@@ -633,6 +633,12 @@
       display: block;
       width: auto;
     }
+    /* A `table-caption` inside a block-level table shrink-to-fits, which broke
+       the caption onto one word per line. */
+    .ci-table caption {
+      display: block;
+      padding: 0 0 0.75rem;
+    }
     .ci-table thead {
       /* Hidden visually; the labels move into each cell. */
       position: absolute;
