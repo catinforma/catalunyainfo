@@ -73,6 +73,34 @@ function visibilityWhere(locale: Locale, preview: boolean) {
   return preview ? previewWhere(locale) : publishedWhere(locale);
 }
 
+
+/* -------------------------------------------------------------------------- */
+/* Resilience                                                                 */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * Runs a read and falls back to an empty result if the database cannot answer.
+ *
+ * Content reads must never take the site down. A cold Neon instance, a dropped
+ * connection, or - as happens on the very first deploy - a schema that has not
+ * been applied yet, should degrade to the same honest empty state we already
+ * render when no database is configured at all. Without this the build itself
+ * fails, because `generateStaticParams` queries the database.
+ *
+ * Writes are deliberately NOT wrapped: a failed write must surface.
+ */
+async function safeRead<T>(label: string, fallback: T, run: () => Promise<T>): Promise<T> {
+  try {
+    return await run();
+  } catch (error) {
+    console.error(
+      `[content] ${label} failed, serving empty:`,
+      error instanceof Error ? error.message : error,
+    );
+    return fallback;
+  }
+}
+
 /* -------------------------------------------------------------------------- */
 /* Row mappers                                                                */
 /* -------------------------------------------------------------------------- */
@@ -217,6 +245,7 @@ export async function listEntries(
 ): Promise<EntrySummary[]> {
   const db = getDb();
   if (!db) return [];
+  return safeRead("listEntries", [], async () => {
 
   const { limit = 12, offset = 0, types, categoryKey, preview = false } = options;
 
@@ -230,7 +259,8 @@ export async function listEntries(
     .limit(Math.min(limit, 100))
     .offset(offset);
 
-  return rows.map((row) => mapSummary(row as SummaryRow, locale));
+    return rows.map((row) => mapSummary(row as SummaryRow, locale));
+  });
 }
 
 export async function countEntries(
@@ -240,16 +270,18 @@ export async function countEntries(
   const db = getDb();
   if (!db) return 0;
 
-  const conditions = [visibilityWhere(locale, options.preview ?? false)];
-  if (options.types?.length) conditions.push(inArray(entries.type, options.types));
+  return safeRead("countEntries", 0, async () => {
+    const conditions = [visibilityWhere(locale, options.preview ?? false)];
+    if (options.types?.length) conditions.push(inArray(entries.type, options.types));
 
-  const rows = await db
-    .select({ count: sql<number>`count(*)::int` })
-    .from(entryTranslations)
-    .innerJoin(entries, eq(entries.id, entryTranslations.entryId))
-    .where(and(...conditions));
+    const rows = await db
+      .select({ count: sql<number>`count(*)::int` })
+      .from(entryTranslations)
+      .innerJoin(entries, eq(entries.id, entryTranslations.entryId))
+      .where(and(...conditions));
 
-  return rows[0]?.count ?? 0;
+    return rows[0]?.count ?? 0;
+  });
 }
 
 export async function listBySection(
@@ -281,34 +313,36 @@ export async function listUpcomingEvents(
   const db = getDb();
   if (!db) return [];
 
-  const rows = await summaryQuery(db, locale)
-    .innerJoin(events, eq(events.entryId, entries.id))
-    .where(
-      and(
-        visibilityWhere(locale, preview),
-        or(gte(events.startsAt, sql`now()`), gte(events.endsAt, sql`now()`)),
-      ),
-    )
-    .orderBy(asc(events.startsAt))
-    .limit(Math.min(limit, 60));
+  return safeRead("listUpcomingEvents", [], async () => {
+    const rows = await summaryQuery(db, locale)
+      .innerJoin(events, eq(events.entryId, entries.id))
+      .where(
+        and(
+          visibilityWhere(locale, preview),
+          or(gte(events.startsAt, sql`now()`), gte(events.endsAt, sql`now()`)),
+        ),
+      )
+      .orderBy(asc(events.startsAt))
+      .limit(Math.min(limit, 60));
 
-  const withDates = await db
-    .select({ entryId: events.entryId, startsAt: events.startsAt, endsAt: events.endsAt })
-    .from(events)
-    .where(
-      inArray(
-        events.entryId,
-        rows.map((r) => (r as SummaryRow).entryId),
-      ),
-    );
+    const withDates = await db
+      .select({ entryId: events.entryId, startsAt: events.startsAt, endsAt: events.endsAt })
+      .from(events)
+      .where(
+        inArray(
+          events.entryId,
+          rows.map((r) => (r as SummaryRow).entryId),
+        ),
+      );
 
-  const dateById = new Map(withDates.map((d) => [d.entryId, d]));
+    const dateById = new Map(withDates.map((d) => [d.entryId, d]));
 
-  return rows.flatMap((row) => {
-    const summary = mapSummary(row as SummaryRow, locale);
-    const dates = dateById.get(summary.entryId);
-    if (!dates) return [];
-    return [{ ...summary, startsAt: dates.startsAt, endsAt: dates.endsAt }];
+    return rows.flatMap((row) => {
+      const summary = mapSummary(row as SummaryRow, locale);
+      const dates = dateById.get(summary.entryId);
+      if (!dates) return [];
+      return [{ ...summary, startsAt: dates.startsAt, endsAt: dates.endsAt }];
+    });
   });
 }
 
@@ -324,237 +358,239 @@ export async function resolvePath(
   const db = getDb();
   if (!db) return null;
 
-  const normalised = path.replace(/^\/+|\/+$/g, "");
+  return safeRead("resolvePath", null, async () => {
+    const normalised = path.replace(/^\/+|\/+$/g, "");
 
-  const rows = await db
-    .select({
-      ...summarySelection(),
-      status: entryTranslations.status,
-      body: entryTranslations.body,
-      noindex: entryTranslations.noindex,
-      canonicalUrl: entryTranslations.canonicalUrl,
-      seoTitle: entryTranslations.seoTitle,
-      seoDescription: entryTranslations.seoDescription,
-      ogMediaId: entryTranslations.ogMediaId,
-      authorId: entries.authorId,
-      isDemo: entries.isDemo,
-      parentId: entries.parentId,
-      categoryDescription: categoryTranslations.description,
-    })
-    .from(entryTranslations)
-    .innerJoin(entries, eq(entries.id, entryTranslations.entryId))
-    .leftJoin(authors, eq(authors.id, entries.authorId))
-    .leftJoin(media, eq(media.id, entries.heroMediaId))
-    .leftJoin(categories, eq(categories.id, entries.primaryCategoryId))
-    .leftJoin(
-      categoryTranslations,
-      and(
-        eq(categoryTranslations.categoryId, categories.id),
-        eq(categoryTranslations.locale, locale),
-      ),
-    )
-    .where(and(eq(entryTranslations.path, normalised), visibilityWhere(locale, preview)))
-    .limit(1);
-
-  const row = rows[0];
-  if (!row) return null;
-
-  const summary = mapSummary(row as unknown as SummaryRow, locale);
-  const entryId = summary.entryId;
-
-  const [
-    ogRows,
-    authorRows,
-    tagRows,
-    categoryRows,
-    sourceRows,
-    relationRows,
-    translationRows,
-    placeRows,
-    eventRows,
-    routeRows,
-    ancestors,
-  ] = await Promise.all([
-    row.ogMediaId
-      ? db.select().from(media).where(eq(media.id, row.ogMediaId)).limit(1)
-      : Promise.resolve([]),
-    row.authorId
-      ? db
-          .select({
-            author: authors,
-            translation: authorTranslations,
-            avatar: media,
-          })
-          .from(authors)
-          .leftJoin(
-            authorTranslations,
-            and(
-              eq(authorTranslations.authorId, authors.id),
-              eq(authorTranslations.locale, locale),
-            ),
-          )
-          .leftJoin(media, eq(media.id, authors.avatarMediaId))
-          .where(eq(authors.id, row.authorId))
-          .limit(1)
-      : Promise.resolve([]),
-    db
-      .select({ id: tags.id, key: tags.key, name: tagTranslations.name, slug: tagTranslations.slug })
-      .from(entryTags)
-      .innerJoin(tags, eq(tags.id, entryTags.tagId))
-      .innerJoin(
-        tagTranslations,
-        and(eq(tagTranslations.tagId, tags.id), eq(tagTranslations.locale, locale)),
-      )
-      .where(and(eq(entryTags.entryId, entryId), eq(tags.isActive, true))),
-    db
+    const rows = await db
       .select({
-        id: categories.id,
-        key: categories.key,
-        section: categories.section,
-        name: categoryTranslations.name,
-        slug: categoryTranslations.slug,
-        description: categoryTranslations.description,
+        ...summarySelection(),
+        status: entryTranslations.status,
+        body: entryTranslations.body,
+        noindex: entryTranslations.noindex,
+        canonicalUrl: entryTranslations.canonicalUrl,
+        seoTitle: entryTranslations.seoTitle,
+        seoDescription: entryTranslations.seoDescription,
+        ogMediaId: entryTranslations.ogMediaId,
+        authorId: entries.authorId,
+        isDemo: entries.isDemo,
+        parentId: entries.parentId,
+        categoryDescription: categoryTranslations.description,
       })
-      .from(entryCategories)
-      .innerJoin(categories, eq(categories.id, entryCategories.categoryId))
-      .innerJoin(
+      .from(entryTranslations)
+      .innerJoin(entries, eq(entries.id, entryTranslations.entryId))
+      .leftJoin(authors, eq(authors.id, entries.authorId))
+      .leftJoin(media, eq(media.id, entries.heroMediaId))
+      .leftJoin(categories, eq(categories.id, entries.primaryCategoryId))
+      .leftJoin(
         categoryTranslations,
         and(
           eq(categoryTranslations.categoryId, categories.id),
           eq(categoryTranslations.locale, locale),
         ),
       )
-      .where(eq(entryCategories.entryId, entryId)),
-    db
-      .select({
-        id: sources.id,
-        name: sources.name,
-        publisher: sources.publisher,
-        url: sources.url,
-        type: sources.type,
-        note: entrySources.note,
-        accessedAt: entrySources.accessedAt,
-        sortOrder: entrySources.sortOrder,
-      })
-      .from(entrySources)
-      .innerJoin(sources, eq(sources.id, entrySources.sourceId))
-      .where(eq(entrySources.entryId, entryId))
-      .orderBy(asc(entrySources.sortOrder)),
-    db
-      .select({ relatedEntryId: entryRelations.relatedEntryId })
-      .from(entryRelations)
-      .where(eq(entryRelations.entryId, entryId))
-      .orderBy(asc(entryRelations.sortOrder))
-      .limit(12),
-    db
-      .select({ locale: entryTranslations.locale, path: entryTranslations.path })
-      .from(entryTranslations)
-      .where(
-        and(
-          eq(entryTranslations.entryId, entryId),
-          eq(entryTranslations.status, "published"),
-          eq(entryTranslations.noindex, false),
-        ),
-      ),
-    db.select().from(places).where(eq(places.entryId, entryId)).limit(1),
-    db.select().from(events).where(eq(events.entryId, entryId)).limit(1),
-    db.select().from(routes).where(eq(routes.entryId, entryId)).limit(1),
-    loadAncestors(db, locale, row.parentId, preview),
-  ]);
+      .where(and(eq(entryTranslations.path, normalised), visibilityWhere(locale, preview)))
+      .limit(1);
 
-  const authorRow = authorRows[0];
-  const author: AuthorView | null = authorRow
-    ? {
-        id: authorRow.author.id,
-        slug: authorRow.author.slug,
-        name: authorRow.author.name,
-        jobTitle: authorRow.translation?.jobTitle ?? null,
-        bio: authorRow.translation?.bio ?? null,
-        expertise: authorRow.translation?.expertise ?? null,
-        links: authorRow.author.links ?? {},
-        avatar: mapMedia(authorRow.avatar, locale),
-      }
-    : null;
+    const row = rows[0];
+    if (!row) return null;
 
-  const related =
-    relationRows.length > 0
-      ? await summariesByEntryIds(
-          locale,
-          relationRows.map((r) => r.relatedEntryId),
-          preview,
+    const summary = mapSummary(row as unknown as SummaryRow, locale);
+    const entryId = summary.entryId;
+
+    const [
+      ogRows,
+      authorRows,
+      tagRows,
+      categoryRows,
+      sourceRows,
+      relationRows,
+      translationRows,
+      placeRows,
+      eventRows,
+      routeRows,
+      ancestors,
+    ] = await Promise.all([
+      row.ogMediaId
+        ? db.select().from(media).where(eq(media.id, row.ogMediaId)).limit(1)
+        : Promise.resolve([]),
+      row.authorId
+        ? db
+            .select({
+              author: authors,
+              translation: authorTranslations,
+              avatar: media,
+            })
+            .from(authors)
+            .leftJoin(
+              authorTranslations,
+              and(
+                eq(authorTranslations.authorId, authors.id),
+                eq(authorTranslations.locale, locale),
+              ),
+            )
+            .leftJoin(media, eq(media.id, authors.avatarMediaId))
+            .where(eq(authors.id, row.authorId))
+            .limit(1)
+        : Promise.resolve([]),
+      db
+        .select({ id: tags.id, key: tags.key, name: tagTranslations.name, slug: tagTranslations.slug })
+        .from(entryTags)
+        .innerJoin(tags, eq(tags.id, entryTags.tagId))
+        .innerJoin(
+          tagTranslations,
+          and(eq(tagTranslations.tagId, tags.id), eq(tagTranslations.locale, locale)),
         )
-      : [];
+        .where(and(eq(entryTags.entryId, entryId), eq(tags.isActive, true))),
+      db
+        .select({
+          id: categories.id,
+          key: categories.key,
+          section: categories.section,
+          name: categoryTranslations.name,
+          slug: categoryTranslations.slug,
+          description: categoryTranslations.description,
+        })
+        .from(entryCategories)
+        .innerJoin(categories, eq(categories.id, entryCategories.categoryId))
+        .innerJoin(
+          categoryTranslations,
+          and(
+            eq(categoryTranslations.categoryId, categories.id),
+            eq(categoryTranslations.locale, locale),
+          ),
+        )
+        .where(eq(entryCategories.entryId, entryId)),
+      db
+        .select({
+          id: sources.id,
+          name: sources.name,
+          publisher: sources.publisher,
+          url: sources.url,
+          type: sources.type,
+          note: entrySources.note,
+          accessedAt: entrySources.accessedAt,
+          sortOrder: entrySources.sortOrder,
+        })
+        .from(entrySources)
+        .innerJoin(sources, eq(sources.id, entrySources.sourceId))
+        .where(eq(entrySources.entryId, entryId))
+        .orderBy(asc(entrySources.sortOrder)),
+      db
+        .select({ relatedEntryId: entryRelations.relatedEntryId })
+        .from(entryRelations)
+        .where(eq(entryRelations.entryId, entryId))
+        .orderBy(asc(entryRelations.sortOrder))
+        .limit(12),
+      db
+        .select({ locale: entryTranslations.locale, path: entryTranslations.path })
+        .from(entryTranslations)
+        .where(
+          and(
+            eq(entryTranslations.entryId, entryId),
+            eq(entryTranslations.status, "published"),
+            eq(entryTranslations.noindex, false),
+          ),
+        ),
+      db.select().from(places).where(eq(places.entryId, entryId)).limit(1),
+      db.select().from(events).where(eq(events.entryId, entryId)).limit(1),
+      db.select().from(routes).where(eq(routes.entryId, entryId)).limit(1),
+      loadAncestors(db, locale, row.parentId, preview),
+    ]);
 
-  const translations: Partial<Record<Locale, string>> = {};
-  for (const t of translationRows) {
-    translations[t.locale as Locale] = hrefFor(t.locale as Locale, t.path);
-  }
+    const authorRow = authorRows[0];
+    const author: AuthorView | null = authorRow
+      ? {
+          id: authorRow.author.id,
+          slug: authorRow.author.slug,
+          name: authorRow.author.name,
+          jobTitle: authorRow.translation?.jobTitle ?? null,
+          bio: authorRow.translation?.bio ?? null,
+          expertise: authorRow.translation?.expertise ?? null,
+          links: authorRow.author.links ?? {},
+          avatar: mapMedia(authorRow.avatar, locale),
+        }
+      : null;
 
-  const placeRow = placeRows[0];
-  const place: PlaceView | null = placeRow
-    ? {
-        kind: placeRow.kind,
-        latitude: placeRow.latitude,
-        longitude: placeRow.longitude,
-        comarca: placeRow.comarca,
-        municipality: placeRow.municipality,
-        postalCode: placeRow.postalCode,
-        streetAddress: placeRow.streetAddress,
-        officialUrl: placeRow.officialUrl,
-        openingHours: placeRow.openingHours ?? [],
-        pricing: placeRow.pricing ?? null,
-        accessibility: placeRow.accessibility ?? null,
-      }
-    : null;
+    const related =
+      relationRows.length > 0
+        ? await summariesByEntryIds(
+            locale,
+            relationRows.map((r) => r.relatedEntryId),
+            preview,
+          )
+        : [];
 
-  const eventRow = eventRows[0];
-  const event: EventView | null = eventRow
-    ? {
-        startsAt: eventRow.startsAt,
-        endsAt: eventRow.endsAt,
-        isAllDay: eventRow.isAllDay,
-        recurrenceRule: eventRow.recurrenceRule,
-        venueName: eventRow.venueName,
-        ticketUrl: eventRow.ticketUrl,
-        isFree: eventRow.isFree,
-        organiser: eventRow.organiser,
-      }
-    : null;
+    const translations: Partial<Record<Locale, string>> = {};
+    for (const t of translationRows) {
+      translations[t.locale as Locale] = hrefFor(t.locale as Locale, t.path);
+    }
 
-  const routeRow = routeRows[0];
-  const route: RouteView | null = routeRow
-    ? {
-        distanceMetres: routeRow.distanceMetres,
-        ascentMetres: routeRow.ascentMetres,
-        descentMetres: routeRow.descentMetres,
-        durationMinutes: routeRow.durationMinutes,
-        difficulty: routeRow.difficulty,
-        isCircular: routeRow.isCircular,
-        gpxUrl: routeRow.gpxUrl,
-      }
-    : null;
+    const placeRow = placeRows[0];
+    const place: PlaceView | null = placeRow
+      ? {
+          kind: placeRow.kind,
+          latitude: placeRow.latitude,
+          longitude: placeRow.longitude,
+          comarca: placeRow.comarca,
+          municipality: placeRow.municipality,
+          postalCode: placeRow.postalCode,
+          streetAddress: placeRow.streetAddress,
+          officialUrl: placeRow.officialUrl,
+          openingHours: placeRow.openingHours ?? [],
+          pricing: placeRow.pricing ?? null,
+          accessibility: placeRow.accessibility ?? null,
+        }
+      : null;
 
-  return {
-    ...summary,
-    status: row.status,
-    body: parseBody(row.body),
-    noindex: row.noindex,
-    canonicalUrl: row.canonicalUrl,
-    seoTitle: row.seoTitle,
-    seoDescription: row.seoDescription,
-    og: mapMedia(ogRows[0] ?? null, locale),
-    author,
-    tags: tagRows as TagView[],
-    categories: categoryRows as CategoryView[],
-    sources: sourceRows as SourceView[],
-    related,
-    translations,
-    place,
-    event,
-    route,
-    isDemo: row.isDemo,
-    breadcrumbs: ancestors,
-  };
+    const eventRow = eventRows[0];
+    const event: EventView | null = eventRow
+      ? {
+          startsAt: eventRow.startsAt,
+          endsAt: eventRow.endsAt,
+          isAllDay: eventRow.isAllDay,
+          recurrenceRule: eventRow.recurrenceRule,
+          venueName: eventRow.venueName,
+          ticketUrl: eventRow.ticketUrl,
+          isFree: eventRow.isFree,
+          organiser: eventRow.organiser,
+        }
+      : null;
+
+    const routeRow = routeRows[0];
+    const route: RouteView | null = routeRow
+      ? {
+          distanceMetres: routeRow.distanceMetres,
+          ascentMetres: routeRow.ascentMetres,
+          descentMetres: routeRow.descentMetres,
+          durationMinutes: routeRow.durationMinutes,
+          difficulty: routeRow.difficulty,
+          isCircular: routeRow.isCircular,
+          gpxUrl: routeRow.gpxUrl,
+        }
+      : null;
+
+    return {
+      ...summary,
+      status: row.status,
+      body: parseBody(row.body),
+      noindex: row.noindex,
+      canonicalUrl: row.canonicalUrl,
+      seoTitle: row.seoTitle,
+      seoDescription: row.seoDescription,
+      og: mapMedia(ogRows[0] ?? null, locale),
+      author,
+      tags: tagRows as TagView[],
+      categories: categoryRows as CategoryView[],
+      sources: sourceRows as SourceView[],
+      related,
+      translations,
+      place,
+      event,
+      route,
+      isDemo: row.isDemo,
+      breadcrumbs: ancestors,
+    };
+  });
 }
 
 /** Walks `entries.parent_id` upwards to build breadcrumb trail. */
@@ -598,19 +634,21 @@ export async function summariesByEntryIds(
   const db = getDb();
   if (!db || ids.length === 0) return [];
 
-  const rows = await summaryQuery(db, locale).where(
-    and(inArray(entries.id, ids), visibilityWhere(locale, preview)),
-  );
+  return safeRead("summariesByEntryIds", [], async () => {
+    const rows = await summaryQuery(db, locale).where(
+      and(inArray(entries.id, ids), visibilityWhere(locale, preview)),
+    );
 
-  const byId = new Map(
-    rows.map((row) => {
-      const summary = mapSummary(row as SummaryRow, locale);
-      return [summary.entryId, summary];
-    }),
-  );
-  return ids.flatMap((id) => {
-    const found = byId.get(id);
-    return found ? [found] : [];
+    const byId = new Map(
+      rows.map((row) => {
+        const summary = mapSummary(row as SummaryRow, locale);
+        return [summary.entryId, summary];
+      }),
+    );
+    return ids.flatMap((id) => {
+      const found = byId.get(id);
+      return found ? [found] : [];
+    });
   });
 }
 
@@ -627,20 +665,22 @@ export async function searchEntries(
   const trimmed = query.trim();
   if (!db || trimmed.length < 2) return [];
 
-  const tsConfig = locale === "es" ? "spanish" : locale === "en" ? "english" : "simple";
+  return safeRead("searchEntries", [], async () => {
+    const tsConfig = locale === "es" ? "spanish" : locale === "en" ? "english" : "simple";
 
-  const rows = await summaryQuery(db, locale)
-    .where(
-      and(
-        publishedWhere(locale),
-        eq(entryTranslations.noindex, false),
-        sql`to_tsvector(${sql.raw(`'${tsConfig}'`)}, coalesce(${entryTranslations.title}, '') || ' ' || coalesce(${entryTranslations.excerpt}, '') || ' ' || coalesce(${entryTranslations.searchText}, '')) @@ websearch_to_tsquery(${sql.raw(`'${tsConfig}'`)}, ${trimmed})`,
-      ),
-    )
-    .orderBy(desc(entryTranslations.publishedAt))
-    .limit(Math.min(limit, 50));
+    const rows = await summaryQuery(db, locale)
+      .where(
+        and(
+          publishedWhere(locale),
+          eq(entryTranslations.noindex, false),
+          sql`to_tsvector(${sql.raw(`'${tsConfig}'`)}, coalesce(${entryTranslations.title}, '') || ' ' || coalesce(${entryTranslations.excerpt}, '') || ' ' || coalesce(${entryTranslations.searchText}, '')) @@ websearch_to_tsquery(${sql.raw(`'${tsConfig}'`)}, ${trimmed})`,
+        ),
+      )
+      .orderBy(desc(entryTranslations.publishedAt))
+      .limit(Math.min(limit, 50));
 
-  return rows.map((row) => mapSummary(row as SummaryRow, locale));
+    return rows.map((row) => mapSummary(row as SummaryRow, locale));
+  });
 }
 
 /* -------------------------------------------------------------------------- */
@@ -659,28 +699,30 @@ export async function allIndexablePaths(): Promise<SitemapRow[]> {
   const db = getDb();
   if (!db) return [];
 
-  const rows = await db
-    .select({
-      locale: entryTranslations.locale,
-      path: entryTranslations.path,
-      updatedAt: entryTranslations.updatedAt,
-      publishedAt: entryTranslations.publishedAt,
-      entryId: entryTranslations.entryId,
-    })
-    .from(entryTranslations)
-    .innerJoin(entries, eq(entries.id, entryTranslations.entryId))
-    .where(
-      and(
-        eq(entryTranslations.status, "published"),
-        eq(entryTranslations.noindex, false),
-        isNotNull(entryTranslations.publishedAt),
-        lte(entryTranslations.publishedAt, sql`now()`),
-        eq(entries.isDemo, false),
-      ),
-    )
-    .orderBy(desc(entryTranslations.publishedAt));
+  return safeRead("allIndexablePaths", [], async () => {
+    const rows = await db
+      .select({
+        locale: entryTranslations.locale,
+        path: entryTranslations.path,
+        updatedAt: entryTranslations.updatedAt,
+        publishedAt: entryTranslations.publishedAt,
+        entryId: entryTranslations.entryId,
+      })
+      .from(entryTranslations)
+      .innerJoin(entries, eq(entries.id, entryTranslations.entryId))
+      .where(
+        and(
+          eq(entryTranslations.status, "published"),
+          eq(entryTranslations.noindex, false),
+          isNotNull(entryTranslations.publishedAt),
+          lte(entryTranslations.publishedAt, sql`now()`),
+          eq(entries.isDemo, false),
+        ),
+      )
+      .orderBy(desc(entryTranslations.publishedAt));
 
-  return rows as SitemapRow[];
+    return rows as SitemapRow[];
+  });
 }
 
 export interface RedirectMatch {
@@ -692,13 +734,15 @@ export async function findRedirect(fromPath: string): Promise<RedirectMatch | nu
   const db = getDb();
   if (!db) return null;
 
-  const rows = await db
-    .select({ toPath: redirects.toPath, kind: redirects.kind })
-    .from(redirects)
-    .where(eq(redirects.fromPath, fromPath))
-    .limit(1);
+  return safeRead("findRedirect", null, async () => {
+    const rows = await db
+      .select({ toPath: redirects.toPath, kind: redirects.kind })
+      .from(redirects)
+      .where(eq(redirects.fromPath, fromPath))
+      .limit(1);
 
-  return rows[0] ?? null;
+    return rows[0] ?? null;
+  });
 }
 
 /* -------------------------------------------------------------------------- */
@@ -712,54 +756,58 @@ export async function listCategories(
   const db = getDb();
   if (!db) return [];
 
-  const conditions = [
-    eq(categoryTranslations.locale, locale),
-    eq(categories.isActive, true),
-  ];
-  if (section) conditions.push(eq(categories.section, section));
+  return safeRead("listCategories", [], async () => {
+    const conditions = [
+      eq(categoryTranslations.locale, locale),
+      eq(categories.isActive, true),
+    ];
+    if (section) conditions.push(eq(categories.section, section));
 
-  const rows = await db
-    .select({
-      id: categories.id,
-      key: categories.key,
-      section: categories.section,
-      name: categoryTranslations.name,
-      slug: categoryTranslations.slug,
-      description: categoryTranslations.description,
-    })
-    .from(categories)
-    .innerJoin(categoryTranslations, eq(categoryTranslations.categoryId, categories.id))
-    .where(and(...conditions))
-    .orderBy(asc(categories.sortOrder), asc(categoryTranslations.name));
+    const rows = await db
+      .select({
+        id: categories.id,
+        key: categories.key,
+        section: categories.section,
+        name: categoryTranslations.name,
+        slug: categoryTranslations.slug,
+        description: categoryTranslations.description,
+      })
+      .from(categories)
+      .innerJoin(categoryTranslations, eq(categoryTranslations.categoryId, categories.id))
+      .where(and(...conditions))
+      .orderBy(asc(categories.sortOrder), asc(categoryTranslations.name));
 
-  return rows as CategoryView[];
+    return rows as CategoryView[];
+  });
 }
 
 export async function listAuthors(locale: Locale): Promise<AuthorView[]> {
   const db = getDb();
   if (!db) return [];
 
-  const rows = await db
-    .select({ author: authors, translation: authorTranslations, avatar: media })
-    .from(authors)
-    .leftJoin(
-      authorTranslations,
-      and(eq(authorTranslations.authorId, authors.id), eq(authorTranslations.locale, locale)),
-    )
-    .leftJoin(media, eq(media.id, authors.avatarMediaId))
-    .where(eq(authors.isActive, true))
-    .orderBy(asc(authors.name));
+  return safeRead("listAuthors", [], async () => {
+    const rows = await db
+      .select({ author: authors, translation: authorTranslations, avatar: media })
+      .from(authors)
+      .leftJoin(
+        authorTranslations,
+        and(eq(authorTranslations.authorId, authors.id), eq(authorTranslations.locale, locale)),
+      )
+      .leftJoin(media, eq(media.id, authors.avatarMediaId))
+      .where(eq(authors.isActive, true))
+      .orderBy(asc(authors.name));
 
-  return rows.map((r) => ({
-    id: r.author.id,
-    slug: r.author.slug,
-    name: r.author.name,
-    jobTitle: r.translation?.jobTitle ?? null,
-    bio: r.translation?.bio ?? null,
-    expertise: r.translation?.expertise ?? null,
-    links: r.author.links ?? {},
-    avatar: mapMedia(r.avatar, locale),
-  }));
+    return rows.map((r) => ({
+      id: r.author.id,
+      slug: r.author.slug,
+      name: r.author.name,
+      jobTitle: r.translation?.jobTitle ?? null,
+      bio: r.translation?.bio ?? null,
+      expertise: r.translation?.expertise ?? null,
+      links: r.author.links ?? {},
+      avatar: mapMedia(r.avatar, locale),
+    }));
+  });
 }
 
 export async function getAuthorBySlug(
@@ -769,38 +817,40 @@ export async function getAuthorBySlug(
   const db = getDb();
   if (!db) return null;
 
-  const rows = await db
-    .select({ author: authors, translation: authorTranslations, avatar: media })
-    .from(authors)
-    .leftJoin(
-      authorTranslations,
-      and(eq(authorTranslations.authorId, authors.id), eq(authorTranslations.locale, locale)),
-    )
-    .leftJoin(media, eq(media.id, authors.avatarMediaId))
-    .where(and(eq(authors.slug, slug), eq(authors.isActive, true)))
-    .limit(1);
+  return safeRead("getAuthorBySlug", null, async () => {
+    const rows = await db
+      .select({ author: authors, translation: authorTranslations, avatar: media })
+      .from(authors)
+      .leftJoin(
+        authorTranslations,
+        and(eq(authorTranslations.authorId, authors.id), eq(authorTranslations.locale, locale)),
+      )
+      .leftJoin(media, eq(media.id, authors.avatarMediaId))
+      .where(and(eq(authors.slug, slug), eq(authors.isActive, true)))
+      .limit(1);
 
-  const row = rows[0];
-  if (!row) return null;
+    const row = rows[0];
+    if (!row) return null;
 
-  const authored = await summaryQuery(db, locale)
-    .where(and(publishedWhere(locale), eq(entries.authorId, row.author.id)))
-    .orderBy(desc(entryTranslations.publishedAt))
-    .limit(24);
+    const authored = await summaryQuery(db, locale)
+      .where(and(publishedWhere(locale), eq(entries.authorId, row.author.id)))
+      .orderBy(desc(entryTranslations.publishedAt))
+      .limit(24);
 
-  return {
-    author: {
-      id: row.author.id,
-      slug: row.author.slug,
-      name: row.author.name,
-      jobTitle: row.translation?.jobTitle ?? null,
-      bio: row.translation?.bio ?? null,
-      expertise: row.translation?.expertise ?? null,
-      links: row.author.links ?? {},
-      avatar: mapMedia(row.avatar, locale),
-    },
-    entries: authored.map((r) => mapSummary(r as SummaryRow, locale)),
-  };
+    return {
+      author: {
+        id: row.author.id,
+        slug: row.author.slug,
+        name: row.author.name,
+        jobTitle: row.translation?.jobTitle ?? null,
+        bio: row.translation?.bio ?? null,
+        expertise: row.translation?.expertise ?? null,
+        links: row.author.links ?? {},
+        avatar: mapMedia(row.avatar, locale),
+      },
+      entries: authored.map((r) => mapSummary(r as SummaryRow, locale)),
+    };
+  });
 }
 
 /* -------------------------------------------------------------------------- */
@@ -822,6 +872,16 @@ export interface HomeData {
  * and the homepage simply does not render them, rather than showing a
  * placeholder shell that would read as a thin, unfinished page.
  */
+const EMPTY_HOME: HomeData = {
+  featured: [],
+  news: [],
+  guides: [],
+  destinations: [],
+  events: [],
+  routes: [],
+  totalPublished: 0,
+};
+
 export async function getHomeData(locale: Locale, preview = false): Promise<HomeData> {
   const db = getDb();
   if (!db) {
@@ -836,29 +896,31 @@ export async function getHomeData(locale: Locale, preview = false): Promise<Home
     };
   }
 
-  const [featuredRows, news, guides, destinations, events, routeItems, totalPublished] =
-    await Promise.all([
-      summaryQuery(db, locale)
-        .where(and(visibilityWhere(locale, preview), eq(entries.isFeatured, true)))
-        .orderBy(desc(entryTranslations.publishedAt))
-        .limit(5),
-      listEntries(locale, { types: ["news"], limit: 6, preview }),
-      listEntries(locale, { types: ["article", "guide"], limit: 6, preview }),
-      listEntries(locale, { types: ["destination", "place"], limit: 6, preview }),
-      listUpcomingEvents(locale, 6, preview),
-      listEntries(locale, { types: ["route"], limit: 4, preview }),
-      countEntries(locale, { preview }),
-    ]);
+  return safeRead("getHomeData", EMPTY_HOME, async () => {
+    const [featuredRows, news, guides, destinations, events, routeItems, totalPublished] =
+      await Promise.all([
+        summaryQuery(db, locale)
+          .where(and(visibilityWhere(locale, preview), eq(entries.isFeatured, true)))
+          .orderBy(desc(entryTranslations.publishedAt))
+          .limit(5),
+        listEntries(locale, { types: ["news"], limit: 6, preview }),
+        listEntries(locale, { types: ["article", "guide"], limit: 6, preview }),
+        listEntries(locale, { types: ["destination", "place"], limit: 6, preview }),
+        listUpcomingEvents(locale, 6, preview),
+        listEntries(locale, { types: ["route"], limit: 4, preview }),
+        countEntries(locale, { preview }),
+      ]);
 
-  return {
-    featured: featuredRows.map((r) => mapSummary(r as SummaryRow, locale)),
-    news,
-    guides,
-    destinations,
-    events,
-    routes: routeItems,
-    totalPublished,
-  };
+    return {
+      featured: featuredRows.map((r) => mapSummary(r as SummaryRow, locale)),
+      news,
+      guides,
+      destinations,
+      events,
+      routes: routeItems,
+      totalPublished,
+    };
+  });
 }
 
 /* -------------------------------------------------------------------------- */
@@ -877,12 +939,14 @@ export async function getMediaByIds(
   const out = new Map<string, MediaView>();
   if (!db || ids.length === 0) return out;
 
-  const rows = await db.select().from(media).where(inArray(media.id, ids));
-  for (const row of rows) {
-    const view = mapMedia(row, locale);
-    if (view) out.set(row.id, view);
-  }
-  return out;
+  return safeRead("getMediaByIds", new Map<string, MediaView>(), async () => {
+    const rows = await db.select().from(media).where(inArray(media.id, ids));
+    for (const row of rows) {
+      const view = mapMedia(row, locale);
+      if (view) out.set(row.id, view);
+    }
+    return out;
+  });
 }
 
 /** Media ids referenced anywhere inside a body, deduplicated. */
