@@ -1,0 +1,13 @@
+{
+  "name": "CatalunyaInfo",
+  "short_name": "CatalunyaInfo",
+  "description": "La guia digital mes util sobre Catalunya.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f4f6f5",
+  "theme_color": "#10202b",
+  "icons": [
+    { "src": "/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" },
+    { "src": "/logo.png", "sizes": "512x512", "type": "image/png", "purpose": "any" }
+  ]
+}

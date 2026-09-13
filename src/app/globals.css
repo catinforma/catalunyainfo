@@ -1,0 +1,803 @@
+@import "tailwindcss";
+
+/* ==========================================================================
+   CatalunyaInfo design tokens
+
+   The product is a reference work about a place, so the visual language is
+   cartographic rather than editorial-newspaper: survey-map ink on cool paper,
+   Mediterranean teal as the single brand accent, contour brown reserved for
+   topographic data, moss reserved for the verification stamp. Colour carries
+   meaning here; it is not decoration.
+   ========================================================================== */
+
+@theme {
+  /* --- Colour ----------------------------------------------------------- */
+  --color-ink: #10202b;
+  --color-ink-soft: #33474f;
+  --color-muted: #5b6b70;
+  --color-faint: #8a979b;
+
+  --color-paper: #f4f6f5;
+  --color-surface: #ffffff;
+  --color-surface-sunk: #eaeeec;
+
+  --color-rule: #d6dcd9;
+  --color-rule-strong: #b8c2be;
+
+  /* Mediterranean teal: links, primary actions, the brand mark. */
+  --color-sea: #0a5b6a;
+  --color-sea-deep: #063a45;
+  --color-sea-wash: #e4eeef;
+
+  /* Contour brown: only ever used for elevation, distance and route data. */
+  --color-contour: #b4642a;
+  --color-contour-wash: #f6ece3;
+
+  /* Moss: only ever used for the verified / freshness signal. */
+  --color-moss: #3f6b4f;
+  --color-moss-wash: #e6efe8;
+
+  /* Warning + error, kept deliberately desaturated so nothing shouts. */
+  --color-amber: #96650a;
+  --color-amber-wash: #f8efdc;
+  --color-danger: #a32a33;
+  --color-danger-wash: #f9e7e7;
+
+  /* --- Type ------------------------------------------------------------- */
+  --font-display: var(--font-fraunces), ui-serif, Georgia, "Times New Roman", serif;
+  --font-sans: var(--font-plex), ui-sans-serif, system-ui, -apple-system, "Segoe UI",
+    sans-serif;
+  --font-mono: ui-monospace, "SFMono-Regular", "IBM Plex Mono", Menlo, monospace;
+
+  /* A modular scale at 1.2 from a 17px body, rounded to sensible pixels. */
+  --text-2xs: 0.6875rem;
+  --text-xs: 0.78125rem;
+  --text-sm: 0.875rem;
+  --text-base: 1.0625rem;
+  --text-lg: 1.1875rem;
+  --text-xl: 1.375rem;
+  --text-2xl: 1.625rem;
+  --text-3xl: 2rem;
+  --text-4xl: 2.5rem;
+  --text-5xl: 3.125rem;
+  --text-6xl: 3.875rem;
+
+  /* --- Space and shape -------------------------------------------------- */
+  --radius-xs: 2px;
+  --radius-sm: 3px;
+  --radius-md: 5px;
+  --radius-lg: 8px;
+
+  --spacing-gutter: 1.25rem;
+  --spacing-measure: 38rem;
+
+  /* Shadows are almost absent by design; depth comes from rules, not blur. */
+  --shadow-raise: 0 1px 0 0 var(--color-rule);
+  --shadow-pop: 0 6px 24px -12px rgba(16, 32, 43, 0.35);
+}
+
+/* --- Dark theme -----------------------------------------------------------
+   Not an inversion: the map ground becomes deep water and the paper tones
+   become the ink, so the same colour meanings survive.
+   ------------------------------------------------------------------------ */
+@layer base {
+  :root {
+    color-scheme: light;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      color-scheme: dark;
+      --color-ink: #e8edeb;
+      --color-ink-soft: #b9c6c4;
+      --color-muted: #93a3a4;
+      --color-faint: #6f8082;
+
+      --color-paper: #0c161c;
+      --color-surface: #12212a;
+      --color-surface-sunk: #0a131a;
+
+      --color-rule: #24363f;
+      --color-rule-strong: #354b55;
+
+      --color-sea: #56b6c4;
+      --color-sea-deep: #8ad4de;
+      --color-sea-wash: #10313a;
+
+      --color-contour: #dd9a5f;
+      --color-contour-wash: #2c2118;
+
+      --color-moss: #85bd97;
+      --color-moss-wash: #17291e;
+
+      --color-amber: #d9a94a;
+      --color-amber-wash: #2a2413;
+      --color-danger: #e4868c;
+      --color-danger-wash: #2c1719;
+    }
+  }
+
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --color-ink: #e8edeb;
+    --color-ink-soft: #b9c6c4;
+    --color-muted: #93a3a4;
+    --color-faint: #6f8082;
+
+    --color-paper: #0c161c;
+    --color-surface: #12212a;
+    --color-surface-sunk: #0a131a;
+
+    --color-rule: #24363f;
+    --color-rule-strong: #354b55;
+
+    --color-sea: #56b6c4;
+    --color-sea-deep: #8ad4de;
+    --color-sea-wash: #10313a;
+
+    --color-contour: #dd9a5f;
+    --color-contour-wash: #2c2118;
+
+    --color-moss: #85bd97;
+    --color-moss-wash: #17291e;
+
+    --color-amber: #d9a94a;
+    --color-amber-wash: #2a2413;
+    --color-danger: #e4868c;
+    --color-danger-wash: #2c1719;
+  }
+}
+
+/* ==========================================================================
+   Base
+   ========================================================================== */
+
+@layer base {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior: smooth;
+    /* Leaves room for the sticky header when jumping to an anchor. */
+    scroll-padding-top: 5.5rem;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+
+  body {
+    margin: 0;
+    background: var(--color-paper);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-size: var(--text-base);
+    line-height: 1.65;
+    font-synthesis-weight: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-variation-settings: "SOFT" 0, "WONK" 0;
+    line-height: 1.15;
+    letter-spacing: -0.012em;
+    text-wrap: balance;
+    margin: 0;
+  }
+
+  h1 {
+    font-size: clamp(2rem, 1.35rem + 2.6vw, 3.125rem);
+    letter-spacing: -0.02em;
+  }
+  h2 {
+    font-size: clamp(1.5rem, 1.25rem + 1.1vw, 2rem);
+  }
+  h3 {
+    font-size: clamp(1.25rem, 1.1rem + 0.6vw, 1.5rem);
+  }
+  h4 {
+    font-size: var(--text-lg);
+  }
+
+  p {
+    margin: 0;
+    text-wrap: pretty;
+  }
+
+  a {
+    color: var(--color-sea);
+    text-decoration-line: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.18em;
+    text-decoration-color: color-mix(in srgb, var(--color-sea) 35%, transparent);
+    transition: text-decoration-color 120ms ease, color 120ms ease;
+  }
+
+  a:hover {
+    color: var(--color-sea-deep);
+    text-decoration-color: currentColor;
+  }
+
+  /* One visible, high-contrast focus treatment everywhere. */
+  :focus-visible {
+    outline: 2px solid var(--color-sea);
+    outline-offset: 2px;
+    border-radius: var(--radius-xs);
+  }
+
+  img,
+  picture,
+  svg,
+  video {
+    display: block;
+    max-width: 100%;
+  }
+
+  table {
+    border-collapse: collapse;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Timetables, prices and distances must align on the decimal. */
+  .ci-numeric,
+  td,
+  time,
+  data {
+    font-variant-numeric: tabular-nums;
+  }
+
+  ::selection {
+    background: var(--color-sea-wash);
+    color: var(--color-sea-deep);
+  }
+
+  hr {
+    border: 0;
+    border-top: 1px solid var(--color-rule);
+    margin: 0;
+  }
+}
+
+/* ==========================================================================
+   Components
+   ========================================================================== */
+
+@layer components {
+  /* --- Shell ------------------------------------------------------------ */
+  .ci-shell {
+    width: 100%;
+    max-width: 78rem;
+    margin-inline: auto;
+    padding-inline: var(--spacing-gutter);
+  }
+
+  .ci-shell-narrow {
+    width: 100%;
+    max-width: 46rem;
+    margin-inline: auto;
+    padding-inline: var(--spacing-gutter);
+  }
+
+  .ci-skip {
+    position: absolute;
+    left: -9999px;
+    top: 0;
+    z-index: 100;
+    background: var(--color-sea);
+    color: #fff;
+    padding: 0.75rem 1.25rem;
+    border-radius: 0 0 var(--radius-md) 0;
+  }
+  .ci-skip:focus {
+    left: 0;
+  }
+
+  /* --- Measure ---------------------------------------------------------- */
+  .ci-measure {
+    max-width: var(--spacing-measure);
+  }
+
+  /* --- Eyebrow / small label -------------------------------------------
+     Sentence case, not tracked-out caps. The label earns its place by
+     naming a real field, so it reads like map marginalia.
+     --------------------------------------------------------------------- */
+  .ci-label {
+    font-size: var(--text-xs);
+    font-weight: 500;
+    color: var(--color-muted);
+    letter-spacing: 0.005em;
+  }
+
+  /* --- The verification stamp -------------------------------------------
+     The single most important trust signal on the site, so it is the one
+     place that gets a distinct colour and a distinct shape.
+     --------------------------------------------------------------------- */
+  .ci-verified {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: var(--text-xs);
+    color: var(--color-moss);
+    background: var(--color-moss-wash);
+    border: 1px solid color-mix(in srgb, var(--color-moss) 30%, transparent);
+    border-radius: var(--radius-sm);
+    padding: 0.15rem 0.45rem;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .ci-verified-dot {
+    width: 0.4rem;
+    height: 0.4rem;
+    border-radius: 50%;
+    background: var(--color-moss);
+    flex: none;
+  }
+
+  .ci-stale {
+    color: var(--color-amber);
+    background: var(--color-amber-wash);
+    border-color: color-mix(in srgb, var(--color-amber) 32%, transparent);
+  }
+  .ci-stale .ci-verified-dot {
+    background: var(--color-amber);
+  }
+
+  /* --- Buttons ---------------------------------------------------------- */
+  .ci-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    font: inherit;
+    font-weight: 500;
+    line-height: 1.2;
+    padding: 0.6rem 1rem;
+    border-radius: var(--radius-sm);
+    border: 1px solid transparent;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background-color 120ms ease, border-color 120ms ease, color 120ms ease;
+  }
+
+  .ci-btn-primary {
+    background: var(--color-sea);
+    color: #fff;
+    border-color: var(--color-sea);
+  }
+  .ci-btn-primary:hover {
+    background: var(--color-sea-deep);
+    border-color: var(--color-sea-deep);
+    color: #fff;
+  }
+
+  .ci-btn-quiet {
+    background: transparent;
+    color: var(--color-ink);
+    border-color: var(--color-rule-strong);
+  }
+  .ci-btn-quiet:hover {
+    background: var(--color-surface-sunk);
+    color: var(--color-ink);
+  }
+
+  .ci-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  /* --- Form controls ---------------------------------------------------- */
+  .ci-field {
+    width: 100%;
+    font: inherit;
+    color: var(--color-ink);
+    background: var(--color-surface);
+    border: 1px solid var(--color-rule-strong);
+    border-radius: var(--radius-sm);
+    padding: 0.6rem 0.75rem;
+  }
+  .ci-field::placeholder {
+    color: var(--color-faint);
+  }
+  .ci-field:focus-visible {
+    border-color: var(--color-sea);
+    outline-offset: 0;
+  }
+
+  /* --- The question box: the homepage's one bold object ------------------ */
+  .ci-ask {
+    display: flex;
+    align-items: stretch;
+    gap: 0;
+    background: var(--color-surface);
+    border: 2px solid var(--color-ink);
+    border-radius: var(--radius-md);
+  }
+  .ci-ask:focus-within {
+    outline: 3px solid color-mix(in srgb, var(--color-sea) 40%, transparent);
+    outline-offset: 2px;
+  }
+  .ci-ask input {
+    flex: 1 1 auto;
+    min-width: 0;
+    font: inherit;
+    font-size: var(--text-lg);
+    padding: 0.9rem 1rem;
+    border: 0;
+    background: transparent;
+    color: var(--color-ink);
+    border-radius: var(--radius-md) 0 0 var(--radius-md);
+  }
+  .ci-ask input:focus {
+    outline: none;
+  }
+  .ci-ask button {
+    flex: none;
+    border: 0;
+    border-left: 2px solid var(--color-ink);
+    background: var(--color-ink);
+    color: var(--color-paper);
+    font: inherit;
+    font-weight: 500;
+    padding-inline: 1.15rem;
+    cursor: pointer;
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  }
+  .ci-ask button:hover {
+    background: var(--color-sea-deep);
+    border-left-color: var(--color-sea-deep);
+    color: #fff;
+  }
+
+  /* --- Marginalia: the key-facts block ---------------------------------
+     Modelled on a survey map's title block. A contour-coloured rule marks
+     it as data rather than prose.
+     --------------------------------------------------------------------- */
+  .ci-margin-block {
+    border-left: 3px solid var(--color-contour);
+    background: var(--color-surface);
+    padding: 1rem 1.15rem;
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  }
+
+  .ci-facts {
+    display: grid;
+    grid-template-columns: minmax(6.5rem, max-content) 1fr;
+    gap: 0.45rem 1rem;
+    margin: 0;
+    font-size: var(--text-sm);
+  }
+  .ci-facts dt {
+    color: var(--color-muted);
+  }
+  .ci-facts dd {
+    margin: 0;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* --- Prose ------------------------------------------------------------ */
+  .ci-prose {
+    max-width: var(--spacing-measure);
+    font-size: var(--text-base);
+    line-height: 1.7;
+  }
+  .ci-prose > * + * {
+    margin-top: 1.15em;
+  }
+  .ci-prose h2 {
+    margin-top: 2.4em;
+    margin-bottom: -0.35em;
+  }
+  .ci-prose h3 {
+    margin-top: 1.9em;
+    margin-bottom: -0.4em;
+  }
+  .ci-prose ul,
+  .ci-prose ol {
+    padding-left: 1.25rem;
+    margin-block: 0;
+  }
+  .ci-prose li + li {
+    margin-top: 0.4em;
+  }
+  .ci-prose .ci-lead {
+    font-size: var(--text-lg);
+    line-height: 1.55;
+    color: var(--color-ink-soft);
+  }
+
+  .ci-inline-code {
+    font-family: var(--font-mono);
+    font-size: 0.9em;
+    background: var(--color-surface-sunk);
+    padding: 0.1em 0.3em;
+    border-radius: var(--radius-xs);
+  }
+
+  /* Mark outbound links so readers know they are leaving. */
+  .ci-prose a[data-external]::after {
+    content: "";
+    display: inline-block;
+    width: 0.5em;
+    height: 0.5em;
+    margin-left: 0.28em;
+    border-top: 1.5px solid currentColor;
+    border-right: 1.5px solid currentColor;
+    transform: translateY(-0.12em) rotate(45deg);
+    opacity: 0.6;
+  }
+
+  /* --- Data table ------------------------------------------------------- */
+  .ci-table-wrap {
+    overflow-x: auto;
+    border: 1px solid var(--color-rule);
+    border-radius: var(--radius-sm);
+    background: var(--color-surface);
+  }
+  .ci-table {
+    width: 100%;
+    font-size: var(--text-sm);
+  }
+  .ci-table caption {
+    caption-side: top;
+    text-align: left;
+    padding: 0.75rem 0.9rem 0;
+    font-size: var(--text-sm);
+    color: var(--color-muted);
+  }
+  .ci-table th,
+  .ci-table td {
+    text-align: left;
+    padding: 0.55rem 0.9rem;
+    border-bottom: 1px solid var(--color-rule);
+    vertical-align: top;
+  }
+  .ci-table thead th {
+    font-weight: 600;
+    color: var(--color-ink);
+    background: var(--color-surface-sunk);
+    white-space: nowrap;
+  }
+  .ci-table tbody tr:last-child td {
+    border-bottom: 0;
+  }
+
+  /* --- Callouts --------------------------------------------------------- */
+  .ci-callout {
+    border: 1px solid var(--color-rule);
+    border-left-width: 3px;
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    padding: 0.9rem 1.05rem;
+    background: var(--color-surface);
+    font-size: var(--text-sm);
+  }
+  .ci-callout-info {
+    border-left-color: var(--color-sea);
+    background: var(--color-sea-wash);
+  }
+  .ci-callout-tip {
+    border-left-color: var(--color-moss);
+    background: var(--color-moss-wash);
+  }
+  .ci-callout-warning {
+    border-left-color: var(--color-amber);
+    background: var(--color-amber-wash);
+  }
+  .ci-callout-official {
+    border-left-color: var(--color-ink);
+    background: var(--color-surface-sunk);
+  }
+
+  /* --- Cards: hairline, no shadow, no uniform radius soup --------------- */
+  .ci-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    background: transparent;
+  }
+  .ci-card-media {
+    position: relative;
+    overflow: hidden;
+    border-radius: var(--radius-sm);
+    background: var(--color-surface-sunk);
+    aspect-ratio: 3 / 2;
+  }
+  .ci-card-media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .ci-card-title {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: var(--text-lg);
+    line-height: 1.25;
+    letter-spacing: -0.01em;
+  }
+  .ci-card-title a {
+    color: inherit;
+    text-decoration: none;
+  }
+  .ci-card-title a:hover {
+    color: var(--color-sea-deep);
+    text-decoration: underline;
+    text-underline-offset: 0.18em;
+  }
+  /* Whole-card hit area without nesting interactive elements. */
+  .ci-card-link::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+  }
+
+  .ci-card-meta {
+    font-size: var(--text-xs);
+    color: var(--color-muted);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.3rem 0.9rem;
+  }
+
+  /* --- Section heading with a hairline that carries the eye ------------- */
+  .ci-section-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-bottom: 0.6rem;
+    border-bottom: 1px solid var(--color-rule-strong);
+    margin-bottom: 1.5rem;
+  }
+
+  /* --- Grids ------------------------------------------------------------ */
+  .ci-grid {
+    display: grid;
+    gap: 1.75rem 1.5rem;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 16rem), 1fr));
+  }
+
+  /* --- Content page layout: prose + marginalia -------------------------- */
+  .ci-article-layout {
+    display: grid;
+    gap: 2.5rem;
+    grid-template-columns: 1fr;
+  }
+  @media (min-width: 64rem) {
+    .ci-article-layout {
+      grid-template-columns: minmax(0, 1fr) 18rem;
+      gap: 3.5rem;
+    }
+    .ci-article-aside {
+      position: sticky;
+      top: 6rem;
+      align-self: start;
+    }
+  }
+
+  /* --- Header ----------------------------------------------------------- */
+  .ci-header {
+    position: sticky;
+    top: 0;
+    z-index: 40;
+    background: color-mix(in srgb, var(--color-paper) 88%, transparent);
+    backdrop-filter: saturate(1.4) blur(10px);
+    border-bottom: 1px solid var(--color-rule);
+  }
+
+  .ci-wordmark {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: var(--text-xl);
+    letter-spacing: -0.02em;
+    color: var(--color-ink);
+    text-decoration: none;
+    white-space: nowrap;
+  }
+  .ci-wordmark span {
+    color: var(--color-sea);
+  }
+
+  .ci-nav-link {
+    color: var(--color-ink-soft);
+    text-decoration: none;
+    font-size: var(--text-sm);
+    padding: 0.35rem 0;
+    border-bottom: 2px solid transparent;
+  }
+  .ci-nav-link:hover,
+  .ci-nav-link[aria-current="page"] {
+    color: var(--color-ink);
+    border-bottom-color: var(--color-sea);
+  }
+
+  /* --- Footer ----------------------------------------------------------- */
+  .ci-footer {
+    border-top: 1px solid var(--color-rule);
+    background: var(--color-surface-sunk);
+    margin-top: 4rem;
+  }
+
+  /* --- Source register -------------------------------------------------
+     Numbered because it genuinely is an ordered register of references.
+     --------------------------------------------------------------------- */
+  .ci-sources {
+    counter-reset: source;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    font-size: var(--text-sm);
+  }
+  .ci-sources li {
+    counter-increment: source;
+    display: grid;
+    grid-template-columns: 1.6rem 1fr;
+    gap: 0.5rem;
+    padding-block: 0.5rem;
+    border-bottom: 1px solid var(--color-rule);
+  }
+  .ci-sources li::before {
+    content: counter(source);
+    color: var(--color-muted);
+    font-variant-numeric: tabular-nums;
+    font-size: var(--text-xs);
+    padding-top: 0.15rem;
+  }
+
+  /* --- Empty states ----------------------------------------------------- */
+  .ci-empty {
+    border: 1px dashed var(--color-rule-strong);
+    border-radius: var(--radius-md);
+    padding: 2.5rem 1.5rem;
+    text-align: center;
+    color: var(--color-muted);
+    background: var(--color-surface);
+  }
+
+  /* --- Development-only banner for demo fixtures ------------------------ */
+  .ci-demo-banner {
+    background: repeating-linear-gradient(
+      135deg,
+      var(--color-amber-wash),
+      var(--color-amber-wash) 10px,
+      transparent 10px,
+      transparent 20px
+    );
+    border: 1px solid var(--color-amber);
+    color: var(--color-amber);
+    padding: 0.5rem 0.85rem;
+    font-size: var(--text-xs);
+    border-radius: var(--radius-sm);
+  }
+}
+
+@layer utilities {
+  .ci-visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+    border: 0;
+  }
+}
