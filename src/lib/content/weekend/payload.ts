@@ -826,3 +826,123 @@ export const SOURCES: { name: string; url: string; publisher?: string }[] = [
   { name: "Agenda cultural de la Generalitat de Catalunya", url: "https://agenda.cultura.gencat.cat/", publisher: "Generalitat de Catalunya" },
   { name: "Ajuntament de Vilabertran", url: "https://vilabertran.cat/" },
 ];
+
+/* -------------------------------------------------------------------------- */
+/* Images                                                                     */
+/* -------------------------------------------------------------------------- */
+
+export interface ImageMeta {
+  /** Matches a key in the generated `images.ts` manifest. */
+  key: string;
+  /** Zero-based index of the plan this image illustrates. */
+  planIndex: number;
+  /** Whether this is also the page's lead image. */
+  isHero?: boolean;
+  alt: Record<Locale, string>;
+  caption: Record<Locale, string>;
+}
+
+/**
+ * Credit line stored on every one of these media rows.
+ *
+ * These are illustrations, not photojournalism: they were generated, and the
+ * caption says so in the reader's language. A site whose entire argument is
+ * verified information and cited sources cannot present a generated image as a
+ * documentary photograph of an event that happened a specific way.
+ */
+export const IMAGE_CREDIT = "CatalunyaInfo";
+export const IMAGE_LICENCE = "Il·lustració pròpia generada amb IA";
+
+const AI_NOTE = {
+  ca: "Il·lustració generada amb intel·ligència artificial.",
+  es: "Ilustración generada con inteligencia artificial.",
+  en: "Illustration generated with artificial intelligence.",
+};
+
+export const IMAGE_META: ImageMeta[] = [
+  {
+    key: "santa-tecla-tarragona-castells",
+    planIndex: 0,
+    isHero: true,
+    alt: {
+      ca: "Castellers aixecant un castell davant la catedral de Tarragona durant Santa Tecla.",
+      es: "Castellers levantando un castell ante la catedral de Tarragona durante Santa Tecla.",
+      en: "Castellers raising a human tower in front of Tarragona cathedral during Santa Tecla.",
+    },
+    caption: {
+      ca: `Diada castellera a la plaça de les Cols, Tarragona. ${AI_NOTE.ca}`,
+      es: `Diada castellera en la plaza de les Cols, Tarragona. ${AI_NOTE.es}`,
+      en: `Human-tower gathering on Plaça de les Cols, Tarragona. ${AI_NOTE.en}`,
+    },
+  },
+  {
+    key: "sea-otter-europe-girona-ciclisme",
+    planIndex: 2,
+    alt: {
+      ca: "Ciclistes provant bicicletes entre les carpes de la fira, amb Girona al fons.",
+      es: "Ciclistas probando bicicletas entre las carpas de la feria, con Girona al fondo.",
+      en: "Cyclists testing bikes among the festival stands, with Girona in the background.",
+    },
+    caption: {
+      ca: `Zona d'exposició i proves de Sea Otter Europe, Girona. ${AI_NOTE.ca}`,
+      es: `Zona de exposición y pruebas de Sea Otter Europe, Girona. ${AI_NOTE.es}`,
+      en: `Expo and test-ride area at Sea Otter Europe, Girona. ${AI_NOTE.en}`,
+    },
+  },
+  {
+    key: "festa-sega-arros-delta-ebre",
+    planIndex: 4,
+    alt: {
+      ca: "Persones segant arròs a mà amb cistells de vímet en un arrossar inundat del Delta.",
+      es: "Personas segando arroz a mano con cestos de mimbre en un arrozal inundado del Delta.",
+      en: "People harvesting rice by hand with wicker baskets in a flooded Delta paddy field.",
+    },
+    caption: {
+      ca: `Sega tradicional de l'arròs a les Terres de l'Ebre. ${AI_NOTE.ca}`,
+      es: `Siega tradicional del arroz en las Terres de l'Ebre. ${AI_NOTE.es}`,
+      en: `Traditional rice harvest in the Ebro Delta. ${AI_NOTE.en}`,
+    },
+  },
+  {
+    key: "festa-bolet-setcases-pirineus",
+    planIndex: 6,
+    alt: {
+      ca: "Parades de bolets en un mercat de poble de muntanya amb el campanar al fons.",
+      es: "Paradas de setas en un mercado de pueblo de montaña con el campanario al fondo.",
+      en: "Mushroom stalls at a mountain village market with the bell tower behind.",
+    },
+    caption: {
+      ca: `Mercat de bolets al Pirineu, Setcases. ${AI_NOTE.ca}`,
+      es: `Mercado de setas en el Pirineo, Setcases. ${AI_NOTE.es}`,
+      en: `Mushroom market in the Pyrenees, Setcases. ${AI_NOTE.en}`,
+    },
+  },
+  {
+    key: "festa-sal-lescala-barques-illuminades",
+    planIndex: 7,
+    alt: {
+      ca: "Barques de vela llatina amb les veles il·luminades arribant a la platja al capvespre.",
+      es: "Barcas de vela latina con las velas iluminadas llegando a la playa al atardecer.",
+      en: "Lateen-sail boats with illuminated sails arriving at the beach at dusk.",
+    },
+    caption: {
+      ca: `Arribada de les barques a la Festa de la Sal, l'Escala. ${AI_NOTE.ca}`,
+      es: `Llegada de las barcas a la Festa de la Sal, L'Escala. ${AI_NOTE.es}`,
+      en: `Boats arriving at the Festa de la Sal, L'Escala. ${AI_NOTE.en}`,
+    },
+  },
+  {
+    key: "fira-formatge-artesa-llado",
+    planIndex: 8,
+    alt: {
+      ca: "Parades de formatge artesà en una plaça de poble de pedra amb visitants tastant.",
+      es: "Paradas de queso artesano en una plaza de pueblo de piedra con visitantes catando.",
+      en: "Artisan cheese stalls in a stone village square with visitors tasting.",
+    },
+    caption: {
+      ca: `Fira Catalana del Formatge Artesà, Lladó. ${AI_NOTE.ca}`,
+      es: `Fira Catalana del Formatge Artesà, Lladó. ${AI_NOTE.es}`,
+      en: `Catalan Artisan Cheese Fair, Lladó. ${AI_NOTE.en}`,
+    },
+  },
+];

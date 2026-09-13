@@ -107,3 +107,47 @@ test("plan links point at the sources register, with no invented URLs", () => {
     assert.ok(known.has(plan.url), `${plan.url} is not in the sources register`);
   }
 });
+
+test("images are attached to plans that exist, with alt and caption in every language", async () => {
+  const { IMAGE_META } = await import("../src/lib/content/weekend/payload.ts");
+  const { IMAGE_BY_KEY } = await import("../src/lib/content/weekend/images.ts");
+
+  assert.ok(IMAGE_META.length > 0);
+  for (const meta of IMAGE_META) {
+    assert.ok(IMAGE_BY_KEY.has(meta.key), `${meta.key} is missing from the manifest`);
+    assert.ok(meta.planIndex >= 0 && meta.planIndex < PLANS.length, `${meta.key} points at no plan`);
+    for (const locale of LOCALES) {
+      assert.ok(meta.alt[locale]?.length > 10, `${meta.key}: weak ${locale} alt text`);
+      assert.ok(meta.caption[locale]?.length > 10, `${meta.key}: missing ${locale} caption`);
+    }
+  }
+  assert.equal(IMAGE_META.filter((m) => m.isHero).length, 1, "there must be exactly one hero");
+});
+
+/**
+ * These illustrations are generated, not photographed. A site built on cited
+ * sources must not pass them off as documentary images, so every caption says
+ * so in the reader's own language.
+ */
+test("every generated illustration is disclosed as such in all three languages", async () => {
+  const { IMAGE_META } = await import("../src/lib/content/weekend/payload.ts");
+  const disclosure = { ca: /intel·ligència artificial/i, es: /inteligencia artificial/i, en: /artificial intelligence/i };
+
+  for (const meta of IMAGE_META) {
+    for (const locale of LOCALES) {
+      assert.match(meta.caption[locale], disclosure[locale], `${meta.key} (${locale}) hides that it is generated`);
+    }
+  }
+});
+
+test("image blocks only appear once the media rows exist", async () => {
+  const { IMAGE_META } = await import("../src/lib/content/weekend/payload.ts");
+
+  const withoutMedia = buildBody("ca");
+  assert.equal(withoutMedia.filter((b) => b.type === "image").length, 0);
+
+  const fake = new Map(IMAGE_META.map((m, i) => [m.key, `00000000-0000-4000-8000-${String(i).padStart(12, "0")}`]));
+  const withMedia = buildBody("ca", fake);
+  assert.equal(withMedia.filter((b) => b.type === "image").length, IMAGE_META.length);
+  assert.ok(bodySchema.safeParse(withMedia).success, "body with images must still validate");
+});

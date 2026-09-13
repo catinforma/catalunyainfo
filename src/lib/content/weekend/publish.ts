@@ -5,7 +5,15 @@ import { and, eq } from "drizzle-orm";
 import { requireDb, schema } from "@/lib/db/client";
 import { bodyToPlainText, type Block } from "@/lib/content/blocks";
 import { LOCALES, type Locale } from "@/lib/i18n/config";
-import { COPY, PLANS, SOURCES } from "./payload";
+import {
+  COPY,
+  IMAGE_CREDIT,
+  IMAGE_LICENCE,
+  IMAGE_META,
+  PLANS,
+  SOURCES,
+} from "./payload";
+import { IMAGE_BY_KEY } from "./images";
 
 /**
  * Publishes the weekend guide in all three languages.
@@ -40,7 +48,15 @@ function hostOf(url: string): string {
   }
 }
 
-export function buildBody(locale: Locale): Block[] {
+/**
+ * @param mediaIds key -> media row id. Images whose key is absent are simply
+ * not rendered, so the body still builds before the media rows exist (and in
+ * tests, which have no database).
+ */
+export function buildBody(
+  locale: Locale,
+  mediaIds: ReadonlyMap<string, string> = new Map(),
+): Block[] {
   const copy = COPY[locale];
   const blocks: Block[] = [];
 
@@ -82,6 +98,13 @@ export function buildBody(locale: Locale): Block[] {
     for (const paragraph of plan.body[locale]) {
       blocks.push({ type: "paragraph", text: paragraph });
     }
+
+    const image = IMAGE_META.find((m) => m.planIndex === index);
+    const mediaId = image ? mediaIds.get(image.key) : undefined;
+    if (image && mediaId) {
+      blocks.push({ type: "image", mediaId, size: "wide" });
+    }
+
     if (plan.url) {
       blocks.push({
         type: "paragraph",
@@ -108,6 +131,7 @@ export function buildBody(locale: Locale): Block[] {
 export interface PublishSummary {
   entryId: string;
   sources: number;
+  media: number;
   editions: { locale: Locale; path: string; blocks: number; action: "created" | "updated" }[];
   publishedAt: string;
   lastVerifiedAt: string;
@@ -143,6 +167,47 @@ export async function publishWeekendGuide(): Promise<PublishSummary> {
     if (inserted[0]) sourceIds.push(inserted[0].id);
   }
 
+  // ---- Media --------------------------------------------------------------
+  // Upserted by URL: the manifest is regenerated from `incoming/`, so the URL
+  // is the stable identity, not a row id.
+  const mediaIds = new Map<string, string>();
+  for (const meta of IMAGE_META) {
+    const file = IMAGE_BY_KEY.get(meta.key);
+    if (!file) continue;
+
+    const values = {
+      url: file.url,
+      mimeType: "image/webp",
+      width: file.width,
+      height: file.height,
+      blurDataUrl: file.blurDataUrl,
+      credit: IMAGE_CREDIT,
+      license: IMAGE_LICENCE,
+      alt: meta.alt,
+      caption: meta.caption,
+    };
+
+    const existing = await db
+      .select({ id: schema.media.id })
+      .from(schema.media)
+      .where(eq(schema.media.url, file.url))
+      .limit(1);
+
+    if (existing[0]) {
+      await db.update(schema.media).set(values).where(eq(schema.media.id, existing[0].id));
+      mediaIds.set(meta.key, existing[0].id);
+    } else {
+      const inserted = await db
+        .insert(schema.media)
+        .values(values)
+        .returning({ id: schema.media.id });
+      if (inserted[0]) mediaIds.set(meta.key, inserted[0].id);
+    }
+  }
+
+  const heroKey = IMAGE_META.find((m) => m.isHero)?.key;
+  const heroMediaId = heroKey ? (mediaIds.get(heroKey) ?? null) : null;
+
   // ---- Category -----------------------------------------------------------
   const categoryRows = await db
     .select({ id: schema.categories.id })
@@ -162,7 +227,7 @@ export async function publishWeekendGuide(): Promise<PublishSummary> {
   if (entryId) {
     await db
       .update(schema.entries)
-      .set({ primaryCategoryId: categoryId, isFeatured: true, updatedAt: now })
+      .set({ primaryCategoryId: categoryId, heroMediaId, isFeatured: true, updatedAt: now })
       .where(eq(schema.entries.id, entryId));
   } else {
     const inserted = await db
@@ -173,6 +238,7 @@ export async function publishWeekendGuide(): Promise<PublishSummary> {
         type: "article",
         key: ENTRY_KEY,
         primaryCategoryId: categoryId,
+        heroMediaId,
         isFeatured: true,
         isDemo: false,
       })
@@ -199,7 +265,7 @@ export async function publishWeekendGuide(): Promise<PublishSummary> {
 
   for (const locale of LOCALES) {
     const copy = COPY[locale];
-    const body = buildBody(locale);
+    const body = buildBody(locale, mediaIds);
     const slug = copy.path.split("/").filter(Boolean).at(-1) ?? copy.path;
 
     const values = {
@@ -247,6 +313,7 @@ export async function publishWeekendGuide(): Promise<PublishSummary> {
   return {
     entryId,
     sources: sourceIds.length,
+    media: mediaIds.size,
     editions,
     publishedAt: publishedAt.toISOString(),
     lastVerifiedAt: LAST_VERIFIED.toISOString(),

@@ -23,7 +23,8 @@
     "audit:readiness": "node --experimental-strip-types scripts/adsense-readiness.ts",
     "build:redirects": "node --experimental-strip-types scripts/build-redirects.ts",
     "prebuild": "npm run build:redirects",
-    "publish:weekend": "node --experimental-strip-types scripts/publish-weekend-guide.ts"
+    "publish:weekend": "node --experimental-strip-types scripts/publish-weekend-guide.ts",
+    "images:import": "node --experimental-strip-types scripts/import-images.ts"
   },
   "dependencies": {
     "@eslint/eslintrc": "^3.3.7",

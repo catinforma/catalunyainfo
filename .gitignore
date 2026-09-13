@@ -19,3 +19,6 @@ CLAUDE.md
 
 .vercel
 .env*
+
+# Editorial images waiting to be imported with `npm run images:import`.
+incoming/
