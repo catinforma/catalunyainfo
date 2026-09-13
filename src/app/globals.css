@@ -615,6 +615,68 @@
     border-bottom: 0;
   }
 
+  /* --- Tables on a phone ------------------------------------------------
+     A five-column table inside a 390px viewport is a sideways scroll with
+     four-line cells. Below 40rem each row becomes a stacked card instead,
+     with the column name carried in by `data-label`. The ARIA roles set in
+     the renderer keep the structure intact once `display` is overridden.
+     ---------------------------------------------------------------------- */
+  @media (max-width: 40rem) {
+    .ci-table-wrap {
+      overflow-x: visible;
+    }
+    .ci-table,
+    .ci-table tbody,
+    .ci-table tr,
+    .ci-table th,
+    .ci-table td {
+      display: block;
+      width: auto;
+    }
+    .ci-table thead {
+      /* Hidden visually; the labels move into each cell. */
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip-path: inset(50%);
+      white-space: nowrap;
+    }
+    .ci-table tbody tr {
+      border-bottom: 1px solid var(--color-rule-strong);
+      padding: 0.85rem 0.9rem;
+    }
+    .ci-table tbody tr:last-child {
+      border-bottom: 0;
+    }
+    .ci-table tbody th[scope="row"] {
+      font-family: var(--font-display);
+      font-size: var(--text-lg);
+      font-weight: 600;
+      line-height: 1.25;
+      padding: 0 0 0.5rem;
+      border-bottom: 0;
+      background: none;
+    }
+    .ci-table tbody th[scope="row"]::before {
+      content: none;
+    }
+    .ci-table tbody td {
+      display: grid;
+      grid-template-columns: minmax(5.5rem, max-content) minmax(0, 1fr);
+      gap: 0.75rem;
+      padding: 0.15rem 0;
+      border-bottom: 0;
+    }
+    .ci-table tbody td:empty {
+      display: none;
+    }
+    .ci-table tbody td::before {
+      content: attr(data-label);
+      color: var(--color-muted);
+    }
+  }
+
   /* --- Callouts --------------------------------------------------------- */
   .ci-callout {
     border: 1px solid var(--color-rule);

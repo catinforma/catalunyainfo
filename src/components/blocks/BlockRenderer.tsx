@@ -147,12 +147,20 @@ function BlockView({ block, context }: { block: Block; context: BlockContext }) 
     case "table":
       return (
         <div className="ci-table-wrap">
-          <table className="ci-table">
+          {/*
+            Explicit ARIA roles are set even though this is a real <table>.
+            Below 40rem the CSS restyles the rows as stacked cards, and changing
+            `display` on table elements strips their implicit roles - the roles
+            put them back, so the structure survives for assistive technology at
+            every width. `data-label` carries the column name into the stacked
+            layout, where the header row is hidden.
+          */}
+          <table className="ci-table" role="table">
             {block.caption ? <caption>{block.caption}</caption> : null}
             <thead>
-              <tr>
+              <tr role="row">
                 {block.headers.map((header, i) => (
-                  <th key={i} scope="col">
+                  <th key={i} scope="col" role="columnheader">
                     {header}
                   </th>
                 ))}
@@ -160,14 +168,22 @@ function BlockView({ block, context }: { block: Block; context: BlockContext }) 
             </thead>
             <tbody>
               {block.rows.map((row, i) => (
-                <tr key={i}>
+                <tr key={i} role="row">
                   {row.map((cell, j) =>
                     j === 0 ? (
-                      <th key={j} scope="row" className="font-normal">
+                      <th
+                        key={j}
+                        scope="row"
+                        role="rowheader"
+                        className="font-normal"
+                        data-label={block.headers[j]}
+                      >
                         {renderInline(cell)}
                       </th>
                     ) : (
-                      <td key={j}>{renderInline(cell)}</td>
+                      <td key={j} role="cell" data-label={block.headers[j]}>
+                        {renderInline(cell)}
+                      </td>
                     ),
                   )}
                 </tr>
