@@ -38,9 +38,36 @@ function authorised(request: Request): boolean {
   return a.length === b.length && timingSafeEqual(a, b);
 }
 
-/** Errors that mean "already applied" rather than "broken". */
+/**
+ * Flattens an error and everything it wraps.
+ *
+ * Drizzle wraps driver errors in a `DrizzleQueryError` whose message is only
+ * the SQL it tried to run, so the Postgres code ("42710: type already exists")
+ * is one or two levels down the `cause` chain.
+ */
+function describe(error: unknown): string {
+  const parts: string[] = [];
+  let current: unknown = error;
+  for (let depth = 0; current && depth < 5; depth += 1) {
+    if (current instanceof Error) {
+      parts.push(current.message);
+      const code = (current as { code?: unknown }).code;
+      if (typeof code === "string") parts.push(code);
+      current = current.cause;
+    } else {
+      parts.push(String(current));
+      break;
+    }
+  }
+  return parts.join(" | ");
+}
+
+/**
+ * Errors that mean "already applied" rather than "broken".
+ * 42P07 = relation exists, 42710 = object exists, 42P06 = schema exists.
+ */
 function isAlreadyExists(message: string): boolean {
-  return /already exists|duplicate key value/i.test(message);
+  return /already exists|duplicate key value|42P07|42710|42P06/i.test(message);
 }
 
 export async function POST(request: Request) {
@@ -70,7 +97,7 @@ export async function POST(request: Request) {
         await db.execute(sql.raw(statement));
         applied += 1;
       } catch (error) {
-        const message = error instanceof Error ? error.message : String(error);
+        const message = describe(error);
         if (isAlreadyExists(message)) {
           skipped += 1;
           continue;
@@ -90,7 +117,7 @@ export async function POST(request: Request) {
     seeded = await seedTaxonomy();
   } catch (error) {
     return NextResponse.json(
-      { ok: false, stage: "seed", error: error instanceof Error ? error.message : String(error) },
+      { ok: false, stage: "seed", error: describe(error) },
       { status: 500 },
     );
   }
@@ -101,7 +128,7 @@ export async function POST(request: Request) {
     published = await publishWeekendGuide();
   } catch (error) {
     return NextResponse.json(
-      { ok: false, stage: "publish", error: error instanceof Error ? error.message : String(error) },
+      { ok: false, stage: "publish", error: describe(error) },
       { status: 500 },
     );
   }
