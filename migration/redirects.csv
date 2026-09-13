@@ -1,4 +1,5 @@
 from_path,to_path,status,decision,reason
+/index.html,/ca/,308,redirect,"Duplicate of the v1 home page. Not in the v1 sitemap, so it was missed until Search Console showed 97 impressions and 2 clicks over 180 days"
 /ultimahora/,/ca/actualitat/,308,redirect,"News hub -> closest equivalent hub on the new site"
 /politica/,/ca/actualitat/,308,redirect,"News category hub with no direct equivalent; closest live hub"
 /economia/,/ca/actualitat/,308,redirect,"News category hub with no direct equivalent; closest live hub"

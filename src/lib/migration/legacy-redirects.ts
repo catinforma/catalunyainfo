@@ -10,6 +10,11 @@ export interface LegacyRedirect {
 
 export const LEGACY_REDIRECTS: readonly LegacyRedirect[] = [
   {
+    "from": "/index.html",
+    "to": "/ca/",
+    "status": 308
+  },
+  {
     "from": "/ultimahora/",
     "to": "/ca/actualitat/",
     "status": 308

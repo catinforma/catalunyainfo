@@ -4,18 +4,35 @@
 
 | Item | State |
 | --- | --- |
-| Property verified | **Not yet** — pending the production deploy of v2 |
-| Sitemap submitted | Not yet |
-| Indexing enabled | **No** — `NEXT_PUBLIC_ALLOW_INDEXING` is `false` |
-| MCP access from this session | **Not available** |
+| Property | `sc-domain:catalunyainfo.com`, verified, permission `siteOwner` |
+| Sitemap submitted | Yes — `sitemap.xml`, 2026-09-13 |
+| Indexing enabled | Yes — `NEXT_PUBLIC_ALLOW_INDEXING=true` |
+| API access | Yes — OAuth desktop client, token at `%LOCALAPPDATA%\mcp-gsc\mcp-gsc	oken.json` |
 
-This file contains **no** coverage numbers, query data, CTR or position figures.
-No Search Console MCP server is connected to this session, and the standing
-instruction is not to invent them. The only Google MCP available here is
-`google-ads-mcp`, which is Google Ads — a different product.
+## What the first real query showed (2026-09-13, last 180 days)
 
-Everything below is the procedure to follow, written so it can be executed
-directly once access exists.
+| | |
+| --- | --- |
+| Total | 4,095 impressions, 94 clicks |
+| Home page `/` | 3,537 impressions, 88 clicks — **86% of impressions, 94% of clicks** |
+| `/index.html` | 97 impressions, 2 clicks |
+| All 42 `/article/*` pages together | ~390 impressions, 4 clicks |
+
+Every meaningful query is navigational and brand-led: *catalunya info*,
+*catalunya informació*, *catalunya informacio*. Nothing ranks on a topic.
+
+Two conclusions, both acted on:
+
+1. **The 410s stand.** The 42 articles produced 4 clicks in six months between
+   them. None is worth a redirect, and redirecting them would be the soft-404
+   pattern for no gain.
+2. **`/index.html` was missing from the migration.** It never appeared in the
+   v1 sitemap, so the CSV built from that sitemap did not cover it, and it was
+   answering 404 despite real traffic. Now a 308 to `/ca/`. This is exactly the
+   gap the historical query existed to find.
+
+The value of this domain is almost entirely its brand home page. Protecting
+`/` -> `/ca/` matters far more than anything else in the migration.
 
 ## Property setup
 
@@ -124,5 +141,8 @@ Until then, this section stays empty rather than speculative.
 | Date | Action | Result |
 | --- | --- | --- |
 | 2026-09-13 | Audited v1 live site by HTTP | 42 thin articles, client-rendered homepage, no `<h1>`, apex→www 307 |
+| 2026-09-13 | Sitemap submitted; three dead v1 sitemaps (`sitemap-articles.xml`, `sitemap-pages.xml`, `sitemap_index.xml`, all 404) removed | Only `sitemap.xml` remains registered |
+| 2026-09-13 | Weekend guide inspected in all three languages | **Submitted and indexed**, crawled 14:55 the same day. Google-selected canonical matches the declared one in each language. |
+| 2026-09-13 | `/ca/` inspected | Not yet known to Google; it will be picked up from the sitemap |
 | 2026-09-13 | Domain moved to the v2 project | Reclaimed by `_vercel` TXT proof at Spaceship. `www` serves v2, apex 308s to `www`, v1 is gone. Indexing still **off**, so the whole domain is `noindex` — expect catalunyainfo.com to be deindexed over the coming weeks. That is intended for the 42 removed articles; the homepage returns once content is published and the switch is flipped. |
 | | *(next entry: property verification)* | |
