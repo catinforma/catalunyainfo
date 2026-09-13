@@ -2,8 +2,8 @@ import assert from "node:assert/strict";
 import { test } from "node:test";
 
 import { bodySchema, bodyToPlainText, wordCount } from "../src/lib/content/blocks.ts";
-import { COPY, PLANS, SOURCES } from "../scripts/content/weekend-2026-09-19.ts";
-import { buildBody } from "../scripts/publish-weekend-guide.ts";
+import { COPY, PLANS, SOURCES } from "../src/lib/content/weekend/payload.ts";
+import { buildBody } from "../src/lib/content/weekend/publish.ts";
 import { LOCALES } from "../src/lib/i18n/config.ts";
 
 /**

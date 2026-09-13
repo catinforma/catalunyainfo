@@ -10,7 +10,7 @@
  * pages are updated each week instead of accumulating a new set of URLs.
  */
 
-import type { Locale } from "../../src/lib/i18n/config.ts";
+import type { Locale } from "@/lib/i18n/config";
 
 export interface Plan {
   /** Heading shown for the plan, per locale. */
