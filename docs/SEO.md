@@ -107,10 +107,16 @@ at once. Indexing is allowed only when it is `"true"` **and** `VERCEL_ENV` is
 | Page `robots` meta | `noindex, nofollow, nocache` | `index, follow, max-image-preview:large` |
 | `X-Robots-Tag` header | `noindex, nofollow, noarchive` | absent |
 
-**Preview deployments can never be indexed.** `VERCEL_ENV` is `preview`, so the
-header is sent regardless of the variable. This matters more than robots.txt: a
-`Disallow` stops crawling but not indexing of a URL discovered elsewhere, while
-the header removes it.
+Indexing additionally requires the request to arrive on
+`Host: www.catalunyainfo.com`. Vercel serves each production build on a
+`*.vercel.app` alias as well as on the custom domain, both with
+`VERCEL_ENV=production`, so an environment-only gate would expose a complete
+duplicate of the site on a host we do not control. Any other host is noindex
+and blanket-disallowed, permanently.
+
+**Preview deployments can never be indexed**, on either count. This matters more
+than robots.txt: a `Disallow` stops crawling but not the indexing of a URL
+discovered elsewhere, whereas the header removes it.
 
 Permanently excluded, on every deployment:
 

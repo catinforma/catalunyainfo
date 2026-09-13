@@ -67,7 +67,7 @@ the sitemap. Fresh static HTML is served from the CDN on the next request.
 ## Scheduling
 
 Set the status to `scheduled` and give `scheduled_for` a time. A Vercel Cron
-calls `/api/cron/publish-scheduled` every 15 minutes and:
+calls `/api/cron/publish-scheduled` and:
 
 1. publishes anything whose time has passed,
 2. flips published pages whose `review_due_at` has passed to `needs_update`,
@@ -75,6 +75,12 @@ calls `/api/cron/publish-scheduled` every 15 minutes and:
 
 The job is idempotent and authorised with `CRON_SECRET`, compared in constant
 time.
+
+**On the current Hobby plan it runs once a day, at 05:00 UTC.** So a page
+scheduled for 14:00 goes live at the next morning's run. Until that changes,
+treat scheduling as "publish on this day" rather than "publish at this minute",
+or just press Publish. `docs/DEPLOYMENT.md` lists the three ways to get finer
+granularity.
 
 ## Translating
 

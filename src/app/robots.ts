@@ -1,9 +1,11 @@
 import type { MetadataRoute } from "next";
+import { headers } from "next/headers";
 
-import { absoluteUrl, indexingAllowed, siteOrigin } from "@/lib/site";
+import { CANONICAL_HOST, absoluteUrl, indexingAllowed, siteOrigin } from "@/lib/site";
 
-export const dynamic = "force-static";
-export const revalidate = 3600;
+// Dynamic so the host can be checked. robots.txt is requested rarely enough
+// that a function invocation per request is not worth optimising away.
+export const dynamic = "force-dynamic";
 
 /**
  * robots.txt
@@ -21,8 +23,13 @@ export const revalidate = 3600;
  *    excluded. Internal search is excluded because result pages are thin and
  *    near-duplicate by nature.
  */
-export default function robots(): MetadataRoute.Robots {
-  if (!indexingAllowed()) {
+export default async function robots(): Promise<MetadataRoute.Robots> {
+  // A production build is also served on its `*.vercel.app` alias. Only the
+  // canonical host may ever invite crawlers.
+  const host = (await headers()).get("host")?.split(":")[0]?.toLowerCase();
+  const onCanonicalHost = host === CANONICAL_HOST;
+
+  if (!indexingAllowed() || !onCanonicalHost) {
     return {
       rules: [{ userAgent: "*", disallow: "/" }],
     };

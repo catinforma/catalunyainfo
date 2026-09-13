@@ -68,8 +68,25 @@ test("no AdSense or ad network script is present anywhere", () => {
   );
 });
 
-test("the production origin is never a vercel.app host", () => {
-  const site = readFileSync(join(SRC, "lib", "site.ts"), "utf8");
-  assert.match(site, /productionOrigin:\s*"https:\/\/www\.catalunyainfo\.com"/);
-  assert.doesNotMatch(site, /productionOrigin:[^\n]*vercel\.app/);
+test("the production origin is the canonical host, never a vercel.app alias", async () => {
+  const { CANONICAL_HOST, SITE } = await import("../src/lib/site.ts");
+
+  assert.equal(CANONICAL_HOST, "www.catalunyainfo.com");
+  assert.equal(SITE.productionOrigin, "https://www.catalunyainfo.com");
+  assert.doesNotMatch(SITE.productionOrigin, /vercel\.app/);
+});
+
+/**
+ * A production build is also served on its `*.vercel.app` alias, with
+ * VERCEL_ENV=production. Both the proxy and robots.txt must therefore gate on
+ * the request host, not on the environment alone — otherwise enabling indexing
+ * would publish a duplicate of the site on a host we do not control.
+ */
+test("indexing is gated on the request host, not only on the environment", () => {
+  const proxy = readFileSync(join(SRC, "proxy.ts"), "utf8");
+  assert.match(proxy, /isIndexableRequest\(\s*request/);
+  assert.match(proxy, /host === CANONICAL_HOST/);
+
+  const robots = readFileSync(join(SRC, "app", "robots.ts"), "utf8");
+  assert.match(robots, /onCanonicalHost/);
 });

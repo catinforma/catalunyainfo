@@ -46,11 +46,26 @@ function detectLocale(request: NextRequest): Locale {
   return DEFAULT_LOCALE;
 }
 
-function isIndexableDeployment(): boolean {
-  return (
-    process.env.VERCEL_ENV === "production" &&
-    process.env.NEXT_PUBLIC_ALLOW_INDEXING === "true"
-  );
+/** The one host that is ever allowed into a search index. */
+const CANONICAL_HOST = "www.catalunyainfo.com";
+
+/**
+ * Indexing requires all three: the production environment, the explicit switch,
+ * and a request that actually arrived on the canonical host.
+ *
+ * The host check is the one that matters in practice. Vercel assigns the first
+ * deployment — and every later production deployment — a `*.vercel.app` alias
+ * that serves the same build with `VERCEL_ENV=production`. Without this check,
+ * flipping the indexing switch would make those aliases indexable too, and the
+ * site would be competing with a duplicate of itself on a host we do not
+ * control.
+ */
+function isIndexableRequest(request: NextRequest): boolean {
+  if (process.env.VERCEL_ENV !== "production") return false;
+  if (process.env.NEXT_PUBLIC_ALLOW_INDEXING !== "true") return false;
+
+  const host = (request.headers.get("host") ?? "").split(":")[0]?.toLowerCase();
+  return host === CANONICAL_HOST;
 }
 
 /**
@@ -119,7 +134,7 @@ export default function proxy(request: NextRequest) {
   // purpose. 410 gets them dropped from the index faster and stops Google
   // re-crawling them for months.
   if (LEGACY_GONE.has(pathname)) {
-    return decorate(new NextResponse(null, { status: 410 }), pathname);
+    return decorate(new NextResponse(null, { status: 410 }), pathname, request);
   }
 
   // ---- Admin gate ---------------------------------------------------------
@@ -128,7 +143,7 @@ export default function proxy(request: NextRequest) {
       const url = request.nextUrl.clone();
       url.pathname = "/admin/login";
       url.search = `?next=${encodeURIComponent(pathname)}`;
-      return decorate(NextResponse.redirect(url), pathname);
+      return decorate(NextResponse.redirect(url), pathname, request);
     }
   }
 
@@ -140,19 +155,23 @@ export default function proxy(request: NextRequest) {
     // mapping must never be cached as permanent by a browser or a proxy.
     const response = NextResponse.redirect(url, 307);
     response.headers.set("Vary", "Accept-Language, Cookie");
-    return decorate(response, pathname);
+    return decorate(response, pathname, request);
   }
 
-  return decorate(NextResponse.next(), pathname);
+  return decorate(NextResponse.next(), pathname, request);
 }
 
-function decorate(response: NextResponse, pathname: string): NextResponse {
+function decorate(
+  response: NextResponse,
+  pathname: string,
+  request: NextRequest,
+): NextResponse {
   response.headers.set("Content-Security-Policy", contentSecurityPolicy());
   for (const [key, value] of Object.entries(SECURITY_HEADERS)) {
     response.headers.set(key, value);
   }
 
-  if (!isIndexableDeployment() || isAlwaysNoindex(pathname)) {
+  if (!isIndexableRequest(request) || isAlwaysNoindex(pathname)) {
     response.headers.set("X-Robots-Tag", "noindex, nofollow, noarchive");
   }
 

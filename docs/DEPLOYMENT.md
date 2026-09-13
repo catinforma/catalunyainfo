@@ -11,8 +11,15 @@
 Preview deployments send `X-Robots-Tag: noindex, nofollow, noarchive` on every
 response and serve a blanket-disallow `robots.txt`, because `VERCEL_ENV` is
 `preview`. This is not configurable by an environment variable — it is a
-property of not being production. A `*.vercel.app` URL cannot end up in the
-index.
+property of not being production.
+
+**Production deployments are gated on the request host as well.** Vercel serves
+every production build on a `*.vercel.app` alias *and* on the custom domain,
+with `VERCEL_ENV=production` in both cases. Gating only on the environment would
+therefore publish a full duplicate of the site on a host we do not control, the
+moment indexing is switched on. So the proxy and `robots.txt` both additionally
+require `Host: www.catalunyainfo.com`; anything else is noindex and
+blanket-disallowed, permanently and regardless of any environment variable.
 
 ## Environment variables
 
@@ -115,12 +122,31 @@ domain reassignment, not a rebuild.
 `vercel.json` registers one job:
 
 ```json
-{ "path": "/api/cron/publish-scheduled", "schedule": "*/15 * * * *" }
+{ "path": "/api/cron/publish-scheduled", "schedule": "0 5 * * *" }
 ```
 
 It publishes scheduled pages, flips overdue pages to `needs_update` and prunes
 expired sessions. Vercel sends `CRON_SECRET` as a bearer token; without it the
 endpoint answers 401. The job is idempotent — a double run changes nothing.
+
+**The daily schedule is a Hobby-plan constraint, not a design choice.** Vercel
+Hobby allows one cron run per day; the deploy is rejected outright with anything
+more frequent. The practical effect: a page scheduled for 14:00 publishes at the
+next 05:00 UTC run, not at 14:00.
+
+Three ways out, in order of preference:
+
+1. **Upgrade to Pro** and change the schedule back to `*/15 * * * *`. That is the
+   only change needed — the endpoint is already idempotent and authorised.
+2. **Publish manually.** For a site publishing a few pages a week, an editor
+   pressing Publish is not a hardship, and scheduling can simply go unused.
+3. **Call the endpoint from outside Vercel** on whatever interval you like
+   (GitHub Actions, cron-job.org, an existing server):
+   ```bash
+   curl -H "Authorization: Bearer $CRON_SECRET"      https://www.catalunyainfo.com/api/cron/publish-scheduled
+   ```
+   Same authorisation, same idempotency. This is the free route to
+   15-minute granularity.
 
 ## Cost control
 

@@ -7,10 +7,13 @@
  * full re-crawl of every indexed URL for zero technical gain, so we keep `www`
  * and make the apex -> www redirect permanent (308) instead of temporary (307).
  */
+/** The only host that may ever be indexed. */
+export const CANONICAL_HOST = "www.catalunyainfo.com";
+
 export const SITE = {
   name: "CatalunyaInfo",
   /** Canonical production origin. Never a *.vercel.app URL. */
-  productionOrigin: "https://www.catalunyainfo.com",
+  productionOrigin: `https://${CANONICAL_HOST}`,
   /** Contact mailbox surfaced on legal/editorial pages. */
   contactEmail: "hola@catalunyainfo.com",
   /** Twitter/X handle, without the @. Empty string = not published yet. */
