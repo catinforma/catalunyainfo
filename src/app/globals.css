@@ -437,7 +437,12 @@
     outline-offset: 2px;
   }
   .ci-ask input {
-    flex: 1 1 auto;
+    /* flex-basis 0 and width 0, not `auto`: an <input> carries an intrinsic
+       width from its `size` attribute (~245px), and under min-content sizing
+       that wins over min-width:0 and pushes the whole hero past a 320px
+       viewport. Starting from zero lets it grow into whatever is left. */
+    flex: 1 1 0;
+    width: 0;
     min-width: 0;
     font: inherit;
     font-size: var(--text-lg);
