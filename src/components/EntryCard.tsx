@@ -66,6 +66,14 @@ export function EntryCard({
         <time dateTime={isoDate(date)}>{formatDate(date, locale, "short")}</time>
         <span>{interpolate(t.meta.readingTime, { minutes: entry.readingMinutes })}</span>
       </p>
+
+      {/* Visual affordance only. The whole card is already one link via
+          `.ci-card-link::after`, so this is a span rather than a second anchor:
+          two links to the same place would be a duplicate stop for anyone using
+          a screen reader or the keyboard. */}
+      <span className="ci-card-more" aria-hidden="true">
+        {t.common.readMore}
+      </span>
     </article>
   );
 }
