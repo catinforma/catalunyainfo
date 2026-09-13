@@ -181,6 +181,7 @@
 
   body {
     margin: 0;
+    overflow-x: clip;
     background: var(--color-paper);
     color: var(--color-ink);
     font-family: var(--font-sans);
@@ -472,6 +473,7 @@
      it as data rather than prose.
      --------------------------------------------------------------------- */
   .ci-margin-block {
+    min-width: 0;
     border-left: 3px solid var(--color-contour);
     background: var(--color-surface);
     padding: 1rem 1.15rem;
@@ -480,10 +482,23 @@
 
   .ci-facts {
     display: grid;
-    grid-template-columns: minmax(6.5rem, max-content) 1fr;
+    grid-template-columns: minmax(5rem, max-content) minmax(0, 1fr);
     gap: 0.45rem 1rem;
     margin: 0;
     font-size: var(--text-sm);
+    overflow-wrap: break-word;
+  }
+
+  /* One column under ~26rem: a label plus a long value has no room side by
+     side on a phone, and the value is the part worth reading. */
+  @media (max-width: 26rem) {
+    .ci-facts {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 0.1rem;
+    }
+    .ci-facts dt {
+      margin-top: 0.5rem;
+    }
   }
   .ci-facts dt {
     color: var(--color-muted);
@@ -496,8 +511,11 @@
   /* --- Prose ------------------------------------------------------------ */
   .ci-prose {
     max-width: var(--spacing-measure);
+    min-width: 0;
     font-size: var(--text-base);
     line-height: 1.7;
+    /* Long URLs and unbroken names must not push the column wider. */
+    overflow-wrap: break-word;
   }
   .ci-prose > * + * {
     margin-top: 1.15em;
@@ -547,7 +565,11 @@
 
   /* --- Data table ------------------------------------------------------- */
   .ci-table-wrap {
+    max-width: 100%;
+    min-width: 0;
     overflow-x: auto;
+    /* Momentum scrolling, and a hint that the table continues sideways. */
+    overscroll-behavior-x: contain;
     border: 1px solid var(--color-rule);
     border-radius: var(--radius-sm);
     background: var(--color-surface);
@@ -693,7 +715,10 @@
   .ci-article-layout {
     display: grid;
     gap: 2.5rem;
-    grid-template-columns: 1fr;
+    /* minmax(0, 1fr), not 1fr: a grid column defaults to min-width:auto, so a
+       wide child (the summary table) stretches the column past the viewport
+       and drags the whole article into horizontal scroll. */
+    grid-template-columns: minmax(0, 1fr);
   }
   @media (min-width: 64rem) {
     .ci-article-layout {
