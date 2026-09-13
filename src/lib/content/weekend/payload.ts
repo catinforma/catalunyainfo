@@ -851,7 +851,12 @@ export interface ImageMeta {
  * documentary photograph of an event that happened a specific way.
  */
 export const IMAGE_CREDIT = "CatalunyaInfo";
-export const IMAGE_LICENCE = "Il·lustració pròpia generada amb IA";
+/**
+ * Left empty on purpose: the caption already states, in the reader's language,
+ * that the image is generated. Repeating it in the licence line said the same
+ * thing twice under every picture.
+ */
+export const IMAGE_LICENCE: string | null = null;
 
 const AI_NOTE = {
   ca: "Il·lustració generada amb intel·ligència artificial.",

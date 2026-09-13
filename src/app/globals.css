@@ -162,8 +162,16 @@
   html {
     -webkit-text-size-adjust: 100%;
     scroll-behavior: smooth;
-    /* Leaves room for the sticky header when jumping to an anchor. */
-    scroll-padding-top: 5.5rem;
+    /* Room for the sticky header when jumping to an anchor. The phone header is
+       two rows tall - wordmark plus the section rail - so it needs more than
+       the desktop one, or the heading lands underneath it. */
+    scroll-padding-top: 8.5rem;
+  }
+
+  @media (min-width: 48rem) {
+    html {
+      scroll-padding-top: 5.5rem;
+    }
   }
 
   @media (prefers-reduced-motion: reduce) {
