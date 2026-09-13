@@ -24,6 +24,11 @@ It covers the apex, `www` and every subdomain and protocol in one place, which
 is what you want when the apex redirects to `www`. A URL-prefix property would
 need separate entries and would miss the apex's redirect behaviour.
 
+A `google-site-verification` TXT record already exists on the apex from the v1
+setup, and it survived the hosting change. Check whether it corresponds to a
+Domain property that is still verified before setting up a new one — if it is,
+there is nothing to do for verification.
+
 If DNS verification is not possible, the fallback is the HTML tag method:
 set `NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION` and add it to the metadata in
 `(public)/[locale]/layout.tsx` under `verification.google`.
@@ -119,4 +124,5 @@ Until then, this section stays empty rather than speculative.
 | Date | Action | Result |
 | --- | --- | --- |
 | 2026-09-13 | Audited v1 live site by HTTP | 42 thin articles, client-rendered homepage, no `<h1>`, apex→www 307 |
+| 2026-09-13 | Domain moved to the v2 project | Reclaimed by `_vercel` TXT proof at Spaceship. `www` serves v2, apex 308s to `www`, v1 is gone. Indexing still **off**, so the whole domain is `noindex` — expect catalunyainfo.com to be deindexed over the coming weeks. That is intended for the 42 removed articles; the homepage returns once content is published and the switch is flipped. |
 | | *(next entry: property verification)* | |

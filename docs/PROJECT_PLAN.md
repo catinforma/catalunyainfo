@@ -75,8 +75,11 @@ These are blocked on things only the owner can provide.
 
 - [ ] **Create the Postgres database** (Neon or Vercel Postgres), set
       `DATABASE_URL` in Vercel, run `npm run db:push`
-- [ ] **Point the domain at the new project** in Vercel, with apex → www as a
-      permanent redirect (`DEPLOYMENT.md`)
+- [x] **Point the domain at the new project** — done 2026-09-13. The domain was
+      claimed by a Vercel account we no longer have access to, so it was
+      reclaimed by DNS ownership proof (`_vercel` TXT at Spaceship) rather than
+      released from the old account. `www` is primary, apex 308s to it, and the
+      site is serving with indexing still off.
 - [ ] **Create CMS accounts** with `npm run admin:create-user`
 - [ ] **Fill in the real company details** for the legal pages: registered name,
       tax number, registered address, hosting provider, data-protection contact.

@@ -84,14 +84,39 @@ In Vercel → Project → Domains:
 2. Add `catalunyainfo.com` and set it to **redirect to** `www.catalunyainfo.com`.
 3. Vercel issues and renews the certificates; there is nothing to do for HTTPS.
 
-DNS at the registrar:
+DNS lives at **Spaceship** (nameservers `launch1/launch2.spaceship.net`).
+Current records:
 
-| Record | Name | Value |
-| --- | --- | --- |
-| CNAME | `www` | `cname.vercel-dns.com` |
-| A | `@` | `76.76.21.21` |
+| Record | Name | Value | Note |
+| --- | --- | --- | --- |
+| A | `@` | `216.198.79.1` | Vercel anycast. Vercel reports `ipStatus: no-change`. |
+| CNAME | `www` | `9db29c1d3804e584.vercel-dns-017.com` | **Inherited from the old project — see below** |
+| TXT | `_vercel` | `vc-domain-verify=…` ×2 | Ownership proof. Safe to keep. |
+| TXT | `@` | `google-site-verification=…` | Search Console. **Do not delete.** |
 
-(Confirm the current values in Vercel's dashboard — they are authoritative.)
+**The `www` CNAME should be repointed.** It still targets the hostname Vercel
+issued to the *old* project. Routing works today because Vercel routes by `Host`
+header and that name resolves to Vercel's edge, so the API reports
+`misconfigured: false` — but the name belongs to a project in an account we do
+not control. If that project is ever deleted, the target could stop resolving.
+
+Change it in Spaceship to this project's own target:
+
+```
+www  CNAME  d624581fbef5aff0.vercel-dns-017.com
+```
+
+(Or `cname.vercel-dns.com`, Vercel's generic rank-2 recommendation.)
+
+### How the domain was reclaimed
+
+The domain had been registered to a Vercel account that is no longer
+accessible, so `vercel domains add` returned `domain_not_owned` (403). The way
+through was **DNS ownership proof**: attaching the domain to the new project
+yields a `_vercel` TXT challenge, and adding that record at the registrar moves
+the domain regardless of which Vercel account previously held it. Verification
+is instant once the TXT propagates, and it takes effect immediately — there is
+no window in which both sites serve.
 
 `next.config.ts` also redirects apex → www at the application level. That is
 belt and braces: it covers custom aliases and any window where the platform
