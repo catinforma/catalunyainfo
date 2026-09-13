@@ -13,7 +13,7 @@ import {
   PLANS,
   SOURCES,
 } from "./payload";
-import { IMAGE_BY_KEY } from "./images";
+import { IMAGE_BY_KEY } from "@/lib/content/images";
 
 /**
  * Publishes the weekend guide in all three languages.

@@ -20,7 +20,7 @@ export {};
 const ROOT = process.cwd();
 const INCOMING = join(ROOT, "incoming");
 const OUT_DIR = join(ROOT, "public", "images");
-const MANIFEST = join(ROOT, "src", "lib", "content", "weekend", "images.ts");
+const MANIFEST = join(ROOT, "src", "lib", "content", "images.ts");
 
 /** Widest we ever render a hero. Anything larger is wasted bytes. */
 const MAX_WIDTH = 1920;
@@ -108,7 +108,6 @@ export const IMAGE_BY_KEY: ReadonlyMap<string, ImportedImage> = new Map(
 );
 `;
 
-  await mkdir(join(ROOT, "src", "lib", "content", "weekend"), { recursive: true });
   await writeFile(MANIFEST, body, "utf8");
 
   console.log(`\n${imported.length} imagenes en public/images/`);

@@ -110,7 +110,7 @@ test("plan links point at the sources register, with no invented URLs", () => {
 
 test("images are attached to plans that exist, with alt and caption in every language", async () => {
   const { IMAGE_META } = await import("../src/lib/content/weekend/payload.ts");
-  const { IMAGE_BY_KEY } = await import("../src/lib/content/weekend/images.ts");
+  const { IMAGE_BY_KEY } = await import("../src/lib/content/images.ts");
 
   assert.ok(IMAGE_META.length > 0);
   for (const meta of IMAGE_META) {
@@ -150,4 +150,80 @@ test("image blocks only appear once the media rows exist", async () => {
   const withMedia = buildBody("ca", fake);
   assert.equal(withMedia.filter((b) => b.type === "image").length, IMAGE_META.length);
   assert.ok(bodySchema.safeParse(withMedia).success, "body with images must still validate");
+});
+
+/* -------------------------------------------------------------------------- */
+/* Weekly mycological report                                                  */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * The whole editorial premise of this page is that it reports conditions, not
+ * mushrooms. These checks fail the build if that distinction erodes.
+ */
+test("the condition ranking never claims mushrooms are present", async () => {
+  const { buildBody } = await import("../src/lib/content/mushrooms/publish.ts");
+  const { COPY } = await import("../src/lib/content/mushrooms/payload.ts");
+
+  // Targets affirmative overclaiming only. An earlier version of this pattern
+  // matched the disclaimer itself ("ni garanteix que n'hi hagi"), which is the
+  // opposite of a problem.
+  const forbidden = {
+    ca: /bolets garantits|probabilitat de trobar|\d+\s*% de (?:probabilitat|fructificació)/i,
+    es: /setas garantizadas|probabilidad de encontrar|\d+\s*% de (?:probabilidad|fructificación)/i,
+    en: /mushrooms guaranteed|guaranteed mushrooms|probability of finding|\d+\s*% (?:probability|chance)/i,
+  };
+
+  for (const locale of LOCALES) {
+    const text = bodyToPlainText(buildBody(locale));
+    assert.doesNotMatch(text, forbidden[locale], `${locale} overclaims`);
+    assert.ok(bodySchema.safeParse(buildBody(locale)).success, `${locale} body invalid`);
+    assert.ok(COPY[locale].path.length > 0);
+  }
+});
+
+test("every edition carries the rating disclaimer", async () => {
+  const { buildBody } = await import("../src/lib/content/mushrooms/publish.ts");
+  const marker = {
+    ca: /no representa observacions de bolets/i,
+    es: /no representa observaciones de setas/i,
+    en: /not based on confirmed mushroom sightings/i,
+  };
+  for (const locale of LOCALES) {
+    assert.match(bodyToPlainText(buildBody(locale)), marker[locale], `${locale} lost the disclaimer`);
+  }
+});
+
+test("mushroom URLs are evergreen and carry no year", async () => {
+  const { COPY } = await import("../src/lib/content/mushrooms/payload.ts");
+  const expected = {
+    ca: "natura/bolets-catalunya-condicions",
+    es: "naturaleza/setas-cataluna-condiciones",
+    en: "nature/mushroom-season-catalonia",
+  };
+  for (const locale of LOCALES) {
+    assert.equal(COPY[locale].path, expected[locale]);
+    assert.doesNotMatch(COPY[locale].path, /\d/, `${locale} path carries a number`);
+  }
+});
+
+test("all seven condition zones are present in all three languages", async () => {
+  const { ZONES, LEVEL_LABEL } = await import("../src/lib/content/mushrooms/payload.ts");
+  assert.equal(ZONES.length, 7);
+  for (const zone of ZONES) {
+    assert.ok(LEVEL_LABEL[zone.level], `unknown level ${zone.level}`);
+    for (const locale of LOCALES) {
+      assert.ok(zone.name[locale]?.length, `${zone.id}: missing ${locale} name`);
+      assert.ok(zone.body[locale]?.length, `${zone.id}: missing ${locale} body`);
+    }
+  }
+});
+
+test("mushroom sources are official, https and untracked", async () => {
+  const { SOURCES } = await import("../src/lib/content/mushrooms/payload.ts");
+  for (const source of SOURCES) {
+    assert.match(source.url, /^https:\/\//, source.url);
+    assert.doesNotMatch(source.url, /utm_|chatgpt\.com/, source.url);
+  }
+  const official = SOURCES.filter((s) => /gencat\.cat|meteo\.cat|ctfc\.cat/.test(s.url));
+  assert.ok(official.length >= 6, "the report must rest on official sources");
 });

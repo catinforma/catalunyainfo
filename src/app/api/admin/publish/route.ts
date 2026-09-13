@@ -3,6 +3,7 @@ import { revalidatePath } from "next/cache";
 
 import { seedTaxonomy } from "@/lib/content/seed-taxonomy";
 import { publishWeekendGuide } from "@/lib/content/weekend/publish";
+import { publishMushroomReport } from "@/lib/content/mushrooms/publish";
 import { authoriseDeployRequest, describeError } from "@/lib/admin/deploy-auth";
 
 export const runtime = "nodejs";
@@ -25,16 +26,19 @@ export async function POST(request: Request) {
 
   try {
     const seed = await seedTaxonomy();
-    const publish = await publishWeekendGuide();
+    const published = [await publishWeekendGuide(), await publishMushroomReport()];
 
-    for (const edition of publish.editions) {
-      revalidatePath(`/${edition.locale}`);
-      revalidatePath(`/${edition.locale}/${edition.path}`);
-      revalidatePath(`/${edition.locale}/agenda`);
+    for (const article of published) {
+      for (const edition of article.editions) {
+        revalidatePath(`/${edition.locale}`);
+        revalidatePath(`/${edition.locale}/${edition.path}`);
+        const section = edition.path.split("/")[0];
+        if (section) revalidatePath(`/${edition.locale}/${section}`);
+      }
     }
     revalidatePath("/sitemap.xml");
 
-    return NextResponse.json({ ok: true, seed, publish });
+    return NextResponse.json({ ok: true, seed, published });
   } catch (error) {
     return NextResponse.json({ ok: false, error: describeError(error) }, { status: 500 });
   }

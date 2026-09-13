@@ -15,6 +15,13 @@ export interface ImportedImage {
 
 export const IMAGES: readonly ImportedImage[] = [
   {
+    "key": "bolets-catalunya-2026-bosc-humit",
+    "url": "/images/bolets-catalunya-2026-bosc-humit.webp",
+    "width": 1600,
+    "height": 900,
+    "blurDataUrl": "data:image/webp;base64,UklGRmQAAABXRUJQVlA4IFgAAADQAQCdASoQAAkAA4BaJZgCdADdpvv8RAD+5gMPsWBJ+ftogVDLucsVrNaWZT7iy28YKFK2zLWg/KArIz5a9FnCPpfGYwvukTQk2qi/a83UoNoil+3DSoAA"
+  },
+  {
     "key": "festa-bolet-setcases-pirineus",
     "url": "/images/festa-bolet-setcases-pirineus.webp",
     "width": 1672,
