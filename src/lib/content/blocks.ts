@@ -167,6 +167,18 @@ export const adSlotBlock = z.object({
   placement: z.enum(["in-article-1", "in-article-2"]),
 });
 
+/**
+ * The contact form.
+ *
+ * A block rather than a bespoke route so the contact page stays an ordinary
+ * `page` entry an editor can reword in the CMS. It carries no configuration
+ * that could change where a message is delivered - the destination lives in
+ * server code - so an editor can place the form, never redirect it.
+ */
+export const contactFormBlock = z.object({
+  type: z.literal("contactForm"),
+});
+
 export const blockSchema = z.discriminatedUnion("type", [
   headingBlock,
   paragraphBlock,
@@ -184,6 +196,7 @@ export const blockSchema = z.discriminatedUnion("type", [
   relatedLinksBlock,
   dividerBlock,
   adSlotBlock,
+  contactFormBlock,
 ]);
 
 export const bodySchema = z.array(blockSchema).max(500);

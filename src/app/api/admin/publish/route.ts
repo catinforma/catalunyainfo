@@ -5,6 +5,7 @@ import { seedTaxonomy } from "@/lib/content/seed-taxonomy";
 import { publishWeekendGuide } from "@/lib/content/weekend/publish";
 import { publishMushroomReport } from "@/lib/content/mushrooms/publish";
 import { publishAutumnColours } from "@/lib/content/autumn/publish";
+import { publishInstitutionalPages } from "@/lib/content/pages/publish";
 import { authoriseDeployRequest, describeError } from "@/lib/admin/deploy-auth";
 
 export const runtime = "nodejs";
@@ -32,18 +33,24 @@ export async function POST(request: Request) {
       await publishMushroomReport(),
       await publishAutumnColours(),
     ];
+    const pages = await publishInstitutionalPages();
 
-    for (const article of published) {
-      for (const edition of article.editions) {
-        revalidatePath(`/${edition.locale}`);
-        revalidatePath(`/${edition.locale}/${edition.path}`);
-        const section = edition.path.split("/")[0];
-        if (section) revalidatePath(`/${edition.locale}/${section}`);
-      }
+    const surfaces = [
+      ...published.flatMap((article) =>
+        article.editions.map((edition) => ({ locale: edition.locale, path: edition.path })),
+      ),
+      ...pages.pages.map((page) => ({ locale: page.locale, path: page.path })),
+    ];
+
+    for (const surface of surfaces) {
+      revalidatePath(`/${surface.locale}`);
+      revalidatePath(`/${surface.locale}/${surface.path}`);
+      const section = surface.path.split("/")[0];
+      if (section) revalidatePath(`/${surface.locale}/${section}`);
     }
     revalidatePath("/sitemap.xml");
 
-    return NextResponse.json({ ok: true, seed, published });
+    return NextResponse.json({ ok: true, seed, published, pages: pages.pages.length });
   } catch (error) {
     return NextResponse.json({ ok: false, error: describeError(error) }, { status: 500 });
   }

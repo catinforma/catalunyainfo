@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 
+import { ContactForm } from "@/components/ContactForm";
 import type { Block, Body } from "@/lib/content/blocks";
 import { headingId } from "@/lib/content/blocks";
 import { renderInline, safeHref } from "@/lib/content/inline";
@@ -322,6 +323,11 @@ function BlockView({ block, context }: { block: Block; context: BlockContext }) 
       // Placeholder only. No ad code is loaded anywhere in this build; see
       // docs/ADSENSE_READINESS.md for what has to be true before it is.
       return <div data-ad-placement={block.placement} aria-hidden="true" />;
+
+    case "contactForm":
+      // The only interactive block. It carries no configuration from the
+      // database, so where a message goes is decided in server code alone.
+      return <ContactForm locale={context.locale} />;
 
     default:
       return null;

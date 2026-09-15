@@ -14,8 +14,9 @@ export const SITE = {
   name: "CatalunyaInfo",
   /** Canonical production origin. Never a *.vercel.app URL. */
   productionOrigin: `https://${CANONICAL_HOST}`,
-  /** Contact mailbox surfaced on legal/editorial pages. */
-  contactEmail: "hola@catalunyainfo.com",
+  /** Contact mailbox surfaced on legal/editorial pages, and where the contact
+   * form is delivered. This is the real, monitored inbox. */
+  contactEmail: "catalunyatinforma@gmail.com",
   /** Twitter/X handle, without the @. Empty string = not published yet. */
   twitter: "",
 } as const;

@@ -1,5 +1,6 @@
 import Link from "next/link";
 
+import { ConsentSettingsButton } from "@/components/ConsentSettingsButton";
 import { getMessages } from "@/lib/i18n";
 import { LEGAL_KEYS, legalPath, sectionPath } from "@/lib/i18n/routes";
 import type { Locale } from "@/lib/i18n/config";
@@ -69,6 +70,9 @@ export function SiteFooter({ locale }: { locale: Locale }) {
                 <Link href={legalPath(key, locale)}>{legalLabel(key, locale)}</Link>
               </li>
             ))}
+            <li>
+              <ConsentSettingsButton locale={locale} />
+            </li>
           </ul>
         </nav>
       </div>

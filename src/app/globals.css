@@ -683,6 +683,114 @@
     }
   }
 
+  /* Footer control that brings the consent banner back. Looks like the links
+     beside it, because that is what it is: another footer entry. */
+  .ci-consent-reopen {
+    font: inherit;
+    color: inherit;
+    background: none;
+    border: 0;
+    padding: 0;
+    cursor: pointer;
+    text-align: left;
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+
+  /* --- Contact form ----------------------------------------------------- */
+  .ci-contact-form {
+    margin: 2rem 0;
+  }
+  .ci-contact-form fieldset {
+    border: 1px solid var(--color-rule);
+    border-radius: var(--radius-sm);
+    padding: 1.25rem;
+    margin: 0;
+    min-width: 0;
+  }
+  .ci-contact-legend {
+    font-family: var(--font-display), Georgia, serif;
+    font-size: var(--text-lg);
+    padding-inline: 0.4rem;
+  }
+  .ci-contact-intro {
+    margin: 0 0 1.25rem;
+    color: var(--color-muted);
+    font-size: var(--text-sm);
+  }
+  /* Two columns where there is room; one on a phone. */
+  .ci-contact-grid {
+    display: grid;
+    gap: 0 1rem;
+    grid-template-columns: minmax(0, 1fr);
+  }
+  @media (min-width: 40rem) {
+    .ci-contact-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  .ci-contact-row {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    margin: 0 0 1.1rem;
+    min-width: 0;
+  }
+  .ci-contact-row > label {
+    font-size: var(--text-sm);
+    font-weight: 500;
+  }
+  .ci-contact-hint {
+    font-size: var(--text-xs);
+    color: var(--color-muted);
+  }
+  .ci-contact-form textarea.ci-field {
+    resize: vertical;
+    min-height: 9rem;
+  }
+  .ci-contact-consent {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.6rem;
+    margin: 0 0 1.25rem;
+    font-size: var(--text-sm);
+  }
+  .ci-contact-consent input {
+    margin-top: 0.25rem;
+    flex: none;
+  }
+  .ci-contact-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem 1rem;
+  }
+  .ci-contact-error {
+    margin: 1rem 0 0;
+    color: var(--color-ink);
+    border-left: 3px solid var(--color-amber);
+    background: var(--color-amber-wash);
+    padding: 0.7rem 0.9rem;
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    font-size: var(--text-sm);
+  }
+  .ci-contact-done {
+    margin: 2rem 0;
+  }
+  .ci-contact-done p {
+    margin: 0;
+  }
+  /* Honeypot: taken out of flow without `display:none`, which some fillers
+     detect and skip. */
+  .ci-hp {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
   /* --- Callouts --------------------------------------------------------- */
   .ci-callout {
     border: 1px solid var(--color-rule);

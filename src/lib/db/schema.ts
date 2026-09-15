@@ -569,9 +569,59 @@ export const pageFeedback = pgTable(
 );
 
 /* -------------------------------------------------------------------------- */
+/* Contact messages                                                           */
+/* -------------------------------------------------------------------------- */
+
+export const contactTopicEnum = pgEnum("contact_topic", [
+  "correction",
+  "editorial",
+  "press",
+  "collaboration",
+  "privacy",
+  "other",
+]);
+
+export const contactStatusEnum = pgEnum("contact_status", [
+  "new",
+  "read",
+  "answered",
+  "spam",
+]);
+
+/**
+ * Messages sent through the contact form.
+ *
+ * Unlike `page_feedback`, this table holds personal data by definition: a
+ * person writing in gives their name and their email address so we can answer.
+ * That is the lawful basis and the only purpose, so the columns are the minimum
+ * needed to reply, there is no IP address and no user agent, and the privacy
+ * policy states the retention period that `scripts/` prunes against.
+ */
+export const contactMessages = pgTable(
+  "contact_messages",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    locale: localeEnum("locale").notNull(),
+    topic: contactTopicEnum("topic").notNull().default("other"),
+    name: varchar("name", { length: 120 }).notNull(),
+    email: varchar("email", { length: 254 }).notNull(),
+    /** The page the message is about, when the reader came from one. */
+    aboutPath: varchar("about_path", { length: 600 }),
+    message: text("message").notNull(),
+    status: contactStatusEnum("status").notNull().default("new"),
+    /** Whether the copy to the editorial inbox actually went out. */
+    deliveredAt: timestamp("delivered_at", { withTimezone: true }),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [index("contact_created_idx").on(t.createdAt), index("contact_status_idx").on(t.status)],
+);
+
+/* -------------------------------------------------------------------------- */
 /* Inferred types                                                             */
 /* -------------------------------------------------------------------------- */
 
+export type ContactMessage = typeof contactMessages.$inferSelect;
+export type ContactTopic = (typeof contactTopicEnum.enumValues)[number];
 export type User = typeof users.$inferSelect;
 export type Author = typeof authors.$inferSelect;
 export type Entry = typeof entries.$inferSelect;
