@@ -70,7 +70,7 @@ export function ContactForm({ locale }: { locale: Locale }) {
 
     setState("sending");
     try {
-      const response = await fetch("/api/contact", {
+      const response = await fetch("/api/contact/", {
         method: "POST",
         headers: { "content-type": "application/json" },
         body: JSON.stringify({

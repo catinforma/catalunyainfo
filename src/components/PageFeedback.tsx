@@ -35,7 +35,7 @@ export function PageFeedback({
       params: { is_useful: isUseful, content_type: contentType, locale },
     });
     try {
-      await fetch("/api/feedback", {
+      await fetch("/api/feedback/", {
         method: "POST",
         headers: { "content-type": "application/json" },
         body: JSON.stringify({ path, locale, isUseful }),

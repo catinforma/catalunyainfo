@@ -683,6 +683,17 @@
     }
   }
 
+  /* While the consent banner is up it covers the foot of the document, which
+     on a phone is exactly where a form's submit button sits. */
+  body.ci-consent-open {
+    padding-bottom: 16rem;
+  }
+  @media (min-width: 48rem) {
+    body.ci-consent-open {
+      padding-bottom: 9rem;
+    }
+  }
+
   /* Footer control that brings the consent banner back. Looks like the links
      beside it, because that is what it is: another footer entry. */
   .ci-consent-reopen {

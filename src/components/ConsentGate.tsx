@@ -1,7 +1,7 @@
 "use client";
 
 import Script from "next/script";
-import { useCallback, useState, useSyncExternalStore } from "react";
+import { useCallback, useEffect, useState, useSyncExternalStore } from "react";
 
 import { CONSENT_VERSION, type ConsentState } from "@/lib/analytics/consent";
 import {
@@ -44,6 +44,17 @@ export function ConsentGate({ locale }: { locale: Locale }) {
   );
   const state = snapshotToState(snapshot);
   const [expanded, setExpanded] = useState(false);
+
+  // The banner is fixed to the bottom of the viewport, so while it is up it
+  // covers the last couple of hundred pixels of the document - which on a phone
+  // is where a form's submit button ends up. Reserve the space for as long as
+  // the banner is there.
+  const showingBanner = state === null;
+  useEffect(() => {
+    if (!showingBanner) return;
+    document.body.classList.add("ci-consent-open");
+    return () => document.body.classList.remove("ci-consent-open");
+  }, [showingBanner]);
 
   const decide = useCallback((analytics: boolean, ads: boolean) => {
     recordConsent({
