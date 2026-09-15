@@ -38,6 +38,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
               <nav aria-label="CMS" className="flex flex-wrap gap-4 text-sm">
                 <Link href="/admin/content">Contingut</Link>
                 <Link href="/admin/media">Imatges</Link>
+                <Link href="/admin/messages">Missatges</Link>
                 <Link href="/admin/redirects">Redireccions</Link>
               </nav>
 

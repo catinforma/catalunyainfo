@@ -8,6 +8,7 @@ import { LOCALES, type Locale } from "@/lib/i18n/config";
 
 const {
   authors,
+  contactMessages,
   categories,
   categoryTranslations,
   entries,
@@ -242,6 +243,33 @@ export async function listRedirects(limit = 200) {
   const db = getDb();
   if (!db) return [];
   return db.select().from(redirects).orderBy(desc(redirects.createdAt)).limit(limit);
+}
+
+/**
+ * The contact inbox.
+ *
+ * Read here rather than only emailed out: the row is the record of the message
+ * and the email is the notification, so a provider that is not configured yet
+ * cannot mean a reader's message is lost.
+ */
+export async function listContactMessages(limit = 200) {
+  const db = getDb();
+  if (!db) return [];
+  return db
+    .select()
+    .from(contactMessages)
+    .orderBy(desc(contactMessages.createdAt))
+    .limit(limit);
+}
+
+export async function countNewContactMessages(): Promise<number> {
+  const db = getDb();
+  if (!db) return 0;
+  const rows = await db
+    .select({ count: sql<number>`count(*)::int` })
+    .from(contactMessages)
+    .where(eq(contactMessages.status, "new"));
+  return rows[0]?.count ?? 0;
 }
 
 export async function listMedia(limit = 200) {

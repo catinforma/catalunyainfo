@@ -584,6 +584,57 @@ export async function saveRedirect(input: unknown): Promise<ActionResult> {
   }
 }
 
+const contactStatusSchema = z.object({
+  id: z.string().uuid(),
+  status: z.enum(["new", "read", "answered", "spam"]),
+});
+
+/**
+ * Marks a contact message read, answered or spam.
+ *
+ * The message itself is never editable from here: an inbox that can rewrite
+ * what somebody sent is not a record of what they sent.
+ */
+export async function setContactStatus(input: unknown): Promise<ActionResult> {
+  try {
+    const user = await requireUser("editor");
+    const parsed = contactStatusSchema.safeParse(input);
+    if (!parsed.success) return fail("Unknown message or status.");
+
+    const db = requireDb();
+    await db
+      .update(schema.contactMessages)
+      .set({ status: parsed.data.status })
+      .where(eq(schema.contactMessages.id, parsed.data.id));
+
+    await audit(user.id, "contact.status", "contact_message", parsed.data.id);
+    revalidatePath("/admin/messages");
+    return { ok: true };
+  } catch (error) {
+    return handle(error);
+  }
+}
+
+/** Deletes a message for good — the route a deletion request has to take. */
+export async function deleteContactMessage(input: unknown): Promise<ActionResult> {
+  try {
+    const user = await requireUser("admin");
+    const parsed = z.object({ id: z.string().uuid() }).safeParse(input);
+    if (!parsed.success) return fail("Unknown message.");
+
+    const db = requireDb();
+    await db
+      .delete(schema.contactMessages)
+      .where(eq(schema.contactMessages.id, parsed.data.id));
+
+    await audit(user.id, "contact.delete", "contact_message", parsed.data.id);
+    revalidatePath("/admin/messages");
+    return { ok: true };
+  } catch (error) {
+    return handle(error);
+  }
+}
+
 /* -------------------------------------------------------------------------- */
 /* Helpers                                                                    */
 /* -------------------------------------------------------------------------- */

@@ -41,8 +41,13 @@ const contactSchema = z.object({
   aboutPath: z.string().trim().max(600).optional().or(z.literal("")),
   message: z.string().trim().min(20).max(5000),
   consent: z.literal(true),
-  /** Honeypot. Anything here means a bot filled a field humans cannot see. */
-  company: z.string().max(0).optional().or(z.literal("")),
+  /**
+   * Honeypot. Anything here means a bot filled a field humans cannot see.
+   * Deliberately permissive at the schema level: rejecting it as a validation
+   * error would tell the bot which field gave it away, so it is accepted and
+   * then silently dropped below.
+   */
+  company: z.string().max(200).optional(),
   /** Milliseconds the form was on screen before submission. */
   elapsedMs: z.number().int().nonnegative().max(86_400_000).optional(),
 });
