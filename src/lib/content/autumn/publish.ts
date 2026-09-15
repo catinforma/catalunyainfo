@@ -90,11 +90,15 @@ export function buildBody(
     if (mediaId) blocks.push({ type: "image", mediaId, size: "wide" });
   }
 
-  blocks.push({
-    type: "steps",
-    title: copy.byDateHeading,
-    items: copy.byDate.map((entry) => ({ title: entry.when, text: entry.what })),
-  });
+  // Headings and prose, not a `steps` block: `steps` emits HowTo structured
+  // data, and this is a set of alternatives keyed on when you can travel, not
+  // a procedure to follow in order. Describing it as HowTo to Google would be
+  // a misdescription of the page.
+  blocks.push({ type: "heading", level: 2, text: copy.byDateHeading });
+  for (const entry of copy.byDate) {
+    blocks.push({ type: "heading", level: 3, text: entry.when });
+    blocks.push({ type: "paragraph", text: entry.what });
+  }
 
   blocks.push({ type: "heading", level: 2, text: copy.whyHeading });
   for (const text of copy.why) blocks.push({ type: "paragraph", text });
