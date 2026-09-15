@@ -33,6 +33,22 @@ Set per environment in Vercel. See `.env.example` for the annotated list.
 | `NEXT_PUBLIC_GA4_MEASUREMENT_ID` | — | — | the GA4 id |
 | `CRON_SECRET` | — | — | a 32-byte random token |
 | `NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION` | — | — | only if not verifying by DNS |
+| `RESEND_API_KEY` | — | — | optional; turns on the contact-form email |
+| `CONTACT_FROM` | — | — | optional sender; defaults to Resend's shared one |
+| `CONTACT_TO` | — | — | optional; defaults to `SITE.contactEmail` |
+
+### The contact form without a mail provider
+
+The form writes to `contact_messages` **before** it attempts any email, so with
+no `RESEND_API_KEY` set nothing is lost — messages simply arrive only in
+`/admin/messages`, where each row says whether the email went out.
+
+To switch the notification on: create a free Resend account, generate an API
+key, and set `RESEND_API_KEY` in Production. Until a sending domain is
+verified, Resend's shared `onboarding@resend.dev` sender works, which is why it
+is the default for `CONTACT_FROM`. Verifying `catalunyainfo.com` as a sending
+domain (three DNS records) is what makes the mail arrive from the site's own
+address rather than a shared one.
 
 Generate `CRON_SECRET`:
 

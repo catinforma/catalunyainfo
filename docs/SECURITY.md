@@ -193,4 +193,27 @@ back without touching the database backup.
 ## Reporting
 
 Add a `/.well-known/security.txt` with a contact address when the site goes
-live. Until there is a monitored inbox, `SITE.contactEmail` is the route.
+live. `SITE.contactEmail` is the monitored inbox, and the contact form at
+`/{locale}/contact/` reaches the same place.
+
+## The contact endpoint
+
+`/api/contact` is the only public endpoint that accepts personal data, so it is
+worth stating what holds it down:
+
+- **Zod on every field**, with the honeypot deliberately permissive at the
+  schema level and dropped silently afterwards — a validation error would tell
+  a bot which field gave it away.
+- **A minimum fill time.** A submission that arrives under three seconds after
+  the form mounted is accepted and discarded.
+- **A per-address rate limit** of three messages per thirty minutes, counted in
+  `contact_messages`. Counted in the database on purpose: an in-memory counter
+  resets on every serverless cold start and protects nothing.
+- **No IP address and no user agent is stored.** The only personal data kept is
+  what somebody deliberately typed in order to be answered.
+- **Stored before sent.** The row is the record; the email is the notification.
+  A mail provider that is missing, down or throttled cannot lose a message.
+- **Header injection** is not possible: CR and LF are stripped from anything
+  that reaches a mail header, and the body is HTML-escaped.
+- The message text is **never editable** from the admin inbox. An inbox that
+  can rewrite what somebody sent is not a record of what they sent.
