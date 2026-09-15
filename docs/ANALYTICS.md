@@ -2,14 +2,39 @@
 
 ## Current state
 
-**Nothing is measured yet.** `NEXT_PUBLIC_GA4_MEASUREMENT_ID` is empty, so:
+**Live since 2026-09-15.**
 
-- no analytics code is shipped,
-- no third-party request is made,
-- **the cookie banner does not appear at all**, because there is nothing to
-  consent to.
+| | |
+| --- | --- |
+| Google tag loaded | `GT-KTR3FB62` |
+| Destinations it feeds | `G-FQ089T86TN` (CatalunyaInfo web, the new property) and `G-TXB0TDCZ2X` (the version-1 property) |
+| Stream id | 15781356691 |
+| Env var | `NEXT_PUBLIC_GA4_MEASUREMENT_ID`, production only |
 
-Set the variable and the whole chain activates. That is the only switch.
+### Why the tag id is not the measurement id
+
+The obvious thing to configure is the new stream's measurement id,
+`G-FQ089T86TN`. That does not work, and fails silently:
+
+```
+GET googletagmanager.com/gtag/js?id=G-FQ089T86TN   404
+GET googletagmanager.com/gtag/js?id=GT-KTR3FB62    200
+```
+
+When the stream was created, Google attached it as a **destination** of the
+Google tag that already existed on the domain from version 1, rather than
+giving it a tag of its own. A destination id is not servable. The browser
+requested the file, got a 404, and the library never ran - so `dataLayer`
+looked perfectly correct, no console error appeared, `window.gtag` was a
+function, and yet not one hit was ever sent. The giveaway is that
+`gtag("get", id, "client_id", cb)` never calls back.
+
+Loading the tag id instead fans out to every destination, which is verified:
+one `page_view` arrives at each of the two properties per page.
+
+**Consequence worth knowing:** the version-1 property also receives this
+traffic. To stop that, remove its destination from the Google tag, or give the
+new stream its own tag - then switch this variable to `G-FQ089T86TN`.
 
 ## Why not Google Tag Manager
 
