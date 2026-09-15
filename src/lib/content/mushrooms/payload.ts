@@ -446,6 +446,7 @@ export const COPY: Record<Locale, Copy> = {
       "Si ordenem Catalunya segons les condicions meteorològiques observades actualment: **1. Ripollès / Alt Ter**, **2. Nord del Berguedà**, **3. Garrotxa / Vall d'en Bas**.",
       "Osona i Collsacabra formen un segon grup interessant. La Cerdanya, l'Alt Urgell i el Pallars tenen potencial, però les condicions són molt més locals. I encara és aviat per a bona part del prelitoral, Ponent i el sud.",
       "La temporada 2026 encara està despertant. CatalunyaInfo actualitzarà aquesta guia a mesura que canviïn les pluges i les temperatures.",
+      "I si la sortida al bosc és tant per caminar com per buscar, mira també quan arriben els [colors de tardor a cada zona de Catalunya](/ca/natura/colors-tardor-catalunya/).",
     ],
   },
   es: {
@@ -520,6 +521,7 @@ export const COPY: Record<Locale, Copy> = {
       "El ranking actual de CatalunyaInfo es: **1. Ripollès / Alt Ter**, **2. Norte del Berguedà**, **3. Garrotxa / Vall d'en Bas**.",
       "Osona y Collsacabra presentan condiciones interesantes. La temporada de 2026, sin embargo, continúa siendo temprana, retrasada e irregular.",
       "Actualizaremos esta guía cuando cambien las lluvias y las temperaturas.",
+      "Y si la salida al bosque es tanto para caminar como para buscar, consulta también cuándo llegan los [colores de otoño a cada zona de Cataluña](/es/naturaleza/colores-otono-cataluna/).",
     ],
   },
   en: {
@@ -594,6 +596,7 @@ export const COPY: Record<Locale, Copy> = {
       "Based on the current weather picture, CatalunyaInfo's ranking is: **1. Ripollès / upper Ter**, **2. Northern Berguedà**, **3. Garrotxa / Vall d'en Bas**.",
       "Osona and Collsacabra form a second group worth watching. The 2026 season remains early, delayed and highly uneven.",
       "This guide will be updated as rainfall and temperatures change.",
+      "If the trip into the forest is as much about walking as about foraging, see also when [fall colors reach each part of Catalonia](/en/nature/fall-colors-catalonia/).",
     ],
   },
 };

@@ -25,6 +25,9 @@ const MANIFEST = join(ROOT, "src", "lib", "content", "images.ts");
 /** Widest we ever render a hero. Anything larger is wasted bytes. */
 const MAX_WIDTH = 1920;
 
+/** Above this, quality is stepped down rather than shipped as-is. */
+const MAX_BYTES = 350 * 1024;
+
 interface Imported {
   key: string;
   url: string;
@@ -66,7 +69,18 @@ async function main() {
       .rotate()
       .resize({ width: Math.min(meta.width ?? MAX_WIDTH, MAX_WIDTH), withoutEnlargement: true });
 
-    const out = await resized.webp({ quality: 82, effort: 5 }).toBuffer();
+    // Step the quality down until the file is a reasonable weight. A hero over
+    // ~350 KB costs more in LCP than the extra quality is worth, and at these
+    // dimensions the difference between 82 and 68 is not visible in a photo.
+    let out = await resized.webp({ quality: 82, effort: 5 }).toBuffer();
+    for (const quality of [74, 68, 62]) {
+      if (out.length <= MAX_BYTES) break;
+      out = await sharp(source)
+        .rotate()
+        .resize({ width: Math.min(meta.width ?? MAX_WIDTH, MAX_WIDTH), withoutEnlargement: true })
+        .webp({ quality, effort: 6 })
+        .toBuffer();
+    }
     const outMeta = await sharp(out).metadata();
     await writeFile(join(OUT_DIR, `${key}.webp`), out);
 

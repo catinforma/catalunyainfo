@@ -22,6 +22,41 @@ export const IMAGES: readonly ImportedImage[] = [
     "blurDataUrl": "data:image/webp;base64,UklGRmQAAABXRUJQVlA4IFgAAADQAQCdASoQAAkAA4BaJZgCdADdpvv8RAD+5gMPsWBJ+ftogVDLucsVrNaWZT7iy28YKFK2zLWg/KArIz5a9FnCPpfGYwvukTQk2qi/a83UoNoil+3DSoAA"
   },
   {
+    "key": "colors-tardor-catalunya-cami-bosc-humit",
+    "url": "/images/colors-tardor-catalunya-cami-bosc-humit.webp",
+    "width": 1672,
+    "height": 941,
+    "blurDataUrl": "data:image/webp;base64,UklGRk4AAABXRUJQVlA4IEIAAACwAQCdASoQAAkAA4BaJaACdAD7t0CgAP7p+1GqF9nTUz/P1rA+uPtp+xdSS/JcLAMjmNBldQ+LHi4AAGVorKxQAAA="
+  },
+  {
+    "key": "colors-tardor-catalunya-carretera-bosc",
+    "url": "/images/colors-tardor-catalunya-carretera-bosc.webp",
+    "width": 1672,
+    "height": 941,
+    "blurDataUrl": "data:image/webp;base64,UklGRlQAAABXRUJQVlA4IEgAAACwAQCdASoQAAkAA4BaJaACdACgzvYwAP59Y8Fja+nrm2s88JT4X6FJkVw3i5g+YErtHjK6kJoCtdOZVwS9UikK4w9dpV8AAAA="
+  },
+  {
+    "key": "colors-tardor-catalunya-fageda-daurada",
+    "url": "/images/colors-tardor-catalunya-fageda-daurada.webp",
+    "width": 1672,
+    "height": 941,
+    "blurDataUrl": "data:image/webp;base64,UklGRlQAAABXRUJQVlA4IEgAAADQAQCdASoQAAkAA4BaJaACdADMmuDUgAD+7C6xk0RPZSjubFyGGTJOdxXLZQPtgguwXqW25MczrNLda7u0l9SbuS2UDsimAAA="
+  },
+  {
+    "key": "colors-tardor-catalunya-panoramica-valle-boira",
+    "url": "/images/colors-tardor-catalunya-panoramica-valle-boira.webp",
+    "width": 1672,
+    "height": 941,
+    "blurDataUrl": "data:image/webp;base64,UklGRmAAAABXRUJQVlA4IFQAAADQAQCdASoQAAkAA4BaJaACdACq7cMAAAD+mqQKvhVzACKiIsz39SpHmJ/xrj32x8ycaHr75TgYFEHkOOISBrvUufXdKvqYEy+dA9WfC0/Y6BVUIAA="
+  },
+  {
+    "key": "colors-tardor-catalunya-vall-pirinenca",
+    "url": "/images/colors-tardor-catalunya-vall-pirinenca.webp",
+    "width": 1672,
+    "height": 941,
+    "blurDataUrl": "data:image/webp;base64,UklGRmIAAABXRUJQVlA4IFYAAADQAQCdASoQAAkAA4BaJbACdADdLHtEoAD+zQcKnQQ4cumm27/QYUIlhf/8u0kmyfA3nkCulVhPHJVs3idl1RZz1oonHiVM69Z/Qvtpu6dEn9zUaAAAAA=="
+  },
+  {
     "key": "festa-bolet-setcases-pirineus",
     "url": "/images/festa-bolet-setcases-pirineus.webp",
     "width": 1672,
