@@ -8,7 +8,10 @@
 | --- | --- |
 | Google tag loaded | `GT-KTR3FB62` |
 | Destinations it feeds | `G-FQ089T86TN` (CatalunyaInfo web, the new property) and `G-TXB0TDCZ2X` (the version-1 property) |
+| Property | `properties/554310792` (CatalunyaInfo web) |
 | Stream id | 15781356691 |
+| Event data retention | 14 months |
+| Custom dimensions | All seven registered, event-scoped |
 | Env var | `NEXT_PUBLIC_GA4_MEASUREMENT_ID`, production only |
 
 ### Why the tag id is not the measurement id
@@ -125,13 +128,29 @@ id is set. Analytics must never break a page, so it is wrapped in a `try`.
 1. Create a GA4 property. Data stream: Web, `https://www.catalunyainfo.com`.
 2. Set `NEXT_PUBLIC_GA4_MEASUREMENT_ID` in Vercel → **Production only**. Leaving
    it out of Preview keeps test traffic out of the property.
-3. In the property, register custom dimensions (event-scoped) for:
-   `content_type`, `locale`, `category`, `days_since_verified`, `link_context`,
-   `is_useful`, `results_count`. Unregistered parameters are collected but not
-   reportable.
-4. Set data retention to 14 months. Disable Google Signals unless there is a
-   reason — it adds a consent surface for no benefit here.
+3. Register the event-scoped custom dimensions. Done via the Admin API rather
+   than seven forms; the parameter name must match the event contract exactly,
+   and an unregistered parameter is collected but never reportable. Note that
+   `displayName` rejects an apostrophe, which is easy to trip over in Catalan.
+4. Set event data retention to 14 months. Two is the default, which makes last
+   autumn invisible by the time this autumn matters. Leave Google Signals off:
+   it adds a consent surface for no benefit here.
 5. Mark `newsletter_signup` as a key event when a newsletter exists.
+
+### On the "0% consent" warning in tag diagnostics
+
+Google flags the tag as *Urgent* because 100% of consent signals come back
+denied. That is correct and should not be "fixed": the diagnostic weighs
+advertising consent, and this site denies `ad_storage`, `ad_user_data` and
+`ad_personalization` permanently because it carries no advertising. What
+matters is the analytics signal, and the hit confirms it:
+
+```
+gcs=G101   ad_storage denied · analytics_storage granted
+```
+
+Revisit only if advertising is ever switched on — at which point a certified
+CMP is required anyway.
 
 ### Validating, in order
 
