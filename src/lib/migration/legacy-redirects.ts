@@ -98,6 +98,26 @@ export const LEGACY_REDIRECTS: readonly LegacyRedirect[] = [
     "from": "/legal/transparencia-editorial.html",
     "to": "/ca/legal/politica-editorial/",
     "status": 308
+  },
+  {
+    "from": "/es/agenda/que-hacer-en-este-fin-de-semana-cataluna/",
+    "to": "/es/agenda/que-hacer-este-fin-de-semana-cataluna/",
+    "status": 308
+  },
+  {
+    "from": "/es/agenda/que-hacer-este-fin-semana-cataluna/",
+    "to": "/es/agenda/que-hacer-este-fin-de-semana-cataluna/",
+    "status": 308
+  },
+  {
+    "from": "/es/agenda/que-hacer-en-semana-cataluna/",
+    "to": "/es/agenda/que-hacer-este-fin-de-semana-cataluna/",
+    "status": 308
+  },
+  {
+    "from": "/es/agenda/que-hacer-en-setembre-cataluna/",
+    "to": "/es/agenda/que-hacer-este-fin-de-semana-cataluna/",
+    "status": 308
   }
 ] as const;
 
