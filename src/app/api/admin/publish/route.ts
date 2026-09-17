@@ -6,6 +6,7 @@ import { publishWeekendGuide } from "@/lib/content/weekend/publish";
 import { publishMushroomReport } from "@/lib/content/mushrooms/publish";
 import { publishAutumnColours } from "@/lib/content/autumn/publish";
 import { publishInstitutionalPages } from "@/lib/content/pages/publish";
+import { publishFeatures } from "@/lib/content/features/publish";
 import { authoriseDeployRequest, describeError } from "@/lib/admin/deploy-auth";
 
 export const runtime = "nodejs";
@@ -26,14 +27,25 @@ export async function POST(request: Request) {
     return NextResponse.json({ ok: false }, { status: 401 });
   }
 
+  // `?only=` publishes one group at a time. Publishing everything is well over
+  // twenty articles in three languages, which does not reliably fit inside the
+  // function's time limit - and a publish that times out half way is worse than
+  // one that never started.
+  const only = new URL(request.url).searchParams.get("only") ?? "all";
+  const wants = (group: string) => only === "all" || only === group;
+
   try {
-    const seed = await seedTaxonomy();
-    const published = [
-      await publishWeekendGuide(),
-      await publishMushroomReport(),
-      await publishAutumnColours(),
-    ];
-    const pages = await publishInstitutionalPages();
+    const seed = wants("taxonomy") || only === "all" ? await seedTaxonomy() : null;
+    const published = [];
+    if (wants("articles")) {
+      published.push(await publishWeekendGuide());
+      published.push(await publishMushroomReport());
+      published.push(await publishAutumnColours());
+    }
+    const pages = wants("pages") ? await publishInstitutionalPages() : { pages: [] };
+    if (wants("features")) published.push(...(await publishFeatures()));
+    if (wants("features-a")) published.push(...(await publishFeatures(0, 5)));
+    if (wants("features-b")) published.push(...(await publishFeatures(5, 10)));
 
     const surfaces = [
       ...published.flatMap((article) =>
