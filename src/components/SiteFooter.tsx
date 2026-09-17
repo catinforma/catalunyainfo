@@ -1,19 +1,23 @@
 import Link from "next/link";
 
 import { ConsentSettingsButton } from "@/components/ConsentSettingsButton";
+import { nonEmptySections } from "@/lib/content/repository";
 import { getMessages } from "@/lib/i18n";
 import { LEGAL_KEYS, legalPath, sectionPath } from "@/lib/i18n/routes";
 import type { Locale } from "@/lib/i18n/config";
 import { SITE } from "@/lib/site";
 
-const FOOTER_SECTIONS = ["destinations", "guides", "events", "routes", "news", "topics"] as const;
+/** Sections the footer may list. Empty ones are dropped, like in the header. */
+const FOOTER_SECTIONS = ["destinations", "guides", "events", "routes", "news"] as const;
 
 /** Legal and editorial-trust pages, which AdSense and readers both look for. */
 const FOOTER_LEGAL = LEGAL_KEYS;
 
-export function SiteFooter({ locale }: { locale: Locale }) {
+export async function SiteFooter({ locale }: { locale: Locale }) {
   const t = getMessages(locale);
   const year = new Date().getUTCFullYear();
+  const filled = await nonEmptySections(locale, FOOTER_SECTIONS);
+  const sections = filled.size > 0 ? FOOTER_SECTIONS.filter((k) => filled.has(k)) : FOOTER_SECTIONS;
 
   return (
     <footer className="ci-footer">
@@ -32,11 +36,14 @@ export function SiteFooter({ locale }: { locale: Locale }) {
             {t.common.home}
           </h2>
           <ul className="flex list-none flex-col gap-2 p-0 text-sm">
-            {FOOTER_SECTIONS.map((key) => (
+            {sections.map((key) => (
               <li key={key}>
                 <Link href={sectionPath(key, locale)}>{t.nav[key]}</Link>
               </li>
             ))}
+            <li>
+              <Link href={sectionPath("topics", locale)}>{t.nav.topics}</Link>
+            </li>
           </ul>
         </nav>
 

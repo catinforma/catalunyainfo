@@ -18,7 +18,7 @@ import type {
   SourceView,
   TagView,
 } from "./types";
-import { SECTION_ENTRY_TYPES } from "./types";
+import { SECTION_CATEGORY_KEYS, SECTION_ENTRY_TYPES } from "./types";
 
 const {
   authors,
@@ -236,6 +236,8 @@ export interface ListOptions {
   offset?: number;
   types?: EntryType[];
   categoryKey?: string;
+  /** Primary-category keys the entry may belong to. OR-ed with `types`. */
+  categoryKeys?: string[];
   preview?: boolean;
 }
 
@@ -247,10 +249,13 @@ export async function listEntries(
   if (!db) return [];
   return safeRead("listEntries", [], async () => {
 
-  const { limit = 12, offset = 0, types, categoryKey, preview = false } = options;
+  const { limit = 12, offset = 0, types, categoryKey, categoryKeys, preview = false } = options;
 
   const conditions = [visibilityWhere(locale, preview)];
-  if (types && types.length > 0) conditions.push(inArray(entries.type, types));
+  // Types and section categories are alternatives, not extra filters: a guide
+  // about villages is an `article` AND belongs under Destinations.
+  const scope = sectionScope(types, categoryKeys);
+  if (scope) conditions.push(scope);
   if (categoryKey) conditions.push(eq(categories.key, categoryKey));
 
   const rows = await summaryQuery(db, locale)
@@ -265,23 +270,37 @@ export async function listEntries(
 
 export async function countEntries(
   locale: Locale,
-  options: Pick<ListOptions, "types" | "categoryKey" | "preview"> = {},
+  options: Pick<ListOptions, "types" | "categoryKey" | "categoryKeys" | "preview"> = {},
 ): Promise<number> {
   const db = getDb();
   if (!db) return 0;
 
   return safeRead("countEntries", 0, async () => {
     const conditions = [visibilityWhere(locale, options.preview ?? false)];
-    if (options.types?.length) conditions.push(inArray(entries.type, options.types));
+    const scope = sectionScope(options.types, options.categoryKeys);
+    if (scope) conditions.push(scope);
 
     const rows = await db
       .select({ count: sql<number>`count(*)::int` })
       .from(entryTranslations)
       .innerJoin(entries, eq(entries.id, entryTranslations.entryId))
+      .leftJoin(categories, eq(categories.id, entries.primaryCategoryId))
       .where(and(...conditions));
 
     return rows[0]?.count ?? 0;
   });
+}
+
+/** `entry.type IN (…) OR entry.primary_category IN (…)`. */
+function sectionScope(types?: EntryType[], categoryKeys?: string[]) {
+  const parts = [];
+  if (types && types.length > 0) parts.push(inArray(entries.type, types));
+  if (categoryKeys && categoryKeys.length > 0) {
+    parts.push(inArray(categories.key, categoryKeys));
+  }
+  if (parts.length === 0) return undefined;
+  if (parts.length === 1) return parts[0];
+  return or(...parts);
 }
 
 export async function listBySection(
@@ -290,8 +309,9 @@ export async function listBySection(
   options: ListOptions = {},
 ): Promise<EntrySummary[]> {
   const types = SECTION_ENTRY_TYPES[section];
-  if (!types) return [];
-  return listEntries(locale, { ...options, types });
+  const categoryKeys = SECTION_CATEGORY_KEYS[section];
+  if (!types && !categoryKeys) return [];
+  return listEntries(locale, { ...options, types, categoryKeys });
 }
 
 export async function countBySection(
@@ -300,8 +320,27 @@ export async function countBySection(
   preview = false,
 ): Promise<number> {
   const types = SECTION_ENTRY_TYPES[section];
-  if (!types) return 0;
-  return countEntries(locale, { types, preview });
+  const categoryKeys = SECTION_CATEGORY_KEYS[section];
+  if (!types && !categoryKeys) return 0;
+  return countEntries(locale, { types, categoryKeys, preview });
+}
+
+/**
+ * Which section hubs actually have something in them.
+ *
+ * The navigation is built from this rather than from the full section list: a
+ * menu entry that leads to an empty page is worse than no menu entry at all,
+ * and hiding it by data means the section comes back on its own the day the
+ * first entry is published, with no code change and nothing to remember.
+ */
+export async function nonEmptySections(
+  locale: Locale,
+  sections: readonly string[],
+): Promise<Set<string>> {
+  const counts = await Promise.all(
+    sections.map(async (section) => [section, await countBySection(locale, section)] as const),
+  );
+  return new Set(counts.filter(([, count]) => count > 0).map(([section]) => section));
 }
 
 /** Upcoming events, ordered by start date rather than publication date. */

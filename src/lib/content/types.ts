@@ -140,3 +140,20 @@ export const SECTION_ENTRY_TYPES: Record<string, EntryType[]> = {
   events: ["event"],
   routes: ["route"],
 };
+
+/**
+ * Categories a section also claims, on top of its entry types.
+ *
+ * Without this, every editorial piece is an `article` and therefore lands in
+ * "Guides" and nowhere else - which is how a site ends up with one full hub and
+ * four empty ones. A guide about medieval villages belongs under Destinations
+ * as well, and a festival guide belongs under Events.
+ *
+ * `routes` is deliberately unmapped: a hiking-routes hub should stay empty
+ * until there are actual routes, rather than being padded with articles that
+ * are not routes.
+ */
+export const SECTION_CATEGORY_KEYS: Record<string, string[]> = {
+  destinations: ["cities", "villages", "coast", "mountain"],
+  events: ["festivals", "calendar"],
+};

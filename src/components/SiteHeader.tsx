@@ -1,15 +1,27 @@
 import Link from "next/link";
 
 import { getMessages } from "@/lib/i18n";
-import { SECTION_KEYS, sectionPath, type SectionKey } from "@/lib/i18n/routes";
+import { sectionPath, type SectionKey } from "@/lib/i18n/routes";
 import type { Locale } from "@/lib/i18n/config";
+import { nonEmptySections } from "@/lib/content/repository";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 import { SearchBox } from "./SearchBox";
 
-/** Sections that appear in the primary navigation, in editorial order. */
+/** Sections that may appear in the primary navigation, in editorial order. */
 const PRIMARY: SectionKey[] = ["destinations", "guides", "events", "routes", "news"];
 
-export function SiteHeader({
+/**
+ * A menu entry that leads to an empty page is worse than no menu entry: it
+ * promises something the site does not have, and it is the first thing a
+ * quality review notices. So the navigation is built from what is actually
+ * published - which also means a section reappears on its own the day its
+ * first entry goes live, with nothing to remember to switch back on.
+ *
+ * If the database cannot answer, `nonEmptySections` returns an empty set and we
+ * fall back to showing everything: a degraded read must not silently delete the
+ * site's navigation.
+ */
+export async function SiteHeader({
   locale,
   translations,
   activeSection,
@@ -22,6 +34,8 @@ export function SiteHeader({
   showSearch?: boolean;
 }) {
   const t = getMessages(locale);
+  const filled = await nonEmptySections(locale, PRIMARY);
+  const sections = filled.size > 0 ? PRIMARY.filter((key) => filled.has(key)) : PRIMARY;
 
   return (
     <header className="ci-header">
@@ -34,7 +48,7 @@ export function SiteHeader({
           aria-label={t.common.menu}
           className="ml-auto hidden items-center gap-5 md:flex"
         >
-          {PRIMARY.map((key) => (
+          {sections.map((key) => (
             <Link
               key={key}
               href={sectionPath(key, locale)}
@@ -67,7 +81,7 @@ export function SiteHeader({
         aria-label={t.common.menu}
         className="ci-shell flex gap-4 overflow-x-auto border-t border-[var(--color-rule)] py-2 md:hidden"
       >
-        {SECTION_KEYS.filter((k) => PRIMARY.includes(k)).map((key) => (
+        {sections.map((key) => (
           <Link
             key={key}
             href={sectionPath(key, locale)}
