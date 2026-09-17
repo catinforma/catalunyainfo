@@ -276,14 +276,14 @@ export const SITGES: FeatureArticle = {
     en: "Representative image of the festival atmosphere. Illustration generated with artificial intelligence.",
   },
   secondaryAlt: {
-    ca: "Sitges de nit durant el festival de cinema",
-    es: "Sitges de noche durante el festival de cine",
-    en: "Sitges at night during the film festival",
+    ca: "Passeig marítim de Sitges amb la senyalització del festival",
+    es: "Paseo marítimo de Sitges con la señalización del festival",
+    en: "The Sitges seafront promenade with festival banners",
   },
   secondaryCaption: {
-    ca: "Imatge representativa de Sitges de nit. Il·lustració generada amb intel·ligència artificial.",
-    es: "Imagen representativa de Sitges de noche. Ilustración generada con inteligencia artificial.",
-    en: "Representative image of Sitges at night. Illustration generated with artificial intelligence.",
+    ca: "Imatge representativa del passeig de Sitges durant el festival. Il·lustració generada amb intel·ligència artificial.",
+    es: "Imagen representativa del paseo de Sitges durante el festival. Ilustración generada con inteligencia artificial.",
+    en: "Representative image of the Sitges promenade during the festival. Illustration generated with artificial intelligence.",
   },
   sources: [
     { name: "Sitges Film Festival — bases i dates de l'edició", url: RULES, publisher: "Sitges Film Festival" },

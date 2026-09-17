@@ -385,9 +385,9 @@ export const TRAINS: FeatureArticle = {
     en: "Representative image of a coastal train journey in Catalonia. Illustration generated with artificial intelligence.",
   },
   secondaryAlt: {
-    ca: "Estació de tren catalana amb paisatge de fons",
-    es: "Estación de tren catalana con paisaje de fondo",
-    en: "A Catalan railway station with landscape behind it",
+    ca: "Viatgers baixant del tren en una estació catalana",
+    es: "Viajeros bajando del tren en una estación catalana",
+    en: "Passengers stepping off a train at a Catalan station",
   },
   secondaryCaption: {
     ca: "Imatge representativa d'una estació de tren a Catalunya. Il·lustració generada amb intel·ligència artificial.",

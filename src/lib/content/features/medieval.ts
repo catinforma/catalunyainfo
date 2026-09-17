@@ -334,14 +334,14 @@ export const MEDIEVAL: FeatureArticle = {
     en: "Representative image of a Catalan medieval village; it does not depict any specific place. Illustration generated with artificial intelligence.",
   },
   secondaryAlt: {
-    ca: "Muralles d'una vila medieval catalana",
-    es: "Murallas de una villa medieval catalana",
-    en: "Walls of a Catalan medieval town",
+    ca: "Carrer empedrat d'una vila medieval catalana",
+    es: "Calle empedrada de una villa medieval catalana",
+    en: "Cobbled street in a Catalan medieval town",
   },
   secondaryCaption: {
-    ca: "Imatge representativa de muralles medievals; no correspon a cap vila concreta. Il·lustració generada amb intel·ligència artificial.",
-    es: "Imagen representativa de murallas medievales; no corresponde a ninguna villa concreta. Ilustración generada con inteligencia artificial.",
-    en: "Representative image of medieval town walls; it does not depict any specific town. Illustration generated with artificial intelligence.",
+    ca: "Imatge representativa d'un carrer medieval; no correspon a cap vila concreta. Il·lustració generada amb intel·ligència artificial.",
+    es: "Imagen representativa de una calle medieval; no corresponde a ninguna villa concreta. Ilustración generada con inteligencia artificial.",
+    en: "Representative image of a medieval street; it does not depict any specific town. Illustration generated with artificial intelligence.",
   },
   sources: [
     { name: "Patrimoni Cultural de Catalunya", url: PATRIMONI, publisher: "Generalitat de Catalunya" },

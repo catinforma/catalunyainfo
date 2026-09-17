@@ -288,9 +288,9 @@ export const MONTSERRAT: FeatureArticle = {
   heroKey: "escapades-barcelona-mes-enlla-montserrat",
   secondaryKey: "cardona-vic-escapades-catalunya",
   heroAlt: {
-    ca: "Paisatge d'una escapada des de Barcelona més enllà de Montserrat",
-    es: "Paisaje de una escapada desde Barcelona más allá de Montserrat",
-    en: "Landscape on a Barcelona day trip beyond Montserrat",
+    ca: "Vila històrica sobre un turó, envoltada de paisatge d'interior",
+    es: "Villa histórica sobre un cerro, rodeada de paisaje de interior",
+    en: "A historic hilltop town surrounded by inland landscape",
   },
   heroCaption: {
     ca: "Imatge representativa d'una escapada per l'interior de Catalunya. Il·lustració generada amb intel·ligència artificial.",
@@ -298,9 +298,9 @@ export const MONTSERRAT: FeatureArticle = {
     en: "Representative image of a day trip in inland Catalonia. Illustration generated with artificial intelligence.",
   },
   secondaryAlt: {
-    ca: "Vila catalana d'interior amb patrimoni històric",
-    es: "Villa catalana de interior con patrimonio histórico",
-    en: "An inland Catalan town with historic heritage",
+    ca: "Plaça porticada d'una vila catalana d'interior",
+    es: "Plaza porticada de una villa catalana de interior",
+    en: "The arcaded square of an inland Catalan town",
   },
   secondaryCaption: {
     ca: "Imatge representativa d'una vila catalana d'interior. Il·lustració generada amb intel·ligència artificial.",

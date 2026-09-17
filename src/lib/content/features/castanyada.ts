@@ -288,14 +288,14 @@ export const CASTANYADA: FeatureArticle = {
     en: "Representative image of the Castanyada tradition. Illustration generated with artificial intelligence.",
   },
   secondaryAlt: {
-    ca: "Parades d'una fira de la castanya a la tardor",
-    es: "Paradas de una feria de la castaña en otoño",
-    en: "Stalls at an autumn chestnut fair",
+    ca: "Castanyes torrades en una paperina",
+    es: "Castañas asadas en un cucurucho",
+    en: "Roast chestnuts in a paper cone",
   },
   secondaryCaption: {
-    ca: "Imatge representativa d'una fira de la castanya; no correspon a cap edició concreta. Il·lustració generada amb intel·ligència artificial.",
-    es: "Imagen representativa de una feria de la castaña; no corresponde a ninguna edición concreta. Ilustración generada con inteligencia artificial.",
-    en: "Representative image of a chestnut fair; it does not depict any specific edition. Illustration generated with artificial intelligence.",
+    ca: "Imatge representativa de castanyes torrades; no correspon a cap fira concreta. Il·lustració generada amb intel·ligència artificial.",
+    es: "Imagen representativa de castañas asadas; no corresponde a ninguna feria concreta. Ilustración generada con inteligencia artificial.",
+    en: "Representative image of roast chestnuts; it does not depict any specific fair. Illustration generated with artificial intelligence.",
   },
   sources: [
     { name: "Fira de la Castanya de Viladrau", url: VILADRAU_FIRA, publisher: "Ajuntament de Viladrau" },
