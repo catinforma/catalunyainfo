@@ -71,13 +71,11 @@ async function main() {
     ["/ca/contacte/", "Contact"],
   ] as const;
 
-  let policyFailures = 0;
   for (const [path, name] of policyPages) {
     const page = await get(path);
     const words = visibleWords(page.body);
     if (page.status !== 200) {
       record("FAIL", name, `${path} returned ${page.status}`);
-      policyFailures += 1;
     } else if (words < 120) {
       record("WARNING", name, `${path} has only ~${words} words`);
     } else {
