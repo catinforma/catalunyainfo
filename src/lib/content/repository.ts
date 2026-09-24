@@ -1009,3 +1009,34 @@ export function relatedIdsInBody(body: ReturnType<typeof parseBody>): string[] {
   }
   return [...ids];
 }
+
+/**
+ * Whether the topic and author indexes have anything to show.
+ *
+ * Both render an empty listing until there are tagged entries or real authors,
+ * and both are already excluded from the sitemap for that reason. These let the
+ * footer make the same decision, so the site never links from every page to a
+ * page with twenty words on it.
+ */
+export async function hasAnyTags(locale: Locale): Promise<boolean> {
+  const db = getDb();
+  if (!db) return false;
+  return safeRead("hasAnyTags", false, async () => {
+    const rows = await db
+      .select({ count: sql<number>`count(*)::int` })
+      .from(entryTags)
+      .innerJoin(entryTranslations, eq(entryTranslations.entryId, entryTags.entryId))
+      .innerJoin(entries, eq(entries.id, entryTranslations.entryId))
+      .where(publishedWhere(locale));
+    return (rows[0]?.count ?? 0) > 0;
+  });
+}
+
+export async function hasAnyAuthors(): Promise<boolean> {
+  const db = getDb();
+  if (!db) return false;
+  return safeRead("hasAnyAuthors", false, async () => {
+    const rows = await db.select({ count: sql<number>`count(*)::int` }).from(authors);
+    return (rows[0]?.count ?? 0) > 0;
+  });
+}

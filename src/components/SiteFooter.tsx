@@ -1,7 +1,7 @@
 import Link from "next/link";
 
 import { ConsentSettingsButton } from "@/components/ConsentSettingsButton";
-import { nonEmptySections } from "@/lib/content/repository";
+import { hasAnyAuthors, hasAnyTags, nonEmptySections } from "@/lib/content/repository";
 import { getMessages } from "@/lib/i18n";
 import { LEGAL_KEYS, legalPath, sectionPath } from "@/lib/i18n/routes";
 import type { Locale } from "@/lib/i18n/config";
@@ -17,6 +17,7 @@ export async function SiteFooter({ locale }: { locale: Locale }) {
   const t = getMessages(locale);
   const year = new Date().getUTCFullYear();
   const filled = await nonEmptySections(locale, FOOTER_SECTIONS);
+  const [hasTopics, hasAuthors] = await Promise.all([hasAnyTags(locale), hasAnyAuthors()]);
   const sections = filled.size > 0 ? FOOTER_SECTIONS.filter((k) => filled.has(k)) : FOOTER_SECTIONS;
 
   return (
@@ -41,9 +42,15 @@ export async function SiteFooter({ locale }: { locale: Locale }) {
                 <Link href={sectionPath(key, locale)}>{t.nav[key]}</Link>
               </li>
             ))}
-            <li>
-              <Link href={sectionPath("topics", locale)}>{t.nav.topics}</Link>
-            </li>
+            {/* Topics and authors are linked only once they have something
+                to list. Both are out of the sitemap for the same reason, and
+                a link from every page to an empty index is the other half of
+                that problem. */}
+            {hasTopics ? (
+              <li>
+                <Link href={sectionPath("topics", locale)}>{t.nav.topics}</Link>
+              </li>
+            ) : null}
           </ul>
         </nav>
 
@@ -55,9 +62,11 @@ export async function SiteFooter({ locale }: { locale: Locale }) {
             <li>
               <Link href={sectionPath("about", locale)}>{t.nav.about}</Link>
             </li>
-            <li>
-              <Link href={sectionPath("authors", locale)}>{t.nav.authors}</Link>
-            </li>
+            {hasAuthors ? (
+              <li>
+                <Link href={sectionPath("authors", locale)}>{t.nav.authors}</Link>
+              </li>
+            ) : null}
             <li>
               <Link href={sectionPath("contact", locale)}>{t.nav.contact}</Link>
             </li>

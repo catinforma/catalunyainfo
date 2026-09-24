@@ -4,7 +4,12 @@
  * Answers the four questions that actually cost traffic, none of which any
  * single page can answer about itself:
  *
- *  - **Broken links.** An internal link to a URL that does not resolve.
+ *  - **Broken links.** An internal link to a URL that does not resolve. Checked
+ *    over HTTP, not against the sitemap: a page can be perfectly healthy and
+ *    deliberately absent from the sitemap.
+ *  - **Linked but unlisted.** A page we link to that the sitemap omits. Not an
+ *    error in itself, but if we recommend it to readers we should be able to
+ *    say why we are not recommending it to Google.
  *  - **Orphans.** A page in the sitemap that nothing links to. Google reaches
  *    it through the sitemap, but it inherits no authority and readers never
  *    arrive at it from anywhere.
@@ -115,15 +120,43 @@ async function main() {
   }
 
   const broken: { from: string; to: string }[] = [];
+  const unlisted = new Map<string, string>();
   const crossLanguage: { from: string; to: string }[] = [];
+
+  // Anything linked but not in the sitemap is resolved once over HTTP, so a
+  // page that is healthy and simply unlisted is not reported as broken.
+  const offSitemap = new Set<string>();
+  for (const page of pages) {
+    for (const href of page.all) if (!known.has(href)) offSitemap.add(href);
+  }
+  const resolved = new Map<string, boolean>();
+  await Promise.all(
+    [...offSitemap].map(async (href) => {
+      try {
+        const response = await fetch(`${ORIGIN}${href}`, {
+          method: "HEAD",
+          headers: { "user-agent": "CatalunyaInfo-link-audit" },
+          signal: AbortSignal.timeout(20_000),
+        });
+        resolved.set(href, response.ok);
+      } catch {
+        resolved.set(href, false);
+      }
+    }),
+  );
 
   for (const page of pages) {
     const from = page.url.replace(ORIGIN, "");
     const fromLocale = from.split("/")[1];
 
     for (const href of page.all) {
-      if (known.has(href)) anyIn.set(href, (anyIn.get(href) ?? 0) + 1);
-      else broken.push({ from, to: href });
+      if (known.has(href)) {
+        anyIn.set(href, (anyIn.get(href) ?? 0) + 1);
+      } else if (resolved.get(href)) {
+        unlisted.set(href, from);
+      } else {
+        broken.push({ from, to: href });
+      }
     }
     for (const href of page.contextual) {
       if (known.has(href)) contextualIn.set(href, (contextualIn.get(href) ?? 0) + 1);
