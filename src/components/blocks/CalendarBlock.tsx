@@ -2,7 +2,6 @@
 
 import type { Block } from "@/lib/content/blocks";
 import { renderInline } from "@/lib/content/inline";
-import { formatDate } from "@/lib/format";
 import { getMessages } from "@/lib/i18n";
 import type { Locale } from "@/lib/i18n/config";
 
@@ -67,6 +66,25 @@ function buildIcs(block: CalendarBlockType, origin: string): string {
   return `${lines.join("\r\n")}\r\n`;
 }
 
+/**
+ * How each row's date reads.
+ *
+ * When every entry falls in the same year — which is the normal case for a
+ * holiday calendar — the year is dropped and the weekday added instead. On a
+ * list of public holidays the weekday is the thing the reader is actually
+ * looking for, and repeating "2027" twelve times tells them nothing.
+ */
+function dateLabel(iso: string, locale: Locale, sameYear: boolean): string {
+  const date = new Date(`${iso}T12:00:00Z`);
+  return date.toLocaleDateString(locale, {
+    timeZone: "UTC",
+    weekday: "short",
+    day: "numeric",
+    month: "long",
+    ...(sameYear ? {} : { year: "numeric" }),
+  });
+}
+
 export function CalendarBlock({
   block,
   locale,
@@ -75,6 +93,8 @@ export function CalendarBlock({
   locale: Locale;
 }) {
   const t = getMessages(locale);
+  const years = new Set(block.events.map((event) => event.date.slice(0, 4)));
+  const sameYear = years.size === 1;
 
   function download() {
     const ics = buildIcs(block, window.location.href);
@@ -95,11 +115,15 @@ export function CalendarBlock({
       <h3 className="ci-calendar-title">{block.title}</h3>
       {block.intro ? <p className="ci-calendar-intro">{renderInline(block.intro)}</p> : null}
 
+      {sameYear ? (
+        <p className="ci-calendar-year ci-numeric">{[...years][0]}</p>
+      ) : null}
+
       <ol className="ci-calendar-list">
         {block.events.map((event, index) => (
           <li key={`${event.date}-${index}`}>
-            <time dateTime={event.date} className="ci-numeric">
-              {formatDate(new Date(`${event.date}T12:00:00Z`), locale, "short")}
+            <time dateTime={event.date} className="ci-calendar-date">
+              {dateLabel(event.date, locale, sameYear)}
             </time>
             <span className="ci-calendar-name">{event.title}</span>
             {event.scope ? <span className="ci-calendar-scope">{event.scope}</span> : null}

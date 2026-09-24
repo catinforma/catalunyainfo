@@ -81,6 +81,28 @@ clicks, or the festival will take the credit.
 
 ---
 
+## 2026-09-24 — public holiday calendar published
+
+**URLs:** `/ca/guies/calendari-laboral-catalunya/` and the es/en equivalents.
+
+Not an experiment on an existing page, recorded here because it has a
+measurement schedule attached and a clear prediction.
+
+**Prediction.** The page targets a seasonal, recurring query that peaks from
+now to January. Nothing on the site currently ranks for it, so any impression
+is new coverage rather than a reallocation.
+
+**Measure at:** 1 October (7 days, indexing and first queries), 22 October
+(28 days, first performance), 23 December (90 days, near the seasonal peak).
+
+**Do not change the title before 22 October** unless a factual error appears.
+Position on a brand-new page is unstable for the first fortnight, and a change
+inside that window makes the whole thing unreadable.
+
+**Outcome:** _pending_
+
+---
+
 ## Candidates not yet run
 
 Recorded so they are not lost, and so they are not all started at once.

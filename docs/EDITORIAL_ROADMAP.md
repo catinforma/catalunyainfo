@@ -27,8 +27,9 @@ Status: `live` · `needs-update` · `proposed` · `blocked`
 | Barcelona | Tourist traps | live | evergreen | Jan 2027 | `/ca/barcelona/barcelona-trampes-turistes-alternatives/` |
 | Places | 15 surprising places | live | evergreen | Mar 2027 | `/ca/llocs/llocs-sorprenents-catalunya/` |
 | Plans | Rainy-day plans | live | evergreen | Nov 2026, before the wet season | `/ca/plans/que-fer-catalunya-quan-plou/` |
+| Practical | **Public holiday calendar** | live 24 Sep 2026 | utility + **recurrent annual** | When the local-holiday dataset is published, or the 2028 order appears | `/ca/guies/calendari-laboral-catalunya/` |
 
-All thirteen exist in ca, es and en.
+All fourteen exist in ca, es and en.
 
 ### The one that matters most
 
@@ -47,7 +48,7 @@ sitemap. The architecture is prepared; the editorial packages arrive separately.
 
 | # | Topic | Cluster | Type | Season | Languages | Status |
 | --- | --- | --- | --- | --- | --- | --- |
-| P01 | Catalan public holiday calendar: bank holidays, long weekends, best days to book leave | Practical | utility + **recurrent annual** | Published late in the preceding year; live all year | ca/es/en | planned |
+| ~~P01~~ | ~~Catalan public holiday calendar~~ | Practical | utility + **recurrent annual** | — | ca/es/en | **published 24 Sep 2026** |
 | P02 | Tourist tax in Barcelona and Catalonia: what you will actually pay | Barcelona practical | utility + commercial | Evergreen; re-verify when rates change | ca/es/en | planned |
 | P03 | Barcelona airport to the centre: metro, train, Aerobús or taxi | Barcelona practical | evergreen + commercial | Evergreen | ca/es/en (**EN lead**) | planned |
 | P04 | The Ripollès: what to see, villages, routes | Destinations | **destination hub** | Evergreen, peaks autumn/winter | ca/es/en | planned |

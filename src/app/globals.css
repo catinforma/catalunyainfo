@@ -814,10 +814,23 @@
     border-bottom: 1px solid var(--color-rule);
     font-size: var(--text-sm);
   }
-  .ci-calendar-list time {
+  .ci-calendar-date {
     flex: 0 0 auto;
+    min-width: 11rem;
     color: var(--color-muted);
     font-variant-numeric: tabular-nums;
+  }
+  @media (max-width: 30rem) {
+    .ci-calendar-date {
+      min-width: 0;
+      flex-basis: 100%;
+    }
+  }
+  .ci-calendar-year {
+    margin: 0 0 0.4rem;
+    font-family: var(--font-display), Georgia, serif;
+    font-size: var(--text-lg);
+    color: var(--color-muted);
   }
   .ci-calendar-name {
     font-weight: 500;
