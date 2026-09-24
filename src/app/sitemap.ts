@@ -1,6 +1,6 @@
 import type { MetadataRoute } from "next";
 
-import { allIndexablePaths } from "@/lib/content/repository";
+import { allIndexablePaths, countBySection } from "@/lib/content/repository";
 import { HTML_LANG, LOCALES, X_DEFAULT_LOCALE, type Locale } from "@/lib/i18n/config";
 import { allSystemPaths, sectionPath } from "@/lib/i18n/routes";
 import { absoluteUrl, indexingAllowed } from "@/lib/site";
@@ -19,7 +19,14 @@ export const revalidate = 3600;
  *  - nothing at all is emitted on a non-production deployment.
  *
  * Hub pages are listed only if the section actually has content behind them,
- * so we never ask Google to crawl an empty listing.
+ * so we never ask Google to crawl an empty listing. That question is asked of
+ * the same function the navigation uses, because a hub fills up by category as
+ * well as by entry type - matching path segments instead missed Guides and
+ * Destinations entirely.
+ *
+ * System paths that are also published as content entries - the legal pages,
+ * about, contact - are emitted once, from the content side, which carries the
+ * real last-modified date. Listing a URL twice is a defect a crawler notices.
  */
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   if (!indexingAllowed()) return [];
@@ -45,19 +52,28 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     };
   });
 
-  // System pages. The search page is excluded by `allSystemPaths`; hubs with no
-  // content are filtered out below.
-  const populatedSections = new Set(
-    rows
-      .map((row) => row.path.split("/")[0])
-      .filter((segment): segment is string => Boolean(segment)),
+  // Anything already published as a content entry is emitted from there only.
+  const contentUrls = new Set(entries.map((entry) => entry.url));
+
+  // Which hubs have something behind them, asked the same way the navigation
+  // asks it.
+  const HUBS = ["news", "guides", "destinations", "events", "routes"] as const;
+  const populatedHubs = new Set<string>();
+  await Promise.all(
+    LOCALES.flatMap((locale) =>
+      HUBS.map(async (key) => {
+        if ((await countBySection(locale, key)) > 0) {
+          populatedHubs.add(sectionPath(key, locale));
+        }
+      }),
+    ),
   );
 
   const systemEntries: MetadataRoute.Sitemap = [];
   for (const locale of LOCALES) {
     for (const path of allSystemPaths(locale)) {
-      const isHub = isSectionHub(locale, path);
-      if (isHub && !hasContent(locale, path, populatedSections)) continue;
+      if (contentUrls.has(absoluteUrl(path))) continue;
+      if (isSectionHub(locale, path) && !populatedHubs.has(path)) continue;
 
       systemEntries.push({
         url: absoluteUrl(path),
@@ -91,11 +107,6 @@ function isSectionHub(locale: Locale, path: string): boolean {
   return (["news", "guides", "destinations", "events", "routes"] as const).some(
     (key) => sectionPath(key, locale) === path,
   );
-}
-
-function hasContent(locale: Locale, path: string, populated: Set<string>): boolean {
-  const segment = path.split("/").filter(Boolean)[1];
-  return Boolean(segment && populated.has(segment));
 }
 
 /**
