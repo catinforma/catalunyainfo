@@ -66,8 +66,12 @@ function imagesFor(article: FeatureArticle): ImageSpec[] {
       width: file.width,
       height: file.height,
       blurDataUrl: file.blurDataUrl,
-      credit: "CatalunyaInfo",
-      license: null,
+      // Attribution comes from the manifest, which carries it from the
+      // sidecar written at download time. For a CC BY-SA photograph this is a
+      // condition of publishing it, so it is never retyped by hand.
+      credit: file.credit ?? "CatalunyaInfo",
+      creditUrl: file.creditUrl ?? null,
+      license: file.license ?? null,
       alt: alt ?? {},
       caption: caption ?? {},
     });

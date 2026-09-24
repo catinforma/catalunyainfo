@@ -165,32 +165,57 @@ test("no tracking parameters anywhere in the prose", () => {
   }
 });
 
-test("every illustration is disclosed as generated, in every language", () => {
+test("AI illustrations are disclosed; photographs are credited instead", async () => {
+  // Which is which is not a judgement call: a photograph fetched from Wikimedia
+  // Commons carries a licence in the manifest, and an AI illustration does not.
+  // Tying the assertion to the file itself means a caption cannot drift out of
+  // step with the picture it sits under.
+  const { IMAGE_BY_KEY } = await import("../src/lib/content/images.ts");
+
   for (const feature of FEATURES) {
-    for (const [alt, caption] of [
-      [feature.heroAlt, feature.heroCaption],
-      [feature.secondaryAlt, feature.secondaryCaption],
+    for (const [key, alt, caption] of [
+      [feature.heroKey, feature.heroAlt, feature.heroCaption],
+      [feature.secondaryKey, feature.secondaryAlt, feature.secondaryCaption],
     ] as const) {
-      if (!caption) continue;
+      if (!key || !caption) continue;
+      const file = IMAGE_BY_KEY.get(key);
+      const licensed = Boolean(file?.license);
+
       for (const locale of LOCALES) {
-        assert.ok(alt?.[locale]?.length, `${feature.key}: missing ${locale} alt`);
-        assert.match(
-          caption[locale] ?? "",
-          /intel·ligència artificial|inteligencia artificial|artificial intelligence/,
-          `${feature.key}: ${locale} caption does not disclose generation`,
-        );
+        assert.ok(alt?.[locale]?.length, `${feature.key}: missing ${locale} alt for ${key}`);
+        const text = caption[locale] ?? "";
+        const claimsAi =
+          /intel·ligència artificial|inteligencia artificial|artificial intelligence/.test(text);
+
+        if (licensed) {
+          assert.ok(
+            !claimsAi,
+            `${feature.key}/${locale}: ${key} is a photograph but the caption calls it generated`,
+          );
+          assert.ok(text.length > 10, `${feature.key}/${locale}: ${key} has no caption`);
+        } else {
+          assert.ok(
+            claimsAi,
+            `${feature.key}/${locale}: ${key} is an illustration and must say so`,
+          );
+        }
       }
     }
   }
 });
 
-test("no caption claims a generated image is a photograph of a specific place", () => {
-  const forbidden = /fotografia (real|del lloc)|fotografía (real|del lugar)|(real|actual) photograph/i;
+test("every licensed photograph carries its author and licence", async () => {
+  const { IMAGE_BY_KEY } = await import("../src/lib/content/images.ts");
+
   for (const feature of FEATURES) {
-    for (const locale of LOCALES) {
-      for (const caption of [feature.heroCaption?.[locale], feature.secondaryCaption?.[locale]]) {
-        if (caption) assert.doesNotMatch(caption, forbidden, `${feature.key}/${locale}`);
-      }
+    for (const key of [feature.heroKey, feature.secondaryKey]) {
+      if (!key) continue;
+      const file = IMAGE_BY_KEY.get(key);
+      if (!file?.license) continue;
+      assert.ok(file.credit?.length, `${key}: licensed but has no author`);
+      assert.match(file.creditUrl ?? "", /^https:\/\//, `${key}: no link to the source page`);
+      // Non-commercial and no-derivatives terms do not fit a publication.
+      assert.doesNotMatch(file.license, /\bNC\b|\bND\b|non-?commercial|no-?deriv/i, key);
     }
   }
 });

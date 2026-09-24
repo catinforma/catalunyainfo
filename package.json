@@ -22,6 +22,7 @@
     "admin:create-user": "node --experimental-strip-types scripts/create-user.ts",
     "audit:readiness": "node --experimental-strip-types scripts/adsense-readiness.ts",
     "build:redirects": "node --experimental-strip-types scripts/build-redirects.ts",
+    "images:commons": "node --experimental-strip-types scripts/fetch-commons.ts",
     "prebuild": "npm run build:redirects",
     "publish:weekend": "node --experimental-strip-types scripts/publish-weekend-guide.ts",
     "images:import": "node --experimental-strip-types scripts/import-images.ts"

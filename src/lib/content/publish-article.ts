@@ -28,6 +28,8 @@ export interface ImageSpec {
   height: number;
   blurDataUrl: string;
   credit: string | null;
+  /** Page the image came from. Required by CC BY / CC BY-SA attribution. */
+  creditUrl?: string | null;
   license: string | null;
   alt: Partial<Record<Locale, string>>;
   caption: Partial<Record<Locale, string>>;
@@ -93,6 +95,7 @@ export async function upsertImages(images: ImageSpec[]): Promise<Map<string, str
       height: image.height,
       blurDataUrl: image.blurDataUrl,
       credit: image.credit,
+      creditUrl: image.creditUrl ?? null,
       license: image.license,
       alt: image.alt,
       caption: image.caption,

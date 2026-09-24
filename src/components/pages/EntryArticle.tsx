@@ -120,6 +120,7 @@ export function EntryArticle({
                   ) : (
                     entry.hero.credit
                   )}
+                  {entry.hero.license ? ` · ${entry.hero.license}` : null}
                 </span>
               ) : null}
             </figcaption>

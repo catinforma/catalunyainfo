@@ -34,6 +34,32 @@ interface Imported {
   width: number;
   height: number;
   blurDataUrl: string;
+  /** Attribution, when the file came with a `.credit.json` sidecar. */
+  credit?: string;
+  creditUrl?: string;
+  license?: string;
+}
+
+/**
+ * Reads the attribution sidecar `fetch-commons.ts` writes.
+ *
+ * Carrying it through the manifest rather than re-deriving it later is the
+ * point: for a CC BY-SA photograph the author, the licence and the source page
+ * are a condition of publishing it at all, so they must not be able to get
+ * separated from the file along the way.
+ */
+async function readCredit(file: string): Promise<Partial<Imported>> {
+  const sidecar = join(INCOMING, `${parse(file).name}.credit.json`);
+  try {
+    const raw = JSON.parse(await readFile(sidecar, "utf8")) as {
+      credit?: string;
+      creditUrl?: string;
+      license?: string;
+    };
+    return { credit: raw.credit, creditUrl: raw.creditUrl, license: raw.license };
+  } catch {
+    return {};
+  }
 }
 
 async function main() {
@@ -94,6 +120,7 @@ async function main() {
       width: outMeta.width ?? 0,
       height: outMeta.height ?? 0,
       blurDataUrl: `data:image/webp;base64,${blur.toString("base64")}`,
+      ...(await readCredit(file)),
     });
 
     const kb = (out.length / 1024).toFixed(0);
@@ -103,9 +130,14 @@ async function main() {
   const body = `// GENERATED FILE - do not edit by hand.
 // Source: incoming/  ->  npm run images:import
 //
-// Alt text and credits are NOT generated: they live in
-// src/lib/content/weekend/payload.ts, keyed by the same slug, so that editorial
-// wording is written by a person and survives a re-import.
+// Alt text is NOT generated: it lives in the article payloads, keyed by the
+// same slug, so editorial wording is written by a person and survives a
+// re-import.
+//
+// Attribution IS generated, from the .credit.json sidecar that
+// fetch-commons.ts writes. For a CC BY-SA photograph the author, licence and
+// source page are a condition of publishing it, so they travel with the file
+// rather than being retyped somewhere they can drift.
 
 export interface ImportedImage {
   readonly key: string;
@@ -113,6 +145,9 @@ export interface ImportedImage {
   readonly width: number;
   readonly height: number;
   readonly blurDataUrl: string;
+  readonly credit?: string;
+  readonly creditUrl?: string;
+  readonly license?: string;
 }
 
 export const IMAGES: readonly ImportedImage[] = ${JSON.stringify(imported, null, 2)} as const;
