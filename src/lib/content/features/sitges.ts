@@ -315,9 +315,9 @@ export const SITGES: FeatureArticle = {
     en: {
       path: ARTICLE_PATHS.sitges.en,
       title: "Sitges Film Festival 2026: the ultimate first-timer's guide",
-      seoTitle: "Sitges Film Festival 2026: a first-timer's guide",
+      seoTitle: "Sitges Film Festival 2026: dates, venues and tickets",
       seoDescription:
-        "The 59th Sitges Film Festival runs 8–18 October 2026. Venues, passes, getting there by train, and what has actually been announced.",
+        "Sitges Film Festival 2026 runs 8-18 October, the 59th edition. Dates, venues, how passes work, getting there by train, and what is confirmed so far.",
       excerpt:
         "The 59th edition runs 8–18 October 2026. Venues, passes, getting there by train, and what is confirmed versus what is not.",
       blocks: en(),

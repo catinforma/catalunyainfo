@@ -22,6 +22,9 @@ export const dynamic = "force-dynamic";
  *  - Production: crawlable, with the admin area, the API and internal search
  *    excluded. Internal search is excluded because result pages are thin and
  *    near-duplicate by nature.
+ *
+ * Query strings are disallowed to keep faceted and tracking variants out, but
+ * the image optimiser is explicitly allowed back in — see below.
  */
 export default async function robots(): Promise<MetadataRoute.Robots> {
   // A production build is also served on its `*.vercel.app` alias. Only the
@@ -39,7 +42,11 @@ export default async function robots(): Promise<MetadataRoute.Robots> {
     rules: [
       {
         userAgent: "*",
-        allow: "/",
+        // `/_next/image` has to be allowed explicitly, and before the query
+        // rule below: every content image is served from it, and `/*?*` would
+        // otherwise hide all of them from Googlebot. A more specific Allow
+        // wins over a broader Disallow, which is what makes this work.
+        allow: ["/", "/_next/image"],
         disallow: [
           "/admin",
           "/admin/",

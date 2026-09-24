@@ -139,11 +139,21 @@ export function translateSectionPath(
   return sectionPath(section, target);
 }
 
-/** Every system path, used by the sitemap generator. */
+/**
+ * Every system path, used by the sitemap generator.
+ *
+ * `authors` and `topics` are excluded: both render an index that is empty
+ * until there are authors or tagged entries to list, and a sitemap entry for a
+ * page with twenty words is an invitation to crawl nothing. They are still
+ * reachable and still render; they are simply not advertised until they have
+ * something to show. The section hubs are filtered the same way, by content,
+ * in `sitemap.ts`.
+ */
 export function allSystemPaths(locale: Locale): string[] {
+  const excluded: SectionKey[] = ["search", "authors", "topics"];
   return [
     homePath(locale),
-    ...SECTION_KEYS.filter((k) => k !== "search").map((k) => sectionPath(k, locale)),
+    ...SECTION_KEYS.filter((k) => !excluded.includes(k)).map((k) => sectionPath(k, locale)),
     ...LEGAL_KEYS.map((k) => legalPath(k, locale)),
   ];
 }
