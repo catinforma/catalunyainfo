@@ -7,6 +7,7 @@ import { publishMushroomReport } from "@/lib/content/mushrooms/publish";
 import { publishAutumnColours } from "@/lib/content/autumn/publish";
 import { publishInstitutionalPages } from "@/lib/content/pages/publish";
 import { publishFeatures } from "@/lib/content/features/publish";
+import { publishHolidayGuide } from "@/lib/content/holidays/publish";
 import { authoriseDeployRequest, describeError } from "@/lib/admin/deploy-auth";
 
 export const runtime = "nodejs";
@@ -38,6 +39,7 @@ export async function POST(request: Request) {
     const seed = wants("taxonomy") || only === "all" ? await seedTaxonomy() : null;
     const published = [];
     if (wants("articles")) {
+      published.push(await publishHolidayGuide());
       published.push(await publishWeekendGuide());
       published.push(await publishMushroomReport());
       published.push(await publishAutumnColours());
@@ -46,6 +48,7 @@ export async function POST(request: Request) {
     if (wants("features")) published.push(...(await publishFeatures()));
     if (wants("features-a")) published.push(...(await publishFeatures(0, 5)));
     if (wants("features-b")) published.push(...(await publishFeatures(5, 10)));
+    if (wants("holidays")) published.push(await publishHolidayGuide());
 
     const surfaces = [
       ...published.flatMap((article) =>
