@@ -39,6 +39,113 @@ article that sits still.
 
 ---
 
+## Planned — batch of 2026-09-24
+
+Ten topics, prioritised. **Status for all ten: `planned`.** Nothing is written,
+no URL exists, no placeholder is published, and none of these appears in the
+sitemap. The architecture is prepared; the editorial packages arrive separately.
+
+| # | Topic | Cluster | Type | Season | Languages | Status |
+| --- | --- | --- | --- | --- | --- | --- |
+| P01 | Catalan public holiday calendar: bank holidays, long weekends, best days to book leave | Practical | utility + **recurrent annual** | Published late in the preceding year; live all year | ca/es/en | planned |
+| P02 | Tourist tax in Barcelona and Catalonia: what you will actually pay | Barcelona practical | utility + commercial | Evergreen; re-verify when rates change | ca/es/en | planned |
+| P03 | Barcelona airport to the centre: metro, train, Aerobús or taxi | Barcelona practical | evergreen + commercial | Evergreen | ca/es/en (**EN lead**) | planned |
+| P04 | The Ripollès: what to see, villages, routes | Destinations | **destination hub** | Evergreen, peaks autumn/winter | ca/es/en | planned |
+| P05 | T-casual, T-dia or Hola Barcelona: which card is cheaper | Barcelona practical | utility + commercial | Evergreen; re-verify at each fare change | ca/es/en (**EN/ES lead**) | planned |
+| P06 | Setcases in a day | Destinations | destination | Evergreen, peaks winter | ca/es/en | planned |
+| P07 | Barcelona LEZ: which vehicles may enter, and foreign plates | Barcelona practical | practical + commercial | Evergreen, **high regulatory churn** | ca/es/en (**EN lead**) | planned |
+| P08 | Christmas markets in Catalonia | Traditions | seasonal + **recurrent annual** | Oct–Dec, updated weekly in season | ca/es/en | planned |
+| P09 | Cerdanya without a car | Day trips | evergreen destination/practical | Evergreen | ca/es/en | planned |
+| P10 | Snow in Catalonia: resort conditions this week | Nature | **recurrent seasonal** | Dec–Mar | ca/es/en | planned |
+
+### Cannibalisation check
+
+Run against Search Console, 28 days to 24 September 2026, query × page. Three
+real conflicts, one of them serious.
+
+#### Serious: P04 and P06 collide with the mushroom report
+
+The weekly mushroom report **already holds the Ripollès toponyms**, at the top:
+
+| Query | Page currently ranking | Position |
+| --- | --- | --- |
+| `ripolles` / `ripollès` | `/en/nature/mushroom-season-catalonia/` | **1** |
+| `setcases` | `/es/naturaleza/setas-cataluna-condiciones/` | **2** |
+| `set cases` | `/es/naturaleza/setas-cataluna-condiciones/` | 4 |
+| `mollo` | `/en/nature/mushroom-season-catalonia/` | 2 |
+| `castellar den hug` | `/en/nature/mushroom-season-catalonia/` | 7 |
+| `la quar` / `quar` | `/ca/natura/bolets-catalunya-condicions/` | 1–2 |
+| `bolets vall d'en bas` | `/ca/natura/bolets-catalunya-condicions/` | 30 |
+
+This is not a reason to drop P04 and P06 — it is the reason they were proposed.
+But two pages competing for `setcases` is worse than one, and the incumbent is
+the best-performing page on the site.
+
+**How to avoid it.** Keep the intents disjoint and make the relationship
+explicit:
+
+- The mushroom report answers *"where are conditions good right now"*. It
+  mentions places as **zones**, never as destinations. It must not grow a
+  "what to see in Setcases" section.
+- P06 answers *"what do I do in Setcases for a day"*. It must not carry a
+  mushroom-conditions table.
+- P04 is a **hub**: it links out to P06, to future village pages, and to the
+  mushroom report for the seasonal question. Hubs are the right home for a
+  toponym; a weekly conditions report is not.
+- Cross-link both ways at publication, and re-check position for `setcases`
+  and `ripollès` 28 days after P06 goes live. If the mushroom page loses
+  position without P06 gaining it, the intents are not disjoint enough.
+
+#### Moderate: P09 overlaps the existing car-free guide
+
+`/ca/escapades/catalunya-sense-cotxe-tren/` already owns the "without a car"
+framing across three languages, and `riu de cerdanya` currently ranks on the
+English mushroom page at position 3.
+
+P09 is narrower — one region, and about what is genuinely reachable rather than
+a list of twelve trips — so it should win on specificity. Requirement: P09 must
+not restate the twelve destinations, and the car-free guide should link to it
+as the Cerdanya deep-dive rather than absorbing it.
+
+#### Moderate: P03 and P05 will both describe Barcelona fares
+
+Both need to mention metro and Aerobús prices. Split by the question asked:
+
+- **P03** answers *"how do I get from the airport to my hotel"* — a journey
+  decision, compared by terminal, destination, party size and hour.
+- **P05** answers *"which ticket should I buy for my stay"* — a purchase
+  decision, compared by number of journeys.
+
+P03 should state the airport fare and link to P05 for the wider comparison.
+P05 should cover the airport case in one line and link to P03.
+
+#### Minor: P08 and the weekly agenda
+
+`/{locale}/agenda/…this-weekend/` lists whatever is on, and in December that
+includes Christmas markets. No structural conflict — one is a weekly listing,
+the other a seasonal hub — provided the agenda links to P08 rather than
+reproducing the market list.
+
+#### No conflict
+
+P01, P02, P07 and P10 have no existing page and no query currently ranking
+against them.
+
+### Notes carried from the brief
+
+- **P01, P08, P10** keep one URL across years. No `-2027` slugs.
+- **P07** has the highest regulatory churn on this list. `last_verified_at`
+  and `review_due_at` are mandatory, and the page should state the date the
+  rules were checked in the body, not only in the furniture.
+- **P10** publishes nothing until official seasonal sources are available.
+  Snow depths and lift openings are exactly the kind of figure that must never
+  be inferred.
+- **P08** has four Christmas-market illustrations already supplied and
+  currently unused, held back in a previous batch because they did not match
+  the articles they were named for. They belong here.
+
+---
+
 ## Gaps the data points at
 
 From Search Console, 10–24 September 2026. These are queries where the site

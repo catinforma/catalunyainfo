@@ -117,6 +117,14 @@ const es: Messages = {
     tooShort: "Escribe un poco más para que podamos entenderte.",
     fallback: "También puedes escribir directamente a",
   },
+  calculator: {
+    disclaimer:
+      "Cálculo orientativo a partir de las tarifas publicadas en la fuente citada. Comprueba siempre el importe final con el organismo o el establecimiento.",
+  },
+  calendar: {
+    download: "Añadir al calendario",
+    hint: "Se descarga un archivo .ics que puedes abrir con Google Calendar, Outlook o el calendario del móvil.",
+  },
   footer: {
     editorialNote: "Contenido editorial independiente, con fuentes citadas.",
     rights: "Todos los derechos reservados.",

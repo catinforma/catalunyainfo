@@ -2,6 +2,8 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { ContactForm } from "@/components/ContactForm";
+import { Calculator } from "@/components/blocks/Calculator";
+import { CalendarBlock } from "@/components/blocks/CalendarBlock";
 import type { Block, Body } from "@/lib/content/blocks";
 import { headingId } from "@/lib/content/blocks";
 import { renderInline, safeHref } from "@/lib/content/inline";
@@ -324,6 +326,13 @@ function BlockView({ block, context }: { block: Block; context: BlockContext }) 
       // docs/ADSENSE_READINESS.md for what has to be true before it is.
       return <div data-ad-placement={block.placement} aria-hidden="true" />;
 
+    case "calculator":
+      // Arithmetic only, over rates supplied by the editorial package.
+      return <Calculator block={block} locale={context.locale} />;
+
+    case "calendar":
+      return <CalendarBlock block={block} locale={context.locale} />;
+
     case "contactForm":
       // The only interactive block. It carries no configuration from the
       // database, so where a message goes is decided in server code alone.
@@ -374,6 +383,30 @@ function MapBlock({
           className="block aspect-[16/10] w-full border-0"
         />
       </details>
+      {/* The embed shows one marker. Several points are listed beneath it as
+          real links, which is better than a marker cluster nobody can read on
+          a phone — and it works with JavaScript disabled. */}
+      {block.points && block.points.length > 0 ? (
+        <ul className="ci-map-points">
+          {block.points.map((point) => {
+            const href =
+              point.href ??
+              `https://www.openstreetmap.org/?mlat=${point.latitude}&mlon=${point.longitude}` +
+                `#map=14/${point.latitude}/${point.longitude}`;
+            const external = href.startsWith("http");
+            return (
+              <li key={`${point.latitude},${point.longitude}`}>
+                <a
+                  href={href}
+                  {...(external ? { rel: "noopener nofollow", target: "_blank" } : {})}
+                >
+                  {point.label}
+                </a>
+              </li>
+            );
+          })}
+        </ul>
+      ) : null}
       <figcaption className="mt-2 text-xs text-[var(--color-muted)]">
         <a href={link} rel="noopener nofollow" target="_blank">
           OpenStreetMap

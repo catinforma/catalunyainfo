@@ -116,6 +116,14 @@ const ca = {
     tooShort: "Escriu una mica més perquè puguem entendre't.",
     fallback: "També pots escriure directament a",
   },
+  calculator: {
+    disclaimer:
+      "Càlcul orientatiu a partir de les tarifes publicades a la font citada. Comprova sempre l'import final amb l'organisme o l'establiment.",
+  },
+  calendar: {
+    download: "Afegeix-ho al calendari",
+    hint: "Es baixa un fitxer .ics que pots obrir amb Google Calendar, Outlook o el calendari del mòbil.",
+  },
   footer: {
     editorialNote: "Contingut editorial independent, amb fonts citades.",
     rights: "Tots els drets reservats.",

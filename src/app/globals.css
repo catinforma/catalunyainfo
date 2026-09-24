@@ -708,6 +708,147 @@
     text-underline-offset: 0.2em;
   }
 
+  /* --- Calculator and calendar blocks ------------------------------------ */
+  .ci-calc,
+  .ci-calendar {
+    margin: 2rem 0;
+    border: 1px solid var(--color-rule);
+    border-radius: var(--radius-sm);
+    padding: 1.25rem;
+    background: var(--color-surface);
+  }
+  .ci-calc-title,
+  .ci-calendar-title {
+    font-family: var(--font-display), Georgia, serif;
+    font-size: var(--text-lg);
+    margin: 0 0 0.5rem;
+  }
+  .ci-calc-intro,
+  .ci-calendar-intro {
+    margin: 0 0 1.25rem;
+    font-size: var(--text-sm);
+    color: var(--color-muted);
+  }
+  .ci-calc-inputs {
+    display: grid;
+    gap: 0 1rem;
+    grid-template-columns: minmax(0, 1fr);
+  }
+  @media (min-width: 34rem) {
+    .ci-calc-inputs {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  .ci-calc-row {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    margin: 0 0 1rem;
+    min-width: 0;
+  }
+  .ci-calc-row > label {
+    font-size: var(--text-sm);
+    font-weight: 500;
+  }
+  .ci-calc-number {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-width: 0;
+  }
+  .ci-calc-number .ci-field {
+    flex: 1 1 0;
+    width: 0;
+    min-width: 0;
+  }
+  .ci-calc-suffix {
+    font-size: var(--text-sm);
+    color: var(--color-muted);
+    white-space: nowrap;
+  }
+  .ci-calc-results {
+    margin: 0.5rem 0 1rem;
+    border-top: 1px solid var(--color-rule);
+  }
+  .ci-calc-results > div {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0.5rem 1rem;
+    padding: 0.6rem 0;
+    border-bottom: 1px solid var(--color-rule);
+  }
+  .ci-calc-results dt {
+    font-size: var(--text-sm);
+    margin: 0;
+  }
+  .ci-calc-results dd {
+    margin: 0;
+    font-variant-numeric: tabular-nums;
+  }
+  .ci-calc-total {
+    font-weight: 600;
+  }
+  .ci-calc-total dd {
+    font-size: var(--text-lg);
+  }
+  .ci-calc-note,
+  .ci-calendar-source {
+    margin: 0.4rem 0 0;
+    font-size: var(--text-xs);
+    color: var(--color-muted);
+  }
+
+  .ci-calendar-list {
+    list-style: none;
+    margin: 0 0 1.25rem;
+    padding: 0;
+    border-top: 1px solid var(--color-rule);
+  }
+  .ci-calendar-list li {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.35rem 0.75rem;
+    padding: 0.55rem 0;
+    border-bottom: 1px solid var(--color-rule);
+    font-size: var(--text-sm);
+  }
+  .ci-calendar-list time {
+    flex: 0 0 auto;
+    color: var(--color-muted);
+    font-variant-numeric: tabular-nums;
+  }
+  .ci-calendar-name {
+    font-weight: 500;
+  }
+  .ci-calendar-scope,
+  .ci-calendar-note {
+    color: var(--color-muted);
+    font-size: var(--text-xs);
+  }
+  .ci-calendar-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.6rem 1rem;
+    margin: 0;
+  }
+  .ci-calendar-hint {
+    font-size: var(--text-xs);
+    color: var(--color-muted);
+  }
+
+  .ci-map-points {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem 0.75rem;
+    margin: 0.6rem 0 0;
+    padding: 0;
+    font-size: var(--text-sm);
+  }
+
   /* --- Contact form ----------------------------------------------------- */
   .ci-contact-form {
     margin: 2rem 0;

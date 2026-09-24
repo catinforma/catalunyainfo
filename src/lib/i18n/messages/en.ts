@@ -116,6 +116,14 @@ const en: Messages = {
     tooShort: "Please write a little more so we can understand you.",
     fallback: "You can also write directly to",
   },
+  calculator: {
+    disclaimer:
+      "An estimate based on the rates published by the source cited. Always confirm the final amount with the authority or the establishment.",
+  },
+  calendar: {
+    download: "Add to calendar",
+    hint: "Downloads an .ics file you can open in Google Calendar, Outlook or your phone's calendar.",
+  },
   footer: {
     editorialNote: "Independent editorial content with cited sources.",
     rights: "All rights reserved.",

@@ -128,6 +128,22 @@ export const mapBlock = z.object({
   latitude: z.number().min(-90).max(90),
   longitude: z.number().min(-180).max(180),
   zoom: z.number().int().min(1).max(19).default(13),
+  /**
+   * Additional labelled points, for a destination hub covering several
+   * villages. Coordinates come from the editorial package and are never
+   * inferred; a wrong coordinate sends someone to the wrong valley.
+   */
+  points: z
+    .array(
+      z.object({
+        latitude: z.number().min(-90).max(90),
+        longitude: z.number().min(-180).max(180),
+        label: z.string().min(1).max(120),
+        href: z.string().max(600).optional(),
+      }),
+    )
+    .max(40)
+    .optional(),
   title: z.string().max(200).optional(),
   markers: z
     .array(
@@ -179,6 +195,120 @@ export const contactFormBlock = z.object({
   type: z.literal("contactForm"),
 });
 
+/**
+ * A calculator.
+ *
+ * Deliberately NOT an expression language. A payload that can carry arbitrary
+ * formulas is a payload that can carry arbitrary code, and the CMS stores
+ * untrusted JSON. The model here is fixed and small, and it still covers every
+ * calculator on the roadmap:
+ *
+ *   result = sum of terms;  term = product of factors
+ *
+ * A factor is either a constant, the value of an input, or the amount attached
+ * to the selected option of a dropdown. An input factor may be clamped, which
+ * is what makes a capped charge expressible — the Catalan tourist tax applies
+ * to a maximum of seven nights, so `{ input: "nights", max: 7 }`.
+ *
+ * Every rate comes from the editorial package, sourced and dated. Nothing is
+ * computed from figures this repository invented.
+ */
+export const calculatorFactor = z.union([
+  z.object({ value: z.number() }),
+  z.object({
+    input: z.string().min(1).max(40),
+    /** Clamp before multiplying, for capped charges. */
+    max: z.number().optional(),
+    min: z.number().optional(),
+  }),
+  /** The `amount` on the currently selected option of a select input. */
+  z.object({ optionAmount: z.string().min(1).max(40) }),
+]);
+
+export const calculatorBlock = z.object({
+  type: z.literal("calculator"),
+  title: z.string().max(200),
+  intro: inlineText.optional(),
+  inputs: z
+    .array(
+      z.union([
+        z.object({
+          kind: z.literal("number"),
+          id: z.string().min(1).max(40),
+          label: z.string().min(1).max(120),
+          min: z.number().default(0),
+          max: z.number().default(999),
+          step: z.number().default(1),
+          value: z.number().default(1),
+          suffix: z.string().max(20).optional(),
+        }),
+        z.object({
+          kind: z.literal("select"),
+          id: z.string().min(1).max(40),
+          label: z.string().min(1).max(120),
+          options: z
+            .array(
+              z.object({
+                value: z.string().min(1).max(60),
+                label: z.string().min(1).max(160),
+                /** Rate carried by this option, in the output's unit. */
+                amount: z.number().default(0),
+              }),
+            )
+            .min(1)
+            .max(30),
+        }),
+      ]),
+    )
+    .min(1)
+    .max(8),
+  outputs: z
+    .array(
+      z.object({
+        label: z.string().min(1).max(160),
+        terms: z.array(z.object({ factors: z.array(calculatorFactor).min(1).max(6) })).min(1).max(8),
+        unit: z.string().max(12).default("€"),
+        decimals: z.number().int().min(0).max(2).default(2),
+        emphasis: z.boolean().default(false),
+      }),
+    )
+    .min(1)
+    .max(6),
+  /** Where the rates come from. Required: a calculator without a source is a guess. */
+  note: z.string().min(1).max(400),
+});
+
+/**
+ * A list of dated entries the reader can add to their own calendar.
+ *
+ * Generates an .ics file in the browser from the dates in the payload. It
+ * invents nothing: if a date is not in the package, it is not in the file.
+ */
+export const calendarBlock = z.object({
+  type: z.literal("calendar"),
+  title: z.string().max(200),
+  intro: inlineText.optional(),
+  /** Shown on the download button. */
+  downloadLabel: z.string().max(80).default("Add to calendar"),
+  filename: z.string().max(60).default("catalunyainfo"),
+  events: z
+    .array(
+      z.object({
+        /** ISO date, `YYYY-MM-DD`. All-day events only. */
+        date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+        /** Optional inclusive end date, for multi-day entries. */
+        endDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
+        title: z.string().min(1).max(200),
+        note: z.string().max(300).optional(),
+        /** Free text: "estatal", "Catalunya", a municipality. */
+        scope: z.string().max(80).optional(),
+      }),
+    )
+    .min(1)
+    .max(120),
+  note: z.string().max(400).optional(),
+});
+
 export const blockSchema = z.discriminatedUnion("type", [
   headingBlock,
   paragraphBlock,
@@ -197,6 +327,8 @@ export const blockSchema = z.discriminatedUnion("type", [
   dividerBlock,
   adSlotBlock,
   contactFormBlock,
+  calculatorBlock,
+  calendarBlock,
 ]);
 
 export const bodySchema = z.array(blockSchema).max(500);
@@ -263,6 +395,23 @@ export function bodyToPlainText(body: Body): string {
         if (block.caption) parts.push(block.caption);
         parts.push(...block.headers);
         for (const row of block.rows) parts.push(...row.map(strip));
+        break;
+      case "calculator":
+        parts.push(block.title);
+        if (block.intro) parts.push(strip(block.intro));
+        for (const input of block.inputs) parts.push(input.label);
+        for (const output of block.outputs) parts.push(output.label);
+        parts.push(strip(block.note));
+        break;
+      case "calendar":
+        parts.push(block.title);
+        if (block.intro) parts.push(strip(block.intro));
+        for (const event of block.events) {
+          parts.push(event.title);
+          if (event.scope) parts.push(event.scope);
+          if (event.note) parts.push(event.note);
+        }
+        if (block.note) parts.push(strip(block.note));
         break;
       case "keyFacts":
         if (block.title) parts.push(block.title);

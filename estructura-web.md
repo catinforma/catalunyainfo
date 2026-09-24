@@ -1,4 +1,6 @@
-# CatalunyaInfo — estructura del web (24 de setembre de 2026)
+# CatalunyaInfo — estructura del web
+
+**Actualitzat: 24 de setembre de 2026, després d'una auditoria tècnica completa.**
 
 Document d'estat per decidir estratègia de monetització amb AdSense i creixement
 de trànsit. Totes les xifres són reals, extretes de Search Console, Google
@@ -12,7 +14,7 @@ Analytics 4 i del propi web el 24/09/2026. Cap dada és estimada.
 |---|---|
 | Domini | `https://www.catalunyainfo.com` (host canònic únic) |
 | Idiomes | Català, castellà, anglès — mateix contingut, no traducció parcial |
-| URLs indexables | **87** (29 per idioma) |
+| URLs indexables | **81** (27 per idioma) |
 | Articles editorials | **13** (× 3 idiomes = 39 edicions) |
 | Pàgines institucionals | 10 (× 3 = 30) |
 | Clics de cerca, últims 7 dies | **92** |
@@ -120,8 +122,10 @@ Un article pot aparèixer a més d'un hub segons la seva categoria.
 | Renderitzat | Estàtic + ISR. **Cap pàgina depèn de JavaScript per mostrar text** |
 | Allotjament | Vercel, funcions a París (UE) |
 | Base de dades | Neon (Postgres) |
-| Sitemap | 87 URLs, 0 duplicats, 0 errors 404 |
+| Sitemap | 81 URLs, 0 duplicats, 0 errors 404 |
 | `robots.txt` | Correcte; previsualitzacions i `*.vercel.app` mai indexables |
+| Enllaços interns | 0 trencats, 0 orfes, 0 fuites entre idiomes (verificat) |
+| Imatges rastrejables | Sí (corregit el 24/09; abans estaven bloquejades) |
 | Redireccions heretades | 22 × 308 i 42 × 410 des de la versió 1 |
 | Core Web Vitals | Sense desbordament a 320 i 390 px; imatges amb mida definida |
 | Capçaleres de seguretat | CSP, HSTS, X-Content-Type-Options, Referrer-Policy |
@@ -183,41 +187,55 @@ Temps de lectura: bolets ES 37 s/vista, cap de setmana ES 59 s, Sitges ES 50 s.
 
 ---
 
-## 7. AdSense: què està fet i què bloqueja
+## 7. AdSense: mesurat, no estimat
 
 La versió 1 d'aquest web **va ser rebutjada per "contingut de poc valor"**: eren
 42 notícies generades automàticament. Aquest és el context que qualsevol
 estratègia ha de respectar.
 
-### Fet
+Hi ha una comprovació automàtica (`npm run adsense:check`) que s'executa contra
+el web en viu. Resultat del 24/09/2026: **12 comprovacions passen, 2 bloquegen.**
 
-- Contingut original, verificat, amb fonts oficials enllaçades a cada article.
-- Les 10 pàgines de polítiques existeixen i són reals, no plantilla.
-- Formulari de contacte funcional.
-- Navegació sense seccions buides.
-- Cap codi d'anuncis al web. Cap rastre del snippet d'AdSense de la v1.
-- Sense contingut duplicat entre idiomes.
-- Sense enllaços interns trencats (760 comprovats).
+### Passa
 
-### Bloqueja, i cal resoldre-ho abans de sol·licitar
+| Comprovació | Resultat |
+|---|---|
+| Avís legal | 539 paraules |
+| Política de privadesa | 693 paraules |
+| Política de galetes | 364 paraules |
+| Política editorial | 471 paraules |
+| Qui som | 375 paraules |
+| Contacte | 358 paraules, amb formulari funcional |
+| URLs indexables | 81 al sitemap |
+| Articles prims | 39 articles comprovats, **cap per sota de 400 paraules** |
+| Llistats buits | Cap al sitemap |
+| Codi d'anuncis | Cap al web, que és el correcte abans de sol·licitar |
+| Imatges rastrejables | Sí |
 
-1. **Dades identificatives legals absents.** L'avís legal no conté nom fiscal,
-   NIF ni adreça postal. Avui és defensable perquè el web no té activitat
-   comercial; **amb publicitat deixa de ser-ho**: l'article 10 de la Llei
-   34/2002 (LSSI-CE) els exigeix. Aquests tres camps s'han d'omplir abans
-   d'activar cap ingrés.
-2. **Volum de contingut baix per a una revisió humana.** 13 articles. No hi ha
-   cap mínim oficial d'AdSense, però un revisor que obre 5 pàgines i en veu 13
-   en total jutja diferent que si en veu 40.
-3. **El consentiment per a publicitat.** El bàner actual és una eina de
-   consentiment pròpia, correcta per a analítica. Per servir **anuncis
-   personalitzats a usuaris de la UE cal un CMP certificat per Google** integrat
-   amb l'IAB TCF. Això és feina addicional, no un interruptor.
-4. **Seccions buides al model.** Actualitat i Rutes existeixen com a concepte
-   però no tenen contingut. Estan ocultes, cosa que ho resol de cara al
-   visitant, però limita el creixement.
+### Bloqueja
 
----
+**1. Dades identificatives legals absents.** Falten nom fiscal, NIF i adreça
+postal. Són tres camps a `src/lib/content/pages/operator.ts` i es publiquen
+sols als tres idiomes. Avui és defensable perquè el web no té activitat
+comercial; **amb publicitat deixa de ser-ho**, perquè l'article 10 de la Llei
+34/2002 (LSSI-CE) els exigeix.
+
+**2. Consentiment per a anuncis.** El bàner actual és una eina de consentiment
+pròpia, correcta per a analítica. Per servir **anuncis personalitzats a usuaris
+de la UE cal un CMP certificat per Google** integrat amb l'IAB TCF. És feina
+addicional, no un interruptor.
+
+### Corregit el 24 de setembre
+
+Tres defectes trobats en l'auditoria i ja resolts:
+
+- **Googlebot no podia carregar cap imatge del contingut.** Totes es serveixen
+  des de `/_next/image/?url=…` i el `robots.txt` tenia `Disallow: /*?*`.
+- **Títol anglès del Festival de Sitges.** 45 impressions a posicions 7–10 i 1
+  clic: les consultes demanaven dates, programa i entrades, i el títol prometia
+  "a first-timer's guide". Canviat a "dates, venues and tickets".
+- **Pàgines buides al sitemap.** `/temes/` i `/autors/` s'hi anunciaven amb 23
+  paraules. Fora fins que tinguin contingut.
 
 ## 8. Buits que les dades assenyalen
 
@@ -231,6 +249,17 @@ Consultes on el web ja apareix sense tenir-ne pàgina dedicada:
   n'Hug, Molló, Cerdanya, Alt Urgell
 
 Seccions sense cap contingut: **actualitat i rutes**.
+
+**El senyal més fort, i el menys explotat.** Aquests topònims ja posicionen
+entre la 1 i la 7 amb una sola impressió cadascun, i **no tenen cap pàgina de
+destinació**: Ripollès, la Quar, Molló, Castellar de n'Hug, Cerdanya, Vall
+d'Aran, Vall d'en Bas. Destinacions és una secció que existeix, té tres
+articles que hi cauen per categoria, i cap pàgina pròpia de cap lloc.
+
+**El que ja funciona, i per què.** El part de bolets és el **48 % de tots els
+clics del web**. No és el millor article; és l'únic que s'actualitza cada
+setmana amb una xifra datada i amb font. Aquesta és la variable, no la
+qualitat de la prosa.
 
 Idiomes: l'anglès genera moltes impressions (209 i 293 en els dos articles
 principals) i pocs clics. Hi ha un problema de títol o d'intenció, no de
