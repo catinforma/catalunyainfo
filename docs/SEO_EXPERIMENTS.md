@@ -153,6 +153,27 @@ Recorded so they are not lost, and so they are not all started at once.
   with zero clicks over 14 days, and the same query ranks `/`, `/ca/` and
   `/en/` simultaneously. Two separate problems — intent mismatch and three URLs
   competing — and the second should be understood before the first is touched.
+
+  **The second is now understood** (URL inspection, 25 September). `/ca/` comes
+  back as *"Duplicate, Google chose different canonical than user"*: our
+  canonical says `/ca/`, Google's says `/`. The cause is the language
+  negotiation in `src/proxy.ts` — `/` answers 307, and a *temporary* redirect
+  leaves the redirecting URL as the canonical one, which is exactly what 307
+  means. The 307 itself is correct and must stay: the destination depends on
+  `Accept-Language`, so a 308 would have a browser cache one visitor's language
+  for every later visitor.
+
+  That leaves one lever worth trying and one not worth trying:
+
+  - **Worth trying:** point `x-default` at `/` instead of `/en/`. It currently
+    claims the English page is the default, while Google has independently
+    decided `/` is. Aligning the two costs nothing and may consolidate the
+    cluster.
+  - **Not worth trying:** forcing `/ca/` to win. It is the Catalan edition of a
+    trilingual site; `/` is genuinely the language-neutral entry point.
+
+  Still one change at a time, and not in the same window as the tourist tax
+  measurement.
 - **`/ca/agenda/que-fer-aquest-cap-de-setmana-catalunya/`** — ranks 16–47 for
   several "cap de setmana" variants. That is a ranking problem, not a CTR one;
   a title change would not fix it.
