@@ -8,6 +8,7 @@ import { publishAutumnColours } from "@/lib/content/autumn/publish";
 import { publishInstitutionalPages } from "@/lib/content/pages/publish";
 import { publishFeatures } from "@/lib/content/features/publish";
 import { publishHolidayGuide } from "@/lib/content/holidays/publish";
+import { publishTouristTaxGuide } from "@/lib/content/tourist-tax/publish";
 import { authoriseDeployRequest, describeError } from "@/lib/admin/deploy-auth";
 
 export const runtime = "nodejs";
@@ -40,6 +41,7 @@ export async function POST(request: Request) {
     const published = [];
     if (wants("articles")) {
       published.push(await publishHolidayGuide());
+      published.push(await publishTouristTaxGuide());
       published.push(await publishWeekendGuide());
       published.push(await publishMushroomReport());
       published.push(await publishAutumnColours());
@@ -49,6 +51,7 @@ export async function POST(request: Request) {
     if (wants("features-a")) published.push(...(await publishFeatures(0, 5)));
     if (wants("features-b")) published.push(...(await publishFeatures(5, 10)));
     if (wants("holidays")) published.push(await publishHolidayGuide());
+    if (wants("tourist-tax")) published.push(await publishTouristTaxGuide());
 
     const surfaces = [
       ...published.flatMap((article) =>

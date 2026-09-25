@@ -103,6 +103,44 @@ inside that window makes the whole thing unreadable.
 
 ---
 
+## 2026-09-25 — tourist tax guide published, with a calculator
+
+**URLs:** `/ca/guies/taxa-turistica-barcelona-catalunya/`,
+`/es/guias/tasa-turistica-barcelona-cataluna/`,
+`/en/guides/barcelona-catalonia-tourist-tax/`.
+
+Recorded here because it has a measurement schedule and two predictions that
+can be wrong.
+
+**Prediction 1 — coverage.** Nothing on the site ranks for any tourist-tax
+query today, and the roadmap's cannibalisation check found no existing page
+competing for the intent. Any impression is therefore new coverage, not a
+reallocation from `/en/barcelona/barcelona-tourist-traps-alternatives/`. If
+that page's impressions fall while these rise, the check was wrong and that is
+worth knowing.
+
+**Prediction 2 — the English edition leads.** The query is asked in English by
+people budgeting a trip from abroad. If ca/es outperform en at 28 days, the
+assumption behind the English-lead pages in the roadmap (P03, P05) needs
+revisiting before those are written.
+
+**What is deliberately not on the page.** The editorial package supplied a
+Barcelona surcharge of €6 from 1 April 2027. It could not be verified against
+the Agència Tributària de Catalunya, and the evidence suggests it is the
+rest-of-Catalonia five-star rate read off the wrong row. No Barcelona rate is
+published for dates after 31 March 2027, and the calculator declines them
+rather than guessing. If a competitor outranks us on "barcelona tourist tax
+2027" with a figure we would not assert, that is the intended trade.
+
+**Measure at:** 2 October (7 days, indexing), 23 October (28 days, first
+performance and the en/ca/es split), 24 December (90 days).
+
+**Do not change any of the three titles before 23 October.**
+
+**Outcome:** _pending_
+
+---
+
 ## Candidates not yet run
 
 Recorded so they are not lost, and so they are not all started at once.

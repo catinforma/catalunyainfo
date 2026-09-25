@@ -125,6 +125,37 @@ const es: Messages = {
     download: "Añadir al calendario",
     hint: "Se descarga un archivo .ics que puedes abrir con Google Calendar, Outlook o el calendario del móvil.",
   },
+  touristTax: {
+    title: "Calcula tu tasa turística",
+    intro:
+      "Indica dónde duermes, cuántas personas tributan y cuántas noches. Las tarifas cambian el 1 de abril, por eso hace falta la fecha.",
+    where: "Dónde te alojas",
+    date: "Fecha de la estancia",
+    accommodation: "Tipo de alojamiento",
+    guests: "Personas que tributan",
+    exempt: "Menores exentos",
+    exemptHint: "No cuentan",
+    nights: "Noches",
+    regional: "Tarifa de la Generalitat",
+    surcharge: "Recargo municipal",
+    surchargeUnknown: "Hay que comprobarlo",
+    perPerson: "Por persona y unidad de estancia",
+    units: "Unidades que tributan",
+    cappedShort: "(máximo)",
+    total: "Total estimado",
+    cappedNote:
+      "El impuesto se calcula con un máximo de siete unidades de estancia por persona dentro de una estancia continuada en el mismo establecimiento. Por eso el total no sube aunque añadas noches.",
+    checkMunicipal:
+      "Fuera de Barcelona, desde el 1 de octubre de 2026 un municipio puede aplicar un recargo propio aprobado por ordenanza. No sumamos ninguno que no hayamos verificado: comprueba si tu municipio lo tiene.",
+    noRateTitle: "Sin tarifa verificada",
+    noRate:
+      "No tenemos una tarifa oficial verificada para esta fecha y esta ubicación, y no daremos ninguna que no podamos comprobar. Consulta la Agència Tributària de Catalunya.",
+    sourceLine: "Tarifas verificadas el 24 de septiembre de 2026 en la",
+    disclaimer:
+      "Cálculo orientativo. El importe final lo determina el establecimiento según la normativa aplicable y debe mostrarlo separado en la factura.",
+    rules:
+      "Máximo {max} unidades de estancia por persona. Las personas de {age} años o menos están exentas, con los requisitos de acreditación que establezca la administración.",
+  },
   footer: {
     editorialNote: "Contenido editorial independiente, con fuentes citadas.",
     rights: "Todos los derechos reservados.",

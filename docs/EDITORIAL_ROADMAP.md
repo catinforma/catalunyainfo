@@ -49,7 +49,7 @@ sitemap. The architecture is prepared; the editorial packages arrive separately.
 | # | Topic | Cluster | Type | Season | Languages | Status |
 | --- | --- | --- | --- | --- | --- | --- |
 | ~~P01~~ | ~~Catalan public holiday calendar~~ | Practical | utility + **recurrent annual** | — | ca/es/en | **published 24 Sep 2026** |
-| P02 | Tourist tax in Barcelona and Catalonia: what you will actually pay | Barcelona practical | utility + commercial | Evergreen; re-verify when rates change | ca/es/en | planned |
+| ~~P02~~ | ~~Tourist tax in Barcelona and Catalonia~~ | Barcelona practical | utility + commercial | Evergreen; re-verify when rates change | ca/es/en | **published 25 Sep 2026** |
 | P03 | Barcelona airport to the centre: metro, train, Aerobús or taxi | Barcelona practical | evergreen + commercial | Evergreen | ca/es/en (**EN lead**) | planned |
 | P04 | The Ripollès: what to see, villages, routes | Destinations | **destination hub** | Evergreen, peaks autumn/winter | ca/es/en | planned |
 | P05 | T-casual, T-dia or Hola Barcelona: which card is cheaper | Barcelona practical | utility + commercial | Evergreen; re-verify at each fare change | ca/es/en (**EN/ES lead**) | planned |

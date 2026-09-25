@@ -124,6 +124,37 @@ const ca = {
     download: "Afegeix-ho al calendari",
     hint: "Es baixa un fitxer .ics que pots obrir amb Google Calendar, Outlook o el calendari del mòbil.",
   },
+  touristTax: {
+    title: "Calcula la teva taxa turística",
+    intro:
+      "Digues on dorms, quantes persones tributen i quantes nits. Les tarifes canvien l'1 d'abril, per això cal la data.",
+    where: "On t'allotges",
+    date: "Data de l'estada",
+    accommodation: "Tipus d'allotjament",
+    guests: "Persones que tributen",
+    exempt: "Menors exempts",
+    exemptHint: "No compten",
+    nights: "Nits",
+    regional: "Tarifa de la Generalitat",
+    surcharge: "Recàrrec municipal",
+    surchargeUnknown: "Cal comprovar-ho",
+    perPerson: "Per persona i unitat d'estada",
+    units: "Unitats que tributen",
+    cappedShort: "(màxim)",
+    total: "Total estimat",
+    cappedNote:
+      "L'impost es calcula amb un màxim de set unitats d'estada per persona dins d'una estada continuada al mateix establiment. Per això el total no puja encara que hi afegeixis nits.",
+    checkMunicipal:
+      "Fora de Barcelona, des de l'1 d'octubre de 2026 un municipi pot aplicar un recàrrec propi aprovat per ordenança. No en sumem cap que no haguem verificat: comprova si el teu municipi en té.",
+    noRateTitle: "Sense tarifa verificada",
+    noRate:
+      "No tenim una tarifa oficial verificada per a aquesta data i aquesta ubicació, i no en direm cap que no puguem comprovar. Consulta l'Agència Tributària de Catalunya.",
+    sourceLine: "Tarifes verificades el 24 de setembre de 2026 a l'",
+    disclaimer:
+      "Càlcul orientatiu. L'import final el determina l'establiment segons la normativa aplicable i l'ha de mostrar separat a la factura.",
+    rules:
+      "Màxim {max} unitats d'estada per persona. Les persones de {age} anys o menys estan exemptes, amb els requisits d'acreditació que estableixi l'administració.",
+  },
   footer: {
     editorialNote: "Contingut editorial independent, amb fonts citades.",
     rights: "Tots els drets reservats.",

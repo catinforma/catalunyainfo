@@ -30,6 +30,26 @@ export const IMAGES: readonly ImportedImage[] = [
     "blurDataUrl": "data:image/webp;base64,UklGRmQAAABXRUJQVlA4IFgAAADQAQCdASoQAAkAA4BaJZgCdADdpvv8RAD+5gMPsWBJ+ftogVDLucsVrNaWZT7iy28YKFK2zLWg/KArIz5a9FnCPpfGYwvukTQk2qi/a83UoNoil+3DSoAA"
   },
   {
+    "key": "calendari-laboral-catalunya-diada",
+    "url": "/images/calendari-laboral-catalunya-diada.webp",
+    "width": 1920,
+    "height": 1278,
+    "blurDataUrl": "data:image/webp;base64,UklGRnIAAABXRUJQVlA4IGYAAACQAgCdASoQAAsAA4BaJaACdIExgtSl8PiGgE6kgAD+0PF+m78tilS0gSUh2j/Cml9ptm7uaBhZyTOHEaR4Zl42xPkBXUkWaqhjfsVKNzC/CZeBHS4rMBgK9YKQPEcYadfaG1jEwAA=",
+    "credit": "Ajuntament d'Esplugues de Llobregat",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Diada_Nacional_de_Catalunya_(6139532197).jpg",
+    "license": "CC BY 2.0"
+  },
+  {
+    "key": "calendari-laboral-catalunya-sant-joan",
+    "url": "/images/calendari-laboral-catalunya-sant-joan.webp",
+    "width": 1920,
+    "height": 1440,
+    "blurDataUrl": "data:image/webp;base64,UklGRmQAAABXRUJQVlA4IFgAAAAQAgCdASoQAAwAA4BaJYgCdAEQ9GsFIBoAAP7s3mgoq3M0EVJppLHOnYgbkp1KCmfOMHTrmiJpCSPAeRlreqlTDdFU28AoMXNZnQG3abwreacloEqrsQAA",
+    "credit": "Pere López Brosa",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Foguera_i_revetlla_de_Sant_Joan_2024_a_les_Corts_-_P1100259.jpg",
+    "license": "CC BY-SA 4.0"
+  },
+  {
     "key": "cardona-vic-escapades-catalunya",
     "url": "/images/cardona-vic-escapades-catalunya.webp",
     "width": 1672,
@@ -295,6 +315,26 @@ export const IMAGES: readonly ImportedImage[] = [
     "blurDataUrl": "data:image/webp;base64,UklGRlQAAABXRUJQVlA4IEgAAADwAQCdASoQAAsAA4BaJQBdgCHo+lHlMwAA/sYGIZzNGKaz1ppggBfhinF1eMZ3ybGls9aZClymrP5rVbnUGcJyaFvTHznAAAA=",
     "credit": "IM027",
     "creditUrl": "https://commons.wikimedia.org/wiki/File:Sant_Pere_de_Rodes_Catalonia_Landscape.jpg",
+    "license": "CC BY-SA 4.0"
+  },
+  {
+    "key": "taxa-turistica-barcelona-skyline",
+    "url": "/images/taxa-turistica-barcelona-skyline.webp",
+    "width": 1920,
+    "height": 767,
+    "blurDataUrl": "data:image/webp;base64,UklGRjoAAABXRUJQVlA4IC4AAADQAQCdASoQAAYAA4BaJYwCdAERBUpGqAD+6CGWlT0D+YsGqYC+yBDCdQ8bT8AA",
+    "credit": "Chris Koerner from St. Louis, USA",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Barcelona_Skyline_as_seen_from_Parc_G%C3%BCell.jpg",
+    "license": "CC BY 2.0"
+  },
+  {
+    "key": "taxa-turistica-catalunya-costa",
+    "url": "/images/taxa-turistica-catalunya-costa.webp",
+    "width": 1920,
+    "height": 1277,
+    "blurDataUrl": "data:image/webp;base64,UklGRmIAAABXRUJQVlA4IFYAAADwAQCdASoQAAsAA4BaJaACdAEWcKLxRaAA/rYBJWZIYQbQS00fRxkRfxZRar+QFNcHejIEEObquLuZMwAIA/41tZ9M5UdbJ+J+GID0AvRmVFzJdCAAAA==",
+    "credit": "Txllxt TxllxT",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Costa_Brava_-_Tossa_de_Mar_-_Platja_Gran_-_View_NNW_along_Passeig_del_Mar.jpg",
     "license": "CC BY-SA 4.0"
   },
   {

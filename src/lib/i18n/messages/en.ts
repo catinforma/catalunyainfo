@@ -124,6 +124,37 @@ const en: Messages = {
     download: "Add to calendar",
     hint: "Downloads an .ics file you can open in Google Calendar, Outlook or your phone's calendar.",
   },
+  touristTax: {
+    title: "Work out your tourist tax",
+    intro:
+      "Tell us where you are staying, how many guests are liable and for how many nights. Rates change on 1 April, which is why the date matters.",
+    where: "Where you are staying",
+    date: "Date of stay",
+    accommodation: "Accommodation type",
+    guests: "Liable guests",
+    exempt: "Exempt children",
+    exemptHint: "Not counted",
+    nights: "Nights",
+    regional: "Catalonia rate",
+    surcharge: "Municipal surcharge",
+    surchargeUnknown: "Needs checking",
+    perPerson: "Per guest, per stay unit",
+    units: "Taxable stay units",
+    cappedShort: "(capped)",
+    total: "Estimated total",
+    cappedNote:
+      "The tax is capped at seven stay units per person within one continuous stay at the same establishment. That is why the total stops rising when you add nights.",
+    checkMunicipal:
+      "Outside Barcelona, a municipality may levy its own surcharge on stays from 1 October 2026 if it has approved one. We add none that we have not verified — check whether yours has one.",
+    noRateTitle: "No verified rate",
+    noRate:
+      "We have no verified official rate for this date and location, and we will not quote one we cannot check. Please consult the Catalan Tax Agency.",
+    sourceLine: "Rates verified on 24 September 2026 against the",
+    disclaimer:
+      "An estimate. The final amount is determined by the accommodation under the applicable rules, and must appear separately on your invoice.",
+    rules:
+      "Maximum {max} stay units per person. People aged {age} or younger are exempt, subject to the documentation requirements set by the authorities.",
+  },
   footer: {
     editorialNote: "Independent editorial content with cited sources.",
     rights: "All rights reserved.",

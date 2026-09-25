@@ -761,6 +761,9 @@
     width: 0;
     min-width: 0;
   }
+  .ci-calc-wide {
+    grid-column: 1 / -1;
+  }
   .ci-calc-suffix {
     font-size: var(--text-sm);
     color: var(--color-muted);

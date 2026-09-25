@@ -2,7 +2,14 @@ import "server-only";
 
 import type { Block } from "@/lib/content/blocks";
 import { LOCALES, type Locale } from "@/lib/i18n/config";
-import { publishArticle, type ArticleSpec, type PublishResult } from "@/lib/content/publish-article";
+import {
+  publishArticle,
+  upsertImages,
+  type ArticleSpec,
+  type ImageSpec,
+  type PublishResult,
+} from "@/lib/content/publish-article";
+import { IMAGES } from "@/lib/content/images";
 import { link } from "@/lib/content/features/shared";
 import {
   ARAN_REPLACEMENT,
@@ -30,6 +37,11 @@ import { COPY, type HolidayCopy } from "./copy";
  */
 
 export const ENTRY_KEY = "guide-public-holidays-catalonia";
+
+const HERO_KEY = "calendari-laboral-catalunya-diada";
+const SECOND_KEY = "calendari-laboral-catalunya-sant-joan";
+
+const IMAGE_BY_KEY = new Map(IMAGES.map((image) => [image.key, image]));
 
 const PUBLISHED = new Date("2026-09-24T18:00:00+02:00");
 const VERIFIED = new Date(`${LAST_VERIFIED}T12:00:00+02:00`);
@@ -90,7 +102,7 @@ function bridgeSection(bridge: Bridge, copy: HolidayCopy, locale: Locale): Block
   ];
 }
 
-export function buildBody(locale: Locale): Block[] {
+export function buildBody(locale: Locale, inlineMediaId?: string): Block[] {
   const copy = COPY[locale];
   const blocks: Block[] = [];
 
@@ -126,6 +138,10 @@ export function buildBody(locale: Locale): Block[] {
   /* ---- Saturdays --------------------------------------------------------- */
   blocks.push({ type: "heading", level: 2, text: copy.saturdayTitle });
   for (const text of copy.saturday) blocks.push({ type: "paragraph", text });
+
+  if (inlineMediaId) {
+    blocks.push({ type: "image", mediaId: inlineMediaId, size: "wide" });
+  }
 
   /* ---- Bridges ----------------------------------------------------------- */
   blocks.push({ type: "heading", level: 2, text: copy.bridgesTitle });
@@ -205,13 +221,69 @@ export function buildBody(locale: Locale): Block[] {
   return blocks;
 }
 
+/* -------------------------------------------------------------------------- */
+/* Images                                                                     */
+/* -------------------------------------------------------------------------- */
+
+const HERO_ALT: Record<Locale, string> = {
+  ca: "Ofrena floral durant la Diada Nacional de Catalunya, amb rams de colors al peu del monument",
+  es: "Ofrenda floral durante la Diada Nacional de Cataluña, con ramos de colores al pie del monumento",
+  en: "Flowers laid at a monument during the Diada, Catalonia's national day",
+};
+
+const HERO_CAPTION: Record<Locale, string> = {
+  ca: "L'11 de setembre, la Diada, és un dels dotze festius de tot Catalunya.",
+  es: "El 11 de septiembre, la Diada, es uno de los doce festivos de toda Cataluña.",
+  en: "11 September, the Diada, is one of the twelve holidays kept across Catalonia.",
+};
+
+const SECOND_ALT: Record<Locale, string> = {
+  ca: "Foguera i focs de la revetlla de Sant Joan en un carrer de Barcelona, de nit",
+  es: "Hoguera y fuegos de la verbena de Sant Joan en una calle de Barcelona, de noche",
+  en: "A Sant Joan bonfire and fireworks in a Barcelona street at night",
+};
+
+const SECOND_CAPTION: Record<Locale, string> = {
+  ca: "La revetlla es fa la nit del 23, però el festiu és el 24 de juny.",
+  es: "La verbena es la noche del 23, pero el festivo es el 24 de junio.",
+  en: "The party is the night of the 23rd; the public holiday is 24 June.",
+};
+
+function imageSpecs(): ImageSpec[] {
+  const specs: ImageSpec[] = [];
+  const add = (key: string, alt: Record<Locale, string>, caption: Record<Locale, string>) => {
+    const file = IMAGE_BY_KEY.get(key);
+    if (!file) return;
+    specs.push({
+      key,
+      url: file.url,
+      width: file.width,
+      height: file.height,
+      blurDataUrl: file.blurDataUrl,
+      credit: file.credit ?? "CatalunyaInfo",
+      creditUrl: file.creditUrl ?? null,
+      license: file.license ?? null,
+      alt,
+      caption,
+    });
+  };
+  add(HERO_KEY, HERO_ALT, HERO_CAPTION);
+  add(SECOND_KEY, SECOND_ALT, SECOND_CAPTION);
+  return specs;
+}
+
 export async function publishHolidayGuide(): Promise<PublishResult> {
+  const images = imageSpecs();
+  const mediaIds = images.length > 0 ? await upsertImages(images) : new Map<string, string>();
+  const inlineMediaId = mediaIds.get(SECOND_KEY);
+
   const spec: ArticleSpec = {
     entryKey: ENTRY_KEY,
     type: "guide",
     categoryKey: "public-services",
     isFeatured: false,
-    images: [],
+    heroKey: IMAGE_BY_KEY.has(HERO_KEY) ? HERO_KEY : undefined,
+    images,
     sources: SOURCES.map((source) => ({
       name: source.name,
       url: source.url,
@@ -229,7 +301,7 @@ export async function publishHolidayGuide(): Promise<PublishResult> {
         excerpt: copy.excerpt,
         seoTitle: copy.seoTitle,
         seoDescription: copy.seoDescription,
-        body: buildBody(locale),
+        body: buildBody(locale, inlineMediaId),
       };
     }),
   };

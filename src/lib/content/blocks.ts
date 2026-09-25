@@ -309,6 +309,17 @@ export const calendarBlock = z.object({
   note: z.string().max(400).optional(),
 });
 
+/**
+ * The tourist tax calculator.
+ *
+ * Configuration-free on purpose, like `contactForm`. Rates live in
+ * `src/lib/content/tourist-tax/rates.ts`, under review and version control,
+ * so nobody can change a tax figure through the editing interface.
+ */
+export const touristTaxBlock = z.object({
+  type: z.literal("touristTax"),
+});
+
 export const blockSchema = z.discriminatedUnion("type", [
   headingBlock,
   paragraphBlock,
@@ -329,6 +340,7 @@ export const blockSchema = z.discriminatedUnion("type", [
   contactFormBlock,
   calculatorBlock,
   calendarBlock,
+  touristTaxBlock,
 ]);
 
 export const bodySchema = z.array(blockSchema).max(500);
@@ -395,6 +407,9 @@ export function bodyToPlainText(body: Body): string {
         if (block.caption) parts.push(block.caption);
         parts.push(...block.headers);
         for (const row of block.rows) parts.push(...row.map(strip));
+        break;
+      case "touristTax":
+        // No prose of its own; the article around it carries the wording.
         break;
       case "calculator":
         parts.push(block.title);
