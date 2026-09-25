@@ -37,6 +37,9 @@ const es: Messages = {
     intro:
       "Información práctica, verificada y mantenida al día sobre Cataluña: adónde ir, cómo llegar, qué conviene saber antes y dónde consultar la fuente oficial.",
     searchLabel: "¿Qué quieres saber de Cataluña?",
+    // El bloque de la portada reúne guías y artículos, por eso no se titula
+    // "Guías": daría a entender que el sitio no publica nada más.
+    allArticles: "Todos los artículos",
   },
   meta: {
     publishedOn: "Publicado el",

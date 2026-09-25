@@ -36,6 +36,9 @@ const ca = {
     intro:
       "Informació pràctica, verificada i mantinguda al dia sobre Catalunya: on anar, com arribar-hi, què cal saber abans i on consultar la font oficial.",
     searchLabel: "Què vols saber de Catalunya?",
+    // The homepage bucket holds guides and articles together, so it is not
+    // labelled "Guies": that would read as though the site published nothing else.
+    allArticles: "Tots els articles",
   },
   meta: {
     publishedOn: "Publicat el",

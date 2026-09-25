@@ -97,7 +97,10 @@ export default async function HomePage({
         {populated.map(({ key, items }) => (
           <section key={key} className="ci-shell py-12">
             <div className="ci-section-head">
-              <h2>{t.nav[key]}</h2>
+              {/* The "guides" bucket is every article and guide the site has,
+                  not the guides section. Heading it "Guides" made the homepage
+                  look as though nothing else were published. */}
+              <h2>{key === "guides" ? t.home.allArticles : t.nav[key]}</h2>
               <Link href={sectionPath(key, locale)} className="text-sm">
                 {t.common.seeAll}
               </Link>

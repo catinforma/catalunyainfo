@@ -37,6 +37,9 @@ const en: Messages = {
     intro:
       "Practical, verified and up-to-date information about Catalonia: where to go, how to get there, what to know beforehand and where to check the official source.",
     searchLabel: "What do you want to know about Catalonia?",
+    // The homepage bucket holds guides and articles together, so it is not
+    // labelled "Guides": that would read as though the site published nothing else.
+    allArticles: "All articles",
   },
   meta: {
     publishedOn: "Published on",
