@@ -4,6 +4,7 @@ import type { Block } from "@/lib/content/blocks";
 import { LOCALES, type Locale } from "@/lib/i18n/config";
 import { publishArticle, type ArticleSpec, type PublishResult } from "@/lib/content/publish-article";
 import { IMAGE_BY_KEY } from "@/lib/content/images";
+import { relatedBlocks } from "@/lib/content/features/shared";
 import { COPY, HERO, LEVEL_LABEL, SOURCES, ZONES } from "./payload";
 
 /**
@@ -98,6 +99,13 @@ export function buildBody(locale: Locale, heroMediaId?: string): Block[] {
 
   blocks.push({ type: "heading", level: 2, text: copy.summaryHeading });
   for (const text of copy.summary) blocks.push({ type: "paragraph", text });
+
+  // This report is the best-ranked page on the site and, until now, it linked
+  // to nothing. Everything below is the same trip in the same weeks - chestnut
+  // season, the autumn food fairs, the colour of the woods - so the links are
+  // editorially right as well as being the only authority this site has to
+  // pass on.
+  blocks.push(...relatedBlocks(["castanyada", "foodfairs", "autumn", "rainy"], locale));
 
   return blocks;
 }

@@ -4,6 +4,7 @@ import type { Block } from "@/lib/content/blocks";
 import { LOCALES, type Locale } from "@/lib/i18n/config";
 import { publishArticle, type ArticleSpec, type PublishResult } from "@/lib/content/publish-article";
 import { IMAGE_BY_KEY } from "@/lib/content/images";
+import { relatedBlocks } from "@/lib/content/features/shared";
 import { COPY, IMAGES, SOURCES, ZONES } from "./payload";
 
 /**
@@ -110,6 +111,10 @@ export function buildBody(
   blocks.push({ type: "list", ordered: false, items: copy.quick });
 
   blocks.push({ type: "paragraph", text: copy.relatedLine });
+
+  // `relatedLine` points at the mushroom report and nothing else. The rest of
+  // the autumn cluster was published later and never got linked from here.
+  blocks.push(...relatedBlocks(["castanyada", "foodfairs", "montserrat", "trains"], locale));
 
   return blocks;
 }
