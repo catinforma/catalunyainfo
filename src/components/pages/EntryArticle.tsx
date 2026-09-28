@@ -11,7 +11,7 @@ import type { EntryDetail } from "@/lib/content/types";
 import { formatDate, formatDistance, formatDuration, isoDate } from "@/lib/format";
 import { getMessages, interpolate } from "@/lib/i18n";
 import type { Locale } from "@/lib/i18n/config";
-import { sectionPath } from "@/lib/i18n/routes";
+import { SECTION_KEYS, sectionPath, type SectionKey } from "@/lib/i18n/routes";
 
 /**
  * The content page.
@@ -47,7 +47,7 @@ export function EntryArticle({
 
           {entry.category ? (
             <p className="ci-label mb-3">
-              <Link href={sectionPath(sectionForType(entry.type), locale)}>
+              <Link href={sectionPath(sectionFor(entry), locale)}>
                 {entry.category.name}
               </Link>
             </p>
@@ -389,20 +389,42 @@ function labelFor(key: FactKey, locale: Locale): string {
   return FACT_LABELS[key][locale];
 }
 
-function sectionForType(type: EntryDetail["type"]) {
+function sectionForType(type: EntryDetail["type"]): SectionKey {
   switch (type) {
     case "news":
-      return "news" as const;
+      return "news";
     case "destination":
     case "place":
-      return "destinations" as const;
+      return "destinations";
     case "event":
-      return "events" as const;
+      return "events";
     case "route":
-      return "routes" as const;
+      return "routes";
     default:
-      return "guides" as const;
+      return "guides";
   }
 }
 
-export { sectionForType };
+/**
+ * Which hub this entry actually appears on.
+ *
+ * The hubs list by category as well as by type: an article filed under
+ * `villages` is listed on /destinacions/, not on /guies/. The category line
+ * under the title used to be built from the type alone, so every one of those
+ * articles pointed the reader - and Google - at the guides hub instead of the
+ * one it is really on. The destinations and events hubs ended up with three
+ * articles each and not a single link in any page's content.
+ *
+ * The category row already carries the section it was seeded with, so this
+ * only has to trust it, and fall back to the type when a category is missing
+ * or names a section that no longer exists.
+ */
+function sectionFor(entry: EntryDetail): SectionKey {
+  const section = entry.category?.section;
+  if (section && (SECTION_KEYS as readonly string[]).includes(section)) {
+    return section as SectionKey;
+  }
+  return sectionForType(entry.type);
+}
+
+export { sectionFor, sectionForType };
