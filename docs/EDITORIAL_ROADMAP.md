@@ -300,3 +300,85 @@ Model to build when the source is settled: station, open or closed, official
 snow depth, slopes open, access roads, official webcam, source, `verified_at`.
 **No figure published until an official source is identified** — a ski
 station's own marketing depth is not a measurement.
+
+---
+
+## Editorial batch 02 — published 29 September 2026
+
+Nine guides, 27 editions, nine Commons photographs. All URLs perennial.
+
+| # | Article | CA / ES / EN | Cluster |
+| --- | --- | --- | --- |
+| 01 | Barcelona transport passes | ✓ | Barcelona Practical |
+| 02 | Low-emission zone, foreign vehicles | ✓ | Barcelona Practical |
+| 03 | Girona by train | ✓ | Day trips |
+| 04 | Montserrat without a tour | ✓ | Day trips |
+| 05 | Ripollès hub | ✓ | Destinations |
+| 06 | Setcases | ✓ | Destinations |
+| 07 | Cerdanya without a car | ✓ | Day trips |
+| 08 | Street parking | ✓ | Barcelona Practical |
+| 09 | **Christmas markets** | **deferred** | Seasonal |
+| 10 | Snow without skiing | ✓ | Seasonal |
+
+### What was verified, and what changed as a result
+
+Every variable figure was re-checked against the operator before publishing.
+
+| Figure | Package | Published | Source |
+| --- | --- | --- | --- |
+| T-casual, 1 zone | 13 € | 13 € | TMB fares page |
+| T-dia, 1 zone | 12 € | 12 € | TMB fares page |
+| T-usual, 1 zone | 22,80 € | 22,80 € | TMB fares page |
+| ZBE verification | "up to 15 days" | **15 working days** | AMB registry FAQ |
+| AREA blue, rate A | 1,25–3,75 €/h | Full five-label table | AREA (B:SM) |
+| AREA green, rate A | 1,50–4,25 €/h | Full five-label table | AREA (B:SM) |
+| FGC mountain destinations | Six, named | Confirmed | FGC / Pirineu365 |
+| La Creueta walk | ~300 m, ~50 m gain | Confirmed | Ripollès Turisme |
+
+Press coverage of January's fare rise reported 12,99 €, 11,95 € and 22,77 €.
+Those were pre-approval projections; TMB publishes the round figures, and the
+operator's own page wins.
+
+### Four things deliberately not published
+
+- **The Hola Barcelona fare.** TMB publishes the card's coverage but not its
+  price on the fares page. The prices circulating are resellers'. The card
+  appears in the comparison with what it includes and an explicit "not priced
+  here".
+- **The rack railway's "more than 600 m" height gain.** The line climbs from
+  Monistrol de Montserrat to the monastery, which is nearer 540 m, and no
+  operator page states 600.
+- **Service frequencies for the rack railway and the cable car.** Neither
+  operator publishes a fixed year-round headway; both vary by season.
+- **Article 09, Christmas markets, in full.** See below.
+
+### Why the Christmas markets article was deferred
+
+The package's own rule for it is: *no market goes in until a date has been
+published by an administration or a reliable organiser.* That rule could not be
+satisfied on 29 September:
+
+- The Diputació de Barcelona's local-fairs agenda runs to October 2026 and has
+  no November or December entries yet.
+- The Generalitat's 2026 fairs calendar does not expose those listings.
+- Press results for those municipalities return **2025** dates.
+
+Publishing the supplied table would have meant republishing last year's dates
+as this year's, which is the precise error the article exists to avoid. The
+component it needs — the `calendar` block, with dates, municipality, scope and
+an ICS download — already exists, so this is now a payload and not a build.
+
+**Re-check from mid-October**, weekly. The seasonal window still allows it: the
+holiday calendar published on 24 September was indexed by the 26th.
+
+### Internal linking map, as built
+
+- **Barcelona Practical** — transport ⇄ ZBE ⇄ parking, all three cross-linked,
+  plus the existing tourist tax and tourist-traps guides.
+- **Day trips** — Girona ⇄ Montserrat ⇄ Cerdanya, each into the existing
+  car-free rail guide.
+- **Ripollès** — hub ⇄ Setcases, both into the mushroom report and the snow
+  guide.
+- **Seasonal** — snow ⇄ Cerdanya ⇄ Ripollès.
+
+Audit after publishing: 0 broken, 0 orphans, 0 cross-language leaks.
