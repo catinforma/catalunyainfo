@@ -546,6 +546,22 @@
     padding-left: 1.25rem;
     margin-block: 0;
   }
+  /*
+    Headings carry a negative bottom margin so they sit tight to the text that
+    follows. That only works while the next element keeps its own flow margin.
+    Lists reset `margin-block` to drop the browser default, which also wiped
+    the top margin the flow rule had given them - and the heading's negative
+    margin then pulled the first list item up into the heading text.
+
+    Matching `h2 + *` rather than `h2 + ul` fixes it for every block that
+    resets its own top margin, not just the one that was noticed. Specificity
+    is (0,1,1), the same as `.ci-prose ul`, and it comes later, so it wins.
+    The resulting gap is 1.15em - 0.35em, identical to a paragraph's.
+  */
+  .ci-prose h2 + *,
+  .ci-prose h3 + * {
+    margin-top: 1.15em;
+  }
   .ci-prose li + li {
     margin-top: 0.4em;
   }
