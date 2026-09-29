@@ -69,6 +69,24 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ),
   );
 
+  /*
+    The home pages and the section hubs have no `updated_at` of their own,
+    because they are not rows: they are listings. They were being stamped with
+    `new Date()`, which meant every fetch of the sitemap told Google that all
+    thirty-odd of them had changed in the same instant, a moment ago. A
+    `lastmod` that is always "now" is one Google learns to ignore, and it
+    stops being a signal for the URLs where it is real.
+
+    What actually changes a listing is a change to the content it lists, so
+    that is the date to use. Falls back to the current time only when there is
+    no content at all, which is the one case where it is true.
+  */
+  const newestContent = rows.reduce<Date | null>(
+    (newest, row) => (newest === null || row.updatedAt > newest ? row.updatedAt : newest),
+    null,
+  );
+  const listingModified = newestContent ?? new Date();
+
   const systemEntries: MetadataRoute.Sitemap = [];
   for (const locale of LOCALES) {
     for (const path of allSystemPaths(locale)) {
@@ -77,7 +95,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
       systemEntries.push({
         url: absoluteUrl(path),
-        lastModified: new Date(),
+        lastModified: listingModified,
         changeFrequency: path === `/${locale}/` ? "daily" : "weekly",
         priority: path === `/${locale}/` ? 1 : 0.5,
         alternates: {
