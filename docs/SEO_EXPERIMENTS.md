@@ -141,6 +141,60 @@ performance and the en/ca/es split), 24 December (90 days).
 
 ---
 
+## 2026-09-29 — read before judging any CTR number on this site
+
+Not an experiment. A measurement warning, recorded because two scheduled
+readings (Sitges on 8 October, the holiday calendar on 22 October) are both
+due to be judged on CTR, and site-wide CTR here is not measuring what it
+appears to measure.
+
+**What the per-page query reports show.** Queries attributed to our own pages,
+15–29 September:
+
+| Page | Query | Position | Clicks |
+| --- | --- | --- | --- |
+| `/en/events/sitges-film-festival-guide/` | `d'acord` | 4 | 0 |
+| `/en/events/sitges-film-festival-guide/` | `japanise` | 4 | 0 |
+| `/en/events/sitges-film-festival-guide/` | `check again` | 5 | 0 |
+| `/en/events/sitges-film-festival-guide/` | `si` | 4 | 0 |
+| `/en/events/sitges-film-festival-guide/` | `oct 10` | 3 | 0 |
+| `/en/nature/mushroom-season-catalonia/` | `avui` | 4 | 0 |
+| `/en/nature/mushroom-season-catalonia/` | `demà` | 3 | 0 |
+| `/ca/natura/bolets-catalunya-condicions/` | `las dos cosas` | 3 | 0 |
+| `/ca/natura/bolets-catalunya-condicions/` | `para ir mañana` | 6 | 0 |
+
+`d'acord` is "OK". `check again`, `si`, `las dos cosas`, `para ir mañana` are
+not things a person types into a search box. They are conversational
+fragments, they sit at positions 2–6, and they never get clicked.
+
+**Reading.** These are consistent with AI-generated fan-out sub-queries rather
+than human searches. Supporting evidence: GA4 reports a distinct **AI
+Assistant** channel with 5 users and 10 sessions in nine days, which is real
+traffic from the same systems.
+
+**Consequence.** Site-wide CTR mixes two populations with different
+denominators, and the AI-side one grew fast through September. That is enough
+on its own to explain the headline decline from 11.2% on 17 September to 2.5%
+on 27 September without any page getting worse. The English pages are hit
+hardest, because their genuine query base is the thinnest, so the fragments are
+a larger share of the total.
+
+**Therefore, for every reading from here on:**
+
+- Judge a title change on its **named, intentful queries** in the per-page
+  query report, never on the page's aggregate CTR.
+- For Sitges on 8 October that means `sitges film festival 2026 dates`,
+  `... schedule`, `... tickets`, `... programme`, `... lineup` — the set listed
+  in the 24 September entry — and nothing else.
+- Do not "fix" a page whose aggregate CTR fell while its named queries held.
+  There is nothing there to fix.
+
+**Healthy, for contrast.** `donde hay setas ahora en cataluña 2026`: position
+1.5, CTR 16.7%. `bolets catalunya 2026`: position 2.5, CTR 33%. When a real
+query meets a page that answers it, this site converts perfectly well.
+
+---
+
 ## Candidates not yet run
 
 Recorded so they are not lost, and so they are not all started at once.

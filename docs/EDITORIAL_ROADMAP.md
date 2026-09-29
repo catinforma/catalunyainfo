@@ -192,3 +192,39 @@ news aggregator, which is what got version 1 rejected.
 | Personalised ads to EEA/UK readers | A Google-certified CMP with IAB TCF |
 | Routes hub | First real route package, with verified geodata |
 | Author pages | Real author identities |
+
+---
+
+## Demand the mushroom report is already surfacing and not serving
+
+Recorded 29 September 2026, from the per-page query report for
+`/ca/natura/bolets-catalunya-condicions/` and `/es/naturaleza/setas-cataluna-condiciones/`.
+
+That report is the best-performing page on the site: 90 of the site's 179
+clicks across ca and es, position 3.8 in Spanish. It wins the generic terms and
+loses the specific ones — and the specific ones are where the roadmap's next
+work should come from, because the demand is measured rather than guessed.
+
+| Query | Position | Note |
+| --- | --- | --- |
+| `bolets vall d'en bas` | 30.3 | Comarca-level, we barely rank |
+| `predicció bolets catalunya` | 16.4 | Our own subject, page 2 |
+| `quants dies després de ploure surten els bolets` | 59 | A real question, unanswered on the page |
+| `mapa bolets catalunya 2026` | 7.1 | A map is asked for by name |
+| `on trobar bolets aquesta setmana` | 6.2 | Same page, weaker than the generic term |
+
+Two conclusions, and neither is "write ten more articles":
+
+1. **Question-shaped queries have no home.** "How many days after rain do
+   mushrooms appear" is a genuine question with a genuine answer, and the page
+   does not answer it in a form Google can lift. An FAQ section on the existing
+   report costs one payload edit.
+2. **Comarca-level demand is real and unserved.** `vall d'en bas`, `berguedà`.
+   The report already models seven condition zones; the gap is that no URL
+   addresses a comarca by name.
+
+Both build on a page that already has authority, which is a different and
+cheaper proposition than starting a new topic from zero.
+
+**Not started. No URLs, no placeholders.** Recorded so the next package can be
+chosen from evidence.
