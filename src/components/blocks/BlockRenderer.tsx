@@ -4,6 +4,7 @@ import Link from "next/link";
 import { ContactForm } from "@/components/ContactForm";
 import { Calculator } from "@/components/blocks/Calculator";
 import { CalendarBlock } from "@/components/blocks/CalendarBlock";
+import { ConditionsMap } from "@/components/blocks/ConditionsMap";
 import { TouristTaxCalculator } from "@/components/blocks/TouristTaxCalculator";
 import type { Block, Body } from "@/lib/content/blocks";
 import { headingId } from "@/lib/content/blocks";
@@ -333,6 +334,11 @@ function BlockView({ block, context }: { block: Block; context: BlockContext }) 
 
     case "calendar":
       return <CalendarBlock block={block} locale={context.locale} />;
+
+    case "conditionsMap":
+      // Named areas and measured conditions. The schema has no coordinate
+      // field, so this cannot render a picking spot however it is filled in.
+      return <ConditionsMap block={block} locale={context.locale} />;
 
     case "touristTax":
       // Rates come from the repository, never from the block.

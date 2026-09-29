@@ -41,6 +41,10 @@ const en: Messages = {
     // labelled "Guides": that would read as though the site published nothing else.
     allArticles: "All articles",
   },
+  conditions: {
+    legend: "Conditions legend",
+    disclaimer: "Conditions estimated from weather data. They do not indicate that mushrooms are present, nor any picking spot. Source:",
+  },
   meta: {
     publishedOn: "Published on",
     updatedOn: "Updated on",

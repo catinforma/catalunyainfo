@@ -5,6 +5,7 @@ import { LOCALES, type Locale } from "@/lib/i18n/config";
 import { publishArticle, type ArticleSpec, type PublishResult } from "@/lib/content/publish-article";
 import { IMAGE_BY_KEY } from "@/lib/content/images";
 import { relatedBlocks } from "@/lib/content/features/shared";
+import { zoneHref, zonesFor } from "@/lib/content/mushroom-zones/registry";
 import { COPY, HERO, LEVEL_LABEL, SOURCES, ZONES } from "./payload";
 
 /**
@@ -19,6 +20,13 @@ export const ENTRY_KEY = "mushroom-conditions-catalunya";
 
 const PUBLISHED = new Date("2026-09-13T17:30:00+02:00");
 const LAST_VERIFIED = new Date("2026-09-13T12:00:00+02:00");
+
+/** Heading for the local-zone list, used only once a zone exists. */
+const ZONES_HEADING: Record<Locale, string> = {
+  ca: "Per zones",
+  es: "Por zonas",
+  en: "By area",
+};
 
 export function buildBody(locale: Locale, heroMediaId?: string): Block[] {
   const copy = COPY[locale];
@@ -105,6 +113,22 @@ export function buildBody(locale: Locale, heroMediaId?: string): Block[] {
   // season, the autumn food fairs, the colour of the woods - so the links are
   // editorially right as well as being the only authority this site has to
   // pass on.
+  // Local zone pages, when any exist. The registry is empty today, so this
+  // adds nothing and renders no empty section: the master gains a "by area"
+  // block on the day the first zone is published, and not before.
+  const zones = zonesFor(locale);
+  if (zones.length > 0) {
+    blocks.push({ type: "heading", level: 2, text: ZONES_HEADING[locale] });
+    blocks.push({
+      type: "list",
+      ordered: false,
+      items: zones.flatMap((zone) => {
+        const href = zoneHref(zone, locale);
+        return href ? [`[${zone.areaName}](${href}) — ${zone.comarca}`] : [];
+      }),
+    });
+  }
+
   blocks.push(...relatedBlocks(["castanyada", "foodfairs", "autumn", "rainy"], locale));
 
   return blocks;

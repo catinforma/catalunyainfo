@@ -9,6 +9,7 @@ import { publishInstitutionalPages } from "@/lib/content/pages/publish";
 import { publishFeatures } from "@/lib/content/features/publish";
 import { publishHolidayGuide } from "@/lib/content/holidays/publish";
 import { publishTouristTaxGuide } from "@/lib/content/tourist-tax/publish";
+import { publishMushroomZones } from "@/lib/content/mushroom-zones/publish";
 import { authoriseDeployRequest, describeError } from "@/lib/admin/deploy-auth";
 
 export const runtime = "nodejs";
@@ -52,6 +53,8 @@ export async function POST(request: Request) {
     if (wants("features-b")) published.push(...(await publishFeatures(5, 10)));
     if (wants("holidays")) published.push(await publishHolidayGuide());
     if (wants("tourist-tax")) published.push(await publishTouristTaxGuide());
+    // Empty registry until an editorial package adds a zone; publishes nothing.
+    if (wants("mushroom-zones") || only === "all") published.push(...(await publishMushroomZones()));
 
     const surfaces = [
       ...published.flatMap((article) =>

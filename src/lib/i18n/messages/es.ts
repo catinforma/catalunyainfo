@@ -41,6 +41,10 @@ const es: Messages = {
     // "Guías": daría a entender que el sitio no publica nada más.
     allArticles: "Todos los artículos",
   },
+  conditions: {
+    legend: "Leyenda de condiciones",
+    disclaimer: "Condiciones estimadas a partir de datos meteorológicos. No indican la presencia de setas ni ningún punto de recogida. Fuente:",
+  },
   meta: {
     publishedOn: "Publicado el",
     updatedOn: "Actualizado el",

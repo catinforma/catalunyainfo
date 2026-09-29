@@ -310,6 +310,58 @@ export const calendarBlock = z.object({
 });
 
 /**
+ * A conditions map by comarca.
+ *
+ * Built for the mushroom report, where the query data shows people asking for
+ * `mapa bolets catalunya 2026`, `predicció bolets catalunya` and
+ * `on trobar bolets aquesta setmana`. What they are asking for and what we are
+ * willing to publish are not the same thing, and the schema is where that line
+ * is held rather than in an editor's good intentions:
+ *
+ *  - **There is no coordinate field, anywhere.** Not optional, not nullable —
+ *    absent. A block that cannot represent a point cannot leak a picking spot,
+ *    however the copy is written. Areas are named administrative units.
+ *  - **The level vocabulary is closed**, and every term describes *conditions*.
+ *    There is no value meaning "there are mushrooms here". Rain and temperature
+ *    are measurable and get published; fruiting is inferred and does not.
+ *  - **`source` and `verifiedAt` are required.** A conditions claim with no
+ *    measurement behind it and no date on it is an opinion, and this block will
+ *    not carry one.
+ *
+ * `href` links an area to a page that exists. It is a path, checked by the
+ * publisher against the real registry, so an area cannot link into nothing.
+ */
+export const conditionLevel = z.enum(["favourable", "moderate", "limiting", "unknown"]);
+
+export const conditionsMapBlock = z.object({
+  type: z.literal("conditionsMap"),
+  title: z.string().max(200),
+  intro: inlineText.optional(),
+  legend: z
+    .array(z.object({ level: conditionLevel, label: z.string().min(1).max(80) }))
+    .min(2)
+    .max(4),
+  areas: z
+    .array(
+      z.object({
+        /** Comarca or other named administrative area. Never a point. */
+        name: z.string().min(1).max(80),
+        level: conditionLevel,
+        /** Measured facts only: rainfall, temperature, days since rain. */
+        note: inlineText.optional(),
+        /** Path to a page that exists, `/ca/...`. */
+        href: z.string().regex(/^\/[a-z]{2}\/[a-z0-9\-/]+\/$/).optional(),
+      }),
+    )
+    .min(1)
+    .max(60),
+  source: z.object({ name: z.string().min(1).max(200), url: z.string().url() }),
+  /** ISO date the levels were last checked against the source. */
+  verifiedAt: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+  note: z.string().max(400).optional(),
+});
+
+/**
  * The tourist tax calculator.
  *
  * Configuration-free on purpose, like `contactForm`. Rates live in
@@ -341,6 +393,7 @@ export const blockSchema = z.discriminatedUnion("type", [
   calculatorBlock,
   calendarBlock,
   touristTaxBlock,
+  conditionsMapBlock,
 ]);
 
 export const bodySchema = z.array(blockSchema).max(500);
@@ -417,6 +470,15 @@ export function bodyToPlainText(body: Body): string {
         for (const input of block.inputs) parts.push(input.label);
         for (const output of block.outputs) parts.push(output.label);
         parts.push(strip(block.note));
+        break;
+      case "conditionsMap":
+        parts.push(block.title);
+        if (block.intro) parts.push(strip(block.intro));
+        for (const area of block.areas) {
+          parts.push(area.name);
+          if (area.note) parts.push(strip(area.note));
+        }
+        if (block.note) parts.push(strip(block.note));
         break;
       case "calendar":
         parts.push(block.title);

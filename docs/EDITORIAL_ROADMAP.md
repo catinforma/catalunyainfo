@@ -228,3 +228,75 @@ cheaper proposition than starting a new topic from zero.
 
 **Not started. No URLs, no placeholders.** Recorded so the next package can be
 chosen from evidence.
+
+---
+
+## Growth sprint 01 — prepared, not published (29 September 2026)
+
+Architecture built so an editorial package can be dropped in. **No URLs were
+created, no placeholders exist, and every registry below ships empty.**
+
+| Item | Status | What exists in code | What is missing |
+| --- | --- | --- | --- |
+| Mushroom zone pilot — Vall d'en Bas | `prepared` | `src/lib/content/mushroom-zones/` — types, publish-time guard, empty registry, publisher wired to `?only=mushroom-zones` | The editorial package |
+| Conditions by comarca | `prepared` | `conditionsMap` block, renderer, closed level vocabulary, no coordinate field | Verified Meteocat data per comarca |
+| Barcelona transport cards | `prepared` | `src/lib/content/transport-cards/types.ts` — ticket, validity, fare and profile model, empty registry | ATM fares, verified |
+| Barcelona airport → city centre | `planned` | — | The editorial package |
+| Christmas markets in Catalonia | `planned` | — | Confirmed dates from each organiser |
+| Snow and ski conditions | `planned` | — | Official station data source |
+
+### Vall d'en Bas: why this one, and why only this one
+
+`bolets vall d'en bas` sits at position 30.3 with its own impressions, and
+`bergueda`, `setcases`, `ripolles` and `riu de cerdanya` all surface against
+the master report. The master is a Catalonia-wide page: it appears for those
+queries and answers none of them.
+
+**One pilot, measured 14 to 28 days before a second zone exists.** The
+registry is an array, so adding six comarques at once would cost nothing and
+would be the wrong thing to do — six thin pages competing with the page that
+currently earns 45% of the site's clicks. Scale only on evidence: the pilot
+must earn impressions, queries of its own, and a position, and the master must
+not lose ground.
+
+A zone page is not the master with a place name substituted in. The master
+answers *"what are conditions like in Catalonia"*; a zone page answers *"what
+is the situation here and what do I need to know before going"* — local
+weather record, habitat, municipal rules, safety, access.
+
+### What the guard refuses to publish
+
+In `mushroom-zones/guard.ts`, enforced at publish time, throwing rather than
+warning:
+
+- **Coordinates in any notation** — decimal pairs, degrees-minutes, UTM-looking
+  grid references, map pin links.
+- **Any claim that mushrooms are present.** Rainfall is measured and may be
+  published; fruiting is inferred and may not. "Conditions are favourable" is a
+  statement about weather. "There are mushrooms" is a statement about a place
+  nobody checked.
+- **Promises** — *hi trobaràs*, *encontrarás*, *you will find*, *guaranteed*.
+- **Picking directions and secret spots.**
+- **A missing link back to the master**, a missing source, a non-https source,
+  a missing verification date, or a year in the slug.
+
+### Christmas markets — why it is on the roadmap in September
+
+Seasonal content has to be indexed before the peak, and this site's own data
+shows why: the holiday calendar was published on 24 September and took until
+26 September to be indexed at all, on a resubmitted sitemap. A Christmas page
+published in late November would reach the index after the traffic.
+
+Perennial URL, no year in the slug, so the same page serves 2027. **No dates
+are published until each organiser has confirmed them** — last year's dates
+reprinted as this year's is the exact kind of error that costs a reader a trip.
+
+### Snow — the winter equivalent of the mushroom report
+
+The mushroom report works because it is recurrent, dated, and honest about
+uncertainty. Snow conditions have the same shape and the same season boundary.
+
+Model to build when the source is settled: station, open or closed, official
+snow depth, slopes open, access roads, official webcam, source, `verified_at`.
+**No figure published until an official source is identified** — a ski
+station's own marketing depth is not a measurement.

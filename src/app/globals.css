@@ -1198,3 +1198,106 @@
     border: 0;
   }
 }
+
+/* ---- Conditions by comarca ------------------------------------------------
+   The level is carried by a word as well as a colour. A chip whose only
+   content is a background colour says nothing in greyscale, nothing to a
+   screen reader, and the wrong thing to a red-green colour-blind reader. */
+.ci-conditions {
+  margin: 2rem 0;
+  border: 1px solid var(--color-rule);
+  border-radius: var(--radius-md);
+  padding: 1.25rem;
+  background: var(--color-surface);
+}
+.ci-conditions-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem 1rem;
+}
+.ci-conditions-title {
+  margin: 0;
+  font-size: 1.05rem;
+}
+.ci-conditions-verified {
+  margin: 0;
+  font-size: 0.8rem;
+  color: var(--color-ink-soft);
+}
+.ci-conditions-intro {
+  margin: 0.75rem 0 0;
+  font-size: 0.95rem;
+}
+.ci-conditions-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem 1rem;
+  margin: 1rem 0 0;
+  padding: 0;
+  list-style: none;
+  font-size: 0.8rem;
+  color: var(--color-ink-soft);
+}
+.ci-conditions-legend li {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+.ci-cond-chip {
+  display: inline-block;
+  width: 0.7rem;
+  height: 0.7rem;
+  border-radius: 50%;
+  border: 1px solid var(--color-rule);
+  background: var(--cond-color, var(--color-faint));
+}
+.ci-conditions-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(11rem, 1fr));
+  gap: 0.6rem;
+  margin: 1rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+.ci-conditions-area {
+  border: 1px solid var(--color-rule);
+  border-left: 3px solid var(--cond-color, var(--color-faint));
+  border-radius: var(--radius-sm);
+  padding: 0.6rem 0.7rem;
+  background: var(--color-bg);
+}
+.ci-conditions-area-name {
+  margin: 0;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+.ci-conditions-area-level {
+  margin: 0.15rem 0 0;
+  font-size: 0.78rem;
+  color: var(--color-ink-soft);
+}
+.ci-conditions-area-note {
+  margin: 0.35rem 0 0;
+  font-size: 0.78rem;
+  color: var(--color-muted);
+}
+.ci-conditions-note {
+  margin: 1rem 0 0;
+  font-size: 0.78rem;
+  color: var(--color-muted);
+}
+.ci-cond-favourable { --cond-color: #2f7d46; }
+.ci-cond-moderate { --cond-color: #b8860b; }
+.ci-cond-limiting { --cond-color: #a4462d; }
+.ci-cond-unknown { --cond-color: var(--color-faint); }
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .ci-cond-favourable { --cond-color: #5fb87a; }
+  :root:not([data-theme="light"]) .ci-cond-moderate { --cond-color: #d9a83a; }
+  :root:not([data-theme="light"]) .ci-cond-limiting { --cond-color: #d97a5c; }
+}
+:root[data-theme="dark"] .ci-cond-favourable { --cond-color: #5fb87a; }
+:root[data-theme="dark"] .ci-cond-moderate { --cond-color: #d9a83a; }
+:root[data-theme="dark"] .ci-cond-limiting { --cond-color: #d97a5c; }

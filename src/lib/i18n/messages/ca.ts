@@ -40,6 +40,10 @@ const ca = {
     // labelled "Guies": that would read as though the site published nothing else.
     allArticles: "Tots els articles",
   },
+  conditions: {
+    legend: "Llegenda de condicions",
+    disclaimer: "Condicions estimades a partir de dades meteorològiques. No indiquen la presència de bolets ni cap punt de recollida. Font:",
+  },
   meta: {
     publishedOn: "Publicat el",
     updatedOn: "Actualitzat el",
