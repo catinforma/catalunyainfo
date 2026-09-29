@@ -23,6 +23,96 @@ export interface ImportedImage {
 
 export const IMAGES: readonly ImportedImage[] = [
   {
+    "key": "b2-cerdanya-puigcerda",
+    "url": "/images/b2-cerdanya-puigcerda.webp",
+    "width": 1920,
+    "height": 1280,
+    "blurDataUrl": "data:image/webp;base64,UklGRloAAABXRUJQVlA4IE4AAADQAQCdASoQAAsAA4BaJZwCdAELV+iwAAD5dA2MK1aZRnjS7n+prRXLquOAuGO3q48XbyTX+NnNXxa/h8xivyEK4mUd9h8BqihB3dcgAAA=",
+    "credit": "Nicolas Vigier",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Puigcerd%C3%A0_-_52123763420.jpg",
+    "license": "CC0"
+  },
+  {
+    "key": "b2-girona-cases-onyar",
+    "url": "/images/b2-girona-cases-onyar.webp",
+    "width": 1920,
+    "height": 1280,
+    "blurDataUrl": "data:image/webp;base64,UklGRmIAAABXRUJQVlA4IFYAAADwAQCdASoQAAsAA4BaJbACdH8AEQu/WQAA/rC+U9fpkBI/bWedRUjIMzLycuRVG3kd1HF4e4mrlchbcXk0gWjYACBF1yfA5PBgjn43fCOyV22iJT/AAA==",
+    "credit": "Richard Mortel from Riyadh, Saudi Arabia",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Houses_along_the_Onyar_River,_Girona_(3)_(31175992312).jpg",
+    "license": "CC BY 2.0"
+  },
+  {
+    "key": "b2-montserrat-cremallera",
+    "url": "/images/b2-montserrat-cremallera.webp",
+    "width": 1920,
+    "height": 1440,
+    "blurDataUrl": "data:image/webp;base64,UklGRmgAAABXRUJQVlA4IFwAAADwAQCdASoQAAwAA4BaJaACdACvJXC+TAAA/vV7tGgt6AbC8iEoamHA+0GZOF9GobfOWA6YfzHc7G/I+tGF8usZEvCNPicd9lwSw4SC7dkKso00n7Rr8WV3EuAAAA==",
+    "credit": "NearEMPTiness",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Cremallera_de_Montserrat_rack_railway_in_Monistrol-Vila.JPG",
+    "license": "CC BY-SA 4.0"
+  },
+  {
+    "key": "b2-neu-vall-de-nuria",
+    "url": "/images/b2-neu-vall-de-nuria.webp",
+    "width": 1920,
+    "height": 1440,
+    "blurDataUrl": "data:image/webp;base64,UklGRloAAABXRUJQVlA4IE4AAADwAQCdASoQAAwAA4BaJZQAAtn3mOm7b8AA/vQQjNbFNIOQ0gIE70Jcvb/WLJUECzhn36lZi8iEhlWjWJOdHAsd0RnRtZY6YXWphpKYQAA=",
+    "credit": "Jordiferrer",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Hivern_-_Parc_L%C3%BAdic_de_la_Vall_de_N%C3%BAria.JPG",
+    "license": "CC BY-SA 4.0"
+  },
+  {
+    "key": "b2-parking-carrer-barcelona",
+    "url": "/images/b2-parking-carrer-barcelona.webp",
+    "width": 1920,
+    "height": 1440,
+    "blurDataUrl": "data:image/webp;base64,UklGRl4AAABXRUJQVlA4IFIAAAAQAgCdASoQAAwAA4BaJagCdAEf243uEcrAAP7aq4/vhjwGUbpaOOF/IsKEfvOd8csUb98APQRQdIM1yPxG+46+IFOJZqPXg3I2LynwJn7DfgAA",
+    "credit": "Matti Blume",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Carrer_de_Cartagena,_Barcelona_(P1170601).jpg",
+    "license": "CC BY-SA 4.0"
+  },
+  {
+    "key": "b2-ripolles-monestir",
+    "url": "/images/b2-ripolles-monestir.webp",
+    "width": 1920,
+    "height": 1875,
+    "blurDataUrl": "data:image/webp;base64,UklGRmYAAABXRUJQVlA4IFoAAAAwAgCdASoQABAAA4BaJbACdDiMwUwrVjLXSAD6XGM/b2Gwel3CFSJ/F+/jA73y17VNWFYY3ryAoYozLENWGWjUIdSTyZfb1zFW8LDpZm4Li82V4twbJEHgAAA=",
+    "credit": "Carles Paredes",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Monestir_de_Santa_Maria_de_Ripoll_(2).JPG",
+    "license": "CC BY-SA 3.0"
+  },
+  {
+    "key": "b2-setcases-poble",
+    "url": "/images/b2-setcases-poble.webp",
+    "width": 1920,
+    "height": 1281,
+    "blurDataUrl": "data:image/webp;base64,UklGRlAAAABXRUJQVlA4IEQAAADwAQCdASoQAAsAA4BaJZACdADRlmdutwAA/p+O5rk9jY30GtOQP/YYtdnNyFeHVeTXnL4zi+QrGvGNFGKZu+5HQKA8AA==",
+    "credit": "Alberto-g-rovi",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Setcases-2021_(1).jpg",
+    "license": "CC BY 3.0"
+  },
+  {
+    "key": "b2-transport-metro-barcelona",
+    "url": "/images/b2-transport-metro-barcelona.webp",
+    "width": 1920,
+    "height": 1440,
+    "blurDataUrl": "data:image/webp;base64,UklGRloAAABXRUJQVlA4IE4AAAAQAgCdASoQAAwAA4BaJbAC7ADp88oBR1wAAP72mqkLHuAqJq1fq/w8tXul3+KbNA/QmqpoNyeVQ7kgPG2WDIHk5FkOMxsnv4IJkySmAAA=",
+    "credit": "P h n",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Espanya_station,_Barcelona_metro_line_3_-_3.9.2013.JPG",
+    "license": "CC BY-SA 4.0"
+  },
+  {
+    "key": "b2-zbe-gran-via-barcelona",
+    "url": "/images/b2-zbe-gran-via-barcelona.webp",
+    "width": 1920,
+    "height": 1280,
+    "blurDataUrl": "data:image/webp;base64,UklGRkgAAABXRUJQVlA4IDwAAACwAQCdASoQAAsAA4BaJZwAAlrit2AAAPl65TFdMniuDcVBU0Vxa7STmpd3KbBNAIiOZSgluhoOXkI9AAA=",
+    "credit": "Txllxt TxllxT",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Barcelona_-_Gran_Via_de_les_Corts_Catalanes_-_View_SW.jpg",
+    "license": "CC BY-SA 4.0"
+  },
+  {
     "key": "bolets-catalunya-2026-bosc-humit",
     "url": "/images/bolets-catalunya-2026-bosc-humit.webp",
     "width": 1600,

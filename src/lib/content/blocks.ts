@@ -372,6 +372,17 @@ export const touristTaxBlock = z.object({
   type: z.literal("touristTax"),
 });
 
+/**
+ * The Barcelona transport-pass selector.
+ *
+ * Configuration-free, like `touristTax`. Fares live in
+ * `src/lib/content/transport-cards/rates.ts`, read from TMB's own page and
+ * under review, so nobody can change a fare through the editing interface.
+ */
+export const transportPassesBlock = z.object({
+  type: z.literal("transportPasses"),
+});
+
 export const blockSchema = z.discriminatedUnion("type", [
   headingBlock,
   paragraphBlock,
@@ -394,6 +405,7 @@ export const blockSchema = z.discriminatedUnion("type", [
   calendarBlock,
   touristTaxBlock,
   conditionsMapBlock,
+  transportPassesBlock,
 ]);
 
 export const bodySchema = z.array(blockSchema).max(500);

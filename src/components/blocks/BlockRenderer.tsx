@@ -5,6 +5,7 @@ import { ContactForm } from "@/components/ContactForm";
 import { Calculator } from "@/components/blocks/Calculator";
 import { CalendarBlock } from "@/components/blocks/CalendarBlock";
 import { ConditionsMap } from "@/components/blocks/ConditionsMap";
+import { TransportPassSelector } from "@/components/blocks/TransportPassSelector";
 import { TouristTaxCalculator } from "@/components/blocks/TouristTaxCalculator";
 import type { Block, Body } from "@/lib/content/blocks";
 import { headingId } from "@/lib/content/blocks";
@@ -343,6 +344,10 @@ function BlockView({ block, context }: { block: Block; context: BlockContext }) 
     case "touristTax":
       // Rates come from the repository, never from the block.
       return <TouristTaxCalculator locale={context.locale} />;
+
+    case "transportPasses":
+      // Fares come from the repository, never from the block.
+      return <TransportPassSelector locale={context.locale} />;
 
     case "contactForm":
       // The only interactive block. It carries no configuration from the

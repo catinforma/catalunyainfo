@@ -98,11 +98,7 @@ export interface TicketOutcome {
 }
 
 /**
- * The registry. **Empty until the editorial package supplies verified fares.**
- *
- * `comparison` and the selector both read this, so an empty registry renders
- * nothing rather than a table of zeroes.
+ * The verified fares live in `rates.ts`, alongside the comparison arithmetic.
+ * This file stays the model alone, so the shape can be reasoned about without
+ * scrolling past a fare table.
  */
-export const TICKETS: Ticket[] = [];
-
-export const LAST_VERIFIED: string | null = null;

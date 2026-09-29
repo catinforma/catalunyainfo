@@ -62,6 +62,12 @@ async function readCredit(file: string): Promise<Partial<Imported>> {
   }
 }
 
+/** First line of an error message, for a one-line report. */
+function firstLine(text: string): string {
+  const index = text.indexOf(String.fromCharCode(10));
+  return index === -1 ? text : text.slice(0, index).trim();
+}
+
 async function main() {
   const sharp = (await import("sharp")).default;
 
@@ -84,12 +90,30 @@ async function main() {
 
   const imported: Imported[] = [];
 
+  // Files that libvips cannot decode are reported and skipped rather than
+  // aborting the run. One unreadable JPEG from Commons used to take the whole
+  // manifest down with it, which meant every image on the site disappeared
+  // because of one bad download.
+  const failed: { file: string; reason: string }[] = [];
+
   for (const file of files.sort()) {
     const source = await readFile(join(INCOMING, file));
     const key = parse(file).name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
 
     const pipeline = sharp(source).rotate();
     const meta = await pipeline.metadata();
+
+    // Metadata only reads the header; a truncated or non-conforming JPEG fails
+    // later, during the actual decode. Probe it here so the failure is
+    // attributed to the right file and the rest of the batch survives.
+    try {
+      await sharp(source).rotate().resize({ width: 32 }).toBuffer();
+    } catch (error) {
+      const reason = firstLine(error instanceof Error ? error.message : String(error));
+      failed.push({ file, reason: reason ?? "undecodable" });
+      console.log(`SKIP ${file.padEnd(38)} ${reason}`);
+      continue;
+    }
 
     const resized = sharp(source)
       .rotate()
@@ -125,6 +149,14 @@ async function main() {
 
     const kb = (out.length / 1024).toFixed(0);
     console.log(`${key.padEnd(38)} ${outMeta.width}x${outMeta.height}  ${kb} KB`);
+  }
+
+  if (failed.length > 0) {
+    console.log("");
+    console.log(`${failed.length} file(s) skipped because they could not be decoded:`);
+    for (const item of failed) console.log(`  ${item.file}: ${item.reason}`);
+    console.log("Replace them with another source file; the manifest omits them.");
+    console.log("");
   }
 
   const body = `// GENERATED FILE - do not edit by hand.

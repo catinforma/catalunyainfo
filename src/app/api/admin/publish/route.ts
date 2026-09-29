@@ -10,6 +10,7 @@ import { publishFeatures } from "@/lib/content/features/publish";
 import { publishHolidayGuide } from "@/lib/content/holidays/publish";
 import { publishTouristTaxGuide } from "@/lib/content/tourist-tax/publish";
 import { publishMushroomZones } from "@/lib/content/mushroom-zones/publish";
+import { publishBatch02 } from "@/lib/content/batch02/publish";
 import { authoriseDeployRequest, describeError } from "@/lib/admin/deploy-auth";
 
 export const runtime = "nodejs";
@@ -55,6 +56,12 @@ export async function POST(request: Request) {
     if (wants("tourist-tax")) published.push(await publishTouristTaxGuide());
     // Empty registry until an editorial package adds a zone; publishes nothing.
     if (wants("mushroom-zones") || only === "all") published.push(...(await publishMushroomZones()));
+    // Nine articles in three languages does not fit in one function call, so
+    // the batch is sliced the same way the feature batch is.
+    if (wants("batch02")) published.push(...(await publishBatch02()));
+    if (wants("batch02-a")) published.push(...(await publishBatch02(0, 3)));
+    if (wants("batch02-b")) published.push(...(await publishBatch02(3, 6)));
+    if (wants("batch02-c")) published.push(...(await publishBatch02(6, 9)));
 
     const surfaces = [
       ...published.flatMap((article) =>
