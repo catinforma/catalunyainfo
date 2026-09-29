@@ -1,249 +1,246 @@
-# CatalunyaInfo — briefing de dades per decidir temes
+# CatalunyaInfo — estat de les visites (29 de setembre de 2026)
 
-Dades reals de Google Search Console i Google Analytics 4, extretes el 17/09/2026.
-Cap xifra d'aquest document és estimada ni inventada.
+Briefing per decidir què fem a continuació. **Cap xifra d'aquest document és
+estimada.** Tot surt de Google Search Console i Google Analytics 4, extret avui.
 
-- **Search Console:** 20 d'agost – 17 de setembre de 2026 (28 dies).
-- **Analytics 4:** només 15–17 de setembre. L'etiqueta no enviava res abans.
-  Els dos períodes **no** són comparables; vegeu l'apartat 7.
+- **Search Console:** 1 – 29 de setembre de 2026 (28 dies).
+- **Analytics 4:** 20 – 29 de setembre (9 dies). Consentiment denegat per
+  defecte, així que GA4 **infracompta** de manera estructural. Els dos períodes
+  no són comparables entre ells.
+
+---
+
+## 0. Llegeix això abans de proposar res sobre el CTR
+
+El CTR agregat d'aquest lloc **no mesura el que sembla**. He mirat les queries
+pàgina per pàgina i una part gran de les impressions no són cerques humanes.
+
+Queries que Google atribueix a les nostres pàgines, 15 – 29 de setembre:
+
+| Pàgina | Query | Posició | Clics |
+| --- | --- | --- | --- |
+| Sitges EN | `d'acord` | 4 | 0 |
+| Sitges EN | `japanise` | 4 | 0 |
+| Sitges EN | `check again` | 5 | 0 |
+| Sitges EN | `si` | 4 | 0 |
+| Sitges EN | `oct 10` | 3 | 0 |
+| Bolets EN | `avui` | 4 | 0 |
+| Bolets EN | `demà` | 3 | 0 |
+| Bolets CA | `las dos cosas` | 3 | 0 |
+| Bolets CA | `para ir mañana` | 6 | 0 |
+
+`d'acord` vol dir «OK». `check again`, `si`, `las dos cosas` — ningú escriu
+això a un cercador. Són fragments conversacionals, seuen a posició 2–6 i no
+reben mai cap clic: **sub-consultes generades per IA**, no cerques.
+
+GA4 ho confirma pel seu costat: hi ha un canal **AI Assistant** amb 5 usuaris i
+10 sessions en nou dies.
+
+**Conseqüència pràctica:** no proposis reescriure títols basant-te en el CTR
+global ni en el CTR d'una pàgina. Només val el CTR de les queries amb nom i
+intenció clara. Quan una query real troba la pàgina, això converteix bé:
+
+- `donde hay setas ahora en cataluña 2026` → posició **1,5**, CTR **16,7 %**
+- `bolets catalunya 2026` → posició **2,5**, CTR **33 %**
 
 ---
 
 ## 1. Què és el web
 
 CatalunyaInfo (`https://www.catalunyainfo.com`) — mitjà editorial independent
-d'informació pràctica i verificada sobre Catalunya. Tres idiomes amb la mateixa
-informació: **català, castellà i anglès**.
+d'informació pràctica i verificada sobre Catalunya, en **català, castellà i
+anglès**, amb la mateixa informació als tres.
 
-Estructura d'URL: `/{idioma}/{secció}/{slug}/`, sense any al slug.
-Exemple: `/ca/natura/bolets-catalunya-condicions/`, `/es/naturaleza/setas-cataluna-condiciones/`,
-`/en/nature/mushroom-season-catalonia/`.
+URLs: `/{idioma}/{secció}/{slug}/`, sense any al slug, perennes.
+Exemple: `/ca/natura/bolets-catalunya-condicions/` ·
+`/es/naturaleza/setas-cataluna-condiciones/` ·
+`/en/nature/mushroom-season-catalonia/`
 
-Seccions existents: actualitat, guies, destinacions, agenda, rutes, natura, temes.
-**Guies, destinacions i rutes estan buides.** Tot el contingut publicat és a
-natura i agenda.
+Volum actual: **15 peces editorials × 3 idiomes = 45 URLs d'article**, més 30
+pàgines institucionals i 12 portades/hubs. **87 URLs al sitemap.**
 
----
-
-## 2. Contingut publicat (tot el que existeix, per no duplicar)
-
-| Article | URLs | Publicat |
-|---|---|---|
-| Què fer aquest cap de setmana | `/ca/agenda/que-fer-aquest-cap-de-setmana-catalunya/` + ES + EN | 14 set |
-| Condicions per als bolets (setmanal) | `/ca/natura/bolets-catalunya-condicions/` + ES + EN | 13 set |
-| Colors de tardor | `/ca/natura/colors-tardor-catalunya/` + ES + EN | 15 set |
-
-Més 10 pàgines institucionals (avís legal, privadesa, galetes, política
-editorial, correccions, fonts, accessibilitat, qui som, contacte, hub legal).
-
-**Només 3 temes de contingut. Aquest és el coll d'ampolla.**
+Objectiu declarat: monetitzar amb AdSense i créixer en visites. La v1 del lloc
+va ser rebutjada per AdSense per «low value content», i per això tot el que es
+publica ha de ser verificable contra font oficial.
 
 ---
 
-## 3. Totals — Search Console, 28 dies
+## 2. Xifres de capçalera — Search Console, 28 dies
 
 | Mètrica | Valor |
-|---|---|
-| Clics | 52 |
-| Impressions | 1.467 |
-| CTR | 3,54 % |
-| Posició mitjana | 8,6 |
+| --- | --- |
+| Clics | 191 |
+| Impressions | 4.484 |
+| CTR | 4,26 % |
+| Posició mitjana | 7,3 |
 
-### Evolució diària (el context importa)
+El contingut nou va entrar el **14 de setembre**. Abans i després:
 
-| Període | Clics | Impressions/dia | Posició |
-|---|---|---|---|
-| 20 ago – 13 set (25 dies) | 11 total | ~25 | 10–15 |
-| 14 set | 16 | 163 | 6,5 |
-| 15 set | 15 | 203 | 6,1 |
-| 16 set | 10 | 252 | 5,9 |
-
-**41 dels 52 clics són dels 3 últims dies**, coincidint amb la publicació dels
-primers articles. Impressions pujant cada dia; posició baixant de ~10 a 5,9.
+| | 1 – 13 set | 14 – 29 set |
+| --- | --- | --- |
+| Impressions | 294 | 4.190 |
+| Clics | 1 | 190 |
 
 ---
 
-## 4. Rendiment per pàgina — 28 dies
+## 3. El problema honest: els clics baixen mentre les impressions pugen
 
-| Pàgina | Clics | Impr. | CTR | Posició |
-|---|---|---|---|---|
-| Bolets ES | 15 | 188 | 7,98 % | 4,8 |
-| **Portada** | **10** | **783** | **1,28 %** | **10,6** |
-| Bolets CA | 10 | 220 | 4,55 % | 5,0 |
-| Cap de setmana CA | 8 | 75 | 10,67 % | 9,3 |
-| Cap de setmana ES | 6 | 45 | 13,33 % | 4,6 |
-| Colors tardor ES | 2 | 26 | 7,69 % | 10,1 |
-| Bolets EN | 1 | 69 | 1,45 % | 4,6 |
-| Colors tardor CA | 0 | 9 | 0 % | 3,0 |
-| Colors tardor EN | 0 | 8 | 0 % | 3,8 |
-| Cap de setmana EN | 0 | 18 | 0 % | 5,4 |
+| | 14 – 20 set | 22 – 28 set |
+| --- | --- | --- |
+| Impressions | 1.572 | 2.193 |
+| Clics | **105** | **66** |
+| CTR | 6,7 % | 3,0 % |
 
----
+Les impressions creixen un 40 % i els clics cauen un 37 %. Part s'explica per
+l'apartat 0 (impressions d'IA que no són humanes). Però **no tot**: 105 → 66
+clics és una caiguda real que cal entendre. Hipòtesi oberta: el pic de la
+temporada de bolets va ser a mitjans de setembre. No està confirmada.
 
-## 5. Consultes — 28 dies (ordenades per impressions)
-
-| Consulta | Clics | Impr. | CTR | Posició |
-|---|---|---|---|---|
-| catalunya informacio | 0 | **393** | **0 %** | 9,3 |
-| catalunya informació | 0 | **70** | **0 %** | 9,1 |
-| catalunya info | 4 | 64 | 6,25 % | 6,1 |
-| privacitat | 0 | 18 | 0 % | 37,9 |
-| informació | 0 | 16 | 0 % | 35,8 |
-| info catalunya | 0 | 13 | 0 % | 7,8 |
-| catalunya informació última hora | 0 | 12 | 0 % | 8,8 |
-| info | 0 | 12 | 0 % | 10,2 |
-| predicció bolets catalunya | 0 | 8 | 0 % | 21,2 |
-| bolets 2026 | 0 | 6 | 0 % | 8,5 |
-| temporada de bolets 2026 | 1 | 6 | 16,67 % | 5,5 |
-| cat info | 0 | 5 | 0 % | 23,6 |
-| cataluña información | 0 | 4 | 0 % | 18,0 |
-| mapa bolets catalunya 2026 | 0 | 3 | 0 % | **3,3** |
-| cap de setmana | 0 | 3 | 0 % | 40,7 |
-
-Consultes de cua llarga amb posició alta i 1 impressió (senyal de temes
-possibles): `robellons` (pos 1), `ripollès` (pos 1), `la quar` (pos 2),
-`mollo` (pos 2), `set cases` (pos 4), `castellar den hug` (pos 7),
-`riu de cerdanya` (pos 3), `donde hay setas ahora en cataluña` (pos 56),
-`ferias y fiestas en cataluña este fin de semana 2026` (pos 1),
-`on anar aquest cap de setmana` (pos 28), `local weekend events` (pos 10).
+Impressions per dia: 163 (14 set) → 451 (28 set), rècord. Posició mitjana
+oscil·la entre 5,2 i 9,6 sense tendència clara.
 
 ---
 
-## 6. Geografia i dispositiu — Search Console, 28 dies
+## 4. Pàgines — Search Console, 15 – 29 de setembre
 
-| País | Dispositiu | Clics | Impr. | Posició |
-|---|---|---|---|---|
-| Espanya | Mòbil | 30 | 587 | **5,7** |
-| Espanya | Escriptori | 18 | 550 | **12,0** |
-| Andorra | Mòbil | 1 | 5 | 5,6 |
-| Resta (Brasil, EAU, Àustria, Bèlgica, Canadà…) | — | 3 | ~120 | variable |
+| URL | Clics | Impr. | CTR | Pos. |
+| --- | --- | --- | --- | --- |
+| `/es/naturaleza/setas-cataluna-condiciones/` | **60** | 606 | 9,9 % | 3,6 |
+| `/ca/natura/bolets-catalunya-condicions/` | **26** | 332 | 7,8 % | 5,2 |
+| `/es/agenda/festival-sitges-guia/` | 13 | 359 | 3,6 % | 7,4 |
+| `/ca/natura/colors-tardor-catalunya/` | 10 | 153 | 6,5 % | 5,7 |
+| `/es/naturaleza/colores-otono-cataluna/` | 10 | 323 | 3,1 % | 6,1 |
+| `/` (portada) | 8 | 148 | 5,4 % | 9,6 |
+| `/en/nature/mushroom-season-catalonia/` | 8 | 351 | 2,3 % | 5,0 |
+| `/es/agenda/que-hacer-este-fin-de-semana-cataluna/` | 8 | 69 | 11,6 % | 10,0 |
+| `/en/nature/fall-colors-catalonia/` | 7 | 147 | 4,8 % | 3,9 |
+| `/ca/agenda/que-fer-aquest-cap-de-setmana-catalunya/` | 5 | 74 | 6,8 % | 12,7 |
+| `/en/events/sitges-film-festival-guide/` | 4 | **496** | **0,8 %** | 7,5 |
+| `/es/gastronomia/ferias-gastronomicas-otono-cataluna/` | 3 | 79 | 3,8 % | 6,6 |
+| `/es/guias/tasa-turistica-barcelona-cataluna/` | 3 | 114 | 2,6 % | 7,2 |
+| `/ca/guies/calendari-laboral-catalunya/` | 2 | 247 | 0,8 % | 7,7 |
+| `/es/planes/que-hacer-cataluna-cuando-llueve/` | 2 | 17 | 11,8 % | 5,2 |
+| `/es/guias/calendario-laboral-cataluna/` | 1 | 192 | 0,5 % | 16,0 |
+| `/en/guides/catalonia-public-holidays/` | 1 | 70 | 1,4 % | 12,7 |
 
-**El 92 % dels clics són d'Espanya.** L'anglès genera 95 impressions i 1 clic.
-
----
-
-## 7. Google Analytics 4 — només 3 dies de dades
-
-⚠️ **GA4 no té 28 dies de dades.** L'etiqueta va començar a enviar dades el
-**15 de setembre**: abans carregava un fitxer que donava 404 i no enviava res.
-Tot aquest apartat cobreix **15–17 de setembre**, no el mateix període que
-Search Console. No comparis les dues xifres directament.
-
-| Mètrica | Valor |
-|---|---|
-| Sessions | 32 |
-| Pàgines vistes | 45 |
-| Mòbil / escriptori (usuaris) | 17 / 9 |
-| Països | Espanya 24, EUA 1 |
-
-### Canals (15–17 set)
-
-| Canal | Usuaris | Sessions | Durada mitjana sessió |
-|---|---|---|---|
-| Cerca orgànica | 18 | 19 | 1 min 55 s |
-| Sense assignar | 5 | 5 | 4 min 46 s |
-| Directe | 4 | 4 | 35 s |
-| **AI Assistant** | **2** | 2 | 0 s |
-| Cross-network | 2 | 2 | 11 min 18 s |
-
-### Temps de lectura per pàgina (15–17 set)
-
-| Pàgina | Vistes | Temps total | Temps/vista |
-|---|---|---|---|
-| Bolets CA | 6 | 601 s | **100 s** |
-| Bolets ES | 10 | 612 s | **61 s** |
-| Cap de setmana ES | 5 | 295 s | 59 s |
-| Colors tardor ES | 3 | 127 s | 42 s |
-| Bolets EN | 1 | 37 s | 37 s |
-| **Colors tardor CA** | **6** | **6 s** | **1 s** |
-
-> **Nota important:** GA4 sempre dirà menys que Search Console, per dues raons
-> acumulades. Primera, només mesura qui accepta el bàner de galetes, i el
-> consentiment està denegat per defecte. Segona, només fa tres dies que
-> funciona. Search Console diu 41 clics en aquests 3 dies; GA4 en veu ~26
-> usuaris. **Per a volum, la font és Search Console. GA4 serveix per a
-> comportament** (temps de lectura, mòbil contra escriptori, canal).
+**Concentració:** el part de bolets (ca + es) són **86 dels 191 clics = 45 %**
+de tot el lloc.
 
 ---
 
-## 8. Els cinc problemes que les dades mostren
+## 5. Les queries reals que guanyem i les que perdem
 
-**1. La portada té 783 impressions i 10 clics (CTR 1,28 %).**
-La consulta `catalunya informacio` sola són 393 impressions amb **zero clics** a
-posició 9,3. És més del 25 % de totes les impressions del web. Google ens
-ensenya i ningú no fa clic. Hi ha un problema de títol, de descripció o
-d'intenció: qui busca «catalunya informacio» potser busca notícies d'última
-hora, i la portada no promet això.
+Del propi informe de queries del part de bolets. **Aquí hi ha la demanda
+mesurada, no suposada.**
 
-**2. Els bolets funcionen; no hi ha res més que funcioni.**
-25 dels 52 clics, posició 4,8–5,0, 100 s de lectura mitjana en català. És l'únic
-tema amb encaix demostrat. I només n'hi ha un.
+Guanyem els termes genèrics:
 
-**3. L'anglès no converteix.** 95 impressions, 1 clic, tot i posicions 3,8–5,4.
-Posició bona i CTR zero vol dir que el títol no encaixa amb qui busca.
+| Query | Posició | CTR |
+| --- | --- | --- |
+| `donde hay setas ahora en cataluña 2026` | 1,5 | 16,7 % |
+| `bolets catalunya 2026` | 2,5 | 33 % |
+| `temporada de bolets 2026` | 5,2 | 9,1 % |
+| `condicions bolets catalunya` | 2,6 | 0 % |
 
-**4. Escriptori posició 12,0 contra mòbil 5,7.** Gairebé les mateixes
-impressions (550 contra 587), el doble de mala posició.
+Perdem els específics:
 
-**5. Colors de tardor CA: 6 vistes, 6 segons totals.** Publicat fa dos dies,
-posició 3,0, però ningú no el llegeix. Contrasta amb els bolets (100 s). Cal
-mirar-ho d'aquí a una setmana abans de concloure res.
+| Query | Posició | Per què importa |
+| --- | --- | --- |
+| `bolets vall d'en bas` | **30,3** | Demanda per comarca, no la servim |
+| `predicció bolets catalunya` | **16,4** | El nostre propi tema, a pàgina 2 |
+| `quants dies després de ploure surten els bolets` | **59** | Pregunta real sense resposta a la pàgina |
+| `mapa bolets catalunya 2026` | 7,1 | Demanen un mapa pel seu nom |
+| `on trobar bolets aquesta setmana` | 6,2 | Més fluix que el terme genèric |
 
----
+Altres queries del lloc amb senyal:
 
-## 9. Buits de contingut que les dades assenyalen
-
-Consultes on ja apareixem sense tenir-ne pàgina dedicada:
-
-- `mapa bolets catalunya 2026` — posició 3,3 sense pàgina pròpia
-- `predicció bolets catalunya` — 8 impressions, posició 21,2
-- `robellons` — posició 1 amb 1 impressió
-- `ferias y fiestas en cataluña este fin de semana 2026` — posició 1
-- Topònims solts: Ripollès, Setcases, Castellar de n'Hug, Molló, la Quar,
-  Cerdanya — sense cap pàgina de destinació
-
-Seccions buides al web: **guies, destinacions, rutes**.
+- `calendario laboral 2027` → posició 15,7 (tenim la pàgina, no la guanyem)
+- `catalunya info` → posició 5,4, 39 impressions, CTR 5,1 % (marca)
+- `sitges film festival 2026 dates` → posició 8,3, CTR 7,1 %
 
 ---
 
-## 10. Regles editorials innegociables
+## 6. Analytics 4 — 20 a 29 de setembre (9 dies)
 
-Qualsevol proposta d'article ha de complir-les o no es pot publicar:
+56 usuaris actius, 68 sessions. Recorda: consentiment denegat per defecte,
+la xifra real és més alta.
 
-1. **No inventar dades.** Ni xifres, ni dates, ni horaris, ni preus, ni
-   percentatges, ni coordenades, ni normativa. Si no es pot verificar contra
-   una font oficial o primària, no es publica.
-2. **Font oficial sempre enllaçada.** Parc natural, ajuntament, Meteocat,
-   Generalitat, operador de transport. Enllaços nets, sense `utm_` ni
-   `chatgpt.com`.
-3. **Finestres temporals, mai dates de màxim garantides.** Si un parc publica
-   un període, se cita i s'atribueix. Si no n'hi ha, es diu que és orientació
-   editorial.
-4. **Tres idiomes amb el mateix contingut**, no una traducció de la meitat.
-5. **URL sense any**, perenne, perquè l'article s'actualitzi al mateix lloc.
-6. **Cap ubicació secreta ni coordenades** de recol·lecció.
-7. **Imatges generades amb IA identificades sempre** al peu, als tres idiomes.
-   Mai presentades com a fotografia real d'un lloc concret.
-8. **Res publicat automàticament.** Revisió humana sempre.
-9. Sense keyword stuffing, sense 20 FAQ, sense contingut de farciment.
+| Canal | Usuaris | Sessions |
+| --- | --- | --- |
+| Organic Search | 40 | 47 |
+| Direct | 6 | 7 |
+| **AI Assistant** | **5** | **10** |
+| Cross-network | 3 | 3 |
+| Unassigned | 2 | 2 |
+
+Dispositiu: mòbil 33 · escriptori 20 · tauleta 2.
+
+Temps d'interacció (segons acumulats / vistes):
+
+| Pàgina | Vistes | Segons | Mitjana |
+| --- | --- | --- | --- |
+| `/es/naturaleza/setas-cataluna-condiciones/` | 30 | 1.107 | 37 s |
+| `/es/agenda/festival-sitges-guia/` | 10 | 566 | 57 s |
+| `/es/naturaleza/colores-otono-cataluna/` | 4 | 238 | 60 s |
+| `/es/agenda/que-hacer-este-fin-de-semana-cataluna/` | 4 | 143 | 36 s |
+
+La gent que arriba, llegeix. No hi ha problema de contingut.
 
 ---
 
-## 11. Què necessito de tu (ChatGPT)
+## 7. Indexació
 
-Proposa temes d'article que ataquin els problemes del punt 8 i els buits del
-punt 9. Per a cada proposta, dona'm:
+Al 25 de setembre: 30 de 80 URLs inspeccionades estaven indexades. Causa: el
+sitemap no s'havia tornat a descarregar des del 17 de setembre. Resubmès.
 
-- **Títol** als tres idiomes
-- **URL** proposada als tres idiomes (sense any, slug natural per idioma)
-- **Secció** (natura, agenda, guies, destinacions, rutes)
-- **Quina consulta ataca** i per què les dades ho justifiquen
-- **Perenne o recurrent** (com els bolets, que s'actualitza cada setmana)
-- **Quines fonts oficials concretes** el sustenten (amb URL), perquè sense
-  fonts verificables l'article no es pot escriure
-- **Què NO s'hi pot afirmar** sense dada oficial
+Avui: **~67 de 87 indexades**. Queda fora:
 
-Prioritza: (a) el que aprofiti que ja tenim posició sense pàgina, (b) el que
-pugui repetir l'encaix dels bolets, (c) el que ompli una secció buida.
+- **Contingut (5):** castanyada ca i es, fires gastronòmiques ca i en, Sitges ca.
+  Se'ls han afegit enllaços interns des de les pàgines fortes el 28 de setembre;
+  revisió prevista ~5 d'octubre. La castanyada és el 31 d'octubre: si no
+  s'indexa abans del 20 d'octubre, la finestra es perd.
+- **Institucionals (13):** `qui-som`, `about`, `contact`, índexs legals i sis
+  legals soltes. Indiferent per a AdSense: el revisor hi arriba per enllaç.
+- **`/ca/`:** marcada com a duplicat de `/`. Causa identificada (el 307 de
+  negociació d'idioma). No es toca: un 308 cachearia l'idioma d'un visitant per
+  a tots els següents.
 
-No proposis res que requereixi inventar dades.
+Auditoria d'enllaços interns: **0 trencats, 0 orfes, 0 fugues entre idiomes.**
+
+---
+
+## 8. Finestres de mesura congelades — no proposis tocar-ho
+
+| Fins | Què |
+| --- | --- |
+| 8 d'octubre | Títol de Sitges EN (canviat el 24 set). Festival 8–18 oct |
+| 22 d'octubre | Títols del calendari laboral (publicat 24 set) |
+| 23 d'octubre | Títols de la taxa turística (publicat 25 set) |
+
+Regla del projecte: **un sol canvi per finestra de mesura**, i mai dos canvis a
+la mateixa pàgina en menys de 28 dies. Si no, res és atribuïble.
+
+---
+
+## 9. Què necessito de tu
+
+Tenint en compte tot l'anterior, i sobretot l'apartat 0 i l'apartat 5:
+
+1. **Quin hauria de ser el pròxim paquet de contingut?** L'evidència apunta a
+   aprofundir on ja som autoritat (bolets: comarques + preguntes) abans
+   d'obrir temes nous. Contradiu-me si veus una raó millor.
+2. **Per què cauen els clics de 105 a 66** mentre les impressions pugen? La
+   hipòtesi de l'estacionalitat dels bolets no està confirmada.
+3. **Com hauríem de segmentar el reporting** perquè el soroll d'IA no ens torni
+   a enganyar cada setmana.
+4. **Com competir per `predicció bolets catalunya`** (posició 16) i per les
+   queries de comarca, sense canibalitzar el part que ja rankeja a posició 3,6.
+
+### Restriccions que no es poden saltar
+
+- **No inventar dades.** Cap xifra, data, preu, horari, normativa o coordenada
+  sense font oficial verificable. És el motiu pel qual AdSense va rebutjar la v1.
+- **Imatges:** només CC0, CC BY, CC BY-SA, domini públic o GFDL. NC i ND
+  rebutjades. Atribució obligatòria a la pàgina.
+- **URLs perennes**, sense any al slug.
+- Res de contingut de notícies autogenerat.
