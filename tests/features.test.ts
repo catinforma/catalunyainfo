@@ -220,19 +220,41 @@ test("every licensed photograph carries its author and licence", async () => {
   }
 });
 
-test("the Sitges guide never presents a schedule it does not have", () => {
-  // The screening grid was unpublished at the time of writing. Saying so is the
-  // point; a fabricated timetable is the one thing that would make this guide
-  // actively harmful.
-  const marker = {
-    ca: /es publicar(à|a) properament|encara no|pendent de publicació/i,
-    es: /se publicará próximamente|todavía no|pendiente de publicar/i,
-    en: /coming soon|not yet published|not out yet/i,
+test("the Sitges guide never presents a schedule of its own", () => {
+  /*
+    The original version of this test asserted the guide still said the
+    schedule was unpublished. That was true in September and false by 1
+    October, so the test was pinning a sentence with a two-week shelf life
+    rather than the thing that actually matters.
+
+    What matters is the invariant: the guide never prints a timetable of its
+    own, it sends the reader to the festival's own session finder, and it tells
+    them to check it on the day. A fabricated grid is the one thing that would
+    make this guide actively harmful.
+  */
+  const checkOnTheDay = {
+    ca: /aquell mateix matí|el mateix matí|abans d'anar|revisa la web oficial/i,
+    es: /esa misma mañana|la misma mañana|antes de ir|revisa la web oficial/i,
+    en: /the morning you go|on the day|check the official/i,
   };
+
   for (const locale of LOCALES) {
     const text = bodyToPlainText(SITGES.editions[locale].blocks);
-    assert.match(text, marker[locale], `${locale} Sitges guide lost the caveat`);
+
+    // Points at the operator rather than reproducing it.
+    assert.match(
+      JSON.stringify(SITGES.editions[locale].blocks),
+      /sitgesfilmfestival\.com\/en\/edition\/program/,
+      `${locale} does not link the official programme`,
+    );
+    assert.match(text, checkOnTheDay[locale], `${locale} lost the check-on-the-day caveat`);
     assert.match(text, /8[–-]18|October 8|8 d'octubre|8 de octubre/, `${locale} lost the dates`);
+
+    // No screening times of our own, ever.
+    assert.ok(
+      !/([01]?\d|2[0-3])[:.][0-5]\d/.test(text),
+      `${locale} contains what looks like a screening time`,
+    );
   }
 });
 

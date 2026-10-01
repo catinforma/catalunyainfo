@@ -20,14 +20,24 @@ import {
  * other. The dates and edition number are verified against the festival's own
  * rules page: 59th edition, 8-18 October 2026.
  *
- * The screening schedule is NOT published at the time of writing, and this
- * article says so instead of inventing a grid. That is the single most likely
- * way a festival guide misleads someone into missing a film.
+ * The guide never invents a screening grid: that is the single most likely way
+ * a festival guide makes somebody miss a film.
+ *
+ * Updated 1 October 2026. Until then this said the schedule was not published,
+ * which had become false: the line-up is out and the official site's session
+ * finder is live, filterable by day, venue and section. Search Console shows
+ * `sitges film festival 2026 schedule` as the top query reaching this page, at
+ * position 7.7 with no clicks - the page was ranking for exactly the question
+ * it had stopped answering correctly.
+ *
+ * The titles are untouched; the 24 September title experiment is still inside
+ * its measurement window until 8 October.
  */
 
 const FESTIVAL = "https://sitgesfilmfestival.com/";
 const RULES = "https://sitgesfilmfestival.com/en/edition/rules-regulations";
 const VENUES = "https://sitgesfilmfestival.com/en/festival/venues";
+const PROGRAM = "https://sitgesfilmfestival.com/en/edition/program";
 const RODALIES = "https://rodalies.gencat.cat/ca/horaris/tots-els-horaris/";
 
 function ca(): Block[] {
@@ -44,13 +54,13 @@ function ca(): Block[] {
       { label: "Dates", value: "8–18 d'octubre de 2026" },
       { label: "On", value: "Sitges (Garraf)" },
       { label: "Com arribar-hi", value: "Rodalies R2 Sud des de Barcelona" },
-      { label: "Graella completa", value: "Pendent de publicació a 17 de setembre" },
+      { label: "Graella de sessions", value: "Publicada: cercador per dia, sala i secció" },
       { label: "Entrades", value: "Només pels canals oficials del Festival" },
     ]),
     callout(
-      "warning",
-      "El programa complet encara no hi és",
-      "A 17 de setembre de 2026, la web oficial encara indica que el calendari complet de sessions es publicarà properament. Desconfia de qualsevol graella d'horaris que circuli abans que el Festival la publiqui, i no compris res fora dels canals oficials.",
+      "tip",
+      "On consultar la graella de sessions",
+      "El Festival ja té publicada la programació i un cercador de sessions que es pot filtrar per dia, sala i secció: [programació oficial](https://sitgesfilmfestival.com/en/edition/program). Consulta'l el mateix matí que hi vagis, perquè s'hi afegeixen i s'hi mouen passis. No compris entrades fora dels canals oficials.",
     ),
     ...h2(
       "Què se sap ja de l'edició 2026",
@@ -131,13 +141,13 @@ function es(): Block[] {
       { label: "Fechas", value: "8–18 de octubre de 2026" },
       { label: "Dónde", value: "Sitges (Garraf)" },
       { label: "Cómo llegar", value: "Rodalies R2 Sud desde Barcelona" },
-      { label: "Programación completa", value: "Pendiente de publicar a 17 de septiembre" },
+      { label: "Parrilla de sesiones", value: "Publicada: buscador por día, sala y sección" },
       { label: "Entradas", value: "Solo por los canales oficiales del Festival" },
     ]),
     callout(
-      "warning",
-      "La programación completa todavía no está",
-      "A 17 de septiembre de 2026 la web oficial sigue indicando que el calendario completo de sesiones se publicará próximamente. Desconfía de cualquier parrilla de horarios que circule antes de que el Festival la publique, y no compres fuera de los canales oficiales.",
+      "tip",
+      "Dónde consultar la parrilla de sesiones",
+      "El Festival ya tiene publicada la programación y un buscador de sesiones filtrable por día, sala y sección: [programación oficial](https://sitgesfilmfestival.com/en/edition/program). Revísalo la misma mañana que vayas, porque se añaden y se mueven pases. No compres entradas fuera de los canales oficiales.",
     ),
     ...h2(
       "Qué se sabe ya de la edición 2026",
@@ -203,13 +213,13 @@ function en(): Block[] {
       { label: "Dates", value: "8–18 October 2026" },
       { label: "Where", value: "Sitges, on the coast south of Barcelona" },
       { label: "Getting there", value: "Rodalies line R2 Sud from Barcelona" },
-      { label: "Full schedule", value: "Not yet published as of 17 September" },
+      { label: "Session grid", value: "Published: searchable by day, venue and section" },
       { label: "Tickets", value: "Official festival channels only" },
     ]),
     callout(
-      "warning",
-      "The full schedule is not out yet",
-      "As of 17 September 2026, the official site still lists the complete screening calendar as coming soon. Treat any timetable circulating before the festival publishes its own as unreliable, and buy only through official channels.",
+      "tip",
+      "Where to find the screening schedule",
+      "The line-up is out, and the festival's own session finder lets you filter by day, venue and section: [official programme](https://sitgesfilmfestival.com/en/edition/program). Check it the morning you go, because screenings are added and moved. Buy tickets only through official channels.",
     ),
     ...h2(
       "What has been announced",
