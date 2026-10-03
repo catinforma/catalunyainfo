@@ -111,6 +111,32 @@ test("every article carries a verification date", () => {
   }
 });
 
+test("the body image is never the hero image", () => {
+  // Both were the same file in the first version of this batch, so every page
+  // rendered one photograph twice: once in the header the template draws, and
+  // again six blocks down.
+  for (const article of ARTICLES) {
+    assert.ok(article.secondaryKey, `${article.key} has no second image`);
+    assert.notEqual(article.secondaryKey, article.heroKey, article.key);
+    assert.ok(
+      IMAGE_KEYS.has(article.secondaryKey ?? ""),
+      `${article.key}: ${article.secondaryKey} not imported`,
+    );
+    for (const locale of LOCALES) {
+      assert.ok((article.secondaryAlt?.[locale] ?? "").length > 15, `${article.key}/${locale} alt`);
+      assert.ok(
+        (article.secondaryCaption?.[locale] ?? "").length > 15,
+        `${article.key}/${locale} caption`,
+      );
+    }
+  }
+});
+
+test("every photograph on the site is used by exactly one article", () => {
+  const used = ARTICLES.flatMap((article) => [article.heroKey, article.secondaryKey]);
+  assert.equal(new Set(used).size, used.length, "an image is reused across articles");
+});
+
 test("hero images exist in the manifest and have alt text in all three languages", () => {
   for (const article of ARTICLES) {
     assert.ok(article.heroKey, `${article.key} has no hero`);

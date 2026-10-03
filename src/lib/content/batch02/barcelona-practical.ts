@@ -47,6 +47,17 @@ export const TRANSPORT: B2Article = {
   categoryKey: "public-services",
   sources: TMB_SOURCES,
   heroKey: "b2-transport-metro-barcelona",
+  secondaryKey: "b2-transport-tram-barcelona",
+  secondaryAlt: {
+    ca: "Un tramvia del Trambaix circulant per Barcelona",
+    es: "Un tranvía del Trambaix circulando por Barcelona",
+    en: "A Trambaix tram running through Barcelona",
+  },
+  secondaryCaption: {
+    ca: "El tramvia entra a la zona 1: tots els títols comparats aquí hi valen.",
+    es: "El tranvía entra en la zona 1: todos los títulos comparados aquí sirven.",
+    en: "The tram is inside zone 1, so every pass compared here covers it.",
+  },
   heroAlt: {
     ca: "Andana de l'estació de metro d'Espanya, a la línia 3 de Barcelona",
     es: "Andén de la estación de metro de Espanya, en la línea 3 de Barcelona",
@@ -298,6 +309,17 @@ export const ZBE: B2Article = {
   categoryKey: "public-services",
   sources: ZBE_SOURCES,
   heroKey: "b2-zbe-gran-via-barcelona",
+  secondaryKey: "b2-zbe-ronda-de-dalt",
+  secondaryAlt: {
+    ca: "La Ronda de Dalt de Barcelona vista des d'un pont",
+    es: "La Ronda de Dalt de Barcelona vista desde un puente",
+    en: "Barcelona's Ronda de Dalt ring road seen from a bridge",
+  },
+  secondaryCaption: {
+    ca: "La ZBE es coneix com a ZBE Rondes perquè el perímetre el marquen les rondes.",
+    es: "La ZBE se conoce como ZBE Rondes porque el perímetro lo marcan las rondas.",
+    en: "The zone is called ZBE Rondes because the ring roads mark its perimeter.",
+  },
   heroAlt: {
     ca: "Trànsit a la Gran Via de les Corts Catalanes de Barcelona",
     es: "Tráfico en la Gran Via de les Corts Catalanes de Barcelona",
@@ -610,6 +632,17 @@ export const PARKING: B2Article = {
   categoryKey: "public-services",
   sources: PARKING_SOURCES,
   heroKey: "b2-parking-carrer-barcelona",
+  secondaryKey: "b2-parking-diagonal-barcelona",
+  secondaryAlt: {
+    ca: "L'avinguda Diagonal de Barcelona amb trànsit i cotxes aparcats",
+    es: "La avenida Diagonal de Barcelona con tráfico y coches aparcados",
+    en: "Barcelona's Avinguda Diagonal with traffic and parked cars",
+  },
+  secondaryCaption: {
+    ca: "La tarifa A s'aplica als barris de més demanda; la B, a la resta de zones regulades.",
+    es: "La tarifa A se aplica a los barrios de más demanda; la B, al resto de zonas reguladas.",
+    en: "Rate A applies in the highest-demand districts, rate B everywhere else regulated.",
+  },
   heroAlt: {
     ca: "Cotxes aparcats al llarg d'un carrer de l'Eixample de Barcelona",
     es: "Coches aparcados a lo largo de una calle del Eixample de Barcelona",

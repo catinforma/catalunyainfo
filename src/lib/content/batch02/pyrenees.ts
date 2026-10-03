@@ -53,6 +53,17 @@ export const RIPOLLES: B2Article = {
   categoryKey: "mountain",
   sources: RIPOLLES_SOURCES,
   heroKey: "b2-ripolles-monestir",
+  secondaryKey: "b2-ripolles-nuria-cremallera",
+  secondaryAlt: {
+    ca: "El cremallera arribant al santuari de la Vall de Núria",
+    es: "El cremallera llegando al santuario de la Vall de Núria",
+    en: "The rack railway arriving at the Vall de Núria sanctuary",
+  },
+  secondaryCaption: {
+    ca: "A la Vall de Núria no hi arriba cap carretera: el cremallera és l'accés.",
+    es: "A la Vall de Núria no llega ninguna carretera: el cremallera es el acceso.",
+    en: "No road reaches Vall de Núria; the rack railway is the way in.",
+  },
   heroAlt: {
     ca: "Portalada del monestir de Santa Maria de Ripoll",
     es: "Portada del monasterio de Santa Maria de Ripoll",
@@ -262,6 +273,17 @@ export const SETCASES: B2Article = {
   categoryKey: "villages",
   sources: SETCASES_SOURCES,
   heroKey: "b2-setcases-poble",
+  secondaryKey: "b2-setcases-vallter",
+  secondaryAlt: {
+    ca: "L'entorn de muntanya de Vallter, a l'alta vall del Ter",
+    es: "El entorno de montaña de Vallter, en el alto valle del Ter",
+    en: "The mountain setting of Vallter, in the upper Ter valley",
+  },
+  secondaryCaption: {
+    ca: "Setcases és la porta natural cap a Vallter i l'alta vall del Ter.",
+    es: "Setcases es la puerta natural hacia Vallter y el alto valle del Ter.",
+    en: "Setcases is the natural gateway towards Vallter and the upper Ter valley.",
+  },
   heroAlt: {
     ca: "El nucli de pedra de Setcases, al Ripollès",
     es: "El núcleo de piedra de Setcases, en el Ripollès",
@@ -439,6 +461,17 @@ export const SNOW: B2Article = {
   categoryKey: "mountain",
   sources: SNOW_SOURCES,
   heroKey: "b2-neu-vall-de-nuria",
+  secondaryKey: "b2-neu-la-molina",
+  secondaryAlt: {
+    ca: "Les muntanyes al voltant de La Molina",
+    es: "Las montañas alrededor de La Molina",
+    en: "The mountains around La Molina",
+  },
+  secondaryCaption: {
+    ca: "Fotografia d'arxiu de l'entorn de La Molina. No mostra les condicions d'avui.",
+    es: "Fotografía de archivo del entorno de La Molina. No muestra las condiciones de hoy.",
+    en: "An archive photograph of the La Molina area. It does not show today's conditions.",
+  },
   heroAlt: {
     ca: "Activitats d'hivern al parc lúdic de la Vall de Núria",
     es: "Actividades de invierno en el parque lúdico de la Vall de Núria",

@@ -9,7 +9,7 @@ import {
   type ImageSpec,
   type PublishResult,
 } from "@/lib/content/publish-article";
-import { LOCALES } from "@/lib/i18n/config";
+import { LOCALES, type Locale } from "@/lib/i18n/config";
 
 import { PARKING, TRANSPORT, ZBE } from "./barcelona-practical";
 import { CERDANYA, GIRONA, MONTSERRAT_FREE } from "./day-trips";
@@ -44,12 +44,18 @@ export const BATCH_02: B2Article[] = [
 ];
 
 function imagesFor(article: B2Article): ImageSpec[] {
-  if (!article.heroKey) return [];
-  const file = IMAGE_BY_KEY.get(article.heroKey);
-  if (!file) return [];
-  return [
-    {
-      key: article.heroKey,
+  const specs: ImageSpec[] = [];
+
+  const add = (
+    key: string | undefined,
+    alt: Record<Locale, string> | undefined,
+    caption: Record<Locale, string> | undefined,
+  ) => {
+    if (!key) return;
+    const file = IMAGE_BY_KEY.get(key);
+    if (!file) return;
+    specs.push({
+      key,
       url: file.url,
       width: file.width,
       height: file.height,
@@ -59,16 +65,23 @@ function imagesFor(article: B2Article): ImageSpec[] {
       credit: file.credit ?? "CatalunyaInfo",
       creditUrl: file.creditUrl ?? null,
       license: file.license ?? null,
-      alt: article.heroAlt ?? {},
-      caption: article.heroCaption ?? {},
-    },
-  ];
+      alt: alt ?? {},
+      caption: caption ?? {},
+    });
+  };
+
+  add(article.heroKey, article.heroAlt, article.heroCaption);
+  add(article.secondaryKey, article.secondaryAlt, article.secondaryCaption);
+  return specs;
 }
 
 export async function publishB2Article(article: B2Article): Promise<PublishResult> {
   const images = imagesFor(article);
   const mediaIds = images.length > 0 ? await upsertImages(images) : new Map<string, string>();
-  const heroMediaId = article.heroKey ? mediaIds.get(article.heroKey) : undefined;
+  // The template already renders the hero in the article header. Putting the
+  // same file in the body as well is what made every page in this batch show
+  // one photograph twice, so the body gets the second image or nothing.
+  const inlineMediaId = article.secondaryKey ? mediaIds.get(article.secondaryKey) : undefined;
 
   const spec: ArticleSpec = {
     entryKey: article.entryKey,
@@ -89,10 +102,10 @@ export async function publishB2Article(article: B2Article): Promise<PublishResul
       const edition = article.editions[locale];
       const body: Block[] = [...edition.blocks];
 
-      if (heroMediaId) {
+      if (inlineMediaId) {
         body.splice(Math.min(6, body.length), 0, {
           type: "image",
-          mediaId: heroMediaId,
+          mediaId: inlineMediaId,
           size: "wide",
         });
       }

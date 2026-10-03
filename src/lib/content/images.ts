@@ -23,6 +23,16 @@ export interface ImportedImage {
 
 export const IMAGES: readonly ImportedImage[] = [
   {
+    "key": "b2-cerdanya-estany",
+    "url": "/images/b2-cerdanya-estany.webp",
+    "width": 1920,
+    "height": 1440,
+    "blurDataUrl": "data:image/webp;base64,UklGRlYAAABXRUJQVlA4IEoAAADwAQCdASoQAAwAA4BaJaACdAEUgJTvMVAA/uet4ujKUAY8zx/lkUMItz+gqLQGCiZbvsJz4nq+qWdzDcoyDZdleuw5FwEAkQAAAA==",
+    "credit": "Jordi Gili",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Estany_de_Puigcerd%C3%A0_01.jpg",
+    "license": "CC BY-SA 4.0"
+  },
+  {
     "key": "b2-cerdanya-puigcerda",
     "url": "/images/b2-cerdanya-puigcerda.webp",
     "width": 1920,
@@ -31,6 +41,16 @@ export const IMAGES: readonly ImportedImage[] = [
     "credit": "Nicolas Vigier",
     "creditUrl": "https://commons.wikimedia.org/wiki/File:Puigcerd%C3%A0_-_52123763420.jpg",
     "license": "CC0"
+  },
+  {
+    "key": "b2-girona-banys-arabs",
+    "url": "/images/b2-girona-banys-arabs.webp",
+    "width": 1600,
+    "height": 1200,
+    "blurDataUrl": "data:image/webp;base64,UklGRmoAAABXRUJQVlA4IF4AAADQAQCdASoQAAwAA4BaJaQAAxR0c+IMoAD++JOGj5etjbr3ouW8j5h/yDhzaH9akq9Ji9QyyrrMTukp1tJm5ExiJYVww4UKXDs4HyXWGZhKKr9FLwZoLa4uvFa+AAAA",
+    "credit": "Naevus (talk · contribs)",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Els_Banys_Arabs_Girona.jpg",
+    "license": "CC BY-SA 3.0"
   },
   {
     "key": "b2-girona-cases-onyar",
@@ -53,6 +73,26 @@ export const IMAGES: readonly ImportedImage[] = [
     "license": "CC BY-SA 4.0"
   },
   {
+    "key": "b2-montserrat-monestir",
+    "url": "/images/b2-montserrat-monestir.webp",
+    "width": 1920,
+    "height": 1280,
+    "blurDataUrl": "data:image/webp;base64,UklGRl4AAABXRUJQVlA4IFIAAAAQAgCdASoQAAsAA4BaJQBdj+ACm+EiWSugAP7qAUzHhAHAda0cTVovhuV7HA+jk03fhuK/pE1TOlUm40HFG5gu7gs8uyC3KgBmHU/Lxzmu/4AA",
+    "credit": "Txllxt TxllxT",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Montserrat_-_Santa_Maria_de_Montserrat_-_Monestir_de_Montserrat_-_View_NE.jpg",
+    "license": "CC BY-SA 4.0"
+  },
+  {
+    "key": "b2-neu-la-molina",
+    "url": "/images/b2-neu-la-molina.webp",
+    "width": 1920,
+    "height": 1280,
+    "blurDataUrl": "data:image/webp;base64,UklGRmAAAABXRUJQVlA4IFQAAADQAQCdASoQAAsAA4BaJQBOgCHXNkk9AAD+6tTip1sUE1uGqJp64312conifgL1pEQ5n6cx7xcdSrNgnShZVSkD7AI7W4/nPv9MNUsVvLy2PC5AAAA=",
+    "credit": "LauraHale",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:La_Molina_area_mountains.JPG",
+    "license": "CC BY-SA 3.0"
+  },
+  {
     "key": "b2-neu-vall-de-nuria",
     "url": "/images/b2-neu-vall-de-nuria.webp",
     "width": 1920,
@@ -73,6 +113,16 @@ export const IMAGES: readonly ImportedImage[] = [
     "license": "CC BY-SA 4.0"
   },
   {
+    "key": "b2-parking-diagonal-barcelona",
+    "url": "/images/b2-parking-diagonal-barcelona.webp",
+    "width": 1920,
+    "height": 1280,
+    "blurDataUrl": "data:image/webp;base64,UklGRloAAABXRUJQVlA4IE4AAAAQAgCdASoQAAsAA4BaJZACdAEDHu0ReM0AAP61ZlHOA3dY0vUXNN2C1bYzfMHqEWykXdiUZS6RiTQsZ7iFRWYAqNg+jIx9OO1o/MF9AAA=",
+    "credit": "Txllxt TxllxT",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Barcelona_-_Avinguda_Diagonal_-_View_ENE_I.jpg",
+    "license": "CC BY-SA 4.0"
+  },
+  {
     "key": "b2-ripolles-monestir",
     "url": "/images/b2-ripolles-monestir.webp",
     "width": 1920,
@@ -80,6 +130,16 @@ export const IMAGES: readonly ImportedImage[] = [
     "blurDataUrl": "data:image/webp;base64,UklGRmYAAABXRUJQVlA4IFoAAAAwAgCdASoQABAAA4BaJbACdDiMwUwrVjLXSAD6XGM/b2Gwel3CFSJ/F+/jA73y17VNWFYY3ryAoYozLENWGWjUIdSTyZfb1zFW8LDpZm4Li82V4twbJEHgAAA=",
     "credit": "Carles Paredes",
     "creditUrl": "https://commons.wikimedia.org/wiki/File:Monestir_de_Santa_Maria_de_Ripoll_(2).JPG",
+    "license": "CC BY-SA 3.0"
+  },
+  {
+    "key": "b2-ripolles-nuria-cremallera",
+    "url": "/images/b2-ripolles-nuria-cremallera.webp",
+    "width": 1920,
+    "height": 1440,
+    "blurDataUrl": "data:image/webp;base64,UklGRmAAAABXRUJQVlA4IFQAAADwAQCdASoQAAwAA4BaJbAC7AEfNAPSYYAA/pG3vq4o9ELAY5ESsbFwyec76x6zynYJCSwGbleBgY7VlBDbNiJE3clvkJD5MWX9ktTDPe9R63GgAAA=",
+    "credit": "Jordiferrer",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Estaci%C3%B3_de_N%C3%BAria_-_Santuari_-_Cremallera.jpg",
     "license": "CC BY-SA 3.0"
   },
   {
@@ -93,6 +153,16 @@ export const IMAGES: readonly ImportedImage[] = [
     "license": "CC BY 3.0"
   },
   {
+    "key": "b2-setcases-vallter",
+    "url": "/images/b2-setcases-vallter.webp",
+    "width": 1600,
+    "height": 1200,
+    "blurDataUrl": "data:image/webp;base64,UklGRm4AAABXRUJQVlA4IGIAAADwAQCdASoQAAwAA4BaJZgCdEf/gQxPgoAA/kzhy5gP4XiVVi5Z0lgrUjSVdw5AISm4jyxp2VPWZeHrzln3QzLTK2nk3ZIizEJ9W+FSD5foqtwyXJps9ybupkA9/oCXDWAAAA==",
+    "credit": "Monster1000",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Vallter2000.jpg",
+    "license": "CC BY-SA 3.0"
+  },
+  {
     "key": "b2-transport-metro-barcelona",
     "url": "/images/b2-transport-metro-barcelona.webp",
     "width": 1920,
@@ -103,6 +173,16 @@ export const IMAGES: readonly ImportedImage[] = [
     "license": "CC BY-SA 4.0"
   },
   {
+    "key": "b2-transport-tram-barcelona",
+    "url": "/images/b2-transport-tram-barcelona.webp",
+    "width": 1920,
+    "height": 1440,
+    "blurDataUrl": "data:image/webp;base64,UklGRmQAAABXRUJQVlA4IFgAAADQAQCdASoQAAwAA4BaJQBOgCLveif8uAD+vhE4PwIil7gZBo+ebeXTijFuHGCu9OUmMKrW1Y9SWnkL7lhdWpnYwB1bUXMJYvoIybHW7azBXuzQd5reAAAA",
+    "credit": "IngolfBLN",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Barcelona_-_Trambaix_(7503109560).jpg",
+    "license": "CC BY-SA 2.0"
+  },
+  {
     "key": "b2-zbe-gran-via-barcelona",
     "url": "/images/b2-zbe-gran-via-barcelona.webp",
     "width": 1920,
@@ -110,6 +190,16 @@ export const IMAGES: readonly ImportedImage[] = [
     "blurDataUrl": "data:image/webp;base64,UklGRkgAAABXRUJQVlA4IDwAAACwAQCdASoQAAsAA4BaJZwAAlrit2AAAPl65TFdMniuDcVBU0Vxa7STmpd3KbBNAIiOZSgluhoOXkI9AAA=",
     "credit": "Txllxt TxllxT",
     "creditUrl": "https://commons.wikimedia.org/wiki/File:Barcelona_-_Gran_Via_de_les_Corts_Catalanes_-_View_SW.jpg",
+    "license": "CC BY-SA 4.0"
+  },
+  {
+    "key": "b2-zbe-ronda-de-dalt",
+    "url": "/images/b2-zbe-ronda-de-dalt.webp",
+    "width": 1920,
+    "height": 2881,
+    "blurDataUrl": "data:image/webp;base64,UklGRpwAAABXRUJQVlA4IJAAAABQBACdASoQABgAPu1iqU2ppaOiMAgBMB2JQBdgA9jia7AQOOPKuSjHTsuAAP7fwz/dTwg/Gq2bRFltAkVGCsY5vv3vjgD/VBloYokgswJXFrrHClB+WvtoOgp/tZ9OXcW5efrSmZAf7oNmQo6TJcbZcCEj64jlRJN0ue4yAODodJnjc4BnlZ560e/EV1kW6AA=",
+    "credit": "Txllxt TxllxT",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Barcelona_-_Ronda_de_Dalt_-_View_South.jpg",
     "license": "CC BY-SA 4.0"
   },
   {

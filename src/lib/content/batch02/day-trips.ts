@@ -59,6 +59,17 @@ export const GIRONA: B2Article = {
   categoryKey: "coast",
   sources: GIRONA_SOURCES,
   heroKey: "b2-girona-cases-onyar",
+  secondaryKey: "b2-girona-banys-arabs",
+  secondaryAlt: {
+    ca: "Interior dels Banys Àrabs de Girona",
+    es: "Interior de los Baños Árabes de Girona",
+    en: "Inside the Arab Baths of Girona",
+  },
+  secondaryCaption: {
+    ca: "Els Banys Àrabs queden al sector nord del Barri Vell, just després de la Catedral.",
+    es: "Los Baños Árabes quedan en el sector norte del Barri Vell, justo después de la Catedral.",
+    en: "The Arab Baths sit in the northern old town, right after the Cathedral.",
+  },
   heroAlt: {
     ca: "Les cases de colors sobre el riu Onyar, a Girona",
     es: "Las casas de colores sobre el río Onyar, en Girona",
@@ -252,6 +263,17 @@ export const MONTSERRAT_FREE: B2Article = {
   categoryKey: "mountain",
   sources: MONTSERRAT_SOURCES,
   heroKey: "b2-montserrat-cremallera",
+  secondaryKey: "b2-montserrat-monestir",
+  secondaryAlt: {
+    ca: "El monestir de Santa Maria de Montserrat sota les agulles de roca",
+    es: "El monasterio de Santa Maria de Montserrat bajo las agujas de roca",
+    en: "The monastery of Santa Maria de Montserrat beneath the rock pinnacles",
+  },
+  secondaryCaption: {
+    ca: "El recinte del santuari és on arriben tant el cremallera com l'aeri.",
+    es: "El recinto del santuario es adonde llegan tanto el cremallera como el Aeri.",
+    en: "Both the rack railway and the cable car arrive at the sanctuary precinct.",
+  },
   heroAlt: {
     ca: "Dos trens del cremallera de Montserrat a l'estació de Monistrol-Vila",
     es: "Dos trenes del cremallera de Montserrat en la estación de Monistrol-Vila",
@@ -442,6 +464,17 @@ export const CERDANYA: B2Article = {
   categoryKey: "mountain",
   sources: CERDANYA_SOURCES,
   heroKey: "b2-cerdanya-puigcerda",
+  secondaryKey: "b2-cerdanya-estany",
+  secondaryAlt: {
+    ca: "L'estany de Puigcerdà, a la Cerdanya",
+    es: "El estanque de Puigcerdà, en la Cerdanya",
+    en: "The lake at Puigcerdà, in Cerdanya",
+  },
+  secondaryCaption: {
+    ca: "L'estany queda a pocs minuts a peu de l'estació, part de l'atractiu d'anar-hi sense cotxe.",
+    es: "El estanque está a pocos minutos a pie de la estación, parte del atractivo de ir sin coche.",
+    en: "The lake is a few minutes' walk from the station, which is part of the car-free appeal.",
+  },
   heroAlt: {
     ca: "Vista de Puigcerdà, a la Cerdanya",
     es: "Vista de Puigcerdà, en la Cerdanya",

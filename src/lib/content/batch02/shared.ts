@@ -235,6 +235,16 @@ export interface B2Article {
   heroKey?: string;
   heroAlt?: Record<Locale, string>;
   heroCaption?: Record<Locale, string>;
+  /**
+   * A second, different photograph for part-way down the article.
+   *
+   * It must not be the hero. The first version of this batch spliced the hero
+   * into the body as well, so every page showed the same picture twice - once
+   * in the header the template renders, once again six blocks later.
+   */
+  secondaryKey?: string;
+  secondaryAlt?: Record<Locale, string>;
+  secondaryCaption?: Record<Locale, string>;
   sources: B2Source[];
   /** ISO date the variable data was last checked against the sources. */
   verifiedAt: string;
