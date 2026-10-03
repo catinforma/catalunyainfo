@@ -56,6 +56,28 @@ Generate `CRON_SECRET`:
 node -e "console.log(require('crypto').randomBytes(32).toString('base64url'))"
 ```
 
+### If you lose `CRON_SECRET`, rotate it
+
+Vercel stores it as a Secret, so `vercel env pull` returns a placeholder, not
+the value. There is no way to read it back. Lost means lost, and the only route
+is to replace it:
+
+```bash
+node -e "console.log(require('crypto').randomBytes(32).toString('base64url'))" > secret.txt
+npx vercel env rm CRON_SECRET production --yes
+tr -d '
+' < secret.txt | npx vercel env add CRON_SECRET production
+npx vercel --prod --yes          # the new value only reaches a new deployment
+```
+
+`tr -d` matters: a trailing newline becomes part of the value, and the
+constant-time comparison in `deploy-auth.ts` then rejects every request with a
+length mismatch that looks exactly like a wrong secret.
+
+Rotating costs nothing but a redeploy. The secret guards only the publish and
+migrate endpoints, so nothing a reader sees depends on it, and the scheduled
+cron picks the new value up from the environment on its next run.
+
 Use the **pooled** connection string at runtime (serverless functions open a
 connection per invocation; `DATABASE_POOL_MAX` defaults to 1 for the same
 reason) and the **non-pooled** one for migrations, since poolers often refuse
