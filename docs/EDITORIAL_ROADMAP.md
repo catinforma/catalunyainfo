@@ -382,3 +382,36 @@ holiday calendar published on 24 September was indexed by the 26th.
 - **Seasonal** — snow ⇄ Cerdanya ⇄ Ripollès.
 
 Audit after publishing: 0 broken, 0 orphans, 0 cross-language leaks.
+
+---
+
+## "Is today a holiday?" — published 6 October 2026
+
+Not from an editorial package: no research was needed. Every date comes from
+the Generalitat's calendar of work holidays, and the 2027 list was already in
+the repository from the calendar article. The page is arithmetic over verified
+data, the same way the tourist-tax calculator and the mushroom report are.
+
+What it adds to the model:
+
+- `holidays/calendar.ts` — the dates by year, the Aran substitutions, and the
+  date handling. The 2027 array is imported from the calendar article rather
+  than copied, so there is one set of dates behind two pages.
+- `holidayToday` block — server-rendered, config-free. The answer has to be in
+  the HTML, and the route already revalidates every five minutes.
+
+Three refusals worth keeping when this model is extended:
+
+1. **Europe/Madrid, not the server clock.** Between midnight and 02:00 local a
+   UTC server still thinks it is yesterday, which is exactly when somebody asks
+   whether tomorrow is a holiday.
+2. **Years with no published order get "not published yet".** Catalonia
+   approves the calendar one year at a time. The fixed dates are predictable,
+   and predicting them would still be invention.
+3. **The two municipal days are named as a gap.** Every town sets two of its
+   own. A page that answered "not a holiday" without saying so would be wrong
+   twice a year in every municipality in Catalonia.
+
+**Next for this cluster**, if the measurement works: the same treatment for the
+municipal calendars is the obvious extension and the one to resist until there
+is a verified source for all 947 municipalities. There is not one yet.

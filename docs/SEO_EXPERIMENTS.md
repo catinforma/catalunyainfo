@@ -195,6 +195,64 @@ query meets a page that answers it, this site converts perfectly well.
 
 ---
 
+## 2026-10-06 — a page for the question the calendar was not answering
+
+**URLs:** `/ca/guies/es-festiu-avui-catalunya/`,
+`/es/guias/es-festivo-hoy-cataluna/`,
+`/en/guides/is-today-a-holiday-in-catalonia/`
+
+**Observation.** Search Console, the week to 6 October, every query containing
+`festiv`: **166 distinct queries**, of which roughly 145 are the same question
+about one particular day.
+
+| Query | Position | Clicks |
+| --- | --- | --- |
+| `el dia 30 de octubre es festivo` | 6.4 | 0 |
+| `30 octubre es festivo` | 5.0 | 0 |
+| `festivo 30 octubre` | 6.7 | 0 |
+| `12 de octubre es festivo en catalunya` | 56.5 | 0 |
+| `el lunes es festivo en catalunya` | 49 | 0 |
+| `manana es festivo en catalunya` | 46.5 | 0 |
+| `es festivo en catalunya hoy` | 57.5 | 0 |
+| `1 de junio es festivo` | 78 | 0 |
+| `proximos dias festivos` | 65 | 0 |
+
+**Diagnosis.** Not a ranking problem and not a content problem. The year-planner
+calendar is correct, complete and already ranks top-ten when the date asked
+about is near. It is answering a different question. A year planner serves
+somebody booking leave in January; these people want a yes or a no about one
+day, and a twelve-row table of next year's dates does not give it to them.
+
+The two calendar pages carried **772 impressions in one week for four clicks**,
+and this long tail is what moved the site's average position from 8.9 to 14.2
+between 22 September and 6 October. The impressions are real and the intent is
+unserved.
+
+**Action.** A separate page, not a change to the planner. Different intent,
+different URL, and the two link to each other. The planner keeps the bridges
+and the ICS download; the new page carries neither, and a test enforces that.
+
+**Hypothesis.** A page whose first element is the sentence "No, today is not a
+public holiday in Catalonia" will take the date-shaped queries the planner
+surfaces for and loses. Specifically: the planner's own CTR should recover as
+these queries move off it, and the new page should pick up clicks at a CTR far
+above 0.5%, because the query is binary and the answer is visible in the
+snippet.
+
+**Caveat on attribution.** Catalonia's national day on 12 October falls inside
+the first measurement window, so October is a high-interest month by itself.
+Compare the share of festive-query impressions that convert, not raw clicks.
+
+**Measure at:** 13 October (7 days, indexing and first queries), 3 November
+(28 days, after both 12 October and 1 November have passed), 6 January (90
+days, across the Christmas cluster).
+
+**Do not change any of the three titles before 3 November.**
+
+**Outcome:** _pending_
+
+---
+
 ## Candidates not yet run
 
 Recorded so they are not lost, and so they are not all started at once.
