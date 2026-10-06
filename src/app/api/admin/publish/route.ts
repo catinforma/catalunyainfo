@@ -11,6 +11,7 @@ import { publishHolidayGuide } from "@/lib/content/holidays/publish";
 import { publishTouristTaxGuide } from "@/lib/content/tourist-tax/publish";
 import { publishMushroomZones } from "@/lib/content/mushroom-zones/publish";
 import { publishBatch02 } from "@/lib/content/batch02/publish";
+import { publishHolidayTodayGuide } from "@/lib/content/holidays/today-publish";
 import { authoriseDeployRequest, describeError } from "@/lib/admin/deploy-auth";
 
 export const runtime = "nodejs";
@@ -43,6 +44,7 @@ export async function POST(request: Request) {
     const published = [];
     if (wants("articles")) {
       published.push(await publishHolidayGuide());
+      published.push(await publishHolidayTodayGuide());
       published.push(await publishTouristTaxGuide());
       published.push(await publishWeekendGuide());
       published.push(await publishMushroomReport());
@@ -53,6 +55,7 @@ export async function POST(request: Request) {
     if (wants("features-a")) published.push(...(await publishFeatures(0, 5)));
     if (wants("features-b")) published.push(...(await publishFeatures(5, 10)));
     if (wants("holidays")) published.push(await publishHolidayGuide());
+    if (wants("holiday-today")) published.push(await publishHolidayTodayGuide());
     if (wants("tourist-tax")) published.push(await publishTouristTaxGuide());
     // Empty registry until an editorial package adds a zone; publishes nothing.
     if (wants("mushroom-zones") || only === "all") published.push(...(await publishMushroomZones()));

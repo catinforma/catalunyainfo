@@ -383,6 +383,18 @@ export const transportPassesBlock = z.object({
   type: z.literal("transportPasses"),
 });
 
+/**
+ * "Is today a public holiday in Catalonia?"
+ *
+ * Configuration-free, like the other utility blocks. The dates live in
+ * `holidays/calendar.ts`, read from the Generalitat's own calendar, so a
+ * holiday cannot be added or removed through the editing interface. Rendered on
+ * the server, because the answer has to be in the HTML.
+ */
+export const holidayTodayBlock = z.object({
+  type: z.literal("holidayToday"),
+});
+
 export const blockSchema = z.discriminatedUnion("type", [
   headingBlock,
   paragraphBlock,
@@ -406,6 +418,7 @@ export const blockSchema = z.discriminatedUnion("type", [
   touristTaxBlock,
   conditionsMapBlock,
   transportPassesBlock,
+  holidayTodayBlock,
 ]);
 
 export const bodySchema = z.array(blockSchema).max(500);

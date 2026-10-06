@@ -1317,3 +1317,67 @@
 :root[data-theme="dark"] .ci-cond-favourable { --cond-color: #5fb87a; }
 :root[data-theme="dark"] .ci-cond-moderate { --cond-color: #d9a83a; }
 :root[data-theme="dark"] .ci-cond-limiting { --cond-color: #d97a5c; }
+
+/* ---- "Is today a holiday?" ------------------------------------------------
+   The answer is the largest thing on the page, because the question is binary
+   and somebody who typed it should not have to read a paragraph to find out. */
+.ci-today {
+  margin: 2rem 0;
+  border: 1px solid var(--color-rule);
+  border-radius: var(--radius-md);
+  padding: 1.5rem 1.25rem;
+  background: var(--color-surface);
+}
+.ci-today-answer {
+  margin: 0;
+  font-size: clamp(1.4rem, 4vw, 2rem);
+  font-weight: 700;
+  line-height: 1.2;
+  border-left: 4px solid var(--answer-color, var(--color-faint));
+  padding-left: 0.75rem;
+}
+.ci-today-answer.is-holiday { --answer-color: #2f7d46; }
+.ci-today-answer.is-not { --answer-color: var(--color-faint); }
+.ci-today-date {
+  margin: 0.5rem 0 0 calc(0.75rem + 4px);
+  color: var(--color-ink-soft);
+}
+.ci-today-facts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
+  gap: 0.75rem 1.5rem;
+  margin: 1.25rem 0 0;
+}
+.ci-today-facts div {
+  border-top: 1px solid var(--color-rule);
+  padding-top: 0.5rem;
+}
+.ci-today-facts dt {
+  margin: 0;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--color-muted);
+}
+.ci-today-facts dd {
+  margin: 0.2rem 0 0;
+  font-weight: 600;
+}
+.ci-today-subtitle {
+  margin: 1.75rem 0 0.75rem;
+  font-size: 1rem;
+}
+.ci-today-aran {
+  font-size: 0.78rem;
+  color: var(--color-muted);
+}
+.ci-today-note {
+  margin: 0.9rem 0 0;
+  font-size: 0.8rem;
+  color: var(--color-muted);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .ci-today-answer.is-holiday { --answer-color: #5fb87a; }
+}
+:root[data-theme="dark"] .ci-today-answer.is-holiday { --answer-color: #5fb87a; }
