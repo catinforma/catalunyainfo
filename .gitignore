@@ -22,3 +22,8 @@ CLAUDE.md
 
 # Editorial images waiting to be imported with `npm run images:import`.
 incoming/
+
+# Local copy of CRON_SECRET. The session scratchpad does not survive, and
+# Vercel stores the value as a Secret that cannot be read back, so losing it
+# means rotating it. Keeping a copy here is what stops that happening weekly.
+.cron-secret
