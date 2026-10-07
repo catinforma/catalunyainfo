@@ -39,6 +39,18 @@ const ca = {
     // The homepage bucket holds guides and articles together, so it is not
     // labelled "Guies": that would read as though the site published nothing else.
     allArticles: "Tots els articles",
+    tools: {
+      title: "Útil ara mateix",
+      holidayYes: "Avui: {name}",
+      holidayNext: "Proper festiu: {name}, {date} (d'aquí a {n} dies)",
+      mushroomsRead: "Pluja llegida el {date}",
+      holiday: { title: "És festiu avui?", desc: "Festius de tot Catalunya i on és festa local avui i demà." },
+      weekend: { title: "Què fer aquest cap de setmana", desc: "L'agenda cultural oficial, filtrada per al proper cap de setmana, gratuïtes primer." },
+      localHolidays: { title: "Festius locals de cada municipi", desc: "Els dos dies de festa local de tots els municipis, en una sola taula cercable." },
+      transport: { title: "Quina targeta de transport et convé", desc: "Compara T-casual, T-dia i T-usual segons dies, viatges i aeroport." },
+      tax: { title: "Calculadora de la taxa turística", desc: "Quant pagaràs per nit a Barcelona i a la resta de Catalunya." },
+      mushrooms: { title: "Bolets: condicions per zona", desc: "Pluja dels últims 15 dies a les estacions del Meteocat, zona per zona." },
+    },
   },
   transportPasses: {
     title: "Quina targeta et convé?",

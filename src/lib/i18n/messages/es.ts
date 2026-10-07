@@ -40,6 +40,18 @@ const es: Messages = {
     // El bloque de la portada reúne guías y artículos, por eso no se titula
     // "Guías": daría a entender que el sitio no publica nada más.
     allArticles: "Todos los artículos",
+    tools: {
+      title: "Útil ahora mismo",
+      holidayYes: "Hoy: {name}",
+      holidayNext: "Próximo festivo: {name}, {date} (dentro de {n} días)",
+      mushroomsRead: "Lluvia leída el {date}",
+      holiday: { title: "¿Es festivo hoy?", desc: "Festivos de toda Cataluña y dónde es fiesta local hoy y mañana." },
+      weekend: { title: "Qué hacer este fin de semana", desc: "La agenda cultural oficial, filtrada para el próximo fin de semana, gratis primero." },
+      localHolidays: { title: "Festivos locales de cada municipio", desc: "Los dos días de fiesta local de todos los municipios, en una sola tabla con buscador." },
+      transport: { title: "Qué tarjeta de transporte te conviene", desc: "Compara T-casual, T-dia y T-usual según días, viajes y aeropuerto." },
+      tax: { title: "Calculadora de la tasa turística", desc: "Cuánto pagarás por noche en Barcelona y en el resto de Cataluña." },
+      mushrooms: { title: "Setas: condiciones por zona", desc: "Lluvia de los últimos 15 días en las estaciones del Meteocat, zona por zona." },
+    },
   },
   transportPasses: {
     title: "¿Qué tarjeta te conviene?",

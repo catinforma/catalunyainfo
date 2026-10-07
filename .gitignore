@@ -30,3 +30,7 @@ incoming/
 
 # Output of npm run site:audit.
 audit-report.json
+
+# Deep-research working notes and reports.
+research_notes/
+reports/

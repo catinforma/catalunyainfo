@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { EntryCard } from "@/components/EntryCard";
+import { HomeTools } from "@/components/HomeTools";
 import { SearchBox } from "@/components/SearchBox";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
@@ -93,6 +94,8 @@ export default async function HomePage({
             ) : null}
           </div>
         </section>
+
+        <HomeTools locale={locale} />
 
         {populated.map(({ key, items }) => (
           <section key={key} className="ci-shell py-12">

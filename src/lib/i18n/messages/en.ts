@@ -40,6 +40,18 @@ const en: Messages = {
     // The homepage bucket holds guides and articles together, so it is not
     // labelled "Guides": that would read as though the site published nothing else.
     allArticles: "All articles",
+    tools: {
+      title: "Useful right now",
+      holidayYes: "Today: {name}",
+      holidayNext: "Next holiday: {name}, {date} (in {n} days)",
+      mushroomsRead: "Rainfall read on {date}",
+      holiday: { title: "Is today a holiday?", desc: "Catalonia-wide holidays, and where today and tomorrow are local holidays." },
+      weekend: { title: "Things to do this weekend", desc: "The official cultural agenda, filtered to the coming weekend, free events first." },
+      localHolidays: { title: "Local holidays by town", desc: "Every municipality's two local holidays, in one searchable table." },
+      transport: { title: "Which Barcelona transport pass?", desc: "Compare T-casual, T-dia and T-usual by days, journeys and the airport." },
+      tax: { title: "Tourist tax calculator", desc: "What you will pay per night in Barcelona and the rest of Catalonia." },
+      mushrooms: { title: "Mushroom conditions by area", desc: "Last 15 days of rainfall at Meteocat stations, area by area." },
+    },
   },
   transportPasses: {
     title: "Which pass fits your trip?",
