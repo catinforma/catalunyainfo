@@ -21,9 +21,25 @@ export const fraunces = Fraunces({
   adjustFontFallback: true,
 });
 
+/*
+ * `optional`, not `swap`, for the body face.
+ *
+ * Lighthouse on mobile measured LCP at 3.3-3.8 s on the mushroom report with a
+ * first paint at 1.0 s, and the LCP element was the lead paragraph with a
+ * three-second "render delay". Nothing was blocking it: the text painted at
+ * 1.0 s in the fallback, then Plex arrived and the swap repainted the largest
+ * block of text on the page, which the browser records as a new, later LCP.
+ *
+ * With `optional` the browser uses Plex only if it is ready almost at once
+ * (cached, or a fast connection) and otherwise keeps the fallback for that
+ * page view. `adjustFontFallback` already sizes the fallback to Plex's
+ * metrics, so the two are close enough that nothing shifts. Headings keep
+ * `swap`: the display face is the brand, and a heading is never the largest
+ * block of text.
+ */
 export const plexSans = IBM_Plex_Sans({
   subsets: ["latin", "latin-ext"],
-  display: "swap",
+  display: "optional",
   weight: ["400", "500", "600"],
   variable: "--font-plex",
   fallback: ["ui-sans-serif", "system-ui", "Segoe UI", "sans-serif"],
