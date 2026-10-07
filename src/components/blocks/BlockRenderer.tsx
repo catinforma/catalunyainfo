@@ -9,6 +9,7 @@ import { TransportPassSelector } from "@/components/blocks/TransportPassSelector
 import { HolidayToday } from "@/components/blocks/HolidayToday";
 import { WeekendAgenda } from "@/components/blocks/WeekendAgenda";
 import { LocalHolidays } from "@/components/blocks/LocalHolidays";
+import { ReservoirLevels } from "@/components/blocks/ReservoirLevels";
 import { TouristTaxCalculator } from "@/components/blocks/TouristTaxCalculator";
 import type { Block, Body } from "@/lib/content/blocks";
 import { headingId } from "@/lib/content/blocks";
@@ -364,6 +365,10 @@ function BlockView({ block, context }: { block: Block; context: BlockContext }) 
     case "localHolidays":
       // The full table is server-rendered; the filter only hides rows.
       return <LocalHolidays locale={context.locale} />;
+
+    case "reservoirLevels":
+      // Async server component: the ACA's daily reading, cached three hours.
+      return <ReservoirLevels locale={context.locale} />;
 
     case "contactForm":
       // The only interactive block. It carries no configuration from the

@@ -6,6 +6,7 @@ import { COPY as LOCAL_COPY } from "../src/lib/content/holidays/local-publish.ts
 import { COPY as TODAY_COPY } from "../src/lib/content/holidays/today-publish.ts";
 import { ORDER, PATHS, type ToolKey } from "../src/lib/content/home-tools.ts";
 import { COPY as MUSHROOM_COPY } from "../src/lib/content/mushrooms/payload.ts";
+import { COPY as RESERVOIR_COPY } from "../src/lib/content/reservoirs/publish.ts";
 import { COPY as TAX_COPY } from "../src/lib/content/tourist-tax/copy.ts";
 import { EVERGREEN } from "../src/lib/content/weekend/evergreen.ts";
 import { LOCALES } from "../src/lib/i18n/config.ts";
@@ -18,6 +19,7 @@ const OWNER: Record<ToolKey, (locale: (typeof LOCALES)[number]) => string> = {
   transport: (l) => B2_PATHS.transport[l],
   tax: (l) => TAX_COPY[l].path,
   mushrooms: (l) => MUSHROOM_COPY[l].path,
+  reservoirs: (l) => RESERVOIR_COPY[l].path,
 };
 
 test("every homepage tool links to the path its publisher uses", () => {

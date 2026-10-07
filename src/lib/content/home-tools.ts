@@ -6,7 +6,7 @@ import type { Locale } from "@/lib/i18n/config";
  * publisher that owns it; a renamed slug must not leave a dead homepage link.
  */
 
-export type ToolKey = "holiday" | "weekend" | "localHolidays" | "transport" | "tax" | "mushrooms";
+export type ToolKey = "holiday" | "weekend" | "localHolidays" | "transport" | "tax" | "mushrooms" | "reservoirs";
 
 export const PATHS: Record<ToolKey, Record<Locale, string>> = {
   holiday: {
@@ -34,6 +34,11 @@ export const PATHS: Record<ToolKey, Record<Locale, string>> = {
     es: "guias/tasa-turistica-barcelona-cataluna",
     en: "guides/barcelona-catalonia-tourist-tax",
   },
+  reservoirs: {
+    ca: "guies/embassaments-catalunya-avui",
+    es: "guias/embalses-cataluna-hoy",
+    en: "guides/catalonia-reservoir-levels",
+  },
   mushrooms: {
     ca: "natura/bolets-catalunya-condicions",
     es: "naturaleza/setas-cataluna-condiciones",
@@ -47,7 +52,7 @@ export const PATHS: Record<ToolKey, Record<Locale, string>> = {
  * live here. Same tools, ordered by who is asking.
  */
 export const ORDER: Record<Locale, ToolKey[]> = {
-  ca: ["holiday", "weekend", "localHolidays", "mushrooms", "transport", "tax"],
-  es: ["holiday", "weekend", "localHolidays", "mushrooms", "transport", "tax"],
-  en: ["transport", "tax", "weekend", "holiday", "localHolidays", "mushrooms"],
+  ca: ["holiday", "weekend", "localHolidays", "mushrooms", "reservoirs", "transport", "tax"],
+  es: ["holiday", "weekend", "localHolidays", "mushrooms", "reservoirs", "transport", "tax"],
+  en: ["transport", "tax", "weekend", "holiday", "localHolidays", "reservoirs", "mushrooms"],
 };

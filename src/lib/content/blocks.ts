@@ -413,6 +413,15 @@ export const localHolidaysBlock = z.object({
   type: z.literal("localHolidays"),
 });
 
+/**
+ * Today's reservoir levels, read from the water agency's open data.
+ * Configuration-free: the reading date comes from the data, so the block
+ * cannot be left showing a day that has passed.
+ */
+export const reservoirLevelsBlock = z.object({
+  type: z.literal("reservoirLevels"),
+});
+
 export const blockSchema = z.discriminatedUnion("type", [
   headingBlock,
   paragraphBlock,
@@ -439,6 +448,7 @@ export const blockSchema = z.discriminatedUnion("type", [
   holidayTodayBlock,
   weekendAgendaBlock,
   localHolidaysBlock,
+  reservoirLevelsBlock,
 ]);
 
 export const bodySchema = z.array(blockSchema).max(500);

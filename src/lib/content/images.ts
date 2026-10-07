@@ -286,6 +286,26 @@ export const IMAGES: readonly ImportedImage[] = [
     "blurDataUrl": "data:image/webp;base64,UklGRmIAAABXRUJQVlA4IFYAAADQAQCdASoQAAkAA4BaJbACdADdLHtEoAD+zQcKnQQ4cumm27/QYUIlhf/8u0kmyfA3nkCulVhPHJVs3idl1RZz1oonHiVM69Z/Qvtpu6dEn9zUaAAAAA=="
   },
   {
+    "key": "embassaments-presa-sau-tavertet",
+    "url": "/images/embassaments-presa-sau-tavertet.webp",
+    "width": 1920,
+    "height": 1440,
+    "blurDataUrl": "data:image/webp;base64,UklGRlAAAABXRUJQVlA4IEQAAADwAQCdASoQAAwAA4BaJQBOgBo1fLKU0QAA/qDBSm7UaDkGncJ5ID5aFz6/ZIwD7tW0/z/cNoEG8srCMjgHIghF7JuMAA==",
+    "credit": "Enric",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:144_La_Riba_i_la_presa_del_pant%C3%A0_de_Sau,_des_de_Tavertet.jpg",
+    "license": "CC BY-SA 4.0"
+  },
+  {
+    "key": "embassaments-sau-cingles-tavertet",
+    "url": "/images/embassaments-sau-cingles-tavertet.webp",
+    "width": 1920,
+    "height": 1440,
+    "blurDataUrl": "data:image/webp;base64,UklGRlwAAABXRUJQVlA4IFAAAADwAQCdASoQAAwAA4BaJaACdGuAAtDtHcAA/tXF1B4r0kp7bSRkQtX5evsIDYFFqen+D82666Su86XDqqSrkhGSzmHiKDQ2T7hYG6V07mgAAA==",
+    "credit": "Jan Tomàs",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Pant%C3%A0_de_Sau.jpg",
+    "license": "CC0"
+  },
+  {
     "key": "escapades-barcelona-mes-enlla-montserrat",
     "url": "/images/escapades-barcelona-mes-enlla-montserrat.webp",
     "width": 1672,
