@@ -422,6 +422,14 @@ export const reservoirLevelsBlock = z.object({
   type: z.literal("reservoirLevels"),
 });
 
+/**
+ * The school calendar the current order sets, and what it says about today.
+ * Configuration-free: the dates live in code, verified against the DOGC.
+ */
+export const schoolCalendarBlock = z.object({
+  type: z.literal("schoolCalendar"),
+});
+
 export const blockSchema = z.discriminatedUnion("type", [
   headingBlock,
   paragraphBlock,
@@ -449,6 +457,7 @@ export const blockSchema = z.discriminatedUnion("type", [
   weekendAgendaBlock,
   localHolidaysBlock,
   reservoirLevelsBlock,
+  schoolCalendarBlock,
 ]);
 
 export const bodySchema = z.array(blockSchema).max(500);

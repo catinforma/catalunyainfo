@@ -210,6 +210,26 @@ export const IMAGES: readonly ImportedImage[] = [
     "blurDataUrl": "data:image/webp;base64,UklGRmQAAABXRUJQVlA4IFgAAADQAQCdASoQAAkAA4BaJZgCdADdpvv8RAD+5gMPsWBJ+ftogVDLucsVrNaWZT7iy28YKFK2zLWg/KArIz5a9FnCPpfGYwvukTQk2qi/a83UoNoil+3DSoAA"
   },
   {
+    "key": "calendari-escolar-escola-vic-pati",
+    "url": "/images/calendari-escolar-escola-vic-pati.webp",
+    "width": 1920,
+    "height": 1440,
+    "blurDataUrl": "data:image/webp;base64,UklGRloAAABXRUJQVlA4IE4AAABQAgCdASoQAAwAA4BaJaACdGuAt/8Dz/gcKAAA/s8/AB7hKJY6IWZCAkx2TOeZMaC9lC8PyGzbQ/sRitBZ+Hbum3CczGJe8SQ/qvNlAAA=",
+    "credit": "Arnaucc",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Escola_Jaume_Balmes_de_Vic.JPG",
+    "license": "CC BY-SA 3.0 es"
+  },
+  {
+    "key": "calendari-escolar-grup-ramon-llull",
+    "url": "/images/calendari-escolar-grup-ramon-llull.webp",
+    "width": 1920,
+    "height": 1440,
+    "blurDataUrl": "data:image/webp;base64,UklGRmIAAABXRUJQVlA4IFYAAAAwAgCdASoQAAwAA4BaJYwC7AELYscFk+I+IAD+8EHDEd1OjaowlhGSyWg9CjuHfmhCPinmVCmbB63A89NeM8t79sMKha1feibEVD4MCrWf6mZrmwAAAA==",
+    "credit": "Pere prlpz",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Grup_Escolar_Ramon_Llull_P1380696.JPG",
+    "license": "CC BY-SA 3.0"
+  },
+  {
     "key": "calendari-laboral-catalunya-diada",
     "url": "/images/calendari-laboral-catalunya-diada.webp",
     "width": 1920,

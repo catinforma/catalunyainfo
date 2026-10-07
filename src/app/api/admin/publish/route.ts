@@ -14,6 +14,7 @@ import { publishBatch02 } from "@/lib/content/batch02/publish";
 import { publishHolidayTodayGuide } from "@/lib/content/holidays/today-publish";
 import { publishLocalHolidaysGuide } from "@/lib/content/holidays/local-publish";
 import { publishReservoirGuide } from "@/lib/content/reservoirs/publish";
+import { publishSchoolCalendarGuide } from "@/lib/content/school/publish";
 import { authoriseDeployRequest, describeError } from "@/lib/admin/deploy-auth";
 
 export const runtime = "nodejs";
@@ -60,6 +61,7 @@ export async function POST(request: Request) {
     if (wants("holiday-today")) published.push(await publishHolidayTodayGuide());
     if (wants("local-holidays")) published.push(await publishLocalHolidaysGuide());
     if (wants("reservoirs")) published.push(await publishReservoirGuide());
+    if (wants("school-calendar")) published.push(await publishSchoolCalendarGuide());
     if (wants("tourist-tax")) published.push(await publishTouristTaxGuide());
     // The weekly refresh: one article, so it never waits on the other five.
     if (wants("mushrooms")) published.push(await publishMushroomReport());

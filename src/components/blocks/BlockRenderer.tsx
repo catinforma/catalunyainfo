@@ -10,6 +10,7 @@ import { HolidayToday } from "@/components/blocks/HolidayToday";
 import { WeekendAgenda } from "@/components/blocks/WeekendAgenda";
 import { LocalHolidays } from "@/components/blocks/LocalHolidays";
 import { ReservoirLevels } from "@/components/blocks/ReservoirLevels";
+import { SchoolCalendar } from "@/components/blocks/SchoolCalendar";
 import { TouristTaxCalculator } from "@/components/blocks/TouristTaxCalculator";
 import type { Block, Body } from "@/lib/content/blocks";
 import { headingId } from "@/lib/content/blocks";
@@ -369,6 +370,10 @@ function BlockView({ block, context }: { block: Block; context: BlockContext }) 
     case "reservoirLevels":
       // Async server component: the ACA's daily reading, cached three hours.
       return <ReservoirLevels locale={context.locale} />;
+
+    case "schoolCalendar":
+      // Dates from the DOGC order; "today" computed in Europe/Madrid.
+      return <SchoolCalendar locale={context.locale} />;
 
     case "contactForm":
       // The only interactive block. It carries no configuration from the
