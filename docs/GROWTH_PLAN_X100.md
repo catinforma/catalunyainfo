@@ -133,6 +133,16 @@ arribaran quan hi hagi prou trànsit.
 `npm run adsense:check`: **12 PASS, 1 avís, 1 FAIL**. L'únic FAIL és la
 identitat de l'editor, i només la pots posar tu.
 
+### Afegit el 7 d'octubre al vespre
+
+| Canvi | Per què |
+| --- | --- |
+| **Franja «Útil ara mateix» a la portada** (7 eines, ordre per idioma) | La portada EN retenia ~1,4 s per visita; les eines que retenen no hi eren |
+| **Embassaments avui** (ACA, `gn9e-3qhr`, diari) | Oportunitat núm. 1 de la recerca; files històriques corruptes descartades per validació |
+| Informe `reports/Oportunitats de trànsit CatalunyaInfo.md` | 12 oportunitats ordenades, polítiques Google/AdSense, afiliació |
+
+**Nou per a AdSense (de la recerca):** el CMP ha de ser TCF **v2.3** (consentiments des de l'1/3/2026); el botó «Rebutjar» igual de visible que «Acceptar» (AEPD); l'avís legal en els tres idiomes abans de sol·licitar.
+
 ## 4. Les palanques, per impacte esperat
 
 ### Palanca 1 — Dades oficials que no envelleixen (×10-20)
