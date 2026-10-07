@@ -101,6 +101,28 @@ const ca = {
       other: "Altres",
     },
   },
+  hubMeta: {
+    guides: {
+      title: "Guies pràctiques de Catalunya: transport, festius i taxes",
+      description: "Guies pràctiques i verificades sobre Catalunya: transport a Barcelona, festius, taxa turística, aparcament, escapades i natura, en català, castellà i anglès.",
+    },
+    destinations: {
+      title: "Destinacions de Catalunya: pobles, comarques i escapades",
+      description: "Pobles, comarques i escapades de Catalunya: què veure, com arribar-hi i què cal saber abans d'anar-hi, amb fonts oficials.",
+    },
+    events: {
+      title: "Agenda de Catalunya: què fer, festivals i fires",
+      description: "Què fer a Catalunya: l'agenda del cap de setmana, festivals, fires i festes, amb dates comprovades a la font oficial.",
+    },
+    news: {
+      title: "Actualitat pràctica de Catalunya",
+      description: "Canvis que afecten qui viu o viatja per Catalunya: normativa, transport i serveis públics, amb la font oficial de cada dada.",
+    },
+    routes: {
+      title: "Rutes a peu i en bicicleta per Catalunya",
+      description: "Rutes a peu i en bicicleta per Catalunya amb distància, desnivell i punt de sortida verificats.",
+    },
+  },
   conditions: {
     legend: "Llegenda de condicions",
     disclaimer: "Condicions estimades a partir de dades meteorològiques. No indiquen la presència de bolets ni cap punt de recollida. Font:",

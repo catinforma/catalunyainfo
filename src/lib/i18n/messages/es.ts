@@ -102,6 +102,28 @@ const es: Messages = {
       other: "Otras",
     },
   },
+  hubMeta: {
+    guides: {
+      title: "Guías prácticas de Cataluña: transporte, festivos y tasas",
+      description: "Guías prácticas y verificadas sobre Cataluña: transporte en Barcelona, festivos, tasa turística, aparcamiento, escapadas y naturaleza.",
+    },
+    destinations: {
+      title: "Destinos de Cataluña: pueblos, comarcas y escapadas",
+      description: "Pueblos, comarcas y escapadas de Cataluña: qué ver, cómo llegar y qué saber antes de ir, con fuentes oficiales.",
+    },
+    events: {
+      title: "Agenda de Cataluña: qué hacer, festivales y ferias",
+      description: "Qué hacer en Cataluña: la agenda del fin de semana, festivales, ferias y fiestas, con fechas comprobadas en la fuente oficial.",
+    },
+    news: {
+      title: "Actualidad práctica de Cataluña",
+      description: "Cambios que afectan a quien vive o viaja por Cataluña: normativa, transporte y servicios públicos, con la fuente oficial de cada dato.",
+    },
+    routes: {
+      title: "Rutas a pie y en bicicleta por Cataluña",
+      description: "Rutas a pie y en bicicleta por Cataluña con distancia, desnivel y punto de salida verificados.",
+    },
+  },
   conditions: {
     legend: "Leyenda de condiciones",
     disclaimer: "Condiciones estimadas a partir de datos meteorológicos. No indican la presencia de setas ni ningún punto de recogida. Fuente:",

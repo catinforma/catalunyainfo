@@ -82,6 +82,50 @@ export interface PageMetadataInput {
   canonicalOverride?: string | null;
 }
 
+/**
+ * Google shows roughly sixty characters of a title. The layout appends
+ * " · CatalunyaInfo" to every page, which on 39 of 117 pages pushed the title
+ * past that and spent the visible part of the result on the brand while the
+ * part that answers the query was cut off.
+ *
+ * The suffix is kept when the whole thing fits and dropped when it does not.
+ * The brand is still in the URL, the site name and the Organization markup;
+ * the title is the one place where every character is competing for the click.
+ */
+export const TITLE_BUDGET = 60;
+const BRAND_SUFFIX = ` · ${SITE.name}`;
+
+/**
+ * Pages whose title is inside a logged measurement window.
+ *
+ * Changing the suffix changes the rendered title, so these keep the old
+ * behaviour until their window closes - see docs/SEO_EXPERIMENTS.md. After the
+ * date the general rule applies to them automatically.
+ */
+const TITLE_FROZEN_UNTIL: Record<string, string> = {
+  "/en/events/sitges-film-festival-guide/": "2026-10-08",
+  "/ca/guies/calendari-laboral-catalunya/": "2026-10-22",
+  "/es/guias/calendario-laboral-cataluna/": "2026-10-22",
+  "/en/guides/catalonia-public-holidays/": "2026-10-22",
+  "/ca/guies/taxa-turistica-barcelona-catalunya/": "2026-10-23",
+  "/es/guias/tasa-turistica-barcelona-cataluna/": "2026-10-23",
+  "/en/guides/barcelona-catalonia-tourist-tax/": "2026-10-23",
+  "/ca/guies/es-festiu-avui-catalunya/": "2026-11-03",
+  "/es/guias/es-festivo-hoy-cataluna/": "2026-11-03",
+  "/en/guides/is-today-a-holiday-in-catalonia/": "2026-11-03",
+};
+
+export function composeTitle(
+  title: string,
+  path: string,
+  today: string = new Date().toISOString().slice(0, 10),
+): string | { absolute: string } {
+  const frozenUntil = TITLE_FROZEN_UNTIL[path];
+  if (frozenUntil && today <= frozenUntil) return title;
+  if (title.length + BRAND_SUFFIX.length <= TITLE_BUDGET) return title;
+  return { absolute: title };
+}
+
 export function buildMetadata(input: PageMetadataInput): Metadata {
   const {
     locale,
@@ -115,7 +159,7 @@ export function buildMetadata(input: PageMetadataInput): Metadata {
 
   return {
     metadataBase: new URL(siteOrigin()),
-    title,
+    title: composeTitle(title, path),
     description: desc,
     alternates: buildAlternates({
       path,

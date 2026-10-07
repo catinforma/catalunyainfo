@@ -140,10 +140,12 @@ export async function generateMetadata({
   switch (resolution.kind) {
     case "hub": {
       const key = resolution.section;
+      const hub = t.hubMeta[key as keyof typeof t.hubMeta];
       return buildMetadata({
         locale,
         path: sectionPath(key, locale),
-        title: t.nav[key],
+        title: hub?.title ?? t.nav[key],
+        description: hub?.description,
         translations: Object.fromEntries(
           LOCALES.map((l) => [l, sectionPath(key, l)]),
         ) as Partial<Record<Locale, string>>,

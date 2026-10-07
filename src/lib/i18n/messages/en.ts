@@ -102,6 +102,28 @@ const en: Messages = {
       other: "Other",
     },
   },
+  hubMeta: {
+    guides: {
+      title: "Catalonia practical guides: transport, holidays, taxes",
+      description: "Practical, verified guides to Catalonia: Barcelona transport passes, public holidays, the tourist tax, parking, day trips and nature.",
+    },
+    destinations: {
+      title: "Catalonia destinations: villages, regions and day trips",
+      description: "Villages, regions and day trips in Catalonia: what to see, how to get there and what to know first, from official sources.",
+    },
+    events: {
+      title: "What's on in Catalonia: weekend agenda and festivals",
+      description: "What's on in Catalonia: the weekend agenda, festivals, fairs and local celebrations, with dates checked against the official source.",
+    },
+    news: {
+      title: "Practical news from Catalonia",
+      description: "Changes that matter if you live in or travel to Catalonia: rules, transport and public services, each with its official source.",
+    },
+    routes: {
+      title: "Walking and cycling routes in Catalonia",
+      description: "Walking and cycling routes in Catalonia with verified distance, elevation and starting point.",
+    },
+  },
   conditions: {
     legend: "Conditions legend",
     disclaimer: "Conditions estimated from weather data. They do not indicate that mushrooms are present, nor any picking spot. Source:",
