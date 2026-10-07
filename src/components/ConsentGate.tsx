@@ -133,9 +133,11 @@ export function ConsentGate({ locale }: { locale: Locale }) {
               >
                 {t.consent.accept}
               </button>
+              {/* Same weight as "accept": the AEPD's cookie guide requires
+                  rejecting to be as easy and as visible as accepting. */}
               <button
                 type="button"
-                className="ci-btn ci-btn-quiet"
+                className="ci-btn ci-btn-primary"
                 onClick={() => decide(false, false)}
               >
                 {t.consent.reject}
