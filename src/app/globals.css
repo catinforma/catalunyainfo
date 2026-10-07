@@ -15,7 +15,12 @@
   --color-ink: #10202b;
   --color-ink-soft: #33474f;
   --color-muted: #5b6b70;
-  --color-faint: #8a979b;
+  /* Was #8a979b: 3.0:1 on white, failing WCAG AA on every date, separator and
+     caption that used it (13 failures on one page in Lighthouse). #5f6e73 is
+     4.7:1 on the page background and 5.3:1 on white. It is now almost the
+     same tone as --color-muted; the hierarchy between them is carried by size
+     and weight instead, which is the only kind every reader can see. */
+  --color-faint: #5f6e73;
 
   --color-paper: #f4f6f5;
   --color-surface: #ffffff;
@@ -94,7 +99,7 @@
       --color-ink: #e8edeb;
       --color-ink-soft: #b9c6c4;
       --color-muted: #93a3a4;
-      --color-faint: #6f8082;
+      --color-faint: #8a9b9d; /* 5.7:1 on the dark surface; was 4.0 */
 
       --color-paper: #0c161c;
       --color-surface: #12212a;
@@ -126,7 +131,7 @@
     --color-ink: #e8edeb;
     --color-ink-soft: #b9c6c4;
     --color-muted: #93a3a4;
-    --color-faint: #6f8082;
+    --color-faint: #8a9b9d; /* 5.7:1 on the dark surface; was 4.0 */
 
     --color-paper: #0c161c;
     --color-surface: #12212a;
