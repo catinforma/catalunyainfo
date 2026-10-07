@@ -253,6 +253,30 @@ days, across the Christmas cluster).
 
 ---
 
+## 2026-10-07 — weekend guide made evergreen; local holidays page; title budget
+
+**Weekend guide** (`/ca/agenda/que-fer-aquest-cap-de-setmana-catalunya/` and
+es/en). Old title: *"Què fer aquest cap de setmana a Catalunya: 25 plans | 19 i
+20 setembre"*, on 7 October. New title, no date: *"Què fer aquest cap de
+setmana a Catalunya"*. The body now reads the official agenda live. Same URL.
+Hypothesis: the page starts ranking for `que fer aquest cap de setmana`
+(position 26-71 before, with a stale page) now that it is about the current
+weekend. **Measure 21 October and 4 November.** Do not touch the title before
+4 November.
+
+**Local holidays** (`/ca/guies/festius-locals-catalunya/` and es/en). New.
+Targets the town-specific long tail of the 166 weekly `festiv` queries.
+**Measure 14 October, 4 November.**
+
+**Title budget.** The brand suffix is dropped where it would push a title past
+60 characters. Every page inside a logged window above is exempt until its
+date. Expect small CTR movement on the affected pages from 8 October onwards;
+it is a site-wide change and cannot be attributed to any one page.
+
+**Outcome:** _pending_
+
+---
+
 ## Candidates not yet run
 
 Recorded so they are not lost, and so they are not all started at once.

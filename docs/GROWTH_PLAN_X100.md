@@ -101,17 +101,37 @@ Estimació: **principis de novembre**.
 
 ## 3. Fet en aquesta sessió (7 d'octubre)
 
-| Canvi | Efecte |
+| Canvi | Efecte mesurat |
 | --- | --- |
-| **Agenda del cap de setmana en directe** des de l'Agenda Cultural de la Generalitat | Mai més una pàgina datada. Primer resultat: 180 activitats, 88 municipis, 39 gratuïtes, pont del 9-12 d'octubre |
-| **Part de bolets autoalimentat** des de Meteocat (XEMA) | Test que trenca el build si passa de 10 dies |
-| **«És festiu avui»** | Resposta en servidor, zona horària de Madrid |
+| **Agenda del cap de setmana en directe** (Agenda Cultural, dades obertes) | Mai més una pàgina datada. Primer resultat: 180 activitats, 88 municipis, 39 gratuïtes, pont del 9-12 d'octubre |
+| **Festius locals de 1.398 municipis i nuclis** (dades obertes) | Una sola pàgina cercable, no 947 pàgines porta; «és festiu avui» diu també on és festa local |
+| **Part de bolets autoalimentat** (Meteocat XEMA) | Test que trenca el build si passa de 10 dies |
 | **Títols amb pressupost de 60 caràcters** | 39 títols tallats → 9 (les que queden són experiments congelats) |
 | **Hubs amb títol i descripció** | 9 pàgines sense descripció → 0 |
-| **`npm run site:audit`** | Auditoria completa de cada URL en 1 minut |
-| Regla de foto obligatòria també a la guia del cap de setmana | Ja no s'escapa cap publicador |
+| **Font del cos `optional`, hero amb `preload` de Next 16** | Treu el repintat tardà del paràgraf principal |
+| **Contrast WCAG AA** | 13 errors → 0; accessibilitat 97 |
+| **Edicions primes ampliades** amb dades d'accés verificades | 6 avisos → 0 a `adsense:check` |
+| **`ads.txt`** llest per al `pub-ID` | Una variable d'entorn i actiu |
+| **`llms.txt`** generat de la base de dades | Mapa per als assistents d'IA |
+| **`npm run site:audit`** | Auditoria de cada URL en 1 minut |
+| Error a `adsense:check` corregit | Reportava FAIL de consentiment per una comparació de majúscules |
 
----
+### Lighthouse, mòbil (simulat)
+
+| Pàgina | Rendiment | SEO | Accessibilitat | Bones pràctiques | CLS |
+| --- | --- | --- | --- | --- | --- |
+| Part de bolets | 92 | 100 | 97 | 100 | 0 |
+| Colors de tardor | 88 | 100 | 97 | 100 | 0 |
+| Portada | 89 | 100 | 97 | 100 | 0 |
+
+LCP queda a ~3,5 s en mòbil simulat: és la descàrrega de la imatge principal
+(ja en AVIF i precarregada). El següent pas són dades de camp de CrUX, que
+arribaran quan hi hagi prou trànsit.
+
+### AdSense: on som
+
+`npm run adsense:check`: **12 PASS, 1 avís, 1 FAIL**. L'únic FAIL és la
+identitat de l'editor, i només la pots posar tu.
 
 ## 4. Les palanques, per impacte esperat
 
