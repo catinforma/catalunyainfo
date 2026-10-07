@@ -6,6 +6,7 @@ import { fontClassNames } from "@/lib/fonts";
 import { getSessionUser } from "@/lib/auth/session";
 import { signOut } from "@/lib/admin/actions";
 import { isDatabaseConfigured } from "@/lib/db/client";
+import { Wordmark } from "@/components/Wordmark";
 
 /**
  * Second root layout, for the backoffice.
@@ -30,9 +31,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
         {user ? (
           <header className="border-b border-[var(--color-rule)] bg-[var(--color-surface)]">
             <div className="ci-shell flex flex-wrap items-center gap-4 py-3">
-              <Link href="/admin" className="ci-wordmark text-lg">
-                Catalunya<span>Info</span>
-              </Link>
+              <Wordmark href="/admin" className="text-lg" />
               <span className="ci-label">CMS</span>
 
               <nav aria-label="CMS" className="flex flex-wrap gap-4 text-sm">

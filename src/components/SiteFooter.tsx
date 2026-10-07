@@ -6,6 +6,7 @@ import { getMessages } from "@/lib/i18n";
 import { LEGAL_KEYS, legalPath, sectionPath } from "@/lib/i18n/routes";
 import type { Locale } from "@/lib/i18n/config";
 import { SITE } from "@/lib/site";
+import { Wordmark } from "@/components/Wordmark";
 
 /** Sections the footer may list. Empty ones are dropped, like in the header. */
 const FOOTER_SECTIONS = ["destinations", "guides", "events", "routes", "news"] as const;
@@ -24,9 +25,7 @@ export async function SiteFooter({ locale }: { locale: Locale }) {
     <footer className="ci-footer">
       <div className="ci-shell grid gap-8 py-10 sm:grid-cols-2 lg:grid-cols-4">
         <div>
-          <Link href={`/${locale}/`} className="ci-wordmark">
-            Catalunya<span>Info</span>
-          </Link>
+          <Wordmark href={`/${locale}/`} />
           <p className="ci-measure mt-3 text-sm text-[var(--color-muted)]">
             {t.footer.editorialNote}
           </p>

@@ -6,6 +6,7 @@ import type { Locale } from "@/lib/i18n/config";
 import { nonEmptySections } from "@/lib/content/repository";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 import { SearchBox } from "./SearchBox";
+import { Wordmark } from "@/components/Wordmark";
 
 /** Sections that may appear in the primary navigation, in editorial order. */
 const PRIMARY: SectionKey[] = ["destinations", "guides", "events", "routes", "news"];
@@ -40,9 +41,7 @@ export async function SiteHeader({
   return (
     <header className="ci-header">
       <div className="ci-shell flex items-center gap-4 py-3">
-        <Link href={`/${locale}/`} className="ci-wordmark">
-          Catalunya<span>Info</span>
-        </Link>
+        <Wordmark href={`/${locale}/`} />
 
         <nav
           aria-label={t.common.menu}

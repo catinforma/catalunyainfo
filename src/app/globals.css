@@ -29,6 +29,9 @@
   --color-sea-deep: #063a45;
   --color-sea-wash: #e4eeef;
 
+  /* Logo red: the "Info" of the wordmark, and nothing else. */
+  --color-brand-red: #da0012;
+
   /* Contour brown: only ever used for elevation, distance and route data. */
   --color-contour: #b4642a;
   --color-contour-wash: #f6ece3;
@@ -103,6 +106,7 @@
       --color-sea: #56b6c4;
       --color-sea-deep: #8ad4de;
       --color-sea-wash: #10313a;
+      --color-brand-red: #ff5a63;
 
       --color-contour: #dd9a5f;
       --color-contour-wash: #2c2118;
@@ -134,6 +138,7 @@
     --color-sea: #56b6c4;
     --color-sea-deep: #8ad4de;
     --color-sea-wash: #10313a;
+    --color-brand-red: #ff5a63;
 
     --color-contour: #dd9a5f;
     --color-contour-wash: #2c2118;
@@ -1116,6 +1121,9 @@
   }
 
   .ci-wordmark {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
     font-family: var(--font-display);
     font-weight: 600;
     font-size: var(--text-xl);
@@ -1124,8 +1132,17 @@
     text-decoration: none;
     white-space: nowrap;
   }
-  .ci-wordmark span {
-    color: var(--color-sea);
+  /* The mark keeps its own white tile so it reads the same on both themes. */
+  .ci-wordmark-mark {
+    width: 2.25rem;
+    height: 2.25rem;
+    flex: none;
+    border-radius: 0.5rem;
+    background: #ffffff;
+    box-shadow: 0 0 0 1px var(--color-rule);
+  }
+  .ci-wordmark-name span {
+    color: var(--color-brand-red);
   }
 
   .ci-nav-link {
