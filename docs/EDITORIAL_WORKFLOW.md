@@ -150,3 +150,36 @@ visible.
 - the **AdSense readiness checklist** with a live verdict,
 - pages overdue for re-verification,
 - translation gaps — published in one language, missing in another.
+
+---
+
+## Refreshing the mushroom report
+
+```bash
+npm run mushrooms:refresh      # reads XEMA, rewrites conditions.ts
+npm test                       # the staleness test must pass
+npm run build
+npx vercel --prod --yes
+curl -X POST -H "Authorization: Bearer $(cat .cron-secret)" \
+  "https://www.catalunyainfo.com/api/admin/publish?only=articles"
+```
+
+**Weekly, during the season.** Five pages across the site call this a weekly
+report, and `tests/mushroom-freshness.test.ts` fails the build once the data is
+more than ten days old. That test exists because the promise was not kept:
+between 13 September and 7 October 2026 the report was refreshed once, and it
+fell from 25 clicks a week at position 2.8 to zero — in the peak of the season,
+with no competitor having done anything. A freshness product that stops being
+fresh does not hold its position.
+
+What the script publishes is measured: mean accumulated rainfall per zone over
+fifteen days, how many stations that covers, and days since the last measurable
+rain. The condition band is derived from those two numbers by the thresholds in
+`scripts/mushroom-conditions.ts`, which the article prints in full.
+
+What it will not publish is whether mushrooms are there. That depends on
+species, substrate and ground temperature; rainfall cannot establish it, and a
+test asserts the phrase never reaches the page in any language.
+
+If a zone reports no station data the script **refuses to write at all** rather
+than refreshing six zones and leaving the seventh stale under the same date.

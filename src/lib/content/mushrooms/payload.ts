@@ -659,3 +659,47 @@ export const HERO = {
     en: "Mountain forest in autumn. Illustration generated with artificial intelligence.",
   },
 };
+
+/**
+ * Copy for the measured-rainfall block.
+ *
+ * Separate from the editorial zone prose because it is the part that has to
+ * stay true every week: it names what was measured, over what window, and by
+ * what rule the band was set, and it says in every language that none of it
+ * is a claim about whether mushrooms are present.
+ */
+export const LIVE_COPY = {
+  ca: {
+    title: "Pluja acumulada dels últims {days} dies",
+    intro: "Mitjana de les estacions automàtiques de Meteocat de cada zona, llegida el {date}. És el que s'ha mesurat, no una previsió ni una afirmació sobre la presència de bolets.",
+    rule: "Com es calcula la banda: molt favorables a partir de {very} mm amb pluja fa menys d'una setmana; favorables a partir de {fav} mm; interessants a partir de {int} mm. Només hi entren pluja acumulada i dies des de l'última pluja, totes dues mesurades.",
+    background: "Els apartats següents expliquen com ha anat la temporada i què mirar a cada zona. La taula de dalt és la lectura d'avui; el text del voltant és el context.",
+    legendFav: "Favorables",
+    legendMod: "Intermèdies",
+    legendLim: "Limitants",
+    legendUnknown: "Sense dades",
+    note: "{stations} estacions. Última pluja mesurada fa {days} dies.",
+  },
+  es: {
+    title: "Lluvia acumulada de los últimos {days} días",
+    intro: "Media de las estaciones automáticas de Meteocat de cada zona, leída el {date}. Es lo medido, no una previsión ni una afirmación sobre la presencia de setas.",
+    rule: "Cómo se calcula la banda: muy favorables a partir de {very} mm con lluvia hace menos de una semana; favorables a partir de {fav} mm; interesantes a partir de {int} mm. Solo entran lluvia acumulada y días desde la última lluvia, ambas medidas.",
+    background: "Los apartados siguientes explican cómo ha ido la temporada y qué mirar en cada zona. La tabla de arriba es la lectura de hoy; el texto alrededor es el contexto.",
+    legendFav: "Favorables",
+    legendMod: "Intermedias",
+    legendLim: "Limitantes",
+    legendUnknown: "Sin datos",
+    note: "{stations} estaciones. Última lluvia medida hace {days} días.",
+  },
+  en: {
+    title: "Rainfall over the last {days} days",
+    intro: "The mean across each zone's automatic weather stations, read on {date}. This is what was measured, not a forecast and not a claim about whether mushrooms are there.",
+    rule: "How the band is set: very favourable from {very} mm with rain in the last week; favourable from {fav} mm; worth a look from {int} mm. Only accumulated rainfall and days since the last rain go into it, both measured.",
+    background: "The sections below explain how the season has gone and what to look at in each area. The table above is today's reading; the text around it is the background.",
+    legendFav: "Favourable",
+    legendMod: "Middling",
+    legendLim: "Limiting",
+    legendUnknown: "No data",
+    note: "{stations} stations. Last measured rain {days} days ago.",
+  },
+};
