@@ -1398,3 +1398,45 @@
   :root:not([data-theme="light"]) .ci-today-answer.is-holiday { --answer-color: #5fb87a; }
 }
 :root[data-theme="dark"] .ci-today-answer.is-holiday { --answer-color: #5fb87a; }
+
+/* ---- Weekend agenda --------------------------------------------------------
+   A list people scan, not read: name, then place and dates on one quiet line,
+   and the "free" badge as a word, not a colour. */
+.ci-agenda {
+  margin: 2rem 0;
+  border: 1px solid var(--color-rule);
+  border-radius: var(--radius-md);
+  padding: 1.25rem;
+  background: var(--color-surface);
+}
+.ci-agenda-heading { margin: 0; font-size: 1.15rem; }
+.ci-agenda-range { margin: 0.25rem 0 0; color: var(--color-ink-soft); font-size: 0.9rem; }
+.ci-agenda-summary { margin: 0.75rem 0 0; font-weight: 600; }
+.ci-agenda-group {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  margin: 1.5rem 0 0.5rem;
+  font-size: 0.95rem;
+}
+.ci-agenda-count {
+  font-size: 0.75rem;
+  font-weight: 400;
+  color: var(--color-muted);
+}
+.ci-agenda-list { margin: 0; padding: 0; list-style: none; }
+.ci-agenda-item { padding: 0.55rem 0; border-top: 1px solid var(--color-rule); }
+.ci-agenda-title { margin: 0; font-weight: 600; font-size: 0.95rem; }
+.ci-agenda-meta { margin: 0.15rem 0 0; font-size: 0.8rem; color: var(--color-muted); }
+.ci-agenda-free {
+  display: inline-block;
+  margin-left: 0.5rem;
+  padding: 0 0.4rem;
+  border: 1px solid var(--color-rule);
+  border-radius: 999px;
+  font-size: 0.7rem;
+  font-weight: 500;
+  color: var(--color-ink-soft);
+  vertical-align: middle;
+}
+.ci-agenda-more, .ci-agenda-note { margin: 0.6rem 0 0; font-size: 0.8rem; color: var(--color-muted); }

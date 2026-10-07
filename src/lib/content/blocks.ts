@@ -395,6 +395,15 @@ export const holidayTodayBlock = z.object({
   type: z.literal("holidayToday"),
 });
 
+/**
+ * This weekend's activities, read at render time from the Generalitat's
+ * open-data cultural agenda. Configuration-free: the window is computed from
+ * the date, so the block cannot be left pointing at a weekend that has passed.
+ */
+export const weekendAgendaBlock = z.object({
+  type: z.literal("weekendAgenda"),
+});
+
 export const blockSchema = z.discriminatedUnion("type", [
   headingBlock,
   paragraphBlock,
@@ -419,6 +428,7 @@ export const blockSchema = z.discriminatedUnion("type", [
   conditionsMapBlock,
   transportPassesBlock,
   holidayTodayBlock,
+  weekendAgendaBlock,
 ]);
 
 export const bodySchema = z.array(blockSchema).max(500);

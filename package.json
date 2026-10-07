@@ -29,6 +29,7 @@
     "publish:weekend": "node --experimental-strip-types scripts/publish-weekend-guide.ts",
     "images:import": "node --experimental-strip-types scripts/import-images.ts",
     "growth:report": "node --experimental-strip-types scripts/growth-report.ts",
+    "site:audit": "node --experimental-strip-types scripts/site-audit.ts",
     "mushrooms:refresh": "node --experimental-strip-types scripts/mushroom-conditions.ts"
   },
   "dependencies": {

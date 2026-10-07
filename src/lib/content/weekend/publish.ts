@@ -1,5 +1,8 @@
 import "server-only";
 
+import { AGENDA_SOURCE } from "./agenda";
+import { EVERGREEN, buildEvergreenBody } from "./evergreen";
+
 import { and, eq } from "drizzle-orm";
 
 import { requireDb, schema } from "@/lib/db/client";
@@ -11,7 +14,6 @@ import {
   IMAGE_LICENCE,
   IMAGE_META,
   PLANS,
-  SOURCES,
 } from "./payload";
 import { IMAGE_BY_KEY } from "@/lib/content/images";
 
@@ -38,7 +40,6 @@ export const ENTRY_KEY = "weekend-guide-catalunya";
  * invisible rather than scheduled.
  */
 const INTENDED_PUBLISH = new Date("2026-09-14T07:00:00+02:00");
-const LAST_VERIFIED = new Date("2026-09-13T00:00:00+02:00");
 
 function hostOf(url: string): string {
   try {
@@ -144,7 +145,13 @@ export async function publishWeekendGuide(): Promise<PublishSummary> {
 
   // ---- Sources ------------------------------------------------------------
   const sourceIds: string[] = [];
-  for (const source of SOURCES) {
+  // The page now lists whatever the official agenda holds for the current
+  // weekend, so that agenda is its source. The twenty-five September sources
+  // belonged to plans that are no longer rendered.
+  const LIVE_SOURCES = [
+    { name: AGENDA_SOURCE.name, url: AGENDA_SOURCE.dataUrl, publisher: AGENDA_SOURCE.publisher },
+  ];
+  for (const source of LIVE_SOURCES) {
     const existing = await db
       .select({ id: schema.sources.id })
       .from(schema.sources)
@@ -208,6 +215,16 @@ export async function publishWeekendGuide(): Promise<PublishSummary> {
   const heroKey = IMAGE_META.find((m) => m.isHero)?.key;
   const heroMediaId = heroKey ? (mediaIds.get(heroKey) ?? null) : null;
 
+  // This publisher writes rows directly rather than going through
+  // `publishArticle`, so the house rule - every article carries at least one
+  // photograph - has to be enforced here as well or it does not hold.
+  if (!heroMediaId) {
+    throw new Error(
+      `${ENTRY_KEY}: every article needs at least one photo as its lead image ` +
+        `(hero ${heroKey ?? "missing"} is not in the image manifest)`,
+    );
+  }
+
   // ---- Category -----------------------------------------------------------
   const categoryRows = await db
     .select({ id: schema.categories.id })
@@ -254,7 +271,7 @@ export async function publishWeekendGuide(): Promise<PublishSummary> {
       sourceIds.map((sourceId, index) => ({
         entryId,
         sourceId,
-        accessedAt: LAST_VERIFIED,
+        accessedAt: now,
         sortOrder: index,
       })),
     );
@@ -264,8 +281,8 @@ export async function publishWeekendGuide(): Promise<PublishSummary> {
   const editions: PublishSummary["editions"] = [];
 
   for (const locale of LOCALES) {
-    const copy = COPY[locale];
-    const body = buildBody(locale, mediaIds);
+    const copy = EVERGREEN[locale];
+    const body = buildEvergreenBody(locale);
     const slug = copy.path.split("/").filter(Boolean).at(-1) ?? copy.path;
 
     const values = {
@@ -283,8 +300,10 @@ export async function publishWeekendGuide(): Promise<PublishSummary> {
       canonicalUrl: null,
       noindex: false,
       publishedAt,
-      lastVerifiedAt: LAST_VERIFIED,
-      updatedAt: publishedAt,
+      // The listing is read live, so "verified" is when the integration was
+      // last published, not a date somebody typed into a payload.
+      lastVerifiedAt: now,
+      updatedAt: now,
     };
 
     const existing = await db
@@ -316,6 +335,6 @@ export async function publishWeekendGuide(): Promise<PublishSummary> {
     media: mediaIds.size,
     editions,
     publishedAt: publishedAt.toISOString(),
-    lastVerifiedAt: LAST_VERIFIED.toISOString(),
+    lastVerifiedAt: now.toISOString(),
   };
 }
