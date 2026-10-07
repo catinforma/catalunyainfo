@@ -206,9 +206,9 @@ test("mushroom URLs are evergreen and carry no year", async () => {
   }
 });
 
-test("all seven condition zones are present in all three languages", async () => {
+test("all eight condition zones are present in all three languages", async () => {
   const { ZONES, LEVEL_LABEL } = await import("../src/lib/content/mushrooms/payload.ts");
-  assert.equal(ZONES.length, 7);
+  assert.equal(ZONES.length, 8);
   for (const zone of ZONES) {
     assert.ok(LEVEL_LABEL[zone.level], `unknown level ${zone.level}`);
     for (const locale of LOCALES) {

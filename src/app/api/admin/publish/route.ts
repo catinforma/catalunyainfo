@@ -57,6 +57,8 @@ export async function POST(request: Request) {
     if (wants("holidays")) published.push(await publishHolidayGuide());
     if (wants("holiday-today")) published.push(await publishHolidayTodayGuide());
     if (wants("tourist-tax")) published.push(await publishTouristTaxGuide());
+    // The weekly refresh: one article, so it never waits on the other five.
+    if (wants("mushrooms")) published.push(await publishMushroomReport());
     // Empty registry until an editorial package adds a zone; publishes nothing.
     if (wants("mushroom-zones") || only === "all") published.push(...(await publishMushroomZones()));
     // Nine articles in three languages does not fit in one function call, so

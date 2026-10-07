@@ -19,7 +19,7 @@ import { COPY, HERO, LEVEL_LABEL, SOURCES, ZONES } from "./payload";
 export const ENTRY_KEY = "mushroom-conditions-catalunya";
 
 const PUBLISHED = new Date("2026-09-13T17:30:00+02:00");
-const LAST_VERIFIED = new Date("2026-09-13T12:00:00+02:00");
+const LAST_VERIFIED = new Date("2026-10-07T12:00:00+02:00");
 
 /** Heading for the local-zone list, used only once a zone exists. */
 const ZONES_HEADING: Record<Locale, string> = {
