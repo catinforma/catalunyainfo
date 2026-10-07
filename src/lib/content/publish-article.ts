@@ -122,7 +122,25 @@ export async function upsertImages(images: ImageSpec[]): Promise<Map<string, str
   return ids;
 }
 
+/**
+ * House rule: every article carries at least one photograph, as its lead image.
+ *
+ * Thrown rather than warned, and before anything is written: an article whose
+ * hero key is missing from the image manifest used to publish silently without
+ * one, which is exactly the failure this exists to stop.
+ */
+export function assertHasPhoto(spec: Pick<ArticleSpec, "entryKey" | "heroKey" | "images">): void {
+  const keys = new Set((spec.images ?? []).map((image) => image.key));
+  if (!spec.heroKey || !keys.has(spec.heroKey)) {
+    throw new Error(
+      `${spec.entryKey}: every article needs at least one photo as its lead image ` +
+        `(heroKey ${spec.heroKey ?? "missing"} is not among its images)`,
+    );
+  }
+}
+
 export async function publishArticle(spec: ArticleSpec): Promise<PublishResult> {
+  assertHasPhoto(spec);
   const db = requireDb();
   const now = new Date();
 

@@ -202,6 +202,23 @@ export async function saveEntryMeta(input: unknown): Promise<ActionResult> {
  *  - the plain-text projection used by search is recomputed from the body, so
  *    it can never drift from what is rendered.
  */
+/**
+ * House rule: every article carries at least one photograph, as its lead
+ * image. Institutional pages (`page`) are not articles and are exempt. The
+ * same rule is enforced for code-published articles by `assertHasPhoto`.
+ */
+const NO_PHOTO = "Every article needs at least one photo: set a lead image before publishing.";
+
+async function lacksPhoto(entryId: string): Promise<boolean> {
+  const rows = await requireDb()
+    .select({ type: entries.type, heroMediaId: entries.heroMediaId })
+    .from(entries)
+    .where(eq(entries.id, entryId))
+    .limit(1);
+  const entry = rows[0];
+  return Boolean(entry && entry.type !== "page" && !entry.heroMediaId);
+}
+
 export async function saveTranslation(input: unknown): Promise<ActionResult> {
   try {
     const user = await requireUser("author");
@@ -214,6 +231,7 @@ export async function saveTranslation(input: unknown): Promise<ActionResult> {
 
     if (data.status === "published" || data.status === "scheduled") {
       await requireUser("editor");
+      if (await lacksPhoto(data.entryId)) return fail(NO_PHOTO);
     }
 
     const body = parseBody(data.body);
@@ -376,6 +394,7 @@ export async function setTranslationStatus(
       .limit(1);
     const row = rows[0];
     if (!row) return fail("That entry no longer exists.");
+    if (status === "published" && (await lacksPhoto(row.entryId))) return fail(NO_PHOTO);
 
     await db
       .update(entryTranslations)

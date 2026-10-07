@@ -37,7 +37,6 @@ import {
 const FESTIVAL = "https://sitgesfilmfestival.com/";
 const RULES = "https://sitgesfilmfestival.com/en/edition/rules-regulations";
 const VENUES = "https://sitgesfilmfestival.com/en/festival/venues";
-const PROGRAM = "https://sitgesfilmfestival.com/en/edition/program";
 const RODALIES = "https://rodalies.gencat.cat/ca/horaris/tots-els-horaris/";
 
 function ca(): Block[] {

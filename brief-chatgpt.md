@@ -240,6 +240,9 @@ Tenint en compte tot l'anterior, i sobretot l'apartat 0 i l'apartat 5:
 
 - **No inventar dades.** Cap xifra, data, preu, horari, normativa o coordenada
   sense font oficial verificable. És el motiu pel qual AdSense va rebutjar la v1.
+- **Cada article ha de tenir com a mínim 1 foto**, com a imatge principal. Sense
+  foto no es publica: el publicador ho rebutja. Cada paquet editorial ha de
+  portar la foto (amb llicència i atribució) o no està complet.
 - **Imatges:** només CC0, CC BY, CC BY-SA, domini públic o GFDL. NC i ND
   rebutjades. Atribució obligatòria a la pàgina.
 - **URLs perennes**, sense any al slug.

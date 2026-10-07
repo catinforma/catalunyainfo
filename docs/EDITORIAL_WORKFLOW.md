@@ -50,15 +50,22 @@ that its pages are checked.
    displays.
 3. **Attribute.** Pick an author. Anonymous content is one of the strongest
    low-value signals there is.
-4. **Cite.** Add sources — official and primary first. They render as a numbered
+4. **Illustrate.** Every article carries **at least one photograph**, set as its
+   lead image. No exceptions: a guide, a weekly report and a one-question
+   utility page all need one. Articles published from code are refused by
+   `assertHasPhoto` in `src/lib/content/publish-article.ts` if the lead image is
+   missing, and `tests/article-photo.test.ts` catches a hero key that is not in
+   the image manifest before it reaches a deploy. Licences as for every image:
+   CC0, CC BY, CC BY-SA, public domain or GFDL, attributed on the page.
+5. **Cite.** Add sources — official and primary first. They render as a numbered
    register and feed `citation` in the structured data.
-5. **Set the verification date.** `last_verified_at` is the date a human checked
+6. **Set the verification date.** `last_verified_at` is the date a human checked
    the facts, not the date the file was touched. Set `review_due_at` to when it
    must be checked again.
-6. **Check the URL.** The path is validated on save; after publication, changing
+7. **Check the URL.** The path is validated on save; after publication, changing
    it automatically leaves a permanent redirect behind.
-7. **Review.** Author moves to `review`; an editor reads it.
-8. **Publish.** Only an editor can. `published_at` is set once and preserved
+8. **Review.** Author moves to `review`; an editor reads it.
+9. **Publish.** Only an editor can. `published_at` is set once and preserved
    through every later edit.
 
 On publish the site revalidates the page, its section hub, the locale home and

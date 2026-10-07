@@ -1,7 +1,13 @@
 import "server-only";
 
 import type { Block } from "@/lib/content/blocks";
-import { publishArticle, type ArticleSpec, type PublishResult } from "@/lib/content/publish-article";
+import { IMAGE_BY_KEY } from "@/lib/content/images";
+import {
+  publishArticle,
+  type ArticleSpec,
+  type ImageSpec,
+  type PublishResult,
+} from "@/lib/content/publish-article";
 import { LOCALES, type Locale } from "@/lib/i18n/config";
 
 import { CALENDAR_VERIFIED_AT, HOLIDAY_SOURCE } from "./calendar";
@@ -41,6 +47,40 @@ import { COPY as CALENDAR_COPY } from "./copy";
 export const ENTRY_KEY = "guide-is-today-a-holiday-catalonia";
 
 const PUBLISHED = new Date("2026-10-06T12:00:00+02:00");
+
+// The calendar guide's Diada photograph. Shared deliberately: every article
+// carries at least one photo, and this is the one that says "public holiday"
+// in Catalonia without a word of text.
+const HERO_KEY = "calendari-laboral-catalunya-diada";
+const HERO_ALT: Record<Locale, string> = {
+  ca: "Ofrena floral durant la Diada Nacional de Catalunya, amb rams de colors al peu del monument",
+  es: "Ofrenda floral durante la Diada Nacional de Cataluña, con ramos de colores al pie del monumento",
+  en: "Flowers laid at a monument during the Diada, Catalonia's national day",
+};
+const HERO_CAPTION: Record<Locale, string> = {
+  ca: "La Diada, l'11 de setembre, és un dels festius que es fan a tot Catalunya.",
+  es: "La Diada, el 11 de septiembre, es uno de los festivos de toda Cataluña.",
+  en: "The Diada on 11 September is one of the holidays kept across Catalonia.",
+};
+
+function heroImages(): ImageSpec[] {
+  const file = IMAGE_BY_KEY.get(HERO_KEY);
+  if (!file) return [];
+  return [
+    {
+      key: HERO_KEY,
+      url: file.url,
+      width: file.width,
+      height: file.height,
+      blurDataUrl: file.blurDataUrl,
+      credit: file.credit ?? "CatalunyaInfo",
+      creditUrl: file.creditUrl ?? null,
+      license: file.license ?? null,
+      alt: HERO_ALT,
+      caption: HERO_CAPTION,
+    },
+  ];
+}
 const VERIFIED = new Date(`${CALENDAR_VERIFIED_AT}T12:00:00+02:00`);
 
 interface TodayCopy {
@@ -186,7 +226,8 @@ export async function publishHolidayTodayGuide(): Promise<PublishResult> {
     type: "guide",
     categoryKey: "public-services",
     isFeatured: false,
-    images: [],
+    heroKey: HERO_KEY,
+    images: heroImages(),
     sources: [
       {
         name: HOLIDAY_SOURCE.name,
