@@ -188,13 +188,21 @@ async function main() {
   );
 
   /* ---- Consent ----------------------------------------------------------- */
-  const hasConsentGate = home.body.includes("ci-consent") || home.body.includes("consent");
+  // Case-insensitive: the banner ships as a client component named
+  // `ConsentGate`, so the old lowercase match never found it and reported a
+  // FAIL for a site that has had consent mode from the start.
+  const hasConsentGate = /consentgate|ci-consent/i.test(home.body);
   record(
     hasConsentGate ? "WARNING" : "FAIL",
     "Consent for ads",
-    "A first-party consent banner covers analytics. Serving personalised ads to " +
-      "EEA/UK users additionally requires a Google-certified CMP integrated with " +
-      "the IAB TCF — that is a separate piece of work, not a switch.",
+    hasConsentGate
+      ? "Analytics consent is in place (Consent Mode v2, denied by default). Not a " +
+          "blocker to apply. Before ads are served to EEA/UK/Swiss visitors, enable " +
+          "AdSense > Privacy & messaging > European regulations message: it is " +
+          "Google-certified and TCF-integrated, which is what the requirement in " +
+          "force since 16 January 2024 asks for. Nothing to build."
+      : "No consent mechanism found on the homepage. Analytics consent must exist " +
+          "before applying, and a Google-certified TCF CMP before serving ads in the EEA.",
   );
 
   /* ---- Report ------------------------------------------------------------ */

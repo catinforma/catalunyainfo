@@ -345,6 +345,12 @@ export const SETCASES: B2Article = {
         ...paras(
           `Setcases forma part d'una comarca que dona per a molt més: ${b2link("ripolles", "ca", "la guia del Ripollès")}.`,
         ),
+        ...h2(
+          "Com arribar-hi",
+          "El tren no arriba a Setcases. L'estació més propera de la línia R3 és **Ripoll**, i des d'allà cal pujar la vall del Ter per carretera, passant per Camprodon.",
+          "A l'hivern, abans de continuar cap a Vallter, comprova l'estat de la carretera: el tram final és d'alta muntanya i pot quedar afectat per la neu.",
+          "Si vas a passar el dia, Camprodon és la població de la vall amb més serveis i pot fer de base per dinar o dormir.",
+        ),
         ...paras(verifiedLine("ca", SETCASES_VERIFIED)),
         ...b2Related(["ripolles", "snow"], "ca"),
       ],
@@ -387,6 +393,12 @@ export const SETCASES: B2Article = {
           "No afirmamos que Vallter esté abierto ni que haya nieve. Comprueba la meteorología, los accesos y el estado de la estación para la fecha concreta.",
         ),
         ...paras(`${b2link("ripolles", "es", "La guía del Ripollès")} sitúa Setcases en su comarca.`),
+        ...h2(
+          "Cómo llegar",
+          "El tren no llega a Setcases. La estación más cercana de la línea R3 es **Ripoll**, y desde allí hay que subir el valle del Ter por carretera, pasando por Camprodon.",
+          "En invierno, antes de seguir hacia Vallter, comprueba el estado de la carretera: el tramo final es de alta montaña y puede verse afectado por la nieve.",
+          "Si vas a pasar el día, Camprodon es la población del valle con más servicios y puede servir de base para comer o dormir.",
+        ),
         ...paras(verifiedLine("es", SETCASES_VERIFIED)),
         ...b2Related(["ripolles", "snow"], "es"),
       ],
@@ -429,6 +441,12 @@ export const SETCASES: B2Article = {
           "Always check mountain and road conditions before continuing towards Vallter. We do not claim the resort is open or that there is snow.",
         ),
         ...paras(`${b2link("ripolles", "en", "The Ripollès guide")} places Setcases in its region.`),
+        ...h2(
+          "Getting there",
+          "The train does not reach Setcases. The nearest R3 station is **Ripoll**; from there the road climbs the Ter valley through Camprodon.",
+          "In winter, check road conditions before continuing to Vallter: the last stretch is high-mountain road and can be affected by snow.",
+          "For a day visit, Camprodon is the town in the valley with the most services and works as a base for lunch or a night.",
+        ),
         ...paras(verifiedLine("en", SETCASES_VERIFIED)),
         ...b2Related(["ripolles", "snow"], "en"),
       ],
@@ -538,6 +556,26 @@ export const SNOW: B2Article = {
         ...paras(
           `Si hi vols anar sense cotxe, mira ${b2link("cerdanya", "ca", "què es pot fer a la Cerdanya amb transport públic")}.`,
         ),
+        ...h2(
+          "Com arribar a cada destinació",
+          "Abans de triar, convé saber quines es poden fer sense cotxe. Només dues tenen connexió ferroviària directa:",
+        ),
+        table(
+          "Com arribar a cada destinació",
+          ["Destinació", "Comarca", "Sense cotxe"],
+          [
+            ["La Molina", "Cerdanya", "Tren R3 fins a l'estació de La Molina; Bus Blanc en temporada de neu"],
+            ["Vall de Núria", "Ripollès", "Tren R3 fins a Ribes de Freser i cremallera fins a Núria. No s'hi pot pujar amb cotxe"],
+            ["Vallter", "Ripollès", "Sense connexió directa verificada"],
+            ["Espot", "Pallars Sobirà", "Sense connexió directa verificada"],
+            ["Port Ainé", "Pallars Sobirà", "Sense connexió directa verificada"],
+            ["Boí Taüll", "Alta Ribagorça", "Sense connexió directa verificada"],
+          ],
+          "«Sense connexió directa verificada» vol dir que no n'hem pogut confirmar cap a les fonts oficials, no que no n'hi hagi cap. Consulta-ho a l'operador abans de sortir.",
+        ),
+        ...paras(
+          "Núria és el cas més clar d'escapada de neu sense cotxe: l'aparcament gratuït de l'estació de Ribes-Enllaç és on es deixa el vehicle si s'hi arriba conduint, i des d'allà el cremallera para a Ribes-Vila, Queralbs i Núria.",
+        ),
         ...paras(verifiedLine("ca", SNOW_VERIFIED)),
         ...b2Related(["cerdanya", "ripolles", "setcases"], "ca"),
       ],
@@ -578,6 +616,26 @@ export const SNOW: B2Article = {
         ),
         ...paras(
           `Sin coche: ${b2link("cerdanya", "es", "qué se puede hacer en la Cerdanya en transporte público")}.`,
+        ),
+        ...h2(
+          "Cómo llegar a cada destino",
+          "Antes de elegir, conviene saber cuáles se pueden hacer sin coche. Solo dos tienen conexión ferroviaria directa:",
+        ),
+        table(
+          "Cómo llegar a cada destino",
+          ["Destino", "Comarca", "Sin coche"],
+          [
+            ["La Molina", "Cerdanya", "Tren R3 hasta la estación de La Molina; Bus Blanc en temporada de nieve"],
+            ["Vall de Núria", "Ripollès", "Tren R3 hasta Ribes de Freser y cremallera hasta Núria. No se puede subir en coche"],
+            ["Vallter", "Ripollès", "Sin conexión directa verificada"],
+            ["Espot", "Pallars Sobirà", "Sin conexión directa verificada"],
+            ["Port Ainé", "Pallars Sobirà", "Sin conexión directa verificada"],
+            ["Boí Taüll", "Alta Ribagorça", "Sin conexión directa verificada"],
+          ],
+          "«Sin conexión directa verificada» significa que no hemos podido confirmar ninguna en las fuentes oficiales, no que no exista. Consúltalo con el operador antes de salir.",
+        ),
+        ...paras(
+          "Núria es el caso más claro de escapada de nieve sin coche: el aparcamiento gratuito de la estación de Ribes-Enllaç es donde se deja el vehículo si se llega conduciendo, y desde allí el cremallera para en Ribes-Vila, Queralbs y Núria.",
         ),
         ...paras(verifiedLine("es", SNOW_VERIFIED)),
         ...b2Related(["cerdanya", "ripolles", "setcases"], "es"),
@@ -624,6 +682,26 @@ export const SNOW: B2Article = {
         ),
         ...paras(
           `Travelling without a car? ${b2link("cerdanya", "en", "What you can reach in Cerdanya by public transport")}.`,
+        ),
+        ...h2(
+          "Getting to each destination",
+          "Before choosing, it helps to know which can be done without a car. Only two have a direct rail connection:",
+        ),
+        table(
+          "Getting to each destination",
+          ["Destination", "Comarca", "Without a car"],
+          [
+            ["La Molina", "Cerdanya", "R3 train to La Molina station; Bus Blanc in the snow season"],
+            ["Vall de Núria", "Ripollès", "R3 train to Ribes de Freser, then the rack railway to Núria. There is no road up"],
+            ["Vallter", "Ripollès", "No verified direct connection"],
+            ["Espot", "Pallars Sobirà", "No verified direct connection"],
+            ["Port Ainé", "Pallars Sobirà", "No verified direct connection"],
+            ["Boí Taüll", "Alta Ribagorça", "No verified direct connection"],
+          ],
+          "\"No verified direct connection\" means we could not confirm one in official sources, not that none exists. Check with the operator before you travel.",
+        ),
+        ...paras(
+          "Núria is the clearest car-free snow trip: drivers leave the car at the free car park at Ribes-Enllaç station, and the rack railway calls at Ribes-Vila, Queralbs and Núria.",
         ),
         ...paras(verifiedLine("en", SNOW_VERIFIED)),
         ...b2Related(["cerdanya", "ripolles", "setcases"], "en"),

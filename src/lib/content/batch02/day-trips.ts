@@ -523,6 +523,11 @@ export const CERDANYA: B2Article = {
         ...paras(
           `Si vols més escapades ferroviàries, mira ${link("trains", "ca", "dotze escapades en tren")}, i si el destí és el Pirineu oriental, ${b2link("ripolles", "ca", "la guia del Ripollès")}.`,
         ),
+        ...h2(
+          "Núria, a la mateixa línia",
+          "L'R3 que puja a la Cerdanya para també a **Ribes de Freser**, on enllaça amb el cremallera de la Vall de Núria. És de les poques escapades d'alta muntanya que es poden fer de punta a punta sense cotxe: a Núria no s'hi pot pujar per carretera.",
+          "Combinar la Cerdanya i Núria en un mateix viatge és possible perquè comparteixen línia; només cal mirar els horaris de tots dos trens el dia que hi vagis.",
+        ),
         ...paras(verifiedLine("ca", CERDANYA_VERIFIED)),
         ...b2Related(["ripolles", "snow", "girona"], "ca"),
       ],
@@ -565,6 +570,11 @@ export const CERDANYA: B2Article = {
         ...paras(
           `Más escapadas ferroviarias: ${link("trains", "es", "doce escapadas en tren")}. Y si vas al Pirineo oriental, ${b2link("ripolles", "es", "la guía del Ripollès")}.`,
         ),
+        ...h2(
+          "Núria, en la misma línea",
+          "La R3 que sube a la Cerdanya para también en **Ribes de Freser**, donde enlaza con el cremallera de la Vall de Núria. Es una de las pocas escapadas de alta montaña que se pueden hacer de punta a punta sin coche: a Núria no se puede subir por carretera.",
+          "Combinar la Cerdanya y Núria en un mismo viaje es posible porque comparten línea; solo hay que mirar los horarios de los dos trenes el día que vayas.",
+        ),
         ...paras(verifiedLine("es", CERDANYA_VERIFIED)),
         ...b2Related(["ripolles", "snow", "girona"], "es"),
       ],
@@ -606,6 +616,11 @@ export const CERDANYA: B2Article = {
         ),
         ...paras(
           `More rail trips: ${link("trains", "en", "twelve day trips by train")}. Heading further east? ${b2link("ripolles", "en", "the Ripollès guide")}.`,
+        ),
+        ...h2(
+          "Núria, on the same line",
+          "The R3 that runs up to Cerdanya also stops at **Ribes de Freser**, where it connects with the Vall de Núria rack railway. It is one of the few high-mountain trips you can do end to end without a car: there is no road up to Núria.",
+          "Combining Cerdanya and Núria on one trip works because they share the line; just check both timetables for the day you travel.",
         ),
         ...paras(verifiedLine("en", CERDANYA_VERIFIED)),
         ...b2Related(["ripolles", "snow", "girona"], "en"),
