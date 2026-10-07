@@ -1440,3 +1440,17 @@
   vertical-align: middle;
 }
 .ci-agenda-more, .ci-agenda-note { margin: 0.6rem 0 0; font-size: 0.8rem; color: var(--color-muted); }
+
+.ci-today-local {
+  margin: 1.25rem 0 0;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--color-rule);
+}
+.ci-today-local-title { margin: 0; font-weight: 600; }
+.ci-today-local-list { margin: 0.35rem 0 0; font-size: 0.9rem; color: var(--color-ink-soft); }
+
+.ci-local { margin: 2rem 0; }
+.ci-local-summary { font-weight: 600; margin: 0 0 0.75rem; }
+.ci-local-filter { display: grid; gap: 0.35rem; margin: 0 0 1rem; max-width: 24rem; }
+.ci-local-filter label { font-size: 0.85rem; color: var(--color-ink-soft); }
+.ci-local-nucleus { font-size: 0.75rem; color: var(--color-muted); }

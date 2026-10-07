@@ -321,6 +321,16 @@ export const IMAGES: readonly ImportedImage[] = [
     "blurDataUrl": "data:image/webp;base64,UklGRmAAAABXRUJQVlA4IFQAAADwAQCdASoQAAkAA4BaJbACdAEXfTSsQpAA9ZJCj1JqwfQeA1r91+75W7x2HjscKbUJzd4tv+LQ4/khfuMn57t4GtlJGH3oPeO9q+KVe9L9FSSgAAA="
   },
   {
+    "key": "festius-locals-gegants-festa-major",
+    "url": "/images/festius-locals-gegants-festa-major.webp",
+    "width": 1920,
+    "height": 1277,
+    "blurDataUrl": "data:image/webp;base64,UklGRnYAAABXRUJQVlA4IGoAAAAwAgCdASoQAAsAA4BaJQBOgMXDwO8Q8BPYYAD+fkDuLjHIuQ0KTarZuYFTiFXXJKPs4t3JH1w0nQ2l+dSUppOqMNHc1HLzWVrwsRKIz6YPnjJ5GSKDkrKq+j6U5Hw449ak2ogLhgWkAAAA",
+    "credit": "josepatau",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Catalonia_LesBogesBlanques_FestaMajor_2007.jpg",
+    "license": "CC BY-SA 2.0"
+  },
+  {
     "key": "festival-sitges-2026-cinema-fantastic",
     "url": "/images/festival-sitges-2026-cinema-fantastic.webp",
     "width": 1672,

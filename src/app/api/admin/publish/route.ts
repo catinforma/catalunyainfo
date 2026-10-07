@@ -12,6 +12,7 @@ import { publishTouristTaxGuide } from "@/lib/content/tourist-tax/publish";
 import { publishMushroomZones } from "@/lib/content/mushroom-zones/publish";
 import { publishBatch02 } from "@/lib/content/batch02/publish";
 import { publishHolidayTodayGuide } from "@/lib/content/holidays/today-publish";
+import { publishLocalHolidaysGuide } from "@/lib/content/holidays/local-publish";
 import { authoriseDeployRequest, describeError } from "@/lib/admin/deploy-auth";
 
 export const runtime = "nodejs";
@@ -56,6 +57,7 @@ export async function POST(request: Request) {
     if (wants("features-b")) published.push(...(await publishFeatures(5, 10)));
     if (wants("holidays")) published.push(await publishHolidayGuide());
     if (wants("holiday-today")) published.push(await publishHolidayTodayGuide());
+    if (wants("local-holidays")) published.push(await publishLocalHolidaysGuide());
     if (wants("tourist-tax")) published.push(await publishTouristTaxGuide());
     // The weekly refresh: one article, so it never waits on the other five.
     if (wants("mushrooms")) published.push(await publishMushroomReport());

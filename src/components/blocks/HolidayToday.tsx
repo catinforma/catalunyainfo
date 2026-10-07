@@ -15,6 +15,7 @@ import {
   weekdayIndex,
   WEEKDAY_NAMES,
 } from "@/lib/content/holidays/calendar";
+import { LOCAL_SOURCE, loadLocalCalendar, placesWithHolidayOn } from "@/lib/content/holidays/local";
 import { getMessages } from "@/lib/i18n";
 import type { Locale } from "@/lib/i18n/config";
 
@@ -46,11 +47,18 @@ import type { Locale } from "@/lib/i18n/config";
  * that would be wrong twice a year in every town.
  */
 
-export function HolidayToday({ locale, now }: { locale: Locale; now?: Date }) {
+export async function HolidayToday({ locale, now }: { locale: Locale; now?: Date }) {
   const t = getMessages(locale).holidayToday;
 
   const today = todayInCatalonia(now);
   const tomorrow = addDays(today, 1);
+
+  // Local days come from the Generalitat's open data, one row per council or
+  // nucleus. Read for the current year only: next year's local days are set
+  // council by council late in the year and are never guessed.
+  const local = await loadLocalCalendar(Number(today.slice(0, 4)));
+  const localToday = placesWithHolidayOn(local, today);
+  const localTomorrow = placesWithHolidayOn(local, tomorrow);
 
   const todayHoliday = holidayOn(today);
   const tomorrowHoliday = holidayOn(tomorrow);
@@ -96,6 +104,28 @@ export function HolidayToday({ locale, now }: { locale: Locale; now?: Date }) {
         </div>
       </dl>
 
+      {local.error ? null : (
+        <div className="ci-today-local">
+          <p className="ci-today-local-title">
+            {localToday.length > 0
+              ? t.localToday.replace("{n}", String(localToday.length))
+              : t.localTodayNone}
+          </p>
+          {localToday.length > 0 ? (
+            <p className="ci-today-local-list">
+              {localToday.map((place) => place.name).join(", ")}
+            </p>
+          ) : null}
+          {localTomorrow.length > 0 ? (
+            <p className="ci-today-note">
+              {t.localTomorrow.replace("{n}", String(localTomorrow.length))}{" "}
+              {localTomorrow.slice(0, 40).map((place) => place.name).join(", ")}
+              {localTomorrow.length > 40 ? "…" : ""}
+            </p>
+          ) : null}
+        </div>
+      )}
+
       <h3 className="ci-today-subtitle">{t.upcomingTitle}</h3>
       <table className="ci-table" role="table">
         <thead>
@@ -134,7 +164,13 @@ export function HolidayToday({ locale, now }: { locale: Locale; now?: Date }) {
         </tbody>
       </table>
 
-      <p className="ci-today-note">{t.localNote}</p>
+      <p className="ci-today-note">
+        {local.error ? t.localNote : t.localListNote}{" "}
+        <a href={LOCAL_SOURCE.url} rel="noopener" target="_blank">
+          {LOCAL_SOURCE.name}
+        </a>
+        .
+      </p>
       <p className="ci-today-note">
         {t.coverageNote.replace("{years}", COVERED_YEARS.join(", "))}
       </p>

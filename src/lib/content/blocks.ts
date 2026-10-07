@@ -404,6 +404,15 @@ export const weekendAgendaBlock = z.object({
   type: z.literal("weekendAgenda"),
 });
 
+/**
+ * Every municipality's local holidays, read from the Generalitat's open data.
+ * Configuration-free: the year is the current one, and a year with no
+ * published rows is reported as such rather than guessed.
+ */
+export const localHolidaysBlock = z.object({
+  type: z.literal("localHolidays"),
+});
+
 export const blockSchema = z.discriminatedUnion("type", [
   headingBlock,
   paragraphBlock,
@@ -429,6 +438,7 @@ export const blockSchema = z.discriminatedUnion("type", [
   transportPassesBlock,
   holidayTodayBlock,
   weekendAgendaBlock,
+  localHolidaysBlock,
 ]);
 
 export const bodySchema = z.array(blockSchema).max(500);
