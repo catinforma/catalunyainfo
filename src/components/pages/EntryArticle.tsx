@@ -100,7 +100,11 @@ export function EntryArticle({
             width={entry.hero.width ?? 1920}
             height={entry.hero.height ?? 1080}
             sizes="100vw"
-            priority
+            // Next.js 16 deprecated `priority` in favour of `preload`. The hero
+            // is the LCP element on most articles, so it is preloaded from the
+            // head and fetched at high priority.
+            preload
+            fetchPriority="high"
             placeholder={entry.hero.blurDataUrl ? "blur" : "empty"}
             blurDataURL={entry.hero.blurDataUrl ?? undefined}
             className="max-h-[32rem] w-full object-cover"

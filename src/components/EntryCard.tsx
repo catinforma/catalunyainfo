@@ -45,7 +45,8 @@ export function EntryCard({
             sizes="(min-width: 1024px) 22rem, (min-width: 640px) 45vw, 92vw"
             placeholder={entry.hero.blurDataUrl ? "blur" : "empty"}
             blurDataURL={entry.hero.blurDataUrl ?? undefined}
-            priority={priority}
+            preload={priority}
+            fetchPriority={priority ? "high" : undefined}
             style={{ objectPosition: `${entry.hero.focalX * 100}% ${entry.hero.focalY * 100}%` }}
           />
         </div>
