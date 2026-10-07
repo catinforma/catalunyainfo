@@ -1454,3 +1454,7 @@
 .ci-local-filter { display: grid; gap: 0.35rem; margin: 0 0 1rem; max-width: 24rem; }
 .ci-local-filter label { font-size: 0.85rem; color: var(--color-ink-soft); }
 .ci-local-nucleus { font-size: 0.75rem; color: var(--color-muted); }
+.ci-local-table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+.ci-local-table th { text-align: left; font-size: 0.78rem; color: var(--color-muted); border-bottom: 1px solid var(--color-rule); padding: 0.4rem 0.5rem; }
+.ci-local-table td { border-bottom: 1px solid var(--color-rule); padding: 0.4rem 0.5rem; vertical-align: top; }
+.ci-local-table small { color: var(--color-muted); }

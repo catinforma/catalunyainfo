@@ -50,3 +50,12 @@ for (const locale of LOCALES) {
     assert.ok(COPY[locale].seoTitle.length <= 60);
   });
 }
+
+import { displayName } from "../src/lib/content/holidays/local.ts";
+
+test("gazetteer-style names get their article back in front", () => {
+  assert.equal(displayName("Guàrdia, la"), "la Guàrdia");
+  assert.equal(displayName("Masies de Voltregà, les"), "les Masies de Voltregà");
+  assert.equal(displayName("Espluga de Francolí, l'"), "l'Espluga de Francolí");
+  assert.equal(displayName("Abrera"), "Abrera");
+});

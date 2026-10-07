@@ -49,27 +49,31 @@ export async function LocalHolidays({ locale }: { locale: Locale }) {
 
       <LocalHolidaysFilter label={t.filterLabel} placeholder={t.filterPlaceholder} empty={t.filterEmpty} />
 
-      <div className="ci-table-wrap">
-        <table className="ci-table ci-local-table" role="table">
-          <thead>
-            <tr role="row">
-              <th scope="col">{t.colPlace}</th>
-              <th scope="col">{t.colDates}</th>
+      {/*
+        A plain two-column table, without the stacked-card markup the general
+        table block uses. Every attribute here is repeated 1,400 times and
+        then again in the server-component payload, so the per-row markup is
+        kept to what the reader and the filter actually need.
+      */}
+      <table className="ci-local-table">
+        <thead>
+          <tr>
+            <th scope="col">{t.colPlace}</th>
+            <th scope="col">{t.colDates}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {calendar.places.map((place) => (
+            <tr key={place.key} data-place={place.name.toLowerCase()}>
+              <td>
+                {place.name}
+                {place.isNucleus ? <small> {t.nucleus}</small> : null}
+              </td>
+              <td>{place.dates.map(day).join(" · ")}</td>
             </tr>
-          </thead>
-          <tbody>
-            {calendar.places.map((place) => (
-              <tr key={place.key} role="row" data-place={place.name.toLowerCase()}>
-                <td data-label={t.colPlace}>
-                  {place.name}
-                  {place.isNucleus ? <span className="ci-local-nucleus"> {t.nucleus}</span> : null}
-                </td>
-                <td data-label={t.colDates}>{place.dates.map(day).join(" · ")}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+          ))}
+        </tbody>
+      </table>
 
       <p className="ci-calc-note">
         {t.sourceLine}{" "}

@@ -61,11 +61,25 @@ interface Row {
   festiu?: string;
 }
 
+/**
+ * The source writes articles after the name, as in a gazetteer: "Guàrdia, la",
+ * "Pobla de Segur, la", "Masies de Voltregà, les". Listed next to each other
+ * with commas, "Clua, la, Gimenells, Guàrdia, la" stops being readable, so the
+ * article goes back in front where everyone says it.
+ */
+export function displayName(name: string): string {
+  const match = /^(.*),\s*(la|el|les|els|l'|l’)$/i.exec(name.trim());
+  if (!match) return name.trim();
+  const [, base, article] = match;
+  const lower = (article ?? "").toLowerCase().replace("’", "'");
+  return lower === "l'" ? `l'${base}` : `${lower} ${base}`;
+}
+
 export function groupRows(rows: Row[]): LocalHolidayPlace[] {
   const byKey = new Map<string, LocalHolidayPlace>();
   for (const row of rows) {
     const date = (row.data ?? "").slice(0, 10);
-    const name = (row.ajuntament_o_nucli_municipal ?? "").trim();
+    const name = displayName(row.ajuntament_o_nucli_municipal ?? "");
     const key = (row.codi_municipal ?? "").trim();
     if (!/^\d{4}-\d{2}-\d{2}$/.test(date) || !name || !key) continue;
 
