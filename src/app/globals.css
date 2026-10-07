@@ -36,6 +36,11 @@
 
   /* Logo red: the "Info" of the wordmark, and nothing else. */
   --color-brand-red: #da0012;
+  /* The logo's red, one step darker, for when it is set as text. At 22 px on
+     the sunk surface #da0012 measures 4.49:1, a hair under WCAG AA; #cc0011
+     is 5.0:1 and reads as the same red. The mark itself keeps the exact brand
+     colour. */
+  --color-brand-red-text: #cc0011;
 
   /* Contour brown: only ever used for elevation, distance and route data. */
   --color-contour: #b4642a;
@@ -112,6 +117,7 @@
       --color-sea-deep: #8ad4de;
       --color-sea-wash: #10313a;
       --color-brand-red: #ff5a63;
+      --color-brand-red-text: #ff5a63;
 
       --color-contour: #dd9a5f;
       --color-contour-wash: #2c2118;
@@ -144,6 +150,7 @@
     --color-sea-deep: #8ad4de;
     --color-sea-wash: #10313a;
     --color-brand-red: #ff5a63;
+      --color-brand-red-text: #ff5a63;
 
     --color-contour: #dd9a5f;
     --color-contour-wash: #2c2118;
@@ -1147,7 +1154,7 @@
     box-shadow: 0 0 0 1px var(--color-rule);
   }
   .ci-wordmark-name span {
-    color: var(--color-brand-red);
+    color: var(--color-brand-red-text);
   }
 
   .ci-nav-link {
