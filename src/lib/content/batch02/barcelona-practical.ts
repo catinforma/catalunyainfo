@@ -213,7 +213,7 @@ export const TRANSPORT: B2Article = {
       path: "guides/barcelona-transport-passes",
       title:
         "T-casual, T-dia, T-usual or Hola Barcelona: which transport pass should you buy?",
-      seoTitle: "Barcelona transport passes 2026: T-casual or Hola BCN?",
+      seoTitle: "Barcelona metro pass 2026: T-casual, T-dia or Hola BCN?",
       seoDescription:
         "Compare T-casual, T-dia, T-usual and Hola Barcelona by days, journeys and whether you need the airport metro. With a selector.",
       excerpt:
@@ -660,9 +660,9 @@ export const PARKING: B2Article = {
       path: "guies/aparcar-barcelona-zona-blava-verda",
       title:
         "Aparcar a Barcelona: zona blava, zona verda, preus i què ha de saber un visitant",
-      seoTitle: "Aparcar a Barcelona 2026: preus zona blava i verda",
+      seoTitle: "Preu zona blava i verda Barcelona: de 1,15 a 4,25 €/h",
       seoDescription:
-        "Preus per hora de la zona blava i la zona verda de Barcelona el 2026, segons el distintiu ambiental, i com pagar.",
+        "Zona blava de 1,15 a 3,75 €/h i zona verda de 1,40 a 4,25 €/h, segons el distintiu ambiental del cotxe. Taula completa de tarifes, horaris i com pagar.",
       excerpt:
         "Els preus de l'aparcament regulat depenen de la zona i del distintiu ambiental del vehicle. Taula completa de 2026.",
       blocks: [
@@ -717,9 +717,9 @@ export const PARKING: B2Article = {
     es: {
       path: "guias/aparcar-barcelona-zona-azul-verde",
       title: "Aparcar en Barcelona: zona azul, zona verde, precios y reglas para visitantes",
-      seoTitle: "Aparcar en Barcelona 2026: precios zona azul y verde",
+      seoTitle: "Precio zona azul y verde Barcelona: de 1,15 a 4,25 €/h",
       seoDescription:
-        "Precios por hora de la zona azul y la zona verde de Barcelona en 2026 según el distintivo ambiental, y cómo pagar.",
+        "Zona azul de 1,15 a 3,75 €/h y zona verde de 1,40 a 4,25 €/h, según el distintivo ambiental del coche. Tabla completa de tarifas, horarios y cómo pagar.",
       excerpt:
         "Las tarifas del aparcamiento regulado dependen de la zona y del distintivo ambiental. Tabla completa de 2026.",
       blocks: [
@@ -770,9 +770,9 @@ export const PARKING: B2Article = {
     en: {
       path: "guides/parking-in-barcelona-blue-green-zones",
       title: "Parking in Barcelona: blue zones, green zones, prices and visitor rules",
-      seoTitle: "Parking in Barcelona 2026: blue and green zone prices",
+      seoTitle: "Barcelona street parking prices: €1.15 to €4.25 an hour",
       seoDescription:
-        "Hourly prices for Barcelona's blue and green regulated parking in 2026 by environmental label, plus how to pay and the time limits.",
+        "Blue zone €1.15–3.75/h and green zone €1.40–4.25/h, depending on your car's environmental label. Full rate table, time limits and how to pay.",
       excerpt:
         "Regulated parking is priced by zone and by your car's environmental label. The full 2026 table.",
       blocks: [

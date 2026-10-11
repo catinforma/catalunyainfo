@@ -420,7 +420,7 @@ export const COPY: Record<Locale, Copy> = {
   ca: {
     path: "natura/bolets-catalunya-condicions",
     title: "Temporada de bolets 2026: on hi ha millors condicions aquesta setmana?",
-    seoTitle: "Bolets a Catalunya 2026: les millors zones aquesta setmana",
+    seoTitle: "Bolets a Catalunya: mapa de condicions aquesta setmana",
     seoDescription:
       "Analitzem pluja, temperatura i humitat per saber quines zones de Catalunya tenen millors condicions per als bolets aquesta setmana.",
     excerpt:

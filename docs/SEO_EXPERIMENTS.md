@@ -277,6 +277,32 @@ it is a site-wide change and cannot be attributed to any one page.
 
 ---
 
+## 2026-10-11 — titles that promise the answer the query asks for
+
+Search Console, 27 Sep – 11 Oct (data to 8 Oct):
+
+| Page | Query | Pos | Impr | Clicks |
+| --- | --- | --- | --- | --- |
+| CA parking | preu zona blava barcelona | 1.9 | 18 | 0 |
+| CA parking | preu zona verda barcelona | 1.0 | 3 | 0 |
+| CA mushrooms | mapa bolets catalunya 2026 | 11.8 | 30 | 0 |
+| CA mushrooms | on trobar bolets aquesta setmana (2026) | 4–7.5 | 21 | 0 |
+| EN transport | barcelona metro pass / public transport pass | 19–23 | 10 | 0 |
+
+**Change.**
+- Parking, all three editions: the price range goes into the title and description
+  (blue €1.15–3.75/h, green €1.40–4.25/h, re-checked on areaverda.cat on 11 Oct);
+  the year comes out of the title. A searcher asking "preu" at position 1–2 was shown
+  a title that said "preus" and gave none.
+- CA mushrooms: "Bolets a Catalunya: mapa de condicions aquesta setmana" — the words
+  the queries use. Not "on hi ha bolets": the page measures conditions, never presence.
+- EN transport: "metro" in the title, which every real query uses. Most of this page's
+  impressions are AI fan-out fragments ("3 dagen", "4 tage", "48h") at positions 1–6;
+  ignore them when reading its CTR.
+
+**Measure on 25 Oct** (14 days): clicks on the queries above; parking CA/ES CTR at
+position ≤3 should be well above 0.
+
 ## Candidates not yet run
 
 Recorded so they are not lost, and so they are not all started at once.
