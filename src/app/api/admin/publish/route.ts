@@ -85,6 +85,12 @@ export async function POST(request: Request) {
       ...pages.pages.map((page) => ({ locale: page.locale, path: page.path })),
     ];
 
+    // A brand-new page's first edition (always Catalan) kept coming back as a
+    // cached 404 while Spanish and English rendered: the regeneration raced the
+    // write. A short pause lets the rows become visible before the cache is
+    // purged and rebuilt.
+    if (surfaces.length > 0) await new Promise((resolve) => setTimeout(resolve, 2_000));
+
     for (const surface of surfaces) {
       revalidatePath(`/${surface.locale}`);
       revalidatePath(`/${surface.locale}/${surface.path}`);
