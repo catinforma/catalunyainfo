@@ -24,7 +24,8 @@ export type B2Key =
   | "setcases"
   | "cerdanya"
   | "snow"
-  | "airport";
+  | "airport"
+  | "monuments";
 
 /** Path after the locale prefix, no leading or trailing slash. */
 export const B2_PATHS: Record<B2Key, Record<Locale, string>> = {
@@ -67,6 +68,11 @@ export const B2_PATHS: Record<B2Key, Record<Locale, string>> = {
     ca: "guies/cerdanya-sense-cotxe",
     es: "guias/cerdana-sin-coche",
     en: "guides/cerdanya-without-a-car",
+  },
+  monuments: {
+    ca: "guies/entrades-sagrada-familia-park-guell-casa-batllo",
+    es: "guias/entradas-sagrada-familia-park-guell-casa-batllo",
+    en: "guides/sagrada-familia-park-guell-casa-batllo-tickets",
   },
   airport: {
     ca: "guies/aeroport-barcelona-centre",
@@ -129,6 +135,11 @@ export const B2_TITLES: Record<B2Key, Record<Locale, string>> = {
     ca: "Cerdanya sense cotxe",
     es: "Cerdanya sin coche",
     en: "Cerdanya without a car",
+  },
+  monuments: {
+    ca: "Entrades de la Sagrada Família, el Park Güell i la Casa Batlló",
+    es: "Entradas de la Sagrada Familia, el Park Güell y la Casa Batlló",
+    en: "Sagrada Família, Park Güell and Casa Batlló tickets",
   },
   airport: {
     ca: "De l'aeroport al centre de Barcelona",

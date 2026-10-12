@@ -183,7 +183,7 @@ function body(locale: Locale): ReturnType<typeof paras> {
           answer: "The R2 Nord station is at Terminal 2. From T1, take the free shuttle bus between terminals.",
         },
       ]),
-      ...b2Related(["transport", "parking", "zbe"], "en"),
+      ...b2Related(["transport", "monuments", "parking"], "en"),
     ];
   }
 
@@ -262,7 +262,7 @@ function body(locale: Locale): ReturnType<typeof paras> {
           answer: "La estación del R2 Nord está en la Terminal 2. Desde la T1, coge el autobús gratuito entre terminales.",
         },
       ]),
-      ...b2Related(["transport", "parking", "zbe"], "es"),
+      ...b2Related(["transport", "monuments", "parking"], "es"),
     ];
   }
 
@@ -340,7 +340,7 @@ function body(locale: Locale): ReturnType<typeof paras> {
         answer: "L'estació de l'R2 Nord és a la Terminal 2. Des de la T1, agafa l'autobús gratuït entre terminals.",
       },
     ]),
-    ...b2Related(["transport", "parking", "zbe"], "ca"),
+    ...b2Related(["transport", "monuments", "parking"], "ca"),
   ];
 }
 

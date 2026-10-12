@@ -443,6 +443,26 @@ export const IMAGES: readonly ImportedImage[] = [
     "license": "CC BY-SA 4.0"
   },
   {
+    "key": "gaudi-park-guell-pavello-entrada",
+    "url": "/images/gaudi-park-guell-pavello-entrada.webp",
+    "width": 1920,
+    "height": 1440,
+    "blurDataUrl": "data:image/webp;base64,UklGRmwAAABXRUJQVlA4IGAAAACwAQCdASoQAAwAA4BaJYgCdAEG6gjAAP7rny8Ve98pLa9B5wScP2Iyp46zlEa1+w7FD1Ki9wC1sahmpjPOHLh8tRyVckr4TO/OdPXtlzLWmObI/TT98N/xTBd9JlDgAAA=",
+    "credit": "Andy Mitchell from Glasgow, UK",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Gatehouse_at_the_main_entrance_to_Park_G%C3%BCell._(2924523671).jpg",
+    "license": "CC BY-SA 2.0"
+  },
+  {
+    "key": "gaudi-sagrada-familia-facana-naixement",
+    "url": "/images/gaudi-sagrada-familia-facana-naixement.webp",
+    "width": 1920,
+    "height": 2880,
+    "blurDataUrl": "data:image/webp;base64,UklGRogAAABXRUJQVlA4IHwAAAAQBACdASoQABgAPu1iqU2ppaQiMAgBMB2JaAC/OBolZTw0DlZdDr0mgAD+suZ+18j+LKLe93xzCSmOx2FPRngJ534a66Fk4HNotlSnfFzj/YWI/VvH6HM5zJ0hmI0/Y7IKDllW3jdYXW4IPrUh0LdTH+gECN8gr/FOj4gA",
+    "credit": "Sietze Kraak",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:La_Sagrada_Familia,_Barcelona,_Spain_-_panoramio_(68).jpg",
+    "license": "CC BY 3.0"
+  },
+  {
     "key": "gaudi-second",
     "url": "/images/gaudi-second.webp",
     "width": 1920,
