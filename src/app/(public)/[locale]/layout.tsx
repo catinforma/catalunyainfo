@@ -21,7 +21,14 @@ import { SITE } from "@/lib/site";
  * dynamic rendering and forfeit CDN caching.
  */
 
-export const dynamicParams = false;
+/*
+ * No `dynamicParams = false` here. Set on this layout it was inherited by the
+ * whole subtree, including `[...slug]`, so every article published after the
+ * last build answered 404 without the page ever running, until the next
+ * deploy (diagnosed 12 Oct 2026 from the prerender manifest: fallback false).
+ * Unknown locales still 404: the layout calls notFound(), and the locale-only
+ * pages below set dynamicParams = false for themselves.
+ */
 
 export function generateStaticParams() {
   return LOCALES.map((locale) => ({ locale }));

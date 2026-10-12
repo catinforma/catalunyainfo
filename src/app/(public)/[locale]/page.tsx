@@ -22,6 +22,9 @@ import { formatDate, isoDate } from "@/lib/format";
  */
 export const revalidate = 600;
 
+/** Only the three locales exist; anything else is a 404 without rendering. */
+export const dynamicParams = false;
+
 function homeTranslations(): Partial<Record<Locale, string>> {
   return Object.fromEntries(LOCALES.map((l) => [l, `/${l}/`])) as Record<Locale, string>;
 }

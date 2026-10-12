@@ -145,10 +145,9 @@ export async function publishArticle(spec: ArticleSpec): Promise<PublishResult> 
   const now = new Date();
 
   // A publish date in the future would hide the page: every public query and
-  // the sitemap require `published_at <= now()`. Clamping to this server's
-  // `now` was not enough: the database clock can trail it by a moment, and the
-  // regeneration that publishing triggers then saw a "future" row and cached a
-  // 404 for five minutes. A minute of margin removes the race.
+  // the sitemap require `published_at <= now()`, compared on the database's
+  // clock. A minute of margin keeps a row just written from looking "future"
+  // if that clock trails this server's.
   const latest = new Date(now.getTime() - 60_000);
   const publishedAt = spec.publishedAt > latest ? latest : spec.publishedAt;
 
