@@ -35,7 +35,8 @@ export type B2Key =
   | "tarragona"
   | "voting"
   | "congressResults"
-  | "parliamentResults";
+  | "parliamentResults"
+  | "figueres";
 
 /** Path after the locale prefix, no leading or trailing slash. */
 export const B2_PATHS: Record<B2Key, Record<Locale, string>> = {
@@ -93,6 +94,11 @@ export const B2_PATHS: Record<B2Key, Record<Locale, string>> = {
     ca: "guies/com-votar-eleccions-catalunya",
     es: "guias/como-votar-elecciones-cataluna",
     en: "guides/how-to-vote-catalonia",
+  },
+  figueres: {
+    ca: "escapades/figueres-museu-dali-des-de-barcelona",
+    es: "escapadas/figueres-museo-dali-desde-barcelona",
+    en: "day-trips/figueres-dali-museum-from-barcelona",
   },
   sitges: {
     ca: "escapades/sitges-des-de-barcelona-tren",
@@ -210,6 +216,11 @@ export const B2_TITLES: Record<B2Key, Record<Locale, string>> = {
     ca: "Com votar a Catalunya",
     es: "Cómo votar en Cataluña",
     en: "How to vote in Catalonia",
+  },
+  figueres: {
+    ca: "Figueres i el Museu Dalí des de Barcelona",
+    es: "Figueres y el Museo Dalí desde Barcelona",
+    en: "Figueres and the Dalí Museum from Barcelona",
   },
   sitges: {
     ca: "Sitges des de Barcelona en tren",

@@ -468,6 +468,26 @@ export const IMAGES: readonly ImportedImage[] = [
     "blurDataUrl": "data:image/webp;base64,UklGRlwAAABXRUJQVlA4IFAAAADwAQCdASoQAAkAA4BaJbACdADMkkLwHgAA/uX7bmE4OMoqNSKhBvPUNoVChSWsBLepEGBGoXNmULNF9cOhWTwcOwpfG6vDw1Z3CAzW4bRcAA=="
   },
   {
+    "key": "figueres-teatre-museu-dali-facana",
+    "url": "/images/figueres-teatre-museu-dali-facana.webp",
+    "width": 1920,
+    "height": 1434,
+    "blurDataUrl": "data:image/webp;base64,UklGRnoAAABXRUJQVlA4IG4AAAAwAgCdASoQAAwAA4BaJZAC7AYvXyWqfRXmUAD+3jWMtkfGA4wGXyYeIXIiJFi3R3UmexXDlOxPhEwxu35Je1qml2AGUJlNHhkmtqvqPMon4kshrf5y2yvTIycALNnsDeZSaT42uUMaCrZS46FgAA==",
+    "credit": "Kippelboy",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Teatre_Museu_Dal%C3%AD_Fa%C3%A7ana.JPG",
+    "license": "CC BY-SA 3.0"
+  },
+  {
+    "key": "figueres-torre-galatea-cupula",
+    "url": "/images/figueres-torre-galatea-cupula.webp",
+    "width": 1920,
+    "height": 1277,
+    "blurDataUrl": "data:image/webp;base64,UklGRnAAAABXRUJQVlA4IGQAAAAwAgCdASoQAAsAA4BaJQAB8h4u/a9zcTP9cAD+9QUKadGt9eSSeQr/peNqGOlv9W7j7h2e5HcMLaUGsRqKvPZ11KML/lDfWtGj1/frMvtT8tEHGt37XbyC/VCayCwB8dQ2kTAA",
+    "credit": "Enfo",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:117_Figueres,_torre_Galatea_i_c%C3%BApula_del_Museu_Dal%C3%AD.JPG",
+    "license": "CC BY-SA 3.0"
+  },
+  {
     "key": "fira-castanya-viladrau-tardor",
     "url": "/images/fira-castanya-viladrau-tardor.webp",
     "width": 1672,
