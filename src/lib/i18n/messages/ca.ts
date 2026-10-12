@@ -175,6 +175,9 @@ const ca = {
     unavailable: "Ara mateix no podem llegir les dades electorals de la Generalitat. Consulta-les directament a",
     sourceLine: "Dades de",
     computedNote: "Percentatges calculats a partir dels recomptes.",
+    provincesTitle: "Per províncies",
+    colProvince: "Província",
+    seatsCount: "{n} escons",
     seatsMissing: "Escons no disponibles a les dades; vots:",
   },
   school: {

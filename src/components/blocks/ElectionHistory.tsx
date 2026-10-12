@@ -1,5 +1,5 @@
 import { shortDate } from "@/lib/content/holidays/calendar";
-import { ELECTIONS_SOURCE, loadElectionHistory, type ElectionKind } from "@/lib/content/elections/history";
+import { ELECTIONS_SOURCE, loadElectionHistory, loadProvinces, type ElectionKind } from "@/lib/content/elections/history";
 import { getMessages } from "@/lib/i18n";
 import { INTL_LOCALE, type Locale } from "@/lib/i18n/config";
 
@@ -31,6 +31,7 @@ export async function ElectionHistory({ locale, kind }: { locale: Locale; kind: 
   const dated = (iso: string) => `${shortDate(iso, locale)}${locale === "en" ? " " : " de "}${iso.slice(0, 4)}`;
   const latest = history.elections[0];
   if (!latest) return null;
+  const provinces = await loadProvinces(latest.id);
 
   return (
     <section className="ci-elections" aria-label={t.title}>
@@ -67,6 +68,35 @@ export async function ElectionHistory({ locale, kind }: { locale: Locale; kind: 
           </tbody>
         </table>
       </div>
+
+      {provinces.length > 0 ? (
+        <>
+          <h3 className="ci-elections-title">{t.provincesTitle}</h3>
+          <div className="ci-table-scroll">
+            <table className="ci-local-table ci-elections-table">
+              <thead>
+                <tr>
+                  <th scope="col">{t.colProvince}</th>
+                  <th scope="col">{t.colTurnout}</th>
+                  <th scope="col">{t.colSeatsByList}</th>
+                </tr>
+              </thead>
+              <tbody>
+                {provinces.map((province) => (
+                  <tr key={province.name}>
+                    <th scope="row">
+                      {province.name}
+                      <small className="ci-reservoirs-place">{t.seatsCount.replace("{n}", String(province.seats))}</small>
+                    </th>
+                    <td className="ci-numeric">{one.format(province.turnout)} %</td>
+                    <td>{province.lists.map((list) => `${list.short} ${list.seats}`).join(" · ")}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </>
+      ) : null}
 
       <h3 className="ci-elections-title">{t.historyTitle}</h3>
       <div className="ci-table-scroll">

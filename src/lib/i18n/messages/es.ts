@@ -176,6 +176,9 @@ const es: Messages = {
     unavailable: "Ahora mismo no podemos leer los datos electorales de la Generalitat. Consúltalos directamente en",
     sourceLine: "Datos de",
     computedNote: "Porcentajes calculados a partir de los recuentos.",
+    provincesTitle: "Por provincias",
+    colProvince: "Provincia",
+    seatsCount: "{n} escaños",
     seatsMissing: "Escaños no disponibles en los datos; votos:",
   },
   school: {

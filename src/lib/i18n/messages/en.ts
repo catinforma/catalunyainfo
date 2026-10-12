@@ -176,6 +176,9 @@ const en: Messages = {
     unavailable: "We cannot read the Generalitat's election data right now. Check it directly in",
     sourceLine: "Data from",
     computedNote: "Percentages computed from the counts.",
+    provincesTitle: "By province",
+    colProvince: "Province",
+    seatsCount: "{n} seats",
     seatsMissing: "Seats not in the dataset; votes:",
   },
   school: {

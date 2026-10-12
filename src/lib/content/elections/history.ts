@@ -176,3 +176,56 @@ export async function loadElectionHistory(kind: ElectionKind): Promise<ElectionH
     return { kind, elections: [], error: error instanceof Error ? error.message : "unreachable" };
   }
 }
+
+export interface ProvinceResult {
+  name: string;
+  electorate: number;
+  voters: number;
+  turnout: number;
+  seats: number;
+  /** Lists that won seats in this province, by votes. */
+  lists: { short: string; seats: number }[];
+}
+
+/** Pure: one election, province level. */
+export function buildProvinces(turnout: (TurnoutRow & { territori_nom?: string })[], votes: (VoteRow & { territori_nom?: string })[]): ProvinceResult[] {
+  return turnout
+    .map((row) => {
+      const name = (row.territori_nom ?? "").trim();
+      const electorate = num(row.cens_electoral);
+      const voters = num(row.votants);
+      return {
+        name,
+        electorate,
+        voters,
+        turnout: electorate > 0 ? (voters / electorate) * 100 : 0,
+        seats: num(row.escons),
+        lists: votes
+          .filter((vote) => (vote.territori_nom ?? "").trim() === name && num(vote.escons) > 0)
+          .sort((a, b) => num(b.vots) - num(a.vots))
+          .map((vote) => ({ short: (vote.candidatura_sigles ?? "").trim(), seats: num(vote.escons) })),
+      };
+    })
+    .filter((province) => province.name && province.electorate > 0)
+    .sort((a, b) => a.name.localeCompare(b.name, "ca"));
+}
+
+/** Province breakdown for one election; an empty list when unavailable. */
+export async function loadProvinces(id: string): Promise<ProvinceResult[]> {
+  const where = (extra = "") => encodeURIComponent(`id_eleccio='${id}' AND id_nivell_territorial='PR'${extra}`);
+  try {
+    const [turnout, votes] = await Promise.all([
+      query<TurnoutRow & { territori_nom?: string }>(
+        "irrv-2mfc",
+        `$where=${where()}&$select=territori_nom,cens_electoral,votants,escons&$limit=10`,
+      ),
+      query<VoteRow & { territori_nom?: string }>(
+        "ntc4-rnwr",
+        `$where=${where()}&$select=territori_nom,candidatura_sigles,vots,escons&$limit=500`,
+      ),
+    ]);
+    return buildProvinces(turnout, votes);
+  } catch {
+    return [];
+  }
+}
