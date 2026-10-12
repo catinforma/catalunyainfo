@@ -93,6 +93,12 @@ export async function POST(request: Request) {
     // purged and rebuilt.
     if (surfaces.length > 0) await new Promise((resolve) => setTimeout(resolve, 2_000));
 
+    // Literal paths alone did not clear a 404 cached for a slug before its
+    // page existed (seen on 12 Oct 2026: three new editions stayed 404 after
+    // publishing). The route pattern invalidates every page of the catch-all,
+    // cached 404s included; each regenerates on its next visit.
+    if (surfaces.length > 0) revalidatePath("/[locale]/[...slug]", "page");
+
     for (const surface of surfaces) {
       revalidatePath(`/${surface.locale}`);
       revalidatePath(`/${surface.locale}/${surface.path}`);
