@@ -157,6 +157,12 @@ identitat de l'editor, i només la pots posar tu.
 
 Recerca descartada per ara: mercats de Nadal (cap data 2026 oficial; tornar-hi a mitjans de novembre).
 
+### 12 d'octubre (tarda-nit): 13 guies més, totes amb paquet verificat
+
+Camp Nou, horaris de metro i NitBus, Sitges, Tarragona, **com votar el 29N** (eleccions generals convocades pel RD 806/2026), **resultats electorals des del 1977** (Congrés i Parlament, dades obertes en directe, per províncies), Figueres i Dalí, Andorra en bus, Montserrat actualitzat (Santa Cova tancat, basílica de pagament per a no residents), Montjuïc, Tibidabo (Tramvia Blau tancat), port de creuers, PortAventura (només R17/RT2).
+
+Ajornat: Costa Brava en bus (horaris Moventis només fins al 31 d'oct.), mercats de Nadal (sense dates 2026).
+
 ## 4. Les palanques, per impacte esperat
 
 ### Palanca 1 — Dades oficials que no envelleixen (×10-20)
