@@ -37,7 +37,9 @@ export type B2Key =
   | "congressResults"
   | "parliamentResults"
   | "figueres"
-  | "andorra";
+  | "andorra"
+  | "montjuic"
+  | "tibidabo";
 
 /** Path after the locale prefix, no leading or trailing slash. */
 export const B2_PATHS: Record<B2Key, Record<Locale, string>> = {
@@ -95,6 +97,16 @@ export const B2_PATHS: Record<B2Key, Record<Locale, string>> = {
     ca: "guies/com-votar-eleccions-catalunya",
     es: "guias/como-votar-elecciones-cataluna",
     en: "guides/how-to-vote-catalonia",
+  },
+  montjuic: {
+    ca: "guies/montjuic-font-magica-teleferic",
+    es: "guias/montjuic-fuente-magica-teleferico",
+    en: "guides/montjuic-magic-fountain-cable-car",
+  },
+  tibidabo: {
+    ca: "guies/tibidabo-parc-atraccions-com-arribar",
+    es: "guias/tibidabo-parque-atracciones-como-llegar",
+    en: "guides/tibidabo-amusement-park-how-to-get-there",
   },
   andorra: {
     ca: "escapades/andorra-des-de-barcelona-autobus",
@@ -222,6 +234,16 @@ export const B2_TITLES: Record<B2Key, Record<Locale, string>> = {
     ca: "Com votar a Catalunya",
     es: "Cómo votar en Cataluña",
     en: "How to vote in Catalonia",
+  },
+  montjuic: {
+    ca: "Montjuïc: Font Màgica, telefèric i castell",
+    es: "Montjuïc: Fuente Mágica, teleférico y castillo",
+    en: "Montjuïc: Magic Fountain, cable car and castle",
+  },
+  tibidabo: {
+    ca: "Tibidabo: parc d'atraccions i com arribar-hi",
+    es: "Tibidabo: parque de atracciones y cómo llegar",
+    en: "Tibidabo: amusement park and how to get there",
   },
   andorra: {
     ca: "Andorra des de Barcelona en autobús",

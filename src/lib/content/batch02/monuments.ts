@@ -299,7 +299,7 @@ function body(locale: Locale) {
     list(...t.plan),
     ...paras(MORE[locale]),
     faq(t.faq),
-    ...b2Related(["museums", "campnou", "transport", "airport"], locale),
+    ...b2Related(["museums", "montjuic", "campnou", "airport"], locale),
   ];
 }
 

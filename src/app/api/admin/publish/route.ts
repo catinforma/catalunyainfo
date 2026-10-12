@@ -22,6 +22,7 @@ import { SITGES, TARRAGONA } from "@/lib/content/batch02/coast-trips";
 import { VOTING } from "@/lib/content/batch02/voting";
 import { FIGUERES } from "@/lib/content/batch02/figueres";
 import { ANDORRA } from "@/lib/content/batch02/andorra";
+import { MONTJUIC, TIBIDABO } from "@/lib/content/batch02/hills";
 import { CONGRESS_RESULTS, PARLIAMENT_RESULTS } from "@/lib/content/batch02/election-results";
 import { publishHolidayTodayGuide } from "@/lib/content/holidays/today-publish";
 import { publishLocalHolidaysGuide } from "@/lib/content/holidays/local-publish";
@@ -92,6 +93,7 @@ export async function POST(request: Request) {
     if (wants("voting")) published.push(await publishB2Article(VOTING));
     if (wants("figueres")) published.push(await publishB2Article(FIGUERES));
     if (wants("andorra")) published.push(await publishB2Article(ANDORRA));
+    if (wants("hills")) published.push(await publishB2Article(MONTJUIC), await publishB2Article(TIBIDABO));
     if (wants("election-results")) published.push(await publishB2Article(CONGRESS_RESULTS), await publishB2Article(PARLIAMENT_RESULTS));
     if (wants("coast-trips")) published.push(await publishB2Article(SITGES), await publishB2Article(TARRAGONA));
     if (wants("batch02-a")) published.push(...(await publishBatch02(0, 3)));

@@ -623,6 +623,26 @@ export const IMAGES: readonly ImportedImage[] = [
     "license": "CC BY-SA 4.0"
   },
   {
+    "key": "montjuic-font-magica-nit",
+    "url": "/images/montjuic-font-magica-nit.webp",
+    "width": 1920,
+    "height": 1440,
+    "blurDataUrl": "data:image/webp;base64,UklGRlwAAABXRUJQVlA4IFAAAACQAQCdASoQAAwAA4BaJQAAXP6xCUAA/u9lwVhgfcOiggaeL8YimdPMpcuCp1s2XvFl83perTozrA18meF4SogZrp9x6wOeE4KOaKw2D0y4AA==",
+    "credit": "Adriano Aurelio Araujo from Campinas, Brasil",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Fonte_M%C3%A1gica,_Barcelona_-_Magic_Fountain,_Barcelona_-_Flickr_-_Adriano_Aurelio_Araujo.jpg",
+    "license": "CC BY 2.0"
+  },
+  {
+    "key": "montjuic-teleferic-cabina",
+    "url": "/images/montjuic-teleferic-cabina.webp",
+    "width": 1920,
+    "height": 1440,
+    "blurDataUrl": "data:image/webp;base64,UklGRmIAAABXRUJQVlA4IFYAAAAwAgCdASoQAAwAA4BaJbACdAELz57H8lE+PAD+6tMMQ+BNVa4rYDAN9OSS/IGaS+VqZVPDMs66gmIlq7IqWnVYTDAZSh5JHNhDc9nqmW6F3+3wEAAAAA==",
+    "credit": "Enric",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:329_Telef%C3%A8ric_de_Montju%C3%AFc,_cabina_entrant_a_l%27estaci%C3%B3_inferior_(Barcelona).jpg",
+    "license": "CC BY 4.0"
+  },
+  {
     "key": "montserrat-hero",
     "url": "/images/montserrat-hero.webp",
     "width": 1920,
@@ -846,6 +866,26 @@ export const IMAGES: readonly ImportedImage[] = [
     "credit": "Txllxt TxllxT",
     "creditUrl": "https://commons.wikimedia.org/wiki/File:Costa_Brava_-_Tossa_de_Mar_-_Platja_Gran_-_View_NNW_along_Passeig_del_Mar.jpg",
     "license": "CC BY-SA 4.0"
+  },
+  {
+    "key": "tibidabo-parc-nit-sagrat-cor",
+    "url": "/images/tibidabo-parc-nit-sagrat-cor.webp",
+    "width": 1920,
+    "height": 1440,
+    "blurDataUrl": "data:image/webp;base64,UklGRmIAAABXRUJQVlA4IFYAAAAwAgCdASoQAAwAA4BaJZACdAD1rYDHic7iAAD+oe8bW8UcU4LSiIo4tq6lKlAshQY5Jo8KL7jtBTw469I60DtYdNqNWhsNFwvmyE85kKFhYwfDnUQAAA==",
+    "credit": "Enric",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:104_Parc_d%27atraccions_Tibidabo_(Barcelona),_nivell_6,_roda_Giradabo_i_Talaia,_al_fons_el_Sagrat_Cor.jpg",
+    "license": "CC BY-SA 4.0"
+  },
+  {
+    "key": "tibidabo-sagrat-cor-muntanya",
+    "url": "/images/tibidabo-sagrat-cor-muntanya.webp",
+    "width": 1920,
+    "height": 1440,
+    "blurDataUrl": "data:image/webp;base64,UklGRkgAAABXRUJQVlA4IDwAAADQAQCdASoQAAwAA4BaJYgCdAEOQhsAAAD9Eo9Xr3IblX7t0wY9UEg7UfMxcTvBGjLINP/T1s7PX3IAAAA=",
+    "credit": "Enfo",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:01_Parc_d%27atraccions_del_Tibidabo,_al_fons_el_Sagrat_Cor.jpg",
+    "license": "CC BY-SA 3.0"
   },
   {
     "key": "trains-hero",
