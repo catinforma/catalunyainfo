@@ -346,6 +346,16 @@ export const IMAGES: readonly ImportedImage[] = [
     "blurDataUrl": "data:image/webp;base64,UklGRmIAAABXRUJQVlA4IFYAAADQAQCdASoQAAkAA4BaJbACdADdLHtEoAD+zQcKnQQ4cumm27/QYUIlhf/8u0kmyfA3nkCulVhPHJVs3idl1RZz1oonHiVM69Z/Qvtpu6dEn9zUaAAAAA=="
   },
   {
+    "key": "congres-hemicicle-sostre",
+    "url": "/images/congres-hemicicle-sostre.webp",
+    "width": 1920,
+    "height": 1280,
+    "blurDataUrl": "data:image/webp;base64,UklGRnAAAABXRUJQVlA4IGQAAAAwAgCdASoQAAsAA4BaJbACdAYvrUl6xXqgQAD+a8x/PPuMCyWyQE5paKoJ1ESwrLoOVog0Z8NzUeVDKZb1ZYfP3YcPSV5b+8J6i+XOITD1jL4FvQ+gOnslJLmCjt+9X7kgAAAA",
+    "credit": "Barcex",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Madrid_-_Hemiciclo_del_Congreso_-_141203_100638.jpg",
+    "license": "CC BY-SA 3.0"
+  },
+  {
     "key": "eleccions-congres-diputats-facana",
     "url": "/images/eleccions-congres-diputats-facana.webp",
     "width": 1920,
@@ -613,6 +623,26 @@ export const IMAGES: readonly ImportedImage[] = [
     "license": "CC BY-SA 3.0"
   },
   {
+    "key": "parlament-palau-ciutadella",
+    "url": "/images/parlament-palau-ciutadella.webp",
+    "width": 1920,
+    "height": 2560,
+    "blurDataUrl": "data:image/webp;base64,UklGRqIAAABXRUJQVlA4IJYAAAAQBACdASoQABUAPu1iqU2ppaOiMAgBMB2JbACdH8AA+7pyTK7dJKp4AADpR1RlWM7W0SSTQfBSuXQ8pLBBvtqWPvYB4IjdILLrU43teXID0pjkjpplgXIWlWVSY3HKWId2F6dVLZSWeS+za8vb0vBjXJOZlHcXW2EzgKMIHTo5gVDrmFv4piSrwaA+9ks9RCJzLqAAAAA=",
+    "credit": "Kent Wang",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Exteriors_of_the_Palace_of_the_Parliament_of_Catalonia_04.jpg",
+    "license": "CC BY-SA 4.0"
+  },
+  {
+    "key": "parlament-sala-de-plens",
+    "url": "/images/parlament-sala-de-plens.webp",
+    "width": 1920,
+    "height": 1127,
+    "blurDataUrl": "data:image/webp;base64,UklGRmgAAABXRUJQVlA4IFwAAABQAgCdASoQAAkAA4BaJZgCdAYtVzBr1zzRpAAA/e2TgJZGme8eGhYR6cP6x9cZEWkD1FWmGMuveN26u8GY6E4CUhL44+i6n8/gRJZdk4NBYRepLiyKvV67PKFgAA==",
+    "credit": "Iván Melenchón Serrano",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Parlament_de_Catalunya_-_Sal%C3%B3_de_plens_(vist_des_del_fons).jpg",
+    "license": "CC0"
+  },
+  {
     "key": "pobles-medievals-catalunya-carrers-pedra",
     "url": "/images/pobles-medievals-catalunya-carrers-pedra.webp",
     "width": 1672,
@@ -659,6 +689,16 @@ export const IMAGES: readonly ImportedImage[] = [
     "width": 1672,
     "height": 941,
     "blurDataUrl": "data:image/webp;base64,UklGRmAAAABXRUJQVlA4IFQAAADwAQCdASoQAAkAA4BaJZQCdAD1FX+cT4AA/om8VJwb+C8KKc/ujtLR03V6mrB8tXwFZ36JR9Dhiq2OXTQuf+9nOxFgJIff0+z+2TqTasCD6L0gAAA="
+  },
+  {
+    "key": "senat-palau-passadis",
+    "url": "/images/senat-palau-passadis.webp",
+    "width": 1920,
+    "height": 1080,
+    "blurDataUrl": "data:image/webp;base64,UklGRmYAAABXRUJQVlA4IFoAAADwAQCdASoQAAkAA4BaJYgCdAC63uausMAA/a3pXFCfZeJ+Gk48OePjPoxQFvfh4BtKdyxjjy21m8AvrMLOetecpv8Wvv9NBMmhh3wngB0pPkNPsxksi7BU0AA=",
+    "credit": "MaGrc",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Palacio_del_Senado_de_Espa%C3%B1a_10.jpg",
+    "license": "CC BY-SA 4.0"
   },
   {
     "key": "sitges-cau-ferrat-facana",

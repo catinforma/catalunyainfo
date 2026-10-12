@@ -33,7 +33,9 @@ export type B2Key =
   | "hours"
   | "sitges"
   | "tarragona"
-  | "voting";
+  | "voting"
+  | "congressResults"
+  | "parliamentResults";
 
 /** Path after the locale prefix, no leading or trailing slash. */
 export const B2_PATHS: Record<B2Key, Record<Locale, string>> = {
@@ -76,6 +78,16 @@ export const B2_PATHS: Record<B2Key, Record<Locale, string>> = {
     ca: "guies/cerdanya-sense-cotxe",
     es: "guias/cerdana-sin-coche",
     en: "guides/cerdanya-without-a-car",
+  },
+  congressResults: {
+    ca: "guies/resultats-eleccions-generals-catalunya",
+    es: "guias/resultados-elecciones-generales-cataluna",
+    en: "guides/general-election-results-catalonia",
+  },
+  parliamentResults: {
+    ca: "guies/resultats-eleccions-parlament-catalunya",
+    es: "guias/resultados-elecciones-parlament-cataluna",
+    en: "guides/catalan-parliament-election-results",
   },
   voting: {
     ca: "guies/com-votar-eleccions-catalunya",
@@ -183,6 +195,16 @@ export const B2_TITLES: Record<B2Key, Record<Locale, string>> = {
     ca: "Cerdanya sense cotxe",
     es: "Cerdanya sin coche",
     en: "Cerdanya without a car",
+  },
+  congressResults: {
+    ca: "Resultats de les eleccions generals a Catalunya",
+    es: "Resultados de las elecciones generales en Cataluña",
+    en: "General election results in Catalonia",
+  },
+  parliamentResults: {
+    ca: "Resultats de les eleccions al Parlament",
+    es: "Resultados de las elecciones al Parlament",
+    en: "Catalan Parliament election results",
   },
   voting: {
     ca: "Com votar a Catalunya",

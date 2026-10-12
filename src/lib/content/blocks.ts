@@ -430,6 +430,15 @@ export const schoolCalendarBlock = z.object({
   type: z.literal("schoolCalendar"),
 });
 
+/**
+ * Election results in Catalonia from the Generalitat's open data, latest
+ * election first. `kind` picks Congress or the Parliament of Catalonia.
+ */
+export const electionHistoryBlock = z.object({
+  type: z.literal("electionHistory"),
+  kind: z.enum(["congress", "parliament"]),
+});
+
 export const blockSchema = z.discriminatedUnion("type", [
   headingBlock,
   paragraphBlock,
@@ -458,6 +467,7 @@ export const blockSchema = z.discriminatedUnion("type", [
   localHolidaysBlock,
   reservoirLevelsBlock,
   schoolCalendarBlock,
+  electionHistoryBlock,
 ]);
 
 export const bodySchema = z.array(blockSchema).max(500);
