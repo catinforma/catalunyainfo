@@ -270,6 +270,26 @@ export const IMAGES: readonly ImportedImage[] = [
     "license": "CC BY-SA 4.0"
   },
   {
+    "key": "campnou-dia-de-partit",
+    "url": "/images/campnou-dia-de-partit.webp",
+    "width": 1920,
+    "height": 1280,
+    "blurDataUrl": "data:image/webp;base64,UklGRnAAAABXRUJQVlA4IGQAAADwAQCdASoQAAsAA4BaJZACdAYvXPMPuQAA/rcFtZnjVwEpa2HW6hbg7ndg3ULdHQTv7oiL9Eg85yvFqCCHCbdQXv0qsJDsTUg3zhxeCghXdStkbqc3HoRUb//gSc4bPCAzOPgA",
+    "credit": "Ank Kumar",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:FC_Barcelona-_Camp_Nou_on_a_matchday_(Ank_Kumar)_02.jpg",
+    "license": "CC BY-SA 4.0"
+  },
+  {
+    "key": "campnou-estatua-kubala",
+    "url": "/images/campnou-estatua-kubala.webp",
+    "width": 1920,
+    "height": 1280,
+    "blurDataUrl": "data:image/webp;base64,UklGRmgAAABXRUJQVlA4IFwAAAAwAgCdASoQAAsAA4BaJZQCdAD1c8KIyUI8gAD88sSwvYYo7WJU7qD3lnjgkrTl6BvrxVuW+/IWCjCnLX0Ui9cWWjnvYCRlxbS1wGGYI/8EN491fVpy9v5xaXQAAA==",
+    "credit": "Luis Miguel Bugallo Sánchez (Lmbuga)",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Estatua_de_Ladislao_Kubala_Stecz._Exteriores_do_Camp_Nou._Barcelona_B32.jpg",
+    "license": "CC BY-SA 3.0"
+  },
+  {
     "key": "cardona-vic-escapades-catalunya",
     "url": "/images/cardona-vic-escapades-catalunya.webp",
     "width": 1672,
