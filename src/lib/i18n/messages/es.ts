@@ -69,6 +69,7 @@ const es: Messages = {
     cheapestTag: "← el más barato",
     blockedAirport: "No válido en T1/T2",
     blockedNoFare: "Tarifa no verificada aquí",
+    blockedTooLong: "Máximo 120 horas",
     personalNote: "Todos estos títulos salvo el billete sencillo son personales: no se pueden compartir entre varias personas.",
     sourceLine: "Tarifas de zona 1 según",
     verified: "Verificadas el {date}.",

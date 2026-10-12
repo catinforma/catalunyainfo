@@ -68,6 +68,7 @@ const ca = {
     cheapestTag: "← el més barat",
     blockedAirport: "No vàlid a T1/T2",
     blockedNoFare: "Tarifa no verificada aquí",
+    blockedTooLong: "Màxim 120 hores",
     personalNote: "Tots aquests títols excepte el bitllet senzill són personals: no es poden compartir entre diverses persones.",
     sourceLine: "Tarifes de zona 1 segons",
     verified: "Verificades el {date}.",

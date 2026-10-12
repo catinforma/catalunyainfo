@@ -10,21 +10,21 @@ import type { Ticket, TripProfile } from "./types";
  * those were the pre-approval projections, and TMB publishes 13 €, 12 € and
  * 22,80 €. The operator's own page wins.
  *
- * ## What is deliberately absent
+ * ## The Hola Barcelona prices
  *
- * **The Hola Barcelona prices.** TMB's page for it lists the durations and the
- * services covered but not the fares, and the prices circulating elsewhere are
- * resellers' own. A travel card is exactly the sort of thing somebody budgets
- * against, so it appears in the comparison with its coverage described and no
- * price attached, rather than with a number we cannot stand behind.
- *
- * That is not a gap to be filled later by guessing. It is filled when the
- * operator publishes.
+ * TMB's tmb.cat page for the card lists durations and coverage but not the
+ * fares, so until 12 Oct 2026 the card was compared with no price. The fares
+ * are published on TMB's own Hola Barcelona site (holabarcelona.com, its
+ * public price list) and match Turisme de Barcelona's shop to the cent:
+ * 24 h 12,50 €, 48 h 18,70 €, 72 h 27,30 €, 96 h 35,60 €, 120 h 43,60 €.
+ * Full prices; the online discount is not applied here.
  */
 
 const TMB_FARES = "https://www.tmb.cat/ca/tarifes-metro-bus-barcelona";
 const TMB_HOLA =
   "https://www.tmb.cat/en/barcelona-fares-metro-bus/tickets-visit-barcelona/barcelona-travel-card-hola-bcn";
+const HOLA_PRICES = "https://www.holabarcelona.com/en";
+const HOLA_VERIFIED_AT = "2026-10-12";
 
 export const VERIFIED_AT = "2026-09-29";
 
@@ -93,19 +93,23 @@ export const TICKETS: Ticket[] = [
   {
     key: "hola-barcelona",
     name: "Hola Barcelona Travel Card",
-    validity: { kind: "days", days: 1 },
+    validity: { kind: "pass", maxDays: 5 },
     sharing: "personal",
     airportIncluded: true,
-    // TMB publishes the coverage but not the fare. We do not publish a price
-    // we have not read from the operator.
-    fares: [],
+    fares: [
+      { zone: "1", days: 1, price: 12.5 },
+      { zone: "1", days: 2, price: 18.7 },
+      { zone: "1", days: 3, price: 27.3 },
+      { zone: "1", days: 4, price: 35.6 },
+      { zone: "1", days: 5, price: 43.6 },
+    ],
     note: {
       ca: "Viatges il·limitats durant 24, 48, 72, 96 o 120 hores consecutives. Inclou metro i bus de TMB, NitBus, funicular de Montjuïc, FGC zona 1, tramvia i Rodalies zona 1, i l'anada i tornada en metro amb l'aeroport. El Telefèric de Montjuïc no hi està inclòs.",
       es: "Viajes ilimitados durante 24, 48, 72, 96 o 120 horas consecutivas. Incluye metro y bus de TMB, NitBus, funicular de Montjuïc, FGC zona 1, tranvía y Rodalies zona 1, y el viaje de ida y vuelta en metro con el aeropuerto. El Teleférico de Montjuïc no está incluido.",
       en: "Unlimited travel for 24, 48, 72, 96 or 120 consecutive hours. Covers TMB metro and buses, NitBus, the Montjuïc funicular, FGC zone 1, the tram and Rodalies zone 1, plus one outbound and one return airport metro journey. The Montjuïc Cable Car is not included.",
     },
-    sourceUrl: TMB_HOLA,
-    verifiedAt: VERIFIED_AT,
+    sourceUrl: HOLA_PRICES,
+    verifiedAt: HOLA_VERIFIED_AT,
   },
 ];
 
@@ -118,6 +122,11 @@ export const SOURCES = [
   {
     name: "Hola Barcelona Travel Card",
     url: TMB_HOLA,
+    publisher: "Transports Metropolitans de Barcelona",
+  },
+  {
+    name: "Hola Barcelona — prices",
+    url: HOLA_PRICES,
     publisher: "Transports Metropolitans de Barcelona",
   },
 ];
@@ -181,6 +190,16 @@ export function compareTickets(profile: TripProfile): Priced[] {
         unitsPerTraveller: journeys,
         total: round(fare * journeys * travellers),
       };
+    }
+
+    if (ticket.validity.kind === "pass") {
+      // The shortest length that covers the stay; past the longest, say so
+      // rather than chain passes into a price nobody would actually pay.
+      const pass = ticket.fares
+        .filter((item) => item.zone === profile.zone && (item.days ?? 0) >= days)
+        .sort((a, b) => (a.days ?? 0) - (b.days ?? 0))[0];
+      if (!pass) return { ticket, total: null, unitsPerTraveller: null, blocked: "too-long" };
+      return { ticket, unitsPerTraveller: 1, total: round(pass.price * travellers) };
     }
 
     if (ticket.validity.kind === "journeys") {

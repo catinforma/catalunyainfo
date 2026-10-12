@@ -69,6 +69,7 @@ const en: Messages = {
     cheapestTag: "← cheapest",
     blockedAirport: "Not valid at T1/T2",
     blockedNoFare: "Fare not verified here",
+    blockedTooLong: "Longest pass is 120 hours",
     personalNote: "Every ticket here except the single ticket is personal: it cannot be shared between travellers.",
     sourceLine: "Zone 1 fares from",
     verified: "Verified on {date}.",

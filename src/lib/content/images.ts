@@ -628,6 +628,26 @@ export const IMAGES: readonly ImportedImage[] = [
     "license": "CC BY-SA 4.0"
   },
   {
+    "key": "targetes-funicular-montjuic-parallel",
+    "url": "/images/targetes-funicular-montjuic-parallel.webp",
+    "width": 1920,
+    "height": 1440,
+    "blurDataUrl": "data:image/webp;base64,UklGRloAAABXRUJQVlA4IE4AAADwAQCdASoQAAwAA4BaJZQCdADa7Q/IyAAA/u97w8Ey+R+hNX72AEgCl5J3ZvE8VePnk/dHj1PBejDDNI4/iEFyBSQ5mPwdRRcifeJAAAA=",
+    "credit": "Ymblanter",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Funiculaire_Parallel_Station.jpg",
+    "license": "CC BY-SA 3.0"
+  },
+  {
+    "key": "targetes-museu-picasso-montcada",
+    "url": "/images/targetes-museu-picasso-montcada.webp",
+    "width": 1920,
+    "height": 2560,
+    "blurDataUrl": "data:image/webp;base64,UklGRpIAAABXRUJQVlA4IIYAAAAQBACdASoQABUAPu1iqU2ppaOiMAgBMB2JYwC7ABYAaTYVSVHBdPD9wAD99tOdXXlVbqEBS8h84ZeU7/+5Hn08qqj8c4YunGAPBH4z6LxKAp1mMn3YQz7QHlThfAhFFMnJ+eae8+vAvNjd1kscUiOCwtQFf4zogR2bMkZrqVlFzgNdmdDAAA==",
+    "credit": "Puigalder",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Carrer_Montcada2-Barcelona(Catalonia).jpg",
+    "license": "CC BY-SA 3.0"
+  },
+  {
     "key": "taxa-turistica-barcelona-skyline",
     "url": "/images/taxa-turistica-barcelona-skyline.webp",
     "width": 1920,

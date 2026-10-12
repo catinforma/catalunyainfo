@@ -116,12 +116,11 @@ export const TRANSPORT: B2Article = {
           "Inclou metro i bus de TMB, NitBus, FGC zona 1, tramvia, Rodalies zona 1 i el funicular de Montjuïc. També inclou l'anada i tornada en metro entre l'aeroport i Barcelona. El Telefèric de Montjuïc no hi està inclòs.",
           "És especialment útil per a qui prefereix no comptar trajectes.",
         ),
-        // TMB publishes the coverage of this card but not its fare. Saying so
-        // is more useful than repeating a reseller's price.
+        // Fares from TMB's own Hola Barcelona site, checked 12 Oct 2026.
         callout(
-          "warning",
-          "Per què no en donem el preu",
-          "TMB publica què inclou la Hola Barcelona, però no en publica la tarifa a la mateixa pàgina de tarifes. Els preus que circulen són de revenedors, així que no els reproduïm: consulta l'import a l'operador abans de comprar-la.",
+          "official",
+          "Preu de la Hola Barcelona",
+          `Al web de TMB (holabarcelona.com), a preu complet: 12,50 € (24 h), 18,70 € (48 h), 27,30 € (72 h), 35,60 € (96 h) i 43,60 € (120 h); TMB anuncia un 10 % de descompte en línia. Si dubtes entre aquesta i la Barcelona Card, mira ${b2link("cards", "ca", "quina surt a compte")}.`,
         ),
         ...h2("Quina triaria segons el viatge?"),
         table(
@@ -185,9 +184,9 @@ export const TRANSPORT: B2Article = {
           "**Hola Barcelona** funciona durante 24, 48, 72, 96 o 120 horas e incluye metro, bus TMB, NitBus, FGC zona 1, tranvía y Rodalies zona 1, además del funicular de Montjuïc y el metro del aeropuerto. El Teleférico de Montjuïc no está incluido.",
         ),
         callout(
-          "warning",
-          "Por qué no damos su precio",
-          "TMB publica qué incluye la Hola Barcelona, pero no su tarifa en la propia página de tarifas. Los precios que circulan son de revendedores, así que no los reproducimos: consulta el importe en el operador antes de comprarla.",
+          "official",
+          "Precio de la Hola Barcelona",
+          `En la web de TMB (holabarcelona.com), a precio completo: 12,50 € (24 h), 18,70 € (48 h), 27,30 € (72 h), 35,60 € (96 h) y 43,60 € (120 h); TMB anuncia un 10 % de descuento en línea. Si dudas entre esta y la Barcelona Card, mira ${b2link("cards", "es", "cuál compensa")}.`,
         ),
         ...h2("Qué miraría según el viaje"),
         table(
@@ -251,9 +250,9 @@ export const TRANSPORT: B2Article = {
           "The **Hola Barcelona Travel Card** offers unlimited travel for 24, 48, 72, 96 or 120 hours and covers TMB metro and buses, NitBus, the Montjuïc funicular, FGC zone 1, the tram and Rodalies zone 1. Airport metro travel is included; the Montjuïc Cable Car is not.",
         ),
         callout(
-          "warning",
-          "Why we do not quote its price",
-          "TMB publishes what the Hola Barcelona card covers but not its fare on the same fares page. The prices circulating elsewhere are resellers' own, so we do not repeat them: check the amount with the operator before buying.",
+          "official",
+          "Hola Barcelona prices",
+          `On TMB's own Hola Barcelona site (holabarcelona.com), full price: €12.50 (24 h), €18.70 (48 h), €27.30 (72 h), €35.60 (96 h) and €43.60 (120 h); TMB advertises 10% off online. Torn between this and the Barcelona Card? See ${b2link("cards", "en", "which one is worth it")}.`,
         ),
         ...h2("Where to start looking"),
         table(

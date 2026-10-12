@@ -150,7 +150,9 @@ export function TransportPassSelector({ locale }: { locale: Locale }) {
                         ? t.blockedAirport
                         : item.blocked === "no-fare"
                           ? t.blockedNoFare
-                          : "—"}
+                          : item.blocked === "too-long"
+                            ? t.blockedTooLong
+                            : "—"}
                     </span>
                   ) : (
                     <>

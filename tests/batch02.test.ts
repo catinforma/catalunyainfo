@@ -9,6 +9,7 @@ import { AIRPORT } from "../src/lib/content/batch02/airport.ts";
 import { MONUMENTS } from "../src/lib/content/batch02/monuments.ts";
 import { SKI } from "../src/lib/content/batch02/ski.ts";
 import { MUSEUMS } from "../src/lib/content/batch02/museums.ts";
+import { CARDS } from "../src/lib/content/batch02/cards.ts";
 import { B2_PATHS, type B2Article } from "../src/lib/content/batch02/shared.ts";
 import { IMAGES } from "../src/lib/content/images.ts";
 import {
@@ -31,6 +32,7 @@ const ARTICLES: B2Article[] = [
   MONUMENTS,
   SKI,
   MUSEUMS,
+  CARDS,
   SNOW,
 ];
 
@@ -41,7 +43,7 @@ const IMAGE_KEYS = new Set(IMAGES.map((image) => image.key));
 /* -------------------------------------------------------------------------- */
 
 test("every article has three editions", () => {
-  assert.equal(ARTICLES.length, 13);
+  assert.equal(ARTICLES.length, 14);
   for (const article of ARTICLES) {
     for (const locale of LOCALES) {
       assert.ok(article.editions[locale], `${article.key} is missing ${locale}`);
@@ -236,10 +238,21 @@ test("fares match what TMB publishes", () => {
   assert.equal(price("senzill"), 2.9);
 });
 
-test("the Hola Barcelona card carries no invented price", () => {
+test("the Hola Barcelona fares are TMB's, one per length, and the stay picks the shortest that covers it", () => {
   const hola = TICKETS.find((ticket) => ticket.key === "hola-barcelona");
   assert.ok(hola);
-  assert.equal(hola.fares.length, 0);
+  assert.deepEqual(
+    hola.fares.map((fare) => [fare.days, fare.price]),
+    [[1, 12.5], [2, 18.7], [3, 27.3], [4, 35.6], [5, 43.6]],
+  );
+  const price = (days: number, travellers = 1) =>
+    compareTickets({ days, journeysPerDay: 4, travellers, zone: "1", usesAirport: false }).find(
+      (item) => item.ticket.key === "hola-barcelona",
+    );
+  assert.equal(price(3)?.total, 27.3);
+  assert.equal(price(2, 2)?.total, 37.4);
+  assert.equal(price(6)?.total, null);
+  assert.equal(price(6)?.blocked, "too-long");
 });
 
 test("ten journeys over three days: one T-casual per traveller", () => {

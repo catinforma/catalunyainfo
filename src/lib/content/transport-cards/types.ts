@@ -37,7 +37,12 @@ export type Validity =
   /** Unlimited travel for a number of consecutive days. */
   | { kind: "days"; days: number }
   /** One journey. */
-  | { kind: "single" };
+  | { kind: "single" }
+  /**
+   * A visitor pass sold in fixed lengths (24 to 120 hours), each with its own
+   * fare carrying `days`. The trip takes the shortest length that covers it.
+   */
+  | { kind: "pass"; maxDays: number };
 
 /** Whether a ticket may be shared between travellers on the same trip. */
 export type Sharing = "personal" | "shareable";
@@ -47,6 +52,8 @@ export interface TicketFare {
   zone: string;
   /** Price in euros. Supplied by the editorial package, never inferred. */
   price: number;
+  /** For a `pass`, how many days (24-hour periods) this fare buys. */
+  days?: number;
 }
 
 export interface Ticket {
