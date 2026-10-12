@@ -276,7 +276,7 @@ function body(locale: Locale) {
     list(...t.pick),
     ...paras(),
     faq(t.faq),
-    ...b2Related(["snow", "cerdanya", "ripolles"], locale),
+    ...b2Related(["snow", "andorra", "cerdanya", "ripolles"], locale),
   ];
 }
 

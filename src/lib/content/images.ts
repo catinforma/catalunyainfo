@@ -43,6 +43,26 @@ export const IMAGES: readonly ImportedImage[] = [
     "license": "CC BY-SA 4.0"
   },
   {
+    "key": "andorra-la-vella-vall",
+    "url": "/images/andorra-la-vella-vall.webp",
+    "width": 1920,
+    "height": 1075,
+    "blurDataUrl": "data:image/webp;base64,UklGRlYAAABXRUJQVlA4IEoAAADwAQCdASoQAAkAA4BaJQBOgCIGnDih7qwA/u3vRIN1Jf3ZiQqxlUKafbFoXNjJLjBaVUDN4rkT6Ac7xlJ2kaMGr61tnReWbwWAAA==",
+    "credit": "Diego Delso",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Vista_de_Andorra_la_Vieja,_Andorra,_2013-12-30,_DD_01.JPG",
+    "license": "CC BY-SA 3.0"
+  },
+  {
+    "key": "andorra-pont-margineda",
+    "url": "/images/andorra-pont-margineda.webp",
+    "width": 1920,
+    "height": 2726,
+    "blurDataUrl": "data:image/webp;base64,UklGRqIAAABXRUJQVlA4IJYAAACwBACdASoQABcAPu1iqU2ppaOiMAgBMB2JQBOmUAS4gy0zOS9Y4/PlJuWtdtdAAP6CyanbOGRUKPV4NEaTMHz2Km5jbA7VXqj+hXjthBB9RTkEcLTiGU6T2oTboRvMn2z5HPP0JnATUMekO2zT9acO4RqAawd2AV7exqPzmUWFlhGLXFcrevDmTwgq5QTkGcA7sXlQAAA=",
+    "credit": "Diego Delso",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Puente_de_la_Margineda,_Santa_Coloma,_Andorra,_2013-12-30,_DD_08-10_HDR.jpg",
+    "license": "CC BY-SA 4.0"
+  },
+  {
     "key": "b2-cerdanya-estany",
     "url": "/images/b2-cerdanya-estany.webp",
     "width": 1920,
