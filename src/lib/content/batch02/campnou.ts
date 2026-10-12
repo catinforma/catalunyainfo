@@ -29,8 +29,8 @@ const VERIFIED = "2026-10-12";
 const SOURCES: B2Source[] = [
   { name: "Barça Immersive Tour — tickets and hours", url: "https://www.fcbarcelona.com/en/tickets/camp-nou-experience", publisher: "FC Barcelona" },
   { name: "Football tickets", url: "https://www.fcbarcelona.com/en/tickets/football", publisher: "FC Barcelona" },
-  { name: "FC Barcelona — stadium capacity statement", url: "https://www.fcbarcelona.com/en/club/news/4465846/", publisher: "FC Barcelona" },
-  { name: "TMB — getting to Camp Nou", url: "https://www.tmb.cat/en/", publisher: "TMB" },
+  { name: "FC Barcelona — stadium capacity statement", url: "https://www.fcbarcelona.com/en/club/news/4465846/fc-barcelona-official-statement", publisher: "FC Barcelona" },
+  { name: "Getting to Spotify Camp Nou", url: "https://www.fcbarcelona.com/en/card/4562313/getting-to-spotify-camp-nou", publisher: "FC Barcelona" },
 ];
 
 const META: Record<Locale, { path: string; title: string; seoTitle: string; seoDescription: string; excerpt: string }> = {

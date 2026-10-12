@@ -513,6 +513,26 @@ export const IMAGES: readonly ImportedImage[] = [
     "license": "CC BY-SA 4.0"
   },
   {
+    "key": "horaris-metro-catalunya-l1",
+    "url": "/images/horaris-metro-catalunya-l1.webp",
+    "width": 1920,
+    "height": 1080,
+    "blurDataUrl": "data:image/webp;base64,UklGRlQAAABXRUJQVlA4IEgAAADQAQCdASoQAAkAA4BaJZQAAt0DWNUv4AD++FIMlrh7X5jbWGVvChkwxQxlg38F1wBty8057huw/uWD2C0XDagG3tewZllgFAA=",
+    "credit": "Agm",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Catalunya_L1_andana.jpg",
+    "license": "CC BY-SA 4.0"
+  },
+  {
+    "key": "horaris-nitbus-n5",
+    "url": "/images/horaris-nitbus-n5.webp",
+    "width": 1920,
+    "height": 1404,
+    "blurDataUrl": "data:image/webp;base64,UklGRm4AAABXRUJQVlA4IGIAAADwAQCdASoQAAwAA4BaJZgCsAYuHIe7XAAA/vLi99VRHqWG34IKh07r3wy3QMzdOaLkhWGibMgduvhE8cA6rlS4UVFy1V391FJJd6ej/lM5sxMHvsomuuXyB6dIuAI5i7eAAA==",
+    "credit": "Ssola",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Nitbus_N5_Carmel.jpg",
+    "license": "CC BY-SA 3.0"
+  },
+  {
     "key": "medieval-hero",
     "url": "/images/medieval-hero.webp",
     "width": 1920,
