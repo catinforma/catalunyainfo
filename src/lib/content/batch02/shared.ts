@@ -511,6 +511,7 @@ export function verifiedLine(locale: Locale, isoDate: string): string {
   const date =
     locale === "en"
       ? `${Number(day)} ${monthName} ${year}`
-      : `${Number(day)} de ${monthName} de ${year}`;
-  return `**${label[locale]}:** ${date}.`;
+      : `${Number(day)} ${locale === "ca" && /^[ao]/.test(monthName) ? "d'" : "de "}${monthName} de ${year}`;
+  // Plain text: the callout renders its title without inline markdown.
+  return `${label[locale]}: ${date}.`;
 }
