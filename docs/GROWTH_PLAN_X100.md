@@ -163,6 +163,15 @@ Camp Nou, horaris de metro i NitBus, Sitges, Tarragona, **com votar el 29N** (el
 
 Ajornat: Costa Brava en bus (horaris Moventis només fins al 31 d'oct.), mercats de Nadal (sense dates 2026).
 
+### 12 d'octubre (nit): hub i quatre guies més
+
+- **Guia pràctica de Barcelona** (hub amb totes les guies de visitant, primera a la portada EN).
+- **Canvi d'hora**, amb un requadre que calcula el pròxim canvi a partir de la regla del RD 236/2002
+  (provat contra totes les dates publicades fins al 2031): no caduca el 25 d'octubre.
+- **Vall de Núria** (preus d'FGC vigents fins al 30 de novembre: **cal actualitzar-los al desembre**).
+- **Platges de Barcelona** (banderes blaves 2026-27 d'ADEAC, ordenança de convivència 2026).
+- Corregit: la línia «Última verificació» mostrava `**` literals i «de octubre» a totes les guies de la tanda 2.
+
 ## 4. Les palanques, per impacte esperat
 
 ### Palanca 1 — Dades oficials que no envelleixen (×10-20)
