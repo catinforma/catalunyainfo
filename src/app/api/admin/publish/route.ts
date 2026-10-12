@@ -25,6 +25,7 @@ import { ANDORRA } from "@/lib/content/batch02/andorra";
 import { MONTJUIC, TIBIDABO } from "@/lib/content/batch02/hills";
 import { CRUISEPORT } from "@/lib/content/batch02/cruiseport";
 import { PORTAVENTURA } from "@/lib/content/batch02/portaventura";
+import { MARKETS, ZOO_AQUARIUM } from "@/lib/content/batch02/family-markets";
 import { CONGRESS_RESULTS, PARLIAMENT_RESULTS } from "@/lib/content/batch02/election-results";
 import { publishHolidayTodayGuide } from "@/lib/content/holidays/today-publish";
 import { publishLocalHolidaysGuide } from "@/lib/content/holidays/local-publish";
@@ -95,6 +96,7 @@ export async function POST(request: Request) {
     if (wants("voting")) published.push(await publishB2Article(VOTING));
     if (wants("figueres")) published.push(await publishB2Article(FIGUERES));
     if (wants("andorra")) published.push(await publishB2Article(ANDORRA));
+    if (wants("family-markets")) published.push(await publishB2Article(ZOO_AQUARIUM), await publishB2Article(MARKETS));
     if (wants("cruiseport")) published.push(await publishB2Article(CRUISEPORT));
     if (wants("portaventura")) published.push(await publishB2Article(PORTAVENTURA));
     if (wants("hills")) published.push(await publishB2Article(MONTJUIC), await publishB2Article(TIBIDABO));

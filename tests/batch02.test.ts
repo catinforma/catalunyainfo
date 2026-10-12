@@ -19,6 +19,7 @@ import { ANDORRA } from "../src/lib/content/batch02/andorra.ts";
 import { MONTJUIC, TIBIDABO } from "../src/lib/content/batch02/hills.ts";
 import { CRUISEPORT } from "../src/lib/content/batch02/cruiseport.ts";
 import { PORTAVENTURA } from "../src/lib/content/batch02/portaventura.ts";
+import { MARKETS, ZOO_AQUARIUM } from "../src/lib/content/batch02/family-markets.ts";
 import { CONGRESS_RESULTS, PARLIAMENT_RESULTS } from "../src/lib/content/batch02/election-results.ts";
 import { B2_PATHS, type B2Article } from "../src/lib/content/batch02/shared.ts";
 import { IMAGES } from "../src/lib/content/images.ts";
@@ -54,6 +55,8 @@ const ARTICLES: B2Article[] = [
   TIBIDABO,
   CRUISEPORT,
   PORTAVENTURA,
+  ZOO_AQUARIUM,
+  MARKETS,
   CONGRESS_RESULTS,
   PARLIAMENT_RESULTS,
   SNOW,
@@ -66,7 +69,7 @@ const IMAGE_KEYS = new Set(IMAGES.map((image) => image.key));
 /* -------------------------------------------------------------------------- */
 
 test("every article has three editions", () => {
-  assert.equal(ARTICLES.length, 27);
+  assert.equal(ARTICLES.length, 29);
   for (const article of ARTICLES) {
     for (const locale of LOCALES) {
       assert.ok(article.editions[locale], `${article.key} is missing ${locale}`);

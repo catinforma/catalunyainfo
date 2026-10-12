@@ -41,7 +41,9 @@ export type B2Key =
   | "montjuic"
   | "tibidabo"
   | "cruiseport"
-  | "portaventura";
+  | "portaventura"
+  | "zooAquarium"
+  | "markets";
 
 /** Path after the locale prefix, no leading or trailing slash. */
 export const B2_PATHS: Record<B2Key, Record<Locale, string>> = {
@@ -99,6 +101,16 @@ export const B2_PATHS: Record<B2Key, Record<Locale, string>> = {
     ca: "guies/com-votar-eleccions-catalunya",
     es: "guias/como-votar-elecciones-cataluna",
     en: "guides/how-to-vote-catalonia",
+  },
+  zooAquarium: {
+    ca: "guies/zoo-aquarium-barcelona",
+    es: "guias/zoo-aquarium-barcelona",
+    en: "guides/barcelona-zoo-aquarium-tickets",
+  },
+  markets: {
+    ca: "guies/mercat-boqueria-mercats-barcelona",
+    es: "guias/mercado-boqueria-mercados-barcelona",
+    en: "guides/la-boqueria-barcelona-markets",
   },
   cruiseport: {
     ca: "guies/port-creuers-barcelona-centre",
@@ -246,6 +258,16 @@ export const B2_TITLES: Record<B2Key, Record<Locale, string>> = {
     ca: "Com votar a Catalunya",
     es: "Cómo votar en Cataluña",
     en: "How to vote in Catalonia",
+  },
+  zooAquarium: {
+    ca: "Zoo i Aquàrium de Barcelona",
+    es: "Zoo y Aquarium de Barcelona",
+    en: "Barcelona Zoo and Aquarium",
+  },
+  markets: {
+    ca: "La Boqueria i els mercats de Barcelona",
+    es: "La Boqueria y los mercados de Barcelona",
+    en: "La Boqueria and Barcelona's markets",
   },
   cruiseport: {
     ca: "Del port de creuers al centre de Barcelona",

@@ -63,6 +63,16 @@ export const IMAGES: readonly ImportedImage[] = [
     "license": "CC BY-SA 4.0"
   },
   {
+    "key": "aquarium-tunel",
+    "url": "/images/aquarium-tunel.webp",
+    "width": 1920,
+    "height": 1285,
+    "blurDataUrl": "data:image/webp;base64,UklGRmQAAABXRUJQVlA4IFgAAADwAQCdASoQAAsAA4BaJagCdACIufj05sAA/un6uWwt2mCwX2ioSFlhXVwFMtoGjLmotfMSN5pcl3edm0IoN59yDysYdYs6MkGt6P5mYE4qqtNJ472D7IAA",
+    "credit": "Paul Hermans",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Tunnelaquarium_14-05-2009_15-54-09.JPG",
+    "license": "CC BY-SA 3.0"
+  },
+  {
     "key": "b2-cerdanya-estany",
     "url": "/images/b2-cerdanya-estany.webp",
     "width": 1920,
@@ -643,6 +653,26 @@ export const IMAGES: readonly ImportedImage[] = [
     "license": "CC BY-SA 4.0"
   },
   {
+    "key": "mercats-boqueria-rotol",
+    "url": "/images/mercats-boqueria-rotol.webp",
+    "width": 1920,
+    "height": 2886,
+    "blurDataUrl": "data:image/webp;base64,UklGRpwAAABXRUJQVlA4IJAAAABQBACdASoQABgAPu1iqU2ppaQiMAgBMB2JZQATwBQUi3ASHez3zqJDz2IAAP7esibf7pq8xmBYb+C3x1XP/5sJwTQuz28tT6iEumQWKn0U1KQmqJfxcfw3OfauHBB9+S0fkbXulOM+eCOoUE6st/8WfBojFfL8rDJerMauZUf6oW1++6NG1xrkJB/O7JptgAA=",
+    "credit": "Moheen Reeyad",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Entrance_to_Mercat_de_la_Boqueria_(01).jpg",
+    "license": "CC BY-SA 4.0"
+  },
+  {
+    "key": "mercats-santa-caterina-coberta",
+    "url": "/images/mercats-santa-caterina-coberta.webp",
+    "width": 1920,
+    "height": 1012,
+    "blurDataUrl": "data:image/webp;base64,UklGRl4AAABXRUJQVlA4IFIAAADwAQCdASoQAAgAA4BaJZACdAD0jpyqCvgA/uxT0PLZAAIvRmIg3TN8DSUtf9innq9KHMvrvxOz8n9iHc5zxuuR6LZfPLJHTngHwwhLMTIitQAA",
+    "credit": "Tony Hisgett from Birmingham, UK",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Market_Roof_(5832285437)_(2).jpg",
+    "license": "CC BY 2.0"
+  },
+  {
     "key": "montjuic-font-magica-nit",
     "url": "/images/montjuic-font-magica-nit.webp",
     "width": 1920,
@@ -963,6 +993,16 @@ export const IMAGES: readonly ImportedImage[] = [
     "width": 1672,
     "height": 941,
     "blurDataUrl": "data:image/webp;base64,UklGRmQAAABXRUJQVlA4IFgAAADwAQCdASoQAAkAA4BaJagCdAEQ8291h3AA/tc3FNav7CkRXgUyW9oYsHL3pON97VrlqCkCFfOeTUorWyrc6i7gG/MfdsZD+mkeppvyzzmxG7TLclVYAAAA"
+  },
+  {
+    "key": "zoo-entrada-ciutadella",
+    "url": "/images/zoo-entrada-ciutadella.webp",
+    "width": 1920,
+    "height": 1440,
+    "blurDataUrl": "data:image/webp;base64,UklGRmgAAABXRUJQVlA4IFwAAADQAQCdASoQAAwAA4BaJQBOgB0yuIyyQADK9Q2o8LZvJh56JrT6PX5fEN7SwnuGsbNzMuwXBmHSzmVvSASsMHSvubIWc9WR9WvzE8aCxYloax4SGMNW4ITMXlkgAA==",
+    "credit": "Enric",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:010_Zoo_de_Barcelona,_entrada_pel_parc_de_la_Ciutadella.jpg",
+    "license": "CC BY-SA 4.0"
   }
 ] as const;
 
