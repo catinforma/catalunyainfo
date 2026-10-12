@@ -221,7 +221,8 @@ test("no train or bus timetable is hard-coded into the day trips", () => {
       const text = bodyToPlainText(article.editions[locale].blocks);
       // A clock time would be a departure we cannot keep current.
       assert.ok(
-        !/\b([01]?\d|2[0-3])[:.][0-5]\d\b/.test(text),
+        // Prices such as "€11.40" are not times: skip figures right after €.
+        !/(?<!€)\b([01]?\d|2[0-3])[:.][0-5]\d\b/.test(text),
         `${article.key}/${locale} contains what looks like a departure time`,
       );
     }

@@ -9,6 +9,7 @@ import {
   lead,
   list,
   paras,
+  table,
   verifiedLine,
   type B2Article,
 } from "./shared";
@@ -249,13 +250,18 @@ const MONTSERRAT_SOURCES = [
     publisher: "Aeri de Montserrat",
   },
   {
+    name: "Montserrat — visita",
+    url: "https://www.montserratvisita.com/en/entrada-turistica",
+    publisher: "Abadia de Montserrat",
+  },
+  {
     name: "Xarxa FGC — línia Llobregat-Anoia",
     url: "https://www.fgc.cat/xarxa-fgc/l-llobregat-anoia/monistrol-de-montserrat-tren/",
     publisher: "Ferrocarrils de la Generalitat de Catalunya",
   },
 ];
 
-const MONTSERRAT_VERIFIED = "2026-09-29";
+const MONTSERRAT_VERIFIED = "2026-10-12";
 
 export const MONTSERRAT_FREE: B2Article = {
   key: "montserratFree",
@@ -293,7 +299,7 @@ export const MONTSERRAT_FREE: B2Article = {
         "Montserrat per lliure des de Barcelona: tren, cremallera o aeri i com organitzar el dia",
       seoTitle: "Montserrat per lliure: tren, cremallera o aeri",
       seoDescription:
-        "Com anar a Montserrat pel teu compte des de Barcelona: tren FGC des de Plaça Espanya i l'elecció entre cremallera i aeri.",
+        "Com anar a Montserrat pel teu compte des de Barcelona: R5 des de Plaça Espanya i cremallera o aeri (15 € anada i tornada). Preus del 2026 i què ha canviat.",
       excerpt:
         "No cal excursió organitzada. Tren des de Plaça Espanya i després cremallera o aeri, segons el que prefereixis.",
       blocks: [
@@ -316,6 +322,28 @@ export const MONTSERRAT_FREE: B2Article = {
           "Freqüències i horaris",
           "Ni el cremallera ni l'aeri publiquen una freqüència fixa tot l'any: varia per temporada i per dia. Consulta l'horari de la teva data als operadors abans de sortir.",
         ),
+        ...h2(
+          "Preus del 2026",
+          "L'R5 triga uns **60 minuts** de Plaça Espanya a l'estació de l'Aeri i **64** a Monistrol de Montserrat, on es canvia al cremallera; els caps de setmana i festius hi ha un tren cada hora.",
+        ),
+        table(
+          "Pujar a Montserrat: preus d'adult del 2026",
+          ["Bitllet", "Preu"],
+          [
+            ["Cremallera (des de Monistrol)", "9 € anada, 15 € anada i tornada"],
+            ["Aeri de Montserrat", "10 € anada, 15 € anada i tornada"],
+            ["Funicular de Sant Joan", "11,40 € anada, 17,50 € anada i tornada"],
+            ["Trans Montserrat (tren, cremallera o aeri, funicular de Sant Joan, espai audiovisual, basílica i metro)", "50 €"],
+            ["Tot Montserrat (el mateix, més museu i dinar de bufet)", "71,50 €"],
+            ["Museu de Montserrat", "12 € (6 € de 8 a 16 anys)"],
+          ],
+          "Preus del cremallera vàlids fins al 31 de desembre de 2026, segons FGC; aeri, funicular i museu segons els seus webs, comprovats el 12 d'octubre de 2026.",
+        ),
+        callout(
+          "warning",
+          "Abans d'anar-hi",
+          "El **funicular de la Santa Cova** està fora de servei per manteniment fins a nou avís (s'hi pot baixar a peu). La **basílica** demana entrada de pagament als turistes no residents; els residents a la UE hi entren gratis però han de reservar en línia l'accés al cambril de la Moreneta. La targeta T-mobilitat no val al cremallera.",
+        ),
         ...h2("Què fer a dalt?"),
         ...paras("Una primera visita pot combinar:"),
         list(
@@ -323,7 +351,7 @@ export const MONTSERRAT_FREE: B2Article = {
           "la basílica;",
           "l'entorn de la Moreneta, segons el tipus d'entrada;",
           "el museu, si t'interessa;",
-          "Santa Cova o Sant Joan, segons el temps i el servei;",
+          "el funicular de Sant Joan (el de la Santa Cova és tancat), segons el temps;",
           "una caminada curta si la meteorologia és adequada.",
         ),
         ...paras(
@@ -343,7 +371,7 @@ export const MONTSERRAT_FREE: B2Article = {
       title: "Montserrat por libre desde Barcelona: tren, cremallera o teleférico",
       seoTitle: "Montserrat por libre: tren, cremallera o teleférico",
       seoDescription:
-        "Cómo ir a Montserrat por tu cuenta desde Barcelona: tren FGC desde Plaça Espanya y la elección entre cremallera y Aeri.",
+        "Cómo ir a Montserrat por tu cuenta desde Barcelona: R5 desde Plaça Espanya y cremallera o Aeri (15 € ida y vuelta). Precios de 2026 y qué ha cambiado.",
       excerpt:
         "No hace falta excursión organizada. Tren desde Plaça Espanya y después cremallera o Aeri.",
       blocks: [
@@ -365,6 +393,28 @@ export const MONTSERRAT_FREE: B2Article = {
           "La decisión no es tanto cuál es mejor como qué experiencia prefieres. La subida en cremallera es progresiva y permite ver cómo cambia el paisaje; la del Aeri es una vista vertical de golpe, en pocos minutos.",
           "También influye desde dónde llegas: el cremallera enlaza en Monistrol de Montserrat y el Aeri tiene su propia parada en la línea.",
         ),
+        ...h2(
+          "Precios de 2026",
+          "La R5 tarda unos **60 minutos** de Plaça Espanya a la estación del Aeri y **64** a Monistrol de Montserrat, donde se cambia al cremallera; los fines de semana y festivos hay un tren cada hora.",
+        ),
+        table(
+          "Subir a Montserrat: precios de adulto de 2026",
+          ["Billete", "Precio"],
+          [
+            ["Cremallera (desde Monistrol)", "9 € ida, 15 € ida y vuelta"],
+            ["Aeri de Montserrat", "10 € ida, 15 € ida y vuelta"],
+            ["Funicular de Sant Joan", "11,40 € ida, 17,50 € ida y vuelta"],
+            ["Trans Montserrat (tren, cremallera o Aeri, funicular de Sant Joan, espacio audiovisual, basílica y metro)", "50 €"],
+            ["Tot Montserrat (lo mismo, más museo y comida de bufé)", "71,50 €"],
+            ["Museu de Montserrat", "12 € (6 € de 8 a 16 años)"],
+          ],
+          "Precios del cremallera válidos hasta el 31 de diciembre de 2026, según FGC; Aeri, funicular y museo según sus webs, comprobados el 12 de octubre de 2026.",
+        ),
+        callout(
+          "warning",
+          "Antes de ir",
+          "El **funicular de la Santa Cova** está fuera de servicio por mantenimiento hasta nuevo aviso (se puede bajar a pie). La **basílica** pide entrada de pago a los turistas no residentes; los residentes en la UE entran gratis pero deben reservar en línea el acceso al camarín de la Moreneta. La tarjeta T-mobilitat no vale en el cremallera.",
+        ),
         ...h2("Qué hacer arriba"),
         ...paras("Una primera visita puede combinar:"),
         list(
@@ -372,7 +422,7 @@ export const MONTSERRAT_FREE: B2Article = {
           "la basílica;",
           "el entorno de la Moreneta, según el tipo de entrada;",
           "el museo, si te interesa;",
-          "Santa Cova o Sant Joan, según el tiempo y el servicio;",
+          "el funicular de Sant Joan (el de la Santa Cova está cerrado), según el tiempo;",
           "un paseo corto si la meteorología acompaña.",
         ),
         ...paras(
@@ -392,7 +442,7 @@ export const MONTSERRAT_FREE: B2Article = {
       title: "Montserrat without a tour: how to get there independently from Barcelona",
       seoTitle: "Montserrat without a tour: train, rack railway or cable car",
       seoDescription:
-        "How to reach Montserrat independently from Barcelona: the FGC R5 from Plaça Espanya, then the rack railway or the Aeri cable car.",
+        "How to reach Montserrat independently from Barcelona: the R5 from Plaça Espanya, then the rack railway or cable car (€15 return). 2026 fares and what changed.",
       excerpt:
         "No organised tour needed. Train from Plaça Espanya, then the rack railway or the cable car.",
       blocks: [
@@ -415,6 +465,28 @@ export const MONTSERRAT_FREE: B2Article = {
           "The useful question is not simply which is better, but which ascent you would rather experience. The rack railway climbs gradually and lets you watch the landscape change; the cable car gives you the vertical view all at once, in a few minutes.",
           "Where you join also matters: the rack railway connects at Monistrol de Montserrat, and the cable car has its own stop on the line.",
         ),
+        ...h2(
+          "2026 fares",
+          "The R5 takes about **60 minutes** from Plaça Espanya to the Aeri station and **64** to Monistrol de Montserrat, where you change to the rack railway; at weekends and on holidays there is a train every hour.",
+        ),
+        table(
+          "Getting up Montserrat: adult fares in 2026",
+          ["Ticket", "Price"],
+          [
+            ["Rack railway (from Monistrol)", "€9 single, €15 return"],
+            ["Aeri cable car", "€10 single, €15 return"],
+            ["Sant Joan funicular", "€11.40 single, €17.50 return"],
+            ["Trans Montserrat (train, rack railway or cable car, Sant Joan funicular, audiovisual space, basilica and metro)", "€50"],
+            ["Tot Montserrat (the same, plus museum and buffet lunch)", "€71.50"],
+            ["Museu de Montserrat", "€12 (€6 ages 8 to 16)"],
+          ],
+          "Rack-railway fares valid until 31 December 2026, per FGC; cable car, funicular and museum from their own sites, checked on 12 October 2026.",
+        ),
+        callout(
+          "warning",
+          "Before you go",
+          "The **Santa Cova funicular** is out of service for maintenance until further notice (you can walk down). The **basilica** now charges non-resident tourists for entry; EU residents go in free but must book online to visit the Black Madonna. The T-mobilitat card is not valid on the rack railway.",
+        ),
         ...h2("What to do up there"),
         ...paras("A first visit can combine:"),
         list(
@@ -422,7 +494,7 @@ export const MONTSERRAT_FREE: B2Article = {
           "the basilica;",
           "the Moreneta, depending on your ticket;",
           "the museum, if it interests you;",
-          "Santa Cova or Sant Joan, depending on time and service;",
+          "the Sant Joan funicular (the Santa Cova one is closed), depending on time;",
           "a short walk if the weather allows.",
         ),
         ...paras(
