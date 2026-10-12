@@ -45,7 +45,8 @@ export type B2Key =
   | "zooAquarium"
   | "markets"
   | "barcelonaHub"
-  | "clockChange";
+  | "clockChange"
+  | "nuria";
 
 /** Path after the locale prefix, no leading or trailing slash. */
 export const B2_PATHS: Record<B2Key, Record<Locale, string>> = {
@@ -103,6 +104,11 @@ export const B2_PATHS: Record<B2Key, Record<Locale, string>> = {
     ca: "guies/com-votar-eleccions-catalunya",
     es: "guias/como-votar-elecciones-cataluna",
     en: "guides/how-to-vote-catalonia",
+  },
+  nuria: {
+    ca: "escapades/vall-de-nuria-cremallera",
+    es: "escapadas/vall-de-nuria-cremallera",
+    en: "day-trips/vall-de-nuria-rack-railway",
   },
   clockChange: {
     ca: "guies/canvi-hora-catalunya",
@@ -270,6 +276,11 @@ export const B2_TITLES: Record<B2Key, Record<Locale, string>> = {
     ca: "Com votar a Catalunya",
     es: "Cómo votar en Cataluña",
     en: "How to vote in Catalonia",
+  },
+  nuria: {
+    ca: "Vall de Núria: el cremallera i com arribar-hi",
+    es: "Vall de Núria: el cremallera y cómo llegar",
+    en: "Vall de Núria by rack railway",
   },
   clockChange: {
     ca: "Canvi d'hora: quan és el pròxim",

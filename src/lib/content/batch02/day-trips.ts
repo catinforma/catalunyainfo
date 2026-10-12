@@ -601,7 +601,7 @@ export const CERDANYA: B2Article = {
           "Combinar la Cerdanya i Núria en un mateix viatge és possible perquè comparteixen línia; només cal mirar els horaris de tots dos trens el dia que hi vagis.",
         ),
         ...paras(verifiedLine("ca", CERDANYA_VERIFIED)),
-        ...b2Related(["ripolles", "snow", "girona"], "ca"),
+        ...b2Related(["nuria", "ripolles", "snow", "girona"], "ca"),
       ],
     },
 
@@ -648,7 +648,7 @@ export const CERDANYA: B2Article = {
           "Combinar la Cerdanya y Núria en un mismo viaje es posible porque comparten línea; solo hay que mirar los horarios de los dos trenes el día que vayas.",
         ),
         ...paras(verifiedLine("es", CERDANYA_VERIFIED)),
-        ...b2Related(["ripolles", "snow", "girona"], "es"),
+        ...b2Related(["nuria", "ripolles", "snow", "girona"], "es"),
       ],
     },
 
@@ -695,7 +695,7 @@ export const CERDANYA: B2Article = {
           "Combining Cerdanya and Núria on one trip works because they share the line; just check both timetables for the day you travel.",
         ),
         ...paras(verifiedLine("en", CERDANYA_VERIFIED)),
-        ...b2Related(["ripolles", "snow", "girona"], "en"),
+        ...b2Related(["nuria", "ripolles", "snow", "girona"], "en"),
       ],
     },
   },

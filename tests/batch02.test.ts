@@ -22,6 +22,7 @@ import { PORTAVENTURA } from "../src/lib/content/batch02/portaventura.ts";
 import { MARKETS, ZOO_AQUARIUM } from "../src/lib/content/batch02/family-markets.ts";
 import { BARCELONA_HUB } from "../src/lib/content/batch02/barcelona-hub.ts";
 import { CLOCK_CHANGE } from "../src/lib/content/batch02/clock-change.ts";
+import { NURIA } from "../src/lib/content/batch02/nuria.ts";
 import { CONGRESS_RESULTS, PARLIAMENT_RESULTS } from "../src/lib/content/batch02/election-results.ts";
 import { B2_PATHS, type B2Article } from "../src/lib/content/batch02/shared.ts";
 import { IMAGES } from "../src/lib/content/images.ts";
@@ -61,6 +62,7 @@ const ARTICLES: B2Article[] = [
   MARKETS,
   BARCELONA_HUB,
   CLOCK_CHANGE,
+  NURIA,
   CONGRESS_RESULTS,
   PARLIAMENT_RESULTS,
   SNOW,
@@ -73,7 +75,7 @@ const IMAGE_KEYS = new Set(IMAGES.map((image) => image.key));
 /* -------------------------------------------------------------------------- */
 
 test("every article has three editions", () => {
-  assert.equal(ARTICLES.length, 31);
+  assert.equal(ARTICLES.length, 32);
   for (const article of ARTICLES) {
     for (const locale of LOCALES) {
       assert.ok(article.editions[locale], `${article.key} is missing ${locale}`);

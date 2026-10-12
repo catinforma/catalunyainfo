@@ -129,7 +129,7 @@ export const RIPOLLES: B2Article = {
           `Si hi vas a la temporada de bolets, tenim el ${link("mushrooms", "ca", "part setmanal de condicions")}, i a l'hivern, ${b2link("snow", "ca", "on veure neu sense esquiar")}.`,
         ),
         ...paras(verifiedLine("ca", RIPOLLES_VERIFIED)),
-        ...b2Related(["setcases", "ski", "snow", "cerdanya"], "ca"),
+        ...b2Related(["nuria", "setcases", "ski", "snow", "cerdanya"], "ca"),
       ],
     },
 
@@ -186,7 +186,7 @@ export const RIPOLLES: B2Article = {
           `En temporada de setas, el ${link("mushrooms", "es", "parte semanal de condiciones")}. En invierno, ${b2link("snow", "es", "dónde ver nieve sin esquiar")}.`,
         ),
         ...paras(verifiedLine("es", RIPOLLES_VERIFIED)),
-        ...b2Related(["setcases", "ski", "snow", "cerdanya"], "es"),
+        ...b2Related(["nuria", "setcases", "ski", "snow", "cerdanya"], "es"),
       ],
     },
 
@@ -242,7 +242,7 @@ export const RIPOLLES: B2Article = {
           `In mushroom season, see the ${link("mushrooms", "en", "weekly conditions report")}. In winter, ${b2link("snow", "en", "where to see snow without skiing")}.`,
         ),
         ...paras(verifiedLine("en", RIPOLLES_VERIFIED)),
-        ...b2Related(["setcases", "ski", "snow", "cerdanya"], "en"),
+        ...b2Related(["nuria", "setcases", "ski", "snow", "cerdanya"], "en"),
       ],
     },
   },
@@ -577,7 +577,7 @@ export const SNOW: B2Article = {
           "Núria és el cas més clar d'escapada de neu sense cotxe: l'aparcament gratuït de l'estació de Ribes-Enllaç és on es deixa el vehicle si s'hi arriba conduint, i des d'allà el cremallera para a Ribes-Vila, Queralbs i Núria.",
         ),
         ...paras(verifiedLine("ca", SNOW_VERIFIED)),
-        ...b2Related(["ski", "cerdanya", "ripolles", "setcases"], "ca"),
+        ...b2Related(["ski", "nuria", "cerdanya", "ripolles", "setcases"], "ca"),
       ],
     },
 
@@ -638,7 +638,7 @@ export const SNOW: B2Article = {
           "Núria es el caso más claro de escapada de nieve sin coche: el aparcamiento gratuito de la estación de Ribes-Enllaç es donde se deja el vehículo si se llega conduciendo, y desde allí el cremallera para en Ribes-Vila, Queralbs y Núria.",
         ),
         ...paras(verifiedLine("es", SNOW_VERIFIED)),
-        ...b2Related(["ski", "cerdanya", "ripolles", "setcases"], "es"),
+        ...b2Related(["ski", "nuria", "cerdanya", "ripolles", "setcases"], "es"),
       ],
     },
 
@@ -704,7 +704,7 @@ export const SNOW: B2Article = {
           "Núria is the clearest car-free snow trip: drivers leave the car at the free car park at Ribes-Enllaç station, and the rack railway calls at Ribes-Vila, Queralbs and Núria.",
         ),
         ...paras(verifiedLine("en", SNOW_VERIFIED)),
-        ...b2Related(["ski", "cerdanya", "ripolles", "setcases"], "en"),
+        ...b2Related(["ski", "nuria", "cerdanya", "ripolles", "setcases"], "en"),
       ],
     },
   },

@@ -773,6 +773,26 @@ export const IMAGES: readonly ImportedImage[] = [
     "license": "CC BY-SA 3.0"
   },
   {
+    "key": "nuria-cremallera-gorja",
+    "url": "/images/nuria-cremallera-gorja.webp",
+    "width": 1920,
+    "height": 1080,
+    "blurDataUrl": "data:image/webp;base64,UklGRlYAAABXRUJQVlA4IEoAAACwAQCdASoQAAkAA4BaJZwAAcxKqFIAAP6B+UCsOnh5joEKaMqNlnVZ57fba4KJiGXNihIxLvY2xjpAER80KXLa6e5DXyvBFgQAAA==",
+    "credit": "Pere López Brosa",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Cremallera_de_N%C3%BAria_-_20220918_132559.jpg",
+    "license": "CC BY-SA 4.0"
+  },
+  {
+    "key": "nuria-llac-santuari",
+    "url": "/images/nuria-llac-santuari.webp",
+    "width": 1600,
+    "height": 1007,
+    "blurDataUrl": "data:image/webp;base64,UklGRmAAAABXRUJQVlA4IFQAAADwAQCdASoQAAoAA4BaJZgCdAEQYdPXSoAA9rhp5oQcoKbx1UtyCCv8CdyXUdyVYoJX9Ao0+wAfLYi7zWNHCXOFYf/sbmF064nixkofTXmWnZ4AAAA=",
+    "credit": "Carmemolistvidal",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Llac_de_N%C3%BAria.jpg",
+    "license": "CC BY-SA 4.0"
+  },
+  {
     "key": "parlament-palau-ciutadella",
     "url": "/images/parlament-palau-ciutadella.webp",
     "width": 1920,
