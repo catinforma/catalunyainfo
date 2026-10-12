@@ -13,6 +13,7 @@ import { publishMushroomZones } from "@/lib/content/mushroom-zones/publish";
 import { publishB2Article, publishBatch02 } from "@/lib/content/batch02/publish";
 import { AIRPORT } from "@/lib/content/batch02/airport";
 import { MONUMENTS } from "@/lib/content/batch02/monuments";
+import { SKI } from "@/lib/content/batch02/ski";
 import { publishHolidayTodayGuide } from "@/lib/content/holidays/today-publish";
 import { publishLocalHolidaysGuide } from "@/lib/content/holidays/local-publish";
 import { publishReservoirGuide } from "@/lib/content/reservoirs/publish";
@@ -74,6 +75,7 @@ export async function POST(request: Request) {
     if (wants("batch02")) published.push(...(await publishBatch02()));
     if (wants("airport")) published.push(await publishB2Article(AIRPORT));
     if (wants("monuments")) published.push(await publishB2Article(MONUMENTS));
+    if (wants("ski")) published.push(await publishB2Article(SKI));
     if (wants("batch02-a")) published.push(...(await publishBatch02(0, 3)));
     if (wants("batch02-b")) published.push(...(await publishBatch02(3, 6)));
     if (wants("batch02-c")) published.push(...(await publishBatch02(6, 9)));

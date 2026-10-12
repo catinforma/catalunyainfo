@@ -360,6 +360,26 @@ export const IMAGES: readonly ImportedImage[] = [
     "blurDataUrl": "data:image/webp;base64,UklGRmgAAABXRUJQVlA4IFwAAAAwAgCdASoQAAkAA4BaJYgCdH8AFm7iPgtGAAD+qeeGDZWlTJ8MzTkc5Fg6UCxRg2l5LPnIyYhK1DasMnex4rZ5iYrwB+03fclnPGv6S+Rm4P0LElBvQ9Z6Dq4AAA=="
   },
   {
+    "key": "esqui-baqueira-beret-mar-de-nuvols",
+    "url": "/images/esqui-baqueira-beret-mar-de-nuvols.webp",
+    "width": 1920,
+    "height": 1081,
+    "blurDataUrl": "data:image/webp;base64,UklGRlwAAABXRUJQVlA4IFAAAADwAQCdASoQAAkAA4BaJQBOgB6uIH9PfwAA/niyNNo8+oCA7rXhx/VUaP2oxl/r86WiyzuLZQ0C8nUOmOOJBMB1L9VAyGqqZ4u5BqHhvfAAAA==",
+    "credit": "Cantabrucu",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Baqueira-Beret_03.jpg",
+    "license": "CC0"
+  },
+  {
+    "key": "esqui-la-molina-pista",
+    "url": "/images/esqui-la-molina-pista.webp",
+    "width": 1920,
+    "height": 2880,
+    "blurDataUrl": "data:image/webp;base64,UklGRqQAAABXRUJQVlA4IJgAAABwBACdASoQABgAPu1iqU2ppaOiMAgBMB2JQBYhjgA2Sx6OCPta8m4+1QhmAAD+84KyDFzSfjZjigSmd782XT7Pcw/1YMeaqbhE1UhQy9KaNvRNHfJ1ylSNlriB9PKS6LjDAmz/q/tJxzvwAm2VWZN96UP5Ivo2DJLQcz+jvPZXKwYMfqKudL1BQ7kXdtKT4+tBCaRh9+AAAA==",
+    "credit": "LauraHale",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Hill_conditions_La_Molina_2.JPG",
+    "license": "CC BY-SA 3.0"
+  },
+  {
     "key": "festa-bolet-setcases-pirineus",
     "url": "/images/festa-bolet-setcases-pirineus.webp",
     "width": 1672,
