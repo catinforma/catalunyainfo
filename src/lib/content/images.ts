@@ -813,6 +813,26 @@ export const IMAGES: readonly ImportedImage[] = [
     "license": "CC0"
   },
   {
+    "key": "platges-barceloneta-passeig",
+    "url": "/images/platges-barceloneta-passeig.webp",
+    "width": 1920,
+    "height": 1276,
+    "blurDataUrl": "data:image/webp;base64,UklGRlQAAABXRUJQVlA4IEgAAAAwAgCdASoQAAsAA4BaJZACdAEK5G6yn4QAAAD+8EXJUWkV4jPJZl04af0WXE9qJdbOaWHdR+itQFPVtIDqLU1qERuM01oIgAA=",
+    "credit": "DimiTalen",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Promenade_and_beach,_Platja_de_la_Barceloneta,_Barcelona,_2015.jpg",
+    "license": "CC0"
+  },
+  {
+    "key": "platges-bogatell",
+    "url": "/images/platges-bogatell.webp",
+    "width": 1920,
+    "height": 1440,
+    "blurDataUrl": "data:image/webp;base64,UklGRkQAAABXRUJQVlA4IDgAAADwAQCdASoQAAwAA4BaJQBOgCHcP8tngAAA/MA1KzZjUBNE6JKIDvIgp8F6ushir9pC3MBDSIQAAA==",
+    "credit": "Jordiferrer",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Platja_del_Bogatell_(Barcelona)_01.JPG",
+    "license": "CC BY-SA 3.0"
+  },
+  {
     "key": "pobles-medievals-catalunya-carrers-pedra",
     "url": "/images/pobles-medievals-catalunya-carrers-pedra.webp",
     "width": 1672,

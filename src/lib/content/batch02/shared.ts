@@ -46,7 +46,8 @@ export type B2Key =
   | "markets"
   | "barcelonaHub"
   | "clockChange"
-  | "nuria";
+  | "nuria"
+  | "beaches";
 
 /** Path after the locale prefix, no leading or trailing slash. */
 export const B2_PATHS: Record<B2Key, Record<Locale, string>> = {
@@ -104,6 +105,11 @@ export const B2_PATHS: Record<B2Key, Record<Locale, string>> = {
     ca: "guies/com-votar-eleccions-catalunya",
     es: "guias/como-votar-elecciones-cataluna",
     en: "guides/how-to-vote-catalonia",
+  },
+  beaches: {
+    ca: "guies/platges-barcelona",
+    es: "guias/playas-barcelona",
+    en: "guides/barcelona-beaches",
   },
   nuria: {
     ca: "escapades/vall-de-nuria-cremallera",
@@ -276,6 +282,11 @@ export const B2_TITLES: Record<B2Key, Record<Locale, string>> = {
     ca: "Com votar a Catalunya",
     es: "Cómo votar en Cataluña",
     en: "How to vote in Catalonia",
+  },
+  beaches: {
+    ca: "Platges de Barcelona",
+    es: "Playas de Barcelona",
+    en: "Barcelona beaches",
   },
   nuria: {
     ca: "Vall de Núria: el cremallera i com arribar-hi",
