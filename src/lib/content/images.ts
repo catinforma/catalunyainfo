@@ -713,6 +713,26 @@ export const IMAGES: readonly ImportedImage[] = [
     "license": "CC BY 2.0"
   },
   {
+    "key": "mesa-electoral-begur-membres",
+    "url": "/images/mesa-electoral-begur-membres.webp",
+    "width": 1920,
+    "height": 1440,
+    "blurDataUrl": "data:image/webp;base64,UklGRloAAABXRUJQVlA4IE4AAAAwAgCdASoQAAwAA4BaJZQCsAECv2JUInp9wAD+5b9DTSVKJL3QWR+w9y+VGzaLVrQ4O5Wrjeo5VgbjVsBzvrPg9IrwHUJxUIbSZtDgAAA=",
+    "credit": "Davidpar",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Mesa_electoral_Begur_2015.JPG",
+    "license": "CC BY-SA 4.0"
+  },
+  {
+    "key": "mesa-electoral-begur-urna",
+    "url": "/images/mesa-electoral-begur-urna.webp",
+    "width": 1920,
+    "height": 1440,
+    "blurDataUrl": "data:image/webp;base64,UklGRlYAAABXRUJQVlA4IEoAAADQAQCdASoQAAwAA4BaJYwC7ADgrO0gAAD+c0cPat8S6USp6GYWU8MHZtbjUqAxyAPA8pckU8eLuemdhLn47Uvdl2mGBFVRi2GaAA==",
+    "credit": "Davidpar",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Mesa_electoral_Begur_2015_02.JPG",
+    "license": "CC BY-SA 4.0"
+  },
+  {
     "key": "montjuic-font-magica-nit",
     "url": "/images/montjuic-font-magica-nit.webp",
     "width": 1920,

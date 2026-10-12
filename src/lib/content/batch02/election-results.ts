@@ -50,7 +50,7 @@ function body(kind: "congress" | "parliament", t: T, locale: Locale): Block[] {
     ...h2(t.readTitle, ...t.read),
     ...h2(t.nextTitle, t.next),
     faq(t.faq),
-    ...b2Related(kind === "congress" ? ["voting", "parliamentResults"] : ["voting", "congressResults"], locale),
+    ...b2Related(kind === "congress" ? ["voting", "mesa", "parliamentResults"] : ["voting", "mesa", "congressResults"], locale),
   ];
 }
 
