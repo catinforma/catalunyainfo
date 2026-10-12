@@ -143,6 +143,20 @@ identitat de l'editor, i només la pots posar tu.
 
 **Nou per a AdSense (de la recerca):** el CMP ha de ser TCF **v2.3** (consentiments des de l'1/3/2026); el botó «Rebutjar» igual de visible que «Acceptar» (AEPD); l'avís legal en els tres idiomes abans de sol·licitar.
 
+### 11-12 d'octubre: nou ritme (recerca → paquet verificat → article)
+
+| Canvi | Per què |
+| --- | --- |
+| **Aeroport → centre** (ca/es/en) | Les pàgines que posicionen no coincideixen en la tarifa de l'Aerobús; nosaltres citem l'operador. Avís sobre aerobusbcn.com (domini segrestat) |
+| **Entrades Gaudí** (Sagrada Família, Park Güell, Batlló, Pedrera, Sant Pau) | Intenció de compra en anglès; sense revenedors |
+| **Estacions d'esquí 2026-27** | Temporada a 6 setmanes; només preus etiquetats 2026-27 |
+| **Museus gratis a Barcelona** | Els blogs es contradiuen; citem cada museu |
+| **Barcelona Card o Hola Barcelona** + preus Hola al selector | TMB publica els preus al seu web Hola; càlcul d'amortització amb preus verificats |
+| Títols amb la resposta (aparcament amb preu, bolets, metro) | Pos. 1-2 amb 0 clics; mesura el 25 d'oct |
+| **Bug crític arreglat:** el layout tenia `dynamicParams = false` | Cada article nou donava 404 fins al següent deploy |
+
+Recerca descartada per ara: mercats de Nadal (cap data 2026 oficial; tornar-hi a mitjans de novembre).
+
 ## 4. Les palanques, per impacte esperat
 
 ### Palanca 1 — Dades oficials que no envelleixen (×10-20)
