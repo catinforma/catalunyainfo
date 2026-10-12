@@ -253,6 +253,26 @@ export const IMAGES: readonly ImportedImage[] = [
     "license": "CC BY-SA 4.0"
   },
   {
+    "key": "barcelona-hub-passeig-gracia",
+    "url": "/images/barcelona-hub-passeig-gracia.webp",
+    "width": 1920,
+    "height": 2880,
+    "blurDataUrl": "data:image/webp;base64,UklGRqoAAABXRUJQVlA4IJ4AAABwBACdASoQABgAPu1iqU2ppaOiMAgBMB2JZACdMoMh1Eh4G+0NBMyNQ9RloAD+2WxGPMIgnPgI/LDPXGkyrNFjRg74+jvW10pfF4joh9S3HwdJlpv+ryTIuS3y3UZibt7X3exvATnIrZ6Lxb+QWT+F7wEMZHJrkCc2zIXKkH3vYLjUZx472qyCirV+nsL+2xfKVUd6Wtv3sby4ycAAAA==",
+    "credit": "Txllxt TxllxT",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Barcelona_-_Passeig_de_Gr%C3%A0cia_-_View_NNW_towards_Casa_Mil%C3%A0_1906-10_Antoni_Gaud%C3%AD.jpg",
+    "license": "CC BY-SA 4.0"
+  },
+  {
+    "key": "barcelona-hub-vista-carmel",
+    "url": "/images/barcelona-hub-vista-carmel.webp",
+    "width": 1920,
+    "height": 1279,
+    "blurDataUrl": "data:image/webp;base64,UklGRlYAAABXRUJQVlA4IEoAAADwAQCdASoQAAsAA4BaJaAAAubl6lR4hAAA/uALilBYXsoD43pG5alqSDVypaykBLt54QpW7om2tVbvNGZMCD/06jaFJ3FgxQAAAA==",
+    "credit": "Alexey Komarov",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Barcelona,_View_from_Bunkers_del_Carmel.jpg",
+    "license": "CC BY-SA 4.0"
+  },
+  {
     "key": "bolets-catalunya-2026-bosc-humit",
     "url": "/images/bolets-catalunya-2026-bosc-humit.webp",
     "width": 1600,

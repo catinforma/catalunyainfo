@@ -12,6 +12,7 @@ import { CARDS_META } from "../src/lib/content/batch02/cards.ts";
 import { MONUMENTS_META } from "../src/lib/content/batch02/monuments.ts";
 import { MUSEUMS_META } from "../src/lib/content/batch02/museums.ts";
 import { VOTING_META } from "../src/lib/content/batch02/voting.ts";
+import { BARCELONA_HUB_META } from "../src/lib/content/batch02/barcelona-hub.ts";
 import { COPY as SCHOOL_COPY } from "../src/lib/content/school/publish.ts";
 import { COPY as TAX_COPY } from "../src/lib/content/tourist-tax/copy.ts";
 import { EVERGREEN } from "../src/lib/content/weekend/evergreen.ts";
@@ -32,6 +33,7 @@ const OWNER: Record<ToolKey, (locale: (typeof LOCALES)[number]) => string> = {
   monuments: (l) => MONUMENTS_META[l].path,
   cards: (l) => CARDS_META[l].path,
   voting: (l) => VOTING_META[l].path,
+  barcelonaHub: (l) => BARCELONA_HUB_META[l].path,
 };
 
 test("every homepage tool links to the path its publisher uses", () => {
