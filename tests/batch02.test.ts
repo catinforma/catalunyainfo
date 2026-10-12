@@ -8,6 +8,7 @@ import { RIPOLLES, SETCASES, SNOW } from "../src/lib/content/batch02/pyrenees.ts
 import { AIRPORT } from "../src/lib/content/batch02/airport.ts";
 import { MONUMENTS } from "../src/lib/content/batch02/monuments.ts";
 import { SKI } from "../src/lib/content/batch02/ski.ts";
+import { MUSEUMS } from "../src/lib/content/batch02/museums.ts";
 import { B2_PATHS, type B2Article } from "../src/lib/content/batch02/shared.ts";
 import { IMAGES } from "../src/lib/content/images.ts";
 import {
@@ -29,6 +30,7 @@ const ARTICLES: B2Article[] = [
   AIRPORT,
   MONUMENTS,
   SKI,
+  MUSEUMS,
   SNOW,
 ];
 
@@ -39,7 +41,7 @@ const IMAGE_KEYS = new Set(IMAGES.map((image) => image.key));
 /* -------------------------------------------------------------------------- */
 
 test("every article has three editions", () => {
-  assert.equal(ARTICLES.length, 12);
+  assert.equal(ARTICLES.length, 13);
   for (const article of ARTICLES) {
     for (const locale of LOCALES) {
       assert.ok(article.editions[locale], `${article.key} is missing ${locale}`);

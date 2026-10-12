@@ -26,7 +26,8 @@ export type B2Key =
   | "snow"
   | "airport"
   | "monuments"
-  | "ski";
+  | "ski"
+  | "museums";
 
 /** Path after the locale prefix, no leading or trailing slash. */
 export const B2_PATHS: Record<B2Key, Record<Locale, string>> = {
@@ -69,6 +70,11 @@ export const B2_PATHS: Record<B2Key, Record<Locale, string>> = {
     ca: "guies/cerdanya-sense-cotxe",
     es: "guias/cerdana-sin-coche",
     en: "guides/cerdanya-without-a-car",
+  },
+  museums: {
+    ca: "guies/museus-gratis-barcelona",
+    es: "guias/museos-gratis-barcelona",
+    en: "guides/free-museums-barcelona",
   },
   ski: {
     ca: "guies/estacions-esqui-catalunya",
@@ -141,6 +147,11 @@ export const B2_TITLES: Record<B2Key, Record<Locale, string>> = {
     ca: "Cerdanya sense cotxe",
     es: "Cerdanya sin coche",
     en: "Cerdanya without a car",
+  },
+  museums: {
+    ca: "Museus gratis a Barcelona",
+    es: "Museos gratis en Barcelona",
+    en: "Free museums in Barcelona",
   },
   ski: {
     ca: "Estacions d'esquí de Catalunya",

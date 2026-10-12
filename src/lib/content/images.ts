@@ -533,6 +533,26 @@ export const IMAGES: readonly ImportedImage[] = [
     "license": "CC BY 4.0"
   },
   {
+    "key": "museus-palau-nacional-mnac",
+    "url": "/images/museus-palau-nacional-mnac.webp",
+    "width": 1920,
+    "height": 1280,
+    "blurDataUrl": "data:image/webp;base64,UklGRlQAAABXRUJQVlA4IEgAAACQAQCdASoQAAsAA4BaJQBOgBKCWIAA/tOl5yWJoVYv46qepxuZW6FGKQpbucBY4tHE9WSmiFOpTau6jIZFA1U1mvz6434AAAA=",
+    "credit": "Juanedc from Zaragoza, España",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Palau_Nacional,_Barcelona.jpg",
+    "license": "CC BY 2.0"
+  },
+  {
+    "key": "museus-placa-angels-macba",
+    "url": "/images/museus-placa-angels-macba.webp",
+    "width": 1920,
+    "height": 1148,
+    "blurDataUrl": "data:image/webp;base64,UklGRmYAAABXRUJQVlA4IFoAAAAQAgCdASoQAAoAA4BaJQBOgBuT+rv6IAHAAP7oa8fvcTmSWT6PDAR/aW9+NswoC/CnGt022v/AfLajLBs0MpWFeFTCeo7NJWx5DFRFBBtArkTYMyxV8H24IAA=",
+    "credit": "Steven Walling",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:MACBA_square.jpg",
+    "license": "CC BY-SA 3.0"
+  },
+  {
     "key": "pobles-medievals-catalunya-carrers-pedra",
     "url": "/images/pobles-medievals-catalunya-carrers-pedra.webp",
     "width": 1672,
