@@ -376,6 +376,26 @@ export const IMAGES: readonly ImportedImage[] = [
     "license": "CC BY-SA 3.0"
   },
   {
+    "key": "creuers-moll-port-barcelona",
+    "url": "/images/creuers-moll-port-barcelona.webp",
+    "width": 1920,
+    "height": 1440,
+    "blurDataUrl": "data:image/webp;base64,UklGRkIAAABXRUJQVlA4IDYAAACwAQCdASoQAAwAA4BaJQBOgCHW5DAAAP6xYlijjpKjUdubauso7RIVlIU6N8PyiPuG7V778AA=",
+    "credit": "Salim Virji",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Cruise-ship_dock,_Port_of_Barcelona.jpg",
+    "license": "CC BY-SA 2.0"
+  },
+  {
+    "key": "creuers-portal-de-la-pau-colom",
+    "url": "/images/creuers-portal-de-la-pau-colom.webp",
+    "width": 1920,
+    "height": 2560,
+    "blurDataUrl": "data:image/webp;base64,UklGRp4AAABXRUJQVlA4IJIAAABwAwCdASoQABUAPu1iqU2ppaQiMAgBMB2JbACdAAx3hC+wH5AA+eMP1kX77LTbaGtKG2Yse6B+RiULOL0CDIuLZvwiAkoBrn43ilZq3jKhlZOqmRI4Zbrym+r7R+fY6N3TGz4TxcBt0zwCsa/8Uucon8Nn/K/ZJ1/H37kULsaxmKXLy/a9rh+Zw7u5hOvqvDhwAA==",
+    "credit": "Enric",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:098_Portal_de_la_Pau_(Barcelona),_al_fons_el_monument_a_Colom_i_la_torre_de_Jaume_I.jpg",
+    "license": "CC BY-SA 4.0"
+  },
+  {
     "key": "eleccions-congres-diputats-facana",
     "url": "/images/eleccions-congres-diputats-facana.webp",
     "width": 1920,
@@ -710,6 +730,26 @@ export const IMAGES: readonly ImportedImage[] = [
     "blurDataUrl": "data:image/webp;base64,UklGRmYAAABXRUJQVlA4IFoAAADQAQCdASoQAAkAA4BaJbACdAD19CURAAD+ihaxFe1ziOPBS+gMFgPQnZxzTQnkUsIR+5xiJc+4uRRxlL/Da+SOmKlQdlHeSuTomOWRX+tmiBs4A3/AbUx2UAA="
   },
   {
+    "key": "portaventura-dragon-khan-shambhala",
+    "url": "/images/portaventura-dragon-khan-shambhala.webp",
+    "width": 1920,
+    "height": 1440,
+    "blurDataUrl": "data:image/webp;base64,UklGRmAAAABXRUJQVlA4IFQAAADwAQCdASoQAAwAA4BaJQBOgBepJdlTtAAA/tb3Mc0YbgCyEC1O93EVmbKMcqWSi7hkBB7ycwiPur0osJTJ91wpHlKntHDfsD+z/6NeYITv7lIAAAA=",
+    "credit": "Sotti",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Dragon_Khan_and_Shambhala_from_far,_Port_Aventura,_2012.JPG",
+    "license": "CC0"
+  },
+  {
+    "key": "portaventura-shambhala-llac",
+    "url": "/images/portaventura-shambhala-llac.webp",
+    "width": 1920,
+    "height": 1222,
+    "blurDataUrl": "data:image/webp;base64,UklGRl4AAABXRUJQVlA4IFIAAADwAQCdASoQAAoAA4BaJQBdgB6gb+GsWRAA/sTzFTElNjscFUmpwnA3bZvtgQ6yvfYkxAjZvcs00Q4zmO7yYWRQ1pJtRMwAtQjPBTrk9qhE+AAA",
+    "credit": "Christophe Badoux",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Shambhala_lake.JPG",
+    "license": "CC0"
+  },
+  {
     "key": "productes-tardor-catalunya-formatge-castanyes-vi",
     "url": "/images/productes-tardor-catalunya-formatge-castanyes-vi.webp",
     "width": 1672,
@@ -883,7 +923,7 @@ export const IMAGES: readonly ImportedImage[] = [
     "width": 1920,
     "height": 1440,
     "blurDataUrl": "data:image/webp;base64,UklGRkgAAABXRUJQVlA4IDwAAADQAQCdASoQAAwAA4BaJYgCdAEOQhsAAAD9Eo9Xr3IblX7t0wY9UEg7UfMxcTvBGjLINP/T1s7PX3IAAAA=",
-    "credit": "Enfo",
+    "credit": "Enfo (talk)",
     "creditUrl": "https://commons.wikimedia.org/wiki/File:01_Parc_d%27atraccions_del_Tibidabo,_al_fons_el_Sagrat_Cor.jpg",
     "license": "CC BY-SA 3.0"
   },

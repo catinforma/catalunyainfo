@@ -413,7 +413,7 @@ function tarragonaBody(locale: Locale) {
     ...h2(t.planTitle),
     list(...t.plan),
     faq(t.faq),
-    ...b2Related(["sitges", "figueres", "girona", "montserratFree"], locale),
+    ...b2Related(["portaventura", "sitges", "figueres", "girona"], locale),
   ];
 }
 

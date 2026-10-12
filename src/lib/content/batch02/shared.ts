@@ -39,7 +39,9 @@ export type B2Key =
   | "figueres"
   | "andorra"
   | "montjuic"
-  | "tibidabo";
+  | "tibidabo"
+  | "cruiseport"
+  | "portaventura";
 
 /** Path after the locale prefix, no leading or trailing slash. */
 export const B2_PATHS: Record<B2Key, Record<Locale, string>> = {
@@ -97,6 +99,16 @@ export const B2_PATHS: Record<B2Key, Record<Locale, string>> = {
     ca: "guies/com-votar-eleccions-catalunya",
     es: "guias/como-votar-elecciones-cataluna",
     en: "guides/how-to-vote-catalonia",
+  },
+  cruiseport: {
+    ca: "guies/port-creuers-barcelona-centre",
+    es: "guias/puerto-cruceros-barcelona-centro",
+    en: "guides/barcelona-cruise-port-to-city-centre",
+  },
+  portaventura: {
+    ca: "escapades/portaventura-des-de-barcelona",
+    es: "escapadas/portaventura-desde-barcelona",
+    en: "day-trips/portaventura-from-barcelona",
   },
   montjuic: {
     ca: "guies/montjuic-font-magica-teleferic",
@@ -234,6 +246,16 @@ export const B2_TITLES: Record<B2Key, Record<Locale, string>> = {
     ca: "Com votar a Catalunya",
     es: "Cómo votar en Cataluña",
     en: "How to vote in Catalonia",
+  },
+  cruiseport: {
+    ca: "Del port de creuers al centre de Barcelona",
+    es: "Del puerto de cruceros al centro de Barcelona",
+    en: "Barcelona cruise port to the city centre",
+  },
+  portaventura: {
+    ca: "PortAventura des de Barcelona",
+    es: "PortAventura desde Barcelona",
+    en: "PortAventura from Barcelona",
   },
   montjuic: {
     ca: "Montjuïc: Font Màgica, telefèric i castell",
