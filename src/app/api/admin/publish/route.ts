@@ -105,11 +105,6 @@ export async function POST(request: Request) {
       ...pages.pages.map((page) => ({ locale: page.locale, path: page.path })),
     ];
 
-    // The route pattern invalidates every page of the catch-all, including any
-    // 404 cached for a slug before its page existed; each regenerates on its
-    // next visit.
-    if (surfaces.length > 0) revalidatePath("/[locale]/[...slug]", "page");
-
     for (const surface of surfaces) {
       revalidatePath(`/${surface.locale}`);
       revalidatePath(`/${surface.locale}/${surface.path}`);
