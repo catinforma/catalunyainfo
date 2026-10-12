@@ -89,12 +89,6 @@ export async function POST(request: Request) {
       ...pages.pages.map((page) => ({ locale: page.locale, path: page.path })),
     ];
 
-    // A brand-new page's first edition (always Catalan) kept coming back as a
-    // cached 404 while Spanish and English rendered: the regeneration raced the
-    // write. A short pause lets the rows become visible before the cache is
-    // purged and rebuilt.
-    if (surfaces.length > 0) await new Promise((resolve) => setTimeout(resolve, 2_000));
-
     // Literal paths alone did not clear a 404 cached for a slug before its
     // page existed (seen on 12 Oct 2026: three new editions stayed 404 after
     // publishing). The route pattern invalidates every page of the catch-all,
