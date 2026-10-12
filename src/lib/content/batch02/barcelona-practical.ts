@@ -6,6 +6,7 @@ import {
   b2Related,
   b2link,
   callout,
+  faq,
   h2,
   keyFacts,
   lead,
@@ -805,16 +806,39 @@ export const PARKING: B2Article = {
           "Source: AREA (B:SM). Verified on 29 September 2026.",
         ),
         ...h2(
+          "When you have to pay",
+          "As a general rule, regulated spaces are paid Monday to Friday from 9:00 to 20:00 without a midday break. In the city centre the rule also applies on Saturdays, and in beach areas on Sundays and public holidays too.",
+          "The maximum stay is whatever the sign by the space says: on Rate A blue streets it can be one or two hours, on Rate B two hours. When the time is up you have to move the car, not just pay again.",
+        ),
+        ...h2(
           "How to pay",
-          "Use the parking meter or an authorised app. SMOU lets you pay digitally and charges only for the time actually used.",
+          "Use the parking meter, which prints a ticket for the windscreen, or an authorised app. SMOU, the city's own app, lets you pay digitally and charges only for the time actually used.",
         ),
         ...h2(
           "Driving in with a foreign car?",
           "Parking and the low-emission zone are separate systems.",
           `Before driving into the zone, check ${b2link("zbe", "en", "the foreign-vehicle register")}.`,
         ),
+        ...h2(
+          "Do you need a car at all?",
+          `For most visits the answer is no: the metro covers the centre, and a T-dia gives 24 hours of unlimited travel for €12 (${b2link("transport", "en", "which pass to buy")}). If you are flying in, ${b2link("airport", "en", "the airport-to-centre guide")} compares the Aerobús, metro, train and taxi.`,
+        ),
+        faq([
+          {
+            question: "How much is blue zone parking in Barcelona?",
+            answer: "From €1.15 to €3.75 an hour, depending on the zone's rate (A or B) and your car's environmental label; zero-emission cars pay least.",
+          },
+          {
+            question: "Is street parking free on Sundays in Barcelona?",
+            answer: "In most regulated areas, yes: the general rule is Monday to Friday, plus Saturdays in the centre. Beach areas also charge on Sundays and public holidays. Always check the sign.",
+          },
+          {
+            question: "Can visitors park in green zones?",
+            answer: "Yes, at the non-resident rate, from €1.40 to €4.25 an hour; green zones give priority to residents.",
+          },
+        ]),
         ...paras(verifiedLine("en", PARKING_VERIFIED)),
-        ...b2Related(["zbe", "transport"], "en"),
+        ...b2Related(["zbe", "transport", "airport"], "en"),
       ],
     },
   },
