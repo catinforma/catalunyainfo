@@ -641,11 +641,31 @@ export const IMAGES: readonly ImportedImage[] = [
     "blurDataUrl": "data:image/webp;base64,UklGRmAAAABXRUJQVlA4IFQAAADwAQCdASoQAAkAA4BaJZQCdAD1FX+cT4AA/om8VJwb+C8KKc/ujtLR03V6mrB8tXwFZ36JR9Dhiq2OXTQuf+9nOxFgJIff0+z+2TqTasCD6L0gAAA="
   },
   {
+    "key": "sitges-cau-ferrat-facana",
+    "url": "/images/sitges-cau-ferrat-facana.webp",
+    "width": 1920,
+    "height": 1440,
+    "blurDataUrl": "data:image/webp;base64,UklGRlwAAABXRUJQVlA4IFAAAACwAQCdASoQAAwAA4BaJZwAAbIhWqooAP6f3yhgfqpnHNHMtDejpkHR3dnNkHurI7YUxqO3YKxcLScMBQslxG12w8fTtQT0XBu8T6KWCgAAAA==",
+    "credit": "Jordiferrer",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Cau_Ferrat_-_Sitges_2013_01.JPG",
+    "license": "CC BY-SA 3.0"
+  },
+  {
     "key": "sitges-festival-cinema-nit",
     "url": "/images/sitges-festival-cinema-nit.webp",
     "width": 1672,
     "height": 941,
     "blurDataUrl": "data:image/webp;base64,UklGRmAAAABXRUJQVlA4IFQAAAAQAgCdASoQAAkAA4BaJbACdAECpi8LVnwAAP7vFksxsP2i+T8j1wqdv4LYDF5FiMrd6U3SPoOfvwTBWQ5vgF6CoEhvuvx7cOYnu1s9xyd/ualIcAA="
+  },
+  {
+    "key": "sitges-platja-fragata-esglesia",
+    "url": "/images/sitges-platja-fragata-esglesia.webp",
+    "width": 1920,
+    "height": 1281,
+    "blurDataUrl": "data:image/webp;base64,UklGRnQAAABXRUJQVlA4IGgAAADwAQCdASoQAAsAA4BaJbACdACqO2C6rAAA9qLi4pwTQDfNPPFL4V/SGceLKuwriDJbpmdKz0cUfGW5jAfXxwN0ZnBDDg4tdLffM4zS+kuGrFgq8HKjeIAjgHa+8pIE/2u8qM1liMVAAA==",
+    "credit": "Enric",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:038_Platja_de_la_Fragata_i_esgl%C3%A9sia_de_Sant_Bartomeu_i_Santa_Tecla_(Sitges).jpg",
+    "license": "CC BY-SA 4.0"
   },
   {
     "key": "surprising-hero",
@@ -686,6 +706,26 @@ export const IMAGES: readonly ImportedImage[] = [
     "credit": "Puigalder",
     "creditUrl": "https://commons.wikimedia.org/wiki/File:Carrer_Montcada2-Barcelona(Catalonia).jpg",
     "license": "CC BY-SA 3.0"
+  },
+  {
+    "key": "tarragona-amfiteatre-roma",
+    "url": "/images/tarragona-amfiteatre-roma.webp",
+    "width": 1920,
+    "height": 742,
+    "blurDataUrl": "data:image/webp;base64,UklGRlQAAABXRUJQVlA4IEgAAADwAQCdASoQAAYAA4BaJYwCdAD1OX2h/AAA/CJwt/0l74dOTMdyvpfvapzEct2G7dBMzxF6j3Q25faQWn4mXUYemElDII+wAAA=",
+    "credit": "Bernard Gagnon",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Amphitheatre_of_Tarragona_02.jpg",
+    "license": "CC BY-SA 3.0"
+  },
+  {
+    "key": "tarragona-passeig-arqueologic-torre",
+    "url": "/images/tarragona-passeig-arqueologic-torre.webp",
+    "width": 1920,
+    "height": 2880,
+    "blurDataUrl": "data:image/webp;base64,UklGRqIAAABXRUJQVlA4IJYAAACQBACdASoQABgAPu1iqU2ppaOiMAgBMB2JagCdMoAluhFqX1kspdTWt+K+YgAA8hhNr1K905Eq5rkjOjChV3TsiNEJKyLaZPvQV2QU+7Ti+qfPCPVlpcFjoczKPKWWqHeNh+OOW/+i1b1Ho5ba/c7zcJbk8aQBqb8NWF4rSwhKW/JmtK5nQsdnaaRVY7JgxoJDkctgAAA=",
+    "credit": "Malopez 21",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Muralla_romana,_Passeig_Arqueol%C3%B2gic,_05,_torre.jpg",
+    "license": "CC BY-SA 4.0"
   },
   {
     "key": "taxa-turistica-barcelona-skyline",

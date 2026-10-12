@@ -30,7 +30,9 @@ export type B2Key =
   | "museums"
   | "cards"
   | "campnou"
-  | "hours";
+  | "hours"
+  | "sitges"
+  | "tarragona";
 
 /** Path after the locale prefix, no leading or trailing slash. */
 export const B2_PATHS: Record<B2Key, Record<Locale, string>> = {
@@ -73,6 +75,16 @@ export const B2_PATHS: Record<B2Key, Record<Locale, string>> = {
     ca: "guies/cerdanya-sense-cotxe",
     es: "guias/cerdana-sin-coche",
     en: "guides/cerdanya-without-a-car",
+  },
+  sitges: {
+    ca: "escapades/sitges-des-de-barcelona-tren",
+    es: "escapadas/sitges-desde-barcelona-tren",
+    en: "day-trips/sitges-from-barcelona-by-train",
+  },
+  tarragona: {
+    ca: "escapades/tarragona-des-de-barcelona-tren",
+    es: "escapadas/tarragona-desde-barcelona-tren",
+    en: "day-trips/tarragona-from-barcelona-by-train",
   },
   hours: {
     ca: "guies/horaris-metro-barcelona",
@@ -165,6 +177,16 @@ export const B2_TITLES: Record<B2Key, Record<Locale, string>> = {
     ca: "Cerdanya sense cotxe",
     es: "Cerdanya sin coche",
     en: "Cerdanya without a car",
+  },
+  sitges: {
+    ca: "Sitges des de Barcelona en tren",
+    es: "Sitges desde Barcelona en tren",
+    en: "Sitges from Barcelona by train",
+  },
+  tarragona: {
+    ca: "Tarragona des de Barcelona en tren",
+    es: "Tarragona desde Barcelona en tren",
+    en: "Tarragona from Barcelona by train",
   },
   hours: {
     ca: "Horari del metro de Barcelona i NitBus",

@@ -134,7 +134,7 @@ export const GIRONA: B2Article = {
           `Si t'agraden les escapades sense cotxe, tenim ${link("trains", "ca", "dotze escapades per Catalunya que pots fer en tren")} i ${b2link("montserratFree", "ca", "com anar a Montserrat per lliure")}.`,
         ),
         ...paras(verifiedLine("ca", GIRONA_VERIFIED)),
-        ...b2Related(["montserratFree", "cerdanya", "ripolles"], "ca"),
+        ...b2Related(["sitges", "tarragona", "montserratFree", "cerdanya"], "ca"),
       ],
     },
 
@@ -181,7 +181,7 @@ export const GIRONA: B2Article = {
           `Más escapadas sin coche: ${link("trains", "es", "doce escapadas en tren")} y ${b2link("montserratFree", "es", "Montserrat por libre")}.`,
         ),
         ...paras(verifiedLine("es", GIRONA_VERIFIED)),
-        ...b2Related(["montserratFree", "cerdanya", "ripolles"], "es"),
+        ...b2Related(["sitges", "tarragona", "montserratFree", "cerdanya"], "es"),
       ],
     },
 
@@ -227,7 +227,7 @@ export const GIRONA: B2Article = {
           `More car-free trips: ${link("trains", "en", "twelve day trips by train")} and ${b2link("montserratFree", "en", "Montserrat without a tour")}.`,
         ),
         ...paras(verifiedLine("en", GIRONA_VERIFIED)),
-        ...b2Related(["montserratFree", "cerdanya", "ripolles"], "en"),
+        ...b2Related(["sitges", "tarragona", "montserratFree", "cerdanya"], "en"),
       ],
     },
   },
