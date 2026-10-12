@@ -346,6 +346,26 @@ export const IMAGES: readonly ImportedImage[] = [
     "blurDataUrl": "data:image/webp;base64,UklGRmIAAABXRUJQVlA4IFYAAADQAQCdASoQAAkAA4BaJbACdADdLHtEoAD+zQcKnQQ4cumm27/QYUIlhf/8u0kmyfA3nkCulVhPHJVs3idl1RZz1oonHiVM69Z/Qvtpu6dEn9zUaAAAAA=="
   },
   {
+    "key": "eleccions-congres-diputats-facana",
+    "url": "/images/eleccions-congres-diputats-facana.webp",
+    "width": 1920,
+    "height": 1440,
+    "blurDataUrl": "data:image/webp;base64,UklGRmwAAABXRUJQVlA4IGAAAAAwAgCdASoQAAwAA4BaJZQCw7Yu5c+pt3RfYAD88cc14OwSJNoMGttDELwRjdNn9Eg2LlkGbGKZ8lUMpE3mxpt4niazEUpVDNazE8j+5b1tW/mNKVoFeaHYbn/AJStdAAA=",
+    "credit": "Yann Droneaud from Paris (France).",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Congreso_de_los_Diputados_(Espa%C3%B1a)_05.jpg",
+    "license": "CC BY-SA 2.0"
+  },
+  {
+    "key": "eleccions-urnes-congres-senat",
+    "url": "/images/eleccions-urnes-congres-senat.webp",
+    "width": 1920,
+    "height": 1440,
+    "blurDataUrl": "data:image/webp;base64,UklGRmAAAABXRUJQVlA4IFQAAAAQAgCdASoQAAwAA4BaJZACdAEOAU5z5FQAAP7tBTpXfJEfXJnQVD/ZFLOOWpmWRe57I4lEjgGYkhVri6l75cLCBu6czUVBUp8w6FHw/gC4F6KnAAA=",
+    "credit": "LauraHale",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Spanish_Deputy_and_Senate_voting_boxes_in_Madrid.jpg",
+    "license": "CC BY-SA 3.0"
+  },
+  {
     "key": "embassaments-presa-sau-tavertet",
     "url": "/images/embassaments-presa-sau-tavertet.webp",
     "width": 1920,

@@ -32,7 +32,8 @@ export type B2Key =
   | "campnou"
   | "hours"
   | "sitges"
-  | "tarragona";
+  | "tarragona"
+  | "voting";
 
 /** Path after the locale prefix, no leading or trailing slash. */
 export const B2_PATHS: Record<B2Key, Record<Locale, string>> = {
@@ -75,6 +76,11 @@ export const B2_PATHS: Record<B2Key, Record<Locale, string>> = {
     ca: "guies/cerdanya-sense-cotxe",
     es: "guias/cerdana-sin-coche",
     en: "guides/cerdanya-without-a-car",
+  },
+  voting: {
+    ca: "guies/com-votar-eleccions-catalunya",
+    es: "guias/como-votar-elecciones-cataluna",
+    en: "guides/how-to-vote-catalonia",
   },
   sitges: {
     ca: "escapades/sitges-des-de-barcelona-tren",
@@ -177,6 +183,11 @@ export const B2_TITLES: Record<B2Key, Record<Locale, string>> = {
     ca: "Cerdanya sense cotxe",
     es: "Cerdanya sin coche",
     en: "Cerdanya without a car",
+  },
+  voting: {
+    ca: "Com votar a Catalunya",
+    es: "Cómo votar en Cataluña",
+    en: "How to vote in Catalonia",
   },
   sitges: {
     ca: "Sitges des de Barcelona en tren",

@@ -6,7 +6,7 @@ import type { Locale } from "@/lib/i18n/config";
  * publisher that owns it; a renamed slug must not leave a dead homepage link.
  */
 
-export type ToolKey = "holiday" | "weekend" | "localHolidays" | "transport" | "tax" | "mushrooms" | "reservoirs" | "school" | "airport" | "museums" | "monuments" | "cards";
+export type ToolKey = "holiday" | "weekend" | "localHolidays" | "transport" | "tax" | "mushrooms" | "reservoirs" | "school" | "airport" | "museums" | "monuments" | "cards" | "voting";
 
 export const PATHS: Record<ToolKey, Record<Locale, string>> = {
   holiday: {
@@ -33,6 +33,11 @@ export const PATHS: Record<ToolKey, Record<Locale, string>> = {
     ca: "guies/taxa-turistica-barcelona-catalunya",
     es: "guias/tasa-turistica-barcelona-cataluna",
     en: "guides/barcelona-catalonia-tourist-tax",
+  },
+  voting: {
+    ca: "guies/com-votar-eleccions-catalunya",
+    es: "guias/como-votar-elecciones-cataluna",
+    en: "guides/how-to-vote-catalonia",
   },
   museums: {
     ca: "guies/museus-gratis-barcelona",
@@ -77,7 +82,7 @@ export const PATHS: Record<ToolKey, Record<Locale, string>> = {
  * live here. Same tools, ordered by who is asking.
  */
 export const ORDER: Record<Locale, ToolKey[]> = {
-  ca: ["holiday", "school", "weekend", "localHolidays", "mushrooms", "reservoirs", "museums", "transport", "airport", "monuments", "cards", "tax"],
-  es: ["holiday", "school", "weekend", "localHolidays", "mushrooms", "reservoirs", "museums", "transport", "airport", "monuments", "cards", "tax"],
-  en: ["airport", "monuments", "transport", "cards", "museums", "tax", "weekend", "holiday", "localHolidays", "school", "reservoirs", "mushrooms"],
+  ca: ["voting", "holiday", "school", "weekend", "localHolidays", "mushrooms", "reservoirs", "museums", "transport", "airport", "monuments", "cards", "tax"],
+  es: ["voting", "holiday", "school", "weekend", "localHolidays", "mushrooms", "reservoirs", "museums", "transport", "airport", "monuments", "cards", "tax"],
+  en: ["airport", "monuments", "transport", "cards", "museums", "tax", "weekend", "holiday", "localHolidays", "school", "voting", "reservoirs", "mushrooms"],
 };
