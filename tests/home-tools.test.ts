@@ -8,6 +8,9 @@ import { ORDER, PATHS, type ToolKey } from "../src/lib/content/home-tools.ts";
 import { COPY as MUSHROOM_COPY } from "../src/lib/content/mushrooms/payload.ts";
 import { COPY as RESERVOIR_COPY } from "../src/lib/content/reservoirs/publish.ts";
 import { AIRPORT_META } from "../src/lib/content/batch02/airport.ts";
+import { CARDS_META } from "../src/lib/content/batch02/cards.ts";
+import { MONUMENTS_META } from "../src/lib/content/batch02/monuments.ts";
+import { MUSEUMS_META } from "../src/lib/content/batch02/museums.ts";
 import { COPY as SCHOOL_COPY } from "../src/lib/content/school/publish.ts";
 import { COPY as TAX_COPY } from "../src/lib/content/tourist-tax/copy.ts";
 import { EVERGREEN } from "../src/lib/content/weekend/evergreen.ts";
@@ -24,6 +27,9 @@ const OWNER: Record<ToolKey, (locale: (typeof LOCALES)[number]) => string> = {
   reservoirs: (l) => RESERVOIR_COPY[l].path,
   school: (l) => SCHOOL_COPY[l].path,
   airport: (l) => AIRPORT_META[l].path,
+  museums: (l) => MUSEUMS_META[l].path,
+  monuments: (l) => MONUMENTS_META[l].path,
+  cards: (l) => CARDS_META[l].path,
 };
 
 test("every homepage tool links to the path its publisher uses", () => {

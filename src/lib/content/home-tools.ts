@@ -6,7 +6,7 @@ import type { Locale } from "@/lib/i18n/config";
  * publisher that owns it; a renamed slug must not leave a dead homepage link.
  */
 
-export type ToolKey = "holiday" | "weekend" | "localHolidays" | "transport" | "tax" | "mushrooms" | "reservoirs" | "school" | "airport";
+export type ToolKey = "holiday" | "weekend" | "localHolidays" | "transport" | "tax" | "mushrooms" | "reservoirs" | "school" | "airport" | "museums" | "monuments" | "cards";
 
 export const PATHS: Record<ToolKey, Record<Locale, string>> = {
   holiday: {
@@ -33,6 +33,21 @@ export const PATHS: Record<ToolKey, Record<Locale, string>> = {
     ca: "guies/taxa-turistica-barcelona-catalunya",
     es: "guias/tasa-turistica-barcelona-cataluna",
     en: "guides/barcelona-catalonia-tourist-tax",
+  },
+  museums: {
+    ca: "guies/museus-gratis-barcelona",
+    es: "guias/museos-gratis-barcelona",
+    en: "guides/free-museums-barcelona",
+  },
+  monuments: {
+    ca: "guies/entrades-sagrada-familia-park-guell-casa-batllo",
+    es: "guias/entradas-sagrada-familia-park-guell-casa-batllo",
+    en: "guides/sagrada-familia-park-guell-casa-batllo-tickets",
+  },
+  cards: {
+    ca: "guies/barcelona-card-o-hola-barcelona",
+    es: "guias/barcelona-card-o-hola-barcelona",
+    en: "guides/barcelona-card-vs-hola-barcelona",
   },
   airport: {
     ca: "guies/aeroport-barcelona-centre",
@@ -62,7 +77,7 @@ export const PATHS: Record<ToolKey, Record<Locale, string>> = {
  * live here. Same tools, ordered by who is asking.
  */
 export const ORDER: Record<Locale, ToolKey[]> = {
-  ca: ["holiday", "school", "weekend", "localHolidays", "mushrooms", "reservoirs", "transport", "airport", "tax"],
-  es: ["holiday", "school", "weekend", "localHolidays", "mushrooms", "reservoirs", "transport", "airport", "tax"],
-  en: ["airport", "transport", "tax", "weekend", "holiday", "localHolidays", "school", "reservoirs", "mushrooms"],
+  ca: ["holiday", "school", "weekend", "localHolidays", "mushrooms", "reservoirs", "museums", "transport", "airport", "monuments", "cards", "tax"],
+  es: ["holiday", "school", "weekend", "localHolidays", "mushrooms", "reservoirs", "museums", "transport", "airport", "monuments", "cards", "tax"],
+  en: ["airport", "monuments", "transport", "cards", "museums", "tax", "weekend", "holiday", "localHolidays", "school", "reservoirs", "mushrooms"],
 };
