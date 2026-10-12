@@ -50,6 +50,7 @@ const ca = {
       transport: { title: "Quina targeta de transport et convé", desc: "Compara T-casual, T-dia i T-usual segons dies, viatges i aeroport." },
       tax: { title: "Calculadora de la taxa turística", desc: "Quant pagaràs per nit a Barcelona i a la resta de Catalunya." },
       barcelonaHub: { title: "Barcelona: guia pràctica", desc: "Arribar, moure's, monuments, museus gratis i excursions, tot en un lloc." },
+      clockChange: { title: "Canvi d'hora", desc: "Quin dia canvia l'hora, si dormim més o menys, i les dates oficials fins al 2031." },
       voting: { title: "Eleccions del 29N: com votar", desc: "On votes, vot per correu fins al 19 de novembre i consulta del cens fins al 19 d'octubre." },
       museums: { title: "Museus gratis a Barcelona", desc: "Quins dies i hores no es paga al MNAC, el Picasso, el MACBA i els museus municipals." },
       monuments: { title: "Entrades de Gaudí i Sant Pau", desc: "Preus oficials i horaris de la Sagrada Família, el Park Güell, la Casa Batlló i la Pedrera." },

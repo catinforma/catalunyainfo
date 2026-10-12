@@ -340,6 +340,26 @@ export const IMAGES: readonly ImportedImage[] = [
     "license": "CC BY-SA 3.0"
   },
   {
+    "key": "canvi-hora-rellotge-hora-oficial",
+    "url": "/images/canvi-hora-rellotge-hora-oficial.webp",
+    "width": 1920,
+    "height": 1198,
+    "blurDataUrl": "data:image/webp;base64,UklGRnAAAABXRUJQVlA4IGQAAAAwAgCdASoQAAoAA4BaJQBOj+AQV47Ni15FAADfjBbhJVKxUw4mSpQNsaCaJcNwchU7j7KaYrHYewauxveEzAmOXFZJHafxzYMX1vU2b1DdDOSzKkGsEOFKWqcs5cOtixEQiAAA",
+    "credit": "MARIA ROSA FERRE ✿",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Reial_Acad%C3%A8mia_de_les_Ci%C3%A8ncies_i_les_Arts_(Barcelona)_-_2.jpg",
+    "license": "CC BY-SA 2.0"
+  },
+  {
+    "key": "canvi-hora-torre-rellotge-gracia",
+    "url": "/images/canvi-hora-torre-rellotge-gracia.webp",
+    "width": 1920,
+    "height": 2560,
+    "blurDataUrl": "data:image/webp;base64,UklGRoQAAABXRUJQVlA4IHgAAADwAwCdASoQABUAPu1iqU2ppaQiMAgBMB2JQBOmUAA08Fy5EIk8jf8AAP4Vuby60EwZldT+CNrVSyO8zi/Pb61vONUOgNCL4CHR+E6L1mgT3QcQtdEjnmMfXcXrUpkjxwbzVIjsGF1pnCD9HaQAnyaV/R2NTjAAAAA=",
+    "credit": "puigalder",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Pla%C3%A7aRiusiTaulet-ViladeGracia-Barcelona-Catalunya.jpg",
+    "license": "CC BY-SA 3.0"
+  },
+  {
     "key": "cardona-vic-escapades-catalunya",
     "url": "/images/cardona-vic-escapades-catalunya.webp",
     "width": 1672,

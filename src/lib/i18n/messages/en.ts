@@ -51,6 +51,7 @@ const en: Messages = {
       transport: { title: "Which Barcelona transport pass?", desc: "Compare T-casual, T-dia and T-usual by days, journeys and the airport." },
       tax: { title: "Tourist tax calculator", desc: "What you will pay per night in Barcelona and the rest of Catalonia." },
       barcelonaHub: { title: "Barcelona practical guide", desc: "Arriving, getting around, sights, free museums and day trips in one place." },
+      clockChange: { title: "Clock change", desc: "When the clocks go back or forward in Spain, and the official dates to 2031." },
       voting: { title: "29 November election: how to vote", desc: "Where you vote, postal vote until 19 November, and checking the roll until 19 October." },
       museums: { title: "Free museums in Barcelona", desc: "The days and hours the MNAC, Picasso, MACBA and city museums charge nothing." },
       monuments: { title: "Gaudí monument tickets", desc: "Official prices and hours for the Sagrada Família, Park Güell, Casa Batlló and La Pedrera." },

@@ -6,7 +6,7 @@ import type { Locale } from "@/lib/i18n/config";
  * publisher that owns it; a renamed slug must not leave a dead homepage link.
  */
 
-export type ToolKey = "holiday" | "weekend" | "localHolidays" | "transport" | "tax" | "mushrooms" | "reservoirs" | "school" | "airport" | "museums" | "monuments" | "cards" | "voting" | "barcelonaHub";
+export type ToolKey = "holiday" | "weekend" | "localHolidays" | "transport" | "tax" | "mushrooms" | "reservoirs" | "school" | "airport" | "museums" | "monuments" | "cards" | "voting" | "barcelonaHub" | "clockChange";
 
 export const PATHS: Record<ToolKey, Record<Locale, string>> = {
   holiday: {
@@ -33,6 +33,11 @@ export const PATHS: Record<ToolKey, Record<Locale, string>> = {
     ca: "guies/taxa-turistica-barcelona-catalunya",
     es: "guias/tasa-turistica-barcelona-cataluna",
     en: "guides/barcelona-catalonia-tourist-tax",
+  },
+  clockChange: {
+    ca: "guies/canvi-hora-catalunya",
+    es: "guias/cambio-hora-espana",
+    en: "guides/clock-change-spain",
   },
   barcelonaHub: {
     ca: "guies/barcelona-guia-practica",
@@ -87,7 +92,7 @@ export const PATHS: Record<ToolKey, Record<Locale, string>> = {
  * live here. Same tools, ordered by who is asking.
  */
 export const ORDER: Record<Locale, ToolKey[]> = {
-  ca: ["voting", "holiday", "school", "weekend", "localHolidays", "mushrooms", "reservoirs", "museums", "transport", "airport", "monuments", "cards", "barcelonaHub", "tax"],
-  es: ["voting", "holiday", "school", "weekend", "localHolidays", "mushrooms", "reservoirs", "museums", "transport", "airport", "monuments", "cards", "barcelonaHub", "tax"],
-  en: ["barcelonaHub", "airport", "monuments", "transport", "cards", "museums", "tax", "weekend", "holiday", "localHolidays", "school", "voting", "reservoirs", "mushrooms"],
+  ca: ["voting", "clockChange", "holiday", "school", "weekend", "localHolidays", "mushrooms", "reservoirs", "museums", "transport", "airport", "monuments", "cards", "barcelonaHub", "tax"],
+  es: ["voting", "clockChange", "holiday", "school", "weekend", "localHolidays", "mushrooms", "reservoirs", "museums", "transport", "airport", "monuments", "cards", "barcelonaHub", "tax"],
+  en: ["barcelonaHub", "airport", "monuments", "transport", "cards", "museums", "tax", "weekend", "holiday", "localHolidays", "school", "clockChange", "voting", "reservoirs", "mushrooms"],
 };

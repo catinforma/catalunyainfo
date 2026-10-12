@@ -51,6 +51,7 @@ const es: Messages = {
       transport: { title: "Qué tarjeta de transporte te conviene", desc: "Compara T-casual, T-dia y T-usual según días, viajes y aeropuerto." },
       tax: { title: "Calculadora de la tasa turística", desc: "Cuánto pagarás por noche en Barcelona y en el resto de Cataluña." },
       barcelonaHub: { title: "Barcelona: guía práctica", desc: "Llegar, moverse, monumentos, museos gratis y excursiones, todo en un sitio." },
+      clockChange: { title: "Cambio de hora", desc: "Qué día cambia la hora, si dormimos más o menos, y las fechas oficiales hasta 2031." },
       voting: { title: "Elecciones del 29N: cómo votar", desc: "Dónde votas, voto por correo hasta el 19 de noviembre y consulta del censo hasta el 19 de octubre." },
       museums: { title: "Museos gratis en Barcelona", desc: "Qué días y horas no se paga en el MNAC, el Picasso, el MACBA y los museos municipales." },
       monuments: { title: "Entradas de Gaudí y Sant Pau", desc: "Precios oficiales y horarios de la Sagrada Familia, el Park Güell, la Casa Batlló y La Pedrera." },

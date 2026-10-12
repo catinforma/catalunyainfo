@@ -44,7 +44,8 @@ export type B2Key =
   | "portaventura"
   | "zooAquarium"
   | "markets"
-  | "barcelonaHub";
+  | "barcelonaHub"
+  | "clockChange";
 
 /** Path after the locale prefix, no leading or trailing slash. */
 export const B2_PATHS: Record<B2Key, Record<Locale, string>> = {
@@ -102,6 +103,11 @@ export const B2_PATHS: Record<B2Key, Record<Locale, string>> = {
     ca: "guies/com-votar-eleccions-catalunya",
     es: "guias/como-votar-elecciones-cataluna",
     en: "guides/how-to-vote-catalonia",
+  },
+  clockChange: {
+    ca: "guies/canvi-hora-catalunya",
+    es: "guias/cambio-hora-espana",
+    en: "guides/clock-change-spain",
   },
   barcelonaHub: {
     ca: "guies/barcelona-guia-practica",
@@ -264,6 +270,11 @@ export const B2_TITLES: Record<B2Key, Record<Locale, string>> = {
     ca: "Com votar a Catalunya",
     es: "Cómo votar en Cataluña",
     en: "How to vote in Catalonia",
+  },
+  clockChange: {
+    ca: "Canvi d'hora: quan és el pròxim",
+    es: "Cambio de hora: cuándo es el próximo",
+    en: "Clock change in Spain",
   },
   barcelonaHub: {
     ca: "Barcelona: guia pràctica",

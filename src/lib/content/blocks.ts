@@ -439,6 +439,14 @@ export const electionHistoryBlock = z.object({
   kind: z.enum(["congress", "parliament"]),
 });
 
+/**
+ * The next clock change, computed from the permanent rule in Real Decreto
+ * 236/2002. Configuration-free.
+ */
+export const clockChangeBlock = z.object({
+  type: z.literal("clockChange"),
+});
+
 export const blockSchema = z.discriminatedUnion("type", [
   headingBlock,
   paragraphBlock,
@@ -468,6 +476,7 @@ export const blockSchema = z.discriminatedUnion("type", [
   reservoirLevelsBlock,
   schoolCalendarBlock,
   electionHistoryBlock,
+  clockChangeBlock,
 ]);
 
 export const bodySchema = z.array(blockSchema).max(500);

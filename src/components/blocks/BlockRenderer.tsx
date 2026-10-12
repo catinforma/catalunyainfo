@@ -11,6 +11,7 @@ import { WeekendAgenda } from "@/components/blocks/WeekendAgenda";
 import { LocalHolidays } from "@/components/blocks/LocalHolidays";
 import { ReservoirLevels } from "@/components/blocks/ReservoirLevels";
 import { SchoolCalendar } from "@/components/blocks/SchoolCalendar";
+import { ClockChange } from "@/components/blocks/ClockChange";
 import { ElectionHistory } from "@/components/blocks/ElectionHistory";
 import { TouristTaxCalculator } from "@/components/blocks/TouristTaxCalculator";
 import type { Block, Body } from "@/lib/content/blocks";
@@ -375,6 +376,10 @@ function BlockView({ block, context }: { block: Block; context: BlockContext }) 
     case "schoolCalendar":
       // Dates from the DOGC order; "today" computed in Europe/Madrid.
       return <SchoolCalendar locale={context.locale} />;
+
+    case "clockChange":
+      // Computed from the last-Sunday rule; "today" in Europe/Madrid.
+      return <ClockChange locale={context.locale} />;
 
     case "electionHistory":
       // Async server component: Generalitat election open data, cached a day.
