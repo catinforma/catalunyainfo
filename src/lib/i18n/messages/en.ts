@@ -50,6 +50,7 @@ const en: Messages = {
       localHolidays: { title: "Local holidays by town", desc: "Every municipality's two local holidays, in one searchable table." },
       transport: { title: "Which Barcelona transport pass?", desc: "Compare T-casual, T-dia and T-usual by days, journeys and the airport." },
       tax: { title: "Tourist tax calculator", desc: "What you will pay per night in Barcelona and the rest of Catalonia." },
+      airport: { title: "Airport to city centre", desc: "Aerobús, L9 metro, R2 Nord train or taxi: fares and times from the operators." },
       school: { title: "School calendar", desc: "Term dates, Christmas and Easter holidays to 2029, and whether schools are open today." },
       reservoirs: { title: "Reservoir levels today", desc: "How full each reservoir is, from the Catalan water agency's daily data." },
       mushrooms: { title: "Mushroom conditions by area", desc: "Last 15 days of rainfall at Meteocat stations, area by area." },

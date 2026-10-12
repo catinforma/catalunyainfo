@@ -49,6 +49,7 @@ const ca = {
       localHolidays: { title: "Festius locals de cada municipi", desc: "Els dos dies de festa local de tots els municipis, en una sola taula cercable." },
       transport: { title: "Quina targeta de transport et convé", desc: "Compara T-casual, T-dia i T-usual segons dies, viatges i aeroport." },
       tax: { title: "Calculadora de la taxa turística", desc: "Quant pagaràs per nit a Barcelona i a la resta de Catalunya." },
+      airport: { title: "De l'aeroport al centre", desc: "Aerobús, metro L9, tren R2 Nord o taxi: preus i temps dels operadors." },
       school: { title: "Calendari escolar", desc: "Inici i final de curs, Nadal i Setmana Santa fins al 2029, i si avui hi ha escola." },
       reservoirs: { title: "Embassaments avui", desc: "Quanta aigua hi ha a cada embassament, amb les dades diàries de l'ACA." },
       mushrooms: { title: "Bolets: condicions per zona", desc: "Pluja dels últims 15 dies a les estacions del Meteocat, zona per zona." },

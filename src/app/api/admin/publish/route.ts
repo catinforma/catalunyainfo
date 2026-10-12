@@ -10,7 +10,8 @@ import { publishFeatures } from "@/lib/content/features/publish";
 import { publishHolidayGuide } from "@/lib/content/holidays/publish";
 import { publishTouristTaxGuide } from "@/lib/content/tourist-tax/publish";
 import { publishMushroomZones } from "@/lib/content/mushroom-zones/publish";
-import { publishBatch02 } from "@/lib/content/batch02/publish";
+import { publishB2Article, publishBatch02 } from "@/lib/content/batch02/publish";
+import { AIRPORT } from "@/lib/content/batch02/airport";
 import { publishHolidayTodayGuide } from "@/lib/content/holidays/today-publish";
 import { publishLocalHolidaysGuide } from "@/lib/content/holidays/local-publish";
 import { publishReservoirGuide } from "@/lib/content/reservoirs/publish";
@@ -70,6 +71,7 @@ export async function POST(request: Request) {
     // Nine articles in three languages does not fit in one function call, so
     // the batch is sliced the same way the feature batch is.
     if (wants("batch02")) published.push(...(await publishBatch02()));
+    if (wants("airport")) published.push(await publishB2Article(AIRPORT));
     if (wants("batch02-a")) published.push(...(await publishBatch02(0, 3)));
     if (wants("batch02-b")) published.push(...(await publishBatch02(3, 6)));
     if (wants("batch02-c")) published.push(...(await publishBatch02(6, 9)));

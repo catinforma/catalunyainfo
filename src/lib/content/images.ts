@@ -23,6 +23,26 @@ export interface ImportedImage {
 
 export const IMAGES: readonly ImportedImage[] = [
   {
+    "key": "aeroport-aerobus-placa-catalunya",
+    "url": "/images/aeroport-aerobus-placa-catalunya.webp",
+    "width": 1920,
+    "height": 1440,
+    "blurDataUrl": "data:image/webp;base64,UklGRmoAAABXRUJQVlA4IF4AAAAQAgCdASoQAAwAA4BaJZACdAEDSOwfUcgAAPqDgScp30aq7SIpfZJF3p7c8JZJfy//Ivq97xBzvrndOaKjhOD7NV6/8rKnTetin3SzTmDURvD4V09Tqt6sHKyhwAAA",
+    "credit": "ÀlexHinojo",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Aerob%C3%BAs_Pla%C3%A7a_Catalunya_4905.jpg",
+    "license": "CC0"
+  },
+  {
+    "key": "aeroport-metro-l9-aeroport-t1",
+    "url": "/images/aeroport-metro-l9-aeroport-t1.webp",
+    "width": 1920,
+    "height": 1440,
+    "blurDataUrl": "data:image/webp;base64,UklGRmoAAABXRUJQVlA4IF4AAAAwAgCdASoQAAwAA4BaJQBYdsW+oZg4TCZtAAD9xLffb4snLvaDPWqPFY7eAXmLqqwTjM61Q41kllhHNz0Tls3vAHP5ErjscDW/XbvmZUt1ODodQWPYYzdm5P0cQAAA",
+    "credit": "Mariusmm",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Barcelona_metro_Aeroport_T1_L9.jpg",
+    "license": "CC BY-SA 4.0"
+  },
+  {
     "key": "b2-cerdanya-estany",
     "url": "/images/b2-cerdanya-estany.webp",
     "width": 1920,
@@ -225,7 +245,7 @@ export const IMAGES: readonly ImportedImage[] = [
     "width": 1920,
     "height": 1440,
     "blurDataUrl": "data:image/webp;base64,UklGRmIAAABXRUJQVlA4IFYAAAAwAgCdASoQAAwAA4BaJYwC7AELYscFk+I+IAD+8EHDEd1OjaowlhGSyWg9CjuHfmhCPinmVCmbB63A89NeM8t79sMKha1feibEVD4MCrWf6mZrmwAAAA==",
-    "credit": "Pere prlpz",
+    "credit": "Pere prlpz (talk)",
     "creditUrl": "https://commons.wikimedia.org/wiki/File:Grup_Escolar_Ramon_Llull_P1380696.JPG",
     "license": "CC BY-SA 3.0"
   },

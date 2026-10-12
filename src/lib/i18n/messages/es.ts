@@ -50,6 +50,7 @@ const es: Messages = {
       localHolidays: { title: "Festivos locales de cada municipio", desc: "Los dos días de fiesta local de todos los municipios, en una sola tabla con buscador." },
       transport: { title: "Qué tarjeta de transporte te conviene", desc: "Compara T-casual, T-dia y T-usual según días, viajes y aeropuerto." },
       tax: { title: "Calculadora de la tasa turística", desc: "Cuánto pagarás por noche en Barcelona y en el resto de Cataluña." },
+      airport: { title: "Del aeropuerto al centro", desc: "Aerobús, metro L9, tren R2 Nord o taxi: precios y tiempos de los operadores." },
       school: { title: "Calendario escolar", desc: "Inicio y final de curso, Navidad y Semana Santa hasta 2029, y si hoy hay colegio." },
       reservoirs: { title: "Embalses hoy", desc: "Cuánta agua hay en cada embalse, con los datos diarios de la ACA." },
       mushrooms: { title: "Setas: condiciones por zona", desc: "Lluvia de los últimos 15 días en las estaciones del Meteocat, zona por zona." },

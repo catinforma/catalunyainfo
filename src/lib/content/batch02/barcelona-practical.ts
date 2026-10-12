@@ -139,7 +139,7 @@ export const TRANSPORT: B2Article = {
           `Si has vingut amb cotxe, mira també ${b2link("zbe", "ca", "què cal fer amb un vehicle estranger a la ZBE")} i ${b2link("parking", "ca", "com funcionen la zona blava i la verda")}.`,
         ),
         ...paras(verifiedLine("ca", VERIFIED_AT)),
-        ...b2Related(["zbe", "parking", "girona", "montserratFree"], "ca"),
+        ...b2Related(["airport", "zbe", "parking", "girona", "montserratFree"], "ca"),
       ],
     },
 
@@ -205,7 +205,7 @@ export const TRANSPORT: B2Article = {
           `Si has venido en coche, mira también ${b2link("zbe", "es", "qué hacer con un vehículo extranjero en la ZBE")} y ${b2link("parking", "es", "cómo funcionan la zona azul y la verde")}.`,
         ),
         ...paras(verifiedLine("es", VERIFIED_AT)),
-        ...b2Related(["zbe", "parking", "girona", "montserratFree"], "es"),
+        ...b2Related(["airport", "zbe", "parking", "girona", "montserratFree"], "es"),
       ],
     },
 
@@ -271,7 +271,7 @@ export const TRANSPORT: B2Article = {
           `Driving in? See ${b2link("zbe", "en", "what foreign-registered cars must do first")} and ${b2link("parking", "en", "how the blue and green parking zones work")}.`,
         ),
         ...paras(verifiedLine("en", VERIFIED_AT)),
-        ...b2Related(["zbe", "parking", "girona", "montserratFree"], "en"),
+        ...b2Related(["airport", "zbe", "parking", "girona", "montserratFree"], "en"),
       ],
     },
   },

@@ -5,6 +5,7 @@ import { bodySchema, bodyToPlainText, wordCount } from "../src/lib/content/block
 import { PARKING, TRANSPORT, ZBE } from "../src/lib/content/batch02/barcelona-practical.ts";
 import { CERDANYA, GIRONA, MONTSERRAT_FREE } from "../src/lib/content/batch02/day-trips.ts";
 import { RIPOLLES, SETCASES, SNOW } from "../src/lib/content/batch02/pyrenees.ts";
+import { AIRPORT } from "../src/lib/content/batch02/airport.ts";
 import { B2_PATHS, type B2Article } from "../src/lib/content/batch02/shared.ts";
 import { IMAGES } from "../src/lib/content/images.ts";
 import {
@@ -23,6 +24,7 @@ const ARTICLES: B2Article[] = [
   SETCASES,
   CERDANYA,
   PARKING,
+  AIRPORT,
   SNOW,
 ];
 
@@ -32,8 +34,8 @@ const IMAGE_KEYS = new Set(IMAGES.map((image) => image.key));
 /* Structure                                                                  */
 /* -------------------------------------------------------------------------- */
 
-test("nine articles, three editions each", () => {
-  assert.equal(ARTICLES.length, 9);
+test("ten articles, three editions each", () => {
+  assert.equal(ARTICLES.length, 10);
   for (const article of ARTICLES) {
     for (const locale of LOCALES) {
       assert.ok(article.editions[locale], `${article.key} is missing ${locale}`);
