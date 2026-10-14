@@ -7,7 +7,8 @@ import { IMAGE_BY_KEY } from "@/lib/content/images";
 import { relatedBlocks } from "@/lib/content/features/shared";
 import { zoneHref, zonesFor } from "@/lib/content/mushroom-zones/registry";
 import { LEVEL_RULE, READ_AT, SOURCE, WINDOW_DAYS, ZONE_READINGS } from "./conditions";
-import { COPY, HERO, LEVEL_LABEL, LIVE_COPY, SOURCES, ZONES } from "./payload";
+import { liveSummary, readDate } from "./live-summary";
+import { COPY, HERO, LIVE_COPY, SOURCES, ZONES } from "./payload";
 
 /**
  * The mycological conditions report.
@@ -106,23 +107,26 @@ function conditionsBlock(locale: Locale): Block {
 
 export function buildBody(locale: Locale, heroMediaId?: string): Block[] {
   const copy = COPY[locale];
+  const live = liveSummary(locale);
   const blocks: Block[] = [];
 
+  // The second intro paragraph named this week's leaders; it is now written
+  // from the latest reading so it cannot contradict the live map below.
   copy.intro.forEach((text, index) => {
-    blocks.push({ type: "paragraph", text, ...(index === 0 ? { lead: true } : {}) });
+    blocks.push({ type: "paragraph", text: index === 1 ? live.intro : text, ...(index === 0 ? { lead: true } : {}) });
   });
 
   blocks.push({
     type: "callout",
     tone: "info",
     title: copy.directAnswerTitle,
-    text: copy.directAnswer,
+    text: live.direct,
   });
 
   blocks.push({
     type: "keyFacts",
     title: copy.keyFactsTitle,
-    items: copy.keyFacts.map((f) => ({ label: f.label, value: f.value })),
+    items: live.facts,
   });
 
   // Today's reading comes before the editorial ranking: somebody who opened
@@ -138,12 +142,7 @@ export function buildBody(locale: Locale, heroMediaId?: string): Block[] {
     type: "table",
     caption: copy.tableCaption,
     headers: copy.tableHeaders,
-    rows: ZONES.map((zone) => [
-      zone.name[locale],
-      LEVEL_LABEL[zone.level][locale],
-      zone.figure[locale],
-      zone.reading[locale],
-    ]),
+    rows: live.tableRows,
   });
 
   // Stated immediately under the ranking, where someone might otherwise read a
@@ -162,12 +161,12 @@ export function buildBody(locale: Locale, heroMediaId?: string): Block[] {
   blocks.push({ type: "heading", level: 2, text: copy.lateHeading });
   for (const text of copy.late) blocks.push({ type: "paragraph", text });
 
+  // Zone by zone, the season so far. These sections are dated context (the
+  // early-October rains), not this week's ranking, so they sit under their own
+  // heading and carry no rating that could disagree with the live table.
+  blocks.push({ type: "heading", level: 2, text: live.context });
   for (const zone of ZONES) {
-    blocks.push({ type: "heading", level: 2, text: zone.heading[locale] });
-    blocks.push({
-      type: "paragraph",
-      text: `**${LEVEL_LABEL[zone.level][locale]}.**`,
-    });
+    blocks.push({ type: "heading", level: 3, text: zone.heading[locale].replace(/^\d+\.\s*/, "") });
     for (const text of zone.body[locale]) blocks.push({ type: "paragraph", text });
   }
 
@@ -188,7 +187,8 @@ export function buildBody(locale: Locale, heroMediaId?: string): Block[] {
   });
 
   blocks.push({ type: "heading", level: 2, text: copy.summaryHeading });
-  for (const text of copy.summary) blocks.push({ type: "paragraph", text });
+  blocks.push({ type: "paragraph", text: live.ranking });
+  for (const text of copy.summary.slice(2)) blocks.push({ type: "paragraph", text });
 
   // This report is the best-ranked page on the site and, until now, it linked
   // to nothing. Everything below is the same trip in the same weeks - chestnut
@@ -264,7 +264,7 @@ export async function publishMushroomReport(): Promise<PublishResult> {
       locale,
       path: copy.path,
       title: copy.title,
-      excerpt: copy.excerpt,
+      excerpt: copy.excerpt.replace(/(verificades el|verificados el|verified on) [^.]+\.$/, (_, verb: string) => `${verb} ${readDate(locale)}.`),
       seoTitle: copy.seoTitle,
       seoDescription: copy.seoDescription,
       body: buildBody(locale, heroMediaId),

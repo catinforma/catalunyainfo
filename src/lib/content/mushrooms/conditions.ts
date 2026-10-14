@@ -23,7 +23,7 @@ export interface ZoneReading {
 export const WINDOW_DAYS = 15;
 
 /** ISO date the data was read. This is what the page shows as last verified. */
-export const READ_AT = "2026-10-11";
+export const READ_AT = "2026-10-14";
 
 export const SOURCE = {
   name: "Dades meteorològiques de la XEMA",
@@ -63,9 +63,9 @@ export const LEVEL_RULE = [
 export const ZONE_READINGS: readonly ZoneReading[] = [
   {
     "id": "ripolles",
-    "mm": 81.1,
+    "mm": 81.2,
     "stations": 5,
-    "daysSinceRain": 4,
+    "daysSinceRain": 7,
     "level": "very",
     "wettest": {
       "name": "Sant Joan de les Abadesses",
@@ -76,29 +76,29 @@ export const ZONE_READINGS: readonly ZoneReading[] = [
     "id": "bergueda",
     "mm": 90.4,
     "stations": 5,
-    "daysSinceRain": 4,
+    "daysSinceRain": 7,
     "level": "very",
     "wettest": {
       "name": "la Quar",
-      "mm": 108.5
+      "mm": 108.7
     }
   },
   {
     "id": "garrotxa",
-    "mm": 118.9,
+    "mm": 119,
     "stations": 2,
-    "daysSinceRain": 3,
+    "daysSinceRain": 6,
     "level": "very",
     "wettest": {
       "name": "la Vall d'en Bas",
-      "mm": 140.5
+      "mm": 140.6
     }
   },
   {
     "id": "osona",
-    "mm": 106.5,
+    "mm": 113.9,
     "stations": 7,
-    "daysSinceRain": 3,
+    "daysSinceRain": 6,
     "level": "very",
     "wettest": {
       "name": "Viladrau",
@@ -107,42 +107,42 @@ export const ZONE_READINGS: readonly ZoneReading[] = [
   },
   {
     "id": "pirineu",
-    "mm": 50.1,
+    "mm": 50.7,
     "stations": 24,
-    "daysSinceRain": 3,
+    "daysSinceRain": 2,
     "level": "favourable",
     "wettest": {
       "name": "Alinyà",
-      "mm": 104.2
+      "mm": 103.7
     }
   },
   {
     "id": "montseny",
-    "mm": 202.6,
+    "mm": 203.4,
     "stations": 9,
-    "daysSinceRain": 3,
+    "daysSinceRain": 6,
     "level": "very",
     "wettest": {
       "name": "Granollers",
-      "mm": 379
+      "mm": 378.5
     }
   },
   {
     "id": "ports",
-    "mm": 151.5,
+    "mm": 150.7,
     "stations": 19,
-    "daysSinceRain": 5,
+    "daysSinceRain": 7,
     "level": "very",
     "wettest": {
       "name": "l'Ametlla de Mar",
-      "mm": 339.9
+      "mm": 339.6
     }
   },
   {
     "id": "ponent",
-    "mm": 26.1,
+    "mm": 26,
     "stations": 31,
-    "daysSinceRain": 5,
+    "daysSinceRain": 7,
     "level": "interesting",
     "wettest": {
       "name": "Vilanova de Meià",
