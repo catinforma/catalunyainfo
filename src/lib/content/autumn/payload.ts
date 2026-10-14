@@ -144,7 +144,7 @@ export const ZONES: Zone[] = [
   {
     id: "bonabe",
     name: { ca: "Vall de Bonabé", es: "Vall de Bonabé", en: "Bonabé Valley" },
-    window: { ca: "Octubre", es: "Octubre", en: "October" },
+    window: { ca: "2a quinzena d'octubre – 1a de novembre", es: "2.ª quincena de octubre – 1.ª de noviembre", en: "Second half of October – first half of November" },
     highlight: {
       ca: "Paisatge pirinenc i caducifolis",
       es: "Paisaje pirenaico y caducifolios",
@@ -155,15 +155,15 @@ export const ZONES: Zone[] = [
     body: {
       ca: [
         "La Vall de Bonabé, a les Valls d'Àneu, és una altra de les grans opcions del Parc Natural de l'Alt Pirineu. La zona entre el refugi del Fornet i les bordes de Perosa combina paisatge d'alta muntanya, boscos i una gran varietat cromàtica.",
-        "No fixem una data exacta de màxim perquè el parc no en dona una d'única per a aquesta vall. La millor estratègia és seguir l'evolució de l'octubre i aprofitar el període en què el canvi ja ha baixat de les cotes més altes.",
+        "El parc situa la millor època entre la **segona quinzena d'octubre i la primera de novembre**.",
       ],
       es: [
         "La Vall de Bonabé, en las Valls d'Àneu, es otra de las recomendaciones oficiales del Parc Natural de l'Alt Pirineu para disfrutar de los colores de otoño. El sector entre el refugi del Fornet y las bordas de Perosa permite combinar bosque y paisaje pirenaico.",
-        "No existe una fecha oficial única de máximo color, por lo que conviene seguir la evolución durante octubre.",
+        "El parque sitúa la mejor época entre la **segunda quincena de octubre y la primera de noviembre**.",
       ],
       en: [
         "Bonabé Valley in the Valls d'Àneu is another area recommended by the Alt Pirineu Natural Park for autumn colour. The landscape between Fornet refuge and the Bordes de Perosa combines Pyrenean scenery and deciduous woodland.",
-        "There is no official single peak date, so October conditions should be followed rather than planning around one fixed weekend.",
+        "The park places its best period between the **second half of October and the first half of November**.",
       ],
     },
   },
@@ -267,16 +267,16 @@ export const ZONES: Zone[] = [
     body: {
       ca: [
         "La Val d'Aran té alguns dels boscos caducifolis més espectaculars dels Pirineus catalans. Torisme Val d'Aran descriu la tardor amb tons vermellosos, granes, ocres i daurats als seus faigs, roures i altres caducifolis. Entre els boscos interessants hi ha Conangles i diversos sectors de les valls araneses.",
-        "**Vall de Salenques.** Torisme Val d'Aran situa explícitament **finals d'octubre i principis de novembre** com el millor moment per apreciar l'explosió de grocs intensos, vermells i marrons càlids.",
+        "**Vall de Salenques.** Ja a l'Aragó, dins del parc natural de Posets-Maladeta, però proposada per Torisme Val d'Aran, que situa explícitament **finals d'octubre i principis de novembre** com el millor moment per apreciar l'explosió de grocs intensos, vermells i marrons càlids.",
         "La ruta segueix el riu entre faigs i avets centenaris i permet entendre perfectament per què la tardor aranesa pot continuar sent espectacular quan altres sectors més alts ja han perdut bona part de la fulla.",
       ],
       es: [
         "La Val d'Aran es uno de los grandes destinos otoñales del Pirineo catalán. Sus bosques combinan hayas, robles y otras especies caducifolias con abetos y paisaje de alta montaña.",
-        "**Salenques.** Aquí sí existe una referencia especialmente precisa: Torisme Val d'Aran señala **finales de octubre y principios de noviembre** como el mejor momento para apreciar la explosión de colores amarillos, rojos y marrones cálidos en el valle de Salenques.",
+        "**Salenques.** Ya en Aragón, dentro del parque natural de Posets-Maladeta, pero propuesto por Torisme Val d'Aran, que señala **finales de octubre y principios de noviembre** como el mejor momento para apreciar la explosión de colores amarillos, rojos y marrones cálidos en el valle de Salenques.",
       ],
       en: [
         "Val d'Aran is one of the strongest autumn destinations in the Catalan Pyrenees. Beeches, oaks and other deciduous trees combine with fir forests and mountain scenery.",
-        "**Salenques Valley.** This is one of the places with particularly clear official timing: the Val d'Aran tourism board identifies **late October and early November** as the best period to see Salenques' intense yellows, reds and warm browns.",
+        "**Salenques Valley.** Just across the border in Aragon, inside the Posets-Maladeta natural park, but promoted by the Val d'Aran tourism board, which identifies **late October and early November** as the best period to see Salenques' intense yellows, reds and warm browns.",
         "Its trail follows the river through centuries-old beech and fir forest.",
       ],
     },
@@ -343,16 +343,16 @@ export const ZONES: Zone[] = [
     body: {
       ca: [
         "El Montseny és una de les grans opcions per veure la tardor sense arribar fins al Pirineu. La diversitat d'altituds permet trobar fagedes, castanyers, rouredes i boscos mixtos amb evolucions diferents.",
-        "La programació del Parc Natural del Montseny per al 2026 ja inclou activitats de tardor, com «La fageda de Collformic» l'11 d'octubre i propostes vinculades als castanyers durant el mes. Això confirma l'interès tardorenc del massís, però no equival a una previsió exacta del moment de màxim color.",
+        "La programació del Parc Natural del Montseny per al 2026 ja inclou activitats de tardor, com la sortida «Tardor, castanyes i castanyers» a Viladrau el 18 i el 31 d'octubre, amb reserva. Això confirma l'interès tardorenc del massís, però no equival a una previsió exacta del moment de màxim color.",
         "Com a orientació, **finals d'octubre i novembre** solen ser el període més interessant per vigilar les fagedes i castanyedes de cota inferior.",
       ],
       es: [
-        "El Montseny permite encontrar hayas, castaños, robles y bosques mixtos relativamente cerca de Barcelona. Su programa de actividades de 2026 incluye propuestas específicamente relacionadas con las hayas y el otoño durante octubre.",
+        "El Montseny permite encontrar hayas, castaños, robles y bosques mixtos relativamente cerca de Barcelona. Su programa de 2026 incluye la salida «Tardor, castanyes i castanyers» en Viladrau el 18 y el 31 de octubre, con reserva.",
         "Las diferencias de altitud hacen que el color avance de forma desigual por el macizo. Como orientación general, finales de octubre y noviembre son fechas especialmente interesantes para seguir las zonas de menor altitud.",
       ],
       en: [
         "Montseny is one of the easiest major autumn areas to reach from Barcelona. Its altitude range supports beech, chestnut, oak and mixed woodland that changes at different times.",
-        "The natural park's 2026 programme includes October walks specifically focused on beech woods and autumn. For lower forest areas, late October and November are generally the period to monitor most closely rather than September.",
+        "The natural park's 2026 programme includes the «Tardor, castanyes i castanyers» outing in Viladrau on 18 and 31 October, booking required. For lower forest areas, late October and November are generally the period to monitor most closely rather than September.",
       ],
     },
     imageKey: "colors-tardor-catalunya-carretera-bosc",
@@ -559,9 +559,10 @@ export const COPY: Record<Locale, Copy> = {
     ],
     statusTitle: "Com està la tardor ara?",
     status: [
-      "**15 de setembre de 2026: encara és aviat a la major part de Catalunya.**",
-      "Els primers canvis poden començar a aparèixer durant la segona meitat de setembre als sectors més alts del Pirineu.",
-      "Per trobar grans extensions de bosc en grocs, ocres i vermells, l'octubre continuarà sent el mes clau en bona part de l'alta muntanya, mentre que alguns boscos de cotes més baixes poden arribar al millor moment entre finals d'octubre i novembre.",
+      "**Actualitzat el 14 d'octubre de 2026.** Cap organisme oficial publica com estan ara mateix els boscos, així que no et direm que el color «ja hi és»: et diem què toca segons el calendari dels parcs i què ha fet el temps.",
+      "**Pel calendari, ara comença la segona quinzena d'octubre**: la finestra que el Parc Natural de l'Alt Pirineu dona per a Esterri de Cardós, la Vall de Bonabé i les Valls de Sant Joan. La Vall de Salenques i els boscos baixos, com la Fageda d'en Jordà o el Montseny, arriben a finals d'octubre i novembre.",
+      "**Pel temps:** el Meteocat qualifica el setembre del 2026 com el més càlid registrat a Catalunya, amb les anomalies més grans als cims del Pirineu. Les primeres glaçades d'octubre al Pirineu van arribar el 8 i el 9 d'octubre (−5,9 °C a la Bonaigua, −1,0 °C a Bonabé). Les pluges fortes de principis d'octubre van caure sobre el litoral i el prelitoral, Montseny inclòs, no sobre el Pirineu.",
+      "Si hi vas aquest cap de setmana: el **17 d'octubre** el Parc Nacional d'Aigüestortes fa la sortida «Tardor de colors» des de Boí, amb reserva prèvia.",
     ],
     directAnswerTitle: "En resum",
     directAnswer:
@@ -573,7 +574,7 @@ export const COPY: Record<Locale, Copy> = {
       { label: "Zones tardanes", value: "Cotes mitjanes i baixes fins a novembre" },
       { label: "Any", value: "2026, després de l'estiu més càlid registrat" },
       { label: "Important", value: "Les dates són orientatives i depenen del temps" },
-      { label: "Actualitzat", value: "Setembre de 2026" },
+      { label: "Actualitzat", value: "14 d'octubre de 2026" },
     ],
     tableCaption: "Calendari orientatiu per zones",
     tableHeaders: ["Zona", "Millor finestra orientativa", "Què hi destaca"],
@@ -646,9 +647,10 @@ export const COPY: Record<Locale, Copy> = {
     ],
     statusTitle: "¿Cómo está el otoño ahora mismo?",
     status: [
-      "**15 de septiembre de 2026: todavía es pronto en la mayor parte de Cataluña.**",
-      "Los primeros cambios pueden empezar a aparecer durante la segunda mitad de septiembre en los sectores más altos del Pirineo.",
-      "Para encontrar grandes extensiones de bosque en amarillos, ocres y rojizos, octubre seguirá siendo el mes clave en buena parte de la montaña, mientras algunos bosques de cotas inferiores pueden alcanzar su mejor momento entre finales de octubre y noviembre.",
+      "**Actualizado el 14 de octubre de 2026.** Ningún organismo oficial publica cómo están ahora mismo los bosques, así que no te diremos que el color «ya está»: te decimos qué toca según el calendario de los parques y qué ha hecho el tiempo.",
+      "**Por calendario, ahora empieza la segunda quincena de octubre**: la ventana que el Parc Natural de l'Alt Pirineu da para Esterri de Cardós, la Vall de Bonabé y las Valls de Sant Joan. El valle de Salenques y los bosques bajos, como la Fageda d'en Jordà o el Montseny, llegan a finales de octubre y noviembre.",
+      "**Por el tiempo:** Meteocat califica septiembre de 2026 como el más cálido registrado en Cataluña, con las mayores anomalías en las cumbres del Pirineo. Las primeras heladas de octubre en el Pirineo llegaron el 8 y el 9 de octubre (−5,9 °C en la Bonaigua, −1,0 °C en Bonabé). Las lluvias fuertes de principios de octubre cayeron sobre el litoral y el prelitoral, Montseny incluido, no sobre el Pirineo.",
+      "Si vas este fin de semana: el **17 de octubre** el Parc Nacional d'Aigüestortes organiza la salida «Tardor de colors» desde Boí, con reserva previa.",
     ],
     directAnswerTitle: "En resumen",
     directAnswer:
@@ -660,7 +662,7 @@ export const COPY: Record<Locale, Copy> = {
       { label: "Zonas tardías", value: "Cotas medias y bajas hasta noviembre" },
       { label: "Año", value: "2026, después del verano más cálido registrado" },
       { label: "Importante", value: "Las fechas son orientativas y dependen del tiempo" },
-      { label: "Actualizado", value: "Septiembre de 2026" },
+      { label: "Actualizado", value: "14 de octubre de 2026" },
     ],
     tableCaption: "Calendario orientativo por zonas",
     tableHeaders: ["Zona", "Mejor ventana orientativa", "Qué destaca"],
@@ -733,9 +735,10 @@ export const COPY: Record<Locale, Copy> = {
     ],
     statusTitle: "What do the forests look like right now?",
     status: [
-      "**September 15, 2026: it is still early across most of Catalonia.**",
-      "The first autumn changes can begin during the second half of September in higher parts of the Pyrenees.",
-      "October is generally the key month for broad areas of mountain woodland, while some lower forests can reach their strongest colours from late October into November.",
+      "**Updated 14 October 2026.** No official body publishes what the forests look like right now, so we won't tell you the colour is already there: we tell you what the parks' calendar says and what the weather has done.",
+      "**By the calendar, the second half of October is starting**: the window the Alt Pirineu Natural Park gives for Esterri de Cardós, the Bonabé Valley and the Sant Joan valleys. The Salenques valley and lower forests such as La Fageda d'en Jordà and Montseny come in late October and November.",
+      "**By the weather:** Meteocat rates September 2026 as the warmest on record in Catalonia, with the largest anomalies on the Pyrenean summits. October's first frosts in the Pyrenees came on 8 and 9 October (−5.9 °C at Bonaigua, −1.0 °C at Bonabé). The heavy early-October rain fell on the coast and pre-coastal ranges, Montseny included, not on the Pyrenees.",
+      "If you're going this weekend: on **17 October** Aigüestortes National Park runs its «Tardor de colors» walk from Boí, booking required.",
     ],
     directAnswerTitle: "In short",
     directAnswer:
@@ -747,7 +750,7 @@ export const COPY: Record<Locale, Copy> = {
       { label: "Later areas", value: "Medium and lower elevations into November" },
       { label: "2026 context", value: "Following Catalonia's hottest summer on record" },
       { label: "Important", value: "Timing is approximate and weather-dependent" },
-      { label: "Updated", value: "September 2026" },
+      { label: "Updated", value: "14 October 2026" },
     ],
     tableCaption: "Approximate timing by area",
     tableHeaders: ["Area", "Best approximate window", "What stands out"],

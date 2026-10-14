@@ -42,11 +42,14 @@ test("the guide never claims the forests are at peak colour now", () => {
   }
 });
 
-test("each edition says explicitly that it is still early", () => {
+test("each edition says no official source reports the forests' state today", () => {
+  // Since the 14 Oct update the status block follows the parks' published
+  // windows and the measured weather; it must keep saying that nobody
+  // official reports current colour, so it never reads as a sighting.
   const marker = {
-    ca: /encara és aviat/i,
-    es: /todavía es pronto/i,
-    en: /still early/i,
+    ca: /cap organisme oficial publica/i,
+    es: /ningún organismo oficial publica/i,
+    en: /no official body publishes/i,
   };
   for (const locale of LOCALES) {
     assert.match(bodyToPlainText(buildBody(locale)), marker[locale], `${locale} lost the status`);
@@ -54,9 +57,9 @@ test("each edition says explicitly that it is still early", () => {
 });
 
 test("no exact peak date is promised", () => {
-  // A day-and-month pair is only allowed where it names a published event -
-  // the national park's 17 October activity, Montseny's 11 October walk - or
-  // the publication date itself.
+  // A day-and-month pair is only allowed where it names a published event
+  // (Aigüestortes on 17 Oct, Viladrau on 18 and 31 Oct), a Meteocat reading
+  // (the 8-9 Oct frosts) or the update date itself (14 Oct).
   const dayMonth =
     /\b\d{1,2}\s+(?:d'|de\s+)?(gener|febrer|març|abril|maig|juny|juliol|agost|setembre|octubre|novembre|desembre|enero|marzo|mayo|junio|julio|agosto|septiembre|octubre|noviembre|diciembre)\b/gi;
   for (const locale of LOCALES) {
@@ -64,7 +67,7 @@ test("no exact peak date is promised", () => {
     for (const hit of text.match(dayMonth) ?? []) {
       assert.match(
         hit,
-        /\b(1[17] d'octubre|1[17] de octubre|15 de setembre|15 de septiembre)\b/i,
+        /\b((?:9|14|17|31) d'octubre|(?:9|14|17|31) de octubre)\b/i,
         `${locale} states an unsourced date: ${hit}`,
       );
     }
