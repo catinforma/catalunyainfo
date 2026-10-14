@@ -49,7 +49,8 @@ export type B2Key =
   | "nuria"
   | "beaches"
   | "mesa"
-  | "municipalResults";
+  | "municipalResults"
+  | "climate";
 
 /** Path after the locale prefix, no leading or trailing slash. */
 export const B2_PATHS: Record<B2Key, Record<Locale, string>> = {
@@ -107,6 +108,11 @@ export const B2_PATHS: Record<B2Key, Record<Locale, string>> = {
     ca: "guies/com-votar-eleccions-catalunya",
     es: "guias/como-votar-elecciones-cataluna",
     en: "guides/how-to-vote-catalonia",
+  },
+  climate: {
+    ca: "guies/temps-barcelona-mes-a-mes",
+    es: "guias/tiempo-barcelona-mes-a-mes",
+    en: "guides/barcelona-weather-by-month",
   },
   municipalResults: {
     ca: "guies/resultats-eleccions-municipals-catalunya",
@@ -294,6 +300,11 @@ export const B2_TITLES: Record<B2Key, Record<Locale, string>> = {
     ca: "Com votar a Catalunya",
     es: "Cómo votar en Cataluña",
     en: "How to vote in Catalonia",
+  },
+  climate: {
+    ca: "El temps a Barcelona mes a mes",
+    es: "El tiempo en Barcelona mes a mes",
+    en: "Barcelona weather by month",
   },
   municipalResults: {
     ca: "Resultats de les eleccions municipals",

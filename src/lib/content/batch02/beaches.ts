@@ -278,7 +278,7 @@ function body(locale: Locale) {
     list(...t.get),
     ...h2(t.sandTitle, t.sand),
     faq(t.faq),
-    ...b2Related(["barcelonaHub", "transport", "sitges", "markets"], locale),
+    ...b2Related(["barcelonaHub", "climate", "transport", "sitges", "markets"], locale),
   ];
 }
 

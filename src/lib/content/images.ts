@@ -381,6 +381,26 @@ export const IMAGES: readonly ImportedImage[] = [
     "blurDataUrl": "data:image/webp;base64,UklGRmIAAABXRUJQVlA4IFYAAADwAQCdASoQAAkAA4BaJbACdAD5g7g73gAA/UyS67hlA9i8Tr49FlGCg54lUu+v0reT0WCfY3Am9aqz9eel2WRPrOEO93B6NZDOFg68PzrOioOrOXpQAA=="
   },
   {
+    "key": "clima-pluja-barcelona",
+    "url": "/images/clima-pluja-barcelona.webp",
+    "width": 1920,
+    "height": 1796,
+    "blurDataUrl": "data:image/webp;base64,UklGRnIAAABXRUJQVlA4IGYAAABQAgCdASoQAA8AA4BaJZQAAxOjZXLDL8Wj0QAA/tGHsTcBPqGALnb3ACZtshA1n/cfL5mTeXDu88v5BIvQtqKHBUie9l6zpTwZT4GvAivimKyRlsN6JzUZ8qtJiA+y17kp4RsgAAA=",
+    "credit": "Tony Hisgett from Birmingham, UK",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Barcelona_Rain_(5831078836).jpg",
+    "license": "CC BY 2.0"
+  },
+  {
+    "key": "clima-rambla-sol-hivern",
+    "url": "/images/clima-rambla-sol-hivern.webp",
+    "width": 1920,
+    "height": 2560,
+    "blurDataUrl": "data:image/webp;base64,UklGRpAAAABXRUJQVlA4IIQAAADQAwCdASoQABUAPu1iqU2ppaOiMAgBMB2JZgCdAA+MTjMVinTJiewA+0RadfyVQb4OSch+wI13+0utEj4kKCY9IzaGrV8jc0l5dgBtvx0EjoSGBffZ6a/F17jxM6Q9/N+E+u37YkW2e8Y4H5TuzDVMK+rwfV9PF53UQm41KAMcasBUgAA=",
+    "credit": "Maxpeiron",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:La_Rambla_(Barcelona,_Spain)_on_a_sunny_day.jpg",
+    "license": "CC0"
+  },
+  {
     "key": "colors-tardor-catalunya-cami-bosc-humit",
     "url": "/images/colors-tardor-catalunya-cami-bosc-humit.webp",
     "width": 1672,
