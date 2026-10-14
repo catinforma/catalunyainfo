@@ -303,6 +303,18 @@ Search Console, 27 Sep – 11 Oct (data to 8 Oct):
 **Measure on 25 Oct** (14 days): clicks on the queries above; parking CA/ES CTR at
 position ≤3 should be well above 0.
 
+## 2026-10-14 — Clock change: the date in the title
+
+**Before.** "Canvi d'hora: quan és el pròxim i calendari fins al 2031". First day live:
+171 impressions, 1 click, position 5.7, on queries like "canvi d'hora 2026", "quan es
+canvia l'hora". The title promised the answer instead of giving it.
+
+**Change.** All three titles name Sunday 25 October ("dormim una hora més" / "clocks go
+back"). `tests/clock-change.test.ts` fails once that date passes, so the title is
+rewritten to the March change and republished.
+
+**Measure on 24 Oct** (the peak is the week of the change): CTR on the CA/ES page.
+
 ## Candidates not yet run
 
 Recorded so they are not lost, and so they are not all started at once.
