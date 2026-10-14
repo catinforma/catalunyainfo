@@ -75,7 +75,7 @@ export function MunicipalResults({
     }
     setState("loading");
     try {
-      const response = await fetch(`/api/elections/municipal?code=${match.code}`);
+      const response = await fetch(`/api/elections/municipal/?code=${match.code}`);
       if (!response.ok) throw new Error(String(response.status));
       const data = (await response.json()) as ElectionHistory;
       if (data.error || data.elections.length === 0) throw new Error("empty");
