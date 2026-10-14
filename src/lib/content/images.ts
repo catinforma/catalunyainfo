@@ -773,6 +773,26 @@ export const IMAGES: readonly ImportedImage[] = [
     "license": "CC BY 4.0"
   },
   {
+    "key": "municipals-ajuntament-barcelona-nit",
+    "url": "/images/municipals-ajuntament-barcelona-nit.webp",
+    "width": 1920,
+    "height": 1440,
+    "blurDataUrl": "data:image/webp;base64,UklGRlAAAABXRUJQVlA4IEQAAAAQAgCdASoQAAwAA4BaJYwC7AEO+4JKFBwQAP7aqYMTfLercKmxvSA/Jb5/ax/YOL5/ugzlp1kn/8TPVyz8XqKSzAAAAA==",
+    "credit": "Enfo",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Ajuntament_de_Barcelona,_nocturn.jpg",
+    "license": "CC BY-SA 3.0"
+  },
+  {
+    "key": "municipals-salo-de-cent",
+    "url": "/images/municipals-salo-de-cent.webp",
+    "width": 1200,
+    "height": 900,
+    "blurDataUrl": "data:image/webp;base64,UklGRmoAAABXRUJQVlA4IF4AAABwAgCdASoQAAwAA4BaJbACdAdwB9x8FuXEXQwAAMySmUcpUjxs+gPFfLyk7yoBq9B0+2dhmxE5tidRyf6om7ODioPN236AQo6K89oB7g8tjdy9etLRQLyO36olEAAA",
+    "credit": "Oliver-Bonjoch",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Salo_de_Cent.jpg",
+    "license": "CC BY-SA 3.0"
+  },
+  {
     "key": "museus-palau-nacional-mnac",
     "url": "/images/museus-palau-nacional-mnac.webp",
     "width": 1920,

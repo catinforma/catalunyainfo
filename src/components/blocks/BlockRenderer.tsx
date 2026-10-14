@@ -12,6 +12,7 @@ import { LocalHolidays } from "@/components/blocks/LocalHolidays";
 import { ReservoirLevels } from "@/components/blocks/ReservoirLevels";
 import { SchoolCalendar } from "@/components/blocks/SchoolCalendar";
 import { ClockChange } from "@/components/blocks/ClockChange";
+import { MunicipalElections } from "@/components/blocks/MunicipalElections";
 import { ElectionHistory } from "@/components/blocks/ElectionHistory";
 import { TouristTaxCalculator } from "@/components/blocks/TouristTaxCalculator";
 import type { Block, Body } from "@/lib/content/blocks";
@@ -380,6 +381,10 @@ function BlockView({ block, context }: { block: Block; context: BlockContext }) 
     case "clockChange":
       // Computed from the last-Sunday rule; "today" in Europe/Madrid.
       return <ClockChange locale={context.locale} />;
+
+    case "municipalElections":
+      // Async server component: Barcelona rendered; other towns fetched on demand.
+      return <MunicipalElections locale={context.locale} />;
 
     case "electionHistory":
       // Async server component: Generalitat election open data, cached a day.

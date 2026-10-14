@@ -31,6 +31,7 @@ import { CLOCK_CHANGE } from "@/lib/content/batch02/clock-change";
 import { NURIA } from "@/lib/content/batch02/nuria";
 import { BEACHES_GUIDE } from "@/lib/content/batch02/beaches";
 import { MESA } from "@/lib/content/batch02/mesa";
+import { MUNICIPAL_RESULTS } from "@/lib/content/batch02/municipal-results";
 import { CONGRESS_RESULTS, PARLIAMENT_RESULTS } from "@/lib/content/batch02/election-results";
 import { publishHolidayTodayGuide } from "@/lib/content/holidays/today-publish";
 import { publishLocalHolidaysGuide } from "@/lib/content/holidays/local-publish";
@@ -106,6 +107,7 @@ export async function POST(request: Request) {
     if (wants("nuria")) published.push(await publishB2Article(NURIA));
     if (wants("beaches")) published.push(await publishB2Article(BEACHES_GUIDE));
     if (wants("mesa")) published.push(await publishB2Article(MESA));
+    if (wants("municipal-results")) published.push(await publishB2Article(MUNICIPAL_RESULTS));
     if (wants("family-markets")) published.push(await publishB2Article(ZOO_AQUARIUM), await publishB2Article(MARKETS));
     if (wants("cruiseport")) published.push(await publishB2Article(CRUISEPORT));
     if (wants("portaventura")) published.push(await publishB2Article(PORTAVENTURA));

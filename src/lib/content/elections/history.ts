@@ -29,9 +29,9 @@ export const ELECTIONS_SOURCE = {
 /** Results do not change after they are final; a day is plenty. */
 const REVALIDATE_SECONDS = 86_400;
 
-export type ElectionKind = "congress" | "parliament";
+export type ElectionKind = "congress" | "parliament" | "municipal";
 
-const PREFIX: Record<ElectionKind, string> = { congress: "G", parliament: "A" };
+const PREFIX: Record<ElectionKind, string> = { congress: "G", parliament: "A", municipal: "M" };
 
 export interface ListResult {
   short: string;
@@ -227,5 +227,85 @@ export async function loadProvinces(id: string): Promise<ProvinceResult[]> {
     return buildProvinces(turnout, votes);
   } catch {
     return [];
+  }
+}
+
+/* -------------------------------------------------------------------------- */
+/* Municipal elections, one municipality at a time                            */
+/* -------------------------------------------------------------------------- */
+
+export interface MunicipalityOption {
+  /** Five-digit INE code without the check digit (Barcelona = 08019). */
+  code: string;
+  name: string;
+}
+
+/**
+ * The dataset writes some codes without the leading zero ('8019'), so both
+ * spellings are queried and every code is padded before it is compared.
+ */
+const padCode = (code: string) => code.trim().padStart(5, "0");
+const codeVariants = (code: string) => {
+  const padded = padCode(code);
+  return [...new Set([padded, padded.replace(/^0+/, "")])];
+};
+
+export const isMunicipalityCode = (code: string) => /^\d{4,5}$/.test(code.trim());
+
+/** Every municipality in the latest municipal election, by name. */
+export async function loadMunicipalities(): Promise<MunicipalityOption[]> {
+  try {
+    const elections = await query<ElectionRow>(
+      "tgns-3xuy",
+      `$where=${encodeURIComponent("starts_with(id_eleccio,'M')")}&$select=id_eleccio,data_eleccio&$order=data_eleccio DESC&$limit=1`,
+    );
+    const latest = elections[0]?.id_eleccio;
+    if (!latest) return [];
+    const rows = await query<{ territori_codi?: string; territori_nom?: string }>(
+      "irrv-2mfc",
+      `$where=${encodeURIComponent(`id_eleccio='${latest}' AND id_nivell_territorial='MU'`)}&$select=territori_codi,territori_nom&$limit=2000`,
+    );
+    const seen = new Map<string, MunicipalityOption>();
+    for (const row of rows) {
+      const name = (row.territori_nom ?? "").trim();
+      if (!row.territori_codi || !name) continue;
+      const code = padCode(row.territori_codi);
+      seen.set(code, { code, name });
+    }
+    return [...seen.values()].sort((a, b) => a.name.localeCompare(b.name, "ca"));
+  } catch {
+    return [];
+  }
+}
+
+/**
+ * Every municipal election since 1979 in one municipality. Same shape as the
+ * Catalonia-wide history; `seats` is the size of the council. In councils of
+ * five or fewer (municipalities of up to 250 residents, open lists under LOREG
+ * art. 184) a list's `votes` is the sum of its candidates' votes, not a ballot
+ * count, so the component shows seats only there.
+ */
+export async function loadMunicipalHistory(code: string): Promise<ElectionHistory & { code: string }> {
+  const variants = codeVariants(code)
+    .map((variant) => `'${variant}'`)
+    .join(",");
+  const where = encodeURIComponent(
+    `starts_with(id_eleccio,'M') AND id_nivell_territorial='MU' AND territori_codi in(${variants})`,
+  );
+  try {
+    const [elections, turnout, votes] = await Promise.all([
+      query<ElectionRow>(
+        "tgns-3xuy",
+        `$where=${encodeURIComponent("starts_with(id_eleccio,'M')")}&$select=id_eleccio,data_eleccio&$limit=100`,
+      ),
+      query<TurnoutRow>("irrv-2mfc", `$where=${where}&$select=id_eleccio,cens_electoral,votants,vots_valids,escons&$limit=100`),
+      query<VoteRow>(
+        "ntc4-rnwr",
+        `$where=${where}&$select=id_eleccio,candidatura_sigles,candidatura_denominacio,vots,escons&$limit=2000`,
+      ),
+    ]);
+    return { ...buildHistory("municipal", elections, turnout, votes), code: padCode(code) };
+  } catch (error) {
+    return { kind: "municipal", elections: [], error: error instanceof Error ? error.message : "unreachable", code: padCode(code) };
   }
 }

@@ -447,6 +447,14 @@ export const clockChangeBlock = z.object({
   type: z.literal("clockChange"),
 });
 
+/**
+ * Municipal election results with a municipality picker, from the
+ * Generalitat's open data. Configuration-free; Barcelona is server-rendered.
+ */
+export const municipalElectionsBlock = z.object({
+  type: z.literal("municipalElections"),
+});
+
 export const blockSchema = z.discriminatedUnion("type", [
   headingBlock,
   paragraphBlock,
@@ -477,6 +485,7 @@ export const blockSchema = z.discriminatedUnion("type", [
   schoolCalendarBlock,
   electionHistoryBlock,
   clockChangeBlock,
+  municipalElectionsBlock,
 ]);
 
 export const bodySchema = z.array(blockSchema).max(500);
