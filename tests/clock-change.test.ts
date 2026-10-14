@@ -42,3 +42,16 @@ test("summer time runs from the March change to the October change", () => {
   assert.equal(isSummerTime("2027-01-15"), false);
   assert.equal(isSummerTime("2027-03-28"), true);
 });
+
+// The SEO titles name the next change ("25 d'octubre") because searchers want
+// the date before they click. Once it has passed, this fails until the titles
+// in batch02/clock-change.ts name the next one and the page is republished.
+test("clock-change titles name the upcoming change, not a past one", async () => {
+  const { CLOCK_CHANGE } = await import("../src/lib/content/batch02/clock-change.ts");
+  const next = upcomingChanges(new Date().toISOString().slice(0, 10))[0];
+  assert.ok(next);
+  const day = String(Number(next.date.slice(8, 10)));
+  for (const edition of Object.values(CLOCK_CHANGE.editions)) {
+    assert.ok(edition.seoTitle.includes(day), `${edition.seoTitle} should name ${next.date}`);
+  }
+});

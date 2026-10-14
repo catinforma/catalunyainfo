@@ -45,27 +45,27 @@ const META: Record<Locale, { path: string; title: string; seoTitle: string; seoD
   ca: {
     path: "guies/canvi-hora-catalunya",
     title: "Canvi d'hora: quan és el pròxim, què passa i si s'acabarà",
-    seoTitle: "Canvi d'hora: quan és el pròxim i calendari fins al 2031",
+    seoTitle: "Canvi d'hora 2026: diumenge 25 d'octubre, dormim una hora més",
     seoDescription:
-      "Quin dia canvia l'hora, si dormim una hora més o menys, les dates fins al 2031 segons el BOE i la UE, i com està la proposta per acabar amb el canvi.",
+      "La matinada del diumenge 25 d'octubre, a les 3 seran les 2. Dates oficials del BOE i la UE fins al 2031, i si s'acabarà mai el canvi d'hora.",
     excerpt:
       "El pròxim canvi d'hora calculat amb la norma, les dates fins al 2031 i l'estat real de la proposta europea per suprimir-lo.",
   },
   es: {
     path: "guias/cambio-hora-espana",
     title: "Cambio de hora: cuándo es el próximo, qué pasa y si se acabará",
-    seoTitle: "Cambio de hora: cuándo es el próximo y calendario hasta 2031",
+    seoTitle: "Cambio de hora 2026: domingo 25 de octubre, una hora más",
     seoDescription:
-      "Qué día cambia la hora, si dormimos una hora más o menos, las fechas hasta 2031 según el BOE y la UE, y cómo está la propuesta para acabar con el cambio.",
+      "La madrugada del domingo 25 de octubre, a las 3 serán las 2. Fechas oficiales del BOE y la UE hasta 2031, y si se acabará el cambio de hora.",
     excerpt:
       "El próximo cambio de hora calculado con la norma, las fechas hasta 2031 y el estado real de la propuesta europea para suprimirlo.",
   },
   en: {
     path: "guides/clock-change-spain",
     title: "Clock change in Spain: when the clocks go back or forward",
-    seoTitle: "Clock change in Spain: when the clocks go back and forward",
+    seoTitle: "Spain clock change: clocks go back on Sunday 25 October 2026",
     seoDescription:
-      "When the clocks change in Barcelona and the rest of Spain, whether you gain or lose an hour, the official dates to 2031, and whether the EU will end it.",
+      "At 03:00 on Sunday 25 October the clocks in Barcelona and Spain go back to 02:00. Official dates to 2031, and whether the EU will end the change.",
     excerpt:
       "The next clock change in Spain, computed from the law, the official dates to 2031 and where the EU plan to scrap it actually stands.",
   },
