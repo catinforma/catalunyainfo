@@ -76,6 +76,9 @@ export async function POST(request: Request) {
       published.push(await publishMushroomReport());
       published.push(await publishAutumnColours());
     }
+    // On its own so a status update does not republish the guides that are
+    // mid title-experiment along with it.
+    if (only === "autumn") published.push(await publishAutumnColours());
     const pages = wants("pages") ? await publishInstitutionalPages() : { pages: [] };
     if (wants("features")) published.push(...(await publishFeatures()));
     if (wants("features-a")) published.push(...(await publishFeatures(0, 5)));
