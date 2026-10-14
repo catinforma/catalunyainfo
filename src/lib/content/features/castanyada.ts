@@ -306,9 +306,9 @@ export const CASTANYADA: FeatureArticle = {
     ca: {
       path: ARTICLE_PATHS.castanyada.ca,
       title: "La Castanyada: 12 pobles i fires on viure-la de veritat",
-      seoTitle: "La Castanyada a Catalunya: on viure-la de veritat",
+      seoTitle: "Castanyada 2026: fires de la castanya i on viure-la",
       seoDescription:
-        "Què és la Castanyada, què s'hi menja i dotze llocs de Catalunya on la tradició de tardor i Tots Sants es viu de veritat.",
+        "Fira de la Castanya de Viladrau el 24 i 25 d'octubre, què es menja la nit del 31 i dotze pobles de Catalunya on la Castanyada es viu de veritat.",
       excerpt:
         "Castanyes, panellets, moniatos i Tots Sants. Què és la Castanyada i dotze llocs on es viu de debò, amb la fira de Viladrau com a referència.",
       blocks: ca(),
@@ -316,9 +316,9 @@ export const CASTANYADA: FeatureArticle = {
     es: {
       path: ARTICLE_PATHS.castanyada.es,
       title: "La Castanyada: 12 pueblos y ferias donde vivirla de verdad",
-      seoTitle: "La Castanyada en Cataluña: dónde vivirla de verdad",
+      seoTitle: "Castanyada 2026: ferias de la castaña y dónde vivirla",
       seoDescription:
-        "Qué es la Castanyada, qué se come y doce lugares de Cataluña donde la tradición de otoño y Todos los Santos se vive de verdad.",
+        "Feria de la Castaña de Viladrau el 24 y 25 de octubre, qué se come la noche del 31 y doce pueblos de Cataluña donde la Castanyada se vive de verdad.",
       excerpt:
         "Castañas, panellets, boniatos y Todos los Santos. Qué es la Castanyada y doce lugares donde se vive de verdad.",
       blocks: es(),
@@ -326,9 +326,9 @@ export const CASTANYADA: FeatureArticle = {
     en: {
       path: ARTICLE_PATHS.castanyada.en,
       title: "Where to experience Catalonia's Castanyada tradition",
-      seoTitle: "The Castanyada: Catalonia's chestnut tradition",
+      seoTitle: "Castanyada 2026: Catalonia's chestnut festival on 31 October",
       seoDescription:
-        "What the Castanyada is, what you eat, and twelve places in Catalonia where the autumn and All Saints tradition is genuinely lived.",
+        "Viladrau's chestnut fair on 24-25 October, what Catalans eat on the night of 31 October, and twelve places where the Castanyada is genuinely lived.",
       excerpt:
         "Chestnuts, panellets, sweet potato and All Saints. What the Castanyada is, and twelve places where it is genuinely lived.",
       blocks: en(),
