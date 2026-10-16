@@ -14,7 +14,7 @@ import { LOCALES, type Locale } from "@/lib/i18n/config";
 import { PARKING, TRANSPORT, ZBE } from "./barcelona-practical";
 import { CERDANYA, GIRONA, MONTSERRAT_FREE } from "./day-trips";
 import { RIPOLLES, SETCASES, SNOW } from "./pyrenees";
-import type { B2Article } from "./shared";
+import { withReadNext, type B2Article } from "./shared";
 
 /**
  * Publisher for editorial batch 02.
@@ -100,7 +100,7 @@ export async function publishB2Article(article: B2Article): Promise<PublishResul
     lastVerifiedAt: new Date(`${article.verifiedAt}T12:00:00+02:00`),
     editions: LOCALES.map((locale) => {
       const edition = article.editions[locale];
-      const body: Block[] = [...edition.blocks];
+      const body: Block[] = withReadNext([...edition.blocks], locale);
 
       if (inlineMediaId) {
         body.splice(Math.min(6, body.length), 0, {

@@ -428,7 +428,7 @@ export const B2_TITLES: Record<B2Key, Record<Locale, string>> = {
   },
 };
 
-const RELATED_HEADING: Record<Locale, string> = {
+export const RELATED_HEADING: Record<Locale, string> = {
   ca: "Continua llegint",
   es: "Sigue leyendo",
   en: "Keep reading",
@@ -569,4 +569,37 @@ export function verifiedLine(locale: Locale, isoDate: string): string {
       : `${Number(day)} ${locale === "ca" && /^[ao]/.test(monthName) ? "d'" : "de "}${monthName} de ${year}`;
   // Plain text: the callout renders its title without inline markdown.
   return `${label[locale]}: ${date}.`;
+}
+
+const READ_NEXT: Record<Locale, string> = {
+  ca: "Llegeix també",
+  es: "Lee también",
+  en: "Read next",
+};
+
+/**
+ * Puts the first two "Keep reading" links in a box halfway down the article.
+ *
+ * GA4 (28 days to 17 Oct 2026): 1.33 pages per session — readers finish the
+ * answer and leave, because the only onward links sit below the FAQ where
+ * few scroll. The box repeats links that are already in the related rail, so
+ * it adds no new target; it only moves the next step to where people are.
+ * Short articles (fewer than three sections) are left alone.
+ */
+export function withReadNext(blocks: Block[], locale: Locale): Block[] {
+  const relatedAt = blocks.findIndex(
+    (block) => block.type === "heading" && (block as { text?: string }).text === RELATED_HEADING[locale],
+  );
+  const list = blocks[relatedAt + 1] as { type?: string; items?: string[] } | undefined;
+  if (relatedAt < 0 || list?.type !== "list" || !list.items?.length) return blocks;
+
+  const sections = blocks
+    .map((block, index) => ({ block, index }))
+    .filter(({ block, index }) => index < relatedAt && block.type === "heading" && (block as { level?: number }).level === 2)
+    .map(({ index }) => index);
+  if (sections.length < 3) return blocks;
+
+  const at = sections[Math.floor(sections.length / 2)] ?? sections[0]!;
+  const box = { type: "callout", tone: "tip", title: READ_NEXT[locale], text: list.items.slice(0, 2).join(" · ") } as Block;
+  return [...blocks.slice(0, at), box, ...blocks.slice(at)];
 }

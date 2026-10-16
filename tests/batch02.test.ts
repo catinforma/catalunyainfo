@@ -360,3 +360,23 @@ test("the selector block is placed on the transport article in every language", 
     assert.equal(count, 1, locale);
   }
 });
+
+test("the read-next box sits mid-article and only repeats related links", async () => {
+  const { withReadNext } = await import("../src/lib/content/batch02/shared.ts");
+  for (const article of ARTICLES) {
+    for (const locale of ["ca", "es", "en"] as const) {
+      const before = article.editions[locale].blocks;
+      const after = withReadNext([...before], locale);
+      const added = after.length - before.length;
+      assert.ok(added === 0 || added === 1, `${article.key}/${locale}`);
+      if (added === 1) {
+        const box = after.find((b) => b.type === "callout" && (b as { tone?: string }).tone === "tip" && /\]\(\//.test((b as { text?: string }).text ?? ""));
+        assert.ok(box, `${article.key}/${locale}: box missing`);
+        const related = before[before.length - 1] as { items?: string[] };
+        for (const link of ((box as { text: string }).text.match(/\]\(([^)]+)\)/g) ?? [])) {
+          assert.ok(related.items?.some((item) => item.includes(link)), `${article.key}/${locale}: ${link} not in related rail`);
+        }
+      }
+    }
+  }
+});

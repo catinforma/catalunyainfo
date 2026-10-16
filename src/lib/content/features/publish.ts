@@ -1,5 +1,6 @@
 import "server-only";
 
+import { withReadNext } from "@/lib/content/batch02/shared";
 import { LOCALES, type Locale } from "@/lib/i18n/config";
 import {
   publishArticle,
@@ -104,7 +105,7 @@ export async function publishFeature(article: FeatureArticle): Promise<PublishRe
     lastVerifiedAt: LAST_VERIFIED,
     editions: LOCALES.map((locale) => {
       const edition = article.editions[locale];
-      const body = [...edition.blocks];
+      const body = withReadNext([...edition.blocks], locale);
 
       // The in-article image goes a third of the way down, which is where the
       // reader needs a break and where it is not competing with the lead.

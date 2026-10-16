@@ -5,6 +5,7 @@ import { LOCALES, type Locale } from "@/lib/i18n/config";
 import { publishArticle, type ArticleSpec, type PublishResult } from "@/lib/content/publish-article";
 import { IMAGE_BY_KEY } from "@/lib/content/images";
 import { relatedBlocks } from "@/lib/content/features/shared";
+import { withReadNext } from "@/lib/content/batch02/shared";
 import { COPY, IMAGES, SOURCES, ZONES } from "./payload";
 
 /**
@@ -116,7 +117,7 @@ export function buildBody(
   // the autumn cluster was published later and never got linked from here.
   blocks.push(...relatedBlocks(["castanyada", "foodfairs", "montserrat", "trains"], locale));
 
-  return blocks;
+  return withReadNext(blocks, locale);
 }
 
 export async function publishAutumnColours(): Promise<PublishResult> {

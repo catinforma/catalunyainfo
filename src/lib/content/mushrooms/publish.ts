@@ -5,6 +5,7 @@ import { LOCALES, type Locale } from "@/lib/i18n/config";
 import { publishArticle, type ArticleSpec, type PublishResult } from "@/lib/content/publish-article";
 import { IMAGE_BY_KEY } from "@/lib/content/images";
 import { relatedBlocks } from "@/lib/content/features/shared";
+import { withReadNext } from "@/lib/content/batch02/shared";
 import { zoneHref, zonesFor } from "@/lib/content/mushroom-zones/registry";
 import { LEVEL_RULE, READ_AT, SOURCE, WINDOW_DAYS, ZONE_READINGS } from "./conditions";
 import { liveSummary, readDate } from "./live-summary";
@@ -213,7 +214,7 @@ export function buildBody(locale: Locale, heroMediaId?: string): Block[] {
 
   blocks.push(...relatedBlocks(["castanyada", "foodfairs", "autumn", "rainy"], locale));
 
-  return blocks;
+  return withReadNext(blocks, locale);
 }
 
 export async function publishMushroomReport(): Promise<PublishResult> {
