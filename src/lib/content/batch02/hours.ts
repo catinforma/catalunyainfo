@@ -37,7 +37,7 @@ const META: Record<Locale, { path: string; title: string; seoTitle: string; seoD
   ca: {
     path: "guies/horaris-metro-barcelona",
     title: "Horari del metro de Barcelona: a quina hora obre i tanca, i el NitBus",
-    seoTitle: "Horari del metro de Barcelona i del NitBus",
+    seoTitle: "Horari metro Barcelona: 5:00 a 24:00, divendres fins a les 2:00",
     seoDescription:
       "El metro de Barcelona obre a les 5:00; tanca a mitjanit de dilluns a dijous, a les 2:00 el divendres i no tanca la nit del dissabte. Nits especials i NitBus.",
     excerpt:
@@ -46,7 +46,7 @@ const META: Record<Locale, { path: string; title: string; seoTitle: string; seoD
   es: {
     path: "guias/horarios-metro-barcelona",
     title: "Horario del metro de Barcelona: a qué hora abre y cierra, y el NitBus",
-    seoTitle: "Horario del metro de Barcelona y del NitBus",
+    seoTitle: "Horario metro Barcelona: de 5:00 a 24:00, viernes hasta las 2:00",
     seoDescription:
       "El metro de Barcelona abre a las 5:00; cierra a medianoche de lunes a jueves, a las 2:00 el viernes y no cierra la noche del sábado. Noches especiales y NitBus.",
     excerpt:
@@ -55,7 +55,7 @@ const META: Record<Locale, { path: string; title: string; seoTitle: string; seoD
   en: {
     path: "guides/barcelona-metro-hours",
     title: "Barcelona metro hours: when it opens and closes, and the night bus",
-    seoTitle: "Barcelona metro hours and the NitBus night bus",
+    seoTitle: "Barcelona metro hours: 5:00 to midnight, Fridays until 2:00",
     seoDescription:
       "Barcelona's metro opens at 5:00; it closes at midnight Monday to Thursday, at 2:00 on Fridays and runs all night on Saturdays. Special nights and NitBus.",
     excerpt:

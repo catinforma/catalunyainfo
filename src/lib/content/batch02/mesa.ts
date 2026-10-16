@@ -49,7 +49,7 @@ const META: Record<Locale, { path: string; title: string; seoTitle: string; seoD
   ca: {
     path: "guies/membre-mesa-electoral",
     title: "Membre de mesa electoral: què fer si t'ha tocat, quant es cobra i com excusar-te",
-    seoTitle: "Membre de mesa electoral: què fer, quant es cobra i excuses",
+    seoTitle: "Membre de mesa electoral 2026: es cobren 75 €, excuses i què fer",
     seoDescription:
       "Si t'ha tocat ser membre de mesa: terminis per excusar-te, excuses acceptades, la dieta de 75 €, permís a la feina, què passa si no hi vas i horari del dia.",
     excerpt:
@@ -58,7 +58,7 @@ const META: Record<Locale, { path: string; title: string; seoTitle: string; seoD
   es: {
     path: "guias/miembro-mesa-electoral",
     title: "Miembro de mesa electoral: qué hacer si te ha tocado, cuánto se cobra y cómo excusarte",
-    seoTitle: "Miembro de mesa electoral: qué hacer, cuánto se cobra y excusas",
+    seoTitle: "Mesa electoral 2026: se cobran 75 €, excusas y qué hacer",
     seoDescription:
       "Si te ha tocado ser miembro de mesa: plazos para excusarte, excusas aceptadas, la dieta de 75 €, permiso en el trabajo, qué pasa si no vas y horario del día.",
     excerpt:
@@ -67,7 +67,7 @@ const META: Record<Locale, { path: string; title: string; seoTitle: string; seoD
   en: {
     path: "guides/polling-station-duty-spain",
     title: "Drawn for polling-station duty in Spain: what to do, the pay and how to be excused",
-    seoTitle: "Polling-station duty in Spain: pay, excuses and time off",
+    seoTitle: "Polling-station duty in Spain: €75 pay, excuses, time off",
     seoDescription:
       "Drawn to sit on a Spanish polling-station table (mesa electoral)? The deadlines to be excused, accepted reasons, the €75 allowance, time off work and the day.",
     excerpt:
