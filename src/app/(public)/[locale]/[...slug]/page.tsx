@@ -63,8 +63,18 @@ import { isProduction } from "@/lib/site";
  * the same entry) without a folder per URL shape.
  */
 
-/** Content is regenerated at most every 5 minutes, and on demand on publish. */
-export const revalidate = 300;
+/**
+ * Content is regenerated at most once a day, and on demand on publish.
+ *
+ * It was every 5 minutes, which re-rendered ~700 URLs up to 288 times a day
+ * each as crawlers came through and took the project to 90% of Vercel's
+ * free ISR-write allowance in October 2026. Published content does not need
+ * it: the publish route revalidates the paths it writes. The few pages whose
+ * answer depends on today's date (holiday today, school calendar, clock
+ * change, weekend agenda, reservoirs) are revalidated just after midnight by
+ * the daily cron — see `api/cron/publish-scheduled` and `DAY_DEPENDENT_BLOCKS`.
+ */
+export const revalidate = 86400;
 export const dynamicParams = true;
 
 const SECTIONS_WITH_HUBS: SectionKey[] = [

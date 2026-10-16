@@ -16,11 +16,12 @@ import { buildMetadata } from "@/lib/seo/metadata";
 import { formatDate, isoDate } from "@/lib/format";
 
 /**
- * Revalidated every 10 minutes, and on demand whenever an editor publishes.
- * The homepage is the most-hit URL on the site, so it is served from the CDN
- * as static HTML and never blocks on the database.
+ * Revalidated hourly, on demand whenever an editor publishes, and just after
+ * midnight by the daily cron (its tools strip says whether today is a
+ * holiday). The homepage is the most-hit URL on the site, so it is served
+ * from the CDN as static HTML and never blocks on the database.
  */
-export const revalidate = 600;
+export const revalidate = 3600;
 
 /** Only the three locales exist; anything else is a 404 without rendering. */
 export const dynamicParams = false;
