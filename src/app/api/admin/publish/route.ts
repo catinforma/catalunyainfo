@@ -1,6 +1,9 @@
 import { NextResponse } from "next/server";
 import { revalidatePath } from "next/cache";
 
+import { pingIndexNow } from "@/lib/seo/indexnow";
+import { allIndexablePaths } from "@/lib/content/repository";
+
 import { seedTaxonomy } from "@/lib/content/seed-taxonomy";
 import { publishWeekendGuide } from "@/lib/content/weekend/publish";
 import { publishMushroomReport } from "@/lib/content/mushrooms/publish";
@@ -66,6 +69,13 @@ export async function POST(request: Request) {
   const wants = (group: string) => only === "all" || only === group;
 
   try {
+    // One-off: submit every indexable URL to IndexNow (Bing, Yandex, Seznam…).
+    if (only === "indexnow-all") {
+      const rows = await allIndexablePaths();
+      const homes = ["/ca", "/es", "/en"];
+      return NextResponse.json({ ok: true, indexNow: await pingIndexNow([...homes, ...rows.map((row) => `/${row.locale}/${row.path}`)]) });
+    }
+
     const seed = wants("taxonomy") || only === "all" ? await seedTaxonomy() : null;
     const published = [];
     if (wants("articles")) {
@@ -138,7 +148,10 @@ export async function POST(request: Request) {
     }
     revalidatePath("/sitemap.xml");
 
-    return NextResponse.json({ ok: true, seed, published, pages: pages.pages.length });
+    // Bing and ChatGPT search find the change in minutes, not days.
+    const indexNow = await pingIndexNow(surfaces.map((surface) => `/${surface.locale}/${surface.path}`));
+
+    return NextResponse.json({ ok: true, seed, published, pages: pages.pages.length, indexNow });
   } catch (error) {
     return NextResponse.json({ ok: false, error: describeError(error) }, { status: 500 });
   }
