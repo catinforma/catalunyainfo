@@ -236,7 +236,8 @@
   }
 
   h1 {
-    font-size: clamp(2rem, 1.35rem + 2.6vw, 3.125rem);
+    /* 1.75rem floor on phones: a long title ran to five lines at 2rem. */
+    font-size: clamp(1.75rem, 1.35rem + 2.6vw, 3.125rem);
     letter-spacing: -0.02em;
   }
   h2 {

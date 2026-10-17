@@ -149,7 +149,8 @@ async function query<T>(dataset: string, params: string): Promise<T[]> {
   const response = await fetch(`${BASE}/${dataset}.json?${params}`, {
     headers: { accept: "application/json" },
     next: { revalidate: REVALIDATE_SECONDS },
-    signal: AbortSignal.timeout(20_000),
+    // Short: a slow open-data API must not hold a page render for 40 s.
+    signal: AbortSignal.timeout(8_000),
   } as RequestInit);
   if (!response.ok) throw new Error(`${dataset} ${response.status}`);
   return (await response.json()) as T[];

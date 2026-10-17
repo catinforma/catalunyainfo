@@ -167,6 +167,9 @@ export async function generateMetadata({
         locale,
         path: sectionPath("authors", locale),
         title: t.nav.authors,
+        // An empty index is a thin page; keep it out of the index until an
+        // author is published.
+        noindex: (await listAuthors(locale)).length === 0,
         translations: Object.fromEntries(
           LOCALES.map((l) => [l, sectionPath("authors", l)]),
         ) as Partial<Record<Locale, string>>,
@@ -177,6 +180,8 @@ export async function generateMetadata({
         locale,
         path: sectionPath("topics", locale),
         title: t.nav.topics,
+        // The topic index has no listing yet (it renders an empty state).
+        noindex: true,
         translations: Object.fromEntries(
           LOCALES.map((l) => [l, sectionPath("topics", l)]),
         ) as Partial<Record<Locale, string>>,

@@ -255,7 +255,15 @@ export async function publishArticle(spec: ArticleSpec): Promise<PublishResult> 
       noindex: false,
       publishedAt,
       lastVerifiedAt: spec.lastVerifiedAt,
-      updatedAt: now,
+      // The date the content last changed, not the date it was re-sent:
+      // republishing ~110 pages to add a layout box once stamped them all
+      // "updated today" (and dateModified) with nothing new in them, which is
+      // the inflated-freshness signal Google discounts. The verification date
+      // is when the facts were last checked or changed; never before the
+      // publication date, never in the future.
+      updatedAt: new Date(
+        Math.min(now.getTime(), Math.max(spec.lastVerifiedAt.getTime(), publishedAt.getTime())),
+      ),
     };
 
     const existing = await db

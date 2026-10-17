@@ -246,12 +246,14 @@ function BlockView({ block, context }: { block: Block; context: BlockContext }) 
 
     case "callout":
       return (
-        <aside className={`ci-callout ci-callout-${block.tone}`}>
+        // A note inside the article, not a complementary landmark: axe flags
+        // nested <aside> landmarks (landmark-complementary-is-top-level).
+        <div role="note" className={`ci-callout ci-callout-${block.tone}`}>
           {block.title ? (
             <p className="mb-1 font-semibold text-[var(--color-ink)]">{block.title}</p>
           ) : null}
           <p>{renderInline(block.text)}</p>
-        </aside>
+        </div>
       );
 
     case "steps":

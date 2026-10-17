@@ -42,7 +42,7 @@ export function EntryArticle({
   return (
     <article>
       <header className="border-b border-[var(--color-rule)] bg-[var(--color-surface)]">
-        <div className="ci-shell py-8 lg:py-12">
+        <div className="ci-shell py-5 md:py-8 lg:py-12">
           <Breadcrumbs items={crumbs} locale={locale} />
 
           {entry.category ? (
@@ -56,7 +56,9 @@ export function EntryArticle({
           <h1 className="ci-measure">{entry.title}</h1>
 
           {entry.excerpt ? (
-            <p className="ci-measure mt-4 text-lg text-[var(--color-ink-soft)]">
+            // The standfirst is hidden on phones, where the lead paragraph that
+            // follows gives the answer; it stays in the HTML and the meta tags.
+            <p className="ci-measure mt-4 text-lg text-[var(--color-ink-soft)] max-md:hidden">
               {entry.excerpt}
             </p>
           ) : null}
@@ -228,7 +230,7 @@ export function EntryArticle({
             </div>
 
             {entry.author?.bio ? (
-              <aside className="ci-measure mt-10 border-t border-[var(--color-rule)] pt-6">
+              <div className="ci-measure mt-10 border-t border-[var(--color-rule)] pt-6">
                 <div className="flex gap-4">
                   {entry.author.avatar ? (
                     <Image
@@ -255,11 +257,11 @@ export function EntryArticle({
                     </p>
                   </div>
                 </div>
-              </aside>
+              </div>
             ) : null}
           </div>
 
-          <aside className="ci-article-aside hidden lg:block">
+          <div className="ci-article-aside hidden lg:block">
             <FactsRail entry={entry} />
 
             {toc.length > 2 ? (
@@ -281,7 +283,7 @@ export function EntryArticle({
                 </ol>
               </nav>
             ) : null}
-          </aside>
+          </div>
         </div>
 
         {entry.related.length > 0 ? (

@@ -9,13 +9,18 @@ import { Fraunces, IBM_Plex_Sans } from "next/font/google";
  * crisp engraved cut rather than the playful default.
  */
 export const fraunces = Fraunces({
-  subsets: ["latin", "latin-ext"],
+  // "latin" covers every character Catalan, Spanish and English use (à ç l·l
+  // ñ € −); latin-ext was 132 KB preloaded on every page for none of them.
+  subsets: ["latin"],
   display: "swap",
   // Variable font: the weight axis stays continuous, and SOFT/WONK are pinned
   // to 0 in globals.css to get the crisp engraved cut rather than the playful
   // default.
   weight: "variable",
-  axes: ["SOFT", "WONK", "opsz"],
+  // SOFT and WONK default to 0, which is what globals.css pins them to, so
+  // shipping those axes bought nothing: 121 KB -> about 67 KB. Lighthouse
+  // mobile LCP went from 3.5-3.9 s to 2.4-2.6 s with both changes.
+  axes: ["opsz"],
   variable: "--font-fraunces",
   fallback: ["ui-serif", "Georgia", "serif"],
   adjustFontFallback: true,
@@ -38,7 +43,7 @@ export const fraunces = Fraunces({
  * block of text.
  */
 export const plexSans = IBM_Plex_Sans({
-  subsets: ["latin", "latin-ext"],
+  subsets: ["latin"],
   display: "optional",
   weight: ["400", "500", "600"],
   variable: "--font-plex",
