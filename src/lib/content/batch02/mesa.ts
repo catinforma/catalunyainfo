@@ -31,7 +31,7 @@ import {
  * municipal elections once their decree is in the BOE.
  */
 
-const VERIFIED = "2026-10-12";
+const VERIFIED = "2026-10-17";
 
 const SOURCES: B2Source[] = [
   { name: "Ley Orgánica 5/1985, del Régimen Electoral General (texto consolidado)", url: "https://www.boe.es/buscar/act.php?id=BOE-A-1985-11672", publisher: "BOE" },
@@ -177,6 +177,7 @@ const COPY: Record<Locale, T> = {
     ],
     faq: [
       { question: "Quant cobra un membre de mesa?", answer: "75 € per jornada electoral, segons l'Orden INT/650/2026. Els suplents només la cobren si acaben a la mesa, i la dieta no tributa a l'IRPF." },
+      { question: "Quan es cobra la dieta de la mesa electoral?", answer: "Cap norma oficial fixa el dia ni la forma de pagament. L'Orden INT/650/2026, que fixa els 75 €, només diu al preàmbul que els pagaments encara es fan majoritàriament en efectiu. Si et toca, pregunta-ho a la Junta Electoral de Zona o a l'Ajuntament." },
       { question: "Quan es fa el sorteig de les meses del 29N?", answer: "Entre el 31 d'octubre i el 4 de novembre del 2026. Cada Ajuntament tria el dia, i t'han de notificar el resultat en tres dies." },
       { question: "Fins quan em puc excusar?", answer: "Set dies des que et notifiquen el nomenament. Per al 29N, com a molt tard el 14 de novembre si el sorteig es fa el darrer dia." },
       { question: "Què passa si no em presento a la mesa?", answer: "És un delicte de l'article 143 de la LOREG: presó de tres mesos a un any o multa de sis a vint-i-quatre mesos." },
@@ -252,6 +253,7 @@ const COPY: Record<Locale, T> = {
     ],
     faq: [
       { question: "¿Cuánto cobra un miembro de mesa?", answer: "75 € por jornada electoral, según la Orden INT/650/2026. Los suplentes solo la cobran si acaban en la mesa, y la dieta no tributa en el IRPF." },
+      { question: "¿Cuándo se cobra la dieta de la mesa electoral?", answer: "Ninguna norma oficial fija el día ni la forma de pago. La Orden INT/650/2026, que fija los 75 €, solo dice en su preámbulo que los pagos aún se hacen mayoritariamente en efectivo. Si te toca, pregúntalo a la Junta Electoral de Zona o al Ayuntamiento." },
       { question: "¿Cuándo es el sorteo de las mesas del 29N?", answer: "Entre el 31 de octubre y el 4 de noviembre de 2026. Cada Ayuntamiento elige el día, y te deben notificar el resultado en tres días." },
       { question: "¿Hasta cuándo me puedo excusar?", answer: "Siete días desde que te notifican el nombramiento. Para el 29N, como muy tarde el 14 de noviembre si el sorteo se hace el último día." },
       { question: "¿Qué pasa si no me presento a la mesa?", answer: "Es un delito del artículo 143 de la LOREG: prisión de tres meses a un año o multa de seis a veinticuatro meses." },
@@ -327,6 +329,7 @@ const COPY: Record<Locale, T> = {
     ],
     faq: [
       { question: "How much are polling-station members paid in Spain?", answer: "€75 per polling day under Orden INT/650/2026. Substitutes are paid only if they sit, and the allowance is not taxed." },
+      { question: "When is the polling-station allowance paid?", answer: "No official rule sets the day or method of payment. Orden INT/650/2026, which sets the €75, only says in its preamble that payments are still mostly made in cash. If you are drawn, ask the Junta Electoral de Zona or your town hall." },
       { question: "When is the draw for the 29 November election?", answer: "Between 31 October and 4 November 2026. Each town hall picks the day, and you must be notified within three days." },
       { question: "How long do I have to ask to be excused?", answer: "Seven days from your notification. For 29 November, 14 November at the latest if your draw was on the last day." },
       { question: "What happens if I don't turn up?", answer: "It is an offence under article 143 of the electoral law: three months to a year in prison, or a day-fine of six to twenty-four months." },

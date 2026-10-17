@@ -28,7 +28,7 @@ import {
  * non-partisan: no parties, candidates, polls or predictions.
  */
 
-const VERIFIED = "2026-10-12";
+const VERIFIED = "2026-10-17";
 
 const SOURCES: B2Source[] = [
   { name: "Real Decreto 806/2026, de disolución del Congreso y del Senado y de convocatoria de elecciones", url: "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2026-20742", publisher: "Boletín Oficial del Estado" },
@@ -84,6 +84,7 @@ type T = {
   whereTitle: string; where: string[];
   postTitle: string; post: string[];
   abroadTitle: string; abroad: string[];
+  dayTitle: string; day: string[];
   muniTitle: string; muni: string[];
   faq: { question: string; answer: string }[];
   note: string;
@@ -92,7 +93,7 @@ type T = {
 
 const COPY: Record<Locale, T> = {
   en: {
-    lead: "Spain holds a **general election on Sunday 29 November 2026**, called by Royal Decree 806/2026 (BOE, 6 October 2026), to elect the Congress of Deputies and the Senate. The campaign runs from 13 to 27 November. Several deadlines fall long before polling day, and the first one, checking the electoral roll, closes on **19 October**.",
+    lead: "Spain holds a **general election on Sunday 29 November 2026**, called by Royal Decree 806/2026 (BOE, 6 October 2026), to elect the Congress of Deputies and the Senate. The campaign runs from 13 to 27 November. Several deadlines fall well before polling day: the postal vote must be requested **by 19 November** and handed in **by 25 November**.",
     calCaption: "Voter calendar for 29 November 2026",
     calHeaders: ["What", "When (2026)"],
     calRows: [
@@ -119,10 +120,19 @@ const COPY: Record<Locale, T> = {
       `Anyone who will be away on polling day, or cannot go in person, can vote by post. Request it **by 19 November** at any Correos post office, **in person and with your original ID** (a photocopy is not accepted), or online with a digital certificate on ${a("Correos", URL.correos)}. People who are ill or disabled can request it through a notarised representative.`,
       `Correos sends the ballot papers between 9 and 22 November; hand your vote back at Correos **by 25 November** (no postage needed). You can ${a("track the documents", URL.tracking)} online. Once you have requested a postal vote, you can no longer vote in person at the polling station.`,
     ],
+    dayTitle: "Polling day and the days before",
+    day: [
+      "**Polls:** none may be published from Tuesday 24 to Saturday 28 November (the five days before voting).",
+      "**Reflection day:** Saturday 28 November. The campaign ends at midnight on Friday 27, and no campaigning is allowed after that.",
+      "**Voting hours:** 9:00 to 20:00 on Sunday 29 November. If you are inside or at the door at 20:00, you can still vote. You can only vote at your own polling table.",
+      "**ID:** your original DNI, passport or driving licence with a photo. Expired documents are accepted; photocopies and the DNI renewal receipt are not. The digital DNI in the MiDNI app is valid too, but bring the card in case of poor phone signal.",
+      "**Braille voting kit:** for blind voters, request it on 900 150 000 by Monday 2 November.",
+      "**Working that day:** you are entitled to up to four paid hours to vote. In Catalonia the exact rule is set by a Generalitat order, which for 29 November has not been published yet.",
+    ],
     abroadTitle: "If you are abroad",
     abroad: [
       "**Temporarily abroad (ERTA)** but living in Spain: register at the consulate as a non-resident and request the vote there **by 31 October**.",
-      "**Living abroad (CERA):** the documents arrive automatically, with no request. You can post your vote to the consulate between 4 and 24 November or vote in the ballot box at the consulate from 21 to 26 November. Do not post it to the electoral board in Spain: those votes are void.",
+      "**Living abroad (CERA):** the documents arrive automatically, with no request. You can post your vote to the consulate by 24 November or vote in the ballot box at the consulate from 21 to 26 November. Do not post it to the electoral board in Spain: those votes are void.",
     ],
     muniTitle: "Next: municipal elections on 23 May 2027",
     muni: [
@@ -136,11 +146,11 @@ const COPY: Record<Locale, T> = {
       { question: "Can foreigners vote in Catalonia?", answer: "Not in the general election. EU citizens can vote in the municipal elections of 23 May 2027 if they register their wish to vote by 30 December 2026." },
     ],
     note: "Electoral deadlines are fixed by law and by the INE; check the official calendar if a date seems to have changed.",
-    warnTitle: "Check the roll before 19 October",
-    warn: "If you have moved recently, check your entry now: claims to the electoral roll can only be made from 12 to 19 October.",
+    warnTitle: "Postal vote: request it by 19 November",
+    warn: "If you will be away on 29 November, request the postal vote at Correos by 19 November, in person with your original ID, and hand it in by 25 November.",
   },
   es: {
-    lead: "España celebra **elecciones generales el domingo 29 de noviembre de 2026**, convocadas por el Real Decreto 806/2026 (BOE del 6 de octubre de 2026), para elegir el Congreso de los Diputados y el Senado. La campaña va del 13 al 27 de noviembre. Varios plazos vencen mucho antes, y el primero, la consulta del censo, termina el **19 de octubre**.",
+    lead: "España celebra **elecciones generales el domingo 29 de noviembre de 2026**, convocadas por el Real Decreto 806/2026 (BOE del 6 de octubre de 2026), para elegir el Congreso de los Diputados y el Senado. La campaña va del 13 al 27 de noviembre. Varios plazos vencen antes: el voto por correo se pide **hasta el 19 de noviembre** y se entrega **hasta el 25 de noviembre**.",
     calCaption: "Calendario del votante para el 29 de noviembre de 2026",
     calHeaders: ["Qué", "Cuándo (2026)"],
     calRows: [
@@ -167,10 +177,19 @@ const COPY: Record<Locale, T> = {
       `Quien no vaya a estar en su localidad el día de la votación, o no pueda ir en persona, puede votar por correo. Hay que pedirlo **hasta el 19 de noviembre** en cualquier oficina de Correos, **en persona y con el DNI original** (no se acepta fotocopia), o por internet con certificado digital en ${a("Correos", URL.correos)}. Las personas enfermas o con discapacidad pueden pedirlo mediante un representante con poder notarial.`,
       `Correos envía las papeletas entre el 9 y el 22 de noviembre; hay que entregar el voto en Correos **hasta el 25 de noviembre** (no necesita franqueo). Puedes ${a("seguir el envío", URL.tracking)} por internet. Quien pide el voto por correo ya no puede votar en persona en la mesa.`,
     ],
+    dayTitle: "El día de la votación y los días antes",
+    day: [
+      "**Encuestas:** no se pueden publicar del martes 24 al sábado 28 de noviembre (los cinco días anteriores a la votación).",
+      "**Jornada de reflexión:** sábado 28 de noviembre. La campaña termina a medianoche del viernes 27 y después no se puede hacer campaña.",
+      "**Horario:** de 9:00 a 20:00 el domingo 29 de noviembre. Si a las 20:00 estás dentro o en la puerta, aún puedes votar. Solo puedes votar en tu mesa.",
+      "**Documento:** DNI, pasaporte o carné de conducir originales, con foto. Se aceptan aunque estén caducados; no valen fotocopias ni el resguardo de renovación del DNI. El DNI digital de la app MiDNI también es válido, pero lleva la tarjeta por si falla la cobertura.",
+      "**Kit de voto en braille:** para personas ciegas, se pide en el 900 150 000 hasta el lunes 2 de noviembre.",
+      "**Si trabajas ese día:** tienes derecho a hasta cuatro horas retribuidas para votar. En Cataluña la norma exacta la fija una orden de la Generalitat, que para el 29N aún no se ha publicado.",
+    ],
     abroadTitle: "Si estás en el extranjero",
     abroad: [
       "**Temporalmente en el extranjero (ERTA)** pero residente en España: inscríbete en el consulado como no residente y pide allí el voto **hasta el 31 de octubre**.",
-      "**Residentes en el extranjero (CERA):** la documentación llega de oficio, sin solicitud. Puedes enviar el voto al consulado entre el 4 y el 24 de noviembre o depositarlo en la urna del consulado del 21 al 26 de noviembre. No lo envíes a la junta electoral en España: esos votos son nulos.",
+      "**Residentes en el extranjero (CERA):** la documentación llega de oficio, sin solicitud. Puedes enviar el voto al consulado hasta el 24 de noviembre o depositarlo en la urna del consulado del 21 al 26 de noviembre. No lo envíes a la junta electoral en España: esos votos son nulos.",
     ],
     muniTitle: "Después: municipales del 23 de mayo de 2027",
     muni: [
@@ -184,11 +203,11 @@ const COPY: Record<Locale, T> = {
       { question: "¿Pueden votar los extranjeros en Cataluña?", answer: "En las generales, no. Los ciudadanos de la UE pueden votar en las municipales del 23 de mayo de 2027 si manifiestan su voluntad de votar antes del 30 de diciembre de 2026." },
     ],
     note: "Los plazos electorales los fija la ley y el INE: consulta el calendario oficial si una fecha parece haber cambiado.",
-    warnTitle: "Consulta el censo antes del 19 de octubre",
-    warn: "Si te has mudado hace poco, comprueba tu inscripción ahora: las reclamaciones al censo solo se pueden hacer del 12 al 19 de octubre.",
+    warnTitle: "Voto por correo: pídelo antes del 19 de noviembre",
+    warn: "Si no estarás el 29 de noviembre, pide el voto por correo en Correos hasta el 19 de noviembre, en persona y con tu documento original, y entrégalo hasta el 25 de noviembre.",
   },
   ca: {
-    lead: "Espanya celebra **eleccions generals el diumenge 29 de novembre de 2026**, convocades pel Reial decret 806/2026 (BOE del 6 d'octubre de 2026), per escollir el Congrés dels Diputats i el Senat. La campanya va del 13 al 27 de novembre. Diversos terminis vencen molt abans, i el primer, la consulta del cens, acaba el **19 d'octubre**.",
+    lead: "Espanya celebra **eleccions generals el diumenge 29 de novembre de 2026**, convocades pel Reial decret 806/2026 (BOE del 6 d'octubre de 2026), per escollir el Congrés dels Diputats i el Senat. La campanya va del 13 al 27 de novembre. Diversos terminis vencen abans: el vot per correu es demana **fins al 19 de novembre** i s'entrega **fins al 25 de novembre**.",
     calCaption: "Calendari del votant per al 29 de novembre de 2026",
     calHeaders: ["Què", "Quan (2026)"],
     calRows: [
@@ -215,10 +234,19 @@ const COPY: Record<Locale, T> = {
       `Qui no serà a la seva localitat el dia de la votació, o no hi pot anar en persona, pot votar per correu. Cal demanar-lo **fins al 19 de novembre** a qualsevol oficina de Correus, **en persona i amb el DNI original** (no s'accepta fotocòpia), o per internet amb certificat digital a ${a("Correus", URL.correos)}. Les persones malaltes o amb discapacitat el poden demanar mitjançant un representant amb poder notarial.`,
       `Correus envia les paperetes entre el 9 i el 22 de novembre; cal lliurar el vot a Correus **fins al 25 de novembre** (no necessita franqueig). Pots ${a("seguir l'enviament", URL.tracking)} per internet. Qui demana el vot per correu ja no pot votar en persona a la mesa.`,
     ],
+    dayTitle: "El dia de la votació i els dies abans",
+    day: [
+      "**Enquestes:** no se'n poden publicar del dimarts 24 al dissabte 28 de novembre (els cinc dies anteriors a la votació).",
+      "**Jornada de reflexió:** dissabte 28 de novembre. La campanya acaba a mitjanit del divendres 27 i després no es pot fer campanya.",
+      "**Horari:** de 9:00 a 20:00 el diumenge 29 de novembre. Si a les 20:00 ets a dins o a la porta, encara pots votar. Només pots votar a la teva mesa.",
+      "**Document:** DNI, passaport o carnet de conduir originals, amb foto. S'accepten encara que estiguin caducats; no valen fotocòpies ni el resguard de renovació del DNI. El DNI digital de l'app MiDNI també és vàlid, però porta la targeta per si falla la cobertura.",
+      "**Kit de vot en braille:** per a persones cegues, es demana al 900 150 000 fins al dilluns 2 de novembre.",
+      "**Si treballes aquell dia:** tens dret a fins a quatre hores retribuïdes per votar. A Catalunya la norma exacta la fixa una ordre de la Generalitat, que per al 29N encara no s'ha publicat.",
+    ],
     abroadTitle: "Si ets a l'estranger",
     abroad: [
       "**Temporalment a l'estranger (ERTA)** però resident a Espanya: inscriu-te al consolat com a no resident i demana-hi el vot **fins al 31 d'octubre**.",
-      "**Residents a l'estranger (CERA):** la documentació arriba d'ofici, sense sol·licitud. Pots enviar el vot al consolat entre el 4 i el 24 de novembre o dipositar-lo a l'urna del consolat del 21 al 26 de novembre. No l'enviïs a la junta electoral a Espanya: aquests vots són nuls.",
+      "**Residents a l'estranger (CERA):** la documentació arriba d'ofici, sense sol·licitud. Pots enviar el vot al consolat fins al 24 de novembre o dipositar-lo a l'urna del consolat del 21 al 26 de novembre. No l'enviïs a la junta electoral a Espanya: aquests vots són nuls.",
     ],
     muniTitle: "Després: municipals del 23 de maig de 2027",
     muni: [
@@ -232,8 +260,8 @@ const COPY: Record<Locale, T> = {
       { question: "Poden votar els estrangers a Catalunya?", answer: "A les generals, no. Els ciutadans de la UE poden votar a les municipals del 23 de maig de 2027 si manifesten la voluntat de votar abans del 30 de desembre de 2026." },
     ],
     note: "Els terminis electorals els fixa la llei i l'INE: consulta el calendari oficial si una data sembla haver canviat.",
-    warnTitle: "Consulta el cens abans del 19 d'octubre",
-    warn: "Si t'has mudat fa poc, comprova la teva inscripció ara: les reclamacions al cens només es poden fer del 12 al 19 d'octubre.",
+    warnTitle: "Vot per correu: demana'l abans del 19 de novembre",
+    warn: "Si no hi seràs el 29 de novembre, demana el vot per correu a Correus fins al 19 de novembre, en persona i amb el document original, i entrega'l fins al 25 de novembre.",
   },
 };
 
@@ -247,6 +275,8 @@ function body(locale: Locale) {
     ...h2(t.seatsTitle, ...t.seats),
     ...h2(t.whereTitle, ...t.where),
     ...h2(t.postTitle, ...t.post),
+    ...h2(t.dayTitle),
+    list(...t.day),
     ...h2(t.abroadTitle),
     list(...t.abroad),
     ...h2(t.muniTitle, ...t.muni),
