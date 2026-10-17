@@ -99,6 +99,16 @@ function authorNode(entry: EntryDetail): Json | undefined {
   };
 }
 
+function publisherNode(): Json {
+  return {
+    "@type": "Organization",
+    "@id": ORGANIZATION_ID,
+    name: SITE.name,
+    url: SITE.productionOrigin,
+    logo: { "@type": "ImageObject", url: `${SITE.productionOrigin}/logo.png`, width: 512, height: 512 },
+  };
+}
+
 /** NewsArticle for `news`, Article for guides and long-form. */
 export function articleSchema(entry: EntryDetail): Json {
   const isNews = entry.type === "news";
@@ -111,8 +121,13 @@ export function articleSchema(entry: EntryDetail): Json {
     mainEntityOfPage: { "@type": "WebPage", "@id": absoluteUrl(entry.href) },
     ...(entry.publishedAt ? { datePublished: entry.publishedAt.toISOString() } : {}),
     dateModified: entry.updatedAt.toISOString(),
-    publisher: { "@id": ORGANIZATION_ID },
-    ...(authorNode(entry) ? { author: authorNode(entry) } : {}),
+    // Inline rather than a bare @id: the Organization lives in another
+    // script block, and a reference that does not resolve leaves Article
+    // without a publisher for parsers that read one graph at a time.
+    publisher: publisherNode(),
+    // No named author is published yet; Google accepts an Organization
+    // author, which beats none (165 articles had no author at all).
+    author: authorNode(entry) ?? publisherNode(),
     ...(imageObject(entry) ? { image: imageObject(entry) } : {}),
     ...(citations(entry) ? { citation: citations(entry) } : {}),
     ...(entry.tags.length > 0 ? { keywords: entry.tags.map((t) => t.name).join(", ") } : {}),

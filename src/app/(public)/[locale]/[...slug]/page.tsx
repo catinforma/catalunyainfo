@@ -159,6 +159,8 @@ export async function generateMetadata({
         translations: Object.fromEntries(
           LOCALES.map((l) => [l, sectionPath(key, l)]),
         ) as Partial<Record<Locale, string>>,
+        // An empty section index is a thin page (routes, news today).
+        noindex: (await listBySection(locale, key, { limit: 1 })).length === 0,
       });
     }
 
@@ -213,7 +215,9 @@ export async function generateMetadata({
         canonicalOverride: entry.canonicalUrl,
         // Demo fixtures and drafts are never indexable, wherever they render.
         noindex: entry.noindex || entry.isDemo || entry.status !== "published",
-        type: entry.type === "news" || entry.type === "article" ? "article" : "website",
+        // Guides and features are articles too; only places and plain pages
+        // are "website" (og:type was "website" on 126 article pages).
+        type: entry.type === "page" || entry.type === "destination" || entry.type === "place" ? "website" : "article",
         publishedTime: entry.publishedAt,
         modifiedTime: entry.updatedAt,
         authors: entry.author ? [entry.author.name] : undefined,
@@ -262,7 +266,10 @@ export default async function CatchAllPage({
 
   if (resolution.kind === "hub") {
     const key = resolution.section;
-    const items = await listBySection(locale, key, { limit: 24 });
+    // Every entry, not the newest 24: with a cap, eight pages per language
+    // (the work calendar among them) had no link from any hub or the home
+    // page, and Google left the English ones "discovered, not indexed".
+    const items = await listBySection(locale, key, { limit: 500 });
     const crumbs: Crumb[] = [
       { label: t.common.home, href: `/${locale}/` },
       { label: t.nav[key], href: sectionPath(key, locale) },
@@ -440,9 +447,19 @@ export default async function CatchAllPage({
   if (entry.hero) heroAndOg.push([entry.hero.id, entry.hero]);
   for (const [id, value] of heroAndOg) mediaMap.set(id, value);
 
+  // Home > section hub > page. Articles without an editorial trail used to
+  // skip the section, so neither the breadcrumb nor its JSON-LD linked the hub.
+  const sectionCrumb = (() => {
+    if (entry.breadcrumbs.length > 0) return [];
+    const section = sectionFromSegment(locale, entry.path.split("/")[0]);
+    return section && SECTION_KEYS.includes(section) && section !== "legal"
+      ? [{ label: t.nav[section], href: sectionPath(section, locale) }]
+      : [];
+  })();
   const crumbs: Crumb[] = [
     { label: t.common.home, href: `/${locale}/` },
     ...entry.breadcrumbs,
+    ...sectionCrumb,
     { label: entry.title, href: entry.href },
   ];
 
