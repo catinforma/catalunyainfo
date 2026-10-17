@@ -105,11 +105,11 @@ export function ConsentGate({ locale }: { locale: Locale }) {
           aria-labelledby="ci-consent-title"
           className="fixed inset-x-0 bottom-0 z-50 border-t border-[var(--color-rule-strong)] bg-[var(--color-surface)] shadow-[var(--shadow-pop)]"
         >
-          <div className="ci-shell py-4">
-            <h2 id="ci-consent-title" className="font-sans text-base font-semibold">
+          <div className="ci-shell py-3 sm:py-4">
+            <h2 id="ci-consent-title" className="font-sans text-sm font-semibold sm:text-base">
               {t.consent.title}
             </h2>
-            <p className="ci-measure mt-1 text-sm text-[var(--color-muted)]">
+            <p className="ci-measure mt-1 text-xs text-[var(--color-muted)] sm:text-sm">
               {t.consent.body}{" "}
               <a href={legalPath("cookies", locale)}>{t.nav.legal}</a>
             </p>
@@ -125,7 +125,11 @@ export function ConsentGate({ locale }: { locale: Locale }) {
               </dl>
             ) : null}
 
-            <div className="mt-4 flex flex-wrap gap-2">
+            {/* Phones: accept and reject side by side (same weight, as the
+                AEPD requires), "manage" as a short line under them, so the
+                banner stays near 150 px instead of covering a third of the
+                screen. */}
+            <div className="mt-3 grid grid-cols-2 gap-2 sm:mt-4 sm:flex sm:flex-wrap">
               <button
                 type="button"
                 className="ci-btn ci-btn-primary"
@@ -144,7 +148,7 @@ export function ConsentGate({ locale }: { locale: Locale }) {
               </button>
               <button
                 type="button"
-                className="ci-btn ci-btn-quiet"
+                className="ci-btn ci-btn-quiet col-span-2 min-h-11 sm:col-span-1"
                 aria-expanded={expanded}
                 onClick={() => setExpanded((v) => !v)}
               >

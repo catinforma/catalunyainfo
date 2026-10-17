@@ -31,6 +31,9 @@
 
   /* Mediterranean teal: links, primary actions, the brand mark. */
   --color-sea: #0a5b6a;
+  /* Text on a sea-coloured fill: white in light mode, near-black in dark,
+     where the sea turns light (#56b6c4) and white on it is 2.36:1. */
+  --color-on-sea: #ffffff;
   --color-sea-deep: #063a45;
   --color-sea-wash: #e4eeef;
 
@@ -114,6 +117,7 @@
       --color-rule-strong: #354b55;
 
       --color-sea: #56b6c4;
+      --color-on-sea: #0c161c;
       --color-sea-deep: #8ad4de;
       --color-sea-wash: #10313a;
       --color-brand-red: #ff5a63;
@@ -147,6 +151,7 @@
     --color-rule-strong: #354b55;
 
     --color-sea: #56b6c4;
+    --color-on-sea: #0c161c;
     --color-sea-deep: #8ad4de;
     --color-sea-wash: #10313a;
     --color-brand-red: #ff5a63;
@@ -329,7 +334,7 @@
     top: 0;
     z-index: 100;
     background: var(--color-sea);
-    color: #fff;
+    color: var(--color-on-sea);
     padding: 0.75rem 1.25rem;
     border-radius: 0 0 var(--radius-md) 0;
   }
@@ -406,13 +411,13 @@
 
   .ci-btn-primary {
     background: var(--color-sea);
-    color: #fff;
+    color: var(--color-on-sea);
     border-color: var(--color-sea);
   }
   .ci-btn-primary:hover {
     background: var(--color-sea-deep);
     border-color: var(--color-sea-deep);
-    color: #fff;
+    color: var(--color-on-sea);
   }
 
   .ci-btn-quiet {
@@ -495,7 +500,7 @@
   .ci-ask button:hover {
     background: var(--color-sea-deep);
     border-left-color: var(--color-sea-deep);
-    color: #fff;
+    color: var(--color-on-sea);
   }
 
   /* --- Marginalia: the key-facts block ---------------------------------
@@ -719,7 +724,7 @@
   /* While the consent banner is up it covers the foot of the document, which
      on a phone is exactly where a form's submit button sits. */
   body.ci-consent-open {
-    padding-bottom: 16rem;
+    padding-bottom: 10rem;
   }
   @media (min-width: 48rem) {
     body.ci-consent-open {

@@ -578,7 +578,7 @@ const READ_NEXT: Record<Locale, string> = {
 };
 
 /**
- * Puts the first two "Keep reading" links in a box halfway down the article.
+ * Puts the first two "Keep reading" links in a box early in the article.
  *
  * GA4 (28 days to 17 Oct 2026): 1.33 pages per session — readers finish the
  * answer and leave, because the only onward links sit below the FAQ where
@@ -599,7 +599,10 @@ export function withReadNext(blocks: Block[], locale: Locale): Block[] {
     .map(({ index }) => index);
   if (sections.length < 3) return blocks;
 
-  const at = sections[Math.floor(sections.length / 2)] ?? sections[0]!;
+  // Before the second section, not the middle: GA4 shows only 11.5% of
+  // mobile page views reach 90% depth, so a mid-page box is already past
+  // most readers (UX audit, 17 Oct 2026).
+  const at = sections[1] ?? sections[0]!;
   const box = { type: "callout", tone: "tip", title: READ_NEXT[locale], text: list.items.slice(0, 2).join(" · ") } as Block;
   return [...blocks.slice(0, at), box, ...blocks.slice(at)];
 }

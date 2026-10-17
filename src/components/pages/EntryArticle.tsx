@@ -46,7 +46,7 @@ export function EntryArticle({
           <Breadcrumbs items={crumbs} locale={locale} />
 
           {entry.category ? (
-            <p className="ci-label mb-3">
+            <p className="ci-label mb-3 max-md:hidden">
               <Link href={sectionPath(sectionFor(entry), locale)}>
                 {entry.category.name}
               </Link>
@@ -70,8 +70,9 @@ export function EntryArticle({
                 </Link>
               </span>
             ) : null}
+            {/* Phones get one meta line: updated date and the stamp. */}
             {published ? (
-              <span>
+              <span className="max-md:hidden">
                 {t.meta.publishedOn}{" "}
                 <time dateTime={isoDate(published)}>{formatDate(published, locale)}</time>
               </span>
@@ -84,7 +85,7 @@ export function EntryArticle({
                 </time>
               </span>
             ) : null}
-            <span>{interpolate(t.meta.readingTime, { minutes: entry.readingMinutes })}</span>
+            <span className="max-md:hidden">{interpolate(t.meta.readingTime, { minutes: entry.readingMinutes })}</span>
             {entry.lastVerifiedAt ? (
               <VerifiedStamp date={entry.lastVerifiedAt} locale={locale} />
             ) : null}
@@ -107,7 +108,9 @@ export function EntryArticle({
             fetchPriority="high"
             placeholder={entry.hero.blurDataUrl ? "blur" : "empty"}
             blurDataURL={entry.hero.blurDataUrl ?? undefined}
-            className="max-h-[32rem] w-full object-cover"
+            // Capped at 40vw on phones so the opening paragraph reaches the
+            // first screen; the full 32rem from md up.
+            className="max-h-[40vw] w-full object-cover md:max-h-[32rem]"
             style={{
               objectPosition: `${entry.hero.focalX * 100}% ${entry.hero.focalY * 100}%`,
             }}
@@ -135,10 +138,35 @@ export function EntryArticle({
       <div className="ci-shell py-10">
         <div className="ci-article-layout">
           <div>
-            {/* Marginalia on mobile: the practical answer before the prose. */}
-            <div className="mb-8 lg:hidden">
-              <FactsRail entry={entry} />
-            </div>
+            {/* Marginalia on mobile, only when there are real facts: without
+                them the rail is just the verified stamp the header already
+                shows. */}
+            {entry.place || entry.route || entry.event ? (
+              <div className="mb-8 lg:hidden">
+                <FactsRail entry={entry} />
+              </div>
+            ) : null}
+
+            {/* Phones never see the sidebar index; long pages get it here,
+                collapsed, without JavaScript. */}
+            {toc.filter((item) => item.level === 2).length > 4 ? (
+              <details className="ci-margin-block mb-8 lg:hidden">
+                <summary className="min-h-11 cursor-pointer py-2 font-semibold">
+                  {t.meta.inThisPage} ({toc.filter((item) => item.level === 2).length})
+                </summary>
+                <ol className="m-0 list-none p-0 text-sm">
+                  {toc
+                    .filter((item) => item.level === 2)
+                    .map((item) => (
+                      <li key={item.id}>
+                        <a href={`#${item.id}`} className="block min-h-11 py-2 no-underline">
+                          {item.text}
+                        </a>
+                      </li>
+                    ))}
+                </ol>
+              </details>
+            ) : null}
 
             <BlockRenderer body={entry.body} context={context} />
 

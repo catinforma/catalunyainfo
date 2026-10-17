@@ -21,8 +21,11 @@ export function Breadcrumbs({ items, locale }: { items: Crumb[]; locale: Locale 
       <ol className="m-0 flex list-none flex-wrap items-center gap-x-2 gap-y-1 p-0">
         {items.map((item, index) => {
           const isLast = index === items.length - 1;
+          // On phones the current page's crumb is dropped (it repeats the H1
+          // right below it, often over two lines), with the separator before
+          // it. The JSON-LD keeps the full trail.
           return (
-            <li key={item.href} className="flex items-center gap-2">
+            <li key={item.href} className={isLast ? "flex items-center gap-2 max-md:hidden" : "flex items-center gap-2"}>
               {isLast ? (
                 <span aria-current="page" className="text-[var(--color-ink-soft)]">
                   {item.label}
@@ -31,7 +34,10 @@ export function Breadcrumbs({ items, locale }: { items: Crumb[]; locale: Locale 
                 <Link href={item.href}>{item.label}</Link>
               )}
               {!isLast ? (
-                <span aria-hidden="true" className="text-[var(--color-faint)]">
+                <span
+                  aria-hidden="true"
+                  className={index === items.length - 2 ? "text-[var(--color-faint)] max-md:hidden" : "text-[var(--color-faint)]"}
+                >
                   /
                 </span>
               ) : null}
