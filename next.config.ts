@@ -1,6 +1,12 @@
 import type { NextConfig } from "next";
 
 import { LEGACY_REDIRECTS } from "./src/lib/migration/legacy-redirects";
+import {
+  ALWAYS_NOINDEX_SOURCES,
+  contentSecurityPolicy,
+  NOINDEX_VALUE,
+  SECURITY_HEADERS,
+} from "./src/lib/security-headers";
 
 /**
  * Host policy.
@@ -16,6 +22,17 @@ import { LEGACY_REDIRECTS } from "./src/lib/migration/legacy-redirects";
  */
 const APEX_HOST = "catalunyainfo.com";
 const CANONICAL_HOST = "www.catalunyainfo.com";
+
+/**
+ * Indexing requires the production environment and the explicit switch,
+ * evaluated at build time (Vercel exposes VERCEL_ENV to the build), plus a
+ * request on the canonical host, evaluated per request with a `missing host`
+ * condition below. A production build is also served on its *.vercel.app
+ * alias with VERCEL_ENV=production; the host condition keeps that duplicate
+ * out of the index.
+ */
+const INDEXING_ALLOWED =
+  process.env.VERCEL_ENV === "production" && process.env.NEXT_PUBLIC_ALLOW_INDEXING === "true";
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
@@ -100,16 +117,28 @@ const nextConfig: NextConfig = {
         ],
       },
       {
+        // The full security header set, statically: none of it varies per
+        // request, so the proxy no longer has to run on every page for it.
         source: "/:path*",
         headers: [
-          // Middleware sets the full security header set per request (it needs
-          // the per-request CSP nonce). These are the static belts that must
-          // survive even on responses middleware does not touch.
-          { key: "X-Content-Type-Options", value: "nosniff" },
+          { key: "Content-Security-Policy", value: contentSecurityPolicy(process.env.NODE_ENV !== "production") },
+          ...Object.entries(SECURITY_HEADERS).map(([key, value]) => ({ key, value })),
           { key: "X-DNS-Prefetch-Control", value: "on" },
-          { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
         ],
       },
+      // Not indexable: any non-production build, any build without the
+      // switch, and on production any host other than the canonical one.
+      INDEXING_ALLOWED
+        ? {
+            source: "/:path*",
+            missing: [{ type: "host" as const, value: CANONICAL_HOST }],
+            headers: [{ key: "X-Robots-Tag", value: NOINDEX_VALUE }],
+          }
+        : { source: "/:path*", headers: [{ key: "X-Robots-Tag", value: NOINDEX_VALUE }] },
+      ...ALWAYS_NOINDEX_SOURCES.map((source) => ({
+        source,
+        headers: [{ key: "X-Robots-Tag", value: NOINDEX_VALUE }],
+      })),
       {
         source: "/fonts/:path*",
         headers: [

@@ -31,8 +31,10 @@ export function LocalHolidaysFilter({
       .normalize("NFD")
       .replace(/[̀-ͯ]/g, "");
     let shown = 0;
-    section.querySelectorAll<HTMLTableRowElement>("tr[data-place]").forEach((row) => {
-      const name = (row.dataset.place ?? "").normalize("NFD").replace(/[̀-ͯ]/g, "");
+    // Rows carry no data attribute any more (it doubled every name in the
+    // HTML); the place name is the first cell's text.
+    section.querySelectorAll<HTMLTableRowElement>("tbody tr").forEach((row) => {
+      const name = (row.cells[0]?.textContent ?? "").toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "");
       const match = needle === "" || name.includes(needle);
       row.hidden = !match;
       if (match) shown += 1;

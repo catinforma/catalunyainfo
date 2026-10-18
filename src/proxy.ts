@@ -2,6 +2,7 @@ import { NextResponse, type NextRequest } from "next/server";
 
 import { DEFAULT_LOCALE, isLocale, type Locale } from "@/lib/i18n/config";
 import { LEGACY_GONE } from "@/lib/migration/legacy-redirects";
+import { contentSecurityPolicy, NOINDEX_VALUE, SECURITY_HEADERS } from "@/lib/security-headers";
 
 /**
  * Edge proxy (the Next 16 replacement for the middleware file convention). Responsibilities, in order:
@@ -10,8 +11,12 @@ import { LEGACY_GONE } from "@/lib/migration/legacy-redirects";
  *  2. Send `/` to a locale root, using the visitor's Accept-Language.
  *  3. Gate `/admin` behind the presence of a session cookie. The cookie is
  *     *verified* in the route handlers; this is only a cheap early bounce.
- *  4. Attach the security headers, and keep every non-production deployment
- *     out of the index.
+ *  4. Attach the security headers to the responses it builds itself.
+ *
+ * Every other response gets its security and X-Robots-Tag headers statically
+ * from `next.config.ts`, so the proxy only runs on the three paths that need
+ * logic (see `config.matcher`). It used to run on every page and prefetch —
+ * about 15 invocations per cold page view — just to attach constant headers.
  *
  * Deliberately does NOT touch the database: this runs on every request at
  * the edge, and a database round trip there would tax every page view. Content
@@ -68,57 +73,6 @@ function isIndexableRequest(request: NextRequest): boolean {
   return host === CANONICAL_HOST;
 }
 
-/**
- * Content Security Policy.
- *
- * `script-src` allows inline script. That is a deliberate, documented trade:
- * the App Router streams its RSC payload through inline `<script>` tags, so a
- * nonce-based policy would have to be generated per response — which makes
- * every page dynamically rendered and uncacheable at the CDN, and a nonce
- * reused across a cached response protects nothing anyway.
- *
- * What makes this acceptable here is that the rendering path never converts
- * stored content into HTML: block bodies are structured JSON rendered as React
- * elements, inline formatting is parsed into elements by `lib/content/inline`,
- * and `dangerouslySetInnerHTML` appears nowhere in the codebase (enforced by a
- * test). The usual injection route that `unsafe-inline` would widen does not
- * exist. Everything else is locked down: no plugins, no framing, no arbitrary
- * connect targets, and a closed allowlist for embeds.
- *
- * See docs/SECURITY.md for the full reasoning and the review trigger.
- */
-function contentSecurityPolicy(): string {
-  const isDev = process.env.NODE_ENV !== "production";
-
-  return [
-    `default-src 'self'`,
-    `base-uri 'self'`,
-    `object-src 'none'`,
-    `frame-ancestors 'none'`,
-    `form-action 'self'`,
-    `script-src 'self' 'unsafe-inline' https://www.googletagmanager.com${isDev ? " 'unsafe-eval'" : ""}`,
-    `style-src 'self' 'unsafe-inline'`,
-    `img-src 'self' data: blob: https:`,
-    `font-src 'self' data:`,
-    `connect-src 'self' https://www.google-analytics.com https://region1.google-analytics.com https://*.vercel-insights.com`,
-    `frame-src 'self' https://www.youtube-nocookie.com https://player.vimeo.com https://www.openstreetmap.org https://open.spotify.com`,
-    `media-src 'self'`,
-    `manifest-src 'self'`,
-    `worker-src 'self' blob:`,
-    `upgrade-insecure-requests`,
-  ].join("; ");
-}
-
-const SECURITY_HEADERS: Record<string, string> = {
-  "X-Content-Type-Options": "nosniff",
-  "Referrer-Policy": "strict-origin-when-cross-origin",
-  "X-Frame-Options": "DENY",
-  "Permissions-Policy":
-    "camera=(), microphone=(), geolocation=(self), payment=(), usb=(), interest-cohort=(), browsing-topics=()",
-  "Cross-Origin-Opener-Policy": "same-origin",
-  "Strict-Transport-Security": "max-age=63072000; includeSubDomains; preload",
-};
-
 /** Paths that must never be indexed, on any deployment. */
 function isAlwaysNoindex(pathname: string): boolean {
   if (pathname.startsWith("/admin")) return true;
@@ -166,25 +120,23 @@ function decorate(
   pathname: string,
   request: NextRequest,
 ): NextResponse {
-  response.headers.set("Content-Security-Policy", contentSecurityPolicy());
+  response.headers.set("Content-Security-Policy", contentSecurityPolicy(process.env.NODE_ENV !== "production"));
   for (const [key, value] of Object.entries(SECURITY_HEADERS)) {
     response.headers.set(key, value);
   }
 
   if (!isIndexableRequest(request) || isAlwaysNoindex(pathname)) {
-    response.headers.set("X-Robots-Tag", "noindex, nofollow, noarchive");
+    response.headers.set("X-Robots-Tag", NOINDEX_VALUE);
   }
 
   return response;
 }
 
 export const config = {
-  matcher: [
-    // Everything except Next internals and the static asset pipeline.
-    // `robots.txt` and `sitemap.xml` are route handlers, so they are matched
-    // on purpose and receive the security headers.
-    "/((?!_next/static|_next/image|favicon.ico|.*\\.(?:png|jpg|jpeg|gif|webp|avif|svg|ico|woff|woff2|ttf)$).*)",
-  ],
+  // Only where the proxy has logic to run: the locale redirect on "/", the
+  // admin gate, and the version-1 URLs answered with 410 (all under
+  // /article/, see LEGACY_GONE). Headers for everything else are static.
+  matcher: ["/", "/admin/:path*", "/article/:path*"],
 };
 
 export { SESSION_COOKIE, LOCALE_COOKIE };

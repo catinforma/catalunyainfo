@@ -87,6 +87,12 @@ test("indexing is gated on the request host, not only on the environment", () =>
   assert.match(proxy, /isIndexableRequest\(\s*request/);
   assert.match(proxy, /host === CANONICAL_HOST/);
 
+  // Most responses get X-Robots-Tag statically from next.config.ts, which must
+  // add noindex on any host other than the canonical one.
+  const config = readFileSync(join(SRC, "..", "next.config.ts"), "utf8");
+  assert.match(config, /missing: \[\{ type: "host"[^\]]*value: CANONICAL_HOST/);
+  assert.match(config, /INDEXING_ALLOWED\s*=\s*process\.env\.VERCEL_ENV === "production"/);
+
   const robots = readFileSync(join(SRC, "app", "robots.ts"), "utf8");
   assert.match(robots, /onCanonicalHost/);
 });

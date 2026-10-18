@@ -1,4 +1,4 @@
-import { shortDate, todayInCatalonia, WEEKDAY_NAMES, weekdayIndex } from "@/lib/content/holidays/calendar";
+import { shortDate, todayInCatalonia, weekdayIndex } from "@/lib/content/holidays/calendar";
 import { LOCAL_SOURCE, loadLocalCalendar } from "@/lib/content/holidays/local";
 import { getMessages } from "@/lib/i18n";
 import type { Locale } from "@/lib/i18n/config";
@@ -18,6 +18,13 @@ import { LocalHolidaysFilter } from "./LocalHolidaysFilter";
  * and date is in the HTML. The filter box is progressive enhancement: it hides
  * rows in the browser and changes nothing a crawler sees.
  */
+/** Short weekday labels: this table repeats them ~2,800 times. */
+const WEEKDAY_SHORT: Record<Locale, string[]> = {
+  ca: ["dg.", "dl.", "dt.", "dc.", "dj.", "dv.", "ds."],
+  es: ["dom.", "lun.", "mar.", "mié.", "jue.", "vie.", "sáb."],
+  en: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
+};
+
 export async function LocalHolidays({ locale }: { locale: Locale }) {
   const t = getMessages(locale).localHolidays;
   const year = Number(todayInCatalonia().slice(0, 4));
@@ -37,7 +44,8 @@ export async function LocalHolidays({ locale }: { locale: Locale }) {
     );
   }
 
-  const day = (iso: string) => `${shortDate(iso, locale)} (${WEEKDAY_NAMES[locale][weekdayIndex(iso)]})`;
+  const day = (iso: string) => `${shortDate(iso, locale)} (${WEEKDAY_SHORT[locale][weekdayIndex(iso)]})`;
+
 
   return (
     <section className="ci-local" aria-label={t.title}>
@@ -63,8 +71,10 @@ export async function LocalHolidays({ locale }: { locale: Locale }) {
           </tr>
         </thead>
         <tbody>
+          {/* No key-derived or data attributes per row: everything here is
+              repeated ~1,400 times in the HTML and again in the RSC payload. */}
           {calendar.places.map((place) => (
-            <tr key={place.key} data-place={place.name.toLowerCase()}>
+            <tr key={place.key}>
               <td>
                 {place.name}
                 {place.isNucleus ? <small> {t.nucleus}</small> : null}
