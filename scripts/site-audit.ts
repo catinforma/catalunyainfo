@@ -141,6 +141,9 @@ async function auditPage(url: string): Promise<PageAudit> {
   else if (!canonicalSelf) issues.push(`canonical points elsewhere: ${canonical}`);
   if (robots && /noindex/.test(robots)) issues.push("noindex");
   if (hreflang.length > 0 && !hreflang.includes("x-default")) issues.push("hreflang without x-default");
+  // The reciprocity check parses <link rel="alternate" …> by attribute order;
+  // if Next ever changes it, say so instead of silently checking nothing.
+  if (hreflang.length > 0 && Object.keys(alternates).length === 0) issues.push("hreflang present but alternates not parsed");
   if (schemaTypes.includes("INVALID_JSON")) issues.push("invalid JSON-LD");
   if (articleProblems.length > 0) issues.push(`Article missing ${articleProblems.join(", ")}`);
   const urlLocale = new URL(url).pathname.split("/")[1] ?? "";

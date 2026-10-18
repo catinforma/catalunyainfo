@@ -33,7 +33,9 @@ export async function GET() {
   ];
 
   for (const locale of LOCALES) {
-    const entries = await listEntries(locale, { types: ["article", "guide"], limit: 200 });
+    // listEntries rethrows DB errors (so pages keep their last good version);
+    // llms.txt is auxiliary, so a failing locale is skipped instead.
+    const entries = await listEntries(locale, { types: ["article", "guide"], limit: 200 }).catch(() => []);
     if (entries.length === 0) continue;
     parts.push(`## ${HEADINGS[locale] ?? locale}`, "");
     for (const entry of entries) {
