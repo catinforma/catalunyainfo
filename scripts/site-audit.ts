@@ -3,7 +3,9 @@
  *
  * Crawls every URL in the sitemap and checks what Google and AdSense reviewers
  * actually receive: status, title and description length, a single H1, the
- * canonical pointing at itself, a complete hreflang cluster, structured data,
+ * canonical pointing at itself, a complete and reciprocal hreflang cluster,
+ * the html lang matching the URL's locale, structured data that parses and
+ * carries Article's required fields,
  * word count, images without alt text, images without width/height, and the
  * page weight.
  *
@@ -34,6 +36,9 @@ interface PageAudit {
   canonical: string;
   canonicalSelf: boolean;
   hreflang: string[];
+  /** hreflang code -> href, for the reciprocity check across pages. */
+  alternates: Record<string, string>;
+  htmlLang: string;
   robots: string;
   schemaTypes: string[];
   words: number;
@@ -79,12 +84,29 @@ async function auditPage(url: string): Promise<PageAudit> {
   const canonical = first(html, /<link rel="canonical" href="([^"]*)"/);
   const robots = first(html, /<meta name="robots" content="([^"]*)"/);
   const hreflang = [...html.matchAll(/hrefLang="([a-zA-Z-]+)"/g)].map((m) => m[1] ?? "");
+  const alternates: Record<string, string> = {};
+  for (const m of html.matchAll(/<link rel="alternate" hrefLang="([a-zA-Z-]+)" href="([^"]+)"/g)) {
+    if (m[1] && m[2]) alternates[m[1]] = m[2];
+  }
+  const htmlLang = first(html, /<html[^>]*\blang="([^"]+)"/);
+  const articleProblems: string[] = [];
 
   const schemaTypes: string[] = [];
   for (const block of html.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)) {
     try {
       const data = JSON.parse(block[1] ?? "") as { "@graph"?: { "@type"?: string }[]; "@type"?: string };
-      for (const node of data["@graph"] ?? [data]) if (node["@type"]) schemaTypes.push(String(node["@type"]));
+      for (const node of data["@graph"] ?? [data]) {
+        if (!node["@type"]) continue;
+        schemaTypes.push(String(node["@type"]));
+        // Fields Google lists for Article/NewsArticle; missing ones are silent
+        // in a browser and only show up in the Rich Results Test.
+        if (node["@type"] === "Article" || node["@type"] === "NewsArticle") {
+          const article = node as Record<string, unknown>;
+          for (const field of ["headline", "image", "datePublished", "dateModified", "author", "publisher"]) {
+            if (!article[field]) articleProblems.push(field);
+          }
+        }
+      }
     } catch {
       schemaTypes.push("INVALID_JSON");
     }
@@ -120,6 +142,11 @@ async function auditPage(url: string): Promise<PageAudit> {
   if (robots && /noindex/.test(robots)) issues.push("noindex");
   if (hreflang.length > 0 && !hreflang.includes("x-default")) issues.push("hreflang without x-default");
   if (schemaTypes.includes("INVALID_JSON")) issues.push("invalid JSON-LD");
+  if (articleProblems.length > 0) issues.push(`Article missing ${articleProblems.join(", ")}`);
+  const urlLocale = new URL(url).pathname.split("/")[1] ?? "";
+  if (["ca", "es", "en"].includes(urlLocale) && !htmlLang.startsWith(urlLocale)) {
+    issues.push(`html lang "${htmlLang}" on a /${urlLocale}/ URL`);
+  }
   if (imagesNoAlt > 0) issues.push(`${imagesNoAlt} images without alt`);
   if (imagesNoSize > 0) issues.push(`${imagesNoSize} images without width/height`);
   if (html.length > 400_000) issues.push(`HTML ${Math.round(html.length / 1024)} KB`);
@@ -138,6 +165,8 @@ async function auditPage(url: string): Promise<PageAudit> {
     canonical,
     canonicalSelf,
     hreflang,
+    alternates,
+    htmlLang,
     robots,
     schemaTypes,
     words,
@@ -169,6 +198,21 @@ async function main() {
   console.log(`Auditing ${urls.length} URLs on ${ORIGIN}\n`);
 
   const pages = await mapLimit(urls, CONCURRENCY, auditPage);
+
+  // hreflang must be reciprocal: if A names B as its "es" version, B must
+  // name A back under A's language. A one-way link is ignored by Google.
+  const byUrl = new Map(pages.map((page) => [page.url, page]));
+  for (const page of pages) {
+    const ownLang = Object.entries(page.alternates).find(([, href]) => href === page.url)?.[0];
+    if (!ownLang) continue;
+    for (const [lang, href] of Object.entries(page.alternates)) {
+      if (lang === "x-default" || href === page.url) continue;
+      const other = byUrl.get(href);
+      if (other && other.alternates[ownLang] !== page.url) {
+        page.issues.push(`hreflang ${lang} not reciprocal (${href})`);
+      }
+    }
+  }
 
   // Duplicate titles and descriptions are a site-level problem no single page shows.
   const titleCount = new Map<string, number>();
