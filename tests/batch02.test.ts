@@ -27,6 +27,7 @@ import { BEACHES_GUIDE } from "../src/lib/content/batch02/beaches.ts";
 import { MESA } from "../src/lib/content/batch02/mesa.ts";
 import { MUNICIPAL_RESULTS } from "../src/lib/content/batch02/municipal-results.ts";
 import { CLIMATE } from "../src/lib/content/batch02/climate.ts";
+import { SHOPS } from "../src/lib/content/batch02/shops.ts";
 import { CONGRESS_RESULTS, PARLIAMENT_RESULTS } from "../src/lib/content/batch02/election-results.ts";
 import { B2_PATHS, type B2Article } from "../src/lib/content/batch02/shared.ts";
 import { IMAGES } from "../src/lib/content/images.ts";
@@ -71,6 +72,7 @@ const ARTICLES: B2Article[] = [
   MESA,
   MUNICIPAL_RESULTS,
   CLIMATE,
+  SHOPS,
   CONGRESS_RESULTS,
   PARLIAMENT_RESULTS,
   SNOW,
@@ -83,7 +85,7 @@ const IMAGE_KEYS = new Set(IMAGES.map((image) => image.key));
 /* -------------------------------------------------------------------------- */
 
 test("every article has three editions", () => {
-  assert.equal(ARTICLES.length, 36);
+  assert.equal(ARTICLES.length, 37);
   for (const article of ARTICLES) {
     for (const locale of LOCALES) {
       assert.ok(article.editions[locale], `${article.key} is missing ${locale}`);
@@ -378,5 +380,23 @@ test("the read-next box sits mid-article and only repeats related links", async 
         }
       }
     }
+  }
+});
+
+/**
+ * Shop opening days come from the DOGC (Ordre EMT/77/2025, Resolució
+ * EMT/4342/2025, Ordre EMT/89/2026). The press labels 28 Nov 2027 "Black
+ * Friday" (it is the Sunday after) and some pages present 3 Jan 2027 as the
+ * start of the sales; the orders say neither.
+ */
+test("shops: the DOGC dates are all there and nothing the orders do not say", () => {
+  for (const locale of ["ca", "es", "en"] as const) {
+    const text = bodyToPlainText(SHOPS.editions[locale].blocks);
+    const days2026 = locale === "en" ? ["29 November", "6 December", "8 December", "13 December", "20 December", "27 December"] : locale === "es" ? ["29 de noviembre", "6 de diciembre", "8 de diciembre", "13 de diciembre", "20 de diciembre", "27 de diciembre"] : ["29 de novembre", "6 de desembre", "8 de desembre", "13 de desembre", "20 de desembre", "27 de desembre"];
+    for (const day of days2026) assert.ok(text.includes(day), `${locale}: ${day}`);
+    const table2027 = SHOPS.editions[locale].blocks.filter((b) => b.type === "table")[1] as { rows: string[][] };
+    assert.equal(table2027.rows.length, 10, `${locale}: 8 general + 2 default municipal days in 2027`);
+    assert.doesNotMatch(text, /black friday/i);
+    assert.doesNotMatch(text, /(rebaixes|rebajas|sales)[^.]*3 (de )?(gener|enero|January)/i);
   }
 });

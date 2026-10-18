@@ -280,6 +280,26 @@ export const IMAGES: readonly ImportedImage[] = [
     "blurDataUrl": "data:image/webp;base64,UklGRmQAAABXRUJQVlA4IFgAAADQAQCdASoQAAkAA4BaJZgCdADdpvv8RAD+5gMPsWBJ+ftogVDLucsVrNaWZT7iy28YKFK2zLWg/KArIz5a9FnCPpfGYwvukTQk2qi/a83UoNoil+3DSoAA"
   },
   {
+    "key": "botigues-carrer-llums-nadal",
+    "url": "/images/botigues-carrer-llums-nadal.webp",
+    "width": 1920,
+    "height": 2560,
+    "blurDataUrl": "data:image/webp;base64,UklGRpwAAABXRUJQVlA4IJAAAABQBACdASoQABUAPu1iqU2ppaOiMAgBMB2JQACiA94CDpA3Q9eCp8JwCWEAAP7yqp4hpukU9g8SoslAMZ49JsAKYuBNQOtLmXzInLKJAu3dc1jitSsJ918BqMJMPHL8Qf4Bhr2hdxmkFQJ+Cq+ZMrw9n39tGNCj6nzCyOpbtc5nHlAyHNumTHzlD2VC2DUAAAA=",
+    "credit": "Jordiferrer",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Barcelona_-_Llums_Nadal_2016_-_19.jpg",
+    "license": "CC BY-SA 4.0"
+  },
+  {
+    "key": "botigues-llums-nadal-barcelona",
+    "url": "/images/botigues-llums-nadal-barcelona.webp",
+    "width": 1920,
+    "height": 1440,
+    "blurDataUrl": "data:image/webp;base64,UklGRmYAAABXRUJQVlA4IFoAAADQAQCdASoQAAwAA4BaJZgCsAYuRhiPUAD+97OdfvfnMZnnJmZ/m1F7EigqFMY4FqXEY53PF7QW8kEYG+0lytMEpDUsDkcJCOH+I0DwVbVkB/zDMRHyypgAAAA=",
+    "credit": "Jordiferrer",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Barcelona_-_Llums_Nadal_2016_-_14.jpg",
+    "license": "CC BY-SA 4.0"
+  },
+  {
     "key": "calendari-escolar-escola-vic-pati",
     "url": "/images/calendari-escolar-escola-vic-pati.webp",
     "width": 1920,

@@ -50,7 +50,8 @@ export type B2Key =
   | "beaches"
   | "mesa"
   | "municipalResults"
-  | "climate";
+  | "climate"
+  | "shops";
 
 /** Path after the locale prefix, no leading or trailing slash. */
 export const B2_PATHS: Record<B2Key, Record<Locale, string>> = {
@@ -113,6 +114,11 @@ export const B2_PATHS: Record<B2Key, Record<Locale, string>> = {
     ca: "guies/temps-barcelona-mes-a-mes",
     es: "guias/tiempo-barcelona-mes-a-mes",
     en: "guides/barcelona-weather-by-month",
+  },
+  shops: {
+    ca: "guies/botigues-obertes-festius-catalunya",
+    es: "guias/tiendas-abiertas-festivos-cataluna",
+    en: "guides/shops-open-sundays-holidays-catalonia",
   },
   municipalResults: {
     ca: "guies/resultats-eleccions-municipals-catalunya",
@@ -305,6 +311,11 @@ export const B2_TITLES: Record<B2Key, Record<Locale, string>> = {
     ca: "El temps a Barcelona mes a mes",
     es: "El tiempo en Barcelona mes a mes",
     en: "Barcelona weather by month",
+  },
+  shops: {
+    ca: "Botigues obertes en diumenges i festius",
+    es: "Tiendas abiertas en domingos y festivos",
+    en: "Shops open on Sundays and holidays",
   },
   municipalResults: {
     ca: "Resultats de les eleccions municipals",
