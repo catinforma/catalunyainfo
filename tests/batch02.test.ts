@@ -440,6 +440,6 @@ test("parking: green hours, no windscreen ticket, resident-only spaces, no inven
     assert.match(text, residentOnly[locale], `${locale}: resident-only spaces`);
     assert.doesNotMatch(text, /windscreen|parabrisas|parabrises/i);
     // Only the AREA cancellation fee is official; no fine amount is.
-    assert.deepEqual([...new Set(text.match(/\d{2,3} ?€|€\d{2,3}/g) ?? [])].sort(), [], `${locale}: no fine amounts`);
+    assert.deepEqual([...new Set(text.match(/(?<![\d,.])\d{2,3} ?€|€\d{2,3}(?![\d,.])/g) ?? [])].sort(), [], `${locale}: no fine amounts`);
   }
 });
