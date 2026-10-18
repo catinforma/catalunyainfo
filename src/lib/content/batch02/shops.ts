@@ -19,7 +19,7 @@ import {
  *
  * Dates are the DOGC's own (Ordre EMT/77/2025 for 2026, Resolució
  * EMT/4342/2025 for the 2026 municipal days, Ordre EMT/89/2026 for 2027) and
- * the rule is Llei 18/2017, checked on 19 Oct 2026
+ * the rule is Llei 18/2017, checked on 18 Oct 2026
  * (research_notes/blog-batch-03/shops_open_holidays.md).
  *
  * The 2027 municipal days are not published yet (councils had until 1 Nov
@@ -29,7 +29,7 @@ import {
  * claim about which small shops may open on 25 Dec or 1 Jan.
  */
 
-const VERIFIED = "2026-10-19";
+const VERIFIED = "2026-10-18";
 
 const SOURCES: B2Source[] = [
   { name: "Ordre EMT/77/2025, calendari d'obertura comercial en diumenges i festius per al 2026", url: "https://portaldogc.gencat.cat/utilsEADOP/AppJava/PdfProviderServlet?documentId=1015009&type=01&language=ca_ES", publisher: "DOGC" },

@@ -96,3 +96,53 @@ test("indexing is gated on the request host, not only on the environment", () =>
   const robots = readFileSync(join(SRC, "app", "robots.ts"), "utf8");
   assert.match(robots, /onCanonicalHost/);
 });
+
+type HeaderRule = { source: string; missing?: { type: string; value: string }[]; headers: { key: string; value: string }[] };
+
+async function headerRules(env: Record<string, string | undefined>): Promise<HeaderRule[]> {
+  const saved = { VERCEL_ENV: process.env.VERCEL_ENV, NEXT_PUBLIC_ALLOW_INDEXING: process.env.NEXT_PUBLIC_ALLOW_INDEXING };
+  Object.assign(process.env, env);
+  for (const [key, value] of Object.entries(env)) if (value === undefined) delete process.env[key];
+  try {
+    // A fresh module instance per call: INDEXING_ALLOWED is read at load time.
+    const url = `${new URL("../next.config.ts", import.meta.url).href}?env=${encodeURIComponent(JSON.stringify(env))}`;
+    const { default: config } = await import(url);
+    return (await config.headers()) as HeaderRule[];
+  } finally {
+    for (const [key, value] of Object.entries(saved)) {
+      if (value === undefined) delete process.env[key];
+      else process.env[key] = value;
+    }
+  }
+}
+
+const robotsRules = (rules: HeaderRule[]) => rules.filter((rule) => rule.headers.some((h) => h.key === "X-Robots-Tag"));
+
+test("X-Robots-Tag rules: canonical host indexable only on production with the switch on", async () => {
+  const on = robotsRules(await headerRules({ VERCEL_ENV: "production", NEXT_PUBLIC_ALLOW_INDEXING: "true" }));
+  const generic = on.filter((rule) => rule.source === "/:path*");
+  assert.equal(generic.length, 1);
+  assert.equal(generic[0]!.missing?.[0]?.type, "host");
+  const host = new RegExp(`^${generic[0]!.missing![0]!.value}$`);
+  assert.ok(host.test("www.catalunyainfo.com"));
+  assert.ok(!host.test("wwwxcatalunyainfo.com"), "dots must be escaped");
+  assert.ok(!host.test("catinfov2.vercel.app"));
+
+  for (const env of [{ VERCEL_ENV: "preview", NEXT_PUBLIC_ALLOW_INDEXING: "true" }, { VERCEL_ENV: "production", NEXT_PUBLIC_ALLOW_INDEXING: undefined }]) {
+    const off = robotsRules(await headerRules(env)).filter((rule) => rule.source === "/:path*");
+    assert.equal(off.length, 1, JSON.stringify(env));
+    assert.equal(off[0]!.missing, undefined, `${JSON.stringify(env)}: noindex everywhere`);
+  }
+
+  const { ALWAYS_NOINDEX_SOURCES } = await import("../src/lib/security-headers.ts");
+  for (const source of ALWAYS_NOINDEX_SOURCES) {
+    assert.ok(on.some((rule) => rule.source === source && !rule.missing), `${source} always noindex`);
+  }
+});
+
+test("every 410 path is under /article/, the only legacy prefix the proxy matcher covers", async () => {
+  const { LEGACY_GONE } = await import("../src/lib/migration/legacy-redirects.ts");
+  const outside = [...LEGACY_GONE].filter((path) => !path.startsWith("/article/"));
+  assert.deepEqual(outside, [], "widen the matcher in src/proxy.ts before adding these");
+  assert.match(readFileSync(join(SRC, "proxy.ts"), "utf8"), /"\/article\/:path\*"/);
+});

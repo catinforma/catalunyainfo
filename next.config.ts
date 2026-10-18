@@ -131,7 +131,9 @@ const nextConfig: NextConfig = {
       INDEXING_ALLOWED
         ? {
             source: "/:path*",
-            missing: [{ type: "host" as const, value: CANONICAL_HOST }],
+            // `value` is a regex to Next: escape the dots so only the exact
+            // host is exempt.
+            missing: [{ type: "host" as const, value: CANONICAL_HOST.replaceAll(".", "\\.") }],
             headers: [{ key: "X-Robots-Tag", value: NOINDEX_VALUE }],
           }
         : { source: "/:path*", headers: [{ key: "X-Robots-Tag", value: NOINDEX_VALUE }] },
