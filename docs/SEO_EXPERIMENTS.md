@@ -315,6 +315,21 @@ rewritten to the March change and republished.
 
 **Measure on 24 Oct** (the peak is the week of the change): CTR on the CA/ES page.
 
+## 2026-10-17 — Mesa electoral and metro hours: the answer in the title
+
+**Before.** "Miembro de mesa electoral: qué hacer, cuánto se cobra y excusas" and
+"Horario del metro de Barcelona y del NitBus" (and ca/en equivalents).
+GSC 11-17 Oct: "cuánto pagan por estar en mesa electoral 2026" 39 impressions at
+position 8.9, 0 clicks; a long tail of "a qué hora abre/cierra el metro" at
+positions 10-13, 0 clicks.
+
+**Change (commit b831189).** Mesa: "Mesa electoral 2026: se cobran 75 €, excusas y
+qué hacer" (ca/en equivalents). Metro: "Horario metro Barcelona: de 5:00 a 24:00,
+viernes hasta las 2:00" (ca/en equivalents). Logged late, on 18 Oct.
+
+**Frozen until 14 Nov** (28 days). Note the 29 Nov election will raise mesa demand
+on its own; compare CTR at equal positions, not clicks.
+
 ## Candidates not yet run
 
 Recorded so they are not lost, and so they are not all started at once.

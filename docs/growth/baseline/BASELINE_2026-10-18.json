@@ -1,0 +1,1923 @@
+{
+ "metadata": {
+  "pulled_at": "2026-10-18",
+  "site": "catalunyainfo.com",
+  "sources": {
+   "gsc": "Google Search Console API searchanalytics.query, property sc-domain:catalunyainfo.com, type=web, dataState=all",
+   "ga4": "GA4 Data API runReport, property 554310792 (timezone Europe/Madrid)"
+  },
+  "periods": {
+   "last_28_days": [
+    "2026-09-20",
+    "2026-10-17"
+   ],
+   "daily_window": [
+    "2026-10-01",
+    "2026-10-17"
+   ]
+  },
+  "caveats": [
+   "GSC totals (no dimension / date / device / country) are property-level aggregates; by-language and top-pages figures are page-level aggregates (summed from page rows), so they do not reconcile exactly with totals.",
+   "GSC anonymises rare queries: query and query+page rows omit them, so query-level sums are well below page/property totals (query rows here sum to 104 clicks / 6605 impressions vs 482 / 23075 property totals).",
+   "GSC dataState=all includes provisional data for the last 2-3 days (2026-10-15..17); these may still change.",
+   "Language prefix \"/\" = root homepage plus legacy /article/*.html URLs.",
+   "Position is impression-weighted average; for language aggregates it is computed from page rows.",
+   "GA4 counts only consented sessions (Consent Mode / CMP); GA4 sessions understate real traffic and are not comparable 1:1 with GSC clicks. GA4 includes non-Google sources (Bing, ChatGPT, Yahoo...).",
+   "GA4 landingPage \"(not set)\" = sessions without a page_view (often consent/late-tag artefacts).",
+   "Small samples: most pages have <50 clicks in the window; treat CTR deltas as directional.",
+   "Spike from 2026-10-13 coincides with election-related content and the autumn/mushroom season; baseline is not seasonally stable.",
+   "No PII: aggregated data only.",
+   "Tooling: GSC rows were pulled straight from the Search Console API (read-only, the gsc MCP server's saved OAuth token), because the MCP get_advanced_search_analytics tool ignores sort_by, and a page filter combined with a non-page dimension (device) returned undercounted totals (e.g. /es/ = 76 clicks vs 278 from page rows). Do not rebuild the by-language split with that MCP filter.",
+   "page x device / page x country rows from the API are heavily thinned (they come back far below page totals), so no per-page device split is included.",
+   "GA4 google/organic sessions (215) vs GSC clicks (482) imply roughly 45% of Google clicks become a consented GA4 session; treat GA4 as a sample."
+  ],
+  "alerts": [
+   "/es/guias/calendario-laboral-cataluna/: page impressions 61 (10-15) -> 3 (10-16) -> 0 (10-17) while the CA edition held (95, 31). URL Inspection on 2026-10-18: indexed, canonical OK, last crawled 2026-09-25, no referring URLs listed. Provisional data; check again on 10-20.",
+   "/es/guias/es-festivo-hoy-cataluna/: daily average position went from ~9-10 (10-11..12) to 41-48 (10-14..17)."
+  ],
+  "totals_check": {
+   "gsc_property_clicks": 482,
+   "gsc_sum_of_page_rows_clicks": 482,
+   "ga4_sessions": 404
+  }
+ },
+ "gsc": {
+  "last_28_days_totals": {
+   "clicks": 482,
+   "impressions": 23075,
+   "ctr": 0.0209,
+   "position": 11.39
+  },
+  "page_level_sum_last_28_days": {
+   "clicks": 482,
+   "impressions": 23177
+  },
+  "daily_2026_10_01_to_10_17": [
+   {
+    "date": "2026-10-01",
+    "clicks": 11,
+    "impressions": 550,
+    "ctr": 0.02,
+    "position": 9.51
+   },
+   {
+    "date": "2026-10-02",
+    "clicks": 11,
+    "impressions": 692,
+    "ctr": 0.0159,
+    "position": 18.41
+   },
+   {
+    "date": "2026-10-03",
+    "clicks": 12,
+    "impressions": 744,
+    "ctr": 0.0161,
+    "position": 27.19
+   },
+   {
+    "date": "2026-10-04",
+    "clicks": 10,
+    "impressions": 668,
+    "ctr": 0.015,
+    "position": 26.07
+   },
+   {
+    "date": "2026-10-05",
+    "clicks": 14,
+    "impressions": 608,
+    "ctr": 0.023,
+    "position": 12.98
+   },
+   {
+    "date": "2026-10-06",
+    "clicks": 10,
+    "impressions": 661,
+    "ctr": 0.0151,
+    "position": 11.81
+   },
+   {
+    "date": "2026-10-07",
+    "clicks": 6,
+    "impressions": 581,
+    "ctr": 0.0103,
+    "position": 11.23
+   },
+   {
+    "date": "2026-10-08",
+    "clicks": 15,
+    "impressions": 771,
+    "ctr": 0.0195,
+    "position": 9.03
+   },
+   {
+    "date": "2026-10-09",
+    "clicks": 8,
+    "impressions": 767,
+    "ctr": 0.0104,
+    "position": 11.2
+   },
+   {
+    "date": "2026-10-10",
+    "clicks": 13,
+    "impressions": 666,
+    "ctr": 0.0195,
+    "position": 12.24
+   },
+   {
+    "date": "2026-10-11",
+    "clicks": 16,
+    "impressions": 804,
+    "ctr": 0.0199,
+    "position": 9.87
+   },
+   {
+    "date": "2026-10-12",
+    "clicks": 14,
+    "impressions": 1044,
+    "ctr": 0.0134,
+    "position": 9.41
+   },
+   {
+    "date": "2026-10-13",
+    "clicks": 35,
+    "impressions": 1621,
+    "ctr": 0.0216,
+    "position": 8.5
+   },
+   {
+    "date": "2026-10-14",
+    "clicks": 46,
+    "impressions": 2182,
+    "ctr": 0.0211,
+    "position": 10.62
+   },
+   {
+    "date": "2026-10-15",
+    "clicks": 37,
+    "impressions": 2498,
+    "ctr": 0.0148,
+    "position": 10.1
+   },
+   {
+    "date": "2026-10-16",
+    "clicks": 69,
+    "impressions": 2685,
+    "ctr": 0.0257,
+    "position": 10.63
+   },
+   {
+    "date": "2026-10-17",
+    "clicks": 43,
+    "impressions": 2003,
+    "ctr": 0.0215,
+    "position": 11.78
+   }
+  ],
+  "daily_2026_09_20_to_09_30": [
+   {
+    "date": "2026-09-20",
+    "clicks": 10,
+    "impressions": 273
+   },
+   {
+    "date": "2026-09-21",
+    "clicks": 14,
+    "impressions": 281
+   },
+   {
+    "date": "2026-09-22",
+    "clicks": 8,
+    "impressions": 314
+   },
+   {
+    "date": "2026-09-23",
+    "clicks": 9,
+    "impressions": 237
+   },
+   {
+    "date": "2026-09-24",
+    "clicks": 10,
+    "impressions": 195
+   },
+   {
+    "date": "2026-09-25",
+    "clicks": 10,
+    "impressions": 229
+   },
+   {
+    "date": "2026-09-26",
+    "clicks": 9,
+    "impressions": 361
+   },
+   {
+    "date": "2026-09-27",
+    "clicks": 10,
+    "impressions": 406
+   },
+   {
+    "date": "2026-09-28",
+    "clicks": 10,
+    "impressions": 469
+   },
+   {
+    "date": "2026-09-29",
+    "clicks": 14,
+    "impressions": 439
+   },
+   {
+    "date": "2026-09-30",
+    "clicks": 8,
+    "impressions": 326
+   }
+  ],
+  "by_language_prefix": {
+   "/": {
+    "clicks": 14,
+    "impressions": 264,
+    "ctr": 0.053,
+    "position": 9.08,
+    "pages_with_impressions": 4
+   },
+   "/ca/": {
+    "clicks": 108,
+    "impressions": 6077,
+    "ctr": 0.0178,
+    "position": 8.33,
+    "pages_with_impressions": 62
+   },
+   "/en/": {
+    "clicks": 82,
+    "impressions": 6522,
+    "ctr": 0.0126,
+    "position": 9.71,
+    "pages_with_impressions": 59
+   },
+   "/es/": {
+    "clicks": 278,
+    "impressions": 10314,
+    "ctr": 0.027,
+    "position": 14.38,
+    "pages_with_impressions": 55
+   }
+  },
+  "by_device": [
+   {
+    "device": "MOBILE",
+    "clicks": 338,
+    "impressions": 12785,
+    "ctr": 0.0264,
+    "position": 7.45
+   },
+   {
+    "device": "DESKTOP",
+    "clicks": 127,
+    "impressions": 10107,
+    "ctr": 0.0126,
+    "position": 16.45
+   },
+   {
+    "device": "TABLET",
+    "clicks": 17,
+    "impressions": 183,
+    "ctr": 0.0929,
+    "position": 7.6
+   }
+  ],
+  "by_country_top10_by_impressions": [
+   {
+    "country": "esp",
+    "clicks": 416,
+    "impressions": 18068,
+    "ctr": 0.023,
+    "position": 11.66
+   },
+   {
+    "country": "usa",
+    "clicks": 6,
+    "impressions": 600,
+    "ctr": 0.01,
+    "position": 13.37
+   },
+   {
+    "country": "gbr",
+    "clicks": 9,
+    "impressions": 539,
+    "ctr": 0.0167,
+    "position": 15.15
+   },
+   {
+    "country": "fra",
+    "clicks": 6,
+    "impressions": 273,
+    "ctr": 0.022,
+    "position": 14.78
+   },
+   {
+    "country": "nld",
+    "clicks": 5,
+    "impressions": 265,
+    "ctr": 0.0189,
+    "position": 13.48
+   },
+   {
+    "country": "deu",
+    "clicks": 7,
+    "impressions": 258,
+    "ctr": 0.0271,
+    "position": 8.24
+   },
+   {
+    "country": "ita",
+    "clicks": 1,
+    "impressions": 195,
+    "ctr": 0.0051,
+    "position": 7.15
+   },
+   {
+    "country": "irl",
+    "clicks": 1,
+    "impressions": 145,
+    "ctr": 0.0069,
+    "position": 28.48
+   },
+   {
+    "country": "bel",
+    "clicks": 0,
+    "impressions": 124,
+    "ctr": 0,
+    "position": 7.75
+   },
+   {
+    "country": "che",
+    "clicks": 1,
+    "impressions": 121,
+    "ctr": 0.0083,
+    "position": 6.02
+   }
+  ],
+  "top50_pages_by_impressions": [
+   {
+    "page": "/es/guias/calendario-laboral-cataluna/",
+    "clicks": 14,
+    "impressions": 1997,
+    "ctr": 0.007,
+    "position": 25.25
+   },
+   {
+    "page": "/ca/guies/canvi-hora-catalunya/",
+    "clicks": 9,
+    "impressions": 1416,
+    "ctr": 0.0064,
+    "position": 5.89
+   },
+   {
+    "page": "/en/guides/barcelona-transport-passes/",
+    "clicks": 26,
+    "impressions": 1409,
+    "ctr": 0.0185,
+    "position": 7.56
+   },
+   {
+    "page": "/ca/guies/calendari-laboral-catalunya/",
+    "clicks": 6,
+    "impressions": 1303,
+    "ctr": 0.0046,
+    "position": 9.54
+   },
+   {
+    "page": "/es/naturaleza/setas-cataluna-condiciones/",
+    "clicks": 115,
+    "impressions": 1203,
+    "ctr": 0.0956,
+    "position": 4.0
+   },
+   {
+    "page": "/es/guias/aparcar-barcelona-zona-azul-verde/",
+    "clicks": 6,
+    "impressions": 819,
+    "ctr": 0.0073,
+    "position": 9.77
+   },
+   {
+    "page": "/en/events/sitges-film-festival-guide/",
+    "clicks": 5,
+    "impressions": 670,
+    "ctr": 0.0075,
+    "position": 7.94
+   },
+   {
+    "page": "/es/guias/tasa-turistica-barcelona-cataluna/",
+    "clicks": 5,
+    "impressions": 651,
+    "ctr": 0.0077,
+    "position": 10.54
+   },
+   {
+    "page": "/es/guias/horarios-metro-barcelona/",
+    "clicks": 0,
+    "impressions": 592,
+    "ctr": 0,
+    "position": 10.23
+   },
+   {
+    "page": "/es/naturaleza/colores-otono-cataluna/",
+    "clicks": 32,
+    "impressions": 587,
+    "ctr": 0.0545,
+    "position": 5.18
+   },
+   {
+    "page": "/es/guias/es-festivo-hoy-cataluna/",
+    "clicks": 0,
+    "impressions": 549,
+    "ctr": 0,
+    "position": 16.65
+   },
+   {
+    "page": "/en/guides/clock-change-spain/",
+    "clicks": 0,
+    "impressions": 505,
+    "ctr": 0,
+    "position": 7.35
+   },
+   {
+    "page": "/es/agenda/festival-sitges-guia/",
+    "clicks": 12,
+    "impressions": 464,
+    "ctr": 0.0259,
+    "position": 8.09
+   },
+   {
+    "page": "/ca/guies/aparcar-barcelona-zona-blava-verda/",
+    "clicks": 9,
+    "impressions": 446,
+    "ctr": 0.0202,
+    "position": 9.12
+   },
+   {
+    "page": "/ca/natura/colors-tardor-catalunya/",
+    "clicks": 38,
+    "impressions": 423,
+    "ctr": 0.0898,
+    "position": 5.77
+   },
+   {
+    "page": "/en/guides/polling-station-duty-spain/",
+    "clicks": 3,
+    "impressions": 396,
+    "ctr": 0.0076,
+    "position": 2.83
+   },
+   {
+    "page": "/ca/guies/com-votar-eleccions-catalunya/",
+    "clicks": 7,
+    "impressions": 394,
+    "ctr": 0.0178,
+    "position": 6.75
+   },
+   {
+    "page": "/es/guias/como-votar-elecciones-cataluna/",
+    "clicks": 52,
+    "impressions": 373,
+    "ctr": 0.1394,
+    "position": 4.81
+   },
+   {
+    "page": "/ca/guies/calendari-escolar-catalunya/",
+    "clicks": 3,
+    "impressions": 368,
+    "ctr": 0.0082,
+    "position": 6.5
+   },
+   {
+    "page": "/en/nature/fall-colors-catalonia/",
+    "clicks": 14,
+    "impressions": 361,
+    "ctr": 0.0388,
+    "position": 3.97
+   },
+   {
+    "page": "/es/guias/calendario-escolar-cataluna/",
+    "clicks": 0,
+    "impressions": 345,
+    "ctr": 0,
+    "position": 22.43
+   },
+   {
+    "page": "/es/guias/tarjetas-transporte-barcelona/",
+    "clicks": 1,
+    "impressions": 312,
+    "ctr": 0.0032,
+    "position": 17.55
+   },
+   {
+    "page": "/ca/natura/bolets-catalunya-condicions/",
+    "clicks": 8,
+    "impressions": 308,
+    "ctr": 0.026,
+    "position": 9.97
+   },
+   {
+    "page": "/es/guias/zbe-barcelona-vehiculos-extranjeros/",
+    "clicks": 2,
+    "impressions": 298,
+    "ctr": 0.0067,
+    "position": 7.71
+   },
+   {
+    "page": "/en/guides/barcelona-low-emission-zone-foreign-cars/",
+    "clicks": 3,
+    "impressions": 281,
+    "ctr": 0.0107,
+    "position": 7.19
+   },
+   {
+    "page": "/es/guias/miembro-mesa-electoral/",
+    "clicks": 3,
+    "impressions": 264,
+    "ctr": 0.0114,
+    "position": 8.27
+   },
+   {
+    "page": "/en/guides/how-to-vote-catalonia/",
+    "clicks": 5,
+    "impressions": 263,
+    "ctr": 0.019,
+    "position": 4.44
+   },
+   {
+    "page": "/",
+    "clicks": 14,
+    "impressions": 261,
+    "ctr": 0.0536,
+    "position": 9.1
+   },
+   {
+    "page": "/en/guides/barcelona-catalonia-tourist-tax/",
+    "clicks": 3,
+    "impressions": 251,
+    "ctr": 0.012,
+    "position": 7.94
+   },
+   {
+    "page": "/en/nature/mushroom-season-catalonia/",
+    "clicks": 5,
+    "impressions": 213,
+    "ctr": 0.0235,
+    "position": 5.58
+   },
+   {
+    "page": "/en/guides/barcelona-metro-hours/",
+    "clicks": 0,
+    "impressions": 209,
+    "ctr": 0,
+    "position": 5.89
+   },
+   {
+    "page": "/en/guides/barcelona-airport-to-city-centre/",
+    "clicks": 0,
+    "impressions": 187,
+    "ctr": 0,
+    "position": 63.79
+   },
+   {
+    "page": "/en/guides/parking-in-barcelona-blue-green-zones/",
+    "clicks": 0,
+    "impressions": 173,
+    "ctr": 0,
+    "position": 5.78
+   },
+   {
+    "page": "/en/guides/catalonia-public-holidays/",
+    "clicks": 1,
+    "impressions": 170,
+    "ctr": 0.0059,
+    "position": 10.15
+   },
+   {
+    "page": "/ca/guies/membre-mesa-electoral/",
+    "clicks": 7,
+    "impressions": 165,
+    "ctr": 0.0424,
+    "position": 4.64
+   },
+   {
+    "page": "/en/guides/la-boqueria-barcelona-markets/",
+    "clicks": 3,
+    "impressions": 152,
+    "ctr": 0.0197,
+    "position": 8.89
+   },
+   {
+    "page": "/ca/guies/horaris-metro-barcelona/",
+    "clicks": 0,
+    "impressions": 130,
+    "ctr": 0,
+    "position": 9.57
+   },
+   {
+    "page": "/es/gastronomia/ferias-gastronomicas-otono-cataluna/",
+    "clicks": 5,
+    "impressions": 128,
+    "ctr": 0.0391,
+    "position": 6.89
+   },
+   {
+    "page": "/ca/guies/es-festiu-avui-catalunya/",
+    "clicks": 1,
+    "impressions": 128,
+    "ctr": 0.0078,
+    "position": 5.39
+   },
+   {
+    "page": "/en/day-trips/portaventura-from-barcelona/",
+    "clicks": 0,
+    "impressions": 124,
+    "ctr": 0,
+    "position": 7.81
+   },
+   {
+    "page": "/ca/guies/taxa-turistica-barcelona-catalunya/",
+    "clicks": 2,
+    "impressions": 122,
+    "ctr": 0.0164,
+    "position": 7.52
+   },
+   {
+    "page": "/es/",
+    "clicks": 1,
+    "impressions": 108,
+    "ctr": 0.0093,
+    "position": 46.5
+   },
+   {
+    "page": "/es/escapadas/vall-de-nuria-cremallera/",
+    "clicks": 0,
+    "impressions": 108,
+    "ctr": 0,
+    "position": 13.02
+   },
+   {
+    "page": "/es/guias/embalses-cataluna-hoy/",
+    "clicks": 0,
+    "impressions": 108,
+    "ctr": 0,
+    "position": 13.35
+   },
+   {
+    "page": "/es/planes/que-hacer-cataluna-cuando-llueve/",
+    "clicks": 6,
+    "impressions": 107,
+    "ctr": 0.0561,
+    "position": 5.72
+   },
+   {
+    "page": "/ca/agenda/festival-sitges-guia/",
+    "clicks": 0,
+    "impressions": 107,
+    "ctr": 0,
+    "position": 6.75
+   },
+   {
+    "page": "/es/guias/aeropuerto-barcelona-centro/",
+    "clicks": 0,
+    "impressions": 96,
+    "ctr": 0,
+    "position": 31.25
+   },
+   {
+    "page": "/en/things-to-do/catalonia-rainy-day/",
+    "clicks": 2,
+    "impressions": 91,
+    "ctr": 0.022,
+    "position": 9.4
+   },
+   {
+    "page": "/en/traditions/castanyada-catalonia/",
+    "clicks": 1,
+    "impressions": 90,
+    "ctr": 0.0111,
+    "position": 13.88
+   },
+   {
+    "page": "/en/guides/barcelona-zoo-aquarium-tickets/",
+    "clicks": 0,
+    "impressions": 90,
+    "ctr": 0,
+    "position": 8.26
+   }
+  ],
+  "top100_query_page_by_impressions": [
+   {
+    "query": "donde hay setas ahora en cataluña 2026",
+    "page": "/es/naturaleza/setas-cataluna-condiciones/",
+    "clicks": 60,
+    "impressions": 305,
+    "ctr": 0.1967,
+    "position": 1.55
+   },
+   {
+    "query": "canvi d'hora",
+    "page": "/ca/guies/canvi-hora-catalunya/",
+    "clicks": 1,
+    "impressions": 153,
+    "ctr": 0.0065,
+    "position": 6.3
+   },
+   {
+    "query": "quan canvien l'hora",
+    "page": "/ca/guies/canvi-hora-catalunya/",
+    "clicks": 1,
+    "impressions": 112,
+    "ctr": 0.0089,
+    "position": 4.32
+   },
+   {
+    "query": "catalunya info",
+    "page": "/",
+    "clicks": 5,
+    "impressions": 91,
+    "ctr": 0.0549,
+    "position": 6.57
+   },
+   {
+    "query": "canvi hora",
+    "page": "/ca/guies/canvi-hora-catalunya/",
+    "clicks": 1,
+    "impressions": 71,
+    "ctr": 0.0141,
+    "position": 6.13
+   },
+   {
+    "query": "hoy es festivo en cataluña",
+    "page": "/es/guias/es-festivo-hoy-cataluna/",
+    "clicks": 0,
+    "impressions": 56,
+    "ctr": 0,
+    "position": 9.71
+   },
+   {
+    "query": "canvi d hora 2026",
+    "page": "/ca/guies/canvi-hora-catalunya/",
+    "clicks": 0,
+    "impressions": 55,
+    "ctr": 0,
+    "position": 7.38
+   },
+   {
+    "query": "cuando se cobra por estar en una mesa electoral 2026",
+    "page": "/es/guias/miembro-mesa-electoral/",
+    "clicks": 0,
+    "impressions": 54,
+    "ctr": 0,
+    "position": 8.87
+   },
+   {
+    "query": "cuanto pagan por estar en mesa electoral 2026",
+    "page": "/es/guias/miembro-mesa-electoral/",
+    "clicks": 0,
+    "impressions": 52,
+    "ctr": 0,
+    "position": 8.88
+   },
+   {
+    "query": "calendario laboral",
+    "page": "/es/guias/calendario-laboral-cataluna/",
+    "clicks": 0,
+    "impressions": 51,
+    "ctr": 0,
+    "position": 56.2
+   },
+   {
+    "query": "mapa bolets catalunya 2026",
+    "page": "/es/naturaleza/setas-cataluna-condiciones/",
+    "clicks": 2,
+    "impressions": 49,
+    "ctr": 0.0408,
+    "position": 7.84
+   },
+   {
+    "query": "quan canvia l'hora",
+    "page": "/ca/guies/canvi-hora-catalunya/",
+    "clicks": 0,
+    "impressions": 48,
+    "ctr": 0,
+    "position": 6.48
+   },
+   {
+    "query": "mapa bolets catalunya 2026",
+    "page": "/ca/natura/bolets-catalunya-condicions/",
+    "clicks": 0,
+    "impressions": 47,
+    "ctr": 0,
+    "position": 10.68
+   },
+   {
+    "query": "calendario laboral 2027",
+    "page": "/es/guias/calendario-laboral-cataluna/",
+    "clicks": 1,
+    "impressions": 45,
+    "ctr": 0.0222,
+    "position": 43.36
+   },
+   {
+    "query": "when do the clocks change in spain",
+    "page": "/en/guides/clock-change-spain/",
+    "clicks": 0,
+    "impressions": 44,
+    "ctr": 0,
+    "position": 7.61
+   },
+   {
+    "query": "calendari laboral 2027 catalunya",
+    "page": "/es/guias/calendario-laboral-cataluna/",
+    "clicks": 2,
+    "impressions": 43,
+    "ctr": 0.0465,
+    "position": 8.84
+   },
+   {
+    "query": "festivitats",
+    "page": "/ca/guies/calendari-laboral-catalunya/",
+    "clicks": 0,
+    "impressions": 42,
+    "ctr": 0,
+    "position": 43.52
+   },
+   {
+    "query": "quan es canvia l'hora",
+    "page": "/ca/guies/canvi-hora-catalunya/",
+    "clicks": 0,
+    "impressions": 42,
+    "ctr": 0,
+    "position": 6.02
+   },
+   {
+    "query": "calendario laboral cataluña 2027",
+    "page": "/es/guias/calendario-laboral-cataluna/",
+    "clicks": 0,
+    "impressions": 41,
+    "ctr": 0,
+    "position": 1
+   },
+   {
+    "query": "canvi d'hora 2026",
+    "page": "/ca/guies/canvi-hora-catalunya/",
+    "clicks": 1,
+    "impressions": 40,
+    "ctr": 0.025,
+    "position": 7.83
+   },
+   {
+    "query": "canvi horari",
+    "page": "/ca/guies/canvi-hora-catalunya/",
+    "clicks": 0,
+    "impressions": 39,
+    "ctr": 0,
+    "position": 5.49
+   },
+   {
+    "query": "festivos catalunya 2027",
+    "page": "/es/guias/calendario-laboral-cataluna/",
+    "clicks": 0,
+    "impressions": 39,
+    "ctr": 0,
+    "position": 9.23
+   },
+   {
+    "query": "divendres sant 2027",
+    "page": "/ca/guies/calendari-laboral-catalunya/",
+    "clicks": 0,
+    "impressions": 36,
+    "ctr": 0,
+    "position": 10.17
+   },
+   {
+    "query": "sitges film festival 2026 schedule",
+    "page": "/en/events/sitges-film-festival-guide/",
+    "clicks": 1,
+    "impressions": 34,
+    "ctr": 0.0294,
+    "position": 8.53
+   },
+   {
+    "query": "canvi d hora",
+    "page": "/ca/guies/canvi-hora-catalunya/",
+    "clicks": 1,
+    "impressions": 33,
+    "ctr": 0.0303,
+    "position": 5.79
+   },
+   {
+    "query": "when do clocks change in spain",
+    "page": "/en/guides/clock-change-spain/",
+    "clicks": 0,
+    "impressions": 33,
+    "ctr": 0,
+    "position": 7.79
+   },
+   {
+    "query": "on trobar bolets aquesta setmana 2026",
+    "page": "/ca/natura/bolets-catalunya-condicions/",
+    "clicks": 0,
+    "impressions": 31,
+    "ctr": 0,
+    "position": 8.1
+   },
+   {
+    "query": "canvi dhora",
+    "page": "/ca/guies/canvi-hora-catalunya/",
+    "clicks": 0,
+    "impressions": 30,
+    "ctr": 0,
+    "position": 6.13
+   },
+   {
+    "query": "preu zona blava barcelona",
+    "page": "/ca/guies/aparcar-barcelona-zona-blava-verda/",
+    "clicks": 0,
+    "impressions": 28,
+    "ctr": 0,
+    "position": 3.68
+   },
+   {
+    "query": "sitges film festival 2026 tickets",
+    "page": "/en/events/sitges-film-festival-guide/",
+    "clicks": 0,
+    "impressions": 28,
+    "ctr": 0,
+    "position": 9.82
+   },
+   {
+    "query": "30 octubre festivo",
+    "page": "/es/guias/calendario-laboral-cataluna/",
+    "clicks": 0,
+    "impressions": 25,
+    "ctr": 0,
+    "position": 7.52
+   },
+   {
+    "query": "rutes hivern catalunya",
+    "page": "/ca/guies/on-veure-neu-catalunya-sense-esquiar/",
+    "clicks": 0,
+    "impressions": 23,
+    "ctr": 0,
+    "position": 65.96
+   },
+   {
+    "query": "cuando empieza el otoño en cataluña",
+    "page": "/es/naturaleza/colores-otono-cataluna/",
+    "clicks": 0,
+    "impressions": 22,
+    "ctr": 0,
+    "position": 8.05
+   },
+   {
+    "query": "how to vote 2026 spain general election",
+    "page": "/en/guides/how-to-vote-catalonia/",
+    "clicks": 2,
+    "impressions": 21,
+    "ctr": 0.0952,
+    "position": 4.52
+   },
+   {
+    "query": "como pedir autorización para entrar en barcelona",
+    "page": "/es/guias/zbe-barcelona-vehiculos-extranjeros/",
+    "clicks": 0,
+    "impressions": 21,
+    "ctr": 0,
+    "position": 12.76
+   },
+   {
+    "query": "calendario laboral 2027 catalunya",
+    "page": "/es/guias/calendario-laboral-cataluna/",
+    "clicks": 0,
+    "impressions": 20,
+    "ctr": 0,
+    "position": 9.45
+   },
+   {
+    "query": "festividades",
+    "page": "/es/guias/es-festivo-hoy-cataluna/",
+    "clicks": 0,
+    "impressions": 20,
+    "ctr": 0,
+    "position": 90.85
+   },
+   {
+    "query": "bolets catalunya 2026",
+    "page": "/ca/natura/bolets-catalunya-condicions/",
+    "clicks": 1,
+    "impressions": 19,
+    "ctr": 0.0526,
+    "position": 11.21
+   },
+   {
+    "query": "calendari laboral 2027 catalunya",
+    "page": "/ca/guies/calendari-laboral-catalunya/",
+    "clicks": 0,
+    "impressions": 19,
+    "ctr": 0,
+    "position": 9.89
+   },
+   {
+    "query": "el dia 30 de octubre es festivo",
+    "page": "/es/guias/calendario-laboral-cataluna/",
+    "clicks": 0,
+    "impressions": 19,
+    "ctr": 0,
+    "position": 7.63
+   },
+   {
+    "query": "quan es el canvi d'hora",
+    "page": "/ca/guies/canvi-hora-catalunya/",
+    "clicks": 0,
+    "impressions": 19,
+    "ctr": 0,
+    "position": 5.53
+   },
+   {
+    "query": "bolets de tardor catalunya",
+    "page": "/ca/natura/colors-tardor-catalunya/",
+    "clicks": 0,
+    "impressions": 18,
+    "ctr": 0,
+    "position": 37.94
+   },
+   {
+    "query": "festivos 2027 catalunya",
+    "page": "/es/guias/calendario-laboral-cataluna/",
+    "clicks": 0,
+    "impressions": 18,
+    "ctr": 0,
+    "position": 11.56
+   },
+   {
+    "query": "2026 spain general election how to register to vote",
+    "page": "/en/guides/how-to-vote-catalonia/",
+    "clicks": 0,
+    "impressions": 17,
+    "ctr": 0,
+    "position": 5.53
+   },
+   {
+    "query": "embalses catalunya",
+    "page": "/es/guias/embalses-cataluna-hoy/",
+    "clicks": 0,
+    "impressions": 17,
+    "ctr": 0,
+    "position": 11.76
+   },
+   {
+    "query": "transfer from barcelona airport to city centre",
+    "page": "/en/guides/barcelona-airport-to-city-centre/",
+    "clicks": 0,
+    "impressions": 17,
+    "ctr": 0,
+    "position": 73.35
+   },
+   {
+    "query": "autobus aeropuerto barcelona centro",
+    "page": "/es/guias/aeropuerto-barcelona-centro/",
+    "clicks": 0,
+    "impressions": 16,
+    "ctr": 0,
+    "position": 38.69
+   },
+   {
+    "query": "barcelona airport to barcelona centre",
+    "page": "/en/guides/barcelona-airport-to-city-centre/",
+    "clicks": 0,
+    "impressions": 16,
+    "ctr": 0,
+    "position": 66.62
+   },
+   {
+    "query": "hoy es festivo",
+    "page": "/es/guias/es-festivo-hoy-cataluna/",
+    "clicks": 0,
+    "impressions": 16,
+    "ctr": 0,
+    "position": 20.19
+   },
+   {
+    "query": "quan canvien l'hora?",
+    "page": "/ca/guies/canvi-hora-catalunya/",
+    "clicks": 0,
+    "impressions": 16,
+    "ctr": 0,
+    "position": 4.25
+   },
+   {
+    "query": "quin dia canvien l'hora",
+    "page": "/ca/guies/canvi-hora-catalunya/",
+    "clicks": 0,
+    "impressions": 16,
+    "ctr": 0,
+    "position": 8
+   },
+   {
+    "query": "como funciona la zona verde en barcelona",
+    "page": "/es/guias/aparcar-barcelona-zona-azul-verde/",
+    "clicks": 0,
+    "impressions": 15,
+    "ctr": 0,
+    "position": 21.2
+   },
+   {
+    "query": "semana santa 2027 catalunya",
+    "page": "/es/guias/calendario-laboral-cataluna/",
+    "clicks": 0,
+    "impressions": 15,
+    "ctr": 0,
+    "position": 11.4
+   },
+   {
+    "query": "vall de montnou",
+    "page": "/ca/guies/on-veure-neu-catalunya-sense-esquiar/",
+    "clicks": 0,
+    "impressions": 15,
+    "ctr": 0,
+    "position": 55.53
+   },
+   {
+    "query": "calendario laboral catalunya 2027",
+    "page": "/es/guias/calendario-laboral-cataluna/",
+    "clicks": 2,
+    "impressions": 14,
+    "ctr": 0.1429,
+    "position": 10.14
+   },
+   {
+    "query": "avui es festiu a catalunya",
+    "page": "/ca/guies/es-festiu-avui-catalunya/",
+    "clicks": 1,
+    "impressions": 14,
+    "ctr": 0.0714,
+    "position": 4.57
+   },
+   {
+    "query": "30 de octubre es festivo",
+    "page": "/es/guias/calendario-laboral-cataluna/",
+    "clicks": 0,
+    "impressions": 14,
+    "ctr": 0,
+    "position": 8.5
+   },
+   {
+    "query": "calendari laboral catalunya 2027",
+    "page": "/ca/guies/calendari-laboral-catalunya/",
+    "clicks": 0,
+    "impressions": 14,
+    "ctr": 0,
+    "position": 12.07
+   },
+   {
+    "query": "catalunya informacio",
+    "page": "/",
+    "clicks": 0,
+    "impressions": 14,
+    "ctr": 0,
+    "position": 10.64
+   },
+   {
+    "query": "site.boe.es \"806/2026\" \"elecciones\"",
+    "page": "/en/guides/how-to-vote-catalonia/",
+    "clicks": 0,
+    "impressions": 14,
+    "ctr": 0,
+    "position": 4.57
+   },
+   {
+    "query": "vall de montnou",
+    "page": "/es/",
+    "clicks": 0,
+    "impressions": 14,
+    "ctr": 0,
+    "position": 72.79
+   },
+   {
+    "query": "when do the clocks go back in spain",
+    "page": "/en/guides/clock-change-spain/",
+    "clicks": 0,
+    "impressions": 14,
+    "ctr": 0,
+    "position": 6
+   },
+   {
+    "query": "a que hora cierra el metro",
+    "page": "/es/guias/horarios-metro-barcelona/",
+    "clicks": 0,
+    "impressions": 13,
+    "ctr": 0,
+    "position": 12.23
+   },
+   {
+    "query": "airport to barcelona city centre",
+    "page": "/en/guides/barcelona-airport-to-city-centre/",
+    "clicks": 0,
+    "impressions": 13,
+    "ctr": 0,
+    "position": 69.31
+   },
+   {
+    "query": "colors de tardor a catalunya",
+    "page": "/ca/natura/colors-tardor-catalunya/",
+    "clicks": 0,
+    "impressions": 13,
+    "ctr": 0,
+    "position": 5.85
+   },
+   {
+    "query": "horario metro viernes",
+    "page": "/es/guias/horarios-metro-barcelona/",
+    "clicks": 0,
+    "impressions": 13,
+    "ctr": 0,
+    "position": 10.77
+   },
+   {
+    "query": "quan canvien la hora",
+    "page": "/ca/guies/canvi-hora-catalunya/",
+    "clicks": 0,
+    "impressions": 13,
+    "ctr": 0,
+    "position": 6.85
+   },
+   {
+    "query": "setcases",
+    "page": "/en/destinations/setcases/",
+    "clicks": 0,
+    "impressions": 13,
+    "ctr": 0,
+    "position": 10.62
+   },
+   {
+    "query": "setcases que ver",
+    "page": "/es/destinos/setcases/",
+    "clicks": 0,
+    "impressions": 13,
+    "ctr": 0,
+    "position": 13.69
+   },
+   {
+    "query": "sitges film festival 2026 dates",
+    "page": "/en/events/sitges-film-festival-guide/",
+    "clicks": 0,
+    "impressions": 13,
+    "ctr": 0,
+    "position": 8.85
+   },
+   {
+    "query": "tasa turistica catalunya",
+    "page": "/es/guias/tasa-turistica-barcelona-cataluna/",
+    "clicks": 0,
+    "impressions": 13,
+    "ctr": 0,
+    "position": 10.69
+   },
+   {
+    "query": "transporte del aeropuerto de barcelona al centro",
+    "page": "/es/guias/aeropuerto-barcelona-centro/",
+    "clicks": 0,
+    "impressions": 13,
+    "ctr": 0,
+    "position": 48.46
+   },
+   {
+    "query": "when do the clocks go back",
+    "page": "/en/guides/clock-change-spain/",
+    "clicks": 0,
+    "impressions": 13,
+    "ctr": 0,
+    "position": 8.31
+   },
+   {
+    "query": "quan es canvia l'hora?",
+    "page": "/ca/guies/canvi-hora-catalunya/",
+    "clicks": 1,
+    "impressions": 12,
+    "ctr": 0.0833,
+    "position": 4.83
+   },
+   {
+    "query": "barcelona transport pass",
+    "page": "/en/guides/barcelona-transport-passes/",
+    "clicks": 0,
+    "impressions": 12,
+    "ctr": 0,
+    "position": 14.25
+   },
+   {
+    "query": "calendario escolar",
+    "page": "/es/guias/calendario-escolar-cataluna/",
+    "clicks": 0,
+    "impressions": 12,
+    "ctr": 0,
+    "position": 19.08
+   },
+   {
+    "query": "es festivo hoy en cataluña",
+    "page": "/es/guias/es-festivo-hoy-cataluna/",
+    "clicks": 0,
+    "impressions": 12,
+    "ctr": 0,
+    "position": 9.83
+   },
+   {
+    "query": "quan canvien l hora",
+    "page": "/ca/guies/canvi-hora-catalunya/",
+    "clicks": 0,
+    "impressions": 12,
+    "ctr": 0,
+    "position": 3.92
+   },
+   {
+    "query": "zona azul barcelona",
+    "page": "/es/guias/aparcar-barcelona-zona-azul-verde/",
+    "clicks": 0,
+    "impressions": 12,
+    "ctr": 0,
+    "position": 32.92
+   },
+   {
+    "query": "barcelona airport to barcelona city centre",
+    "page": "/en/guides/barcelona-airport-to-city-centre/",
+    "clicks": 0,
+    "impressions": 11,
+    "ctr": 0,
+    "position": 68
+   },
+   {
+    "query": "bcn airport to city center",
+    "page": "/en/guides/barcelona-airport-to-city-centre/",
+    "clicks": 0,
+    "impressions": 11,
+    "ctr": 0,
+    "position": 63.91
+   },
+   {
+    "query": "el 30 de octubre es festivo",
+    "page": "/es/guias/calendario-laboral-cataluna/",
+    "clicks": 0,
+    "impressions": 11,
+    "ctr": 0,
+    "position": 9.36
+   },
+   {
+    "query": "t casual",
+    "page": "/es/guias/tarjetas-transporte-barcelona/",
+    "clicks": 0,
+    "impressions": 11,
+    "ctr": 0,
+    "position": 29.36
+   },
+   {
+    "query": "t casual barcelona",
+    "page": "/en/guides/barcelona-transport-passes/",
+    "clicks": 0,
+    "impressions": 11,
+    "ctr": 0,
+    "position": 12.55
+   },
+   {
+    "query": "30 de octubre festivo",
+    "page": "/es/guias/calendario-laboral-cataluna/",
+    "clicks": 0,
+    "impressions": 10,
+    "ctr": 0,
+    "position": 6.8
+   },
+   {
+    "query": "a que hora abre el metro",
+    "page": "/es/guias/horarios-metro-barcelona/",
+    "clicks": 0,
+    "impressions": 10,
+    "ctr": 0,
+    "position": 10.3
+   },
+   {
+    "query": "a qué hora cierra el metro",
+    "page": "/es/guias/horarios-metro-barcelona/",
+    "clicks": 0,
+    "impressions": 10,
+    "ctr": 0,
+    "position": 11.9
+   },
+   {
+    "query": "barcelona city centre to airport",
+    "page": "/en/guides/barcelona-airport-to-city-centre/",
+    "clicks": 0,
+    "impressions": 10,
+    "ctr": 0,
+    "position": 67.3
+   },
+   {
+    "query": "bus aeropuerto barcelona centro",
+    "page": "/es/guias/aeropuerto-barcelona-centro/",
+    "clicks": 0,
+    "impressions": 10,
+    "ctr": 0,
+    "position": 47
+   },
+   {
+    "query": "clocks change spain",
+    "page": "/en/guides/clock-change-spain/",
+    "clicks": 0,
+    "impressions": 10,
+    "ctr": 0,
+    "position": 8.7
+   },
+   {
+    "query": "do spain's clocks go back",
+    "page": "/en/guides/clock-change-spain/",
+    "clicks": 0,
+    "impressions": 10,
+    "ctr": 0,
+    "position": 6.9
+   },
+   {
+    "query": "horario metro",
+    "page": "/es/guias/horarios-metro-barcelona/",
+    "clicks": 0,
+    "impressions": 10,
+    "ctr": 0,
+    "position": 9.3
+   },
+   {
+    "query": "mañana es festivo",
+    "page": "/es/guias/es-festivo-hoy-cataluna/",
+    "clicks": 0,
+    "impressions": 10,
+    "ctr": 0,
+    "position": 56.7
+   },
+   {
+    "query": "pasqua florida 2027",
+    "page": "/ca/guies/calendari-laboral-catalunya/",
+    "clicks": 0,
+    "impressions": 10,
+    "ctr": 0,
+    "position": 9.5
+   },
+   {
+    "query": "ponts 2027",
+    "page": "/ca/guies/calendari-laboral-catalunya/",
+    "clicks": 0,
+    "impressions": 10,
+    "ctr": 0,
+    "position": 9.7
+   },
+   {
+    "query": "proxim canvi d'hora",
+    "page": "/ca/guies/canvi-hora-catalunya/",
+    "clicks": 0,
+    "impressions": 10,
+    "ctr": 0,
+    "position": 4.3
+   },
+   {
+    "query": "tasa turistica barcelona",
+    "page": "/es/guias/tasa-turistica-barcelona-cataluna/",
+    "clicks": 0,
+    "impressions": 10,
+    "ctr": 0,
+    "position": 23.8
+   },
+   {
+    "query": "taxa turistica catalunya",
+    "page": "/es/guias/tasa-turistica-barcelona-cataluna/",
+    "clicks": 0,
+    "impressions": 10,
+    "ctr": 0,
+    "position": 15.9
+   },
+   {
+    "query": "airport barcelona to city centre",
+    "page": "/en/guides/barcelona-airport-to-city-centre/",
+    "clicks": 0,
+    "impressions": 9,
+    "ctr": 0,
+    "position": 67.67
+   },
+   {
+    "query": "barcelona airport bus to city",
+    "page": "/en/guides/barcelona-airport-to-city-centre/",
+    "clicks": 0,
+    "impressions": 9,
+    "ctr": 0,
+    "position": 58.67
+   }
+  ],
+  "row_counts": {
+   "pages": 180,
+   "queries": 2486,
+   "query_page": 2624,
+   "countries": 136
+  }
+ },
+ "ga4": {
+  "last_28_days_totals": {
+   "sessions": 404,
+   "totalUsers": 330,
+   "newUsers": 325,
+   "screenPageViews": 544,
+   "engagedSessions": 244,
+   "engagementRate": 0.604,
+   "averageSessionDuration_s": 147.5,
+   "screenPageViewsPerSession": 1.347,
+   "bounceRate": 0.396,
+   "eventCount": 1683
+  },
+  "by_device": [
+   {
+    "deviceCategory": "mobile",
+    "sessions": 248,
+    "totalUsers": 210,
+    "screenPageViews": 285,
+    "engagementRate": 0.524,
+    "averageSessionDuration_s": 100.1,
+    "screenPageViewsPerSession": 1.149
+   },
+   {
+    "deviceCategory": "desktop",
+    "sessions": 152,
+    "totalUsers": 117,
+    "screenPageViews": 254,
+    "engagementRate": 0.737,
+    "averageSessionDuration_s": 217.9,
+    "screenPageViewsPerSession": 1.671
+   },
+   {
+    "deviceCategory": "tablet",
+    "sessions": 3,
+    "totalUsers": 3,
+    "screenPageViews": 5,
+    "engagementRate": 0.667,
+    "averageSessionDuration_s": 549.1,
+    "screenPageViewsPerSession": 1.667
+   }
+  ],
+  "by_channel_group": [
+   {
+    "sessionDefaultChannelGroup": "Organic Search",
+    "sessions": 295,
+    "totalUsers": 248,
+    "engagementRate": 0.614,
+    "averageSessionDuration_s": 159.4,
+    "screenPageViewsPerSession": 1.092
+   },
+   {
+    "sessionDefaultChannelGroup": "Direct",
+    "sessions": 73,
+    "totalUsers": 57,
+    "engagementRate": 0.671,
+    "averageSessionDuration_s": 144.7,
+    "screenPageViewsPerSession": 2.479
+   },
+   {
+    "sessionDefaultChannelGroup": "AI Assistant",
+    "sessions": 34,
+    "totalUsers": 27,
+    "engagementRate": 0.382,
+    "averageSessionDuration_s": 57.8,
+    "screenPageViewsPerSession": 1.118
+   },
+   {
+    "sessionDefaultChannelGroup": "Referral",
+    "sessions": 1,
+    "totalUsers": 1,
+    "engagementRate": 1.0,
+    "averageSessionDuration_s": 33.9,
+    "screenPageViewsPerSession": 3.0
+   }
+  ],
+  "by_session_source_top15": [
+   {
+    "sessionSource": "google",
+    "sessions": 215,
+    "totalUsers": 182,
+    "engagementRate": 0.581,
+    "averageSessionDuration_s": 125.1,
+    "screenPageViewsPerSession": 1.121
+   },
+   {
+    "sessionSource": "(direct)",
+    "sessions": 73,
+    "totalUsers": 57,
+    "engagementRate": 0.671,
+    "averageSessionDuration_s": 144.7,
+    "screenPageViewsPerSession": 2.479
+   },
+   {
+    "sessionSource": "bing",
+    "sessions": 52,
+    "totalUsers": 47,
+    "engagementRate": 0.788,
+    "averageSessionDuration_s": 249.6,
+    "screenPageViewsPerSession": 1.038
+   },
+   {
+    "sessionSource": "chatgpt.com",
+    "sessions": 31,
+    "totalUsers": 24,
+    "engagementRate": 0.355,
+    "averageSessionDuration_s": 59.4,
+    "screenPageViewsPerSession": 1.161
+   },
+   {
+    "sessionSource": "es.search.yahoo.com",
+    "sessions": 18,
+    "totalUsers": 12,
+    "engagementRate": 0.611,
+    "averageSessionDuration_s": 314.4,
+    "screenPageViewsPerSession": 0.889
+   },
+   {
+    "sessionSource": "ecosia.org",
+    "sessions": 5,
+    "totalUsers": 3,
+    "engagementRate": 0.4,
+    "averageSessionDuration_s": 229.9,
+    "screenPageViewsPerSession": 1.2
+   },
+   {
+    "sessionSource": "duckduckgo",
+    "sessions": 4,
+    "totalUsers": 4,
+    "engagementRate": 0.5,
+    "averageSessionDuration_s": 83.6,
+    "screenPageViewsPerSession": 1.0
+   },
+   {
+    "sessionSource": "gemini.google.com",
+    "sessions": 3,
+    "totalUsers": 3,
+    "engagementRate": 0.667,
+    "averageSessionDuration_s": 40.6,
+    "screenPageViewsPerSession": 0.667
+   },
+   {
+    "sessionSource": "ar.search.yahoo.com",
+    "sessions": 1,
+    "totalUsers": 1,
+    "engagementRate": 0.0,
+    "averageSessionDuration_s": 9.4,
+    "screenPageViewsPerSession": 1.0
+   },
+   {
+    "sessionSource": "ops.picrights.com",
+    "sessions": 1,
+    "totalUsers": 1,
+    "engagementRate": 1.0,
+    "averageSessionDuration_s": 33.9,
+    "screenPageViewsPerSession": 3.0
+   }
+  ],
+  "session_source_rows_available": 10,
+  "landing_pages_top30": [
+   {
+    "landingPage": "/es/naturaleza/setas-cataluna-condiciones",
+    "sessions": 72,
+    "totalUsers": 58,
+    "engagementRate": 0.542,
+    "averageSessionDuration_s": 116.8,
+    "screenPageViewsPerSession": 1.153
+   },
+   {
+    "landingPage": "/es/guias/como-votar-elecciones-cataluna",
+    "sessions": 33,
+    "totalUsers": 30,
+    "engagementRate": 0.667,
+    "averageSessionDuration_s": 224.0,
+    "screenPageViewsPerSession": 1.242
+   },
+   {
+    "landingPage": "/es/guias/calendario-laboral-cataluna",
+    "sessions": 28,
+    "totalUsers": 27,
+    "engagementRate": 0.714,
+    "averageSessionDuration_s": 220.6,
+    "screenPageViewsPerSession": 1.071
+   },
+   {
+    "landingPage": "/es/naturaleza/colores-otono-cataluna",
+    "sessions": 26,
+    "totalUsers": 21,
+    "engagementRate": 0.423,
+    "averageSessionDuration_s": 86.6,
+    "screenPageViewsPerSession": 1.154
+   },
+   {
+    "landingPage": "/ca/natura/colors-tardor-catalunya",
+    "sessions": 23,
+    "totalUsers": 17,
+    "engagementRate": 0.435,
+    "averageSessionDuration_s": 154.9,
+    "screenPageViewsPerSession": 1.087
+   },
+   {
+    "landingPage": "/ca/natura/bolets-catalunya-condicions",
+    "sessions": 21,
+    "totalUsers": 18,
+    "engagementRate": 0.714,
+    "averageSessionDuration_s": 128.2,
+    "screenPageViewsPerSession": 1.429
+   },
+   {
+    "landingPage": "(not set)",
+    "sessions": 17,
+    "totalUsers": 15,
+    "engagementRate": 0.0,
+    "averageSessionDuration_s": 0.0,
+    "screenPageViewsPerSession": 0.0
+   },
+   {
+    "landingPage": "/en/guides/barcelona-transport-passes",
+    "sessions": 17,
+    "totalUsers": 17,
+    "engagementRate": 0.706,
+    "averageSessionDuration_s": 133.9,
+    "screenPageViewsPerSession": 1.353
+   },
+   {
+    "landingPage": "/en/guides/barcelona-catalonia-tourist-tax",
+    "sessions": 11,
+    "totalUsers": 11,
+    "engagementRate": 1.0,
+    "averageSessionDuration_s": 475.4,
+    "screenPageViewsPerSession": 1.273
+   },
+   {
+    "landingPage": "/es/guias/tasa-turistica-barcelona-cataluna",
+    "sessions": 11,
+    "totalUsers": 11,
+    "engagementRate": 0.727,
+    "averageSessionDuration_s": 270.6,
+    "screenPageViewsPerSession": 1.182
+   },
+   {
+    "landingPage": "/ca",
+    "sessions": 10,
+    "totalUsers": 7,
+    "engagementRate": 0.8,
+    "averageSessionDuration_s": 59.6,
+    "screenPageViewsPerSession": 5.1
+   },
+   {
+    "landingPage": "/es/agenda/festival-sitges-guia",
+    "sessions": 10,
+    "totalUsers": 9,
+    "engagementRate": 0.7,
+    "averageSessionDuration_s": 139.1,
+    "screenPageViewsPerSession": 1.1
+   },
+   {
+    "landingPage": "/en",
+    "sessions": 8,
+    "totalUsers": 3,
+    "engagementRate": 0.75,
+    "averageSessionDuration_s": 77.1,
+    "screenPageViewsPerSession": 5.5
+   },
+   {
+    "landingPage": "/en/nature/fall-colors-catalonia",
+    "sessions": 8,
+    "totalUsers": 7,
+    "engagementRate": 0.875,
+    "averageSessionDuration_s": 87.9,
+    "screenPageViewsPerSession": 1.25
+   },
+   {
+    "landingPage": "/es",
+    "sessions": 7,
+    "totalUsers": 4,
+    "engagementRate": 0.857,
+    "averageSessionDuration_s": 63.3,
+    "screenPageViewsPerSession": 1.857
+   },
+   {
+    "landingPage": "/ca/guies/calendari-laboral-catalunya",
+    "sessions": 6,
+    "totalUsers": 5,
+    "engagementRate": 0.833,
+    "averageSessionDuration_s": 28.1,
+    "screenPageViewsPerSession": 1.667
+   },
+   {
+    "landingPage": "/en/guides/barcelona-airport-to-city-centre",
+    "sessions": 6,
+    "totalUsers": 6,
+    "engagementRate": 0.333,
+    "averageSessionDuration_s": 401.7,
+    "screenPageViewsPerSession": 1.667
+   },
+   {
+    "landingPage": "/es/agenda/que-hacer-este-fin-de-semana-cataluna",
+    "sessions": 6,
+    "totalUsers": 5,
+    "engagementRate": 0.5,
+    "averageSessionDuration_s": 24.2,
+    "screenPageViewsPerSession": 1.0
+   },
+   {
+    "landingPage": "/es/guias/es-festivo-hoy-cataluna",
+    "sessions": 4,
+    "totalUsers": 4,
+    "engagementRate": 0.5,
+    "averageSessionDuration_s": 20.9,
+    "screenPageViewsPerSession": 1.0
+   },
+   {
+    "landingPage": "/es/guias/resultados-elecciones-generales-cataluna",
+    "sessions": 4,
+    "totalUsers": 4,
+    "engagementRate": 0.5,
+    "averageSessionDuration_s": 46.2,
+    "screenPageViewsPerSession": 1.0
+   },
+   {
+    "landingPage": "/ca/guies/aparcar-barcelona-zona-blava-verda",
+    "sessions": 3,
+    "totalUsers": 3,
+    "engagementRate": 0.0,
+    "averageSessionDuration_s": 0.0,
+    "screenPageViewsPerSession": 1.0
+   },
+   {
+    "landingPage": "/ca/guies/com-votar-eleccions-catalunya",
+    "sessions": 3,
+    "totalUsers": 3,
+    "engagementRate": 0.667,
+    "averageSessionDuration_s": 53.7,
+    "screenPageViewsPerSession": 1.0
+   },
+   {
+    "landingPage": "/ca/plans/que-fer-catalunya-quan-plou",
+    "sessions": 3,
+    "totalUsers": 3,
+    "engagementRate": 1.0,
+    "averageSessionDuration_s": 99.5,
+    "screenPageViewsPerSession": 1.333
+   },
+   {
+    "landingPage": "/en/guides/polling-station-duty-spain",
+    "sessions": 3,
+    "totalUsers": 1,
+    "engagementRate": 0.0,
+    "averageSessionDuration_s": 0.0,
+    "screenPageViewsPerSession": 1.0
+   },
+   {
+    "landingPage": "/en/nature/mushroom-season-catalonia",
+    "sessions": 3,
+    "totalUsers": 3,
+    "engagementRate": 0.667,
+    "averageSessionDuration_s": 13.6,
+    "screenPageViewsPerSession": 1.0
+   },
+   {
+    "landingPage": "/en/things-to-do/catalonia-rainy-day",
+    "sessions": 3,
+    "totalUsers": 3,
+    "engagementRate": 0.667,
+    "averageSessionDuration_s": 61.7,
+    "screenPageViewsPerSession": 1.0
+   },
+   {
+    "landingPage": "/es/guias/aparcar-barcelona-zona-azul-verde",
+    "sessions": 3,
+    "totalUsers": 3,
+    "engagementRate": 0.667,
+    "averageSessionDuration_s": 14.2,
+    "screenPageViewsPerSession": 1.0
+   },
+   {
+    "landingPage": "/es/guias/tarjetas-transporte-barcelona",
+    "sessions": 3,
+    "totalUsers": 3,
+    "engagementRate": 1.0,
+    "averageSessionDuration_s": 695.2,
+    "screenPageViewsPerSession": 2.667
+   },
+   {
+    "landingPage": "/ca/agenda/que-fer-aquest-cap-de-setmana-catalunya",
+    "sessions": 2,
+    "totalUsers": 2,
+    "engagementRate": 1.0,
+    "averageSessionDuration_s": 749.7,
+    "screenPageViewsPerSession": 1.5
+   },
+   {
+    "landingPage": "/ca/escapades/escapades-barcelona-mes-enlla-montserrat",
+    "sessions": 2,
+    "totalUsers": 2,
+    "engagementRate": 0.0,
+    "averageSessionDuration_s": 0.0,
+    "screenPageViewsPerSession": 1.0
+   }
+  ],
+  "landing_pages_total_rows": 67,
+  "pages_per_session": 1.347
+ }
+}
