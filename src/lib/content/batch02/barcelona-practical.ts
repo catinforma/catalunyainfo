@@ -277,7 +277,7 @@ export const TRANSPORT: B2Article = {
       path: "guides/barcelona-transport-passes",
       title:
         "T-casual, T-dia, T-usual or Hola Barcelona: which transport pass should you buy?",
-      seoTitle: "Barcelona metro pass 2026: T-casual, T-dia or Hola BCN?",
+      seoTitle: "Barcelona transport pass for 1 to 5 days: 2026 prices",
       seoDescription:
         "Compare T-casual, T-dia, T-usual and Hola Barcelona by days, journeys and whether you need the airport metro. With a selector.",
       excerpt:

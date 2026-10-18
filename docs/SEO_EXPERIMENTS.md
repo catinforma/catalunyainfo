@@ -330,6 +330,24 @@ viernes hasta las 2:00" (ca/en equivalents). Logged late, on 18 Oct.
 **Frozen until 14 Nov** (28 days). Note the 29 Nov election will raise mesa demand
 on its own; compare CTR at equal positions, not clicks.
 
+## 2026-10-18 — Barcelona transport passes (EN): the number of days in the title
+
+**Before.** "Barcelona metro pass 2026: T-casual, T-dia or Hola BCN?". GSC 20 Sep-17
+Oct: 1,419 impressions, 26 clicks (CTR 1.8 %), position 7.6. The queries are a
+long multilingual tail of durations ("3 days", "3 tage", "4 giorni", "48h",
+"5 days pass"), one or two impressions each; the page never said what a given
+number of days costs.
+
+**Change (branch `sprint/2026-10-19-perf-and-season`, commit 041d054 + title
+commit).** Body: a "what 1 to 5 days cost" table in all three editions,
+computed from the fare table. EN title only: "Barcelona transport pass for 1 to
+5 days: 2026 prices". ca/es titles unchanged (their impressions are too few to
+read).
+
+**Frozen for 28 days from the deploy date** (write it here when it ships).
+Compare CTR at equal positions; the body change can also move position, so
+report both.
+
 ## Candidates not yet run
 
 Recorded so they are not lost, and so they are not all started at once.
