@@ -424,3 +424,22 @@ test("election night: provisional, no CERA, no forecasts, no invented site", () 
   }
   assert.ok(ELECTION_NIGHT.sources.every((s) => !/resultados\.[a-z]/.test(s.url)), "no guessed results-site domain");
 });
+
+/**
+ * Parking: three errors found on 18 Oct 2026 against AREA's own pages
+ * (research_notes/blog-batch-03/parking_area_verda_blava.md). The blue
+ * schedule was given as the only one, the meter was said to print a
+ * windscreen ticket, and resident-only spaces were never mentioned.
+ */
+test("parking: green hours, no windscreen ticket, resident-only spaces, no invented fine", () => {
+  const green = { ca: /de 8\.00 a 20\.00 h o fins a les 22\.00/, es: /de 8:00 a 20:00 o hasta las 22:00/, en: /from 8:00 to 20:00 or to 22:00/ };
+  const residentOnly = { ca: /exclusives per a residents/, es: /exclusivas para residentes/, en: /resident-only spaces/ };
+  for (const locale of ["ca", "es", "en"] as const) {
+    const text = bodyToPlainText(PARKING.editions[locale].blocks);
+    assert.match(text, green[locale], `${locale}: green hours`);
+    assert.match(text, residentOnly[locale], `${locale}: resident-only spaces`);
+    assert.doesNotMatch(text, /windscreen|parabrisas|parabrises/i);
+    // Only the AREA cancellation fee is official; no fine amount is.
+    assert.deepEqual([...new Set(text.match(/\d{2,3} ?€|€\d{2,3}/g) ?? [])].sort(), [], `${locale}: no fine amounts`);
+  }
+});
