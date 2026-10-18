@@ -1,6 +1,6 @@
 import type { Block } from "@/lib/content/blocks";
 import { link } from "@/lib/content/features/shared";
-import { SOURCES as TMB_SOURCES, VERIFIED_AT } from "@/lib/content/transport-cards/rates";
+import { SOURCES as TMB_SOURCES, TICKETS, VERIFIED_AT } from "@/lib/content/transport-cards/rates";
 
 import {
   b2Related,
@@ -35,6 +35,68 @@ import {
 /* ========================================================================== */
 /* 01 — Transport passes                                                      */
 /* ========================================================================== */
+
+/**
+ * "How many days?" table, computed from the fare table so it cannot drift
+ * from the selector. GSC (20 Sep-17 Oct 2026): the EN page has 1.4k
+ * impressions at position 7.6, mostly "3 days" / "3 tage" / "4 giorni" style
+ * queries, and the page never said what a given number of days costs.
+ */
+function fareFor(key: string, days?: number): number {
+  const ticket = TICKETS.find((t) => t.key === key);
+  const fare = ticket?.fares.find((f) => f.zone === "1" && (days === undefined || f.days === days));
+  if (!fare) throw new Error(`no zone-1 fare for ${key}${days ? ` (${days} days)` : ""}`);
+  return fare.price;
+}
+
+function euros(value: number, locale: "ca" | "es" | "en"): string {
+  const fixed = value.toFixed(2);
+  return locale === "en" ? `€${fixed}` : `${fixed.replace(".", ",")} €`;
+}
+
+const DAYS_COPY = {
+  ca: {
+    title: "Quant costa per dies",
+    caption: "Hola Barcelona o una T-dia per dia, zona 1, preus del 2026",
+    headers: ["Dies", "Hola Barcelona", "Per dia", "Una T-dia cada dia"],
+    day: (n: number) => (n === 1 ? "1 dia (24 h)" : `${n} dies (${n * 24} h)`),
+    note: "Preus complets de TMB; en línia, la Hola Barcelona té un 10 % de descompte.",
+    text: (casual: string) =>
+      `Per a dos dies o més, si en total faràs deu trajectes o menys, una **T-casual (${casual})** surt més barata que qualsevol de les dues, però no val a les estacions de metro de l'aeroport.`,
+  },
+  es: {
+    title: "Cuánto cuesta por días",
+    caption: "Hola Barcelona o una T-dia por día, zona 1, precios de 2026",
+    headers: ["Días", "Hola Barcelona", "Por día", "Una T-dia cada día"],
+    day: (n: number) => (n === 1 ? "1 día (24 h)" : `${n} días (${n * 24} h)`),
+    note: "Precios completos de TMB; en línea, la Hola Barcelona tiene un 10 % de descuento.",
+    text: (casual: string) =>
+      `Para dos días o más, si en total harás diez trayectos o menos, una **T-casual (${casual})** sale más barata que cualquiera de las dos, pero no vale en las estaciones de metro del aeropuerto.`,
+  },
+  en: {
+    title: "What it costs for 1 to 5 days",
+    caption: "Hola Barcelona or one T-dia a day, zone 1, 2026 prices",
+    headers: ["Days", "Hola Barcelona", "Per day", "One T-dia each day"],
+    day: (n: number) => (n === 1 ? "1 day (24 h)" : `${n} days (${n * 24} h)`),
+    note: "Full TMB prices; Hola Barcelona is 10% cheaper bought online.",
+    text: (casual: string) =>
+      `For two days or more, if you will make ten journeys or fewer in total, a **T-casual (${casual})** costs less than either, but it is not valid at the airport metro stations.`,
+  },
+} as const;
+
+function daysBlocks(locale: "ca" | "es" | "en"): Block[] {
+  const t = DAYS_COPY[locale];
+  const tDia = fareFor("t-dia");
+  const rows = [1, 2, 3, 4, 5].map((n) => {
+    const hola = fareFor("hola-barcelona", n);
+    return [t.day(n), euros(hola, locale), euros(hola / n, locale), euros(tDia * n, locale)];
+  });
+  return [
+    ...h2(t.title),
+    table(t.caption, [...t.headers], rows, t.note),
+    ...paras(t.text(euros(fareFor("t-casual"), locale))),
+  ];
+}
 
 const PROFILE_HEADERS: Record<string, string[]> = {
   ca: ["Perfil", "Miraria primer"],
@@ -123,6 +185,7 @@ export const TRANSPORT: B2Article = {
           "Preu de la Hola Barcelona",
           `Al web de TMB (holabarcelona.com), a preu complet: 12,50 € (24 h), 18,70 € (48 h), 27,30 € (72 h), 35,60 € (96 h) i 43,60 € (120 h); TMB anuncia un 10 % de descompte en línia. Si dubtes entre aquesta i la Barcelona Card, mira ${b2link("cards", "ca", "quina surt a compte")}.`,
         ),
+        ...daysBlocks("ca"),
         ...h2("Quina triaria segons el viatge?"),
         table(
           "Per on començar a mirar segons el tipus de viatge",
@@ -189,6 +252,7 @@ export const TRANSPORT: B2Article = {
           "Precio de la Hola Barcelona",
           `En la web de TMB (holabarcelona.com), a precio completo: 12,50 € (24 h), 18,70 € (48 h), 27,30 € (72 h), 35,60 € (96 h) y 43,60 € (120 h); TMB anuncia un 10 % de descuento en línea. Si dudas entre esta y la Barcelona Card, mira ${b2link("cards", "es", "cuál compensa")}.`,
         ),
+        ...daysBlocks("es"),
         ...h2("Qué miraría según el viaje"),
         table(
           "Por dónde empezar a mirar según el tipo de viaje",
@@ -255,6 +319,7 @@ export const TRANSPORT: B2Article = {
           "Hola Barcelona prices",
           `On TMB's own Hola Barcelona site (holabarcelona.com), full price: €12.50 (24 h), €18.70 (48 h), €27.30 (72 h), €35.60 (96 h) and €43.60 (120 h); TMB advertises 10% off online. Torn between this and the Barcelona Card? See ${b2link("cards", "en", "which one is worth it")}.`,
         ),
+        ...daysBlocks("en"),
         ...h2("Where to start looking"),
         table(
           "A starting point, not a ranking",
