@@ -95,7 +95,7 @@ export const COPY: Record<Locale, TaxCopy> = {
     ],
     directAnswerTitle: "Resposta ràpida",
     directAnswer:
-      "En un hotel de 4 estrelles a Barcelona pagues **{bcn4} per persona i nit** ({bcn4reg} de tarifa de la Generalitat més {bcn4sur} de recàrrec municipal): per a dues persones i quatre nits, {couple4}. El mateix hotel fora de Barcelona: {rest4} per persona i nit. Les persones de {age} anys o menys no paguen, i el càlcul s'atura a {max} nits per persona.",
+      "En un hotel de 4 estrelles a Barcelona pagues **{bcn4} per persona i nit** ({bcn4reg} de tarifa de la Generalitat més {bcn4sur} de recàrrec municipal): per a dues persones i quatre nits, {couple4}. El mateix hotel en un municipi sense recàrrec: {rest4} per persona i nit (a l'Hospitalet, Sabadell, Sant Cugat i quatre municipis més, el doble). Les persones de {age} anys o menys no paguen, i el càlcul s'atura a {max} nits per persona.",
 
     keyFactsTitle: "Dades clau",
     keyFactLabels: {
@@ -108,9 +108,9 @@ export const COPY: Record<Locale, TaxCopy> = {
     },
     keyFactValues: {
       exemption: "16 anys o menys",
-      scope: "Un municipi pot tenir recàrrec propi des de l'1/10/2026",
-      verified: "24 de setembre de 2026",
-      review: "1 d'octubre de 2026",
+      scope: "Recàrrec municipal vigent des de l'1/10/2026 a Castelldefels, Esplugues, l'Hospitalet, el Prat, Sabadell, Sant Cugat i Sant Just Desvern",
+      verified: "18 d'octubre de 2026",
+      review: "1 de desembre de 2026",
     },
 
     barcelonaTitle: "Quant costa actualment a Barcelona",
@@ -121,8 +121,8 @@ export const COPY: Record<Locale, TaxCopy> = {
 
     restTitle: "Quant costa a la resta de Catalunya",
     rest: [
-      "Fora de Barcelona les tarifes autonòmiques són força més baixes. Ara bé, hi ha una novetat important: des de l'**1 d'octubre de 2026**, qualsevol municipi pot establir un recàrrec propi si l'ha aprovat per ordenança.",
-      "No donem per suposat que un municipi en tingui, ni que no en tingui. Per això la taula següent mostra només la part autonòmica, i la calculadora no suma cap recàrrec que no haguem pogut verificar.",
+      "Fora de Barcelona les tarifes autonòmiques són força més baixes. Però des de l'**1 d'octubre de 2026** set municipis ja cobren un recàrrec propi: **Castelldefels, Esplugues de Llobregat, l'Hospitalet de Llobregat, el Prat de Llobregat, Sabadell, Sant Cugat del Vallès i Sant Just Desvern**. En un hotel de 4 estrelles, per exemple, el recàrrec és igual que la tarifa autonòmica, de manera que la duplica.",
+      "La taula següent mostra només la part autonòmica, que és el que pagues en qualsevol municipi que no tingui recàrrec. La llista de municipis amb recàrrec la publica l'Agència Tributària de Catalunya i pot créixer.",
     ],
     restCaption: "Taxa turística fora de Barcelona, per persona i unitat d'estada",
 
@@ -134,7 +134,7 @@ export const COPY: Record<Locale, TaxCopy> = {
     },
     noSurcharge: "Cal comprovar-ho",
     tableNote:
-      "Tarifes verificades el 24 de setembre de 2026 a l'Agència Tributària de Catalunya. Import per persona i unitat d'estada.",
+      "Tarifes verificades el 18 d'octubre de 2026 a l'Agència Tributària de Catalunya. Import per persona i unitat d'estada.",
 
     futureTitle: "Què canvia l'1 d'abril de 2027",
     future: [
@@ -144,8 +144,8 @@ export const COPY: Record<Locale, TaxCopy> = {
     futureHeaders: { type: "Tipus d'allotjament", rate: "Tarifa" },
     barcelonaFutureTitle: "I a Barcelona?",
     barcelonaFuture: [
-      "Aquí hem de ser honestos sobre el que sabem i el que no. El recàrrec municipal de Barcelona el fixa l'Ajuntament per ordenança, i la llei permet que arribi fins a 8 euros.",
-      "**No hem pogut verificar quin serà l'import a partir de l'1 d'abril de 2027**, i per això no el publiquem ni el sumem a la calculadora. Preferim dir-t'ho a donar-te una xifra que no hem comprovat: si estàs pressupostant un viatge per a després d'aquesta data, consulta l'ordenança vigent.",
+      "El recàrrec municipal de Barcelona puja cada 1 d'abril fins al 2029, segons l'Ordenança fiscal 2.2 de l'Ajuntament: **5 €** fins al 31 de març de 2027, **6 €** de l'1 d'abril de 2027 al 31 de març de 2028, **7 €** fins al 31 de març de 2029 i **8 €** a partir de llavors, el màxim que permet la llei. La tarifa de la Generalitat per a Barcelona no canvia.",
+      "Així, l'1 d'abril de 2027 un hotel a Barcelona pagarà **1 € més per persona i nit**. La calculadora ja aplica aquests imports segons la data.",
     ],
 
     childrenTitle: "Els menors paguen?",
@@ -176,7 +176,7 @@ export const COPY: Record<Locale, TaxCopy> = {
       },
       {
         scenario: "2 adults, 4 nits, hotel de 4 estrelles fora de Barcelona",
-        note: "Sense cap recàrrec municipal verificat.",
+        note: "En un municipi sense recàrrec municipal.",
       },
     ],
 
@@ -219,7 +219,7 @@ export const COPY: Record<Locale, TaxCopy> = {
     ],
     directAnswerTitle: "Respuesta rápida",
     directAnswer:
-      "En un hotel de 4 estrellas en Barcelona pagas **{bcn4} por persona y noche** ({bcn4reg} de tarifa autonómica más {bcn4sur} de recargo municipal): para dos personas y cuatro noches, {couple4}. El mismo hotel fuera de Barcelona: {rest4} por persona y noche. Las personas de {age} años o menos no pagan, y el cálculo se detiene en {max} noches por persona.",
+      "En un hotel de 4 estrellas en Barcelona pagas **{bcn4} por persona y noche** ({bcn4reg} de tarifa autonómica más {bcn4sur} de recargo municipal): para dos personas y cuatro noches, {couple4}. El mismo hotel en un municipio sin recargo: {rest4} por persona y noche (en L'Hospitalet, Sabadell, Sant Cugat y otros cuatro municipios, el doble). Las personas de {age} años o menos no pagan, y el cálculo se detiene en {max} noches por persona.",
 
     keyFactsTitle: "Datos clave",
     keyFactLabels: {
@@ -232,9 +232,9 @@ export const COPY: Record<Locale, TaxCopy> = {
     },
     keyFactValues: {
       exemption: "16 años o menos",
-      scope: "Un municipio puede tener recargo propio desde el 1/10/2026",
-      verified: "24 de septiembre de 2026",
-      review: "1 de octubre de 2026",
+      scope: "Recargo municipal vigente desde el 1/10/2026 en Castelldefels, Esplugues, L'Hospitalet, El Prat, Sabadell, Sant Cugat y Sant Just Desvern",
+      verified: "18 de octubre de 2026",
+      review: "1 de diciembre de 2026",
     },
 
     barcelonaTitle: "Tarifas actuales en Barcelona",
@@ -245,8 +245,8 @@ export const COPY: Record<Locale, TaxCopy> = {
 
     restTitle: "¿Y fuera de Barcelona?",
     rest: [
-      "Las tarifas autonómicas son claramente inferiores. Pero hay una novedad importante: desde el **1 de octubre de 2026**, cualquier municipio puede establecer un recargo propio si lo ha aprobado mediante ordenanza.",
-      "No damos por supuesto que un municipio lo tenga, ni que no lo tenga. Por eso la tabla siguiente muestra solo la parte autonómica, y la calculadora no suma ningún recargo que no hayamos podido verificar.",
+      "Fuera de Barcelona las tarifas autonómicas son bastante más bajas. Pero desde el **1 de octubre de 2026** siete municipios ya cobran un recargo propio: **Castelldefels, Esplugues de Llobregat, L'Hospitalet de Llobregat, El Prat de Llobregat, Sabadell, Sant Cugat del Vallès y Sant Just Desvern**. En un hotel de 4 estrellas, por ejemplo, el recargo es igual que la tarifa autonómica, así que la duplica.",
+      "La tabla siguiente muestra solo la parte autonómica, que es lo que pagas en cualquier municipio sin recargo. La lista de municipios con recargo la publica la Agència Tributària de Catalunya y puede crecer.",
     ],
     restCaption: "Tasa turística fuera de Barcelona, por persona y unidad de estancia",
 
@@ -258,7 +258,7 @@ export const COPY: Record<Locale, TaxCopy> = {
     },
     noSurcharge: "Hay que comprobarlo",
     tableNote:
-      "Tarifas verificadas el 24 de septiembre de 2026 en la Agència Tributària de Catalunya. Importe por persona y unidad de estancia.",
+      "Tarifas verificadas el 18 de octubre de 2026 en la Agència Tributària de Catalunya. Importe por persona y unidad de estancia.",
 
     futureTitle: "Qué cambia el 1 de abril de 2027",
     future: [
@@ -268,8 +268,8 @@ export const COPY: Record<Locale, TaxCopy> = {
     futureHeaders: { type: "Tipo de alojamiento", rate: "Tarifa" },
     barcelonaFutureTitle: "¿Y en Barcelona?",
     barcelonaFuture: [
-      "Aquí conviene ser honesto sobre lo que sabemos y lo que no. El recargo municipal de Barcelona lo fija el Ayuntamiento por ordenanza, y la ley permite que llegue hasta 8 euros.",
-      "**No hemos podido verificar cuál será el importe a partir del 1 de abril de 2027**, así que no lo publicamos ni lo sumamos en la calculadora. Preferimos decírtelo antes que darte una cifra sin comprobar: si estás presupuestando un viaje posterior a esa fecha, consulta la ordenanza vigente.",
+      "El recargo municipal de Barcelona sube cada 1 de abril hasta 2029, según la Ordenanza fiscal 2.2 del Ayuntamiento: **5 €** hasta el 31 de marzo de 2027, **6 €** del 1 de abril de 2027 al 31 de marzo de 2028, **7 €** hasta el 31 de marzo de 2029 y **8 €** a partir de entonces, el máximo que permite la ley. La tarifa de la Generalitat para Barcelona no cambia.",
+      "Así, el 1 de abril de 2027 un hotel en Barcelona pagará **1 € más por persona y noche**. La calculadora ya aplica estos importes según la fecha.",
     ],
 
     childrenTitle: "¿Los niños pagan?",
@@ -300,7 +300,7 @@ export const COPY: Record<Locale, TaxCopy> = {
       },
       {
         scenario: "2 adultos, 4 noches, hotel de 4 estrellas fuera de Barcelona",
-        note: "Sin ningún recargo municipal verificado.",
+        note: "En un municipio sin recargo municipal.",
       },
     ],
 
@@ -343,7 +343,7 @@ export const COPY: Record<Locale, TaxCopy> = {
     ],
     directAnswerTitle: "Quick answer",
     directAnswer:
-      "A four-star hotel in Barcelona costs **{bcn4} per person per night** ({bcn4reg} regional rate plus {bcn4sur} municipal surcharge): for two people over four nights, {couple4}. The same hotel elsewhere in Catalonia: {rest4} per person per night. Guests aged {age} or younger pay nothing, and the count stops at {max} nights per person.",
+      "A four-star hotel in Barcelona costs **{bcn4} per person per night** ({bcn4reg} regional rate plus {bcn4sur} municipal surcharge): for two people over four nights, {couple4}. The same hotel in a municipality without a surcharge: {rest4} per person per night (double that in L'Hospitalet, Sabadell, Sant Cugat and four other towns). Guests aged {age} or younger pay nothing, and the count stops at {max} nights per person.",
 
     keyFactsTitle: "Key facts",
     keyFactLabels: {
@@ -356,9 +356,9 @@ export const COPY: Record<Locale, TaxCopy> = {
     },
     keyFactValues: {
       exemption: "16 or younger",
-      scope: "A municipality may levy its own surcharge from 1 Oct 2026",
-      verified: "24 September 2026",
-      review: "1 October 2026",
+      scope: "Municipal surcharge in force since 1 Oct 2026 in Castelldefels, Esplugues, L'Hospitalet, El Prat, Sabadell, Sant Cugat and Sant Just Desvern",
+      verified: "18 October 2026",
+      review: "1 December 2026",
     },
 
     barcelonaTitle: "Barcelona tourist tax rates",
@@ -369,8 +369,8 @@ export const COPY: Record<Locale, TaxCopy> = {
 
     restTitle: "What if you stay elsewhere in Catalonia?",
     rest: [
-      "The regional rates are markedly lower outside Barcelona. There is one important change to know about: from **1 October 2026**, any municipality may levy its own surcharge if it has approved one.",
-      "We do not assume a municipality has one, and we do not assume it has none. The table below therefore shows only the regional part, and the calculator adds no surcharge we have not verified.",
+      "Regional rates are much lower outside Barcelona. But since **1 October 2026** seven municipalities have charged their own surcharge: **Castelldefels, Esplugues de Llobregat, L'Hospitalet de Llobregat, El Prat de Llobregat, Sabadell, Sant Cugat del Vallès and Sant Just Desvern**. In a four-star hotel, for example, the surcharge equals the regional rate, doubling it.",
+      "The table below shows the regional part only, which is what you pay in any municipality without a surcharge. The Catalan Tax Agency publishes the list of municipalities with a surcharge, and it may grow.",
     ],
     restCaption: "Tourist tax outside Barcelona, per liable guest per stay unit",
 
@@ -382,7 +382,7 @@ export const COPY: Record<Locale, TaxCopy> = {
     },
     noSurcharge: "Needs checking",
     tableNote:
-      "Rates verified on 24 September 2026 against the Catalan Tax Agency. Amount per liable guest per stay unit.",
+      "Rates verified on 18 October 2026 against the Catalan Tax Agency. Amount per liable guest per stay unit.",
 
     futureTitle: "What changes on 1 April 2027",
     future: [
@@ -392,8 +392,8 @@ export const COPY: Record<Locale, TaxCopy> = {
     futureHeaders: { type: "Accommodation type", rate: "Rate" },
     barcelonaFutureTitle: "And in Barcelona?",
     barcelonaFuture: [
-      "Here it is worth being straight about what is known and what is not. Barcelona's municipal surcharge is set by the city council through an ordinance, and the law allows it to reach €8.",
-      "**We could not verify what the amount will be from 1 April 2027**, so we neither publish it nor add it in the calculator. We would rather tell you that than hand you a figure we have not checked: if you are budgeting a trip after that date, check the ordinance in force.",
+      "Barcelona's municipal surcharge rises every 1 April until 2029, under the city's Fiscal Ordinance 2.2: **€5** until 31 March 2027, **€6** from 1 April 2027 to 31 March 2028, **€7** until 31 March 2029 and **€8** from then on, the legal maximum. The Catalan rate for Barcelona does not change.",
+      "So from 1 April 2027 a Barcelona hotel stay costs **€1 more per person per night**. The calculator already applies these amounts by date.",
     ],
 
     childrenTitle: "Do children pay?",
@@ -424,7 +424,7 @@ export const COPY: Record<Locale, TaxCopy> = {
       },
       {
         scenario: "2 adults, 4 nights, four-star hotel outside Barcelona",
-        note: "With no verified municipal surcharge.",
+        note: "In a municipality with no municipal surcharge.",
       },
     ],
 

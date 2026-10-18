@@ -31,7 +31,7 @@ import {
  * pages disagree) and the Ski Tren price (no season label).
  */
 
-const VERIFIED = "2026-10-12";
+const VERIFIED = "2026-10-18";
 
 const SOURCES: B2Source[] = [
   { name: "Cremallera de Núria — fares and line", url: "https://turistren.cat/trens/cremallera-de-nuria/", publisher: "FGC Turistren" },
@@ -130,7 +130,7 @@ const COPY: Record<Locale, T> = {
       "**En cotxe:** fins a Ribes de Freser o Queralbs, i allà el cremallera. Els tres aparcaments de les estacions són gratuïts.",
     ],
     r3Title: "L'R3, ara mateix",
-    r3: "Segons l'avís de Rodalies del 6 de juliol del 2026, l'R3 circula amb el 50 % dels trens que tenia abans del 20 de gener, per obres a la via. Entre Barcelona i la Garriga el servei el cobreixen l'R4 i autobusos alternatius, i els trens de l'R3 van de la Garriga a Puigcerdà; el viatge és més llarg que l'habitual. El TreNatura continua sent vàlid durant aquest període. Mira els horaris a rodalies.gencat.cat abans de sortir.",
+    r3: "Segons l'avís de Rodalies del 6 de juliol del 2026, l'R3 circula amb el 50 % dels trens que tenia abans del 20 de gener, per obres a la via. Entre Barcelona i la Garriga el servei el cobreixen l'R4 i autobusos alternatius, i els trens de l'R3 van de la Garriga a Puigcerdà; el viatge és més llarg que l'habitual. Des del 12 d'agost hi ha també autobusos complementaris entre la Garriga i Puigcerdà, i l'avís continuava vigent el 18 d'octubre. El TreNatura continua sent vàlid durant aquest període. Mira els horaris a rodalies.gencat.cat abans de sortir.",
     novTitle: "Al novembre",
     nov: [
       "El calendari oficial de l'estació per al novembre del 2026 marca **tancats els dies feiners** i oberts els caps de setmana. Els anys anteriors FGC ha reduït el cremallera fins a Núria als caps de setmana durant el novembre, amb un servei curt entre Ribes i Queralbs els dies feiners. Si hi vols anar al novembre, ves-hi en cap de setmana i comprova-ho abans.",
@@ -142,7 +142,7 @@ const COPY: Record<Locale, T> = {
     ],
     walkTitle: "A peu: el Camí Vell des de Queralbs",
     walk: [
-      "L'antic camí dels pelegrins surt de la plaça del Raig de Queralbs i puja per les gorges del Freser, amb salts d'aigua com el del Sastre i la Cua de Cavall, fins a albirar el llac. El Parc Natural el dona com a **7,7 km i 932 metres de desnivell**, unes **3 hores i 45 minuts**, i el classifica com a exigent.",
+      "L'antic camí dels pelegrins surt de la plaça del Raig de Queralbs i puja per les gorges de Núria, amb salts d'aigua com el del Sastre i la Cua de Cavall, fins a albirar el llac. El Parc Natural el dona com a **7,7 km i 932 metres de desnivell**, unes **3 hores i 45 minuts**, i el classifica com a molt exigent.",
       "La xifra és per pujar a peu i baixar amb el cremallera fins a Queralbs. El Parc el recomana a la primavera, l'estiu i la tardor.",
     ],
     legendTitle: "La Mare de Déu de Núria",
@@ -184,7 +184,7 @@ const COPY: Record<Locale, T> = {
       "**En coche:** hasta Ribes de Freser o Queralbs, y allí el cremallera. Los tres aparcamientos de las estaciones son gratuitos.",
     ],
     r3Title: "La R3, ahora mismo",
-    r3: "Según el aviso de Rodalies del 6 de julio de 2026, la R3 circula con el 50 % de los trenes que tenía antes del 20 de enero, por obras en la vía. Entre Barcelona y La Garriga el servicio lo cubren la R4 y autobuses alternativos, y los trenes de la R3 van de La Garriga a Puigcerdà; el viaje es más largo de lo habitual. El TreNatura sigue siendo válido durante este periodo. Mira los horarios en rodalies.gencat.cat antes de salir.",
+    r3: "Según el aviso de Rodalies del 6 de julio de 2026, la R3 circula con el 50 % de los trenes que tenía antes del 20 de enero, por obras en la vía. Entre Barcelona y La Garriga el servicio lo cubren la R4 y autobuses alternativos, y los trenes de la R3 van de La Garriga a Puigcerdà; el viaje es más largo de lo habitual. Desde el 12 de agosto hay también autobuses complementarios entre La Garriga y Puigcerdà, y el aviso seguía vigente el 18 de octubre. El TreNatura sigue siendo válido durante este periodo. Mira los horarios en rodalies.gencat.cat antes de salir.",
     novTitle: "En noviembre",
     nov: [
       "El calendario oficial de la estación para noviembre de 2026 marca **cerrados los días laborables** y abiertos los fines de semana. Los años anteriores FGC ha reducido el cremallera hasta Núria a los fines de semana durante noviembre, con un servicio corto entre Ribes y Queralbs los días laborables. Si quieres ir en noviembre, ve en fin de semana y compruébalo antes.",
@@ -196,7 +196,7 @@ const COPY: Record<Locale, T> = {
     ],
     walkTitle: "A pie: el Camí Vell desde Queralbs",
     walk: [
-      "El antiguo camino de los peregrinos sale de la plaça del Raig de Queralbs y sube por las gargantas del Freser, con saltos de agua como el del Sastre y la Cua de Cavall, hasta divisar el lago. El Parc Natural lo da como **7,7 km y 932 metros de desnivel**, unas **3 horas y 45 minutos**, y lo clasifica como exigente.",
+      "El antiguo camino de los peregrinos sale de la plaça del Raig de Queralbs y sube por las gargantas de Núria, con saltos de agua como el del Sastre y la Cua de Cavall, hasta divisar el lago. El Parc Natural lo da como **7,7 km y 932 metros de desnivel**, unas **3 horas y 45 minutos**, y lo clasifica como muy exigente.",
       "La cifra es para subir a pie y bajar en cremallera hasta Queralbs. El Parc lo recomienda en primavera, verano y otoño.",
     ],
     legendTitle: "La Virgen de Núria",
@@ -238,7 +238,7 @@ const COPY: Record<Locale, T> = {
       "**By car:** drive to Ribes de Freser or Queralbs and take the rack railway from there. The car parks at all three stations are free.",
     ],
     r3Title: "The R3 right now",
-    r3: "According to Rodalies' notice of 6 July 2026, the R3 is running 50% of the trains it had before 20 January, because of track works. Between Barcelona and La Garriga the service is covered by the R4 and replacement buses, and R3 trains run from La Garriga to Puigcerdà; the journey takes longer than usual. TreNatura tickets stay valid throughout. Check the timetables at rodalies.gencat.cat before you go.",
+    r3: "According to Rodalies' notice of 6 July 2026, the R3 is running 50% of the trains it had before 20 January, because of track works. Between Barcelona and La Garriga the service is covered by the R4 and replacement buses, and R3 trains run from La Garriga to Puigcerdà; the journey takes longer than usual. Since 12 August there have also been complementary buses between La Garriga and Puigcerdà, and the notice was still in force on 18 October. TreNatura tickets stay valid throughout. Check the timetables at rodalies.gencat.cat before you go.",
     novTitle: "In November",
     nov: [
       "The resort's official calendar for November 2026 shows **weekdays closed** and weekends open. In previous years FGC has cut the rack railway to Núria back to weekends in November, with a short Ribes–Queralbs service on weekdays. If you want to go in November, go at a weekend and check first.",
@@ -250,7 +250,7 @@ const COPY: Record<Locale, T> = {
     ],
     walkTitle: "On foot: the old path from Queralbs",
     walk: [
-      "The old pilgrims' path (Camí Vell) leaves Plaça del Raig in Queralbs and climbs the Freser gorges, past waterfalls such as the Sastre and the Cua de Cavall, until the lake comes into view. The Natural Park gives it as **7.7 km with 932 metres of ascent**, about **3 hours 45 minutes**, and rates it demanding.",
+      "The old pilgrims' path (Camí Vell) leaves Plaça del Raig in Queralbs and climbs the Núria gorges, past waterfalls such as the Sastre and the Cua de Cavall, until the lake comes into view. The Natural Park gives it as **7.7 km with 932 metres of ascent**, about **3 hours 45 minutes**, and rates it very demanding.",
       "That is walking up and riding the rack railway back down to Queralbs. The park recommends it in spring, summer and autumn.",
     ],
     legendTitle: "Our Lady of Núria",

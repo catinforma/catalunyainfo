@@ -94,18 +94,27 @@ test("the article's example table is those same four cases", () => {
 /* What the calculator must refuse to assert                                  */
 /* -------------------------------------------------------------------------- */
 
-test("no Barcelona rate is claimed after 31 March 2027", () => {
-  assert.equal(periodFor("barcelona", "2027-04-01"), null);
-  const result = calculateTax({
-    scope: "barcelona",
-    date: "2027-04-01",
-    accommodation: "hotel-4",
-    liableGuests: 2,
-    nights: 4,
-  });
-  assert.equal(result.period, null);
-  assert.equal(result.total, null);
-  assert.equal(result.perPersonPerUnit, null);
+test("Barcelona's surcharge follows the Ordenança fiscal 2.2 steps", () => {
+  // BOPB 2-2-2026, transitional provision: 5 / 6 / 7 EUR each 1 April, then 8.
+  // The Generalitat's Barcelona rate (Llei 2/2026) does not change.
+  const steps: [string, number][] = [
+    ["2027-03-31", 5],
+    ["2027-04-01", 6],
+    ["2028-03-31", 6],
+    ["2028-04-01", 7],
+    ["2029-04-01", 8],
+    ["2035-01-01", 8],
+  ];
+  for (const [date, surcharge] of steps) {
+    const period = periodFor("barcelona", date);
+    assert.ok(period, date);
+    assert.equal(period.surcharge, surcharge, date);
+    assert.equal(period.regional["hotel-4"], 3.4, date);
+  }
+  // Four-star hotel from 1 April 2027: 3.40 + 6.00 = 9.40 per person and night.
+  const result = calculateTax({ scope: "barcelona", date: "2027-04-01", accommodation: "hotel-4", liableGuests: 2, nights: 4 });
+  assert.equal(result.perPersonPerUnit, 9.4);
+  assert.equal(result.total, 75.2);
 });
 
 test("an unverified municipal surcharge is null, never zero", () => {
@@ -116,7 +125,7 @@ test("an unverified municipal surcharge is null, never zero", () => {
 
 test("every period carries a source and a verification date", () => {
   for (const period of RATE_PERIODS) {
-    assert.match(period.sourceUrl, /^https:\/\/atc\.gencat\.cat\//);
+    assert.match(period.sourceUrl, /^https:\/\/(atc\.gencat\.cat|ajuntament\.barcelona\.cat)\//);
     assert.match(period.verifiedAt, /^\d{4}-\d{2}-\d{2}$/);
     for (const type of ACCOMMODATION_ORDER) {
       const rate = period.regional[type];

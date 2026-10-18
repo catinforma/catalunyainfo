@@ -322,9 +322,9 @@ const SECOND_ALT: Record<Locale, string> = {
 };
 
 const SECOND_CAPTION: Record<Locale, string> = {
-  ca: "Fora de Barcelona la tarifa és més baixa, però des de l'1 d'octubre de 2026 cada municipi pot afegir el seu recàrrec.",
-  es: "Fuera de Barcelona la tarifa es más baja, pero desde el 1 de octubre de 2026 cada municipio puede añadir su recargo.",
-  en: "Rates are lower outside Barcelona, but from 1 October 2026 each municipality may add its own surcharge.",
+  ca: "Fora de Barcelona la tarifa és més baixa, però des de l'1 d'octubre de 2026 set municipis hi afegeixen recàrrec propi.",
+  es: "Fuera de Barcelona la tarifa es más baja, pero desde el 1 de octubre de 2026 siete municipios añaden recargo propio.",
+  en: "Rates are lower outside Barcelona, but since 1 October 2026 seven municipalities have added their own surcharge.",
 };
 
 function imageSpecs(): ImageSpec[] {

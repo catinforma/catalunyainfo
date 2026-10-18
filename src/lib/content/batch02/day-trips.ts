@@ -42,7 +42,7 @@ import {
 const GIRONA_SOURCES = [
   {
     name: "Girona, què visitar",
-    url: "https://www.girona.cat/turisme/cat/quevisitar.php",
+    url: "https://www.girona.cat/turisme/cat/monuments.php",
     publisher: "Ajuntament de Girona — Turisme",
   },
   {
@@ -517,18 +517,45 @@ export const MONTSERRAT_FREE: B2Article = {
 
 const CERDANYA_SOURCES = [
   {
-    name: "Com arribar a la Cerdanya",
-    url: "https://www.turismecerdanya.com/",
+    name: "Transports",
+    url: "https://cerdanya.org/informacio-util/transports/",
     publisher: "Turisme Cerdanya",
   },
   {
-    name: "Rodalies de Catalunya — línia R3",
-    url: "https://rodalies.gencat.cat/ca/inici/",
+    name: "R3: Modificació del servei entre L'Hospitalet de Llobregat i Puigcerdà",
+    url: "https://rodalies.gencat.cat/ca/detalls/article/02_02_PAT_R3",
     publisher: "Rodalies de Catalunya",
+  },
+  {
+    name: "R3: servei alternatiu per carretera entre la Garriga i Puigcerdà",
+    url: "https://rodalies.gencat.cat/ca/detalls/article/08_12_Reforc_R3",
+    publisher: "Rodalies de Catalunya",
+  },
+  {
+    name: "Bus urbà",
+    url: "https://www.puigcerda.cat/ca/serveis/mobilitat/bus-urba/",
+    publisher: "Ajuntament de Puigcerdà",
   },
 ];
 
-const CERDANYA_VERIFIED = "2026-09-29";
+// R3 status re-checked against the Rodalies notice on 18 Oct 2026
+// (research_notes/audits/p0_data_accuracy.md, P0-4).
+const CERDANYA_VERIFIED = "2026-10-18";
+
+const CERDANYA_R3: Record<"ca" | "es" | "en", [title: string, body: string]> = {
+  ca: [
+    "L'R3, ara mateix",
+    "Segons l'avís de Rodalies (actualitzat el 6 de juliol del 2026 i vigent el 18 d'octubre), l'R3 circula amb el 50 % dels trens que tenia abans del 20 de gener i no hi ha trens entre Barcelona i la Garriga. Des del 12 d'agost hi ha també autobusos complementaris entre la Garriga i Puigcerdà. Adif preveia mantenir el tall entre Barcelona i la Garriga fins al gener del 2027. Mira els horaris a rodalies.gencat.cat abans de sortir.",
+  ],
+  es: [
+    "La R3, ahora mismo",
+    "Según el aviso de Rodalies (actualizado el 6 de julio de 2026 y vigente el 18 de octubre), la R3 circula con el 50 % de los trenes que tenía antes del 20 de enero y no hay trenes entre Barcelona y La Garriga. Desde el 12 de agosto hay también autobuses complementarios entre La Garriga y Puigcerdà. Adif preveía mantener el corte entre Barcelona y La Garriga hasta enero de 2027. Mira los horarios en rodalies.gencat.cat antes de salir.",
+  ],
+  en: [
+    "The R3 right now",
+    "According to Rodalies' notice (last updated 6 July 2026 and still in force on 18 October), the R3 is running 50% of the trains it had before 20 January, and no trains run between Barcelona and La Garriga. Since 12 August there have also been complementary buses between La Garriga and Puigcerdà. Adif planned to keep the Barcelona–La Garriga line closed until January 2027. Check the timetables at rodalies.gencat.cat before you go.",
+  ],
+};
 
 export const CERDANYA: B2Article = {
   key: "cerdanya",
@@ -571,8 +598,9 @@ export const CERDANYA: B2Article = {
       blocks: [
         lead("Anar a la Cerdanya sense cotxe és possible, però cal planificar-la de manera diferent."),
         ...paras(
-          "La línia **R3** connecta Barcelona amb la Cerdanya passant per Vic i Ripoll, i alguns serveis continuen fins a la Tor de Querol. També hi ha serveis regulars d'autobús des de Barcelona, la Seu d'Urgell i Lleida, i des de Girona via Olot i Ripoll.",
+          "La línia **R3** de Rodalies és la que puja a la Cerdanya per Vic i Ripoll fins a Puigcerdà i la Tor de Querol. **Ara mateix, però, no hi ha trens entre Barcelona i la Garriga** per les obres d'Adif: el tram el cobreixen l'R4 fins a Montcada Bifurcació i autobusos de Rodalies, i els trens de l'R3 circulen entre la Garriga i Puigcerdà/la Tor de Querol amb la meitat de l'oferta habitual i més temps de viatge. També hi ha serveis regulars d'autobús des de Barcelona, la Seu d'Urgell i Lleida, i des de Girona via Olot i Ripoll.",
         ),
+        callout("warning", ...CERDANYA_R3.ca),
         ...h2(
           "Puigcerdà és la base més fàcil",
           "Puigcerdà disposa d'estació ferroviària i servei urbà de proximitat que connecta el centre amb diferents equipaments.",
@@ -584,7 +612,7 @@ export const CERDANYA: B2Article = {
         ),
         ...h2(
           "Temporada de neu",
-          "Turisme Cerdanya informa també del **Bus Blanc**, que durant la temporada de neu dona servei cap a La Molina i Masella.",
+          "Les darreres temporades el Consell Comarcal de la Cerdanya ha ofert el **Bus Blanc** cap a La Molina i Masella els caps de setmana i festius escolars de la temporada de neu. El servei de la temporada 2026-2027 encara no s'ha anunciat: comprova-ho abans de comptar-hi.",
           "Els horaris canvien cada temporada: comprova'ls abans de comptar-hi.",
         ),
         callout(
@@ -615,8 +643,9 @@ export const CERDANYA: B2Article = {
         "Se puede ir a la Cerdanya sin coche, pero hay que planificarlo distinto. Qué es realista y qué no.",
       blocks: [
         lead(
-          "La **R3** conecta Barcelona con Cerdanya pasando por Vic y Ripoll, y algunos trenes continúan hasta La Tor de Querol.",
+          "La línea **R3** de Rodalies es la que sube a la Cerdanya por Vic y Ripoll hasta Puigcerdà y La Tor de Querol. **Ahora mismo, sin embargo, no hay trenes entre Barcelona y La Garriga** por las obras de Adif: el tramo lo cubren la R4 hasta Montcada Bifurcació y autobuses de Rodalies, y los trenes de la R3 circulan entre La Garriga y Puigcerdà/La Tor de Querol con la mitad de la oferta habitual y más tiempo de viaje.",
         ),
+        callout("warning", ...CERDANYA_R3.es),
         ...paras(
           "Los autobuses regulares conectan la comarca con Barcelona, Lleida y la Seu d'Urgell, y existen conexiones desde Girona vía Olot y Ripoll.",
         ),
@@ -631,7 +660,7 @@ export const CERDANYA: B2Article = {
         ),
         ...h2(
           "Temporada de nieve",
-          "Durante la temporada de nieve existe además el **Bus Blanc** hacia La Molina y Masella, sujeto a horarios de temporada.",
+          "Las últimas temporadas el Consell Comarcal de la Cerdanya ha ofrecido el **Bus Blanc** hacia La Molina y Masella los fines de semana y festivos escolares de la temporada de nieve. El servicio de la temporada 2026-2027 aún no se ha anunciado: compruébalo antes de contar con él.",
           "Los horarios cambian cada temporada, así que conviene comprobarlos antes de contar con ellos para volver.",
         ),
         callout(
@@ -662,8 +691,9 @@ export const CERDANYA: B2Article = {
         "Cerdanya without a car is possible, but it needs different planning. What is realistic, and what is not.",
       blocks: [
         lead(
-          "Renfe's **R3** connects Barcelona with Cerdanya via Vic and Ripoll, with some services continuing to La Tor de Querol.",
+          "Rodalies line **R3** is the railway up to Cerdanya, via Vic and Ripoll to Puigcerdà and La Tor de Querol. **Right now, though, no trains run between Barcelona and La Garriga** because of Adif works: the R4 covers the stretch to Montcada Bifurcació and Rodalies buses the rest, and R3 trains run between La Garriga and Puigcerdà/La Tor de Querol at half the usual frequency and with longer journey times.",
         ),
+        callout("warning", ...CERDANYA_R3.en),
         ...paras(
           "Regular buses also connect the region with Barcelona, Lleida, La Seu d'Urgell and Girona.",
         ),
@@ -678,7 +708,7 @@ export const CERDANYA: B2Article = {
         ),
         ...h2(
           "Snow season",
-          "During the snow season the region also promotes the **Bus Blanc** connection to La Molina and Masella.",
+          "In recent seasons the Cerdanya county council has run the **Bus Blanc** to La Molina and Masella at weekends and during school holidays in the snow season. The 2026-27 service has not been announced yet, so check before relying on it.",
           "Timetables change each season, so check them before relying on one for the journey back.",
         ),
         callout(

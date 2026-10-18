@@ -7,22 +7,25 @@ import type { Locale } from "@/lib/i18n/config";
  * never be right in one place and stale in the other. Nothing numeric is
  * written in the prose.
  *
- * Verified against the Agència Tributària de Catalunya's own tariff page on
- * 24 September 2026, figure by figure.
+ * Verified against the Agència Tributària de Catalunya's tariff page, Llei
+ * 2/2026 (DOGC 9621) and Barcelona's Ordenança fiscal 2.2 (BOPB 2-2-2026) on
+ * 18 October 2026 (research_notes/audits/p0_data_accuracy.md).
  *
- * ## What is deliberately absent
+ * ## Barcelona from April 2027
  *
- * The editorial package supplied a Barcelona surcharge of €6 from 1 April
- * 2027 and a combined table built on it. **That could not be verified.** The
- * ATC confirms the rest-of-Catalonia rates rising on that date — five-star
- * goes to €6.00 — and the €6 attributed to Barcelona's surcharge looks like
- * the same figure read off the wrong row. The law lets Barcelona set a
- * surcharge of up to €8 by ordinance; what it will be from April 2027 is not
- * something this file is willing to assert.
+ * The Generalitat's Barcelona rate is open-ended ("a partir de l'1 d'abril de
+ * 2026"); only the city's surcharge steps up, by the ordinance's transitional
+ * provision: €5 to 31 March 2027, €6 to 31 March 2028, €7 to 31 March 2029,
+ * then the article 2.2 figure of €8 (the legal maximum). An earlier version of
+ * this file called the €6 a misread figure; it is the ordinance's own number.
  *
- * So there is no Barcelona period after 31 March 2027 here. The calculator
- * refuses a date it has no verified rate for rather than guessing, and the
- * article says the surcharge is set by ordinance and may change.
+ * ## Other municipalities
+ *
+ * Seven municipalities have charged their own surcharge since 1 October 2026
+ * (Castelldefels, Esplugues, L'Hospitalet, El Prat, Sabadell, Sant Cugat,
+ * Sant Just Desvern). The calculator's "rest of Catalonia" scope is the
+ * regional rate only, i.e. a municipality without a surcharge; the page says
+ * so and names the seven.
  */
 
 export type Scope = "barcelona" | "rest-of-catalonia";
@@ -68,24 +71,37 @@ export const MUNICIPAL_SURCHARGE_FROM = "2026-10-01";
 
 const ATC_RATES = "https://atc.gencat.cat/ca/tributs/ieet/quota-tributaria";
 
+const BARCELONA_REGIONAL: Record<AccommodationType, number> = {
+  "hotel-5": 7.0,
+  "hotel-4": 3.4,
+  "tourist-dwelling": 4.5,
+  hostel: 1.0,
+  other: 2.0,
+  "cruise-over-12h": 4.0,
+  "cruise-under-12h": 6.0,
+};
+
+const BCN_ORDINANCE =
+  "https://ajuntament.barcelona.cat/hisenda/sites/default/files/normativa/2026-02/2.2-ordenanca-recarrec-turistic.pdf";
+
+/** Barcelona: same regional rate, surcharge stepping up each 1 April (Ordenança fiscal 2.2). */
+const BARCELONA_STEPS: [from: string, until: string | null, surcharge: number][] = [
+  ["2026-04-01", "2027-03-31", 5.0],
+  ["2027-04-01", "2028-03-31", 6.0],
+  ["2028-04-01", "2029-03-31", 7.0],
+  ["2029-04-01", null, 8.0],
+];
+
 export const RATE_PERIODS: RatePeriod[] = [
-  {
+  ...BARCELONA_STEPS.map(([from, until, surcharge]): RatePeriod => ({
     scope: "barcelona",
-    from: "2026-04-01",
-    until: "2027-03-31",
-    regional: {
-      "hotel-5": 7.0,
-      "hotel-4": 3.4,
-      "tourist-dwelling": 4.5,
-      hostel: 1.0,
-      other: 2.0,
-      "cruise-over-12h": 4.0,
-      "cruise-under-12h": 6.0,
-    },
-    surcharge: 5.0,
-    sourceUrl: ATC_RATES,
-    verifiedAt: "2026-09-24",
-  },
+    from,
+    until,
+    regional: BARCELONA_REGIONAL,
+    surcharge,
+    sourceUrl: surcharge === 5.0 ? ATC_RATES : BCN_ORDINANCE,
+    verifiedAt: "2026-10-18",
+  })),
   {
     scope: "rest-of-catalonia",
     from: "2026-04-01",
@@ -99,10 +115,11 @@ export const RATE_PERIODS: RatePeriod[] = [
       "cruise-over-12h": 3.0,
       "cruise-under-12h": 4.5,
     },
-    // Municipalities may levy one from 1 October 2026. None is verified here.
+    // Regional rate only: what applies in a municipality without a surcharge
+    // (seven municipalities have one since 1 Oct 2026; the page names them).
     surcharge: null,
     sourceUrl: ATC_RATES,
-    verifiedAt: "2026-09-24",
+    verifiedAt: "2026-10-18",
   },
   {
     scope: "rest-of-catalonia",
@@ -119,7 +136,7 @@ export const RATE_PERIODS: RatePeriod[] = [
     },
     surcharge: null,
     sourceUrl: ATC_RATES,
-    verifiedAt: "2026-09-24",
+    verifiedAt: "2026-10-18",
   },
 ];
 
@@ -175,9 +192,11 @@ export const ACCOMMODATION_LABEL: Record<AccommodationType, Record<Locale, strin
 export const SCOPE_LABEL: Record<Scope, Record<Locale, string>> = {
   barcelona: { ca: "Barcelona", es: "Barcelona", en: "Barcelona" },
   "rest-of-catalonia": {
-    ca: "Resta de Catalunya",
-    es: "Resto de Cataluña",
-    en: "Rest of Catalonia",
+    // Regional rate only: the seven municipalities with a surcharge since
+    // 1 Oct 2026 are named in the article, not priced here.
+    ca: "Resta de Catalunya (municipi sense recàrrec)",
+    es: "Resto de Cataluña (municipio sin recargo)",
+    en: "Rest of Catalonia (no municipal surcharge)",
   },
 };
 
@@ -281,7 +300,13 @@ export const SOURCES = [
     url: "https://atc.gencat.cat/ca/tributs/ieet/",
     publisher: "Agència Tributària de Catalunya",
   },
+  {
+    name: "Ordenança fiscal núm. 2.2 — recàrrec sobre l'impost sobre les estades en establiments turístics",
+    url: "https://ajuntament.barcelona.cat/hisenda/sites/default/files/normativa/2026-02/2.2-ordenanca-recarrec-turistic.pdf",
+    publisher: "Ajuntament de Barcelona",
+  },
 ];
 
-export const LAST_VERIFIED = "2026-09-24";
-export const NEXT_REVIEW = "2026-10-01";
+export const LAST_VERIFIED = "2026-10-18";
+// New municipal surcharges approved this autumn; then again before 1 Apr 2027.
+export const NEXT_REVIEW = "2026-12-01";

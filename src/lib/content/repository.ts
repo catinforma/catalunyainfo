@@ -101,6 +101,23 @@ async function safeRead<T>(label: string, fallback: T, run: () => Promise<T>): P
   }
 }
 
+/**
+ * For reads a page cannot render without (the entry behind a URL, the home
+ * page, a hub listing). An empty fallback here is worse than an error: an ISR
+ * regeneration that gets `null` renders a 404 or an empty hub and caches it
+ * for a day (content routes revalidate every 86400 s), while a thrown error
+ * makes Next keep serving the last good page. A database that is simply not
+ * configured still returns the empty value before this is reached.
+ */
+async function criticalRead<T>(label: string, run: () => Promise<T>): Promise<T> {
+  try {
+    return await run();
+  } catch (error) {
+    console.error(`[content] ${label} failed; keeping the cached page:`, error instanceof Error ? error.message : error);
+    throw error;
+  }
+}
+
 /* -------------------------------------------------------------------------- */
 /* Row mappers                                                                */
 /* -------------------------------------------------------------------------- */
@@ -247,7 +264,7 @@ export async function listEntries(
 ): Promise<EntrySummary[]> {
   const db = getDb();
   if (!db) return [];
-  return safeRead("listEntries", [], async () => {
+  return criticalRead("listEntries", async () => {
 
   const { limit = 12, offset = 0, types, categoryKey, categoryKeys, preview = false } = options;
 
@@ -397,7 +414,7 @@ export async function resolvePath(
   const db = getDb();
   if (!db) return null;
 
-  return safeRead("resolvePath", null, async () => {
+  return criticalRead("resolvePath", async () => {
     const normalised = path.replace(/^\/+|\/+$/g, "");
 
     const rows = await db
@@ -923,19 +940,9 @@ const EMPTY_HOME: HomeData = {
 
 export async function getHomeData(locale: Locale, preview = false): Promise<HomeData> {
   const db = getDb();
-  if (!db) {
-    return {
-      featured: [],
-      news: [],
-      guides: [],
-      destinations: [],
-      events: [],
-      routes: [],
-      totalPublished: 0,
-    };
-  }
+  if (!db) return EMPTY_HOME;
 
-  return safeRead("getHomeData", EMPTY_HOME, async () => {
+  return criticalRead("getHomeData", async () => {
     const [featuredRows, news, guides, destinations, events, routeItems, totalPublished] =
       await Promise.all([
         summaryQuery(db, locale)
