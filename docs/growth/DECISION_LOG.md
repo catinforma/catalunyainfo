@@ -2,6 +2,8 @@
 
 Newest first. Format: date · decision · why (evidence) · how it is measured · commit.
 
+- 2026-10-18 · Parking guide rewritten from an AREA/SMOU fact check; three live errors fixed (green hours, windscreen ticket, resident-only spaces). Fine amounts not printed (no official page states them). · parking_area_verda_blava.md; ES page pos 9.8 overall but 20-50 for "zona verde". · GSC position for "zona verde" queries 28 days after deploy. · 4dcf210
+- 2026-10-18 · Transport-pass guide gets a 1-5 day cost table (computed from the fare table) and a new EN title. · EN: 1,419 impressions, CTR 1.8 %, duration queries. · docs/SEO_EXPERIMENTS.md entry. · 041d054, d66f5b7
 - 2026-10-19 · Election-night page is an explainer with no figures; the official link goes in only from Interior's own press note. · Interior has announced no 29N results site and documents no night-count feed; its only licensed data is the final count (election_night_29n.md). · GSC impressions for "resultados elecciones hora" / "escrutinio" queries from 20 Nov. · 7f576b0
 - 2026-10-19 · Shops-open-on-holidays guide states that the 2027 municipal days are unpublished and gives the default; no sales dates, no Black Friday label. · Ordre EMT/89/2026 art. 5; no Consell Assessor 2027 recommendation found (shops_open_holidays.md). · GSC queries "botigues obertes diumenge" / "tiendas abiertas domingo" in Nov–Dec. · 5e0c480
 - 2026-10-18 · P0 data fixes on branch: tourist tax (Barcelona 2027-29 surcharge, seven municipal surcharges), Cerdanya R3 cut, Núria details. · p0_data_accuracy.md (ATC, Ordenança 2.2, Llei 2/2026, Rodalies). · Tests on rate table; live text check after deploy. · de45bb9
