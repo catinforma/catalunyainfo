@@ -281,7 +281,7 @@ function body(locale: Locale) {
     list(...t.abroad),
     ...h2(t.muniTitle, ...t.muni),
     faq(t.faq),
-    ...b2Related(["mesa", "congressResults", "parliamentResults", "municipalResults"], locale),
+    ...b2Related(["mesa", "electionNight", "congressResults", "parliamentResults", "municipalResults"], locale),
   ];
 }
 

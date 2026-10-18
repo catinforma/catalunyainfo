@@ -51,7 +51,8 @@ export type B2Key =
   | "mesa"
   | "municipalResults"
   | "climate"
-  | "shops";
+  | "shops"
+  | "electionNight";
 
 /** Path after the locale prefix, no leading or trailing slash. */
 export const B2_PATHS: Record<B2Key, Record<Locale, string>> = {
@@ -119,6 +120,11 @@ export const B2_PATHS: Record<B2Key, Record<Locale, string>> = {
     ca: "guies/botigues-obertes-festius-catalunya",
     es: "guias/tiendas-abiertas-festivos-cataluna",
     en: "guides/shops-open-sundays-holidays-catalonia",
+  },
+  electionNight: {
+    ca: "guies/nit-electoral-resultats-escrutini",
+    es: "guias/noche-electoral-resultados-escrutinio",
+    en: "guides/spain-election-night-results",
   },
   municipalResults: {
     ca: "guies/resultats-eleccions-municipals-catalunya",
@@ -316,6 +322,11 @@ export const B2_TITLES: Record<B2Key, Record<Locale, string>> = {
     ca: "Botigues obertes en diumenges i festius",
     es: "Tiendas abiertas en domingos y festivos",
     en: "Shops open on Sundays and holidays",
+  },
+  electionNight: {
+    ca: "Nit electoral: hora dels resultats i escrutini",
+    es: "Noche electoral: hora de los resultados y escrutinio",
+    en: "Election night: results times and the count",
   },
   municipalResults: {
     ca: "Resultats de les eleccions municipals",

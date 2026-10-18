@@ -28,6 +28,7 @@ import { MESA } from "../src/lib/content/batch02/mesa.ts";
 import { MUNICIPAL_RESULTS } from "../src/lib/content/batch02/municipal-results.ts";
 import { CLIMATE } from "../src/lib/content/batch02/climate.ts";
 import { SHOPS } from "../src/lib/content/batch02/shops.ts";
+import { ELECTION_NIGHT } from "../src/lib/content/batch02/election-night.ts";
 import { CONGRESS_RESULTS, PARLIAMENT_RESULTS } from "../src/lib/content/batch02/election-results.ts";
 import { B2_PATHS, type B2Article } from "../src/lib/content/batch02/shared.ts";
 import { IMAGES } from "../src/lib/content/images.ts";
@@ -73,6 +74,7 @@ const ARTICLES: B2Article[] = [
   MUNICIPAL_RESULTS,
   CLIMATE,
   SHOPS,
+  ELECTION_NIGHT,
   CONGRESS_RESULTS,
   PARLIAMENT_RESULTS,
   SNOW,
@@ -85,7 +87,7 @@ const IMAGE_KEYS = new Set(IMAGES.map((image) => image.key));
 /* -------------------------------------------------------------------------- */
 
 test("every article has three editions", () => {
-  assert.equal(ARTICLES.length, 37);
+  assert.equal(ARTICLES.length, 38);
   for (const article of ARTICLES) {
     for (const locale of LOCALES) {
       assert.ok(article.editions[locale], `${article.key} is missing ${locale}`);
@@ -399,4 +401,26 @@ test("shops: the DOGC dates are all there and nothing the orders do not say", ()
     assert.doesNotMatch(text, /black friday/i);
     assert.doesNotMatch(text, /(rebaixes|rebajas|sales)[^.]*3 (de )?(gener|enero|January)/i);
   }
+});
+
+/**
+ * Election night carries no figures until Interior publishes a documented,
+ * licensed source (research_notes/blog-batch-03/election_night_29n.md):
+ * no percentages other than the worked "30 %" example, no seat forecasts,
+ * and every edition says the count is provisional and leaves out CERA.
+ */
+test("election night: provisional, no CERA, no forecasts, no invented site", () => {
+  const words: Record<string, RegExp[]> = {
+    ca: [/escrutini provisional/, /CERA/, /BOE/, /24 al 28 de novembre/],
+    es: [/escrutinio provisional/, /CERA/, /BOE/, /24 al 28 de noviembre/],
+    en: [/provisional count/, /CERA/, /BOE/, /24 to 28 November/],
+  };
+  for (const locale of ["ca", "es", "en"] as const) {
+    const text = bodyToPlainText(ELECTION_NIGHT.editions[locale].blocks);
+    for (const pattern of words[locale]!) assert.match(text, pattern, `${locale}: ${pattern}`);
+    assert.deepEqual(text.match(/\d+(,\d+)? ?%/g), ["30 %"], `${locale}: only the worked example is a percentage`);
+    assert.doesNotMatch(text, /sondeig a peu d'urna|sondeo a pie de urna|exit poll|majoria absoluta|mayoría absoluta|absolute majority|guanyador|ganador|winner|is winning/i);
+    assert.doesNotMatch(text, /resultados\.[a-z]|generales\d+j?\.es|https?:\/\/resultados/i);
+  }
+  assert.ok(ELECTION_NIGHT.sources.every((s) => !/resultados\.[a-z]/.test(s.url)), "no guessed results-site domain");
 });

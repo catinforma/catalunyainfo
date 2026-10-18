@@ -853,6 +853,26 @@ export const IMAGES: readonly ImportedImage[] = [
     "license": "CC BY-SA 3.0"
   },
   {
+    "key": "nit-electoral-recompte-2021",
+    "url": "/images/nit-electoral-recompte-2021.webp",
+    "width": 1920,
+    "height": 1440,
+    "blurDataUrl": "data:image/webp;base64,UklGRlwAAABXRUJQVlA4IFAAAADQAQCdASoQAAwAA4BaJQBOgCKeYqYAAAD+yc1PGCRP3vo0vG+eT1MwWiDCdd4Nwo4RPhfvKrd8SWGZUuu0Bdz5OQucN447FivVg3DDkdAAAA==",
+    "credit": "Jordi Roca",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Recompte_de_vots,_Eleccions_Catalanes_2021_-_50959163271.jpg",
+    "license": "CC BY-SA 2.0"
+  },
+  {
+    "key": "nit-electoral-recompte-riudoms",
+    "url": "/images/nit-electoral-recompte-riudoms.webp",
+    "width": 1920,
+    "height": 1440,
+    "blurDataUrl": "data:image/webp;base64,UklGRnAAAABXRUJQVlA4IGQAAABQAgCdASoQAAwAA4BaJYgCdAYv/wM+uGjQj2AA/dqr0RGy6Z/99kJmi5pd+PazJDVYzNq9c7wo0SUFfdaYPzl9Y1FDRpvAU9HJnK2Sdvie0iKtKWp3h4PCAyqiED0n3Q1QJAAA",
+    "credit": "Jordi Gili",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Recompte_de_vots_Riudoms_2023_02.jpg",
+    "license": "CC BY-SA 4.0"
+  },
+  {
     "key": "nuria-cremallera-gorja",
     "url": "/images/nuria-cremallera-gorja.webp",
     "width": 1920,
