@@ -112,11 +112,13 @@ export function ConsentGate({ locale, t }: { locale: Locale; t: ConsentCopy }) {
           aria-labelledby="ci-consent-title"
           className="fixed inset-x-0 bottom-0 z-50 border-t border-[var(--color-rule-strong)] bg-[var(--color-surface)] shadow-[var(--shadow-pop)]"
         >
-          <div className="ci-shell py-3 sm:py-4">
-            <h2 id="ci-consent-title" className="font-sans text-sm font-semibold sm:text-base">
+          <div className="ci-shell py-2 sm:py-4">
+            {/* On phones the heading is for screen readers only (it still
+                labels the dialog); the body sentence says the same thing. */}
+            <h2 id="ci-consent-title" className="sr-only font-sans font-semibold sm:not-sr-only sm:text-base">
               {t.consent.title}
             </h2>
-            <p className="ci-measure mt-1 text-xs text-[var(--color-muted)] sm:text-sm">
+            <p className="ci-measure text-xs text-[var(--color-muted)] sm:mt-1 sm:text-sm">
               {t.consent.body}{" "}
               <a href={legalPath("cookies", locale)}>{t.legalLabel}</a>
             </p>
@@ -136,7 +138,7 @@ export function ConsentGate({ locale, t }: { locale: Locale; t: ConsentCopy }) {
                 AEPD requires), "manage" as a short line under them, so the
                 banner stays near 150 px instead of covering a third of the
                 screen. */}
-            <div className="mt-3 grid grid-cols-2 gap-2 sm:mt-4 sm:flex sm:flex-wrap">
+            <div className="mt-2 grid grid-cols-2 gap-2 sm:mt-4 sm:flex sm:flex-wrap">
               <button
                 type="button"
                 className="ci-btn ci-btn-primary"
@@ -155,7 +157,7 @@ export function ConsentGate({ locale, t }: { locale: Locale; t: ConsentCopy }) {
               </button>
               <button
                 type="button"
-                className="ci-btn ci-btn-quiet col-span-2 min-h-11 sm:col-span-1"
+                className="ci-btn ci-btn-quiet col-span-2 justify-self-start max-sm:px-1 max-sm:py-1 max-sm:text-xs max-sm:underline sm:col-span-1"
                 aria-expanded={expanded}
                 onClick={() => setExpanded((v) => !v)}
               >
