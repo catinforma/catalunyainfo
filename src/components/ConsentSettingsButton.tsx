@@ -9,8 +9,6 @@ import {
   snapshotToState,
   subscribeConsent,
 } from "@/lib/analytics/consent-store";
-import { getMessages } from "@/lib/i18n";
-import type { Locale } from "@/lib/i18n/config";
 
 /**
  * "Cookie settings", in the footer.
@@ -20,8 +18,10 @@ import type { Locale } from "@/lib/i18n/config";
  * only once a decision exists, because while the banner is still on screen a
  * second control that reopens it would do nothing.
  */
-export function ConsentSettingsButton({ locale }: { locale: Locale }) {
-  const t = getMessages(locale);
+// Strings arrive as props from the server component that renders this one.
+// Importing getMessages here shipped all three languages' dictionaries
+// (~17 KB) to every page, because this component is on every page.
+export function ConsentSettingsButton({ label }: { label: string }) {
 
   const snapshot = useSyncExternalStore(subscribeConsent, readConsentCookie, readServerSnapshot);
   const state = snapshotToState(snapshot);
@@ -31,7 +31,7 @@ export function ConsentSettingsButton({ locale }: { locale: Locale }) {
 
   return (
     <button type="button" className="ci-consent-reopen" onClick={() => reopenConsent()}>
-      {t.consent.title}
+      {label}
     </button>
   );
 }

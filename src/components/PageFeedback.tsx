@@ -3,7 +3,7 @@
 import { useState } from "react";
 
 import { track } from "@/lib/analytics/events";
-import { getMessages } from "@/lib/i18n";
+import type { Messages } from "@/lib/i18n";
 import type { Locale } from "@/lib/i18n/config";
 
 /**
@@ -14,16 +14,21 @@ import type { Locale } from "@/lib/i18n/config";
  * stored against the path only — no identifier, no session, no free-text field
  * that could collect personal data by accident.
  */
+// Strings arrive as props from the server component that renders this one.
+// Importing getMessages here shipped all three languages' dictionaries
+// (~17 KB) to every page, because this component is on every page.
 export function PageFeedback({
   locale,
   path,
   contentType,
+  copy,
 }: {
   locale: Locale;
   path: string;
   contentType: string;
+  copy: Messages["feedback"];
 }) {
-  const t = getMessages(locale);
+  const t = { feedback: copy };
   const [sent, setSent] = useState(false);
   const [pending, setPending] = useState(false);
 

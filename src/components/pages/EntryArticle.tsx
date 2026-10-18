@@ -226,7 +226,7 @@ export function EntryArticle({
             ) : null}
 
             <div className="ci-measure mt-10">
-              <PageFeedback locale={locale} path={entry.href} contentType={entry.type} />
+              <PageFeedback locale={locale} path={entry.href} contentType={entry.type} copy={t.feedback} />
             </div>
 
             {entry.author?.bio ? (

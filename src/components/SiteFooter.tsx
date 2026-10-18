@@ -86,7 +86,7 @@ export async function SiteFooter({ locale }: { locale: Locale }) {
               </li>
             ))}
             <li>
-              <ConsentSettingsButton locale={locale} />
+              <ConsentSettingsButton label={getMessages(locale).consent.title} />
             </li>
           </ul>
         </nav>

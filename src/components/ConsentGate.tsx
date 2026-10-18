@@ -11,7 +11,7 @@ import {
   snapshotToState,
   subscribeConsent,
 } from "@/lib/analytics/consent-store";
-import { getMessages } from "@/lib/i18n";
+import type { Messages } from "@/lib/i18n";
 import { legalPath } from "@/lib/i18n/routes";
 import type { Locale } from "@/lib/i18n/config";
 
@@ -33,8 +33,15 @@ import type { Locale } from "@/lib/i18n/config";
  * capability we need. The decision is revisited if a second destination
  * appears.
  */
-export function ConsentGate({ locale }: { locale: Locale }) {
-  const t = getMessages(locale);
+// Strings arrive as props from the server component that renders this one.
+// Importing getMessages here shipped all three languages' dictionaries
+// (~17 KB) to every page, because this component is on every page.
+export interface ConsentCopy {
+  consent: Messages["consent"];
+  legalLabel: string;
+}
+
+export function ConsentGate({ locale, t }: { locale: Locale; t: ConsentCopy }) {
   const measurementId = process.env.NEXT_PUBLIC_GA4_MEASUREMENT_ID;
 
   const snapshot = useSyncExternalStore(
@@ -111,7 +118,7 @@ export function ConsentGate({ locale }: { locale: Locale }) {
             </h2>
             <p className="ci-measure mt-1 text-xs text-[var(--color-muted)] sm:text-sm">
               {t.consent.body}{" "}
-              <a href={legalPath("cookies", locale)}>{t.nav.legal}</a>
+              <a href={legalPath("cookies", locale)}>{t.legalLabel}</a>
             </p>
 
             {expanded ? (

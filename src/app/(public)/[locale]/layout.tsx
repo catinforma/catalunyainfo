@@ -98,7 +98,7 @@ export default async function LocaleLayout({
         </a>
         {children}
         <JsonLd json={siteGraph} />
-        <ConsentGate locale={typed} />
+        <ConsentGate locale={typed} t={{ consent: getMessages(typed).consent, legalLabel: getMessages(typed).nav.legal }} />
       </body>
     </html>
   );
