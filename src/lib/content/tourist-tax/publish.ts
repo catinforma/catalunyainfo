@@ -171,6 +171,23 @@ function directAnswer(copy: TaxCopy, locale: Locale): string {
     .replace("{age}", String(EXEMPT_AGE_AT_OR_BELOW));
 }
 
+/**
+ * Barcelona's surcharge steps, filled from the rate table so the prose can
+ * never drift from what the calculator charges.
+ */
+function barcelonaFuture(text: string, locale: Locale): string {
+  const steps = RATE_PERIODS.filter((period) => period.scope === "barcelona")
+    .sort((x, y) => x.from.localeCompare(y.from))
+    .map((period) => period.surcharge ?? 0);
+  const [s0 = 0, s1 = 0, s2 = 0, s3 = 0] = steps;
+  return text
+    .replace("{s0}", money(s0, locale))
+    .replace("{s1}", money(s1, locale))
+    .replace("{s2}", money(s2, locale))
+    .replace("{s3}", money(s3, locale))
+    .replace("{step}", money(s1 - s0, locale));
+}
+
 export function buildBody(locale: Locale, inlineMediaId?: string): Block[] {
   const copy = COPY[locale];
   const blocks: Block[] = [];
@@ -251,7 +268,7 @@ export function buildBody(locale: Locale, inlineMediaId?: string): Block[] {
   });
 
   blocks.push({ type: "heading", level: 3, text: copy.barcelonaFutureTitle });
-  for (const text of copy.barcelonaFuture) blocks.push({ type: "paragraph", text });
+  for (const text of copy.barcelonaFuture) blocks.push({ type: "paragraph", text: barcelonaFuture(text, locale) });
 
   /* ---- Exemptions and the cap ---------------------------------------------- */
   blocks.push({ type: "heading", level: 2, text: copy.childrenTitle });

@@ -215,3 +215,12 @@ test("the three paths are distinct", () => {
   const paths = LOCALES.map((locale) => COPY[locale].path);
   assert.equal(new Set(paths).size, paths.length);
 });
+
+test("Barcelona's future surcharges in the prose come from the rate table", () => {
+  for (const locale of LOCALES) {
+    const text = bodyToPlainText(buildBody(locale));
+    assert.doesNotMatch(text, /\{s[0-3]\}|\{step\}/, `${locale}: unfilled placeholder`);
+    // 6 EUR from 1 April 2027 (Ordenança fiscal 2.2), formatted per locale.
+    assert.match(text, locale === "en" ? /€6\.00/ : /6,00\s?€/, `${locale}: 2027 surcharge missing`);
+  }
+});

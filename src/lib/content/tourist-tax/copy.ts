@@ -144,8 +144,8 @@ export const COPY: Record<Locale, TaxCopy> = {
     futureHeaders: { type: "Tipus d'allotjament", rate: "Tarifa" },
     barcelonaFutureTitle: "I a Barcelona?",
     barcelonaFuture: [
-      "El recàrrec municipal de Barcelona puja cada 1 d'abril fins al 2029, segons l'Ordenança fiscal 2.2 de l'Ajuntament: **5 €** fins al 31 de març de 2027, **6 €** de l'1 d'abril de 2027 al 31 de març de 2028, **7 €** fins al 31 de març de 2029 i **8 €** a partir de llavors, el màxim que permet la llei. La tarifa de la Generalitat per a Barcelona no canvia.",
-      "Així, l'1 d'abril de 2027 un hotel a Barcelona pagarà **1 € més per persona i nit**. La calculadora ja aplica aquests imports segons la data.",
+      "El recàrrec municipal de Barcelona puja cada 1 d'abril fins al 2029, segons l'Ordenança fiscal 2.2 de l'Ajuntament: **{s0}** fins al 31 de març de 2027, **{s1}** de l'1 d'abril de 2027 al 31 de març de 2028, **{s2}** fins al 31 de març de 2029 i **{s3}** a partir de llavors, el màxim que permet la llei. La tarifa de la Generalitat per a Barcelona no canvia.",
+      "Així, l'1 d'abril de 2027 un hotel a Barcelona pagarà **{step} més per persona i nit**. La calculadora ja aplica aquests imports segons la data.",
     ],
 
     childrenTitle: "Els menors paguen?",
@@ -268,8 +268,8 @@ export const COPY: Record<Locale, TaxCopy> = {
     futureHeaders: { type: "Tipo de alojamiento", rate: "Tarifa" },
     barcelonaFutureTitle: "¿Y en Barcelona?",
     barcelonaFuture: [
-      "El recargo municipal de Barcelona sube cada 1 de abril hasta 2029, según la Ordenanza fiscal 2.2 del Ayuntamiento: **5 €** hasta el 31 de marzo de 2027, **6 €** del 1 de abril de 2027 al 31 de marzo de 2028, **7 €** hasta el 31 de marzo de 2029 y **8 €** a partir de entonces, el máximo que permite la ley. La tarifa de la Generalitat para Barcelona no cambia.",
-      "Así, el 1 de abril de 2027 un hotel en Barcelona pagará **1 € más por persona y noche**. La calculadora ya aplica estos importes según la fecha.",
+      "El recargo municipal de Barcelona sube cada 1 de abril hasta 2029, según la Ordenanza fiscal 2.2 del Ayuntamiento: **{s0}** hasta el 31 de marzo de 2027, **{s1}** del 1 de abril de 2027 al 31 de marzo de 2028, **{s2}** hasta el 31 de marzo de 2029 y **{s3}** a partir de entonces, el máximo que permite la ley. La tarifa de la Generalitat para Barcelona no cambia.",
+      "Así, el 1 de abril de 2027 un hotel en Barcelona pagará **{step} más por persona y noche**. La calculadora ya aplica estos importes según la fecha.",
     ],
 
     childrenTitle: "¿Los niños pagan?",
@@ -392,8 +392,8 @@ export const COPY: Record<Locale, TaxCopy> = {
     futureHeaders: { type: "Accommodation type", rate: "Rate" },
     barcelonaFutureTitle: "And in Barcelona?",
     barcelonaFuture: [
-      "Barcelona's municipal surcharge rises every 1 April until 2029, under the city's Fiscal Ordinance 2.2: **€5** until 31 March 2027, **€6** from 1 April 2027 to 31 March 2028, **€7** until 31 March 2029 and **€8** from then on, the legal maximum. The Catalan rate for Barcelona does not change.",
-      "So from 1 April 2027 a Barcelona hotel stay costs **€1 more per person per night**. The calculator already applies these amounts by date.",
+      "Barcelona's municipal surcharge rises every 1 April until 2029, under the city's Fiscal Ordinance 2.2: **{s0}** until 31 March 2027, **{s1}** from 1 April 2027 to 31 March 2028, **{s2}** until 31 March 2029 and **{s3}** from then on, the legal maximum. The Catalan rate for Barcelona does not change.",
+      "So from 1 April 2027 a Barcelona hotel stay costs **{step} more per person per night**. The calculator already applies these amounts by date.",
     ],
 
     childrenTitle: "Do children pay?",
