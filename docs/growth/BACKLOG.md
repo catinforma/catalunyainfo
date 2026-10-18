@@ -38,9 +38,9 @@ Evidence files: `research_notes/audits/*.md` (gitignored) and `docs/growth/basel
 
 | # | Task | Live by | Sources | Effort |
 |---|---|---|---|---|
-| 20 | Election night 29N: provisional results (Interior) in the existing results pages + municipal-style lookup; "provisional" label, no projections | 20 Nov | Interior, JEC | L |
+| 20 | Election night 29N. **Explainer built on branch** (7f576b0, no figures). Left: add the official Interior results link when its press note names it (~26–27 Nov by precedent); ingest numbers only if Interior publishes a documented download with reuse terms; 29N final data into `congressResults` after the BOE | 26 Nov | Interior, JEC | S |
 | 21 | Christmas markets (Santa Llúcia etc.) | 20 Nov | councils, organisers | M |
-| 22 | Shops open on Sundays/holidays + January sales | 20 Nov | Generalitat (comerç) DOGC | M |
+| 22 | Shops open on Sundays/holidays. **Built on branch** (5e0c480). Left: add the 2027 municipal days (Barcelona and big towns) when the DOGC resolution appears (~27 Nov by precedent); recheck ZGAT validity before summer 2027 | 28 Nov | DOGC, Ajuntament | S |
 | 23 | Christmas & New Year in Barcelona | 1 Dec | Ajuntament | M |
 | 24 | Cavalcada de Reis 2027 (routes as councils publish) | 8 Dec | councils | M |
 | 25 | Snow & avalanche state (ICGC bulletin, Meteocat) upgrade of ski/snow pages | 28 Nov | ICGC, Meteocat, resorts | M |
