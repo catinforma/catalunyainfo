@@ -344,7 +344,7 @@ computed from the fare table. EN title only: "Barcelona transport pass for 1 to
 5 days: 2026 prices". ca/es titles unchanged (their impressions are too few to
 read).
 
-**Frozen for 28 days from the deploy date** (write it here when it ships).
+**Deployed 19 Oct 2026; frozen until 16 Nov 2026** (28 days).
 Compare CTR at equal positions; the body change can also move position, so
 report both.
 
