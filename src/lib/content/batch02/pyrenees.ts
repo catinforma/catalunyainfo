@@ -40,12 +40,18 @@ const RIPOLLES_SOURCES = [
   },
   {
     name: "Parc Natural de les Capçaleres del Ter i del Freser",
-    url: "https://parcsnaturals.gencat.cat/ca/capcaleres-ter-freser/",
+    url: "https://parcsnaturals.gencat.cat/ca/xarxa-de-parcs/ter-freser/",
     publisher: "Generalitat de Catalunya",
   },
+  { name: "Horaris i preus d'entrada", url: "https://www.monestirderipoll.cat/horaris-i-preus-dentrades/", publisher: "Monestir de Ripoll" },
+  { name: "Horaris", url: "https://www.museuderipoll.org/horaris/", publisher: "Museu Etnogràfic de Ripoll" },
+  { name: "Ruta del Ferro i del Carbó", url: "https://www.viesverdes.cat/rutes_vies_verdes/ruta-del-ferro-i-del-carbo/", publisher: "Vies Verdes de Girona" },
+  { name: "Cremallera de Núria", url: "https://turistren.cat/trens/cremallera-de-nuria/", publisher: "FGC Turistren" },
+  { name: "Com arribar", url: "https://ripollesturisme.cat/planifica-la-teva-visita/com-arribar/", publisher: "Ripollès Turisme" },
+  { name: "R3: avís de servei", url: "https://rodalies.gencat.cat/ca/detalls/article/02_02_PAT_R3", publisher: "Rodalies de Catalunya" },
 ];
 
-const RIPOLLES_VERIFIED = "2026-09-29";
+const RIPOLLES_VERIFIED = "2026-10-20";
 
 export const RIPOLLES: B2Article = {
   key: "ripolles",
@@ -94,25 +100,41 @@ export const RIPOLLES: B2Article = {
           "Ripollès Turisme destaca entre els imprescindibles el conjunt monàstic de **Ripoll**, la **Vall de Núria**, **Beget** i el Parc Natural de les Capçaleres del Ter i del Freser.",
         ),
         ...h2(
-          "Ripoll",
-          "El conjunt monàstic és una de les grans portes d'entrada al patrimoni de la comarca.",
+          "Ripoll: el monestir i el museu",
+          "Amplia la secció «Ripoll».",
+          "El monestir de Santa Maria de Ripoll és el motiu principal per aturar-se a la vila. La basílica la va consagrar l'abat Oliba el 1032, i la portalada del segle XII és, segons Ripollès Turisme, candidata a Patrimoni de la Humanitat. Del saqueig i l'incendi de 1835 es van salvar 231 volums de la biblioteca, que avui es conserven a l'Arxiu de la Corona d'Aragó.",
+          "Horari 2026: d'estiu (28 de març – 27 de setembre), de 10 a 14 h i de 16 a 19 h; d'hivern, de 10 a 13.30 h i de 15.30 a 18 h. Diumenges i alguns festius, de 10 a 14 h. Tanca el 25 i 26 de desembre i l'1 i el 6 de gener. Les entrades es venen fins a 30 minuts abans de tancar, i hi ha visita guiada dissabtes i diumenges a les 12 h. Entrada general: 7,50 €; menors de 5 a 18 anys, 3,50 €; menors de 5 anys, gratuït *(preus consultats el 20/10/2026)*.",
+          "Al costat, el Museu Etnogràfic de Ripoll explica la comarca a través dels pastors, la farga i les armes de foc ripolleses. Obre de dimarts a dissabte i diumenge al matí, tanca els dilluns, i l'entrada general és de 4 €. És gratuït l'últim diumenge de mes i per als menors de 12 anys.",
+        ),
+        ...h2(
+          "Sant Joan de les Abadesses",
+          "L'altre gran monestir de la comarca el va fundar Guifré el Pelós el 887 com el primer monestir femení dels comtats catalans, i l'església actual es va consagrar el 1150. A dins hi ha el Santíssim Misteri, un davallament de la creu del segle XIII tallat en fusta. Entrada general: 5 € (consultat el 20/10/2026).",
+        ),
+        ...h2(
+          "Sense cotxe: la via verda del Ferro i del Carbó",
+          "Entre Ripoll i Sant Joan de les Abadesses, l'antiga via del tren és una via verda asfaltada, amb un pendent suau de l'1 % i classificada com a accessible i de dificultat mínima. Puja de 682 m a Ripoll a 775 m a Sant Joan, i en total la ruta arriba als 18 km fins a Ogassa i Sant Pau de Segúries. Des de Sant Joan, la via temàtica de l'Alt Ter continua 21,76 km riu amunt per Camprodon fins a Vilallonga de Ter.",
+        ),
+        ...h2(
+          "La vall de Camprodon i Beget",
+          "A Camprodon, el pont Nou de finals del segle XII és la imatge de la vila. Isaac Albéniz hi va néixer el 1860. A Beget, l'església romànica de Sant Cristòfol guarda la Majestat, un Crist del segle XII d'uns dos metres. Setcases té ${b2link(\"setcases\", \"ca\", \"guia pròpia\")}.",
         ),
         ...h2(
           "Vall de Núria",
-          "L'accés amb cremallera forma part de l'experiència. L'oferta de muntanya existeix durant tot l'any.",
+          "Amplia la secció.",
+          "El cremallera surt de Ribes-Enllaç, para a Ribes-Vila i Queralbs, i en 40 minuts puja 1.000 metres en 12,5 km. Circula tot l'any, però a partir de començaments de novembre FGC en redueix el servei. L'operador indica que la compra en línia és obligatòria, i hi ha tres aparcaments gratuïts a les estacions d'accés. Tota la resta és a ${b2link(\"nuria\", \"ca\", \"la nostra guia de Núria\")}.",
         ),
         ...h2(
-          "Vall de Camprodon",
-          "Camprodon pot funcionar com a base per combinar nuclis de la vall, patrimoni i paisatge.",
+          "Com arribar al Ripollès",
+          "En cotxe, des de Barcelona per la C-17 (direcció Vic–Puigcerdà), i des de Girona per l'A-26 cap a Olot i la N-260 cap a Ripoll. En autobús, TEISA uneix Barcelona amb Ripoll i Camprodon passant per Vic, i també té línies des de Girona i Olot. En tren, la R3 arriba a Ripoll i a Ribes-Enllaç, però des del 7 de juliol de 2026 només circula entre la Garriga i Puigcerdà, i entre Barcelona i la Garriga o Vic hi ha un servei de Rodalies per carretera. Comprova l'avís vigent abans de viatjar.",
+        ),
+        ...h2(
+          "Informació del parc natural",
+          "El Parc Natural de les Capçaleres del Ter i del Freser té quatre centres d'informació: a Queralbs, a l'estació del cremallera de Núria, a Setcases i a Ulldeter. Els horaris no són els mateixos a tots.",
         ),
         ...h2(
           "Setcases i Vallter",
           "Setcases és una de les portes del Parc Natural de les Capçaleres del Ter i del Freser i connecta directament amb l'entorn de Vallter.",
           `N'hem escrit una guia a part: ${b2link("setcases", "ca", "què veure a Setcases en un dia")}.`,
-        ),
-        ...h2(
-          "Beget",
-          "És un dels nuclis patrimonials més singulars de la comarca i conserva arquitectura medieval de pedra.",
         ),
         ...h2("Quants dies?"),
         table(
@@ -151,25 +173,38 @@ export const RIPOLLES: B2Article = {
           "La mejor forma de entender la comarca es dividirla: **Ripoll y patrimonio**, **Vall de Ribes y Núria**, y **Vall de Camprodon, Setcases y Vallter**.",
         ),
         ...h2(
-          "Ripoll",
-          "El conjunto monástico es la gran puerta de entrada al patrimonio de la comarca y el punto donde más fácil resulta entender su historia medieval.",
+          "Ripoll: el monasterio y el museo",
+          "El monasterio de Santa Maria de Ripoll es la razón principal para parar en la villa. El abad Oliba consagró la basílica en 1032, y la portada del siglo XII es, según Ripollès Turisme, candidata a Patrimonio de la Humanidad. Del saqueo y el incendio de 1835 se salvaron 231 volúmenes de la biblioteca, que hoy se conservan en el Archivo de la Corona de Aragón.",
+          "Horario 2026: de verano (28 de marzo – 27 de septiembre), de 10 a 14 h y de 16 a 19 h; de invierno, de 10 a 13.30 h y de 15.30 a 18 h. Domingos y algunos festivos, de 10 a 14 h. Cierra el 25 y 26 de diciembre y el 1 y 6 de enero. Las entradas se venden hasta 30 minutos antes del cierre, y hay visita guiada sábados y domingos a las 12 h. Entrada general: 7,50 €; de 5 a 18 años, 3,50 €; menores de 5, gratis *(precios consultados el 20/10/2026)*.",
+          "Al lado, el Museu Etnogràfic de Ripoll explica la comarca a través de los pastores, la forja y las armas de fuego ripollesas. Abre de martes a sábado y el domingo por la mañana, cierra los lunes, y la entrada general cuesta 4 €. Es gratis el último domingo de mes y para menores de 12 años.",
+        ),
+        ...h2(
+          "Sant Joan de les Abadesses",
+          "El otro gran monasterio de la comarca lo fundó Guifré el Pelós en 887 como el primer monasterio femenino de los condados catalanes, y la iglesia actual se consagró en 1150. Dentro está el Santíssim Misteri, un descendimiento de la cruz del siglo XIII tallado en madera. Entrada general: 5 € (consultado el 20/10/2026).",
+        ),
+        ...h2(
+          "Sin coche: la vía verde del Hierro y del Carbón",
+          "Entre Ripoll y Sant Joan de les Abadesses, el antiguo trazado del tren es una vía verde asfaltada, con una pendiente suave del 1 % y clasificada como accesible y de dificultad mínima. Sube de 682 m en Ripoll a 775 m en Sant Joan, y en total la ruta suma 18 km hasta Ogassa y Sant Pau de Segúries. Desde Sant Joan, la vía temática del Alt Ter sigue 21,76 km río arriba por Camprodon hasta Vilallonga de Ter.",
+        ),
+        ...h2(
+          "El valle de Camprodon y Beget",
+          "En Camprodon, el Pont Nou de finales del siglo XII es la imagen de la villa. Isaac Albéniz nació allí en 1860. En Beget, la iglesia románica de Sant Cristòfol guarda la Majestat, un Cristo del siglo XII de unos dos metros. Setcases tiene ${b2link(\"setcases\", \"es\", \"guía propia\")}.",
         ),
         ...h2(
           "Vall de Núria",
-          "El acceso en cremallera forma parte de la experiencia: no hay carretera hasta el santuario.",
-          "La oferta de montaña existe durante todo el año, no solo en temporada de nieve.",
+          "El cremallera sale de Ribes-Enllaç, para en Ribes-Vila y Queralbs, y en 40 minutos sube 1.000 metros en 12,5 km. Circula todo el año, pero a partir de principios de noviembre FGC reduce el servicio. El operador indica que la compra online es obligatoria, y hay tres aparcamientos gratuitos en las estaciones de acceso. Todo lo demás está en ${b2link(\"nuria\", \"es\", \"nuestra guía de Núria\")}.",
+        ),
+        ...h2(
+          "Cómo llegar al Ripollès",
+          "En coche, desde Barcelona por la C-17 (dirección Vic–Puigcerdà), y desde Girona por la A-26 hacia Olot y la N-260 hacia Ripoll. En autobús, TEISA une Barcelona con Ripoll y Camprodon pasando por Vic, y tiene líneas desde Girona y Olot. En tren, la R3 llega a Ripoll y a Ribes-Enllaç, pero desde el 7 de julio de 2026 solo circula entre La Garriga y Puigcerdà, y entre Barcelona y La Garriga o Vic hay un servicio de Rodalies por carretera. Comprueba el aviso vigente antes de viajar.",
+        ),
+        ...h2(
+          "Información del parque natural",
+          "El Parc Natural de les Capçaleres del Ter i del Freser tiene cuatro centros de información: en Queralbs, en la estación del cremallera de Núria, en Setcases y en Ulldeter. Los horarios no son iguales en todos.",
         ),
         ...h2(
           "Vall de Camprodon, Setcases y Vallter",
           `Setcases es una de las puertas del parque natural. ${b2link("setcases", "es", "Guía de Setcases")}.`,
-        ),
-        ...h2(
-          "Vall de Camprodon",
-          "Camprodon puede funcionar como base para combinar los núcleos del valle, el patrimonio y el paisaje sin cambiar de alojamiento cada noche.",
-        ),
-        ...h2(
-          "Beget",
-          "Uno de los núcleos patrimoniales más singulares de la comarca, con arquitectura medieval de piedra.",
         ),
         ...h2("Cuántos días"),
         table(
@@ -210,23 +245,39 @@ export const RIPOLLES: B2Article = {
           "Rather than treating the area as a single excursion, divide it into **Ripoll and heritage**, **Vall de Ribes and Núria**, and **Vall de Camprodon, Setcases and Vallter**.",
         ),
         ...h2(
-          "Ripoll",
-          "The monastic complex is the main gateway to the area's heritage and the easiest place to get a grip on its medieval history.",
+          "Ripoll: the monastery and the museum",
+          "The monastery of Santa Maria de Ripoll is the main reason to stop in the town. Abbot Oliba consecrated the basilica in 1032. According to Ripollès Turisme, the 12th-century carved doorway is a candidate for UNESCO World Heritage status. When the monastery was sacked and burned in 1835, 231 volumes from its library were saved; they are now kept in the Archive of the Crown of Aragon.",
+          "Opening hours in 2026: in summer (28 March – 27 September), 10:00–14:00 and 16:00–19:00; in winter, 10:00–13:30 and 15:30–18:00. On Sundays and some public holidays it opens 10:00–14:00. It is closed on 25–26 December and 1 and 6 January. Ticket sales stop 30 minutes before closing, and there is a guided tour at 12:00 on Saturdays and Sundays. Admission: €7.50 general; €3.50 for ages 5–18; free under 5 *(prices checked 20 Oct 2026)*.",
+          "Next door, the Ripoll Ethnographic Museum tells the area's story through shepherding, the iron forge and the town's firearms trade. It opens Tuesday to Saturday and on Sunday mornings, is closed on Mondays, and charges €4 general admission. Entry is free on the last Sunday of each month and for under-12s.",
+        ),
+        ...h2(
+          "Sant Joan de les Abadesses",
+          "Wilfred the Hairy (Guifré el Pelós) founded the area's other great monastery in 887, the first convent for women in the Catalan counties. The present church was consecrated in 1150. Inside is the Santíssim Misteri, a 13th-century wooden Descent from the Cross. Admission: €5 general (checked 20 Oct 2026).",
+        ),
+        ...h2(
+          "Without a car: the Iron and Coal greenway",
+          "Between Ripoll and Sant Joan de les Abadesses, the old railway line is now an asphalt greenway with a gentle 1% gradient, rated accessible and of minimal difficulty. It climbs from 682 m at Ripoll to 775 m at Sant Joan, and the full route runs 18 km to Ogassa and Sant Pau de Segúries. From Sant Joan, the Alt Ter route continues 21.76 km up the river through Camprodon to Vilallonga de Ter.",
+        ),
+        ...h2(
+          "The Camprodon valley and Beget",
+          "In Camprodon, the late-12th-century Pont Nou bridge is the town's signature view, and the composer Isaac Albéniz was born here in 1860. In Beget, the Romanesque church of Sant Cristòfol holds the Majestat, a 12th-century robed Christ about two metres tall. Setcases has ${b2link(\"setcases\", \"en\", \"its own guide\")}.",
         ),
         ...h2(
           "Vall de Núria",
-          "The rack-railway approach is part of the experience: there is no road to the sanctuary.",
-          "There is mountain activity all year, not only in the snow season.",
+          "The rack railway leaves from Ribes-Enllaç and calls at Ribes-Vila and Queralbs. It climbs 1,000 metres over 12.5 km in 40 minutes. It runs all year, but FGC reduces the service from early November. The operator says tickets must be bought online, and there are three free car parks at the access stations. Everything else is in ${b2link(\"nuria\", \"en\", \"our Núria guide\")}.",
         ),
         ...h2(
-          "Vall de Camprodon",
-          "Camprodon works well as a base for combining the valley's villages, its heritage and its landscape without changing accommodation every night.",
+          "Getting to Ripollès",
+          "By car, take the C-17 from Barcelona (towards Vic and Puigcerdà). From Girona, take the A-26 towards Olot and then the N-260 to Ripoll. By bus, TEISA links Barcelona with Ripoll and Camprodon via Vic, and also runs lines from Girona and Olot. By rail, the R3 serves Ripoll and Ribes-Enllaç. Since 7 July 2026, however, trains have run only between La Garriga and Puigcerdà, with a Rodalies road service between Barcelona and La Garriga or Vic. Check the current notice before you travel.",
+        ),
+        ...h2(
+          "Natural park information",
+          "Capçaleres del Ter i del Freser Natural Park has four information centres: in Queralbs, at Núria's rack-railway station, in Setcases and at Ulldeter. Opening hours differ between them.",
         ),
         ...h2(
           "Setcases and Vallter",
           `Setcases is one of the gateways to the natural park. ${b2link("setcases", "en", "Our Setcases guide")}.`,
         ),
-        ...h2("Beget", "One of the most distinctive heritage villages in the comarca."),
         ...h2("How many days"),
         table(
           "Splitting the time",
@@ -260,12 +311,26 @@ const SETCASES_SOURCES = [
   },
   {
     name: "Parc Natural de les Capçaleres del Ter i del Freser",
-    url: "https://parcsnaturals.gencat.cat/ca/capcaleres-ter-freser/",
+    url: "https://parcsnaturals.gencat.cat/ca/xarxa-de-parcs/ter-freser/",
     publisher: "Generalitat de Catalunya",
   },
+  { name: "Descobreix Setcases", url: "https://setcases.cat/coneix/descobreix-setcases/", publisher: "Ajuntament de Setcases" },
+  {
+    name: "Itineraris interpretatius del parc natural",
+    url: "https://parcsnaturals.gencat.cat/ca/xarxa-de-parcs/ter-freser/gaudeix-del-parc/equipaments-i-itineraris/itineraris/itineraris-interpretatius-del-parc-natural/",
+    publisher: "Parcs Naturals de Catalunya",
+  },
+  {
+    name: "Oficines d'informació del parc natural",
+    url: "https://parcsnaturals.gencat.cat/ca/xarxa-de-parcs/ter-freser/gaudeix-del-parc/equipaments-i-itineraris/equipaments/oficines-dinformacio/",
+    publisher: "Parcs Naturals de Catalunya",
+  },
+  { name: "Horaris", url: "https://www.teisa-bus.com/ca/horaris", publisher: "TEISA" },
+  { name: "R3: avís de servei", url: "https://rodalies.gencat.cat/ca/detalls/article/02_02_PAT_R3", publisher: "Rodalies de Catalunya" },
+  { name: "Setcases, el municipi en xifres", url: "https://www.idescat.cat/emex/?id=171925", publisher: "Idescat" },
 ];
 
-const SETCASES_VERIFIED = "2026-09-29";
+const SETCASES_VERIFIED = "2026-10-20";
 
 export const SETCASES: B2Article = {
   key: "setcases",
@@ -314,7 +379,8 @@ export const SETCASES: B2Article = {
           { label: "Comarca", value: "Ripollès" },
           { label: "Parc natural", value: "Capçaleres del Ter i del Freser" },
           { label: "Passeig de la Creueta", value: "Uns 300 m i uns 50 m de desnivell, uns 10 minuts" },
-          { label: "Última verificació", value: "29 de setembre de 2026" },
+          { label: "Altitud", value: "1.265 m (Idescat)" },
+          { label: "Última verificació", value: "20 d'octubre de 2026" },
         ]),
         ...h2(
           "Al matí: el nucli",
@@ -323,14 +389,6 @@ export const SETCASES: B2Article = {
         ...h2(
           "La Creueta",
           "Ripollès Turisme proposa un petit passeig d'uns deu minuts, de poc més de **300 metres** i uns **50 metres de desnivell**, per obtenir una bona perspectiva del poble.",
-        ),
-        ...h2("Miradors"),
-        ...paras("El municipi identifica diversos miradors:"),
-        list(
-          "el Forat de l'Olla;",
-          "el Collet de Xuriguera;",
-          "la Baidana;",
-          "el balcó de la Costa Brava.",
         ),
         ...h2(
           "Vallter",
@@ -346,10 +404,49 @@ export const SETCASES: B2Article = {
           `Setcases forma part d'una comarca que dona per a molt més: ${b2link("ripolles", "ca", "la guia del Ripollès")}.`,
         ),
         ...h2(
-          "Com arribar-hi",
-          "El tren no arriba a Setcases. L'estació més propera de la línia R3 és **Ripoll**, i des d'allà cal pujar la vall del Ter per carretera, passant per Camprodon.",
-          "A l'hivern, abans de continuar cap a Vallter, comprova l'estat de la carretera: el tram final és d'alta muntanya i pot quedar afectat per la neu.",
-          "Si vas a passar el dia, Camprodon és la població de la vall amb més serveis i pot fer de base per dinar o dormir.",
+          "L'església de Sant Miquel",
+          "L'església parroquial, dedicada a Sant Miquel Arcàngel, és de finals del segle XVII i es va aixecar damunt d'un temple romànic del segle XII, del qual encara queden restes a la base del campanar. El 1728 un incendi va enfonsar el teulat i l'antiga volta de fusta, i la reconstrucció es va acabar el 1729. A dins hi ha la peça que més val la pena: el retaule barroc de l'altar major, presidit per Sant Miquel. Va ser un dels pocs que es van salvar de la Guerra Civil i es va restaurar el 1983. L'Ajuntament ofereix un tour virtual de l'església al seu web.",
+        ),
+        ...h2(
+          "Un passeig per la història del poble",
+          "Pel nucli hi ha plaques que expliquen la vida d'abans: els molins, les fargues i les mines, els traginers, la transhumància, els antics hostals de la plaça Major. L'Ajuntament en publica la ruta en un fitxer descarregable, i és la manera més senzilla d'omplir un matí sense cotxe. El nom del poble també té la seva història. Segons Ripollès Turisme, un pastor i els seus set fills van baixar de la muntanya fugint de la neu, i cadascun s'hi va construir una cabana.",
+        ),
+        ...h2(
+          "On són els miradors",
+          "El Forat de l'Olla és a uns 5 km del poble en direcció a Vallter, amb vistes sobre el Ter i el Gra de Fajol, i el Collet de Xuriguera és just al costat, mirant a la vall del Carlat. La Baidana queda a uns 6 km, a la pista forestal que uneix Setcases amb Espinavell. El balcó de la Costa Brava és a 2.535 m, davant de la cafeteria Les Marmotes de Vallter, i s'hi pot pujar a peu per les pistes o amb el telecadira.",
+        ),
+        ...h2(
+          "Passejades i excursions des del poble",
+        ),
+        table(
+          "",
+          ["Itinerari", "Distància", "Desnivell +", "Temps", "Dificultat"],
+          [
+            ["Camí dels Socarrats i dels Beduïs (circular)", "3,85 km", "350 m", "1 h 30 min", "Moderada"],
+            ["Circ d'Ulldeter", "4,5 km", "345 m", "1 h 25 min", "Moderada"],
+            ["Collada Fonda – Costabona – Balmeta", "8,2 km", "659 m", "3 h 45 min", "Exigent"],
+            ["Carboner – Baidana – Cabanes – Setcases", "8,5 km", "710 m", "5 h", "Exigent"],
+          ],
+          "Font: itineraris interpretatius del Parc Natural (dificultat segons el mètode SENDIF). Consultat el 20 d'octubre de 2026.",
+        ),
+        ...paras(
+          "Amb nens, l'Ajuntament recomana el camí dels Socarrats i dels Beduïs i el camí de les cabanyes i la fageda (1 h 15 min, més 45 minuts de tornada per carretera). Tots dos són per a infants a partir de 8 anys, no són aptes per a cotxets i es poden fer tot l'any excepte quan hi ha neu. Per caminar pel teu compte, l'Ajuntament també recomana l'app Natura Local, amb rutes autoguiades pel municipi.",
+        ),
+        ...h2(
+          "Amb nens, a més",
+          "El poble té zona d'esbarjo i parc infantil, i a l'estiu, la Platgeta. A Vallter, el telecadira també funciona a l'estiu. Segons l'Ajuntament, la pujada dura uns 20 minuts i els dies clars s'hi veuen el cap de Creus i el golf de Roses. Des de dalt es pot caminar fins al naixement del Ter. El 2026, la temporada d'estiu de Vallter va anar de l'1 de juliol al 30 d'agost; consulta les dates de cada any a l'operador.",
+        ),
+        ...h2(
+          "El refugi d'Ulldeter",
+          "Prop de Vallter, a 2.393 m, hi ha les restes del primer refugi d'Ulldeter, inaugurat el 25 de juliol de 1909. Ripollès Turisme el presenta com el primer refugi de muntanya de l'Estat. Avui està en ruïnes, amb una placa commemorativa.",
+        ),
+        ...h2(
+          "Centres d'informació del parc natural",
+          "Setcases aporta el 23 % de la superfície del Parc Natural de les Capçaleres del Ter i del Freser. El centre d'informació del poble és a l'aparcament de la Closa d'en Xola, a la carretera de Vallter (GIV-5264). A dalt, al pla de Morens, hi ha un segon centre al costat de l'aparcament superior de Vallter. Obre els caps de setmana de maig a finals d'octubre, els ponts i cada dia del 25 de juliol al 7 de setembre, és accessible per a persones amb mobilitat reduïda i tanca a l'hivern. Els horaris canvien segons el centre: abans d'anar-hi, truca al 667 116 811.",
+        ),
+        ...h2(
+          "Com arribar-hi en transport públic",
+          "El tren no arriba a Setcases. TEISA opera la línia d'autobús Setcases – Camprodon – Ripoll – Campdevànol, però la majoria d'expedicions comencen i acaben a Camprodon, i només unes poques pugen fins a Setcases. Mira l'horari vigent al web de TEISA abans de sortir. Ripoll té estació de la R3, però des del 7 de juliol de 2026 els trens circulen només entre la Garriga i Puigcerdà, amb menys freqüència. Entre Barcelona i la Garriga o Vic, Rodalies hi posa un servei per carretera. Consulta l'avís de Rodalies per al dia que viatges. A l'hivern, abans de pujar a Vallter, comprova l'estat de la carretera: el darrer tram és d'alta muntanya.",
         ),
         ...paras(verifiedLine("ca", SETCASES_VERIFIED)),
         ...b2Related(["ripolles", "snow"], "ca"),
@@ -375,14 +472,13 @@ export const SETCASES: B2Article = {
           { label: "Comarca", value: "Ripollès" },
           { label: "Parque natural", value: "Capçaleres del Ter i del Freser" },
           { label: "Paseo de la Creueta", value: "Unos 300 m y unos 50 m de desnivel, unos 10 minutos" },
-          { label: "Última verificación", value: "29 de septiembre de 2026" },
+          { label: "Altitud", value: "1.265 m (Idescat)" },
+          { label: "Última verificación", value: "20 de octubre de 2026" },
         ]),
         ...h2(
           "La Creueta",
           "Es un paseo corto de poco más de **300 metros** y unos **50 metros de desnivel**, de unos diez minutos, con una buena perspectiva del pueblo.",
         ),
-        ...h2("Miradores"),
-        list("el Forat de l'Olla;", "el Collet de Xuriguera;", "la Baidana;", "el balcón de la Costa Brava."),
         ...h2(
           "Vallter",
           "Setcases es la puerta natural hacia Vallter y el alto valle del Ter.",
@@ -394,10 +490,49 @@ export const SETCASES: B2Article = {
         ),
         ...paras(`${b2link("ripolles", "es", "La guía del Ripollès")} sitúa Setcases en su comarca.`),
         ...h2(
-          "Cómo llegar",
-          "El tren no llega a Setcases. La estación más cercana de la línea R3 es **Ripoll**, y desde allí hay que subir el valle del Ter por carretera, pasando por Camprodon.",
-          "En invierno, antes de seguir hacia Vallter, comprueba el estado de la carretera: el tramo final es de alta montaña y puede verse afectado por la nieve.",
-          "Si vas a pasar el día, Camprodon es la población del valle con más servicios y puede servir de base para comer o dormir.",
+          "La iglesia de Sant Miquel",
+          "La iglesia parroquial, dedicada a San Miguel Arcángel, es de finales del siglo XVII y se levantó sobre un templo románico del siglo XII, del que aún quedan restos en la base del campanario. En 1728 un incendio hundió el tejado y la antigua bóveda de madera, y la reconstrucción terminó en 1729. Dentro está lo mejor: el retablo barroco del altar mayor, presidido por San Miguel. Fue uno de los pocos que se salvaron de la Guerra Civil y se restauró en 1983. El Ayuntamiento ofrece un tour virtual de la iglesia en su web.",
+        ),
+        ...h2(
+          "Un paseo por la historia del pueblo",
+          "Repartidas por el casco hay placas que cuentan la vida de antes: los molinos, las forjas y las minas, los arrieros, la trashumancia, las antiguas posadas de la plaza Mayor. El Ayuntamiento publica la ruta en un archivo descargable. El nombre del pueblo tiene leyenda: según Ripollès Turisme, un pastor y sus siete hijos bajaron de la montaña huyendo de la nieve, y cada hijo se construyó una cabaña.",
+        ),
+        ...h2(
+          "Dónde están los miradores",
+          "El Forat de l'Olla está a unos 5 km del pueblo en dirección a Vallter, con vistas sobre el Ter y el Gra de Fajol, y el Collet de Xuriguera queda justo al lado, mirando al valle del Carlat. La Baidana está a unos 6 km, en la pista forestal que une Setcases con Espinavell. El balcón de la Costa Brava está a 2.535 m, frente a la cafetería Les Marmotes de Vallter, y se llega a pie por las pistas o en telesilla.",
+        ),
+        ...h2(
+          "Paseos y excursiones desde el pueblo",
+        ),
+        table(
+          "",
+          ["Itinerario", "Distancia", "Desnivel +", "Tiempo", "Dificultad"],
+          [
+            ["Camí dels Socarrats i dels Beduïs (circular)", "3,85 km", "350 m", "1 h 30 min", "Moderada"],
+            ["Circo de Ulldeter", "4,5 km", "345 m", "1 h 25 min", "Moderada"],
+            ["Collada Fonda – Costabona – Balmeta", "8,2 km", "659 m", "3 h 45 min", "Exigente"],
+            ["Carboner – Baidana – Cabanes – Setcases", "8,5 km", "710 m", "5 h", "Exigente"],
+          ],
+          "Fuente: itinerarios interpretativos del Parque Natural (dificultad según el método SENDIF). Consultado el 20 de octubre de 2026.",
+        ),
+        ...paras(
+          "Con niños, el Ayuntamiento recomienda el camino dels Socarrats i dels Beduïs y el camino de las cabañas y el hayedo (1 h 15 min, más 45 minutos de vuelta por carretera). Los dos son para niños a partir de 8 años, no son aptos para cochecitos y se pueden hacer todo el año salvo con nieve. Para caminar por tu cuenta, el Ayuntamiento también recomienda la app Natura Local, con rutas autoguiadas.",
+        ),
+        ...h2(
+          "Con niños, además",
+          "El pueblo tiene zona de recreo y parque infantil, y en verano, la Platgeta. En Vallter, el telesilla también funciona en verano. Según el Ayuntamiento, la subida dura unos 20 minutos y los días claros se ven el cabo de Creus y el golfo de Roses. Desde arriba se puede caminar hasta el nacimiento del Ter. En 2026, la temporada de verano de Vallter fue del 1 de julio al 30 de agosto; consulta las fechas de cada año con el operador.",
+        ),
+        ...h2(
+          "El refugio de Ulldeter",
+          "Cerca de Vallter, a 2.393 m, quedan los restos del primer refugio de Ulldeter, inaugurado el 25 de julio de 1909. Ripollès Turisme lo presenta como el primer refugio de montaña del Estado. Hoy está en ruinas, con una placa conmemorativa.",
+        ),
+        ...h2(
+          "Centros de información del parque natural",
+          "Setcases aporta el 23 % de la superficie del Parc Natural de les Capçaleres del Ter i del Freser. El centro de información del pueblo está en el aparcamiento de la Closa d'en Xola, en la carretera de Vallter (GIV-5264). Arriba, en el pla de Morens, hay un segundo centro junto al aparcamiento superior de Vallter. Abre los fines de semana de mayo a finales de octubre, los puentes y a diario del 25 de julio al 7 de septiembre, es accesible para personas con movilidad reducida y cierra en invierno. Los horarios varían según el centro: antes de ir, llama al 667 116 811.",
+        ),
+        ...h2(
+          "Cómo llegar en transporte público",
+          "El tren no llega a Setcases. TEISA opera la línea de autobús Setcases – Camprodon – Ripoll – Campdevànol, pero la mayoría de las expediciones empiezan y terminan en Camprodon, y solo unas pocas suben hasta Setcases. Mira el horario vigente en la web de TEISA antes de salir. Ripoll tiene estación de la R3, pero desde el 7 de julio de 2026 los trenes solo circulan entre La Garriga y Puigcerdà, con menos frecuencia. Entre Barcelona y La Garriga o Vic, Rodalies pone un servicio por carretera. Consulta el aviso de Rodalies para el día del viaje. En invierno, antes de subir a Vallter, comprueba el estado de la carretera: el último tramo es de alta montaña.",
         ),
         ...paras(verifiedLine("es", SETCASES_VERIFIED)),
         ...b2Related(["ripolles", "snow"], "es"),
@@ -423,14 +558,13 @@ export const SETCASES: B2Article = {
           { label: "Comarca", value: "Ripollès" },
           { label: "Natural park", value: "Capçaleres del Ter i del Freser" },
           { label: "La Creueta walk", value: "About 300 m and 50 m of ascent, roughly 10 minutes" },
-          { label: "Last verified", value: "29 September 2026" },
+          { label: "Altitude", value: "1,265 m (Idescat)" },
+          { label: "Last verified", value: "20 October 2026" },
         ]),
         ...h2(
           "La Creueta",
           "The walk is only a little over **300 metres** long with roughly **50 metres** of elevation gain, about ten minutes, for one of the best views over the village.",
         ),
-        ...h2("Lookouts"),
-        list("Forat de l'Olla;", "Collet de Xuriguera;", "La Baidana;", "the Costa Brava balcony."),
         ...h2(
           "Vallter",
           "Setcases is the natural gateway towards Vallter and the upper Ter valley. Summer brings walking and mountain activities; winter depends on snow conditions and what the resort is running.",
@@ -442,10 +576,49 @@ export const SETCASES: B2Article = {
         ),
         ...paras(`${b2link("ripolles", "en", "The Ripollès guide")} places Setcases in its region.`),
         ...h2(
-          "Getting there",
-          "The train does not reach Setcases. The nearest R3 station is **Ripoll**; from there the road climbs the Ter valley through Camprodon.",
-          "In winter, check road conditions before continuing to Vallter: the last stretch is high-mountain road and can be affected by snow.",
-          "For a day visit, Camprodon is the town in the valley with the most services and works as a base for lunch or a night.",
+          "The church of Sant Miquel",
+          "The parish church, dedicated to Saint Michael the Archangel, dates from the late 17th century. It was built over a 12th-century Romanesque church, and remains of the older building survive at the base of the bell tower. A fire in 1728 brought down the roof and the original timber vault, and the rebuilding was finished in 1729. The highlight is inside: the baroque main altarpiece with Saint Michael at its centre. It was one of the few altarpieces to survive the Civil War, and it was restored in 1983. The town council's website has a virtual tour of the church.",
+        ),
+        ...h2(
+          "A walk through the village's history",
+          "Plaques around the village explain how people lived here: the mills, the forges and mines, the muleteers, transhumance, the old inns on the main square. The council publishes the route as a download. Even the name has a story. Ripollès Turisme tells of a shepherd and his seven sons who came down from the mountain to escape the snow, and of the hut that each son built.",
+        ),
+        ...h2(
+          "Where the lookouts are",
+          "Forat de l'Olla is about 5 km from the village on the road towards Vallter, looking over the Ter and Gra de Fajol. Collet de Xuriguera is right beside it, facing the Carlat valley. La Baidana is about 6 km out, on the forest track between Setcases and Espinavell. The Costa Brava balcony stands at 2,535 m, in front of the Les Marmotes café at Vallter. You can reach it on foot up the slopes or by chairlift.",
+        ),
+        ...h2(
+          "Walks from the village",
+        ),
+        table(
+          "",
+          ["Route", "Distance", "Ascent", "Time", "Difficulty"],
+          [
+            ["Socarrats and Beduïs path (loop)", "3.85 km", "350 m", "1 h 30 min", "Moderate"],
+            ["Ulldeter cirque", "4.5 km", "345 m", "1 h 25 min", "Moderate"],
+            ["Collada Fonda – Costabona – Balmeta", "8.2 km", "659 m", "3 h 45 min", "Demanding"],
+            ["Carboner – Baidana – Cabanes – Setcases", "8.5 km", "710 m", "5 h", "Demanding"],
+          ],
+          "Source: the natural park's interpretive routes (difficulty graded with the SENDIF method). Checked 20 October 2026.",
+        ),
+        ...paras(
+          "With children, the council suggests the Socarrats and Beduïs path, or the path through the huts and the beech wood (1 h 15 min plus 45 minutes back by road). Both are recommended from age 8, neither suits a pushchair, and both can be walked all year except when there is snow. For self-guided walks, the council also recommends the Natura Local app.",
+        ),
+        ...h2(
+          "More for families",
+          "The village has a playground and leisure area, and in summer a spot known as La Platgeta. At Vallter the chairlift also runs in summer. The council describes a ride of about 20 minutes, with views on clear days as far as Cap de Creus and the Bay of Roses. From the top you can walk to the source of the Ter. In 2026 Vallter's summer season ran from 1 July to 30 August, so check each year's dates with the operator.",
+        ),
+        ...h2(
+          "The Ulldeter refuge",
+          "Near Vallter, at 2,393 m, are the remains of the first Ulldeter refuge, opened on 25 July 1909. Ripollès Turisme describes it as the first mountain refuge in Spain. Today it is a ruin with a commemorative plaque.",
+        ),
+        ...h2(
+          "Natural park information centres",
+          "Setcases holds 23% of the area of Capçaleres del Ter i del Freser Natural Park. The village information centre is at the Closa d'en Xola car park on the Vallter road (GIV-5264). A second centre stands higher up on the Pla de Morens, next to Vallter's upper car park. It opens at weekends from May to late October, on long weekends, and daily from 25 July to 7 September. It is accessible to visitors with reduced mobility and closes in winter. Opening hours differ between centres, so call +34 667 116 811 before you go.",
+        ),
+        ...h2(
+          "Getting there by public transport",
+          "The train does not reach Setcases. TEISA runs a Setcases – Camprodon – Ripoll – Campdevànol bus, but most journeys start and end in Camprodon and only a few go up to Setcases, so check the current timetable on TEISA's website first. Ripoll is on the R3 rail line. Since 7 July 2026, however, R3 trains have run only between La Garriga and Puigcerdà, with a reduced service, and Rodalies operates a replacement road service between Barcelona and La Garriga or Vic. Check the Rodalies notice for your travel date. In winter, check road conditions before driving up to Vallter: the last stretch is high-mountain road.",
         ),
         ...paras(verifiedLine("en", SETCASES_VERIFIED)),
         ...b2Related(["ripolles", "snow"], "en"),

@@ -50,9 +50,14 @@ const GIRONA_SOURCES = [
     url: "https://www.renfe.com/es/es",
     publisher: "Renfe",
   },
+  { name: "R11: horaris", url: "https://rodalies.gencat.cat/web/.content/02_Horaris/horaris/R11.pdf", publisher: "Rodalies de Catalunya" },
+  { name: "Visita", url: "https://gironaepiscopal.cat/visita/", publisher: "Girona Episcopal" },
+  { name: "Museu d'Història dels Jueus: informació", url: "https://www.girona.cat/call/cat/info.php", publisher: "Ajuntament de Girona" },
+  { name: "Planifica la visita", url: "https://www.mac.cat/ca/Visita-ns-Portada/Girona-Portada-Seu/Planifica-la-visita-Girona", publisher: "Museu d'Arqueologia de Catalunya" },
+  { name: "Banys Àrabs", url: "https://www.girona.cat/turisme/cat/monuments_banysarabs.php", publisher: "Ajuntament de Girona — Turisme" },
 ];
 
-const GIRONA_VERIFIED = "2026-09-29";
+const GIRONA_VERIFIED = "2026-10-20";
 
 export const GIRONA: B2Article = {
   key: "girona",
@@ -129,7 +134,41 @@ export const GIRONA: B2Article = {
         callout(
           "info",
           "Per què no publiquem horaris",
-          "Els horaris i els preus ferroviaris canvien diverses vegades l'any. Una pàgina que els fixa és falsa al cap de pocs mesos, i qui se la creu perd un tren. Mira-ho a l'operador per al dia concret.",
+          "Aquí només donem durades aproximades, amb la data de l'horari d'on surten. Els horaris de sortida i els preus canvien diverses vegades l'any: mira'ls a l'operador per al dia concret.",
+        ),
+        ...h2(
+          "Quin tren agafar",
+          "Des de Barcelona hi ha dues opcions. La més econòmica és la línia **R11** de Rodalies, que surt de Barcelona Sants i para a Passeig de Gràcia i al Clot abans de seguir per Granollers fins a Girona i Figueres. Segons l'horari de Rodalies actualitzat el 4 de juliol de 2026, els trens de mitjana distància (MD) tarden aproximadament 1 h 20 min de Sants a Girona, i els regionals (R), que fan més parades, al voltant d'1 h 30 min. L'altra opció és l'alta velocitat de Renfe. Girona Turisme situa l'estació de Renfe a la plaça d'Espanya i l'estació d'alta velocitat i d'autobusos a la plaça de Joan Brossa.",
+        ),
+        ...h2(
+          "Horaris i preus dels monuments",
+          "Consultats el 20 d'octubre de 2026.",
+        ),
+        table(
+          "",
+          ["Lloc", "Horari", "Entrada general"],
+          [
+            ["Catedral + basílica de Sant Feliu + Museu d'Art (entrada Girona Episcopal, vàlida 48 h)", "Catedral: dl–ds 10–18 h, dg 12–18 h. Sant Feliu: dg 13–18 h", "12 €"],
+            ["Banys Àrabs", "març–oct.: dl–ds 10–18 h, dg 10–14 h · nov.–febr.: dl–dv 10–14 h, ds 10–17.30 h, dg 10–14 h", "3 € (reduïda 1 €)"],
+            ["Museu d'Història dels Jueus (Call)", "set.–juny: dt–ds 10–18 h; dg, dl i festius 10–14 h · jul.–ag.: dt–ds 10–19 h", "6 € (reduïda 3 €)"],
+            ["Sant Pere de Galligants (MAC Girona)", "dt–ds 10–18 h (maig–set. fins a les 19 h), dg 10–14 h; tancat dilluns", "6 € (reduïda 4 €)"],
+            ["Passeig de la Muralla", "set.–maig 8–21 h · juny–ag. 8–23 h", "—"],
+          ],
+        ),
+        ...paras(
+          "La Catedral tanca el 25 de desembre, l'1 i el 6 de gener i el diumenge de Pasqua, i no s'hi pot fer la visita cultural a la nau durant les celebracions. El carnet GironaMuseus dona un 50 % de descompte en sis museus de la ciutat.",
+        ),
+        ...h2(
+          "Què és gratuït",
+          "El primer diumenge de cada mes, el Museu d'Història dels Jueus i Sant Pere de Galligants són gratuïts, i també ho són sempre per als menors de 16 anys. El MAC també obre de franc el 23 d'abril. Passejar pel Call, les cases de l'Onyar i la Rambla no costa res.",
+        ),
+        ...h2(
+          "Accessibilitat",
+          "Girona Turisme avisa que les muralles no són accessibles perquè tenen trams d'escales, i que el Call té pendents molt pronunciats i moltes escales. El recorregut més practicable és el carrer de la Força, de plataforma única i amb un pendent d'entre el 8 % i el 12 %. A Sant Pere de Galligants, el monestir, l'església i el claustre són accessibles, però els lavabos no estan adaptats. L'Oficina de Turisme disposa de maquetes en 3D dels principals monuments per a persones amb discapacitat visual.",
+        ),
+        ...h2(
+          "Oficina de Turisme",
+          "És a la Rambla de la Llibertat, 1, al final de la ruta. D'abril a octubre obre de dilluns a divendres de 9 a 20 h, dissabtes de 9 a 14 h i de 15 a 19 h, i diumenges i festius de 9 a 14 h. De novembre a març, entre setmana tanca a les 19 h.",
         ),
         ...paras(
           `Si t'agraden les escapades sense cotxe, tenim ${link("trains", "ca", "dotze escapades per Catalunya que pots fer en tren")} i ${b2link("montserratFree", "ca", "com anar a Montserrat per lliure")}.`,
@@ -176,7 +215,41 @@ export const GIRONA: B2Article = {
         callout(
           "info",
           "Por qué no publicamos horarios",
-          "Los horarios y precios ferroviarios cambian varias veces al año. Consúltalos en Renfe para la fecha concreta en lugar de fiarte de un horario copiado en un blog.",
+          "Aquí solo damos duraciones aproximadas, con la fecha del horario del que salen. Los horarios de salida y los precios cambian varias veces al año: consúltalos en el operador para la fecha concreta.",
+        ),
+        ...h2(
+          "Qué tren coger",
+          "Desde Barcelona hay dos opciones. La más económica es la línea **R11** de Rodalies, que sale de Barcelona Sants y para en Passeig de Gràcia y El Clot antes de seguir por Granollers hasta Girona y Figueres. Según el horario de Rodalies actualizado el 4 de julio de 2026, los trenes de media distancia (MD) tardan aproximadamente 1 h 20 min de Sants a Girona, y los regionales (R), con más paradas, en torno a 1 h 30 min. La otra opción es la alta velocidad de Renfe. Girona Turisme sitúa la estación de Renfe en la plaza de España y la estación de alta velocidad y autobuses en la plaza de Joan Brossa.",
+        ),
+        ...h2(
+          "Horarios y precios de los monumentos",
+          "Consultados el 20 de octubre de 2026.",
+        ),
+        table(
+          "",
+          ["Lugar", "Horario", "Entrada general"],
+          [
+            ["Catedral + basílica de Sant Feliu + Museu d'Art (entrada Girona Episcopal, válida 48 h)", "Catedral: lu–sá 10–18 h, do 12–18 h. Sant Feliu: do 13–18 h", "12 €"],
+            ["Baños Árabes", "mar.–oct.: lu–sá 10–18 h, do 10–14 h · nov.–feb.: lu–vi 10–14 h, sá 10–17.30 h, do 10–14 h", "3 € (reducida 1 €)"],
+            ["Museu d'Història dels Jueus (Call)", "sep.–jun.: ma–sá 10–18 h; do, lu y festivos 10–14 h · jul.–ago.: ma–sá 10–19 h", "6 € (reducida 3 €)"],
+            ["Sant Pere de Galligants (MAC Girona)", "ma–sá 10–18 h (may.–sep. hasta las 19 h), do 10–14 h; cerrado lunes", "6 € (reducida 4 €)"],
+            ["Paseo de la Muralla", "sep.–may. 8–21 h · jun.–ago. 8–23 h", "—"],
+          ],
+        ),
+        ...paras(
+          "La Catedral cierra el 25 de diciembre, el 1 y 6 de enero y el domingo de Pascua, y no se puede hacer la visita cultural a la nave durante los oficios. El carnet GironaMuseus da un 50 % de descuento en seis museos de la ciudad.",
+        ),
+        ...h2(
+          "Qué es gratis",
+          "El primer domingo de cada mes, el Museu d'Història dels Jueus y Sant Pere de Galligants son gratuitos, y siempre lo son para menores de 16 años. El MAC también abre gratis el 23 de abril. Pasear por el Call, las casas del Onyar y la Rambla no cuesta nada.",
+        ),
+        ...h2(
+          "Accesibilidad",
+          "Girona Turisme avisa de que las murallas no son accesibles porque tienen tramos de escaleras, y de que el Call tiene pendientes muy pronunciadas y muchas escaleras. El recorrido más practicable es la calle de la Força, de plataforma única y con una pendiente de entre el 8 % y el 12 %. En Sant Pere de Galligants, el monasterio, la iglesia y el claustro son accesibles, pero los aseos no están adaptados. La Oficina de Turismo dispone de maquetas en 3D de los principales monumentos para personas con discapacidad visual.",
+        ),
+        ...h2(
+          "Oficina de Turismo",
+          "Está en la Rambla de la Llibertat, 1, al final de la ruta. De abril a octubre abre de lunes a viernes de 9 a 20 h, los sábados de 9 a 14 h y de 15 a 19 h, y los domingos y festivos de 9 a 14 h. De noviembre a marzo, entre semana cierra a las 19 h.",
         ),
         ...paras(
           `Más escapadas sin coche: ${link("trains", "es", "doce escapadas en tren")} y ${b2link("montserratFree", "es", "Montserrat por libre")}.`,
@@ -222,7 +295,41 @@ export const GIRONA: B2Article = {
         callout(
           "info",
           "Why there are no times on this page",
-          "Check current train times and fares with Renfe rather than relying on static travel-blog schedules. They change several times a year.",
+          "This page gives approximate journey times only, with the date of the timetable they come from. Departure times and fares change several times a year: check them with the operator for your day.",
+        ),
+        ...h2(
+          "Which train to take",
+          "There are two ways to get here from Barcelona. The cheaper is Rodalies line **R11**. It leaves from Barcelona Sants, calls at Passeig de Gràcia and El Clot, and then runs via Granollers to Girona and Figueres. On the Rodalies timetable updated 4 July 2026, medium-distance (MD) trains take about 1 h 20 min from Sants to Girona, and regional (R) trains, which make more stops, about 1 h 30 min. The other option is Renfe's high-speed service. Girona's tourist office places the Renfe station on Plaça d'Espanya and the high-speed and bus station on Plaça de Joan Brossa.",
+        ),
+        ...h2(
+          "Sights: hours and prices",
+          "Checked 20 October 2026.",
+        ),
+        table(
+          "",
+          ["Sight", "Hours", "General admission"],
+          [
+            ["Cathedral + Sant Feliu basilica + Art Museum (Girona Episcopal ticket, valid 48 h)", "Cathedral: Mon–Sat 10:00–18:00, Sun 12:00–18:00. Sant Feliu: Sun 13:00–18:00", "€12"],
+            ["Arab Baths", "Mar–Oct: Mon–Sat 10:00–18:00, Sun 10:00–14:00 · Nov–Feb: Mon–Fri 10:00–14:00, Sat 10:00–17:30, Sun 10:00–14:00", "€3 (reduced €1)"],
+            ["Museum of Jewish History (Call)", "Sep–Jun: Tue–Sat 10:00–18:00; Sun, Mon and holidays 10:00–14:00 · Jul–Aug: Tue–Sat 10:00–19:00", "€6 (reduced €3)"],
+            ["Sant Pere de Galligants (MAC Girona)", "Tue–Sat 10:00–18:00 (May–Sep until 19:00), Sun 10:00–14:00; closed Mondays", "€6 (reduced €4)"],
+            ["City walls walk", "Sep–May 08:00–21:00 · Jun–Aug 08:00–23:00", "—"],
+          ],
+        ),
+        ...paras(
+          "The Cathedral is closed on 25 December, 1 and 6 January and Easter Sunday. You cannot tour the nave during services. A GironaMuseus card gives 50% off at six of the city's museums.",
+        ),
+        ...h2(
+          "What's free",
+          "On the first Sunday of every month, the Museum of Jewish History and Sant Pere de Galligants are free. Both are always free for under-16s, and the MAC is also free on 23 April. Walking through the Call, past the Onyar houses and along the Rambla costs nothing.",
+        ),
+        ...h2(
+          "Accessibility",
+          "Girona's tourist office warns that the walls are not accessible because of their flights of steps, and that the Call has steep slopes and many steps. The most manageable route is Carrer de la Força, a level-surface street with gradients of 8–12%. At Sant Pere de Galligants, the monastery, church and cloister are step-free, but the toilets are not adapted. The tourist office has 3D models of the main monuments for blind and partially sighted visitors.",
+        ),
+        ...h2(
+          "Tourist office",
+          "The tourist office is at Rambla de la Llibertat 1, at the end of the route. From April to October it opens Monday to Friday 9 am to 8 pm, Saturday 9 am to 2 pm and 3 pm to 7 pm, and Sundays and holidays 9 am to 2 pm. From November to March it closes at 7 pm on weekdays.",
         ),
         ...paras(
           `More car-free trips: ${link("trains", "en", "twelve day trips by train")} and ${b2link("montserratFree", "en", "Montserrat without a tour")}.`,

@@ -246,7 +246,9 @@ test("the snow guide never promises snow", () => {
 test("no train or bus timetable is hard-coded into the day trips", () => {
   for (const article of [GIRONA, MONTSERRAT_FREE, CERDANYA]) {
     for (const locale of LOCALES) {
-      const text = bodyToPlainText(article.editions[locale].blocks);
+      // Opening hours of sights live in a dated table and are not departures;
+      // every other block is checked.
+      const text = bodyToPlainText(article.editions[locale].blocks.filter((block) => block.type !== "table"));
       // A clock time would be a departure we cannot keep current.
       assert.ok(
         // Prices such as "€11.40" are not times: skip figures right after €.

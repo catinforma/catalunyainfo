@@ -30,7 +30,7 @@ Evidence files: `research_notes/audits/*.md` (gitignored) and `docs/growth/basel
 | 14 | "Next step" cards with thumbnails after the first answer (render-time, no republish) | ux_accessibility P1-4 · E | M | M | M |
 | 15 | Holiday-today: next-step actions in the answer box, show 5 upcoming, rest collapsible | ux P1-6 · E (title frozen; body allowed) | M | S | M |
 | 16 | Consent banner still 205–225 px on phones (goal ≤ 150): single-line body + link | audit.js 17 Oct · V | M | S | H |
-| 17 | Thin pages: Setcases, Girona, Ripollès (450–540 words) — expand with verified practical facts or merge | content_adsense · V | M | M | M |
+| 17 | Thin pages: Setcases, Girona, Ripollès (450–540 words) — expand with verified practical facts or merge. **Done on branch 20 Oct** (to ~720–1,050 words; R3 and dead-link fixes) | content_adsense · V | M | M | M |
 | 18 | Weekly freshness: mushrooms (`mushrooms:refresh`) and autumn status block until end of Nov | memory · V | H | S | H |
 | 19 | Clock change after 25 Oct: titles to 28 Mar 2027 (test forces it) | clock-change test · V | M | S | H |
 
