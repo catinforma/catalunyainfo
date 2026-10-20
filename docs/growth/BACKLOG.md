@@ -14,14 +14,14 @@ Evidence files: `research_notes/audits/*.md` (gitignored) and `docs/growth/basel
 | 3 | DB error during ISR regeneration must not cache a 404 / empty hub for 24 h | hosting_monetisation C8 · H (untested in staging) | S | **done on branch** (criticalRead) |
 | 4 | Vercel Hobby forbids ads: upgrade to Pro before any AdSense code or verification tag | Vercel fair-use page (2026-09-14) · V | owner | open — owner |
 | 5 | Neon free compute quota (100 CU-h): monitor; suspension = site errors | hosting_monetisation §2 · V | owner | open — owner |
-| 6 | `/es/guias/calendario-laboral-cataluna/` impressions 61 → 3 → 0 (15–17 Oct); last crawl 25 Sep | search_opportunities §2 · H (data provisional) | S | re-check 20 Oct |
+| 6 | `/es/guias/calendario-laboral-cataluna/` impressions 61 → 3 → 0 (15–17 Oct); last crawl 25 Sep | **Re-checked 20 Oct · V:** 0 impressions 16–18 Oct (was 60–220/day). URL inspection: indexed, canonical ours, robots allowed, in sitemap with lastmod; **last crawl still 25 Sep**. Not cannibalised: no other page took `calendario laboral` / `2027`. The whole ES holiday cluster fell from 15 Oct (`es-festivo-hoy` pos 17 → 61, last crawl 9 Oct). Owner action: *Request indexing* in GSC for the ES and CA calendar pages and `es-festivo-hoy`. | S | owner: request indexing |
 | 7 | `/es/guias/es-festivo-hoy-cataluna/` position ~9 → 41–48 after 13 Oct | search_opportunities · H | S | investigate (title frozen to 3 Nov) |
 
 ## P1 — demand at positions 3–15, mobile LCP, linking
 
 | # | Task | Evidence | Impact | Effort | Conf. |
 |---|---|---|---|---|---|
-| 8 | Mesa ES: answer "cuándo/cuánto se cobra" higher in the body (title frozen to 14 Nov) | 106 impr. pos 8.9, 0 clicks · V | M | S | M |
+| 8 | Mesa ES: answer "cuándo/cuánto se cobra" higher in the body (title frozen to 14 Nov) | 106 impr. pos 8.9, 0 clicks · V. **Done on branch 20 Oct:** the "when is it paid" answer moved from the FAQ into the pay section, all three editions | M | S | M |
 | 9 | Work calendar CA/ES: plan the post-22 Oct title from measured data; strengthen Catalan internal links to the CA page | ~3,250 impr./28 d, CTR < 1 % · V | H | S | M |
 | 10 | Tourist tax: after 23 Oct, title/description with the 2027 change (from the freeze result) | frozen to 23 Oct | M | S | M |
 | 11 | Mobile LCP 2.7–3.0 s (was 3.5–3.9): render delay 1.4 s → cut client JS (per-component i18n strings, ~17 KB) | Lighthouse 18 Oct, 2×4 runs · V | M | M | M |

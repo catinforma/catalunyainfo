@@ -23,7 +23,7 @@ export interface ZoneReading {
 export const WINDOW_DAYS = 15;
 
 /** ISO date the data was read. This is what the page shows as last verified. */
-export const READ_AT = "2026-10-14";
+export const READ_AT = "2026-10-20";
 
 export const SOURCE = {
   name: "Dades meteorològiques de la XEMA",
@@ -63,90 +63,90 @@ export const LEVEL_RULE = [
 export const ZONE_READINGS: readonly ZoneReading[] = [
   {
     "id": "ripolles",
-    "mm": 81.2,
+    "mm": 103.7,
     "stations": 5,
-    "daysSinceRain": 7,
+    "daysSinceRain": 0,
     "level": "very",
     "wettest": {
-      "name": "Sant Joan de les Abadesses",
-      "mm": 93.5
+      "name": "Ulldeter (2.413 m)",
+      "mm": 142.3
     }
   },
   {
     "id": "bergueda",
-    "mm": 90.4,
+    "mm": 107.8,
     "stations": 5,
-    "daysSinceRain": 7,
+    "daysSinceRain": 1,
     "level": "very",
     "wettest": {
-      "name": "la Quar",
-      "mm": 108.7
+      "name": "Gisclareny",
+      "mm": 146.8
     }
   },
   {
     "id": "garrotxa",
-    "mm": 119,
+    "mm": 93.9,
     "stations": 2,
-    "daysSinceRain": 6,
+    "daysSinceRain": 1,
     "level": "very",
     "wettest": {
       "name": "la Vall d'en Bas",
-      "mm": 140.6
+      "mm": 95.7
     }
   },
   {
     "id": "osona",
-    "mm": 113.9,
+    "mm": 73,
     "stations": 7,
-    "daysSinceRain": 6,
+    "daysSinceRain": 1,
     "level": "very",
     "wettest": {
-      "name": "Viladrau",
-      "mm": 216.7
+      "name": "Montesquiu",
+      "mm": 115.8
     }
   },
   {
     "id": "pirineu",
-    "mm": 50.7,
+    "mm": 72.6,
     "stations": 24,
-    "daysSinceRain": 2,
-    "level": "favourable",
+    "daysSinceRain": 0,
+    "level": "very",
     "wettest": {
-      "name": "Alinyà",
-      "mm": 103.7
+      "name": "Cadí Nord (2.145 m) - Prat d'Aguiló",
+      "mm": 119.5
     }
   },
   {
     "id": "montseny",
-    "mm": 203.4,
+    "mm": 79.8,
     "stations": 9,
-    "daysSinceRain": 6,
+    "daysSinceRain": 1,
     "level": "very",
     "wettest": {
       "name": "Granollers",
-      "mm": 378.5
+      "mm": 155.3
     }
   },
   {
     "id": "ports",
-    "mm": 150.7,
+    "mm": 70.8,
     "stations": 19,
-    "daysSinceRain": 7,
+    "daysSinceRain": 1,
     "level": "very",
     "wettest": {
-      "name": "l'Ametlla de Mar",
-      "mm": 339.6
+      "name": "Tivissa",
+      "mm": 135.4
     }
   },
   {
     "id": "ponent",
-    "mm": 26,
+    "mm": 63.8,
     "stations": 31,
-    "daysSinceRain": 7,
-    "level": "interesting",
+    "daysSinceRain": 1,
+    "level": "very",
     "wettest": {
       "name": "Vilanova de Meià",
-      "mm": 69.1
+      "mm": 93
     }
   }
 ];

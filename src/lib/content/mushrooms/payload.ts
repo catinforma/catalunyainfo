@@ -426,7 +426,7 @@ export const COPY: Record<Locale, Copy> = {
     excerpt:
       "Analitzem pluja, temperatura i context forestal per saber quines zones de Catalunya tenen ara mateix les millors condicions per als bolets. Dades de Meteocat verificades el 7 d'octubre de 2026.",
     intro: [
-      "L'inici d'octubre ha canviat el mapa. Després d'un estiu molt càlid i sec, les pluges dels primers dies del mes han deixat més de 100 mm en bona part del nord-est de Catalunya, i més de 200 mm en alguns punts del Montseny.",
+      "Aquest informe es renova cada setmana amb la pluja mesurada per les estacions automàtiques de Meteocat. Després d'un estiu rècord de calor i molt sec, les pluges d'octubre han canviat la temporada.",
       "Les dades meteorològiques situen ara mateix la **Garrotxa, el Montseny i el Ripollès** al capdavant. En canvi, el Pirineu central i occidental i Ponent han quedat gairebé al marge de la pluja.",
       "Aquesta guia no és un mapa de bolets trobats. Analitza **condicions favorables per a la fructificació** a partir de precipitació, temperatura i context forestal. No hi ha cap garantia que un bosc concret tingui bolets.",
     ],
@@ -502,7 +502,7 @@ export const COPY: Record<Locale, Copy> = {
     excerpt:
       "Analizamos lluvia, temperatura y contexto forestal para saber qué zonas de Cataluña tienen ahora mismo las mejores condiciones para las setas. Datos de Meteocat verificados el 7 de octubre de 2026.",
     intro: [
-      "El inicio de octubre ha cambiado el mapa. Tras un verano muy cálido y seco, las lluvias de los primeros días del mes han dejado más de 100 mm en buena parte del nordeste de Cataluña, y más de 200 mm en algunos puntos del Montseny.",
+      "Este informe se renueva cada semana con la lluvia medida por las estaciones automáticas de Meteocat. Tras un verano récord de calor y muy seco, las lluvias de octubre han cambiado la temporada.",
       "Los datos actuales sitúan a la **Garrotxa, el Montseny y el Ripollès** a la cabeza. En cambio, el Pirineo central y occidental y Poniente han quedado casi al margen de la lluvia.",
       "Esta guía no es un mapa de setas encontradas. Analiza **condiciones meteorológicas favorables para la fructificación**. No existe ninguna garantía de que haya setas en un bosque concreto.",
     ],
@@ -577,7 +577,7 @@ export const COPY: Record<Locale, Copy> = {
     excerpt:
       "Rainfall, temperature and forest conditions across Catalonia, and what they mean for the 2026 mushroom season. Meteocat data verified on 7 October 2026.",
     intro: [
-      "The start of October has redrawn the map. After a very hot, dry summer, rain in the first days of the month left more than 100 mm across much of north-eastern Catalonia, and more than 200 mm in parts of Montseny.",
+      "This report is renewed every week with rainfall measured by Meteocat's automatic weather stations. After a record-hot, very dry summer, October's rain has changed the season.",
       "Current weather data puts **Garrotxa, Montseny and the Ripollès** at the top. The central and western Pyrenees and western Catalonia, by contrast, have been almost entirely missed by the rain.",
       "This is not a map showing confirmed mushroom finds. It is an analysis of **conditions that may support mushroom fruiting**. Finding mushrooms is never guaranteed.",
     ],
