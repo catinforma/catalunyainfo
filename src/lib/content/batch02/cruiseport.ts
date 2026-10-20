@@ -202,7 +202,7 @@ function body(locale: Locale) {
     ...h2(t.tipsTitle),
     list(...t.tips),
     faq(t.faq),
-    ...b2Related(["airport", "monuments", "cards", "transport"], locale),
+    ...b2Related(["airport", "touristTax", "monuments", "cards", "transport"], locale),
   ];
 }
 

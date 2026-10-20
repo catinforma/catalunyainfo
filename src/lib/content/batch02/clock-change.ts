@@ -225,7 +225,7 @@ const CALENDAR_LINK: Record<Locale, string> = {
 
 function body(locale: Locale): Block[] {
   const t = COPY[locale];
-  const related = b2Related(["hours", "transport", "barcelonaHub"], locale);
+  const related = b2Related(["holidayToday", "workCalendar", "shops", "hours"], locale);
   const list = related[1] as Extract<Block, { type: "list" }>;
   list.items = [`[${CALENDAR_LINK[locale]}](/${locale}/${CALENDAR[locale].path}/)`, ...list.items];
   return [

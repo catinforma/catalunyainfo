@@ -52,7 +52,10 @@ export type B2Key =
   | "municipalResults"
   | "climate"
   | "shops"
-  | "electionNight";
+  | "electionNight"
+  | "touristTax"
+  | "workCalendar"
+  | "holidayToday";
 
 /** Path after the locale prefix, no leading or trailing slash. */
 export const B2_PATHS: Record<B2Key, Record<Locale, string>> = {
@@ -235,6 +238,21 @@ export const B2_PATHS: Record<B2Key, Record<Locale, string>> = {
     ca: "guies/entrades-sagrada-familia-park-guell-casa-batllo",
     es: "guias/entradas-sagrada-familia-park-guell-casa-batllo",
     en: "guides/sagrada-familia-park-guell-casa-batllo-tickets",
+  },
+  workCalendar: {
+    ca: "guies/calendari-laboral-catalunya",
+    es: "guias/calendario-laboral-cataluna",
+    en: "guides/catalonia-public-holidays",
+  },
+  holidayToday: {
+    ca: "guies/es-festiu-avui-catalunya",
+    es: "guias/es-festivo-hoy-cataluna",
+    en: "guides/is-today-a-holiday-in-catalonia",
+  },
+  touristTax: {
+    ca: "guies/taxa-turistica-barcelona-catalunya",
+    es: "guias/tasa-turistica-barcelona-cataluna",
+    en: "guides/barcelona-catalonia-tourist-tax",
   },
   airport: {
     ca: "guies/aeroport-barcelona-centre",
@@ -437,6 +455,21 @@ export const B2_TITLES: Record<B2Key, Record<Locale, string>> = {
     ca: "Entrades de la Sagrada Família, el Park Güell i la Casa Batlló",
     es: "Entradas de la Sagrada Familia, el Park Güell y la Casa Batlló",
     en: "Sagrada Família, Park Güell and Casa Batlló tickets",
+  },
+  workCalendar: {
+    ca: "Calendari laboral 2027 a Catalunya: festius i ponts",
+    es: "Calendario laboral 2027 en Cataluña: festivos y puentes",
+    en: "Catalonia public holidays 2027",
+  },
+  holidayToday: {
+    ca: "És festiu avui a Catalunya?",
+    es: "¿Es festivo hoy en Cataluña?",
+    en: "Is today a public holiday in Catalonia?",
+  },
+  touristTax: {
+    ca: "Taxa turística a Barcelona i Catalunya: quant es paga",
+    es: "Tasa turística en Barcelona y Cataluña: cuánto se paga",
+    en: "Tourist tax in Barcelona and Catalonia: what you pay",
   },
   airport: {
     ca: "De l'aeroport al centre de Barcelona",

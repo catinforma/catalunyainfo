@@ -491,6 +491,7 @@ export const COPY: Record<Locale, Copy> = {
       "Osona i el nord del Berguedà formen un segon grup favorable. Els Ports han rebut molta pluja de cop i cal seguir-los de prop. El Pirineu central i occidental i Ponent continuen secs.",
       "CatalunyaInfo actualitza aquesta guia cada setmana durant la temporada amb les dades de les estacions de Meteocat.",
       "I si la sortida al bosc és tant per caminar com per buscar, mira també quan arriben els [colors de tardor a cada zona de Catalunya](/ca/natura/colors-tardor-catalunya/).",
+      "Amb l'horari d'hivern es fa fosc una hora abans, i la tarda al bosc s'escurça. Mira [quan canvia l'hora](/ca/guies/canvi-hora-catalunya/) abans de planificar la sortida.",
     ],
   },
   es: {
@@ -566,6 +567,7 @@ export const COPY: Record<Locale, Copy> = {
       "Osona y el norte del Berguedà forman un segundo grupo favorable. Els Ports han recibido mucha lluvia de golpe y conviene seguirlos de cerca. El Pirineo central y occidental y Poniente siguen secos.",
       "CatalunyaInfo actualiza esta guía cada semana durante la temporada con los datos de las estaciones de Meteocat.",
       "Y si la salida al bosque es tanto para caminar como para buscar, consulta también cuándo llegan los [colores de otoño a cada zona de Cataluña](/es/naturaleza/colores-otono-cataluna/).",
+      "Con el horario de invierno anochece una hora antes y la tarde en el bosque se acorta. Consulta [cuándo cambia la hora](/es/guias/cambio-hora-espana/) antes de planificar la salida.",
     ],
   },
   en: {
@@ -641,6 +643,7 @@ export const COPY: Record<Locale, Copy> = {
       "Osona and northern Berguedà form a second favourable group. Els Ports took a lot of rain at once and is worth following closely. The central and western Pyrenees and western Catalonia remain dry.",
       "CatalunyaInfo updates this guide every week of the season with Meteocat station data.",
       "If the trip into the forest is as much about walking as about foraging, see also when [fall colors reach each part of Catalonia](/en/nature/fall-colors-catalonia/).",
+      "Once the clocks go back to winter time it gets dark an hour earlier, which cuts the afternoon in the forest short. Check [when the clocks change](/en/guides/clock-change-spain/) before you plan the trip.",
     ],
   },
 };
@@ -670,7 +673,7 @@ export const HERO = {
  */
 export const LIVE_COPY = {
   ca: {
-    title: "Pluja acumulada dels últims {days} dies",
+    title: "Mapa de condicions: pluja acumulada dels últims {days} dies",
     intro: "Mitjana de les estacions automàtiques de Meteocat de cada zona, llegida el {date}. És el que s'ha mesurat, no una previsió ni una afirmació sobre la presència de bolets.",
     rule: "Com es calcula la banda: molt favorables a partir de {very} mm amb pluja fa menys d'una setmana; favorables a partir de {fav} mm; interessants a partir de {int} mm. Només hi entren pluja acumulada i dies des de l'última pluja, totes dues mesurades.",
     background: "Els apartats següents expliquen com ha anat la temporada i què mirar a cada zona. La taula de dalt és la lectura d'avui; el text del voltant és el context.",
@@ -681,7 +684,7 @@ export const LIVE_COPY = {
     note: "{stations} estacions. Última pluja mesurada fa {days} dies.",
   },
   es: {
-    title: "Lluvia acumulada de los últimos {days} días",
+    title: "Mapa de condiciones: lluvia acumulada de los últimos {days} días",
     intro: "Media de las estaciones automáticas de Meteocat de cada zona, leída el {date}. Es lo medido, no una previsión ni una afirmación sobre la presencia de setas.",
     rule: "Cómo se calcula la banda: muy favorables a partir de {very} mm con lluvia hace menos de una semana; favorables a partir de {fav} mm; interesantes a partir de {int} mm. Solo entran lluvia acumulada y días desde la última lluvia, ambas medidas.",
     background: "Los apartados siguientes explican cómo ha ido la temporada y qué mirar en cada zona. La tabla de arriba es la lectura de hoy; el texto alrededor es el contexto.",
@@ -692,7 +695,7 @@ export const LIVE_COPY = {
     note: "{stations} estaciones. Última lluvia medida hace {days} días.",
   },
   en: {
-    title: "Rainfall over the last {days} days",
+    title: "Conditions map: rainfall over the last {days} days",
     intro: "The mean across each zone's automatic weather stations, read on {date}. This is what was measured, not a forecast and not a claim about whether mushrooms are there.",
     rule: "How the band is set: very favourable from {very} mm with rain in the last week; favourable from {fav} mm; worth a look from {int} mm. Only accumulated rainfall and days since the last rain go into it, both measured.",
     background: "The sections below explain how the season has gone and what to look at in each area. The table above is today's reading; the text around it is the background.",

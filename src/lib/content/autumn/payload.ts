@@ -629,7 +629,7 @@ export const COPY: Record<Locale, Copy> = {
       "I sobretot: comprova sempre l'estat real del bosc abans de fer un viatge llarg només pels colors.",
     ],
     relatedLine:
-      "Si l'escapada de tardor també inclou bosc i cistella, tenim el [part setmanal de condicions per als bolets](/ca/natura/bolets-catalunya-condicions/), amb pluja acumulada i zones per comarca.",
+      "Si l'escapada de tardor també inclou bosc i cistella, tenim el [part setmanal de condicions per als bolets](/ca/natura/bolets-catalunya-condicions/), amb pluja acumulada i zones per comarca. Amb l'horari d'hivern es fa fosc una hora abans: per a una sortida de colors, la llum de la tarda s'acaba abans. Mira [quan canvia l'hora](/ca/guies/canvi-hora-catalunya/).",
   },
   es: {
     path: "naturaleza/colores-otono-cataluna",
@@ -717,7 +717,7 @@ export const COPY: Record<Locale, Copy> = {
       "Y sobre todo: comprueba siempre el estado real del bosque antes de hacer un viaje largo solo por los colores.",
     ],
     relatedLine:
-      "Si la escapada de otoño también incluye bosque y cesta, tenemos el [parte semanal de condiciones para las setas](/es/naturaleza/setas-cataluna-condiciones/), con lluvia acumulada y zonas por comarca.",
+      "Si la escapada de otoño también incluye bosque y cesta, tenemos el [parte semanal de condiciones para las setas](/es/naturaleza/setas-cataluna-condiciones/), con lluvia acumulada y zonas por comarca. Con el horario de invierno anochece una hora antes: para una salida de colores, la luz de la tarde se acaba antes. Consulta [cuándo cambia la hora](/es/guias/cambio-hora-espana/).",
   },
   en: {
     path: "nature/fall-colors-catalonia",
@@ -805,6 +805,6 @@ export const COPY: Record<Locale, Copy> = {
       "And above all: check the real state of the forest before making a long trip for the colours alone.",
     ],
     relatedLine:
-      "If the autumn trip also involves a basket, we publish a [weekly report on mushroom conditions](/en/nature/mushroom-season-catalonia/) with recent rainfall by area.",
+      "If the autumn trip also involves a basket, we publish a [weekly report on mushroom conditions](/en/nature/mushroom-season-catalonia/) with recent rainfall by area. Once the clocks go back to winter time it gets dark an hour earlier, so the afternoon light for a colour trip ends sooner. Check [when the clocks change](/en/guides/clock-change-spain/).",
   },
 };
