@@ -57,7 +57,7 @@ export function buildAlternates({
     if (href) languages[HTML_LANG[locale]] = absoluteUrl(href);
   }
 
-  const xDefault = translations[X_DEFAULT_LOCALE] ?? translations.ca ?? path;
+  const xDefault = isHomeCluster(translations) ? "/" : (translations[X_DEFAULT_LOCALE] ?? translations.ca ?? path);
   if (xDefault) languages["x-default"] = absoluteUrl(xDefault);
 
   return {
@@ -204,4 +204,15 @@ export function buildMetadata(input: PageMetadataInput): Metadata {
       ...(SITE.twitter ? { site: `@${SITE.twitter}` } : {}),
     },
   };
+}
+
+/**
+ * The three locale roots. `/` negotiates between them by Accept-Language and
+ * Google already treats it as the canonical of `/ca/`, so for this one cluster
+ * `x-default` names `/` (Google's guidance for language-selector homepages)
+ * instead of the English edition. See docs/SEO_EXPERIMENTS.md, 2026-10-24.
+ */
+export function isHomeCluster(translations: Partial<Record<string, string>>): boolean {
+  const hrefs = Object.values(translations).filter(Boolean) as string[];
+  return hrefs.length > 0 && hrefs.every((href) => /^\/(ca|es|en)\/$/.test(href));
 }

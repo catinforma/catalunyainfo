@@ -90,3 +90,20 @@ test("localised paths match the URL architecture in the brief", () => {
   assert.equal(sectionPath("guides", "es"), "/es/guias/");
   assert.equal(legalPath("privacy", "en"), "/en/legal/privacy/");
 });
+
+test("the home cluster names / as x-default; every other page keeps the English edition", async () => {
+  const { buildAlternates } = await import("../src/lib/seo/metadata.ts");
+  const home = buildAlternates({ path: "/ca/", translations: { ca: "/ca/", es: "/es/", en: "/en/" } });
+  assert.equal((home?.languages as Record<string, string>)["x-default"], "https://www.catalunyainfo.com/");
+  const page = buildAlternates({ path: "/ca/guies/x/", translations: { ca: "/ca/guies/x/", en: "/en/guides/x/" } });
+  assert.equal((page?.languages as Record<string, string>)["x-default"], "https://www.catalunyainfo.com/en/guides/x/");
+});
+
+test("the site schema names the brand both ways and offers no retired search action", async () => {
+  const { organizationSchema, websiteSchema } = await import("../src/lib/seo/jsonld.ts");
+  for (const schema of [organizationSchema(), websiteSchema("ca")]) {
+    assert.deepEqual(schema.alternateName, ["Catalunya Info", "catalunyainfo.com"]);
+    assert.equal(schema.url, "https://www.catalunyainfo.com/");
+    assert.equal("potentialAction" in schema, false);
+  }
+});

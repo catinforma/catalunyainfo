@@ -4,6 +4,7 @@ import { allIndexablePaths, countBySection } from "@/lib/content/repository";
 import { HTML_LANG, LOCALES, X_DEFAULT_LOCALE, type Locale } from "@/lib/i18n/config";
 import { allSystemPaths, sectionPath } from "@/lib/i18n/routes";
 import { absoluteUrl, indexingAllowed } from "@/lib/site";
+import { isHomeCluster } from "@/lib/seo/metadata";
 
 export const revalidate = 3600;
 
@@ -114,7 +115,7 @@ function languageMap(group: Partial<Record<Locale, string>>): Record<string, str
     const href = group[locale];
     if (href) languages[HTML_LANG[locale]] = absoluteUrl(href);
   }
-  const fallback = group[X_DEFAULT_LOCALE] ?? group.ca;
+  const fallback = isHomeCluster(group) ? "/" : (group[X_DEFAULT_LOCALE] ?? group.ca);
   if (fallback) languages["x-default"] = absoluteUrl(fallback);
   return languages;
 }

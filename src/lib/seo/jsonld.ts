@@ -23,7 +23,8 @@ export function organizationSchema(): Json {
     "@type": "Organization",
     "@id": ORGANIZATION_ID,
     name: SITE.name,
-    url: SITE.productionOrigin,
+    alternateName: BRAND_ALTERNATE_NAMES,
+    url: `${SITE.productionOrigin}/`,
     logo: {
       "@type": "ImageObject",
       url: `${SITE.productionOrigin}/logo.png`,
@@ -34,22 +35,23 @@ export function organizationSchema(): Json {
   };
 }
 
-export function websiteSchema(locale: Locale, searchPath: string): Json {
+/**
+ * "catalunya info" (two words) is how people search for the site, and the
+ * brand ranked only 6.6 for it: nothing told Google the two spellings are the
+ * same entity. No SearchAction: Google retired the sitelinks search box, and
+ * the target was a URL robots.txt blocks.
+ */
+const BRAND_ALTERNATE_NAMES = ["Catalunya Info", "catalunyainfo.com"];
+
+export function websiteSchema(locale: Locale): Json {
   return {
     "@type": "WebSite",
     "@id": WEBSITE_ID,
-    url: SITE.productionOrigin,
+    url: `${SITE.productionOrigin}/`,
     name: SITE.name,
+    alternateName: BRAND_ALTERNATE_NAMES,
     inLanguage: HTML_LANG[locale],
     publisher: { "@id": ORGANIZATION_ID },
-    potentialAction: {
-      "@type": "SearchAction",
-      target: {
-        "@type": "EntryPoint",
-        urlTemplate: `${absoluteUrl(searchPath)}?q={search_term_string}`,
-      },
-      "query-input": "required name=search_term_string",
-    },
   };
 }
 
