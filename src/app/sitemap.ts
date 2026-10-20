@@ -5,7 +5,14 @@ import { HTML_LANG, LOCALES, X_DEFAULT_LOCALE, type Locale } from "@/lib/i18n/co
 import { allSystemPaths, sectionPath } from "@/lib/i18n/routes";
 import { absoluteUrl, indexingAllowed } from "@/lib/site";
 
-export const revalidate = 3600;
+/**
+ * Rendered on request, not through ISR. The cached copy depended on ISR
+ * writes, and on 20 Oct it was 30 hours old and missing six live pages while
+ * the Hobby write quota was near its limit (DECISION_LOG, 18-20 Oct). Crawlers
+ * fetch it a few times a day; one indexed query per fetch is cheaper than a
+ * sitemap that silently stops listing new pages.
+ */
+export const dynamic = "force-dynamic";
 
 /**
  * The sitemap.

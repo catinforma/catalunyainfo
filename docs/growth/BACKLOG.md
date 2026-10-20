@@ -53,6 +53,7 @@ Evidence files: `research_notes/audits/*.md` (gitignored) and `docs/growth/basel
 |---|---|---|
 | 28 | Site search: PostgreSQL full-text + trigram over titles/places, CA/ES/EN synonyms; evaluate on 50 real queries before any vectors | megaprompt §12 |
 | 29 | Real-user Web Vitals to GA4 (consented users only) | performance P2 |
+| — | **Tried and reverted 20 Oct:** `next/dynamic` for the client widgets inside `BlockRenderer` (contact form, calculators, calendar, transport selector, holiday filter, election tables). With Turbopack (Next 16) the `[...slug]` client reference manifest still put all of them in the same three chunks (2v9kos5ta1lh0, 0me0bm1d4avje, 06zqvhzqepamg, 112 KB raw), so it split nothing. A real fix needs a different boundary, e.g. a separate route segment or client-side `import()` behind interaction. | evidence: page_client-reference-manifest.js |
 | 30 | x-default → `/` for the home cluster only, after 23 Oct, as a logged experiment | technical_seo P2 |
 
 ## Do not do
