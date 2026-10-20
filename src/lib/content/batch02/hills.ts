@@ -191,7 +191,7 @@ function montjuicBody(locale: Locale) {
     ...h2(t.upTitle, ...t.up),
     ...h2(t.castleTitle, ...t.castle),
     faq(t.faq),
-    ...b2Related(["tibidabo", "museums", "cards", "transport"], locale),
+    ...b2Related(["tibidabo", "hours", "museums", "cards", "transport"], locale),
   ];
 }
 

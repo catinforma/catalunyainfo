@@ -23,6 +23,7 @@ import {
   type Holiday,
 } from "./payload";
 import { COPY, type HolidayCopy } from "./copy";
+import { longDate } from "./calendar";
 
 /**
  * The public holiday guide.
@@ -205,6 +206,8 @@ export function buildBody(locale: Locale, inlineMediaId?: string): Block[] {
     note: copy.calendarNote,
   });
 
+  blocks.push(faqBlock(locale));
+
   /* ---- Closing ------------------------------------------------------------ */
   blocks.push({ type: "heading", level: 2, text: copy.closingTitle });
   for (const text of copy.closing) blocks.push({ type: "paragraph", text });
@@ -310,3 +313,58 @@ export async function publishHolidayGuide(): Promise<PublishResult> {
 }
 
 export { YEAR };
+
+/* -------------------------------------------------------------------------- */
+/* FAQ                                                                        */
+/* -------------------------------------------------------------------------- */
+
+const HOLIDAY_PATH: Record<Locale, { today: string; local: string }> = {
+  ca: { today: "/ca/guies/es-festiu-avui-catalunya/", local: "/ca/guies/festius-locals-catalunya/" },
+  es: { today: "/es/guias/es-festivo-hoy-cataluna/", local: "/es/guias/festivos-locales-cataluna/" },
+  en: { today: "/en/guides/is-today-a-holiday-in-catalonia/", local: "/en/guides/local-holidays-catalonia/" },
+};
+
+/**
+ * The questions Search Console shows people asking this page, answered in the
+ * words they use. Every date is rendered from the payload, like the rest of
+ * the page, so the answers cannot drift from the table above them.
+ */
+function faqBlock(locale: Locale): Block {
+  const find = (en: string) => {
+    const holiday = CATALONIA_HOLIDAYS.find((h) => h.name.en === en);
+    if (!holiday) throw new Error(`holiday FAQ: no ${en} in the ${YEAR} calendar`);
+    return longDate(holiday.date, locale);
+  };
+  const goodFriday = find("Good Friday");
+  const easterMonday = find("Easter Monday");
+  const cap = (text: string) => text.charAt(0).toUpperCase() + text.slice(1);
+  const count = CATALONIA_HOLIDAYS.length;
+  const path = HOLIDAY_PATH[locale];
+
+  const items: Record<Locale, { question: string; answer: string }[]> = {
+    ca: [
+      { question: `Quants festius hi ha a Catalunya el ${YEAR}?`, answer: `${count} festius a tot Catalunya, fixats per la Generalitat, més dues festes locals que tria cada ajuntament: consulta les [festes locals de cada municipi](${path.local}).` },
+      { question: `Quan és Divendres Sant el ${YEAR}?`, answer: `${cap(goodFriday)}. És festiu a tot Catalunya.` },
+      { question: `Quan és Pasqua Florida el ${YEAR}?`, answer: `El Dilluns de Pasqua Florida és ${easterMonday}, festiu a tot Catalunya excepte a l'Aran, on el substitueix la Festa d'Aran.` },
+      { question: "És festiu avui?", answer: `Ho diem dia a dia a [és festiu avui a Catalunya?](${path.today}), amb el pròxim festiu.` },
+    ],
+    es: [
+      { question: `¿Cuántos festivos hay en Cataluña en ${YEAR}?`, answer: `${count} festivos en toda Cataluña, fijados por la Generalitat, más dos fiestas locales que elige cada ayuntamiento: consulta las [fiestas locales de cada municipio](${path.local}).` },
+      { question: `¿Cuándo es Viernes Santo en ${YEAR}?`, answer: `${cap(goodFriday)}. Es festivo en toda Cataluña.` },
+      { question: `¿Cuándo es el Lunes de Pascua en ${YEAR}?`, answer: `${cap(easterMonday)}. Es festivo en toda Cataluña excepto en Arán, donde lo sustituye la Festa d'Aran.` },
+      { question: "¿Es festivo hoy?", answer: `Lo decimos cada día en [¿es festivo hoy en Cataluña?](${path.today}), con el próximo festivo.` },
+    ],
+    en: [
+      { question: `How many public holidays does Catalonia have in ${YEAR}?`, answer: `${count} across Catalonia, set by the Generalitat, plus two local holidays chosen by each town council: see the [local holidays for each town](${path.local}).` },
+      { question: `When is Good Friday in ${YEAR}?`, answer: `${cap(goodFriday)}. It is a public holiday across Catalonia.` },
+      { question: `When is Easter Monday in ${YEAR}?`, answer: `${cap(easterMonday)}. It is a public holiday across Catalonia except in Aran, where the Festa d'Aran replaces it.` },
+      { question: "Is today a public holiday?", answer: `We answer that every day at [is today a public holiday in Catalonia?](${path.today}), with the next one.` },
+    ],
+  };
+  const title: Record<Locale, string> = {
+    ca: "Preguntes freqüents",
+    es: "Preguntas frecuentes",
+    en: "Frequently asked questions",
+  };
+  return { type: "faq", title: title[locale], items: items[locale] };
+}

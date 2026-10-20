@@ -218,7 +218,7 @@ function body(locale: Locale) {
     ...h2(t.tipsTitle),
     list(...t.tips),
     faq(t.faq),
-    ...b2Related(["monuments", "cards", "airport", "transport"], locale),
+    ...b2Related(["hours", "transport", "monuments", "cards", "airport"], locale),
   ];
 }
 
