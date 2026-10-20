@@ -55,7 +55,8 @@ export type B2Key =
   | "electionNight"
   | "touristTax"
   | "workCalendar"
-  | "holidayToday";
+  | "holidayToday"
+  | "christmas";
 
 /** Path after the locale prefix, no leading or trailing slash. */
 export const B2_PATHS: Record<B2Key, Record<Locale, string>> = {
@@ -238,6 +239,11 @@ export const B2_PATHS: Record<B2Key, Record<Locale, string>> = {
     ca: "guies/entrades-sagrada-familia-park-guell-casa-batllo",
     es: "guias/entradas-sagrada-familia-park-guell-casa-batllo",
     en: "guides/sagrada-familia-park-guell-casa-batllo-tickets",
+  },
+  christmas: {
+    ca: "tradicions/mercats-de-nadal-catalunya",
+    es: "tradiciones/mercados-navidad-cataluna",
+    en: "traditions/christmas-markets-catalonia",
   },
   workCalendar: {
     ca: "guies/calendari-laboral-catalunya",
@@ -455,6 +461,11 @@ export const B2_TITLES: Record<B2Key, Record<Locale, string>> = {
     ca: "Entrades de la Sagrada Família, el Park Güell i la Casa Batlló",
     es: "Entradas de la Sagrada Familia, el Park Güell y la Casa Batlló",
     en: "Sagrada Família, Park Güell and Casa Batlló tickets",
+  },
+  christmas: {
+    ca: "Mercats i fires de Nadal a Catalunya",
+    es: "Mercados y ferias de Navidad en Cataluña",
+    en: "Christmas markets in Catalonia",
   },
   workCalendar: {
     ca: "Calendari laboral 2027 a Catalunya: festius i ponts",

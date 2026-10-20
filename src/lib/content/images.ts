@@ -743,6 +743,26 @@ export const IMAGES: readonly ImportedImage[] = [
     "license": "CC BY-SA 4.0"
   },
   {
+    "key": "mercats-nadal-santa-llucia-figures",
+    "url": "/images/mercats-nadal-santa-llucia-figures.webp",
+    "width": 1920,
+    "height": 1440,
+    "blurDataUrl": "data:image/webp;base64,UklGRmoAAABXRUJQVlA4IF4AAADwAQCdASoQAAwAA4BaJQBOgCLtPMu91AAAzFDq92QhSZxWPlWbqHvMjqXplNMcHaI4pfihmg9ZHiFEcQePikYyDdWfzPJI1mWND/3b8DRuEtD9PeY/Lyxf94QUJMAA",
+    "credit": "Jordi Gili",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:2025_-_Fira_de_Santa_Ll%C3%BAcia_01.jpg",
+    "license": "CC BY 4.0"
+  },
+  {
+    "key": "mercats-nadal-santa-llucia-nit",
+    "url": "/images/mercats-nadal-santa-llucia-nit.webp",
+    "width": 1920,
+    "height": 1440,
+    "blurDataUrl": "data:image/webp;base64,UklGRmoAAABXRUJQVlA4IF4AAADwAQCdASoQAAwAA4BaJYgCsAENoy0VxgAA/vRqtRBvgKVYqip8GdUdgFlGSObSlz3qhG3+evwz9mRvcRF5P/zTn/MFEoEX6vzjYpg2rySsTmECQwgVylwKfq6P+8AA",
+    "credit": "Enric",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:122_Fira_de_Santa_Ll%C3%BAcia,_av._de_la_Catedral_(Barcelona),_Nadal_2024,_des_del_Pla_de_la_Seu.jpg",
+    "license": "CC BY-SA 4.0"
+  },
+  {
     "key": "mercats-santa-caterina-coberta",
     "url": "/images/mercats-santa-caterina-coberta.webp",
     "width": 1920,

@@ -159,6 +159,15 @@ async function main() {
     console.log("");
   }
 
+  // Merge into the existing manifest. `incoming/` only ever holds the new
+  // batch, so writing just `imported` deleted every image already on the site
+  // (it did, on 20 Oct, before anything was committed). Same key: the new
+  // file wins.
+  const existing = await readExistingManifest();
+  const byKey = new Map(existing.map((image) => [image.key, image]));
+  for (const image of imported) byKey.set(image.key, image);
+  const merged = [...byKey.values()].sort((a, b) => a.key.localeCompare(b.key));
+
   const body = `// GENERATED FILE - do not edit by hand.
 // Source: incoming/  ->  npm run images:import
 //
@@ -182,7 +191,7 @@ export interface ImportedImage {
   readonly license?: string;
 }
 
-export const IMAGES: readonly ImportedImage[] = ${JSON.stringify(imported, null, 2)} as const;
+export const IMAGES: readonly ImportedImage[] = ${JSON.stringify(merged, null, 2)} as const;
 
 export const IMAGE_BY_KEY: ReadonlyMap<string, ImportedImage> = new Map(
   IMAGES.map((image) => [image.key, image]),
@@ -202,3 +211,17 @@ main().catch((error) => {
   console.error(error instanceof Error ? error.message : error);
   process.exit(1);
 });
+
+/** The IMAGES array of the current manifest, or nothing if there is none yet. */
+async function readExistingManifest(): Promise<Imported[]> {
+  let text: string;
+  try {
+    text = await readFile(MANIFEST, "utf8");
+  } catch {
+    return [];
+  }
+  const start = text.indexOf("= [", text.indexOf("export const IMAGES")) + 2;
+  const end = text.indexOf("] as const;", start);
+  if (start < 2 || end < 0) throw new Error("images.ts: could not find the IMAGES array; refusing to overwrite it");
+  return JSON.parse(text.slice(start, end + 1)) as Imported[];
+}
