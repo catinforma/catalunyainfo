@@ -5,18 +5,12 @@ import { timingSafeEqual } from "node:crypto";
 
 import { getDb, schema } from "@/lib/db/client";
 import { pruneExpiredSessions } from "@/lib/auth/session";
+import { DAY_DEPENDENT_PATTERN } from "@/lib/content/day-dependent";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 const { entryTranslations } = schema;
-
-/**
- * Blocks whose output changes with the date: "is today a holiday", the school
- * calendar's "today", the clock-change countdown, this weekend's agenda and
- * the daily reservoir reading. Pages carrying one are revalidated every night.
- */
-const DAY_DEPENDENT_BLOCKS = ["holidayToday", "schoolCalendar", "clockChange", "weekendAgenda", "reservoirLevels"];
 
 /**
  * Scheduled housekeeping, run by Vercel Cron (see vercel.json).
@@ -72,7 +66,7 @@ export async function GET(request: Request) {
   // Content pages are cached for a day. The ones whose answer depends on
   // today's date are refreshed here, once, just after midnight in Madrid.
   // jsonb's text form puts a space after the colon; allow either.
-  const pattern = `"type":\\s*"(${DAY_DEPENDENT_BLOCKS.join("|")})"`;
+  const pattern = DAY_DEPENDENT_PATTERN;
   const dayDependent = await db
     .select({ locale: entryTranslations.locale, path: entryTranslations.path })
     .from(entryTranslations)

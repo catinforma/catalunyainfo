@@ -19,6 +19,7 @@ import type {
   TagView,
 } from "./types";
 import { SECTION_CATEGORY_KEYS, SECTION_ENTRY_TYPES } from "./types";
+import { DAY_DEPENDENT_PATTERN } from "./day-dependent";
 
 const {
   authors,
@@ -749,6 +750,8 @@ export interface SitemapRow {
   updatedAt: Date;
   publishedAt: Date | null;
   entryId: string;
+  /** Carries a block whose output changes every day (see day-dependent.ts). */
+  dayDependent: boolean;
 }
 
 export async function allIndexablePaths(): Promise<SitemapRow[]> {
@@ -763,6 +766,7 @@ export async function allIndexablePaths(): Promise<SitemapRow[]> {
         updatedAt: entryTranslations.updatedAt,
         publishedAt: entryTranslations.publishedAt,
         entryId: entryTranslations.entryId,
+        dayDependent: sql<boolean>`${entryTranslations.body}::text ~ ${DAY_DEPENDENT_PATTERN}`,
       })
       .from(entryTranslations)
       .innerJoin(entries, eq(entries.id, entryTranslations.entryId))

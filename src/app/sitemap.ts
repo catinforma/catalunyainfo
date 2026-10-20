@@ -45,8 +45,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const group = byEntry.get(row.entryId) ?? {};
     return {
       url: absoluteUrl(`/${row.locale}/${row.path}/`),
-      lastModified: row.updatedAt,
-      changeFrequency: "monthly",
+      lastModified: row.dayDependent ? latest(row.updatedAt, startOfTodayInMadrid()) : row.updatedAt,
+      changeFrequency: row.dayDependent ? "daily" : "monthly",
       priority: 0.7,
       alternates: { languages: languageMap(group) },
     };
@@ -143,4 +143,22 @@ function translateSystemPath(path: string, locale: Locale): Partial<Record<Local
     if (target) out[l] = target;
   }
   return out;
+}
+
+/**
+ * Midnight today in Madrid, as an instant. Day-dependent pages are rebuilt by
+ * the nightly cron, so this is when their current content was produced.
+ */
+function startOfTodayInMadrid(now: Date = new Date()): Date {
+  const day = new Intl.DateTimeFormat("en-CA", { timeZone: "Europe/Madrid" }).format(now);
+  const offset =
+    new Intl.DateTimeFormat("en-US", { timeZone: "Europe/Madrid", timeZoneName: "longOffset" })
+      .formatToParts(now)
+      .find((part) => part.type === "timeZoneName")
+      ?.value.replace("GMT", "") || "+00:00";
+  return new Date(`${day}T00:00:00${offset}`);
+}
+
+function latest(a: Date, b: Date): Date {
+  return a > b ? a : b;
 }
