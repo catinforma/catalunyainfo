@@ -5,7 +5,17 @@ import { IMAGES } from "@/lib/content/images";
 import { publishArticle, upsertImages, type ArticleSpec, type ImageSpec, type PublishResult } from "@/lib/content/publish-article";
 import { LOCALES, type Locale } from "@/lib/i18n/config";
 
-import { SCHOOL_SOURCE, SCHOOL_VERIFIED_AT } from "./calendar";
+import {
+  addDays,
+  aranSubstitutionFor,
+  holidayOn,
+  isCovered,
+  longDate,
+  todayInCatalonia,
+  weekdayIndex,
+} from "@/lib/content/holidays/calendar";
+
+import { SCHOOL_SOURCE, SCHOOL_VERIFIED_AT, SCHOOL_YEARS, type SchoolYear } from "./calendar";
 
 /**
  * "School calendar in Catalonia."
@@ -156,8 +166,12 @@ export const COPY: Record<Locale, Copy> = {
 
 export function buildBody(locale: Locale, secondMediaId?: string): Block[] {
   const copy = COPY[locale];
-  const blocks: Block[] = [{ type: "paragraph", lead: true, text: copy.lead }];
+  const year = currentYear(todayInCatalonia());
+  const blocks: Block[] = [
+    { type: "paragraph", lead: true, text: `${answerLead(year, locale)} ${copy.lead}` },
+  ];
   blocks.push({ type: "schoolCalendar" });
+  blocks.push(...daysOff(year, locale));
 
   const section = (heading: string, paragraphs: string[]) => {
     blocks.push({ type: "heading", level: 2, text: heading });
@@ -170,6 +184,124 @@ export function buildBody(locale: Locale, secondMediaId?: string): Block[] {
   section(copy.otherTitle, copy.other);
   blocks.push({ type: "paragraph", text: copy.related });
   return blocks;
+}
+
+/* -------------------------------------------------------------------------- */
+/* The answer first, and the days off: computed, never typed                  */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * Search Console: "días lectivos / no lectivos", "cuándo empiezan las clases",
+ * "calendario escolar barcelona" at positions 30-60, because the page gave no
+ * date in its first screen and did not count the days off at all. Everything
+ * below is derived from SCHOOL_YEARS (Ordre EDF/66/2026) and the holiday
+ * orders (EMT/66/2025, EMT/52/2026), so it cannot drift from the table.
+ */
+
+/** The school year in progress, or the next one during the summer. */
+function currentYear(today: string): SchoolYear {
+  return SCHOOL_YEARS.find((year) => today <= year.end) ?? SCHOOL_YEARS[SCHOOL_YEARS.length - 1]!;
+}
+
+/** "8 de setembre de 2026" / "8 September 2026": the long date without its weekday. */
+function dayMonthYear(iso: string, locale: Locale): string {
+  return longDate(iso, locale).replace(/^\S+,?\s/, "");
+}
+
+function answerLead(year: SchoolYear, locale: Locale): string {
+  const started = todayInCatalonia() >= year.start;
+  const d = (iso: string) => `**${dayMonthYear(iso, locale)}**`;
+  if (locale === "ca") {
+    return `El curs ${year.label} a Catalunya ${started ? "va començar" : "comença"} el ${d(year.start)} i acaba el ${d(year.end)}. Les vacances de Nadal van del ${d(year.christmas[0])} al ${d(year.christmas[1])}, i les de Setmana Santa, del ${d(year.easter[0])} al ${d(year.easter[1])}.`;
+  }
+  if (locale === "es") {
+    return `El curso ${year.label} en Cataluña ${started ? "empezó" : "empieza"} el ${d(year.start)} y termina el ${d(year.end)}. Las vacaciones de Navidad van del ${d(year.christmas[0])} al ${d(year.christmas[1])}, y las de Semana Santa, del ${d(year.easter[0])} al ${d(year.easter[1])}.`;
+  }
+  return `The ${year.label} school year in Catalonia ${started ? "started" : "starts"} on ${d(year.start)} and ends on ${d(year.end)}. The Christmas holidays run from ${d(year.christmas[0])} to ${d(year.christmas[1])}, and Easter from ${d(year.easter[0])} to ${d(year.easter[1])}.`;
+}
+
+/** Catalonia-wide holidays that fall on a weekday inside term. */
+function holidaysOnSchoolDays(year: SchoolYear): { date: string; name: Record<Locale, string> }[] {
+  const out: { date: string; name: Record<Locale, string> }[] = [];
+  for (let day = year.start; day <= year.end; day = addDays(day, 1)) {
+    const weekday = weekdayIndex(day);
+    if (weekday === 0 || weekday === 6) continue;
+    if (day >= year.christmas[0] && day <= year.christmas[1]) continue;
+    if (day >= year.easter[0] && day <= year.easter[1]) continue;
+    const holiday = holidayOn(day);
+    if (holiday) out.push({ date: day, name: holiday.name });
+  }
+  return out;
+}
+
+/** A Catalonia-wide holiday Aran swaps for its own day, if that day is in term. */
+function aranSwapInTerm(year: SchoolYear) {
+  for (let day = year.start; day <= year.end; day = addDays(day, 1)) {
+    const swap = aranSubstitutionFor(day);
+    if (swap && swap.date >= year.start && swap.date <= year.end) return swap;
+  }
+  return null;
+}
+
+/**
+ * Barcelona's municipal school council (CEMB) proposal, approved at its plenary
+ * of 10 June 2026. A recommendation, not a rule, and for one school year only.
+ */
+const BARCELONA_DAYS: Record<string, string[]> = {
+  "2026-2027": ["2026-10-30", "2026-12-07", "2027-02-08", "2027-05-14"],
+};
+
+const DAYS_OFF_TITLE: Record<Locale, string> = {
+  ca: "Dies sense classe del curs {y}",
+  es: "Días sin clase del curso {y}",
+  en: "Days without school in {y}",
+};
+
+function daysOff(year: SchoolYear, locale: Locale): Block[] {
+  const and = locale === "ca" ? " i " : locale === "es" ? " y " : " and ";
+  const list = (items: string[]) =>
+    items.length <= 1 ? items.join("") : `${items.slice(0, -1).join(", ")}${and}${items[items.length - 1]}`;
+
+  const named = list(holidaysOnSchoolDays(year).map((h) => `**${longDate(h.date, locale)}** (${h.name[locale]})`));
+  const afterChristmas = longDate(addDays(year.christmas[1], 1), locale);
+  const afterEaster = longDate(addDays(year.easter[1], 1), locale);
+  const complete = isCovered(year.end);
+  const aran = aranSwapInTerm(year);
+
+  const p: string[] = [];
+  if (locale === "ca") {
+    p.push(`A més de les vacances, no hi ha classe els festius de tot Catalunya que cauen en dia feiner dins del curs: ${named}.${complete ? "" : " El calendari de festius de l'any vinent encara no s'ha publicat; quan surti, s'hi sumaran els seus dies."}`);
+    p.push(`Després de Nadal es torna a classe el ${afterChristmas}, i després de Setmana Santa, el ${afterEaster}.`);
+    if (aran) p.push(`A l'Aran, la festa del ${longDate(aran.replaces, locale)} queda substituïda per la ${aran.name.ca}, el **${longDate(aran.date, locale)}**, que és dia lectiu a la resta de Catalunya.`);
+    p.push("Cal sumar-hi els dos festius locals de cada municipi i els dies de lliure disposició que tria cada centre.");
+  } else if (locale === "es") {
+    p.push(`Además de las vacaciones, no hay clase los festivos de toda Cataluña que caen en día laborable dentro del curso: ${named}.${complete ? "" : " El calendario de festivos del año que viene aún no se ha publicado; cuando salga, se sumarán sus días."}`);
+    p.push(`Después de Navidad se vuelve a clase el ${afterChristmas}, y después de Semana Santa, el ${afterEaster}.`);
+    if (aran) p.push(`En Arán, la fiesta del ${longDate(aran.replaces, locale)} se sustituye por la ${aran.name.es}, el **${longDate(aran.date, locale)}**, que es día lectivo en el resto de Cataluña.`);
+    p.push("Hay que sumar los dos festivos locales de cada municipio y los días de libre disposición que elige cada centro.");
+  } else {
+    p.push(`Besides the holidays, there is no school on Catalonia-wide public holidays that fall on a weekday during term: ${named}.${complete ? "" : " Next year's holiday calendar has not been published yet; its days will add to these when it is."}`);
+    p.push(`After Christmas, classes restart on ${afterChristmas}; after Easter, on ${afterEaster}.`);
+    if (aran) p.push(`In Aran, the ${longDate(aran.replaces, locale)} holiday is replaced by the ${aran.name.en} on **${longDate(aran.date, locale)}**, a school day everywhere else in Catalonia.`);
+    p.push("Add each town's two local holidays and the free-choice days each school sets.");
+  }
+
+  const bcn = BARCELONA_DAYS[year.label];
+  if (bcn) {
+    const days = list(bcn.map((iso) => `**${longDate(iso, locale)}**`));
+    p.push(
+      locale === "ca"
+        ? `A **Barcelona**, el Consell Escolar Municipal proposa a tots els centres fer festa el ${days}. És una proposta de ciutat: cada centre decideix els seus dies.`
+        : locale === "es"
+          ? `En **Barcelona**, el Consell Escolar Municipal propone a todos los centros hacer fiesta el ${days}. Es una propuesta de ciudad: cada centro decide sus días.`
+          : `In **Barcelona**, the municipal school council recommends that every school take ${days} off. It is a city-wide recommendation: each school sets its own days.`,
+    );
+  }
+
+  return [
+    { type: "heading", level: 2, text: DAYS_OFF_TITLE[locale].replace("{y}", year.label) },
+    ...p.map((text) => ({ type: "paragraph", text }) as Block),
+  ];
 }
 
 function imageSpec(key: string, alt: (c: Copy) => string, caption: (c: Copy) => string): ImageSpec {

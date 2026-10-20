@@ -60,6 +60,13 @@ const SOURCES: B2Source[] = [
     publisher: "Aena",
   },
   {
+    name: "Airlines at Josep Tarradellas Barcelona-El Prat",
+    url: "https://www.aena.es/en/josep-tarradellas-barcelona-el-prat/airlines-and-destinations/airlines.html",
+    publisher: "Aena",
+  },
+  { name: "Aerobús A1, city to T1", url: "https://aerobusbarcelona.es/en/lines-stops-and-schedules/line-a1-outbound/", publisher: "Aerobús (Monbus)" },
+  { name: "Aerobús A2, city to T2", url: "https://aerobusbarcelona.es/en/lines-stops-and-schedules/line-a2-outbound/", publisher: "Aerobús (Monbus)" },
+  {
     name: "Tarifes urbanes del taxi per al 2026",
     url: "https://taxi.amb.cat/es/imet/actualitat/noticies/detall/-/noticiataxi/tarifes-urbanes-del-taxi-per-al-2026/29760500/956832",
     publisher: "Àrea Metropolitana de Barcelona",
@@ -157,6 +164,16 @@ function body(locale: Locale): ReturnType<typeof paras> {
         "Aena runs a **free shuttle bus between T1 and T2**, 24 hours a day, every 5 to 10 minutes; T1 to T2 takes about 10 minutes and T2 to T1 about 14.",
         "At night, besides the Aerobús, the night buses **N17** (from T1) and **N18** (T1 and T2) run to Plaça Catalunya roughly from midnight to 05:00, every 20 to 30 minutes, and accept integrated passes.",
       ),
+      ...h2(
+        "Which terminal? It depends on your airline",
+        "Aena's airline list gives each airline's terminal. **Vueling, Iberia, British Airways, Air Europa, Lufthansa, Emirates and United Airlines use T1**; **Ryanair, easyJet, Jet2.com, Aer Lingus, Wizz Air, Volotea, Transavia, Norwegian and Eurowings use T2**. From T1 you have the A1 Aerobús and the L9 Sud metro; from T2, the A2 Aerobús, the L9 Sud metro and the R2 Nord train. Assignments can change, so check your booking or [Aena's airline list](https://www.aena.es/en/josep-tarradellas-barcelona-el-prat/airlines-and-destinations/airlines.html) before you travel.",
+      ),
+      ...h2(
+        "Going back to the airport",
+        "**Aerobús.** Both lines start at Plaça Catalunya and, on the way out, stop only at Carrer Sepúlveda and Plaça Espanya, so board at one of those three. Take the **A1 for T1** (it stops at Level 3, Departures) and the **A2 for T2** (it stops on the airport road at T2B). From the centre, the A1 leaves every 5 minutes from 06:40 to 21:55 and the A2 every 10 minutes from 05:00 to 22:30; overnight both leave every 20 minutes.",
+        "**Metro.** TMB's airport ticket works in both directions: it takes you to the airport from any metro station. The T-casual is not valid at the airport stations on the way out either.",
+        "**Train.** The R2 Nord runs to Aeroport every 30 minutes and arrives at T2. If you fly from T1, add Aena's free shuttle, which takes about 14 minutes from T2 to T1.",
+      ),
       ...h2("Which one to pick"),
       list(
         "**Staying near Plaça Catalunya, Universitat or Plaça Espanya:** Aerobús. No change, frequent, luggage-friendly.",
@@ -181,6 +198,14 @@ function body(locale: Locale): ReturnType<typeof paras> {
         {
           question: "Which terminal does the train leave from?",
           answer: "The R2 Nord station is at Terminal 2. From T1, take the free shuttle bus between terminals.",
+        },
+        {
+          question: "Which terminal does Ryanair use at Barcelona airport?",
+          answer: "T2, on Aena's airline list (checked 20 October 2026), like easyJet, Jet2.com and Aer Lingus. Vueling, Iberia and British Airways use T1.",
+        },
+        {
+          question: "Where do I catch the Aerobús back to the airport?",
+          answer: "At Plaça Catalunya, Carrer Sepúlveda or Plaça Espanya. The A1 goes to T1 and the A2 to T2.",
         },
       ]),
       ...b2Related(["barcelonaHub", "transport", "touristTax", "cruiseport", "hours"], "en"),
@@ -236,6 +261,16 @@ function body(locale: Locale): ReturnType<typeof paras> {
         "Aena tiene un **autobús gratuito entre la T1 y la T2**, las 24 horas, cada 5 a 10 minutos; de la T1 a la T2 tarda unos 10 minutos y de la T2 a la T1 unos 14.",
         "De noche, además del Aerobús, los nitbus **N17** (desde la T1) y **N18** (T1 y T2) van a plaza Catalunya aproximadamente de medianoche a las 05:00, cada 20 a 30 minutos, y aceptan títulos integrados.",
       ),
+      ...h2(
+        "¿Qué terminal? Depende de tu aerolínea",
+        "La lista de aerolíneas de Aena indica la terminal de cada una. **Vueling, Iberia, British Airways, Air Europa, Lufthansa, Emirates y United Airlines operan en la T1**; **Ryanair, easyJet, Jet2.com, Aer Lingus, Wizz Air, Volotea, Transavia, Norwegian y Eurowings, en la T2**. Desde la T1 tienes el Aerobús A1 y el metro L9 Sud; desde la T2, el Aerobús A2, el metro L9 Sud y el tren R2 Nord. Las asignaciones pueden cambiar: compruébalo en tu reserva o en la [lista de aerolíneas de Aena](https://www.aena.es/es/josep-tarradellas-barcelona-el-prat/aerolineas-y-destinos/aerolineas.html) antes de viajar.",
+      ),
+      ...h2(
+        "Volver al aeropuerto",
+        "**Aerobús.** Las dos líneas salen de plaza Catalunya y, en dirección al aeropuerto, solo paran en la calle Sepúlveda y en plaza Espanya: sube en una de esas tres paradas. Coge el **A1 para la T1** (para en la planta 3, Salidas) y el **A2 para la T2** (para en el vial de la T2B). Desde el centro, el A1 sale cada 5 minutos de 06:40 a 21:55 y el A2 cada 10 minutos de 05:00 a 22:30; de madrugada, los dos salen cada 20 minutos.",
+        "**Metro.** El billete aeropuerto de TMB vale en los dos sentidos: te lleva al aeropuerto desde cualquier estación de metro. La T-casual tampoco vale a la ida en las estaciones del aeropuerto.",
+        "**Tren.** El R2 Nord va a Aeroport cada 30 minutos y llega a la T2. Si vuelas desde la T1, súmale el autobús gratuito de Aena, que tarda unos 14 minutos de la T2 a la T1.",
+      ),
       ...h2("Cuál elegir"),
       list(
         "**Te alojas cerca de plaza Catalunya, Universitat o plaza Espanya:** Aerobús. Sin transbordos, frecuente y cómodo con maletas.",
@@ -260,6 +295,14 @@ function body(locale: Locale): ReturnType<typeof paras> {
         {
           question: "¿De qué terminal sale el tren?",
           answer: "La estación del R2 Nord está en la Terminal 2. Desde la T1, coge el autobús gratuito entre terminales.",
+        },
+        {
+          question: "¿En qué terminal opera Ryanair en el aeropuerto de Barcelona?",
+          answer: "En la T2, según la lista de aerolíneas de Aena (consultada el 20 de octubre de 2026), igual que easyJet, Jet2.com y Aer Lingus. Vueling, Iberia y British Airways operan en la T1.",
+        },
+        {
+          question: "¿Dónde se coge el Aerobús para volver al aeropuerto?",
+          answer: "En plaza Catalunya, en la calle Sepúlveda o en plaza Espanya. El A1 va a la T1 y el A2 a la T2.",
         },
       ]),
       ...b2Related(["barcelonaHub", "transport", "touristTax", "cruiseport", "hours"], "es"),
@@ -314,6 +357,16 @@ function body(locale: Locale): ReturnType<typeof paras> {
       "Aena té un **autobús gratuït entre la T1 i la T2**, les 24 hores, cada 5 a 10 minuts; de la T1 a la T2 triga uns 10 minuts i de la T2 a la T1 uns 14.",
       "De nit, a més de l'Aerobús, els nitbus **N17** (des de la T1) i **N18** (T1 i T2) van a plaça Catalunya aproximadament de mitjanit a les 05:00, cada 20 a 30 minuts, i accepten títols integrats.",
     ),
+    ...h2(
+      "Quina terminal? Depèn de l'aerolínia",
+      "La llista d'aerolínies d'Aena indica la terminal de cadascuna. **Vueling, Iberia, British Airways, Air Europa, Lufthansa, Emirates i United Airlines operen a la T1**; **Ryanair, easyJet, Jet2.com, Aer Lingus, Wizz Air, Volotea, Transavia, Norwegian i Eurowings, a la T2**. Des de la T1 tens l'Aerobús A1 i el metro L9 Sud; des de la T2, l'Aerobús A2, el metro L9 Sud i el tren R2 Nord. Les assignacions poden canviar: comprova-ho a la reserva o a la [llista d'aerolínies d'Aena](https://www.aena.es/ca/josep-tarradellas-barcelona-el-prat/aerolinies-i-destinacions/aerolinies.html) abans de viatjar.",
+    ),
+    ...h2(
+      "Tornar a l'aeroport",
+      "**Aerobús.** Totes dues línies surten de plaça Catalunya i, en direcció a l'aeroport, només paren al carrer Sepúlveda i a plaça Espanya: puja a una d'aquestes tres parades. Agafa l'**A1 per a la T1** (para a la planta 3, Sortides) i l'**A2 per a la T2** (para al vial de la T2B). Des del centre, l'A1 surt cada 5 minuts de 06:40 a 21:55 i l'A2 cada 10 minuts de 05:00 a 22:30; de matinada, tots dos surten cada 20 minuts.",
+      "**Metro.** El bitllet aeroport de TMB val en tots dos sentits: et porta a l'aeroport des de qualsevol estació de metro. La T-casual tampoc no hi val a l'anada.",
+      "**Tren.** L'R2 Nord va a Aeroport cada 30 minuts i arriba a la T2. Si voles des de la T1, afegeix-hi l'autobús gratuït d'Aena, que triga uns 14 minuts de la T2 a la T1.",
+    ),
     ...h2("Quin triar"),
     list(
       "**T'allotges a prop de plaça Catalunya, Universitat o plaça Espanya:** Aerobús. Sense transbords, freqüent i còmode amb maletes.",
@@ -338,6 +391,14 @@ function body(locale: Locale): ReturnType<typeof paras> {
       {
         question: "De quina terminal surt el tren?",
         answer: "L'estació de l'R2 Nord és a la Terminal 2. Des de la T1, agafa l'autobús gratuït entre terminals.",
+      },
+      {
+        question: "A quina terminal opera Ryanair a l'aeroport de Barcelona?",
+        answer: "A la T2, segons la llista d'aerolínies d'Aena (consultada el 20 d'octubre de 2026), igual que easyJet, Jet2.com i Aer Lingus. Vueling, Iberia i British Airways operen a la T1.",
+      },
+      {
+        question: "On s'agafa l'Aerobús per tornar a l'aeroport?",
+        answer: "A plaça Catalunya, al carrer Sepúlveda o a plaça Espanya. L'A1 va a la T1 i l'A2 a la T2.",
       },
     ]),
     ...b2Related(["barcelonaHub", "transport", "touristTax", "cruiseport", "hours"], "ca"),
