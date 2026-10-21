@@ -348,6 +348,31 @@ read).
 Compare CTR at equal positions; the body change can also move position, so
 report both.
 
+## 2026-10-24 — Home brand: x-default → `/` and the brand's two spellings (scheduled)
+
+Prepared on branch `sprint/2026-10-24-home-brand`, **not to be deployed before
+24 October 2026** (after the tourist-tax reading of 23 Oct, as the candidate
+below required).
+
+**Observation.** `catalunya info` 90 impressions / 28 d at position 6.6 for the
+site's own name. Tech audit 20 Oct (research_notes/tech_audit_2026-10-20.md §3):
+Google chose `/` as canonical of `/ca/` while our hreflang named `/en/` as
+x-default; the two-word spelling "Catalunya Info" appeared nowhere, and the
+Organization/WebSite markup had no `alternateName`.
+
+**Change.** Home cluster only: `x-default` → `/` (metadata and sitemap). Site
+schema: `alternateName` ["Catalunya Info", "catalunyainfo.com"], `url` with its
+trailing slash, retired SearchAction removed. Titles untouched.
+
+**Hypothesis.** Position for `catalunya info`, `catalunyainfo` and
+`catalunya informacio` improves, and the URL Google shows settles on one of
+`/`, `/ca/`, `/es/`, `/en/` per language rather than rotating.
+
+**Measure on 21 Nov** (28 days): position and ranking URL for those queries by
+country and language.
+
+**Outcome:** _pending_
+
 ## Candidates not yet run
 
 Recorded so they are not lost, and so they are not all started at once.

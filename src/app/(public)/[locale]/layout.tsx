@@ -8,7 +8,6 @@ import { JsonLd } from "@/components/JsonLd";
 import { fontClassNames } from "@/lib/fonts";
 import { getMessages } from "@/lib/i18n";
 import { HTML_LANG, LOCALES, isLocale, type Locale } from "@/lib/i18n/config";
-import { sectionPath } from "@/lib/i18n/routes";
 import { graph, organizationSchema, websiteSchema } from "@/lib/seo/jsonld";
 import { SITE } from "@/lib/site";
 
@@ -87,7 +86,7 @@ export default async function LocaleLayout({
 
   const siteGraph = graph([
     organizationSchema(),
-    websiteSchema(typed, sectionPath("search", typed)),
+    websiteSchema(typed),
   ]);
 
   return (
