@@ -28,6 +28,12 @@ import {
  */
 
 const VERIFIED = "2026-10-12";
+// The city list was re-read on 23 Oct 2026 from the Ajuntament's own page:
+// it adds the Jardí Botànic and the Centre Martorell on Sundays, and the
+// Pavelló Mies van der Rohe, the Museu Olímpic i de l'Esport and Foto
+// Colectania on the first Sunday; the Museu del Disseny, like the CCCB, is
+// free only 15:00-20:00 on Sundays.
+const CITY_LIST_URL = "https://www.barcelona.cat/infobarcelona/ca/tema/cultura-i-lleure/diumenges-de-museu-sense-passar-per-taquilla_1620590.html";
 
 const SOURCES: B2Source[] = [
   {
@@ -47,7 +53,7 @@ const META: Record<Locale, { path: string; title: string; seoTitle: string; seoD
   ca: {
     path: "guies/museus-gratis-barcelona",
     title: "Museus gratis a Barcelona: quins dies i a quina hora no es paga",
-    seoTitle: "Museus gratis a Barcelona: dies i horaris d'entrada lliure",
+    seoTitle: "Museus gratis a Barcelona: diumenges i primer diumenge",
     seoDescription:
       "Quan és gratis el MNAC, el Picasso, el MACBA, el CCCB i els museus municipals de Barcelona: diumenges a la tarda, primer diumenge de mes i si cal reservar.",
     excerpt:
@@ -56,7 +62,7 @@ const META: Record<Locale, { path: string; title: string; seoTitle: string; seoD
   es: {
     path: "guias/museos-gratis-barcelona",
     title: "Museos gratis en Barcelona: qué días y a qué hora no se paga",
-    seoTitle: "Museos gratis en Barcelona: días y horarios de entrada libre",
+    seoTitle: "Museos gratis en Barcelona: domingos y primer domingo",
     seoDescription:
       "Cuándo es gratis el MNAC, el Picasso, el MACBA, el CCCB y los museos municipales de Barcelona: domingos por la tarde, primer domingo de mes y si hay que reservar.",
     excerpt:
@@ -65,7 +71,7 @@ const META: Record<Locale, { path: string; title: string; seoTitle: string; seoD
   en: {
     path: "guides/free-museums-barcelona",
     title: "Free museums in Barcelona: which days and times are free",
-    seoTitle: "Free museums in Barcelona: free days and times",
+    seoTitle: "Free museums in Barcelona: Sunday afternoons and 1st Sunday",
     seoDescription:
       "When the MNAC, Picasso Museum, MACBA, CCCB and Barcelona's city museums are free: Sunday afternoons, the first Sunday of the month, and where to book.",
     excerpt:
@@ -100,8 +106,9 @@ const COPY: Record<Locale, T> = {
     lead: "Most of Barcelona's museums have a free slot every week, and the city's own museums open free **every Sunday afternoon** and **all day on the first Sunday of the month**. The catch is that each museum sets its own times, and some of the biggest require you to **book online even when entry is free**.",
     ruleTitle: "The city rule: Sunday afternoons and the first Sunday",
     rule: [
-      "Museums run by Barcelona City Council are free every Sunday from 15:00, and all day (within normal Sunday opening hours) on the first Sunday of the month. That covers the Museu d'Història de Barcelona (MUHBA, every site except Park Güell), the Museu de la Música, the Museu del Disseny, the Museu Frederic Marès, the Museu Blau (natural sciences), the Museu Etnològic i de Cultures del Món, the Castell de Montjuïc and the Monestir de Pedralbes.",
-      "Two exceptions: the **Museu Marítim** is free on Sundays from 15:00 only, with no free first Sunday, and the **CCCB** is free on Sundays from 15:00 to 20:00 with online booking.",
+      "Museums run by Barcelona City Council are free every Sunday from 15:00, and all day (within normal Sunday opening hours) on the first Sunday of the month. That covers the Museu d'Història de Barcelona (MUHBA, every site except Park Güell), the Museu de la Música, the Museu del Disseny, the Museu Frederic Marès, the Museu Blau (natural sciences), the Museu Etnològic i de Cultures del Món, the Castell de Montjuïc, the Monestir de Pedralbes, the Jardí Botànic and the Centre Martorell.",
+      `On the first Sunday the [City Council's list](${CITY_LIST_URL}) adds the MNAC, the Pavelló Mies van der Rohe, the Museu Olímpic i de l'Esport and the Picasso, and Foto Colectania from 11:00 to 15:00.`,
+      "Two exceptions: the **Museu Marítim** is free on Sundays from 15:00 only, with no free first Sunday, and the **CCCB** and the **Museu del Disseny** are free on Sundays from 15:00 to 20:00 only, the CCCB with online booking.",
     ],
     tableCaption: "The big museums: when entry is free",
     headers: ["Museum", "Free", "Book ahead?", "Normal adult ticket"],
@@ -122,7 +129,7 @@ const COPY: Record<Locale, T> = {
     big: [
       "**Museu Picasso:** besides the first Sunday, entry is free on Thursdays from 16:00 to 19:00 from late September to late March; in spring and summer the free slot moves to Thursday, Friday and Saturday evenings from 19:00 to 21:00. Under-18s always go free.",
       "**MACBA:** free from 18:00 every Thursday, Friday and Saturday and all day on the first Sunday; under-16s always go free. It is closed on Tuesdays.",
-      "**MNAC:** free every Saturday from 15:00 and on the first Sunday, with an online booking; under-16s and EU residents over 65 always go free.",
+      "**MNAC:** free every Saturday from 15:00 and on the first Sunday, with an online booking; under-16s and EU residents over 65 always go free. From October to April it closes at 15:00 on Sundays, so the free first Sunday is a morning.",
       "**Fundació Joan Miró:** no free day, but under-12s and unemployed visitors with proof get in free, and the Espai 13 gallery is always free.",
     ],
     freeTitle: "Who always goes free",
@@ -150,8 +157,9 @@ const COPY: Record<Locale, T> = {
     lead: "La mayoría de museos de Barcelona tienen una franja gratuita cada semana, y los museos del Ayuntamiento abren gratis **todos los domingos por la tarde** y **todo el día el primer domingo de mes**. La trampa es que cada museo fija sus horas, y algunos de los grandes piden **reservar en línea aunque la entrada sea gratis**.",
     ruleTitle: "La norma de la ciudad: domingos por la tarde y primer domingo",
     rule: [
-      "Los museos del Ayuntamiento de Barcelona son gratuitos todos los domingos a partir de las 15:00, y todo el día (dentro del horario normal de domingo) el primer domingo de mes. Incluye el Museu d'Història de Barcelona (MUHBA, todos los centros excepto el Park Güell), el Museu de la Música, el Museu del Disseny, el Museu Frederic Marès, el Museu Blau (ciencias naturales), el Museu Etnològic i de Cultures del Món, el Castell de Montjuïc y el Monestir de Pedralbes.",
-      "Dos excepciones: el **Museu Marítim** es gratis los domingos a partir de las 15:00 y no tiene primer domingo gratuito, y el **CCCB** es gratis los domingos de 15:00 a 20:00 con reserva en línea.",
+      "Los museos del Ayuntamiento de Barcelona son gratuitos todos los domingos a partir de las 15:00, y todo el día (dentro del horario normal de domingo) el primer domingo de mes. Incluye el Museu d'Història de Barcelona (MUHBA, todos los centros excepto el Park Güell), el Museu de la Música, el Museu del Disseny, el Museu Frederic Marès, el Museu Blau (ciencias naturales), el Museu Etnològic i de Cultures del Món, el Castell de Montjuïc, el Monestir de Pedralbes, el Jardí Botànic y el Centre Martorell.",
+      `El primer domingo, la [lista del Ayuntamiento](${CITY_LIST_URL}) añade el MNAC, el Pavelló Mies van der Rohe, el Museu Olímpic i de l'Esport y el Picasso, y Foto Colectania de 11:00 a 15:00.`,
+      "Dos excepciones: el **Museu Marítim** es gratis los domingos a partir de las 15:00 y no tiene primer domingo gratuito, y el **CCCB** y el **Museu del Disseny** solo son gratis los domingos de 15:00 a 20:00, el CCCB con reserva en línea.",
     ],
     tableCaption: "Los grandes museos: cuándo es gratis",
     headers: ["Museo", "Gratis", "¿Reserva?", "Entrada general"],
@@ -172,7 +180,7 @@ const COPY: Record<Locale, T> = {
     big: [
       "**Museu Picasso:** además del primer domingo, es gratis los jueves de 16:00 a 19:00 de finales de septiembre a finales de marzo; en primavera y verano la franja pasa a jueves, viernes y sábado de 19:00 a 21:00. Los menores de 18 años siempre entran gratis.",
       "**MACBA:** gratis a partir de las 18:00 todos los jueves, viernes y sábados y todo el primer domingo; los menores de 16 siempre entran gratis. Cierra los martes.",
-      "**MNAC:** gratis todos los sábados a partir de las 15:00 y el primer domingo, con reserva en línea; los menores de 16 y los mayores de 65 de la UE siempre entran gratis.",
+      "**MNAC:** gratis todos los sábados a partir de las 15:00 y el primer domingo, con reserva en línea; los menores de 16 y los mayores de 65 de la UE siempre entran gratis. De octubre a abril cierra a las 15:00 los domingos, así que el primer domingo gratuito es por la mañana.",
       "**Fundació Joan Miró:** no tiene día gratuito, pero los menores de 12 y las personas en paro acreditadas entran gratis, y el Espai 13 es siempre gratuito.",
     ],
     freeTitle: "Quién entra siempre gratis",
@@ -200,8 +208,9 @@ const COPY: Record<Locale, T> = {
     lead: "La majoria de museus de Barcelona tenen una franja gratuïta cada setmana, i els museus de l'Ajuntament obren gratis **tots els diumenges a la tarda** i **tot el dia el primer diumenge de mes**. El parany és que cada museu fixa les seves hores, i alguns dels grans demanen **reservar en línia encara que l'entrada sigui gratis**.",
     ruleTitle: "La norma de la ciutat: diumenges a la tarda i primer diumenge",
     rule: [
-      "Els museus de l'Ajuntament de Barcelona són gratuïts tots els diumenges a partir de les 15:00, i tot el dia (dins l'horari normal de diumenge) el primer diumenge de mes. Inclou el Museu d'Història de Barcelona (MUHBA, tots els centres excepte el Park Güell), el Museu de la Música, el Museu del Disseny, el Museu Frederic Marès, el Museu Blau (ciències naturals), el Museu Etnològic i de Cultures del Món, el Castell de Montjuïc i el Monestir de Pedralbes.",
-      "Dues excepcions: el **Museu Marítim** és gratis els diumenges a partir de les 15:00 i no té primer diumenge gratuït, i el **CCCB** és gratis els diumenges de 15:00 a 20:00 amb reserva en línia.",
+      "Els museus de l'Ajuntament de Barcelona són gratuïts tots els diumenges a partir de les 15:00, i tot el dia (dins l'horari normal de diumenge) el primer diumenge de mes. Inclou el Museu d'Història de Barcelona (MUHBA, tots els centres excepte el Park Güell), el Museu de la Música, el Museu del Disseny, el Museu Frederic Marès, el Museu Blau (ciències naturals), el Museu Etnològic i de Cultures del Món, el Castell de Montjuïc, el Monestir de Pedralbes, el Jardí Botànic i el Centre Martorell.",
+      `El primer diumenge, la [llista de l'Ajuntament](${CITY_LIST_URL}) hi afegeix el MNAC, el Pavelló Mies van der Rohe, el Museu Olímpic i de l'Esport i el Picasso, i Foto Colectania d'11:00 a 15:00.`,
+      "Dues excepcions: el **Museu Marítim** és gratis els diumenges a partir de les 15:00 i no té primer diumenge gratuït, i el **CCCB** i el **Museu del Disseny** només són gratis els diumenges de 15:00 a 20:00, el CCCB amb reserva en línia.",
     ],
     tableCaption: "Els grans museus: quan és gratis",
     headers: ["Museu", "Gratis", "Cal reservar?", "Entrada general"],
@@ -222,7 +231,7 @@ const COPY: Record<Locale, T> = {
     big: [
       "**Museu Picasso:** a més del primer diumenge, és gratis els dijous de 16:00 a 19:00 de finals de setembre a finals de març; a la primavera i a l'estiu la franja passa a dijous, divendres i dissabte de 19:00 a 21:00. Els menors de 18 anys sempre hi entren gratis.",
       "**MACBA:** gratis a partir de les 18:00 tots els dijous, divendres i dissabtes i tot el primer diumenge; els menors de 16 sempre hi entren gratis. Tanca els dimarts.",
-      "**MNAC:** gratis tots els dissabtes a partir de les 15:00 i el primer diumenge, amb reserva en línia; els menors de 16 i els majors de 65 de la UE sempre hi entren gratis.",
+      "**MNAC:** gratis tots els dissabtes a partir de les 15:00 i el primer diumenge, amb reserva en línia; els menors de 16 i els majors de 65 de la UE sempre hi entren gratis. D'octubre a abril tanca a les 15:00 els diumenges, així que el primer diumenge gratuït és al matí.",
       "**Fundació Joan Miró:** no té cap dia gratuït, però els menors de 12 i les persones a l'atur acreditades hi entren gratis, i l'Espai 13 és sempre gratuït.",
     ],
     freeTitle: "Qui hi entra sempre gratis",
