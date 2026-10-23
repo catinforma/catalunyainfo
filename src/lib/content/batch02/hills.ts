@@ -233,7 +233,15 @@ export const MONTJUIC: B2Article = {
 /* Tibidabo                                                                   */
 /* ========================================================================== */
 
+// Re-checked 23 Oct 2026 on tibidabo.cat (fares, hours, how to get there)
+// and TMB (Tramvia Blau still closed, no reopening date): funicular fares,
+// box-office discounts and parking added (research_notes/page1/castanyada_outings.md).
+// The Sagrat Cor lift and December hours were not re-read that day. Montjuïc
+// keeps its own date.
+const TIBIDABO_VERIFIED = "2026-10-23";
+
 const TIBIDABO_SOURCES: B2Source[] = [
+  { name: "Tibidabo — com arribar-hi", url: "https://www.tibidabo.cat/ca/planifica-la-visita/com-arribar", publisher: "Parc d'Atraccions Tibidabo (BSM)" },
   { name: "Tibidabo — tarifes", url: "https://www.tibidabo.cat/ca/planifica-la-visita/tarifes", publisher: "Parc d'Atraccions Tibidabo (BSM)" },
   { name: "Tibidabo — horaris", url: "https://www.tibidabo.cat/ca/planifica-la-visita/horaris", publisher: "Parc d'Atraccions Tibidabo (BSM)" },
   { name: "Cuca de Llum", url: "https://tibidabo.cat/en/funicular/cuca-de-llum", publisher: "Parc d'Atraccions Tibidabo (BSM)" },
@@ -245,7 +253,7 @@ const TIBIDABO_META: Record<Locale, Meta> = {
   ca: {
     path: "guies/tibidabo-parc-atraccions-com-arribar",
     title: "Tibidabo: parc d'atraccions, Sagrat Cor i com arribar-hi",
-    seoTitle: "Tibidabo: horaris, preus i com arribar-hi",
+    seoTitle: "Tibidabo: entrades, calendari i com pujar-hi en funicular",
     seoDescription:
       "El parc del Tibidabo obre els caps de setmana a la tardor (39 €). Com pujar-hi: FGC, bus 196 i la Cuca de Llum; el Tramvia Blau és tancat per obres.",
     excerpt: "Quan obre el parc del Tibidabo, quant costa, com s'hi puja ara que el Tramvia Blau és tancat i què hi ha al Sagrat Cor, amb dades oficials.",
@@ -253,7 +261,7 @@ const TIBIDABO_META: Record<Locale, Meta> = {
   es: {
     path: "guias/tibidabo-parque-atracciones-como-llegar",
     title: "Tibidabo: parque de atracciones, Sagrado Corazón y cómo llegar",
-    seoTitle: "Tibidabo: horarios, precios y cómo llegar",
+    seoTitle: "Tibidabo: entradas, calendario y cómo subir en funicular",
     seoDescription:
       "El parque del Tibidabo abre los fines de semana en otoño (39 €). Cómo subir: FGC, bus 196 y la Cuca de Llum; el Tramvia Blau está cerrado por obras.",
     excerpt: "Cuándo abre el parque del Tibidabo, cuánto cuesta, cómo se sube ahora que el Tramvia Blau está cerrado y qué hay en el Sagrado Corazón, con datos oficiales.",
@@ -261,9 +269,9 @@ const TIBIDABO_META: Record<Locale, Meta> = {
   en: {
     path: "guides/tibidabo-amusement-park-how-to-get-there",
     title: "Tibidabo: amusement park, Sagrat Cor and how to get there",
-    seoTitle: "Tibidabo: opening days, prices and how to get there",
+    seoTitle: "Tibidabo tickets, opening days and how to get there",
     seoDescription:
-      "Tibidabo park opens at weekends in autumn (€39). Getting up: FGC, bus 196 and the Cuca de Llum funicular; the Tramvia Blau tram is closed for works.",
+      "Tibidabo tickets from €39 (funicular included), autumn opening days, Cuca de Llum fares, FGC + bus 196, discounts and parking. Tramvia Blau closed.",
     excerpt: "When Tibidabo amusement park opens, what it costs, how to get up now the Tramvia Blau is closed, and the Sagrat Cor church at the top, from official sources.",
   },
 };
@@ -271,6 +279,9 @@ const TIBIDABO_META: Record<Locale, Meta> = {
 type TT = {
   lead: string; openTitle: string; open: string[];
   priceCaption: string; priceHeaders: string[]; priceRows: string[][]; priceNote: string;
+  funicularTitle: string; funicular: string[];
+  discountsTitle: string; discounts: string[];
+  parkingTitle: string; parking: string[];
   getTitle: string; get: string[];
   churchTitle: string; church: string[];
   faq: { question: string; answer: string }[]; note: string;
@@ -278,7 +289,7 @@ type TT = {
 
 const TIBIDABO_COPY: Record<Locale, TT> = {
   en: {
-    lead: "Tibidabo is the summit of the Collserola ridge above Barcelona, with a century-old **amusement park** and the **Sagrat Cor** church on top. Outside summer the park opens on **weekends and holidays only**, so check the calendar before you go.",
+    lead: "A Tibidabo amusement-park ticket costs **€39** (over 120 cm) and includes the **Cuca de Llum** funicular; in autumn the full park opens on **weekends and public holidays only**. To get up, take the FGC L7 to Avinguda Tibidabo, then **bus 196** (the Tramvia Blau is closed for works) to Plaça Doctor Andreu and the funicular.",
     openTitle: "When it opens",
     open: [
       "In October and November 2026 the full park opens on **weekends and public holidays**, roughly from 11:00 until 19:00 or 21:00 depending on the day. On weekdays it is closed, but the **Panoramic Area** at the top, with the oldest rides, stays open (11:00–18:00 in October, 11:00–17:00 in November).",
@@ -290,7 +301,20 @@ const TIBIDABO_COPY: Record<Locale, TT> = {
       ["Amusement park", "€39", "€15.50", "€11.70"],
       ["Emblematic rides pass (Panoramic Area)", "€21.50", "€11.80", "€9.10"],
     ],
-    priceNote: "Under 90 cm free. Single rides €4. All tickets include the Cuca de Llum funicular and the TibiBus shuttles. From tibidabo.cat, 12 October 2026.",
+    priceNote: "Under 90 cm free. Single rides €4. All tickets include the Cuca de Llum funicular and the TibiBus shuttles. From tibidabo.cat, 23 October 2026.",
+    discountsTitle: "Discounts on the €39 ticket",
+    discounts: [
+      "At the box office, not online, the park takes 20% off with the Barcelona Card (€31.20) or an ISIC card, 35% off with a Zoo de Barcelona ticket (€25.35), two for one with the Carnet Jove, and €31.20 with a large-family or single-parent card; the Barcelona Card Family gets in free. Most of these discounts run until 5 January 2027.",
+    ],
+    funicularTitle: "Tibidabo funicular (Cuca de Llum): fares and times",
+    funicular: [
+      "On its own the funicular costs **€13.50** return, **€6.75** for children aged 4 to 12, large or single-parent families and Gaudir Més holders, and **€3.95** for over-65s, disabled visitors, school groups and Targeta Rosa holders; under-4s ride free. It is included in every park ticket.",
+      "On park days it runs from 10:30 until 30 minutes after the park closes, at least every 15 minutes; on days when only the Panoramic Area is open, from 11:00 until 15 minutes after closing.",
+    ],
+    parkingTitle: "Parking at Tibidabo",
+    parking: [
+      "The park's car park at the summit charges €0.092 a minute or €18 a day, and the park recommends booking 24 hours ahead. A cheaper option is the Vall d'Hebron car park (€4.20 a day), from which the free TibiBus T2B runs up on park days.",
+    ],
     getTitle: "Getting up",
     get: [
       "**FGC train** (line L7) from Plaça Catalunya to Avinguda Tibidabo, then up to Plaça Doctor Andreu.",
@@ -305,13 +329,15 @@ const TIBIDABO_COPY: Record<Locale, TT> = {
     faq: [
       { question: "Is Tibidabo amusement park open on weekdays?", answer: "Not in autumn: the full park opens on weekends and holidays, while the Panoramic Area also opens on weekdays." },
       { question: "How much is a Tibidabo ticket?", answer: "€39 for visitors over 120 cm, €15.50 for 90–120 cm, €11.70 for over-60s; under 90 cm free. The panoramic-area pass costs €21.50." },
+      { question: "How much is the Tibidabo funicular?", answer: "€13.50 return on its own (€6.75 reduced, €3.95 for over-65s); it is included in every park ticket." },
+      { question: "Is there a discount with the Barcelona Card?", answer: "Yes, 20% off at the box office (€31.20); the Barcelona Card Family gets in free." },
       { question: "Is the Tramvia Blau running?", answer: "No, it is closed for modernisation works; bus 196 covers the route." },
       { question: "How do I get to Tibidabo by public transport?", answer: "FGC to Avinguda Tibidabo, bus 196 to Plaça Doctor Andreu, then the Cuca de Llum funicular to the top." },
     ],
     note: "Opening days change through the year: check the official calendar for your date.",
   },
   es: {
-    lead: "El Tibidabo es la cima de la sierra de Collserola sobre Barcelona, con un **parque de atracciones** centenario y el templo del **Sagrado Corazón** arriba. Fuera del verano el parque abre **solo fines de semana y festivos**, así que mira el calendario antes de ir.",
+    lead: "La entrada al parque de atracciones del Tibidabo cuesta **39 €** (más de 120 cm) e incluye el funicular **Cuca de Llum**; en otoño el parque completo abre **solo fines de semana y festivos**. Para subir, FGC L7 hasta Avinguda Tibidabo, **bus 196** (el Tramvia Blau está cerrado por obras) hasta la plaza Doctor Andreu y funicular.",
     openTitle: "Cuándo abre",
     open: [
       "En octubre y noviembre de 2026 el parque completo abre **fines de semana y festivos**, aproximadamente de 11:00 a 19:00 o 21:00 según el día. Entre semana está cerrado, pero la **Zona Panorámica** de arriba, con las atracciones más antiguas, sigue abierta (de 11:00 a 18:00 en octubre, de 11:00 a 17:00 en noviembre).",
@@ -323,7 +349,20 @@ const TIBIDABO_COPY: Record<Locale, TT> = {
       ["Parque de atracciones", "39 €", "15,50 €", "11,70 €"],
       ["Pase de atracciones emblemáticas (Zona Panorámica)", "21,50 €", "11,80 €", "9,10 €"],
     ],
-    priceNote: "Menos de 90 cm, gratis. Atracción suelta, 4 €. Todas las entradas incluyen el funicular Cuca de Llum y los TibiBus. De tibidabo.cat, 12 de octubre de 2026.",
+    priceNote: "Menos de 90 cm, gratis. Atracción suelta, 4 €. Todas las entradas incluyen el funicular Cuca de Llum y los TibiBus. De tibidabo.cat, 23 de octubre de 2026.",
+    discountsTitle: "Descuentos sobre la entrada de 39 €",
+    discounts: [
+      "En taquilla, no en línea, el parque descuenta un 20 % con la Barcelona Card (31,20 €) o el carnet ISIC, un 35 % con una entrada del Zoo de Barcelona (25,35 €), dos por uno con el Carnet Jove y deja la entrada en 31,20 € con el carnet de familia numerosa o monoparental; con la Barcelona Card Family se entra gratis. La mayoría de estos descuentos valen hasta el 5 de enero de 2027.",
+    ],
+    funicularTitle: "Funicular del Tibidabo (Cuca de Llum): precio y horario",
+    funicular: [
+      "Solo, el funicular cuesta **13,50 €** ida y vuelta, **6,75 €** para niños de 4 a 12 años, familias numerosas o monoparentales y titulares de Gaudir Més, y **3,95 €** para mayores de 65, personas con discapacidad, grupos escolares y titulares de la Targeta Rosa; los menores de 4 años no pagan. Está incluido en todas las entradas del parque.",
+      "Los días de parque funciona de 10:30 hasta 30 minutos después del cierre, como mínimo cada 15 minutos; los días en que solo abre la Zona Panorámica, de 11:00 hasta 15 minutos después del cierre.",
+    ],
+    parkingTitle: "Aparcar en el Tibidabo",
+    parking: [
+      "El aparcamiento del parque, en la cima, cuesta 0,092 € el minuto o 18 € el día, y el parque recomienda reservar con 24 horas. Más barato es el aparcamiento de la Vall d'Hebron (4,20 € el día), desde donde sube el TibiBus T2B gratuito los días de parque.",
+    ],
     getTitle: "Cómo subir",
     get: [
       "**Tren de FGC** (línea L7) de plaza Catalunya a Avinguda Tibidabo, y después hasta la plaza Doctor Andreu.",
@@ -338,13 +377,15 @@ const TIBIDABO_COPY: Record<Locale, TT> = {
     faq: [
       { question: "¿Abre el Tibidabo entre semana?", answer: "No en otoño: el parque completo abre fines de semana y festivos, y la Zona Panorámica también entre semana." },
       { question: "¿Cuánto cuesta la entrada al Tibidabo?", answer: "39 € más de 120 cm, 15,50 € de 90 a 120 cm, 11,70 € mayores de 60; menos de 90 cm, gratis. El pase de la Zona Panorámica cuesta 21,50 €." },
+      { question: "¿Cuánto cuesta el funicular del Tibidabo?", answer: "13,50 € ida y vuelta por separado (6,75 € reducido, 3,95 € mayores de 65); está incluido en todas las entradas del parque." },
+      { question: "¿Hay descuento con la Barcelona Card?", answer: "Sí, un 20 % en taquilla (31,20 €); con la Barcelona Card Family se entra gratis." },
       { question: "¿Funciona el Tramvia Blau?", answer: "No, está cerrado por obras de modernización; el bus 196 cubre el recorrido." },
       { question: "¿Cómo se llega al Tibidabo en transporte público?", answer: "FGC hasta Avinguda Tibidabo, bus 196 hasta la plaza Doctor Andreu y el funicular Cuca de Llum hasta arriba." },
     ],
     note: "Los días de apertura cambian a lo largo del año: consulta el calendario oficial para tu fecha.",
   },
   ca: {
-    lead: "El Tibidabo és el cim de la serra de Collserola sobre Barcelona, amb un **parc d'atraccions** centenari i el temple del **Sagrat Cor** a dalt. Fora de l'estiu el parc obre **només caps de setmana i festius**, així que mira el calendari abans d'anar-hi.",
+    lead: "L'entrada al parc d'atraccions del Tibidabo costa **39 €** (més de 120 cm) i inclou el funicular **Cuca de Llum**; a la tardor el parc complet obre **només caps de setmana i festius**. Per pujar-hi, FGC L7 fins a Avinguda Tibidabo, **bus 196** (el Tramvia Blau és tancat per obres) fins a la plaça Doctor Andreu i funicular.",
     openTitle: "Quan obre",
     open: [
       "L'octubre i el novembre de 2026 el parc complet obre **caps de setmana i festius**, aproximadament d'11:00 a 19:00 o 21:00 segons el dia. Entre setmana és tancat, però la **Zona Panoràmica** de dalt, amb les atraccions més antigues, continua oberta (d'11:00 a 18:00 a l'octubre, d'11:00 a 17:00 al novembre).",
@@ -356,7 +397,20 @@ const TIBIDABO_COPY: Record<Locale, TT> = {
       ["Parc d'atraccions", "39 €", "15,50 €", "11,70 €"],
       ["Passi d'atraccions emblemàtiques (Zona Panoràmica)", "21,50 €", "11,80 €", "9,10 €"],
     ],
-    priceNote: "Menys de 90 cm, gratis. Atracció solta, 4 €. Totes les entrades inclouen el funicular Cuca de Llum i els TibiBus. De tibidabo.cat, 12 d'octubre de 2026.",
+    priceNote: "Menys de 90 cm, gratis. Atracció solta, 4 €. Totes les entrades inclouen el funicular Cuca de Llum i els TibiBus. De tibidabo.cat, 23 d'octubre de 2026.",
+    discountsTitle: "Descomptes sobre l'entrada de 39 €",
+    discounts: [
+      "A la taquilla, no en línia, el parc descompta un 20 % amb la Barcelona Card (31,20 €) o el carnet ISIC, un 35 % amb una entrada del Zoo de Barcelona (25,35 €), dos per un amb el Carnet Jove i deixa l'entrada en 31,20 € amb el carnet de família nombrosa o monoparental; amb la Barcelona Card Family s'hi entra gratis. La majoria d'aquests descomptes valen fins al 5 de gener de 2027.",
+    ],
+    funicularTitle: "Funicular del Tibidabo (Cuca de Llum): preu i horari",
+    funicular: [
+      "Sol, el funicular costa **13,50 €** anada i tornada, **6,75 €** per a infants de 4 a 12 anys, famílies nombroses o monoparentals i titulars de Gaudir Més, i **3,95 €** per a majors de 65, persones amb discapacitat, grups escolars i titulars de la Targeta Rosa; els menors de 4 anys no paguen. És inclòs a totes les entrades del parc.",
+      "Els dies de parc funciona de 10:30 fins a 30 minuts després del tancament, com a mínim cada 15 minuts; els dies que només obre la Zona Panoràmica, d'11:00 fins a 15 minuts després del tancament.",
+    ],
+    parkingTitle: "Aparcar al Tibidabo",
+    parking: [
+      "L'aparcament del parc, al cim, costa 0,092 € el minut o 18 € el dia, i el parc recomana reservar amb 24 hores. Més barat és l'aparcament de la Vall d'Hebron (4,20 € el dia), des d'on puja el TibiBus T2B gratuït els dies de parc.",
+    ],
     getTitle: "Com pujar-hi",
     get: [
       "**Tren de FGC** (línia L7) de plaça Catalunya a Avinguda Tibidabo, i després fins a la plaça Doctor Andreu.",
@@ -371,6 +425,8 @@ const TIBIDABO_COPY: Record<Locale, TT> = {
     faq: [
       { question: "Obre el Tibidabo entre setmana?", answer: "No a la tardor: el parc complet obre caps de setmana i festius, i la Zona Panoràmica també entre setmana." },
       { question: "Quant costa l'entrada al Tibidabo?", answer: "39 € més de 120 cm, 15,50 € de 90 a 120 cm, 11,70 € majors de 60; menys de 90 cm, gratis. El passi de la Zona Panoràmica costa 21,50 €." },
+      { question: "Quant costa el funicular del Tibidabo?", answer: "13,50 € anada i tornada per separat (6,75 € reduït, 3,95 € majors de 65); és inclòs a totes les entrades del parc." },
+      { question: "Hi ha descompte amb la Barcelona Card?", answer: "Sí, un 20 % a la taquilla (31,20 €); amb la Barcelona Card Family s'hi entra gratis." },
       { question: "Funciona el Tramvia Blau?", answer: "No, és tancat per obres de modernització; el bus 196 cobreix el recorregut." },
       { question: "Com s'hi arriba al Tibidabo en transport públic?", answer: "FGC fins a Avinguda Tibidabo, bus 196 fins a la plaça Doctor Andreu i el funicular Cuca de Llum fins a dalt." },
     ],
@@ -382,11 +438,14 @@ function tibidaboBody(locale: Locale) {
   const t = TIBIDABO_COPY[locale];
   return [
     lead(t.lead),
-    callout("official", verifiedLine(locale, VERIFIED), t.note),
+    callout("official", verifiedLine(locale, TIBIDABO_VERIFIED), t.note),
     ...h2(t.openTitle, ...t.open),
     table(t.priceCaption, t.priceHeaders, t.priceRows, t.priceNote),
+    ...h2(t.discountsTitle, ...t.discounts),
     ...h2(t.getTitle),
     list(...t.get),
+    ...h2(t.funicularTitle, ...t.funicular),
+    ...h2(t.parkingTitle, ...t.parking),
     ...h2(t.churchTitle, ...t.church),
     faq(t.faq),
     ...b2Related(["montjuic", "museums", "transport"], locale),
@@ -420,7 +479,7 @@ export const TIBIDABO: B2Article = {
     es: "La cima del Tibidabo, en la sierra de Collserola.",
     en: "The summit of Tibidabo on the Collserola ridge.",
   },
-  verifiedAt: VERIFIED,
+  verifiedAt: TIBIDABO_VERIFIED,
   publishedAt: "2026-10-13T00:30:00+02:00",
   editions: Object.fromEntries(
     (["ca", "es", "en"] as Locale[]).map((locale) => [locale, { ...TIBIDABO_META[locale], blocks: tibidaboBody(locale) }]),
