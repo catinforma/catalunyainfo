@@ -104,11 +104,20 @@ const PROFILE_HEADERS: Record<string, string[]> = {
   en: ["Profile", "Look at first"],
 };
 
+// T-casual fares for zones 1-7: ATM's T-casual page, visible table, read
+// 23 Oct 2026 (the same page keeps the 2025 fares in a collapsed accordion).
+// Only zone 1 is in TICKETS, which drives the calculator.
+const ZONE_FARES: string[][] = [["1", "13,00 €"], ["2", "25,50 €"], ["3", "34,70 €"], ["4", "44,65 €"], ["5", "51,20 €"], ["6", "54,45 €"], ["7", "57,60 €"]];
+
 export const TRANSPORT: B2Article = {
   key: "transport",
   entryKey: "guide-barcelona-transport-passes",
   categoryKey: "public-services",
-  sources: TMB_SOURCES,
+  sources: [
+    ...TMB_SOURCES,
+    { name: "T-casual", url: "https://www.atm.cat/en/titols-tarifes/titols-i-tarifes/t-casual", publisher: "Autoritat del Transport Metropolità" },
+    { name: "Mapa de zones tarifàries", url: "https://www.tmb.cat/ca/tarifes-metro-bus-barcelona/mapa-zones", publisher: "TMB" },
+  ],
   heroKey: "b2-transport-metro-barcelona",
   secondaryKey: "b2-transport-tram-barcelona",
   secondaryAlt: {
@@ -138,9 +147,9 @@ export const TRANSPORT: B2Article = {
       path: "guies/targetes-transport-barcelona",
       title:
         "T-casual, T-dia, T-usual o Hola Barcelona: quina targeta de transport et convé?",
-      seoTitle: "Targetes transport Barcelona 2026: T-casual o Hola BCN?",
+      seoTitle: "T-casual Barcelona 2026: preu per zones i Hola BCN",
       seoDescription:
-        "Compara T-casual, T-dia, T-usual i Hola Barcelona segons els dies de viatge, els trajectes i si faràs servir el metro de l'aeroport.",
+        "T-casual: 13 € (1 zona), 25,50 € (2) i 34,70 € (3). On no val, transbordaments i quan surt més a compte la T-dia o la Hola Barcelona.",
       excerpt:
         "La targeta pensada per a turistes no sempre és la més barata. Compara els títols segons els dies, els trajectes i l'aeroport.",
       blocks: [
@@ -154,6 +163,14 @@ export const TRANSPORT: B2Article = {
           "Si faràs pocs trajectes, compara primer la T-casual. Si vols viatges il·limitats durant 24 hores, la T-dia és especialment interessant. Per a estades llargues, la T-usual pot tenir molt sentit. La Hola Barcelona prioritza la simplicitat i inclou el metro de l'aeroport.",
         ),
         { type: "transportPasses" } as Block,
+        ...h2(
+          "T-casual: preu per zones",
+          "La T-casual val per a **deu viatges integrats** en tots els modes de transport. Costa **13 €** en una zona, **25,50 €** en dues i **34,70 €** en tres.",
+        ),
+        table("Preu de la T-casual per zones, 2026", ["Zones", "Preu (10 viatges)"], ZONE_FARES, "Font: ATM, Autoritat del Transport Metropolità. Barcelona i el Prat de Llobregat són a la zona 1."),
+        ...paras(
+          "**Quantes zones necessites?** Compta el sector tarifari d'on surts i el d'arribada: per anar de Barcelona (zona 1) a Sabadell (zona 2C) cal un títol de 2 zones, segons TMB. Cada viatge permet fins a 3 transbordaments en 75 minuts en una zona, 15 minuts més per cada zona addicional. La T-casual en targeta de cartró T-mobilitat costa 1 € més.",
+        ),
         ...h2(
           "T-casual: 10 viatges",
           "La T-casual costa **13 € per una zona** i permet deu viatges.",
@@ -210,14 +227,14 @@ export const TRANSPORT: B2Article = {
       path: "guias/tarjetas-transporte-barcelona",
       title:
         "T-casual, T-dia, T-usual o Hola Barcelona: qué tarjeta de transporte te conviene",
-      seoTitle: "Tarjetas transporte Barcelona 2026: ¿T-casual u Hola BCN?",
+      seoTitle: "T-casual Barcelona 2026: precio por zonas y Hola BCN",
       seoDescription:
-        "Compara T-casual, T-dia, T-usual y Hola Barcelona según los días de viaje, los trayectos y si usarás el metro del aeropuerto.",
+        "T-casual: 13 € (1 zona), 25,50 € (2) y 34,70 € (3). Dónde no vale, transbordos y cuándo compensa más la T-dia o la Hola Barcelona.",
       excerpt:
         "La tarjeta dirigida a turistas no siempre es la más barata. Compara los títulos según días, trayectos y aeropuerto.",
       blocks: [
         lead(
-          "Barcelona tiene varias opciones de transporte y la tarjeta dirigida a turistas **no siempre es automáticamente la más barata**.",
+          "La T-casual cuesta 13 € en una zona, 25,50 € en dos y 34,70 € en tres, y da diez viajes integrados en metro, bus, tranvía y tren. No vale en las estaciones Aeroport T1 y T2 de la L9 Sud, y la tarjeta para turistas, la Hola Barcelona, **no siempre es la más barata**.",
         ),
         ...paras(
           "En 2026, la T-casual de una zona cuesta 13 €, la T-dia 12 € y la T-usual 22,80 €. Hola Barcelona ofrece viajes ilimitados durante periodos consecutivos de 24 a 120 horas.",
@@ -228,6 +245,14 @@ export const TRANSPORT: B2Article = {
           "T-casual para pocos desplazamientos; T-dia para un día de uso intensivo; T-usual para estancias largas; Hola Barcelona para quien valore especialmente los viajes ilimitados y el metro del aeropuerto.",
         ),
         { type: "transportPasses" } as Block,
+        ...h2(
+          "T-casual: precio por zonas",
+          "La T-casual sirve para **diez viajes integrados** en todos los modos de transporte. Cuesta **13 €** en una zona, **25,50 €** en dos y **34,70 €** en tres.",
+        ),
+        table("Precio de la T-casual por zonas, 2026", ["Zonas", "Precio (10 viajes)"], ZONE_FARES, "Fuente: ATM, Autoritat del Transport Metropolità. Barcelona y El Prat de Llobregat están en la zona 1."),
+        ...paras(
+          "**¿Cuántas zonas necesitas?** Cuenta el sector tarifario de salida y el de llegada: para ir de Barcelona (zona 1) a Sabadell (zona 2C) hace falta un título de 2 zonas, según TMB. Cada viaje permite hasta 3 transbordos en 75 minutos en una zona, 15 minutos más por cada zona adicional. La T-casual en tarjeta de cartón T-mobilitat cuesta 1 € más.",
+        ),
         ...h2(
           "T-casual: diez viajes",
           "La **T-casual** cuesta 13 € en una zona e incluye diez viajes, pero no es válida en las estaciones Aeroport T1 y Aeroport T2 de L9 Sud.",
