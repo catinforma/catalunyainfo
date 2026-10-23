@@ -373,6 +373,38 @@ country and language.
 
 **Outcome:** _pending_
 
+## 2026-10-23 — Page-1 sprint: titles and bodies for the queries each page loses
+
+Branch `sprint/2026-10-23-page1`. Baseline: Search Console 26 Sep – 22 Oct
+(`reports/growth-graph/`, `scripts/growth-pull.py`): 74 of 174 articles on page 1
+(page and its top query at position 10 or better), 32 almost, 25 on page 2,
+27 further, 16 with no impressions. Research: `research_notes/page1/*.md`.
+
+**Changed together** (one release, so read per page, not per change):
+
+| Page | Title change | Body change | Query and position before |
+| --- | --- | --- | --- |
+| Calendar 2027 ES/EN | "12 festivos" / "dates and long weekends" | BOE national list, national vs Catalan, FAQ incl. 30 Oct | calendario laboral 2027 43, festivos catalunya 2027 9, 30 octubre festivo 7.5 |
+| School calendar | "2026-2027" in all three | 2025-2026 archive, CEMB source | calendario escolar 25, calendario escolar 2025 42 |
+| Tourist tax | "Barcelona i/y Catalunya: tarifes/tarifas i calculadora"; EN "(city tax)" | headings phrased as the question | tasa turistica barcelona 22, city tax barcelona 38-47 |
+| Airport ES/CA/EN | "autobús" (ES/CA), "bus" (EN) | bus 46, night buses, answer-first lead | autobus aeropuerto barcelona centro 41, airport to city centre 60-69 |
+| ZBE ES/EN | ES "Autorización ZBE…: cómo pedirla"; EN "(LEZ)" | hours, fees, day permits, fine | como pedir autorización 11, lez barcelona 49 |
+| T-casual CA/ES | "preu/precio per/por zones" | zone 1-7 table | t casual 24, t casual 3 zonas precio 28 |
+| Tibidabo | "entradas / tickets … funicular" | funicular fares, discounts, parking | tibidabo funicular 50, tibidabo tickets 25 |
+| Núria | "horaris / horarios / timetable" | low-season timetable, single fares | cremallera de nuria horaris 86 |
+| Free museums | "diumenges i primer diumenge" etc. | full city list | sunday free museums barcelona 47 |
+| Castanyada | "quan és, on anar-hi" | only dated 2026 events (P0 fix) | castanyada 60, castanyeres 64 |
+| Metro hours | none (frozen to 14 Nov) | today's hours block | a qué hora cierra el metro hoy 10.4 |
+
+Site-wide in the same release: related cards topped up from the category
+(articles linked from 2-4 pages before), seasonal homepage tools.
+
+**Measure on 20 Nov** (28 days): per page, position and clicks for the queries
+above; the count of articles on page 1 against 74. Castanyada and school
+calendar change with the season, so read their queries, not their totals.
+
+**Outcome:** _pending_
+
 ## Candidates not yet run
 
 Recorded so they are not lost, and so they are not all started at once.
