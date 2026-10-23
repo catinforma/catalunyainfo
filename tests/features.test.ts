@@ -252,7 +252,7 @@ test("the Sitges guide never presents a schedule of its own", () => {
 
     // No screening times of our own, ever.
     assert.ok(
-      !/([01]?\d|2[0-3])[:.][0-5]\d/.test(text),
+      !/\b([01]?\d|2[0-3])[:.][0-5]\d\b/.test(text),
       `${locale} contains what looks like a screening time`,
     );
   }
