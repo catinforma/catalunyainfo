@@ -2,7 +2,7 @@ import Link from "next/link";
 
 import { daysBetween, holidayOn, isCovered, nextHolidayAfter, shortDate, todayInCatalonia } from "@/lib/content/holidays/calendar";
 import { READ_AT } from "@/lib/content/mushrooms/conditions";
-import { ORDER, PATHS, type ToolKey } from "@/lib/content/home-tools";
+import { PATHS, toolsFor, type ToolKey } from "@/lib/content/home-tools";
 import { hrefFor } from "@/lib/content/repository";
 import { getMessages } from "@/lib/i18n";
 import type { Locale } from "@/lib/i18n/config";
@@ -48,7 +48,7 @@ export function HomeTools({ locale }: { locale: Locale }) {
         <h2 id="home-tools">{t.title}</h2>
       </div>
       <ul className="ci-tools">
-        {ORDER[locale].map((key) => {
+        {toolsFor(locale, todayInCatalonia()).map((key) => {
           const live = liveLine(key, locale);
           return (
             <li key={key}>

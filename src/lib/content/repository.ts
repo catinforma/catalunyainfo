@@ -568,7 +568,7 @@ export async function resolvePath(
         }
       : null;
 
-    const related =
+    const chosen =
       relationRows.length > 0
         ? await summariesByEntryIds(
             locale,
@@ -576,6 +576,19 @@ export async function resolvePath(
             preview,
           )
         : [];
+    const related =
+      chosen.length < RELATED_SHOWN
+        ? [
+            ...chosen,
+            ...(await relatedFill(
+              locale,
+              entryId,
+              [entryId, ...chosen.map((s) => s.entryId)],
+              RELATED_SHOWN - chosen.length,
+              preview,
+            )),
+          ]
+        : chosen;
 
     const translations: Partial<Record<Locale, string>> = {};
     for (const t of translationRows) {
@@ -706,6 +719,64 @@ export async function summariesByEntryIds(
       const found = byId.get(id);
       return found ? [found] : [];
     });
+  });
+}
+
+/** How many related cards an article shows (EntryArticle renders four). */
+const RELATED_SHOWN = 4;
+
+/**
+ * Tops up an article's hand-picked related entries from its own category, then
+ * its own entry type.
+ *
+ * Most pages were published with two or three relations, so about half the
+ * site was linked from fewer than five other pages and Google crawled some of
+ * them rarely or never (Search Console, 23 Oct 2026: "Discovered - currently
+ * not indexed"). The order is a hash of both ids rather than recency, so every
+ * entry of a category gets picked by some of its siblings instead of the
+ * newest few being picked by all of them; it is stable, so a page does not
+ * change its links on every render.
+ */
+async function relatedFill(
+  locale: Locale,
+  entryId: string,
+  exclude: string[],
+  count: number,
+  preview: boolean,
+): Promise<EntrySummary[]> {
+  const db = getDb();
+  if (!db || count <= 0) return [];
+
+  return safeRead("relatedFill", [], async () => {
+    const self = db
+      .select({ type: entries.type, categoryId: entries.primaryCategoryId })
+      .from(entries)
+      .where(eq(entries.id, entryId));
+    const [own] = await self;
+    if (!own) return [];
+
+    const sameCategory = own.categoryId
+      ? eq(entries.primaryCategoryId, own.categoryId)
+      : sql`false`;
+    const rows = await summaryQuery(db, locale)
+      .where(
+        and(
+          visibilityWhere(locale, preview),
+          eq(entryTranslations.noindex, false),
+          ne(entries.type, "page"),
+          sql`${entries.id} not in (${sql.join(
+            exclude.map((id) => sql`${id}::uuid`),
+            sql`, `,
+          )})`,
+          or(sameCategory, eq(entries.type, own.type)),
+        ),
+      )
+      .orderBy(
+        desc(sql`(${sameCategory})`),
+        sql`md5(${entries.id}::text || ${entryId})`,
+      )
+      .limit(count);
+    return rows.map((row) => mapSummary(row as SummaryRow, locale));
   });
 }
 

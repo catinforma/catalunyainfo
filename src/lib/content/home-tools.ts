@@ -6,7 +6,7 @@ import type { Locale } from "@/lib/i18n/config";
  * publisher that owns it; a renamed slug must not leave a dead homepage link.
  */
 
-export type ToolKey = "holiday" | "weekend" | "localHolidays" | "transport" | "tax" | "mushrooms" | "reservoirs" | "school" | "airport" | "museums" | "monuments" | "cards" | "voting" | "barcelonaHub" | "clockChange" | "beaches";
+export type ToolKey = "holiday" | "weekend" | "localHolidays" | "transport" | "tax" | "mushrooms" | "reservoirs" | "school" | "airport" | "museums" | "monuments" | "cards" | "voting" | "barcelonaHub" | "clockChange" | "beaches" | "castanyada" | "shops" | "christmas" | "autumn" | "ski";
 
 export const PATHS: Record<ToolKey, Record<Locale, string>> = {
   holiday: {
@@ -89,6 +89,31 @@ export const PATHS: Record<ToolKey, Record<Locale, string>> = {
     es: "naturaleza/setas-cataluna-condiciones",
     en: "nature/mushroom-season-catalonia",
   },
+  castanyada: {
+    ca: "tradicions/castanyada-catalunya",
+    es: "tradiciones/castanyada-cataluna",
+    en: "traditions/castanyada-catalonia",
+  },
+  shops: {
+    ca: "guies/botigues-obertes-festius-catalunya",
+    es: "guias/tiendas-abiertas-festivos-cataluna",
+    en: "guides/shops-open-sundays-holidays-catalonia",
+  },
+  christmas: {
+    ca: "tradicions/mercats-de-nadal-catalunya",
+    es: "tradiciones/mercados-navidad-cataluna",
+    en: "traditions/christmas-markets-catalonia",
+  },
+  autumn: {
+    ca: "natura/colors-tardor-catalunya",
+    es: "naturaleza/colores-otono-cataluna",
+    en: "nature/fall-colors-catalonia",
+  },
+  ski: {
+    ca: "guies/estacions-esqui-catalunya",
+    es: "guias/estaciones-esqui-cataluna",
+    en: "guides/ski-resorts-catalonia",
+  },
 };
 
 /*
@@ -101,3 +126,30 @@ export const ORDER: Record<Locale, ToolKey[]> = {
   es: ["voting", "clockChange", "holiday", "school", "weekend", "localHolidays", "mushrooms", "reservoirs", "museums", "transport", "airport", "monuments", "cards", "barcelonaHub", "beaches", "tax"],
   en: ["barcelonaHub", "airport", "beaches", "monuments", "transport", "cards", "museums", "tax", "weekend", "holiday", "localHolidays", "school", "clockChange", "voting", "reservoirs", "mushrooms"],
 };
+
+/*
+ * Pages that matter only part of the year go first while they matter and
+ * leave the strip afterwards. Search Console, 23 Oct 2026: the Castanyada page
+ * ranked 60th for "castanyada" eight days before 31 October, and its Spanish
+ * edition had never been crawled; the homepage did not link it. Windows are
+ * month-day, inclusive, in Catalan time; a window whose start is after its end
+ * runs across New Year.
+ */
+export const SEASONAL: { key: ToolKey; from: string; to: string }[] = [
+  { key: "castanyada", from: "10-10", to: "11-01" },
+  { key: "christmas", from: "11-02", to: "01-06" },
+  { key: "shops", from: "10-20", to: "01-06" },
+  { key: "ski", from: "11-15", to: "04-15" },
+  { key: "autumn", from: "10-01", to: "11-30" },
+];
+
+function inWindow(monthDay: string, from: string, to: string): boolean {
+  return from <= to ? monthDay >= from && monthDay <= to : monthDay >= from || monthDay <= to;
+}
+
+/** The strip for one edition on one day (`today` as YYYY-MM-DD). */
+export function toolsFor(locale: Locale, today: string): ToolKey[] {
+  const monthDay = today.slice(5, 10);
+  const season = SEASONAL.filter((s) => inWindow(monthDay, s.from, s.to)).map((s) => s.key);
+  return [...season, ...ORDER[locale]];
+}
