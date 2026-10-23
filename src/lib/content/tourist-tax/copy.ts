@@ -83,9 +83,9 @@ export const COPY: Record<Locale, TaxCopy> = {
   ca: {
     path: "guies/taxa-turistica-barcelona-catalunya",
     title: "Taxa turística a Barcelona i Catalunya: quant pagaràs realment",
-    seoTitle: "Taxa turística Barcelona 2026-2027: preus i calculadora",
+    seoTitle: "Taxa turística Barcelona i Catalunya: tarifes i calculadora",
     seoDescription:
-      "Consulta la taxa turística actual de Barcelona i Catalunya, calcula quant pagaràs segons l'allotjament, les persones i les nits, i comprova les exempcions.",
+      "Quant és la taxa turística a Barcelona i Catalunya el 2026-2027: tarifa de la Generalitat més recàrrec, per allotjament i nit. Amb calculadora.",
     excerpt:
       "Quant costa realment la taxa turística segons on dorms, quantes persones tributen i quantes nits. Amb calculadora i tarifes oficials verificades.",
 
@@ -113,13 +113,13 @@ export const COPY: Record<Locale, TaxCopy> = {
       review: "1 de desembre de 2026",
     },
 
-    barcelonaTitle: "Quant costa actualment a Barcelona",
+    barcelonaTitle: "Quant és la taxa turística a Barcelona?",
     barcelona: [
       "A Barcelona l'import final suma dues quantitats: la **tarifa de la Generalitat** i el **recàrrec municipal de l'Ajuntament**.",
     ],
     barcelonaCaption: "Taxa turística a Barcelona, per persona i unitat d'estada",
 
-    restTitle: "Quant costa a la resta de Catalunya",
+    restTitle: "Quant és la taxa turística a la resta de Catalunya?",
     rest: [
       "Fora de Barcelona les tarifes autonòmiques són força més baixes. Però des de l'**1 d'octubre de 2026** set municipis ja cobren un recàrrec propi: **Castelldefels, Esplugues de Llobregat, l'Hospitalet de Llobregat, el Prat de Llobregat, Sabadell, Sant Cugat del Vallès i Sant Just Desvern**. En un hotel de 4 estrelles, per exemple, el recàrrec és igual que la tarifa autonòmica, de manera que la duplica.",
       "La taula següent mostra només la part autonòmica, que és el que pagues en qualsevol municipi que no tingui recàrrec. La llista de municipis amb recàrrec la publica l'Agència Tributària de Catalunya i pot créixer.",
@@ -207,9 +207,9 @@ export const COPY: Record<Locale, TaxCopy> = {
   es: {
     path: "guias/tasa-turistica-barcelona-cataluna",
     title: "Tasa turística en Barcelona y Cataluña: cuánto pagarás realmente",
-    seoTitle: "Tasa turística Barcelona 2026-2027: precios y calculadora",
+    seoTitle: "Tasa turística Barcelona y Cataluña: tarifas y calculadora",
     seoDescription:
-      "Consulta la tasa turística actual de Barcelona y Cataluña y calcula cuánto pagarás según alojamiento, personas, noches y fecha del viaje.",
+      "Cuánto es la tasa turística en Barcelona y Cataluña en 2026-2027: tarifa de la Generalitat más recargo, por alojamiento y noche. Con calculadora.",
     excerpt:
       "Cuánto cuesta realmente la tasa turística según dónde duermes, cuántas personas tributan y cuántas noches. Con calculadora y tarifas oficiales verificadas.",
 
@@ -237,13 +237,13 @@ export const COPY: Record<Locale, TaxCopy> = {
       review: "1 de diciembre de 2026",
     },
 
-    barcelonaTitle: "Tarifas actuales en Barcelona",
+    barcelonaTitle: "¿Cuánto es la tasa turística en Barcelona?",
     barcelona: [
       "En Barcelona el importe final suma dos cantidades: la **tarifa autonómica de la Generalitat** y el **recargo municipal del Ayuntamiento**.",
     ],
     barcelonaCaption: "Tasa turística en Barcelona, por persona y unidad de estancia",
 
-    restTitle: "¿Y fuera de Barcelona?",
+    restTitle: "¿Cuánto es la tasa turística en Cataluña fuera de Barcelona?",
     rest: [
       "Fuera de Barcelona las tarifas autonómicas son bastante más bajas. Pero desde el **1 de octubre de 2026** siete municipios ya cobran un recargo propio: **Castelldefels, Esplugues de Llobregat, L'Hospitalet de Llobregat, El Prat de Llobregat, Sabadell, Sant Cugat del Vallès y Sant Just Desvern**. En un hotel de 4 estrellas, por ejemplo, el recargo es igual que la tarifa autonómica, así que la duplica.",
       "La tabla siguiente muestra solo la parte autonómica, que es lo que pagas en cualquier municipio sin recargo. La lista de municipios con recargo la publica la Agència Tributària de Catalunya y puede crecer.",
@@ -331,9 +331,9 @@ export const COPY: Record<Locale, TaxCopy> = {
   en: {
     path: "guides/barcelona-catalonia-tourist-tax",
     title: "Barcelona tourist tax: what you'll actually pay",
-    seoTitle: "Barcelona tourist tax 2026-2027: rates & calculator",
+    seoTitle: "Barcelona tourist tax (city tax): rates and calculator",
     seoDescription:
-      "Check Barcelona and Catalonia tourist tax rates and calculate what you'll pay by accommodation type, guests, nights and travel date.",
+      "How much is the Barcelona city tax in 2026-2027? The regional rate plus the municipal surcharge, by accommodation and night. With a calculator.",
     excerpt:
       "What the tourist tax really costs, by where you stay, how many guests are liable and how many nights. With a calculator and verified official rates.",
 
@@ -361,13 +361,13 @@ export const COPY: Record<Locale, TaxCopy> = {
       review: "1 December 2026",
     },
 
-    barcelonaTitle: "Barcelona tourist tax rates",
+    barcelonaTitle: "How much is the city tax in Barcelona?",
     barcelona: [
       "In Barcelona the final amount is two figures added together: the **Catalonia-wide rate** and the **city council's municipal surcharge**.",
     ],
     barcelonaCaption: "Tourist tax in Barcelona, per liable guest per stay unit",
 
-    restTitle: "What if you stay elsewhere in Catalonia?",
+    restTitle: "Tourist tax elsewhere in Catalonia",
     rest: [
       "Regional rates are much lower outside Barcelona. But since **1 October 2026** seven municipalities have charged their own surcharge: **Castelldefels, Esplugues de Llobregat, L'Hospitalet de Llobregat, El Prat de Llobregat, Sabadell, Sant Cugat del Vallès and Sant Just Desvern**. In a four-star hotel, for example, the surcharge equals the regional rate, doubling it.",
       "The table below shows the regional part only, which is what you pay in any municipality without a surcharge. The Catalan Tax Agency publishes the list of municipalities with a surcharge, and it may grow.",
