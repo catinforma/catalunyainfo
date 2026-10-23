@@ -33,7 +33,12 @@ import {
  * site. The operator's site is aerobusbarcelona.es.
  */
 
-const VERIFIED = "2026-10-12";
+// Re-checked 23 Oct 2026 (research_notes/page1/airport_transport_zbe.md).
+// The L9 heading used to call the metro the cheapest option; the €2.90 TMB
+// single ticket is valid on bus 46, which serves both terminals. Line 46's
+// frequency and journey time are on no official page we could read, so the
+// guide gives its route, hours and fare only.
+const VERIFIED = "2026-10-23";
 
 const SOURCES: B2Source[] = [
   { name: "Aerobús — rates", url: "https://aerobusbarcelona.es/en/rates/", publisher: "Aerobús (Monbus)" },
@@ -66,6 +71,8 @@ const SOURCES: B2Source[] = [
   },
   { name: "Aerobús A1, city to T1", url: "https://aerobusbarcelona.es/en/lines-stops-and-schedules/line-a1-outbound/", publisher: "Aerobús (Monbus)" },
   { name: "Aerobús A2, city to T2", url: "https://aerobusbarcelona.es/en/lines-stops-and-schedules/line-a2-outbound/", publisher: "Aerobús (Monbus)" },
+  { name: "Bus 46 and the airport bus stops", url: "https://www.aena.es/en/josep-tarradellas-barcelona-el-prat/getting-there/bus.html", publisher: "Aena" },
+  { name: "TMB single ticket", url: "https://www.tmb.cat/en/barcelona-fares-metro-bus/single-ticket", publisher: "TMB" },
   {
     name: "Tarifes urbanes del taxi per al 2026",
     url: "https://taxi.amb.cat/es/imet/actualitat/noticies/detall/-/noticiataxi/tarifes-urbanes-del-taxi-per-al-2026/29760500/956832",
@@ -88,27 +95,27 @@ const META: Record<Locale, Copy> = {
   ca: {
     path: "guies/aeroport-barcelona-centre",
     title: "De l'aeroport del Prat al centre de Barcelona: metro, Aerobús, tren o taxi",
-    seoTitle: "Aeroport del Prat al centre: Aerobús, metro, tren, taxi",
+    seoTitle: "Aeroport de Barcelona al centre: autobús, metro i tren",
     seoDescription:
-      "Com anar de l'aeroport del Prat al centre de Barcelona: Aerobús (7,75 €), metro L9 (5,90 €), tren R2 Nord i taxi. Preus i horaris dels operadors.",
+      "Autobús de l'aeroport del Prat al centre de Barcelona: Aerobús 7,75 €, bus 46 amb bitllet senzill, metro L9 5,90 €, tren R2 Nord i taxi. Preus oficials.",
     excerpt:
       "Les quatre maneres d'arribar de l'aeroport al centre de Barcelona, amb els preus i els temps que publiquen els operadors, i quina triar segons on vas i quin bitllet tens.",
   },
   es: {
     path: "guias/aeropuerto-barcelona-centro",
     title: "Del aeropuerto de El Prat al centro de Barcelona: metro, Aerobús, tren o taxi",
-    seoTitle: "Aeropuerto de El Prat al centro: Aerobús, metro, tren, taxi",
+    seoTitle: "Aeropuerto de Barcelona al centro: autobús, metro y tren",
     seoDescription:
-      "Cómo ir del aeropuerto de El Prat al centro de Barcelona: Aerobús (7,75 €), metro L9 (5,90 €), tren R2 Nord y taxi. Precios y horarios de los operadores.",
+      "Autobús del aeropuerto de El Prat al centro de Barcelona: Aerobús 7,75 €, bus 46 con billete sencillo, metro L9 5,90 €, tren R2 Nord y taxi. Precios oficiales.",
     excerpt:
       "Las cuatro maneras de llegar del aeropuerto al centro de Barcelona, con los precios y tiempos que publican los operadores, y cuál elegir según adónde vas y qué billete tienes.",
   },
   en: {
     path: "guides/barcelona-airport-to-city-centre",
     title: "Barcelona airport to the city centre: metro, Aerobús, train or taxi",
-    seoTitle: "Barcelona airport to city centre: Aerobús, metro, train, taxi",
+    seoTitle: "Barcelona airport to city centre: Aerobús, bus, metro, train",
     seoDescription:
-      "How to get from Barcelona El Prat airport to the city centre: Aerobús (€7.75), L9 metro (€5.90), R2 Nord train and taxi. Fares and times from the operators.",
+      "Barcelona airport to the city centre: Aerobús €7.75, bus 46 on a €2.90 single, L9 metro €5.90, R2 Nord train and taxi, plus night buses. Official fares.",
     excerpt:
       "The four ways from the airport to central Barcelona, with the fares and journey times the operators publish, and which to pick for where you are going and what ticket you hold.",
   },
@@ -118,18 +125,20 @@ function body(locale: Locale): ReturnType<typeof paras> {
   if (locale === "en") {
     return [
       lead(
-        "There are four ways into central Barcelona from El Prat: the **Aerobús** shuttle, the **L9 Sud metro**, the **R2 Nord train** and a **taxi**. Which is best depends on which terminal you land at, where you are staying and whether you already hold a transport pass.",
+        "The **Aerobús** is the direct airport bus to Plaça Catalunya: line A1 from Terminal 1 and line A2 from Terminal 2, **€7.75** one way (€13.30 return), 30 to 35 minutes, 24 hours a day. A cheaper bus is **line 46** to Plaça Espanya on a **€2.90** single ticket, and the **R2 Nord** train from Terminal 2 is the only rail option that takes a T-casual; the **L9 Sud metro** and a **taxi** complete the list.",
       ),
       table(
         "Airport to the centre at a glance",
         ["Option", "Terminals", "Fare", "Time to the centre", "Frequency"],
         [
           ["Aerobús A1 / A2", "A1: T1 · A2: T2", "€7.75 single, €13.30 return", "30–35 min to Plaça Catalunya", "Every 5–10 min by day"],
+          ["Bus 46", "T1 and T2", "€2.90 single ticket or integrated pass", "To Plaça Espanya; no official journey time", "About 05:00 to midnight"],
           ["Metro L9 Sud", "T1 and T2", "€5.90 airport ticket", "About 32 min, with one change", "Every 7 min"],
           ["Train R2 Nord", "T2 only", "Rodalies ticket or integrated pass", "About 20 min to Sants, 25 to Passeig de Gràcia", "Every 30 min"],
           ["Taxi", "T1 and T2", "Metered; minimum €21 from the airport", "Depends on traffic", "—"],
+          ["Night buses N17, N18", "N17: T1 · N18: T1 and T2", "Integrated pass", "To Plaça Catalunya", "About midnight to 05:00, every 20–30 min"],
         ],
-        "Fares and times from Aerobús, TMB, Rodalies and AMB. Train times read from the official R2 timetable of 1 September 2026.",
+        "Fares and times from Aerobús, TMB, ATM, Rodalies and AMB. Train times read from the official R2 timetable of 1 September 2026.",
       ),
       callout("official", verifiedLine("en", VERIFIED), "Fares change. Each section links the operator's own page: check there before you travel."),
       ...h2(
@@ -137,6 +146,7 @@ function body(locale: Locale): ReturnType<typeof paras> {
         "The Aerobús is a direct shuttle run by Monbus. **Line A1 serves Terminal 1 and line A2 serves Terminal 2** (T2B and T2C), so check your terminal with your airline. Into town, both lines stop at Plaça Espanya, Gran Via – Borrell and Plaça Universitat and end at Plaça Catalunya. The operator gives the journey as about 30 to 35 minutes.",
         `A single costs **€7.75** and a return **€13.30** on the operator's ${link("rates page", AEROBUS)}. Tickets are valid for 90 days from purchase; the return half is valid for another 90 days from the outbound trip. You can buy online, in the app, at machines at the airport and in the centre, from staff at the stops and on the bus. Children under 4 travel free.`,
         "It runs 24 hours a day. From T1 the A1 leaves every 5 minutes from 07:15 to 22:30 and every 10 to 20 minutes outside those hours; the A2 leaves T2 every 10 minutes from 05:35 to 23:00 and every 20 minutes overnight.",
+        "There is room on board for large luggage, wheelchairs, pushchairs and bikes, and every bus has a ramp. Pets travel in an approved carrier, one per ticket. You do not need to print the ticket: the driver scans the QR code on your phone. The operator also sells Hola Barcelona travel cards with the Aerobús included, from €28.65 for 48 hours plus €1 for the card.",
       ),
       callout(
         "warning",
@@ -144,9 +154,9 @@ function body(locale: Locale): ReturnType<typeof paras> {
         `If you are catching a long-distance train at Barcelona-Sants, take the R2 Nord train or the metro instead. And buy only from aerobusbarcelona.es: the old domain aerobusbcn.com now redirects to an unrelated site.`,
       ),
       ...h2(
-        "Metro L9 Sud: cheapest from both terminals, with a change",
+        "Metro L9 Sud: from both terminals, with a change",
         "The L9 Sud stops at both terminals and runs every 7 minutes. It does **not** reach the centre on its own: you change at Torrassa (L1), Collblanc (L5), Zona Universitària (L3) or Can Tries | Gornal (L10 Sud). TMB gives about 32 minutes from the airport to the city centre.",
-        `The airport stations need the **airport ticket, €5.90**. The single ticket (€2.90) and the **T-casual are not valid** at Aeroport T1 and T2; if you arrive with one, you must buy the airport ticket to get out. The **T-dia** covers one trip to the airport and one from it, and the **Hola Barcelona** card includes airport metro trips. ${b2link("transport", "en", "Which pass to buy")} compares them.`,
+        `The airport stations need the **airport ticket, €5.90**, which costs more than the €2.90 single ticket that also works on bus 46 to Plaça Espanya: pick the metro for its frequency, not its price. The single ticket (€2.90) and the **T-casual are not valid** at Aeroport T1 and T2; if you arrive with one, you must buy the airport ticket to get out. The **T-dia** covers one trip to the airport and one from it, and the **Hola Barcelona** card includes airport metro trips. ${b2link("transport", "en", "Which pass to buy")} compares them.`,
         "The metro runs from 05:00 to midnight Monday to Thursday, until 02:00 on Fridays and the eves of public holidays, and all night on Saturdays.",
       ),
       ...h2(
@@ -158,6 +168,10 @@ function body(locale: Locale): ReturnType<typeof paras> {
         "Taxi",
         "Airport taxis in the metropolitan area run on the AMB meter. In 2026 the flag fall is €2.80, the rate is €1.35 per km on weekdays from 08:00 to 20:00 and €1.66 at night, on Saturdays and on public holidays, and trips to or from the airport carry a **€4.60 supplement**. The minimum fare for a trip starting at the airport, all supplements included, is **€21**.",
         "No official source publishes a typical total to the centre, because it depends on the meter and the traffic; be wary of anyone quoting a fixed price, which the AMB tariff only sets for the airport–cruise terminal (Moll Adossat) run, at €46.",
+      ),
+      ...h2(
+        "Bus 46: the cheapest bus into town",
+        "TMB's line **46** runs between both terminals (T1 Level 0, Arrivals; T2AB and T2C) and **Plaça Espanya**, roughly from 05:00 to midnight according to the ATM. It is an ordinary city bus, so it takes the **€2.90 single ticket** and every integrated pass, the T-casual included. From Plaça Espanya the metro (L1, L3) takes you on. No official page gives its frequency or journey time, so we do not either.",
       ),
       ...h2(
         "Between terminals, and at night",
@@ -188,6 +202,10 @@ function body(locale: Locale): ReturnType<typeof paras> {
           answer: `€7.75 one way and €13.30 return on the operator's rates page, checked on ${VERIFIED}. Children under 4 travel free.`,
         },
         {
+          question: "Is there a cheaper bus than the Aerobús?",
+          answer: "Yes: TMB's line 46 runs from both terminals to Plaça Espanya and takes the €2.90 single ticket or any integrated pass. The Aerobús is direct to Plaça Catalunya and more frequent.",
+        },
+        {
           question: "Can I use the T-casual from the airport?",
           answer: "Not on the airport metro stations (L9 Sud), but yes on the R2 Nord train, the bus 46 and the night buses.",
         },
@@ -215,18 +233,20 @@ function body(locale: Locale): ReturnType<typeof paras> {
   if (locale === "es") {
     return [
       lead(
-        "Hay cuatro maneras de llegar al centro de Barcelona desde El Prat: el **Aerobús**, el **metro L9 Sud**, el **tren R2 Nord** y el **taxi**. La mejor depende de la terminal a la que llegas, de dónde te alojas y de si ya tienes un título de transporte.",
+        "El **Aerobús** es el autobús directo del aeropuerto a plaza Catalunya: la línea A1 sale de la Terminal 1 y la A2 de la Terminal 2, cuesta **7,75 €** la ida (13,30 € ida y vuelta), tarda entre 30 y 35 minutos y funciona las 24 horas. Si buscas un autobús más barato, la **línea 46** llega a plaza Espanya con el billete sencillo de **2,90 €**, y el tren **R2 Nord** desde la T2 es la única opción ferroviaria que admite la T-casual; completan la lista el **metro L9 Sud** y el **taxi**.",
       ),
       table(
         "Del aeropuerto al centro, de un vistazo",
         ["Opción", "Terminales", "Precio", "Tiempo al centro", "Frecuencia"],
         [
           ["Aerobús A1 / A2", "A1: T1 · A2: T2", "7,75 € ida, 13,30 € ida y vuelta", "30–35 min a plaza Catalunya", "Cada 5–10 min de día"],
+          ["Bus 46", "T1 y T2", "Billete sencillo 2,90 € o título integrado", "Hasta plaza Espanya; sin tiempo oficial publicado", "De 05:00 a medianoche, aprox."],
           ["Metro L9 Sud", "T1 y T2", "Billete aeropuerto 5,90 €", "Unos 32 min, con un transbordo", "Cada 7 min"],
           ["Tren R2 Nord", "Solo T2", "Billete de Rodalies o título integrado", "Unos 20 min a Sants, 25 a Passeig de Gràcia", "Cada 30 min"],
           ["Taxi", "T1 y T2", "Taxímetro; mínimo 21 € desde el aeropuerto", "Según el tráfico", "—"],
+          ["Nitbus N17, N18", "N17: T1 · N18: T1 y T2", "Título integrado", "Hasta plaza Catalunya", "De medianoche a 05:00, cada 20–30 min, aprox."],
         ],
-        "Precios y tiempos de Aerobús, TMB, Rodalies y AMB. Tiempos del tren leídos del horario oficial de la R2 del 1 de septiembre de 2026.",
+        "Precios y tiempos de Aerobús, TMB, ATM, Rodalies y AMB. Tiempos del tren leídos del horario oficial de la R2 del 1 de septiembre de 2026.",
       ),
       callout("official", verifiedLine("es", VERIFIED), "Los precios cambian. Cada apartado enlaza la página del operador: compruébalo allí antes de viajar."),
       ...h2(
@@ -234,6 +254,7 @@ function body(locale: Locale): ReturnType<typeof paras> {
         "El Aerobús es un autobús directo que opera Monbus. **La línea A1 sale de la Terminal 1 y la A2 de la Terminal 2** (T2B y T2C): confirma tu terminal con la aerolínea. Hacia la ciudad, las dos paran en plaza Espanya, Gran Via – Borrell y plaza Universitat y terminan en plaza Catalunya. El operador calcula entre 30 y 35 minutos.",
         `El billete sencillo cuesta **7,75 €** y el de ida y vuelta **13,30 €** según la ${link("página de tarifas", AEROBUS)} del operador. Los billetes valen 90 días desde la compra; la vuelta, otros 90 días desde el viaje de ida. Se compran en línea, en la app, en las máquinas del aeropuerto y del centro, al personal de las paradas y en el propio autobús. Los menores de 4 años viajan gratis.`,
         "Funciona las 24 horas. Desde la T1, el A1 sale cada 5 minutos de 07:15 a 22:30 y cada 10 a 20 minutos fuera de esa franja; el A2 sale de la T2 cada 10 minutos de 05:35 a 23:00 y cada 20 minutos de noche.",
+        "Hay espacio a bordo para maletas grandes, sillas de ruedas, cochecitos y bicicletas, y todos los autobuses tienen rampa. Las mascotas viajan en un transportín homologado, una por billete. No hace falta imprimir el billete: el conductor escanea el código QR del móvil. El operador también vende la tarjeta Hola Barcelona con el Aerobús incluido, desde 28,65 € por 48 horas más 1 € del soporte.",
       ),
       callout(
         "warning",
@@ -241,9 +262,9 @@ function body(locale: Locale): ReturnType<typeof paras> {
         "Si tienes que coger un tren en Barcelona-Sants, ve en el R2 Nord o en metro. Y compra solo en aerobusbarcelona.es: el antiguo dominio aerobusbcn.com redirige ahora a otra web que no tiene nada que ver.",
       ),
       ...h2(
-        "Metro L9 Sud: lo más barato desde las dos terminales, con transbordo",
+        "Metro L9 Sud: desde las dos terminales, con transbordo",
         "La L9 Sud para en las dos terminales y pasa cada 7 minutos. **No** llega al centro por sí sola: hay que cambiar en Torrassa (L1), Collblanc (L5), Zona Universitària (L3) o Can Tries | Gornal (L10 Sud). TMB calcula unos 32 minutos hasta el centro.",
-        `Las estaciones del aeropuerto piden el **billete aeropuerto, 5,90 €**. El billete sencillo (2,90 €) y la **T-casual no valen** en Aeroport T1 y T2; si llegas con uno de ellos, tendrás que comprar el billete aeropuerto para salir. La **T-dia** incluye un viaje de ida y uno de vuelta al aeropuerto, y la **Hola Barcelona** incluye los viajes en metro al aeropuerto. ${b2link("transport", "es", "Qué tarjeta te conviene")} las compara.`,
+        `Las estaciones del aeropuerto piden el **billete aeropuerto, 5,90 €**, que cuesta más que el billete sencillo de 2,90 € que también vale en el bus 46 hasta plaza Espanya: elige el metro por su frecuencia, no por el precio. El billete sencillo (2,90 €) y la **T-casual no valen** en Aeroport T1 y T2; si llegas con uno de ellos, tendrás que comprar el billete aeropuerto para salir. La **T-dia** incluye un viaje de ida y uno de vuelta al aeropuerto, y la **Hola Barcelona** incluye los viajes en metro al aeropuerto. ${b2link("transport", "es", "Qué tarjeta te conviene")} las compara.`,
         "El metro funciona de 05:00 a medianoche de lunes a jueves, hasta las 02:00 los viernes y vísperas de festivo, y toda la noche del sábado.",
       ),
       ...h2(
@@ -255,6 +276,10 @@ function body(locale: Locale): ReturnType<typeof paras> {
         "Taxi",
         "Los taxis del aeropuerto en el área metropolitana funcionan con la tarifa del AMB. En 2026 la bajada de bandera es de 2,80 €, el kilómetro cuesta 1,35 € los laborables de 08:00 a 20:00 y 1,66 € de noche, sábados y festivos, y los servicios con origen o destino en el aeropuerto llevan un **suplemento de 4,60 €**. El importe **mínimo** de un servicio con origen en el aeropuerto, con todos los suplementos, es de **21 €**.",
         "Ninguna fuente oficial publica un precio habitual hasta el centro, porque depende del taxímetro y del tráfico; desconfía de quien te ofrezca un precio cerrado, que la tarifa del AMB solo fija para el trayecto aeropuerto–terminal de cruceros (Moll Adossat), en 46 €.",
+      ),
+      ...h2(
+        "Bus 46: el autobús más barato al centro",
+        "La línea **46** de TMB une las dos terminales (T1, planta 0, Llegadas; T2AB y T2C) con **plaza Espanya**, aproximadamente de 05:00 a medianoche según la ATM. Es un autobús urbano normal, así que admite el **billete sencillo de 2,90 €** y todos los títulos integrados, también la T-casual. Desde plaza Espanya sigues en metro (L1, L3). Ninguna página oficial publica su frecuencia ni su tiempo de viaje, así que no los damos.",
       ),
       ...h2(
         "Entre terminales, y de noche",
@@ -285,6 +310,10 @@ function body(locale: Locale): ReturnType<typeof paras> {
           answer: `7,75 € la ida y 13,30 € ida y vuelta según la página de tarifas del operador, comprobado el ${VERIFIED}. Los menores de 4 años viajan gratis.`,
         },
         {
+          question: "¿Hay un autobús más barato que el Aerobús?",
+          answer: "Sí: la línea 46 de TMB va de las dos terminales a plaza Espanya y admite el billete sencillo de 2,90 € o cualquier título integrado. El Aerobús va directo a plaza Catalunya y pasa más a menudo.",
+        },
+        {
           question: "¿Puedo usar la T-casual desde el aeropuerto?",
           answer: "No en las estaciones de metro del aeropuerto (L9 Sud), pero sí en el tren R2 Nord, el bus 46 y los nitbus.",
         },
@@ -311,18 +340,20 @@ function body(locale: Locale): ReturnType<typeof paras> {
 
   return [
     lead(
-      "Hi ha quatre maneres d'arribar al centre de Barcelona des del Prat: l'**Aerobús**, el **metro L9 Sud**, el **tren R2 Nord** i el **taxi**. La millor depèn de la terminal on arribes, d'on t'allotges i de si ja tens un títol de transport.",
+      "L'**Aerobús** és l'autobús directe de l'aeroport a plaça Catalunya: la línia A1 surt de la Terminal 1 i l'A2 de la Terminal 2, costa **7,75 €** l'anada (13,30 € anada i tornada), triga entre 30 i 35 minuts i funciona les 24 hores. Si busques un autobús més barat, la **línia 46** arriba a plaça Espanya amb el bitllet senzill de **2,90 €**, i el tren **R2 Nord** des de la T2 és l'única opció ferroviària que admet la T-casual; completen la llista el **metro L9 Sud** i el **taxi**.",
     ),
     table(
       "De l'aeroport al centre, d'un cop d'ull",
       ["Opció", "Terminals", "Preu", "Temps fins al centre", "Freqüència"],
       [
         ["Aerobús A1 / A2", "A1: T1 · A2: T2", "7,75 € anada, 13,30 € anada i tornada", "30–35 min a plaça Catalunya", "Cada 5–10 min de dia"],
+        ["Bus 46", "T1 i T2", "Bitllet senzill 2,90 € o títol integrat", "Fins a plaça Espanya; sense temps oficial publicat", "De 05:00 a mitjanit, aprox."],
         ["Metro L9 Sud", "T1 i T2", "Bitllet aeroport 5,90 €", "Uns 32 min, amb un transbord", "Cada 7 min"],
         ["Tren R2 Nord", "Només T2", "Bitllet de Rodalies o títol integrat", "Uns 20 min a Sants, 25 a Passeig de Gràcia", "Cada 30 min"],
         ["Taxi", "T1 i T2", "Taxímetre; mínim 21 € des de l'aeroport", "Segons el trànsit", "—"],
+        ["Nitbus N17, N18", "N17: T1 · N18: T1 i T2", "Títol integrat", "Fins a plaça Catalunya", "De mitjanit a 05:00, cada 20–30 min, aprox."],
       ],
-      "Preus i temps d'Aerobús, TMB, Rodalies i AMB. Temps del tren llegits de l'horari oficial de l'R2 de l'1 de setembre de 2026.",
+      "Preus i temps d'Aerobús, TMB, ATM, Rodalies i AMB. Temps del tren llegits de l'horari oficial de l'R2 de l'1 de setembre de 2026.",
     ),
     callout("official", verifiedLine("ca", VERIFIED), "Els preus canvien. Cada apartat enllaça la pàgina de l'operador: comprova-ho allà abans de viatjar."),
     ...h2(
@@ -330,6 +361,7 @@ function body(locale: Locale): ReturnType<typeof paras> {
       "L'Aerobús és un autobús directe que opera Monbus. **La línia A1 surt de la Terminal 1 i l'A2 de la Terminal 2** (T2B i T2C): confirma la terminal amb l'aerolínia. Cap a la ciutat, totes dues paren a plaça Espanya, Gran Via – Borrell i plaça Universitat i acaben a plaça Catalunya. L'operador calcula entre 30 i 35 minuts.",
       `El bitllet senzill costa **7,75 €** i el d'anada i tornada **13,30 €** segons la ${link("pàgina de tarifes", AEROBUS)} de l'operador. Els bitllets valen 90 dies des de la compra; la tornada, 90 dies més des del viatge d'anada. Es compren en línia, a l'app, a les màquines de l'aeroport i del centre, al personal de les parades i al mateix autobús. Els menors de 4 anys viatgen gratis.`,
       "Funciona les 24 hores. Des de la T1, l'A1 surt cada 5 minuts de 07:15 a 22:30 i cada 10 a 20 minuts fora d'aquesta franja; l'A2 surt de la T2 cada 10 minuts de 05:35 a 23:00 i cada 20 minuts de nit.",
+      "Hi ha espai a bord per a maletes grans, cadires de rodes, cotxets i bicicletes, i tots els autobusos tenen rampa. Les mascotes viatgen en un transportí homologat, una per bitllet. No cal imprimir el bitllet: el conductor escaneja el codi QR del mòbil. L'operador també ven la targeta Hola Barcelona amb l'Aerobús inclòs, des de 28,65 € per 48 hores més 1 € del suport.",
     ),
     callout(
       "warning",
@@ -337,9 +369,9 @@ function body(locale: Locale): ReturnType<typeof paras> {
       "Si has d'agafar un tren a Barcelona-Sants, ves-hi amb l'R2 Nord o amb metro. I compra només a aerobusbarcelona.es: l'antic domini aerobusbcn.com ara redirigeix a una altra web que no hi té res a veure.",
     ),
     ...h2(
-      "Metro L9 Sud: el més barat des de les dues terminals, amb transbord",
+      "Metro L9 Sud: des de les dues terminals, amb transbord",
       "La L9 Sud para a les dues terminals i passa cada 7 minuts. **No** arriba al centre tota sola: cal canviar a Torrassa (L1), Collblanc (L5), Zona Universitària (L3) o Can Tries | Gornal (L10 Sud). TMB calcula uns 32 minuts fins al centre.",
-      `Les estacions de l'aeroport demanen el **bitllet aeroport, 5,90 €**. El bitllet senzill (2,90 €) i la **T-casual no hi valen**; si hi arribes amb un d'aquests, hauràs de comprar el bitllet aeroport per sortir. La **T-dia** inclou un viatge d'anada i un de tornada a l'aeroport, i la **Hola Barcelona** inclou els viatges en metro a l'aeroport. ${b2link("transport", "ca", "Quina targeta et convé")} les compara.`,
+      `Les estacions de l'aeroport demanen el **bitllet aeroport, 5,90 €**, que costa més que el bitllet senzill de 2,90 € que també val al bus 46 fins a plaça Espanya: tria el metro per la freqüència, no pel preu. El bitllet senzill (2,90 €) i la **T-casual no hi valen**; si hi arribes amb un d'aquests, hauràs de comprar el bitllet aeroport per sortir. La **T-dia** inclou un viatge d'anada i un de tornada a l'aeroport, i la **Hola Barcelona** inclou els viatges en metro a l'aeroport. ${b2link("transport", "ca", "Quina targeta et convé")} les compara.`,
       "El metro funciona de 05:00 a mitjanit de dilluns a dijous, fins a les 02:00 els divendres i vigílies de festiu, i tota la nit del dissabte.",
     ),
     ...h2(
@@ -351,6 +383,10 @@ function body(locale: Locale): ReturnType<typeof paras> {
       "Taxi",
       "Els taxis de l'aeroport a l'àrea metropolitana funcionen amb la tarifa de l'AMB. El 2026 la baixada de bandera és de 2,80 €, el quilòmetre costa 1,35 € els feiners de 08:00 a 20:00 i 1,66 € de nit, dissabtes i festius, i els serveis amb origen o destinació a l'aeroport porten un **suplement de 4,60 €**. L'import **mínim** d'un servei amb origen a l'aeroport, amb tots els suplements, és de **21 €**.",
       "Cap font oficial publica un preu habitual fins al centre, perquè depèn del taxímetre i del trànsit; desconfia de qui t'ofereixi un preu tancat, que la tarifa de l'AMB només fixa per al trajecte aeroport–terminal de creuers (Moll Adossat), a 46 €.",
+    ),
+    ...h2(
+      "Bus 46: l'autobús més barat al centre",
+      "La línia **46** de TMB uneix les dues terminals (T1, planta 0, Arribades; T2AB i T2C) amb **plaça Espanya**, aproximadament de 05:00 a mitjanit segons l'ATM. És un autobús urbà normal, així que admet el **bitllet senzill de 2,90 €** i tots els títols integrats, també la T-casual. Des de plaça Espanya continues en metro (L1, L3). Cap pàgina oficial publica la freqüència ni el temps de viatge, així que no els donem.",
     ),
     ...h2(
       "Entre terminals, i de nit",
@@ -379,6 +415,10 @@ function body(locale: Locale): ReturnType<typeof paras> {
       {
         question: "Quant costa l'Aerobús des de l'aeroport de Barcelona?",
         answer: `7,75 € l'anada i 13,30 € anada i tornada segons la pàgina de tarifes de l'operador, comprovat el ${VERIFIED}. Els menors de 4 anys viatgen gratis.`,
+      },
+      {
+        question: "Hi ha un autobús més barat que l'Aerobús?",
+        answer: "Sí: la línia 46 de TMB va de les dues terminals a plaça Espanya i admet el bitllet senzill de 2,90 € o qualsevol títol integrat. L'Aerobús va directe a plaça Catalunya i passa més sovint.",
       },
       {
         question: "Puc fer servir la T-casual des de l'aeroport?",
