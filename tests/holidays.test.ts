@@ -247,3 +247,20 @@ test("dates are formatted from the ISO value, not transcribed", () => {
   assert.equal(formatDay("2027-06-24", COPY.en, "en"), "24 June");
   assert.equal(weekdayOf("2027-12-07", COPY.ca), "dimarts");
 });
+
+test("the opening sentence names every 2027 holiday, so it cannot drift from the table", () => {
+  const months: Record<string, string[]> = {
+    ca: ["gener", "febrer", "març", "abril", "maig", "juny", "juliol", "agost", "setembre", "octubre", "novembre", "desembre"],
+    es: ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"],
+    en: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
+  };
+  for (const locale of LOCALES) {
+    const lead = COPY[locale].lead[0] ?? "";
+    for (const holiday of CATALONIA_HOLIDAYS) {
+      const day = String(Number(holiday.date.slice(8, 10)));
+      const month = months[locale][Number(holiday.date.slice(5, 7)) - 1] ?? "";
+      assert.match(lead, new RegExp(String.raw`(?<!\d)${day}(?!\d)[^.]*?${month}`), `${locale}: ${holiday.date}`);
+    }
+    assert.match(lead, /BOE/, locale);
+  }
+});

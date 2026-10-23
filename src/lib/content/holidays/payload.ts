@@ -206,10 +206,22 @@ export const SOURCES = [
     publisher: "Generalitat de Catalunya",
   },
   {
+    name: "Resolución de 8 de octubre de 2026, de la Dirección General de Trabajo, por la que se publica relación de fiestas laborales para el año 2027",
+    url: "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2026-21254",
+    publisher: "Boletín Oficial del Estado",
+  },
+  {
+    name: "Calendari de festes laborals 2027",
+    url: "https://treball.gencat.cat/ca/ambits/relacions_laborals/ci/calendari_laboral/calendari-festes-2027/",
+    publisher: "Departament d'Empresa i Treball, Generalitat de Catalunya",
+  },
+  {
     name: "Festes estatals i autonòmiques a Catalunya i locals a Barcelona al 2027",
     url: "https://ajuntament.barcelona.cat/calendarifestius/ca/",
     publisher: "Ajuntament de Barcelona",
   },
 ];
 
-export const LAST_VERIFIED = "2026-09-24";
+// Re-checked 23 Oct 2026 against the BOE national list (BOE-A-2026-21254),
+// which repeats Order EMT/52/2026 and the Aran swap for Catalonia.
+export const LAST_VERIFIED = "2026-10-23";
