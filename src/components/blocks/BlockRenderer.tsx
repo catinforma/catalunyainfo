@@ -7,6 +7,7 @@ import { CalendarBlock } from "@/components/blocks/CalendarBlock";
 import { ConditionsMap } from "@/components/blocks/ConditionsMap";
 import { TransportPassSelector } from "@/components/blocks/TransportPassSelector";
 import { HolidayToday } from "@/components/blocks/HolidayToday";
+import { MetroTonight } from "@/components/blocks/MetroTonight";
 import { WeekendAgenda } from "@/components/blocks/WeekendAgenda";
 import { LocalHolidays } from "@/components/blocks/LocalHolidays";
 import { ReservoirLevels } from "@/components/blocks/ReservoirLevels";
@@ -363,6 +364,10 @@ function BlockView({ block, context }: { block: Block; context: BlockContext }) 
       // Server-rendered on purpose: the answer has to be in the HTML, and the
       // route revalidates every five minutes so it is never stale.
       return <HolidayToday locale={context.locale} />;
+
+    case "metroTonight":
+      // Server-rendered for the same reason; the nightly cron keeps the date.
+      return <MetroTonight locale={context.locale} />;
 
     case "weekendAgenda":
       // Async server component: reads the open-data agenda, cached six hours.

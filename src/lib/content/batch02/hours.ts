@@ -216,6 +216,7 @@ function body(locale: Locale) {
   const t = COPY[locale];
   return [
     lead(t.lead),
+    { type: "metroTonight" as const },
     table(t.tableCaption, t.headers, t.rows, t.tableNote),
     callout("official", verifiedLine(locale, VERIFIED), t.note),
     ...h2(t.closeTitle, t.close),

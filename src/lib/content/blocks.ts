@@ -396,6 +396,15 @@ export const holidayTodayBlock = z.object({
 });
 
 /**
+ * Today's and tomorrow's Barcelona metro hours, computed from TMB's rules in
+ * `metro/tonight.ts`. Configuration-free like the other utility blocks, so the
+ * hours cannot be typed in through the editor.
+ */
+export const metroTonightBlock = z.object({
+  type: z.literal("metroTonight"),
+});
+
+/**
  * This weekend's activities, read at render time from the Generalitat's
  * open-data cultural agenda. Configuration-free: the window is computed from
  * the date, so the block cannot be left pointing at a weekend that has passed.
@@ -479,6 +488,7 @@ export const blockSchema = z.discriminatedUnion("type", [
   conditionsMapBlock,
   transportPassesBlock,
   holidayTodayBlock,
+  metroTonightBlock,
   weekendAgendaBlock,
   localHolidaysBlock,
   reservoirLevelsBlock,
