@@ -258,7 +258,7 @@ test("the opening sentence names every 2027 holiday, so it cannot drift from the
     const lead = COPY[locale].lead[0] ?? "";
     for (const holiday of CATALONIA_HOLIDAYS) {
       const day = String(Number(holiday.date.slice(8, 10)));
-      const month = months[locale][Number(holiday.date.slice(5, 7)) - 1] ?? "";
+      const month = (months[locale] ?? [])[Number(holiday.date.slice(5, 7)) - 1] ?? "";
       assert.match(lead, new RegExp(String.raw`(?<!\d)${day}(?!\d)[^.]*?${month}`), `${locale}: ${holiday.date}`);
     }
     assert.match(lead, /BOE/, locale);

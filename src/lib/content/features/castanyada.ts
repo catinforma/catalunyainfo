@@ -15,105 +15,96 @@ import {
 /**
  * Article 6 — the Castanyada.
  *
- * Honest framing is the whole job here. Only a few of these places hold an
- * actual chestnut fair; the rest are towns where the autumn and All Saints
- * tradition is unusually visible. Presenting all twelve as "Fira de la
- * Castanya" would be the easy, wrong version.
+ * Rewritten 23 Oct 2026 from research_notes/page1/castanyada_outings.md. The
+ * first version listed twelve places, and for most of them no official page
+ * gave a 2026 date or even confirmed the event: Gósol and Oliana's "All Saints
+ * fairs", Bagà, Pratdip, Vilanova de Prades, Monistrol and Amer are gone, and
+ * Arbúcies keeps its autumn fair without a castanyada claim its council does
+ * not make. What remains has a date published by the organiser or in the
+ * Generalitat's open-data cultural agenda (rhpv-yr4f), read that day.
  *
- * Verified dates: Viladrau's 31st chestnut fair on 24-25 October 2026, and its
- * Ball de les Bruixes held each 31 October. Everything else carries the period
- * and the official link, because municipal programmes for late October are
- * published late and change.
+ * Left out because only an aggregator or a mirror states them: the Ball de
+ * les Bruixes' 2026 edition number and clock times (the council's programme
+ * PDF returned 404), Castelldefels, Cabró Rock and Jesús. After 2 November the
+ * table is history: replace it with next year's dates or "to be announced"
+ * wording, keeping the URL.
  */
 
 const VILADRAU_FIRA = "https://viladrau.cat/ca/turisme/festes/fira-de-la-castanya";
 const VILADRAU_BALL = "https://viladrau.cat/ca/turisme/festes/el-ball-de-les-bruixes-de-viladrau";
-const FIRES = "https://firescatalanes.cat/";
+const ARBUCIES = "https://www.arbucies.cat";
+const CARDONA =
+  "https://www.cardona.cat/ajuntament/representants-politics/lalcaldessa/cardona-celebrara-la-33a-fira-de-la-llenega-amb-gastronomia-bolets-i-activitats-per-a-tota-la-familia.html";
+const PEDRERA = "https://www.lapedrera.com/ca/activitats/castanyera/";
+const AGENDA = "https://analisi.transparenciacatalunya.cat/Cultura-oci/Agenda-cultural-de-Catalunya/rhpv-yr4f";
+const BCN_TRADITION = "https://barcelona.cat/culturapopular/en/festivals-and-traditions/food-and-drink/castanyes";
+const BTV_CASTANYERES = "https://beteve.cat/historia/origen-castanyeres-barcelona/";
+const CHECKED = { ca: "23 d'octubre de 2026", es: "23 de octubre de 2026", en: "23 October 2026" };
 
-const PROGRAMME_NOTE = {
-  ca: "Els programes municipals de finals d'octubre es publiquen tard i canvien. Fora de Viladrau, aquí no fixem dates: comprova-les al web de cada ajuntament la mateixa setmana.",
-  es: "Los programas municipales de finales de octubre se publican tarde y cambian. Fuera de Viladrau, aquí no fijamos fechas: compruébalas en la web de cada ayuntamiento esa misma semana.",
-  en: "Late-October municipal programmes are published late and change. Outside Viladrau we do not fix dates here: check each town hall's site in the same week.",
-};
+function faq(title: string, items: { question: string; answer: string }[]): Block {
+  return { type: "faq", title, items } as Block;
+}
 
 function ca(): Block[] {
   return [
     lead(
-      "La Castanyada no és una decoració de tardor ni només una paperina de castanyes. A Catalunya està lligada a Tots Sants, als panellets, als moniatos, a la figura de la castanyera i a una xarxa de fires que cada tardor converteixen pobles sencers en mercats de producte local.",
+      "La Castanyada del 2026 és el **dissabte 31 d'octubre**, la vigília de Tots Sants, que enguany cau en diumenge. El cap de setmana del 24 i 25 d'octubre Viladrau fa la 31a Fira de la Castanya, i la nit del 31 hi torna el Ball de les Bruixes.",
     ),
     keyFacts("Què és, en curt", [
-      { label: "Quan", value: "Últims caps de setmana d'octubre i 31 d'octubre – 1 de novembre" },
+      { label: "Quan", value: "Dissabte 31 d'octubre de 2026 (Tots Sants: diumenge 1 de novembre)" },
       { label: "Què es menja", value: "Castanyes torrades, panellets, moniatos" },
       { label: "Què es beu", value: "Moscatell" },
-      { label: "La figura", value: "La castanyera, que ven castanyes al carrer" },
-      { label: "El context", value: "Tots Sants, i la visita als cementiris" },
+      { label: "La figura", value: "La castanyera, que torra castanyes al carrer" },
+      { label: "El context", value: "Tots Sants i el record dels difunts" },
       { label: "Fira de referència", value: "Viladrau, 24 i 25 d'octubre de 2026" },
     ]),
     ...h2(
-      "Què és exactament la Castanyada",
-      "És la celebració catalana associada a la vigília i el dia de Tots Sants. La part gastronòmica —castanyes torrades, panellets de massapà i pinyons, moniatos rostits, moscatell— és la més visible, però històricament va lligada al record dels difunts i a la visita als cementiris de l'1 de novembre.",
-      "La castanyera és el personatge que ho concentra tot: una dona gran, abrigada, que torra castanyes en un fogó al carrer. Durant l'octubre apareix a escoles, mercats i places de mig país.",
-      "Als Països Catalans hi ha variants: al País Valencià se celebra un dia abans, per Sant Dionís, amb el mocadorà. La lògica de fons és la mateixa: fruita seca i dolços de temporada al final de la collita.",
+      "Castanyada 2026: què hi ha, dia a dia",
+      `Només hi posem actes amb la data publicada per l'organitzador o a l'agenda cultural oficial de la Generalitat, comprovats el ${CHECKED.ca}. Preus i horaris poden canviar: confirma'ls al web de l'organitzador abans d'anar-hi.`,
     ),
-    callout("info", "Castanyada o Halloween?", "No cal plantejar-ho com una incompatibilitat: avui conviuen a la majoria de municipis. En molts pobles la festa de la castanyada es fa a l'escola al matí i la nit de Tots Sants té elements dels dos calendaris. Els programes municipals solen incloure-hi tant una cosa com l'altra."),
-    callout("warning", "Sobre els programes", PROGRAMME_NOTE.ca),
     table(
-      "On es viu amb més intensitat",
-      ["Lloc", "Comarca", "Què hi trobaràs"],
+      "Actes de la Castanyada i de tardor amb data confirmada, 2026",
+      ["Data", "Lloc", "Què"],
       [
-        ["Viladrau", "Osona", "Fira de la Castanya (24–25 oct. 2026) i Ball de les Bruixes (31 oct.)"],
-        ["Vilanova de Prades", "Conca de Barberà", "Mercat i festa de la castanyada"],
-        ["Arbúcies", "Selva", "Fira de Tardor amb castanyada tradicional"],
-        ["Gósol", "Berguedà", "Fira de Tots Sants de muntanya"],
-        ["Bagà", "Berguedà", "Fira de Tots Sants"],
-        ["Pratdip", "Baix Camp", "Pratdip Llegendari, entorn de Tots Sants"],
-        ["Cardona", "Bages", "Fira de la Llenega i bosc de tardor"],
-        ["Monistrol de Montserrat", "Bages", "Fira de la Coca i el Mató"],
-        ["Oliana", "Alt Urgell", "Fira de Tots Sants"],
-        ["Amer", "Selva", "Fira de Sant Martí, amb torradors de castanyes"],
-        ["Barcelona", "Barcelonès", "Castanyeres al carrer, pastisseries i mercats"],
-        ["Montseny (conjunt)", "Osona / Vallès / Selva", "El massís castanyer per excel·lència"],
+        ["Ds. 24 i dg. 25 d'octubre", "Viladrau (Osona)", "31a Fira de la Castanya: castanyes de Viladrau crues i torrades, tastos i itineraris pels castanyers"],
+        ["Ds. 24 i dg. 25 d'octubre", "Arbúcies (la Selva)", "Fira de la Tardor i Festa del Flabiol"],
+        ["Ds. 24 i ds. 31 d'octubre, 10:00", "Barcelona, la Pedrera", "Taller familiar «La Castanyera a La Pedrera!» (1 h 30, 9,50 €; menors de 3 anys, gratis)"],
+        ["Ds. 24 d'octubre, 18:00", "Vilanova del Vallès", "Teatre «Una castanyada de por» (10 €)"],
+        ["Dg. 25 d'octubre", "Cardona (Bages)", "33a Fira de la Llenega: és de bolets, no de castanyes, amb exposició micològica i showcooking"],
+        ["Del 24 d'octubre al 2 de novembre", "Palau-solità i Plegamans (24), Valls (30), Capellades (31), Maçanet de la Selva (1 nov.) i Bellver de Cerdanya (2 nov.)", "Espectacle infantil «On són les castanyes?»"],
+        ["Ds. 31 d'octubre, a la nit", "Viladrau", "Ball de les Bruixes, que se celebra des del 1997"],
       ],
-      "Només algunes d'aquestes cites són estrictament una «fira de la castanya». La resta són llocs on la tradició de tardor i Tots Sants es viu de manera especialment visible.",
+      "Fonts: ajuntaments de Viladrau, Arbúcies i Cardona; la Pedrera; agenda cultural de Catalunya (dades obertes de la Generalitat).",
     ),
     ...h2(
       "Viladrau, la referència",
-      "Si només pots anar a un lloc, és aquest. L'Ajuntament de Viladrau confirma que la **31a Fira de la Castanya se celebra el cap de setmana del 24 i 25 d'octubre de 2026**.",
-      "Viladrau és al cor del Montseny, el gran massís castanyer català, i la fira omple el poble de parades de producte, tastos i activitats. Compta que hi haurà molta gent: matinar hi val molt la pena.",
-      `A més, cada **31 d'octubre** s'hi celebra el Ball de les Bruixes, vinculat des del 1997 als actes de la fira. Informació oficial: [la fira](${VILADRAU_FIRA}) i [el ball](${VILADRAU_BALL}).`,
+      "Si només pots anar a un lloc, és aquest. L'Ajuntament de Viladrau confirma que la **31a Fira de la Castanya se celebra el cap de setmana del 24 i 25 d'octubre de 2026**, amb castanyes de Viladrau crues i torrades, concurs de menjar castanyes, itineraris guiats pels castanyers i tastos.",
+      "Viladrau és al cor del Montseny, el gran massís castanyer català. Compta que hi haurà molta gent: matinar hi val la pena.",
+      `El **31 d'octubre**, la nit que comença Tots Sants, el poble fa el Ball de les Bruixes, que se celebra des del 1997. Informació oficial: [la fira](${VILADRAU_FIRA}) i [el ball](${VILADRAU_BALL}).`,
     ),
     ...h2(
-      "Les fires de Tots Sants del Prepirineu",
-      "Gósol, Bagà i Oliana mantenen fires de Tots Sants que responen a una lògica anterior al turisme: eren els mercats on es tancava la temporada abans de l'hivern.",
-      "Això es nota en el que s'hi ven —producte, bestiar, eines, artesania— i en el públic, que continua sent majoritàriament local. Si busques una experiència menys orientada al visitant, són aquestes.",
+      "Qui és la castanyera i d'on ve",
+      "La castanyera és la figura de la festa: una dona gran, abrigada, que torra castanyes en un fogó al carrer. Segons un reportatge de betevé amb l'historiador Xavier Theros, cap al 1800 n'hi havia unes 200 només a l'actual Ciutat Vella, i el 1839 una prohibició de fer foc i torrar castanyes a la via pública les va obligar a treballar amb un recipient de fang cuit, la copa.",
+      `L'Ajuntament de Barcelona explica que els historiadors creuen que la tradició de les castanyes ve del menjar dels funerals d'antany, quan es resava el rosari per la família morta. Fonts: [Ajuntament de Barcelona](${BCN_TRADITION}) i [betevé](${BTV_CASTANYERES}).`,
     ),
-    ...h2(
-      "Bosc i taula: Cardona i Arbúcies",
-      "Cardona combina la Fira de la Llenega amb activitats de bosc de tardor, de manera que la castanya hi conviu amb els bolets i amb el paisatge.",
-      `Arbúcies, al peu del Montseny, encaixa la castanyada dins la seva fira de tardor. Totes dues es complementen amb ${link("foodfairs", "ca", "la resta de fires gastronòmiques de la temporada")}.`,
-    ),
-    ...h2(
-      "Pratdip i Vilanova de Prades: la tardor amb un altre accent",
-      "Pratdip converteix l'entorn de Tots Sants en una proposta de llegenda i territori, amb el dip —la bèstia mitològica local— com a fil conductor.",
-      "Vilanova de Prades, a la Conca de Barberà, manté un mercat i una festa de castanyada de dimensions petites i caràcter molt local.",
-    ),
-    ...h2(
-      "Monistrol de Montserrat i Amer",
-      "A Monistrol, la Fira de la Coca i el Mató recupera el dolç que històricament es menjava pujant a Montserrat, a l'entorn de Tots Sants.",
-      "A Amer, la Fira de Sant Martí manté la tradició dels torradors de castanyes ja entrat el novembre: és la manera de fer durar la temporada dues setmanes més.",
-    ),
+    callout("info", "Castanyada o Halloween?", "No cal plantejar-ho com una incompatibilitat: avui conviuen a la majoria de municipis. En molts pobles la castanyada es fa a l'escola i la nit de Tots Sants barreja elements dels dos calendaris."),
     ...h2(
       "Barcelona: la castanyada urbana",
-      "A Barcelona no hi ha una única festa central de la castanyada, i seria fals presentar-la com si n'hi hagués. El que hi ha és una tradició de carrer: castanyeres amb el seu fogó a les cantonades, pastisseries amb panellets des de mitjan octubre, i activitats de barri i mercats municipals.",
-      "És la versió quotidiana de la tradició, i té el seu propi valor: no cal sortir de la ciutat per menjar panellets fets el mateix dia.",
+      "A Barcelona no hi ha una única festa central de la castanyada, i seria fals presentar-la com si n'hi hagués. El que hi ha és una tradició de carrer, amb castanyeres a les cantonades i panellets a les pastisseries, i activitats de barri com el taller de la Pedrera de la taula.",
     ),
     ...h2(
-      "Què menjar, i quan",
+      "Què menjar",
       "**Castanyes torrades**, calentes, en paperina. **Panellets**, de massapà amb pinyons, coco, cafè o ametlla. **Moniatos** rostits. I **moscatell** per acompanyar-ho.",
-      "Els panellets es troben a les pastisseries des de mitjan octubre. Les castanyeres apareixen al carrer a mesura que refresca.",
-      `El moment fort és entre els últims caps de setmana d'octubre i l'1 de novembre. Si vols encadenar-hi paisatge, ${link("autumn", "ca", "els colors de tardor")} estan en bona part del país just en aquestes setmanes.`,
+      `Si vols encadenar-hi paisatge, ${link("autumn", "ca", "els colors de tardor")} arriben a bona part del país en aquestes setmanes, i hi ha ${link("foodfairs", "ca", "més fires gastronòmiques de tardor")}.`,
     ),
-    ...paras(`Calendari general de fires: [firescatalanes.cat](${FIRES}).`),
+    faq("Preguntes freqüents", [
+      { question: "Quan és la Castanyada el 2026?", answer: "El dissabte 31 d'octubre, la vigília de Tots Sants. L'1 de novembre de 2026 cau en diumenge." },
+      { question: "Què es menja a la Castanyada?", answer: "Castanyes torrades, panellets i moniatos, sovint amb moscatell." },
+      { question: "Qui és la castanyera?", answer: "La venedora de castanyes torrades al carrer. Cap al 1800 n'hi havia unes 200 a l'actual Ciutat Vella de Barcelona, segons betevé." },
+      { question: "On hi ha fires de la castanya aquest any?", answer: "La més gran és la 31a Fira de la Castanya de Viladrau, el 24 i 25 d'octubre de 2026. A la taula hi ha la resta d'actes amb data confirmada." },
+      { question: "És el mateix que Halloween?", answer: "No. La Castanyada és una tradició catalana lligada a Tots Sants; avui conviu amb Halloween a molts municipis." },
+    ]),
+    ...paras(`Agenda oficial d'actes: [agenda cultural de Catalunya](${AGENDA}).`),
     ...relatedBlocks(["foodfairs", "autumn", "mushrooms", "medieval", "weekend"], "ca"),
   ];
 }
@@ -121,76 +112,63 @@ function ca(): Block[] {
 function es(): Block[] {
   return [
     lead(
-      "La Castanyada no es una decoración de otoño ni solo un cucurucho de castañas. En Cataluña está ligada a Todos los Santos, a los panellets, a los boniatos, a la figura de la castanyera y a una red de ferias que cada otoño convierten pueblos enteros en mercados de producto local.",
+      "La Castañada de 2026 es el **sábado 31 de octubre**, la víspera de Todos los Santos, que este año cae en domingo. El fin de semana del 24 y 25 de octubre Viladrau celebra la 31ª Fira de la Castanya, y la noche del 31 vuelve el Ball de les Bruixes.",
     ),
     keyFacts("Qué es, en corto", [
-      { label: "Cuándo", value: "Últimos fines de semana de octubre y 31 de octubre – 1 de noviembre" },
+      { label: "Cuándo", value: "Sábado 31 de octubre de 2026 (Todos los Santos: domingo 1 de noviembre)" },
       { label: "Qué se come", value: "Castañas asadas, panellets, boniatos" },
       { label: "Qué se bebe", value: "Moscatel" },
       { label: "La figura", value: "La castanyera, que asa castañas en la calle" },
-      { label: "El contexto", value: "Todos los Santos y la visita a los cementerios" },
+      { label: "El contexto", value: "Todos los Santos y el recuerdo de los difuntos" },
       { label: "Feria de referencia", value: "Viladrau, 24 y 25 de octubre de 2026" },
     ]),
     ...h2(
-      "Qué es exactamente la Castanyada",
-      "Es la celebración catalana asociada a la víspera y el día de Todos los Santos. La parte gastronómica —castañas asadas, panellets de mazapán y piñones, boniatos, moscatel— es la más visible, pero históricamente va ligada al recuerdo de los difuntos y a la visita a los cementerios del 1 de noviembre.",
-      "La castanyera lo concentra todo: una mujer mayor, abrigada, que asa castañas en un hornillo en la calle. Durante octubre aparece en escuelas, mercados y plazas de medio país.",
-      "Hay variantes: en el País Valenciano se celebra un día antes, por Sant Dionís, con la mocadorà. La lógica de fondo es la misma: fruto seco y dulces de temporada al final de la cosecha.",
+      "Castañada 2026: qué hay, día a día",
+      `Solo incluimos actos con la fecha publicada por el organizador o en la agenda cultural oficial de la Generalitat, comprobados el ${CHECKED.es}. Precios y horarios pueden cambiar: confírmalos en la web del organizador antes de ir.`,
     ),
-    callout("info", "¿Castanyada o Halloween?", "No hace falta plantearlo como incompatibilidad: hoy conviven en la mayoría de municipios. En muchos pueblos la castanyada se celebra en la escuela por la mañana y la noche de Todos los Santos mezcla elementos de ambos calendarios."),
-    callout("warning", "Sobre los programas", PROGRAMME_NOTE.es),
     table(
-      "Dónde se vive con más intensidad",
-      ["Lugar", "Comarca", "Qué encontrarás"],
+      "Actos de la Castañada y de otoño con fecha confirmada, 2026",
+      ["Fecha", "Lugar", "Qué"],
       [
-        ["Viladrau", "Osona", "Fira de la Castanya (24–25 oct. 2026) y Ball de les Bruixes (31 oct.)"],
-        ["Vilanova de Prades", "Conca de Barberà", "Mercado y fiesta de la castañada"],
-        ["Arbúcies", "Selva", "Feria de otoño con castañada tradicional"],
-        ["Gósol", "Berguedà", "Feria de Todos los Santos de montaña"],
-        ["Bagà", "Berguedà", "Feria de Todos los Santos"],
-        ["Pratdip", "Baix Camp", "Pratdip Llegendari, entorno de Todos los Santos"],
-        ["Cardona", "Bages", "Fira de la Llenega y bosque de otoño"],
-        ["Monistrol de Montserrat", "Bages", "Fira de la Coca i el Mató"],
-        ["Oliana", "Alt Urgell", "Feria de Todos los Santos"],
-        ["Amer", "Selva", "Fira de Sant Martí, con asadores de castañas"],
-        ["Barcelona", "Barcelonès", "Castañeras en la calle, pastelerías y mercados"],
-        ["Montseny (conjunto)", "Osona / Vallès / Selva", "El macizo castañero por excelencia"],
+        ["Sáb. 24 y dom. 25 de octubre", "Viladrau (Osona)", "31ª Fira de la Castanya: castañas de Viladrau crudas y asadas, catas e itinerarios por los castañares"],
+        ["Sáb. 24 y dom. 25 de octubre", "Arbúcies (la Selva)", "Fira de la Tardor y Festa del Flabiol"],
+        ["Sáb. 24 y sáb. 31 de octubre, 10:00", "Barcelona, La Pedrera", "Taller familiar «La Castanyera a La Pedrera!» (1 h 30, 9,50 €; menores de 3 años, gratis)"],
+        ["Sáb. 24 de octubre, 18:00", "Vilanova del Vallès", "Teatro «Una castanyada de por» (10 €)"],
+        ["Dom. 25 de octubre", "Cardona (Bages)", "33ª Fira de la Llenega: es de setas, no de castañas, con exposición micológica y showcooking"],
+        ["Del 24 de octubre al 2 de noviembre", "Palau-solità i Plegamans (24), Valls (30), Capellades (31), Maçanet de la Selva (1 nov.) y Bellver de Cerdanya (2 nov.)", "Espectáculo infantil «On són les castanyes?»"],
+        ["Sáb. 31 de octubre, por la noche", "Viladrau", "Ball de les Bruixes, que se celebra desde 1997"],
       ],
-      "Solo algunas de estas citas son estrictamente una «feria de la castaña». El resto son lugares donde la tradición de otoño y Todos los Santos se vive de forma especialmente visible.",
+      "Fuentes: ayuntamientos de Viladrau, Arbúcies y Cardona; La Pedrera; agenda cultural de Cataluña (datos abiertos de la Generalitat).",
     ),
     ...h2(
       "Viladrau, la referencia",
-      "Si solo puedes ir a un sitio, es este. El Ayuntamiento de Viladrau confirma que la **31ª Fira de la Castanya se celebra el fin de semana del 24 y 25 de octubre de 2026**.",
-      "Viladrau está en el corazón del Montseny, el gran macizo castañero catalán, y la feria llena el pueblo de paradas de producto, catas y actividades. Habrá mucha gente: madrugar compensa.",
-      `Además, cada **31 de octubre** se celebra el Ball de les Bruixes, vinculado desde 1997 a los actos de la feria. Información oficial: [la feria](${VILADRAU_FIRA}) y [el baile](${VILADRAU_BALL}).`,
+      "Si solo puedes ir a un sitio, es este. El Ayuntamiento de Viladrau confirma que la **31ª Fira de la Castanya se celebra el fin de semana del 24 y 25 de octubre de 2026**, con castañas de Viladrau crudas y asadas, concurso de comer castañas, itinerarios guiados por los castañares y catas.",
+      "Viladrau está en el corazón del Montseny, el gran macizo castañero catalán. Habrá mucha gente: madrugar compensa.",
+      `El **31 de octubre**, la noche en que empieza Todos los Santos, el pueblo celebra el Ball de les Bruixes, que se hace desde 1997. Información oficial: [la feria](${VILADRAU_FIRA}) y [el baile](${VILADRAU_BALL}).`,
     ),
     ...h2(
-      "Las ferias de Todos los Santos del Prepirineo",
-      "Gósol, Bagà y Oliana mantienen ferias de Todos los Santos que responden a una lógica anterior al turismo: eran los mercados donde se cerraba la temporada antes del invierno.",
-      "Se nota en lo que se vende y en el público, que sigue siendo mayoritariamente local. Si buscas algo menos orientado al visitante, son estas.",
+      "Quién es la castanyera y de dónde viene",
+      "La castanyera es la figura de la fiesta: una mujer mayor, abrigada, que asa castañas en un hornillo en la calle. Según un reportaje de betevé con el historiador Xavier Theros, hacia 1800 había unas 200 solo en la actual Ciutat Vella, y en 1839 una prohibición de hacer fuego y asar castañas en la vía pública las obligó a trabajar con un recipiente de barro cocido, la copa.",
+      `El Ayuntamiento de Barcelona explica que los historiadores creen que la tradición de las castañas viene de la comida de los funerales de antaño, cuando se rezaba el rosario por los familiares difuntos. Fuentes: [Ayuntamiento de Barcelona](${BCN_TRADITION}) y [betevé](${BTV_CASTANYERES}).`,
     ),
-    ...h2(
-      "Bosque y mesa: Cardona y Arbúcies",
-      "Cardona combina la Fira de la Llenega con actividades de bosque de otoño, de modo que la castaña convive con las setas y con el paisaje.",
-      `Arbúcies, al pie del Montseny, encaja la castañada dentro de su feria de otoño. Ambas se complementan con ${link("foodfairs", "es", "el resto de ferias gastronómicas de la temporada")}.`,
-    ),
-    ...h2(
-      "Pratdip, Vilanova de Prades, Monistrol y Amer",
-      "Pratdip convierte el entorno de Todos los Santos en una propuesta de leyenda y territorio, con el dip —la bestia mitológica local— como hilo conductor. Vilanova de Prades mantiene un mercado y una fiesta de castañada pequeños y muy locales.",
-      "En Monistrol, la Fira de la Coca i el Mató recupera el dulce que históricamente se comía subiendo a Montserrat. En Amer, la Fira de Sant Martí mantiene la tradición de los asadores de castañas ya entrado noviembre.",
-    ),
+    callout("info", "¿Castañada o Halloween?", "No hace falta plantearlo como incompatibilidad: hoy conviven en la mayoría de municipios. En muchos pueblos la castañada se celebra en la escuela y la noche de Todos los Santos mezcla elementos de ambos calendarios."),
     ...h2(
       "Barcelona: la castañada urbana",
-      "En Barcelona no hay una única fiesta central de la castañada, y sería falso presentarla como si la hubiera. Lo que hay es una tradición de calle: castañeras con su hornillo en las esquinas, pastelerías con panellets desde mediados de octubre, y actividades de barrio y mercados municipales.",
-      "Es la versión cotidiana de la tradición, y tiene su propio valor.",
+      "En Barcelona no hay una única fiesta central de la castañada, y sería falso presentarla como si la hubiera. Lo que hay es una tradición de calle, con castañeras en las esquinas y panellets en las pastelerías, y actividades de barrio como el taller de La Pedrera de la tabla.",
     ),
     ...h2(
-      "Qué comer, y cuándo",
+      "Qué comer",
       "**Castañas asadas**, calientes, en cucurucho. **Panellets**, de mazapán con piñones, coco, café o almendra. **Boniatos** asados. Y **moscatel** para acompañar.",
-      "Los panellets están en las pastelerías desde mediados de octubre. Las castañeras aparecen en la calle a medida que refresca.",
-      `El momento fuerte va de los últimos fines de semana de octubre al 1 de noviembre. Si quieres encadenar paisaje, ${link("autumn", "es", "los colores de otoño")} llegan a buena parte del país justo esas semanas.`,
+      `Si quieres encadenar paisaje, ${link("autumn", "es", "los colores de otoño")} llegan a buena parte del país esas semanas, y hay ${link("foodfairs", "es", "más ferias gastronómicas de otoño")}.`,
     ),
-    ...paras(`Calendario general de ferias: [firescatalanes.cat](${FIRES}).`),
+    faq("Preguntas frecuentes", [
+      { question: "¿Cuándo es la Castañada en 2026?", answer: "El sábado 31 de octubre, la víspera de Todos los Santos. El 1 de noviembre de 2026 cae en domingo." },
+      { question: "¿Qué se come en la Castañada?", answer: "Castañas asadas, panellets y boniatos, a menudo con moscatel." },
+      { question: "¿Quién es la castanyera?", answer: "La vendedora de castañas asadas en la calle. Hacia 1800 había unas 200 en la actual Ciutat Vella de Barcelona, según betevé." },
+      { question: "¿Dónde hay ferias de la castaña este año?", answer: "La mayor es la 31ª Fira de la Castanya de Viladrau, el 24 y 25 de octubre de 2026. En la tabla están los demás actos con fecha confirmada." },
+      { question: "¿Es lo mismo que Halloween?", answer: "No. La Castañada es una tradición catalana ligada a Todos los Santos; hoy convive con Halloween en muchos municipios." },
+    ]),
+    ...paras(`Agenda oficial de actos: [agenda cultural de Cataluña](${AGENDA}).`),
     ...relatedBlocks(["foodfairs", "autumn", "mushrooms", "medieval", "weekend"], "es"),
   ];
 }
@@ -198,75 +176,67 @@ function es(): Block[] {
 function en(): Block[] {
   return [
     lead(
-      "The Castanyada is not autumn decoration, and not simply a paper cone of roasted chestnuts. In Catalonia it is tied to All Saints, to marzipan panellets, to roast sweet potato, to the figure of the castanyera, and to a network of fairs that turn whole villages into markets of local produce each autumn.",
+      "The Castanyada 2026 is on **Saturday 31 October**, the eve of All Saints' Day, which falls on a Sunday this year. Its symbol is the **castanyera**, the chestnut seller roasting on a street brazier; on 24–25 October Viladrau holds its 31st Chestnut Fair, and on the night of the 31st its Ball de les Bruixes.",
     ),
     keyFacts("The short version", [
-      { label: "When", value: "Late-October weekends, and 31 October – 1 November" },
+      { label: "When", value: "Saturday 31 October 2026 (All Saints: Sunday 1 November)" },
       { label: "What you eat", value: "Roast chestnuts, panellets, sweet potato" },
       { label: "What you drink", value: "Moscatell, a sweet muscat wine" },
       { label: "The figure", value: "The castanyera, who roasts chestnuts in the street" },
-      { label: "The context", value: "All Saints, and visits to the cemeteries" },
+      { label: "The context", value: "All Saints, and remembering the dead" },
       { label: "The reference fair", value: "Viladrau, 24–25 October 2026" },
     ]),
     ...h2(
-      "What the Castanyada actually is",
-      "It is the Catalan celebration attached to All Saints' Eve and All Saints' Day. The food is the visible part — roast chestnuts, **panellets** (small marzipan sweets, most classically rolled in pine nuts), roast sweet potato and sweet muscat wine — but historically it belongs to the remembrance of the dead and the visits to cemeteries on 1 November.",
-      "The **castanyera** ties it together: an older woman, well wrapped up, roasting chestnuts on a brazier in the street. Through October she appears at schools, markets and squares across the country.",
-      "It is not Halloween with chestnuts. It is an older harvest-and-remembrance tradition that happens to fall on the same nights.",
+      "Castanyeres: who they are and where they come from",
+      "The castanyera is the figure of the night: an older woman, well wrapped up, roasting chestnuts on a brazier on a street corner. According to a report by Barcelona's city broadcaster betevé, quoting historian Xavier Theros, around 1800 there were some 200 of them in today's Ciutat Vella alone, and an 1839 ban on lighting fires and roasting chestnuts in the street forced them to work with a fired-clay pot called a copa.",
+      `Barcelona City Council notes that historians believe the chestnut tradition comes from the food served at funerals in the past, when people recited the rosary for relatives who had died. Sources: [Ajuntament de Barcelona](${BCN_TRADITION}) and [betevé](${BTV_CASTANYERES}).`,
+    ),
+    ...h2(
+      "Castanyada 2026 events, day by day",
+      `Only events whose date is published by the organiser or in the Generalitat's official cultural agenda are listed, checked on ${CHECKED.en}. Prices and times can change: confirm them on the organiser's site before you go.`,
+    ),
+    table(
+      "Castanyada and autumn events with a confirmed date, 2026",
+      ["Date", "Place", "What"],
+      [
+        ["Sat 24 and Sun 25 October", "Viladrau (Osona)", "31st Chestnut Fair: Viladrau chestnuts raw and roasted, tastings and guided walks through the chestnut woods"],
+        ["Sat 24 and Sun 25 October", "Arbúcies (La Selva)", "Autumn Fair and Festa del Flabiol"],
+        ["Sat 24 and Sat 31 October, 10:00", "Barcelona, La Pedrera", "Family workshop \"La Castanyera a La Pedrera!\" (1 h 30, €9.50; under-3s free)"],
+        ["Sat 24 October, 18:00", "Vilanova del Vallès", "Theatre, \"Una castanyada de por\" (€10)"],
+        ["Sun 25 October", "Cardona (Bages)", "33rd Fira de la Llenega: a mushroom fair, not a chestnut one, with an exhibition and a cookery show"],
+        ["24 October to 2 November", "Palau-solità i Plegamans (24), Valls (30), Capellades (31), Maçanet de la Selva (1 Nov) and Bellver de Cerdanya (2 Nov)", "Children's show \"On són les castanyes?\""],
+        ["Sat 31 October, at night", "Viladrau", "Ball de les Bruixes (Witches' Dance), held since 1997"],
+      ],
+      "Sources: Viladrau, Arbúcies and Cardona town councils; La Pedrera; Catalonia's cultural agenda (Generalitat open data).",
+    ),
+    ...h2(
+      "Viladrau, the one to pick",
+      "If you can only go to one, go here. Viladrau town council confirms that the **31st Chestnut Fair takes place on the weekend of 24–25 October 2026**, with Viladrau chestnuts raw and roasted, a chestnut-eating contest, guided walks through the chestnut woods and tastings.",
+      "Viladrau sits in the heart of the Montseny, Catalonia's great chestnut massif. Expect crowds; arriving early helps.",
+      `On **31 October**, the night All Saints begins, the village holds its Ball de les Bruixes, which it has done since 1997. Official information: [the fair](${VILADRAU_FIRA}) and [the dance](${VILADRAU_BALL}).`,
     ),
     callout(
       "info",
       "Castanyada or Halloween?",
-      "There is no need to frame this as a conflict: the two now coexist in most towns. In many places the Castanyada is celebrated at school in the morning, and All Saints' night mixes elements of both calendars. Municipal programmes usually include both.",
-    ),
-    callout("warning", "About the programmes", PROGRAMME_NOTE.en),
-    table(
-      "Where the tradition is most visible",
-      ["Place", "Region", "What you will find"],
-      [
-        ["Viladrau", "Osona", "Chestnut Fair (24–25 Oct 2026) and Ball de les Bruixes (31 Oct)"],
-        ["Vilanova de Prades", "Conca de Barberà", "Small local chestnut market and festival"],
-        ["Arbúcies", "La Selva", "Autumn fair with a traditional castanyada"],
-        ["Gósol", "Berguedà", "Mountain All Saints fair"],
-        ["Bagà", "Berguedà", "All Saints fair"],
-        ["Pratdip", "Baix Camp", "Pratdip Llegendari, around All Saints"],
-        ["Cardona", "Bages", "Mushroom fair and autumn-forest activities"],
-        ["Monistrol de Montserrat", "Bages", "Coca i Mató fair"],
-        ["Oliana", "Alt Urgell", "All Saints fair"],
-        ["Amer", "La Selva", "Sant Martí fair, with chestnut roasters"],
-        ["Barcelona", "Barcelonès", "Street chestnut sellers, bakeries and markets"],
-        ["The Montseny massif", "Osona / Vallès / Selva", "Catalonia's chestnut country"],
-      ],
-      "Only some of these are strictly a chestnut fair. The rest are places where the autumn and All Saints tradition is unusually visible.",
-    ),
-    ...h2(
-      "Viladrau, the one to pick",
-      "If you can only go to one, go here. Viladrau town council confirms that the **31st Chestnut Fair takes place on the weekend of 24–25 October 2026**.",
-      "Viladrau sits in the heart of the Montseny, Catalonia's great chestnut massif, and the fair fills the village with produce stalls, tastings and activities. Expect crowds; arriving early genuinely helps.",
-      `Viladrau also holds its Ball de les Bruixes — Witches' Dance — each **31 October**, linked to the fair's programme since 1997. Official information: [the fair](${VILADRAU_FIRA}) and [the dance](${VILADRAU_BALL}).`,
-    ),
-    ...h2(
-      "The pre-Pyrenean All Saints fairs",
-      "Gósol, Bagà and Oliana keep All Saints fairs that predate tourism entirely: these were the markets that closed the season before winter.",
-      "It shows in what is sold and in who attends — still mostly local. If you want something not shaped around visitors, choose one of these.",
-    ),
-    ...h2(
-      "Forest and table: Cardona and Arbúcies",
-      "Cardona pairs its mushroom fair with autumn-forest activities, so chestnuts share the weekend with wild mushrooms and the landscape.",
-      `Arbúcies, at the foot of the Montseny, folds the castanyada into its autumn fair. Both connect with ${link("foodfairs", "en", "the wider season of Catalan food fairs")}.`,
+      "There is no need to frame this as a conflict: the two now coexist in most towns. In many places the Castanyada is celebrated at school, and All Saints' night mixes elements of both calendars.",
     ),
     ...h2(
       "Barcelona: the everyday version",
-      "Barcelona has no single central Castanyada festival, and it would be false to present one. What it has is a street tradition: chestnut sellers with braziers on corners, bakeries selling panellets from mid-October, neighbourhood events and municipal markets.",
-      "That is worth something in itself — you do not need to leave the city to eat panellets made that morning.",
+      "Barcelona has no single central Castanyada festival, and it would be false to present one. What it has is a street tradition, with chestnut sellers on corners and panellets in the bakeries, and neighbourhood events such as the La Pedrera workshop in the table.",
     ),
     ...h2(
-      "What to eat, and when",
-      "**Roast chestnuts**, hot, in a paper cone. **Panellets**, marzipan sweets with pine nuts, coconut, coffee or almond. **Roast sweet potato**. And **moscatell** alongside.",
-      "Panellets appear in bakeries from mid-October. The street chestnut sellers arrive as the weather turns.",
-      `The peak runs from the last weekends of October to 1 November. If you want landscape with it, ${link("autumn", "en", "autumn colour")} reaches much of the country in exactly those weeks.`,
+      "What to eat",
+      "**Roast chestnuts**, hot, in a paper cone. **Panellets**, small marzipan sweets with pine nuts, coconut, coffee or almond. **Roast sweet potato**. And **moscatell** alongside.",
+      `If you want landscape with it, ${link("autumn", "en", "autumn colour")} reaches much of the country in these weeks, and there are ${link("foodfairs", "en", "more autumn food fairs")}.`,
     ),
-    ...paras(`General fair calendar: [firescatalanes.cat](${FIRES}).`),
+    faq("Frequently asked questions", [
+      { question: "When is the Castanyada in 2026?", answer: "Saturday 31 October, the eve of All Saints' Day. 1 November 2026 is a Sunday." },
+      { question: "What are castanyeres?", answer: "The women who sell roast chestnuts in the street. Around 1800 there were some 200 in today's Ciutat Vella in Barcelona, according to betevé." },
+      { question: "What do you eat on the Castanyada?", answer: "Roast chestnuts, panellets and roast sweet potato, often with moscatell." },
+      { question: "Where can I find a chestnut fair this year?", answer: "The biggest is Viladrau's 31st Chestnut Fair on 24–25 October 2026. The table lists the other events with a confirmed date." },
+      { question: "Is the Castanyada the same as Halloween?", answer: "No. It is a Catalan tradition tied to All Saints; today it coexists with Halloween in many towns." },
+    ]),
+    ...paras(`Official events listing: [Catalonia's cultural agenda](${AGENDA}).`),
     ...relatedBlocks(["foodfairs", "autumn", "mushrooms", "medieval", "weekend"], "en"),
   ];
 }
@@ -300,37 +270,42 @@ export const CASTANYADA: FeatureArticle = {
   sources: [
     { name: "Fira de la Castanya de Viladrau", url: VILADRAU_FIRA, publisher: "Ajuntament de Viladrau" },
     { name: "El Ball de les Bruixes de Viladrau", url: VILADRAU_BALL, publisher: "Ajuntament de Viladrau" },
-    { name: "Fires Catalanes", url: FIRES, publisher: "Fires Catalanes" },
+    { name: "Fira de la Tardor i Festa del Flabiol", url: ARBUCIES, publisher: "Ajuntament d'Arbúcies" },
+    { name: "33a Fira de la Llenega", url: CARDONA, publisher: "Ajuntament de Cardona" },
+    { name: "La Castanyera a La Pedrera!", url: PEDRERA, publisher: "Fundació Catalunya La Pedrera" },
+    { name: "Agenda cultural de Catalunya (dades obertes)", url: AGENDA, publisher: "Generalitat de Catalunya" },
+    { name: "Castanyes", url: BCN_TRADITION, publisher: "Ajuntament de Barcelona" },
+    { name: "L'origen de les castanyeres de Barcelona", url: BTV_CASTANYERES, publisher: "betevé" },
   ],
   editions: {
     ca: {
       path: ARTICLE_PATHS.castanyada.ca,
-      title: "La Castanyada: 12 pobles i fires on viure-la de veritat",
-      seoTitle: "Castanyada 2026: fires de la castanya i on viure-la",
+      title: "Castanyada 2026: quan és, on anar-hi i qui és la castanyera",
+      seoTitle: "Castanyada 2026: quan és, on anar-hi i què es menja",
       seoDescription:
-        "Fira de la Castanya de Viladrau el 24 i 25 d'octubre, què es menja la nit del 31 i dotze pobles de Catalunya on la Castanyada es viu de veritat.",
+        "La Castanyada 2026 és dissabte 31 d'octubre. Fires i actes confirmats pels ajuntaments (Viladrau, Cardona, Arbúcies), què es menja i l'origen.",
       excerpt:
-        "Castanyes, panellets, moniatos i Tots Sants. Què és la Castanyada i dotze llocs on es viu de debò, amb la fira de Viladrau com a referència.",
+        "Dissabte 31 d'octubre: la Fira de la Castanya de Viladrau, els actes amb data confirmada, qui és la castanyera i què es menja.",
       blocks: ca(),
     },
     es: {
       path: ARTICLE_PATHS.castanyada.es,
-      title: "La Castanyada: 12 pueblos y ferias donde vivirla de verdad",
-      seoTitle: "Castanyada 2026: ferias de la castaña y dónde vivirla",
+      title: "Castañada 2026: cuándo es, dónde ir y quién es la castanyera",
+      seoTitle: "Castañada 2026: cuándo es, dónde ir y qué se come",
       seoDescription:
-        "Feria de la Castaña de Viladrau el 24 y 25 de octubre, qué se come la noche del 31 y doce pueblos de Cataluña donde la Castanyada se vive de verdad.",
+        "La Castañada 2026 es el sábado 31 de octubre. Ferias y actos confirmados por los ayuntamientos (Viladrau, Cardona, Arbúcies), qué se come y su origen.",
       excerpt:
-        "Castañas, panellets, boniatos y Todos los Santos. Qué es la Castanyada y doce lugares donde se vive de verdad.",
+        "Sábado 31 de octubre: la Fira de la Castanya de Viladrau, los actos con fecha confirmada, quién es la castanyera y qué se come.",
       blocks: es(),
     },
     en: {
       path: ARTICLE_PATHS.castanyada.en,
-      title: "Where to experience Catalonia's Castanyada tradition",
-      seoTitle: "Castanyada 2026: Catalonia's chestnut festival on 31 October",
+      title: "Castanyada 2026: the date, the castanyeres and where to go",
+      seoTitle: "Castanyada 2026: date, castanyeres and where to go",
       seoDescription:
-        "Viladrau's chestnut fair on 24-25 October, what Catalans eat on the night of 31 October, and twelve places where the Castanyada is genuinely lived.",
+        "The Castanyada 2026 is Saturday 31 October. Fairs and events confirmed by town councils, what Catalans eat, and who the castanyeres are.",
       excerpt:
-        "Chestnuts, panellets, sweet potato and All Saints. What the Castanyada is, and twelve places where it is genuinely lived.",
+        "Saturday 31 October: Viladrau's chestnut fair, the events with a confirmed date, who the castanyeres are and what to eat.",
       blocks: en(),
     },
   },

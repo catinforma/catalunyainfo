@@ -97,6 +97,8 @@ export async function POST(request: Request) {
     if (wants("features")) published.push(...(await publishFeatures()));
     if (wants("features-a")) published.push(...(await publishFeatures(0, 5)));
     if (wants("features-b")) published.push(...(await publishFeatures(5, 10)));
+    // Index 5 of FEATURES; republishes the Castanyada alone.
+    if (wants("castanyada")) published.push(...(await publishFeatures(5, 6)));
     if (wants("holidays")) published.push(await publishHolidayGuide());
     if (wants("holiday-today")) published.push(await publishHolidayTodayGuide());
     if (wants("local-holidays")) published.push(await publishLocalHolidaysGuide());

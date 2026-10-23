@@ -9,6 +9,7 @@ import { MEDIEVAL } from "../src/lib/content/features/medieval.ts";
 import { SITGES } from "../src/lib/content/features/sitges.ts";
 import { FOODFAIRS } from "../src/lib/content/features/foodfairs.ts";
 import { CASTANYADA } from "../src/lib/content/features/castanyada.ts";
+import { FEATURES as PUBLISH_ORDER } from "../src/lib/content/features/publish.ts";
 import { MONTSERRAT } from "../src/lib/content/features/montserrat.ts";
 import { TRAPS } from "../src/lib/content/features/traps.ts";
 import { SURPRISING } from "../src/lib/content/features/surprising.ts";
@@ -303,5 +304,16 @@ test("every feature has a title for the related rail in all three languages", ()
     for (const locale of LOCALES) {
       assert.ok(ARTICLE_TITLES[feature.key][locale]?.length, `${feature.key}/${locale}`);
     }
+  }
+});
+
+test("the Castanyada lists only events with a published 2026 date", () => {
+  assert.equal(PUBLISH_ORDER[5], CASTANYADA, "the castanyada publish group assumes index 5");
+  for (const locale of LOCALES) {
+    const text = JSON.stringify(CASTANYADA.editions[locale].blocks);
+    for (const unsourced of ["Gósol", "Oliana", "Bagà", "Pratdip", "Vilanova de Prades", "Amer", "Monistrol", "Sant Dionís"]) {
+      assert.ok(!text.includes(unsourced), `${locale} names ${unsourced}, which has no 2026 source`);
+    }
+    assert.match(text, /31/, locale);
   }
 });
