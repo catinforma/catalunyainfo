@@ -49,6 +49,9 @@ interface Copy {
   june: string[];
   otherTitle: string;
   other: string[];
+  /** The course that has just ended, for searches that still name its year. */
+  previousTitle: string;
+  previous: string[];
   related: string;
   heroAlt: string;
   heroCaption: string;
@@ -60,7 +63,7 @@ export const COPY: Record<Locale, Copy> = {
   ca: {
     path: "guies/calendari-escolar-catalunya",
     title: "Calendari escolar de Catalunya: inici de curs, Nadal i Setmana Santa",
-    seoTitle: "Calendari escolar Catalunya: dates fins al 2029",
+    seoTitle: "Calendari escolar Catalunya 2026-2027: dates clau",
     seoDescription:
       "Quan comença i acaba el curs escolar a Catalunya, les vacances de Nadal i Setmana Santa dels cursos 2026-2027, 2027-2028 i 2028-2029, segons el DOGC.",
     excerpt:
@@ -85,6 +88,10 @@ export const COPY: Record<Locale, Copy> = {
       "Primer de batxillerat acaba el 17 de juny de 2027, el 20 de juny de 2028 i el 20 de juny de 2029. El final de segon de batxillerat el fixa cada centre segons el calendari d'accés a la universitat.",
       "La formació de persones adultes i les escoles oficials d'idiomes comencen com a més tard el 21 de setembre de 2026, el 20 de setembre de 2027 i el 18 i el 21 de setembre de 2028, respectivament.",
     ],
+    previousTitle: "El curs passat: calendari escolar 2025-2026",
+    previous: [
+      "El curs 2025-2026 ja s'ha acabat. Va començar el 8 de setembre de 2025 (el 12 per a batxillerat i FP de grau mitjà i superior), va acabar el 19 de juny de 2026 i tenia vacances de Nadal del 20 de desembre de 2025 al 7 de gener de 2026 i de Setmana Santa del 28 de març al 6 d'abril de 2026, segons l'Ordre EDF/72/2025 recollida pel Consorci d'Educació de Barcelona.",
+    ],
     related:
       "Per planificar ponts i vacances amb els festius laborals, mira el [calendari laboral](/ca/guies/calendari-laboral-catalunya/) i la pàgina [és festiu avui](/ca/guies/es-festiu-avui-catalunya/).",
     heroAlt: "Façana de l'Escola Jaume Balmes de Vic amb el pati enrajolat al davant",
@@ -95,7 +102,7 @@ export const COPY: Record<Locale, Copy> = {
   es: {
     path: "guias/calendario-escolar-cataluna",
     title: "Calendario escolar de Cataluña: inicio de curso, Navidad y Semana Santa",
-    seoTitle: "Calendario escolar Cataluña: fechas hasta 2029",
+    seoTitle: "Calendario escolar Cataluña 2026-2027: fechas clave",
     seoDescription:
       "Cuándo empieza y acaba el curso escolar en Cataluña, las vacaciones de Navidad y Semana Santa de los cursos 2026-2027, 2027-2028 y 2028-2029, según el DOGC.",
     excerpt:
@@ -120,6 +127,10 @@ export const COPY: Record<Locale, Copy> = {
       "Primero de bachillerato termina el 17 de junio de 2027, el 20 de junio de 2028 y el 20 de junio de 2029. El final de segundo de bachillerato lo fija cada centro según el calendario de acceso a la universidad.",
       "La formación de personas adultas y las escuelas oficiales de idiomas empiezan como muy tarde el 21 de septiembre de 2026, el 20 de septiembre de 2027 y el 18 y el 21 de septiembre de 2028, respectivamente.",
     ],
+    previousTitle: "El curso pasado: calendario escolar 2025-2026",
+    previous: [
+      "El curso 2025-2026 ya ha terminado. Empezó el 8 de septiembre de 2025 (el 12 para bachillerato y FP de grado medio y superior), terminó el 19 de junio de 2026 y tuvo vacaciones de Navidad del 20 de diciembre de 2025 al 7 de enero de 2026 y de Semana Santa del 28 de marzo al 6 de abril de 2026, según la Ordre EDF/72/2025 recogida por el Consorci d'Educació de Barcelona.",
+    ],
     related:
       "Para planificar puentes y vacaciones con los festivos laborales, mira el [calendario laboral](/es/guias/calendario-laboral-cataluna/) y la página [es festivo hoy](/es/guias/es-festivo-hoy-cataluna/).",
     heroAlt: "Fachada de la Escola Jaume Balmes de Vic con el patio embaldosado delante",
@@ -130,7 +141,7 @@ export const COPY: Record<Locale, Copy> = {
   en: {
     path: "guides/catalonia-school-calendar",
     title: "Catalonia school calendar: term dates, Christmas and Easter",
-    seoTitle: "Catalonia school calendar: term dates to 2029",
+    seoTitle: "Catalonia school calendar 2026-2027: term dates",
     seoDescription:
       "When the school year starts and ends in Catalonia, and the Christmas and Easter holidays for 2026-2027, 2027-2028 and 2028-2029, from the official gazette.",
     excerpt:
@@ -154,6 +165,10 @@ export const COPY: Record<Locale, Copy> = {
     other: [
       "First-year batxillerat (the two-year upper-secondary course) ends on 17 June 2027, 20 June 2028 and 20 June 2029. The end of the second year is set by each school around the university-entrance calendar.",
       "Adult education and the official language schools start by 21 September 2026, 20 September 2027, and 18 and 21 September 2028 respectively, at the latest.",
+    ],
+    previousTitle: "Last year: the 2025-2026 school calendar",
+    previous: [
+      "The 2025-2026 school year is over. It started on 8 September 2025 (12 September for batxillerat and intermediate and higher vocational training), ended on 19 June 2026, and had Christmas holidays from 20 December 2025 to 7 January 2026 and Easter holidays from 28 March to 6 April 2026, under Order EDF/72/2025 as published by the Consorci d'Educació de Barcelona.",
     ],
     related:
       "To plan long weekends around public holidays, see the [public holiday guide](/en/guides/catalonia-public-holidays/) and [is today a holiday](/en/guides/is-today-a-holiday-in-catalonia/).",
@@ -182,6 +197,7 @@ export function buildBody(locale: Locale, secondMediaId?: string): Block[] {
   if (secondMediaId) blocks.push({ type: "image", mediaId: secondMediaId, size: "wide" });
   section(copy.juneTitle, copy.june);
   section(copy.otherTitle, copy.other);
+  section(copy.previousTitle, copy.previous);
   blocks.push({ type: "paragraph", text: copy.related });
   return blocks;
 }
@@ -335,7 +351,21 @@ export async function publishSchoolCalendarGuide(): Promise<PublishResult> {
     isFeatured: false,
     heroKey: HERO_KEY,
     images,
-    sources: [{ name: SCHOOL_SOURCE.name, url: SCHOOL_SOURCE.url, publisher: SCHOOL_SOURCE.publisher, type: "official" as const }],
+    sources: [
+      { name: SCHOOL_SOURCE.name, url: SCHOOL_SOURCE.url, publisher: SCHOOL_SOURCE.publisher, type: "official" as const },
+      {
+        name: "Proposta de dies de lliure disposició del CEMB per al curs 2026-2027",
+        url: "https://pro-gestornoticies-dtibcn-cat.s3.amazonaws.com/gestornoticies-pro/media/PROPOSTA_APROVADA_DE_DIES_DE_LLIURE_DISPOSICIO_DEL_CEMB_PER_AL_CURS_2026-2027.0d2f10d5.pdf",
+        publisher: "Consell d'Educació Municipal de Barcelona",
+        type: "official" as const,
+      },
+      {
+        name: "Calendari escolar 2025-2026",
+        url: "https://www.edubcn.cat/ca/centres_serveis_educatius/centres_educatius/gestio_centres/calendari_escolar/2025_2026",
+        publisher: "Consorci d'Educació de Barcelona",
+        type: "official" as const,
+      },
+    ],
     publishedAt: PUBLISHED,
     lastVerifiedAt: new Date(`${SCHOOL_VERIFIED_AT}T12:00:00+02:00`),
     editions: LOCALES.map((locale) => {
