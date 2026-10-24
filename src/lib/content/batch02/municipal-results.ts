@@ -88,7 +88,7 @@ const COPY: Record<Locale, T> = {
     ],
     nextTitle: "Les pròximes municipals: 23 de maig del 2027",
     next: [
-      "La llei electoral fixa les municipals el **quart diumenge de maig** cada quatre anys, així que les pròximes són el **diumenge 23 de maig del 2027**. El decret de convocatòria es publica al BOE unes setmanes abans.",
+      "La llei electoral fixa les municipals el **quart diumenge de maig** cada quatre anys, així que les pròximes són el **diumenge 23 de maig del 2027**. El decret de convocatòria es publica al BOE unes setmanes abans. Les eleccions del 29 de novembre del 2026 són generals (Congrés i Senat), no municipals.",
       "Els ciutadans de la Unió Europea que viuen a Catalunya hi poden votar, però han de manifestar la voluntat de fer-ho a l'INE: per a aquestes eleccions, **fins al 30 de desembre del 2026**.",
     ],
     howTitle: "Com es reparteixen els regidors",
@@ -114,7 +114,7 @@ const COPY: Record<Locale, T> = {
     ],
     nextTitle: "Las próximas municipales: 23 de mayo de 2027",
     next: [
-      "La ley electoral fija las municipales el **cuarto domingo de mayo** cada cuatro años, así que las próximas son el **domingo 23 de mayo de 2027**. El decreto de convocatoria se publica en el BOE unas semanas antes.",
+      "La ley electoral fija las municipales el **cuarto domingo de mayo** cada cuatro años, así que las próximas son el **domingo 23 de mayo de 2027**. El decreto de convocatoria se publica en el BOE unas semanas antes. Las elecciones del 29 de noviembre de 2026 son generales (Congreso y Senado), no municipales.",
       "Los ciudadanos de la Unión Europea que viven en Cataluña pueden votar, pero deben manifestar su voluntad de hacerlo al INE: para estas elecciones, **hasta el 30 de diciembre de 2026**.",
     ],
     howTitle: "Cómo se reparten los concejales",
@@ -140,7 +140,7 @@ const COPY: Record<Locale, T> = {
     ],
     nextTitle: "The next local elections: 23 May 2027",
     next: [
-      "Spanish electoral law sets local elections on the **fourth Sunday of May** every four years, so the next ones are on **Sunday 23 May 2027**. The decree calling them is published in the BOE a few weeks before.",
+      "Spanish electoral law sets local elections on the **fourth Sunday of May** every four years, so the next ones are on **Sunday 23 May 2027**. The decree calling them is published in the BOE a few weeks before. The election of 29 November 2026 is a general election (Congress and Senate), not a local one.",
       "EU citizens living in Catalonia can vote, but they must tell the INE (the statistics office that keeps the electoral roll) that they want to: for these elections, **by 30 December 2026**.",
     ],
     howTitle: "How councillors are allocated",
