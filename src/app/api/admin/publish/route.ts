@@ -101,6 +101,7 @@ export async function POST(request: Request) {
     if (wants("castanyada")) published.push(...(await publishFeatures(5, 6)));
     // Montserrat, traps and surprising places without the Castanyada beside them.
     if (wants("features-c")) published.push(...(await publishFeatures(6, 9)));
+    if (wants("rainy")) published.push(...(await publishFeatures(9, 10)));
     if (wants("holidays")) published.push(await publishHolidayGuide());
     if (wants("holiday-today")) published.push(await publishHolidayTodayGuide());
     if (wants("local-holidays")) published.push(await publishLocalHolidaysGuide());
