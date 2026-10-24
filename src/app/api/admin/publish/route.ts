@@ -99,6 +99,8 @@ export async function POST(request: Request) {
     if (wants("features-b")) published.push(...(await publishFeatures(5, 10)));
     // Index 5 of FEATURES; republishes the Castanyada alone.
     if (wants("castanyada")) published.push(...(await publishFeatures(5, 6)));
+    // Montserrat, traps and surprising places without the Castanyada beside them.
+    if (wants("features-c")) published.push(...(await publishFeatures(6, 9)));
     if (wants("holidays")) published.push(await publishHolidayGuide());
     if (wants("holiday-today")) published.push(await publishHolidayTodayGuide());
     if (wants("local-holidays")) published.push(await publishLocalHolidaysGuide());
@@ -141,6 +143,8 @@ export async function POST(request: Request) {
     if (wants("election-results")) published.push(await publishB2Article(CONGRESS_RESULTS), await publishB2Article(PARLIAMENT_RESULTS));
     if (wants("coast-trips")) published.push(await publishB2Article(SITGES), await publishB2Article(TARRAGONA));
     if (wants("batch02-a")) published.push(...(await publishBatch02(0, 3)));
+    // Index 2 of BATCH_02; Girona without the transport and ZBE guides.
+    if (wants("girona")) published.push(...(await publishBatch02(2, 3)));
     if (wants("batch02-b")) published.push(...(await publishBatch02(3, 6)));
     if (wants("batch02-c")) published.push(...(await publishBatch02(6, 9)));
 
