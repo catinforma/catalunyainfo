@@ -20,6 +20,7 @@ import type {
 } from "./types";
 import { SECTION_CATEGORY_KEYS, SECTION_ENTRY_TYPES } from "./types";
 import { DAY_DEPENDENT_PATTERN } from "./day-dependent";
+import { relatedTerms } from "./related-terms";
 
 const {
   authors,
@@ -726,8 +727,9 @@ export async function summariesByEntryIds(
 const RELATED_SHOWN = 4;
 
 /**
- * Tops up an article's hand-picked related entries from its own category, then
- * its own entry type.
+ * Tops up an article's hand-picked related entries with the pages closest in
+ * subject (full-text rank against the article's title and excerpt, see
+ * related-terms.ts), then its own category, then its own entry type.
  *
  * Most pages were published with two or three relations, so about half the
  * site was linked from fewer than five other pages and Google crawled some of
@@ -748,16 +750,31 @@ async function relatedFill(
   if (!db || count <= 0) return [];
 
   return safeRead("relatedFill", [], async () => {
-    const self = db
-      .select({ type: entries.type, categoryId: entries.primaryCategoryId })
+    const [own] = await db
+      .select({
+        type: entries.type,
+        categoryId: entries.primaryCategoryId,
+        title: entryTranslations.title,
+        excerpt: entryTranslations.excerpt,
+      })
       .from(entries)
-      .where(eq(entries.id, entryId));
-    const [own] = await self;
+      .leftJoin(
+        entryTranslations,
+        and(eq(entryTranslations.entryId, entries.id), eq(entryTranslations.locale, locale)),
+      )
+      .where(eq(entries.id, entryId))
+      .limit(1);
     if (!own) return [];
 
     const sameCategory = own.categoryId
       ? eq(entries.primaryCategoryId, own.categoryId)
       : sql`false`;
+    const terms = relatedTerms(own.title, own.excerpt);
+    const tsConfig = sql.raw(`'${locale === "es" ? "spanish" : locale === "en" ? "english" : "simple"}'`);
+    const document = sql`setweight(to_tsvector(${tsConfig}, coalesce(${entryTranslations.title}, '')), 'A') || setweight(to_tsvector(${tsConfig}, coalesce(${entryTranslations.excerpt}, '')), 'B')`;
+    const query = sql`to_tsquery(${tsConfig}, ${terms.join(" | ")})`;
+    const matches = terms.length > 0 ? sql`(${document} @@ ${query})` : sql`false`;
+    const rank = terms.length > 0 ? sql`ts_rank(${document}, ${query})` : sql`0`;
     const rows = await summaryQuery(db, locale)
       .where(
         and(
@@ -768,10 +785,11 @@ async function relatedFill(
             exclude.map((id) => sql`${id}::uuid`),
             sql`, `,
           )})`,
-          or(sameCategory, eq(entries.type, own.type)),
+          or(sameCategory, eq(entries.type, own.type), matches),
         ),
       )
       .orderBy(
+        desc(rank),
         desc(sql`(${sameCategory})`),
         sql`md5(${entries.id}::text || ${entryId})`,
       )
