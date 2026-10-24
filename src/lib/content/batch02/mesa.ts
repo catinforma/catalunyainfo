@@ -20,7 +20,14 @@ import {
  * Every statement is from the LOREG, RD 806/2026, RD 605/1999, Orden
  * INT/650/2026, JEC Instrucción 6/2011 (as amended to 2025), the IRPF
  * regulation, Interior and the INE, checked on 12 Oct 2026
- * (research_notes/blog-batch-03/mesa_electoral.md).
+ * (research_notes/blog-batch-03/mesa_electoral.md). Re-checked on 24 Oct
+ * 2026: Orden INT/650/2026 (75 EUR, paid in full per polling day, silent on
+ * when or how), Instrucción 6/2011 causes, Interior's "Permisos y dietas"
+ * page (substitutes paid only if they sit; full day off and five hours the
+ * next day) and the JEC calendar (draw 31 Oct to 4 Nov, 72-hour notice).
+ *
+ * ca/es titles are frozen until 14 Nov (docs/SEO_EXPERIMENTS.md, 17 Oct):
+ * only the body changes there.
  *
  * The 29N dates are the latest possible ones from Interior's calendar; each
  * person's own deadline runs from their own notification, and the copy says
@@ -31,7 +38,7 @@ import {
  * municipal elections once their decree is in the BOE.
  */
 
-const VERIFIED = "2026-10-17";
+const VERIFIED = "2026-10-24";
 
 const SOURCES: B2Source[] = [
   { name: "Ley Orgánica 5/1985, del Régimen Electoral General (texto consolidado)", url: "https://www.boe.es/buscar/act.php?id=BOE-A-1985-11672", publisher: "BOE" },
@@ -39,6 +46,8 @@ const SOURCES: B2Source[] = [
   { name: "Orden INT/650/2026, dieta de los miembros de las mesas electorales", url: "https://www.boe.es/buscar/act.php?id=BOE-A-2026-13948", publisher: "BOE" },
   { name: "Instrucción 6/2011 de la Junta Electoral Central, sobre excusas de miembros de mesa (consolidada)", url: "https://www.boe.es/buscar/act.php?id=BOE-A-2011-7705", publisher: "BOE" },
   { name: "Real Decreto 605/1999, de regulación complementaria de los procesos electorales", url: "https://www.boe.es/buscar/act.php?id=BOE-A-1999-8583", publisher: "BOE" },
+  { name: "Calendario electoral, elecciones generales 2026", url: "https://www.juntaelectoralcentral.es/cs/jec/documentos/eg2026_calendario.pdf", publisher: "Junta Electoral Central" },
+  { name: "Miembros de mesa: permisos y dietas", url: "https://infoelectoral.interior.gob.es/es/proceso-electoral/miembros-de-mesa/informacion-general/permisos-y-dietas/", publisher: "Ministerio del Interior" },
   { name: "Calendario electoral, elecciones a Cortes Generales 29-N", url: "https://infoelectoral.interior.gob.es/export/sites/default/pdf/procesos_electorales/Elecciones-Generales-29-N/Calendario-mural-elecciones-Cortes-Generales-2026.pdf", publisher: "Ministerio del Interior" },
   { name: "Preguntas frecuentes: las mesas electorales", url: "https://infoelectoral.interior.gob.es/es/proceso-electoral/preguntas-frecuentes/las-mesas-electorales/", publisher: "Ministerio del Interior" },
   { name: "Consulta de mesas y locales electorales", url: "https://sede.ine.gob.es/tramite/consulta_mesas_locales/", publisher: "INE" },
@@ -66,8 +75,8 @@ const META: Record<Locale, { path: string; title: string; seoTitle: string; seoD
   },
   en: {
     path: "guides/polling-station-duty-spain",
-    title: "Drawn for polling-station duty in Spain: what to do, the pay and how to be excused",
-    seoTitle: "Polling-station duty in Spain: €75 pay, excuses, time off",
+    title: "Drawn for polling-station duty in Spain on 29 November: the €75 pay, excuses and what to do",
+    seoTitle: "Polling-station duty in Spain 2026: €75 pay, excuses, time off",
     seoDescription:
       "Drawn to sit on a Spanish polling-station table (mesa electoral)? The deadlines to be excused, accepted reasons, the €75 allowance, time off work and the day.",
     excerpt:
@@ -94,6 +103,10 @@ type T = {
   penaltyTitle: string;
   penalty: string;
   payTitle: string;
+  payCaption: string;
+  payHeaders: string[];
+  payRows: string[][];
+  payNote: string;
   pay: string[];
   workTitle: string;
   work: string[];
@@ -109,7 +122,7 @@ type T = {
 
 const COPY: Record<Locale, T> = {
   ca: {
-    lead: "Cada mesa electoral la formen **una presidenta o president i dos vocals**, triats per sorteig entre els electors d'aquella mesa. Si t'ha tocat, és obligatori, però tens set dies per presentar una excusa documentada, cobres una dieta de **75 €** i tens permís a la feina. Aquí tens els terminis de les eleccions generals del **29 de novembre del 2026** i tot el que diu la llei.",
+    lead: "Ser membre de mesa a les eleccions generals del **29 de novembre del 2026** es paga amb una dieta de **75 €** per la jornada, la mateixa per a qui presideix i per als dos vocals, i no tributa a l'IRPF (Orden INT/650/2026). Cap norma no fixa quan ni com es cobra. El sorteig el fa cada ajuntament **entre el 31 d'octubre i el 4 de novembre**: si et toca, és obligatori, però tens set dies des de la notificació per presentar una excusa documentada, i tens permís a la feina. Aquí tens els terminis i tot el que diu la llei.",
     note: "Els terminis de cada persona compten des del dia que li notifiquen el nomenament. Les dates d'aquesta pàgina són les últimes possibles segons el calendari oficial.",
     whoTitle: "Qui pot ser membre de mesa",
     who: [
@@ -148,7 +161,16 @@ const COPY: Record<Locale, T> = {
     late: "Si després del termini de set dies passa alguna cosa que t'impedeix anar-hi, l'has de comunicar a la Junta Electoral de Zona **almenys 72 hores abans** de les 8.00 del dia de la votació, amb justificants. Si passa encara més tard, avisa **immediatament**, i sempre abans que es constitueixi la mesa.",
     penaltyTitle: "Què passa si no hi vas",
     penalty: "No presentar-te, abandonar el lloc sense causa legítima o no fer l'excusa o l'avís que demana la llei és un **delicte** (article 143 de la LOREG): presó de **tres mesos a un any o multa de sis a vint-i-quatre mesos**. També s'aplica als suplents.",
-    payTitle: "Quant i quan es cobra",
+    payTitle: "Quant es cobra per ser a la mesa electoral el 2026 i quan es cobra",
+    payCaption: "Dieta per ser a la mesa electoral el 29 de novembre",
+    payHeaders: ["Lloc a la mesa", "Dieta"],
+    payRows: [
+      ["President o presidenta", "75 €"],
+      ["Vocal (dos per mesa)", "75 €"],
+      ["Suplent que acaba formant part de la mesa", "75 €"],
+      ["Suplent que no ocupa cap lloc", "No cobra"],
+    ],
+    payNote: "Orden INT/650/2026 (BOE del 27 de juny del 2026), vigent des del 28 de juny. Es cobra sencera, duri el que duri la jornada.",
     pay: [
       "Cada membre titular cobra una dieta de **75 €** per jornada electoral, sigui quina sigui la durada, segons l'Orden INT/650/2026 (abans eren 70 €). Els suplents només la cobren si acaben formant part de la mesa. La dieta **no tributa a l'IRPF**.",
       "**Quan es cobra:** cap norma oficial fixa el dia ni la forma de pagament. L'Orden INT/650/2026, que fixa els 75 €, només diu al preàmbul que els pagaments encara es fan majoritàriament en efectiu. Si et toca, pregunta-ho a la Junta Electoral de Zona o a l'Ajuntament.",
@@ -177,16 +199,19 @@ const COPY: Record<Locale, T> = {
       "**Si t'ha tocat ser membre de mesa:** no hi ha cap consulta oficial en línia. Només ho saps per la notificació; si tens dubtes, pregunta a l'Ajuntament o a la Junta Electoral de Zona.",
     ],
     faq: [
-      { question: "Quant cobra un membre de mesa?", answer: "75 € per jornada electoral, segons l'Orden INT/650/2026. Els suplents només la cobren si acaben a la mesa, i la dieta no tributa a l'IRPF." },
+      { question: "Quant cobra un membre de mesa el 2026?", answer: "75 € per jornada electoral, segons l'Orden INT/650/2026. Els suplents només la cobren si acaben a la mesa, i la dieta no tributa a l'IRPF." },
+      { question: "Quant cobra el president d'una mesa electoral?", answer: "75 €, la mateixa dieta que cada vocal: l'Orden INT/650/2026 fixa una sola quantitat per a presidents i vocals." },
       { question: "Quan es cobra la dieta de la mesa electoral?", answer: "Cap norma oficial fixa el dia ni la forma de pagament. L'Orden INT/650/2026, que fixa els 75 €, només diu al preàmbul que els pagaments encara es fan majoritàriament en efectiu. Si et toca, pregunta-ho a la Junta Electoral de Zona o a l'Ajuntament." },
       { question: "Quan es fa el sorteig de les meses del 29N?", answer: "Entre el 31 d'octubre i el 4 de novembre del 2026. Cada Ajuntament tria el dia, i t'han de notificar el resultat en tres dies." },
       { question: "Fins quan em puc excusar?", answer: "Set dies des que et notifiquen el nomenament. Per al 29N, com a molt tard el 14 de novembre si el sorteig es fa el darrer dia." },
       { question: "Què passa si no em presento a la mesa?", answer: "És un delicte de l'article 143 de la LOREG: presó de tres mesos a un any o multa de sis a vint-i-quatre mesos." },
       { question: "Tinc festa l'endemà de fer de membre de mesa?", answer: "Tens dret a cinc hores menys de feina l'endemà, en tots els casos. Per al 29N, el dilluns 30 de novembre." },
+      { question: "Com sé si m'ha tocat ser membre de mesa?", answer: "No hi ha cap consulta en línia: només ho saps per la notificació, que t'han de fer en els tres dies següents al sorteig (del 31 d'octubre al 4 de novembre). Si tens dubtes, pregunta a l'Ajuntament o a la Junta Electoral de Zona." },
+      { question: "Quines excuses s'accepten per no anar a la mesa?", answer: "S'accepten sempre, si les documentes: tenir de 65 a 69 anys, una discapacitat declarada, estar de baixa, estar embarassada de sis mesos o més, cuidar un lactant, menors de 12 anys o un familiar dependent, o haver estat a la mesa tres vegades en deu anys. Treballar o ser de vacances no n'és cap d'automàtica." },
     ],
   },
   es: {
-    lead: "Cada mesa electoral la forman **un presidente o presidenta y dos vocales**, elegidos por sorteo entre los electores de esa mesa. Si te ha tocado, es obligatorio, pero tienes siete días para presentar una excusa documentada, cobras una dieta de **75 €** y tienes permiso en el trabajo. Aquí tienes los plazos de las elecciones generales del **29 de noviembre de 2026** y todo lo que dice la ley.",
+    lead: "Estar en la mesa electoral en las generales del **29 de noviembre de 2026** se paga con una dieta de **75 €** por la jornada, la misma para el presidente y los dos vocales, y no tributa en el IRPF (Orden INT/650/2026). Ninguna norma fija cuándo ni cómo se cobra. El sorteo lo hace cada ayuntamiento **entre el 31 de octubre y el 4 de noviembre**: si te toca, es obligatorio, pero tienes siete días desde la notificación para presentar una excusa documentada, y tienes permiso en el trabajo. Aquí tienes los plazos y todo lo que dice la ley.",
     note: "Los plazos de cada persona cuentan desde el día en que le notifican el nombramiento. Las fechas de esta página son las últimas posibles según el calendario oficial.",
     whoTitle: "Quién puede ser miembro de mesa",
     who: [
@@ -225,7 +250,16 @@ const COPY: Record<Locale, T> = {
     late: "Si después del plazo de siete días ocurre algo que te impide ir, debes comunicarlo a la Junta Electoral de Zona **al menos 72 horas antes** de las 8.00 del día de la votación, con justificantes. Si ocurre aún más tarde, avisa **de inmediato**, y siempre antes de que se constituya la mesa.",
     penaltyTitle: "Qué pasa si no vas",
     penalty: "No presentarte, abandonar el puesto sin causa legítima o no hacer la excusa o el aviso que exige la ley es un **delito** (artículo 143 de la LOREG): prisión de **tres meses a un año o multa de seis a veinticuatro meses**. También se aplica a los suplentes.",
-    payTitle: "Cuánto y cuándo se cobra",
+    payTitle: "Cuánto pagan por estar en la mesa electoral en 2026 y cuándo se cobra",
+    payCaption: "Dieta por estar en la mesa electoral el 29 de noviembre",
+    payHeaders: ["Puesto en la mesa", "Dieta"],
+    payRows: [
+      ["Presidente o presidenta", "75 €"],
+      ["Vocal (dos por mesa)", "75 €"],
+      ["Suplente que acaba formando parte de la mesa", "75 €"],
+      ["Suplente que no ocupa ningún puesto", "No cobra"],
+    ],
+    payNote: "Orden INT/650/2026 (BOE del 27 de junio de 2026), en vigor desde el 28 de junio. Se cobra entera, dure lo que dure la jornada.",
     pay: [
       "Cada miembro titular cobra una dieta de **75 €** por jornada electoral, sea cual sea la duración, según la Orden INT/650/2026 (antes eran 70 €). Los suplentes solo la cobran si acaban formando parte de la mesa. La dieta **no tributa en el IRPF**.",
       "**Cuándo se cobra:** ninguna norma oficial fija el día ni la forma de pago. La Orden INT/650/2026, que fija los 75 €, solo dice en su preámbulo que los pagos aún se hacen mayoritariamente en efectivo. Si te toca, pregúntalo a la Junta Electoral de Zona o al Ayuntamiento.",
@@ -254,16 +288,19 @@ const COPY: Record<Locale, T> = {
       "**Si te ha tocado ser miembro de mesa:** no hay ninguna consulta oficial en línea. Solo lo sabes por la notificación; si tienes dudas, pregunta al Ayuntamiento o a la Junta Electoral de Zona.",
     ],
     faq: [
-      { question: "¿Cuánto cobra un miembro de mesa?", answer: "75 € por jornada electoral, según la Orden INT/650/2026. Los suplentes solo la cobran si acaban en la mesa, y la dieta no tributa en el IRPF." },
+      { question: "¿Cuánto pagan por estar en la mesa electoral en 2026?", answer: "75 € por jornada electoral, según la Orden INT/650/2026. Los suplentes solo la cobran si acaban en la mesa, y la dieta no tributa en el IRPF." },
+      { question: "¿Cuánto cobra un presidente de mesa electoral?", answer: "75 €, la misma dieta que cada vocal: la Orden INT/650/2026 fija una sola cantidad para presidentes y vocales." },
       { question: "¿Cuándo se cobra la dieta de la mesa electoral?", answer: "Ninguna norma oficial fija el día ni la forma de pago. La Orden INT/650/2026, que fija los 75 €, solo dice en su preámbulo que los pagos aún se hacen mayoritariamente en efectivo. Si te toca, pregúntalo a la Junta Electoral de Zona o al Ayuntamiento." },
       { question: "¿Cuándo es el sorteo de las mesas del 29N?", answer: "Entre el 31 de octubre y el 4 de noviembre de 2026. Cada Ayuntamiento elige el día, y te deben notificar el resultado en tres días." },
       { question: "¿Hasta cuándo me puedo excusar?", answer: "Siete días desde que te notifican el nombramiento. Para el 29N, como muy tarde el 14 de noviembre si el sorteo se hace el último día." },
       { question: "¿Qué pasa si no me presento a la mesa?", answer: "Es un delito del artículo 143 de la LOREG: prisión de tres meses a un año o multa de seis a veinticuatro meses." },
       { question: "¿Tengo fiesta al día siguiente de ser miembro de mesa?", answer: "Tienes derecho a cinco horas menos de trabajo al día siguiente, en todos los casos. Para el 29N, el lunes 30 de noviembre." },
+      { question: "¿Cómo sé si me ha tocado mesa electoral?", answer: "No hay ninguna consulta en línea: solo lo sabes por la notificación, que te deben hacer en los tres días siguientes al sorteo (del 31 de octubre al 4 de noviembre). Si tienes dudas, pregunta al Ayuntamiento o a la Junta Electoral de Zona." },
+      { question: "¿Qué excusas se aceptan para no ir a la mesa electoral?", answer: "Se aceptan siempre, si las documentas: tener de 65 a 69 años, una discapacidad declarada, estar de baja, estar embarazada de seis meses o más, cuidar de un lactante, de menores de 12 años o de un familiar dependiente, o haber estado en la mesa tres veces en diez años. Trabajar o estar de vacaciones no es ninguna automática." },
     ],
   },
   en: {
-    lead: "Every Spanish polling station has a **mesa electoral**: **a chair and two members**, drawn by lot from the voters registered at that station. If you are drawn, it is compulsory, but you have seven days to submit a documented excuse, you are paid a **€75** allowance and you get time off work. Here are the deadlines for the general election of **29 November 2026** and everything the law says.",
+    lead: "Sitting on a Spanish polling-station table (**mesa electoral**) at the general election of **29 November 2026** pays a **€75** allowance for the day, the same for the chair and the two members, and it is not taxed (Orden INT/650/2026). No rule says when or how it is paid. Each town hall holds the draw **between 31 October and 4 November**: if you are drawn, it is compulsory, but you have seven days from notification to submit a documented excuse, and you get time off work. Here are the deadlines and everything the law says.",
     note: "Each person's deadlines run from the day they are notified. The dates on this page are the latest possible ones in the official calendar.",
     whoTitle: "Who can be drawn",
     who: [
@@ -302,7 +339,16 @@ const COPY: Record<Locale, T> = {
     late: "If, after the seven days, something prevents you from going, tell the Junta Electoral de Zona **at least 72 hours before** 08:00 on polling day, with proof. If it happens even later, tell them **immediately**, and always before the table is formed.",
     penaltyTitle: "What happens if you don't turn up",
     penalty: "Failing to turn up, leaving without a legitimate reason, or not giving the excuse or notice the law requires is a **criminal offence** (article 143 of the electoral law): **three months to a year in prison, or a fine of six to twenty-four months** (a day-fine). It applies to substitutes too.",
-    payTitle: "How much, and when it is paid",
+    payTitle: "How much polling-station duty pays in 2026, and when",
+    payCaption: "Allowance for sitting on a polling-station table on 29 November",
+    payHeaders: ["Role", "Allowance"],
+    payRows: [
+      ["Chair (presidente)", "€75"],
+      ["Member (vocal, two per table)", "€75"],
+      ["Substitute who ends up sitting", "€75"],
+      ["Substitute who does not sit", "Not paid"],
+    ],
+    payNote: "Orden INT/650/2026 (BOE, 27 June 2026), in force since 28 June. Paid in full however long the day lasts.",
     pay: [
       "Each sitting member is paid an allowance of **€75** per polling day, however long it lasts, under Orden INT/650/2026 (it used to be €70). Substitutes are paid only if they end up sitting. The allowance is **not taxed**.",
       "**When it is paid:** no official rule sets the day or method of payment. Orden INT/650/2026, which sets the €75, only says in its preamble that payments are still mostly made in cash. If you are drawn, ask the Junta Electoral de Zona or your town hall.",
@@ -336,6 +382,8 @@ const COPY: Record<Locale, T> = {
       { question: "When is the draw for the 29 November election?", answer: "Between 31 October and 4 November 2026. Each town hall picks the day, and you must be notified within three days." },
       { question: "How long do I have to ask to be excused?", answer: "Seven days from your notification. For 29 November, 14 November at the latest if your draw was on the last day." },
       { question: "What happens if I don't turn up?", answer: "It is an offence under article 143 of the electoral law: three months to a year in prison, or a day-fine of six to twenty-four months." },
+      { question: "How do I know if I have been drawn?", answer: "There is no online lookup: you find out from the notification, which must reach you within three days of the draw (31 October to 4 November). If in doubt, ask your town hall or the Junta Electoral de Zona." },
+      { question: "Which excuses are accepted?", answer: "Always accepted once documented: being 65 to 69, a recognised disability, sick leave, being six or more months pregnant, caring for a breastfed baby, children under 12 or a dependent relative, or having sat three times in ten years. Work or holidays are not automatic excuses." },
     ],
   },
 };
@@ -345,6 +393,9 @@ function body(locale: Locale) {
   return [
     lead(t.lead),
     callout("official", verifiedLine(locale, VERIFIED), t.note),
+    ...h2(t.payTitle),
+    table(t.payCaption, t.payHeaders, t.payRows, t.payNote),
+    ...t.pay.map((text) => ({ type: "paragraph", text }) as const),
     ...h2(t.whoTitle, ...t.who),
     ...h2(t.datesTitle),
     table(t.datesCaption, t.datesHeaders, t.datesRows, t.datesNote),
@@ -353,7 +404,6 @@ function body(locale: Locale) {
     { type: "paragraph", text: t.excuseCase } as const,
     ...h2(t.lateTitle, t.late),
     callout("warning", t.penaltyTitle, t.penalty),
-    ...h2(t.payTitle, ...t.pay),
     ...h2(t.workTitle),
     list(...t.work),
     ...h2(t.dayTitle),
@@ -361,7 +411,7 @@ function body(locale: Locale) {
     ...h2(t.checkTitle),
     list(...t.check),
     faq(t.faq),
-    ...b2Related(["voting", "congressResults", "parliamentResults"], locale),
+    ...b2Related(["voting", "electionNight", "congressResults", "parliamentResults"], locale),
   ];
 }
 
