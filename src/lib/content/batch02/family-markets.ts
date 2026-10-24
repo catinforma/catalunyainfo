@@ -57,7 +57,7 @@ const ZOO_META: Record<Locale, Meta> = {
   es: {
     path: "guias/zoo-aquarium-barcelona",
     title: "Zoo y Aquarium de Barcelona: entradas, horarios y cómo llegar",
-    seoTitle: "Zoo y Aquarium de Barcelona: horario y precio de las entradas",
+    seoTitle: "Zoo y Aquarium de Barcelona: horario y precio de entradas",
     seoDescription:
       "Zoo de Barcelona a 23 € (niños 13,90 €), entrada solo por la Ciutadella, y Aquarium a 30 € (de 5 a 10 años, 23 €). Horario de los dos y cómo llegar.",
     excerpt: "Cuánto cuestan el Zoo y el Aquarium de Barcelona, cuándo abren, quién entra gratis y cómo se llega, con datos de las webs oficiales.",
@@ -319,7 +319,7 @@ const MARKETS_META: Record<Locale, Meta> = {
     title: "La Boqueria i els mercats de Barcelona: horaris i normes per visitar-los",
     seoTitle: "La Boqueria i els mercats de Barcelona: horaris i normes",
     seoDescription:
-      "La Boqueria obre de dilluns a dissabte de 8:00 a 20:30 i tanca els diumenges. Horaris de Santa Caterina, Sant Antoni i la resta, i la norma dels grups turístics.",
+      "La Boqueria obre de dilluns a dissabte de 8:00 a 20:30 i tanca els diumenges. Horaris de Santa Caterina, Sant Antoni i la resta, i la norma dels grups.",
     excerpt: "Quan obren la Boqueria i els altres grans mercats de Barcelona, les normes per als grups de visitants i què canviarà amb la reforma.",
   },
   es: {
@@ -327,7 +327,7 @@ const MARKETS_META: Record<Locale, Meta> = {
     title: "La Boqueria y los mercados de Barcelona: horarios y normas para visitarlos",
     seoTitle: "Horario de la Boqueria y de los mercados de Barcelona",
     seoDescription:
-      "La Boqueria abre de lunes a sábado de 8:00 a 20:30 y cierra el domingo. Horario de Santa Caterina, Sant Antoni, Concepció, Llibertat y Ninot, y qué abre en domingo.",
+      "La Boqueria abre de lunes a sábado de 8:00 a 20:30 y cierra el domingo. Horario de Santa Caterina, Sant Antoni, Concepció y Ninot, y qué abre en domingo.",
     excerpt: "Cuándo abren la Boqueria y los otros grandes mercados de Barcelona, las normas para los grupos de visitantes y qué cambiará con la reforma.",
   },
   en: {

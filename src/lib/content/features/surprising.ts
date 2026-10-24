@@ -550,7 +550,7 @@ export const SURPRISING: FeatureArticle = {
       title: "15 hidden places in Catalonia most visitors still miss",
       seoTitle: "15 hidden places in Catalonia most visitors miss",
       seoDescription:
-        "Hidden places in Catalonia off the usual circuit: Cardona's Salt Mountain, Casserres, Ullastret, Fumanya, Castellfollit and more, with official prices and hours.",
+        "Hidden places in Catalonia off the usual route: Cardona's Salt Mountain, Casserres, Ullastret, Fumanya, Castellfollit and more, with official prices and hours.",
       excerpt:
         "Salt mines, monasteries in river meanders, Iberian cities and dinosaur footprints: fifteen places outside the usual circuit.",
       blocks: en(),
