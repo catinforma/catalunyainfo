@@ -445,3 +445,21 @@ test("parking: green hours, no windscreen ticket, resident-only spaces, no inven
     assert.deepEqual([...new Set(text.match(/(?<![\d,.])\d{2,3} ?€|€\d{2,3}(?![\d,.])/g) ?? [])].sort(), [], `${locale}: no fine amounts`);
   }
 });
+
+/**
+ * Parking, 24 Oct 2026: the ES page's top query is "como funciona la zona
+ * verde en barcelona". The lead now answers it, a zone-by-zone table follows,
+ * and the "which is cheaper" answer is computed from AREA's rate tables.
+ */
+test("parking: zone summary table and a blue-vs-green answer that matches the rates", () => {
+  for (const locale of ["ca", "es", "en"] as const) {
+    const blocks = PARKING.editions[locale].blocks as { type: string; rows?: string[][]; text?: string }[];
+    const tables = blocks.filter((b) => b.type === "table");
+    assert.equal(tables.length, 3, `${locale}: summary + blue + green tables`);
+    assert.equal(tables[0]?.rows?.length, 5, `${locale}: five kinds of space in the summary`);
+    const lead = blocks.find((b) => b.type === "paragraph")?.text ?? "";
+    assert.match(lead, /1[,.]40/, `${locale}: the lead gives the green non-resident price`);
+  }
+  const es = bodyToPlainText(PARKING.editions.es.blocks);
+  assert.match(es, /3,25 €\W* la hora en azul y \W*3,75 €/);
+});
