@@ -27,6 +27,11 @@ import {
  * figures with the year attached; the 2027 calendar is not out.
  */
 
+// 24 Oct 2026: season dates, lifeguard hours, "only 112" off season, the
+// winter toilets and the beach descriptions re-read on barcelona.cat
+// (temporada-de-banys, barcelona-platja-platja). The "about 5 km of coast"
+// figure is not on either page and was taken out of the leads. The rest of
+// the page was not re-checked today, so VERIFIED stays at 12 Oct.
 const VERIFIED = "2026-10-12";
 
 const SOURCES: B2Source[] = [
@@ -56,7 +61,7 @@ const META: Record<Locale, { path: string; title: string; seoTitle: string; seoD
   es: {
     path: "guias/playas-barcelona",
     title: "Playas de Barcelona: cuál elegir, temporada de baño y normas",
-    seoTitle: "Playas de Barcelona: cuál elegir, normas y bandera azul",
+    seoTitle: "Playas de Barcelona: las 10 playas, bandera azul y normas",
     seoDescription:
       "Las diez zonas de baño de Barcelona, cuáles tienen bandera azul, la playa nudista y la de perros, cuándo hay socorristas y qué te pueden multar.",
     excerpt:
@@ -65,7 +70,7 @@ const META: Record<Locale, { path: string; title: string; seoTitle: string; seoD
   en: {
     path: "guides/barcelona-beaches",
     title: "Barcelona beaches: which one to pick, the season and the rules",
-    seoTitle: "Barcelona beaches: which to pick, rules and Blue Flags",
+    seoTitle: "Barcelona beaches: all 10, Blue Flags, rules and season",
     seoDescription:
       "Barcelona's ten bathing areas, which have a Blue Flag, the nudist and dog beaches, when lifeguards are on duty and what you can be fined for.",
     excerpt:
@@ -117,7 +122,7 @@ type T = {
 
 const COPY: Record<Locale, T> = {
   ca: {
-    lead: "Barcelona té **deu zones de bany** al llarg d'uns 5 quilòmetres de costa: nou platges de sorra i la Zona de Banys del Fòrum, que no en té. Aquí tens com són, quines tenen bandera blava, quan hi ha socorristes, què es pot fer i què no, i on mirar la qualitat de l'aigua, amb les dades de l'Ajuntament i l'Agència Catalana de l'Aigua.",
+    lead: "Barcelona té **deu zones de bany** de Sant Sebastià al Fòrum: nou platges de sorra i la Zona de Banys del Fòrum, que no en té. La temporada de bany del 2026 va acabar el 4 d'octubre: ara no hi ha socorristes, només el 112. Aquí tens com són, quines tenen bandera blava, quan hi ha socorristes, què es pot fer i què no, i on mirar la qualitat de l'aigua, amb les dades de l'Ajuntament i l'Agència Catalana de l'Aigua.",
     note: "Fora de la temporada de bany no hi ha socorristes a cap platja: només el 112.",
     whichTitle: "Quina platja triar",
     which: [
@@ -163,7 +168,7 @@ const COPY: Record<Locale, T> = {
     ],
   },
   es: {
-    lead: "Barcelona tiene **diez zonas de baño** a lo largo de unos 5 kilómetros de costa: nueve playas de arena y la Zona de Banys del Fòrum, que no tiene. Aquí tienes cómo son, cuáles tienen bandera azul, cuándo hay socorristas, qué se puede hacer y qué no, y dónde mirar la calidad del agua, con los datos del Ayuntamiento y la Agència Catalana de l'Aigua.",
+    lead: "Barcelona tiene **diez zonas de baño** de Sant Sebastià al Fòrum: nueve playas de arena y la Zona de Banys del Fòrum, que no tiene. La temporada de baño de 2026 terminó el 4 de octubre: ahora no hay socorristas, solo el 112. Aquí tienes cómo son, cuáles tienen bandera azul, cuándo hay socorristas, qué se puede hacer y qué no, y dónde mirar la calidad del agua, con los datos del Ayuntamiento y la Agència Catalana de l'Aigua.",
     note: "Fuera de la temporada de baño no hay socorristas en ninguna playa: solo el 112.",
     whichTitle: "Qué playa elegir",
     which: [
@@ -209,7 +214,7 @@ const COPY: Record<Locale, T> = {
     ],
   },
   en: {
-    lead: "Barcelona has **ten bathing areas** along about 5 kilometres of coast: nine sand beaches plus the Fòrum bathing area, which has no sand. Here is what each is like, which have a Blue Flag, when lifeguards are on duty, what you can and can't do, and where to check the water, from the City Council and the Catalan Water Agency (ACA).",
+    lead: "Barcelona has **ten bathing areas** from Sant Sebastià to the Fòrum: nine sand beaches plus the Fòrum bathing area, which has no sand. The 2026 bathing season ended on 4 October, so there are no lifeguards now, only the 112 emergency number. Here is what each is like, which have a Blue Flag, when lifeguards are on duty, what you can and can't do, and where to check the water, from the City Council and the Catalan Water Agency (ACA).",
     note: "Outside the bathing season there are no lifeguards on any beach: only the 112 emergency number.",
     whichTitle: "Which beach to pick",
     which: [
