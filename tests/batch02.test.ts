@@ -445,3 +445,76 @@ test("parking: green hours, no windscreen ticket, resident-only spaces, no inven
     assert.deepEqual([...new Set(text.match(/(?<![\d,.])\d{2,3} ?€|€\d{2,3}(?![\d,.])/g) ?? [])].sort(), [], `${locale}: no fine amounts`);
   }
 });
+
+/**
+ * Parking, 24 Oct 2026: the ES page's top query is "como funciona la zona
+ * verde en barcelona". The lead now answers it, a zone-by-zone table follows,
+ * and the "which is cheaper" answer is computed from AREA's rate tables.
+ */
+test("parking: zone summary table and a blue-vs-green answer that matches the rates", () => {
+  for (const locale of ["ca", "es", "en"] as const) {
+    const blocks = PARKING.editions[locale].blocks as { type: string; rows?: string[][]; text?: string }[];
+    const tables = blocks.filter((b) => b.type === "table");
+    assert.equal(tables.length, 3, `${locale}: summary + blue + green tables`);
+    assert.equal(tables[0]?.rows?.length, 5, `${locale}: five kinds of space in the summary`);
+    const lead = blocks.find((b) => b.type === "paragraph")?.text ?? "";
+    assert.match(lead, /1[,.]40/, `${locale}: the lead gives the green non-resident price`);
+  }
+  const es = bodyToPlainText(PARKING.editions.es.blocks);
+  assert.match(es, /3,25 €\W* la hora en azul y \W*3,75 €/);
+});
+
+/**
+ * Zoo and markets, re-checked 24 Oct 2026. The Zoo publishes only today's
+ * hours and says visitors enter only through the Ciutadella entrance; no
+ * official page states "open every day of the year", so that line went.
+ * The Aquarium calendar is published to 31 Jan 2027.
+ */
+test("zoo: Ciutadella-only entrance, dated zoo hours, aquarium calendar, no unverified 365-day claim", () => {
+  const entrance = { ca: /únicament per l'entrada situada a l'interior del parc de la Ciutadella/, es: /solo se accede por la entrada situada en el interior del parque de la Ciutadella/, en: /only get into the Zoo through the entrance inside the Parc de la Ciutadella/ };
+  for (const locale of ["ca", "es", "en"] as const) {
+    const text = bodyToPlainText(ZOO_AQUARIUM.editions[locale].blocks);
+    assert.match(text, entrance[locale], `${locale}: entrance`);
+    assert.match(text, /17:30/, `${locale}: dated zoo closing time`);
+    assert.doesNotMatch(text, /every day of the year|todos los días del año|cada dia de l'any/i);
+    const tables = (ZOO_AQUARIUM.editions[locale].blocks as { type: string; rows?: string[][] }[]).filter((b) => b.type === "table");
+    assert.equal(tables.length, 2, `${locale}: prices + aquarium hours`);
+    assert.equal(tables[1]?.rows?.length, 6, `${locale}: aquarium date ranges to 31 Jan 2027`);
+  }
+});
+
+test("cards: the price table's online column is 10% off and the difference is card minus Hola", () => {
+  const num = (cell: string) => Number(cell.replace(/[€\s]/g, "").replace(",", "."));
+  for (const locale of ["ca", "es", "en"] as const) {
+    const table = (CARDS.editions[locale].blocks as { type: string; rows?: string[][] }[]).find((b) => b.type === "table");
+    assert.ok(table?.rows, `${locale}: price table`);
+    for (const [, hola, card, online, diff] of table.rows.slice(1)) {
+      assert.equal(Math.round(num(card!) * 0.9 * 100) / 100, num(online!), `${locale}: online = 90% of ${card}`);
+      assert.equal(Math.round((num(card!) - num(hola!)) * 100) / 100, num(diff!), `${locale}: difference for ${card}`);
+    }
+    assert.match(CARDS.editions[locale].blocks.map((b) => JSON.stringify(b)).join(" "), /12[,.]50/, `${locale}: 24 h Hola price`);
+  }
+});
+
+test("cruise port: terminal table with transport, Port's June 2026 plan only, Cruise Bus fares", () => {
+  for (const locale of ["ca", "es", "en"] as const) {
+    const text = bodyToPlainText(CRUISEPORT.editions[locale].blocks);
+    assert.match(text, /3[,.]50/, `${locale}: one-way fare`);
+    assert.match(text, /11 (June|de junio|de juny) (de )?2026/, `${locale}: dated Port note`);
+    assert.doesNotMatch(text, /terminal G|2028/i, `${locale}: no plan dates the Port note does not give`);
+    const table = (CRUISEPORT.editions[locale].blocks as { type: string; rows?: string[][] }[]).find((b) => b.type === "table");
+    assert.equal(table?.rows?.length, 5);
+    assert.ok(table?.rows?.every((row) => row.length === 4), `${locale}: four columns`);
+  }
+});
+
+test("markets: hours answered first, Sunday question answered, no unverified group cap", () => {
+  for (const locale of ["ca", "es", "en"] as const) {
+    const blocks = MARKETS.editions[locale].blocks as { type: string; text?: string }[];
+    const lead = blocks.find((b) => b.type === "paragraph")?.text ?? "";
+    assert.match(lead, /8:00/, `${locale}: lead gives the Boqueria hours`);
+    const text = bodyToPlainText(MARKETS.editions[locale].blocks);
+    assert.match(text, /8:30/, `${locale}: Sunday book market hours`);
+    assert.doesNotMatch(text, /\b20 (people|personas|persones)\b/);
+  }
+});

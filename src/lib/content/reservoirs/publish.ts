@@ -50,6 +50,7 @@ interface Copy {
   missing: string[];
   droughtTitle: string;
   drought: string[];
+  faq: { question: string; answer: string }[];
   heroAlt: string;
   heroCaption: string;
   secondAlt: string;
@@ -60,12 +61,12 @@ export const COPY: Record<Locale, Copy> = {
   ca: {
     path: "guies/embassaments-catalunya-avui",
     title: "Embassaments de Catalunya avui: a quin nivell són",
-    seoTitle: "Embassaments de Catalunya avui: nivell i percentatge",
+    seoTitle: "Estat dels embassaments de Catalunya avui: nivell (ACA)",
     seoDescription:
-      "Nivell dels embassaments de Catalunya avui, amb les dades diàries de l'ACA: percentatge, hm³ i com està el sistema Ter-Llobregat que abasteix Barcelona.",
+      "Estat i nivell dels embassaments de Catalunya avui, amb la dada diària de l'ACA: percentatge d'aigua, hm³ i el sistema Ter-Llobregat de Barcelona.",
     excerpt:
       "El percentatge d'aigua de cada embassament que mesura l'ACA, llegit cada dia de les dades obertes, i què vol dir per a l'àrea de Barcelona.",
-    lead: "Quanta aigua hi ha **avui** als embassaments de Catalunya, llegit directament de les dades diàries de l'Agència Catalana de l'Aigua. La data de la lectura surt sempre al costat de la xifra.",
+    lead: "L'estat dels embassaments de Catalunya **avui**: el percentatge d'aigua embassada als nou embassaments de les conques internes que mesura l'Agència Catalana de l'Aigua (ACA), llegit directament de les seves dades obertes diàries. La data de la lectura surt sempre al costat de la xifra.",
     readTitle: "Com llegir aquestes xifres",
     read: [
       "El **percentatge** és el volum d'aigua embassada dividit per la capacitat de l'embassament. Un **hm³** (hectòmetre cúbic) és un milió de metres cúbics, és a dir, mil milions de litres.",
@@ -85,6 +86,12 @@ export const COPY: Record<Locale, Copy> = {
     drought: [
       "Les mesures per sequera no depenen del total d'aquesta pàgina, sinó de l'estat que l'ACA declara per a cada zona. Si el que vols saber és si hi ha restriccions al teu municipi, consulta directament l'ACA: un percentatge alt al total no garanteix que totes les zones estiguin igual.",
     ],
+    faq: [
+      { question: "Com estan avui els embassaments de Catalunya?", answer: "El percentatge d'avui és a dalt de tot, amb la data de la lectura. És la dada diària que publica l'ACA per als nou embassaments de les conques internes: Susqueda, Sau, la Baells, la Llosa del Cavall, Darnius Boadella, Sant Ponç, Siurana, Riudecanyes i Foix." },
+      { question: "Cada quant s'actualitzen les dades?", answer: "Cada dia. L'ACA publica una lectura diària per embassament al portal de dades obertes de la Generalitat, i aquesta pàgina la torna a llegir com a molt cada tres hores." },
+      { question: "Quins embassaments abasteixen Barcelona?", answer: "Els cinc del sistema Ter-Llobregat: Sau i Susqueda, al Ter, i la Baells, la Llosa del Cavall i Sant Ponç, a la conca del Llobregat." },
+      { question: "Per què no hi surten Canelles, Rialb o Oliana?", answer: "Perquè són a la conca de l'Ebre i no formen part d'aquesta sèrie de l'ACA. Rialb i Oliana els gestiona la Confederació Hidrogràfica de l'Ebre." },
+    ],
     heroAlt: "El pantà de Sau amb l'aigua alta, envoltat de bosc i amb els cingles de Tavertet al fons",
     heroCaption: "Sau, al Ter, és un dels cinc embassaments del sistema Ter-Llobregat.",
     secondAlt: "La presa de Sau vista des dels cingles de Tavertet, amb el poble de la Riba a primer terme",
@@ -93,12 +100,12 @@ export const COPY: Record<Locale, Copy> = {
   es: {
     path: "guias/embalses-cataluna-hoy",
     title: "Embalses de Cataluña hoy: a qué nivel están",
-    seoTitle: "Embalses de Cataluña hoy: nivel y porcentaje",
+    seoTitle: "Embalses de Catalunya hoy: nivel y reservas de agua (ACA)",
     seoDescription:
-      "Nivel de los embalses de Cataluña hoy, con los datos diarios de la ACA: porcentaje, hm³ y cómo está el sistema Ter-Llobregat que abastece Barcelona.",
+      "Nivel de los embalses y pantanos de Cataluña hoy, con el dato diario de la ACA: porcentaje de agua embalsada, hm³ y el sistema Ter-Llobregat de Barcelona.",
     excerpt:
       "El porcentaje de agua de cada embalse que mide la ACA, leído cada día de los datos abiertos, y qué significa para el área de Barcelona.",
-    lead: "Cuánta agua hay **hoy** en los embalses de Cataluña, leído directamente de los datos diarios de la Agència Catalana de l'Aigua. La fecha de la lectura aparece siempre junto a la cifra.",
+    lead: "Cómo están **hoy** los embalses de Cataluña: el porcentaje de agua embalsada en los nueve embalses (pantanos) de las cuencas internas que mide la Agència Catalana de l'Aigua (ACA), leído directamente de sus datos abiertos diarios. La fecha de la lectura aparece siempre junto a la cifra.",
     readTitle: "Cómo leer estas cifras",
     read: [
       "El **porcentaje** es el volumen de agua embalsada dividido por la capacidad del embalse. Un **hm³** (hectómetro cúbico) es un millón de metros cúbicos, es decir, mil millones de litros.",
@@ -118,6 +125,12 @@ export const COPY: Record<Locale, Copy> = {
     drought: [
       "Las medidas por sequía no dependen del total de esta página, sino del estado que la ACA declara para cada zona. Si lo que quieres saber es si hay restricciones en tu municipio, consulta directamente la ACA: un porcentaje alto en el total no garantiza que todas las zonas estén igual.",
     ],
+    faq: [
+      { question: "¿Cómo están hoy los embalses de Cataluña?", answer: "El porcentaje de hoy está arriba del todo, con la fecha de la lectura. Es el dato diario que publica la ACA para los nueve embalses de las cuencas internas: Susqueda, Sau, la Baells, la Llosa del Cavall, Darnius Boadella, Sant Ponç, Siurana, Riudecanyes y Foix." },
+      { question: "¿Cada cuánto se actualizan los datos?", answer: "Cada día. La ACA publica una lectura diaria por embalse en el portal de datos abiertos de la Generalitat, y esta página la vuelve a leer como mucho cada tres horas." },
+      { question: "¿Qué embalses abastecen Barcelona?", answer: "Los cinco del sistema Ter-Llobregat: Sau y Susqueda, en el Ter, y la Baells, la Llosa del Cavall y Sant Ponç, en la cuenca del Llobregat." },
+      { question: "¿Por qué no aparecen Canelles, Rialb u Oliana?", answer: "Porque están en la cuenca del Ebro y no forman parte de esta serie de la ACA. Rialb y Oliana los gestiona la Confederación Hidrográfica del Ebro." },
+    ],
     heroAlt: "El pantano de Sau con el agua alta, rodeado de bosque y con los riscos de Tavertet al fondo",
     heroCaption: "Sau, en el Ter, es uno de los cinco embalses del sistema Ter-Llobregat.",
     secondAlt: "La presa de Sau vista desde los riscos de Tavertet, con el pueblo de la Riba en primer plano",
@@ -126,12 +139,12 @@ export const COPY: Record<Locale, Copy> = {
   en: {
     path: "guides/catalonia-reservoir-levels",
     title: "Catalonia reservoir levels today: how full they are",
-    seoTitle: "Catalonia reservoir levels today",
+    seoTitle: "Catalonia reservoir levels today: how full (ACA data)",
     seoDescription:
       "How full Catalonia's reservoirs are today, from the water agency's daily data: percentage, hm³, and the Ter-Llobregat system that supplies Barcelona.",
     excerpt:
       "How full each reservoir the Catalan water agency monitors is, read daily from its open data, and what it means for the Barcelona area.",
-    lead: "How much water Catalonia's reservoirs hold **today**, read directly from the Catalan Water Agency's (ACA) daily data. The reading date is always shown next to the figure.",
+    lead: "How full Catalonia's reservoirs are **today**: the share of capacity held in the nine reservoirs of the Catalan internal basins that the Catalan Water Agency (ACA) measures, read directly from its daily open data. The reading date is always shown next to the figure.",
     readTitle: "How to read these figures",
     read: [
       "The **percentage** is the stored volume divided by the reservoir's capacity. One **hm³** (cubic hectometre) is a million cubic metres, or a billion litres.",
@@ -150,6 +163,12 @@ export const COPY: Record<Locale, Copy> = {
     droughtTitle: "What about drought restrictions?",
     drought: [
       "Drought measures do not depend on this page's total but on the status the ACA declares for each area. If you want to know whether your town has restrictions, check with the ACA directly: a high overall percentage does not mean every area is in the same position.",
+    ],
+    faq: [
+      { question: "How full are Catalonia's reservoirs today?", answer: "Today's percentage is at the top of the page, with the reading date. It is the ACA's daily figure for the nine reservoirs of the internal basins: Susqueda, Sau, la Baells, la Llosa del Cavall, Darnius Boadella, Sant Ponç, Siurana, Riudecanyes and Foix." },
+      { question: "How often is the data updated?", answer: "Daily. The ACA publishes one reading per reservoir per day on the Generalitat's open-data portal, and this page re-reads it at least every three hours." },
+      { question: "Which reservoirs supply Barcelona?", answer: "The five of the Ter-Llobregat system: Sau and Susqueda on the Ter, and la Baells, la Llosa del Cavall and Sant Ponç in the Llobregat basin." },
+      { question: "Why are Canelles, Rialb and Oliana not listed?", answer: "They are in the Ebro basin and are not part of this ACA series. Rialb and Oliana are managed by the Ebro Basin Authority." },
     ],
     heroAlt: "Sau reservoir with high water, surrounded by forest, with the Tavertet cliffs behind",
     heroCaption: "Sau, on the Ter, is one of the five reservoirs of the Ter-Llobregat system.",
@@ -175,6 +194,7 @@ export function buildBody(locale: Locale, secondMediaId?: string): Block[] {
   if (secondMediaId) blocks.push({ type: "image", mediaId: secondMediaId, size: "wide" });
   section(copy.missingTitle, copy.missing);
   section(copy.droughtTitle, copy.drought);
+  blocks.push({ type: "faq", items: copy.faq });
   return blocks;
 }
 

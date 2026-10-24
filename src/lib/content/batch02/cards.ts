@@ -31,7 +31,14 @@ import {
  * (not on the official list).
  */
 
-const VERIFIED = "2026-10-12";
+// Re-checked 24 Oct 2026: Hola Barcelona fares from TMB's own catalogue API
+// behind holabarcelona.com (products 505-509: 12.50/18.70/27.30/35.60/43.60),
+// coverage and "10% discount" text from the Hola product page, airport ticket
+// €5.90 from tmb.cat; Barcelona Card full and online prices, child and
+// Essential prices from thisisbarcelona.com's availability endpoint for the
+// product; museum prices from museupicassobcn.cat, fmirobcn.org and
+// museunacional.cat.
+const VERIFIED = "2026-10-24";
 
 const SOURCES: B2Source[] = [
   { name: "Hola Barcelona Travel Card", url: "https://www.holabarcelona.com/en", publisher: "TMB" },
@@ -52,18 +59,18 @@ const META: Record<Locale, { path: string; title: string; seoTitle: string; seoD
   es: {
     path: "guias/barcelona-card-o-hola-barcelona",
     title: "Barcelona Card o Hola Barcelona: qué tarjeta compensa",
-    seoTitle: "Barcelona Card o Hola Barcelona: ¿cuál compensa?",
+    seoTitle: "Hola Barcelona o Barcelona Card: precios y cuál compensa",
     seoDescription:
-      "Precios oficiales de la Barcelona Card (desde 39 €) y la Hola Barcelona (desde 12,50 €), qué incluye cada una y cuándo compensa la Card.",
+      "Hola Barcelona Travel Card desde 12,50 € (24 h) y Barcelona Card desde 39 € (48 h): precios oficiales, qué incluye cada una y cuándo compensa la Card.",
     excerpt:
       "Las dos tarjetas para visitantes de Barcelona comparadas con los precios oficiales: qué cubre cada una y la cuenta que dice cuándo compensa la Barcelona Card.",
   },
   en: {
     path: "guides/barcelona-card-vs-hola-barcelona",
     title: "Barcelona Card or Hola Barcelona: which card is worth it",
-    seoTitle: "Barcelona Card vs Hola Barcelona: which is worth it?",
+    seoTitle: "Barcelona Card vs Hola Barcelona: prices, which is worth it",
     seoDescription:
-      "Official prices for the Barcelona Card (from €39) and Hola Barcelona (from €12.50), what each covers, and when the Barcelona Card pays off.",
+      "Hola Barcelona Travel Card from €12.50 (24 h) and Barcelona Card from €39 (48 h): official 2026 prices, what each covers, and when the Card pays off.",
     excerpt:
       "Barcelona's two visitor cards compared on official prices: what each one covers, and the sum that tells you when the Barcelona Card pays for itself.",
   },
@@ -93,16 +100,17 @@ type T = {
 
 const COPY: Record<Locale, T> = {
   en: {
-    lead: "The **Hola Barcelona** card is unlimited public transport and nothing else. The **Barcelona Card** adds free entry to more than 25 museums and cultural venues, and costs roughly twice as much. Whether it pays off depends on one thing: how many paid museums you would have visited anyway.",
+    lead: "The **Hola Barcelona Travel Card** is unlimited public transport and nothing else: **€12.50 for 24 hours up to €43.60 for 120 hours**, airport metro included. The **Barcelona Card** adds free entry to more than 25 museums and cultural venues and costs roughly twice as much: **€39 for 48 hours up to €79 for 120 hours**. Whether it pays off depends on one thing: how many paid museums you would have visited anyway.",
     tableCaption: "Price by duration (adult, full price)",
-    headers: ["Duration", "Hola Barcelona", "Barcelona Card (with transport)", "Difference"],
+    headers: ["Duration", "Hola Barcelona", "Barcelona Card (with transport)", "Barcelona Card online", "Difference"],
     rows: [
-      ["48 hours", "€18.70", "€39", "€20.30"],
-      ["72 hours", "€27.30", "€59", "€31.70"],
-      ["96 hours", "€35.60", "€69", "€33.40"],
-      ["120 hours", "€43.60", "€79", "€35.40"],
+      ["24 hours", "€12.50", "—", "—", "—"],
+      ["48 hours", "€18.70", "€39", "€35.10", "€20.30"],
+      ["72 hours", "€27.30", "€59", "€53.10", "€31.70"],
+      ["96 hours", "€35.60", "€69", "€62.10", "€33.40"],
+      ["120 hours", "€43.60", "€79", "€71.10", "€35.40"],
     ],
-    tableNote: "Full prices from TMB (Hola Barcelona) and Turisme de Barcelona (Barcelona Card). Both are cheaper online: TMB advertises 10% off Hola Barcelona, and the Barcelona Card shows 10% off on its official shop.",
+    tableNote: "Full prices from TMB (Hola Barcelona) and Turisme de Barcelona (Barcelona Card), checked on 24 October 2026; the difference is between full prices. Both are cheaper online: TMB advertises 10% off Hola Barcelona, and the Barcelona Card's official shop sells it 10% below full price. There is no 24-hour Barcelona Card.",
     holaTitle: "Hola Barcelona: transport only",
     hola: [
       "Run by TMB, it covers the metro and TMB buses, the NitBus night buses, the Montjuïc funicular, the tram, FGC trains in zone 1 and Rodalies trains in zone 1, for 24 to 120 consecutive hours from the first validation. A 24-hour card costs €12.50.",
@@ -111,7 +119,7 @@ const COPY: Record<Locale, T> = {
     cardTitle: "Barcelona Card: transport plus museums",
     card: [
       "Sold by Turisme de Barcelona, the version with transport covers the metro, TMB buses, the tram, Rodalies zone 1, the Montjuïc funicular and the metro or train to the airport. It does **not** include night buses. Child prices (ages 4 to 12) are €27, €37, €46 and €54 for 48 to 120 hours.",
-      "It gives free entry to more than 25 museums and venues, among them the **Museu Picasso, the MNAC and the Fundació Joan Miró**, and discounts elsewhere: €7 off at Casa Batlló and La Pedrera. The Sagrada Família and Park Güell are not included. There is also a cheaper Barcelona Card Essential without transport.",
+      "It gives free entry to more than 25 museums and venues, among them the **Museu Picasso, the MNAC and the Fundació Joan Miró**, and discounts elsewhere: €7 off at Casa Batlló and La Pedrera. The Sagrada Família and Park Güell are not included. There is also a cheaper **Barcelona Card Essential**, without transport: €29 for 72 hours, €35 for 96 and €45 for 120 (children 4 to 12: €15, €17 and €20).",
     ],
     sumTitle: "The sum: when the Barcelona Card pays off",
     sum: [
@@ -133,6 +141,7 @@ const COPY: Record<Locale, T> = {
     warnTitle: "Buy from the official sellers",
     warn: "Search results are full of resellers, and at least one site using the 'Barcelona Card' name sells different products at different prices. The Barcelona Card is Turisme de Barcelona's (thisisbarcelona.com); Hola Barcelona is TMB's.",
     faq: [
+      { question: "Is the Hola Barcelona travel card worth it?", answer: "If you ride a lot or use the airport metro, yes: an airport metro ticket alone is €5.90 each way, and the card includes one trip each way. If you will make fewer than ten journeys in total, a T-casual is cheaper." },
       { question: "How much is the Hola Barcelona card?", answer: "€12.50 for 24 hours, €18.70 for 48, €27.30 for 72, €35.60 for 96 and €43.60 for 120 hours at full price; TMB advertises 10% off online." },
       { question: "How much is the Barcelona Card?", answer: "With transport, €39 for 48 hours, €59 for 72, €69 for 96 and €79 for 120 hours at full price, with 10% off on the official shop." },
       { question: "Does the Barcelona Card include the Sagrada Família?", answer: "No. Neither the Sagrada Família nor Park Güell is included; Casa Batlló and La Pedrera get a €7 discount." },
@@ -141,16 +150,17 @@ const COPY: Record<Locale, T> = {
     note: "Card prices and what they include change: check the official sellers before buying.",
   },
   es: {
-    lead: "La **Hola Barcelona** es transporte público ilimitado y nada más. La **Barcelona Card** añade entrada gratis a más de 25 museos y espacios culturales, y cuesta aproximadamente el doble. Que compense depende de una sola cosa: cuántos museos de pago habrías visitado igualmente.",
+    lead: "La **Hola Barcelona Travel Card** es transporte público ilimitado y nada más: **de 12,50 € (24 horas) a 43,60 € (120 horas)**, con el metro del aeropuerto incluido. La **Barcelona Card** añade entrada gratis a más de 25 museos y espacios culturales y cuesta aproximadamente el doble: **de 39 € (48 horas) a 79 € (120 horas)**. Que compense depende de una sola cosa: cuántos museos de pago habrías visitado igualmente.",
     tableCaption: "Precio según la duración (adulto, precio completo)",
-    headers: ["Duración", "Hola Barcelona", "Barcelona Card (con transporte)", "Diferencia"],
+    headers: ["Duración", "Hola Barcelona", "Barcelona Card (con transporte)", "Barcelona Card en línea", "Diferencia"],
     rows: [
-      ["48 horas", "18,70 €", "39 €", "20,30 €"],
-      ["72 horas", "27,30 €", "59 €", "31,70 €"],
-      ["96 horas", "35,60 €", "69 €", "33,40 €"],
-      ["120 horas", "43,60 €", "79 €", "35,40 €"],
+      ["24 horas", "12,50 €", "—", "—", "—"],
+      ["48 horas", "18,70 €", "39 €", "35,10 €", "20,30 €"],
+      ["72 horas", "27,30 €", "59 €", "53,10 €", "31,70 €"],
+      ["96 horas", "35,60 €", "69 €", "62,10 €", "33,40 €"],
+      ["120 horas", "43,60 €", "79 €", "71,10 €", "35,40 €"],
     ],
-    tableNote: "Precios completos de TMB (Hola Barcelona) y Turisme de Barcelona (Barcelona Card). Las dos son más baratas en línea: TMB anuncia un 10 % de descuento en la Hola Barcelona, y la Barcelona Card muestra un 10 % en su tienda oficial.",
+    tableNote: "Precios completos de TMB (Hola Barcelona) y Turisme de Barcelona (Barcelona Card), comprobados el 24 de octubre de 2026; la diferencia es entre precios completos. Las dos son más baratas en línea: TMB anuncia un 10 % de descuento en la Hola Barcelona, y la tienda oficial vende la Barcelona Card un 10 % por debajo del precio completo. No hay Barcelona Card de 24 horas.",
     holaTitle: "Hola Barcelona: solo transporte",
     hola: [
       "Es de TMB y cubre el metro y los autobuses de TMB, el NitBus, el funicular de Montjuïc, el tranvía, los FGC en zona 1 y Rodalies en zona 1, durante 24 a 120 horas seguidas desde la primera validación. La de 24 horas cuesta 12,50 €.",
@@ -159,7 +169,7 @@ const COPY: Record<Locale, T> = {
     cardTitle: "Barcelona Card: transporte y museos",
     card: [
       "La vende Turisme de Barcelona; la versión con transporte cubre el metro, los autobuses de TMB, el tranvía, Rodalies en zona 1, el funicular de Montjuïc y el metro o el tren al aeropuerto. **No** incluye los autobuses nocturnos. Los precios infantiles (de 4 a 12 años) son 27, 37, 46 y 54 € para 48 a 120 horas.",
-      "Da entrada gratis a más de 25 museos y espacios, entre ellos el **Museu Picasso, el MNAC y la Fundació Joan Miró**, y descuentos en otros: 7 € menos en la Casa Batlló y La Pedrera. La Sagrada Familia y el Park Güell no están incluidos. También existe una Barcelona Card Essential, más barata y sin transporte.",
+      "Da entrada gratis a más de 25 museos y espacios, entre ellos el **Museu Picasso, el MNAC y la Fundació Joan Miró**, y descuentos en otros: 7 € menos en la Casa Batlló y La Pedrera. La Sagrada Familia y el Park Güell no están incluidos. También existe una **Barcelona Card Essential**, más barata y sin transporte: 29 € las 72 horas, 35 € las 96 y 45 € las 120 (niños de 4 a 12 años: 15, 17 y 20 €).",
     ],
     sumTitle: "La cuenta: cuándo compensa la Barcelona Card",
     sum: [
@@ -181,6 +191,7 @@ const COPY: Record<Locale, T> = {
     warnTitle: "Compra en los vendedores oficiales",
     warn: "Los resultados de búsqueda están llenos de revendedores, y al menos una web que usa el nombre «Barcelona Card» vende otros productos a otros precios. La Barcelona Card es de Turisme de Barcelona (thisisbarcelona.com); la Hola Barcelona, de TMB.",
     faq: [
+      { question: "¿Merece la pena la Hola Barcelona Travel Card?", answer: "Si haces muchos trayectos o usas el metro del aeropuerto, sí: solo el billete de metro del aeropuerto cuesta 5,90 € por trayecto, y la tarjeta incluye uno de ida y otro de vuelta. Si vas a hacer menos de diez viajes en total, sale más barata una T-casual." },
       { question: "¿Cuánto cuesta la Hola Barcelona?", answer: "12,50 € las 24 horas, 18,70 € las 48, 27,30 € las 72, 35,60 € las 96 y 43,60 € las 120 a precio completo; TMB anuncia un 10 % de descuento en línea." },
       { question: "¿Cuánto cuesta la Barcelona Card?", answer: "Con transporte, 39 € las 48 horas, 59 € las 72, 69 € las 96 y 79 € las 120 a precio completo, con un 10 % de descuento en la tienda oficial." },
       { question: "¿La Barcelona Card incluye la Sagrada Familia?", answer: "No. Ni la Sagrada Familia ni el Park Güell están incluidos; la Casa Batlló y La Pedrera tienen 7 € de descuento." },
@@ -189,16 +200,17 @@ const COPY: Record<Locale, T> = {
     note: "Los precios y lo que incluye cada tarjeta cambian: compruébalo en los vendedores oficiales antes de comprar.",
   },
   ca: {
-    lead: "La **Hola Barcelona** és transport públic il·limitat i res més. La **Barcelona Card** hi afegeix entrada gratuïta a més de 25 museus i espais culturals, i costa aproximadament el doble. Que surti a compte depèn d'una sola cosa: quants museus de pagament hauries visitat igualment.",
+    lead: "La **Hola Barcelona Travel Card** és transport públic il·limitat i res més: **de 12,50 € (24 hores) a 43,60 € (120 hores)**, amb el metro de l'aeroport inclòs. La **Barcelona Card** hi afegeix entrada gratuïta a més de 25 museus i espais culturals i costa aproximadament el doble: **de 39 € (48 hores) a 79 € (120 hores)**. Que surti a compte depèn d'una sola cosa: quants museus de pagament hauries visitat igualment.",
     tableCaption: "Preu segons la durada (adult, preu complet)",
-    headers: ["Durada", "Hola Barcelona", "Barcelona Card (amb transport)", "Diferència"],
+    headers: ["Durada", "Hola Barcelona", "Barcelona Card (amb transport)", "Barcelona Card en línia", "Diferència"],
     rows: [
-      ["48 hores", "18,70 €", "39 €", "20,30 €"],
-      ["72 hores", "27,30 €", "59 €", "31,70 €"],
-      ["96 hores", "35,60 €", "69 €", "33,40 €"],
-      ["120 hores", "43,60 €", "79 €", "35,40 €"],
+      ["24 hores", "12,50 €", "—", "—", "—"],
+      ["48 hores", "18,70 €", "39 €", "35,10 €", "20,30 €"],
+      ["72 hores", "27,30 €", "59 €", "53,10 €", "31,70 €"],
+      ["96 hores", "35,60 €", "69 €", "62,10 €", "33,40 €"],
+      ["120 hores", "43,60 €", "79 €", "71,10 €", "35,40 €"],
     ],
-    tableNote: "Preus complets de TMB (Hola Barcelona) i de Turisme de Barcelona (Barcelona Card). Totes dues són més barates en línia: TMB anuncia un 10 % de descompte a la Hola Barcelona, i la Barcelona Card mostra un 10 % a la seva botiga oficial.",
+    tableNote: "Preus complets de TMB (Hola Barcelona) i de Turisme de Barcelona (Barcelona Card), comprovats el 24 d'octubre de 2026; la diferència és entre preus complets. Totes dues són més barates en línia: TMB anuncia un 10 % de descompte a la Hola Barcelona, i la botiga oficial ven la Barcelona Card un 10 % per sota del preu complet. No hi ha Barcelona Card de 24 hores.",
     holaTitle: "Hola Barcelona: només transport",
     hola: [
       "És de TMB i cobreix el metro i els autobusos de TMB, el NitBus, el funicular de Montjuïc, el tramvia, FGC a la zona 1 i Rodalies a la zona 1, durant 24 a 120 hores seguides des de la primera validació. La de 24 hores costa 12,50 €.",
@@ -207,7 +219,7 @@ const COPY: Record<Locale, T> = {
     cardTitle: "Barcelona Card: transport i museus",
     card: [
       "La ven Turisme de Barcelona; la versió amb transport cobreix el metro, els autobusos de TMB, el tramvia, Rodalies a la zona 1, el funicular de Montjuïc i el metro o el tren a l'aeroport. **No** inclou els autobusos nocturns. Els preus infantils (de 4 a 12 anys) són 27, 37, 46 i 54 € per a 48 a 120 hores.",
-      "Dona entrada gratuïta a més de 25 museus i espais, entre els quals el **Museu Picasso, el MNAC i la Fundació Joan Miró**, i descomptes en d'altres: 7 € menys a la Casa Batlló i la Pedrera. La Sagrada Família i el Park Güell no hi són inclosos. També hi ha una Barcelona Card Essential, més barata i sense transport.",
+      "Dona entrada gratuïta a més de 25 museus i espais, entre els quals el **Museu Picasso, el MNAC i la Fundació Joan Miró**, i descomptes en d'altres: 7 € menys a la Casa Batlló i la Pedrera. La Sagrada Família i el Park Güell no hi són inclosos. També hi ha una **Barcelona Card Essential**, més barata i sense transport: 29 € les 72 hores, 35 € les 96 i 45 € les 120 (infants de 4 a 12 anys: 15, 17 i 20 €).",
     ],
     sumTitle: "El compte: quan surt a compte la Barcelona Card",
     sum: [
@@ -229,6 +241,7 @@ const COPY: Record<Locale, T> = {
     warnTitle: "Compra als venedors oficials",
     warn: "Els resultats de cerca són plens de revenedors, i almenys un web que fa servir el nom «Barcelona Card» ven altres productes a altres preus. La Barcelona Card és de Turisme de Barcelona (thisisbarcelona.com); la Hola Barcelona, de TMB.",
     faq: [
+      { question: "Surt a compte la Hola Barcelona Travel Card?", answer: "Si fas molts trajectes o fas servir el metro de l'aeroport, sí: només el bitllet de metro de l'aeroport costa 5,90 € per trajecte, i la targeta n'inclou un d'anada i un de tornada. Si faràs menys de deu viatges en total, surt més barata una T-casual." },
       { question: "Quant costa la Hola Barcelona?", answer: "12,50 € les 24 hores, 18,70 € les 48, 27,30 € les 72, 35,60 € les 96 i 43,60 € les 120 a preu complet; TMB anuncia un 10 % de descompte en línia." },
       { question: "Quant costa la Barcelona Card?", answer: "Amb transport, 39 € les 48 hores, 59 € les 72, 69 € les 96 i 79 € les 120 a preu complet, amb un 10 % de descompte a la botiga oficial." },
       { question: "La Barcelona Card inclou la Sagrada Família?", answer: "No. Ni la Sagrada Família ni el Park Güell hi són inclosos; la Casa Batlló i la Pedrera tenen 7 € de descompte." },

@@ -108,3 +108,15 @@ test("every edition validates, puts the figure before the explanation and has a 
     assert.ok(COPY[locale].seoTitle.length <= 60, `${locale}: title budget`);
   }
 });
+
+test("the FAQ names every reservoir the series has, and no figure that would go stale", () => {
+  for (const locale of LOCALES) {
+    const copy = COPY[locale];
+    assert.ok(copy.seoDescription.length <= 155, `${locale}: description budget`);
+    const first = copy.faq[0]?.answer ?? "";
+    for (const name of Object.keys(REFERENCE_CAPACITY)) assert.ok(first.includes(name), `${locale}: ${name}`);
+    // Static copy must not carry a percentage: the live block owns the number.
+    for (const item of copy.faq) assert.doesNotMatch(item.answer, /\d+([.,]\d+)? ?%/, `${locale}: no static percentage`);
+    assert.doesNotMatch(copy.lead, /\d+([.,]\d+)? ?%/, `${locale}: no static percentage in the lead`);
+  }
+});
