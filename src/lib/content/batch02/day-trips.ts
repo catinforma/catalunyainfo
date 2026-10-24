@@ -4,6 +4,7 @@ import {
   b2Related,
   b2link,
   callout,
+  faq,
   h2,
   h3,
   lead,
@@ -639,30 +640,89 @@ const CERDANYA_SOURCES = [
     publisher: "Rodalies de Catalunya",
   },
   {
+    name: "R3: horaris de tren fins a la Tor de Querol a partir del 06.07",
+    url: "https://rodalies.gencat.cat/web/.content/01_Actualitat/2026/02_02_PAT_R3/R3-Horaris-tren-fins-La-Tor-de-Querol-a-partir-06.07_V7.pdf",
+    publisher: "Rodalies de Catalunya",
+  },
+  {
     name: "Bus urbà",
     url: "https://www.puigcerda.cat/ca/serveis/mobilitat/bus-urba/",
     publisher: "Ajuntament de Puigcerdà",
   },
+  {
+    name: "Bus Blanc — horaris 2025-2026",
+    url: "https://cerdanya.org/wp-content/uploads/2026/02/Bus-Blanc-2026.pdf",
+    publisher: "Turisme Cerdanya",
+  },
+  {
+    name: "La Molina — informació pràctica i transport",
+    url: "https://pirineu365.cat/lamolina/estacio/informacio-tecnica/",
+    publisher: "FGC (PIRINEU365)",
+  },
 ];
 
-// R3 status re-checked against the Rodalies notice on 18 Oct 2026
-// (research_notes/audits/p0_data_accuracy.md, P0-4).
-const CERDANYA_VERIFIED = "2026-10-18";
+// R3 notice and train timetable re-checked on 24 Oct 2026: notice updated
+// 06.07.2026 (plus a Balenyà-Els Hostalets stop change from 22/10), train
+// sheet "a partir del 06.07" V7, last updated 16/09/2026. The two tables
+// below list only the rows that sheet marks as R3 trains running through
+// to Puigcerdà; none of them carries the weekday-only shading. The old
+// "Adif planned to keep the cut until January 2027" line is gone: the
+// notice no longer says it.
+const CERDANYA_VERIFIED = "2026-10-24";
 
 const CERDANYA_R3: Record<"ca" | "es" | "en", [title: string, body: string]> = {
   ca: [
     "L'R3, ara mateix",
-    "Segons l'avís de Rodalies (actualitzat el 6 de juliol del 2026 i vigent el 18 d'octubre), l'R3 circula amb el 50 % dels trens que tenia abans del 20 de gener i no hi ha trens entre Barcelona i la Garriga. Des del 12 d'agost hi ha també autobusos complementaris entre la Garriga i Puigcerdà. Adif preveia mantenir el tall entre Barcelona i la Garriga fins al gener del 2027. Mira els horaris a rodalies.gencat.cat abans de sortir.",
+    "Segons l'avís de Rodalies (actualitzat el 6 de juliol de 2026 i vigent el 24 d'octubre), l'R3 circula amb el 50 % dels trens que tenia abans del 20 de gener i no hi ha trens entre Barcelona i la Garriga: entre l'Hospitalet i Fabra i Puig o Montcada Bifurcació hi ha l'R4, i fins a la Garriga o Vic, autobusos directes de Rodalies. Des del 12 d'agost hi ha també autobusos complementaris entre la Garriga i Puigcerdà. Mira els horaris a rodalies.gencat.cat abans de sortir.",
   ],
   es: [
     "La R3, ahora mismo",
-    "Según el aviso de Rodalies (actualizado el 6 de julio de 2026 y vigente el 18 de octubre), la R3 circula con el 50 % de los trenes que tenía antes del 20 de enero y no hay trenes entre Barcelona y La Garriga. Desde el 12 de agosto hay también autobuses complementarios entre La Garriga y Puigcerdà. Adif preveía mantener el corte entre Barcelona y La Garriga hasta enero de 2027. Mira los horarios en rodalies.gencat.cat antes de salir.",
+    "Según el aviso de Rodalies (actualizado el 6 de julio de 2026 y vigente el 24 de octubre), la R3 circula con el 50 % de los trenes que tenía antes del 20 de enero y no hay trenes entre Barcelona y La Garriga: entre L'Hospitalet y Fabra i Puig o Montcada Bifurcació está la R4, y hasta La Garriga o Vic, autobuses directos de Rodalies. Desde el 12 de agosto hay también autobuses complementarios entre La Garriga y Puigcerdà. Mira los horarios en rodalies.gencat.cat antes de salir.",
   ],
   en: [
     "The R3 right now",
-    "According to Rodalies' notice (last updated 6 July 2026 and still in force on 18 October), the R3 is running 50% of the trains it had before 20 January, and no trains run between Barcelona and La Garriga. Since 12 August there have also been complementary buses between La Garriga and Puigcerdà. Adif planned to keep the Barcelona–La Garriga line closed until January 2027. Check the timetables at rodalies.gencat.cat before you go.",
+    "According to Rodalies' notice (last updated 6 July 2026 and still in force on 24 October), the R3 is running 50% of the trains it had before 20 January, and no trains run between Barcelona and La Garriga: the R4 covers L'Hospitalet to Fabra i Puig or Montcada Bifurcació, and Rodalies direct buses run to La Garriga or Vic. Since 12 August there have also been complementary buses between La Garriga and Puigcerdà. Check the timetables at rodalies.gencat.cat before you go.",
   ],
 };
+
+/** Through trains only, from the Rodalies sheet valid since 6 July 2026. */
+const CERDANYA_UP: string[][] = [
+  ["6:46", "8:10", "8:29", "9:00", "9:21", "—"],
+  ["10:16", "11:40", "12:01", "12:32", "12:54", "13:00"],
+  ["13:16", "14:40", "14:59", "15:32", "15:54", "16:00"],
+  ["16:16", "17:40", "17:59", "18:32", "18:54", "19:00"],
+];
+
+const CERDANYA_DOWN: string[][] = [
+  ["—", "5:53", "6:17", "6:51", "7:12", "8:36"],
+  ["—", "7:51", "8:15", "8:49", "9:11", "10:36"],
+  ["—", "10:22", "10:46", "11:20", "11:41", "13:06"],
+  ["14:14", "14:21", "14:45", "15:19", "15:41", "17:06"],
+  ["17:13", "17:20", "17:44", "18:19", "18:41", "20:06"],
+];
+
+const CERDANYA_TT: Record<"ca" | "es" | "en", { up: [string, string[]]; down: [string, string[]]; note: string }> = {
+  ca: {
+    up: ["Trens R3 de pujada: la Garriga → Puigcerdà (cada dia)", ["La Garriga", "Ripoll", "Ribes de Freser", "La Molina", "Puigcerdà", "La Tor de Querol"]],
+    down: ["Trens R3 de baixada: Puigcerdà → la Garriga (cada dia)", ["La Tor de Querol", "Puigcerdà", "La Molina", "Ribes de Freser", "Ripoll", "La Garriga"]],
+    note: "Font: Rodalies, horari de tren R3 vigent des del 6 de juliol de 2026 (full actualitzat el 16/09/2026). Només els trens que fan tot el recorregut; la resta acaba a Ripoll o a Ribes. Consultat el 24/10/2026: pot canviar, comprova'l el dia que viatgis.",
+  },
+  es: {
+    up: ["Trenes R3 de subida: La Garriga → Puigcerdà (todos los días)", ["La Garriga", "Ripoll", "Ribes de Freser", "La Molina", "Puigcerdà", "La Tor de Querol"]],
+    down: ["Trenes R3 de bajada: Puigcerdà → La Garriga (todos los días)", ["La Tor de Querol", "Puigcerdà", "La Molina", "Ribes de Freser", "Ripoll", "La Garriga"]],
+    note: "Fuente: Rodalies, horario de tren R3 vigente desde el 6 de julio de 2026 (hoja actualizada el 16/09/2026). Solo los trenes que hacen todo el recorrido; el resto termina en Ripoll o en Ribes. Consultado el 24/10/2026: puede cambiar, compruébalo el día que viajes.",
+  },
+  en: {
+    up: ["R3 trains up: La Garriga → Puigcerdà (daily)", ["La Garriga", "Ripoll", "Ribes de Freser", "La Molina", "Puigcerdà", "La Tor de Querol"]],
+    down: ["R3 trains down: Puigcerdà → La Garriga (daily)", ["La Tor de Querol", "Puigcerdà", "La Molina", "Ribes de Freser", "Ripoll", "La Garriga"]],
+    note: "Source: Rodalies, R3 train timetable in force since 6 July 2026 (sheet updated 16/09/2026). Only trains that run the whole way; the rest terminate at Ripoll or Ribes. Checked 24/10/2026: it can change, so confirm on the day you travel.",
+  },
+};
+
+function cerdanyaTimetable(locale: "ca" | "es" | "en") {
+  const t = CERDANYA_TT[locale];
+  return [table(t.up[0], t.up[1], CERDANYA_UP, t.note), table(t.down[0], t.down[1], CERDANYA_DOWN, t.note)];
+}
 
 export const CERDANYA: B2Article = {
   key: "cerdanya",
@@ -696,31 +756,35 @@ export const CERDANYA: B2Article = {
   editions: {
     ca: {
       path: "guies/cerdanya-sense-cotxe",
-      title: "Cerdanya sense cotxe: què es pot fer realment amb tren i transport públic",
-      seoTitle: "Cerdanya sense cotxe: tren R3, busos i què és realista",
+      title: "Cerdanya sense cotxe: horaris del tren R3 a Puigcerdà, busos i què és realista",
+      seoTitle: "Cerdanya sense cotxe: horaris R3 a Puigcerdà i busos",
       seoDescription:
-        "Què es pot visitar de la Cerdanya sense cotxe: la línia R3, els busos regulars, Puigcerdà com a base i el Bus Blanc d'hivern.",
+        "Cerdanya sense cotxe: horaris dels trens R3 directes a la Molina i Puigcerdà, com fer el tram Barcelona–la Garriga, el bus urbà i el Bus Blanc d'hivern.",
       excerpt:
-        "Es pot anar a la Cerdanya sense cotxe, però cal planificar-ho diferent. Què sí és realista i què no.",
+        "Els trens R3 que arriben a Puigcerdà, com sortir de Barcelona mentre duren les obres, i què és realista sense cotxe.",
       blocks: [
-        lead("Anar a la Cerdanya sense cotxe és possible, però cal planificar-la de manera diferent."),
-        ...paras(
-          "La línia **R3** de Rodalies és la que puja a la Cerdanya per Vic i Ripoll fins a Puigcerdà i la Tor de Querol. **Ara mateix, però, no hi ha trens entre Barcelona i la Garriga** per les obres d'Adif: el tram el cobreixen l'R4 fins a Montcada Bifurcació i autobusos de Rodalies, i els trens de l'R3 circulen entre la Garriga i Puigcerdà/la Tor de Querol amb la meitat de l'oferta habitual i més temps de viatge. També hi ha serveis regulars d'autobús des de Barcelona, la Seu d'Urgell i Lleida, i des de Girona via Olot i Ripoll.",
+        lead(
+          "Sí, es pot anar a la Cerdanya sense cotxe: amb la línia **R3**, que puja per Vic i Ripoll fins a la Molina, Puigcerdà i la Tor de Querol. Mentre duren les obres no hi ha trens entre Barcelona i la Garriga (el tram es fa amb autobusos de Rodalies), i de la Garriga a Puigcerdà hi ha **quatre trens directes al dia**, amb un trajecte d'entre 2 h 35 min i 2 h 46 min. Un cop allà, Puigcerdà és la base més pràctica.",
         ),
         callout("warning", ...CERDANYA_R3.ca),
+        ...h2("Horaris de l'R3 a la Molina i Puigcerdà"),
+        ...cerdanyaTimetable("ca"),
+        ...paras(
+          "La resta de trens de l'R3 acaben a Ripoll o a Ribes de Freser, i entre la Garriga i Puigcerdà també circulen els autobusos complementaris de Rodalies. També hi ha línies regulars d'autobús des de Barcelona, la Seu d'Urgell i Lleida (ALSA) i des de Girona per Olot i Ripoll (TEISA).",
+        ),
         ...h2(
           "Puigcerdà és la base més fàcil",
-          "Puigcerdà disposa d'estació ferroviària i servei urbà de proximitat que connecta el centre amb diferents equipaments.",
+          "Puigcerdà té estació de tren i un bus urbà de proximitat que funciona cada dia i fa un recorregut circular des de la plaça Barcelona per l'Hospital de Cerdanya, la plaça de l'Estació i el passeig Josep Pla. El bitllet senzill costa 1,50 € i l'abonament de 10 viatges, 9 €, a l'Oficina de Turisme.",
           "Per a una escapada sense vehicle, és més pràctic dormir en un nucli amb transport que intentar replicar una ruta de cotxe.",
         ),
         ...h2(
-          "La Molina",
-          "L'R3 també permet plantejar una escapada ferroviària vinculada a La Molina segons el servei vigent.",
+          "La Molina en tren",
+          "La Molina té estació pròpia a l'R3, i des de l'estació un autobús intern puja fins al peu de pistes. El web de l'estació anuncia també el **Ski Tren**, que es compra a Renfe/Rodalies i combina el tren d'anada i tornada, el bus intern i el forfet d'un dia.",
         ),
         ...h2(
-          "Temporada de neu",
-          "Les darreres temporades el Consell Comarcal de la Cerdanya ha ofert el **Bus Blanc** cap a La Molina i Masella els caps de setmana i festius escolars de la temporada de neu. El servei de la temporada 2026-2027 encara no s'ha anunciat: comprova-ho abans de comptar-hi.",
-          "Els horaris canvien cada temporada: comprova'ls abans de comptar-hi.",
+          "Temporada de neu: el Bus Blanc",
+          "El Consell Comarcal de la Cerdanya ofereix el **Bus Blanc** cap a la Molina i Masella, amb dues rutes: una per Llívia, Puigcerdà i Urtx, i l'altra per Martinet, Bellver i Alp. La temporada 2025-26 va començar el cap de setmana del 6 de desembre de 2025 i circulava tots els caps de setmana i festius escolars, excepte el dia de Nadal, a 2 €. El servei de la temporada 2026-2027 encara no s'ha publicat: comprova-ho abans de comptar-hi.",
+          `Per triar estació, mira ${b2link("ski", "ca", "les estacions d'esquí de Catalunya")}.`,
         ),
         callout(
           "warning",
@@ -735,40 +799,48 @@ export const CERDANYA: B2Article = {
           "L'R3 que puja a la Cerdanya para també a **Ribes de Freser**, on enllaça amb el cremallera de la Vall de Núria. És de les poques escapades d'alta muntanya que es poden fer de punta a punta sense cotxe: a Núria no s'hi pot pujar per carretera.",
           "Combinar la Cerdanya i Núria en un mateix viatge és possible perquè comparteixen línia; només cal mirar els horaris de tots dos trens el dia que hi vagis.",
         ),
+        faq([
+          { question: "Quants trens hi ha de la Garriga a Puigcerdà?", answer: "Quatre trens directes al dia de pujada i cinc de baixada, segons l'horari vigent des del 6 de juliol de 2026. La resta de trens de l'R3 acaben a Ripoll o a Ribes de Freser." },
+          { question: "Es pot anar en tren de Barcelona a Puigcerdà?", answer: "No directament mentre duren les obres: de Barcelona a la Garriga hi ha autobusos de Rodalies, i de la Garriga a Puigcerdà, el tren R3." },
+          { question: "Quant dura el trajecte de la Garriga a Puigcerdà?", answer: "Entre 2 h 35 min i 2 h 46 min, segons el tren." },
+          { question: "Hi ha bus a les pistes des de Puigcerdà?", answer: "La temporada 2025-26, el Bus Blanc va unir la Cerdanya amb la Molina i Masella els caps de setmana i festius escolars, a 2 €. El de 2026-27 encara no s'ha publicat." },
+        ]),
         ...paras(verifiedLine("ca", CERDANYA_VERIFIED)),
-        ...b2Related(["nuria", "ripolles", "snow", "girona"], "ca"),
+        ...b2Related(["nuria", "ski", "ripolles", "snow", "girona"], "ca"),
       ],
     },
 
     es: {
       path: "guias/cerdana-sin-coche",
-      title: "Cerdanya sin coche: qué puedes visitar realmente en transporte público",
-      seoTitle: "Cerdanya sin coche: tren R3, buses y qué es realista",
+      title: "Cerdanya sin coche: horarios del tren R3 a Puigcerdà, autobuses y qué es realista",
+      seoTitle: "Cerdanya sin coche: horarios del tren R3 a Puigcerdà",
       seoDescription:
-        "Qué se puede visitar de la Cerdanya sin coche: línea R3, autobuses regulares, Puigcerdà como base y el Bus Blanc de invierno.",
+        "Cerdanya sin coche: horarios de los trenes R3 directos a La Molina y Puigcerdà, cómo hacer el tramo Barcelona–La Garriga, el bus urbano y el Bus Blanc.",
       excerpt:
-        "Se puede ir a la Cerdanya sin coche, pero hay que planificarlo distinto. Qué es realista y qué no.",
+        "Los trenes R3 que llegan a Puigcerdà, cómo salir de Barcelona mientras duran las obras y qué es realista sin coche.",
       blocks: [
         lead(
-          "La línea **R3** de Rodalies es la que sube a la Cerdanya por Vic y Ripoll hasta Puigcerdà y La Tor de Querol. **Ahora mismo, sin embargo, no hay trenes entre Barcelona y La Garriga** por las obras de Adif: el tramo lo cubren la R4 hasta Montcada Bifurcació y autobuses de Rodalies, y los trenes de la R3 circulan entre La Garriga y Puigcerdà/La Tor de Querol con la mitad de la oferta habitual y más tiempo de viaje.",
+          "Sí, se puede ir a la Cerdanya sin coche: con la línea **R3**, que sube por Vic y Ripoll hasta La Molina, Puigcerdà y La Tor de Querol. Mientras duran las obras no hay trenes entre Barcelona y La Garriga (el tramo se hace en autobuses de Rodalies), y de La Garriga a Puigcerdà hay **cuatro trenes directos al día**, con un trayecto de entre 2 h 35 min y 2 h 46 min. Una vez allí, Puigcerdà es la base más práctica.",
         ),
         callout("warning", ...CERDANYA_R3.es),
+        ...h2("Horarios de la R3 a La Molina y Puigcerdà"),
+        ...cerdanyaTimetable("es"),
         ...paras(
-          "Los autobuses regulares conectan la comarca con Barcelona, Lleida y la Seu d'Urgell, y existen conexiones desde Girona vía Olot y Ripoll.",
+          "El resto de trenes de la R3 terminan en Ripoll o en Ribes de Freser, y entre La Garriga y Puigcerdà también circulan los autobuses complementarios de Rodalies. Hay además líneas regulares de autobús desde Barcelona, La Seu d'Urgell y Lleida (ALSA) y desde Girona por Olot y Ripoll (TEISA).",
         ),
         ...h2(
           "Puigcerdà, la base más sencilla",
-          "Puigcerdà es la base más práctica para una estancia sin vehículo porque tiene estación de tren y una red urbana de proximidad.",
+          "Puigcerdà tiene estación de tren y un bus urbano de proximidad que funciona todos los días y hace un recorrido circular desde la plaza Barcelona por el Hospital de Cerdanya, la plaza de la Estación y el paseo Josep Pla. El billete sencillo cuesta 1,50 € y el abono de 10 viajes, 9 €, en la Oficina de Turismo.",
           "Es más realista dormir en un núcleo con transporte que intentar replicar una ruta pensada para coche.",
         ),
         ...h2(
           "La Molina en tren",
-          "La R3 permite plantear una escapada ferroviaria vinculada a La Molina según el servicio vigente, sin depender del coche para llegar a la comarca.",
+          "La Molina tiene estación propia en la R3, y desde la estación un autobús interno sube hasta el pie de pistas. La web de la estación anuncia también el **Ski Tren**, que se compra en Renfe/Rodalies y combina el tren de ida y vuelta, el bus interno y el forfait de un día.",
         ),
         ...h2(
-          "Temporada de nieve",
-          "Las últimas temporadas el Consell Comarcal de la Cerdanya ha ofrecido el **Bus Blanc** hacia La Molina y Masella los fines de semana y festivos escolares de la temporada de nieve. El servicio de la temporada 2026-2027 aún no se ha anunciado: compruébalo antes de contar con él.",
-          "Los horarios cambian cada temporada, así que conviene comprobarlos antes de contar con ellos para volver.",
+          "Temporada de nieve: el Bus Blanc",
+          "El Consell Comarcal de la Cerdanya ofrece el **Bus Blanc** hacia La Molina y Masella, con dos rutas: una por Llívia, Puigcerdà y Urtx, y otra por Martinet, Bellver y Alp. La temporada 2025-26 empezó el fin de semana del 6 de diciembre de 2025 y circulaba todos los fines de semana y festivos escolares, salvo el día de Navidad, a 2 €. El servicio de la temporada 2026-2027 aún no se ha publicado: compruébalo antes de contar con él.",
+          `Para elegir estación, mira ${b2link("ski", "es", "las estaciones de esquí de Cataluña")}.`,
         ),
         callout(
           "warning",
@@ -783,40 +855,48 @@ export const CERDANYA: B2Article = {
           "La R3 que sube a la Cerdanya para también en **Ribes de Freser**, donde enlaza con el cremallera de la Vall de Núria. Es una de las pocas escapadas de alta montaña que se pueden hacer de punta a punta sin coche: a Núria no se puede subir por carretera.",
           "Combinar la Cerdanya y Núria en un mismo viaje es posible porque comparten línea; solo hay que mirar los horarios de los dos trenes el día que vayas.",
         ),
+        faq([
+          { question: "¿Cuántos trenes hay de La Garriga a Puigcerdà?", answer: "Cuatro trenes directos al día de subida y cinco de bajada, según el horario vigente desde el 6 de julio de 2026. El resto de trenes de la R3 terminan en Ripoll o en Ribes de Freser." },
+          { question: "¿Se puede ir en tren de Barcelona a Puigcerdà?", answer: "No directamente mientras duran las obras: de Barcelona a La Garriga hay autobuses de Rodalies, y de La Garriga a Puigcerdà, el tren R3." },
+          { question: "¿Cuánto dura el trayecto de La Garriga a Puigcerdà?", answer: "Entre 2 h 35 min y 2 h 46 min, según el tren." },
+          { question: "¿Hay autobús a las pistas desde Puigcerdà?", answer: "En la temporada 2025-26, el Bus Blanc unió la Cerdanya con La Molina y Masella los fines de semana y festivos escolares, a 2 €. El de 2026-27 aún no se ha publicado." },
+        ]),
         ...paras(verifiedLine("es", CERDANYA_VERIFIED)),
-        ...b2Related(["nuria", "ripolles", "snow", "girona"], "es"),
+        ...b2Related(["nuria", "ski", "ripolles", "snow", "girona"], "es"),
       ],
     },
 
     en: {
       path: "guides/cerdanya-without-a-car",
-      title: "Cerdanya without a car: what you can realistically visit by public transport",
-      seoTitle: "Cerdanya without a car: the R3 train, buses and limits",
+      title: "Cerdanya without a car: R3 train times to Puigcerdà, buses and what is realistic",
+      seoTitle: "Cerdanya without a car: R3 train times to Puigcerdà",
       seoDescription:
-        "What you can reach in Cerdanya without a car: the R3 line, regular buses, Puigcerdà as a base and the winter Bus Blanc.",
+        "Cerdanya without a car: times of the through R3 trains to La Molina and Puigcerdà, the Barcelona–La Garriga bus link, the town bus and the Bus Blanc.",
       excerpt:
-        "Cerdanya without a car is possible, but it needs different planning. What is realistic, and what is not.",
+        "The R3 trains that reach Puigcerdà, how to leave Barcelona while the works last, and what is realistic without a car.",
       blocks: [
         lead(
-          "Rodalies line **R3** is the railway up to Cerdanya, via Vic and Ripoll to Puigcerdà and La Tor de Querol. **Right now, though, no trains run between Barcelona and La Garriga** because of Adif works: the R4 covers the stretch to Montcada Bifurcació and Rodalies buses the rest, and R3 trains run between La Garriga and Puigcerdà/La Tor de Querol at half the usual frequency and with longer journey times.",
+          "Yes, you can reach Cerdanya without a car: on Rodalies line **R3**, which climbs via Vic and Ripoll to La Molina, Puigcerdà and La Tor de Querol. While the works last there are no trains between Barcelona and La Garriga (that stretch is by Rodalies bus), and **four through trains a day** run from La Garriga to Puigcerdà, taking between 2 h 35 min and 2 h 46 min. Once there, Puigcerdà is the practical base.",
         ),
         callout("warning", ...CERDANYA_R3.en),
+        ...h2("R3 train times to La Molina and Puigcerdà"),
+        ...cerdanyaTimetable("en"),
         ...paras(
-          "Regular buses also connect the region with Barcelona, Lleida, La Seu d'Urgell and Girona.",
+          "Other R3 trains terminate at Ripoll or Ribes de Freser, and Rodalies also runs complementary buses between La Garriga and Puigcerdà. Regular coaches link the area with Barcelona, La Seu d'Urgell and Lleida (ALSA) and with Girona via Olot and Ripoll (TEISA).",
         ),
         ...h2(
           "Puigcerdà is the practical base",
-          "Puigcerdà is the most practical base for many car-free visitors because it has rail access and a local urban bus network.",
+          "Puigcerdà has a railway station and a small town bus that runs every day on a loop from Plaça Barcelona via the Cerdanya hospital, the station square and Passeig Josep Pla. A single ticket is €1.50 and a 10-trip pass €9, sold at the tourist office.",
           "Sleeping somewhere with transport beats trying to reproduce a driving itinerary.",
         ),
         ...h2(
           "La Molina by train",
-          "The R3 makes a rail-based trip towards La Molina possible depending on the service running, so reaching the region need not depend on a car.",
+          "La Molina has its own R3 station, and a resort shuttle bus runs from the station up to the slopes. The resort's website also lists the **Ski Tren**, sold by Renfe/Rodalies, which bundles the return train, the shuttle and a one-day lift pass.",
         ),
         ...h2(
-          "Snow season",
-          "In recent seasons the Cerdanya county council has run the **Bus Blanc** to La Molina and Masella at weekends and during school holidays in the snow season. The 2026-27 service has not been announced yet, so check before relying on it.",
-          "Timetables change each season, so check them before relying on one for the journey back.",
+          "Snow season: the Bus Blanc",
+          "The Cerdanya county council runs the **Bus Blanc** to La Molina and Masella on two routes: one via Llívia, Puigcerdà and Urtx, the other via Martinet, Bellver and Alp. In 2025-26 it started on the weekend of 6 December 2025 and ran every weekend and school holiday except Christmas Day, for €2. The 2026-27 service has not been published yet, so check before relying on it.",
+          `To pick a resort, see ${b2link("ski", "en", "Catalonia's ski resorts compared")}.`,
         ),
         callout(
           "warning",
@@ -831,8 +911,14 @@ export const CERDANYA: B2Article = {
           "The R3 that runs up to Cerdanya also stops at **Ribes de Freser**, where it connects with the Vall de Núria rack railway. It is one of the few high-mountain trips you can do end to end without a car: there is no road up to Núria.",
           "Combining Cerdanya and Núria on one trip works because they share the line; just check both timetables for the day you travel.",
         ),
+        faq([
+          { question: "How many trains run from La Garriga to Puigcerdà?", answer: "Four through trains a day up and five down, on the timetable in force since 6 July 2026. Other R3 trains terminate at Ripoll or Ribes de Freser." },
+          { question: "Can you take the train from Barcelona to Puigcerdà?", answer: "Not directly while the works last: Rodalies buses run from Barcelona to La Garriga, and the R3 train from La Garriga to Puigcerdà." },
+          { question: "How long is the R3 from La Garriga to Puigcerdà?", answer: "Between 2 h 35 min and 2 h 46 min, depending on the train." },
+          { question: "Is there a bus to the slopes from Puigcerdà?", answer: "In 2025-26 the Bus Blanc linked Cerdanya with La Molina and Masella at weekends and in school holidays, for €2. The 2026-27 service has not been published yet." },
+        ]),
         ...paras(verifiedLine("en", CERDANYA_VERIFIED)),
-        ...b2Related(["nuria", "ripolles", "snow", "girona"], "en"),
+        ...b2Related(["nuria", "ski", "ripolles", "snow", "girona"], "en"),
       ],
     },
   },
