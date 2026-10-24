@@ -23,7 +23,7 @@ export interface ZoneReading {
 export const WINDOW_DAYS = 15;
 
 /** ISO date the data was read. This is what the page shows as last verified. */
-export const READ_AT = "2026-10-20";
+export const READ_AT = "2026-10-24";
 
 export const SOURCE = {
   name: "Dades meteorològiques de la XEMA",
@@ -63,90 +63,90 @@ export const LEVEL_RULE = [
 export const ZONE_READINGS: readonly ZoneReading[] = [
   {
     "id": "ripolles",
-    "mm": 103.7,
+    "mm": 101.8,
     "stations": 5,
-    "daysSinceRain": 0,
+    "daysSinceRain": 4,
     "level": "very",
     "wettest": {
       "name": "Ulldeter (2.413 m)",
-      "mm": 142.3
+      "mm": 137.4
     }
   },
   {
     "id": "bergueda",
-    "mm": 107.8,
+    "mm": 88.9,
     "stations": 5,
-    "daysSinceRain": 1,
+    "daysSinceRain": 5,
     "level": "very",
     "wettest": {
       "name": "Gisclareny",
-      "mm": 146.8
+      "mm": 130.8
     }
   },
   {
     "id": "garrotxa",
-    "mm": 93.9,
+    "mm": 84.5,
     "stations": 2,
-    "daysSinceRain": 1,
+    "daysSinceRain": 4,
     "level": "very",
     "wettest": {
       "name": "la Vall d'en Bas",
-      "mm": 95.7
+      "mm": 84.9
     }
   },
   {
     "id": "osona",
-    "mm": 73,
+    "mm": 59.2,
     "stations": 7,
     "daysSinceRain": 1,
-    "level": "very",
+    "level": "favourable",
     "wettest": {
       "name": "Montesquiu",
-      "mm": 115.8
+      "mm": 105.7
     }
   },
   {
     "id": "pirineu",
-    "mm": 72.6,
+    "mm": 55,
     "stations": 24,
     "daysSinceRain": 0,
-    "level": "very",
+    "level": "favourable",
     "wettest": {
       "name": "Cadí Nord (2.145 m) - Prat d'Aguiló",
-      "mm": 119.5
+      "mm": 114.2
     }
   },
   {
     "id": "montseny",
-    "mm": 79.8,
+    "mm": 42.5,
     "stations": 9,
-    "daysSinceRain": 1,
-    "level": "very",
+    "daysSinceRain": 0,
+    "level": "favourable",
     "wettest": {
-      "name": "Granollers",
-      "mm": 155.3
+      "name": "Caldes de Montbui",
+      "mm": 87.9
     }
   },
   {
     "id": "ports",
-    "mm": 70.8,
+    "mm": 54.8,
     "stations": 19,
-    "daysSinceRain": 1,
-    "level": "very",
+    "daysSinceRain": 4,
+    "level": "favourable",
     "wettest": {
       "name": "Tivissa",
-      "mm": 135.4
+      "mm": 95.4
     }
   },
   {
     "id": "ponent",
-    "mm": 63.8,
+    "mm": 53.8,
     "stations": 31,
-    "daysSinceRain": 1,
-    "level": "very",
+    "daysSinceRain": 5,
+    "level": "favourable",
     "wettest": {
-      "name": "Vilanova de Meià",
-      "mm": 93
+      "name": "els Alamús",
+      "mm": 73.8
     }
   }
 ];
