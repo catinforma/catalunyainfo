@@ -19,7 +19,59 @@ import {
  * Pavellons de la Finca Güell are currently closed for works — verified against
  * Patrimoni Cultural, which states "Actualment el monument està tancat per
  * obres" — and the article says so rather than listing them as a visit.
+ *
+ * Re-checked on 24 Oct 2026: the pavilions are still "Tancat per obres"; the
+ * hours and prices table comes from each site's own page (palauguell.cat,
+ * gaudicoloniaguell.org/informacion-practica, visitmataro.cat for the Nau
+ * Gaudí, bellesguardgaudi.com for its visit prices). Casa Vicens and
+ * Bellesguard hours are not printed: neither page showed a schedule that could
+ * be read. The Nau Gaudí's "short walk from the station" line was replaced by
+ * its address, which is what the official page gives.
  */
+
+const PALAU_GUELL = "https://inici.palauguell.cat/";
+const CRIPTA = "https://www.gaudicoloniaguell.org/informacion-practica/";
+
+const HOURS: Record<"ca" | "es" | "en", { caption: string; headers: string[]; rows: string[][]; note: string }> = {
+  ca: {
+    caption: "Horaris i preus",
+    headers: ["Obra", "Horari", "Entrada"],
+    rows: [
+      ["Palau Güell", "De l'1 de novembre al 31 de març, 10:00–17:30 (últim accés 16:30); tancat els dilluns no festius", "De moment, només en línia"],
+      ["Cripta de la Colònia Güell", "Dl–dv 10:00–17:00; ds, dg i festius 10:00–15:00", "10 € amb audioguia; visita guiada 13 €"],
+      ["Nau Gaudí", "Dt–dv 17:00–20:00; ds 11:00–14:00 i 17:00–20:00; dg 11:00–14:00; tancat dilluns i festius (alguns festius, 11:00–14:00)", "Consulta el web"],
+      ["Torre Bellesguard", "Consulta el web", "Amb audioguia 12 €; visita guiada 20 €"],
+    ],
+    note: "Comprovat al web oficial de cada espai el 24 d'octubre de 2026.",
+  },
+  es: {
+    caption: "Horarios y precios",
+    headers: ["Obra", "Horario", "Entrada"],
+    rows: [
+      ["Palau Güell", "Del 1 de noviembre al 31 de marzo, 10:00–17:30 (último acceso 16:30); cerrado los lunes no festivos", "De momento, solo en línea"],
+      ["Cripta de la Colònia Güell", "Lun–vie 10:00–17:00; sáb, dom y festivos 10:00–15:00", "10 € con audioguía; visita guiada 13 €"],
+      ["Nau Gaudí", "Mar–vie 17:00–20:00; sáb 11:00–14:00 y 17:00–20:00; dom 11:00–14:00; cerrado lunes y festivos (algunos festivos, 11:00–14:00)", "Consulta la web"],
+      ["Torre Bellesguard", "Consulta la web", "Con audioguía 12 €; visita guiada 20 €"],
+    ],
+    note: "Comprobado en la web oficial de cada espacio el 24 de octubre de 2026.",
+  },
+  en: {
+    caption: "Opening hours and prices",
+    headers: ["Site", "Hours", "Ticket"],
+    rows: [
+      ["Palau Güell", "1 November to 31 March, 10:00–17:30 (last entry 16:30); closed on Mondays that are not public holidays", "Online only for now"],
+      ["Colònia Güell Crypt", "Mon–Fri 10:00–17:00; Sat, Sun and holidays 10:00–15:00", "€10 with audio guide; guided visit €13"],
+      ["Nau Gaudí", "Tue–Fri 17:00–20:00; Sat 11:00–14:00 and 17:00–20:00; Sun 11:00–14:00; closed Mondays and holidays (some holidays 11:00–14:00)", "See the website"],
+      ["Torre Bellesguard", "See the website", "Audio-guide visit €12; guided visit €20"],
+    ],
+    note: "Checked on each site's official website on 24 October 2026.",
+  },
+};
+
+const hoursTable = (locale: "ca" | "es" | "en"): Block => {
+  const t = HOURS[locale];
+  return table(t.caption, t.headers, t.rows, t.note);
+};
 
 const PATRIMONI_GAUDI = "https://patrimoni.gencat.cat/ca/coleccio/antoni-gaudi";
 const PATRIMONI_PAVELLONS = "https://patrimoni.gencat.cat/ca/coleccio/pavellons-de-la-finca-guell";
@@ -56,6 +108,7 @@ function ca(): Block[] {
       ],
       "Verificat a Patrimoni Cultural de la Generalitat i a les webs oficials de cada espai. Confirma-ho abans d'anar-hi.",
     ),
+    hoursTable("ca"),
     ...h2(
       "1. Torre Bellesguard",
       "Bellesguard és probablement la gran candidata a «Gaudí desconegut» dins de Barcelona. La casa barreja el llenguatge modernista amb formes d'inspiració gòtica, en un lloc carregat d'història catalana: s'aixeca on hi havia la residència de Martí l'Humà.",
@@ -77,13 +130,13 @@ function ca(): Block[] {
       "4. Cripta de la Colònia Güell",
       "A Santa Coloma de Cervelló hi ha un dels llocs més importants per entendre l'experimentació estructural de Gaudí. La cripta formava part d'un projecte d'església que no es va completar mai.",
       "Columnes inclinades, maó, pedra i geometries complexes anticipen recursos que Gaudí desenvoluparia després a escala molt més gran. És on va assajar, físicament, allò que la Sagrada Família acabaria fent monumental.",
-      "És una de les millors escapades arquitectòniques fora del centre de Barcelona, i es combina bé amb la visita a la colònia industrial que l'envolta.",
+      "És una de les millors escapades arquitectòniques fora del centre de Barcelona, i es combina bé amb la visita a la colònia industrial que l'envolta. Segons el web de la Cripta, els trens d'FGC des de la plaça d'Espanya arriben a l'estació de Colònia Güell en 20-25 minuts.",
     ),
     ...h2(
       "5. Nau Gaudí, Mataró",
       "A Mataró es conserva una de les primeres obres construïdes de l'arquitecte, feta per a la cooperativa Obrera Mataronense quan Gaudí encara era molt jove.",
       "Actualment la Nau Gaudí funciona com a espai museístic de la Col·lecció Bassat, de manera que la visita combina arquitectura primerenca i art contemporani.",
-      `És a poca distància de l'estació, cosa que la converteix en una de les parades naturals de ${link("trains", "ca", "les escapades en tren")}. Informació: [visitmataro.cat](${NAU_GAUDI}).`,
+      `És al carrer de la Cooperativa, 47, i és una de les parades naturals de ${link("trains", "ca", "les escapades en tren")}. Informació: [visitmataro.cat](${NAU_GAUDI}).`,
     ),
     ...h2(
       "6. Casa Calvet",
@@ -135,6 +188,7 @@ function es(): Block[] {
       ],
       "Verificado en Patrimoni Cultural de la Generalitat y en las webs oficiales de cada espacio. Confírmalo antes de ir.",
     ),
+    hoursTable("es"),
     ...h2(
       "1. Torre Bellesguard",
       "Una de sus obras más complejas y menos masificadas. Combina modernismo, referencias góticas e historia de Cataluña: se levanta donde estuvo la residencia de Martín el Humano.",
@@ -156,13 +210,13 @@ function es(): Block[] {
       "4. Cripta de la Colònia Güell",
       "En Santa Coloma de Cervelló está uno de los grandes laboratorios arquitectónicos de Gaudí. La cripta formaba parte de un proyecto de iglesia que nunca se completó.",
       "Columnas inclinadas, ladrillo, piedra y geometrías complejas anticipan recursos que después desarrollaría a mucha mayor escala. Es donde ensayó físicamente lo que la Sagrada Família acabaría haciendo monumental.",
-      "Se combina bien con la visita a la colonia industrial que la rodea.",
+      "Se combina bien con la visita a la colonia industrial que la rodea. Según la web de la Cripta, los trenes de FGC desde la plaza de España llegan a la estación de Colònia Güell en 20-25 minutos.",
     ),
     ...h2(
       "5. Nau Gaudí, Mataró",
       "Una de las primeras construcciones conservadas del arquitecto, hecha para la cooperativa Obrera Mataronense cuando Gaudí era muy joven.",
       "Hoy funciona como espacio museístico de la Col·lecció Bassat, de modo que la visita combina arquitectura temprana y arte contemporáneo.",
-      `Está a poca distancia de la estación, lo que la convierte en una parada natural de ${link("trains", "es", "las escapadas en tren")}. Información: [visitmataro.cat](${NAU_GAUDI}).`,
+      `Está en la calle de la Cooperativa, 47, y es una parada natural de ${link("trains", "es", "las escapadas en tren")}. Información: [visitmataro.cat](${NAU_GAUDI}).`,
     ),
     ...h2(
       "6. Casa Calvet",
@@ -214,6 +268,7 @@ function en(): Block[] {
       ],
       "Checked against Catalonia's heritage service and each site's official website. Confirm before travelling.",
     ),
+    hoursTable("en"),
     ...h2(
       "1. Torre Bellesguard",
       "A remarkably complex house mixing Gaudí's modernist language with Gothic references and Catalan history — it stands where the residence of King Martin the Humane once was.",
@@ -235,13 +290,13 @@ function en(): Block[] {
       "4. Colònia Güell Crypt",
       "In Santa Coloma de Cervelló, outside Barcelona, stands one of Gaudí's most important structural laboratories. The crypt was part of a church that was never finished.",
       "Leaning columns, brick, stone and complex geometry anticipate techniques he would later use at much greater scale. This is where he physically tested what the Sagrada Família would eventually make monumental.",
-      "It pairs well with the surrounding industrial workers' colony.",
+      "It pairs well with the surrounding industrial workers' colony. According to the Crypt's website, FGC trains from Plaça d'Espanya reach Colònia Güell station in 20 to 25 minutes.",
     ),
     ...h2(
       "5. Nau Gaudí, Mataró",
       "One of his earliest surviving works, built for the Obrera Mataronense cooperative when Gaudí was still very young.",
       "It now operates as an art space housing the Bassat Collection, so the visit combines early architecture with contemporary art.",
-      `It is a short walk from the station, which makes it a natural stop on ${link("trains", "en", "a car-free day trip")}. Details: [visitmataro.cat](${NAU_GAUDI}).`,
+      `It is at carrer de la Cooperativa 47, and a natural stop on ${link("trains", "en", "a car-free day trip")}. Details: [visitmataro.cat](${NAU_GAUDI}).`,
     ),
     ...h2(
       "6. Casa Calvet",
@@ -301,14 +356,16 @@ export const GAUDI: FeatureArticle = {
     { name: "Torre Bellesguard", url: BELLESGUARD, publisher: "Torre Bellesguard" },
     { name: "Casa Vicens", url: CASA_VICENS, publisher: "Casa Vicens" },
     { name: "Nau Gaudí — Col·lecció Bassat", url: NAU_GAUDI, publisher: "Ajuntament de Mataró" },
+    { name: "Palau Güell", url: PALAU_GUELL, publisher: "Diputació de Barcelona" },
+    { name: "Cripta Gaudí, Colònia Güell — información práctica", url: CRIPTA, publisher: "Colònia Güell" },
   ],
   editions: {
     ca: {
       path: ARTICLE_PATHS.gaudi.ca,
       title: "La Catalunya de Gaudí que gairebé ningú visita: 8 obres més enllà dels grans icones",
-      seoTitle: "8 obres de Gaudí menys conegudes que val la pena visitar",
+      seoTitle: "Obres de Gaudí menys conegudes: 8 que val la pena visitar",
       seoDescription:
-        "Vuit obres de Gaudí fora del circuit habitual, amb l'estat de visita de cadascuna: interior, exterior o tancada per obres.",
+        "Bellesguard, Casa Vicens, el Palau Güell, la Cripta de la Colònia Güell i quatre obres més de Gaudí fora del circuit, amb horaris, preus i estat de visita.",
       excerpt:
         "Vuit obres de Gaudí fora del circuit habitual, amb l'estat real de visita de cadascuna: quines es veuen per dins, quines només des del carrer i quina està tancada.",
       blocks: ca(),
@@ -316,9 +373,9 @@ export const GAUDI: FeatureArticle = {
     es: {
       path: ARTICLE_PATHS.gaudi.es,
       title: "La Cataluña de Gaudí que casi nadie visita: 8 obras más allá de los grandes iconos",
-      seoTitle: "8 obras menos conocidas de Gaudí que merece la pena visitar",
+      seoTitle: "Obras de Gaudí menos conocidas: 8 que merece la pena visitar",
       seoDescription:
-        "Ocho obras de Gaudí fuera del circuito habitual, con el estado de visita de cada una: interior, exterior o cerrada por obras.",
+        "Bellesguard, Casa Vicens, el Palau Güell, la Cripta de la Colònia Güell y cuatro obras más de Gaudí fuera del circuito, con horarios, precios y acceso.",
       excerpt:
         "Ocho obras de Gaudí fuera del circuito habitual, con el estado real de visita de cada una: cuáles se ven por dentro, cuáles solo desde la calle y cuál está cerrada.",
       blocks: es(),
@@ -326,9 +383,9 @@ export const GAUDI: FeatureArticle = {
     en: {
       path: ARTICLE_PATHS.gaudi.en,
       title: "8 Gaudí sites most Barcelona visitors never see",
-      seoTitle: "8 lesser-known Gaudí sites worth visiting",
+      seoTitle: "Lesser-known Gaudí buildings near Barcelona: 8 to visit",
       seoDescription:
-        "Eight Gaudí works beyond the famous ones, each with its real visiting status: interior visit, exterior only, or closed for restoration.",
+        "Bellesguard, Casa Vicens, Palau Güell, the Colònia Güell Crypt and four more Gaudí works off the usual route, with hours, prices and how to visit each.",
       excerpt:
         "Eight Gaudí works beyond the famous ones, each labelled with how you can actually visit it — inside, from the street, or not at all right now.",
       blocks: en(),

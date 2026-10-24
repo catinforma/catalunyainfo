@@ -9,9 +9,13 @@ import { b2link, h2, lead, list, paras, verifiedLine, type B2Article, type B2Key
  * guide it links to (same date), so the hub cannot drift from its children:
  * when a child changes, the line here is the only other place to update, and
  * the registry keeps every link pointing at a published URL.
+ *
+ * Re-synced with every child guide on 24 Oct 2026 (airport, ZBE, cards,
+ * monuments, Girona, Sitges, Tarragona and Figueres lines updated to the
+ * figures those guides now carry).
  */
 
-const VERIFIED = "2026-10-12";
+const VERIFIED = "2026-10-24";
 
 type Group = { title: string; items: [B2Key, string, string][] };
 
@@ -23,7 +27,7 @@ const GROUPS: Record<Locale, { lead: string; intro: string; groups: Group[]; out
       {
         title: "Arriving",
         items: [
-          ["airport", "Airport to the city centre", "Aerobús €7.75, airport metro €5.90, the R2 Nord train from T2, or a taxi with a €21 minimum."],
+          ["airport", "Airport to the city centre", "Aerobús €7.75, bus 46 on a €2.90 single, airport metro €5.90, the R2 Nord train from T2, or a taxi with a €21 minimum."],
           ["cruiseport", "Cruise port to the city", "Cruise Bus shuttle €3.50 from the Moll Adossat; only the WTC terminal is walkable."],
         ],
       },
@@ -31,16 +35,16 @@ const GROUPS: Record<Locale, { lead: string; intro: string; groups: Group[]; out
         title: "Getting around",
         items: [
           ["transport", "Which transport pass to buy", "T-casual €13 for ten journeys, T-dia €12, Hola Barcelona from €12.50, with a selector."],
-          ["cards", "Barcelona Card or Hola Barcelona", "When the Barcelona Card's museums pay back its higher price."],
+          ["cards", "Barcelona Card or Hola Barcelona", "Hola Barcelona from €12.50 for 24 hours, Barcelona Card from €39 for 48, and when the Card pays off."],
           ["hours", "Metro and night bus hours", "Metro to midnight on weeknights, 2:00 on Fridays, all night on Saturdays; NitBus after."],
           ["parking", "Street parking prices", "Blue zone €1.15–3.75 an hour, green zone €1.40–4.25, by environmental label."],
-          ["zbe", "Low-emission zone with a foreign car", "Registering a foreign vehicle before driving into the zone."],
+          ["zbe", "Low-emission zone with a foreign car", "Register a foreign vehicle with the AMB (€7) before driving in, Monday to Friday 7:00–20:00."],
         ],
       },
       {
         title: "Seeing the city",
         items: [
-          ["monuments", "Gaudí monument tickets", "Sagrada Família from €26, Park Güell €18, Casa Batlló from €29, La Pedrera €29."],
+          ["monuments", "Gaudí monument tickets", "Sagrada Família €26, Park Güell €18 online only, Casa Batlló and La Pedrera from €29."],
           ["museums", "Free museums", "Sunday afternoons, first Sundays and each museum's own free slots, and where to book."],
           ["campnou", "Spotify Camp Nou", "The Barça museum from €28, match tickets and the stadium works."],
           ["montjuic", "Montjuïc", "Magic Fountain show days, the cable cars, the funicular and the castle."],
@@ -55,10 +59,10 @@ const GROUPS: Record<Locale, { lead: string; intro: string; groups: Group[]; out
         title: "Day trips",
         items: [
           ["montserratFree", "Montserrat without a tour", "R5 train, then rack railway or cable car at €15 return."],
-          ["sitges", "Sitges by train", "32–38 minutes from Sants on the R2 Sud."],
-          ["girona", "Girona by train", "Regional or high-speed from Barcelona."],
-          ["tarragona", "Tarragona by train", "71 minutes from Sants; Roman sites €5 each or €15 for five."],
-          ["figueres", "Figueres and the Dalí Museum", "R11 or high-speed; tickets from €18.50, closed Mondays in winter."],
+          ["sitges", "Sitges by train", "31–37 minutes on the R2 Sud, €5.50 single; last train back 22:22."],
+          ["girona", "Girona by train", "R11 regional from €8.95 in 1 h 19–1 h 31, or high-speed in about 40 minutes."],
+          ["tarragona", "Tarragona by train", "69 minutes from Sants, €8.60 single; Roman sites €5 each or €15 for five."],
+          ["figueres", "Figueres and the Dalí Museum", "2 hours on the R11 or under an hour by high-speed; tickets from €18.50."],
           ["portaventura", "PortAventura", "Open daily until 6 January; only the R17 and RT2 stop at the park."],
           ["andorra", "Andorra by bus", "About three hours, from €33, and what you can bring back."],
         ],
@@ -73,7 +77,7 @@ const GROUPS: Record<Locale, { lead: string; intro: string; groups: Group[]; out
       {
         title: "Llegar",
         items: [
-          ["airport", "Del aeropuerto al centro", "Aerobús 7,75 €, metro del aeropuerto 5,90 €, tren R2 Nord desde la T2 o taxi con un mínimo de 21 €."],
+          ["airport", "Del aeropuerto al centro", "Aerobús 7,75 €, bus 46 con billete sencillo de 2,90 €, metro del aeropuerto 5,90 €, tren R2 Nord desde la T2 o taxi con un mínimo de 21 €."],
           ["cruiseport", "Del puerto de cruceros a la ciudad", "Lanzadera Cruise Bus 3,50 € desde el Moll Adossat; solo la terminal WTC está a distancia de ir a pie."],
         ],
       },
@@ -81,16 +85,16 @@ const GROUPS: Record<Locale, { lead: string; intro: string; groups: Group[]; out
         title: "Moverse",
         items: [
           ["transport", "Qué tarjeta de transporte comprar", "T-casual 13 € diez viajes, T-dia 12 €, Hola Barcelona desde 12,50 €, con un selector."],
-          ["cards", "Barcelona Card o Hola Barcelona", "Cuándo los museos de la Barcelona Card compensan su precio más alto."],
+          ["cards", "Barcelona Card o Hola Barcelona", "Hola Barcelona desde 12,50 € (24 horas), Barcelona Card desde 39 € (48 horas) y cuándo compensa la Card."],
           ["hours", "Horario del metro y del NitBus", "Metro hasta medianoche entre semana, hasta las 2:00 el viernes, toda la noche el sábado; después, NitBus."],
           ["parking", "Precio del aparcamiento en la calle", "Zona azul de 1,15 a 3,75 € la hora, zona verde de 1,40 a 4,25 €, según el distintivo."],
-          ["zbe", "ZBE con un coche extranjero", "Registrar un vehículo extranjero antes de entrar en la zona."],
+          ["zbe", "ZBE con un coche extranjero", "Registra el vehículo extranjero en el AMB (7 €) antes de entrar, de lunes a viernes de 7:00 a 20:00."],
         ],
       },
       {
         title: "Ver la ciudad",
         items: [
-          ["monuments", "Entradas de Gaudí", "Sagrada Familia desde 26 €, Park Güell 18 €, Casa Batlló desde 29 €, La Pedrera 29 €."],
+          ["monuments", "Entradas de Gaudí", "Sagrada Familia 26 €, Park Güell 18 € solo en línea, Casa Batlló y La Pedrera desde 29 €."],
           ["museums", "Museos gratis", "Domingos por la tarde, primeros domingos y las franjas gratuitas de cada museo, y dónde reservar."],
           ["campnou", "Spotify Camp Nou", "El museo del Barça desde 28 €, las entradas de partido y las obras del estadio."],
           ["montjuic", "Montjuïc", "Días de la Fuente Mágica, los teleféricos, el funicular y el castillo."],
@@ -105,10 +109,10 @@ const GROUPS: Record<Locale, { lead: string; intro: string; groups: Group[]; out
         title: "Excursiones",
         items: [
           ["montserratFree", "Montserrat por libre", "Tren R5 y después cremallera o teleférico a 15 € ida y vuelta."],
-          ["sitges", "Sitges en tren", "De 32 a 38 minutos desde Sants en la R2 Sud."],
-          ["girona", "Girona en tren", "Regional o alta velocidad desde Barcelona."],
-          ["tarragona", "Tarragona en tren", "71 minutos desde Sants; recintos romanos 5 € cada uno o 15 € los cinco."],
-          ["figueres", "Figueres y el Museo Dalí", "R11 o alta velocidad; entradas desde 18,50 €, cerrado los lunes en invierno."],
+          ["sitges", "Sitges en tren", "De 31 a 37 minutos en la R2 Sud, 5,50 € el sencillo; último tren de vuelta a las 22:22."],
+          ["girona", "Girona en tren", "Regional R11 desde 8,95 € en 1 h 19–1 h 31, o alta velocidad en unos 40 minutos."],
+          ["tarragona", "Tarragona en tren", "69 minutos desde Sants, 8,60 € el sencillo; recintos romanos 5 € cada uno o 15 € los cinco."],
+          ["figueres", "Figueres y el Museo Dalí", "2 horas en la R11 o menos de una en alta velocidad; entradas desde 18,50 €."],
           ["portaventura", "PortAventura", "Abierto cada día hasta el 6 de enero; solo la R17 y la RT2 paran en el parque."],
           ["andorra", "Andorra en autobús", "Unas tres horas, desde 33 €, y lo que puedes traer de vuelta."],
         ],
@@ -123,7 +127,7 @@ const GROUPS: Record<Locale, { lead: string; intro: string; groups: Group[]; out
       {
         title: "Arribar",
         items: [
-          ["airport", "De l'aeroport al centre", "Aerobús 7,75 €, metro de l'aeroport 5,90 €, tren R2 Nord des de la T2 o taxi amb un mínim de 21 €."],
+          ["airport", "De l'aeroport al centre", "Aerobús 7,75 €, bus 46 amb bitllet senzill de 2,90 €, metro de l'aeroport 5,90 €, tren R2 Nord des de la T2 o taxi amb un mínim de 21 €."],
           ["cruiseport", "Del port de creuers a la ciutat", "Llançadora Cruise Bus 3,50 € des del Moll Adossat; només la terminal WTC és a distància d'anar-hi a peu."],
         ],
       },
@@ -131,16 +135,16 @@ const GROUPS: Record<Locale, { lead: string; intro: string; groups: Group[]; out
         title: "Moure's",
         items: [
           ["transport", "Quina targeta de transport comprar", "T-casual 13 € deu viatges, T-dia 12 €, Hola Barcelona des de 12,50 €, amb un selector."],
-          ["cards", "Barcelona Card o Hola Barcelona", "Quan els museus de la Barcelona Card compensen el seu preu més alt."],
+          ["cards", "Barcelona Card o Hola Barcelona", "Hola Barcelona des de 12,50 € (24 hores), Barcelona Card des de 39 € (48 hores) i quan compensa la Card."],
           ["hours", "Horari del metro i del NitBus", "Metro fins a mitjanit entre setmana, fins a les 2:00 el divendres, tota la nit el dissabte; després, NitBus."],
           ["parking", "Preu de l'aparcament al carrer", "Zona blava d'1,15 a 3,75 € l'hora, zona verda d'1,40 a 4,25 €, segons el distintiu."],
-          ["zbe", "ZBE amb un cotxe estranger", "Registrar un vehicle estranger abans d'entrar a la zona."],
+          ["zbe", "ZBE amb un cotxe estranger", "Registra el vehicle estranger a l'AMB (7 €) abans d'entrar-hi, de dilluns a divendres de 7:00 a 20:00."],
         ],
       },
       {
         title: "Veure la ciutat",
         items: [
-          ["monuments", "Entrades de Gaudí", "Sagrada Família des de 26 €, Park Güell 18 €, Casa Batlló des de 29 €, la Pedrera 29 €."],
+          ["monuments", "Entrades de Gaudí", "Sagrada Família 26 €, Park Güell 18 € només en línia, Casa Batlló i la Pedrera des de 29 €."],
           ["museums", "Museus gratis", "Diumenges a la tarda, primers diumenges i les franges gratuïtes de cada museu, i on reservar."],
           ["campnou", "Spotify Camp Nou", "El museu del Barça des de 28 €, les entrades de partit i les obres de l'estadi."],
           ["montjuic", "Montjuïc", "Dies de la Font Màgica, els telefèrics, el funicular i el castell."],
@@ -155,10 +159,10 @@ const GROUPS: Record<Locale, { lead: string; intro: string; groups: Group[]; out
         title: "Excursions",
         items: [
           ["montserratFree", "Montserrat per lliure", "Tren R5 i després cremallera o aeri a 15 € anada i tornada."],
-          ["sitges", "Sitges en tren", "De 32 a 38 minuts des de Sants amb l'R2 Sud."],
-          ["girona", "Girona en tren", "Regional o alta velocitat des de Barcelona."],
-          ["tarragona", "Tarragona en tren", "71 minuts des de Sants; recintes romans 5 € cadascun o 15 € tots cinc."],
-          ["figueres", "Figueres i el Museu Dalí", "R11 o alta velocitat; entrades des de 18,50 €, tancat els dilluns a l'hivern."],
+          ["sitges", "Sitges en tren", "De 31 a 37 minuts amb l'R2 Sud, 5,50 € el senzill; últim tren de tornada a les 22:22."],
+          ["girona", "Girona en tren", "Regional R11 des de 8,95 € en 1 h 19–1 h 31, o alta velocitat en uns 40 minuts."],
+          ["tarragona", "Tarragona en tren", "69 minuts des de Sants, 8,60 € el senzill; recintes romans 5 € cadascun o 15 € tots cinc."],
+          ["figueres", "Figueres i el Museu Dalí", "2 hores amb l'R11 o menys d'una en alta velocitat; entrades des de 18,50 €."],
           ["portaventura", "PortAventura", "Obert cada dia fins al 6 de gener; només l'R17 i l'RT2 paren al parc."],
           ["andorra", "Andorra en autobús", "Unes tres hores, des de 33 €, i el que pots tornar a portar."],
         ],
