@@ -2,6 +2,7 @@ import type { Block } from "@/lib/content/blocks";
 import type { Locale } from "@/lib/i18n/config";
 
 import {
+  b2link,
   b2Related,
   callout,
   faq,
@@ -25,6 +26,13 @@ import {
 
 const VERIFIED = "2026-10-12";
 
+/** Where the 29 November 2026 count is explained (Congress page only). */
+const NIGHT: Record<Locale, string> = {
+  ca: `Per als resultats del **29 de novembre de 2026**, la nit electoral, mira ${b2link("electionNight", "ca", "a quina hora surten i com és l'escrutini provisional")}.`,
+  es: `Para los resultados del **29 de noviembre de 2026**, la noche electoral, mira ${b2link("electionNight", "es", "a qué hora salen y cómo es el escrutinio provisional")}.`,
+  en: `For the results of **29 November 2026** on election night, see ${b2link("electionNight", "en", "when they come out and how the provisional count works")}.`,
+};
+
 const DATA_SOURCES: B2Source[] = [
   { name: "Processos electorals — vots", url: "https://analisi.transparenciacatalunya.cat/d/ntc4-rnwr", publisher: "Generalitat de Catalunya. Departament de la Presidència" },
   { name: "Processos electorals — participació", url: "https://analisi.transparenciacatalunya.cat/d/irrv-2mfc", publisher: "Generalitat de Catalunya. Departament de la Presidència" },
@@ -45,6 +53,7 @@ type T = {
 function body(kind: "congress" | "parliament", t: T, locale: Locale): Block[] {
   return [
     lead(t.lead),
+    ...(kind === "congress" ? [{ type: "paragraph", text: NIGHT[locale] } as Block] : []),
     callout("official", verifiedLine(locale, VERIFIED), t.note),
     { type: "electionHistory", kind } as Block,
     ...h2(t.readTitle, ...t.read),
