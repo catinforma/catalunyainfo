@@ -51,7 +51,9 @@ export async function ReservoirLevels({ locale }: { locale: Locale }) {
           {fill(t.detail, {
             vol: whole.format(total.volume),
             cap: whole.format(total.capacity),
-            date: shortDate(report.date, locale),
+            // With the year: "embalses hoy" pages that print a day without one
+            // are the stale ones searchers have learnt to distrust.
+            date: `${shortDate(report.date, locale)}${locale === "en" ? " " : " de "}${report.date.slice(0, 4)}`,
           })}{" "}
           {totalCompare && compareDate
             ? fill(t.change, {
