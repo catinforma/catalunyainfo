@@ -406,6 +406,28 @@ test("shops: the DOGC dates are all there and nothing the orders do not say", ()
 });
 
 /**
+ * How to vote: the calendar is the one in RD 806/2026, the JEC and the INE
+ * (checked 24 Oct 2026). The JEC suspended the MiDNI app on 26 Mar 2026
+ * (Acuerdo 94/2026), so the page must never present it as valid ID again,
+ * and the braille phone number had no 2026 source.
+ */
+test("voting: dated calendar from the decree, MiDNI not presented as valid", () => {
+  const dates: Record<string, string[]> = {
+    ca: ["31 d'octubre", "2 de novembre", "19 de novembre", "25 de novembre", "4–7 de desembre", "23 de desembre"],
+    es: ["31 de octubre", "2 de noviembre", "19 de noviembre", "25 de noviembre", "4–7 de diciembre", "23 de diciembre"],
+    en: ["31 October", "2 November", "19 November", "25 November", "4–7 December", "23 December"],
+  };
+  for (const locale of ["ca", "es", "en"] as const) {
+    const text = bodyToPlainText(VOTING.editions[locale].blocks);
+    assert.match(text, /806\/2026/, `${locale}: decree`);
+    for (const day of dates[locale]!) assert.ok(text.includes(day), `${locale}: ${day}`);
+    assert.match(text, /Acuerdo 94\/2026|Acord 94\/2026/, `${locale}: MiDNI suspension cited`);
+    assert.doesNotMatch(text, /MiDNI[^.]*(también es válido|també és vàlid|is valid too)/i, `${locale}: MiDNI valid`);
+    assert.doesNotMatch(text, /900 150 000/, `${locale}: unsourced braille phone`);
+  }
+});
+
+/**
  * Election night carries no figures until Interior publishes a documented,
  * licensed source (research_notes/blog-batch-03/election_night_29n.md):
  * no percentages other than the worked "30 %" example, no seat forecasts,
