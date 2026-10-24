@@ -360,9 +360,9 @@ const TARRAGONA_META: Record<Locale, Meta> = {
   es: {
     path: "escapadas/tarragona-desde-barcelona-tren",
     title: "Tarragona desde Barcelona en tren: horarios, precio y la Tarraco romana en un día",
-    seoTitle: "Tren Barcelona–Tarragona: horarios, precio y Tarraco en un día",
+    seoTitle: "Tren Barcelona–Tarragona: horarios, precio y Tarraco",
     seoDescription:
-      "Regionales de Sants a Tarragona en 69 minutos, dos por hora, 8,60 € el sencillo. Entrada conjunta a los cinco recintos romanos: 15 €. Horarios y días gratis.",
+      "Regionales de Sants a Tarragona en 69 minutos, dos por hora, 8,60 € el sencillo. Entrada conjunta a los 5 recintos romanos: 15 €. Horarios y días gratis.",
     excerpt: "Cómo ir a Tarragona en tren desde Barcelona y ver la Tarraco romana en un día: horarios, precio del billete, entrada conjunta y jornadas de puertas abiertas.",
   },
   en: {
