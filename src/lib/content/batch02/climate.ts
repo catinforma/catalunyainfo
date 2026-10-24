@@ -21,38 +21,43 @@ import {
  * its site (a 1991-2020 one is not online). The city-centre figures are
  * Meteocat's el Raval station, 2010-2025, labelled as such. Records are
  * AEMET's annual extremes as updated on 30 Sep 2026. Checked 12 Oct 2026
- * (research_notes/blog-batch-03/climate.md).
+ * (research_notes/blog-batch-03/climate.md); every figure re-checked on
+ * 24 Oct 2026. The Fabra record is Meteocat's summer 2026 bulletin (published
+ * 19 Oct 2026), which gives 40.9 °C in the 6-9 July heat wave but no day, so
+ * no day is printed. The start of winter is IGN's (astronomia.ign.es).
  *
  * Not printed: September and annual sunshine at the airport (AEMET shows no
  * value), any monthly sea temperature (no official monthly average exists for
  * Barcelona) and monthly records (not retrievable).
  */
 
-const VERIFIED = "2026-10-12";
+const VERIFIED = "2026-10-24";
 
 const SOURCES: B2Source[] = [
   { name: "Valores climatológicos normales: Barcelona Aeropuerto", url: "https://www.aemet.es/es/serviciosclimaticos/datosclimatologicos/valoresclimatologicos?l=0076&k=cat", publisher: "AEMET" },
   { name: "Valores extremos: Barcelona Aeropuerto", url: "https://www.aemet.es/es/serviciosclimaticos/datosclimatologicos/efemerides_extremos?w=0&k=cat&datos=det&l=0076", publisher: "AEMET" },
   { name: "Climatologia XEMA: Barcelona - el Raval, 2010-2025", url: "https://static-m.meteo.cat/content/climatologia/xema/X4_2010-2025.pdf", publisher: "Servei Meteorològic de Catalunya" },
   { name: "Atles climàtic de Catalunya 1991-2020", url: "https://www.meteo.cat/wpweb/climatologia/el-clima/atles-climatic/", publisher: "Servei Meteorològic de Catalunya" },
+  { name: "Butlletí climàtic de l'estiu del 2026", url: "https://www.meteo.cat/wpweb/climatologia/butlletins-i-episodis-meteorologics/butlleti-estacional/", publisher: "Servei Meteorològic de Catalunya" },
+  { name: "Start of winter 2026-2027", url: "https://astronomia.ign.es/en/inicio-estaciones/invierno", publisher: "Instituto Geográfico Nacional — Observatorio Astronómico Nacional" },
 ];
 
 const META: Record<Locale, { path: string; title: string; seoTitle: string; seoDescription: string; excerpt: string }> = {
   ca: {
     path: "guies/temps-barcelona-mes-a-mes",
     title: "El temps a Barcelona mes a mes: temperatures, pluja i sol",
-    seoTitle: "El temps a Barcelona mes a mes: temperatures i pluja",
+    seoTitle: "Temps i clima a Barcelona mes a mes: temperatures i pluja",
     seoDescription:
-      "Temperatures màximes i mínimes, pluja i hores de sol de cada mes a Barcelona segons l'AEMET: l'agost és el més calorós, l'octubre el més plujós.",
+      "El gener és el mes més fred a Barcelona (13,6 °C de màxima i 4,7 °C de mínima), l'agost el més calorós i l'octubre el més plujós (91 mm). Dades AEMET.",
     excerpt:
       "Quin temps fa a Barcelona cada mes, amb les mitjanes oficials de l'AEMET i el que diu el Meteocat del centre de la ciutat.",
   },
   es: {
     path: "guias/tiempo-barcelona-mes-a-mes",
     title: "El tiempo en Barcelona mes a mes: temperaturas, lluvia y sol",
-    seoTitle: "El tiempo en Barcelona mes a mes: temperaturas y lluvia",
+    seoTitle: "Tiempo y clima en Barcelona mes a mes: temperaturas y lluvia",
     seoDescription:
-      "Temperaturas máximas y mínimas, lluvia y horas de sol de cada mes en Barcelona según la AEMET: agosto es el más caluroso, octubre el más lluvioso.",
+      "Enero es el mes más frío en Barcelona (13,6 °C de máxima y 4,7 °C de mínima), agosto el más caluroso y octubre el más lluvioso (91 mm). Medias de la AEMET.",
     excerpt:
       "Qué tiempo hace en Barcelona cada mes, con las medias oficiales de la AEMET y lo que dice el Meteocat del centro de la ciudad.",
   },
@@ -61,7 +66,7 @@ const META: Record<Locale, { path: string; title: string; seoTitle: string; seoD
     title: "Barcelona weather by month: temperatures, rain and sunshine",
     seoTitle: "Barcelona weather by month: temperatures, rain, sunshine",
     seoDescription:
-      "Average highs and lows, rainfall and sunshine for every month in Barcelona from Spain's weather agency, AEMET: August is warmest, October wettest.",
+      "January is Barcelona's coldest month (average high 13.6 °C, low 4.7 °C), August the warmest and October the wettest (91 mm). Monthly averages from AEMET.",
     excerpt:
       "What the weather is like in Barcelona each month, from AEMET's official averages and Meteocat's figures for the city centre.",
   },
@@ -113,7 +118,7 @@ type T = {
 
 const COPY: Record<Locale, T> = {
   ca: {
-    lead: "Barcelona té un clima mediterrani suau: hiverns amb màximes al voltant dels 14 °C i estius amb màximes de 28 °C. L'**agost** és el mes més calorós, el **gener** el més fred i l'**octubre** el més plujós. Aquí tens les mitjanes oficials de cada mes, segons l'AEMET.",
+    lead: "Barcelona té un clima mediterrani suau: hiverns amb màximes al voltant dels 14 °C i estius amb màximes de 28 °C. L'**agost** és el mes més calorós, el **gener** el més fred (màxima mitjana de 13,6 °C i mínima de 4,7 °C a l'aeroport) i l'**octubre** el més plujós, amb 91 mm. Aquí tens les mitjanes oficials de cada mes, segons l'AEMET.",
     note: "Les mitjanes mensuals són les de l'estació de l'AEMET a l'aeroport del Prat (1981-2010), la taula completa que publica l'agència. Al centre de la ciutat fa més calor, sobretot de nit.",
     tableTitle: "Mes a mes",
     tableCaption: "Clima de Barcelona per mesos (AEMET, Barcelona Aeroport, 1981-2010)",
@@ -122,7 +127,7 @@ const COPY: Record<Locale, T> = {
     noValue: "—",
     seasonsTitle: "Què esperar cada estació",
     seasons: [
-      "**Hivern (desembre-febrer):** màximes mitjanes de 14 °C i mínimes de 5 °C a l'aeroport. Les glaçades hi són rares: unes quatre l'any, i la neu, menys d'un dia l'any de mitjana.",
+      "**Hivern (desembre-febrer):** màximes mitjanes de 14 °C i mínimes de 5 °C a l'aeroport. Les glaçades hi són rares: unes quatre l'any, i la neu, menys d'un dia l'any de mitjana. L'hivern astronòmic 2026-27 comença el 21 de desembre de 2026 a les 21:50 (hora oficial peninsular), segons l'Institut Geogràfic Nacional.",
       "**Primavera (març-maig):** les màximes pugen de 16 a 21 °C, amb unes cinc jornades de pluja al mes.",
       "**Estiu (juny-agost):** màximes de 25 a 28,5 °C i el juliol és el mes més sec (21 mm) i el més assolellat (305 hores de sol). L'agost ja porta tempestes: 62 mm de pluja de mitjana.",
       "**Tardor (setembre-novembre):** és l'època més plujosa. L'octubre suma 91 mm i el setembre, 81, en uns sis dies de pluja.",
@@ -135,19 +140,23 @@ const COPY: Record<Locale, T> = {
     recordsTitle: "Rècords",
     records: [
       "Segons l'AEMET, la temperatura més alta registrada a l'aeroport és de **37,7 °C, el 8 de juliol del 2026**, i la més baixa, de **-8,0 °C, el 27 de desembre del 1962**. El dia més plujós va deixar 186,7 mm, el 25 de setembre del 1953.",
-      "A l'Observatori Fabra, a 408 metres d'altitud al vessant de Collserola, el màxim és de 40,9 °C, també del 8 de juliol del 2026.",
+      "A l'Observatori Fabra, a 408 metres d'altitud al vessant de Collserola, l'onada de calor del 6 al 9 de juliol del 2026 va arribar a 40,9 °C, la temperatura més alta en els 113 anys de dades de l'observatori, segons el Meteocat.",
     ],
     seaTitle: "I la temperatura de l'aigua?",
     sea: "No hi ha una mitjana oficial mes a mes de la temperatura del mar a Barcelona. La boia de Ports de l'Estat davant de Barcelona en dona la lectura del moment al portal PORTUS, i la pàgina de cada platja a barcelona.cat informa de l'estat del mar.",
     faq: [
       { question: "Quin és el mes més calorós a Barcelona?", answer: "L'agost, amb una màxima mitjana de 28,5 °C i una mitjana de 24,4 °C a l'estació de l'aeroport (AEMET, 1981-2010). El juliol el segueix de prop." },
+      { question: "Quin és el mes més fred a Barcelona?", answer: "El gener, amb una màxima mitjana de 13,6 °C, una mínima de 4,7 °C i una mitjana de 9,2 °C a l'estació de l'aeroport (AEMET, 1981-2010). Al centre, l'estació del Meteocat al Raval va donar una mínima mitjana de 8,6 °C al gener entre el 2010 i el 2025." },
       { question: "Quin és el mes més plujós a Barcelona?", answer: "L'octubre, amb 91 mm de mitjana, seguit del setembre amb 81 mm. El juliol és el més sec, amb 21 mm." },
+      { question: "Quin temps fa a Barcelona al gener?", answer: "Màximes mitjanes de 13,6 °C i mínimes de 4,7 °C, amb 37 mm de pluja en uns quatre dies i 151 hores de sol, segons l'AEMET." },
+      { question: "Quin temps fa a Barcelona a l'octubre?", answer: "Màximes mitjanes de 22,1 °C i mínimes de 13,5 °C. És el mes més plujós, amb 91 mm en uns sis dies, i té 182 hores de sol, segons l'AEMET." },
+      { question: "Quan comença l'hivern a Barcelona?", answer: "L'hivern astronòmic 2026-27 comença el 21 de desembre de 2026 a les 21:50, hora oficial peninsular, segons l'Institut Geogràfic Nacional. Climàticament, desembre, gener i febrer són els mesos més freds." },
       { question: "Neva a Barcelona?", answer: "Molt poc: l'AEMET compta 0,4 dies de neu l'any de mitjana a l'aeroport." },
       { question: "Quin temps fa a Barcelona al novembre?", answer: "Màximes mitjanes de 17,3 °C i mínimes de 8,6 °C, amb 59 mm de pluja en uns cinc dies, segons l'AEMET." },
     ],
   },
   es: {
-    lead: "Barcelona tiene un clima mediterráneo suave: inviernos con máximas en torno a los 14 °C y veranos con máximas de 28 °C. **Agosto** es el mes más caluroso, **enero** el más frío y **octubre** el más lluvioso. Aquí tienes las medias oficiales de cada mes, según la AEMET.",
+    lead: "Barcelona tiene un clima mediterráneo suave: inviernos con máximas en torno a los 14 °C y veranos con máximas de 28 °C. **Agosto** es el mes más caluroso, **enero** el más frío (máxima media de 13,6 °C y mínima de 4,7 °C en el aeropuerto) y **octubre** el más lluvioso, con 91 mm. Aquí tienes las medias oficiales de cada mes, según la AEMET.",
     note: "Las medias mensuales son las de la estación de la AEMET en el aeropuerto de El Prat (1981-2010), la tabla completa que publica la agencia. En el centro de la ciudad hace más calor, sobre todo de noche.",
     tableTitle: "Mes a mes",
     tableCaption: "Clima de Barcelona por meses (AEMET, Barcelona Aeropuerto, 1981-2010)",
@@ -156,7 +165,7 @@ const COPY: Record<Locale, T> = {
     noValue: "—",
     seasonsTitle: "Qué esperar cada estación",
     seasons: [
-      "**Invierno (diciembre-febrero):** máximas medias de 14 °C y mínimas de 5 °C en el aeropuerto. Las heladas son raras: unas cuatro al año, y la nieve, menos de un día al año de media.",
+      "**Invierno (diciembre-febrero):** máximas medias de 14 °C y mínimas de 5 °C en el aeropuerto. Las heladas son raras: unas cuatro al año, y la nieve, menos de un día al año de media. El invierno astronómico 2026-27 empieza el 21 de diciembre de 2026 a las 21:50 (hora oficial peninsular), según el Instituto Geográfico Nacional.",
       "**Primavera (marzo-mayo):** las máximas suben de 16 a 21 °C, con unas cinco jornadas de lluvia al mes.",
       "**Verano (junio-agosto):** máximas de 25 a 28,5 °C y julio es el mes más seco (21 mm) y el más soleado (305 horas de sol). Agosto ya trae tormentas: 62 mm de lluvia de media.",
       "**Otoño (septiembre-noviembre):** es la época más lluviosa. Octubre suma 91 mm y septiembre, 81, en unos seis días de lluvia.",
@@ -169,19 +178,23 @@ const COPY: Record<Locale, T> = {
     recordsTitle: "Récords",
     records: [
       "Según la AEMET, la temperatura más alta registrada en el aeropuerto es de **37,7 °C, el 8 de julio de 2026**, y la más baja, de **-8,0 °C, el 27 de diciembre de 1962**. El día más lluvioso dejó 186,7 mm, el 25 de septiembre de 1953.",
-      "En el Observatori Fabra, a 408 metros de altitud en la ladera de Collserola, el máximo es de 40,9 °C, también del 8 de julio de 2026.",
+      "En el Observatori Fabra, a 408 metros de altitud en la ladera de Collserola, la ola de calor del 6 al 9 de julio de 2026 llegó a 40,9 °C, la temperatura más alta en los 113 años de datos del observatorio, según el Meteocat.",
     ],
     seaTitle: "¿Y la temperatura del agua?",
     sea: "No existe una media oficial mes a mes de la temperatura del mar en Barcelona. La boya de Puertos del Estado frente a Barcelona da la lectura del momento en el portal PORTUS, y la página de cada playa en barcelona.cat informa del estado del mar.",
     faq: [
       { question: "¿Cuál es el mes más caluroso en Barcelona?", answer: "Agosto, con una máxima media de 28,5 °C y una media de 24,4 °C en la estación del aeropuerto (AEMET, 1981-2010). Julio le sigue de cerca." },
+      { question: "¿Cuál es el mes más frío en Barcelona?", answer: "Enero, con una máxima media de 13,6 °C, una mínima de 4,7 °C y una media de 9,2 °C en la estación del aeropuerto (AEMET, 1981-2010). En el centro, la estación del Meteocat en el Raval dio una mínima media de 8,6 °C en enero entre 2010 y 2025." },
       { question: "¿Cuál es el mes más lluvioso en Barcelona?", answer: "Octubre, con 91 mm de media, seguido de septiembre con 81 mm. Julio es el más seco, con 21 mm." },
+      { question: "¿Qué tiempo hace en Barcelona en enero?", answer: "Máximas medias de 13,6 °C y mínimas de 4,7 °C, con 37 mm de lluvia en unos cuatro días y 151 horas de sol, según la AEMET." },
+      { question: "¿Qué clima hace en Barcelona en octubre?", answer: "Máximas medias de 22,1 °C y mínimas de 13,5 °C. Es el mes más lluvioso, con 91 mm en unos seis días, y tiene 182 horas de sol, según la AEMET." },
+      { question: "¿Cuándo empieza el invierno en Barcelona?", answer: "El invierno astronómico 2026-27 empieza el 21 de diciembre de 2026 a las 21:50, hora oficial peninsular, según el Instituto Geográfico Nacional. En el clima, diciembre, enero y febrero son los meses más fríos." },
       { question: "¿Nieva en Barcelona?", answer: "Muy poco: la AEMET cuenta 0,4 días de nieve al año de media en el aeropuerto." },
       { question: "¿Qué tiempo hace en Barcelona en noviembre?", answer: "Máximas medias de 17,3 °C y mínimas de 8,6 °C, con 59 mm de lluvia en unos cinco días, según la AEMET." },
     ],
   },
   en: {
-    lead: "Barcelona has a mild Mediterranean climate: winters with highs around 14 °C and summers with highs of 28 °C. **August** is the warmest month, **January** the coldest and **October** the wettest. Here are the official averages for every month from AEMET, Spain's weather agency.",
+    lead: "Barcelona has a mild Mediterranean climate: winters with highs around 14 °C and summers with highs of 28 °C. **August** is the warmest month, **January** the coldest (average high 13.6 °C, low 4.7 °C at the airport) and **October** the wettest, with 91 mm. Here are the official averages for every month from AEMET, Spain's weather agency.",
     note: "The monthly averages are from AEMET's station at El Prat airport (1981-2010), the full table the agency publishes. The city centre is warmer, especially at night.",
     tableTitle: "Month by month",
     tableCaption: "Barcelona climate by month (AEMET, Barcelona airport, 1981-2010)",
@@ -190,7 +203,7 @@ const COPY: Record<Locale, T> = {
     noValue: "—",
     seasonsTitle: "What to expect each season",
     seasons: [
-      "**Winter (December-February):** average highs of 14 °C and lows of 5 °C at the airport. Frost is rare, about four days a year, and snow less than one day a year on average.",
+      "**Winter (December-February):** average highs of 14 °C and lows of 5 °C at the airport. Frost is rare, about four days a year, and snow less than one day a year on average. Astronomical winter 2026-27 begins on 21 December 2026 at 21:50 (Spanish mainland time), according to Spain's National Geographic Institute.",
       "**Spring (March-May):** highs climb from 16 to 21 °C, with about five rainy days a month.",
       "**Summer (June-August):** highs of 25 to 28.5 °C; July is the driest month (21 mm) and the sunniest (305 hours). August brings storms: 62 mm of rain on average.",
       "**Autumn (September-November):** the wettest season. October averages 91 mm and September 81, over about six rainy days.",
@@ -203,13 +216,17 @@ const COPY: Record<Locale, T> = {
     recordsTitle: "Records",
     records: [
       "According to AEMET, the highest temperature recorded at the airport is **37.7 °C on 8 July 2026**, and the lowest **-8.0 °C on 27 December 1962**. The wettest day brought 186.7 mm, on 25 September 1953.",
-      "At the Fabra Observatory, 408 metres up the Collserola hillside, the record is 40.9 °C, also on 8 July 2026.",
+      "At the Fabra Observatory, 408 metres up the Collserola hillside, the heat wave of 6 to 9 July 2026 reached 40.9 °C, the highest temperature in the observatory's 113 years of data, according to Meteocat.",
     ],
     seaTitle: "What about the sea temperature?",
     sea: "There is no official month-by-month average for the sea temperature in Barcelona. Puertos del Estado's buoy off Barcelona gives the current reading on its PORTUS portal, and each beach page on barcelona.cat reports the sea conditions.",
     faq: [
       { question: "What is the hottest month in Barcelona?", answer: "August, with an average high of 28.5 °C and a mean of 24.4 °C at the airport station (AEMET, 1981-2010). July is close behind." },
+      { question: "What is the coldest month in Barcelona?", answer: "January, with an average high of 13.6 °C, an average low of 4.7 °C and a mean of 9.2 °C at the airport station (AEMET, 1981-2010). In the centre, Meteocat's el Raval station averaged a January low of 8.6 °C between 2010 and 2025." },
       { question: "What is the rainiest month in Barcelona?", answer: "October, with 91 mm on average, followed by September with 81 mm. July is the driest, with 21 mm." },
+      { question: "What is the weather like in Barcelona in January?", answer: "Average highs of 13.6 °C and lows of 4.7 °C, with 37 mm of rain over about four days and 151 hours of sunshine, according to AEMET." },
+      { question: "What is the weather like in Barcelona in October?", answer: "Average highs of 22.1 °C and lows of 13.5 °C. It is the wettest month, with 91 mm over about six days, and has 182 hours of sunshine, according to AEMET." },
+      { question: "When does winter start in Barcelona?", answer: "Astronomical winter 2026-27 begins on 21 December 2026 at 21:50, Spanish mainland time, according to Spain's National Geographic Institute. By climate, December, January and February are the coldest months." },
       { question: "Does it snow in Barcelona?", answer: "Hardly ever: AEMET counts 0.4 snow days a year on average at the airport." },
       { question: "What is the weather like in Barcelona in November?", answer: "Average highs of 17.3 °C and lows of 8.6 °C, with 59 mm of rain over about five days, according to AEMET." },
     ],
