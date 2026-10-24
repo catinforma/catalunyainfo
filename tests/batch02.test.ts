@@ -483,6 +483,19 @@ test("zoo: Ciutadella-only entrance, dated zoo hours, aquarium calendar, no unve
   }
 });
 
+test("cards: the price table's online column is 10% off and the difference is card minus Hola", () => {
+  const num = (cell: string) => Number(cell.replace(/[€\s]/g, "").replace(",", "."));
+  for (const locale of ["ca", "es", "en"] as const) {
+    const table = (CARDS.editions[locale].blocks as { type: string; rows?: string[][] }[]).find((b) => b.type === "table");
+    assert.ok(table?.rows, `${locale}: price table`);
+    for (const [, hola, card, online, diff] of table.rows.slice(1)) {
+      assert.equal(Math.round(num(card!) * 0.9 * 100) / 100, num(online!), `${locale}: online = 90% of ${card}`);
+      assert.equal(Math.round((num(card!) - num(hola!)) * 100) / 100, num(diff!), `${locale}: difference for ${card}`);
+    }
+    assert.match(CARDS.editions[locale].blocks.map((b) => JSON.stringify(b)).join(" "), /12[,.]50/, `${locale}: 24 h Hola price`);
+  }
+});
+
 test("markets: hours answered first, Sunday question answered, no unverified group cap", () => {
   for (const locale of ["ca", "es", "en"] as const) {
     const blocks = MARKETS.editions[locale].blocks as { type: string; text?: string }[];
