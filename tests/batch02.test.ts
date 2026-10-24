@@ -496,6 +496,18 @@ test("cards: the price table's online column is 10% off and the difference is ca
   }
 });
 
+test("cruise port: terminal table with transport, Port's June 2026 plan only, Cruise Bus fares", () => {
+  for (const locale of ["ca", "es", "en"] as const) {
+    const text = bodyToPlainText(CRUISEPORT.editions[locale].blocks);
+    assert.match(text, /3[,.]50/, `${locale}: one-way fare`);
+    assert.match(text, /11 (June|de junio|de juny) (de )?2026/, `${locale}: dated Port note`);
+    assert.doesNotMatch(text, /terminal G|2028/i, `${locale}: no plan dates the Port note does not give`);
+    const table = (CRUISEPORT.editions[locale].blocks as { type: string; rows?: string[][] }[]).find((b) => b.type === "table");
+    assert.equal(table?.rows?.length, 5);
+    assert.ok(table?.rows?.every((row) => row.length === 4), `${locale}: four columns`);
+  }
+});
+
 test("markets: hours answered first, Sunday question answered, no unverified group cap", () => {
   for (const locale of ["ca", "es", "en"] as const) {
     const blocks = MARKETS.editions[locale].blocks as { type: string; text?: string }[];
