@@ -65,9 +65,9 @@ const ZOO_META: Record<Locale, Meta> = {
   en: {
     path: "guides/barcelona-zoo-aquarium-tickets",
     title: "Barcelona Zoo and Aquarium: tickets, opening hours and getting there",
-    seoTitle: "Barcelona Zoo and Aquarium: ticket prices and hours",
+    seoTitle: "Barcelona Zoo tickets and prices 2026: €23, Aquarium €30",
     seoDescription:
-      "Barcelona Zoo €23 (children €13.90) and the Aquarium €30 (ages 5–10 €23), opening hours, who goes free and how to get there by metro, from the official sites.",
+      "Barcelona Zoo costs €23 (children 3–12 €13.90, under-3s free) and the Aquarium €30 (ages 5–10 €23), the same online and at the gate. Hours and metro.",
     excerpt: "What Barcelona Zoo and the Aquarium cost, when they open, who goes free and how to get there, from the official websites.",
   },
 };
@@ -333,9 +333,9 @@ const MARKETS_META: Record<Locale, Meta> = {
   en: {
     path: "guides/la-boqueria-barcelona-markets",
     title: "La Boqueria and Barcelona's food markets: opening hours and visiting rules",
-    seoTitle: "La Boqueria and Barcelona markets: opening hours and rules",
+    seoTitle: "La Boqueria opening hours and Barcelona market times",
     seoDescription:
-      "La Boqueria opens Monday to Saturday, 8:00 to 20:30, and closes on Sundays. Hours for Santa Caterina, Sant Antoni and the rest, and the tour-group rule.",
+      "La Boqueria is open Monday to Saturday, 8:00 to 20:30, and closed on Sundays. Opening times for Sant Antoni, Santa Caterina, Ninot and other city markets.",
     excerpt: "When La Boqueria and Barcelona's other big markets open, the rules for visitor groups, and what the renovation will change.",
   },
 };
