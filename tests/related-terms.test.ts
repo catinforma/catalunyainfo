@@ -6,8 +6,13 @@ import { relatedTerms } from "../src/lib/content/related-terms.ts";
 test("keeps the subject words and drops what every page shares", () => {
   assert.deepEqual(
     relatedTerms("Horarios del metro de Barcelona: a qué hora abre y cierra en 2026"),
-    ["horarios", "metro", "hora", "abre", "cierra"],
+    ["metro"],
   );
+});
+
+test("what the reader asks (hours, prices, tickets) is not a subject", () => {
+  assert.deepEqual(relatedTerms("Ski resorts in Catalonia 2026-27: lift passes and runs"), ["ski", "resorts", "lift", "runs"]);
+  assert.deepEqual(relatedTerms("Zoo y Aquarium de Barcelona: horario y precio de entradas"), ["zoo", "aquarium"]);
 });
 
 test("title words come before excerpt words, without repeats, and stop at twelve", () => {

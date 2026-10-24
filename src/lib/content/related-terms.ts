@@ -5,7 +5,7 @@
  * Matching the candidates' text against the article's own title and excerpt
  * keeps the cards on the same subject. Words every page shares (the place
  * names, the years, "guide") would match everything, so they are dropped, as
- * are short words, which in three languages are mostly articles and
+ * are words under three letters and the three-letter articles and
  * prepositions.
  */
 
@@ -62,6 +62,72 @@ const COMMON = new Set([
   "unes",
   "the",
   "and",
+  // What the reader wants to know, not what the page is about: "horario" or
+  // "tickets" would match the ski guide to the transport passes.
+  "horario",
+  "horarios",
+  "horari",
+  "horaris",
+  "hours",
+  "opening",
+  "times",
+  "timetable",
+  "precio",
+  "precios",
+  "preu",
+  "preus",
+  "price",
+  "prices",
+  "fares",
+  "tarifes",
+  "tarifas",
+  "tickets",
+  "entradas",
+  "entrades",
+  "passes",
+  "llegar",
+  "arribar",
+  "arribar-hi",
+  "visit",
+  "visita",
+  "visitar",
+  "there",
+  "qué",
+  "què",
+  "best",
+  "millors",
+  "mejores",
+  "hora",
+  "abre",
+  "cierra",
+  "obre",
+  "tanca",
+  "opens",
+  "closes",
+  // Three-letter function words, now that "ski", "zoo" and "bus" count.
+  "del",
+  "dels",
+  "per",
+  "por",
+  "que",
+  "con",
+  "els",
+  "sin",
+  "for",
+  "you",
+  "how",
+  "can",
+  "are",
+  "its",
+  "has",
+  "més",
+  "más",
+  "hoy",
+  "any",
+  "año",
+  "day",
+  "dia",
+  "día",
 ]);
 
 /** At most this many words go into the query; the title's come first. */
@@ -71,7 +137,7 @@ export function relatedTerms(...texts: (string | null | undefined)[]): string[] 
   const seen = new Set<string>();
   for (const text of texts) {
     for (const word of (text ?? "").toLowerCase().split(/[^\p{L}\p{N}]+/u)) {
-      if (word.length < 4 || COMMON.has(word) || seen.has(word)) continue;
+      if (word.length < 3 || COMMON.has(word) || seen.has(word)) continue;
       seen.add(word);
       if (seen.size === MAX_TERMS) return [...seen];
     }
