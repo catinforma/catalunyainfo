@@ -1,4 +1,5 @@
 import type { Block } from "@/lib/content/blocks";
+import { b2link } from "@/lib/content/batch02/shared";
 import {
   ARTICLE_PATHS,
   h2,
@@ -31,6 +32,7 @@ function ca(): Block[] {
     ),
     ...paras(
       "Aquesta llista barreja destinacions que es fan còmodament en transport públic i altres on el cotxe o l'autobús marquen la diferència. Ho indiquem a cada cas, perquè és el que decideix si el dia funciona o s'omple d'esperes.",
+      `Si al final vas a Montserrat, la guia ${b2link("montserratFree", "ca", "Montserrat per lliure: horaris del cremallera i l'Aeri, preus i tren R5")} t'explica com pujar-hi pel teu compte.`,
     ),
     table(
       "Les 10 escapades",
@@ -64,7 +66,7 @@ function ca(): Block[] {
       "3. Vic",
       "Una ciutat amb vida pròpia i molt menys turisme internacional que altres destinacions d'aquesta llista. La Plaça Major, el centre històric, la catedral i el Museu d'Art Medieval s'encadenen a peu.",
       "Si coincideix amb dia de mercat, la visita canvia completament de caràcter.",
-      "S'hi va bé en tren (R3).",
+      "S'hi va en tren (R3), però ara mateix l'R3 no circula entre Barcelona i la Garriga: el tram el cobreixen l'R4 i autobusos de Rodalies, i el viatge és més llarg (avís de Rodalies vigent el 24 d'octubre de 2026).",
     ),
     ...h2(
       "4. Cardona",
@@ -126,6 +128,7 @@ function es(): Block[] {
     ),
     ...paras(
       "Esta lista mezcla destinos que se hacen cómodamente en transporte público y otros donde el coche o el autobús marcan la diferencia. Lo indicamos en cada caso, porque es lo que decide si el día funciona o se llena de esperas.",
+      `Si al final vas a Montserrat, la guía ${b2link("montserratFree", "es", "Montserrat por libre: horarios del cremallera y el Aeri, precios y tren R5")} explica cómo subir por tu cuenta.`,
     ),
     table(
       "Las 10 escapadas",
@@ -155,6 +158,7 @@ function es(): Block[] {
     ...h2(
       "3. Vic",
       "Una ciudad con vida propia y mucho menos turismo internacional. Plaça Major, casco histórico, catedral y Museu d'Art Medieval se encadenan a pie. Si coincide con día de mercado, la visita cambia por completo.",
+      "Se va en tren (R3), pero ahora mismo la R3 no circula entre Barcelona y La Garriga: el tramo lo cubren la R4 y autobuses de Rodalies, y el viaje es más largo (aviso de Rodalies vigente el 24 de octubre de 2026).",
     ),
     ...h2(
       "4. Cardona",
@@ -203,6 +207,7 @@ function en(): Block[] {
     ),
     ...paras(
       "This list mixes places that work comfortably on public transport with places where a car or a bus makes a real difference. Each entry says which — that is what decides whether your day works or turns into waiting.",
+      `If you do go to Montserrat itself, ${b2link("montserratFree", "en", "Montserrat without a tour: rack railway and cable car times, fares and the R5")} explains how to get up on your own.`,
     ),
     table(
       "The 10 trips",
@@ -235,7 +240,7 @@ function en(): Block[] {
       "3. Vic",
       "A working Catalan city with far fewer international visitors. The enormous main square, the historic centre, the cathedral and the medieval art museum all connect on foot.",
       "If your visit lands on a market day, it becomes a different trip entirely.",
-      "Easy by train (R3).",
+      "By train on the R3, but right now no R3 trains run between Barcelona and La Garriga: the R4 and Rodalies replacement buses cover that stretch, and the journey takes longer (Rodalies notice in force on 24 October 2026).",
     ),
     ...h2(
       "4. Cardona",

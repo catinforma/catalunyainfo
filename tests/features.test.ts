@@ -3,6 +3,7 @@ import { test } from "node:test";
 
 import { bodySchema, bodyToPlainText, wordCount } from "../src/lib/content/blocks.ts";
 import { ARTICLE_PATHS, ARTICLE_TITLES } from "../src/lib/content/features/shared.ts";
+import { B2_PATHS } from "../src/lib/content/batch02/shared.ts";
 import { TRAINS } from "../src/lib/content/features/trains.ts";
 import { GAUDI } from "../src/lib/content/features/gaudi.ts";
 import { MEDIEVAL } from "../src/lib/content/features/medieval.ts";
@@ -38,9 +39,14 @@ const FEATURES = [
   RAINY,
 ];
 
-/** Every path the site publishes, including the three earlier articles. */
+/**
+ * Every path the site publishes, including the three earlier articles and the
+ * batch-02 guides (the trains and Montserrat features link to the day-trip
+ * guides that carry the timetables; both registries are what links are
+ * built from, so a link to either still cannot point at a dead URL).
+ */
 const PUBLISHED_HREFS = new Set(
-  Object.values(ARTICLE_PATHS).flatMap((paths) =>
+  [...Object.values(ARTICLE_PATHS), ...Object.values(B2_PATHS)].flatMap((paths) =>
     LOCALES.map((locale) => `/${locale}/${paths[locale]}/`),
   ),
 );

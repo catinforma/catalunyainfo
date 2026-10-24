@@ -1,4 +1,5 @@
 import type { Block } from "@/lib/content/blocks";
+import { b2link } from "@/lib/content/batch02/shared";
 import {
   ARTICLE_PATHS,
   callout,
@@ -18,10 +19,29 @@ import {
  * visit works on foot once you step off the train. That is what separates this
  * from a list of towns that happen to have a station.
  *
- * No journey times and no departure minutes anywhere in the text. Rodalies
- * services change with engineering works, and a number copied into an article
- * becomes a promise the reader will hold us to on the platform.
+ * No departure minutes anywhere in the text: Rodalies services change with
+ * engineering works, and a departure copied into an article becomes a promise
+ * the reader will hold us to on the platform. Since 24 Oct 2026 the overview
+ * table does carry the scheduled journey time from Barcelona-Sants and the
+ * Rodalies single fare, both read that day from the official Rodalies
+ * journey planner (the API behind rodalies.gencat.cat/horaris) for Tuesday
+ * 27 Oct 2026, and high-speed times from Renfe's open GTFS. Vic has no time:
+ * the R3 is cut between Barcelona and La Garriga (Rodalies notice of 6 Jul
+ * 2026, still in force on 24 Oct). Each destination with its own guide links
+ * to it, which is where the timetables live.
  */
+
+const TABLE_NOTE = {
+  ca: "Durada de Barcelona-Sants i bitllet senzill de Rodalies segons el cercador oficial de Rodalies per al dimarts 27 d'octubre de 2026; alta velocitat segons les dades obertes de Renfe. Comprova el servei del dia: algun trajecte pot requerir transbordament.",
+  es: "Duración desde Barcelona-Sants y billete sencillo de Rodalies según el planificador oficial de Rodalies para el martes 27 de octubre de 2026; alta velocidad según los datos abiertos de Renfe. Comprueba el servicio del día: algún trayecto puede requerir transbordo.",
+  en: "Journey time from Barcelona-Sants and Rodalies single fare from the official Rodalies journey planner for Tuesday 27 October 2026; high-speed times from Renfe's open data. Check the service on the day: some journeys may involve a change.",
+};
+
+const VIC_R3 = {
+  ca: "Ara mateix, però, no hi ha trens de l'R3 entre Barcelona i la Garriga: el tram el cobreixen l'R4 i autobusos de Rodalies, i el viatge és més llarg (avís de Rodalies del 6 de juliol de 2026, vigent el 24 d'octubre).",
+  es: "Ahora mismo, sin embargo, no hay trenes de la R3 entre Barcelona y La Garriga: el tramo lo cubren la R4 y autobuses de Rodalies, y el viaje es más largo (aviso de Rodalies del 6 de julio de 2026, vigente el 24 de octubre).",
+  en: "Right now, though, no R3 trains run between Barcelona and La Garriga: the R4 and Rodalies replacement buses cover that stretch, and the journey takes longer (Rodalies notice of 6 July 2026, still in force on 24 October).",
+};
 
 const RODALIES = "https://rodalies.gencat.cat/ca/horaris/tots-els-horaris/";
 
@@ -42,22 +62,25 @@ function ca(): Block[] {
     callout("warning", "Abans de sortir", WARNING.ca),
     table(
       "Les 12 escapades, d'un cop d'ull",
-      ["Destinació", "Línia habitual", "Per a què hi vas"],
+      ["Destinació", "Línia habitual", "Durada des de Sants", "Senzill", "Per a què hi vas"],
       [
-        ["Sitges", "R2 Sud", "Mar, nucli antic i museus"],
-        ["Girona", "Regional i altres serveis", "Barri Vell, catedral i Call"],
-        ["Tarragona", "Regional", "Patrimoni romà i Mediterrani"],
-        ["Vic", "R3", "Plaça Major, mercat i art medieval"],
-        ["Figueres", "Regional i altres serveis", "Teatre-Museu Dalí"],
-        ["Vilanova i la Geltrú", "R2 Sud", "Platja i Museu del Ferrocarril"],
-        ["Mataró", "R1", "Nau Gaudí i façana marítima"],
-        ["Sant Pol de Mar", "R1", "Poble de costa tranquil"],
-        ["Vilafranca del Penedès", "R4", "Cultura del vi i VINSEUM"],
-        ["Sant Sadurní d'Anoia", "R4", "Capital del cava"],
-        ["Manresa", "R4", "La Seu i patrimoni ignasià"],
-        ["Terrassa", "R4 i FGC segons origen", "Modernisme industrial"],
+        ["Sitges", "R2 Sud", "31–37 min", "5,50 €", "Mar, nucli antic i museus"],
+        ["Girona", "R11 o alta velocitat", "1 h 19–1 h 31 (R11), uns 40 min (alta velocitat)", "8,95–12 € (R11)", "Barri Vell, catedral i Call"],
+        ["Tarragona", "Regionals R14–R17", "69 min", "8,60 €", "Patrimoni romà i Mediterrani"],
+        ["Vic", "R3 (tallada entre Barcelona i la Garriga)", "—", "—", "Plaça Major, mercat i art medieval"],
+        ["Figueres", "R11 o alta velocitat", "1 h 50–2 h 18 (R11), 42–65 min (alta velocitat a Figueres-Vilafant)", "12,80–17,10 € (R11)", "Teatre-Museu Dalí"],
+        ["Vilanova i la Geltrú", "R2 Sud i regionals", "32–44 min", "5,50 €", "Platja i Museu del Ferrocarril"],
+        ["Mataró", "R1", "46–50 min", "5,50 €", "Nau Gaudí i façana marítima"],
+        ["Sant Pol de Mar", "R1", "1 h 06", "6,60 €", "Poble de costa tranquil"],
+        ["Vilafranca del Penedès", "R4", "1 h 06", "6,60 €", "Cultura del vi i VINSEUM"],
+        ["Sant Sadurní d'Anoia", "R4", "54 min", "5,50 €", "Capital del cava"],
+        ["Manresa", "R4", "1 h 25–1 h 29", "8,25 €", "La Seu i patrimoni ignasià"],
+        ["Terrassa", "R4 (Estació del Nord) o FGC", "52 min (R4)", "5,50 € (R4)", "Modernisme industrial"],
       ],
-      "Les línies indicades són les habituals. Comprova el servei del dia: segons l'hora, algun trajecte pot requerir transbordament.",
+      TABLE_NOTE.ca,
+    ),
+    ...paras(
+      `Guies pas a pas, amb horaris i preus: ${b2link("sitges", "ca", "Sitges en tren")}, ${b2link("girona", "ca", "Girona en tren")}, ${b2link("tarragona", "ca", "Tarragona en tren")}, ${b2link("figueres", "ca", "Figueres i el Museu Dalí")}, ${b2link("montserratFree", "ca", "Montserrat amb cremallera o Aeri")} i ${b2link("portaventura", "ca", "PortAventura")}.`,
     ),
     ...h2(
       "1. Sitges",
@@ -80,6 +103,7 @@ function ca(): Block[] {
       "4. Vic",
       "La R3 converteix Vic en una de les grans escapades interiors sense cotxe. La Plaça Major, el centre històric, la catedral i el Museu d'Art Medieval queden a distància caminable de l'estació.",
       "Els dies de mercat tradicional a la Plaça Major, la visita canvia de caràcter: val la pena comprovar el calendari municipal abans de triar el dia.",
+      VIC_R3.ca,
     ),
     ...h2(
       "5. Figueres",
@@ -156,22 +180,25 @@ function es(): Block[] {
     callout("warning", "Antes de salir", WARNING.es),
     table(
       "Las 12 escapadas, de un vistazo",
-      ["Destino", "Línea habitual", "A qué vas"],
+      ["Destino", "Línea habitual", "Duración desde Sants", "Sencillo", "A qué vas"],
       [
-        ["Sitges", "R2 Sud", "Mar, casco antiguo y museos"],
-        ["Girona", "Regional y otros servicios", "Barrio Viejo, catedral y Call"],
-        ["Tarragona", "Regional", "Patrimonio romano y Mediterráneo"],
-        ["Vic", "R3", "Plaça Major, mercado y arte medieval"],
-        ["Figueres", "Regional y otros servicios", "Teatre-Museu Dalí"],
-        ["Vilanova i la Geltrú", "R2 Sud", "Playa y Museo del Ferrocarril"],
-        ["Mataró", "R1", "Nau Gaudí y fachada marítima"],
-        ["Sant Pol de Mar", "R1", "Pueblo costero tranquilo"],
-        ["Vilafranca del Penedès", "R4", "Cultura del vino y VINSEUM"],
-        ["Sant Sadurní d'Anoia", "R4", "Capital del cava"],
-        ["Manresa", "R4", "La Seu y patrimonio ignaciano"],
-        ["Terrassa", "R4 y FGC según origen", "Modernismo industrial"],
+        ["Sitges", "R2 Sud", "31–37 min", "5,50 €", "Mar, casco antiguo y museos"],
+        ["Girona", "R11 o alta velocidad", "1 h 19–1 h 31 (R11), unos 40 min (alta velocidad)", "8,95–12 € (R11)", "Barrio Viejo, catedral y Call"],
+        ["Tarragona", "Regionales R14–R17", "69 min", "8,60 €", "Patrimonio romano y Mediterráneo"],
+        ["Vic", "R3 (cortada entre Barcelona y La Garriga)", "—", "—", "Plaça Major, mercado y arte medieval"],
+        ["Figueres", "R11 o alta velocidad", "1 h 50–2 h 18 (R11), 42–65 min (alta velocidad a Figueres-Vilafant)", "12,80–17,10 € (R11)", "Teatre-Museu Dalí"],
+        ["Vilanova i la Geltrú", "R2 Sud y regionales", "32–44 min", "5,50 €", "Playa y Museo del Ferrocarril"],
+        ["Mataró", "R1", "46–50 min", "5,50 €", "Nau Gaudí y fachada marítima"],
+        ["Sant Pol de Mar", "R1", "1 h 06", "6,60 €", "Pueblo costero tranquilo"],
+        ["Vilafranca del Penedès", "R4", "1 h 06", "6,60 €", "Cultura del vino y VINSEUM"],
+        ["Sant Sadurní d'Anoia", "R4", "54 min", "5,50 €", "Capital del cava"],
+        ["Manresa", "R4", "1 h 25–1 h 29", "8,25 €", "La Seu y patrimonio ignaciano"],
+        ["Terrassa", "R4 (Estació del Nord) o FGC", "52 min (R4)", "5,50 € (R4)", "Modernismo industrial"],
       ],
-      "Las líneas indicadas son las habituales. Comprueba el servicio del día: según la hora, algún trayecto puede requerir transbordo.",
+      TABLE_NOTE.es,
+    ),
+    ...paras(
+      `Guías paso a paso, con horarios y precios: ${b2link("sitges", "es", "Sitges en tren")}, ${b2link("girona", "es", "Girona en tren")}, ${b2link("tarragona", "es", "Tarragona en tren")}, ${b2link("figueres", "es", "Figueres y el Museo Dalí")}, ${b2link("montserratFree", "es", "Montserrat en cremallera o Aeri")} y ${b2link("portaventura", "es", "PortAventura")}.`,
     ),
     ...h2(
       "1. Sitges",
@@ -193,6 +220,7 @@ function es(): Block[] {
       "4. Vic",
       "La R3 convierte Vic en una de las grandes escapadas de interior sin coche. Plaça Major, casco histórico, catedral y Museu d'Art Medieval quedan a distancia andando de la estación.",
       "Los días de mercado tradicional en la Plaça Major la visita cambia por completo: conviene comprobar el calendario municipal antes de elegir el día.",
+      VIC_R3.es,
     ),
     ...h2(
       "5. Figueres",
@@ -260,7 +288,7 @@ function es(): Block[] {
 function en(): Block[] {
   return [
     lead(
-      "Barcelona is one of the easiest European cities to use as a base for car-free day trips. Regional and commuter trains reach Roman ruins, Mediterranean towns, major museums, wine country and historic Catalan cities.",
+      "The easiest day trips from Barcelona by train are **Sitges** (31–37 minutes on the R2 Sud, €5.50), **Tarragona** (69 minutes, €8.60), **Girona** (about 40 minutes by high-speed train or 1 h 19 on the R11) and **Figueres** for the Dalí Museum. Regional and commuter trains also reach wine country, Gaudí's early work and historic Catalan towns: here are twelve, with journey times and fares.",
     ),
     ...paras(
       "The rule behind this list: every destination gives you something substantial to do on foot once you step off the train. No taxi at the other end, no bus that runs twice a day.",
@@ -268,22 +296,25 @@ function en(): Block[] {
     callout("warning", "Before you travel", WARNING.en),
     table(
       "The 12 trips at a glance",
-      ["Destination", "Usual line", "What you go for"],
+      ["Destination", "Usual line", "Journey from Sants", "Single fare", "What you go for"],
       [
-        ["Sitges", "R2 Sud", "Beaches, old town, museums"],
-        ["Girona", "Regional and other services", "Old Quarter, cathedral, Jewish Quarter"],
-        ["Tarragona", "Regional", "Roman heritage and the Mediterranean"],
-        ["Vic", "R3", "Main square, market, medieval art"],
-        ["Figueres", "Regional and other services", "Dalí Theatre-Museum"],
-        ["Vilanova i la Geltrú", "R2 Sud", "Beach and the railway museum"],
-        ["Mataró", "R1", "Nau Gaudí and the seafront"],
-        ["Sant Pol de Mar", "R1", "A quiet coastal village"],
-        ["Vilafranca del Penedès", "R4", "Wine culture and VINSEUM"],
-        ["Sant Sadurní d'Anoia", "R4", "Cava country"],
-        ["Manresa", "R4", "La Seu and Ignatian heritage"],
-        ["Terrassa", "R4 and FGC depending on origin", "Industrial Modernisme"],
+        ["Sitges", "R2 Sud", "31–37 min", "€5.50", "Beaches, old town, museums"],
+        ["Girona", "R11 or high-speed", "1 h 19–1 h 31 (R11), about 40 min (high-speed)", "€8.95–12 (R11)", "Old Quarter, cathedral, Jewish Quarter"],
+        ["Tarragona", "Regional R14–R17", "69 min", "€8.60", "Roman heritage and the Mediterranean"],
+        ["Vic", "R3 (cut between Barcelona and La Garriga)", "—", "—", "Main square, market, medieval art"],
+        ["Figueres", "R11 or high-speed", "1 h 50–2 h 18 (R11), 42–65 min (high-speed to Figueres-Vilafant)", "€12.80–17.10 (R11)", "Dalí Theatre-Museum"],
+        ["Vilanova i la Geltrú", "R2 Sud and regionals", "32–44 min", "€5.50", "Beach and the railway museum"],
+        ["Mataró", "R1", "46–50 min", "€5.50", "Nau Gaudí and the seafront"],
+        ["Sant Pol de Mar", "R1", "1 h 06", "€6.60", "A quiet coastal village"],
+        ["Vilafranca del Penedès", "R4", "1 h 06", "€6.60", "Wine culture and VINSEUM"],
+        ["Sant Sadurní d'Anoia", "R4", "54 min", "€5.50", "Cava country"],
+        ["Manresa", "R4", "1 h 25–1 h 29", "€8.25", "La Seu and Ignatian heritage"],
+        ["Terrassa", "R4 (Estació del Nord) or FGC", "52 min (R4)", "€5.50 (R4)", "Industrial Modernisme"],
       ],
-      "Lines shown are the usual ones. Check the service on the day: depending on the hour, some journeys may involve a change.",
+      TABLE_NOTE.en,
+    ),
+    ...paras(
+      `Step-by-step guides with timetables and fares: ${b2link("sitges", "en", "Sitges by train")}, ${b2link("girona", "en", "Girona by train")}, ${b2link("tarragona", "en", "Tarragona by train")}, ${b2link("figueres", "en", "Figueres and the Dalí Museum")}, ${b2link("montserratFree", "en", "Montserrat by rack railway or cable car")} and ${b2link("portaventura", "en", "PortAventura")}.`,
     ),
     ...h2(
       "1. Sitges",
@@ -305,6 +336,7 @@ function en(): Block[] {
       "4. Vic",
       "Take the R3 inland to Vic for its enormous main square, the medieval art museum and one of Catalonia's most distinctive market towns.",
       "The traditional market transforms the visit, so it is worth checking the town's calendar before choosing your day.",
+      VIC_R3.en,
     ),
     ...h2(
       "5. Figueres",
@@ -423,10 +455,10 @@ export const TRAINS: FeatureArticle = {
     },
     en: {
       path: ARTICLE_PATHS.trains.en,
-      title: "12 amazing day trips from Barcelona you can do without a car",
-      seoTitle: "12 best day trips from Barcelona by train",
+      title: "12 day trips from Barcelona by train: journey times, fares and what to see",
+      seoTitle: "Day trips from Barcelona by train: 12 towns, times, fares",
       seoDescription:
-        "12 easy day trips from Barcelona by train, from beaches and medieval streets to Girona, Tarragona, wine country and modernist cities.",
+        "12 day trips from Barcelona by train with journey times and fares: Sitges in 31 min, Tarragona in 69, Girona in 40 by high-speed, plus wine and Gaudí.",
       excerpt:
         "Twelve destinations where the whole visit happens on foot once you step off the train — beaches, Roman cities, Modernisme and wine country.",
       blocks: en(),
