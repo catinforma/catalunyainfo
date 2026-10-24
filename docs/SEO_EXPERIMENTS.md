@@ -405,6 +405,55 @@ calendar change with the season, so read their queries, not their totals.
 
 **Outcome:** _pending_
 
+## 2026-10-24 — Page-1 sprint, round 2: the pages round 1 did not touch
+
+Branch `sprint/2026-10-24-page1-b`. Baseline: Search Console 28 days to 23 Oct
+(`scripts/growth-pull.py`): of 216 sitemap URLs, 112 at position 10 or better
+over the last 7 days, 69 below, 35 with no impressions (most of them legal
+pages). Per-page queries were the brief; pages edited on 23 Oct or under a
+frozen title were left alone.
+
+**Changed together** (titles in the words of each page's top queries, an
+answer-first lead, the missing facts re-checked against the operator, FAQ):
+
+| Page | Query and position before |
+| --- | --- |
+| Parking ES (title) + all (body) | como funciona la zona verde 22, zona azul barcelona 33 |
+| Zoo & Aquarium ES/CA | horario zoo 12.6, precio entradas zoo 17 |
+| Boqueria / markets ES | la boqueria horario 9.5, page 11.8 |
+| Reservoirs ES/CA/EN | embalses catalunya 13.5, estat embassaments 42 |
+| Barcelona Card vs Hola EN/ES | page 10-15 |
+| Cruise port ES/CA | page 22 / 10 |
+| Beaches ES/EN | page 17-21 / none |
+| Ski resorts ES/CA/EN | estaciones de esquí de cataluña 58, esquí catalunya 63 |
+| Snow without skiing | rutes hivern catalunya 67 |
+| Setcases | setcases que ver 14, setcases 28 |
+| Ripollès (lead now Ripoll) | ripoll 46-51, ripolles 57-64 |
+| Cerdanya without a car | page 9-17 |
+| Sitges by train ES/CA/EN | barcelona sitges tren 18, barcelona to sitges train 23 |
+| Tarragona EN | page 16-20 |
+| Montserrat guide ES/CA/EN | cremallera de montserrat horarios 15-35, montserrat rack railway 32 |
+| Girona by train | tren barcelona girona 41 |
+| Figueres / Dalí | como ir al museo dali desde barcelona 47, figueres museum tickets 42 |
+| Day trips by train EN | page 20-30 |
+| Andorra by bus EN | page 10-11 |
+| PortAventura ES/CA | portaventura barcelona 50, portaventura horaris 41 |
+| Christmas markets | none (ES unknown to Google) |
+| Shops open on holidays | none (ES discovered, not crawled) |
+| Medieval villages CA/ES | pobles medievals de catalunya 56, pueblos medievales 77 |
+| Beyond Montserrat, traps, surprising places | none / 20 |
+| Autumn food fairs | page 6-16 |
+
+Site-wide in the same release: related cards ranked by subject (full-text
+match on title and excerpt) before category; reservoir reading date with the
+year; Ripollès live leak fixed (editor's note and raw link code on the page)
+and a test that blocks the class.
+
+**Measure on 21 Nov** (28 days): the same count as round 1 (pages at 10 or
+better over 7 days, against 112 of 216), and per page the queries above.
+
+**Outcome:** _pending_
+
 ## Candidates not yet run
 
 Recorded so they are not lost, and so they are not all started at once.
