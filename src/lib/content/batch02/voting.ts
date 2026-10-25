@@ -55,6 +55,7 @@ const SOURCES: B2Source[] = [
   { name: "Acuerdo 94/2026, de 26 de marzo (suspensión de MiDNI y MiDGT para identificarse al votar)", url: "https://www.juntaelectoralcentral.es/cs/jec/doctrina/acuerdos?anyosesion=2026&idacuerdoinstruccion=148656&idsesion=1107&template=Doctrina%2FJEC_Detalle", publisher: "Junta Electoral Central" },
   { name: "Voto por correo", url: "https://www.correos.es/es/es/particulares/para-el-ciudadano/voto-por-correo", publisher: "Correos" },
   { name: "Ley Orgánica 5/1985, del Régimen Electoral General", url: "https://www.boe.es/buscar/act.php?id=BOE-A-1985-11672", publisher: "Boletín Oficial del Estado" },
+  { name: "Descarga de papeletas por los electores residentes en el extranjero (CERA): disponible hasta el 26 de noviembre", url: "https://www.ine.es/dyngs/CEL/index.htm?cid=1030", publisher: "INE — Oficina del Censo Electoral" },
   { name: "Ciudadanos de la UE: elecciones municipales de 23 de mayo de 2027", url: "https://www.ine.es/dyngs/CEL/index.htm?cid=383", publisher: "INE — Oficina del Censo Electoral" },
 ];
 
@@ -181,7 +182,7 @@ const COPY: Record<Locale, T> = {
     abroadTitle: "If you are abroad",
     abroad: [
       "**Temporarily abroad** but living in Spain: register at the consulate as a non-resident and request your vote there **by 31 October** (both can be done at once). The documents are sent from 3 November and the vote must be posted back by registered mail by 25 November.",
-      "**Living abroad (CERA):** no request is needed. The first mailing goes out from 24 to 30 October and the ballot papers from 4 to 8 November (up to 14 November where candidacies are challenged); ballots can also be downloaded from the INE's website until 7 November. Post your vote to the consulate by registered mail **by 24 November**, or vote in person at the consulate or polling centre **from 21 to 26 November**.",
+      "**Living abroad (CERA):** no request is needed. The first mailing goes out from 24 to 30 October and the ballot papers from 4 to 8 November (up to 14 November where candidacies are challenged); ballots can also be downloaded from the INE's website until 26 November. Post your vote to the consulate by registered mail **by 24 November**, or vote in person at the consulate or polling centre **from 21 to 26 November**.",
       "**CERA voters who are in Spain:** you can request a postal vote at any Correos office until 19 November.",
     ],
     muniTitle: "Next: municipal elections on 23 May 2027",
@@ -270,7 +271,7 @@ const COPY: Record<Locale, T> = {
     abroadTitle: "Si estás en el extranjero",
     abroad: [
       "**Temporalmente en el extranjero** pero residente en España: inscríbete en el consulado como no residente y pide allí el voto **hasta el 31 de octubre** (se puede hacer todo en el mismo acto). La documentación se envía a partir del 3 de noviembre y el voto se remite por correo certificado hasta el 25 de noviembre.",
-      "**Residentes en el extranjero (CERA):** no hay que pedir nada. El primer envío sale del 24 al 30 de octubre y las papeletas, del 4 al 8 de noviembre (hasta el 14 si se recurren candidaturas); también se pueden descargar en la web del INE hasta el 7 de noviembre. Envía el voto al consulado por correo certificado **hasta el 24 de noviembre** o vota en persona en el consulado o centro habilitado **del 21 al 26 de noviembre**.",
+      "**Residentes en el extranjero (CERA):** no hay que pedir nada. El primer envío sale del 24 al 30 de octubre y las papeletas, del 4 al 8 de noviembre (hasta el 14 si se recurren candidaturas); también se pueden descargar en la web del INE hasta el 26 de noviembre. Envía el voto al consulado por correo certificado **hasta el 24 de noviembre** o vota en persona en el consulado o centro habilitado **del 21 al 26 de noviembre**.",
       "**Residentes en el extranjero que están en España:** pueden pedir el voto por correo en cualquier oficina de Correos hasta el 19 de noviembre.",
     ],
     muniTitle: "Después: municipales del 23 de mayo de 2027",
@@ -359,7 +360,7 @@ const COPY: Record<Locale, T> = {
     abroadTitle: "Si ets a l'estranger",
     abroad: [
       "**Temporalment a l'estranger** però resident a Espanya: inscriu-te al consolat com a no resident i demana-hi el vot **fins al 31 d'octubre** (es pot fer tot alhora). La documentació s'envia a partir del 3 de novembre i el vot s'ha de remetre per correu certificat fins al 25 de novembre.",
-      "**Residents a l'estranger (CERA):** no cal demanar res. El primer enviament surt del 24 al 30 d'octubre i les paperetes, del 4 al 8 de novembre (fins al 14 si es recorren candidatures); també es poden descarregar al web de l'INE fins al 7 de novembre. Envia el vot al consolat per correu certificat **fins al 24 de novembre** o vota en persona al consolat o centre habilitat **del 21 al 26 de novembre**.",
+      "**Residents a l'estranger (CERA):** no cal demanar res. El primer enviament surt del 24 al 30 d'octubre i les paperetes, del 4 al 8 de novembre (fins al 14 si es recorren candidatures); també es poden descarregar al web de l'INE fins al 26 de novembre. Envia el vot al consolat per correu certificat **fins al 24 de novembre** o vota en persona al consolat o centre habilitat **del 21 al 26 de novembre**.",
       "**Residents a l'estranger que són a Espanya:** poden demanar el vot per correu a qualsevol oficina de Correus fins al 19 de novembre.",
     ],
     muniTitle: "Després: municipals del 23 de maig de 2027",
