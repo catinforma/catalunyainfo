@@ -57,7 +57,9 @@ export type B2Key =
   | "workCalendar"
   | "holidayToday"
   | "christmas"
-  | "pessebres";
+  | "pessebres"
+  | "christmasBarcelona"
+  | "newYear";
 
 /** Path after the locale prefix, no leading or trailing slash. */
 export const B2_PATHS: Record<B2Key, Record<Locale, string>> = {
@@ -245,6 +247,16 @@ export const B2_PATHS: Record<B2Key, Record<Locale, string>> = {
     ca: "tradicions/mercats-de-nadal-catalunya",
     es: "tradiciones/mercados-navidad-cataluna",
     en: "traditions/christmas-markets-catalonia",
+  },
+  christmasBarcelona: {
+    ca: "guies/nadal-a-barcelona",
+    es: "guias/navidad-en-barcelona",
+    en: "guides/christmas-in-barcelona",
+  },
+  newYear: {
+    ca: "guies/cap-d-any-barcelona",
+    es: "guias/nochevieja-barcelona",
+    en: "guides/new-years-eve-barcelona",
   },
   workCalendar: {
     ca: "guies/calendari-laboral-catalunya",
@@ -472,6 +484,16 @@ export const B2_TITLES: Record<B2Key, Record<Locale, string>> = {
     ca: "Mercats i fires de Nadal a Catalunya",
     es: "Mercados y ferias de Navidad en Cataluña",
     en: "Christmas markets in Catalonia",
+  },
+  christmasBarcelona: {
+    ca: "Nadal a Barcelona: llums, pessebre i què obre",
+    es: "Navidad en Barcelona: luces, belén y qué abre",
+    en: "Christmas in Barcelona: lights, nativity and what's open",
+  },
+  newYear: {
+    ca: "Cap d'Any a Barcelona: la festa de Montjuïc i el metro",
+    es: "Nochevieja en Barcelona: la fiesta de Montjuïc y el metro",
+    en: "New Year's Eve in Barcelona: the Montjuïc show and the metro",
   },
   workCalendar: {
     ca: "Calendari laboral 2027 a Catalunya: festius i ponts",
