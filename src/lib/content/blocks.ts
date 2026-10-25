@@ -464,6 +464,15 @@ export const municipalElectionsBlock = z.object({
   type: z.literal("municipalElections"),
 });
 
+/**
+ * Upcoming living nativity scenes ("pessebres vivents"), read at render time
+ * from the Generalitat's open-data cultural agenda. Configuration-free: only
+ * rows that have not ended are shown, so it cannot list a past season.
+ */
+export const livingNativitiesBlock = z.object({
+  type: z.literal("livingNativities"),
+});
+
 export const blockSchema = z.discriminatedUnion("type", [
   headingBlock,
   paragraphBlock,
@@ -496,6 +505,7 @@ export const blockSchema = z.discriminatedUnion("type", [
   electionHistoryBlock,
   clockChangeBlock,
   municipalElectionsBlock,
+  livingNativitiesBlock,
 ]);
 
 export const bodySchema = z.array(blockSchema).max(500);
