@@ -70,7 +70,7 @@ const COPY: Record<Locale, Copy> = {
     more: "I {n} més a l'agenda oficial.",
     organiser: "web de l'organitzador",
     unavailable:
-      "Ara mateix no podem llegir l'Agenda Cultural de la Generalitat. No et mostrarem una llista antiga: consulta-la directament a",
+      "Quan s'ha actualitzat aquesta pàgina no hem pogut llegir l'Agenda Cultural de la Generalitat. No et mostrarem una llista antiga: consulta-la directament a",
     sourceLine:
       "Hi surten les activitats que el seu organitzador ha publicat a l'agenda oficial amb «pessebre vivent» al nom, amb el nom tal com l'ha escrit. Font:",
   },
@@ -95,7 +95,7 @@ const COPY: Record<Locale, Copy> = {
     more: "Y {n} más en la agenda oficial.",
     organiser: "web del organizador",
     unavailable:
-      "Ahora mismo no podemos leer la Agenda Cultural de la Generalitat. No te mostraremos una lista antigua: consúltala directamente en",
+      "Cuando se actualizó esta página no pudimos leer la Agenda Cultural de la Generalitat. No te mostraremos una lista antigua: consúltala directamente en",
     sourceLine:
       "Aparecen las actividades que su organizador ha publicado en la agenda oficial con «pessebre vivent» en el nombre, con el nombre tal como lo ha escrito. Fuente:",
   },
@@ -120,7 +120,7 @@ const COPY: Record<Locale, Copy> = {
     more: "And {n} more in the official agenda.",
     organiser: "organiser's website",
     unavailable:
-      "We cannot read the Generalitat's cultural agenda right now. We will not show you an old list: check it directly at",
+      "We could not read the Generalitat's cultural agenda when this page was last updated. We will not show you an old list: check it directly at",
     sourceLine:
       "Listed: events whose organiser has posted them in the official agenda with \"pessebre vivent\" in the name, named as the organiser wrote it. Source:",
   },

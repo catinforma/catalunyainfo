@@ -81,7 +81,7 @@ const META: Record<Locale, { path: string; title: string; seoTitle: string; seoD
     title: "Hi ha neu al Pirineu avui? Gruix de neu per estacions",
     seoTitle: "Hi ha neu al Pirineu? Gruix de neu avui (Meteocat)",
     seoDescription:
-      "Gruix de neu a terra ara mateix a les estacions del Meteocat al Pirineu català: centímetres per estació, hora de la lectura i on mirar el perill d'allaus.",
+      "Gruix de neu a terra a les estacions del Meteocat al Pirineu català, última lectura validada: centímetres per estació, hora i on mirar el perill d'allaus.",
     excerpt:
       "La neu que hi ha a terra a les estacions de muntanya del Meteocat, llegida cada dia de les dades obertes, amb l'hora de cada lectura.",
   },
@@ -90,7 +90,7 @@ const META: Record<Locale, { path: string; title: string; seoTitle: string; seoD
     title: "¿Hay nieve en el Pirineo catalán hoy? Espesor por estación",
     seoTitle: "¿Hay nieve en el Pirineo catalán hoy? Datos de Meteocat",
     seoDescription:
-      "Espesor de nieve en el suelo ahora mismo en las estaciones de Meteocat del Pirineo catalán: centímetros por estación, hora de lectura y riesgo de aludes.",
+      "Espesor de nieve en el suelo en las estaciones de Meteocat del Pirineo catalán, última lectura validada: centímetros por estación, hora y riesgo de aludes.",
     excerpt:
       "La nieve que hay en el suelo en las estaciones de montaña de Meteocat, leída cada día de los datos abiertos, con la hora de cada lectura.",
   },
@@ -99,7 +99,7 @@ const META: Record<Locale, { path: string; title: string; seoTitle: string; seoD
     title: "Is there snow in the Catalan Pyrenees today?",
     seoTitle: "Is there snow in the Pyrenees? Catalonia snow depth now",
     seoDescription:
-      "Snow depth right now at Meteocat's mountain weather stations in the Catalan Pyrenees: centimetres per station, reading time and where to check avalanches.",
+      "Snow depth at Meteocat's mountain stations in the Catalan Pyrenees, latest validated reading: centimetres per station, reading time and avalanche risk.",
     excerpt:
       "How much snow is on the ground at Meteocat's mountain weather stations, read daily from open data, with the time of every reading.",
   },

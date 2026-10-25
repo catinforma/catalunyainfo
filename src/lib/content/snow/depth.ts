@@ -370,45 +370,45 @@ const SUMMARY: Record<
       `Hi ha neu a terra a ${n} de les ${total} estacions del Meteocat amb lectura recent. El gruix més alt és a ${station} (${altitude} m): ${cm} cm.`,
     none: (total) =>
       total === 1
-        ? "Ara mateix no hi ha neu a terra a l'única estació del Meteocat amb lectura recent."
-        : `Ara mateix no hi ha neu a terra a cap de les ${total} estacions del Meteocat amb lectura recent.`,
+        ? "No hi ha neu a terra a l'única estació del Meteocat amb lectura validada recent."
+        : `No hi ha neu a terra a cap de les ${total} estacions del Meteocat amb lectura validada recent.`,
     latest: (when) => `Lectura validada més recent: ${when}.`,
     stale: (n) =>
       n === 1
         ? "Una altra estació no té cap lectura validada de les últimes 48 hores."
         : `${n} estacions més no tenen cap lectura validada de les últimes 48 hores.`,
     noCurrent: "El Meteocat no ha publicat cap lectura validada del gruix de neu de les últimes 48 hores.",
-    unreachable: "Ara mateix no podem llegir les dades del Meteocat.",
+    unreachable: "Quan s'ha actualitzat aquesta pàgina no hem pogut llegir les dades del Meteocat.",
   },
   es: {
     snow: (n, total, station, altitude, cm) =>
       `Hay nieve en el suelo en ${n} de las ${total} estaciones de Meteocat con lectura reciente. El mayor espesor está en ${station} (${altitude} m): ${cm} cm.`,
     none: (total) =>
       total === 1
-        ? "Ahora mismo no hay nieve en el suelo en la única estación de Meteocat con lectura reciente."
-        : `Ahora mismo no hay nieve en el suelo en ninguna de las ${total} estaciones de Meteocat con lectura reciente.`,
+        ? "No hay nieve en el suelo en la única estación de Meteocat con lectura validada reciente."
+        : `No hay nieve en el suelo en ninguna de las ${total} estaciones de Meteocat con lectura validada reciente.`,
     latest: (when) => `Lectura validada más reciente: ${when}.`,
     stale: (n) =>
       n === 1
         ? "Otra estación no tiene ninguna lectura validada de las últimas 48 horas."
         : `Otras ${n} estaciones no tienen ninguna lectura validada de las últimas 48 horas.`,
     noCurrent: "Meteocat no ha publicado ninguna lectura validada del espesor de nieve de las últimas 48 horas.",
-    unreachable: "Ahora mismo no podemos leer los datos de Meteocat.",
+    unreachable: "Cuando se actualizó esta página no pudimos leer los datos de Meteocat.",
   },
   en: {
     snow: (n, total, station, altitude, cm) =>
       `There is snow on the ground at ${n} of the ${total} Meteocat stations with a recent reading. The deepest is at ${station} (${altitude} m): ${cm} cm.`,
     none: (total) =>
       total === 1
-        ? "There is no snow on the ground at the one Meteocat station with a recent reading right now."
-        : `There is no snow on the ground at any of the ${total} Meteocat stations with a recent reading right now.`,
+        ? "There is no snow on the ground at the one Meteocat station with a recent validated reading."
+        : `There is no snow on the ground at any of the ${total} Meteocat stations with a recent validated reading.`,
     latest: (when) => `Latest validated reading: ${when}.`,
     stale: (n) =>
       n === 1
         ? "One more station has no validated reading from the last 48 hours."
         : `${n} more stations have no validated reading from the last 48 hours.`,
     noCurrent: "Meteocat has not published a validated snow-depth reading from the last 48 hours.",
-    unreachable: "We cannot read Meteocat's data right now.",
+    unreachable: "We could not read Meteocat's data when this page was last updated.",
   },
 };
 

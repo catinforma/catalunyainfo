@@ -453,6 +453,9 @@ and a test that blocks the class.
 better over 7 days, against 112 of 216), and per page the queries above.
 
 **Outcome:** _pending_
+
+---
+
 ## 2026-10-26 — Clock change: titles move to the March change (scheduled)
 
 Prepared on branch `sprint/2026-10-26-clock-march`, **not to be deployed before

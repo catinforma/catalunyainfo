@@ -1,3 +1,4 @@
+import { MONTJUIC } from "./hills";
 import type { Locale } from "@/lib/i18n/config";
 
 import { CHECKED, cavalcadaSentence, metroTable, when } from "./christmas-barcelona";
@@ -412,16 +413,10 @@ export const NEW_YEAR: B2Article = {
   sources: SOURCES,
   // Reused from the manifest, not a new photograph (see the header comment).
   heroKey: "montjuic-font-magica-nit",
-  heroAlt: {
-    ca: "La Font Màgica de Montjuïc il·luminada de nit amb públic al voltant i les torres de la plaça d'Espanya al fons",
-    es: "La Fuente Mágica de Montjuïc iluminada de noche con público alrededor y las torres de la plaza de España al fondo",
-    en: "The Magic Fountain of Montjuïc lit up at night, with crowds around it and the Plaça d'Espanya towers behind",
-  },
-  heroCaption: {
-    ca: "La Font Màgica i, al fons, la plaça d'Espanya: entre totes dues hi ha l'avinguda de la Reina Maria Cristina.",
-    es: "La Fuente Mágica y, al fondo, la plaza de España: entre las dos está la avenida de la Reina Maria Cristina.",
-    en: "The Magic Fountain with Plaça d'Espanya behind: Avinguda de la Reina Maria Cristina runs between them.",
-  },
+  // Same alt and caption as MONTJUIC: media rows are keyed by file, so
+  // different wording here would overwrite that page's on every publish.
+  heroAlt: MONTJUIC.heroAlt,
+  heroCaption: MONTJUIC.heroCaption,
   verifiedAt: FESTIVE_VERIFIED,
   publishedAt: "2026-10-25T12:00:00+02:00",
   editions: Object.fromEntries(

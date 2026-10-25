@@ -29,3 +29,8 @@ test("only letters and digits reach the tsquery", () => {
   }
   assert.deepEqual(relatedTerms(null, undefined, ""), []);
 });
+
+test("Catalan three-letter function words never become terms", () => {
+  assert.deepEqual(relatedTerms("Cap d'Any a Barcelona: com arribar-hi i què fer"), []);
+  assert.deepEqual(relatedTerms("Revetlla de Cap d'Any", "Com i des d'on veure-la, pel centre i als barris"), ["revetlla", "veure", "centre", "barris"]);
+});

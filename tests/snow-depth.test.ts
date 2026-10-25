@@ -163,8 +163,8 @@ test("zero everywhere says there is no snow, with the reading time", () => {
   const r = report(zero);
   assert.equal(r.withSnow, 0);
   assert.equal(r.deepest, null);
-  assert.match(snowSummary(r, "ca")[0] ?? "", /no hi ha neu a terra a cap de les 5 estacions/);
-  assert.match(snowSummary(r, "es")[0] ?? "", /no hay nieve en el suelo en ninguna de las 5 estaciones/);
+  assert.match(snowSummary(r, "ca")[0] ?? "", /no hi ha neu a terra a cap de les 5 estacions/i);
+  assert.match(snowSummary(r, "es")[0] ?? "", /no hay nieve en el suelo en ninguna de las 5 estaciones/i);
   assert.match(snowSummary(r, "en")[0] ?? "", /no snow on the ground at any of the 5 Meteocat stations/);
   assert.ok(snowSummary(r, "es").some((line) => line.startsWith("Lectura validada más reciente:")));
 });
@@ -200,7 +200,7 @@ test("an unreachable source is reported as such, never replaced", async () => {
   const r = await loadSnowReport(NOW);
   assert.equal(r.error, "network down");
   assert.equal(r.stations.length, 0);
-  assert.deepEqual(snowSummary(r, "ca"), ["Ara mateix no podem llegir les dades del Meteocat."]);
+  assert.deepEqual(snowSummary(r, "ca"), ["Quan s'ha actualitzat aquesta pàgina no hem pogut llegir les dades del Meteocat."]);
 
   globalThis.fetch = (async () => new Response("oops", { status: 503 })) as typeof fetch;
   assert.match((await loadSnowReport(NOW)).error ?? "", /503/);

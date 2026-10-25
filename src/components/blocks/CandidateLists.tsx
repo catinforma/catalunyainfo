@@ -53,6 +53,8 @@ interface Copy {
   proclaimedNote: (appeals: string, by: string) => string;
   proclaimedAfter: (by: string) => string;
   mixedTitle: string;
+  /** The proclaimed item is out but could not be read; the presented lists stand in. */
+  proclaimedUnread: string;
   sourceLabel: string;
   issue: (issue: string | null, date: string) => string;
   pdf: string;
@@ -93,8 +95,8 @@ const COPY: Record<Locale, Copy> = {
     waitingNote: (presented, proclaimed) =>
       `Segons el calendari electoral, les presentades surten al BOE ${presented} i les proclamades, ${proclaimed}. La pàgina es torna a llegir cada nit. Consulta el BOE a`,
     failedDays: (days) => `No hem pogut llegir el BOE d'aquests dies: ${days}. Si hi ha publicat alguna cosa, aquí no hi surt.`,
-    unreachable: "Ara mateix no podem llegir el BOE. No et mostrarem cap llista antiga en el seu lloc.",
-    unreadable: "El BOE ha publicat les candidatures, però ara mateix no les podem llegir. No et mostrarem una llista antiga: obre-les directament al BOE:",
+    unreachable: "Quan s'ha actualitzat aquesta pàgina no hem pogut llegir el BOE. No et mostrarem cap llista antiga en el seu lloc.",
+    unreadable: "El BOE ha publicat les candidatures, però quan s'ha actualitzat aquesta pàgina no les hem pogut llegir. No et mostrarem una llista antiga: obre-les directament al BOE:",
     unreadableSome: "Aquest document del BOE no l'hem pogut llegir; obre'l directament:",
     presentedTitle: "Candidatures presentades (encara no proclamades)",
     presentedNote: (proclamation, proclaimed) =>
@@ -105,6 +107,8 @@ const COPY: Record<Locale, Copy> = {
     proclaimedAfter: (by) =>
       `El termini per resoldre els recursos contra la proclamació es va acabar ${by}. Si el BOE ha publicat correccions de les llistes, les trobaràs enllaçades aquí.`,
     mixedTitle: "Candidatures publicades al BOE",
+    proclaimedUnread:
+      "El BOE ja ha publicat les candidatures proclamades, però quan s'ha actualitzat aquesta pàgina no les hem pogut llegir (enllaç a sota). Les llistes d'aquí són les presentades: les proclamades poden ser diferents, consulta-les al BOE.",
     sourceLabel: "Font",
     issue: (issue, date) => (issue ? `BOE núm. ${issue}, ${date}` : `BOE, ${date}`),
     pdf: "PDF",
@@ -152,8 +156,8 @@ const COPY: Record<Locale, Copy> = {
     waitingNote: (presented, proclaimed) =>
       `Según el calendario electoral, las presentadas salen en el BOE ${presented} y las proclamadas, ${proclaimed}. La página se vuelve a leer cada noche. Consulta el BOE en`,
     failedDays: (days) => `No hemos podido leer el BOE de estos días: ${days}. Si se publicó algo, aquí no aparece.`,
-    unreachable: "Ahora mismo no podemos leer el BOE. No te mostraremos ninguna lista antigua en su lugar.",
-    unreadable: "El BOE ha publicado las candidaturas, pero ahora mismo no podemos leerlas. No te mostraremos una lista antigua: ábrelas directamente en el BOE:",
+    unreachable: "Cuando se actualizó esta página no pudimos leer el BOE. No te mostraremos ninguna lista antigua en su lugar.",
+    unreadable: "El BOE ha publicado las candidaturas, pero cuando se actualizó esta página no pudimos leerlas. No te mostraremos una lista antigua: ábrelas directamente en el BOE:",
     unreadableSome: "Este documento del BOE no lo hemos podido leer; ábrelo directamente:",
     presentedTitle: "Candidaturas presentadas (aún no proclamadas)",
     presentedNote: (proclamation, proclaimed) =>
@@ -164,6 +168,8 @@ const COPY: Record<Locale, Copy> = {
     proclaimedAfter: (by) =>
       `El plazo para resolver los recursos contra la proclamación terminó ${by}. Si el BOE ha publicado correcciones de las listas, las encontrarás enlazadas aquí.`,
     mixedTitle: "Candidaturas publicadas en el BOE",
+    proclaimedUnread:
+      "El BOE ya ha publicado las candidaturas proclamadas, pero cuando se actualizó esta página no pudimos leerlas (enlace abajo). Las listas de aquí son las presentadas: las proclamadas pueden ser distintas, consúltalas en el BOE.",
     sourceLabel: "Fuente",
     issue: (issue, date) => (issue ? `BOE núm. ${issue}, ${date}` : `BOE, ${date}`),
     pdf: "PDF",
@@ -211,8 +217,8 @@ const COPY: Record<Locale, Copy> = {
     waitingNote: (presented, proclaimed) =>
       `Under the electoral calendar, the lists as submitted appear in the BOE ${presented} and the proclaimed lists ${proclaimed}. This page is re-read every night. Check the BOE at`,
     failedDays: (days) => `We could not read the BOE for these days: ${days}. Anything published then is missing here.`,
-    unreachable: "We cannot read the BOE right now. We will not show you an old list in its place.",
-    unreadable: "The BOE has published the lists, but we cannot read them right now. We will not show you an old list: open them directly in the BOE:",
+    unreachable: "We could not read the BOE when this page was last updated. We will not show you an old list in its place.",
+    unreadable: "The BOE has published the lists, but we could not read them when this page was last updated. We will not show you an old list: open them directly in the BOE:",
     unreadableSome: "We could not read this BOE document; open it directly:",
     presentedTitle: "Lists as submitted (not yet proclaimed)",
     presentedNote: (proclamation, proclaimed) =>
@@ -223,6 +229,8 @@ const COPY: Record<Locale, Copy> = {
     proclaimedAfter: (by) =>
       `The deadline for settling appeals against the proclamation passed ${by}. If the BOE has published corrections to the lists, they are linked here.`,
     mixedTitle: "Candidate lists published in the BOE",
+    proclaimedUnread:
+      "The BOE has already published the proclaimed lists, but we could not read them when this page was last updated (link below). The lists here are as submitted: the proclaimed ones may differ, so check them in the BOE.",
     sourceLabel: "Source",
     issue: (issue, date) => (issue ? `BOE no. ${issue}, ${date}` : `BOE, ${date}`),
     pdf: "PDF",
@@ -530,6 +538,7 @@ export async function CandidateLists({ locale }: { locale: Locale }) {
   const sources = [...new Map(result.provinces.map((province) => [province.source.id, province.source])).values()];
   // An item found in the summary but not read: say so, with its link.
   const unread = result.unreadable.filter((notice) => !sources.some((source) => source.id === notice.id));
+  const proclaimedUnread = allPresented && unread.some((notice) => notice.kind === "proclaimed");
 
   return (
     <section className="ci-agenda" aria-label={t.title}>
@@ -538,7 +547,9 @@ export async function CandidateLists({ locale }: { locale: Locale }) {
         {allProclaimed ? t.proclaimedTitle : allPresented ? t.presentedTitle : t.mixedTitle}
       </p>
       <p className="ci-agenda-note">
-        {allPresented || !allProclaimed
+        {proclaimedUnread
+          ? t.proclaimedUnread
+          : allPresented || !allProclaimed
           ? t.presentedNote(onDay(config.proclamationDay, locale), proclaimedOn)
           : result.today > config.appealsResolvedBy
             ? t.proclaimedAfter(onDay(config.appealsResolvedBy, locale))

@@ -1,3 +1,4 @@
+import { SHOPS } from "./shops";
 import type { Locale } from "@/lib/i18n/config";
 
 import {
@@ -606,16 +607,10 @@ export const CHRISTMAS_BARCELONA: B2Article = {
   sources: SOURCES,
   // Reused from the manifest, not a new photograph (see the header comment).
   heroKey: "botigues-llums-nadal-barcelona",
-  heroAlt: {
-    ca: "Llums de Nadal blaves i blanques sobre un carrer comercial de Barcelona, de nit",
-    es: "Luces de Navidad azules y blancas sobre una calle comercial de Barcelona, de noche",
-    en: "Blue and white Christmas lights over a shopping street in Barcelona at night",
-  },
-  heroCaption: {
-    ca: "Llums de Nadal en un carrer de Barcelona (fotografia del 2016).",
-    es: "Luces de Navidad en una calle de Barcelona (fotografía de 2016).",
-    en: "Christmas lights on a Barcelona street (photographed in 2016).",
-  },
+  // Same alt and caption as SHOPS: media rows are keyed by file, so
+  // different wording here would overwrite that page's on every publish.
+  heroAlt: SHOPS.heroAlt,
+  heroCaption: SHOPS.heroCaption,
   verifiedAt: FESTIVE_VERIFIED,
   publishedAt: "2026-10-25T12:00:00+02:00",
   editions: Object.fromEntries(
