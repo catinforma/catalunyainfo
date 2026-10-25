@@ -41,6 +41,8 @@ import { CHRISTMAS } from "@/lib/content/batch02/christmas";
 import { PESSEBRES } from "@/lib/content/batch02/pessebres";
 import { CHRISTMAS_BARCELONA } from "@/lib/content/batch02/christmas-barcelona";
 import { NEW_YEAR } from "@/lib/content/batch02/new-year";
+import { SNOW_NOW } from "@/lib/content/batch02/snow-now";
+import { SNOW } from "@/lib/content/batch02/pyrenees";
 import { PARKING, TRANSPORT } from "@/lib/content/batch02/barcelona-practical";
 import { ELECTION_NIGHT } from "@/lib/content/batch02/election-night";
 import { CONGRESS_RESULTS, PARLIAMENT_RESULTS } from "@/lib/content/batch02/election-results";
@@ -144,6 +146,8 @@ export async function POST(request: Request) {
     // group each so a newly announced date republishes only its own page.
     if (wants("christmas-bcn")) published.push(await publishB2Article(CHRISTMAS_BARCELONA));
     if (wants("nye")) published.push(await publishB2Article(NEW_YEAR));
+    // The live snow-depth page, plus the ski and snow guides that now link to it.
+    if (wants("snow-now")) published.push(await publishB2Article(SNOW_NOW), await publishB2Article(SKI), await publishB2Article(SNOW));
     if (wants("transport")) published.push(await publishB2Article(TRANSPORT));
     if (wants("parking")) published.push(await publishB2Article(PARKING));
     if (wants("election-night")) published.push(await publishB2Article(ELECTION_NIGHT));

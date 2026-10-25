@@ -473,6 +473,16 @@ export const livingNativitiesBlock = z.object({
   type: z.literal("livingNativities"),
 });
 
+/**
+ * Snow on the ground at Meteocat's mountain stations, read at render time from
+ * the XEMA open data (`snow/depth.ts`). Configuration-free: validated readings
+ * only, each with its own time, so the block cannot show a stale depth as
+ * today's.
+ */
+export const snowDepthBlock = z.object({
+  type: z.literal("snowDepth"),
+});
+
 export const blockSchema = z.discriminatedUnion("type", [
   headingBlock,
   paragraphBlock,
@@ -506,6 +516,7 @@ export const blockSchema = z.discriminatedUnion("type", [
   clockChangeBlock,
   municipalElectionsBlock,
   livingNativitiesBlock,
+  snowDepthBlock,
 ]);
 
 export const bodySchema = z.array(blockSchema).max(500);

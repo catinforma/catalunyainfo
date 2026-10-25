@@ -59,7 +59,8 @@ export type B2Key =
   | "christmas"
   | "pessebres"
   | "christmasBarcelona"
-  | "newYear";
+  | "newYear"
+  | "snowNow";
 
 /** Path after the locale prefix, no leading or trailing slash. */
 export const B2_PATHS: Record<B2Key, Record<Locale, string>> = {
@@ -287,6 +288,11 @@ export const B2_PATHS: Record<B2Key, Record<Locale, string>> = {
     ca: "tradicions/pessebres-vivents-catalunya",
     es: "tradiciones/belenes-vivientes-cataluna",
     en: "traditions/living-nativity-scenes-catalonia",
+  },
+  snowNow: {
+    ca: "guies/neu-pirineu-avui",
+    es: "guias/nieve-pirineo-hoy",
+    en: "guides/snow-pyrenees-today",
   },
 };
 
@@ -524,6 +530,11 @@ export const B2_TITLES: Record<B2Key, Record<Locale, string>> = {
     ca: "Pessebres vivents a Catalunya: calendari",
     es: "Belenes vivientes en Cataluña: calendario",
     en: "Living nativity scenes in Catalonia",
+  },
+  snowNow: {
+    ca: "Hi ha neu al Pirineu avui?",
+    es: "¿Hay nieve en el Pirineo hoy?",
+    en: "Is there snow in the Pyrenees today?",
   },
 };
 
