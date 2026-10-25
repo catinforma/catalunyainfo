@@ -454,6 +454,22 @@ better over 7 days, against 112 of 216), and per page the queries above.
 
 **Outcome:** _pending_
 
+---
+
+## 2026-10-26 — Clock change: titles move to the March change (scheduled)
+
+Prepared on branch `sprint/2026-10-26-clock-march`, **not to be deployed before
+Monday 26 October 2026**: `tests/clock-change.test.ts` fails on this branch until
+25 October has passed, by design.
+
+**Change.** SEO title and description, all three editions, from Sunday 25
+October 2026 to Sunday 28 March 2027 (date from Communication C/2026/1660, already
+cited on the page). Same pattern as the 14 Oct entry: the date in the title.
+
+**Measure on 23 Nov** (28 days): impressions and CTR at equal position. Demand
+falls sharply after the change, so judge CTR, never clicks. The next peak is the
+week before 28 March 2027.
+
 ## Candidates not yet run
 
 Recorded so they are not lost, and so they are not all started at once.

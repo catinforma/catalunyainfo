@@ -464,6 +464,35 @@ export const municipalElectionsBlock = z.object({
   type: z.literal("municipalElections"),
 });
 
+/**
+ * Upcoming living nativity scenes ("pessebres vivents"), read at render time
+ * from the Generalitat's open-data cultural agenda. Configuration-free: only
+ * rows that have not ended are shown, so it cannot list a past season.
+ */
+export const livingNativitiesBlock = z.object({
+  type: z.literal("livingNativities"),
+});
+
+/**
+ * Snow on the ground at Meteocat's mountain stations, read at render time from
+ * the XEMA open data (`snow/depth.ts`). Configuration-free: validated readings
+ * only, each with its own time, so the block cannot show a stale depth as
+ * today's.
+ */
+export const snowDepthBlock = z.object({
+  type: z.literal("snowDepth"),
+});
+
+/**
+ * The candidate lists for the 29 November 2026 general election in the four
+ * Catalan provinces, read at render time from the BOE (presented 28 Oct,
+ * proclaimed 3 Nov). Configuration-free: before the first publication day it
+ * says the lists are not out, and it never shows an earlier election's.
+ */
+export const candidateListsBlock = z.object({
+  type: z.literal("candidateLists"),
+});
+
 export const blockSchema = z.discriminatedUnion("type", [
   headingBlock,
   paragraphBlock,
@@ -496,6 +525,9 @@ export const blockSchema = z.discriminatedUnion("type", [
   electionHistoryBlock,
   clockChangeBlock,
   municipalElectionsBlock,
+  livingNativitiesBlock,
+  snowDepthBlock,
+  candidateListsBlock,
 ]);
 
 export const bodySchema = z.array(blockSchema).max(500);

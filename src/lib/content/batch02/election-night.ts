@@ -1,6 +1,7 @@
 import type { Locale } from "@/lib/i18n/config";
 
 import {
+  b2link,
   b2Related,
   callout,
   faq,
@@ -144,6 +145,7 @@ const COPY: Record<Locale, T> = {
     catTitle: "Què s'elegeix a Catalunya",
     cat: [
       "Catalunya tria **48 diputats**: 32 per Barcelona, 6 per Girona, 4 per Lleida i 6 per Tarragona. També elegeix **16 senadors**, quatre per província.",
+      `Qui es presenta a cada província: ${b2link("candidates", "ca", "les llistes de candidats del 29N a Catalunya")}.`,
     ],
     pollsTitle: "Enquestes i jornada de reflexió",
     polls: [
@@ -196,6 +198,7 @@ const COPY: Record<Locale, T> = {
     catTitle: "Qué se elige en Cataluña",
     cat: [
       "Cataluña elige **48 diputados**: 32 por Barcelona, 6 por Girona, 4 por Lleida y 6 por Tarragona. También elige **16 senadores**, cuatro por provincia.",
+      `Quién se presenta en cada provincia: ${b2link("candidates", "es", "las listas de candidatos del 29N en Cataluña")}.`,
     ],
     pollsTitle: "Encuestas y jornada de reflexión",
     polls: [
@@ -248,6 +251,7 @@ const COPY: Record<Locale, T> = {
     catTitle: "What Catalonia elects",
     cat: [
       "Catalonia elects **48 members of Congress**: 32 for Barcelona, 6 for Girona, 4 for Lleida and 6 for Tarragona. It also elects **16 senators**, four per province.",
+      `Who is standing in each province: ${b2link("candidates", "en", "the 29 November candidate lists in Catalonia")}.`,
     ],
     pollsTitle: "Polls and the day of reflection",
     polls: [

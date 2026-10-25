@@ -38,9 +38,15 @@ import { MUNICIPAL_RESULTS } from "@/lib/content/batch02/municipal-results";
 import { CLIMATE } from "@/lib/content/batch02/climate";
 import { SHOPS } from "@/lib/content/batch02/shops";
 import { CHRISTMAS } from "@/lib/content/batch02/christmas";
+import { PESSEBRES } from "@/lib/content/batch02/pessebres";
+import { CHRISTMAS_BARCELONA } from "@/lib/content/batch02/christmas-barcelona";
+import { NEW_YEAR } from "@/lib/content/batch02/new-year";
+import { SNOW_NOW } from "@/lib/content/batch02/snow-now";
+import { SNOW } from "@/lib/content/batch02/pyrenees";
 import { PARKING, TRANSPORT } from "@/lib/content/batch02/barcelona-practical";
 import { ELECTION_NIGHT } from "@/lib/content/batch02/election-night";
 import { CONGRESS_RESULTS, PARLIAMENT_RESULTS } from "@/lib/content/batch02/election-results";
+import { CANDIDATES } from "@/lib/content/batch02/candidates";
 import { publishHolidayTodayGuide } from "@/lib/content/holidays/today-publish";
 import { publishLocalHolidaysGuide } from "@/lib/content/holidays/local-publish";
 import { publishReservoirGuide } from "@/lib/content/reservoirs/publish";
@@ -134,9 +140,21 @@ export async function POST(request: Request) {
     if (wants("climate")) published.push(await publishB2Article(CLIMATE));
     if (wants("shops")) published.push(await publishB2Article(SHOPS));
     if (wants("christmas")) published.push(await publishB2Article(CHRISTMAS));
+    // Living nativities: the calendar block reads the agenda live; this
+    // publishes the guide around it.
+    if (wants("pessebres")) published.push(await publishB2Article(PESSEBRES));
+    // Christmas in Barcelona hub and New Year's Eve: dated-fact pages, one
+    // group each so a newly announced date republishes only its own page.
+    if (wants("christmas-bcn")) published.push(await publishB2Article(CHRISTMAS_BARCELONA));
+    if (wants("nye")) published.push(await publishB2Article(NEW_YEAR));
+    // The live snow-depth page, plus the ski and snow guides that now link to it.
+    if (wants("snow-now")) published.push(await publishB2Article(SNOW_NOW), await publishB2Article(SKI), await publishB2Article(SNOW));
     if (wants("transport")) published.push(await publishB2Article(TRANSPORT));
     if (wants("parking")) published.push(await publishB2Article(PARKING));
     if (wants("election-night")) published.push(await publishB2Article(ELECTION_NIGHT));
+    // 29N candidates: the lists are read from the BOE at render time; this
+    // publishes the guide around them (re-running it also refreshes the page).
+    if (wants("candidates")) published.push(await publishB2Article(CANDIDATES));
     if (wants("family-markets")) published.push(await publishB2Article(ZOO_AQUARIUM), await publishB2Article(MARKETS));
     if (wants("cruiseport")) published.push(await publishB2Article(CRUISEPORT));
     if (wants("portaventura")) published.push(await publishB2Article(PORTAVENTURA));

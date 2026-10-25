@@ -58,6 +58,7 @@ const ca = {
       christmas: { title: "Mercats de Nadal", desc: "La Fira de Santa Llúcia i els altres mercats de Nadal: on són i quan obren." },
       autumn: { title: "Colors de tardor", desc: "On i quan veure els boscos de tardor als parcs naturals de Catalunya." },
       ski: { title: "Estacions d'esquí", desc: "Les estacions catalanes, la temporada 2026-2027 i com arribar-hi." },
+      snowNow: { title: "Hi ha neu al Pirineu?", desc: "El gruix de neu a terra a les estacions de muntanya del Meteocat, amb l'hora de cada lectura." },
       museums: { title: "Museus gratis a Barcelona", desc: "Quins dies i hores no es paga al MNAC, el Picasso, el MACBA i els museus municipals." },
       monuments: { title: "Entrades de Gaudí i Sant Pau", desc: "Preus oficials i horaris de la Sagrada Família, el Park Güell, la Casa Batlló i la Pedrera." },
       cards: { title: "Barcelona Card o Hola Barcelona", desc: "Què inclou cadascuna i quan surt a compte la Barcelona Card." },

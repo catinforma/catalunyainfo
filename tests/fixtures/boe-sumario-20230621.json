@@ -1,0 +1,87 @@
+{
+  "status": {
+    "code": "200",
+    "text": "ok"
+  },
+  "data": {
+    "sumario": {
+      "metadatos": {
+        "publicacion": "BOE",
+        "fecha_publicacion": "20230621"
+      },
+      "diario": [
+        {
+          "numero": "147",
+          "sumario_diario": {
+            "identificador": "BOE-S-2023-147",
+            "url_pdf": {
+              "szBytes": "351196",
+              "szKBytes": "343",
+              "texto": "https://www.boe.es/boe/dias/2023/06/21/pdfs/BOE-S-2023-147.pdf"
+            }
+          },
+          "seccion": [
+            {
+              "codigo": "1",
+              "nombre": "I. Disposiciones generales",
+              "departamento": [
+                {
+                  "codigo": "7320",
+                  "nombre": "MINISTERIO DEL INTERIOR",
+                  "epigrafe": [
+                    {
+                      "nombre": "Protección civil",
+                      "item": {
+                        "identificador": "BOE-A-2023-14679",
+                        "control": "2023/14895",
+                        "titulo": "Real Decreto 524/2023, de 20 de junio, por el que se aprueba la Norma Básica de Protección Civil.",
+                        "url_pdf": {
+                          "szBytes": "284369",
+                          "szKBytes": "278",
+                          "pagina_inicial": "87293",
+                          "pagina_final": "87305",
+                          "texto": "https://www.boe.es/boe/dias/2023/06/21/pdfs/BOE-A-2023-14679.pdf"
+                        },
+                        "url_html": "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2023-14679",
+                        "url_xml": "https://www.boe.es/diario_boe/xml.php?id=BOE-A-2023-14679"
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "codigo": "3",
+              "nombre": "III. Otras disposiciones",
+              "departamento": [
+                {
+                  "codigo": "1330",
+                  "nombre": "JUNTAS ELECTORALES PROVINCIALES",
+                  "epigrafe": [
+                    {
+                      "nombre": "Elecciones generales. Presentación de candidaturas",
+                      "item": {
+                        "identificador": "BOE-A-2023-14733",
+                        "control": "2023/14894",
+                        "titulo": "Candidaturas presentadas para las elecciones al Congreso de los Diputados y al Senado, convocadas por Real Decreto 400/2023, de 29 de mayo.",
+                        "url_pdf": {
+                          "szBytes": "4492155",
+                          "szKBytes": "4387",
+                          "pagina_inicial": "87679",
+                          "pagina_final": "87947",
+                          "texto": "https://www.boe.es/boe/dias/2023/06/21/pdfs/BOE-A-2023-14733.pdf"
+                        },
+                        "url_html": "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2023-14733",
+                        "url_xml": "https://www.boe.es/diario_boe/xml.php?id=BOE-A-2023-14733"
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

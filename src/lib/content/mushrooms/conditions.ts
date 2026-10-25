@@ -23,7 +23,7 @@ export interface ZoneReading {
 export const WINDOW_DAYS = 15;
 
 /** ISO date the data was read. This is what the page shows as last verified. */
-export const READ_AT = "2026-10-24";
+export const READ_AT = "2026-10-25";
 
 export const SOURCE = {
   name: "Dades meteorològiques de la XEMA",
@@ -65,18 +65,18 @@ export const ZONE_READINGS: readonly ZoneReading[] = [
     "id": "ripolles",
     "mm": 101.8,
     "stations": 5,
-    "daysSinceRain": 4,
+    "daysSinceRain": 5,
     "level": "very",
     "wettest": {
       "name": "Ulldeter (2.413 m)",
-      "mm": 137.4
+      "mm": 137.5
     }
   },
   {
     "id": "bergueda",
     "mm": 88.9,
     "stations": 5,
-    "daysSinceRain": 5,
+    "daysSinceRain": 6,
     "level": "very",
     "wettest": {
       "name": "Gisclareny",
@@ -85,20 +85,20 @@ export const ZONE_READINGS: readonly ZoneReading[] = [
   },
   {
     "id": "garrotxa",
-    "mm": 84.5,
+    "mm": 84.4,
     "stations": 2,
-    "daysSinceRain": 4,
+    "daysSinceRain": 5,
     "level": "very",
     "wettest": {
       "name": "la Vall d'en Bas",
-      "mm": 84.9
+      "mm": 84.8
     }
   },
   {
     "id": "osona",
     "mm": 59.2,
     "stations": 7,
-    "daysSinceRain": 1,
+    "daysSinceRain": 2,
     "level": "favourable",
     "wettest": {
       "name": "Montesquiu",
@@ -107,20 +107,20 @@ export const ZONE_READINGS: readonly ZoneReading[] = [
   },
   {
     "id": "pirineu",
-    "mm": 55,
+    "mm": 55.1,
     "stations": 24,
-    "daysSinceRain": 0,
+    "daysSinceRain": 1,
     "level": "favourable",
     "wettest": {
       "name": "Cadí Nord (2.145 m) - Prat d'Aguiló",
-      "mm": 114.2
+      "mm": 114.6
     }
   },
   {
     "id": "montseny",
-    "mm": 42.5,
+    "mm": 42.4,
     "stations": 9,
-    "daysSinceRain": 0,
+    "daysSinceRain": 1,
     "level": "favourable",
     "wettest": {
       "name": "Caldes de Montbui",
@@ -131,7 +131,7 @@ export const ZONE_READINGS: readonly ZoneReading[] = [
     "id": "ports",
     "mm": 54.8,
     "stations": 19,
-    "daysSinceRain": 4,
+    "daysSinceRain": 5,
     "level": "favourable",
     "wettest": {
       "name": "Tivissa",
@@ -142,7 +142,7 @@ export const ZONE_READINGS: readonly ZoneReading[] = [
     "id": "ponent",
     "mm": 53.8,
     "stations": 31,
-    "daysSinceRain": 5,
+    "daysSinceRain": 6,
     "level": "favourable",
     "wettest": {
       "name": "els Alamús",

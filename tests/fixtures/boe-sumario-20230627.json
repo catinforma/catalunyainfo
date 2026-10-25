@@ -1,0 +1,118 @@
+{
+  "status": {
+    "code": "200",
+    "text": "ok"
+  },
+  "data": {
+    "sumario": {
+      "metadatos": {
+        "publicacion": "BOE",
+        "fecha_publicacion": "20230627"
+      },
+      "diario": [
+        {
+          "numero": "152",
+          "sumario_diario": {
+            "identificador": "BOE-S-2023-152",
+            "url_pdf": {
+              "szBytes": "364358",
+              "szKBytes": "356",
+              "texto": "https://www.boe.es/boe/dias/2023/06/27/pdfs/BOE-S-2023-152.pdf"
+            }
+          },
+          "seccion": [
+            {
+              "codigo": "1",
+              "nombre": "I. Disposiciones generales",
+              "departamento": [
+                {
+                  "codigo": "9572",
+                  "nombre": "MINISTERIO DE TRANSPORTES, MOVILIDAD Y AGENDA URBANA",
+                  "texto": {
+                    "epigrafe": [
+                      {
+                        "nombre": "Ayudas",
+                        "item": {
+                          "identificador": "BOE-A-2023-15001",
+                          "control": "2023/15184",
+                          "titulo": "Orden TMA/686/2023, de 22 de junio, por la que se modifican los Anexos I y III, del Real Decreto 983/2021, de 16 de noviembre, por el que se aprueba la concesión directa a las comunidades autónomas y a las ciudades de Ceuta y Melilla de ayudas para la transformación de flotas de transporte de viajeros y mercancías de empresas privadas prestadoras de servicios de transporte por carretera, así como de empresas que realicen transporte privado complementario, en el marco del Plan de Recuperación, Transformación y Resiliencia.",
+                          "url_pdf": {
+                            "szBytes": "220633",
+                            "szKBytes": "215",
+                            "pagina_inicial": "89844",
+                            "pagina_final": "89849",
+                            "texto": "https://www.boe.es/boe/dias/2023/06/27/pdfs/BOE-A-2023-15001.pdf"
+                          },
+                          "url_html": "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2023-15001",
+                          "url_xml": "https://www.boe.es/diario_boe/xml.php?id=BOE-A-2023-15001"
+                        }
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "codigo": "2A",
+              "nombre": "II. Autoridades y personal. - A. Nombramientos, situaciones e incidencias",
+              "departamento": [
+                {
+                  "codigo": "1310",
+                  "nombre": "JUNTA ELECTORAL CENTRAL",
+                  "epigrafe": [
+                    {
+                      "nombre": "Designaciones",
+                      "item": {
+                        "identificador": "BOE-A-2023-15013",
+                        "control": "2023/15218",
+                        "titulo": "Resolución de 26 de junio de 2023, de la Presidencia de la Junta Electoral Central, de designación de la Comisión de Radio y Televisión en relación con las elecciones generales a celebrar el 23 de julio de 2023.",
+                        "url_pdf": {
+                          "szBytes": "195059",
+                          "szKBytes": "190",
+                          "pagina_inicial": "89871",
+                          "pagina_final": "89871",
+                          "texto": "https://www.boe.es/boe/dias/2023/06/27/pdfs/BOE-A-2023-15013.pdf"
+                        },
+                        "url_html": "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2023-15013",
+                        "url_xml": "https://www.boe.es/diario_boe/xml.php?id=BOE-A-2023-15013"
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "codigo": "3",
+              "nombre": "III. Otras disposiciones",
+              "departamento": [
+                {
+                  "codigo": "1330",
+                  "nombre": "JUNTAS ELECTORALES PROVINCIALES",
+                  "epigrafe": [
+                    {
+                      "nombre": "Elecciones generales. Proclamación de candidaturas",
+                      "item": {
+                        "identificador": "BOE-A-2023-15066",
+                        "control": "2023/15217",
+                        "titulo": "Candidaturas proclamadas para la elecciones al Congreso de los Diputados y al Senado, convocadas por Real Decreto 400/2023, de 29 de mayo.",
+                        "url_pdf": {
+                          "szBytes": "4298580",
+                          "szKBytes": "4198",
+                          "pagina_inicial": "89993",
+                          "pagina_final": "90248",
+                          "texto": "https://www.boe.es/boe/dias/2023/06/27/pdfs/BOE-A-2023-15066.pdf"
+                        },
+                        "url_html": "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2023-15066",
+                        "url_xml": "https://www.boe.es/diario_boe/xml.php?id=BOE-A-2023-15066"
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,152 @@
+{
+  "status": {
+    "code": "200",
+    "text": "ok"
+  },
+  "data": {
+    "sumario": {
+      "metadatos": {
+        "publicacion": "BOE",
+        "fecha_publicacion": "20230704"
+      },
+      "diario": [
+        {
+          "numero": "158",
+          "sumario_diario": {
+            "identificador": "BOE-S-2023-158",
+            "url_pdf": {
+              "szBytes": "403715",
+              "szKBytes": "394",
+              "texto": "https://www.boe.es/boe/dias/2023/07/04/pdfs/BOE-S-2023-158.pdf"
+            }
+          },
+          "seccion": [
+            {
+              "codigo": "1",
+              "nombre": "I. Disposiciones generales",
+              "departamento": [
+                {
+                  "codigo": "8131",
+                  "nombre": "COMUNIDAD DE MADRID",
+                  "texto": {
+                    "epigrafe": [
+                      {
+                        "nombre": "Emergencias. Protección civil",
+                        "item": {
+                          "identificador": "BOE-A-2023-15467",
+                          "control": "2023/15222",
+                          "titulo": "Ley 5/2023, de 22 de marzo, de Creación del Sistema Integrado de Protección Civil y Emergencias de la Comunidad de Madrid.",
+                          "url_pdf": {
+                            "szBytes": "325896",
+                            "szKBytes": "318",
+                            "pagina_inicial": "92755",
+                            "pagina_final": "92775",
+                            "texto": "https://www.boe.es/boe/dias/2023/07/04/pdfs/BOE-A-2023-15467.pdf"
+                          },
+                          "url_html": "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2023-15467",
+                          "url_xml": "https://www.boe.es/diario_boe/xml.php?id=BOE-A-2023-15467"
+                        }
+                      },
+                      {
+                        "nombre": "Archivos",
+                        "item": {
+                          "identificador": "BOE-A-2023-15468",
+                          "control": "2023/15223",
+                          "titulo": "Ley 6/2023, de 30 de marzo, de Archivos y Documentos de la Comunidad de Madrid.",
+                          "url_pdf": {
+                            "szBytes": "707333",
+                            "szKBytes": "691",
+                            "pagina_inicial": "92776",
+                            "pagina_final": "92857",
+                            "texto": "https://www.boe.es/boe/dias/2023/07/04/pdfs/BOE-A-2023-15468.pdf"
+                          },
+                          "url_html": "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2023-15468",
+                          "url_xml": "https://www.boe.es/diario_boe/xml.php?id=BOE-A-2023-15468"
+                        }
+                      },
+                      {
+                        "nombre": "Patrimonio bibliográfico",
+                        "item": {
+                          "identificador": "BOE-A-2023-15469",
+                          "control": "2023/15224",
+                          "titulo": "Ley 7/2023, de 30 de marzo, del Libro, la Lectura y el Patrimonio Bibliográfico de la Comunidad de Madrid.",
+                          "url_pdf": {
+                            "szBytes": "391397",
+                            "szKBytes": "382",
+                            "pagina_inicial": "92858",
+                            "pagina_final": "92888",
+                            "texto": "https://www.boe.es/boe/dias/2023/07/04/pdfs/BOE-A-2023-15469.pdf"
+                          },
+                          "url_html": "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2023-15469",
+                          "url_xml": "https://www.boe.es/diario_boe/xml.php?id=BOE-A-2023-15469"
+                        }
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "codigo": "2A",
+              "nombre": "II. Autoridades y personal. - A. Nombramientos, situaciones e incidencias",
+              "departamento": [
+                {
+                  "codigo": "1310",
+                  "nombre": "JUNTA ELECTORAL CENTRAL",
+                  "epigrafe": [
+                    {
+                      "nombre": "Designaciones",
+                      "item": {
+                        "identificador": "BOE-A-2023-15476",
+                        "control": "2023/15609",
+                        "titulo": "Acuerdo de 28 de junio de 2023, de la Junta Electoral Central, de designación de Vocal no judicial de la Junta Electoral Provincial de Sevilla, de conformidad con lo dispuesto en el artículo 10.1 b) de la Ley Orgánica del Régimen Electoral General, en relación con las elecciones generales de 23 de julio de 2023.",
+                        "url_pdf": {
+                          "szBytes": "191266",
+                          "szKBytes": "187",
+                          "pagina_inicial": "92899",
+                          "pagina_final": "92899",
+                          "texto": "https://www.boe.es/boe/dias/2023/07/04/pdfs/BOE-A-2023-15476.pdf"
+                        },
+                        "url_html": "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2023-15476",
+                        "url_xml": "https://www.boe.es/diario_boe/xml.php?id=BOE-A-2023-15476"
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "codigo": "3",
+              "nombre": "III. Otras disposiciones",
+              "departamento": [
+                {
+                  "codigo": "1330",
+                  "nombre": "JUNTAS ELECTORALES PROVINCIALES",
+                  "epigrafe": [
+                    {
+                      "nombre": "Elecciones generales. Proclamación de candidaturas",
+                      "item": {
+                        "identificador": "BOE-A-2023-15548",
+                        "control": "2023/15696",
+                        "titulo": "Corrección de errores de las candidaturas proclamadas para las elecciones al Congreso de los Diputados y al Senado, convocadas por Real Decreto 400/2023, de 29 de mayo.",
+                        "url_pdf": {
+                          "szBytes": "199188",
+                          "szKBytes": "195",
+                          "pagina_inicial": "93283",
+                          "pagina_final": "93284",
+                          "texto": "https://www.boe.es/boe/dias/2023/07/04/pdfs/BOE-A-2023-15548.pdf"
+                        },
+                        "url_html": "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2023-15548",
+                        "url_xml": "https://www.boe.es/diario_boe/xml.php?id=BOE-A-2023-15548"
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

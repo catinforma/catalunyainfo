@@ -56,7 +56,12 @@ export type B2Key =
   | "touristTax"
   | "workCalendar"
   | "holidayToday"
-  | "christmas";
+  | "christmas"
+  | "pessebres"
+  | "christmasBarcelona"
+  | "newYear"
+  | "snowNow"
+  | "candidates";
 
 /** Path after the locale prefix, no leading or trailing slash. */
 export const B2_PATHS: Record<B2Key, Record<Locale, string>> = {
@@ -245,6 +250,16 @@ export const B2_PATHS: Record<B2Key, Record<Locale, string>> = {
     es: "tradiciones/mercados-navidad-cataluna",
     en: "traditions/christmas-markets-catalonia",
   },
+  christmasBarcelona: {
+    ca: "guies/nadal-a-barcelona",
+    es: "guias/navidad-en-barcelona",
+    en: "guides/christmas-in-barcelona",
+  },
+  newYear: {
+    ca: "guies/cap-d-any-barcelona",
+    es: "guias/nochevieja-barcelona",
+    en: "guides/new-years-eve-barcelona",
+  },
   workCalendar: {
     ca: "guies/calendari-laboral-catalunya",
     es: "guias/calendario-laboral-cataluna",
@@ -269,6 +284,21 @@ export const B2_PATHS: Record<B2Key, Record<Locale, string>> = {
     ca: "guies/on-veure-neu-catalunya-sense-esquiar",
     es: "guias/donde-ver-nieve-cataluna-sin-esquiar",
     en: "guides/where-to-see-snow-catalonia-without-skiing",
+  },
+  pessebres: {
+    ca: "tradicions/pessebres-vivents-catalunya",
+    es: "tradiciones/belenes-vivientes-cataluna",
+    en: "traditions/living-nativity-scenes-catalonia",
+  },
+  snowNow: {
+    ca: "guies/neu-pirineu-avui",
+    es: "guias/nieve-pirineo-hoy",
+    en: "guides/snow-pyrenees-today",
+  },
+  candidates: {
+    ca: "guies/candidats-eleccions-generals-catalunya",
+    es: "guias/candidatos-elecciones-generales-cataluna",
+    en: "guides/spain-general-election-candidates-catalonia",
   },
 };
 
@@ -467,6 +497,16 @@ export const B2_TITLES: Record<B2Key, Record<Locale, string>> = {
     es: "Mercados y ferias de Navidad en Cataluña",
     en: "Christmas markets in Catalonia",
   },
+  christmasBarcelona: {
+    ca: "Nadal a Barcelona: llums, pessebre i què obre",
+    es: "Navidad en Barcelona: luces, belén y qué abre",
+    en: "Christmas in Barcelona: lights, nativity and what's open",
+  },
+  newYear: {
+    ca: "Cap d'Any a Barcelona: la festa de Montjuïc i el metro",
+    es: "Nochevieja en Barcelona: la fiesta de Montjuïc y el metro",
+    en: "New Year's Eve in Barcelona: the Montjuïc show and the metro",
+  },
   workCalendar: {
     ca: "Calendari laboral 2027 a Catalunya: festius i ponts",
     es: "Calendario laboral 2027 en Cataluña: festivos y puentes",
@@ -491,6 +531,21 @@ export const B2_TITLES: Record<B2Key, Record<Locale, string>> = {
     ca: "On veure neu sense esquiar",
     es: "Dónde ver nieve sin esquiar",
     en: "Where to see snow without skiing",
+  },
+  pessebres: {
+    ca: "Pessebres vivents a Catalunya: calendari",
+    es: "Belenes vivientes en Cataluña: calendario",
+    en: "Living nativity scenes in Catalonia",
+  },
+  snowNow: {
+    ca: "Hi ha neu al Pirineu avui?",
+    es: "¿Hay nieve en el Pirineo hoy?",
+    en: "Is there snow in the Pyrenees today?",
+  },
+  candidates: {
+    ca: "Candidats a les eleccions generals a Catalunya",
+    es: "Candidatos a las elecciones generales en Cataluña",
+    en: "General election candidates in Catalonia",
   },
 };
 

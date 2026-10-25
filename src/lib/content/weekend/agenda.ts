@@ -45,8 +45,10 @@ export const AGENDA_SOURCE = {
   publisher: "Generalitat de Catalunya — dades obertes",
 };
 
-const ENDPOINT = "https://analisi.transparenciacatalunya.cat/resource/rhpv-yr4f.json";
-const MUNICIPALITIES = "https://analisi.transparenciacatalunya.cat/resource/wpyq-we8x.json";
+// Exported for the living-nativity calendar (`pessebres/agenda.ts`), which
+// reads the same two datasets.
+export const ENDPOINT = "https://analisi.transparenciacatalunya.cat/resource/rhpv-yr4f.json";
+export const MUNICIPALITIES = "https://analisi.transparenciacatalunya.cat/resource/wpyq-we8x.json";
 
 /** Six hours: the source updates daily, and a weekend list changes slowly. */
 export const REVALIDATE_SECONDS = 21_600;
@@ -158,7 +160,7 @@ export function slugify(text: string): string {
 }
 
 /** Title-cased fallback for a slug the municipality list does not know. */
-function prettify(slug: string): string {
+export function prettify(slug: string): string {
   const lower = new Set(["de", "del", "dels", "la", "les", "el", "els", "i", "d", "l"]);
   return slug
     .split("-")
@@ -177,7 +179,7 @@ function categoryOf(tags: string | undefined): AgendaCategory {
 }
 
 /** Only an organiser link we can vouch for being a web address. */
-function cleanUrl(value: string | undefined): string | null {
+export function cleanUrl(value: string | undefined): string | null {
   if (!value) return null;
   const trimmed = value.trim();
   if (!/^https?:\/\/[^\s]+\.[^\s]+/.test(trimmed)) return null;
