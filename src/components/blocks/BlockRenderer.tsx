@@ -17,6 +17,7 @@ import { MunicipalElections } from "@/components/blocks/MunicipalElections";
 import { ElectionHistory } from "@/components/blocks/ElectionHistory";
 import { TouristTaxCalculator } from "@/components/blocks/TouristTaxCalculator";
 import { LivingNativities } from "@/components/blocks/LivingNativities";
+import { CandidateLists } from "@/components/blocks/CandidateLists";
 import type { Block, Body } from "@/lib/content/blocks";
 import { headingId } from "@/lib/content/blocks";
 import { renderInline, safeHref } from "@/lib/content/inline";
@@ -401,6 +402,10 @@ function BlockView({ block, context }: { block: Block; context: BlockContext }) 
     case "livingNativities":
       // Async server component: upcoming pessebres vivents from the open-data agenda.
       return <LivingNativities locale={context.locale} />;
+
+    case "candidateLists":
+      // Async server component: the 29N candidate lists, read from the BOE.
+      return <CandidateLists locale={context.locale} />;
 
     case "contactForm":
       // The only interactive block. It carries no configuration from the

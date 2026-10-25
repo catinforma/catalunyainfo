@@ -1,0 +1,110 @@
+{
+  "status": {
+    "code": "200",
+    "text": "ok"
+  },
+  "data": {
+    "sumario": {
+      "metadatos": {
+        "publicacion": "BOE",
+        "fecha_publicacion": "20230707"
+      },
+      "diario": [
+        {
+          "numero": "161",
+          "sumario_diario": {
+            "identificador": "BOE-S-2023-161",
+            "url_pdf": {
+              "szBytes": "386391",
+              "szKBytes": "377",
+              "texto": "https://www.boe.es/boe/dias/2023/07/07/pdfs/BOE-S-2023-161.pdf"
+            }
+          },
+          "seccion": [
+            {
+              "codigo": "1",
+              "nombre": "I. Disposiciones generales",
+              "departamento": [
+                {
+                  "codigo": "9562",
+                  "nombre": "MINISTERIO DE ASUNTOS EXTERIORES, UNIÓN EUROPEA Y COOPERACIÓN",
+                  "epigrafe": [
+                    {
+                      "nombre": "Tratados internacionales",
+                      "item": {
+                        "identificador": "BOE-A-2023-15734",
+                        "control": "2023/15880",
+                        "titulo": "Acuerdo entre el Reino de España y la Organización de las Naciones Unidas para la Educación, la Ciencia y la Cultura (UNESCO) relativo al centro auspiciado por la UNESCO (Categoría 2) denominado \"Centro Internacional sobre Reservas de Biosfera Mediterráneas\", hecho en Barcelona el 18 de mayo de 2022.",
+                        "url_pdf": {
+                          "szBytes": "232939",
+                          "szKBytes": "227",
+                          "pagina_inicial": "96032",
+                          "pagina_final": "96037",
+                          "texto": "https://www.boe.es/boe/dias/2023/07/07/pdfs/BOE-A-2023-15734.pdf"
+                        },
+                        "url_html": "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2023-15734",
+                        "url_xml": "https://www.boe.es/diario_boe/xml.php?id=BOE-A-2023-15734"
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "codigo": "3",
+              "nombre": "III. Otras disposiciones",
+              "departamento": [
+                {
+                  "codigo": "1310",
+                  "nombre": "JUNTA ELECTORAL CENTRAL",
+                  "epigrafe": [
+                    {
+                      "nombre": "Elecciones locales. Resultados",
+                      "item": {
+                        "identificador": "BOE-A-2023-15823",
+                        "control": "2023/16157",
+                        "titulo": "Resolución de 5 de julio de 2023, de la Presidencia de la Junta Electoral Central, por la que se publica el resumen de los resultados de las elecciones locales convocadas por Real Decreto 207/2023, de 3 de abril, y celebradas el 28 de mayo de 2023, según los datos que figuran en las actas de proclamación remitidas por cada una de las Juntas Electorales de Zona. Provincia: Albacete.",
+                        "url_pdf": {
+                          "szBytes": "380998",
+                          "szKBytes": "372",
+                          "pagina_inicial": "96648",
+                          "pagina_final": "96679",
+                          "texto": "https://www.boe.es/boe/dias/2023/07/07/pdfs/BOE-A-2023-15823.pdf"
+                        },
+                        "url_html": "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2023-15823",
+                        "url_xml": "https://www.boe.es/diario_boe/xml.php?id=BOE-A-2023-15823"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "codigo": "1330",
+                  "nombre": "JUNTAS ELECTORALES PROVINCIALES",
+                  "epigrafe": [
+                    {
+                      "nombre": "Elecciones generales. Proclamación de candidaturas",
+                      "item": {
+                        "identificador": "BOE-A-2023-15828",
+                        "control": "2023/16161",
+                        "titulo": "Corrección de errores de las candidaturas proclamadas para las elecciones al Congreso de los Diputados y al Senado, convocadas por Real Decreto 400/2023, de 29 de mayo.",
+                        "url_pdf": {
+                          "szBytes": "194014",
+                          "szKBytes": "189",
+                          "pagina_inicial": "96685",
+                          "pagina_final": "96685",
+                          "texto": "https://www.boe.es/boe/dias/2023/07/07/pdfs/BOE-A-2023-15828.pdf"
+                        },
+                        "url_html": "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2023-15828",
+                        "url_xml": "https://www.boe.es/diario_boe/xml.php?id=BOE-A-2023-15828"
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

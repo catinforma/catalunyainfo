@@ -473,6 +473,16 @@ export const livingNativitiesBlock = z.object({
   type: z.literal("livingNativities"),
 });
 
+/**
+ * The candidate lists for the 29 November 2026 general election in the four
+ * Catalan provinces, read at render time from the BOE (presented 28 Oct,
+ * proclaimed 3 Nov). Configuration-free: before the first publication day it
+ * says the lists are not out, and it never shows an earlier election's.
+ */
+export const candidateListsBlock = z.object({
+  type: z.literal("candidateLists"),
+});
+
 export const blockSchema = z.discriminatedUnion("type", [
   headingBlock,
   paragraphBlock,
@@ -506,6 +516,7 @@ export const blockSchema = z.discriminatedUnion("type", [
   clockChangeBlock,
   municipalElectionsBlock,
   livingNativitiesBlock,
+  candidateListsBlock,
 ]);
 
 export const bodySchema = z.array(blockSchema).max(500);
