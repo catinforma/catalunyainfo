@@ -229,6 +229,7 @@ function body(locale: Locale) {
       ...h2(
         "Abans d'anar-hi",
         `Els organitzadors canvien dates i emplaçaments d'un any a l'altre: comprova-ho al seu web el dia que hi vagis. Si vas a comprar un diumenge o festiu de desembre, mira ${b2link("shops", "ca", "quins dies poden obrir les botigues")}: el 2026 ho poden fer els diumenges 6, 13, 20 i 27 de desembre i el dimarts 8. Per als ponts, ${b2link("workCalendar", "ca", "el calendari de festius")}.`,
+        `Per a la resta del Nadal a la ciutat (els llums, el pessebre de Sant Jaume i què obre els festius), mira ${b2link("christmasBarcelona", "ca", "Nadal a Barcelona")}.`,
       ),
       faq([
         {
@@ -299,6 +300,7 @@ function body(locale: Locale) {
       ...h2(
         "Antes de ir",
         `Los organizadores cambian fechas y emplazamientos de un año a otro: compruébalo en su web el día que vayas. Si vas a comprar un domingo o festivo de diciembre, mira ${b2link("shops", "es", "qué días pueden abrir las tiendas")}: en 2026 pueden hacerlo los domingos 6, 13, 20 y 27 de diciembre y el martes 8. Para los puentes, ${b2link("workCalendar", "es", "el calendario de festivos")}.`,
+        `Para el resto de la Navidad en la ciudad (las luces, el belén de Sant Jaume y qué abre los festivos), mira ${b2link("christmasBarcelona", "es", "Navidad en Barcelona")}.`,
       ),
       faq([
         {
@@ -368,6 +370,7 @@ function body(locale: Locale) {
     ...h2(
       "Before you go",
       `Organisers change dates and venues from year to year, so check their website for your day. If you plan to shop on a December Sunday or holiday, see ${b2link("shops", "en", "which days shops may open")}: in 2026 they may open on Sundays 6, 13, 20 and 27 December and on Tuesday 8 December. For long weekends, ${b2link("workCalendar", "en", "the public holiday calendar")}.`,
+      `For the rest of Christmas in the city (the lights, the Plaça Sant Jaume nativity scene and what is open on the holidays), see ${b2link("christmasBarcelona", "en", "Christmas in Barcelona")}.`,
     ),
     faq([
       {

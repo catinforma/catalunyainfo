@@ -38,6 +38,8 @@ import { MUNICIPAL_RESULTS } from "@/lib/content/batch02/municipal-results";
 import { CLIMATE } from "@/lib/content/batch02/climate";
 import { SHOPS } from "@/lib/content/batch02/shops";
 import { CHRISTMAS } from "@/lib/content/batch02/christmas";
+import { CHRISTMAS_BARCELONA } from "@/lib/content/batch02/christmas-barcelona";
+import { NEW_YEAR } from "@/lib/content/batch02/new-year";
 import { PARKING, TRANSPORT } from "@/lib/content/batch02/barcelona-practical";
 import { ELECTION_NIGHT } from "@/lib/content/batch02/election-night";
 import { CONGRESS_RESULTS, PARLIAMENT_RESULTS } from "@/lib/content/batch02/election-results";
@@ -134,6 +136,10 @@ export async function POST(request: Request) {
     if (wants("climate")) published.push(await publishB2Article(CLIMATE));
     if (wants("shops")) published.push(await publishB2Article(SHOPS));
     if (wants("christmas")) published.push(await publishB2Article(CHRISTMAS));
+    // Christmas in Barcelona hub and New Year's Eve: dated-fact pages, one
+    // group each so a newly announced date republishes only its own page.
+    if (wants("christmas-bcn")) published.push(await publishB2Article(CHRISTMAS_BARCELONA));
+    if (wants("nye")) published.push(await publishB2Article(NEW_YEAR));
     if (wants("transport")) published.push(await publishB2Article(TRANSPORT));
     if (wants("parking")) published.push(await publishB2Article(PARKING));
     if (wants("election-night")) published.push(await publishB2Article(ELECTION_NIGHT));
