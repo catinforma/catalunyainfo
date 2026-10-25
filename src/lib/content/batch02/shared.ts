@@ -57,7 +57,8 @@ export type B2Key =
   | "workCalendar"
   | "holidayToday"
   | "christmas"
-  | "pessebres";
+  | "pessebres"
+  | "candidates";
 
 /** Path after the locale prefix, no leading or trailing slash. */
 export const B2_PATHS: Record<B2Key, Record<Locale, string>> = {
@@ -275,6 +276,11 @@ export const B2_PATHS: Record<B2Key, Record<Locale, string>> = {
     ca: "tradicions/pessebres-vivents-catalunya",
     es: "tradiciones/belenes-vivientes-cataluna",
     en: "traditions/living-nativity-scenes-catalonia",
+  },
+  candidates: {
+    ca: "guies/candidats-eleccions-generals-catalunya",
+    es: "guias/candidatos-elecciones-generales-cataluna",
+    en: "guides/spain-general-election-candidates-catalonia",
   },
 };
 
@@ -502,6 +508,11 @@ export const B2_TITLES: Record<B2Key, Record<Locale, string>> = {
     ca: "Pessebres vivents a Catalunya: calendari",
     es: "Belenes vivientes en Cataluña: calendario",
     en: "Living nativity scenes in Catalonia",
+  },
+  candidates: {
+    ca: "Candidats a les eleccions generals a Catalunya",
+    es: "Candidatos a las elecciones generales en Cataluña",
+    en: "General election candidates in Catalonia",
   },
 };
 

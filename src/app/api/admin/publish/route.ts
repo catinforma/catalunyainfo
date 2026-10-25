@@ -42,6 +42,7 @@ import { PESSEBRES } from "@/lib/content/batch02/pessebres";
 import { PARKING, TRANSPORT } from "@/lib/content/batch02/barcelona-practical";
 import { ELECTION_NIGHT } from "@/lib/content/batch02/election-night";
 import { CONGRESS_RESULTS, PARLIAMENT_RESULTS } from "@/lib/content/batch02/election-results";
+import { CANDIDATES } from "@/lib/content/batch02/candidates";
 import { publishHolidayTodayGuide } from "@/lib/content/holidays/today-publish";
 import { publishLocalHolidaysGuide } from "@/lib/content/holidays/local-publish";
 import { publishReservoirGuide } from "@/lib/content/reservoirs/publish";
@@ -141,6 +142,9 @@ export async function POST(request: Request) {
     if (wants("transport")) published.push(await publishB2Article(TRANSPORT));
     if (wants("parking")) published.push(await publishB2Article(PARKING));
     if (wants("election-night")) published.push(await publishB2Article(ELECTION_NIGHT));
+    // 29N candidates: the lists are read from the BOE at render time; this
+    // publishes the guide around them (re-running it also refreshes the page).
+    if (wants("candidates")) published.push(await publishB2Article(CANDIDATES));
     if (wants("family-markets")) published.push(await publishB2Article(ZOO_AQUARIUM), await publishB2Article(MARKETS));
     if (wants("cruiseport")) published.push(await publishB2Article(CRUISEPORT));
     if (wants("portaventura")) published.push(await publishB2Article(PORTAVENTURA));
