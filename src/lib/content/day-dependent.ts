@@ -8,7 +8,7 @@
  * daily, and a `lastmod` frozen at the last republish told Google there was
  * nothing to recrawl while its copy said the wrong day.
  */
-export const DAY_DEPENDENT_BLOCKS = ["holidayToday", "schoolCalendar", "clockChange", "weekendAgenda", "reservoirLevels", "metroTonight", "livingNativities", "snowDepth"];
+export const DAY_DEPENDENT_BLOCKS = ["holidayToday", "schoolCalendar", "clockChange", "weekendAgenda", "reservoirLevels", "metroTonight", "livingNativities", "snowDepth", "candidateLists"];
 
 /** Matches a block of one of those types in a body's jsonb text form. */
 export const DAY_DEPENDENT_PATTERN = `"type":\\s*"(${DAY_DEPENDENT_BLOCKS.join("|")})"`;

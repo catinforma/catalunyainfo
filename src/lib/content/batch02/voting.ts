@@ -403,6 +403,16 @@ const NIGHT_LABEL: Record<Locale, string> = {
   es: "a qué hora salen los resultados y cómo es el escrutinio",
   en: "when results come out and how the count works",
 };
+const CANDIDATES_LINK: Record<Locale, string> = {
+  ca: "Qui es presenta a cada província: ",
+  es: "Quién se presenta en cada provincia: ",
+  en: "Who is standing in each province: ",
+};
+const CANDIDATES_LABEL: Record<Locale, string> = {
+  ca: "les llistes de candidats de Barcelona, Girona, Lleida i Tarragona",
+  es: "las listas de candidatos de Barcelona, Girona, Lleida y Tarragona",
+  en: "the candidate lists for Barcelona, Girona, Lleida and Tarragona",
+};
 
 function body(locale: Locale) {
   const t = COPY[locale];
@@ -424,6 +434,7 @@ function body(locale: Locale) {
     list(
       MESA_LINK[locale] + b2link("mesa", locale, MESA_LABEL[locale]) + ".",
       NIGHT_LINK[locale] + b2link("electionNight", locale, NIGHT_LABEL[locale]) + ".",
+      CANDIDATES_LINK[locale] + b2link("candidates", locale, CANDIDATES_LABEL[locale]) + ".",
     ),
     ...h2(t.muniTitle, ...t.muni),
     faq(t.faq),

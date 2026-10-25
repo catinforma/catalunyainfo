@@ -60,7 +60,8 @@ export type B2Key =
   | "pessebres"
   | "christmasBarcelona"
   | "newYear"
-  | "snowNow";
+  | "snowNow"
+  | "candidates";
 
 /** Path after the locale prefix, no leading or trailing slash. */
 export const B2_PATHS: Record<B2Key, Record<Locale, string>> = {
@@ -293,6 +294,11 @@ export const B2_PATHS: Record<B2Key, Record<Locale, string>> = {
     ca: "guies/neu-pirineu-avui",
     es: "guias/nieve-pirineo-hoy",
     en: "guides/snow-pyrenees-today",
+  },
+  candidates: {
+    ca: "guies/candidats-eleccions-generals-catalunya",
+    es: "guias/candidatos-elecciones-generales-cataluna",
+    en: "guides/spain-general-election-candidates-catalonia",
   },
 };
 
@@ -535,6 +541,11 @@ export const B2_TITLES: Record<B2Key, Record<Locale, string>> = {
     ca: "Hi ha neu al Pirineu avui?",
     es: "¿Hay nieve en el Pirineo hoy?",
     en: "Is there snow in the Pyrenees today?",
+  },
+  candidates: {
+    ca: "Candidats a les eleccions generals a Catalunya",
+    es: "Candidatos a las elecciones generales en Cataluña",
+    en: "General election candidates in Catalonia",
   },
 };
 
