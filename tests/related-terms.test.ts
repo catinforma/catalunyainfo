@@ -13,6 +13,8 @@ test("keeps the subject words and drops what every page shares", () => {
 test("what the reader asks (hours, prices, tickets) is not a subject", () => {
   assert.deepEqual(relatedTerms("Ski resorts in Catalonia 2026-27: lift passes and runs"), ["ski", "resorts", "lift", "runs"]);
   assert.deepEqual(relatedTerms("Zoo y Aquarium de Barcelona: horario y precio de entradas"), ["zoo", "aquarium"]);
+  // "day pass" put the Sitges festival (festival pass) under the ski guide.
+  assert.ok(!relatedTerms("Ski resorts", "2026-27 day pass, opening and car-free access.").includes("pass"));
 });
 
 test("title words come before excerpt words, without repeats, and stop at twelve", () => {
