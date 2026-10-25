@@ -38,6 +38,7 @@ import { MUNICIPAL_RESULTS } from "@/lib/content/batch02/municipal-results";
 import { CLIMATE } from "@/lib/content/batch02/climate";
 import { SHOPS } from "@/lib/content/batch02/shops";
 import { CHRISTMAS } from "@/lib/content/batch02/christmas";
+import { PESSEBRES } from "@/lib/content/batch02/pessebres";
 import { PARKING, TRANSPORT } from "@/lib/content/batch02/barcelona-practical";
 import { ELECTION_NIGHT } from "@/lib/content/batch02/election-night";
 import { CONGRESS_RESULTS, PARLIAMENT_RESULTS } from "@/lib/content/batch02/election-results";
@@ -134,6 +135,9 @@ export async function POST(request: Request) {
     if (wants("climate")) published.push(await publishB2Article(CLIMATE));
     if (wants("shops")) published.push(await publishB2Article(SHOPS));
     if (wants("christmas")) published.push(await publishB2Article(CHRISTMAS));
+    // Living nativities: the calendar block reads the agenda live; this
+    // publishes the guide around it.
+    if (wants("pessebres")) published.push(await publishB2Article(PESSEBRES));
     if (wants("transport")) published.push(await publishB2Article(TRANSPORT));
     if (wants("parking")) published.push(await publishB2Article(PARKING));
     if (wants("election-night")) published.push(await publishB2Article(ELECTION_NIGHT));

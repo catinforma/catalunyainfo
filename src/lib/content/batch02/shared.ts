@@ -56,7 +56,8 @@ export type B2Key =
   | "touristTax"
   | "workCalendar"
   | "holidayToday"
-  | "christmas";
+  | "christmas"
+  | "pessebres";
 
 /** Path after the locale prefix, no leading or trailing slash. */
 export const B2_PATHS: Record<B2Key, Record<Locale, string>> = {
@@ -269,6 +270,11 @@ export const B2_PATHS: Record<B2Key, Record<Locale, string>> = {
     ca: "guies/on-veure-neu-catalunya-sense-esquiar",
     es: "guias/donde-ver-nieve-cataluna-sin-esquiar",
     en: "guides/where-to-see-snow-catalonia-without-skiing",
+  },
+  pessebres: {
+    ca: "tradicions/pessebres-vivents-catalunya",
+    es: "tradiciones/belenes-vivientes-cataluna",
+    en: "traditions/living-nativity-scenes-catalonia",
   },
 };
 
@@ -491,6 +497,11 @@ export const B2_TITLES: Record<B2Key, Record<Locale, string>> = {
     ca: "On veure neu sense esquiar",
     es: "Dónde ver nieve sin esquiar",
     en: "Where to see snow without skiing",
+  },
+  pessebres: {
+    ca: "Pessebres vivents a Catalunya: calendari",
+    es: "Belenes vivientes en Cataluña: calendario",
+    en: "Living nativity scenes in Catalonia",
   },
 };
 

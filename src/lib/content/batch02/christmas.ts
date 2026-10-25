@@ -204,7 +204,7 @@ function body(locale: Locale) {
       ...h2(
         "Fira de Santa Llúcia 2026: quan i on",
         "Segons l'Ajuntament de Barcelona, «des del 1786 es fa, al davant de la Catedral, la Fira de Santa Llúcia, una de les més populars de la ciutat». Les parades omplen el pla de la Seu i l'avinguda de la Catedral, s'hi instal·len a final de novembre o principi de desembre, **sempre abans del dia 13, Santa Llúcia**, i s'hi queden durant els dies de Nadal.",
-        "L'edició del 2025 va obrir el 28 de novembre i va tancar el 23 de desembre, amb 215 parades, segons l'Associació Fira de Santa Llúcia, que l'organitza i publica el calendari al seu web. És la fira on Barcelona compra el pessebre: figures, molsa, avets i herbes, a més d'artesania i regals.",
+        `L'edició del 2025 va obrir el 28 de novembre i va tancar el 23 de desembre, amb 215 parades, segons l'Associació Fira de Santa Llúcia, que l'organitza i publica el calendari al seu web. És la fira on Barcelona compra el pessebre: figures, molsa, avets i herbes, a més d'artesania i regals. Per veure'n un de vivent, mira ${b2link("pessebres", "ca", "el calendari de pessebres vivents")}.`,
       ),
       ...h2(
         "Fira de Nadal de la Sagrada Família",
@@ -274,7 +274,7 @@ function body(locale: Locale) {
       ...h2(
         "Fira de Santa Llúcia 2026: cuándo y dónde",
         "Según el Ayuntamiento de Barcelona, desde 1786 se celebra frente a la Catedral y es una de las ferias más populares de la ciudad. Los puestos llenan el pla de la Seu y la avenida de la Catedral, se instalan a finales de noviembre o principios de diciembre, **siempre antes del día 13, Santa Llúcia**, y se quedan durante los días de Navidad.",
-        "La edición de 2025 abrió el 28 de noviembre y cerró el 23 de diciembre, con 215 puestos, según la Associació Fira de Santa Llúcia, que la organiza y publica el calendario en su web. Es la feria donde Barcelona compra el belén: figuras, musgo, abetos y hierbas, además de artesanía y regalos.",
+        `La edición de 2025 abrió el 28 de noviembre y cerró el 23 de diciembre, con 215 puestos, según la Associació Fira de Santa Llúcia, que la organiza y publica el calendario en su web. Es la feria donde Barcelona compra el belén: figuras, musgo, abetos y hierbas, además de artesanía y regalos. Para ver uno viviente, mira ${b2link("pessebres", "es", "el calendario de belenes vivientes")}.`,
       ),
       ...h2(
         "Fira de Nadal de la Sagrada Família",
@@ -343,7 +343,7 @@ function body(locale: Locale) {
     ...h2(
       "Fira de Santa Llúcia 2026: when and where",
       "According to Barcelona City Council, the fair has been held in front of the Cathedral since 1786 and is one of the most popular in the city. Its stalls fill the Pla de la Seu and Avinguda de la Catedral; they set up at the end of November or the start of December, **always before 13 December, Santa Llúcia's day**, and stay through the Christmas days.",
-      "The 2025 edition opened on 28 November and closed on 23 December, with 215 stalls, according to the Associació Fira de Santa Llúcia, which runs it and publishes the calendar on its website. It is where Barcelona buys its nativity scene: figures, moss, fir trees and greenery, as well as crafts and gifts.",
+      `The 2025 edition opened on 28 November and closed on 23 December, with 215 stalls, according to the Associació Fira de Santa Llúcia, which runs it and publishes the calendar on its website. It is where Barcelona buys its nativity scene: figures, moss, fir trees and greenery, as well as crafts and gifts. For a living one, see ${b2link("pessebres", "en", "the living nativity calendar")}.`,
     ),
     ...h2(
       "Sagrada Família Christmas Fair",
