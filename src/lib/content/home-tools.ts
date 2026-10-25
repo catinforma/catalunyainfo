@@ -6,7 +6,7 @@ import type { Locale } from "@/lib/i18n/config";
  * publisher that owns it; a renamed slug must not leave a dead homepage link.
  */
 
-export type ToolKey = "holiday" | "weekend" | "localHolidays" | "transport" | "tax" | "mushrooms" | "reservoirs" | "school" | "airport" | "museums" | "monuments" | "cards" | "voting" | "barcelonaHub" | "clockChange" | "beaches" | "castanyada" | "shops" | "christmas" | "autumn" | "ski";
+export type ToolKey = "holiday" | "weekend" | "localHolidays" | "transport" | "tax" | "mushrooms" | "reservoirs" | "school" | "airport" | "museums" | "monuments" | "cards" | "voting" | "barcelonaHub" | "clockChange" | "beaches" | "castanyada" | "shops" | "christmas" | "autumn" | "ski" | "snowNow";
 
 export const PATHS: Record<ToolKey, Record<Locale, string>> = {
   holiday: {
@@ -114,6 +114,11 @@ export const PATHS: Record<ToolKey, Record<Locale, string>> = {
     es: "guias/estaciones-esqui-cataluna",
     en: "guides/ski-resorts-catalonia",
   },
+  snowNow: {
+    ca: "guies/neu-pirineu-avui",
+    es: "guias/nieve-pirineo-hoy",
+    en: "guides/snow-pyrenees-today",
+  },
 };
 
 /*
@@ -140,6 +145,9 @@ export const SEASONAL: { key: ToolKey; from: string; to: string }[] = [
   { key: "christmas", from: "11-02", to: "01-06" },
   { key: "shops", from: "10-20", to: "01-06" },
   { key: "ski", from: "11-15", to: "04-15" },
+  // Wider than the ski season at both ends: the page says so honestly when
+  // no station has snow, and early and late snow is what people search for.
+  { key: "snowNow", from: "10-25", to: "05-15" },
   { key: "autumn", from: "10-01", to: "11-30" },
 ];
 

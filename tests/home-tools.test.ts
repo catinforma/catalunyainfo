@@ -45,6 +45,7 @@ const OWNER: Record<ToolKey, (locale: (typeof LOCALES)[number]) => string> = {
   christmas: (l) => B2_PATHS.christmas[l],
   autumn: (l) => AUTUMN_COPY[l].path,
   ski: (l) => B2_PATHS.ski[l],
+  snowNow: (l) => B2_PATHS.snowNow[l],
 };
 
 test("every homepage tool links to the path its publisher uses", () => {

@@ -16,6 +16,7 @@ import { ClockChange } from "@/components/blocks/ClockChange";
 import { MunicipalElections } from "@/components/blocks/MunicipalElections";
 import { ElectionHistory } from "@/components/blocks/ElectionHistory";
 import { TouristTaxCalculator } from "@/components/blocks/TouristTaxCalculator";
+import { SnowDepth } from "@/components/blocks/SnowDepth";
 import type { Block, Body } from "@/lib/content/blocks";
 import { headingId } from "@/lib/content/blocks";
 import { renderInline, safeHref } from "@/lib/content/inline";
@@ -396,6 +397,10 @@ function BlockView({ block, context }: { block: Block; context: BlockContext }) 
     case "electionHistory":
       // Async server component: Generalitat election open data, cached a day.
       return <ElectionHistory locale={context.locale} kind={block.kind} />;
+
+    case "snowDepth":
+      // Async server component: Meteocat's validated snow depths, refreshed by the nightly cron.
+      return <SnowDepth locale={context.locale} />;
 
     case "contactForm":
       // The only interactive block. It carries no configuration from the

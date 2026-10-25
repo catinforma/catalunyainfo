@@ -348,6 +348,7 @@ const COPY: Record<Locale, T> = {
     snowTitle: "On mirar l'estat de la neu",
     snow: [
       "Cada estació publica cada dia les pistes obertes, el gruix de neu i els remuntadors en marxa: Baqueira a la secció «Estado de la estación» del seu web, les d'FGC a «Infoneu» de pirineu365.cat, Masella i Port del Comte al seu web. Mira-ho el mateix matí: a principi i final de temporada canvia d'un dia per l'altre.",
+      `Per saber si hi ha neu a terra a l'alta muntanya, fora de les pistes, mira ${b2link("snowNow", "ca", "el gruix de neu d'avui a les estacions meteorològiques del Meteocat")}.`,
     ],
     pickTitle: "Quina estació triar",
     pick: [
@@ -410,6 +411,7 @@ const COPY: Record<Locale, T> = {
     snowTitle: "Dónde mirar el estado de la nieve",
     snow: [
       "Cada estación publica a diario las pistas abiertas, el espesor de nieve y los remontes en marcha: Baqueira en la sección «Estado de la estación» de su web, las de FGC en «Infoneu» de pirineu365.cat, Masella y Port del Comte en su web. Míralo la misma mañana: a principio y final de temporada cambia de un día para otro.",
+      `Para saber si hay nieve en el suelo en la alta montaña, fuera de las pistas, mira ${b2link("snowNow", "es", "el espesor de nieve de hoy en las estaciones meteorológicas de Meteocat")}.`,
     ],
     pickTitle: "Qué estación elegir",
     pick: [
@@ -472,6 +474,7 @@ const COPY: Record<Locale, T> = {
     snowTitle: "Where to check the snow",
     snow: [
       "Each resort posts open runs, snow depth and running lifts daily: Baqueira in the 'Estado de la estación' section of its website, the FGC resorts under 'Infoneu' on pirineu365.cat, Masella and Port del Comte on their websites. Check on the morning itself: at the start and end of the season it changes from one day to the next.",
+      `To see whether there is snow on the ground in the high mountains away from the pistes, see ${b2link("snowNow", "en", "today's snow depth at Meteocat's weather stations")}.`,
     ],
     pickTitle: "Which resort to choose",
     pick: [

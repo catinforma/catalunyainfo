@@ -56,7 +56,8 @@ export type B2Key =
   | "touristTax"
   | "workCalendar"
   | "holidayToday"
-  | "christmas";
+  | "christmas"
+  | "snowNow";
 
 /** Path after the locale prefix, no leading or trailing slash. */
 export const B2_PATHS: Record<B2Key, Record<Locale, string>> = {
@@ -269,6 +270,11 @@ export const B2_PATHS: Record<B2Key, Record<Locale, string>> = {
     ca: "guies/on-veure-neu-catalunya-sense-esquiar",
     es: "guias/donde-ver-nieve-cataluna-sin-esquiar",
     en: "guides/where-to-see-snow-catalonia-without-skiing",
+  },
+  snowNow: {
+    ca: "guies/neu-pirineu-avui",
+    es: "guias/nieve-pirineo-hoy",
+    en: "guides/snow-pyrenees-today",
   },
 };
 
@@ -491,6 +497,11 @@ export const B2_TITLES: Record<B2Key, Record<Locale, string>> = {
     ca: "On veure neu sense esquiar",
     es: "Dónde ver nieve sin esquiar",
     en: "Where to see snow without skiing",
+  },
+  snowNow: {
+    ca: "Hi ha neu al Pirineu avui?",
+    es: "¿Hay nieve en el Pirineo hoy?",
+    en: "Is there snow in the Pyrenees today?",
   },
 };
 

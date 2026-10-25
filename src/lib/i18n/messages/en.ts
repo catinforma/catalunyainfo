@@ -59,6 +59,7 @@ const en: Messages = {
       christmas: { title: "Christmas markets", desc: "Fira de Santa Llúcia and the other Christmas markets: where they are and when they open." },
       autumn: { title: "Autumn colours", desc: "Where and when to see the autumn woods in Catalonia's natural parks." },
       ski: { title: "Ski resorts", desc: "Catalonia's ski resorts, the 2026-2027 season and how to get there." },
+      snowNow: { title: "Is there snow in the Pyrenees?", desc: "Snow depth on the ground at Meteocat's mountain weather stations, with the time of each reading." },
       museums: { title: "Free museums in Barcelona", desc: "The days and hours the MNAC, Picasso, MACBA and city museums charge nothing." },
       monuments: { title: "Gaudí monument tickets", desc: "Official prices and hours for the Sagrada Família, Park Güell, Casa Batlló and La Pedrera." },
       cards: { title: "Barcelona Card or Hola Barcelona", desc: "What each covers, and when the Barcelona Card pays off." },

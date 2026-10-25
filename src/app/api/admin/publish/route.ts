@@ -38,6 +38,8 @@ import { MUNICIPAL_RESULTS } from "@/lib/content/batch02/municipal-results";
 import { CLIMATE } from "@/lib/content/batch02/climate";
 import { SHOPS } from "@/lib/content/batch02/shops";
 import { CHRISTMAS } from "@/lib/content/batch02/christmas";
+import { SNOW_NOW } from "@/lib/content/batch02/snow-now";
+import { SNOW } from "@/lib/content/batch02/pyrenees";
 import { PARKING, TRANSPORT } from "@/lib/content/batch02/barcelona-practical";
 import { ELECTION_NIGHT } from "@/lib/content/batch02/election-night";
 import { CONGRESS_RESULTS, PARLIAMENT_RESULTS } from "@/lib/content/batch02/election-results";
@@ -134,6 +136,8 @@ export async function POST(request: Request) {
     if (wants("climate")) published.push(await publishB2Article(CLIMATE));
     if (wants("shops")) published.push(await publishB2Article(SHOPS));
     if (wants("christmas")) published.push(await publishB2Article(CHRISTMAS));
+    // The live snow-depth page, plus the ski and snow guides that now link to it.
+    if (wants("snow-now")) published.push(await publishB2Article(SNOW_NOW), await publishB2Article(SKI), await publishB2Article(SNOW));
     if (wants("transport")) published.push(await publishB2Article(TRANSPORT));
     if (wants("parking")) published.push(await publishB2Article(PARKING));
     if (wants("election-night")) published.push(await publishB2Article(ELECTION_NIGHT));
