@@ -7,6 +7,7 @@ import {
   h2,
   lead,
   list,
+  paras,
   table,
   verifiedLine,
   type B2Article,
@@ -20,15 +21,20 @@ import {
  * the calendar data behind its own page), markets from the City Council's
  * markets institute and its 2017, 2019 and Aug 2026 notes. Checked on
  * 12 Oct 2026 (research_notes/blog-batch-03/zoo_aquarium.md, markets.md);
- * all of it re-checked on 24 Oct 2026 against the same official pages.
+ * all of it re-checked on 24 Oct 2026 against the same official pages. The
+ * Zoo's winter hours were updated on 26 Oct 2026, after the clock change, from
+ * the Zoo's own daily line and the City Council's page on the Zoo
+ * (research_notes/rank-all/review-4-bcn-sights.md).
  *
- * Left out: the Zoo's seasonal timetable (the site shows only today's hours),
- * the Zoo Club price (the site states two), any Zoo + Aquarium combo (only
+ * Left out: the Zoo Club price (the site states two), any Zoo + Aquarium combo (only
  * resellers sell one), Boqueria stall-by-stall habits (blogs only), and the
  * group rules at Santa Caterina and Sant Antoni, which were not reconfirmed.
  */
 
 const VERIFIED = "2026-10-24";
+// The Zoo page alone was re-checked on 26 Oct 2026 (winter hours); the
+// markets page keeps VERIFIED.
+const ZOO_VERIFIED = "2026-10-26";
 type Meta = { path: string; title: string; seoTitle: string; seoDescription: string; excerpt: string };
 
 /* ========================================================================== */
@@ -40,6 +46,7 @@ const ZOO_SOURCES: B2Source[] = [
   { name: "Zoo de Barcelona — entradas y abonos", url: "https://www.zoobarcelona.cat/es/planifica-tu-visita/entradas-y-abonos", publisher: "Zoo de Barcelona (BSM)" },
   { name: "Zoo de Barcelona — horario del Zoo", url: "https://www.zoobarcelona.cat/es/visita-el-zoo/horario-del-zoo", publisher: "Zoo de Barcelona (BSM)" },
   { name: "Zoo de Barcelona — cómo llegar", url: "https://www.zoobarcelona.cat/es/planifica-tu-visita/como-llegar", publisher: "Zoo de Barcelona (BSM)" },
+  { name: "El Zoo de Barcelona — horaris", url: "https://www.barcelona.cat/en/discoverbcn/pics/el-zoo-de-barcelona-61171409", publisher: "Ajuntament de Barcelona" },
   { name: "L'Aquàrium de Barcelona — prices", url: "https://www.aquariumbcn.com/en/visit/prices/", publisher: "L'Aquàrium de Barcelona" },
   { name: "L'Aquàrium de Barcelona — opening hours", url: "https://www.aquariumbcn.com/en/visit/opening-hours/", publisher: "L'Aquàrium de Barcelona" },
   { name: "L'Aquàrium de Barcelona — how to get here", url: "https://www.aquariumbcn.com/en/plan-your-visit/how-to-get-here/", publisher: "L'Aquàrium de Barcelona" },
@@ -77,6 +84,7 @@ type ZT = {
   pTitle: string;
   pCaption: string; pHeaders: string[]; pRows: string[][]; pNote: string;
   zooTitle: string; zoo: string[];
+  zooCaption: string; zooHeaders: string[]; zooRows: string[][]; zooNote: string;
   aqTitle: string; aq: string[];
   aqCaption: string; aqHeaders: string[]; aqRows: string[][]; aqNote: string;
   getTitle: string; get: string[];
@@ -86,17 +94,22 @@ type ZT = {
 /**
  * Re-checked 24 Oct 2026. Zoo: zoobarcelona.cat/es/planifica-tu-visita/
  * entradas-y-abonos (prices), /visita-el-zoo/horario-del-zoo (today's hours
- * only: 10:00-17:30, gates and ticket offices close 17:00), home page (only
- * entrance inside the Parc de la Ciutadella; some areas closed for works),
- * /como-llegar (metro, Renfe, buses). The Zoo publishes no seasonal
- * calendar, so none is printed; the "open every day of the year / closes on
- * Christmas afternoon" line was dropped because no official page states it
- * today. Aquarium: /en/visit/prices/ and the openingHoursData calendar behind
+ * only), home page (only entrance inside the Parc de la Ciutadella; some
+ * areas closed for works), /como-llegar (metro, Renfe, buses).
+ * Zoo hours updated 26 Oct 2026: the Zoo's daily line read "Abierto 10:00 h |
+ * Cerrado 16:30 h" and "Cerramos taquillas y accesos a las 16:00"; the City
+ * Council's Zoo page (barcelona.cat, no year shown) gives the winter table
+ * (24 Oct-20 Dec and 8 Jan-28 Feb weekdays 10:00-16:30, weekends 10:00-17:30;
+ * 21 Dec-7 Jan every day 10:00-17:30; 25 Dec 10:00-14:00), consistent with
+ * the Zoo's own line on 24 and 26 Oct. Its "taquilles tanquen 1h abans" is
+ * not printed: the Zoo's own figure is 30 minutes. entradas-y-abonos states
+ * "El Zoo está abierto todos los días; solamente cierra el día de Navidad por
+ * la tarde", so that line is back. Aquarium: /en/visit/prices/ and the openingHoursData calendar behind
  * /en/visit/opening-hours/ (published to 31 Jan 2027).
  */
 const ZOO_COPY: Record<Locale, ZT> = {
   en: {
-    lead: "**Barcelona Zoo costs €23** (children 3 to 12, €13.90) and on 24 October 2026 it was open **10:00 to 17:30**, with ticket offices and gates closing at 17:00; you can only get in through the entrance inside the Parc de la Ciutadella. **The Aquarium costs €30** (ages 5 to 10, €23) and opens **10:00 to 20:00 every day until 1 November**; from 2 November it closes at 19:00 on weekdays. Both charge the same online and at the door, and they are a short metro ride apart.",
+    lead: "**Barcelona Zoo costs €23** (children 3 to 12, €13.90) and opens at 10:00 every day: until 20 December it closes at **16:30 on weekdays** and **17:30 at weekends and on public holidays**, and ticket offices and gates shut half an hour before closing. You can only get in through the entrance inside the Parc de la Ciutadella. **The Aquarium costs €30** (ages 5 to 10, €23) and opens 10:00 to 20:00 every day until 1 November; from 2 November to 20 December it closes at 19:00 on weekdays and 20:00 at weekends. Both charge the same online and at the door, and they are a short metro ride apart.",
     pTitle: "Barcelona Zoo and Aquarium ticket prices",
     pCaption: "Ticket prices in 2026",
     pHeaders: ["Ticket", "Zoo", "Aquarium"],
@@ -111,10 +124,18 @@ const ZOO_COPY: Record<Locale, ZT> = {
     pNote: "From zoobarcelona.cat and aquariumbcn.com, checked on 24 October 2026. There is no official combined Zoo and Aquarium ticket.",
     zooTitle: "Barcelona Zoo opening hours",
     zoo: [
-      "The Zoo publishes only the current day's hours. On **24 October 2026** it opened **10:00 to 17:30**, and ticket offices and gates closed at **17:00**. Hours change through the year, so check the Zoo's timetable page on the day.",
+      "The Zoo is open every day of the year; on Christmas Day it closes in the afternoon. On **Monday 26 October 2026** it opened 10:00 to 16:30, with ticket offices and gates closing at 16:00. The City Council's page on the Zoo gives the winter timetable below; check the Zoo's own timetable page on the day.",
       "**Entrance:** at the moment you can only get into the Zoo through the entrance inside the Parc de la Ciutadella. Some enclosures and areas are temporarily closed while the Zoo carries out improvement works; the rest of the park stays open.",
       "**Discounts:** large-family and single-parent family cards get 20% off at the ticket office. Visitors with a disability of 33% or more pay €6, with a free companion when the Zoo's conditions are met.",
     ],
+    zooCaption: "Barcelona Zoo winter opening hours",
+    zooHeaders: ["Dates", "Mon–Fri", "Sat, Sun and holidays"],
+    zooRows: [
+      ["24 October to 20 December 2026", "10:00–16:30", "10:00–17:30"],
+      ["21 December 2026 to 7 January 2027 (25 December 10:00–14:00)", "10:00–17:30", "10:00–17:30"],
+      ["8 January to 28 February 2027", "10:00–16:30", "10:00–17:30"],
+    ],
+    zooNote: "From barcelona.cat (City Council) and the Zoo's timetable page, checked on 26 October 2026. Gates close 30 minutes before closing.",
     aqTitle: "Barcelona Aquarium opening hours",
     aq: [
       "The Aquarium opens every day; the ticket office and entry close **one hour before closing time**. Its calendar is published to 31 January 2027:",
@@ -138,7 +159,7 @@ const ZOO_COPY: Record<Locale, ZT> = {
     ],
     faq: [
       { question: "How much is Barcelona Zoo?", answer: "€23 for adults and €13.90 for children aged 3 to 12; under-3s free; over-65s €11.20 at the ticket office. Same price online and at the gate." },
-      { question: "What time does Barcelona Zoo close?", answer: "On 24 October 2026 it closed at 17:30, with the last entry at 17:00. The Zoo publishes each day's hours on its website." },
+      { question: "What time does Barcelona Zoo close?", answer: "Until 20 December, at 16:30 on weekdays and 17:30 at weekends and on public holidays; last entry half an hour earlier. On Christmas Day it closes at 14:00." },
       { question: "How much is the Barcelona Aquarium?", answer: "€30 for adults, €23 for ages 5 to 10, €15 for ages 3 to 4, €25 for over-65s; under-3s free." },
       { question: "What are the Barcelona Aquarium's opening hours?", answer: "10:00 to 20:00 every day until 1 November 2026; from 2 November, 10:00 to 19:00 on weekdays and 10:00 to 20:00 at weekends. Last entry one hour before closing." },
       { question: "Is there a combined Zoo and Aquarium ticket?", answer: "Not from either venue. Only resellers offer combinations." },
@@ -146,7 +167,7 @@ const ZOO_COPY: Record<Locale, ZT> = {
     note: "Prices and hours change: check the Zoo and Aquarium websites for your date.",
   },
   es: {
-    lead: "**El Zoo de Barcelona cuesta 23 €** (niños de 3 a 12 años, 13,90 €) y el 24 de octubre de 2026 abría **de 10:00 a 17:30**, con taquillas y accesos cerrados a las 17:00; solo se entra por la puerta del interior del parque de la Ciutadella. **El Aquarium cuesta 30 €** (de 5 a 10 años, 23 €) y abre **de 10:00 a 20:00 todos los días hasta el 1 de noviembre**; desde el 2 de noviembre cierra a las 19:00 entre semana. Los dos cobran lo mismo en línea y en taquilla, y están a poca distancia en metro.",
+    lead: "**El Zoo de Barcelona cuesta 23 €** (niños de 3 a 12 años, 13,90 €) y abre a las 10:00 todos los días: hasta el 20 de diciembre cierra a las **16:30 entre semana** y a las **17:30 los fines de semana y festivos**, y las taquillas y los accesos cierran media hora antes. Solo se entra por la puerta del interior del parque de la Ciutadella. **El Aquarium cuesta 30 €** (de 5 a 10 años, 23 €) y abre de 10:00 a 20:00 todos los días hasta el 1 de noviembre; del 2 de noviembre al 20 de diciembre cierra a las 19:00 entre semana y a las 20:00 los fines de semana. Los dos cobran lo mismo en línea y en taquilla, y están a poca distancia en metro.",
     pTitle: "Precio de las entradas del Zoo y del Aquarium",
     pCaption: "Precios de las entradas en 2026",
     pHeaders: ["Entrada", "Zoo", "Aquarium"],
@@ -161,10 +182,18 @@ const ZOO_COPY: Record<Locale, ZT> = {
     pNote: "De zoobarcelona.cat y aquariumbcn.com, comprobado el 24 de octubre de 2026. No hay entrada combinada oficial Zoo y Aquarium.",
     zooTitle: "Horario del Zoo de Barcelona",
     zoo: [
-      "El Zoo publica solo el horario del día. El **24 de octubre de 2026** abría **de 10:00 a 17:30**, y las taquillas y los accesos cerraban a las **17:00**. El horario cambia a lo largo del año: compruébalo en la página de horario del Zoo el mismo día.",
+      "El Zoo abre todos los días del año; el día de Navidad cierra por la tarde. El **lunes 26 de octubre de 2026** abrió de 10:00 a 16:30, con taquillas y accesos cerrados a las 16:00. La página del Ayuntamiento sobre el Zoo da el horario de invierno de la tabla; compruébalo el mismo día en la página de horario del Zoo.",
       "**Entrada:** actualmente al Zoo solo se accede por la entrada situada en el interior del parque de la Ciutadella. Algunas instalaciones y espacios no se pueden visitar temporalmente por obras de mejora; el resto del parque sigue abierto.",
       "**Descuentos:** las familias numerosas y monoparentales tienen un 20 % de descuento en taquilla presentando el carné. Las personas con una discapacidad del 33 % o más pagan 6 €, con acompañante gratuito si se cumplen las condiciones del Zoo.",
     ],
+    zooCaption: "Horario de invierno del Zoo de Barcelona",
+    zooHeaders: ["Fechas", "Lun–vie", "Sáb, dom y festivos"],
+    zooRows: [
+      ["Del 24 de octubre al 20 de diciembre de 2026", "10:00–16:30", "10:00–17:30"],
+      ["Del 21 de diciembre de 2026 al 7 de enero de 2027 (25 de diciembre, 10:00–14:00)", "10:00–17:30", "10:00–17:30"],
+      ["Del 8 de enero al 28 de febrero de 2027", "10:00–16:30", "10:00–17:30"],
+    ],
+    zooNote: "De barcelona.cat (Ayuntamiento) y de la página de horario del Zoo, comprobado el 26 de octubre de 2026. Taquillas y accesos cierran 30 minutos antes del cierre.",
     aqTitle: "Horario del Aquarium de Barcelona",
     aq: [
       "El Aquarium abre todos los días; la taquilla y el acceso cierran **una hora antes del cierre**. Tiene el calendario publicado hasta el 31 de enero de 2027:",
@@ -188,7 +217,7 @@ const ZOO_COPY: Record<Locale, ZT> = {
     ],
     faq: [
       { question: "¿Cuánto cuesta la entrada al Zoo de Barcelona?", answer: "23 € los adultos y 13,90 € los niños de 3 a 12 años; los menores de 3, gratis; los mayores de 65, 11,20 € en taquilla. Mismo precio en línea y en taquilla." },
-      { question: "¿A qué hora cierra el Zoo de Barcelona?", answer: "El 24 de octubre de 2026 cerraba a las 17:30, con último acceso a las 17:00. El Zoo publica el horario de cada día en su web." },
+      { question: "¿A qué hora cierra el Zoo de Barcelona?", answer: "Hasta el 20 de diciembre, a las 16:30 entre semana y a las 17:30 los fines de semana y festivos; último acceso media hora antes. El día de Navidad cierra a las 14:00." },
       { question: "¿Cuánto cuesta el Aquarium de Barcelona?", answer: "30 € adultos, 23 € de 5 a 10 años, 15 € de 3 a 4 años, 25 € mayores de 65; menores de 3, gratis." },
       { question: "¿Cuál es el horario del Aquarium de Barcelona?", answer: "De 10:00 a 20:00 todos los días hasta el 1 de noviembre de 2026; desde el 2 de noviembre, de 10:00 a 19:00 entre semana y de 10:00 a 20:00 los fines de semana. Último acceso una hora antes del cierre." },
       { question: "¿Hay entrada combinada Zoo y Aquarium?", answer: "No por parte de ninguno de los dos. Solo los revendedores ofrecen combinados." },
@@ -196,7 +225,7 @@ const ZOO_COPY: Record<Locale, ZT> = {
     note: "Precios y horarios cambian: consulta las webs del Zoo y del Aquarium para tu fecha.",
   },
   ca: {
-    lead: "**El Zoo de Barcelona costa 23 €** (infants de 3 a 12 anys, 13,90 €) i el 24 d'octubre de 2026 obria **de 10:00 a 17:30**, amb taquilles i accessos tancats a les 17:00; només s'hi entra per la porta de l'interior del parc de la Ciutadella. **L'Aquàrium costa 30 €** (de 5 a 10 anys, 23 €) i obre **de 10:00 a 20:00 cada dia fins a l'1 de novembre**; des del 2 de novembre tanca a les 19:00 entre setmana. Tots dos cobren el mateix en línia i a taquilla, i són a poca distància en metro.",
+    lead: "**El Zoo de Barcelona costa 23 €** (infants de 3 a 12 anys, 13,90 €) i obre a les 10:00 cada dia: fins al 20 de desembre tanca a les **16:30 entre setmana** i a les **17:30 els caps de setmana i festius**, i les taquilles i els accessos tanquen mitja hora abans. Només s'hi entra per la porta de l'interior del parc de la Ciutadella. **L'Aquàrium costa 30 €** (de 5 a 10 anys, 23 €) i obre de 10:00 a 20:00 cada dia fins a l'1 de novembre; del 2 de novembre al 20 de desembre tanca a les 19:00 entre setmana i a les 20:00 els caps de setmana. Tots dos cobren el mateix en línia i a taquilla, i són a poca distància en metro.",
     pTitle: "Preu de les entrades del Zoo i de l'Aquàrium",
     pCaption: "Preus de les entrades el 2026",
     pHeaders: ["Entrada", "Zoo", "Aquàrium"],
@@ -211,10 +240,18 @@ const ZOO_COPY: Record<Locale, ZT> = {
     pNote: "De zoobarcelona.cat i aquariumbcn.com, comprovat el 24 d'octubre de 2026. No hi ha entrada combinada oficial Zoo i Aquàrium.",
     zooTitle: "Horari del Zoo de Barcelona",
     zoo: [
-      "El Zoo publica només l'horari del dia. El **24 d'octubre de 2026** obria **de 10:00 a 17:30**, i les taquilles i els accessos tancaven a les **17:00**. L'horari canvia al llarg de l'any: comprova'l a la pàgina d'horari del Zoo el mateix dia.",
+      "El Zoo obre cada dia de l'any; el dia de Nadal tanca a la tarda. El **dilluns 26 d'octubre de 2026** va obrir de 10:00 a 16:30, amb taquilles i accessos tancats a les 16:00. La pàgina de l'Ajuntament sobre el Zoo dona l'horari d'hivern de la taula; comprova'l el mateix dia a la pàgina d'horari del Zoo.",
       "**Entrada:** actualment l'accés al Zoo es fa únicament per l'entrada situada a l'interior del parc de la Ciutadella. Algunes instal·lacions i espais no es poden visitar temporalment per obres de millora; la resta del parc continua obert.",
       "**Descomptes:** les famílies nombroses i monoparentals tenen un 20 % de descompte a taquilla presentant el carnet. Les persones amb una discapacitat del 33 % o més paguen 6 €, amb acompanyant gratuït si es compleixen les condicions del Zoo.",
     ],
+    zooCaption: "Horari d'hivern del Zoo de Barcelona",
+    zooHeaders: ["Dates", "Dl–dv", "Ds, dg i festius"],
+    zooRows: [
+      ["Del 24 d'octubre al 20 de desembre de 2026", "10:00–16:30", "10:00–17:30"],
+      ["Del 21 de desembre de 2026 al 7 de gener de 2027 (25 de desembre, 10:00–14:00)", "10:00–17:30", "10:00–17:30"],
+      ["Del 8 de gener al 28 de febrer de 2027", "10:00–16:30", "10:00–17:30"],
+    ],
+    zooNote: "De barcelona.cat (Ajuntament) i de la pàgina d'horari del Zoo, comprovat el 26 d'octubre de 2026. Taquilles i accessos tanquen 30 minuts abans del tancament.",
     aqTitle: "Horari de l'Aquàrium de Barcelona",
     aq: [
       "L'Aquàrium obre cada dia; la taquilla i l'accés tanquen **una hora abans del tancament**. Té el calendari publicat fins al 31 de gener de 2027:",
@@ -238,7 +275,7 @@ const ZOO_COPY: Record<Locale, ZT> = {
     ],
     faq: [
       { question: "Quant costa l'entrada al Zoo de Barcelona?", answer: "23 € els adults i 13,90 € els infants de 3 a 12 anys; els menors de 3, gratis; els majors de 65, 11,20 € a taquilla. Mateix preu en línia i a taquilla." },
-      { question: "A quina hora tanca el Zoo de Barcelona?", answer: "El 24 d'octubre de 2026 tancava a les 17:30, amb últim accés a les 17:00. El Zoo publica l'horari de cada dia al seu web." },
+      { question: "A quina hora tanca el Zoo de Barcelona?", answer: "Fins al 20 de desembre, a les 16:30 entre setmana i a les 17:30 els caps de setmana i festius; últim accés mitja hora abans. El dia de Nadal tanca a les 14:00." },
       { question: "Quant costa l'Aquàrium de Barcelona?", answer: "30 € adults, 23 € de 5 a 10 anys, 15 € de 3 a 4 anys, 25 € majors de 65; menors de 3, gratis." },
       { question: "Quin és l'horari de l'Aquàrium de Barcelona?", answer: "De 10:00 a 20:00 cada dia fins a l'1 de novembre de 2026; des del 2 de novembre, de 10:00 a 19:00 entre setmana i de 10:00 a 20:00 els caps de setmana. Últim accés una hora abans del tancament." },
       { question: "Hi ha entrada combinada Zoo i Aquàrium?", answer: "No per part de cap dels dos. Només els revenedors ofereixen combinats." },
@@ -251,10 +288,12 @@ function zooBody(locale: Locale) {
   const t = ZOO_COPY[locale];
   return [
     lead(t.lead),
-    callout("official", verifiedLine(locale, VERIFIED), t.note),
+    callout("official", verifiedLine(locale, ZOO_VERIFIED), t.note),
     ...h2(t.pTitle),
     table(t.pCaption, t.pHeaders, t.pRows, t.pNote),
-    ...h2(t.zooTitle, ...t.zoo),
+    ...h2(t.zooTitle, t.zoo[0]!),
+    table(t.zooCaption, t.zooHeaders, t.zooRows, t.zooNote),
+    ...paras(...t.zoo.slice(1)),
     ...h2(t.aqTitle, ...t.aq),
     table(t.aqCaption, t.aqHeaders, t.aqRows, t.aqNote),
     ...h2(t.getTitle),
@@ -291,7 +330,7 @@ export const ZOO_AQUARIUM: B2Article = {
     es: "La entrada del Zoo, en el parque de la Ciutadella.",
     en: "The Zoo entrance in the Parc de la Ciutadella.",
   },
-  verifiedAt: VERIFIED,
+  verifiedAt: ZOO_VERIFIED,
   publishedAt: "2026-10-13T01:30:00+02:00",
   editions: Object.fromEntries(
     (["ca", "es", "en"] as Locale[]).map((locale) => [locale, { ...ZOO_META[locale], blocks: zooBody(locale) }]),

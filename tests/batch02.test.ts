@@ -487,21 +487,25 @@ test("parking: zone summary table and a blue-vs-green answer that matches the ra
 });
 
 /**
- * Zoo and markets, re-checked 24 Oct 2026. The Zoo publishes only today's
- * hours and says visitors enter only through the Ciutadella entrance; no
- * official page states "open every day of the year", so that line went.
+ * Zoo and markets, re-checked 24 Oct 2026; Zoo hours updated 26 Oct 2026,
+ * after the clock change. The Zoo says visitors enter only through the
+ * Ciutadella entrance. Since 26 Oct it closes at 16:30 on weekdays (17:30 at
+ * weekends), per its own daily line and the City Council's winter table; its
+ * tickets page states it is open every day and closes on Christmas afternoon.
  * The Aquarium calendar is published to 31 Jan 2027.
  */
-test("zoo: Ciutadella-only entrance, dated zoo hours, aquarium calendar, no unverified 365-day claim", () => {
+test("zoo: Ciutadella-only entrance, winter zoo hours table, aquarium calendar", () => {
   const entrance = { ca: /únicament per l'entrada situada a l'interior del parc de la Ciutadella/, es: /solo se accede por la entrada situada en el interior del parque de la Ciutadella/, en: /only get into the Zoo through the entrance inside the Parc de la Ciutadella/ };
   for (const locale of ["ca", "es", "en"] as const) {
     const text = bodyToPlainText(ZOO_AQUARIUM.editions[locale].blocks);
     assert.match(text, entrance[locale], `${locale}: entrance`);
-    assert.match(text, /17:30/, `${locale}: dated zoo closing time`);
-    assert.doesNotMatch(text, /every day of the year|todos los días del año|cada dia de l'any/i);
+    assert.match(text, /16:30/, `${locale}: weekday winter closing time`);
+    assert.match(text, /17:30/, `${locale}: weekend winter closing time`);
+    assert.doesNotMatch(text, /17:00/, `${locale}: no stale 24 Oct last-entry time`);
     const tables = (ZOO_AQUARIUM.editions[locale].blocks as { type: string; rows?: string[][] }[]).filter((b) => b.type === "table");
-    assert.equal(tables.length, 2, `${locale}: prices + aquarium hours`);
-    assert.equal(tables[1]?.rows?.length, 6, `${locale}: aquarium date ranges to 31 Jan 2027`);
+    assert.equal(tables.length, 3, `${locale}: prices + zoo hours + aquarium hours`);
+    assert.equal(tables[1]?.rows?.length, 3, `${locale}: zoo winter date ranges to 28 Feb 2027`);
+    assert.equal(tables[2]?.rows?.length, 6, `${locale}: aquarium date ranges to 31 Jan 2027`);
   }
 });
 

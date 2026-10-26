@@ -36,11 +36,20 @@ import {
  * Pau's children's price is omitted because its own page states two
  * different rules.
  *
+ * Fixed on 26 Oct 2026 (research_notes/rank-all/review-4-bcn-sights.md):
+ * Park Güell's ticket slots run "From 9:30 am to 17:30 pm" (parkguell.barcelona
+ * prices-and-times), not to 19:30; the Sagrada Família conditions of sale
+ * (cl. 19.2) give a partial refund of the towers part when the towers close
+ * for adverse weather, breakdowns, maintenance or force majeure, "but in no
+ * case the amount paid for the visit to the Temple"; Casa Batlló's opening
+ * hours page states only 8:30-22:30, every day, last admission 21:30, so the
+ * 9:00-19:45 general-visit window and the dated night-visit price went.
+ *
  * No reseller links. Sagrada Família refuses tickets bought from resellers,
  * and Park Güell bans resale: the useful advice is the official site.
  */
 
-const VERIFIED = "2026-10-24";
+const VERIFIED = "2026-10-26";
 
 const SOURCES: B2Source[] = [
   { name: "Sagrada Família — prices", url: "https://sagradafamilia.org/en/prices", publisher: "Junta Constructora del Temple de la Sagrada Família" },
@@ -128,14 +137,14 @@ const COPY: Record<Locale, T> = {
     headers: ["Monument", "Adult ticket", "Free", "Winter hours"],
     rows: [
       ["Sagrada Família", "€26 (towers €36)", "Under 11s", "Nov–Feb: Mon–Sat 9:00–18:00, Sun 10:30–18:00"],
-      ["Park Güell (Monumental Zone)", "€18, online only", "Ages 0–6 (ticket still needed)", "Ticket slots 9:30–19:30"],
+      ["Park Güell (Monumental Zone)", "€18, online only", "Ages 0–6 (ticket still needed)", "Ticket slots 9:30–17:30"],
       ["Casa Batlló", "From €29 (varies by date)", "Ages 0–12, with an adult", "Daily 8:30–22:30"],
       ["Casa Milà – La Pedrera", "From €29", "Ages 0–11", "2 Nov–25 Feb: daily 9:00–18:30"],
       ["Sant Pau Recinte Modernista", "€18 before 14:00, €17 after", "See the official page", "Nov–Mar: daily 9:30–17:00"],
     ],
     tableNote: "Prices from each monument's official site; Casa Batlló uses date-based pricing and quotes a 'from' price.",
     checkTitle: "Temporary closures",
-    checkText: "The Sagrada Família may change its hours for special events, and its towers can close with no refund; every monument posts closures on its own site. Check the day before.",
+    checkText: "The Sagrada Família may change its hours for special events. If its towers close for weather, breakdowns or maintenance, the conditions of sale refund only the towers part of the ticket, never the Basilica visit. Every monument posts closures on its own site: check the day before.",
     sfTitle: "Sagrada Família",
     sf: [
       `The basic ticket, with the audio-guide app, is **€26**; with a guided tour **€30**, with the towers **€36**, and both **€40** (${a("official prices", URL.sf)}). Under 30s and holders of a student card pay €24 for the basic ticket, seniors €21; under 11s and people with disabilities go free. Children under 6 may not go up the towers. Tickets carry the visitor's name, and you need official photo ID to get in.`,
@@ -143,13 +152,13 @@ const COPY: Record<Locale, T> = {
     ],
     pgTitle: "Park Güell",
     pg: [
-      `The Monumental Zone costs **€18**; ages 7–12 and over-65s pay €13.50, and children up to 6 go free but still need a ticket (${a("official prices", URL.pg)}). Tickets are **sold online only**, for a 30-minute slot between 9:30 and 19:30; you must enter within that half hour and cannot re-enter.`,
+      `The Monumental Zone costs **€18**; ages 7–12 and over-65s pay €13.50, and children up to 6 go free but still need a ticket (${a("official prices", URL.pg)}). Tickets are **sold online only**, for a 30-minute slot between 9:30 and 17:30; you must enter within that half hour and cannot re-enter.`,
       `People registered as residents of Barcelona get in free with the **Passi Verd**, booked on the same day only: it cannot be reserved in advance (${a("Passi Verd", URL.passi)}).`,
     ],
     batlloTitle: "Casa Batlló",
     batllo: [
       `Casa Batlló prices change with the date and time: the general visit, with an audio guide in 15 languages, starts **from €29**, and buying in advance online saves up to €15 per person (${a("official tickets", URL.batllo)}). Children aged 0 to 12 with an adult go free; ages 13–17 and students get €6 off, over-65s €3 off.`,
-      "It is open every day of the year from 8:30 to 22:30; the general visit admits from 9:00 to 19:45, and a separate night visit is sold online (from €25 until 15 November).",
+      "It is open every day of the year from 8:30 to 22:30, with last admission at 21:30; a separate night visit is sold online only.",
     ],
     pedreraTitle: "Casa Milà – La Pedrera",
     pedrera: [
@@ -183,14 +192,14 @@ const COPY: Record<Locale, T> = {
     headers: ["Monumento", "Entrada adulto", "Gratis", "Horario de invierno"],
     rows: [
       ["Sagrada Familia", "26 € (torres 36 €)", "Menores de 11", "Nov–feb: lun–sáb 9:00–18:00, dom 10:30–18:00"],
-      ["Park Güell (Zona Monumental)", "18 €, solo en línea", "0–6 años (con entrada)", "Franjas de entrada 9:30–19:30"],
+      ["Park Güell (Zona Monumental)", "18 €, solo en línea", "0–6 años (con entrada)", "Franjas de entrada 9:30–17:30"],
       ["Casa Batlló", "Desde 29 € (según la fecha)", "0–12 años, con un adulto", "Cada día 8:30–22:30"],
       ["Casa Milà – La Pedrera", "Desde 29 €", "0–11 años", "2 nov–25 feb: cada día 9:00–18:30"],
       ["Recinte Modernista de Sant Pau", "18 € antes de las 14:00, 17 € después", "Ver la página oficial", "Nov–mar: cada día 9:30–17:00"],
     ],
     tableNote: "Precios de la web oficial de cada monumento; la Casa Batlló usa precios según la fecha y publica un precio «desde».",
     checkTitle: "Cierres temporales",
-    checkText: "La Sagrada Familia puede cambiar el horario por actos especiales, y las torres pueden cerrar sin reembolso; cada monumento anuncia los cierres en su web. Compruébalo el día antes.",
+    checkText: "La Sagrada Familia puede cambiar el horario por actos especiales. Si las torres cierran por meteorología, averías o mantenimiento, las condiciones de venta devuelven solo la parte de las torres, nunca la visita al templo. Cada monumento anuncia los cierres en su web: compruébalo el día antes.",
     sfTitle: "Sagrada Familia",
     sf: [
       `La entrada básica, con la audioguía en app, cuesta **26 €**; con visita guiada **30 €**, con torres **36 €** y con las dos cosas **40 €** (${a("precios oficiales", URL.sf)}). Los menores de 30 y quien tiene carnet de estudiante pagan 24 € la básica, los sénior 21 €; los menores de 11 y las personas con discapacidad entran gratis. Los menores de 6 no pueden subir a las torres. Las entradas son nominativas y para entrar hay que mostrar un documento oficial con foto.`,
@@ -198,13 +207,13 @@ const COPY: Record<Locale, T> = {
     ],
     pgTitle: "Park Güell",
     pg: [
-      `La Zona Monumental cuesta **18 €**; de 7 a 12 años y mayores de 65 pagan 13,50 €, y los niños hasta 6 años entran gratis pero necesitan entrada (${a("precios oficiales", URL.pg)}). Las entradas **solo se venden en línea**, para una franja de 30 minutos entre las 9:30 y las 19:30; hay que entrar dentro de esa media hora y no se puede volver a entrar.`,
+      `La Zona Monumental cuesta **18 €**; de 7 a 12 años y mayores de 65 pagan 13,50 €, y los niños hasta 6 años entran gratis pero necesitan entrada (${a("precios oficiales", URL.pg)}). Las entradas **solo se venden en línea**, para una franja de 30 minutos entre las 9:30 y las 17:30; hay que entrar dentro de esa media hora y no se puede volver a entrar.`,
       `Las personas empadronadas en Barcelona entran gratis con el **Passi Verd**, que solo se reserva el mismo día: no admite reservas anticipadas (${a("Passi Verd", URL.passi)}).`,
     ],
     batlloTitle: "Casa Batlló",
     batllo: [
       `Los precios de la Casa Batlló cambian según el día y la hora: la visita general, con audioguía en 15 idiomas, empieza **desde 29 €**, y comprar en línea con antelación ahorra hasta 15 € por persona (${a("entradas oficiales", URL.batllo)}). Los niños de 0 a 12 años con un adulto entran gratis; de 13 a 17 y estudiantes tienen 6 € de descuento, y los mayores de 65, 3 €.`,
-      "Abre todos los días del año de 8:30 a 22:30; la visita general admite de 9:00 a 19:45, y aparte se vende en línea una visita de noche (desde 25 € hasta el 15 de noviembre).",
+      "Abre todos los días del año de 8:30 a 22:30, con último acceso a las 21:30; aparte se vende solo en línea una visita de noche.",
     ],
     pedreraTitle: "Casa Milà – La Pedrera",
     pedrera: [
@@ -238,14 +247,14 @@ const COPY: Record<Locale, T> = {
     headers: ["Monument", "Entrada adult", "Gratis", "Horari d'hivern"],
     rows: [
       ["Sagrada Família", "26 € (torres 36 €)", "Menors d'11", "Nov–febr: dl–ds 9:00–18:00, dg 10:30–18:00"],
-      ["Park Güell (Zona Monumental)", "18 €, només en línia", "0–6 anys (amb entrada)", "Franges d'entrada 9:30–19:30"],
+      ["Park Güell (Zona Monumental)", "18 €, només en línia", "0–6 anys (amb entrada)", "Franges d'entrada 9:30–17:30"],
       ["Casa Batlló", "Des de 29 € (segons la data)", "0–12 anys, amb un adult", "Cada dia 8:30–22:30"],
       ["Casa Milà – La Pedrera", "Des de 29 €", "0–11 anys", "2 nov–25 febr: cada dia 9:00–18:30"],
       ["Recinte Modernista de Sant Pau", "18 € abans de les 14:00, 17 € després", "Vegeu la pàgina oficial", "Nov–març: cada dia 9:30–17:00"],
     ],
     tableNote: "Preus del web oficial de cada monument; la Casa Batlló fa preus segons la data i en publica un «des de».",
     checkTitle: "Tancaments temporals",
-    checkText: "La Sagrada Família pot canviar l'horari per actes especials, i les torres poden tancar sense reemborsament; cada monument anuncia els tancaments al seu web. Comprova-ho el dia abans.",
+    checkText: "La Sagrada Família pot canviar l'horari per actes especials. Si les torres tanquen per meteorologia, avaries o manteniment, les condicions de venda retornen només la part de les torres, mai la visita al temple. Cada monument anuncia els tancaments al seu web: comprova-ho el dia abans.",
     sfTitle: "Sagrada Família",
     sf: [
       `L'entrada bàsica, amb l'audioguia en app, costa **26 €**; amb visita guiada **30 €**, amb torres **36 €** i amb totes dues coses **40 €** (${a("preus oficials", URL.sf)}). Els menors de 30 anys i qui té carnet d'estudiant paguen 24 € la bàsica, els sèniors 21 €; els menors d'11 anys i les persones amb discapacitat hi entren gratis. Els menors de 6 anys no poden pujar a les torres. Les entrades són nominatives i per entrar cal mostrar un document oficial amb foto.`,
@@ -253,13 +262,13 @@ const COPY: Record<Locale, T> = {
     ],
     pgTitle: "Park Güell",
     pg: [
-      `La Zona Monumental costa **18 €**; de 7 a 12 anys i majors de 65 paguen 13,50 €, i els infants fins a 6 anys hi entren gratis però necessiten entrada (${a("preus oficials", URL.pg)}). Les entrades **només es venen en línia**, per a una franja de 30 minuts entre les 9:30 i les 19:30; cal entrar dins d'aquella mitja hora i no es pot tornar a entrar.`,
+      `La Zona Monumental costa **18 €**; de 7 a 12 anys i majors de 65 paguen 13,50 €, i els infants fins a 6 anys hi entren gratis però necessiten entrada (${a("preus oficials", URL.pg)}). Les entrades **només es venen en línia**, per a una franja de 30 minuts entre les 9:30 i les 17:30; cal entrar dins d'aquella mitja hora i no es pot tornar a entrar.`,
       `Les persones empadronades a Barcelona hi entren gratis amb el **Passi Verd**, que només es reserva el mateix dia: no admet reserves anticipades (${a("Passi Verd", URL.passi)}).`,
     ],
     batlloTitle: "Casa Batlló",
     batllo: [
       `Els preus de la Casa Batlló canvien segons el dia i l'hora: la visita general, amb audioguia en 15 idiomes, comença **des de 29 €**, i comprar en línia amb antelació estalvia fins a 15 € per persona (${a("entrades oficials", URL.batllo)}). Els infants de 0 a 12 anys amb un adult hi entren gratis; de 13 a 17 anys i estudiants tenen 6 € de descompte, i els majors de 65, 3 €.`,
-      "Obre tots els dies de l'any de 8:30 a 22:30; la visita general admet de 9:00 a 19:45, i a part es ven en línia una visita de nit (des de 25 € fins al 15 de novembre).",
+      "Obre tots els dies de l'any de 8:30 a 22:30, amb últim accés a les 21:30; a part es ven només en línia una visita de nit.",
     ],
     pedreraTitle: "Casa Milà – La Pedrera",
     pedrera: [

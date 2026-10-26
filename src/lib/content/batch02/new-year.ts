@@ -36,6 +36,13 @@ import {
  * shop rules. Nothing for 2026-27 was published that day, so the lead says so
  * and every detail of the last edition carries its year.
  *
+ * 26 Oct 2026: the descriptions and the metro key fact no longer present
+ * Avinguda de la Reina Maria Cristina or Espanya as this year's venue and
+ * station; they carry 2024 and 2025. The City Council moved the 2026 Mercè
+ * Piromusical to Nova Icària beach, and the press reports of a 2026 move to
+ * the Anella Olímpica cite no official source, so no 2026 venue is printed
+ * (research_notes/rank-all/review-4-bcn-sights.md).
+ *
  * No new photograph: the hero is the Magic Fountain picture already in the
  * manifest (the Montjuïc guide's lead image), because the publisher refuses
  * an article without one.
@@ -67,7 +74,7 @@ export const NEW_YEAR_META: Record<Locale, { path: string; title: string; seoTit
     title: "Cap d'Any a Barcelona 2026-27: la festa de Montjuïc, el metro i l'1 de gener",
     seoTitle: "Cap d'Any Barcelona 2026: la revetlla a Montjuïc i el metro",
     seoDescription:
-      "Revetlla de Cap d'Any a Barcelona: l'espectacle gratuït de l'avinguda Maria Cristina, si ja té data, accessos, metro tota la nit i què obre l'1 de gener.",
+      "Cap d'Any a Barcelona: què s'ha anunciat per al 2026, on es va fer l'espectacle gratuït el 2024 i el 2025, el metro tota la nit i què obre l'1 de gener.",
     excerpt:
       "Cap d'Any a Barcelona: on es fa la festa de la ciutat, què se sap del 2026, com s'hi entra, el metro tota la nit, els dotze grans de raïm i què obre l'1 de gener.",
   },
@@ -76,7 +83,7 @@ export const NEW_YEAR_META: Record<Locale, { path: string; title: string; seoTit
     title: "Nochevieja en Barcelona 2026-27: fin de año en Montjuïc, metro y 1 de enero",
     seoTitle: "Nochevieja Barcelona 2026: fin de año en Montjuïc y metro",
     seoDescription:
-      "Fin de año en Barcelona: el espectáculo gratis de la avenida Maria Cristina (Montjuïc), qué se sabe de 2026, accesos, metro toda la noche y el 1 de enero.",
+      "Nochevieja en Barcelona: qué se ha anunciado para 2026, dónde fue el espectáculo gratis en 2024 y 2025, el metro toda la noche y qué abre el 1 de enero.",
     excerpt:
       "Nochevieja en Barcelona: dónde es la fiesta de la ciudad, qué se sabe de 2026, cómo se entra, el metro toda la noche, las 12 uvas y qué abre el 1 de enero.",
   },
@@ -85,7 +92,7 @@ export const NEW_YEAR_META: Record<Locale, { path: string; title: string; seoTit
     title: "New Year's Eve in Barcelona 2026-27: the Montjuïc show, metro and 1 January",
     seoTitle: "New Year's Eve Barcelona 2026: Montjuïc fireworks, metro",
     seoDescription:
-      "Barcelona's free New Year's Eve show by Montjuïc (Av. Maria Cristina): what's known for 2026, entry rules, all-night metro and what's open on 1 January.",
+      "Barcelona's free New Year's Eve show: what has been announced for 2026, where it was in 2024 and 2025, the all-night metro and what's open on 1 January.",
     excerpt:
       "New Year's Eve in Barcelona: where the city's show is, what is known for 2026, how to get in, the all-night metro, the 12 grapes and what is open on 1 January.",
   },
@@ -172,7 +179,7 @@ export function buildNewYearBody(locale: Locale, facts: Announcements = ANNOUNCE
         { label: "On (2024 i 2025)", value: "Avinguda de la Reina Maria Cristina, entre la plaça d'Espanya i la Font Màgica" },
         { label: "Horari (2025)", value: "Espectacle de les fonts màgiques des de les 22:00; espectacle central de 23:50 a 00:10" },
         { label: "Preu (2025)", value: "Gratuït i sense límit d'aforament" },
-        { label: "Metro", value: "Tota la nit del 31 de desembre (horari de TMB); l'estació més propera és Espanya (L1 i L3)" },
+        { label: "Metro", value: "Tota la nit el 31 de desembre (horari de TMB); el 2024 i el 2025 l'estació més propera a l'espectacle era Espanya (L1, L3)" },
         { label: "Quan surten els detalls", value: "El 2025, el programa va sortir el 12 de novembre; els accessos i el transport, el 29 de desembre, igual que el 2024" },
       ]),
       callout(
@@ -253,7 +260,7 @@ export function buildNewYearBody(locale: Locale, facts: Announcements = ANNOUNCE
         { label: "Dónde (2024 y 2025)", value: "Avenida de la Reina Maria Cristina, entre la plaza de España y la Fuente Mágica" },
         { label: "Horario (2025)", value: "Espectáculo de las fuentes mágicas desde las 22:00; espectáculo central de 23:50 a 00:10" },
         { label: "Precio (2025)", value: "Gratis y sin límite de aforo" },
-        { label: "Metro", value: "Toda la noche del 31 de diciembre (horario de TMB); la estación más cercana es Espanya (L1 y L3)" },
+        { label: "Metro", value: "Toda la noche el 31 de diciembre (horario de TMB); en 2024 y 2025 la estación más cercana al espectáculo era Espanya (L1, L3)" },
         { label: "Cuándo salen los detalles", value: "En 2025, el programa salió el 12 de noviembre; los accesos y el transporte, el 29 de diciembre, igual que en 2024" },
       ]),
       callout(
@@ -333,7 +340,7 @@ export function buildNewYearBody(locale: Locale, facts: Announcements = ANNOUNCE
       { label: "Where (2024 and 2025)", value: "Avinguda de la Reina Maria Cristina, between Plaça d'Espanya and the Magic Fountain" },
       { label: "Times (2025)", value: "Magic Fountain show from 22:00; main show 23:50 to 00:10" },
       { label: "Price (2025)", value: "Free, with no capacity limit" },
-      { label: "Metro", value: "All night on 31 December (TMB timetable); the nearest station is Espanya (L1, L3)" },
+      { label: "Metro", value: "All night on 31 December (TMB timetable); in 2024 and 2025 the nearest station to the show was Espanya (L1, L3)" },
       { label: "When details come out", value: "In 2025 the programme came out on 12 November, and entry and transport details on 29 December, as in 2024" },
     ]),
     callout(

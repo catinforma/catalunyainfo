@@ -26,9 +26,15 @@ import {
  * Seasonal timetables are given by month where the operator publishes them
  * and otherwise pointed to: the fountain's November-December show days and
  * Tibidabo's 2027 calendar were not out yet.
+ *
+ * Montjuïc re-checked 26 Oct 2026 (research_notes/rank-all/review-4-bcn-sights.md):
+ * the fountain page still showed only "De l'1 al 31 d'octubre … Dijous,
+ * divendres i dissabte … De 21.00 a 22.00 hores … 21.00 i 21.30 hores" and no
+ * November schedule, so the copy says that October ended and points to the
+ * calendar instead of stating show days past 31 October.
  */
 
-const VERIFIED = "2026-10-12";
+const VERIFIED = "2026-10-26";
 
 type Meta = { path: string; title: string; seoTitle: string; seoDescription: string; excerpt: string };
 
@@ -84,7 +90,7 @@ const MONTJUIC_COPY: Record<Locale, MT> = {
     lead: "Montjuïc rises straight above Plaça d'Espanya: the **Magic Fountain** at its foot, the **castle** at the top, and four ways up in between, two of them on an ordinary metro ticket.",
     fountainTitle: "The Magic Fountain",
     fountain: [
-      "The fountain's music-and-light shows run on set evenings that change with the season. In October 2026 they are on **Thursday, Friday and Saturday from 21:00 to 22:00**, in two half-hour sessions. The City Council publishes each month's show days on its calendar; in early 2026 there were no shows from January to March, and they resumed in April.",
+      "The fountain's music-and-light shows run on set evenings that change with the season. Until 31 October 2026 the shows ran Thursday, Friday and Saturday from 21:00 to 22:00, with choreographies at 21:00 and 21:30. On 26 October the City Council had not published show days for November onwards: check its calendar before you go. In early 2026 there were no shows from January to March, and they resumed in April.",
       "The fountain has run on groundwater since 2010, and it reopened renovated in September 2025.",
     ],
     upCaption: "Ways up Montjuïc",
@@ -106,7 +112,7 @@ const MONTJUIC_COPY: Record<Locale, MT> = {
       "The castle costs **€12** (€8 reduced; under-16s free) and is **free on Sunday afternoons from 15:00 and all day on the first Sunday** of the month. It opens 10:00–20:00 until 31 October and 10:00–18:00 from 1 November; ticket offices close half an hour earlier.",
     ],
     faq: [
-      { question: "When is the Magic Fountain show?", answer: "In October 2026, Thursday to Saturday from 21:00 to 22:00. Show days change each month: check the City Council's calendar." },
+      { question: "When is the Magic Fountain show?", answer: "Until 31 October 2026 the shows ran Thursday, Friday and Saturday from 21:00 to 22:00, with choreographies at 21:00 and 21:30. On 26 October the City Council had not published show days for November onwards: check its calendar before you go." },
       { question: "How much is the Montjuïc cable car?", answer: "€17.10 return online or €19 at the desk, €12 single; children 4–12 €11.70 return online. Checked on 12 October 2026." },
       { question: "Can I use a metro ticket on the Montjuïc funicular?", answer: "Yes: the funicular is part of the integrated network and takes the single ticket and passes." },
       { question: "Is Montjuïc Castle free?", answer: "On Sunday afternoons from 15:00 and all day on the first Sunday of the month; otherwise €12." },
@@ -117,7 +123,7 @@ const MONTJUIC_COPY: Record<Locale, MT> = {
     lead: "Montjuïc se levanta justo sobre la plaza de Espanya: la **Fuente Mágica** al pie, el **castillo** arriba, y cuatro maneras de subir, dos de ellas con un billete de metro normal.",
     fountainTitle: "La Fuente Mágica",
     fountain: [
-      "Los espectáculos de música y luz de la fuente se hacen ciertas tardes que cambian según la temporada. En octubre de 2026 son **de jueves a sábado de 21:00 a 22:00**, en dos pases de media hora. El Ayuntamiento publica los días de cada mes en su calendario; a principios de 2026 no hubo espectáculos de enero a marzo, y volvieron en abril.",
+      "Los espectáculos de música y luz de la fuente se hacen ciertas tardes que cambian según la temporada. Hasta el 31 de octubre de 2026 los espectáculos fueron jueves, viernes y sábado de 21:00 a 22:00, con coreografías a las 21:00 y a las 21:30. El 26 de octubre el Ayuntamiento aún no había publicado los días a partir de noviembre: consulta su calendario antes de ir. A principios de 2026 no hubo espectáculos de enero a marzo, y volvieron en abril.",
       "La fuente funciona con agua freática desde 2010 y reabrió renovada en septiembre de 2025.",
     ],
     upCaption: "Maneras de subir a Montjuïc",
@@ -139,7 +145,7 @@ const MONTJUIC_COPY: Record<Locale, MT> = {
       "El castillo cuesta **12 €** (8 € reducida; menores de 16 gratis) y es **gratis los domingos a partir de las 15:00 y todo el primer domingo** de cada mes. Abre de 10:00 a 20:00 hasta el 31 de octubre y de 10:00 a 18:00 desde el 1 de noviembre; las taquillas cierran media hora antes.",
     ],
     faq: [
-      { question: "¿Cuándo es el espectáculo de la Fuente Mágica?", answer: "En octubre de 2026, de jueves a sábado de 21:00 a 22:00. Los días cambian cada mes: consulta el calendario del Ayuntamiento." },
+      { question: "¿Cuándo es el espectáculo de la Fuente Mágica?", answer: "Hasta el 31 de octubre de 2026 los espectáculos fueron jueves, viernes y sábado de 21:00 a 22:00, con coreografías a las 21:00 y a las 21:30. El 26 de octubre el Ayuntamiento aún no había publicado los días a partir de noviembre: consulta su calendario antes de ir." },
       { question: "¿Cuánto cuesta el teleférico de Montjuïc?", answer: "17,10 € ida y vuelta en línea o 19 € en taquilla, 12 € ida; niños de 4 a 12 años, 11,70 € ida y vuelta en línea. Comprobado el 12 de octubre de 2026." },
       { question: "¿Se puede usar el billete de metro en el funicular de Montjuïc?", answer: "Sí: el funicular forma parte de la red integrada y acepta el billete sencillo y los abonos." },
       { question: "¿El castillo de Montjuïc es gratis?", answer: "Los domingos desde las 15:00 y todo el primer domingo de cada mes; si no, 12 €." },
@@ -150,7 +156,7 @@ const MONTJUIC_COPY: Record<Locale, MT> = {
     lead: "Montjuïc s'aixeca just sobre la plaça d'Espanya: la **Font Màgica** al peu, el **castell** a dalt, i quatre maneres de pujar-hi, dues amb un bitllet de metro normal.",
     fountainTitle: "La Font Màgica",
     fountain: [
-      "Els espectacles de música i llum de la font es fan certs vespres que canvien segons la temporada. L'octubre de 2026 són **de dijous a dissabte de 21:00 a 22:00**, en dos passis de mitja hora. L'Ajuntament publica els dies de cada mes al seu calendari; a principis del 2026 no hi va haver espectacles de gener a març, i van tornar a l'abril.",
+      "Els espectacles de música i llum de la font es fan certs vespres que canvien segons la temporada. Fins al 31 d'octubre de 2026 els espectacles van ser dijous, divendres i dissabte de 21:00 a 22:00, amb coreografies a les 21:00 i a les 21:30. El 26 d'octubre l'Ajuntament encara no havia publicat els dies a partir del novembre: consulta'n el calendari abans d'anar-hi. A principis del 2026 no hi va haver espectacles de gener a març, i van tornar a l'abril.",
       "La font funciona amb aigua freàtica des del 2010 i va reobrir renovada el setembre de 2025.",
     ],
     upCaption: "Maneres de pujar a Montjuïc",
@@ -172,7 +178,7 @@ const MONTJUIC_COPY: Record<Locale, MT> = {
       "El castell costa **12 €** (8 € reduïda; menors de 16 gratis) i és **gratis els diumenges a partir de les 15:00 i tot el primer diumenge** de cada mes. Obre de 10:00 a 20:00 fins al 31 d'octubre i de 10:00 a 18:00 des de l'1 de novembre; les taquilles tanquen mitja hora abans.",
     ],
     faq: [
-      { question: "Quan és l'espectacle de la Font Màgica?", answer: "L'octubre de 2026, de dijous a dissabte de 21:00 a 22:00. Els dies canvien cada mes: consulta el calendari de l'Ajuntament." },
+      { question: "Quan és l'espectacle de la Font Màgica?", answer: "Fins al 31 d'octubre de 2026 els espectacles van ser dijous, divendres i dissabte de 21:00 a 22:00, amb coreografies a les 21:00 i a les 21:30. El 26 d'octubre l'Ajuntament encara no havia publicat els dies a partir del novembre: consulta'n el calendari abans d'anar-hi." },
       { question: "Quant costa el telefèric de Montjuïc?", answer: "17,10 € anada i tornada en línia o 19 € a taquilla, 12 € anada; infants de 4 a 12 anys, 11,70 € anada i tornada en línia. Comprovat el 12 d'octubre de 2026." },
       { question: "Es pot fer servir el bitllet de metro al funicular de Montjuïc?", answer: "Sí: el funicular forma part de la xarxa integrada i accepta el bitllet senzill i els abonaments." },
       { question: "El castell de Montjuïc és gratis?", answer: "Els diumenges a partir de les 15:00 i tot el primer diumenge de cada mes; si no, 12 €." },
@@ -236,17 +242,26 @@ export const MONTJUIC: B2Article = {
 // Re-checked 23 Oct 2026 on tibidabo.cat (fares, hours, how to get there)
 // and TMB (Tramvia Blau still closed, no reopening date): funicular fares,
 // box-office discounts and parking added (research_notes/page1/castanyada_outings.md).
-// The Sagrat Cor lift and December hours were not re-read that day. Montjuïc
-// keeps its own date.
-const TIBIDABO_VERIFIED = "2026-10-23";
+// Re-checked 26 Oct 2026 (research_notes/rank-all/review-4-bcn-sights.md):
+// Sagrat Cor lift €8.50 and monthly hours from tibidabo.salesianos.edu/horaris/
+// ("Ascensor: 8,5 € per persona"; Nov-Feb 10:30-17:45, Mar and Oct
+// 10:30-18:45; no ticket office at the church). The park's calendar states
+// only "Desembre: caps de setmana i 7, 8, 21, 22, 23, 24, 28, 29 i 30 de
+// desembre" and lists only the Panoramic Area as closed on 25-26 December, so
+// the park-closure claim went; the approximate park and Panoramic Area hours
+// went too, because the page shows only today's hours. Montjuïc keeps its own
+// date.
+const TIBIDABO_VERIFIED = "2026-10-26";
+const TIBIDABO_CALENDAR = "https://www.tibidabo.cat/ca/planifica-la-visita/horaris";
 
 const TIBIDABO_SOURCES: B2Source[] = [
   { name: "Tibidabo — com arribar-hi", url: "https://www.tibidabo.cat/ca/planifica-la-visita/com-arribar", publisher: "Parc d'Atraccions Tibidabo (BSM)" },
   { name: "Tibidabo — tarifes", url: "https://www.tibidabo.cat/ca/planifica-la-visita/tarifes", publisher: "Parc d'Atraccions Tibidabo (BSM)" },
-  { name: "Tibidabo — horaris", url: "https://www.tibidabo.cat/ca/planifica-la-visita/horaris", publisher: "Parc d'Atraccions Tibidabo (BSM)" },
+  { name: "Tibidabo — horaris", url: TIBIDABO_CALENDAR, publisher: "Parc d'Atraccions Tibidabo (BSM)" },
   { name: "Cuca de Llum", url: "https://tibidabo.cat/en/funicular/cuca-de-llum", publisher: "Parc d'Atraccions Tibidabo (BSM)" },
   { name: "Tramvia Blau", url: "https://www.tmb.cat/ca/barcelona/altres-transports-tmb/tramvia-blau-tibidabo", publisher: "TMB" },
   { name: "Temple del Sagrat Cor — visites", url: "https://tibidabo.salesianos.edu/visites/", publisher: "Salesians" },
+  { name: "Temple del Sagrat Cor — horaris", url: "https://tibidabo.salesianos.edu/horaris/", publisher: "Salesians" },
 ];
 
 const TIBIDABO_META: Record<Locale, Meta> = {
@@ -292,8 +307,8 @@ const TIBIDABO_COPY: Record<Locale, TT> = {
     lead: "A Tibidabo amusement-park ticket costs **€39** (over 120 cm) and includes the **Cuca de Llum** funicular; in autumn the full park opens on **weekends and public holidays only**. To get up, take the FGC L7 to Avinguda Tibidabo, then **bus 196** (the Tramvia Blau is closed for works) to Plaça Doctor Andreu and the funicular.",
     openTitle: "When it opens",
     open: [
-      "In October and November 2026 the full park opens on **weekends and public holidays**, roughly from 11:00 until 19:00 or 21:00 depending on the day. On weekdays it is closed, but the **Panoramic Area** at the top, with the oldest rides, stays open (11:00–18:00 in October, 11:00–17:00 in November).",
-      "In December the park opens at weekends and on 7, 8, 21–24 and 28–30 December, closes on 25–26 December and 1 January, and opens again 2–5 January before its winter break. The official calendar lists the exact hours for each day.",
+      `In October and November 2026 the full park opens on **weekends and public holidays**. On weekdays it is closed, but the **Panoramic Area** at the top, with the oldest rides, stays open. [The official calendar gives each day's hours](${TIBIDABO_CALENDAR}).`,
+      "In December the park opens at weekends and on 7, 8, 21–24 and 28–30 December, and again 2–5 January before its winter break. The Panoramic Area opens every day in December except 25 and 26 December.",
     ],
     priceCaption: "Tibidabo tickets",
     priceHeaders: ["Ticket", "Over 120 cm", "90–120 cm", "Over 60"],
@@ -324,7 +339,7 @@ const TIBIDABO_COPY: Record<Locale, TT> = {
     ],
     churchTitle: "Sagrat Cor",
     church: [
-      "The church's lift to the upper terraces, with an audio guide, costs €8; in October the basilica, terrace and lift open 10:30–18:45 and the crypt 9:00–20:00. The church says only tickets bought on its own website are valid.",
+      "The church's lift to the second and third terraces, with an audio guide, costs €8.50. From November to February the basilica, terrace and lift open 10:30–17:45 (October and March 10:30–18:45); the crypt opens 9:00–20:00. There is no ticket office at the church: buy online in advance.",
     ],
     faq: [
       { question: "Is Tibidabo amusement park open on weekdays?", answer: "Not in autumn: the full park opens on weekends and holidays, while the Panoramic Area also opens on weekdays." },
@@ -340,8 +355,8 @@ const TIBIDABO_COPY: Record<Locale, TT> = {
     lead: "La entrada al parque de atracciones del Tibidabo cuesta **39 €** (más de 120 cm) e incluye el funicular **Cuca de Llum**; en otoño el parque completo abre **solo fines de semana y festivos**. Para subir, FGC L7 hasta Avinguda Tibidabo, **bus 196** (el Tramvia Blau está cerrado por obras) hasta la plaza Doctor Andreu y funicular.",
     openTitle: "Cuándo abre",
     open: [
-      "En octubre y noviembre de 2026 el parque completo abre **fines de semana y festivos**, aproximadamente de 11:00 a 19:00 o 21:00 según el día. Entre semana está cerrado, pero la **Zona Panorámica** de arriba, con las atracciones más antiguas, sigue abierta (de 11:00 a 18:00 en octubre, de 11:00 a 17:00 en noviembre).",
-      "En diciembre el parque abre los fines de semana y el 7, 8, 21–24 y 28–30 de diciembre, cierra el 25 y 26 de diciembre y el 1 de enero, y vuelve a abrir del 2 al 5 de enero antes del parón de invierno. El calendario oficial da el horario exacto de cada día.",
+      `En octubre y noviembre de 2026 el parque completo abre **fines de semana y festivos**. Entre semana está cerrado, pero la **Zona Panorámica** de arriba, con las atracciones más antiguas, sigue abierta. [El calendario oficial da el horario de cada día](${TIBIDABO_CALENDAR}).`,
+      "En diciembre el parque abre los fines de semana y el 7, 8, 21–24 y 28–30 de diciembre, y vuelve a abrir del 2 al 5 de enero antes del parón de invierno. La Zona Panorámica abre todos los días de diciembre salvo el 25 y el 26.",
     ],
     priceCaption: "Entradas del Tibidabo",
     priceHeaders: ["Entrada", "Más de 120 cm", "90–120 cm", "Mayores de 60"],
@@ -372,7 +387,7 @@ const TIBIDABO_COPY: Record<Locale, TT> = {
     ],
     churchTitle: "Sagrado Corazón",
     church: [
-      "El ascensor del templo a las terrazas superiores, con audioguía, cuesta 8 €; en octubre la basílica, la terraza y el ascensor abren de 10:30 a 18:45 y la cripta de 9:00 a 20:00. El templo advierte que solo valen las entradas compradas en su web.",
+      "El ascensor del templo a las terrazas segunda y tercera, con audioguía, cuesta 8,50 €. De noviembre a febrero la basílica, la terraza y el ascensor abren de 10:30 a 17:45 (octubre y marzo, de 10:30 a 18:45); la cripta, de 9:00 a 20:00. El templo no tiene taquilla: hay que comprar en línea con antelación.",
     ],
     faq: [
       { question: "¿Abre el Tibidabo entre semana?", answer: "No en otoño: el parque completo abre fines de semana y festivos, y la Zona Panorámica también entre semana." },
@@ -388,8 +403,8 @@ const TIBIDABO_COPY: Record<Locale, TT> = {
     lead: "L'entrada al parc d'atraccions del Tibidabo costa **39 €** (més de 120 cm) i inclou el funicular **Cuca de Llum**; a la tardor el parc complet obre **només caps de setmana i festius**. Per pujar-hi, FGC L7 fins a Avinguda Tibidabo, **bus 196** (el Tramvia Blau és tancat per obres) fins a la plaça Doctor Andreu i funicular.",
     openTitle: "Quan obre",
     open: [
-      "L'octubre i el novembre de 2026 el parc complet obre **caps de setmana i festius**, aproximadament d'11:00 a 19:00 o 21:00 segons el dia. Entre setmana és tancat, però la **Zona Panoràmica** de dalt, amb les atraccions més antigues, continua oberta (d'11:00 a 18:00 a l'octubre, d'11:00 a 17:00 al novembre).",
-      "Al desembre el parc obre els caps de setmana i el 7, 8, 21–24 i 28–30 de desembre, tanca el 25 i 26 de desembre i l'1 de gener, i torna a obrir del 2 al 5 de gener abans de l'aturada d'hivern. El calendari oficial dona l'horari exacte de cada dia.",
+      `L'octubre i el novembre de 2026 el parc complet obre **caps de setmana i festius**. Entre setmana és tancat, però la **Zona Panoràmica** de dalt, amb les atraccions més antigues, continua oberta. [El calendari oficial dona l'horari de cada dia](${TIBIDABO_CALENDAR}).`,
+      "Al desembre el parc obre els caps de setmana i el 7, 8, 21–24 i 28–30 de desembre, i torna a obrir del 2 al 5 de gener abans de l'aturada d'hivern. La Zona Panoràmica obre cada dia del desembre excepte el 25 i el 26.",
     ],
     priceCaption: "Entrades del Tibidabo",
     priceHeaders: ["Entrada", "Més de 120 cm", "90–120 cm", "Majors de 60"],
@@ -420,7 +435,7 @@ const TIBIDABO_COPY: Record<Locale, TT> = {
     ],
     churchTitle: "Sagrat Cor",
     church: [
-      "L'ascensor del temple a les terrasses superiors, amb audioguia, costa 8 €; a l'octubre la basílica, la terrassa i l'ascensor obren de 10:30 a 18:45 i la cripta de 9:00 a 20:00. El temple avisa que només valen les entrades comprades al seu web.",
+      "L'ascensor del temple a les terrasses segona i tercera, amb audioguia, costa 8,50 €. De novembre a febrer la basílica, la terrassa i l'ascensor obren de 10:30 a 17:45 (octubre i març, de 10:30 a 18:45); la cripta, de 9:00 a 20:00. El temple no té taquilla: cal comprar en línia amb antelació.",
     ],
     faq: [
       { question: "Obre el Tibidabo entre setmana?", answer: "No a la tardor: el parc complet obre caps de setmana i festius, i la Zona Panoràmica també entre setmana." },
