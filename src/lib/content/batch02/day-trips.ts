@@ -71,7 +71,7 @@ const GIRONA_SOURCES = [
 // 26 Oct 2026: R11 journey range re-read from the same planner for 27, 28
 // and 31 Oct: durations 1 h 19, 1 h 25, 1 h 31 and 1 h 41 (the 7:16 from
 // Sants), so the range runs to 1 h 41, not 1 h 31. The seoDescription still
-// says 1 h 19-1 h 31: it is frozen (docs/SEO_EXPERIMENTS.md).
+// was corrected to 1 h 41 on 26 Oct as a factual fix (allowed inside a freeze).
 const GIRONA_VERIFIED = "2026-10-26";
 
 export const GIRONA: B2Article = {
@@ -109,7 +109,7 @@ export const GIRONA: B2Article = {
       title: "Tren de Barcelona a Girona: horaris, preus i què veure en un dia",
       seoTitle: "Tren de Barcelona a Girona: horaris, preus, AVE o Rodalies",
       seoDescription:
-        "R11 de Rodalies en 1 h 19-1 h 31 des de 8,95 €, o alta velocitat en uns 40 minuts. Trens al dia, últim de tornada i ruta d'un dia pel Barri Vell.",
+        "R11 de Rodalies en 1 h 19-1 h 41 des de 8,95 €, o alta velocitat en uns 40 minuts. Trens al dia, últim de tornada i ruta d'un dia pel Barri Vell.",
       excerpt:
         "R11 o alta velocitat: quant triga i quant costa el tren de Barcelona a Girona, i una ruta d'un dia pel Barri Vell, sense cotxe.",
       blocks: [
@@ -202,7 +202,7 @@ export const GIRONA: B2Article = {
       title: "Tren de Barcelona a Girona: horarios, precios y qué ver en un día",
       seoTitle: "Tren Barcelona–Girona: horarios, precios, AVE o Rodalies",
       seoDescription:
-        "R11 de Rodalies en 1 h 19-1 h 31 desde 8,95 €, o alta velocidad en unos 40 minutos. Trenes al día, último de vuelta y ruta de un día por el Barri Vell.",
+        "R11 de Rodalies en 1 h 19-1 h 41 desde 8,95 €, o alta velocidad en unos 40 minutos. Trenes al día, último de vuelta y ruta de un día por el Barri Vell.",
       excerpt:
         "R11 o alta velocidad: cuánto tarda y cuánto cuesta el tren de Barcelona a Girona, y una ruta de un día por el Barri Vell, sin coche.",
       blocks: [
@@ -290,7 +290,7 @@ export const GIRONA: B2Article = {
       title: "Barcelona to Girona by train: times, fares and a one-day route",
       seoTitle: "Barcelona to Girona by train: times, fares, AVE or R11",
       seoDescription:
-        "The R11 takes 1 h 19-1 h 31 from €8.95; high-speed trains take about 40 minutes. Trains a day, the last train back and a one-day walk round the old town.",
+        "The R11 takes 1 h 19-1 h 41 from €8.95; high-speed trains take about 40 minutes. Trains a day, the last train back and a one-day walk round the old town.",
       excerpt:
         "R11 or high-speed: how long the train from Barcelona to Girona takes, what it costs, and a one-day route through the old town without a car.",
       blocks: [
