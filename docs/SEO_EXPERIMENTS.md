@@ -470,6 +470,35 @@ cited on the page). Same pattern as the 14 Oct entry: the date in the title.
 falls sharply after the change, so judge CTR, never clicks. The next peak is the
 week before 28 March 2027.
 
+## 2026-10-26 — New page: calçot season and the Valls Calçotada 2027
+
+Round 4 (December/January seasonal pages), publish group `calcots`. A new
+trilingual guide, `/ca/tradicions/calcotada-valls-temporada-calcots/`,
+`/es/tradiciones/calcotada-valls-temporada-calcots/`,
+`/en/traditions/calcotada-valls-calcot-season/`. Titles in the words of the
+query with the year ("Calçotada de Valls 2027: data/fecha i/y temporada de
+calçots", "Calçotada de Valls 2027: date and calçot season"); the lead answers
+both questions (season November-April; Sunday 31 January 2027, 45th edition).
+Facts checked on 26 Oct 2026 against the festival organiser, the Ajuntament de
+Valls, the IGP regulator, the Generalitat, Rodalies and Monbus; the 2027
+programme, price and tasting pack are not published, and the page says so.
+One sentence linking to it was added to the autumn food-fairs guide (body only,
+no title change; that page is inside the 24 Oct window, so read its queries,
+not its totals).
+
+**Prediction.** Indexed within 2-3 weeks; by the measure date the ES and CA
+pages show impressions for "calçotada valls 2027" / "festa calçotada valls"
+variants at position 10 or better, and "temporada calçots" variants inside the
+top 20. EN impressions stay small. Demand for the festival date peaks in
+January, so a low November count is not a failure.
+
+**Measure 28 days after publish** (published 27 Oct -> 24 Nov): impressions,
+position and clicks per query family (festival date / season / IGP and "how to
+eat"). Read again in the week after 31 January 2027, and update the page when
+the 2027 programme appears (`PROGRAMME_2027` in `batch02/calcots.ts`).
+
+**Outcome:** _pending_
+
 ## Candidates not yet run
 
 Recorded so they are not lost, and so they are not all started at once.

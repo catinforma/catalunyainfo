@@ -47,6 +47,7 @@ import { PARKING, TRANSPORT } from "@/lib/content/batch02/barcelona-practical";
 import { ELECTION_NIGHT } from "@/lib/content/batch02/election-night";
 import { CONGRESS_RESULTS, PARLIAMENT_RESULTS } from "@/lib/content/batch02/election-results";
 import { CANDIDATES } from "@/lib/content/batch02/candidates";
+import { CALCOTS } from "@/lib/content/batch02/calcots";
 import { publishHolidayTodayGuide } from "@/lib/content/holidays/today-publish";
 import { publishLocalHolidaysGuide } from "@/lib/content/holidays/local-publish";
 import { publishReservoirGuide } from "@/lib/content/reservoirs/publish";
@@ -155,6 +156,9 @@ export async function POST(request: Request) {
     // 29N candidates: the lists are read from the BOE at render time; this
     // publishes the guide around them (re-running it also refreshes the page).
     if (wants("candidates")) published.push(await publishB2Article(CANDIDATES));
+    // Calçots and the Valls Calçotada 2027, plus the food-fairs feature
+    // (index 4 of FEATURES) that gained one sentence linking to it.
+    if (wants("calcots")) published.push(await publishB2Article(CALCOTS), ...(await publishFeatures(4, 5)));
     if (wants("family-markets")) published.push(await publishB2Article(ZOO_AQUARIUM), await publishB2Article(MARKETS));
     if (wants("cruiseport")) published.push(await publishB2Article(CRUISEPORT));
     if (wants("portaventura")) published.push(await publishB2Article(PORTAVENTURA));
