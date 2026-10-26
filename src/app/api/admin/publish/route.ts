@@ -49,6 +49,8 @@ import { CONGRESS_RESULTS, PARLIAMENT_RESULTS } from "@/lib/content/batch02/elec
 import { CANDIDATES } from "@/lib/content/batch02/candidates";
 import { CALCOTS } from "@/lib/content/batch02/calcots";
 import { CHRISTMAS_TRADITIONS } from "@/lib/content/batch02/christmas-traditions";
+import { DECEMBER_BRIDGE } from "@/lib/content/batch02/december-bridge";
+import { MARATO_GUIDE } from "@/lib/content/batch02/marato";
 import { publishHolidayTodayGuide } from "@/lib/content/holidays/today-publish";
 import { publishLocalHolidaysGuide } from "@/lib/content/holidays/local-publish";
 import { publishReservoirGuide } from "@/lib/content/reservoirs/publish";
@@ -163,6 +165,11 @@ export async function POST(request: Request) {
     // Calçots and the Valls Calçotada 2027, plus the food-fairs feature
     // (index 4 of FEATURES) that gained one sentence linking to it.
     if (wants("calcots")) published.push(await publishB2Article(CALCOTS), ...(await publishFeatures(4, 5)));
+    // December bridge 2026 and La Marató 2026, one group each, each with the
+    // one existing page that gained a link to it (the holiday calendar; the
+    // Christmas in Barcelona hub).
+    if (wants("pont-desembre")) published.push(await publishB2Article(DECEMBER_BRIDGE), await publishHolidayGuide());
+    if (wants("marato")) published.push(await publishB2Article(MARATO_GUIDE), await publishB2Article(CHRISTMAS_BARCELONA));
     if (wants("family-markets")) published.push(await publishB2Article(ZOO_AQUARIUM), await publishB2Article(MARKETS));
     if (wants("cruiseport")) published.push(await publishB2Article(CRUISEPORT));
     if (wants("portaventura")) published.push(await publishB2Article(PORTAVENTURA));

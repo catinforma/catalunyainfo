@@ -333,6 +333,7 @@ export function buildChristmasBarcelonaBody(locale: Locale, facts: Announcements
       ...h2(
         "Més activitats de Nadal a la ciutat",
         `El programa del 2025, publicat el ${dateYear(PAST.programme2025.published, "ca")}, incloïa el Barcelona Festival de Nadal (${PAST.festival2025.shows} funcions d'arts de carrer a la plaça de Catalunya, ${span(PAST.festival2025.from, PAST.festival2025.to, "ca")} de 2025) i el Concert de Nadal de l'Orfeó Català al pla de la Seu (${dateYear(PAST.concert2025, "ca")}). El programa del 2026 encara no s'ha publicat.`,
+        `A mitjan desembre també hi ha ${b2link("marato", "ca", "La Marató de 3Cat")}, el programa solidari de TV3, que el 2026 es dedica a les malalties neurodegeneratives i neuromusculars.`,
       ),
       ...h2(
         "Què obre a Barcelona el dia de Nadal?",
@@ -439,6 +440,7 @@ export function buildChristmasBarcelonaBody(locale: Locale, facts: Announcements
       ...h2(
         "Más actos de Navidad en la ciudad",
         `El programa de 2025, publicado el ${dateYear(PAST.programme2025.published, "es")}, incluía el Barcelona Festival de Nadal (${PAST.festival2025.shows} funciones de artes de calle en la plaza de Catalunya, ${span(PAST.festival2025.from, PAST.festival2025.to, "es")} de 2025) y el Concierto de Navidad del Orfeó Català en el pla de la Seu (${dateYear(PAST.concert2025, "es")}). El programa de 2026 aún no se ha publicado.`,
+        `A mediados de diciembre también está ${b2link("marato", "es", "La Marató de 3Cat")}, el programa solidario de TV3, que en 2026 se dedica a las enfermedades neurodegenerativas y neuromusculares.`,
       ),
       ...h2(
         "¿Qué abre en Barcelona el día de Navidad?",
@@ -544,6 +546,7 @@ export function buildChristmasBarcelonaBody(locale: Locale, facts: Announcements
     ...h2(
       "More Christmas events in the city",
       `The 2025 programme, published on ${dateYear(PAST.programme2025.published, "en")}, included the Barcelona Festival de Nadal (${PAST.festival2025.shows} street-arts performances of theatre, dance, circus and music on Plaça de Catalunya, ${span(PAST.festival2025.from, PAST.festival2025.to, "en")} 2025) and the city's Christmas concert by the Orfeó Català on the Pla de la Seu (${dateYear(PAST.concert2025, "en")}). The 2026 programme has not been published yet.`,
+      `Mid-December also brings ${b2link("marato", "en", "La Marató de 3Cat")}, TV3's charity telethon, which in 2026 is for neurodegenerative and neuromuscular diseases.`,
     ),
     ...h2(
       "Is Barcelona open on Christmas Day?",
