@@ -1,7 +1,6 @@
 import type { Block } from "@/lib/content/blocks";
 import {
   ARTICLE_PATHS,
-  callout,
   h2,
   keyFacts,
   lead,
@@ -9,6 +8,7 @@ import {
   list,
   paras,
   relatedBlocks,
+  table,
   type FeatureArticle,
 } from "./shared";
 
@@ -30,11 +30,18 @@ import {
  * position 7.7 with no clicks - the page was ranking for exactly the question
  * it had stopped answering correctly.
  *
- * The titles are untouched; the 24 September title experiment is still inside
- * its measurement window until 8 October.
+ * Updated 26 October 2026 (research_notes/rank-all/review-7-features.md): the
+ * 59th edition ended on 18 October, so the page is now "2026 results + the
+ * next edition + the evergreen first-timer guide". The session-grid callout
+ * and the pre-festival "announced names" section are gone; the palmarès table
+ * is copied from the festival's own news of 17 October 2026. The festival had
+ * not announced the next edition's dates on 26 October. When it does, rewrite
+ * the titles and the lead to the new year in one change. Titles untouched
+ * here: demand is near zero until then, so a title change would be unreadable.
  */
 
 const FESTIVAL = "https://sitgesfilmfestival.com/";
+const PALMARES = "https://sitgesfilmfestival.com/ca/noticies/sanguine-marion-corroller-millor-pellicula-sitges-2026";
 const RULES = "https://sitgesfilmfestival.com/en/edition/rules-regulations";
 const VENUES = "https://sitgesfilmfestival.com/en/festival/venues";
 const RODALIES = "https://rodalies.gencat.cat/ca/horaris/tots-els-horaris/";
@@ -42,7 +49,7 @@ const RODALIES = "https://rodalies.gencat.cat/ca/horaris/tots-els-horaris/";
 function ca(): Block[] {
   return [
     lead(
-      "Del 8 al 18 d'octubre de 2026, Sitges torna a convertir-se en un dels centres mundials del cinema fantàstic. És la 59a edició.",
+      "La 59a edició del Festival de Sitges es va fer del 8 al 18 d'octubre de 2026, i el premi a la Millor Pel·lícula va ser per a **Sanguine**, de Marion Le Corroller. El Festival encara no ha anunciat les dates de la pròxima edició (comprovat el 26 d'octubre de 2026); quan les publiqui, les posarem aquí.",
     ),
     ...paras(
       "Anar-hi per primera vegada pot ser confús: diverses sales repartides per la vila, sessions des de primera hora del matí, activitats paral·leles, cues, abonaments, estrenes i una població que durant deu dies funciona a un ritme completament diferent.",
@@ -50,23 +57,33 @@ function ca(): Block[] {
     ),
     keyFacts("Dades essencials", [
       { label: "Edició", value: "59a" },
-      { label: "Dates", value: "8–18 d'octubre de 2026" },
+      { label: "Dates 2026", value: "8–18 d'octubre" },
+      { label: "Millor pel·lícula 2026", value: "Sanguine (Marion Le Corroller)" },
+      { label: "Pròxima edició", value: "Dates per anunciar" },
       { label: "On", value: "Sitges (Garraf)" },
       { label: "Com arribar-hi", value: "Rodalies R2 Sud des de Barcelona" },
-      { label: "Graella de sessions", value: "Publicada: cercador per dia, sala i secció" },
       { label: "Entrades", value: "Només pels canals oficials del Festival" },
     ]),
-    callout(
-      "tip",
-      "On consultar la graella de sessions",
-      "El Festival ja té publicada la programació i un cercador de sessions que es pot filtrar per dia, sala i secció: [programació oficial](https://sitgesfilmfestival.com/en/edition/program). Consulta'l el mateix matí que hi vagis, perquè s'hi afegeixen i s'hi mouen passis. No compris entrades fora dels canals oficials.",
+    ...h2("Palmarès 2026"),
+    table(
+      "Premis de la 59a edició del Festival de Sitges (2026)",
+      ["Premi", "Pel·lícula / persona"],
+      [
+        ["Millor Pel·lícula (Secció Oficial Fantàstic)", "Sanguine, de Marion Le Corroller"],
+        ["Premi Especial del Jurat", "Drag, de Greg Yagolnitzer i Raviv Ullman"],
+        ["Millor Direcció", "Joko Anwar, per Ghost in the Cell"],
+        ["Millor Interpretació Femenina", "Jasmine Trinca, per The Spiral"],
+        ["Millor Interpretació Masculina", "Benoît Magimel, per Historias de la noche (The Birthday Party)"],
+        ["Premi Citizen Kane al Director Revelació", "Leviticus, d'Adrian Chiarella"],
+        ["Gran Premi del Públic", "Wildwood, de Travis Knight"],
+        ["Noves Visions, Millor Pel·lícula", "Hen, de Nico Scheepers"],
+        ["Òrbita, Millor Pel·lícula", "Gummy, de Javi Prada"],
+        ["Méliès d'Argent, Millor Pel·lícula", "The Spiral, de Paolo Strippoli"],
+      ],
+      "Font: Sitges Film Festival, palmarès publicat el 17 d'octubre de 2026.",
     ),
-    ...h2(
-      "Què se sap ja de l'edició 2026",
-      "El Festival ha anunciat que la pel·lícula inaugural serà **Found Alive**, de Carlota Pereda, protagonitzada per Chloë Grace Moretz.",
-      "La clausura anunciada és **Wicker**, amb Olivia Colman i Alexander Skarsgård.",
-      "Entre els noms que el Festival ha anunciat per a homenatges, premis i activitats d'aquesta edició hi ha Peter Jackson, Danny DeVito, Amy Irving, Robert Eggers, Yuen Woo-ping, Takashi Shimizu, Rick Baker, Kevin Bacon, Kyra Sedgwick, Meiko Kaji i Adrienne Barbeau.",
-      "Un matís que estalvia decepcions: un anunci de premi o homenatge no equival sempre a presència física garantida en una data concreta. Comprova-ho a la web oficial abans de planificar un dia sencer al voltant d'una persona.",
+    ...paras(
+      "Els premis honorífics van ser per a Danny DeVito, Meiko Kaji i Takashi Shimizu (16 d'octubre) i Amy Irving, Gran Premi Honorífic (18 d'octubre).",
     ),
     ...h2("Com funcionen les sales"),
     ...paras(
@@ -82,7 +99,7 @@ function ca(): Block[] {
       "**Meeting** — espai exterior de trobada amb activitats, música, projeccions i podcasts.",
       "**Fanshop** i **Foodtastic** — botiga oficial i zona de food trucks vora el mar.",
     ),
-    ...paras(`Llistat i ubicacions oficials: [sitgesfilmfestival.com](${VENUES}).`),
+    ...paras(`Llistat i ubicacions oficials de les seus, Sala Llevant inclosa: [sitgesfilmfestival.com](${VENUES}).`),
     ...h2(
       "Primer consell: no intentis veure-ho tot",
       "L'error més comú del primer any és construir una agenda impossible. Sitges funciona molt millor si tries unes quantes prioritats i deixes espai per al que hi ha entremig.",
@@ -120,7 +137,7 @@ function ca(): Block[] {
       { title: "Revisa la web oficial el mateix matí", text: "Els canvis d'última hora existeixen." },
     ] } as Block,
     ...paras(
-      `Web oficial del Festival: [sitgesfilmfestival.com](${FESTIVAL}). Dates i bases de l'edició: [rules & regulations](${RULES}).`,
+      `Web oficial del Festival: [sitgesfilmfestival.com](${FESTIVAL}). Dates i bases de l'edició 2026: [rules & regulations](${RULES}).`,
     ),
     ...relatedBlocks(["trains", "weekend", "foodfairs", "castanyada", "traps"], "ca"),
   ];
@@ -129,7 +146,7 @@ function ca(): Block[] {
 function es(): Block[] {
   return [
     lead(
-      "Del 8 al 18 de octubre de 2026, Sitges vuelve a convertirse en uno de los centros mundiales del cine fantástico. Es la 59ª edición.",
+      "La 59ª edición del Festival de Sitges se celebró del 8 al 18 de octubre de 2026, y el premio a la Mejor Película fue para **Sanguine**, de Marion Le Corroller. El Festival aún no ha anunciado las fechas de la próxima edición (comprobado el 26 de octubre de 2026); cuando las publique, las pondremos aquí.",
     ),
     ...paras(
       "Ir por primera vez puede ser confuso: varias salas repartidas por la localidad, sesiones desde primera hora, actividades paralelas, colas, abonos, estrenos y un pueblo que durante diez días funciona a un ritmo completamente distinto.",
@@ -137,23 +154,33 @@ function es(): Block[] {
     ),
     keyFacts("Datos esenciales", [
       { label: "Edición", value: "59ª" },
-      { label: "Fechas", value: "8–18 de octubre de 2026" },
+      { label: "Fechas 2026", value: "8–18 de octubre" },
+      { label: "Mejor película 2026", value: "Sanguine (Marion Le Corroller)" },
+      { label: "Próxima edición", value: "Fechas por anunciar" },
       { label: "Dónde", value: "Sitges (Garraf)" },
       { label: "Cómo llegar", value: "Rodalies R2 Sud desde Barcelona" },
-      { label: "Parrilla de sesiones", value: "Publicada: buscador por día, sala y sección" },
       { label: "Entradas", value: "Solo por los canales oficiales del Festival" },
     ]),
-    callout(
-      "tip",
-      "Dónde consultar la parrilla de sesiones",
-      "El Festival ya tiene publicada la programación y un buscador de sesiones filtrable por día, sala y sección: [programación oficial](https://sitgesfilmfestival.com/en/edition/program). Revísalo la misma mañana que vayas, porque se añaden y se mueven pases. No compres entradas fuera de los canales oficiales.",
+    ...h2("Palmarés 2026"),
+    table(
+      "Premios de la 59ª edición del Festival de Sitges (2026)",
+      ["Premio", "Película / persona"],
+      [
+        ["Mejor Película (Sección Oficial Fantàstic)", "Sanguine, de Marion Le Corroller"],
+        ["Premio Especial del Jurado", "Drag, de Greg Yagolnitzer y Raviv Ullman"],
+        ["Mejor Dirección", "Joko Anwar, por Ghost in the Cell"],
+        ["Mejor Interpretación Femenina", "Jasmine Trinca, por The Spiral"],
+        ["Mejor Interpretación Masculina", "Benoît Magimel, por Historias de la noche (The Birthday Party)"],
+        ["Premio Citizen Kane al Director Revelación", "Leviticus, de Adrian Chiarella"],
+        ["Gran Premio del Público", "Wildwood, de Travis Knight"],
+        ["Noves Visions, Mejor Película", "Hen, de Nico Scheepers"],
+        ["Òrbita, Mejor Película", "Gummy, de Javi Prada"],
+        ["Méliès d'Argent, Mejor Película", "The Spiral, de Paolo Strippoli"],
+      ],
+      "Fuente: Sitges Film Festival, palmarés publicado el 17 de octubre de 2026.",
     ),
-    ...h2(
-      "Qué se sabe ya de la edición 2026",
-      "El Festival ha anunciado que la película inaugural será **Found Alive**, de Carlota Pereda, protagonizada por Chloë Grace Moretz.",
-      "La clausura anunciada es **Wicker**, con Olivia Colman y Alexander Skarsgård.",
-      "Entre los nombres anunciados por el Festival para homenajes, premios y actividades de esta edición figuran Peter Jackson, Danny DeVito, Amy Irving, Robert Eggers, Yuen Woo-ping, Takashi Shimizu, Rick Baker, Kevin Bacon, Kyra Sedgwick, Meiko Kaji y Adrienne Barbeau.",
-      "Un matiz que ahorra decepciones: el anuncio de un premio u homenaje no equivale siempre a presencia física garantizada en una fecha concreta. Confírmalo en la web oficial antes de planificar un día entero alrededor de alguien.",
+    ...paras(
+      "Los premios honoríficos fueron para Danny DeVito, Meiko Kaji y Takashi Shimizu (16 de octubre) y Amy Irving, Gran Premio Honorífico (18 de octubre).",
     ),
     ...h2("Cómo funcionan las salas"),
     ...paras("Las sedes no están todas en el mismo sitio, y eso es lo que más descoloca el primer año:"),
@@ -167,7 +194,7 @@ function es(): Block[] {
       "**Meeting** — espacio exterior de encuentro con actividades, música, proyecciones y podcasts.",
       "**Fanshop** y **Foodtastic** — tienda oficial y zona de food trucks junto al mar.",
     ),
-    ...paras(`Listado y ubicaciones oficiales: [sitgesfilmfestival.com](${VENUES}).`),
+    ...paras(`Listado y ubicaciones oficiales de las sedes, Sala Llevant incluida: [sitgesfilmfestival.com](${VENUES}).`),
     ...h2(
       "Primer consejo: no intentes verlo todo",
       "El error más común del primer año es construir una agenda imposible. Sitges funciona mucho mejor eligiendo unas pocas prioridades y dejando espacio para lo que hay entremedias: desplazamientos a pie, colas, comer y actividades paralelas.",
@@ -193,7 +220,7 @@ function es(): Block[] {
       "Elige una jornada y aprovéchala bien. Selecciona dos o tres películas prioritarias y deja el resto como opcional. Reserva margen entre salas. Consulta las ubicaciones antes de llegar. Compra solo por canales oficiales. Ignora capturas antiguas del programa y revisa la web oficial esa misma mañana.",
     ),
     ...paras(
-      `Web oficial: [sitgesfilmfestival.com](${FESTIVAL}). Fechas y bases de la edición: [rules & regulations](${RULES}).`,
+      `Web oficial: [sitgesfilmfestival.com](${FESTIVAL}). Fechas y bases de la edición 2026: [rules & regulations](${RULES}).`,
     ),
     ...relatedBlocks(["trains", "weekend", "foodfairs", "castanyada", "traps"], "es"),
   ];
@@ -202,30 +229,40 @@ function es(): Block[] {
 function en(): Block[] {
   return [
     lead(
-      "From 8 to 18 October 2026, Sitges becomes one of the world's major centres for fantastic cinema. This is the 59th edition.",
+      "The 59th Sitges Film Festival ran from 8 to 18 October 2026, and Best Film went to **Sanguine**, by Marion Le Corroller. The festival has not yet announced the dates of its next edition (checked 26 October 2026); we will add them here when it does.",
     ),
     ...paras(
       "If you are staying in Barcelona and have never been to a film festival in Spain, the practical details matter more than the line-up. Venues are scattered around a small seaside town, screenings start early, queues form, and passes work differently from single tickets.",
     ),
     keyFacts("The essentials", [
       { label: "Edition", value: "59th" },
-      { label: "Dates", value: "8–18 October 2026" },
+      { label: "Dates 2026", value: "8–18 October" },
+      { label: "Best Film 2026", value: "Sanguine (Marion Le Corroller)" },
+      { label: "Next edition", value: "Dates not yet announced" },
       { label: "Where", value: "Sitges, on the coast south of Barcelona" },
       { label: "Getting there", value: "Rodalies line R2 Sud from Barcelona" },
-      { label: "Session grid", value: "Published: searchable by day, venue and section" },
       { label: "Tickets", value: "Official festival channels only" },
     ]),
-    callout(
-      "tip",
-      "Where to find the screening schedule",
-      "The line-up is out, and the festival's own session finder lets you filter by day, venue and section: [official programme](https://sitgesfilmfestival.com/en/edition/program). Check it the morning you go, because screenings are added and moved. Buy tickets only through official channels.",
+    ...h2("2026 winners"),
+    table(
+      "Awards of the 59th Sitges Film Festival (2026)",
+      ["Award", "Film / person"],
+      [
+        ["Best Film (Official Fantàstic Section)", "Sanguine, by Marion Le Corroller"],
+        ["Special Jury Prize", "Drag, by Greg Yagolnitzer and Raviv Ullman"],
+        ["Best Director", "Joko Anwar, for Ghost in the Cell"],
+        ["Best Actress", "Jasmine Trinca, for The Spiral"],
+        ["Best Actor", "Benoît Magimel, for Historias de la noche (The Birthday Party)"],
+        ["Citizen Kane Award for Best New Director", "Leviticus, by Adrian Chiarella"],
+        ["Grand Audience Award", "Wildwood, by Travis Knight"],
+        ["Noves Visions, Best Film", "Hen, by Nico Scheepers"],
+        ["Òrbita, Best Film", "Gummy, by Javi Prada"],
+        ["Méliès d'Argent, Best Film", "The Spiral, by Paolo Strippoli"],
+      ],
+      "Source: Sitges Film Festival, winners announced on 17 October 2026.",
     ),
-    ...h2(
-      "What has been announced",
-      "The opening film is **Found Alive**, directed by Carlota Pereda and starring Chloë Grace Moretz.",
-      "The announced closing film is **Wicker**, with Olivia Colman and Alexander Skarsgård.",
-      "Names announced by the festival for awards, tributes and activities this year include Peter Jackson, Danny DeVito, Amy Irving, Robert Eggers, Yuen Woo-ping, Takashi Shimizu, Rick Baker, Kevin Bacon, Kyra Sedgwick, Meiko Kaji and Adrienne Barbeau.",
-      "One caveat worth knowing: an announced award or tribute does not always mean a guaranteed appearance on a specific date. Check the official site before building a whole day around one person.",
+    ...paras(
+      "Honorary awards went to Danny DeVito, Meiko Kaji and Takashi Shimizu (16 October) and to Amy Irving, the Grand Honorary Award (18 October).",
     ),
     ...h2("The venues"),
     ...paras(
@@ -240,7 +277,7 @@ function en(): Block[] {
       "**Meeting** — an open-air gathering space with activities, music, screenings and podcasts.",
       "**Fanshop** and **Foodtastic** — the official store and a food-truck area by the sea.",
     ),
-    ...paras(`Official venue list: [sitgesfilmfestival.com](${VENUES}).`),
+    ...paras(`Official venue list and locations, including the Sala Llevant: [sitgesfilmfestival.com](${VENUES}).`),
     ...h2(
       "Do not try to see everything",
       "The classic first-year mistake is an impossible schedule. Sitges works far better when you pick a few priorities and leave room for walking between venues, queueing, eating and the things you did not plan.",
@@ -262,7 +299,7 @@ function en(): Block[] {
       "If you want to watch films, book screenings. If you want the atmosphere, much of the day can be enjoyed outside a cinema.",
     ),
     ...paras(
-      `Official site: [sitgesfilmfestival.com](${FESTIVAL}). Dates and regulations: [rules & regulations](${RULES}).`,
+      `Official site: [sitgesfilmfestival.com](${FESTIVAL}). 2026 dates and regulations: [rules & regulations](${RULES}).`,
     ),
     ...relatedBlocks(["trains", "weekend", "foodfairs", "castanyada", "traps"], "en"),
   ];
@@ -298,6 +335,7 @@ export const SITGES: FeatureArticle = {
     { name: "Sitges Film Festival — bases i dates de l'edició", url: RULES, publisher: "Sitges Film Festival" },
     { name: "Sitges Film Festival — seus", url: VENUES, publisher: "Sitges Film Festival" },
     { name: "Sitges Film Festival", url: FESTIVAL, publisher: "Sitges Film Festival" },
+    { name: "Sitges Film Festival — palmarès 2026", url: PALMARES, publisher: "Sitges Film Festival" },
     { name: "Horaris de Rodalies de Catalunya", url: RODALIES, publisher: "Generalitat de Catalunya" },
   ],
   editions: {

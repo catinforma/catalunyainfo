@@ -238,6 +238,11 @@ test("the Sitges guide never presents a schedule of its own", () => {
     own, it sends the reader to the festival's own session finder, and it tells
     them to check it on the day. A fabricated grid is the one thing that would
     make this guide actively harmful.
+
+    On 26 October 2026, after the 59th edition ended, the session-grid callout
+    and its link to /en/edition/program were removed (there is no grid until
+    the next edition is announced). The guide still points at the festival's
+    own site and still never prints a timetable.
   */
   const checkOnTheDay = {
     ca: /aquell mateix matí|el mateix matí|abans d'anar|revisa la web oficial/i,
@@ -251,8 +256,8 @@ test("the Sitges guide never presents a schedule of its own", () => {
     // Points at the operator rather than reproducing it.
     assert.match(
       JSON.stringify(SITGES.editions[locale].blocks),
-      /sitgesfilmfestival\.com\/en\/edition\/program/,
-      `${locale} does not link the official programme`,
+      /\(https:\/\/sitgesfilmfestival\.com\//,
+      `${locale} does not link the official festival site`,
     );
     assert.match(text, checkOnTheDay[locale], `${locale} lost the check-on-the-day caveat`);
     assert.match(text, /8[–-]18|October 8|8 d'octubre|8 de octubre/, `${locale} lost the dates`);
