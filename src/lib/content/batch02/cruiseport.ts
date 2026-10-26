@@ -67,7 +67,7 @@ const META: Record<Locale, { path: string; title: string; seoTitle: string; seoD
     title: "Del puerto de cruceros de Barcelona al centro: Cruise Bus, taxi o a pie",
     seoTitle: "Muelle Adosado Barcelona: terminales de cruceros y Cruise Bus",
     seoDescription:
-      "Terminales de cruceros del Muelle Adosado (A, B, C, D, E Helix, MSC) y WTC: distancia al centro, Cruise Bus (3,50 €) hasta La Rambla y taxi al aeropuerto.",
+      "Terminales de cruceros del Muelle Adosado (A, B, D, E Helix, MSC) y WTC: distancia al centro, Cruise Bus (3,50 €) hasta La Rambla y taxi al aeropuerto.",
     excerpt: "Cómo ir de las terminales de cruceros de Barcelona al centro: la lanzadera, el taxi y a pie, con las distancias y los precios oficiales.",
   },
   en: {
