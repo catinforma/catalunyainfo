@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { test } from "node:test";
 
 import { bodySchema, bodyToPlainText } from "../src/lib/content/blocks.ts";
-import { normaliseEvent, slugify, weekendWindow } from "../src/lib/content/weekend/agenda.ts";
+import { isInCatalonia, normaliseEvent, slugify, weekendWindow } from "../src/lib/content/weekend/agenda.ts";
 import { EVERGREEN, buildEvergreenBody } from "../src/lib/content/weekend/evergreen.ts";
 import { LOCALES } from "../src/lib/i18n/config.ts";
 
@@ -154,3 +154,17 @@ for (const locale of LOCALES) {
     }
   });
 }
+
+test("events outside Catalonia are left out of the Catalan agenda", () => {
+  // Found by an outside review on 26 Oct 2026: a Manacor exhibition was listed.
+  const mallorca = { comarca_i_municipi: "manacor_illes_balears", comarca: "manacor_illes_balears", municipi: "" };
+  assert.equal(normaliseEvent(row(mallorca), WINDOW, NAMES), null);
+  assert.equal(isInCatalonia({ comarca: "agenda:ubicacions/fora-de-catalunya" }, NAMES), false);
+  assert.equal(isInCatalonia({ comarca: "", comarca_i_municipi: "", municipi: "" }, NAMES), false);
+});
+
+test("Catalan locations are kept, structured or as a known municipality", () => {
+  assert.equal(isInCatalonia({ comarca: "agenda:ubicacions/girona/baix-emporda" }, NAMES), true);
+  assert.equal(isInCatalonia({ comarca_i_municipi: "sant-cugat-del-valles" }, NAMES), true);
+  assert.equal(isInCatalonia({ comarca_i_municipi: "manresa" }, NAMES), false, "unknown to this test's register");
+});
