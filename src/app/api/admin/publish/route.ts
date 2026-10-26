@@ -47,6 +47,8 @@ import { PARKING, TRANSPORT } from "@/lib/content/batch02/barcelona-practical";
 import { ELECTION_NIGHT } from "@/lib/content/batch02/election-night";
 import { CONGRESS_RESULTS, PARLIAMENT_RESULTS } from "@/lib/content/batch02/election-results";
 import { CANDIDATES } from "@/lib/content/batch02/candidates";
+import { DECEMBER_BRIDGE } from "@/lib/content/batch02/december-bridge";
+import { MARATO_GUIDE } from "@/lib/content/batch02/marato";
 import { publishHolidayTodayGuide } from "@/lib/content/holidays/today-publish";
 import { publishLocalHolidaysGuide } from "@/lib/content/holidays/local-publish";
 import { publishReservoirGuide } from "@/lib/content/reservoirs/publish";
@@ -155,6 +157,11 @@ export async function POST(request: Request) {
     // 29N candidates: the lists are read from the BOE at render time; this
     // publishes the guide around them (re-running it also refreshes the page).
     if (wants("candidates")) published.push(await publishB2Article(CANDIDATES));
+    // December bridge 2026 and La Marató 2026, one group each, each with the
+    // one existing page that gained a link to it (the holiday calendar; the
+    // Christmas in Barcelona hub).
+    if (wants("pont-desembre")) published.push(await publishB2Article(DECEMBER_BRIDGE), await publishHolidayGuide());
+    if (wants("marato")) published.push(await publishB2Article(MARATO_GUIDE), await publishB2Article(CHRISTMAS_BARCELONA));
     if (wants("family-markets")) published.push(await publishB2Article(ZOO_AQUARIUM), await publishB2Article(MARKETS));
     if (wants("cruiseport")) published.push(await publishB2Article(CRUISEPORT));
     if (wants("portaventura")) published.push(await publishB2Article(PORTAVENTURA));

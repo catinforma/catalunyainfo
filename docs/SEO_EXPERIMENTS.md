@@ -470,6 +470,35 @@ cited on the page). Same pattern as the 14 Oct entry: the date in the title.
 falls sharply after the change, so judge CTR, never clicks. The next peak is the
 week before 28 March 2027.
 
+## 2026-10-26 — Round 4: December bridge 2026 and La Marató 2026 (new pages)
+
+Branch `sprint/2026-10-30-round4`. Two new trilingual pages, each answering
+one dated question in its first two lines, facts re-read on 26 Oct 2026 from
+the DOGC, the BOE, the CEMB and 3Cat:
+
+| Page | Publish group | Answer in the lead | Queries aimed at |
+| --- | --- | --- | --- |
+| `/ca/guies/pont-desembre-catalunya/` (+ es `guias/puente-diciembre-cataluna`, en `guides/december-long-weekend-catalonia`) | `pont-desembre` | only Tue 8 Dec is a holiday; the 6th is a Sunday, the 7th a working day (local holiday in 42 towns) | pont desembre 2026, puente diciembre 2026 cataluña, 7 diciembre festivo cataluña, december holidays catalonia |
+| `/ca/guies/la-marato-tv3-3cat/` (+ es `guias/la-marato-tv3-3cat`, en `guides/la-marato-tv3-telethon`) | `marato` | Sun 13 Dec 2026, neurodegenerative and neuromuscular diseases, 35th edition | la marató 2026, marató tv3 2026, marató 3cat, bizum marató |
+
+Links added to existing pages (one sentence each, nothing else changed): the
+2027 holiday calendar (bridges intro) -> bridge page; Christmas in Barcelona
+("more Christmas events") -> La Marató. Both are inside their 23-25 Oct
+windows, so read those pages' own queries as unaffected unless clicks to the
+new pages show up in their exits.
+
+**Prediction.** Both enter at position 10 or better for their main query
+within 28 days of publishing (the 29N candidates page entered at 5.1 on day
+one); demand peaks late November to 8 December (bridge) and 1-13 December
+(Marató), so clicks before mid-November will be small.
+
+**Measure** 28 days after publishing (if published on 30 Oct: 27 Nov 2026):
+position and clicks per query above, per language. Re-check the Marató page
+weekly from mid-November on https://www.3cat.cat/tv3/marato/ and add the
+programme times and the donation phone number once 3Cat publishes them.
+
+**Outcome:** _pending_
+
 ## Candidates not yet run
 
 Recorded so they are not lost, and so they are not all started at once.

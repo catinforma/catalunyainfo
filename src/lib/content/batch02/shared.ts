@@ -61,7 +61,10 @@ export type B2Key =
   | "christmasBarcelona"
   | "newYear"
   | "snowNow"
-  | "candidates";
+  | "candidates"
+  // Round 4 (26 Oct 2026): December bridge and La Marató.
+  | "decemberBridge"
+  | "marato";
 
 /** Path after the locale prefix, no leading or trailing slash. */
 export const B2_PATHS: Record<B2Key, Record<Locale, string>> = {
@@ -299,6 +302,16 @@ export const B2_PATHS: Record<B2Key, Record<Locale, string>> = {
     ca: "guies/candidats-eleccions-generals-catalunya",
     es: "guias/candidatos-elecciones-generales-cataluna",
     en: "guides/spain-general-election-candidates-catalonia",
+  },
+  decemberBridge: {
+    ca: "guies/pont-desembre-catalunya",
+    es: "guias/puente-diciembre-cataluna",
+    en: "guides/december-long-weekend-catalonia",
+  },
+  marato: {
+    ca: "guies/la-marato-tv3-3cat",
+    es: "guias/la-marato-tv3-3cat",
+    en: "guides/la-marato-tv3-telethon",
   },
 };
 
@@ -546,6 +559,16 @@ export const B2_TITLES: Record<B2Key, Record<Locale, string>> = {
     ca: "Candidats a les eleccions generals a Catalunya",
     es: "Candidatos a las elecciones generales en Cataluña",
     en: "General election candidates in Catalonia",
+  },
+  decemberBridge: {
+    ca: "Pont de desembre 2026: quins dies són festius",
+    es: "Puente de diciembre 2026: qué días son festivos",
+    en: "December 2026 holidays in Catalonia: 6, 7 and 8 December",
+  },
+  marato: {
+    ca: "La Marató de 3Cat 2026: quan és i com col·laborar",
+    es: "La Marató de 3Cat 2026: cuándo es y cómo colaborar",
+    en: "La Marató 2026: date, cause and how to donate",
   },
 };
 
