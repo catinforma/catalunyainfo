@@ -22,8 +22,15 @@ declare global {
   var __catinfoSql: ReturnType<typeof postgres> | undefined;
 }
 
+/**
+ * `APP_DATABASE_URL` wins over the rest: the DATABASE_URL/POSTGRES_* variables
+ * are written by the Neon integration on Vercel and cannot be edited there, so
+ * the database the site actually uses (Supabase since 26 Oct 2026) is set
+ * under its own name. Removing it falls back to Neon.
+ */
 export function databaseUrl(): string | null {
   const url =
+    process.env.APP_DATABASE_URL ??
     process.env.DATABASE_URL ??
     process.env.POSTGRES_URL ??
     process.env.POSTGRES_URL_NON_POOLING ??
@@ -47,14 +54,19 @@ export function getDb(): Database | null {
   // Reuse the socket pool across HMR reloads and across warm serverless
   // invocations. `max: 1` keeps a serverless function from exhausting the
   // connection limit; use a pooled connection string (pgBouncer) in Vercel.
-  const client =
-    globalThis.__catinfoSql ??
-    postgres(url, {
-      max: Number(process.env.DATABASE_POOL_MAX ?? 1),
-      idle_timeout: 20,
-      connect_timeout: 10,
-      prepare: false,
-    });
+  const options = {
+    max: Number(process.env.DATABASE_POOL_MAX ?? 1),
+    idle_timeout: 20,
+    connect_timeout: 10,
+    prepare: false,
+    // One query at a time per connection. postgres.js otherwise pipelines
+    // concurrent queries, and Supabase's transaction pooler (Supavisor)
+    // mixes them up under load: backends hung "active" until the 2-minute
+    // statement timeout and a local build timed out on 144 pages. The option
+    // exists in postgres.js but not in its type definitions.
+    max_pipeline: 0,
+  };
+  const client = globalThis.__catinfoSql ?? postgres(url, options);
 
   if (process.env.NODE_ENV !== "production") globalThis.__catinfoSql = client;
 

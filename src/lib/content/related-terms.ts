@@ -85,6 +85,7 @@ const COMMON = new Set([
   "tickets",
   "entradas",
   "entrades",
+  "pass",
   "passes",
   "llegar",
   "arribar",

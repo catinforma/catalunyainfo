@@ -48,10 +48,11 @@ export const PROCESSORS = [
     region: { ca: "París (UE) i CDN global", es: "París (UE) y CDN global", en: "Paris (EU) and global CDN" },
   },
   {
-    name: "Neon Inc.",
+    /** Processor named in supabase.com/legal/dpa; project in eu-west-1 (Ireland) since 26 Oct 2026. */
+    name: "Supabase Pte. Ltd.",
     role: { ca: "Base de dades", es: "Base de datos", en: "Database" },
-    url: "https://neon.com/privacy-policy",
-    region: { ca: "Segons la regió contractada", es: "Según la región contratada", en: "Per the contracted region" },
+    url: "https://supabase.com/privacy",
+    region: { ca: "Irlanda (UE)", es: "Irlanda (UE)", en: "Ireland (EU)" },
   },
   {
     name: "Google Ireland Ltd.",
