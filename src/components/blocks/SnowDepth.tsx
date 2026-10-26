@@ -22,6 +22,13 @@ import type { Locale } from "@/lib/i18n/config";
  * the time of its own reading, because validated readings arrive a day or
  * more late.
  *
+ * `loadSnowReport` throws when Meteocat cannot be read at runtime, and that is
+ * deliberate: the throw fails the ISR regeneration, so the last good page
+ * stays up instead of a day-long "could not read the data" page. Do not wrap
+ * it in a try/catch or a Suspense boundary that would turn the failure into
+ * rendered HTML. The `report.error` branch below is only reached during
+ * `next build`.
+ *
  * The strings live here rather than in the message files: the block is the
  * only thing that uses them.
  */

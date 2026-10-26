@@ -17,6 +17,7 @@ import {
   parseReadings,
   parseStations,
   SNOW_STATIONS,
+  SnowSourceError,
   snowSummary,
   type ReadingRow,
 } from "../src/lib/content/snow/depth.ts";
@@ -176,6 +177,49 @@ test("when nothing validated is recent, no figure is given at all", () => {
   assert.deepEqual(snowSummary(r, "en"), ["Meteocat has not published a validated snow-depth reading from the last 48 hours."]);
 });
 
+test("with no current Pyrenean reading, the summary says so before the stations outside the Pyrenees", () => {
+  // 26 Oct 2026, en: all Pyrenean stations lacked a validated reading, and the
+  // headline "no snow at any of the 3 stations" rested on Puig Sesolles, Els
+  // Ports and Prades, on a page titled "Is there snow in the Pyrenees today?".
+  const stations = parseStations([
+    ...STATION_ROWS,
+    { codi_estacio: "T1", nom_estacio: "Test station outside the Pyrenees", nom_comarca: "Baix Ebre", altitud: "1000" },
+  ]);
+  const rows = [
+    row("XK", "2026-10-24T06:00", "0", "V"),
+    row("T1", "2026-10-24T06:00", "0", "V"),
+    // Pyrenean readings, all older than 48 hours.
+    row("Z1", "2026-10-22T05:30", "0", "V"),
+    row("VS", "2026-10-22T03:30", "1", "V"),
+  ];
+  const r = buildSnowReport(parseReadings(rows), ["Z1", "Z5", "VS", "XK", "T1"], stations, NOW);
+  assert.equal(r.current, 2);
+
+  const ca = snowSummary(r, "ca");
+  assert.equal(
+    ca[0],
+    "Cap de les 3 estacions del Meteocat al Pirineu no té encara una lectura validada de les últimes 48 hores, així que avui no podem dir si hi ha neu a terra al Pirineu.",
+  );
+  assert.match(ca[1] ?? "", /no hi ha neu a terra a cap de les 2 estacions/i);
+  assert.equal(
+    snowSummary(r, "es")[0],
+    "Ninguna de las 3 estaciones de Meteocat en el Pirineo tiene todavía una lectura validada de las últimas 48 horas, así que hoy no podemos decir si hay nieve en el suelo en el Pirineo.",
+  );
+  const en = snowSummary(r, "en");
+  assert.equal(
+    en[0],
+    "None of Meteocat's 3 Pyrenean stations has a validated reading from the last 48 hours yet, so we can't say today whether there is snow on the ground in the Pyrenees.",
+  );
+  assert.match(en[1] ?? "", /no snow on the ground at any of the 2 Meteocat stations/);
+  // The Pyrenean stations are already counted in the first line, not again as "more stations".
+  assert.ok(!en.some((line) => /more station/i.test(line)), en.join(" | "));
+});
+
+test("one current Pyrenean reading is enough to answer for the Pyrenees", () => {
+  const r = report();
+  assert.ok(!snowSummary(r, "en").some((line) => /Pyrenean stations has a validated reading/.test(line)));
+});
+
 test("numbers are grouped the local way whatever the runtime does", () => {
   assert.equal(formatInt(2262, "ca"), "2.262");
   assert.equal(formatInt(2262, "es"), "2.262");
@@ -193,20 +237,68 @@ afterEach(() => {
   globalThis.fetch = realFetch;
 });
 
-test("an unreachable source is reported as such, never replaced", async () => {
+/** Runs `body` as if inside `next build`, restoring the environment afterwards. */
+async function duringBuild<T>(body: () => Promise<T>): Promise<T> {
+  const previous = process.env.NEXT_PHASE;
+  process.env.NEXT_PHASE = "phase-production-build";
+  try {
+    return await body();
+  } finally {
+    if (previous === undefined) delete process.env.NEXT_PHASE;
+    else process.env.NEXT_PHASE = previous;
+  }
+}
+
+test("at runtime an unreachable source throws, so ISR keeps the last good page", async () => {
+  // A resolved error report would be rendered and cached for a day in place of
+  // the previous good page (ca and es, 25-26 Oct 2026). A rejection fails the
+  // regeneration instead, and the cached page stays up.
   globalThis.fetch = (async () => {
     throw new Error("network down");
   }) as typeof fetch;
-  const r = await loadSnowReport(NOW);
+  await assert.rejects(loadSnowReport(NOW), (error: unknown) => error instanceof SnowSourceError && /network down/.test(error.message));
+
+  globalThis.fetch = (async () => new Response("oops", { status: 503 })) as typeof fetch;
+  await assert.rejects(loadSnowReport(NOW), (error: unknown) => error instanceof SnowSourceError && /503/.test(error.message));
+
+  globalThis.fetch = (async () => new Response(JSON.stringify({ error: true }), { status: 200 })) as typeof fetch;
+  await assert.rejects(loadSnowReport(NOW), (error: unknown) => error instanceof SnowSourceError && error.message === "unexpected response");
+
+  // Station metadata missing: nothing could be shown, so it is a failure too.
+  globalThis.fetch = (async () => new Response(JSON.stringify([]))) as typeof fetch;
+  await assert.rejects(loadSnowReport(NOW), SnowSourceError);
+});
+
+test("an error report is never what a regenerated page renders", async () => {
+  // Whatever the source does, loadSnowReport either resolves with a report
+  // that has no error or rejects. It never hands the block the "could not
+  // read" state outside `next build`.
+  const responses: Array<() => Promise<Response>> = [
+    async () => {
+      throw new Error("timeout");
+    },
+    async () => new Response("", { status: 500 }),
+    async () => new Response("{}"),
+    async () => new Response("[]"),
+  ];
+  for (const respond of responses) {
+    globalThis.fetch = respond as unknown as typeof fetch;
+    const outcome = await loadSnowReport(NOW).then(
+      (report) => report.error,
+      () => "rejected",
+    );
+    assert.equal(outcome, "rejected");
+  }
+});
+
+test("during next build, with no earlier page to keep, the failure is rendered as such", async () => {
+  globalThis.fetch = (async () => {
+    throw new Error("network down");
+  }) as typeof fetch;
+  const r = await duringBuild(() => loadSnowReport(NOW));
   assert.equal(r.error, "network down");
   assert.equal(r.stations.length, 0);
   assert.deepEqual(snowSummary(r, "ca"), ["Quan s'ha actualitzat aquesta pàgina no hem pogut llegir les dades del Meteocat."]);
-
-  globalThis.fetch = (async () => new Response("oops", { status: 503 })) as typeof fetch;
-  assert.match((await loadSnowReport(NOW)).error ?? "", /503/);
-
-  globalThis.fetch = (async () => new Response(JSON.stringify({ error: true }), { status: 200 })) as typeof fetch;
-  assert.equal((await loadSnowReport(NOW)).error, "unexpected response");
 });
 
 test("the live query asks for variable 38, validated rows only, with a day-stable bound", async () => {

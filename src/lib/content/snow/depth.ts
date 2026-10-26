@@ -30,7 +30,19 @@ import { INTL_LOCALE, type Locale } from "@/lib/i18n/config";
  *
  * - **Show a stale reading as current.** Older than `MAX_AGE_HOURS` and the
  *   station is listed without a figure.
- * - **Fall back to remembered data.** A failed fetch is reported as a failure.
+ * - **Replace a good page with a failure.** A failed fetch throws
+ *   (`SnowSourceError`) instead of rendering "we could not read the data".
+ *   The page is ISR: on Vercel a failed regeneration, background or on demand
+ *   (the nightly cron's `revalidatePath`), keeps serving the last good HTML
+ *   and retries about 30 seconds later ("If revalidation fails, Vercel keeps
+ *   serving the existing cached content", vercel.com/docs/incremental-static-
+ *   regeneration, read 26 Oct 2026). Rendering the failure instead cached it
+ *   for a day: on 25-26 Oct 2026 Google crawled the ca and es pages that way.
+ *   Only during `next build`, where there is no previous page and a throw
+ *   would fail the deploy, is the failure rendered as such. A module-level
+ *   "last good" copy would not help: serverless instances do not share or
+ *   keep memory. The readings still carry their own times, so the last good
+ *   page never presents an old reading as today's.
  * - **Use the daily dataset (`7bvh-jvq2`).** Its snow variables (1600 mean
  *   depth, 1602 new snow) were three days behind on 25 Oct 2026, computed
  *   from the unvalidated readings (12 cm of "new snow" at Núria at 0-8 °C)
@@ -139,6 +151,11 @@ export const AREA_LABEL: Record<SnowArea, Record<Locale, string>> = {
 /** The comarca's place in the list; any comarca not named above is "other". */
 export function areaFor(comarca: string): SnowArea {
   return AREA_BY_COMARCA[comarca.normalize("NFC").trim()] ?? "other";
+}
+
+/** Every area but "other" is in the Pyrenees. */
+export function isPyrenean(area: SnowArea): boolean {
+  return area !== "other";
 }
 
 /** "Cadí Nord (2.145 m) - Prat d'Aguiló" → "Cadí Nord - Prat d'Aguiló"; the altitude has its own column. */
@@ -359,6 +376,7 @@ const SUMMARY: Record<
   {
     snow: (n: number, total: number, station: string, altitude: string, cm: number) => string;
     none: (total: number) => string;
+    pyreneesNoCurrent: (n: number) => string;
     latest: (when: string) => string;
     stale: (n: number) => string;
     noCurrent: string;
@@ -372,6 +390,8 @@ const SUMMARY: Record<
       total === 1
         ? "No hi ha neu a terra a l'única estació del Meteocat amb lectura validada recent."
         : `No hi ha neu a terra a cap de les ${total} estacions del Meteocat amb lectura validada recent.`,
+    pyreneesNoCurrent: (n) =>
+      `Cap de les ${n} estacions del Meteocat al Pirineu no té encara una lectura validada de les últimes 48 hores, així que avui no podem dir si hi ha neu a terra al Pirineu.`,
     latest: (when) => `Lectura validada més recent: ${when}.`,
     stale: (n) =>
       n === 1
@@ -387,6 +407,8 @@ const SUMMARY: Record<
       total === 1
         ? "No hay nieve en el suelo en la única estación de Meteocat con lectura validada reciente."
         : `No hay nieve en el suelo en ninguna de las ${total} estaciones de Meteocat con lectura validada reciente.`,
+    pyreneesNoCurrent: (n) =>
+      `Ninguna de las ${n} estaciones de Meteocat en el Pirineo tiene todavía una lectura validada de las últimas 48 horas, así que hoy no podemos decir si hay nieve en el suelo en el Pirineo.`,
     latest: (when) => `Lectura validada más reciente: ${when}.`,
     stale: (n) =>
       n === 1
@@ -402,6 +424,8 @@ const SUMMARY: Record<
       total === 1
         ? "There is no snow on the ground at the one Meteocat station with a recent validated reading."
         : `There is no snow on the ground at any of the ${total} Meteocat stations with a recent validated reading.`,
+    pyreneesNoCurrent: (n) =>
+      `None of Meteocat's ${n} Pyrenean stations has a validated reading from the last 48 hours yet, so we can't say today whether there is snow on the ground in the Pyrenees.`,
     latest: (when) => `Latest validated reading: ${when}.`,
     stale: (n) =>
       n === 1
@@ -421,7 +445,15 @@ export function snowSummary(report: SnowReport, locale: Locale): string[] {
   if (report.error) return [t.unreachable];
   if (report.current === 0) return [t.noCurrent];
 
+  // The page answers "is there snow in the Pyrenees". When every reading it
+  // has comes from outside them (Montseny, Ports, Prades on 26 Oct 2026), a
+  // "no snow at any station" headline would answer a different question, so
+  // the missing Pyrenean readings lead.
+  const pyrenean = report.stations.filter((s) => isPyrenean(s.area));
+  const noPyreneanReading = pyrenean.length > 0 && pyrenean.every((s) => s.cm === null);
+
   const lines: string[] = [];
+  if (noPyreneanReading) lines.push(t.pyreneesNoCurrent(pyrenean.length));
   if (report.withSnow > 0 && report.deepest) {
     const d = report.deepest;
     lines.push(t.snow(report.withSnow, report.current, d.name, formatInt(d.altitude, locale), d.cm ?? 0));
@@ -429,7 +461,8 @@ export function snowSummary(report: SnowReport, locale: Locale): string[] {
     lines.push(t.none(report.current));
   }
   if (report.latestAt) lines.push(t.latest(formatReadingTime(report.latestAt, locale, true)));
-  const stale = report.stations.length - report.current;
+  // Stations without a current reading that the lines above have not already named.
+  const stale = report.stations.filter((s) => s.cm === null && !(noPyreneanReading && isPyrenean(s.area))).length;
   if (stale > 0) lines.push(t.stale(stale));
   return lines;
 }
@@ -464,7 +497,34 @@ function query(base: string, params: Record<string, string>): string {
   return `${base}?${search}`;
 }
 
+/** Meteocat's open data could not be read; see "What it will not do" above. */
+export class SnowSourceError extends Error {
+  constructor(message: string, options?: { cause?: unknown }) {
+    super(message, options);
+    this.name = "SnowSourceError";
+  }
+}
+
+/** `next build` sets this before prerendering (`PHASE_PRODUCTION_BUILD`). */
+function isBuildPhase(): boolean {
+  return process.env.NEXT_PHASE === "phase-production-build";
+}
+
+/**
+ * The report, or a throw.
+ *
+ * At runtime a failure rejects, so the ISR regeneration fails and the last
+ * good page stays up. During `next build` there is no earlier page to keep and
+ * a throw would fail the deploy, so the failure is returned as a report with
+ * `error` set and the block says it could not read the data.
+ */
 export async function loadSnowReport(now: Date = new Date()): Promise<SnowReport> {
+  const report = await readSnowReport(now);
+  if (report.error && !isBuildPhase()) throw new SnowSourceError(report.error);
+  return report;
+}
+
+async function readSnowReport(now: Date): Promise<SnowReport> {
   try {
     const [validated, stations] = await Promise.all([
       // Validated rows only, enough days back for the 48 h window and the 24 h change.
