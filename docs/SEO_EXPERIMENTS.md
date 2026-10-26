@@ -77,7 +77,7 @@ clicks, or the festival will take the credit.
 
 **Measure on:** 2026-10-08 (14 days) and 2026-10-22 (28 days).
 
-**Outcome:** _pending_
+**Outcome (read 26 Oct, scripts/gsc-compare.py):** no lift. Named queries (dates/schedule/tickets/programme/lineup) 10–23 Sep: 50 impressions, 1 click (2.0%); 25 Sep–22 Oct: 66 impressions, 1 click (1.5%). Position stayed at 9–10 throughout. The title now matched the intent, and it made no difference at position 9: the limit was the position, not the title. The festival ended on 18 Oct.
 
 ---
 
@@ -99,7 +99,7 @@ is new coverage rather than a reallocation.
 Position on a brand-new page is unstable for the first fortnight, and a change
 inside that window makes the whole thing unreadable.
 
-**Outcome:** _pending_
+**Outcome (read 26 Oct):** ES position 34.5 (25 Sep–8 Oct) → 14.3 (9–24 Oct), clicks 4 → 10; CA flat at position 9.6–10.0, 4 → 5 clicks on 640 → 1,035 impressions; EN ~110 impressions at position 10–11, 1 → 0 clicks. Coverage came, clicks did not: every edition sits at the bottom of page 1 or on page 2, where CTR is under 1%. Next lever is position (content and links), not the title.
 
 ---
 
@@ -137,7 +137,7 @@ performance and the en/ca/es split), 24 December (90 days).
 
 **Do not change any of the three titles before 23 October.**
 
-**Outcome:** _pending_
+**Outcome (read 26 Oct):** Prediction 1 (new coverage) held. Prediction 2 (the English edition leads) was **wrong**: 9–24 Oct ES 647 impressions at position 9.2, EN 165 at 6.5, CA 170 at 6.7. Spanish-language demand is four times the English. Revisit the English-lead assumption behind P03/P05. CTR is 0.3–1.8% everywhere: again a position problem.
 
 ---
 
@@ -303,6 +303,9 @@ Search Console, 27 Sep – 11 Oct (data to 8 Oct):
 **Measure on 25 Oct** (14 days): clicks on the queries above; parking CA/ES CTR at
 position ≤3 should be well above 0.
 
+**Outcome (read 26 Oct, 27 Sep–10 Oct vs 12–24 Oct):** Mushrooms CA **positive**: map/this-week queries 54 → 195 impressions, 0 → 5 clicks; `mapa bolets catalunya 2026` position 11.8 → 7.2. Parking CA/ES **no effect**: 0 clicks before and after on the price queries (and the body was rewritten on 23 Oct, so later readings are confounded). Transport EN **unreadable**: the title changed again on 18 Oct.
+
+
 ## 2026-10-14 — Clock change: the date in the title
 
 **Before.** "Canvi d'hora: quan és el pròxim i calendari fins al 2031". First day live:
@@ -314,6 +317,9 @@ back"). `tests/clock-change.test.ts` fails once that date passes, so the title i
 rewritten to the March change and republished.
 
 **Measure on 24 Oct** (the peak is the week of the change): CTR on the CA/ES page.
+
+**Outcome (read 26 Oct):** no lift. CA page 12–14 Oct 465 impressions, 2 clicks (0.4%) at position 5.5; 15–24 Oct 6,824 impressions, 19 clicks (0.3%) at 7.1. ES 234 impressions, 1 click. With the date in the title and in Google's own answer box, searchers had nothing left to click for.
+
 
 ## 2026-10-17 — Mesa electoral and metro hours: the answer in the title
 
@@ -469,6 +475,18 @@ cited on the page). Same pattern as the 14 Oct entry: the date in the title.
 **Measure on 23 Nov** (28 days): impressions and CTR at equal position. Demand
 falls sharply after the change, so judge CTR, never clicks. The next peak is the
 week before 28 March 2027.
+
+## 2026-10-26 — what five readings say: titles do not move CTR below position 5
+
+Read together, the five experiments due between 22 and 25 October agree:
+
+- A title that names the answer did **not** raise CTR at positions 7–10 (Sitges,
+  parking, clock change). Where it helped (mushroom map), position improved too.
+- The pages that convert are the ones at positions 1–4: `donde hay setas ahora`
+  at 1.4 converts at 22.6 %; `como votar` at 5.2 at 10.7 %.
+- So the next round goes after **position**: content that answers more of the
+  query cluster than the top three, freshness, and internal links from the
+  pages that already rank. Title changes are the exception, not the tool.
 
 ## Candidates not yet run
 
