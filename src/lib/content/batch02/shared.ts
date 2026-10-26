@@ -62,7 +62,8 @@ export type B2Key =
   | "newYear"
   | "snowNow"
   | "candidates"
-  | "calcots";
+  | "calcots"
+  | "christmasTraditions";
 
 /** Path after the locale prefix, no leading or trailing slash. */
 export const B2_PATHS: Record<B2Key, Record<Locale, string>> = {
@@ -305,6 +306,11 @@ export const B2_PATHS: Record<B2Key, Record<Locale, string>> = {
     ca: "tradicions/calcotada-valls-temporada-calcots",
     es: "tradiciones/calcotada-valls-temporada-calcots",
     en: "traditions/calcotada-valls-calcot-season",
+  },
+  christmasTraditions: {
+    ca: "tradicions/tradicions-de-nadal-catalunya",
+    es: "tradiciones/tradiciones-navidad-cataluna",
+    en: "traditions/catalan-christmas-traditions",
   },
 };
 
@@ -557,6 +563,11 @@ export const B2_TITLES: Record<B2Key, Record<Locale, string>> = {
     ca: "Calçots i Calçotada de Valls 2027: temporada i data",
     es: "Calçots y Calçotada de Valls 2027: temporada y fecha",
     en: "Calçot season and the Valls Calçotada 2027",
+  },
+  christmasTraditions: {
+    ca: "Tradicions de Nadal a Catalunya: tió, caganer i Sant Esteve",
+    es: "Tradiciones de Navidad en Cataluña: tió, caganer y Sant Esteve",
+    en: "Catalan Christmas traditions: tió, caganer and Sant Esteve",
   },
 };
 
