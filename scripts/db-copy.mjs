@@ -9,6 +9,7 @@
  *   node scripts/db-copy.mjs verify   row counts and an md5 of every table, both sides
  *   node scripts/db-copy.mjs lock     enable RLS and revoke the Supabase API roles
  *   node scripts/db-copy.mjs backup source|target   COPY dump of every table to backups/
+ *   node scripts/db-copy.mjs app-url | vercel env add ...   production URL, pipe only
  *
  * Connection strings are read from `.env.migrate` (gitignored) as SOURCE_URL
  * and TARGET_URL (NEON_URL / SUPABASE_URL also accepted) and never printed.
@@ -293,7 +294,20 @@ async function backup() {
   console.log(`backup of ${side} (${host(side === "source" ? sourceUrl : targetUrl)}): ${tables.length} tables in ${dir}`);
 }
 
-const steps = { info, schema, diff, copy, verify, lock, backup };
+/**
+ * `app-url`: the production APP_DATABASE_URL (transaction pooler, encoded
+ * password, sslmode=require), for piping only:
+ *   node scripts/db-copy.mjs app-url | npx vercel env add APP_DATABASE_URL production --sensitive --force
+ * Refuses to print to a terminal.
+ */
+async function appUrl() {
+  if (process.stdout.isTTY) throw new Error("app-url only writes to a pipe (it contains the password)");
+  const url = encodePassword(env.TARGET_URL || env.SUPABASE_URL || "");
+  if (!/:6543\//.test(url)) throw new Error("SUPABASE_URL is not the transaction pooler (port 6543)");
+  process.stdout.write(`${url.split("?")[0]}?sslmode=require`);
+}
+
+const steps = { info, schema, diff, copy, verify, lock, backup, "app-url": appUrl };
 const step = steps[process.argv[2]];
 if (!step) {
   console.error(`usage: node scripts/db-copy.mjs ${Object.keys(steps).join("|")}`);
