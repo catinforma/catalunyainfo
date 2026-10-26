@@ -179,7 +179,7 @@ const COPY: Record<Locale, T> = {
     ],
     faq: [
       { question: "How much is a Sagrada Família ticket?", answer: `€26 for the basic ticket with the audio-guide app, €36 with the towers, on the official site as of ${VERIFIED}. Under 11s go free.` },
-      { question: "What are the Sagrada Família opening hours?", answer: "In October, Monday to Friday 9:00–19:00, Saturday 9:00–18:00 and Sunday 10:30–19:00. From November to February, Monday to Saturday 9:00–18:00 and Sunday 10:30–18:00." },
+      { question: "What are the Sagrada Família opening hours?", answer: "From November to February, Monday to Saturday 9:00–18:00 and Sunday 10:30–18:00; on 25 and 26 December and 1 and 6 January, 9:00–14:00. In March and October, Monday to Friday 9:00–19:00, Saturday 9:00–18:00 and Sunday 10:30–19:00." },
       { question: "Can I buy Park Güell tickets at the gate?", answer: "No. Tickets for the Monumental Zone are sold online only, for a 30-minute time slot." },
       { question: "How much are Casa Batlló tickets?", answer: "The general visit starts from €29 and the price changes with the date and time. Buying online in advance saves up to €15 per person, and children aged 0 to 12 with an adult go free." },
       { question: "Is Park Güell free for Barcelona residents?", answer: "Yes, with the Passi Verd, booked on the same day, for people registered as residents in Barcelona." },
@@ -234,7 +234,7 @@ const COPY: Record<Locale, T> = {
     ],
     faq: [
       { question: "¿Cuánto cuesta la entrada a la Sagrada Familia?", answer: `26 € la básica con audioguía en app y 36 € con torres, en la web oficial a ${VERIFIED}. Los menores de 11 entran gratis.` },
-      { question: "¿Qué horario tiene la Sagrada Familia?", answer: "En octubre, de lunes a viernes de 9:00 a 19:00, el sábado de 9:00 a 18:00 y el domingo de 10:30 a 19:00. De noviembre a febrero, de lunes a sábado de 9:00 a 18:00 y el domingo de 10:30 a 18:00." },
+      { question: "¿Qué horario tiene la Sagrada Familia?", answer: "De noviembre a febrero, de lunes a sábado de 9:00 a 18:00 y el domingo de 10:30 a 18:00; el 25 y 26 de diciembre y el 1 y 6 de enero, de 9:00 a 14:00. En marzo y octubre, de lunes a viernes de 9:00 a 19:00, el sábado de 9:00 a 18:00 y el domingo de 10:30 a 19:00." },
       { question: "¿Se pueden comprar entradas del Park Güell en la puerta?", answer: "No. Las entradas a la Zona Monumental solo se venden en línea, para una franja de 30 minutos." },
       { question: "¿Cuánto cuesta la entrada a la Casa Batlló?", answer: "La visita general cuesta desde 29 € y el precio cambia según el día y la hora. Comprar en línea con antelación ahorra hasta 15 € por persona, y los niños de 0 a 12 años con un adulto entran gratis." },
       { question: "¿El Park Güell es gratis para los vecinos de Barcelona?", answer: "Sí, con el Passi Verd, que se reserva el mismo día, para las personas empadronadas en Barcelona." },
@@ -289,7 +289,7 @@ const COPY: Record<Locale, T> = {
     ],
     faq: [
       { question: "Quant costa l'entrada a la Sagrada Família?", answer: `26 € la bàsica amb audioguia en app i 36 € amb torres, al web oficial a ${VERIFIED}. Els menors d'11 anys hi entren gratis.` },
-      { question: "Quin horari té la Sagrada Família?", answer: "A l'octubre, de dilluns a divendres de 9:00 a 19:00, el dissabte de 9:00 a 18:00 i el diumenge de 10:30 a 19:00. De novembre a febrer, de dilluns a dissabte de 9:00 a 18:00 i el diumenge de 10:30 a 18:00." },
+      { question: "Quin horari té la Sagrada Família?", answer: "De novembre a febrer, de dilluns a dissabte de 9:00 a 18:00 i el diumenge de 10:30 a 18:00; el 25 i 26 de desembre i l'1 i 6 de gener, de 9:00 a 14:00. Al març i a l'octubre, de dilluns a divendres de 9:00 a 19:00, el dissabte de 9:00 a 18:00 i el diumenge de 10:30 a 19:00." },
       { question: "Es poden comprar entrades del Park Güell a la porta?", answer: "No. Les entrades a la Zona Monumental només es venen en línia, per a una franja de 30 minuts." },
       { question: "Quant costa l'entrada a la Casa Batlló?", answer: "La visita general costa des de 29 € i el preu canvia segons el dia i l'hora. Comprar en línia amb antelació estalvia fins a 15 € per persona, i els infants de 0 a 12 anys amb un adult hi entren gratis." },
       { question: "El Park Güell és gratis per als veïns de Barcelona?", answer: "Sí, amb el Passi Verd, que es reserva el mateix dia, per a les persones empadronades a Barcelona." },
