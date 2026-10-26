@@ -788,9 +788,12 @@ async function relatedFill(
           or(sameCategory, eq(entries.type, own.type), matches),
         ),
       )
+      // A bare constant is not a valid ORDER BY term ("non-integer constant in
+      // ORDER BY" for false, "position 0" for 0), so the rank and category
+      // keys are only added when they depend on the row.
       .orderBy(
-        desc(rank),
-        desc(sql`(${sameCategory})`),
+        ...(terms.length > 0 ? [desc(rank)] : []),
+        ...(own.categoryId ? [desc(sql`(${sameCategory})`)] : []),
         sql`md5(${entries.id}::text || ${entryId})`,
       )
       .limit(count);

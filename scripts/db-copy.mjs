@@ -28,16 +28,55 @@ const env = Object.fromEntries(
     .filter(Boolean)
     .map((m) => [m[1], m[2]]),
 );
-const sourceUrl = env.SOURCE_URL ?? env.NEON_URL;
-const targetUrl = (env.TARGET_URL ?? env.SUPABASE_URL ?? "").replace(/:6543\//, ":5432/");
+/**
+ * Passwords pasted from a dashboard are often not percent-encoded ("#" or "!"
+ * break URL parsing), so the password part is re-encoded here. Everything up
+ * to the last "@" after the user name is the password.
+ */
+export function encodePassword(url) {
+  const m = url.match(/^(postgres(?:ql)?:\/\/)([^:@/]+):(.*)@([^@/]+\/.*)$/);
+  if (!m) return url;
+  let password = m[3];
+  try {
+    password = decodeURIComponent(password);
+  } catch {
+    // a literal "%" that is not an escape: keep it as typed
+  }
+  return `${m[1]}${m[2]}:${encodeURIComponent(password)}@${m[4]}`;
+}
+
+const sourceUrl = encodePassword(env.SOURCE_URL || env.NEON_URL || env.DATABASE_URL_UNPOOLED || "");
+const targetUrl = encodePassword((env.TARGET_URL || env.SUPABASE_URL || "").replace(/:6543\//, ":5432/"));
 if (!sourceUrl || !targetUrl) {
   console.error("Missing SOURCE_URL/NEON_URL or TARGET_URL/SUPABASE_URL in .env.migrate");
   process.exit(1);
 }
 
 const opts = { max: 1, ssl: "require", prepare: false, onnotice: () => {}, idle_timeout: 20, connect_timeout: 30 };
-const src = postgres(sourceUrl, opts);
-const dst = postgres(targetUrl, opts);
+function connect(label, url) {
+  try {
+    return postgres(url, opts);
+  } catch {
+    // Never echo the URL: it carries the password.
+    console.error(`${label} connection string is not a valid URL (not printed)`);
+    process.exit(1);
+  }
+}
+const src = connect("source", sourceUrl);
+const dst = connect("target", targetUrl);
+
+/**
+ * postgres.js leaves a connection stuck after a large COPY ... TO STDOUT (the
+ * next query never runs), so every COPY gets a connection of its own.
+ */
+async function once(url, run) {
+  const sql = postgres(url, opts);
+  try {
+    return await run(sql);
+  } finally {
+    await sql.end({ timeout: 1 });
+  }
+}
 const host = (url) => new URL(url).hostname;
 
 /** Tables in public, parents before children (foreign keys). */
@@ -125,7 +164,10 @@ async function describe(sql) {
   const indexes = await sql`select indexdef as d from pg_indexes where schemaname = 'public'`;
   const constraints = await sql`
     select conrelid::regclass::text || ' ' || conname || ' ' || pg_get_constraintdef(c.oid) as d
-    from pg_constraint c join pg_namespace n on n.oid = c.connamespace where n.nspname = 'public'`;
+    from pg_constraint c join pg_namespace n on n.oid = c.connamespace
+    -- Postgres 18 also lists NOT NULL as constraints (contype n); 17 keeps them
+    -- only as column nullability, which the columns check already compares.
+    where n.nspname = 'public' and c.contype <> 'n'`;
   const triggers = await sql`
     select event_object_table || ' ' || trigger_name || ' ' || action_timing || ' ' || event_manipulation as d
     from information_schema.triggers where trigger_schema = 'public'`;
@@ -164,9 +206,13 @@ async function copy() {
   await dst.unsafe(`truncate ${tables.map((t) => `"${t}"`).join(", ")} cascade`);
   for (const t of tables) {
     const columns = (await src`select column_name from information_schema.columns where table_schema = 'public' and table_name = ${t} order by ordinal_position`).map((r) => `"${r.column_name}"`).join(", ");
-    const readable = await src.unsafe(`copy "${t}" (${columns}) to stdout`).readable();
-    const writable = await dst.unsafe(`copy "${t}" (${columns}) from stdin`).writable();
-    await pipeline(readable, writable);
+    await once(sourceUrl, (from) =>
+      once(targetUrl, async (to) => {
+        const readable = await from.unsafe(`copy "${t}" (${columns}) to stdout`).readable();
+        const writable = await to.unsafe(`copy "${t}" (${columns}) from stdin`).writable();
+        await pipeline(readable, writable);
+      }),
+    );
     console.log(`copied ${t}`);
   }
   const sequences = await src`select sequencename, last_value from pg_sequences where schemaname = 'public'`;
@@ -237,8 +283,10 @@ async function backup() {
   mkdirSync(dir, { recursive: true });
   const tables = await tablesInOrder(sql);
   for (const t of tables) {
-    const readable = await sql.unsafe(`copy "${t}" to stdout`).readable();
-    await pipeline(readable, createWriteStream(join(dir, `${t}.copy`)));
+    await once(side === "source" ? sourceUrl : targetUrl, async (one) => {
+      const readable = await one.unsafe(`copy "${t}" to stdout`).readable();
+      await pipeline(readable, createWriteStream(join(dir, `${t}.copy`)));
+    });
   }
   writeFileSync(join(dir, "ORDER.txt"), tables.join("\n") + "\n");
   writeFileSync(join(dir, "COUNTS.json"), JSON.stringify(await counts(sql, tables), null, 2));
@@ -258,5 +306,8 @@ try {
   console.error(error.message);
   process.exitCode = 1;
 } finally {
-  await Promise.all([src.end(), dst.end()]);
+  // A connection left stuck by COPY keeps the event loop alive: close with a
+  // deadline and exit explicitly.
+  await Promise.race([Promise.all([src.end({ timeout: 1 }), dst.end({ timeout: 1 })]), new Promise((r) => setTimeout(r, 3000))]);
+  process.exit(process.exitCode ?? 0);
 }
