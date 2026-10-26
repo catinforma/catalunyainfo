@@ -7,7 +7,8 @@ Goal: move every article towards position 1 for the queries it already gets, so 
 - 189 article URLs (63 articles × ca/es/en) plus 21 legal pages (out of scope).
 - 65 URLs have ≥100 impressions; 21 have none.
 - **161 of 189 were edited between 23 and 25 Oct** (page-1 sprints). Their measurement windows end 20–21 Nov.
-- Five experiments were read today (SEO_EXPERIMENTS.md, 26 Oct): **titles do not move CTR at positions 7–10; position does.** `donde hay setas ahora` at 1.4 converts at 22.6 %; pages at 7–10 convert at 0.3–3 %.
+- Five experiments were read today (SEO_EXPERIMENTS.md, 26 Oct). Only two were readable: the clock-change and ES parking titles were never crawled. The readable ones point the same way: a title alone did not lift CTR at position 9; position matters most (`donde hay setas ahora` at 1.4 converts at 22.6 %; pages at 7–10 at 0.3–3 %).
+- **Crawl is a bottleneck.** Several pages were last crawled 2–4 weeks ago (ES work calendar 25 Sep, ES weekend 25 Sep, clock change 13 Oct), so recent edits are not yet seen. Recrawl requests and internal links come before more edits.
 
 ## Rules (from the repo and the seo-audit skill)
 

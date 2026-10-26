@@ -303,7 +303,7 @@ Search Console, 27 Sep – 11 Oct (data to 8 Oct):
 **Measure on 25 Oct** (14 days): clicks on the queries above; parking CA/ES CTR at
 position ≤3 should be well above 0.
 
-**Outcome (read 26 Oct, 27 Sep–10 Oct vs 12–24 Oct):** Mushrooms CA **positive**: map/this-week queries 54 → 195 impressions, 0 → 5 clicks; `mapa bolets catalunya 2026` position 11.8 → 7.2. Parking CA/ES **no effect**: 0 clicks before and after on the price queries (and the body was rewritten on 23 Oct, so later readings are confounded). Transport EN **unreadable**: the title changed again on 18 Oct.
+**Outcome (read 26 Oct, 27 Sep–10 Oct vs 12–24 Oct):** Mushrooms CA **positive**: map/this-week queries 54 → 195 impressions, 0 → 5 clicks; `mapa bolets catalunya 2026` position 11.8 → 7.2. Parking **unreadable**: the ES page was last crawled on 30 Sep, so Google never showed the 11 Oct title; the CA page's last crawl is 24 Oct, after the 23 Oct body rewrite, so whether the 11 Oct title was ever shown before then is unknown (0 clicks before and after). Transport EN **unreadable**: the title changed again on 18 Oct.
 
 
 ## 2026-10-14 — Clock change: the date in the title
@@ -318,7 +318,7 @@ rewritten to the March change and republished.
 
 **Measure on 24 Oct** (the peak is the week of the change): CTR on the CA/ES page.
 
-**Outcome (read 26 Oct):** no lift. CA page 12–14 Oct 465 impressions, 2 clicks (0.4%) at position 5.5; 15–24 Oct 6,824 impressions, 19 clicks (0.3%) at 7.1. ES 234 impressions, 1 click. With the date in the title and in Google's own answer box, searchers had nothing left to click for.
+**Outcome (read 26 Oct, corrected the same day): unreadable.** URL inspection: the CA page was last crawled on 13 Oct, before the title was deployed (14 Oct), and the three editions all on 12–14 Oct. The 15–24 Oct numbers (6,824 impressions, 19 clicks, 0.3%) measured the **old** title. No conclusion about the date in the title can be drawn from them.
 
 
 ## 2026-10-17 — Mesa electoral and metro hours: the answer in the title
@@ -478,10 +478,16 @@ week before 28 March 2027.
 
 ## 2026-10-26 — what five readings say: titles do not move CTR below position 5
 
-Read together, the five experiments due between 22 and 25 October agree:
+Read together, the five experiments due between 22 and 25 October suggest,
+**with only two of them readable** (corrected 26 Oct after checking crawl dates:
+the clock-change and ES parking titles were never crawled):
 
-- A title that names the answer did **not** raise CTR at positions 7–10 (Sitges,
-  parking, clock change). Where it helped (mushroom map), position improved too.
+- A title that names the answer did not raise CTR at position 9 (Sitges, the one
+  readable negative). Where a title helped (mushroom map, crawled 25 Oct),
+  position improved too.
+- **Before reading any experiment, check the page's last crawl date in URL
+  inspection.** A change Google has not crawled has not been tested. Several
+  pages here go two to four weeks between crawls.
 - The pages that convert are the ones at positions 1–4: `donde hay setas ahora`
   at 1.4 converts at 22.6 %; `como votar` at 5.2 at 10.7 %.
 - So the next round goes after **position**: content that answers more of the
