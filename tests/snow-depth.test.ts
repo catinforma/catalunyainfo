@@ -198,17 +198,17 @@ test("with no current Pyrenean reading, the summary says so before the stations 
   const ca = snowSummary(r, "ca");
   assert.equal(
     ca[0],
-    "Cap de les 3 estacions del Meteocat al Pirineu no té encara una lectura validada de les últimes 48 hores, així que avui no podem dir si hi ha neu a terra al Pirineu.",
+    "Cap de les 3 estacions del Meteocat al Pirineu que seguim no té encara una lectura validada de les últimes 48 hores, així que avui no podem dir si hi ha neu a terra al Pirineu.",
   );
   assert.match(ca[1] ?? "", /no hi ha neu a terra a cap de les 2 estacions/i);
   assert.equal(
     snowSummary(r, "es")[0],
-    "Ninguna de las 3 estaciones de Meteocat en el Pirineo tiene todavía una lectura validada de las últimas 48 horas, así que hoy no podemos decir si hay nieve en el suelo en el Pirineo.",
+    "Ninguna de las 3 estaciones de Meteocat en el Pirineo que seguimos tiene todavía una lectura validada de las últimas 48 horas, así que hoy no podemos decir si hay nieve en el suelo en el Pirineo.",
   );
   const en = snowSummary(r, "en");
   assert.equal(
     en[0],
-    "None of Meteocat's 3 Pyrenean stations has a validated reading from the last 48 hours yet, so we can't say today whether there is snow on the ground in the Pyrenees.",
+    "None of the 3 Meteocat stations in the Pyrenees that we follow has a validated reading from the last 48 hours yet, so we can't say today whether there is snow on the ground in the Pyrenees.",
   );
   assert.match(en[1] ?? "", /no snow on the ground at any of the 2 Meteocat stations/);
   // The Pyrenean stations are already counted in the first line, not again as "more stations".
@@ -403,4 +403,20 @@ test("the ski guide and the snow guide link to the new page in every language", 
     assert.ok(JSON.stringify(SKI.editions[locale].blocks).includes(`](${href})`), `ski/${locale}`);
     assert.ok(JSON.stringify(SNOW.editions[locale].blocks).includes(`](${href})`), `snow/${locale}`);
   }
+});
+
+test("no Pyrenean station in the report at all still leads with the missing Pyrenean reading", () => {
+  // Found in review: a station dropped for missing metadata or an unknown
+  // comarca spelling left no Pyrenean station, and the headline fell back to
+  // "no snow at any of the N stations" built from outside the Pyrenees.
+  const report = {
+    stations: [{ code: "X1", name: "Montseny", area: "other", altitude: 1700, cm: 0, at: "2026-10-26T06:00:00Z", change24h: null }],
+    current: 1,
+    withSnow: 0,
+    deepest: null,
+    latestAt: "2026-10-26T06:00:00Z",
+    error: null,
+  } as unknown as Parameters<typeof snowSummary>[0];
+  const ca = snowSummary(report, "ca");
+  assert.match(ca[0] ?? "", /^Cap de les estacions del Meteocat al Pirineu que seguim/);
 });

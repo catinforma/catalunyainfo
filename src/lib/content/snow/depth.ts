@@ -32,12 +32,19 @@ import { INTL_LOCALE, type Locale } from "@/lib/i18n/config";
  *   station is listed without a figure.
  * - **Replace a good page with a failure.** A failed fetch throws
  *   (`SnowSourceError`) instead of rendering "we could not read the data".
- *   The page is ISR: on Vercel a failed regeneration, background or on demand
- *   (the nightly cron's `revalidatePath`), keeps serving the last good HTML
- *   and retries about 30 seconds later ("If revalidation fails, Vercel keeps
- *   serving the existing cached content", vercel.com/docs/incremental-static-
- *   regeneration, read 26 Oct 2026). Rendering the failure instead cached it
- *   for a day: on 25-26 Oct 2026 Google crawled the ca and es pages that way.
+ *   The page is ISR. A failed **background** regeneration keeps serving the
+ *   last good HTML and retries ("If revalidation fails, Vercel keeps serving
+ *   the existing cached content", vercel.com/docs/incremental-static-
+ *   regeneration, read 26 Oct 2026). After an **on-demand** `revalidatePath`
+ *   (the nightly cron, a publish) the old page is expired, and a failed render
+ *   most likely answers that request with an uncached 500 until a render
+ *   succeeds (code review of 26 Oct; unverified on Vercel). Either way no
+ *   failure page is cached, which is the point: rendering the failure cached
+ *   it for a day, and on 25-26 Oct 2026 Google crawled the ca and es pages
+ *   that way.
+ *   Known limit: a 200 response with a bad body is held by Next's fetch cache
+ *   until the next `revalidatePath`; `cache: "no-store"` would make the route
+ *   dynamic, which costs more than it saves.
  *   Only during `next build`, where there is no previous page and a throw
  *   would fail the deploy, is the failure rendered as such. A module-level
  *   "last good" copy would not help: serverless instances do not share or
@@ -391,7 +398,7 @@ const SUMMARY: Record<
         ? "No hi ha neu a terra a l'única estació del Meteocat amb lectura validada recent."
         : `No hi ha neu a terra a cap de les ${total} estacions del Meteocat amb lectura validada recent.`,
     pyreneesNoCurrent: (n) =>
-      `Cap de les ${n} estacions del Meteocat al Pirineu no té encara una lectura validada de les últimes 48 hores, així que avui no podem dir si hi ha neu a terra al Pirineu.`,
+      `${n > 0 ? `Cap de les ${n} estacions del Meteocat al Pirineu que seguim` : "Cap de les estacions del Meteocat al Pirineu que seguim"} no té encara una lectura validada de les últimes 48 hores, així que avui no podem dir si hi ha neu a terra al Pirineu.`,
     latest: (when) => `Lectura validada més recent: ${when}.`,
     stale: (n) =>
       n === 1
@@ -408,7 +415,7 @@ const SUMMARY: Record<
         ? "No hay nieve en el suelo en la única estación de Meteocat con lectura validada reciente."
         : `No hay nieve en el suelo en ninguna de las ${total} estaciones de Meteocat con lectura validada reciente.`,
     pyreneesNoCurrent: (n) =>
-      `Ninguna de las ${n} estaciones de Meteocat en el Pirineo tiene todavía una lectura validada de las últimas 48 horas, así que hoy no podemos decir si hay nieve en el suelo en el Pirineo.`,
+      `${n > 0 ? `Ninguna de las ${n} estaciones de Meteocat en el Pirineo que seguimos` : "Ninguna de las estaciones de Meteocat en el Pirineo que seguimos"} tiene todavía una lectura validada de las últimas 48 horas, así que hoy no podemos decir si hay nieve en el suelo en el Pirineo.`,
     latest: (when) => `Lectura validada más reciente: ${when}.`,
     stale: (n) =>
       n === 1
@@ -425,7 +432,7 @@ const SUMMARY: Record<
         ? "There is no snow on the ground at the one Meteocat station with a recent validated reading."
         : `There is no snow on the ground at any of the ${total} Meteocat stations with a recent validated reading.`,
     pyreneesNoCurrent: (n) =>
-      `None of Meteocat's ${n} Pyrenean stations has a validated reading from the last 48 hours yet, so we can't say today whether there is snow on the ground in the Pyrenees.`,
+      `${n > 0 ? `None of the ${n} Meteocat stations in the Pyrenees that we follow` : "None of the Meteocat stations in the Pyrenees that we follow"} has a validated reading from the last 48 hours yet, so we can't say today whether there is snow on the ground in the Pyrenees.`,
     latest: (when) => `Latest validated reading: ${when}.`,
     stale: (n) =>
       n === 1
@@ -450,7 +457,9 @@ export function snowSummary(report: SnowReport, locale: Locale): string[] {
   // "no snow at any station" headline would answer a different question, so
   // the missing Pyrenean readings lead.
   const pyrenean = report.stations.filter((s) => isPyrenean(s.area));
-  const noPyreneanReading = pyrenean.length > 0 && pyrenean.every((s) => s.cm === null);
+  // Also true when no Pyrenean station made it into the report (missing metadata,
+  // an unknown comarca spelling): the headline must not fall back to the others.
+  const noPyreneanReading = pyrenean.every((s) => s.cm === null);
 
   const lines: string[] = [];
   if (noPyreneanReading) lines.push(t.pyreneesNoCurrent(pyrenean.length));
@@ -519,12 +528,17 @@ function isBuildPhase(): boolean {
  * `error` set and the block says it could not read the data.
  */
 export async function loadSnowReport(now: Date = new Date()): Promise<SnowReport> {
-  const report = await readSnowReport(now);
-  if (report.error && !isBuildPhase()) throw new SnowSourceError(report.error);
+  const { report, cause } = await readSnowReport(now);
+  if (report.error) {
+    // Logged in both phases: a deploy during an outage, or a parser bug, would
+    // otherwise ship the failure state with nothing in the logs.
+    console.error(`[snow-depth] Meteocat read failed (${isBuildPhase() ? "build" : "runtime"}): ${report.error}`, cause ?? "");
+    if (!isBuildPhase()) throw new SnowSourceError(report.error, { cause });
+  }
   return report;
 }
 
-async function readSnowReport(now: Date): Promise<SnowReport> {
+async function readSnowReport(now: Date): Promise<{ report: SnowReport; cause?: unknown }> {
   try {
     const [validated, stations] = await Promise.all([
       // Validated rows only, enough days back for the 48 h window and the 24 h change.
@@ -543,8 +557,8 @@ async function readSnowReport(now: Date): Promise<SnowReport> {
       ),
     ]);
 
-    return buildSnowReport(parseReadings(validated), SNOW_STATIONS, parseStations(stations), now);
+    return { report: buildSnowReport(parseReadings(validated), SNOW_STATIONS, parseStations(stations), now) };
   } catch (error) {
-    return emptyReport(error instanceof Error ? error.message : "unreachable");
+    return { report: emptyReport(error instanceof Error ? error.message : "unreachable"), cause: error };
   }
 }
