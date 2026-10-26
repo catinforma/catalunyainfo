@@ -34,3 +34,6 @@ audit-report.json
 # Deep-research working notes and reports.
 research_notes/
 reports/
+
+# Local database dumps (personal data: contact messages, admin users)
+/backups/

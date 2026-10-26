@@ -1,6 +1,7 @@
 import type { Config } from "drizzle-kit";
 
 const url =
+  process.env.APP_DATABASE_URL ??
   process.env.DATABASE_URL ??
   process.env.POSTGRES_URL_NON_POOLING ??
   process.env.POSTGRES_URL ??

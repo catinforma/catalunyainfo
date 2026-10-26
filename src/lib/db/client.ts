@@ -22,8 +22,15 @@ declare global {
   var __catinfoSql: ReturnType<typeof postgres> | undefined;
 }
 
+/**
+ * `APP_DATABASE_URL` wins over the rest: the DATABASE_URL/POSTGRES_* variables
+ * are written by the Neon integration on Vercel and cannot be edited there, so
+ * the database the site actually uses (Supabase since 26 Oct 2026) is set
+ * under its own name. Removing it falls back to Neon.
+ */
 export function databaseUrl(): string | null {
   const url =
+    process.env.APP_DATABASE_URL ??
     process.env.DATABASE_URL ??
     process.env.POSTGRES_URL ??
     process.env.POSTGRES_URL_NON_POOLING ??
