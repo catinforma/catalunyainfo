@@ -279,7 +279,7 @@ export const CASTANYADA: FeatureArticle = {
       seoDescription:
         "La Castanyada 2026 és dissabte 31 d'octubre. Fires i actes confirmats pels ajuntaments (Viladrau, Cardona, Arbúcies), què es menja i l'origen.",
       excerpt:
-        "Dissabte 31 d'octubre: la Fira de la Castanya de Viladrau, els actes amb data confirmada, qui és la castanyera i què es menja.",
+        "Dissabte 31 d'octubre: el Ball de les Bruixes de Viladrau, els actes amb data confirmada, qui és la castanyera i què es menja.",
       blocks: ca(),
     },
     es: {
@@ -289,7 +289,7 @@ export const CASTANYADA: FeatureArticle = {
       seoDescription:
         "La Castañada 2026 es el sábado 31 de octubre. Ferias y actos confirmados por los ayuntamientos (Viladrau, Cardona, Arbúcies), qué se come y su origen.",
       excerpt:
-        "Sábado 31 de octubre: la Fira de la Castanya de Viladrau, los actos con fecha confirmada, quién es la castanyera y qué se come.",
+        "Sábado 31 de octubre: el Ball de les Bruixes de Viladrau, los actos con fecha confirmada, quién es la castanyera y qué se come.",
       blocks: es(),
     },
     en: {
@@ -299,7 +299,7 @@ export const CASTANYADA: FeatureArticle = {
       seoDescription:
         "The Castanyada 2026 is Saturday 31 October. Fairs and events confirmed by town councils, what Catalans eat, and who the castanyeres are.",
       excerpt:
-        "Saturday 31 October: Viladrau's chestnut fair, the events with a confirmed date, who the castanyeres are and what to eat.",
+        "Saturday 31 October: Viladrau's Ball de les Bruixes, the events with a confirmed date, who the castanyeres are and what to eat.",
       blocks: en(),
     },
   },
