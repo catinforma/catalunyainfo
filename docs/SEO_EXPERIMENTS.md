@@ -470,6 +470,33 @@ cited on the page). Same pattern as the 14 Oct entry: the date in the title.
 falls sharply after the change, so judge CTR, never clicks. The next peak is the
 week before 28 March 2027.
 
+---
+
+## 2026-10-26 — Catalan Christmas traditions page (new, publish group `nadal-tradicions`)
+
+**What.** New trilingual page: `/ca/tradicions/tradicions-de-nadal-catalunya/`,
+`/es/tradiciones/tradiciones-navidad-cataluna/`,
+`/en/traditions/catalan-christmas-traditions/`. One question per tradition (what
+the tió is and when it is made to "poo", the caganer, the pessebre, the Missa
+del Gall, els Pastorets, the Christmas food, whether Sant Esteve is a holiday),
+answered in the first lines, with the 2026 holidays from the DOGC orders. Mostly
+evergreen; the Fira de Santa Llúcia and the Pastorets season are "not announced
+yet" lines that switch to dates when `ANNOUNCED_TRADITIONS` is filled. One link
+added from the Christmas in Barcelona guide's traditions section; nothing else
+on that page changed.
+
+**Prediction.** No impressions before indexing (1-4 weeks at the current crawl
+rate). By the measure date: impressions for "caga tió", "caganer", "catalan
+christmas traditions", "qué es el tió", "tradiciones navidad cataluña" and
+"sant esteve festiu 2026", with the long-tail "what is / qué es" queries at
+position 20 or better. Demand peaks in December, so the 28-day reading is about
+indexing and position, not clicks; a second reading in early January.
+
+**Measure** 28 days after publish (if published on 26 Oct, on 23 Nov 2026), then again on
+4 Jan 2027: position and impressions per query above, and clicks over 1-31 Dec.
+
+**Outcome:** _pending_
+
 ## Candidates not yet run
 
 Recorded so they are not lost, and so they are not all started at once.

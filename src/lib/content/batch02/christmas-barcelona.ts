@@ -357,6 +357,7 @@ export function buildChristmasBarcelonaBody(locale: Locale, facts: Announcements
         "**Els Pastorets.** Una obra de teatre que es remunta al segle XVIII i que barreja el Naixement amb la baralla entre àngels i dimonis; per Nadal se'n fan per tot arreu.",
         "**El cava.** L'escumós dels brindis de Nadal es fa pel mètode tradicional, amb una segona fermentació a l'ampolla i com a mínim nou mesos de criança amb les lies; segons la DO Cava, el seu origen és al Penedès, sobretot a Sant Sadurní d'Anoia i els voltants.",
         "**Els Innocents.** El 28 de desembre és el dia de les bromes: vigila que no et pengin una llufa a l'esquena.",
+        `Com es fa cagar el tió pas a pas, on s'amaga el caganer i què es menja per Nadal i per Sant Esteve ho expliquem a ${b2link("christmasTraditions", "ca", "la guia de tradicions de Nadal a Catalunya")}.`,
       ),
       ...h2(
         "El temps i les escapades al desembre",
@@ -462,6 +463,7 @@ export function buildChristmasBarcelonaBody(locale: Locale, facts: Announcements
         "**Els Pastorets.** Una obra de teatro que se remonta al siglo XVIII y mezcla el Nacimiento con la lucha entre ángeles y demonios; en Navidad se representa por todas partes.",
         "**El cava.** El espumoso de los brindis navideños se elabora por el método tradicional, con una segunda fermentación en la botella y al menos nueve meses de crianza con sus lías; según la DO Cava, su origen está en el Penedès, sobre todo en Sant Sadurní d'Anoia y alrededores.",
         "**Los Inocentes.** El 28 de diciembre es el día de las bromas: en Cataluña, cuidado con que no te cuelguen una llufa (un monigote de papel) en la espalda.",
+        `Cómo se hace cagar el tió paso a paso, dónde se esconde el caganer y qué se come en Navidad y San Esteban lo contamos en ${b2link("christmasTraditions", "es", "la guía de tradiciones de Navidad en Cataluña")}.`,
       ),
       ...h2(
         "El tiempo y las excursiones en diciembre",
@@ -566,6 +568,7 @@ export function buildChristmasBarcelonaBody(locale: Locale, facts: Announcements
       "**Els Pastorets.** A Christmas play that goes back to the 18th century and mixes the Nativity with a fight between angels and devils; theatres of every size put it on.",
       "**Cava.** The sparkling wine of Christmas toasts is made by the traditional method, with a second fermentation in the bottle and at least nine months on its lees; according to the DO Cava, its origins are in the Penedès, especially around Sant Sadurní d'Anoia.",
       "**Innocents' Day.** 28 December is the day for practical jokes: in Catalonia, check your back for a llufa, a paper cut-out pinned on without you noticing.",
+      `How to make the tió poo step by step, where the caganer hides and what Catalans eat on Christmas Day and Sant Esteve are in ${b2link("christmasTraditions", "en", "our guide to Catalan Christmas traditions")}.`,
     ),
     ...h2(
       "Weather and day trips in December",

@@ -61,7 +61,8 @@ export type B2Key =
   | "christmasBarcelona"
   | "newYear"
   | "snowNow"
-  | "candidates";
+  | "candidates"
+  | "christmasTraditions";
 
 /** Path after the locale prefix, no leading or trailing slash. */
 export const B2_PATHS: Record<B2Key, Record<Locale, string>> = {
@@ -299,6 +300,11 @@ export const B2_PATHS: Record<B2Key, Record<Locale, string>> = {
     ca: "guies/candidats-eleccions-generals-catalunya",
     es: "guias/candidatos-elecciones-generales-cataluna",
     en: "guides/spain-general-election-candidates-catalonia",
+  },
+  christmasTraditions: {
+    ca: "tradicions/tradicions-de-nadal-catalunya",
+    es: "tradiciones/tradiciones-navidad-cataluna",
+    en: "traditions/catalan-christmas-traditions",
   },
 };
 
@@ -546,6 +552,11 @@ export const B2_TITLES: Record<B2Key, Record<Locale, string>> = {
     ca: "Candidats a les eleccions generals a Catalunya",
     es: "Candidatos a las elecciones generales en Cataluña",
     en: "General election candidates in Catalonia",
+  },
+  christmasTraditions: {
+    ca: "Tradicions de Nadal a Catalunya: tió, caganer i Sant Esteve",
+    es: "Tradiciones de Navidad en Cataluña: tió, caganer y Sant Esteve",
+    en: "Catalan Christmas traditions: tió, caganer and Sant Esteve",
   },
 };
 
