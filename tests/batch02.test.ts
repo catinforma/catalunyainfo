@@ -518,15 +518,18 @@ test("cards: the price table's online column is 10% off and the difference is ca
   }
 });
 
-test("cruise port: terminal table with transport, Port's June 2026 plan only, Cruise Bus fares", () => {
+test("cruise port: terminal table with transport, Port's April 2026 note, terminal C closed, Cruise Bus fares", () => {
   for (const locale of ["ca", "es", "en"] as const) {
     const text = bodyToPlainText(CRUISEPORT.editions[locale].blocks);
     assert.match(text, /3[,.]50/, `${locale}: one-way fare`);
-    assert.match(text, /11 (June|de junio|de juny) (de )?2026/, `${locale}: dated Port note`);
+    assert.match(text, /15 (April|de abril|d'abril) (de )?2026/, `${locale}: dated Port note`);
     assert.doesNotMatch(text, /terminal G|2028/i, `${locale}: no plan dates the Port note does not give`);
+    assert.doesNotMatch(text, /A, B, C|C, D|\bE (and|y|i) H\b/, `${locale}: terminal C not offered, no Cruise Bus stop at H`);
     const table = (CRUISEPORT.editions[locale].blocks as { type: string; rows?: string[][] }[]).find((b) => b.type === "table");
     assert.equal(table?.rows?.length, 5);
     assert.ok(table?.rows?.every((row) => row.length === 4), `${locale}: four columns`);
+    assert.ok(!table?.rows?.some((row) => /^C\b|, C\b/.test(row[0] ?? "")), `${locale}: no terminal C row`);
+    assert.equal(table?.rows?.find((row) => (row[0] ?? "").startsWith("MSC"))?.[3], "Taxi", `${locale}: MSC is taxi only`);
   }
 });
 
