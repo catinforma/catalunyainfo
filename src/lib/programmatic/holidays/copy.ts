@@ -246,10 +246,10 @@ export function hubCopy(locale: MuniLocale) {
   if (locale === "ca") {
     return {
       title: fit([`Festius locals ${YEAR} i ${NEXT} per municipis de Catalunya`, `Festius locals ${YEAR} per municipi`], TITLE_MAX),
-      description: `Festius locals del ${YEAR} dels ${count} municipis més poblats de Catalunya, per comarques: els dos dies de cada ajuntament i si avui és festiu.`,
+      description: `Festius locals del ${YEAR} dels municipis més poblats de Catalunya, per comarques: els dos dies de cada ajuntament, si avui és festiu i el ${NEXT}.`,
       h1: `Festius locals ${YEAR} per municipi`,
       breadcrumb: "Festius locals",
-      lead: `Cada municipi de Catalunya fixa dos festius locals, que se sumen als dotze de tot Catalunya. Aquí hi ha els del ${YEAR} dels ${count} municipis més poblats, per comarques, cadascun amb la seva pàgina: tots els festius de l'any, si avui és festiu, les botigues obertes i el ${NEXT}.`,
+      lead: `Cada municipi de Catalunya fixa dos festius locals, que se sumen als dotze de tot Catalunya. Aquí hi ha els del ${YEAR} dels ${count} municipis més poblats que en tenen al calendari oficial, per comarques, cadascun amb la seva pàgina: tots els festius de l'any, si avui és festiu, les botigues obertes i el ${NEXT}.`,
       allMunicipalities: "Per a qualsevol altre municipi, la llista completa és a la pàgina de festius locals de tots els municipis.",
       excludedNote: excluded.length
         ? `${joinList(excluded, "ca")} ${excluded.length === 1 ? "no té" : "no tenen"} festius locals al calendari oficial del ${YEAR}: l'ordre hi diu «proposta no formulada» (l'ajuntament no va enviar la proposta a temps) i la modificació de gener no ho va canviar.`
@@ -263,10 +263,10 @@ export function hubCopy(locale: MuniLocale) {
   }
   return {
     title: fit([`Festivos locales ${YEAR} y ${NEXT} por municipios de Cataluña`, `Festivos locales ${YEAR} por municipio`], TITLE_MAX),
-    description: `Festivos locales de ${YEAR} de los ${count} municipios más poblados de Cataluña, por comarcas: los dos días de cada ayuntamiento y si hoy es festivo.`,
+    description: `Festivos locales de ${YEAR} de los municipios más poblados de Cataluña, por comarcas: los dos días de cada ayuntamiento, si hoy es festivo y ${NEXT}.`,
     h1: `Festivos locales ${YEAR} por municipio`,
     breadcrumb: "Festivos locales",
-    lead: `Cada municipio de Cataluña fija dos festivos locales, que se suman a los doce de toda Cataluña. Aquí están los de ${YEAR} de los ${count} municipios más poblados, por comarcas, cada uno con su página: todos los festivos del año, si hoy es festivo, las tiendas abiertas y ${NEXT}.`,
+    lead: `Cada municipio de Cataluña fija dos festivos locales, que se suman a los doce de toda Cataluña. Aquí están los de ${YEAR} de los ${count} municipios más poblados que los tienen en el calendario oficial, por comarcas, cada uno con su página: todos los festivos del año, si hoy es festivo, las tiendas abiertas y ${NEXT}.`,
     allMunicipalities: "Para cualquier otro municipio, la lista completa está en la página de festivos locales de todos los municipios.",
     excludedNote: excluded.length
       ? `${joinList(excluded, "es")} no ${excluded.length === 1 ? "tiene" : "tienen"} festivos locales en el calendario oficial de ${YEAR}: la orden dice «proposta no formulada» (el ayuntamiento no envió la propuesta a tiempo) y la modificación de enero no lo cambió.`

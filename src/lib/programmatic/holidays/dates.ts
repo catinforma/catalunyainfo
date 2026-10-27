@@ -57,7 +57,8 @@ function placesPhrase(places: DatePlace[], locale: DateLocale): string {
 }
 
 function placeNames(places: DatePlace[], locale: DateLocale): string {
-  return joinList(places.map((p) => (locale === "es" ? esName(p.name) : p.name)), locale);
+  const shown = (name: string) => (locale === "es" ? esName(name) : name);
+  return joinList(places.map((p) => (p.parent ? `${shown(p.name)} (${shown(p.parent)})` : shown(p.name))), locale);
 }
 
 /** Listed municipalities (the 100 with a page) whose shop days for 2026 leave this date out. */
@@ -202,9 +203,9 @@ export function dateContent(iso: DatePage, locale: DateLocale): DateContent {
           title: L("Botigues", "Tiendas", "Shops"),
           paragraphs: [
             L(
-              `Les botigues poden obrir a la majoria de municipis: el 8 de desembre és un dels dos dies municipals per defecte (Ordre EMT/77/2025, article 6), i Barcelona també l'ha triat (Resolució EMT/4342/2025). Entre els ${municipalities().length} municipis més poblats, no és dia d'obertura a ${names(closed)}.`,
-              `Las tiendas pueden abrir en la mayoría de municipios: el 8 de diciembre es uno de los dos días municipales por defecto (Orden EMT/77/2025, artículo 6), y Barcelona también lo ha elegido (Resolución EMT/4342/2025). Entre los ${municipalities().length} municipios más poblados, no es día de apertura en ${names(closed)}.`,
-              `Shops may open in most towns: 8 December is one of the two default municipal opening days (Order EMT/77/2025, article 6), and Barcelona has chosen it too (Resolution EMT/4342/2025). Among the ${municipalities().length} largest towns, it is not an opening day in ${names(closed)}.`,
+              `Les botigues poden obrir a la majoria de municipis: el 8 de desembre és un dels dos dies municipals per defecte (Ordre EMT/77/2025, article 6), i Barcelona també l'ha triat (Resolució EMT/4342/2025). Entre els ${municipalities().length} municipis d'aquest recull, no és dia d'obertura a ${names(closed)}.`,
+              `Las tiendas pueden abrir en la mayoría de municipios: el 8 de diciembre es uno de los dos días municipales por defecto (Orden EMT/77/2025, artículo 6), y Barcelona también lo ha elegido (Resolución EMT/4342/2025). Entre los ${municipalities().length} municipios de esta guía, no es día de apertura en ${names(closed)}.`,
+              `Shops may open in most towns: 8 December is one of the two default municipal opening days (Order EMT/77/2025, article 6), and Barcelona has chosen it too (Resolution EMT/4342/2025). Among the ${municipalities().length} towns covered here, it is not an opening day in ${names(closed)}.`,
             ),
             L(
               "Poder obrir no vol dir que obrin: cada botiga decideix.",
@@ -235,9 +236,9 @@ export function dateContent(iso: DatePage, locale: DateLocale): DateContent {
     const swap = aranSwap(2026);
     const closed27 = shopsClosedAmongListed("2026-12-27");
     const next27 = L(
-      `El pròxim dia en què les botigues poden obrir és el diumenge 27 de desembre, que és al calendari general del 2026 (Ordre EMT/77/2025)${closed27.length ? `; entre els ${municipalities().length} municipis més poblats, no ho és a ${names(closed27)}` : ""}.`,
-      `El próximo día en que las tiendas pueden abrir es el domingo 27 de diciembre, que está en el calendario general de 2026 (Orden EMT/77/2025)${closed27.length ? `; entre los ${municipalities().length} municipios más poblados, no lo es en ${names(closed27)}` : ""}.`,
-      `The next day shops may open is Sunday 27 December, which is in the general 2026 calendar (Order EMT/77/2025)${closed27.length ? `; among the ${municipalities().length} largest towns it is not an opening day in ${names(closed27)}` : ""}.`,
+      `El pròxim dia en què les botigues poden obrir és el diumenge 27 de desembre, que és al calendari general del 2026 (Ordre EMT/77/2025)${closed27.length ? `; entre els ${municipalities().length} municipis d'aquest recull, no ho és a ${names(closed27)}` : ""}.`,
+      `El próximo día en que las tiendas pueden abrir es el domingo 27 de diciembre, que está en el calendario general de 2026 (Orden EMT/77/2025)${closed27.length ? `; entre los ${municipalities().length} municipios de esta guía, no lo es en ${names(closed27)}` : ""}.`,
+      `The next day shops may open is Sunday 27 December, which is in the general 2026 calendar (Order EMT/77/2025)${closed27.length ? `; among the ${municipalities().length} towns covered here it is not an opening day in ${names(closed27)}` : ""}.`,
     );
     return {
       holiday: true,
