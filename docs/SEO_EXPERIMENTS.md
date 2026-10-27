@@ -584,6 +584,32 @@ programme times and the donation phone number once 3Cat publishes them.
 
 **Outcome:** _pending_
 
+## 2026-10-27 — New page: strikes hub "Vaga avui a Catalunya: què funciona" (publish group `strikes`)
+
+x10 engines, week 1 (research §B2 #7). One evergreen URL per language, a dated
+section per strike: `/ca/guies/vaga-avui-catalunya/`, `/es/guias/huelga-hoy-cataluna/`,
+`/en/guides/strike-barcelona-catalonia-today/`. Data in
+`src/lib/content/batch02/strikes.ts` (typed list + `STRIKES_AS_OF`), facts read
+on 27 Oct 2026 from SEMAF, Rodalies, Ouigo, CCOO, UGT, CGT, USTEC, the BOE and
+the DOGC. On that day: Renfe drivers 29 Oct (Rodalies 66% peak / 33% rest),
+Ouigo drivers 30 Oct and 2 Nov (71%, every Barcelona train runs), general
+strike 11 Nov (minimum services not yet published).
+
+Links added to existing pages (one sentence each, body only, titles
+untouched, group `strikes-links`): metro hours (tips list; title frozen to
+14 Nov) and transport passes (closing paragraph; EN title frozen to 16 Nov).
+Read those two pages' queries as unaffected unless exits to the hub show up.
+
+**Queries aimed at:** vaga avui, huelga hoy cataluña, vaga general 11 novembre,
+huelga general 11 noviembre, huelga renfe 29 octubre, serveis mínims vaga,
+barcelona strike today.
+
+**Measure** on 24 Nov 2026 (28 days; the 11 Nov week is the peak): position and
+clicks per query and language. Indexing lag may miss 11N itself; the page is
+built to keep the URL for the next strikes.
+
+**Outcome:** _pending_
+
 ## Candidates not yet run
 
 Recorded so they are not lost, and so they are not all started at once.

@@ -34,9 +34,11 @@ Architecture for every template (research §B1): own route, `revalidate = false`
 - Pages per session 1.22: every template links to the next useful action (today's holiday -> shops open -> transport).
 - Brand: consistent CatalunyaInfo name and logo; owner actions: Bing Webmaster Tools + sitemap, real social profiles for `sameAs`, Google signals in GA4 if consent allows, outreach to local media for the data pages.
 
-## Owner decision pending
+## Owner decision (27 Oct 2026)
 
-Extending two or three families (holidays, mushrooms) to all of Spain is the only route to x10 within months (Spain ~6x Catalonia) but changes the site's identity. Until decided: Catalonia only.
+Catalonia only. Extending families to all of Spain was offered as the fastest route to x10 and rejected by the owner: the site stays a Catalonia guide. Growth comes from deeper Catalan coverage (per municipality, per line, per comarca), English "right now" pages for visitors, and the 2027 peaks.
+
+Google signals: not enabled. The site denies `ad_user_data`/`ad_personalization` permanently (Consent Mode v2, promised on the privacy page), so signals would collect no demographics and would add data thresholds to small reports. Revisit only if ads (AdSense, Vercel Pro) arrive with an ads-consent choice.
 
 ## Expectations (honest)
 

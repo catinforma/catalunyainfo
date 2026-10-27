@@ -5,6 +5,8 @@ import { HTML_LANG, LOCALES, X_DEFAULT_LOCALE, type Locale } from "@/lib/i18n/co
 import { allSystemPaths, sectionPath } from "@/lib/i18n/routes";
 import { absoluteUrl, indexingAllowed } from "@/lib/site";
 import { isHomeCluster } from "@/lib/seo/metadata";
+import { electionsSitemap } from "@/lib/programmatic/elections/pages";
+import { holidaySitemapEntries } from "@/lib/programmatic/holidays/paths";
 
 /**
  * Rendered on request, not through ISR. The cached copy depended on ISR
@@ -113,7 +115,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }
   }
 
-  return [...systemEntries, ...entries];
+  return [...systemEntries, ...entries, ...electionsSitemap(), ...holidaySitemapEntries()];
 }
 
 function languageMap(group: Partial<Record<Locale, string>>): Record<string, string> {

@@ -217,6 +217,7 @@ export const TRANSPORT: B2Article = {
         ),
         ...paras(
           `Si has vingut amb cotxe, mira també ${b2link("zbe", "ca", "què cal fer amb un vehicle estranger a la ZBE")} i ${b2link("parking", "ca", "com funcionen la zona blava i la verda")}.`,
+          `Si hi ha una vaga convocada, consulta ${b2link("strikes", "ca", "què funciona els dies de vaga")}: hi afegim els serveis mínims oficials de metro, bus i Rodalies quan es publiquen.`,
         ),
         ...paras(verifiedLine("ca", VERIFIED_AT)),
         ...b2Related(["airport", "zbe", "parking", "girona", "montserratFree"], "ca"),
@@ -292,6 +293,7 @@ export const TRANSPORT: B2Article = {
         ),
         ...paras(
           `Si has venido en coche, mira también ${b2link("zbe", "es", "qué hacer con un vehículo extranjero en la ZBE")} y ${b2link("parking", "es", "cómo funcionan la zona azul y la verde")}.`,
+          `Si hay una huelga convocada, consulta ${b2link("strikes", "es", "qué funciona los días de huelga")}: añadimos los servicios mínimos oficiales de metro, bus y Rodalies cuando se publican.`,
         ),
         ...paras(verifiedLine("es", VERIFIED_AT)),
         ...b2Related(["airport", "zbe", "parking", "girona", "montserratFree"], "es"),
@@ -359,6 +361,7 @@ export const TRANSPORT: B2Article = {
         ),
         ...paras(
           `Driving in? See ${b2link("zbe", "en", "what foreign-registered cars must do first")} and ${b2link("parking", "en", "how the blue and green parking zones work")}.`,
+          `If a strike has been called, check ${b2link("strikes", "en", "what runs on strike days")}: we add the official minimum services for the metro, buses and Rodalies as they are published.`,
         ),
         ...paras(verifiedLine("en", VERIFIED_AT)),
         ...b2Related(["airport", "zbe", "parking", "girona", "montserratFree"], "en"),

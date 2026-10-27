@@ -98,6 +98,46 @@ export function groupRows(rows: Row[]): LocalHolidayPlace[] {
   return places.sort((a, b) => a.name.localeCompare(b.name, "ca"));
 }
 
+/**
+ * What the open data never picked up (read 27 Oct 2026). Ordre EMT/3/2026
+ * (DOGC 9586, 20.1.2026) changed ten councils' days after Ordre EMT/208/2025,
+ * and the 2026 rows still carry the old ones; they also leave out Gallifa,
+ * which EMT/208/2025 lists ("Gallifa, 2 d'abril i 7 de desembre"). The DOGC
+ * wins. Each "before" in the amending order matches the open data exactly,
+ * which is how these were confirmed. Remove an entry once the open data
+ * carries it (check with `npm run holidays:snapshot -- build`), and re-read
+ * the DOGC for any later amending order before trusting either.
+ */
+const DOGC_CORRECTIONS: Record<number, { name: string; dates: string[] }[]> = {
+  2026: [
+    { name: "Cardona", dates: ["2026-09-14", "2026-09-15"] },
+    { name: "Viladecans", dates: ["2026-05-25", "2026-09-08"] },
+    { name: "Sant Joan Despí", dates: ["2026-05-25", "2026-09-24"] },
+    { name: "Castelldefels", dates: ["2026-08-14", "2026-12-07"] },
+    { name: "Sitges", dates: ["2026-08-24", "2026-09-23"] },
+    { name: "Tordera", dates: ["2026-05-11", "2026-08-24"] },
+    { name: "Balenyà", dates: ["2026-01-21", "2026-08-24"] },
+    { name: "Tavèrnoles", dates: ["2026-05-25", "2026-08-03"] },
+    { name: "Torà", dates: ["2026-05-25", "2026-09-01"] },
+    { name: "Polinyà", dates: ["2026-01-20", "2026-07-06"] },
+    { name: "Gallifa", dates: ["2026-04-02", "2026-12-07"] },
+  ],
+};
+
+const fold = (name: string) => name.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase().trim();
+
+export function applyDogcCorrections(places: LocalHolidayPlace[], year: number): LocalHolidayPlace[] {
+  const corrections = DOGC_CORRECTIONS[year];
+  if (!corrections || places.length === 0) return places;
+  const result = places.map((place) => ({ ...place, dates: [...place.dates] }));
+  for (const { name, dates } of corrections) {
+    const place = result.find((p) => !p.isNucleus && fold(p.name) === fold(name));
+    if (place) place.dates = [...dates];
+    else result.push({ key: `dogc:${fold(name)}`, name, isNucleus: false, dates: [...dates] });
+  }
+  return result.sort((a, b) => a.name.localeCompare(b.name, "ca"));
+}
+
 export async function loadLocalCalendar(year: number): Promise<LocalCalendar> {
   const url = `${ENDPOINT}?any_calendari=${year}&$select=data,ajuntament_o_nucli_municipal,codi_municipal,pedania,festiu&$limit=10000`;
   try {
@@ -108,7 +148,7 @@ export async function loadLocalCalendar(year: number): Promise<LocalCalendar> {
     } as RequestInit);
     if (!response.ok) throw new Error(`${response.status}`);
     const rows = (await response.json()) as Row[];
-    return { year, places: groupRows(rows), error: null };
+    return { year, places: applyDogcCorrections(groupRows(rows), year), error: null };
   } catch (error) {
     return { year, places: [], error: error instanceof Error ? error.message : "unreachable" };
   }
