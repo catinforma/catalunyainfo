@@ -49,11 +49,12 @@ import {
  *    outreach sessions page (13 Oct - 13 Dec) and the news of 20 Oct 2026
  *    (about 6,500 sessions, about 1,000 schools, about 450 health
  *    professionals, about 225,000 young people, "Crea per La Marató").
- *  - "Què és La Marató?": since 1992, TV3 the first public broadcaster in
+ *  - "Què és La Marató?": since 1992, TV3 the pioneering public broadcaster in
  *    Spain to run a telethon, about fifteen hours live, TV and radio.
  *  - 3Cat live page: "tots els canals de TV3, Catalunya Ràdio".
  *  - Ley 49/2002, art. 19 (BOE consolidated, as amended by RDL 6/2023): 80%
- *    of the first 250 euros, 40% of the rest.
+ *    of the first 250 euros, 40% of the rest (45% for repeat donors, 3Cat
+ *    donation page and art. 19.1), capped at 10% of the taxable base.
  *
  * Not published on 26 Oct 2026, so not printed: the programme's start time
  * and running order, the donation phone number, the 2026 total.
@@ -160,7 +161,7 @@ export function buildMaratoBody(locale: Locale): Block[] {
         "A què es dedica La Marató 2026?",
         "A les **malalties neurodegeneratives i neuromusculars**. Segons la Fundació, de neurodegeneratives n'hi ha més de 600 de reconegudes i a Catalunya afecten unes 250.000 persones: entre les més freqüents hi ha l'Alzheimer i altres demències, el Parkinson i l'esclerosi múltiple, i entre les menys habituals, els parkinsonismes atípics i la malaltia de Huntington.",
         "Les neuromusculars són més de 150, afecten unes 44.000 persones a Catalunya i més de la meitat dels pacients en tenen els primers símptomes a la infància. Entre elles hi ha la distròfia muscular de Duchenne, la miastènia greu, l'atròfia muscular espinal i l'esclerosi lateral amiotròfica (ELA).",
-        "La majoria no tenen cura i fan perdre autonomia, per això aquesta edició també posa el focus en les persones que en tenen cura. La Fundació destina els donatius íntegrament a la sensibilització i a la recerca. La del 2025 es va dedicar al càncer.",
+        "Les neurodegeneratives són progressives i la majoria de les neuromusculars no tenen cura; unes i altres fan perdre autonomia, per això aquesta edició també posa el focus en les persones que en tenen cura. La Fundació destina els donatius íntegrament a la sensibilització i a la recerca. La del 2025 es va dedicar al càncer.",
       ),
       ...h2(
         "Com es pot veure i escoltar La Marató?",
@@ -177,7 +178,7 @@ export function buildMaratoBody(locale: Locale): Block[] {
       ),
       ...paras(
         "El dia del programa, La Marató obre seus telefòniques a la Fira de Barcelona, al Palau de Congressos de Girona, al Port de Tarragona i a la Universitat de Lleida per atendre les trucades de donatius. El número encara no és a la pàgina de donatius; fes servir només el que publiqui 3Cat.",
-        "**Desgravació.** La Fundació La Marató de 3Cat és una entitat acollida a la Llei 49/2002. L'article 19 d'aquesta llei permet als contribuents de l'IRPF deduir el 80% dels primers 250 € donats i el 40% de la resta. Per rebre el certificat, la Fundació demana omplir el formulari de la pàgina de donatius abans del 31 de desembre.",
+        "**Desgravació.** La Fundació La Marató de 3Cat és una entitat acollida a la Llei 49/2002. L'article 19 d'aquesta llei permet als contribuents de l'IRPF deduir el 80% dels primers 250 € donats i el 40% de la resta (el 45% si els dos exercicis anteriors es va donar a la Fundació un import igual o superior), amb el límit del 10% de la base liquidable. Per rebre el certificat, la Fundació demana omplir el formulari de la pàgina de donatius abans del 31 de desembre.",
       ),
       ...h2(
         "Com participar-hi: voluntariat i activitats populars",
@@ -191,7 +192,7 @@ export function buildMaratoBody(locale: Locale): Block[] {
       ),
       ...h2(
         "Què és La Marató?",
-        "Un projecte solidari de Televisió de Catalunya i la Fundació La Marató de 3Cat que recull diners per investigar malalties que encara no tenen cura i en fa divulgació. Va començar el 1992: segons la Fundació, TV3 va ser la primera televisió pública d'Espanya a fer un «telethon». Molta gent encara en diu La Marató de TV3; el nom actual és La Marató de 3Cat.",
+        "Un projecte solidari de Televisió de Catalunya i la Fundació La Marató de 3Cat que recull diners per investigar malalties que encara no tenen cura i en fa divulgació. Va començar el 1992: segons la Fundació, TV3 va ser la televisió pública pionera a Espanya a fer un «telethon». Molta gent encara en diu La Marató de TV3; el nom actual és La Marató de 3Cat.",
         `Segons ${link(MARATO.hub2026.ca, "la pàgina de La Marató 2026")}, consultada el 26 d'octubre de 2026, des del 1992 ha recaptat 271,9 milions d'euros i ha finançat 1.084 projectes de recerca.`,
       ),
       ...h2(
@@ -204,7 +205,7 @@ export function buildMaratoBody(locale: Locale): Block[] {
         { question: "Qui presenta La Marató 2026?", answer: "Raquel Sans i Miki Núñez a TV3, i Roger Escapa a Catalunya Ràdio." },
         { question: "Com puc fer un donatiu a La Marató?", answer: `A la pàgina oficial de donatius de 3Cat: per internet, per Bizum amb el codi ${MARATO.bizum} (a «Donacions») o per transferència al compte que hi publica la Fundació.` },
         { question: "Quin és el telèfon de La Marató 2026?", answer: "El 26 d'octubre de 2026 encara no s'havia publicat. Les trucades del dia s'atenen a les seus de Barcelona, Girona, Tarragona i Lleida; fes servir només el número que publiqui 3Cat." },
-        { question: "Els donatius a La Marató desgraven?", answer: "Sí, per als contribuents de l'IRPF: la Llei 49/2002 permet deduir el 80% dels primers 250 € i el 40% de la resta. El certificat s'ha de demanar a la Fundació abans del 31 de desembre." },
+        { question: "Els donatius a La Marató desgraven?", answer: "Sí, per als contribuents de l'IRPF: la Llei 49/2002 permet deduir el 80% dels primers 250 € i el 40% de la resta (el 45% per a qui hi va donar el mateix o més els dos anys anteriors). El certificat s'ha de demanar a la Fundació abans del 31 de desembre." },
       ]),
       ...paras(verifiedLine("ca", MARATO_VERIFIED)),
       ...b2Related([...RELATED], "ca"),
@@ -239,7 +240,7 @@ export function buildMaratoBody(locale: Locale): Block[] {
         "¿A qué se dedica La Marató 2026?",
         "A las **enfermedades neurodegenerativas y neuromusculares**. Según la Fundació, hay más de 600 neurodegenerativas reconocidas y en Cataluña afectan a unas 250.000 personas: entre las más frecuentes están el alzhéimer y otras demencias, el párkinson y la esclerosis múltiple, y entre las menos habituales, los parkinsonismos atípicos y la enfermedad de Huntington.",
         "Las neuromusculares son más de 150, afectan a unas 44.000 personas en Cataluña y más de la mitad de los pacientes tienen los primeros síntomas en la infancia. Entre ellas están la distrofia muscular de Duchenne, la miastenia gravis, la atrofia muscular espinal y la esclerosis lateral amiotrófica (ELA).",
-        "La mayoría no tienen cura y hacen perder autonomía, por eso esta edición también pone el foco en las personas que las cuidan. La Fundació destina los donativos íntegramente a la sensibilización y a la investigación. La de 2025 se dedicó al cáncer.",
+        "Las neurodegenerativas son progresivas y la mayoría de las neuromusculares no tienen cura; unas y otras hacen perder autonomía, por eso esta edición también pone el foco en las personas que las cuidan. La Fundació destina los donativos íntegramente a la sensibilización y a la investigación. La de 2025 se dedicó al cáncer.",
       ),
       ...h2(
         "¿Cómo se puede ver y escuchar La Marató?",
@@ -256,7 +257,7 @@ export function buildMaratoBody(locale: Locale): Block[] {
       ),
       ...paras(
         "El día del programa, La Marató abre centros telefónicos en la Fira de Barcelona, el Palau de Congressos de Girona, el Port de Tarragona y la Universitat de Lleida para atender las llamadas de donativos. El número aún no está en la página de donativos; usa solo el que publique 3Cat.",
-        "**Desgravación.** La Fundació La Marató de 3Cat es una entidad acogida a la Ley 49/2002. El artículo 19 de esa ley permite a los contribuyentes del IRPF deducir el 80% de los primeros 250 € donados y el 40% del resto. Para recibir el certificado, la Fundació pide rellenar el formulario de la página de donativos antes del 31 de diciembre.",
+        "**Desgravación.** La Fundació La Marató de 3Cat es una entidad acogida a la Ley 49/2002. El artículo 19 de esa ley permite a los contribuyentes del IRPF deducir el 80% de los primeros 250 € donados y el 40% del resto (el 45% si en los dos ejercicios anteriores se donó a la Fundació un importe igual o superior), con el límite del 10% de la base liquidable. Para recibir el certificado, la Fundació pide rellenar el formulario de la página de donativos antes del 31 de diciembre.",
       ),
       ...h2(
         "Cómo participar: voluntariado y actividades populares",
@@ -270,7 +271,7 @@ export function buildMaratoBody(locale: Locale): Block[] {
       ),
       ...h2(
         "¿Qué es La Marató?",
-        "Un proyecto solidario de Televisió de Catalunya y la Fundació La Marató de 3Cat que recauda dinero para investigar enfermedades que aún no tienen cura y las divulga. Empezó en 1992: según la Fundació, TV3 fue la primera televisión pública de España en hacer un «telethon». Mucha gente aún la llama La Marató de TV3; el nombre actual es La Marató de 3Cat.",
+        "Un proyecto solidario de Televisió de Catalunya y la Fundació La Marató de 3Cat que recauda dinero para investigar enfermedades que aún no tienen cura y las divulga. Empezó en 1992: según la Fundació, TV3 fue la televisión pública pionera en España en hacer un «telethon». Mucha gente aún la llama La Marató de TV3; el nombre actual es La Marató de 3Cat.",
         `Según ${link(MARATO.hub2026.es, "la página de La Marató 2026")}, consultada el 26 de octubre de 2026, desde 1992 ha recaudado 271,9 millones de euros y ha financiado 1.084 proyectos de investigación.`,
       ),
       ...h2(
@@ -283,7 +284,7 @@ export function buildMaratoBody(locale: Locale): Block[] {
         { question: "¿Quién presenta La Marató 2026?", answer: "Raquel Sans y Miki Núñez en TV3, y Roger Escapa en Catalunya Ràdio." },
         { question: "¿Cómo puedo hacer un donativo a La Marató?", answer: `En la página oficial de donativos de 3Cat: por internet, por Bizum con el código ${MARATO.bizum} (en el apartado de donaciones) o por transferencia a la cuenta que publica la Fundació.` },
         { question: "¿Cuál es el teléfono de La Marató 2026?", answer: "El 26 de octubre de 2026 aún no se había publicado. Las llamadas del día se atienden en los centros de Barcelona, Girona, Tarragona y Lleida; usa solo el número que publique 3Cat." },
-        { question: "¿Los donativos a La Marató desgravan?", answer: "Sí, para los contribuyentes del IRPF: la Ley 49/2002 permite deducir el 80% de los primeros 250 € y el 40% del resto. El certificado se pide a la Fundació antes del 31 de diciembre." },
+        { question: "¿Los donativos a La Marató desgravan?", answer: "Sí, para los contribuyentes del IRPF: la Ley 49/2002 permite deducir el 80% de los primeros 250 € y el 40% del resto (el 45% para quien donó lo mismo o más los dos años anteriores). El certificado se pide a la Fundació antes del 31 de diciembre." },
       ]),
       ...paras(verifiedLine("es", MARATO_VERIFIED)),
       ...b2Related([...RELATED], "es"),
@@ -317,7 +318,7 @@ export function buildMaratoBody(locale: Locale): Block[] {
       "What is La Marató 2026 for?",
       "**Neurodegenerative and neuromuscular diseases.** According to the Fundació, there are more than 600 recognised neurodegenerative conditions, affecting about 250,000 people in Catalonia: the commonest include Alzheimer's and other dementias, Parkinson's and multiple sclerosis, and the rarer ones atypical parkinsonism and Huntington's disease.",
       "There are more than 150 neuromuscular diseases, affecting about 44,000 people in Catalonia, and more than half of patients first show symptoms in childhood. They include Duchenne muscular dystrophy, myasthenia gravis, spinal muscular atrophy and amyotrophic lateral sclerosis (ALS).",
-      "Most have no cure and take away people's independence, so this edition also looks at the people who care for them. The Fundació puts all donations into awareness and research. The 2025 edition was about cancer.",
+      "Neurodegenerative diseases are progressive and most neuromuscular ones have no cure; both take away people's independence, so this edition also looks at the people who care for them. The Fundació puts all donations into awareness and research. The 2025 edition was about cancer.",
     ),
     ...h2(
       "How to watch or listen to La Marató",
@@ -334,7 +335,7 @@ export function buildMaratoBody(locale: Locale): Block[] {
     ),
     ...paras(
       "On the day, La Marató runs phone centres at Fira de Barcelona, the Palau de Congressos de Girona, the Port of Tarragona and the University of Lleida to take donation calls. The number is not on the donation page yet; only use the one 3Cat publishes.",
-      "**Tax relief.** The Fundació La Marató de 3Cat is covered by Spain's Law 49/2002. Article 19 of that law lets people who pay Spanish income tax (IRPF) deduct 80% of the first €250 donated and 40% of the rest. To get the certificate, the Fundació asks donors to fill in the form on the donation page before 31 December.",
+      "**Tax relief.** The Fundació La Marató de 3Cat is covered by Spain's Law 49/2002. Article 19 of that law lets people who pay Spanish income tax (IRPF) deduct 80% of the first €250 donated and 40% of the rest (45% if you gave the Fundació the same amount or more in each of the two previous years), up to 10% of the taxable base. To get the certificate, the Fundació asks donors to fill in the form on the donation page before 31 December.",
     ),
     ...h2(
       "How to take part: volunteering and local events",
@@ -348,7 +349,7 @@ export function buildMaratoBody(locale: Locale): Block[] {
     ),
     ...h2(
       "What is La Marató?",
-      "A charity project run by Televisió de Catalunya and the Fundació La Marató de 3Cat that raises money for research into diseases that still have no cure, and explains them to the public. It began in 1992: according to the Fundació, TV3 was the first public broadcaster in Spain to run a telethon. Many people still call it La Marató de TV3; its current name is La Marató de 3Cat.",
+      "A charity project run by Televisió de Catalunya and the Fundació La Marató de 3Cat that raises money for research into diseases that still have no cure, and explains them to the public. It began in 1992: according to the Fundació, TV3 was the pioneering public broadcaster in Spain to run a telethon. Many people still call it La Marató de TV3; its current name is La Marató de 3Cat.",
       `According to ${link(MARATO.hub2026.en, "the La Marató 2026 page")}, checked on 26 October 2026, it has raised €271.9 million since 1992 and funded 1,084 research projects.`,
     ),
     ...h2(
@@ -361,7 +362,7 @@ export function buildMaratoBody(locale: Locale): Block[] {
       { question: "Who presents La Marató 2026?", answer: "Raquel Sans and Miki Núñez on TV3, and Roger Escapa on Catalunya Ràdio." },
       { question: "How can I donate to La Marató?", answer: `On 3Cat's official donation page: online, by Bizum with code ${MARATO.bizum} (in the donations section) or by bank transfer to the account the Fundació publishes there.` },
       { question: "What is La Marató 2026's phone number?", answer: "It had not been published on 26 October 2026. Calls on the day are taken at centres in Barcelona, Girona, Tarragona and Lleida; only use the number 3Cat publishes." },
-      { question: "Are donations to La Marató tax-deductible?", answer: "Yes, for Spanish income tax (IRPF) payers: Law 49/2002 allows a deduction of 80% of the first €250 and 40% of the rest. Request the certificate from the Fundació before 31 December." },
+      { question: "Are donations to La Marató tax-deductible?", answer: "Yes, for Spanish income tax (IRPF) payers: Law 49/2002 allows a deduction of 80% of the first €250 and 40% of the rest (45% for repeat donors who gave the same or more in the two previous years). Request the certificate from the Fundació before 31 December." },
     ]),
     ...paras(verifiedLine("en", MARATO_VERIFIED)),
     ...b2Related([...RELATED], "en"),

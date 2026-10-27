@@ -324,9 +324,9 @@ function ticketTip(locale: Locale, programme: ProgrammeNotice | null): string {
     }[locale];
   }
   return {
-    ca: "Si vols el lot del 2027, vigila la web de la festa a partir de principis de gener.",
-    es: "Si quieres el lote de 2027, vigila la web de la fiesta desde principios de enero.",
-    en: "If you want a 2027 pack, watch the festival website from early January.",
+    ca: "Si vols el lot del 2027, vigila la web de la festa: el 2026, la venda anticipada va obrir el 8 de gener.",
+    es: "Si quieres el lote de 2027, vigila la web de la fiesta: en 2026, la venta anticipada abrió el 8 de enero.",
+    en: "If you want a 2027 pack, watch the festival website: in 2026, advance sales opened on 8 January.",
   }[locale];
 }
 
@@ -406,7 +406,7 @@ export function buildCalcotsBody(locale: Locale, programme: ProgrammeNotice | nu
       list(
         `**Calçotada popular:** de 13:00 a 15:00 a l'aparcament de la Cooperativa, amb 1.500 degustacions a 15 € més despeses de gestió. Els tiquets es compren al [web del Calçofest](${URLS.calcofest}).`,
         "**Concerts:** Figa Flawas, The Tyets, Els Pets i Els Amics de les Arts, entre d'altres.",
-        "**Bus des de Barcelona:** l'organització ha programat un autobús oficial d'anada i tornada des de la zona de l'Estació de França, gestionat per Festymas i subjecte a un mínim de viatgers. A Valls, un bus llançadora gratuït uneix l'estació d'autobusos amb el recinte.",
+        "**Bus des de Barcelona:** l'organització del Calçofest ha programat un autobús oficial d'anada i tornada des de la zona de l'Estació de França, amb sortida a les 14:30, pensat per als concerts (no arriba a la calçotada de 13:00 a 15:00), subjecte a un mínim d'ocupació i amb tornada en acabar la música. A Valls, un bus llançadora gratuït uneix l'estació d'autobusos amb el recinte.",
       ),
       ...paras(
         `Font: [Ajuntament de Valls, 15 d'octubre de 2026](${URLS.vallsCalcofest}). Els preus de les entrades dels concerts pugen a mesura que s'acosta la data; consulta'ls al web del festival. Per a les altres fires gastronòmiques de la tardor, ${link("foodfairs", "ca", "mira el nostre calendari")}.`,
@@ -451,7 +451,7 @@ export function buildCalcotsBody(locale: Locale, programme: ProgrammeNotice | nu
       ),
       ...h2(
         "Com arribar a Valls des de Barcelona en transport públic",
-        `**En tren: la línia R13 de Rodalies.** És la línia regional Barcelona-Estació de França – Lleida per Valls, amb parada també a Passeig de Gràcia i Sants ([fitxa de l'R13](${URLS.r13})). Hi ha pocs trens directes al dia i alguns només circulen els feiners, de manera que mira l'[horari de l'R13](${URLS.r13Timetable}) per al dia que hi vagis, sobretot si és diumenge. Des de l'11 de juliol de 2026 la línia torna a passar per Valls, després de les obres que la desviaven per Reus i Tarragona.`,
+        `**En tren: la línia R13 de Rodalies.** És la línia regional Barcelona-Estació de França – Lleida per Valls, amb parada també a Passeig de Gràcia i Sants ([fitxa de l'R13](${URLS.r13})). Hi ha pocs trens directes al dia i alguns només circulen els feiners, de manera que mira l'[horari de l'R13](${URLS.r13Timetable}) per al dia que hi vagis: l'horari del 10 de juliol de 2026 no mostra cap tren de l'R13 en diumenge. Des de l'11 de juliol de 2026 la línia torna a passar per Valls, després de les obres que la desviaven per Reus i Tarragona.`,
         `**En autobús: la línia Valls – Barcelona de Monbus**, amb parades a Barcelona Sants i a Maria Cristina. Segons l'horari del 14 de juliol de 2026, també té servei en diumenges i festius, amb com a mínim un bus per sentit. L'Ajuntament de Valls recull aquest horari i els de la resta de línies a la seva [pàgina de transport públic](${URLS.vallsTransport}).`,
         `**Des de Tarragona**, Autocars Plana té diverses línies Valls – Tarragona, segons l'Ajuntament. Si vols combinar la visita amb Tarragona, ${b2link("tarragona", "ca", "aquí tens com arribar-hi en tren des de Barcelona")}.`,
         festivalDayTransport("ca", programme),
@@ -477,7 +477,7 @@ export function buildCalcotsBody(locale: Locale, programme: ProgrammeNotice | nu
         },
         {
           question: "Com puc anar a Valls sense cotxe?",
-          answer: "En tren, amb l'R13 de Rodalies (Barcelona-Estació de França – Lleida per Valls), o en autobús, amb la línia Valls – Barcelona de Monbus, que para a Sants i a Maria Cristina. Hi ha pocs serveis, sobretot en diumenge: mira els horaris abans de sortir.",
+          answer: "En tren, amb l'R13 de Rodalies (Barcelona-Estació de França – Lleida per Valls), o en autobús, amb la línia Valls – Barcelona de Monbus, que para a Sants i a Maria Cristina. En diumenge, l'horari de l'R13 del 10 de juliol de 2026 no mostra cap tren, però el bus de Monbus sí que hi va: mira els horaris abans de sortir.",
         },
         {
           question: "Què és el Calçofest?",
@@ -538,7 +538,7 @@ export function buildCalcotsBody(locale: Locale, programme: ProgrammeNotice | nu
       list(
         `**Calçotada popular:** de 13:00 a 15:00 en el aparcamiento de la Cooperativa, con 1.500 degustaciones a 15 € más gastos de gestión. Los tickets se compran en la [web del Calçofest](${URLS.calcofest}).`,
         "**Conciertos:** Figa Flawas, The Tyets, Els Pets y Els Amics de les Arts, entre otros.",
-        "**Autobús desde Barcelona:** la organización ha programado un autobús oficial de ida y vuelta desde la zona de la Estació de França, gestionado por Festymas y sujeto a un mínimo de viajeros. En Valls, un autobús lanzadera gratuito une la estación de autobuses con el recinto.",
+        "**Autobús desde Barcelona:** la organización del Calçofest ha programado un autobús oficial de ida y vuelta desde la zona de la Estació de França, con salida a las 14:30, pensado para los conciertos (no llega a la calçotada de 13:00 a 15:00), sujeto a un mínimo de ocupación y con vuelta al acabar la música. En Valls, un autobús lanzadera gratuito une la estación de autobuses con el recinto.",
       ),
       ...paras(
         `Fuente: [Ayuntamiento de Valls, 15 de octubre de 2026](${URLS.vallsCalcofest}). El precio de las entradas de los conciertos sube a medida que se acerca la fecha; consúltalo en la web del festival. Para el resto de ferias gastronómicas del otoño, ${link("foodfairs", "es", "mira nuestro calendario")}.`,
@@ -583,7 +583,7 @@ export function buildCalcotsBody(locale: Locale, programme: ProgrammeNotice | nu
       ),
       ...h2(
         "Cómo llegar a Valls desde Barcelona en transporte público",
-        `**En tren: la línea R13 de Rodalies.** Es la línea regional Barcelona-Estació de França – Lleida por Valls, que también para en Passeig de Gràcia y Sants ([ficha de la R13](${URLS.r13})). Hay pocos trenes directos al día y algunos solo circulan los laborables, así que mira el [horario de la R13](${URLS.r13Timetable}) para el día que vayas, sobre todo si es domingo. Desde el 11 de julio de 2026 la línea vuelve a pasar por Valls, tras las obras que la desviaban por Reus y Tarragona.`,
+        `**En tren: la línea R13 de Rodalies.** Es la línea regional Barcelona-Estació de França – Lleida por Valls, que también para en Passeig de Gràcia y Sants ([ficha de la R13](${URLS.r13})). Hay pocos trenes directos al día y algunos solo circulan los laborables, así que mira el [horario de la R13](${URLS.r13Timetable}) para el día que vayas: el horario del 10 de julio de 2026 no muestra ningún tren de la R13 en domingo. Desde el 11 de julio de 2026 la línea vuelve a pasar por Valls, tras las obras que la desviaban por Reus y Tarragona.`,
         `**En autobús: la línea Valls – Barcelona de Monbus**, con paradas en Barcelona Sants y en Maria Cristina. Según el horario del 14 de julio de 2026, también tiene servicio en domingos y festivos, con al menos un autobús por sentido. El Ayuntamiento de Valls recoge este horario y los del resto de líneas en su [página de transporte público](${URLS.vallsTransport}).`,
         `**Desde Tarragona**, Autocars Plana tiene varias líneas Valls – Tarragona, según el Ayuntamiento. Si quieres combinar la visita con Tarragona, ${b2link("tarragona", "es", "aquí tienes cómo llegar en tren desde Barcelona")}.`,
         festivalDayTransport("es", programme),
@@ -609,7 +609,7 @@ export function buildCalcotsBody(locale: Locale, programme: ProgrammeNotice | nu
         },
         {
           question: "¿Cómo ir a Valls sin coche?",
-          answer: "En tren, con la R13 de Rodalies (Barcelona-Estació de França – Lleida por Valls), o en autobús, con la línea Valls – Barcelona de Monbus, que para en Sants y en Maria Cristina. Hay pocos servicios, sobre todo en domingo: mira los horarios antes de salir.",
+          answer: "En tren, con la R13 de Rodalies (Barcelona-Estació de França – Lleida por Valls), o en autobús, con la línea Valls – Barcelona de Monbus, que para en Sants y en Maria Cristina. En domingo, el horario de la R13 del 10 de julio de 2026 no muestra ningún tren, pero el autobús de Monbus sí va: mira los horarios antes de salir.",
         },
         {
           question: "¿Qué es el Calçofest?",
@@ -669,7 +669,7 @@ export function buildCalcotsBody(locale: Locale, programme: ProgrammeNotice | nu
     list(
       `**Popular calçotada:** 13:00 to 15:00 in the Cooperativa car park, with 1,500 tastings at €15 plus booking fees. Tickets are sold on the [Calçofest website](${URLS.calcofest}).`,
       "**Concerts:** Figa Flawas, The Tyets, Els Pets and Els Amics de les Arts, among others.",
-      "**Bus from Barcelona:** the organisers have arranged an official return bus from the Estació de França area, run by Festymas and subject to a minimum number of passengers. In Valls, a free shuttle bus links the bus station with the festival site.",
+      "**Bus from Barcelona:** the Calçofest organisers have arranged an official return bus from the Estació de França area, leaving at 14:30 and timed for the concerts (it does not reach the 13:00-15:00 calçotada), subject to a minimum number of passengers and returning after the music ends. In Valls, a free shuttle bus links the bus station with the festival site.",
     ),
     ...paras(
       `Source: [Valls City Council, 15 October 2026](${URLS.vallsCalcofest}). Concert ticket prices rise as the date approaches; check them on the festival website. For the other autumn food fairs, ${link("foodfairs", "en", "see our calendar")}.`,
@@ -714,7 +714,7 @@ export function buildCalcotsBody(locale: Locale, programme: ProgrammeNotice | nu
     ),
     ...h2(
       "Getting to Valls from Barcelona by public transport",
-      `**By train: the Rodalies R13.** This is the regional line from Barcelona-Estació de França to Lleida via Valls, also calling at Passeig de Gràcia and Sants ([R13 line page](${URLS.r13})). There are only a few direct trains a day and some run on working weekdays only, so check the [R13 timetable](${URLS.r13Timetable}) for the day you travel, especially on a Sunday. Since 11 July 2026 the line runs through Valls again, after engineering works that had diverted it via Reus and Tarragona.`,
+      `**By train: the Rodalies R13.** This is the regional line from Barcelona-Estació de França to Lleida via Valls, also calling at Passeig de Gràcia and Sants ([R13 line page](${URLS.r13})). There are only a few direct trains a day and some run on working weekdays only, so check the [R13 timetable](${URLS.r13Timetable}) for the day you travel: the 10 July 2026 timetable shows no R13 train on Sundays. Since 11 July 2026 the line runs through Valls again, after engineering works that had diverted it via Reus and Tarragona.`,
       `**By bus: the Monbus Valls – Barcelona line**, with stops at Barcelona Sants and Maria Cristina. Its timetable of 14 July 2026 includes Sundays and public holidays, with at least one bus each way. Valls City Council collects this and the other bus timetables on its [public transport page](${URLS.vallsTransport}).`,
       `**From Tarragona**, Autocars Plana runs several Valls – Tarragona routes, according to the City Council. To combine the trip with Tarragona, ${b2link("tarragona", "en", "here is how to get there by train from Barcelona")}.`,
       festivalDayTransport("en", programme),
@@ -740,7 +740,7 @@ export function buildCalcotsBody(locale: Locale, programme: ProgrammeNotice | nu
       },
       {
         question: "How do I get to Valls without a car?",
-        answer: "By train on the Rodalies R13 (Barcelona-Estació de França to Lleida via Valls), or by bus on the Monbus Valls – Barcelona line, which stops at Sants and Maria Cristina. Services are few, especially on Sundays: check the timetables before you set off.",
+        answer: "By train on the Rodalies R13 (Barcelona-Estació de França to Lleida via Valls), or by bus on the Monbus Valls – Barcelona line, which stops at Sants and Maria Cristina. On Sundays the 10 July 2026 R13 timetable shows no train, but the Monbus coach does run: check the timetables before you set off.",
       },
       {
         question: "What is Calçofest?",

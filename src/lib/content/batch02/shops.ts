@@ -28,8 +28,8 @@ import {
  * line was removed: the Agència Catalana del Consum gives no date, only that
  * the Consell Assessor recommends dates each year. Added from the texts: 1 Nov
  * 2026 is an opening day only in l'Ametlla del Vallès and Mollet del Vallès
- * (Resolució EMT/4342/2025); the art. 37 exclusions (small food shops and SME
- * shops up to 300 m², bakeries, convenience stores...) are outside the art. 36
+ * (Resolució EMT/4342/2025); the art. 37 exclusions (bakeries,
+ * convenience stores, pharmacies...) are outside the art. 36
  * limits; the 2027 order's consecutive-holidays rule (art. 4.2) and the food
  * retailers' three-date swap (art. 6).
  *
@@ -160,8 +160,6 @@ const COPY: Record<Locale, T> = {
     ],
     alwaysList: [
       "Pastisseries, fleques, xurreries, plats preparats, premsa, floristeries i botigues de conveniència.",
-      "Botigues d'alimentació de compra diària de fins a 300 m² de superfície de venda.",
-      "Botigues de petites i mitjanes empreses de fins a 300 m² de superfície de venda.",
       "Farmàcies, la venda de carburant i les botigues a les quals només s'accedeix des de dins d'estacions, aeroports i ports.",
       "Botigues dins de museus, monuments, parcs temàtics i hotels, i les dels municipis declarats turístics, durant el període aprovat.",
     ],
@@ -190,9 +188,9 @@ const COPY: Record<Locale, T> = {
       "No hi ha cap data obligatòria: cada botiga decideix si fa rebaixes, i les ha d'anunciar amb aquest nom i amb el període que duren. El Consell Assessor de la Generalitat en matèria de comerç proposa cada any unes dates recomanades. El preu de referència ha de ser el més baix dels trenta dies anteriors, segons l'Agència Catalana del Consum.",
     ],
     faq: [
-      { question: "Obren les botigues l'1 de novembre de 2026?", answer: "En general no: el diumenge 1 de novembre no és dia d'obertura comercial a Barcelona ni a la majoria de municipis. Només l'han triat l'Ametlla del Vallès i Mollet del Vallès. Sí que poden obrir els establiments exclosos de l'horari general, com fleques, botigues de conveniència o botigues d'alimentació de fins a 300 m²." },
+      { question: "Obren les botigues l'1 de novembre de 2026?", answer: "En general no: el diumenge 1 de novembre no és dia d'obertura comercial a Barcelona ni a la majoria de municipis. Només l'han triat l'Ametlla del Vallès i Mollet del Vallès. Sí que poden obrir els establiments exclosos de l'horari general, com fleques, botigues de conveniència o farmàcies." },
       { question: "Quins diumenges obren les botigues el desembre del 2026?", answer: "A Barcelona i a la majoria de municipis, els diumenges 6, 13, 20 i 27 de desembre, i també el dimarts 8 de desembre. Alguns municipis, com Terrassa, Manresa, Olot o Badalona, en canvien algun." },
-      { question: "Obren les botigues el dia de Nadal o Sant Esteve?", answer: "Les botigues amb horari general, no: el 25 i el 26 de desembre són dies de tancament, igual que l'1 i el 6 de gener. Els establiments exclosos de l'horari general (fleques, conveniència, petites botigues de fins a 300 m², farmàcies...) sí que poden obrir." },
+      { question: "Obren les botigues el dia de Nadal o Sant Esteve?", answer: "Les botigues amb horari general, no: el 25 i el 26 de desembre són dies de tancament, igual que l'1 i el 6 de gener. Els establiments exclosos de l'horari general (fleques, conveniència, farmàcies...) sí que poden obrir." },
       { question: "Quins festius obren les botigues el 2027?", answer: "Els dies generals són el 3 de gener, el 27 de juny, l'1 i el 28 de novembre i el 6, el 8, el 12 i el 19 de desembre. Cada municipi n'hi afegeix dos; si no en tria cap, el 10 de gener i el 5 de desembre." },
       { question: "Quan comencen les rebaixes de gener?", answer: "No hi ha una data obligatòria: cada botiga decideix i ha d'indicar l'inici i el final. La Generalitat només en publica unes dates recomanades." },
     ],
@@ -220,8 +218,6 @@ const COPY: Record<Locale, T> = {
     ],
     alwaysList: [
       "Pastelerías, panaderías, churrerías, platos preparados, prensa, floristerías y tiendas de conveniencia.",
-      "Tiendas de alimentación de compra diaria de hasta 300 m² de superficie de venta.",
-      "Tiendas de pequeñas y medianas empresas de hasta 300 m² de superficie de venta.",
       "Farmacias, la venta de carburante y las tiendas a las que solo se accede desde dentro de estaciones, aeropuertos y puertos.",
       "Tiendas dentro de museos, monumentos, parques temáticos y hoteles, y las de los municipios declarados turísticos, durante el periodo aprobado.",
     ],
@@ -250,9 +246,9 @@ const COPY: Record<Locale, T> = {
       "No hay ninguna fecha obligatoria: cada tienda decide si hace rebajas, y debe anunciarlas con ese nombre y con el periodo que duran. El Consell Assessor de la Generalitat en materia de comercio propone cada año unas fechas recomendadas. El precio de referencia debe ser el más bajo de los treinta días anteriores, según la Agència Catalana del Consum.",
     ],
     faq: [
-      { question: "¿Abren las tiendas el 1 de noviembre de 2026 en Cataluña?", answer: "En general no: el domingo 1 de noviembre no es día de apertura comercial en Barcelona ni en la mayoría de municipios. Solo lo han elegido l'Ametlla del Vallès y Mollet del Vallès. Sí pueden abrir los establecimientos excluidos del horario general, como panaderías, tiendas de conveniencia o tiendas de alimentación de hasta 300 m²." },
+      { question: "¿Abren las tiendas el 1 de noviembre de 2026 en Cataluña?", answer: "En general no: el domingo 1 de noviembre no es día de apertura comercial en Barcelona ni en la mayoría de municipios. Solo lo han elegido l'Ametlla del Vallès y Mollet del Vallès. Sí pueden abrir los establecimientos excluidos del horario general, como panaderías, tiendas de conveniencia o farmacias." },
       { question: "¿Qué domingos abren las tiendas en diciembre de 2026 en Cataluña?", answer: "En Barcelona y en la mayoría de municipios, los domingos 6, 13, 20 y 27 de diciembre, y también el martes 8 de diciembre. Algunos municipios, como Terrassa, Manresa, Olot o Badalona, cambian alguno." },
-      { question: "¿Abren las tiendas el día de Navidad o San Esteban?", answer: "Las tiendas con horario general, no: el 25 y el 26 de diciembre son días de cierre, igual que el 1 y el 6 de enero. Los establecimientos excluidos del horario general (panaderías, conveniencia, pequeñas tiendas de hasta 300 m², farmacias...) sí pueden abrir." },
+      { question: "¿Abren las tiendas el día de Navidad o San Esteban?", answer: "Las tiendas con horario general, no: el 25 y el 26 de diciembre son días de cierre, igual que el 1 y el 6 de enero. Los establecimientos excluidos del horario general (panaderías, conveniencia, farmacias...) sí pueden abrir." },
       { question: "¿Qué festivos abren las tiendas en 2027?", answer: "Los días generales son el 3 de enero, el 27 de junio, el 1 y el 28 de noviembre y el 6, el 8, el 12 y el 19 de diciembre. Cada municipio añade dos; si no elige ninguno, el 10 de enero y el 5 de diciembre." },
       { question: "¿Cuándo empiezan las rebajas de enero?", answer: "No hay una fecha obligatoria: cada tienda decide y debe indicar el inicio y el final. La Generalitat solo publica unas fechas recomendadas." },
     ],
@@ -280,8 +276,6 @@ const COPY: Record<Locale, T> = {
     ],
     alwaysList: [
       "Cake shops, bakeries, churro shops, ready meals, newsagents, florists and convenience stores.",
-      "Everyday food shops with up to 300 m² of sales floor.",
-      "Shops run by small and medium-sized businesses with up to 300 m² of sales floor.",
       "Pharmacies, fuel sales, and shops reachable only from inside stations, airports and ports.",
       "Shops inside museums, monuments, theme parks and hotels, and those in designated tourist municipalities, for the approved period.",
     ],
@@ -310,9 +304,9 @@ const COPY: Record<Locale, T> = {
       "There is no compulsory date: each shop decides whether to hold sales and must announce them as such, with the period they cover. The Generalitat's retail advisory council proposes recommended dates every year. The reference price must be the lowest of the previous thirty days, according to the Catalan Consumer Agency.",
     ],
     faq: [
-      { question: "Are shops open on 1 November 2026 in Barcelona?", answer: "Mostly not: Sunday 1 November is not a shop opening day in Barcelona or most of Catalonia. Only l'Ametlla del Vallès and Mollet del Vallès chose it. Businesses outside the general timetable, such as bakeries, convenience stores and food shops up to 300 m², may open." },
+      { question: "Are shops open on 1 November 2026 in Barcelona?", answer: "Mostly not: Sunday 1 November is not a shop opening day in Barcelona or most of Catalonia. Only l'Ametlla del Vallès and Mollet del Vallès chose it. Businesses outside the general timetable, such as bakeries, convenience stores and pharmacies, may open." },
       { question: "Are shops open on Sundays in Barcelona in December 2026?", answer: "Yes, on Sundays 6, 13, 20 and 27 December, and on Tuesday 8 December, in Barcelona and most towns. A few towns, such as Terrassa, Manresa, Olot or Badalona, change one of them." },
-      { question: "Are shops open on Christmas Day or 26 December in Catalonia?", answer: "Shops on the general timetable are not: 25 and 26 December are closing days, as are 1 and 6 January. Businesses outside the general timetable (bakeries, convenience stores, small shops up to 300 m², pharmacies...) may open." },
+      { question: "Are shops open on Christmas Day or 26 December in Catalonia?", answer: "Shops on the general timetable are not: 25 and 26 December are closing days, as are 1 and 6 January. Businesses outside the general timetable (bakeries, convenience stores, pharmacies...) may open." },
       { question: "Which holidays can shops open in 2027?", answer: "The general days are 3 January, 27 June, 1 and 28 November, and 6, 8, 12 and 19 December. Each town adds two; if it chooses none, 10 January and 5 December." },
       { question: "When do the January sales start?", answer: "There is no fixed date: each shop decides and must state when its sale starts and ends. The Generalitat only publishes recommended dates." },
     ],

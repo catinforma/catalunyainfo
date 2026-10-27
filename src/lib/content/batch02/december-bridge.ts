@@ -35,10 +35,12 @@ import {
  *    Andalucía, Aragón, Asturias, Cantabria, Castilla y León, Extremadura,
  *    Madrid, Murcia, La Rioja and Melilla, and not for Cataluña. 8 December
  *    is marked for every territory.
- *  - Ordre EMT/208/2025 (DOGC 9565, 17.12.2025) and the Generalitat's open
- *    data on local holidays (b4eh-r8up): Monday 7 December 2026 is a local
- *    holiday in 42 municipalities and 11 more nuclei (e.g. "Castelldefels, 14
- *    de setembre i 7 de desembre"). Barcelona's are 25 May and 24 September.
+ *  - Ordre EMT/208/2025 (DOGC 9565, 17.12.2025): Monday 7 December 2026 is a
+ *    local holiday in 43 municipalities (e.g. "Castelldefels, 14 de setembre
+ *    i 7 de desembre"). The open data set b4eh-r8up lists 42 and leaves out
+ *    Gallifa, which the order includes; the order names only two nuclei
+ *    (Escaladei, Escart), so no nucleus count is printed. Barcelona's are
+ *    25 May and 24 September.
  *  - Ordre EDF/66/2026 (school calendar): holidays are Treball's calendar plus
  *    the two local days; each school "pot establir quatre dies festius de
  *    lliure disposició"; the municipal school councils propose the days for
@@ -51,7 +53,8 @@ import {
  *  - Baqueira Beret, news of 28/07/2026: opening planned for 28 November
  *    "siempre que las condiciones meteorológicas y de nieve lo permitan".
  *  - Ajuntament d'Espinelves (45a Fira de l'Avet, 28 Nov - 8 Dec 2026) and
- *    Ajuntament de Vic agenda (Mercat Medieval, 5-8 Dec 2026).
+ *    Ajuntament de Vic agenda (Mercat Medieval from 5 Dec 2026; the listing's
+ *    end, "08/12/2026 a 00:00", leaves the 8th unclear).
  *
  * The Servei Català de Trànsit had published nothing about this bridge on
  * 26 Oct 2026, so the page says nothing about traffic operations.
@@ -85,10 +88,9 @@ export const MONDAY_7_REGIONS: Record<Locale, string[]> = {
   en: ["Andalusia", "Aragon", "Asturias", "Cantabria", "Castile and León", "Extremadura", "the Community of Madrid", "the Region of Murcia", "La Rioja", "Melilla"],
 };
 
-/** Monday 7 December 2026 as a local holiday (open data b4eh-r8up, read 26 Oct 2026). */
+/** Monday 7 December 2026 as a local holiday (Ordre EMT/208/2025, read 27 Oct 2026). */
 export const LOCAL_MONDAY_7 = {
-  municipalities: 42,
-  nuclei: 11,
+  municipalities: 43,
   examples: ["Castelldefels", "Sant Boi de Llobregat", "Amposta", "Bellver de Cerdanya"],
 } as const;
 
@@ -306,7 +308,6 @@ function optionTable(locale: Locale): Block {
 export function buildDecemberBridgeBody(locale: Locale): Block[] {
   const regions = joinList(MONDAY_7_REGIONS[locale], locale);
   const n = LOCAL_MONDAY_7.municipalities;
-  const nuclei = LOCAL_MONDAY_7.nuclei;
   const examples = joinList(LOCAL_MONDAY_7.examples, locale, true);
   const bridge = runAround(BRIDGE_DAYS.immaculada, [BRIDGE_DAYS.monday]);
 
@@ -340,7 +341,7 @@ export function buildDecemberBridgeBody(locale: Locale): Block[] {
       ),
       ...h2(
         "El 7 de desembre és festiu a Catalunya?",
-        `No a tot Catalunya: és un dilluns feiner. Sí que és **festa local a ${n} municipis**, com ${examples}, i en ${nuclei} nuclis de població més, segons el calendari de festes locals del 2026 (Ordre EMT/208/2025 i dades obertes de la Generalitat, consultades el 26 d'octubre de 2026). Barcelona no hi és: les seves festes locals del 2026 són el 25 de maig i el 24 de setembre.`,
+        `No a tot Catalunya: és un dilluns feiner. Sí que és **festa local a ${n} municipis**, com ${examples}, segons l'Ordre EMT/208/2025 (DOGC del 17 de desembre de 2025). Alguns nuclis de població, com Escaladei i Escart, també en fan festa. Barcelona no hi és: les seves festes locals del 2026 són el 25 de maig i el 24 de setembre.`,
         `Per saber si el teu municipi en fa festa, busca'l a ${sibling("local", "ca", "les festes locals de cada municipi")}.`,
       ),
       ...h2(
@@ -365,14 +366,14 @@ export function buildDecemberBridgeBody(locale: Locale): Block[] {
       ...h2(
         "Obren les botigues el 6 i el 8 de desembre?",
         `A Barcelona poden obrir els dos dies. El diumenge 6 és un dels vuit dies d'obertura del calendari comercial general del 2026 (Ordre EMT/77/2025), i el dimarts 8 és un dels dos que hi afegeix Barcelona (Resolució EMT/4342/2025). Als municipis que no van comunicar dies propis, el 8 de desembre també és dia d'obertura per defecte. Alguns ajuntaments n'han canviat alguna data: el detall, municipi per municipi, és a ${b2link("shops", "ca", "la guia de botigues obertes en diumenges i festius")}.`,
-        "Poder obrir no vol dir que obrin: cada botiga decideix. Les que la llei de comerç exclou de l'horari general (forns i pastisseries, botigues de conveniència, botigues d'alimentació de fins a 300 m², farmàcies...) poden obrir igualment.",
+        "Poder obrir no vol dir que obrin: cada botiga decideix. Les que la llei de comerç exclou de l'horari general (forns i pastisseries, botigues de conveniència, farmàcies...) poden obrir igualment.",
       ),
       ...h2(
         "Què fer el pont de desembre del 2026",
         "Algunes idees amb data oficial i les guies on les seguim:",
       ),
       list(
-        `**Mercats de Nadal.** La 45a Fira de l'Avet d'Espinelves (Osona) és del 28 de novembre al 8 de desembre de 2026, segons l'Ajuntament d'Espinelves, i el Mercat Medieval de Vic omple el centre històric del 5 al 8 de desembre, segons l'agenda de l'Ajuntament de Vic. Les dates de la Fira de Santa Llúcia de Barcelona del 2026 encara no s'han publicat. Tots, a ${b2link("christmas", "ca", "la guia de mercats de Nadal")}.`,
+        `**Mercats de Nadal.** La 45a Fira de l'Avet d'Espinelves (Osona) és del 28 de novembre al 8 de desembre de 2026, segons l'Ajuntament d'Espinelves, i el Mercat Medieval de Vic comença el 5 de desembre, segons l'agenda de l'Ajuntament de Vic (mireu-ne el programa abans d'anar-hi). Les dates de la Fira de Santa Llúcia de Barcelona del 2026 encara no s'han publicat. Tots, a ${b2link("christmas", "ca", "la guia de mercats de Nadal")}.`,
         `**Pessebres vivents.** El calendari, amb les dates de cada un quan les publiquen, és a ${b2link("pessebres", "ca", "la guia de pessebres vivents")}.`,
         `**Nadal a Barcelona.** Els llums, el pessebre de la plaça de Sant Jaume i què obre per les festes, a ${b2link("christmasBarcelona", "ca", "Nadal a Barcelona")}.`,
         `**Neu i esquí.** Baqueira Beret té previst obrir la temporada el 28 de novembre, si la meteorologia i la neu ho permeten (notícia de l'estació del 28 de juliol de 2026); cap obertura és segura fins que no hi ha neu. Mira ${b2link("snowNow", "ca", "si hi ha neu al Pirineu avui")} i ${b2link("ski", "ca", "les estacions d'esquí de Catalunya")}.`,
@@ -424,7 +425,7 @@ export function buildDecemberBridgeBody(locale: Locale): Block[] {
       ),
       ...h2(
         "¿El 7 de diciembre es festivo en Cataluña?",
-        `No en toda Cataluña: es un lunes laborable. Sí es **fiesta local en ${n} municipios**, como ${examples}, y en ${nuclei} núcleos de población más, según el calendario de fiestas locales de 2026 (Orden EMT/208/2025 y datos abiertos de la Generalitat, consultados el 26 de octubre de 2026). Barcelona no está entre ellos: sus fiestas locales de 2026 son el 25 de mayo y el 24 de septiembre.`,
+        `No en toda Cataluña: es un lunes laborable. Sí es **fiesta local en ${n} municipios**, como ${examples}, según la Orden EMT/208/2025 (DOGC del 17 de diciembre de 2025). Algunos núcleos de población, como Escaladei y Escart, también tienen fiesta. Barcelona no está entre ellos: sus fiestas locales de 2026 son el 25 de mayo y el 24 de septiembre.`,
         `Para saber si tu municipio tiene fiesta, búscalo en ${sibling("local", "es", "los festivos locales de cada municipio")}.`,
       ),
       ...h2(
@@ -449,14 +450,14 @@ export function buildDecemberBridgeBody(locale: Locale): Block[] {
       ...h2(
         "¿Abren las tiendas el 6 y el 8 de diciembre?",
         `En Barcelona pueden abrir los dos días. El domingo 6 es uno de los ocho días de apertura del calendario comercial general de 2026 (Orden EMT/77/2025), y el martes 8 es uno de los dos que añade Barcelona (Resolución EMT/4342/2025). En los municipios que no comunicaron días propios, el 8 de diciembre también es día de apertura por defecto. Algunos ayuntamientos han cambiado alguna fecha: el detalle, municipio por municipio, está en ${b2link("shops", "es", "la guía de tiendas abiertas en domingos y festivos")}.`,
-        "Poder abrir no quiere decir que abran: cada tienda decide. Las que la ley de comercio excluye del horario general (panaderías y pastelerías, tiendas de conveniencia, tiendas de alimentación de hasta 300 m², farmacias...) pueden abrir igualmente.",
+        "Poder abrir no quiere decir que abran: cada tienda decide. Las que la ley de comercio excluye del horario general (panaderías y pastelerías, tiendas de conveniencia, farmacias...) pueden abrir igualmente.",
       ),
       ...h2(
         "Qué hacer en el puente de diciembre de 2026",
         "Algunas ideas con fecha oficial y las guías donde las seguimos:",
       ),
       list(
-        `**Mercados de Navidad.** La 45ª Fira de l'Avet de Espinelves (Osona) es del 28 de noviembre al 8 de diciembre de 2026, según el Ayuntamiento de Espinelves, y el Mercat Medieval de Vic llena el casco antiguo del 5 al 8 de diciembre, según la agenda del Ayuntamiento de Vic. Las fechas de la Fira de Santa Llúcia de Barcelona de 2026 aún no se han publicado. Todos, en ${b2link("christmas", "es", "la guía de mercados de Navidad")}.`,
+        `**Mercados de Navidad.** La 45ª Fira de l'Avet de Espinelves (Osona) es del 28 de noviembre al 8 de diciembre de 2026, según el Ayuntamiento de Espinelves, y el Mercat Medieval de Vic empieza el 5 de diciembre, según la agenda del Ayuntamiento de Vic (consultad el programa antes de ir). Las fechas de la Fira de Santa Llúcia de Barcelona de 2026 aún no se han publicado. Todos, en ${b2link("christmas", "es", "la guía de mercados de Navidad")}.`,
         `**Belenes vivientes.** El calendario, con las fechas de cada uno cuando se publican, está en ${b2link("pessebres", "es", "la guía de belenes vivientes")}.`,
         `**Navidad en Barcelona.** Las luces, el belén de la plaza de Sant Jaume y qué abre en las fiestas, en ${b2link("christmasBarcelona", "es", "Navidad en Barcelona")}.`,
         `**Nieve y esquí.** Baqueira Beret tiene previsto abrir la temporada el 28 de noviembre «siempre que las condiciones meteorológicas y de nieve lo permitan» (noticia de la estación del 28 de julio de 2026); ninguna apertura es segura hasta que hay nieve. Mira ${b2link("snowNow", "es", "si hay nieve en el Pirineo hoy")} y ${b2link("ski", "es", "las estaciones de esquí de Cataluña")}.`,
@@ -507,7 +508,7 @@ export function buildDecemberBridgeBody(locale: Locale): Block[] {
     ),
     ...h2(
       "Is 7 December a holiday in Catalonia?",
-      `Not across Catalonia: it is an ordinary working Monday. It **is a local holiday in ${n} towns**, such as ${examples}, and in ${nuclei} more villages within other municipalities, according to the 2026 local holiday calendar (Order EMT/208/2025 and the Generalitat's open data, checked on 26 October 2026). Barcelona is not one of them: its 2026 local holidays are 25 May and 24 September.`,
+      `Not across Catalonia: it is an ordinary working Monday. It **is a local holiday in ${n} towns**, such as ${examples}, according to Order EMT/208/2025 (DOGC, 17 December 2025). A few villages within other municipalities, such as Escaladei and Escart, have the day off too. Barcelona is not one of them: its 2026 local holidays are 25 May and 24 September.`,
       `To check your own town, look it up in ${sibling("local", "en", "local holidays for every town in Catalonia")}.`,
     ),
     ...h2(
@@ -532,14 +533,14 @@ export function buildDecemberBridgeBody(locale: Locale): Block[] {
     ...h2(
       "Are shops open on 6 and 8 December?",
       `In Barcelona they may open on both days. Sunday the 6th is one of the eight opening days in the general 2026 shopping calendar (Order EMT/77/2025), and Tuesday the 8th is one of the two Barcelona adds (Resolution EMT/4342/2025). In towns that did not send in their own days, 8 December is also an opening day by default. Some councils swapped a date: town-by-town details are in ${b2link("shops", "en", "our guide to shops open on Sundays and holidays")}.`,
-      "Being allowed to open does not mean every shop will: each decides. Shops the retail law exempts from the general hours (bakeries and cake shops, convenience stores, everyday food shops of up to 300 m², pharmacies...) can open anyway.",
+      "Being allowed to open does not mean every shop will: each decides. Shops the retail law exempts from the general hours (bakeries and cake shops, convenience stores, pharmacies...) can open anyway.",
     ),
     ...h2(
       "Things to do over the December 2026 bridge",
       "A few ideas with official dates, and the guides where we follow them:",
     ),
     list(
-      `**Christmas markets.** The 45th Fira de l'Avet in Espinelves (Osona) runs from 28 November to 8 December 2026, according to Espinelves town council, and the Vic Medieval Market fills the old town from 5 to 8 December, according to Vic town council's listings. Barcelona's Fira de Santa Llúcia has not published its 2026 dates yet. All of them are in ${b2link("christmas", "en", "our Christmas markets guide")}.`,
+      `**Christmas markets.** The 45th Fira de l'Avet in Espinelves (Osona) runs from 28 November to 8 December 2026, according to Espinelves town council, and the Vic Medieval Market starts on 5 December, according to Vic town council's listings (check the programme before you go). Barcelona's Fira de Santa Llúcia has not published its 2026 dates yet. All of them are in ${b2link("christmas", "en", "our Christmas markets guide")}.`,
       `**Living nativity scenes.** The calendar, with each one's dates once published, is in ${b2link("pessebres", "en", "our living nativity scenes guide")}.`,
       `**Christmas in Barcelona.** The lights, the Plaça de Sant Jaume nativity scene and what is open over the holidays: ${b2link("christmasBarcelona", "en", "Christmas in Barcelona")}.`,
       `**Snow and skiing.** Baqueira Beret plans to open its season on 28 November, weather and snow permitting (the resort's news item of 28 July 2026); no opening is certain until the snow is there. Check ${b2link("snowNow", "en", "whether there is snow in the Pyrenees today")} and ${b2link("ski", "en", "Catalonia's ski resorts")}.`,
