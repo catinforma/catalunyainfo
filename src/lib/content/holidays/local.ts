@@ -104,7 +104,9 @@ export function groupRows(rows: Row[]): LocalHolidayPlace[] {
  * and the 2026 rows still carry the old ones; they also leave out Gallifa,
  * which EMT/208/2025 lists ("Gallifa, 2 d'abril i 7 de desembre"). The DOGC
  * wins. Each "before" in the amending order matches the open data exactly,
- * which is how these were confirmed.
+ * which is how these were confirmed. Remove an entry once the open data
+ * carries it (check with `npm run holidays:snapshot -- build`), and re-read
+ * the DOGC for any later amending order before trusting either.
  */
 const DOGC_CORRECTIONS: Record<number, { name: string; dates: string[] }[]> = {
   2026: [
