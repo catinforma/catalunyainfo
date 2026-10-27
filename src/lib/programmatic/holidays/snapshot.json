@@ -1,0 +1,3368 @@
+{
+ "schema": 1,
+ "readOn": "2026-10-27",
+ "year": 2026,
+ "sources": {
+  "localOrder": {
+   "name": "Ordre EMT/208/2025, d'11 de desembre, per la qual s'estableix el calendari de festes locals a Catalunya per a l'any 2026",
+   "ref": "DOGC núm. 9565, de 17.12.2025",
+   "url": "https://dogc.gencat.cat/ca/document-del-dogc/?documentId=1032232"
+  },
+  "localAmendments": [
+   {
+    "name": "Ordre EMT/3/2026, de 14 de gener, de modificació de l'Ordre EMT/208/2025",
+    "ref": "DOGC núm. 9586, de 20.1.2026",
+    "url": "https://dogc.gencat.cat/ca/document-del-dogc/?documentId=1034587"
+   }
+  ],
+  "localOpenData": {
+   "name": "Calendari de festes locals a Catalunya",
+   "ref": "b4eh-r8up",
+   "url": "https://analisi.transparenciacatalunya.cat/d/b4eh-r8up",
+   "rowsUpdatedAt": "2026-03-02",
+   "rows": 2794
+  },
+  "regional": {
+   "2026": {
+    "name": "Ordre EMT/66/2025, de 30 d'abril, per la qual s'estableix el calendari oficial de festes laborals a Catalunya per a l'any 2026",
+    "ref": "DOGC núm. 9406, de 6.5.2025",
+    "url": "https://dogc.gencat.cat/ca/document-del-dogc/?documentId=1013204"
+   },
+   "2027": {
+    "name": "Ordre EMT/52/2026, de 25 de març, per la qual s'estableix el calendari oficial de festes laborals a Catalunya per a l'any 2027",
+    "ref": "DOGC núm. 9637, de 1.4.2026",
+    "url": "https://dogc.gencat.cat/ca/document-del-dogc/?documentId=1040896"
+   }
+  },
+  "shops": {
+   "name": "Resolució EMT/4342/2025, de 20 de novembre, dates afegides o substituïdes en el calendari de dies festius amb obertura comercial autoritzada de diversos municipis per a l'any 2026",
+   "ref": "DOGC núm. 9551, de 27.11.2025",
+   "url": "https://dogc.gencat.cat/ca/document-del-dogc/?documentId=1030324"
+  },
+  "shopsOrder": {
+   "name": "Ordre EMT/77/2025, de 22 de maig, calendari d'obertura dels establiments comercials en diumenge i dies festius per a l'any 2026",
+   "ref": "DOGC núm. 9421, de 27.5.2025",
+   "url": "https://dogc.gencat.cat/ca/document-del-dogc/?documentId=1015009"
+  },
+  "population": {
+   "name": "Idescat, Padró municipal d'habitants: població a 1 de gener de 2025, per municipis",
+   "ref": "PMH 2025",
+   "url": "https://www.idescat.cat/pub/?id=pmh&n=446&geo=mun&lang=ca",
+   "year": 2025
+  },
+  "comarques": {
+   "name": "Idescat, codis territorials: municipis i comarques",
+   "ref": "Idescat codis",
+   "url": "https://www.idescat.cat/codis/?id=50&n=9"
+  }
+ },
+ "municipalities": [
+  {
+   "slug": "barcelona",
+   "ine": "08019",
+   "name": "Barcelona",
+   "dogcName": "Barcelona",
+   "comarca": "Barcelonès",
+   "population": 1731649,
+   "rank": 1,
+   "local": [
+    "2026-05-25",
+    "2026-09-24"
+   ],
+   "nuclei": [],
+   "correction": null,
+   "shops": [
+    "2026-01-04",
+    "2026-01-11",
+    "2026-08-15",
+    "2026-10-12",
+    "2026-11-29",
+    "2026-12-06",
+    "2026-12-08",
+    "2026-12-13",
+    "2026-12-20",
+    "2026-12-27"
+   ],
+   "shopsOwnList": true
+  },
+  {
+   "slug": "l-hospitalet-de-llobregat",
+   "ine": "08101",
+   "name": "l'Hospitalet de Llobregat",
+   "dogcName": "Hospitalet de Llobregat, l'",
+   "comarca": "Barcelonès",
+   "population": 289510,
+   "rank": 2,
+   "local": [
+    "2026-05-25",
+    "2026-09-24"
+   ],
+   "nuclei": [],
+   "correction": null,
+   "shops": [
+    "2026-01-04",
+    "2026-01-11",
+    "2026-08-15",
+    "2026-10-12",
+    "2026-11-29",
+    "2026-12-06",
+    "2026-12-08",
+    "2026-12-13",
+    "2026-12-20",
+    "2026-12-27"
+   ],
+   "shopsOwnList": false
+  },
+  {
+   "slug": "terrassa",
+   "ine": "08279",
+   "name": "Terrassa",
+   "dogcName": "Terrassa",
+   "comarca": "Vallès Occidental",
+   "population": 233270,
+   "rank": 3,
+   "local": [
+    "2026-04-02",
+    "2026-07-06"
+   ],
+   "nuclei": [],
+   "correction": null,
+   "shops": [
+    "2026-01-04",
+    "2026-01-11",
+    "2026-06-28",
+    "2026-08-15",
+    "2026-10-12",
+    "2026-11-29",
+    "2026-12-08",
+    "2026-12-13",
+    "2026-12-20",
+    "2026-12-27"
+   ],
+   "shopsOwnList": true
+  },
+  {
+   "slug": "badalona",
+   "ine": "08015",
+   "name": "Badalona",
+   "dogcName": "Badalona",
+   "comarca": "Barcelonès",
+   "population": 231542,
+   "rank": 4,
+   "local": [
+    "2026-05-11",
+    "2026-05-25"
+   ],
+   "nuclei": [],
+   "correction": null,
+   "shops": [
+    "2026-01-04",
+    "2026-01-11",
+    "2026-05-10",
+    "2026-08-15",
+    "2026-10-12",
+    "2026-11-29",
+    "2026-12-06",
+    "2026-12-13",
+    "2026-12-20",
+    "2026-12-27"
+   ],
+   "shopsOwnList": true
+  },
+  {
+   "slug": "sabadell",
+   "ine": "08187",
+   "name": "Sabadell",
+   "dogcName": "Sabadell",
+   "comarca": "Vallès Occidental",
+   "population": 225368,
+   "rank": 5,
+   "local": [
+    "2026-05-11",
+    "2026-09-07"
+   ],
+   "nuclei": [],
+   "correction": null,
+   "shops": [
+    "2026-01-04",
+    "2026-01-11",
+    "2026-08-15",
+    "2026-10-12",
+    "2026-11-29",
+    "2026-12-06",
+    "2026-12-08",
+    "2026-12-13",
+    "2026-12-20",
+    "2026-12-27"
+   ],
+   "shopsOwnList": true
+  },
+  {
+   "slug": "lleida",
+   "ine": "25120",
+   "name": "Lleida",
+   "dogcName": "Lleida",
+   "comarca": "Segrià",
+   "population": 146266,
+   "rank": 6,
+   "local": [
+    "2026-05-11",
+    "2026-09-29"
+   ],
+   "nuclei": [
+    {
+     "name": "Raimat",
+     "dates": [
+      "2026-04-27",
+      "2026-07-24"
+     ]
+    },
+    {
+     "name": "Sucs",
+     "dates": [
+      "2026-05-15",
+      "2026-08-14"
+     ]
+    }
+   ],
+   "correction": null,
+   "shops": [
+    "2026-01-04",
+    "2026-01-11",
+    "2026-08-15",
+    "2026-10-12",
+    "2026-11-29",
+    "2026-12-06",
+    "2026-12-08",
+    "2026-12-13",
+    "2026-12-20",
+    "2026-12-27"
+   ],
+   "shopsOwnList": true
+  },
+  {
+   "slug": "tarragona",
+   "ine": "43148",
+   "name": "Tarragona",
+   "dogcName": "Tarragona",
+   "comarca": "Tarragonès",
+   "population": 143649,
+   "rank": 7,
+   "local": [
+    "2026-08-19",
+    "2026-09-23"
+   ],
+   "nuclei": [],
+   "correction": null,
+   "shops": [
+    "2026-01-04",
+    "2026-01-11",
+    "2026-08-15",
+    "2026-10-12",
+    "2026-11-29",
+    "2026-12-06",
+    "2026-12-08",
+    "2026-12-13",
+    "2026-12-20",
+    "2026-12-27"
+   ],
+   "shopsOwnList": true
+  },
+  {
+   "slug": "mataro",
+   "ine": "08121",
+   "name": "Mataró",
+   "dogcName": "Mataró",
+   "comarca": "Maresme",
+   "population": 131683,
+   "rank": 8,
+   "local": [
+    "2026-05-25",
+    "2026-07-27"
+   ],
+   "nuclei": [],
+   "correction": null,
+   "shops": [
+    "2026-01-04",
+    "2026-01-11",
+    "2026-08-15",
+    "2026-10-12",
+    "2026-11-29",
+    "2026-12-06",
+    "2026-12-08",
+    "2026-12-13",
+    "2026-12-20",
+    "2026-12-27"
+   ],
+   "shopsOwnList": true
+  },
+  {
+   "slug": "santa-coloma-de-gramenet",
+   "ine": "08245",
+   "name": "Santa Coloma de Gramenet",
+   "dogcName": "Santa Coloma de Gramenet",
+   "comarca": "Barcelonès",
+   "population": 123981,
+   "rank": 9,
+   "local": [
+    "2026-05-25",
+    "2026-09-24"
+   ],
+   "nuclei": [],
+   "correction": null,
+   "shops": [
+    "2026-01-04",
+    "2026-05-25",
+    "2026-08-15",
+    "2026-09-24",
+    "2026-10-12",
+    "2026-11-29",
+    "2026-12-06",
+    "2026-12-13",
+    "2026-12-20",
+    "2026-12-27"
+   ],
+   "shopsOwnList": true
+  },
+  {
+   "slug": "reus",
+   "ine": "43123",
+   "name": "Reus",
+   "dogcName": "Reus",
+   "comarca": "Baix Camp",
+   "population": 111601,
+   "rank": 10,
+   "local": [
+    "2026-06-29",
+    "2026-09-25"
+   ],
+   "nuclei": [],
+   "correction": null,
+   "shops": [
+    "2026-01-04",
+    "2026-01-11",
+    "2026-08-15",
+    "2026-10-12",
+    "2026-11-29",
+    "2026-12-06",
+    "2026-12-08",
+    "2026-12-13",
+    "2026-12-20",
+    "2026-12-27"
+   ],
+   "shopsOwnList": true
+  },
+  {
+   "slug": "girona",
+   "ine": "17079",
+   "name": "Girona",
+   "dogcName": "Girona",
+   "comarca": "Gironès",
+   "population": 108666,
+   "rank": 11,
+   "local": [
+    "2026-07-25",
+    "2026-10-29"
+   ],
+   "nuclei": [],
+   "correction": null,
+   "shops": [
+    "2026-01-04",
+    "2026-01-11",
+    "2026-08-15",
+    "2026-10-12",
+    "2026-11-29",
+    "2026-12-06",
+    "2026-12-08",
+    "2026-12-13",
+    "2026-12-20",
+    "2026-12-27"
+   ],
+   "shopsOwnList": true
+  },
+  {
+   "slug": "sant-cugat-del-valles",
+   "ine": "08205",
+   "name": "Sant Cugat del Vallès",
+   "dogcName": "Sant Cugat del Vallès",
+   "comarca": "Vallès Occidental",
+   "population": 97983,
+   "rank": 12,
+   "local": [
+    "2026-03-03",
+    "2026-06-29"
+   ],
+   "nuclei": [
+    {
+     "name": "Valldoreix",
+     "dates": [
+      "2026-03-03",
+      "2026-09-16"
+     ]
+    }
+   ],
+   "correction": null,
+   "shops": [
+    "2026-01-04",
+    "2026-07-05",
+    "2026-08-15",
+    "2026-10-12",
+    "2026-11-29",
+    "2026-12-06",
+    "2026-12-08",
+    "2026-12-13",
+    "2026-12-20",
+    "2026-12-27"
+   ],
+   "shopsOwnList": true
+  },
+  {
+   "slug": "cornella-de-llobregat",
+   "ine": "08073",
+   "name": "Cornellà de Llobregat",
+   "dogcName": "Cornellà de Llobregat",
+   "comarca": "Baix Llobregat",
+   "population": 92237,
+   "rank": 13,
+   "local": [
+    "2026-05-25",
+    "2026-06-05"
+   ],
+   "nuclei": [],
+   "correction": null,
+   "shops": [
+    "2026-01-04",
+    "2026-01-11",
+    "2026-08-15",
+    "2026-10-12",
+    "2026-11-29",
+    "2026-12-06",
+    "2026-12-08",
+    "2026-12-13",
+    "2026-12-20",
+    "2026-12-27"
+   ],
+   "shopsOwnList": false
+  },
+  {
+   "slug": "sant-boi-de-llobregat",
+   "ine": "08200",
+   "name": "Sant Boi de Llobregat",
+   "dogcName": "Sant Boi de Llobregat",
+   "comarca": "Baix Llobregat",
+   "population": 85610,
+   "rank": 14,
+   "local": [
+    "2026-05-20",
+    "2026-12-07"
+   ],
+   "nuclei": [],
+   "correction": null,
+   "shops": [
+    "2026-01-04",
+    "2026-08-15",
+    "2026-10-12",
+    "2026-11-29",
+    "2026-12-06",
+    "2026-12-07",
+    "2026-12-08",
+    "2026-12-13",
+    "2026-12-20",
+    "2026-12-27"
+   ],
+   "shopsOwnList": true
+  },
+  {
+   "slug": "rubi",
+   "ine": "08184",
+   "name": "Rubí",
+   "dogcName": "Rubí",
+   "comarca": "Vallès Occidental",
+   "population": 82823,
+   "rank": 15,
+   "local": [
+    "2026-02-16",
+    "2026-06-29"
+   ],
+   "nuclei": [],
+   "correction": null,
+   "shops": [
+    "2026-01-04",
+    "2026-07-05",
+    "2026-08-15",
+    "2026-10-12",
+    "2026-11-29",
+    "2026-12-06",
+    "2026-12-08",
+    "2026-12-13",
+    "2026-12-20",
+    "2026-12-27"
+   ],
+   "shopsOwnList": true
+  },
+  {
+   "slug": "manresa",
+   "ine": "08113",
+   "name": "Manresa",
+   "dogcName": "Manresa",
+   "comarca": "Bages",
+   "population": 80974,
+   "rank": 16,
+   "local": [
+    "2026-02-21",
+    "2026-08-31"
+   ],
+   "nuclei": [],
+   "correction": null,
+   "shops": [
+    "2026-01-04",
+    "2026-01-11",
+    "2026-05-17",
+    "2026-08-15",
+    "2026-10-12",
+    "2026-11-29",
+    "2026-12-06",
+    "2026-12-13",
+    "2026-12-20",
+    "2026-12-27"
+   ],
+   "shopsOwnList": true
+  },
+  {
+   "slug": "vilanova-i-la-geltru",
+   "ine": "08307",
+   "name": "Vilanova i la Geltrú",
+   "dogcName": "Vilanova i la Geltrú",
+   "comarca": "Garraf",
+   "population": 71641,
+   "rank": 17,
+   "local": [
+    "2026-01-17",
+    "2026-08-05"
+   ],
+   "nuclei": [],
+   "correction": null,
+   "shops": [
+    "2026-01-04",
+    "2026-01-11",
+    "2026-08-15",
+    "2026-10-12",
+    "2026-11-29",
+    "2026-12-06",
+    "2026-12-08",
+    "2026-12-13",
+    "2026-12-20",
+    "2026-12-27"
+   ],
+   "shopsOwnList": false
+  },
+  {
+   "slug": "castelldefels",
+   "ine": "08056",
+   "name": "Castelldefels",
+   "dogcName": "Castelldefels",
+   "comarca": "Baix Llobregat",
+   "population": 70057,
+   "rank": 18,
+   "local": [
+    "2026-08-14",
+    "2026-12-07"
+   ],
+   "nuclei": [],
+   "correction": {
+    "openData": [
+     "2026-09-14",
+     "2026-12-07"
+    ],
+    "by": "Ordre EMT/3/2026"
+   },
+   "shops": [
+    "2026-01-04",
+    "2026-01-11",
+    "2026-08-15",
+    "2026-10-12",
+    "2026-11-29",
+    "2026-12-06",
+    "2026-12-08",
+    "2026-12-13",
+    "2026-12-20",
+    "2026-12-27"
+   ],
+   "shopsOwnList": false
+  },
+  {
+   "slug": "viladecans",
+   "ine": "08301",
+   "name": "Viladecans",
+   "dogcName": "Viladecans",
+   "comarca": "Baix Llobregat",
+   "population": 67587,
+   "rank": 19,
+   "local": [
+    "2026-05-25",
+    "2026-09-08"
+   ],
+   "nuclei": [],
+   "correction": {
+    "openData": [],
+    "by": "Ordre EMT/3/2026"
+   },
+   "shops": [
+    "2026-01-04",
+    "2026-01-11",
+    "2026-08-15",
+    "2026-10-12",
+    "2026-11-29",
+    "2026-12-06",
+    "2026-12-08",
+    "2026-12-13",
+    "2026-12-20",
+    "2026-12-27"
+   ],
+   "shopsOwnList": false
+  },
+  {
+   "slug": "el-prat-de-llobregat",
+   "ine": "08169",
+   "name": "el Prat de Llobregat",
+   "dogcName": "Prat de Llobregat, el",
+   "comarca": "Baix Llobregat",
+   "population": 66338,
+   "rank": 20,
+   "local": [
+    "2026-05-25",
+    "2026-09-28"
+   ],
+   "nuclei": [],
+   "correction": null,
+   "shops": [
+    "2026-01-04",
+    "2026-01-11",
+    "2026-08-15",
+    "2026-10-12",
+    "2026-11-29",
+    "2026-12-06",
+    "2026-12-08",
+    "2026-12-13",
+    "2026-12-20",
+    "2026-12-27"
+   ],
+   "shopsOwnList": false
+  },
+  {
+   "slug": "granollers",
+   "ine": "08096",
+   "name": "Granollers",
+   "dogcName": "Granollers",
+   "comarca": "Vallès Oriental",
+   "population": 65341,
+   "rank": 21,
+   "local": [
+    "2026-05-15",
+    "2026-08-28"
+   ],
+   "nuclei": [],
+   "correction": null,
+   "shops": [
+    "2026-01-04",
+    "2026-01-11",
+    "2026-08-15",
+    "2026-10-12",
+    "2026-11-29",
+    "2026-12-06",
+    "2026-12-08",
+    "2026-12-13",
+    "2026-12-20",
+    "2026-12-27"
+   ],
+   "shopsOwnList": true
+  },
+  {
+   "slug": "mollet-del-valles",
+   "ine": "08124",
+   "name": "Mollet del Vallès",
+   "dogcName": "Mollet del Vallès",
+   "comarca": "Vallès Oriental",
+   "population": 52990,
+   "rank": 22,
+   "local": [
+    "2026-01-22",
+    "2026-08-17"
+   ],
+   "nuclei": [],
+   "correction": null,
+   "shops": [
+    "2026-01-04",
+    "2026-05-03",
+    "2026-08-15",
+    "2026-10-12",
+    "2026-11-01",
+    "2026-11-29",
+    "2026-12-06",
+    "2026-12-13",
+    "2026-12-20",
+    "2026-12-27"
+   ],
+   "shopsOwnList": true
+  },
+  {
+   "slug": "vic",
+   "ine": "08298",
+   "name": "Vic",
+   "dogcName": "Vic",
+   "comarca": "Osona",
+   "population": 50796,
+   "rank": 23,
+   "local": [
+    "2026-05-25",
+    "2026-07-06"
+   ],
+   "nuclei": [],
+   "correction": null,
+   "shops": [
+    "2026-01-04",
+    "2026-01-11",
+    "2026-08-15",
+    "2026-10-12",
+    "2026-11-29",
+    "2026-12-06",
+    "2026-12-08",
+    "2026-12-13",
+    "2026-12-20",
+    "2026-12-27"
+   ],
+   "shopsOwnList": false
+  },
+  {
+   "slug": "figueres",
+   "ine": "17066",
+   "name": "Figueres",
+   "dogcName": "Figueres",
+   "comarca": "Alt Empordà",
+   "population": 49689,
+   "rank": 24,
+   "local": [
+    "2026-05-25",
+    "2026-06-29"
+   ],
+   "nuclei": [],
+   "correction": null,
+   "shops": [
+    "2026-01-04",
+    "2026-01-11",
+    "2026-08-15",
+    "2026-10-12",
+    "2026-11-29",
+    "2026-12-06",
+    "2026-12-08",
+    "2026-12-13",
+    "2026-12-20",
+    "2026-12-27"
+   ],
+   "shopsOwnList": true
+  },
+  {
+   "slug": "gava",
+   "ine": "08089",
+   "name": "Gavà",
+   "dogcName": "Gavà",
+   "comarca": "Baix Llobregat",
+   "population": 48243,
+   "rank": 25,
+   "local": [
+    "2026-06-29",
+    "2026-12-14"
+   ],
+   "nuclei": [],
+   "correction": null,
+   "shops": [
+    "2026-01-04",
+    "2026-01-11",
+    "2026-08-15",
+    "2026-10-12",
+    "2026-11-29",
+    "2026-12-06",
+    "2026-12-13",
+    "2026-12-14",
+    "2026-12-20",
+    "2026-12-27"
+   ],
+   "shopsOwnList": true
+  },
+  {
+   "slug": "esplugues-de-llobregat",
+   "ine": "08077",
+   "name": "Esplugues de Llobregat",
+   "dogcName": "Esplugues de Llobregat",
+   "comarca": "Baix Llobregat",
+   "population": 48221,
+   "rank": 26,
+   "local": [
+    "2026-05-25",
+    "2026-09-21"
+   ],
+   "nuclei": [],
+   "correction": null,
+   "shops": [
+    "2026-01-04",
+    "2026-01-11",
+    "2026-08-15",
+    "2026-10-12",
+    "2026-11-29",
+    "2026-12-06",
+    "2026-12-08",
+    "2026-12-13",
+    "2026-12-20",
+    "2026-12-27"
+   ],
+   "shopsOwnList": false
+  },
+  {
+   "slug": "sant-feliu-de-llobregat",
+   "ine": "08211",
+   "name": "Sant Feliu de Llobregat",
+   "dogcName": "Sant Feliu de Llobregat",
+   "comarca": "Baix Llobregat",
+   "population": 46781,
+   "rank": 27,
+   "local": [
+    "2026-05-25",
+    "2026-10-09"
+   ],
+   "nuclei": [],
+   "correction": null,
+   "shops": [
+    "2026-01-04",
+    "2026-01-11",
+    "2026-08-15",
+    "2026-10-12",
+    "2026-11-29",
+    "2026-12-06",
+    "2026-12-08",
+    "2026-12-13",
+    "2026-12-20",
+    "2026-12-27"
+   ],
+   "shopsOwnList": false
+  },
+  {
+   "slug": "lloret-de-mar",
+   "ine": "17095",
+   "name": "Lloret de Mar",
+   "dogcName": "Lloret de Mar",
+   "comarca": "Selva",
+   "population": 43000,
+   "rank": 28,
+   "local": [
+    "2026-07-24",
+    "2026-11-18"
+   ],
+   "nuclei": [],
+   "correction": null,
+   "shops": [
+    "2026-01-04",
+    "2026-01-11",
+    "2026-08-15",
+    "2026-10-12",
+    "2026-11-29",
+    "2026-12-06",
+    "2026-12-08",
+    "2026-12-13",
+    "2026-12-20",
+    "2026-12-27"
+   ],
+   "shopsOwnList": false
+  },
+  {
+   "slug": "blanes",
+   "ine": "17023",
+   "name": "Blanes",
+   "dogcName": "Blanes",
+   "comarca": "Selva",
+   "population": 42699,
+   "rank": 29,
+   "local": [
+    "2026-04-07",
+    "2026-08-21"
+   ],
+   "nuclei": [],
+   "correction": null,
+   "shops": [
+    "2026-01-04",
+    "2026-01-11",
+    "2026-08-15",
+    "2026-10-12",
+    "2026-11-29",
+    "2026-12-06",
+    "2026-12-08",
+    "2026-12-13",
+    "2026-12-20",
+    "2026-12-27"
+   ],
+   "shopsOwnList": false
+  },
+  {
+   "slug": "vilafranca-del-penedes",
+   "ine": "08305",
+   "name": "Vilafranca del Penedès",
+   "dogcName": "Vilafranca del Penedès",
+   "comarca": "Alt Penedès",
+   "population": 42607,
+   "rank": 30,
+   "local": [
+    "2026-08-31",
+    "2026-09-01"
+   ],
+   "nuclei": [],
+   "correction": null,
+   "shops": [
+    "2026-01-04",
+    "2026-08-15",
+    "2026-09-01",
+    "2026-10-12",
+    "2026-11-29",
+    "2026-12-06",
+    "2026-12-08",
+    "2026-12-13",
+    "2026-12-20",
+    "2026-12-27"
+   ],
+   "shopsOwnList": true
+  },
+  {
+   "slug": "igualada",
+   "ine": "08102",
+   "name": "Igualada",
+   "dogcName": "Igualada",
+   "comarca": "Anoia",
+   "population": 42085,
+   "rank": 31,
+   "local": [
+    "2026-04-07",
+    "2026-08-24"
+   ],
+   "nuclei": [],
+   "correction": null,
+   "shops": [
+    "2026-01-04",
+    "2026-01-11",
+    "2026-08-15",
+    "2026-10-12",
+    "2026-11-29",
+    "2026-12-06",
+    "2026-12-08",
+    "2026-12-13",
+    "2026-12-20",
+    "2026-12-27"
+   ],
+   "shopsOwnList": true
+  },
+  {
+   "slug": "el-vendrell",
+   "ine": "43163",
+   "name": "el Vendrell",
+   "dogcName": "Vendrell, el",
+   "comarca": "Baix Penedès",
+   "population": 41133,
+   "rank": 32,
+   "local": [
+    "2026-07-27",
+    "2026-07-28"
+   ],
+   "nuclei": [],
+   "correction": null,
+   "shops": [
+    "2026-01-04",
+    "2026-01-11",
+    "2026-08-15",
+    "2026-10-12",
+    "2026-11-29",
+    "2026-12-06",
+    "2026-12-08",
+    "2026-12-13",
+    "2026-12-20",
+    "2026-12-27"
+   ],
+   "shopsOwnList": false
+  },
+  {
+   "slug": "ripollet",
+   "ine": "08180",
+   "name": "Ripollet",
+   "dogcName": "Ripollet",
+   "comarca": "Vallès Occidental",
+   "population": 39897,
+   "rank": 33,
+   "local": [
+    "2026-05-25",
+    "2026-08-31"
+   ],
+   "nuclei": [],
+   "correction": null,
+   "shops": [
+    "2026-01-04",
+    "2026-04-03",
+    "2026-08-15",
+    "2026-10-12",
+    "2026-11-29",
+    "2026-12-06",
+    "2026-12-08",
+    "2026-12-13",
+    "2026-12-20",
+    "2026-12-27"
+   ],
+   "shopsOwnList": true
+  },
+  {
+   "slug": "olot",
+   "ine": "17114",
+   "name": "Olot",
+   "dogcName": "Olot",
+   "comarca": "Garrotxa",
+   "population": 39519,
+   "rank": 34,
+   "local": [
+    "2026-09-07",
+    "2026-09-08"
+   ],
+   "nuclei": [],
+   "correction": null,
+   "shops": [
+    "2026-01-04",
+    "2026-08-15",
+    "2026-09-07",
+    "2026-10-12",
+    "2026-10-18",
+    "2026-11-29",
+    "2026-12-06",
+    "2026-12-08",
+    "2026-12-20",
+    "2026-12-27"
+   ],
+   "shopsOwnList": true
+  },
+  {
+   "slug": "sant-adria-de-besos",
+   "ine": "08194",
+   "name": "Sant Adrià de Besòs",
+   "dogcName": "Sant Adrià de Besòs",
+   "comarca": "Barcelonès",
+   "population": 39323,
+   "rank": 35,
+   "local": [
+    "2026-05-25",
+    "2026-09-08"
+   ],
+   "nuclei": [],
+   "correction": null,
+   "shops": [
+    "2026-01-04",
+    "2026-01-11",
+    "2026-08-15",
+    "2026-10-12",
+    "2026-11-29",
+    "2026-12-06",
+    "2026-12-08",
+    "2026-12-13",
+    "2026-12-20",
+    "2026-12-27"
+   ],
+   "shopsOwnList": true
+  },
+  {
+   "slug": "montcada-i-reixac",
+   "ine": "08125",
+   "name": "Montcada i Reixac",
+   "dogcName": "Montcada i Reixac",
+   "comarca": "Vallès Occidental",
+   "population": 37460,
+   "rank": 36,
+   "local": [
+    "2026-05-25",
+    "2026-09-24"
+   ],
+   "nuclei": [],
+   "correction": null,
+   "shops": [
+    "2026-01-04",
+    "2026-05-25",
+    "2026-08-15",
+    "2026-09-24",
+    "2026-10-12",
+    "2026-11-29",
+    "2026-12-06",
+    "2026-12-13",
+    "2026-12-20",
+    "2026-12-27"
+   ],
+   "shopsOwnList": true
+  },
+  {
+   "slug": "cambrils",
+   "ine": "43038",
+   "name": "Cambrils",
+   "dogcName": "Cambrils",
+   "comarca": "Baix Camp",
+   "population": 37042,
+   "rank": 37,
+   "local": [
+    "2026-06-29",
+    "2026-09-08"
+   ],
+   "nuclei": [],
+   "correction": null,
+   "shops": [
+    "2026-01-04",
+    "2026-01-11",
+    "2026-08-15",
+    "2026-10-12",
+    "2026-11-29",
+    "2026-12-06",
+    "2026-12-08",
+    "2026-12-13",
+    "2026-12-20",
+    "2026-12-27"
+   ],
+   "shopsOwnList": false
+  },
+  {
+   "slug": "tortosa",
+   "ine": "43155",
+   "name": "Tortosa",
+   "dogcName": "Tortosa",
+   "comarca": "Baix Ebre",
+   "population": 35997,
+   "rank": 38,
+   "local": [
+    "2026-05-25",
+    "2026-09-07"
+   ],
+   "nuclei": [
+    {
+     "name": "Bítem",
+     "dates": [
+      "2026-05-25",
+      "2026-09-18"
+     ]
+    },
+    {
+     "name": "Campredó",
+     "dates": [
+      "2026-05-25",
+      "2026-07-27"
+     ]
+    }
+   ],
+   "correction": null,
+   "shops": [
+    "2026-01-04",
+    "2026-01-11",
+    "2026-08-15",
+    "2026-10-12",
+    "2026-11-29",
+    "2026-12-06",
+    "2026-12-08",
+    "2026-12-13",
+    "2026-12-20",
+    "2026-12-27"
+   ],
+   "shopsOwnList": false
+  },
+  {
+   "slug": "sant-joan-despi",
+   "ine": "08217",
+   "name": "Sant Joan Despí",
+   "dogcName": "Sant Joan Despí",
+   "comarca": "Baix Llobregat",
+   "population": 35926,
+   "rank": 39,
+   "local": [
+    "2026-05-25",
+    "2026-09-24"
+   ],
+   "nuclei": [],
+   "correction": {
+    "openData": [
+     "2026-05-25",
+     "2026-09-29"
+    ],
+    "by": "Ordre EMT/3/2026"
+   },
+   "shops": [
+    "2026-01-04",
+    "2026-01-11",
+    "2026-08-15",
+    "2026-10-12",
+    "2026-11-29",
+    "2026-12-06",
+    "2026-12-08",
+    "2026-12-13",
+    "2026-12-20",
+    "2026-12-27"
+   ],
+   "shopsOwnList": true
+  },
+  {
+   "slug": "salt",
+   "ine": "17155",
+   "name": "Salt",
+   "dogcName": "Salt",
+   "comarca": "Gironès",
+   "population": 34491,
+   "rank": 40,
+   "local": [
+    "2026-07-25",
+    "2026-10-29"
+   ],
+   "nuclei": [],
+   "correction": null,
+   "shops": [
+    "2026-01-04",
+    "2026-01-11",
+    "2026-06-28",
+    "2026-08-15",
+    "2026-10-12",
+    "2026-12-06",
+    "2026-12-08",
+    "2026-12-13",
+    "2026-12-20",
+    "2026-12-27"
+   ],
+   "shopsOwnList": true
+  },
+  {
+   "slug": "sant-pere-de-ribes",
+   "ine": "08231",
+   "name": "Sant Pere de Ribes",
+   "dogcName": "Sant Pere de Ribes",
+   "comarca": "Garraf",
+   "population": 32705,
+   "rank": 41,
+   "local": [
+    "2026-01-26",
+    "2026-06-29"
+   ],
+   "nuclei": [
+    {
+     "name": "les Roquetes",
+     "dates": [
+      "2026-02-12",
+      "2026-06-25"
+     ]
+    }
+   ],
+   "correction": null,
+   "shops": [
+    "2026-01-04",
+    "2026-01-11",
+    "2026-08-15",
+    "2026-10-12",
+    "2026-11-29",
+    "2026-12-06",
+    "2026-12-08",
+    "2026-12-13",
+    "2026-12-20",
+    "2026-12-27"
+   ],
+   "shopsOwnList": false
+  },
+  {
+   "slug": "calafell",
+   "ine": "43037",
+   "name": "Calafell",
+   "dogcName": "Calafell",
+   "comarca": "Baix Penedès",
+   "population": 32624,
+   "rank": 42,
+   "local": [
+    "2026-06-29",
+    "2026-07-16"
+   ],
+   "nuclei": [
+    {
+     "name": "Segur de Calafell",
+     "dates": [
+      "2026-07-16",
+      "2026-09-29"
+     ]
+    }
+   ],
+   "correction": null,
+   "shops": [
+    "2026-01-04",
+    "2026-01-11",
+    "2026-08-15",
+    "2026-10-12",
+    "2026-11-29",
+    "2026-12-06",
+    "2026-12-08",
+    "2026-12-13",
+    "2026-12-20",
+    "2026-12-27"
+   ],
+   "shopsOwnList": false
+  },
+  {
+   "slug": "sitges",
+   "ine": "08270",
+   "name": "Sitges",
+   "dogcName": "Sitges",
+   "comarca": "Garraf",
+   "population": 32609,
+   "rank": 43,
+   "local": [
+    "2026-08-24",
+    "2026-09-23"
+   ],
+   "nuclei": [],
+   "correction": {
+    "openData": [
+     "2026-09-23"
+    ],
+    "by": "Ordre EMT/3/2026"
+   },
+   "shops": [
+    "2026-01-04",
+    "2026-01-11",
+    "2026-08-15",
+    "2026-10-12",
+    "2026-11-29",
+    "2026-12-06",
+    "2026-12-08",
+    "2026-12-13",
+    "2026-12-20",
+    "2026-12-27"
+   ],
+   "shopsOwnList": false
+  },
+  {
+   "slug": "salou",
+   "ine": "43905",
+   "name": "Salou",
+   "dogcName": "Salou",
+   "comarca": "Tarragonès",
+   "population": 31491,
+   "rank": 44,
+   "local": [
+    "2026-02-06",
+    "2026-10-30"
+   ],
+   "nuclei": [],
+   "correction": null,
+   "shops": [
+    "2026-01-04",
+    "2026-01-11",
+    "2026-08-15",
+    "2026-10-12",
+    "2026-11-29",
+    "2026-12-06",
+    "2026-12-08",
+    "2026-12-13",
+    "2026-12-20",
+    "2026-12-27"
+   ],
+   "shopsOwnList": false
+  },
+  {
+   "slug": "pineda-de-mar",
+   "ine": "08163",
+   "name": "Pineda de Mar",
+   "dogcName": "Pineda de Mar",
+   "comarca": "Maresme",
+   "population": 30108,
+   "rank": 45,
+   "local": [
+    "2026-08-27",
+    "2026-08-28"
+   ],
+   "nuclei": [],
+   "correction": null,
+   "shops": [
+    "2026-01-04",
+    "2026-01-11",
+    "2026-08-15",
+    "2026-10-12",
+    "2026-11-29",
+    "2026-12-06",
+    "2026-12-08",
+    "2026-12-13",
+    "2026-12-20",
+    "2026-12-27"
+   ],
+   "shopsOwnList": false
+  },
+  {
+   "slug": "premia-de-mar",
+   "ine": "08172",
+   "name": "Premià de Mar",
+   "dogcName": "Premià de Mar",
+   "comarca": "Maresme",
+   "population": 29431,
+   "rank": 46,
+   "local": [
+    "2026-02-16",
+    "2026-07-10"
+   ],
+   "nuclei": [],
+   "correction": null,
+   "shops": [
+    "2026-01-04",
+    "2026-01-11",
+    "2026-08-15",
+    "2026-10-12",
+    "2026-11-29",
+    "2026-12-06",
+    "2026-12-08",
+    "2026-12-13",
+    "2026-12-20",
+    "2026-12-27"
+   ],
+   "shopsOwnList": false
+  },
+  {
+   "slug": "martorell",
+   "ine": "08114",
+   "name": "Martorell",
+   "dogcName": "Martorell",
+   "comarca": "Baix Llobregat",
+   "population": 29175,
+   "rank": 47,
+   "local": [
+    "2026-04-27",
+    "2026-05-25"
+   ],
+   "nuclei": [],
+   "correction": null,
+   "shops": [
+    "2026-01-04",
+    "2026-04-27",
+    "2026-05-25",
+    "2026-08-15",
+    "2026-10-12",
+    "2026-12-06",
+    "2026-12-08",
+    "2026-12-13",
+    "2026-12-20",
+    "2026-12-27"
+   ],
+   "shopsOwnList": true
+  },
+  {
+   "slug": "sant-vicenc-dels-horts",
+   "ine": "08263",
+   "name": "Sant Vicenç dels Horts",
+   "dogcName": "Sant Vicenç dels Horts",
+   "comarca": "Baix Llobregat",
+   "population": 28746,
+   "rank": 48,
+   "local": [
+    "2026-01-22",
+    "2026-07-27"
+   ],
+   "nuclei": [],
+   "correction": null,
+   "shops": [
+    "2026-01-04",
+    "2026-01-11",
+    "2026-08-15",
+    "2026-10-12",
+    "2026-11-29",
+    "2026-12-06",
+    "2026-12-08",
+    "2026-12-13",
+    "2026-12-20",
+    "2026-12-27"
+   ],
+   "shopsOwnList": false
+  },
+  {
+   "slug": "molins-de-rei",
+   "ine": "08123",
+   "name": "Molins de Rei",
+   "dogcName": "Molins de Rei",
+   "comarca": "Baix Llobregat",
+   "population": 27300,
+   "rank": 49,
+   "local": [
+    "2026-05-25",
+    "2026-09-29"
+   ],
+   "nuclei": [],
+   "correction": null,
+   "shops": [
+    "2026-01-04",
+    "2026-02-01",
+    "2026-08-15",
+    "2026-10-12",
+    "2026-11-29",
+    "2026-12-06",
+    "2026-12-08",
+    "2026-12-13",
+    "2026-12-20",
+    "2026-12-27"
+   ],
+   "shopsOwnList": true
+  },
+  {
+   "slug": "sant-andreu-de-la-barca",
+   "ine": "08196",
+   "name": "Sant Andreu de la Barca",
+   "dogcName": "Sant Andreu de la Barca",
+   "comarca": "Baix Llobregat",
+   "population": 27094,
+   "rank": 50,
+   "local": [
+    "2026-09-07",
+    "2026-11-30"
+   ],
+   "nuclei": [],
+   "correction": null,
+   "shops": [
+    "2026-01-04",
+    "2026-08-15",
+    "2026-10-12",
+    "2026-11-29",
+    "2026-11-30",
+    "2026-12-06",
+    "2026-12-08",
+    "2026-12-13",
+    "2026-12-20",
+    "2026-12-27"
+   ],
+   "shopsOwnList": true
+  },
+  {
+   "slug": "santa-perpetua-de-mogoda",
+   "ine": "08260",
+   "name": "Santa Perpètua de Mogoda",
+   "dogcName": "Santa Perpètua de Mogoda",
+   "comarca": "Vallès Occidental",
+   "population": 26130,
+   "rank": 51,
+   "local": [
+    "2026-03-07",
+    "2026-09-04"
+   ],
+   "nuclei": [],
+   "correction": null,
+   "shops": [
+    "2026-01-04",
+    "2026-01-11",
+    "2026-08-15",
+    "2026-10-12",
+    "2026-11-29",
+    "2026-12-06",
+    "2026-12-08",
+    "2026-12-13",
+    "2026-12-20",
+    "2026-12-27"
+   ],
+   "shopsOwnList": false
+  },
+  {
+   "slug": "valls",
+   "ine": "43161",
+   "name": "Valls",
+   "dogcName": "Valls",
+   "comarca": "Alt Camp",
+   "population": 25518,
+   "rank": 52,
+   "local": [
+    "2026-02-02",
+    "2026-06-25"
+   ],
+   "nuclei": [
+    {
+     "name": "Picamoixons",
+     "dates": [
+      "2026-03-19",
+      "2026-08-01"
+     ]
+    }
+   ],
+   "correction": null,
+   "shops": [
+    "2026-01-04",
+    "2026-01-25",
+    "2026-08-15",
+    "2026-10-12",
+    "2026-11-29",
+    "2026-12-06",
+    "2026-12-08",
+    "2026-12-13",
+    "2026-12-20",
+    "2026-12-27"
+   ],
+   "shopsOwnList": true
+  },
+  {
+   "slug": "castellar-del-valles",
+   "ine": "08051",
+   "name": "Castellar del Vallès",
+   "dogcName": "Castellar del Vallès",
+   "comarca": "Vallès Occidental",
+   "population": 25422,
+   "rank": 53,
+   "local": [
+    "2026-03-19",
+    "2026-09-14"
+   ],
+   "nuclei": [],
+   "correction": null,
+   "shops": [
+    "2026-01-04",
+    "2026-01-11",
+    "2026-08-15",
+    "2026-10-12",
+    "2026-11-29",
+    "2026-12-06",
+    "2026-12-08",
+    "2026-12-13",
+    "2026-12-20",
+    "2026-12-27"
+   ],
+   "shopsOwnList": false
+  },
+  {
+   "slug": "olesa-de-montserrat",
+   "ine": "08147",
+   "name": "Olesa de Montserrat",
+   "dogcName": "Olesa de Montserrat",
+   "comarca": "Baix Llobregat",
+   "population": 24966,
+   "rank": 54,
+   "local": [
+    "2026-06-10",
+    "2026-06-25"
+   ],
+   "nuclei": [],
+   "correction": null,
+   "shops": [
+    "2026-01-04",
+    "2026-04-03",
+    "2026-08-15",
+    "2026-10-12",
+    "2026-11-29",
+    "2026-12-06",
+    "2026-12-08",
+    "2026-12-13",
+    "2026-12-20",
+    "2026-12-27"
+   ],
+   "shopsOwnList": true
+  },
+  {
+   "slug": "el-masnou",
+   "ine": "08118",
+   "name": "el Masnou",
+   "dogcName": "Masnou, el",
+   "comarca": "Maresme",
+   "population": 24761,
+   "rank": 55,
+   "local": [
+    "2026-05-25",
+    "2026-06-29"
+   ],
+   "nuclei": [],
+   "correction": null,
+   "shops": [
+    "2026-01-04",
+    "2026-01-11",
+    "2026-08-15",
+    "2026-10-12",
+    "2026-11-29",
+    "2026-12-06",
+    "2026-12-08",
+    "2026-12-13",
+    "2026-12-20",
+    "2026-12-27"
+   ],
+   "shopsOwnList": false
+  },
+  {
+   "slug": "palafrugell",
+   "ine": "17117",
+   "name": "Palafrugell",
+   "dogcName": "Palafrugell",
+   "comarca": "Baix Empordà",
+   "population": 24543,
+   "rank": 56,
+   "local": [
+    "2026-06-08",
+    "2026-07-20"
+   ],
+   "nuclei": [],
+   "correction": null,
+   "shops": [
+    "2026-01-04",
+    "2026-01-11",
+    "2026-08-15",
+    "2026-10-12",
+    "2026-11-29",
+    "2026-12-06",
+    "2026-12-08",
+    "2026-12-13",
+    "2026-12-20",
+    "2026-12-27"
+   ],
+   "shopsOwnList": false
+  },
+  {
+   "slug": "vila-seca",
+   "ine": "43171",
+   "name": "Vila-seca",
+   "dogcName": "Vila-seca",
+   "comarca": "Tarragonès",
+   "population": 23917,
+   "rank": 57,
+   "local": [
+    "2026-01-17",
+    "2026-08-03"
+   ],
+   "nuclei": [],
+   "correction": null,
+   "shops": [
+    "2026-01-04",
+    "2026-01-11",
+    "2026-08-15",
+    "2026-10-12",
+    "2026-11-29",
+    "2026-12-06",
+    "2026-12-08",
+    "2026-12-13",
+    "2026-12-20",
+    "2026-12-27"
+   ],
+   "shopsOwnList": false
+  },
+  {
+   "slug": "sant-feliu-de-guixols",
+   "ine": "17160",
+   "name": "Sant Feliu de Guíxols",
+   "dogcName": "Sant Feliu de Guíxols",
+   "comarca": "Baix Empordà",
+   "population": 23141,
+   "rank": 58,
+   "local": [
+    "2026-02-13",
+    "2026-08-01"
+   ],
+   "nuclei": [],
+   "correction": null,
+   "shops": [
+    "2026-01-04",
+    "2026-01-11",
+    "2026-08-15",
+    "2026-10-12",
+    "2026-11-29",
+    "2026-12-06",
+    "2026-12-08",
+    "2026-12-13",
+    "2026-12-20",
+    "2026-12-27"
+   ],
+   "shopsOwnList": false
+  },
+  {
+   "slug": "amposta",
+   "ine": "43014",
+   "name": "Amposta",
+   "dogcName": "Amposta",
+   "comarca": "Montsià",
+   "population": 23080,
+   "rank": 59,
+   "local": [
+    "2026-05-18",
+    "2026-12-07"
+   ],
+   "nuclei": [],
+   "correction": null,
+   "shops": [
+    "2026-01-04",
+    "2026-05-17",
+    "2026-08-15",
+    "2026-10-12",
+    "2026-11-29",
+    "2026-12-06",
+    "2026-12-08",
+    "2026-12-13",
+    "2026-12-20",
+    "2026-12-27"
+   ],
+   "shopsOwnList": true
+  },
+  {
+   "slug": "esparreguera",
+   "ine": "08076",
+   "name": "Esparreguera",
+   "dogcName": "Esparreguera",
+   "comarca": "Baix Llobregat",
+   "population": 22665,
+   "rank": 60,
+   "local": [
+    "2026-02-12",
+    "2026-07-13"
+   ],
+   "nuclei": [],
+   "correction": null,
+   "shops": [
+    "2026-01-04",
+    "2026-01-11",
+    "2026-08-15",
+    "2026-10-12",
+    "2026-11-29",
+    "2026-12-06",
+    "2026-12-08",
+    "2026-12-13",
+    "2026-12-20",
+    "2026-12-27"
+   ],
+   "shopsOwnList": false
+  },
+  {
+   "slug": "manlleu",
+   "ine": "08112",
+   "name": "Manlleu",
+   "dogcName": "Manlleu",
+   "comarca": "Osona",
+   "population": 21425,
+   "rank": 61,
+   "local": [
+    "2026-04-02",
+    "2026-05-25"
+   ],
+   "nuclei": [],
+   "correction": null,
+   "shops": [
+    "2026-01-04",
+    "2026-04-02",
+    "2026-05-25",
+    "2026-08-15",
+    "2026-10-12",
+    "2026-11-29",
+    "2026-12-06",
+    "2026-12-13",
+    "2026-12-20",
+    "2026-12-27"
+   ],
+   "shopsOwnList": true
+  },
+  {
+   "slug": "vilassar-de-mar",
+   "ine": "08219",
+   "name": "Vilassar de Mar",
+   "dogcName": "Vilassar de Mar",
+   "comarca": "Maresme",
+   "population": 21227,
+   "rank": 62,
+   "local": [
+    "2026-06-25",
+    "2026-11-16"
+   ],
+   "nuclei": [],
+   "correction": null,
+   "shops": [
+    "2026-01-04",
+    "2026-06-25",
+    "2026-08-15",
+    "2026-10-12",
+    "2026-11-29",
+    "2026-12-06",
+    "2026-12-08",
+    "2026-12-13",
+    "2026-12-20",
+    "2026-12-27"
+   ],
+   "shopsOwnList": true
+  },
+  {
+   "slug": "sant-just-desvern",
+   "ine": "08221",
+   "name": "Sant Just Desvern",
+   "dogcName": "Sant Just Desvern",
+   "comarca": "Baix Llobregat",
+   "population": 21037,
+   "rank": 63,
+   "local": [
+    "2026-05-25",
+    "2026-08-06"
+   ],
+   "nuclei": [],
+   "correction": null,
+   "shops": [
+    "2026-01-04",
+    "2026-01-11",
+    "2026-08-15",
+    "2026-10-12",
+    "2026-11-29",
+    "2026-12-06",
+    "2026-12-08",
+    "2026-12-13",
+    "2026-12-20",
+    "2026-12-27"
+   ],
+   "shopsOwnList": false
+  },
+  {
+   "slug": "les-franqueses-del-valles",
+   "ine": "08086",
+   "name": "les Franqueses del Vallès",
+   "dogcName": "Franqueses del Vallès, les",
+   "comarca": "Vallès Oriental",
+   "population": 20881,
+   "rank": 64,
+   "local": [],
+   "nuclei": [
+    {
+     "name": "Bellavista",
+     "dates": [
+      "2026-05-15",
+      "2026-07-03"
+     ]
+    },
+    {
+     "name": "Corró d'Amunt",
+     "dates": [
+      "2026-05-15",
+      "2026-07-11"
+     ]
+    },
+    {
+     "name": "Corró d'Avall",
+     "dates": [
+      "2026-05-15",
+      "2026-09-18"
+     ]
+    },
+    {
+     "name": "Llerona",
+     "dates": [
+      "2026-05-15",
+      "2026-09-08"
+     ]
+    },
+    {
+     "name": "Marata",
+     "dates": [
+      "2026-05-15",
+      "2026-07-25"
+     ]
+    }
+   ],
+   "correction": null,
+   "shops": [
+    "2026-01-04",
+    "2026-01-11",
+    "2026-08-15",
+    "2026-10-12",
+    "2026-11-29",
+    "2026-12-06",
+    "2026-12-08",
+    "2026-12-13",
+    "2026-12-20",
+    "2026-12-27"
+   ],
+   "shopsOwnList": false
+  },
+  {
+   "slug": "banyoles",
+   "ine": "17015",
+   "name": "Banyoles",
+   "dogcName": "Banyoles",
+   "comarca": "Pla de l'Estany",
+   "population": 20865,
+   "rank": 65,
+   "local": [
+    "2026-10-23",
+    "2026-10-26"
+   ],
+   "nuclei": [],
+   "correction": null,
+   "shops": [
+    "2026-01-04",
+    "2026-08-15",
+    "2026-10-12",
+    "2026-10-23",
+    "2026-11-29",
+    "2026-12-06",
+    "2026-12-08",
+    "2026-12-13",
+    "2026-12-20",
+    "2026-12-27"
+   ],
+   "shopsOwnList": true
+  },
+  {
+   "slug": "calella",
+   "ine": "08035",
+   "name": "Calella",
+   "dogcName": "Calella",
+   "comarca": "Maresme",
+   "population": 20864,
+   "rank": 66,
+   "local": [
+    "2026-06-16",
+    "2026-09-23"
+   ],
+   "nuclei": [],
+   "correction": null,
+   "shops": [
+    "2026-01-04",
+    "2026-01-11",
+    "2026-08-15",
+    "2026-10-12",
+    "2026-11-29",
+    "2026-12-06",
+    "2026-12-08",
+    "2026-12-13",
+    "2026-12-20",
+    "2026-12-27"
+   ],
+   "shopsOwnList": false
+  },
+  {
+   "slug": "roses",
+   "ine": "17152",
+   "name": "Roses",
+   "dogcName": "Roses",
+   "comarca": "Alt Empordà",
+   "population": 20365,
+   "rank": 67,
+   "local": [
+    "2026-02-13",
+    "2026-02-16"
+   ],
+   "nuclei": [],
+   "correction": null,
+   "shops": [
+    "2026-01-04",
+    "2026-01-11",
+    "2026-08-15",
+    "2026-10-12",
+    "2026-11-29",
+    "2026-12-06",
+    "2026-12-08",
+    "2026-12-13",
+    "2026-12-20",
+    "2026-12-27"
+   ],
+   "shopsOwnList": false
+  },
+  {
+   "slug": "sant-quirze-del-valles",
+   "ine": "08238",
+   "name": "Sant Quirze del Vallès",
+   "dogcName": "Sant Quirze del Vallès",
+   "comarca": "Vallès Occidental",
+   "population": 20209,
+   "rank": 68,
+   "local": [
+    "2026-05-11",
+    "2026-09-07"
+   ],
+   "nuclei": [],
+   "correction": null,
+   "shops": [
+    "2026-01-04",
+    "2026-01-11",
+    "2026-08-15",
+    "2026-10-12",
+    "2026-11-29",
+    "2026-12-06",
+    "2026-12-08",
+    "2026-12-13",
+    "2026-12-20",
+    "2026-12-27"
+   ],
+   "shopsOwnList": false
+  },
+  {
+   "slug": "tarrega",
+   "ine": "25217",
+   "name": "Tàrrega",
+   "dogcName": "Tàrrega",
+   "comarca": "Urgell",
+   "population": 19057,
+   "rank": 69,
+   "local": [
+    "2026-05-14",
+    "2026-09-10"
+   ],
+   "nuclei": [
+    {
+     "name": "Altet",
+     "dates": [
+      "2026-05-14",
+      "2026-08-29"
+     ]
+    },
+    {
+     "name": "Claravalls",
+     "dates": [
+      "2026-07-31",
+      "2026-08-06"
+     ]
+    },
+    {
+     "name": "la Figuerosa",
+     "dates": [
+      "2026-08-14",
+      "2026-09-10"
+     ]
+    },
+    {
+     "name": "Riudovelles",
+     "dates": [
+      "2026-07-11",
+      "2026-08-29"
+     ]
+    },
+    {
+     "name": "Santa Maria de Montmagastrell",
+     "dates": [
+      "2026-08-14",
+      "2026-09-12"
+     ]
+    },
+    {
+     "name": "el Talladell",
+     "dates": [
+      "2026-09-05",
+      "2026-09-19"
+     ]
+    }
+   ],
+   "correction": null,
+   "shops": [
+    "2026-01-04",
+    "2026-08-15",
+    "2026-09-10",
+    "2026-10-12",
+    "2026-11-29",
+    "2026-12-06",
+    "2026-12-08",
+    "2026-12-13",
+    "2026-12-20",
+    "2026-12-27"
+   ],
+   "shopsOwnList": true
+  },
+  {
+   "slug": "cardedeu",
+   "ine": "08046",
+   "name": "Cardedeu",
+   "dogcName": "Cardedeu",
+   "comarca": "Vallès Oriental",
+   "population": 19046,
+   "rank": 70,
+   "local": [
+    "2026-05-25",
+    "2026-08-14"
+   ],
+   "nuclei": [],
+   "correction": null,
+   "shops": [
+    "2026-01-04",
+    "2026-05-25",
+    "2026-08-15",
+    "2026-10-04",
+    "2026-10-12",
+    "2026-11-29",
+    "2026-12-06",
+    "2026-12-13",
+    "2026-12-20",
+    "2026-12-27"
+   ],
+   "shopsOwnList": true
+  },
+  {
+   "slug": "tordera",
+   "ine": "08284",
+   "name": "Tordera",
+   "dogcName": "Tordera",
+   "comarca": "Maresme",
+   "population": 19039,
+   "rank": 71,
+   "local": [
+    "2026-05-11",
+    "2026-08-24"
+   ],
+   "nuclei": [],
+   "correction": {
+    "openData": [
+     "2026-03-11",
+     "2026-08-24"
+    ],
+    "by": "Ordre EMT/3/2026"
+   },
+   "shops": [
+    "2026-01-04",
+    "2026-01-11",
+    "2026-08-15",
+    "2026-10-12",
+    "2026-11-29",
+    "2026-12-06",
+    "2026-12-08",
+    "2026-12-13",
+    "2026-12-20",
+    "2026-12-27"
+   ],
+   "shopsOwnList": false
+  },
+  {
+   "slug": "sant-celoni",
+   "ine": "08202",
+   "name": "Sant Celoni",
+   "dogcName": "Sant Celoni",
+   "comarca": "Vallès Oriental",
+   "population": 18977,
+   "rank": 72,
+   "local": [
+    "2026-09-07",
+    "2026-11-09"
+   ],
+   "nuclei": [
+    {
+     "name": "la Batllòria",
+     "dates": [
+      "2026-08-24",
+      "2026-12-18"
+     ]
+    }
+   ],
+   "correction": null,
+   "shops": [
+    "2026-01-04",
+    "2026-01-11",
+    "2026-08-15",
+    "2026-10-12",
+    "2026-11-29",
+    "2026-12-06",
+    "2026-12-08",
+    "2026-12-13",
+    "2026-12-20",
+    "2026-12-27"
+   ],
+   "shopsOwnList": false
+  },
+  {
+   "slug": "palamos-i-sant-joan",
+   "ine": "17118",
+   "name": "Palamós i Sant Joan",
+   "dogcName": "Palamós",
+   "comarca": "Baix Empordà",
+   "population": 18933,
+   "rank": 73,
+   "local": [
+    "2026-06-25",
+    "2026-06-26"
+   ],
+   "nuclei": [],
+   "correction": null,
+   "shops": [
+    "2026-01-04",
+    "2026-01-11",
+    "2026-08-15",
+    "2026-10-12",
+    "2026-11-29",
+    "2026-12-06",
+    "2026-12-08",
+    "2026-12-13",
+    "2026-12-20",
+    "2026-12-27"
+   ],
+   "shopsOwnList": false
+  },
+  {
+   "slug": "parets-del-valles",
+   "ine": "08159",
+   "name": "Parets del Vallès",
+   "dogcName": "Parets del Vallès",
+   "comarca": "Vallès Oriental",
+   "population": 18885,
+   "rank": 74,
+   "local": [
+    "2026-01-26",
+    "2026-07-27"
+   ],
+   "nuclei": [],
+   "correction": null,
+   "shops": [
+    "2026-01-04",
+    "2026-01-11",
+    "2026-08-15",
+    "2026-10-12",
+    "2026-11-29",
+    "2026-12-06",
+    "2026-12-08",
+    "2026-12-13",
+    "2026-12-20",
+    "2026-12-27"
+   ],
+   "shopsOwnList": false
+  },
+  {
+   "slug": "caldes-de-montbui",
+   "ine": "08033",
+   "name": "Caldes de Montbui",
+   "dogcName": "Caldes de Montbui",
+   "comarca": "Vallès Oriental",
+   "population": 18567,
+   "rank": 75,
+   "local": [
+    "2026-05-25",
+    "2026-10-09"
+   ],
+   "nuclei": [],
+   "correction": null,
+   "shops": [
+    "2026-01-04",
+    "2026-03-15",
+    "2026-08-15",
+    "2026-10-09",
+    "2026-10-12",
+    "2026-11-29",
+    "2026-12-06",
+    "2026-12-13",
+    "2026-12-20",
+    "2026-12-27"
+   ],
+   "shopsOwnList": true
+  },
+  {
+   "slug": "torredembarra",
+   "ine": "43153",
+   "name": "Torredembarra",
+   "dogcName": "Torredembarra",
+   "comarca": "Tarragonès",
+   "population": 18237,
+   "rank": 76,
+   "local": [
+    "2026-07-15",
+    "2026-09-04"
+   ],
+   "nuclei": [],
+   "correction": null,
+   "shops": [
+    "2026-01-04",
+    "2026-01-11",
+    "2026-08-15",
+    "2026-10-12",
+    "2026-11-29",
+    "2026-12-06",
+    "2026-12-08",
+    "2026-12-13",
+    "2026-12-20",
+    "2026-12-27"
+   ],
+   "shopsOwnList": false
+  },
+  {
+   "slug": "piera",
+   "ine": "08161",
+   "name": "Piera",
+   "dogcName": "Piera",
+   "comarca": "Anoia",
+   "population": 17880,
+   "rank": 77,
+   "local": [
+    "2026-04-28",
+    "2026-09-08"
+   ],
+   "nuclei": [],
+   "correction": null,
+   "shops": [
+    "2026-01-04",
+    "2026-04-03",
+    "2026-08-15",
+    "2026-10-12",
+    "2026-11-29",
+    "2026-12-06",
+    "2026-12-08",
+    "2026-12-13",
+    "2026-12-20",
+    "2026-12-27"
+   ],
+   "shopsOwnList": true
+  },
+  {
+   "slug": "balaguer",
+   "ine": "25040",
+   "name": "Balaguer",
+   "dogcName": "Balaguer",
+   "comarca": "Noguera",
+   "population": 17729,
+   "rank": 78,
+   "local": [
+    "2026-07-13",
+    "2026-11-09"
+   ],
+   "nuclei": [],
+   "correction": null,
+   "shops": [
+    "2026-01-04",
+    "2026-01-11",
+    "2026-08-15",
+    "2026-10-12",
+    "2026-11-29",
+    "2026-12-06",
+    "2026-12-08",
+    "2026-12-13",
+    "2026-12-20",
+    "2026-12-27"
+   ],
+   "shopsOwnList": false
+  },
+  {
+   "slug": "cubelles",
+   "ine": "08074",
+   "name": "Cubelles",
+   "dogcName": "Cubelles",
+   "comarca": "Garraf",
+   "population": 17673,
+   "rank": 79,
+   "local": [
+    "2026-07-30",
+    "2026-08-17"
+   ],
+   "nuclei": [],
+   "correction": null,
+   "shops": [
+    "2026-01-04",
+    "2026-01-11",
+    "2026-08-15",
+    "2026-10-12",
+    "2026-11-29",
+    "2026-12-06",
+    "2026-12-08",
+    "2026-12-13",
+    "2026-12-20",
+    "2026-12-27"
+   ],
+   "shopsOwnList": false
+  },
+  {
+   "slug": "berga",
+   "ine": "08022",
+   "name": "Berga",
+   "dogcName": "Berga",
+   "comarca": "Berguedà",
+   "population": 17473,
+   "rank": 80,
+   "local": [
+    "2026-06-04",
+    "2026-09-08"
+   ],
+   "nuclei": [],
+   "correction": null,
+   "shops": [
+    "2026-01-04",
+    "2026-01-11",
+    "2026-08-15",
+    "2026-10-12",
+    "2026-11-29",
+    "2026-12-06",
+    "2026-12-08",
+    "2026-12-13",
+    "2026-12-20",
+    "2026-12-27"
+   ],
+   "shopsOwnList": false
+  },
+  {
+   "slug": "canovelles",
+   "ine": "08041",
+   "name": "Canovelles",
+   "dogcName": "Canovelles",
+   "comarca": "Vallès Oriental",
+   "population": 17473,
+   "rank": 81,
+   "local": [
+    "2026-05-15",
+    "2026-07-27"
+   ],
+   "nuclei": [],
+   "correction": null,
+   "shops": [
+    "2026-01-04",
+    "2026-01-11",
+    "2026-08-15",
+    "2026-10-12",
+    "2026-11-29",
+    "2026-12-06",
+    "2026-12-08",
+    "2026-12-13",
+    "2026-12-20",
+    "2026-12-27"
+   ],
+   "shopsOwnList": false
+  },
+  {
+   "slug": "la-garriga",
+   "ine": "08088",
+   "name": "la Garriga",
+   "dogcName": "Garriga, la",
+   "comarca": "Vallès Oriental",
+   "population": 17426,
+   "rank": 82,
+   "local": [
+    "2026-08-03",
+    "2026-10-01"
+   ],
+   "nuclei": [],
+   "correction": null,
+   "shops": [
+    "2026-01-04",
+    "2026-06-07",
+    "2026-08-15",
+    "2026-10-12",
+    "2026-11-29",
+    "2026-12-06",
+    "2026-12-08",
+    "2026-12-13",
+    "2026-12-20",
+    "2026-12-27"
+   ],
+   "shopsOwnList": true
+  },
+  {
+   "slug": "montornes-del-valles",
+   "ine": "08136",
+   "name": "Montornès del Vallès",
+   "dogcName": "Montornès del Vallès",
+   "comarca": "Vallès Oriental",
+   "population": 17102,
+   "rank": 83,
+   "local": [
+    "2026-09-18",
+    "2026-11-30"
+   ],
+   "nuclei": [],
+   "correction": null,
+   "shops": [
+    "2026-01-04",
+    "2026-01-11",
+    "2026-08-15",
+    "2026-10-12",
+    "2026-11-29",
+    "2026-12-06",
+    "2026-12-08",
+    "2026-12-13",
+    "2026-12-20",
+    "2026-12-27"
+   ],
+   "shopsOwnList": false
+  },
+  {
+   "slug": "arenys-de-mar",
+   "ine": "08006",
+   "name": "Arenys de Mar",
+   "dogcName": "Arenys de Mar",
+   "comarca": "Maresme",
+   "population": 17042,
+   "rank": 84,
+   "local": [
+    "2026-07-09",
+    "2026-08-17"
+   ],
+   "nuclei": [],
+   "correction": null,
+   "shops": [
+    "2026-01-04",
+    "2026-01-11",
+    "2026-08-15",
+    "2026-10-12",
+    "2026-11-29",
+    "2026-12-06",
+    "2026-12-08",
+    "2026-12-13",
+    "2026-12-20",
+    "2026-12-27"
+   ],
+   "shopsOwnList": false
+  },
+  {
+   "slug": "llica-d-amunt",
+   "ine": "08107",
+   "name": "Lliçà d'Amunt",
+   "dogcName": "Lliçà d'Amunt",
+   "comarca": "Vallès Oriental",
+   "population": 16540,
+   "rank": 85,
+   "local": [
+    "2026-01-07",
+    "2026-09-10"
+   ],
+   "nuclei": [],
+   "correction": null,
+   "shops": [
+    "2026-01-04",
+    "2026-01-11",
+    "2026-08-15",
+    "2026-10-12",
+    "2026-11-29",
+    "2026-12-06",
+    "2026-12-08",
+    "2026-12-13",
+    "2026-12-20",
+    "2026-12-27"
+   ],
+   "shopsOwnList": false
+  },
+  {
+   "slug": "cunit",
+   "ine": "43051",
+   "name": "Cunit",
+   "dogcName": "Cunit",
+   "comarca": "Baix Penedès",
+   "population": 16385,
+   "rank": 86,
+   "local": [
+    "2026-01-20",
+    "2026-07-14"
+   ],
+   "nuclei": [],
+   "correction": null,
+   "shops": [
+    "2026-01-04",
+    "2026-01-11",
+    "2026-08-15",
+    "2026-10-12",
+    "2026-11-29",
+    "2026-12-06",
+    "2026-12-08",
+    "2026-12-13",
+    "2026-12-20",
+    "2026-12-27"
+   ],
+   "shopsOwnList": false
+  },
+  {
+   "slug": "vallirana",
+   "ine": "08295",
+   "name": "Vallirana",
+   "dogcName": "Vallirana",
+   "comarca": "Baix Llobregat",
+   "population": 16245,
+   "rank": 87,
+   "local": [
+    "2026-01-20",
+    "2026-09-21"
+   ],
+   "nuclei": [],
+   "correction": null,
+   "shops": [
+    "2026-01-04",
+    "2026-01-11",
+    "2026-08-15",
+    "2026-10-12",
+    "2026-11-29",
+    "2026-12-06",
+    "2026-12-08",
+    "2026-12-13",
+    "2026-12-20",
+    "2026-12-27"
+   ],
+   "shopsOwnList": false
+  },
+  {
+   "slug": "la-rapita",
+   "ine": "43136",
+   "name": "la Ràpita",
+   "dogcName": "Ràpita, la",
+   "comarca": "Montsià",
+   "population": 16119,
+   "rank": 88,
+   "local": [
+    "2026-07-25",
+    "2026-09-08"
+   ],
+   "nuclei": [],
+   "correction": null,
+   "shops": [
+    "2026-01-04",
+    "2026-01-11",
+    "2026-08-15",
+    "2026-10-12",
+    "2026-11-29",
+    "2026-12-06",
+    "2026-12-08",
+    "2026-12-13",
+    "2026-12-20",
+    "2026-12-27"
+   ],
+   "shopsOwnList": false
+  },
+  {
+   "slug": "corbera-de-llobregat",
+   "ine": "08072",
+   "name": "Corbera de Llobregat",
+   "dogcName": "Corbera de Llobregat",
+   "comarca": "Baix Llobregat",
+   "population": 16010,
+   "rank": 89,
+   "local": [
+    "2026-01-17",
+    "2026-07-22"
+   ],
+   "nuclei": [],
+   "correction": null,
+   "shops": [
+    "2026-01-04",
+    "2026-01-11",
+    "2026-08-15",
+    "2026-10-12",
+    "2026-11-29",
+    "2026-12-06",
+    "2026-12-08",
+    "2026-12-13",
+    "2026-12-20",
+    "2026-12-27"
+   ],
+   "shopsOwnList": false
+  },
+  {
+   "slug": "mollerussa",
+   "ine": "25137",
+   "name": "Mollerussa",
+   "dogcName": "Mollerussa",
+   "comarca": "Pla d'Urgell",
+   "population": 15763,
+   "rank": 90,
+   "local": [
+    "2026-03-19",
+    "2026-05-15"
+   ],
+   "nuclei": [],
+   "correction": null,
+   "shops": [
+    "2026-01-04",
+    "2026-01-11",
+    "2026-08-15",
+    "2026-10-12",
+    "2026-11-29",
+    "2026-12-06",
+    "2026-12-08",
+    "2026-12-13",
+    "2026-12-20",
+    "2026-12-27"
+   ],
+   "shopsOwnList": false
+  },
+  {
+   "slug": "palau-solita-i-plegamans",
+   "ine": "08156",
+   "name": "Palau-solità i Plegamans",
+   "dogcName": "Palau-solità i Plegamans",
+   "comarca": "Vallès Occidental",
+   "population": 15614,
+   "rank": 91,
+   "local": [
+    "2026-05-25",
+    "2026-08-31"
+   ],
+   "nuclei": [],
+   "correction": null,
+   "shops": [
+    "2026-01-04",
+    "2026-01-11",
+    "2026-08-15",
+    "2026-10-12",
+    "2026-11-29",
+    "2026-12-06",
+    "2026-12-08",
+    "2026-12-13",
+    "2026-12-20",
+    "2026-12-27"
+   ],
+   "shopsOwnList": false
+  },
+  {
+   "slug": "canet-de-mar",
+   "ine": "08040",
+   "name": "Canet de Mar",
+   "dogcName": "Canet de Mar",
+   "comarca": "Maresme",
+   "population": 15198,
+   "rank": 92,
+   "local": [
+    "2026-06-29",
+    "2026-09-08"
+   ],
+   "nuclei": [],
+   "correction": null,
+   "shops": [
+    "2026-01-04",
+    "2026-01-11",
+    "2026-08-15",
+    "2026-10-12",
+    "2026-11-29",
+    "2026-12-06",
+    "2026-12-08",
+    "2026-12-13",
+    "2026-12-20",
+    "2026-12-27"
+   ],
+   "shopsOwnList": false
+  },
+  {
+   "slug": "mont-roig-del-camp",
+   "ine": "43092",
+   "name": "Mont-roig del Camp",
+   "dogcName": "Mont-roig del Camp",
+   "comarca": "Baix Camp",
+   "population": 14615,
+   "rank": 93,
+   "local": [
+    "2026-09-08",
+    "2026-09-29"
+   ],
+   "nuclei": [
+    {
+     "name": "Miami Platja",
+     "dates": [
+      "2026-03-19",
+      "2026-07-27"
+     ]
+    }
+   ],
+   "correction": null,
+   "shops": [
+    "2026-01-04",
+    "2026-01-11",
+    "2026-08-15",
+    "2026-10-12",
+    "2026-11-29",
+    "2026-12-06",
+    "2026-12-08",
+    "2026-12-13",
+    "2026-12-20",
+    "2026-12-27"
+   ],
+   "shopsOwnList": false
+  },
+  {
+   "slug": "santa-coloma-de-farners",
+   "ine": "17180",
+   "name": "Santa Coloma de Farners",
+   "dogcName": "Santa Coloma de Farners",
+   "comarca": "Selva",
+   "population": 13993,
+   "rank": 94,
+   "local": [
+    "2026-04-07",
+    "2026-09-25"
+   ],
+   "nuclei": [],
+   "correction": null,
+   "shops": [
+    "2026-01-04",
+    "2026-01-11",
+    "2026-08-15",
+    "2026-10-12",
+    "2026-11-29",
+    "2026-12-06",
+    "2026-12-08",
+    "2026-12-13",
+    "2026-12-20",
+    "2026-12-27"
+   ],
+   "shopsOwnList": false
+  },
+  {
+   "slug": "la-llagosta",
+   "ine": "08105",
+   "name": "la Llagosta",
+   "dogcName": "Llagosta, la",
+   "comarca": "Vallès Oriental",
+   "population": 13280,
+   "rank": 95,
+   "local": [
+    "2026-03-19",
+    "2026-09-10"
+   ],
+   "nuclei": [],
+   "correction": null,
+   "shops": [
+    "2026-01-04",
+    "2026-01-11",
+    "2026-08-15",
+    "2026-10-12",
+    "2026-11-29",
+    "2026-12-06",
+    "2026-12-08",
+    "2026-12-13",
+    "2026-12-20",
+    "2026-12-27"
+   ],
+   "shopsOwnList": false
+  },
+  {
+   "slug": "abrera",
+   "ine": "08001",
+   "name": "Abrera",
+   "dogcName": "Abrera",
+   "comarca": "Baix Llobregat",
+   "population": 13227,
+   "rank": 96,
+   "local": [
+    "2026-05-25",
+    "2026-06-29"
+   ],
+   "nuclei": [],
+   "correction": null,
+   "shops": [
+    "2026-01-04",
+    "2026-01-11",
+    "2026-08-15",
+    "2026-10-12",
+    "2026-11-29",
+    "2026-12-06",
+    "2026-12-08",
+    "2026-12-13",
+    "2026-12-20",
+    "2026-12-27"
+   ],
+   "shopsOwnList": true
+  },
+  {
+   "slug": "castellbisbal",
+   "ine": "08054",
+   "name": "Castellbisbal",
+   "dogcName": "Castellbisbal",
+   "comarca": "Vallès Occidental",
+   "population": 13061,
+   "rank": 97,
+   "local": [
+    "2026-01-22",
+    "2026-08-20"
+   ],
+   "nuclei": [],
+   "correction": null,
+   "shops": [
+    "2026-01-04",
+    "2026-01-22",
+    "2026-08-15",
+    "2026-10-12",
+    "2026-11-29",
+    "2026-12-06",
+    "2026-12-08",
+    "2026-12-13",
+    "2026-12-20",
+    "2026-12-27"
+   ],
+   "shopsOwnList": true
+  },
+  {
+   "slug": "badia-del-valles",
+   "ine": "08904",
+   "name": "Badia del Vallès",
+   "dogcName": "Badia del Vallès",
+   "comarca": "Vallès Occidental",
+   "population": 13060,
+   "rank": 98,
+   "local": [
+    "2026-04-14",
+    "2026-05-25"
+   ],
+   "nuclei": [],
+   "correction": null,
+   "shops": [
+    "2026-01-04",
+    "2026-01-11",
+    "2026-08-15",
+    "2026-10-12",
+    "2026-11-29",
+    "2026-12-06",
+    "2026-12-08",
+    "2026-12-13",
+    "2026-12-20",
+    "2026-12-27"
+   ],
+   "shopsOwnList": false
+  },
+  {
+   "slug": "la-seu-d-urgell",
+   "ine": "25203",
+   "name": "la Seu d'Urgell",
+   "dogcName": "Seu d'Urgell, la",
+   "comarca": "Alt Urgell",
+   "population": 13009,
+   "rank": 99,
+   "local": [
+    "2026-01-20",
+    "2026-07-07"
+   ],
+   "nuclei": [],
+   "correction": null,
+   "shops": [
+    "2026-01-04",
+    "2026-01-11",
+    "2026-08-15",
+    "2026-10-12",
+    "2026-11-29",
+    "2026-12-06",
+    "2026-12-08",
+    "2026-12-13",
+    "2026-12-20",
+    "2026-12-27"
+   ],
+   "shopsOwnList": false
+  },
+  {
+   "slug": "castell-d-aro-platja-d-aro-i-s-agaro",
+   "ine": "17048",
+   "name": "Castell d'Aro, Platja d'Aro i s'Agaró",
+   "dogcName": "Castell-Platja d'Aro",
+   "comarca": "Baix Empordà",
+   "population": 12982,
+   "rank": 100,
+   "local": [
+    "2026-02-12",
+    "2026-09-08"
+   ],
+   "nuclei": [],
+   "correction": null,
+   "shops": [
+    "2026-01-04",
+    "2026-01-11",
+    "2026-08-15",
+    "2026-10-12",
+    "2026-11-29",
+    "2026-12-06",
+    "2026-12-08",
+    "2026-12-13",
+    "2026-12-20",
+    "2026-12-27"
+   ],
+   "shopsOwnList": false
+  }
+ ],
+ "excluded": [
+  {
+   "name": "Cerdanyola del Vallès",
+   "ine": "08266",
+   "population": 58528,
+   "comarca": "Vallès Occidental",
+   "reason": "no-proposal"
+  },
+  {
+   "name": "Barberà del Vallès",
+   "ine": "08252",
+   "population": 33987,
+   "comarca": "Vallès Occidental",
+   "reason": "no-proposal"
+  },
+  {
+   "name": "Malgrat de Mar",
+   "ine": "08110",
+   "population": 19714,
+   "comarca": "Maresme",
+   "reason": "no-proposal"
+  },
+  {
+   "name": "Torelló",
+   "ine": "08285",
+   "population": 15334,
+   "comarca": "Osona",
+   "reason": "no-proposal"
+  }
+ ],
+ "localByDate": {
+  "2026-12-07": [
+   {
+    "name": "Aguilar de Segarra",
+    "parent": null,
+    "slug": null
+   },
+   {
+    "name": "Alfara de Carles",
+    "parent": null,
+    "slug": null
+   },
+   {
+    "name": "Amposta",
+    "parent": null,
+    "slug": "amposta"
+   },
+   {
+    "name": "Argençola",
+    "parent": null,
+    "slug": null
+   },
+   {
+    "name": "Bellver de Cerdanya",
+    "parent": null,
+    "slug": null
+   },
+   {
+    "name": "Camarles",
+    "parent": null,
+    "slug": null
+   },
+   {
+    "name": "Castelldefels",
+    "parent": null,
+    "slug": "castelldefels"
+   },
+   {
+    "name": "Collsuspina",
+    "parent": null,
+    "slug": null
+   },
+   {
+    "name": "Creixell",
+    "parent": null,
+    "slug": null
+   },
+   {
+    "name": "Das",
+    "parent": null,
+    "slug": null
+   },
+   {
+    "name": "Escaladei",
+    "parent": "la Morera de Montsant",
+    "slug": null
+   },
+   {
+    "name": "Escart",
+    "parent": "la Guingueta d'Àneu",
+    "slug": null
+   },
+   {
+    "name": "Espot",
+    "parent": null,
+    "slug": null
+   },
+   {
+    "name": "Fontanals de Cerdanya",
+    "parent": null,
+    "slug": null
+   },
+   {
+    "name": "Forès",
+    "parent": null,
+    "slug": null
+   },
+   {
+    "name": "Gallifa",
+    "parent": null,
+    "slug": null
+   },
+   {
+    "name": "Garriguella",
+    "parent": null,
+    "slug": null
+   },
+   {
+    "name": "la Cellera de Ter",
+    "parent": null,
+    "slug": null
+   },
+   {
+    "name": "la Guingueta d'Àneu",
+    "parent": null,
+    "slug": null
+   },
+   {
+    "name": "la Tallada d'Empordà",
+    "parent": null,
+    "slug": null
+   },
+   {
+    "name": "les Llosses",
+    "parent": null,
+    "slug": null
+   },
+   {
+    "name": "Mas de Barberans",
+    "parent": null,
+    "slug": null
+   },
+   {
+    "name": "Masdenverge",
+    "parent": null,
+    "slug": null
+   },
+   {
+    "name": "Miravet",
+    "parent": null,
+    "slug": null
+   },
+   {
+    "name": "Mont-ras",
+    "parent": null,
+    "slug": null
+   },
+   {
+    "name": "Montesquiu",
+    "parent": null,
+    "slug": null
+   },
+   {
+    "name": "Montgai",
+    "parent": null,
+    "slug": null
+   },
+   {
+    "name": "Muntanyola",
+    "parent": null,
+    "slug": null
+   },
+   {
+    "name": "Olivella",
+    "parent": null,
+    "slug": null
+   },
+   {
+    "name": "Peralada",
+    "parent": null,
+    "slug": null
+   },
+   {
+    "name": "Porqueres",
+    "parent": null,
+    "slug": null
+   },
+   {
+    "name": "Querol",
+    "parent": null,
+    "slug": null
+   },
+   {
+    "name": "Rajadell",
+    "parent": null,
+    "slug": null
+   },
+   {
+    "name": "Roda de Berà",
+    "parent": null,
+    "slug": null
+   },
+   {
+    "name": "Sant Boi de Llobregat",
+    "parent": null,
+    "slug": "sant-boi-de-llobregat"
+   },
+   {
+    "name": "Sant Joan les Fonts",
+    "parent": null,
+    "slug": null
+   },
+   {
+    "name": "Santa Coloma de Cervelló",
+    "parent": null,
+    "slug": null
+   },
+   {
+    "name": "Santa Maria de Besora",
+    "parent": null,
+    "slug": null
+   },
+   {
+    "name": "Tagamanent",
+    "parent": null,
+    "slug": null
+   },
+   {
+    "name": "Vallmoll",
+    "parent": null,
+    "slug": null
+   },
+   {
+    "name": "Vila-sacra",
+    "parent": null,
+    "slug": null
+   },
+   {
+    "name": "Viladamat",
+    "parent": null,
+    "slug": null
+   },
+   {
+    "name": "Vilagrassa",
+    "parent": null,
+    "slug": null
+   },
+   {
+    "name": "Vilanova de Sau",
+    "parent": null,
+    "slug": null
+   },
+   {
+    "name": "Vilobí d'Onyar",
+    "parent": null,
+    "slug": null
+   }
+  ],
+  "2026-12-08": [],
+  "2026-12-24": [
+   {
+    "name": "Copons",
+    "parent": null,
+    "slug": null
+   },
+   {
+    "name": "la Vajol",
+    "parent": null,
+    "slug": null
+   },
+   {
+    "name": "Sant Jaume de Frontanyà",
+    "parent": null,
+    "slug": null
+   }
+  ],
+  "2026-12-25": [],
+  "2026-12-26": [],
+  "2026-12-31": [
+   {
+    "name": "Arsèguel",
+    "parent": null,
+    "slug": null
+   },
+   {
+    "name": "Centelles",
+    "parent": null,
+    "slug": null
+   },
+   {
+    "name": "Ger",
+    "parent": null,
+    "slug": null
+   },
+   {
+    "name": "la Vajol",
+    "parent": null,
+    "slug": null
+   },
+   {
+    "name": "Montant de Tost",
+    "parent": "Ribera d'Urgellet",
+    "slug": null
+   },
+   {
+    "name": "Puigpelat",
+    "parent": null,
+    "slug": null
+   },
+   {
+    "name": "Santa Coloma de Cervelló",
+    "parent": null,
+    "slug": null
+   },
+   {
+    "name": "Santa Coloma de Queralt",
+    "parent": null,
+    "slug": null
+   },
+   {
+    "name": "Surri",
+    "parent": "Vall de Cardós",
+    "slug": null
+   }
+  ]
+ },
+ "placesWithLocalDays": 1340
+}

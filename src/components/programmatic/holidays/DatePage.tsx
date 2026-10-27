@@ -1,0 +1,104 @@
+import Link from "next/link";
+
+import { Breadcrumbs, type Crumb } from "@/components/Breadcrumbs";
+import { getMessages } from "@/lib/i18n";
+import { DATE_UI, dateQuestion } from "@/lib/programmatic/holidays/copy";
+import { dateContent } from "@/lib/programmatic/holidays/dates";
+import { longDate, type DateLocale } from "@/lib/programmatic/holidays/format";
+import { GUIDES } from "@/lib/programmatic/holidays/links";
+import { esName } from "@/lib/programmatic/holidays/names";
+import { DATE_PAGES, datePath, hubPath, municipalityPath, type DatePage as DatePageIso } from "@/lib/programmatic/holidays/paths";
+
+import { GuideLinks, Sources, type SourceKey } from "./parts";
+
+export function dateCrumbs(iso: DatePageIso, locale: DateLocale): Crumb[] {
+  const ui = DATE_UI[locale];
+  const parent = locale === "en" ? GUIDES.holidayToday.en : hubPath(locale);
+  return [
+    { label: getMessages(locale).common.home, href: `/${locale}/` },
+    { label: ui.breadcrumbParent, href: parent },
+    { label: dateQuestion(iso, locale), href: datePath(locale, iso) },
+  ];
+}
+
+export function DatePageView({ iso, locale }: { iso: DatePageIso; locale: DateLocale }) {
+  const ui = DATE_UI[locale];
+  const content = dateContent(iso, locale);
+  const year = iso.slice(0, 4);
+  const sources: SourceKey[] =
+    year === "2026"
+      ? ["regional2026", "localOrder", "amendment", "boe2026", "shopsOrder", "shops", "retailLaw", "school"]
+      : ["regional2027", "localOrder", "retailLaw", "school"];
+
+  return (
+    <article>
+      <header className="border-b border-[var(--color-rule)] bg-[var(--color-surface)]">
+        <div className="ci-shell py-5 md:py-8 lg:py-12">
+          <Breadcrumbs items={dateCrumbs(iso, locale)} locale={locale} />
+          <h1 className="ci-measure">{dateQuestion(iso, locale)}</h1>
+        </div>
+      </header>
+
+      <div className="ci-shell py-10">
+        <div className="ci-prose">
+          <div className="ci-today">
+            <p className={`ci-today-answer ${content.holiday ? "is-holiday" : "is-not"}`}>{content.holiday ? ui.yes : ui.no}</p>
+            <p className="ci-today-date">
+              <time dateTime={iso}>{longDate(iso, locale)}</time>
+            </p>
+          </div>
+          <p className="ci-lead">{content.answer}</p>
+          {content.answerNote.map((p) => (
+            <p key={p}>{p}</p>
+          ))}
+
+          <h2 id="local">{ui.localTitle}</h2>
+          <p>{content.local.text}</p>
+          {content.local.places.length > 0 ? (
+            <ul className="columns-1 sm:columns-2 lg:columns-3">
+              {content.local.places.map((p) => {
+                const label = locale === "es" ? esName(p.name) : p.name;
+                const parent = p.parent ? (locale === "es" ? esName(p.parent) : p.parent) : null;
+                return (
+                  <li key={`${p.name}-${p.parent ?? ""}`}>
+                    {p.slug && locale !== "en" ? <Link href={municipalityPath(locale, p.slug)}>{label}</Link> : label}
+                    {parent ? <span className="text-[var(--color-muted)]"> ({parent})</span> : null}
+                  </li>
+                );
+              })}
+            </ul>
+          ) : null}
+
+          {content.sections.map((section) => (
+            <section key={section.title}>
+              <h2>{section.title}</h2>
+              {section.paragraphs.map((p) => (
+                <p key={p}>{p}</p>
+              ))}
+            </section>
+          ))}
+        </div>
+
+        <section className="mt-12" aria-labelledby="ci-hol-other-dates">
+          <h2 id="ci-hol-other-dates">{ui.otherDates}</h2>
+          <ul className="mt-4 grid list-none gap-2 p-0 sm:grid-cols-2">
+            {DATE_PAGES.filter((d) => d !== iso).map((d) => (
+              <li key={d}>
+                <Link href={datePath(locale, d)}>{dateQuestion(d, locale)}</Link>
+              </li>
+            ))}
+            {locale !== "en" ? (
+              <li>
+                <Link href={hubPath(locale)}>{ui.municipalityLink}</Link>
+              </li>
+            ) : null}
+          </ul>
+        </section>
+
+        <GuideLinks keys={content.guides} locale={locale} title={ui.guidesTitle} />
+
+        <Sources keys={sources} locale={locale} title={ui.sourcesTitle} />
+      </div>
+    </article>
+  );
+}
