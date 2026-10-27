@@ -51,6 +51,7 @@ import { CALCOTS } from "@/lib/content/batch02/calcots";
 import { CHRISTMAS_TRADITIONS } from "@/lib/content/batch02/christmas-traditions";
 import { DECEMBER_BRIDGE } from "@/lib/content/batch02/december-bridge";
 import { MARATO_GUIDE } from "@/lib/content/batch02/marato";
+import { STRIKES_GUIDE } from "@/lib/content/batch02/strikes";
 import { publishHolidayTodayGuide } from "@/lib/content/holidays/today-publish";
 import { publishLocalHolidaysGuide } from "@/lib/content/holidays/local-publish";
 import { publishReservoirGuide } from "@/lib/content/reservoirs/publish";
@@ -170,6 +171,12 @@ export async function POST(request: Request) {
     // Christmas in Barcelona hub).
     if (wants("pont-desembre")) published.push(await publishB2Article(DECEMBER_BRIDGE), await publishHolidayGuide());
     if (wants("marato")) published.push(await publishB2Article(MARATO_GUIDE), await publishB2Article(CHRISTMAS_BARCELONA));
+    // Strikes hub: one evergreen page, republished every time a strike or its
+    // minimum services are added. The metro-hours and transport-passes guides
+    // gained one body link to it; they go out once, on their own group, so a
+    // strike update never republishes two pages under a title experiment.
+    if (wants("strikes")) published.push(await publishB2Article(STRIKES_GUIDE));
+    if (wants("strikes-links")) published.push(await publishB2Article(HOURS), await publishB2Article(TRANSPORT));
     if (wants("family-markets")) published.push(await publishB2Article(ZOO_AQUARIUM), await publishB2Article(MARKETS));
     if (wants("cruiseport")) published.push(await publishB2Article(CRUISEPORT));
     if (wants("portaventura")) published.push(await publishB2Article(PORTAVENTURA));
