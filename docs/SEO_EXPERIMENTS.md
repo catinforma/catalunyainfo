@@ -535,8 +535,13 @@ del Gall, els Pastorets, the Christmas food, whether Sant Esteve is a holiday),
 answered in the first lines, with the 2026 holidays from the DOGC orders. Mostly
 evergreen; the Fira de Santa Llúcia and the Pastorets season are "not announced
 yet" lines that switch to dates when `ANNOUNCED_TRADITIONS` is filled. One link
-added from the Christmas in Barcelona guide's traditions section; nothing else
-on that page changed.
+added from the Christmas in Barcelona guide's traditions section. The same
+section lost two contested claims (caganer "only in Catalan and Valencian
+nativity scenes, Baroque"; Pastorets "18th century"), which the Ajuntament's
+Cultura Popular pages contradict. After the events (8 and 13 Dec 2026, 31 Jan
+2027) the round-4 pages still read as upcoming: republish them with past-tense
+copy, and drop the "el 2026 només és festiu el dimarts 8" sentence from the 2027
+holiday guide once 8 Dec has passed.
 
 **Prediction.** No impressions before indexing (1-4 weeks at the current crawl
 rate). By the measure date: impressions for "caga tió", "caganer", "catalan
