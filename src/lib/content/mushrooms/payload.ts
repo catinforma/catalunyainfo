@@ -17,6 +17,12 @@ import type { Locale } from "@/lib/i18n/config";
  * Figures are Meteocat station readings for 2026-09-01..2026-10-06, verified
  * on 2026-10-07 with `scripts/mushroom-data.py`. A station
  * reading describes that station, not every hectare of its comarca.
+ *
+ * The zone prose below is dated context: it describes the 7 October ranking
+ * in the past tense, so it cannot contradict the live table above it. The
+ * Bonaigua frosts (Pyrenees zone) are XEMA daily minimums (dataset 7bvh-jvq2,
+ * station Z1, variable 1002), read on 2026-10-26: 8 Oct -4.3, 9 Oct -5.9,
+ * 20 Oct -2.6, 21 Oct -2.7, 22 Oct -2.8, 23 Oct -2.2 °C.
  */
 
 /** Condition levels. Deliberately qualitative: we have no probability to quote. */
@@ -94,27 +100,27 @@ export const ZONES: Zone[] = [
       en: "The biggest change this week",
     },
     heading: {
-      ca: "2. Montseny: de «encara és aviat» a la zona més regada",
-      es: "2. Montseny: de «todavía es pronto» a la zona más regada",
-      en: "2. Montseny: from “still early” to the wettest massif",
+      ca: "2. Montseny: la zona més regada a principis d'octubre",
+      es: "2. Montseny: la zona más regada a principios de octubre",
+      en: "2. Montseny: the wettest massif in early October",
     },
     body: {
       ca: [
-        "El Montseny és el canvi més gran des de l'últim informe. A mitjan setembre encara era aviat; en els sis primers dies d'octubre Meteocat registra **216,4 mm al Puig Sesolles** (1.666 m), **195,3 mm a Viladrau** i **128,5 mm a Tagamanent**.",
-        "Les nits a cota alta també són fresques: la mínima mitjana de l'última setmana al Puig Sesolles ha estat de 9,8 °C.",
-        "El punt feble és el setembre: entre 42 i 58 mm a les mateixes estacions, molt menys que a la Garrotxa o al Ripollès. Bona part de l'aigua ha caigut en molt pocs dies, i un aiguat no és el mateix que una pluja que s'infiltra a poc a poc. Per això el situem segon i no primer.",
+        "A l'informe del 7 d'octubre, el Montseny va ser el canvi més gran respecte del setembre. A mitjan setembre encara era aviat; en els sis primers dies d'octubre Meteocat registra **216,4 mm al Puig Sesolles** (1.666 m), **195,3 mm a Viladrau** i **128,5 mm a Tagamanent**.",
+        "Les nits a cota alta també són fresques: la mínima mitjana de la setmana fins al 6 d'octubre al Puig Sesolles ha estat de 9,8 °C.",
+        "El punt feble és el setembre: entre 42 i 58 mm a les mateixes estacions, molt menys que a la Garrotxa o al Ripollès. Bona part de l'aigua ha caigut en molt pocs dies, i un aiguat no és el mateix que una pluja que s'infiltra a poc a poc. Per això, el 7 d'octubre el vam situar segon i no primer.",
         "Abans de sortir, consulta els avisos de Protecció Civil i de Meteocat: després de pluges tan intenses, l'estat de les pistes forestals pot haver canviat.",
       ],
       es: [
-        "El Montseny es el cambio más grande desde el último informe. A mediados de septiembre todavía era pronto; en los seis primeros días de octubre Meteocat registra **216,4 mm en el Puig Sesolles** (1.666 m), **195,3 mm en Viladrau** y **128,5 mm en Tagamanent**.",
-        "Las noches en cota alta también son frescas: la mínima media de la última semana en el Puig Sesolles ha sido de 9,8 °C.",
-        "El punto débil es septiembre: entre 42 y 58 mm en esas mismas estaciones, mucho menos que en la Garrotxa o el Ripollès. Gran parte del agua ha caído en muy pocos días, y un aguacero no equivale a una lluvia que se infiltra poco a poco. Por eso lo situamos segundo y no primero.",
+        "En el informe del 7 de octubre, el Montseny fue el cambio más grande respecto a septiembre. A mediados de septiembre todavía era pronto; en los seis primeros días de octubre Meteocat registra **216,4 mm en el Puig Sesolles** (1.666 m), **195,3 mm en Viladrau** y **128,5 mm en Tagamanent**.",
+        "Las noches en cota alta también son frescas: la mínima media de la semana hasta el 6 de octubre en el Puig Sesolles ha sido de 9,8 °C.",
+        "El punto débil es septiembre: entre 42 y 58 mm en esas mismas estaciones, mucho menos que en la Garrotxa o el Ripollès. Gran parte del agua ha caído en muy pocos días, y un aguacero no equivale a una lluvia que se infiltra poco a poco. Por eso, el 7 de octubre lo situamos segundo y no primero.",
         "Antes de salir, consulta los avisos de Protecció Civil y de Meteocat: tras lluvias tan intensas, el estado de las pistas forestales puede haber cambiado.",
       ],
       en: [
-        "Montseny is the biggest change since the last report. In mid-September it was still early; in the first six days of October Meteocat recorded **216.4 mm at Puig Sesolles** (1,666 m), **195.3 mm at Viladrau** and **128.5 mm at Tagamanent**.",
-        "Nights at altitude are cool too: the mean minimum at Puig Sesolles over the past week was 9.8 °C.",
-        "The weak point is September: between 42 and 58 mm at the same stations, far less than Garrotxa or the Ripollès. Much of the water fell in very few days, and a downpour is not the same as rain that soaks in slowly. That is why it ranks second, not first.",
+        "In the 7 October report, Montseny was the biggest change since September. In mid-September it was still early; in the first six days of October Meteocat recorded **216.4 mm at Puig Sesolles** (1,666 m), **195.3 mm at Viladrau** and **128.5 mm at Tagamanent**.",
+        "Nights at altitude are cool too: the mean minimum at Puig Sesolles in the week to 6 October was 9.8 °C.",
+        "The weak point is September: between 42 and 58 mm at the same stations, far less than Garrotxa or the Ripollès. Much of the water fell in very few days, and a downpour is not the same as rain that soaks in slowly. That is why, on 7 October, it ranked second, not first.",
         "Before you go, check the Protecció Civil and Meteocat warnings: after rain this intense, forest tracks may not be in the state you remember.",
       ],
     },
@@ -141,18 +147,18 @@ export const ZONES: Zone[] = [
     body: {
       ca: [
         "El Ripollès, que encapçalava l'informe al setembre, manté un dels millors registres de pluja acumulada del nord del país. Sant Joan de les Abadesses tanca el setembre amb **114,7 mm** i hi suma **62,0 mm** a l'octubre; Sant Pau de Segúries acumula **150,2 mm** i Molló-Fabert **110,4 mm** des de l'1 de setembre.",
-        "A favor seu hi té l'altitud: la mínima mitjana de l'última setmana ha estat de 10,2 °C a Molló-Fabert i de 12,6 °C a Sant Pau de Segúries.",
-        "L'octubre hi ha estat menys extrem que al Montseny o a la Garrotxa. Per això baixa del primer lloc, no perquè les condicions hi hagin empitjorat.",
+        "A favor seu hi té l'altitud: la mínima mitjana de la setmana fins al 6 d'octubre ha estat de 10,2 °C a Molló-Fabert i de 12,6 °C a Sant Pau de Segúries.",
+        "L'octubre hi ha estat menys extrem que al Montseny o a la Garrotxa. Per això, el 7 d'octubre va baixar del primer lloc, no perquè les condicions hi haguessin empitjorat.",
       ],
       es: [
         "El Ripollès, que encabezaba el informe en septiembre, mantiene uno de los mejores registros de lluvia acumulada del norte. Sant Joan de les Abadesses cierra septiembre con **114,7 mm** y suma **62,0 mm** más en octubre; Sant Pau de Segúries acumula **150,2 mm** y Molló-Fabert **110,4 mm** desde el 1 de septiembre.",
-        "A su favor juega la altitud: la mínima media de la última semana ha sido de 10,2 °C en Molló-Fabert y de 12,6 °C en Sant Pau de Segúries.",
-        "Octubre ha sido aquí menos extremo que en el Montseny o la Garrotxa. Por eso baja del primer puesto, no porque las condiciones hayan empeorado.",
+        "A su favor juega la altitud: la mínima media de la semana hasta el 6 de octubre ha sido de 10,2 °C en Molló-Fabert y de 12,6 °C en Sant Pau de Segúries.",
+        "Octubre ha sido aquí menos extremo que en el Montseny o la Garrotxa. Por eso, el 7 de octubre bajó del primer puesto, no porque las condiciones hubieran empeorado.",
       ],
       en: [
         "The Ripollès, top of the report in September, still has one of the best accumulated-rainfall records in the north. Sant Joan de les Abadesses closed September on **114.7 mm** and has added **62.0 mm** in October; Sant Pau de Segúries has **150.2 mm** and Molló-Fabert **110.4 mm** since 1 September.",
-        "Elevation works in its favour: the mean minimum over the past week was 10.2 °C at Molló-Fabert and 12.6 °C at Sant Pau de Segúries.",
-        "October has been less extreme here than in Montseny or Garrotxa. That is why it drops from first place, not because conditions have got worse.",
+        "Elevation works in its favour: the mean minimum in the week to 6 October was 10.2 °C at Molló-Fabert and 12.6 °C at Sant Pau de Segúries.",
+        "October has been less extreme here than in Montseny or Garrotxa. That is why, on 7 October, it dropped from first place, not because conditions had got worse.",
       ],
     },
   },
@@ -212,15 +218,15 @@ export const ZONES: Zone[] = [
     body: {
       ca: [
         "La Quar tanca el setembre amb **108,8 mm** i Castellar de n'Hug amb **81,0 mm**, dos dels millors registres del Prepirineu. A l'octubre hi han caigut uns **50 mm**, menys que més a l'est.",
-        "Té una bona base d'humitat i nits fresques (11,5 °C de mínima mitjana a Castellar de n'Hug l'última setmana), però la pluja recent no ha estat tan abundant com a la Garrotxa o al Montseny.",
+        "Té una bona base d'humitat i nits fresques (11,5 °C de mínima mitjana a Castellar de n'Hug la setmana fins al 6 d'octubre), però la pluja recent no ha estat tan abundant com a la Garrotxa o al Montseny.",
       ],
       es: [
         "La Quar cierra septiembre con **108,8 mm** y Castellar de n'Hug con **81,0 mm**, dos de los mejores registros del Prepirineo. En octubre han caído unos **50 mm**, menos que más al este.",
-        "Tiene una buena base de humedad y noches frescas (11,5 °C de mínima media en Castellar de n'Hug la última semana), pero la lluvia reciente no ha sido tan abundante como en la Garrotxa o el Montseny.",
+        "Tiene una buena base de humedad y noches frescas (11,5 °C de mínima media en Castellar de n'Hug la semana hasta el 6 de octubre), pero la lluvia reciente no ha sido tan abundante como en la Garrotxa o el Montseny.",
       ],
       en: [
         "La Quar closed September on **108.8 mm** and Castellar de n'Hug on **81.0 mm**, two of the best readings in the pre-Pyrenees. October has added about **50 mm**, less than further east.",
-        "The ground has a good moisture base and nights are cool (an 11.5 °C mean minimum at Castellar de n'Hug over the past week), but recent rain has been lighter than in Garrotxa or Montseny.",
+        "The ground has a good moisture base and nights are cool (an 11.5 °C mean minimum at Castellar de n'Hug in the week to 6 October), but recent rain has been lighter than in Garrotxa or Montseny.",
       ],
     },
   },
@@ -243,22 +249,22 @@ export const ZONES: Zone[] = [
       en: "October's rain has barely reached it",
     },
     heading: {
-      ca: "6. Pirineu central i occidental: encara sec",
-      es: "6. Pirineo central y occidental: todavía seco",
-      en: "6. Central and western Pyrenees: still dry",
+      ca: "6. Pirineu central i occidental: sec fins a principis d'octubre",
+      es: "6. Pirineo central y occidental: seco hasta principios de octubre",
+      en: "6. Central and western Pyrenees: dry until early October",
     },
     body: {
       ca: [
         "El contrast amb el Pirineu oriental és gran. Des de l'1 de setembre, Puigcerdà suma **30,7 mm**, Sort **23,4 mm** i Vielha **35,5 mm**. Els episodis d'octubre han descarregat sobretot a l'est i al litoral.",
-        "Hi ha excepcions locals, com Alinyà, a l'Alt Urgell, amb **82,8 mm**, però a escala de comarca les dades no permeten parlar de bones condicions. A més, aquí la temporada és curta: les primeres glaçades acostumen a arribar entre finals d'octubre i principis de novembre.",
+        "Hi ha excepcions locals, com Alinyà, a l'Alt Urgell, amb **82,8 mm**, però a escala de comarca les dades no permeten parlar de bones condicions. A més, a cota alta ja glaça: el Meteocat va registrar mínimes sota zero a la Bonaigua (2.262 m) el 8 i el 9 d'octubre i del 20 al 23 d'octubre.",
       ],
       es: [
         "El contraste con el Pirineo oriental es grande. Desde el 1 de septiembre, Puigcerdà suma **30,7 mm**, Sort **23,4 mm** y Vielha **35,5 mm**. Los episodios de octubre han descargado sobre todo en el este y en el litoral.",
-        "Hay excepciones locales, como Alinyà, en el Alt Urgell, con **82,8 mm**, pero a escala comarcal los datos no permiten hablar de buenas condiciones. Además, aquí la temporada es corta: las primeras heladas suelen llegar entre finales de octubre y principios de noviembre.",
+        "Hay excepciones locales, como Alinyà, en el Alt Urgell, con **82,8 mm**, pero a escala comarcal los datos no permiten hablar de buenas condiciones. Además, en cota alta ya hiela: Meteocat registró mínimas bajo cero en la Bonaigua (2.262 m) el 8 y el 9 de octubre y del 20 al 23 de octubre.",
       ],
       en: [
         "The contrast with the eastern Pyrenees is stark. Since 1 September, Puigcerdà has recorded **30.7 mm**, Sort **23.4 mm** and Vielha **35.5 mm**. October's rain fell mostly in the east and along the coast.",
-        "There are local exceptions, such as Alinyà in the Alt Urgell with **82.8 mm**, but at county level the data does not support calling conditions good. The season here is also short: the first frosts usually arrive between late October and early November.",
+        "There are local exceptions, such as Alinyà in the Alt Urgell with **82.8 mm**, but at county level the data does not support calling conditions good. And at altitude it is already freezing: Meteocat recorded sub-zero minimums at Bonaigua (2,262 m) on 8 and 9 October and from 20 to 23 October.",
       ],
     },
   },
@@ -284,15 +290,15 @@ export const ZONES: Zone[] = [
     body: {
       ca: [
         "Les Terres de l'Ebre han rebut alguns dels registres més alts de Catalunya a l'octubre, i el massís dels Ports també: l'estació del Parc Natural (1.056 m) suma **130,2 mm** de l'1 al 6 d'octubre, després d'un setembre de només **22,5 mm**.",
-        "És un canvi important, però ha arribat sobre un sòl molt sec i en un sol episodi. Al sud la temporada sol anar més tard que al Pirineu, de manera que aquí té més sentit seguir l'evolució de les properes setmanes que no pas anar-hi ara mateix.",
+        "És un canvi important, però ha arribat sobre un sòl molt sec i en un sol episodi. Al sud la temporada sol anar més tard que al Pirineu, de manera que, a 7 d'octubre, tenia més sentit seguir-ne l'evolució que no pas anar-hi.",
       ],
       es: [
         "Las Terres de l'Ebre han recibido algunos de los registros más altos de Cataluña en octubre, y el macizo de Els Ports también: la estación del Parque Natural (1.056 m) suma **130,2 mm** del 1 al 6 de octubre, tras un septiembre de solo **22,5 mm**.",
-        "Es un cambio importante, pero ha llegado sobre un suelo muy seco y en un único episodio. En el sur la temporada suele ir más tarde que en el Pirineo, así que aquí tiene más sentido seguir la evolución de las próximas semanas que ir ahora mismo.",
+        "Es un cambio importante, pero ha llegado sobre un suelo muy seco y en un único episodio. En el sur la temporada suele ir más tarde que en el Pirineo, así que, a 7 de octubre, tenía más sentido seguir su evolución que ir.",
       ],
       en: [
         "The Ebro lands have had some of Catalonia's highest October totals, and the Ports massif too: the Natural Park station (1,056 m) recorded **130.2 mm** from 1 to 6 October, after a September of only **22.5 mm**.",
-        "That is a real change, but it fell on very dry ground in a single episode. In the south the season usually runs later than in the Pyrenees, so this is an area to follow over the coming weeks rather than one to head for right now.",
+        "That is a real change, but it fell on very dry ground in a single episode. In the south the season usually runs later than in the Pyrenees, so, as of 7 October, it was an area to follow rather than one to head for.",
       ],
     },
   },
@@ -311,22 +317,22 @@ export const ZONES: Zone[] = [
       en: "Almost no rain",
     },
     heading: {
-      ca: "8. Ponent: la pluja encara no ha arribat",
-      es: "8. Poniente: la lluvia todavía no ha llegado",
-      en: "8. Western Catalonia: the rain has not arrived",
+      ca: "8. Ponent: la pluja no havia arribat a principis d'octubre",
+      es: "8. Poniente: la lluvia no había llegado a principios de octubre",
+      en: "8. Western Catalonia: no rain until early October",
     },
     body: {
       ca: [
         "Mentre l'est acumula centenars de litres, a Ponent gairebé no ha plogut: **6,6 mm** a les Borges Blanques, **10,6 mm** a Anglesola i **15,6 mm** a la Granadella des de l'1 de setembre.",
-        "Amb aquestes xifres no hi ha base per situar-lo entre les zones a considerar aquesta setmana.",
+        "Amb aquelles xifres, a 7 d'octubre no hi havia base per situar-lo entre les zones a considerar. La pluja de mitjan octubre sí que hi ha arribat: mira la taula de dalt.",
       ],
       es: [
         "Mientras el este acumula cientos de litros, en Poniente apenas ha llovido: **6,6 mm** en les Borges Blanques, **10,6 mm** en Anglesola y **15,6 mm** en la Granadella desde el 1 de septiembre.",
-        "Con estas cifras no hay base para situarlo entre las zonas a considerar esta semana.",
+        "Con aquellas cifras, a 7 de octubre no había base para situarlo entre las zonas a considerar. La lluvia de mediados de octubre sí ha llegado: mira la tabla de arriba.",
       ],
       en: [
         "While the east has had hundreds of litres, western Catalonia has barely seen rain: **6.6 mm** at les Borges Blanques, **10.6 mm** at Anglesola and **15.6 mm** at la Granadella since 1 September.",
-        "On those figures there is no basis for putting it among the areas to consider this week.",
+        "On those figures, as of 7 October there was no basis for including it. The mid-October rain has reached it since: see the table above.",
       ],
     },
   },

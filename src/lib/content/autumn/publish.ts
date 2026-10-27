@@ -19,7 +19,7 @@ import { COPY, IMAGES, SOURCES, ZONES } from "./payload";
 export const ENTRY_KEY = "autumn-colours-catalunya";
 
 const PUBLISHED = new Date("2026-09-15T08:00:00+02:00");
-const LAST_VERIFIED = new Date("2026-10-14T12:00:00+02:00");
+const LAST_VERIFIED = new Date("2026-10-26T12:00:00+01:00");
 
 export function buildBody(
   locale: Locale,

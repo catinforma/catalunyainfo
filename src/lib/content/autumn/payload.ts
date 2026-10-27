@@ -503,6 +503,29 @@ export const SOURCES = [
     publisher: "Diputació de Barcelona",
   },
   {
+    // Status block, 26 Oct: listed on the parks' agenda on 26 Oct 2026
+    // (31/10/2026, 11-14 h, Viladrau, "Cal fer reserva prèvia").
+    name: {
+      ca: "Tardor, castanyes i castanyers, 31 d'octubre de 2026 — Montseny",
+      es: "Tardor, castanyes i castanyers, 31 de octubre de 2026 — Montseny",
+      en: "Tardor, castanyes i castanyers, 31 October 2026 — Montseny",
+    },
+    url: "https://parcs.diba.cat/web/agenda/-/montseny-tardor-castanyes-i-castanyers.-excursio-a-viladrau-per-descobrir-un-moment-unic-al-parc-natural-del-montseny-1",
+    publisher: "Diputació de Barcelona",
+  },
+  {
+    // Status block, 26 Oct: daily minimums at Bonaigua (Z1) and Bonabé (YT),
+    // variable 1002, read 26 Oct 2026. Pyrenees rainfall from the same
+    // network via `mushrooms/conditions.ts` (read 25 Oct).
+    name: {
+      ca: "Dades meteorològiques diàries de la XEMA",
+      es: "Datos meteorológicos diarios de la XEMA",
+      en: "Daily XEMA weather-station readings",
+    },
+    url: "https://analisi.transparenciacatalunya.cat/Medi-Ambient/Dades-meteorol-giques-di-ries-de-la-XEMA/7bvh-jvq2",
+    publisher: "Servei Meteorològic de Catalunya",
+  },
+  {
     name: {
       ca: "Butlletí climàtic estacional — estiu 2026",
       es: "Boletín climático estacional — verano 2026",
@@ -559,10 +582,10 @@ export const COPY: Record<Locale, Copy> = {
     ],
     statusTitle: "Com està la tardor ara?",
     status: [
-      "**Actualitzat el 14 d'octubre de 2026.** Cap organisme oficial publica com estan ara mateix els boscos, així que no et direm que el color «ja hi és»: et diem què toca segons el calendari dels parcs i què ha fet el temps.",
-      "**Pel calendari, ara comença la segona quinzena d'octubre**: la finestra que el Parc Natural de l'Alt Pirineu dona per a Esterri de Cardós, la Vall de Bonabé i les Valls de Sant Joan. La Vall de Salenques i els boscos baixos, com la Fageda d'en Jordà o el Montseny, arriben a finals d'octubre i novembre.",
-      "**Pel temps:** el Meteocat qualifica el setembre del 2026 com el més càlid registrat a Catalunya, amb les anomalies més grans als cims del Pirineu. Les primeres glaçades d'octubre al Pirineu van arribar el 8 i el 9 d'octubre (−5,9 °C a la Bonaigua, −1,0 °C a Bonabé). Les pluges fortes de principis d'octubre van caure sobre el litoral i el prelitoral, Montseny inclòs, no sobre el Pirineu.",
-      "Si hi vas aquest cap de setmana: el **17 d'octubre** el Parc Nacional d'Aigüestortes fa la sortida «Tardor de colors» des de Boí, amb reserva prèvia.",
+      "**Actualitzat el 26 d'octubre de 2026.** Cap organisme oficial publica com estan ara mateix els boscos, així que no et direm que el color «ja hi és»: et diem què toca segons el calendari dels parcs i què ha fet el temps.",
+      "**Pel calendari, som a l'última setmana d'octubre.** És la finestra que Torisme Val d'Aran dona per a la Vall de Salenques (finals d'octubre i principis de novembre), i continuen les del Parc Natural de l'Alt Pirineu per a la Vall de Bonabé i la Vall de Sant Joan, que arriben fins a la primera quinzena de novembre. També és el moment de vigilar la Fageda d'en Jordà i el Montseny. Al Bosc de Virós, la finestra oficial de la fageda (primera quinzena d'octubre) ja ha passat.",
+      "**Pel temps:** a l'alta muntanya ja glaça. Segons les dades diàries del Meteocat, la Bonaigua (2.262 m) va baixar de zero el 18 d'octubre i cada dia del 20 al 23 (−2,8 °C el 22), i Bonabé (1.691 m) el 21 i el 22 (−0,3 °C). La pluja de mitjan octubre sí que ha arribat al Pirineu: 55,1 mm de mitjana a les 24 estacions del Meteocat de la Cerdanya, l'Alt Urgell, el Pallars i l'Aran en els 15 dies fins al 25 d'octubre.",
+      "Una sortida guiada amb data: el **31 d'octubre**, el Parc Natural del Montseny fa «Tardor, castanyes i castanyers» a Viladrau, amb reserva prèvia.",
     ],
     directAnswerTitle: "En resum",
     directAnswer:
@@ -574,7 +597,7 @@ export const COPY: Record<Locale, Copy> = {
       { label: "Zones tardanes", value: "Cotes mitjanes i baixes fins a novembre" },
       { label: "Any", value: "2026, després de l'estiu més càlid registrat" },
       { label: "Important", value: "Les dates són orientatives i depenen del temps" },
-      { label: "Actualitzat", value: "14 d'octubre de 2026" },
+      { label: "Actualitzat", value: "26 d'octubre de 2026" },
     ],
     tableCaption: "Calendari orientatiu per zones",
     tableHeaders: ["Zona", "Millor finestra orientativa", "Què hi destaca"],
@@ -647,10 +670,10 @@ export const COPY: Record<Locale, Copy> = {
     ],
     statusTitle: "¿Cómo está el otoño ahora mismo?",
     status: [
-      "**Actualizado el 14 de octubre de 2026.** Ningún organismo oficial publica cómo están ahora mismo los bosques, así que no te diremos que el color «ya está»: te decimos qué toca según el calendario de los parques y qué ha hecho el tiempo.",
-      "**Por calendario, ahora empieza la segunda quincena de octubre**: la ventana que el Parc Natural de l'Alt Pirineu da para Esterri de Cardós, la Vall de Bonabé y las Valls de Sant Joan. El valle de Salenques y los bosques bajos, como la Fageda d'en Jordà o el Montseny, llegan a finales de octubre y noviembre.",
-      "**Por el tiempo:** Meteocat califica septiembre de 2026 como el más cálido registrado en Cataluña, con las mayores anomalías en las cumbres del Pirineo. Las primeras heladas de octubre en el Pirineo llegaron el 8 y el 9 de octubre (−5,9 °C en la Bonaigua, −1,0 °C en Bonabé). Las lluvias fuertes de principios de octubre cayeron sobre el litoral y el prelitoral, Montseny incluido, no sobre el Pirineo.",
-      "Si vas este fin de semana: el **17 de octubre** el Parc Nacional d'Aigüestortes organiza la salida «Tardor de colors» desde Boí, con reserva previa.",
+      "**Actualizado el 26 de octubre de 2026.** Ningún organismo oficial publica cómo están ahora mismo los bosques, así que no te diremos que el color «ya está»: te decimos qué toca según el calendario de los parques y qué ha hecho el tiempo.",
+      "**Por calendario, estamos en la última semana de octubre.** Es la ventana que Torisme Val d'Aran da para el valle de Salenques (finales de octubre y principios de noviembre), y siguen las del Parc Natural de l'Alt Pirineu para la Vall de Bonabé y la Vall de Sant Joan, que llegan hasta la primera quincena de noviembre. También es el momento de vigilar la Fageda d'en Jordà y el Montseny. En el Bosc de Virós, la ventana oficial del hayedo (primera quincena de octubre) ya ha pasado.",
+      "**Por el tiempo:** en alta montaña ya hiela. Según los datos diarios de Meteocat, la Bonaigua (2.262 m) bajó de cero el 18 de octubre y cada día del 20 al 23 (−2,8 °C el 22), y Bonabé (1.691 m) el 21 y el 22 (−0,3 °C). La lluvia de mediados de octubre sí ha llegado al Pirineo: 55,1 mm de media en las 24 estaciones de Meteocat de la Cerdanya, el Alt Urgell, el Pallars y el Aran en los 15 días hasta el 25 de octubre.",
+      "Una salida guiada con fecha: el **31 de octubre**, el Parc Natural del Montseny organiza «Tardor, castanyes i castanyers» en Viladrau, con reserva previa.",
     ],
     directAnswerTitle: "En resumen",
     directAnswer:
@@ -662,7 +685,7 @@ export const COPY: Record<Locale, Copy> = {
       { label: "Zonas tardías", value: "Cotas medias y bajas hasta noviembre" },
       { label: "Año", value: "2026, después del verano más cálido registrado" },
       { label: "Importante", value: "Las fechas son orientativas y dependen del tiempo" },
-      { label: "Actualizado", value: "14 de octubre de 2026" },
+      { label: "Actualizado", value: "26 de octubre de 2026" },
     ],
     tableCaption: "Calendario orientativo por zonas",
     tableHeaders: ["Zona", "Mejor ventana orientativa", "Qué destaca"],
@@ -735,10 +758,10 @@ export const COPY: Record<Locale, Copy> = {
     ],
     statusTitle: "What do the forests look like right now?",
     status: [
-      "**Updated 14 October 2026.** No official body publishes what the forests look like right now, so we won't tell you the colour is already there: we tell you what the parks' calendar says and what the weather has done.",
-      "**By the calendar, the second half of October is starting**: the window the Alt Pirineu Natural Park gives for Esterri de Cardós, the Bonabé Valley and the Sant Joan valleys. The Salenques valley and lower forests such as La Fageda d'en Jordà and Montseny come in late October and November.",
-      "**By the weather:** Meteocat rates September 2026 as the warmest on record in Catalonia, with the largest anomalies on the Pyrenean summits. October's first frosts in the Pyrenees came on 8 and 9 October (−5.9 °C at Bonaigua, −1.0 °C at Bonabé). The heavy early-October rain fell on the coast and pre-coastal ranges, Montseny included, not on the Pyrenees.",
-      "If you're going this weekend: on **17 October** Aigüestortes National Park runs its «Tardor de colors» walk from Boí, booking required.",
+      "**Updated 26 October 2026.** No official body publishes what the forests look like right now, so we won't tell you the colour is already there: we tell you what the parks' calendar says and what the weather has done.",
+      "**By the calendar, this is the last week of October.** It is the window the Val d'Aran tourism board gives for the Salenques valley (late October and early November), and the Alt Pirineu Natural Park's windows for the Bonabé and Sant Joan valleys run on into the first half of November. It is also the time to watch La Fageda d'en Jordà and Montseny. At Bosc de Virós, the official beech window (first half of October) has passed.",
+      "**By the weather:** it is already freezing at altitude. Meteocat's daily data show Bonaigua (2,262 m) below zero on 18 October and every day from 20 to 23 October (−2.8 °C on the 22nd), and Bonabé (1,691 m) on 21 and 22 October (−0.3 °C). Mid-October's rain did reach the Pyrenees: a 55.1 mm average across Meteocat's 24 stations in Cerdanya, Alt Urgell, Pallars and Aran in the 15 days to 25 October.",
+      "A guided outing with a date: on **31 October**, Montseny Natural Park runs «Tardor, castanyes i castanyers» in Viladrau, booking required.",
     ],
     directAnswerTitle: "In short",
     directAnswer:
@@ -750,7 +773,7 @@ export const COPY: Record<Locale, Copy> = {
       { label: "Later areas", value: "Medium and lower elevations into November" },
       { label: "2026 context", value: "Following Catalonia's hottest summer on record" },
       { label: "Important", value: "Timing is approximate and weather-dependent" },
-      { label: "Updated", value: "14 October 2026" },
+      { label: "Updated", value: "26 October 2026" },
     ],
     tableCaption: "Approximate timing by area",
     tableHeaders: ["Area", "Best approximate window", "What stands out"],

@@ -821,9 +821,13 @@ const SNOW_SOURCES = [
   { name: "Guils Fontanera — forfet de temporada", url: "https://www.guils.com/forfet-de-temporada/", publisher: "Guils Fontanera" },
   { name: "Cremallera de Núria", url: "https://turistren.cat/trens/cremallera-de-nuria/", publisher: "FGC Turistren" },
   { name: "TEISA — Girona-Olot-Camprodon-Vallter 2000", url: "https://www.teisa-bus.com/pdf/pdf_comarques_pdf143.pdf", publisher: "TEISA" },
+  // FAQ "when do the resorts open": «La estación tiene previsto inaugurar la
+  // temporada de invierno 2026-2027 el próximo 28 de noviembre…», re-checked
+  // 26 Oct 2026 (the ski guide cites the same item).
+  { name: "Baqueira Beret — «Baqueira Beret activa el invierno en pleno verano» (28/07/2026)", url: "https://www.baqueira.es/es/noticia/baqueira-beret-activa-el-invierno-en-pleno-verano", publisher: "Baqueira Beret" },
 ];
 
-const SNOW_VERIFIED = "2026-10-24";
+const SNOW_VERIFIED = "2026-10-26";
 
 type SnowCopy = {
   path: string;
@@ -899,7 +903,7 @@ const SNOW_COPY: Record<"ca" | "es" | "en", SnowCopy> = {
       { question: "On hi ha neu a Catalunya?", answer: "Al Pirineu: a les estacions d'esquí i de muntanya, de la Vall de Núria i Vallter, al Ripollès, a la Molina, Espot, Port Ainé i Boí Taüll. Si hi ha neu un dia concret, només ho diu el part de cada estació." },
       { question: "On es poden fer rutes amb raquetes de neu a Catalunya?", answer: "A les sis estacions d'FGC (la Molina, Vall de Núria, Vallter, Espot, Port Ainé i Boí Taüll) i als circuits de les estacions d'esquí nòrdic del Tot Nòrdic, com Guils Fontanera, Aransa o Tuixent-La Vansa." },
       { question: "Es pot veure la neu sense cotxe des de Barcelona?", answer: "Sí: la Vall de Núria (R3 fins a Ribes-Enllaç i cremallera) i la Molina (R3 fins a l'estació de la Molina) són les més fàcils." },
-      { question: "Quan obren les estacions?", answer: "Normalment entre finals de novembre i principis de desembre. A 24 d'octubre de 2026 cap ha anunciat la data de la temporada 2026-27." },
+      { question: "Quan obren les estacions?", answer: "Normalment entre finals de novembre i principis de desembre. Baqueira Beret preveu obrir la temporada 2026-27 el 28 de novembre, si la neu ho permet; les estacions d'FGC encara no n'han anunciat la data (consultat el 26 d'octubre de 2026)." },
     ],
   },
   es: {
@@ -948,7 +952,7 @@ const SNOW_COPY: Record<"ca" | "es" | "en", SnowCopy> = {
       { question: "¿Dónde nieva en Cataluña?", answer: "En el Pirineo: en las estaciones de esquí y de montaña, de la Vall de Núria y Vallter, en el Ripollès, a La Molina, Espot, Port Ainé y Boí Taüll. Si hay nieve un día concreto, solo lo dice el parte de cada estación." },
       { question: "¿Dónde hacer rutas con raquetas de nieve en Cataluña?", answer: "En las seis estaciones de FGC (La Molina, Vall de Núria, Vallter, Espot, Port Ainé y Boí Taüll) y en los circuitos de las estaciones de esquí nórdico del Tot Nòrdic, como Guils Fontanera, Aransa o Tuixent-La Vansa." },
       { question: "¿Se puede ver la nieve sin coche desde Barcelona?", answer: "Sí: la Vall de Núria (R3 hasta Ribes-Enllaç y cremallera) y La Molina (R3 hasta la estación de La Molina) son las más fáciles." },
-      { question: "¿Cuándo abren las estaciones?", answer: "Normalmente entre finales de noviembre y principios de diciembre. A 24 de octubre de 2026 ninguna ha anunciado la fecha de la temporada 2026-27." },
+      { question: "¿Cuándo abren las estaciones?", answer: "Normalmente entre finales de noviembre y principios de diciembre. Baqueira Beret prevé abrir la temporada 2026-27 el 28 de noviembre, si la nieve lo permite; las estaciones de FGC aún no han anunciado la fecha (consultado el 26 de octubre de 2026)." },
     ],
   },
   en: {
@@ -997,7 +1001,7 @@ const SNOW_COPY: Record<"ca" | "es" | "en", SnowCopy> = {
       { question: "Does it snow in Catalonia?", answer: "Yes, in the Pyrenees: the ski resorts' seasons run from late November or early December to around Easter. Whether there is snow on a given day is in each resort's snow report." },
       { question: "Where can you go snowshoeing in Catalonia?", answer: "At the six FGC resorts (La Molina, Vall de Núria, Vallter, Espot, Port Ainé and Boí Taüll) and on the circuits of the Tot Nòrdic cross-country stations, such as Guils Fontanera, Aransa or Tuixent-La Vansa." },
       { question: "Can you see snow from Barcelona without a car?", answer: "Yes: Vall de Núria (R3 to Ribes-Enllaç and the rack railway) and La Molina (R3 to La Molina station) are the easiest." },
-      { question: "When do the resorts open?", answer: "Usually between late November and early December. As of 24 October 2026 none had announced its 2026-27 date." },
+      { question: "When do the resorts open?", answer: "Usually between late November and early December. Baqueira Beret plans to open the 2026-27 season on 28 November, snow permitting; FGC's resorts have not yet announced their dates (checked 26 October 2026)." },
     ],
   },
 };

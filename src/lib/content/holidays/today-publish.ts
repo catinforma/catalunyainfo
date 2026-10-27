@@ -114,7 +114,7 @@ const COPY: Record<Locale, TodayCopy> = {
     howTitle: "Com funcionen els festius a Catalunya",
     how: [
       "Cada any la Generalitat fixa **dotze dies festius** per a tot Catalunya. Són retribuïts i no recuperables.",
-      "Tres d'aquests dotze es mouen cada any perquè depenen de la Pasqua: Divendres Sant, Dilluns de Pasqua Florida i, segons l'any, alguna altra data vinculada. La resta són fixos.",
+      "Dos d'aquests dotze canvien de data cada any perquè depenen de la Pasqua: Divendres Sant i Dilluns de Pasqua Florida. La llista tampoc no és sempre la mateixa: el 2026 hi ha el 15 d'agost i el 26 de desembre; el 2027, quan tots dos cauen en diumenge, no hi són, i en canvi hi ha l'1 de novembre i el 6 de desembre.",
       "El calendari s'aprova any per any, així que no es poden saber amb antelació il·limitada.",
     ],
     localTitle: "Els dos dies que no surten aquí",
@@ -145,7 +145,7 @@ const COPY: Record<Locale, TodayCopy> = {
     howTitle: "Cómo funcionan los festivos en Cataluña",
     how: [
       "Cada año la Generalitat fija **doce días festivos** para toda Cataluña. Son retribuidos y no recuperables.",
-      "Tres de esos doce se mueven cada año porque dependen de la Pascua: Viernes Santo, Lunes de Pascua y, según el año, alguna otra fecha vinculada. El resto son fijos.",
+      "Dos de esos doce cambian de fecha cada año porque dependen de la Pascua: Viernes Santo y Lunes de Pascua Florida. La lista tampoco es siempre la misma: en 2026 incluye el 15 de agosto y el 26 de diciembre; en 2027, cuando ambos caen en domingo, no están, y en cambio sí lo están el 1 de noviembre y el 6 de diciembre.",
       "El calendario se aprueba año a año, así que no puede conocerse con antelación ilimitada.",
     ],
     localTitle: "Los dos días que no salen aquí",
@@ -176,7 +176,7 @@ const COPY: Record<Locale, TodayCopy> = {
     howTitle: "How public holidays work in Catalonia",
     how: [
       "Each year the Catalan government sets **twelve public holidays** for the whole of Catalonia. They are paid and cannot be made up later.",
-      "Three of the twelve move each year because they follow Easter: Good Friday, Easter Monday and, depending on the year, a related date. The rest are fixed.",
+      "Two of the twelve change date every year because they follow Easter: Good Friday and Easter Monday. The list itself also changes: 2026 includes 15 August and 26 December; in 2027, when both fall on a Sunday, they are not on it, and 1 November and 6 December are.",
       "The calendar is approved one year at a time, so it cannot be known indefinitely far ahead.",
     ],
     localTitle: "The two days this page does not cover",

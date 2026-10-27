@@ -116,7 +116,7 @@ type T = {
 
 const COPY: Record<Locale, T> = {
   en: {
-    lead: "Spain holds a **general election on Sunday 29 November 2026** to elect the Congress of Deputies and the Senate, called by Royal Decree 806/2026 (BOE, 6 October 2026). Polling stations are open from **9:00 to 20:00**, and the INE's official finder tells you where you vote. As of 24 October 2026, the next deadline is **31 October** (requesting a vote if you are temporarily abroad); a postal vote can be requested at Correos **until 19 November**.",
+    lead: "Spain holds a **general election on Sunday 29 November 2026** to elect the Congress of Deputies and the Senate, called by Royal Decree 806/2026 (BOE, 6 October 2026). Polling stations are open from **9:00 to 20:00**, and the INE's official finder tells you where you vote. Key dates: request a postal vote at Correos **by 19 November** and hand it in by 25 November; the voter card with your polling station arrives by post between 2 and 10 November.",
     nextCaption: "Upcoming elections in Catalonia",
     nextHeaders: ["Election", "Date", "Status"],
     nextRows: [
@@ -205,7 +205,7 @@ const COPY: Record<Locale, T> = {
     warn: "If you will be away on 29 November, request the postal vote at Correos by 19 November, in person with your original ID, and hand it in by 25 November.",
   },
   es: {
-    lead: "Las próximas elecciones en Cataluña son las **generales del domingo 29 de noviembre de 2026**, para elegir el Congreso y el Senado, convocadas por el Real Decreto 806/2026 (BOE del 6 de octubre). Se vota de **9:00 a 20:00** en la mesa que te indica el buscador oficial del INE. A 24 de octubre de 2026, el próximo plazo es el **31 de octubre** (pedir el voto si estás temporalmente en el extranjero), y el voto por correo se pide en Correos **hasta el 19 de noviembre**.",
+    lead: "Las próximas elecciones en Cataluña son las **generales del domingo 29 de noviembre de 2026**, para elegir el Congreso y el Senado, convocadas por el Real Decreto 806/2026 (BOE del 6 de octubre). Se vota de **9:00 a 20:00** en la mesa que te indica el buscador oficial del INE. Plazos clave: el voto por correo se pide en Correos **hasta el 19 de noviembre** y se entrega hasta el 25, y la tarjeta censal con tu mesa llega por correo entre el 2 y el 10 de noviembre.",
     nextCaption: "Próximas elecciones en Cataluña",
     nextHeaders: ["Elección", "Fecha", "Situación"],
     nextRows: [
@@ -276,7 +276,7 @@ const COPY: Record<Locale, T> = {
     ],
     muniTitle: "Después: municipales del 23 de mayo de 2027",
     muni: [
-      "Por ley, las elecciones locales se celebran el cuarto domingo de mayo, así que las próximas son el **23 de mayo de 2027**. En las generales solo votan los ciudadanos españoles, pero los **ciudadanos de la UE** residentes en España pueden votar en las municipales si están empadronados y han manifestado su voluntad de votar, **antes del 30 de diciembre de 2026** para 2027.",
+      "Por ley, las elecciones locales se celebran el cuarto domingo de mayo, así que las próximas son el **23 de mayo de 2027**. En las generales solo votan los ciudadanos españoles, pero los **ciudadanos de la UE** residentes en España pueden votar en las municipales si están empadronados y han manifestado su voluntad de votar, **hasta el 30 de diciembre de 2026** para 2027.",
       `Los ciudadanos de la UE pueden hacer esa declaración en línea en la ${a("sede del INE", URL.eu)}, por correo o en el ayuntamiento, y sirve para las elecciones siguientes. Algunos nacionales de fuera de la UE con convenio de reciprocidad también pueden votar, pero lo deben solicitar cada vez; la lista y el plazo de 2027 aún no se han publicado.`,
     ],
     faq: [
@@ -287,14 +287,14 @@ const COPY: Record<Locale, T> = {
       { question: "¿Qué documento necesito para votar? ¿Vale el DNI del móvil?", answer: "DNI, pasaporte o carné de conducir originales con foto; el DNI y el pasaporte valen caducados. La app MiDNI no vale: la Junta Electoral Central la suspendió en marzo de 2026." },
       { question: "¿Tengo que inscribirme para votar?", answer: "No, si eres español y vives en España: el INE forma el censo a partir del padrón. El censo del 29 de noviembre se cerró el 1 de agosto de 2026." },
       { question: "¿Qué es el Real Decreto 806/2026?", answer: "El decreto de 5 de octubre de 2026, publicado en el BOE el 6 de octubre, que disuelve el Congreso y el Senado y convoca elecciones para el 29 de noviembre. Fija la campaña del 13 al 27 de noviembre y la constitución de las nuevas Cortes el 23 de diciembre." },
-      { question: "¿Pueden votar los extranjeros en Cataluña?", answer: "En las generales, no. Los ciudadanos de la UE pueden votar en las municipales del 23 de mayo de 2027 si manifiestan su voluntad de votar antes del 30 de diciembre de 2026." },
+      { question: "¿Pueden votar los extranjeros en Cataluña?", answer: "En las generales, no. Los ciudadanos de la UE pueden votar en las municipales del 23 de mayo de 2027 si manifiestan su voluntad de votar hasta el 30 de diciembre de 2026." },
     ],
     note: "Los plazos electorales los fijan la ley, la Junta Electoral Central y el INE: consulta el calendario oficial si una fecha parece haber cambiado.",
-    warnTitle: "Voto por correo: pídelo antes del 19 de noviembre",
+    warnTitle: "Voto por correo: pídelo hasta el 19 de noviembre",
     warn: "Si no estarás el 29 de noviembre, pide el voto por correo en Correos hasta el 19 de noviembre, en persona y con tu documento original, y entrégalo hasta el 25 de noviembre.",
   },
   ca: {
-    lead: "Les properes eleccions a Catalunya són les **generals del diumenge 29 de novembre de 2026**, per escollir el Congrés i el Senat, convocades pel Reial decret 806/2026 (BOE del 6 d'octubre). Es vota de **9:00 a 20:00** a la mesa que t'indica el cercador oficial de l'INE. A 24 d'octubre de 2026, el proper termini és el **31 d'octubre** (demanar el vot si ets temporalment a l'estranger), i el vot per correu es demana a Correus **fins al 19 de novembre**.",
+    lead: "Les properes eleccions a Catalunya són les **generals del diumenge 29 de novembre de 2026**, per escollir el Congrés i el Senat, convocades pel Reial decret 806/2026 (BOE del 6 d'octubre). Es vota de **9:00 a 20:00** a la mesa que t'indica el cercador oficial de l'INE. Terminis clau: el vot per correu es demana a Correus **fins al 19 de novembre** i es lliura fins al 25, i la targeta censal amb la teva mesa arriba per correu entre el 2 i el 10 de novembre.",
     nextCaption: "Properes eleccions a Catalunya",
     nextHeaders: ["Elecció", "Data", "Situació"],
     nextRows: [
@@ -365,7 +365,7 @@ const COPY: Record<Locale, T> = {
     ],
     muniTitle: "Després: municipals del 23 de maig de 2027",
     muni: [
-      "Per llei, les eleccions locals se celebren el quart diumenge de maig, així que les properes són el **23 de maig de 2027**. A les generals només hi voten els ciutadans espanyols, però els **ciutadans de la UE** residents a Espanya poden votar a les municipals si estan empadronats i han manifestat la voluntat de votar, **abans del 30 de desembre de 2026** per al 2027.",
+      "Per llei, les eleccions locals se celebren el quart diumenge de maig, així que les properes són el **23 de maig de 2027**. A les generals només hi voten els ciutadans espanyols, però els **ciutadans de la UE** residents a Espanya poden votar a les municipals si estan empadronats i han manifestat la voluntat de votar, **fins al 30 de desembre de 2026** per al 2027.",
       `Els ciutadans de la UE poden fer aquesta declaració en línia a la ${a("seu de l'INE", URL.eu)}, per correu o a l'ajuntament, i serveix per a les eleccions següents. Alguns nacionals de fora de la UE amb conveni de reciprocitat també poden votar, però ho han de sol·licitar cada vegada; la llista i el termini del 2027 encara no s'han publicat.`,
     ],
     faq: [
@@ -376,10 +376,10 @@ const COPY: Record<Locale, T> = {
       { question: "Quin document necessito per votar? Val el DNI del mòbil?", answer: "DNI, passaport o carnet de conduir originals amb foto; el DNI i el passaport valen caducats. L'app MiDNI no val: la Junta Electoral Central la va suspendre el març de 2026." },
       { question: "M'he d'inscriure per votar?", answer: "No, si ets espanyol i vius a Espanya: l'INE forma el cens a partir del padró. El cens del 29 de novembre es va tancar l'1 d'agost de 2026." },
       { question: "Què és el Reial decret 806/2026?", answer: "El decret de 5 d'octubre de 2026, publicat al BOE el 6 d'octubre, que dissol el Congrés i el Senat i convoca eleccions per al 29 de novembre. Fixa la campanya del 13 al 27 de novembre i la constitució de les noves Corts el 23 de desembre." },
-      { question: "Poden votar els estrangers a Catalunya?", answer: "A les generals, no. Els ciutadans de la UE poden votar a les municipals del 23 de maig de 2027 si manifesten la voluntat de votar abans del 30 de desembre de 2026." },
+      { question: "Poden votar els estrangers a Catalunya?", answer: "A les generals, no. Els ciutadans de la UE poden votar a les municipals del 23 de maig de 2027 si manifesten la voluntat de votar fins al 30 de desembre de 2026." },
     ],
     note: "Els terminis electorals els fixen la llei, la Junta Electoral Central i l'INE: consulta el calendari oficial si una data sembla haver canviat.",
-    warnTitle: "Vot per correu: demana'l abans del 19 de novembre",
+    warnTitle: "Vot per correu: demana'l fins al 19 de novembre",
     warn: "Si no hi seràs el 29 de novembre, demana el vot per correu a Correus fins al 19 de novembre, en persona i amb el document original, i entrega'l fins al 25 de novembre.",
   },
 };

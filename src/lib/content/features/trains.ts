@@ -28,7 +28,9 @@ import {
  * 27 Oct 2026, and high-speed times from Renfe's open GTFS. Vic has no time:
  * the R3 is cut between Barcelona and La Garriga (Rodalies notice of 6 Jul
  * 2026, still in force on 24 Oct). Each destination with its own guide links
- * to it, which is where the timetables live.
+ * to it, which is where the timetables live. On 26 Oct 2026 the Girona R11
+ * range was re-read from the same planner for 27 and 28 Oct: 1 h 19 to
+ * 1 h 41 (the 7:16 from Sants takes 1 h 41), not 1 h 19 to 1 h 31.
  */
 
 const TABLE_NOTE = {
@@ -65,7 +67,7 @@ function ca(): Block[] {
       ["Destinació", "Línia habitual", "Durada des de Sants", "Senzill", "Per a què hi vas"],
       [
         ["Sitges", "R2 Sud", "31–37 min", "5,50 €", "Mar, nucli antic i museus"],
-        ["Girona", "R11 o alta velocitat", "1 h 19–1 h 31 (R11), uns 40 min (alta velocitat)", "8,95–12 € (R11)", "Barri Vell, catedral i Call"],
+        ["Girona", "R11 o alta velocitat", "1 h 19–1 h 41 (R11), uns 40 min (alta velocitat)", "8,95–12 € (R11)", "Barri Vell, catedral i Call"],
         ["Tarragona", "Regionals R14–R17", "69 min", "8,60 €", "Patrimoni romà i Mediterrani"],
         ["Vic", "R3 (tallada entre Barcelona i la Garriga)", "—", "—", "Plaça Major, mercat i art medieval"],
         ["Figueres", "R11 o alta velocitat", "1 h 50–2 h 18 (R11), 42–65 min (alta velocitat a Figueres-Vilafant)", "12,80–17,10 € (R11)", "Teatre-Museu Dalí"],
@@ -183,7 +185,7 @@ function es(): Block[] {
       ["Destino", "Línea habitual", "Duración desde Sants", "Sencillo", "A qué vas"],
       [
         ["Sitges", "R2 Sud", "31–37 min", "5,50 €", "Mar, casco antiguo y museos"],
-        ["Girona", "R11 o alta velocidad", "1 h 19–1 h 31 (R11), unos 40 min (alta velocidad)", "8,95–12 € (R11)", "Barrio Viejo, catedral y Call"],
+        ["Girona", "R11 o alta velocidad", "1 h 19–1 h 41 (R11), unos 40 min (alta velocidad)", "8,95–12 € (R11)", "Barrio Viejo, catedral y Call"],
         ["Tarragona", "Regionales R14–R17", "69 min", "8,60 €", "Patrimonio romano y Mediterráneo"],
         ["Vic", "R3 (cortada entre Barcelona y La Garriga)", "—", "—", "Plaça Major, mercado y arte medieval"],
         ["Figueres", "R11 o alta velocidad", "1 h 50–2 h 18 (R11), 42–65 min (alta velocidad a Figueres-Vilafant)", "12,80–17,10 € (R11)", "Teatre-Museu Dalí"],
@@ -299,7 +301,7 @@ function en(): Block[] {
       ["Destination", "Usual line", "Journey from Sants", "Single fare", "What you go for"],
       [
         ["Sitges", "R2 Sud", "31–37 min", "€5.50", "Beaches, old town, museums"],
-        ["Girona", "R11 or high-speed", "1 h 19–1 h 31 (R11), about 40 min (high-speed)", "€8.95–12 (R11)", "Old Quarter, cathedral, Jewish Quarter"],
+        ["Girona", "R11 or high-speed", "1 h 19–1 h 41 (R11), about 40 min (high-speed)", "€8.95–12 (R11)", "Old Quarter, cathedral, Jewish Quarter"],
         ["Tarragona", "Regional R14–R17", "69 min", "€8.60", "Roman heritage and the Mediterranean"],
         ["Vic", "R3 (cut between Barcelona and La Garriga)", "—", "—", "Main square, market, medieval art"],
         ["Figueres", "R11 or high-speed", "1 h 50–2 h 18 (R11), 42–65 min (high-speed to Figueres-Vilafant)", "€12.80–17.10 (R11)", "Dalí Theatre-Museum"],

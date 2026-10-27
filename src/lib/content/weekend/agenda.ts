@@ -186,11 +186,45 @@ export function cleanUrl(value: string | undefined): string | null {
   return trimmed.replace(/^http:\/\//, "https://");
 }
 
+const CATALAN_PROVINCES = new Set(["barcelona", "girona", "lleida", "tarragona"]);
+
+/**
+ * Whether a row is in Catalonia.
+ *
+ * The Generalitat's cultural agenda also carries events elsewhere: rows such
+ * as `manacor_illes_balears` or `agenda:ubicacions/fora-de-catalunya` were
+ * listed as "things to do in Catalonia" until an outside review found a
+ * Manacor exhibition on the page (26 Oct 2026). Accepted: a structured
+ * location under one of the four provinces, or a bare slug that is a Catalan
+ * municipality in the Generalitat's own register. Everything else, including
+ * rows with no location at all, is left out: a plan we cannot place in
+ * Catalonia is not one we can recommend there.
+ */
+export function isInCatalonia(
+  row: Record<string, string | undefined>,
+  names: ReadonlyMap<string, string>,
+): boolean {
+  const locations = [row.comarca_i_municipi, row.municipi, row.comarca].filter(
+    (value): value is string => Boolean(value && value.trim()),
+  );
+  if (locations.length === 0) return false;
+  for (const location of locations) {
+    const structured = /^agenda:ubicacions\/([^/,]+)/.exec(location.trim());
+    if (structured) {
+      if (CATALAN_PROVINCES.has(structured[1]!)) return true;
+      continue;
+    }
+    if (!location.includes(":") && names.has(lastSegment(location))) return true;
+  }
+  return false;
+}
+
 export function normaliseEvent(
   row: Record<string, string | undefined>,
   window: WeekendWindow,
   names: ReadonlyMap<string, string>,
 ): AgendaEvent | null {
+  if (!isInCatalonia(row, names)) return null;
   const title = (row.denominaci ?? "").trim();
   const start = (row.data_inici ?? "").slice(0, 10);
   const end = (row.data_fi ?? row.data_inici ?? "").slice(0, 10);

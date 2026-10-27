@@ -56,10 +56,27 @@ test("each edition says no official source reports the forests' state today", ()
   }
 });
 
+test("the status block does not send readers to 'this weekend'", () => {
+  // The 14 Oct block said "if you go this weekend: 17 October" and was still
+  // live ten days later. A dated outing is named by its date, never by a
+  // relative weekend that goes stale the following Monday.
+  const relative = {
+    ca: /aquest cap de setmana/i,
+    es: /este fin de semana/i,
+    en: /this weekend/i,
+  };
+  for (const locale of LOCALES) {
+    for (const text of COPY[locale].status) {
+      assert.doesNotMatch(text, relative[locale], `${locale}: ${text}`);
+    }
+  }
+});
+
 test("no exact peak date is promised", () => {
   // A day-and-month pair is only allowed where it names a published event
   // (Aigüestortes on 17 Oct, Viladrau on 18 and 31 Oct), a Meteocat reading
-  // (the 8-9 Oct frosts) or the update date itself (14 Oct).
+  // (the 18 Oct frost, the rain window to 25 Oct) or the update date itself
+  // (26 Oct).
   const dayMonth =
     /\b\d{1,2}\s+(?:d'|de\s+)?(gener|febrer|març|abril|maig|juny|juliol|agost|setembre|octubre|novembre|desembre|enero|marzo|mayo|junio|julio|agosto|septiembre|octubre|noviembre|diciembre)\b/gi;
   for (const locale of LOCALES) {
@@ -67,7 +84,7 @@ test("no exact peak date is promised", () => {
     for (const hit of text.match(dayMonth) ?? []) {
       assert.match(
         hit,
-        /\b((?:9|14|17|31) d'octubre|(?:9|14|17|31) de octubre)\b/i,
+        /\b((?:17|18|25|26|31) d'octubre|(?:17|18|25|26|31) de octubre)\b/i,
         `${locale} states an unsourced date: ${hit}`,
       );
     }

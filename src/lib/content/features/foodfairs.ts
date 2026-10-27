@@ -36,12 +36,19 @@ import {
  * Manlleu, the Fira de la Galeta in Camprodon and Brunyola's hazelnut fair
  * (both early October). Fairs seen only on aggregators (Calonge's Vi Nou,
  * Santa Coloma's Ratafia, Olot's Orígens, Amer's Sant Martí) are not listed.
+ *
+ * Updated 26 October 2026 (research_notes/rank-all/review-7-features.md): the
+ * 24-25 Oct fairs are over, so the lead now opens with Gandesa, those three
+ * rows sit at the bottom of the table marked as already held, and their
+ * section moved after the oil fairs in the past tense. The glass-and-tickets
+ * sentence is from festadelvi.cat/entrades, read that day.
  */
 
 const VILADRAU = "https://viladrau.cat/ca/turisme/festes/fira-de-la-castanya";
 const MONISTROL = "https://www.monistroldemontserrat.cat/";
 const CARDONA = "https://www.cardonaturisme.cat/fires_festes/fira-de-la-llenega/";
 const GANDESA = "https://www.festadelvi.cat/programa";
+const GANDESA_TICKETS = "https://www.festadelvi.cat/entrades";
 const MAIALS = "https://www.maials.cat/";
 const REUS = "https://dopsiurana.com/events/fira-de-loli-nou-a-reus-6/";
 const BCN_OIL = "https://dopsiurana.com/events/mercat-de-loli-nou/";
@@ -52,32 +59,25 @@ const FIRES = "https://firescatalanes.cat/fires/categoria/gastronomica-i-aliment
 function ca(): Block[] {
   return [
     lead(
-      "El **dissabte 24 i diumenge 25 d'octubre de 2026**, hi ha la Fira de la Castanya de Viladrau i la Fira de la Coca i el Mató de Monistrol de Montserrat, i el diumenge 25 la Fira de la Llenega de Cardona. Després vénen la Festa del Vi de Gandesa (del 30 d'octubre a l'1 de novembre) i, al novembre, les fires de l'oli nou de Reus, Maials, Barcelona i Tarragona.",
+      "La pròxima és la **39a Festa del Vi de Gandesa**, a la Terra Alta, **de divendres 30 d'octubre a diumenge 1 de novembre de 2026**. Al novembre vénen les fires de l'oli nou: **Reus (13 i 14)**, **Maials (14 i 15)**, **Barcelona, a la plaça de Catalunya (del 20 al 22)** i **Tarragona (27 i 28)**. Les fires de Viladrau (castanya), Monistrol de Montserrat (coca i mató) i Cardona (llenega) ja es van fer el 24 i 25 d'octubre.",
     ),
     ...paras(
-      "Totes les dates d'aquesta llista són les que publica l'organitzador o l'ajuntament, comprovades el 24 d'octubre de 2026. Les fires que encara no tenen data oficial per a enguany no hi surten: no posem la de l'any passat com si fos la d'aquest.",
+      "Totes les dates d'aquesta llista són les que publica l'organitzador o l'ajuntament, comprovades el 26 d'octubre de 2026. Les fires que encara no tenen data oficial per a enguany no hi surten: no posem la de l'any passat com si fos la d'aquest.",
     ),
     table(
       "Fires gastronòmiques de tardor a Catalunya, per data (2026)",
       ["Dates", "Fira", "Municipi", "Producte"],
       [
-        ["**Ds 24 i dg 25 d'octubre**", "Fira de la Castanya (31a edició)", "Viladrau", "Castanya"],
-        ["**Ds 24 i dg 25 d'octubre**", "Fira de la Coca i el Mató (32a edició)", "Monistrol de Montserrat", "Coca i mató"],
-        ["**Dg 25 d'octubre**", "Fira de la Llenega i el Bosc de Tardor", "Cardona", "Bolets"],
         ["**Del 30 d'octubre a l'1 de novembre**", "Festa del Vi (39a edició)", "Gandesa", "Vi DO Terra Alta"],
         ["**13 i 14 de novembre**", "Fira de l'Oli Nou", "Reus (pl. de la Llibertat)", "Oli DOP Siurana"],
         ["**14 i 15 de novembre**", "Fira de l'Oli Verd", "Maials", "Oli nou sense filtrar"],
         ["**Del 20 al 22 de novembre**", "Mercat de l'Oli Nou", "Barcelona (pl. de Catalunya)", "Oli nou"],
         ["**27 i 28 de novembre**", "Fira de l'Oli Nou", "Tarragona (pl. Corsini)", "Oli DOP Siurana"],
+        ["**Ds 24 i dg 25 d'octubre** (ja feta)", "Fira de la Castanya (31a edició)", "Viladrau", "Castanya"],
+        ["**Ds 24 i dg 25 d'octubre** (ja feta)", "Fira de la Coca i el Mató (32a edició)", "Monistrol de Montserrat", "Coca i mató"],
+        ["**Dg 25 d'octubre** (ja feta)", "Fira de la Llenega i el Bosc de Tardor", "Cardona", "Bolets"],
       ],
-      "Dates de la web de cada organitzador o ajuntament, comprovades el 24 d'octubre de 2026. Els programes es poden canviar: mira la font el dia abans d'anar-hi.",
-    ),
-    ...h2(
-      "24 i 25 d'octubre: castanyes, coca i mató i bolets",
-      `**Viladrau, Fira de la Castanya.** L'Ajuntament de Viladrau anuncia la 31a edició **el cap de setmana del 24 i 25 d'octubre de 2026**. És la fira de la castanya de referència al Montseny i una de les fires de tardor més conegudes de Catalunya. Informació oficial: [viladrau.cat](${VILADRAU}).`,
-      `**Monistrol de Montserrat, Fira de la Coca i el Mató.** L'Ajuntament hi celebra la XXXII edició **el 24 i el 25 d'octubre**. La coca i el mató és el dolç que històricament es menja en pujar a Montserrat, de manera que és una parada natural si fas ${link("montserrat", "ca", "una escapada a Montserrat")}. Font: [monistroldemontserrat.cat](${MONISTROL}).`,
-      `**Cardona, Fira de la Llenega i el Bosc de Tardor.** Cardona Turisme la situa el **diumenge 25 d'octubre de 2026**. La llenega és el bolet protagonista, però la fira inclou també activitats de natura, i es combina bé amb la Muntanya de Sal i el castell. Font: [cardonaturisme.cat](${CARDONA}). Si vas a buscar bolets pel teu compte, mira abans ${link("mushrooms", "ca", "el nostre part setmanal de bolets")}.`,
-      `Si el que busques és la tradició sencera —castanyes, panellets i Tots Sants—, ${link("castanyada", "ca", "hi dediquem un article complet")}.`,
+      "Dates de la web de cada organitzador o ajuntament, comprovades el 26 d'octubre de 2026. Els programes es poden canviar: mira la font el dia abans d'anar-hi.",
     ),
     ...h2(
       "Festa del Vi de Gandesa: del 30 d'octubre a l'1 de novembre",
@@ -89,7 +89,7 @@ function ca(): Block[] {
       "**Diumenge 1 de novembre:** d'11.00 a 14.00 h, i a les 14.00 h el dinar de clotxa al pati de les Escoles Velles.",
     ),
     ...paras(
-      `El divendres a les 22.00 h hi ha la Nit de les Garnatxes Blanques, un sopar maridatge al Celler Cooperatiu de Gandesa, amb entrades a 65 €. El preu de la copa i els tiquets de degustació de la mostra encara és «per confirmar» a la web. Programa i entrades: [festadelvi.cat](${GANDESA}).`,
+      `El divendres a les 22.00 h hi ha la Nit de les Garnatxes Blanques, un sopar maridatge al Celler Cooperatiu de Gandesa, amb entrades a 65 €. El preu de la copa i els tiquets de degustació de la mostra encara és «per confirmar» a la web. La copa i els tiquets de degustació es venen al mateix recinte, a l'estand habilitat. Programa i entrades: [festadelvi.cat](${GANDESA}).`,
     ),
     ...h2(
       "I al novembre? Les fires de l'oli nou",
@@ -105,6 +105,13 @@ function ca(): Block[] {
       "Si encara no has tastat l'oli nou, és la millor manera d'entendre per què no és el mateix producte que l'oli que es compra la resta de l'any.",
       `I amb el novembre arrenca la temporada de calçots, que dura fins a l'abril: ${b2link("calcots", "ca", "quan és la Calçotada de Valls 2027 i com funciona la temporada")}.`,
     ),
+    ...h2(
+      "Ja s'han fet: castanya, coca i mató i llenega (24 i 25 d'octubre)",
+      `**Viladrau, Fira de la Castanya.** L'Ajuntament de Viladrau va celebrar la 31a edició **el cap de setmana del 24 i 25 d'octubre de 2026**. És la fira de la castanya de referència al Montseny i una de les fires de tardor més conegudes de Catalunya. Informació oficial: [viladrau.cat](${VILADRAU}).`,
+      `**Monistrol de Montserrat, Fira de la Coca i el Mató.** L'Ajuntament hi va celebrar la XXXII edició **el 24 i el 25 d'octubre**. La coca i el mató és el dolç que històricament es menja en pujar a Montserrat, de manera que és una parada natural si fas ${link("montserrat", "ca", "una escapada a Montserrat")}. Font: [monistroldemontserrat.cat](${MONISTROL}).`,
+      `**Cardona, Fira de la Llenega i el Bosc de Tardor.** Cardona Turisme la va situar el **diumenge 25 d'octubre de 2026**. La llenega és el bolet protagonista, però la fira inclou també activitats de natura, i es combina bé amb la Muntanya de Sal i el castell. Font: [cardonaturisme.cat](${CARDONA}). Si vas a buscar bolets pel teu compte, mira abans ${link("mushrooms", "ca", "el nostre part setmanal de bolets")}.`,
+      `Si el que busques és la tradició sencera —castanyes, panellets i Tots Sants—, ${link("castanyada", "ca", "hi dediquem un article complet")}.`,
+    ),
     callout(
       "info",
       "Ja s'ha fet aquest any",
@@ -112,7 +119,7 @@ function ca(): Block[] {
     ),
     ...h2(
       "Com triar",
-      "Per a una sortida familiar el 24 i el 25 d'octubre: Viladrau o Monistrol. Per combinar bosc i taula: Cardona. Per beure amb criteri: Gandesa. Per comprar oli de l'any: Reus, Maials, Barcelona o Tarragona; el mercat de la plaça de Catalunya és el més fàcil si no tens cotxe.",
+      "Per beure amb criteri, aquest cap de setmana de Tots Sants: Gandesa. Per combinar bosc i taula: Cardona. Per comprar oli de l'any: Reus, Maials, Barcelona o Tarragona; el mercat de la plaça de Catalunya és el més fàcil si no tens cotxe.",
       `Hi ha moltes més fires petites als calendaris agregats, com [firescatalanes.cat](${FIRES}), però no les hem pogut confirmar amb l'organitzador: comprova-les abans de fer quilòmetres. I per a la resta de plans, ${link("weekend", "ca", "la nostra agenda del cap de setmana")}.`,
     ),
     ...relatedBlocks(["castanyada", "mushrooms", "autumn", "weekend", "montserrat"], "ca"),
@@ -122,32 +129,25 @@ function ca(): Block[] {
 function es(): Block[] {
   return [
     lead(
-      "El **sábado 24 y domingo 25 de octubre de 2026**, hay la Fira de la Castanya de Viladrau y la Fira de la Coca i el Mató de Monistrol de Montserrat, y el domingo 25 la Fira de la Llenega de Cardona. Después llegan la Festa del Vi de Gandesa (del 30 de octubre al 1 de noviembre) y, en noviembre, las ferias del aceite nuevo de Reus, Maials, Barcelona y Tarragona.",
+      "La próxima es la **39.ª Festa del Vi de Gandesa**, en la Terra Alta, **de viernes 30 de octubre a domingo 1 de noviembre de 2026**. En noviembre llegan las ferias del aceite nuevo: **Reus (13 y 14)**, **Maials (14 y 15)**, **Barcelona, en la plaza de Catalunya (del 20 al 22)** y **Tarragona (27 y 28)**. Las ferias de Viladrau (castaña), Monistrol de Montserrat (coca y mató) y Cardona (llenega) ya se celebraron el 24 y 25 de octubre.",
     ),
     ...paras(
-      "Todas las fechas de esta lista son las que publica el organizador o el ayuntamiento, comprobadas el 24 de octubre de 2026. Las ferias que aún no tienen fecha oficial para este año no aparecen: no ponemos la del año pasado como si fuera la de este.",
+      "Todas las fechas de esta lista son las que publica el organizador o el ayuntamiento, comprobadas el 26 de octubre de 2026. Las ferias que aún no tienen fecha oficial para este año no aparecen: no ponemos la del año pasado como si fuera la de este.",
     ),
     table(
       "Ferias gastronómicas de otoño en Cataluña, por fecha (2026)",
       ["Fechas", "Feria", "Municipio", "Producto"],
       [
-        ["**Sá 24 y do 25 de octubre**", "Fira de la Castanya (31.ª edición)", "Viladrau", "Castaña"],
-        ["**Sá 24 y do 25 de octubre**", "Fira de la Coca i el Mató (32.ª edición)", "Monistrol de Montserrat", "Coca y mató"],
-        ["**Do 25 de octubre**", "Fira de la Llenega i el Bosc de Tardor", "Cardona", "Setas"],
         ["**Del 30 de octubre al 1 de noviembre**", "Festa del Vi (39.ª edición)", "Gandesa", "Vino DO Terra Alta"],
         ["**13 y 14 de noviembre**", "Fira de l'Oli Nou", "Reus (pl. de la Llibertat)", "Aceite DOP Siurana"],
         ["**14 y 15 de noviembre**", "Fira de l'Oli Verd", "Maials", "Aceite nuevo sin filtrar"],
         ["**Del 20 al 22 de noviembre**", "Mercat de l'Oli Nou", "Barcelona (pl. de Catalunya)", "Aceite nuevo"],
         ["**27 y 28 de noviembre**", "Fira de l'Oli Nou", "Tarragona (pl. Corsini)", "Aceite DOP Siurana"],
+        ["**Sá 24 y do 25 de octubre** (ya celebrada)", "Fira de la Castanya (31.ª edición)", "Viladrau", "Castaña"],
+        ["**Sá 24 y do 25 de octubre** (ya celebrada)", "Fira de la Coca i el Mató (32.ª edición)", "Monistrol de Montserrat", "Coca y mató"],
+        ["**Do 25 de octubre** (ya celebrada)", "Fira de la Llenega i el Bosc de Tardor", "Cardona", "Setas"],
       ],
-      "Fechas de la web de cada organizador o ayuntamiento, comprobadas el 24 de octubre de 2026. Los programas pueden cambiar: mira la fuente el día antes de ir.",
-    ),
-    ...h2(
-      "24 y 25 de octubre: castañas, coca con mató y setas",
-      `**Viladrau, Fira de la Castanya.** El Ayuntamiento de Viladrau anuncia la 31.ª edición **el fin de semana del 24 y 25 de octubre de 2026**. Es la feria de la castaña de referencia en el Montseny y una de las ferias de otoño más conocidas de Cataluña. Información oficial: [viladrau.cat](${VILADRAU}).`,
-      `**Monistrol de Montserrat, Fira de la Coca i el Mató.** El Ayuntamiento celebra la XXXII edición **el 24 y el 25 de octubre**. La coca con mató es el dulce que históricamente se come al subir a Montserrat, así que es una parada natural si haces ${link("montserrat", "es", "una escapada a Montserrat")}. Fuente: [monistroldemontserrat.cat](${MONISTROL}).`,
-      `**Cardona, Fira de la Llenega i el Bosc de Tardor.** Cardona Turisme la sitúa el **domingo 25 de octubre de 2026**. La llenega es la seta protagonista, pero la feria incluye también actividades de naturaleza, y se combina bien con la Montaña de Sal y el castillo. Fuente: [cardonaturisme.cat](${CARDONA}). Si vas a buscar setas por tu cuenta, mira antes ${link("mushrooms", "es", "nuestro parte semanal de setas")}.`,
-      `Si buscas la tradición completa —castañas, panellets y Todos los Santos—, ${link("castanyada", "es", "le dedicamos un artículo entero")}.`,
+      "Fechas de la web de cada organizador o ayuntamiento, comprobadas el 26 de octubre de 2026. Los programas pueden cambiar: mira la fuente el día antes de ir.",
     ),
     ...h2(
       "Festa del Vi de Gandesa: del 30 de octubre al 1 de noviembre",
@@ -159,7 +159,7 @@ function es(): Block[] {
       "**Domingo 1 de noviembre:** de 11:00 a 14:00, y a las 14:00 la comida de clotxa en el patio de les Escoles Velles.",
     ),
     ...paras(
-      `El viernes a las 22:00 se celebra la Nit de les Garnatxes Blanques, una cena maridaje en el Celler Cooperatiu de Gandesa, con entradas a 65 €. El precio de la copa y los tickets de degustación de la muestra aún figura como «per confirmar» en la web. Programa y entradas: [festadelvi.cat](${GANDESA}).`,
+      `El viernes a las 22:00 se celebra la Nit de les Garnatxes Blanques, una cena maridaje en el Celler Cooperatiu de Gandesa, con entradas a 65 €. El precio de la copa y los tickets de degustación de la muestra aún figura como «per confirmar» en la web. La copa y los tickets de degustación se venden en el propio recinto, en el estand habilitado. Programa y entradas: [festadelvi.cat](${GANDESA}).`,
     ),
     ...h2(
       "¿Y en noviembre? Las ferias del aceite nuevo",
@@ -175,6 +175,13 @@ function es(): Block[] {
       "Si todavía no has probado el aceite nuevo, es la mejor manera de entender por qué no es el mismo producto que el aceite que se compra el resto del año.",
       `Y con noviembre empieza la temporada de calçots, que dura hasta abril: ${b2link("calcots", "es", "cuándo es la Calçotada de Valls 2027 y cómo funciona la temporada")}.`,
     ),
+    ...h2(
+      "Ya celebradas: castaña, coca con mató y llenega (24 y 25 de octubre)",
+      `**Viladrau, Fira de la Castanya.** El Ayuntamiento de Viladrau celebró la 31.ª edición **el fin de semana del 24 y 25 de octubre de 2026**. Es la feria de la castaña de referencia en el Montseny y una de las ferias de otoño más conocidas de Cataluña. Información oficial: [viladrau.cat](${VILADRAU}).`,
+      `**Monistrol de Montserrat, Fira de la Coca i el Mató.** El Ayuntamiento celebró la XXXII edición **el 24 y el 25 de octubre**. La coca con mató es el dulce que históricamente se come al subir a Montserrat, así que es una parada natural si haces ${link("montserrat", "es", "una escapada a Montserrat")}. Fuente: [monistroldemontserrat.cat](${MONISTROL}).`,
+      `**Cardona, Fira de la Llenega i el Bosc de Tardor.** Cardona Turisme la situó el **domingo 25 de octubre de 2026**. La llenega es la seta protagonista, pero la feria incluye también actividades de naturaleza, y se combina bien con la Montaña de Sal y el castillo. Fuente: [cardonaturisme.cat](${CARDONA}). Si vas a buscar setas por tu cuenta, mira antes ${link("mushrooms", "es", "nuestro parte semanal de setas")}.`,
+      `Si buscas la tradición completa —castañas, panellets y Todos los Santos—, ${link("castanyada", "es", "le dedicamos un artículo entero")}.`,
+    ),
     callout(
       "info",
       "Ya se ha celebrado este año",
@@ -182,7 +189,7 @@ function es(): Block[] {
     ),
     ...h2(
       "Cómo elegir",
-      "Para una salida familiar el 24 y el 25 de octubre: Viladrau o Monistrol. Para combinar bosque y mesa: Cardona. Para beber con criterio: Gandesa. Para comprar aceite del año: Reus, Maials, Barcelona o Tarragona; el mercado de la plaza de Catalunya es el más fácil si no tienes coche.",
+      "Para beber con criterio, este puente de Todos los Santos: Gandesa. Para combinar bosque y mesa: Cardona. Para comprar aceite del año: Reus, Maials, Barcelona o Tarragona; el mercado de la plaza de Catalunya es el más fácil si no tienes coche.",
       `Hay muchas más ferias pequeñas en los calendarios agregados, como [firescatalanes.cat](${FIRES}), pero no las hemos podido confirmar con el organizador: compruébalas antes de hacer kilómetros. Y para el resto de planes, ${link("weekend", "es", "nuestra agenda del fin de semana")}.`,
     ),
     ...relatedBlocks(["castanyada", "mushrooms", "autumn", "weekend", "montserrat"], "es"),
@@ -192,37 +199,30 @@ function es(): Block[] {
 function en(): Block[] {
   return [
     lead(
-      "On **Saturday 24 and Sunday 25 October 2026**, Viladrau holds its Chestnut Fair and Monistrol de Montserrat its Coca i Mató Fair, and on Sunday 25 Cardona holds its Llenega mushroom fair. Next comes the Gandesa Wine Festival (30 October to 1 November) and, in November, the new olive oil fairs in Reus, Maials, Barcelona and Tarragona.",
+      "Next up is the **39th Festa del Vi in Gandesa**, in the Terra Alta, **from Friday 30 October to Sunday 1 November 2026**. November brings the new olive oil fairs: **Reus (13–14)**, **Maials (14–15)**, **Barcelona, on Plaça de Catalunya (20–22)** and **Tarragona (27–28)**. The Viladrau (chestnut), Monistrol de Montserrat (coca i mató) and Cardona (llenega) fairs already took place on 24–25 October.",
     ),
     ...paras(
-      "Every date on this list is the one published by the organiser or the town council, checked on 24 October 2026. Fairs without an official date for this year are left out: we do not reprint last year's date as this year's.",
+      "Every date on this list is the one published by the organiser or the town council, checked on 26 October 2026. Fairs without an official date for this year are left out: we do not reprint last year's date as this year's.",
     ),
     table(
       "Autumn food festivals in Catalonia, by date (2026)",
       ["Dates", "Fair", "Town", "Product"],
       [
-        ["**Sat 24–Sun 25 October**", "Chestnut Fair (31st edition)", "Viladrau", "Chestnuts"],
-        ["**Sat 24–Sun 25 October**", "Coca i Mató Fair (32nd edition)", "Monistrol de Montserrat", "Coca i mató"],
-        ["**Sun 25 October**", "Fira de la Llenega i el Bosc de Tardor", "Cardona", "Wild mushrooms"],
         ["**30 October–1 November**", "Festa del Vi (39th edition)", "Gandesa", "DO Terra Alta wine"],
         ["**13–14 November**", "New Oil Fair", "Reus (Plaça de la Llibertat)", "DOP Siurana olive oil"],
         ["**14–15 November**", "Oli Verd Fair", "Maials", "New unfiltered olive oil"],
         ["**20–22 November**", "Mercat de l'Oli Nou", "Barcelona (Plaça de Catalunya)", "New olive oil"],
         ["**27–28 November**", "New Oil Fair", "Tarragona (Plaça Corsini)", "DOP Siurana olive oil"],
+        ["**Sat 24–Sun 25 October** (already held)", "Chestnut Fair (31st edition)", "Viladrau", "Chestnuts"],
+        ["**Sat 24–Sun 25 October** (already held)", "Coca i Mató Fair (32nd edition)", "Monistrol de Montserrat", "Coca i mató"],
+        ["**Sun 25 October** (already held)", "Fira de la Llenega i el Bosc de Tardor", "Cardona", "Wild mushrooms"],
       ],
-      "Dates from each organiser's or council's website, checked on 24 October 2026. Programmes can change: check the source the day before you go.",
+      "Dates from each organiser's or council's website, checked on 26 October 2026. Programmes can change: check the source the day before you go.",
     ),
     callout(
       "info",
       "Four Catalan words worth knowing",
       "**Coca i mató**: a flat sweet pastry eaten with fresh unsalted curd cheese, traditionally on the way up to Montserrat. **Llenega**: a wild mushroom prized in central Catalonia. **Oli verd**: the first, unfiltered oil of the olive harvest, intensely green, bitter and peppery. **Clotxa**: a hollowed-out loaf filled with grilled vegetables, salt cod and garlic, eaten in the southern inland regions.",
-    ),
-    ...h2(
-      "24 and 25 October: chestnuts, coca i mató and mushrooms",
-      `**Viladrau Chestnut Fair.** Viladrau town council announces the 31st edition for **the weekend of 24 and 25 October 2026**. It is the reference chestnut fair of the Montseny massif and one of Catalonia's best-known autumn fairs. Official information: [viladrau.cat](${VILADRAU}).`,
-      `**Monistrol de Montserrat Coca i Mató Fair.** The town council holds the 32nd edition on **24 and 25 October**. Coca i mató is the sweet historically eaten on the way up to Montserrat, so it is a natural stop on ${link("montserrat", "en", "a Montserrat day trip")}. Source: [monistroldemontserrat.cat](${MONISTROL}).`,
-      `**Cardona Llenega Fair.** Cardona Turisme gives **Sunday 25 October 2026**. The llenega mushroom is the headline, with nature activities alongside, and it combines well with Cardona's salt mountain and castle. Source: [cardonaturisme.cat](${CARDONA}). If you are foraging yourself, read ${link("mushrooms", "en", "our weekly mushroom report")} first.`,
-      `For the wider tradition of chestnuts, panellets and All Saints, ${link("castanyada", "en", "we have a full guide")}.`,
     ),
     ...h2(
       "Gandesa Wine Festival: 30 October to 1 November",
@@ -234,7 +234,7 @@ function en(): Block[] {
       "**Sunday 1 November:** 11:00 to 14:00, followed at 14:00 by the clotxa lunch in the Pati de les Escoles Velles.",
     ),
     ...paras(
-      `On Friday at 22:00 there is the Nit de les Garnatxes Blanques, a pairing dinner at the Gandesa Co-operative Winery, with tickets at €65. The price of the glass and tasting tickets for the wine show is still marked "to be confirmed" on the website. Programme and tickets: [festadelvi.cat](${GANDESA}).`,
+      `On Friday at 22:00 there is the Nit de les Garnatxes Blanques, a pairing dinner at the Gandesa Co-operative Winery, with tickets at €65. The price of the glass and tasting tickets for the wine show is still marked "to be confirmed" on the website. The glass and tasting tickets are sold at a stand inside the venue. Programme and tickets: [festadelvi.cat](${GANDESA}).`,
     ),
     ...h2(
       "What about November? The new olive oil fairs",
@@ -250,6 +250,13 @@ function en(): Block[] {
       "If you have never tasted new oil, these fairs are the best way to understand why it is a different product from the oil sold the rest of the year.",
       `November also opens calçot season, which runs until April: ${b2link("calcots", "en", "when the 2027 Valls Calçotada is and how the season works")}.`,
     ),
+    ...h2(
+      "Already held: chestnuts, coca i mató and llenega (24 and 25 October)",
+      `**Viladrau Chestnut Fair.** Viladrau town council held the 31st edition on **the weekend of 24 and 25 October 2026**. It is the reference chestnut fair of the Montseny massif and one of Catalonia's best-known autumn fairs. Official information: [viladrau.cat](${VILADRAU}).`,
+      `**Monistrol de Montserrat Coca i Mató Fair.** The town council held the 32nd edition on **24 and 25 October**. Coca i mató is the sweet historically eaten on the way up to Montserrat, so it is a natural stop on ${link("montserrat", "en", "a Montserrat day trip")}. Source: [monistroldemontserrat.cat](${MONISTROL}).`,
+      `**Cardona Llenega Fair.** Cardona Turisme placed it on **Sunday 25 October 2026**. The llenega mushroom is the headline, with nature activities alongside, and it combines well with Cardona's salt mountain and castle. Source: [cardonaturisme.cat](${CARDONA}). If you are foraging yourself, read ${link("mushrooms", "en", "our weekly mushroom report")} first.`,
+      `For the wider tradition of chestnuts, panellets and All Saints, ${link("castanyada", "en", "we have a full guide")}.`,
+    ),
     callout(
       "info",
       "Already held this year",
@@ -257,7 +264,7 @@ function en(): Block[] {
     ),
     ...h2(
       "How to choose",
-      "For a family outing on 24 and 25 October: Viladrau or Monistrol. To combine forest and table: Cardona. To drink with some guidance: Gandesa. To buy this year's oil: Reus, Maials, Barcelona or Tarragona; the Plaça de Catalunya market is the easiest without a car.",
+      "To drink with some guidance over the All Saints weekend: Gandesa. To combine forest and table: Cardona. To buy this year's oil: Reus, Maials, Barcelona or Tarragona; the Plaça de Catalunya market is the easiest without a car.",
       `Listing sites such as [firescatalanes.cat](${FIRES}) carry many more small fairs, but we could not confirm them with the organiser, so check before driving. For everything else on, see ${link("weekend", "en", "our weekend guide")}.`,
     ),
     ...relatedBlocks(["castanyada", "mushrooms", "autumn", "weekend", "montserrat"], "en"),
@@ -295,6 +302,7 @@ export const FOODFAIRS: FeatureArticle = {
     { name: "XXXII Fira de la Coca i el Mató", url: MONISTROL, publisher: "Ajuntament de Monistrol de Montserrat" },
     { name: "Fira de la Llenega — Cardona Turisme", url: CARDONA, publisher: "Cardona Turisme" },
     { name: "39a Festa del Vi de Gandesa, programa", url: GANDESA, publisher: "Festa del Vi de Gandesa" },
+    { name: "Festa del Vi de Gandesa, entrades", url: GANDESA_TICKETS, publisher: "Festa del Vi de Gandesa" },
     { name: "Fira de l'Oli Verd de Maials", url: MAIALS, publisher: "Ajuntament de Maials" },
     { name: "Fira de l'oli nou a Reus", url: REUS, publisher: "DOP Siurana" },
     { name: "Mercat de l'Oli Nou, Barcelona", url: BCN_OIL, publisher: "DOP Siurana" },
