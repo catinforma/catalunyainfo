@@ -66,7 +66,9 @@ export type B2Key =
   | "christmasTraditions"
   // Round 4 (26 Oct 2026): December bridge and La Marató.
   | "decemberBridge"
-  | "marato";
+  | "marato"
+  // x10 engines (27 Oct 2026): the evergreen strikes hub.
+  | "strikes";
 
 /** Path after the locale prefix, no leading or trailing slash. */
 export const B2_PATHS: Record<B2Key, Record<Locale, string>> = {
@@ -324,6 +326,11 @@ export const B2_PATHS: Record<B2Key, Record<Locale, string>> = {
     ca: "guies/la-marato-tv3-3cat",
     es: "guias/la-marato-tv3-3cat",
     en: "guides/la-marato-tv3-telethon",
+  },
+  strikes: {
+    ca: "guies/vaga-avui-catalunya",
+    es: "guias/huelga-hoy-cataluna",
+    en: "guides/strike-barcelona-catalonia-today",
   },
 };
 
@@ -591,6 +598,11 @@ export const B2_TITLES: Record<B2Key, Record<Locale, string>> = {
     ca: "La Marató de 3Cat 2026: quan és i com col·laborar",
     es: "La Marató de 3Cat 2026: cuándo es y cómo colaborar",
     en: "La Marató 2026: date, cause and how to donate",
+  },
+  strikes: {
+    ca: "Vaga avui a Catalunya: què funciona",
+    es: "Huelga hoy en Cataluña: qué funciona",
+    en: "Strike in Barcelona and Catalonia today: what runs",
   },
 };
 
