@@ -494,6 +494,96 @@ the clock-change and ES parking titles were never crawled):
   query cluster than the top three, freshness, and internal links from the
   pages that already rank. Title changes are the exception, not the tool.
 
+---
+
+## 2026-10-26 — New page: calçot season and the Valls Calçotada 2027
+
+Round 4 (December/January seasonal pages), publish group `calcots`. A new
+trilingual guide, `/ca/tradicions/calcotada-valls-temporada-calcots/`,
+`/es/tradiciones/calcotada-valls-temporada-calcots/`,
+`/en/traditions/calcotada-valls-calcot-season/`. Titles in the words of the
+query with the year ("Calçotada de Valls 2027: data/fecha i/y temporada de
+calçots", "Calçotada de Valls 2027: date and calçot season"); the lead answers
+both questions (season November-April; Sunday 31 January 2027, 45th edition).
+Facts checked on 26 Oct 2026 against the festival organiser, the Ajuntament de
+Valls, the IGP regulator, the Generalitat, Rodalies and Monbus; the 2027
+programme, price and tasting pack are not published, and the page says so.
+One sentence linking to it was added to the autumn food-fairs guide (body only,
+no title change; that page is inside the 24 Oct window, so read its queries,
+not its totals).
+
+**Prediction.** Indexed within 2-3 weeks; by the measure date the ES and CA
+pages show impressions for "calçotada valls 2027" / "festa calçotada valls"
+variants at position 10 or better, and "temporada calçots" variants inside the
+top 20. EN impressions stay small. Demand for the festival date peaks in
+January, so a low November count is not a failure.
+
+**Measure 28 days after publish** (published 27 Oct -> 24 Nov): impressions,
+position and clicks per query family (festival date / season / IGP and "how to
+eat"). Read again in the week after 31 January 2027, and update the page when
+the 2027 programme appears (`PROGRAMME_2027` in `batch02/calcots.ts`).
+
+---
+
+## 2026-10-26 — Catalan Christmas traditions page (new, publish group `nadal-tradicions`)
+
+**What.** New trilingual page: `/ca/tradicions/tradicions-de-nadal-catalunya/`,
+`/es/tradiciones/tradiciones-navidad-cataluna/`,
+`/en/traditions/catalan-christmas-traditions/`. One question per tradition (what
+the tió is and when it is made to "poo", the caganer, the pessebre, the Missa
+del Gall, els Pastorets, the Christmas food, whether Sant Esteve is a holiday),
+answered in the first lines, with the 2026 holidays from the DOGC orders. Mostly
+evergreen; the Fira de Santa Llúcia and the Pastorets season are "not announced
+yet" lines that switch to dates when `ANNOUNCED_TRADITIONS` is filled. One link
+added from the Christmas in Barcelona guide's traditions section. The same
+section lost two contested claims (caganer "only in Catalan and Valencian
+nativity scenes, Baroque"; Pastorets "18th century"), which the Ajuntament's
+Cultura Popular pages contradict. After the events (8 and 13 Dec 2026, 31 Jan
+2027) the round-4 pages still read as upcoming: republish them with past-tense
+copy, and drop the "el 2026 només és festiu el dimarts 8" sentence from the 2027
+holiday guide once 8 Dec has passed.
+
+**Prediction.** No impressions before indexing (1-4 weeks at the current crawl
+rate). By the measure date: impressions for "caga tió", "caganer", "catalan
+christmas traditions", "qué es el tió", "tradiciones navidad cataluña" and
+"sant esteve festiu 2026", with the long-tail "what is / qué es" queries at
+position 20 or better. Demand peaks in December, so the 28-day reading is about
+indexing and position, not clicks; a second reading in early January.
+
+**Measure** 28 days after publish (if published on 26 Oct, on 23 Nov 2026), then again on
+4 Jan 2027: position and impressions per query above, and clicks over 1-31 Dec.
+
+---
+
+## 2026-10-26 — Round 4: December bridge 2026 and La Marató 2026 (new pages)
+
+Branch `sprint/2026-10-30-round4`. Two new trilingual pages, each answering
+one dated question in its first two lines, facts re-read on 26 Oct 2026 from
+the DOGC, the BOE, the CEMB and 3Cat:
+
+| Page | Publish group | Answer in the lead | Queries aimed at |
+| --- | --- | --- | --- |
+| `/ca/guies/pont-desembre-catalunya/` (+ es `guias/puente-diciembre-cataluna`, en `guides/december-long-weekend-catalonia`) | `pont-desembre` | only Tue 8 Dec is a holiday; the 6th is a Sunday, the 7th a working day (local holiday in 42 towns) | pont desembre 2026, puente diciembre 2026 cataluña, 7 diciembre festivo cataluña, december holidays catalonia |
+| `/ca/guies/la-marato-tv3-3cat/` (+ es `guias/la-marato-tv3-3cat`, en `guides/la-marato-tv3-telethon`) | `marato` | Sun 13 Dec 2026, neurodegenerative and neuromuscular diseases, 35th edition | la marató 2026, marató tv3 2026, marató 3cat, bizum marató |
+
+Links added to existing pages (one sentence each, nothing else changed): the
+2027 holiday calendar (bridges intro) -> bridge page; Christmas in Barcelona
+("more Christmas events") -> La Marató. Both are inside their 23-25 Oct
+windows, so read those pages' own queries as unaffected unless clicks to the
+new pages show up in their exits.
+
+**Prediction.** Both enter at position 10 or better for their main query
+within 28 days of publishing (the 29N candidates page entered at 5.1 on day
+one); demand peaks late November to 8 December (bridge) and 1-13 December
+(Marató), so clicks before mid-November will be small.
+
+**Measure** 28 days after publishing (if published on 30 Oct: 27 Nov 2026):
+position and clicks per query above, per language. Re-check the Marató page
+weekly from mid-November on https://www.3cat.cat/tv3/marato/ and add the
+programme times and the donation phone number once 3Cat publishes them.
+
+**Outcome:** _pending_
+
 ## Candidates not yet run
 
 Recorded so they are not lost, and so they are not all started at once.

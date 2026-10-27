@@ -119,6 +119,7 @@ export const COPY: Record<Locale, HolidayCopy> = {
     bridgesTitle: "Els millors ponts del 2027",
     bridgesIntro: [
       "Tot el que ve a continuació pressuposa una setmana laboral habitual de dilluns a divendres. No és una regla universal: torns, convenis i calendaris d'empresa poden canviar-ho del tot.",
+      "Si el que busques és el pont d'enguany, el 2026 a Catalunya només és festiu el dimarts 8 de desembre: ho expliquem a [pont de desembre 2026](/ca/guies/pont-desembre-catalunya/).",
     ],
 
     efficiencyTitle: "Quins dies val més la pena demanar?",
@@ -209,6 +210,7 @@ export const COPY: Record<Locale, HolidayCopy> = {
     bridgesTitle: "Los mejores puentes de 2027",
     bridgesIntro: [
       "Todo lo que sigue presupone una semana laboral habitual de lunes a viernes. No es una regla universal: turnos, convenios y calendarios de empresa pueden cambiarlo por completo.",
+      "Si lo que buscas es el puente de este año, en 2026 en Cataluña solo es festivo el martes 8 de diciembre: lo explicamos en [puente de diciembre 2026](/es/guias/puente-diciembre-cataluna/).",
     ],
 
     efficiencyTitle: "Qué días sale más a cuenta pedir",
@@ -299,6 +301,7 @@ export const COPY: Record<Locale, HolidayCopy> = {
     bridgesTitle: "The best long weekends in 2027",
     bridgesIntro: [
       "Everything below assumes a conventional Monday-to-Friday working week. It is not a universal rule: shifts, collective agreements and company calendars can change it entirely.",
+      "If it is this year's December bridge you are after, in 2026 Catalonia's only holiday that week is Tuesday 8 December, as explained in [December 2026 public holidays in Catalonia](/en/guides/december-long-weekend-catalonia/).",
     ],
 
     efficiencyTitle: "Which days of leave go furthest",

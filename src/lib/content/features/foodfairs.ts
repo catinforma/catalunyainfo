@@ -1,4 +1,5 @@
 import type { Block } from "@/lib/content/blocks";
+import { b2link } from "@/lib/content/batch02/shared";
 import {
   ARTICLE_PATHS,
   callout,
@@ -102,6 +103,7 @@ function ca(): Block[] {
     ),
     ...paras(
       "Si encara no has tastat l'oli nou, és la millor manera d'entendre per què no és el mateix producte que l'oli que es compra la resta de l'any.",
+      `I amb el novembre arrenca la temporada de calçots, que dura fins a l'abril: ${b2link("calcots", "ca", "quan és la Calçotada de Valls 2027 i com funciona la temporada")}.`,
     ),
     ...h2(
       "Ja s'han fet: castanya, coca i mató i llenega (24 i 25 d'octubre)",
@@ -171,6 +173,7 @@ function es(): Block[] {
     ),
     ...paras(
       "Si todavía no has probado el aceite nuevo, es la mejor manera de entender por qué no es el mismo producto que el aceite que se compra el resto del año.",
+      `Y con noviembre empieza la temporada de calçots, que dura hasta abril: ${b2link("calcots", "es", "cuándo es la Calçotada de Valls 2027 y cómo funciona la temporada")}.`,
     ),
     ...h2(
       "Ya celebradas: castaña, coca con mató y llenega (24 y 25 de octubre)",
@@ -245,6 +248,7 @@ function en(): Block[] {
     ),
     ...paras(
       "If you have never tasted new oil, these fairs are the best way to understand why it is a different product from the oil sold the rest of the year.",
+      `November also opens calçot season, which runs until April: ${b2link("calcots", "en", "when the 2027 Valls Calçotada is and how the season works")}.`,
     ),
     ...h2(
       "Already held: chestnuts, coca i mató and llenega (24 and 25 October)",

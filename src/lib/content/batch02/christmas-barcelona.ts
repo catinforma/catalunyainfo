@@ -333,6 +333,7 @@ export function buildChristmasBarcelonaBody(locale: Locale, facts: Announcements
       ...h2(
         "Més activitats de Nadal a la ciutat",
         `El programa del 2025, publicat el ${dateYear(PAST.programme2025.published, "ca")}, incloïa el Barcelona Festival de Nadal (${PAST.festival2025.shows} funcions d'arts de carrer a la plaça de Catalunya, ${span(PAST.festival2025.from, PAST.festival2025.to, "ca")} de 2025) i el Concert de Nadal de l'Orfeó Català al pla de la Seu (${dateYear(PAST.concert2025, "ca")}). El programa del 2026 encara no s'ha publicat.`,
+        `A mitjan desembre també hi ha ${b2link("marato", "ca", "La Marató de 3Cat")}, el programa solidari de TV3, que el 2026 es dedica a les malalties neurodegeneratives i neuromusculars.`,
       ),
       ...h2(
         "Què obre a Barcelona el dia de Nadal?",
@@ -353,10 +354,11 @@ export function buildChristmasBarcelonaBody(locale: Locale, facts: Announcements
         "Tradicions de Nadal, en breu",
         "**El tió.** Segons la guia de tradicions de l'Ajuntament, el tió és un tronc que la mainada comença a alimentar per la Immaculada, el 8 de desembre, i que per Nadal, tapat amb una manta, se li pega amb un bastó cantant «Caga tió» perquè cagui torrons, llaminadures i algun regalet.",
         "**Nadal i Sant Esteve.** El 25 és el gran dinar familiar, amb l'escudella de galets i, per postres, torrons i neules. El 26, Sant Esteve, és un altre festiu a Catalunya per tornar-se a reunir, sovint amb l'altra branca de la família, al voltant dels canelons.",
-        "**El pessebre i el caganer.** Els pessebres es fan amb suro, molsa i fusta, i a Catalunya hi ha un caganer amagat: una figura que porta bona sort i que, segons l'Ajuntament, només es troba als naixements de Catalunya i el País Valencià i va sorgir en època barroca.",
-        "**Els Pastorets.** Una obra de teatre que es remunta al segle XVIII i que barreja el Naixement amb la baralla entre àngels i dimonis; per Nadal se'n fan per tot arreu.",
+        "**El pessebre i el caganer.** Els pessebres es fan amb suro, molsa i fusta, i a Catalunya hi ha un caganer amagat: una figura que porta bona sort.",
+        "**Els Pastorets.** Una obra de teatre que barreja el Naixement amb la baralla entre àngels i dimonis; per Nadal se'n fan per tot arreu.",
         "**El cava.** L'escumós dels brindis de Nadal es fa pel mètode tradicional, amb una segona fermentació a l'ampolla i com a mínim nou mesos de criança amb les lies; segons la DO Cava, el seu origen és al Penedès, sobretot a Sant Sadurní d'Anoia i els voltants.",
         "**Els Innocents.** El 28 de desembre és el dia de les bromes: vigila que no et pengin una llufa a l'esquena.",
+        `Com es fa cagar el tió pas a pas, on s'amaga el caganer i què es menja per Nadal i per Sant Esteve ho expliquem a ${b2link("christmasTraditions", "ca", "la guia de tradicions de Nadal a Catalunya")}.`,
       ),
       ...h2(
         "El temps i les escapades al desembre",
@@ -438,6 +440,7 @@ export function buildChristmasBarcelonaBody(locale: Locale, facts: Announcements
       ...h2(
         "Más actos de Navidad en la ciudad",
         `El programa de 2025, publicado el ${dateYear(PAST.programme2025.published, "es")}, incluía el Barcelona Festival de Nadal (${PAST.festival2025.shows} funciones de artes de calle en la plaza de Catalunya, ${span(PAST.festival2025.from, PAST.festival2025.to, "es")} de 2025) y el Concierto de Navidad del Orfeó Català en el pla de la Seu (${dateYear(PAST.concert2025, "es")}). El programa de 2026 aún no se ha publicado.`,
+        `A mediados de diciembre también está ${b2link("marato", "es", "La Marató de 3Cat")}, el programa solidario de TV3, que en 2026 se dedica a las enfermedades neurodegenerativas y neuromusculares.`,
       ),
       ...h2(
         "¿Qué abre en Barcelona el día de Navidad?",
@@ -458,10 +461,11 @@ export function buildChristmasBarcelonaBody(locale: Locale, facts: Announcements
         "Tradiciones de Navidad en Cataluña, en breve",
         "**El tió.** Según la guía de tradiciones del Ayuntamiento, el tió es un tronco al que los niños empiezan a alimentar por la Inmaculada, el 8 de diciembre, y al que en Navidad, tapado con una manta, se golpea con un bastón cantando «Caga tió» para que «cague» turrones, golosinas y algún regalito.",
         "**Navidad y San Esteban.** El 25 es la gran comida familiar, con escudella de galets (una sopa con pasta en forma de caracola grande) y, de postre, turrones y neules. El 26, Sant Esteve, es otro festivo en Cataluña para volver a reunirse, a menudo con la otra rama de la familia, alrededor de los canelones.",
-        "**El belén y el caganer.** Los belenes se hacen con corcho, musgo y madera, y en Cataluña llevan un caganer escondido: una figura que da buena suerte y que, según el Ayuntamiento, solo se encuentra en los belenes de Cataluña y el País Valenciano y surgió en época barroca.",
-        "**Els Pastorets.** Una obra de teatro que se remonta al siglo XVIII y mezcla el Nacimiento con la lucha entre ángeles y demonios; en Navidad se representa por todas partes.",
+        "**El belén y el caganer.** Los belenes se hacen con corcho, musgo y madera, y en Cataluña llevan un caganer escondido: una figura que da buena suerte.",
+        "**Els Pastorets.** Una obra de teatro que mezcla el Nacimiento con la lucha entre ángeles y demonios; en Navidad se representa por todas partes.",
         "**El cava.** El espumoso de los brindis navideños se elabora por el método tradicional, con una segunda fermentación en la botella y al menos nueve meses de crianza con sus lías; según la DO Cava, su origen está en el Penedès, sobre todo en Sant Sadurní d'Anoia y alrededores.",
         "**Los Inocentes.** El 28 de diciembre es el día de las bromas: en Cataluña, cuidado con que no te cuelguen una llufa (un monigote de papel) en la espalda.",
+        `Cómo se hace cagar el tió paso a paso, dónde se esconde el caganer y qué se come en Navidad y San Esteban lo contamos en ${b2link("christmasTraditions", "es", "la guía de tradiciones de Navidad en Cataluña")}.`,
       ),
       ...h2(
         "El tiempo y las excursiones en diciembre",
@@ -542,6 +546,7 @@ export function buildChristmasBarcelonaBody(locale: Locale, facts: Announcements
     ...h2(
       "More Christmas events in the city",
       `The 2025 programme, published on ${dateYear(PAST.programme2025.published, "en")}, included the Barcelona Festival de Nadal (${PAST.festival2025.shows} street-arts performances of theatre, dance, circus and music on Plaça de Catalunya, ${span(PAST.festival2025.from, PAST.festival2025.to, "en")} 2025) and the city's Christmas concert by the Orfeó Català on the Pla de la Seu (${dateYear(PAST.concert2025, "en")}). The 2026 programme has not been published yet.`,
+      `Mid-December also brings ${b2link("marato", "en", "La Marató de 3Cat")}, TV3's charity telethon, which in 2026 is for neurodegenerative and neuromuscular diseases.`,
     ),
     ...h2(
       "Is Barcelona open on Christmas Day?",
@@ -562,10 +567,11 @@ export function buildChristmasBarcelonaBody(locale: Locale, facts: Announcements
       "Catalan Christmas traditions, briefly",
       "**The tió.** According to the City Council's guide to Christmas traditions, the tió is a log that children start \"feeding\" on 8 December, the Immaculada, and that at Christmas, covered with a blanket, they beat with a stick while singing \"Caga tió\" so that it \"poos\" turrón, sweets and small presents.",
       "**Christmas Day and Sant Esteve.** The 25th is the big family lunch, with escudella de galets (a broth with large pasta shells) and turrón and neules (rolled wafers) for dessert. The 26th, Sant Esteve, is a second public holiday in Catalonia for getting together again, often with the other side of the family, over canelons.",
-      "**The pessebre and the caganer.** Nativity scenes are built with cork, moss and wood, and in Catalonia they hide a caganer, a squatting figure that brings good luck; the City Council notes it is found only in Catalan and Valencian nativity scenes and appeared in the Baroque period.",
-      "**Els Pastorets.** A Christmas play that goes back to the 18th century and mixes the Nativity with a fight between angels and devils; theatres of every size put it on.",
+      "**The pessebre and the caganer.** Nativity scenes are built with cork, moss and wood, and in Catalonia they hide a caganer, a squatting figure that brings good luck.",
+      "**Els Pastorets.** A Christmas play that mixes the Nativity with a fight between angels and devils; theatres of every size put it on.",
       "**Cava.** The sparkling wine of Christmas toasts is made by the traditional method, with a second fermentation in the bottle and at least nine months on its lees; according to the DO Cava, its origins are in the Penedès, especially around Sant Sadurní d'Anoia.",
       "**Innocents' Day.** 28 December is the day for practical jokes: in Catalonia, check your back for a llufa, a paper cut-out pinned on without you noticing.",
+      `How to make the tió poo step by step, where the caganer hides and what Catalans eat on Christmas Day and Sant Esteve are in ${b2link("christmasTraditions", "en", "our guide to Catalan Christmas traditions")}.`,
     ),
     ...h2(
       "Weather and day trips in December",
