@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { test } from "node:test";
 
 import { bodySchema } from "../src/lib/content/blocks.ts";
-import { groupRows, placesWithHolidayOn } from "../src/lib/content/holidays/local.ts";
+import { applyDogcCorrections, groupRows, placesWithHolidayOn } from "../src/lib/content/holidays/local.ts";
 import { COPY, buildBody } from "../src/lib/content/holidays/local-publish.ts";
 import { LOCALES } from "../src/lib/i18n/config.ts";
 
@@ -58,4 +58,24 @@ test("gazetteer-style names get their article back in front", () => {
   assert.equal(displayName("Masies de Voltregà, les"), "les Masies de Voltregà");
   assert.equal(displayName("Espluga de Francolí, l'"), "l'Espluga de Francolí");
   assert.equal(displayName("Abrera"), "Abrera");
+});
+
+test("the DOGC corrections the open data never applied win (Ordre EMT/3/2026, Gallifa)", () => {
+  const rows = [
+    { data: "2026-05-25T00:00:00.000", ajuntament_o_nucli_municipal: "Sant Joan Despí", codi_municipal: "08217", pedania: "000" },
+    { data: "2026-09-29T00:00:00.000", ajuntament_o_nucli_municipal: "Sant Joan Despí", codi_municipal: "08217", pedania: "000" },
+    { data: "2026-09-14T00:00:00.000", ajuntament_o_nucli_municipal: "Castelldefels", codi_municipal: "08056", pedania: "000" },
+    { data: "2026-12-07T00:00:00.000", ajuntament_o_nucli_municipal: "Castelldefels", codi_municipal: "08056", pedania: "000" },
+    { data: "2026-05-25T00:00:00.000", ajuntament_o_nucli_municipal: "Barcelona", codi_municipal: "08019", pedania: "000" },
+  ];
+  const places = applyDogcCorrections(groupRows(rows), 2026);
+  const byName = new Map(places.map((p) => [p.name, p.dates]));
+  assert.deepEqual(byName.get("Sant Joan Despí"), ["2026-05-25", "2026-09-24"]);
+  assert.deepEqual(byName.get("Castelldefels"), ["2026-08-14", "2026-12-07"]);
+  assert.deepEqual(byName.get("Gallifa"), ["2026-04-02", "2026-12-07"]);
+  assert.deepEqual(byName.get("Barcelona"), ["2026-05-25"]);
+  // Another year is left exactly as the source gives it.
+  assert.deepEqual(applyDogcCorrections(groupRows(rows), 2027).map((p) => p.name).sort(), ["Barcelona", "Castelldefels", "Sant Joan Despí"]);
+  // An unreachable source stays an honest empty list, not a list of corrections.
+  assert.deepEqual(applyDogcCorrections([], 2026), []);
 });
