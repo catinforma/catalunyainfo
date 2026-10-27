@@ -1,5 +1,6 @@
 import type { Block } from "@/lib/content/blocks";
 import type { Locale } from "@/lib/i18n/config";
+import { hubPath } from "@/lib/programmatic/elections/paths";
 
 import {
   b2Related,
@@ -8,6 +9,7 @@ import {
   h2,
   lead,
   list,
+  paras,
   verifiedLine,
   type B2Article,
   type B2Source,
@@ -158,12 +160,20 @@ const COPY: Record<Locale, T> = {
   },
 };
 
+/** 27 Oct 2026: one sentence pointing to the per-municipality pages (tranche 1). */
+const TOWN_PAGES: Record<Locale, string> = {
+  ca: `Per als 100 municipis més poblats hi ha també una pàgina per municipi, amb les municipals del 2023, les generals i el Parlament al costat de Catalunya: [resultats electorals per municipi](${hubPath("ca")}).`,
+  es: `Para los 100 municipios más poblados hay también una página por municipio, con las municipales de 2023, las generales y el Parlament junto a Cataluña: [resultados electorales por municipio](${hubPath("es")}).`,
+  en: `The ten largest towns also have a page each, with the 2023 local, general and Catalan elections beside Catalonia: [election results by town](${hubPath("en")}).`,
+};
+
 function body(locale: Locale): Block[] {
   const t = COPY[locale];
   return [
     lead(t.lead),
     callout("official", verifiedLine(locale, VERIFIED), t.note),
     { type: "municipalElections" } as Block,
+    ...paras(TOWN_PAGES[locale]),
     ...h2(t.bcnTitle, ...t.bcn),
     ...h2(t.nextTitle, ...t.next),
     ...h2(t.howTitle),
