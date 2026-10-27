@@ -305,8 +305,9 @@ test("upcoming strikes come first, answer first: the lead names each one and eac
       assert.ok(section, `${locale}: no section for ${strike.id}`);
       assert.ok(section.text.toLowerCase().startsWith(days.toLowerCase()), `${locale}: ${section.text}`);
     }
-    // The pending general strike is flagged in the lead.
-    assert.match(leadText, /encara no s'han publicat|aún no se han publicado|not been published yet/, locale);
+    // Any upcoming strike still waiting for minimum services is flagged in the lead.
+    const waiting = upcomingStrikes(STRIKES_AS_OF).some((s) => s.minimumServices.status === "pending");
+    assert.equal(/encara no s'han publicat|aún no se han publicado|not been published yet/.test(leadText), waiting, locale);
     // Dated sections come before the evergreen guidance.
     const firstStrike = h2.findIndex((h) => h.id === upcomingStrikes(STRIKES_AS_OF)[0]?.id);
     const how = h2.findIndex((h) => /serveis mínims a Catalunya|servicios mínimos en Cataluña|minimum services work/.test(h.text));
@@ -378,7 +379,6 @@ test("known answers: the dates and the official figures read on 27 October 2026"
   assert.deepEqual(general.dates, ["2026-11-11"]);
   assert.equal(weekdayIndex("2026-11-11"), 3); // Wednesday
   assert.equal(general.scope, "general");
-  assert.equal(general.minimumServices.status, "pending");
   assert.equal(renfe.minimumServices.status, "published");
   assert.equal(ouigo.minimumServices.status, "published");
   for (const locale of LOCALES) {
@@ -396,11 +396,30 @@ test("known answers: the dates and the official figures read on 27 October 2026"
     for (const name of ["CCOO", "UGT", "CGT", "CNT", "USTEC·STEs", "CCOO de Catalunya", "UGT de Catalunya", "CGT Catalunya"]) assert.ok(facts.includes(name), `${locale}: ${name}`);
     assert.match(facts, /19 (d'octubre|de octubre|October) (de )?2026/, locale);
     assert.match(facts, /24 (hores|horas|hours)/, locale);
-    assert.match(general.minimumServices.text[locale], /Encara no s'han publicat|Aún no se han publicado|Not published yet/, locale);
+  }
+});
+
+test("minimum-services text matches its status: 'pending' says so, 'published' gives figures and the official link", () => {
+  for (const strike of STRIKES) {
+    for (const locale of LOCALES) {
+      const ms = strike.minimumServices.text[locale];
+      if (strike.minimumServices.status === "pending") {
+        assert.match(ms, /Encara no s'han publicat|Aún no se han publicado|Not published yet/, `${strike.id}/${locale}`);
+        assert.doesNotMatch(ms, /\d+\s?%/, `${strike.id}/${locale}: a pending strike carries a percentage`);
+      }
+      if (strike.minimumServices.status === "published") {
+        assert.match(ms, /\d+\s?%|plantilla|staff|servei habitual|servicio habitual|usual service/, `${strike.id}/${locale}: no figure`);
+        assert.match(ms, /\]\(https:\/\//, `${strike.id}/${locale}: no link to the order or the operator's notice`);
+        assert.doesNotMatch(ms, /Encara no s'han publicat|Aún no se han publicado|Not published yet/, `${strike.id}/${locale}`);
+      }
+    }
   }
 });
 
 test("the page never prints press-only claims or an 11 November percentage nobody has published", () => {
+  // Once the 11N order is out and recorded as "published", its figures are
+  // allowed; until then no sentence about 11 November may carry a percentage.
+  const generalPending = byId("vaga-general-2026-11-11").minimumServices.status === "pending";
   for (const locale of LOCALES) {
     for (const asOf of [STRIKES_AS_OF, "2026-12-01"]) {
       const body = text(buildStrikesBody(locale, asOf));
@@ -414,7 +433,7 @@ test("the page never prints press-only claims or an 11 November percentage nobod
       let about11 = 0;
       for (const piece of body.split(/\n|(?<=[.!?])\s+/)) {
         if (/\b11 (de |d')?(novembre|noviembre|November)\b|l'11\b|del 11\b|the 11th|11N/.test(piece)) {
-          assert.doesNotMatch(piece, /\d+\s?%/, `${locale}: "${piece}"`);
+          if (generalPending) assert.doesNotMatch(piece, /\d+\s?%/, `${locale}: "${piece}"`);
           about11 += 1;
         }
       }
@@ -434,9 +453,16 @@ test("the 2024 figures are printed as last year's reference, with the order's ow
     assert.match(body, /Decret 120\/1995|Decree 120\/1995/, locale);
     assert.match(body, /28\.2/, locale);
     assert.match(body, /10\.2/, locale);
-    for (const piece of body.split(/\n|(?<=[.!?])\s+/).filter((p) => /85\s?%/.test(p))) {
-      assert.match(piece, /2024/, `${locale}: "${piece}" gives 85% without saying it was 2024`);
-    }
+    // In the evergreen guidance (not the dated strike sections), every 85% is
+    // the 2024 order's and says so.
+    const blocks = STRIKES_GUIDE.editions[locale].blocks;
+    const from = blocks.findIndex((b) => b.type === "heading" && /serveis mínims a Catalunya|servicios mínimos en Cataluña|minimum services work/.test((b as { text: string }).text));
+    const to = blocks.findIndex((b) => b.type === "faq");
+    assert.ok(from > 0 && to > from, locale);
+    const evergreen = text(blocks.slice(from, to));
+    const with85 = evergreen.split(/\n|(?<=[.!?])\s+/).filter((p) => /85\s?%/.test(p));
+    assert.ok(with85.length >= 1, locale);
+    for (const piece of with85) assert.match(piece, /2024/, `${locale}: "${piece}" gives 85% without saying it was 2024`);
   }
 });
 
