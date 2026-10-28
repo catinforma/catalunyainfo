@@ -130,7 +130,9 @@ export const REFERENCE_CAPACITY: Record<string, number> = {
 
 export function isClean(row: Parsed): boolean {
   const reference = REFERENCE_CAPACITY[row.name];
-  if (!reference || row.percent > 100.5) return false;
+  // A full reservoir reads above 100% (la Llosa del Cavall: 100.6-100.9% from
+  // 26 Feb to 31 Mar 2026); the volume check below is what rejects bad rows.
+  if (!reference || !(row.percent > 0) || row.percent > 115) return false;
   return Math.abs((row.volume / row.percent) * 100 / reference - 1) < 0.04;
 }
 

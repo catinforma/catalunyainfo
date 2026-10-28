@@ -143,9 +143,10 @@ test("rows that lost their decimal separator are rejected; a real reading above 
   assert.equal(isValidReading("Sau", 683, 11325), false);
   assert.equal(isValidReading("la Llosa del Cavall", 1006, 72.02), false);
   assert.equal(isValidReading("Sau", 68.3, 113.25), true);
-  // Susqueda, 8 Mar 2026: 102.1 % / 228.36 hm³ (223.66 hm³ implied). The overall report rejects it; the per-reservoir page keeps it.
+  // Susqueda, 8 Mar 2026: 102.1 % / 228.36 hm³ (223.66 hm³ implied). A real full-reservoir reading:
+  // both the per-reservoir page and the overall report keep it (the report's cap was 100.5 % until 28 Oct).
   assert.equal(isValidReading("Susqueda", 102.1, 228.36), true);
-  assert.equal(isClean(parseRows([row("2026-03-08", "Embassament de Susqueda (Osor)", "102.1", "228.36")])[0]!), false);
+  assert.equal(isClean(parseRows([row("2026-03-08", "Embassament de Susqueda (Osor)", "102.1", "228.36")])[0]!), true);
   assert.equal(isValidReading("Embassament nou", 50, 10), false, "unknown reservoir");
   const { byName, rejected } = validReadings([
     row("2026-09-30", "Embassament de Sau (Vilanova de Sau)", "683", "11325"),
