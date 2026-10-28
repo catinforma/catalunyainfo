@@ -251,7 +251,15 @@ export const MONTJUIC: B2Article = {
 // the park-closure claim went; the approximate park and Panoramic Area hours
 // went too, because the page shows only today's hours. Montjuïc keeps its own
 // date.
-const TIBIDABO_VERIFIED = "2026-10-26";
+// Re-checked 28 Oct 2026 on tibidabo.cat (schedules and rates pages) and TMB
+// (Tramvia Blau). Fixed: the €3.95 funicular fare is for over-60s ("+60
+// years"), not over-65s. Added: the opening-days table by month (the
+// schedules page's own rules), rides from 11:00 and ticket-office times, the
+// Cuca de Llum's 10:00-14:00 on 25 and 26 December and 1 January, the top car
+// park's address, booking and day rate from 3 h 15 min, the two TibiBus lines.
+// Per-day closing times are not printed: the calendar shows one day at a time
+// and could not be re-read in full today.
+const TIBIDABO_VERIFIED = "2026-10-28";
 const TIBIDABO_CALENDAR = "https://www.tibidabo.cat/ca/planifica-la-visita/horaris";
 
 const TIBIDABO_SOURCES: B2Source[] = [
@@ -275,16 +283,16 @@ const TIBIDABO_META: Record<Locale, Meta> = {
   },
   es: {
     path: "guias/tibidabo-parque-atracciones-como-llegar",
-    title: "Tibidabo: parque de atracciones, Sagrado Corazón y cómo llegar",
-    seoTitle: "Tibidabo: entradas, calendario y cómo subir en funicular",
+    title: "Tibidabo: precio de la entrada, horario del parque, funicular y cómo llegar",
+    seoTitle: "Tibidabo 2026: precio de la entrada, horario y cómo llegar",
     seoDescription:
       "El parque del Tibidabo abre los fines de semana en otoño (39 €). Cómo subir: FGC, bus 196 y la Cuca de Llum; el Tramvia Blau está cerrado por obras.",
     excerpt: "Cuándo abre el parque del Tibidabo, cuánto cuesta, cómo se sube ahora que el Tramvia Blau está cerrado y qué hay en el Sagrado Corazón, con datos oficiales.",
   },
   en: {
     path: "guides/tibidabo-amusement-park-how-to-get-there",
-    title: "Tibidabo: amusement park, Sagrat Cor and how to get there",
-    seoTitle: "Tibidabo tickets, opening days and how to get there",
+    title: "Tibidabo amusement park: ticket prices, opening hours, funicular and how to get there",
+    seoTitle: "Tibidabo tickets and prices 2026, hours and how to get there",
     seoDescription:
       "Tibidabo tickets from €39 (funicular included), autumn opening days, Cuca de Llum fares, FGC + bus 196, discounts and parking. Tramvia Blau closed.",
     excerpt: "When Tibidabo amusement park opens, what it costs, how to get up now the Tramvia Blau is closed, and the Sagrat Cor church at the top, from official sources.",
@@ -293,6 +301,7 @@ const TIBIDABO_META: Record<Locale, Meta> = {
 
 type TT = {
   lead: string; openTitle: string; open: string[];
+  daysCaption: string; daysHeaders: string[]; daysRows: string[][]; daysNote: string;
   priceCaption: string; priceHeaders: string[]; priceRows: string[][]; priceNote: string;
   funicularTitle: string; funicular: string[];
   discountsTitle: string; discounts: string[];
@@ -305,11 +314,20 @@ type TT = {
 const TIBIDABO_COPY: Record<Locale, TT> = {
   en: {
     lead: "A Tibidabo amusement-park ticket costs **€39** (over 120 cm) and includes the **Cuca de Llum** funicular; in autumn the full park opens on **weekends and public holidays only**. To get up, take the FGC L7 to Avinguda Tibidabo, then **bus 196** (the Tramvia Blau is closed for works) to Plaça Doctor Andreu and the funicular.",
-    openTitle: "When it opens",
+    openTitle: "Tibidabo opening hours and days",
     open: [
       `In October and November 2026 the full park opens on **weekends and public holidays**. On weekdays it is closed, but the **Panoramic Area** at the top, with the oldest rides, stays open. [The official calendar gives each day's hours](${TIBIDABO_CALENDAR}).`,
-      "In December the park opens at weekends and on 7, 8, 21–24 and 28–30 December, and again 2–5 January before its winter break. The Panoramic Area opens every day in December except 25 and 26 December.",
+      "The rides open at **11:00**. Ticket offices open at 10:00 at the Tibidabo Store, the Vall d'Hebron car park and the funicular's lower station, at 10:30 in Plaça del Tibidabo and at 11:00 at the top car park. Closing time changes from day to day, so check the calendar for yours.",
     ],
+    daysCaption: "Tibidabo opening days, autumn and winter",
+    daysHeaders: ["Month", "Amusement park", "Panoramic Area"],
+    daysRows: [
+      ["October and November", "Weekends and public holidays", "Every day"],
+      ["December", "Weekends and 7, 8, 21, 22, 23, 24, 28, 29 and 30 December", "Every day except 25 and 26 December"],
+      ["January", "2, 3, 4 and 5 January", "2, 3, 4 and 5 January"],
+      ["February", "No opening days listed", "Weekends"],
+    ],
+    daysNote: "From the schedules page on tibidabo.cat, checked on 28 October 2026. The park reserves the right to change its timetables.",
     priceCaption: "Tibidabo tickets",
     priceHeaders: ["Ticket", "Over 120 cm", "90–120 cm", "Over 60"],
     priceRows: [
@@ -323,12 +341,12 @@ const TIBIDABO_COPY: Record<Locale, TT> = {
     ],
     funicularTitle: "Tibidabo funicular (Cuca de Llum): fares and times",
     funicular: [
-      "On its own the funicular costs **€13.50** return, **€6.75** for children aged 4 to 12, large or single-parent families and Gaudir Més holders, and **€3.95** for over-65s, disabled visitors, school groups and Targeta Rosa holders; under-4s ride free. It is included in every park ticket.",
-      "On park days it runs from 10:30 until 30 minutes after the park closes, at least every 15 minutes; on days when only the Panoramic Area is open, from 11:00 until 15 minutes after closing.",
+      "On its own the funicular costs **€13.50** return, **€6.75** for children aged 4 to 12, large or single-parent families and Gaudir Més holders, and **€3.95** for over-60s (with ID or passport), disabled visitors, school groups (booked ahead) and Targeta Rosa holders; under-4s ride free. The reduced fares are sold only at the funicular ticket offices. It is included in every park ticket.",
+      "On park days it runs from 10:30 until 30 minutes after the park closes, at least every 15 minutes; on days when only the Panoramic Area is open, from 11:00 until 15 minutes after closing. On 25 and 26 December and 1 January, when the park is closed, the funicular runs from 10:00 to 14:00.",
     ],
-    parkingTitle: "Parking at Tibidabo",
+    parkingTitle: "Driving to Tibidabo: where to park",
     parking: [
-      "The park's car park at the summit charges €0.092 a minute or €18 a day, and the park recommends booking 24 hours ahead. A cheaper option is the Vall d'Hebron car park (€4.20 a day), from which the free TibiBus T2B runs up on park days.",
+      "The park's car park at the summit (Camí de Vallvidrera al Tibidabo, 49) charges €0.092 a minute, or €18 for the day from 3 hours 15 minutes, and has to be booked at least 24 hours ahead. A cheaper option is the Vall d'Hebron car park (€4.20 a day), from which the free TibiBus T2B runs up on park days.",
     ],
     getTitle: "Getting up",
     get: [
@@ -343,8 +361,10 @@ const TIBIDABO_COPY: Record<Locale, TT> = {
     ],
     faq: [
       { question: "Is Tibidabo amusement park open on weekdays?", answer: "Not in autumn: the full park opens on weekends and holidays, while the Panoramic Area also opens on weekdays." },
+      { question: "What are Tibidabo amusement park's opening hours?", answer: "Rides open at 11:00; closing time changes from day to day and is on the park's calendar. In October and November the full park opens at weekends and on public holidays." },
       { question: "How much is a Tibidabo ticket?", answer: "€39 for visitors over 120 cm, €15.50 for 90–120 cm, €11.70 for over-60s; under 90 cm free. The panoramic-area pass costs €21.50." },
-      { question: "How much is the Tibidabo funicular?", answer: "€13.50 return on its own (€6.75 reduced, €3.95 for over-65s); it is included in every park ticket." },
+      { question: "How much is the Tibidabo funicular?", answer: "€13.50 return on its own (€6.75 reduced, €3.95 for over-60s); it is included in every park ticket." },
+      { question: "What is the TibiBus?", answer: "The park's free shuttle buses: the T2C from Plaça Kennedy (Av. Tibidabo), for anyone with a park, emblematic-rides or funicular ticket, and, on park days, the T2B from the Vall d'Hebron car park." },
       { question: "Is there a discount with the Barcelona Card?", answer: "Yes, 20% off at the box office (€31.20); the Barcelona Card Family gets in free." },
       { question: "Is the Tramvia Blau running?", answer: "No, it is closed for modernisation works; bus 196 covers the route." },
       { question: "How do I get to Tibidabo by public transport?", answer: "FGC to Avinguda Tibidabo, bus 196 to Plaça Doctor Andreu, then the Cuca de Llum funicular to the top." },
@@ -353,11 +373,20 @@ const TIBIDABO_COPY: Record<Locale, TT> = {
   },
   es: {
     lead: "La entrada al parque de atracciones del Tibidabo cuesta **39 €** (más de 120 cm) e incluye el funicular **Cuca de Llum**; en otoño el parque completo abre **solo fines de semana y festivos**. Para subir, FGC L7 hasta Avinguda Tibidabo, **bus 196** (el Tramvia Blau está cerrado por obras) hasta la plaza Doctor Andreu y funicular.",
-    openTitle: "Cuándo abre",
+    openTitle: "Horario del Tibidabo y días de apertura",
     open: [
       `En octubre y noviembre de 2026 el parque completo abre **fines de semana y festivos**. Entre semana está cerrado, pero la **Zona Panorámica** de arriba, con las atracciones más antiguas, sigue abierta. [El calendario oficial da el horario de cada día](${TIBIDABO_CALENDAR}).`,
-      "En diciembre el parque abre los fines de semana y el 7, 8, 21–24 y 28–30 de diciembre, y vuelve a abrir del 2 al 5 de enero antes del parón de invierno. La Zona Panorámica abre todos los días de diciembre salvo el 25 y el 26.",
+      "Las atracciones abren a las **11:00**. Las taquillas abren a las 10:00 en la Tibidabo Store, el aparcamiento de la Vall d'Hebron y la estación inferior del funicular, a las 10:30 en la plaza del Tibidabo y a las 11:00 en el aparcamiento de la cima. La hora de cierre cambia cada día: consúltala en el calendario.",
     ],
+    daysCaption: "Días de apertura del Tibidabo, otoño e invierno",
+    daysHeaders: ["Mes", "Parque de atracciones", "Zona Panorámica"],
+    daysRows: [
+      ["Octubre y noviembre", "Fines de semana y festivos", "Todos los días"],
+      ["Diciembre", "Fines de semana y 7, 8, 21, 22, 23, 24, 28, 29 y 30 de diciembre", "Todos los días salvo el 25 y el 26"],
+      ["Enero", "2, 3, 4 y 5 de enero", "2, 3, 4 y 5 de enero"],
+      ["Febrero", "Sin días de apertura publicados", "Fines de semana"],
+    ],
+    daysNote: "De la página de horarios de tibidabo.cat, comprobada el 28 de octubre de 2026. El parque se reserva el derecho a cambiar los horarios.",
     priceCaption: "Entradas del Tibidabo",
     priceHeaders: ["Entrada", "Más de 120 cm", "90–120 cm", "Mayores de 60"],
     priceRows: [
@@ -371,12 +400,12 @@ const TIBIDABO_COPY: Record<Locale, TT> = {
     ],
     funicularTitle: "Funicular del Tibidabo (Cuca de Llum): precio y horario",
     funicular: [
-      "Solo, el funicular cuesta **13,50 €** ida y vuelta, **6,75 €** para niños de 4 a 12 años, familias numerosas o monoparentales y titulares de Gaudir Més, y **3,95 €** para mayores de 65, personas con discapacidad, grupos escolares y titulares de la Targeta Rosa; los menores de 4 años no pagan. Está incluido en todas las entradas del parque.",
-      "Los días de parque funciona de 10:30 hasta 30 minutos después del cierre, como mínimo cada 15 minutos; los días en que solo abre la Zona Panorámica, de 11:00 hasta 15 minutos después del cierre.",
+      "Solo, el funicular cuesta **13,50 €** ida y vuelta, **6,75 €** para niños de 4 a 12 años, familias numerosas o monoparentales y titulares de Gaudir Més, y **3,95 €** para mayores de 60 (con DNI o pasaporte), personas con discapacidad, grupos escolares (con reserva previa) y titulares de la Targeta Rosa; los menores de 4 años no pagan. Las tarifas reducidas solo se venden en las taquillas del funicular. Está incluido en todas las entradas del parque.",
+      "Los días de parque funciona de 10:30 hasta 30 minutos después del cierre, como mínimo cada 15 minutos; los días en que solo abre la Zona Panorámica, de 11:00 hasta 15 minutos después del cierre. El 25 y el 26 de diciembre y el 1 de enero, con el parque cerrado, el funicular funciona de 10:00 a 14:00.",
     ],
-    parkingTitle: "Aparcar en el Tibidabo",
+    parkingTitle: "Cómo llegar al Tibidabo en coche y dónde aparcar",
     parking: [
-      "El aparcamiento del parque, en la cima, cuesta 0,092 € el minuto o 18 € el día, y el parque recomienda reservar con 24 horas. Más barato es el aparcamiento de la Vall d'Hebron (4,20 € el día), desde donde sube el TibiBus T2B gratuito los días de parque.",
+      "El aparcamiento del parque, en la cima (Camí de Vallvidrera al Tibidabo, 49), cuesta 0,092 € el minuto, o 18 € el día a partir de 3 horas y 15 minutos, y hay que reservarlo con 24 horas como mínimo. Más barato es el aparcamiento de la Vall d'Hebron (4,20 € el día), desde donde sube el TibiBus T2B gratuito los días de parque.",
     ],
     getTitle: "Cómo subir",
     get: [
@@ -391,8 +420,11 @@ const TIBIDABO_COPY: Record<Locale, TT> = {
     ],
     faq: [
       { question: "¿Abre el Tibidabo entre semana?", answer: "No en otoño: el parque completo abre fines de semana y festivos, y la Zona Panorámica también entre semana." },
-      { question: "¿Cuánto cuesta la entrada al Tibidabo?", answer: "39 € más de 120 cm, 15,50 € de 90 a 120 cm, 11,70 € mayores de 60; menos de 90 cm, gratis. El pase de la Zona Panorámica cuesta 21,50 €." },
-      { question: "¿Cuánto cuesta el funicular del Tibidabo?", answer: "13,50 € ida y vuelta por separado (6,75 € reducido, 3,95 € mayores de 65); está incluido en todas las entradas del parque." },
+      { question: "¿Cuál es el horario del Tibidabo?", answer: "Las atracciones abren a las 11:00; la hora de cierre cambia cada día y está en el calendario del parque. En octubre y noviembre el parque completo abre fines de semana y festivos." },
+      { question: "¿Cuánto vale la entrada al Tibidabo?", answer: "39 € más de 120 cm, 15,50 € de 90 a 120 cm, 11,70 € mayores de 60; menos de 90 cm, gratis. El pase de la Zona Panorámica cuesta 21,50 €." },
+      { question: "¿Cuánto cuesta el funicular del Tibidabo?", answer: "13,50 € ida y vuelta por separado (6,75 € reducido, 3,95 € mayores de 60); está incluido en todas las entradas del parque." },
+      { question: "¿Cuál es el horario del funicular del Tibidabo?", answer: "Los días de parque, de 10:30 hasta 30 minutos después del cierre; los días de Zona Panorámica, de 11:00 hasta 15 minutos después. El 25 y el 26 de diciembre y el 1 de enero, de 10:00 a 14:00." },
+      { question: "¿Qué es el TibiBus?", answer: "Las lanzaderas gratuitas del parque: el T2C desde la plaza Kennedy (av. Tibidabo), para quien tiene entrada, pase o billete del funicular, y, los días de parque, el T2B desde el aparcamiento de la Vall d'Hebron." },
       { question: "¿Hay descuento con la Barcelona Card?", answer: "Sí, un 20 % en taquilla (31,20 €); con la Barcelona Card Family se entra gratis." },
       { question: "¿Funciona el Tramvia Blau?", answer: "No, está cerrado por obras de modernización; el bus 196 cubre el recorrido." },
       { question: "¿Cómo se llega al Tibidabo en transporte público?", answer: "FGC hasta Avinguda Tibidabo, bus 196 hasta la plaza Doctor Andreu y el funicular Cuca de Llum hasta arriba." },
@@ -401,11 +433,20 @@ const TIBIDABO_COPY: Record<Locale, TT> = {
   },
   ca: {
     lead: "L'entrada al parc d'atraccions del Tibidabo costa **39 €** (més de 120 cm) i inclou el funicular **Cuca de Llum**; a la tardor el parc complet obre **només caps de setmana i festius**. Per pujar-hi, FGC L7 fins a Avinguda Tibidabo, **bus 196** (el Tramvia Blau és tancat per obres) fins a la plaça Doctor Andreu i funicular.",
-    openTitle: "Quan obre",
+    openTitle: "Horari del Tibidabo i dies d'obertura",
     open: [
       `L'octubre i el novembre de 2026 el parc complet obre **caps de setmana i festius**. Entre setmana és tancat, però la **Zona Panoràmica** de dalt, amb les atraccions més antigues, continua oberta. [El calendari oficial dona l'horari de cada dia](${TIBIDABO_CALENDAR}).`,
-      "Al desembre el parc obre els caps de setmana i el 7, 8, 21–24 i 28–30 de desembre, i torna a obrir del 2 al 5 de gener abans de l'aturada d'hivern. La Zona Panoràmica obre cada dia del desembre excepte el 25 i el 26.",
+      "Les atraccions obren a les **11:00**. Les taquilles obren a les 10:00 a la Tibidabo Store, l'aparcament de la Vall d'Hebron i l'estació inferior del funicular, a les 10:30 a la plaça del Tibidabo i a les 11:00 a l'aparcament del cim. L'hora de tancament canvia cada dia: consulta-la al calendari.",
     ],
+    daysCaption: "Dies d'obertura del Tibidabo, tardor i hivern",
+    daysHeaders: ["Mes", "Parc d'atraccions", "Zona Panoràmica"],
+    daysRows: [
+      ["Octubre i novembre", "Caps de setmana i festius", "Cada dia"],
+      ["Desembre", "Caps de setmana i 7, 8, 21, 22, 23, 24, 28, 29 i 30 de desembre", "Cada dia excepte el 25 i el 26"],
+      ["Gener", "2, 3, 4 i 5 de gener", "2, 3, 4 i 5 de gener"],
+      ["Febrer", "Sense dies d'obertura publicats", "Caps de setmana"],
+    ],
+    daysNote: "De la pàgina d'horaris de tibidabo.cat, comprovada el 28 d'octubre de 2026. El parc es reserva el dret de canviar els horaris.",
     priceCaption: "Entrades del Tibidabo",
     priceHeaders: ["Entrada", "Més de 120 cm", "90–120 cm", "Majors de 60"],
     priceRows: [
@@ -419,12 +460,12 @@ const TIBIDABO_COPY: Record<Locale, TT> = {
     ],
     funicularTitle: "Funicular del Tibidabo (Cuca de Llum): preu i horari",
     funicular: [
-      "Sol, el funicular costa **13,50 €** anada i tornada, **6,75 €** per a infants de 4 a 12 anys, famílies nombroses o monoparentals i titulars de Gaudir Més, i **3,95 €** per a majors de 65, persones amb discapacitat, grups escolars i titulars de la Targeta Rosa; els menors de 4 anys no paguen. És inclòs a totes les entrades del parc.",
-      "Els dies de parc funciona de 10:30 fins a 30 minuts després del tancament, com a mínim cada 15 minuts; els dies que només obre la Zona Panoràmica, d'11:00 fins a 15 minuts després del tancament.",
+      "Sol, el funicular costa **13,50 €** anada i tornada, **6,75 €** per a infants de 4 a 12 anys, famílies nombroses o monoparentals i titulars de Gaudir Més, i **3,95 €** per a majors de 60 (amb DNI o passaport), persones amb discapacitat, grups escolars (amb reserva prèvia) i titulars de la Targeta Rosa; els menors de 4 anys no paguen. Les tarifes reduïdes només es venen a les taquilles del funicular. És inclòs a totes les entrades del parc.",
+      "Els dies de parc funciona de 10:30 fins a 30 minuts després del tancament, com a mínim cada 15 minuts; els dies que només obre la Zona Panoràmica, d'11:00 fins a 15 minuts després del tancament. El 25 i el 26 de desembre i l'1 de gener, amb el parc tancat, el funicular funciona de 10:00 a 14:00.",
     ],
-    parkingTitle: "Aparcar al Tibidabo",
+    parkingTitle: "Com arribar al Tibidabo en cotxe i on aparcar",
     parking: [
-      "L'aparcament del parc, al cim, costa 0,092 € el minut o 18 € el dia, i el parc recomana reservar amb 24 hores. Més barat és l'aparcament de la Vall d'Hebron (4,20 € el dia), des d'on puja el TibiBus T2B gratuït els dies de parc.",
+      "L'aparcament del parc, al cim (Camí de Vallvidrera al Tibidabo, 49), costa 0,092 € el minut, o 18 € el dia a partir de 3 hores i 15 minuts, i cal reservar-lo amb 24 hores com a mínim. Més barat és l'aparcament de la Vall d'Hebron (4,20 € el dia), des d'on puja el TibiBus T2B gratuït els dies de parc.",
     ],
     getTitle: "Com pujar-hi",
     get: [
@@ -440,7 +481,7 @@ const TIBIDABO_COPY: Record<Locale, TT> = {
     faq: [
       { question: "Obre el Tibidabo entre setmana?", answer: "No a la tardor: el parc complet obre caps de setmana i festius, i la Zona Panoràmica també entre setmana." },
       { question: "Quant costa l'entrada al Tibidabo?", answer: "39 € més de 120 cm, 15,50 € de 90 a 120 cm, 11,70 € majors de 60; menys de 90 cm, gratis. El passi de la Zona Panoràmica costa 21,50 €." },
-      { question: "Quant costa el funicular del Tibidabo?", answer: "13,50 € anada i tornada per separat (6,75 € reduït, 3,95 € majors de 65); és inclòs a totes les entrades del parc." },
+      { question: "Quant costa el funicular del Tibidabo?", answer: "13,50 € anada i tornada per separat (6,75 € reduït, 3,95 € majors de 60); és inclòs a totes les entrades del parc." },
       { question: "Hi ha descompte amb la Barcelona Card?", answer: "Sí, un 20 % a la taquilla (31,20 €); amb la Barcelona Card Family s'hi entra gratis." },
       { question: "Funciona el Tramvia Blau?", answer: "No, és tancat per obres de modernització; el bus 196 cobreix el recorregut." },
       { question: "Com s'hi arriba al Tibidabo en transport públic?", answer: "FGC fins a Avinguda Tibidabo, bus 196 fins a la plaça Doctor Andreu i el funicular Cuca de Llum fins a dalt." },
@@ -455,6 +496,7 @@ function tibidaboBody(locale: Locale) {
     lead(t.lead),
     callout("official", verifiedLine(locale, TIBIDABO_VERIFIED), t.note),
     ...h2(t.openTitle, ...t.open),
+    table(t.daysCaption, t.daysHeaders, t.daysRows, t.daysNote),
     table(t.priceCaption, t.priceHeaders, t.priceRows, t.priceNote),
     ...h2(t.discountsTitle, ...t.discounts),
     ...h2(t.getTitle),

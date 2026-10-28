@@ -641,6 +641,22 @@ test("museums: day-by-day table, MNAC section, Disseny's first Sunday", () => {
   }
 });
 
+/**
+ * Tibidabo, 28 Oct 2026: tibidabo.cat's rates page says the €3.95 funicular
+ * fare is for "+60 years"; the schedules page gives the opening days by month
+ * and the Cuca de Llum's 10:00-14:00 on 25 and 26 December and 1 January.
+ */
+test("tibidabo: over-60 funicular fare, opening-days table, Christmas funicular hours", () => {
+  for (const locale of ["ca", "es", "en"] as const) {
+    const text = bodyToPlainText(TIBIDABO.editions[locale].blocks);
+    assert.doesNotMatch(text, /3[,.]95 €?[^.]*(65)|€3\.95[^.]*65/, `${locale}: €3.95 is not for over-65s`);
+    assert.match(text, /(majors de |mayores de |over-)60/i, `${locale}: over-60s`);
+    assert.match(text, /10:00 (a|to) 14:00/, `${locale}: funicular on 25-26 Dec and 1 Jan`);
+    const tables = (TIBIDABO.editions[locale].blocks as { type: string; rows?: string[][] }[]).filter((b) => b.type === "table");
+    assert.equal(tables[0]?.rows?.length, 4, `${locale}: opening days by month`);
+  }
+});
+
 test("cards: the price table's online column is 10% off and the difference is card minus Hola", () => {
   const num = (cell: string) => Number(cell.replace(/[€\s]/g, "").replace(",", "."));
   for (const locale of ["ca", "es", "en"] as const) {
