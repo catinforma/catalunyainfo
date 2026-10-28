@@ -110,9 +110,8 @@ const TITLE_FROZEN_UNTIL: Record<string, string> = {
   "/ca/guies/taxa-turistica-barcelona-catalunya/": "2026-10-23",
   "/es/guias/tasa-turistica-barcelona-cataluna/": "2026-10-23",
   "/en/guides/barcelona-catalonia-tourist-tax/": "2026-10-23",
-  "/ca/guies/es-festiu-avui-catalunya/": "2026-11-03",
-  "/es/guias/es-festivo-hoy-cataluna/": "2026-11-03",
-  "/en/guides/is-today-a-holiday-in-catalonia/": "2026-11-03",
+  // es-festiu-avui (CA/ES/EN) was frozen to 3 Nov; the owner lifted the
+  // freezes on 28 Oct and the new titles need the full 60 characters.
 };
 
 export function composeTitle(
