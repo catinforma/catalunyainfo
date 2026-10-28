@@ -1,4 +1,6 @@
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
 import { test } from "node:test";
 
 import { bodySchema } from "../src/lib/content/blocks.ts";
@@ -13,6 +15,7 @@ import {
   splitStation,
 } from "../src/lib/content/reservoirs/levels.ts";
 import { LOCALES } from "../src/lib/i18n/config.ts";
+import { reservoirHubPath } from "../src/lib/programmatic/reservoirs/paths.ts";
 
 // Real rows from gn9e-3qhr. 30 Sep 2026 is one of the many days whose decimal
 // separator was lost: Sau "68.3 / 113.25" arrives as "683" / "11325".
@@ -129,4 +132,16 @@ test("the live title carries the day's total and the reading date, and falls bac
   assert.equal(liveReservoirTitle("en", report), "Catalonia reservoir levels today: 75.1% full (7 Oct)");
   for (const locale of LOCALES) assert.ok((liveReservoirTitle(locale, report) ?? "").length <= 60, locale);
   assert.equal(liveReservoirTitle("es", buildReport(parseRows(rows("2026-09-30", DAMAGED_30)))), null);
+});
+
+test("the guide gains exactly one sentence linking the per-reservoir pages, titles untouched", () => {
+  for (const locale of LOCALES) {
+    const body = JSON.stringify(buildBody(locale));
+    assert.equal(body.split(`](${reservoirHubPath(locale)})`).length - 1, 1, locale);
+  }
+  assert.equal(COPY.es.seoTitle, "Embalses de Catalunya hoy: nivel de los pantanos (ACA)");
+  assert.equal(COPY.ca.seoTitle, "Estat dels embassaments de Catalunya avui (dades ACA)");
+  assert.equal(COPY.en.seoTitle, "Catalonia reservoir levels today: how full (ACA data)");
+  const route = readFileSync(join(import.meta.dirname, "..", "src/app/api/admin/publish/route.ts"), "utf8");
+  assert.match(route, /wants\("reservoirs"\)\) published\.push\(await publishReservoirGuide\(\)\)/, "republished with the existing group");
 });
