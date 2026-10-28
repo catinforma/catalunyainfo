@@ -476,9 +476,10 @@ test("the metro-hours and transport-passes guides gain exactly one body link eac
     assert.equal(JSON.stringify(HOURS.editions[locale].blocks).split(target).length - 1, 1, `hours/${locale}`);
     assert.equal(JSON.stringify(TRANSPORT.editions[locale].blocks).split(target).length - 1, 1, `transport/${locale}`);
   }
-  // Frozen titles (docs/SEO_EXPERIMENTS.md): metro hours to 14 Nov, transport EN to 16 Nov.
-  assert.equal(HOURS.editions.ca.seoTitle, "Horari metro Barcelona: 5:00 a 24:00, divendres fins a les 2:00");
-  assert.equal(HOURS.editions.es.seoTitle, "Horario metro Barcelona: de 5:00 a 24:00, viernes hasta las 2:00");
+  // Frozen titles (docs/SEO_EXPERIMENTS.md): transport EN to 16 Nov. The metro
+  // hours ca/es freeze was lifted by the owner on 28 Oct 2026 (page-1 push).
+  assert.equal(HOURS.editions.ca.seoTitle, "Horari metro Barcelona avui: a quina hora obre i tanca");
+  assert.equal(HOURS.editions.es.seoTitle, "Horario metro Barcelona hoy: a qué hora abre y cierra");
   assert.equal(HOURS.editions.en.seoTitle, "Barcelona metro hours: 5:00 to midnight, Fridays until 2:00");
   assert.equal(TRANSPORT.editions.en.seoTitle, "Barcelona transport pass for 1 to 5 days: 2026 prices");
 });

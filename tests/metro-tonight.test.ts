@@ -43,6 +43,30 @@ test("the printed lines name the day and the hour in each language", () => {
   assert.match(metroLines("2026-10-22", "en").today, /^Today, Thursday 22 October 2026, the metro opens at 5:00 and closes at midnight\.$/);
 });
 
+/**
+ * Metro guide, 28 Oct 2026 (TMB hours page and tram.cat): the metro does not
+ * "open at 5:00 every day" - on Sunday it has been running since Saturday
+ * night - and the guide answers the tram and Montjuïc funicular timetables
+ * with their validity dates.
+ */
+test("the metro guide never says it opens at 5:00 every day, and gives tram and funicular hours", async () => {
+  const { bodyToPlainText } = await import("../src/lib/content/blocks.ts");
+  const everyDay = { ca: /5:00\*{0,2} cada dia|5:00 cada dia/, es: /5:00\*{0,2} todos los días/, en: /5:00\*{0,2} every day/ };
+  const funicular = { ca: /26 d'octubre de 2026 al 28 de març de 2027/, es: /26 de octubre de 2026 al 28 de marzo de 2027/, en: /26 October 2026 to 28 March 2027/ };
+  for (const locale of ["ca", "es", "en"] as const) {
+    const blocks = HOURS.editions[locale].blocks as { type: string; rows?: string[][] }[];
+    const text = bodyToPlainText(HOURS.editions[locale].blocks);
+    assert.doesNotMatch(text, everyDay[locale], `${locale}: "opens at 5:00 every day"`);
+    assert.match(text, funicular[locale], `${locale}: funicular winter dates`);
+    assert.match(text, /22:30/, `${locale}: tram on 24 December`);
+    const tables = blocks.filter((b) => b.type === "table");
+    assert.equal(tables.length, 2, `${locale}: metro + tram tables`);
+    assert.equal(tables[0]?.rows?.length, 6, `${locale}: six day types`);
+    assert.equal(tables[1]?.rows?.length, 4, `${locale}: four tram rows`);
+    assert.doesNotMatch(text, /Aerob[uú]s[^.]*24 (hores|horas|hours)/, `${locale}: the airport bus is not said to run 24 hours`);
+  }
+});
+
 test("the metro guide carries the block right after its lead, and the cron refreshes it", () => {
   assert.ok(DAY_DEPENDENT_BLOCKS.includes("metroTonight"));
   for (const locale of ["ca", "es", "en"] as const) {
