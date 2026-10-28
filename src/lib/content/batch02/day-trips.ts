@@ -181,7 +181,7 @@ export const GIRONA: B2Article = {
           ],
         ),
         ...paras(
-          "La Catedral tanca el 25 de desembre, l'1 i el 6 de gener i el diumenge de Pasqua, i no s'hi pot fer la visita cultural a la nau durant les celebracions. El carnet GironaMuseus dona un 50 % de descompte en sis museus de la ciutat.",
+          "La Catedral tanca el 25 de desembre, l'1 i el 6 de gener i el diumenge de Pasqua, i no s'hi pot fer la visita cultural a la nau durant les celebracions. El carnet GironaMuseus dona un 50 % de descompte en sis museus de la ciutat. Els diumenges, comprova l'horari de la Catedral i Sant Feliu el mateix dia: la web del bisbat en dona dos de diferents.",
         ),
         ...h2(
           "Què és gratuït",
@@ -269,7 +269,7 @@ export const GIRONA: B2Article = {
           ],
         ),
         ...paras(
-          "La Catedral cierra el 25 de diciembre, el 1 y 6 de enero y el domingo de Pascua, y no se puede hacer la visita cultural a la nave durante los oficios. El carnet GironaMuseus da un 50 % de descuento en seis museos de la ciudad.",
+          "La Catedral cierra el 25 de diciembre, el 1 y 6 de enero y el domingo de Pascua, y no se puede hacer la visita cultural a la nave durante los oficios. El carnet GironaMuseus da un 50 % de descuento en seis museos de la ciudad. Los domingos, comprueba el horario de la Catedral y Sant Feliu el mismo día: la web del obispado da dos distintos.",
         ),
         ...h2(
           "Qué es gratis",
@@ -356,7 +356,7 @@ export const GIRONA: B2Article = {
           ],
         ),
         ...paras(
-          "The Cathedral is closed on 25 December, 1 and 6 January and Easter Sunday. You cannot tour the nave during services. A GironaMuseus card gives 50% off at six of the city's museums.",
+          "The Cathedral is closed on 25 December, 1 and 6 January and Easter Sunday. You cannot tour the nave during services. A GironaMuseus card gives 50% off at six of the city's museums. On Sundays, check the Cathedral and Sant Feliu hours on the day: the bishopric's page gives two different ones.",
         ),
         ...h2(
           "What's free",
