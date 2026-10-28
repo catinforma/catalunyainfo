@@ -548,6 +548,22 @@ test("markets: hours answered first, Sunday question answered, no unverified gro
   }
 });
 
+test("portaventura: the standard price leads, the Halloween price is labelled, the winter closure and the walk are stated", () => {
+  const walk = { ca: /10 minuts a peu/, es: /10 minutos a pie/, en: /10-minute walk/ } as const;
+  for (const locale of LOCALES) {
+    const edition = PORTAVENTURA.editions[locale];
+    assert.match(edition.seoDescription, /43/, `${locale}: description gives the standard price`);
+    assert.doesNotMatch(edition.seoDescription, /37/, `${locale}: no promotional price in the snippet`);
+    const blocks = edition.blocks as { type: string; lead?: boolean; text?: string }[];
+    const lead = blocks.find((b) => b.type === "paragraph" && b.lead)?.text ?? "";
+    assert.match(lead, /43/, `${locale}: lead gives the standard price`);
+    assert.match(lead, /Halloween/, `${locale}: the 37 EUR price is tied to the promotion`);
+    assert.match(lead, /19 (de )?(febrer|febrero|February)/, `${locale}: winter closure`);
+    assert.match(bodyToPlainText(edition.blocks), walk[locale], `${locale}: walk from the station`);
+    assert.ok(edition.seoTitle.length <= 60, `${locale}: title budget`);
+  }
+});
+
 test("ripolles: the comarca in Idescat's figures and a villages table; setcases answers what to do", () => {
   const villages = { ca: "Pobles bonics a prop de Ripoll", es: "Pueblos bonitos cerca de Ripoll", en: "Pretty villages near Ripoll" } as const;
   for (const locale of LOCALES) {
