@@ -886,7 +886,7 @@ const SNOW_SOURCES = [
   { name: "Baqueira Beret — «Baqueira Beret activa el invierno en pleno verano» (28/07/2026)", url: "https://www.baqueira.es/es/noticia/baqueira-beret-activa-el-invierno-en-pleno-verano", publisher: "Baqueira Beret" },
 ];
 
-const SNOW_VERIFIED = "2026-10-26";
+const SNOW_VERIFIED = "2026-10-28";
 
 type SnowCopy = {
   path: string;
@@ -918,8 +918,8 @@ type SnowCopy = {
 const SNOW_COPY: Record<"ca" | "es" | "en", SnowCopy> = {
   ca: {
     path: "guies/on-veure-neu-catalunya-sense-esquiar",
-    title: "On veure neu a Catalunya sense esquiar: rutes d'hivern amb raquetes i escapades al Pirineu",
-    seoTitle: "On veure neu a Catalunya sense esquiar: rutes d'hivern",
+    title: "Rutes d'hivern a Catalunya: on veure neu sense esquiar, amb raquetes o en tren",
+    seoTitle: "Rutes d'hivern a Catalunya: on veure neu sense esquiar",
     seoDescription:
       "On veure neu a Catalunya sense esquiar: rutes d'hivern amb raquetes, trineus i telecabines a les estacions del Pirineu, i com arribar-hi en tren o bus.",
     excerpt:
@@ -927,7 +927,7 @@ const SNOW_COPY: Record<"ca" | "es" | "en", SnowCopy> = {
     lead: "On veure neu a Catalunya sense esquiar: a les sis estacions de muntanya d'FGC (**la Molina, Vall de Núria, Vallter, Espot, Port Ainé i Boí Taüll**), que ofereixen rutes amb raquetes de neu i activitats per a no esquiadors, i a les set estacions d'esquí nòrdic del **Tot Nòrdic**, amb circuits de raquetes. Sense cotxe, les més fàcils són la **Vall de Núria** (R3 i cremallera) i **la Molina** (R3). Les estacions obren entre finals de novembre i principis de desembre: la temporada passada, la Molina ho va fer el 29 de novembre de 2025.",
     notReportTitle: "Això no és un part de neu",
     notReport: `Aquesta guia explica **on plantejar una escapada hivernal**. No prediu les condicions d'una data concreta: això només ho pot dir l'estació aquell dia. Abans de sortir cal comprovar l'estat de l'estació, la meteorologia, les carreteres i quines activitats estan obertes. Per al gruix de neu que mesura avui el Meteocat a les seves estacions de muntanya, mira ${b2link("snowNow", "ca", "si hi ha neu al Pirineu avui")}.`,
-    routesTitle: "Rutes d'hivern amb raquetes a Catalunya",
+    routesTitle: "Rutes d'hivern amb neu a Catalunya: on fer raquetes",
     routesIntro: "Les raquetes de neu són la manera més senzilla de caminar per la neu sense saber esquiar. Aquests són els llocs on l'operador ofereix rutes o circuits amb raquetes, i què més s'hi pot fer:",
     routesCaption: "On fer rutes amb raquetes de neu a Catalunya",
     routesHeaders: ["Lloc", "Comarca", "Què hi ofereix l'operador", "Sense cotxe"],
@@ -940,7 +940,7 @@ const SNOW_COPY: Record<"ca" | "es" | "en", SnowCopy> = {
       ["Boí Taüll", "Alta Ribagorça", "Rutes amb raquetes, zona lúdica i tirolina", "Bus de la Neu des de Vilaller (1 €)"],
       ["Estacions del Tot Nòrdic", "Pirineu", "Circuits de raquetes a Guils Fontanera, Aransa, Lles, Tuixent-La Vansa, Sant Joan de l'Erm, Tavascan i Virós-Vallferrera", "Sense connexió verificada"],
     ],
-    routesNote: "Activitats segons les pàgines de PIRINEU365 i de Guils, consultades el 24/10/2026. Els busos que hi consten tenen publicades les dates de 2025-26 (o 2023-24 a Vallter): les de 2026-27 encara no.",
+    routesNote: "Activitats segons les pàgines de PIRINEU365 i de Guils, consultades el 28/10/2026. Els busos que hi consten tenen publicades les dates de 2025-26 (o 2023-24 a Vallter): les de 2026-27 encara no.",
     places: [
       ["Vall de Núria: neu sense carretera", `No hi arriba cap carretera: el cremallera surt de Ribes-Enllaç i puja 1.000 metres en 12,5 km i 40 minuts, i l'operador demana comprar el bitllet en línia. Aquest hivern 2026-27, segons la pàgina de tarifes, el bitllet del cremallera inclou també el telefèric de la Coma del Clot. Tota la resta, a ${b2link("nuria", "ca", "la guia de Núria")}.`],
       ["La Molina", "Té estació pròpia a l'R3. A més de les pistes, hi ha raquetes de neu, el circuit «Descoberta de la Fauna» i el telecabina Cadí-Moixeró, que es pot fer només de passeig. El seu web també anuncia el Bus Natura, amb bus d'anada i tornada i el forfet de passeig del telecabina, els dimecres, divendres, dissabtes i diumenges."],
@@ -948,7 +948,7 @@ const SNOW_COPY: Record<"ca" | "es" | "en", SnowCopy> = {
       ["Espot", "FGC la situa al cor del Parc Nacional d'Aigüestortes i Estany de Sant Maurici. Hi ha circuits amb raquetes, una excursió guiada, parc lúdic, sortides amb màquina retrac i l'experiència Starlight per mirar el cel nocturn."],
       ["Port Ainé", "Al Pallars Sobirà, amb parc lúdic, raquetes de neu i passejos en telecadira per als que no esquien."],
       ["Boí Taüll", "És l'estació amb la cota més alta de Catalunya (2.751 m). Ofereix rutes amb raquetes, zona lúdica i tirolina, i s'hi pot arribar amb el Bus de la Neu des de la vall."],
-      ["Esquí nòrdic i raquetes: el Tot Nòrdic", "Les set estacions de la Mancomunitat d'Esquí Nòrdic comparteixen forfet. Per a la temporada 2026-27, el de **només raquetes** costa **75 €** per a adults i el d'esquí + raquetes, **175 €**; Guils indica un descompte del 25 % fins al 17 de novembre."],
+      ["Esquí nòrdic i raquetes: el Tot Nòrdic", "Les set estacions de la Mancomunitat d'Esquí Nòrdic comparteixen forfet. Per a la temporada 2026-27, el de **només raquetes** costa **75 €** per a adults i el d'esquí + raquetes, **175 €**, preus amb el 25 % de descompte que Guils aplica fins al 17 de novembre."],
     ],
     kidsTitle: "Neu amb nens: trineus i parcs lúdics",
     kids: "Per a una primera vegada a la neu amb criatures, les estacions d'FGC tenen espais pensats per a això: pista de trineus a Vallter, parc lúdic a Espot i Port Ainé i zona lúdica a Boí Taüll. A la Vall de Núria, el mateix trajecte en cremallera ja és part de l'excursió.",
@@ -962,13 +962,13 @@ const SNOW_COPY: Record<"ca" | "es" | "en", SnowCopy> = {
       { question: "On hi ha neu a Catalunya?", answer: "Al Pirineu: a les estacions d'esquí i de muntanya, de la Vall de Núria i Vallter, al Ripollès, a la Molina, Espot, Port Ainé i Boí Taüll. Si hi ha neu un dia concret, només ho diu el part de cada estació." },
       { question: "On es poden fer rutes amb raquetes de neu a Catalunya?", answer: "A les sis estacions d'FGC (la Molina, Vall de Núria, Vallter, Espot, Port Ainé i Boí Taüll) i als circuits de les estacions d'esquí nòrdic del Tot Nòrdic, com Guils Fontanera, Aransa o Tuixent-La Vansa." },
       { question: "Es pot veure la neu sense cotxe des de Barcelona?", answer: "Sí: la Vall de Núria (R3 fins a Ribes-Enllaç i cremallera) i la Molina (R3 fins a l'estació de la Molina) són les més fàcils." },
-      { question: "Quan obren les estacions?", answer: "Normalment entre finals de novembre i principis de desembre. Baqueira Beret preveu obrir la temporada 2026-27 el 28 de novembre, si la neu ho permet; les estacions d'FGC encara no n'han anunciat la data (consultat el 26 d'octubre de 2026)." },
+      { question: "Quan obren les estacions?", answer: "Normalment entre finals de novembre i principis de desembre. Baqueira Beret preveu obrir la temporada 2026-27 el 28 de novembre, si la neu ho permet; les estacions d'FGC encara no n'han anunciat la data (consultat el 28 d'octubre de 2026)." },
     ],
   },
   es: {
     path: "guias/donde-ver-nieve-cataluna-sin-esquiar",
-    title: "Dónde ver nieve en Cataluña sin esquiar: rutas de invierno con raquetas y escapadas al Pirineo",
-    seoTitle: "Dónde ver nieve en Cataluña sin esquiar: rutas de invierno",
+    title: "Dónde ver nieve en Cataluña sin esquiar: sitios, rutas con raquetas y escapadas en tren",
+    seoTitle: "Dónde ver nieve en Cataluña sin esquiar: sitios y rutas",
     seoDescription:
       "Dónde ver nieve en Cataluña sin esquiar: rutas de invierno con raquetas, trineos y telecabinas en las estaciones del Pirineo, y cómo llegar en tren o bus.",
     excerpt:
@@ -976,7 +976,7 @@ const SNOW_COPY: Record<"ca" | "es" | "en", SnowCopy> = {
     lead: "Dónde ver nieve en Cataluña sin esquiar: en las seis estaciones de montaña de FGC (**La Molina, Vall de Núria, Vallter, Espot, Port Ainé y Boí Taüll**), que ofrecen rutas con raquetas de nieve y actividades para no esquiadores, y en las siete estaciones de esquí nórdico del **Tot Nòrdic**, con circuitos de raquetas. Sin coche, las más fáciles son la **Vall de Núria** (R3 y cremallera) y **La Molina** (R3). Las estaciones abren entre finales de noviembre y principios de diciembre: la temporada pasada, La Molina lo hizo el 29 de noviembre de 2025.",
     notReportTitle: "Esto no es un parte de nieve",
     notReport: `Esta guía explica **dónde plantear una escapada invernal**. No predice las condiciones de una fecha concreta: eso solo lo puede decir la estación ese día. Antes de salir hay que revisar el estado de la estación, la meteorología, las carreteras y qué actividades están abiertas. Para el espesor de nieve que mide hoy Meteocat en sus estaciones de montaña, mira ${b2link("snowNow", "es", "si hay nieve en el Pirineo hoy")}.`,
-    routesTitle: "Rutas de invierno con raquetas en Cataluña",
+    routesTitle: "Sitios de nieve en Cataluña: dónde hacer rutas con raquetas",
     routesIntro: "Las raquetas de nieve son la forma más sencilla de caminar por la nieve sin saber esquiar. Estos son los lugares donde el operador ofrece rutas o circuitos con raquetas, y qué más se puede hacer:",
     routesCaption: "Dónde hacer rutas con raquetas de nieve en Cataluña",
     routesHeaders: ["Lugar", "Comarca", "Qué ofrece el operador", "Sin coche"],
@@ -989,7 +989,7 @@ const SNOW_COPY: Record<"ca" | "es" | "en", SnowCopy> = {
       ["Boí Taüll", "Alta Ribagorça", "Rutas con raquetas, zona lúdica y tirolina", "Bus de la Neu desde Vilaller (1 €)"],
       ["Estaciones del Tot Nòrdic", "Pirineo", "Circuitos de raquetas en Guils Fontanera, Aransa, Lles, Tuixent-La Vansa, Sant Joan de l'Erm, Tavascan y Virós-Vallferrera", "Sin conexión verificada"],
     ],
-    routesNote: "Actividades según las páginas de PIRINEU365 y de Guils, consultadas el 24/10/2026. Los buses que figuran tienen publicadas las fechas de 2025-26 (o 2023-24 en Vallter): las de 2026-27 todavía no.",
+    routesNote: "Actividades según las páginas de PIRINEU365 y de Guils, consultadas el 28/10/2026. Los buses que figuran tienen publicadas las fechas de 2025-26 (o 2023-24 en Vallter): las de 2026-27 todavía no.",
     places: [
       ["Vall de Núria: nieve sin carretera", `No llega ninguna carretera: el cremallera sale de Ribes-Enllaç y sube 1.000 metros en 12,5 km y 40 minutos, y el operador pide comprar el billete online. Este invierno 2026-27, según la página de tarifas, el billete del cremallera incluye también el teleférico de la Coma del Clot. Todo lo demás, en ${b2link("nuria", "es", "la guía de Núria")}.`],
       ["La Molina", "Tiene estación propia en la R3. Además de las pistas, hay raquetas de nieve, el circuito «Descoberta de la Fauna» y el telecabina Cadí-Moixeró, que se puede hacer solo de paseo. Su web también anuncia el Bus Natura, con bus de ida y vuelta y el forfait de paseo del telecabina, los miércoles, viernes, sábados y domingos."],
@@ -997,7 +997,7 @@ const SNOW_COPY: Record<"ca" | "es" | "en", SnowCopy> = {
       ["Espot", "FGC la sitúa en el corazón del Parque Nacional de Aigüestortes i Estany de Sant Maurici. Hay circuitos con raquetas, una excursión guiada, parque lúdico, salidas en máquina retrac y la experiencia Starlight para contemplar el cielo nocturno."],
       ["Port Ainé", "En el Pallars Sobirà, con parque lúdico, raquetas de nieve y paseos en telesilla para quien no esquía."],
       ["Boí Taüll", "Es la estación con la cota más alta de Cataluña (2.751 m). Ofrece rutas con raquetas, zona lúdica y tirolina, y se puede llegar con el Bus de la Neu desde el valle."],
-      ["Esquí nórdico y raquetas: el Tot Nòrdic", "Las siete estaciones de la Mancomunitat d'Esquí Nòrdic comparten forfait. Para la temporada 2026-27, el de **solo raquetas** cuesta **75 €** para adultos y el de esquí + raquetas, **175 €**; Guils indica un descuento del 25 % hasta el 17 de noviembre."],
+      ["Esquí nórdico y raquetas: el Tot Nòrdic", "Las siete estaciones de la Mancomunitat d'Esquí Nòrdic comparten forfait. Para la temporada 2026-27, el de **solo raquetas** cuesta **75 €** para adultos y el de esquí + raquetas, **175 €**, precios con el 25 % de descuento que Guils aplica hasta el 17 de noviembre."],
     ],
     kidsTitle: "Nieve con niños: trineos y parques lúdicos",
     kids: "Para una primera vez en la nieve con críos, las estaciones de FGC tienen espacios pensados para eso: pista de trineos en Vallter, parque lúdico en Espot y Port Ainé y zona lúdica en Boí Taüll. En la Vall de Núria, el propio trayecto en cremallera ya es parte de la excursión.",
@@ -1011,7 +1011,7 @@ const SNOW_COPY: Record<"ca" | "es" | "en", SnowCopy> = {
       { question: "¿Dónde nieva en Cataluña?", answer: "En el Pirineo: en las estaciones de esquí y de montaña, de la Vall de Núria y Vallter, en el Ripollès, a La Molina, Espot, Port Ainé y Boí Taüll. Si hay nieve un día concreto, solo lo dice el parte de cada estación." },
       { question: "¿Dónde hacer rutas con raquetas de nieve en Cataluña?", answer: "En las seis estaciones de FGC (La Molina, Vall de Núria, Vallter, Espot, Port Ainé y Boí Taüll) y en los circuitos de las estaciones de esquí nórdico del Tot Nòrdic, como Guils Fontanera, Aransa o Tuixent-La Vansa." },
       { question: "¿Se puede ver la nieve sin coche desde Barcelona?", answer: "Sí: la Vall de Núria (R3 hasta Ribes-Enllaç y cremallera) y La Molina (R3 hasta la estación de La Molina) son las más fáciles." },
-      { question: "¿Cuándo abren las estaciones?", answer: "Normalmente entre finales de noviembre y principios de diciembre. Baqueira Beret prevé abrir la temporada 2026-27 el 28 de noviembre, si la nieve lo permite; las estaciones de FGC aún no han anunciado la fecha (consultado el 26 de octubre de 2026)." },
+      { question: "¿Cuándo abren las estaciones?", answer: "Normalmente entre finales de noviembre y principios de diciembre. Baqueira Beret prevé abrir la temporada 2026-27 el 28 de noviembre, si la nieve lo permite; las estaciones de FGC aún no han anunciado la fecha (consultado el 28 de octubre de 2026)." },
     ],
   },
   en: {
@@ -1038,7 +1038,7 @@ const SNOW_COPY: Record<"ca" | "es" | "en", SnowCopy> = {
       ["Boí Taüll", "Alta Ribagorça", "Snowshoe routes, play area and zip line", "Bus de la Neu from Vilaller (€1)"],
       ["Tot Nòrdic stations", "Pyrenees", "Snowshoe circuits at Guils Fontanera, Aransa, Lles, Tuixent-La Vansa, Sant Joan de l'Erm, Tavascan and Virós-Vallferrera", "No verified connection"],
     ],
-    routesNote: "Activities as listed on the PIRINEU365 and Guils pages, checked 24/10/2026. The buses shown have their 2025-26 dates published (2023-24 for Vallter); 2026-27 dates are not out yet.",
+    routesNote: "Activities as listed on the PIRINEU365 and Guils pages, checked 28/10/2026. The buses shown have their 2025-26 dates published (2023-24 for Vallter); 2026-27 dates are not out yet.",
     places: [
       ["Vall de Núria: snow with no road", `No road reaches it: the rack railway leaves Ribes-Enllaç and climbs 1,000 metres over 12.5 km in 40 minutes, and the operator asks you to buy tickets online. This 2026-27 winter, according to the rates page, the rack-railway ticket also includes the Coma del Clot cable car. Everything else is in ${b2link("nuria", "en", "our Núria guide")}.`],
       ["La Molina", "It has its own station on the R3. Besides the slopes there is snowshoeing, the 'Descoberta de la Fauna' circuit and the Cadí-Moixeró gondola, which you can ride just for the views. Its website also lists the Bus Natura, a return coach with a gondola sightseeing pass, on Wednesdays, Fridays, Saturdays and Sundays."],
@@ -1046,7 +1046,7 @@ const SNOW_COPY: Record<"ca" | "es" | "en", SnowCopy> = {
       ["Espot", "FGC places it in the heart of Aigüestortes i Estany de Sant Maurici National Park. There are snowshoe circuits, a guided outing, a leisure park, snowcat trips and the 'Starlight' night-sky experience."],
       ["Port Ainé", "In the Pallars Sobirà, with a leisure park, snowshoeing and chairlift rides for non-skiers."],
       ["Boí Taüll", "The highest resort in Catalonia (2,751 m). It offers snowshoe routes, a play area and a zip line, and the Bus de la Neu runs up from the valley."],
-      ["Cross-country and snowshoes: Tot Nòrdic", "The seven stations of the Mancomunitat d'Esquí Nòrdic share one pass. For 2026-27 the **snowshoes-only** pass costs **€75** for adults and skiing + snowshoes **€175**; Guils lists a 25% discount until 17 November."],
+      ["Cross-country and snowshoes: Tot Nòrdic", "The seven stations of the Mancomunitat d'Esquí Nòrdic share one pass. For 2026-27 the **snowshoes-only** pass costs **€75** for adults and skiing + snowshoes **€175**, prices that include the 25% discount Guils applies until 17 November."],
     ],
     kidsTitle: "Snow with children: sledging and play areas",
     kids: "For a first day in the snow with small children, the FGC resorts have areas made for it: a sledging run at Vallter, leisure parks at Espot and Port Ainé and a play area at Boí Taüll. At Vall de Núria, the rack-railway ride is half the outing.",
@@ -1060,7 +1060,7 @@ const SNOW_COPY: Record<"ca" | "es" | "en", SnowCopy> = {
       { question: "Does it snow in Catalonia?", answer: "Yes, in the Pyrenees: the ski resorts' seasons run from late November or early December to around Easter. Whether there is snow on a given day is in each resort's snow report." },
       { question: "Where can you go snowshoeing in Catalonia?", answer: "At the six FGC resorts (La Molina, Vall de Núria, Vallter, Espot, Port Ainé and Boí Taüll) and on the circuits of the Tot Nòrdic cross-country stations, such as Guils Fontanera, Aransa or Tuixent-La Vansa." },
       { question: "Can you see snow from Barcelona without a car?", answer: "Yes: Vall de Núria (R3 to Ribes-Enllaç and the rack railway) and La Molina (R3 to La Molina station) are the easiest." },
-      { question: "When do the resorts open?", answer: "Usually between late November and early December. Baqueira Beret plans to open the 2026-27 season on 28 November, snow permitting; FGC's resorts have not yet announced their dates (checked 26 October 2026)." },
+      { question: "When do the resorts open?", answer: "Usually between late November and early December. Baqueira Beret plans to open the 2026-27 season on 28 November, snow permitting; FGC's resorts have not yet announced their dates (checked 28 October 2026)." },
     ],
   },
 };

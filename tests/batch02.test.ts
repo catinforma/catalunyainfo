@@ -548,6 +548,23 @@ test("markets: hours answered first, Sunday question answered, no unverified gro
   }
 });
 
+test("ski: opening in the title, official snow-report links, FGC early birds, child prices; snow guide in the query's words", () => {
+  const opening = { ca: /obertura/, es: /apertura/, en: /opening/ } as const;
+  const winter = { ca: /^Rutes d'hivern a Catalunya/, es: /^Dónde ver nieve en Cataluña/, en: /^Snow in Catalonia/ } as const;
+  for (const locale of LOCALES) {
+    const edition = SKI.editions[locale];
+    assert.match(edition.seoTitle, opening[locale], `${locale}: opening in the title`);
+    assert.ok(edition.seoTitle.length <= 60, `${locale}: title budget`);
+    const json = JSON.stringify(edition.blocks);
+    assert.match(json, /pirineu365\.cat\/infoneu-pirineu365\//, `${locale}: FGC snow report linked`);
+    const text = bodyToPlainText(edition.blocks);
+    assert.match(text, /600/, `${locale}: La Molina early-bird season pass`);
+    assert.match(text, /36 €|€36/, `${locale}: child day price`);
+    assert.doesNotMatch(text, /12[,.]6 km/, `${locale}: Tavascan's page says twelve kilometres`);
+    assert.match(SNOW.editions[locale].seoTitle, winter[locale], `${locale}: snow guide title`);
+  }
+});
+
 test("sitges and tarragona: corrected first pattern train, T-casual zones, last train back, open days not free days", () => {
   const back = { ca: /Horaris del tren de Sitges a Barcelona/, es: /Horarios del tren de Sitges a Barcelona/, en: /Sitges to Barcelona train times/ } as const;
   for (const locale of LOCALES) {
