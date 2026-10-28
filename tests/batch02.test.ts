@@ -487,6 +487,30 @@ test("parking: zone summary table and a blue-vs-green answer that matches the ra
 });
 
 /**
+ * Parking, 28 Oct 2026: AREA's own "tipos de plazas" pages state that the
+ * resident rate runs January to December including August, that Rate A covers
+ * high-demand areas such as the Eixample and Ciutat Vella, and the count of
+ * blue (about 5,400) and green (about 57,000) spaces. Each edition says so,
+ * walks a visitor through parking in four steps, and never invents an August
+ * exemption or a colour for the road markings.
+ */
+test("parking: August answered from AREA, Rate A areas, four steps, no invented markings", () => {
+  const august = { ca: /agost inclòs/, es: /incluido el mes de agosto/, en: /including August/ };
+  const rateA = { ca: /l'Eixample i Ciutat Vella/, es: /el Eixample y Ciutat Vella/, en: /the Eixample and Ciutat Vella/ };
+  for (const locale of ["ca", "es", "en"] as const) {
+    const blocks = PARKING.editions[locale].blocks as { type: string; items?: unknown[] }[];
+    const text = bodyToPlainText(PARKING.editions[locale].blocks);
+    assert.match(text, august[locale], `${locale}: August`);
+    assert.match(text, rateA[locale], `${locale}: Rate A areas`);
+    assert.match(text, /5[.,]400/, `${locale}: blue space count`);
+    assert.match(text, /57[.,]000/, `${locale}: green space count`);
+    assert.equal(blocks.find((b) => b.type === "steps")?.items?.length, 4, `${locale}: four steps`);
+    assert.doesNotMatch(text, /(gratis|gratuïta|free)[^.]*(agost|agosto|August)/i, `${locale}: no August exemption`);
+    assert.doesNotMatch(text, /l[ií]neas? (azul|verde)|línies (blav|verd)|(blue|green) lines/i, `${locale}: no unverified markings`);
+  }
+});
+
+/**
  * Zoo and markets, re-checked 24 Oct 2026; Zoo hours updated 26 Oct 2026,
  * after the clock change. The Zoo says visitors enter only through the
  * Ciutadella entrance. Since 26 Oct it closes at 16:30 on weekdays (17:30 at

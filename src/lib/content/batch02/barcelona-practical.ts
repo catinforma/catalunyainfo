@@ -760,8 +760,19 @@ const PARKING_SOURCES = [
   { name: "AREA Motos", url: "https://areaverda.cat/en/motorcycles", publisher: "Barcelona de Serveis Municipals" },
   { name: "Ordenança fiscal 3.12, estacionament regulat", url: "https://ajuntament.barcelona.cat/hisenda/sites/default/files/normativa/2021-01/3.12-taxes-per-lestacionament-regulat-de-vehicles-a-la-via-publica-area.pdf", publisher: "Ajuntament de Barcelona" },
   { name: "Voreres lliures de motos als accessos d'escoles i hospitals", url: "https://www.barcelona.cat/infobarcelona/ca/tema/mobilitat-i-transports/voreres-lliures-de-motos-als-accessos-descoles-i-hospitals_1491548.html", publisher: "Ajuntament de Barcelona" },
+  { name: "Tipos de plazas: Área Verde", url: "https://www.areaverda.cat/es/informacion/tipos-de-plazas/area-verde", publisher: "Barcelona de Serveis Municipals" },
+  { name: "Tipos de plazas: Área Azul", url: "https://www.areaverda.cat/es/informacion/tipos-de-plazas/area-azul", publisher: "Barcelona de Serveis Municipals" },
 ];
 
+// Re-checked 28 Oct 2026 against areaverda.cat (blue, green-area, the ES
+// "tipos de plazas" pages for blue and green, meter FAQs): every rate and
+// schedule unchanged. Added from those pages: about 5,400 blue and 57,000
+// green spaces in 35 resident zones; Rate A covers high-demand areas such as
+// the Eixample and Ciutat Vella; residents parking outside their zone pay the
+// non-resident rate; the resident rate applies "de enero a diciembre,
+// incluido el mes de agosto"; the council can restrict parking on pollution-
+// episode days. Neither page states an August exception for non-residents or
+// the colour of the road markings, so the page says neither.
 // Re-checked 24 Oct 2026 against areaverda.cat (blue, green-area,
 // procedures, meter FAQs, resident-only spaces, beach-season and Zone 36
 // news) and smou.cat: every rate, schedule and the €9 cancellation unchanged.
@@ -774,7 +785,7 @@ const PARKING_SOURCES = [
 // spaces. Not printed, because no official page states them: the fine if a
 // notice is not cancelled, a deadline for the €9 cancellation, August or
 // weekday-holiday rules for green spaces, and motorbikes in blue/green bays.
-const PARKING_VERIFIED = "2026-10-24";
+const PARKING_VERIFIED = "2026-10-28";
 
 /**
  * The full label-by-label table.
@@ -852,6 +863,10 @@ type ParkingCopy = {
   cheaper: (blueCA: string, greenCA: string) => string;
   ruleTitle: string;
   rule: string;
+  stepsTitle: string;
+  steps: { title: string; text: string }[];
+  augustTitle: string;
+  august: string;
   hoursTitle: string;
   hours: string[];
   blueTitle: string;
@@ -894,24 +909,33 @@ const PARKING_COPY: Record<"ca" | "es" | "en", ParkingCopy> = {
       `La blava. Amb el mateix distintiu i la mateixa tarifa, una hora en zona blava costa 0,50 € menys que en zona verda (0,25 € menys amb un cotxe zero emissions): amb distintiu C i tarifa A, **${blueCA}** l'hora a la blava i **${greenCA}** a la verda. Totes dues limiten l'estada, normalment a 1 o 2 hores, així que per deixar el cotxe tot el dia cap de les dues serveix a un visitant.`,
     ruleTitle: "La regla més important",
     rule: "Mana sempre el senyal vertical del tram: l'horari i el temps màxim poden canviar d'un carrer a un altre.",
-    hoursTitle: "Horaris: quan cal pagar",
+    stepsTitle: "Com aparcar en zona blava o verda, pas a pas",
+    steps: [
+      { title: "Llegeix el senyal del tram", text: "El senyal vertical diu quin tipus de plaça és, l'horari i el temps màxim. Si diu que és exclusiva per a residents, no hi pots aparcar." },
+      { title: "Treu el tiquet amb la matrícula", text: "Al parquímetre tria el tipus de zona, escriu la matrícula i paga amb targeta o monedes justes (no torna canvi), o paga amb l'app SMOU. Si el cotxe és elèctric, el parquímetre aplica el descompte en comprovar la matrícula." },
+      { title: "No cal deixar res al cotxe", text: "Els agents d'AREA comproven la matrícula de manera electrònica; el rebut imprès és opcional." },
+      { title: "Torna abans del temps màxim", text: "SMOU t'avisa 15 minuts abans. El tiquet no es pot renovar a la mateixa zona: quan s'acaba el temps, has de moure el cotxe." },
+    ],
+    augustTitle: "Es paga la zona verda a l'agost?",
+    august: "Sí. AREA aplica la tarifa de residents tot l'any, de gener a desembre, agost inclòs, i les seves pàgines de la zona blava i de la zona verda no preveuen cap excepció d'agost per als no residents: a l'agost es paga amb l'horari i el temps màxim del senyal. En dies d'episodi de contaminació, l'Ajuntament pot limitar les operacions d'estacionament.",
+    hoursTitle: "Horari de la zona blava i la zona verda",
     hours: [
       "La **zona blava** es regula normalment de dilluns a divendres de 9.00 a 20.00 h sense pausa al migdia; al centre, també els dissabtes, i a les zones de platja, també diumenges i festius.",
       "La **zona verda** per a no residents funciona de dilluns a divendres o de dilluns a dissabte, de 8.00 a 20.00 h o fins a les 22.00 h segons la zona. Fora de l'horari regulat l'estacionament és lliure, però mana el senyal vertical.",
       "La regulació de platja és de temporada: a Sant Martí va anar de l'1 d'abril al 30 de setembre del 2026, i des de l'1 d'octubre només el tram de l'avinguda Litoral entre Joan Miró i Jonquera manté l'horari de set dies.",
       "**Cap de setmana:** el dissabte només es paga la zona blava del centre i les zones verdes que funcionen de dilluns a dissabte; el diumenge, fora de la platja, ni la blava ni la verda es paguen. Les **places exclusives per a residents**, en canvi, estan reservades de 8.00 a 20.00 h tots els dies, festius inclosos (a la Barceloneta i el Born, les 24 hores).",
     ],
-    blueTitle: "Zona blava: estades curtes",
-    blue: "És per a rotació: el temps màxim és el que indica el senyal, normalment d'1 o 2 hores a la tarifa A i de 2 hores a la tarifa B.",
+    blueTitle: "Preu de la zona blava a Barcelona",
+    blue: "És per a estades curtes de qualsevol conductor (hi ha unes 5.400 places blaves a la ciutat): el temps màxim és el que indica el senyal, normalment 1 o 2 hores. La tarifa A s'aplica a les zones de més demanda, com l'Eixample i Ciutat Vella; la B, a la resta.",
     blueCaption: "AREA Blava, preus per hora el 2026",
-    greenTitle: "Com funciona la zona verda per a no residents",
+    greenTitle: "Com funciona la zona verda a Barcelona",
     green: [
-      "La zona verda prioritza els veïns, però els visitants també hi poden aparcar, amb la tarifa de no resident i normalment d'1 o 2 hores segons el senyal. El que no poden fer és aparcar a les **places exclusives per a residents**: unes 2.900 a Ciutat Vella, els centres històrics de Gràcia i Sarrià, Camp de l'Arpa, el Raval, la Barceloneta, el Born i el Carmel.",
-      "Els residents autoritzats paguen 0,20 € al dia, amb un màxim d'1 € la setmana, i només dins de la seva zona.",
+      "La zona verda (unes 57.000 places en 35 zones de residents) prioritza els veïns, però a les seves places hi poden aparcar tant residents com no residents. Si no hi vius, pagues la tarifa de no resident i t'hi pots quedar el temps que indica el senyal, normalment 1 o 2 hores. El que no pots fer és aparcar a les **places exclusives per a residents**: unes 2.900 a Ciutat Vella, els centres històrics de Gràcia i Sarrià, Camp de l'Arpa, el Raval, la Barceloneta, el Born i el Carmel.",
+      "Els residents autoritzats paguen 0,20 € al dia, amb un màxim d'1 € la setmana, i només dins de la seva zona: si aparquen fora, paguen com a no residents.",
       "A Trinitat Vella (Sant Andreu) s'activa una zona verda nova el 9 de novembre del 2026, amb un màxim de 2 hores per als no residents.",
     ],
     greenCaption: "AREA Verda per a no residents, preus per hora el 2026",
-    tableNote: "Font: AREA (B:SM), comprovat el 24 d'octubre de 2026.",
+    tableNote: "Font: AREA (B:SM), comprovat el 28 d'octubre de 2026.",
     costTitle: "Quant et costarà",
     cost: (greenC, blueEco) =>
       `Dues hores en zona verda amb tarifa A i un cotxe amb distintiu C costen **${greenC}**. Dues hores en zona blava amb tarifa B i distintiu ECO, **${blueEco}**. Els cotxes elèctrics també han de treure tiquet: paguen la tarifa més baixa, però no és gratis.`,
@@ -934,6 +958,9 @@ const PARKING_COPY: Record<"ca" | "es" | "en", ParkingCopy> = {
       { question: "Es paga la zona blava i verda el diumenge?", answer: "Normalment no: la blava es regula de dilluns a divendres (i dissabtes al centre) i la verda de dilluns a divendres o dissabte. Algunes places de platja es paguen també diumenges i festius. Mira sempre el senyal." },
       { question: "Què és més barat, la zona blava o la verda?", answer: "La blava: amb el mateix distintiu i la mateixa tarifa, 0,50 € menys l'hora (0,25 € menys amb un cotxe zero emissions)." },
       { question: "Es paga la zona blava el dissabte?", answer: "Només al centre de la ciutat, on la regulació s'amplia al dissabte. A la resta, el dissabte la zona blava és lliure; algunes zones verdes sí que es paguen de dilluns a dissabte. Mira el senyal del tram." },
+      { question: "Quin és l'horari de la zona blava a Barcelona?", answer: "De dilluns a divendres de 9.00 a 20.00 h sense interrupció; al centre també el dissabte i a les zones de platja també diumenges i festius. Fora d'aquest horari s'aparca gratis, llevat que el senyal digui una altra cosa." },
+      { question: "Quin preu té la zona verda a Barcelona?", answer: "Per als no residents, d'1,40 a 4,25 € l'hora segons la tarifa (A o B) i el distintiu: amb distintiu C, 3,75 € a la tarifa A i 3,50 € a la B. Els residents autoritzats paguen 0,20 € al dia (màxim 1 € la setmana)." },
+      { question: "Es paga la zona verda a l'agost?", answer: "Sí. La tarifa de residents s'aplica tot l'any, agost inclòs, i AREA no preveu cap excepció d'agost per als no residents: es paga amb l'horari del senyal." },
     ],
   },
   es: {
@@ -953,24 +980,33 @@ const PARKING_COPY: Record<"ca" | "es" | "en", ParkingCopy> = {
       `La azul. Con el mismo distintivo y la misma tarifa, una hora en zona azul cuesta 0,50 € menos que en zona verde (0,25 € menos con un coche cero emisiones): con distintivo C y tarifa A, **${blueCA}** la hora en azul y **${greenCA}** en verde. Las dos limitan la estancia, normalmente a 1 o 2 horas, así que para dejar el coche todo el día ninguna sirve a un visitante.`,
     ruleTitle: "La regla más importante",
     rule: "Manda siempre la señal vertical del tramo: el horario y el tiempo máximo pueden cambiar de una calle a otra.",
-    hoursTitle: "Horarios: cuándo hay que pagar",
+    stepsTitle: "Cómo aparcar en zona azul o verde, paso a paso",
+    steps: [
+      { title: "Lee la señal del tramo", text: "La señal vertical dice qué tipo de plaza es, el horario y el tiempo máximo. Si dice que es exclusiva para residentes, no puedes aparcar." },
+      { title: "Saca el tique con la matrícula", text: "En el parquímetro elige el tipo de zona, escribe la matrícula y paga con tarjeta o monedas justas (no devuelve cambio), o paga con la app SMOU. Si el coche es eléctrico, el parquímetro aplica el descuento al comprobar la matrícula." },
+      { title: "No hace falta dejar nada en el coche", text: "Los agentes de AREA comprueban la matrícula de forma electrónica; el recibo impreso es opcional." },
+      { title: "Vuelve antes del tiempo máximo", text: "SMOU te avisa 15 minutos antes. El tique no se puede renovar en la misma zona: cuando se acaba el tiempo, tienes que mover el coche." },
+    ],
+    augustTitle: "¿Se paga la zona verde en agosto?",
+    august: "Sí. AREA aplica la tarifa de residentes todo el año, «de enero a diciembre, incluido el mes de agosto», y sus páginas de la zona azul y de la zona verde no prevén ninguna excepción de agosto para los no residentes: en agosto se paga con el horario y el tiempo máximo de la señal. En días de episodio de contaminación, el Ayuntamiento puede limitar las operaciones de estacionamiento.",
+    hoursTitle: "Horario de la zona azul y la zona verde",
     hours: [
       "La **zona azul** se regula normalmente de lunes a viernes de 9:00 a 20:00 sin pausa al mediodía; en el centro, también los sábados, y en las zonas de playa, también domingos y festivos.",
       "La **zona verde** para no residentes funciona de lunes a viernes o de lunes a sábado, de 8:00 a 20:00 o hasta las 22:00 según la zona. Fuera del horario regulado se aparca gratis, pero manda la señal vertical.",
       "La regulación de playa es de temporada: en Sant Martí fue del 1 de abril al 30 de septiembre de 2026, y desde el 1 de octubre solo el tramo de la avenida Litoral entre Joan Miró y Jonquera mantiene el horario de siete días.",
       "**Fin de semana:** el sábado solo se paga la zona azul del centro y las zonas verdes que funcionan de lunes a sábado; el domingo, fuera de la playa, ni la azul ni la verde se pagan. Las **plazas exclusivas para residentes**, en cambio, están reservadas de 8:00 a 20:00 todos los días, festivos incluidos (en la Barceloneta y El Born, las 24 horas).",
     ],
-    blueTitle: "Zona azul: estancias cortas",
-    blue: "Es para rotación: el tiempo máximo es el que indica la señal, normalmente de 1 o 2 horas en la tarifa A y de 2 horas en la tarifa B.",
+    blueTitle: "Precio de la zona azul en Barcelona",
+    blue: "Es para estancias cortas de cualquier conductor (hay unas 5.400 plazas azules en la ciudad): el tiempo máximo es el que indica la señal, normalmente 1 o 2 horas. La tarifa A se aplica en las zonas de más demanda, como el Eixample y Ciutat Vella; la B, en el resto.",
     blueCaption: "AREA Azul, precios por hora en 2026",
-    greenTitle: "Cómo funciona la zona verde para no residentes",
+    greenTitle: "Cómo funciona la zona verde en Barcelona",
     green: [
-      "La zona verde prioriza a los vecinos, pero los visitantes también pueden aparcar, con la tarifa de no residente y normalmente 1 o 2 horas según la señal. Lo que no pueden hacer es aparcar en las **plazas exclusivas para residentes**: unas 2.900 en Ciutat Vella, los centros históricos de Gràcia y Sarrià, Camp de l'Arpa, El Raval, la Barceloneta, El Born y El Carmel.",
-      "Los residentes autorizados pagan 0,20 € al día, con un máximo de 1 € a la semana, y solo dentro de su zona.",
+      "La zona verde (unas 57.000 plazas en 35 zonas de residentes) prioriza a los vecinos, pero en sus plazas pueden aparcar tanto residentes como no residentes. Si no vives allí, pagas la tarifa de no residente y puedes quedarte el tiempo que indique la señal, normalmente 1 o 2 horas. Lo que no puedes hacer es aparcar en las **plazas exclusivas para residentes**: unas 2.900 en Ciutat Vella, los centros históricos de Gràcia y Sarrià, Camp de l'Arpa, El Raval, la Barceloneta, El Born y El Carmel.",
+      "Los residentes autorizados pagan 0,20 € al día, con un máximo de 1 € a la semana, y solo dentro de su zona: si aparcan fuera, pagan como no residentes.",
       "En Trinitat Vella (Sant Andreu) se activa una zona verde nueva el 9 de noviembre de 2026, con un máximo de 2 horas para los no residentes.",
     ],
     greenCaption: "AREA Verde para no residentes, precios por hora en 2026",
-    tableNote: "Fuente: AREA (B:SM), comprobado el 24 de octubre de 2026.",
+    tableNote: "Fuente: AREA (B:SM), comprobado el 28 de octubre de 2026.",
     costTitle: "Cuánto te costará",
     cost: (greenC, blueEco) =>
       `Dos horas en zona verde con tarifa A y un coche con distintivo C cuestan **${greenC}**. Dos horas en zona azul con tarifa B y distintivo ECO, **${blueEco}**. Los coches eléctricos también tienen que sacar tique: pagan la tarifa más baja, pero no es gratis.`,
@@ -993,6 +1029,9 @@ const PARKING_COPY: Record<"ca" | "es" | "en", ParkingCopy> = {
       { question: "¿Se paga la zona azul y verde el domingo?", answer: "Normalmente no: la azul se regula de lunes a viernes (y sábados en el centro) y la verde de lunes a viernes o sábado. Algunas plazas de playa se pagan también domingos y festivos. Mira siempre la señal." },
       { question: "¿Qué es más barato, la zona azul o la verde?", answer: "La azul: con el mismo distintivo y la misma tarifa, 0,50 € menos la hora (0,25 € menos con un coche cero emisiones)." },
       { question: "¿Se paga la zona azul el sábado?", answer: "Solo en el centro de la ciudad, donde la regulación se amplía al sábado. En el resto, el sábado la zona azul es gratis; algunas zonas verdes sí se pagan de lunes a sábado. Mira la señal del tramo." },
+      { question: "¿Cuál es el horario de la zona azul en Barcelona?", answer: "De lunes a viernes de 9:00 a 20:00 sin interrupción; en el centro también los sábados y en las zonas de playa también domingos y festivos. Fuera de ese horario se aparca gratis, salvo que la señal diga otra cosa." },
+      { question: "¿Cuánto vale la zona verde en Barcelona?", answer: "Para no residentes, de 1,40 a 4,25 € la hora según la tarifa (A o B) y el distintivo: con distintivo C, 3,75 € en tarifa A y 3,50 € en tarifa B. Los residentes autorizados pagan 0,20 € al día (máximo 1 € a la semana)." },
+      { question: "¿Se paga la zona verde en agosto?", answer: "Sí. La tarifa de residentes se aplica todo el año, agosto incluido, y AREA no prevé ninguna excepción de agosto para los no residentes: se paga con el horario de la señal." },
     ],
   },
   en: {
@@ -1012,24 +1051,33 @@ const PARKING_COPY: Record<"ca" | "es" | "en", ParkingCopy> = {
       `Blue. For the same label and the same rate, an hour in a blue space costs €0.50 less than in a green one (€0.25 less for a zero-emission car): with a C label on Rate A it is **${blueCA}** an hour in blue and **${greenCA}** in green. Both limit your stay, usually to 1 or 2 hours, so neither works for a visitor who wants to leave the car all day.`,
     ruleTitle: "The rule that matters most",
     rule: "The vertical sign for that stretch of street always wins: hours and the maximum stay change from street to street.",
-    hoursTitle: "When you have to pay",
+    stepsTitle: "How to park in a blue or green space, step by step",
+    steps: [
+      { title: "Read the sign for that stretch", text: "The vertical sign tells you the type of space, the hours and the maximum stay. If it says the space is for residents only, you cannot park there." },
+      { title: "Buy the ticket with your number plate", text: "At the meter, choose the zone type, type your plate and pay by card or exact coins (no change given), or pay in the SMOU app. For an electric car, the meter applies the discount when it checks the plate." },
+      { title: "Leave nothing in the car", text: "AREA officers check the number plate electronically; the printed receipt is optional." },
+      { title: "Be back before the maximum stay", text: "SMOU warns you 15 minutes before. The ticket cannot be renewed in the same area: when the time is up, you have to move the car." },
+    ],
+    augustTitle: "Do you pay for green zones in August?",
+    august: "Yes. AREA charges the resident rate all year round, from January to December including August, and its blue and green zone pages make no August exception for non-residents: in August you pay by the hours and maximum stay on the sign. On days when a pollution episode is declared, the City Council can restrict parking transactions.",
+    hoursTitle: "Blue and green zone hours",
     hours: [
       "**Blue** spaces are normally regulated Monday to Friday, 9:00 to 20:00 with no midday break; in the city centre also on Saturdays, and in beach zones also on Sundays and public holidays.",
       "**Green** spaces for non-residents run Monday to Friday or Monday to Saturday, from 8:00 to 20:00 or to 22:00 depending on the area. Outside the regulated hours parking is free, but the sign on the street is what counts.",
       "Beach regulation is seasonal: in Sant Martí it ran from 1 April to 30 September 2026, and since 1 October only the Avinguda Litoral stretch between Joan Miró and Jonquera keeps the seven-day schedule.",
       "**Weekends:** on Saturdays you pay only in blue spaces in the centre and in green areas that run Monday to Saturday; on Sundays, away from the beach, neither blue nor green spaces are charged. **Resident-only spaces**, though, are reserved 8:00 to 20:00 every day including public holidays (24 hours in Barceloneta and El Born).",
     ],
-    blueTitle: "Blue spaces: short stays",
-    blue: "They are for turnover: the maximum stay is what the sign says, usually 1 or 2 hours on Rate A and 2 hours on Rate B.",
+    blueTitle: "Blue zone prices in Barcelona",
+    blue: "Blue spaces are for short stays by any driver (there are about 5,400 of them in the city): the maximum stay is what the sign says, usually 1 or 2 hours. Rate A applies in high-demand areas such as the Eixample and Ciutat Vella; Rate B everywhere else.",
     blueCaption: "AREA Blue, hourly prices in 2026",
-    greenTitle: "How green spaces work for visitors",
+    greenTitle: "How green zones work in Barcelona",
     green: [
-      "Green spaces give residents priority, but visitors can park there too, at the non-resident rate and usually for 1 or 2 hours as the sign says. What visitors cannot use are the **resident-only spaces**: about 2,900 of them in Ciutat Vella, the historic centres of Gràcia and Sarrià, Camp de l'Arpa, El Raval, Barceloneta, El Born and El Carmel.",
-      "Authorised residents pay €0.20 a day, capped at €1 a week, and only inside their own zone.",
+      "Green spaces (about 57,000 in 35 resident zones) give residents priority, but both residents and non-residents can park in them. If you do not live there, you pay the non-resident rate and can stay as long as the sign says, usually 1 or 2 hours. What visitors cannot use are the **resident-only spaces**: about 2,900 of them in Ciutat Vella, the historic centres of Gràcia and Sarrià, Camp de l'Arpa, El Raval, Barceloneta, El Born and El Carmel.",
+      "Authorised residents pay €0.20 a day, capped at €1 a week, and only inside their own zone: outside it they pay the non-resident rate.",
       "A new green zone opens in Trinitat Vella (Sant Andreu) on 9 November 2026, with a 2-hour limit for non-residents.",
     ],
     greenCaption: "AREA Green for non-residents, hourly prices in 2026",
-    tableNote: "Source: AREA (B:SM), checked on 24 October 2026.",
+    tableNote: "Source: AREA (B:SM), checked on 28 October 2026.",
     costTitle: "What it will cost you",
     cost: (greenC, blueEco) =>
       `Two hours in a green space on Rate A with a C-label car cost **${greenC}**. Two hours in a blue space on Rate B with an ECO label, **${blueEco}**. Electric cars still need a ticket: they pay the lowest rate, but parking is not free.`,
@@ -1052,6 +1100,9 @@ const PARKING_COPY: Record<"ca" | "es" | "en", ParkingCopy> = {
       { question: "Is street parking free on Sundays in Barcelona?", answer: "Usually yes for visitors. Blue spaces are regulated Monday to Friday (plus Saturdays in the centre, and Sundays and holidays in some beach spaces); green spaces Monday to Friday or Monday to Saturday. Check the sign." },
       { question: "Which is cheaper in Barcelona, blue or green zone parking?", answer: "Blue: for the same label and rate it costs €0.50 less an hour (€0.25 less for a zero-emission car)." },
       { question: "Do you pay for blue zone parking on Saturdays?", answer: "Only in the city centre, where regulation extends to Saturdays. Elsewhere blue spaces are free on Saturdays, but some green areas are charged Monday to Saturday. Check the sign for that stretch." },
+      { question: "What are the blue zone hours in Barcelona?", answer: "Monday to Friday, 9:00 to 20:00 without a break; in the centre also on Saturdays, and in beach areas also on Sundays and public holidays. Outside those hours parking is free unless the sign says otherwise." },
+      { question: "How much is green zone parking in Barcelona?", answer: "For non-residents, €1.40 to €4.25 an hour depending on the rate (A or B) and the label: with a C label, €3.75 on Rate A and €3.50 on Rate B. Authorised residents pay €0.20 a day (capped at €1 a week)." },
+      { question: "Do you pay for green zones in August?", answer: "Yes. The resident rate applies all year, August included, and AREA makes no August exception for non-residents: you pay by the hours on the sign." },
     ],
   },
 };
@@ -1072,11 +1123,13 @@ function parkingBody(locale: "ca" | "es" | "en"): Block[] {
     ...h2(t.summaryTitle),
     table(t.summaryCaption, t.summaryHeaders, t.summaryRows, t.tableNote),
     callout("warning", t.ruleTitle, t.rule),
+    steps(t.stepsTitle, t.steps),
     ...h2(t.hoursTitle, ...t.hours),
     ...h2(t.blueTitle, t.blue),
     table(t.blueCaption, LABEL_HEADERS[locale] ?? [], blue, t.tableNote),
     ...h2(t.greenTitle, ...t.green),
     table(t.greenCaption, LABEL_HEADERS[locale] ?? [], green, t.tableNote),
+    ...h2(t.augustTitle, t.august),
     ...h2(t.cheaperTitle, t.cheaper(blueCA, greenCA)),
     ...h2(t.costTitle, t.cost(greenC, blueEco)),
     ...h2(t.payTitle, ...t.pay),
@@ -1123,10 +1176,10 @@ export const PARKING: B2Article = {
     ca: {
       path: "guies/aparcar-barcelona-zona-blava-verda",
       title:
-        "Aparcar a Barcelona: zona blava, zona verda, preus i què ha de saber un visitant",
-      seoTitle: "Preu zona blava i verda Barcelona: de 1,15 a 4,25 €/h",
+        "Zona blava i zona verda de Barcelona: com funcionen, preu i horari el 2026",
+      seoTitle: "Zona blava i verda Barcelona: preu, horari i com funciona",
       seoDescription:
-        "Zona blava de 1,15 a 3,75 €/h i zona verda de 1,40 a 4,25 €/h, segons el distintiu ambiental del cotxe. Taula completa de tarifes, horaris i com pagar.",
+        "Zona blava: 1,15-3,75 €/h, dl-dv de 9 a 20 h. Zona verda per a no residents: 1,40-4,25 €/h, 1 o 2 h. Com funciona, horari, agost i com pagar.",
       excerpt:
         "Els preus de l'aparcament regulat depenen de la zona i del distintiu ambiental del vehicle. Taula completa de 2026.",
       blocks: parkingBody("ca"),
@@ -1134,10 +1187,10 @@ export const PARKING: B2Article = {
 
     es: {
       path: "guias/aparcar-barcelona-zona-azul-verde",
-      title: "Aparcar en Barcelona: zona azul, zona verde, precios y reglas para visitantes",
-      seoTitle: "Zona azul y verde Barcelona: precio, horario y cómo funciona",
+      title: "Cómo funciona la zona verde y la zona azul en Barcelona: precio y horario 2026",
+      seoTitle: "Zona verde y azul Barcelona: cómo funciona, precio y horario",
       seoDescription:
-        "Zona azul: 1,15-3,75 €/h, lun-vie de 9 a 20 h. Zona verde para no residentes: 1,40-4,25 €/h, 1 o 2 h. Cómo funciona, tabla por distintivo y cómo pagar.",
+        "Zona azul: 1,15-3,75 €/h, lun-vie de 9 a 20 h. Zona verde para no residentes: 1,40-4,25 €/h, 1 o 2 h. Cómo funciona, horario, agosto y cómo pagar.",
       excerpt:
         "Las tarifas del aparcamiento regulado dependen de la zona y del distintivo ambiental. Tabla completa de 2026.",
       blocks: parkingBody("es"),
