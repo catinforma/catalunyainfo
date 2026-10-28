@@ -622,7 +622,15 @@ test("cruise port: terminal table with transport, Port's April 2026 note, termin
     assert.equal(table?.rows?.length, 5);
     assert.ok(table?.rows?.every((row) => row.length === 4), `${locale}: four columns`);
     assert.ok(!table?.rows?.some((row) => /^C\b|, C\b/.test(row[0] ?? "")), `${locale}: no terminal C row`);
-    assert.equal(table?.rows?.find((row) => (row[0] ?? "").startsWith("MSC"))?.[3], "Taxi", `${locale}: MSC is taxi only`);
+    // 28 Oct 2026: the Port's MSC page lists "Shuttle bus and taxi rank" but
+    // the Cruise Bus names only terminals A-E, so the row says taxi and sends
+    // the reader to the cruise line instead of promising the shuttle.
+    const msc = table?.rows?.find((row) => (row[0] ?? "").startsWith("MSC"))?.[3] ?? "";
+    assert.match(msc, /^Taxi; /, `${locale}: MSC is taxi, shuttle to be asked`);
+    assert.match(msc, /cruise line|naviera|naviliera/, `${locale}: MSC row sends the reader to the cruise line`);
+    assert.match(text, /30 (October|de octubre|d'octubre)/, `${locale}: terminal C's last cruise, from the 23 Jul 2026 note`);
+    assert.doesNotMatch(text, /Portbus[^.]*(formerly|antes se llamaba|abans es deia)|(formerly|antes se llamaba|abans es deia)[^.]*Portbus/i, `${locale}: no unverified rename`);
+    assert.doesNotMatch(text, /Drassanes/, `${locale}: no unverified metro stop`);
   }
 });
 
