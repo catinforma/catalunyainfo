@@ -30,6 +30,7 @@ import { TRAINS } from "../src/lib/content/features/trains.ts";
 import { weekdayIndex } from "../src/lib/content/holidays/calendar.ts";
 import { IMAGE_BY_KEY } from "../src/lib/content/images.ts";
 import { LOCALES, type Locale } from "../src/lib/i18n/config.ts";
+import { hubPath as rodaliesHubPath } from "../src/lib/programmatic/rodalies/paths.ts";
 
 /**
  * The strikes hub (27 Oct 2026): one evergreen page per language, a dated
@@ -49,11 +50,13 @@ const byId = (id: string) => {
   return strike;
 };
 
-const PUBLISHED = new Set(
-  [...Object.values(B2_PATHS), ...Object.values(ARTICLE_PATHS), ...Object.values(SIBLING_PATHS)].flatMap((paths) =>
+const PUBLISHED = new Set([
+  ...[...Object.values(B2_PATHS), ...Object.values(ARTICLE_PATHS), ...Object.values(SIBLING_PATHS)].flatMap((paths) =>
     LOCALES.map((locale) => `/${locale}/${paths[locale]}/`),
   ),
-);
+  // The Rodalies hub is a code route (app/(public)/[locale]/rodalies), served in all three languages.
+  ...LOCALES.map((locale) => rodaliesHubPath(locale)),
+]);
 
 /* -------------------------------------------------------------------------- */
 /* Structure, SEO, links, photo                                               */

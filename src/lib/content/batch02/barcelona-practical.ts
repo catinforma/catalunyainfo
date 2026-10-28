@@ -2,6 +2,7 @@ import type { Block } from "@/lib/content/blocks";
 import { link } from "@/lib/content/features/shared";
 import { SOURCES as TMB_SOURCES, TICKETS, VERIFIED_AT } from "@/lib/content/transport-cards/rates";
 import { fuelPath } from "@/lib/programmatic/fuel/paths";
+import { hubPath as rodaliesHub } from "@/lib/programmatic/rodalies/paths";
 
 import {
   b2Related,
@@ -280,6 +281,7 @@ export const TRANSPORT: B2Article = {
           `Per saber fins a quina hora pots fer servir la targeta cada nit, mira ${b2link("hours", "ca", "l'horari del metro, el tramvia i el NitBus")}; per arribar des de l'aeroport, ${b2link("airport", "ca", "l'autobús, el metro i el tren de l'aeroport al centre")}.`,
           `Si has vingut amb cotxe, mira també ${b2link("zbe", "ca", "què cal fer amb un vehicle estranger a la ZBE")} i ${b2link("parking", "ca", "com funcionen la zona blava i la verda")}.`,
           `Si hi ha una vaga convocada, consulta ${b2link("strikes", "ca", "què funciona els dies de vaga")}: hi afegim els serveis mínims oficials de metro, bus i Rodalies quan es publiquen.`,
+          `Abans d'agafar un tren de Rodalies, mira [les incidències de Rodalies avui, línia per línia](${rodaliesHub("ca")}).`,
         ),
         ...paras(verifiedLine("ca", VERIFIED_AT)),
         ...b2Related(["airport", "zbe", "parking", "girona", "montserratFree"], "ca"),
@@ -370,6 +372,7 @@ export const TRANSPORT: B2Article = {
           `Para saber hasta qué hora puedes usar la tarjeta cada noche, mira ${b2link("hours", "es", "el horario del metro, el tranvía y el NitBus")}; para llegar desde el aeropuerto, ${b2link("airport", "es", "el autobús, el metro y el tren del aeropuerto al centro")}.`,
           `Si has venido en coche, mira también ${b2link("zbe", "es", "qué hacer con un vehículo extranjero en la ZBE")} y ${b2link("parking", "es", "cómo funcionan la zona azul y la verde")}.`,
           `Si hay una huelga convocada, consulta ${b2link("strikes", "es", "qué funciona los días de huelga")}: añadimos los servicios mínimos oficiales de metro, bus y Rodalies cuando se publican.`,
+          `Antes de coger un tren de Rodalies, mira [las incidencias de Rodalies hoy, línea por línea](${rodaliesHub("es")}).`,
         ),
         ...paras(verifiedLine("es", VERIFIED_AT)),
         ...b2Related(["airport", "zbe", "parking", "girona", "montserratFree"], "es"),
@@ -438,6 +441,7 @@ export const TRANSPORT: B2Article = {
         ...paras(
           `Driving in? See ${b2link("zbe", "en", "what foreign-registered cars must do first")} and ${b2link("parking", "en", "how the blue and green parking zones work")}.`,
           `If a strike has been called, check ${b2link("strikes", "en", "what runs on strike days")}: we add the official minimum services for the metro, buses and Rodalies as they are published.`,
+          `Before you take a Rodalies train, check [Rodalies disruptions today](${rodaliesHub("en")}).`,
         ),
         ...paras(verifiedLine("en", VERIFIED_AT)),
         ...b2Related(["airport", "zbe", "parking", "girona", "montserratFree"], "en"),
