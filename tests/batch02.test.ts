@@ -287,6 +287,27 @@ test("ZBE: who-can-enter table from the AMB, FAQ, fine only for the official cas
   }
 });
 
+/**
+ * Airport, 28 Oct 2026: the page answers the specific transport queries from
+ * official pages only (Aena, AMB, TMB, ATM, Rodalies, DOGC). The airport
+ * express bus is named as Aena and the AMB name it, with no fare, frequency
+ * or link to its operator; the night buses carry the AMB's 15-minute
+ * timetable, not the old "midnight to 05:00, every 20-30 min".
+ */
+test("airport: official figures only, no operator link or fare for the express bus", () => {
+  for (const locale of ["ca", "es", "en"] as const) {
+    const json = JSON.stringify(AIRPORT.editions[locale].blocks);
+    const text = bodyToPlainText(AIRPORT.editions[locale].blocks);
+    assert.doesNotMatch(json, /aerobus(bcn|barcelona)\./i, `${locale}: no operator domain`);
+    assert.doesNotMatch(text, /7[,.]75|13[,.]30|28[,.]65/, `${locale}: no express-bus fare`);
+    assert.doesNotMatch(text, /20[–-]30 min/, `${locale}: no stale night-bus frequency`);
+    for (const figure of [/5:40/, /23:38/, /5[,.]90/, /2[,.]90/, /21:55/, /0:05/, /21 ?€|€21/]) assert.match(text, figure, `${locale}: ${figure}`);
+    const tables = (AIRPORT.editions[locale].blocks as { type: string }[]).filter((b) => b.type === "table");
+    assert.equal(tables.length, 3, `${locale}: overview, night buses, R2 first and last`);
+  }
+  assert.ok(AIRPORT.sources.every((s) => !/aerobus/i.test(s.url)), "no operator source");
+});
+
 test("the ZBE page states working days, not calendar days", () => {
   assert.match(bodyToPlainText(ZBE.editions.ca.blocks), /15 dies hàbils/);
   assert.match(bodyToPlainText(ZBE.editions.es.blocks), /15 días hábiles/);
