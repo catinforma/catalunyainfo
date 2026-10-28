@@ -1,0 +1,6247 @@
+{
+ "readOn": "2026-10-28",
+ "sources": {
+  "lines": {
+   "name": "Línies i estacions (cercador d'horaris i estat del servei de rodalies.gencat.cat)",
+   "publisher": "Rodalies de Catalunya",
+   "url": "https://serveisgrs.rodalies.gencat.cat/api/lines?limit=500",
+   "terms": "Avís legal de la Generalitat (web.gencat.cat/ca/ajuda/avis_legal/): reutilització permesa citant la font i la data d'actualització, sense alterar el contingut",
+   "updated": null
+  },
+  "renfeGtfs": {
+   "name": "Horarios cercanías (GTFS), routes.txt",
+   "publisher": "Renfe Operadora",
+   "url": "https://ssl.renfe.com/ftransit/Fichero_CER_FOMENTO/fomento_transit.zip",
+   "terms": "CC BY 4.0 (data.renfe.com / datos.gob.es); \"Origen de los datos: Renfe Operadora\"",
+   "updated": "2026-10-28"
+  }
+ },
+ "lines": [
+  {
+   "id": "R1",
+   "name": "R1",
+   "service": "RODALIES",
+   "journey": "Molins de Rei - Maçanet-Massanes",
+   "via": {
+    "ca": "per Mataró",
+    "es": "por Mataró",
+    "en": "by Mataró"
+   },
+   "origin": "Molins de Rei",
+   "destination": "Maçanet-Massanes",
+   "stations": [
+    {
+     "id": "72300",
+     "name": "Molins de Rei",
+     "accessible": false,
+     "lines": [
+      "R4"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "72301",
+     "name": "Sant Feliu de Llobregat",
+     "accessible": false,
+     "lines": [
+      "R4"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "72302",
+     "name": "Sant Joan Despí",
+     "accessible": true,
+     "lines": [
+      "R4"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "72303",
+     "name": "Cornellà",
+     "accessible": false,
+     "lines": [
+      "R4"
+     ],
+     "transfers": [
+      {
+       "type": "METRO",
+       "id": "L5",
+       "label": {
+        "ca": "Cornellà Centre / Horta",
+        "es": "Cornellà Centre / Horta",
+        "en": "Cornellà Centre / Horta"
+       }
+      },
+      {
+       "type": "TRAM",
+       "id": "T1",
+       "label": {
+        "ca": "Francesc Macià / Bon Viatge",
+        "es": "Francesc Macià / Bon Viatge",
+        "en": "Francesc Macià / Bon Viatge"
+       }
+      },
+      {
+       "type": "TRAM",
+       "id": "T2",
+       "label": {
+        "ca": "Francesc Macià / Llevant i Les Planes",
+        "es": "Francesc Macià / Llevant i Les Planes",
+        "en": "Francesc Macià / Llevant i Les Planes"
+       }
+      }
+     ]
+    },
+    {
+     "id": "72305",
+     "name": "L'Hospitalet de Llobregat",
+     "accessible": true,
+     "lines": [
+      "R3",
+      "R4",
+      "RG1"
+     ],
+     "transfers": [
+      {
+       "type": "METRO",
+       "id": "L1",
+       "label": {
+        "ca": "Hospital de Bellvitge / Fondo",
+        "es": "Hospital de Bellvitge / Fondo",
+        "en": "Hospital de Bellvitge / Fondo"
+       }
+      }
+     ]
+    },
+    {
+     "id": "71801",
+     "name": "Barcelona-Sants",
+     "accessible": true,
+     "lines": [
+      "R2",
+      "R2N",
+      "R2S",
+      "R3",
+      "R4",
+      "R11",
+      "R13",
+      "R14",
+      "R15",
+      "R16",
+      "R17",
+      "RG1"
+     ],
+     "transfers": [
+      {
+       "type": "OTHER",
+       "id": "R-MD",
+       "label": {
+        "ca": "Altres serveis ferroviaris",
+        "es": "Otros servicios ferroviarios",
+        "en": "Other train services"
+       }
+      },
+      {
+       "type": "OTHER",
+       "id": "R-AVE",
+       "label": {
+        "ca": "Tren d'Alta Velocitat",
+        "es": "Tren de Alta Velocidad",
+        "en": "High Speed Train"
+       }
+      },
+      {
+       "type": "METRO",
+       "id": "L3",
+       "label": {
+        "ca": "Zona Universitària / Trinitat Nova",
+        "es": "Zona Universitària / Trinitat Nova",
+        "en": "Zona Universitària / Trinitat Nova"
+       }
+      },
+      {
+       "type": "METRO",
+       "id": "L5",
+       "label": {
+        "ca": "Cornellà Centre / Horta",
+        "es": "Cornellà Centre / Horta",
+        "en": "Cornellà Centre / Horta"
+       }
+      }
+     ]
+    },
+    {
+     "id": "78805",
+     "name": "Barcelona-Plaça de Catalunya",
+     "accessible": true,
+     "lines": [
+      "R3",
+      "R4",
+      "RG1"
+     ],
+     "transfers": [
+      {
+       "type": "RAILWAY",
+       "id": "S1",
+       "label": {
+        "ca": "Barcelona- Pl. Catalunya / Terrassa",
+        "es": "Barcelona- Pl. Catalunya / Terrassa",
+        "en": "Barcelona- Pl. Catalunya / Terrassa"
+       }
+      },
+      {
+       "type": "RAILWAY",
+       "id": "S2",
+       "label": {
+        "ca": "Barcelona- Pl. Catalunya / Sabadell",
+        "es": "Barcelona- Pl. Catalunya / Sabadell",
+        "en": "Barcelona- Pl. Catalunya / Sabadell"
+       }
+      },
+      {
+       "type": "METRO",
+       "id": "L1",
+       "label": {
+        "ca": "Hospital de Bellvitge / Fondo",
+        "es": "Hospital de Bellvitge / Fondo",
+        "en": "Hospital de Bellvitge / Fondo"
+       }
+      },
+      {
+       "type": "METRO",
+       "id": "L3",
+       "label": {
+        "ca": "Zona Universitària / Trinitat Nova",
+        "es": "Zona Universitària / Trinitat Nova",
+        "en": "Zona Universitària / Trinitat Nova"
+       }
+      },
+      {
+       "type": "METRO",
+       "id": "L6",
+       "label": {
+        "ca": "Barcelona-Pl. Catalunya / Reina Elisenda",
+        "es": "Barcelona-Pl. Catalunya / Reina Elisenda",
+        "en": "Barcelona-Pl. Catalunya / Reina Elisenda"
+       }
+      },
+      {
+       "type": "METRO",
+       "id": "L7",
+       "label": {
+        "ca": "Barcelona-Pl. Catalunya / Av. Tibidabo",
+        "es": "Barcelona-Pl. Catalunya / Av. Tibidabo",
+        "en": "Barcelona-Pl. Catalunya / Av. Tibidabo"
+       }
+      }
+     ]
+    },
+    {
+     "id": "78804",
+     "name": "Barcelona-Arc de Triomf",
+     "accessible": true,
+     "lines": [
+      "R3",
+      "R4",
+      "RG1"
+     ],
+     "transfers": [
+      {
+       "type": "OTHER",
+       "id": "R-MD",
+       "label": {
+        "ca": "Altres serveis ferroviaris",
+        "es": "Otros servicios ferroviarios",
+        "en": "Other train services"
+       }
+      },
+      {
+       "type": "METRO",
+       "id": "L1",
+       "label": {
+        "ca": "Hospital de Bellvitge / Fondo",
+        "es": "Hospital de Bellvitge / Fondo",
+        "en": "Hospital de Bellvitge / Fondo"
+       }
+      }
+     ]
+    },
+    {
+     "id": "79009",
+     "name": "Barcelona-El Clot",
+     "accessible": true,
+     "lines": [
+      "R2",
+      "R2N",
+      "R11",
+      "RG1"
+     ],
+     "transfers": [
+      {
+       "type": "METRO",
+       "id": "L1",
+       "label": {
+        "ca": "Hospital de Bellvitge / Fondo",
+        "es": "Hospital de Bellvitge / Fondo",
+        "en": "Hospital de Bellvitge / Fondo"
+       }
+      },
+      {
+       "type": "METRO",
+       "id": "L2",
+       "label": {
+        "ca": "Paral·lel / Pep Ventura",
+        "es": "Paral·lel / Pep Ventura",
+        "en": "Paral·lel / Pep Ventura"
+       }
+      }
+     ]
+    },
+    {
+     "id": "79403",
+     "name": "Sant Adrià de Besòs",
+     "accessible": true,
+     "lines": [
+      "RG1"
+     ],
+     "transfers": [
+      {
+       "type": "TRAM",
+       "id": "T4",
+       "label": {
+        "ca": "Estació de Sant Adrià / Ciutadella i Vila Olímpica",
+        "es": "Estació de Sant Adrià / Ciutadella i Vila Olímpica",
+        "en": "Estació de Sant Adrià / Ciutadella i Vila Olímpica"
+       }
+      },
+      {
+       "type": "TRAM",
+       "id": "T6",
+       "label": {
+        "ca": "Estació de Sant Adrià / Gorg",
+        "es": "Estació de Sant Adrià / Gorg",
+        "en": "Estació de Sant Adrià / Gorg"
+       }
+      }
+     ]
+    },
+    {
+     "id": "79404",
+     "name": "Badalona",
+     "accessible": true,
+     "lines": [
+      "RG1"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "79405",
+     "name": "Montgat",
+     "accessible": true,
+     "lines": [
+      "RG1"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "79406",
+     "name": "Montgat Nord",
+     "accessible": true,
+     "lines": [
+      "RG1"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "79407",
+     "name": "El Masnou",
+     "accessible": true,
+     "lines": [
+      "RG1"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "79408",
+     "name": "Ocata",
+     "accessible": false,
+     "lines": [
+      "RG1"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "79409",
+     "name": "Premià de Mar",
+     "accessible": true,
+     "lines": [
+      "RG1"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "79410",
+     "name": "Vilassar de Mar",
+     "accessible": true,
+     "lines": [
+      "RG1"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "79412",
+     "name": "Cabrera de Mar-Vilassar de Mar",
+     "accessible": true,
+     "lines": [
+      "RG1"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "79500",
+     "name": "Mataró",
+     "accessible": true,
+     "lines": [
+      "RG1"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "79501",
+     "name": "Sant Andreu de Llavaneres",
+     "accessible": true,
+     "lines": [
+      "RG1"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "79502",
+     "name": "Caldes d'Estrac",
+     "accessible": true,
+     "lines": [
+      "RG1"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "79600",
+     "name": "Arenys de Mar",
+     "accessible": true,
+     "lines": [
+      "RG1"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "79601",
+     "name": "Canet de Mar",
+     "accessible": true,
+     "lines": [
+      "RG1"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "79602",
+     "name": "Sant Pol de Mar",
+     "accessible": false,
+     "lines": [
+      "RG1"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "79603",
+     "name": "Calella",
+     "accessible": true,
+     "lines": [
+      "RG1"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "79604",
+     "name": "Pineda de Mar",
+     "accessible": true,
+     "lines": [
+      "RG1"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "79608",
+     "name": "Santa Susanna",
+     "accessible": true,
+     "lines": [
+      "RG1"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "79605",
+     "name": "Malgrat de Mar",
+     "accessible": true,
+     "lines": [
+      "RG1"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "79606",
+     "name": "Blanes",
+     "accessible": true,
+     "lines": [
+      "RG1"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "79607",
+     "name": "Tordera",
+     "accessible": true,
+     "lines": [
+      "RG1"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "79200",
+     "name": "Maçanet-Massanes",
+     "accessible": true,
+     "lines": [
+      "R2N",
+      "R11",
+      "RG1"
+     ],
+     "transfers": []
+    }
+   ]
+  },
+  {
+   "id": "R2",
+   "name": "R2",
+   "service": "RODALIES",
+   "journey": "Castelldefels - Granollers Centre",
+   "via": {
+    "ca": "",
+    "es": "",
+    "en": ""
+   },
+   "origin": "Castelldefels",
+   "destination": "Granollers Centre",
+   "stations": [
+    {
+     "id": "71705",
+     "name": "Castelldefels",
+     "accessible": true,
+     "lines": [
+      "R2S"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "71706",
+     "name": "Gavà",
+     "accessible": true,
+     "lines": [
+      "R2S",
+      "R13",
+      "R14"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "71709",
+     "name": "Viladecans",
+     "accessible": true,
+     "lines": [
+      "R2S"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "71707",
+     "name": "El Prat de Llobregat",
+     "accessible": true,
+     "lines": [
+      "R2N",
+      "R2S"
+     ],
+     "transfers": [
+      {
+       "type": "METRO",
+       "id": "L9",
+       "label": {
+        "ca": "Can Peixauet / Can Zam",
+        "es": "Can Peixauet / Can Zam",
+        "en": "Can Peixauet / Can Zam"
+       }
+      },
+      {
+       "type": "METRO",
+       "id": "L9 Sud",
+       "label": {
+        "ca": "Aeroport T1 / Zona Universitària",
+        "es": "Aeroport T1 / Zona Universitària",
+        "en": "Aeroport T1 / Zona Universitària"
+       }
+      }
+     ]
+    },
+    {
+     "id": "71708",
+     "name": "Bellvitge | Gornal",
+     "accessible": true,
+     "lines": [
+      "R2N",
+      "R2S"
+     ],
+     "transfers": [
+      {
+       "type": "RAILWAY",
+       "id": "R50",
+       "label": {
+        "ca": "Barcelona-Plaça Espanya / Manresa",
+        "es": "Barcelona-Plaça Espanya / Manresa",
+        "en": "Barcelona-Plaça Espanya / Manresa"
+       }
+      },
+      {
+       "type": "RAILWAY",
+       "id": "R60",
+       "label": {
+        "ca": "Barcelona-Plaça Espanya / Igualada",
+        "es": "Barcelona-Plaça Espanya / Igualada",
+        "en": "Barcelona-Plaça Espanya / Igualada"
+       }
+      },
+      {
+       "type": "RAILWAY",
+       "id": "S4",
+       "label": {
+        "ca": "Barcelona- Pl. Espanya / Olesa de Montserrat",
+        "es": "Barcelona- Pl. Espanya / Olesa de Montserrat",
+        "en": "Barcelona- Pl. Espanya / Olesa de Montserrat"
+       }
+      },
+      {
+       "type": "RAILWAY",
+       "id": "S8",
+       "label": {
+        "ca": "Barcelona-Pl. Espanya / Martorell Enllaç",
+        "es": "Barcelona-Pl. Espanya / Martorell Enllaç",
+        "en": "Barcelona-Pl. Espanya / Martorell Enllaç"
+       }
+      },
+      {
+       "type": "RAILWAY",
+       "id": "S9",
+       "label": {
+        "ca": "Barcelona-Plaça Espanya / Quatre Camins",
+        "es": "Barcelona-Plaça Espanya / Quatre Camins",
+        "en": "Barcelona-Plaça Espanya / Quatre Camins"
+       }
+      },
+      {
+       "type": "METRO",
+       "id": "L8",
+       "label": {
+        "ca": "Barcelona-Pl. Espanya / Molí Nou-Ciutat Cooperativa",
+        "es": "Barcelona-Pl. Espanya / Molí Nou-Ciutat Cooperativa",
+        "en": "Barcelona-Pl. Espanya / Molí Nou-Ciutat Cooperativa"
+       }
+      },
+      {
+       "type": "METRO",
+       "id": "L9 Sud",
+       "label": {
+        "ca": "Aeroport T1 / Zona Universitària",
+        "es": "Aeroport T1 / Zona Universitària",
+        "en": "Aeroport T1 / Zona Universitària"
+       }
+      }
+     ]
+    },
+    {
+     "id": "71801",
+     "name": "Barcelona-Sants",
+     "accessible": true,
+     "lines": [
+      "R1",
+      "R2N",
+      "R2S",
+      "R3",
+      "R4",
+      "R11",
+      "R13",
+      "R14",
+      "R15",
+      "R16",
+      "R17",
+      "RG1"
+     ],
+     "transfers": [
+      {
+       "type": "OTHER",
+       "id": "R-MD",
+       "label": {
+        "ca": "Altres serveis ferroviaris",
+        "es": "Otros servicios ferroviarios",
+        "en": "Other train services"
+       }
+      },
+      {
+       "type": "OTHER",
+       "id": "R-AVE",
+       "label": {
+        "ca": "Tren d'Alta Velocitat",
+        "es": "Tren de Alta Velocidad",
+        "en": "High Speed Train"
+       }
+      },
+      {
+       "type": "METRO",
+       "id": "L3",
+       "label": {
+        "ca": "Zona Universitària / Trinitat Nova",
+        "es": "Zona Universitària / Trinitat Nova",
+        "en": "Zona Universitària / Trinitat Nova"
+       }
+      },
+      {
+       "type": "METRO",
+       "id": "L5",
+       "label": {
+        "ca": "Cornellà Centre / Horta",
+        "es": "Cornellà Centre / Horta",
+        "en": "Cornellà Centre / Horta"
+       }
+      }
+     ]
+    },
+    {
+     "id": "71802",
+     "name": "Barcelona-Passeig de Gràcia",
+     "accessible": true,
+     "lines": [
+      "R2N",
+      "R2S",
+      "R11",
+      "R13",
+      "R14",
+      "R15",
+      "R16",
+      "R17"
+     ],
+     "transfers": [
+      {
+       "type": "METRO",
+       "id": "L2",
+       "label": {
+        "ca": "Paral·lel / Pep Ventura",
+        "es": "Paral·lel / Pep Ventura",
+        "en": "Paral·lel / Pep Ventura"
+       }
+      },
+      {
+       "type": "METRO",
+       "id": "L3",
+       "label": {
+        "ca": "Zona Universitària / Trinitat Nova",
+        "es": "Zona Universitària / Trinitat Nova",
+        "en": "Zona Universitària / Trinitat Nova"
+       }
+      },
+      {
+       "type": "METRO",
+       "id": "L4",
+       "label": {
+        "ca": "Trinitat Nova / La Pau",
+        "es": "Trinitat Nova / La Pau",
+        "en": "Trinitat Nova / La Pau"
+       }
+      }
+     ]
+    },
+    {
+     "id": "79009",
+     "name": "Barcelona-El Clot",
+     "accessible": true,
+     "lines": [
+      "R1",
+      "R2N",
+      "R11",
+      "RG1"
+     ],
+     "transfers": [
+      {
+       "type": "METRO",
+       "id": "L1",
+       "label": {
+        "ca": "Hospital de Bellvitge / Fondo",
+        "es": "Hospital de Bellvitge / Fondo",
+        "en": "Hospital de Bellvitge / Fondo"
+       }
+      },
+      {
+       "type": "METRO",
+       "id": "L2",
+       "label": {
+        "ca": "Paral·lel / Pep Ventura",
+        "es": "Paral·lel / Pep Ventura",
+        "en": "Paral·lel / Pep Ventura"
+       }
+      }
+     ]
+    },
+    {
+     "id": "79004",
+     "name": "Barcelona-Sant Andreu",
+     "accessible": true,
+     "lines": [
+      "R2N",
+      "R11"
+     ],
+     "transfers": [
+      {
+       "type": "METRO",
+       "id": "L1",
+       "label": {
+        "ca": "Hospital de Bellvitge / Fondo",
+        "es": "Hospital de Bellvitge / Fondo",
+        "en": "Hospital de Bellvitge / Fondo"
+       }
+      }
+     ]
+    },
+    {
+     "id": "79005",
+     "name": "Montcada i Reixac",
+     "accessible": false,
+     "lines": [
+      "R2N"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "79011",
+     "name": "La Llagosta",
+     "accessible": true,
+     "lines": [
+      "R2N"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "79006",
+     "name": "Mollet-Sant Fost",
+     "accessible": false,
+     "lines": [
+      "R2N",
+      "R8"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "79007",
+     "name": "Montmeló",
+     "accessible": true,
+     "lines": [
+      "R2N",
+      "R8"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "79100",
+     "name": "Granollers Centre",
+     "accessible": true,
+     "lines": [
+      "R2N",
+      "R8",
+      "R11"
+     ],
+     "transfers": [
+      {
+       "type": "OTHER",
+       "id": "R-MD",
+       "label": {
+        "ca": "Altres serveis ferroviaris",
+        "es": "Otros servicios ferroviarios",
+        "en": "Other train services"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "R2N",
+   "name": "R2 Nord",
+   "service": "RODALIES",
+   "journey": "Aeroport - Maçanet-Massanes",
+   "via": {
+    "ca": "per Granollers Centre",
+    "es": "por Granollers Centre",
+    "en": "by Granollers Centre"
+   },
+   "origin": "Aeroport",
+   "destination": "Maçanet-Massanes",
+   "stations": [
+    {
+     "id": "72400",
+     "name": "Aeroport",
+     "accessible": true,
+     "lines": [],
+     "transfers": [
+      {
+       "type": "METRO",
+       "id": "L9 Sud",
+       "label": {
+        "ca": "Aeroport T1 / Zona Universitària",
+        "es": "Aeroport T1 / Zona Universitària",
+        "en": "Aeroport T1 / Zona Universitària"
+       }
+      }
+     ]
+    },
+    {
+     "id": "71707",
+     "name": "El Prat de Llobregat",
+     "accessible": true,
+     "lines": [
+      "R2",
+      "R2S"
+     ],
+     "transfers": [
+      {
+       "type": "METRO",
+       "id": "L9",
+       "label": {
+        "ca": "Can Peixauet / Can Zam",
+        "es": "Can Peixauet / Can Zam",
+        "en": "Can Peixauet / Can Zam"
+       }
+      },
+      {
+       "type": "METRO",
+       "id": "L9 Sud",
+       "label": {
+        "ca": "Aeroport T1 / Zona Universitària",
+        "es": "Aeroport T1 / Zona Universitària",
+        "en": "Aeroport T1 / Zona Universitària"
+       }
+      }
+     ]
+    },
+    {
+     "id": "71708",
+     "name": "Bellvitge | Gornal",
+     "accessible": true,
+     "lines": [
+      "R2",
+      "R2S"
+     ],
+     "transfers": [
+      {
+       "type": "RAILWAY",
+       "id": "R50",
+       "label": {
+        "ca": "Barcelona-Plaça Espanya / Manresa",
+        "es": "Barcelona-Plaça Espanya / Manresa",
+        "en": "Barcelona-Plaça Espanya / Manresa"
+       }
+      },
+      {
+       "type": "RAILWAY",
+       "id": "R60",
+       "label": {
+        "ca": "Barcelona-Plaça Espanya / Igualada",
+        "es": "Barcelona-Plaça Espanya / Igualada",
+        "en": "Barcelona-Plaça Espanya / Igualada"
+       }
+      },
+      {
+       "type": "RAILWAY",
+       "id": "S4",
+       "label": {
+        "ca": "Barcelona- Pl. Espanya / Olesa de Montserrat",
+        "es": "Barcelona- Pl. Espanya / Olesa de Montserrat",
+        "en": "Barcelona- Pl. Espanya / Olesa de Montserrat"
+       }
+      },
+      {
+       "type": "RAILWAY",
+       "id": "S8",
+       "label": {
+        "ca": "Barcelona-Pl. Espanya / Martorell Enllaç",
+        "es": "Barcelona-Pl. Espanya / Martorell Enllaç",
+        "en": "Barcelona-Pl. Espanya / Martorell Enllaç"
+       }
+      },
+      {
+       "type": "RAILWAY",
+       "id": "S9",
+       "label": {
+        "ca": "Barcelona-Plaça Espanya / Quatre Camins",
+        "es": "Barcelona-Plaça Espanya / Quatre Camins",
+        "en": "Barcelona-Plaça Espanya / Quatre Camins"
+       }
+      },
+      {
+       "type": "METRO",
+       "id": "L8",
+       "label": {
+        "ca": "Barcelona-Pl. Espanya / Molí Nou-Ciutat Cooperativa",
+        "es": "Barcelona-Pl. Espanya / Molí Nou-Ciutat Cooperativa",
+        "en": "Barcelona-Pl. Espanya / Molí Nou-Ciutat Cooperativa"
+       }
+      },
+      {
+       "type": "METRO",
+       "id": "L9 Sud",
+       "label": {
+        "ca": "Aeroport T1 / Zona Universitària",
+        "es": "Aeroport T1 / Zona Universitària",
+        "en": "Aeroport T1 / Zona Universitària"
+       }
+      }
+     ]
+    },
+    {
+     "id": "71801",
+     "name": "Barcelona-Sants",
+     "accessible": true,
+     "lines": [
+      "R1",
+      "R2",
+      "R2S",
+      "R3",
+      "R4",
+      "R11",
+      "R13",
+      "R14",
+      "R15",
+      "R16",
+      "R17",
+      "RG1"
+     ],
+     "transfers": [
+      {
+       "type": "OTHER",
+       "id": "R-MD",
+       "label": {
+        "ca": "Altres serveis ferroviaris",
+        "es": "Otros servicios ferroviarios",
+        "en": "Other train services"
+       }
+      },
+      {
+       "type": "OTHER",
+       "id": "R-AVE",
+       "label": {
+        "ca": "Tren d'Alta Velocitat",
+        "es": "Tren de Alta Velocidad",
+        "en": "High Speed Train"
+       }
+      },
+      {
+       "type": "METRO",
+       "id": "L3",
+       "label": {
+        "ca": "Zona Universitària / Trinitat Nova",
+        "es": "Zona Universitària / Trinitat Nova",
+        "en": "Zona Universitària / Trinitat Nova"
+       }
+      },
+      {
+       "type": "METRO",
+       "id": "L5",
+       "label": {
+        "ca": "Cornellà Centre / Horta",
+        "es": "Cornellà Centre / Horta",
+        "en": "Cornellà Centre / Horta"
+       }
+      }
+     ]
+    },
+    {
+     "id": "71802",
+     "name": "Barcelona-Passeig de Gràcia",
+     "accessible": true,
+     "lines": [
+      "R2",
+      "R2S",
+      "R11",
+      "R13",
+      "R14",
+      "R15",
+      "R16",
+      "R17"
+     ],
+     "transfers": [
+      {
+       "type": "METRO",
+       "id": "L2",
+       "label": {
+        "ca": "Paral·lel / Pep Ventura",
+        "es": "Paral·lel / Pep Ventura",
+        "en": "Paral·lel / Pep Ventura"
+       }
+      },
+      {
+       "type": "METRO",
+       "id": "L3",
+       "label": {
+        "ca": "Zona Universitària / Trinitat Nova",
+        "es": "Zona Universitària / Trinitat Nova",
+        "en": "Zona Universitària / Trinitat Nova"
+       }
+      },
+      {
+       "type": "METRO",
+       "id": "L4",
+       "label": {
+        "ca": "Trinitat Nova / La Pau",
+        "es": "Trinitat Nova / La Pau",
+        "en": "Trinitat Nova / La Pau"
+       }
+      }
+     ]
+    },
+    {
+     "id": "79009",
+     "name": "Barcelona-El Clot",
+     "accessible": true,
+     "lines": [
+      "R1",
+      "R2",
+      "R11",
+      "RG1"
+     ],
+     "transfers": [
+      {
+       "type": "METRO",
+       "id": "L1",
+       "label": {
+        "ca": "Hospital de Bellvitge / Fondo",
+        "es": "Hospital de Bellvitge / Fondo",
+        "en": "Hospital de Bellvitge / Fondo"
+       }
+      },
+      {
+       "type": "METRO",
+       "id": "L2",
+       "label": {
+        "ca": "Paral·lel / Pep Ventura",
+        "es": "Paral·lel / Pep Ventura",
+        "en": "Paral·lel / Pep Ventura"
+       }
+      }
+     ]
+    },
+    {
+     "id": "79004",
+     "name": "Barcelona-Sant Andreu",
+     "accessible": true,
+     "lines": [
+      "R2",
+      "R11"
+     ],
+     "transfers": [
+      {
+       "type": "METRO",
+       "id": "L1",
+       "label": {
+        "ca": "Hospital de Bellvitge / Fondo",
+        "es": "Hospital de Bellvitge / Fondo",
+        "en": "Hospital de Bellvitge / Fondo"
+       }
+      }
+     ]
+    },
+    {
+     "id": "79005",
+     "name": "Montcada i Reixac",
+     "accessible": false,
+     "lines": [
+      "R2"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "79011",
+     "name": "La Llagosta",
+     "accessible": true,
+     "lines": [
+      "R2"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "79006",
+     "name": "Mollet-Sant Fost",
+     "accessible": false,
+     "lines": [
+      "R2",
+      "R8"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "79007",
+     "name": "Montmeló",
+     "accessible": true,
+     "lines": [
+      "R2",
+      "R8"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "79100",
+     "name": "Granollers Centre",
+     "accessible": true,
+     "lines": [
+      "R2",
+      "R8",
+      "R11"
+     ],
+     "transfers": [
+      {
+       "type": "OTHER",
+       "id": "R-MD",
+       "label": {
+        "ca": "Altres serveis ferroviaris",
+        "es": "Otros servicios ferroviarios",
+        "en": "Other train services"
+       }
+      }
+     ]
+    },
+    {
+     "id": "79109",
+     "name": "Les Franqueses-Granollers Nord",
+     "accessible": true,
+     "lines": [],
+     "transfers": []
+    },
+    {
+     "id": "79101",
+     "name": "Cardedeu",
+     "accessible": true,
+     "lines": [],
+     "transfers": []
+    },
+    {
+     "id": "79102",
+     "name": "Llinars del Vallès",
+     "accessible": false,
+     "lines": [],
+     "transfers": []
+    },
+    {
+     "id": "79103",
+     "name": "Palautordera",
+     "accessible": true,
+     "lines": [],
+     "transfers": []
+    },
+    {
+     "id": "79104",
+     "name": "Sant Celoni",
+     "accessible": true,
+     "lines": [
+      "R11"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "79105",
+     "name": "Gualba",
+     "accessible": true,
+     "lines": [
+      "R11"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "79106",
+     "name": "Riells i Viabrea-Breda",
+     "accessible": true,
+     "lines": [
+      "R11"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "79107",
+     "name": "Hostalric",
+     "accessible": true,
+     "lines": [
+      "R11"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "79200",
+     "name": "Maçanet-Massanes",
+     "accessible": true,
+     "lines": [
+      "R1",
+      "R11",
+      "RG1"
+     ],
+     "transfers": []
+    }
+   ]
+  },
+  {
+   "id": "R2S",
+   "name": "R2 Sud",
+   "service": "RODALIES",
+   "journey": "Barcelona Estació de França - Sant Vicenç de Calders",
+   "via": {
+    "ca": "per Vilanova i la Geltrú",
+    "es": "por Vilanova i la Geltrú",
+    "en": "by Vilanova i la Geltrú"
+   },
+   "origin": "Sant Vicenç de Calders",
+   "destination": "Barcelona-Estació de França",
+   "stations": [
+    {
+     "id": "71600",
+     "name": "Sant Vicenç de Calders",
+     "accessible": true,
+     "lines": [
+      "R4",
+      "R13",
+      "R14",
+      "R15",
+      "R16",
+      "R17",
+      "RT2"
+     ],
+     "transfers": [
+      {
+       "type": "OTHER",
+       "id": "R-MD",
+       "label": {
+        "ca": "Altres serveis ferroviaris",
+        "es": "Otros servicios ferroviarios",
+        "en": "Other train services"
+       }
+      }
+     ]
+    },
+    {
+     "id": "71601",
+     "name": "Calafell",
+     "accessible": true,
+     "lines": [],
+     "transfers": []
+    },
+    {
+     "id": "71602",
+     "name": "Segur de Calafell",
+     "accessible": true,
+     "lines": [],
+     "transfers": []
+    },
+    {
+     "id": "71603",
+     "name": "Cunit",
+     "accessible": true,
+     "lines": [],
+     "transfers": []
+    },
+    {
+     "id": "71604",
+     "name": "Cubelles",
+     "accessible": true,
+     "lines": [],
+     "transfers": []
+    },
+    {
+     "id": "71700",
+     "name": "Vilanova i la Geltrú",
+     "accessible": true,
+     "lines": [
+      "R15",
+      "R16",
+      "R17"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "71701",
+     "name": "Sitges",
+     "accessible": true,
+     "lines": [],
+     "transfers": []
+    },
+    {
+     "id": "71703",
+     "name": "Garraf",
+     "accessible": true,
+     "lines": [],
+     "transfers": []
+    },
+    {
+     "id": "71704",
+     "name": "Platja de Castelldefels",
+     "accessible": true,
+     "lines": [],
+     "transfers": []
+    },
+    {
+     "id": "71705",
+     "name": "Castelldefels",
+     "accessible": true,
+     "lines": [
+      "R2"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "71706",
+     "name": "Gavà",
+     "accessible": true,
+     "lines": [
+      "R2",
+      "R13",
+      "R14"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "71709",
+     "name": "Viladecans",
+     "accessible": true,
+     "lines": [
+      "R2"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "71707",
+     "name": "El Prat de Llobregat",
+     "accessible": true,
+     "lines": [
+      "R2",
+      "R2N"
+     ],
+     "transfers": [
+      {
+       "type": "METRO",
+       "id": "L9",
+       "label": {
+        "ca": "Can Peixauet / Can Zam",
+        "es": "Can Peixauet / Can Zam",
+        "en": "Can Peixauet / Can Zam"
+       }
+      },
+      {
+       "type": "METRO",
+       "id": "L9 Sud",
+       "label": {
+        "ca": "Aeroport T1 / Zona Universitària",
+        "es": "Aeroport T1 / Zona Universitària",
+        "en": "Aeroport T1 / Zona Universitària"
+       }
+      }
+     ]
+    },
+    {
+     "id": "71708",
+     "name": "Bellvitge | Gornal",
+     "accessible": true,
+     "lines": [
+      "R2",
+      "R2N"
+     ],
+     "transfers": [
+      {
+       "type": "RAILWAY",
+       "id": "R50",
+       "label": {
+        "ca": "Barcelona-Plaça Espanya / Manresa",
+        "es": "Barcelona-Plaça Espanya / Manresa",
+        "en": "Barcelona-Plaça Espanya / Manresa"
+       }
+      },
+      {
+       "type": "RAILWAY",
+       "id": "R60",
+       "label": {
+        "ca": "Barcelona-Plaça Espanya / Igualada",
+        "es": "Barcelona-Plaça Espanya / Igualada",
+        "en": "Barcelona-Plaça Espanya / Igualada"
+       }
+      },
+      {
+       "type": "RAILWAY",
+       "id": "S4",
+       "label": {
+        "ca": "Barcelona- Pl. Espanya / Olesa de Montserrat",
+        "es": "Barcelona- Pl. Espanya / Olesa de Montserrat",
+        "en": "Barcelona- Pl. Espanya / Olesa de Montserrat"
+       }
+      },
+      {
+       "type": "RAILWAY",
+       "id": "S8",
+       "label": {
+        "ca": "Barcelona-Pl. Espanya / Martorell Enllaç",
+        "es": "Barcelona-Pl. Espanya / Martorell Enllaç",
+        "en": "Barcelona-Pl. Espanya / Martorell Enllaç"
+       }
+      },
+      {
+       "type": "RAILWAY",
+       "id": "S9",
+       "label": {
+        "ca": "Barcelona-Plaça Espanya / Quatre Camins",
+        "es": "Barcelona-Plaça Espanya / Quatre Camins",
+        "en": "Barcelona-Plaça Espanya / Quatre Camins"
+       }
+      },
+      {
+       "type": "METRO",
+       "id": "L8",
+       "label": {
+        "ca": "Barcelona-Pl. Espanya / Molí Nou-Ciutat Cooperativa",
+        "es": "Barcelona-Pl. Espanya / Molí Nou-Ciutat Cooperativa",
+        "en": "Barcelona-Pl. Espanya / Molí Nou-Ciutat Cooperativa"
+       }
+      },
+      {
+       "type": "METRO",
+       "id": "L9 Sud",
+       "label": {
+        "ca": "Aeroport T1 / Zona Universitària",
+        "es": "Aeroport T1 / Zona Universitària",
+        "en": "Aeroport T1 / Zona Universitària"
+       }
+      }
+     ]
+    },
+    {
+     "id": "71801",
+     "name": "Barcelona-Sants",
+     "accessible": true,
+     "lines": [
+      "R1",
+      "R2",
+      "R2N",
+      "R3",
+      "R4",
+      "R11",
+      "R13",
+      "R14",
+      "R15",
+      "R16",
+      "R17",
+      "RG1"
+     ],
+     "transfers": [
+      {
+       "type": "OTHER",
+       "id": "R-MD",
+       "label": {
+        "ca": "Altres serveis ferroviaris",
+        "es": "Otros servicios ferroviarios",
+        "en": "Other train services"
+       }
+      },
+      {
+       "type": "OTHER",
+       "id": "R-AVE",
+       "label": {
+        "ca": "Tren d'Alta Velocitat",
+        "es": "Tren de Alta Velocidad",
+        "en": "High Speed Train"
+       }
+      },
+      {
+       "type": "METRO",
+       "id": "L3",
+       "label": {
+        "ca": "Zona Universitària / Trinitat Nova",
+        "es": "Zona Universitària / Trinitat Nova",
+        "en": "Zona Universitària / Trinitat Nova"
+       }
+      },
+      {
+       "type": "METRO",
+       "id": "L5",
+       "label": {
+        "ca": "Cornellà Centre / Horta",
+        "es": "Cornellà Centre / Horta",
+        "en": "Cornellà Centre / Horta"
+       }
+      }
+     ]
+    },
+    {
+     "id": "71802",
+     "name": "Barcelona-Passeig de Gràcia",
+     "accessible": true,
+     "lines": [
+      "R2",
+      "R2N",
+      "R11",
+      "R13",
+      "R14",
+      "R15",
+      "R16",
+      "R17"
+     ],
+     "transfers": [
+      {
+       "type": "METRO",
+       "id": "L2",
+       "label": {
+        "ca": "Paral·lel / Pep Ventura",
+        "es": "Paral·lel / Pep Ventura",
+        "en": "Paral·lel / Pep Ventura"
+       }
+      },
+      {
+       "type": "METRO",
+       "id": "L3",
+       "label": {
+        "ca": "Zona Universitària / Trinitat Nova",
+        "es": "Zona Universitària / Trinitat Nova",
+        "en": "Zona Universitària / Trinitat Nova"
+       }
+      },
+      {
+       "type": "METRO",
+       "id": "L4",
+       "label": {
+        "ca": "Trinitat Nova / La Pau",
+        "es": "Trinitat Nova / La Pau",
+        "en": "Trinitat Nova / La Pau"
+       }
+      }
+     ]
+    },
+    {
+     "id": "79400",
+     "name": "Barcelona-Estació de França",
+     "accessible": true,
+     "lines": [
+      "R13",
+      "R14",
+      "R15",
+      "R16",
+      "R17"
+     ],
+     "transfers": [
+      {
+       "type": "OTHER",
+       "id": "R-MD",
+       "label": {
+        "ca": "Altres serveis ferroviaris",
+        "es": "Otros servicios ferroviarios",
+        "en": "Other train services"
+       }
+      },
+      {
+       "type": "METRO",
+       "id": "L4",
+       "label": {
+        "ca": "Trinitat Nova / La Pau",
+        "es": "Trinitat Nova / La Pau",
+        "en": "Trinitat Nova / La Pau"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "R3",
+   "name": "R3",
+   "service": "RODALIES",
+   "journey": "L'Hospitalet de Llobregat - Puigcerdà",
+   "via": {
+    "ca": "per Vic",
+    "es": "por Vic",
+    "en": "by Vic"
+   },
+   "origin": "L'Hospitalet de Llobregat",
+   "destination": "La Tor de Querol-Enveig",
+   "stations": [
+    {
+     "id": "72305",
+     "name": "L'Hospitalet de Llobregat",
+     "accessible": true,
+     "lines": [
+      "R1",
+      "R4",
+      "RG1"
+     ],
+     "transfers": [
+      {
+       "type": "METRO",
+       "id": "L1",
+       "label": {
+        "ca": "Hospital de Bellvitge / Fondo",
+        "es": "Hospital de Bellvitge / Fondo",
+        "en": "Hospital de Bellvitge / Fondo"
+       }
+      }
+     ]
+    },
+    {
+     "id": "71801",
+     "name": "Barcelona-Sants",
+     "accessible": true,
+     "lines": [
+      "R1",
+      "R2",
+      "R2N",
+      "R2S",
+      "R4",
+      "R11",
+      "R13",
+      "R14",
+      "R15",
+      "R16",
+      "R17",
+      "RG1"
+     ],
+     "transfers": [
+      {
+       "type": "OTHER",
+       "id": "R-MD",
+       "label": {
+        "ca": "Altres serveis ferroviaris",
+        "es": "Otros servicios ferroviarios",
+        "en": "Other train services"
+       }
+      },
+      {
+       "type": "OTHER",
+       "id": "R-AVE",
+       "label": {
+        "ca": "Tren d'Alta Velocitat",
+        "es": "Tren de Alta Velocidad",
+        "en": "High Speed Train"
+       }
+      },
+      {
+       "type": "METRO",
+       "id": "L3",
+       "label": {
+        "ca": "Zona Universitària / Trinitat Nova",
+        "es": "Zona Universitària / Trinitat Nova",
+        "en": "Zona Universitària / Trinitat Nova"
+       }
+      },
+      {
+       "type": "METRO",
+       "id": "L5",
+       "label": {
+        "ca": "Cornellà Centre / Horta",
+        "es": "Cornellà Centre / Horta",
+        "en": "Cornellà Centre / Horta"
+       }
+      }
+     ]
+    },
+    {
+     "id": "78805",
+     "name": "Barcelona-Plaça de Catalunya",
+     "accessible": true,
+     "lines": [
+      "R1",
+      "R4",
+      "RG1"
+     ],
+     "transfers": [
+      {
+       "type": "RAILWAY",
+       "id": "S1",
+       "label": {
+        "ca": "Barcelona- Pl. Catalunya / Terrassa",
+        "es": "Barcelona- Pl. Catalunya / Terrassa",
+        "en": "Barcelona- Pl. Catalunya / Terrassa"
+       }
+      },
+      {
+       "type": "RAILWAY",
+       "id": "S2",
+       "label": {
+        "ca": "Barcelona- Pl. Catalunya / Sabadell",
+        "es": "Barcelona- Pl. Catalunya / Sabadell",
+        "en": "Barcelona- Pl. Catalunya / Sabadell"
+       }
+      },
+      {
+       "type": "METRO",
+       "id": "L1",
+       "label": {
+        "ca": "Hospital de Bellvitge / Fondo",
+        "es": "Hospital de Bellvitge / Fondo",
+        "en": "Hospital de Bellvitge / Fondo"
+       }
+      },
+      {
+       "type": "METRO",
+       "id": "L3",
+       "label": {
+        "ca": "Zona Universitària / Trinitat Nova",
+        "es": "Zona Universitària / Trinitat Nova",
+        "en": "Zona Universitària / Trinitat Nova"
+       }
+      },
+      {
+       "type": "METRO",
+       "id": "L6",
+       "label": {
+        "ca": "Barcelona-Pl. Catalunya / Reina Elisenda",
+        "es": "Barcelona-Pl. Catalunya / Reina Elisenda",
+        "en": "Barcelona-Pl. Catalunya / Reina Elisenda"
+       }
+      },
+      {
+       "type": "METRO",
+       "id": "L7",
+       "label": {
+        "ca": "Barcelona-Pl. Catalunya / Av. Tibidabo",
+        "es": "Barcelona-Pl. Catalunya / Av. Tibidabo",
+        "en": "Barcelona-Pl. Catalunya / Av. Tibidabo"
+       }
+      }
+     ]
+    },
+    {
+     "id": "78804",
+     "name": "Barcelona-Arc de Triomf",
+     "accessible": true,
+     "lines": [
+      "R1",
+      "R4",
+      "RG1"
+     ],
+     "transfers": [
+      {
+       "type": "OTHER",
+       "id": "R-MD",
+       "label": {
+        "ca": "Altres serveis ferroviaris",
+        "es": "Otros servicios ferroviarios",
+        "en": "Other train services"
+       }
+      },
+      {
+       "type": "METRO",
+       "id": "L1",
+       "label": {
+        "ca": "Hospital de Bellvitge / Fondo",
+        "es": "Hospital de Bellvitge / Fondo",
+        "en": "Hospital de Bellvitge / Fondo"
+       }
+      }
+     ]
+    },
+    {
+     "id": "78806",
+     "name": "Barcelona-La Sagrera-Meridiana",
+     "accessible": true,
+     "lines": [
+      "R4"
+     ],
+     "transfers": [
+      {
+       "type": "METRO",
+       "id": "L1",
+       "label": {
+        "ca": "Hospital de Bellvitge / Fondo",
+        "es": "Hospital de Bellvitge / Fondo",
+        "en": "Hospital de Bellvitge / Fondo"
+       }
+      },
+      {
+       "type": "METRO",
+       "id": "L5",
+       "label": {
+        "ca": "Cornellà Centre / Horta",
+        "es": "Cornellà Centre / Horta",
+        "en": "Cornellà Centre / Horta"
+       }
+      },
+      {
+       "type": "METRO",
+       "id": "L9 Nord",
+       "label": {
+        "ca": "La Sagrera / Can Zam",
+        "es": "La Sagrera / Can Zam",
+        "en": "La Sagrera / Can Zam"
+       }
+      },
+      {
+       "type": "METRO",
+       "id": "L10",
+       "label": {
+        "ca": "La Sagrera / Gorg",
+        "es": "La Sagrera / Gorg",
+        "en": "La Sagrera / Gorg"
+       }
+      }
+     ]
+    },
+    {
+     "id": "78802",
+     "name": "Barcelona-Fabra i Puig",
+     "accessible": false,
+     "lines": [
+      "R4",
+      "R7"
+     ],
+     "transfers": [
+      {
+       "type": "METRO",
+       "id": "L1",
+       "label": {
+        "ca": "Hospital de Bellvitge / Fondo",
+        "es": "Hospital de Bellvitge / Fondo",
+        "en": "Hospital de Bellvitge / Fondo"
+       }
+      }
+     ]
+    },
+    {
+     "id": "78801",
+     "name": "Barcelona-Torre Baró | Vallbona",
+     "accessible": true,
+     "lines": [
+      "R4",
+      "R7"
+     ],
+     "transfers": [
+      {
+       "type": "METRO",
+       "id": "L11",
+       "label": {
+        "ca": "Trinitat Nova / Can Cuiàs",
+        "es": "Trinitat Nova / Can Cuiàs",
+        "en": "Trinitat Nova / Can Cuiàs"
+       }
+      }
+     ]
+    },
+    {
+     "id": "78800",
+     "name": "Montcada Bifurcació",
+     "accessible": false,
+     "lines": [
+      "R4",
+      "R7"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "77002",
+     "name": "Montcada Ripollet",
+     "accessible": false,
+     "lines": [],
+     "transfers": []
+    },
+    {
+     "id": "77003",
+     "name": "Santa Perpètua de Mogoda La Florida",
+     "accessible": false,
+     "lines": [],
+     "transfers": []
+    },
+    {
+     "id": "77004",
+     "name": "Mollet-Santa Rosa",
+     "accessible": false,
+     "lines": [],
+     "transfers": []
+    },
+    {
+     "id": "77005",
+     "name": "Parets del Vallès",
+     "accessible": false,
+     "lines": [],
+     "transfers": []
+    },
+    {
+     "id": "77006",
+     "name": "Granollers-Canovelles",
+     "accessible": false,
+     "lines": [],
+     "transfers": []
+    },
+    {
+     "id": "77100",
+     "name": "Les Franqueses del Vallès",
+     "accessible": false,
+     "lines": [],
+     "transfers": []
+    },
+    {
+     "id": "77102",
+     "name": "La Garriga",
+     "accessible": false,
+     "lines": [],
+     "transfers": []
+    },
+    {
+     "id": "77103",
+     "name": "Figaró",
+     "accessible": false,
+     "lines": [],
+     "transfers": []
+    },
+    {
+     "id": "77104",
+     "name": "Sant Martí de Centelles",
+     "accessible": false,
+     "lines": [],
+     "transfers": []
+    },
+    {
+     "id": "77105",
+     "name": "Centelles",
+     "accessible": false,
+     "lines": [],
+     "transfers": []
+    },
+    {
+     "id": "77106",
+     "name": "Balenyà-Els Hostalets",
+     "accessible": false,
+     "lines": [],
+     "transfers": []
+    },
+    {
+     "id": "77107",
+     "name": "Balenyà-Tona-Seva",
+     "accessible": false,
+     "lines": [],
+     "transfers": []
+    },
+    {
+     "id": "77109",
+     "name": "Vic",
+     "accessible": true,
+     "lines": [],
+     "transfers": []
+    },
+    {
+     "id": "77110",
+     "name": "Manlleu",
+     "accessible": false,
+     "lines": [],
+     "transfers": []
+    },
+    {
+     "id": "77111",
+     "name": "Torelló",
+     "accessible": true,
+     "lines": [],
+     "transfers": []
+    },
+    {
+     "id": "77112",
+     "name": "Borgonyà",
+     "accessible": true,
+     "lines": [],
+     "transfers": []
+    },
+    {
+     "id": "77113",
+     "name": "Sant Quirze de Besora",
+     "accessible": false,
+     "lines": [],
+     "transfers": []
+    },
+    {
+     "id": "77114",
+     "name": "La Farga de Bebié",
+     "accessible": true,
+     "lines": [],
+     "transfers": []
+    },
+    {
+     "id": "77200",
+     "name": "Ripoll",
+     "accessible": true,
+     "lines": [],
+     "transfers": []
+    },
+    {
+     "id": "77301",
+     "name": "Campdevànol",
+     "accessible": true,
+     "lines": [],
+     "transfers": []
+    },
+    {
+     "id": "77303",
+     "name": "Ribes de Freser",
+     "accessible": false,
+     "lines": [],
+     "transfers": [
+      {
+       "type": "VALL_DE_NURIA",
+       "id": "VN",
+       "label": {
+        "ca": "Vall de Núria",
+        "es": "Vall de Núria",
+        "en": "Vall de Núria"
+       }
+      },
+      {
+       "type": "RACK_RAILWAY",
+       "id": "CM",
+       "label": {
+        "ca": "Cremallera de Vall de Núria",
+        "es": "Cremallera de Vall de Núria",
+        "en": "Vall de Núria Rack Railway"
+       }
+      }
+     ]
+    },
+    {
+     "id": "77304",
+     "name": "Planoles",
+     "accessible": false,
+     "lines": [],
+     "transfers": []
+    },
+    {
+     "id": "77305",
+     "name": "Toses",
+     "accessible": true,
+     "lines": [],
+     "transfers": []
+    },
+    {
+     "id": "77306",
+     "name": "La Molina",
+     "accessible": true,
+     "lines": [],
+     "transfers": [
+      {
+       "type": "OTHER",
+       "id": "LM",
+       "label": {
+        "ca": "La Molina",
+        "es": "La Molina",
+        "en": "La Molina"
+       }
+      }
+     ]
+    },
+    {
+     "id": "77307",
+     "name": "Urtx-Alp",
+     "accessible": true,
+     "lines": [],
+     "transfers": []
+    },
+    {
+     "id": "77309",
+     "name": "Puigcerdà",
+     "accessible": false,
+     "lines": [],
+     "transfers": []
+    },
+    {
+     "id": "77310",
+     "name": "La Tor de Querol-Enveig",
+     "accessible": false,
+     "lines": [],
+     "transfers": []
+    }
+   ]
+  },
+  {
+   "id": "R4",
+   "name": "R4",
+   "service": "RODALIES",
+   "journey": "Sant Vicenç de Calders - Manresa",
+   "via": {
+    "ca": "per Vilafranca del Penedès",
+    "es": "por Vilafranca del Penedès",
+    "en": "by Vilafranca del Penedès"
+   },
+   "origin": "Sant Vicenç de Calders",
+   "destination": "Manresa",
+   "stations": [
+    {
+     "id": "71600",
+     "name": "Sant Vicenç de Calders",
+     "accessible": true,
+     "lines": [
+      "R2S",
+      "R13",
+      "R14",
+      "R15",
+      "R16",
+      "R17",
+      "RT2"
+     ],
+     "transfers": [
+      {
+       "type": "OTHER",
+       "id": "R-MD",
+       "label": {
+        "ca": "Altres serveis ferroviaris",
+        "es": "Otros servicios ferroviarios",
+        "en": "Other train services"
+       }
+      }
+     ]
+    },
+    {
+     "id": "72201",
+     "name": "El Vendrell",
+     "accessible": false,
+     "lines": [
+      "RT2"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "72202",
+     "name": "L'Arboç",
+     "accessible": false,
+     "lines": [
+      "RT2"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "72203",
+     "name": "Els Monjos",
+     "accessible": true,
+     "lines": [],
+     "transfers": []
+    },
+    {
+     "id": "72204",
+     "name": "Vilafranca del Penedès",
+     "accessible": true,
+     "lines": [],
+     "transfers": []
+    },
+    {
+     "id": "72205",
+     "name": "La Granada",
+     "accessible": false,
+     "lines": [],
+     "transfers": []
+    },
+    {
+     "id": "72206",
+     "name": "Lavern-Subirats",
+     "accessible": true,
+     "lines": [],
+     "transfers": []
+    },
+    {
+     "id": "72207",
+     "name": "Sant Sadurní d'Anoia",
+     "accessible": false,
+     "lines": [],
+     "transfers": []
+    },
+    {
+     "id": "72208",
+     "name": "Gelida",
+     "accessible": false,
+     "lines": [],
+     "transfers": []
+    },
+    {
+     "id": "72209",
+     "name": "Martorell Central",
+     "accessible": true,
+     "lines": [
+      "R8"
+     ],
+     "transfers": [
+      {
+       "type": "RAILWAY",
+       "id": "S4",
+       "label": {
+        "ca": "Barcelona- Pl. Espanya / Olesa de Montserrat",
+        "es": "Barcelona- Pl. Espanya / Olesa de Montserrat",
+        "en": "Barcelona- Pl. Espanya / Olesa de Montserrat"
+       }
+      },
+      {
+       "type": "RAILWAY",
+       "id": "S8",
+       "label": {
+        "ca": "Barcelona-Pl. Espanya / Martorell Enllaç",
+        "es": "Barcelona-Pl. Espanya / Martorell Enllaç",
+        "en": "Barcelona-Pl. Espanya / Martorell Enllaç"
+       }
+      }
+     ]
+    },
+    {
+     "id": "72210",
+     "name": "Castellbisbal",
+     "accessible": false,
+     "lines": [
+      "R8"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "72211",
+     "name": "El Papiol",
+     "accessible": false,
+     "lines": [],
+     "transfers": []
+    },
+    {
+     "id": "72300",
+     "name": "Molins de Rei",
+     "accessible": false,
+     "lines": [
+      "R1"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "72301",
+     "name": "Sant Feliu de Llobregat",
+     "accessible": false,
+     "lines": [
+      "R1"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "72302",
+     "name": "Sant Joan Despí",
+     "accessible": true,
+     "lines": [
+      "R1"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "72303",
+     "name": "Cornellà",
+     "accessible": false,
+     "lines": [
+      "R1"
+     ],
+     "transfers": [
+      {
+       "type": "METRO",
+       "id": "L5",
+       "label": {
+        "ca": "Cornellà Centre / Horta",
+        "es": "Cornellà Centre / Horta",
+        "en": "Cornellà Centre / Horta"
+       }
+      },
+      {
+       "type": "TRAM",
+       "id": "T1",
+       "label": {
+        "ca": "Francesc Macià / Bon Viatge",
+        "es": "Francesc Macià / Bon Viatge",
+        "en": "Francesc Macià / Bon Viatge"
+       }
+      },
+      {
+       "type": "TRAM",
+       "id": "T2",
+       "label": {
+        "ca": "Francesc Macià / Llevant i Les Planes",
+        "es": "Francesc Macià / Llevant i Les Planes",
+        "en": "Francesc Macià / Llevant i Les Planes"
+       }
+      }
+     ]
+    },
+    {
+     "id": "72305",
+     "name": "L'Hospitalet de Llobregat",
+     "accessible": true,
+     "lines": [
+      "R1",
+      "R3",
+      "RG1"
+     ],
+     "transfers": [
+      {
+       "type": "METRO",
+       "id": "L1",
+       "label": {
+        "ca": "Hospital de Bellvitge / Fondo",
+        "es": "Hospital de Bellvitge / Fondo",
+        "en": "Hospital de Bellvitge / Fondo"
+       }
+      }
+     ]
+    },
+    {
+     "id": "71801",
+     "name": "Barcelona-Sants",
+     "accessible": true,
+     "lines": [
+      "R1",
+      "R2",
+      "R2N",
+      "R2S",
+      "R3",
+      "R11",
+      "R13",
+      "R14",
+      "R15",
+      "R16",
+      "R17",
+      "RG1"
+     ],
+     "transfers": [
+      {
+       "type": "OTHER",
+       "id": "R-MD",
+       "label": {
+        "ca": "Altres serveis ferroviaris",
+        "es": "Otros servicios ferroviarios",
+        "en": "Other train services"
+       }
+      },
+      {
+       "type": "OTHER",
+       "id": "R-AVE",
+       "label": {
+        "ca": "Tren d'Alta Velocitat",
+        "es": "Tren de Alta Velocidad",
+        "en": "High Speed Train"
+       }
+      },
+      {
+       "type": "METRO",
+       "id": "L3",
+       "label": {
+        "ca": "Zona Universitària / Trinitat Nova",
+        "es": "Zona Universitària / Trinitat Nova",
+        "en": "Zona Universitària / Trinitat Nova"
+       }
+      },
+      {
+       "type": "METRO",
+       "id": "L5",
+       "label": {
+        "ca": "Cornellà Centre / Horta",
+        "es": "Cornellà Centre / Horta",
+        "en": "Cornellà Centre / Horta"
+       }
+      }
+     ]
+    },
+    {
+     "id": "78805",
+     "name": "Barcelona-Plaça de Catalunya",
+     "accessible": true,
+     "lines": [
+      "R1",
+      "R3",
+      "RG1"
+     ],
+     "transfers": [
+      {
+       "type": "RAILWAY",
+       "id": "S1",
+       "label": {
+        "ca": "Barcelona- Pl. Catalunya / Terrassa",
+        "es": "Barcelona- Pl. Catalunya / Terrassa",
+        "en": "Barcelona- Pl. Catalunya / Terrassa"
+       }
+      },
+      {
+       "type": "RAILWAY",
+       "id": "S2",
+       "label": {
+        "ca": "Barcelona- Pl. Catalunya / Sabadell",
+        "es": "Barcelona- Pl. Catalunya / Sabadell",
+        "en": "Barcelona- Pl. Catalunya / Sabadell"
+       }
+      },
+      {
+       "type": "METRO",
+       "id": "L1",
+       "label": {
+        "ca": "Hospital de Bellvitge / Fondo",
+        "es": "Hospital de Bellvitge / Fondo",
+        "en": "Hospital de Bellvitge / Fondo"
+       }
+      },
+      {
+       "type": "METRO",
+       "id": "L3",
+       "label": {
+        "ca": "Zona Universitària / Trinitat Nova",
+        "es": "Zona Universitària / Trinitat Nova",
+        "en": "Zona Universitària / Trinitat Nova"
+       }
+      },
+      {
+       "type": "METRO",
+       "id": "L6",
+       "label": {
+        "ca": "Barcelona-Pl. Catalunya / Reina Elisenda",
+        "es": "Barcelona-Pl. Catalunya / Reina Elisenda",
+        "en": "Barcelona-Pl. Catalunya / Reina Elisenda"
+       }
+      },
+      {
+       "type": "METRO",
+       "id": "L7",
+       "label": {
+        "ca": "Barcelona-Pl. Catalunya / Av. Tibidabo",
+        "es": "Barcelona-Pl. Catalunya / Av. Tibidabo",
+        "en": "Barcelona-Pl. Catalunya / Av. Tibidabo"
+       }
+      }
+     ]
+    },
+    {
+     "id": "78804",
+     "name": "Barcelona-Arc de Triomf",
+     "accessible": true,
+     "lines": [
+      "R1",
+      "R3",
+      "RG1"
+     ],
+     "transfers": [
+      {
+       "type": "OTHER",
+       "id": "R-MD",
+       "label": {
+        "ca": "Altres serveis ferroviaris",
+        "es": "Otros servicios ferroviarios",
+        "en": "Other train services"
+       }
+      },
+      {
+       "type": "METRO",
+       "id": "L1",
+       "label": {
+        "ca": "Hospital de Bellvitge / Fondo",
+        "es": "Hospital de Bellvitge / Fondo",
+        "en": "Hospital de Bellvitge / Fondo"
+       }
+      }
+     ]
+    },
+    {
+     "id": "78806",
+     "name": "Barcelona-La Sagrera-Meridiana",
+     "accessible": true,
+     "lines": [
+      "R3"
+     ],
+     "transfers": [
+      {
+       "type": "METRO",
+       "id": "L1",
+       "label": {
+        "ca": "Hospital de Bellvitge / Fondo",
+        "es": "Hospital de Bellvitge / Fondo",
+        "en": "Hospital de Bellvitge / Fondo"
+       }
+      },
+      {
+       "type": "METRO",
+       "id": "L5",
+       "label": {
+        "ca": "Cornellà Centre / Horta",
+        "es": "Cornellà Centre / Horta",
+        "en": "Cornellà Centre / Horta"
+       }
+      },
+      {
+       "type": "METRO",
+       "id": "L9 Nord",
+       "label": {
+        "ca": "La Sagrera / Can Zam",
+        "es": "La Sagrera / Can Zam",
+        "en": "La Sagrera / Can Zam"
+       }
+      },
+      {
+       "type": "METRO",
+       "id": "L10",
+       "label": {
+        "ca": "La Sagrera / Gorg",
+        "es": "La Sagrera / Gorg",
+        "en": "La Sagrera / Gorg"
+       }
+      }
+     ]
+    },
+    {
+     "id": "78802",
+     "name": "Barcelona-Fabra i Puig",
+     "accessible": false,
+     "lines": [
+      "R3",
+      "R7"
+     ],
+     "transfers": [
+      {
+       "type": "METRO",
+       "id": "L1",
+       "label": {
+        "ca": "Hospital de Bellvitge / Fondo",
+        "es": "Hospital de Bellvitge / Fondo",
+        "en": "Hospital de Bellvitge / Fondo"
+       }
+      }
+     ]
+    },
+    {
+     "id": "78801",
+     "name": "Barcelona-Torre Baró | Vallbona",
+     "accessible": true,
+     "lines": [
+      "R3",
+      "R7"
+     ],
+     "transfers": [
+      {
+       "type": "METRO",
+       "id": "L11",
+       "label": {
+        "ca": "Trinitat Nova / Can Cuiàs",
+        "es": "Trinitat Nova / Can Cuiàs",
+        "en": "Trinitat Nova / Can Cuiàs"
+       }
+      }
+     ]
+    },
+    {
+     "id": "78800",
+     "name": "Montcada Bifurcació",
+     "accessible": false,
+     "lines": [
+      "R3",
+      "R7"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "78708",
+     "name": "Montcada i Reixac-Manresa",
+     "accessible": false,
+     "lines": [
+      "R7"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "78707",
+     "name": "Montcada i Reixac-Santa Maria",
+     "accessible": true,
+     "lines": [
+      "R7"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "78706",
+     "name": "Cerdanyola del Vallès",
+     "accessible": true,
+     "lines": [
+      "R7"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "78705",
+     "name": "Barberà del Vallès",
+     "accessible": true,
+     "lines": [],
+     "transfers": []
+    },
+    {
+     "id": "78703",
+     "name": "Sabadell Sud",
+     "accessible": true,
+     "lines": [],
+     "transfers": []
+    },
+    {
+     "id": "78704",
+     "name": "Sabadell Centre",
+     "accessible": true,
+     "lines": [],
+     "transfers": []
+    },
+    {
+     "id": "78709",
+     "name": "Sabadell Nord",
+     "accessible": true,
+     "lines": [],
+     "transfers": [
+      {
+       "type": "RAILWAY",
+       "id": "S2",
+       "label": {
+        "ca": "Barcelona- Pl. Catalunya / Sabadell",
+        "es": "Barcelona- Pl. Catalunya / Sabadell",
+        "en": "Barcelona- Pl. Catalunya / Sabadell"
+       }
+      }
+     ]
+    },
+    {
+     "id": "78710",
+     "name": "Terrassa Est",
+     "accessible": true,
+     "lines": [],
+     "transfers": []
+    },
+    {
+     "id": "78700",
+     "name": "Terrassa Estació del Nord",
+     "accessible": true,
+     "lines": [
+      "RL4"
+     ],
+     "transfers": [
+      {
+       "type": "RAILWAY",
+       "id": "S1",
+       "label": {
+        "ca": "Barcelona- Pl. Catalunya / Terrassa",
+        "es": "Barcelona- Pl. Catalunya / Terrassa",
+        "en": "Barcelona- Pl. Catalunya / Terrassa"
+       }
+      }
+     ]
+    },
+    {
+     "id": "78610",
+     "name": "Sant Miquel de Gonteres-Viladecavalls",
+     "accessible": false,
+     "lines": [],
+     "transfers": []
+    },
+    {
+     "id": "78609",
+     "name": "Viladecavalls",
+     "accessible": false,
+     "lines": [],
+     "transfers": []
+    },
+    {
+     "id": "78607",
+     "name": "Vacarisses-Torreblanca",
+     "accessible": true,
+     "lines": [],
+     "transfers": []
+    },
+    {
+     "id": "78606",
+     "name": "Vacarisses",
+     "accessible": false,
+     "lines": [],
+     "transfers": []
+    },
+    {
+     "id": "78605",
+     "name": "Castellbell i el Vilar-Monistrol de Mont",
+     "accessible": false,
+     "lines": [],
+     "transfers": []
+    },
+    {
+     "id": "78604",
+     "name": "Sant Vicenç de Castellet",
+     "accessible": false,
+     "lines": [
+      "RL4"
+     ],
+     "transfers": [
+      {
+       "type": "RAILWAY",
+       "id": "R50",
+       "label": {
+        "ca": "Barcelona-Plaça Espanya / Manresa",
+        "es": "Barcelona-Plaça Espanya / Manresa",
+        "en": "Barcelona-Plaça Espanya / Manresa"
+       }
+      }
+     ]
+    },
+    {
+     "id": "78600",
+     "name": "Manresa",
+     "accessible": true,
+     "lines": [
+      "RL4"
+     ],
+     "transfers": []
+    }
+   ]
+  },
+  {
+   "id": "R7",
+   "name": "R7",
+   "service": "RODALIES",
+   "journey": "Barcelona-Fabra i Puig - Cerdanyola Universitat",
+   "via": {
+    "ca": "",
+    "es": "",
+    "en": ""
+   },
+   "origin": "Barcelona-Fabra i Puig",
+   "destination": "Cerdanyola-Universitat",
+   "stations": [
+    {
+     "id": "78802",
+     "name": "Barcelona-Fabra i Puig",
+     "accessible": false,
+     "lines": [
+      "R3",
+      "R4"
+     ],
+     "transfers": [
+      {
+       "type": "METRO",
+       "id": "L1",
+       "label": {
+        "ca": "Hospital de Bellvitge / Fondo",
+        "es": "Hospital de Bellvitge / Fondo",
+        "en": "Hospital de Bellvitge / Fondo"
+       }
+      }
+     ]
+    },
+    {
+     "id": "78801",
+     "name": "Barcelona-Torre Baró | Vallbona",
+     "accessible": true,
+     "lines": [
+      "R3",
+      "R4"
+     ],
+     "transfers": [
+      {
+       "type": "METRO",
+       "id": "L11",
+       "label": {
+        "ca": "Trinitat Nova / Can Cuiàs",
+        "es": "Trinitat Nova / Can Cuiàs",
+        "en": "Trinitat Nova / Can Cuiàs"
+       }
+      }
+     ]
+    },
+    {
+     "id": "78800",
+     "name": "Montcada Bifurcació",
+     "accessible": false,
+     "lines": [
+      "R3",
+      "R4"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "78708",
+     "name": "Montcada i Reixac-Manresa",
+     "accessible": false,
+     "lines": [
+      "R4"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "78707",
+     "name": "Montcada i Reixac-Santa Maria",
+     "accessible": true,
+     "lines": [
+      "R4"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "78706",
+     "name": "Cerdanyola del Vallès",
+     "accessible": true,
+     "lines": [
+      "R4"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "72503",
+     "name": "Cerdanyola-Universitat",
+     "accessible": true,
+     "lines": [
+      "R8"
+     ],
+     "transfers": []
+    }
+   ]
+  },
+  {
+   "id": "R8",
+   "name": "R8",
+   "service": "RODALIES",
+   "journey": "Martorell Central - Granollers Centre",
+   "via": {
+    "ca": "per Cerdanyola Universitat",
+    "es": "por Cerdanyola Universitat",
+    "en": "by Cerdanyola Universitat"
+   },
+   "origin": "Martorell Central",
+   "destination": "Granollers Centre",
+   "stations": [
+    {
+     "id": "72209",
+     "name": "Martorell Central",
+     "accessible": true,
+     "lines": [
+      "R4"
+     ],
+     "transfers": [
+      {
+       "type": "RAILWAY",
+       "id": "S4",
+       "label": {
+        "ca": "Barcelona- Pl. Espanya / Olesa de Montserrat",
+        "es": "Barcelona- Pl. Espanya / Olesa de Montserrat",
+        "en": "Barcelona- Pl. Espanya / Olesa de Montserrat"
+       }
+      },
+      {
+       "type": "RAILWAY",
+       "id": "S8",
+       "label": {
+        "ca": "Barcelona-Pl. Espanya / Martorell Enllaç",
+        "es": "Barcelona-Pl. Espanya / Martorell Enllaç",
+        "en": "Barcelona-Pl. Espanya / Martorell Enllaç"
+       }
+      }
+     ]
+    },
+    {
+     "id": "72210",
+     "name": "Castellbisbal",
+     "accessible": false,
+     "lines": [
+      "R4"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "72501",
+     "name": "Rubí Can Vallhonrat",
+     "accessible": false,
+     "lines": [],
+     "transfers": []
+    },
+    {
+     "id": "72502",
+     "name": "Sant Cugat Coll Favà",
+     "accessible": false,
+     "lines": [],
+     "transfers": [
+      {
+       "type": "RAILWAY",
+       "id": "S2",
+       "label": {
+        "ca": "Barcelona- Pl. Catalunya / Sabadell",
+        "es": "Barcelona- Pl. Catalunya / Sabadell",
+        "en": "Barcelona- Pl. Catalunya / Sabadell"
+       }
+      }
+     ]
+    },
+    {
+     "id": "72503",
+     "name": "Cerdanyola-Universitat",
+     "accessible": true,
+     "lines": [
+      "R7"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "72508",
+     "name": "Santa Perpètua de Mogoda Riera de Caldes",
+     "accessible": true,
+     "lines": [],
+     "transfers": []
+    },
+    {
+     "id": "79006",
+     "name": "Mollet-Sant Fost",
+     "accessible": false,
+     "lines": [
+      "R2",
+      "R2N"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "79007",
+     "name": "Montmeló",
+     "accessible": true,
+     "lines": [
+      "R2",
+      "R2N"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "79100",
+     "name": "Granollers Centre",
+     "accessible": true,
+     "lines": [
+      "R2",
+      "R2N",
+      "R11"
+     ],
+     "transfers": [
+      {
+       "type": "OTHER",
+       "id": "R-MD",
+       "label": {
+        "ca": "Altres serveis ferroviaris",
+        "es": "Otros servicios ferroviarios",
+        "en": "Other train services"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "R11",
+   "name": "R11",
+   "service": "REGIONAL",
+   "journey": "Barcelona Sants - Portbou",
+   "via": {
+    "ca": "per Granollers Centre i Girona",
+    "es": "por Granollers Centre i Girona",
+    "en": "by Granollers Centre i Girona"
+   },
+   "origin": "Barcelona-Sants",
+   "destination": "Cerbère",
+   "stations": [
+    {
+     "id": "71801",
+     "name": "Barcelona-Sants",
+     "accessible": true,
+     "lines": [
+      "R1",
+      "R2",
+      "R2N",
+      "R2S",
+      "R3",
+      "R4",
+      "R13",
+      "R14",
+      "R15",
+      "R16",
+      "R17",
+      "RG1"
+     ],
+     "transfers": [
+      {
+       "type": "OTHER",
+       "id": "R-MD",
+       "label": {
+        "ca": "Altres serveis ferroviaris",
+        "es": "Otros servicios ferroviarios",
+        "en": "Other train services"
+       }
+      },
+      {
+       "type": "OTHER",
+       "id": "R-AVE",
+       "label": {
+        "ca": "Tren d'Alta Velocitat",
+        "es": "Tren de Alta Velocidad",
+        "en": "High Speed Train"
+       }
+      },
+      {
+       "type": "METRO",
+       "id": "L3",
+       "label": {
+        "ca": "Zona Universitària / Trinitat Nova",
+        "es": "Zona Universitària / Trinitat Nova",
+        "en": "Zona Universitària / Trinitat Nova"
+       }
+      },
+      {
+       "type": "METRO",
+       "id": "L5",
+       "label": {
+        "ca": "Cornellà Centre / Horta",
+        "es": "Cornellà Centre / Horta",
+        "en": "Cornellà Centre / Horta"
+       }
+      }
+     ]
+    },
+    {
+     "id": "71802",
+     "name": "Barcelona-Passeig de Gràcia",
+     "accessible": true,
+     "lines": [
+      "R2",
+      "R2N",
+      "R2S",
+      "R13",
+      "R14",
+      "R15",
+      "R16",
+      "R17"
+     ],
+     "transfers": [
+      {
+       "type": "METRO",
+       "id": "L2",
+       "label": {
+        "ca": "Paral·lel / Pep Ventura",
+        "es": "Paral·lel / Pep Ventura",
+        "en": "Paral·lel / Pep Ventura"
+       }
+      },
+      {
+       "type": "METRO",
+       "id": "L3",
+       "label": {
+        "ca": "Zona Universitària / Trinitat Nova",
+        "es": "Zona Universitària / Trinitat Nova",
+        "en": "Zona Universitària / Trinitat Nova"
+       }
+      },
+      {
+       "type": "METRO",
+       "id": "L4",
+       "label": {
+        "ca": "Trinitat Nova / La Pau",
+        "es": "Trinitat Nova / La Pau",
+        "en": "Trinitat Nova / La Pau"
+       }
+      }
+     ]
+    },
+    {
+     "id": "79009",
+     "name": "Barcelona-El Clot",
+     "accessible": true,
+     "lines": [
+      "R1",
+      "R2",
+      "R2N",
+      "RG1"
+     ],
+     "transfers": [
+      {
+       "type": "METRO",
+       "id": "L1",
+       "label": {
+        "ca": "Hospital de Bellvitge / Fondo",
+        "es": "Hospital de Bellvitge / Fondo",
+        "en": "Hospital de Bellvitge / Fondo"
+       }
+      },
+      {
+       "type": "METRO",
+       "id": "L2",
+       "label": {
+        "ca": "Paral·lel / Pep Ventura",
+        "es": "Paral·lel / Pep Ventura",
+        "en": "Paral·lel / Pep Ventura"
+       }
+      }
+     ]
+    },
+    {
+     "id": "79004",
+     "name": "Barcelona-Sant Andreu",
+     "accessible": true,
+     "lines": [
+      "R2",
+      "R2N"
+     ],
+     "transfers": [
+      {
+       "type": "METRO",
+       "id": "L1",
+       "label": {
+        "ca": "Hospital de Bellvitge / Fondo",
+        "es": "Hospital de Bellvitge / Fondo",
+        "en": "Hospital de Bellvitge / Fondo"
+       }
+      }
+     ]
+    },
+    {
+     "id": "79100",
+     "name": "Granollers Centre",
+     "accessible": true,
+     "lines": [
+      "R2",
+      "R2N",
+      "R8"
+     ],
+     "transfers": [
+      {
+       "type": "OTHER",
+       "id": "R-MD",
+       "label": {
+        "ca": "Altres serveis ferroviaris",
+        "es": "Otros servicios ferroviarios",
+        "en": "Other train services"
+       }
+      }
+     ]
+    },
+    {
+     "id": "79104",
+     "name": "Sant Celoni",
+     "accessible": true,
+     "lines": [
+      "R2N"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "79105",
+     "name": "Gualba",
+     "accessible": true,
+     "lines": [
+      "R2N"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "79106",
+     "name": "Riells i Viabrea-Breda",
+     "accessible": true,
+     "lines": [
+      "R2N"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "79107",
+     "name": "Hostalric",
+     "accessible": true,
+     "lines": [
+      "R2N"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "79200",
+     "name": "Maçanet-Massanes",
+     "accessible": true,
+     "lines": [
+      "R1",
+      "R2N",
+      "RG1"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "79202",
+     "name": "Sils",
+     "accessible": true,
+     "lines": [
+      "RG1"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "79203",
+     "name": "Caldes de Malavella",
+     "accessible": true,
+     "lines": [
+      "RG1"
+     ],
+     "transfers": [
+      {
+       "type": "OTHER",
+       "id": "R-MD",
+       "label": {
+        "ca": "Altres serveis ferroviaris",
+        "es": "Otros servicios ferroviarios",
+        "en": "Other train services"
+       }
+      }
+     ]
+    },
+    {
+     "id": "79204",
+     "name": "Riudellots",
+     "accessible": false,
+     "lines": [
+      "RG1"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "79205",
+     "name": "Fornells de la Selva",
+     "accessible": false,
+     "lines": [
+      "RG1"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "79300",
+     "name": "Girona",
+     "accessible": false,
+     "lines": [
+      "RG1"
+     ],
+     "transfers": [
+      {
+       "type": "OTHER",
+       "id": "R-MD",
+       "label": {
+        "ca": "Altres serveis ferroviaris",
+        "es": "Otros servicios ferroviarios",
+        "en": "Other train services"
+       }
+      }
+     ]
+    },
+    {
+     "id": "79301",
+     "name": "Celrà",
+     "accessible": false,
+     "lines": [
+      "RG1"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "79302",
+     "name": "Bordils-Juià",
+     "accessible": false,
+     "lines": [
+      "RG1"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "79303",
+     "name": "Flaçà",
+     "accessible": true,
+     "lines": [
+      "RG1"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "79304",
+     "name": "Sant Jordi Desvalls",
+     "accessible": false,
+     "lines": [
+      "RG1"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "79305",
+     "name": "Camallera",
+     "accessible": false,
+     "lines": [
+      "RG1"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "79306",
+     "name": "Sant Miquel de Fluvià",
+     "accessible": false,
+     "lines": [
+      "RG1"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "79308",
+     "name": "Vilamalla",
+     "accessible": false,
+     "lines": [
+      "RG1"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "79309",
+     "name": "Figueres",
+     "accessible": true,
+     "lines": [
+      "RG1"
+     ],
+     "transfers": [
+      {
+       "type": "OTHER",
+       "id": "R-MD",
+       "label": {
+        "ca": "Altres serveis ferroviaris",
+        "es": "Otros servicios ferroviarios",
+        "en": "Other train services"
+       }
+      }
+     ]
+    },
+    {
+     "id": "79311",
+     "name": "Vilajuïga",
+     "accessible": false,
+     "lines": [
+      "RG1"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "79312",
+     "name": "Llançà",
+     "accessible": false,
+     "lines": [
+      "RG1"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "79314",
+     "name": "Colera",
+     "accessible": false,
+     "lines": [
+      "RG1"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "79315",
+     "name": "Portbou",
+     "accessible": false,
+     "lines": [
+      "RG1"
+     ],
+     "transfers": [
+      {
+       "type": "OTHER",
+       "id": "R-MD",
+       "label": {
+        "ca": "Altres serveis ferroviaris",
+        "es": "Otros servicios ferroviarios",
+        "en": "Other train services"
+       }
+      }
+     ]
+    },
+    {
+     "id": "79316",
+     "name": "Cerbère",
+     "accessible": false,
+     "lines": [],
+     "transfers": []
+    }
+   ]
+  },
+  {
+   "id": "R13",
+   "name": "R13",
+   "service": "REGIONAL",
+   "journey": "Barcelona Estació de França - Lleida",
+   "via": {
+    "ca": "per Valls",
+    "es": "por Valls",
+    "en": "by Valls"
+   },
+   "origin": "Barcelona-Estació de França",
+   "destination": "Lleida-Pirineus",
+   "stations": [
+    {
+     "id": "79400",
+     "name": "Barcelona-Estació de França",
+     "accessible": true,
+     "lines": [
+      "R2S",
+      "R14",
+      "R15",
+      "R16",
+      "R17"
+     ],
+     "transfers": [
+      {
+       "type": "OTHER",
+       "id": "R-MD",
+       "label": {
+        "ca": "Altres serveis ferroviaris",
+        "es": "Otros servicios ferroviarios",
+        "en": "Other train services"
+       }
+      },
+      {
+       "type": "METRO",
+       "id": "L4",
+       "label": {
+        "ca": "Trinitat Nova / La Pau",
+        "es": "Trinitat Nova / La Pau",
+        "en": "Trinitat Nova / La Pau"
+       }
+      }
+     ]
+    },
+    {
+     "id": "71802",
+     "name": "Barcelona-Passeig de Gràcia",
+     "accessible": true,
+     "lines": [
+      "R2",
+      "R2N",
+      "R2S",
+      "R11",
+      "R14",
+      "R15",
+      "R16",
+      "R17"
+     ],
+     "transfers": [
+      {
+       "type": "METRO",
+       "id": "L2",
+       "label": {
+        "ca": "Paral·lel / Pep Ventura",
+        "es": "Paral·lel / Pep Ventura",
+        "en": "Paral·lel / Pep Ventura"
+       }
+      },
+      {
+       "type": "METRO",
+       "id": "L3",
+       "label": {
+        "ca": "Zona Universitària / Trinitat Nova",
+        "es": "Zona Universitària / Trinitat Nova",
+        "en": "Zona Universitària / Trinitat Nova"
+       }
+      },
+      {
+       "type": "METRO",
+       "id": "L4",
+       "label": {
+        "ca": "Trinitat Nova / La Pau",
+        "es": "Trinitat Nova / La Pau",
+        "en": "Trinitat Nova / La Pau"
+       }
+      }
+     ]
+    },
+    {
+     "id": "71801",
+     "name": "Barcelona-Sants",
+     "accessible": true,
+     "lines": [
+      "R1",
+      "R2",
+      "R2N",
+      "R2S",
+      "R3",
+      "R4",
+      "R11",
+      "R14",
+      "R15",
+      "R16",
+      "R17",
+      "RG1"
+     ],
+     "transfers": [
+      {
+       "type": "OTHER",
+       "id": "R-MD",
+       "label": {
+        "ca": "Altres serveis ferroviaris",
+        "es": "Otros servicios ferroviarios",
+        "en": "Other train services"
+       }
+      },
+      {
+       "type": "OTHER",
+       "id": "R-AVE",
+       "label": {
+        "ca": "Tren d'Alta Velocitat",
+        "es": "Tren de Alta Velocidad",
+        "en": "High Speed Train"
+       }
+      },
+      {
+       "type": "METRO",
+       "id": "L3",
+       "label": {
+        "ca": "Zona Universitària / Trinitat Nova",
+        "es": "Zona Universitària / Trinitat Nova",
+        "en": "Zona Universitària / Trinitat Nova"
+       }
+      },
+      {
+       "type": "METRO",
+       "id": "L5",
+       "label": {
+        "ca": "Cornellà Centre / Horta",
+        "es": "Cornellà Centre / Horta",
+        "en": "Cornellà Centre / Horta"
+       }
+      }
+     ]
+    },
+    {
+     "id": "71600",
+     "name": "Sant Vicenç de Calders",
+     "accessible": true,
+     "lines": [
+      "R2S",
+      "R4",
+      "R14",
+      "R15",
+      "R16",
+      "R17",
+      "RT2"
+     ],
+     "transfers": [
+      {
+       "type": "OTHER",
+       "id": "R-MD",
+       "label": {
+        "ca": "Altres serveis ferroviaris",
+        "es": "Otros servicios ferroviarios",
+        "en": "Other train services"
+       }
+      }
+     ]
+    },
+    {
+     "id": "72101",
+     "name": "Roda de Mar",
+     "accessible": true,
+     "lines": [],
+     "transfers": []
+    },
+    {
+     "id": "76001",
+     "name": "Salomó",
+     "accessible": false,
+     "lines": [],
+     "transfers": []
+    },
+    {
+     "id": "76002",
+     "name": "Vilabella",
+     "accessible": true,
+     "lines": [],
+     "transfers": []
+    },
+    {
+     "id": "76003",
+     "name": "Nulles-Bràfim",
+     "accessible": true,
+     "lines": [],
+     "transfers": []
+    },
+    {
+     "id": "76004",
+     "name": "Valls",
+     "accessible": false,
+     "lines": [],
+     "transfers": []
+    },
+    {
+     "id": "73100",
+     "name": "La Plana-Picamoixons",
+     "accessible": false,
+     "lines": [
+      "R14"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "73010",
+     "name": "La Riba",
+     "accessible": true,
+     "lines": [
+      "R14"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "73009",
+     "name": "Vilaverd",
+     "accessible": true,
+     "lines": [
+      "R14"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "73008",
+     "name": "Montblanc",
+     "accessible": false,
+     "lines": [
+      "R14"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "73007",
+     "name": "L'Espluga de Francolí",
+     "accessible": true,
+     "lines": [
+      "R14"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "73006",
+     "name": "Vimbodí",
+     "accessible": true,
+     "lines": [
+      "R14"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "73005",
+     "name": "Vinaixa",
+     "accessible": false,
+     "lines": [
+      "R14"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "73004",
+     "name": "La Floresta",
+     "accessible": true,
+     "lines": [
+      "R14"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "73003",
+     "name": "Les Borges Blanques",
+     "accessible": false,
+     "lines": [
+      "R14"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "73002",
+     "name": "Juneda",
+     "accessible": false,
+     "lines": [
+      "R14"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "73001",
+     "name": "Puigverd de Lleida-Artesa de Lleida",
+     "accessible": false,
+     "lines": [
+      "R14"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "78400",
+     "name": "Lleida-Pirineus",
+     "accessible": true,
+     "lines": [
+      "R14",
+      "RL3",
+      "RL4"
+     ],
+     "transfers": []
+    }
+   ]
+  },
+  {
+   "id": "R14",
+   "name": "R14",
+   "service": "REGIONAL",
+   "journey": "Barcelona Estació de França - Lleida",
+   "via": {
+    "ca": "per Tarragona i Reus",
+    "es": "por Tarragona i Reus",
+    "en": "by Tarragona i Reus"
+   },
+   "origin": "Barcelona-Estació de França",
+   "destination": "Lleida-Pirineus",
+   "stations": [
+    {
+     "id": "79400",
+     "name": "Barcelona-Estació de França",
+     "accessible": true,
+     "lines": [
+      "R2S",
+      "R13",
+      "R15",
+      "R16",
+      "R17"
+     ],
+     "transfers": [
+      {
+       "type": "OTHER",
+       "id": "R-MD",
+       "label": {
+        "ca": "Altres serveis ferroviaris",
+        "es": "Otros servicios ferroviarios",
+        "en": "Other train services"
+       }
+      },
+      {
+       "type": "METRO",
+       "id": "L4",
+       "label": {
+        "ca": "Trinitat Nova / La Pau",
+        "es": "Trinitat Nova / La Pau",
+        "en": "Trinitat Nova / La Pau"
+       }
+      }
+     ]
+    },
+    {
+     "id": "71802",
+     "name": "Barcelona-Passeig de Gràcia",
+     "accessible": true,
+     "lines": [
+      "R2",
+      "R2N",
+      "R2S",
+      "R11",
+      "R13",
+      "R15",
+      "R16",
+      "R17"
+     ],
+     "transfers": [
+      {
+       "type": "METRO",
+       "id": "L2",
+       "label": {
+        "ca": "Paral·lel / Pep Ventura",
+        "es": "Paral·lel / Pep Ventura",
+        "en": "Paral·lel / Pep Ventura"
+       }
+      },
+      {
+       "type": "METRO",
+       "id": "L3",
+       "label": {
+        "ca": "Zona Universitària / Trinitat Nova",
+        "es": "Zona Universitària / Trinitat Nova",
+        "en": "Zona Universitària / Trinitat Nova"
+       }
+      },
+      {
+       "type": "METRO",
+       "id": "L4",
+       "label": {
+        "ca": "Trinitat Nova / La Pau",
+        "es": "Trinitat Nova / La Pau",
+        "en": "Trinitat Nova / La Pau"
+       }
+      }
+     ]
+    },
+    {
+     "id": "71801",
+     "name": "Barcelona-Sants",
+     "accessible": true,
+     "lines": [
+      "R1",
+      "R2",
+      "R2N",
+      "R2S",
+      "R3",
+      "R4",
+      "R11",
+      "R13",
+      "R15",
+      "R16",
+      "R17",
+      "RG1"
+     ],
+     "transfers": [
+      {
+       "type": "OTHER",
+       "id": "R-MD",
+       "label": {
+        "ca": "Altres serveis ferroviaris",
+        "es": "Otros servicios ferroviarios",
+        "en": "Other train services"
+       }
+      },
+      {
+       "type": "OTHER",
+       "id": "R-AVE",
+       "label": {
+        "ca": "Tren d'Alta Velocitat",
+        "es": "Tren de Alta Velocidad",
+        "en": "High Speed Train"
+       }
+      },
+      {
+       "type": "METRO",
+       "id": "L3",
+       "label": {
+        "ca": "Zona Universitària / Trinitat Nova",
+        "es": "Zona Universitària / Trinitat Nova",
+        "en": "Zona Universitària / Trinitat Nova"
+       }
+      },
+      {
+       "type": "METRO",
+       "id": "L5",
+       "label": {
+        "ca": "Cornellà Centre / Horta",
+        "es": "Cornellà Centre / Horta",
+        "en": "Cornellà Centre / Horta"
+       }
+      }
+     ]
+    },
+    {
+     "id": "71600",
+     "name": "Sant Vicenç de Calders",
+     "accessible": true,
+     "lines": [
+      "R2S",
+      "R4",
+      "R13",
+      "R15",
+      "R16",
+      "R17",
+      "RT2"
+     ],
+     "transfers": [
+      {
+       "type": "OTHER",
+       "id": "R-MD",
+       "label": {
+        "ca": "Altres serveis ferroviaris",
+        "es": "Otros servicios ferroviarios",
+        "en": "Other train services"
+       }
+      }
+     ]
+    },
+    {
+     "id": "71503",
+     "name": "Torredembarra",
+     "accessible": true,
+     "lines": [
+      "R15",
+      "R16",
+      "R17",
+      "RT2"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "71502",
+     "name": "Altafulla-Tamarit",
+     "accessible": true,
+     "lines": [
+      "R15",
+      "R16",
+      "R17",
+      "RT2"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "71500",
+     "name": "Tarragona",
+     "accessible": false,
+     "lines": [
+      "R15",
+      "R16",
+      "R17",
+      "RT1",
+      "RT2"
+     ],
+     "transfers": [
+      {
+       "type": "OTHER",
+       "id": "R-MD",
+       "label": {
+        "ca": "Altres serveis ferroviaris",
+        "es": "Otros servicios ferroviarios",
+        "en": "Other train services"
+       }
+      }
+     ]
+    },
+    {
+     "id": "71401",
+     "name": "Vila-seca",
+     "accessible": true,
+     "lines": [
+      "R15",
+      "RT1"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "71400",
+     "name": "Reus",
+     "accessible": true,
+     "lines": [
+      "R15",
+      "RT1"
+     ],
+     "transfers": [
+      {
+       "type": "OTHER",
+       "id": "R-MD",
+       "label": {
+        "ca": "Altres serveis ferroviaris",
+        "es": "Otros servicios ferroviarios",
+        "en": "Other train services"
+       }
+      }
+     ]
+    },
+    {
+     "id": "73102",
+     "name": "La Selva del Camp",
+     "accessible": true,
+     "lines": [],
+     "transfers": []
+    },
+    {
+     "id": "73101",
+     "name": "Alcover",
+     "accessible": false,
+     "lines": [],
+     "transfers": []
+    },
+    {
+     "id": "73100",
+     "name": "La Plana-Picamoixons",
+     "accessible": false,
+     "lines": [
+      "R13"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "73010",
+     "name": "La Riba",
+     "accessible": true,
+     "lines": [
+      "R13"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "73009",
+     "name": "Vilaverd",
+     "accessible": true,
+     "lines": [
+      "R13"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "73008",
+     "name": "Montblanc",
+     "accessible": false,
+     "lines": [
+      "R13"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "73007",
+     "name": "L'Espluga de Francolí",
+     "accessible": true,
+     "lines": [
+      "R13"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "73006",
+     "name": "Vimbodí",
+     "accessible": true,
+     "lines": [
+      "R13"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "73005",
+     "name": "Vinaixa",
+     "accessible": false,
+     "lines": [
+      "R13"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "73004",
+     "name": "La Floresta",
+     "accessible": true,
+     "lines": [
+      "R13"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "73003",
+     "name": "Les Borges Blanques",
+     "accessible": false,
+     "lines": [
+      "R13"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "73002",
+     "name": "Juneda",
+     "accessible": false,
+     "lines": [
+      "R13"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "73001",
+     "name": "Puigverd de Lleida-Artesa de Lleida",
+     "accessible": false,
+     "lines": [
+      "R13"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "78400",
+     "name": "Lleida-Pirineus",
+     "accessible": true,
+     "lines": [
+      "R13",
+      "RL3",
+      "RL4"
+     ],
+     "transfers": []
+    }
+   ]
+  },
+  {
+   "id": "R15",
+   "name": "R15",
+   "service": "REGIONAL",
+   "journey": "Barcelona Estació de França - Reus - Riba-roja d'Ebre",
+   "via": {
+    "ca": "",
+    "es": "",
+    "en": ""
+   },
+   "origin": "Barcelona-Estació de França",
+   "destination": "Riba-roja d'Ebre",
+   "stations": [
+    {
+     "id": "79400",
+     "name": "Barcelona-Estació de França",
+     "accessible": true,
+     "lines": [
+      "R2S",
+      "R13",
+      "R14",
+      "R16",
+      "R17"
+     ],
+     "transfers": [
+      {
+       "type": "OTHER",
+       "id": "R-MD",
+       "label": {
+        "ca": "Altres serveis ferroviaris",
+        "es": "Otros servicios ferroviarios",
+        "en": "Other train services"
+       }
+      },
+      {
+       "type": "METRO",
+       "id": "L4",
+       "label": {
+        "ca": "Trinitat Nova / La Pau",
+        "es": "Trinitat Nova / La Pau",
+        "en": "Trinitat Nova / La Pau"
+       }
+      }
+     ]
+    },
+    {
+     "id": "71802",
+     "name": "Barcelona-Passeig de Gràcia",
+     "accessible": true,
+     "lines": [
+      "R2",
+      "R2N",
+      "R2S",
+      "R11",
+      "R13",
+      "R14",
+      "R16",
+      "R17"
+     ],
+     "transfers": [
+      {
+       "type": "METRO",
+       "id": "L2",
+       "label": {
+        "ca": "Paral·lel / Pep Ventura",
+        "es": "Paral·lel / Pep Ventura",
+        "en": "Paral·lel / Pep Ventura"
+       }
+      },
+      {
+       "type": "METRO",
+       "id": "L3",
+       "label": {
+        "ca": "Zona Universitària / Trinitat Nova",
+        "es": "Zona Universitària / Trinitat Nova",
+        "en": "Zona Universitària / Trinitat Nova"
+       }
+      },
+      {
+       "type": "METRO",
+       "id": "L4",
+       "label": {
+        "ca": "Trinitat Nova / La Pau",
+        "es": "Trinitat Nova / La Pau",
+        "en": "Trinitat Nova / La Pau"
+       }
+      }
+     ]
+    },
+    {
+     "id": "71801",
+     "name": "Barcelona-Sants",
+     "accessible": true,
+     "lines": [
+      "R1",
+      "R2",
+      "R2N",
+      "R2S",
+      "R3",
+      "R4",
+      "R11",
+      "R13",
+      "R14",
+      "R16",
+      "R17",
+      "RG1"
+     ],
+     "transfers": [
+      {
+       "type": "OTHER",
+       "id": "R-MD",
+       "label": {
+        "ca": "Altres serveis ferroviaris",
+        "es": "Otros servicios ferroviarios",
+        "en": "Other train services"
+       }
+      },
+      {
+       "type": "OTHER",
+       "id": "R-AVE",
+       "label": {
+        "ca": "Tren d'Alta Velocitat",
+        "es": "Tren de Alta Velocidad",
+        "en": "High Speed Train"
+       }
+      },
+      {
+       "type": "METRO",
+       "id": "L3",
+       "label": {
+        "ca": "Zona Universitària / Trinitat Nova",
+        "es": "Zona Universitària / Trinitat Nova",
+        "en": "Zona Universitària / Trinitat Nova"
+       }
+      },
+      {
+       "type": "METRO",
+       "id": "L5",
+       "label": {
+        "ca": "Cornellà Centre / Horta",
+        "es": "Cornellà Centre / Horta",
+        "en": "Cornellà Centre / Horta"
+       }
+      }
+     ]
+    },
+    {
+     "id": "71700",
+     "name": "Vilanova i la Geltrú",
+     "accessible": true,
+     "lines": [
+      "R2S",
+      "R16",
+      "R17"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "71600",
+     "name": "Sant Vicenç de Calders",
+     "accessible": true,
+     "lines": [
+      "R2S",
+      "R4",
+      "R13",
+      "R14",
+      "R16",
+      "R17",
+      "RT2"
+     ],
+     "transfers": [
+      {
+       "type": "OTHER",
+       "id": "R-MD",
+       "label": {
+        "ca": "Altres serveis ferroviaris",
+        "es": "Otros servicios ferroviarios",
+        "en": "Other train services"
+       }
+      }
+     ]
+    },
+    {
+     "id": "71503",
+     "name": "Torredembarra",
+     "accessible": true,
+     "lines": [
+      "R14",
+      "R16",
+      "R17",
+      "RT2"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "71502",
+     "name": "Altafulla-Tamarit",
+     "accessible": true,
+     "lines": [
+      "R14",
+      "R16",
+      "R17",
+      "RT2"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "71500",
+     "name": "Tarragona",
+     "accessible": false,
+     "lines": [
+      "R14",
+      "R16",
+      "R17",
+      "RT1",
+      "RT2"
+     ],
+     "transfers": [
+      {
+       "type": "OTHER",
+       "id": "R-MD",
+       "label": {
+        "ca": "Altres serveis ferroviaris",
+        "es": "Otros servicios ferroviarios",
+        "en": "Other train services"
+       }
+      }
+     ]
+    },
+    {
+     "id": "71401",
+     "name": "Vila-seca",
+     "accessible": true,
+     "lines": [
+      "R14",
+      "RT1"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "71400",
+     "name": "Reus",
+     "accessible": true,
+     "lines": [
+      "R14",
+      "RT1"
+     ],
+     "transfers": [
+      {
+       "type": "OTHER",
+       "id": "R-MD",
+       "label": {
+        "ca": "Altres serveis ferroviaris",
+        "es": "Otros servicios ferroviarios",
+        "en": "Other train services"
+       }
+      }
+     ]
+    },
+    {
+     "id": "71307",
+     "name": "Les Borges del Camp",
+     "accessible": false,
+     "lines": [],
+     "transfers": []
+    },
+    {
+     "id": "71306",
+     "name": "Riudecanyes-Botarell",
+     "accessible": false,
+     "lines": [],
+     "transfers": []
+    },
+    {
+     "id": "71305",
+     "name": "Duesaigües-L'Argentera",
+     "accessible": false,
+     "lines": [],
+     "transfers": []
+    },
+    {
+     "id": "71304",
+     "name": "Pradell",
+     "accessible": false,
+     "lines": [],
+     "transfers": []
+    },
+    {
+     "id": "71303",
+     "name": "Marçà-Falset",
+     "accessible": false,
+     "lines": [],
+     "transfers": []
+    },
+    {
+     "id": "71302",
+     "name": "Capçanes",
+     "accessible": true,
+     "lines": [],
+     "transfers": []
+    },
+    {
+     "id": "71300",
+     "name": "Móra la Nova",
+     "accessible": false,
+     "lines": [],
+     "transfers": [
+      {
+       "type": "OTHER",
+       "id": "R-MD",
+       "label": {
+        "ca": "Altres serveis ferroviaris",
+        "es": "Otros servicios ferroviarios",
+        "en": "Other train services"
+       }
+      }
+     ]
+    },
+    {
+     "id": "71211",
+     "name": "Ascó",
+     "accessible": false,
+     "lines": [],
+     "transfers": []
+    },
+    {
+     "id": "71210",
+     "name": "Flix",
+     "accessible": false,
+     "lines": [],
+     "transfers": [
+      {
+       "type": "OTHER",
+       "id": "R-MD",
+       "label": {
+        "ca": "Altres serveis ferroviaris",
+        "es": "Otros servicios ferroviarios",
+        "en": "Other train services"
+       }
+      }
+     ]
+    },
+    {
+     "id": "71209",
+     "name": "Riba-roja d'Ebre",
+     "accessible": false,
+     "lines": [],
+     "transfers": []
+    }
+   ]
+  },
+  {
+   "id": "R16",
+   "name": "R16",
+   "service": "REGIONAL",
+   "journey": "Barcelona Estació de França - Tarragona - Tortosa / Ulldecona",
+   "via": {
+    "ca": "",
+    "es": "",
+    "en": ""
+   },
+   "origin": "Barcelona-Estació de França",
+   "destination": "Ulldecona-Alcanar-La Sénia",
+   "stations": [
+    {
+     "id": "79400",
+     "name": "Barcelona-Estació de França",
+     "accessible": true,
+     "lines": [
+      "R2S",
+      "R13",
+      "R14",
+      "R15",
+      "R17"
+     ],
+     "transfers": [
+      {
+       "type": "OTHER",
+       "id": "R-MD",
+       "label": {
+        "ca": "Altres serveis ferroviaris",
+        "es": "Otros servicios ferroviarios",
+        "en": "Other train services"
+       }
+      },
+      {
+       "type": "METRO",
+       "id": "L4",
+       "label": {
+        "ca": "Trinitat Nova / La Pau",
+        "es": "Trinitat Nova / La Pau",
+        "en": "Trinitat Nova / La Pau"
+       }
+      }
+     ]
+    },
+    {
+     "id": "71802",
+     "name": "Barcelona-Passeig de Gràcia",
+     "accessible": true,
+     "lines": [
+      "R2",
+      "R2N",
+      "R2S",
+      "R11",
+      "R13",
+      "R14",
+      "R15",
+      "R17"
+     ],
+     "transfers": [
+      {
+       "type": "METRO",
+       "id": "L2",
+       "label": {
+        "ca": "Paral·lel / Pep Ventura",
+        "es": "Paral·lel / Pep Ventura",
+        "en": "Paral·lel / Pep Ventura"
+       }
+      },
+      {
+       "type": "METRO",
+       "id": "L3",
+       "label": {
+        "ca": "Zona Universitària / Trinitat Nova",
+        "es": "Zona Universitària / Trinitat Nova",
+        "en": "Zona Universitària / Trinitat Nova"
+       }
+      },
+      {
+       "type": "METRO",
+       "id": "L4",
+       "label": {
+        "ca": "Trinitat Nova / La Pau",
+        "es": "Trinitat Nova / La Pau",
+        "en": "Trinitat Nova / La Pau"
+       }
+      }
+     ]
+    },
+    {
+     "id": "71801",
+     "name": "Barcelona-Sants",
+     "accessible": true,
+     "lines": [
+      "R1",
+      "R2",
+      "R2N",
+      "R2S",
+      "R3",
+      "R4",
+      "R11",
+      "R13",
+      "R14",
+      "R15",
+      "R17",
+      "RG1"
+     ],
+     "transfers": [
+      {
+       "type": "OTHER",
+       "id": "R-MD",
+       "label": {
+        "ca": "Altres serveis ferroviaris",
+        "es": "Otros servicios ferroviarios",
+        "en": "Other train services"
+       }
+      },
+      {
+       "type": "OTHER",
+       "id": "R-AVE",
+       "label": {
+        "ca": "Tren d'Alta Velocitat",
+        "es": "Tren de Alta Velocidad",
+        "en": "High Speed Train"
+       }
+      },
+      {
+       "type": "METRO",
+       "id": "L3",
+       "label": {
+        "ca": "Zona Universitària / Trinitat Nova",
+        "es": "Zona Universitària / Trinitat Nova",
+        "en": "Zona Universitària / Trinitat Nova"
+       }
+      },
+      {
+       "type": "METRO",
+       "id": "L5",
+       "label": {
+        "ca": "Cornellà Centre / Horta",
+        "es": "Cornellà Centre / Horta",
+        "en": "Cornellà Centre / Horta"
+       }
+      }
+     ]
+    },
+    {
+     "id": "71700",
+     "name": "Vilanova i la Geltrú",
+     "accessible": true,
+     "lines": [
+      "R2S",
+      "R15",
+      "R17"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "71600",
+     "name": "Sant Vicenç de Calders",
+     "accessible": true,
+     "lines": [
+      "R2S",
+      "R4",
+      "R13",
+      "R14",
+      "R15",
+      "R17",
+      "RT2"
+     ],
+     "transfers": [
+      {
+       "type": "OTHER",
+       "id": "R-MD",
+       "label": {
+        "ca": "Altres serveis ferroviaris",
+        "es": "Otros servicios ferroviarios",
+        "en": "Other train services"
+       }
+      }
+     ]
+    },
+    {
+     "id": "71503",
+     "name": "Torredembarra",
+     "accessible": true,
+     "lines": [
+      "R14",
+      "R15",
+      "R17",
+      "RT2"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "71502",
+     "name": "Altafulla-Tamarit",
+     "accessible": true,
+     "lines": [
+      "R14",
+      "R15",
+      "R17",
+      "RT2"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "71500",
+     "name": "Tarragona",
+     "accessible": false,
+     "lines": [
+      "R14",
+      "R15",
+      "R17",
+      "RT1",
+      "RT2"
+     ],
+     "transfers": [
+      {
+       "type": "OTHER",
+       "id": "R-MD",
+       "label": {
+        "ca": "Altres serveis ferroviaris",
+        "es": "Otros servicios ferroviarios",
+        "en": "Other train services"
+       }
+      }
+     ]
+    },
+    {
+     "id": "71401",
+     "name": "Vila-seca",
+     "accessible": true,
+     "lines": [
+      "R14",
+      "R15",
+      "RT1"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "65422",
+     "name": "Cambrils",
+     "accessible": false,
+     "lines": [],
+     "transfers": [
+      {
+       "type": "OTHER",
+       "id": "R-MD",
+       "label": {
+        "ca": "Altres serveis ferroviaris",
+        "es": "Otros servicios ferroviarios",
+        "en": "Other train services"
+       }
+      }
+     ]
+    },
+    {
+     "id": "65420",
+     "name": "L'Hospitalet de l'Infant",
+     "accessible": false,
+     "lines": [],
+     "transfers": []
+    },
+    {
+     "id": "65405",
+     "name": "L'Ametlla de Mar",
+     "accessible": false,
+     "lines": [],
+     "transfers": []
+    },
+    {
+     "id": "65404",
+     "name": "L'Ampolla-Perelló-Deltebre",
+     "accessible": true,
+     "lines": [],
+     "transfers": []
+    },
+    {
+     "id": "65403",
+     "name": "Camarles-Deltebre",
+     "accessible": true,
+     "lines": [],
+     "transfers": []
+    },
+    {
+     "id": "65402",
+     "name": "L'Aldea-Amposta",
+     "accessible": true,
+     "lines": [],
+     "transfers": [
+      {
+       "type": "OTHER",
+       "id": "R-MD",
+       "label": {
+        "ca": "Altres serveis ferroviaris",
+        "es": "Otros servicios ferroviarios",
+        "en": "Other train services"
+       }
+      }
+     ]
+    },
+    {
+     "id": "65401",
+     "name": "Camp-redó",
+     "accessible": false,
+     "lines": [],
+     "transfers": []
+    },
+    {
+     "id": "65400",
+     "name": "Tortosa",
+     "accessible": true,
+     "lines": [],
+     "transfers": []
+    },
+    {
+     "id": "65314",
+     "name": "Ulldecona-Alcanar-La Sénia",
+     "accessible": false,
+     "lines": [],
+     "transfers": []
+    }
+   ]
+  },
+  {
+   "id": "R17",
+   "name": "R17",
+   "service": "REGIONAL",
+   "journey": "Barcelona Estació de França - Salou - Port Aventura",
+   "via": {
+    "ca": "",
+    "es": "",
+    "en": ""
+   },
+   "origin": "Barcelona-Estació de França",
+   "destination": "Salou - Port Aventura",
+   "stations": [
+    {
+     "id": "79400",
+     "name": "Barcelona-Estació de França",
+     "accessible": true,
+     "lines": [
+      "R2S",
+      "R13",
+      "R14",
+      "R15",
+      "R16"
+     ],
+     "transfers": [
+      {
+       "type": "OTHER",
+       "id": "R-MD",
+       "label": {
+        "ca": "Altres serveis ferroviaris",
+        "es": "Otros servicios ferroviarios",
+        "en": "Other train services"
+       }
+      },
+      {
+       "type": "METRO",
+       "id": "L4",
+       "label": {
+        "ca": "Trinitat Nova / La Pau",
+        "es": "Trinitat Nova / La Pau",
+        "en": "Trinitat Nova / La Pau"
+       }
+      }
+     ]
+    },
+    {
+     "id": "71802",
+     "name": "Barcelona-Passeig de Gràcia",
+     "accessible": true,
+     "lines": [
+      "R2",
+      "R2N",
+      "R2S",
+      "R11",
+      "R13",
+      "R14",
+      "R15",
+      "R16"
+     ],
+     "transfers": [
+      {
+       "type": "METRO",
+       "id": "L2",
+       "label": {
+        "ca": "Paral·lel / Pep Ventura",
+        "es": "Paral·lel / Pep Ventura",
+        "en": "Paral·lel / Pep Ventura"
+       }
+      },
+      {
+       "type": "METRO",
+       "id": "L3",
+       "label": {
+        "ca": "Zona Universitària / Trinitat Nova",
+        "es": "Zona Universitària / Trinitat Nova",
+        "en": "Zona Universitària / Trinitat Nova"
+       }
+      },
+      {
+       "type": "METRO",
+       "id": "L4",
+       "label": {
+        "ca": "Trinitat Nova / La Pau",
+        "es": "Trinitat Nova / La Pau",
+        "en": "Trinitat Nova / La Pau"
+       }
+      }
+     ]
+    },
+    {
+     "id": "71801",
+     "name": "Barcelona-Sants",
+     "accessible": true,
+     "lines": [
+      "R1",
+      "R2",
+      "R2N",
+      "R2S",
+      "R3",
+      "R4",
+      "R11",
+      "R13",
+      "R14",
+      "R15",
+      "R16",
+      "RG1"
+     ],
+     "transfers": [
+      {
+       "type": "OTHER",
+       "id": "R-MD",
+       "label": {
+        "ca": "Altres serveis ferroviaris",
+        "es": "Otros servicios ferroviarios",
+        "en": "Other train services"
+       }
+      },
+      {
+       "type": "OTHER",
+       "id": "R-AVE",
+       "label": {
+        "ca": "Tren d'Alta Velocitat",
+        "es": "Tren de Alta Velocidad",
+        "en": "High Speed Train"
+       }
+      },
+      {
+       "type": "METRO",
+       "id": "L3",
+       "label": {
+        "ca": "Zona Universitària / Trinitat Nova",
+        "es": "Zona Universitària / Trinitat Nova",
+        "en": "Zona Universitària / Trinitat Nova"
+       }
+      },
+      {
+       "type": "METRO",
+       "id": "L5",
+       "label": {
+        "ca": "Cornellà Centre / Horta",
+        "es": "Cornellà Centre / Horta",
+        "en": "Cornellà Centre / Horta"
+       }
+      }
+     ]
+    },
+    {
+     "id": "71700",
+     "name": "Vilanova i la Geltrú",
+     "accessible": true,
+     "lines": [
+      "R2S",
+      "R15",
+      "R16"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "71600",
+     "name": "Sant Vicenç de Calders",
+     "accessible": true,
+     "lines": [
+      "R2S",
+      "R4",
+      "R13",
+      "R14",
+      "R15",
+      "R16",
+      "RT2"
+     ],
+     "transfers": [
+      {
+       "type": "OTHER",
+       "id": "R-MD",
+       "label": {
+        "ca": "Altres serveis ferroviaris",
+        "es": "Otros servicios ferroviarios",
+        "en": "Other train services"
+       }
+      }
+     ]
+    },
+    {
+     "id": "71503",
+     "name": "Torredembarra",
+     "accessible": true,
+     "lines": [
+      "R14",
+      "R15",
+      "R16",
+      "RT2"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "71502",
+     "name": "Altafulla-Tamarit",
+     "accessible": true,
+     "lines": [
+      "R14",
+      "R15",
+      "R16",
+      "RT2"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "71500",
+     "name": "Tarragona",
+     "accessible": false,
+     "lines": [
+      "R14",
+      "R15",
+      "R16",
+      "RT1",
+      "RT2"
+     ],
+     "transfers": [
+      {
+       "type": "OTHER",
+       "id": "R-MD",
+       "label": {
+        "ca": "Altres serveis ferroviaris",
+        "es": "Otros servicios ferroviarios",
+        "en": "Other train services"
+       }
+      }
+     ]
+    },
+    {
+     "id": "65411",
+     "name": "Salou - Port Aventura",
+     "accessible": true,
+     "lines": [
+      "RT2"
+     ],
+     "transfers": [
+      {
+       "type": "OTHER",
+       "id": "R-MD",
+       "label": {
+        "ca": "Altres serveis ferroviaris",
+        "es": "Otros servicios ferroviarios",
+        "en": "Other train services"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "RG1",
+   "name": "RG1",
+   "service": "REGIONAL",
+   "journey": "L'Hospitalet de Llobregat - Figueres / Portbou",
+   "via": {
+    "ca": "per Mataró i Girona",
+    "es": "por Mataró i Girona",
+    "en": "by Mataró i Girona"
+   },
+   "origin": "L'Hospitalet de Llobregat",
+   "destination": "Portbou",
+   "stations": [
+    {
+     "id": "72305",
+     "name": "L'Hospitalet de Llobregat",
+     "accessible": true,
+     "lines": [
+      "R1",
+      "R3",
+      "R4"
+     ],
+     "transfers": [
+      {
+       "type": "METRO",
+       "id": "L1",
+       "label": {
+        "ca": "Hospital de Bellvitge / Fondo",
+        "es": "Hospital de Bellvitge / Fondo",
+        "en": "Hospital de Bellvitge / Fondo"
+       }
+      }
+     ]
+    },
+    {
+     "id": "71801",
+     "name": "Barcelona-Sants",
+     "accessible": true,
+     "lines": [
+      "R1",
+      "R2",
+      "R2N",
+      "R2S",
+      "R3",
+      "R4",
+      "R11",
+      "R13",
+      "R14",
+      "R15",
+      "R16",
+      "R17"
+     ],
+     "transfers": [
+      {
+       "type": "OTHER",
+       "id": "R-MD",
+       "label": {
+        "ca": "Altres serveis ferroviaris",
+        "es": "Otros servicios ferroviarios",
+        "en": "Other train services"
+       }
+      },
+      {
+       "type": "OTHER",
+       "id": "R-AVE",
+       "label": {
+        "ca": "Tren d'Alta Velocitat",
+        "es": "Tren de Alta Velocidad",
+        "en": "High Speed Train"
+       }
+      },
+      {
+       "type": "METRO",
+       "id": "L3",
+       "label": {
+        "ca": "Zona Universitària / Trinitat Nova",
+        "es": "Zona Universitària / Trinitat Nova",
+        "en": "Zona Universitària / Trinitat Nova"
+       }
+      },
+      {
+       "type": "METRO",
+       "id": "L5",
+       "label": {
+        "ca": "Cornellà Centre / Horta",
+        "es": "Cornellà Centre / Horta",
+        "en": "Cornellà Centre / Horta"
+       }
+      }
+     ]
+    },
+    {
+     "id": "78805",
+     "name": "Barcelona-Plaça de Catalunya",
+     "accessible": true,
+     "lines": [
+      "R1",
+      "R3",
+      "R4"
+     ],
+     "transfers": [
+      {
+       "type": "RAILWAY",
+       "id": "S1",
+       "label": {
+        "ca": "Barcelona- Pl. Catalunya / Terrassa",
+        "es": "Barcelona- Pl. Catalunya / Terrassa",
+        "en": "Barcelona- Pl. Catalunya / Terrassa"
+       }
+      },
+      {
+       "type": "RAILWAY",
+       "id": "S2",
+       "label": {
+        "ca": "Barcelona- Pl. Catalunya / Sabadell",
+        "es": "Barcelona- Pl. Catalunya / Sabadell",
+        "en": "Barcelona- Pl. Catalunya / Sabadell"
+       }
+      },
+      {
+       "type": "METRO",
+       "id": "L1",
+       "label": {
+        "ca": "Hospital de Bellvitge / Fondo",
+        "es": "Hospital de Bellvitge / Fondo",
+        "en": "Hospital de Bellvitge / Fondo"
+       }
+      },
+      {
+       "type": "METRO",
+       "id": "L3",
+       "label": {
+        "ca": "Zona Universitària / Trinitat Nova",
+        "es": "Zona Universitària / Trinitat Nova",
+        "en": "Zona Universitària / Trinitat Nova"
+       }
+      },
+      {
+       "type": "METRO",
+       "id": "L6",
+       "label": {
+        "ca": "Barcelona-Pl. Catalunya / Reina Elisenda",
+        "es": "Barcelona-Pl. Catalunya / Reina Elisenda",
+        "en": "Barcelona-Pl. Catalunya / Reina Elisenda"
+       }
+      },
+      {
+       "type": "METRO",
+       "id": "L7",
+       "label": {
+        "ca": "Barcelona-Pl. Catalunya / Av. Tibidabo",
+        "es": "Barcelona-Pl. Catalunya / Av. Tibidabo",
+        "en": "Barcelona-Pl. Catalunya / Av. Tibidabo"
+       }
+      }
+     ]
+    },
+    {
+     "id": "78804",
+     "name": "Barcelona-Arc de Triomf",
+     "accessible": true,
+     "lines": [
+      "R1",
+      "R3",
+      "R4"
+     ],
+     "transfers": [
+      {
+       "type": "OTHER",
+       "id": "R-MD",
+       "label": {
+        "ca": "Altres serveis ferroviaris",
+        "es": "Otros servicios ferroviarios",
+        "en": "Other train services"
+       }
+      },
+      {
+       "type": "METRO",
+       "id": "L1",
+       "label": {
+        "ca": "Hospital de Bellvitge / Fondo",
+        "es": "Hospital de Bellvitge / Fondo",
+        "en": "Hospital de Bellvitge / Fondo"
+       }
+      }
+     ]
+    },
+    {
+     "id": "79009",
+     "name": "Barcelona-El Clot",
+     "accessible": true,
+     "lines": [
+      "R1",
+      "R2",
+      "R2N",
+      "R11"
+     ],
+     "transfers": [
+      {
+       "type": "METRO",
+       "id": "L1",
+       "label": {
+        "ca": "Hospital de Bellvitge / Fondo",
+        "es": "Hospital de Bellvitge / Fondo",
+        "en": "Hospital de Bellvitge / Fondo"
+       }
+      },
+      {
+       "type": "METRO",
+       "id": "L2",
+       "label": {
+        "ca": "Paral·lel / Pep Ventura",
+        "es": "Paral·lel / Pep Ventura",
+        "en": "Paral·lel / Pep Ventura"
+       }
+      }
+     ]
+    },
+    {
+     "id": "79403",
+     "name": "Sant Adrià de Besòs",
+     "accessible": true,
+     "lines": [
+      "R1"
+     ],
+     "transfers": [
+      {
+       "type": "TRAM",
+       "id": "T4",
+       "label": {
+        "ca": "Estació de Sant Adrià / Ciutadella i Vila Olímpica",
+        "es": "Estació de Sant Adrià / Ciutadella i Vila Olímpica",
+        "en": "Estació de Sant Adrià / Ciutadella i Vila Olímpica"
+       }
+      },
+      {
+       "type": "TRAM",
+       "id": "T6",
+       "label": {
+        "ca": "Estació de Sant Adrià / Gorg",
+        "es": "Estació de Sant Adrià / Gorg",
+        "en": "Estació de Sant Adrià / Gorg"
+       }
+      }
+     ]
+    },
+    {
+     "id": "79404",
+     "name": "Badalona",
+     "accessible": true,
+     "lines": [
+      "R1"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "79405",
+     "name": "Montgat",
+     "accessible": true,
+     "lines": [
+      "R1"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "79406",
+     "name": "Montgat Nord",
+     "accessible": true,
+     "lines": [
+      "R1"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "79407",
+     "name": "El Masnou",
+     "accessible": true,
+     "lines": [
+      "R1"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "79408",
+     "name": "Ocata",
+     "accessible": false,
+     "lines": [
+      "R1"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "79409",
+     "name": "Premià de Mar",
+     "accessible": true,
+     "lines": [
+      "R1"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "79410",
+     "name": "Vilassar de Mar",
+     "accessible": true,
+     "lines": [
+      "R1"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "79412",
+     "name": "Cabrera de Mar-Vilassar de Mar",
+     "accessible": true,
+     "lines": [
+      "R1"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "79500",
+     "name": "Mataró",
+     "accessible": true,
+     "lines": [
+      "R1"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "79501",
+     "name": "Sant Andreu de Llavaneres",
+     "accessible": true,
+     "lines": [
+      "R1"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "79502",
+     "name": "Caldes d'Estrac",
+     "accessible": true,
+     "lines": [
+      "R1"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "79600",
+     "name": "Arenys de Mar",
+     "accessible": true,
+     "lines": [
+      "R1"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "79601",
+     "name": "Canet de Mar",
+     "accessible": true,
+     "lines": [
+      "R1"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "79602",
+     "name": "Sant Pol de Mar",
+     "accessible": false,
+     "lines": [
+      "R1"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "79603",
+     "name": "Calella",
+     "accessible": true,
+     "lines": [
+      "R1"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "79604",
+     "name": "Pineda de Mar",
+     "accessible": true,
+     "lines": [
+      "R1"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "79608",
+     "name": "Santa Susanna",
+     "accessible": true,
+     "lines": [
+      "R1"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "79605",
+     "name": "Malgrat de Mar",
+     "accessible": true,
+     "lines": [
+      "R1"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "79606",
+     "name": "Blanes",
+     "accessible": true,
+     "lines": [
+      "R1"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "79607",
+     "name": "Tordera",
+     "accessible": true,
+     "lines": [
+      "R1"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "79200",
+     "name": "Maçanet-Massanes",
+     "accessible": true,
+     "lines": [
+      "R1",
+      "R2N",
+      "R11"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "79202",
+     "name": "Sils",
+     "accessible": true,
+     "lines": [
+      "R11"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "79203",
+     "name": "Caldes de Malavella",
+     "accessible": true,
+     "lines": [
+      "R11"
+     ],
+     "transfers": [
+      {
+       "type": "OTHER",
+       "id": "R-MD",
+       "label": {
+        "ca": "Altres serveis ferroviaris",
+        "es": "Otros servicios ferroviarios",
+        "en": "Other train services"
+       }
+      }
+     ]
+    },
+    {
+     "id": "79204",
+     "name": "Riudellots",
+     "accessible": false,
+     "lines": [
+      "R11"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "79205",
+     "name": "Fornells de la Selva",
+     "accessible": false,
+     "lines": [
+      "R11"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "79300",
+     "name": "Girona",
+     "accessible": false,
+     "lines": [
+      "R11"
+     ],
+     "transfers": [
+      {
+       "type": "OTHER",
+       "id": "R-MD",
+       "label": {
+        "ca": "Altres serveis ferroviaris",
+        "es": "Otros servicios ferroviarios",
+        "en": "Other train services"
+       }
+      }
+     ]
+    },
+    {
+     "id": "79301",
+     "name": "Celrà",
+     "accessible": false,
+     "lines": [
+      "R11"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "79302",
+     "name": "Bordils-Juià",
+     "accessible": false,
+     "lines": [
+      "R11"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "79303",
+     "name": "Flaçà",
+     "accessible": true,
+     "lines": [
+      "R11"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "79304",
+     "name": "Sant Jordi Desvalls",
+     "accessible": false,
+     "lines": [
+      "R11"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "79305",
+     "name": "Camallera",
+     "accessible": false,
+     "lines": [
+      "R11"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "79306",
+     "name": "Sant Miquel de Fluvià",
+     "accessible": false,
+     "lines": [
+      "R11"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "79308",
+     "name": "Vilamalla",
+     "accessible": false,
+     "lines": [
+      "R11"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "79309",
+     "name": "Figueres",
+     "accessible": true,
+     "lines": [
+      "R11"
+     ],
+     "transfers": [
+      {
+       "type": "OTHER",
+       "id": "R-MD",
+       "label": {
+        "ca": "Altres serveis ferroviaris",
+        "es": "Otros servicios ferroviarios",
+        "en": "Other train services"
+       }
+      }
+     ]
+    },
+    {
+     "id": "79311",
+     "name": "Vilajuïga",
+     "accessible": false,
+     "lines": [
+      "R11"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "79312",
+     "name": "Llançà",
+     "accessible": false,
+     "lines": [
+      "R11"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "79314",
+     "name": "Colera",
+     "accessible": false,
+     "lines": [
+      "R11"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "79315",
+     "name": "Portbou",
+     "accessible": false,
+     "lines": [
+      "R11"
+     ],
+     "transfers": [
+      {
+       "type": "OTHER",
+       "id": "R-MD",
+       "label": {
+        "ca": "Altres serveis ferroviaris",
+        "es": "Otros servicios ferroviarios",
+        "en": "Other train services"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "RT1",
+   "name": "RT1",
+   "service": "REGIONAL",
+   "journey": "Tarragona - La Plana-Picamoixons",
+   "via": {
+    "ca": "",
+    "es": "",
+    "en": ""
+   },
+   "origin": "Tarragona",
+   "destination": "La Plana-Picamoixons",
+   "stations": [
+    {
+     "id": "71500",
+     "name": "Tarragona",
+     "accessible": false,
+     "lines": [
+      "R14",
+      "R15",
+      "R16",
+      "R17",
+      "RT2"
+     ],
+     "transfers": [
+      {
+       "type": "OTHER",
+       "id": "R-MD",
+       "label": {
+        "ca": "Altres serveis ferroviaris",
+        "es": "Otros servicios ferroviarios",
+        "en": "Other train services"
+       }
+      }
+     ]
+    },
+    {
+     "id": "71401",
+     "name": "Vila-seca",
+     "accessible": true,
+     "lines": [
+      "R14",
+      "R15"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "71400",
+     "name": "Reus",
+     "accessible": true,
+     "lines": [
+      "R14",
+      "R15"
+     ],
+     "transfers": [
+      {
+       "type": "OTHER",
+       "id": "R-MD",
+       "label": {
+        "ca": "Altres serveis ferroviaris",
+        "es": "Otros servicios ferroviarios",
+        "en": "Other train services"
+       }
+      }
+     ]
+    },
+    {
+     "id": "73102",
+     "name": "La Selva del Camp",
+     "accessible": true,
+     "lines": [
+      "R14"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "73101",
+     "name": "Alcover",
+     "accessible": false,
+     "lines": [
+      "R14"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "73100",
+     "name": "La Plana-Picamoixons",
+     "accessible": false,
+     "lines": [
+      "R13",
+      "R14"
+     ],
+     "transfers": []
+    }
+   ]
+  },
+  {
+   "id": "RT2",
+   "name": "RT2",
+   "service": "REGIONAL",
+   "journey": "Tarragona - Salou - Port Aventura",
+   "via": {
+    "ca": "",
+    "es": "",
+    "en": ""
+   },
+   "origin": "Tarragona",
+   "destination": "Salou - Port Aventura",
+   "stations": [
+    {
+     "id": "71500",
+     "name": "Tarragona",
+     "accessible": false,
+     "lines": [
+      "R14",
+      "R15",
+      "R16",
+      "R17",
+      "RT1"
+     ],
+     "transfers": [
+      {
+       "type": "OTHER",
+       "id": "R-MD",
+       "label": {
+        "ca": "Altres serveis ferroviaris",
+        "es": "Otros servicios ferroviarios",
+        "en": "Other train services"
+       }
+      }
+     ]
+    },
+    {
+     "id": "65411",
+     "name": "Salou - Port Aventura",
+     "accessible": true,
+     "lines": [
+      "R17"
+     ],
+     "transfers": [
+      {
+       "type": "OTHER",
+       "id": "R-MD",
+       "label": {
+        "ca": "Altres serveis ferroviaris",
+        "es": "Otros servicios ferroviarios",
+        "en": "Other train services"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "RL3",
+   "name": "RL3",
+   "service": "REGIONAL",
+   "journey": "Cervera - Lleida Pirineus",
+   "via": {
+    "ca": "",
+    "es": "",
+    "en": ""
+   },
+   "origin": "Cervera",
+   "destination": "Lleida-Pirineus",
+   "stations": [
+    {
+     "id": "78500",
+     "name": "Cervera",
+     "accessible": false,
+     "lines": [
+      "RL4"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "78408",
+     "name": "Tàrrega",
+     "accessible": false,
+     "lines": [
+      "RL4"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "78407",
+     "name": "Anglesola",
+     "accessible": true,
+     "lines": [
+      "RL4"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "78406",
+     "name": "Bellpuig",
+     "accessible": false,
+     "lines": [
+      "RL4"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "78405",
+     "name": "Castellnou de Seana",
+     "accessible": true,
+     "lines": [
+      "RL4"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "78404",
+     "name": "Golmés",
+     "accessible": true,
+     "lines": [
+      "RL4"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "78403",
+     "name": "Mollerussa",
+     "accessible": false,
+     "lines": [
+      "RL4"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "78402",
+     "name": "Bell-lloc d'Urgell",
+     "accessible": true,
+     "lines": [
+      "RL4"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "78400",
+     "name": "Lleida-Pirineus",
+     "accessible": true,
+     "lines": [
+      "R13",
+      "R14",
+      "RL4"
+     ],
+     "transfers": []
+    }
+   ]
+  },
+  {
+   "id": "RL4",
+   "name": "RL4",
+   "service": "REGIONAL",
+   "journey": "Terrassa Estació del Nord - Lleida",
+   "via": {
+    "ca": "",
+    "es": "",
+    "en": ""
+   },
+   "origin": "Terrassa Estació del Nord",
+   "destination": "Lleida-Pirineus",
+   "stations": [
+    {
+     "id": "78700",
+     "name": "Terrassa Estació del Nord",
+     "accessible": true,
+     "lines": [
+      "R4"
+     ],
+     "transfers": [
+      {
+       "type": "RAILWAY",
+       "id": "S1",
+       "label": {
+        "ca": "Barcelona- Pl. Catalunya / Terrassa",
+        "es": "Barcelona- Pl. Catalunya / Terrassa",
+        "en": "Barcelona- Pl. Catalunya / Terrassa"
+       }
+      }
+     ]
+    },
+    {
+     "id": "78604",
+     "name": "Sant Vicenç de Castellet",
+     "accessible": false,
+     "lines": [
+      "R4"
+     ],
+     "transfers": [
+      {
+       "type": "RAILWAY",
+       "id": "R50",
+       "label": {
+        "ca": "Barcelona-Plaça Espanya / Manresa",
+        "es": "Barcelona-Plaça Espanya / Manresa",
+        "en": "Barcelona-Plaça Espanya / Manresa"
+       }
+      }
+     ]
+    },
+    {
+     "id": "78600",
+     "name": "Manresa",
+     "accessible": true,
+     "lines": [
+      "R4"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "78506",
+     "name": "Rajadell",
+     "accessible": true,
+     "lines": [],
+     "transfers": []
+    },
+    {
+     "id": "78505",
+     "name": "Aguilar de Segarra",
+     "accessible": true,
+     "lines": [],
+     "transfers": []
+    },
+    {
+     "id": "78504",
+     "name": "Seguers-Sant Pere Sallavinera",
+     "accessible": true,
+     "lines": [],
+     "transfers": []
+    },
+    {
+     "id": "78503",
+     "name": "Calaf",
+     "accessible": true,
+     "lines": [],
+     "transfers": []
+    },
+    {
+     "id": "78502",
+     "name": "Sant Martí Sesgueioles",
+     "accessible": true,
+     "lines": [],
+     "transfers": []
+    },
+    {
+     "id": "78501",
+     "name": "Sant Guim de Freixenet",
+     "accessible": false,
+     "lines": [],
+     "transfers": []
+    },
+    {
+     "id": "78500",
+     "name": "Cervera",
+     "accessible": false,
+     "lines": [
+      "RL3"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "78408",
+     "name": "Tàrrega",
+     "accessible": false,
+     "lines": [
+      "RL3"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "78407",
+     "name": "Anglesola",
+     "accessible": true,
+     "lines": [
+      "RL3"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "78406",
+     "name": "Bellpuig",
+     "accessible": false,
+     "lines": [
+      "RL3"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "78405",
+     "name": "Castellnou de Seana",
+     "accessible": true,
+     "lines": [
+      "RL3"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "78404",
+     "name": "Golmés",
+     "accessible": true,
+     "lines": [
+      "RL3"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "78403",
+     "name": "Mollerussa",
+     "accessible": false,
+     "lines": [
+      "RL3"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "78402",
+     "name": "Bell-lloc d'Urgell",
+     "accessible": true,
+     "lines": [
+      "RL3"
+     ],
+     "transfers": []
+    },
+    {
+     "id": "78400",
+     "name": "Lleida-Pirineus",
+     "accessible": true,
+     "lines": [
+      "R13",
+      "R14",
+      "RL3"
+     ],
+     "transfers": []
+    }
+   ]
+  }
+ ],
+ "renfeRoutes": {
+  "51T0001R1": "R1",
+  "51T0002R1": "R1",
+  "51T0003R2N": "R2N",
+  "51T0004R2N": "R2N",
+  "51T0007R2S": "R2S",
+  "51T0008R2S": "R2S",
+  "51T0011R2S": "R2S",
+  "51T0012R2S": "R2S",
+  "51T0013R2": "R2",
+  "51T0014R2": "R2",
+  "51T0015R3": "R3",
+  "51T0016R3": "R3",
+  "51T0019R4": "R4",
+  "51T0020R4": "R4",
+  "51T0023R8": "R8",
+  "51T0024R8": "R8",
+  "51T0025R2": "R2",
+  "51T0026R2": "R2",
+  "51T0028R2": "R2",
+  "51T0029R7": "R7",
+  "51T0030R7": "R7",
+  "51T0031R4": "R4",
+  "51T0032R4": "R4",
+  "51T0033R3": "R3",
+  "51T0034R3": "R3",
+  "51T0039R3": "R3",
+  "51T0040R3": "R3",
+  "51T0045R3": "R3",
+  "51T0046R3": "R3",
+  "51T0047RL4": "RL4",
+  "51T0048RL4": "RL4",
+  "51T0093R11": "R11",
+  "51T0094R11": "R11",
+  "51T0097R15": "R15",
+  "51T0098R15": "R15",
+  "51T0099RL3": "RL3",
+  "51T0100RL3": "RL3",
+  "51T0101R14": "R14",
+  "51T0102R14": "R14",
+  "51T0103R16": "R16",
+  "51T0104R16": "R16",
+  "51T0105R16": "R16",
+  "51T0106R16": "R16",
+  "51T0107R17": "R17",
+  "51T0108R17": "R17",
+  "51T0109RT2": "RT2",
+  "51T0110RT2": "RT2",
+  "51T0111RG1": "RG1",
+  "51T0112RG1": "RG1",
+  "51T0113R15": "R15",
+  "51T0114R15": "R15",
+  "51T0120R11": "R11",
+  "51T0123R15": "R15",
+  "51T0124R15": "R15",
+  "51T0127R3": "R3",
+  "51T0128R3": "R3",
+  "51T0137RT1": "RT1",
+  "51T0138RT1": "RT1",
+  "51T0139R13": "R13",
+  "51T0140R13": "R13",
+  "51T0163R15": "R15",
+  "51T0164R15": "R15",
+  "51T0175R13": "R13",
+  "51T0176R13": "R13",
+  "51T0183R15": "R15",
+  "51T0185R13": "R13",
+  "51T0186R3": "R3",
+  "51T0187R3": "R3",
+  "51T0188R3": "R3",
+  "51T0189R3": "R3",
+  "51T0190R3": "R3",
+  "51T0191R3": "R3",
+  "51T0192R3": "R3",
+  "51T0193R3": "R3",
+  "51T0194R3": "R3",
+  "51T0195R3": "R3",
+  "51T0196R3": "R3",
+  "51T0197R3": "R3",
+  "51T0198R3": "R3",
+  "51T0199R3": "R3",
+  "51T0200R13": "R13",
+  "51T0201R3": "R3",
+  "51T0202R3": "R3",
+  "51T0203R3": "R3",
+  "51T0204R3": "R3"
+ }
+}
