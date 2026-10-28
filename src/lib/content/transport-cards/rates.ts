@@ -5,7 +5,11 @@ import type { Ticket, TripProfile } from "./types";
 /**
  * Barcelona transport fares, 2026.
  *
- * Every figure below was read off TMB's own fare page on 29 September 2026.
+ * Every figure below was read off TMB's own fare page on 29 September 2026,
+ * and the single, T-casual, T-dia and T-usual fares were re-read on 28 October
+ * 2026 on TMB's 2026 fare table ("in force from 15 January 2026"). The Hola
+ * Barcelona prices keep their own 12 Oct 2026 date: TMB's pages show only
+ * "from 12,50 €" and the shop renders the rest client-side.
  * Press coverage of the January rise reported 12,99 €, 11,95 € and 22,77 €;
  * those were the pre-approval projections, and TMB publishes 13 €, 12 € and
  * 22,80 €. The operator's own page wins.
@@ -26,7 +30,7 @@ const TMB_HOLA =
 const HOLA_PRICES = "https://www.holabarcelona.com/en";
 const HOLA_VERIFIED_AT = "2026-10-12";
 
-export const VERIFIED_AT = "2026-09-29";
+export const VERIFIED_AT = "2026-10-28";
 
 export const TICKETS: Ticket[] = [
   {

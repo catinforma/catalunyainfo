@@ -358,6 +358,29 @@ test("every priced ticket is multiplied by the number of travellers", () => {
   }
 });
 
+/**
+ * Transport passes, 28 Oct 2026: TMB's 2026 fare table ("in force from 15
+ * January 2026") gives every zone for the single ticket, T-casual, T-dia and
+ * T-usual. ATM's T-casual page still shows the 2025 fares lower down; none of
+ * them may appear. The ca/es pages answer "hola barcelona vs t casual" with
+ * figures computed from the fare table.
+ */
+test("transport: 2026 fares for every zone, no 2025 fares, Hola vs T-casual computed", () => {
+  for (const locale of ["ca", "es"] as const) {
+    const blocks = TRANSPORT.editions[locale].blocks as { type: string; rows?: string[][]; headers?: string[] }[];
+    const zones = blocks.find((b) => b.type === "table" && (b.rows?.length ?? 0) === 7);
+    assert.deepEqual(zones?.rows?.[0], ["1", "2,90 €", "13,00 €", "12,00 €", "22,80 €"], `${locale}: zone 1 row`);
+    assert.deepEqual(zones?.rows?.[2], ["3", "5,40 €", "34,70 €", "22,95 €", "42,70 €"], `${locale}: zone 3 row`);
+    const text = bodyToPlainText(TRANSPORT.editions[locale].blocks);
+    for (const old of ["12,55", "24,65", "33,55", "43,15"]) assert.ok(!text.includes(old), `${locale}: 2025 fare ${old}`);
+    assert.match(text, /15 (de gener|de enero) de 2026|15 (de gener|de enero)\)/, `${locale}: date the fares took effect`);
+    assert.match(text, /24,80 €/, `${locale}: T-casual plus two airport tickets`);
+    assert.match(text, /T-familiar[^.]*11,50 €/, `${locale}: T-familiar fare`);
+    assert.ok(blocks.some((b) => b.type === "faq"), `${locale}: FAQ`);
+  }
+  assert.match(bodyToPlainText(TRANSPORT.editions.ca.blocks), /Ocata[^.]*zona 2/);
+});
+
 test("the selector block is placed on the transport article in every language", () => {
   for (const locale of LOCALES) {
     const count = TRANSPORT.editions[locale].blocks.filter(
