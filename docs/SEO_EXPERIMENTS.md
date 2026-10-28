@@ -610,6 +610,72 @@ built to keep the URL for the next strikes.
 
 **Outcome:** _pending_
 
+## 2026-10-28 — Election cluster: the answers in the body, inside the title windows (deliberate)
+
+Branch `worktree-agent-ad7e6cb4a4b3cd9b2`, publish groups `mesa` and `voting`.
+**Body only**: no title, SEO title or description changed, and
+`tests/election-cluster.test.ts` pins all six editions to what main serves.
+
+**Why this breaks the one-change-per-window rule on purpose.** The mesa ca/es
+title is frozen to 14 Nov (17 Oct entry) and the how-to-vote titles changed on
+24 Oct (window to 21 Nov). Demand for both peaks in the fortnight before the
+29 Nov vote. Waiting for 21 Nov would leave eight days, less than the two to
+four weeks between crawls measured on 26 Oct, so the change would land after
+the peak. The cost is that the 14 Nov (mesa) and 21 Nov (voting) readings will
+measure title and body together: record them as such, never as title results.
+
+**Observation** (Search Console, 28 days to 27 Oct, as given in the brief):
+
+| Page | Query | Impressions | Position | Clicks |
+| --- | --- | --- | --- | --- |
+| Mesa ES | cuando se cobra por estar en una mesa electoral 2026 | 75 | 9.1 | 0 |
+| Mesa ES | cuanto pagan por estar en mesa electoral 2026 | 66 | 9.1 | n/a |
+| Mesa ES | cuanto te dan por ir a la mesa electoral | n/a | n/a | n/a |
+| Voting ES | próximas elecciones en cataluña 2026 | n/a | 4.0 | n/a |
+| Voting ES | cuándo son las elecciones en cataluña | n/a | 6.4–9.4 | n/a |
+| Voting ES | donde tengo que ir a votar 2026 | n/a | 6.1 | n/a |
+| Voting CA | quan són les properes eleccions a catalunya | n/a | 10.4 | n/a |
+| Voting EN | how to vote 2026 spain general election | n/a | 4.7 | n/a |
+| Voting EN | 2026 spain general election how to register to vote | n/a | 5.9 | n/a |
+
+**Change** (facts re-read on 28 Oct 2026 from the BOE, the official 29N mesa
+manual, the INE and the Junta Electoral Central;
+`research_notes/growth-round3/election-cluster-2026-10-28.md`):
+
+- **Mesa (ca/es/en).** The lead gives the amount (75 €, Orden INT/650/2026,
+  which applies to every election held after 27 June 2026; the same figure is
+  in the 29N manual the Council of Ministers approved on 27 Oct) and when it is
+  paid: no official rule sets the day or method, the order's preamble says such
+  payments are still mostly made in cash, and the reader is told to ask the
+  Junta Electoral de Zona. "How much" and "when is it paid" are now two
+  headings; three FAQ entries use the queries' own wording. The draw note adds
+  that a Junta Electoral de Zona can authorise an earlier draw (JEC Acuerdos
+  243, 272, 273, 299 and 300/2026).
+- **Voting (ca/es/en).** New first section, "next elections": 29 Nov 2026, then
+  municipal elections *expected* on 23 May 2027 (LOREG art. 42.3; decree issued
+  29 Mar and published 30 Mar 2027, the wording of the results hub), no
+  Parlament date. "Where do I vote?" moved to second place and rebuilt around
+  the INE's official finder, the census card (2–10 Nov) and the final list of
+  tables and venues (from 19 Nov). One link to the per-municipality results
+  hub. The EN lead answers the registration question. FAQ in the queries'
+  words. The MiDNI line now cites JEC Acuerdo 295/2026 (22 Oct): still
+  suspended, to be lifted for MiDNI only once Interior confirms a QR reader at
+  every table. **Watch the JEC sessions and update that line when it happens.**
+
+**Hypothesis.** The lever is position, not CTR (26 Oct entry): a page that
+answers the exact question in its first lines and under its own heading moves
+from 5–10 into the top 3. Prediction: by 25 Nov at least five of the nine
+queries above sit at position 3 or better on the 7-day average, and "cuando se
+cobra por estar en una mesa electoral 2026" moves from 9.1 to 5 or better.
+
+**Check first:** the last-crawl date of both ES URLs in URL inspection. A body
+Google has not crawled has not been tested.
+
+**Measure on 25 Nov** (peak) and **6 Dec** (after the vote): position and
+clicks per query above, per language.
+
+**Outcome:** _pending_
+
 ## Candidates not yet run
 
 Recorded so they are not lost, and so they are not all started at once.
