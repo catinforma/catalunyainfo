@@ -1520,6 +1520,10 @@
 }
 .ci-today-local-title { margin: 0; font-weight: 600; }
 .ci-today-local-list { margin: 0.35rem 0 0; font-size: 0.9rem; color: var(--color-ink-soft); }
+.ci-today-local .ci-today-subtitle { margin-top: 0; }
+.ci-today-find { margin: 0.9rem 0 0; font-size: 0.9rem; }
+.ci-today-dates { margin: 0; padding-left: 1.1rem; font-size: 0.9rem; }
+.ci-today-dates li { margin: 0.2rem 0; }
 
 .ci-local { margin: 2rem 0; }
 .ci-local-summary { font-weight: 600; margin: 0 0 0.75rem; }
