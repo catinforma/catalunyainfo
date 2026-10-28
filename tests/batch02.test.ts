@@ -548,6 +548,21 @@ test("markets: hours answered first, Sunday question answered, no unverified gro
   }
 });
 
+test("montserrat: the Aeri table covers 1 Nov and 7 Dec, the free question and the Monistrol station are answered", () => {
+  const free = { ca: /és gratis per a algú/, es: /Es gratis el cremallera/, en: /free for anyone/ } as const;
+  for (const locale of LOCALES) {
+    const blocks = MONTSERRAT_FREE.editions[locale].blocks as { type: string; rows?: string[][] }[];
+    const aeri = blocks.find((b) => b.type === "table" && (b.rows ?? []).some((row) => row[1] === "9:30–17:15"));
+    const rows = JSON.stringify(aeri?.rows ?? []);
+    assert.match(rows, /1 (de )?(novembre|noviembre|November)/, `${locale}: 1 Nov keeps October hours`);
+    assert.match(rows, /7 (de )?(desembre|diciembre|December)/, `${locale}: 7 Dec has holiday hours`);
+    const text = bodyToPlainText(MONTSERRAT_FREE.editions[locale].blocks);
+    assert.match(text, free[locale], `${locale}: answers "cremallera gratis"`);
+    assert.match(text, /Monistrol-Vila/, `${locale}: which station`);
+    assert.ok(MONTSERRAT_FREE.editions[locale].seoTitle.length <= 60, `${locale}: title budget`);
+  }
+});
+
 test("portaventura: the standard price leads, the Halloween price is labelled, the winter closure and the walk are stated", () => {
   const walk = { ca: /10 minuts a peu/, es: /10 minutos a pie/, en: /10-minute walk/ } as const;
   for (const locale of LOCALES) {

@@ -439,7 +439,14 @@ const MONTSERRAT_SOURCES = [
 // 25 and 28 Dec. Service 6350da927176 (weekdays 2 Nov–24 Dec except 7–8 Dec)
 // ends an hour earlier: last up 17:48, last down 18:15, last from
 // Monistrol-Vila 18:15. Weekends, 7–8 Dec and 28–31 Dec keep 18:48 / 19:15.
-const MONTSERRAT_VERIFIED = "2026-10-26";
+// 28 Oct 2026 (page-1 push, research_notes/page1-28oct/portaventura_montserrat.md):
+// cremallera and R5 re-read from FGC's GTFS (feed_version 2026-10-27, ends
+// 31 Dec 2026), unchanged; Aeri calendar re-read day by day: 1 Nov keeps the
+// October hours and 7 Dec the holiday ones, so the table names both. Museum
+// "10 EUR" is for "students, seniors and groups" with no age. No free
+// cremallera exists; what is free (dogs, Aeri under-4s, Monistrol-Vila
+// parking) is said instead. Weekday R50 trains skip Montserrat-Aeri (GTFS).
+const MONTSERRAT_VERIFIED = "2026-10-28";
 
 type MontT = {
   title: string; seoTitle: string; seoDescription: string; excerpt: string;
@@ -462,8 +469,8 @@ type MontT = {
 
 const MONTSERRAT_COPY: Record<"ca" | "es" | "en", MontT> = {
   ca: {
-    title: "Montserrat per lliure des de Barcelona: horaris del cremallera i l'Aeri, preus i tren R5",
-    seoTitle: "Cremallera i Aeri de Montserrat: horaris, preus i tren R5",
+    title: "Montserrat per lliure des de Barcelona: horaris del cremallera i l'Aeri 2026, preus i tren R5",
+    seoTitle: "Cremallera i Aeri de Montserrat 2026: horaris i preus",
     seoDescription:
       "R5 des de Plaça Espanya i cremallera (cada hora, 15 € anada i tornada) o Aeri (cada 15 minuts, 15 €). Horaris de tardor i Trans Montserrat a 50 €.",
     excerpt:
@@ -480,6 +487,7 @@ const MONTSERRAT_COPY: Record<"ca" | "es" | "en", MontT> = {
     rack: [
       "El cremallera surt **cada hora** de l'estació de **Monistrol de Montserrat**, on para l'R5, i arriba al monestir en 20 minuts; des de **Monistrol-Vila**, a l'altra banda del poble, n'hi ha més i triga 13. L'R5 que surt de Plaça Espanya al minut :36 enllaça amb el cremallera del minut :48.",
       "De baixada, els trens que surten de Montserrat al quart d'hora enllacen a Monistrol amb l'R5 cap a Barcelona. Del 2 de novembre al 24 de desembre, els dies feiners l'últim tren puja i baixa una hora abans que els caps de setmana: mira la taula.",
+      "Si hi vas en tren, baixa a **Monistrol de Montserrat**: l'R5 no para a Monistrol-Vila. **Monistrol-Vila** és l'estació del poble, amb aparcament gratuït per als usuaris del cremallera, per a qui hi arriba amb cotxe.",
     ],
     rackCaption: "Cremallera de Montserrat, del 26 d'octubre al 31 de desembre de 2026",
     rackHeaders: ["Trajecte", "Caps de setmana i festius (i fins al 30 d'octubre)", "Feiners del 2 de novembre al 24 de desembre", "Durada"],
@@ -489,7 +497,7 @@ const MONTSERRAT_COPY: Record<"ca" | "es" | "en", MontT> = {
       ["Monistrol-Vila → Montserrat", "Cada 20 min, de 8:35 a 19:15 (fins al 30 d'octubre, algunes hores cada 40 min)", "A :15 i :55, fins a les 18:15", "13 min"],
       ["25 de desembre", "Última pujada 13:48 (14:15 des de Monistrol-Vila)", "—", "—"],
     ],
-    rackNote: "Dades obertes d'horaris d'FGC (versió del 25 d'octubre de 2026) per al 28 d'octubre, el 4 i el 7 de novembre i el 10, el 25 i el 28 de desembre. El 7 i el 8 de desembre i del 28 al 31 de desembre s'aplica l'horari de cap de setmana.",
+    rackNote: "Dades obertes d'horaris d'FGC (versió del 27 d'octubre de 2026) per al 28 d'octubre, el 4 i el 7 de novembre i el 10, el 25 i el 28 de desembre. El 7 i el 8 de desembre i del 28 al 31 de desembre s'aplica l'horari de cap de setmana.",
     aeriTitle: "Horaris de l'Aeri de Montserrat",
     aeri: [
       "L'**Aeri** és el telefèric que puja des de la seva pròpia estació de l'R5 (Montserrat-Aeri) fins al monestir. Surt **cada 15 minuts** i el trajecte dura uns **5 minuts**. Els horaris canvien amb la temporada: a l'octubre tanca més tard, i al novembre i desembre tanca abans entre setmana.",
@@ -497,12 +505,12 @@ const MONTSERRAT_COPY: Record<"ca" | "es" | "en", MontT> = {
     aeriCaption: "Aeri de Montserrat, calendari 2026",
     aeriHeaders: ["Període", "Horari"],
     aeriRows: [
-      ["Octubre, cada dia", "9:30–19:00"],
-      ["Novembre i desembre, feiners", "9:30–17:15"],
-      ["Novembre i desembre, caps de setmana i festius", "9:30–18:15"],
+      ["Octubre i l'1 de novembre", "9:30–19:00"],
+      ["Novembre i desembre, feiners (excepte el 7 de desembre)", "9:30–17:15"],
+      ["Novembre i desembre, caps de setmana i festius, i el 7 de desembre", "9:30–18:15"],
       ["25 de desembre", "9:30–14:00"],
     ],
-    aeriNote: "Calendari 2026 publicat per l'Aeri de Montserrat, consultat el 24 d'octubre de 2026.",
+    aeriNote: "Calendari 2026 publicat per l'Aeri de Montserrat, consultat el 28 d'octubre de 2026.",
     trainTitle: "Tren R5 de Plaça Espanya a Montserrat",
     train: [
       "L'R5 d'FGC (direcció Manresa) surt de Plaça Espanya i para a **Montserrat-Aeri**, per a l'Aeri, i a **Monistrol de Montserrat**, per al cremallera. Els feiners hi ha uns 30 trens al dia i els caps de setmana un cada hora. La T-mobilitat no val per al cremallera ni els funiculars, que no formen part de la xarxa integrada.",
@@ -515,7 +523,7 @@ const MONTSERRAT_COPY: Record<"ca" | "es" | "en", MontT> = {
       ["Monistrol de Montserrat → Plaça Espanya", "Cada dia", "Cada hora a :41 (feiners també a :01 o :21), l'últim a les 22:41", "64 min"],
       ["Montserrat-Aeri → Plaça Espanya", "Cada dia", "Feiners, un o dos per hora; caps de setmana, cada hora a :45; l'últim a les 22:45", "60 min"],
     ],
-    trainNote: "Dades obertes d'horaris d'FGC per al 27 i el 31 d'octubre i l'1 de novembre de 2026.",
+    trainNote: "Dades obertes d'horaris d'FGC (versió del 27 d'octubre de 2026) per al 29 d'octubre i el 4 i el 7 de novembre de 2026. Alguns trens R50 dels dies feiners no paren a Montserrat-Aeri: si vas a l'Aeri, comprova que el teu tren hi pari.",
     chooseTitle: "Cremallera o Aeri: quin triar",
     choose: [
       "La pujada en cremallera és progressiva i deixa veure com canvia el paisatge; la de l'Aeri és una vista vertical de cop, en pocs minuts. Costen el mateix d'anada i tornada.",
@@ -530,13 +538,13 @@ const MONTSERRAT_COPY: Record<"ca" | "es" | "en", MontT> = {
       ["Funicular de Sant Joan, anada / anada i tornada", "11,40 € / 17,50 €", "5,70 € / 8,75 €", "10,25 € / 15,75 €"],
       ["Trans Montserrat (des de Plaça Espanya)", "50 €", "—", "—"],
       ["Tot Montserrat (des de Plaça Espanya)", "71,50 €", "—", "—"],
-      ["Museu de Montserrat", "12 €", "6 € (de 8 a 16 anys)", "10 €"],
+      ["Museu de Montserrat", "12 €", "6 € (de 8 a 16 anys)", "10 € (sèniors i estudiants)"],
     ],
-    pricesNote: "Cremallera i funicular: preus vàlids fins al 31 de desembre de 2026 (Turistren). Aeri: tarifes 2026. Combinats i museu: els seus webs, consultats el 24 d'octubre de 2026.",
+    pricesNote: "Cremallera i funicular: preus vàlids fins al 31 de desembre de 2026 (Turistren). Aeri: tarifes 2026. Combinats i museu: els seus webs, consultats el 28 d'octubre de 2026.",
     combosTitle: "Trans Montserrat i Tot Montserrat: què inclouen",
     combos: [
       "El **Trans Montserrat** (50 €) inclou el tren d'FGC d'anada i tornada des de Plaça Espanya, el **cremallera o l'Aeri** (hi ha una versió de cada), el funicular de Sant Joan, l'Espai Audiovisual, l'accés a la basílica i al cambril de la Mare de Déu segons aforament i un bitllet de metro de tornada. El **Tot Montserrat** (71,50 €) hi afegeix el Museu de Montserrat i el dinar de bufet. Cap dels dos inclou el cant de l'Escolania.",
-      "Si els compres en línia, has de bescanviar el bitllet al Punt d'Acollida de l'estació de Plaça Espanya el mateix dia del viatge. Les persones amb targeta de discapacitat tenen un 50 % de descompte al cremallera i els funiculars, i les famílies nombroses i monoparentals, un 20 % o un 50 %.",
+      "Són bitllets sense data: valen per a qualsevol dia fins al pròxim canvi de tarifes i es poden cancel·lar gratis dins dels 15 dies posteriors a la compra; els funiculars s'han de fer servir el dia que arribes al monestir, i no es poden reservar: s'hi accedeix fent cua. Si els compres en línia, has de bescanviar el bitllet al Punt d'Acollida de l'estació de Plaça Espanya (de dilluns a diumenge, de 8 a 14 h) el mateix dia del viatge. Les persones amb targeta de discapacitat tenen un 50 % de descompte al cremallera i els funiculars, i les famílies nombroses i monoparentals, un 20 % o un 50 %.",
     ],
     beforeTitle: "Abans d'anar-hi",
     before: "El **funicular de la Santa Cova** està fora de servei per manteniment fins a nou avís (s'hi pot baixar a peu). Els turistes no residents paguen entrada per accedir al santuari (basílica i cambril); els residents a Catalunya, a la resta d'Espanya i a la UE en queden exempts, però han de reservar al web de l'Abadia per venerar la Mare de Déu.",
@@ -558,11 +566,13 @@ const MONTSERRAT_COPY: Record<"ca" | "es" | "en", MontT> = {
       { question: "Què és millor, el cremallera o l'Aeri?", answer: "Costen el mateix (15 € anada i tornada). L'Aeri surt cada 15 minuts i puja en 5; el cremallera surt cada hora des de Monistrol de Montserrat i puja en 20, amb una pujada més suau." },
       { question: "Com s'hi va de Barcelona a Montserrat en tren?", answer: "Amb l'R5 d'FGC des de Plaça Espanya: 60 minuts fins a l'estació de l'Aeri o 64 fins a Monistrol de Montserrat, on es canvia al cremallera." },
       { question: "Què inclou el Trans Montserrat?", answer: "Per 50 €: tren d'FGC des de Plaça Espanya, cremallera o Aeri, funicular de Sant Joan, Espai Audiovisual, accés a la basílica i metro de tornada." },
+      { question: "El cremallera de Montserrat és gratis per a algú?", answer: "No hi ha bitllet gratuït ni cap promoció vigent: paguen tots els viatgers a partir de 4 anys. Els gossos hi viatgen gratis, lligats i amb morrió, i l'aparcament de Monistrol-Vila és gratuït per als usuaris del cremallera. A l'Aeri, els menors de 4 anys no paguen. La T-mobilitat no hi és vàlida." },
+      { question: "A quina estació he de baixar per agafar el cremallera?", answer: "A Monistrol de Montserrat, on para l'R5. Monistrol-Vila és l'altra estació del cremallera, al poble, amb aparcament gratuït per a qui hi va amb cotxe." },
     ],
   },
   es: {
-    title: "Montserrat por libre desde Barcelona: horarios del cremallera y el Aeri, precios y tren R5",
-    seoTitle: "Montserrat por libre: cremallera y Aeri, horarios y precios",
+    title: "Montserrat por libre desde Barcelona: horarios del cremallera y el teleférico, precios y tren R5 de FGC",
+    seoTitle: "Cremallera y teleférico de Montserrat: horarios y precios",
     seoDescription:
       "R5 desde Plaça Espanya y cremallera (cada hora, 15 € ida y vuelta) o Aeri (cada 15 minutos, 15 €). Horarios de otoño y Trans Montserrat a 50 €.",
     excerpt:
@@ -579,6 +589,7 @@ const MONTSERRAT_COPY: Record<"ca" | "es" | "en", MontT> = {
     rack: [
       "El cremallera sale **cada hora** de la estación de **Monistrol de Montserrat**, donde para la R5, y llega al monasterio en 20 minutos; desde **Monistrol-Vila**, al otro lado del pueblo, hay más y tarda 13. La R5 que sale de Plaça Espanya en el minuto :36 enlaza con el cremallera del minuto :48.",
       "De bajada, los trenes que salen de Montserrat y cuarto enlazan en Monistrol con la R5 hacia Barcelona. Del 2 de noviembre al 24 de diciembre, los laborables el último tren sube y baja una hora antes que los fines de semana: mira la tabla.",
+      "Si vas en tren, bájate en **Monistrol de Montserrat**: la R5 no para en Monistrol-Vila. **Monistrol-Vila** es la estación del pueblo, con aparcamiento gratuito para los usuarios del cremallera, para quien llega en coche.",
     ],
     rackCaption: "Cremallera de Montserrat, del 26 de octubre al 31 de diciembre de 2026",
     rackHeaders: ["Trayecto", "Fines de semana y festivos (y hasta el 30 de octubre)", "Laborables del 2 de noviembre al 24 de diciembre", "Duración"],
@@ -588,20 +599,20 @@ const MONTSERRAT_COPY: Record<"ca" | "es" | "en", MontT> = {
       ["Monistrol-Vila → Montserrat", "Cada 20 min, de 8:35 a 19:15 (hasta el 30 de octubre, algunas horas cada 40 min)", "A :15 y :55, hasta las 18:15", "13 min"],
       ["25 de diciembre", "Última subida 13:48 (14:15 desde Monistrol-Vila)", "—", "—"],
     ],
-    rackNote: "Datos abiertos de horarios de FGC (versión del 25 de octubre de 2026) para el 28 de octubre, el 4 y el 7 de noviembre y el 10, el 25 y el 28 de diciembre. El 7 y el 8 de diciembre y del 28 al 31 de diciembre rige el horario de fin de semana.",
-    aeriTitle: "Horarios del Aeri (teleférico) de Montserrat",
+    rackNote: "Datos abiertos de horarios de FGC (versión del 27 de octubre de 2026) para el 28 de octubre, el 4 y el 7 de noviembre y el 10, el 25 y el 28 de diciembre. El 7 y el 8 de diciembre y del 28 al 31 de diciembre rige el horario de fin de semana.",
+    aeriTitle: "Horarios del teleférico de Montserrat (Aeri)",
     aeri: [
       "El **Aeri** es el teleférico que sube desde su propia estación de la R5 (Montserrat-Aeri) hasta el monasterio. Sale **cada 15 minutos** y el trayecto dura unos **5 minutos**. Los horarios cambian con la temporada: en octubre cierra más tarde, y en noviembre y diciembre cierra antes entre semana.",
     ],
     aeriCaption: "Aeri de Montserrat, calendario 2026",
     aeriHeaders: ["Periodo", "Horario"],
     aeriRows: [
-      ["Octubre, todos los días", "9:30–19:00"],
-      ["Noviembre y diciembre, laborables", "9:30–17:15"],
-      ["Noviembre y diciembre, fines de semana y festivos", "9:30–18:15"],
+      ["Octubre y el 1 de noviembre", "9:30–19:00"],
+      ["Noviembre y diciembre, laborables (salvo el 7 de diciembre)", "9:30–17:15"],
+      ["Noviembre y diciembre, fines de semana y festivos, y el 7 de diciembre", "9:30–18:15"],
       ["25 de diciembre", "9:30–14:00"],
     ],
-    aeriNote: "Calendario 2026 publicado por el Aeri de Montserrat, consultado el 24 de octubre de 2026.",
+    aeriNote: "Calendario 2026 publicado por el Aeri de Montserrat, consultado el 28 de octubre de 2026.",
     trainTitle: "Tren R5 de Plaça Espanya a Montserrat",
     train: [
       "La R5 de FGC (dirección Manresa) sale de Plaça Espanya y para en **Montserrat-Aeri**, para el Aeri, y en **Monistrol de Montserrat**, para el cremallera. Los laborables hay unos 30 trenes al día y los fines de semana uno cada hora. La T-mobilitat no vale para el cremallera ni los funiculares, que no forman parte de la red integrada.",
@@ -614,7 +625,7 @@ const MONTSERRAT_COPY: Record<"ca" | "es" | "en", MontT> = {
       ["Monistrol de Montserrat → Plaça Espanya", "Todos los días", "Cada hora a :41 (laborables también a :01 o :21), el último a las 22:41", "64 min"],
       ["Montserrat-Aeri → Plaça Espanya", "Todos los días", "Laborables, uno o dos por hora; fines de semana, cada hora a :45; el último a las 22:45", "60 min"],
     ],
-    trainNote: "Datos abiertos de horarios de FGC para el 27 y el 31 de octubre y el 1 de noviembre de 2026.",
+    trainNote: "Datos abiertos de horarios de FGC (versión del 27 de octubre de 2026) para el 29 de octubre y el 4 y el 7 de noviembre de 2026. Algunos trenes R50 de los laborables no paran en Montserrat-Aeri: si vas al teleférico, comprueba que tu tren pare allí.",
     chooseTitle: "Cremallera o teleférico: cuál elegir",
     choose: [
       "La subida en cremallera es progresiva y permite ver cómo cambia el paisaje; la del Aeri es una vista vertical de golpe, en pocos minutos. Cuestan lo mismo ida y vuelta.",
@@ -629,13 +640,13 @@ const MONTSERRAT_COPY: Record<"ca" | "es" | "en", MontT> = {
       ["Funicular de Sant Joan, ida / ida y vuelta", "11,40 € / 17,50 €", "5,70 € / 8,75 €", "10,25 € / 15,75 €"],
       ["Trans Montserrat (desde Plaça Espanya)", "50 €", "—", "—"],
       ["Tot Montserrat (desde Plaça Espanya)", "71,50 €", "—", "—"],
-      ["Museu de Montserrat", "12 €", "6 € (de 8 a 16 años)", "10 €"],
+      ["Museu de Montserrat", "12 €", "6 € (de 8 a 16 años)", "10 € (sénior y estudiantes)"],
     ],
-    pricesNote: "Cremallera y funicular: precios válidos hasta el 31 de diciembre de 2026 (Turistren). Aeri: tarifas 2026. Combinados y museo: sus webs, consultadas el 24 de octubre de 2026.",
+    pricesNote: "Cremallera y funicular: precios válidos hasta el 31 de diciembre de 2026 (Turistren). Aeri: tarifas 2026. Combinados y museo: sus webs, consultadas el 28 de octubre de 2026.",
     combosTitle: "Trans Montserrat y Tot Montserrat: qué incluyen",
     combos: [
       "El **Trans Montserrat** (50 €) incluye el tren de FGC de ida y vuelta desde Plaça Espanya, el **cremallera o el Aeri** (hay una versión de cada), el funicular de Sant Joan, el Espai Audiovisual, el acceso a la basílica y al camarín de la Virgen según aforo y un billete de metro de vuelta. El **Tot Montserrat** (71,50 €) añade el Museu de Montserrat y la comida de bufé. Ninguno de los dos incluye el canto de la Escolania.",
-      "Si los compras en línea, hay que canjear el billete en el Punt d'Acollida de la estación de Plaça Espanya el mismo día del viaje. Las personas con tarjeta de discapacidad tienen un 50 % de descuento en el cremallera y los funiculares, y las familias numerosas y monoparentales, un 20 % o un 50 %.",
+      "Son billetes sin fecha: valen para cualquier día hasta el próximo cambio de tarifas y se pueden cancelar gratis en los 15 días siguientes a la compra; los funiculares hay que usarlos el día que llegas al monasterio, y no se pueden reservar: se accede haciendo cola. Si los compras en línea, hay que canjear el billete en el Punt d'Acollida de la estación de Plaça Espanya (de lunes a domingo, de 8 a 14 h) el mismo día del viaje. Las personas con tarjeta de discapacidad tienen un 50 % de descuento en el cremallera y los funiculares, y las familias numerosas y monoparentales, un 20 % o un 50 %.",
     ],
     beforeTitle: "Antes de ir",
     before: "El **funicular de la Santa Cova** está fuera de servicio por mantenimiento hasta nuevo aviso (se puede bajar a pie). Los turistas no residentes pagan entrada para acceder al santuario (basílica y camarín); los residentes en Cataluña, el resto de España y la UE están exentos, pero deben reservar en la web de la Abadía para venerar a la Virgen.",
@@ -657,11 +668,13 @@ const MONTSERRAT_COPY: Record<"ca" | "es" | "en", MontT> = {
       { question: "¿Qué es mejor, el cremallera o el teleférico?", answer: "Cuestan lo mismo (15 € ida y vuelta). El Aeri sale cada 15 minutos y sube en 5; el cremallera sale cada hora desde Monistrol de Montserrat y sube en 20, con una subida más suave." },
       { question: "¿Cómo llegar a Montserrat en tren desde Barcelona?", answer: "Con la R5 de FGC desde Plaça Espanya: 60 minutos hasta la estación del Aeri o 64 hasta Monistrol de Montserrat, donde se cambia al cremallera." },
       { question: "¿Qué incluye el Trans Montserrat?", answer: "Por 50 €: tren de FGC desde Plaça Espanya, cremallera o Aeri, funicular de Sant Joan, Espai Audiovisual, acceso a la basílica y metro de vuelta." },
+      { question: "¿Es gratis el cremallera de Montserrat para alguien?", answer: "No hay billete gratuito ni ninguna promoción vigente: pagan todos los viajeros desde los 4 años. Los perros viajan gratis, atados y con bozal, y el aparcamiento de Monistrol-Vila es gratuito para los usuarios del cremallera. En el teleférico (Aeri), los menores de 4 años no pagan. La T-mobilitat no es válida." },
+      { question: "¿En qué estación hay que bajar para coger el cremallera?", answer: "En Monistrol de Montserrat, donde para la R5. Monistrol-Vila es la otra estación del cremallera, en el pueblo, con aparcamiento gratuito para quien va en coche." },
     ],
   },
   en: {
     title: "Montserrat without a tour: rack railway and cable car times, fares and the R5 train",
-    seoTitle: "Montserrat rack railway or cable car: times and fares",
+    seoTitle: "Montserrat cable car or rack railway: 2026 times and fares",
     seoDescription:
       "The R5 from Plaça Espanya, then the rack railway (hourly, €15 return) or the Aeri cable car (every 15 min, €15). Autumn times; Trans Montserrat €50.",
     excerpt:
@@ -678,6 +691,7 @@ const MONTSERRAT_COPY: Record<"ca" | "es" | "en", MontT> = {
     rack: [
       "The rack railway leaves **every hour** from **Monistrol de Montserrat** station, where the R5 stops, and reaches the monastery in 20 minutes; from **Monistrol-Vila**, across the village, trains are more frequent and take 13. The R5 leaving Plaça Espanya at :36 past the hour connects with the rack railway at :48.",
       "Coming down, the trains leaving Montserrat at a quarter past connect at Monistrol with the R5 to Barcelona. From 2 November to 24 December, on weekdays the last trains up and down run an hour earlier than at weekends: see the table.",
+      "Coming by train, get off at **Monistrol de Montserrat**: the R5 does not stop at Monistrol-Vila. **Monistrol-Vila** is the village station, with free parking for rack-railway passengers, for those arriving by car.",
     ],
     rackCaption: "Montserrat rack railway, 26 October to 31 December 2026",
     rackHeaders: ["Route", "Weekends and holidays (and until 30 October)", "Weekdays, 2 November to 24 December", "Journey"],
@@ -687,7 +701,7 @@ const MONTSERRAT_COPY: Record<"ca" | "es" | "en", MontT> = {
       ["Monistrol-Vila → Montserrat", "Every 20 min, 8:35 to 19:15 (until 30 October, some hours every 40 min)", "At :15 and :55, until 18:15", "13 min"],
       ["25 December", "Last train up 13:48 (14:15 from Monistrol-Vila)", "—", "—"],
     ],
-    rackNote: "FGC's open timetable data (version of 25 October 2026) for 28 October, 4 and 7 November and 10, 25 and 28 December. On 7 and 8 December and from 28 to 31 December the weekend timetable applies.",
+    rackNote: "FGC's open timetable data (version of 27 October 2026) for 28 October, 4 and 7 November and 10, 25 and 28 December. On 7 and 8 December and from 28 to 31 December the weekend timetable applies.",
     aeriTitle: "Montserrat cable car (Aeri) opening times",
     aeri: [
       "The **Aeri** is the cable car that climbs from its own R5 station (Montserrat-Aeri) to the monastery. It runs **every 15 minutes** and the ride takes about **5 minutes**. Hours change with the season: in October it stays open later, and in November and December it closes earlier on weekdays.",
@@ -695,12 +709,12 @@ const MONTSERRAT_COPY: Record<"ca" | "es" | "en", MontT> = {
     aeriCaption: "Aeri de Montserrat, 2026 calendar",
     aeriHeaders: ["Period", "Hours"],
     aeriRows: [
-      ["October, every day", "9:30–19:00"],
-      ["November and December, weekdays", "9:30–17:15"],
-      ["November and December, weekends and holidays", "9:30–18:15"],
+      ["October and 1 November", "9:30–19:00"],
+      ["November and December, weekdays (except 7 December)", "9:30–17:15"],
+      ["November and December, weekends and holidays, and 7 December", "9:30–18:15"],
       ["25 December", "9:30–14:00"],
     ],
-    aeriNote: "2026 calendar published by the Aeri de Montserrat, checked on 24 October 2026.",
+    aeriNote: "2026 calendar published by the Aeri de Montserrat, checked on 28 October 2026.",
     trainTitle: "R5 train from Plaça Espanya to Montserrat",
     train: [
       "FGC's R5 (towards Manresa) leaves from Plaça Espanya and stops at **Montserrat-Aeri**, for the cable car, and at **Monistrol de Montserrat**, for the rack railway. On weekdays there are about 30 trains a day; at weekends one an hour. The T-mobilitat card is not valid on the rack railway or the funiculars, which are outside the integrated fare network.",
@@ -713,7 +727,7 @@ const MONTSERRAT_COPY: Record<"ca" | "es" | "en", MontT> = {
       ["Monistrol de Montserrat → Plaça Espanya", "Every day", "Hourly at :41 (weekdays also at :01 or :21), last at 22:41", "64 min"],
       ["Montserrat-Aeri → Plaça Espanya", "Every day", "Weekdays one or two an hour; weekends hourly at :45; last at 22:45", "60 min"],
     ],
-    trainNote: "FGC's open timetable data for 27 and 31 October and 1 November 2026.",
+    trainNote: "FGC's open timetable data (version of 27 October 2026) for 29 October and 4 and 7 November 2026. Some weekday R50 trains do not stop at Montserrat-Aeri: if you are going to the cable car, check that yours does.",
     chooseTitle: "Rack railway or cable car?",
     choose: [
       "The rack railway climbs gradually and lets you watch the landscape change; the cable car gives you the vertical view all at once, in a few minutes. Returns cost the same on both.",
@@ -728,13 +742,13 @@ const MONTSERRAT_COPY: Record<"ca" | "es" | "en", MontT> = {
       ["Sant Joan funicular, single / return", "€11.40 / €17.50", "€5.70 / €8.75", "€10.25 / €15.75"],
       ["Trans Montserrat (from Plaça Espanya)", "€50", "—", "—"],
       ["Tot Montserrat (from Plaça Espanya)", "€71.50", "—", "—"],
-      ["Museu de Montserrat", "€12", "€6 (ages 8 to 16)", "€10"],
+      ["Museu de Montserrat", "€12", "€6 (ages 8 to 16)", "€10 (seniors and students)"],
     ],
-    pricesNote: "Rack railway and funicular: fares valid until 31 December 2026 (Turistren). Cable car: 2026 fares. Combined tickets and museum: their own sites, checked on 24 October 2026.",
+    pricesNote: "Rack railway and funicular: fares valid until 31 December 2026 (Turistren). Cable car: 2026 fares. Combined tickets and museum: their own sites, checked on 28 October 2026.",
     combosTitle: "Trans Montserrat and Tot Montserrat: what they include",
     combos: [
       "**Trans Montserrat** (€50) includes the return FGC train from Plaça Espanya, the **rack railway or the cable car** (there is a version of each), the Sant Joan funicular, the audiovisual space, access to the basilica and the Black Madonna's chapel subject to capacity, and a return metro ticket. **Tot Montserrat** (€71.50) adds the Museu de Montserrat and a buffet lunch. Neither includes the Escolania choir.",
-      "If you buy online, you exchange the e-ticket at the Punt d'Acollida in Plaça Espanya station on the day you travel. Holders of a disability card get 50% off the rack railway and funiculars, and large and single-parent families 20% or 50%.",
+      "They are open-dated: valid on any day until the next fare change, with free cancellation within 15 days of purchase; the funiculars must be used on the day you reach the monastery, and they cannot be booked: you queue. If you buy online, you exchange the e-ticket at the Punt d'Acollida in Plaça Espanya station (Monday to Sunday, 8 am to 2 pm) on the day you travel. Holders of a disability card get 50% off the rack railway and funiculars, and large and single-parent families 20% or 50%.",
     ],
     beforeTitle: "Before you go",
     before: "The **Santa Cova funicular** is out of service for maintenance until further notice (you can walk down). Non-resident tourists pay to enter the sanctuary (basilica and chapel); residents of Catalonia, the rest of Spain and the EU are exempt but must book on the Abbey's website to visit the Black Madonna.",
@@ -756,6 +770,9 @@ const MONTSERRAT_COPY: Record<"ca" | "es" | "en", MontT> = {
       { question: "Montserrat cable car or rack railway: which is better?", answer: "They cost the same (€15 return). The cable car leaves every 15 minutes and takes 5; the rack railway leaves hourly from Monistrol de Montserrat and takes 20, with a gentler climb." },
       { question: "How do I get from Barcelona to Montserrat by train?", answer: "On FGC's R5 from Plaça Espanya: 60 minutes to the Aeri cable car station or 64 to Monistrol de Montserrat, where you change to the rack railway." },
       { question: "What does Trans Montserrat include?", answer: "For €50: the FGC train from Plaça Espanya, the rack railway or cable car, the Sant Joan funicular, the audiovisual space, basilica access and a return metro ticket." },
+      { question: "Can you go to Montserrat without a tour?", answer: "Yes. Take FGC's R5 from Plaça Espanya and the rack railway or the cable car up; the Trans Montserrat ticket covers both legs and the Sant Joan funicular for €50." },
+      { question: "Which station is Monistrol-Vila?", answer: "The rack railway's village station in Monistrol de Montserrat, with free parking for passengers arriving by car. The R5 does not stop there: by train, get off at Monistrol de Montserrat." },
+      { question: "Is the Montserrat rack railway free for anyone?", answer: "There is no free ticket or current promotion: everyone from age 4 pays. Dogs travel free on a lead and muzzled, Monistrol-Vila parking is free for passengers, and under-4s ride the cable car free. The T-mobilitat card is not valid." },
     ],
   },
 };
