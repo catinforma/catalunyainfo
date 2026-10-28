@@ -548,6 +548,22 @@ test("markets: hours answered first, Sunday question answered, no unverified gro
   }
 });
 
+test("sitges and tarragona: corrected first pattern train, T-casual zones, last train back, open days not free days", () => {
+  const back = { ca: /Horaris del tren de Sitges a Barcelona/, es: /Horarios del tren de Sitges a Barcelona/, en: /Sitges to Barcelona train times/ } as const;
+  for (const locale of LOCALES) {
+    const sitges = bodyToPlainText(SITGES.editions[locale].blocks);
+    assert.match(sitges, /6:06 (a|to) 21:45/, `${locale}: the :06/:15/:36/:45 pattern starts at 6:06`);
+    assert.doesNotMatch(sitges, /6:36 (a|to) 21:45/, `${locale}: old start time gone`);
+    assert.match(sitges, /34,70 €|€34\.70/, `${locale}: 3-zone T-casual`);
+    assert.match(sitges, back[locale], `${locale}: return-direction section`);
+    const tarragona = TARRAGONA.editions[locale];
+    assert.doesNotMatch(tarragona.seoDescription, /gratis|free/i, `${locale}: no unconfirmed free days in the snippet`);
+    const text = bodyToPlainText(tarragona.blocks);
+    assert.match(text, /22:26/, `${locale}: last train back from 2 Nov`);
+    assert.doesNotMatch(text, /21:56 (els caps de setmana|los fines de semana|at weekends)/, `${locale}: no weekday/weekend split`);
+  }
+});
+
 test("figueres: walk from Figueres-Vilafant, 10:30 opening dated 1 Oct-22 Mar, bus and car, nothing 'under an hour'", () => {
   const walk = { ca: /25 minuts a peu/, es: /25 minutos a pie/, en: /25 minutes on foot/ } as const;
   for (const locale of LOCALES) {

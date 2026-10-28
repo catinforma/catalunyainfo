@@ -86,7 +86,7 @@ function ca(): Block[] {
     ),
     ...h2(
       "1. Sitges",
-      "És una de les escapades més directes que es poden fer des de Barcelona. El tren deixa el viatger a poca distància del nucli antic, i en pocs minuts es passa dels carrers blancs del centre al passeig marítim, l'església de Sant Bartomeu i Santa Tecla i les platges.",
+      "És una de les escapades més directes que es poden fer des de Barcelona. L'estació és dins del poble, i a peu es passa dels carrers blancs del centre al passeig marítim, l'església de Sant Bartomeu i Santa Tecla i les platges.",
       "Sitges funciona pràcticament tot l'any: mar a l'estiu, museus i patrimoni quan refresca, i una agenda cultural especialment intensa a la tardor. Si hi vas durant el Festival de Cinema, compta que la vila canvia de ritme del tot.",
       "Línia habitual: R2 Sud.",
     ),
@@ -204,7 +204,7 @@ function es(): Block[] {
     ),
     ...h2(
       "1. Sitges",
-      "Una de las escapadas más directas desde Barcelona. El tren deja al viajero cerca del casco antiguo, y en pocos minutos se pasa de las calles blancas del centro al paseo marítimo, la iglesia de Sant Bartomeu i Santa Tecla y las playas.",
+      "Una de las escapadas más directas desde Barcelona. La estación está en el propio pueblo, y a pie se pasa de las calles blancas del centro al paseo marítimo, la iglesia de Sant Bartomeu i Santa Tecla y las playas.",
       "Sitges funciona casi todo el año: mar en verano, museos y patrimonio cuando refresca, y una agenda cultural especialmente intensa en otoño.",
       "Línea habitual: R2 Sud.",
     ),
@@ -320,7 +320,7 @@ function en(): Block[] {
     ),
     ...h2(
       "1. Sitges",
-      "The most straightforward escape on this list. The train leaves you close to the old town, and within minutes you go from whitewashed streets to the seafront promenade, the church of Sant Bartomeu i Santa Tecla and the beaches.",
+      "The most straightforward escape on this list. The station is in the town itself, and on foot you go from whitewashed streets to the seafront promenade, the church of Sant Bartomeu i Santa Tecla and the beaches.",
       "Sitges works nearly all year: the sea in summer, museums and heritage when it cools down, and a notably busy cultural calendar in autumn.",
       "Usual line: R2 Sud.",
     ),
