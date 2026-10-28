@@ -167,6 +167,7 @@ const COPY: Record<Locale, T> = {
     valley: [
       "La vall és dins del Parc Natural de les Capçaleres del Ter i del Freser, envoltada de cims de més de 2.900 metres. Al fons hi ha el **santuari de la Mare de Déu de Núria**, el llac i l'hotel.",
       "El **Telefèric Coma del Clot** puja fins al Pic de l'Àliga, a més de 2.100 metres, un dels millors miradors de la vall. Des del juny del 2026 hi ha també el nou **Mirador del Llac**. A l'estiu hi ha barques al llac, un parc lúdic i rutes curtes al voltant del santuari; a l'hivern, l'estació d'esquí.",
+      `Si t'hi quedes més d'un dia, la resta de la comarca (Ripoll, Sant Joan de les Abadesses, Camprodon, Setcases) és a ${b2link("ripolles", "ca", "la guia del Ripollès")}.`,
     ],
     walkTitle: "A peu: el Camí Vell des de Queralbs",
     walk: [
@@ -233,6 +234,7 @@ const COPY: Record<Locale, T> = {
     valley: [
       "El valle está dentro del Parc Natural de les Capçaleres del Ter i del Freser, rodeado de cimas de más de 2.900 metros. Al fondo están el **santuario de la Mare de Déu de Núria**, el lago y el hotel.",
       "El **Telefèric Coma del Clot** sube hasta el Pic de l'Àliga, a más de 2.100 metros, uno de los mejores miradores del valle. Desde junio de 2026 hay también el nuevo **Mirador del Llac**. En verano hay barcas en el lago, un parque lúdico y rutas cortas alrededor del santuario; en invierno, la estación de esquí.",
+      `Si te quedas más de un día, el resto de la comarca (Ripoll, Sant Joan de les Abadesses, Camprodon, Setcases) está en ${b2link("ripolles", "es", "la guía del Ripollès")}.`,
     ],
     walkTitle: "A pie: el Camí Vell desde Queralbs",
     walk: [
@@ -299,6 +301,7 @@ const COPY: Record<Locale, T> = {
     valley: [
       "The valley lies inside the Capçaleres del Ter i del Freser Natural Park, ringed by peaks of more than 2,900 metres. At its head are the **sanctuary of Our Lady of Núria**, the lake and the hotel.",
       "The **Coma del Clot cable car** climbs to Pic de l'Àliga, at over 2,100 metres, one of the best viewpoints over the valley, and since June 2026 there is a new **lake viewpoint** (Mirador del Llac). In summer there are boats on the lake, a play park and short walks around the sanctuary; in winter, the ski area.",
+      `If you stay longer, the rest of the district (Ripoll, Sant Joan de les Abadesses, Camprodon, Setcases) is in ${b2link("ripolles", "en", "our Ripollès guide")}.`,
     ],
     walkTitle: "On foot: the old path from Queralbs",
     walk: [

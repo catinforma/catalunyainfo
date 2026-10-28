@@ -548,6 +548,21 @@ test("markets: hours answered first, Sunday question answered, no unverified gro
   }
 });
 
+test("ripolles: the comarca in Idescat's figures and a villages table; setcases answers what to do", () => {
+  const villages = { ca: "Pobles bonics a prop de Ripoll", es: "Pueblos bonitos cerca de Ripoll", en: "Pretty villages near Ripoll" } as const;
+  for (const locale of LOCALES) {
+    const text = bodyToPlainText(RIPOLLES.editions[locale].blocks);
+    assert.match(text, /19 (municipis|municipios|municipalities)/, `${locale}: municipality count`);
+    assert.match(text, /956[.,]6 km²/, `${locale}: area`);
+    assert.match(text, /25[.,]914/, `${locale}: population`);
+    const blocks = RIPOLLES.editions[locale].blocks as { type: string; caption?: string; rows?: string[][] }[];
+    const table = blocks.find((b) => b.type === "table" && b.caption === villages[locale]);
+    assert.ok(table && (table.rows?.length ?? 0) >= 5, `${locale}: villages table`);
+    const faqs = JSON.stringify(SETCASES.editions[locale].blocks.filter((b) => b.type === "faq"));
+    assert.match(faqs, /Què fer a Setcases|Qué hacer en Setcases|to do in Setcases/, `${locale}: setcases what-to-do FAQ`);
+  }
+});
+
 test("nuria: the lead answers the price; free travel, November and the ski pass are answered from FGC", () => {
   const fare = { ca: /34 € anada i tornada/, es: /34 € ida y vuelta/, en: /€34 return/ } as const;
   const free = { ca: /0 a 3 anys/, es: /0 a 3 años/, en: /under 4/ } as const;

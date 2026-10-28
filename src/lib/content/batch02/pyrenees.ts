@@ -82,7 +82,7 @@ const RIPOLLES_SOURCES = [
   },
 ];
 
-const RIPOLLES_VERIFIED = "2026-10-24";
+const RIPOLLES_VERIFIED = "2026-10-28";
 
 const RIPOLL_HOURS: Record<"ca" | "es" | "en", string[][]> = {
   ca: [
@@ -185,8 +185,8 @@ export const RIPOLLES: B2Article = {
   editions: {
     ca: {
       path: "destinacions/ripolles",
-      title: "Ripoll i el Ripollès: què veure, el monestir, els pobles i com arribar-hi",
-      seoTitle: "Ripoll i el Ripollès: què veure, monestir i pobles",
+      title: "Ripoll i la comarca del Ripollès: què veure, el monestir, pobles bonics i com arribar-hi",
+      seoTitle: "Ripoll i el Ripollès: què veure a la comarca i pobles",
       seoDescription:
         "Què veure a Ripoll i al Ripollès: horari i preu del monestir de Santa Maria, trens R3, Sant Joan de les Abadesses, Camprodon, Beget, Setcases i Núria.",
       excerpt:
@@ -198,18 +198,35 @@ export const RIPOLLES: B2Article = {
         keyFacts("Ripoll i el Ripollès en dades", [
           { label: "Població de Ripoll", value: "10.812 habitants (Idescat, 2025)" },
           { label: "Altitud de Ripoll", value: "691 m" },
-          { label: "Població del Ripollès", value: "25.914 habitants" },
+          { label: "Comarca del Ripollès", value: "19 municipis, 956,6 km², 25.914 habitants" },
           { label: "Monestir de Ripoll", value: "Entrada general 7,50 €" },
           { label: "Tren", value: "R3: 13 trens al dia de la Garriga a Ripoll" },
-          { label: "Última verificació", value: "24 d'octubre de 2026" },
+          { label: "Última verificació", value: "28 d'octubre de 2026" },
         ]),
+        ...h2(
+          "La comarca del Ripollès",
+          "El Ripollès és una comarca de la província de Girona, al Pirineu: **19 municipis**, **956,6 km²** i **25.914 habitants** (Idescat, 2025), amb **Ripoll** com a capital. Ocupa les capçaleres del Ter i del Freser, de les valls de Camprodon i de Ribes fins als cims de Vallter i Núria, i té des de pobles de pedra d'alta muntanya fins a dos dels grans monestirs romànics de Catalunya.",
+        ),
+        table(
+          "Pobles bonics a prop de Ripoll",
+          ["Poble", "Per què anar-hi"],
+          [
+            ["Sant Joan de les Abadesses", "L'altre gran monestir de la comarca, fundat el 887, amb el Santíssim Misteri; s'hi arriba des de Ripoll per la via verda"],
+            ["Camprodon", "El pont Nou de finals del segle XII; Isaac Albéniz hi va néixer el 1860"],
+            ["Beget", "L'església romànica de Sant Cristòfol i la Majestat, un Crist del segle XII"],
+            ["Setcases", "Cases de pedra a 1.265 m, a l'alta vall del Ter, i la porta de Vallter"],
+            ["Queralbs", "L'última parada del cremallera on s'arriba amb cotxe i l'inici del Camí Vell de Núria"],
+            ["Ribes de Freser", "D'on surt el cremallera de la Vall de Núria, al costat de l'estació de l'R3"],
+          ],
+          "Tots són municipis del Ripollès segons l'Idescat, excepte Beget, que pertany a Camprodon.",
+        ),
         ...h2(
           "Què veure a Ripoll: el monestir de Santa Maria",
           "El monestir de Santa Maria de Ripoll és el motiu principal per aturar-se a la vila. La basílica la va consagrar l'abat Oliba el 1032, i la portalada del segle XII és, segons Ripollès Turisme, candidata a Patrimoni de la Humanitat. Del saqueig i l'incendi de 1835 es van salvar 231 volums de la biblioteca, que avui es conserven a l'Arxiu de la Corona d'Aragó.",
           "Les entrades es venen fins a 30 minuts abans de tancar, i el monestir recomana reservar la visita guiada al 972 70 42 03.",
         ),
-        table("Horari del monestir de Ripoll", ["Període", "Horari"], RIPOLL_HOURS.ca, "Font: Monestir de Santa Maria de Ripoll. Consultat el 24 d'octubre de 2026. Els diumenges i festius, convé confirmar-ho per telèfon."),
-        table("Preu de l'entrada al monestir de Ripoll", ["Entrada", "Preu"], RIPOLL_PRICES.ca, "Hi ha venda d'entrades en línia. Preus consultats el 24/10/2026."),
+        table("Horari del monestir de Ripoll", ["Període", "Horari"], RIPOLL_HOURS.ca, "Font: Monestir de Santa Maria de Ripoll. Consultat el 28 d'octubre de 2026. Els diumenges i festius, convé confirmar-ho per telèfon."),
+        table("Preu de l'entrada al monestir de Ripoll", ["Entrada", "Preu"], RIPOLL_PRICES.ca, "Hi ha venda d'entrades en línia. Preus consultats el 28/10/2026."),
         ...h3(
           "El Museu Etnogràfic de Ripoll",
           "Al costat, a la mateixa plaça de l'Abat Oliba, el Museu Etnogràfic explica la comarca a través dels pastors, la farga i les armes de foc ripolleses. De setembre a juny obre de dimarts a dissabte de 10 a 13.30 h i de 16 a 18 h, i els diumenges i festius de 10 a 14 h; al juliol i l'agost tanca a les 19 h. Tanca els dilluns. Entrada general 4 €, reduïda 3 €; gratuït per als menors de 12 anys i l'últim diumenge de mes.",
@@ -218,7 +235,7 @@ export const RIPOLLES: B2Article = {
         ...paras(
           "Ripoll té estació de l'**R3**, però per les obres d'Adif no hi ha trens entre Barcelona i la Garriga: aquest tram es fa amb els autobusos directes de Rodalies fins a la Garriga o Vic, i des de la Garriga l'R3 puja cap a Ripoll i Puigcerdà amb la meitat dels trens d'abans del 20 de gener.",
         ),
-        table("Trens R3 entre la Garriga i Ripoll", ["", "Horari"], RIPOLL_TRAINS.ca, "Horari de tren vigent des del 6 de juliol de 2026 (full actualitzat el 16/09/2026), cada dia. Consultat el 24/10/2026: comprova'l a rodalies.gencat.cat el dia que viatgis."),
+        table("Trens R3 entre la Garriga i Ripoll", ["", "Horari"], RIPOLL_TRAINS.ca, "Horari de tren vigent des del 6 de juliol de 2026 (full actualitzat el 16/09/2026), cada dia. Consultat el 28/10/2026: comprova'l a rodalies.gencat.cat el dia que viatgis."),
         ...paras(
           "En autobús, TEISA uneix Barcelona amb Ripoll i Camprodon passant per Vic, i també hi té línies des de Girona i Olot. En cotxe, des de Barcelona per la C-17 (direcció Vic–Puigcerdà), i des de Girona per l'A-26 cap a Olot i la N-260 cap a Ripoll.",
         ),
@@ -263,9 +280,11 @@ export const RIPOLLES: B2Article = {
         ),
         faq([
           { question: "Què veure a Ripoll?", answer: "El monestir de Santa Maria, amb la portalada romànica del segle XII, i el Museu Etnogràfic, a la mateixa plaça. Amb una tarda més, la via verda fins a Sant Joan de les Abadesses." },
-          { question: "Quant costa entrar al monestir de Ripoll?", answer: "L'entrada general costa 7,50 €; 5,50 € per a majors de 65 anys i joves fins a 25; 3,50 € de 5 a 18 anys; gratuït per a menors de 5 anys i residents (preus consultats el 24/10/2026)." },
+          { question: "Quant costa entrar al monestir de Ripoll?", answer: "L'entrada general costa 7,50 €; 5,50 € per a majors de 65 anys i joves fins a 25; 3,50 € de 5 a 18 anys; gratuït per a menors de 5 anys i residents (preus consultats el 28/10/2026)." },
           { question: "Com s'arriba a Ripoll en tren des de Barcelona?", answer: "Amb l'R3. Mentre durin les obres, de Barcelona a la Garriga o Vic es va amb el bus directe de Rodalies i d'allà amb el tren; de la Garriga a Ripoll hi ha 13 trens al dia." },
           { question: "Quina altitud té Ripoll?", answer: "691 metres, segons l'Idescat." },
+          { question: "Quina és la capital del Ripollès i quants municipis té?", answer: "La capital és Ripoll. La comarca té 19 municipis, 956,6 km² i 25.914 habitants, segons l'Idescat (2025)." },
+          { question: "Quins pobles bonics hi ha a prop de Ripoll?", answer: "Sant Joan de les Abadesses, Camprodon, Beget, Setcases, Queralbs i Ribes de Freser, d'on surt el cremallera de Núria." },
         ]),
         ...paras(verifiedLine("ca", RIPOLLES_VERIFIED)),
         ...b2Related(["nuria", "setcases", "ski", "snow", "cerdanya"], "ca"),
@@ -274,8 +293,8 @@ export const RIPOLLES: B2Article = {
 
     es: {
       path: "destinos/ripolles",
-      title: "Ripoll y el Ripollès: qué ver, el monasterio, los pueblos y cómo llegar",
-      seoTitle: "Ripoll y el Ripollès: qué ver, monasterio y pueblos",
+      title: "Ripoll y la comarca del Ripollès: qué ver, el monasterio, pueblos bonitos y cómo llegar",
+      seoTitle: "Ripoll y la comarca del Ripollès: qué ver y pueblos",
       seoDescription:
         "Qué ver en Ripoll y el Ripollès: horario y precio del monasterio de Santa Maria, trenes R3, Sant Joan de les Abadesses, Camprodon, Beget, Setcases y Núria.",
       excerpt:
@@ -287,18 +306,35 @@ export const RIPOLLES: B2Article = {
         keyFacts("Ripoll y el Ripollès en datos", [
           { label: "Población de Ripoll", value: "10.812 habitantes (Idescat, 2025)" },
           { label: "Altitud de Ripoll", value: "691 m" },
-          { label: "Población del Ripollès", value: "25.914 habitantes" },
+          { label: "Comarca del Ripollès", value: "19 municipios, 956,6 km², 25.914 habitantes" },
           { label: "Monasterio de Ripoll", value: "Entrada general 7,50 €" },
           { label: "Tren", value: "R3: 13 trenes al día de La Garriga a Ripoll" },
-          { label: "Última verificación", value: "24 de octubre de 2026" },
+          { label: "Última verificación", value: "28 de octubre de 2026" },
         ]),
+        ...h2(
+          "La comarca del Ripollès",
+          "El Ripollès es una comarca de la provincia de Girona, en el Pirineo: **19 municipios**, **956,6 km²** y **25.914 habitantes** (Idescat, 2025), con **Ripoll** como capital. Ocupa las cabeceras del Ter y del Freser, de los valles de Camprodon y de Ribes hasta las cumbres de Vallter y Núria, y tiene desde pueblos de piedra de alta montaña hasta dos de los grandes monasterios románicos de Cataluña.",
+        ),
+        table(
+          "Pueblos bonitos cerca de Ripoll",
+          ["Pueblo", "Por qué ir"],
+          [
+            ["Sant Joan de les Abadesses", "El otro gran monasterio de la comarca, fundado en 887, con el Santíssim Misteri; se llega desde Ripoll por la vía verde"],
+            ["Camprodon", "El Pont Nou de finales del siglo XII; Isaac Albéniz nació allí en 1860"],
+            ["Beget", "La iglesia románica de Sant Cristòfol y la Majestat, un Cristo del siglo XII"],
+            ["Setcases", "Casas de piedra a 1.265 m, en el alto valle del Ter, y la puerta de Vallter"],
+            ["Queralbs", "La última parada del cremallera a la que se llega en coche y el inicio del Camí Vell de Núria"],
+            ["Ribes de Freser", "De donde sale el cremallera de la Vall de Núria, junto a la estación de la R3"],
+          ],
+          "Todos son municipios del Ripollès según el Idescat, salvo Beget, que pertenece a Camprodon.",
+        ),
         ...h2(
           "Qué ver en Ripoll: el monasterio de Santa Maria",
           "El monasterio de Santa Maria de Ripoll es la razón principal para parar en la villa. El abad Oliba consagró la basílica en 1032, y la portada del siglo XII es, según Ripollès Turisme, candidata a Patrimonio de la Humanidad. Del saqueo y el incendio de 1835 se salvaron 231 volúmenes de la biblioteca, que hoy se conservan en el Archivo de la Corona de Aragón.",
           "Las entradas se venden hasta 30 minutos antes del cierre, y el monasterio recomienda reservar la visita guiada en el 972 70 42 03.",
         ),
-        table("Horario del monasterio de Ripoll", ["Periodo", "Horario"], RIPOLL_HOURS.es, "Fuente: Monestir de Santa Maria de Ripoll. Consultado el 24 de octubre de 2026. Domingos y festivos, conviene confirmarlo por teléfono."),
-        table("Precio de la entrada al monasterio de Ripoll", ["Entrada", "Precio"], RIPOLL_PRICES.es, "Hay venta de entradas online. Precios consultados el 24/10/2026."),
+        table("Horario del monasterio de Ripoll", ["Periodo", "Horario"], RIPOLL_HOURS.es, "Fuente: Monestir de Santa Maria de Ripoll. Consultado el 28 de octubre de 2026. Domingos y festivos, conviene confirmarlo por teléfono."),
+        table("Precio de la entrada al monasterio de Ripoll", ["Entrada", "Precio"], RIPOLL_PRICES.es, "Hay venta de entradas online. Precios consultados el 28/10/2026."),
         ...h3(
           "El Museu Etnogràfic de Ripoll",
           "Al lado, en la misma plaza del Abat Oliba, el Museu Etnogràfic explica la comarca a través de los pastores, la forja y las armas de fuego ripollesas. De septiembre a junio abre de martes a sábado de 10 a 13:30 y de 16 a 18 h, y domingos y festivos de 10 a 14 h; en julio y agosto cierra a las 19 h. Cierra los lunes. Entrada general 4 €, reducida 3 €; gratis para menores de 12 años y el último domingo de mes.",
@@ -307,7 +343,7 @@ export const RIPOLLES: B2Article = {
         ...paras(
           "Ripoll tiene estación de la **R3**, pero por las obras de Adif no hay trenes entre Barcelona y La Garriga: ese tramo se hace con los autobuses directos de Rodalies hasta La Garriga o Vic, y desde La Garriga la R3 sube hacia Ripoll y Puigcerdà con la mitad de los trenes que había antes del 20 de enero.",
         ),
-        table("Trenes R3 entre La Garriga y Ripoll", ["", "Horario"], RIPOLL_TRAINS.es, "Horario de tren vigente desde el 6 de julio de 2026 (hoja actualizada el 16/09/2026), todos los días. Consultado el 24/10/2026: compruébalo en rodalies.gencat.cat el día que viajes."),
+        table("Trenes R3 entre La Garriga y Ripoll", ["", "Horario"], RIPOLL_TRAINS.es, "Horario de tren vigente desde el 6 de julio de 2026 (hoja actualizada el 16/09/2026), todos los días. Consultado el 28/10/2026: compruébalo en rodalies.gencat.cat el día que viajes."),
         ...paras(
           "En autobús, TEISA une Barcelona con Ripoll y Camprodon pasando por Vic, y tiene líneas desde Girona y Olot. En coche, desde Barcelona por la C-17 (dirección Vic–Puigcerdà), y desde Girona por la A-26 hacia Olot y la N-260 hacia Ripoll.",
         ),
@@ -351,9 +387,11 @@ export const RIPOLLES: B2Article = {
         ),
         faq([
           { question: "¿Qué ver en Ripoll?", answer: "El monasterio de Santa Maria, con la portada románica del siglo XII, y el Museu Etnogràfic, en la misma plaza. Con una tarde más, la vía verde hasta Sant Joan de les Abadesses." },
-          { question: "¿Cuánto cuesta entrar al monasterio de Ripoll?", answer: "La entrada general cuesta 7,50 €; 5,50 € para mayores de 65 y jóvenes hasta 25; 3,50 € de 5 a 18 años; gratis para menores de 5 y residentes (precios consultados el 24/10/2026)." },
+          { question: "¿Cuánto cuesta entrar al monasterio de Ripoll?", answer: "La entrada general cuesta 7,50 €; 5,50 € para mayores de 65 y jóvenes hasta 25; 3,50 € de 5 a 18 años; gratis para menores de 5 y residentes (precios consultados el 28/10/2026)." },
           { question: "¿Cómo se llega a Ripoll en tren desde Barcelona?", answer: "Con la R3. Mientras duren las obras, de Barcelona a La Garriga o Vic se va en el bus directo de Rodalies y de allí en tren; de La Garriga a Ripoll hay 13 trenes al día." },
           { question: "¿Dónde está Ripoll?", answer: "En la provincia de Girona, en el Pirineo catalán: es la capital de la comarca del Ripollès, a 691 metros de altitud." },
+          { question: "¿Cuántos municipios tiene la comarca del Ripollès?", answer: "19, con Ripoll como capital: 956,6 km² y 25.914 habitantes, según el Idescat (2025)." },
+          { question: "¿Qué pueblos bonitos hay cerca de Ripoll?", answer: "Sant Joan de les Abadesses, Camprodon, Beget, Setcases, Queralbs y Ribes de Freser, de donde sale el cremallera de Núria." },
         ]),
         ...paras(verifiedLine("es", RIPOLLES_VERIFIED)),
         ...b2Related(["nuria", "setcases", "ski", "snow", "cerdanya"], "es"),
@@ -363,7 +401,7 @@ export const RIPOLLES: B2Article = {
     en: {
       path: "destinations/ripolles",
       title: "Ripoll and the Ripollès: what to see, the monastery, villages and trains",
-      seoTitle: "Ripoll and Ripollès, Spain: monastery, villages, trains",
+      seoTitle: "Ripoll, Spain: monastery, Ripollès villages and trains",
       seoDescription:
         "Ripoll and the Ripollès in Catalonia: the monastery's hours and prices, R3 trains, Sant Joan de les Abadesses, Camprodon, Beget, Setcases and Núria.",
       excerpt:
@@ -375,18 +413,35 @@ export const RIPOLLES: B2Article = {
         keyFacts("Ripoll and the Ripollès at a glance", [
           { label: "Ripoll population", value: "10,812 (Idescat, 2025)" },
           { label: "Ripoll altitude", value: "691 m" },
-          { label: "Ripollès population", value: "25,914" },
+          { label: "Ripollès district", value: "19 municipalities, 956.6 km², 25,914 people" },
           { label: "Monastery of Ripoll", value: "General admission €7.50" },
           { label: "Train", value: "R3: 13 trains a day from La Garriga to Ripoll" },
-          { label: "Last verified", value: "24 October 2026" },
+          { label: "Last verified", value: "28 October 2026" },
         ]),
+        ...h2(
+          "The Ripollès district",
+          "The Ripollès is a district (comarca) of the province of Girona, in the Pyrenees: **19 municipalities**, **956.6 km²** and **25,914 people** (Idescat, 2025), with **Ripoll** as its capital. It covers the headwaters of the Ter and the Freser, from the Camprodon and Ribes valleys up to the peaks of Vallter and Núria, and runs from high-mountain stone villages to two of Catalonia's great Romanesque monasteries.",
+        ),
+        table(
+          "Pretty villages near Ripoll",
+          ["Village", "Why go"],
+          [
+            ["Sant Joan de les Abadesses", "The district's other great monastery, founded in 887, with the Santíssim Misteri; the greenway runs there from Ripoll"],
+            ["Camprodon", "The late 12th-century Pont Nou; Isaac Albéniz was born here in 1860"],
+            ["Beget", "The Romanesque church of Sant Cristòfol and its Majestat, a 12th-century Christ"],
+            ["Setcases", "Stone houses at 1,265 m in the upper Ter valley, and the gateway to Vallter"],
+            ["Queralbs", "The last rack-railway stop you can drive to, and the start of the old path to Núria"],
+            ["Ribes de Freser", "Where the Vall de Núria rack railway starts, next to the R3 station"],
+          ],
+          "All are Ripollès municipalities according to Idescat, except Beget, which belongs to Camprodon.",
+        ),
         ...h2(
           "What to see in Ripoll: the monastery of Santa Maria",
           "The monastery of Santa Maria de Ripoll is the main reason to stop in the town. Abbot Oliba consecrated the basilica in 1032. According to Ripollès Turisme, the 12th-century carved doorway is a candidate for UNESCO World Heritage status. When the monastery was sacked and burned in 1835, 231 volumes from its library were saved; they are now kept in the Archive of the Crown of Aragon.",
           "Ticket sales stop 30 minutes before closing, and the monastery recommends booking the guided tour on +34 972 70 42 03.",
         ),
-        table("Monastery of Ripoll opening hours", ["Period", "Hours"], RIPOLL_HOURS.en, "Source: Monastery of Santa Maria de Ripoll. Checked 24 October 2026. On Sundays and holidays, phone to confirm."),
-        table("Monastery of Ripoll ticket prices", ["Ticket", "Price"], RIPOLL_PRICES.en, "Tickets are also sold online. Prices checked 24/10/2026."),
+        table("Monastery of Ripoll opening hours", ["Period", "Hours"], RIPOLL_HOURS.en, "Source: Monastery of Santa Maria de Ripoll. Checked 28 October 2026. On Sundays and holidays, phone to confirm."),
+        table("Monastery of Ripoll ticket prices", ["Ticket", "Price"], RIPOLL_PRICES.en, "Tickets are also sold online. Prices checked 28/10/2026."),
         ...h3(
           "The Ripoll Ethnographic Museum",
           "Next door, on the same Plaça de l'Abat Oliba, the Ethnographic Museum tells the area's story through shepherding, the iron forge and the town's firearms trade. From September to June it opens Tuesday to Saturday 10:00–13:30 and 16:00–18:00, and Sundays and holidays 10:00–14:00; in July and August it closes at 19:00. Closed on Mondays. General admission €4, reduced €3; free for under-12s and on the last Sunday of each month.",
@@ -395,7 +450,7 @@ export const RIPOLLES: B2Article = {
         ...paras(
           "Ripoll is on the **R3** line, but because of Adif works no trains run between Barcelona and La Garriga: that stretch is covered by Rodalies direct buses to La Garriga or Vic, and from La Garriga R3 trains run up to Ripoll and Puigcerdà at half the frequency they had before 20 January.",
         ),
-        table("R3 trains between La Garriga and Ripoll", ["", "Times"], RIPOLL_TRAINS.en, "Train timetable in force since 6 July 2026 (sheet updated 16/09/2026), daily. Checked 24/10/2026: confirm on rodalies.gencat.cat for your travel date."),
+        table("R3 trains between La Garriga and Ripoll", ["", "Times"], RIPOLL_TRAINS.en, "Train timetable in force since 6 July 2026 (sheet updated 16/09/2026), daily. Checked 28/10/2026: confirm on rodalies.gencat.cat for your travel date."),
         ...paras(
           "By bus, TEISA links Barcelona with Ripoll and Camprodon via Vic, and also runs lines from Girona and Olot. By car, take the C-17 from Barcelona (towards Vic and Puigcerdà); from Girona, the A-26 towards Olot and then the N-260 to Ripoll.",
         ),
@@ -439,9 +494,10 @@ export const RIPOLLES: B2Article = {
         ),
         faq([
           { question: "What is there to see in Ripoll?", answer: "The monastery of Santa Maria, with its 12th-century Romanesque doorway, and the Ethnographic Museum on the same square. With an extra afternoon, the greenway to Sant Joan de les Abadesses." },
-          { question: "How much does the monastery of Ripoll cost?", answer: "General admission is €7.50; €5.50 for over-65s and under-26s; €3.50 for ages 5 to 18; free for under-5s and residents (checked 24/10/2026)." },
+          { question: "How much does the monastery of Ripoll cost?", answer: "General admission is €7.50; €5.50 for over-65s and under-26s; €3.50 for ages 5 to 18; free for under-5s and residents (checked 28/10/2026)." },
           { question: "How do you get to Ripoll from Barcelona by train?", answer: "On the R3. While the works last, take the Rodalies direct bus from Barcelona to La Garriga or Vic and the train from there; 13 trains a day run from La Garriga to Ripoll." },
           { question: "Where is Ripoll, Spain?", answer: "In the Catalan Pyrenees, in the province of Girona: it is the capital of the Ripollès district, at 691 metres." },
+          { question: "Which villages are worth seeing near Ripoll?", answer: "Sant Joan de les Abadesses, Camprodon, Beget, Setcases, Queralbs and Ribes de Freser, where the Núria rack railway starts." },
         ]),
         ...paras(verifiedLine("en", RIPOLLES_VERIFIED)),
         ...b2Related(["nuria", "setcases", "ski", "snow", "cerdanya"], "en"),
@@ -483,7 +539,7 @@ const SETCASES_SOURCES = [
   { name: "Setcases, el municipi en xifres", url: "https://www.idescat.cat/emex/?id=171925", publisher: "Idescat" },
 ];
 
-const SETCASES_VERIFIED = "2026-10-24";
+const SETCASES_VERIFIED = "2026-10-28";
 
 export const SETCASES: B2Article = {
   key: "setcases",
@@ -517,8 +573,8 @@ export const SETCASES: B2Article = {
   editions: {
     ca: {
       path: "destinacions/setcases",
-      title: "Què veure a Setcases: el poble, els miradors, les rutes i els voltants",
-      seoTitle: "Què veure a Setcases: poble, miradors, rutes i Vallter",
+      title: "Què veure i què fer a Setcases i els voltants: el poble, els miradors, les rutes i Vallter",
+      seoTitle: "Què veure a Setcases i voltants: què fer en un dia",
       seoDescription:
         "Què veure a Setcases i als voltants: el nucli de pedra, Sant Miquel, la Creueta, els miradors, les rutes del parc natural, Vallter i com arribar-hi.",
       excerpt:
@@ -533,7 +589,7 @@ export const SETCASES: B2Article = {
           { label: "Altitud", value: "1.265 m (Idescat)" },
           { label: "Població", value: "196 habitants (Idescat, 2025)" },
           { label: "Passeig de la Creueta", value: "Uns 300 m i uns 50 m de desnivell, uns 10 minuts" },
-          { label: "Última verificació", value: "24 d'octubre de 2026" },
+          { label: "Última verificació", value: "28 d'octubre de 2026" },
         ]),
         ...h2(
           "Al matí: el nucli",
@@ -602,6 +658,7 @@ export const SETCASES: B2Article = {
         faq([
           { question: "Què veure a Setcases en un dia?", answer: "El nucli i l'església de Sant Miquel al matí, el passeig a la Creueta, i a la tarda un mirador o una ruta curta com el camí dels Socarrats i dels Beduïs. Si hi ha temps, Vallter i el circ d'Ulldeter." },
           { question: "Quina altitud té Setcases?", answer: "1.265 metres, segons l'Idescat." },
+          { question: "Què fer a Setcases?", answer: "Caminar: la Creueta (uns 10 minuts), el camí dels Socarrats i dels Beduïs (1 h 30 min, per a infants a partir de 8 anys) o el circ d'Ulldeter; pujar als miradors; a l'estiu, la Platgeta i el telecadira de Vallter, i a l'hivern, raquetes, trineu o esquí a Vallter." },
           { question: "Com s'arriba a Setcases sense cotxe?", answer: "Amb l'autobús de TEISA des de Ripoll o Camprodon, tot i que pocs serveis pugen fins a Setcases. A l'hivern hi ha un bus d'esquí de TEISA fins a Vallter els caps de setmana de gener a març." },
         ]),
         ...paras(verifiedLine("ca", SETCASES_VERIFIED)),
@@ -611,8 +668,8 @@ export const SETCASES: B2Article = {
 
     es: {
       path: "destinos/setcases",
-      title: "Qué ver en Setcases: el pueblo, los miradores, las rutas y los alrededores",
-      seoTitle: "Qué ver en Setcases: pueblo, miradores, rutas y Vallter",
+      title: "Qué ver y qué hacer en Setcases y alrededores: el pueblo, los miradores, las rutas y Vallter",
+      seoTitle: "Qué ver en Setcases y alrededores: qué hacer en un día",
       seoDescription:
         "Qué ver en Setcases y alrededores: el casco de piedra, Sant Miquel, la Creueta, los miradores, las rutas del parque natural, Vallter y cómo llegar.",
       excerpt:
@@ -627,7 +684,7 @@ export const SETCASES: B2Article = {
           { label: "Altitud", value: "1.265 m (Idescat)" },
           { label: "Población", value: "196 habitantes (Idescat, 2025)" },
           { label: "Paseo de la Creueta", value: "Unos 300 m y unos 50 m de desnivel, unos 10 minutos" },
-          { label: "Última verificación", value: "24 de octubre de 2026" },
+          { label: "Última verificación", value: "28 de octubre de 2026" },
         ]),
         ...h2(
           "Por la mañana: el casco antiguo",
@@ -696,6 +753,7 @@ export const SETCASES: B2Article = {
         faq([
           { question: "¿Qué ver en Setcases en un día?", answer: "El casco y la iglesia de Sant Miquel por la mañana, el paseo a la Creueta, y por la tarde un mirador o una ruta corta como el camí dels Socarrats i dels Beduïs. Si hay tiempo, Vallter y el circo de Ulldeter." },
           { question: "¿Qué altitud tiene Setcases?", answer: "1.265 metros, según el Idescat." },
+          { question: "¿Qué hacer en Setcases?", answer: "Caminar: la Creueta (unos 10 minutos), el camí dels Socarrats i dels Beduïs (1 h 30 min, para niños a partir de 8 años) o el circo de Ulldeter; subir a los miradores; en verano, la Platgeta y el telesilla de Vallter, y en invierno, raquetas, trineo o esquí en Vallter." },
           { question: "¿Qué hay en los alrededores de Setcases?", answer: "Vallter 2000 y el circo de Ulldeter, con el nacimiento del Ter, y valle abajo Camprodon y Beget." },
           { question: "¿Cómo se llega a Setcases sin coche?", answer: "Con el autobús de TEISA desde Ripoll o Camprodon, aunque pocos servicios suben hasta Setcases. En invierno hay un bus de esquí de TEISA hasta Vallter los fines de semana de enero a marzo." },
         ]),
@@ -707,7 +765,7 @@ export const SETCASES: B2Article = {
     en: {
       path: "destinations/setcases",
       title: "Setcases, Catalonia: what to see, walks, Vallter and how to get there",
-      seoTitle: "Setcases: what to see, walks, Vallter and getting there",
+      seoTitle: "Setcases, Spain: what to see and do, walks and Vallter",
       seoDescription:
         "What to see in Setcases, a Pyrenean village at 1,265 m: the stone village, Sant Miquel, La Creueta, lookouts, natural park walks, Vallter and buses.",
       excerpt:
@@ -722,7 +780,7 @@ export const SETCASES: B2Article = {
           { label: "Altitude", value: "1,265 m (Idescat)" },
           { label: "Population", value: "196 (Idescat, 2025)" },
           { label: "La Creueta walk", value: "About 300 m and 50 m of ascent, roughly 10 minutes" },
-          { label: "Last verified", value: "24 October 2026" },
+          { label: "Last verified", value: "28 October 2026" },
         ]),
         ...h2(
           "The village",
@@ -791,6 +849,7 @@ export const SETCASES: B2Article = {
         faq([
           { question: "What is there to see in Setcases?", answer: "The stone village and the church of Sant Miquel, the short walk to La Creueta, four lookouts, and the natural park's walks, including the Ulldeter cirque near Vallter." },
           { question: "How high is Setcases?", answer: "1,265 metres, according to Idescat." },
+          { question: "What is there to do in Setcases?", answer: "Walk: La Creueta (about 10 minutes), the Socarrats i Beduïs loop (1 h 30 min, for children aged 8 and up) or the Ulldeter cirque; drive up to the lookouts; in summer, the Platgeta and the Vallter chairlift, and in winter, snowshoeing, sledging or skiing at Vallter." },
           { question: "How do you get to Setcases without a car?", answer: "By TEISA bus from Ripoll or Camprodon, although few services go all the way up. In winter a TEISA ski bus runs to Vallter at weekends from January to March." },
         ]),
         ...paras(verifiedLine("en", SETCASES_VERIFIED)),
