@@ -1,4 +1,5 @@
 import type { Locale } from "@/lib/i18n/config";
+import { hubPath as rodaliesHub } from "@/lib/programmatic/rodalies/paths";
 
 import {
   b2Related,
@@ -155,6 +156,7 @@ const COPY: Record<Locale, T> = {
       "**Arriving late at the airport:** the airport metro follows the same hours; after it closes, use the NitBus.",
       "**Christmas and New Year:** TMB announces the exact hours in December; New Year's Eve has run all night in recent years.",
       `**Strike days:** if a strike covers TMB, the metro runs the minimum service the Generalitat sets; see ${b2link("strikes", "en", "what runs on strike days")}.`,
+      `**Rodalies:** if your trip continues by train, check [Rodalies disruptions today](${rodaliesHub("en")}) first.`,
     ],
     faq: [
       { question: "What time does the Barcelona metro close?", answer: "At midnight from Sunday to Thursday, at 2:00 on Fridays and the night before a midweek public holiday; on Saturdays it runs all night." },
@@ -216,6 +218,7 @@ const COPY: Record<Locale, T> = {
       "**Llegada tarde al aeropuerto:** el metro del aeropuerto sigue el mismo horario; cuando cierra, queda el NitBus.",
       "**Navidad y Fin de Año:** TMB anuncia el horario exacto en diciembre; los últimos años la Nochevieja ha funcionado toda la noche.",
       `**Días de huelga:** si la huelga afecta a TMB, el metro funciona con los servicios mínimos que fija la Generalitat; mira ${b2link("strikes", "es", "qué funciona los días de huelga")}.`,
+      `**Rodalies:** si sigues el viaje en tren, mira antes [las incidencias de Rodalies hoy](${rodaliesHub("es")}).`,
     ],
     faq: [
       { question: "¿A qué hora cierra el metro de Barcelona hoy?", answer: "Depende del día: a medianoche de domingo a jueves, a las 2:00 los viernes y vísperas de festivo entre semana, y el sábado no cierra en toda la noche. Arriba tienes el horario de hoy y de mañana." },
@@ -278,6 +281,7 @@ const COPY: Record<Locale, T> = {
       "**Arribada tard a l'aeroport:** el metro de l'aeroport segueix el mateix horari; quan tanca, queda el NitBus.",
       "**Nadal i Cap d'Any:** TMB anuncia l'horari exacte al desembre; els últims anys la nit de Cap d'Any ha funcionat tota la nit.",
       `**Dies de vaga:** si la vaga afecta TMB, el metro funciona amb els serveis mínims que fixa la Generalitat; mira ${b2link("strikes", "ca", "què funciona els dies de vaga")}.`,
+      `**Rodalies:** si continues el viatge en tren, mira abans [les incidències de Rodalies avui](${rodaliesHub("ca")}).`,
     ],
     faq: [
       { question: "A quina hora tanca el metro de Barcelona avui?", answer: "Depèn del dia: a mitjanit de diumenge a dijous, a les 2:00 els divendres i vigílies de festiu entre setmana, i el dissabte no tanca en tota la nit. A dalt tens l'horari d'avui i de demà." },

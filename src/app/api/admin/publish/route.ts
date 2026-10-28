@@ -180,6 +180,16 @@ export async function POST(request: Request) {
     // strike update never republishes two pages under a title experiment.
     if (wants("strikes")) published.push(await publishB2Article(STRIKES_GUIDE));
     if (wants("strikes-links")) published.push(await publishB2Article(HOURS), await publishB2Article(TRANSPORT));
+    // Rodalies live status (/ca/rodalies/ and the line pages are code routes,
+    // not articles): the four guides that gained one body link to them.
+    if (wants("rodalies-links")) {
+      published.push(
+        await publishB2Article(TRANSPORT),
+        await publishB2Article(HOURS),
+        await publishB2Article(AIRPORT),
+        await publishB2Article(STRIKES_GUIDE),
+      );
+    }
     if (wants("family-markets")) published.push(await publishB2Article(ZOO_AQUARIUM), await publishB2Article(MARKETS));
     if (wants("cruiseport")) published.push(await publishB2Article(CRUISEPORT));
     if (wants("portaventura")) published.push(await publishB2Article(PORTAVENTURA));

@@ -1,4 +1,5 @@
 import type { Locale } from "@/lib/i18n/config";
+import { hubPath as rodaliesHub, linePath as rodaliesLine } from "@/lib/programmatic/rodalies/paths";
 
 import {
   b2Related,
@@ -216,6 +217,7 @@ const COPY: Record<Locale, T> = {
     train: [
       "La estación de Rodalies está en la **Terminal 2, planta 0**, y solo la sirve la **R2 Nord**, con **un tren cada 30 minutos** todos los días. Para en El Prat, Bellvitge, **Barcelona-Sants** (19 minutos) y **Passeig de Gràcia** (24 minutos).",
       "Acepta **todos los títulos integrados, también la T-casual**, así que si ya llevas una, el tren te cuesta un viaje. ¿Llegas a la T1? La lanzadera gratuita tarda unos 10 minutos hasta la T2.",
+      `Antes de ir a la estación, mira [si la R2 Nord tiene incidencias hoy](${rodaliesLine("es", "R2N")}).`,
     ],
     trainCaption: "R2 Nord: primeros y últimos trenes",
     trainHeaders: ["Sentido", "Primer tren", "Último tren", "Salidas"],
@@ -307,6 +309,7 @@ const COPY: Record<Locale, T> = {
     train: [
       "L'estació de Rodalies és a la **Terminal 2, planta 0**, i només la serveix l'**R2 Nord**, amb **un tren cada 30 minuts** cada dia. Para al Prat, Bellvitge, **Barcelona-Sants** (19 minuts) i **Passeig de Gràcia** (24 minuts).",
       "Accepta **tots els títols integrats, també la T-casual**, així que si ja en portes una, el tren et costa un viatge. Arribes a la T1? La llançadora gratuïta triga uns 10 minuts fins a la T2.",
+      `Abans d'anar a l'estació, mira [si l'R2 Nord té incidències avui](${rodaliesLine("ca", "R2N")}).`,
     ],
     trainCaption: "R2 Nord: primers i últims trens",
     trainHeaders: ["Sentit", "Primer tren", "Últim tren", "Sortides"],
@@ -398,6 +401,7 @@ const COPY: Record<Locale, T> = {
     train: [
       "The Rodalies station is at **Terminal 2, Level 0**, served only by the **R2 Nord**, with **a train every 30 minutes** every day. It stops at El Prat, Bellvitge, **Barcelona-Sants** (19 minutes) and **Passeig de Gràcia** (24 minutes).",
       "It accepts **every integrated pass, the T-casual included**, so if you already hold one, the train costs you one journey. Landing at T1? The free shuttle takes about 10 minutes to T2.",
+      `Before you head for the station, check [Rodalies disruptions today](${rodaliesHub("en")}), R2 Nord included.`,
     ],
     trainCaption: "R2 Nord: first and last trains",
     trainHeaders: ["Direction", "First train", "Last train", "Departures"],
