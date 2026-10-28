@@ -548,6 +548,21 @@ test("markets: hours answered first, Sunday question answered, no unverified gro
   }
 });
 
+test("figueres: walk from Figueres-Vilafant, 10:30 opening dated 1 Oct-22 Mar, bus and car, nothing 'under an hour'", () => {
+  const walk = { ca: /25 minuts a peu/, es: /25 minutos a pie/, en: /25 minutes on foot/ } as const;
+  for (const locale of LOCALES) {
+    const blocks = FIGUERES.editions[locale].blocks as { type: string; lead?: boolean; text?: string }[];
+    const lead = blocks.find((b) => b.type === "paragraph" && b.lead)?.text ?? "";
+    assert.match(lead, walk[locale], `${locale}: walk from the high-speed station`);
+    assert.match(lead, /22 (de )?(març|marzo|March)/, `${locale}: winter hours dated`);
+    const text = bodyToPlainText(FIGUERES.editions[locale].blocks);
+    assert.doesNotMatch(text, /menys d'una hora|menos de una hora|under an hour/, `${locale}: high-speed is about an hour`);
+    assert.match(text, /140 km/, `${locale}: distance by car`);
+    assert.match(text, /44[.,]50/, `${locale}: Dalí + La Pedrera combined ticket`);
+    assert.ok(FIGUERES.editions[locale].seoTitle.length <= 60, `${locale}: title budget`);
+  }
+});
+
 test("montserrat: the Aeri table covers 1 Nov and 7 Dec, the free question and the Monistrol station are answered", () => {
   const free = { ca: /és gratis per a algú/, es: /Es gratis el cremallera/, en: /free for anyone/ } as const;
   for (const locale of LOCALES) {
