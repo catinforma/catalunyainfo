@@ -72,7 +72,13 @@ const GIRONA_SOURCES = [
 // and 31 Oct: durations 1 h 19, 1 h 25, 1 h 31 and 1 h 41 (the 7:16 from
 // Sants), so the range runs to 1 h 41, not 1 h 31. The seoDescription still
 // was corrected to 1 h 41 on 26 Oct as a factual fix (allowed inside a freeze).
-const GIRONA_VERIFIED = "2026-10-26";
+// 28 Oct 2026 (research_notes/page1-28oct/figueres_girona.md): R11, Renfe
+// GTFS and every sight re-read; nothing contradicted. The train section now
+// follows the lead (the queries are "tren barcelona girona", "renfe
+// barcelona girona"). Added Renfe's planner "precio desde" for 3 Nov (Avant
+// 17.40, AVE 36.50 EUR) and its child rule, the MAC's other free days, and
+// a caveat on the two Sunday timetables the bishopric's page prints.
+const GIRONA_VERIFIED = "2026-10-28";
 
 export const GIRONA: B2Article = {
   key: "girona",
@@ -116,6 +122,23 @@ export const GIRONA: B2Article = {
         lead(
           "Per anar de Barcelona a Girona en tren hi ha dues opcions: la **R11 de Rodalies**, que triga **d'1 h 19 a 1 h 41 (la majoria, 1 h 19 o 1 h 31)** des de Sants i costa **8,95 €** el senzill (12 € als trens MD), i l'**alta velocitat de Renfe**, que hi arriba en **uns 40 minuts**. Totes dues paren a l'estació de Girona, i la ciutat es recorre a peu en un dia.",
         ),
+        ...h2(
+          "Tren de Barcelona a Girona: R11 o alta velocitat",
+          "Girona té trens de Rodalies i d'alta velocitat des de Barcelona. La taula compara les dues opcions per a un dia feiner i un dissabte.",
+        ),
+        table(
+          "Tren de Barcelona-Sants a Girona",
+          ["Tren", "Durada", "Trens al dia", "Primer i últim des de Sants", "Últim de tornada", "Senzill"],
+          [
+            ["R11 de Rodalies (MD i regional)", "d'1 h 19 a 1 h 41 (la majoria, 1 h 19 o 1 h 31)", "23 feiners, 15 dissabtes", "5:56 – 21:46 (dissabte des de 6:46)", "21:19 (dissabte 21:23)", "8,95 € regional, 12 € MD"],
+            ["Alta velocitat de Renfe (Avant, AVE, Euromed)", "39 – 49 min (alguns directes, 26 min)", "17 feiners, 11 dissabtes", "6:40 – 23:20", "19:52 (dissabte 19:25)", "Des de 17,40 € (Avant) i 36,50 € (AVE), a renfe.com per al 3 de novembre"],
+          ],
+          "Cercador oficial de Rodalies (amb els seus preus) i dades obertes d'horaris de Renfe per al 27 i el 31 d'octubre de 2026.",
+        ),
+        ...h2(
+          "Quin tren agafar",
+          "La més econòmica és la línia **R11** de Rodalies, que surt de Barcelona Sants i para a Passeig de Gràcia i al Clot abans de seguir per Granollers fins a Girona i Figueres. Els trens de mitjana distància (MD) fan el trajecte en 1 h 19 i costen 12 €; els regionals, que fan més parades, triguen 1 h 31 i costen 8,95 €. L'**alta velocitat** de Renfe surt de Sants i arriba en uns 40 minuts, però el preu varia segons el tren i la data: el 28 d'octubre, el cercador de Renfe donava preus des de 17,40 € en Avant i 36,50 € en AVE per al 3 de novembre. Els infants de 4 a 13 anys tenen un 40 % de descompte sobre la tarifa base i els menors de 4 viatgen gratis si no ocupen seient. L'últim tren d'alta velocitat de tornada surt força més d'hora que l'últim R11.",
+        ),
         ...paras("No cal intentar veure-ho tot."),
         ...paras(
           "Una jornada ben plantejada pot concentrar-se en la ciutat històrica, que conserva més de **2.000 anys d'història** entre la Força Vella i l'eixample medieval.",
@@ -143,25 +166,8 @@ export const GIRONA: B2Article = {
           "L'Oficina de Turisme de Girona identifica entre els grans elements històrics la Catedral, Sant Pere de Galligants, els Banys Àrabs, la basílica de Sant Feliu, el Call i les muralles.",
         ),
         ...h2(
-          "Tren de Barcelona a Girona: R11 o alta velocitat",
-          "Girona té trens de Rodalies i d'alta velocitat des de Barcelona. La taula compara les dues opcions per a un dia feiner i un dissabte.",
-        ),
-        table(
-          "Tren de Barcelona-Sants a Girona",
-          ["Tren", "Durada", "Trens al dia", "Primer i últim des de Sants", "Últim de tornada", "Senzill"],
-          [
-            ["R11 de Rodalies (MD i regional)", "d'1 h 19 a 1 h 41 (la majoria, 1 h 19 o 1 h 31)", "23 feiners, 15 dissabtes", "5:56 – 21:46 (dissabte des de 6:46)", "21:19 (dissabte 21:23)", "8,95 € regional, 12 € MD"],
-            ["Alta velocitat de Renfe (Avant, AVE, Euromed)", "39 – 49 min (alguns directes, 26 min)", "17 feiners, 11 dissabtes", "6:40 – 23:20", "19:52 (dissabte 19:25)", "Segons tren i data"],
-          ],
-          "Cercador oficial de Rodalies (amb els seus preus) i dades obertes d'horaris de Renfe per al 27 i el 31 d'octubre de 2026.",
-        ),
-        ...h2(
-          "Quin tren agafar",
-          "La més econòmica és la línia **R11** de Rodalies, que surt de Barcelona Sants i para a Passeig de Gràcia i al Clot abans de seguir per Granollers fins a Girona i Figueres. Els trens de mitjana distància (MD) fan el trajecte en 1 h 19 i costen 12 €; els regionals, que fan més parades, triguen 1 h 31 i costen 8,95 €. L'**alta velocitat** de Renfe surt de Sants i arriba en uns 40 minuts, però el preu varia segons el tren i la data: mira'l a renfe.com. L'últim tren d'alta velocitat de tornada surt força més d'hora que l'últim R11.",
-        ),
-        ...h2(
           "Horaris i preus dels monuments",
-          "Consultats el 24 d'octubre de 2026.",
+          "Consultats el 28 d'octubre de 2026.",
         ),
         table(
           "",
@@ -179,7 +185,7 @@ export const GIRONA: B2Article = {
         ),
         ...h2(
           "Què és gratuït",
-          "El primer diumenge de cada mes, el Museu d'Història dels Jueus i Sant Pere de Galligants són gratuïts, i també ho són sempre per als menors de 16 anys. El MAC també obre de franc el 23 d'abril. Passejar pel Call, les cases de l'Onyar i la Rambla no costa res.",
+          "El primer diumenge de cada mes, el Museu d'Història dels Jueus i Sant Pere de Galligants són gratuïts, i també ho són sempre per als menors de 16 anys. El MAC també obre de franc el 23 d'abril, el 18 de maig, l'11 de setembre i el 29 d'octubre (festa local). Passejar pel Call, les cases de l'Onyar i la Rambla no costa res.",
         ),
         ...h2(
           "Accessibilitat",
@@ -209,6 +215,23 @@ export const GIRONA: B2Article = {
         lead(
           "Para ir de Barcelona a Girona en tren hay dos opciones: la **R11 de Rodalies**, que tarda **de 1 h 19 a 1 h 41 (la mayoría, 1 h 19 o 1 h 31)** desde Sants y cuesta **8,95 €** el sencillo (12 € en los trenes MD), y la **alta velocidad de Renfe**, que llega en **unos 40 minutos**. Las dos paran en la estación de Girona, y la ciudad se recorre a pie en un día.",
         ),
+        ...h2(
+          "Tren de Barcelona a Girona: R11 o alta velocidad",
+          "Girona tiene trenes de Rodalies y de alta velocidad desde Barcelona. La tabla compara las dos opciones para un día laborable y un sábado.",
+        ),
+        table(
+          "Tren de Barcelona-Sants a Girona",
+          ["Tren", "Duración", "Trenes al día", "Primero y último desde Sants", "Último de vuelta", "Sencillo"],
+          [
+            ["R11 de Rodalies (MD y regional)", "de 1 h 19 a 1 h 41 (la mayoría, 1 h 19 o 1 h 31)", "23 laborables, 15 sábados", "5:56 – 21:46 (sábado desde 6:46)", "21:19 (sábado 21:23)", "8,95 € regional, 12 € MD"],
+            ["Alta velocidad de Renfe (Avant, AVE, Euromed)", "39 – 49 min (algunos directos, 26 min)", "17 laborables, 11 sábados", "6:40 – 23:20", "19:52 (sábado 19:25)", "Desde 17,40 € (Avant) y 36,50 € (AVE), en renfe.com para el 3 de noviembre"],
+          ],
+          "Planificador oficial de Rodalies (con sus precios) y datos abiertos de horarios de Renfe para el 27 y el 31 de octubre de 2026.",
+        ),
+        ...h2(
+          "Qué tren coger",
+          "La más económica es la línea **R11** de Rodalies, que sale de Barcelona Sants y para en Passeig de Gràcia y El Clot antes de seguir por Granollers hasta Girona y Figueres. Los trenes de media distancia (MD) hacen el trayecto en 1 h 19 y cuestan 12 €; los regionales, con más paradas, tardan 1 h 31 y cuestan 8,95 €. La **alta velocidad** de Renfe sale de Sants y llega en unos 40 minutos, pero el precio varía según el tren y la fecha: el 28 de octubre, el buscador de Renfe daba precios desde 17,40 € en Avant y 36,50 € en AVE para el 3 de noviembre. Los niños de 4 a 13 años tienen un 40 % de descuento sobre la tarifa base y los menores de 4 viajan gratis si no ocupan asiento. El último tren de alta velocidad de vuelta sale bastante antes que el último R11.",
+        ),
         ...paras("Un día permite recorrer lo esencial del Barri Vell sin necesidad de coche."),
         ...h2("Itinerario recomendado"),
         list(
@@ -231,25 +254,8 @@ export const GIRONA: B2Article = {
           "Si queda tiempo y el tiempo acompaña, el recorrido por las murallas es el mejor cierre antes de bajar de nuevo hacia la Rambla de la Llibertat y la estación.",
         ),
         ...h2(
-          "Tren de Barcelona a Girona: R11 o alta velocidad",
-          "Girona tiene trenes de Rodalies y de alta velocidad desde Barcelona. La tabla compara las dos opciones para un día laborable y un sábado.",
-        ),
-        table(
-          "Tren de Barcelona-Sants a Girona",
-          ["Tren", "Duración", "Trenes al día", "Primero y último desde Sants", "Último de vuelta", "Sencillo"],
-          [
-            ["R11 de Rodalies (MD y regional)", "de 1 h 19 a 1 h 41 (la mayoría, 1 h 19 o 1 h 31)", "23 laborables, 15 sábados", "5:56 – 21:46 (sábado desde 6:46)", "21:19 (sábado 21:23)", "8,95 € regional, 12 € MD"],
-            ["Alta velocidad de Renfe (Avant, AVE, Euromed)", "39 – 49 min (algunos directos, 26 min)", "17 laborables, 11 sábados", "6:40 – 23:20", "19:52 (sábado 19:25)", "Según tren y fecha"],
-          ],
-          "Planificador oficial de Rodalies (con sus precios) y datos abiertos de horarios de Renfe para el 27 y el 31 de octubre de 2026.",
-        ),
-        ...h2(
-          "Qué tren coger",
-          "La más económica es la línea **R11** de Rodalies, que sale de Barcelona Sants y para en Passeig de Gràcia y El Clot antes de seguir por Granollers hasta Girona y Figueres. Los trenes de media distancia (MD) hacen el trayecto en 1 h 19 y cuestan 12 €; los regionales, con más paradas, tardan 1 h 31 y cuestan 8,95 €. La **alta velocidad** de Renfe sale de Sants y llega en unos 40 minutos, pero el precio varía según el tren y la fecha: consúltalo en renfe.com. El último tren de alta velocidad de vuelta sale bastante antes que el último R11.",
-        ),
-        ...h2(
           "Horarios y precios de los monumentos",
-          "Consultados el 24 de octubre de 2026.",
+          "Consultados el 28 de octubre de 2026.",
         ),
         table(
           "",
@@ -267,7 +273,7 @@ export const GIRONA: B2Article = {
         ),
         ...h2(
           "Qué es gratis",
-          "El primer domingo de cada mes, el Museu d'Història dels Jueus y Sant Pere de Galligants son gratuitos, y siempre lo son para menores de 16 años. El MAC también abre gratis el 23 de abril. Pasear por el Call, las casas del Onyar y la Rambla no cuesta nada.",
+          "El primer domingo de cada mes, el Museu d'Història dels Jueus y Sant Pere de Galligants son gratuitos, y siempre lo son para menores de 16 años. El MAC también abre gratis el 23 de abril, el 18 de mayo, el 11 de septiembre y el 29 de octubre (fiesta local). Pasear por el Call, las casas del Onyar y la Rambla no cuesta nada.",
         ),
         ...h2(
           "Accesibilidad",
@@ -297,6 +303,23 @@ export const GIRONA: B2Article = {
         lead(
           "There are two ways to go from Barcelona to Girona by train: Rodalies line **R11**, which takes **1 h 19 to 1 h 41 (most take 1 h 19 or 1 h 31)** from Sants and costs **€8.95** single (€12 on MD trains), and **Renfe's high-speed trains**, which take **about 40 minutes**. Both stop at Girona station, and the city is easy to see on foot in a day.",
         ),
+        ...h2(
+          "Barcelona to Girona train: R11 or high-speed",
+          "Girona has both Rodalies and high-speed trains from Barcelona. The table compares the two for a weekday and a Saturday.",
+        ),
+        table(
+          "Barcelona-Sants to Girona by train",
+          ["Train", "Journey", "Trains a day", "First and last from Sants", "Last train back", "Single fare"],
+          [
+            ["Rodalies R11 (MD and regional)", "1 h 19 to 1 h 41 (most take 1 h 19 or 1 h 31)", "23 on weekdays, 15 on Saturdays", "5:56 – 21:46 (Saturday from 6:46)", "21:19 (Saturday 21:23)", "€8.95 regional, €12 MD"],
+            ["Renfe high-speed (Avant, AVE, Euromed)", "39 – 49 min (some non-stop, 26 min)", "17 on weekdays, 11 on Saturdays", "6:40 – 23:20", "19:52 (Saturday 19:25)", "From €17.40 (Avant) and €36.50 (AVE) on renfe.com for 3 November"],
+          ],
+          "Official Rodalies journey planner (with its fares) and Renfe's open timetable data, for 27 and 31 October 2026.",
+        ),
+        ...h2(
+          "Which train to take",
+          "The cheaper is Rodalies line **R11**. It leaves from Barcelona Sants, calls at Passeig de Gràcia and El Clot, and then runs via Granollers to Girona and Figueres. Medium-distance (MD) trains take 1 h 19 and cost €12; regional trains, which make more stops, take 1 h 31 and cost €8.95. Renfe's **high-speed** trains leave from Sants and take about 40 minutes, but the fare depends on the train and the date: on 28 October Renfe's planner showed fares from €17.40 on Avant and €36.50 on AVE for 3 November. Children aged 4 to 13 get 40% off the base fare, and under-4s travel free without a seat. The last high-speed train back leaves well before the last R11.",
+        ),
         ...h2("A practical route"),
         list(
           "**Onyar houses** — cross the river into the old town.",
@@ -318,25 +341,8 @@ export const GIRONA: B2Article = {
           "If you have time and the weather holds, the walk along the city walls is the best way to finish before dropping back down to the Rambla de la Llibertat and the station.",
         ),
         ...h2(
-          "Barcelona to Girona train: R11 or high-speed",
-          "Girona has both Rodalies and high-speed trains from Barcelona. The table compares the two for a weekday and a Saturday.",
-        ),
-        table(
-          "Barcelona-Sants to Girona by train",
-          ["Train", "Journey", "Trains a day", "First and last from Sants", "Last train back", "Single fare"],
-          [
-            ["Rodalies R11 (MD and regional)", "1 h 19 to 1 h 41 (most take 1 h 19 or 1 h 31)", "23 on weekdays, 15 on Saturdays", "5:56 – 21:46 (Saturday from 6:46)", "21:19 (Saturday 21:23)", "€8.95 regional, €12 MD"],
-            ["Renfe high-speed (Avant, AVE, Euromed)", "39 – 49 min (some non-stop, 26 min)", "17 on weekdays, 11 on Saturdays", "6:40 – 23:20", "19:52 (Saturday 19:25)", "Varies by train and date"],
-          ],
-          "Official Rodalies journey planner (with its fares) and Renfe's open timetable data, for 27 and 31 October 2026.",
-        ),
-        ...h2(
-          "Which train to take",
-          "The cheaper is Rodalies line **R11**. It leaves from Barcelona Sants, calls at Passeig de Gràcia and El Clot, and then runs via Granollers to Girona and Figueres. Medium-distance (MD) trains take 1 h 19 and cost €12; regional trains, which make more stops, take 1 h 31 and cost €8.95. Renfe's **high-speed** trains leave from Sants and take about 40 minutes, but the fare depends on the train and the date: check it on renfe.com. The last high-speed train back leaves well before the last R11.",
-        ),
-        ...h2(
           "Sights: hours and prices",
-          "Checked 24 October 2026.",
+          "Checked 28 October 2026.",
         ),
         table(
           "",
@@ -354,7 +360,7 @@ export const GIRONA: B2Article = {
         ),
         ...h2(
           "What's free",
-          "On the first Sunday of every month, the Museum of Jewish History and Sant Pere de Galligants are free. Both are always free for under-16s, and the MAC is also free on 23 April. Walking through the Call, past the Onyar houses and along the Rambla costs nothing.",
+          "On the first Sunday of every month, the Museum of Jewish History and Sant Pere de Galligants are free. Both are always free for under-16s, and the MAC is also free on 23 April, 18 May, 11 September and 29 October (the city's local holiday). Walking through the Call, past the Onyar houses and along the Rambla costs nothing.",
         ),
         ...h2(
           "Accessibility",
