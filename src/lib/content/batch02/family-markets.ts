@@ -31,10 +31,22 @@ import {
  * group rules at Santa Caterina and Sant Antoni, which were not reconfirmed.
  */
 
-const VERIFIED = "2026-10-24";
+// Markets re-checked 28 Oct 2026: IMMB pages for every market in the table,
+// boqueria.barcelona (contact: "Monday to Saturday: 8:00am - 8:30pm", Rambla
+// 91, phone; Christmas 2025-26 openings post of 9 Dec 2025), the Aug 2026
+// reform note (group rule restated). No 2026-27 Sunday or holiday openings
+// are published yet, so none is printed.
+const VERIFIED = "2026-10-28";
 // The Zoo page alone was re-checked on 26 Oct 2026 (winter hours); the
 // markets page keeps VERIFIED.
-const ZOO_VERIFIED = "2026-10-26";
+// Re-checked 28 Oct 2026: Zoo prices and the "open every day ... closed in
+// the afternoon on Christmas day" line (tickets page), the Zoo's daily line
+// (Wed 28 Oct 10:00-16:30, ticket office and gates 16:00), the City Council's
+// winter table, Zoo Club prices; Aquarium prices (incl. the online-only
+// Flexiticket valid 90 days), FAQ (re-entry is paid again) and its calendar
+// to 31 Jan 2027. The 14:00 Christmas closing is the City Council's figure
+// and is attributed to it.
+const ZOO_VERIFIED = "2026-10-28";
 type Meta = { path: string; title: string; seoTitle: string; seoDescription: string; excerpt: string };
 
 /* ========================================================================== */
@@ -48,6 +60,8 @@ const ZOO_SOURCES: B2Source[] = [
   { name: "Zoo de Barcelona — cómo llegar", url: "https://www.zoobarcelona.cat/es/planifica-tu-visita/como-llegar", publisher: "Zoo de Barcelona (BSM)" },
   { name: "El Zoo de Barcelona — horaris", url: "https://www.barcelona.cat/en/discoverbcn/pics/el-zoo-de-barcelona-61171409", publisher: "Ajuntament de Barcelona" },
   { name: "L'Aquàrium de Barcelona — prices", url: "https://www.aquariumbcn.com/en/visit/prices/", publisher: "L'Aquàrium de Barcelona" },
+  { name: "Barcelona Zoo — tickets and subscriptions", url: "https://www.zoobarcelona.cat/en/plan-your-visit/tickets-and-subscriptions", publisher: "Zoo de Barcelona (BSM)" },
+  { name: "L'Aquàrium de Barcelona — FAQ", url: "https://www.aquariumbcn.com/en/faq/", publisher: "L'Aquàrium de Barcelona" },
   { name: "L'Aquàrium de Barcelona — opening hours", url: "https://www.aquariumbcn.com/en/visit/opening-hours/", publisher: "L'Aquàrium de Barcelona" },
   { name: "L'Aquàrium de Barcelona — how to get here", url: "https://www.aquariumbcn.com/en/plan-your-visit/how-to-get-here/", publisher: "L'Aquàrium de Barcelona" },
 ];
@@ -120,13 +134,14 @@ const ZOO_COPY: Record<Locale, ZT> = {
       ["Under 3", "Free", "Free"],
       ["Disability card", "€6 (33% or more, ticket office)", "€20 adult, €14 child (ticket office)"],
       ["Packs (online)", "—", "2 adults + 2 children €88; 1 + 2 €63; 4 adults €100"],
+      ["Flexible date (online)", "—", "Flexiticket: €35 adult, €28 (5 to 10), €17 (3 to 4), €30 senior; valid 90 days"],
     ],
-    pNote: "From zoobarcelona.cat and aquariumbcn.com, checked on 24 October 2026. There is no official combined Zoo and Aquarium ticket.",
+    pNote: "From zoobarcelona.cat and aquariumbcn.com, checked on 28 October 2026. There is no official combined Zoo and Aquarium ticket.",
     zooTitle: "Barcelona Zoo opening hours",
     zoo: [
-      "The Zoo is open every day of the year; on Christmas Day it closes in the afternoon. On **Monday 26 October 2026** it opened 10:00 to 16:30, with ticket offices and gates closing at 16:00. The City Council's page on the Zoo gives the winter timetable below; check the Zoo's own timetable page on the day.",
+      "The Zoo is open every day of the year; on Christmas Day it closes in the afternoon. On **Wednesday 28 October 2026** the Zoo's own timetable page showed 10:00 to 16:30, with ticket offices and gates closing at 16:00. The City Council's page on the Zoo gives the winter timetable below; check the Zoo's own timetable page on the day.",
       "**Entrance:** at the moment you can only get into the Zoo through the entrance inside the Parc de la Ciutadella. Some enclosures and areas are temporarily closed while the Zoo carries out improvement works; the rest of the park stays open.",
-      "**Discounts:** large-family and single-parent family cards get 20% off at the ticket office. Visitors with a disability of 33% or more pay €6, with a free companion when the Zoo's conditions are met.",
+      "**Discounts:** large-family and single-parent family cards get 20% off at the ticket office. Visitors with a disability of 33% or more pay €6, with a free companion when the Zoo's conditions are met. The **Zoo Club** annual pass costs €47 (individual), €27 (teens) or €65 (single-parent family), plus €25.50 registration, and lasts 12 months.",
     ],
     zooCaption: "Barcelona Zoo winter opening hours",
     zooHeaders: ["Dates", "Mon–Fri", "Sat, Sun and holidays"],
@@ -135,10 +150,10 @@ const ZOO_COPY: Record<Locale, ZT> = {
       ["21 December 2026 to 7 January 2027 (25 December 10:00–14:00)", "10:00–17:30", "10:00–17:30"],
       ["8 January to 28 February 2027", "10:00–16:30", "10:00–17:30"],
     ],
-    zooNote: "From barcelona.cat (City Council) and the Zoo's timetable page, checked on 26 October 2026. Gates close 30 minutes before closing.",
+    zooNote: "From barcelona.cat (City Council) and the Zoo's timetable page, checked on 28 October 2026. Gates close 30 minutes before closing.",
     aqTitle: "Barcelona Aquarium opening hours",
     aq: [
-      "The Aquarium opens every day; the ticket office and entry close **one hour before closing time**. Its calendar is published to 31 January 2027:",
+      "The Aquarium opens every day of the year; the ticket office and entry close **one hour before closing time**, and if you leave, coming back in means paying again. Its calendar is published to 31 January 2027:",
     ],
     aqCaption: "L'Aquàrium opening hours, autumn and winter 2026-27",
     aqHeaders: ["Dates", "Opening hours"],
@@ -150,7 +165,7 @@ const ZOO_COPY: Record<Locale, ZT> = {
       ["1 to 4 January 2027", "10:00–20:00"],
       ["5 to 31 January 2027", "Mon–Fri 10:00–19:00; Sat and Sun 10:00–20:00"],
     ],
-    aqNote: "From the calendar on aquariumbcn.com, checked on 24 October 2026. Last entry one hour before closing.",
+    aqNote: "From the calendar on aquariumbcn.com, checked on 28 October 2026. Last entry one hour before closing.",
     getTitle: "How to get to the Zoo and the Aquarium",
     get: [
       "**Zoo:** entrance inside the Parc de la Ciutadella; metro L4 Barceloneta or L1 Arc de Triomf, Rodalies Arc de Triomf or Estació de França, buses V17, V19, H14 and H16.",
@@ -159,8 +174,8 @@ const ZOO_COPY: Record<Locale, ZT> = {
     ],
     faq: [
       { question: "How much is Barcelona Zoo?", answer: "€23 for adults and €13.90 for children aged 3 to 12; under-3s free; over-65s €11.20 at the ticket office. Same price online and at the gate." },
-      { question: "What time does Barcelona Zoo close?", answer: "Until 20 December, at 16:30 on weekdays and 17:30 at weekends and on public holidays; last entry half an hour earlier. On Christmas Day it closes at 14:00." },
-      { question: "How much is the Barcelona Aquarium?", answer: "€30 for adults, €23 for ages 5 to 10, €15 for ages 3 to 4, €25 for over-65s; under-3s free." },
+      { question: "What time does Barcelona Zoo close?", answer: "Until 20 December, at 16:30 on weekdays and 17:30 at weekends and on public holidays; last entry half an hour earlier. On Christmas Day it closes in the afternoon (at 14:00, according to the City Council)." },
+      { question: "How much is the Barcelona Aquarium?", answer: "€30 for adults, €23 for ages 5 to 10, €15 for ages 3 to 4, €25 for over-65s; under-3s free. The online Flexiticket (€35 adult) can be used on any day within 90 days." },
       { question: "What are the Barcelona Aquarium's opening hours?", answer: "10:00 to 20:00 every day until 1 November 2026; from 2 November, 10:00 to 19:00 on weekdays and 10:00 to 20:00 at weekends. Last entry one hour before closing." },
       { question: "Is there a combined Zoo and Aquarium ticket?", answer: "Not from either venue. Only resellers offer combinations." },
     ],
@@ -178,13 +193,14 @@ const ZOO_COPY: Record<Locale, ZT> = {
       ["Menores de 3", "Gratis", "Gratis"],
       ["Discapacidad", "6 € (33 % o más, en taquilla)", "20 € adulto, 14 € niño (en taquilla)"],
       ["Packs (en línea)", "—", "2 adultos + 2 niños 88 €; 1 + 2, 63 €; 4 adultos, 100 €"],
+      ["Fecha abierta (en línea)", "—", "Flexiticket: 35 € adulto, 28 € (5 a 10), 17 € (3 a 4), 30 € sénior; vale 90 días"],
     ],
-    pNote: "De zoobarcelona.cat y aquariumbcn.com, comprobado el 24 de octubre de 2026. No hay entrada combinada oficial Zoo y Aquarium.",
+    pNote: "De zoobarcelona.cat y aquariumbcn.com, comprobado el 28 de octubre de 2026. No hay entrada combinada oficial Zoo y Aquarium.",
     zooTitle: "Horario del Zoo de Barcelona",
     zoo: [
-      "El Zoo abre todos los días del año; el día de Navidad cierra por la tarde. El **lunes 26 de octubre de 2026** abrió de 10:00 a 16:30, con taquillas y accesos cerrados a las 16:00. La página del Ayuntamiento sobre el Zoo da el horario de invierno de la tabla; compruébalo el mismo día en la página de horario del Zoo.",
+      "El Zoo abre todos los días del año; el día de Navidad cierra por la tarde. El **miércoles 28 de octubre de 2026** la página de horario del Zoo indicaba de 10:00 a 16:30, con taquillas y accesos cerrados a las 16:00. La página del Ayuntamiento sobre el Zoo da el horario de invierno de la tabla; compruébalo el mismo día en la página de horario del Zoo.",
       "**Entrada:** actualmente al Zoo solo se accede por la entrada situada en el interior del parque de la Ciutadella. Algunas instalaciones y espacios no se pueden visitar temporalmente por obras de mejora; el resto del parque sigue abierto.",
-      "**Descuentos:** las familias numerosas y monoparentales tienen un 20 % de descuento en taquilla presentando el carné. Las personas con una discapacidad del 33 % o más pagan 6 €, con acompañante gratuito si se cumplen las condiciones del Zoo.",
+      "**Descuentos:** las familias numerosas y monoparentales tienen un 20 % de descuento en taquilla presentando el carné. Las personas con una discapacidad del 33 % o más pagan 6 €, con acompañante gratuito si se cumplen las condiciones del Zoo. El abono anual **Zoo Club** cuesta 47 € (individual), 27 € (adolescentes) o 65 € (familia monoparental), más 25,50 € de alta, y vale 12 meses.",
     ],
     zooCaption: "Horario de invierno del Zoo de Barcelona",
     zooHeaders: ["Fechas", "Lun–vie", "Sáb, dom y festivos"],
@@ -193,10 +209,10 @@ const ZOO_COPY: Record<Locale, ZT> = {
       ["Del 21 de diciembre de 2026 al 7 de enero de 2027 (25 de diciembre, 10:00–14:00)", "10:00–17:30", "10:00–17:30"],
       ["Del 8 de enero al 28 de febrero de 2027", "10:00–16:30", "10:00–17:30"],
     ],
-    zooNote: "De barcelona.cat (Ayuntamiento) y de la página de horario del Zoo, comprobado el 26 de octubre de 2026. Taquillas y accesos cierran 30 minutos antes del cierre.",
-    aqTitle: "Horario del Aquarium de Barcelona",
+    zooNote: "De barcelona.cat (Ayuntamiento) y de la página de horario del Zoo, comprobado el 28 de octubre de 2026. Taquillas y accesos cierran 30 minutos antes del cierre.",
+    aqTitle: "Horario del Aquarium (acuario) de Barcelona",
     aq: [
-      "El Aquarium abre todos los días; la taquilla y el acceso cierran **una hora antes del cierre**. Tiene el calendario publicado hasta el 31 de enero de 2027:",
+      "El Aquarium abre todos los días del año; la taquilla y el acceso cierran **una hora antes del cierre**, y si sales, volver a entrar se paga de nuevo. Tiene el calendario publicado hasta el 31 de enero de 2027:",
     ],
     aqCaption: "Horario de L'Aquàrium, otoño e invierno 2026-27",
     aqHeaders: ["Fechas", "Horario"],
@@ -208,7 +224,7 @@ const ZOO_COPY: Record<Locale, ZT> = {
       ["Del 1 al 4 de enero de 2027", "10:00–20:00"],
       ["Del 5 al 31 de enero de 2027", "Lun–vie 10:00–19:00; sáb y dom 10:00–20:00"],
     ],
-    aqNote: "Del calendario de aquariumbcn.com, comprobado el 24 de octubre de 2026. Último acceso una hora antes del cierre.",
+    aqNote: "Del calendario de aquariumbcn.com, comprobado el 28 de octubre de 2026. Último acceso una hora antes del cierre.",
     getTitle: "Cómo llegar al Zoo y al Aquarium",
     get: [
       "**Zoo:** entrada en el interior del parque de la Ciutadella; metro L4 Barceloneta o L1 Arc de Triomf, Rodalies Arc de Triomf o Estació de França, buses V17, V19, H14 y H16.",
@@ -217,9 +233,9 @@ const ZOO_COPY: Record<Locale, ZT> = {
     ],
     faq: [
       { question: "¿Cuánto cuesta la entrada al Zoo de Barcelona?", answer: "23 € los adultos y 13,90 € los niños de 3 a 12 años; los menores de 3, gratis; los mayores de 65, 11,20 € en taquilla. Mismo precio en línea y en taquilla." },
-      { question: "¿A qué hora cierra el Zoo de Barcelona?", answer: "Hasta el 20 de diciembre, a las 16:30 entre semana y a las 17:30 los fines de semana y festivos; último acceso media hora antes. El día de Navidad cierra a las 14:00." },
-      { question: "¿Cuánto cuesta el Aquarium de Barcelona?", answer: "30 € adultos, 23 € de 5 a 10 años, 15 € de 3 a 4 años, 25 € mayores de 65; menores de 3, gratis." },
-      { question: "¿Cuál es el horario del Aquarium de Barcelona?", answer: "De 10:00 a 20:00 todos los días hasta el 1 de noviembre de 2026; desde el 2 de noviembre, de 10:00 a 19:00 entre semana y de 10:00 a 20:00 los fines de semana. Último acceso una hora antes del cierre." },
+      { question: "¿A qué hora cierra el Zoo de Barcelona?", answer: "Hasta el 20 de diciembre, a las 16:30 entre semana y a las 17:30 los fines de semana y festivos; último acceso media hora antes. El día de Navidad cierra por la tarde (a las 14:00, según el Ayuntamiento)." },
+      { question: "¿Cuánto vale la entrada al acuario de Barcelona?", answer: "30 € adultos, 23 € de 5 a 10 años, 15 € de 3 a 4 años, 25 € mayores de 65; menores de 3, gratis. La Flexiticket en línea (35 € adulto) se puede usar cualquier día en 90 días." },
+      { question: "¿Cuál es el horario del Aquarium (acuario) de Barcelona?", answer: "De 10:00 a 20:00 todos los días hasta el 1 de noviembre de 2026; desde el 2 de noviembre, de 10:00 a 19:00 entre semana y de 10:00 a 20:00 los fines de semana. Último acceso una hora antes del cierre." },
       { question: "¿Hay entrada combinada Zoo y Aquarium?", answer: "No por parte de ninguno de los dos. Solo los revendedores ofrecen combinados." },
     ],
     note: "Precios y horarios cambian: consulta las webs del Zoo y del Aquarium para tu fecha.",
@@ -236,13 +252,14 @@ const ZOO_COPY: Record<Locale, ZT> = {
       ["Menors de 3", "Gratis", "Gratis"],
       ["Discapacitat", "6 € (33 % o més, a taquilla)", "20 € adult, 14 € infant (a taquilla)"],
       ["Paquets (en línia)", "—", "2 adults + 2 infants 88 €; 1 + 2, 63 €; 4 adults, 100 €"],
+      ["Data oberta (en línia)", "—", "Flexiticket: 35 € adult, 28 € (5 a 10), 17 € (3 a 4), 30 € sènior; val 90 dies"],
     ],
-    pNote: "De zoobarcelona.cat i aquariumbcn.com, comprovat el 24 d'octubre de 2026. No hi ha entrada combinada oficial Zoo i Aquàrium.",
+    pNote: "De zoobarcelona.cat i aquariumbcn.com, comprovat el 28 d'octubre de 2026. No hi ha entrada combinada oficial Zoo i Aquàrium.",
     zooTitle: "Horari del Zoo de Barcelona",
     zoo: [
-      "El Zoo obre cada dia de l'any; el dia de Nadal tanca a la tarda. El **dilluns 26 d'octubre de 2026** va obrir de 10:00 a 16:30, amb taquilles i accessos tancats a les 16:00. La pàgina de l'Ajuntament sobre el Zoo dona l'horari d'hivern de la taula; comprova'l el mateix dia a la pàgina d'horari del Zoo.",
+      "El Zoo obre cada dia de l'any; el dia de Nadal tanca a la tarda. El **dimecres 28 d'octubre de 2026** la pàgina d'horari del Zoo indicava de 10:00 a 16:30, amb taquilles i accessos tancats a les 16:00. La pàgina de l'Ajuntament sobre el Zoo dona l'horari d'hivern de la taula; comprova'l el mateix dia a la pàgina d'horari del Zoo.",
       "**Entrada:** actualment l'accés al Zoo es fa únicament per l'entrada situada a l'interior del parc de la Ciutadella. Algunes instal·lacions i espais no es poden visitar temporalment per obres de millora; la resta del parc continua obert.",
-      "**Descomptes:** les famílies nombroses i monoparentals tenen un 20 % de descompte a taquilla presentant el carnet. Les persones amb una discapacitat del 33 % o més paguen 6 €, amb acompanyant gratuït si es compleixen les condicions del Zoo.",
+      "**Descomptes:** les famílies nombroses i monoparentals tenen un 20 % de descompte a taquilla presentant el carnet. Les persones amb una discapacitat del 33 % o més paguen 6 €, amb acompanyant gratuït si es compleixen les condicions del Zoo. L'abonament anual **Zoo Club** costa 47 € (individual), 27 € (adolescents) o 65 € (família monoparental), més 25,50 € d'alta, i val 12 mesos.",
     ],
     zooCaption: "Horari d'hivern del Zoo de Barcelona",
     zooHeaders: ["Dates", "Dl–dv", "Ds, dg i festius"],
@@ -251,10 +268,10 @@ const ZOO_COPY: Record<Locale, ZT> = {
       ["Del 21 de desembre de 2026 al 7 de gener de 2027 (25 de desembre, 10:00–14:00)", "10:00–17:30", "10:00–17:30"],
       ["Del 8 de gener al 28 de febrer de 2027", "10:00–16:30", "10:00–17:30"],
     ],
-    zooNote: "De barcelona.cat (Ajuntament) i de la pàgina d'horari del Zoo, comprovat el 26 d'octubre de 2026. Taquilles i accessos tanquen 30 minuts abans del tancament.",
+    zooNote: "De barcelona.cat (Ajuntament) i de la pàgina d'horari del Zoo, comprovat el 28 d'octubre de 2026. Taquilles i accessos tanquen 30 minuts abans del tancament.",
     aqTitle: "Horari de l'Aquàrium de Barcelona",
     aq: [
-      "L'Aquàrium obre cada dia; la taquilla i l'accés tanquen **una hora abans del tancament**. Té el calendari publicat fins al 31 de gener de 2027:",
+      "L'Aquàrium obre cada dia de l'any; la taquilla i l'accés tanquen **una hora abans del tancament**, i si en surts, tornar a entrar es paga de nou. Té el calendari publicat fins al 31 de gener de 2027:",
     ],
     aqCaption: "Horari de L'Aquàrium, tardor i hivern 2026-27",
     aqHeaders: ["Dates", "Horari"],
@@ -266,7 +283,7 @@ const ZOO_COPY: Record<Locale, ZT> = {
       ["De l'1 al 4 de gener de 2027", "10:00–20:00"],
       ["Del 5 al 31 de gener de 2027", "Dl–dv 10:00–19:00; ds i dg 10:00–20:00"],
     ],
-    aqNote: "Del calendari d'aquariumbcn.com, comprovat el 24 d'octubre de 2026. Últim accés una hora abans del tancament.",
+    aqNote: "Del calendari d'aquariumbcn.com, comprovat el 28 d'octubre de 2026. Últim accés una hora abans del tancament.",
     getTitle: "Com arribar al Zoo i a l'Aquàrium",
     get: [
       "**Zoo:** entrada a l'interior del parc de la Ciutadella; metro L4 Barceloneta o L1 Arc de Triomf, Rodalies Arc de Triomf o Estació de França, busos V17, V19, H14 i H16.",
@@ -275,8 +292,8 @@ const ZOO_COPY: Record<Locale, ZT> = {
     ],
     faq: [
       { question: "Quant costa l'entrada al Zoo de Barcelona?", answer: "23 € els adults i 13,90 € els infants de 3 a 12 anys; els menors de 3, gratis; els majors de 65, 11,20 € a taquilla. Mateix preu en línia i a taquilla." },
-      { question: "A quina hora tanca el Zoo de Barcelona?", answer: "Fins al 20 de desembre, a les 16:30 entre setmana i a les 17:30 els caps de setmana i festius; últim accés mitja hora abans. El dia de Nadal tanca a les 14:00." },
-      { question: "Quant costa l'Aquàrium de Barcelona?", answer: "30 € adults, 23 € de 5 a 10 anys, 15 € de 3 a 4 anys, 25 € majors de 65; menors de 3, gratis." },
+      { question: "A quina hora tanca el Zoo de Barcelona?", answer: "Fins al 20 de desembre, a les 16:30 entre setmana i a les 17:30 els caps de setmana i festius; últim accés mitja hora abans. El dia de Nadal tanca a la tarda (a les 14:00, segons l'Ajuntament)." },
+      { question: "Quant val l'entrada a l'Aquàrium de Barcelona?", answer: "30 € adults, 23 € de 5 a 10 anys, 15 € de 3 a 4 anys, 25 € majors de 65; menors de 3, gratis. La Flexiticket en línia (35 € adult) es pot fer servir qualsevol dia en 90 dies." },
       { question: "Quin és l'horari de l'Aquàrium de Barcelona?", answer: "De 10:00 a 20:00 cada dia fins a l'1 de novembre de 2026; des del 2 de novembre, de 10:00 a 19:00 entre setmana i de 10:00 a 20:00 els caps de setmana. Últim accés una hora abans del tancament." },
       { question: "Hi ha entrada combinada Zoo i Aquàrium?", answer: "No per part de cap dels dos. Només els revenedors ofereixen combinats." },
     ],
@@ -349,6 +366,8 @@ const MARKETS_SOURCES: B2Source[] = [
   { name: "Mercat de la Llibertat", url: "https://ajuntament.barcelona.cat/mercats/ca/punts-alimentaris/mercat-de-la-llibertat-92086009773", publisher: "Institut Municipal de Mercats de Barcelona" },
   { name: "Mercat del Ninot", url: "https://ajuntament.barcelona.cat/mercats/ca/punts-alimentaris/mercat-del-ninot-92086009451", publisher: "Institut Municipal de Mercats de Barcelona" },
   { name: "Mercat dominical de Sant Antoni", url: "https://ajuntament.barcelona.cat/mercats/ca/mercats-no-alimentaris/mercat-dominical-de-sant-antoni-96058202955", publisher: "Institut Municipal de Mercats de Barcelona" },
+  { name: "Boqueria — contact and opening hours", url: "https://www.boqueria.barcelona/contact", publisher: "Mercat de la Boqueria" },
+  { name: "Boqueria opening hours during Christmas (2025-26)", url: "https://www.boqueria.barcelona/boqueria-opening-hours-during-christmas-n-352-en", publisher: "Mercat de la Boqueria" },
   { name: "Nota sobre la reforma de la Boqueria (27.08.2026)", url: "https://ajuntament.barcelona.cat/mercats/sites/default/files/2026-08/260827_NOTA_reformaBoqueriapropermandat_def.pdf", publisher: "Ajuntament de Barcelona" },
 ];
 
@@ -363,10 +382,10 @@ const MARKETS_META: Record<Locale, Meta> = {
   },
   es: {
     path: "guias/mercado-boqueria-mercados-barcelona",
-    title: "La Boqueria y los mercados de Barcelona: horarios y normas para visitarlos",
+    title: "Horario de la Boqueria y de los mercados de Barcelona: días, festivos y normas para visitarlos",
     seoTitle: "Horario de la Boqueria y de los mercados de Barcelona",
     seoDescription:
-      "La Boqueria abre de lunes a sábado de 8:00 a 20:30 y cierra el domingo. Horario de Santa Caterina, Sant Antoni, Concepció y Ninot, y qué abre en domingo.",
+      "La Boqueria abre de lunes a sábado de 8:00 a 20:30; domingos y festivos, solo los días que anuncia. Horario de Santa Caterina, Sant Antoni y Ninot.",
     excerpt: "Cuándo abren la Boqueria y los otros grandes mercados de Barcelona, las normas para los grupos de visitantes y qué cambiará con la reforma.",
   },
   en: {
@@ -391,10 +410,11 @@ type MKT = {
 
 const MARKETS_COPY: Record<Locale, MKT> = {
   en: {
-    lead: "**La Boqueria opens Monday to Saturday, 8:00 to 20:30, and is closed on Sundays**, apart from a few Sundays before Christmas that the City Council announces each year; each stall sets its own hours inside that window. Sant Antoni keeps the same hours, while Santa Caterina, La Concepció, La Llibertat and El Ninot close early on some days (table below). These are working markets first: the city runs them for the people who shop there.",
-    boqTitle: "La Boqueria",
+    lead: "**La Boqueria opens Monday to Saturday, 8:00 to 20:30**; on Sundays and public holidays it opens only on the dates the market announces, usually a few over Christmas. Each stall sets its own hours inside that window. Sant Antoni keeps the same hours, while Santa Caterina, La Concepció, La Llibertat and El Ninot close early on some days (table below). These are working markets first: the city runs them for the people who shop there.",
+    boqTitle: "La Boqueria opening hours, Sundays and holidays",
     boq: [
-      "The Mercat de Sant Josep, La Boqueria, opens Monday to Saturday from 8:00 to 20:30; the nearest metro is Liceu (L3). It opens on a few Sundays before Christmas, which the city announces each year.",
+      "The Mercat de Sant Josep, La Boqueria, is at La Rambla 91 and opens Monday to Saturday from 8:00 to 20:30; the nearest metro is Liceu (L3). Phone: 93 413 23 03.",
+      "**Sundays and public holidays:** the market opens only on the days it announces. Over Christmas 2025-26 it opened on Saturday 6 December and on Sundays 21 and 28 December and 4 January; the 2026-27 dates have not been published yet.",
       "A renovation is under way: smaller works start after the summer of 2026, the central fish stalls are expected to move temporarily to Plaça de la Gardunya, and the main works on the roof and structure run from 2027 to 2029, with trading continuing where possible.",
     ],
     rulesTitle: "Rules for visitors",
@@ -412,7 +432,7 @@ const MARKETS_COPY: Record<Locale, MKT> = {
       ["La Llibertat", "Mon to Fri 8:00–20:30; Sat 8:00–15:00 (shorter in August)"],
       ["El Ninot", "Mon to Thu 8:00–20:00; Fri and Sat 8:00–17:00"],
     ],
-    hNote: "From the City Council's markets institute, checked on 24 October 2026. Market hours are the building's; individual stalls set their own.",
+    hNote: "From the City Council's markets institute, checked on 28 October 2026. Market hours are the building's; individual stalls set their own.",
     bookTitle: "Sunday book market at Sant Antoni",
     book: "Around Sant Antoni market, the Sunday book, comics and collectables market runs every Sunday from 8:30 to 14:00, including Sundays that are public holidays.",
     tipsTitle: "Tips",
@@ -422,7 +442,8 @@ const MARKETS_COPY: Record<Locale, MKT> = {
       "**Buy something:** these are food markets, and the stallholders' living depends on sales, not footfall.",
     ],
     faq: [
-      { question: "Is La Boqueria open on Sundays?", answer: "No. It opens Monday to Saturday from 8:00 to 20:30, plus a few Sundays before Christmas announced each year." },
+      { question: "Is La Boqueria open on Sundays?", answer: "Usually not. It opens Monday to Saturday from 8:00 to 20:30, and on Sundays only on the dates the market announces, usually a few over Christmas." },
+      { question: "Is La Boqueria open on public holidays?", answer: "Only on the days the market announces. Over Christmas 2025-26 those were 6, 21 and 28 December and 4 January; the 2026-27 dates are not published yet." },
       { question: "Can tour groups visit La Boqueria?", answer: "Not organised groups of 15 or more on Fridays and Saturdays from April to October." },
       { question: "Which Barcelona markets are open on Sundays?", answer: "None of the big food markets in the table: they all open Monday to Saturday. On Sundays the book, comics and collectables market around Sant Antoni runs from 8:30 to 14:00." },
       { question: "What time does La Boqueria close?", answer: "At 20:30, Monday to Saturday; each stall sets its own hours within that." },
@@ -430,10 +451,11 @@ const MARKETS_COPY: Record<Locale, MKT> = {
     note: "Market hours change for holidays and works: check the City Council's markets pages.",
   },
   es: {
-    lead: "**La Boqueria abre de lunes a sábado de 8:00 a 20:30 y cierra los domingos**, salvo algunos domingos antes de Navidad que el Ayuntamiento anuncia cada año; cada parada fija su horario dentro de esa franja. Sant Antoni tiene el mismo horario, mientras que Santa Caterina, la Concepció, la Llibertat y el Ninot cierran antes algunos días (tabla más abajo). Son ante todo mercados de barrio: el Ayuntamiento los gestiona para quien compra en ellos.",
-    boqTitle: "La Boqueria",
+    lead: "**La Boqueria abre de lunes a sábado de 8:00 a 20:30**; los domingos y festivos solo abre los días que anuncia el mercado, normalmente unos pocos en Navidad. Cada parada fija su horario dentro de esa franja. Sant Antoni tiene el mismo horario, mientras que Santa Caterina, la Concepció, la Llibertat y el Ninot cierran antes algunos días (tabla más abajo). Son ante todo mercados de barrio: el Ayuntamiento los gestiona para quien compra en ellos.",
+    boqTitle: "Horario de la Boqueria: domingos y festivos",
     boq: [
-      "El Mercat de Sant Josep, la Boqueria, abre de lunes a sábado de 8:00 a 20:30; el metro más cercano es Liceu (L3). Abre algunos domingos antes de Navidad, que el Ayuntamiento anuncia cada año.",
+      "El Mercat de Sant Josep, la Boqueria, está en La Rambla, 91, y abre de lunes a sábado de 8:00 a 20:30; el metro más cercano es Liceu (L3). Teléfono: 93 413 23 03.",
+      "**Domingos y festivos:** el mercado solo abre los días que anuncia. En la Navidad de 2025-26 abrió el sábado 6 de diciembre y los domingos 21 y 28 de diciembre y 4 de enero; las fechas de 2026-27 aún no se han publicado.",
       "Hay una reforma en marcha: las obras menores empiezan después del verano de 2026, está previsto que las paradas centrales de pescado se trasladen temporalmente a la plaza de la Gardunya, y las obras grandes de cubierta y estructura van de 2027 a 2029, manteniendo la actividad donde sea posible.",
     ],
     rulesTitle: "Normas para los visitantes",
@@ -451,7 +473,7 @@ const MARKETS_COPY: Record<Locale, MKT> = {
       ["La Llibertat", "De lun a vie 8:00–20:30; sáb 8:00–15:00 (más corto en agosto)"],
       ["El Ninot", "De lun a jue 8:00–20:00; vie y sáb 8:00–17:00"],
     ],
-    hNote: "Del Instituto Municipal de Mercados, comprobado el 24 de octubre de 2026. El horario es el del edificio; cada parada fija el suyo.",
+    hNote: "Del Instituto Municipal de Mercados, comprobado el 28 de octubre de 2026. El horario es el del edificio; cada parada fija el suyo.",
     bookTitle: "Mercado dominical de Sant Antoni",
     book: "Alrededor del mercado de Sant Antoni, el mercado dominical de libros, cómics y coleccionismo se hace todos los domingos de 8:30 a 14:00, también los domingos festivos.",
     tipsTitle: "Consejos",
@@ -461,7 +483,9 @@ const MARKETS_COPY: Record<Locale, MKT> = {
       "**Compra algo:** son mercados de alimentación y los paradistas viven de las ventas, no de las visitas.",
     ],
     faq: [
-      { question: "¿La Boqueria abre los domingos?", answer: "No. Abre de lunes a sábado de 8:00 a 20:30, más algunos domingos antes de Navidad que se anuncian cada año." },
+      { question: "¿La Boqueria abre los domingos?", answer: "Normalmente no. Abre de lunes a sábado de 8:00 a 20:30, y los domingos solo los días que anuncia el mercado, normalmente unos pocos en Navidad." },
+      { question: "¿Cuál es el horario de la Boqueria en festivos?", answer: "Solo abre los festivos que anuncia el mercado. En la Navidad de 2025-26 fueron el 6, el 21 y el 28 de diciembre y el 4 de enero; las fechas de 2026-27 aún no están publicadas." },
+      { question: "¿Dónde está la Boqueria?", answer: "En La Rambla, 91; la parada de metro más cercana es Liceu (L3)." },
       { question: "¿Pueden visitar la Boqueria los grupos turísticos?", answer: "No los grupos organizados de 15 personas o más, los viernes y sábados de abril a octubre." },
       { question: "¿Qué mercados de Barcelona abren el domingo?", answer: "Ninguno de los grandes mercados de alimentación de la tabla: todos abren de lunes a sábado. El domingo, alrededor de Sant Antoni, se hace el mercado de libros, cómics y coleccionismo, de 8:30 a 14:00." },
       { question: "¿A qué hora cierra la Boqueria?", answer: "A las 20:30, de lunes a sábado; cada parada fija su horario dentro de ese." },
@@ -469,10 +493,11 @@ const MARKETS_COPY: Record<Locale, MKT> = {
     note: "Los horarios de los mercados cambian por fiestas y obras: consulta las páginas de mercados del Ayuntamiento.",
   },
   ca: {
-    lead: "**La Boqueria obre de dilluns a dissabte de 8:00 a 20:30 i tanca els diumenges**, tret d'alguns diumenges abans de Nadal que l'Ajuntament anuncia cada any; cada parada fixa el seu horari dins d'aquesta franja. Sant Antoni té el mateix horari, mentre que Santa Caterina, la Concepció, la Llibertat i el Ninot tanquen abans alguns dies (taula més avall). Són abans de res mercats de barri: l'Ajuntament els gestiona per a qui hi compra.",
-    boqTitle: "La Boqueria",
+    lead: "**La Boqueria obre de dilluns a dissabte de 8:00 a 20:30**; els diumenges i festius només obre els dies que anuncia el mercat, normalment uns quants per Nadal. Cada parada fixa el seu horari dins d'aquesta franja. Sant Antoni té el mateix horari, mentre que Santa Caterina, la Concepció, la Llibertat i el Ninot tanquen abans alguns dies (taula més avall). Són abans de res mercats de barri: l'Ajuntament els gestiona per a qui hi compra.",
+    boqTitle: "Horari de la Boqueria: diumenges i festius",
     boq: [
-      "El Mercat de Sant Josep, la Boqueria, obre de dilluns a dissabte de 8:00 a 20:30; el metro més proper és Liceu (L3). Obre alguns diumenges abans de Nadal, que l'Ajuntament anuncia cada any.",
+      "El Mercat de Sant Josep, la Boqueria, és a la Rambla, 91, i obre de dilluns a dissabte de 8:00 a 20:30; el metro més proper és Liceu (L3). Telèfon: 93 413 23 03.",
+      "**Diumenges i festius:** el mercat només obre els dies que anuncia. El Nadal de 2025-26 va obrir el dissabte 6 de desembre i els diumenges 21 i 28 de desembre i 4 de gener; les dates del 2026-27 encara no s'han publicat.",
       "Hi ha una reforma en marxa: les obres menors comencen després de l'estiu del 2026, està previst que les parades centrals de peix es traslladin temporalment a la plaça de la Gardunya, i les obres grans de coberta i estructura van del 2027 al 2029, mantenint l'activitat on sigui possible.",
     ],
     rulesTitle: "Normes per als visitants",
@@ -490,7 +515,7 @@ const MARKETS_COPY: Record<Locale, MKT> = {
       ["La Llibertat", "De dl a dv 8:00–20:30; ds 8:00–15:00 (més curt a l'agost)"],
       ["El Ninot", "De dl a dj 8:00–20:00; dv i ds 8:00–17:00"],
     ],
-    hNote: "De l'Institut Municipal de Mercats, comprovat el 24 d'octubre de 2026. L'horari és el de l'edifici; cada parada fixa el seu.",
+    hNote: "De l'Institut Municipal de Mercats, comprovat el 28 d'octubre de 2026. L'horari és el de l'edifici; cada parada fixa el seu.",
     bookTitle: "Mercat dominical de Sant Antoni",
     book: "Al voltant del mercat de Sant Antoni, el mercat dominical de llibres, còmics i col·leccionisme es fa cada diumenge de 8:30 a 14:00, també els diumenges festius.",
     tipsTitle: "Consells",
@@ -500,7 +525,8 @@ const MARKETS_COPY: Record<Locale, MKT> = {
       "**Compra alguna cosa:** són mercats d'alimentació i els paradistes viuen de les vendes, no de les visites.",
     ],
     faq: [
-      { question: "La Boqueria obre els diumenges?", answer: "No. Obre de dilluns a dissabte de 8:00 a 20:30, més alguns diumenges abans de Nadal que s'anuncien cada any." },
+      { question: "La Boqueria obre els diumenges?", answer: "Normalment no. Obre de dilluns a dissabte de 8:00 a 20:30, i els diumenges només els dies que anuncia el mercat, normalment uns quants per Nadal." },
+      { question: "Quin és l'horari de la Boqueria els festius?", answer: "Només obre els festius que anuncia el mercat. El Nadal de 2025-26 van ser el 6, el 21 i el 28 de desembre i el 4 de gener; les dates del 2026-27 encara no s'han publicat." },
       { question: "Poden visitar la Boqueria els grups turístics?", answer: "No els grups organitzats de 15 persones o més, els divendres i dissabtes d'abril a octubre." },
       { question: "Quins mercats de Barcelona obren el diumenge?", answer: "Cap dels grans mercats d'alimentació de la taula: tots obren de dilluns a dissabte. El diumenge, al voltant de Sant Antoni, es fa el mercat de llibres, còmics i col·leccionisme, de 8:30 a 14:00." },
       { question: "A quina hora tanca la Boqueria?", answer: "A les 20:30, de dilluns a dissabte; cada parada fixa el seu horari dins d'aquest." },

@@ -598,6 +598,29 @@ test("zoo: Ciutadella-only entrance, winter zoo hours table, aquarium calendar",
   }
 });
 
+/**
+ * Zoo, Aquarium and markets, 28 Oct 2026: the Aquarium's online Flexiticket
+ * (90 days) and the Zoo Club are on the official price pages; the Zoo itself
+ * says only "closed in the afternoon" on Christmas Day, so the 14:00 is
+ * attributed to the City Council. The Boqueria's Sunday and holiday openings
+ * are announced by the market (2025-26: 6, 21, 28 Dec and 4 Jan); 2026-27 is
+ * not published, so no 2026-27 date may appear.
+ */
+test("zoo and markets: Flexiticket, Christmas attribution, Boqueria holidays from the market", () => {
+  const council = { ca: /14:00, segons l'Ajuntament/, es: /14:00, según el Ayuntamiento/, en: /14:00, according to the City Council/ };
+  const holidays = { ca: /4 de gener/, es: /4 de enero/, en: /4 January/ };
+  for (const locale of ["ca", "es", "en"] as const) {
+    const zoo = bodyToPlainText(ZOO_AQUARIUM.editions[locale].blocks);
+    assert.match(zoo, /Flexiticket/, `${locale}: Flexiticket`);
+    assert.match(zoo, /90 (days|días|dies)/, `${locale}: Flexiticket validity`);
+    assert.match(zoo, council[locale], `${locale}: Christmas closing attributed`);
+    const markets = bodyToPlainText(MARKETS.editions[locale].blocks);
+    assert.match(markets, holidays[locale], `${locale}: last season's holiday openings`);
+    assert.match(markets, /2026-27/, `${locale}: says the 2026-27 dates are not out`);
+    assert.doesNotMatch(markets, /(Sundays before Christmas that the City Council|domingos antes de Navidad que el Ayuntamiento|diumenges abans de Nadal que l'Ajuntament)/, `${locale}: openings are the market's, not the council's`);
+  }
+});
+
 test("cards: the price table's online column is 10% off and the difference is card minus Hola", () => {
   const num = (cell: string) => Number(cell.replace(/[€\s]/g, "").replace(",", "."));
   for (const locale of ["ca", "es", "en"] as const) {
