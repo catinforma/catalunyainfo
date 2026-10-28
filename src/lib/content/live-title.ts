@@ -38,11 +38,18 @@ const SHORT_MONTHS: Record<Locale, string[]> = {
  * function the agenda block uses, on the same render.
  */
 export function weekendTitle(locale: Locale, window: WeekendWindow): string {
+  return `${EVERGREEN[locale].seoTitle} (${weekendRange(locale, window)})`;
+}
+
+/**
+ * The window as the weekend titles write it: "30 oct–1 nov", "6–8 nov". Also
+ * used by the weekend zone pages (`programmatic/weekend`), so every weekend
+ * title on the site names its dates the same way.
+ */
+export function weekendRange(locale: Locale, window: Pick<WeekendWindow, "from" | "to">): string {
   const day = (iso: string) => Number(iso.slice(8, 10));
   const month = (iso: string) => SHORT_MONTHS[locale][Number(iso.slice(5, 7)) - 1] ?? "";
-  const range =
-    month(window.from) === month(window.to)
-      ? `${day(window.from)}–${day(window.to)} ${month(window.to)}`
-      : `${day(window.from)} ${month(window.from)}–${day(window.to)} ${month(window.to)}`;
-  return `${EVERGREEN[locale].seoTitle} (${range})`;
+  return month(window.from) === month(window.to)
+    ? `${day(window.from)}–${day(window.to)} ${month(window.to)}`
+    : `${day(window.from)} ${month(window.from)}–${day(window.to)} ${month(window.to)}`;
 }

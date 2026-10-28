@@ -1,0 +1,8238 @@
+{
+ "readOn": "2026-10-28",
+ "sources": {
+  "agenda": {
+   "name": "Agenda cultural de Catalunya (per localitzacions)",
+   "publisher": "Departament de Cultura, Generalitat de Catalunya",
+   "url": "https://analisi.transparenciacatalunya.cat/d/rhpv-yr4f",
+   "api": "https://analisi.transparenciacatalunya.cat/resource/rhpv-yr4f.json",
+   "updated": "2026-10-28"
+  },
+  "fairs": {
+   "name": "Calendari fires de Catalunya (fires i fires mercat)",
+   "publisher": "Departament d'Empresa i Treball, Generalitat de Catalunya",
+   "url": "https://analisi.transparenciacatalunya.cat/d/vm32-przc",
+   "api": "https://analisi.transparenciacatalunya.cat/resource/vm32-przc.json",
+   "updated": "2026-09-25"
+  },
+  "register": {
+   "name": "Caps de municipi de Catalunya georeferenciats",
+   "publisher": "Institut Cartogràfic i Geològic de Catalunya (ICGC)",
+   "url": "https://analisi.transparenciacatalunya.cat/d/wpyq-we8x",
+   "api": "https://analisi.transparenciacatalunya.cat/resource/wpyq-we8x.json",
+   "updated": "2024-11-27"
+  },
+  "brands": {
+   "name": "Marques turístiques (a partir de l'1-1-1994)",
+   "publisher": "Institut d'Estadística de Catalunya (Idescat)",
+   "url": "https://www.idescat.cat/codis/?id=50&n=37",
+   "api": "https://www.idescat.cat/codis/?id=50&n=37&f=ssv",
+   "updated": null
+  }
+ },
+ "comarques": {
+  "10": "Baix Empordà",
+  "11": "Baix Llobregat",
+  "12": "Baix Penedès",
+  "13": "Barcelonès",
+  "14": "Berguedà",
+  "15": "Cerdanya",
+  "16": "Conca de Barberà",
+  "17": "Garraf",
+  "18": "Garrigues",
+  "19": "Garrotxa",
+  "20": "Gironès",
+  "21": "Maresme",
+  "22": "Montsià",
+  "23": "Noguera",
+  "24": "Osona",
+  "25": "Pallars Jussà",
+  "26": "Pallars Sobirà",
+  "27": "Pla d'Urgell",
+  "28": "Pla de l'Estany",
+  "29": "Priorat",
+  "30": "Ribera d'Ebre",
+  "31": "Ripollès",
+  "32": "Segarra",
+  "33": "Segrià",
+  "34": "Selva",
+  "35": "Solsonès",
+  "36": "Tarragonès",
+  "37": "Terra Alta",
+  "38": "Urgell",
+  "39": "Aran",
+  "40": "Vallès Occidental",
+  "41": "Vallès Oriental",
+  "42": "Moianès",
+  "43": "Lluçanès",
+  "01": "Alt Camp",
+  "02": "Alt Empordà",
+  "03": "Alt Penedès",
+  "04": "Alt Urgell",
+  "05": "Alta Ribagorça",
+  "06": "Anoia",
+  "07": "Bages",
+  "08": "Baix Camp",
+  "09": "Baix Ebre"
+ },
+ "brands": {
+  "MT01": {
+   "name": "Pirineus",
+   "comarques": [
+    "04",
+    "05",
+    "14",
+    "15",
+    "19",
+    "25",
+    "26",
+    "31",
+    "35"
+   ]
+  },
+  "MT02": {
+   "name": "Costa Brava",
+   "comarques": [
+    "02",
+    "10",
+    "20",
+    "28",
+    "34"
+   ]
+  },
+  "MT04": {
+   "name": "Barcelona",
+   "comarques": [
+    "13"
+   ]
+  },
+  "MT05": {
+   "name": "Costa Daurada",
+   "comarques": [
+    "01",
+    "08",
+    "12",
+    "16",
+    "29",
+    "36"
+   ]
+  },
+  "MT06": {
+   "name": "Terres de Lleida",
+   "comarques": [
+    "18",
+    "23",
+    "27",
+    "32",
+    "33",
+    "38"
+   ]
+  },
+  "MT08": {
+   "name": "Paisatges Barcelona",
+   "comarques": [
+    "06",
+    "07",
+    "24",
+    "42",
+    "43"
+   ]
+  },
+  "MT09": {
+   "name": "Terres de l'Ebre",
+   "comarques": [
+    "09",
+    "22",
+    "30",
+    "37"
+   ]
+  },
+  "MT10": {
+   "name": "Val d'Aran",
+   "comarques": [
+    "39"
+   ]
+  },
+  "MT11": {
+   "name": "Costa Barcelona",
+   "comarques": [
+    "03",
+    "11",
+    "17",
+    "21",
+    "40",
+    "41"
+   ]
+  }
+ },
+ "municipalities": [
+  {
+   "ine": "08001",
+   "idescat": "080018",
+   "name": "Abrera",
+   "comarca": "11",
+   "province": "08"
+  },
+  {
+   "ine": "08002",
+   "idescat": "080023",
+   "name": "Aguilar de Segarra",
+   "comarca": "07",
+   "province": "08"
+  },
+  {
+   "ine": "08003",
+   "idescat": "080039",
+   "name": "Alella",
+   "comarca": "21",
+   "province": "08"
+  },
+  {
+   "ine": "08004",
+   "idescat": "080044",
+   "name": "Alpens",
+   "comarca": "43",
+   "province": "08"
+  },
+  {
+   "ine": "08005",
+   "idescat": "080057",
+   "name": "l'Ametlla del Vallès",
+   "comarca": "41",
+   "province": "08"
+  },
+  {
+   "ine": "08006",
+   "idescat": "080060",
+   "name": "Arenys de Mar",
+   "comarca": "21",
+   "province": "08"
+  },
+  {
+   "ine": "08007",
+   "idescat": "080076",
+   "name": "Arenys de Munt",
+   "comarca": "21",
+   "province": "08"
+  },
+  {
+   "ine": "08008",
+   "idescat": "080082",
+   "name": "Argençola",
+   "comarca": "06",
+   "province": "08"
+  },
+  {
+   "ine": "08009",
+   "idescat": "080095",
+   "name": "Argentona",
+   "comarca": "21",
+   "province": "08"
+  },
+  {
+   "ine": "08010",
+   "idescat": "080109",
+   "name": "Artés",
+   "comarca": "07",
+   "province": "08"
+  },
+  {
+   "ine": "08011",
+   "idescat": "080116",
+   "name": "Avià",
+   "comarca": "14",
+   "province": "08"
+  },
+  {
+   "ine": "08012",
+   "idescat": "080121",
+   "name": "Avinyó",
+   "comarca": "07",
+   "province": "08"
+  },
+  {
+   "ine": "08013",
+   "idescat": "080137",
+   "name": "Avinyonet del Penedès",
+   "comarca": "03",
+   "province": "08"
+  },
+  {
+   "ine": "08014",
+   "idescat": "080142",
+   "name": "Aiguafreda",
+   "comarca": "41",
+   "province": "08"
+  },
+  {
+   "ine": "08015",
+   "idescat": "080155",
+   "name": "Badalona",
+   "comarca": "13",
+   "province": "08"
+  },
+  {
+   "ine": "08016",
+   "idescat": "080168",
+   "name": "Bagà",
+   "comarca": "14",
+   "province": "08"
+  },
+  {
+   "ine": "08017",
+   "idescat": "080174",
+   "name": "Balenyà",
+   "comarca": "24",
+   "province": "08"
+  },
+  {
+   "ine": "08018",
+   "idescat": "080180",
+   "name": "Balsareny",
+   "comarca": "07",
+   "province": "08"
+  },
+  {
+   "ine": "08019",
+   "idescat": "080193",
+   "name": "Barcelona",
+   "comarca": "13",
+   "province": "08"
+  },
+  {
+   "ine": "08020",
+   "idescat": "080207",
+   "name": "Begues",
+   "comarca": "11",
+   "province": "08"
+  },
+  {
+   "ine": "08021",
+   "idescat": "080214",
+   "name": "Bellprat",
+   "comarca": "06",
+   "province": "08"
+  },
+  {
+   "ine": "08022",
+   "idescat": "080229",
+   "name": "Berga",
+   "comarca": "14",
+   "province": "08"
+  },
+  {
+   "ine": "08023",
+   "idescat": "080235",
+   "name": "Bigues i Riells del Fai",
+   "comarca": "41",
+   "province": "08"
+  },
+  {
+   "ine": "08024",
+   "idescat": "080240",
+   "name": "Borredà",
+   "comarca": "14",
+   "province": "08"
+  },
+  {
+   "ine": "08025",
+   "idescat": "080253",
+   "name": "el Bruc",
+   "comarca": "06",
+   "province": "08"
+  },
+  {
+   "ine": "08026",
+   "idescat": "080266",
+   "name": "el Brull",
+   "comarca": "24",
+   "province": "08"
+  },
+  {
+   "ine": "08027",
+   "idescat": "080272",
+   "name": "les Cabanyes",
+   "comarca": "03",
+   "province": "08"
+  },
+  {
+   "ine": "08028",
+   "idescat": "080288",
+   "name": "Cabrera d'Anoia",
+   "comarca": "06",
+   "province": "08"
+  },
+  {
+   "ine": "08029",
+   "idescat": "080291",
+   "name": "Cabrera de Mar",
+   "comarca": "21",
+   "province": "08"
+  },
+  {
+   "ine": "08030",
+   "idescat": "080305",
+   "name": "Cabrils",
+   "comarca": "21",
+   "province": "08"
+  },
+  {
+   "ine": "08031",
+   "idescat": "080312",
+   "name": "Calaf",
+   "comarca": "06",
+   "province": "08"
+  },
+  {
+   "ine": "08032",
+   "idescat": "080327",
+   "name": "Caldes d'Estrac",
+   "comarca": "21",
+   "province": "08"
+  },
+  {
+   "ine": "08033",
+   "idescat": "080333",
+   "name": "Caldes de Montbui",
+   "comarca": "41",
+   "province": "08"
+  },
+  {
+   "ine": "08034",
+   "idescat": "080348",
+   "name": "Calders",
+   "comarca": "42",
+   "province": "08"
+  },
+  {
+   "ine": "08035",
+   "idescat": "080351",
+   "name": "Calella",
+   "comarca": "21",
+   "province": "08"
+  },
+  {
+   "ine": "08036",
+   "idescat": "080364",
+   "name": "Calonge de Segarra",
+   "comarca": "06",
+   "province": "08"
+  },
+  {
+   "ine": "08037",
+   "idescat": "080370",
+   "name": "Calldetenes",
+   "comarca": "24",
+   "province": "08"
+  },
+  {
+   "ine": "08038",
+   "idescat": "080386",
+   "name": "Callús",
+   "comarca": "07",
+   "province": "08"
+  },
+  {
+   "ine": "08039",
+   "idescat": "080399",
+   "name": "Campins",
+   "comarca": "41",
+   "province": "08"
+  },
+  {
+   "ine": "08040",
+   "idescat": "080403",
+   "name": "Canet de Mar",
+   "comarca": "21",
+   "province": "08"
+  },
+  {
+   "ine": "08041",
+   "idescat": "080410",
+   "name": "Canovelles",
+   "comarca": "41",
+   "province": "08"
+  },
+  {
+   "ine": "08042",
+   "idescat": "080425",
+   "name": "Cànoves i Samalús",
+   "comarca": "41",
+   "province": "08"
+  },
+  {
+   "ine": "08043",
+   "idescat": "080431",
+   "name": "Canyelles",
+   "comarca": "17",
+   "province": "08"
+  },
+  {
+   "ine": "08044",
+   "idescat": "080446",
+   "name": "Capellades",
+   "comarca": "06",
+   "province": "08"
+  },
+  {
+   "ine": "08045",
+   "idescat": "080459",
+   "name": "Capolat",
+   "comarca": "14",
+   "province": "08"
+  },
+  {
+   "ine": "08046",
+   "idescat": "080462",
+   "name": "Cardedeu",
+   "comarca": "41",
+   "province": "08"
+  },
+  {
+   "ine": "08047",
+   "idescat": "080478",
+   "name": "Cardona",
+   "comarca": "07",
+   "province": "08"
+  },
+  {
+   "ine": "08048",
+   "idescat": "080484",
+   "name": "Carme",
+   "comarca": "06",
+   "province": "08"
+  },
+  {
+   "ine": "08049",
+   "idescat": "080497",
+   "name": "Casserres",
+   "comarca": "14",
+   "province": "08"
+  },
+  {
+   "ine": "08050",
+   "idescat": "080500",
+   "name": "Castellar del Riu",
+   "comarca": "14",
+   "province": "08"
+  },
+  {
+   "ine": "08051",
+   "idescat": "080517",
+   "name": "Castellar del Vallès",
+   "comarca": "40",
+   "province": "08"
+  },
+  {
+   "ine": "08052",
+   "idescat": "080522",
+   "name": "Castellar de n'Hug",
+   "comarca": "14",
+   "province": "08"
+  },
+  {
+   "ine": "08053",
+   "idescat": "080538",
+   "name": "Castellbell i el Vilar",
+   "comarca": "07",
+   "province": "08"
+  },
+  {
+   "ine": "08054",
+   "idescat": "080543",
+   "name": "Castellbisbal",
+   "comarca": "40",
+   "province": "08"
+  },
+  {
+   "ine": "08055",
+   "idescat": "080556",
+   "name": "Castellcir",
+   "comarca": "42",
+   "province": "08"
+  },
+  {
+   "ine": "08056",
+   "idescat": "080569",
+   "name": "Castelldefels",
+   "comarca": "11",
+   "province": "08"
+  },
+  {
+   "ine": "08057",
+   "idescat": "080575",
+   "name": "Castell de l'Areny",
+   "comarca": "14",
+   "province": "08"
+  },
+  {
+   "ine": "08058",
+   "idescat": "080581",
+   "name": "Castellet i la Gornal",
+   "comarca": "03",
+   "province": "08"
+  },
+  {
+   "ine": "08059",
+   "idescat": "080594",
+   "name": "Castellfollit del Boix",
+   "comarca": "07",
+   "province": "08"
+  },
+  {
+   "ine": "08060",
+   "idescat": "080608",
+   "name": "Castellfollit de Riubregós",
+   "comarca": "06",
+   "province": "08"
+  },
+  {
+   "ine": "08061",
+   "idescat": "080615",
+   "name": "Castellgalí",
+   "comarca": "07",
+   "province": "08"
+  },
+  {
+   "ine": "08062",
+   "idescat": "080620",
+   "name": "Castellnou de Bages",
+   "comarca": "07",
+   "province": "08"
+  },
+  {
+   "ine": "08063",
+   "idescat": "080636",
+   "name": "Castellolí",
+   "comarca": "06",
+   "province": "08"
+  },
+  {
+   "ine": "08064",
+   "idescat": "080641",
+   "name": "Castellterçol",
+   "comarca": "42",
+   "province": "08"
+  },
+  {
+   "ine": "08065",
+   "idescat": "080654",
+   "name": "Castellví de la Marca",
+   "comarca": "03",
+   "province": "08"
+  },
+  {
+   "ine": "08066",
+   "idescat": "080667",
+   "name": "Castellví de Rosanes",
+   "comarca": "11",
+   "province": "08"
+  },
+  {
+   "ine": "08067",
+   "idescat": "080673",
+   "name": "Centelles",
+   "comarca": "24",
+   "province": "08"
+  },
+  {
+   "ine": "08068",
+   "idescat": "080689",
+   "name": "Cervelló",
+   "comarca": "11",
+   "province": "08"
+  },
+  {
+   "ine": "08069",
+   "idescat": "080692",
+   "name": "Collbató",
+   "comarca": "11",
+   "province": "08"
+  },
+  {
+   "ine": "08070",
+   "idescat": "080706",
+   "name": "Collsuspina",
+   "comarca": "42",
+   "province": "08"
+  },
+  {
+   "ine": "08071",
+   "idescat": "080713",
+   "name": "Copons",
+   "comarca": "06",
+   "province": "08"
+  },
+  {
+   "ine": "08072",
+   "idescat": "080728",
+   "name": "Corbera de Llobregat",
+   "comarca": "11",
+   "province": "08"
+  },
+  {
+   "ine": "08073",
+   "idescat": "080734",
+   "name": "Cornellà de Llobregat",
+   "comarca": "11",
+   "province": "08"
+  },
+  {
+   "ine": "08074",
+   "idescat": "080749",
+   "name": "Cubelles",
+   "comarca": "17",
+   "province": "08"
+  },
+  {
+   "ine": "08075",
+   "idescat": "080752",
+   "name": "Dosrius",
+   "comarca": "21",
+   "province": "08"
+  },
+  {
+   "ine": "08076",
+   "idescat": "080765",
+   "name": "Esparreguera",
+   "comarca": "11",
+   "province": "08"
+  },
+  {
+   "ine": "08077",
+   "idescat": "080771",
+   "name": "Esplugues de Llobregat",
+   "comarca": "11",
+   "province": "08"
+  },
+  {
+   "ine": "08078",
+   "idescat": "080787",
+   "name": "l'Espunyola",
+   "comarca": "14",
+   "province": "08"
+  },
+  {
+   "ine": "08079",
+   "idescat": "080790",
+   "name": "l'Estany",
+   "comarca": "42",
+   "province": "08"
+  },
+  {
+   "ine": "08080",
+   "idescat": "080804",
+   "name": "Fígols",
+   "comarca": "14",
+   "province": "08"
+  },
+  {
+   "ine": "08081",
+   "idescat": "080811",
+   "name": "Fogars de Montclús",
+   "comarca": "41",
+   "province": "08"
+  },
+  {
+   "ine": "08082",
+   "idescat": "080826",
+   "name": "Fogars de la Selva",
+   "comarca": "34",
+   "province": "08"
+  },
+  {
+   "ine": "08083",
+   "idescat": "080832",
+   "name": "Folgueroles",
+   "comarca": "24",
+   "province": "08"
+  },
+  {
+   "ine": "08084",
+   "idescat": "080847",
+   "name": "Fonollosa",
+   "comarca": "07",
+   "province": "08"
+  },
+  {
+   "ine": "08085",
+   "idescat": "080850",
+   "name": "Font-rubí",
+   "comarca": "03",
+   "province": "08"
+  },
+  {
+   "ine": "08086",
+   "idescat": "080863",
+   "name": "les Franqueses del Vallès",
+   "comarca": "41",
+   "province": "08"
+  },
+  {
+   "ine": "08087",
+   "idescat": "080879",
+   "name": "Gallifa",
+   "comarca": "40",
+   "province": "08"
+  },
+  {
+   "ine": "08088",
+   "idescat": "080885",
+   "name": "la Garriga",
+   "comarca": "41",
+   "province": "08"
+  },
+  {
+   "ine": "08089",
+   "idescat": "080898",
+   "name": "Gavà",
+   "comarca": "11",
+   "province": "08"
+  },
+  {
+   "ine": "08090",
+   "idescat": "080902",
+   "name": "Gaià",
+   "comarca": "07",
+   "province": "08"
+  },
+  {
+   "ine": "08091",
+   "idescat": "080919",
+   "name": "Gelida",
+   "comarca": "03",
+   "province": "08"
+  },
+  {
+   "ine": "08092",
+   "idescat": "080924",
+   "name": "Gironella",
+   "comarca": "14",
+   "province": "08"
+  },
+  {
+   "ine": "08093",
+   "idescat": "080930",
+   "name": "Gisclareny",
+   "comarca": "14",
+   "province": "08"
+  },
+  {
+   "ine": "08094",
+   "idescat": "080945",
+   "name": "la Granada",
+   "comarca": "03",
+   "province": "08"
+  },
+  {
+   "ine": "08095",
+   "idescat": "080958",
+   "name": "Granera",
+   "comarca": "42",
+   "province": "08"
+  },
+  {
+   "ine": "08096",
+   "idescat": "080961",
+   "name": "Granollers",
+   "comarca": "41",
+   "province": "08"
+  },
+  {
+   "ine": "08097",
+   "idescat": "080977",
+   "name": "Gualba",
+   "comarca": "41",
+   "province": "08"
+  },
+  {
+   "ine": "08098",
+   "idescat": "080983",
+   "name": "Sant Salvador de Guardiola",
+   "comarca": "07",
+   "province": "08"
+  },
+  {
+   "ine": "08099",
+   "idescat": "080996",
+   "name": "Guardiola de Berguedà",
+   "comarca": "14",
+   "province": "08"
+  },
+  {
+   "ine": "08100",
+   "idescat": "081000",
+   "name": "Gurb",
+   "comarca": "24",
+   "province": "08"
+  },
+  {
+   "ine": "08101",
+   "idescat": "081017",
+   "name": "l'Hospitalet de Llobregat",
+   "comarca": "13",
+   "province": "08"
+  },
+  {
+   "ine": "08102",
+   "idescat": "081022",
+   "name": "Igualada",
+   "comarca": "06",
+   "province": "08"
+  },
+  {
+   "ine": "08103",
+   "idescat": "081038",
+   "name": "Jorba",
+   "comarca": "06",
+   "province": "08"
+  },
+  {
+   "ine": "08104",
+   "idescat": "081043",
+   "name": "la Llacuna",
+   "comarca": "06",
+   "province": "08"
+  },
+  {
+   "ine": "08105",
+   "idescat": "081056",
+   "name": "la Llagosta",
+   "comarca": "41",
+   "province": "08"
+  },
+  {
+   "ine": "08106",
+   "idescat": "081069",
+   "name": "Llinars del Vallès",
+   "comarca": "41",
+   "province": "08"
+  },
+  {
+   "ine": "08107",
+   "idescat": "081075",
+   "name": "Lliçà d'Amunt",
+   "comarca": "41",
+   "province": "08"
+  },
+  {
+   "ine": "08108",
+   "idescat": "081081",
+   "name": "Lliçà de Vall",
+   "comarca": "41",
+   "province": "08"
+  },
+  {
+   "ine": "08109",
+   "idescat": "081094",
+   "name": "Lluçà",
+   "comarca": "43",
+   "province": "08"
+  },
+  {
+   "ine": "08110",
+   "idescat": "081108",
+   "name": "Malgrat de Mar",
+   "comarca": "21",
+   "province": "08"
+  },
+  {
+   "ine": "08111",
+   "idescat": "081115",
+   "name": "Malla",
+   "comarca": "24",
+   "province": "08"
+  },
+  {
+   "ine": "08112",
+   "idescat": "081120",
+   "name": "Manlleu",
+   "comarca": "24",
+   "province": "08"
+  },
+  {
+   "ine": "08113",
+   "idescat": "081136",
+   "name": "Manresa",
+   "comarca": "07",
+   "province": "08"
+  },
+  {
+   "ine": "08114",
+   "idescat": "081141",
+   "name": "Martorell",
+   "comarca": "11",
+   "province": "08"
+  },
+  {
+   "ine": "08115",
+   "idescat": "081154",
+   "name": "Martorelles",
+   "comarca": "41",
+   "province": "08"
+  },
+  {
+   "ine": "08116",
+   "idescat": "081167",
+   "name": "les Masies de Roda",
+   "comarca": "24",
+   "province": "08"
+  },
+  {
+   "ine": "08117",
+   "idescat": "081173",
+   "name": "les Masies de Voltregà",
+   "comarca": "24",
+   "province": "08"
+  },
+  {
+   "ine": "08118",
+   "idescat": "081189",
+   "name": "el Masnou",
+   "comarca": "21",
+   "province": "08"
+  },
+  {
+   "ine": "08119",
+   "idescat": "081192",
+   "name": "Masquefa",
+   "comarca": "06",
+   "province": "08"
+  },
+  {
+   "ine": "08120",
+   "idescat": "081206",
+   "name": "Matadepera",
+   "comarca": "40",
+   "province": "08"
+  },
+  {
+   "ine": "08121",
+   "idescat": "081213",
+   "name": "Mataró",
+   "comarca": "21",
+   "province": "08"
+  },
+  {
+   "ine": "08122",
+   "idescat": "081228",
+   "name": "Mediona",
+   "comarca": "03",
+   "province": "08"
+  },
+  {
+   "ine": "08123",
+   "idescat": "081234",
+   "name": "Molins de Rei",
+   "comarca": "11",
+   "province": "08"
+  },
+  {
+   "ine": "08124",
+   "idescat": "081249",
+   "name": "Mollet del Vallès",
+   "comarca": "41",
+   "province": "08"
+  },
+  {
+   "ine": "08125",
+   "idescat": "081252",
+   "name": "Montcada i Reixac",
+   "comarca": "40",
+   "province": "08"
+  },
+  {
+   "ine": "08126",
+   "idescat": "081265",
+   "name": "Montgat",
+   "comarca": "21",
+   "province": "08"
+  },
+  {
+   "ine": "08127",
+   "idescat": "081271",
+   "name": "Monistrol de Montserrat",
+   "comarca": "07",
+   "province": "08"
+  },
+  {
+   "ine": "08128",
+   "idescat": "081287",
+   "name": "Monistrol de Calders",
+   "comarca": "42",
+   "province": "08"
+  },
+  {
+   "ine": "08129",
+   "idescat": "081290",
+   "name": "Muntanyola",
+   "comarca": "24",
+   "province": "08"
+  },
+  {
+   "ine": "08130",
+   "idescat": "081304",
+   "name": "Montclar",
+   "comarca": "14",
+   "province": "08"
+  },
+  {
+   "ine": "08131",
+   "idescat": "081311",
+   "name": "Montesquiu",
+   "comarca": "24",
+   "province": "08"
+  },
+  {
+   "ine": "08132",
+   "idescat": "081326",
+   "name": "Montmajor",
+   "comarca": "14",
+   "province": "08"
+  },
+  {
+   "ine": "08133",
+   "idescat": "081332",
+   "name": "Montmaneu",
+   "comarca": "06",
+   "province": "08"
+  },
+  {
+   "ine": "08134",
+   "idescat": "081347",
+   "name": "Figaró-Montmany",
+   "comarca": "41",
+   "province": "08"
+  },
+  {
+   "ine": "08135",
+   "idescat": "081350",
+   "name": "Montmeló",
+   "comarca": "41",
+   "province": "08"
+  },
+  {
+   "ine": "08136",
+   "idescat": "081363",
+   "name": "Montornès del Vallès",
+   "comarca": "41",
+   "province": "08"
+  },
+  {
+   "ine": "08137",
+   "idescat": "081379",
+   "name": "Montseny",
+   "comarca": "41",
+   "province": "08"
+  },
+  {
+   "ine": "08138",
+   "idescat": "081385",
+   "name": "Moià",
+   "comarca": "42",
+   "province": "08"
+  },
+  {
+   "ine": "08139",
+   "idescat": "081398",
+   "name": "Mura",
+   "comarca": "07",
+   "province": "08"
+  },
+  {
+   "ine": "08140",
+   "idescat": "081402",
+   "name": "Navarcles",
+   "comarca": "07",
+   "province": "08"
+  },
+  {
+   "ine": "08141",
+   "idescat": "081419",
+   "name": "Navàs",
+   "comarca": "07",
+   "province": "08"
+  },
+  {
+   "ine": "08142",
+   "idescat": "081424",
+   "name": "la Nou de Berguedà",
+   "comarca": "14",
+   "province": "08"
+  },
+  {
+   "ine": "08143",
+   "idescat": "081430",
+   "name": "Òdena",
+   "comarca": "06",
+   "province": "08"
+  },
+  {
+   "ine": "08144",
+   "idescat": "081445",
+   "name": "Olvan",
+   "comarca": "14",
+   "province": "08"
+  },
+  {
+   "ine": "08145",
+   "idescat": "081458",
+   "name": "Olèrdola",
+   "comarca": "03",
+   "province": "08"
+  },
+  {
+   "ine": "08146",
+   "idescat": "081461",
+   "name": "Olesa de Bonesvalls",
+   "comarca": "03",
+   "province": "08"
+  },
+  {
+   "ine": "08147",
+   "idescat": "081477",
+   "name": "Olesa de Montserrat",
+   "comarca": "11",
+   "province": "08"
+  },
+  {
+   "ine": "08148",
+   "idescat": "081483",
+   "name": "Olivella",
+   "comarca": "17",
+   "province": "08"
+  },
+  {
+   "ine": "08149",
+   "idescat": "081496",
+   "name": "Olost",
+   "comarca": "43",
+   "province": "08"
+  },
+  {
+   "ine": "08150",
+   "idescat": "081509",
+   "name": "Orís",
+   "comarca": "24",
+   "province": "08"
+  },
+  {
+   "ine": "08151",
+   "idescat": "081516",
+   "name": "Oristà",
+   "comarca": "43",
+   "province": "08"
+  },
+  {
+   "ine": "08152",
+   "idescat": "081521",
+   "name": "Orpí",
+   "comarca": "06",
+   "province": "08"
+  },
+  {
+   "ine": "08153",
+   "idescat": "081537",
+   "name": "Òrrius",
+   "comarca": "21",
+   "province": "08"
+  },
+  {
+   "ine": "08154",
+   "idescat": "081542",
+   "name": "Pacs del Penedès",
+   "comarca": "03",
+   "province": "08"
+  },
+  {
+   "ine": "08155",
+   "idescat": "081555",
+   "name": "Palafolls",
+   "comarca": "21",
+   "province": "08"
+  },
+  {
+   "ine": "08156",
+   "idescat": "081568",
+   "name": "Palau-solità i Plegamans",
+   "comarca": "40",
+   "province": "08"
+  },
+  {
+   "ine": "08157",
+   "idescat": "081574",
+   "name": "Pallejà",
+   "comarca": "11",
+   "province": "08"
+  },
+  {
+   "ine": "08158",
+   "idescat": "081580",
+   "name": "el Papiol",
+   "comarca": "11",
+   "province": "08"
+  },
+  {
+   "ine": "08159",
+   "idescat": "081593",
+   "name": "Parets del Vallès",
+   "comarca": "41",
+   "province": "08"
+  },
+  {
+   "ine": "08160",
+   "idescat": "081607",
+   "name": "Perafita",
+   "comarca": "43",
+   "province": "08"
+  },
+  {
+   "ine": "08161",
+   "idescat": "081614",
+   "name": "Piera",
+   "comarca": "06",
+   "province": "08"
+  },
+  {
+   "ine": "08162",
+   "idescat": "081629",
+   "name": "els Hostalets de Pierola",
+   "comarca": "06",
+   "province": "08"
+  },
+  {
+   "ine": "08163",
+   "idescat": "081635",
+   "name": "Pineda de Mar",
+   "comarca": "21",
+   "province": "08"
+  },
+  {
+   "ine": "08164",
+   "idescat": "081640",
+   "name": "el Pla del Penedès",
+   "comarca": "03",
+   "province": "08"
+  },
+  {
+   "ine": "08165",
+   "idescat": "081653",
+   "name": "la Pobla de Claramunt",
+   "comarca": "06",
+   "province": "08"
+  },
+  {
+   "ine": "08166",
+   "idescat": "081666",
+   "name": "la Pobla de Lillet",
+   "comarca": "14",
+   "province": "08"
+  },
+  {
+   "ine": "08167",
+   "idescat": "081672",
+   "name": "Polinyà",
+   "comarca": "40",
+   "province": "08"
+  },
+  {
+   "ine": "08168",
+   "idescat": "081688",
+   "name": "Pontons",
+   "comarca": "03",
+   "province": "08"
+  },
+  {
+   "ine": "08169",
+   "idescat": "081691",
+   "name": "el Prat de Llobregat",
+   "comarca": "11",
+   "province": "08"
+  },
+  {
+   "ine": "08170",
+   "idescat": "081705",
+   "name": "els Prats de Rei",
+   "comarca": "06",
+   "province": "08"
+  },
+  {
+   "ine": "08171",
+   "idescat": "081712",
+   "name": "Prats de Lluçanès",
+   "comarca": "43",
+   "province": "08"
+  },
+  {
+   "ine": "08172",
+   "idescat": "081727",
+   "name": "Premià de Mar",
+   "comarca": "21",
+   "province": "08"
+  },
+  {
+   "ine": "08174",
+   "idescat": "081748",
+   "name": "Puigdàlber",
+   "comarca": "03",
+   "province": "08"
+  },
+  {
+   "ine": "08175",
+   "idescat": "081751",
+   "name": "Puig-reig",
+   "comarca": "14",
+   "province": "08"
+  },
+  {
+   "ine": "08176",
+   "idescat": "081764",
+   "name": "Pujalt",
+   "comarca": "06",
+   "province": "08"
+  },
+  {
+   "ine": "08177",
+   "idescat": "081770",
+   "name": "la Quar",
+   "comarca": "14",
+   "province": "08"
+  },
+  {
+   "ine": "08178",
+   "idescat": "081786",
+   "name": "Rajadell",
+   "comarca": "07",
+   "province": "08"
+  },
+  {
+   "ine": "08179",
+   "idescat": "081799",
+   "name": "Rellinars",
+   "comarca": "40",
+   "province": "08"
+  },
+  {
+   "ine": "08180",
+   "idescat": "081803",
+   "name": "Ripollet",
+   "comarca": "40",
+   "province": "08"
+  },
+  {
+   "ine": "08181",
+   "idescat": "081810",
+   "name": "la Roca del Vallès",
+   "comarca": "41",
+   "province": "08"
+  },
+  {
+   "ine": "08182",
+   "idescat": "081825",
+   "name": "el Pont de Vilomara i Rocafort",
+   "comarca": "07",
+   "province": "08"
+  },
+  {
+   "ine": "08183",
+   "idescat": "081831",
+   "name": "Roda de Ter",
+   "comarca": "24",
+   "province": "08"
+  },
+  {
+   "ine": "08184",
+   "idescat": "081846",
+   "name": "Rubí",
+   "comarca": "40",
+   "province": "08"
+  },
+  {
+   "ine": "08185",
+   "idescat": "081859",
+   "name": "Rubió",
+   "comarca": "06",
+   "province": "08"
+  },
+  {
+   "ine": "08187",
+   "idescat": "081878",
+   "name": "Sabadell",
+   "comarca": "40",
+   "province": "08"
+  },
+  {
+   "ine": "08188",
+   "idescat": "081884",
+   "name": "Sagàs",
+   "comarca": "14",
+   "province": "08"
+  },
+  {
+   "ine": "08189",
+   "idescat": "081897",
+   "name": "Sant Pere Sallavinera",
+   "comarca": "06",
+   "province": "08"
+  },
+  {
+   "ine": "08190",
+   "idescat": "081901",
+   "name": "Saldes",
+   "comarca": "14",
+   "province": "08"
+  },
+  {
+   "ine": "08191",
+   "idescat": "081918",
+   "name": "Sallent",
+   "comarca": "07",
+   "province": "08"
+  },
+  {
+   "ine": "08192",
+   "idescat": "081923",
+   "name": "Santpedor",
+   "comarca": "07",
+   "province": "08"
+  },
+  {
+   "ine": "08193",
+   "idescat": "081939",
+   "name": "Sant Iscle de Vallalta",
+   "comarca": "21",
+   "province": "08"
+  },
+  {
+   "ine": "08194",
+   "idescat": "081944",
+   "name": "Sant Adrià de Besòs",
+   "comarca": "13",
+   "province": "08"
+  },
+  {
+   "ine": "08195",
+   "idescat": "081957",
+   "name": "Sant Agustí de Lluçanès",
+   "comarca": "24",
+   "province": "08"
+  },
+  {
+   "ine": "08196",
+   "idescat": "081960",
+   "name": "Sant Andreu de la Barca",
+   "comarca": "11",
+   "province": "08"
+  },
+  {
+   "ine": "08197",
+   "idescat": "081976",
+   "name": "Sant Andreu de Llavaneres",
+   "comarca": "21",
+   "province": "08"
+  },
+  {
+   "ine": "08198",
+   "idescat": "081982",
+   "name": "Sant Antoni de Vilamajor",
+   "comarca": "41",
+   "province": "08"
+  },
+  {
+   "ine": "08199",
+   "idescat": "081995",
+   "name": "Sant Bartomeu del Grau",
+   "comarca": "24",
+   "province": "08"
+  },
+  {
+   "ine": "08200",
+   "idescat": "082009",
+   "name": "Sant Boi de Llobregat",
+   "comarca": "11",
+   "province": "08"
+  },
+  {
+   "ine": "08201",
+   "idescat": "082016",
+   "name": "Sant Boi de Lluçanès",
+   "comarca": "24",
+   "province": "08"
+  },
+  {
+   "ine": "08202",
+   "idescat": "082021",
+   "name": "Sant Celoni",
+   "comarca": "41",
+   "province": "08"
+  },
+  {
+   "ine": "08203",
+   "idescat": "082037",
+   "name": "Sant Cebrià de Vallalta",
+   "comarca": "21",
+   "province": "08"
+  },
+  {
+   "ine": "08204",
+   "idescat": "082042",
+   "name": "Sant Climent de Llobregat",
+   "comarca": "11",
+   "province": "08"
+  },
+  {
+   "ine": "08205",
+   "idescat": "082055",
+   "name": "Sant Cugat del Vallès",
+   "comarca": "40",
+   "province": "08"
+  },
+  {
+   "ine": "08206",
+   "idescat": "082068",
+   "name": "Sant Cugat Sesgarrigues",
+   "comarca": "03",
+   "province": "08"
+  },
+  {
+   "ine": "08207",
+   "idescat": "082074",
+   "name": "Sant Esteve de Palautordera",
+   "comarca": "41",
+   "province": "08"
+  },
+  {
+   "ine": "08208",
+   "idescat": "082080",
+   "name": "Sant Esteve Sesrovires",
+   "comarca": "11",
+   "province": "08"
+  },
+  {
+   "ine": "08209",
+   "idescat": "082093",
+   "name": "Sant Fost de Campsentelles",
+   "comarca": "41",
+   "province": "08"
+  },
+  {
+   "ine": "08210",
+   "idescat": "082107",
+   "name": "Sant Feliu de Codines",
+   "comarca": "41",
+   "province": "08"
+  },
+  {
+   "ine": "08211",
+   "idescat": "082114",
+   "name": "Sant Feliu de Llobregat",
+   "comarca": "11",
+   "province": "08"
+  },
+  {
+   "ine": "08212",
+   "idescat": "082129",
+   "name": "Sant Feliu Sasserra",
+   "comarca": "07",
+   "province": "08"
+  },
+  {
+   "ine": "08213",
+   "idescat": "082135",
+   "name": "Sant Fruitós de Bages",
+   "comarca": "07",
+   "province": "08"
+  },
+  {
+   "ine": "08214",
+   "idescat": "082140",
+   "name": "Vilassar de Dalt",
+   "comarca": "21",
+   "province": "08"
+  },
+  {
+   "ine": "08215",
+   "idescat": "082153",
+   "name": "Sant Hipòlit de Voltregà",
+   "comarca": "24",
+   "province": "08"
+  },
+  {
+   "ine": "08216",
+   "idescat": "082166",
+   "name": "Sant Jaume de Frontanyà",
+   "comarca": "14",
+   "province": "08"
+  },
+  {
+   "ine": "08217",
+   "idescat": "082172",
+   "name": "Sant Joan Despí",
+   "comarca": "11",
+   "province": "08"
+  },
+  {
+   "ine": "08218",
+   "idescat": "082188",
+   "name": "Sant Joan de Vilatorrada",
+   "comarca": "07",
+   "province": "08"
+  },
+  {
+   "ine": "08219",
+   "idescat": "082191",
+   "name": "Vilassar de Mar",
+   "comarca": "21",
+   "province": "08"
+  },
+  {
+   "ine": "08220",
+   "idescat": "082205",
+   "name": "Sant Julià de Vilatorta",
+   "comarca": "24",
+   "province": "08"
+  },
+  {
+   "ine": "08221",
+   "idescat": "082212",
+   "name": "Sant Just Desvern",
+   "comarca": "11",
+   "province": "08"
+  },
+  {
+   "ine": "08222",
+   "idescat": "082227",
+   "name": "Sant Llorenç d'Hortons",
+   "comarca": "03",
+   "province": "08"
+  },
+  {
+   "ine": "08223",
+   "idescat": "082233",
+   "name": "Sant Llorenç Savall",
+   "comarca": "40",
+   "province": "08"
+  },
+  {
+   "ine": "08224",
+   "idescat": "082248",
+   "name": "Sant Martí de Centelles",
+   "comarca": "24",
+   "province": "08"
+  },
+  {
+   "ine": "08225",
+   "idescat": "082251",
+   "name": "Sant Martí d'Albars",
+   "comarca": "43",
+   "province": "08"
+  },
+  {
+   "ine": "08226",
+   "idescat": "082264",
+   "name": "Sant Martí de Tous",
+   "comarca": "06",
+   "province": "08"
+  },
+  {
+   "ine": "08227",
+   "idescat": "082270",
+   "name": "Sant Martí Sarroca",
+   "comarca": "03",
+   "province": "08"
+  },
+  {
+   "ine": "08228",
+   "idescat": "082286",
+   "name": "Sant Martí Sesgueioles",
+   "comarca": "06",
+   "province": "08"
+  },
+  {
+   "ine": "08229",
+   "idescat": "082299",
+   "name": "Sant Mateu de Bages",
+   "comarca": "07",
+   "province": "08"
+  },
+  {
+   "ine": "08230",
+   "idescat": "082303",
+   "name": "Premià de Dalt",
+   "comarca": "21",
+   "province": "08"
+  },
+  {
+   "ine": "08231",
+   "idescat": "082310",
+   "name": "Sant Pere de Ribes",
+   "comarca": "17",
+   "province": "08"
+  },
+  {
+   "ine": "08232",
+   "idescat": "082325",
+   "name": "Sant Pere de Riudebitlles",
+   "comarca": "03",
+   "province": "08"
+  },
+  {
+   "ine": "08233",
+   "idescat": "082331",
+   "name": "Sant Pere de Torelló",
+   "comarca": "24",
+   "province": "08"
+  },
+  {
+   "ine": "08234",
+   "idescat": "082346",
+   "name": "Sant Pere de Vilamajor",
+   "comarca": "41",
+   "province": "08"
+  },
+  {
+   "ine": "08235",
+   "idescat": "082359",
+   "name": "Sant Pol de Mar",
+   "comarca": "21",
+   "province": "08"
+  },
+  {
+   "ine": "08236",
+   "idescat": "082362",
+   "name": "Sant Quintí de Mediona",
+   "comarca": "03",
+   "province": "08"
+  },
+  {
+   "ine": "08237",
+   "idescat": "082378",
+   "name": "Sant Quirze de Besora",
+   "comarca": "24",
+   "province": "08"
+  },
+  {
+   "ine": "08238",
+   "idescat": "082384",
+   "name": "Sant Quirze del Vallès",
+   "comarca": "40",
+   "province": "08"
+  },
+  {
+   "ine": "08239",
+   "idescat": "082397",
+   "name": "Sant Quirze Safaja",
+   "comarca": "42",
+   "province": "08"
+  },
+  {
+   "ine": "08240",
+   "idescat": "082401",
+   "name": "Sant Sadurní d'Anoia",
+   "comarca": "03",
+   "province": "08"
+  },
+  {
+   "ine": "08241",
+   "idescat": "082418",
+   "name": "Sant Sadurní d'Osormort",
+   "comarca": "24",
+   "province": "08"
+  },
+  {
+   "ine": "08242",
+   "idescat": "082423",
+   "name": "Marganell",
+   "comarca": "07",
+   "province": "08"
+  },
+  {
+   "ine": "08243",
+   "idescat": "082439",
+   "name": "Santa Cecília de Voltregà",
+   "comarca": "24",
+   "province": "08"
+  },
+  {
+   "ine": "08244",
+   "idescat": "082444",
+   "name": "Santa Coloma de Cervelló",
+   "comarca": "11",
+   "province": "08"
+  },
+  {
+   "ine": "08245",
+   "idescat": "082457",
+   "name": "Santa Coloma de Gramenet",
+   "comarca": "13",
+   "province": "08"
+  },
+  {
+   "ine": "08246",
+   "idescat": "082460",
+   "name": "Santa Eugènia de Berga",
+   "comarca": "24",
+   "province": "08"
+  },
+  {
+   "ine": "08247",
+   "idescat": "082476",
+   "name": "Santa Eulàlia de Riuprimer",
+   "comarca": "24",
+   "province": "08"
+  },
+  {
+   "ine": "08248",
+   "idescat": "082482",
+   "name": "Santa Eulàlia de Ronçana",
+   "comarca": "41",
+   "province": "08"
+  },
+  {
+   "ine": "08249",
+   "idescat": "082495",
+   "name": "Santa Fe del Penedès",
+   "comarca": "03",
+   "province": "08"
+  },
+  {
+   "ine": "08250",
+   "idescat": "082508",
+   "name": "Santa Margarida de Montbui",
+   "comarca": "06",
+   "province": "08"
+  },
+  {
+   "ine": "08251",
+   "idescat": "082515",
+   "name": "Santa Margarida i els Monjos",
+   "comarca": "03",
+   "province": "08"
+  },
+  {
+   "ine": "08252",
+   "idescat": "082520",
+   "name": "Barberà del Vallès",
+   "comarca": "40",
+   "province": "08"
+  },
+  {
+   "ine": "08253",
+   "idescat": "082536",
+   "name": "Santa Maria de Besora",
+   "comarca": "24",
+   "province": "08"
+  },
+  {
+   "ine": "08254",
+   "idescat": "082541",
+   "name": "l'Esquirol",
+   "comarca": "24",
+   "province": "08"
+  },
+  {
+   "ine": "08255",
+   "idescat": "082554",
+   "name": "Santa Maria de Merlès",
+   "comarca": "14",
+   "province": "08"
+  },
+  {
+   "ine": "08256",
+   "idescat": "082567",
+   "name": "Santa Maria de Martorelles",
+   "comarca": "41",
+   "province": "08"
+  },
+  {
+   "ine": "08257",
+   "idescat": "082573",
+   "name": "Santa Maria de Miralles",
+   "comarca": "06",
+   "province": "08"
+  },
+  {
+   "ine": "08258",
+   "idescat": "082589",
+   "name": "Santa Maria d'Oló",
+   "comarca": "42",
+   "province": "08"
+  },
+  {
+   "ine": "08259",
+   "idescat": "082592",
+   "name": "Santa Maria de Palautordera",
+   "comarca": "41",
+   "province": "08"
+  },
+  {
+   "ine": "08260",
+   "idescat": "082606",
+   "name": "Santa Perpètua de Mogoda",
+   "comarca": "40",
+   "province": "08"
+  },
+  {
+   "ine": "08261",
+   "idescat": "082613",
+   "name": "Santa Susanna",
+   "comarca": "21",
+   "province": "08"
+  },
+  {
+   "ine": "08262",
+   "idescat": "082628",
+   "name": "Sant Vicenç de Castellet",
+   "comarca": "07",
+   "province": "08"
+  },
+  {
+   "ine": "08263",
+   "idescat": "082634",
+   "name": "Sant Vicenç dels Horts",
+   "comarca": "11",
+   "province": "08"
+  },
+  {
+   "ine": "08264",
+   "idescat": "082649",
+   "name": "Sant Vicenç de Montalt",
+   "comarca": "21",
+   "province": "08"
+  },
+  {
+   "ine": "08265",
+   "idescat": "082652",
+   "name": "Sant Vicenç de Torelló",
+   "comarca": "24",
+   "province": "08"
+  },
+  {
+   "ine": "08266",
+   "idescat": "082665",
+   "name": "Cerdanyola del Vallès",
+   "comarca": "40",
+   "province": "08"
+  },
+  {
+   "ine": "08267",
+   "idescat": "082671",
+   "name": "Sentmenat",
+   "comarca": "40",
+   "province": "08"
+  },
+  {
+   "ine": "08268",
+   "idescat": "082687",
+   "name": "Cercs",
+   "comarca": "14",
+   "province": "08"
+  },
+  {
+   "ine": "08269",
+   "idescat": "082690",
+   "name": "Seva",
+   "comarca": "24",
+   "province": "08"
+  },
+  {
+   "ine": "08270",
+   "idescat": "082704",
+   "name": "Sitges",
+   "comarca": "17",
+   "province": "08"
+  },
+  {
+   "ine": "08271",
+   "idescat": "082711",
+   "name": "Sobremunt",
+   "comarca": "43",
+   "province": "08"
+  },
+  {
+   "ine": "08272",
+   "idescat": "082726",
+   "name": "Sora",
+   "comarca": "24",
+   "province": "08"
+  },
+  {
+   "ine": "08273",
+   "idescat": "082732",
+   "name": "Subirats",
+   "comarca": "03",
+   "province": "08"
+  },
+  {
+   "ine": "08274",
+   "idescat": "082747",
+   "name": "Súria",
+   "comarca": "07",
+   "province": "08"
+  },
+  {
+   "ine": "08275",
+   "idescat": "082750",
+   "name": "Tavèrnoles",
+   "comarca": "24",
+   "province": "08"
+  },
+  {
+   "ine": "08276",
+   "idescat": "082763",
+   "name": "Tagamanent",
+   "comarca": "41",
+   "province": "08"
+  },
+  {
+   "ine": "08277",
+   "idescat": "082779",
+   "name": "Talamanca",
+   "comarca": "07",
+   "province": "08"
+  },
+  {
+   "ine": "08278",
+   "idescat": "082785",
+   "name": "Taradell",
+   "comarca": "24",
+   "province": "08"
+  },
+  {
+   "ine": "08279",
+   "idescat": "082798",
+   "name": "Terrassa",
+   "comarca": "40",
+   "province": "08"
+  },
+  {
+   "ine": "08280",
+   "idescat": "082802",
+   "name": "Tavertet",
+   "comarca": "24",
+   "province": "08"
+  },
+  {
+   "ine": "08281",
+   "idescat": "082819",
+   "name": "Teià",
+   "comarca": "21",
+   "province": "08"
+  },
+  {
+   "ine": "08282",
+   "idescat": "082824",
+   "name": "Tiana",
+   "comarca": "21",
+   "province": "08"
+  },
+  {
+   "ine": "08283",
+   "idescat": "082830",
+   "name": "Tona",
+   "comarca": "24",
+   "province": "08"
+  },
+  {
+   "ine": "08284",
+   "idescat": "082845",
+   "name": "Tordera",
+   "comarca": "21",
+   "province": "08"
+  },
+  {
+   "ine": "08285",
+   "idescat": "082858",
+   "name": "Torelló",
+   "comarca": "24",
+   "province": "08"
+  },
+  {
+   "ine": "08286",
+   "idescat": "082861",
+   "name": "la Torre de Claramunt",
+   "comarca": "06",
+   "province": "08"
+  },
+  {
+   "ine": "08287",
+   "idescat": "082877",
+   "name": "Torrelavit",
+   "comarca": "03",
+   "province": "08"
+  },
+  {
+   "ine": "08288",
+   "idescat": "082883",
+   "name": "Torrelles de Foix",
+   "comarca": "03",
+   "province": "08"
+  },
+  {
+   "ine": "08289",
+   "idescat": "082896",
+   "name": "Torrelles de Llobregat",
+   "comarca": "11",
+   "province": "08"
+  },
+  {
+   "ine": "08290",
+   "idescat": "082900",
+   "name": "Ullastrell",
+   "comarca": "40",
+   "province": "08"
+  },
+  {
+   "ine": "08291",
+   "idescat": "082917",
+   "name": "Vacarisses",
+   "comarca": "40",
+   "province": "08"
+  },
+  {
+   "ine": "08292",
+   "idescat": "082922",
+   "name": "Vallbona d'Anoia",
+   "comarca": "06",
+   "province": "08"
+  },
+  {
+   "ine": "08293",
+   "idescat": "082938",
+   "name": "Vallcebre",
+   "comarca": "14",
+   "province": "08"
+  },
+  {
+   "ine": "08294",
+   "idescat": "082943",
+   "name": "Vallgorguina",
+   "comarca": "41",
+   "province": "08"
+  },
+  {
+   "ine": "08295",
+   "idescat": "082956",
+   "name": "Vallirana",
+   "comarca": "11",
+   "province": "08"
+  },
+  {
+   "ine": "08296",
+   "idescat": "082969",
+   "name": "Vallromanes",
+   "comarca": "41",
+   "province": "08"
+  },
+  {
+   "ine": "08297",
+   "idescat": "082975",
+   "name": "Veciana",
+   "comarca": "06",
+   "province": "08"
+  },
+  {
+   "ine": "08298",
+   "idescat": "082981",
+   "name": "Vic",
+   "comarca": "24",
+   "province": "08"
+  },
+  {
+   "ine": "08299",
+   "idescat": "082994",
+   "name": "Vilada",
+   "comarca": "14",
+   "province": "08"
+  },
+  {
+   "ine": "08300",
+   "idescat": "083008",
+   "name": "Viladecavalls",
+   "comarca": "40",
+   "province": "08"
+  },
+  {
+   "ine": "08301",
+   "idescat": "083015",
+   "name": "Viladecans",
+   "comarca": "11",
+   "province": "08"
+  },
+  {
+   "ine": "08302",
+   "idescat": "083020",
+   "name": "Vilanova del Camí",
+   "comarca": "06",
+   "province": "08"
+  },
+  {
+   "ine": "08303",
+   "idescat": "083036",
+   "name": "Vilanova de Sau",
+   "comarca": "24",
+   "province": "08"
+  },
+  {
+   "ine": "08304",
+   "idescat": "083041",
+   "name": "Vilobí del Penedès",
+   "comarca": "03",
+   "province": "08"
+  },
+  {
+   "ine": "08305",
+   "idescat": "083054",
+   "name": "Vilafranca del Penedès",
+   "comarca": "03",
+   "province": "08"
+  },
+  {
+   "ine": "08306",
+   "idescat": "083067",
+   "name": "Vilalba Sasserra",
+   "comarca": "41",
+   "province": "08"
+  },
+  {
+   "ine": "08307",
+   "idescat": "083073",
+   "name": "Vilanova i la Geltrú",
+   "comarca": "17",
+   "province": "08"
+  },
+  {
+   "ine": "08308",
+   "idescat": "083089",
+   "name": "Viver i Serrateix",
+   "comarca": "14",
+   "province": "08"
+  },
+  {
+   "ine": "08901",
+   "idescat": "089019",
+   "name": "Rupit i Pruit",
+   "comarca": "24",
+   "province": "08"
+  },
+  {
+   "ine": "08902",
+   "idescat": "089024",
+   "name": "Vilanova del Vallès",
+   "comarca": "41",
+   "province": "08"
+  },
+  {
+   "ine": "08903",
+   "idescat": "089030",
+   "name": "Sant Julià de Cerdanyola",
+   "comarca": "14",
+   "province": "08"
+  },
+  {
+   "ine": "08904",
+   "idescat": "089045",
+   "name": "Badia del Vallès",
+   "comarca": "40",
+   "province": "08"
+  },
+  {
+   "ine": "08905",
+   "idescat": "089058",
+   "name": "la Palma de Cervelló",
+   "comarca": "11",
+   "province": "08"
+  },
+  {
+   "ine": "17001",
+   "idescat": "170010",
+   "name": "Agullana",
+   "comarca": "02",
+   "province": "17"
+  },
+  {
+   "ine": "17002",
+   "idescat": "170025",
+   "name": "Aiguaviva",
+   "comarca": "20",
+   "province": "17"
+  },
+  {
+   "ine": "17003",
+   "idescat": "170031",
+   "name": "Albanyà",
+   "comarca": "02",
+   "province": "17"
+  },
+  {
+   "ine": "17004",
+   "idescat": "170046",
+   "name": "Albons",
+   "comarca": "10",
+   "province": "17"
+  },
+  {
+   "ine": "17005",
+   "idescat": "170059",
+   "name": "el Far d'Empordà",
+   "comarca": "02",
+   "province": "17"
+  },
+  {
+   "ine": "17006",
+   "idescat": "170062",
+   "name": "Alp",
+   "comarca": "15",
+   "province": "17"
+  },
+  {
+   "ine": "17007",
+   "idescat": "170078",
+   "name": "Amer",
+   "comarca": "34",
+   "province": "17"
+  },
+  {
+   "ine": "17008",
+   "idescat": "170084",
+   "name": "Anglès",
+   "comarca": "34",
+   "province": "17"
+  },
+  {
+   "ine": "17009",
+   "idescat": "170097",
+   "name": "Arbúcies",
+   "comarca": "34",
+   "province": "17"
+  },
+  {
+   "ine": "17010",
+   "idescat": "170101",
+   "name": "Argelaguer",
+   "comarca": "19",
+   "province": "17"
+  },
+  {
+   "ine": "17011",
+   "idescat": "170118",
+   "name": "l'Armentera",
+   "comarca": "02",
+   "province": "17"
+  },
+  {
+   "ine": "17012",
+   "idescat": "170123",
+   "name": "Avinyonet de Puigventós",
+   "comarca": "02",
+   "province": "17"
+  },
+  {
+   "ine": "17013",
+   "idescat": "170139",
+   "name": "Begur",
+   "comarca": "10",
+   "province": "17"
+  },
+  {
+   "ine": "17014",
+   "idescat": "170144",
+   "name": "la Vajol",
+   "comarca": "02",
+   "province": "17"
+  },
+  {
+   "ine": "17015",
+   "idescat": "170157",
+   "name": "Banyoles",
+   "comarca": "28",
+   "province": "17"
+  },
+  {
+   "ine": "17016",
+   "idescat": "170160",
+   "name": "Bàscara",
+   "comarca": "02",
+   "province": "17"
+  },
+  {
+   "ine": "17018",
+   "idescat": "170182",
+   "name": "Bellcaire d'Empordà",
+   "comarca": "10",
+   "province": "17"
+  },
+  {
+   "ine": "17019",
+   "idescat": "170195",
+   "name": "Besalú",
+   "comarca": "19",
+   "province": "17"
+  },
+  {
+   "ine": "17020",
+   "idescat": "170209",
+   "name": "Bescanó",
+   "comarca": "20",
+   "province": "17"
+  },
+  {
+   "ine": "17021",
+   "idescat": "170216",
+   "name": "Beuda",
+   "comarca": "19",
+   "province": "17"
+  },
+  {
+   "ine": "17022",
+   "idescat": "170221",
+   "name": "la Bisbal d'Empordà",
+   "comarca": "10",
+   "province": "17"
+  },
+  {
+   "ine": "17023",
+   "idescat": "170237",
+   "name": "Blanes",
+   "comarca": "34",
+   "province": "17"
+  },
+  {
+   "ine": "17024",
+   "idescat": "170242",
+   "name": "Bolvir",
+   "comarca": "15",
+   "province": "17"
+  },
+  {
+   "ine": "17025",
+   "idescat": "170255",
+   "name": "Bordils",
+   "comarca": "20",
+   "province": "17"
+  },
+  {
+   "ine": "17026",
+   "idescat": "170268",
+   "name": "Borrassà",
+   "comarca": "02",
+   "province": "17"
+  },
+  {
+   "ine": "17027",
+   "idescat": "170274",
+   "name": "Breda",
+   "comarca": "34",
+   "province": "17"
+  },
+  {
+   "ine": "17028",
+   "idescat": "170280",
+   "name": "Brunyola i Sant Martí Sapresa",
+   "comarca": "34",
+   "province": "17"
+  },
+  {
+   "ine": "17029",
+   "idescat": "170293",
+   "name": "Boadella i les Escaules",
+   "comarca": "02",
+   "province": "17"
+  },
+  {
+   "ine": "17030",
+   "idescat": "170307",
+   "name": "Cabanes",
+   "comarca": "02",
+   "province": "17"
+  },
+  {
+   "ine": "17031",
+   "idescat": "170314",
+   "name": "Cabanelles",
+   "comarca": "02",
+   "province": "17"
+  },
+  {
+   "ine": "17032",
+   "idescat": "170329",
+   "name": "Cadaqués",
+   "comarca": "02",
+   "province": "17"
+  },
+  {
+   "ine": "17033",
+   "idescat": "170335",
+   "name": "Caldes de Malavella",
+   "comarca": "34",
+   "province": "17"
+  },
+  {
+   "ine": "17034",
+   "idescat": "170340",
+   "name": "Calonge i Sant Antoni",
+   "comarca": "10",
+   "province": "17"
+  },
+  {
+   "ine": "17035",
+   "idescat": "170353",
+   "name": "Camós",
+   "comarca": "28",
+   "province": "17"
+  },
+  {
+   "ine": "17036",
+   "idescat": "170366",
+   "name": "Campdevànol",
+   "comarca": "31",
+   "province": "17"
+  },
+  {
+   "ine": "17037",
+   "idescat": "170372",
+   "name": "Campelles",
+   "comarca": "31",
+   "province": "17"
+  },
+  {
+   "ine": "17038",
+   "idescat": "170388",
+   "name": "Campllong",
+   "comarca": "20",
+   "province": "17"
+  },
+  {
+   "ine": "17039",
+   "idescat": "170391",
+   "name": "Camprodon",
+   "comarca": "31",
+   "province": "17"
+  },
+  {
+   "ine": "17040",
+   "idescat": "170405",
+   "name": "Canet d'Adri",
+   "comarca": "20",
+   "province": "17"
+  },
+  {
+   "ine": "17041",
+   "idescat": "170412",
+   "name": "Cantallops",
+   "comarca": "02",
+   "province": "17"
+  },
+  {
+   "ine": "17042",
+   "idescat": "170427",
+   "name": "Capmany",
+   "comarca": "02",
+   "province": "17"
+  },
+  {
+   "ine": "17043",
+   "idescat": "170433",
+   "name": "Queralbs",
+   "comarca": "31",
+   "province": "17"
+  },
+  {
+   "ine": "17044",
+   "idescat": "170448",
+   "name": "Cassà de la Selva",
+   "comarca": "20",
+   "province": "17"
+  },
+  {
+   "ine": "17046",
+   "idescat": "170464",
+   "name": "Castellfollit de la Roca",
+   "comarca": "19",
+   "province": "17"
+  },
+  {
+   "ine": "17047",
+   "idescat": "170470",
+   "name": "Castelló d'Empúries",
+   "comarca": "02",
+   "province": "17"
+  },
+  {
+   "ine": "17048",
+   "idescat": "170486",
+   "name": "Castell d'Aro, Platja d'Aro i s'Agaró",
+   "comarca": "10",
+   "province": "17"
+  },
+  {
+   "ine": "17049",
+   "idescat": "170499",
+   "name": "Celrà",
+   "comarca": "20",
+   "province": "17"
+  },
+  {
+   "ine": "17050",
+   "idescat": "170502",
+   "name": "Cervià de Ter",
+   "comarca": "20",
+   "province": "17"
+  },
+  {
+   "ine": "17051",
+   "idescat": "170519",
+   "name": "Cistella",
+   "comarca": "02",
+   "province": "17"
+  },
+  {
+   "ine": "17052",
+   "idescat": "170524",
+   "name": "Siurana",
+   "comarca": "02",
+   "province": "17"
+  },
+  {
+   "ine": "17054",
+   "idescat": "170545",
+   "name": "Colera",
+   "comarca": "02",
+   "province": "17"
+  },
+  {
+   "ine": "17055",
+   "idescat": "170558",
+   "name": "Colomers",
+   "comarca": "10",
+   "province": "17"
+  },
+  {
+   "ine": "17056",
+   "idescat": "170561",
+   "name": "Cornellà del Terri",
+   "comarca": "28",
+   "province": "17"
+  },
+  {
+   "ine": "17057",
+   "idescat": "170577",
+   "name": "Corçà",
+   "comarca": "10",
+   "province": "17"
+  },
+  {
+   "ine": "17058",
+   "idescat": "170583",
+   "name": "Crespià",
+   "comarca": "28",
+   "province": "17"
+  },
+  {
+   "ine": "17060",
+   "idescat": "170600",
+   "name": "Darnius",
+   "comarca": "02",
+   "province": "17"
+  },
+  {
+   "ine": "17061",
+   "idescat": "170617",
+   "name": "Das",
+   "comarca": "15",
+   "province": "17"
+  },
+  {
+   "ine": "17062",
+   "idescat": "170622",
+   "name": "l'Escala",
+   "comarca": "02",
+   "province": "17"
+  },
+  {
+   "ine": "17063",
+   "idescat": "170638",
+   "name": "Espinelves",
+   "comarca": "24",
+   "province": "17"
+  },
+  {
+   "ine": "17064",
+   "idescat": "170643",
+   "name": "Espolla",
+   "comarca": "02",
+   "province": "17"
+  },
+  {
+   "ine": "17065",
+   "idescat": "170656",
+   "name": "Esponellà",
+   "comarca": "28",
+   "province": "17"
+  },
+  {
+   "ine": "17066",
+   "idescat": "170669",
+   "name": "Figueres",
+   "comarca": "02",
+   "province": "17"
+  },
+  {
+   "ine": "17067",
+   "idescat": "170675",
+   "name": "Flaçà",
+   "comarca": "20",
+   "province": "17"
+  },
+  {
+   "ine": "17068",
+   "idescat": "170681",
+   "name": "Foixà",
+   "comarca": "10",
+   "province": "17"
+  },
+  {
+   "ine": "17069",
+   "idescat": "170694",
+   "name": "Fontanals de Cerdanya",
+   "comarca": "15",
+   "province": "17"
+  },
+  {
+   "ine": "17070",
+   "idescat": "170708",
+   "name": "Fontanilles",
+   "comarca": "10",
+   "province": "17"
+  },
+  {
+   "ine": "17071",
+   "idescat": "170715",
+   "name": "Fontcoberta",
+   "comarca": "28",
+   "province": "17"
+  },
+  {
+   "ine": "17073",
+   "idescat": "170736",
+   "name": "Fornells de la Selva",
+   "comarca": "20",
+   "province": "17"
+  },
+  {
+   "ine": "17074",
+   "idescat": "170741",
+   "name": "Fortià",
+   "comarca": "02",
+   "province": "17"
+  },
+  {
+   "ine": "17075",
+   "idescat": "170754",
+   "name": "Garrigàs",
+   "comarca": "02",
+   "province": "17"
+  },
+  {
+   "ine": "17076",
+   "idescat": "170767",
+   "name": "Garrigoles",
+   "comarca": "10",
+   "province": "17"
+  },
+  {
+   "ine": "17077",
+   "idescat": "170773",
+   "name": "Garriguella",
+   "comarca": "02",
+   "province": "17"
+  },
+  {
+   "ine": "17078",
+   "idescat": "170789",
+   "name": "Ger",
+   "comarca": "15",
+   "province": "17"
+  },
+  {
+   "ine": "17079",
+   "idescat": "170792",
+   "name": "Girona",
+   "comarca": "20",
+   "province": "17"
+  },
+  {
+   "ine": "17080",
+   "idescat": "170806",
+   "name": "Gombrèn",
+   "comarca": "31",
+   "province": "17"
+  },
+  {
+   "ine": "17081",
+   "idescat": "170813",
+   "name": "Gualta",
+   "comarca": "10",
+   "province": "17"
+  },
+  {
+   "ine": "17082",
+   "idescat": "170828",
+   "name": "Guils de Cerdanya",
+   "comarca": "15",
+   "province": "17"
+  },
+  {
+   "ine": "17083",
+   "idescat": "170834",
+   "name": "Hostalric",
+   "comarca": "34",
+   "province": "17"
+  },
+  {
+   "ine": "17084",
+   "idescat": "170849",
+   "name": "Isòvol",
+   "comarca": "15",
+   "province": "17"
+  },
+  {
+   "ine": "17085",
+   "idescat": "170852",
+   "name": "Jafre",
+   "comarca": "10",
+   "province": "17"
+  },
+  {
+   "ine": "17086",
+   "idescat": "170865",
+   "name": "la Jonquera",
+   "comarca": "02",
+   "province": "17"
+  },
+  {
+   "ine": "17087",
+   "idescat": "170871",
+   "name": "Juià",
+   "comarca": "20",
+   "province": "17"
+  },
+  {
+   "ine": "17088",
+   "idescat": "170887",
+   "name": "Lladó",
+   "comarca": "02",
+   "province": "17"
+  },
+  {
+   "ine": "17089",
+   "idescat": "170890",
+   "name": "Llagostera",
+   "comarca": "20",
+   "province": "17"
+  },
+  {
+   "ine": "17090",
+   "idescat": "170904",
+   "name": "Llambilles",
+   "comarca": "20",
+   "province": "17"
+  },
+  {
+   "ine": "17091",
+   "idescat": "170911",
+   "name": "Llanars",
+   "comarca": "31",
+   "province": "17"
+  },
+  {
+   "ine": "17092",
+   "idescat": "170926",
+   "name": "Llançà",
+   "comarca": "02",
+   "province": "17"
+  },
+  {
+   "ine": "17093",
+   "idescat": "170932",
+   "name": "Llers",
+   "comarca": "02",
+   "province": "17"
+  },
+  {
+   "ine": "17094",
+   "idescat": "170947",
+   "name": "Llívia",
+   "comarca": "15",
+   "province": "17"
+  },
+  {
+   "ine": "17095",
+   "idescat": "170950",
+   "name": "Lloret de Mar",
+   "comarca": "34",
+   "province": "17"
+  },
+  {
+   "ine": "17096",
+   "idescat": "170963",
+   "name": "les Llosses",
+   "comarca": "31",
+   "province": "17"
+  },
+  {
+   "ine": "17097",
+   "idescat": "170979",
+   "name": "Madremanya",
+   "comarca": "20",
+   "province": "17"
+  },
+  {
+   "ine": "17098",
+   "idescat": "170985",
+   "name": "Maià de Montcal",
+   "comarca": "19",
+   "province": "17"
+  },
+  {
+   "ine": "17099",
+   "idescat": "170998",
+   "name": "Meranges",
+   "comarca": "15",
+   "province": "17"
+  },
+  {
+   "ine": "17100",
+   "idescat": "171002",
+   "name": "Masarac",
+   "comarca": "02",
+   "province": "17"
+  },
+  {
+   "ine": "17101",
+   "idescat": "171019",
+   "name": "Massanes",
+   "comarca": "34",
+   "province": "17"
+  },
+  {
+   "ine": "17102",
+   "idescat": "171024",
+   "name": "Maçanet de Cabrenys",
+   "comarca": "02",
+   "province": "17"
+  },
+  {
+   "ine": "17103",
+   "idescat": "171030",
+   "name": "Maçanet de la Selva",
+   "comarca": "34",
+   "province": "17"
+  },
+  {
+   "ine": "17105",
+   "idescat": "171058",
+   "name": "Mieres",
+   "comarca": "19",
+   "province": "17"
+  },
+  {
+   "ine": "17106",
+   "idescat": "171061",
+   "name": "Mollet de Peralada",
+   "comarca": "02",
+   "province": "17"
+  },
+  {
+   "ine": "17107",
+   "idescat": "171077",
+   "name": "Molló",
+   "comarca": "31",
+   "province": "17"
+  },
+  {
+   "ine": "17109",
+   "idescat": "171096",
+   "name": "Montagut i Oix",
+   "comarca": "19",
+   "province": "17"
+  },
+  {
+   "ine": "17110",
+   "idescat": "171100",
+   "name": "Mont-ras",
+   "comarca": "10",
+   "province": "17"
+  },
+  {
+   "ine": "17111",
+   "idescat": "171117",
+   "name": "Navata",
+   "comarca": "02",
+   "province": "17"
+  },
+  {
+   "ine": "17112",
+   "idescat": "171122",
+   "name": "Ogassa",
+   "comarca": "31",
+   "province": "17"
+  },
+  {
+   "ine": "17114",
+   "idescat": "171143",
+   "name": "Olot",
+   "comarca": "19",
+   "province": "17"
+  },
+  {
+   "ine": "17115",
+   "idescat": "171156",
+   "name": "Ordis",
+   "comarca": "02",
+   "province": "17"
+  },
+  {
+   "ine": "17116",
+   "idescat": "171169",
+   "name": "Osor",
+   "comarca": "34",
+   "province": "17"
+  },
+  {
+   "ine": "17117",
+   "idescat": "171175",
+   "name": "Palafrugell",
+   "comarca": "10",
+   "province": "17"
+  },
+  {
+   "ine": "17118",
+   "idescat": "171181",
+   "name": "Palamós",
+   "comarca": "10",
+   "province": "17"
+  },
+  {
+   "ine": "17119",
+   "idescat": "171194",
+   "name": "Palau de Santa Eulàlia",
+   "comarca": "02",
+   "province": "17"
+  },
+  {
+   "ine": "17120",
+   "idescat": "171208",
+   "name": "Palau-saverdera",
+   "comarca": "02",
+   "province": "17"
+  },
+  {
+   "ine": "17121",
+   "idescat": "171215",
+   "name": "Palau-sator",
+   "comarca": "10",
+   "province": "17"
+  },
+  {
+   "ine": "17123",
+   "idescat": "171236",
+   "name": "Palol de Revardit",
+   "comarca": "28",
+   "province": "17"
+  },
+  {
+   "ine": "17124",
+   "idescat": "171241",
+   "name": "Pals",
+   "comarca": "10",
+   "province": "17"
+  },
+  {
+   "ine": "17125",
+   "idescat": "171254",
+   "name": "Pardines",
+   "comarca": "31",
+   "province": "17"
+  },
+  {
+   "ine": "17126",
+   "idescat": "171267",
+   "name": "Parlavà",
+   "comarca": "10",
+   "province": "17"
+  },
+  {
+   "ine": "17128",
+   "idescat": "171289",
+   "name": "Pau",
+   "comarca": "02",
+   "province": "17"
+  },
+  {
+   "ine": "17129",
+   "idescat": "171292",
+   "name": "Pedret i Marzà",
+   "comarca": "02",
+   "province": "17"
+  },
+  {
+   "ine": "17130",
+   "idescat": "171306",
+   "name": "la Pera",
+   "comarca": "10",
+   "province": "17"
+  },
+  {
+   "ine": "17132",
+   "idescat": "171328",
+   "name": "Peralada",
+   "comarca": "02",
+   "province": "17"
+  },
+  {
+   "ine": "17133",
+   "idescat": "171334",
+   "name": "les Planes d'Hostoles",
+   "comarca": "19",
+   "province": "17"
+  },
+  {
+   "ine": "17134",
+   "idescat": "171349",
+   "name": "Planoles",
+   "comarca": "31",
+   "province": "17"
+  },
+  {
+   "ine": "17135",
+   "idescat": "171352",
+   "name": "Pont de Molins",
+   "comarca": "02",
+   "province": "17"
+  },
+  {
+   "ine": "17136",
+   "idescat": "171365",
+   "name": "Pontós",
+   "comarca": "02",
+   "province": "17"
+  },
+  {
+   "ine": "17137",
+   "idescat": "171371",
+   "name": "Porqueres",
+   "comarca": "28",
+   "province": "17"
+  },
+  {
+   "ine": "17138",
+   "idescat": "171387",
+   "name": "Portbou",
+   "comarca": "02",
+   "province": "17"
+  },
+  {
+   "ine": "17139",
+   "idescat": "171390",
+   "name": "les Preses",
+   "comarca": "19",
+   "province": "17"
+  },
+  {
+   "ine": "17140",
+   "idescat": "171404",
+   "name": "el Port de la Selva",
+   "comarca": "02",
+   "province": "17"
+  },
+  {
+   "ine": "17141",
+   "idescat": "171411",
+   "name": "Puigcerdà",
+   "comarca": "15",
+   "province": "17"
+  },
+  {
+   "ine": "17142",
+   "idescat": "171426",
+   "name": "Quart",
+   "comarca": "20",
+   "province": "17"
+  },
+  {
+   "ine": "17143",
+   "idescat": "171432",
+   "name": "Rabós",
+   "comarca": "02",
+   "province": "17"
+  },
+  {
+   "ine": "17144",
+   "idescat": "171447",
+   "name": "Regencós",
+   "comarca": "10",
+   "province": "17"
+  },
+  {
+   "ine": "17145",
+   "idescat": "171450",
+   "name": "Ribes de Freser",
+   "comarca": "31",
+   "province": "17"
+  },
+  {
+   "ine": "17146",
+   "idescat": "171463",
+   "name": "Riells i Viabrea",
+   "comarca": "34",
+   "province": "17"
+  },
+  {
+   "ine": "17147",
+   "idescat": "171479",
+   "name": "Ripoll",
+   "comarca": "31",
+   "province": "17"
+  },
+  {
+   "ine": "17148",
+   "idescat": "171485",
+   "name": "Riudarenes",
+   "comarca": "34",
+   "province": "17"
+  },
+  {
+   "ine": "17149",
+   "idescat": "171498",
+   "name": "Riudaura",
+   "comarca": "19",
+   "province": "17"
+  },
+  {
+   "ine": "17150",
+   "idescat": "171501",
+   "name": "Riudellots de la Selva",
+   "comarca": "34",
+   "province": "17"
+  },
+  {
+   "ine": "17151",
+   "idescat": "171518",
+   "name": "Riumors",
+   "comarca": "02",
+   "province": "17"
+  },
+  {
+   "ine": "17152",
+   "idescat": "171523",
+   "name": "Roses",
+   "comarca": "02",
+   "province": "17"
+  },
+  {
+   "ine": "17153",
+   "idescat": "171539",
+   "name": "Rupià",
+   "comarca": "10",
+   "province": "17"
+  },
+  {
+   "ine": "17154",
+   "idescat": "171544",
+   "name": "Sales de Llierca",
+   "comarca": "19",
+   "province": "17"
+  },
+  {
+   "ine": "17155",
+   "idescat": "171557",
+   "name": "Salt",
+   "comarca": "20",
+   "province": "17"
+  },
+  {
+   "ine": "17157",
+   "idescat": "171576",
+   "name": "Sant Andreu Salou",
+   "comarca": "20",
+   "province": "17"
+  },
+  {
+   "ine": "17158",
+   "idescat": "171582",
+   "name": "Sant Climent Sescebes",
+   "comarca": "02",
+   "province": "17"
+  },
+  {
+   "ine": "17159",
+   "idescat": "171595",
+   "name": "Sant Feliu de Buixalleu",
+   "comarca": "34",
+   "province": "17"
+  },
+  {
+   "ine": "17160",
+   "idescat": "171609",
+   "name": "Sant Feliu de Guíxols",
+   "comarca": "10",
+   "province": "17"
+  },
+  {
+   "ine": "17161",
+   "idescat": "171616",
+   "name": "Sant Feliu de Pallerols",
+   "comarca": "19",
+   "province": "17"
+  },
+  {
+   "ine": "17162",
+   "idescat": "171621",
+   "name": "Sant Ferriol",
+   "comarca": "19",
+   "province": "17"
+  },
+  {
+   "ine": "17163",
+   "idescat": "171637",
+   "name": "Sant Gregori",
+   "comarca": "20",
+   "province": "17"
+  },
+  {
+   "ine": "17164",
+   "idescat": "171642",
+   "name": "Sant Hilari Sacalm",
+   "comarca": "34",
+   "province": "17"
+  },
+  {
+   "ine": "17165",
+   "idescat": "171655",
+   "name": "Sant Jaume de Llierca",
+   "comarca": "19",
+   "province": "17"
+  },
+  {
+   "ine": "17166",
+   "idescat": "171668",
+   "name": "Sant Jordi Desvalls",
+   "comarca": "20",
+   "province": "17"
+  },
+  {
+   "ine": "17167",
+   "idescat": "171674",
+   "name": "Sant Joan de les Abadesses",
+   "comarca": "31",
+   "province": "17"
+  },
+  {
+   "ine": "17168",
+   "idescat": "171680",
+   "name": "Sant Joan de Mollet",
+   "comarca": "20",
+   "province": "17"
+  },
+  {
+   "ine": "17169",
+   "idescat": "171693",
+   "name": "Sant Julià de Ramis",
+   "comarca": "20",
+   "province": "17"
+  },
+  {
+   "ine": "17170",
+   "idescat": "171707",
+   "name": "Vallfogona de Ripollès",
+   "comarca": "31",
+   "province": "17"
+  },
+  {
+   "ine": "17171",
+   "idescat": "171714",
+   "name": "Sant Llorenç de la Muga",
+   "comarca": "02",
+   "province": "17"
+  },
+  {
+   "ine": "17172",
+   "idescat": "171729",
+   "name": "Sant Martí de Llémena",
+   "comarca": "20",
+   "province": "17"
+  },
+  {
+   "ine": "17173",
+   "idescat": "171735",
+   "name": "Sant Martí Vell",
+   "comarca": "20",
+   "province": "17"
+  },
+  {
+   "ine": "17174",
+   "idescat": "171740",
+   "name": "Sant Miquel de Campmajor",
+   "comarca": "28",
+   "province": "17"
+  },
+  {
+   "ine": "17175",
+   "idescat": "171753",
+   "name": "Sant Miquel de Fluvià",
+   "comarca": "02",
+   "province": "17"
+  },
+  {
+   "ine": "17176",
+   "idescat": "171766",
+   "name": "Sant Mori",
+   "comarca": "02",
+   "province": "17"
+  },
+  {
+   "ine": "17177",
+   "idescat": "171772",
+   "name": "Sant Pau de Segúries",
+   "comarca": "31",
+   "province": "17"
+  },
+  {
+   "ine": "17178",
+   "idescat": "171788",
+   "name": "Sant Pere Pescador",
+   "comarca": "02",
+   "province": "17"
+  },
+  {
+   "ine": "17180",
+   "idescat": "171805",
+   "name": "Santa Coloma de Farners",
+   "comarca": "34",
+   "province": "17"
+  },
+  {
+   "ine": "17181",
+   "idescat": "171812",
+   "name": "Santa Cristina d'Aro",
+   "comarca": "10",
+   "province": "17"
+  },
+  {
+   "ine": "17182",
+   "idescat": "171827",
+   "name": "Santa Llogaia d'Àlguema",
+   "comarca": "02",
+   "province": "17"
+  },
+  {
+   "ine": "17183",
+   "idescat": "171833",
+   "name": "Sant Aniol de Finestres",
+   "comarca": "19",
+   "province": "17"
+  },
+  {
+   "ine": "17184",
+   "idescat": "171848",
+   "name": "Santa Pau",
+   "comarca": "19",
+   "province": "17"
+  },
+  {
+   "ine": "17185",
+   "idescat": "171851",
+   "name": "Sant Joan les Fonts",
+   "comarca": "19",
+   "province": "17"
+  },
+  {
+   "ine": "17186",
+   "idescat": "171864",
+   "name": "Sarrià de Ter",
+   "comarca": "20",
+   "province": "17"
+  },
+  {
+   "ine": "17187",
+   "idescat": "171870",
+   "name": "Saus, Camallera i Llampaies",
+   "comarca": "02",
+   "province": "17"
+  },
+  {
+   "ine": "17188",
+   "idescat": "171886",
+   "name": "la Selva de Mar",
+   "comarca": "02",
+   "province": "17"
+  },
+  {
+   "ine": "17189",
+   "idescat": "171899",
+   "name": "la Cellera de Ter",
+   "comarca": "34",
+   "province": "17"
+  },
+  {
+   "ine": "17190",
+   "idescat": "171903",
+   "name": "Serinyà",
+   "comarca": "28",
+   "province": "17"
+  },
+  {
+   "ine": "17191",
+   "idescat": "171910",
+   "name": "Serra de Daró",
+   "comarca": "10",
+   "province": "17"
+  },
+  {
+   "ine": "17192",
+   "idescat": "171925",
+   "name": "Setcases",
+   "comarca": "31",
+   "province": "17"
+  },
+  {
+   "ine": "17193",
+   "idescat": "171931",
+   "name": "Sils",
+   "comarca": "34",
+   "province": "17"
+  },
+  {
+   "ine": "17194",
+   "idescat": "171946",
+   "name": "Susqueda",
+   "comarca": "34",
+   "province": "17"
+  },
+  {
+   "ine": "17195",
+   "idescat": "171959",
+   "name": "la Tallada d'Empordà",
+   "comarca": "10",
+   "province": "17"
+  },
+  {
+   "ine": "17196",
+   "idescat": "171962",
+   "name": "Terrades",
+   "comarca": "02",
+   "province": "17"
+  },
+  {
+   "ine": "17197",
+   "idescat": "171978",
+   "name": "Torrent",
+   "comarca": "10",
+   "province": "17"
+  },
+  {
+   "ine": "17198",
+   "idescat": "171984",
+   "name": "Torroella de Fluvià",
+   "comarca": "02",
+   "province": "17"
+  },
+  {
+   "ine": "17199",
+   "idescat": "171997",
+   "name": "Torroella de Montgrí",
+   "comarca": "10",
+   "province": "17"
+  },
+  {
+   "ine": "17200",
+   "idescat": "172001",
+   "name": "Tortellà",
+   "comarca": "19",
+   "province": "17"
+  },
+  {
+   "ine": "17201",
+   "idescat": "172018",
+   "name": "Toses",
+   "comarca": "31",
+   "province": "17"
+  },
+  {
+   "ine": "17202",
+   "idescat": "172023",
+   "name": "Tossa de Mar",
+   "comarca": "34",
+   "province": "17"
+  },
+  {
+   "ine": "17203",
+   "idescat": "172039",
+   "name": "Ultramort",
+   "comarca": "10",
+   "province": "17"
+  },
+  {
+   "ine": "17204",
+   "idescat": "172044",
+   "name": "Ullà",
+   "comarca": "10",
+   "province": "17"
+  },
+  {
+   "ine": "17205",
+   "idescat": "172057",
+   "name": "Ullastret",
+   "comarca": "10",
+   "province": "17"
+  },
+  {
+   "ine": "17206",
+   "idescat": "172060",
+   "name": "Urús",
+   "comarca": "15",
+   "province": "17"
+  },
+  {
+   "ine": "17207",
+   "idescat": "172076",
+   "name": "la Vall d'en Bas",
+   "comarca": "19",
+   "province": "17"
+  },
+  {
+   "ine": "17208",
+   "idescat": "172082",
+   "name": "la Vall de Bianya",
+   "comarca": "19",
+   "province": "17"
+  },
+  {
+   "ine": "17209",
+   "idescat": "172095",
+   "name": "Vall-llobrega",
+   "comarca": "10",
+   "province": "17"
+  },
+  {
+   "ine": "17210",
+   "idescat": "172109",
+   "name": "Ventalló",
+   "comarca": "02",
+   "province": "17"
+  },
+  {
+   "ine": "17211",
+   "idescat": "172116",
+   "name": "Verges",
+   "comarca": "10",
+   "province": "17"
+  },
+  {
+   "ine": "17212",
+   "idescat": "172121",
+   "name": "Vidrà",
+   "comarca": "24",
+   "province": "17"
+  },
+  {
+   "ine": "17213",
+   "idescat": "172137",
+   "name": "Vidreres",
+   "comarca": "34",
+   "province": "17"
+  },
+  {
+   "ine": "17214",
+   "idescat": "172142",
+   "name": "Vilabertran",
+   "comarca": "02",
+   "province": "17"
+  },
+  {
+   "ine": "17215",
+   "idescat": "172155",
+   "name": "Vilablareix",
+   "comarca": "20",
+   "province": "17"
+  },
+  {
+   "ine": "17216",
+   "idescat": "172168",
+   "name": "Viladasens",
+   "comarca": "20",
+   "province": "17"
+  },
+  {
+   "ine": "17217",
+   "idescat": "172174",
+   "name": "Viladamat",
+   "comarca": "02",
+   "province": "17"
+  },
+  {
+   "ine": "17218",
+   "idescat": "172180",
+   "name": "Vilademuls",
+   "comarca": "28",
+   "province": "17"
+  },
+  {
+   "ine": "17220",
+   "idescat": "172207",
+   "name": "Viladrau",
+   "comarca": "24",
+   "province": "17"
+  },
+  {
+   "ine": "17221",
+   "idescat": "172214",
+   "name": "Vilafant",
+   "comarca": "02",
+   "province": "17"
+  },
+  {
+   "ine": "17222",
+   "idescat": "172229",
+   "name": "Vilaür",
+   "comarca": "02",
+   "province": "17"
+  },
+  {
+   "ine": "17223",
+   "idescat": "172235",
+   "name": "Vilajuïga",
+   "comarca": "02",
+   "province": "17"
+  },
+  {
+   "ine": "17224",
+   "idescat": "172240",
+   "name": "Vilallonga de Ter",
+   "comarca": "31",
+   "province": "17"
+  },
+  {
+   "ine": "17225",
+   "idescat": "172253",
+   "name": "Vilamacolum",
+   "comarca": "02",
+   "province": "17"
+  },
+  {
+   "ine": "17226",
+   "idescat": "172266",
+   "name": "Vilamalla",
+   "comarca": "02",
+   "province": "17"
+  },
+  {
+   "ine": "17227",
+   "idescat": "172272",
+   "name": "Vilamaniscle",
+   "comarca": "02",
+   "province": "17"
+  },
+  {
+   "ine": "17228",
+   "idescat": "172288",
+   "name": "Vilanant",
+   "comarca": "02",
+   "province": "17"
+  },
+  {
+   "ine": "17230",
+   "idescat": "172305",
+   "name": "Vila-sacra",
+   "comarca": "02",
+   "province": "17"
+  },
+  {
+   "ine": "17232",
+   "idescat": "172327",
+   "name": "Vilopriu",
+   "comarca": "10",
+   "province": "17"
+  },
+  {
+   "ine": "17233",
+   "idescat": "172333",
+   "name": "Vilobí d'Onyar",
+   "comarca": "34",
+   "province": "17"
+  },
+  {
+   "ine": "17234",
+   "idescat": "172348",
+   "name": "Biure",
+   "comarca": "02",
+   "province": "17"
+  },
+  {
+   "ine": "17901",
+   "idescat": "179011",
+   "name": "Cruïlles, Monells i Sant Sadurní de l'Heura",
+   "comarca": "10",
+   "province": "17"
+  },
+  {
+   "ine": "17902",
+   "idescat": "179026",
+   "name": "Forallac",
+   "comarca": "10",
+   "province": "17"
+  },
+  {
+   "ine": "17903",
+   "idescat": "179032",
+   "name": "Sant Julià del Llor i Bonmatí",
+   "comarca": "34",
+   "province": "17"
+  },
+  {
+   "ine": "25001",
+   "idescat": "250019",
+   "name": "Abella de la Conca",
+   "comarca": "25",
+   "province": "25"
+  },
+  {
+   "ine": "25002",
+   "idescat": "250024",
+   "name": "Àger",
+   "comarca": "23",
+   "province": "25"
+  },
+  {
+   "ine": "25003",
+   "idescat": "250030",
+   "name": "Agramunt",
+   "comarca": "38",
+   "province": "25"
+  },
+  {
+   "ine": "25004",
+   "idescat": "250045",
+   "name": "els Alamús",
+   "comarca": "33",
+   "province": "25"
+  },
+  {
+   "ine": "25005",
+   "idescat": "250058",
+   "name": "Alàs i Cerc",
+   "comarca": "04",
+   "province": "25"
+  },
+  {
+   "ine": "25006",
+   "idescat": "250061",
+   "name": "l'Albagés",
+   "comarca": "18",
+   "province": "25"
+  },
+  {
+   "ine": "25007",
+   "idescat": "250077",
+   "name": "Albatàrrec",
+   "comarca": "33",
+   "province": "25"
+  },
+  {
+   "ine": "25008",
+   "idescat": "250083",
+   "name": "Albesa",
+   "comarca": "23",
+   "province": "25"
+  },
+  {
+   "ine": "25009",
+   "idescat": "250096",
+   "name": "l'Albi",
+   "comarca": "18",
+   "province": "25"
+  },
+  {
+   "ine": "25010",
+   "idescat": "250100",
+   "name": "Alcanó",
+   "comarca": "33",
+   "province": "25"
+  },
+  {
+   "ine": "25011",
+   "idescat": "250117",
+   "name": "Alcarràs",
+   "comarca": "33",
+   "province": "25"
+  },
+  {
+   "ine": "25012",
+   "idescat": "250122",
+   "name": "Alcoletge",
+   "comarca": "33",
+   "province": "25"
+  },
+  {
+   "ine": "25013",
+   "idescat": "250138",
+   "name": "Alfarràs",
+   "comarca": "33",
+   "province": "25"
+  },
+  {
+   "ine": "25014",
+   "idescat": "250143",
+   "name": "Alfés",
+   "comarca": "33",
+   "province": "25"
+  },
+  {
+   "ine": "25015",
+   "idescat": "250156",
+   "name": "Algerri",
+   "comarca": "23",
+   "province": "25"
+  },
+  {
+   "ine": "25016",
+   "idescat": "250169",
+   "name": "Alguaire",
+   "comarca": "33",
+   "province": "25"
+  },
+  {
+   "ine": "25017",
+   "idescat": "250175",
+   "name": "Alins",
+   "comarca": "26",
+   "province": "25"
+  },
+  {
+   "ine": "25019",
+   "idescat": "250194",
+   "name": "Almacelles",
+   "comarca": "33",
+   "province": "25"
+  },
+  {
+   "ine": "25020",
+   "idescat": "250208",
+   "name": "Almatret",
+   "comarca": "33",
+   "province": "25"
+  },
+  {
+   "ine": "25021",
+   "idescat": "250215",
+   "name": "Almenar",
+   "comarca": "33",
+   "province": "25"
+  },
+  {
+   "ine": "25022",
+   "idescat": "250220",
+   "name": "Alòs de Balaguer",
+   "comarca": "23",
+   "province": "25"
+  },
+  {
+   "ine": "25023",
+   "idescat": "250236",
+   "name": "Alpicat",
+   "comarca": "33",
+   "province": "25"
+  },
+  {
+   "ine": "25024",
+   "idescat": "250241",
+   "name": "Alt Àneu",
+   "comarca": "26",
+   "province": "25"
+  },
+  {
+   "ine": "25025",
+   "idescat": "250254",
+   "name": "Naut Aran",
+   "comarca": "39",
+   "province": "25"
+  },
+  {
+   "ine": "25027",
+   "idescat": "250273",
+   "name": "Anglesola",
+   "comarca": "38",
+   "province": "25"
+  },
+  {
+   "ine": "25029",
+   "idescat": "250292",
+   "name": "Arbeca",
+   "comarca": "18",
+   "province": "25"
+  },
+  {
+   "ine": "25030",
+   "idescat": "250306",
+   "name": "el Pont de Bar",
+   "comarca": "04",
+   "province": "25"
+  },
+  {
+   "ine": "25031",
+   "idescat": "250313",
+   "name": "Arres",
+   "comarca": "39",
+   "province": "25"
+  },
+  {
+   "ine": "25032",
+   "idescat": "250328",
+   "name": "Arsèguel",
+   "comarca": "04",
+   "province": "25"
+  },
+  {
+   "ine": "25033",
+   "idescat": "250334",
+   "name": "Artesa de Lleida",
+   "comarca": "33",
+   "province": "25"
+  },
+  {
+   "ine": "25034",
+   "idescat": "250349",
+   "name": "Artesa de Segre",
+   "comarca": "23",
+   "province": "25"
+  },
+  {
+   "ine": "25035",
+   "idescat": "250352",
+   "name": "la Sentiu de Sió",
+   "comarca": "23",
+   "province": "25"
+  },
+  {
+   "ine": "25036",
+   "idescat": "250365",
+   "name": "Aspa",
+   "comarca": "33",
+   "province": "25"
+  },
+  {
+   "ine": "25037",
+   "idescat": "250371",
+   "name": "les Avellanes i Santa Linya",
+   "comarca": "23",
+   "province": "25"
+  },
+  {
+   "ine": "25038",
+   "idescat": "250387",
+   "name": "Aitona",
+   "comarca": "33",
+   "province": "25"
+  },
+  {
+   "ine": "25039",
+   "idescat": "250390",
+   "name": "Baix Pallars",
+   "comarca": "26",
+   "province": "25"
+  },
+  {
+   "ine": "25040",
+   "idescat": "250404",
+   "name": "Balaguer",
+   "comarca": "23",
+   "province": "25"
+  },
+  {
+   "ine": "25041",
+   "idescat": "250411",
+   "name": "Barbens",
+   "comarca": "27",
+   "province": "25"
+  },
+  {
+   "ine": "25042",
+   "idescat": "250426",
+   "name": "la Baronia de Rialb",
+   "comarca": "23",
+   "province": "25"
+  },
+  {
+   "ine": "25043",
+   "idescat": "250432",
+   "name": "la Vall de Boí",
+   "comarca": "05",
+   "province": "25"
+  },
+  {
+   "ine": "25044",
+   "idescat": "250447",
+   "name": "Bassella",
+   "comarca": "04",
+   "province": "25"
+  },
+  {
+   "ine": "25045",
+   "idescat": "250450",
+   "name": "Bausen",
+   "comarca": "39",
+   "province": "25"
+  },
+  {
+   "ine": "25046",
+   "idescat": "250463",
+   "name": "Belianes",
+   "comarca": "38",
+   "province": "25"
+  },
+  {
+   "ine": "25047",
+   "idescat": "250479",
+   "name": "Bellcaire d'Urgell",
+   "comarca": "23",
+   "province": "25"
+  },
+  {
+   "ine": "25048",
+   "idescat": "250485",
+   "name": "Bell-lloc d'Urgell",
+   "comarca": "27",
+   "province": "25"
+  },
+  {
+   "ine": "25049",
+   "idescat": "250498",
+   "name": "Bellmunt d'Urgell",
+   "comarca": "23",
+   "province": "25"
+  },
+  {
+   "ine": "25050",
+   "idescat": "250501",
+   "name": "Bellpuig",
+   "comarca": "38",
+   "province": "25"
+  },
+  {
+   "ine": "25051",
+   "idescat": "250518",
+   "name": "Bellver de Cerdanya",
+   "comarca": "15",
+   "province": "25"
+  },
+  {
+   "ine": "25052",
+   "idescat": "250523",
+   "name": "Bellvís",
+   "comarca": "27",
+   "province": "25"
+  },
+  {
+   "ine": "25053",
+   "idescat": "250539",
+   "name": "Benavent de Segrià",
+   "comarca": "33",
+   "province": "25"
+  },
+  {
+   "ine": "25055",
+   "idescat": "250557",
+   "name": "Biosca",
+   "comarca": "35",
+   "province": "25"
+  },
+  {
+   "ine": "25056",
+   "idescat": "250560",
+   "name": "Bovera",
+   "comarca": "18",
+   "province": "25"
+  },
+  {
+   "ine": "25057",
+   "idescat": "250576",
+   "name": "Es Bòrdes",
+   "comarca": "39",
+   "province": "25"
+  },
+  {
+   "ine": "25058",
+   "idescat": "250582",
+   "name": "les Borges Blanques",
+   "comarca": "18",
+   "province": "25"
+  },
+  {
+   "ine": "25059",
+   "idescat": "250595",
+   "name": "Bossòst",
+   "comarca": "39",
+   "province": "25"
+  },
+  {
+   "ine": "25060",
+   "idescat": "250609",
+   "name": "Cabanabona",
+   "comarca": "23",
+   "province": "25"
+  },
+  {
+   "ine": "25061",
+   "idescat": "250616",
+   "name": "Cabó",
+   "comarca": "04",
+   "province": "25"
+  },
+  {
+   "ine": "25062",
+   "idescat": "250621",
+   "name": "Camarasa",
+   "comarca": "23",
+   "province": "25"
+  },
+  {
+   "ine": "25063",
+   "idescat": "250637",
+   "name": "Canejan",
+   "comarca": "39",
+   "province": "25"
+  },
+  {
+   "ine": "25064",
+   "idescat": "250642",
+   "name": "Castellar de la Ribera",
+   "comarca": "35",
+   "province": "25"
+  },
+  {
+   "ine": "25067",
+   "idescat": "250674",
+   "name": "Castelldans",
+   "comarca": "18",
+   "province": "25"
+  },
+  {
+   "ine": "25068",
+   "idescat": "250680",
+   "name": "Castellnou de Seana",
+   "comarca": "27",
+   "province": "25"
+  },
+  {
+   "ine": "25069",
+   "idescat": "250693",
+   "name": "Castelló de Farfanya",
+   "comarca": "23",
+   "province": "25"
+  },
+  {
+   "ine": "25070",
+   "idescat": "250707",
+   "name": "Castellserà",
+   "comarca": "38",
+   "province": "25"
+  },
+  {
+   "ine": "25071",
+   "idescat": "250714",
+   "name": "Cava",
+   "comarca": "04",
+   "province": "25"
+  },
+  {
+   "ine": "25072",
+   "idescat": "250729",
+   "name": "Cervera",
+   "comarca": "32",
+   "province": "25"
+  },
+  {
+   "ine": "25073",
+   "idescat": "250735",
+   "name": "Cervià de les Garrigues",
+   "comarca": "18",
+   "province": "25"
+  },
+  {
+   "ine": "25074",
+   "idescat": "250740",
+   "name": "Ciutadilla",
+   "comarca": "38",
+   "province": "25"
+  },
+  {
+   "ine": "25075",
+   "idescat": "250753",
+   "name": "Clariana de Cardener",
+   "comarca": "35",
+   "province": "25"
+  },
+  {
+   "ine": "25076",
+   "idescat": "250766",
+   "name": "el Cogul",
+   "comarca": "18",
+   "province": "25"
+  },
+  {
+   "ine": "25077",
+   "idescat": "250772",
+   "name": "Coll de Nargó",
+   "comarca": "04",
+   "province": "25"
+  },
+  {
+   "ine": "25078",
+   "idescat": "250788",
+   "name": "Corbins",
+   "comarca": "33",
+   "province": "25"
+  },
+  {
+   "ine": "25079",
+   "idescat": "250791",
+   "name": "Cubells",
+   "comarca": "23",
+   "province": "25"
+  },
+  {
+   "ine": "25081",
+   "idescat": "250812",
+   "name": "l'Espluga Calba",
+   "comarca": "18",
+   "province": "25"
+  },
+  {
+   "ine": "25082",
+   "idescat": "250827",
+   "name": "Espot",
+   "comarca": "26",
+   "province": "25"
+  },
+  {
+   "ine": "25085",
+   "idescat": "250851",
+   "name": "Estaràs",
+   "comarca": "32",
+   "province": "25"
+  },
+  {
+   "ine": "25086",
+   "idescat": "250864",
+   "name": "Esterri d'Àneu",
+   "comarca": "26",
+   "province": "25"
+  },
+  {
+   "ine": "25087",
+   "idescat": "250870",
+   "name": "Esterri de Cardós",
+   "comarca": "26",
+   "province": "25"
+  },
+  {
+   "ine": "25088",
+   "idescat": "250886",
+   "name": "Estamariu",
+   "comarca": "04",
+   "province": "25"
+  },
+  {
+   "ine": "25089",
+   "idescat": "250899",
+   "name": "Farrera",
+   "comarca": "26",
+   "province": "25"
+  },
+  {
+   "ine": "25092",
+   "idescat": "250925",
+   "name": "la Floresta",
+   "comarca": "18",
+   "province": "25"
+  },
+  {
+   "ine": "25093",
+   "idescat": "250931",
+   "name": "Fondarella",
+   "comarca": "27",
+   "province": "25"
+  },
+  {
+   "ine": "25094",
+   "idescat": "250946",
+   "name": "Foradada",
+   "comarca": "23",
+   "province": "25"
+  },
+  {
+   "ine": "25096",
+   "idescat": "250962",
+   "name": "la Fuliola",
+   "comarca": "38",
+   "province": "25"
+  },
+  {
+   "ine": "25097",
+   "idescat": "250978",
+   "name": "Fulleda",
+   "comarca": "18",
+   "province": "25"
+  },
+  {
+   "ine": "25098",
+   "idescat": "250984",
+   "name": "Gavet de la Conca",
+   "comarca": "25",
+   "province": "25"
+  },
+  {
+   "ine": "25099",
+   "idescat": "250997",
+   "name": "Golmés",
+   "comarca": "27",
+   "province": "25"
+  },
+  {
+   "ine": "25100",
+   "idescat": "251001",
+   "name": "Gósol",
+   "comarca": "14",
+   "province": "25"
+  },
+  {
+   "ine": "25101",
+   "idescat": "251018",
+   "name": "la Granadella",
+   "comarca": "18",
+   "province": "25"
+  },
+  {
+   "ine": "25102",
+   "idescat": "251023",
+   "name": "la Granja d'Escarp",
+   "comarca": "33",
+   "province": "25"
+  },
+  {
+   "ine": "25103",
+   "idescat": "251039",
+   "name": "Granyanella",
+   "comarca": "32",
+   "province": "25"
+  },
+  {
+   "ine": "25104",
+   "idescat": "251044",
+   "name": "Granyena de Segarra",
+   "comarca": "32",
+   "province": "25"
+  },
+  {
+   "ine": "25105",
+   "idescat": "251057",
+   "name": "Granyena de les Garrigues",
+   "comarca": "18",
+   "province": "25"
+  },
+  {
+   "ine": "25109",
+   "idescat": "251095",
+   "name": "Guimerà",
+   "comarca": "38",
+   "province": "25"
+  },
+  {
+   "ine": "25110",
+   "idescat": "251109",
+   "name": "Guissona",
+   "comarca": "32",
+   "province": "25"
+  },
+  {
+   "ine": "25111",
+   "idescat": "251116",
+   "name": "Guixers",
+   "comarca": "35",
+   "province": "25"
+  },
+  {
+   "ine": "25112",
+   "idescat": "251121",
+   "name": "Ivars de Noguera",
+   "comarca": "23",
+   "province": "25"
+  },
+  {
+   "ine": "25113",
+   "idescat": "251137",
+   "name": "Ivars d'Urgell",
+   "comarca": "27",
+   "province": "25"
+  },
+  {
+   "ine": "25114",
+   "idescat": "251142",
+   "name": "Ivorra",
+   "comarca": "32",
+   "province": "25"
+  },
+  {
+   "ine": "25115",
+   "idescat": "251155",
+   "name": "Isona i Conca Dellà",
+   "comarca": "25",
+   "province": "25"
+  },
+  {
+   "ine": "25118",
+   "idescat": "251180",
+   "name": "Juncosa",
+   "comarca": "18",
+   "province": "25"
+  },
+  {
+   "ine": "25119",
+   "idescat": "251193",
+   "name": "Juneda",
+   "comarca": "18",
+   "province": "25"
+  },
+  {
+   "ine": "25120",
+   "idescat": "251207",
+   "name": "Lleida",
+   "comarca": "33",
+   "province": "25"
+  },
+  {
+   "ine": "25121",
+   "idescat": "251214",
+   "name": "Les",
+   "comarca": "39",
+   "province": "25"
+  },
+  {
+   "ine": "25122",
+   "idescat": "251229",
+   "name": "Linyola",
+   "comarca": "27",
+   "province": "25"
+  },
+  {
+   "ine": "25123",
+   "idescat": "251235",
+   "name": "Lladorre",
+   "comarca": "26",
+   "province": "25"
+  },
+  {
+   "ine": "25124",
+   "idescat": "251240",
+   "name": "Lladurs",
+   "comarca": "35",
+   "province": "25"
+  },
+  {
+   "ine": "25125",
+   "idescat": "251253",
+   "name": "Llardecans",
+   "comarca": "33",
+   "province": "25"
+  },
+  {
+   "ine": "25126",
+   "idescat": "251266",
+   "name": "Llavorsí",
+   "comarca": "26",
+   "province": "25"
+  },
+  {
+   "ine": "25127",
+   "idescat": "251272",
+   "name": "Lles de Cerdanya",
+   "comarca": "15",
+   "province": "25"
+  },
+  {
+   "ine": "25128",
+   "idescat": "251288",
+   "name": "Llimiana",
+   "comarca": "25",
+   "province": "25"
+  },
+  {
+   "ine": "25129",
+   "idescat": "251291",
+   "name": "Llobera",
+   "comarca": "35",
+   "province": "25"
+  },
+  {
+   "ine": "25130",
+   "idescat": "251305",
+   "name": "Maldà",
+   "comarca": "38",
+   "province": "25"
+  },
+  {
+   "ine": "25131",
+   "idescat": "251312",
+   "name": "Massalcoreig",
+   "comarca": "33",
+   "province": "25"
+  },
+  {
+   "ine": "25132",
+   "idescat": "251327",
+   "name": "Massoteres",
+   "comarca": "32",
+   "province": "25"
+  },
+  {
+   "ine": "25133",
+   "idescat": "251333",
+   "name": "Maials",
+   "comarca": "33",
+   "province": "25"
+  },
+  {
+   "ine": "25134",
+   "idescat": "251348",
+   "name": "Menàrguens",
+   "comarca": "23",
+   "province": "25"
+  },
+  {
+   "ine": "25135",
+   "idescat": "251351",
+   "name": "Miralcamp",
+   "comarca": "27",
+   "province": "25"
+  },
+  {
+   "ine": "25136",
+   "idescat": "251364",
+   "name": "la Molsosa",
+   "comarca": "35",
+   "province": "25"
+  },
+  {
+   "ine": "25137",
+   "idescat": "251370",
+   "name": "Mollerussa",
+   "comarca": "27",
+   "province": "25"
+  },
+  {
+   "ine": "25138",
+   "idescat": "251386",
+   "name": "Montgai",
+   "comarca": "23",
+   "province": "25"
+  },
+  {
+   "ine": "25139",
+   "idescat": "251399",
+   "name": "Montellà i Martinet",
+   "comarca": "15",
+   "province": "25"
+  },
+  {
+   "ine": "25140",
+   "idescat": "251403",
+   "name": "Montferrer i Castellbò",
+   "comarca": "04",
+   "province": "25"
+  },
+  {
+   "ine": "25141",
+   "idescat": "251410",
+   "name": "Montoliu de Segarra",
+   "comarca": "32",
+   "province": "25"
+  },
+  {
+   "ine": "25142",
+   "idescat": "251425",
+   "name": "Montoliu de Lleida",
+   "comarca": "33",
+   "province": "25"
+  },
+  {
+   "ine": "25143",
+   "idescat": "251431",
+   "name": "Montornès de Segarra",
+   "comarca": "32",
+   "province": "25"
+  },
+  {
+   "ine": "25145",
+   "idescat": "251459",
+   "name": "Nalec",
+   "comarca": "38",
+   "province": "25"
+  },
+  {
+   "ine": "25146",
+   "idescat": "251462",
+   "name": "Navès",
+   "comarca": "35",
+   "province": "25"
+  },
+  {
+   "ine": "25148",
+   "idescat": "251484",
+   "name": "Odèn",
+   "comarca": "35",
+   "province": "25"
+  },
+  {
+   "ine": "25149",
+   "idescat": "251497",
+   "name": "Oliana",
+   "comarca": "04",
+   "province": "25"
+  },
+  {
+   "ine": "25150",
+   "idescat": "251500",
+   "name": "Oliola",
+   "comarca": "23",
+   "province": "25"
+  },
+  {
+   "ine": "25151",
+   "idescat": "251517",
+   "name": "Olius",
+   "comarca": "35",
+   "province": "25"
+  },
+  {
+   "ine": "25152",
+   "idescat": "251522",
+   "name": "les Oluges",
+   "comarca": "32",
+   "province": "25"
+  },
+  {
+   "ine": "25153",
+   "idescat": "251538",
+   "name": "els Omellons",
+   "comarca": "18",
+   "province": "25"
+  },
+  {
+   "ine": "25154",
+   "idescat": "251543",
+   "name": "els Omells de na Gaia",
+   "comarca": "38",
+   "province": "25"
+  },
+  {
+   "ine": "25155",
+   "idescat": "251556",
+   "name": "Organyà",
+   "comarca": "04",
+   "province": "25"
+  },
+  {
+   "ine": "25156",
+   "idescat": "251569",
+   "name": "Os de Balaguer",
+   "comarca": "23",
+   "province": "25"
+  },
+  {
+   "ine": "25157",
+   "idescat": "251575",
+   "name": "Ossó de Sió",
+   "comarca": "38",
+   "province": "25"
+  },
+  {
+   "ine": "25158",
+   "idescat": "251581",
+   "name": "el Palau d'Anglesola",
+   "comarca": "27",
+   "province": "25"
+  },
+  {
+   "ine": "25161",
+   "idescat": "251615",
+   "name": "Conca de Dalt",
+   "comarca": "25",
+   "province": "25"
+  },
+  {
+   "ine": "25163",
+   "idescat": "251636",
+   "name": "la Coma i la Pedra",
+   "comarca": "35",
+   "province": "25"
+  },
+  {
+   "ine": "25164",
+   "idescat": "251641",
+   "name": "Penelles",
+   "comarca": "23",
+   "province": "25"
+  },
+  {
+   "ine": "25165",
+   "idescat": "251654",
+   "name": "Peramola",
+   "comarca": "04",
+   "province": "25"
+  },
+  {
+   "ine": "25166",
+   "idescat": "251667",
+   "name": "Pinell de Solsonès",
+   "comarca": "35",
+   "province": "25"
+  },
+  {
+   "ine": "25167",
+   "idescat": "251673",
+   "name": "Pinós",
+   "comarca": "35",
+   "province": "25"
+  },
+  {
+   "ine": "25168",
+   "idescat": "251689",
+   "name": "el Poal",
+   "comarca": "27",
+   "province": "25"
+  },
+  {
+   "ine": "25169",
+   "idescat": "251692",
+   "name": "la Pobla de Cérvoles",
+   "comarca": "18",
+   "province": "25"
+  },
+  {
+   "ine": "25170",
+   "idescat": "251706",
+   "name": "Bellaguarda",
+   "comarca": "18",
+   "province": "25"
+  },
+  {
+   "ine": "25171",
+   "idescat": "251713",
+   "name": "la Pobla de Segur",
+   "comarca": "25",
+   "province": "25"
+  },
+  {
+   "ine": "25172",
+   "idescat": "251728",
+   "name": "Ponts",
+   "comarca": "23",
+   "province": "25"
+  },
+  {
+   "ine": "25173",
+   "idescat": "251734",
+   "name": "el Pont de Suert",
+   "comarca": "05",
+   "province": "25"
+  },
+  {
+   "ine": "25174",
+   "idescat": "251749",
+   "name": "la Portella",
+   "comarca": "33",
+   "province": "25"
+  },
+  {
+   "ine": "25175",
+   "idescat": "251752",
+   "name": "Prats i Sansor",
+   "comarca": "15",
+   "province": "25"
+  },
+  {
+   "ine": "25176",
+   "idescat": "251765",
+   "name": "Preixana",
+   "comarca": "38",
+   "province": "25"
+  },
+  {
+   "ine": "25177",
+   "idescat": "251771",
+   "name": "Preixens",
+   "comarca": "23",
+   "province": "25"
+  },
+  {
+   "ine": "25179",
+   "idescat": "251790",
+   "name": "Prullans",
+   "comarca": "15",
+   "province": "25"
+  },
+  {
+   "ine": "25180",
+   "idescat": "251804",
+   "name": "Puiggròs",
+   "comarca": "18",
+   "province": "25"
+  },
+  {
+   "ine": "25181",
+   "idescat": "251811",
+   "name": "Puigverd d'Agramunt",
+   "comarca": "38",
+   "province": "25"
+  },
+  {
+   "ine": "25182",
+   "idescat": "251826",
+   "name": "Puigverd de Lleida",
+   "comarca": "33",
+   "province": "25"
+  },
+  {
+   "ine": "25183",
+   "idescat": "251832",
+   "name": "Rialp",
+   "comarca": "26",
+   "province": "25"
+  },
+  {
+   "ine": "25185",
+   "idescat": "251850",
+   "name": "Ribera d'Urgellet",
+   "comarca": "04",
+   "province": "25"
+  },
+  {
+   "ine": "25186",
+   "idescat": "251863",
+   "name": "Riner",
+   "comarca": "35",
+   "province": "25"
+  },
+  {
+   "ine": "25189",
+   "idescat": "251898",
+   "name": "Rosselló",
+   "comarca": "33",
+   "province": "25"
+  },
+  {
+   "ine": "25190",
+   "idescat": "251902",
+   "name": "Salàs de Pallars",
+   "comarca": "25",
+   "province": "25"
+  },
+  {
+   "ine": "25191",
+   "idescat": "251919",
+   "name": "Sanaüja",
+   "comarca": "32",
+   "province": "25"
+  },
+  {
+   "ine": "25192",
+   "idescat": "251924",
+   "name": "Sant Guim de Freixenet",
+   "comarca": "32",
+   "province": "25"
+  },
+  {
+   "ine": "25193",
+   "idescat": "251930",
+   "name": "Sant Llorenç de Morunys",
+   "comarca": "35",
+   "province": "25"
+  },
+  {
+   "ine": "25194",
+   "idescat": "251945",
+   "name": "Sant Ramon",
+   "comarca": "32",
+   "province": "25"
+  },
+  {
+   "ine": "25196",
+   "idescat": "251961",
+   "name": "Sant Esteve de la Sarga",
+   "comarca": "25",
+   "province": "25"
+  },
+  {
+   "ine": "25197",
+   "idescat": "251977",
+   "name": "Sant Guim de la Plana",
+   "comarca": "32",
+   "province": "25"
+  },
+  {
+   "ine": "25200",
+   "idescat": "252000",
+   "name": "Sarroca de Lleida",
+   "comarca": "33",
+   "province": "25"
+  },
+  {
+   "ine": "25201",
+   "idescat": "252017",
+   "name": "Sarroca de Bellera",
+   "comarca": "25",
+   "province": "25"
+  },
+  {
+   "ine": "25202",
+   "idescat": "252022",
+   "name": "Senterada",
+   "comarca": "25",
+   "province": "25"
+  },
+  {
+   "ine": "25203",
+   "idescat": "252038",
+   "name": "la Seu d'Urgell",
+   "comarca": "04",
+   "province": "25"
+  },
+  {
+   "ine": "25204",
+   "idescat": "252043",
+   "name": "Seròs",
+   "comarca": "33",
+   "province": "25"
+  },
+  {
+   "ine": "25205",
+   "idescat": "252056",
+   "name": "Sidamon",
+   "comarca": "27",
+   "province": "25"
+  },
+  {
+   "ine": "25206",
+   "idescat": "252069",
+   "name": "el Soleràs",
+   "comarca": "18",
+   "province": "25"
+  },
+  {
+   "ine": "25207",
+   "idescat": "252075",
+   "name": "Solsona",
+   "comarca": "35",
+   "province": "25"
+  },
+  {
+   "ine": "25208",
+   "idescat": "252081",
+   "name": "Soriguera",
+   "comarca": "26",
+   "province": "25"
+  },
+  {
+   "ine": "25209",
+   "idescat": "252094",
+   "name": "Sort",
+   "comarca": "26",
+   "province": "25"
+  },
+  {
+   "ine": "25210",
+   "idescat": "252108",
+   "name": "Soses",
+   "comarca": "33",
+   "province": "25"
+  },
+  {
+   "ine": "25211",
+   "idescat": "252115",
+   "name": "Sudanell",
+   "comarca": "33",
+   "province": "25"
+  },
+  {
+   "ine": "25212",
+   "idescat": "252120",
+   "name": "Sunyer",
+   "comarca": "33",
+   "province": "25"
+  },
+  {
+   "ine": "25215",
+   "idescat": "252154",
+   "name": "Talarn",
+   "comarca": "25",
+   "province": "25"
+  },
+  {
+   "ine": "25216",
+   "idescat": "252167",
+   "name": "Talavera",
+   "comarca": "32",
+   "province": "25"
+  },
+  {
+   "ine": "25217",
+   "idescat": "252173",
+   "name": "Tàrrega",
+   "comarca": "38",
+   "province": "25"
+  },
+  {
+   "ine": "25218",
+   "idescat": "252189",
+   "name": "Tarrés",
+   "comarca": "18",
+   "province": "25"
+  },
+  {
+   "ine": "25219",
+   "idescat": "252192",
+   "name": "Tarroja de Segarra",
+   "comarca": "32",
+   "province": "25"
+  },
+  {
+   "ine": "25220",
+   "idescat": "252206",
+   "name": "Térmens",
+   "comarca": "23",
+   "province": "25"
+  },
+  {
+   "ine": "25221",
+   "idescat": "252213",
+   "name": "Tírvia",
+   "comarca": "26",
+   "province": "25"
+  },
+  {
+   "ine": "25222",
+   "idescat": "252228",
+   "name": "Tiurana",
+   "comarca": "23",
+   "province": "25"
+  },
+  {
+   "ine": "25223",
+   "idescat": "252234",
+   "name": "Torà",
+   "comarca": "35",
+   "province": "25"
+  },
+  {
+   "ine": "25224",
+   "idescat": "252249",
+   "name": "els Torms",
+   "comarca": "18",
+   "province": "25"
+  },
+  {
+   "ine": "25225",
+   "idescat": "252252",
+   "name": "Tornabous",
+   "comarca": "38",
+   "province": "25"
+  },
+  {
+   "ine": "25226",
+   "idescat": "252265",
+   "name": "Torrebesses",
+   "comarca": "33",
+   "province": "25"
+  },
+  {
+   "ine": "25227",
+   "idescat": "252271",
+   "name": "la Torre de Cabdella",
+   "comarca": "25",
+   "province": "25"
+  },
+  {
+   "ine": "25228",
+   "idescat": "252287",
+   "name": "Torrefarrera",
+   "comarca": "33",
+   "province": "25"
+  },
+  {
+   "ine": "25230",
+   "idescat": "252304",
+   "name": "Torregrossa",
+   "comarca": "27",
+   "province": "25"
+  },
+  {
+   "ine": "25231",
+   "idescat": "252311",
+   "name": "Torrelameu",
+   "comarca": "23",
+   "province": "25"
+  },
+  {
+   "ine": "25232",
+   "idescat": "252326",
+   "name": "Torres de Segre",
+   "comarca": "33",
+   "province": "25"
+  },
+  {
+   "ine": "25233",
+   "idescat": "252332",
+   "name": "Torre-serona",
+   "comarca": "33",
+   "province": "25"
+  },
+  {
+   "ine": "25234",
+   "idescat": "252347",
+   "name": "Tremp",
+   "comarca": "25",
+   "province": "25"
+  },
+  {
+   "ine": "25238",
+   "idescat": "252385",
+   "name": "Vallbona de les Monges",
+   "comarca": "38",
+   "province": "25"
+  },
+  {
+   "ine": "25239",
+   "idescat": "252398",
+   "name": "les Valls de Valira",
+   "comarca": "04",
+   "province": "25"
+  },
+  {
+   "ine": "25240",
+   "idescat": "252402",
+   "name": "Vallfogona de Balaguer",
+   "comarca": "23",
+   "province": "25"
+  },
+  {
+   "ine": "25242",
+   "idescat": "252424",
+   "name": "Verdú",
+   "comarca": "38",
+   "province": "25"
+  },
+  {
+   "ine": "25243",
+   "idescat": "252430",
+   "name": "Vielha e Mijaran",
+   "comarca": "39",
+   "province": "25"
+  },
+  {
+   "ine": "25244",
+   "idescat": "252445",
+   "name": "Vilagrassa",
+   "comarca": "38",
+   "province": "25"
+  },
+  {
+   "ine": "25245",
+   "idescat": "252458",
+   "name": "Vilaller",
+   "comarca": "05",
+   "province": "25"
+  },
+  {
+   "ine": "25247",
+   "idescat": "252477",
+   "name": "Vilamòs",
+   "comarca": "39",
+   "province": "25"
+  },
+  {
+   "ine": "25248",
+   "idescat": "252483",
+   "name": "Vilanova de Bellpuig",
+   "comarca": "27",
+   "province": "25"
+  },
+  {
+   "ine": "25249",
+   "idescat": "252496",
+   "name": "Vilanova de l'Aguda",
+   "comarca": "23",
+   "province": "25"
+  },
+  {
+   "ine": "25250",
+   "idescat": "252509",
+   "name": "Vilanova de Meià",
+   "comarca": "23",
+   "province": "25"
+  },
+  {
+   "ine": "25251",
+   "idescat": "252516",
+   "name": "Vilanova de Segrià",
+   "comarca": "33",
+   "province": "25"
+  },
+  {
+   "ine": "25252",
+   "idescat": "252521",
+   "name": "Vila-sana",
+   "comarca": "27",
+   "province": "25"
+  },
+  {
+   "ine": "25253",
+   "idescat": "252537",
+   "name": "el Vilosell",
+   "comarca": "18",
+   "province": "25"
+  },
+  {
+   "ine": "25254",
+   "idescat": "252542",
+   "name": "Vilanova de la Barca",
+   "comarca": "33",
+   "province": "25"
+  },
+  {
+   "ine": "25255",
+   "idescat": "252555",
+   "name": "Vinaixa",
+   "comarca": "18",
+   "province": "25"
+  },
+  {
+   "ine": "25901",
+   "idescat": "259010",
+   "name": "Vall de Cardós",
+   "comarca": "26",
+   "province": "25"
+  },
+  {
+   "ine": "25902",
+   "idescat": "259025",
+   "name": "Sant Martí de Riucorb",
+   "comarca": "38",
+   "province": "25"
+  },
+  {
+   "ine": "25903",
+   "idescat": "259031",
+   "name": "la Guingueta d'Àneu",
+   "comarca": "26",
+   "province": "25"
+  },
+  {
+   "ine": "25904",
+   "idescat": "259046",
+   "name": "Castell de Mur",
+   "comarca": "25",
+   "province": "25"
+  },
+  {
+   "ine": "25905",
+   "idescat": "259059",
+   "name": "Ribera d'Ondara",
+   "comarca": "32",
+   "province": "25"
+  },
+  {
+   "ine": "25906",
+   "idescat": "259062",
+   "name": "les Valls d'Aguilar",
+   "comarca": "04",
+   "province": "25"
+  },
+  {
+   "ine": "25907",
+   "idescat": "259078",
+   "name": "Torrefeta i Florejacs",
+   "comarca": "32",
+   "province": "25"
+  },
+  {
+   "ine": "25908",
+   "idescat": "259084",
+   "name": "Fígols i Alinyà",
+   "comarca": "04",
+   "province": "25"
+  },
+  {
+   "ine": "25909",
+   "idescat": "259097",
+   "name": "la Vansa i Fórnols",
+   "comarca": "04",
+   "province": "25"
+  },
+  {
+   "ine": "25910",
+   "idescat": "259101",
+   "name": "Josa i Tuixén",
+   "comarca": "04",
+   "province": "25"
+  },
+  {
+   "ine": "25911",
+   "idescat": "259118",
+   "name": "els Plans de Sió",
+   "comarca": "32",
+   "province": "25"
+  },
+  {
+   "ine": "25912",
+   "idescat": "259123",
+   "name": "Gimenells i el Pla de la Font",
+   "comarca": "33",
+   "province": "25"
+  },
+  {
+   "ine": "25913",
+   "idescat": "259139",
+   "name": "Riu de Cerdanya",
+   "comarca": "15",
+   "province": "25"
+  },
+  {
+   "ine": "43001",
+   "idescat": "430017",
+   "name": "Aiguamúrcia",
+   "comarca": "01",
+   "province": "43"
+  },
+  {
+   "ine": "43002",
+   "idescat": "430022",
+   "name": "Albinyana",
+   "comarca": "12",
+   "province": "43"
+  },
+  {
+   "ine": "43003",
+   "idescat": "430038",
+   "name": "l'Albiol",
+   "comarca": "08",
+   "province": "43"
+  },
+  {
+   "ine": "43004",
+   "idescat": "430043",
+   "name": "Alcanar",
+   "comarca": "22",
+   "province": "43"
+  },
+  {
+   "ine": "43005",
+   "idescat": "430056",
+   "name": "Alcover",
+   "comarca": "01",
+   "province": "43"
+  },
+  {
+   "ine": "43006",
+   "idescat": "430069",
+   "name": "Aldover",
+   "comarca": "09",
+   "province": "43"
+  },
+  {
+   "ine": "43007",
+   "idescat": "430075",
+   "name": "l'Aleixar",
+   "comarca": "08",
+   "province": "43"
+  },
+  {
+   "ine": "43008",
+   "idescat": "430081",
+   "name": "Alfara de Carles",
+   "comarca": "09",
+   "province": "43"
+  },
+  {
+   "ine": "43009",
+   "idescat": "430094",
+   "name": "Alforja",
+   "comarca": "08",
+   "province": "43"
+  },
+  {
+   "ine": "43010",
+   "idescat": "430108",
+   "name": "Alió",
+   "comarca": "01",
+   "province": "43"
+  },
+  {
+   "ine": "43011",
+   "idescat": "430115",
+   "name": "Almoster",
+   "comarca": "08",
+   "province": "43"
+  },
+  {
+   "ine": "43012",
+   "idescat": "430120",
+   "name": "Altafulla",
+   "comarca": "36",
+   "province": "43"
+  },
+  {
+   "ine": "43013",
+   "idescat": "430136",
+   "name": "l'Ametlla de Mar",
+   "comarca": "09",
+   "province": "43"
+  },
+  {
+   "ine": "43014",
+   "idescat": "430141",
+   "name": "Amposta",
+   "comarca": "22",
+   "province": "43"
+  },
+  {
+   "ine": "43015",
+   "idescat": "430154",
+   "name": "Arbolí",
+   "comarca": "08",
+   "province": "43"
+  },
+  {
+   "ine": "43016",
+   "idescat": "430167",
+   "name": "l'Arboç",
+   "comarca": "12",
+   "province": "43"
+  },
+  {
+   "ine": "43017",
+   "idescat": "430173",
+   "name": "l'Argentera",
+   "comarca": "08",
+   "province": "43"
+  },
+  {
+   "ine": "43018",
+   "idescat": "430189",
+   "name": "Arnes",
+   "comarca": "37",
+   "province": "43"
+  },
+  {
+   "ine": "43019",
+   "idescat": "430192",
+   "name": "Ascó",
+   "comarca": "30",
+   "province": "43"
+  },
+  {
+   "ine": "43020",
+   "idescat": "430206",
+   "name": "Banyeres del Penedès",
+   "comarca": "12",
+   "province": "43"
+  },
+  {
+   "ine": "43021",
+   "idescat": "430213",
+   "name": "Barberà de la Conca",
+   "comarca": "16",
+   "province": "43"
+  },
+  {
+   "ine": "43022",
+   "idescat": "430228",
+   "name": "Batea",
+   "comarca": "37",
+   "province": "43"
+  },
+  {
+   "ine": "43023",
+   "idescat": "430234",
+   "name": "Bellmunt del Priorat",
+   "comarca": "29",
+   "province": "43"
+  },
+  {
+   "ine": "43024",
+   "idescat": "430249",
+   "name": "Bellvei",
+   "comarca": "12",
+   "province": "43"
+  },
+  {
+   "ine": "43025",
+   "idescat": "430252",
+   "name": "Benifallet",
+   "comarca": "09",
+   "province": "43"
+  },
+  {
+   "ine": "43026",
+   "idescat": "430265",
+   "name": "Benissanet",
+   "comarca": "30",
+   "province": "43"
+  },
+  {
+   "ine": "43027",
+   "idescat": "430271",
+   "name": "la Bisbal de Falset",
+   "comarca": "29",
+   "province": "43"
+  },
+  {
+   "ine": "43028",
+   "idescat": "430287",
+   "name": "la Bisbal del Penedès",
+   "comarca": "12",
+   "province": "43"
+  },
+  {
+   "ine": "43029",
+   "idescat": "430290",
+   "name": "Blancafort",
+   "comarca": "16",
+   "province": "43"
+  },
+  {
+   "ine": "43030",
+   "idescat": "430304",
+   "name": "Bonastre",
+   "comarca": "12",
+   "province": "43"
+  },
+  {
+   "ine": "43031",
+   "idescat": "430311",
+   "name": "les Borges del Camp",
+   "comarca": "08",
+   "province": "43"
+  },
+  {
+   "ine": "43032",
+   "idescat": "430326",
+   "name": "Bot",
+   "comarca": "37",
+   "province": "43"
+  },
+  {
+   "ine": "43033",
+   "idescat": "430332",
+   "name": "Botarell",
+   "comarca": "08",
+   "province": "43"
+  },
+  {
+   "ine": "43034",
+   "idescat": "430347",
+   "name": "Bràfim",
+   "comarca": "01",
+   "province": "43"
+  },
+  {
+   "ine": "43035",
+   "idescat": "430350",
+   "name": "Cabacés",
+   "comarca": "29",
+   "province": "43"
+  },
+  {
+   "ine": "43036",
+   "idescat": "430363",
+   "name": "Cabra del Camp",
+   "comarca": "01",
+   "province": "43"
+  },
+  {
+   "ine": "43037",
+   "idescat": "430379",
+   "name": "Calafell",
+   "comarca": "12",
+   "province": "43"
+  },
+  {
+   "ine": "43038",
+   "idescat": "430385",
+   "name": "Cambrils",
+   "comarca": "08",
+   "province": "43"
+  },
+  {
+   "ine": "43039",
+   "idescat": "430398",
+   "name": "Capafonts",
+   "comarca": "08",
+   "province": "43"
+  },
+  {
+   "ine": "43040",
+   "idescat": "430402",
+   "name": "Capçanes",
+   "comarca": "29",
+   "province": "43"
+  },
+  {
+   "ine": "43041",
+   "idescat": "430419",
+   "name": "Caseres",
+   "comarca": "37",
+   "province": "43"
+  },
+  {
+   "ine": "43042",
+   "idescat": "430424",
+   "name": "Castellvell del Camp",
+   "comarca": "08",
+   "province": "43"
+  },
+  {
+   "ine": "43043",
+   "idescat": "430430",
+   "name": "el Catllar",
+   "comarca": "36",
+   "province": "43"
+  },
+  {
+   "ine": "43044",
+   "idescat": "430445",
+   "name": "la Sénia",
+   "comarca": "22",
+   "province": "43"
+  },
+  {
+   "ine": "43045",
+   "idescat": "430458",
+   "name": "Colldejou",
+   "comarca": "08",
+   "province": "43"
+  },
+  {
+   "ine": "43046",
+   "idescat": "430461",
+   "name": "Conesa",
+   "comarca": "16",
+   "province": "43"
+  },
+  {
+   "ine": "43047",
+   "idescat": "430477",
+   "name": "Constantí",
+   "comarca": "36",
+   "province": "43"
+  },
+  {
+   "ine": "43048",
+   "idescat": "430483",
+   "name": "Corbera d'Ebre",
+   "comarca": "37",
+   "province": "43"
+  },
+  {
+   "ine": "43049",
+   "idescat": "430496",
+   "name": "Cornudella de Montsant",
+   "comarca": "29",
+   "province": "43"
+  },
+  {
+   "ine": "43050",
+   "idescat": "430509",
+   "name": "Creixell",
+   "comarca": "36",
+   "province": "43"
+  },
+  {
+   "ine": "43051",
+   "idescat": "430516",
+   "name": "Cunit",
+   "comarca": "12",
+   "province": "43"
+  },
+  {
+   "ine": "43052",
+   "idescat": "430521",
+   "name": "Xerta",
+   "comarca": "09",
+   "province": "43"
+  },
+  {
+   "ine": "43053",
+   "idescat": "430537",
+   "name": "Duesaigües",
+   "comarca": "08",
+   "province": "43"
+  },
+  {
+   "ine": "43054",
+   "idescat": "430542",
+   "name": "l'Espluga de Francolí",
+   "comarca": "16",
+   "province": "43"
+  },
+  {
+   "ine": "43055",
+   "idescat": "430555",
+   "name": "Falset",
+   "comarca": "29",
+   "province": "43"
+  },
+  {
+   "ine": "43056",
+   "idescat": "430568",
+   "name": "la Fatarella",
+   "comarca": "37",
+   "province": "43"
+  },
+  {
+   "ine": "43057",
+   "idescat": "430574",
+   "name": "la Febró",
+   "comarca": "08",
+   "province": "43"
+  },
+  {
+   "ine": "43058",
+   "idescat": "430580",
+   "name": "la Figuera",
+   "comarca": "29",
+   "province": "43"
+  },
+  {
+   "ine": "43059",
+   "idescat": "430593",
+   "name": "Figuerola del Camp",
+   "comarca": "01",
+   "province": "43"
+  },
+  {
+   "ine": "43060",
+   "idescat": "430607",
+   "name": "Flix",
+   "comarca": "30",
+   "province": "43"
+  },
+  {
+   "ine": "43061",
+   "idescat": "430614",
+   "name": "Forès",
+   "comarca": "16",
+   "province": "43"
+  },
+  {
+   "ine": "43062",
+   "idescat": "430629",
+   "name": "Freginals",
+   "comarca": "22",
+   "province": "43"
+  },
+  {
+   "ine": "43063",
+   "idescat": "430635",
+   "name": "la Galera",
+   "comarca": "22",
+   "province": "43"
+  },
+  {
+   "ine": "43064",
+   "idescat": "430640",
+   "name": "Gandesa",
+   "comarca": "37",
+   "province": "43"
+  },
+  {
+   "ine": "43065",
+   "idescat": "430653",
+   "name": "Garcia",
+   "comarca": "30",
+   "province": "43"
+  },
+  {
+   "ine": "43066",
+   "idescat": "430666",
+   "name": "els Garidells",
+   "comarca": "01",
+   "province": "43"
+  },
+  {
+   "ine": "43067",
+   "idescat": "430672",
+   "name": "Ginestar",
+   "comarca": "30",
+   "province": "43"
+  },
+  {
+   "ine": "43068",
+   "idescat": "430688",
+   "name": "Godall",
+   "comarca": "22",
+   "province": "43"
+  },
+  {
+   "ine": "43069",
+   "idescat": "430691",
+   "name": "Gratallops",
+   "comarca": "29",
+   "province": "43"
+  },
+  {
+   "ine": "43070",
+   "idescat": "430705",
+   "name": "els Guiamets",
+   "comarca": "29",
+   "province": "43"
+  },
+  {
+   "ine": "43071",
+   "idescat": "430712",
+   "name": "Horta de Sant Joan",
+   "comarca": "37",
+   "province": "43"
+  },
+  {
+   "ine": "43072",
+   "idescat": "430727",
+   "name": "el Lloar",
+   "comarca": "29",
+   "province": "43"
+  },
+  {
+   "ine": "43073",
+   "idescat": "430733",
+   "name": "Llorac",
+   "comarca": "16",
+   "province": "43"
+  },
+  {
+   "ine": "43074",
+   "idescat": "430748",
+   "name": "Llorenç del Penedès",
+   "comarca": "12",
+   "province": "43"
+  },
+  {
+   "ine": "43075",
+   "idescat": "430751",
+   "name": "Margalef",
+   "comarca": "29",
+   "province": "43"
+  },
+  {
+   "ine": "43076",
+   "idescat": "430764",
+   "name": "Marçà",
+   "comarca": "29",
+   "province": "43"
+  },
+  {
+   "ine": "43077",
+   "idescat": "430770",
+   "name": "Mas de Barberans",
+   "comarca": "22",
+   "province": "43"
+  },
+  {
+   "ine": "43078",
+   "idescat": "430786",
+   "name": "Masdenverge",
+   "comarca": "22",
+   "province": "43"
+  },
+  {
+   "ine": "43079",
+   "idescat": "430799",
+   "name": "Masllorenç",
+   "comarca": "12",
+   "province": "43"
+  },
+  {
+   "ine": "43080",
+   "idescat": "430803",
+   "name": "la Masó",
+   "comarca": "01",
+   "province": "43"
+  },
+  {
+   "ine": "43081",
+   "idescat": "430810",
+   "name": "Maspujols",
+   "comarca": "08",
+   "province": "43"
+  },
+  {
+   "ine": "43082",
+   "idescat": "430825",
+   "name": "el Masroig",
+   "comarca": "29",
+   "province": "43"
+  },
+  {
+   "ine": "43083",
+   "idescat": "430831",
+   "name": "el Milà",
+   "comarca": "01",
+   "province": "43"
+  },
+  {
+   "ine": "43084",
+   "idescat": "430846",
+   "name": "Miravet",
+   "comarca": "30",
+   "province": "43"
+  },
+  {
+   "ine": "43085",
+   "idescat": "430859",
+   "name": "el Molar",
+   "comarca": "29",
+   "province": "43"
+  },
+  {
+   "ine": "43086",
+   "idescat": "430862",
+   "name": "Montblanc",
+   "comarca": "16",
+   "province": "43"
+  },
+  {
+   "ine": "43088",
+   "idescat": "430884",
+   "name": "Montbrió del Camp",
+   "comarca": "08",
+   "province": "43"
+  },
+  {
+   "ine": "43089",
+   "idescat": "430897",
+   "name": "Montferri",
+   "comarca": "01",
+   "province": "43"
+  },
+  {
+   "ine": "43090",
+   "idescat": "430901",
+   "name": "el Montmell",
+   "comarca": "12",
+   "province": "43"
+  },
+  {
+   "ine": "43091",
+   "idescat": "430918",
+   "name": "Mont-ral",
+   "comarca": "01",
+   "province": "43"
+  },
+  {
+   "ine": "43092",
+   "idescat": "430923",
+   "name": "Mont-roig del Camp",
+   "comarca": "08",
+   "province": "43"
+  },
+  {
+   "ine": "43093",
+   "idescat": "430939",
+   "name": "Móra d'Ebre",
+   "comarca": "30",
+   "province": "43"
+  },
+  {
+   "ine": "43094",
+   "idescat": "430944",
+   "name": "Móra la Nova",
+   "comarca": "30",
+   "province": "43"
+  },
+  {
+   "ine": "43095",
+   "idescat": "430957",
+   "name": "el Morell",
+   "comarca": "36",
+   "province": "43"
+  },
+  {
+   "ine": "43096",
+   "idescat": "430960",
+   "name": "la Morera de Montsant",
+   "comarca": "29",
+   "province": "43"
+  },
+  {
+   "ine": "43097",
+   "idescat": "430976",
+   "name": "la Nou de Gaià",
+   "comarca": "36",
+   "province": "43"
+  },
+  {
+   "ine": "43098",
+   "idescat": "430982",
+   "name": "Nulles",
+   "comarca": "01",
+   "province": "43"
+  },
+  {
+   "ine": "43099",
+   "idescat": "430995",
+   "name": "la Palma d'Ebre",
+   "comarca": "30",
+   "province": "43"
+  },
+  {
+   "ine": "43100",
+   "idescat": "431009",
+   "name": "els Pallaresos",
+   "comarca": "36",
+   "province": "43"
+  },
+  {
+   "ine": "43101",
+   "idescat": "431016",
+   "name": "Passanant i Belltall",
+   "comarca": "16",
+   "province": "43"
+  },
+  {
+   "ine": "43102",
+   "idescat": "431021",
+   "name": "Paüls",
+   "comarca": "09",
+   "province": "43"
+  },
+  {
+   "ine": "43103",
+   "idescat": "431037",
+   "name": "Perafort",
+   "comarca": "36",
+   "province": "43"
+  },
+  {
+   "ine": "43104",
+   "idescat": "431042",
+   "name": "el Perelló",
+   "comarca": "09",
+   "province": "43"
+  },
+  {
+   "ine": "43105",
+   "idescat": "431055",
+   "name": "les Piles de Gaià",
+   "comarca": "16",
+   "province": "43"
+  },
+  {
+   "ine": "43106",
+   "idescat": "431068",
+   "name": "el Pinell de Brai",
+   "comarca": "37",
+   "province": "43"
+  },
+  {
+   "ine": "43107",
+   "idescat": "431074",
+   "name": "Pira",
+   "comarca": "16",
+   "province": "43"
+  },
+  {
+   "ine": "43108",
+   "idescat": "431080",
+   "name": "el Pla de Santa Maria",
+   "comarca": "01",
+   "province": "43"
+  },
+  {
+   "ine": "43109",
+   "idescat": "431093",
+   "name": "la Pobla de Mafumet",
+   "comarca": "36",
+   "province": "43"
+  },
+  {
+   "ine": "43110",
+   "idescat": "431107",
+   "name": "la Pobla de Massaluca",
+   "comarca": "37",
+   "province": "43"
+  },
+  {
+   "ine": "43111",
+   "idescat": "431114",
+   "name": "la Pobla de Montornès",
+   "comarca": "36",
+   "province": "43"
+  },
+  {
+   "ine": "43112",
+   "idescat": "431129",
+   "name": "Poboleda",
+   "comarca": "29",
+   "province": "43"
+  },
+  {
+   "ine": "43113",
+   "idescat": "431135",
+   "name": "el Pont d'Armentera",
+   "comarca": "01",
+   "province": "43"
+  },
+  {
+   "ine": "43114",
+   "idescat": "431140",
+   "name": "Porrera",
+   "comarca": "29",
+   "province": "43"
+  },
+  {
+   "ine": "43115",
+   "idescat": "431153",
+   "name": "Pradell de la Teixeta",
+   "comarca": "29",
+   "province": "43"
+  },
+  {
+   "ine": "43116",
+   "idescat": "431166",
+   "name": "Prades",
+   "comarca": "08",
+   "province": "43"
+  },
+  {
+   "ine": "43117",
+   "idescat": "431172",
+   "name": "Prat de Comte",
+   "comarca": "37",
+   "province": "43"
+  },
+  {
+   "ine": "43118",
+   "idescat": "431188",
+   "name": "Pratdip",
+   "comarca": "08",
+   "province": "43"
+  },
+  {
+   "ine": "43119",
+   "idescat": "431191",
+   "name": "Puigpelat",
+   "comarca": "01",
+   "province": "43"
+  },
+  {
+   "ine": "43120",
+   "idescat": "431205",
+   "name": "Querol",
+   "comarca": "01",
+   "province": "43"
+  },
+  {
+   "ine": "43121",
+   "idescat": "431212",
+   "name": "Rasquera",
+   "comarca": "30",
+   "province": "43"
+  },
+  {
+   "ine": "43122",
+   "idescat": "431227",
+   "name": "Renau",
+   "comarca": "36",
+   "province": "43"
+  },
+  {
+   "ine": "43123",
+   "idescat": "431233",
+   "name": "Reus",
+   "comarca": "08",
+   "province": "43"
+  },
+  {
+   "ine": "43124",
+   "idescat": "431248",
+   "name": "la Riba",
+   "comarca": "01",
+   "province": "43"
+  },
+  {
+   "ine": "43125",
+   "idescat": "431251",
+   "name": "Riba-roja d'Ebre",
+   "comarca": "30",
+   "province": "43"
+  },
+  {
+   "ine": "43126",
+   "idescat": "431264",
+   "name": "la Riera de Gaià",
+   "comarca": "36",
+   "province": "43"
+  },
+  {
+   "ine": "43127",
+   "idescat": "431270",
+   "name": "Riudecanyes",
+   "comarca": "08",
+   "province": "43"
+  },
+  {
+   "ine": "43128",
+   "idescat": "431286",
+   "name": "Riudecols",
+   "comarca": "08",
+   "province": "43"
+  },
+  {
+   "ine": "43129",
+   "idescat": "431299",
+   "name": "Riudoms",
+   "comarca": "08",
+   "province": "43"
+  },
+  {
+   "ine": "43130",
+   "idescat": "431303",
+   "name": "Rocafort de Queralt",
+   "comarca": "16",
+   "province": "43"
+  },
+  {
+   "ine": "43131",
+   "idescat": "431310",
+   "name": "Roda de Berà",
+   "comarca": "36",
+   "province": "43"
+  },
+  {
+   "ine": "43132",
+   "idescat": "431325",
+   "name": "Rodonyà",
+   "comarca": "01",
+   "province": "43"
+  },
+  {
+   "ine": "43133",
+   "idescat": "431331",
+   "name": "Roquetes",
+   "comarca": "09",
+   "province": "43"
+  },
+  {
+   "ine": "43134",
+   "idescat": "431346",
+   "name": "el Rourell",
+   "comarca": "01",
+   "province": "43"
+  },
+  {
+   "ine": "43135",
+   "idescat": "431359",
+   "name": "Salomó",
+   "comarca": "36",
+   "province": "43"
+  },
+  {
+   "ine": "43136",
+   "idescat": "431362",
+   "name": "la Ràpita",
+   "comarca": "22",
+   "province": "43"
+  },
+  {
+   "ine": "43137",
+   "idescat": "431378",
+   "name": "Sant Jaume dels Domenys",
+   "comarca": "12",
+   "province": "43"
+  },
+  {
+   "ine": "43138",
+   "idescat": "431384",
+   "name": "Santa Bàrbara",
+   "comarca": "22",
+   "province": "43"
+  },
+  {
+   "ine": "43139",
+   "idescat": "431397",
+   "name": "Santa Coloma de Queralt",
+   "comarca": "16",
+   "province": "43"
+  },
+  {
+   "ine": "43140",
+   "idescat": "431401",
+   "name": "Santa Oliva",
+   "comarca": "12",
+   "province": "43"
+  },
+  {
+   "ine": "43141",
+   "idescat": "431418",
+   "name": "Pontils",
+   "comarca": "16",
+   "province": "43"
+  },
+  {
+   "ine": "43142",
+   "idescat": "431423",
+   "name": "Sarral",
+   "comarca": "16",
+   "province": "43"
+  },
+  {
+   "ine": "43143",
+   "idescat": "431439",
+   "name": "Savallà del Comtat",
+   "comarca": "16",
+   "province": "43"
+  },
+  {
+   "ine": "43144",
+   "idescat": "431444",
+   "name": "la Secuita",
+   "comarca": "36",
+   "province": "43"
+  },
+  {
+   "ine": "43145",
+   "idescat": "431457",
+   "name": "la Selva del Camp",
+   "comarca": "08",
+   "province": "43"
+  },
+  {
+   "ine": "43146",
+   "idescat": "431460",
+   "name": "Senan",
+   "comarca": "16",
+   "province": "43"
+  },
+  {
+   "ine": "43147",
+   "idescat": "431476",
+   "name": "Solivella",
+   "comarca": "16",
+   "province": "43"
+  },
+  {
+   "ine": "43148",
+   "idescat": "431482",
+   "name": "Tarragona",
+   "comarca": "36",
+   "province": "43"
+  },
+  {
+   "ine": "43149",
+   "idescat": "431495",
+   "name": "Tivenys",
+   "comarca": "09",
+   "province": "43"
+  },
+  {
+   "ine": "43150",
+   "idescat": "431508",
+   "name": "Tivissa",
+   "comarca": "30",
+   "province": "43"
+  },
+  {
+   "ine": "43151",
+   "idescat": "431515",
+   "name": "la Torre de Fontaubella",
+   "comarca": "29",
+   "province": "43"
+  },
+  {
+   "ine": "43152",
+   "idescat": "431520",
+   "name": "la Torre de l'Espanyol",
+   "comarca": "30",
+   "province": "43"
+  },
+  {
+   "ine": "43153",
+   "idescat": "431536",
+   "name": "Torredembarra",
+   "comarca": "36",
+   "province": "43"
+  },
+  {
+   "ine": "43154",
+   "idescat": "431541",
+   "name": "Torroja del Priorat",
+   "comarca": "29",
+   "province": "43"
+  },
+  {
+   "ine": "43155",
+   "idescat": "431554",
+   "name": "Tortosa",
+   "comarca": "09",
+   "province": "43"
+  },
+  {
+   "ine": "43156",
+   "idescat": "431567",
+   "name": "Ulldecona",
+   "comarca": "22",
+   "province": "43"
+  },
+  {
+   "ine": "43157",
+   "idescat": "431573",
+   "name": "Ulldemolins",
+   "comarca": "29",
+   "province": "43"
+  },
+  {
+   "ine": "43158",
+   "idescat": "431589",
+   "name": "Vallclara",
+   "comarca": "16",
+   "province": "43"
+  },
+  {
+   "ine": "43159",
+   "idescat": "431592",
+   "name": "Vallfogona de Riucorb",
+   "comarca": "16",
+   "province": "43"
+  },
+  {
+   "ine": "43160",
+   "idescat": "431606",
+   "name": "Vallmoll",
+   "comarca": "01",
+   "province": "43"
+  },
+  {
+   "ine": "43161",
+   "idescat": "431613",
+   "name": "Valls",
+   "comarca": "01",
+   "province": "43"
+  },
+  {
+   "ine": "43162",
+   "idescat": "431628",
+   "name": "Vandellòs i l'Hospitalet de l'Infant",
+   "comarca": "08",
+   "province": "43"
+  },
+  {
+   "ine": "43163",
+   "idescat": "431634",
+   "name": "el Vendrell",
+   "comarca": "12",
+   "province": "43"
+  },
+  {
+   "ine": "43164",
+   "idescat": "431649",
+   "name": "Vespella de Gaià",
+   "comarca": "36",
+   "province": "43"
+  },
+  {
+   "ine": "43165",
+   "idescat": "431652",
+   "name": "Vilabella",
+   "comarca": "01",
+   "province": "43"
+  },
+  {
+   "ine": "43166",
+   "idescat": "431665",
+   "name": "Vilallonga del Camp",
+   "comarca": "36",
+   "province": "43"
+  },
+  {
+   "ine": "43167",
+   "idescat": "431671",
+   "name": "Vilanova d'Escornalbou",
+   "comarca": "08",
+   "province": "43"
+  },
+  {
+   "ine": "43168",
+   "idescat": "431687",
+   "name": "Vilanova de Prades",
+   "comarca": "16",
+   "province": "43"
+  },
+  {
+   "ine": "43169",
+   "idescat": "431690",
+   "name": "Vilaplana",
+   "comarca": "08",
+   "province": "43"
+  },
+  {
+   "ine": "43170",
+   "idescat": "431704",
+   "name": "Vila-rodona",
+   "comarca": "01",
+   "province": "43"
+  },
+  {
+   "ine": "43171",
+   "idescat": "431711",
+   "name": "Vila-seca",
+   "comarca": "36",
+   "province": "43"
+  },
+  {
+   "ine": "43172",
+   "idescat": "431726",
+   "name": "Vilaverd",
+   "comarca": "16",
+   "province": "43"
+  },
+  {
+   "ine": "43173",
+   "idescat": "431732",
+   "name": "la Vilella Alta",
+   "comarca": "29",
+   "province": "43"
+  },
+  {
+   "ine": "43174",
+   "idescat": "431747",
+   "name": "la Vilella Baixa",
+   "comarca": "29",
+   "province": "43"
+  },
+  {
+   "ine": "43175",
+   "idescat": "431750",
+   "name": "Vilalba dels Arcs",
+   "comarca": "37",
+   "province": "43"
+  },
+  {
+   "ine": "43176",
+   "idescat": "431763",
+   "name": "Vimbodí i Poblet",
+   "comarca": "16",
+   "province": "43"
+  },
+  {
+   "ine": "43177",
+   "idescat": "431779",
+   "name": "Vinebre",
+   "comarca": "30",
+   "province": "43"
+  },
+  {
+   "ine": "43178",
+   "idescat": "431785",
+   "name": "Vinyols i els Arcs",
+   "comarca": "08",
+   "province": "43"
+  },
+  {
+   "ine": "43901",
+   "idescat": "439018",
+   "name": "Deltebre",
+   "comarca": "09",
+   "province": "43"
+  },
+  {
+   "ine": "43902",
+   "idescat": "439023",
+   "name": "Sant Jaume d'Enveja",
+   "comarca": "22",
+   "province": "43"
+  },
+  {
+   "ine": "43903",
+   "idescat": "439039",
+   "name": "Camarles",
+   "comarca": "09",
+   "province": "43"
+  },
+  {
+   "ine": "43904",
+   "idescat": "439044",
+   "name": "l'Aldea",
+   "comarca": "09",
+   "province": "43"
+  },
+  {
+   "ine": "43905",
+   "idescat": "439057",
+   "name": "Salou",
+   "comarca": "36",
+   "province": "43"
+  },
+  {
+   "ine": "43906",
+   "idescat": "439060",
+   "name": "l'Ampolla",
+   "comarca": "09",
+   "province": "43"
+  },
+  {
+   "ine": "43907",
+   "idescat": "439076",
+   "name": "la Canonja",
+   "comarca": "36",
+   "province": "43"
+  }
+ ],
+ "agendaAliases": {
+  "bigues-i-riells": "08023",
+  "santa-maria-de-corco": "08254",
+  "brunyola": "17028",
+  "calonge": "17034",
+  "castell-platja-d-aro": "17048",
+  "roda-de-bara": "43131",
+  "sant-carles-de-la-rapita": "43136"
+ },
+ "fairs": [
+  {
+   "id": "24032289",
+   "name": "Fira Industrial, Agrícola i Comercial. Fira de Mostres",
+   "town": "Girona",
+   "ine": "17079",
+   "comarca": "20",
+   "province": "17",
+   "start": "2026-10-28",
+   "end": "2026-11-01",
+   "sector": "Multisectorial",
+   "sectorEs": "Multisectorial",
+   "web": "https://www.firagirona.com/",
+   "toConfirm": false
+  },
+  {
+   "id": "24033173",
+   "name": "Fira del Vi de Gandesa",
+   "town": "Gandesa",
+   "ine": "43064",
+   "comarca": "37",
+   "province": "43",
+   "start": "2026-10-30",
+   "end": "2026-11-01",
+   "sector": "Alimentació, vins, hoteleria i els seus equips",
+   "sectorEs": "Alimentación, vinos, hostelería y sus equipos",
+   "web": "https://www.festadelvi.cat/",
+   "toConfirm": false
+  },
+  {
+   "id": "24032736",
+   "name": "Fira de Tots Sants",
+   "town": "Bagà",
+   "ine": "08016",
+   "comarca": "14",
+   "province": "08",
+   "start": "2026-10-31",
+   "end": "2026-10-31",
+   "sector": "Multisectorial",
+   "sectorEs": "Multisectorial",
+   "web": "https://www.baga.cat/",
+   "toConfirm": false
+  },
+  {
+   "id": "24033427",
+   "name": "Fira de Tots Sants",
+   "town": "Gósol",
+   "ine": "25100",
+   "comarca": "14",
+   "province": "25",
+   "start": "2026-10-31",
+   "end": "2026-10-31",
+   "sector": "Multisectorial",
+   "sectorEs": "Multisectorial",
+   "web": "https://www.gosol.cat/",
+   "toConfirm": false
+  },
+  {
+   "id": "24033216",
+   "name": "Fira del Codony",
+   "town": "Tremp",
+   "ine": "25234",
+   "comarca": "25",
+   "province": "25",
+   "start": "2026-10-31",
+   "end": "2026-10-31",
+   "sector": "Multisectorial",
+   "sectorEs": "Multisectorial",
+   "web": "https://www.ajuntamentdetremp.cat/",
+   "toConfirm": false
+  },
+  {
+   "id": "24033048",
+   "name": "Fira de la Coca i el Mató",
+   "town": "Monistrol de Montserrat",
+   "ine": "08127",
+   "comarca": "07",
+   "province": "08",
+   "start": "2026-10-31",
+   "end": "2026-11-01",
+   "sector": "Alimentació, vins, hoteleria i els seus equips",
+   "sectorEs": "Alimentación, vinos, hostelería y sus equipos",
+   "web": "https://www.turismemonistrol.cat/",
+   "toConfirm": false
+  },
+  {
+   "id": "24033411",
+   "name": "Fira de Tots Sants",
+   "town": "Oliana",
+   "ine": "25149",
+   "comarca": "04",
+   "province": "25",
+   "start": "2026-11-01",
+   "end": "2026-11-01",
+   "sector": "Multisectorial",
+   "sectorEs": "Multisectorial",
+   "web": "https://www.oliana.cat/",
+   "toConfirm": false
+  },
+  {
+   "id": "24032749",
+   "name": "Fira de Tots Sants",
+   "town": "Vilaller",
+   "ine": "25245",
+   "comarca": "05",
+   "province": "25",
+   "start": "2026-11-02",
+   "end": "2026-11-02",
+   "sector": "Ramaderia, avicultura",
+   "sectorEs": "Ganadería, avicultura",
+   "web": "https://www.ajuntamentdevilaller.cat/",
+   "toConfirm": false
+  },
+  {
+   "id": "24033149",
+   "name": "Gastronomic Forum Barcelona",
+   "town": "Barcelona",
+   "ine": "08019",
+   "comarca": "13",
+   "province": "08",
+   "start": "2026-11-02",
+   "end": "2026-11-04",
+   "sector": "Alimentació, vins, hoteleria i els seus equips",
+   "sectorEs": "Alimentación, vinos, hostelería y sus equipos",
+   "web": "https://www.gastronomicforumbarcelona.com/ca/",
+   "toConfirm": false
+  },
+  {
+   "id": "30721404",
+   "name": "Barcelona Cybersecurity Congress",
+   "town": "l'Hospitalet de Llobregat",
+   "ine": "08101",
+   "comarca": "13",
+   "province": "08",
+   "start": "2026-11-03",
+   "end": "2026-11-05",
+   "sector": "Electrònica, noves tecnologies",
+   "sectorEs": "Electrónica, nuevas tecnologías",
+   "web": "https://www.barcelonacybersecuritycongress.com/",
+   "toConfirm": false
+  },
+  {
+   "id": "24032899",
+   "name": "Smart City Expo World Congress",
+   "town": "l'Hospitalet de Llobregat",
+   "ine": "08101",
+   "comarca": "13",
+   "province": "08",
+   "start": "2026-11-03",
+   "end": "2026-11-05",
+   "sector": "Sanitat, medi ambient",
+   "sectorEs": "Sanidad, medio ambiente",
+   "web": "https://www.smartcityexpo.com/",
+   "toConfirm": false
+  },
+  {
+   "id": "24032918",
+   "name": "Fira de la Muntanya",
+   "town": "Vic",
+   "ine": "08298",
+   "comarca": "24",
+   "province": "08",
+   "start": "2026-11-06",
+   "end": "2026-11-08",
+   "sector": "Lleure, esport i turisme",
+   "sectorEs": "Ocio, deporte y turismo",
+   "web": "https://www.vicfires.cat/",
+   "toConfirm": false
+  },
+  {
+   "id": "24032540",
+   "name": "ExpoNadó",
+   "town": "Sabadell",
+   "ine": "08187",
+   "comarca": "40",
+   "province": "08",
+   "start": "2026-11-07",
+   "end": "2026-11-08",
+   "sector": "Serveis personals",
+   "sectorEs": "Servicios personales",
+   "web": "https://www.feriadebebes.es/",
+   "toConfirm": false
+  },
+  {
+   "id": "24032628",
+   "name": "Fira Agropecuària de Vila-rodona",
+   "town": "Vila-rodona",
+   "ine": "43170",
+   "comarca": "01",
+   "province": "43",
+   "start": "2026-11-07",
+   "end": "2026-11-08",
+   "sector": "Multisectorial",
+   "sectorEs": "Multisectorial",
+   "web": "https://www.vila-rodona.cat/",
+   "toConfirm": false
+  },
+  {
+   "id": "24032637",
+   "name": "Fira de Tardor",
+   "town": "Sort",
+   "ine": "25209",
+   "comarca": "26",
+   "province": "25",
+   "start": "2026-11-07",
+   "end": "2026-11-08",
+   "sector": "Multisectorial",
+   "sectorEs": "Multisectorial",
+   "web": "https://turisme.sort.cat/fitxes/fira-tardor/",
+   "toConfirm": false
+  },
+  {
+   "id": "29157873",
+   "name": "Mostra de Formatges Artesans de Ponent",
+   "town": "el Palau d'Anglesola",
+   "ine": "25158",
+   "comarca": "27",
+   "province": "25",
+   "start": "2026-11-07",
+   "end": "2026-11-08",
+   "sector": "Alimentació, vins, hoteleria i els seus equips",
+   "sectorEs": "Alimentación, vinos, hostelería y sus equipos",
+   "web": "https://www.elpalaudanglesola.com/",
+   "toConfirm": false
+  },
+  {
+   "id": "33782738",
+   "name": "Fira Àpat Costa Daurada i Terres de l'Ebre",
+   "town": "Reus",
+   "ine": "43123",
+   "comarca": "08",
+   "province": "43",
+   "start": "2026-11-07",
+   "end": "2026-11-09",
+   "sector": "Alimentació, vins, hoteleria i els seus equips",
+   "sectorEs": "Alimentación, vinos, hostelería y sus equipos",
+   "web": "https://www.fira-apat.cat/",
+   "toConfirm": false
+  },
+  {
+   "id": "24032797",
+   "name": "Fira d'Olost. Fira d'en Rocaguinarda",
+   "town": "Olost",
+   "ine": "08149",
+   "comarca": "43",
+   "province": "08",
+   "start": "2026-11-08",
+   "end": "2026-11-08",
+   "sector": "Multisectorial",
+   "sectorEs": "Multisectorial",
+   "web": "https://olost.cat/",
+   "toConfirm": false
+  },
+  {
+   "id": "24032360",
+   "name": "Fira de la Perdiu",
+   "town": "Vilanova de Meià",
+   "ine": "25250",
+   "comarca": "23",
+   "province": "25",
+   "start": "2026-11-08",
+   "end": "2026-11-08",
+   "sector": "Ramaderia, avicultura",
+   "sectorEs": "Ganadería, avicultura",
+   "web": "https://www.vilanovameia.cat/",
+   "toConfirm": false
+  },
+  {
+   "id": "24033578",
+   "name": "Fira del Vi Nou de Calonge",
+   "town": "Calonge i Sant Antoni",
+   "ine": "17034",
+   "comarca": "10",
+   "province": "17",
+   "start": "2026-11-11",
+   "end": "2026-11-15",
+   "sector": "Alimentació, vins, hoteleria i els seus equips",
+   "sectorEs": "Alimentación, vinos, hostelería y sus equipos",
+   "web": "https://www.calonge-santantoni.cat/",
+   "toConfirm": false
+  },
+  {
+   "id": "24032677",
+   "name": "Fira de Novembre",
+   "town": "Vilanova i la Geltrú",
+   "ine": "08307",
+   "comarca": "17",
+   "province": "08",
+   "start": "2026-11-13",
+   "end": "2026-11-15",
+   "sector": "Multisectorial",
+   "sectorEs": "Multisectorial",
+   "web": "https://www.firadenovembre.cat/",
+   "toConfirm": false
+  },
+  {
+   "id": "24033006",
+   "name": "Fira de Sant Martí",
+   "town": "Puig-reig",
+   "ine": "08175",
+   "comarca": "14",
+   "province": "08",
+   "start": "2026-11-13",
+   "end": "2026-11-15",
+   "sector": "Multisectorial",
+   "sectorEs": "Multisectorial",
+   "web": "https://www.puig-reig.cat/",
+   "toConfirm": false
+  },
+  {
+   "id": "24032691",
+   "name": "Fira de Sant Martirià",
+   "town": "Banyoles",
+   "ine": "17015",
+   "comarca": "28",
+   "province": "17",
+   "start": "2026-11-13",
+   "end": "2026-11-15",
+   "sector": "Multisectorial",
+   "sectorEs": "Multisectorial",
+   "web": "https://www.banyoles.cat/",
+   "toConfirm": false
+  },
+  {
+   "id": "24032778",
+   "name": "Fira de Tardor",
+   "town": "Salàs de Pallars",
+   "ine": "25190",
+   "comarca": "25",
+   "province": "25",
+   "start": "2026-11-13",
+   "end": "2026-11-15",
+   "sector": "Ramaderia, avicultura",
+   "sectorEs": "Ganadería, avicultura",
+   "web": "https://www.salas.cat/",
+   "toConfirm": false
+  },
+  {
+   "id": "24033527",
+   "name": "Funifira",
+   "town": "Gelida",
+   "ine": "08091",
+   "comarca": "03",
+   "province": "08",
+   "start": "2026-11-13",
+   "end": "2026-11-15",
+   "sector": "Multisectorial",
+   "sectorEs": "Multisectorial",
+   "web": "https://www.gelida.cat/",
+   "toConfirm": false
+  },
+  {
+   "id": "59425279",
+   "name": "Expocítric Alcanar",
+   "town": "Alcanar",
+   "ine": "43004",
+   "comarca": "22",
+   "province": "43",
+   "start": "2026-11-14",
+   "end": "2026-11-15",
+   "sector": "Alimentació, vins, hoteleria i els seus equips",
+   "sectorEs": "Alimentación, vinos, hostelería y sus equipos",
+   "web": "https://expocitric.com/",
+   "toConfirm": false
+  },
+  {
+   "id": "24033331",
+   "name": "Fira Medieval d'Oficis del Poble Vell de Súria",
+   "town": "Súria",
+   "ine": "08274",
+   "comarca": "07",
+   "province": "08",
+   "start": "2026-11-14",
+   "end": "2026-11-15",
+   "sector": "Artesania, ceràmica",
+   "sectorEs": "Artesania, cerámica",
+   "web": "https://www.suria.cat/",
+   "toConfirm": false
+  },
+  {
+   "id": "24033428",
+   "name": "Fira de Sant Martí",
+   "town": "Amer",
+   "ine": "17007",
+   "comarca": "34",
+   "province": "17",
+   "start": "2026-11-15",
+   "end": "2026-11-15",
+   "sector": "Multisectorial",
+   "sectorEs": "Multisectorial",
+   "web": "https://www.amer.cat/",
+   "toConfirm": false
+  },
+  {
+   "id": "24032424",
+   "name": "Mercat del Trumfo i la Sal d'Odèn",
+   "town": "Odèn",
+   "ine": "25148",
+   "comarca": "35",
+   "province": "25",
+   "start": "2026-11-15",
+   "end": "2026-11-15",
+   "sector": "Multisectorial",
+   "sectorEs": "Multisectorial",
+   "web": "https://www.oden.cat/",
+   "toConfirm": false
+  },
+  {
+   "id": "24033291",
+   "name": "Ibtm World",
+   "town": "l'Hospitalet de Llobregat",
+   "ine": "08101",
+   "comarca": "13",
+   "province": "08",
+   "start": "2026-11-17",
+   "end": "2026-11-19",
+   "sector": "Lleure, esport i turisme",
+   "sectorEs": "Ocio, deporte y turismo",
+   "web": "https://www.eibtm.com/",
+   "toConfirm": false
+  },
+  {
+   "id": "30997762",
+   "name": "Paint & Coatings",
+   "town": "l'Hospitalet de Llobregat",
+   "ine": "08101",
+   "comarca": "13",
+   "province": "08",
+   "start": "2026-11-18",
+   "end": "2026-11-19",
+   "sector": "Indústria, tecnologia industrial",
+   "sectorEs": "Industria, tecnología industrial",
+   "web": "https://www.paint-coatings.es/",
+   "toConfirm": false
+  },
+  {
+   "id": "24033589",
+   "name": "Southern European Veterinary Conference",
+   "town": "Barcelona",
+   "ine": "08019",
+   "comarca": "13",
+   "province": "08",
+   "start": "2026-11-19",
+   "end": "2026-11-21",
+   "sector": "Serveis, diversos",
+   "sectorEs": "Servicios, diversos",
+   "web": "https://www.sevc.info/",
+   "toConfirm": false
+  },
+  {
+   "id": "24032336",
+   "name": "Fira Joc Joc",
+   "town": "Tona",
+   "ine": "08283",
+   "comarca": "24",
+   "province": "08",
+   "start": "2026-11-21",
+   "end": "2026-11-21",
+   "sector": "Lleure, esport i turisme",
+   "sectorEs": "Ocio, deporte y turismo",
+   "web": "https://www.tona.cat/",
+   "toConfirm": false
+  },
+  {
+   "id": "24033217",
+   "name": "Fira de l'Oli Verd",
+   "town": "Maials",
+   "ine": "25133",
+   "comarca": "33",
+   "province": "25",
+   "start": "2026-11-21",
+   "end": "2026-11-22",
+   "sector": "Alimentació, vins, hoteleria i els seus equips",
+   "sectorEs": "Alimentación, vinos, hostelería y sus equipos",
+   "web": "https://www.maials.cat/",
+   "toConfirm": false
+  },
+  {
+   "id": "24033562",
+   "name": "Fira Orígens. Fira Agroalimentària de Productes de Qualitat",
+   "town": "Olot",
+   "ine": "17114",
+   "comarca": "19",
+   "province": "17",
+   "start": "2026-11-21",
+   "end": "2026-11-22",
+   "sector": "Alimentació, vins, hoteleria i els seus equips",
+   "sectorEs": "Alimentación, vinos, hostelería y sus equipos",
+   "web": "https://www.firaorigens.cat/",
+   "toConfirm": false
+  },
+  {
+   "id": "24033422",
+   "name": "Lleida Retro",
+   "town": "Lleida",
+   "ine": "25120",
+   "comarca": "33",
+   "province": "25",
+   "start": "2026-11-21",
+   "end": "2026-11-22",
+   "sector": "Automoció i els seus equips",
+   "sectorEs": "Automoción y sus equipos",
+   "web": "https://www.firadelleida.com/",
+   "toConfirm": false
+  },
+  {
+   "id": "24033109",
+   "name": "Lleidantic. Saló d'Antiquaris i Brocanters de Lleida",
+   "town": "Lleida",
+   "ine": "25120",
+   "comarca": "33",
+   "province": "25",
+   "start": "2026-11-21",
+   "end": "2026-11-22",
+   "sector": "Antiquaris, art",
+   "sectorEs": "Anticuarios, arte",
+   "web": "https://www.lleidantic.com/",
+   "toConfirm": false
+  },
+  {
+   "id": "24032258",
+   "name": "Eurofruit. Fira Professional de Proveïdors de la Indústria Fructícola",
+   "town": "Lleida",
+   "ine": "25120",
+   "comarca": "33",
+   "province": "25",
+   "start": "2026-11-24",
+   "end": "2026-11-26",
+   "sector": "Agricultura, maquinària agrícola i jardineria",
+   "sectorEs": "Agricultura, maquinaria agrícola y jardinería",
+   "web": "https://www.firadelleida.com/eurofruit",
+   "toConfirm": false
+  },
+  {
+   "id": "24032444",
+   "name": "Wasteinprogress. Fòrum Internacional de Gestió de Residus Municipals",
+   "town": "Girona",
+   "ine": "17079",
+   "comarca": "20",
+   "province": "17",
+   "start": "2026-11-25",
+   "end": "2026-11-27",
+   "sector": "Sanitat, medi ambient",
+   "sectorEs": "Sanidad, medio ambiente",
+   "web": "https://www.wasteinprogress.net/",
+   "toConfirm": false
+  },
+  {
+   "id": "24032375",
+   "name": "Fira Agrícola, Ramadera i Comercial de Sant Andreu",
+   "town": "Torroella de Montgrí",
+   "ine": "17199",
+   "comarca": "10",
+   "province": "17",
+   "start": "2026-11-27",
+   "end": "2026-11-29",
+   "sector": "Multisectorial",
+   "sectorEs": "Multisectorial",
+   "web": "https://www.torroella-estartit.cat/",
+   "toConfirm": false
+  },
+  {
+   "id": "24032402",
+   "name": "Fira Avícola de la Raça Prat",
+   "town": "el Prat de Llobregat",
+   "ine": "08169",
+   "comarca": "11",
+   "province": "08",
+   "start": "2026-11-27",
+   "end": "2026-11-29",
+   "sector": "Ramaderia, avicultura",
+   "sectorEs": "Ganadería, avicultura",
+   "web": "https://www.elprat.cat/firavicola",
+   "toConfirm": false
+  },
+  {
+   "id": "24032969",
+   "name": "Fira de l'Oli i la Mediterrània",
+   "town": "Santa Bàrbara",
+   "ine": "43138",
+   "comarca": "22",
+   "province": "43",
+   "start": "2026-11-27",
+   "end": "2026-11-29",
+   "sector": "Alimentació, vins, hoteleria i els seus equips",
+   "sectorEs": "Alimentación, vinos, hostelería y sus equipos",
+   "web": "https://www.santabarbara.cat/",
+   "toConfirm": false
+  },
+  {
+   "id": "24033180",
+   "name": "Fira de Sant Andreu",
+   "town": "Manresa",
+   "ine": "08113",
+   "comarca": "07",
+   "province": "08",
+   "start": "2026-11-27",
+   "end": "2026-11-29",
+   "sector": "Multisectorial",
+   "sectorEs": "Multisectorial",
+   "web": "https://www.xn--manresamscomer-tjbz.cat/",
+   "toConfirm": false
+  },
+  {
+   "id": "24032522",
+   "name": "Fira de la Xocolata i la Ratafia",
+   "town": "Berga",
+   "ine": "08022",
+   "comarca": "14",
+   "province": "08",
+   "start": "2026-11-28",
+   "end": "2026-11-28",
+   "sector": "Alimentació, vins, hoteleria i els seus equips",
+   "sectorEs": "Alimentación, vinos, hostelería y sus equipos",
+   "web": "https://firaxocolata.ajberga.cat/",
+   "toConfirm": false
+  },
+  {
+   "id": "24033607",
+   "name": "Fira de Nadal",
+   "town": "Ascó",
+   "ine": "43019",
+   "comarca": "30",
+   "province": "43",
+   "start": "2026-11-28",
+   "end": "2026-11-29",
+   "sector": "Multisectorial",
+   "sectorEs": "Multisectorial",
+   "web": "https://www.ascoturisme.com/",
+   "toConfirm": false
+  },
+  {
+   "id": "24032398",
+   "name": "Fira de Nadal de Vallirana",
+   "town": "Vallirana",
+   "ine": "08295",
+   "comarca": "11",
+   "province": "08",
+   "start": "2026-11-28",
+   "end": "2026-11-29",
+   "sector": "Multisectorial",
+   "sectorEs": "Multisectorial",
+   "web": "https://www.vallirana.cat/",
+   "toConfirm": false
+  },
+  {
+   "id": "24032623",
+   "name": "Fira de Sant Andreu",
+   "town": "Organyà",
+   "ine": "25155",
+   "comarca": "04",
+   "province": "25",
+   "start": "2026-11-28",
+   "end": "2026-11-29",
+   "sector": "Ramaderia, avicultura",
+   "sectorEs": "Ganadería, avicultura",
+   "web": "https://www.organya.cat/",
+   "toConfirm": false
+  },
+  {
+   "id": "24033018",
+   "name": "Fira de Sant Andreu",
+   "town": "Falset",
+   "ine": "43055",
+   "comarca": "29",
+   "province": "43",
+   "start": "2026-11-28",
+   "end": "2026-11-29",
+   "sector": "Multisectorial",
+   "sectorEs": "Multisectorial",
+   "web": "https://www.falset.org/",
+   "toConfirm": false
+  },
+  {
+   "id": "24033377",
+   "name": "Fira de Santa Llúcia",
+   "town": "Canyelles",
+   "ine": "08043",
+   "comarca": "17",
+   "province": "08",
+   "start": "2026-11-28",
+   "end": "2026-11-29",
+   "sector": "Artesania, ceràmica",
+   "sectorEs": "Artesania, cerámica",
+   "web": "https://www.canyelles.cat/",
+   "toConfirm": false
+  },
+  {
+   "id": "24033619",
+   "name": "Mercat de Nadal",
+   "town": "Maçanet de la Selva",
+   "ine": "17103",
+   "comarca": "34",
+   "province": "17",
+   "start": "2026-11-28",
+   "end": "2026-11-29",
+   "sector": "Multisectorial",
+   "sectorEs": "Multisectorial",
+   "web": "https://www.xn--maanetdelaselva-fmb.cat/",
+   "toConfirm": false
+  },
+  {
+   "id": "24033576",
+   "name": "Mostra del Cava",
+   "town": "Ascó",
+   "ine": "43019",
+   "comarca": "30",
+   "province": "43",
+   "start": "2026-11-28",
+   "end": "2026-11-29",
+   "sector": "Alimentació, vins, hoteleria i els seus equips",
+   "sectorEs": "Alimentación, vinos, hostelería y sus equipos",
+   "web": "https://www.ascoturisme.com/",
+   "toConfirm": false
+  },
+  {
+   "id": "24032308",
+   "name": "Fira de l'Avet",
+   "town": "Espinelves",
+   "ine": "17063",
+   "comarca": "24",
+   "province": "17",
+   "start": "2026-11-28",
+   "end": "2026-12-08",
+   "sector": "Agricultura, maquinària agrícola i jardineria",
+   "sectorEs": "Agricultura, maquinaria agrícola y jardinería",
+   "web": "https://www.espinelves.cat/",
+   "toConfirm": false
+  },
+  {
+   "id": "24033253",
+   "name": "Fira d'Artesans i de Nadal",
+   "town": "Balsareny",
+   "ine": "08018",
+   "comarca": "07",
+   "province": "08",
+   "start": "2026-11-29",
+   "end": "2026-11-29",
+   "sector": "Artesania, ceràmica",
+   "sectorEs": "Artesania, cerámica",
+   "web": "https://www.balsareny.cat/",
+   "toConfirm": false
+  },
+  {
+   "id": "24033285",
+   "name": "Fira de la Ratafia",
+   "town": "Besalú",
+   "ine": "17019",
+   "comarca": "19",
+   "province": "17",
+   "start": "2026-11-29",
+   "end": "2026-11-29",
+   "sector": "Alimentació, vins, hoteleria i els seus equips",
+   "sectorEs": "Alimentación, vinos, hostelería y sus equipos",
+   "web": "https://www.besalu.cat/",
+   "toConfirm": false
+  },
+  {
+   "id": "24032355",
+   "name": "Fira d'Artesans a Capçanes",
+   "town": "Capçanes",
+   "ine": "43040",
+   "comarca": "29",
+   "province": "43",
+   "start": "2026-12-05",
+   "end": "2026-12-05",
+   "sector": "Multisectorial",
+   "sectorEs": "Multisectorial",
+   "web": "https://www.capcanes.org/",
+   "toConfirm": false
+  },
+  {
+   "id": "24032332",
+   "name": "Fira de Nadal",
+   "town": "la Pobla de Segur",
+   "ine": "25171",
+   "comarca": "25",
+   "province": "25",
+   "start": "2026-12-05",
+   "end": "2026-12-05",
+   "sector": "Multisectorial",
+   "sectorEs": "Multisectorial",
+   "web": "https://www.lapobladesegur.cat/",
+   "toConfirm": false
+  },
+  {
+   "id": "24032429",
+   "name": "Fira del Tió",
+   "town": "Solsona",
+   "ine": "25207",
+   "comarca": "35",
+   "province": "25",
+   "start": "2026-12-05",
+   "end": "2026-12-05",
+   "sector": "Multisectorial",
+   "sectorEs": "Multisectorial",
+   "web": "https://www.solsonaturisme.com/",
+   "toConfirm": false
+  },
+  {
+   "id": "24033337",
+   "name": "Fira Mercat de Santa Llúcia",
+   "town": "Balaguer",
+   "ine": "25040",
+   "comarca": "23",
+   "province": "25",
+   "start": "2026-12-05",
+   "end": "2026-12-05",
+   "sector": "Artesania, ceràmica",
+   "sectorEs": "Artesania, cerámica",
+   "web": "https://www.balaguer.cat/",
+   "toConfirm": false
+  },
+  {
+   "id": "24033175",
+   "name": "Festa de l'Oli. Mostra de Productes Artesanals i Tradicionals",
+   "town": "la Fatarella",
+   "ine": "43056",
+   "comarca": "37",
+   "province": "43",
+   "start": "2026-12-05",
+   "end": "2026-12-06",
+   "sector": "Alimentació, vins, hoteleria i els seus equips",
+   "sectorEs": "Alimentación, vinos, hostelería y sus equipos",
+   "web": "https://www.lafatarella.cat/",
+   "toConfirm": false
+  },
+  {
+   "id": "24032983",
+   "name": "Fira de Nadal",
+   "town": "Ripoll",
+   "ine": "17147",
+   "comarca": "31",
+   "province": "17",
+   "start": "2026-12-05",
+   "end": "2026-12-06",
+   "sector": "Multisectorial",
+   "sectorEs": "Multisectorial",
+   "web": "https://www.ajripoll.cat/",
+   "toConfirm": false
+  },
+  {
+   "id": "24033611",
+   "name": "Fira de Nadal",
+   "town": "Sant Celoni",
+   "ine": "08202",
+   "comarca": "41",
+   "province": "08",
+   "start": "2026-12-05",
+   "end": "2026-12-06",
+   "sector": "Multisectorial",
+   "sectorEs": "Multisectorial",
+   "web": "https://www.santceloni.cat/",
+   "toConfirm": false
+  },
+  {
+   "id": "34895242",
+   "name": "Fira de Nadal de Tivissa",
+   "town": "Tivissa",
+   "ine": "43150",
+   "comarca": "30",
+   "province": "43",
+   "start": "2026-12-05",
+   "end": "2026-12-06",
+   "sector": "Artesania, ceràmica",
+   "sectorEs": "Artesania, cerámica",
+   "web": "https://www.turismetivissa.com/",
+   "toConfirm": false
+  },
+  {
+   "id": "24032545",
+   "name": "Fira del Tió",
+   "town": "Arbúcies",
+   "ine": "17009",
+   "comarca": "34",
+   "province": "17",
+   "start": "2026-12-05",
+   "end": "2026-12-06",
+   "sector": "Multisectorial",
+   "sectorEs": "Multisectorial",
+   "web": "https://www.visitarbucies.cat/",
+   "toConfirm": false
+  },
+  {
+   "id": "24033508",
+   "name": "Fira de Nadal",
+   "town": "Sant Feliu de Guíxols",
+   "ine": "17160",
+   "comarca": "10",
+   "province": "17",
+   "start": "2026-12-05",
+   "end": "2026-12-07",
+   "sector": "Multisectorial",
+   "sectorEs": "Multisectorial",
+   "web": "https://www.visitguixols.com/",
+   "toConfirm": false
+  },
+  {
+   "id": "24032768",
+   "name": "Fira del Pessebre",
+   "town": "Olot",
+   "ine": "17114",
+   "comarca": "19",
+   "province": "17",
+   "start": "2026-12-05",
+   "end": "2026-12-07",
+   "sector": "Artesania, ceràmica",
+   "sectorEs": "Artesania, cerámica",
+   "web": "https://www.descobreixolot.cat/",
+   "toConfirm": false
+  },
+  {
+   "id": "24032596",
+   "name": "Fira dels Torrons",
+   "town": "Llinars del Vallès",
+   "ine": "08106",
+   "comarca": "41",
+   "province": "08",
+   "start": "2026-12-05",
+   "end": "2026-12-07",
+   "sector": "Alimentació, vins, hoteleria i els seus equips",
+   "sectorEs": "Alimentación, vinos, hostelería y sus equipos",
+   "web": "https://www.llinarsdelvalles.cat/",
+   "toConfirm": false
+  },
+  {
+   "id": "24033063",
+   "name": "Fira d'Hivern de Porqueres",
+   "town": "Porqueres",
+   "ine": "17137",
+   "comarca": "28",
+   "province": "17",
+   "start": "2026-12-05",
+   "end": "2026-12-08",
+   "sector": "Artesania, ceràmica",
+   "sectorEs": "Artesania, cerámica",
+   "web": "https://www.porqueres.cat/",
+   "toConfirm": false
+  },
+  {
+   "id": "24032647",
+   "name": "Fira de Mostres d'Amposta",
+   "town": "Amposta",
+   "ine": "43014",
+   "comarca": "22",
+   "province": "43",
+   "start": "2026-12-05",
+   "end": "2026-12-08",
+   "sector": "Multisectorial",
+   "sectorEs": "Multisectorial",
+   "web": "https://www.firaamposta.cat/",
+   "toConfirm": false
+  },
+  {
+   "id": "24033561",
+   "name": "Manga Barcelona",
+   "town": "l'Hospitalet de Llobregat",
+   "ine": "08101",
+   "comarca": "13",
+   "province": "08",
+   "start": "2026-12-05",
+   "end": "2026-12-08",
+   "sector": "Lleure, esport i turisme",
+   "sectorEs": "Ocio, deporte y turismo",
+   "web": "https://www.manga-barcelona.com/",
+   "toConfirm": false
+  },
+  {
+   "id": "24032937",
+   "name": "Mercat d'Artesans. Fira de Nadal",
+   "town": "Caldes de Montbui",
+   "ine": "08033",
+   "comarca": "41",
+   "province": "08",
+   "start": "2026-12-05",
+   "end": "2026-12-08",
+   "sector": "Artesania, ceràmica",
+   "sectorEs": "Artesania, cerámica",
+   "web": "https://www.visiteucaldes.cat/fires",
+   "toConfirm": false
+  },
+  {
+   "id": "24032987",
+   "name": "Mercat Medieval Vic",
+   "town": "Vic",
+   "ine": "08298",
+   "comarca": "24",
+   "province": "08",
+   "start": "2026-12-05",
+   "end": "2026-12-08",
+   "sector": "Artesania, ceràmica",
+   "sectorEs": "Artesania, cerámica",
+   "web": "https://www.vicfires.cat/",
+   "toConfirm": false
+  },
+  {
+   "id": "24032906",
+   "name": "Fira de la Puríssima de Les",
+   "town": "Les",
+   "ine": "25121",
+   "comarca": "39",
+   "province": "25",
+   "start": "2026-12-06",
+   "end": "2026-12-06",
+   "sector": "Artesania, ceràmica",
+   "sectorEs": "Artesania, cerámica",
+   "web": "https://www.turismoles.com/",
+   "toConfirm": false
+  },
+  {
+   "id": "24033025",
+   "name": "Fira de Sant Nicolau. Remença Medieval",
+   "town": "la Vall d'en Bas",
+   "ine": "17207",
+   "comarca": "19",
+   "province": "17",
+   "start": "2026-12-06",
+   "end": "2026-12-06",
+   "sector": "Multisectorial",
+   "sectorEs": "Multisectorial",
+   "web": "https://www.vallbas.cat/",
+   "toConfirm": false
+  },
+  {
+   "id": "24032523",
+   "name": "Fira del Joc i de Nadal",
+   "town": "Berga",
+   "ine": "08022",
+   "comarca": "14",
+   "province": "08",
+   "start": "2026-12-06",
+   "end": "2026-12-06",
+   "sector": "Serveis, diversos",
+   "sectorEs": "Servicios, diversos",
+   "web": "https://firadeljocberga.wordpress.com/",
+   "toConfirm": false
+  },
+  {
+   "id": "24032291",
+   "name": "Fira de la Puríssima",
+   "town": "Sant Boi de Llobregat",
+   "ine": "08200",
+   "comarca": "11",
+   "province": "08",
+   "start": "2026-12-06",
+   "end": "2026-12-08",
+   "sector": "Multisectorial",
+   "sectorEs": "Multisectorial",
+   "web": "https://www.santboi.cat/",
+   "toConfirm": false
+  },
+  {
+   "id": "24032287",
+   "name": "Fira de Sarral",
+   "town": "Sarral",
+   "ine": "43142",
+   "comarca": "16",
+   "province": "43",
+   "start": "2026-12-08",
+   "end": "2026-12-08",
+   "sector": "Multisectorial",
+   "sectorEs": "Multisectorial",
+   "web": "https://www.sarral.altanet.org/",
+   "toConfirm": false
+  },
+  {
+   "id": "24033189",
+   "name": "Fira d'Artistes i Mercat de Nadal",
+   "town": "Tàrrega",
+   "ine": "25217",
+   "comarca": "38",
+   "province": "25",
+   "start": "2026-12-11",
+   "end": "2026-12-13",
+   "sector": "Artesania, ceràmica",
+   "sectorEs": "Artesania, cerámica",
+   "web": "https://www.tarrega.cat/",
+   "toConfirm": false
+  },
+  {
+   "id": "24033117",
+   "name": "Fira de Nadal i del Torró Artesà de Cardedeu",
+   "town": "Cardedeu",
+   "ine": "08046",
+   "comarca": "41",
+   "province": "08",
+   "start": "2026-12-11",
+   "end": "2026-12-13",
+   "sector": "Multisectorial",
+   "sectorEs": "Multisectorial",
+   "web": "https://www.firadenadal.cat/",
+   "toConfirm": false
+  },
+  {
+   "id": "24033323",
+   "name": "Fira de Santa Llúcia. Fira de la Punta al Coixí",
+   "town": "l'Arboç",
+   "ine": "43016",
+   "comarca": "12",
+   "province": "43",
+   "start": "2026-12-11",
+   "end": "2026-12-13",
+   "sector": "Artesania artística i d'ofici",
+   "sectorEs": "Artesania artística y de oficio",
+   "web": "https://www.arbocenc.cat/",
+   "toConfirm": false
+  },
+  {
+   "id": "24033113",
+   "name": "FiraNadal",
+   "town": "Cerdanyola del Vallès",
+   "ine": "08266",
+   "comarca": "40",
+   "province": "08",
+   "start": "2026-12-11",
+   "end": "2026-12-13",
+   "sector": "Multisectorial",
+   "sectorEs": "Multisectorial",
+   "web": "https://www.cerdanyolaoberta.cat/",
+   "toConfirm": false
+  },
+  {
+   "id": "24033257",
+   "name": "Fira de Nadal",
+   "town": "Móra d'Ebre",
+   "ine": "43093",
+   "comarca": "30",
+   "province": "43",
+   "start": "2026-12-12",
+   "end": "2026-12-12",
+   "sector": "Artesania, ceràmica",
+   "sectorEs": "Artesania, cerámica",
+   "web": "https://www.moradebre.cat/",
+   "toConfirm": false
+  },
+  {
+   "id": "24033492",
+   "name": "Fira de Nadal de Banyoles i Mostra d'Oficis",
+   "town": "Banyoles",
+   "ine": "17015",
+   "comarca": "28",
+   "province": "17",
+   "start": "2026-12-12",
+   "end": "2026-12-13",
+   "sector": "Artesania, ceràmica",
+   "sectorEs": "Artesania, cerámica",
+   "web": "https://www.banyoles.cat/",
+   "toConfirm": false
+  },
+  {
+   "id": "24032442",
+   "name": "Fira de Santa Llúcia",
+   "town": "Manresa",
+   "ine": "08113",
+   "comarca": "07",
+   "province": "08",
+   "start": "2026-12-12",
+   "end": "2026-12-13",
+   "sector": "Multisectorial",
+   "sectorEs": "Multisectorial",
+   "web": "https://www.firamanresa.com/",
+   "toConfirm": false
+  },
+  {
+   "id": "24033327",
+   "name": "Mercat de Nadal. Fira de Capons, Aviram i Motius Nadalencs",
+   "town": "Valls",
+   "ine": "43161",
+   "comarca": "01",
+   "province": "43",
+   "start": "2026-12-12",
+   "end": "2026-12-13",
+   "sector": "Multisectorial",
+   "sectorEs": "Multisectorial",
+   "web": "https://www.cambravalls.com/",
+   "toConfirm": false
+  },
+  {
+   "id": "24032450",
+   "name": "Fira de Nadal",
+   "town": "Sant Vicenç de Torelló",
+   "ine": "08265",
+   "comarca": "24",
+   "province": "08",
+   "start": "2026-12-13",
+   "end": "2026-12-13",
+   "sector": "Artesania, ceràmica",
+   "sectorEs": "Artesania, cerámica",
+   "web": "https://www.santvicencdetorello.cat/",
+   "toConfirm": false
+  },
+  {
+   "id": "24033306",
+   "name": "Fira de Nadal",
+   "town": "Montgat",
+   "ine": "08126",
+   "comarca": "21",
+   "province": "08",
+   "start": "2026-12-13",
+   "end": "2026-12-13",
+   "sector": "Artesania, ceràmica",
+   "sectorEs": "Artesania, cerámica",
+   "web": "https://www.montgat.cat/",
+   "toConfirm": false
+  },
+  {
+   "id": "24032992",
+   "name": "Fira de Nadal i Reis",
+   "town": "Ulldecona",
+   "ine": "43156",
+   "comarca": "22",
+   "province": "43",
+   "start": "2026-12-13",
+   "end": "2026-12-13",
+   "sector": "Artesania, ceràmica",
+   "sectorEs": "Artesania, cerámica",
+   "web": "https://www.ulldecona.cat/",
+   "toConfirm": false
+  },
+  {
+   "id": "24032552",
+   "name": "Fira de Pont a Pont",
+   "town": "Roda de Ter",
+   "ine": "08183",
+   "comarca": "24",
+   "province": "08",
+   "start": "2026-12-13",
+   "end": "2026-12-13",
+   "sector": "Multisectorial",
+   "sectorEs": "Multisectorial",
+   "web": "https://www.rodadeter.cat/",
+   "toConfirm": false
+  },
+  {
+   "id": "24032828",
+   "name": "Fira de Santa Llúcia",
+   "town": "Prats de Lluçanès",
+   "ine": "08171",
+   "comarca": "43",
+   "province": "08",
+   "start": "2026-12-13",
+   "end": "2026-12-13",
+   "sector": "Ramaderia, avicultura",
+   "sectorEs": "Ganadería, avicultura",
+   "web": "https://www.pratsdellucanes.cat/",
+   "toConfirm": false
+  },
+  {
+   "id": "24033260",
+   "name": "Fira de Santa Llúcia",
+   "town": "Tremp",
+   "ine": "25234",
+   "comarca": "25",
+   "province": "25",
+   "start": "2026-12-13",
+   "end": "2026-12-13",
+   "sector": "Artesania, ceràmica",
+   "sectorEs": "Artesania, cerámica",
+   "web": "https://vilamitjana.ajuntamentdetremp.cat/",
+   "toConfirm": false
+  },
+  {
+   "id": "24032887",
+   "name": "Fira de Santa Llúcia",
+   "town": "Sant Feliu de Pallerols",
+   "ine": "17161",
+   "comarca": "19",
+   "province": "17",
+   "start": "2026-12-13",
+   "end": "2026-12-13",
+   "sector": "Artesania, ceràmica",
+   "sectorEs": "Artesania, cerámica",
+   "web": "https://www.santfeliudepallerols.cat/",
+   "toConfirm": false
+  },
+  {
+   "id": "24032855",
+   "name": "Fira de Santa Llúcia de Navès",
+   "town": "Navès",
+   "ine": "25146",
+   "comarca": "35",
+   "province": "25",
+   "start": "2026-12-13",
+   "end": "2026-12-13",
+   "sector": "Multisectorial",
+   "sectorEs": "Multisectorial",
+   "web": "https://www.naves.cat/",
+   "toConfirm": false
+  },
+  {
+   "id": "24033495",
+   "name": "Fira de la Tòfona de Centelles",
+   "town": "Centelles",
+   "ine": "08067",
+   "comarca": "24",
+   "province": "08",
+   "start": "2026-12-19",
+   "end": "2026-12-20",
+   "sector": "Alimentació, vins, hoteleria i els seus equips",
+   "sectorEs": "Alimentación, vinos, hostelería y sus equipos",
+   "web": "https://www.centelles.cat/",
+   "toConfirm": false
+  },
+  {
+   "id": "24032693",
+   "name": "Fira del Gall",
+   "town": "Vilafranca del Penedès",
+   "ine": "08305",
+   "comarca": "03",
+   "province": "08",
+   "start": "2026-12-19",
+   "end": "2026-12-20",
+   "sector": "Ramaderia, avicultura",
+   "sectorEs": "Ganadería, avicultura",
+   "web": "https://www.firadelgall.cat/",
+   "toConfirm": false
+  },
+  {
+   "id": "24033249",
+   "name": "Mercat de Nadal",
+   "town": "Martorell",
+   "ine": "08114",
+   "comarca": "11",
+   "province": "08",
+   "start": "2026-12-19",
+   "end": "2026-12-20",
+   "sector": "Multisectorial",
+   "sectorEs": "Multisectorial",
+   "web": "https://www.martorell.cat/",
+   "toConfirm": false
+  }
+ ],
+ "volume": {
+  "barcelona": {
+   "weekends": 52,
+   "from": "2025-10-31",
+   "to": "2026-10-23",
+   "median": 61,
+   "p25": 55,
+   "min": 15
+  },
+  "provincia-barcelona": {
+   "weekends": 52,
+   "from": "2025-10-31",
+   "to": "2026-10-23",
+   "median": 128,
+   "p25": 94,
+   "min": 33
+  },
+  "girona": {
+   "weekends": 52,
+   "from": "2025-10-31",
+   "to": "2026-10-23",
+   "median": 37,
+   "p25": 30,
+   "min": 12
+  },
+  "lleida": {
+   "weekends": 52,
+   "from": "2025-10-31",
+   "to": "2026-10-23",
+   "median": 15,
+   "p25": 10,
+   "min": 3
+  },
+  "tarragona": {
+   "weekends": 52,
+   "from": "2025-10-31",
+   "to": "2026-10-23",
+   "median": 23,
+   "p25": 16,
+   "min": 8
+  },
+  "costa-brava": {
+   "weekends": 52,
+   "from": "2025-10-31",
+   "to": "2026-10-23",
+   "median": 30,
+   "p25": 27,
+   "min": 8
+  },
+  "costa-daurada": {
+   "weekends": 52,
+   "from": "2025-10-31",
+   "to": "2026-10-23",
+   "median": 19,
+   "p25": 13,
+   "min": 5
+  },
+  "maresme": {
+   "weekends": 52,
+   "from": "2025-10-31",
+   "to": "2026-10-23",
+   "median": 9,
+   "p25": 6,
+   "min": 1
+  },
+  "pirineu": {
+   "weekends": 52,
+   "from": "2025-10-31",
+   "to": "2026-10-23",
+   "median": 9,
+   "p25": 7,
+   "min": 1
+  },
+  "alt-emporda": {
+   "weekends": 52,
+   "from": "2025-10-31",
+   "to": "2026-10-23",
+   "median": 7,
+   "p25": 4,
+   "min": 1
+  },
+  "baix-emporda": {
+   "weekends": 52,
+   "from": "2025-10-31",
+   "to": "2026-10-23",
+   "median": 8,
+   "p25": 5,
+   "min": 1
+  },
+  "valles-occidental": {
+   "weekends": 52,
+   "from": "2025-10-31",
+   "to": "2026-10-23",
+   "median": 12,
+   "p25": 8,
+   "min": 0
+  }
+ }
+}
