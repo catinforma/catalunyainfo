@@ -6,6 +6,8 @@ import { timingSafeEqual } from "node:crypto";
 import { getDb, schema } from "@/lib/db/client";
 import { pruneExpiredSessions } from "@/lib/auth/session";
 import { DAY_DEPENDENT_PATTERN } from "@/lib/content/day-dependent";
+import { todayInCatalonia } from "@/lib/content/holidays/calendar";
+import { weekendRefreshPaths } from "@/lib/programmatic/weekend/routing";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -29,6 +31,13 @@ export async function GET(request: Request) {
   if (!authorised(request)) {
     return NextResponse.json({ ok: false }, { status: 401 });
   }
+
+  // The weekend zone pages (/ca/cap-de-setmana/, /es/fin-de-semana/) are
+  // static code routes with the weekend's dates in their titles: rebuilt on
+  // the night the weekend window changes and the night after, before the
+  // database step so an outage there cannot leave a past weekend in a title.
+  const weekendPaths = weekendRefreshPaths(todayInCatalonia());
+  for (const path of weekendPaths) revalidatePath(path);
 
   const db = getDb();
   if (!db) return NextResponse.json({ ok: false, reason: "no-database" }, { status: 503 });
@@ -80,6 +89,7 @@ export async function GET(request: Request) {
     ok: true,
     published: due.length,
     refreshedForToday: dayDependent.length,
+    weekendPagesRefreshed: weekendPaths.length,
     flaggedForUpdate: stale.length,
     sessionsPruned,
   });

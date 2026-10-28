@@ -34,7 +34,8 @@
     "holidays:snapshot": "node --experimental-strip-types --import ./tests/register-alias.mjs scripts/holidays-snapshot.ts",
     "fuel:snapshot": "node --experimental-strip-types --import ./tests/register-alias.mjs scripts/fuel-snapshot.ts",
     "rodalies:snapshot": "node --experimental-strip-types --import ./tests/register-alias.mjs scripts/rodalies-snapshot.ts",
-    "reservoirs:snapshot": "node --experimental-strip-types --import ./tests/register-alias.mjs scripts/reservoirs-snapshot.ts"
+    "reservoirs:snapshot": "node --experimental-strip-types --import ./tests/register-alias.mjs scripts/reservoirs-snapshot.ts",
+    "weekend:snapshot": "node --experimental-strip-types --import ./tests/register-alias.mjs scripts/weekend-snapshot.ts"
   },
   "dependencies": {
     "@eslint/eslintrc": "^3.3.7",

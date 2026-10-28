@@ -7,6 +7,7 @@ import {
 } from "@/lib/content/weekend/agenda";
 import { getMessages } from "@/lib/i18n";
 import type { Locale } from "@/lib/i18n/config";
+import { isWeekendLocale, weekendHubPath } from "@/lib/programmatic/weekend/paths";
 
 /**
  * This weekend's activities, from the Generalitat's open-data cultural agenda.
@@ -40,7 +41,14 @@ const GROUP_ORDER: AgendaCategory[] = [
 
 /** Enough to be useful, few enough that the page stays a guide, not a dump. */
 const PER_GROUP = 12;
+
 const FREE_LIMIT = 15;
+
+/** One link to the per-zone pages (ca/es only; they have no English edition). */
+const ZONES_LINK = {
+  ca: "Per zones: Barcelona, Girona, Lleida, Tarragona, Costa Brava, Pirineu… i les fires d'aquest cap de setmana",
+  es: "Por zonas: Barcelona, Girona, Lleida, Tarragona, Costa Brava, Pirineo… y las ferias de este fin de semana",
+} as const;
 
 function dateRange(event: AgendaEvent, locale: Locale): string {
   if (event.start === event.end) return shortDate(event.start, locale);
@@ -151,6 +159,11 @@ export async function WeekendAgenda({ locale }: { locale: Locale }) {
         </a>{" "}
         ({AGENDA_SOURCE.publisher}). {t.checkLine}
       </p>
+      {isWeekendLocale(locale) ? (
+        <p className="ci-agenda-note">
+          <a href={weekendHubPath(locale)}>{ZONES_LINK[locale]}</a>
+        </p>
+      ) : null}
     </section>
   );
 }

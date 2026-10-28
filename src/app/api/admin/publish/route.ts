@@ -190,6 +190,9 @@ export async function POST(request: Request) {
         await publishB2Article(STRIKES_GUIDE),
       );
     }
+    // Weekend zone pages (/ca/cap-de-setmana/, /es/fin-de-semana/ are code
+    // routes, not articles): the Christmas markets guide gained one body link.
+    if (wants("weekend-links")) published.push(await publishB2Article(CHRISTMAS));
     if (wants("family-markets")) published.push(await publishB2Article(ZOO_AQUARIUM), await publishB2Article(MARKETS));
     if (wants("cruiseport")) published.push(await publishB2Article(CRUISEPORT));
     if (wants("portaventura")) published.push(await publishB2Article(PORTAVENTURA));
