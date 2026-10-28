@@ -670,6 +670,93 @@ test("cards: the price table's online column is 10% off and the difference is ca
   }
 });
 
+/**
+ * Cards, 28 Oct 2026: holabarcelona.com renders "Desde 12,50 € 11,25 €" and
+ * says the voucher is swapped at a metro ticket machine within 180 days;
+ * thisisbarcelona.com's terms say the Barcelona Card runs for "consecutive
+ * days, not for 24-hour periods"; the Picasso's free slot is Thursday
+ * 16:00-19:00 (no "in winter" on its page).
+ */
+test("cards: Hola online price and collection, Barcelona Card days rule, museum free slots", () => {
+  for (const locale of ["ca", "es", "en"] as const) {
+    const text = bodyToPlainText(CARDS.editions[locale].blocks);
+    assert.match(text, /11[,.]25/, `${locale}: 24 h Hola online price`);
+    assert.match(text, /180/, `${locale}: voucher valid 180 days`);
+    assert.match(text, /(consecutive days|días consecutivos|dies consecutius)/, `${locale}: terms count days`);
+    assert.match(text, /16:00/, `${locale}: Picasso free Thursday slot`);
+    assert.doesNotMatch(text, /(in winter|en invierno|a l'hivern)/, `${locale}: no seasonal Picasso claim`);
+    assert.match(JSON.stringify(CARDS.editions[locale].blocks), /\]\(\/[a-z]{2}\/[^)]*sagrada-familia[^)]*\/\)/, `${locale}: links the monuments guide`);
+  }
+  assert.match(CARDS.editions.es.seoTitle, /^Hola Barcelona Travel Card/);
+});
+
+/**
+ * Climate, 28 Oct 2026: AEMET's normals page still says "Periodo: 1981-2010"
+ * and its help page names 1981-2010 as the reference period; Meteocat says its
+ * 1991-2020 climatologies are still in preparation. Monthly records read one
+ * month at a time from AEMET's extremes page (updated 30 Sep 2026).
+ */
+test("climate: 1981-2010 table with the year row, city-centre table, a section per month with its records", () => {
+  for (const locale of ["ca", "es", "en"] as const) {
+    const blocks = CLIMATE.editions[locale].blocks as { type: string; level?: number; text?: string; caption?: string; rows?: string[][] }[];
+    const tables = blocks.filter((b) => b.type === "table");
+    assert.equal(tables.length, 2, `${locale}: airport and city-centre tables`);
+    assert.match(tables[0]?.caption ?? "", /1981-2010/, `${locale}: AEMET period`);
+    assert.match(tables[1]?.caption ?? "", /2010-2025/, `${locale}: Meteocat period`);
+    assert.equal(tables[0]?.rows?.length, 13, `${locale}: 12 months and the year`);
+    assert.equal(tables[1]?.rows?.length, 13, `${locale}: 12 months and the year`);
+    assert.ok(!tables.some((t) => /1991-2020/.test(t.caption ?? "")), `${locale}: no table claims 1991-2020`);
+    assert.equal(blocks.filter((b) => b.type === "heading" && b.level === 3).length, 12, `${locale}: one section per month`);
+    const text = bodyToPlainText(CLIMATE.editions[locale].blocks);
+    assert.match(text, /23[,.]8 °C/, `${locale}: January record high`);
+    assert.match(text, /-7[,.]2 °C/, `${locale}: January record low`);
+    assert.match(text, /16[,.]1/, `${locale}: annual mean`);
+  }
+  const ca = bodyToPlainText(CLIMATE.editions.ca.blocks);
+  assert.match(ca, /l'1 de març del 1988/, "Catalan elides the article before 1");
+  assert.doesNotMatch(ca, /el 1 de|el 11 de/, "no 'el 1 de' in Catalan");
+});
+
+/**
+ * Monuments, 28 Oct 2026: sagradafamilia.org prices grid and April-September
+ * hours; parkguell.barcelona prices-and-times and how-to-get-there; Casa
+ * Batlló's ticket office closes at 21:00. The night-visit price ("until
+ * 15 Nov") stays out.
+ */
+test("monuments: Sagrada Família price grid and summer hours, Park Güell prices and resident hours, no dated night price", () => {
+  for (const locale of ["ca", "es", "en"] as const) {
+    const blocks = MONUMENTS.editions[locale].blocks as { type: string; rows?: string[][] }[];
+    const tables = blocks.filter((b) => b.type === "table");
+    assert.equal(tables.length, 4, `${locale}: summary, Sagrada Família prices and hours, Park Güell prices`);
+    assert.deepEqual(tables[1]?.rows?.map((r) => r.slice(1, 4).join("|").replace(/[€\s]/g, "")), ["26|24|21", "30|28|23", "36|34|28", "40|38|32"], `${locale}: price grid`);
+    assert.equal(tables[2]?.rows?.length, 4, `${locale}: three seasons and the holidays`);
+    assert.match(JSON.stringify(tables[2]), /9:00–20:00/, `${locale}: April-September weekdays`);
+    const text = bodyToPlainText(MONUMENTS.editions[locale].blocks);
+    assert.match(text, /13[,.]50/, `${locale}: Park Güell reduced price`);
+    assert.match(text, /18:00/, `${locale}: resident evening hours`);
+    assert.match(text, /21:00/, `${locale}: Casa Batlló ticket office`);
+    assert.match(text, /L3/, `${locale}: Park Güell metro`);
+    assert.doesNotMatch(text, /(€25|25 €)/, `${locale}: no dated night-visit price`);
+  }
+  assert.match(MONUMENTS.editions.en.seoTitle, /^Sagrada Familia tickets price 2026/);
+});
+
+/**
+ * Camp Nou, 28 Oct 2026: the club's tickets page (eight products with "from"
+ * prices) and timetable (3 Nov until 21:00, 17 Nov until 17:00).
+ */
+test("campnou: product table from the club, November special hours, ES title for the museum queries", () => {
+  for (const locale of ["ca", "es", "en"] as const) {
+    const table = (CAMPNOU.editions[locale].blocks as { type: string; rows?: string[][] }[]).find((b) => b.type === "table");
+    assert.deepEqual(table?.rows?.map((r) => Number((r[1] ?? "").replace(/[€\s]/g, ""))), [28, 38, 52, 59, 69, 99, 149, 214], `${locale}: products`);
+    const text = bodyToPlainText(CAMPNOU.editions[locale].blocks);
+    assert.match(text, /21:00/, `${locale}: 3 November late opening`);
+    assert.match(text, /17:00/, `${locale}: 17 November early close`);
+    assert.match(text, /\b113\b/, `${locale}: bus lines`);
+  }
+  assert.match(CAMPNOU.editions.es.seoTitle, /^Museo del Barça/);
+});
+
 test("cruise port: terminal table with transport, Port's April 2026 note, terminal C closed, Cruise Bus fares", () => {
   for (const locale of ["ca", "es", "en"] as const) {
     const text = bodyToPlainText(CRUISEPORT.editions[locale].blocks);
