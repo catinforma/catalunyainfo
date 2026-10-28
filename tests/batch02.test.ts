@@ -266,6 +266,27 @@ test("the Montserrat page does not repeat the unverified height gain", () => {
   }
 });
 
+/**
+ * ZBE, 28 Oct 2026 (zbe.barcelona vehicles-afectats, zberegistre): who may
+ * enter, by fuel and Euro level, with the registration years the AMB gives
+ * ("2005 o 2006" for diesel), and an FAQ in the words of the EN queries.
+ */
+test("ZBE: who-can-enter table from the AMB, FAQ, fine only for the official case", () => {
+  for (const locale of ["ca", "es", "en"] as const) {
+    const blocks = ZBE.editions[locale].blocks as { type: string; rows?: string[][] }[];
+    const tables = blocks.filter((b) => b.type === "table");
+    assert.equal(tables.length, 1, `${locale}: one who-can-enter table`);
+    assert.equal(tables[0]?.rows?.length, 4, `${locale}: petrol, diesel, motorbike, electric`);
+    assert.match(JSON.stringify(tables[0]?.rows), /2005 (o|or) 2006/, `${locale}: diesel years as the AMB gives them`);
+    assert.ok(blocks.some((b) => b.type === "faq"), `${locale}: FAQ`);
+    const text = bodyToPlainText(ZBE.editions[locale].blocks);
+    assert.match(text, /1 (d'abril de|de abril de|April) 2021/, `${locale}: vans since April 2021`);
+    for (const match of text.matchAll(/(\d{2,3}) ?(€|euros)|€(\d{2,3})/g)) {
+      assert.equal(match[1] ?? match[3], "200", `${locale}: only the official 200 euro fine`);
+    }
+  }
+});
+
 test("the ZBE page states working days, not calendar days", () => {
   assert.match(bodyToPlainText(ZBE.editions.ca.blocks), /15 dies hàbils/);
   assert.match(bodyToPlainText(ZBE.editions.es.blocks), /15 días hábiles/);

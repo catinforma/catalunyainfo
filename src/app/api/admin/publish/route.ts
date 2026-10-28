@@ -43,7 +43,7 @@ import { CHRISTMAS_BARCELONA } from "@/lib/content/batch02/christmas-barcelona";
 import { NEW_YEAR } from "@/lib/content/batch02/new-year";
 import { SNOW_NOW } from "@/lib/content/batch02/snow-now";
 import { SNOW } from "@/lib/content/batch02/pyrenees";
-import { PARKING, TRANSPORT } from "@/lib/content/batch02/barcelona-practical";
+import { PARKING, TRANSPORT, ZBE } from "@/lib/content/batch02/barcelona-practical";
 import { ELECTION_NIGHT } from "@/lib/content/batch02/election-night";
 import { CONGRESS_RESULTS, PARLIAMENT_RESULTS } from "@/lib/content/batch02/election-results";
 import { CANDIDATES } from "@/lib/content/batch02/candidates";
@@ -159,6 +159,9 @@ export async function POST(request: Request) {
     if (wants("snow-now")) published.push(await publishB2Article(SNOW_NOW), await publishB2Article(SKI), await publishB2Article(SNOW));
     if (wants("transport")) published.push(await publishB2Article(TRANSPORT));
     if (wants("parking")) published.push(await publishB2Article(PARKING));
+    // The low-emission zone guide on its own (it was only reachable through
+    // batch02-a, which also republishes the transport and Girona guides).
+    if (wants("zbe")) published.push(await publishB2Article(ZBE));
     if (wants("election-night")) published.push(await publishB2Article(ELECTION_NIGHT));
     // 29N candidates: the lists are read from the BOE at render time; this
     // publishes the guide around them (re-running it also refreshes the page).

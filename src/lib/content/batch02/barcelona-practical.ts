@@ -480,7 +480,62 @@ const ZBE_SOURCES = [
 // out: a general fine amount, the helpline (the official contact page is a
 // placeholder) and the medical-urgency deadline, on which two AMB pages
 // disagree. Fees are revised yearly: re-check each January.
-const ZBE_VERIFIED = "2026-10-23";
+// Re-checked 28 Oct 2026 on zbe.barcelona (vehicles-afectats, incl. the
+// "multa a partir de 200 euros" line for a qualifying foreign car that was not
+// registered), zberegistre (VehiclesEstrangers, AutoritzacionsDiaries) and the
+// AMB FAQ (95 km2, Mon-Fri 7-20). Added: the who-can-enter table (petrol cars
+// before Euro 3 "habitualment matriculats abans del 2000" cannot enter, diesel
+// before Euro 4 "abans del 2005 o 2006", motorbikes before Euro 2, 2003; vans
+// N1 since 1 April 2021), in force since 1 January 2020, not registered until
+// confirmed, occasional-access papers, manufacturer document in Catalan,
+// Spanish or English. Not printed: whether weekday public holidays are exempt
+// (the page says "dies laborables, de dilluns a divendres" and nothing more)
+// and any map we could link.
+const ZBE_VERIFIED = "2026-10-28";
+
+const ZBE_TABLE: Record<"ca" | "es" | "en", { title: string; caption: string; headers: string[]; rows: string[][]; note: string }> = {
+  ca: {
+    title: "Quins vehicles poden entrar a la ZBE de Barcelona",
+    caption: "Requisits per circular per la ZBE Rondes de Barcelona",
+    headers: ["Vehicle", "Pot entrar si és", "Habitualment, matriculat"],
+    rows: [
+      ["Turisme o furgoneta de gasolina", "Euro 3 o superior", "Des del 2000"],
+      ["Turisme o furgoneta dièsel", "Euro 4 o superior", "Des del 2005 o 2006"],
+      ["Moto o ciclomotor", "Euro 2 o superior", "Des del 2003"],
+      ["Elèctric", "Sempre", "—"],
+    ],
+    note: "Font: AMB (zbe.barcelona i registre de la ZBE), comprovat el 28 d'octubre de 2026. L'any és orientatiu: mana el nivell Euro del permís de circulació.",
+  },
+  es: {
+    title: "Qué vehículos pueden entrar en la ZBE de Barcelona",
+    caption: "Requisitos para circular por la ZBE Rondes de Barcelona",
+    headers: ["Vehículo", "Puede entrar si es", "Normalmente, matriculado"],
+    rows: [
+      ["Turismo o furgoneta de gasolina", "Euro 3 o superior", "Desde 2000"],
+      ["Turismo o furgoneta diésel", "Euro 4 o superior", "Desde 2005 o 2006"],
+      ["Moto o ciclomotor", "Euro 2 o superior", "Desde 2003"],
+      ["Eléctrico", "Siempre", "—"],
+    ],
+    note: "Fuente: AMB (zbe.barcelona y registro de la ZBE), comprobado el 28 de octubre de 2026. El año es orientativo: manda el nivel Euro del permiso de circulación.",
+  },
+  en: {
+    title: "Which cars can enter Barcelona's low emission zone?",
+    caption: "Standards for driving in the ZBE Rondes de Barcelona",
+    headers: ["Vehicle", "Can enter if it is", "Usually registered"],
+    rows: [
+      ["Petrol car or van", "Euro 3 or higher", "From 2000"],
+      ["Diesel car or van", "Euro 4 or higher", "From 2005 or 2006"],
+      ["Motorbike or moped", "Euro 2 or higher", "From 2003"],
+      ["Electric", "Always", "—"],
+    ],
+    note: "Source: AMB (zbe.barcelona and the ZBE register), checked on 28 October 2026. The year is a guide: the Euro level on your registration document is what counts.",
+  },
+};
+
+function zbeTable(locale: "ca" | "es" | "en"): Block[] {
+  const t = ZBE_TABLE[locale];
+  return [...h2(t.title), table(t.caption, t.headers, t.rows, t.note)];
+}
 
 export const ZBE: B2Article = {
   key: "zbe",
@@ -514,10 +569,10 @@ export const ZBE: B2Article = {
   editions: {
     ca: {
       path: "guies/zbe-barcelona-vehicles-estrangers",
-      title: "ZBE de Barcelona: què has de fer si vens amb un vehicle estranger",
-      seoTitle: "ZBE Barcelona amb cotxe estranger: registre, preu i horari",
+      title: "ZBE de Barcelona: quins cotxes hi poden entrar i què has de fer si vens amb un vehicle estranger",
+      seoTitle: "ZBE Barcelona: quins cotxes hi entren, horari i registre",
       seoDescription:
-        "Els vehicles amb matrícula estrangera s'han de registrar abans de circular per la ZBE de Barcelona. Requisits, terminis i autoritzacions esporàdiques.",
+        "Quins cotxes poden entrar a la ZBE de Barcelona (gasolina Euro 3, dièsel Euro 4), horari de dl. a dv. de 7 a 20 h i com registrar un cotxe estranger (7 €).",
       excerpt:
         "Amb matrícula estrangera cal registrar-se abans de circular per la ZBE. La comprovació ordinària pot trigar fins a 15 dies hàbils.",
       blocks: [
@@ -525,7 +580,7 @@ export const ZBE: B2Article = {
           "Per circular per la ZBE de Barcelona amb un cotxe de matrícula estrangera l'has d'inscriure abans al Registre metropolità de l'AMB, perquè els vehicles estrangers no tenen etiqueta de la DGT. Si compleix els requisits (gasolina Euro 3, dièsel Euro 4) la inscripció costa 7 € una sola vegada; si no, pots demanar fins a 24 autoritzacions diàries l'any a 5 € cadascuna. La zona funciona de dilluns a divendres de 7:00 a 20:00.",
         ),
         ...paras(
-          "**Tots els vehicles amb matrícula estrangera s'han d'inscriure al Registre metropolità per circular per les ZBE de la metròpolis de Barcelona.** La comprovació ordinària dels requisits ambientals pot trigar fins a **15 dies hàbils**.",
+          "**Tots els vehicles amb matrícula estrangera s'han d'inscriure al Registre metropolità per circular per les ZBE de la metròpolis de Barcelona.** La comprovació ordinària dels requisits ambientals pot trigar fins a **15 dies hàbils**, i fins que no arriba la confirmació el vehicle no consta com a registrat i no pot circular per la ZBE.",
         ),
         callout(
           "warning",
@@ -539,13 +594,15 @@ export const ZBE: B2Article = {
           { label: "Dièsel (turismes)", value: "Euro 4 o superior" },
           { label: "Autoritzacions esporàdiques", value: "Fins a 24 diàries l'any" },
           { label: "Horari", value: "Dl.–dv., 7:00–20:00" },
-          { label: "Última verificació", value: "23 d'octubre de 2026" },
+          { label: "Última verificació", value: "28 d'octubre de 2026" },
         ]),
         ...h2(
           "Quins requisits ambientals demanen",
           "Per a l'autorització ambiental de llarga durada, els turismes de gasolina han de complir almenys **Euro 3** (habitualment matriculats després del 2000) i els dièsel **Euro 4** (habitualment matriculats després del 2005), segons les categories descrites per l'AMB.",
           "Si el vehicle no compleix els requisits, o necessites accedir-hi urgentment, existeixen autoritzacions esporàdiques. L'AMB permet fins a **24 autoritzacions diàries anuals** en aquesta modalitat.",
         ),
+        ...zbeTable("ca"),
+        ...paras("Les furgonetes (N1) tenen els mateixos requisits que els turismes des de l'1 d'abril de 2021; la restricció permanent s'aplica des de l'1 de gener de 2020. Un dièsel del 2012 o del 2015 normalment supera de llarg l'Euro 4, però mira el nivell Euro del permís de circulació, no l'any."),
         ...h2(
           "Quan i on s'aplica",
           "La ZBE Rondes de Barcelona funciona **de dilluns a divendres, de 7:00 a 20:00**, tot l'any. Cobreix tot el terme de Barcelona (excepte la Zona Franca industrial i els barris de Vallvidrera, el Tibidabo i les Planes), l'Hospitalet de Llobregat, Sant Adrià de Besòs i part d'Esplugues i de Cornellà: més de 95 km².",
@@ -581,7 +638,7 @@ export const ZBE: B2Article = {
           "nivell Euro.",
         ),
         ...paras(
-          "Si la documentació no inclou prou informació ambiental, l'AMB pot requerir acreditació del fabricant.",
+          "Si la documentació no inclou prou informació ambiental, cal un document del fabricant, en català, castellà o anglès, que acrediti les emissions de NOx i de partícules. Per a les autoritzacions diàries només cal la documentació on consten la matrícula i el titular.",
         ),
         ...h2("Com demanar l'autorització, pas a pas"),
         steps("Passos abans del viatge", [
@@ -608,6 +665,13 @@ export const ZBE: B2Article = {
           "Tenir autorització per circular per la ZBE no dona dret a aparcar gratis ni converteix una zona verda de residents en una plaça disponible per a visitants.",
           `Com funciona l'aparcament al carrer ho expliquem a part: ${b2link("parking", "ca", "zona blava i zona verda de Barcelona")}.`,
         ),
+        faq([
+          { question: "Un cotxe estranger pot entrar a la ZBE de Barcelona?", answer: "Sí, si abans l'inscrius al registre de l'AMB: amb gasolina Euro 3 o dièsel Euro 4 o superior, una taxa de 7 € una sola vegada; si no compleix, fins a 24 autoritzacions diàries l'any." },
+          { question: "Quin és l'horari de la ZBE de Barcelona?", answer: "De dilluns a divendres, de 7:00 a 20:00, tot l'any. Fora d'aquest horari i el cap de setmana no s'aplica la restricció permanent." },
+          { question: "Quins dièsel poden entrar a la ZBE?", answer: "Els Euro 4 o superiors, habitualment els matriculats a partir del 2005 o 2006. Mana el nivell Euro del permís de circulació." },
+          { question: "Quant triga el registre de la ZBE?", answer: "Fins a 15 dies hàbils; fins que no arriba la confirmació, el vehicle no pot circular per la ZBE." },
+          { question: "Quina multa hi ha si entro sense registrar?", answer: "Segons l'AMB, un vehicle que compleix els requisits però no s'ha registrat pot rebre una multa a partir de 200 euros." },
+        ]),
         ...paras(verifiedLine("ca", ZBE_VERIFIED)),
         ...b2Related(["parking", "transport"], "ca"),
       ],
@@ -625,7 +689,7 @@ export const ZBE: B2Article = {
         lead(
           "Para entrar en la ZBE de Barcelona con un coche de matrícula extranjera hay que inscribirlo antes en el Registro metropolitano de la AMB, porque los vehículos extranjeros no tienen etiqueta de la DGT. Si cumple los requisitos (gasolina Euro 3, diésel Euro 4) la inscripción cuesta 7 € una sola vez; si no, puedes pedir hasta 24 autorizaciones diarias al año a 5 € cada una. La zona funciona de lunes a viernes de 7:00 a 20:00.",
         ),
-        ...paras("La comprobación ordinaria puede tardar hasta **15 días hábiles**."),
+        ...paras("La comprobación ordinaria puede tardar hasta **15 días hábiles**, y hasta que llega la confirmación el vehículo no consta como registrado y no puede circular por la ZBE."),
         callout(
           "warning",
           "Respuesta rápida",
@@ -638,13 +702,15 @@ export const ZBE: B2Article = {
           { label: "Diésel (turismos)", value: "Euro 4 o superior" },
           { label: "Autorizaciones esporádicas", value: "Hasta 24 diarias al año" },
           { label: "Horario", value: "L–V, 7:00–20:00" },
-          { label: "Última verificación", value: "23 de octubre de 2026" },
+          { label: "Última verificación", value: "28 de octubre de 2026" },
         ]),
         ...h2(
           "Requisitos ambientales",
           "Los turismos de gasolina deben cumplir al menos **Euro 3** y los diésel **Euro 4** para obtener la autorización ambiental de larga duración.",
           "Existe además una modalidad de acceso esporádico que permite solicitar hasta **24 días de circulación al año** cuando corresponda.",
         ),
+        ...zbeTable("es"),
+        ...paras("Las furgonetas (N1) tienen los mismos requisitos que los turismos desde el 1 de abril de 2021; la restricción permanente se aplica desde el 1 de enero de 2020. Un diésel de 2012 o de 2015 normalmente supera de largo el Euro 4, pero mira el nivel Euro del permiso de circulación, no el año."),
         ...h2(
           "Horario y zona",
           "La ZBE Rondes de Barcelona funciona **de lunes a viernes, de 7:00 a 20:00**, todo el año. Cubre todo el término de Barcelona (salvo la Zona Franca industrial y los barrios de Vallvidrera, el Tibidabo y les Planes), L'Hospitalet de Llobregat, Sant Adrià de Besòs y parte de Esplugues y de Cornellà: más de 95 km².",
@@ -678,7 +744,7 @@ export const ZBE: B2Article = {
           "nivel Euro.",
         ),
         ...paras(
-          "Si la documentación no incluye suficiente información ambiental, la AMB puede requerir acreditación del fabricante.",
+          "Si la documentación no incluye suficiente información ambiental, hace falta un documento del fabricante, en catalán, castellano o inglés, que acredite las emisiones de NOx y de partículas. Para las autorizaciones diarias solo hace falta la documentación con la matrícula y el titular.",
         ),
         ...h2("Cómo pedir la autorización paso a paso"),
         steps("Pasos antes del viaje", [
@@ -704,6 +770,13 @@ export const ZBE: B2Article = {
           "Tener autorización para circular por la ZBE no da derecho a aparcar gratis ni convierte una zona verde de residentes en una plaza disponible para visitantes.",
           `Cómo funciona el aparcamiento en la calle lo explicamos aparte: ${b2link("parking", "es", "zona azul y zona verde de Barcelona")}.`,
         ),
+        faq([
+          { question: "¿Puede entrar un coche extranjero en la ZBE de Barcelona?", answer: "Sí, si antes lo inscribes en el registro de la AMB: con gasolina Euro 3 o diésel Euro 4 o superior, una tasa de 7 € una sola vez; si no cumple, hasta 24 autorizaciones diarias al año." },
+          { question: "¿Cuál es el horario de la ZBE de Barcelona?", answer: "De lunes a viernes, de 7:00 a 20:00, todo el año. Fuera de ese horario y el fin de semana no se aplica la restricción permanente." },
+          { question: "¿Qué diésel pueden entrar en la ZBE?", answer: "Los Euro 4 o superiores, normalmente los matriculados a partir de 2005 o 2006. Manda el nivel Euro del permiso de circulación." },
+          { question: "¿Cuánto tarda el registro de la ZBE?", answer: "Hasta 15 días hábiles; hasta que llega la confirmación, el vehículo no puede circular por la ZBE." },
+          { question: "¿Qué multa hay si entro sin registrar?", answer: "Según la AMB, un vehículo que cumple los requisitos pero no se ha registrado puede recibir una multa a partir de 200 euros." },
+        ]),
         ...paras(verifiedLine("es", ZBE_VERIFIED)),
         ...b2Related(["parking", "transport"], "es"),
       ],
@@ -712,10 +785,10 @@ export const ZBE: B2Article = {
     en: {
       path: "guides/barcelona-low-emission-zone-foreign-cars",
       title:
-        "Barcelona low-emission zone: what foreign drivers need to do before entering",
-      seoTitle: "Barcelona low emission zone (LEZ): foreign car rules",
+        "Barcelona low emission zone (LEZ): which cars can enter, and what foreign drivers must do",
+      seoTitle: "Barcelona low emission zone (LEZ): foreign cars, hours, fees",
       seoDescription:
-        "Foreign car in Barcelona's low emission zone (LEZ/ZBE)? Register with the AMB first (€7). Mon–Fri 07:00–20:00. Day permits: 24 a year at €5.",
+        "Which cars can enter Barcelona's low emission zone (LEZ/ZBE): petrol Euro 3, diesel Euro 4. Mon–Fri 07:00–20:00. Foreign cars register with the AMB (€7).",
       excerpt:
         "Foreign plates must be registered before driving in Barcelona's low-emission zone. Verification can take up to 15 working days.",
       blocks: [
@@ -723,7 +796,7 @@ export const ZBE: B2Article = {
           "Barcelona's low-emission zone (ZBE Rondes de Barcelona, the LEZ) keeps out vehicles without a DGT environmental label from Monday to Friday, 07:00 to 20:00. A foreign-registered car has no DGT label, so you must register it with the AMB before you drive in: €7 once if it meets the standard (petrol Euro 3, diesel Euro 4), or up to 24 day permits a year at €5 each if it does not.",
         ),
         ...paras(
-          "**Foreign-registered vehicles must be entered in the metropolitan register before driving in Barcelona metropolitan low-emission zones.** Standard environmental verification can take up to **15 working days**.",
+          "**Foreign-registered vehicles must be entered in the metropolitan register before driving in Barcelona metropolitan low-emission zones.** Standard environmental verification can take up to **15 working days**, and until it is confirmed the vehicle is not registered and may not drive in the zone.",
         ),
         callout(
           "warning",
@@ -737,13 +810,15 @@ export const ZBE: B2Article = {
           { label: "Diesel cars", value: "Euro 4 or higher" },
           { label: "Day authorisations", value: "Up to 24 per year" },
           { label: "Hours", value: "Mon–Fri, 07:00–20:00" },
-          { label: "Last verified", value: "23 October 2026" },
+          { label: "Last verified", value: "28 October 2026" },
         ]),
         ...h2(
           "Environmental standards",
           "For passenger cars, the AMB lists petrol **Euro 3** or higher and diesel **Euro 4** or higher among the standards eligible for long-term authorisation.",
           "Vehicles using the occasional-access system can request up to **24 daily authorisations per year**, subject to the applicable conditions.",
         ),
+        ...zbeTable("en"),
+        ...paras("Vans (N1) have had the same standards as cars since 1 April 2021; the permanent restriction has applied since 1 January 2020. A 2012 or 2015 diesel is normally well past Euro 4, but check the Euro level on the registration document rather than the year."),
         ...h2(
           "When and where the zone applies",
           "The ZBE Rondes de Barcelona runs **Monday to Friday, 07:00 to 20:00**, all year. It covers the whole of Barcelona (except the industrial Zona Franca and the Vallvidrera, Tibidabo and Les Planes neighbourhoods), L'Hospitalet de Llobregat, Sant Adrià de Besòs and parts of Esplugues and Cornellà: more than 95 km².",
@@ -777,7 +852,7 @@ export const ZBE: B2Article = {
           "the Euro level.",
         ),
         ...paras(
-          "If your documents do not carry enough environmental information, the AMB may ask for manufacturer certification.",
+          "If your documents do not carry enough environmental information, you need a manufacturer's document, in Catalan, Spanish or English, showing the vehicle's NOx and particulate emissions. For day permits, papers showing the plate and the keeper are enough.",
         ),
         ...h2("How to register a foreign car, step by step"),
         steps("Before you travel", [
@@ -803,6 +878,13 @@ export const ZBE: B2Article = {
           "Authorisation to drive in the low-emission zone does not give you free parking, and it does not turn a residents' green space into a visitor space.",
           `Street parking is a separate question: ${b2link("parking", "en", "Barcelona's blue and green zones")}.`,
         ),
+        faq([
+          { question: "Can foreign cars drive in Barcelona's low emission zone?", answer: "Yes, once registered with the AMB: a petrol Euro 3 or diesel Euro 4 car (or better) pays a €7 fee once; one that does not qualify can use up to 24 day permits a year." },
+          { question: "What are the Barcelona low emission zone hours?", answer: "Monday to Friday, 07:00 to 20:00, all year. Outside those hours and at weekends the permanent restriction does not apply." },
+          { question: "Can a diesel car enter the Barcelona LEZ?", answer: "Yes if it is Euro 4 or higher, which usually means registered from 2005 or 2006. The Euro level on your registration document is what counts." },
+          { question: "How long does LEZ registration take?", answer: "Up to 15 working days; until it is confirmed, the car may not drive in the zone." },
+          { question: "What is the fine for driving in without registering?", answer: "According to the AMB, a qualifying vehicle that was not registered can be fined from €200." },
+        ]),
         ...paras(verifiedLine("en", ZBE_VERIFIED)),
         ...b2Related(["parking", "transport"], "en"),
       ],
