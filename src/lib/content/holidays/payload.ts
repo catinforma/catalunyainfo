@@ -220,8 +220,30 @@ export const SOURCES = [
     url: "https://ajuntament.barcelona.cat/calendarifestius/ca/",
     publisher: "Ajuntament de Barcelona",
   },
+  {
+    name: "Ordre EMT/66/2025, de 30 d'abril — calendari oficial de festes laborals a Catalunya per al 2026",
+    url: "https://treball.gencat.cat/ca/ambits/relacions_laborals/ci/calendari_laboral/calendari-festes-2026/",
+    publisher: "Departament d'Empresa i Treball, Generalitat de Catalunya",
+  },
+  {
+    name: "Ordre EMT/208/2025, d'11 de desembre — calendari de festes locals a Catalunya per al 2026 (DOGC núm. 9565)",
+    url: "https://dogc.gencat.cat/ca/document-del-dogc/?documentId=1032232",
+    publisher: "Departament d'Empresa i Treball, Generalitat de Catalunya",
+  },
+  {
+    name: "Calendari de festes locals a Catalunya (dades obertes)",
+    url: "https://analisi.transparenciacatalunya.cat/d/b4eh-r8up",
+    publisher: "Departament d'Empresa i Treball — dades obertes",
+  },
+  {
+    name: "Ordre EDF/66/2026, de 22 d'abril — calendari escolar dels cursos 2026-2027, 2027-2028 i 2028-2029",
+    url: "https://portaldogc.gencat.cat/utilsEADOP/PDF/9653/2147443.pdf",
+    publisher: "Departament d'Educació i Formació Professional",
+  },
 ];
 
 // Re-checked 23 Oct 2026 against the BOE national list (BOE-A-2026-21254),
-// which repeats Order EMT/52/2026 and the Aran swap for Catalonia.
-export const LAST_VERIFIED = "2026-10-23";
+// which repeats Order EMT/52/2026 and the Aran swap for Catalonia; and on
+// 28 Oct 2026 against the Generalitat's 2026 and 2027 calendar pages and
+// Barcelona's own calendar (17 May and 24 Sep 2027; 25 May and 24 Sep 2026).
+export const LAST_VERIFIED = "2026-10-28";

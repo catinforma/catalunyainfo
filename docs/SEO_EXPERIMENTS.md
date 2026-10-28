@@ -674,6 +674,40 @@ Google has not crawled has not been tested.
 **Measure on 25 Nov** (peak) and **6 Dec** (after the vote): position and
 clicks per query above, per language.
 
+---
+
+## 2026-10-28 — Page-1 push: calendars and holidays (work calendar, school calendar, "is it a holiday today")
+
+Owner decision of 28 Oct: windows and frozen titles lifted for these pages.
+Baseline: `research_notes/x10/rank-inventory-28oct.json` (GSC 28 days to 27 Oct)
+plus GSC query × page for the school and holiday queries. Facts re-read on 28 Oct
+on treball.gencat.cat (2026 and 2027 calendars), Barcelona's calendar, the
+Ordre EDF/66/2026 PDF, the CEMB proposal PDF and the local open data (no 2027
+rows yet); fact pack in `research_notes/calendars-holidays-28oct.md`.
+
+| Page (publish group) | Title before -> after | Body added | Target queries, position now (28 d) |
+| --- | --- | --- | --- |
+| `/es/guias/calendario-laboral-cataluna/` (`holidays`) | unchanged ("Calendario laboral 2027 Cataluña: 12 festivos y puentes"); description now lists the Easter dates | Semana Santa 2027 table, Barcelona section titled "Calendario laboral Barcelona 2027", local days 2027 (not out yet) -> 11 town pages + `/es/festivos/`, 2026 calendar with the December date pages linked, FAQ (puentes 2027, 14 days in Barcelona, when the local order comes, 7 Dec), link to the school calendar | calendario laboral cataluña 2027 1.0, calendario laboral 2027 catalunya 9.3, festivos catalunya 2027 9.2, festivos 2027 catalunya 10.4, calendario laboral barcelona 2027 23.4 (page 24.1, 7 d 10.9) |
+| `/ca/guies/calendari-laboral-catalunya/` (`holidays`) | "Calendari laboral 2027 Catalunya: festius i ponts" -> "…: festius, ponts i Pasqua" | same module | calendari laboral 2027 catalunya 10.1, divendres sant 2027 10.1, pasqua florida 2027 9.6, dilluns de pasqua 2027 5.1, ponts 2027 9.6, festius catalunya 2027 15.6, festes locals catalunya 2027 4.7 |
+| `/en/guides/catalonia-public-holidays/` (`holidays`) | "Catalonia public holidays 2027: dates and long weekends" -> "Barcelona & Catalonia public holidays 2027: all dates" (H1 adds Barcelona) | same module | public holidays barcelona 2027 9.5, holidays barcelona 2027 11 (page 9.4, 161 impressions) |
+| `/es/guias/calendario-escolar-cataluna/` (`school-calendar`) | "Calendario escolar Cataluña 2026-2027: fechas clave" -> "…: vacaciones y festivos"; H1 now carries 2026-2027 | Christmas 2026-27 answer above the fold, table of every day without school, Barcelona 2026-27 (local + CEMB days with reasons, long weekends), FAQ in query wording, links to town pages; now linked from the ES work calendar and "es festivo hoy" | calendario escolar cataluña 28.2, calendario escolar 2026-2027 catalunya 36, calendario escolar cataluña 26 27 49, hoy hay cole en cataluña 6.3 (page 26.2, 7 d 30.9) |
+| CA / EN school editions (`school-calendar`) | "Calendari escolar Catalunya 2026-2027: dates clau" -> "Calendari escolar 2026-2027 Catalunya: vacances i festius"; "…: term dates" -> "…: holidays and term dates" | same module | calendari escolar 2027-2028 8.4, vacances escolars setmana santa 2027 7.3, vacances escolars nadal 2026 9.3 |
+| `/es/guias/es-festivo-hoy-cataluna/` (`holiday-today` + deploy for the block) | "¿Es festivo hoy en Cataluña? Respuesta y próximos festivos" -> "¿Hoy es festivo en Cataluña? Hoy, mañana y en tu municipio"; CA "…Avui, demà i al teu municipi"; EN "Is today a holiday in Barcelona and Catalonia? Live answer" | live block: "¿Dónde es festivo hoy?" heading, each town linked to its engine page (INE match), "¿Mañana es festivo?", upcoming holidays linked to the date pages, list of the date questions still ahead; body: "¿Es festivo hoy en tu municipio?" with the 11 largest towns and the hub | hoy es festivo en cataluña 9.3 (7 d 4.6), es festivo hoy en cataluña 11.6, festivos hoy 11.3, festivo hoy cataluña 10.2, mañana es festivo 56.5, donde es festivo hoy 65 (page 23.7, 7 d 42.2: dragged by "festividades" at 85) |
+
+**Why the ES school page lagged** (CA at 5-10): last crawled 9 Oct, so the 23 Oct
+title was never seen; its only referring URL was the CA edition; most of its
+impressions are Spain-wide generic queries at 30-60; and the Spanish results lead
+with a list of the year's days off, which the page only had in prose.
+
+**Prediction.** ES school page into the top 10 for "calendario escolar cataluña
+2026-2027" variants once recrawled (it now has two ranking ES referrers); ES work
+calendar's Catalonia queries from 9-10 to 5-7; "hoy es festivo en cataluña" holds
+top 5 and town pages start receiving clicks from the today page.
+
+**Measure on 28 Nov 2026** (28 days): per page, position and clicks for the
+queries above; check the last-crawl date first (rule of 26 Oct). Demand rises in
+the first week of December (bridge) and around 22 Dec (school holidays).
+
 **Outcome:** _pending_
 
 ## Candidates not yet run

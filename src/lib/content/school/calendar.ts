@@ -19,7 +19,8 @@ export const SCHOOL_SOURCE = {
   publisher: "Departament d'Educació i Formació Professional — DOGC núm. 9653, 27.4.2026",
 };
 
-export const SCHOOL_VERIFIED_AT = "2026-10-07";
+// Re-read 28 Oct 2026: the order's PDF (dates below unchanged) and the CEMB proposal.
+export const SCHOOL_VERIFIED_AT = "2026-10-28";
 
 export interface SchoolYear {
   /** "2026-2027" */

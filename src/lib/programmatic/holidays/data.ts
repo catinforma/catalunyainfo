@@ -21,6 +21,7 @@ export const NEXT = YEAR + 1;
 export type Lang = "ca" | "es" | "en";
 
 const BY_SLUG = new Map(SNAPSHOT.municipalities.map((m) => [m.slug, m]));
+const BY_INE = new Map(SNAPSHOT.municipalities.map((m) => [m.ine, m]));
 
 export function municipalities(): SnapshotMunicipality[] {
   return SNAPSHOT.municipalities;
@@ -28,6 +29,26 @@ export function municipalities(): SnapshotMunicipality[] {
 
 export function municipalityBySlug(slug: string): SnapshotMunicipality | null {
   return BY_SLUG.get(slug) ?? null;
+}
+
+const fold = (name: string) => name.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase().trim();
+
+/**
+ * The municipality page for a place in the live local-holiday data
+ * (`lib/content/holidays/local.ts`), so "today is a local holiday in…" can
+ * send the reader to the town's own calendar. The open data's `codi_municipal`
+ * is the five-digit INE code plus a three-digit nucleus code: a nucleus maps to
+ * the municipality it belongs to, whose page lists the nucleus's days. A place
+ * added from a DOGC correction carries `dogc:<name>` and is matched by name.
+ * Null when the place has no page (the family covers the 100 largest).
+ */
+export function municipalityForCode(code: string): SnapshotMunicipality | null {
+  if (/^\d{8}$/.test(code)) return BY_INE.get(code.slice(0, 5)) ?? null;
+  if (code.startsWith("dogc:")) {
+    const name = code.slice(5);
+    return SNAPSHOT.municipalities.find((m) => fold(m.name) === name || fold(m.dogcName) === name) ?? null;
+  }
+  return null;
 }
 
 /** Whether next year's local order has been published (and parsed). */

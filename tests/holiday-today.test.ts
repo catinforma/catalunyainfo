@@ -20,6 +20,7 @@ import {
 import { COPY, buildBody } from "../src/lib/content/holidays/today-publish.ts";
 import { COPY as PLANNER_COPY } from "../src/lib/content/holidays/copy.ts";
 import { LOCALES } from "../src/lib/i18n/config.ts";
+import { municipalityForCode } from "../src/lib/programmatic/holidays/data.ts";
 
 /**
  * This page tells somebody whether they have to go to work. Being wrong by one
@@ -200,6 +201,42 @@ for (const locale of LOCALES) {
   test(`${locale}: the page says the two local days are not covered`, () => {
     const text = bodyToPlainText(buildBody(locale)).toLowerCase();
     assert.match(text, /local/, "no mention of local holidays");
+  });
+}
+
+/* -------------------------------------------------------------------------- */
+/* Local questions go on to the holiday engine's town pages                   */
+/* -------------------------------------------------------------------------- */
+
+test("a place in the live local data maps to its town page, nuclei to their municipality", () => {
+  // codi_municipal = five-digit INE code + three-digit nucleus code.
+  assert.equal(municipalityForCode("08019000")?.slug, "barcelona");
+  assert.equal(municipalityForCode("17079000")?.slug, "girona");
+  assert.equal(municipalityForCode("08019001")?.slug, "barcelona", "a nucleus maps to its municipality");
+  // A DOGC correction carries its folded name.
+  assert.equal(municipalityForCode("dogc:castelldefels")?.slug, "castelldefels");
+  // A village outside the 100 has no page.
+  assert.equal(municipalityForCode("25123001"), null);
+  assert.equal(municipalityForCode("nonsense"), null);
+});
+
+for (const locale of LOCALES) {
+  test(`${locale}: search title and description fit, and the body links the town pages`, () => {
+    const { seoTitle, seoDescription } = COPY[locale];
+    assert.ok(seoTitle.length <= 60, `${seoTitle.length}`);
+    assert.ok(seoDescription.length <= 155, `${seoDescription.length}`);
+    const json = JSON.stringify(buildBody(locale));
+    if (locale === "en") {
+      assert.match(json, /\/en\/guides\/local-holidays-catalonia\//);
+      assert.match(json, /17 May/, "Barcelona's Whit Monday, from the payload");
+    } else {
+      const root = locale === "ca" ? "festius" : "festivos";
+      assert.ok(json.includes(`(/${locale}/${root}/)`), "no link to the hub");
+      for (const town of ["barcelona", "girona", "lleida", "tarragona"]) {
+        assert.ok(json.includes(`/${locale}/${root}/${town}/`), `no link to ${town}`);
+      }
+    }
+    assert.ok(!json.includes("{towns}") && !json.includes("{bcn"), "a placeholder leaked");
   });
 }
 

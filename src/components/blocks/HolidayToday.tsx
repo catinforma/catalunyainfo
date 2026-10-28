@@ -15,9 +15,43 @@ import {
   weekdayIndex,
   WEEKDAY_NAMES,
 } from "@/lib/content/holidays/calendar";
-import { LOCAL_SOURCE, loadLocalCalendar, placesWithHolidayOn } from "@/lib/content/holidays/local";
+import Link from "next/link";
+
+import { LOCAL_SOURCE, loadLocalCalendar, placesWithHolidayOn, type LocalHolidayPlace } from "@/lib/content/holidays/local";
 import { getMessages } from "@/lib/i18n";
 import type { Locale } from "@/lib/i18n/config";
+import { dateQuestion } from "@/lib/programmatic/holidays/copy";
+import { municipalityForCode } from "@/lib/programmatic/holidays/data";
+import { GUIDES } from "@/lib/programmatic/holidays/links";
+import { DATE_PAGES, datePath, hubPath, isDatePage, municipalityPath } from "@/lib/programmatic/holidays/paths";
+
+/**
+ * Where a local question goes next: the town's own page in Catalan and
+ * Spanish (the family has no English town pages), otherwise nowhere.
+ */
+function placeHref(place: LocalHolidayPlace, locale: Locale): string | null {
+  if (locale === "en") return null;
+  const m = municipalityForCode(place.key);
+  return m ? municipalityPath(locale, m.slug) : null;
+}
+
+function PlaceList({ places, locale, limit }: { places: LocalHolidayPlace[]; locale: Locale; limit?: number }) {
+  const shown = limit ? places.slice(0, limit) : places;
+  return (
+    <>
+      {shown.map((place, index) => {
+        const href = placeHref(place, locale);
+        return (
+          <span key={place.key}>
+            {index > 0 ? ", " : ""}
+            {href ? <Link href={href}>{place.name}</Link> : place.name}
+          </span>
+        );
+      })}
+      {limit && places.length > limit ? "…" : ""}
+    </>
+  );
+}
 
 /**
  * Is today a public holiday in Catalonia?
@@ -66,6 +100,7 @@ export async function HolidayToday({ locale, now }: { locale: Locale; now?: Date
   const weekend = weekdayIndex(today) === 0 || weekdayIndex(today) === 6;
 
   const upcoming = allHolidays().filter((holiday) => holiday.date >= today);
+  const datePages = DATE_PAGES.filter((iso) => iso >= today);
 
   return (
     <section className="ci-today" aria-label={t.title}>
@@ -106,6 +141,7 @@ export async function HolidayToday({ locale, now }: { locale: Locale; now?: Date
 
       {local.error ? null : (
         <div className="ci-today-local">
+          <h3 className="ci-today-subtitle">{t.whereTitle}</h3>
           <p className="ci-today-local-title">
             {localToday.length > 0
               ? t.localToday.replace("{n}", String(localToday.length))
@@ -113,18 +149,30 @@ export async function HolidayToday({ locale, now }: { locale: Locale; now?: Date
           </p>
           {localToday.length > 0 ? (
             <p className="ci-today-local-list">
-              {localToday.map((place) => place.name).join(", ")}
+              <PlaceList places={localToday} locale={locale} />
             </p>
           ) : null}
           {localTomorrow.length > 0 ? (
             <p className="ci-today-note">
               {t.localTomorrow.replace("{n}", String(localTomorrow.length))}{" "}
-              {localTomorrow.slice(0, 40).map((place) => place.name).join(", ")}
-              {localTomorrow.length > 40 ? "…" : ""}
+              <PlaceList places={localTomorrow} locale={locale} limit={40} />
             </p>
           ) : null}
         </div>
       )}
+
+      {/* Local questions go to the town pages (ca/es) or the all-towns guide (en). */}
+      <p className="ci-today-find">
+        {t.findTown}{" "}
+        <Link href={locale === "en" ? GUIDES.localHolidays.en : hubPath(locale)}>{t.findTownLink}</Link>
+        {locale === "en" ? null : (
+          <>
+            {" · "}
+            <Link href={GUIDES.localHolidays[locale]}>{t.allTownsLink}</Link>
+          </>
+        )}
+        .
+      </p>
 
       <h3 className="ci-today-subtitle">{t.upcomingTitle}</h3>
       <table className="ci-table" role="table">
@@ -141,7 +189,15 @@ export async function HolidayToday({ locale, now }: { locale: Locale; now?: Date
             return (
               <tr key={holiday.date} role="row" aria-current={holiday.date === today ? "date" : undefined}>
                 <td data-label={t.colDate}>
-                  {shortDate(holiday.date, locale)} {holiday.date.slice(0, 4)}
+                  {isDatePage(holiday.date) ? (
+                    <Link href={datePath(locale, holiday.date)}>
+                      {shortDate(holiday.date, locale)} {holiday.date.slice(0, 4)}
+                    </Link>
+                  ) : (
+                    <>
+                      {shortDate(holiday.date, locale)} {holiday.date.slice(0, 4)}
+                    </>
+                  )}
                 </td>
                 <td data-label={t.colWeekday}>{WEEKDAY_NAMES[locale][weekdayIndex(holiday.date)]}</td>
                 <td data-label={t.colName}>
@@ -163,6 +219,20 @@ export async function HolidayToday({ locale, now }: { locale: Locale; now?: Date
           })}
         </tbody>
       </table>
+
+      {/* The dated questions people ask ("is 8 December a holiday?"), each with its own page. */}
+      {datePages.length > 0 ? (
+        <>
+          <h3 className="ci-today-subtitle">{t.dateQuestionsTitle}</h3>
+          <ul className="ci-today-dates">
+            {datePages.map((iso) => (
+              <li key={iso}>
+                <Link href={datePath(locale, iso)}>{dateQuestion(iso, locale)}</Link>
+              </li>
+            ))}
+          </ul>
+        </>
+      ) : null}
 
       <p className="ci-today-note">
         {local.error ? t.localNote : t.localListNote}{" "}

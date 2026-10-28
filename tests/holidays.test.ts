@@ -248,6 +248,79 @@ test("dates are formatted from the ISO value, not transcribed", () => {
   assert.equal(weekdayOf("2027-12-07", COPY.ca), "dimarts");
 });
 
+/* -------------------------------------------------------------------------- */
+/* Page-1 push, 28 Oct 2026: Easter, 2026, local days, links                  */
+/* -------------------------------------------------------------------------- */
+
+const tableAfter = (locale: (typeof LOCALES)[number], heading: string) => {
+  const body = buildBody(locale);
+  const index = body.findIndex((b) => b.type === "heading" && b.text === heading);
+  assert.ok(index >= 0, `${locale}: no "${heading}" heading`);
+  const table = body.slice(index).find((b) => b.type === "table");
+  assert.ok(table && table.type === "table", `${locale}: no table under "${heading}"`);
+  return table;
+};
+
+test("search titles and descriptions fit what Google shows", () => {
+  for (const locale of LOCALES) {
+    const { seoTitle, seoDescription } = COPY[locale];
+    assert.ok(seoTitle.length <= 60, `${locale}: title ${seoTitle.length}`);
+    assert.ok(seoDescription.length <= 155, `${locale}: description ${seoDescription.length}`);
+    assert.match(seoTitle, /2027/, locale);
+  }
+  assert.match(COPY.ca.seoTitle, /Pasqua/);
+  assert.match(COPY.en.seoTitle, /Barcelona/);
+});
+
+test("Easter 2027: the table marks only Good Friday and Easter Monday as Catalonia-wide", () => {
+  const goodFriday = { ca: "26 de març", es: "26 de marzo", en: "26 March" };
+  const maundy = { ca: "25 de març", es: "25 de marzo", en: "25 March" };
+  for (const locale of LOCALES) {
+    const copy = COPY[locale];
+    const table = tableAfter(locale, copy.easterTitle);
+    const rows = new Map(table.rows.map((row) => [row[0], row]));
+    assert.equal(rows.get(maundy[locale])?.[3], copy.easterStatus.maundy, `${locale}: Maundy Thursday`);
+    assert.equal(rows.get(goodFriday[locale])?.[3], copy.easterStatus.holiday, `${locale}: Good Friday`);
+    assert.equal(table.rows.filter((row) => row[3] === copy.easterStatus.holiday || row[3] === copy.easterStatus.exceptAran).length, 2);
+    // The school Easter break comes from Ordre EDF/66/2026: 20 to 29 March 2027.
+    const text = bodyToPlainText(buildBody(locale));
+    assert.match(text, locale === "en" ? /20 March to 29 March/ : /20 de mar[çz]o? al 29 de mar[çz]/, locale);
+  }
+});
+
+test("the 2026 calendar is Ordre EMT/66/2025's twelve days, with the December date pages linked", () => {
+  const titles = { ca: COPY.ca.year2026Title, es: COPY.es.year2026Title, en: COPY.en.year2026Title };
+  const dayPath = { ca: "/ca/festius/dia/8-desembre-2026/", es: "/es/festivos/dia/8-diciembre-2026/", en: "/en/holidays/day/8-december-2026/" };
+  for (const locale of LOCALES) {
+    const table = tableAfter(locale, titles[locale]);
+    assert.equal(table.rows.length, 12, locale);
+    assert.ok(table.rows.some((row) => row[0]?.includes(dayPath[locale])), `${locale}: 8 Dec not linked`);
+    // Sant Esteve 2026 is a Saturday and Aran swaps it for 17 June.
+    assert.match(table.note ?? "", /17/, locale);
+  }
+});
+
+test("local days: 2027 not published yet, 2026 sent to the town pages", () => {
+  for (const locale of LOCALES) {
+    const json = JSON.stringify(buildBody(locale));
+    if (locale === "en") {
+      assert.match(json, /\/en\/guides\/local-holidays-catalonia\//);
+    } else {
+      const root = locale === "ca" ? "festius" : "festivos";
+      for (const town of ["barcelona", "lleida", "tarragona", "girona"]) {
+        assert.ok(json.includes(`/${locale}/${root}/${town}/`), `${locale}: no link to ${town}`);
+      }
+      assert.ok(json.includes(`(/${locale}/${root}/)`), `${locale}: no link to the hub`);
+    }
+    assert.match(bodyToPlainText(buildBody(locale)), /17 (de desembre|de diciembre|December) (de )?2025/, locale);
+  }
+});
+
+test("the planner sends parents to the school calendar", () => {
+  const school = { ca: "/ca/guies/calendari-escolar-catalunya/", es: "/es/guias/calendario-escolar-cataluna/", en: "/en/guides/catalonia-school-calendar/" };
+  for (const locale of LOCALES) assert.ok(JSON.stringify(buildBody(locale)).includes(school[locale]), locale);
+});
+
 test("the opening sentence names every 2027 holiday, so it cannot drift from the table", () => {
   const months: Record<string, string[]> = {
     ca: ["gener", "febrer", "març", "abril", "maig", "juny", "juliol", "agost", "setembre", "octubre", "novembre", "desembre"],

@@ -31,7 +31,9 @@ export const HOLIDAY_SOURCE = {
   publisher: "Departament d'Empresa i Treball, Generalitat de Catalunya",
 };
 
-export const CALENDAR_VERIFIED_AT = "2026-10-06";
+// Both years re-read on 28 Oct 2026 on the Generalitat's calendar pages
+// (calendari-festes-2026, calendari-festes-2027): same dates, same Aran swaps.
+export const CALENDAR_VERIFIED_AT = "2026-10-28";
 
 /** Years this page can answer for. Extend when the next order is published. */
 export const COVERED_YEARS = [2026, 2027] as const;

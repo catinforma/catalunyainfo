@@ -10,8 +10,13 @@ import {
 } from "@/lib/content/publish-article";
 import { LOCALES, type Locale } from "@/lib/i18n/config";
 
-import { CALENDAR_VERIFIED_AT, HOLIDAY_SOURCE } from "./calendar";
+import { joinList } from "@/lib/programmatic/holidays/names";
+import { largestTownLinks } from "@/lib/programmatic/holidays/towns";
+
+import { CALENDAR_VERIFIED_AT, HOLIDAY_SOURCE, shortDate } from "./calendar";
 import { COPY as CALENDAR_COPY } from "./copy";
+import { LOCAL_SOURCE } from "./local";
+import { BARCELONA_LOCAL } from "./payload";
 
 /**
  * "Is today a public holiday in Catalonia?"
@@ -103,13 +108,13 @@ const COPY: Record<Locale, TodayCopy> = {
   ca: {
     path: "guies/es-festiu-avui-catalunya",
     title: "És festiu avui a Catalunya?",
-    seoTitle: "És festiu avui a Catalunya? Resposta i pròxims festius",
+    seoTitle: "Avui és festiu a Catalunya? Avui, demà i al teu municipi",
     seoDescription:
-      "Comprova si avui o demà és festiu a Catalunya, quin és el pròxim dia festiu i la llista completa de festius oficials.",
+      "Si avui i demà és festiu a Catalunya, el pròxim festiu i on és festa local avui, amb el calendari de cada municipi. Dades de la Generalitat.",
     excerpt:
-      "La resposta d'avui, la de demà i el pròxim festiu, amb el calendari oficial de la Generalitat.",
+      "La resposta d'avui, la de demà, el pròxim festiu i on és festa local avui, amb el calendari oficial de la Generalitat.",
     lead: [
-      "Aquesta pàgina respon una sola pregunta: **si el dia d'avui és festiu a Catalunya**. També diu si ho és demà i quan cau el pròxim.",
+      "Aquesta pàgina respon cada dia una pregunta: **si avui és festiu a Catalunya**. També diu si ho és demà, quan cau el pròxim festiu i a quins municipis és avui festa local.",
     ],
     howTitle: "Com funcionen els festius a Catalunya",
     how: [
@@ -117,10 +122,11 @@ const COPY: Record<Locale, TodayCopy> = {
       "Dos d'aquests dotze canvien de data cada any perquè depenen de la Pasqua: Divendres Sant i Dilluns de Pasqua Florida. La llista tampoc no és sempre la mateixa: el 2026 hi ha el 15 d'agost i el 26 de desembre; el 2027, quan tots dos cauen en diumenge, no hi són, i en canvi hi ha l'1 de novembre i el 6 de desembre.",
       "El calendari s'aprova any per any, així que no es poden saber amb antelació il·limitada.",
     ],
-    localTitle: "Els dos dies que no surten aquí",
+    localTitle: "És festiu avui al teu municipi?",
     local: [
-      "A banda dels dotze dies de tot Catalunya, **cada municipi en fixa dos més**, que són els seus festius locals. Varien de poble a poble i no formen part d'aquesta llista.",
-      "Si el que vols saber és si demà obre la teva oficina o la teva escola, mira també el calendari del teu municipi: la resposta pot ser diferent de la d'aquesta pàgina.",
+      "A banda dels dotze dies de tot Catalunya, **cada municipi en fixa dos més**, que són els seus festius locals. Varien de poble a poble i no surten a la llista de pròxims festius: a dalt, a «On és festiu avui?», hi ha els municipis i nuclis que avui i demà fan festa local, segons les dades obertes de la Generalitat.",
+      "Per veure l'any sencer d'una ciutat, cadascun dels 100 municipis més poblats té la seva pàgina amb tots els festius ({towns}); els tens tots a [festius locals per municipi](/ca/festius/). Qualsevol altre municipi és a [festius locals de Catalunya](/ca/guies/festius-locals-catalunya/).",
+      "Si el que vols saber és si demà obre la teva escola, compta-hi també els dies de lliure disposició de cada centre: el curs sencer és al [calendari escolar 2026-2027](/ca/guies/calendari-escolar-catalunya/).",
     ],
     weekendTitle: "Un festiu en dissabte es trasllada?",
     weekend: [
@@ -134,13 +140,13 @@ const COPY: Record<Locale, TodayCopy> = {
   es: {
     path: "guias/es-festivo-hoy-cataluna",
     title: "¿Es festivo hoy en Cataluña?",
-    seoTitle: "¿Es festivo hoy en Cataluña? Respuesta y próximos festivos",
+    seoTitle: "¿Hoy es festivo en Cataluña? Hoy, mañana y en tu municipio",
     seoDescription:
-      "Comprueba si hoy o mañana es festivo en Cataluña, cuándo cae el próximo día festivo y la lista completa de festivos oficiales.",
+      "Si hoy y mañana es festivo en Cataluña, el próximo festivo y dónde es fiesta local hoy, con el calendario de cada municipio. Datos de la Generalitat.",
     excerpt:
-      "La respuesta de hoy, la de mañana y el próximo festivo, con el calendario oficial de la Generalitat.",
+      "La respuesta de hoy, la de mañana, el próximo festivo y dónde es fiesta local hoy, con el calendario oficial de la Generalitat.",
     lead: [
-      "Esta página responde a una sola pregunta: **si hoy es festivo en Cataluña**. También dice si lo es mañana y cuándo cae el próximo.",
+      "Esta página responde cada día a una pregunta: **si hoy es festivo en Cataluña**. También dice si lo es mañana, cuándo cae el próximo festivo y en qué municipios es hoy fiesta local.",
     ],
     howTitle: "Cómo funcionan los festivos en Cataluña",
     how: [
@@ -148,10 +154,11 @@ const COPY: Record<Locale, TodayCopy> = {
       "Dos de esos doce cambian de fecha cada año porque dependen de la Pascua: Viernes Santo y Lunes de Pascua Florida. La lista tampoco es siempre la misma: en 2026 incluye el 15 de agosto y el 26 de diciembre; en 2027, cuando ambos caen en domingo, no están, y en cambio sí lo están el 1 de noviembre y el 6 de diciembre.",
       "El calendario se aprueba año a año, así que no puede conocerse con antelación ilimitada.",
     ],
-    localTitle: "Los dos días que no salen aquí",
+    localTitle: "¿Es festivo hoy en tu municipio?",
     local: [
-      "Además de los doce días de toda Cataluña, **cada municipio fija dos más**, que son sus festivos locales. Varían de un pueblo a otro y no forman parte de esta lista.",
-      "Si lo que quieres saber es si mañana abre tu oficina o tu colegio, consulta también el calendario de tu municipio: la respuesta puede ser distinta de la de esta página.",
+      "Además de los doce días de toda Cataluña, **cada municipio fija dos más**, que son sus festivos locales. Varían de un pueblo a otro y no salen en la lista de próximos festivos: arriba, en «¿Dónde es festivo hoy?», están los municipios y núcleos que hoy y mañana tienen fiesta local, según los datos abiertos de la Generalitat.",
+      "Para ver el año entero de una ciudad, cada uno de los 100 municipios más poblados tiene su página con todos los festivos ({towns}); los tienes todos en [festivos locales por municipio](/es/festivos/). Cualquier otro municipio está en [festivos locales de Cataluña](/es/guias/festivos-locales-cataluna/).",
+      "Si lo que quieres saber es si mañana hay cole, cuenta también los días de libre disposición de cada centro: el curso entero está en el [calendario escolar 2026-2027](/es/guias/calendario-escolar-cataluna/).",
     ],
     weekendTitle: "¿Un festivo en sábado se traslada?",
     weekend: [
@@ -165,13 +172,13 @@ const COPY: Record<Locale, TodayCopy> = {
   en: {
     path: "guides/is-today-a-holiday-in-catalonia",
     title: "Is today a public holiday in Catalonia?",
-    seoTitle: "Is today a public holiday in Catalonia? Live answer",
+    seoTitle: "Is today a holiday in Barcelona and Catalonia? Live answer",
     seoDescription:
-      "Check whether today or tomorrow is a public holiday in Catalonia, when the next one falls, and the full list of official holidays.",
+      "Whether today and tomorrow are public holidays in Barcelona and the rest of Catalonia, the next holiday, and which towns have a local holiday today.",
     excerpt:
-      "Today's answer, tomorrow's, and the next holiday, from the Catalan government's official calendar.",
+      "Today's answer, tomorrow's, the next holiday and where it is a local holiday today, from the Catalan government's official calendar.",
     lead: [
-      "This page answers one question: **whether today is a public holiday in Catalonia**. It also says whether tomorrow is, and when the next one falls.",
+      "This page answers one question every day: **whether today is a public holiday in Catalonia**. It also says whether tomorrow is, when the next one falls, and which towns have a local holiday today.",
     ],
     howTitle: "How public holidays work in Catalonia",
     how: [
@@ -179,10 +186,11 @@ const COPY: Record<Locale, TodayCopy> = {
       "Two of the twelve change date every year because they follow Easter: Good Friday and Easter Monday. The list itself also changes: 2026 includes 15 August and 26 December; in 2027, when both fall on a Sunday, they are not on it, and 1 November and 6 December are.",
       "The calendar is approved one year at a time, so it cannot be known indefinitely far ahead.",
     ],
-    localTitle: "The two days this page does not cover",
+    localTitle: "Is it a holiday today in your town?",
     local: [
-      "On top of the twelve Catalonia-wide days, **every municipality sets two more** as its local holidays. They differ from town to town and are not in this list.",
-      "If what you need to know is whether an office or a school is open tomorrow, check the municipal calendar as well: the answer can differ from this page.",
+      "On top of the twelve Catalonia-wide days, **every municipality sets two more** as its local holidays. They differ from town to town and are not in the list of upcoming holidays: above, under \"Where is it a local holiday today?\", are the towns and villages with a local holiday today and tomorrow, from the Catalan government's open data.",
+      "Barcelona's two local holidays in {bcnYear} are {bcn}. Every other town's dates are in [local holidays in Catalonia](/en/guides/local-holidays-catalonia/).",
+      "If what you need to know is whether schools are open tomorrow, each school also sets four free-choice days of its own: the term dates are in the [Catalonia school calendar 2026-2027](/en/guides/catalonia-school-calendar/).",
     ],
     weekendTitle: "Does a Saturday holiday move?",
     weekend: [
@@ -211,8 +219,21 @@ export function buildBody(locale: Locale): Block[] {
     for (const text of paragraphs) blocks.push({ type: "paragraph", text });
   };
 
+  // Local questions go on to the town pages of the holiday engine (ca/es);
+  // English has no town pages, so it names Barcelona's two days instead.
+  const towns = locale === "en" ? "" : joinList(largestTownLinks(locale), locale);
+  const bcn = joinList(
+    BARCELONA_LOCAL.map((holiday) => `${shortDate(holiday.date, "en")} (${holiday.name.en.replace(/ \(.*\)$/, "")})`),
+    "en",
+  );
+  const local = copy.local.map((text) =>
+    text.replace("{towns}", towns).replace("{bcnYear}", BARCELONA_LOCAL[0]!.date.slice(0, 4)).replace("{bcn}", bcn),
+  );
+
+  // How it works first for the reader who wants the rule; the local section
+  // right after, because "is it a holiday in my town" is the next question.
+  section(copy.localTitle, local);
   section(copy.howTitle, copy.how);
-  section(copy.localTitle, copy.local);
   section(copy.weekendTitle, copy.weekend);
 
   blocks.push({ type: "paragraph", text: copy.plannerLine });
@@ -233,6 +254,18 @@ export async function publishHolidayTodayGuide(): Promise<PublishResult> {
         name: HOLIDAY_SOURCE.name,
         url: HOLIDAY_SOURCE.url,
         publisher: HOLIDAY_SOURCE.publisher,
+        type: "official" as const,
+      },
+      {
+        name: LOCAL_SOURCE.name,
+        url: LOCAL_SOURCE.url,
+        publisher: LOCAL_SOURCE.publisher,
+        type: "official" as const,
+      },
+      {
+        name: "Festes estatals i autonòmiques a Catalunya i locals a Barcelona",
+        url: "https://ajuntament.barcelona.cat/calendarifestius/ca/",
+        publisher: "Ajuntament de Barcelona",
         type: "official" as const,
       },
     ],
