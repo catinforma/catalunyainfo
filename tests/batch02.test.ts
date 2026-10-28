@@ -621,6 +621,26 @@ test("zoo and markets: Flexiticket, Christmas attribution, Boqueria holidays fro
   }
 });
 
+/**
+ * Free museums, 28 Oct 2026: the Museu del Disseny's own page says Sunday
+ * afternoons and the first Sunday (the earlier copy grouped it with the CCCB
+ * as Sunday-afternoon only). The page answers "museos gratis hoy" with a
+ * day-by-day table and "cuándo es gratis el MNAC" with its own section.
+ */
+test("museums: day-by-day table, MNAC section, Disseny's first Sunday", () => {
+  const disseny = { ca: /Museu del Disseny\*\* és gratis els diumenges a la tarda \(15:00–20:00\) i el primer diumenge/, es: /Museu del Disseny\*\* es gratis los domingos por la tarde \(15:00–20:00\) y el primer domingo/, en: /Museu del Disseny\*\* is free on Sunday afternoons \(15:00–20:00\) and on the first Sunday/ };
+  for (const locale of ["ca", "es", "en"] as const) {
+    const blocks = MUSEUMS.editions[locale].blocks as { type: string; rows?: string[][]; text?: string }[];
+    const tables = blocks.filter((b) => b.type === "table");
+    assert.equal(tables[0]?.rows?.length, 7, `${locale}: Monday to Sunday plus first Sunday`);
+    assert.ok(blocks.some((b) => b.type === "heading" && /MNAC/.test(b.text ?? "")), `${locale}: MNAC heading`);
+    assert.match(JSON.stringify(blocks), disseny[locale], `${locale}: Disseny first Sunday`);
+    const text = bodyToPlainText(MUSEUMS.editions[locale].blocks);
+    assert.doesNotMatch(text, /CCCB\*{0,2} (and|y|i) (the |el )?\*{0,2}Museu del Disseny/, `${locale}: Disseny no longer grouped with the CCCB`);
+    assert.match(text, /22 (November|de noviembre|de novembre) (de )?2026/, `${locale}: next Música open day`);
+  }
+});
+
 test("cards: the price table's online column is 10% off and the difference is card minus Hola", () => {
   const num = (cell: string) => Number(cell.replace(/[€\s]/g, "").replace(",", "."));
   for (const locale of ["ca", "es", "en"] as const) {
