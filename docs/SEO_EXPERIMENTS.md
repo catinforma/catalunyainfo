@@ -752,6 +752,57 @@ above, and for the airport the four long-tail transport queries.
 
 **Outcome:** _pending_
 
+## 2026-10-28 — Page-1 push, Barcelona sights and weather (weather by month, Gaudí tickets, Camp Nou, Hola vs Barcelona Card)
+
+The pages the Barcelona practical round did not reach. Owner decision of
+28 Oct: windows and frozen titles lifted. Positions are Search Console, 28
+days to 27 Oct (`research_notes/x10/rank-inventory-28oct.json`; EN weather
+queries pulled from GSC for 30 Sep-27 Oct because the inventory has no row
+for it). Every new fact was read on the official page on 28 Oct 2026 and
+`verifiedAt` moved to that day (climate, monuments, campnou, cards).
+Changed together per page, so read per page, not per change.
+
+| Page | Old title → new title | Target queries and position now |
+| --- | --- | --- |
+| Weather by month ES (+CA body, EN body) | "Tiempo y clima en Barcelona mes a mes: temperaturas y lluvia" → "Clima y tiempo en Barcelona por meses: temperatura y lluvia"; H1 "…mes a mes: clima, temperaturas y lluvia". CA and EN titles kept (EN is growing: "barcelona temperature by month" 8.0, "barcelona weather august" 3, "barcelona weather january" 6.9, "coldest month in barcelona" 5.6) | el tiempo mensual en barcelona 20.5, barcelona clima por mes 20, clima en barcelona en octubre 40, barcelona clima enero 49, clima barcelona enero 59, clima de barcelona en septiembre 77, temperatura barcelona marzo 72, cual es el mes mas frio en barcelona 11, cuando comienza el invierno en barcelona 11, temperatura barcelona invierno 12, cuando empiezan a bajar las temperaturas 88, en que mes llueve mas 7 (page 9.1, 7 d 10.7) |
+| Gaudí tickets EN (+ES/CA body) | "Sagrada Familia, Park Güell, Casa Batlló tickets: 2026 prices" → "Sagrada Familia tickets price 2026, Park Güell & Casa Batlló"; H1s in all three now "…tickets 2026: prices and opening hours". ES/CA titles kept | casa batllo entrance fee 42; no other named query yet (page 9.5, 7 d 11.8). Long tail aimed at: sagrada familia tickets price, sagrada familia opening hours, sagrada familia tower tickets, park guell tickets price, park guell opening hours, casa batllo entrance fee |
+| Camp Nou ES (+CA/EN body) | "Visita Spotify Camp Nou: precio desde 28 €, horario y cómo ir" → "Museo del Barça y visita Camp Nou: precio, horario, cómo ir"; H1 "Museo del Barça y visita al Spotify Camp Nou: precio, horario y cómo llegar". CA/EN titles kept | camp nou museo horario 11, museo del barça como llegar 7, visita spotify camp nou 25, ir a camp nou 47 (page 9.2, 7 d 8.4) |
+| Barcelona Card vs Hola ES (+CA/EN body) | "Hola Barcelona o Barcelona Card: precios y cuál compensa" → "Hola Barcelona Travel Card 2026: precios y cuándo compensa"; H1 "Hola Barcelona Travel Card o Barcelona Card: precios 2026 y cuál compensa". CA/EN titles kept | hola card barcelona 11, hola barcelona travel card conviene 9, hola barcelona card 15, hola card 15, barcelona hola 20, hola barcelona travel card 29, hola card barcellona 43 (page 9.8, 7 d 9.2) |
+| Rainy day EN | unchanged (7 d 6.5, improving); one sentence linking the weather page | things to do in the rain near me 10, things to do in barcelona on a rainy day 51 |
+
+**Body changes.** Weather: AEMET 0076 is still 1981-2010 (station page "Periodo:
+1981-2010", AEMET help page "periodo de referencia 1981-2010"; no 1991-2020
+station table on aemet.es, Meteocat's 1991-2020 climatologies "en elaboració"),
+so the page says so in a callout and an FAQ; mean-temperature column and year
+row; a Meteocat el Raval 2010-2025 table (city centre); twelve "Barcelona en
+enero…" sections with AEMET's monthly record highs and lows; FAQ for "en qué
+mes llueve más", "cuándo empiezan a bajar las temperaturas", "temperatura en
+invierno", August and December. Gaudí: Sagrada Família price grid (seniors,
+under-30s, companions) and April–September hours, evacuation 15 minutes before
+closing, metro/bus; Park Güell price list, resident-only hours, how to get
+there; Casa Batlló other tickets, disability discount, ticket office 21:00.
+Camp Nou: product table (8 tickets), November special hours, buses, booths,
+accessibility. Cards: Hola online price €11.25, voucher swapped at any metro
+machine within 180 days, Barcelona Card terms ("consecutive days, not 24-hour
+periods"), collection offices, Picasso/MNAC free slots corrected (no "in
+winter").
+
+**Internal links.** Cards → monuments (body); Christmas in Barcelona (ES 5.5)
+→ Camp Nou and monuments (one sentence after the holiday sights table); rainy
+day → weather; weather → rainy day; monuments → cards.
+
+Publish groups: `climate`, `monuments`, `campnou`, `cards`, `christmas-bcn`,
+`rainy`. Dated content to revisit: Camp Nou November special hours (past after
+17 Nov); Museum Flexible "until 28 February 2027"; La Pedrera winter hours to
+25 Feb 2027; AEMET records page (updated 30 Sep 2026) and a 1991-2020 table if
+AEMET publishes one.
+
+**Measure on 28 Nov 2026**: per page, position and clicks for the queries
+above; for the weather ES page, the month queries ("clima barcelona enero",
+"clima en barcelona en octubre") are the test of the month sections.
+
+**Outcome:** _pending_
+
 ## Candidates not yet run
 
 Recorded so they are not lost, and so they are not all started at once.
