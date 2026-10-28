@@ -457,8 +457,8 @@ export const TRAINS: FeatureArticle = {
     },
     en: {
       path: ARTICLE_PATHS.trains.en,
-      title: "12 day trips from Barcelona by train: journey times, fares and what to see",
-      seoTitle: "Day trips from Barcelona by train: 12 towns, times, fares",
+      title: "The 12 best day trips from Barcelona by train: journey times, fares and what to see",
+      seoTitle: "Best day trips from Barcelona by train: 12 towns, fares",
       seoDescription:
         "12 day trips from Barcelona by train with journey times and fares: Sitges in 31 min, Tarragona in 69, Girona in 40 by high-speed, plus wine and Gaudí.",
       excerpt:
