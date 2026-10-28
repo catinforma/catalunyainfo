@@ -708,6 +708,48 @@ top 5 and town pages start receiving clicks from the today page.
 queries above; check the last-crawl date first (rule of 26 Oct). Demand rises in
 the first week of December (bridge) and around 22 Dec (school holidays).
 
+---
+
+## 2026-10-28 — Page-1 push, Barcelona practical cluster (owner lifted the freezes)
+
+Owner decision of 28 Oct: "every page on page 1, now"; the 28-day windows and
+frozen titles were lifted for these pages (metro hours ca/es were frozen to
+14 Nov). Positions below are Search Console, 28 days to 27 Oct
+(`research_notes/x10/rank-inventory-28oct.json`). Every new fact was read on
+the official page on 28 Oct 2026 and the page's `verifiedAt` moved to that day.
+Changed together per page (title, H1, answer-first lead, query-worded H2s,
+tables, FAQ), so read per page, not per change.
+
+| Page | Old title → new title | Target queries and position now |
+| --- | --- | --- |
+| Parking ES (+CA) | "Zona azul y verde Barcelona: precio, horario y cómo funciona" → "Zona verde y azul Barcelona: cómo funciona, precio y horario"; CA "Preu zona blava i verda Barcelona: de 1,15 a 4,25 €/h" → "Zona blava i verda Barcelona: preu, horari i com funciona" | como funciona la zona verde en barcelona 22.2, horario zona azul barcelona 21.8, zona azul barcelona 29.9, zona verde barcelona agosto 18.8, precio zona verde barcelona no residentes 12.4, preu zona blava barcelona 14.4 (lands on ES) |
+| Metro hours ES/CA | "Horario metro Barcelona: de 5:00 a 24:00, viernes hasta las 2:00" → "Horario metro Barcelona hoy: a qué hora abre y cierra"; CA "Horari metro Barcelona: 5:00 a 24:00, divendres fins a les 2:00" → "Horari metro Barcelona avui: a quina hora obre i tanca" (EN unchanged) | horario metro 9.9, a que hora abre el metro 10.2, a que hora cierra el metro 13.5, a qué hora cierra el metro hoy 10.4, horario metro viernes 11.6, horario metro domingo 15.4, hay metro toda la noche hoy 8.5, horari metro divendres 9.1, tranvía barcelona horario 53.5 |
+| Transport passes ES/CA | "T-casual Barcelona 2026: precio por zonas y Hola BCN" → "T-casual 2026: precio por zonas y tarjetas metro Barcelona"; CA "T-casual Barcelona 2026: preu per zones i Hola BCN" → "Preus targetes TMB 2026: T-casual per zones, T-dia i T-usual" (EN frozen to 16 Nov, unchanged) | t casual 22.2, tarjeta casual precio 22.2, t casual 1 zona precio 21.5, t casual 3 zonas precio 28.3, tarjeta 10 viajes barcelona 27.5, tarjetas metro barcelona 2026 11, hola barcelona vs t casual 8, preus targetes tmb 29, que zona es ocata 49 |
+| ZBE EN/CA | "Barcelona low emission zone (LEZ): foreign car rules" → "Barcelona low emission zone (LEZ): foreign cars, hours, fees"; CA "ZBE Barcelona amb cotxe estranger: registre, preu i horari" → "ZBE Barcelona: quins cotxes hi entren, horari i registre" | barcelona low emission zone 26.1, lez barcelona 49, barcelona low emission zone map 16, zbe barcelona foreign car 9 |
+| Airport ES/EN/CA | "Aeropuerto de Barcelona al centro: autobús, metro y tren" → "Bus aeropuerto Barcelona centro: 46, nitbus, metro y tren R2"; EN "Barcelona airport to city centre: Aerobús, bus, metro, train" → "Barcelona airport bus to city centre: 46, night bus, metro"; CA → "Aeroport Barcelona al centre: bus 46, nitbus, metro i tren" | autobus aeropuerto barcelona centro 43.8, bus aeropuerto barcelona centro 53.1, tren aeropuerto 58.6, barcelona airport bus to city centre 57.1, aeroport billet 36; new long tail with no impressions yet: bus 46 aeropuerto horario, autobús nocturno aeropuerto barcelona, metro L9 aeropuerto precio, R2 Nord aeropuerto horario. The operator's fares were removed (Aena/AMB name the express bus but publish no fare) |
+| Cruise port EN/ES | "Barcelona cruise port to city centre: shuttle, taxi, walk" → "Barcelona cruise port to city centre: Cruise Bus €3.50, taxi"; ES "Muelle Adosado Barcelona: terminales de cruceros y Cruise Bus" → "Moll Adossat Barcelona: terminales de cruceros y cómo llegar" | cruise bus barcelona ticket 6.9, cruise bus barcelona price 11.8, how much is taxi from barcelona cruise port to city centre 8.3, barcelona cruise port taxi 51.2, moll adossat 30, de donde salen los cruceros en barcelona 43, como llegar al puerto de barcelona para embarcar 67 |
+| Zoo & Aquarium ES/CA | titles unchanged; body: Flexiticket, Zoo Club, acuario wording | horario zoo 15.7, zoo horario 11.3, precio entrada zoo 14.5, horario del acuario 12.5, precio entrada aquarium 8, a qué hora cierra el zoo 34.5 |
+| Free museums ES/CA (+EN body) | "Museos gratis en Barcelona: domingos y primer domingo" → "Museos gratis en Barcelona hoy: MNAC, Picasso y domingos"; CA → "Museus gratis a Barcelona avui: MNAC, Picasso i diumenges" (EN kept: 7-day 7.9) | mnac entradas gratis 12.4, mnac entradas gratis domingo 9.4, mnac gratis sabado 9.7, cuando es gratis el mnac 9, museos gratis hoy 11.2, cuando es el dia de los museos gratis 8, sunday free museums barcelona 47.1, museus gratis barcelona dijous 34 |
+| Boqueria ES | title unchanged; H1 "Horario de la Boqueria y de los mercados de Barcelona: días, festivos y normas"; Sunday/holiday openings | la boqueria barcelona horario 9.5, mercado boqueria horario 16, boqueria horario festivos 4, boqueria horarios 42 |
+| Tibidabo EN/ES | "Tibidabo tickets, opening days and how to get there" → "Tibidabo tickets and prices 2026, hours and how to get there"; ES "Tibidabo: entradas, calendario y cómo subir en funicular" → "Tibidabo 2026: precio de la entrada, horario y cómo llegar" | tibidabo tickets 20.8, tibidabo tickets price 11.5, tibidabo funicular 50.3, tibibus 17.5, cuanto vale la entrada al tibidabo 20.8, tibidabo horario 19, funicular tibidabo horario 39.5 |
+
+Factual fixes shipped with it: metro "opens at 5:00 every day" (not on Sunday);
+"Aerobús runs 24 hours" removed; night buses N17/N18 every 15 min (AMB), not
+"midnight-05:00 every 20-30 min"; Museu del Disseny also free on the first
+Sunday; Tibidabo funicular €3.95 is for over-60s, not over-65s; cruise MSC row
+no longer "taxi only"; terminal C last cruise 30 Oct 2026.
+
+Publish groups: `parking`, `hours`, `transport`, `zbe` (new), `airport`,
+`barcelona-hub` (one row lost the operator fare), `cruiseport`,
+`family-markets`, `museums`, `hills`.
+
+Not reached in this round: weather month by month ES, Sagrada Família/Park
+Güell/Casa Batlló tickets EN, Spotify Camp Nou museum ES, Barcelona Card vs
+Hola ES, rainy day EN.
+
+**Measure on 28 Nov 2026**: per page, position and clicks for the queries
+above, and for the airport the four long-tail transport queries.
+
 **Outcome:** _pending_
 
 ## Candidates not yet run

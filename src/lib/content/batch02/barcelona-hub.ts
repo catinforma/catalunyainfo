@@ -27,7 +27,7 @@ const GROUPS: Record<Locale, { lead: string; intro: string; groups: Group[]; out
       {
         title: "Arriving",
         items: [
-          ["airport", "Airport to the city centre", "Aerobús €7.75, bus 46 on a €2.90 single, airport metro €5.90, the R2 Nord train from T2, or a taxi with a €21 minimum."],
+          ["airport", "Airport to the city centre", "Bus 46 on a €2.90 single, airport metro €5.90, the R2 Nord train from T2, night buses N17 and N18, or a taxi with a €21 minimum."],
           ["cruiseport", "Cruise port to the city", "Cruise Bus shuttle €3.50 from the Moll Adossat; only the WTC terminal is walkable."],
         ],
       },
@@ -77,7 +77,7 @@ const GROUPS: Record<Locale, { lead: string; intro: string; groups: Group[]; out
       {
         title: "Llegar",
         items: [
-          ["airport", "Del aeropuerto al centro", "Aerobús 7,75 €, bus 46 con billete sencillo de 2,90 €, metro del aeropuerto 5,90 €, tren R2 Nord desde la T2 o taxi con un mínimo de 21 €."],
+          ["airport", "Del aeropuerto al centro", "Bus 46 con billete sencillo de 2,90 €, metro del aeropuerto 5,90 €, tren R2 Nord desde la T2, nitbus N17 y N18 o taxi con un mínimo de 21 €."],
           ["cruiseport", "Del puerto de cruceros a la ciudad", "Lanzadera Cruise Bus 3,50 € desde el Moll Adossat; solo la terminal WTC está a distancia de ir a pie."],
         ],
       },
@@ -127,7 +127,7 @@ const GROUPS: Record<Locale, { lead: string; intro: string; groups: Group[]; out
       {
         title: "Arribar",
         items: [
-          ["airport", "De l'aeroport al centre", "Aerobús 7,75 €, bus 46 amb bitllet senzill de 2,90 €, metro de l'aeroport 5,90 €, tren R2 Nord des de la T2 o taxi amb un mínim de 21 €."],
+          ["airport", "De l'aeroport al centre", "Bus 46 amb bitllet senzill de 2,90 €, metro de l'aeroport 5,90 €, tren R2 Nord des de la T2, nitbus N17 i N18 o taxi amb un mínim de 21 €."],
           ["cruiseport", "Del port de creuers a la ciutat", "Llançadora Cruise Bus 3,50 € des del Moll Adossat; només la terminal WTC és a distància d'anar-hi a peu."],
         ],
       },

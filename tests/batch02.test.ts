@@ -266,6 +266,48 @@ test("the Montserrat page does not repeat the unverified height gain", () => {
   }
 });
 
+/**
+ * ZBE, 28 Oct 2026 (zbe.barcelona vehicles-afectats, zberegistre): who may
+ * enter, by fuel and Euro level, with the registration years the AMB gives
+ * ("2005 o 2006" for diesel), and an FAQ in the words of the EN queries.
+ */
+test("ZBE: who-can-enter table from the AMB, FAQ, fine only for the official case", () => {
+  for (const locale of ["ca", "es", "en"] as const) {
+    const blocks = ZBE.editions[locale].blocks as { type: string; rows?: string[][] }[];
+    const tables = blocks.filter((b) => b.type === "table");
+    assert.equal(tables.length, 1, `${locale}: one who-can-enter table`);
+    assert.equal(tables[0]?.rows?.length, 4, `${locale}: petrol, diesel, motorbike, electric`);
+    assert.match(JSON.stringify(tables[0]?.rows), /2005 (o|or) 2006/, `${locale}: diesel years as the AMB gives them`);
+    assert.ok(blocks.some((b) => b.type === "faq"), `${locale}: FAQ`);
+    const text = bodyToPlainText(ZBE.editions[locale].blocks);
+    assert.match(text, /1 (d'abril de|de abril de|April) 2021/, `${locale}: vans since April 2021`);
+    for (const match of text.matchAll(/(\d{2,3}) ?(€|euros)|€(\d{2,3})/g)) {
+      assert.equal(match[1] ?? match[3], "200", `${locale}: only the official 200 euro fine`);
+    }
+  }
+});
+
+/**
+ * Airport, 28 Oct 2026: the page answers the specific transport queries from
+ * official pages only (Aena, AMB, TMB, ATM, Rodalies, DOGC). The airport
+ * express bus is named as Aena and the AMB name it, with no fare, frequency
+ * or link to its operator; the night buses carry the AMB's 15-minute
+ * timetable, not the old "midnight to 05:00, every 20-30 min".
+ */
+test("airport: official figures only, no operator link or fare for the express bus", () => {
+  for (const locale of ["ca", "es", "en"] as const) {
+    const json = JSON.stringify(AIRPORT.editions[locale].blocks);
+    const text = bodyToPlainText(AIRPORT.editions[locale].blocks);
+    assert.doesNotMatch(json, /aerobus(bcn|barcelona)\./i, `${locale}: no operator domain`);
+    assert.doesNotMatch(text, /7[,.]75|13[,.]30|28[,.]65/, `${locale}: no express-bus fare`);
+    assert.doesNotMatch(text, /20[–-]30 min/, `${locale}: no stale night-bus frequency`);
+    for (const figure of [/5:40/, /23:38/, /5[,.]90/, /2[,.]90/, /21:55/, /0:05/, /21 ?€|€21/]) assert.match(text, figure, `${locale}: ${figure}`);
+    const tables = (AIRPORT.editions[locale].blocks as { type: string }[]).filter((b) => b.type === "table");
+    assert.equal(tables.length, 3, `${locale}: overview, night buses, R2 first and last`);
+  }
+  assert.ok(AIRPORT.sources.every((s) => !/aerobus/i.test(s.url)), "no operator source");
+});
+
 test("the ZBE page states working days, not calendar days", () => {
   assert.match(bodyToPlainText(ZBE.editions.ca.blocks), /15 dies hàbils/);
   assert.match(bodyToPlainText(ZBE.editions.es.blocks), /15 días hábiles/);
@@ -356,6 +398,29 @@ test("every priced ticket is multiplied by the number of travellers", () => {
     }
     assert.equal(many?.total, Math.round(item.total * 4 * 100) / 100, item.ticket.key);
   }
+});
+
+/**
+ * Transport passes, 28 Oct 2026: TMB's 2026 fare table ("in force from 15
+ * January 2026") gives every zone for the single ticket, T-casual, T-dia and
+ * T-usual. ATM's T-casual page still shows the 2025 fares lower down; none of
+ * them may appear. The ca/es pages answer "hola barcelona vs t casual" with
+ * figures computed from the fare table.
+ */
+test("transport: 2026 fares for every zone, no 2025 fares, Hola vs T-casual computed", () => {
+  for (const locale of ["ca", "es"] as const) {
+    const blocks = TRANSPORT.editions[locale].blocks as { type: string; rows?: string[][]; headers?: string[] }[];
+    const zones = blocks.find((b) => b.type === "table" && (b.rows?.length ?? 0) === 7);
+    assert.deepEqual(zones?.rows?.[0], ["1", "2,90 €", "13,00 €", "12,00 €", "22,80 €"], `${locale}: zone 1 row`);
+    assert.deepEqual(zones?.rows?.[2], ["3", "5,40 €", "34,70 €", "22,95 €", "42,70 €"], `${locale}: zone 3 row`);
+    const text = bodyToPlainText(TRANSPORT.editions[locale].blocks);
+    for (const old of ["12,55", "24,65", "33,55", "43,15"]) assert.ok(!text.includes(old), `${locale}: 2025 fare ${old}`);
+    assert.match(text, /15 (de gener|de enero) de 2026|15 (de gener|de enero)\)/, `${locale}: date the fares took effect`);
+    assert.match(text, /24,80 €/, `${locale}: T-casual plus two airport tickets`);
+    assert.match(text, /T-familiar[^.]*11,50 €/, `${locale}: T-familiar fare`);
+    assert.ok(blocks.some((b) => b.type === "faq"), `${locale}: FAQ`);
+  }
+  assert.match(bodyToPlainText(TRANSPORT.editions.ca.blocks), /Ocata[^.]*zona 2/);
 });
 
 test("the selector block is placed on the transport article in every language", () => {
@@ -487,6 +552,30 @@ test("parking: zone summary table and a blue-vs-green answer that matches the ra
 });
 
 /**
+ * Parking, 28 Oct 2026: AREA's own "tipos de plazas" pages state that the
+ * resident rate runs January to December including August, that Rate A covers
+ * high-demand areas such as the Eixample and Ciutat Vella, and the count of
+ * blue (about 5,400) and green (about 57,000) spaces. Each edition says so,
+ * walks a visitor through parking in four steps, and never invents an August
+ * exemption or a colour for the road markings.
+ */
+test("parking: August answered from AREA, Rate A areas, four steps, no invented markings", () => {
+  const august = { ca: /agost inclòs/, es: /incluido el mes de agosto/, en: /including August/ };
+  const rateA = { ca: /l'Eixample i Ciutat Vella/, es: /el Eixample y Ciutat Vella/, en: /the Eixample and Ciutat Vella/ };
+  for (const locale of ["ca", "es", "en"] as const) {
+    const blocks = PARKING.editions[locale].blocks as { type: string; items?: unknown[] }[];
+    const text = bodyToPlainText(PARKING.editions[locale].blocks);
+    assert.match(text, august[locale], `${locale}: August`);
+    assert.match(text, rateA[locale], `${locale}: Rate A areas`);
+    assert.match(text, /5[.,]400/, `${locale}: blue space count`);
+    assert.match(text, /57[.,]000/, `${locale}: green space count`);
+    assert.equal(blocks.find((b) => b.type === "steps")?.items?.length, 4, `${locale}: four steps`);
+    assert.doesNotMatch(text, /(gratis|gratuïta|free)[^.]*(agost|agosto|August)/i, `${locale}: no August exemption`);
+    assert.doesNotMatch(text, /l[ií]neas? (azul|verde)|línies (blav|verd)|(blue|green) lines/i, `${locale}: no unverified markings`);
+  }
+});
+
+/**
  * Zoo and markets, re-checked 24 Oct 2026; Zoo hours updated 26 Oct 2026,
  * after the clock change. The Zoo says visitors enter only through the
  * Ciutadella entrance. Since 26 Oct it closes at 16:30 on weekdays (17:30 at
@@ -506,6 +595,65 @@ test("zoo: Ciutadella-only entrance, winter zoo hours table, aquarium calendar",
     assert.equal(tables.length, 3, `${locale}: prices + zoo hours + aquarium hours`);
     assert.equal(tables[1]?.rows?.length, 3, `${locale}: zoo winter date ranges to 28 Feb 2027`);
     assert.equal(tables[2]?.rows?.length, 6, `${locale}: aquarium date ranges to 31 Jan 2027`);
+  }
+});
+
+/**
+ * Zoo, Aquarium and markets, 28 Oct 2026: the Aquarium's online Flexiticket
+ * (90 days) and the Zoo Club are on the official price pages; the Zoo itself
+ * says only "closed in the afternoon" on Christmas Day, so the 14:00 is
+ * attributed to the City Council. The Boqueria's Sunday and holiday openings
+ * are announced by the market (2025-26: 6, 21, 28 Dec and 4 Jan); 2026-27 is
+ * not published, so no 2026-27 date may appear.
+ */
+test("zoo and markets: Flexiticket, Christmas attribution, Boqueria holidays from the market", () => {
+  const council = { ca: /14:00, segons l'Ajuntament/, es: /14:00, según el Ayuntamiento/, en: /14:00, according to the City Council/ };
+  const holidays = { ca: /4 de gener/, es: /4 de enero/, en: /4 January/ };
+  for (const locale of ["ca", "es", "en"] as const) {
+    const zoo = bodyToPlainText(ZOO_AQUARIUM.editions[locale].blocks);
+    assert.match(zoo, /Flexiticket/, `${locale}: Flexiticket`);
+    assert.match(zoo, /90 (days|días|dies)/, `${locale}: Flexiticket validity`);
+    assert.match(zoo, council[locale], `${locale}: Christmas closing attributed`);
+    const markets = bodyToPlainText(MARKETS.editions[locale].blocks);
+    assert.match(markets, holidays[locale], `${locale}: last season's holiday openings`);
+    assert.match(markets, /2026-27/, `${locale}: says the 2026-27 dates are not out`);
+    assert.doesNotMatch(markets, /(Sundays before Christmas that the City Council|domingos antes de Navidad que el Ayuntamiento|diumenges abans de Nadal que l'Ajuntament)/, `${locale}: openings are the market's, not the council's`);
+  }
+});
+
+/**
+ * Free museums, 28 Oct 2026: the Museu del Disseny's own page says Sunday
+ * afternoons and the first Sunday (the earlier copy grouped it with the CCCB
+ * as Sunday-afternoon only). The page answers "museos gratis hoy" with a
+ * day-by-day table and "cuándo es gratis el MNAC" with its own section.
+ */
+test("museums: day-by-day table, MNAC section, Disseny's first Sunday", () => {
+  const disseny = { ca: /Museu del Disseny\*\* és gratis els diumenges a la tarda \(15:00–20:00\) i el primer diumenge/, es: /Museu del Disseny\*\* es gratis los domingos por la tarde \(15:00–20:00\) y el primer domingo/, en: /Museu del Disseny\*\* is free on Sunday afternoons \(15:00–20:00\) and on the first Sunday/ };
+  for (const locale of ["ca", "es", "en"] as const) {
+    const blocks = MUSEUMS.editions[locale].blocks as { type: string; rows?: string[][]; text?: string }[];
+    const tables = blocks.filter((b) => b.type === "table");
+    assert.equal(tables[0]?.rows?.length, 7, `${locale}: Monday to Sunday plus first Sunday`);
+    assert.ok(blocks.some((b) => b.type === "heading" && /MNAC/.test(b.text ?? "")), `${locale}: MNAC heading`);
+    assert.match(JSON.stringify(blocks), disseny[locale], `${locale}: Disseny first Sunday`);
+    const text = bodyToPlainText(MUSEUMS.editions[locale].blocks);
+    assert.doesNotMatch(text, /CCCB\*{0,2} (and|y|i) (the |el )?\*{0,2}Museu del Disseny/, `${locale}: Disseny no longer grouped with the CCCB`);
+    assert.match(text, /22 (November|de noviembre|de novembre) (de )?2026/, `${locale}: next Música open day`);
+  }
+});
+
+/**
+ * Tibidabo, 28 Oct 2026: tibidabo.cat's rates page says the €3.95 funicular
+ * fare is for "+60 years"; the schedules page gives the opening days by month
+ * and the Cuca de Llum's 10:00-14:00 on 25 and 26 December and 1 January.
+ */
+test("tibidabo: over-60 funicular fare, opening-days table, Christmas funicular hours", () => {
+  for (const locale of ["ca", "es", "en"] as const) {
+    const text = bodyToPlainText(TIBIDABO.editions[locale].blocks);
+    assert.doesNotMatch(text, /3[,.]95 €?[^.]*(65)|€3\.95[^.]*65/, `${locale}: €3.95 is not for over-65s`);
+    assert.match(text, /(majors de |mayores de |over-)60/i, `${locale}: over-60s`);
+    assert.match(text, /10:00 (a|to) 14:00/, `${locale}: funicular on 25-26 Dec and 1 Jan`);
+    const tables = (TIBIDABO.editions[locale].blocks as { type: string; rows?: string[][] }[]).filter((b) => b.type === "table");
+    assert.equal(tables[0]?.rows?.length, 4, `${locale}: opening days by month`);
   }
 });
 
@@ -533,7 +681,15 @@ test("cruise port: terminal table with transport, Port's April 2026 note, termin
     assert.equal(table?.rows?.length, 5);
     assert.ok(table?.rows?.every((row) => row.length === 4), `${locale}: four columns`);
     assert.ok(!table?.rows?.some((row) => /^C\b|, C\b/.test(row[0] ?? "")), `${locale}: no terminal C row`);
-    assert.equal(table?.rows?.find((row) => (row[0] ?? "").startsWith("MSC"))?.[3], "Taxi", `${locale}: MSC is taxi only`);
+    // 28 Oct 2026: the Port's MSC page lists "Shuttle bus and taxi rank" but
+    // the Cruise Bus names only terminals A-E, so the row says taxi and sends
+    // the reader to the cruise line instead of promising the shuttle.
+    const msc = table?.rows?.find((row) => (row[0] ?? "").startsWith("MSC"))?.[3] ?? "";
+    assert.match(msc, /^Taxi; /, `${locale}: MSC is taxi, shuttle to be asked`);
+    assert.match(msc, /cruise line|naviera|naviliera/, `${locale}: MSC row sends the reader to the cruise line`);
+    assert.match(text, /30 (October|de octubre|d'octubre)/, `${locale}: terminal C's last cruise, from the 23 Jul 2026 note`);
+    assert.doesNotMatch(text, /Portbus[^.]*(formerly|antes se llamaba|abans es deia)|(formerly|antes se llamaba|abans es deia)[^.]*Portbus/i, `${locale}: no unverified rename`);
+    assert.doesNotMatch(text, /Drassanes/, `${locale}: no unverified metro stop`);
   }
 });
 
