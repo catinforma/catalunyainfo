@@ -199,6 +199,31 @@ export function buildReport(rows: Parsed[]): ReservoirReport {
   };
 }
 
+/*
+ * The page title with the latest reading in it.
+ *
+ * embalses.net, which ranks above this page, shows a weekly MITECO figure;
+ * the ACA's is daily, and saying so in the result itself is the one thing a
+ * searcher can compare before clicking (research_notes/x10, A13). The title
+ * carries the reading date, never "today" alone, for the same reason the
+ * block does. A failed or empty report gives null and the stored title wins.
+ */
+const LIVE_TITLE = {
+  ca: "Estat dels embassaments de Catalunya avui: {pct} % ({date})",
+  es: "Embalses de Catalunya hoy: al {pct} % (ACA, {date})",
+  en: "Catalonia reservoir levels today: {pct}% full ({date})",
+} as const;
+
+const EN_MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+export function liveReservoirTitle(locale: keyof typeof LIVE_TITLE, report: ReservoirReport): string | null {
+  if (report.error || !report.date || report.reservoirs.length === 0) return null;
+  const [, month = "", day = ""] = report.date.split("-");
+  const pct = report.total.percent.toFixed(1);
+  const date = locale === "en" ? `${Number(day)} ${EN_MONTHS[Number(month) - 1]}` : `${day}/${month}`;
+  return LIVE_TITLE[locale].replace("{pct}", locale === "en" ? pct : pct.replace(".", ",")).replace("{date}", date);
+}
+
 async function query(params: string): Promise<Row[]> {
   const response = await fetch(`${ENDPOINT}?${params}`, {
     headers: { accept: "application/json" },

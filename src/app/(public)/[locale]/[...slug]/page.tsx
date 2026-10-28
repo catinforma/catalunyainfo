@@ -22,6 +22,7 @@ import {
   resolvePath,
   summariesByEntryIds,
 } from "@/lib/content/repository";
+import { liveEntryTitle } from "@/lib/content/live-title";
 import type { EntryDetail, MediaView, SourceView } from "@/lib/content/types";
 import { getMessages } from "@/lib/i18n";
 import { LOCALES, isLocale, type Locale } from "@/lib/i18n/config";
@@ -209,7 +210,8 @@ export async function generateMetadata({
       return buildMetadata({
         locale,
         path: entry.href,
-        title: entry.seoTitle ?? entry.title,
+        // A live figure in the title where the page has one (reservoirs).
+        title: (await liveEntryTitle(entry.body, locale)) ?? entry.seoTitle ?? entry.title,
         description: entry.seoDescription ?? entry.excerpt,
         translations: entry.translations,
         canonicalOverride: entry.canonicalUrl,

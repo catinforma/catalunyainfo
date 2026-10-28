@@ -8,6 +8,7 @@ import {
   REFERENCE_CAPACITY,
   buildReport,
   isClean,
+  liveReservoirTitle,
   parseRows,
   splitStation,
 } from "../src/lib/content/reservoirs/levels.ts";
@@ -119,4 +120,13 @@ test("the FAQ names every reservoir the series has, and no figure that would go 
     for (const item of copy.faq) assert.doesNotMatch(item.answer, /\d+([.,]\d+)? ?%/, `${locale}: no static percentage`);
     assert.doesNotMatch(copy.lead, /\d+([.,]\d+)? ?%/, `${locale}: no static percentage in the lead`);
   }
+});
+
+test("the live title carries the day's total and the reading date, and falls back when the data fails", () => {
+  const report = buildReport(parseRows([...rows("2026-10-07", CLEAN_07), ...rows("2026-10-01", CLEAN_01)]));
+  assert.equal(liveReservoirTitle("es", report), "Embalses de Catalunya hoy: al 75,1 % (ACA, 07/10)");
+  assert.equal(liveReservoirTitle("ca", report), "Estat dels embassaments de Catalunya avui: 75,1 % (07/10)");
+  assert.equal(liveReservoirTitle("en", report), "Catalonia reservoir levels today: 75.1% full (7 Oct)");
+  for (const locale of LOCALES) assert.ok((liveReservoirTitle(locale, report) ?? "").length <= 60, locale);
+  assert.equal(liveReservoirTitle("es", buildReport(parseRows(rows("2026-09-30", DAMAGED_30)))), null);
 });
