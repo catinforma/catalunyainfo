@@ -65,7 +65,7 @@ const BCN_COPY: Record<"ca" | "es" | "en", { title: string; intro: string; items
       `**Camp Nou museum**: the Barça Immersive Tour costs from €28 and opens 10:00–18:00 from 19 October to 19 March (${b2link("campnou", "en", "Camp Nou guide")}).`,
       `**Covered markets**: La Boqueria and Sant Antoni open Monday to Saturday 8:00–20:30 and close on Sundays (${b2link("markets", "en", "market hours")}).`,
     ],
-    outdoor: "Park Güell, the Montjuïc gardens and the beaches are open-air: leave them for a dry day.",
+    outdoor: `Park Güell, the Montjuïc gardens and the beaches are open-air: leave them for a dry day. October is Barcelona's wettest month (91 mm on average at the airport, according to AEMET) and July the driest: see ${b2link("climate", "en", "Barcelona weather by month")}.`,
   },
   es: {
     title: "Qué hacer en Barcelona cuando llueve",
@@ -79,7 +79,7 @@ const BCN_COPY: Record<"ca" | "es" | "en", { title: string; intro: string; items
       `**Museo del Camp Nou**: el Barça Immersive Tour cuesta desde 28 € y abre de 10:00 a 18:00 del 19 de octubre al 19 de marzo (${b2link("campnou", "es", "guía del Camp Nou")}).`,
       `**Mercados cubiertos**: la Boqueria y Sant Antoni abren de lunes a sábado de 8:00 a 20:30 y cierran los domingos (${b2link("markets", "es", "horario de los mercados")}).`,
     ],
-    outdoor: "El Park Güell, los jardines de Montjuïc y las playas son al aire libre: déjalos para un día seco.",
+    outdoor: `El Park Güell, los jardines de Montjuïc y las playas son al aire libre: déjalos para un día seco. Octubre es el mes más lluvioso en Barcelona (91 mm de media en el aeropuerto, según la AEMET) y julio el más seco: mira ${b2link("climate", "es", "el tiempo en Barcelona mes a mes")}.`,
   },
   ca: {
     title: "Què fer a Barcelona quan plou",
@@ -93,7 +93,7 @@ const BCN_COPY: Record<"ca" | "es" | "en", { title: string; intro: string; items
       `**Museu del Camp Nou**: el Barça Immersive Tour costa des de 28 € i obre de 10:00 a 18:00 del 19 d'octubre al 19 de març (${b2link("campnou", "ca", "guia del Camp Nou")}).`,
       `**Mercats coberts**: la Boqueria i Sant Antoni obren de dilluns a dissabte de 8:00 a 20:30 i tanquen els diumenges (${b2link("markets", "ca", "horari dels mercats")}).`,
     ],
-    outdoor: "El Park Güell, els jardins de Montjuïc i les platges són a l'aire lliure: deixa'ls per a un dia sec.",
+    outdoor: `El Park Güell, els jardins de Montjuïc i les platges són a l'aire lliure: deixa'ls per a un dia sec. L'octubre és el mes més plujós a Barcelona (91 mm de mitjana a l'aeroport, segons l'AEMET) i el juliol el més sec: mira ${b2link("climate", "ca", "el temps a Barcelona mes a mes")}.`,
   },
 };
 
@@ -339,6 +339,7 @@ export const RAINY: FeatureArticle = {
   sources: [
     { name: "Patrimoni Cultural de Catalunya", url: PATRIMONI, publisher: "Generalitat de Catalunya" },
     { name: "Servei Meteorològic de Catalunya", url: METEOCAT, publisher: "Meteocat" },
+    { name: "Valores climatológicos normales: Barcelona Aeropuerto", url: "https://www.aemet.es/es/serviciosclimaticos/datosclimatologicos/valoresclimatologicos?l=0076&k=cat", publisher: "AEMET" },
     { name: "Horaris de Rodalies de Catalunya", url: RODALIES, publisher: "Generalitat de Catalunya" },
     { name: "L'Aquàrium de Barcelona — prices", url: AQUARIUM, publisher: "L'Aquàrium de Barcelona" },
     { name: "Sagrada Família — prices", url: SAGRADA, publisher: "Junta Constructora del Temple de la Sagrada Família" },

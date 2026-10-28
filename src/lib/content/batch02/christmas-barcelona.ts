@@ -341,6 +341,9 @@ export function buildChristmasBarcelonaBody(locale: Locale, facts: Announcements
         `Aquests quatre dies, la llei catalana de comerç obliga a tancar les botigues amb horari general. Poden obrir, perquè en queden excloses, els forns i pastisseries, les floristeries, les botigues de conveniència, les farmàcies, les botigues de dins de les estacions i les de fins a 300 m² d'alimentació o de petites i mitjanes empreses. Abans de Nadal, a Barcelona les botigues poden obrir els diumenges 6, 13, 20 i 27 de desembre i el dimarts 8: ho detallem a ${b2link("shops", "ca", "la guia de botigues obertes en diumenges i festius")}.`,
       ),
       sightTable("ca"),
+      ...paras(
+        `El museu del Barça, al Spotify Camp Nou, tanca el 25 de desembre i l'1 de gener i la resta de dies obre de 10:00 a 18:00 (${b2link("campnou", "ca", "preu i horari de la visita al Camp Nou")}). Els preus de la Sagrada Família, el Park Güell i la Casa Batlló són a ${b2link("monuments", "ca", "la guia d'entrades")}.`,
+      ),
       ...h2(
         "Metro i autobusos per Nadal i Cap d'Any",
         "El metro funciona tots els dies de festes. Aquesta taula aplica l'horari general de TMB a cada dia:",
@@ -448,6 +451,9 @@ export function buildChristmasBarcelonaBody(locale: Locale, facts: Announcements
         `Esos cuatro días, la ley catalana de comercio obliga a cerrar a las tiendas con horario general. Pueden abrir, porque quedan excluidas, las panaderías y pastelerías, las floristerías, las tiendas de conveniencia, las farmacias, las tiendas del interior de las estaciones y las de hasta 300 m² de alimentación o de pequeñas y medianas empresas. Antes de Navidad, en Barcelona las tiendas pueden abrir los domingos 6, 13, 20 y 27 de diciembre y el martes 8: lo detallamos en ${b2link("shops", "es", "la guía de tiendas abiertas en domingos y festivos")}.`,
       ),
       sightTable("es"),
+      ...paras(
+        `El museo del Barça, en el Spotify Camp Nou, cierra el 25 de diciembre y el 1 de enero y el resto de días abre de 10:00 a 18:00 (${b2link("campnou", "es", "precio y horario del museo del Barça")}). Los precios de la Sagrada Familia, el Park Güell y la Casa Batlló están en ${b2link("monuments", "es", "la guía de entradas")}.`,
+      ),
       ...h2(
         "Metro y autobuses en Navidad y Año Nuevo",
         "El metro funciona todos los días de fiesta. Esta tabla aplica el horario general de TMB a cada día:",
@@ -554,6 +560,9 @@ export function buildChristmasBarcelonaBody(locale: Locale, facts: Announcements
       `On those four days Catalan retail law keeps shops on the general timetable closed. Exempt, and so free to open, are bakeries and cake shops, florists, convenience stores, pharmacies, shops inside stations, and shops of up to 300 m² that sell everyday food or are run by small and medium-sized businesses. Before Christmas, shops in Barcelona may open on Sundays 6, 13, 20 and 27 December and on Tuesday 8 December: details in ${b2link("shops", "en", "our guide to shops open on Sundays and holidays")}.`,
     ),
     sightTable("en"),
+    ...paras(
+      `The Barça museum at Spotify Camp Nou is closed on 25 December and 1 January and opens 10:00 to 18:00 on the other days (${b2link("campnou", "en", "Camp Nou tour prices and hours")}). Sagrada Família, Park Güell and Casa Batlló prices are in ${b2link("monuments", "en", "our tickets guide")}.`,
+    ),
     ...h2(
       "Metro and buses at Christmas and New Year",
       "The metro runs on every day of the holidays. This table applies TMB's standing timetable to each day:",
