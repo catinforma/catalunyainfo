@@ -1,6 +1,7 @@
 import type { Locale } from "@/lib/i18n/config";
 
 import {
+  b2link,
   b2Related,
   callout,
   faq,
@@ -31,7 +32,7 @@ import {
  * pages disagree) and the Ski Tren price (no season label).
  */
 
-const VERIFIED = "2026-10-18";
+const VERIFIED = "2026-10-28";
 
 // Low-season timetable and one-way fares, read 23 Oct 2026 from the FGC
 // leaflet "Primavera-Estiu-Tardor 2026" (the PDF in SOURCES): its text gives
@@ -61,19 +62,19 @@ const SOURCES: B2Source[] = [
 const META: Record<Locale, { path: string; title: string; seoTitle: string; seoDescription: string; excerpt: string }> = {
   ca: {
     path: "escapades/vall-de-nuria-cremallera",
-    title: "Vall de Núria des de Barcelona: el cremallera, preus i com arribar-hi",
-    seoTitle: "Cremallera de Núria: horaris, preus i bitllets",
+    title: "Cremallera de la Vall de Núria 2026: horaris, preus i com arribar-hi",
+    seoTitle: "Cremallera Vall de Núria 2026: horaris i preus",
     seoDescription:
-      "Cremallera de Núria 2026: horaris des de Ribes i Queralbs, anada i tornada 34/31 €, bitllet senzill, tancament de novembre entre setmana i l'R3. Dades d'FGC.",
+      "Cremallera de Núria 2026: 34 € anada i tornada des de Ribes, 31 € des de Queralbs, gratis fins a 3 anys. Horaris, novembre, TreNatura i com arribar-hi.",
     excerpt:
       "Com pujar a la Vall de Núria: preus del cremallera, el combinat amb Rodalies, l'estat de l'R3, el novembre i el Camí Vell, amb dades d'FGC.",
   },
   es: {
     path: "escapadas/vall-de-nuria-cremallera",
-    title: "Vall de Núria desde Barcelona: el cremallera, precios y cómo llegar",
-    seoTitle: "Cremallera de Núria: horarios, precios y billetes",
+    title: "Cremallera de la Vall de Núria 2026: precios, horarios y cómo llegar",
+    seoTitle: "Cremallera Vall de Núria 2026: precios y horarios",
     seoDescription:
-      "Cremallera de Núria 2026: horarios desde Ribes y Queralbs, ida y vuelta 34/31 €, billete sencillo, cierre de noviembre entre semana y la R3. Datos de FGC.",
+      "Cremallera de Núria 2026: 34 € ida y vuelta desde Ribes, 31 € desde Queralbs, gratis hasta 3 años. Horarios, noviembre, TreNatura y cómo llegar.",
     excerpt:
       "Cómo subir a la Vall de Núria: precios del cremallera, el combinado con Rodalies, el estado de la R3, noviembre y el Camí Vell, con datos de FGC.",
   },
@@ -82,7 +83,7 @@ const META: Record<Locale, { path: string; title: string; seoTitle: string; seoD
     title: "Vall de Núria from Barcelona: rack railway, tickets and getting there",
     seoTitle: "Núria rack railway: timetable, tickets and fares",
     seoDescription:
-      "Núria rack railway 2026: timetable from Ribes and Queralbs, return €34/€31 and single fares, November weekday closure and the R3 works. FGC figures.",
+      "Núria rack railway 2026: return €34 from Ribes, €31 from Queralbs, free under 4. Timetable, November weekday closure, TreNatura and the R3.",
     excerpt:
       "How to get up to Vall de Núria: rack railway fares, the combined Rodalies ticket, the R3 disruption, November and the old path, from FGC's own figures.",
   },
@@ -122,14 +123,14 @@ type T = {
 
 const COPY: Record<Locale, T> = {
   ca: {
-    lead: "A la **Vall de Núria** no hi arriba cap carretera: s'hi puja amb el **cremallera** des de Ribes de Freser o Queralbs, o a peu. Aquí tens què costa, com s'hi va des de Barcelona amb l'R3 tal com circula ara, què passa al novembre i què hi ha a dalt, amb les dades d'FGC, que explota el tren i l'estació.",
+    lead: "El **cremallera de Núria** costa **34 € anada i tornada des de Ribes de Freser** i **31 € des de Queralbs** per a un adult (infants de 4 a 13 anys, 22 i 20 €; fins a 3 anys, gratis), segons les tarifes d'FGC vigents fins al 30 de novembre del 2026. A la **Vall de Núria** no hi arriba cap carretera: s'hi puja amb el cremallera o a peu. A sota tens els horaris, com s'hi va des de Barcelona amb l'R3 tal com circula ara, què passa al novembre i què hi ha a dalt.",
     note: "Els preus del cremallera són els que FGC publica com a vigents fins al 30 de novembre del 2026. L'R3 circula amb servei reduït per obres: consulta Rodalies abans de sortir.",
     lineTitle: "El cremallera",
     line: [
       "El cremallera surt de **Ribes-Enllaç**, al costat de l'estació de l'R3, i para a **Ribes-Vila** i **Queralbs** abans d'arribar a Núria. Fa 12,5 km, puja uns 1.000 metres de desnivell i triga uns 40 minuts. Es va inaugurar el 1931, i l'estació de Núria és a **1.964 metres**.",
       "Queralbs és l'últim punt on s'arriba amb cotxe. A les tres estacions de baix (Ribes-Enllaç, Ribes-Vila i Queralbs) hi ha aparcament gratuït. FGC demana comprar el bitllet en línia per assegurar plaça.",
     ],
-    faresTitle: "Quant costa",
+    faresTitle: "Quant costa el cremallera de Núria",
     faresCaption: "Cremallera de Núria, preus 2026",
     faresHeaders: ["Edat", "Anada i tornada des de Ribes", "Anada i tornada des de Queralbs", "Només anada des de Ribes", "Només anada des de Queralbs"],
     faresRows: [
@@ -139,31 +140,34 @@ const COPY: Record<Locale, T> = {
       ["De 0 a 3 anys", "Gratuït", "Gratuït", "Gratuït", "Gratuït"],
     ],
     faresNote: "Vigents fins al 30 de novembre del 2026, segons FGC. L'anada i la tornada s'han de fer el mateix dia.",
-    timesTitle: "Horaris del cremallera",
+    timesTitle: "Horaris del cremallera de Núria",
     times: "Aquests són els trens de **temporada baixa**, la de la majoria de dies de tardor. Els dies de temporada alta, alguns caps de setmana i festius, hi ha més trens i l'últim baixa de Núria a les 18.05: el calendari de colors del fullet d'FGC diu quin tipus de dia és el teu. El tren de pujada triga uns 40 minuts.",
     timesCaptions: ["Pujada: de Ribes-Enllaç a Núria", "Baixada: de Núria a Ribes-Enllaç"],
     timesHeaders: [["Surt de Ribes-Enllaç", "Arriba a Núria"], ["Surt de Núria", "Arriba a Ribes-Enllaç"]],
     friday: "només divendres",
-    timesNote: "* El primer tren surt de Ribes-Vila. Tots paren a Ribes-Vila i Queralbs. Fullet d'FGC primavera-estiu-tardor 2026, llegit el 23 d'octubre de 2026.",
+    timesNote: "* El primer tren surt de Ribes-Vila. Tots paren a Ribes-Vila i Queralbs. Fullet d'FGC primavera-estiu-tardor 2026, llegit el 28 d'octubre de 2026.",
     fares: [
-      "El bitllet inclou el **Telefèric Coma del Clot**, l'entrada a la **basílica**, les exposicions i una audioguia. Els gossos viatgen gratis, lligats i amb morrió.",
-      "Per a l'hivern, FGC ja ha publicat l'abonament de temporada del cremallera, vàlid de l'1 de desembre del 2026 al 30 d'abril del 2027: 62,50 € adults i 39,50 € infants. Els bitllets senzills d'hivern encara no són públics.",
+      "El bitllet inclou el **Telefèric Coma del Clot**, l'entrada a la **basílica**, les exposicions i una audioguia. Els gossos viatgen gratis, lligats i amb morrió (a la taquilla en venen per 5 €).",
+      "Si hi pujaràs sovint, hi ha un **abonament de temporada** de 104 € (a partir de 14 anys) i 66 € (de 4 a 13 anys), vàlid un any des del dia de la compra.",
+      "Per a l'hivern, FGC ja ha publicat l'abonament de temporada del cremallera, vàlid de l'1 de desembre del 2026 al 30 d'abril del 2027: 62,50 € adults i 39,50 € infants. Els bitllets senzills d'hivern i els forfets d'esquí de la temporada 2026-2027 encara no eren públics el 28 d'octubre.",
     ],
-    getTitle: "Com arribar-hi des de Barcelona",
+    getTitle: "Com arribar a Núria des de Barcelona",
     get: [
       "**En tren:** l'R3 de Rodalies enllaça amb el cremallera a Ribes de Freser. El bitllet combinat **TreNatura** inclou el tren d'anada i tornada des de qualsevol estació de Rodalies fins a Ribes de Freser i el cremallera fins a Núria: **40,20 €** adults i **30,70 €** infants de 4 a 13 anys. Renfe el ven tot l'any excepte els dies feiners de novembre.",
       "**En cotxe:** fins a Ribes de Freser o Queralbs, i allà el cremallera. Els tres aparcaments de les estacions són gratuïts.",
     ],
     r3Title: "L'R3, ara mateix",
-    r3: "Segons l'avís de Rodalies del 6 de juliol del 2026, l'R3 circula amb el 50 % dels trens que tenia abans del 20 de gener, per obres a la via. Entre Barcelona i la Garriga el servei el cobreixen l'R4 i autobusos alternatius, i els trens de l'R3 van de la Garriga a Puigcerdà; el viatge és més llarg que l'habitual. Des del 12 d'agost hi ha també autobusos complementaris entre la Garriga i Puigcerdà, i l'avís continuava vigent el 18 d'octubre. El TreNatura continua sent vàlid durant aquest període. Mira els horaris a rodalies.gencat.cat abans de sortir.",
-    novTitle: "Al novembre",
+    r3: "Segons l'avís de Rodalies del 6 de juliol del 2026, l'R3 circula amb el 50 % dels trens que tenia abans del 20 de gener, per obres a la via. Entre Barcelona i la Garriga el servei el cobreixen l'R4 i autobusos alternatius, i els trens de l'R3 van de la Garriga a Puigcerdà; el viatge és més llarg que l'habitual. Des del 12 d'agost hi ha també autobusos complementaris entre la Garriga i Puigcerdà, i l'avís continuava vigent el 28 d'octubre. El TreNatura continua sent vàlid durant aquest període. Mira els horaris a rodalies.gencat.cat abans de sortir.",
+    novTitle: "El cremallera de Núria al novembre",
     nov: [
-      "El calendari oficial de l'estació per al novembre del 2026 marca **tancats els dies feiners** i oberts els caps de setmana. Els anys anteriors FGC ha reduït el cremallera fins a Núria als caps de setmana durant el novembre, amb un servei curt entre Ribes i Queralbs els dies feiners. Si hi vols anar al novembre, ves-hi en cap de setmana i comprova-ho abans.",
+      "El calendari oficial de l'estació per al novembre del 2026 marca **tancats els dies feiners** i oberts els caps de setmana. És el que FGC va fer el 2025: del 3 al 30 de novembre el cremallera només va pujar a Núria els caps de setmana, i els dies feiners va fer tres viatges entre Ribes i Queralbs; al desembre va tornar a circular cada dia. L'avís d'enguany encara no s'havia publicat el 28 d'octubre.",
+      "El combinat TreNatura tampoc no es ven els dies feiners de novembre. Si hi vols anar aquest mes, ves-hi en cap de setmana i comprova-ho a FGC abans de sortir.",
     ],
     valleyTitle: "Què hi ha a la vall",
     valley: [
       "La vall és dins del Parc Natural de les Capçaleres del Ter i del Freser, envoltada de cims de més de 2.900 metres. Al fons hi ha el **santuari de la Mare de Déu de Núria**, el llac i l'hotel.",
       "El **Telefèric Coma del Clot** puja fins al Pic de l'Àliga, a més de 2.100 metres, un dels millors miradors de la vall. Des del juny del 2026 hi ha també el nou **Mirador del Llac**. A l'estiu hi ha barques al llac, un parc lúdic i rutes curtes al voltant del santuari; a l'hivern, l'estació d'esquí.",
+      `Si t'hi quedes més d'un dia, la resta de la comarca (Ripoll, Sant Joan de les Abadesses, Camprodon, Setcases) és a ${b2link("ripolles", "ca", "la guia del Ripollès")}.`,
     ],
     walkTitle: "A peu: el Camí Vell des de Queralbs",
     walk: [
@@ -181,17 +185,19 @@ const COPY: Record<Locale, T> = {
       { question: "Es pot anar a Núria amb cotxe?", answer: "No. Es pot arribar amb cotxe fins a Ribes de Freser o Queralbs, on hi ha aparcament gratuït, i d'allà s'hi puja amb el cremallera o a peu." },
       { question: "Què inclou el bitllet TreNatura?", answer: "El tren de Rodalies d'anada i tornada des de qualsevol estació fins a Ribes de Freser i el cremallera fins a Núria. Costa 40,20 € adults i 30,70 € infants." },
       { question: "El cremallera funciona al novembre?", answer: "El calendari de l'estació per al novembre del 2026 marca tancats els dies feiners i oberts els caps de setmana. Comprova-ho a FGC abans d'anar-hi." },
+      { question: "El cremallera de Núria és gratis per a algú?", answer: "Per als infants de 0 a 3 anys, que no paguen, i per als gossos, que viatgen gratis lligats i amb morrió. Els altres paguen la tarifa: 34 € anada i tornada des de Ribes per a un adult." },
+      { question: "Quant costa el forfet d'esquí de Vall de Núria?", answer: "El 28 d'octubre FGC encara no havia publicat els forfets de la temporada 2026-2027. Sí que hi havia l'abonament d'hivern del cremallera: 62,50 € adults i 39,50 € infants, de l'1 de desembre del 2026 al 30 d'abril del 2027." },
     ],
   },
   es: {
-    lead: "A la **Vall de Núria** no llega ninguna carretera: se sube en **cremallera** desde Ribes de Freser o Queralbs, o a pie. Aquí tienes lo que cuesta, cómo se va desde Barcelona con la R3 tal como circula ahora, qué pasa en noviembre y qué hay arriba, con los datos de FGC, que explota el tren y la estación.",
+    lead: "El **cremallera de Núria** cuesta **34 € ida y vuelta desde Ribes de Freser** y **31 € desde Queralbs** para un adulto (niños de 4 a 13 años, 22 y 20 €; hasta 3 años, gratis), según las tarifas de FGC vigentes hasta el 30 de noviembre de 2026. A la **Vall de Núria** no llega ninguna carretera: se sube en cremallera o a pie. Abajo tienes los horarios, cómo se va desde Barcelona con la R3 tal como circula ahora, qué pasa en noviembre y qué hay arriba.",
     note: "Los precios del cremallera son los que FGC publica como vigentes hasta el 30 de noviembre de 2026. La R3 circula con servicio reducido por obras: consulta Rodalies antes de salir.",
     lineTitle: "El cremallera",
     line: [
       "El cremallera sale de **Ribes-Enllaç**, junto a la estación de la R3, y para en **Ribes-Vila** y **Queralbs** antes de llegar a Núria. Recorre 12,5 km, sube unos 1.000 metros de desnivel y tarda unos 40 minutos. Se inauguró en 1931, y la estación de Núria está a **1.964 metros**.",
       "Queralbs es el último punto al que se llega en coche. En las tres estaciones de abajo (Ribes-Enllaç, Ribes-Vila y Queralbs) hay aparcamiento gratuito. FGC pide comprar el billete en línea para asegurar plaza.",
     ],
-    faresTitle: "Cuánto cuesta",
+    faresTitle: "Cuánto cuesta el cremallera de Núria",
     faresCaption: "Cremallera de Núria, precios 2026",
     faresHeaders: ["Edad", "Ida y vuelta desde Ribes", "Ida y vuelta desde Queralbs", "Solo ida desde Ribes", "Solo ida desde Queralbs"],
     faresRows: [
@@ -201,31 +207,34 @@ const COPY: Record<Locale, T> = {
       ["De 0 a 3 años", "Gratis", "Gratis", "Gratis", "Gratis"],
     ],
     faresNote: "Vigentes hasta el 30 de noviembre de 2026, según FGC. La ida y la vuelta se deben hacer el mismo día.",
-    timesTitle: "Horarios del cremallera",
+    timesTitle: "Horarios del cremallera de Núria",
     times: "Estos son los trenes de **temporada baja**, la de la mayoría de días de otoño. Los días de temporada alta, algunos fines de semana y festivos, hay más trenes y el último baja de Núria a las 18.05: el calendario de colores del folleto de FGC indica qué tipo de día es el tuyo. El tren de subida tarda unos 40 minutos.",
     timesCaptions: ["Subida: de Ribes-Enllaç a Núria", "Bajada: de Núria a Ribes-Enllaç"],
     timesHeaders: [["Sale de Ribes-Enllaç", "Llega a Núria"], ["Sale de Núria", "Llega a Ribes-Enllaç"]],
     friday: "solo viernes",
-    timesNote: "* El primer tren sale de Ribes-Vila. Todos paran en Ribes-Vila y Queralbs. Folleto de FGC primavera-verano-otoño 2026, leído el 23 de octubre de 2026.",
+    timesNote: "* El primer tren sale de Ribes-Vila. Todos paran en Ribes-Vila y Queralbs. Folleto de FGC primavera-verano-otoño 2026, leído el 28 de octubre de 2026.",
     fares: [
-      "El billete incluye el **Telefèric Coma del Clot**, la entrada a la **basílica**, las exposiciones y una audioguía. Los perros viajan gratis, atados y con bozal.",
-      "Para el invierno, FGC ya ha publicado el abono de temporada del cremallera, válido del 1 de diciembre de 2026 al 30 de abril de 2027: 62,50 € adultos y 39,50 € niños. Los billetes sencillos de invierno aún no son públicos.",
+      "El billete incluye el **Telefèric Coma del Clot**, la entrada a la **basílica**, las exposiciones y una audioguía. Los perros viajan gratis, atados y con bozal (en la taquilla venden bozales por 5 €).",
+      "Si vas a subir a menudo, hay un **abono de temporada** de 104 € (a partir de 14 años) y 66 € (de 4 a 13 años), válido un año desde el día de la compra.",
+      "Para el invierno, FGC ya ha publicado el abono de temporada del cremallera, válido del 1 de diciembre de 2026 al 30 de abril de 2027: 62,50 € adultos y 39,50 € niños. Los billetes sencillos de invierno y los forfaits de esquí de la temporada 2026-2027 aún no eran públicos el 28 de octubre.",
     ],
-    getTitle: "Cómo llegar desde Barcelona",
+    getTitle: "Cómo llegar a Núria desde Barcelona",
     get: [
       "**En tren:** la R3 de Rodalies enlaza con el cremallera en Ribes de Freser. El billete combinado **TreNatura** incluye el tren de ida y vuelta desde cualquier estación de Rodalies hasta Ribes de Freser y el cremallera hasta Núria: **40,20 €** adultos y **30,70 €** niños de 4 a 13 años. Renfe lo vende todo el año excepto los días laborables de noviembre.",
       "**En coche:** hasta Ribes de Freser o Queralbs, y allí el cremallera. Los tres aparcamientos de las estaciones son gratuitos.",
     ],
     r3Title: "La R3, ahora mismo",
-    r3: "Según el aviso de Rodalies del 6 de julio de 2026, la R3 circula con el 50 % de los trenes que tenía antes del 20 de enero, por obras en la vía. Entre Barcelona y La Garriga el servicio lo cubren la R4 y autobuses alternativos, y los trenes de la R3 van de La Garriga a Puigcerdà; el viaje es más largo de lo habitual. Desde el 12 de agosto hay también autobuses complementarios entre La Garriga y Puigcerdà, y el aviso seguía vigente el 18 de octubre. El TreNatura sigue siendo válido durante este periodo. Mira los horarios en rodalies.gencat.cat antes de salir.",
-    novTitle: "En noviembre",
+    r3: "Según el aviso de Rodalies del 6 de julio de 2026, la R3 circula con el 50 % de los trenes que tenía antes del 20 de enero, por obras en la vía. Entre Barcelona y La Garriga el servicio lo cubren la R4 y autobuses alternativos, y los trenes de la R3 van de La Garriga a Puigcerdà; el viaje es más largo de lo habitual. Desde el 12 de agosto hay también autobuses complementarios entre La Garriga y Puigcerdà, y el aviso seguía vigente el 28 de octubre. El TreNatura sigue siendo válido durante este periodo. Mira los horarios en rodalies.gencat.cat antes de salir.",
+    novTitle: "El cremallera de Núria en noviembre",
     nov: [
-      "El calendario oficial de la estación para noviembre de 2026 marca **cerrados los días laborables** y abiertos los fines de semana. Los años anteriores FGC ha reducido el cremallera hasta Núria a los fines de semana durante noviembre, con un servicio corto entre Ribes y Queralbs los días laborables. Si quieres ir en noviembre, ve en fin de semana y compruébalo antes.",
+      "El calendario oficial de la estación para noviembre de 2026 marca **cerrados los días laborables** y abiertos los fines de semana. Es lo que FGC hizo en 2025: del 3 al 30 de noviembre el cremallera solo subió a Núria los fines de semana, y los días laborables hizo tres viajes entre Ribes y Queralbs; en diciembre volvió a circular a diario. El aviso de este año aún no se había publicado el 28 de octubre.",
+      "El combinado TreNatura tampoco se vende los días laborables de noviembre. Si quieres ir este mes, ve en fin de semana y compruébalo en FGC antes de salir.",
     ],
     valleyTitle: "Qué hay en el valle",
     valley: [
       "El valle está dentro del Parc Natural de les Capçaleres del Ter i del Freser, rodeado de cimas de más de 2.900 metros. Al fondo están el **santuario de la Mare de Déu de Núria**, el lago y el hotel.",
       "El **Telefèric Coma del Clot** sube hasta el Pic de l'Àliga, a más de 2.100 metros, uno de los mejores miradores del valle. Desde junio de 2026 hay también el nuevo **Mirador del Llac**. En verano hay barcas en el lago, un parque lúdico y rutas cortas alrededor del santuario; en invierno, la estación de esquí.",
+      `Si te quedas más de un día, el resto de la comarca (Ripoll, Sant Joan de les Abadesses, Camprodon, Setcases) está en ${b2link("ripolles", "es", "la guía del Ripollès")}.`,
     ],
     walkTitle: "A pie: el Camí Vell desde Queralbs",
     walk: [
@@ -243,17 +252,19 @@ const COPY: Record<Locale, T> = {
       { question: "¿Se puede ir a Núria en coche?", answer: "No. Se puede llegar en coche hasta Ribes de Freser o Queralbs, donde hay aparcamiento gratuito, y desde allí se sube en cremallera o a pie." },
       { question: "¿Qué incluye el billete TreNatura?", answer: "El tren de Rodalies de ida y vuelta desde cualquier estación hasta Ribes de Freser y el cremallera hasta Núria. Cuesta 40,20 € adultos y 30,70 € niños." },
       { question: "¿Funciona el cremallera en noviembre?", answer: "El calendario de la estación para noviembre de 2026 marca cerrados los días laborables y abiertos los fines de semana. Compruébalo en FGC antes de ir." },
+      { question: "¿Es gratis el cremallera de Núria para alguien?", answer: "Para los niños de 0 a 3 años, que no pagan, y para los perros, que viajan gratis atados y con bozal. Los demás pagan la tarifa: 34 € ida y vuelta desde Ribes para un adulto." },
+      { question: "¿Cuánto cuesta el forfait de Vall de Núria?", answer: "El 28 de octubre FGC aún no había publicado los forfaits de la temporada 2026-2027. Sí estaba el abono de invierno del cremallera: 62,50 € adultos y 39,50 € niños, del 1 de diciembre de 2026 al 30 de abril de 2027." },
     ],
   },
   en: {
-    lead: "No road reaches **Vall de Núria**: you go up by **rack railway** (the Cremallera) from Ribes de Freser or Queralbs, or on foot. Here is what it costs, how to get there from Barcelona on the R3 as it runs now, what happens in November and what is up there, from the figures of FGC, which runs the railway and the resort.",
+    lead: "The **Núria rack railway** (the Cremallera) costs **€34 return from Ribes de Freser** and **€31 from Queralbs** for an adult (children aged 4 to 13, €22 and €20; under 4, free), on FGC's fares valid until 30 November 2026. No road reaches **Vall de Núria**: you go up by rack railway or on foot. Below are the timetable, how to get there from Barcelona on the R3 as it runs now, what happens in November and what is up there.",
     note: "Rack railway fares are the ones FGC publishes as valid until 30 November 2026. The R3 is running a reduced service because of works: check Rodalies before you set off.",
     lineTitle: "The rack railway",
     line: [
       "The Cremallera starts at **Ribes-Enllaç**, next to the R3 station, and stops at **Ribes-Vila** and **Queralbs** before reaching Núria. It covers 12.5 km, climbs about 1,000 metres and takes about 40 minutes. It opened in 1931, and Núria station sits at **1,964 metres**.",
       "Queralbs is as far as a car can go. All three lower stations (Ribes-Enllaç, Ribes-Vila and Queralbs) have free parking. FGC asks you to buy online to be sure of a seat.",
     ],
-    faresTitle: "What it costs",
+    faresTitle: "Núria rack railway fares",
     faresCaption: "Núria rack railway, 2026 fares",
     faresHeaders: ["Age", "Return from Ribes", "Return from Queralbs", "Single from Ribes", "Single from Queralbs"],
     faresRows: [
@@ -263,15 +274,16 @@ const COPY: Record<Locale, T> = {
       ["Under 4", "Free", "Free", "Free", "Free"],
     ],
     faresNote: "Valid until 30 November 2026, according to FGC. Both legs of a return must be used on the same day.",
-    timesTitle: "Rack railway timetable",
+    timesTitle: "Núria rack railway timetable",
     times: "These are the **low-season** trains, which cover most autumn days. On high-season days, some weekends and public holidays, there are more trains and the last one leaves Núria at 18.05: the colour calendar on FGC's leaflet shows which kind of day yours is. The ride up takes about 40 minutes.",
     timesCaptions: ["Up: Ribes-Enllaç to Núria", "Down: Núria to Ribes-Enllaç"],
     timesHeaders: [["Leaves Ribes-Enllaç", "Arrives Núria"], ["Leaves Núria", "Arrives Ribes-Enllaç"]],
     friday: "Fridays only",
-    timesNote: "* The first train starts at Ribes-Vila. All trains stop at Ribes-Vila and Queralbs. FGC's spring-summer-autumn 2026 leaflet, read on 23 October 2026.",
+    timesNote: "* The first train starts at Ribes-Vila. All trains stop at Ribes-Vila and Queralbs. FGC's spring-summer-autumn 2026 leaflet, read on 28 October 2026.",
     fares: [
-      "The ticket includes the **Coma del Clot cable car** (Telefèric), entry to the **basilica**, the exhibitions and an audio guide. Dogs travel free, on a lead and muzzled.",
-      "For winter, FGC has already published the rack railway season ticket, valid from 1 December 2026 to 30 April 2027: €62.50 for adults and €39.50 for children. Single and return winter fares are not out yet.",
+      "The ticket includes the **Coma del Clot cable car** (Telefèric), entry to the **basilica**, the exhibitions and an audio guide. Dogs travel free, on a lead and muzzled (the ticket office sells muzzles for €5).",
+      "If you will go up often, there is a **season ticket**: €104 from age 14 and €66 for ages 4 to 13, valid for a year from the day you buy it.",
+      "For winter, FGC has already published the rack railway season ticket, valid from 1 December 2026 to 30 April 2027: €62.50 for adults and €39.50 for children. Winter single and return fares and the 2026-27 ski passes were not out yet on 28 October.",
     ],
     getTitle: "Getting there from Barcelona",
     get: [
@@ -279,15 +291,17 @@ const COPY: Record<Locale, T> = {
       "**By car:** drive to Ribes de Freser or Queralbs and take the rack railway from there. The car parks at all three stations are free.",
     ],
     r3Title: "The R3 right now",
-    r3: "According to Rodalies' notice of 6 July 2026, the R3 is running 50% of the trains it had before 20 January, because of track works. Between Barcelona and La Garriga the service is covered by the R4 and replacement buses, and R3 trains run from La Garriga to Puigcerdà; the journey takes longer than usual. Since 12 August there have also been complementary buses between La Garriga and Puigcerdà, and the notice was still in force on 18 October. TreNatura tickets stay valid throughout. Check the timetables at rodalies.gencat.cat before you go.",
-    novTitle: "In November",
+    r3: "According to Rodalies' notice of 6 July 2026, the R3 is running 50% of the trains it had before 20 January, because of track works. Between Barcelona and La Garriga the service is covered by the R4 and replacement buses, and R3 trains run from La Garriga to Puigcerdà; the journey takes longer than usual. Since 12 August there have also been complementary buses between La Garriga and Puigcerdà, and the notice was still in force on 28 October. TreNatura tickets stay valid throughout. Check the timetables at rodalies.gencat.cat before you go.",
+    novTitle: "The rack railway in November",
     nov: [
-      "The resort's official calendar for November 2026 shows **weekdays closed** and weekends open. In previous years FGC has cut the rack railway to Núria back to weekends in November, with a short Ribes–Queralbs service on weekdays. If you want to go in November, go at a weekend and check first.",
+      "The resort's official calendar for November 2026 shows **weekdays closed** and weekends open. That is what FGC did in 2025: from 3 to 30 November the rack railway ran up to Núria only at weekends, with three weekday trips between Ribes and Queralbs, and it went back to running daily in December. This year's notice was not out yet on 28 October.",
+      "The TreNatura combined ticket is not sold on November weekdays either. If you want to go this month, go at a weekend and check with FGC before you set off.",
     ],
     valleyTitle: "What's in the valley",
     valley: [
       "The valley lies inside the Capçaleres del Ter i del Freser Natural Park, ringed by peaks of more than 2,900 metres. At its head are the **sanctuary of Our Lady of Núria**, the lake and the hotel.",
       "The **Coma del Clot cable car** climbs to Pic de l'Àliga, at over 2,100 metres, one of the best viewpoints over the valley, and since June 2026 there is a new **lake viewpoint** (Mirador del Llac). In summer there are boats on the lake, a play park and short walks around the sanctuary; in winter, the ski area.",
+      `If you stay longer, the rest of the district (Ripoll, Sant Joan de les Abadesses, Camprodon, Setcases) is in ${b2link("ripolles", "en", "our Ripollès guide")}.`,
     ],
     walkTitle: "On foot: the old path from Queralbs",
     walk: [
@@ -305,8 +319,17 @@ const COPY: Record<Locale, T> = {
       { question: "Can you drive to Núria?", answer: "No. You can drive to Ribes de Freser or Queralbs, which have free parking, and go up from there by rack railway or on foot." },
       { question: "What does the TreNatura ticket include?", answer: "The return Rodalies train from any station to Ribes de Freser and the rack railway to Núria. It costs €40.20 for adults and €30.70 for children." },
       { question: "Does the Núria rack railway run in November?", answer: "The resort's calendar for November 2026 shows weekdays closed and weekends open. Check with FGC before you go." },
+      { question: "Is the Núria rack railway free for anyone?", answer: "For children under 4, who ride free, and for dogs, which travel free on a lead and muzzled. Everyone else pays the fare: €34 return from Ribes for an adult." },
+      { question: "How much is a Vall de Núria ski pass?", answer: "On 28 October FGC had not yet published the 2026-27 ski passes. The winter rack railway season ticket was out: €62.50 for adults and €39.50 for children, from 1 December 2026 to 30 April 2027." },
     ],
   },
+};
+
+// The R3 is hit by every Rodalies strike; the hub says what runs that day.
+const STRIKES_LINE: Record<Locale, string> = {
+  ca: ` Els dies de vaga de Rodalies, mira ${b2link("strikes", "ca", "què funciona")}.`,
+  es: ` Los días de huelga de Rodalies, mira ${b2link("strikes", "es", "qué funciona")}.`,
+  en: ` On Rodalies strike days, see ${b2link("strikes", "en", "what runs")}.`,
 };
 
 function body(locale: Locale) {
@@ -323,13 +346,13 @@ function body(locale: Locale) {
     table(t.timesCaptions[1], t.timesHeaders[1], [...DOWN, ...DOWN_FRIDAY.map(([a, b]) => [`${a} (${t.friday})`, b])]),
     ...h2(t.getTitle),
     list(...t.get),
-    callout("warning", t.r3Title, t.r3),
+    callout("warning", t.r3Title, t.r3 + STRIKES_LINE[locale]),
     ...h2(t.novTitle, ...t.nov),
     ...h2(t.valleyTitle, ...t.valley),
     ...h2(t.walkTitle, ...t.walk),
     ...h2(t.legendTitle, ...t.legend),
     faq(t.faq),
-    ...b2Related(["ripolles", "ski", "snow", "cerdanya"], locale),
+    ...b2Related(["ripolles", "ski", "snowNow", "snow", "cerdanya"], locale),
   ];
 }
 

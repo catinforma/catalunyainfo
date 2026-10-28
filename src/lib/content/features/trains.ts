@@ -82,11 +82,11 @@ function ca(): Block[] {
       TABLE_NOTE.ca,
     ),
     ...paras(
-      `Guies pas a pas, amb horaris i preus: ${b2link("sitges", "ca", "Sitges en tren")}, ${b2link("girona", "ca", "Girona en tren")}, ${b2link("tarragona", "ca", "Tarragona en tren")}, ${b2link("figueres", "ca", "Figueres i el Museu Dalí")}, ${b2link("montserratFree", "ca", "Montserrat amb cremallera o Aeri")} i ${b2link("portaventura", "ca", "PortAventura")}.`,
+      `Guies pas a pas, amb horaris i preus: ${b2link("sitges", "ca", "Sitges en tren")}, ${b2link("girona", "ca", "Girona en tren")}, ${b2link("tarragona", "ca", "Tarragona en tren")}, ${b2link("figueres", "ca", "Figueres i el Museu Dalí")}, ${b2link("montserratFree", "ca", "Montserrat amb cremallera o Aeri")}, ${b2link("nuria", "ca", "el cremallera de Núria")} i ${b2link("portaventura", "ca", "PortAventura")}.`,
     ),
     ...h2(
       "1. Sitges",
-      "És una de les escapades més directes que es poden fer des de Barcelona. El tren deixa el viatger a poca distància del nucli antic, i en pocs minuts es passa dels carrers blancs del centre al passeig marítim, l'església de Sant Bartomeu i Santa Tecla i les platges.",
+      "És una de les escapades més directes que es poden fer des de Barcelona. L'estació és dins del poble, i a peu es passa dels carrers blancs del centre al passeig marítim, l'església de Sant Bartomeu i Santa Tecla i les platges.",
       "Sitges funciona pràcticament tot l'any: mar a l'estiu, museus i patrimoni quan refresca, i una agenda cultural especialment intensa a la tardor. Si hi vas durant el Festival de Cinema, compta que la vila canvia de ritme del tot.",
       "Línia habitual: R2 Sud.",
     ),
@@ -200,11 +200,11 @@ function es(): Block[] {
       TABLE_NOTE.es,
     ),
     ...paras(
-      `Guías paso a paso, con horarios y precios: ${b2link("sitges", "es", "Sitges en tren")}, ${b2link("girona", "es", "Girona en tren")}, ${b2link("tarragona", "es", "Tarragona en tren")}, ${b2link("figueres", "es", "Figueres y el Museo Dalí")}, ${b2link("montserratFree", "es", "Montserrat en cremallera o Aeri")} y ${b2link("portaventura", "es", "PortAventura")}.`,
+      `Guías paso a paso, con horarios y precios: ${b2link("sitges", "es", "Sitges en tren")}, ${b2link("girona", "es", "Girona en tren")}, ${b2link("tarragona", "es", "Tarragona en tren")}, ${b2link("figueres", "es", "Figueres y el Museo Dalí")}, ${b2link("montserratFree", "es", "Montserrat en cremallera o Aeri")}, ${b2link("nuria", "es", "el cremallera de Núria")} y ${b2link("portaventura", "es", "PortAventura")}.`,
     ),
     ...h2(
       "1. Sitges",
-      "Una de las escapadas más directas desde Barcelona. El tren deja al viajero cerca del casco antiguo, y en pocos minutos se pasa de las calles blancas del centro al paseo marítimo, la iglesia de Sant Bartomeu i Santa Tecla y las playas.",
+      "Una de las escapadas más directas desde Barcelona. La estación está en el propio pueblo, y a pie se pasa de las calles blancas del centro al paseo marítimo, la iglesia de Sant Bartomeu i Santa Tecla y las playas.",
       "Sitges funciona casi todo el año: mar en verano, museos y patrimonio cuando refresca, y una agenda cultural especialmente intensa en otoño.",
       "Línea habitual: R2 Sud.",
     ),
@@ -316,11 +316,11 @@ function en(): Block[] {
       TABLE_NOTE.en,
     ),
     ...paras(
-      `Step-by-step guides with timetables and fares: ${b2link("sitges", "en", "Sitges by train")}, ${b2link("girona", "en", "Girona by train")}, ${b2link("tarragona", "en", "Tarragona by train")}, ${b2link("figueres", "en", "Figueres and the Dalí Museum")}, ${b2link("montserratFree", "en", "Montserrat by rack railway or cable car")} and ${b2link("portaventura", "en", "PortAventura")}.`,
+      `Step-by-step guides with timetables and fares: ${b2link("sitges", "en", "Sitges by train")}, ${b2link("girona", "en", "Girona by train")}, ${b2link("tarragona", "en", "Tarragona by train")}, ${b2link("figueres", "en", "Figueres and the Dalí Museum")}, ${b2link("montserratFree", "en", "Montserrat by rack railway or cable car")}, ${b2link("nuria", "en", "the Núria rack railway")} and ${b2link("portaventura", "en", "PortAventura")}.`,
     ),
     ...h2(
       "1. Sitges",
-      "The most straightforward escape on this list. The train leaves you close to the old town, and within minutes you go from whitewashed streets to the seafront promenade, the church of Sant Bartomeu i Santa Tecla and the beaches.",
+      "The most straightforward escape on this list. The station is in the town itself, and on foot you go from whitewashed streets to the seafront promenade, the church of Sant Bartomeu i Santa Tecla and the beaches.",
       "Sitges works nearly all year: the sea in summer, museums and heritage when it cools down, and a notably busy cultural calendar in autumn.",
       "Usual line: R2 Sud.",
     ),
@@ -457,8 +457,8 @@ export const TRAINS: FeatureArticle = {
     },
     en: {
       path: ARTICLE_PATHS.trains.en,
-      title: "12 day trips from Barcelona by train: journey times, fares and what to see",
-      seoTitle: "Day trips from Barcelona by train: 12 towns, times, fares",
+      title: "The 12 best day trips from Barcelona by train: journey times, fares and what to see",
+      seoTitle: "Best day trips from Barcelona by train: 12 towns, fares",
       seoDescription:
         "12 day trips from Barcelona by train with journey times and fares: Sitges in 31 min, Tarragona in 69, Girona in 40 by high-speed, plus wine and Gaudí.",
       excerpt:

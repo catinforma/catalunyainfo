@@ -39,7 +39,16 @@ import {
  * season their published dates belong to.
  */
 
-const VERIFIED = "2026-10-24";
+// 28 Oct 2026 (research_notes/page1-28oct/ski_christmas.md): all day and
+// season prices re-read and unchanged; still no 2026-27 opening date except
+// Baqueira's. Added: child day prices, the three FGC early-bird season passes
+// to 8 Dec (La Molina 600, Boí Taüll 530, Ripollès 420), official snow-report
+// links. Guils' season-pass page (modified 5 Oct 2026) prints the 175/75 EUR
+// prices with "DESCOMPTE del 25% aplicat fins el 17 de Novembre", i.e. the
+// discount is already in those prices; worded so. Tavascan's nordic circuit
+// is "dotze quilòmetres" on its page, not 12.6 km. Masella publishes no daily
+// piste page (webcams only).
+const VERIFIED = "2026-10-28";
 
 const SOURCES: B2Source[] = [
   { name: "Baqueira Beret — «Baqueira Beret activa el invierno en pleno verano» (28/07/2026)", url: "https://www.baqueira.es/es/noticia/baqueira-beret-activa-el-invierno-en-pleno-verano", publisher: "Baqueira Beret" },
@@ -68,6 +77,10 @@ const SOURCES: B2Source[] = [
   { name: "Port del Comte — forfets de temporada 26-27", url: "https://portdelcomte.net/forfets-temporada/", publisher: "Port del Comte" },
   { name: "Tavascan — estació de muntanya", url: "https://www.tavascan365.com/estacio-de-muntanya-de-tavascan/", publisher: "Tavascan" },
   { name: "Guils Fontanera — forfets (Tot Nòrdic 2026-2027)", url: "https://www.guils.com/forfets/", publisher: "Guils Fontanera" },
+  { name: "Guils Fontanera — forfet de temporada", url: "https://www.guils.com/forfet-de-temporada/", publisher: "Guils Fontanera" },
+  { name: "PIRINEU365 — Infoneu", url: "https://pirineu365.cat/infoneu-pirineu365/", publisher: "FGC (PIRINEU365)" },
+  { name: "Baqueira Beret — estado de la estación", url: "https://www.baqueira.es/es/estado-de-la-estacion", publisher: "Baqueira Beret" },
+  { name: "Port del Comte — pistes", url: "https://portdelcomte.net/pistes/", publisher: "Port del Comte" },
   { name: "Bus Blanc — horaris 2025-2026", url: "https://cerdanya.org/wp-content/uploads/2026/02/Bus-Blanc-2026.pdf", publisher: "Turisme Cerdanya" },
   { name: "TEISA — Girona-Olot-Camprodon-Vallter 2000", url: "https://www.teisa-bus.com/pdf/pdf_comarques_pdf143.pdf", publisher: "TEISA" },
   { name: "R3: modificació del servei", url: "https://rodalies.gencat.cat/ca/detalls/article/02_02_PAT_R3", publisher: "Rodalies de Catalunya" },
@@ -76,8 +89,8 @@ const SOURCES: B2Source[] = [
 const META: Record<Locale, { path: string; title: string; seoTitle: string; seoDescription: string; excerpt: string }> = {
   ca: {
     path: "guies/estacions-esqui-catalunya",
-    title: "Estacions d'esquí de Catalunya 2026-2027: pistes, preus del forfet i com arribar-hi",
-    seoTitle: "Estacions d'esquí de Catalunya 2026-27: forfets i pistes",
+    title: "Estacions d'esquí de Catalunya 2026-2027: obertura, preus del forfet i pistes obertes",
+    seoTitle: "Estacions d'esquí de Catalunya 2026-27: obertura i forfets",
     seoDescription:
       "Esquiar a Catalunya el 2026-27: les deu estacions comparades amb km de pistes, forfet de dia, forfet de temporada, obertura i com arribar-hi en tren o bus.",
     excerpt:
@@ -85,17 +98,17 @@ const META: Record<Locale, { path: string; title: string; seoTitle: string; seoD
   },
   es: {
     path: "guias/estaciones-esqui-cataluna",
-    title: "Estaciones de esquí de Cataluña 2026-2027: pistas, precios del forfait y cómo llegar",
-    seoTitle: "Estaciones de esquí de Cataluña 2026-27: forfaits y pistas",
+    title: "Estaciones de esquí de Cataluña 2026-2027: apertura, precios del forfait y pistas abiertas",
+    seoTitle: "Estaciones de esquí Cataluña 2026-27: apertura y forfait",
     seoDescription:
-      "Esquiar en Cataluña en 2026-27: las diez estaciones comparadas con km de pistas, forfait de día y de temporada, apertura y cómo llegar en tren o bus.",
+      "Estaciones de esquí de Cataluña 2026-27: fecha de apertura, precio del forfait de día y de temporada, dónde ver las pistas abiertas y cómo llegar en tren.",
     excerpt:
       "Baqueira, La Molina, Masella, Boí Taüll y el resto en una tabla: kilómetros, forfait de día 2026-27, apertura y cómo llegar sin coche.",
   },
   en: {
     path: "guides/ski-resorts-catalonia",
-    title: "Ski resorts in Catalonia 2026-2027: runs, lift pass prices and how to get there",
-    seoTitle: "Ski resorts in Catalonia 2026-27: lift passes and runs",
+    title: "Ski resorts in Catalonia 2026-2027: opening dates, lift pass prices and open runs",
+    seoTitle: "Ski resorts in Catalonia 2026-27: opening, lift passes",
     seoDescription:
       "Skiing in Catalonia in 2026-27: all ten resorts compared by kilometres, day and season pass prices, opening and how to get there by train or bus.",
     excerpt:
@@ -239,34 +252,34 @@ const SEASON_PASS: Record<Locale, string[][]> = {
     ["Baqueira Beret", "1.300 € fins a l'1 de novembre; 1.400 € després"],
     ["Alp2500 (la Molina + Masella)", "950 € fins al 8 de desembre de 2026; 1.090 € després"],
     ["Masella", "730 € fins al 22 de novembre de 2026; 840 € després"],
-    ["La Molina", "690 €"],
-    ["Boí Taüll", "660 € (el web no indica la temporada)"],
+    ["La Molina", "600 € fins al 8 de desembre; 690 € després"],
+    ["Boí Taüll", "530 € fins al 8 de desembre; 660 € després"],
     ["Port del Comte", "595 € (a la venda des de l'1 de novembre)"],
     ["Pallars (Espot + Port Ainé)", "545 €"],
-    ["Ripollès (Vallter + Vall de Núria)", "495 €"],
-    ["Tot Nòrdic (esquí de fons + raquetes)", "175 €"],
+    ["Ripollès (Vallter + Vall de Núria)", "420 € fins al 8 de desembre; 495 € després"],
+    ["Esquí nòrdic: les set estacions de la Mancomunitat (esquí + raquetes)", "175 € amb el 25 % de descompte, fins al 17 de novembre"],
   ],
   es: [
     ["Baqueira Beret", "1.300 € hasta el 1 de noviembre; 1.400 € después"],
     ["Alp2500 (La Molina + Masella)", "950 € hasta el 8 de diciembre de 2026; 1.090 € después"],
     ["Masella", "730 € hasta el 22 de noviembre de 2026; 840 € después"],
-    ["La Molina", "690 €"],
-    ["Boí Taüll", "660 € (la web no indica la temporada)"],
+    ["La Molina", "600 € hasta el 8 de diciembre; 690 € después"],
+    ["Boí Taüll", "530 € hasta el 8 de diciembre; 660 € después"],
     ["Port del Comte", "595 € (a la venta desde el 1 de noviembre)"],
     ["Pallars (Espot + Port Ainé)", "545 €"],
-    ["Ripollès (Vallter + Vall de Núria)", "495 €"],
-    ["Tot Nòrdic (esquí de fondo + raquetas)", "175 €"],
+    ["Ripollès (Vallter + Vall de Núria)", "420 € hasta el 8 de diciembre; 495 € después"],
+    ["Esquí nórdico: las siete estaciones de la Mancomunitat (esquí + raquetas)", "175 € con el 25 % de descuento, hasta el 17 de noviembre"],
   ],
   en: [
     ["Baqueira Beret", "€1,300 until 1 November; €1,400 after"],
     ["Alp2500 (La Molina + Masella)", "€950 until 8 December 2026; €1,090 after"],
     ["Masella", "€730 until 22 November 2026; €840 after"],
-    ["La Molina", "€690"],
-    ["Boí Taüll", "€660 (no season stated on the page)"],
+    ["La Molina", "€600 until 8 December; €690 after"],
+    ["Boí Taüll", "€530 until 8 December; €660 after"],
     ["Port del Comte", "€595 (on sale from 1 November)"],
     ["Pallars (Espot + Port Ainé)", "€545"],
-    ["Ripollès (Vallter + Vall de Núria)", "€495"],
-    ["Tot Nòrdic (cross-country + snowshoes)", "€175"],
+    ["Ripollès (Vallter + Vall de Núria)", "€420 until 8 December; €495 after"],
+    ["Cross-country: the seven Mancomunitat stations (skiing + snowshoes)", "€175 with the 25% discount, until 17 November"],
   ],
 };
 
@@ -309,20 +322,21 @@ const COPY: Record<Locale, T> = {
     tableTitle: "Comparativa de les estacions d'esquí de Catalunya 2026-2027",
     tableCaption: "Estacions d'esquí alpí de Catalunya: pistes, forfet de dia d'adult i accés sense cotxe",
     headers: ["Estació", "Comarca", "Km", "Altitud (m)", "Forfet d'1 dia, adult", "Sense cotxe"],
-    tableNote: "Quilòmetres i altituds de la fitxa tècnica de cada estació. Preus de les pàgines de tarifes, consultades el 24/10/2026: Baqueira els etiqueta «temporada 26-27» i la resta ja hi inclou dates de 2026-27, excepte Boí Taüll. Port del Comte mostra dues taules amb imports diferents.",
-    openTitle: "Quan obren les pistes el 2026-2027",
+    tableNote: "Quilòmetres i altituds de la fitxa tècnica de cada estació. Preus de les pàgines de tarifes, consultades el 28/10/2026: Baqueira els etiqueta «temporada 26-27» i la resta ja hi inclou dates de 2026-27, excepte Boí Taüll. Port del Comte mostra dues taules amb imports diferents.",
+    openTitle: "Obertura de les estacions d'esquí 2026-2027: quan obren",
     open: [
-      "**Baqueira Beret té previst obrir la temporada 2026-2027 el 28 de novembre i tancar el 4 d'abril de 2027**, si la meteorologia i la neu ho permeten (notícia de l'estació del 28 de juliol de 2026). Cap altra estació catalana no n'ha anunciat la data (consultat el 25 d'octubre de 2026). L'obertura depèn de la neu i del fred per fabricar-ne.",
+      "**Baqueira Beret té previst obrir la temporada 2026-2027 el 28 de novembre i tancar el 4 d'abril de 2027**, si la meteorologia i la neu ho permeten (notícia de l'estació del 28 de juliol de 2026). Cap altra estació catalana no n'ha anunciat la data (consultat el 28 d'octubre de 2026). L'obertura depèn de la neu i del fred per fabricar-ne.",
       "Les pistes de referència: **Baqueira Beret** diu a les seves preguntes freqüents que la temporada «s'inicia l'últim cap de setmana de novembre i acaba en acabar Setmana Santa», sempre segons la meteorologia. **Port Ainé** compta com a dies de temporada a les seves tarifes de l'**1 de desembre de 2026 al 4 d'abril de 2027**.",
       "La temporada passada, la **Molina** va obrir el **29 de novembre de 2025** i les altres cinc estacions d'FGC, el **4 de desembre de 2025**.",
     ],
     passTitle: "Forfet de temporada 2026-2027",
     passCaption: "Forfet de temporada d'adult, temporada 2026-2027",
     passHeaders: ["Estació o domini", "Preu adult"],
-    passNote: "Preus publicats a les webs oficials, consultats el 24/10/2026. Les edats d'«adult» canvien segons l'estació (a les d'FGC, de 25 a 64 anys).",
+    passNote: "Preus publicats a les webs oficials, consultats el 28/10/2026. Les ofertes de la Molina, Boí Taüll i el Ripollès són d'FGC i acaben el 8 de desembre. Les edats d'«adult» canvien segons l'estació (a les d'FGC, de 25 a 64 anys).",
     pricesTitle: "Preus del forfet: el que cal saber abans de comprar",
     prices: [
       "**Compra en línia.** A la Molina, Vallter, Espot i Boí Taüll comprar a la taquilla costa **3 € més** (a Port Ainé, **5 € més**); a Masella, també 3 € més. Baqueira ven el forfet de dia amb la targeta recarregable BaqueiraTICKET, i amb el BaqueiraPASS el dia d'adult baixa de 74 a 70 €.",
+      "**Infants.** El forfet de dia infantil costa 49 € a Baqueira, 43 € a Masella (en línia), 36 € a la Molina i Boí Taüll, 30,50–33,50 € a Port Ainé, 28,50 € a Espot i 24–27,50 € a Vallter; les franges d'edat canvien segons l'estació.",
       "**Temporada alta i baixa.** A Vallter i Port Ainé el preu de dia canvia segons el calendari: a Port Ainé, la temporada alta 2026-27 és del 26 al 30 de desembre, el 2 i 3 de gener i els caps de setmana de febrer.",
       "**Abonaments que comparteixen estacions.** El forfet Alp2500 val per a la Molina i Masella (145 km junts); el Temporada Pallars, per a Espot i Port Ainé; el Temporada Ripollès, per a Vallter i la Vall de Núria.",
     ],
@@ -340,16 +354,16 @@ const COPY: Record<Locale, T> = {
     smallTitle: "Port del Comte i Tavascan",
     small: [
       "**Port del Comte**, al Solsonès, ja ven el forfet de temporada 2026-27 (595 € adult). Al seu web la temporada alta inclou tots els caps de setmana, el 7 i 8 de desembre, del 21 de desembre al 28 de febrer de 2027 i del 22 al 29 de març de 2027.",
-      "**Tavascan** no va obrir les pistes alpines ni el telecadira la temporada 2025-26 i, a 24 d'octubre de 2026, el seu web no diu què farà aquest hivern. El circuit nòrdic (12,6 km) forma part del Tot Nòrdic.",
+      "**Tavascan** no va obrir les pistes alpines ni el telecadira la temporada 2025-26 i, a 24 d'octubre de 2026, el seu web no diu què farà aquest hivern. El seu circuit nòrdic, d'uns dotze quilòmetres, és una de les set estacions de la Mancomunitat d'Esquí Nòrdic.",
     ],
     nordicTitle: "Esquí nòrdic i raquetes",
     nordic: [
-      "Les set estacions de la Mancomunitat d'Esquí Nòrdic (Guils Fontanera, Aransa, Lles, Tuixent-La Vansa, Sant Joan de l'Erm, Tavascan i Virós-Vallferrera) comparteixen el forfet **Tot Nòrdic**: **175 €** per a adults la temporada 2026-27 (esquí + raquetes) i **75 €** el de només raquetes. Guils indica un descompte del 25 % fins al 17 de novembre.",
+      "Les set estacions de la Mancomunitat d'Esquí Nòrdic (Guils Fontanera, Aransa, Lles, Tuixent-La Vansa, Sant Joan de l'Erm, Tavascan i Virós-Vallferrera) comparteixen el forfet de temporada que ven Guils: **175 €** per a adults la temporada 2026-27 (esquí + raquetes) i **75 €** el de només raquetes, preus amb el 25 % de descompte que Guils aplica fins al 17 de novembre.",
       `Si no esquies, mira ${b2link("snow", "ca", "on veure neu sense esquiar i les rutes amb raquetes")}.`,
     ],
-    snowTitle: "On mirar l'estat de la neu",
+    snowTitle: "Pistes obertes avui: on mirar l'estat de la neu",
     snow: [
-      "Cada estació publica cada dia les pistes obertes, el gruix de neu i els remuntadors en marxa: Baqueira a la secció «Estado de la estación» del seu web, les d'FGC a «Infoneu» de pirineu365.cat, Masella i Port del Comte al seu web. Mira-ho el mateix matí: a principi i final de temporada canvia d'un dia per l'altre.",
+      "Cada estació publica cada dia les pistes obertes, el gruix de neu i els remuntadors en marxa: les sis d'FGC (la Molina, Vall de Núria, Vallter, Espot, Port Ainé i Boí Taüll) a l'[Infoneu de PIRINEU365](https://pirineu365.cat/infoneu-pirineu365/), Baqueira a «[Estado de la estación](https://www.baqueira.es/es/estado-de-la-estacion)» i Port del Comte a [la seva pàgina de pistes](https://portdelcomte.net/pistes/); Masella hi té càmeres web. Abans de l'obertura surten buits. Mira-ho el mateix matí: a principi i final de temporada canvia d'un dia per l'altre.",
       `Per saber si hi ha neu a terra a l'alta muntanya, fora de les pistes, mira ${b2link("snowNow", "ca", "el gruix de neu d'avui a les estacions meteorològiques del Meteocat")}.`,
     ],
     pickTitle: "Quina estació triar",
@@ -360,7 +374,7 @@ const COPY: Record<Locale, T> = {
       "**Aprendre o anar amb nens petits:** la Vall de Núria i Vallter són petites i fàcils de controlar.",
     ],
     faq: [
-      { question: "Quan obren les estacions d'esquí de Catalunya la temporada 2026-2027?", answer: "Baqueira Beret té previst obrir el 28 de novembre de 2026 i tancar el 4 d'abril de 2027, si la meteorologia i la neu ho permeten. Cap altra estació n'ha anunciat la data (consultat el 25 d'octubre de 2026); la temporada passada la Molina va obrir el 29 de novembre de 2025 i les altres estacions d'FGC, el 4 de desembre." },
+      { question: "Quan obren les estacions d'esquí de Catalunya la temporada 2026-2027?", answer: "Baqueira Beret té previst obrir el 28 de novembre de 2026 i tancar el 4 d'abril de 2027, si la meteorologia i la neu ho permeten. Cap altra estació n'ha anunciat la data (consultat el 28 d'octubre de 2026); la temporada passada la Molina va obrir el 29 de novembre de 2025 i les altres estacions d'FGC, el 4 de desembre." },
       { question: "Quant costa el forfet de dia a Catalunya el 2026-27?", answer: "Per a un adult, de 30 € (Vallter en temporada baixa) a 74 € (Baqueira Beret). La Molina, 49 € en línia; Masella, 53 € en línia; Espot, 39 €; Port Ainé, de 42 a 46 €." },
       { question: "Quina és l'estació d'esquí més gran de Catalunya?", answer: "Baqueira Beret, amb 169 km de pistes balisades. El domini Alp2500 (la Molina + Masella) en suma 145." },
       { question: "Es pot anar a esquiar en tren des de Barcelona?", answer: "Sí: a la Molina, que té estació a l'R3, i a la Vall de Núria amb l'R3 i el Cremallera. Durant les obres de l'R3 el tram Barcelona–la Garriga es fa amb autobús." },
@@ -372,20 +386,21 @@ const COPY: Record<Locale, T> = {
     tableTitle: "Comparativa de las estaciones de esquí de Cataluña 2026-2027",
     tableCaption: "Estaciones de esquí alpino de Cataluña: pistas, forfait de día de adulto y acceso sin coche",
     headers: ["Estación", "Comarca", "Km", "Altitud (m)", "Forfait 1 día, adulto", "Sin coche"],
-    tableNote: "Kilómetros y altitudes de la ficha técnica de cada estación. Precios de las páginas de tarifas, consultadas el 24/10/2026: Baqueira los etiqueta «temporada 26-27» y el resto ya incluye fechas de 2026-27, salvo Boí Taüll. Port del Comte muestra dos tablas con importes distintos.",
-    openTitle: "Cuándo abren las pistas en 2026-2027",
+    tableNote: "Kilómetros y altitudes de la ficha técnica de cada estación. Precios de las páginas de tarifas, consultadas el 28/10/2026: Baqueira los etiqueta «temporada 26-27» y el resto ya incluye fechas de 2026-27, salvo Boí Taüll. Port del Comte muestra dos tablas con importes distintos.",
+    openTitle: "Apertura de las estaciones de esquí 2026-2027: cuándo abren",
     open: [
-      "**Baqueira Beret tiene previsto abrir la temporada 2026-2027 el 28 de noviembre y cerrar el 4 de abril de 2027**, si la meteorología y la nieve lo permiten (noticia de la estación del 28 de julio de 2026). Ninguna otra estación catalana ha anunciado la fecha (consultado el 25 de octubre de 2026). La apertura depende de la nieve y del frío para fabricarla.",
+      "**Baqueira Beret tiene previsto abrir la temporada 2026-2027 el 28 de noviembre y cerrar el 4 de abril de 2027**, si la meteorología y la nieve lo permiten (noticia de la estación del 28 de julio de 2026). Ninguna otra estación catalana ha anunciado la fecha (consultado el 28 de octubre de 2026). La apertura depende de la nieve y del frío para fabricarla.",
       "Las referencias: **Baqueira Beret** dice en sus preguntas frecuentes que la temporada «inicia el último fin de semana de noviembre y finaliza al acabar Semana Santa», siempre sujeta a la meteorología. **Port Ainé** cuenta como días de temporada en sus tarifas del **1 de diciembre de 2026 al 4 de abril de 2027**.",
       "La temporada pasada, **La Molina** abrió el **29 de noviembre de 2025** y las otras cinco estaciones de FGC, el **4 de diciembre de 2025**.",
     ],
     passTitle: "Forfait de temporada 2026-2027",
     passCaption: "Forfait de temporada de adulto, temporada 2026-2027",
     passHeaders: ["Estación o dominio", "Precio adulto"],
-    passNote: "Precios publicados en las webs oficiales, consultados el 24/10/2026. La edad de «adulto» cambia según la estación (en las de FGC, de 25 a 64 años).",
+    passNote: "Precios publicados en las webs oficiales, consultados el 28/10/2026. Las ofertas de La Molina, Boí Taüll y el Ripollès son de FGC y acaban el 8 de diciembre. La edad de «adulto» cambia según la estación (en las de FGC, de 25 a 64 años).",
     pricesTitle: "Precios del forfait: lo que hay que saber antes de comprar",
     prices: [
       "**Compra online.** En La Molina, Vallter, Espot y Boí Taüll comprar en taquilla cuesta **3 € más** (en Port Ainé, **5 € más**); en Masella, también 3 € más. Baqueira vende el forfait de día con la tarjeta recargable BaqueiraTICKET, y con el BaqueiraPASS el día de adulto baja de 74 a 70 €.",
+      "**Niños.** El forfait de día infantil cuesta 49 € en Baqueira, 43 € en Masella (online), 36 € en La Molina y Boí Taüll, 30,50–33,50 € en Port Ainé, 28,50 € en Espot y 24–27,50 € en Vallter; las franjas de edad cambian según la estación.",
       "**Temporada alta y baja.** En Vallter y Port Ainé el precio de día cambia según el calendario: en Port Ainé, la temporada alta 2026-27 es del 26 al 30 de diciembre, el 2 y 3 de enero y los fines de semana de febrero.",
       "**Abonos que comparten estaciones.** El forfait Alp2500 vale para La Molina y Masella (145 km juntas); el Temporada Pallars, para Espot y Port Ainé; el Temporada Ripollès, para Vallter y la Vall de Núria.",
     ],
@@ -403,16 +418,16 @@ const COPY: Record<Locale, T> = {
     smallTitle: "Port del Comte y Tavascan",
     small: [
       "**Port del Comte**, en el Solsonès, ya vende el forfait de temporada 2026-27 (595 € adulto). En su web la temporada alta incluye todos los fines de semana, el 7 y 8 de diciembre, del 21 de diciembre al 28 de febrero de 2027 y del 22 al 29 de marzo de 2027.",
-      "**Tavascan** no abrió las pistas alpinas ni el telesilla en la temporada 2025-26 y, a 24 de octubre de 2026, su web no dice qué hará este invierno. El circuito nórdico (12,6 km) forma parte del Tot Nòrdic.",
+      "**Tavascan** no abrió las pistas alpinas ni el telesilla en la temporada 2025-26 y, a 24 de octubre de 2026, su web no dice qué hará este invierno. Su circuito nórdico, de unos doce kilómetros, es una de las siete estaciones de la Mancomunitat d'Esquí Nòrdic.",
     ],
     nordicTitle: "Esquí nórdico y raquetas",
     nordic: [
-      "Las siete estaciones de la Mancomunitat d'Esquí Nòrdic (Guils Fontanera, Aransa, Lles, Tuixent-La Vansa, Sant Joan de l'Erm, Tavascan y Virós-Vallferrera) comparten el forfait **Tot Nòrdic**: **175 €** para adultos en la temporada 2026-27 (esquí + raquetas) y **75 €** el de solo raquetas. Guils indica un descuento del 25 % hasta el 17 de noviembre.",
+      "Las siete estaciones de la Mancomunitat d'Esquí Nòrdic (Guils Fontanera, Aransa, Lles, Tuixent-La Vansa, Sant Joan de l'Erm, Tavascan y Virós-Vallferrera) comparten el forfait de temporada que vende Guils: **175 €** para adultos en la temporada 2026-27 (esquí + raquetas) y **75 €** el de solo raquetas, precios con el 25 % de descuento que Guils aplica hasta el 17 de noviembre.",
       `Si no esquías, mira ${b2link("snow", "es", "dónde ver nieve sin esquiar y las rutas con raquetas")}.`,
     ],
-    snowTitle: "Dónde mirar el estado de la nieve",
+    snowTitle: "Pistas abiertas hoy: dónde mirar el estado de la nieve",
     snow: [
-      "Cada estación publica a diario las pistas abiertas, el espesor de nieve y los remontes en marcha: Baqueira en la sección «Estado de la estación» de su web, las de FGC en «Infoneu» de pirineu365.cat, Masella y Port del Comte en su web. Míralo la misma mañana: a principio y final de temporada cambia de un día para otro.",
+      "Cada estación publica a diario las pistas abiertas, el espesor de nieve y los remontes en marcha: las seis de FGC (La Molina, Vall de Núria, Vallter, Espot, Port Ainé y Boí Taüll) en el [Infoneu de PIRINEU365](https://pirineu365.cat/infoneu-pirineu365/), Baqueira en «[Estado de la estación](https://www.baqueira.es/es/estado-de-la-estacion)» y Port del Comte en [su página de pistas](https://portdelcomte.net/pistes/); Masella tiene cámaras web. Antes de la apertura salen vacíos. Míralo la misma mañana: a principio y final de temporada cambia de un día para otro.",
       `Para saber si hay nieve en el suelo en la alta montaña, fuera de las pistas, mira ${b2link("snowNow", "es", "el espesor de nieve de hoy en las estaciones meteorológicas de Meteocat")}.`,
     ],
     pickTitle: "Qué estación elegir",
@@ -423,7 +438,7 @@ const COPY: Record<Locale, T> = {
       "**Aprender o ir con niños pequeños:** la Vall de Núria y Vallter son pequeñas y fáciles de controlar.",
     ],
     faq: [
-      { question: "¿Cuándo abren las estaciones de esquí de Cataluña en la temporada 2026-2027?", answer: "Baqueira Beret tiene previsto abrir el 28 de noviembre de 2026 y cerrar el 4 de abril de 2027, si la meteorología y la nieve lo permiten. Ninguna otra estación ha anunciado la fecha (consultado el 25 de octubre de 2026); la temporada pasada La Molina abrió el 29 de noviembre de 2025 y las demás estaciones de FGC, el 4 de diciembre." },
+      { question: "¿Cuándo abren las estaciones de esquí de Cataluña en la temporada 2026-2027?", answer: "Baqueira Beret tiene previsto abrir el 28 de noviembre de 2026 y cerrar el 4 de abril de 2027, si la meteorología y la nieve lo permiten. Ninguna otra estación ha anunciado la fecha (consultado el 28 de octubre de 2026); la temporada pasada La Molina abrió el 29 de noviembre de 2025 y las demás estaciones de FGC, el 4 de diciembre." },
       { question: "¿Cuánto cuesta el forfait de día en Cataluña en 2026-27?", answer: "Para un adulto, de 30 € (Vallter en temporada baja) a 74 € (Baqueira Beret). La Molina, 49 € online; Masella, 53 € online; Espot, 39 €; Port Ainé, de 42 a 46 €." },
       { question: "¿Cuál es la estación de esquí más grande de Cataluña?", answer: "Baqueira Beret, con 169 km de pistas balizadas. El dominio Alp2500 (La Molina + Masella) suma 145." },
       { question: "¿Se puede ir a esquiar en tren desde Barcelona?", answer: "Sí: a La Molina, que tiene estación en la R3, y a la Vall de Núria con la R3 y el Cremallera. Durante las obras de la R3 el tramo Barcelona–La Garriga se hace en autobús." },
@@ -435,20 +450,21 @@ const COPY: Record<Locale, T> = {
     tableTitle: "Catalonia's ski resorts compared, 2026-2027",
     tableCaption: "Alpine ski resorts in Catalonia: runs, adult day pass and car-free access",
     headers: ["Resort", "Area", "Km", "Altitude (m)", "Adult 1-day pass", "Without a car"],
-    tableNote: "Kilometres and altitudes from each resort's technical sheet. Prices from the rates pages, checked 24/10/2026: Baqueira labels them 'temporada 26-27' and the others already carry 2026-27 dates, except Boí Taüll. Port del Comte shows two tables with different amounts.",
-    openTitle: "When the slopes open in 2026-2027",
+    tableNote: "Kilometres and altitudes from each resort's technical sheet. Prices from the rates pages, checked 28/10/2026: Baqueira labels them 'temporada 26-27' and the others already carry 2026-27 dates, except Boí Taüll. Port del Comte shows two tables with different amounts.",
+    openTitle: "Opening dates for the 2026-2027 ski season",
     open: [
-      "**Baqueira Beret plans to open the 2026-2027 season on 28 November and close on 4 April 2027**, weather and snow permitting (the resort's own news item of 28 July 2026). No other Catalan resort has announced a date (checked 25 October 2026). Opening depends on snowfall and on nights cold enough to make snow.",
+      "**Baqueira Beret plans to open the 2026-2027 season on 28 November and close on 4 April 2027**, weather and snow permitting (the resort's own news item of 28 July 2026). No other Catalan resort has announced a date (checked 28 October 2026). Opening depends on snowfall and on nights cold enough to make snow.",
       "The markers: **Baqueira Beret** says in its FAQ that the season 'starts on the last weekend of November and ends after Easter', always weather permitting. **Port Ainé** counts season days in its rates from **1 December 2026 to 4 April 2027**.",
       "Last season, **La Molina** opened on **29 November 2025** and the other five FGC resorts on **4 December 2025**.",
     ],
     passTitle: "Season passes for 2026-2027",
     passCaption: "Adult season pass, 2026-2027 season",
     passHeaders: ["Resort or area", "Adult price"],
-    passNote: "Prices published on the official websites, checked 24/10/2026. 'Adult' age bands differ by resort (25 to 64 at the FGC resorts).",
+    passNote: "Prices published on the official websites, checked 28/10/2026. The La Molina, Boí Taüll and Ripollès offers are FGC's and end on 8 December. 'Adult' age bands differ by resort (25 to 64 at the FGC resorts).",
     pricesTitle: "Lift pass prices: what to know before you buy",
     prices: [
       "**Buy online.** At La Molina, Vallter, Espot and Boí Taüll the ticket office charges **€3 more** (**€5 more** at Port Ainé); Masella also adds €3. Baqueira sells day passes on its reloadable BaqueiraTICKET card, and with a BaqueiraPASS the adult day drops from €74 to €70.",
+      "**Children.** A child day pass costs €49 at Baqueira, €43 at Masella (online), €36 at La Molina and Boí Taüll, €30.50–33.50 at Port Ainé, €28.50 at Espot and €24–27.50 at Vallter; age bands differ by resort.",
       "**High and low season.** At Vallter and Port Ainé the day price follows a calendar: at Port Ainé, 2026-27 high season is 26–30 December, 2–3 January and the February weekends.",
       "**Passes that cover several resorts.** Alp2500 is valid at La Molina and Masella (145 km together); Temporada Pallars at Espot and Port Ainé; Temporada Ripollès at Vallter and Vall de Núria.",
     ],
@@ -466,16 +482,16 @@ const COPY: Record<Locale, T> = {
     smallTitle: "Port del Comte and Tavascan",
     small: [
       "**Port del Comte**, in the Solsonès, is already selling its 2026-27 season pass (€595 adult). Its high season covers every weekend, 7–8 December, 21 December to 28 February 2027 and 22–29 March 2027.",
-      "**Tavascan** did not open its alpine runs or chairlift in 2025-26 and, as of 24 October 2026, its website does not say what it will do this winter. Its 12.6 km cross-country circuit is part of Tot Nòrdic.",
+      "**Tavascan** did not open its alpine runs or chairlift in 2025-26 and, as of 24 October 2026, its website does not say what it will do this winter. Its cross-country circuit, about twelve kilometres, is one of the seven Mancomunitat d'Esquí Nòrdic stations.",
     ],
     nordicTitle: "Cross-country skiing and snowshoes",
     nordic: [
-      "The seven stations of the Mancomunitat d'Esquí Nòrdic (Guils Fontanera, Aransa, Lles, Tuixent-La Vansa, Sant Joan de l'Erm, Tavascan and Virós-Vallferrera) share the **Tot Nòrdic** pass: **€175** for adults in 2026-27 (skiing + snowshoes) and **€75** for snowshoes only. Guils lists a 25% discount until 17 November.",
+      "The seven stations of the Mancomunitat d'Esquí Nòrdic (Guils Fontanera, Aransa, Lles, Tuixent-La Vansa, Sant Joan de l'Erm, Tavascan and Virós-Vallferrera) share the season pass Guils sells: **€175** for adults in 2026-27 (skiing + snowshoes) and **€75** for snowshoes only, prices that include the 25% discount Guils applies until 17 November.",
       `Not a skier? See ${b2link("snow", "en", "where to see snow without skiing, with snowshoe routes")}.`,
     ],
-    snowTitle: "Where to check the snow",
+    snowTitle: "Open runs today: where to check the snow",
     snow: [
-      "Each resort posts open runs, snow depth and running lifts daily: Baqueira in the 'Estado de la estación' section of its website, the FGC resorts under 'Infoneu' on pirineu365.cat, Masella and Port del Comte on their websites. Check on the morning itself: at the start and end of the season it changes from one day to the next.",
+      "Each resort posts open runs, snow depth and running lifts daily: the six FGC resorts (La Molina, Vall de Núria, Vallter, Espot, Port Ainé and Boí Taüll) on [PIRINEU365's Infoneu](https://pirineu365.cat/infoneu-pirineu365/), Baqueira under '[Estado de la estación](https://www.baqueira.es/es/estado-de-la-estacion)' and Port del Comte on [its pistes page](https://portdelcomte.net/pistes/); Masella has webcams. Before opening they are empty. Check on the morning itself: at the start and end of the season it changes from one day to the next.",
       `To see whether there is snow on the ground in the high mountains away from the pistes, see ${b2link("snowNow", "en", "today's snow depth at Meteocat's weather stations")}.`,
     ],
     pickTitle: "Which resort to choose",
@@ -486,7 +502,7 @@ const COPY: Record<Locale, T> = {
       "**Learning, or with small children:** Vall de Núria and Vallter are small and easy to keep track of.",
     ],
     faq: [
-      { question: "When do Catalonia's ski resorts open for 2026-2027?", answer: "Baqueira Beret plans to open on 28 November 2026 and close on 4 April 2027, weather and snow permitting. No other resort has announced a date (checked 25 October 2026); last season La Molina opened on 29 November 2025 and the other FGC resorts on 4 December." },
+      { question: "When do Catalonia's ski resorts open for 2026-2027?", answer: "Baqueira Beret plans to open on 28 November 2026 and close on 4 April 2027, weather and snow permitting. No other resort has announced a date (checked 28 October 2026); last season La Molina opened on 29 November 2025 and the other FGC resorts on 4 December." },
       { question: "How much is a ski day pass in Catalonia in 2026-27?", answer: "For an adult, from €30 (Vallter, low season) to €74 (Baqueira Beret). La Molina is €49 online, Masella €53 online, Espot €39 and Port Ainé €42–46." },
       { question: "What is the biggest ski resort in Catalonia?", answer: "Baqueira Beret, with 169 km of marked runs. The Alp2500 area (La Molina + Masella) adds up to 145 km." },
       { question: "Can you go skiing by train from Barcelona?", answer: "Yes: to La Molina, which has a station on the R3, and to Vall de Núria with the R3 and the rack railway. During the R3 works the Barcelona–La Garriga stretch is by bus." },

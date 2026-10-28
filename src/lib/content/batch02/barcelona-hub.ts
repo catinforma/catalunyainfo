@@ -22,7 +22,7 @@ type Group = { title: string; items: [B2Key, string, string][] };
 const GROUPS: Record<Locale, { lead: string; intro: string; groups: Group[]; outro: string }> = {
   en: {
     lead: "Everything practical for a visit to Barcelona in one place: how to arrive, how to get around, what the big sights cost and when they are free, and the best day trips by train. Every figure comes from the operator or the City Council and is dated in the guide it links to.",
-    intro: `Start with the section you need. Visiting in December? See ${b2link("christmasBarcelona", "en", "Christmas in Barcelona")}.`,
+    intro: `Start with the section you need. Visiting in December? See ${b2link("christmasBarcelona", "en", "Christmas in Barcelona")} and ${b2link("christmas", "en", "the Christmas markets")}.`,
     groups: [
       {
         title: "Arriving",
@@ -72,7 +72,7 @@ const GROUPS: Record<Locale, { lead: string; intro: string; groups: Group[]; out
   },
   es: {
     lead: "Todo lo práctico para visitar Barcelona en un solo sitio: cómo llegar, cómo moverse, cuánto cuestan los grandes monumentos y cuándo son gratis, y las mejores excursiones en tren. Cada cifra sale del operador o del Ayuntamiento y está fechada en la guía que enlaza.",
-    intro: `Empieza por el apartado que necesites. ¿Vienes en diciembre? Mira ${b2link("christmasBarcelona", "es", "Navidad en Barcelona")}.`,
+    intro: `Empieza por el apartado que necesites. ¿Vienes en diciembre? Mira ${b2link("christmasBarcelona", "es", "Navidad en Barcelona")} y ${b2link("christmas", "es", "los mercados de Navidad")}.`,
     groups: [
       {
         title: "Llegar",
@@ -122,7 +122,7 @@ const GROUPS: Record<Locale, { lead: string; intro: string; groups: Group[]; out
   },
   ca: {
     lead: "Tot el que és pràctic per visitar Barcelona en un sol lloc: com arribar-hi, com moure's, quant costen els grans monuments i quan són gratis, i les millors excursions en tren. Cada xifra surt de l'operador o de l'Ajuntament i està datada a la guia que enllaça.",
-    intro: `Comença per l'apartat que necessitis. Vens al desembre? Mira ${b2link("christmasBarcelona", "ca", "Nadal a Barcelona")}.`,
+    intro: `Comença per l'apartat que necessitis. Vens al desembre? Mira ${b2link("christmasBarcelona", "ca", "Nadal a Barcelona")} i ${b2link("christmas", "ca", "els mercats de Nadal")}.`,
     groups: [
       {
         title: "Arribar",

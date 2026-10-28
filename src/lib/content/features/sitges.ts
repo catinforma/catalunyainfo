@@ -1,4 +1,5 @@
 import type { Block } from "@/lib/content/blocks";
+import { b2link } from "@/lib/content/batch02/shared";
 import {
   ARTICLE_PATHS,
   h2,
@@ -119,7 +120,7 @@ function ca(): Block[] {
       "Com arribar-hi des de Barcelona",
       "El tren és una de les opcions més pràctiques. Sitges té estació de Rodalies, a la línia R2 Sud, i el centre es recorre a peu.",
       "La planificació del **retorn** és el que més sovint es descuida: les sessions de nit acaben tard i l'últim tren no espera ningú. Comprova l'horari de tornada abans de comprar una entrada de sessió nocturna, i no et refiïs d'horaris d'edicions anteriors.",
-      `Horaris oficials: [rodalies.gencat.cat](${RODALIES}). Si vols fer-ne una escapada de dia, ${link("trains", "ca", "Sitges també encapçala la nostra llista d'escapades en tren")}.`,
+      `Horaris oficials: [rodalies.gencat.cat](${RODALIES}). Freqüència, preu i hora de l'últim tren de tornada, a ${b2link("sitges", "ca", "la guia del tren de Barcelona a Sitges")}. Si vols fer-ne una escapada de dia, ${link("trains", "ca", "Sitges també encapçala la nostra llista d'escapades en tren")}.`,
     ),
     ...h2(
       "Val la pena anar-hi sense entrada?",
@@ -208,7 +209,7 @@ function es(): Block[] {
       "Cómo llegar desde Barcelona",
       "El tren es una de las opciones más prácticas. Sitges tiene estación de Rodalies, en la línea R2 Sud, y el centro se recorre a pie.",
       "Lo que más se descuida es la **vuelta**: las sesiones nocturnas terminan tarde y el último tren no espera. Comprueba el horario de regreso antes de comprar una entrada de noche, y no te fíes de horarios de ediciones anteriores.",
-      `Horarios oficiales: [rodalies.gencat.cat](${RODALIES}). Si quieres convertirlo en escapada de día, ${link("trains", "es", "Sitges también encabeza nuestra lista de escapadas en tren")}.`,
+      `Horarios oficiales: [rodalies.gencat.cat](${RODALIES}). Frecuencia, precio y hora del último tren de vuelta, en ${b2link("sitges", "es", "la guía del tren de Barcelona a Sitges")}. Si quieres convertirlo en escapada de día, ${link("trains", "es", "Sitges también encabeza nuestra lista de escapadas en tren")}.`,
     ),
     ...h2(
       "¿Merece la pena ir sin entrada?",
@@ -291,7 +292,7 @@ function en(): Block[] {
       "Getting there from Barcelona",
       "Commuter rail is the practical option. Sitges is on Rodalies line R2 Sud, and the town centre is walkable from the station.",
       "The **return** is what people forget. Late screenings finish late and the last train does not wait. Check return times before booking an evening screening, and do not rely on special timetables from previous editions.",
-      `Official timetables: [rodalies.gencat.cat](${RODALIES}). Sitges also tops ${link("trains", "en", "our list of day trips by train")} if you want to visit outside festival season.`,
+      `Official timetables: [rodalies.gencat.cat](${RODALIES}). Frequency, fares and the time of the last train back are in ${b2link("sitges", "en", "our Barcelona to Sitges train guide")}. Sitges also tops ${link("trains", "en", "our list of day trips by train")} if you want to visit outside festival season.`,
     ),
     ...h2(
       "Is it worth going without a ticket?",

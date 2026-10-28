@@ -168,3 +168,16 @@ test("Catalan locations are kept, structured or as a known municipality", () => 
   assert.equal(isInCatalonia({ comarca_i_municipi: "sant-cugat-del-valles" }, NAMES), true);
   assert.equal(isInCatalonia({ comarca_i_municipi: "manresa" }, NAMES), false, "unknown to this test's register");
 });
+
+test("the live title names the weekend the block lists, and fits the title budget", async () => {
+  const { weekendTitle } = await import("../src/lib/content/live-title.ts");
+  const window = weekendWindow("2026-10-28");
+  assert.deepEqual(window, { from: "2026-10-30", to: "2026-11-01", long: false });
+  assert.equal(weekendTitle("ca", window), "Què fer aquest cap de setmana a Catalunya (30 oct–1 nov)");
+  assert.equal(weekendTitle("es", window), "Qué hacer este fin de semana en Cataluña (30 oct–1 nov)");
+  assert.equal(weekendTitle("en", window), "Things to do in Catalonia this weekend (30 Oct–1 Nov)");
+  assert.equal(weekendTitle("ca", weekendWindow("2026-10-07")), "Què fer aquest cap de setmana a Catalunya (9–12 oct)");
+  for (const locale of ["ca", "es", "en"] as const) {
+    assert.ok(weekendTitle(locale, window).length <= 60, locale);
+  }
+});

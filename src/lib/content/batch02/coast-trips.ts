@@ -2,6 +2,7 @@ import type { Locale } from "@/lib/i18n/config";
 import { link } from "@/lib/content/features/shared";
 
 import {
+  b2link,
   b2Related,
   callout,
   faq,
@@ -40,15 +41,26 @@ import {
  * read on 24 Oct 2026. The Tarragona open days changed since the first
  * version: the UNESCO-anniversary free days are 14, 15 and 28 November, and
  * the sites are closed on Sunday 29 November (general election).
+ *
+ * 28 Oct 2026 (research_notes/page1-28oct/sitges_tarragona_trains.md): all
+ * re-read. Fixed: the Sitges :06/:15/:36/:45 pattern starts at 6:06, not
+ * 6:36; at weekends only the 6:15 is missing. The last Tarragona -> Sants
+ * train is 21:56 every day to 1 Nov and 22:26 every day from 2 Nov (planner,
+ * checked to 23 Nov), not a weekday/weekend split. The museum lists the
+ * last Tuesday and 14, 15 and 28 Nov as "jornades de portes obertes" without
+ * saying admission is free, so the page says "open days". "Downhill from
+ * the station" dropped (no official source). Added: ATM zoning makes
+ * Barcelona-Sitges 3 zones on a T-casual (34.70 EUR / 10 trips, atm.cat).
  */
 
-const VERIFIED = "2026-10-24";
+const VERIFIED = "2026-10-28";
 
 const SITGES_SOURCES: B2Source[] = [
   { name: "Cercador d'horaris de Rodalies", url: "https://rodalies.gencat.cat/ca/horaris/", publisher: "Rodalies de Catalunya" },
   { name: "Horaris R2 (Rodalies de Catalunya)", url: "https://rodalies.gencat.cat/web/.content/02_Horaris/horaris/R2.pdf", publisher: "Rodalies de Catalunya" },
   { name: "Tarifes: només Rodalies (servei de rodalia de Barcelona)", url: "https://rodalies.gencat.cat/ca/tarifes/servei_rodalia_barcelona/nomes_rodalies/", publisher: "Rodalies de Catalunya" },
   { name: "Mapa de zones del servei de rodalia de Barcelona", url: "https://rodalies.gencat.cat/web/.content/00_home/04_mapes/mapa_rodalia_barcelona.pdf", publisher: "Rodalies de Catalunya" },
+  { name: "T-casual", url: "https://www.atm.cat/titols-i-tarifes/t-casual", publisher: "ATM Àrea de Barcelona" },
   { name: "Museus de Sitges — horaris", url: "https://museusdesitges.cat/ca/horaris", publisher: "Consorci del Patrimoni de Sitges" },
   { name: "Museus de Sitges — tarifes", url: "https://museusdesitges.cat/ca/tarifes", publisher: "Consorci del Patrimoni de Sitges" },
   { name: "Oficines de turisme de Sitges", url: "https://www.sitgesanytime.com/planifica/oficines-de-turisme/", publisher: "Ajuntament de Sitges" },
@@ -99,7 +111,7 @@ type SitgesT = {
   lead: string;
   factsTitle: string; facts: { label: string; value: string }[];
   tableCaption: string; headers: string[]; rows: string[][]; tableNote: string;
-  timesTitle: string; times: string[];
+  timesTitle: string; times: string[]; backTitle: string;
   fareTitle: string; fare: string[];
   stationsTitle: string; stations: string[];
   museumsTitle: string; museums: string[]; townTitle: string; town: string[];
@@ -128,19 +140,21 @@ const SITGES_COPY: Record<Locale, SitgesT> = {
     tableNote: "Official Rodalies journey planner for 27 and 31 October and 1 November 2026 (R2 timetable of 1 September 2026). The last train from Sitges to all three stations leaves at 22:22.",
     timesTitle: "Barcelona to Sitges train times",
     times: [
-      "From Sants, trains to Sitges leave at **:06, :15, :36 and :45** past each hour from 6:36 to 21:45. The :06 and :36 trains are semi-fast (31 minutes); the :15 and :45 call at every station (37 minutes). After 22:06 there is one every half hour until the last at 0:06; the first of the day leaves at 5:45. Saturdays, Sundays and holidays follow the same pattern, minus a couple of early-morning trains.",
+      "From Sants, trains to Sitges leave at **:06, :15, :36 and :45** past each hour from 6:06 to 21:45. The :06 and :36 trains are semi-fast (31 minutes); the :15 and :45 call at every station (37 minutes). After 22:06 there is one every half hour until the last at 0:06; the first of the day leaves at 5:45. Saturdays, Sundays and holidays follow the same pattern, except for the 6:15 from Sants.",
       "Coming back, there are also four trains an hour from Sitges to Barcelona, at about :15, :29, :45 and :59 until mid-afternoon and :15, :27, :45 and :57 from 15:45. The first leaves at 4:51 and **the last at 22:22**: there are later trains from Barcelona to Sitges, but none back after that, so plan dinner around it.",
     ],
+    backTitle: "Sitges to Barcelona train times and the last train back",
     fareTitle: "How much is the train to Sitges?",
     fare: [
       "Sitges is in **zone 4** of the Rodalies Barcelona fare map, so a trip from any Barcelona station costs **€5.50 single** and **€11 return** (a return is simply two singles). A single is valid for two hours after you validate it.",
       "If you go often: a **Bonotren 10-trip** ticket for 4 zones costs €35.80, is valid for a year and can be shared by people making the same journey; Rodalies' **€20 monthly pass** gives unlimited travel on a Renfe&Tu card and is on sale until 31 December 2026. Children under 4 travel free if they do not take a seat, and the Targeta Daurada (over-60s and some disability cards) takes 40% off singles and returns.",
+      "With an integrated ATM ticket the count is different: in the ATM system Barcelona–Sitges is **3 zones**, so a **T-casual** for 3 zones (10 trips, €34.70) works out at €3.47 a trip; it can be used by one person at a time, not by several together.",
       "Buy at the machines in the station or in the Renfe or Rodalies app before boarding.",
     ],
     stationsTitle: "Stations: where to catch it and where it leaves you",
     stations: [
       "In Barcelona the R2 Sud stops at **Estació de França, Passeig de Gràcia and Sants**; Sants is the quickest. Not every R2 train goes that far: some end at Castelldefels, so check that Sitges is on the departure board.",
-      "Only the R2 Sud stops at Sitges. The regional trains R15, R16 and R17 also leave Sants southbound and stop at Vilanova i la Geltrú, but run through Sitges without stopping. Sitges station is in town: the tourist office is right next to it at Plaça Eduard Maristany 2, and the old town and the beach are downhill from there.",
+      "Only the R2 Sud stops at Sitges. The regional trains R15, R16 and R17 also leave Sants southbound and stop at Vilanova i la Geltrú, but run through Sitges without stopping. Sitges station is in town, and the tourist office is right next to it at Plaça Eduard Maristany 2.",
     ],
     museumsTitle: "Cau Ferrat and Maricel",
     museums: [
@@ -163,6 +177,7 @@ const SITGES_COPY: Record<Locale, SitgesT> = {
       { question: "When is the last train from Sitges to Barcelona?", answer: "22:22, every day, on the timetable in force since 1 September 2026. The last train from Sants to Sitges leaves later, at 0:06." },
       { question: "How often do trains run from Barcelona to Sitges?", answer: "Four an hour during the day (at :06, :15, :36 and :45 from Sants), and every half hour after 22:00." },
       { question: "Which station does the Sitges train leave from?", answer: "Sants, Passeig de Gràcia or Estació de França, on the R2 Sud. The regional trains from Sants do not stop at Sitges." },
+      { question: "Can I use a T-casual to Sitges?", answer: "Yes: Barcelona–Sitges is 3 zones in the ATM integrated system, so you need a 3-zone T-casual (€34.70 for 10 trips). Rodalies' own single ticket counts it as 4 zones, €5.50." },
       { question: "Are the Sitges museums free?", answer: "On the first Wednesday of every month, and always for under-17s. Otherwise the Cau Ferrat and Maricel ticket costs €12." },
     ],
     note: "Rodalies can change services for works or incidents: check the Rodalies app on the day.",
@@ -188,19 +203,21 @@ const SITGES_COPY: Record<Locale, SitgesT> = {
     tableNote: "Planificador oficial de Rodalies para el 27 y el 31 de octubre y el 1 de noviembre de 2026 (horario de la R2 del 1 de septiembre de 2026). El último tren de Sitges hacia las tres estaciones sale a las 22:22.",
     timesTitle: "Horarios del tren de Barcelona a Sitges",
     times: [
-      "Desde Sants salen trenes a Sitges a los minutos **:06, :15, :36 y :45** de cada hora, de 6:36 a 21:45. Los de :06 y :36 son semidirectos (31 minutos); los de :15 y :45 paran en todas las estaciones (37 minutos). A partir de las 22:06 hay uno cada media hora hasta el último, a las 0:06; el primero del día sale a las 5:45. Sábados, domingos y festivos siguen el mismo patrón, con algún tren menos a primera hora.",
+      "Desde Sants salen trenes a Sitges a los minutos **:06, :15, :36 y :45** de cada hora, de 6:06 a 21:45. Los de :06 y :36 son semidirectos (31 minutos); los de :15 y :45 paran en todas las estaciones (37 minutos). A partir de las 22:06 hay uno cada media hora hasta el último, a las 0:06; el primero del día sale a las 5:45. Sábados, domingos y festivos siguen el mismo patrón, salvo el tren de las 6:15 desde Sants.",
       "De vuelta también hay cuatro trenes por hora de Sitges a Barcelona, hacia :15, :29, :45 y :59 hasta media tarde y :15, :27, :45 y :57 a partir de las 15:45. El primero sale a las 4:51 y **el último a las 22:22**: de Barcelona a Sitges hay trenes más tarde, pero de vuelta ya no, así que organiza la cena en función de eso.",
     ],
+    backTitle: "Horarios del tren de Sitges a Barcelona y último tren de vuelta",
     fareTitle: "¿Cuánto cuesta el tren a Sitges?",
     fare: [
       "Sitges está en la **zona 4** del mapa de tarifas de Rodalies de Barcelona, así que un viaje desde cualquier estación de Barcelona cuesta **5,50 € el sencillo** y **11 € ida y vuelta** (la ida y vuelta es el doble del sencillo). El sencillo vale durante las dos horas siguientes a la validación.",
       "Si vas a menudo: el **Bonotren 10 viajes** de 4 zonas cuesta 35,80 €, vale un año y lo pueden usar varias personas con el mismo origen y destino; el **abono mensual de Rodalies de 20 €** da viajes ilimitados en la tarjeta Renfe&Tu y se vende hasta el 31 de diciembre de 2026. Los menores de 4 años viajan gratis si no ocupan asiento, y la Tarjeta Dorada (mayores de 60 y algunas discapacidades) descuenta un 40 % en sencillos e idas y vueltas.",
+      "Con un billete integrado de la ATM la cuenta cambia: en el sistema de la ATM, Barcelona–Sitges son **3 zonas**, así que una **T-casual** de 3 zonas (10 viajes, 34,70 €) sale a 3,47 € el viaje; la puede usar una sola persona cada vez, no varias a la vez.",
       "Compra en las máquinas de la estación o en la app de Renfe o de Rodalies antes de subir.",
     ],
     stationsTitle: "Estaciones: dónde coger el tren y dónde te deja",
     stations: [
       "En Barcelona la R2 Sud para en **Estació de França, Passeig de Gràcia y Sants**; desde Sants es más rápido. No todos los trenes R2 llegan tan lejos: algunos terminan en Castelldefels, así que comprueba que Sitges aparece en el panel de salidas.",
-      "Solo la R2 Sud para en Sitges. Los regionales R15, R16 y R17 también salen de Sants hacia el sur y paran en Vilanova i la Geltrú, pero pasan por Sitges sin parar. La estación de Sitges está en el pueblo: la oficina de turismo está justo al lado, en la plaza Eduard Maristany, 2, y el casco antiguo y la playa quedan cuesta abajo.",
+      "Solo la R2 Sud para en Sitges. Los regionales R15, R16 y R17 también salen de Sants hacia el sur y paran en Vilanova i la Geltrú, pero pasan por Sitges sin parar. La estación de Sitges está en el pueblo, y la oficina de turismo está justo al lado, en la plaza Eduard Maristany, 2.",
     ],
     museumsTitle: "Cau Ferrat y Maricel",
     museums: [
@@ -223,6 +240,7 @@ const SITGES_COPY: Record<Locale, SitgesT> = {
       { question: "¿A qué hora sale el último tren de Sitges a Barcelona?", answer: "A las 22:22, todos los días, según el horario vigente desde el 1 de septiembre de 2026. El último de Sants a Sitges sale más tarde, a las 0:06." },
       { question: "¿Cada cuánto pasa el tren de Barcelona a Sitges?", answer: "Cuatro por hora durante el día (a :06, :15, :36 y :45 desde Sants) y cada media hora a partir de las 22:00." },
       { question: "¿Desde qué estación sale el tren a Sitges?", answer: "Desde Sants, Passeig de Gràcia o Estació de França, en la R2 Sud. Los regionales que salen de Sants no paran en Sitges." },
+      { question: "¿Sirve la T-casual para ir a Sitges?", answer: "Sí: Barcelona–Sitges son 3 zonas en el sistema integrado de la ATM, así que hace falta una T-casual de 3 zonas (34,70 € los 10 viajes). El billete sencillo de Rodalies lo cuenta como 4 zonas, 5,50 €." },
       { question: "¿Los museos de Sitges son gratis?", answer: "El primer miércoles de cada mes, y siempre para menores de 17. Si no, la entrada al Cau Ferrat y Maricel cuesta 12 €." },
     ],
     note: "Rodalies puede cambiar el servicio por obras o incidencias: mira la app de Rodalies el mismo día.",
@@ -248,19 +266,21 @@ const SITGES_COPY: Record<Locale, SitgesT> = {
     tableNote: "Cercador oficial de Rodalies per al 27 i el 31 d'octubre i l'1 de novembre de 2026 (horari de l'R2 de l'1 de setembre de 2026). L'últim tren de Sitges cap a les tres estacions surt a les 22:22.",
     timesTitle: "Horaris del tren de Barcelona a Sitges",
     times: [
-      "Des de Sants surten trens cap a Sitges als minuts **:06, :15, :36 i :45** de cada hora, de 6:36 a 21:45. Els de :06 i :36 són semidirectes (31 minuts); els de :15 i :45 paren a totes les estacions (37 minuts). A partir de les 22:06 n'hi ha un cada mitja hora fins a l'últim, a les 0:06; el primer del dia surt a les 5:45. Dissabtes, diumenges i festius segueixen el mateix patró, amb algun tren menys a primera hora.",
+      "Des de Sants surten trens cap a Sitges als minuts **:06, :15, :36 i :45** de cada hora, de 6:06 a 21:45. Els de :06 i :36 són semidirectes (31 minuts); els de :15 i :45 paren a totes les estacions (37 minuts). A partir de les 22:06 n'hi ha un cada mitja hora fins a l'últim, a les 0:06; el primer del dia surt a les 5:45. Dissabtes, diumenges i festius segueixen el mateix patró, llevat del tren de les 6:15 des de Sants.",
       "De tornada també hi ha quatre trens per hora de Sitges a Barcelona, cap a :15, :29, :45 i :59 fins a mitja tarda i :15, :27, :45 i :57 a partir de les 15:45. El primer surt a les 4:51 i **l'últim a les 22:22**: de Barcelona a Sitges hi ha trens més tard, però de tornada ja no, així que organitza el sopar en funció d'això.",
     ],
+    backTitle: "Horaris del tren de Sitges a Barcelona i últim tren de tornada",
     fareTitle: "Quant costa el tren a Sitges?",
     fare: [
       "Sitges és a la **zona 4** del mapa de tarifes de Rodalies de Barcelona, així que un viatge des de qualsevol estació de Barcelona costa **5,50 € el senzill** i **11 € anada i tornada** (l'anada i tornada és el doble del senzill). El senzill val durant les dues hores següents a la validació.",
       "Si hi vas sovint: el **Bonotren 10 viatges** de 4 zones costa 35,80 €, val un any i el poden fer servir diverses persones amb el mateix origen i destinació; l'**abonament mensual de Rodalies de 20 €** dona viatges il·limitats a la targeta Renfe&Tu i es ven fins al 31 de desembre de 2026. Els menors de 4 anys viatgen gratis si no ocupen seient, i la Targeta Daurada (majors de 60 i algunes discapacitats) descompta un 40 % en senzills i anades i tornades.",
+      "Amb un bitllet integrat de l'ATM el compte canvia: al sistema de l'ATM, Barcelona–Sitges són **3 zones**, així que una **T-casual** de 3 zones (10 viatges, 34,70 €) surt a 3,47 € el viatge; la pot fer servir una sola persona cada cop, no diverses alhora.",
       "Compra a les màquines de l'estació o a l'app de Renfe o de Rodalies abans de pujar.",
     ],
     stationsTitle: "Estacions: on agafar el tren i on et deixa",
     stations: [
       "A Barcelona l'R2 Sud para a l'**Estació de França, Passeig de Gràcia i Sants**; des de Sants és més ràpid. No tots els trens R2 arriben tan lluny: alguns acaben a Castelldefels, així que comprova que Sitges surt al panell de sortides.",
-      "Només l'R2 Sud para a Sitges. Els regionals R15, R16 i R17 també surten de Sants cap al sud i paren a Vilanova i la Geltrú, però passen per Sitges sense parar. L'estació de Sitges és al poble: l'oficina de turisme és just al costat, a la plaça Eduard Maristany, 2, i el nucli antic i la platja queden baixada avall.",
+      "Només l'R2 Sud para a Sitges. Els regionals R15, R16 i R17 també surten de Sants cap al sud i paren a Vilanova i la Geltrú, però passen per Sitges sense parar. L'estació de Sitges és al poble, i l'oficina de turisme és just al costat, a la plaça Eduard Maristany, 2.",
     ],
     museumsTitle: "Cau Ferrat i Maricel",
     museums: [
@@ -283,11 +303,19 @@ const SITGES_COPY: Record<Locale, SitgesT> = {
       { question: "A quina hora surt l'últim tren de Sitges a Barcelona?", answer: "A les 22:22, cada dia, segons l'horari vigent des de l'1 de setembre de 2026. L'últim de Sants a Sitges surt més tard, a les 0:06." },
       { question: "Cada quant passa el tren de Barcelona a Sitges?", answer: "Quatre per hora durant el dia (a :06, :15, :36 i :45 des de Sants) i cada mitja hora a partir de les 22:00." },
       { question: "Des de quina estació surt el tren a Sitges?", answer: "Des de Sants, Passeig de Gràcia o l'Estació de França, amb l'R2 Sud. Els regionals que surten de Sants no paren a Sitges." },
+      { question: "Serveix la T-casual per anar a Sitges?", answer: "Sí: Barcelona–Sitges són 3 zones al sistema integrat de l'ATM, així que cal una T-casual de 3 zones (34,70 € els 10 viatges). El bitllet senzill de Rodalies ho compta com a 4 zones, 5,50 €." },
       { question: "Els museus de Sitges són gratis?", answer: "El primer dimecres de cada mes, i sempre per als menors de 17. Si no, l'entrada al Cau Ferrat i Maricel costa 12 €." },
     ],
     note: "Rodalies pot canviar el servei per obres o incidències: mira l'app de Rodalies el mateix dia.",
     more: `Més escapades en tren des de Barcelona: ${link("trains", "ca", "12 escapades per Catalunya que pots fer en tren")}.`,
   },
+};
+
+// Strikes change the R2 Sud service; the hub says what runs that day.
+const SITGES_STRIKES: Record<Locale, string> = {
+  ca: ` Els dies de vaga, mira ${b2link("strikes", "ca", "què funciona")}.`,
+  es: ` Los días de huelga, mira ${b2link("strikes", "es", "qué funciona")}.`,
+  en: ` On strike days, see ${b2link("strikes", "en", "what runs")}.`,
 };
 
 function sitgesBody(locale: Locale) {
@@ -296,8 +324,9 @@ function sitgesBody(locale: Locale) {
     lead(t.lead),
     keyFacts(t.factsTitle, t.facts),
     table(t.tableCaption, t.headers, t.rows, t.tableNote),
-    callout("official", verifiedLine(locale, VERIFIED), t.note),
-    ...h2(t.timesTitle, ...t.times),
+    callout("official", verifiedLine(locale, VERIFIED), t.note + SITGES_STRIKES[locale]),
+    ...h2(t.timesTitle, t.times[0] ?? ""),
+    ...h2(t.backTitle, ...t.times.slice(1)),
     ...h2(t.fareTitle, ...t.fare),
     ...h2(t.stationsTitle, ...t.stations),
     ...h2(t.museumsTitle, ...t.museums),
@@ -322,9 +351,9 @@ export const SITGES: B2Article = {
     en: "Sitges' Platja de la Fragata with palm trees and the church of Sant Bartomeu i Santa Tecla behind",
   },
   heroCaption: {
-    ca: "La platja de la Fragata i l'església, a poca distància a peu de l'estació.",
-    es: "La playa de la Fragata y la iglesia, a poca distancia a pie de la estación.",
-    en: "Platja de la Fragata and the church, a short walk from the station.",
+    ca: "La platja de la Fragata i l'església de Sant Bartomeu i Santa Tecla, a Sitges.",
+    es: "La playa de la Fragata y la iglesia de Sant Bartomeu i Santa Tecla, en Sitges.",
+    en: "Platja de la Fragata and the church of Sant Bartomeu i Santa Tecla in Sitges.",
   },
   secondaryKey: "sitges-cau-ferrat-facana",
   secondaryAlt: {
@@ -354,7 +383,7 @@ const TARRAGONA_META: Record<Locale, Meta> = {
     title: "Tarragona des de Barcelona en tren: horaris, preu i la Tàrraco romana en un dia",
     seoTitle: "Tarragona des de Barcelona en tren: horaris, preu i Tàrraco",
     seoDescription:
-      "Regionals de Sants a Tarragona en 69 minuts, dos per hora, 8,60 € el senzill. Entrada conjunta als cinc recintes romans per 15 €, horaris i dies gratis.",
+      "Regionals de Sants a Tarragona en 69 minuts, dos per hora, 8,60 € el senzill. Entrada conjunta als cinc recintes romans per 15 €, horaris i portes obertes.",
     excerpt: "Com anar a Tarragona en tren des de Barcelona i veure la Tàrraco romana en un dia: horaris, preu del bitllet, entrada conjunta i dies de portes obertes.",
   },
   es: {
@@ -362,7 +391,7 @@ const TARRAGONA_META: Record<Locale, Meta> = {
     title: "Tarragona desde Barcelona en tren: horarios, precio y la Tarraco romana en un día",
     seoTitle: "Tren Barcelona–Tarragona: horarios, precio y Tarraco",
     seoDescription:
-      "Regionales de Sants a Tarragona en 69 minutos, dos por hora, 8,60 € el sencillo. Entrada conjunta a los 5 recintos romanos: 15 €. Horarios y días gratis.",
+      "Regionales de Sants a Tarragona en 69 minutos, dos por hora, 8,60 € el sencillo. Entrada conjunta a los 5 recintos romanos: 15 €. Horarios y puertas abiertas.",
     excerpt: "Cómo ir a Tarragona en tren desde Barcelona y ver la Tarraco romana en un día: horarios, precio del billete, entrada conjunta y jornadas de puertas abiertas.",
   },
   en: {
@@ -370,8 +399,8 @@ const TARRAGONA_META: Record<Locale, Meta> = {
     title: "Tarragona from Barcelona by train: times, fares and Roman Tarraco in a day",
     seoTitle: "Barcelona to Tarragona train: times, fares, Roman sites",
     seoDescription:
-      "Regional trains from Sants reach Tarragona in 69 minutes, twice an hour, €8.60 single. A €15 combined ticket covers all five Roman sites. Hours, free days.",
-    excerpt: "How to reach Tarragona by train from Barcelona and see Roman Tarraco in a day: train times, fares, the combined ticket and free open days.",
+      "Regional trains from Sants reach Tarragona in 69 minutes, twice an hour, €8.60 single. A €15 combined ticket covers all five Roman sites. Hours, open days.",
+    excerpt: "How to reach Tarragona by train from Barcelona and see Roman Tarraco in a day: train times, fares, the combined ticket and the museum's open days.",
   },
 };
 
@@ -389,7 +418,7 @@ const TARRAGONA_COPY: Record<Locale, TarragonaT> = {
     lead: "The train from Barcelona to Tarragona takes **69 minutes from Sants**, with a regional train at **:03 and :33 past the hour** and a **€8.60 single**. Tarragona was Tarraco, capital of Roman Hispania Citerior: its amphitheatre, circus, walls and forum are a UNESCO World Heritage site, and a **€15 combined ticket** opens all five Roman sites.",
     trainTitle: "Barcelona to Tarragona train times",
     train: [
-      "The regional lines **R14, R15, R16 and R17** all run from Estació de França, Passeig de Gràcia and Sants to Tarragona station, in the city by the sea. On weekdays there are 32 trains from Sants, from 6:03 to 22:03; on Saturdays about 26. Back, trains leave Tarragona at about :26 and :56 past the hour, the last at 22:26 on weekdays and 21:56 at weekends.",
+      "The regional lines **R14, R15, R16 and R17** all run from Estació de França, Passeig de Gràcia and Sants to Tarragona station, in the city by the sea. From Sants, trains leave at :03 and :33 past the hour from 6:03 to 22:03; a few hours have only one. Back, trains leave Tarragona at about :26 and :56 past the hour; the last leaves at 22:26 (21:56 until 1 November 2026).",
       "Do not confuse it with **Camp de Tarragona**, the high-speed station outside the city. The commuter R2 Sud ends at Sant Vicenç de Calders and does not reach Tarragona. Buy at the machine or in the Renfe app: the regional single from Barcelona costs €8.60.",
     ],
     trainCaption: "Barcelona to Tarragona by regional train",
@@ -398,9 +427,9 @@ const TARRAGONA_COPY: Record<Locale, TarragonaT> = {
       ["Barcelona-Sants", "69 min", ":03 and :33, 6:03–22:03", "€8.60"],
       ["Passeig de Gràcia", "76 min", "7 minutes before Sants", "€8.60"],
       ["Estació de França", "87 min", "18 minutes before Sants", "€8.60"],
-      ["Back from Tarragona to Sants", "71 min", ":26 and :56, last 22:26 (21:56 at weekends)", "€8.60"],
+      ["Back from Tarragona to Sants", "71 min", ":26 and :56, last 22:26 (21:56 until 1 Nov)", "€8.60"],
     ],
-    trainNote: "Official Rodalies journey planner for 27 and 31 October and 1 November 2026 (R15 timetable of 13 October 2026). A few hours have only one train.",
+    trainNote: "Official Rodalies journey planner, read on 28 October 2026 for dates to 23 November (R15 timetable of 13 October 2026). A few hours have only one train.",
     sitesTitle: "The Roman sites and the combined ticket",
     sites: [
       "The city's history museum runs five Roman sites: the **Amphitheatre**, the **Circus with the Praetorium**, the **Archaeological Promenade** along the walls, the **Colonial Forum** and **Casa Canals**. A single site costs **€5**; the **combined ticket for all five costs €15**. Under-12s go free; ages 12 to 17, students and retired people pay half; a large family pays one ticket for everyone.",
@@ -412,8 +441,8 @@ const TARRAGONA_COPY: Record<Locale, TarragonaT> = {
       ["Circus–Praetorium, Casa Canals", "9:00–20:00", "9:30–20:00", "9:30–14:30"],
     ],
     tableNote: "All closed on Mondays except scheduled holidays. Last entry 30 minutes before closing. Closed on 29 November, 24, 25, 26 and 31 December and 1 and 6 January; mornings only on 8 December.",
-    freeTitle: "Free days",
-    free: "The Roman sites are free on the **last Tuesday of every month**, and on **14, 15 and 28 November** for the anniversary of the UNESCO listing. The Roman aqueduct (Pont del Diable), outside the centre, is always free.",
+    freeTitle: "Open days, and what is always free",
+    free: "The museum lists **open days** ('jornades de portes obertes') on the **last Tuesday of every month** and on **14, 15 and 28 November 2026** for the anniversary of the UNESCO listing; its hours page does not say whether admission is free on them, so check tarragona.cat/patrimoni before you go. The Roman aqueduct (Aqüeducte de les Ferreres, or Pont del Diable), outside the centre, is always free.",
     mnatTitle: "The archaeological museum",
     mnat: "The Museu Nacional Arqueològic de Tarragona on Plaça del Rei is **closed for renovation**; the museum plans to reopen it in the last quarter of 2026. Check mnat.cat before planning around it.",
     planTitle: "A day in Tarragona",
@@ -426,7 +455,7 @@ const TARRAGONA_COPY: Record<Locale, TarragonaT> = {
       { question: "How long is the train from Barcelona to Tarragona?", answer: "69 minutes from Barcelona-Sants on the regional trains R14 to R17, 76 from Passeig de Gràcia and 87 from Estació de França." },
       { question: "How much is the train from Barcelona to Tarragona?", answer: "€8.60 single on the regional trains, according to the official Rodalies planner in October 2026." },
       { question: "Is there a combined ticket for Tarragona's Roman sites?", answer: "Yes: €15 for all five (Amphitheatre, Circus–Praetorium, Archaeological Promenade, Colonial Forum and Casa Canals), or €5 for one. Under-12s free." },
-      { question: "When are Tarragona's Roman sites free?", answer: "On the last Tuesday of every month, and on 14, 15 and 28 November 2026 for the UNESCO anniversary." },
+      { question: "Are Tarragona's Roman sites ever free?", answer: "The Roman aqueduct (Pont del Diable) is always free. The museum lists open days on the last Tuesday of every month and on 14, 15 and 28 November 2026, but does not say on its hours page whether admission is free on them: check tarragona.cat/patrimoni." },
       { question: "Is the Tarragona archaeological museum open?", answer: "Not as of October 2026: it is closed for renovation, with reopening planned for the last quarter of 2026." },
     ],
     note: "Train times and site hours change by season: check Rodalies and the city museum before you go.",
@@ -435,7 +464,7 @@ const TARRAGONA_COPY: Record<Locale, TarragonaT> = {
     lead: "El tren de Barcelona a Tarragona tarda **69 minutos desde Sants**, con un regional a **los minutos :03 y :33 de cada hora** y un **sencillo de 8,60 €**. Tarragona fue Tarraco, capital de la Hispania Citerior romana: su anfiteatro, circo, murallas y foro son Patrimonio Mundial de la UNESCO, y una **entrada conjunta de 15 €** abre los cinco recintos romanos.",
     trainTitle: "Horarios del tren de Barcelona a Tarragona",
     train: [
-      "Las líneas regionales **R14, R15, R16 y R17** van de Estació de França, Passeig de Gràcia y Sants a la estación de Tarragona, en la ciudad, junto al mar. Los laborables hay 32 trenes desde Sants, de 6:03 a 22:03; los sábados, unos 26. De vuelta salen de Tarragona hacia las :26 y las :56 de cada hora, el último a las 22:26 los laborables y a las 21:56 los fines de semana.",
+      "Las líneas regionales **R14, R15, R16 y R17** van de Estació de França, Passeig de Gràcia y Sants a la estación de Tarragona, en la ciudad, junto al mar. Desde Sants salen regionales a las :03 y :33 de cada hora, de 6:03 a 22:03; alguna hora tiene un solo tren. De vuelta salen de Tarragona hacia las :26 y las :56 de cada hora; el último sale a las 22:26 (a las 21:56 hasta el 1 de noviembre de 2026).",
       "No la confundas con **Camp de Tarragona**, la estación de alta velocidad fuera de la ciudad. La R2 Sud termina en Sant Vicenç de Calders y no llega a Tarragona. Compra en la máquina o en la app de Renfe: el sencillo regional desde Barcelona cuesta 8,60 €.",
     ],
     trainCaption: "De Barcelona a Tarragona en tren regional",
@@ -444,9 +473,9 @@ const TARRAGONA_COPY: Record<Locale, TarragonaT> = {
       ["Barcelona-Sants", "69 min", ":03 y :33, de 6:03 a 22:03", "8,60 €"],
       ["Passeig de Gràcia", "76 min", "7 minutos antes que de Sants", "8,60 €"],
       ["Estació de França", "87 min", "18 minutos antes que de Sants", "8,60 €"],
-      ["Vuelta de Tarragona a Sants", "71 min", ":26 y :56, último 22:26 (21:56 fines de semana)", "8,60 €"],
+      ["Vuelta de Tarragona a Sants", "71 min", ":26 y :56, último 22:26 (21:56 hasta el 1 nov.)", "8,60 €"],
     ],
-    trainNote: "Planificador oficial de Rodalies para el 27 y el 31 de octubre y el 1 de noviembre de 2026 (horario de la R15 del 13 de octubre de 2026). Algunas horas tienen un solo tren.",
+    trainNote: "Planificador oficial de Rodalies, consultado el 28 de octubre de 2026 para fechas hasta el 23 de noviembre (horario de la R15 del 13 de octubre de 2026). Algunas horas tienen un solo tren.",
     sitesTitle: "Los recintos romanos y la entrada conjunta",
     sites: [
       "El museo de historia de la ciudad gestiona cinco recintos romanos: el **Anfiteatro**, el **Circo con el Pretorio**, el **Paseo Arqueológico** junto a las murallas, el **Foro de la Colonia** y la **Casa Canals**. Un recinto cuesta **5 €**; la **entrada conjunta a los cinco, 15 €**. Los menores de 12 entran gratis; de 12 a 17 años, estudiantes y jubilados pagan la mitad; una familia numerosa paga una sola entrada para todos.",
@@ -458,8 +487,8 @@ const TARRAGONA_COPY: Record<Locale, TarragonaT> = {
       ["Circo–Pretorio, Casa Canals", "9:00–20:00", "9:30–20:00", "9:30–14:30"],
     ],
     tableNote: "Todos cierran los lunes salvo festivos programados. Último acceso 30 minutos antes del cierre. Cerrados el 29 de noviembre, el 24, 25, 26 y 31 de diciembre y el 1 y 6 de enero; el 8 de diciembre, solo por la mañana.",
-    freeTitle: "Días gratis",
-    free: "Los recintos romanos son gratuitos el **último martes de cada mes** y el **14, 15 y 28 de noviembre** por el aniversario de la declaración de la UNESCO. El acueducto romano (Pont del Diable), fuera del centro, es siempre gratuito.",
+    freeTitle: "Puertas abiertas y lo que siempre es gratis",
+    free: "El museo anuncia **jornadas de puertas abiertas** el **último martes de cada mes** y el **14, 15 y 28 de noviembre de 2026** por el aniversario de la declaración de la UNESCO; su página de horarios no indica si la entrada es gratuita esos días, así que compruébalo en tarragona.cat/patrimoni antes de ir. El acueducto romano (Aqüeducte de les Ferreres, o Pont del Diable), fuera del centro, es siempre gratuito.",
     mnatTitle: "El museo arqueológico",
     mnat: "El Museu Nacional Arqueològic de Tarragona de la plaza del Rei está **cerrado por renovación**; el museo prevé reabrirlo en el último trimestre de 2026. Consulta mnat.cat antes de contar con él.",
     planTitle: "Un día en Tarragona",
@@ -472,7 +501,7 @@ const TARRAGONA_COPY: Record<Locale, TarragonaT> = {
       { question: "¿Cuánto tarda el tren de Barcelona a Tarragona?", answer: "69 minutos desde Barcelona-Sants en los regionales R14 a R17, 76 desde Passeig de Gràcia y 87 desde Estació de França." },
       { question: "¿Cuánto cuesta el tren de Barcelona a Tarragona?", answer: "8,60 € el sencillo en los regionales, según el planificador oficial de Rodalies en octubre de 2026." },
       { question: "¿Hay entrada conjunta para los recintos romanos de Tarragona?", answer: "Sí: 15 € los cinco (Anfiteatro, Circo–Pretorio, Paseo Arqueológico, Foro de la Colonia y Casa Canals), o 5 € uno. Menores de 12, gratis." },
-      { question: "¿Cuándo son gratis los recintos romanos de Tarragona?", answer: "El último martes de cada mes, y el 14, 15 y 28 de noviembre de 2026 por el aniversario de la UNESCO." },
+      { question: "¿Son gratis algún día los recintos romanos de Tarragona?", answer: "El acueducto romano (Pont del Diable) es siempre gratuito. El museo anuncia jornadas de puertas abiertas el último martes de cada mes y el 14, 15 y 28 de noviembre de 2026, pero su página de horarios no dice si ese día la entrada es gratis: compruébalo en tarragona.cat/patrimoni." },
       { question: "¿Está abierto el museo arqueológico de Tarragona?", answer: "No a octubre de 2026: está cerrado por renovación y prevé reabrir en el último trimestre de 2026." },
     ],
     note: "Los horarios de tren y de los recintos cambian según la temporada: compruébalo en Rodalies y en el museo antes de ir.",
@@ -481,7 +510,7 @@ const TARRAGONA_COPY: Record<Locale, TarragonaT> = {
     lead: "El tren de Barcelona a Tarragona triga **69 minuts des de Sants**, amb un regional **als minuts :03 i :33 de cada hora** i un **senzill de 8,60 €**. Tarragona va ser Tàrraco, capital de la Hispània Citerior romana: l'amfiteatre, el circ, les muralles i el fòrum són Patrimoni Mundial de la UNESCO, i una **entrada conjunta de 15 €** obre els cinc recintes romans.",
     trainTitle: "Horaris del tren de Barcelona a Tarragona",
     train: [
-      "Les línies regionals **R14, R15, R16 i R17** van de l'Estació de França, Passeig de Gràcia i Sants a l'estació de Tarragona, a la ciutat, arran de mar. Els feiners hi ha 32 trens des de Sants, de 6:03 a 22:03; els dissabtes, uns 26. De tornada surten de Tarragona cap a les :26 i les :56 de cada hora, l'últim a les 22:26 els feiners i a les 21:56 els caps de setmana.",
+      "Les línies regionals **R14, R15, R16 i R17** van de l'Estació de França, Passeig de Gràcia i Sants a l'estació de Tarragona, a la ciutat, arran de mar. Des de Sants surten regionals a les :03 i :33 de cada hora, de 6:03 a 22:03; alguna hora només té un tren. De tornada surten de Tarragona cap a les :26 i les :56 de cada hora; l'últim surt a les 22:26 (a les 21:56 fins a l'1 de novembre del 2026).",
       "No la confonguis amb **Camp de Tarragona**, l'estació d'alta velocitat fora de la ciutat. L'R2 Sud acaba a Sant Vicenç de Calders i no arriba a Tarragona. Compra a la màquina o a l'app de Renfe: el senzill regional des de Barcelona costa 8,60 €.",
     ],
     trainCaption: "De Barcelona a Tarragona en tren regional",
@@ -490,9 +519,9 @@ const TARRAGONA_COPY: Record<Locale, TarragonaT> = {
       ["Barcelona-Sants", "69 min", ":03 i :33, de 6:03 a 22:03", "8,60 €"],
       ["Passeig de Gràcia", "76 min", "7 minuts abans que de Sants", "8,60 €"],
       ["Estació de França", "87 min", "18 minuts abans que de Sants", "8,60 €"],
-      ["Tornada de Tarragona a Sants", "71 min", ":26 i :56, últim 22:26 (21:56 caps de setmana)", "8,60 €"],
+      ["Tornada de Tarragona a Sants", "71 min", ":26 i :56, últim 22:26 (21:56 fins a l'1 nov.)", "8,60 €"],
     ],
-    trainNote: "Cercador oficial de Rodalies per al 27 i el 31 d'octubre i l'1 de novembre de 2026 (horari de l'R15 del 13 d'octubre de 2026). Algunes hores només tenen un tren.",
+    trainNote: "Cercador oficial de Rodalies, consultat el 28 d'octubre de 2026 per a dates fins al 23 de novembre (horari de l'R15 del 13 d'octubre de 2026). Algunes hores només tenen un tren.",
     sitesTitle: "Els recintes romans i l'entrada conjunta",
     sites: [
       "El museu d'història de la ciutat gestiona cinc recintes romans: l'**Amfiteatre**, el **Circ amb el Pretori**, el **Passeig Arqueològic** de les muralles, el **Fòrum de la Colònia** i la **Casa Canals**. Un recinte costa **5 €**; l'**entrada conjunta als cinc, 15 €**. Els menors de 12 hi entren gratis; de 12 a 17 anys, estudiants i jubilats paguen la meitat; una família nombrosa paga una sola entrada per a tothom.",
@@ -504,8 +533,8 @@ const TARRAGONA_COPY: Record<Locale, TarragonaT> = {
       ["Circ–Pretori, Casa Canals", "9:00–20:00", "9:30–20:00", "9:30–14:30"],
     ],
     tableNote: "Tots tanquen els dilluns llevat de festius programats. Últim accés 30 minuts abans del tancament. Tancats el 29 de novembre, el 24, 25, 26 i 31 de desembre i l'1 i 6 de gener; el 8 de desembre, només al matí.",
-    freeTitle: "Dies gratis",
-    free: "Els recintes romans són gratuïts l'**últim dimarts de cada mes** i el **14, 15 i 28 de novembre** per l'aniversari de la declaració de la UNESCO. L'aqüeducte romà (Pont del Diable), fora del centre, és sempre gratuït.",
+    freeTitle: "Portes obertes i el que sempre és gratis",
+    free: "El museu anuncia **jornades de portes obertes** l'**últim dimarts de cada mes** i el **14, 15 i 28 de novembre del 2026** per l'aniversari de la declaració de la UNESCO; la seva pàgina d'horaris no diu si aquells dies l'entrada és gratuïta, així que comprova-ho a tarragona.cat/patrimoni abans d'anar-hi. L'aqüeducte romà (Aqüeducte de les Ferreres, o Pont del Diable), fora del centre, és sempre gratuït.",
     mnatTitle: "El museu arqueològic",
     mnat: "El Museu Nacional Arqueològic de Tarragona de la plaça del Rei és **tancat per renovació**; el museu preveu reobrir-lo l'últim trimestre del 2026. Consulta mnat.cat abans de comptar-hi.",
     planTitle: "Un dia a Tarragona",
@@ -518,7 +547,7 @@ const TARRAGONA_COPY: Record<Locale, TarragonaT> = {
       { question: "Quant triga el tren de Barcelona a Tarragona?", answer: "69 minuts des de Barcelona-Sants amb els regionals R14 a R17, 76 des de Passeig de Gràcia i 87 des de l'Estació de França." },
       { question: "Quant costa el tren de Barcelona a Tarragona?", answer: "8,60 € el senzill als regionals, segons el cercador oficial de Rodalies a l'octubre del 2026." },
       { question: "Hi ha entrada conjunta per als recintes romans de Tarragona?", answer: "Sí: 15 € els cinc (Amfiteatre, Circ–Pretori, Passeig Arqueològic, Fòrum de la Colònia i Casa Canals), o 5 € un. Menors de 12, gratis." },
-      { question: "Quan són gratis els recintes romans de Tarragona?", answer: "L'últim dimarts de cada mes, i el 14, 15 i 28 de novembre de 2026 per l'aniversari de la UNESCO." },
+      { question: "Són gratis algun dia els recintes romans de Tarragona?", answer: "L'aqüeducte romà (Pont del Diable) és sempre gratuït. El museu anuncia jornades de portes obertes l'últim dimarts de cada mes i el 14, 15 i 28 de novembre del 2026, però la seva pàgina d'horaris no diu si aquell dia l'entrada és gratis: comprova-ho a tarragona.cat/patrimoni." },
       { question: "És obert el museu arqueològic de Tarragona?", answer: "No a octubre del 2026: és tancat per renovació i preveu reobrir l'últim trimestre del 2026." },
     ],
     note: "Els horaris de tren i dels recintes canvien segons la temporada: comprova-ho a Rodalies i al museu abans d'anar-hi.",

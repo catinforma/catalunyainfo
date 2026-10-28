@@ -703,3 +703,115 @@ test("markets: hours answered first, Sunday question answered, no unverified gro
     assert.doesNotMatch(text, /\b20 (people|personas|persones)\b/);
   }
 });
+
+test("ski: opening in the title, official snow-report links, FGC early birds, child prices; snow guide in the query's words", () => {
+  const opening = { ca: /obertura/, es: /apertura/, en: /opening/ } as const;
+  const winter = { ca: /^Rutes d'hivern a Catalunya/, es: /^Dónde ver nieve en Cataluña/, en: /^Snow in Catalonia/ } as const;
+  for (const locale of LOCALES) {
+    const edition = SKI.editions[locale];
+    assert.match(edition.seoTitle, opening[locale], `${locale}: opening in the title`);
+    assert.ok(edition.seoTitle.length <= 60, `${locale}: title budget`);
+    const json = JSON.stringify(edition.blocks);
+    assert.match(json, /pirineu365\.cat\/infoneu-pirineu365\//, `${locale}: FGC snow report linked`);
+    const text = bodyToPlainText(edition.blocks);
+    assert.match(text, /600/, `${locale}: La Molina early-bird season pass`);
+    assert.match(text, /36 €|€36/, `${locale}: child day price`);
+    assert.doesNotMatch(text, /12[,.]6 km/, `${locale}: Tavascan's page says twelve kilometres`);
+    assert.match(SNOW.editions[locale].seoTitle, winter[locale], `${locale}: snow guide title`);
+  }
+});
+
+test("sitges and tarragona: corrected first pattern train, T-casual zones, last train back, open days not free days", () => {
+  const back = { ca: /Horaris del tren de Sitges a Barcelona/, es: /Horarios del tren de Sitges a Barcelona/, en: /Sitges to Barcelona train times/ } as const;
+  for (const locale of LOCALES) {
+    const sitges = bodyToPlainText(SITGES.editions[locale].blocks);
+    assert.match(sitges, /6:06 (a|to) 21:45/, `${locale}: the :06/:15/:36/:45 pattern starts at 6:06`);
+    assert.doesNotMatch(sitges, /6:36 (a|to) 21:45/, `${locale}: old start time gone`);
+    assert.match(sitges, /34,70 €|€34\.70/, `${locale}: 3-zone T-casual`);
+    assert.match(sitges, back[locale], `${locale}: return-direction section`);
+    const tarragona = TARRAGONA.editions[locale];
+    assert.doesNotMatch(tarragona.seoDescription, /gratis|free/i, `${locale}: no unconfirmed free days in the snippet`);
+    const text = bodyToPlainText(tarragona.blocks);
+    assert.match(text, /22:26/, `${locale}: last train back from 2 Nov`);
+    assert.doesNotMatch(text, /21:56 (els caps de setmana|los fines de semana|at weekends)/, `${locale}: no weekday/weekend split`);
+  }
+});
+
+test("figueres: walk from Figueres-Vilafant, 10:30 opening dated 1 Oct-22 Mar, bus and car, nothing 'under an hour'", () => {
+  const walk = { ca: /25 minuts a peu/, es: /25 minutos a pie/, en: /25 minutes on foot/ } as const;
+  for (const locale of LOCALES) {
+    const blocks = FIGUERES.editions[locale].blocks as { type: string; lead?: boolean; text?: string }[];
+    const lead = blocks.find((b) => b.type === "paragraph" && b.lead)?.text ?? "";
+    assert.match(lead, walk[locale], `${locale}: walk from the high-speed station`);
+    assert.match(lead, /22 (de )?(març|marzo|March)/, `${locale}: winter hours dated`);
+    const text = bodyToPlainText(FIGUERES.editions[locale].blocks);
+    assert.doesNotMatch(text, /menys d'una hora|menos de una hora|under an hour/, `${locale}: high-speed is about an hour`);
+    assert.match(text, /140 km/, `${locale}: distance by car`);
+    assert.match(text, /44[.,]50/, `${locale}: Dalí + La Pedrera combined ticket`);
+    assert.ok(FIGUERES.editions[locale].seoTitle.length <= 60, `${locale}: title budget`);
+  }
+});
+
+test("montserrat: the Aeri table covers 1 Nov and 7 Dec, the free question and the Monistrol station are answered", () => {
+  const free = { ca: /és gratis per a algú/, es: /Es gratis el cremallera/, en: /free for anyone/ } as const;
+  for (const locale of LOCALES) {
+    const blocks = MONTSERRAT_FREE.editions[locale].blocks as { type: string; rows?: string[][] }[];
+    const aeri = blocks.find((b) => b.type === "table" && (b.rows ?? []).some((row) => row[1] === "9:30–17:15"));
+    const rows = JSON.stringify(aeri?.rows ?? []);
+    assert.match(rows, /1 (de )?(novembre|noviembre|November)/, `${locale}: 1 Nov keeps October hours`);
+    assert.match(rows, /7 (de )?(desembre|diciembre|December)/, `${locale}: 7 Dec has holiday hours`);
+    const text = bodyToPlainText(MONTSERRAT_FREE.editions[locale].blocks);
+    assert.match(text, free[locale], `${locale}: answers "cremallera gratis"`);
+    assert.match(text, /Monistrol-Vila/, `${locale}: which station`);
+    assert.ok(MONTSERRAT_FREE.editions[locale].seoTitle.length <= 60, `${locale}: title budget`);
+  }
+});
+
+test("portaventura: the standard price leads, the Halloween price is labelled, the winter closure and the walk are stated", () => {
+  const walk = { ca: /10 minuts a peu/, es: /10 minutos a pie/, en: /10-minute walk/ } as const;
+  for (const locale of LOCALES) {
+    const edition = PORTAVENTURA.editions[locale];
+    assert.match(edition.seoDescription, /43/, `${locale}: description gives the standard price`);
+    assert.doesNotMatch(edition.seoDescription, /37/, `${locale}: no promotional price in the snippet`);
+    const blocks = edition.blocks as { type: string; lead?: boolean; text?: string }[];
+    const lead = blocks.find((b) => b.type === "paragraph" && b.lead)?.text ?? "";
+    assert.match(lead, /43/, `${locale}: lead gives the standard price`);
+    assert.match(lead, /Halloween/, `${locale}: the 37 EUR price is tied to the promotion`);
+    assert.match(lead, /19 (de )?(febrer|febrero|February)/, `${locale}: winter closure`);
+    assert.match(bodyToPlainText(edition.blocks), walk[locale], `${locale}: walk from the station`);
+    assert.ok(edition.seoTitle.length <= 60, `${locale}: title budget`);
+  }
+});
+
+test("ripolles: the comarca in Idescat's figures and a villages table; setcases answers what to do", () => {
+  const villages = { ca: "Pobles bonics a prop de Ripoll", es: "Pueblos bonitos cerca de Ripoll", en: "Pretty villages near Ripoll" } as const;
+  for (const locale of LOCALES) {
+    const text = bodyToPlainText(RIPOLLES.editions[locale].blocks);
+    assert.match(text, /19 (municipis|municipios|municipalities)/, `${locale}: municipality count`);
+    assert.match(text, /956[.,]6 km²/, `${locale}: area`);
+    assert.match(text, /25[.,]914/, `${locale}: population`);
+    const blocks = RIPOLLES.editions[locale].blocks as { type: string; caption?: string; rows?: string[][] }[];
+    const table = blocks.find((b) => b.type === "table" && b.caption === villages[locale]);
+    assert.ok(table && (table.rows?.length ?? 0) >= 5, `${locale}: villages table`);
+    const faqs = JSON.stringify(SETCASES.editions[locale].blocks.filter((b) => b.type === "faq"));
+    assert.match(faqs, /Què fer a Setcases|Qué hacer en Setcases|to do in Setcases/, `${locale}: setcases what-to-do FAQ`);
+  }
+});
+
+test("nuria: the lead answers the price; free travel, November and the ski pass are answered from FGC", () => {
+  const fare = { ca: /34 € anada i tornada/, es: /34 € ida y vuelta/, en: /€34 return/ } as const;
+  const free = { ca: /0 a 3 anys/, es: /0 a 3 años/, en: /under 4/ } as const;
+  for (const locale of LOCALES) {
+    const blocks = NURIA.editions[locale].blocks as { type: string; lead?: boolean; text?: string }[];
+    const lead = blocks.find((b) => b.type === "paragraph" && b.lead)?.text ?? "";
+    assert.match(lead, fare[locale], `${locale}: lead gives the return fare`);
+    assert.match(lead, /30 de novembre|30 de noviembre|30 November/, `${locale}: lead dates the fares`);
+    const text = bodyToPlainText(NURIA.editions[locale].blocks);
+    assert.match(text, free[locale], `${locale}: says who rides free`);
+    assert.match(text, /104/, `${locale}: annual season ticket`);
+    assert.match(text, /2026-2027|2026-27/, `${locale}: ski-pass status for the coming season`);
+    assert.match(text, /3 (al|to) 30 (de )?(novembre|noviembre|November)/, `${locale}: last November's weekday closure`);
+    assert.ok(NURIA.editions[locale].seoTitle.length <= 60, `${locale}: seoTitle fits`);
+    assert.ok(NURIA.editions[locale].seoDescription.length <= 155, `${locale}: description fits`);
+  }
+});

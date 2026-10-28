@@ -1,4 +1,5 @@
 import type { Locale } from "@/lib/i18n/config";
+import { PATHS as TOOL_PATHS } from "@/lib/content/home-tools";
 
 import {
   b2Related,
@@ -130,7 +131,7 @@ const COPY: Record<Locale, T> = {
       "**Hivern (desembre-febrer):** màximes mitjanes de 14 °C i mínimes de 5 °C a l'aeroport. Les glaçades hi són rares: unes quatre l'any, i la neu, menys d'un dia l'any de mitjana. L'hivern astronòmic 2026-27 comença el 21 de desembre de 2026 a les 21:50 (hora oficial peninsular), segons l'Institut Geogràfic Nacional.",
       "**Primavera (març-maig):** les màximes pugen de 16 a 21 °C, amb unes cinc jornades de pluja al mes.",
       "**Estiu (juny-agost):** màximes de 25 a 28,5 °C i el juliol és el mes més sec (21 mm) i el més assolellat (305 hores de sol). L'agost ja porta tempestes: 62 mm de pluja de mitjana.",
-      "**Tardor (setembre-novembre):** és l'època més plujosa. L'octubre suma 91 mm i el setembre, 81, en uns sis dies de pluja.",
+      `**Tardor (setembre-novembre):** és l'època més plujosa. L'octubre suma 91 mm i el setembre, 81, en uns sis dies de pluja. Per veure com estan els pantans, consulta [l'estat dels embassaments avui](/ca/${TOOL_PATHS.reservoirs.ca}/), amb la dada diària de l'ACA.`,
     ],
     cityTitle: "Al centre de la ciutat fa més calor",
     city: [
@@ -168,7 +169,7 @@ const COPY: Record<Locale, T> = {
       "**Invierno (diciembre-febrero):** máximas medias de 14 °C y mínimas de 5 °C en el aeropuerto. Las heladas son raras: unas cuatro al año, y la nieve, menos de un día al año de media. El invierno astronómico 2026-27 empieza el 21 de diciembre de 2026 a las 21:50 (hora oficial peninsular), según el Instituto Geográfico Nacional.",
       "**Primavera (marzo-mayo):** las máximas suben de 16 a 21 °C, con unas cinco jornadas de lluvia al mes.",
       "**Verano (junio-agosto):** máximas de 25 a 28,5 °C y julio es el mes más seco (21 mm) y el más soleado (305 horas de sol). Agosto ya trae tormentas: 62 mm de lluvia de media.",
-      "**Otoño (septiembre-noviembre):** es la época más lluviosa. Octubre suma 91 mm y septiembre, 81, en unos seis días de lluvia.",
+      `**Otoño (septiembre-noviembre):** es la época más lluviosa. Octubre suma 91 mm y septiembre, 81, en unos seis días de lluvia. Para ver cómo están los pantanos, consulta [el nivel de los embalses hoy](/es/${TOOL_PATHS.reservoirs.es}/), con el dato diario de la ACA.`,
     ],
     cityTitle: "En el centro de la ciudad hace más calor",
     city: [
@@ -206,7 +207,7 @@ const COPY: Record<Locale, T> = {
       "**Winter (December-February):** average highs of 14 °C and lows of 5 °C at the airport. Frost is rare, about four days a year, and snow less than one day a year on average. Astronomical winter 2026-27 begins on 21 December 2026 at 21:50 (Spanish mainland time), according to Spain's National Geographic Institute.",
       "**Spring (March-May):** highs climb from 16 to 21 °C, with about five rainy days a month.",
       "**Summer (June-August):** highs of 25 to 28.5 °C; July is the driest month (21 mm) and the sunniest (305 hours). August brings storms: 62 mm of rain on average.",
-      "**Autumn (September-November):** the wettest season. October averages 91 mm and September 81, over about six rainy days.",
+      `**Autumn (September-November):** the wettest season. October averages 91 mm and September 81, over about six rainy days. To see how the reservoirs stand, check [Catalonia's reservoir levels today](/en/${TOOL_PATHS.reservoirs.en}/), from the water agency's daily data.`,
     ],
     cityTitle: "The city centre is warmer",
     city: [
