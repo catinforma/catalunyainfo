@@ -22,6 +22,7 @@ import {
   type ReadingRow,
 } from "../src/lib/content/snow/depth.ts";
 import { LOCALES } from "../src/lib/i18n/config.ts";
+import { hubPath as mountainHubPath } from "../src/lib/programmatic/mountain/paths.ts";
 
 /*
  * Fixtures are real rows from nzvn-apee and yqwd-vj5e, read on 25 Oct 2026 at
@@ -369,7 +370,11 @@ test("paths, titles and descriptions fit the house rules", () => {
 });
 
 test("links stay in their language, end in a slash, and point at published paths", () => {
-  const known = new Set(Object.keys(B2_PATHS).flatMap((key) => LOCALES.map((l) => b2href(key as keyof typeof B2_PATHS, l))));
+  const known = new Set([
+    ...Object.keys(B2_PATHS).flatMap((key) => LOCALES.map((l) => b2href(key as keyof typeof B2_PATHS, l))),
+    // The mountain-weather hub is a code route (app/(public)/[locale]/temps-muntanya etc.), one per language.
+    ...LOCALES.map((l) => mountainHubPath(l)),
+  ]);
   for (const locale of LOCALES) {
     const text = JSON.stringify(SNOW_NOW.editions[locale].blocks);
     for (const match of text.matchAll(/\]\((\/[^)]*)\)/g)) {

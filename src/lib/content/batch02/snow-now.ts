@@ -1,5 +1,6 @@
 import type { Block } from "@/lib/content/blocks";
 import type { Locale } from "@/lib/i18n/config";
+import { hubPath as mountainHub } from "@/lib/programmatic/mountain/paths";
 
 import { SNOW } from "./pyrenees";
 import {
@@ -125,7 +126,7 @@ function body(locale: Locale): Block[] {
       ...h2(
         "Per què no coincideix amb el part de les estacions d'esquí",
         "Les estacions d'esquí publiquen el seu propi part de neu: el gruix a les pistes, les pistes obertes i els remuntadors en marxa. Les pistes es trepitgen i moltes es cobreixen amb neu produïda: la Molina, per exemple, indica a la seva fitxa tècnica 43 km de pistes amb neu produïda (el 60 % de l'àrea esquiable) i 602 canons. Una estació meteorològica, en canvi, mesura la neu natural en un sol punt, sovint lluny de les pistes.",
-        `Si vas a esquiar, el part que compta és el de l'estació: les sis d'FGC (la Molina, Vall de Núria, Vallter, Espot, Port Ainé i Boí Taüll) el publiquen a [Infoneu de PIRINEU365](${INFONEU}), i Baqueira Beret a la pàgina [«Estado de la estación»](https://www.baqueira.es/ca/estado-de-la-estacion) del seu web. Per a la resta, i per comparar preus i accessos, mira ${b2link("ski", "ca", "les estacions d'esquí de Catalunya")}.`,
+        `Si vas a esquiar, el part que compta és el de l'estació: les sis d'FGC (la Molina, Vall de Núria, Vallter, Espot, Port Ainé i Boí Taüll) el publiquen a [Infoneu de PIRINEU365](${INFONEU}), i Baqueira Beret a la pàgina [«Estado de la estación»](https://www.baqueira.es/ca/estado-de-la-estacion) del seu web. Per a la resta, i per comparar preus i accessos, mira ${b2link("ski", "ca", "les estacions d'esquí de Catalunya")}. La temperatura i el vent de l'estació del Meteocat més propera a cada pista són a [la pàgina del temps a les estacions d'esquí](${mountainHub("ca")}).`,
       ),
       ...h2(
         "On mirar el perill d'allaus",
@@ -188,7 +189,7 @@ function body(locale: Locale): Block[] {
       ...h2(
         "¿Por qué no coincide con el parte de nieve de las estaciones de esquí?",
         "Las estaciones de esquí publican su propio parte: el espesor en las pistas, las pistas abiertas y los remontes en marcha. Las pistas se pisan y muchas se cubren con nieve producida: La Molina, por ejemplo, indica en su ficha técnica 43 km de pistas con nieve producida (el 60 % del área esquiable) y 602 cañones. Una estación meteorológica, en cambio, mide la nieve natural en un solo punto, a menudo lejos de las pistas.",
-        `Si vas a esquiar, el parte que cuenta es el de la estación: las seis de FGC (La Molina, Vall de Núria, Vallter, Espot, Port Ainé y Boí Taüll) lo publican en [Infoneu de PIRINEU365](${INFONEU}), y Baqueira Beret en la página [«Estado de la estación»](https://www.baqueira.es/es/estado-de-la-estacion) de su web. Para las demás, y para comparar precios y accesos, mira ${b2link("ski", "es", "las estaciones de esquí de Cataluña")}.`,
+        `Si vas a esquiar, el parte que cuenta es el de la estación: las seis de FGC (La Molina, Vall de Núria, Vallter, Espot, Port Ainé y Boí Taüll) lo publican en [Infoneu de PIRINEU365](${INFONEU}), y Baqueira Beret en la página [«Estado de la estación»](https://www.baqueira.es/es/estado-de-la-estacion) de su web. Para las demás, y para comparar precios y accesos, mira ${b2link("ski", "es", "las estaciones de esquí de Cataluña")}. La temperatura y el viento de la estación de Meteocat más cercana a cada pista están en [la página del tiempo en las estaciones de esquí](${mountainHub("es")}).`,
       ),
       ...h2(
         "Dónde consultar el riesgo de aludes",
@@ -250,7 +251,7 @@ function body(locale: Locale): Block[] {
     ...h2(
       "Why it differs from the ski resorts' snow report",
       "Ski resorts publish their own snow report: depth on the pistes, open runs and lifts running. Pistes are groomed and many are covered with machine-made snow: La Molina, for example, lists 43 km of runs with snowmaking (60% of its skiable area) and 602 snow cannons on its technical sheet. A weather station measures natural snow at a single point, often far from any piste.",
-      `If you are going skiing, the resort's report is the one that counts: FGC's six resorts (La Molina, Vall de Núria, Vallter, Espot, Port Ainé and Boí Taüll) post theirs on [PIRINEU365 Infoneu](${INFONEU}), and Baqueira Beret on the ['Estado de la estación' page](https://www.baqueira.es/en/estado-de-la-estacion) of its website. For the others, and to compare prices and access, see ${b2link("ski", "en", "our guide to Catalonia's ski resorts")}.`,
+      `If you are going skiing, the resort's report is the one that counts: FGC's six resorts (La Molina, Vall de Núria, Vallter, Espot, Port Ainé and Boí Taüll) post theirs on [PIRINEU365 Infoneu](${INFONEU}), and Baqueira Beret on the ['Estado de la estación' page](https://www.baqueira.es/en/estado-de-la-estacion) of its website. For the others, and to compare prices and access, see ${b2link("ski", "en", "our guide to Catalonia's ski resorts")}. For temperature and wind at the Meteocat station nearest each resort, see [ski resort weather today](${mountainHub("en")}).`,
     ),
     ...h2(
       "Avalanche danger: where to check",

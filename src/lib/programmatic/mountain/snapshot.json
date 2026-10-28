@@ -1,0 +1,1247 @@
+{
+ "readOn": "2026-10-28",
+ "sources": {
+  "stations": {
+   "name": "Metadades estacions meteorològiques automàtiques",
+   "publisher": "Servei Meteorològic de Catalunya (Meteocat)",
+   "url": "https://analisi.transparenciacatalunya.cat/d/yqwd-vj5e",
+   "terms": "Avís legal del Meteocat (www.meteo.cat/wpweb/avis-legal/): reutilització citant la font i la data de la darrera actualització, sense alterar el contingut"
+  },
+  "readings": {
+   "name": "Dades meteorològiques de la XEMA",
+   "publisher": "Servei Meteorològic de Catalunya (Meteocat)",
+   "url": "https://analisi.transparenciacatalunya.cat/d/nzvn-apee",
+   "terms": "Avís legal del Meteocat (www.meteo.cat/wpweb/avis-legal/): reutilització citant la font i la data de la darrera actualització, sense alterar el contingut"
+  },
+  "toponyms": {
+   "name": "Geocodificador (Nomenclàtor oficial de toponímia)",
+   "publisher": "Institut Cartogràfic i Geològic de Catalunya (ICGC)",
+   "url": "https://eines.icgc.cat/geocodificador/",
+   "terms": "Dades obertes de l'ICGC; noms i coordenades del nomenclàtor"
+  }
+ },
+ "stations": [
+  {
+   "code": "C9",
+   "name": "Mas de Barberans",
+   "altitude": 241,
+   "lat": 40.71822,
+   "lon": 0.39986,
+   "municipality": "Mas de Barberans",
+   "comarca": "Montsià",
+   "measures": {
+    "temperature": true,
+    "wind": 10,
+    "snow": false
+   }
+  },
+  {
+   "code": "CD",
+   "name": "la Seu d'Urgell - Bellestar",
+   "altitude": 849,
+   "lat": 42.37083,
+   "lon": 1.43279,
+   "municipality": "La Seu d'Urgell",
+   "comarca": "Alt Urgell",
+   "measures": {
+    "temperature": true,
+    "wind": 10,
+    "snow": false
+   }
+  },
+  {
+   "code": "CG",
+   "name": "Molló - Fabert",
+   "altitude": 1405,
+   "lat": 42.37718,
+   "lon": 2.41452,
+   "municipality": "Molló",
+   "comarca": "Ripollès",
+   "measures": {
+    "temperature": true,
+    "wind": 10,
+    "snow": true
+   }
+  },
+  {
+   "code": "CT",
+   "name": "el Pont de Suert",
+   "altitude": 824,
+   "lat": 42.39809,
+   "lon": 0.74364,
+   "municipality": "El Pont de Suert",
+   "comarca": "Alta Ribagorça",
+   "measures": {
+    "temperature": true,
+    "wind": 10,
+    "snow": false
+   }
+  },
+  {
+   "code": "DG",
+   "name": "Núria",
+   "altitude": 1971,
+   "lat": 42.39848,
+   "lon": 2.15517,
+   "municipality": "Queralbs",
+   "comarca": "Ripollès",
+   "measures": {
+    "temperature": true,
+    "wind": 10,
+    "snow": true
+   }
+  },
+  {
+   "code": "DP",
+   "name": "Das - Aeròdrom",
+   "altitude": 1096,
+   "lat": 42.38603,
+   "lon": 1.86639,
+   "municipality": "Das",
+   "comarca": "Cerdanya",
+   "measures": {
+    "temperature": true,
+    "wind": 10,
+    "snow": true
+   }
+  },
+  {
+   "code": "MS",
+   "name": "Castellar de n'Hug - el Clot del Moro",
+   "altitude": 940,
+   "lat": 42.25943,
+   "lon": 1.9761,
+   "municipality": "Castellar de n'Hug",
+   "comarca": "Berguedà",
+   "measures": {
+    "temperature": true,
+    "wind": null,
+    "snow": false
+   }
+  },
+  {
+   "code": "MV",
+   "name": "Guixers - Valls",
+   "altitude": 845,
+   "lat": 42.13595,
+   "lon": 1.67297,
+   "municipality": "Guixers",
+   "comarca": "Solsonès",
+   "measures": {
+    "temperature": true,
+    "wind": null,
+    "snow": false
+   }
+  },
+  {
+   "code": "U7",
+   "name": "Aldover",
+   "altitude": 53,
+   "lat": 40.85936,
+   "lon": 0.50525,
+   "municipality": "Aldover",
+   "comarca": "Baix Ebre",
+   "measures": {
+    "temperature": true,
+    "wind": 2,
+    "snow": false
+   }
+  },
+  {
+   "code": "UI",
+   "name": "Gisclareny",
+   "altitude": 1388,
+   "lat": 42.26478,
+   "lon": 1.76216,
+   "municipality": "Gisclareny",
+   "comarca": "Berguedà",
+   "measures": {
+    "temperature": true,
+    "wind": null,
+    "snow": false
+   }
+  },
+  {
+   "code": "VS",
+   "name": "Lac Redon",
+   "altitude": 2245,
+   "lat": 42.63836,
+   "lon": 0.7789,
+   "municipality": "Vielha e Mijaran",
+   "comarca": "Val d'Aran",
+   "measures": {
+    "temperature": true,
+    "wind": 10,
+    "snow": true
+   }
+  },
+  {
+   "code": "VX",
+   "name": "Tagamanent - PN del Montseny",
+   "altitude": 1030,
+   "lat": 41.7476,
+   "lon": 2.3029,
+   "municipality": "Tagamanent",
+   "comarca": "Vallès Oriental",
+   "measures": {
+    "temperature": true,
+    "wind": null,
+    "snow": false
+   }
+  },
+  {
+   "code": "WQ",
+   "name": "Montsec d'Ares",
+   "altitude": 1571,
+   "lat": 42.0513,
+   "lon": 0.72952,
+   "municipality": "Sant Esteve de la Sarga",
+   "comarca": "Pallars Jussà",
+   "measures": {
+    "temperature": true,
+    "wind": 10,
+    "snow": false
+   }
+  },
+  {
+   "code": "WS",
+   "name": "Viladrau",
+   "altitude": 956,
+   "lat": 41.84008,
+   "lon": 2.41877,
+   "municipality": "Viladrau",
+   "comarca": "Osona",
+   "measures": {
+    "temperature": true,
+    "wind": 10,
+    "snow": false
+   }
+  },
+  {
+   "code": "WV",
+   "name": "Guardiola de Berguedà",
+   "altitude": 787,
+   "lat": 42.23414,
+   "lon": 1.87485,
+   "municipality": "Guardiola de Berguedà",
+   "comarca": "Berguedà",
+   "measures": {
+    "temperature": true,
+    "wind": 10,
+    "snow": false
+   }
+  },
+  {
+   "code": "WX",
+   "name": "Camarasa",
+   "altitude": 669,
+   "lat": 41.9178,
+   "lon": 0.88175,
+   "municipality": "Camarasa",
+   "comarca": "Noguera",
+   "measures": {
+    "temperature": true,
+    "wind": 2,
+    "snow": false
+   }
+  },
+  {
+   "code": "X5",
+   "name": "PN dels Ports",
+   "altitude": 1056,
+   "lat": 40.79705,
+   "lon": 0.31822,
+   "municipality": "Roquetes",
+   "comarca": "Baix Ebre",
+   "measures": {
+    "temperature": true,
+    "wind": 10,
+    "snow": true
+   }
+  },
+  {
+   "code": "XH",
+   "name": "Sort",
+   "altitude": 677,
+   "lat": 42.40537,
+   "lon": 1.12997,
+   "municipality": "Sort",
+   "comarca": "Pallars Sobirà",
+   "measures": {
+    "temperature": true,
+    "wind": null,
+    "snow": true
+   }
+  },
+  {
+   "code": "XK",
+   "name": "Puig Sesolles",
+   "altitude": 1666,
+   "lat": 41.77362,
+   "lon": 2.43774,
+   "municipality": "Fogars de Montclús",
+   "comarca": "Vallès Oriental",
+   "measures": {
+    "temperature": true,
+    "wind": 10,
+    "snow": true
+   }
+  },
+  {
+   "code": "XQ",
+   "name": "Tremp",
+   "altitude": 474,
+   "lat": 42.16255,
+   "lon": 0.88811,
+   "municipality": "Tremp",
+   "comarca": "Pallars Jussà",
+   "measures": {
+    "temperature": true,
+    "wind": 10,
+    "snow": false
+   }
+  },
+  {
+   "code": "Y4",
+   "name": "Alinyà",
+   "altitude": 1161,
+   "lat": 42.17427,
+   "lon": 1.42769,
+   "municipality": "Fígols i Alinyà",
+   "comarca": "Alt Urgell",
+   "measures": {
+    "temperature": true,
+    "wind": null,
+    "snow": false
+   }
+  },
+  {
+   "code": "YA",
+   "name": "Puigcerdà",
+   "altitude": 1214,
+   "lat": 42.44013,
+   "lon": 1.93482,
+   "municipality": "Puigcerdà",
+   "comarca": "Cerdanya",
+   "measures": {
+    "temperature": true,
+    "wind": 10,
+    "snow": false
+   }
+  },
+  {
+   "code": "YG",
+   "name": "Tírvia",
+   "altitude": 955,
+   "lat": 42.51881,
+   "lon": 1.24244,
+   "municipality": "Tírvia",
+   "comarca": "Pallars Sobirà",
+   "measures": {
+    "temperature": true,
+    "wind": 6,
+    "snow": false
+   }
+  },
+  {
+   "code": "YN",
+   "name": "Vielha - Elipòrt",
+   "altitude": 1029,
+   "lat": 42.69737,
+   "lon": 0.80197,
+   "municipality": "Vielha e Mijaran",
+   "comarca": "Val d'Aran",
+   "measures": {
+    "temperature": true,
+    "wind": 6,
+    "snow": true
+   }
+  },
+  {
+   "code": "YT",
+   "name": "Bonabé",
+   "altitude": 1691,
+   "lat": 42.75094,
+   "lon": 1.07527,
+   "municipality": "Alt Àneu",
+   "comarca": "Pallars Sobirà",
+   "measures": {
+    "temperature": true,
+    "wind": null,
+    "snow": true
+   }
+  },
+  {
+   "code": "Z1",
+   "name": "Bonaigua",
+   "altitude": 2262,
+   "lat": 42.64691,
+   "lon": 0.98486,
+   "municipality": "Alt Àneu",
+   "comarca": "Pallars Sobirà",
+   "measures": {
+    "temperature": true,
+    "wind": 6,
+    "snow": true
+   }
+  },
+  {
+   "code": "Z2",
+   "name": "Boí",
+   "altitude": 2537,
+   "lat": 42.46603,
+   "lon": 0.88403,
+   "municipality": "La Vall de Boí",
+   "comarca": "Alta Ribagorça",
+   "measures": {
+    "temperature": true,
+    "wind": 6,
+    "snow": true
+   }
+  },
+  {
+   "code": "Z3",
+   "name": "Malniu",
+   "altitude": 2229,
+   "lat": 42.46605,
+   "lon": 1.7785,
+   "municipality": "Meranges",
+   "comarca": "Cerdanya",
+   "measures": {
+    "temperature": true,
+    "wind": 6,
+    "snow": true
+   }
+  },
+  {
+   "code": "Z5",
+   "name": "Certascan",
+   "altitude": 2398,
+   "lat": 42.7003,
+   "lon": 1.272,
+   "municipality": "Lladorre",
+   "comarca": "Pallars Sobirà",
+   "measures": {
+    "temperature": true,
+    "wind": 6,
+    "snow": true
+   }
+  },
+  {
+   "code": "Z6",
+   "name": "Sasseuva",
+   "altitude": 2226,
+   "lat": 42.77011,
+   "lon": 0.73198,
+   "municipality": "Arres",
+   "comarca": "Val d'Aran",
+   "measures": {
+    "temperature": true,
+    "wind": 6,
+    "snow": true
+   }
+  },
+  {
+   "code": "Z7",
+   "name": "Espot",
+   "altitude": 2519,
+   "lat": 42.5341,
+   "lon": 1.05474,
+   "municipality": "Espot",
+   "comarca": "Pallars Sobirà",
+   "measures": {
+    "temperature": true,
+    "wind": 10,
+    "snow": true
+   }
+  },
+  {
+   "code": "Z9",
+   "name": "Cadí Nord - Prat d'Aguiló",
+   "altitude": 2145,
+   "lat": 42.29265,
+   "lon": 1.71498,
+   "municipality": "Montellà i Martinet",
+   "comarca": "Cerdanya",
+   "measures": {
+    "temperature": true,
+    "wind": 10,
+    "snow": true
+   }
+  },
+  {
+   "code": "ZB",
+   "name": "Salòria",
+   "altitude": 2451,
+   "lat": 42.51939,
+   "lon": 1.36597,
+   "municipality": "Alins",
+   "comarca": "Pallars Sobirà",
+   "measures": {
+    "temperature": true,
+    "wind": 10,
+    "snow": true
+   }
+  },
+  {
+   "code": "ZC",
+   "name": "Ulldeter",
+   "altitude": 2413,
+   "lat": 42.42102,
+   "lon": 2.24593,
+   "municipality": "Setcases",
+   "comarca": "Ripollès",
+   "measures": {
+    "temperature": true,
+    "wind": 10,
+    "snow": true
+   }
+  },
+  {
+   "code": "ZD",
+   "name": "la Tosa d'Alp",
+   "altitude": 2478,
+   "lat": 42.32213,
+   "lon": 1.89716,
+   "municipality": "Alp",
+   "comarca": "Cerdanya",
+   "measures": {
+    "temperature": true,
+    "wind": 10,
+    "snow": false
+   }
+  },
+  {
+   "code": "ZE",
+   "name": "el Port del Comte",
+   "altitude": 2288,
+   "lat": 42.19084,
+   "lon": 1.53213,
+   "municipality": "La Coma i la Pedra",
+   "comarca": "Solsonès",
+   "measures": {
+    "temperature": true,
+    "wind": 10,
+    "snow": true
+   }
+  }
+ ],
+ "places": [
+  {
+   "slug": "baqueira-beret",
+   "point": {
+    "name": "Estació d'esquí de Baqueira - Beret",
+    "type": "Equipament",
+    "municipality": "Naut Aran",
+    "municipalityCode": "250254",
+    "comarca": "Val d'Aran",
+    "lat": 42.70038,
+    "lon": 0.94745
+   },
+   "stations": [
+    {
+     "code": "Z1",
+     "distanceKm": 6.7
+    }
+   ],
+   "nearest": [
+    {
+     "code": "Z1",
+     "distanceKm": 6.7
+    },
+    {
+     "code": "YN",
+     "distanceKm": 11.9
+    },
+    {
+     "code": "YT",
+     "distanceKm": 11.9
+    }
+   ]
+  },
+  {
+   "slug": "la-molina",
+   "point": {
+    "name": "Estació d'esquí de la Molina",
+    "type": "Equipament",
+    "municipality": "Alp",
+    "municipalityCode": "170062",
+    "comarca": "Cerdanya",
+    "lat": 42.33473,
+    "lon": 1.93479
+   },
+   "stations": [
+    {
+     "code": "ZD",
+     "distanceKm": 3.4
+    }
+   ],
+   "nearest": [
+    {
+     "code": "ZD",
+     "distanceKm": 3.4
+    },
+    {
+     "code": "DP",
+     "distanceKm": 8
+    },
+    {
+     "code": "MS",
+     "distanceKm": 9
+    }
+   ]
+  },
+  {
+   "slug": "masella",
+   "point": {
+    "name": "Estació d'esquí de Masella",
+    "type": "Equipament",
+    "municipality": "Alp",
+    "municipalityCode": "170062",
+    "comarca": "Cerdanya",
+    "lat": 42.34995,
+    "lon": 1.90091
+   },
+   "stations": [
+    {
+     "code": "ZD",
+     "distanceKm": 3.1
+    }
+   ],
+   "nearest": [
+    {
+     "code": "ZD",
+     "distanceKm": 3.1
+    },
+    {
+     "code": "DP",
+     "distanceKm": 4.9
+    },
+    {
+     "code": "YA",
+     "distanceKm": 10.4
+    }
+   ]
+  },
+  {
+   "slug": "boi-taull",
+   "point": {
+    "name": "Estació d'esquí de Boí-Taüll",
+    "type": "Equipament",
+    "municipality": "la Vall de Boí",
+    "municipalityCode": "250432",
+    "comarca": "Alta Ribagorça",
+    "lat": 42.47817,
+    "lon": 0.86852
+   },
+   "stations": [
+    {
+     "code": "Z2",
+     "distanceKm": 1.9
+    }
+   ],
+   "nearest": [
+    {
+     "code": "Z2",
+     "distanceKm": 1.9
+    },
+    {
+     "code": "CT",
+     "distanceKm": 13.6
+    },
+    {
+     "code": "Z7",
+     "distanceKm": 16.5
+    }
+   ]
+  },
+  {
+   "slug": "espot",
+   "point": {
+    "name": "Estació d'esquí d'Espot Esquí",
+    "type": "Equipament",
+    "municipality": "Espot",
+    "municipalityCode": "250827",
+    "comarca": "Pallars Sobirà",
+    "lat": 42.55051,
+    "lon": 1.08117
+   },
+   "stations": [
+    {
+     "code": "Z7",
+     "distanceKm": 2.8
+    }
+   ],
+   "nearest": [
+    {
+     "code": "Z7",
+     "distanceKm": 2.8
+    },
+    {
+     "code": "Z1",
+     "distanceKm": 13.3
+    },
+    {
+     "code": "YG",
+     "distanceKm": 13.7
+    }
+   ]
+  },
+  {
+   "slug": "port-aine",
+   "point": {
+    "name": "Estació d'esquí de Port-Ainé",
+    "type": "Equipament",
+    "municipality": "Rialp",
+    "municipalityCode": "251832",
+    "comarca": "Pallars Sobirà",
+    "lat": 42.42871,
+    "lon": 1.21402
+   },
+   "stations": [],
+   "nearest": [
+    {
+     "code": "XH",
+     "distanceKm": 7.4
+    },
+    {
+     "code": "YG",
+     "distanceKm": 10.3
+    },
+    {
+     "code": "ZB",
+     "distanceKm": 16
+    }
+   ]
+  },
+  {
+   "slug": "vallter",
+   "point": {
+    "name": "Estació d'esquí de Vallter 2000",
+    "type": "Equipament",
+    "municipality": "Setcases",
+    "municipalityCode": "171925",
+    "comarca": "Ripollès",
+    "lat": 42.42693,
+    "lon": 2.26505
+   },
+   "stations": [
+    {
+     "code": "ZC",
+     "distanceKm": 1.7
+    }
+   ],
+   "nearest": [
+    {
+     "code": "ZC",
+     "distanceKm": 1.7
+    },
+    {
+     "code": "DG",
+     "distanceKm": 9.6
+    },
+    {
+     "code": "CG",
+     "distanceKm": 13.5
+    }
+   ]
+  },
+  {
+   "slug": "vall-de-nuria",
+   "point": {
+    "name": "Estació de Muntanya Vall de Núria",
+    "type": "Equipament",
+    "municipality": "Queralbs",
+    "municipalityCode": "170433",
+    "comarca": "Ripollès",
+    "lat": 42.39758,
+    "lon": 2.15507
+   },
+   "stations": [
+    {
+     "code": "DG",
+     "distanceKm": 0.1
+    }
+   ],
+   "nearest": [
+    {
+     "code": "DG",
+     "distanceKm": 0.1
+    },
+    {
+     "code": "ZC",
+     "distanceKm": 7.9
+    },
+    {
+     "code": "YA",
+     "distanceKm": 18.7
+    }
+   ]
+  },
+  {
+   "slug": "port-del-comte",
+   "point": {
+    "name": "Estació d'esquí de Port del Comte",
+    "type": "Equipament",
+    "municipality": "la Coma i la Pedra",
+    "municipalityCode": "251636",
+    "comarca": "Solsonès",
+    "lat": 42.17236,
+    "lon": 1.56194
+   },
+   "stations": [
+    {
+     "code": "ZE",
+     "distanceKm": 3.2
+    }
+   ],
+   "nearest": [
+    {
+     "code": "ZE",
+     "distanceKm": 3.2
+    },
+    {
+     "code": "MV",
+     "distanceKm": 10
+    },
+    {
+     "code": "Y4",
+     "distanceKm": 11.1
+    }
+   ]
+  },
+  {
+   "slug": "tavascan",
+   "point": {
+    "name": "Estació d'esquí de Tavascan",
+    "type": "Equipament",
+    "municipality": "Lladorre",
+    "municipalityCode": "251235",
+    "comarca": "Pallars Sobirà",
+    "lat": 42.67786,
+    "lon": 1.21937
+   },
+   "stations": [
+    {
+     "code": "Z5",
+     "distanceKm": 5
+    }
+   ],
+   "nearest": [
+    {
+     "code": "Z5",
+     "distanceKm": 5
+    },
+    {
+     "code": "YT",
+     "distanceKm": 14.3
+    },
+    {
+     "code": "YG",
+     "distanceKm": 17.8
+    }
+   ]
+  },
+  {
+   "slug": "guils-fontanera",
+   "point": {
+    "name": "Estació d'esquí de fons de Guils-Fontanera",
+    "type": "Equipament",
+    "municipality": "Guils de Cerdanya",
+    "municipalityCode": "170828",
+    "comarca": "Cerdanya",
+    "lat": 42.45846,
+    "lon": 1.84467
+   },
+   "stations": [
+    {
+     "code": "Z3",
+     "distanceKm": 5.5
+    }
+   ],
+   "nearest": [
+    {
+     "code": "Z3",
+     "distanceKm": 5.5
+    },
+    {
+     "code": "YA",
+     "distanceKm": 7.7
+    },
+    {
+     "code": "DP",
+     "distanceKm": 8.2
+    }
+   ]
+  },
+  {
+   "slug": "lles",
+   "point": {
+    "name": "Estació d'esquí de fons de Lles de Cerdanya",
+    "type": "Equipament",
+    "municipality": "Lles de Cerdanya",
+    "municipalityCode": "251272",
+    "comarca": "Cerdanya",
+    "lat": 42.43127,
+    "lon": 1.66822
+   },
+   "stations": [],
+   "nearest": [
+    {
+     "code": "Z3",
+     "distanceKm": 9.8
+    },
+    {
+     "code": "Z9",
+     "distanceKm": 15.9
+    },
+    {
+     "code": "DP",
+     "distanceKm": 17
+    }
+   ]
+  },
+  {
+   "slug": "aransa",
+   "point": {
+    "name": "Estació d'esquí de fons d'Arànser",
+    "type": "Equipament",
+    "municipality": "Lles de Cerdanya",
+    "municipalityCode": "251272",
+    "comarca": "Cerdanya",
+    "lat": 42.42271,
+    "lon": 1.63549
+   },
+   "stations": [],
+   "nearest": [
+    {
+     "code": "Z3",
+     "distanceKm": 12.7
+    },
+    {
+     "code": "Z9",
+     "distanceKm": 15.9
+    },
+    {
+     "code": "CD",
+     "distanceKm": 17.6
+    }
+   ]
+  },
+  {
+   "slug": "sant-joan-de-l-erm",
+   "point": {
+    "name": "Estació d'esquí de fons de Sant Joan de l'Erm",
+    "type": "Equipament",
+    "municipality": "Montferrer i Castellbò",
+    "municipalityCode": "251403",
+    "comarca": "Alt Urgell",
+    "lat": 42.41772,
+    "lon": 1.28727
+   },
+   "stations": [],
+   "nearest": [
+    {
+     "code": "YG",
+     "distanceKm": 11.8
+    },
+    {
+     "code": "CD",
+     "distanceKm": 13
+    },
+    {
+     "code": "XH",
+     "distanceKm": 13
+    }
+   ]
+  },
+  {
+   "slug": "viros-vallferrera",
+   "point": {
+    "name": "Estació d'esquí de fons de Virós-Vallferrera",
+    "type": "Equipament",
+    "municipality": "Alins",
+    "municipalityCode": "250175",
+    "comarca": "Pallars Sobirà",
+    "lat": 42.52705,
+    "lon": 1.28185
+   },
+   "stations": [
+    {
+     "code": "ZB",
+     "distanceKm": 6.9
+    }
+   ],
+   "nearest": [
+    {
+     "code": "YG",
+     "distanceKm": 3.4
+    },
+    {
+     "code": "ZB",
+     "distanceKm": 6.9
+    },
+    {
+     "code": "XH",
+     "distanceKm": 18.4
+    }
+   ]
+  },
+  {
+   "slug": "port-de-la-bonaigua",
+   "point": {
+    "name": "Port de la Bonaigua",
+    "type": "Orografia",
+    "municipality": "Alt Àneu",
+    "municipalityCode": "250241",
+    "comarca": "Pallars Sobirà",
+    "lat": 42.66409,
+    "lon": 0.97815
+   },
+   "stations": [
+    {
+     "code": "Z1",
+     "distanceKm": 2
+    }
+   ],
+   "nearest": [
+    {
+     "code": "Z1",
+     "distanceKm": 2
+    },
+    {
+     "code": "YT",
+     "distanceKm": 12.5
+    },
+    {
+     "code": "YN",
+     "distanceKm": 14.9
+    }
+   ]
+  },
+  {
+   "slug": "lac-redon",
+   "point": {
+    "name": "Lac Redon",
+    "type": "Element Hidrogràfic",
+    "municipality": "Vielha e Mijaran",
+    "municipalityCode": "252430",
+    "comarca": "Val d'Aran",
+    "lat": 42.64039,
+    "lon": 0.77834
+   },
+   "stations": [
+    {
+     "code": "VS",
+     "distanceKm": 0.2
+    }
+   ],
+   "nearest": [
+    {
+     "code": "VS",
+     "distanceKm": 0.2
+    },
+    {
+     "code": "YN",
+     "distanceKm": 6.6
+    },
+    {
+     "code": "Z6",
+     "distanceKm": 14.9
+    }
+   ]
+  },
+  {
+   "slug": "saloria",
+   "point": {
+    "name": "Pic de Salòria",
+    "type": "Cim",
+    "municipality": "Alins",
+    "municipalityCode": "250175",
+    "comarca": "Pallars Sobirà",
+    "lat": 42.51446,
+    "lon": 1.38515
+   },
+   "stations": [
+    {
+     "code": "ZB",
+     "distanceKm": 1.7
+    }
+   ],
+   "nearest": [
+    {
+     "code": "ZB",
+     "distanceKm": 1.7
+    },
+    {
+     "code": "YG",
+     "distanceKm": 11.7
+    },
+    {
+     "code": "CD",
+     "distanceKm": 16.4
+    }
+   ]
+  },
+  {
+   "slug": "estany-de-malniu",
+   "point": {
+    "name": "Estany de Malniu",
+    "type": "Element Hidrogràfic",
+    "municipality": "Meranges",
+    "municipalityCode": "170998",
+    "comarca": "Cerdanya",
+    "lat": 42.47247,
+    "lon": 1.79137
+   },
+   "stations": [
+    {
+     "code": "Z3",
+     "distanceKm": 1.3
+    }
+   ],
+   "nearest": [
+    {
+     "code": "Z3",
+     "distanceKm": 1.3
+    },
+    {
+     "code": "DP",
+     "distanceKm": 11.4
+    },
+    {
+     "code": "YA",
+     "distanceKm": 12.3
+    }
+   ]
+  },
+  {
+   "slug": "prat-d-aguilo",
+   "point": {
+    "name": "Refugi de Prats d'Aguiló (Cèsar A. Torras)",
+    "type": "Equipament",
+    "municipality": "Montellà i Martinet",
+    "municipalityCode": "251399",
+    "comarca": "Cerdanya",
+    "lat": 42.29717,
+    "lon": 1.71411
+   },
+   "stations": [
+    {
+     "code": "Z9",
+     "distanceKm": 0.5
+    }
+   ],
+   "nearest": [
+    {
+     "code": "Z9",
+     "distanceKm": 0.5
+    },
+    {
+     "code": "UI",
+     "distanceKm": 5.3
+    },
+    {
+     "code": "WV",
+     "distanceKm": 15
+    }
+   ]
+  },
+  {
+   "slug": "montsec-d-ares",
+   "point": {
+    "name": "Sant Alís",
+    "type": "Cim",
+    "municipality": "Sant Esteve de la Sarga",
+    "municipalityCode": "251961",
+    "comarca": "Pallars Jussà",
+    "lat": 42.03985,
+    "lon": 0.76655
+   },
+   "stations": [
+    {
+     "code": "WQ",
+     "distanceKm": 3.3
+    }
+   ],
+   "nearest": [
+    {
+     "code": "WQ",
+     "distanceKm": 3.3
+    },
+    {
+     "code": "WX",
+     "distanceKm": 16.6
+    },
+    {
+     "code": "XQ",
+     "distanceKm": 16.9
+    }
+   ]
+  },
+  {
+   "slug": "montseny",
+   "point": {
+    "name": "Turó de l'Home",
+    "type": "Cim",
+    "municipality": "Fogars de Montclús",
+    "municipalityCode": "080811",
+    "comarca": "Vallès Oriental",
+    "lat": 41.77649,
+    "lon": 2.43482
+   },
+   "stations": [
+    {
+     "code": "XK",
+     "distanceKm": 0.4
+    }
+   ],
+   "nearest": [
+    {
+     "code": "XK",
+     "distanceKm": 0.4
+    },
+    {
+     "code": "WS",
+     "distanceKm": 7.2
+    },
+    {
+     "code": "VX",
+     "distanceKm": 11.4
+    }
+   ]
+  },
+  {
+   "slug": "els-ports",
+   "point": {
+    "name": "Caro",
+    "type": "Cim",
+    "municipality": "Roquetes",
+    "municipalityCode": "431331",
+    "comarca": "Baix Ebre",
+    "lat": 40.80313,
+    "lon": 0.34311
+   },
+   "stations": [
+    {
+     "code": "X5",
+     "distanceKm": 2.2
+    }
+   ],
+   "nearest": [
+    {
+     "code": "X5",
+     "distanceKm": 2.2
+    },
+    {
+     "code": "C9",
+     "distanceKm": 10.6
+    },
+    {
+     "code": "U7",
+     "distanceKm": 15
+    }
+   ]
+  }
+ ]
+}

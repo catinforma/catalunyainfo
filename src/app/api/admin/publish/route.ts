@@ -190,6 +190,9 @@ export async function POST(request: Request) {
         await publishB2Article(STRIKES_GUIDE),
       );
     }
+    // Mountain weather (/ca/temps-muntanya/ and the place pages are code
+    // routes): the two guides that gained one body link to the hub.
+    if (wants("mountain-links")) published.push(await publishB2Article(SKI), await publishB2Article(SNOW_NOW));
     if (wants("family-markets")) published.push(await publishB2Article(ZOO_AQUARIUM), await publishB2Article(MARKETS));
     if (wants("cruiseport")) published.push(await publishB2Article(CRUISEPORT));
     if (wants("portaventura")) published.push(await publishB2Article(PORTAVENTURA));

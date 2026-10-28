@@ -1,4 +1,5 @@
 import type { Locale } from "@/lib/i18n/config";
+import { hubPath as mountainHub } from "@/lib/programmatic/mountain/paths";
 
 import {
   b2Related,
@@ -364,7 +365,7 @@ const COPY: Record<Locale, T> = {
     snowTitle: "Pistes obertes avui: on mirar l'estat de la neu",
     snow: [
       "Cada estació publica cada dia les pistes obertes, el gruix de neu i els remuntadors en marxa: les sis d'FGC (la Molina, Vall de Núria, Vallter, Espot, Port Ainé i Boí Taüll) a l'[Infoneu de PIRINEU365](https://pirineu365.cat/infoneu-pirineu365/), Baqueira a «[Estado de la estación](https://www.baqueira.es/es/estado-de-la-estacion)» i Port del Comte a [la seva pàgina de pistes](https://portdelcomte.net/pistes/); Masella hi té càmeres web. Abans de l'obertura surten buits. Mira-ho el mateix matí: a principi i final de temporada canvia d'un dia per l'altre.",
-      `Per saber si hi ha neu a terra a l'alta muntanya, fora de les pistes, mira ${b2link("snowNow", "ca", "el gruix de neu d'avui a les estacions meteorològiques del Meteocat")}.`,
+      `Per saber si hi ha neu a terra a l'alta muntanya, fora de les pistes, mira ${b2link("snowNow", "ca", "el gruix de neu d'avui a les estacions meteorològiques del Meteocat")}. La temperatura, el vent i la neu de l'estació del Meteocat més propera a cada estació d'esquí són a [la pàgina del temps a les estacions d'esquí](${mountainHub("ca")}).`,
     ],
     pickTitle: "Quina estació triar",
     pick: [
@@ -428,7 +429,7 @@ const COPY: Record<Locale, T> = {
     snowTitle: "Pistas abiertas hoy: dónde mirar el estado de la nieve",
     snow: [
       "Cada estación publica a diario las pistas abiertas, el espesor de nieve y los remontes en marcha: las seis de FGC (La Molina, Vall de Núria, Vallter, Espot, Port Ainé y Boí Taüll) en el [Infoneu de PIRINEU365](https://pirineu365.cat/infoneu-pirineu365/), Baqueira en «[Estado de la estación](https://www.baqueira.es/es/estado-de-la-estacion)» y Port del Comte en [su página de pistas](https://portdelcomte.net/pistes/); Masella tiene cámaras web. Antes de la apertura salen vacíos. Míralo la misma mañana: a principio y final de temporada cambia de un día para otro.",
-      `Para saber si hay nieve en el suelo en la alta montaña, fuera de las pistas, mira ${b2link("snowNow", "es", "el espesor de nieve de hoy en las estaciones meteorológicas de Meteocat")}.`,
+      `Para saber si hay nieve en el suelo en la alta montaña, fuera de las pistas, mira ${b2link("snowNow", "es", "el espesor de nieve de hoy en las estaciones meteorológicas de Meteocat")}. La temperatura, el viento y la nieve de la estación de Meteocat más cercana a cada estación de esquí están en [la página del tiempo en las estaciones de esquí](${mountainHub("es")}).`,
     ],
     pickTitle: "Qué estación elegir",
     pick: [
@@ -492,7 +493,7 @@ const COPY: Record<Locale, T> = {
     snowTitle: "Open runs today: where to check the snow",
     snow: [
       "Each resort posts open runs, snow depth and running lifts daily: the six FGC resorts (La Molina, Vall de Núria, Vallter, Espot, Port Ainé and Boí Taüll) on [PIRINEU365's Infoneu](https://pirineu365.cat/infoneu-pirineu365/), Baqueira under '[Estado de la estación](https://www.baqueira.es/es/estado-de-la-estacion)' and Port del Comte on [its pistes page](https://portdelcomte.net/pistes/); Masella has webcams. Before opening they are empty. Check on the morning itself: at the start and end of the season it changes from one day to the next.",
-      `To see whether there is snow on the ground in the high mountains away from the pistes, see ${b2link("snowNow", "en", "today's snow depth at Meteocat's weather stations")}.`,
+      `To see whether there is snow on the ground in the high mountains away from the pistes, see ${b2link("snowNow", "en", "today's snow depth at Meteocat's weather stations")}. For the temperature, wind and snow at the Meteocat station nearest each resort, see [ski resort weather today](${mountainHub("en")}).`,
     ],
     pickTitle: "Which resort to choose",
     pick: [

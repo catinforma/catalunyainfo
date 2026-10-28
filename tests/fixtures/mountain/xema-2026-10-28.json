@@ -1,0 +1,824 @@
+{
+ "readAt": "2026-10-28T20:28:46.287Z",
+ "weatherQuery": "https://analisi.transparenciacatalunya.cat/resource/nzvn-apee.json?$select=codi_estacio%2Ccodi_variable%2Cdata_lectura%2Cvalor_lectura%2Ccodi_estat&$where=codi_estat%3D'V'%20AND%20codi_estacio%20in('DG'%2C'VS'%2C'VX'%2C'WQ'%2C'X5'%2C'XK'%2C'Z1'%2C'Z2'%2C'Z3'%2C'Z5'%2C'Z7'%2C'Z9'%2C'ZB'%2C'ZC'%2C'ZD'%2C'ZE')%20AND%20codi_variable%20in('30'%2C'31'%2C'32'%2C'48'%2C'49'%2C'50'%2C'53')%20AND%20data_lectura%20%3E%3D%20'2026-10-26T18%3A28%3A00'&$order=data_lectura%20DESC&$limit=20000",
+ "snowQuery": "https://analisi.transparenciacatalunya.cat/resource/nzvn-apee.json?$select=codi_estacio%2Cdata_lectura%2Cvalor_lectura%2Ccodi_estat&$where=codi_variable%3D'38'%20AND%20codi_estat%3D'V'%20AND%20codi_estacio%20in('DG'%2C'VS'%2C'X5'%2C'XK'%2C'Z1'%2C'Z2'%2C'Z3'%2C'Z5'%2C'Z7'%2C'Z9'%2C'ZB'%2C'ZC'%2C'ZE')%20AND%20data_lectura%20%3E%3D%20'2026-10-24T00%3A00%3A00'&$order=data_lectura%20DESC&$limit=10000",
+ "weather": [],
+ "snow": [
+  {
+   "codi_estacio": "Z5",
+   "data_lectura": "2026-10-26T14:00:00.000",
+   "valor_lectura": "0",
+   "codi_estat": "V"
+  },
+  {
+   "codi_estacio": "ZE",
+   "data_lectura": "2026-10-26T13:30:00.000",
+   "valor_lectura": "0",
+   "codi_estat": "V"
+  },
+  {
+   "codi_estacio": "ZB",
+   "data_lectura": "2026-10-26T13:30:00.000",
+   "valor_lectura": "0",
+   "codi_estat": "V"
+  },
+  {
+   "codi_estacio": "Z9",
+   "data_lectura": "2026-10-26T13:30:00.000",
+   "valor_lectura": "0",
+   "codi_estat": "V"
+  },
+  {
+   "codi_estacio": "Z7",
+   "data_lectura": "2026-10-26T13:30:00.000",
+   "valor_lectura": "0",
+   "codi_estat": "V"
+  },
+  {
+   "codi_estacio": "Z2",
+   "data_lectura": "2026-10-26T13:30:00.000",
+   "valor_lectura": "0",
+   "codi_estat": "V"
+  },
+  {
+   "codi_estacio": "Z3",
+   "data_lectura": "2026-10-26T13:30:00.000",
+   "valor_lectura": "0",
+   "codi_estat": "V"
+  },
+  {
+   "codi_estacio": "Z5",
+   "data_lectura": "2026-10-26T13:30:00.000",
+   "valor_lectura": "0",
+   "codi_estat": "V"
+  },
+  {
+   "codi_estacio": "VS",
+   "data_lectura": "2026-10-26T13:30:00.000",
+   "valor_lectura": "0",
+   "codi_estat": "V"
+  },
+  {
+   "codi_estacio": "DG",
+   "data_lectura": "2026-10-26T13:30:00.000",
+   "valor_lectura": "0",
+   "codi_estat": "V"
+  },
+  {
+   "codi_estacio": "ZE",
+   "data_lectura": "2026-10-26T13:00:00.000",
+   "valor_lectura": "0",
+   "codi_estat": "V"
+  },
+  {
+   "codi_estacio": "ZB",
+   "data_lectura": "2026-10-26T13:00:00.000",
+   "valor_lectura": "0",
+   "codi_estat": "V"
+  },
+  {
+   "codi_estacio": "Z9",
+   "data_lectura": "2026-10-26T13:00:00.000",
+   "valor_lectura": "0",
+   "codi_estat": "V"
+  },
+  {
+   "codi_estacio": "Z7",
+   "data_lectura": "2026-10-26T13:00:00.000",
+   "valor_lectura": "0",
+   "codi_estat": "V"
+  },
+  {
+   "codi_estacio": "Z5",
+   "data_lectura": "2026-10-26T13:00:00.000",
+   "valor_lectura": "0",
+   "codi_estat": "V"
+  },
+  {
+   "codi_estacio": "Z3",
+   "data_lectura": "2026-10-26T13:00:00.000",
+   "valor_lectura": "0",
+   "codi_estat": "V"
+  },
+  {
+   "codi_estacio": "Z2",
+   "data_lectura": "2026-10-26T13:00:00.000",
+   "valor_lectura": "0",
+   "codi_estat": "V"
+  },
+  {
+   "codi_estacio": "Z1",
+   "data_lectura": "2026-10-26T13:00:00.000",
+   "valor_lectura": "0",
+   "codi_estat": "V"
+  },
+  {
+   "codi_estacio": "VS",
+   "data_lectura": "2026-10-26T13:00:00.000",
+   "valor_lectura": "0",
+   "codi_estat": "V"
+  },
+  {
+   "codi_estacio": "DG",
+   "data_lectura": "2026-10-26T13:00:00.000",
+   "valor_lectura": "0",
+   "codi_estat": "V"
+  },
+  {
+   "codi_estacio": "VS",
+   "data_lectura": "2026-10-26T12:30:00.000",
+   "valor_lectura": "0",
+   "codi_estat": "V"
+  },
+  {
+   "codi_estacio": "ZE",
+   "data_lectura": "2026-10-26T12:30:00.000",
+   "valor_lectura": "0",
+   "codi_estat": "V"
+  },
+  {
+   "codi_estacio": "ZB",
+   "data_lectura": "2026-10-26T12:30:00.000",
+   "valor_lectura": "0",
+   "codi_estat": "V"
+  },
+  {
+   "codi_estacio": "Z9",
+   "data_lectura": "2026-10-26T12:30:00.000",
+   "valor_lectura": "0",
+   "codi_estat": "V"
+  },
+  {
+   "codi_estacio": "Z7",
+   "data_lectura": "2026-10-26T12:30:00.000",
+   "valor_lectura": "0",
+   "codi_estat": "V"
+  },
+  {
+   "codi_estacio": "Z1",
+   "data_lectura": "2026-10-26T12:30:00.000",
+   "valor_lectura": "0",
+   "codi_estat": "V"
+  },
+  {
+   "codi_estacio": "Z2",
+   "data_lectura": "2026-10-26T12:30:00.000",
+   "valor_lectura": "0",
+   "codi_estat": "V"
+  },
+  {
+   "codi_estacio": "Z3",
+   "data_lectura": "2026-10-26T12:30:00.000",
+   "valor_lectura": "0",
+   "codi_estat": "V"
+  },
+  {
+   "codi_estacio": "DG",
+   "data_lectura": "2026-10-26T12:30:00.000",
+   "valor_lectura": "0",
+   "codi_estat": "V"
+  },
+  {
+   "codi_estacio": "ZE",
+   "data_lectura": "2026-10-26T12:00:00.000",
+   "valor_lectura": "0",
+   "codi_estat": "V"
+  },
+  {
+   "codi_estacio": "ZB",
+   "data_lectura": "2026-10-26T12:00:00.000",
+   "valor_lectura": "0",
+   "codi_estat": "V"
+  },
+  {
+   "codi_estacio": "Z1",
+   "data_lectura": "2026-10-26T12:00:00.000",
+   "valor_lectura": "0",
+   "codi_estat": "V"
+  },
+  {
+   "codi_estacio": "Z2",
+   "data_lectura": "2026-10-26T12:00:00.000",
+   "valor_lectura": "0",
+   "codi_estat": "V"
+  },
+  {
+   "codi_estacio": "Z3",
+   "data_lectura": "2026-10-26T12:00:00.000",
+   "valor_lectura": "0",
+   "codi_estat": "V"
+  },
+  {
+   "codi_estacio": "Z5",
+   "data_lectura": "2026-10-26T12:00:00.000",
+   "valor_lectura": "0",
+   "codi_estat": "V"
+  },
+  {
+   "codi_estacio": "Z7",
+   "data_lectura": "2026-10-26T12:00:00.000",
+   "valor_lectura": "0",
+   "codi_estat": "V"
+  },
+  {
+   "codi_estacio": "Z9",
+   "data_lectura": "2026-10-26T12:00:00.000",
+   "valor_lectura": "0",
+   "codi_estat": "V"
+  },
+  {
+   "codi_estacio": "VS",
+   "data_lectura": "2026-10-26T12:00:00.000",
+   "valor_lectura": "0",
+   "codi_estat": "V"
+  },
+  {
+   "codi_estacio": "DG",
+   "data_lectura": "2026-10-26T12:00:00.000",
+   "valor_lectura": "0",
+   "codi_estat": "V"
+  },
+  {
+   "codi_estacio": "ZE",
+   "data_lectura": "2026-10-26T11:30:00.000",
+   "valor_lectura": "0",
+   "codi_estat": "V"
+  },
+  {
+   "codi_estacio": "ZB",
+   "data_lectura": "2026-10-26T11:30:00.000",
+   "valor_lectura": "0",
+   "codi_estat": "V"
+  },
+  {
+   "codi_estacio": "Z9",
+   "data_lectura": "2026-10-26T11:30:00.000",
+   "valor_lectura": "0",
+   "codi_estat": "V"
+  },
+  {
+   "codi_estacio": "Z7",
+   "data_lectura": "2026-10-26T11:30:00.000",
+   "valor_lectura": "0",
+   "codi_estat": "V"
+  },
+  {
+   "codi_estacio": "Z5",
+   "data_lectura": "2026-10-26T11:30:00.000",
+   "valor_lectura": "0",
+   "codi_estat": "V"
+  },
+  {
+   "codi_estacio": "Z3",
+   "data_lectura": "2026-10-26T11:30:00.000",
+   "valor_lectura": "0",
+   "codi_estat": "V"
+  },
+  {
+   "codi_estacio": "Z2",
+   "data_lectura": "2026-10-26T11:30:00.000",
+   "valor_lectura": "0",
+   "codi_estat": "V"
+  },
+  {
+   "codi_estacio": "Z1",
+   "data_lectura": "2026-10-26T11:30:00.000",
+   "valor_lectura": "0",
+   "codi_estat": "V"
+  },
+  {
+   "codi_estacio": "VS",
+   "data_lectura": "2026-10-26T11:30:00.000",
+   "valor_lectura": "0",
+   "codi_estat": "V"
+  },
+  {
+   "codi_estacio": "DG",
+   "data_lectura": "2026-10-26T11:30:00.000",
+   "valor_lectura": "0",
+   "codi_estat": "V"
+  },
+  {
+   "codi_estacio": "Z7",
+   "data_lectura": "2026-10-26T11:00:00.000",
+   "valor_lectura": "0",
+   "codi_estat": "V"
+  },
+  {
+   "codi_estacio": "Z5",
+   "data_lectura": "2026-10-26T11:00:00.000",
+   "valor_lectura": "0",
+   "codi_estat": "V"
+  },
+  {
+   "codi_estacio": "Z3",
+   "data_lectura": "2026-10-26T11:00:00.000",
+   "valor_lectura": "0",
+   "codi_estat": "V"
+  },
+  {
+   "codi_estacio": "Z2",
+   "data_lectura": "2026-10-26T11:00:00.000",
+   "valor_lectura": "0",
+   "codi_estat": "V"
+  },
+  {
+   "codi_estacio": "Z1",
+   "data_lectura": "2026-10-26T11:00:00.000",
+   "valor_lectura": "0",
+   "codi_estat": "V"
+  },
+  {
+   "codi_estacio": "Z9",
+   "data_lectura": "2026-10-26T11:00:00.000",
+   "valor_lectura": "0",
+   "codi_estat": "V"
+  },
+  {
+   "codi_estacio": "ZB",
+   "data_lectura": "2026-10-26T11:00:00.000",
+   "valor_lectura": "0",
+   "codi_estat": "V"
+  },
+  {
+   "codi_estacio": "ZE",
+   "data_lectura": "2026-10-26T11:00:00.000",
+   "valor_lectura": "0",
+   "codi_estat": "V"
+  },
+  {
+   "codi_estacio": "VS",
+   "data_lectura": "2026-10-26T11:00:00.000",
+   "valor_lectura": "0",
+   "codi_estat": "V"
+  },
+  {
+   "codi_estacio": "DG",
+   "data_lectura": "2026-10-26T11:00:00.000",
+   "valor_lectura": "0",
+   "codi_estat": "V"
+  },
+  {
+   "codi_estacio": "ZE",
+   "data_lectura": "2026-10-26T10:30:00.000",
+   "valor_lectura": "0",
+   "codi_estat": "V"
+  },
+  {
+   "codi_estacio": "ZB",
+   "data_lectura": "2026-10-26T10:30:00.000",
+   "valor_lectura": "0",
+   "codi_estat": "V"
+  },
+  {
+   "codi_estacio": "Z9",
+   "data_lectura": "2026-10-26T10:30:00.000",
+   "valor_lectura": "0",
+   "codi_estat": "V"
+  },
+  {
+   "codi_estacio": "Z7",
+   "data_lectura": "2026-10-26T10:30:00.000",
+   "valor_lectura": "0",
+   "codi_estat": "V"
+  },
+  {
+   "codi_estacio": "Z5",
+   "data_lectura": "2026-10-26T10:30:00.000",
+   "valor_lectura": "0",
+   "codi_estat": "V"
+  },
+  {
+   "codi_estacio": "Z3",
+   "data_lectura": "2026-10-26T10:30:00.000",
+   "valor_lectura": "0",
+   "codi_estat": "V"
+  },
+  {
+   "codi_estacio": "Z1",
+   "data_lectura": "2026-10-26T10:30:00.000",
+   "valor_lectura": "0",
+   "codi_estat": "V"
+  },
+  {
+   "codi_estacio": "VS",
+   "data_lectura": "2026-10-26T10:30:00.000",
+   "valor_lectura": "0",
+   "codi_estat": "V"
+  },
+  {
+   "codi_estacio": "DG",
+   "data_lectura": "2026-10-26T10:30:00.000",
+   "valor_lectura": "0",
+   "codi_estat": "V"
+  },
+  {
+   "codi_estacio": "Z2",
+   "data_lectura": "2026-10-26T10:30:00.000",
+   "valor_lectura": "0",
+   "codi_estat": "V"
+  },
+  {
+   "codi_estacio": "ZB",
+   "data_lectura": "2026-10-26T10:00:00.000",
+   "valor_lectura": "0",
+   "codi_estat": "V"
+  },
+  {
+   "codi_estacio": "Z9",
+   "data_lectura": "2026-10-26T10:00:00.000",
+   "valor_lectura": "0",
+   "codi_estat": "V"
+  },
+  {
+   "codi_estacio": "Z2",
+   "data_lectura": "2026-10-26T10:00:00.000",
+   "valor_lectura": "0",
+   "codi_estat": "V"
+  },
+  {
+   "codi_estacio": "Z1",
+   "data_lectura": "2026-10-26T10:00:00.000",
+   "valor_lectura": "0",
+   "codi_estat": "V"
+  },
+  {
+   "codi_estacio": "Z3",
+   "data_lectura": "2026-10-26T10:00:00.000",
+   "valor_lectura": "0",
+   "codi_estat": "V"
+  },
+  {
+   "codi_estacio": "Z5",
+   "data_lectura": "2026-10-26T10:00:00.000",
+   "valor_lectura": "0",
+   "codi_estat": "V"
+  },
+  {
+   "codi_estacio": "Z7",
+   "data_lectura": "2026-10-26T10:00:00.000",
+   "valor_lectura": "0",
+   "codi_estat": "V"
+  },
+  {
+   "codi_estacio": "ZE",
+   "data_lectura": "2026-10-26T10:00:00.000",
+   "valor_lectura": "0",
+   "codi_estat": "V"
+  },
+  {
+   "codi_estacio": "VS",
+   "data_lectura": "2026-10-26T10:00:00.000",
+   "valor_lectura": "0",
+   "codi_estat": "V"
+  },
+  {
+   "codi_estacio": "DG",
+   "data_lectura": "2026-10-26T10:00:00.000",
+   "valor_lectura": "0",
+   "codi_estat": "V"
+  },
+  {
+   "codi_estacio": "X5",
+   "data_lectura": "2026-10-26T07:00:00.000",
+   "valor_lectura": "0",
+   "codi_estat": "V"
+  },
+  {
+   "codi_estacio": "X5",
+   "data_lectura": "2026-10-26T06:30:00.000",
+   "valor_lectura": "0",
+   "codi_estat": "V"
+  },
+  {
+   "codi_estacio": "XK",
+   "data_lectura": "2026-10-26T06:30:00.000",
+   "valor_lectura": "0",
+   "codi_estat": "V"
+  },
+  {
+   "codi_estacio": "XK",
+   "data_lectura": "2026-10-26T06:00:00.000",
+   "valor_lectura": "0",
+   "codi_estat": "V"
+  },
+  {
+   "codi_estacio": "X5",
+   "data_lectura": "2026-10-26T06:00:00.000",
+   "valor_lectura": "0",
+   "codi_estat": "V"
+  },
+  {
+   "codi_estacio": "XK",
+   "data_lectura": "2026-10-26T05:30:00.000",
+   "valor_lectura": "0",
+   "codi_estat": "V"
+  },
+  {
+   "codi_estacio": "X5",
+   "data_lectura": "2026-10-26T05:30:00.000",
+   "valor_lectura": "0",
+   "codi_estat": "V"
+  },
+  {
+   "codi_estacio": "XK",
+   "data_lectura": "2026-10-26T05:00:00.000",
+   "valor_lectura": "0",
+   "codi_estat": "V"
+  },
+  {
+   "codi_estacio": "X5",
+   "data_lectura": "2026-10-26T05:00:00.000",
+   "valor_lectura": "0",
+   "codi_estat": "V"
+  },
+  {
+   "codi_estacio": "XK",
+   "data_lectura": "2026-10-26T04:30:00.000",
+   "valor_lectura": "0",
+   "codi_estat": "V"
+  },
+  {
+   "codi_estacio": "X5",
+   "data_lectura": "2026-10-26T04:30:00.000",
+   "valor_lectura": "0",
+   "codi_estat": "V"
+  },
+  {
+   "codi_estacio": "XK",
+   "data_lectura": "2026-10-26T04:00:00.000",
+   "valor_lectura": "0",
+   "codi_estat": "V"
+  },
+  {
+   "codi_estacio": "X5",
+   "data_lectura": "2026-10-26T04:00:00.000",
+   "valor_lectura": "0",
+   "codi_estat": "V"
+  },
+  {
+   "codi_estacio": "XK",
+   "data_lectura": "2026-10-26T03:30:00.000",
+   "valor_lectura": "0",
+   "codi_estat": "V"
+  },
+  {
+   "codi_estacio": "X5",
+   "data_lectura": "2026-10-26T03:30:00.000",
+   "valor_lectura": "0",
+   "codi_estat": "V"
+  },
+  {
+   "codi_estacio": "XK",
+   "data_lectura": "2026-10-26T03:00:00.000",
+   "valor_lectura": "0",
+   "codi_estat": "V"
+  },
+  {
+   "codi_estacio": "XK",
+   "data_lectura": "2026-10-26T02:30:00.000",
+   "valor_lectura": "0",
+   "codi_estat": "V"
+  },
+  {
+   "codi_estacio": "Z9",
+   "data_lectura": "2026-10-24T06:30:00.000",
+   "valor_lectura": "0",
+   "codi_estat": "V"
+  },
+  {
+   "codi_estacio": "ZE",
+   "data_lectura": "2026-10-24T06:00:00.000",
+   "valor_lectura": "0",
+   "codi_estat": "V"
+  },
+  {
+   "codi_estacio": "Z5",
+   "data_lectura": "2026-10-24T06:00:00.000",
+   "valor_lectura": "1",
+   "codi_estat": "V"
+  },
+  {
+   "codi_estacio": "Z2",
+   "data_lectura": "2026-10-24T06:00:00.000",
+   "valor_lectura": "0",
+   "codi_estat": "V"
+  },
+  {
+   "codi_estacio": "Z3",
+   "data_lectura": "2026-10-24T06:00:00.000",
+   "valor_lectura": "0",
+   "codi_estat": "V"
+  },
+  {
+   "codi_estacio": "Z9",
+   "data_lectura": "2026-10-24T06:00:00.000",
+   "valor_lectura": "0",
+   "codi_estat": "V"
+  },
+  {
+   "codi_estacio": "DG",
+   "data_lectura": "2026-10-24T06:00:00.000",
+   "valor_lectura": "0",
+   "codi_estat": "V"
+  },
+  {
+   "codi_estacio": "ZE",
+   "data_lectura": "2026-10-24T05:30:00.000",
+   "valor_lectura": "0",
+   "codi_estat": "V"
+  },
+  {
+   "codi_estacio": "Z1",
+   "data_lectura": "2026-10-24T05:30:00.000",
+   "valor_lectura": "1",
+   "codi_estat": "V"
+  },
+  {
+   "codi_estacio": "Z2",
+   "data_lectura": "2026-10-24T05:30:00.000",
+   "valor_lectura": "0",
+   "codi_estat": "V"
+  },
+  {
+   "codi_estacio": "Z3",
+   "data_lectura": "2026-10-24T05:30:00.000",
+   "valor_lectura": "0",
+   "codi_estat": "V"
+  },
+  {
+   "codi_estacio": "Z5",
+   "data_lectura": "2026-10-24T05:30:00.000",
+   "valor_lectura": "1",
+   "codi_estat": "V"
+  },
+  {
+   "codi_estacio": "Z9",
+   "data_lectura": "2026-10-24T05:30:00.000",
+   "valor_lectura": "0",
+   "codi_estat": "V"
+  },
+  {
+   "codi_estacio": "ZC",
+   "data_lectura": "2026-10-24T05:30:00.000",
+   "valor_lectura": "0",
+   "codi_estat": "V"
+  },
+  {
+   "codi_estacio": "DG",
+   "data_lectura": "2026-10-24T05:30:00.000",
+   "valor_lectura": "0",
+   "codi_estat": "V"
+  },
+  {
+   "codi_estacio": "ZE",
+   "data_lectura": "2026-10-24T05:00:00.000",
+   "valor_lectura": "0",
+   "codi_estat": "V"
+  },
+  {
+   "codi_estacio": "ZC",
+   "data_lectura": "2026-10-24T05:00:00.000",
+   "valor_lectura": "0",
+   "codi_estat": "V"
+  },
+  {
+   "codi_estacio": "Z2",
+   "data_lectura": "2026-10-24T05:00:00.000",
+   "valor_lectura": "0",
+   "codi_estat": "V"
+  },
+  {
+   "codi_estacio": "Z3",
+   "data_lectura": "2026-10-24T05:00:00.000",
+   "valor_lectura": "0",
+   "codi_estat": "V"
+  },
+  {
+   "codi_estacio": "Z5",
+   "data_lectura": "2026-10-24T05:00:00.000",
+   "valor_lectura": "1",
+   "codi_estat": "V"
+  },
+  {
+   "codi_estacio": "Z9",
+   "data_lectura": "2026-10-24T05:00:00.000",
+   "valor_lectura": "0",
+   "codi_estat": "V"
+  },
+  {
+   "codi_estacio": "DG",
+   "data_lectura": "2026-10-24T05:00:00.000",
+   "valor_lectura": "0",
+   "codi_estat": "V"
+  },
+  {
+   "codi_estacio": "DG",
+   "data_lectura": "2026-10-24T04:30:00.000",
+   "valor_lectura": "0",
+   "codi_estat": "V"
+  },
+  {
+   "codi_estacio": "Z2",
+   "data_lectura": "2026-10-24T04:30:00.000",
+   "valor_lectura": "0",
+   "codi_estat": "V"
+  },
+  {
+   "codi_estacio": "Z3",
+   "data_lectura": "2026-10-24T04:30:00.000",
+   "valor_lectura": "0",
+   "codi_estat": "V"
+  },
+  {
+   "codi_estacio": "Z5",
+   "data_lectura": "2026-10-24T04:30:00.000",
+   "valor_lectura": "1",
+   "codi_estat": "V"
+  },
+  {
+   "codi_estacio": "Z9",
+   "data_lectura": "2026-10-24T04:30:00.000",
+   "valor_lectura": "0",
+   "codi_estat": "V"
+  },
+  {
+   "codi_estacio": "ZE",
+   "data_lectura": "2026-10-24T04:30:00.000",
+   "valor_lectura": "0",
+   "codi_estat": "V"
+  },
+  {
+   "codi_estacio": "ZE",
+   "data_lectura": "2026-10-24T04:00:00.000",
+   "valor_lectura": "0",
+   "codi_estat": "V"
+  },
+  {
+   "codi_estacio": "Z2",
+   "data_lectura": "2026-10-24T04:00:00.000",
+   "valor_lectura": "0",
+   "codi_estat": "V"
+  },
+  {
+   "codi_estacio": "Z3",
+   "data_lectura": "2026-10-24T04:00:00.000",
+   "valor_lectura": "0",
+   "codi_estat": "V"
+  },
+  {
+   "codi_estacio": "Z5",
+   "data_lectura": "2026-10-24T04:00:00.000",
+   "valor_lectura": "1",
+   "codi_estat": "V"
+  },
+  {
+   "codi_estacio": "Z9",
+   "data_lectura": "2026-10-24T04:00:00.000",
+   "valor_lectura": "0",
+   "codi_estat": "V"
+  },
+  {
+   "codi_estacio": "DG",
+   "data_lectura": "2026-10-24T04:00:00.000",
+   "valor_lectura": "0",
+   "codi_estat": "V"
+  },
+  {
+   "codi_estacio": "Z3",
+   "data_lectura": "2026-10-24T03:30:00.000",
+   "valor_lectura": "0",
+   "codi_estat": "V"
+  },
+  {
+   "codi_estacio": "Z5",
+   "data_lectura": "2026-10-24T03:30:00.000",
+   "valor_lectura": "1",
+   "codi_estat": "V"
+  },
+  {
+   "codi_estacio": "ZE",
+   "data_lectura": "2026-10-24T03:30:00.000",
+   "valor_lectura": "0",
+   "codi_estat": "V"
+  },
+  {
+   "codi_estacio": "DG",
+   "data_lectura": "2026-10-24T03:30:00.000",
+   "valor_lectura": "0",
+   "codi_estat": "V"
+  },
+  {
+   "codi_estacio": "Z2",
+   "data_lectura": "2026-10-24T03:30:00.000",
+   "valor_lectura": "0",
+   "codi_estat": "V"
+  },
+  {
+   "codi_estacio": "Z9",
+   "data_lectura": "2026-10-24T03:30:00.000",
+   "valor_lectura": "0",
+   "codi_estat": "V"
+  }
+ ]
+}

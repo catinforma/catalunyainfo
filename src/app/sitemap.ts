@@ -9,6 +9,7 @@ import { electionsSitemap } from "@/lib/programmatic/elections/pages";
 import { holidaySitemapEntries } from "@/lib/programmatic/holidays/paths";
 import { fuelSitemapEntries } from "@/lib/programmatic/fuel/sitemap";
 import { rodaliesSitemap } from "@/lib/programmatic/rodalies/pages";
+import { mountainSitemap } from "@/lib/programmatic/mountain/pages";
 
 /**
  * Rendered on request, not through ISR. The cached copy depended on ISR
@@ -117,7 +118,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }
   }
 
-  return [...systemEntries, ...entries, ...electionsSitemap(), ...holidaySitemapEntries(), ...fuelSitemapEntries(), ...rodaliesSitemap()];
+  return [...systemEntries, ...entries, ...electionsSitemap(), ...holidaySitemapEntries(), ...fuelSitemapEntries(), ...rodaliesSitemap(), ...mountainSitemap()];
 }
 
 function languageMap(group: Partial<Record<Locale, string>>): Record<string, string> {
