@@ -1,0 +1,8897 @@
+{
+ "readOn": "2026-10-28",
+ "stations": [
+  {
+   "id": "396",
+   "brand": "E.S.GELIDA",
+   "address": "CALLE ANSELM CLAVE, 5176901",
+   "municipality": "956"
+  },
+  {
+   "id": "1536",
+   "brand": "REPSOL LA RIERA",
+   "address": "CALLE FEDERICA MONTSENY, 2",
+   "municipality": "1035"
+  },
+  {
+   "id": "1537",
+   "brand": "PETRO VALLES",
+   "address": "AVENIDA JAIME I, 1",
+   "municipality": "1141"
+  },
+  {
+   "id": "1538",
+   "brand": "3 PUNT TRES",
+   "address": "MOSSEN JACINTO VERDAGUER, 83-85",
+   "municipality": "1080"
+  },
+  {
+   "id": "1540",
+   "brand": "PETROCAT DIRECTE",
+   "address": "AVENIDA BEJAR, DE, 399",
+   "municipality": "1141"
+  },
+  {
+   "id": "1548",
+   "brand": "PETROLIS DE BARCELONA",
+   "address": "CTRA. MANRESA, C-55 km 77,50",
+   "municipality": "3940"
+  },
+  {
+   "id": "1551",
+   "brand": "TORTUGA",
+   "address": "CARRETERA N-II KM. 773,5",
+   "municipality": "2531"
+  },
+  {
+   "id": "1553",
+   "brand": "SERVICIOS PENEDES SA",
+   "address": "CALLE IGUALADA, 70",
+   "municipality": "1162"
+  },
+  {
+   "id": "1554",
+   "brand": "ESCLATOIL",
+   "address": "CARRETERA MANLLEU TORELLO KM. 1",
+   "municipality": "977"
+  },
+  {
+   "id": "1556",
+   "brand": "MEROIL",
+   "address": "AVENIDA PRAT DE LA RIBA, 100",
+   "municipality": "961"
+  },
+  {
+   "id": "1557",
+   "brand": "E.S. SANT GUIM",
+   "address": "CARRETERA CALAF, 35 KM.",
+   "municipality": "3976"
+  },
+  {
+   "id": "1559",
+   "brand": "GALP",
+   "address": "CARRETERA N-240 KM. 77,800",
+   "municipality": "4010"
+  },
+  {
+   "id": "1560",
+   "brand": "BENZINERA MARTINET",
+   "address": "CARRETERA N-260 KM. 205,7",
+   "municipality": "3917"
+  },
+  {
+   "id": "1562",
+   "brand": "BONAREA",
+   "address": "CRTA. C-13,  (C.C. BON AREA) km 84,25",
+   "municipality": "4014"
+  },
+  {
+   "id": "1563",
+   "brand": "PETROVOLTREGÀ - ÀREA DEL COLLSACABRA",
+   "address": "CARRETERA VIC-OLOT KM. 15,70",
+   "municipality": "1119"
+  },
+  {
+   "id": "1565",
+   "brand": "BONAREA",
+   "address": "C-1412A (BONAREA) km 23,85",
+   "municipality": "4003"
+  },
+  {
+   "id": "1566",
+   "brand": "BONAREA",
+   "address": "CTRA. TARREGA A MONTBLACH (C-240 km 69)",
+   "municipality": "4022"
+  },
+  {
+   "id": "1567",
+   "brand": "MOEVE",
+   "address": "CARRETERA C-28 KM. 29,5",
+   "municipality": "3935"
+  },
+  {
+   "id": "1568",
+   "brand": "BONAREA",
+   "address": "POLIGONO INDUSTRIAL EL SEGRE,PARCELA 202",
+   "municipality": "3916"
+  },
+  {
+   "id": "1570",
+   "brand": "E.S. SEGRIÀ",
+   "address": "CARRETERA N-230 LLEIDA - VIELLA KM. 22",
+   "municipality": "3824"
+  },
+  {
+   "id": "1571",
+   "brand": "E.S.MAS",
+   "address": "CTRA. ANDORRA, S/N (C1412 km 23,42)",
+   "municipality": "4003"
+  },
+  {
+   "id": "1572",
+   "brand": "EASYGAS",
+   "address": "AVINGUDA PUIGCERDÀ, 8",
+   "municipality": "972"
+  },
+  {
+   "id": "1573",
+   "brand": "FARRE OIL",
+   "address": "CARRETERA C-14 KM. 102,100",
+   "municipality": "3833"
+  },
+  {
+   "id": "1574",
+   "brand": "PONENT ENERGIA",
+   "address": "CTRA. LP-9221 km 6.80000",
+   "municipality": "3850"
+  },
+  {
+   "id": "1576",
+   "brand": "PETROMIRALLES",
+   "address": "CARRETERA COMARCAL C-16 KM. 105,5",
+   "municipality": "930"
+  },
+  {
+   "id": "1579",
+   "brand": "CEPSA",
+   "address": "PASEO VALLDAURA, 210",
+   "municipality": "881"
+  },
+  {
+   "id": "1581",
+   "brand": "FITOGAS",
+   "address": "AVDA. ALFONS XIII, 24 (N-II km 636,5)",
+   "municipality": "875"
+  },
+  {
+   "id": "1582",
+   "brand": "RUTA DEL FERRO E.S.",
+   "address": "CALLE SOROLLA, 33",
+   "municipality": "2587"
+  },
+  {
+   "id": "1583",
+   "brand": "PETREM",
+   "address": "N-II km 728",
+   "municipality": "2624"
+  },
+  {
+   "id": "1584",
+   "brand": "SHELL",
+   "address": "CARRETERA A-II KM. 770,35",
+   "municipality": "2489"
+  },
+  {
+   "id": "1585",
+   "brand": "SHELL",
+   "address": "N-340 km 1216,35",
+   "municipality": "1068"
+  },
+  {
+   "id": "1587",
+   "brand": "NADA",
+   "address": "C-17 km 81.20000",
+   "municipality": "1099"
+  },
+  {
+   "id": "1588",
+   "brand": "BONAREA",
+   "address": "CENTRO COMERCIAL BONAREA, CTRA.L-313 km 14,5",
+   "municipality": "3901"
+  },
+  {
+   "id": "1590",
+   "brand": "BP",
+   "address": "CARRETERA DE SABADELLA A CASTELLAR DEL VALLES KM. 6,400",
+   "municipality": "915"
+  },
+  {
+   "id": "1592",
+   "brand": "ESTACIO SERVEI BIGUES I RIELLS",
+   "address": "CARRETERA SANT LLORENÇ A LLINARS KM. 25",
+   "municipality": "885"
+  },
+  {
+   "id": "1593",
+   "brand": "BONAREA",
+   "address": "CARRETERA DE VIC KM. 27",
+   "municipality": "989"
+  },
+  {
+   "id": "1594",
+   "brand": "ANDAMUR \"LA JONQUERA\"",
+   "address": "CARRETERA NACIONAL II KM. 765",
+   "municipality": "2531"
+  },
+  {
+   "id": "1596",
+   "brand": "AREA DE SERVEIS TARADELL,SL",
+   "address": "CTRA. DE VIC/ ARBUCIES km 5.80000",
+   "municipality": "1137"
+  },
+  {
+   "id": "1597",
+   "brand": "PETROMIRALLES",
+   "address": "CARRETERA C-37 KM. 48,500",
+   "municipality": "1122"
+  },
+  {
+   "id": "1598",
+   "brand": "PANAWAY ROAD",
+   "address": "CARRETERA N-260 KM. 79,60",
+   "municipality": "2608"
+  },
+  {
+   "id": "1599",
+   "brand": "CARBURANTS SANT ISCLE",
+   "address": "POLIGONO EL MOLI, S/N (BV-5128 km 22,6)",
+   "municipality": "1077"
+  },
+  {
+   "id": "1600",
+   "brand": "E.S.TERMENS",
+   "address": "CALLE CARRETERA, 29",
+   "municipality": "4000"
+  },
+  {
+   "id": "1601",
+   "brand": "ANEU OIL",
+   "address": "AVENIDA CERDANYA, 35",
+   "municipality": "3848"
+  },
+  {
+   "id": "1604",
+   "brand": "MOEVE",
+   "address": "C-134, KM  154",
+   "municipality": "3878"
+  },
+  {
+   "id": "1605",
+   "brand": "BONAREA",
+   "address": "N-240  (C. C. BON AREA) km 71,15",
+   "municipality": "3853"
+  },
+  {
+   "id": "1607",
+   "brand": "GALP",
+   "address": "CARRETERA N240 KM. 77,8",
+   "municipality": "4010"
+  },
+  {
+   "id": "1609",
+   "brand": "MEROIL",
+   "address": "C/ ROCAFORT, 103 (B-4512 km 0,6)",
+   "municipality": "871"
+  },
+  {
+   "id": "1611",
+   "brand": "ZONA DIESEL",
+   "address": "CTRA. ARBÚCIES-VILADRAU",
+   "municipality": "2457"
+  },
+  {
+   "id": "1613",
+   "brand": "BONAREA",
+   "address": "CARRETERA BV-2005 KM. 4,7",
+   "municipality": "1149"
+  },
+  {
+   "id": "1614",
+   "brand": "COPERAL",
+   "address": "CARRETERA C-241 KM. S/N",
+   "municipality": "6485"
+  },
+  {
+   "id": "1615",
+   "brand": "GASOILS CARRERAS DE PIERA S.L.",
+   "address": "AVDA. CTRA. IGUALADA, 119",
+   "municipality": "1027"
+  },
+  {
+   "id": "1616",
+   "brand": "SHELL",
+   "address": "CARRETERA A-II KM. 770,52",
+   "municipality": "2489"
+  },
+  {
+   "id": "1617",
+   "brand": "PETREM",
+   "address": "VILALLONGA, 61 (CTRA.260)",
+   "municipality": "2511"
+  },
+  {
+   "id": "1618",
+   "brand": "PETREM",
+   "address": "FINAL CALLE NORTE,S/N",
+   "municipality": "2511"
+  },
+  {
+   "id": "1619",
+   "brand": "SHELL",
+   "address": "N-340 km 1216,35",
+   "municipality": "1068"
+  },
+  {
+   "id": "1620",
+   "brand": "MEROIL",
+   "address": "CARRETERA NACIONAL   152 KM. 169,100",
+   "municipality": "2580"
+  },
+  {
+   "id": "1623",
+   "brand": "AVIA",
+   "address": "AVINGUDA EDUARD TOLDRA, 62",
+   "municipality": "1167"
+  },
+  {
+   "id": "1624",
+   "brand": "BENZINERA CASTELLBISBAL",
+   "address": "C/ MAGNETISME, 1 (B-150)",
+   "municipality": "917"
+  },
+  {
+   "id": "1625",
+   "brand": "MEROIL",
+   "address": "AVDA. DEL MARESME, S/N",
+   "municipality": "984"
+  },
+  {
+   "id": "1628",
+   "brand": "GALP",
+   "address": "CARRETERA TER KM. S/N",
+   "municipality": "983"
+  },
+  {
+   "id": "1629",
+   "brand": "ES ALGERRI",
+   "address": "CARRETERA C-26 KM. 7",
+   "municipality": "3819"
+  },
+  {
+   "id": "1630",
+   "brand": "PORBOL",
+   "address": "C-59 km 32",
+   "municipality": "926"
+  },
+  {
+   "id": "1631",
+   "brand": "E.S.MOIANES",
+   "address": "MOIANES, 34",
+   "municipality": "881"
+  },
+  {
+   "id": "1633",
+   "brand": "EVOLUTION",
+   "address": "CALLE PERE IV, 79",
+   "municipality": "881"
+  },
+  {
+   "id": "1634",
+   "brand": "GALP",
+   "address": "CALLE BAC DE RODA, 66",
+   "municipality": "881"
+  },
+  {
+   "id": "1635",
+   "brand": "BENZINERA SANTA SUSANNA",
+   "address": "CARRETERA HORTA SANT CRIST KM. 0",
+   "municipality": "1126"
+  },
+  {
+   "id": "1636",
+   "brand": "GALP",
+   "address": "CARRETERA N-II KM. 774",
+   "municipality": "2531"
+  },
+  {
+   "id": "1637",
+   "brand": "REPSOL",
+   "address": "CARRETERA N-2 KM. 644",
+   "municipality": "987"
+  },
+  {
+   "id": "1638",
+   "brand": "GALP",
+   "address": "CALLE CALLE DEL TER, 45",
+   "municipality": "1145"
+  },
+  {
+   "id": "1639",
+   "brand": "GALP",
+   "address": "AVENIDA DE GAVÁ, ESQ. JOSEP TARRADELLAS, SN",
+   "municipality": "1160"
+  },
+  {
+   "id": "1640",
+   "brand": "GALP",
+   "address": "CALLE DOMENECH I MONTANER, 46",
+   "municipality": "1052"
+  },
+  {
+   "id": "1641",
+   "brand": "GALP",
+   "address": "CARRETERA N-150 BARCELONA-SABADELL KM. 286",
+   "municipality": "1046"
+  },
+  {
+   "id": "1645",
+   "brand": "E.S. ROSALEDA  -ST. FRUITOS DE BAGES-     GASOILS ROVIRA",
+   "address": "CARRETERA N 141 C KM. 3,7",
+   "municipality": "1075"
+  },
+  {
+   "id": "1647",
+   "brand": "Q8",
+   "address": "CARRETERA CTRA N-II KM. KM 452,2",
+   "municipality": "3815"
+  },
+  {
+   "id": "1649",
+   "brand": "Q8",
+   "address": "CARRETERA C-66 KM. 27,5",
+   "municipality": "2532"
+  },
+  {
+   "id": "1651",
+   "brand": "Q8",
+   "address": "CARRETERA CTRA. B-201, PK KM 3,1, KM. 3,1",
+   "municipality": "1035"
+  },
+  {
+   "id": "1653",
+   "brand": "ESTACIO SERVEI CAN BUXERES",
+   "address": "CALLE MIQUEL PEIRÓ VICTORI, CANTONADA AMETLLERS, S/N",
+   "municipality": "965"
+  },
+  {
+   "id": "1654",
+   "brand": "Q8",
+   "address": "AVENIDA AVDA. JOSEP TARRADELLAS 76,",
+   "municipality": "965"
+  },
+  {
+   "id": "1655",
+   "brand": "Q8",
+   "address": "CARRETERA CTRA. C-63 KM. KM 54,34",
+   "municipality": "2572"
+  },
+  {
+   "id": "1656",
+   "brand": "GECKOIL SANT PONÇ",
+   "address": "AVINGUDA FRANÇA, 56",
+   "municipality": "2524"
+  },
+  {
+   "id": "1657",
+   "brand": "PETROLIS MIRAMAR",
+   "address": "CTRA. N-II, PK km 650,7",
+   "municipality": "1059"
+  },
+  {
+   "id": "1658",
+   "brand": "Q8",
+   "address": "ALFONSO X EL SABIO, S/N,",
+   "municipality": "987"
+  },
+  {
+   "id": "1659",
+   "brand": "Q8",
+   "address": "POLIGONO POL. IND. CASA NOVA DEL BAIX, 8,",
+   "municipality": "2587"
+  },
+  {
+   "id": "1661",
+   "brand": "ZONA DIESEL",
+   "address": "C/ LLEIDA, 2 P.ACTIV. ECONOMIQUES",
+   "municipality": "1158"
+  },
+  {
+   "id": "1663",
+   "brand": "FEIXAS AULET",
+   "address": "CTRA. DE RODA, 67",
+   "municipality": "1158"
+  },
+  {
+   "id": "1666",
+   "brand": "FEIXAS AULET",
+   "address": "CALLE BAC DE RODA, 52",
+   "municipality": "1048"
+  },
+  {
+   "id": "1668",
+   "brand": "FEIXAS AULET",
+   "address": "CALLE FRANCESC PUGET MONTFORT, 2",
+   "municipality": "977"
+  },
+  {
+   "id": "1670",
+   "brand": "PETROCAT DIRECTE",
+   "address": "CARRETERA BV-4511 KM. 9,2",
+   "municipality": "1079"
+  },
+  {
+   "id": "1671",
+   "brand": "TAMOIL",
+   "address": "CARRETERA C-55 KM. 39",
+   "municipality": "1079"
+  },
+  {
+   "id": "1672",
+   "brand": "BEROIL",
+   "address": "CARRETERA C-55 KM. 39",
+   "municipality": "1079"
+  },
+  {
+   "id": "1673",
+   "brand": "PETROPRIX",
+   "address": "CARRETERA BP-1503 KM. 20,270",
+   "municipality": "1100"
+  },
+  {
+   "id": "1674",
+   "brand": "PETROCAT DIRECTE",
+   "address": "CARRETERA C-15 KM. 11,5",
+   "municipality": "1009"
+  },
+  {
+   "id": "1675",
+   "brand": "PETROCAT DIRECTE",
+   "address": "CARRETERA C-15 KM. 11,5",
+   "municipality": "1009"
+  },
+  {
+   "id": "1677",
+   "brand": "BLANCA",
+   "address": "CARRETERA BV-5303 KM. 8,2",
+   "municipality": "1129"
+  },
+  {
+   "id": "1679",
+   "brand": "ESCLATOIL",
+   "address": "HIPER ESCLAT. CTRA. C-17 km 55",
+   "municipality": "976"
+  },
+  {
+   "id": "1681",
+   "brand": "ESCLATOIL",
+   "address": "CARRETERA BARCELONA KM. 115",
+   "municipality": "1162"
+  },
+  {
+   "id": "1682",
+   "brand": "BLANCA",
+   "address": "PASSEIG LA FONT, 1",
+   "municipality": "1002"
+  },
+  {
+   "id": "1684",
+   "brand": "ESCLATOIL",
+   "address": "AVENIDA LLUIS COMPANYS, S/N",
+   "municipality": "1083"
+  },
+  {
+   "id": "1686",
+   "brand": "ESCLATOIL",
+   "address": "CALLE RIPOLL, 1",
+   "municipality": "1158"
+  },
+  {
+   "id": "1687",
+   "brand": "CARREFOUR",
+   "address": "CARRETERA COMARCAL KM. 246",
+   "municipality": "938"
+  },
+  {
+   "id": "1688",
+   "brand": "CARREFOUR",
+   "address": "AVENIDA BARCELONA, S/N",
+   "municipality": "1009"
+  },
+  {
+   "id": "1689",
+   "brand": "CARREFOUR",
+   "address": "CARRETERA CTRA SAN FRUITOS KM. 65",
+   "municipality": "884"
+  },
+  {
+   "id": "1690",
+   "brand": "SUPECO",
+   "address": "CARRETERA CASTELLAR KM. S/N",
+   "municipality": "1141"
+  },
+  {
+   "id": "1692",
+   "brand": "BENZINERA GRANOLLERS",
+   "address": "CALLE JORDI CAMP (ESQ. C/SABADELL), 2",
+   "municipality": "961"
+  },
+  {
+   "id": "1693",
+   "brand": "REPSOL",
+   "address": "AVENIDA BARCELONA, 28",
+   "municipality": "1080"
+  },
+  {
+   "id": "1694",
+   "brand": "CARREFOUR",
+   "address": "AVENIDA DE LA GENERALITAT, 198",
+   "municipality": "1160"
+  },
+  {
+   "id": "1695",
+   "brand": "CARREFOUR",
+   "address": "CARRETERA MANRESA A BERGA KM. 1",
+   "municipality": "1075"
+  },
+  {
+   "id": "1698",
+   "brand": "SUPECO",
+   "address": "C/Industria, esquina C/Torrelló , s/n (C.C.CHAMPION)",
+   "municipality": "1158"
+  },
+  {
+   "id": "1699",
+   "brand": "MOEVE",
+   "address": "CARRETERA E-9/C-16 KM. 35,500",
+   "municipality": "1151"
+  },
+  {
+   "id": "1700",
+   "brand": "MOEVE",
+   "address": "CARRETERA E-9/C-16 KM. 35,5",
+   "municipality": "1151"
+  },
+  {
+   "id": "1701",
+   "brand": "BP BEGUES",
+   "address": "CARRETERA BV-2041 KM. 8,3",
+   "municipality": "882"
+  },
+  {
+   "id": "1704",
+   "brand": "Q8",
+   "address": "POLIGONO CTRA.N-340 SORTIDA 30 -POL.IND.CLOT DE MOJA, S/N",
+   "municipality": "1009"
+  },
+  {
+   "id": "1707",
+   "brand": "SHELL",
+   "address": "CALLE ILLES1 Y 2, PLAN PARCIAL SECTOR CUC, S/N",
+   "municipality": "2456"
+  },
+  {
+   "id": "1709",
+   "brand": "ESCLATOIL",
+   "address": "HIPER ESCLAT. AVDA.PAISOS CATALANS, 2",
+   "municipality": "2511"
+  },
+  {
+   "id": "1710",
+   "brand": "CONDIS",
+   "address": "PASEO DE LA FARGA, 0",
+   "municipality": "2461"
+  },
+  {
+   "id": "1712",
+   "brand": "ESCLATOIL",
+   "address": "HIPER ESCLAT. CTRA. GE 641 km 4,225",
+   "municipality": "2637"
+  },
+  {
+   "id": "1713",
+   "brand": "SHELL",
+   "address": "CARRETERA DE PALAMÒS C255 KM. 5",
+   "municipality": "2495"
+  },
+  {
+   "id": "1715",
+   "brand": "ALCAMPO",
+   "address": "AVENIDA DE LA PLAYA, S/N",
+   "municipality": "1056"
+  },
+  {
+   "id": "1718",
+   "brand": "GADCAR",
+   "address": "C/ TARREGA, 4,",
+   "municipality": "4018"
+  },
+  {
+   "id": "1723",
+   "brand": "MEROIL",
+   "address": "CTRA.BARCELONA,405-409",
+   "municipality": "1052"
+  },
+  {
+   "id": "1724",
+   "brand": "Q8",
+   "address": "CTRA. DE MATADEPERA km 1,750",
+   "municipality": "1141"
+  },
+  {
+   "id": "1727",
+   "brand": "PANDORA BIOENERGY SL",
+   "address": "CARRETERA N-340 KM. 1243",
+   "municipality": "1108"
+  },
+  {
+   "id": "1728",
+   "brand": "CARREFOUR",
+   "address": "Cami Ral, 74 (C.C.CHAMPION)",
+   "municipality": "961"
+  },
+  {
+   "id": "1729",
+   "brand": "CONDIS",
+   "address": "POLIGONO DE LA AIGUETA, S/N",
+   "municipality": "2468"
+  },
+  {
+   "id": "1730",
+   "brand": "IDS",
+   "address": "CTRA. N-II km 484",
+   "municipality": "4032"
+  },
+  {
+   "id": "1734",
+   "brand": "Q8",
+   "address": "COLOM ESQUINA AV TEXTIL - POL.IND. SANTA MARGARIDA 2,",
+   "municipality": "1141"
+  },
+  {
+   "id": "1736",
+   "brand": "NIEVES",
+   "address": "CALLE HOSTAL DEL PI S/N, S/N",
+   "municipality": "861"
+  },
+  {
+   "id": "1738",
+   "brand": "Q8",
+   "address": "CARRETERA CRTA.N II, KM 635, POL.IND. VORAMAR KM.",
+   "municipality": "984"
+  },
+  {
+   "id": "1740",
+   "brand": "Q8",
+   "address": "CARRETERA CRTA.COMARCAL 251 KM 1'2 KM.",
+   "municipality": "961"
+  },
+  {
+   "id": "1742",
+   "brand": "Q8",
+   "address": "EIX 2 PARCELA 12-14 - POL.IND. MAS ALBA,",
+   "municipality": "1130"
+  },
+  {
+   "id": "1744",
+   "brand": "AUTONETOIL",
+   "address": "CALLE EL PRAT, 54",
+   "municipality": "1035"
+  },
+  {
+   "id": "1746",
+   "brand": "PETROLIS INDEPENDENTS - PETRO7",
+   "address": "CENTRO COMERCIAL CAPRABO VIC",
+   "municipality": "1158"
+  },
+  {
+   "id": "1750",
+   "brand": "Q8",
+   "address": "CARRETERA CTRA NACIONAL II (SECTOR 21) PARKING C. COMERCIAL ATRIUM KM.",
+   "municipality": "1058"
+  },
+  {
+   "id": "1754",
+   "brand": "Q8",
+   "address": "AVENIDA EUROPA, D', 46",
+   "municipality": "2470"
+  },
+  {
+   "id": "1756",
+   "brand": "Q8",
+   "address": "CALLE L'AIGÜETA PI B2 PARCELA 11, S/N",
+   "municipality": "2468"
+  },
+  {
+   "id": "1758",
+   "brand": "Q8",
+   "address": "AVENIDA AV VILA DE BLANES 120,",
+   "municipality": "2540"
+  },
+  {
+   "id": "1760",
+   "brand": "PETROLIS INDEPENDENTS - PETRO7",
+   "address": "AV. CERVERA ESQ. MESTRE GÜELL  - C.C. CAPRABO",
+   "municipality": "3997"
+  },
+  {
+   "id": "1765",
+   "brand": "Q8",
+   "address": "CARRETERA CRTA.N 152 ESQ.ST.MIQUEL CORB KM.",
+   "municipality": "2579"
+  },
+  {
+   "id": "1767",
+   "brand": "PETROLIS INDEPENDENTS - PETRO7",
+   "address": "CRTA.N II, KM 486 POL.IND.GOLDPARK",
+   "municipality": "3892"
+  },
+  {
+   "id": "1768",
+   "brand": "MOEVE",
+   "address": "POLIGONO INDUSTRIAL EL SEGRE, 202R, 202",
+   "municipality": "3916"
+  },
+  {
+   "id": "1769",
+   "brand": "PETROLIS",
+   "address": "RONDA DE PONENT, 1",
+   "municipality": "3926"
+  },
+  {
+   "id": "1773",
+   "brand": "SEROIL ENERGY",
+   "address": "CTRA.LLEIDA-PUIGUERD",
+   "municipality": "3876"
+  },
+  {
+   "id": "1774",
+   "brand": "PINS OIL",
+   "address": "POLIGONO PLA DE L'ESTACIO, S/N",
+   "municipality": "1117"
+  },
+  {
+   "id": "1776",
+   "brand": "BP COLL FAVA",
+   "address": "RONDA NORD, 30",
+   "municipality": "1067"
+  },
+  {
+   "id": "1778",
+   "brand": "GALP",
+   "address": "CALLE COLON, S/N",
+   "municipality": "1011"
+  },
+  {
+   "id": "1779",
+   "brand": "BP",
+   "address": "CALLE BOTANICA, 21",
+   "municipality": "965"
+  },
+  {
+   "id": "1780",
+   "brand": "MOEVE",
+   "address": "AUTOVIA C-17 KM. 18",
+   "municipality": "1025"
+  },
+  {
+   "id": "1782",
+   "brand": "GALP",
+   "address": "CALLE GUIPUZCOA, S/N",
+   "municipality": "1056"
+  },
+  {
+   "id": "1783",
+   "brand": "BALLENOIL",
+   "address": "CALLE LOPE DE VEGA, 125/139",
+   "municipality": "881"
+  },
+  {
+   "id": "1784",
+   "brand": "MOEVE",
+   "address": "RONDA SANTA EULALIA, 31",
+   "municipality": "1022"
+  },
+  {
+   "id": "1786",
+   "brand": "EVOLUTION",
+   "address": "CALLE FEMADES/ESQUINA TRAVESSIA INDUSTRIAL, 19,25",
+   "municipality": "965"
+  },
+  {
+   "id": "1788",
+   "brand": "BP JORDAN",
+   "address": "CALLE LLAVEROL ESQ CRTA C-2005, 0",
+   "municipality": "1108"
+  },
+  {
+   "id": "1790",
+   "brand": "REPSOL",
+   "address": "CARRETERA GE-643 KM. 5,06",
+   "municipality": "2628"
+  },
+  {
+   "id": "1791",
+   "brand": "BALLENOIL",
+   "address": "PASEO GENERALITAT, 33",
+   "municipality": "1158"
+  },
+  {
+   "id": "1792",
+   "brand": "BP MONTSENY",
+   "address": "CARRETERA C-35 KM. 57,3",
+   "municipality": "1065"
+  },
+  {
+   "id": "1793",
+   "brand": "PETRONOR",
+   "address": "AVINGUDA ANGEL GUIMERA, 15",
+   "municipality": "967"
+  },
+  {
+   "id": "1794",
+   "brand": "REPSOL",
+   "address": "CARRETERA COMARCAL 148 KM. 20,500",
+   "municipality": "3844"
+  },
+  {
+   "id": "1795",
+   "brand": "REPSOL",
+   "address": "CARRETERA C-66 KM. 24",
+   "municipality": "2627"
+  },
+  {
+   "id": "1797",
+   "brand": "REPSOL",
+   "address": "CARRETERA B-124 KM. 5,3",
+   "municipality": "915"
+  },
+  {
+   "id": "1798",
+   "brand": "REPSOL",
+   "address": "CARRETERA GE-610 KM. 6,85",
+   "municipality": "2568"
+  },
+  {
+   "id": "1799",
+   "brand": "SEGRE OIL",
+   "address": "CARRETERA C-13 KM. 9,6",
+   "municipality": "3858"
+  },
+  {
+   "id": "1800",
+   "brand": "PETROCAT",
+   "address": "CARRETERA C-32 KM. 49,61",
+   "municipality": "955"
+  },
+  {
+   "id": "1801",
+   "brand": "PETROCAT",
+   "address": "CR C-32, 49,61",
+   "municipality": "955"
+  },
+  {
+   "id": "1802",
+   "brand": "BP VILADECANS",
+   "address": "CALLE AGRICULTURA, 19",
+   "municipality": "1160"
+  },
+  {
+   "id": "1804",
+   "brand": "U.S. SANT QUIRZE SAFAJA  -GASOILS ROVIRA AUTOSERVEI-",
+   "address": "CARRETERA C-59 KM. 26,49",
+   "municipality": "1101"
+  },
+  {
+   "id": "1805",
+   "brand": "PETROCAT",
+   "address": "CARRETERA 31 KM. 344,8",
+   "municipality": "2515"
+  },
+  {
+   "id": "1806",
+   "brand": "REPSOL",
+   "address": "CARRETERA AVDA. DEL VALLES KM. 10",
+   "municipality": "972"
+  },
+  {
+   "id": "1807",
+   "brand": "REPSOL",
+   "address": "CALLE ORLINA, S/N",
+   "municipality": "2492"
+  },
+  {
+   "id": "1808",
+   "brand": "REPSOL",
+   "address": "CALLE PIO XII, S.N.",
+   "municipality": "1168"
+  },
+  {
+   "id": "1810",
+   "brand": "REPSOL",
+   "address": "CARRETERA C-243 KM. 7,5",
+   "municipality": "959"
+  },
+  {
+   "id": "1811",
+   "brand": "REPSOL",
+   "address": "CARRETERA VILAFRANCA A SANT SADURNI D'ANOIA KM. 7,5",
+   "municipality": "959"
+  },
+  {
+   "id": "1812",
+   "brand": "DST",
+   "address": "AUTOVÍA N.II.(CERCA ITV) (AUTOV? N.II.(CERCA ITV) km 512,9)",
+   "municipality": "3896"
+  },
+  {
+   "id": "1813",
+   "brand": "PETRONOR",
+   "address": "CARRETERA LES PLANES KM. 4,631",
+   "municipality": "2603"
+  },
+  {
+   "id": "1814",
+   "brand": "PETROVOLTREGÀ",
+   "address": "AVINGUDA DEL CASTELL, 4",
+   "municipality": "1107"
+  },
+  {
+   "id": "1815",
+   "brand": "PETROCAT",
+   "address": "CR C-17, 26,65",
+   "municipality": "866"
+  },
+  {
+   "id": "1816",
+   "brand": "REPSOL",
+   "address": "AVENIDA EUROPA, 26",
+   "municipality": "967"
+  },
+  {
+   "id": "1817",
+   "brand": "CAMPSA",
+   "address": "CALLE PUJADES, 154",
+   "municipality": "881"
+  },
+  {
+   "id": "1818",
+   "brand": "REPSOL",
+   "address": "CR C-66, 30,5",
+   "municipality": "2495"
+  },
+  {
+   "id": "1819",
+   "brand": "REPSOL",
+   "address": "PASEO SANTA COLOMA, 71",
+   "municipality": "881"
+  },
+  {
+   "id": "1822",
+   "brand": "GALP",
+   "address": "AUTOVIA C-35 KM. 84,5",
+   "municipality": "2653"
+  },
+  {
+   "id": "1823",
+   "brand": "GALP",
+   "address": "CARRETERA C-260 KM. 33,176",
+   "municipality": "2519"
+  },
+  {
+   "id": "1824",
+   "brand": "REPSOL",
+   "address": "CARRETERA C-260 KM. 27,5",
+   "municipality": "2511"
+  },
+  {
+   "id": "1825",
+   "brand": "REPSOL",
+   "address": "CR A-2, 486,4 (A-2 km 486,5)",
+   "municipality": "4032"
+  },
+  {
+   "id": "1826",
+   "brand": "REPSOL",
+   "address": "AUTOVIA A-II KM. 513,8",
+   "municipality": "3896"
+  },
+  {
+   "id": "1827",
+   "brand": "REPSOL",
+   "address": "POLIGONO CAMI DEL MIG, 23",
+   "municipality": "937"
+  },
+  {
+   "id": "1828",
+   "brand": "PETRONOR",
+   "address": "CARRETERA GE-667 KM. 1",
+   "municipality": "2481"
+  },
+  {
+   "id": "1829",
+   "brand": "PETRONOR",
+   "address": "CARRER VILANOVA IGUALADA, 8,3",
+   "municipality": "1146"
+  },
+  {
+   "id": "1830",
+   "brand": "REPSOL",
+   "address": "CL LAUREA MIRO, 403",
+   "municipality": "1072"
+  },
+  {
+   "id": "1831",
+   "brand": "PETROSELVA",
+   "address": "CARRETERA C-63 KM. 21",
+   "municipality": "2588"
+  },
+  {
+   "id": "1832",
+   "brand": "PETROSELVA",
+   "address": "CARRETERA C-63 KM. 21",
+   "municipality": "2588"
+  },
+  {
+   "id": "1833",
+   "brand": "REPSOL",
+   "address": "CARRETERA C-35 KM. 97",
+   "municipality": "2534"
+  },
+  {
+   "id": "1834",
+   "brand": "CEPSA",
+   "address": "C-32 PK 129,8",
+   "municipality": "1020"
+  },
+  {
+   "id": "1835",
+   "brand": "REPSOL",
+   "address": "AVENIDA DIAGONAL, 687",
+   "municipality": "881"
+  },
+  {
+   "id": "1836",
+   "brand": "AOIL",
+   "address": "CARRETERA CTRA N II KM. 747",
+   "municipality": "2474"
+  },
+  {
+   "id": "1838",
+   "brand": "PETRONOR",
+   "address": "CR C-14, 162",
+   "municipality": "3944"
+  },
+  {
+   "id": "1840",
+   "brand": "GALP",
+   "address": "AVINGUDA DEL PARALELO, 132",
+   "municipality": "881"
+  },
+  {
+   "id": "1841",
+   "brand": "REPSOL",
+   "address": "CARRETERA C63 KM. 32,200",
+   "municipality": "2476"
+  },
+  {
+   "id": "1842",
+   "brand": "REPSOL",
+   "address": "CARRETERA C-1413A KM. 32,7",
+   "municipality": "1128"
+  },
+  {
+   "id": "1844",
+   "brand": "REPSOL",
+   "address": "CARRETERA C-243 KM. 10,9",
+   "municipality": "1141"
+  },
+  {
+   "id": "1845",
+   "brand": "GALP",
+   "address": "AVINGUDA EDUARDO TOLDRA, 67",
+   "municipality": "1167"
+  },
+  {
+   "id": "1846",
+   "brand": "MEROIL",
+   "address": "CARRETERA C-15 KM. 21,5",
+   "municipality": "1029"
+  },
+  {
+   "id": "1850",
+   "brand": "GALP",
+   "address": "CARRETERA N-II KM. 774,800",
+   "municipality": "2531"
+  },
+  {
+   "id": "1851",
+   "brand": "REPSOL",
+   "address": "RIERA ARGENTONA, 1",
+   "municipality": "890"
+  },
+  {
+   "id": "1852",
+   "brand": "SALLENT DE SERVEIS, S.L.",
+   "address": "PLAZA LACETANIA, 44",
+   "municipality": "1055"
+  },
+  {
+   "id": "1853",
+   "brand": "MOEVE",
+   "address": "CARRETERA C-31 KM. 6,101",
+   "municipality": "905"
+  },
+  {
+   "id": "1854",
+   "brand": "PETROCAT",
+   "address": "CARRETERA C-37 KM. 95,39",
+   "municipality": "978"
+  },
+  {
+   "id": "1855",
+   "brand": "PETROCAT",
+   "address": "AVENIDA DEL VALLÈS, 4",
+   "municipality": "1141"
+  },
+  {
+   "id": "1856",
+   "brand": "REPSOL",
+   "address": "CR N-141D, 3,3",
+   "municipality": "898"
+  },
+  {
+   "id": "1857",
+   "brand": "ES CALDERS",
+   "address": "CARRETERA N-143 TRAMO C (MANRESA A VIC) KM. 18,42",
+   "municipality": "894"
+  },
+  {
+   "id": "1858",
+   "brand": "REPSOL",
+   "address": "CARRETERA B-400 KM. 14,8",
+   "municipality": "1054"
+  },
+  {
+   "id": "1863",
+   "brand": "B-OIL",
+   "address": "CALLE BAC DE RODA, 130",
+   "municipality": "881"
+  },
+  {
+   "id": "1864",
+   "brand": "GALP",
+   "address": "CARRETERA MASNOU KM. 14,8",
+   "municipality": "961"
+  },
+  {
+   "id": "1865",
+   "brand": "GALP",
+   "address": "CARRETERA D'OLESA KM. 240",
+   "municipality": "1141"
+  },
+  {
+   "id": "1866",
+   "brand": "GALP",
+   "address": "CARRETERA GARRAF KM. 21",
+   "municipality": "1035"
+  },
+  {
+   "id": "1867",
+   "brand": "PETROCAT",
+   "address": "CARRETERA C-17 KM. 37",
+   "municipality": "1135"
+  },
+  {
+   "id": "1868",
+   "brand": "REPSOL",
+   "address": "PG MATA ROCAFONDA C/ENERGIA 2-4, S.",
+   "municipality": "987"
+  },
+  {
+   "id": "1993",
+   "brand": "PETROMIRALLES",
+   "address": "CALLE PORT DE HAIFA, S/N",
+   "municipality": "881"
+  },
+  {
+   "id": "1995",
+   "brand": "BONAREA",
+   "address": "POLIG. IND. LES GARRIGUES, 24, C. BON AREA",
+   "municipality": "893"
+  },
+  {
+   "id": "1996",
+   "brand": "EL SURTIDOR",
+   "address": "CALLE CARLES RIBA, 15",
+   "municipality": "1001"
+  },
+  {
+   "id": "1997",
+   "brand": "BONAREA",
+   "address": "POLIGONO PONT CREMAT, 2",
+   "municipality": "2457"
+  },
+  {
+   "id": "1998",
+   "brand": "BONAREA",
+   "address": "POL.IND.CAMPLLONG,19",
+   "municipality": "3837"
+  },
+  {
+   "id": "1999",
+   "brand": "BONAREA",
+   "address": "POL. IND., C/PONENT, S/N",
+   "municipality": "3958"
+  },
+  {
+   "id": "2000",
+   "brand": "BONAREA",
+   "address": "CENTRO BONAREA, C/URGELL,S/N",
+   "municipality": "3867"
+  },
+  {
+   "id": "2001",
+   "brand": "(SIN RÓTULO)",
+   "address": "CARRETERA MANRESA A ST. GUIM, KM. 32,400",
+   "municipality": "893"
+  },
+  {
+   "id": "2002",
+   "brand": "ENTREAUTO",
+   "address": "APEL·LES MESTRES 44-46",
+   "municipality": "6467"
+  },
+  {
+   "id": "2003",
+   "brand": "PETRO VALLES",
+   "address": "CARRETERA CASTELLAR KM. 200",
+   "municipality": "1141"
+  },
+  {
+   "id": "2004",
+   "brand": "MEROIL, S.L.",
+   "address": "AVINGUDA MESTRE MUNTANER,",
+   "municipality": "967"
+  },
+  {
+   "id": "2005",
+   "brand": "M AUTOMOCION",
+   "address": "CALLE PERU, 171",
+   "municipality": "881"
+  },
+  {
+   "id": "2006",
+   "brand": "REPSOL",
+   "address": "CALLE VALENCIA, 503",
+   "municipality": "881"
+  },
+  {
+   "id": "2009",
+   "brand": "PETROMIRALLES",
+   "address": "CARRETERA N-II KM. 760",
+   "municipality": "2538"
+  },
+  {
+   "id": "2011",
+   "brand": "PETROLIS INDEPENDENTS",
+   "address": "AVENIDA AGRAMUNT.POL.INDUSTRIAL, 1",
+   "municipality": "3867"
+  },
+  {
+   "id": "2012",
+   "brand": "LOW COST 24",
+   "address": "CALLE MARINADA, S/N.POL.IND.CAMP LLONG,",
+   "municipality": "3837"
+  },
+  {
+   "id": "2014",
+   "brand": "PETROMIRALLES",
+   "address": "PG IND. LA CANALETA S/N (BARCELONA-MADRID km 507)",
+   "municipality": "3997"
+  },
+  {
+   "id": "2015",
+   "brand": "BONAREA",
+   "address": "C/ SANTA MAGDALENA, S/N",
+   "municipality": "3952"
+  },
+  {
+   "id": "2018",
+   "brand": "BONAREA",
+   "address": "PTDA. LES ERES, 4",
+   "municipality": "3828"
+  },
+  {
+   "id": "2019",
+   "brand": "BONAREA",
+   "address": "CENTRO  BONAREA, AVDA. GENERALITAT 10, (P. IND. NAVESMA)",
+   "municipality": "3806"
+  },
+  {
+   "id": "2020",
+   "brand": "COOP. IVARS",
+   "address": "CALLE LLEIDA, 2",
+   "municipality": "3905"
+  },
+  {
+   "id": "2023",
+   "brand": "MEROIL",
+   "address": "CALLE AVDA. BARCELONA, 222",
+   "municipality": "990"
+  },
+  {
+   "id": "2024",
+   "brand": "PETROLIS INDEPENDENTS",
+   "address": "AVENIDA ILDEFONS CERDA, 121",
+   "municipality": "929"
+  },
+  {
+   "id": "2026",
+   "brand": "REPSOL",
+   "address": "CARRETERA C-3141 KM. 5",
+   "municipality": "6467"
+  },
+  {
+   "id": "2027",
+   "brand": "ESTACIO SERVEI OLIANA",
+   "address": "CARRETERA C-14 KM. 141,000",
+   "municipality": "3938"
+  },
+  {
+   "id": "2028",
+   "brand": "BENZINERES MONTOIL",
+   "address": "AVINGUDA TARRAGONA, 107",
+   "municipality": "1162"
+  },
+  {
+   "id": "2029",
+   "brand": "COPERAL",
+   "address": "CARRETERA IGUALADA KM. S/N",
+   "municipality": "6485"
+  },
+  {
+   "id": "2030",
+   "brand": "ESTACIO SERVEI LLINARS",
+   "address": "AVINGUDA MAS BAGA, 1",
+   "municipality": "973"
+  },
+  {
+   "id": "2031",
+   "brand": "GALP",
+   "address": "CALLE TAJO, 28",
+   "municipality": "881"
+  },
+  {
+   "id": "2033",
+   "brand": "PETROMIRALLES",
+   "address": "CALLE LA MUNIA, 2",
+   "municipality": "1162"
+  },
+  {
+   "id": "2035",
+   "brand": "PETROMIRALLES",
+   "address": "CALLE GUIMARAES, S/N",
+   "municipality": "967"
+  },
+  {
+   "id": "2036",
+   "brand": "MEROIL",
+   "address": "CALLE ARCADIA, 30",
+   "municipality": "1052"
+  },
+  {
+   "id": "2038",
+   "brand": "JULIA-OIL (FINA)",
+   "address": "CARRETERA C-1413 KM. 12,7",
+   "municipality": "1049"
+  },
+  {
+   "id": "2040",
+   "brand": "NUROIL",
+   "address": "CALLE BOSC TANCAT, S/N",
+   "municipality": "931"
+  },
+  {
+   "id": "2041",
+   "brand": "PETROMIRALLES",
+   "address": "CALLE A, 31",
+   "municipality": "1108"
+  },
+  {
+   "id": "2042",
+   "brand": "NUROIL",
+   "address": "CALLE SANTA ANNA, 133",
+   "municipality": "931"
+  },
+  {
+   "id": "2043",
+   "brand": "TORTUGA",
+   "address": "CALLE MAJOR, 26",
+   "municipality": "881"
+  },
+  {
+   "id": "2045",
+   "brand": "MEROIL",
+   "address": "TRAVESIA INDUSTRIAL, 147",
+   "municipality": "965"
+  },
+  {
+   "id": "2047",
+   "brand": "SYM SARRIA",
+   "address": "N-II km 719,4",
+   "municipality": "2624"
+  },
+  {
+   "id": "2048",
+   "brand": "COOPERATIVA SANT ROC",
+   "address": "C/ CAMI DEL RIU, S/N",
+   "municipality": "3812"
+  },
+  {
+   "id": "2049",
+   "brand": "BONAREA",
+   "address": "AVDA. VERGE DEL CLAUSTRE, 32",
+   "municipality": "3901"
+  },
+  {
+   "id": "2053",
+   "brand": "ALCAMPO",
+   "address": "CALLE METALURGIA, 4",
+   "municipality": "1167"
+  },
+  {
+   "id": "2056",
+   "brand": "BP SANTA PERPETUA",
+   "address": "AVENIDA MOSSÈN JACINT VERDAGUER, 1",
+   "municipality": "1125"
+  },
+  {
+   "id": "2058",
+   "brand": "PETREM",
+   "address": "CARRETERA C-152 KM. 3",
+   "municipality": "2620"
+  },
+  {
+   "id": "2059",
+   "brand": "EVOLUTION",
+   "address": "CALLE INDUSTRIA, 371",
+   "municipality": "875"
+  },
+  {
+   "id": "2060",
+   "brand": "BP SALT",
+   "address": "CALLE BESCABO, 25",
+   "municipality": "2595"
+  },
+  {
+   "id": "2061",
+   "brand": "ESSER",
+   "address": "AVINGUDA DE LES ALEGRIES, 89/91",
+   "municipality": "2540"
+  },
+  {
+   "id": "2062",
+   "brand": "MOEVE",
+   "address": "AVINGUDA VILA DE BLANES, 60/62",
+   "municipality": "2540"
+  },
+  {
+   "id": "2063",
+   "brand": "PREMIRA",
+   "address": "CARRETERA B-502 KM. 4,34",
+   "municipality": "870"
+  },
+  {
+   "id": "2064",
+   "brand": "PETROCAT",
+   "address": "CARRETERA C-1415A KM. 20",
+   "municipality": "1141"
+  },
+  {
+   "id": "2065",
+   "brand": "BRIGHT SERVICE",
+   "address": "CALLE CARRETERA REIAL, 62",
+   "municipality": "1083"
+  },
+  {
+   "id": "2066",
+   "brand": "GALP",
+   "address": "CARRETERA C-35 KM. 2,8",
+   "municipality": "951"
+  },
+  {
+   "id": "2067",
+   "brand": "REPSOL",
+   "address": "CARRETERA C-65 KM. 22,3",
+   "municipality": "2490"
+  },
+  {
+   "id": "2068",
+   "brand": "REPSOL",
+   "address": "CARRETERA C-65 KM. 22,3",
+   "municipality": "2490"
+  },
+  {
+   "id": "2069",
+   "brand": "REPSOL",
+   "address": "CARRETERA C-63 KM. 48,61",
+   "municipality": "2455"
+  },
+  {
+   "id": "2070",
+   "brand": "REPSOL",
+   "address": "PASSEIG REGULL, 12",
+   "municipality": "2587"
+  },
+  {
+   "id": "2071",
+   "brand": "REPSOL",
+   "address": "CARRETERA C-63 KM. 17",
+   "municipality": "2630"
+  },
+  {
+   "id": "2072",
+   "brand": "CEPSA",
+   "address": "CARRETERA C-61 KM. 11",
+   "municipality": "1154"
+  },
+  {
+   "id": "2074",
+   "brand": "BP BADANOR",
+   "address": "PLAZA CARITG, 1",
+   "municipality": "875"
+  },
+  {
+   "id": "2075",
+   "brand": "REPSOL",
+   "address": "CR C-250, 24,3",
+   "municipality": "2534"
+  },
+  {
+   "id": "2076",
+   "brand": "REPSOL",
+   "address": "AUTOVIA C-65 KM. 4,8",
+   "municipality": "2534"
+  },
+  {
+   "id": "2077",
+   "brand": "GALP",
+   "address": "CARRETERA B-682 KM. 24,36",
+   "municipality": "1020"
+  },
+  {
+   "id": "2078",
+   "brand": "GALP",
+   "address": "CALLE TARRAGONA, 15-19 ESQ.CALLE BALMES, 15",
+   "municipality": "1046"
+  },
+  {
+   "id": "2079",
+   "brand": "REPSOL",
+   "address": "CR A-2, 581,5",
+   "municipality": "940"
+  },
+  {
+   "id": "2080",
+   "brand": "BP MONTIGALA",
+   "address": "AVENIDA DINAMARCA ESQ. COMUNIDAD EUROPEA, S/N",
+   "municipality": "875"
+  },
+  {
+   "id": "2081",
+   "brand": "REPSOL",
+   "address": "AVENIDA DEL LITORAL, 49",
+   "municipality": "881"
+  },
+  {
+   "id": "2082",
+   "brand": "PETRONOR",
+   "address": "CL AVENIDA LERIDA, 75",
+   "municipality": "3817"
+  },
+  {
+   "id": "2083",
+   "brand": "REPSOL",
+   "address": "PASSEIG ZONA FRANCA, 82",
+   "municipality": "881"
+  },
+  {
+   "id": "2084",
+   "brand": "REPSOL",
+   "address": "AVENIDA MOGENT, 3",
+   "municipality": "1001"
+  },
+  {
+   "id": "2085",
+   "brand": "REPSOL",
+   "address": "CARRETERA B-224 KM. 20,8",
+   "municipality": "1084"
+  },
+  {
+   "id": "2086",
+   "brand": "HICAP ENERGY",
+   "address": "CALLE CR. CARDONA, 80/82",
+   "municipality": "978"
+  },
+  {
+   "id": "2087",
+   "brand": "REPSOL",
+   "address": "CARRER PRAT DE LA RIBA, 83",
+   "municipality": "3909"
+  },
+  {
+   "id": "2089",
+   "brand": "PETROCAT",
+   "address": "CAMI DE LES ROVIRES, S/N",
+   "municipality": "2542"
+  },
+  {
+   "id": "2090",
+   "brand": "PETROCAT",
+   "address": "AVINGUDA CATALUNYA, 31",
+   "municipality": "2539"
+  },
+  {
+   "id": "2091",
+   "brand": "GALP",
+   "address": "CALLE CALLE Y PUERTO AUTONOMO, S/N",
+   "municipality": "881"
+  },
+  {
+   "id": "2093",
+   "brand": "GALP",
+   "address": "C/TORRASSA, 87-95",
+   "municipality": "1056"
+  },
+  {
+   "id": "2094",
+   "brand": "GALP",
+   "address": "CARRETERA C-260 KM. 33,056",
+   "municipality": "2519"
+  },
+  {
+   "id": "2095",
+   "brand": "REPSOL",
+   "address": "CR N-2, 667",
+   "municipality": "897"
+  },
+  {
+   "id": "2097",
+   "brand": "REPSOL",
+   "address": "CARRETERA CTRA. D'ARENYS DE MAR A SANT CELONI KM. 2,200",
+   "municipality": "868"
+  },
+  {
+   "id": "2099",
+   "brand": "REPSOL",
+   "address": "CARRETERA N-230 KM. 15",
+   "municipality": "3820"
+  },
+  {
+   "id": "2100",
+   "brand": "MOEVE",
+   "address": "AUTOVIA C-31 KM. 191,8",
+   "municipality": "1035"
+  },
+  {
+   "id": "2208",
+   "brand": "REPSOL",
+   "address": "CARRETERA C-37 KM. 78,48",
+   "municipality": "1104"
+  },
+  {
+   "id": "2210",
+   "brand": "REPSOL",
+   "address": "CARRETERA C-1415 KM. 1,4",
+   "municipality": "987"
+  },
+  {
+   "id": "2212",
+   "brand": "REPSOL",
+   "address": "CALLE ACADEMIA, 28",
+   "municipality": "3916"
+  },
+  {
+   "id": "2213",
+   "brand": "REPSOL",
+   "address": "CR C-35 , P.K. 51",
+   "municipality": "1123"
+  },
+  {
+   "id": "2214",
+   "brand": "REPSOL",
+   "address": "AVENIDA VIRGEN DE MONTSERRAT, 87",
+   "municipality": "881"
+  },
+  {
+   "id": "2215",
+   "brand": "REPSOL",
+   "address": "CALLE GUIPUZCOA ESQ PEDRO IV, S/N",
+   "municipality": "1056"
+  },
+  {
+   "id": "2216",
+   "brand": "BP PEDRO IV",
+   "address": "CALLE PEDRO IV, 440",
+   "municipality": "881"
+  },
+  {
+   "id": "2217",
+   "brand": "ESCLATOIL",
+   "address": "CALLE SAN RAMON, 259",
+   "municipality": "931"
+  },
+  {
+   "id": "2218",
+   "brand": "REPSOL",
+   "address": "CARRETERA C-1413 KM. 9,8",
+   "municipality": "1049"
+  },
+  {
+   "id": "2219",
+   "brand": "REPSOL",
+   "address": "CARRETERA C-59 KM. 16,59",
+   "municipality": "895"
+  },
+  {
+   "id": "2221",
+   "brand": "REPSOL",
+   "address": "CR N-230, 163,7",
+   "municipality": "4023"
+  },
+  {
+   "id": "2222",
+   "brand": "REPSOL",
+   "address": "CARRETERA N-240 KM. 89",
+   "municipality": "3916"
+  },
+  {
+   "id": "2223",
+   "brand": "REPSOL",
+   "address": "C-32 PK 88,5",
+   "municipality": "1140"
+  },
+  {
+   "id": "2224",
+   "brand": "REPSOL",
+   "address": "CALLE SAN BRUNO, 17",
+   "municipality": "875"
+  },
+  {
+   "id": "2225",
+   "brand": "REPSOL L'ESCALA",
+   "address": "CALLE CLOSA D'EN LLOP, 2",
+   "municipality": "2506"
+  },
+  {
+   "id": "2226",
+   "brand": "MOEVE",
+   "address": "CALLE MOLINS DE REI, 135/137",
+   "municipality": "1052"
+  },
+  {
+   "id": "2227",
+   "brand": "AUTONETOIL",
+   "address": "CALLE RENCLUSA, 36",
+   "municipality": "965"
+  },
+  {
+   "id": "2228",
+   "brand": "BALLENOIL",
+   "address": "CARRETERA B-140 KM. 5,5",
+   "municipality": "1125"
+  },
+  {
+   "id": "2229",
+   "brand": "REPSOL",
+   "address": "CARRETERA B-402 KM. 10",
+   "municipality": "1031"
+  },
+  {
+   "id": "2230",
+   "brand": "REPSOL",
+   "address": "CR C-1413, 7,7 (C-1413 km 7,75)",
+   "municipality": "1067"
+  },
+  {
+   "id": "2231",
+   "brand": "REPSOL",
+   "address": "AU AP-7, 86",
+   "municipality": "2543"
+  },
+  {
+   "id": "2232",
+   "brand": "PETRONOR",
+   "address": "CARRETERA OLOT KM. 38,5",
+   "municipality": "2511"
+  },
+  {
+   "id": "2233",
+   "brand": "REPSOL",
+   "address": "CARRETERA B-5002 KM. 15",
+   "municipality": "961"
+  },
+  {
+   "id": "2234",
+   "brand": "BP MONTGAT",
+   "address": "CALLE RAMON Y CAJAL, S/N",
+   "municipality": "997"
+  },
+  {
+   "id": "2235",
+   "brand": "BP RECA",
+   "address": "CALLE INDUSTRIA, S/N",
+   "municipality": "1046"
+  },
+  {
+   "id": "2237",
+   "brand": "REPSOL",
+   "address": "AVENIDA PRESIDENT COMPANYS, 280",
+   "municipality": "875"
+  },
+  {
+   "id": "2238",
+   "brand": "REPSOL",
+   "address": "CL AVENIDA GENERALITAT, 97",
+   "municipality": "1111"
+  },
+  {
+   "id": "2239",
+   "brand": "REPSOL",
+   "address": "CARRETERA C-13 KM. 11",
+   "municipality": "3816"
+  },
+  {
+   "id": "2241",
+   "brand": "REPSOL",
+   "address": "CALLE 6   SECTOR  C    ZONA FRANCA, S/N",
+   "municipality": "881"
+  },
+  {
+   "id": "2242",
+   "brand": "REPSOL",
+   "address": "CARRETERA NAC-152 KM. 171",
+   "municipality": "2580"
+  },
+  {
+   "id": "2243",
+   "brand": "REPSOL",
+   "address": "CARRETERA DE SANTPEDOR KM. 3,5",
+   "municipality": "1075"
+  },
+  {
+   "id": "2246",
+   "brand": "BP",
+   "address": "CALLE PARDO BAZAN, 2",
+   "municipality": "1141"
+  },
+  {
+   "id": "2248",
+   "brand": "BP SANTIGA",
+   "address": "CR DE RIPOLLET A SANTIGA KM  2,4",
+   "municipality": "880"
+  },
+  {
+   "id": "2249",
+   "brand": "BP HOSTAL DE LA SELVA",
+   "address": "CR N-II MADRID-FRANCIA KM  695",
+   "municipality": "2630"
+  },
+  {
+   "id": "2252",
+   "brand": "GALP",
+   "address": "PLAZA MAESTRO CLAVE, 10",
+   "municipality": "965"
+  },
+  {
+   "id": "2253",
+   "brand": "REPSOL",
+   "address": "CL CRTA. NUEVA, 37 (N-152 km 37,3)",
+   "municipality": "954"
+  },
+  {
+   "id": "2255",
+   "brand": "REPSOL",
+   "address": "RAMBLA MARINA, 428",
+   "municipality": "965"
+  },
+  {
+   "id": "2256",
+   "brand": "REPSOL",
+   "address": "AVENIDA JAIME I, 24",
+   "municipality": "3926"
+  },
+  {
+   "id": "2257",
+   "brand": "REPSOL",
+   "address": "AVENIDA JAIME I, 24",
+   "municipality": "3926"
+  },
+  {
+   "id": "2258",
+   "brand": "CARBURANTS BONOIL",
+   "address": "CARRETERA GI-682 KM. 6,965",
+   "municipality": "2470"
+  },
+  {
+   "id": "2259",
+   "brand": "GALP",
+   "address": "CARRETERA CTRA. C-253, P.K. 47,5 KM. 47,5",
+   "municipality": "2481"
+  },
+  {
+   "id": "2260",
+   "brand": "GALP",
+   "address": "AUTOPISTA AP 7 KM. 70,5",
+   "municipality": "2590"
+  },
+  {
+   "id": "2261",
+   "brand": "GALP",
+   "address": "AUTOVIA AP - 7 KM. 70,5",
+   "municipality": "2590"
+  },
+  {
+   "id": "2263",
+   "brand": "GALP",
+   "address": "AVINGUDA EUROPA, 47",
+   "municipality": "2470"
+  },
+  {
+   "id": "2264",
+   "brand": "GALP",
+   "address": "CAMINO SECTOR \"RECINTO FERIAL\",CNO CEMENTERIO, S/N",
+   "municipality": "2511"
+  },
+  {
+   "id": "2265",
+   "brand": "GALP",
+   "address": "CARRETERA GI-682 KM. 10",
+   "municipality": "2540"
+  },
+  {
+   "id": "2266",
+   "brand": "BP VULCANO",
+   "address": "CARRETERA SANTA PAU KM. 0,523",
+   "municipality": "2556"
+  },
+  {
+   "id": "2267",
+   "brand": "PETROPRIX",
+   "address": "CALLE DOCTOR BARTRINA, 10",
+   "municipality": "2556"
+  },
+  {
+   "id": "2269",
+   "brand": "BP",
+   "address": "CARRETERA N2 KM. 0",
+   "municipality": "2531"
+  },
+  {
+   "id": "2270",
+   "brand": "PETROLIS",
+   "address": "AVENIDA EUROPA - PARCELA, 7",
+   "municipality": "2556"
+  },
+  {
+   "id": "2271",
+   "brand": "GALP",
+   "address": "ZONA COMERCIAL SECTOR DUANA, S/N",
+   "municipality": "2531"
+  },
+  {
+   "id": "2273",
+   "brand": "REPSOL",
+   "address": "AVENIDA CASTELL D'ARO, 122",
+   "municipality": "2493"
+  },
+  {
+   "id": "2274",
+   "brand": "REPSOL",
+   "address": "CR N-230, 164,1",
+   "municipality": "4023"
+  },
+  {
+   "id": "2275",
+   "brand": "REPSOL",
+   "address": "POLIGONO CR C-153 PGNO. MALLOLES, 2,7",
+   "municipality": "1158"
+  },
+  {
+   "id": "2276",
+   "brand": "MOEVE",
+   "address": "CARRETERA A-2 KM. 489,5",
+   "municipality": "4032"
+  },
+  {
+   "id": "2280",
+   "brand": "SHELL - E.S. BELLVIS",
+   "address": "LV-3311 km 5,2",
+   "municipality": "3849"
+  },
+  {
+   "id": "2281",
+   "brand": "REPSOL",
+   "address": "CARRETERA C-13 KM. 86,30",
+   "municipality": "4014"
+  },
+  {
+   "id": "2282",
+   "brand": "REPSOL",
+   "address": "CARRETERA C 14 KM. 134",
+   "municipality": "3840"
+  },
+  {
+   "id": "2283",
+   "brand": "BALLENOIL",
+   "address": "AVENIDA BARCELONA (N-IIA PK 463,5), 17",
+   "municipality": "3916"
+  },
+  {
+   "id": "2284",
+   "brand": "BALLENOIL",
+   "address": "AVENIDA BARCELONA (N-IIA PK 463,5), 17",
+   "municipality": "3916"
+  },
+  {
+   "id": "2285",
+   "brand": "PETRONOR",
+   "address": "CARRETERA N-2 KM. 555",
+   "municipality": "1008"
+  },
+  {
+   "id": "2287",
+   "brand": "REPSOL",
+   "address": "CARRETERA N-II A KM. 480",
+   "municipality": "3987"
+  },
+  {
+   "id": "2288",
+   "brand": "REPSOL",
+   "address": "CR N-2 A ,P.K.4,5",
+   "municipality": "2511"
+  },
+  {
+   "id": "2290",
+   "brand": "REPSOL",
+   "address": "CARRETERA C-17 KM. 1,5",
+   "municipality": "994"
+  },
+  {
+   "id": "2291",
+   "brand": "GALP",
+   "address": "AUTOPISTA AP 7 KM 7 KM. 7",
+   "municipality": "2531"
+  },
+  {
+   "id": "2292",
+   "brand": "REPSOL",
+   "address": "AUTOVIA C 16 , 35,6 KM. 35,6",
+   "municipality": "1075"
+  },
+  {
+   "id": "2293",
+   "brand": "PETRONOR",
+   "address": "CALLE SAN FELIU, S/N",
+   "municipality": "4015"
+  },
+  {
+   "id": "2294",
+   "brand": "REPSOL",
+   "address": "CARRETERA DE BERGA KM. S/N",
+   "municipality": "3978"
+  },
+  {
+   "id": "2295",
+   "brand": "BP PORTAL DEL VALLES DCHA.",
+   "address": "CR A-18 BARC.-TARR.DCHA. KM  2,8",
+   "municipality": "994"
+  },
+  {
+   "id": "2296",
+   "brand": "REPSOL",
+   "address": "CALLE PRATS LLUSANES - ESQ. C. URGEL, S/N",
+   "municipality": "1052"
+  },
+  {
+   "id": "2297",
+   "brand": "BALLENOIL",
+   "address": "CALLE MOZART, 24",
+   "municipality": "1111"
+  },
+  {
+   "id": "2298",
+   "brand": "PETROCAT",
+   "address": "CR N-230, 7",
+   "municipality": "4008"
+  },
+  {
+   "id": "2300",
+   "brand": "REPSOL",
+   "address": "CR C-1415, 17,4",
+   "municipality": "1047"
+  },
+  {
+   "id": "2301",
+   "brand": "REPSOL",
+   "address": "CL PAU CLARIS, 13",
+   "municipality": "980"
+  },
+  {
+   "id": "2302",
+   "brand": "\"BP\"",
+   "address": "CARRETERA GIRONA SANTA COLOAM FARNERS KM. 13",
+   "municipality": "2669"
+  },
+  {
+   "id": "2303",
+   "brand": "JULIA-OIL",
+   "address": "CARRETERA RUBI A SANT CUGAT BP-1503 KM. 18,4",
+   "municipality": "1049"
+  },
+  {
+   "id": "2304",
+   "brand": "REPSOL",
+   "address": "AVENIDA 303, 1",
+   "municipality": "919"
+  },
+  {
+   "id": "2305",
+   "brand": "REPSOL",
+   "address": "PASEO VALLDAURA, 106",
+   "municipality": "881"
+  },
+  {
+   "id": "2306",
+   "brand": "BP DANI",
+   "address": "CALLE JOAN GÜELL, 207",
+   "municipality": "881"
+  },
+  {
+   "id": "2307",
+   "brand": "REPSOL",
+   "address": "CARRER DEL BOSC, 16",
+   "municipality": "991"
+  },
+  {
+   "id": "2308",
+   "brand": "REPSOL",
+   "address": "CALLE SANT ADRIA, 81",
+   "municipality": "881"
+  },
+  {
+   "id": "2309",
+   "brand": "REPSOL",
+   "address": "CALLE BARCELONA, 208",
+   "municipality": "2524"
+  },
+  {
+   "id": "2310",
+   "brand": "BALLENOIL",
+   "address": "TIRSO DE MOLINA, 2-6, 2",
+   "municipality": "1052"
+  },
+  {
+   "id": "2311",
+   "brand": "REPSOL",
+   "address": "CL ALFONSO XII, 161",
+   "municipality": "2461"
+  },
+  {
+   "id": "2312",
+   "brand": "PETRONOR",
+   "address": "CARRETERA N-2 KM. 593,5",
+   "municipality": "980"
+  },
+  {
+   "id": "2313",
+   "brand": "CEPSA",
+   "address": "AVENIDA VILAFRANCA, S/N",
+   "municipality": "1167"
+  },
+  {
+   "id": "2315",
+   "brand": "PANDORA ENERGY",
+   "address": "CALLE BARCELONA, 298",
+   "municipality": "1108"
+  },
+  {
+   "id": "2316",
+   "brand": "REPSOL",
+   "address": "CALLE LES TRIES, 70",
+   "municipality": "2556"
+  },
+  {
+   "id": "2317",
+   "brand": "E.S. PINEDA DE MAR",
+   "address": "CARRETERA N-II KM. 671",
+   "municipality": "1028"
+  },
+  {
+   "id": "2318",
+   "brand": "BP CAN SOLA",
+   "address": "CARRETERA CERDANYOLA KM. 108",
+   "municipality": "1067"
+  },
+  {
+   "id": "2319",
+   "brand": "REPSOL",
+   "address": "AVENIDA DE LA CERDANYA, S/N",
+   "municipality": "2481"
+  },
+  {
+   "id": "2322",
+   "brand": "REPSOL",
+   "address": "CL F.JUNIP.SERRA ESQU.SANTANDER, 91",
+   "municipality": "881"
+  },
+  {
+   "id": "2323",
+   "brand": "REPSOL",
+   "address": "CARRETERA N-152 KM. 11,9",
+   "municipality": "994"
+  },
+  {
+   "id": "2324",
+   "brand": "REPSOL",
+   "address": "CARRETERA C-35 KM. 55,100",
+   "municipality": "1065"
+  },
+  {
+   "id": "2326",
+   "brand": "REPSOL",
+   "address": "CARRETERA C-55 KM. 6,39",
+   "municipality": "1011"
+  },
+  {
+   "id": "2328",
+   "brand": "REPSOL",
+   "address": "CR C-12  P.K. 128,20 (C-12 km 127)",
+   "municipality": "3818"
+  },
+  {
+   "id": "2329",
+   "brand": "SERVICIOS PETROLIFEROS",
+   "address": "CARRETERA DE LA SANSON, NUMERO 78 KM. 78",
+   "municipality": "1072"
+  },
+  {
+   "id": "2330",
+   "brand": "REPSOL",
+   "address": "CARRETERA C-260 KM. 28,7",
+   "municipality": "2511"
+  },
+  {
+   "id": "2331",
+   "brand": "REPSOL",
+   "address": "CALLE DOMENECH I MONTANER, 96",
+   "municipality": "1052"
+  },
+  {
+   "id": "2332",
+   "brand": "REPSOL",
+   "address": "AUTOPISTA AP-7 KM. 7",
+   "municipality": "2531"
+  },
+  {
+   "id": "2333",
+   "brand": "BP VIA FAVENCIA",
+   "address": "CL VIA FAVENCIA  75 - 121",
+   "municipality": "881"
+  },
+  {
+   "id": "2334",
+   "brand": "REPSOL",
+   "address": "AVENIDA CATALUÑA 135-137",
+   "municipality": "1023"
+  },
+  {
+   "id": "2335",
+   "brand": "REPSOL",
+   "address": "RAMBLA SANT JOAN, 117",
+   "municipality": "875"
+  },
+  {
+   "id": "2336",
+   "brand": "REPSOL",
+   "address": "AVENIDA ALCALDE RECASENS, 25",
+   "municipality": "3916"
+  },
+  {
+   "id": "2337",
+   "brand": "REPSOL",
+   "address": "CARRETERA SANTIGA KM. 0,430",
+   "municipality": "1046"
+  },
+  {
+   "id": "2339",
+   "brand": "REPSOL",
+   "address": "CALLE SANTA EULALIA, 27",
+   "municipality": "965"
+  },
+  {
+   "id": "2340",
+   "brand": "MOEVE",
+   "address": "CR N-2, 591,3",
+   "municipality": "980"
+  },
+  {
+   "id": "2341",
+   "brand": "REPSOL",
+   "address": "AUTOPISTA AP-7 KM. 35",
+   "municipality": "2520"
+  },
+  {
+   "id": "2342",
+   "brand": "REPSOL",
+   "address": "CR BP-1213, 1,8 (BP-1213 km 1,85)",
+   "municipality": "1161"
+  },
+  {
+   "id": "2343",
+   "brand": "VILACARBURANTS",
+   "address": "AVENIDA FRANCESC MACIA, 226",
+   "municipality": "1111"
+  },
+  {
+   "id": "2344",
+   "brand": "REPSOL",
+   "address": "CR AUTOPISTA AP-7  KM 144.1",
+   "municipality": "1125"
+  },
+  {
+   "id": "2345",
+   "brand": "REPSOL",
+   "address": "CARRETERA C-16 KM. 130,733",
+   "municipality": "3848"
+  },
+  {
+   "id": "2346",
+   "brand": "REPSOL",
+   "address": "CARRETERA C-16 KM. 136,6",
+   "municipality": "3848"
+  },
+  {
+   "id": "2347",
+   "brand": "BP PORTAL DEL VALLES IZDA.",
+   "address": "CR C-58 TARR.-BARCEL. IZ. KM  2,8",
+   "municipality": "994"
+  },
+  {
+   "id": "2349",
+   "brand": "REPSOL",
+   "address": "AVINGUDA MONTSERRAT, 2",
+   "municipality": "967"
+  },
+  {
+   "id": "2350",
+   "brand": "REPSOL",
+   "address": "CALLE URGELL, 11",
+   "municipality": "3837"
+  },
+  {
+   "id": "2351",
+   "brand": "PLENERGY",
+   "address": "CARRETERA SABADELL A PRAT LLUÇANES KM. 7",
+   "municipality": "915"
+  },
+  {
+   "id": "2352",
+   "brand": "REPSOL",
+   "address": "CALLE CRUZ, S/N",
+   "municipality": "2524"
+  },
+  {
+   "id": "2353",
+   "brand": "MOEVE",
+   "address": "AVDA. FLIX, 41",
+   "municipality": "3916"
+  },
+  {
+   "id": "2354",
+   "brand": "BP MOLMAR",
+   "address": "CR C-245  GARRAF-BARCELONA KM  8,9 (CARRETERA km 179)",
+   "municipality": "1062"
+  },
+  {
+   "id": "2413",
+   "brand": "FLUID",
+   "address": "CARRETERA C-31 KM. 20",
+   "municipality": "2656"
+  },
+  {
+   "id": "2414",
+   "brand": "BP EL PRAT",
+   "address": "AVENIDA JOSEP ANSELM CLAVE, 106",
+   "municipality": "1035"
+  },
+  {
+   "id": "2416",
+   "brand": "PETROLIS",
+   "address": "CARRETERA C-13 KM. 131",
+   "municipality": "3967"
+  },
+  {
+   "id": "2417",
+   "brand": "BP",
+   "address": "CARRETERA DE GIRONA C-65 KM. 0",
+   "municipality": "2600"
+  },
+  {
+   "id": "2418",
+   "brand": "BP PARADA LA CREU",
+   "address": "AVENIDA FRANCISCO MARIMON, 121",
+   "municipality": "940"
+  },
+  {
+   "id": "2419",
+   "brand": "VILALTA",
+   "address": "CARRETERA C-1410A KM. 29",
+   "municipality": "909"
+  },
+  {
+   "id": "2421",
+   "brand": "BP OIL",
+   "address": "PASSEIG DE LA PAU, S/N",
+   "municipality": "884"
+  },
+  {
+   "id": "2422",
+   "brand": "BP ALMOGAVARES",
+   "address": "CL ALMOGAVARES  159 - 161",
+   "municipality": "881"
+  },
+  {
+   "id": "2423",
+   "brand": "REPSOL",
+   "address": "CL INDUSTRIA, 629",
+   "municipality": "875"
+  },
+  {
+   "id": "2425",
+   "brand": "BP BADALONA",
+   "address": "CARRETERA DE MATARO KM. 30",
+   "municipality": "875"
+  },
+  {
+   "id": "2426",
+   "brand": "REPSOL",
+   "address": "CARRETERA B-211 KM. 8",
+   "municipality": "1092"
+  },
+  {
+   "id": "2430",
+   "brand": "LA TRAMUNTANA",
+   "address": "CALLE LLANÇÀ, S/N",
+   "municipality": "2577"
+  },
+  {
+   "id": "2431",
+   "brand": "BP OIL",
+   "address": "AVENIDA RHODE, S/N",
+   "municipality": "2592"
+  },
+  {
+   "id": "2432",
+   "brand": "GALP",
+   "address": "C-35  KM.82,5,",
+   "municipality": "2543"
+  },
+  {
+   "id": "2434",
+   "brand": "CEPSA",
+   "address": "C-240 km 89",
+   "municipality": "3806"
+  },
+  {
+   "id": "2438",
+   "brand": "CEPSA",
+   "address": "CARRETERA NACIONAL 260 KM. 1",
+   "municipality": "2578"
+  },
+  {
+   "id": "2439",
+   "brand": "MEROIL",
+   "address": "PASEO PAISOS CATALANS, 57",
+   "municipality": "2595"
+  },
+  {
+   "id": "2440",
+   "brand": "E.S. TOSSA DE MAR",
+   "address": "AVENIDA PUERTO RICO, 1",
+   "municipality": "2640"
+  },
+  {
+   "id": "2441",
+   "brand": "BP ARENYS DE MAR",
+   "address": "CR RA-2 KM  655,9",
+   "municipality": "867"
+  },
+  {
+   "id": "2442",
+   "brand": "REPSOL",
+   "address": "CARRETERA CR CM-1411 ABRERA-BELLVER KM. 17,1",
+   "municipality": "916"
+  },
+  {
+   "id": "2445",
+   "brand": "REPSOL",
+   "address": "AVENIDA EUROPA, 2",
+   "municipality": "2537"
+  },
+  {
+   "id": "2446",
+   "brand": "RIU D'OR",
+   "address": "CL TEULERA , 15",
+   "municipality": "2621"
+  },
+  {
+   "id": "2447",
+   "brand": "REPSOL",
+   "address": "CARRETERA N-II KM. 518",
+   "municipality": "3867"
+  },
+  {
+   "id": "2449",
+   "brand": "REPSOL",
+   "address": "CR C-31, 164,38",
+   "municipality": "1130"
+  },
+  {
+   "id": "2450",
+   "brand": "REPSOL",
+   "address": "CARRETERA NII KM. 475",
+   "municipality": "3845"
+  },
+  {
+   "id": "2452",
+   "brand": "REPSOL",
+   "address": "CL MAYOR, 610",
+   "municipality": "1155"
+  },
+  {
+   "id": "2453",
+   "brand": "REPSOL",
+   "address": "CALLE MAJOR, 94",
+   "municipality": "3822"
+  },
+  {
+   "id": "2455",
+   "brand": "BALLENOIL",
+   "address": "CALLE CLOT, 2",
+   "municipality": "881"
+  },
+  {
+   "id": "2456",
+   "brand": "REPSOL",
+   "address": "CALLE COLON, 123",
+   "municipality": "1141"
+  },
+  {
+   "id": "2457",
+   "brand": "REPSOL",
+   "address": "CALLE COLON, 125",
+   "municipality": "1141"
+  },
+  {
+   "id": "2458",
+   "brand": "REPSOL",
+   "address": "CARRETERA LL-11 KM. 10,00",
+   "municipality": "3916"
+  },
+  {
+   "id": "2460",
+   "brand": "PETROCAT",
+   "address": "CARRETERA C-16 KM. 73,47",
+   "municipality": "1006"
+  },
+  {
+   "id": "2461",
+   "brand": "REPSOL",
+   "address": "CARRETERA CTRA. DE MANRESA S/N KM.",
+   "municipality": "3989"
+  },
+  {
+   "id": "2462",
+   "brand": "REPSOL",
+   "address": "CARRETERA CARRETERA SANT HILARI ARBÚCIES KM 16.300 KM. 16,300",
+   "municipality": "2457"
+  },
+  {
+   "id": "2464",
+   "brand": "CAMPSA",
+   "address": "AVENIDA CATALUÑA, 1",
+   "municipality": "1030"
+  },
+  {
+   "id": "2465",
+   "brand": "ONDINA DEL SEGRE",
+   "address": "CR C-14, 117,10",
+   "municipality": "3958"
+  },
+  {
+   "id": "2467",
+   "brand": "REPSOL",
+   "address": "CR N-152, 33",
+   "municipality": "951"
+  },
+  {
+   "id": "2470",
+   "brand": "REPSOL",
+   "address": "AVENIDA MERIDIANA, 247",
+   "municipality": "881"
+  },
+  {
+   "id": "2472",
+   "brand": "REPSOL",
+   "address": "CALLE PI Y MARGALL, 118",
+   "municipality": "895"
+  },
+  {
+   "id": "2473",
+   "brand": "REPSOL",
+   "address": "CARRETERA C-31 KM. 148,50",
+   "municipality": "938"
+  },
+  {
+   "id": "2474",
+   "brand": "REPSOL",
+   "address": "CARRETERA C-31 KM. 148,50",
+   "municipality": "938"
+  },
+  {
+   "id": "2475",
+   "brand": "REPSOL",
+   "address": "AVENIDA CATALUNYA, 38",
+   "municipality": "2580"
+  },
+  {
+   "id": "2476",
+   "brand": "REPSOL",
+   "address": "CARRETERA C-260 KM. 42,5",
+   "municipality": "2592"
+  },
+  {
+   "id": "2477",
+   "brand": "REPSOL",
+   "address": "AVENIDA DE BARCELONA, 34",
+   "municipality": "1162"
+  },
+  {
+   "id": "2478",
+   "brand": "REPSOL",
+   "address": "CARRETERA C-250 KM. 19",
+   "municipality": "2534"
+  },
+  {
+   "id": "2479",
+   "brand": "REPSOL",
+   "address": "CARRETERA NACIONAL 340 KM. 1249,900",
+   "municipality": "1083"
+  },
+  {
+   "id": "2480",
+   "brand": "REPSOL",
+   "address": "CL AVENIDA ALFONSO XIII, 628",
+   "municipality": "875"
+  },
+  {
+   "id": "2481",
+   "brand": "REPSOL",
+   "address": "CARRETERA NACIONAL 230 KM. 174,90",
+   "municipality": "4026"
+  },
+  {
+   "id": "2483",
+   "brand": "REPSOL",
+   "address": "CARRETERA N-2 KM. 450",
+   "municipality": "4012"
+  },
+  {
+   "id": "2485",
+   "brand": "REPSOL",
+   "address": "AVENIDA SARRIA, 126",
+   "municipality": "881"
+  },
+  {
+   "id": "2487",
+   "brand": "CEPSA",
+   "address": "AVINGUDA EXERCIT, 44",
+   "municipality": "3916"
+  },
+  {
+   "id": "2488",
+   "brand": "REPSOL",
+   "address": "CALLE GRAN DE SANT ANDREU, 513",
+   "municipality": "881"
+  },
+  {
+   "id": "2489",
+   "brand": "PETRONOR",
+   "address": "CARRETERA C-16 KM. 60,40",
+   "municipality": "1055"
+  },
+  {
+   "id": "2490",
+   "brand": "CAMPSA EXPRESS",
+   "address": "CARRER VIC, 69",
+   "municipality": "1000"
+  },
+  {
+   "id": "2492",
+   "brand": "REPSOL",
+   "address": "CARRETERA C-151 KM. 10,6",
+   "municipality": "2606"
+  },
+  {
+   "id": "2494",
+   "brand": "BP ESTACION SERVICIO MATARO",
+   "address": "AVENIDA MARESME, 1",
+   "municipality": "987"
+  },
+  {
+   "id": "2495",
+   "brand": "REPSOL",
+   "address": "CARRETERA DE PONTS KM. 15,1",
+   "municipality": "3901"
+  },
+  {
+   "id": "2496",
+   "brand": "PETRONOR",
+   "address": "CARRETERA CR N-260 KM. 27,8",
+   "municipality": "2569"
+  },
+  {
+   "id": "2497",
+   "brand": "REPSOL",
+   "address": "CARRETERA SANT ADRIA  ROCA KM. 7",
+   "municipality": "994"
+  },
+  {
+   "id": "2498",
+   "brand": "REPSOL",
+   "address": "AVENIDA VALIRA, 27",
+   "municipality": "3986"
+  },
+  {
+   "id": "2499",
+   "brand": "RABELL",
+   "address": "CARRETERA CR C-250 GERONA-SAN FELIU KM. 11,800",
+   "municipality": "2490"
+  },
+  {
+   "id": "2500",
+   "brand": "REPSOL",
+   "address": "CARRETERA DE LERIDA, S/N KM. 23",
+   "municipality": "3891"
+  },
+  {
+   "id": "2501",
+   "brand": "REPSOL",
+   "address": "CR C-31, 186,58",
+   "municipality": "1160"
+  },
+  {
+   "id": "2502",
+   "brand": "CAMPSA",
+   "address": "CR N-230, 129",
+   "municipality": "4025"
+  },
+  {
+   "id": "2503",
+   "brand": "REPSOL",
+   "address": "CARRETERA C-31 KM. 350,5",
+   "municipality": "2641"
+  },
+  {
+   "id": "2504",
+   "brand": "CAMPSA EXPRESS",
+   "address": "CR C-148  (A), 0,8",
+   "municipality": "4018"
+  },
+  {
+   "id": "2505",
+   "brand": "REPSOL",
+   "address": "CALLE MURALLA SANT FRANCESC, 54",
+   "municipality": "978"
+  },
+  {
+   "id": "2507",
+   "brand": "REPSOL",
+   "address": "CR N-2, 660,7",
+   "municipality": "902"
+  },
+  {
+   "id": "2508",
+   "brand": "MOEVE",
+   "address": "RONDA GENERAL MITRE, 128",
+   "municipality": "881"
+  },
+  {
+   "id": "2509",
+   "brand": "REPSOL",
+   "address": "CARRETERA C-251 KM. 5,5",
+   "municipality": "908"
+  },
+  {
+   "id": "2510",
+   "brand": "REPSOL",
+   "address": "CARRETERA C-251 KM. 5,5",
+   "municipality": "908"
+  },
+  {
+   "id": "2511",
+   "brand": "REPSOL",
+   "address": "AVINGUDA SALVADOR DALI DOMENECH, 172",
+   "municipality": "2511"
+  },
+  {
+   "id": "2512",
+   "brand": "REPSOL",
+   "address": "AVINGUDA SALVADOR DALI DOMENECH, 147",
+   "municipality": "2511"
+  },
+  {
+   "id": "2513",
+   "brand": "REPSOL",
+   "address": "CR C-250, 7,7",
+   "municipality": "2581"
+  },
+  {
+   "id": "2514",
+   "brand": "PETRONOR",
+   "address": "CARRETERA COMARCAL 230A KM. 6,100",
+   "municipality": "3811"
+  },
+  {
+   "id": "2515",
+   "brand": "REPSOL",
+   "address": "AVENIDA EIX 11 DE SETEMBRE, 12",
+   "municipality": "1158"
+  },
+  {
+   "id": "2516",
+   "brand": "REPSOL",
+   "address": "AVINGUDA EIX 11 DE SETEMBRE, 12",
+   "municipality": "1158"
+  },
+  {
+   "id": "2517",
+   "brand": "REPSOL",
+   "address": "CARRETERA BV-5001 SANT ADRIA-LA ROCA KM. 19,9",
+   "municipality": "1166"
+  },
+  {
+   "id": "2518",
+   "brand": "REPSOL",
+   "address": "AVINGUDA RIUS I TAULET, 137",
+   "municipality": "1067"
+  },
+  {
+   "id": "2519",
+   "brand": "REPSOL",
+   "address": "CARRETERA C-151 KM. 23",
+   "municipality": "2486"
+  },
+  {
+   "id": "2520",
+   "brand": "REPSOL",
+   "address": "CARRETERA SANT FELIU DE GUIXOLS KM. 2",
+   "municipality": "2524"
+  },
+  {
+   "id": "2523",
+   "brand": "BALLENOIL",
+   "address": "CARRETERA CARRETERA N-2, Nº 647,9 KM. 647,9",
+   "municipality": "987"
+  },
+  {
+   "id": "2524",
+   "brand": "BP J. LLAVARI SANTA COLOMA DE FARNERS",
+   "address": "CARRETERA SILS KM. 1",
+   "municipality": "2620"
+  },
+  {
+   "id": "2525",
+   "brand": "REPSOL",
+   "address": "AVENIDA MESTRE MUNTAMER, 56",
+   "municipality": "967"
+  },
+  {
+   "id": "2527",
+   "brand": "REPSOL",
+   "address": "CL PASEO ZONA FRANCA, 35",
+   "municipality": "881"
+  },
+  {
+   "id": "2528",
+   "brand": "REPSOL",
+   "address": "CR N-230 186",
+   "municipality": "3841"
+  },
+  {
+   "id": "2529",
+   "brand": "PETRONOR",
+   "address": "CARRETERA C-55 KM. 21,7",
+   "municipality": "1105"
+  },
+  {
+   "id": "2531",
+   "brand": "REPSOL",
+   "address": "CARRETERA C-17 KM. 36,230",
+   "municipality": "1135"
+  },
+  {
+   "id": "2532",
+   "brand": "REPSOL",
+   "address": "CARRETERA N-260 KM. 63",
+   "municipality": "2465"
+  },
+  {
+   "id": "2533",
+   "brand": "REPSOL",
+   "address": "CALLE SERIÑANA, 18",
+   "municipality": "2479"
+  },
+  {
+   "id": "2534",
+   "brand": "REPSOL",
+   "address": "AVENIDA CORONEL ESTRADA, 136",
+   "municipality": "2528"
+  },
+  {
+   "id": "2535",
+   "brand": "REPSOL",
+   "address": "PASEO DOCTOR PI Y MOLIST, 110",
+   "municipality": "881"
+  },
+  {
+   "id": "2537",
+   "brand": "LA PANADELLA",
+   "address": "CARRETERA NACIONAL II KM. 532",
+   "municipality": "999"
+  },
+  {
+   "id": "2538",
+   "brand": "LA PANADELLA",
+   "address": "CARRETERA NACIONAL II KM. 532",
+   "municipality": "999"
+  },
+  {
+   "id": "2540",
+   "brand": "REPSOL",
+   "address": "CALLE DIPUTACION, 371",
+   "municipality": "881"
+  },
+  {
+   "id": "2541",
+   "brand": "REPSOL",
+   "address": "CR C-55, 13,33",
+   "municipality": "993"
+  },
+  {
+   "id": "2544",
+   "brand": "SEROIL ENERGY",
+   "address": "CR L-7042, 12",
+   "municipality": "3985"
+  },
+  {
+   "id": "2545",
+   "brand": "BP SANTA ANA",
+   "address": "CALLE ANSELM CLAVE, 66",
+   "municipality": "2470"
+  },
+  {
+   "id": "2546",
+   "brand": "REPSOL",
+   "address": "CARRER CODINA, 1",
+   "municipality": "2494"
+  },
+  {
+   "id": "2547",
+   "brand": "\"BP\"",
+   "address": "PASEO FONT DEL CIRERER, 43",
+   "municipality": "2604"
+  },
+  {
+   "id": "2548",
+   "brand": "BALLENOIL",
+   "address": "TERRENOS AVELLANEDA, 465",
+   "municipality": "2524"
+  },
+  {
+   "id": "2549",
+   "brand": "BALLENOIL",
+   "address": "CALLE BARCELONA, 236",
+   "municipality": "2524"
+  },
+  {
+   "id": "2550",
+   "brand": "REPSOL",
+   "address": "CARRETERA N-2 KM. 654",
+   "municipality": "1106"
+  },
+  {
+   "id": "2551",
+   "brand": "REPSOL",
+   "address": "CARRETERA A-2 KM. 447",
+   "municipality": "3992"
+  },
+  {
+   "id": "2554",
+   "brand": "CEPSA",
+   "address": "AVENIDA DE ESPLUGUES, 103",
+   "municipality": "881"
+  },
+  {
+   "id": "2555",
+   "brand": "REPSOL",
+   "address": "CR A-2, 495,5",
+   "municipality": "3847"
+  },
+  {
+   "id": "2556",
+   "brand": "REPSOL",
+   "address": "CARRETERA MANRESA SURIA KM. 14",
+   "municipality": "1134"
+  },
+  {
+   "id": "2557",
+   "brand": "REPSOL",
+   "address": "CALLE SANTA EUGENIA, 122",
+   "municipality": "2524"
+  },
+  {
+   "id": "2558",
+   "brand": "REPSOL",
+   "address": "AVENIDA BOGATELL, 49",
+   "municipality": "881"
+  },
+  {
+   "id": "2559",
+   "brand": "REPSOL",
+   "address": "CL CRTA. STA. COLOMA S.N.",
+   "municipality": "2556"
+  },
+  {
+   "id": "2560",
+   "brand": "PETRONOR",
+   "address": "CARRETERA C-154 DE VIC A BERGA KM. 20",
+   "municipality": "1013"
+  },
+  {
+   "id": "2562",
+   "brand": "REPSOL",
+   "address": "CARRETERA N-150 KM. 8,6",
+   "municipality": "880"
+  },
+  {
+   "id": "2757",
+   "brand": "MOEVE",
+   "address": "AUTOVIA C-17 KM 20,5 KM. 20,5",
+   "municipality": "971"
+  },
+  {
+   "id": "2758",
+   "brand": "REPSOL",
+   "address": "CALLE ANSELMO CLAVE, S/N",
+   "municipality": "1021"
+  },
+  {
+   "id": "2759",
+   "brand": "REPSOL",
+   "address": "CARRETERA C-66 KM. 18,800",
+   "municipality": "2570"
+  },
+  {
+   "id": "2760",
+   "brand": "REPSOL",
+   "address": "CALLE CARRETERA DE VIC, 230",
+   "municipality": "978"
+  },
+  {
+   "id": "2761",
+   "brand": "REPSOL",
+   "address": "CALLE CARRETERA DE VIC, 225",
+   "municipality": "978"
+  },
+  {
+   "id": "2762",
+   "brand": "REPSOL",
+   "address": "CARRETERA SAN QUINTIN KM. 9,2",
+   "municipality": "1102"
+  },
+  {
+   "id": "2763",
+   "brand": "PETRONOR",
+   "address": "CARRETERA C-149 KM. 43,5",
+   "municipality": "884"
+  },
+  {
+   "id": "2765",
+   "brand": "BP SANTA EULALIA DE RONÇANA",
+   "address": "CARRETERA BARCELONA KM. 10,700",
+   "municipality": "1114"
+  },
+  {
+   "id": "2766",
+   "brand": "REPSOL",
+   "address": "BARRIADA BASSACS, S/N",
+   "municipality": "957"
+  },
+  {
+   "id": "2768",
+   "brand": "REPSOL",
+   "address": "CARRETERA N-2 KM. 731",
+   "municipality": "2658"
+  },
+  {
+   "id": "2772",
+   "brand": "REPSOL",
+   "address": "CARRETERA N-152 KM. 118",
+   "municipality": "2484"
+  },
+  {
+   "id": "2773",
+   "brand": "REPSOL",
+   "address": "CARRETERA LP-4033 KM. 6,2",
+   "municipality": "3960"
+  },
+  {
+   "id": "2775",
+   "brand": "REPSOL",
+   "address": "AUTOPISTA AP-2 KM. 8,5",
+   "municipality": "990"
+  },
+  {
+   "id": "2777",
+   "brand": "REPSOL",
+   "address": "AUTOVIA A2 KM. 708",
+   "municipality": "2451"
+  },
+  {
+   "id": "2778",
+   "brand": "BP GASFELS",
+   "address": "AVENIDA CONSTITUCIO, 364",
+   "municipality": "919"
+  },
+  {
+   "id": "2779",
+   "brand": "GALP",
+   "address": "PASSEIG ZONA FRANCA, 81",
+   "municipality": "881"
+  },
+  {
+   "id": "2780",
+   "brand": "GALP",
+   "address": "CALLE PROGRESO ESQUINA ALBERT EISTEIN, SN",
+   "municipality": "937"
+  },
+  {
+   "id": "2785",
+   "brand": "BP LA BOBILA",
+   "address": "AVENIDA JOAN CARLES I ESQ C/ ARGILA, 0",
+   "municipality": "955"
+  },
+  {
+   "id": "2786",
+   "brand": "NUROIL",
+   "address": "AVENIDA RIU MOJENT ESQ CARLES RIBA, S/N",
+   "municipality": "1001"
+  },
+  {
+   "id": "2787",
+   "brand": "E.S.  PUNT DE TROBADA    -SABADELL-",
+   "address": "RAMBLA IBERIA D', 203",
+   "municipality": "1052"
+  },
+  {
+   "id": "2788",
+   "brand": "BP SANT BOI",
+   "address": "CALLE CANTABRIA, 3",
+   "municipality": "1062"
+  },
+  {
+   "id": "2789",
+   "brand": "REPSOL",
+   "address": "CALLE INDUSTRIA, 104",
+   "municipality": "903"
+  },
+  {
+   "id": "2790",
+   "brand": "BALLENOIL",
+   "address": "RD PAISOS CATALANS 15",
+   "municipality": "987"
+  },
+  {
+   "id": "2791",
+   "brand": "CEPSA",
+   "address": "CR C-32   P.K. 129,8",
+   "municipality": "1020"
+  },
+  {
+   "id": "2792",
+   "brand": "PETROCAT",
+   "address": "CR BV-2001, 2.1 (BV-2001 km 2,1)",
+   "municipality": "1080"
+  },
+  {
+   "id": "2793",
+   "brand": "REPSOL",
+   "address": "CALLE TARRAGONA, 29",
+   "municipality": "955"
+  },
+  {
+   "id": "2794",
+   "brand": "REPSOL",
+   "address": "CALLE CTRA DE VIC, 163",
+   "municipality": "978"
+  },
+  {
+   "id": "2795",
+   "brand": "REPSOL",
+   "address": "CARRETERA A-2 KM. 507,39",
+   "municipality": "3997"
+  },
+  {
+   "id": "2796",
+   "brand": "REPSOL",
+   "address": "CL JOAQUIN BLUME, 1",
+   "municipality": "1052"
+  },
+  {
+   "id": "2798",
+   "brand": "REPSOL",
+   "address": "AVINGUDA CANAL INDUSTRIAL, S/N",
+   "municipality": "884"
+  },
+  {
+   "id": "2799",
+   "brand": "REPSOL",
+   "address": "CARRETERA B-124 KM. 5,4",
+   "municipality": "915"
+  },
+  {
+   "id": "2800",
+   "brand": "REPSOL",
+   "address": "CARRETERA TERRASA KM. 216",
+   "municipality": "1052"
+  },
+  {
+   "id": "2802",
+   "brand": "REPSOL",
+   "address": "CARRETERA TORRELLAS 68 KM.",
+   "municipality": "1108"
+  },
+  {
+   "id": "2803",
+   "brand": "REPSOL",
+   "address": "VÍA EUROPA, 220",
+   "municipality": "987"
+  },
+  {
+   "id": "2804",
+   "brand": "REPSOL",
+   "address": "CALLE CIENCIES, SN",
+   "municipality": "965"
+  },
+  {
+   "id": "2805",
+   "brand": "REPSOL",
+   "address": "CALLE COLLSEROLA, 2",
+   "municipality": "881"
+  },
+  {
+   "id": "2806",
+   "brand": "REPSOL",
+   "address": "AVENIDA CALDES, 18",
+   "municipality": "990"
+  },
+  {
+   "id": "2807",
+   "brand": "REPSOL",
+   "address": "CL RONDA EUROPA, 58",
+   "municipality": "1167"
+  },
+  {
+   "id": "2808",
+   "brand": "REPSOL",
+   "address": "RONDA ARRAONA, SN",
+   "municipality": "1100"
+  },
+  {
+   "id": "2809",
+   "brand": "REPSOL",
+   "address": "CARRETERA N-2 KM. 643",
+   "municipality": "890"
+  },
+  {
+   "id": "2810",
+   "brand": "REPSOL",
+   "address": "CALLE VILADOMAT, 201",
+   "municipality": "1052"
+  },
+  {
+   "id": "2811",
+   "brand": "REPSOL",
+   "address": "CARRETERA E-9 KM. 14,9",
+   "municipality": "1049"
+  },
+  {
+   "id": "2812",
+   "brand": "REPSOL",
+   "address": "AVENIDA VIA AUGUSTA, 1",
+   "municipality": "1067"
+  },
+  {
+   "id": "2814",
+   "brand": "REPSOL",
+   "address": "POLIGONO CIM VALLÉS, PARCELA 13, SN",
+   "municipality": "1125"
+  },
+  {
+   "id": "2815",
+   "brand": "REPSOL",
+   "address": "AUTOPISTA AUTOPISTA C-32 (PAU CASAL) KM. 16,75",
+   "municipality": "938"
+  },
+  {
+   "id": "2816",
+   "brand": "REPSOL",
+   "address": "CR N-2, 772,5",
+   "municipality": "2531"
+  },
+  {
+   "id": "2817",
+   "brand": "REPSOL",
+   "address": "AUTOPISTA AUTOPISTA PAU CASALS KM. 15,75",
+   "municipality": "938"
+  },
+  {
+   "id": "2818",
+   "brand": "REPSOL",
+   "address": "CALLE LAS PALMAS, S/N",
+   "municipality": "1125"
+  },
+  {
+   "id": "2819",
+   "brand": "REPSOL",
+   "address": "CARRETERA C-60 KM. 8,7",
+   "municipality": "1047"
+  },
+  {
+   "id": "2820",
+   "brand": "REPSOL",
+   "address": "CARRETERA C-60 KM. 8,7",
+   "municipality": "1047"
+  },
+  {
+   "id": "2821",
+   "brand": "REPSOL",
+   "address": "CARRETERA E-9 KM. 14,7",
+   "municipality": "1049"
+  },
+  {
+   "id": "2822",
+   "brand": "REPSOL",
+   "address": "AVENIDA MATADEPERA, 247",
+   "municipality": "1052"
+  },
+  {
+   "id": "2823",
+   "brand": "REPSOL",
+   "address": "CR A-2 , 512",
+   "municipality": "3896"
+  },
+  {
+   "id": "2824",
+   "brand": "REPSOL",
+   "address": "AUTOVIA E-9 KM. 6,5",
+   "municipality": "1067"
+  },
+  {
+   "id": "2825",
+   "brand": "REPSOL",
+   "address": "CR B-224, 23,5",
+   "municipality": "1070"
+  },
+  {
+   "id": "2826",
+   "brand": "REPSOL",
+   "address": "CARRETERA C-25 KM. 111,52",
+   "municipality": "1096"
+  },
+  {
+   "id": "2827",
+   "brand": "REPSOL",
+   "address": "CARRETERA C-25 KM. 111,52",
+   "municipality": "1096"
+  },
+  {
+   "id": "2828",
+   "brand": "REPSOL",
+   "address": "CALLE CAN JERONI MARTI/CTRA SABADELL, 197,5",
+   "municipality": "931"
+  },
+  {
+   "id": "2831",
+   "brand": "REPSOL",
+   "address": "CARRETERA N-2 KM. 772,5",
+   "municipality": "2531"
+  },
+  {
+   "id": "2832",
+   "brand": "ESTACION BOYA",
+   "address": "CR N-230, 183,3",
+   "municipality": "3910"
+  },
+  {
+   "id": "2833",
+   "brand": "REPSOL",
+   "address": "CARRETERA N-150 KM. 14,2",
+   "municipality": "1052"
+  },
+  {
+   "id": "2834",
+   "brand": "REPSOL",
+   "address": "CR A-2, 484,5",
+   "municipality": "3886"
+  },
+  {
+   "id": "2835",
+   "brand": "REPSOL",
+   "address": "CALLE ROMA, DE, 2",
+   "municipality": "1141"
+  },
+  {
+   "id": "2836",
+   "brand": "MOEVE",
+   "address": "CALLE SANTA ROSA, 49",
+   "municipality": "931"
+  },
+  {
+   "id": "2837",
+   "brand": "REPSOL",
+   "address": "AUTOVIA A-2 KM 543    MARGEN DERECHO KM.",
+   "municipality": "968"
+  },
+  {
+   "id": "2838",
+   "brand": "REPSOL",
+   "address": "CALLE VULCA, 11",
+   "municipality": "954"
+  },
+  {
+   "id": "2839",
+   "brand": "AMAT OIL",
+   "address": "CALLE ITALIA, 29",
+   "municipality": "1102"
+  },
+  {
+   "id": "2840",
+   "brand": "REPSOL",
+   "address": "CL RONDA SANTA MARIA ,202-210 (ESQ.",
+   "municipality": "880"
+  },
+  {
+   "id": "2842",
+   "brand": "CEPSA",
+   "address": "CALLE GARBI, 123/125",
+   "municipality": "1028"
+  },
+  {
+   "id": "2843",
+   "brand": "MOEVE",
+   "address": "CARRETERA C-25 (MRG.DCHO.) KM. 174,6",
+   "municipality": "964"
+  },
+  {
+   "id": "2844",
+   "brand": "MOEVE",
+   "address": "CARRETERA C-25 (MRG.IZDO.) KM. 174,6",
+   "municipality": "964"
+  },
+  {
+   "id": "2846",
+   "brand": "TAMOIL",
+   "address": "AVINGUDA MARQUES DE MONTROIG, 125",
+   "municipality": "875"
+  },
+  {
+   "id": "2847",
+   "brand": "BP EL CORB - TORRE DE NOVEL",
+   "address": "CR C-12,  P.K. 161.83",
+   "municipality": "3837"
+  },
+  {
+   "id": "2848",
+   "brand": "SHELL",
+   "address": "CALLE A ZONA FRANCA, 3",
+   "municipality": "881"
+  },
+  {
+   "id": "2849",
+   "brand": "SHELL",
+   "address": "C/ RIERA MONTEALEGRE, 12 km CENTRO COMERCIAL M",
+   "municipality": "875"
+  },
+  {
+   "id": "2851",
+   "brand": "MOEVE",
+   "address": "CARRETERA UNIDIRECCIONAL - UNE ADUANA DE LA JUNQUERA (N-II) KM. 783",
+   "municipality": "2531"
+  },
+  {
+   "id": "2852",
+   "brand": "CEPSA",
+   "address": "CARRETERA BP-2121 KM. 2",
+   "municipality": "1019"
+  },
+  {
+   "id": "2853",
+   "brand": "CEPSA",
+   "address": "CARRETERA N-340 KM. 1213,7",
+   "municipality": "1162"
+  },
+  {
+   "id": "2854",
+   "brand": "CEPSA",
+   "address": "CARRETERA N-230 KM. 124,7",
+   "municipality": "3957"
+  },
+  {
+   "id": "2855",
+   "brand": "E.S.  AVINYÓ   -CEPSA-",
+   "address": "CALLE ANTONI PONT  (B-431, PK 53), S/N",
+   "municipality": "873"
+  },
+  {
+   "id": "2856",
+   "brand": "MOEVE",
+   "address": "CARRETERA N-141-C KM. 27,3",
+   "municipality": "989"
+  },
+  {
+   "id": "2857",
+   "brand": "CEPSA",
+   "address": "CARRETERA C-55 KM. 24,9",
+   "municipality": "978"
+  },
+  {
+   "id": "2858",
+   "brand": "CEPSA",
+   "address": "CARRETERA C-55 KM. 24,9",
+   "municipality": "978"
+  },
+  {
+   "id": "2859",
+   "brand": "GALP",
+   "address": "CARRETERA C-225 KM. 42",
+   "municipality": "2560"
+  },
+  {
+   "id": "2860",
+   "brand": "FULL  ENERGY BELLCAIRE D'EMPORDA",
+   "address": "CARRETERA GI-632 KM. 2,4",
+   "municipality": "2464"
+  },
+  {
+   "id": "2861",
+   "brand": "MOEVE",
+   "address": "PARATGE SANTA MARGARIDA, 7",
+   "municipality": "2559"
+  },
+  {
+   "id": "2863",
+   "brand": "PETROLIS INDEPENDENTS",
+   "address": "CARRETERA C-31 KM. 38,5",
+   "municipality": "2553"
+  },
+  {
+   "id": "2864",
+   "brand": "CEPSA",
+   "address": "CARRETERA C-31 KM. 357,2",
+   "municipality": "2651"
+  },
+  {
+   "id": "2865",
+   "brand": "MOEVE",
+   "address": "CALLE GRANADA, 20/24",
+   "municipality": "919"
+  },
+  {
+   "id": "2866",
+   "brand": "BALLENOIL",
+   "address": "AVENIDA DEL REMOLAR, 37,39",
+   "municipality": "1035"
+  },
+  {
+   "id": "2867",
+   "brand": "QOIL",
+   "address": "CARRER CARRETERA DE HOSPITALET, 328",
+   "municipality": "937"
+  },
+  {
+   "id": "2868",
+   "brand": "CEPSA",
+   "address": "CALLE ENERGIA, 73/83",
+   "municipality": "937"
+  },
+  {
+   "id": "2869",
+   "brand": "BALLENOIL",
+   "address": "AVENIDA CONSTITUCIO, 99",
+   "municipality": "919"
+  },
+  {
+   "id": "2870",
+   "brand": "BALLENOIL",
+   "address": "CARRETERA A SANT JOAN DESPI BV-2001 KM. 0,19",
+   "municipality": "937"
+  },
+  {
+   "id": "2871",
+   "brand": "MOEVE",
+   "address": "CARRETERA SANTA CREU DE CALAFELL KM. 5",
+   "municipality": "955"
+  },
+  {
+   "id": "2872",
+   "brand": "MOEVE",
+   "address": "CALLE BOTANICA, 74",
+   "municipality": "965"
+  },
+  {
+   "id": "2873",
+   "brand": "NUROIL",
+   "address": "CARRETERA C-17 KM. 0,500",
+   "municipality": "881"
+  },
+  {
+   "id": "2875",
+   "brand": "MOEVE",
+   "address": "POLIGONO INDUSTRIAL MONTIGALA, RAMBLA DE FRANCIA, 1",
+   "municipality": "875"
+  },
+  {
+   "id": "2876",
+   "brand": "MOEVE",
+   "address": "AVENIDA PARALELO, 179",
+   "municipality": "881"
+  },
+  {
+   "id": "2877",
+   "brand": "MOEVE",
+   "address": "AVENIDA CLOT, 181",
+   "municipality": "881"
+  },
+  {
+   "id": "2878",
+   "brand": "CEPSA",
+   "address": "CALLE CASANOVA, 89",
+   "municipality": "881"
+  },
+  {
+   "id": "2881",
+   "brand": "BALLENOIL",
+   "address": "CALLE CRAYWINKEL, 1",
+   "municipality": "881"
+  },
+  {
+   "id": "2884",
+   "brand": "MOEVE",
+   "address": "RONDA EUROPA, S/N",
+   "municipality": "1167"
+  },
+  {
+   "id": "2885",
+   "brand": "CEPSA",
+   "address": "CARRETERA C-16 KM. 113,5",
+   "municipality": "963"
+  },
+  {
+   "id": "2887",
+   "brand": "BP VILANOVA - AV EDUARDO TOLDRA",
+   "address": "AVENIDA EDUARD TOLDRA, 68",
+   "municipality": "1167"
+  },
+  {
+   "id": "2888",
+   "brand": "BP VILANOVA - AV BALMES",
+   "address": "AVENIDA BALMES, 35",
+   "municipality": "1167"
+  },
+  {
+   "id": "2890",
+   "brand": "MEROIL",
+   "address": "PASEO MARQUES DE CAMPS, 79",
+   "municipality": "2595"
+  },
+  {
+   "id": "2893",
+   "brand": "CEPSA",
+   "address": "CALLE SANT PONS DE LA BARCA, 2",
+   "municipality": "2524"
+  },
+  {
+   "id": "2894",
+   "brand": "CEPSA",
+   "address": "CARRETERA GE-533 KM. 0,3",
+   "municipality": "2524"
+  },
+  {
+   "id": "2895",
+   "brand": "CEPSA",
+   "address": "AVENIDA COSTA BRAVA, 163",
+   "municipality": "975"
+  },
+  {
+   "id": "2931",
+   "brand": "MOEVE",
+   "address": "AUTOVIA A-2 KM. 680,9",
+   "municipality": "1144"
+  },
+  {
+   "id": "2932",
+   "brand": "REPSOL",
+   "address": "AUTOPISTA C32 KM. 89",
+   "municipality": "1140"
+  },
+  {
+   "id": "2933",
+   "brand": "BALLENOIL",
+   "address": "CARRETERA N-II KM. 674,2",
+   "municipality": "975"
+  },
+  {
+   "id": "2934",
+   "brand": "BALLENOIL",
+   "address": "CARRETERA N-II KM. 674,2",
+   "municipality": "975"
+  },
+  {
+   "id": "2935",
+   "brand": "REPSOL",
+   "address": "CARRETERA N-II KM. 635,5",
+   "municipality": "984"
+  },
+  {
+   "id": "2941",
+   "brand": "MOEVE",
+   "address": "CARRETERA C-13 KM. 94,5",
+   "municipality": "3955"
+  },
+  {
+   "id": "2942",
+   "brand": "MOEVE",
+   "address": "CARRETERA C-13 KM. 158",
+   "municipality": "3881"
+  },
+  {
+   "id": "2944",
+   "brand": "PETROPRIX",
+   "address": "CARRETERA L-200 KM. 1,370",
+   "municipality": "3926"
+  },
+  {
+   "id": "2945",
+   "brand": "MOEVE",
+   "address": "CARRETERA C-253 KM. 41,3",
+   "municipality": "2600"
+  },
+  {
+   "id": "2948",
+   "brand": "CEPSA",
+   "address": "CARRETERA N-240A KM. 96,4",
+   "municipality": "3916"
+  },
+  {
+   "id": "2949",
+   "brand": "CEPSA",
+   "address": "CALLE CORTS CATALANES, 60",
+   "municipality": "3916"
+  },
+  {
+   "id": "2953",
+   "brand": "CEPSA",
+   "address": "CARRETERA C-35 KM. 66,667",
+   "municipality": "2599"
+  },
+  {
+   "id": "2955",
+   "brand": "MOEVE",
+   "address": "CARRETERA BV-5122 KM. 5,1",
+   "municipality": "946"
+  },
+  {
+   "id": "2958",
+   "brand": "ZONA DIESEL",
+   "address": "CARRETERA N-II KM. 701",
+   "municipality": "2480"
+  },
+  {
+   "id": "2964",
+   "brand": "REPSOL",
+   "address": "AUTOPISTA C- 33 KM. 82,5",
+   "municipality": "994"
+  },
+  {
+   "id": "2965",
+   "brand": "GALP",
+   "address": "AUTOPISTA AP-7 KM 165,5 KM. 165,5",
+   "municipality": "917"
+  },
+  {
+   "id": "2968",
+   "brand": "REPSOL",
+   "address": "CALLE COLOM, 351",
+   "municipality": "1141"
+  },
+  {
+   "id": "2969",
+   "brand": "PETROCAT DIRECTE",
+   "address": "CARRETERA BARCELONA KM. 6,7",
+   "municipality": "1046"
+  },
+  {
+   "id": "2970",
+   "brand": "CEPSA",
+   "address": "AVINGUDA LA FERRERIA ESQ/ TRABAJO, S/N",
+   "municipality": "994"
+  },
+  {
+   "id": "2971",
+   "brand": "CEPSA",
+   "address": "POLIGONO INDUSTRIAL HERMES, 4",
+   "municipality": "994"
+  },
+  {
+   "id": "2972",
+   "brand": "AVIA",
+   "address": "AVENIDA CONCORDIA, 1",
+   "municipality": "1052"
+  },
+  {
+   "id": "2975",
+   "brand": "MOEVE",
+   "address": "CARRETERA C-59 KM. 1,5",
+   "municipality": "1125"
+  },
+  {
+   "id": "2976",
+   "brand": "BALLENOIL",
+   "address": "CARRETERA N-152A KM. 15,1",
+   "municipality": "1125"
+  },
+  {
+   "id": "2977",
+   "brand": "MOEVE",
+   "address": "AUTOVIA CASTELLDEFELS KM. 4,500",
+   "municipality": "965"
+  },
+  {
+   "id": "2979",
+   "brand": "GALP",
+   "address": "AUTOPISTA AP 7 KM. 117",
+   "municipality": "973"
+  },
+  {
+   "id": "2980",
+   "brand": "GALP",
+   "address": "AUTOPISTA AP-7 KM. 117",
+   "municipality": "973"
+  },
+  {
+   "id": "2981",
+   "brand": "MOEVE",
+   "address": "CARRETERA DEL MONTSENY KM. 3",
+   "municipality": "1123"
+  },
+  {
+   "id": "2983",
+   "brand": "EVOLUTION",
+   "address": "AVENIDA EDUARD TOLDRA, 60",
+   "municipality": "1167"
+  },
+  {
+   "id": "2984",
+   "brand": "NIEVES",
+   "address": "Maestrazgo Esq.C/Matadepera,S/N",
+   "municipality": "1141"
+  },
+  {
+   "id": "2986",
+   "brand": "GALP",
+   "address": "Collblanc, 14-16",
+   "municipality": "965"
+  },
+  {
+   "id": "2988",
+   "brand": "EURONOR",
+   "address": "CALLE ARMENTERES, 62",
+   "municipality": "1072"
+  },
+  {
+   "id": "2990",
+   "brand": "GALP",
+   "address": "AUTOVIA A-2 KM. 573",
+   "municipality": "887"
+  },
+  {
+   "id": "2992",
+   "brand": "EVOLUTION",
+   "address": "Rambla Pare Alegre, 39",
+   "municipality": "1141"
+  },
+  {
+   "id": "2994",
+   "brand": "GALP",
+   "address": "VÍA SERGIA, 100",
+   "municipality": "987"
+  },
+  {
+   "id": "2995",
+   "brand": "GALP",
+   "address": "Almogavares, 66",
+   "municipality": "881"
+  },
+  {
+   "id": "2997",
+   "brand": "REPSOL",
+   "address": "CARRETERA ESPLUGUES KM. 219",
+   "municipality": "937"
+  },
+  {
+   "id": "2998",
+   "brand": "Q8",
+   "address": "CAMI DE SANT CRIST, 63",
+   "municipality": "987"
+  },
+  {
+   "id": "2999",
+   "brand": "TAMOIL",
+   "address": "CALLE JUAN RAMON JIMENEZ, 20",
+   "municipality": "965"
+  },
+  {
+   "id": "3001",
+   "brand": "MLC",
+   "address": "CARRETERA GI-623 KM. 1,8",
+   "municipality": "2462"
+  },
+  {
+   "id": "3002",
+   "brand": "PLENERGY",
+   "address": "CARRETERA C-65 KM. 16,12",
+   "municipality": "2490"
+  },
+  {
+   "id": "3003",
+   "brand": "GALP",
+   "address": "Pº de la Zona Franca, 221-239",
+   "municipality": "881"
+  },
+  {
+   "id": "3005",
+   "brand": "REPSOL",
+   "address": "CALLE SANTANDER, 102",
+   "municipality": "881"
+  },
+  {
+   "id": "3006",
+   "brand": "TAMOIL",
+   "address": "CALLE PUJADES, 309",
+   "municipality": "881"
+  },
+  {
+   "id": "3007",
+   "brand": "MEROIL",
+   "address": "AVENIDA DE LA FAMA, 2",
+   "municipality": "937"
+  },
+  {
+   "id": "3008",
+   "brand": "GALP",
+   "address": "AUTOVIA CASTELLDEFELS KM. 2,7",
+   "municipality": "965"
+  },
+  {
+   "id": "3009",
+   "brand": "GALP",
+   "address": "AUTOVIA CASTELLDEFELS KM. 2,7",
+   "municipality": "965"
+  },
+  {
+   "id": "3010",
+   "brand": "REPSOL",
+   "address": "AUTOVIA A-17 KM. 5,2",
+   "municipality": "994"
+  },
+  {
+   "id": "3011",
+   "brand": "E.S. ALCAMPO SANT BOI",
+   "address": "CALLE ALBEREDES, 6,12",
+   "municipality": "1062"
+  },
+  {
+   "id": "3012",
+   "brand": "ALCAMPO",
+   "address": "C.C.MATARÓ PARK; CTRA.CIRERA, S/N",
+   "municipality": "987"
+  },
+  {
+   "id": "3014",
+   "brand": "LOW COST FUEL",
+   "address": "N-II km 689,216",
+   "municipality": "2543"
+  },
+  {
+   "id": "3015",
+   "brand": "LOW COST FUEL",
+   "address": "N-II km 689,216",
+   "municipality": "2543"
+  },
+  {
+   "id": "3016",
+   "brand": "GALP",
+   "address": "CARRETERA N-2 KM. 772,500",
+   "municipality": "2531"
+  },
+  {
+   "id": "3017",
+   "brand": "CEPSA",
+   "address": "AUTOPISTA AP-7 KM. 86",
+   "municipality": "2543"
+  },
+  {
+   "id": "3018",
+   "brand": "GALP",
+   "address": "AVENIDA PROGRESO ESQUINA CAN CALDERÓN, SN",
+   "municipality": "1160"
+  },
+  {
+   "id": "3019",
+   "brand": "GALP",
+   "address": "A-2 km 8,000",
+   "municipality": "990"
+  },
+  {
+   "id": "3020",
+   "brand": "BP AP7 BELLATERRA (MD)",
+   "address": "AUTOPISTA AP-7 (MRG.DCHO.) KM. 151",
+   "municipality": "931"
+  },
+  {
+   "id": "3021",
+   "brand": "BP AP7 BELLATERRA (MI)",
+   "address": "AUTOPISTA AP-7 (MRG.IZDO.) KM. 151",
+   "municipality": "931"
+  },
+  {
+   "id": "3023",
+   "brand": "TAMOIL",
+   "address": "CARRETERA C-25 KM. 240",
+   "municipality": "2590"
+  },
+  {
+   "id": "3024",
+   "brand": "BENZINERA LA GARRIGA",
+   "address": "CARRETERA C-17 KM. 32,2",
+   "municipality": "954"
+  },
+  {
+   "id": "3026",
+   "brand": "TAMOIL",
+   "address": "AVENIDA FABREGADA, 55",
+   "municipality": "965"
+  },
+  {
+   "id": "3027",
+   "brand": "GALP",
+   "address": "C/ Rambla Volart, 2 - Passeig Maragall",
+   "municipality": "881"
+  },
+  {
+   "id": "3028",
+   "brand": "GALP",
+   "address": "AVINGUDA PAÏSOS CATALANS, 2",
+   "municipality": "941"
+  },
+  {
+   "id": "3029",
+   "brand": "REPSOL",
+   "address": "CARRETERA AUTOVIA CASTELLDEFELS KM. 16,600",
+   "municipality": "955"
+  },
+  {
+   "id": "3030",
+   "brand": "REPSOL",
+   "address": "CARRETERA AUTOVIA DE CASTELLDEFELS KM. 16,600",
+   "municipality": "955"
+  },
+  {
+   "id": "3031",
+   "brand": "GALP",
+   "address": "PASEO Pº VALLE DE HEBRÓN, 72",
+   "municipality": "881"
+  },
+  {
+   "id": "3032",
+   "brand": "GALP",
+   "address": "CALLE SANT GALDERICH, 14",
+   "municipality": "1097"
+  },
+  {
+   "id": "3033",
+   "brand": "GALP",
+   "address": "Avda. Cubelles",
+   "municipality": "938"
+  },
+  {
+   "id": "3034",
+   "brand": "CEPSA",
+   "address": "AUTOPISTA AP-7 (MRG.IZDO.) KM. 35",
+   "municipality": "2520"
+  },
+  {
+   "id": "3035",
+   "brand": "MEROIL",
+   "address": "PLAZA LA SARDANA, 3",
+   "municipality": "941"
+  },
+  {
+   "id": "3037",
+   "brand": "MEROIL",
+   "address": "CARRETERA L'ARRABASSADA KM. 5",
+   "municipality": "881"
+  },
+  {
+   "id": "3038",
+   "brand": "GALP",
+   "address": "AUTOPISTA AP-2 (MRG.DCHO.) KM. 164",
+   "municipality": "3853"
+  },
+  {
+   "id": "3039",
+   "brand": "GALP",
+   "address": "AUTOPISTA AP-2 (MRG.IZDO.) KM. 164",
+   "municipality": "3853"
+  },
+  {
+   "id": "3040",
+   "brand": "VALCARCE",
+   "address": "AUTOPISTA AP-2 (MRG.IZDO.) KM. 142",
+   "municipality": "3818"
+  },
+  {
+   "id": "3041",
+   "brand": "VALCARCE",
+   "address": "AUTOPISTA AP-2 (MRG.DCHO.) KM. 142",
+   "municipality": "3818"
+  },
+  {
+   "id": "3042",
+   "brand": "CEPSA",
+   "address": "AUTOPISTA AP-7 KM. 165,5",
+   "municipality": "917"
+  },
+  {
+   "id": "3055",
+   "brand": "ESCLATOIL",
+   "address": "HIPER ESCLAT. ARTESANS,S/N POL.IND.VALLS",
+   "municipality": "6507"
+  },
+  {
+   "id": "3057",
+   "brand": "ESCLATOIL",
+   "address": "HIPER ESCLAT. CTRA. N-340 km 1.145",
+   "municipality": "6524"
+  },
+  {
+   "id": "3058",
+   "brand": "CARREFOUR",
+   "address": "AUTOVIA DE REUS KM. 4",
+   "municipality": "6494"
+  },
+  {
+   "id": "3059",
+   "brand": "SUPECO",
+   "address": "CARRETERA TORTOSA A LŽALDEA KM. 1",
+   "municipality": "6501"
+  },
+  {
+   "id": "3060",
+   "brand": "ALCAMPO",
+   "address": "CARRETERA EIX DE L'EBRE KM. S/N",
+   "municipality": "6501"
+  },
+  {
+   "id": "3061",
+   "brand": "GALP",
+   "address": "CALLE RECASENS I MERCADE, 79",
+   "municipality": "6467"
+  },
+  {
+   "id": "3224",
+   "brand": "Q8",
+   "address": "AVENIDA DE LA GENERALITAT, 22",
+   "municipality": "6509"
+  },
+  {
+   "id": "3226",
+   "brand": "Q8",
+   "address": "CARRETERA CTRA COMARCAL 246 KM.",
+   "municipality": "6509"
+  },
+  {
+   "id": "3227",
+   "brand": "PETROENERGY",
+   "address": "CARRETERA C-42 KM. 5",
+   "municipality": "6501"
+  },
+  {
+   "id": "3228",
+   "brand": "MOEVE",
+   "address": "CARRETERA C/230 KM. 17400",
+   "municipality": "6501"
+  },
+  {
+   "id": "3230",
+   "brand": "CEPSA",
+   "address": "AUTOPISTA AP 7 KM. 237",
+   "municipality": "6355"
+  },
+  {
+   "id": "3234",
+   "brand": "GM FUEL STATIONS",
+   "address": "CARRETERA NACIONAL 340 KM. 1196,525",
+   "municipality": "920"
+  },
+  {
+   "id": "3235",
+   "brand": "REPSOL",
+   "address": "CR TV-3405, 0,5",
+   "municipality": "6358"
+  },
+  {
+   "id": "3236",
+   "brand": "REPSOL",
+   "address": "CARRETERA 230 KM. 50",
+   "municipality": "6465"
+  },
+  {
+   "id": "3238",
+   "brand": "REPSOL",
+   "address": "CARRETERA C-246 KM. 56",
+   "municipality": "6381"
+  },
+  {
+   "id": "3239",
+   "brand": "REPSOL",
+   "address": "CALLE COMPTE DE RIUS, S/N",
+   "municipality": "6393"
+  },
+  {
+   "id": "3240",
+   "brand": "REPSOL",
+   "address": "AUTOVIA A 7 KM. 1148",
+   "municipality": "6383"
+  },
+  {
+   "id": "3241",
+   "brand": "REPSOL",
+   "address": "CALLE CTRA. DE TARRAGONA, 28",
+   "municipality": "6507"
+  },
+  {
+   "id": "3242",
+   "brand": "REPSOL",
+   "address": "CARRETERA C-44 KM. 20,200",
+   "municipality": "6496"
+  },
+  {
+   "id": "3243",
+   "brand": "REPSOL",
+   "address": "CR C-242, 62,6",
+   "municipality": "6352"
+  },
+  {
+   "id": "3244",
+   "brand": "REPSOL",
+   "address": "CR T-240, 3,5",
+   "municipality": "6372"
+  },
+  {
+   "id": "3245",
+   "brand": "PETRONOR",
+   "address": "CR C-12, 77,8",
+   "municipality": "6523"
+  },
+  {
+   "id": "3246",
+   "brand": "REPSOL",
+   "address": "CARRETERA C-750 KM. 1,9",
+   "municipality": "6452"
+  },
+  {
+   "id": "3247",
+   "brand": "GALP",
+   "address": "CARRETERA C-255 KM. 23,175",
+   "municipality": "2468"
+  },
+  {
+   "id": "3248",
+   "brand": "REPSOL",
+   "address": "CARRETERA C-14 DIRECCIO MONTBLANC KM. 10,96",
+   "municipality": "6467"
+  },
+  {
+   "id": "3249",
+   "brand": "REPSOL",
+   "address": "CARRETERA C-14 DIRECCIO REUS KM. 11,24",
+   "municipality": "6467"
+  },
+  {
+   "id": "3250",
+   "brand": "REPSOL",
+   "address": "CALLE SANT JUAN BOSCO, 44",
+   "municipality": "6396"
+  },
+  {
+   "id": "3251",
+   "brand": "FRANCAS ENERGY",
+   "address": "CARRETERA N-240, KM:6,05 PERAFORT - TARRAGONA KM.",
+   "municipality": "6446"
+  },
+  {
+   "id": "3252",
+   "brand": "PETRONOR",
+   "address": "AVENIDA DE LA PAU,",
+   "municipality": "6438"
+  },
+  {
+   "id": "3255",
+   "brand": "REPSOL",
+   "address": "CR N-340, 1194,3",
+   "municipality": "6368"
+  },
+  {
+   "id": "3257",
+   "brand": "REPSOL",
+   "address": "CARRETERA C 12 KM. 60,900",
+   "municipality": "6437"
+  },
+  {
+   "id": "3259",
+   "brand": "PETRONOR",
+   "address": "CARRETERA T-700 KM. 21,9",
+   "municipality": "6460"
+  },
+  {
+   "id": "3260",
+   "brand": "REPSOL",
+   "address": "CL VALLESPIR, 118",
+   "municipality": "6475"
+  },
+  {
+   "id": "3261",
+   "brand": "ALAS",
+   "address": "ACCESO NORTE A VANDELLÒS (C-233 km 9,8)",
+   "municipality": "6508"
+  },
+  {
+   "id": "3262",
+   "brand": "REPSOL",
+   "address": "CARRETERA C-246 KM. 53,7",
+   "municipality": "6395"
+  },
+  {
+   "id": "3263",
+   "brand": "ALAS",
+   "address": "AVENIDA SANT BERNAT CALBO, 16",
+   "municipality": "6467"
+  },
+  {
+   "id": "3264",
+   "brand": "REPSOL",
+   "address": "POLIGONO IND. FRANCOLI, PARCELA 1, 1",
+   "municipality": "6494"
+  },
+  {
+   "id": "3265",
+   "brand": "REPSOL",
+   "address": "CR N-420, 876,8",
+   "municipality": "6467"
+  },
+  {
+   "id": "3266",
+   "brand": "PETRONOR",
+   "address": "CARRETERA T 331 KM. 17,50",
+   "municipality": "6502"
+  },
+  {
+   "id": "3267",
+   "brand": "REPSOL",
+   "address": "CALLE CTRA. DE MONTBLANC, 34",
+   "municipality": "6507"
+  },
+  {
+   "id": "3268",
+   "brand": "REPSOL",
+   "address": "CR N-340, 1159.5",
+   "municipality": "6494"
+  },
+  {
+   "id": "3269",
+   "brand": "PETRONOR",
+   "address": "AVENIDA GENERALITAT, 152",
+   "municipality": "6501"
+  },
+  {
+   "id": "3270",
+   "brand": "REPSOL",
+   "address": "CL DELS FUNDADORS, 104",
+   "municipality": "6481"
+  },
+  {
+   "id": "3272",
+   "brand": "REPSOL",
+   "address": "CARRETERA 510,1 KM. 510,1",
+   "municipality": "6473"
+  },
+  {
+   "id": "3274",
+   "brand": "REPSOL",
+   "address": "AVENIDA GENERALITAT, 44",
+   "municipality": "6396"
+  },
+  {
+   "id": "3276",
+   "brand": "REPSOL",
+   "address": "CARRETERA C-37 VALLS IGUALADA KM. 9,850",
+   "municipality": "6451"
+  },
+  {
+   "id": "3277",
+   "brand": "PETRONOR",
+   "address": "RONDA REMEI (DEL), S/N",
+   "municipality": "6346"
+  },
+  {
+   "id": "3280",
+   "brand": "BP",
+   "address": "BLOQUE SAN JORDI, S/N",
+   "municipality": "6494"
+  },
+  {
+   "id": "3281",
+   "brand": "CEPSA",
+   "address": "CARRETERA TV-3025 KM. 0,425",
+   "municipality": "6356"
+  },
+  {
+   "id": "3283",
+   "brand": "REPSOL",
+   "address": "CL AVENIDA DE LA RAPITA, 141",
+   "municipality": "6358"
+  },
+  {
+   "id": "3284",
+   "brand": "REPSOL",
+   "address": "CARRETERA C-12 KM. 11",
+   "municipality": "6525"
+  },
+  {
+   "id": "3285",
+   "brand": "QUALITY MONTSIÀ",
+   "address": "CALLE BAJADA GRAU, 1",
+   "municipality": "6358"
+  },
+  {
+   "id": "3286",
+   "brand": "REPSOL",
+   "address": "CARRETERA C-37 VALLS IGUALADA KM. 2,5",
+   "municipality": "6507"
+  },
+  {
+   "id": "3287",
+   "brand": "PETRONOR",
+   "address": "CARRETERA N-420 KM. 455,5",
+   "municipality": "6400"
+  },
+  {
+   "id": "3288",
+   "brand": "REPSOL",
+   "address": "CARRETERA N-340A KM. 1110,0",
+   "municipality": "6356"
+  },
+  {
+   "id": "3289",
+   "brand": "REPSOL",
+   "address": "CARRETERA C-246 VALLS-BARCELONA KM. 0,850",
+   "municipality": "6507"
+  },
+  {
+   "id": "3290",
+   "brand": "REPSOL",
+   "address": "CARRETERA N-340 KM. 1173",
+   "municipality": "6355"
+  },
+  {
+   "id": "3291",
+   "brand": "BALLENOIL",
+   "address": "CALLE FRANCOLI, 75",
+   "municipality": "6494"
+  },
+  {
+   "id": "3292",
+   "brand": "REPSOL",
+   "address": "CALLE AVENIDA S.BERNARDO CALVO, S/N",
+   "municipality": "6467"
+  },
+  {
+   "id": "3293",
+   "brand": "REPSOL",
+   "address": "AU AP-7   OESTE, 208",
+   "municipality": "6482"
+  },
+  {
+   "id": "3294",
+   "brand": "LORRY PETROL",
+   "address": "CARRER TARRAGONA, CAMI DE, 55",
+   "municipality": "6467"
+  },
+  {
+   "id": "3295",
+   "brand": "BP LA COMETA",
+   "address": "CR VENDRELL A VALLS KM  S/N",
+   "municipality": "6509"
+  },
+  {
+   "id": "3296",
+   "brand": "REPSOL",
+   "address": "CARRER DEL COURE, 2",
+   "municipality": "6494"
+  },
+  {
+   "id": "3298",
+   "brand": "REPSOL",
+   "address": "AVENIDA ARAGON, 7",
+   "municipality": "6408"
+  },
+  {
+   "id": "3300",
+   "brand": "BP",
+   "address": "AVENIDA DIPUTACIO, S/N",
+   "municipality": "6383"
+  },
+  {
+   "id": "3303",
+   "brand": "SHELL",
+   "address": "CARRETERA DE VENDRELL A VALLS KM. 69300",
+   "municipality": "6372"
+  },
+  {
+   "id": "3304",
+   "brand": "GALP",
+   "address": "CARRETERA N-340 KM. 1139",
+   "municipality": "6435"
+  },
+  {
+   "id": "3306",
+   "brand": "CEPSA",
+   "address": "CARRETERA TV-7211 KM. 9",
+   "municipality": "6391"
+  },
+  {
+   "id": "3308",
+   "brand": "QOIL",
+   "address": "AVDA.DE REUS ESQUINA C/.KLAUS FISCHER, 2 (A.REUS ESQ.C/.KLAUS FISCHER,2)",
+   "municipality": "6435"
+  },
+  {
+   "id": "3310",
+   "brand": "REPSOL",
+   "address": "CL DR.VILASECA-PAISES CATALANS, 26",
+   "municipality": "6467"
+  },
+  {
+   "id": "3312",
+   "brand": "REPSOL",
+   "address": "CL PZA. CORONA DE ARAGON, S.N.",
+   "municipality": "6501"
+  },
+  {
+   "id": "3313",
+   "brand": "REPSOL",
+   "address": "CARRETERA N-420 KM. 841",
+   "municipality": "6399"
+  },
+  {
+   "id": "3315",
+   "brand": "REPSOL",
+   "address": "CL MONTBLANC, 139",
+   "municipality": "6467"
+  },
+  {
+   "id": "3317",
+   "brand": "REPSOL",
+   "address": "AVENIDA MURALLA SANTA TECLA, 10",
+   "municipality": "6430"
+  },
+  {
+   "id": "3318",
+   "brand": "REPSOL",
+   "address": "CARRETERA N-340 VALENCIA - BARCELOMA KM. 1167",
+   "municipality": "6494"
+  },
+  {
+   "id": "3319",
+   "brand": "REPSOL",
+   "address": "CR N-340, 1160",
+   "municipality": "6494"
+  },
+  {
+   "id": "3320",
+   "brand": "REPSOL",
+   "address": "CARRETERA Nº 340 KM. 1121,8",
+   "municipality": "6508"
+  },
+  {
+   "id": "3322",
+   "brand": "CAMPSA",
+   "address": "CALLE RONDA REUS, 25/27",
+   "municipality": "6501"
+  },
+  {
+   "id": "3324",
+   "brand": "REPSOL",
+   "address": "CARRERA C-12, 101",
+   "municipality": "6404"
+  },
+  {
+   "id": "3325",
+   "brand": "REPSOL",
+   "address": "CARRETERA TARRAGONA LERIDA KM. 8",
+   "municipality": "6446"
+  },
+  {
+   "id": "3326",
+   "brand": "REPSOL",
+   "address": "CARRETERA CTRA. N-420 KM. 467,100",
+   "municipality": "6437"
+  },
+  {
+   "id": "3327",
+   "brand": "PETRONOR",
+   "address": "CALLE TARRAGONA, 33",
+   "municipality": "6492"
+  },
+  {
+   "id": "3328",
+   "brand": "REPSOL",
+   "address": "TRAVESSERA CARRETERA DE ARTESA, 4",
+   "municipality": "6493"
+  },
+  {
+   "id": "3329",
+   "brand": "CAMPSA",
+   "address": "CR C-51, 26,5",
+   "municipality": "6517"
+  },
+  {
+   "id": "3330",
+   "brand": "BP",
+   "address": "CALLE CARRETERA DE SALOU, 111",
+   "municipality": "6467"
+  },
+  {
+   "id": "3332",
+   "brand": "PETROCAT DIRECTE",
+   "address": "CARRETERA N-340 KM. 1093,5",
+   "municipality": "6357"
+  },
+  {
+   "id": "3334",
+   "brand": "REPSOL",
+   "address": "CR N-340, 1165",
+   "municipality": "6494"
+  },
+  {
+   "id": "3335",
+   "brand": "REPSOL",
+   "address": "CR N-340, 1132",
+   "municipality": "6435"
+  },
+  {
+   "id": "3336",
+   "brand": "REPSOL",
+   "address": "CL AVDA. MARIA FORTUNY, 57",
+   "municipality": "6467"
+  },
+  {
+   "id": "3337",
+   "brand": "REPSOL",
+   "address": "CR AP-1, 7,8",
+   "municipality": "6480"
+  },
+  {
+   "id": "3338",
+   "brand": "REPSOL",
+   "address": "AVENIDA S.BERNAT CALBO, 26/28",
+   "municipality": "6467"
+  },
+  {
+   "id": "3339",
+   "brand": "REPSOL",
+   "address": "CL AVDA JAUME CARNER ESQ.C/DEL MAR,",
+   "municipality": "6509"
+  },
+  {
+   "id": "3340",
+   "brand": "VILALTA",
+   "address": "CALLE MUELLE CASTILLA, S/N",
+   "municipality": "6494"
+  },
+  {
+   "id": "3341",
+   "brand": "CEPSA",
+   "address": "CARRETERA SALOU PONS KM. 15,8",
+   "municipality": "6490"
+  },
+  {
+   "id": "3345",
+   "brand": "CEPSA",
+   "address": "CALLE MAJOR, 120",
+   "municipality": "6348"
+  },
+  {
+   "id": "3347",
+   "brand": "MOEVE",
+   "address": "CALLE ALT PENEDES-UR.MOLI SERRA, S/N",
+   "municipality": "6486"
+  },
+  {
+   "id": "3349",
+   "brand": "MOEVE",
+   "address": "CALLE PRIORAT  EN  RESIDENCIAL, 16",
+   "municipality": "6381"
+  },
+  {
+   "id": "3350",
+   "brand": "MOEVE",
+   "address": "CARRETERA N-340 KM. 1201,8",
+   "municipality": "6359"
+  },
+  {
+   "id": "3355",
+   "brand": "CEPSA",
+   "address": "AVINGUDA CATALUNYA, 288",
+   "municipality": "6483"
+  },
+  {
+   "id": "3357",
+   "brand": "CEPSA",
+   "address": "CARRETERA N-340 KM. 1078,5",
+   "municipality": "6358"
+  },
+  {
+   "id": "3359",
+   "brand": "MOEVE",
+   "address": "CARRER VIA AUGUSTA, 2",
+   "municipality": "6494"
+  },
+  {
+   "id": "3360",
+   "brand": "MOEVE",
+   "address": "CARRETERA N-340 KM. 1168",
+   "municipality": "6494"
+  },
+  {
+   "id": "3361",
+   "brand": "CEPSA",
+   "address": "CARRETERA N-420 KM. 867",
+   "municipality": "6494"
+  },
+  {
+   "id": "3362",
+   "brand": "CEPSA",
+   "address": "CARRETERA N-420 KM. 867",
+   "municipality": "6494"
+  },
+  {
+   "id": "3364",
+   "brand": "MOEVE",
+   "address": "CARRETERA N-340 KM. 1177,4",
+   "municipality": "6499"
+  },
+  {
+   "id": "3365",
+   "brand": "GALP",
+   "address": "CARRETERA N-340 KM. 0",
+   "municipality": "6357"
+  },
+  {
+   "id": "3367",
+   "brand": "ICOR ENERGIA",
+   "address": "AVENIDA DE REUS, 86",
+   "municipality": "6347"
+  },
+  {
+   "id": "3370",
+   "brand": "TAMOIL",
+   "address": "CARRETERA CTRA. C-12 L'EIX DE L'EBRE KM. 36,7",
+   "municipality": "6369"
+  },
+  {
+   "id": "3371",
+   "brand": "GALP",
+   "address": "CTRA. N-340 km 1071,000",
+   "municipality": "6481"
+  },
+  {
+   "id": "3372",
+   "brand": "GALP",
+   "address": "CARRETERA N-340 KM. 1071",
+   "municipality": "6481"
+  },
+  {
+   "id": "3373",
+   "brand": "TAMOIL",
+   "address": "CARRETERA TP-2124 KM. 1,6",
+   "municipality": "6359"
+  },
+  {
+   "id": "3374",
+   "brand": "TAMOIL",
+   "address": "CARRETERA TV-3321 KM. 0,9",
+   "municipality": "6346"
+  },
+  {
+   "id": "3375",
+   "brand": "GALP",
+   "address": "AUTOPISTA AP-2 (MRG.IZDO.) KM. 221,5",
+   "municipality": "6517"
+  },
+  {
+   "id": "3376",
+   "brand": "CEPSA",
+   "address": "AUTOPISTA AP-2 (MRG.DCHO.) KM. 196",
+   "municipality": "6430"
+  },
+  {
+   "id": "3377",
+   "brand": "CEPSA",
+   "address": "AUTOPISTA AP-2 (MRG.IZDO.) KM. 196",
+   "municipality": "6430"
+  },
+  {
+   "id": "3378",
+   "brand": "GALP",
+   "address": "AUTOPISTA AP-2 (MRG.DCHO.) KM. 221,5",
+   "municipality": "6517"
+  },
+  {
+   "id": "3379",
+   "brand": "ENI",
+   "address": "AUTOPISTA AP-7 (MRG.DCHO.) KM. 317",
+   "municipality": "6348"
+  },
+  {
+   "id": "3380",
+   "brand": "ENI",
+   "address": "AUTOPISTA AP-7 (MRG.IZDO.) KM. 317",
+   "municipality": "6348"
+  },
+  {
+   "id": "3381",
+   "brand": "ICOR ENERGIA",
+   "address": "CARRETERA T-722 KM. 11,5",
+   "municipality": "6513"
+  },
+  {
+   "id": "3384",
+   "brand": "REPSOL",
+   "address": "N-340 km 1089,800",
+   "municipality": "6382"
+  },
+  {
+   "id": "3386",
+   "brand": "PETROLIS DE BARCELONA S.A",
+   "address": "CARRETERA PT-2039 KM. 0,900",
+   "municipality": "6388"
+  },
+  {
+   "id": "3387",
+   "brand": "ICOR ENERGIA",
+   "address": "CARRETERA C-724 KM. 6,3",
+   "municipality": "6507"
+  },
+  {
+   "id": "3388",
+   "brand": "ENI",
+   "address": "AUTOPISTA AP-7 (MRG.IZDO.) KM. 283",
+   "municipality": "6508"
+  },
+  {
+   "id": "3389",
+   "brand": "ENI",
+   "address": "AUTOPISTA AP-7 (MRG.DCHO.) KM. 283",
+   "municipality": "6508"
+  },
+  {
+   "id": "3390",
+   "brand": "GALP",
+   "address": "CARRETERA DE LA RIERA KM. 20",
+   "municipality": "6499"
+  },
+  {
+   "id": "3391",
+   "brand": "CEPSA",
+   "address": "CARRETERA E-15/AP-7 KM. 237",
+   "municipality": "6355"
+  },
+  {
+   "id": "6886",
+   "brand": "BP",
+   "address": "CARRETERA C-66 KM. 12,977",
+   "municipality": "2500"
+  },
+  {
+   "id": "7998",
+   "brand": "LACICAR",
+   "address": "SANT MIQUEL D'OLERDOLA (P. I.  SANT PERE MOLANTA)",
+   "municipality": "1009"
+  },
+  {
+   "id": "8042",
+   "brand": "MEROIL",
+   "address": "AVENIDA BARCELONA, 41,43",
+   "municipality": "1080"
+  },
+  {
+   "id": "8103",
+   "brand": "NIEVES",
+   "address": "PARTIDA CTRA NACIONL II, N",
+   "municipality": "3916"
+  },
+  {
+   "id": "8127",
+   "brand": "PETROCAT DIRECTE",
+   "address": "CALLE RAMBLA PARE ALEGRE, S/N",
+   "municipality": "1141"
+  },
+  {
+   "id": "8129",
+   "brand": "PETROCAT KM 17",
+   "address": "AUTOPISTA C-58 KM. 17,2",
+   "municipality": "1141"
+  },
+  {
+   "id": "8130",
+   "brand": "PETROCAT",
+   "address": "AUTOPISTA C-58 KM. 17,2",
+   "municipality": "1141"
+  },
+  {
+   "id": "8132",
+   "brand": "E.S. SANT RAMON",
+   "address": "CARRETERA NACIONAL 141 KM. 11,400",
+   "municipality": "3980"
+  },
+  {
+   "id": "8135",
+   "brand": "GRATSA",
+   "address": "PASEO MARAGALL, 33",
+   "municipality": "881"
+  },
+  {
+   "id": "8164",
+   "brand": "GM FUEL STATIONS",
+   "address": "CARRETERA NACIONAL 340 KM. 1187",
+   "municipality": "6509"
+  },
+  {
+   "id": "8165",
+   "brand": "MONTSIA",
+   "address": "CARRETERA DIPUTACION KM. 2,45",
+   "municipality": "6483"
+  },
+  {
+   "id": "8207",
+   "brand": "PETROMIRALLES",
+   "address": "CARRETERA COMARCAL C-16 KM. 105",
+   "municipality": "930"
+  },
+  {
+   "id": "8208",
+   "brand": "GASUIR",
+   "address": "CALLE VALLES, 1",
+   "municipality": "951"
+  },
+  {
+   "id": "8209",
+   "brand": "SERVIAUTO ECOLOGIC",
+   "address": "POLIGONO RONDE DE LES CONQUES, 17",
+   "municipality": "989"
+  },
+  {
+   "id": "8213",
+   "brand": "SHELL",
+   "address": "AVENIDA VECINAL, S/N",
+   "municipality": "1143"
+  },
+  {
+   "id": "8232",
+   "brand": "BENZINERA  \" 38 \"",
+   "address": "POL.IND.\"ELS.GARROFERS\", 38",
+   "municipality": "1169"
+  },
+  {
+   "id": "8237",
+   "brand": "PETREM",
+   "address": "N-II km 728",
+   "municipality": "2624"
+  },
+  {
+   "id": "8243",
+   "brand": "PONENT ENERGIA",
+   "address": "CTRA. VALLMANYA km 1,5",
+   "municipality": "3815"
+  },
+  {
+   "id": "8253",
+   "brand": "REPSOL",
+   "address": "CARRETERA C-66 KM. 36",
+   "municipality": "2564"
+  },
+  {
+   "id": "8288",
+   "brand": "GALP",
+   "address": "CARRETERA N-340 KM. 1234,5",
+   "municipality": "1155"
+  },
+  {
+   "id": "8313",
+   "brand": "SHELL",
+   "address": "CARRETERA C-246 \"MAS MEL\" SECTOR 6 KM. 4",
+   "municipality": "6381"
+  },
+  {
+   "id": "8329",
+   "brand": "BP ALELLA",
+   "address": "CARRETERA ALELLA KM. 1",
+   "municipality": "864"
+  },
+  {
+   "id": "8341",
+   "brand": "BP SABADELL",
+   "address": "CR TERRASA 101",
+   "municipality": "1052"
+  },
+  {
+   "id": "8351",
+   "brand": "AYAFUEL",
+   "address": "AVENIDA FERROCARRILES CATALANES, 240",
+   "municipality": "937"
+  },
+  {
+   "id": "8372",
+   "brand": "REPSOL",
+   "address": "CALLE PAGESIA, 2",
+   "municipality": "1049"
+  },
+  {
+   "id": "8393",
+   "brand": "SHELL",
+   "address": "CALLE IRADIER, S/N",
+   "municipality": "881"
+  },
+  {
+   "id": "8394",
+   "brand": "SHELL",
+   "address": "CL.JOANOT MARTORELL",
+   "municipality": "961"
+  },
+  {
+   "id": "8395",
+   "brand": "SHELL",
+   "address": "CARRETERA N-340 KM. 1246",
+   "municipality": "990"
+  },
+  {
+   "id": "8397",
+   "brand": "SHELL",
+   "address": "AVINGUDA CATALUNYA, 111",
+   "municipality": "1025"
+  },
+  {
+   "id": "8398",
+   "brand": "SHELL",
+   "address": "POLIGONO CAN MESSEGUER, S/N",
+   "municipality": "1047"
+  },
+  {
+   "id": "8399",
+   "brand": "E.S. ROCBLUME  -SABADELL- GAS-OILS_ROVIRA-",
+   "address": "CALLE DE ROCAFORT, 123",
+   "municipality": "1052"
+  },
+  {
+   "id": "8402",
+   "brand": "SHELL",
+   "address": "AVENIDA BAIX LLOBREGAT, S/N",
+   "municipality": "1080"
+  },
+  {
+   "id": "8440",
+   "brand": "SHELL",
+   "address": "CTRA.N-II km 454,9",
+   "municipality": "3815"
+  },
+  {
+   "id": "8441",
+   "brand": "SHELL",
+   "address": "CARRER RAVAL DE LLEIDA, S/N",
+   "municipality": "3853"
+  },
+  {
+   "id": "8526",
+   "brand": "SHELL",
+   "address": "CARRETERA NACIONAL 340 SEC H KM. 1059",
+   "municipality": "6346"
+  },
+  {
+   "id": "8529",
+   "brand": "SHELL",
+   "address": "CARRETERA NACIONAL 340 KM. 299,300",
+   "municipality": "6383"
+  },
+  {
+   "id": "8530",
+   "brand": "SHELL",
+   "address": "CARRETERA T-310 REUS-PRATDIP KM. 4",
+   "municipality": "6473"
+  },
+  {
+   "id": "8531",
+   "brand": "REPSOL",
+   "address": "CALLE TORRES JORDI (DE), 1",
+   "municipality": "6494"
+  },
+  {
+   "id": "8532",
+   "brand": "SHELL",
+   "address": "CARRETERA NACIONAL 340 KM. 1156",
+   "municipality": "6494"
+  },
+  {
+   "id": "8533",
+   "brand": "SHELL",
+   "address": "PASEO PASSEIG PAU CASALS, S/N",
+   "municipality": "6518"
+  },
+  {
+   "id": "8534",
+   "brand": "SHELL",
+   "address": "CARRETERA N-340A KM. 1151",
+   "municipality": "6518"
+  },
+  {
+   "id": "8535",
+   "brand": "SHELL",
+   "address": "TRAVESÍA CR NACIONAL 340, 233",
+   "municipality": "6524"
+  },
+  {
+   "id": "8536",
+   "brand": "TAMOIL",
+   "address": "AUTOVIA AP-01 KM. 0,450",
+   "municipality": "6494"
+  },
+  {
+   "id": "8564",
+   "brand": "SHELL",
+   "address": "AUTOVIA A-1 TARRAGONA-SALOU KM. 3",
+   "municipality": "6494"
+  },
+  {
+   "id": "8784",
+   "brand": "PETROLIS DE BARCELONA",
+   "address": "CALLE RIERA CAN PAHISSA, 7,11",
+   "municipality": "990"
+  },
+  {
+   "id": "8790",
+   "brand": "GECKOIL",
+   "address": "AVENIDA FRANÇA, 30",
+   "municipality": "2556"
+  },
+  {
+   "id": "8791",
+   "brand": "SHELL",
+   "address": "C/SANTIAGO RUSSINYOL/AV TRAMUNTANA",
+   "municipality": "2493"
+  },
+  {
+   "id": "8922",
+   "brand": "AVANTI",
+   "address": "CTRA. DE CARDONA A BERGA (B420 km 1.700)",
+   "municipality": "909"
+  },
+  {
+   "id": "8955",
+   "brand": "COOP. LA GALERA",
+   "address": "CALLE COOPERATIVA, 12",
+   "municipality": "6407"
+  },
+  {
+   "id": "8979",
+   "brand": "PONENT ENERGIA",
+   "address": "CALLE ESTATUT DE SAU, 0",
+   "municipality": "4012"
+  },
+  {
+   "id": "9014",
+   "brand": "MONTSIA",
+   "address": "CARRETERA TV-3408 KM. 0,8",
+   "municipality": "6358"
+  },
+  {
+   "id": "9020",
+   "brand": "GRATSA",
+   "address": "CASANOVA 23",
+   "municipality": "881"
+  },
+  {
+   "id": "9055",
+   "brand": "VERGE LORETO",
+   "address": "CALLE FLIX, 0",
+   "municipality": "3914"
+  },
+  {
+   "id": "9067",
+   "brand": "EMPÚRIES OILS SAUS",
+   "address": "CARRETERA ORRIOLS A L'ESCALA KM. 7",
+   "municipality": "2625"
+  },
+  {
+   "id": "9077",
+   "brand": "AUTOSERVEI M3",
+   "address": "CALLE DE LA CATALUNYA NORD, 21",
+   "municipality": "3892"
+  },
+  {
+   "id": "9096",
+   "brand": "ENERGETICS CONCA S.L.",
+   "address": "LA GUARDIA DELS PRATS (C-14 km 38.3)",
+   "municipality": "6430"
+  },
+  {
+   "id": "9114",
+   "brand": "-",
+   "address": "PARTIDA ORIOLA, 54",
+   "municipality": "6358"
+  },
+  {
+   "id": "9130",
+   "brand": "COBASA",
+   "address": "AVENIDA VALLES, DEL, 149",
+   "municipality": "1141"
+  },
+  {
+   "id": "9147",
+   "brand": "SHELL",
+   "address": "SABADELL, 4-6",
+   "municipality": "1158"
+  },
+  {
+   "id": "9158",
+   "brand": "NIEVES PARETS LLEVANTPARK",
+   "address": "C/ TENES, 1",
+   "municipality": "1025"
+  },
+  {
+   "id": "9166",
+   "brand": "SHELL",
+   "address": "AVINGUDA JOAN MARAGALL, S/N",
+   "municipality": "1094"
+  },
+  {
+   "id": "9193",
+   "brand": "VALENTI",
+   "address": "CTRA. N-260 km 230",
+   "municipality": "3929"
+  },
+  {
+   "id": "9207",
+   "brand": "ENCO SANT JORDI",
+   "address": "AV.GENERALITAT.25",
+   "municipality": "2609"
+  },
+  {
+   "id": "9212",
+   "brand": "DYNEFF",
+   "address": "AVINGUDA EUSKADI, 11",
+   "municipality": "2531"
+  },
+  {
+   "id": "9224",
+   "brand": "AGRICOLA DEL CAMP SANTA BARBARA",
+   "address": "PASEO ESCOLES, 71",
+   "municipality": "6484"
+  },
+  {
+   "id": "9226",
+   "brand": "PANDORA ENERGY",
+   "address": "CARRETERA CRTA.STA.CREU CALAFELL KM 7,8 KM. 7,800",
+   "municipality": "1062"
+  },
+  {
+   "id": "9246",
+   "brand": "VINICOLA DE SARRAL, SCCL",
+   "address": "AVINGUDA DE LA CONCA, 33",
+   "municipality": "6487"
+  },
+  {
+   "id": "9248",
+   "brand": "BP",
+   "address": "CARRETERA N-2 KM. 0",
+   "municipality": "2469"
+  },
+  {
+   "id": "9280",
+   "brand": "AGROPECUARIA DE JUNEDA",
+   "address": "CARRETERA N-240 km 73",
+   "municipality": "3909"
+  },
+  {
+   "id": "9283",
+   "brand": "CASTELL-OIL",
+   "address": "CAMI ERMITA, S/N",
+   "municipality": "3862"
+  },
+  {
+   "id": "9295",
+   "brand": "TOTAL",
+   "address": "PTDA. BARRANC S. ANTONI, 1",
+   "municipality": "3826"
+  },
+  {
+   "id": "9297",
+   "brand": "COOP. AGRICOLA SANT ISIDRE",
+   "address": "CTRA. TORTOSA, 5",
+   "municipality": "6421"
+  },
+  {
+   "id": "9301",
+   "brand": "COOPERATIVA LINYOLA",
+   "address": "C/ PRAT DE LA RIBA , S/N",
+   "municipality": "3911"
+  },
+  {
+   "id": "9360",
+   "brand": "AVANZA",
+   "address": "CALLE PONENT, 10",
+   "municipality": "2664"
+  },
+  {
+   "id": "9369",
+   "brand": "PETROBAGES S.L.",
+   "address": "AVENIDA INDUSTRIA,",
+   "municipality": "879"
+  },
+  {
+   "id": "9393",
+   "brand": "F.A.LES PLANES",
+   "address": "CAMI GILIBLAU, S/N",
+   "municipality": "4010"
+  },
+  {
+   "id": "9403",
+   "brand": "GALP",
+   "address": "CARRETERA SANTA CREU DE CALAFELL DE KM. 10",
+   "municipality": "1062"
+  },
+  {
+   "id": "9428",
+   "brand": "SHELL",
+   "address": "CARRETERA VILASAR DE MAR KM. 3,343",
+   "municipality": "892"
+  },
+  {
+   "id": "9461",
+   "brand": "CEPSA",
+   "address": "CARRETERA C-243C KM. 5",
+   "municipality": "917"
+  },
+  {
+   "id": "9471",
+   "brand": "REPSOL",
+   "address": "B-502 km 1",
+   "municipality": "890"
+  },
+  {
+   "id": "9475",
+   "brand": "BP PLANAMAR",
+   "address": "CARRETERA NACIONAL II KM. 639,5",
+   "municipality": "1169"
+  },
+  {
+   "id": "9492",
+   "brand": "LOWCOSTFUEL",
+   "address": "CARRETERA C-58 KM. 32,5",
+   "municipality": "1151"
+  },
+  {
+   "id": "9493",
+   "brand": "LOWCOSTFUEL",
+   "address": "CARRETERA C-58 KM. 32,5",
+   "municipality": "1151"
+  },
+  {
+   "id": "9499",
+   "brand": "REPSOL",
+   "address": "CALLE LLEIDA, 2",
+   "municipality": "3832"
+  },
+  {
+   "id": "9518",
+   "brand": "FRU-ROSE, SCCL",
+   "address": "AVGDA.DE LA FRUITA, 11",
+   "municipality": "3972"
+  },
+  {
+   "id": "9521",
+   "brand": "REPSOL",
+   "address": "CARRETERA LL-11 KM. 9,000",
+   "municipality": "3916"
+  },
+  {
+   "id": "9547",
+   "brand": "TAMOIL",
+   "address": "CALLE COMP WAGNER, 21",
+   "municipality": "1049"
+  },
+  {
+   "id": "9554",
+   "brand": "PETROESTANY",
+   "address": "CTRA. C-66 km 38",
+   "municipality": "2564"
+  },
+  {
+   "id": "9582",
+   "brand": "OILPRIX",
+   "address": "CRTA.C-14 km 19,50",
+   "municipality": "6347"
+  },
+  {
+   "id": "9599",
+   "brand": "REPSOL",
+   "address": "CALLE BALMES, 288",
+   "municipality": "881"
+  },
+  {
+   "id": "9638",
+   "brand": "POSTE DE MATA",
+   "address": "CRTA. C-150 km 16,630",
+   "municipality": "2461"
+  },
+  {
+   "id": "9708",
+   "brand": "REPSOL",
+   "address": "CARRER ACCES COSTA BRAVA, 136",
+   "municipality": "2470"
+  },
+  {
+   "id": "9744",
+   "brand": "E.S.MEX",
+   "address": "C260 km 38.5",
+   "municipality": "2492"
+  },
+  {
+   "id": "9750",
+   "brand": "ARROSSAIRES",
+   "address": "CARRETERA LLIGALLO A CAMARLES KM. 1",
+   "municipality": "6382"
+  },
+  {
+   "id": "9761",
+   "brand": "ARROSSAIRES",
+   "address": "CARRETERA CAMARLES A DELTEBRE KM. 6,5",
+   "municipality": "6396"
+  },
+  {
+   "id": "9818",
+   "brand": "POSTE DE MATA",
+   "address": "CRTA. C-150 km 16,700",
+   "municipality": "2461"
+  },
+  {
+   "id": "9830",
+   "brand": "CAMPO",
+   "address": "MAJOR,  183",
+   "municipality": "6502"
+  },
+  {
+   "id": "9835",
+   "brand": "NINGUNO",
+   "address": "CALLE CARRETERA (LA), 162",
+   "municipality": "1093"
+  },
+  {
+   "id": "9854",
+   "brand": "TOTAL",
+   "address": "CALLE ANTIC DE VIC, S",
+   "municipality": "951"
+  },
+  {
+   "id": "9881",
+   "brand": "REPSOL",
+   "address": "CARRETERA COMARCAL 251 KM. 26,300",
+   "municipality": "1065"
+  },
+  {
+   "id": "9882",
+   "brand": "EMPURIES OILS L'ESCALA",
+   "address": "CALLE RONDA DELS OFICIS, 4",
+   "municipality": "2506"
+  },
+  {
+   "id": "9895",
+   "brand": "PETROSET",
+   "address": "AVENIDA PIRELLI, 29",
+   "municipality": "978"
+  },
+  {
+   "id": "9921",
+   "brand": "MEROIL",
+   "address": "CALLE GALILEU, 210",
+   "municipality": "881"
+  },
+  {
+   "id": "9962",
+   "brand": "REPSOL",
+   "address": "CASTELLO 37",
+   "municipality": "3837"
+  },
+  {
+   "id": "10001",
+   "brand": "AREA DIESEL",
+   "address": "AVINGUDA ZONA INDUSTRIAL, S/N",
+   "municipality": "989"
+  },
+  {
+   "id": "10018",
+   "brand": "PETRO-PINTO,S.L.",
+   "address": "CALLE BARCELONA, S/N",
+   "municipality": "1075"
+  },
+  {
+   "id": "10023",
+   "brand": "ALAS",
+   "address": "POLIGONO PLA DE SOLANS, S/N",
+   "municipality": "6447"
+  },
+  {
+   "id": "10027",
+   "brand": "ALAS",
+   "address": "CR. CN-340 km 1121,8",
+   "municipality": "6508"
+  },
+  {
+   "id": "10029",
+   "brand": "ALAS",
+   "address": "CARRETERA CN-340 KM. 1110",
+   "municipality": "6356"
+  },
+  {
+   "id": "10074",
+   "brand": "PETRO PINTÓ S.L.",
+   "address": "CARRETERA CTRA. C-1411-Z, KM.59.4 KM.",
+   "municipality": "1041"
+  },
+  {
+   "id": "10141",
+   "brand": "MOEVE",
+   "address": "RONDA CERDANYOLA, S/N",
+   "municipality": "931"
+  },
+  {
+   "id": "10154",
+   "brand": "SIN ASIGNAR",
+   "address": "POLIGONO INDUSTRIAL RIU CLAR C/GRANIT S/N PARC.35-38",
+   "municipality": "6494"
+  },
+  {
+   "id": "10161",
+   "brand": "ESCUDEROIL",
+   "address": "CARRETERA GI-601 A CANTALLOPS, ESQ. N-II, POL. SECTOR LES OLIVERES KM. 128",
+   "municipality": "2531"
+  },
+  {
+   "id": "10177",
+   "brand": "PETROLIS INDEPENDENTS",
+   "address": "CTRA. DE ROSES km 31",
+   "municipality": "2511"
+  },
+  {
+   "id": "10182",
+   "brand": "PRIMER- AREA VIC",
+   "address": "CALLE TORELLO, 65",
+   "municipality": "1158"
+  },
+  {
+   "id": "10238",
+   "brand": "PORTUARIOS SERVICIOS",
+   "address": "CALLE PABLO IGLESIAS, 65",
+   "municipality": "965"
+  },
+  {
+   "id": "10272",
+   "brand": "MIFASCET,SLU",
+   "address": "RDA. FORT ROIG, 21 (URB. MONTJUIC)",
+   "municipality": "2524"
+  },
+  {
+   "id": "10319",
+   "brand": "CEPSA",
+   "address": "AUTOPISTA AP-7 KM. 144",
+   "municipality": "1125"
+  },
+  {
+   "id": "10339",
+   "brand": "LOW COST SANT FOST VILACARBURANTS",
+   "address": "CARRETERA BV-5001 KM. 11,6",
+   "municipality": "1074"
+  },
+  {
+   "id": "10341",
+   "brand": "BP COMERCIAL VALLROMANAS",
+   "address": "CARRETERA C5502 KM. 7,4",
+   "municipality": "1156"
+  },
+  {
+   "id": "10363",
+   "brand": "ESTACIO DE SERVEIS BALENYA",
+   "address": "POL. IND. LA BOBILA PARC 1",
+   "municipality": "878"
+  },
+  {
+   "id": "10380",
+   "brand": "STAR PETROLEUM",
+   "address": "CALLE RIERA D'EN MISSER, 2",
+   "municipality": "902"
+  },
+  {
+   "id": "10446",
+   "brand": "SHELL",
+   "address": "CL OSONA, 1-3",
+   "municipality": "915"
+  },
+  {
+   "id": "10450",
+   "brand": "REPSOL",
+   "address": "AVENIDA TIBIDABO, S/N",
+   "municipality": "876"
+  },
+  {
+   "id": "10451",
+   "brand": "\"BP\"BEGUR",
+   "address": "CARRER DE LA CREU, 30",
+   "municipality": "2463"
+  },
+  {
+   "id": "10452",
+   "brand": "REPSOL",
+   "address": "CARRETERA C-55 KM. 17,1",
+   "municipality": "916"
+  },
+  {
+   "id": "10453",
+   "brand": "BP",
+   "address": "CARRETERA N-2 KM. 0",
+   "municipality": "2469"
+  },
+  {
+   "id": "10458",
+   "brand": "BP",
+   "address": "CARRETERA N2 KM. 0",
+   "municipality": "2531"
+  },
+  {
+   "id": "10510",
+   "brand": "BONAREA",
+   "address": "CTRA L-800 km 1.85",
+   "municipality": "3815"
+  },
+  {
+   "id": "10517",
+   "brand": "VALCARCE",
+   "address": "CALLE LES SALINES, 9",
+   "municipality": "2531"
+  },
+  {
+   "id": "10598",
+   "brand": "PEDROSA CENTER",
+   "address": "CALLE LAPEDROSA, 20",
+   "municipality": "985"
+  },
+  {
+   "id": "10662",
+   "brand": "PETROCAT DIRECTE",
+   "address": "AVENIDA VALLES, DEL, 484",
+   "municipality": "1141"
+  },
+  {
+   "id": "10663",
+   "brand": "PETROCAT DIRECTE",
+   "address": "CALLE CIUDAD DE ASUNCIÓN, 69",
+   "municipality": "881"
+  },
+  {
+   "id": "10664",
+   "brand": "REPSOL",
+   "address": "PASEO GUAYAQUIL, 25",
+   "municipality": "881"
+  },
+  {
+   "id": "10666",
+   "brand": "PETROCAT",
+   "address": "AVENIDA LAS MATAS, 12",
+   "municipality": "6509"
+  },
+  {
+   "id": "10667",
+   "brand": "GALP",
+   "address": "AVENIDA TEXTIL,DEL, 34",
+   "municipality": "1141"
+  },
+  {
+   "id": "10668",
+   "brand": "PETROCAT DIRECTE",
+   "address": "CALLE MEXICO, S/N",
+   "municipality": "1058"
+  },
+  {
+   "id": "10669",
+   "brand": "PETROCAT DIRECTE",
+   "address": "CALLE VENUS, DE, 19",
+   "municipality": "1141"
+  },
+  {
+   "id": "10679",
+   "brand": "PLENERGY",
+   "address": "AVENIDA DE CARRILET, 269",
+   "municipality": "965"
+  },
+  {
+   "id": "10689",
+   "brand": "BONAREA",
+   "address": "POLIGONO LES ERES, 7",
+   "municipality": "6398"
+  },
+  {
+   "id": "10693",
+   "brand": "NIEVES",
+   "address": "CALLE TRES RIERES, S/N. NAVE 9, 9",
+   "municipality": "940"
+  },
+  {
+   "id": "10694",
+   "brand": "NIEVES",
+   "address": "CARRETERA NACIONAL II KM. 575",
+   "municipality": "933"
+  },
+  {
+   "id": "10716",
+   "brand": "PETRO7 - PETROLIS INDEPENDENTS",
+   "address": "N-240 km 38,8",
+   "municipality": "6430"
+  },
+  {
+   "id": "10734",
+   "brand": "ESCLATOIL",
+   "address": "CARRETERA CASTELLO KM. 1",
+   "municipality": "2619"
+  },
+  {
+   "id": "10735",
+   "brand": "ESCLATOIL",
+   "address": "CARRER POMPEU FABRA, 2",
+   "municipality": "2528"
+  },
+  {
+   "id": "10736",
+   "brand": "ESCLATOIL",
+   "address": "CARRER XALOC, 1",
+   "municipality": "2534"
+  },
+  {
+   "id": "10752",
+   "brand": "TAMOIL",
+   "address": "CARRETERA NOVA DE SANT CELONI KM. 40",
+   "municipality": "1123"
+  },
+  {
+   "id": "10755",
+   "brand": "BIONET",
+   "address": "POL. INDUSTRIAL RIU-CLAR, C/ SOFRE Nº 3",
+   "municipality": "6494"
+  },
+  {
+   "id": "10828",
+   "brand": "SHELL",
+   "address": "AVENIDA DE LA PAU, S/N",
+   "municipality": "2595"
+  },
+  {
+   "id": "10843",
+   "brand": "PETROCAT DIRECTE",
+   "address": "CALLE GRAN VIA, 12",
+   "municipality": "965"
+  },
+  {
+   "id": "10852",
+   "brand": "COOP.JUNCOSA",
+   "address": "PLAZA MAJOR, 8",
+   "municipality": "3908"
+  },
+  {
+   "id": "10853",
+   "brand": "COOP.JUNCOSA",
+   "address": "PLAZA MAJOR, 8",
+   "municipality": "3908"
+  },
+  {
+   "id": "10864",
+   "brand": "REPSOL",
+   "address": "CARRETERA T-310 KM. 8,6",
+   "municipality": "6431"
+  },
+  {
+   "id": "10865",
+   "brand": "REPSOL",
+   "address": "CR N-340, 1128,2",
+   "municipality": "6508"
+  },
+  {
+   "id": "10867",
+   "brand": "REPSOL",
+   "address": "CALLE CERDANYA ESQ RONDA NORTE, SN",
+   "municipality": "1067"
+  },
+  {
+   "id": "10904",
+   "brand": "ZD URBAN VIC",
+   "address": "CALLE MATARO, 12",
+   "municipality": "1158"
+  },
+  {
+   "id": "10912",
+   "brand": "PETROCAT",
+   "address": "LUGAR AEROPUERTO DEL PRAT JUNTO PARRILLA DE TAXIS, S/N",
+   "municipality": "1035"
+  },
+  {
+   "id": "10946",
+   "brand": "MOEVE",
+   "address": "AUTOVIA A-2 KM. 485,1",
+   "municipality": "3886"
+  },
+  {
+   "id": "10974",
+   "brand": "REPSOL",
+   "address": "AUTOPISTA AP7 KM. 208",
+   "municipality": "6359"
+  },
+  {
+   "id": "10985",
+   "brand": "COPVILAR",
+   "address": "CARRETERA TP-2003 KM. 0,110",
+   "municipality": "6517"
+  },
+  {
+   "id": "11034",
+   "brand": "REPSOL",
+   "address": "AUTOVIA A-2 KM. 567",
+   "municipality": "887"
+  },
+  {
+   "id": "11035",
+   "brand": "REPSOL",
+   "address": "CARRETERA BV-2002 KM. 2800",
+   "municipality": "1108"
+  },
+  {
+   "id": "11036",
+   "brand": "PANDORA ENERGY",
+   "address": "CARRETERA N-II KM. 597",
+   "municipality": "1022"
+  },
+  {
+   "id": "11037",
+   "brand": "CARREFOUR",
+   "address": "AVENIDA COMUNIDAD EUROPEA, S/N",
+   "municipality": "875"
+  },
+  {
+   "id": "11039",
+   "brand": "BP",
+   "address": "PARCELA 27 POLIGON 8 (C-66)",
+   "municipality": "2517"
+  },
+  {
+   "id": "11047",
+   "brand": "LA BOTIGA DEL SINDICAT",
+   "address": "CALLE AFORES, S/N",
+   "municipality": "6418"
+  },
+  {
+   "id": "11050",
+   "brand": "GALP",
+   "address": "CALLE SALVADOR SEGUI,1,",
+   "municipality": "861"
+  },
+  {
+   "id": "11051",
+   "brand": "GALP",
+   "address": "CALLE DE FRANÇA, 5",
+   "municipality": "1102"
+  },
+  {
+   "id": "11057",
+   "brand": "BONAREA",
+   "address": "POLIGONO ELS SALANCONS, 1",
+   "municipality": "3991"
+  },
+  {
+   "id": "11062",
+   "brand": "NO",
+   "address": "CARRETERA C-13 KM. 14",
+   "municipality": "4000"
+  },
+  {
+   "id": "11080",
+   "brand": "PETROCAT",
+   "address": "CARRETERA TV-2041 KM. 0,300",
+   "municipality": "6475"
+  },
+  {
+   "id": "11133",
+   "brand": "JULIA-OIL",
+   "address": "AV.ELECTRICIDAD,ESQ.CHAPLIN C.VALLHONRAT",
+   "municipality": "1049"
+  },
+  {
+   "id": "11151",
+   "brand": "XOPLUC",
+   "address": "C-53 km 127",
+   "municipality": "3888"
+  },
+  {
+   "id": "11163",
+   "brand": "MOEVE",
+   "address": "RONDA SANTA EULALIA, 33",
+   "municipality": "1022"
+  },
+  {
+   "id": "11173",
+   "brand": "PETROMIRALLES",
+   "address": "CALLE EL REC CANTONADA JOAN MERCADER, S/N",
+   "municipality": "967"
+  },
+  {
+   "id": "11191",
+   "brand": "GALP",
+   "address": "AVENIDA D'ÀLGUEMA, 2",
+   "municipality": "2622"
+  },
+  {
+   "id": "11193",
+   "brand": "SHELL",
+   "address": "CALLE COSTA I LLOBERA DE, 1",
+   "municipality": "1052"
+  },
+  {
+   "id": "11215",
+   "brand": "GARATGE HORTA",
+   "address": "PLAZA EIVISSA, 12",
+   "municipality": "881"
+  },
+  {
+   "id": "11247",
+   "brand": "PETROLIS COLLBLANC",
+   "address": "CARRETERA COLLBLANC KM. 137,141",
+   "municipality": "965"
+  },
+  {
+   "id": "11248",
+   "brand": "ESTACIO SERVEI LLUÇANÈS",
+   "address": "AVINGUDA POMPEU FABRA, 3",
+   "municipality": "1036"
+  },
+  {
+   "id": "11250",
+   "brand": "VILALTA",
+   "address": "CALLE PINTOR FUSTER, 3",
+   "municipality": "6467"
+  },
+  {
+   "id": "11251",
+   "brand": "TRADILO INVERSIONES",
+   "address": "CALLE ALEMANIA, 9",
+   "municipality": "6391"
+  },
+  {
+   "id": "11266",
+   "brand": "BONAREA",
+   "address": "POLIGONO CAMINS NOUS, 1",
+   "municipality": "6436"
+  },
+  {
+   "id": "11308",
+   "brand": "ESSER",
+   "address": "CALLE LLEBEIG, 1",
+   "municipality": "1028"
+  },
+  {
+   "id": "11345",
+   "brand": "CACENCA",
+   "address": "CAMI CAN VALLS, S/N",
+   "municipality": "956"
+  },
+  {
+   "id": "11355",
+   "brand": "BONAREA",
+   "address": "CARRETERA C-12 ENCREUAMENT C-233 KM. 1",
+   "municipality": "6404"
+  },
+  {
+   "id": "11383",
+   "brand": "BP LA CREUETA",
+   "address": "CALLE EMILI GRAHIT, 106",
+   "municipality": "2524"
+  },
+  {
+   "id": "11389",
+   "brand": "SHELL",
+   "address": "CARRETERA NACIONAL 340 KM. 232,500",
+   "municipality": "6383"
+  },
+  {
+   "id": "11406",
+   "brand": "SAV SERVEIS",
+   "address": "AVINGUDA DE LA PAU, 1",
+   "municipality": "4000"
+  },
+  {
+   "id": "11425",
+   "brand": "MEROIL",
+   "address": "CALLE CARRETERA DE MATARO, 10",
+   "municipality": "1056"
+  },
+  {
+   "id": "11426",
+   "brand": "SIN ROTULO",
+   "address": "DISEMINADO AFORES, S/N",
+   "municipality": "4011"
+  },
+  {
+   "id": "11433",
+   "brand": "COOP ALBATARREC",
+   "address": "CARRETERA L-700 KM. 1",
+   "municipality": "3811"
+  },
+  {
+   "id": "11444",
+   "brand": "MEROIL",
+   "address": "AVENIDA VIA AUGUSTA, 137",
+   "municipality": "1067"
+  },
+  {
+   "id": "11463",
+   "brand": "PETROMIRALLES",
+   "address": "CARRETERA NACIONAL II KM. 593",
+   "municipality": "1058"
+  },
+  {
+   "id": "11465",
+   "brand": "PETROCAT",
+   "address": "CALLE MONTURIOL ESQUINA C/ FORQUES, S/N",
+   "municipality": "1024"
+  },
+  {
+   "id": "11513",
+   "brand": "NIEVES",
+   "address": "CARRETERA N-340 KM. 1229,7",
+   "municipality": "1155"
+  },
+  {
+   "id": "11514",
+   "brand": "REPSOL FORTUNA",
+   "address": "CALLE FORTUNA, 34",
+   "municipality": "965"
+  },
+  {
+   "id": "11528",
+   "brand": "CARREFOUR",
+   "address": "CARRETERA NACIONAL II KM. 644",
+   "municipality": "890"
+  },
+  {
+   "id": "11535",
+   "brand": "REPSOL",
+   "address": "CAMI DES CARLIS, 10",
+   "municipality": "2595"
+  },
+  {
+   "id": "11536",
+   "brand": "REPSOL",
+   "address": "AVENIDA VILA DEL COMU DE LA, 8",
+   "municipality": "6518"
+  },
+  {
+   "id": "11550",
+   "brand": "BONAREA",
+   "address": "POLIGONO COLOMER, C/ LLEIDA, 35",
+   "municipality": "3892"
+  },
+  {
+   "id": "11584",
+   "brand": "ESCLATOIL",
+   "address": "CARRETERA C-35 KM. 56,1",
+   "municipality": "1065"
+  },
+  {
+   "id": "11586",
+   "brand": "AYAFUEL",
+   "address": "CALLE TIRSO DE MOLINA, 9",
+   "municipality": "937"
+  },
+  {
+   "id": "11601",
+   "brand": "ARROSSAIRES",
+   "address": "CARRETERA DEL FARO DE BUDA T-340 KM. 8",
+   "municipality": "6396"
+  },
+  {
+   "id": "11628",
+   "brand": "ESCLATOIL",
+   "address": "CARRER COMPTE BORREL, 1",
+   "municipality": "1145"
+  },
+  {
+   "id": "11659",
+   "brand": "NIEVES",
+   "address": "CALLE ISAAC PERAL, 9",
+   "municipality": "1070"
+  },
+  {
+   "id": "11666",
+   "brand": "LACICAR",
+   "address": "CARRER ENGINYER MIAS, 509",
+   "municipality": "3916"
+  },
+  {
+   "id": "11669",
+   "brand": "REPSOL",
+   "address": "CARRETERA N-340 KM. 1242",
+   "municipality": "932"
+  },
+  {
+   "id": "11671",
+   "brand": "\"BP\"PROPERLY, S.A.",
+   "address": "CARRER JOAN MARAGALL, 1",
+   "municipality": "2559"
+  },
+  {
+   "id": "11672",
+   "brand": "ALAS",
+   "address": "POLIGONO CONSTANTI - AVD.EUROPA, 5",
+   "municipality": "6391"
+  },
+  {
+   "id": "11696",
+   "brand": "REPSOL",
+   "address": "CARRETERA N-340 KM. 1183,8",
+   "municipality": "6475"
+  },
+  {
+   "id": "11703",
+   "brand": "NIEVES",
+   "address": "CALLE CARRETERA DE MARTORELL, 24",
+   "municipality": "1058"
+  },
+  {
+   "id": "11705",
+   "brand": "E.S.ARENES BELLPUIG",
+   "address": "CARRETERA LV3344 KM. 1,5",
+   "municipality": "3847"
+  },
+  {
+   "id": "11710",
+   "brand": "BONAREA",
+   "address": "CARRETERA ARTESA DE SEGRE A TREMP KM. 51",
+   "municipality": "4014"
+  },
+  {
+   "id": "11724",
+   "brand": "CEPSA",
+   "address": "CALLE LLULL ESQ EDUAR MARISTANY, S/N",
+   "municipality": "1056"
+  },
+  {
+   "id": "11771",
+   "brand": "ESCLATOIL",
+   "address": "CARRER HISPANO SUIZA, 1",
+   "municipality": "6475"
+  },
+  {
+   "id": "11777",
+   "brand": "REPSOL",
+   "address": "CARRETERA C-63 KM. 9,4",
+   "municipality": "2653"
+  },
+  {
+   "id": "11778",
+   "brand": "BP AREA 463",
+   "address": "AUTOVIA A-2 KM. 463,63",
+   "municipality": "3916"
+  },
+  {
+   "id": "11796",
+   "brand": "SHELL",
+   "address": "CALLE CAN VINYALETS, 21",
+   "municipality": "1125"
+  },
+  {
+   "id": "11800",
+   "brand": "REPSOL",
+   "address": "CALLE MURCIA, S/N",
+   "municipality": "1062"
+  },
+  {
+   "id": "11804",
+   "brand": "REPSOL",
+   "address": "CARRETERA A-2 KM. 567",
+   "municipality": "887"
+  },
+  {
+   "id": "11823",
+   "brand": "REPSOL",
+   "address": "CALLE COGUL, 1",
+   "municipality": "3916"
+  },
+  {
+   "id": "11841",
+   "brand": "SHELL",
+   "address": "CALLE PARAIRES, 2",
+   "municipality": "1125"
+  },
+  {
+   "id": "11855",
+   "brand": "PETROSERVICE",
+   "address": "CARRETERA C-35 KM. 92",
+   "municipality": "2480"
+  },
+  {
+   "id": "11860",
+   "brand": "LOWCOSTFUEL",
+   "address": "CALLE CARRETERA BARCELONA, 340",
+   "municipality": "1052"
+  },
+  {
+   "id": "11869",
+   "brand": "BONAREA",
+   "address": "CALLE C/MARINADA, S/N",
+   "municipality": "4008"
+  },
+  {
+   "id": "11876",
+   "brand": "BONAREA",
+   "address": "POLIGONO PLANS DE JORI, CTRA LLEIDA, 4",
+   "municipality": "6430"
+  },
+  {
+   "id": "11881",
+   "brand": "GALP",
+   "address": "CARRETERA N-240 KM. 100",
+   "municipality": "3916"
+  },
+  {
+   "id": "11886",
+   "brand": "TAMOIL",
+   "address": "CALLE CALLE GARBI, 190/194",
+   "municipality": "1028"
+  },
+  {
+   "id": "11898",
+   "brand": "BP BUFALVENT",
+   "address": "CALLE EDISON, 2",
+   "municipality": "978"
+  },
+  {
+   "id": "11923",
+   "brand": "AVIA",
+   "address": "CARRETERA TV-3401 KM. 1,210",
+   "municipality": "6357"
+  },
+  {
+   "id": "11935",
+   "brand": "BALLENOIL",
+   "address": "AVENIDA CONSTITUCIO, 83",
+   "municipality": "919"
+  },
+  {
+   "id": "11943",
+   "brand": "REPSOL",
+   "address": "AUTOVIA A-2 KM. 543",
+   "municipality": "968"
+  },
+  {
+   "id": "11944",
+   "brand": "ESCLATOIL",
+   "address": "POLIGONO AUBALS, 3",
+   "municipality": "6437"
+  },
+  {
+   "id": "11951",
+   "brand": "ES MALAVELLA",
+   "address": "CARRETERA C-35 KM. 92,800",
+   "municipality": "2480"
+  },
+  {
+   "id": "11953",
+   "brand": "PETROMIRALLES",
+   "address": "CALLE TOMAS VILADOMIU, 15",
+   "municipality": "1055"
+  },
+  {
+   "id": "11955",
+   "brand": "REPSOL",
+   "address": "CARRETERA L'ESTARTIT KM. 1",
+   "municipality": "2637"
+  },
+  {
+   "id": "11972",
+   "brand": "REPSOL",
+   "address": "CALLE CAN NADAL, 4",
+   "municipality": "972"
+  },
+  {
+   "id": "11973",
+   "brand": "MOEVE",
+   "address": "CALLE COMTE D'URGELL, 219",
+   "municipality": "881"
+  },
+  {
+   "id": "11983",
+   "brand": "BALLENOIL",
+   "address": "PLAZA RAMON LLULL, 11",
+   "municipality": "1052"
+  },
+  {
+   "id": "11988",
+   "brand": "PETROZAL",
+   "address": "PASSATGE Moçambic, 2",
+   "municipality": "881"
+  },
+  {
+   "id": "11999",
+   "brand": "SHELL",
+   "address": "CALLE DELS SATÈL.LITS, 33",
+   "municipality": "954"
+  },
+  {
+   "id": "12007",
+   "brand": "BALLENOIL",
+   "address": "CALLE MIGUEL HERNANDEZ, 116",
+   "municipality": "965"
+  },
+  {
+   "id": "12017",
+   "brand": "JAYOMI SERVEIS",
+   "address": "POLIGONO CRTA.N340 PKM 1113, 3",
+   "municipality": "6356"
+  },
+  {
+   "id": "12036",
+   "brand": "PETROLOWCOST",
+   "address": "CARRETERA MONTCADA KM. 666",
+   "municipality": "1141"
+  },
+  {
+   "id": "12065",
+   "brand": "AUTONETOIL",
+   "address": "CARRER EL PLA, 3",
+   "municipality": "990"
+  },
+  {
+   "id": "12075",
+   "brand": "AREA CAMBRILS COOPERATIVA",
+   "address": "CARRETERA MONTBRIO T-3120 KM. 2",
+   "municipality": "6383"
+  },
+  {
+   "id": "12090",
+   "brand": "MOEVE",
+   "address": "AUTOPISTA AUTOPISTA A-7 KM. 1156",
+   "municipality": "6467"
+  },
+  {
+   "id": "12092",
+   "brand": "BALLENOIL",
+   "address": "RONDA INDUSTRIA, 38",
+   "municipality": "880"
+  },
+  {
+   "id": "12095",
+   "brand": "PORT CANTÓ",
+   "address": "CARRETERA N-260 KM. 278,25",
+   "municipality": "3990"
+  },
+  {
+   "id": "12115",
+   "brand": "CALSINA CARRE",
+   "address": "CAMI DEL ROURE, 5",
+   "municipality": "2574"
+  },
+  {
+   "id": "12116",
+   "brand": "ALCAMPO",
+   "address": "CALLE PARE MANYANET, S/N",
+   "municipality": "6467"
+  },
+  {
+   "id": "12121",
+   "brand": "NIEVES",
+   "address": "AVINGUDA FRANCESC MACIA ESQ. CTRA. MARTORELL - ILLA 2, S/N",
+   "municipality": "1011"
+  },
+  {
+   "id": "12128",
+   "brand": "NIEVES",
+   "address": "CALLE LLETRA B DE LA ZONA FRANCA, 13",
+   "municipality": "881"
+  },
+  {
+   "id": "12142",
+   "brand": "ESCLATOIL",
+   "address": "AVENIDA GENERALITAT, S/N",
+   "municipality": "6396"
+  },
+  {
+   "id": "12153",
+   "brand": "CARREFOUR",
+   "address": "CARRETERA FIGUERES A ROSES KM 29 KM. 29",
+   "municipality": "2511"
+  },
+  {
+   "id": "12154",
+   "brand": "CARREFOUR",
+   "address": "AVENIDA SANTA COLOMA, 74",
+   "municipality": "2556"
+  },
+  {
+   "id": "12155",
+   "brand": "CARREFOUR",
+   "address": "CARRETERA NACIONAL II KM. 588",
+   "municipality": "980"
+  },
+  {
+   "id": "12156",
+   "brand": "CARREFOUR",
+   "address": "CALLE RAL DE VALENCIA, 21",
+   "municipality": "919"
+  },
+  {
+   "id": "12173",
+   "brand": "ESTACION DE SERVICIO FAVENCIA JULIA",
+   "address": "VÍA JULIA, 207",
+   "municipality": "881"
+  },
+  {
+   "id": "12187",
+   "brand": "COOPSERVICE D'ARTESA",
+   "address": "CARRETERA MONTBLANC KM. 1",
+   "municipality": "3833"
+  },
+  {
+   "id": "12192",
+   "brand": "MEROIL",
+   "address": "AVENIDA MERIDIANA, 666",
+   "municipality": "881"
+  },
+  {
+   "id": "12203",
+   "brand": "MONTEPIO",
+   "address": "POLIGONO INDUSTRIAL LA RAVALETA, 10",
+   "municipality": "6477"
+  },
+  {
+   "id": "12219",
+   "brand": "BONAREA",
+   "address": "AVENIDA BERTRAN I GÜELL, 17,19",
+   "municipality": "955"
+  },
+  {
+   "id": "12224",
+   "brand": "BALLENOIL",
+   "address": "CARRETERA HOSPITALET KM. 33",
+   "municipality": "937"
+  },
+  {
+   "id": "12232",
+   "brand": "REPSOL",
+   "address": "AVENIDA ESPANYA, S/N",
+   "municipality": "2559"
+  },
+  {
+   "id": "12237",
+   "brand": "E.S.AVINYONET",
+   "address": "CARRETERA C-260 DE BESALU A ROSES KM. 41,000",
+   "municipality": "2460"
+  },
+  {
+   "id": "12260",
+   "brand": "BONAREA",
+   "address": "AUTOVIA AUTOVIA A-2 KM. 545",
+   "municipality": "968"
+  },
+  {
+   "id": "12267",
+   "brand": "CEPSA",
+   "address": "CALLE BLANQUERS, 51",
+   "municipality": "6507"
+  },
+  {
+   "id": "12272",
+   "brand": "NUROIL",
+   "address": "CALLE BALMES, 34",
+   "municipality": "1046"
+  },
+  {
+   "id": "12280",
+   "brand": "PETRO7 - PETROLIS INDEPENDENTS",
+   "address": "CARRER CR. BP-1503 DE RUBI A TERRASSA, 325",
+   "municipality": "1141"
+  },
+  {
+   "id": "12287",
+   "brand": "BALLENOIL",
+   "address": "AVENIDA MADRID, 15",
+   "municipality": "1141"
+  },
+  {
+   "id": "12288",
+   "brand": "P FUEL EXPRESS",
+   "address": "POLIGONO VALLDEGATA DRAPER UASU 2-1,",
+   "municipality": "867"
+  },
+  {
+   "id": "12292",
+   "brand": "BONAREA",
+   "address": "CARRETERA MANRESA KM. 78,100",
+   "municipality": "3989"
+  },
+  {
+   "id": "12303",
+   "brand": "GM OIL",
+   "address": "CALLE TORRE VEDRUNA, S/N",
+   "municipality": "2524"
+  },
+  {
+   "id": "12308",
+   "brand": "CARREFOUR",
+   "address": "AVENIDA PAISES CATALANES, S/N",
+   "municipality": "967"
+  },
+  {
+   "id": "12310",
+   "brand": "CONFORT AUTO",
+   "address": "CALLE FERRO, 13",
+   "municipality": "917"
+  },
+  {
+   "id": "12313",
+   "brand": "ESCLATOIL",
+   "address": "CAMINO PLÀ DEL LLOP (DEL), 2",
+   "municipality": "2560"
+  },
+  {
+   "id": "12328",
+   "brand": "EXPRESS",
+   "address": "CARRETERA TORRELLES KM. 28",
+   "municipality": "1108"
+  },
+  {
+   "id": "12339",
+   "brand": "PETROMIRALLES",
+   "address": "CALLE DOCTOR FERRAN, 26",
+   "municipality": "978"
+  },
+  {
+   "id": "12340",
+   "brand": "ESCLATOIL",
+   "address": "PLAZA GENERALITAT, 1",
+   "municipality": "1105"
+  },
+  {
+   "id": "12341",
+   "brand": "ESCLATOIL",
+   "address": "CARRETERA DE SANTA COLOMA KM. 106",
+   "municipality": "2524"
+  },
+  {
+   "id": "12347",
+   "brand": "EMCCAT 24H.",
+   "address": "CARRETERA N-260 KM. 198,100",
+   "municipality": "3848"
+  },
+  {
+   "id": "12349",
+   "brand": "U. S. SÚRIA      *ROVIRA ENERGIA*",
+   "address": "PASEO JONCARETS, 149",
+   "municipality": "1134"
+  },
+  {
+   "id": "12351",
+   "brand": "REPSOL",
+   "address": "CARRETERA A-22 KM. 0",
+   "municipality": "3826"
+  },
+  {
+   "id": "12352",
+   "brand": "SERVICO",
+   "address": "CARRETERA NACIONAL II KM. 710",
+   "municipality": "2518"
+  },
+  {
+   "id": "12361",
+   "brand": "ZONA DIESEL",
+   "address": "POLIGONO INDUSTRIAL CAN BALTASAR PARCELA, 5",
+   "municipality": "1020"
+  },
+  {
+   "id": "12368",
+   "brand": "BALLENOIL",
+   "address": "CALLE SANTA ANA, 115",
+   "municipality": "931"
+  },
+  {
+   "id": "12372",
+   "brand": "ESCLATOIL",
+   "address": "AVENIDA PIRINEUS, S/N",
+   "municipality": "4014"
+  },
+  {
+   "id": "12403",
+   "brand": "NIEVES",
+   "address": "CALLE VAPOR CREMAT DEL, 13",
+   "municipality": "1011"
+  },
+  {
+   "id": "12411",
+   "brand": "BONAREA",
+   "address": "CALLE RAMON LLULL ESQUINA STA.MARIA DE TOUDELL, S/N",
+   "municipality": "1161"
+  },
+  {
+   "id": "12418",
+   "brand": "SERVI AGER",
+   "address": "CARRETERA TREMP (DE) KM. 35,5",
+   "municipality": "3805"
+  },
+  {
+   "id": "12435",
+   "brand": "AVIA",
+   "address": "RONDA CANALETA, 63",
+   "municipality": "2461"
+  },
+  {
+   "id": "12437",
+   "brand": "U.S. MANRESA -GAS-OILS ROVIRA-",
+   "address": "CARRER DOLORS, 19",
+   "municipality": "978"
+  },
+  {
+   "id": "12447",
+   "brand": "FER PREU JUST",
+   "address": "CALLE ALEMANYA, 3",
+   "municipality": "967"
+  },
+  {
+   "id": "12450",
+   "brand": "TAMOIL",
+   "address": "CALLE FRAGATA PAULITA, 1",
+   "municipality": "902"
+  },
+  {
+   "id": "12454",
+   "brand": "BALLUS BAIXCOST",
+   "address": "POLIGONO CAL VIDAL PARCEL-LA, 18",
+   "municipality": "1041"
+  },
+  {
+   "id": "12468",
+   "brand": "BALLENOIL",
+   "address": "POLIGONO POL17 EL PEDREGAR INDUST., 1",
+   "municipality": "1000"
+  },
+  {
+   "id": "12474",
+   "brand": "ALCAMPO",
+   "address": "PASEO DE LA BOBILA, 4",
+   "municipality": "1100"
+  },
+  {
+   "id": "12476",
+   "brand": "A.O. LOW COST",
+   "address": "CALLE MATARO, 40",
+   "municipality": "961"
+  },
+  {
+   "id": "12482",
+   "brand": "AUTONETOIL",
+   "address": "CALLE PABLO IGLESIAS, 1",
+   "municipality": "987"
+  },
+  {
+   "id": "12488",
+   "brand": "PUNTA SOLERA",
+   "address": "AVENIDA COVA SOLERA, 20",
+   "municipality": "1049"
+  },
+  {
+   "id": "12490",
+   "brand": "ESCLATOIL",
+   "address": "CALLE ENGINYER ANTONI LLOBET, S/N",
+   "municipality": "3916"
+  },
+  {
+   "id": "12491",
+   "brand": "ESCLATOIL",
+   "address": "CARRER DE LA LLOSA D, 80",
+   "municipality": "2506"
+  },
+  {
+   "id": "12492",
+   "brand": "ESCLATOIL",
+   "address": "CARRER SANT MAURICI, 21",
+   "municipality": "2492"
+  },
+  {
+   "id": "12497",
+   "brand": "AUTONET&OIL",
+   "address": "CALLE LLUIS COMPANYS, 60",
+   "municipality": "961"
+  },
+  {
+   "id": "12511",
+   "brand": "PETROLOWCOST",
+   "address": "CALLE CAN MILANS, 1",
+   "municipality": "994"
+  },
+  {
+   "id": "12518",
+   "brand": "ESCLATOIL",
+   "address": "CALLE DE LA BASSA DEL CANEM, 22",
+   "municipality": "2461"
+  },
+  {
+   "id": "12519",
+   "brand": "1PRIMER",
+   "address": "PASEO CONCA DEL BESOS, 26",
+   "municipality": "961"
+  },
+  {
+   "id": "12522",
+   "brand": "BALLENOIL",
+   "address": "CAMI SANT CRIST (DEL), 32",
+   "municipality": "987"
+  },
+  {
+   "id": "12530",
+   "brand": "OIL PRIX",
+   "address": "CALLE VIC, 12/14",
+   "municipality": "941"
+  },
+  {
+   "id": "12532",
+   "brand": "ANEU OIL",
+   "address": "AVENIDA GENERALITAT, 31",
+   "municipality": "2559"
+  },
+  {
+   "id": "12537",
+   "brand": "REGENCOS OIL",
+   "address": "CARRETERA C-31 KM. 1",
+   "municipality": "2584"
+  },
+  {
+   "id": "12541",
+   "brand": "ANEU OIL",
+   "address": "CALLE FARGA, 17",
+   "municipality": "940"
+  },
+  {
+   "id": "12545",
+   "brand": "PETROVOLTREGÀ",
+   "address": "CALLE ONZE DE SETEMBRE, 34",
+   "municipality": "983"
+  },
+  {
+   "id": "12550",
+   "brand": "TAMOIL",
+   "address": "CARRETERA TERRASSA KM. 1",
+   "municipality": "1049"
+  },
+  {
+   "id": "12553",
+   "brand": "U.S.SABADELL   - GAS-OILS ROVIRA-",
+   "address": "CALLE ROCAFORT, 40",
+   "municipality": "1052"
+  },
+  {
+   "id": "12557",
+   "brand": "BALLENOIL",
+   "address": "CARRETERA CA L'ALAIO KM. 3",
+   "municipality": "1035"
+  },
+  {
+   "id": "12570",
+   "brand": "LOWCOSTFUEL",
+   "address": "CALLE CATALUNYA, 33",
+   "municipality": "1125"
+  },
+  {
+   "id": "12584",
+   "brand": "BP CUBELLES",
+   "address": "CARRETERA C-31 KM. 147,500",
+   "municipality": "938"
+  },
+  {
+   "id": "12590",
+   "brand": "REPSOL BUTANO",
+   "address": "AVINGUDA INDUSTRIA, P. 504",
+   "municipality": "3916"
+  },
+  {
+   "id": "12597",
+   "brand": "PETROMIRALLES",
+   "address": "CALLE INDUSTRIA, 23",
+   "municipality": "1072"
+  },
+  {
+   "id": "12599",
+   "brand": "ESCLATOIL",
+   "address": "AVENIDA AVINGUDA IGUALADA, 97",
+   "municipality": "1027"
+  },
+  {
+   "id": "12602",
+   "brand": "NADAL",
+   "address": "CARRETERA LP-2015 KM. 0,500",
+   "municipality": "3847"
+  },
+  {
+   "id": "12621",
+   "brand": "BALLENOIL",
+   "address": "AVENIDA SEGLE XXI, 44",
+   "municipality": "1160"
+  },
+  {
+   "id": "12623",
+   "brand": "BP GUALBA",
+   "address": "CALLE RIERA DE GUALBA, 1",
+   "municipality": "962"
+  },
+  {
+   "id": "12626",
+   "brand": "PETRO VALLES",
+   "address": "CALLE CAMI FONT DE LES CANYES,D, 54",
+   "municipality": "1141"
+  },
+  {
+   "id": "12627",
+   "brand": "PETRO VALLES",
+   "address": "CALLE JUAN DE LA CIERVA, 2",
+   "municipality": "903"
+  },
+  {
+   "id": "12628",
+   "brand": "PETROPRIX",
+   "address": "CALLE PRIORAT, 30",
+   "municipality": "915"
+  },
+  {
+   "id": "12636",
+   "brand": "CEPSA",
+   "address": "RONDA SANT PAU DE RIU SEC, 7",
+   "municipality": "1052"
+  },
+  {
+   "id": "12639",
+   "brand": "SHELL",
+   "address": "CALLE TEIXIDORA (DE LA), 37",
+   "municipality": "987"
+  },
+  {
+   "id": "12669",
+   "brand": "E.S.GUILLERIES,S.L.",
+   "address": "AVENIDA SANTA COLOMA DE FARNERS, 95",
+   "municipality": "2604"
+  },
+  {
+   "id": "12674",
+   "brand": "PETROLIS DE BARCELONA",
+   "address": "CARRER CAN CULEBRA, PARCELA 44, S/N",
+   "municipality": "2466"
+  },
+  {
+   "id": "12680",
+   "brand": "MOEVE",
+   "address": "POLIGONO LA BISBAL, 10",
+   "municipality": "2664"
+  },
+  {
+   "id": "12683",
+   "brand": "BONAREA",
+   "address": "CARRETERA RIUDOMS KM. 2,2",
+   "municipality": "6467"
+  },
+  {
+   "id": "12696",
+   "brand": "BP CARDEDEU",
+   "address": "CALLE PINS ROSES, 2",
+   "municipality": "908"
+  },
+  {
+   "id": "12700",
+   "brand": "GM OIL",
+   "address": "AVENIDA LA FERRERIA, S/N",
+   "municipality": "994"
+  },
+  {
+   "id": "12714",
+   "brand": "AVIA",
+   "address": "CALLE AGUSTI COLL, 18",
+   "municipality": "978"
+  },
+  {
+   "id": "12719",
+   "brand": "PETROLIS INDEPENDENTS - PETRO7",
+   "address": "CALLE SECTOR MAS DORCA, 2",
+   "municipality": "866"
+  },
+  {
+   "id": "12722",
+   "brand": "GASOIL 3B",
+   "address": "CARRER RIPOLLES, 4",
+   "municipality": "954"
+  },
+  {
+   "id": "12728",
+   "brand": "ESCLATOIL",
+   "address": "CARRETERA NACIONAL II KM. 70",
+   "municipality": "890"
+  },
+  {
+   "id": "12732",
+   "brand": "ANEU OIL",
+   "address": "CALLE DELS SALINCS, 11",
+   "municipality": "2463"
+  },
+  {
+   "id": "12746",
+   "brand": "LOW COST FUEL",
+   "address": "CALLE DE LES FONTS, 7",
+   "municipality": "1033"
+  },
+  {
+   "id": "12752",
+   "brand": "SERVIOIL",
+   "address": "CALLE CADAQUES, 3",
+   "municipality": "2559"
+  },
+  {
+   "id": "12754",
+   "brand": "MARINÉ",
+   "address": "CALLE GUIFRE EL PILOS, S/N",
+   "municipality": "1125"
+  },
+  {
+   "id": "12755",
+   "brand": "GALP",
+   "address": "AVENIDA ALEGRIES, 1",
+   "municipality": "2540"
+  },
+  {
+   "id": "12757",
+   "brand": "GASOLINERA LOW COST",
+   "address": "CARRETERA NACIONAL II L11 KM. 467,6",
+   "municipality": "3916"
+  },
+  {
+   "id": "12765",
+   "brand": "ECOBENZ",
+   "address": "AVINGUDA JOAN CARLES I, 16",
+   "municipality": "965"
+  },
+  {
+   "id": "12767",
+   "brand": "E.S SANT ISIDRE",
+   "address": "AVINGUDA JAUME SEGARRA, S/N",
+   "municipality": "3853"
+  },
+  {
+   "id": "12788",
+   "brand": "PETROPRIX",
+   "address": "CALLE TURO D'EN BRUGUET, 2",
+   "municipality": "961"
+  },
+  {
+   "id": "12805",
+   "brand": "OILPRIX",
+   "address": "CALLE FRIEDRICH WILHELM SERTÜNER, 8",
+   "municipality": "991"
+  },
+  {
+   "id": "12807",
+   "brand": "GADCAR",
+   "address": "AVENIDA GIRONA, S/N",
+   "municipality": "2506"
+  },
+  {
+   "id": "12815",
+   "brand": "AUTONETOIL",
+   "address": "RONDA EUROPA CANTONADA CARRER SOLICRUP, S/N",
+   "municipality": "1167"
+  },
+  {
+   "id": "12822",
+   "brand": "CAMPSA EXPRESS",
+   "address": "AVINGUDA BERTRAN I GÜELL, 46",
+   "municipality": "955"
+  },
+  {
+   "id": "12825",
+   "brand": "ESCLATOIL",
+   "address": "AVINGUDA CENTENARI AMADEU VIVES, 2",
+   "municipality": "933"
+  },
+  {
+   "id": "12829",
+   "brand": "ESCLATOIL",
+   "address": "AVENIDA COSTA BRAVA, S/N",
+   "municipality": "2559"
+  },
+  {
+   "id": "12831",
+   "brand": "BONAREA",
+   "address": "POLIGONO LES TAPIES II, S/N",
+   "municipality": "6508"
+  },
+  {
+   "id": "12842",
+   "brand": "PETROPRIX",
+   "address": "CARRETERA C1413A KM. 9,7",
+   "municipality": "1049"
+  },
+  {
+   "id": "12844",
+   "brand": "REPSOL",
+   "address": "CARRETERA C-17 KM. 14,000",
+   "municipality": "1025"
+  },
+  {
+   "id": "12845",
+   "brand": "CAMPSA EXPRESS",
+   "address": "CARRETERA SANTA COLOMA KM. 38-42",
+   "municipality": "2524"
+  },
+  {
+   "id": "12852",
+   "brand": "BONAREA",
+   "address": "POLIGONO IND. LA PEDROSA, S/N",
+   "municipality": "985"
+  },
+  {
+   "id": "12860",
+   "brand": "ESCLATOIL",
+   "address": "CALLE ARGENTINA, 13",
+   "municipality": "6467"
+  },
+  {
+   "id": "12864",
+   "brand": "AUTOSERVEI PUIGCERDÀ",
+   "address": "CALLE GIRONA, 1",
+   "municipality": "2580"
+  },
+  {
+   "id": "12913",
+   "brand": "PETROPRIX",
+   "address": "AVENIDA CAN FATJÓ DELS AURONS, SN",
+   "municipality": "931"
+  },
+  {
+   "id": "12919",
+   "brand": "ESCLATOIL",
+   "address": "CALLE VICTORIA DELS ANGELS, 2",
+   "municipality": "6480"
+  },
+  {
+   "id": "12921",
+   "brand": "BONAREA",
+   "address": "CALLE CR. DEL MIG, 146",
+   "municipality": "965"
+  },
+  {
+   "id": "12934",
+   "brand": "BALLUS BAIX COST",
+   "address": "CALLE BERNAT SALA (POLIGONO INDUSTRIAL), 62",
+   "municipality": "884"
+  },
+  {
+   "id": "12935",
+   "brand": "LOWCOSTFUEL",
+   "address": "RAMBLA DEL GARRAF, 68",
+   "municipality": "1092"
+  },
+  {
+   "id": "12936",
+   "brand": "VILACARBURANTS",
+   "address": "CALLE BARCELONA, 180",
+   "municipality": "1074"
+  },
+  {
+   "id": "12942",
+   "brand": "AUTONETOIL",
+   "address": "CARRER DE LES MORERES, 49",
+   "municipality": "1035"
+  },
+  {
+   "id": "12943",
+   "brand": "COOP.ASPA",
+   "address": "CARRETERA COGUL KM. S/N",
+   "municipality": "3834"
+  },
+  {
+   "id": "12949",
+   "brand": "BP PLATJA D'ARO",
+   "address": "AVENIDA PARIS, 6",
+   "municipality": "2493"
+  },
+  {
+   "id": "12955",
+   "brand": "NIEVES",
+   "address": "AVENIDA COMTE LLOBREGAT, 107",
+   "municipality": "980"
+  },
+  {
+   "id": "12975",
+   "brand": "PETROLOWCOST",
+   "address": "CARRETERA GI-600 KM. 1",
+   "municipality": "2470"
+  },
+  {
+   "id": "12979",
+   "brand": "LOW COST 24",
+   "address": "CARRER DIAGONAL, 7",
+   "municipality": "4005"
+  },
+  {
+   "id": "12982",
+   "brand": "ESCLATOIL",
+   "address": "AVENIDA TARRAGONA, 132-142",
+   "municipality": "1162"
+  },
+  {
+   "id": "12985",
+   "brand": "Q8",
+   "address": "CARRETERA POLIGANO INDUSTRIAL LA SERRA KM. 1",
+   "municipality": "2647"
+  },
+  {
+   "id": "12986",
+   "brand": "PETROALFA",
+   "address": "CALLE BERLIN, 9",
+   "municipality": "1151"
+  },
+  {
+   "id": "12988",
+   "brand": "PLENERGY",
+   "address": "CARRER Ignasi Buxó i Gou, 11",
+   "municipality": "2556"
+  },
+  {
+   "id": "13007",
+   "brand": "PETRO PINTÓ",
+   "address": "RONDA SANT PERE, 331",
+   "municipality": "1127"
+  },
+  {
+   "id": "13010",
+   "brand": "GOOD PRICE PALAU",
+   "address": "AVINGUDA BADALONA, 22",
+   "municipality": "991"
+  },
+  {
+   "id": "13013",
+   "brand": "BALLENOIL",
+   "address": "CALLE CIUDAD DE ASUNCIÓN, 12",
+   "municipality": "881"
+  },
+  {
+   "id": "13016",
+   "brand": "TAMOIL",
+   "address": "CALLE TUCUMAN, 2",
+   "municipality": "881"
+  },
+  {
+   "id": "13029",
+   "brand": "PREMIUM ENERGY LA SAGRERA",
+   "address": "CALLE SANTANDER, 50",
+   "municipality": "881"
+  },
+  {
+   "id": "13035",
+   "brand": "TAMOIL",
+   "address": "AVENIDA GENERALITAT (DE LA), 10",
+   "municipality": "6501"
+  },
+  {
+   "id": "13045",
+   "brand": "ESCLATOIL",
+   "address": "CALLE JACINT VERDAGUER, 35",
+   "municipality": "1011"
+  },
+  {
+   "id": "13052",
+   "brand": "CARREFOUR",
+   "address": "CARRETERA GRANOLLERS-SANT CELONI, CANT FREDERIC MISTRAL KM. S/N",
+   "municipality": "908"
+  },
+  {
+   "id": "13055",
+   "brand": "ALAS",
+   "address": "CALLE FRANQUESES (DE LES), 12",
+   "municipality": "6518"
+  },
+  {
+   "id": "13074",
+   "brand": "MEROIL",
+   "address": "CALLE EUROPA, 2",
+   "municipality": "1060"
+  },
+  {
+   "id": "13075",
+   "brand": "BP TARRAGONA CITY",
+   "address": "CALLE CTRA VELLA DE VALENCIA, 5",
+   "municipality": "6494"
+  },
+  {
+   "id": "13080",
+   "brand": "ESCLATOIL",
+   "address": "AVENIDA TRES, 64",
+   "municipality": "1125"
+  },
+  {
+   "id": "13082",
+   "brand": "BONAREA",
+   "address": "POLIGONO PLA DE LES GAVARRERES AV. MADRID, 44",
+   "municipality": "1008"
+  },
+  {
+   "id": "13094",
+   "brand": "BONAREA",
+   "address": "AVENIDA DE LA RAPITA, 226",
+   "municipality": "6358"
+  },
+  {
+   "id": "13105",
+   "brand": "BENZOIL",
+   "address": "CALLE B-PP9, 2",
+   "municipality": "6494"
+  },
+  {
+   "id": "13110",
+   "brand": "PETREM",
+   "address": "CALLE ANTIGA CARRETERA D'AMER, 2",
+   "municipality": "2524"
+  },
+  {
+   "id": "13125",
+   "brand": "ESCLATOIL",
+   "address": "CALLE FRANCESC MORAGUES, SN",
+   "municipality": "2620"
+  },
+  {
+   "id": "13127",
+   "brand": "CARREFOUR",
+   "address": "AUTOVIA DE CASTELLDEFELLS KM. 5",
+   "municipality": "1035"
+  },
+  {
+   "id": "13145",
+   "brand": "ANEU OIL",
+   "address": "CALLE AZUAGA, 2",
+   "municipality": "1062"
+  },
+  {
+   "id": "13146",
+   "brand": "REPSOL",
+   "address": "CARRETERA C-31 KM. 327,000",
+   "municipality": "2560"
+  },
+  {
+   "id": "13148",
+   "brand": "BALLENOIL",
+   "address": "AVENIDA MARINA DE, 14",
+   "municipality": "1062"
+  },
+  {
+   "id": "13173",
+   "brand": "CERVIA OIL",
+   "address": "CAMI FONTANALS, S/N",
+   "municipality": "2496"
+  },
+  {
+   "id": "13181",
+   "brand": "PETROEIGHT",
+   "address": "CALLE TERRA ALTA, 47",
+   "municipality": "915"
+  },
+  {
+   "id": "13190",
+   "brand": "EXOIL",
+   "address": "CALLE COURE DEL  EN  TORREFORTA, 9",
+   "municipality": "6494"
+  },
+  {
+   "id": "13191",
+   "brand": "U.S. CALDES - GAS-OILS ROVIRA-",
+   "address": "AVENIDA PI I MARGALL, 171",
+   "municipality": "895"
+  },
+  {
+   "id": "13203",
+   "brand": "ESCLATOIL",
+   "address": "AVENIDA JOSEP TARRADELLAS,DE, 2",
+   "municipality": "1141"
+  },
+  {
+   "id": "13216",
+   "brand": "PETREM",
+   "address": "CALLE CORAL ROIG, S/N",
+   "municipality": "2622"
+  },
+  {
+   "id": "13217",
+   "brand": "LOWCOSTFUEL",
+   "address": "CARRETERA DE MATARO KM. 1",
+   "municipality": "875"
+  },
+  {
+   "id": "13225",
+   "brand": "GLOBALTANK",
+   "address": "AVENIDA EUROPA D', 1",
+   "municipality": "2664"
+  },
+  {
+   "id": "13246",
+   "brand": "REPSOL",
+   "address": "AVINGUDA VIDRERES, 244",
+   "municipality": "2540"
+  },
+  {
+   "id": "13247",
+   "brand": "REPSOL",
+   "address": "RONDA LA FARINERA, S/N",
+   "municipality": "991"
+  },
+  {
+   "id": "13256",
+   "brand": "ESCLATOIL",
+   "address": "CALLE NOU, 264",
+   "municipality": "1145"
+  },
+  {
+   "id": "13257",
+   "brand": "ES VILAMARINA CEPSA",
+   "address": "CARRETERA VILA KM. 33",
+   "municipality": "1160"
+  },
+  {
+   "id": "13262",
+   "brand": "BONAREA",
+   "address": "POLIGONO ELS DOLORS CL.SALLENT, 50",
+   "municipality": "978"
+  },
+  {
+   "id": "13274",
+   "brand": "NATURGY",
+   "address": "CALLE BOTANICA, 114",
+   "municipality": "965"
+  },
+  {
+   "id": "13277",
+   "brand": "NATURGY",
+   "address": "CALLE DOCTOR AIGUADER, 50",
+   "municipality": "881"
+  },
+  {
+   "id": "13281",
+   "brand": "NATURGY",
+   "address": "CALLE FRA JUNIPER SERRA, 59-75",
+   "municipality": "881"
+  },
+  {
+   "id": "13305",
+   "brand": "COOP BELLCAIRE",
+   "address": "CARRETERA CARRETERA COMARCAL C-53 KM. 137,3",
+   "municipality": "3844"
+  },
+  {
+   "id": "13318",
+   "brand": "HAM",
+   "address": "CALLE TREBALL, 1",
+   "municipality": "861"
+  },
+  {
+   "id": "13321",
+   "brand": "BONAREA",
+   "address": "CALLE ESTIU, 18,20",
+   "municipality": "875"
+  },
+  {
+   "id": "13326",
+   "brand": "HAM BIONET",
+   "address": "CALLE SOFRE, 5",
+   "municipality": "6494"
+  },
+  {
+   "id": "13330",
+   "brand": "HAM IGUALADA",
+   "address": "AVENIDA EUROPA, 26",
+   "municipality": "967"
+  },
+  {
+   "id": "13347",
+   "brand": "OCTOPO",
+   "address": "AVENIDA BEJAR, 373",
+   "municipality": "1141"
+  },
+  {
+   "id": "13352",
+   "brand": "PREMIUM ENERGY CASTELLDEFELS",
+   "address": "AVINGUDA CONSTITUCION, 11",
+   "municipality": "919"
+  },
+  {
+   "id": "13363",
+   "brand": "PANDORA E ENERGY",
+   "address": "CARRER JOSEP CARNER, S/N",
+   "municipality": "6518"
+  },
+  {
+   "id": "13378",
+   "brand": "NATURGY",
+   "address": "AVENIDA PROGRÉS, 25-27",
+   "municipality": "1160"
+  },
+  {
+   "id": "13382",
+   "brand": "EXOIL",
+   "address": "CALLE MERCURI, 15,17",
+   "municipality": "6494"
+  },
+  {
+   "id": "13405",
+   "brand": "PETRO G24",
+   "address": "CALLE CALLE COBALT, 190",
+   "municipality": "965"
+  },
+  {
+   "id": "13431",
+   "brand": "BALLENOIL",
+   "address": "AVINGUDA SEGLE XXI, 79",
+   "municipality": "1062"
+  },
+  {
+   "id": "13432",
+   "brand": "PETROLOGIC OIL",
+   "address": "CARRETERA B510 KM. 3,1",
+   "municipality": "939"
+  },
+  {
+   "id": "13475",
+   "brand": "MDIESEL",
+   "address": "CARRETERA DE LA CANYA KM. 115",
+   "municipality": "2556"
+  },
+  {
+   "id": "13481",
+   "brand": "GMOIL",
+   "address": "CALLE LLEIDA, 6",
+   "municipality": "1158"
+  },
+  {
+   "id": "13486",
+   "brand": "BONOIL",
+   "address": "CALLE FRANÇA, 42",
+   "municipality": "951"
+  },
+  {
+   "id": "13490",
+   "brand": "Q8",
+   "address": "CARRER PERE IV, 544",
+   "municipality": "881"
+  },
+  {
+   "id": "13491",
+   "brand": "CEPSA",
+   "address": "ROTONDA GIP5233, SN",
+   "municipality": "2605"
+  },
+  {
+   "id": "13512",
+   "brand": "AUTONETOIL",
+   "address": "CARRER RIERA, 48",
+   "municipality": "864"
+  },
+  {
+   "id": "13563",
+   "brand": "AMAT OIL",
+   "address": "CALLE LA CREU TRENCADA, 1",
+   "municipality": "1133"
+  },
+  {
+   "id": "13595",
+   "brand": "MARINÉ",
+   "address": "CALLE GUIFRÉ EL PILÓS, 10",
+   "municipality": "1125"
+  },
+  {
+   "id": "13610",
+   "brand": "VALLIWASH-PETROMIRALLES",
+   "address": "CALLE MAJOR, 12",
+   "municipality": "1155"
+  },
+  {
+   "id": "13611",
+   "brand": "ESCLATOIL",
+   "address": "AVENIDA MIQUEL MARTÍ I POL, S/N",
+   "municipality": "1048"
+  },
+  {
+   "id": "13614",
+   "brand": "BONAREA",
+   "address": "AVENIDA BARCELONA, 26",
+   "municipality": "3997"
+  },
+  {
+   "id": "13623",
+   "brand": "TAMOIL",
+   "address": "AVENIDA RONDA MAR, 24",
+   "municipality": "1162"
+  },
+  {
+   "id": "13640",
+   "brand": "VALLFOGONINA",
+   "address": "CARRER PAU CASALS, 2",
+   "municipality": "4018"
+  },
+  {
+   "id": "13687",
+   "brand": "OILPRIX",
+   "address": "AVENIDA ENRIC PRAT DE LA RIBA, 10",
+   "municipality": "961"
+  },
+  {
+   "id": "13697",
+   "brand": "OILAREA",
+   "address": "CALLE SANT SEBASTIÀ, 41",
+   "municipality": "2480"
+  },
+  {
+   "id": "13698",
+   "brand": "GMOIL",
+   "address": "CALLE BELGICA, 9,11",
+   "municipality": "6467"
+  },
+  {
+   "id": "13700",
+   "brand": "WENCES",
+   "address": "CALLE MALLORCA, 43/47",
+   "municipality": "1100"
+  },
+  {
+   "id": "13706",
+   "brand": "BENZOIL",
+   "address": "CAMI CEMENTIRI, 1",
+   "municipality": "961"
+  },
+  {
+   "id": "13721",
+   "brand": "AUTOSERVEI 24 H",
+   "address": "CARRETERA C45-CTRA. MAIALS A SERÒS KM. 0,5",
+   "municipality": "3920"
+  },
+  {
+   "id": "13728",
+   "brand": "GARDENOIL",
+   "address": "CALLE EDUARDO CONDE, 11",
+   "municipality": "881"
+  },
+  {
+   "id": "13775",
+   "brand": "PETROPRIX",
+   "address": "CALLE BADAJOZ, 108",
+   "municipality": "881"
+  },
+  {
+   "id": "13815",
+   "brand": "OILPRIX",
+   "address": "CALLE RIERA DE GAIA (DE LA), 20",
+   "municipality": "6499"
+  },
+  {
+   "id": "13821",
+   "brand": "PETROLIS INDEPENDENTS - PETRO7",
+   "address": "CAMI DEL MOLI, 1",
+   "municipality": "2637"
+  },
+  {
+   "id": "13829",
+   "brand": "MOLGAS",
+   "address": "CALLE B, ZONA FRANCA, 13",
+   "municipality": "881"
+  },
+  {
+   "id": "13842",
+   "brand": "CONFORT AUTO",
+   "address": "CALLE COURE (DEL), 7",
+   "municipality": "6494"
+  },
+  {
+   "id": "13850",
+   "brand": "EPSILON PLUS",
+   "address": "AVENIDA PLATJA (DE LA), 34",
+   "municipality": "2493"
+  },
+  {
+   "id": "13876",
+   "brand": "SPAROIL",
+   "address": "CARRETERA VILAFRANCA KM. 45",
+   "municipality": "905"
+  },
+  {
+   "id": "13909",
+   "brand": "ESCLATOIL",
+   "address": "AVENIDA TÀRREGA, 5",
+   "municipality": "3867"
+  },
+  {
+   "id": "13911",
+   "brand": "BLTR",
+   "address": "POLIGONO CAMPLLONG C/MARINADA, 7",
+   "municipality": "3837"
+  },
+  {
+   "id": "13941",
+   "brand": "AGRARIA DE MIRALCAMP",
+   "address": "POLIGONO POLIGON 12, PARC, 9, 1",
+   "municipality": "3925"
+  },
+  {
+   "id": "13944",
+   "brand": "ESCLATOIL",
+   "address": "CARRETERA VIC, CANTONADA C/CASTELLGALÍ KM. 0",
+   "municipality": "978"
+  },
+  {
+   "id": "13955",
+   "brand": "BONAREA",
+   "address": "AVENIDA GOLES DE L'EBRE, 7",
+   "municipality": "6396"
+  },
+  {
+   "id": "13959",
+   "brand": "HAM",
+   "address": "CALLE PROGRESO, 4",
+   "municipality": "937"
+  },
+  {
+   "id": "13960",
+   "brand": "REPSOL",
+   "address": "CALLE LEGALITAT, 59",
+   "municipality": "881"
+  },
+  {
+   "id": "13975",
+   "brand": "ANEU OIL",
+   "address": "CARRER VAREMA, 1",
+   "municipality": "2481"
+  },
+  {
+   "id": "13982",
+   "brand": "BONAREA",
+   "address": "CARRETERA N-340 KM. 1215,500",
+   "municipality": "1068"
+  },
+  {
+   "id": "13990",
+   "brand": "ESCLATOIL",
+   "address": "CALLE DE LLUIS COMPANYS, 14,16",
+   "municipality": "2556"
+  },
+  {
+   "id": "13994",
+   "brand": "GM OIL",
+   "address": "AVENIDA EUROPA, 57",
+   "municipality": "2470"
+  },
+  {
+   "id": "13997",
+   "brand": "HAM",
+   "address": "CARRETERA N-II KM. 774",
+   "municipality": "2531"
+  },
+  {
+   "id": "14000",
+   "brand": "FERCAM",
+   "address": "CALLE FERRALLA, 38",
+   "municipality": "917"
+  },
+  {
+   "id": "14009",
+   "brand": "GM OIL",
+   "address": "CARRETERA ANTIGUA DE VALENCIA 8 KM. 8",
+   "municipality": "6494"
+  },
+  {
+   "id": "14025",
+   "brand": "ESCLATOIL",
+   "address": "CARRETERA C1413A KM. 9,4",
+   "municipality": "1049"
+  },
+  {
+   "id": "14089",
+   "brand": "BENZOIL",
+   "address": "CAMI AVINGUDA CAMI REIAL, 32",
+   "municipality": "1021"
+  },
+  {
+   "id": "14099",
+   "brand": "HAM",
+   "address": "CARRETERA N-156 KM. 1",
+   "municipality": "2669"
+  },
+  {
+   "id": "14113",
+   "brand": "GM OIL",
+   "address": "AVENIDA VIA SÈRGIA, 77",
+   "municipality": "987"
+  },
+  {
+   "id": "14139",
+   "brand": "NIEVES",
+   "address": "AVENIDA CAMI PLA, 8",
+   "municipality": "1130"
+  },
+  {
+   "id": "14152",
+   "brand": "EROSKI",
+   "address": "RONDA PEDRET, 101",
+   "municipality": "2524"
+  },
+  {
+   "id": "14158",
+   "brand": "JOAN OILS",
+   "address": "CARRER CERAMICA, 6",
+   "municipality": "6490"
+  },
+  {
+   "id": "14170",
+   "brand": "BONAREA",
+   "address": "POLIGONO INDUSTRIAL FRANCOLI, 4",
+   "municipality": "6494"
+  },
+  {
+   "id": "14199",
+   "brand": "CONFORT AUTO",
+   "address": "CARRER NUMERO TRES, 50",
+   "municipality": "881"
+  },
+  {
+   "id": "14220",
+   "brand": "PETROLOWCOST",
+   "address": "CALLE EIVISSA (D'), 1",
+   "municipality": "6467"
+  },
+  {
+   "id": "14221",
+   "brand": "NUROIL",
+   "address": "AVENIDA PRINCIPAL   POLIGONO INDUSTRIAL  CAN CLAPERS, 3",
+   "municipality": "1128"
+  },
+  {
+   "id": "14236",
+   "brand": "GALP",
+   "address": "CARRETERA N-260 KM. 18,2",
+   "municipality": "2537"
+  },
+  {
+   "id": "14260",
+   "brand": "BONAREA",
+   "address": "POLIGONO IND. DE VALLS/CARRETERA DEL PLA, 180",
+   "municipality": "6507"
+  },
+  {
+   "id": "14272",
+   "brand": "ESCLATOIL",
+   "address": "AVENIDA CAN CAMPANYA, 1",
+   "municipality": "917"
+  },
+  {
+   "id": "14295",
+   "brand": "HAM",
+   "address": "CALLE CALLE Y PUERTO, S/N",
+   "municipality": "881"
+  },
+  {
+   "id": "14324",
+   "brand": "ESCLATOIL",
+   "address": "CALLE C/ CLOSA DELS FRARES, CANTONADA C/ ALT EMPORDÀ, S/N",
+   "municipality": "2492"
+  },
+  {
+   "id": "14339",
+   "brand": "AVANZA OIL",
+   "address": "AVENIDA JOAN CARLES, 44",
+   "municipality": "2492"
+  },
+  {
+   "id": "14354",
+   "brand": "ESCLATOIL",
+   "address": "AVENIDA PAÏSOS CATALANS, 17",
+   "municipality": "971"
+  },
+  {
+   "id": "14361",
+   "brand": "ESCLATOIL",
+   "address": "CALLE VALLFORNERS. CANT. CTRA.BP 5002 GRANOLLERS-MASNOU, S/N",
+   "municipality": "1166"
+  },
+  {
+   "id": "14375",
+   "brand": "ESCLATOIL",
+   "address": "CALLE MAJOR, 212",
+   "municipality": "6502"
+  },
+  {
+   "id": "14390",
+   "brand": "REPSOL",
+   "address": "CALLE KARPETAN, S/N",
+   "municipality": "2538"
+  },
+  {
+   "id": "14415",
+   "brand": "REPSOL",
+   "address": "POLIGONO POL. 17 PARCELA 127-129 ENLACE AUTOVÍA A-27 CON C-37, S/N",
+   "municipality": "6507"
+  },
+  {
+   "id": "14436",
+   "brand": "CARREFOUR",
+   "address": "POLIGONO POLÍGONO 1 DE LA RIERA , PARCELAS  FR6-FR7, S/N",
+   "municipality": "1126"
+  },
+  {
+   "id": "14477",
+   "brand": "ANEUOIL",
+   "address": "CALLE DE LA VIA, 98",
+   "municipality": "2490"
+  },
+  {
+   "id": "14503",
+   "brand": "NATURGY IBERIA, S.L.",
+   "address": "CARRETERA CARRETERA DE BARCELONA (N-II) 50 KM. 645",
+   "municipality": "987"
+  },
+  {
+   "id": "14552",
+   "brand": "PETROPRIX",
+   "address": "CALLE PABLO PICASSO, 11",
+   "municipality": "1046"
+  },
+  {
+   "id": "14557",
+   "brand": "PETROPRIX",
+   "address": "CAMINO PERAFITA, S/N",
+   "municipality": "1126"
+  },
+  {
+   "id": "14576",
+   "brand": "Q8",
+   "address": "CARRETERA DE SANTA COLOMA KM. 108",
+   "municipality": "2524"
+  },
+  {
+   "id": "14581",
+   "brand": "ESCLATOIL",
+   "address": "CALLE C DALT DE CAN TURON-C 8 DE MARÇ, S/N",
+   "municipality": "2524"
+  },
+  {
+   "id": "14599",
+   "brand": "VILACARBURANTS",
+   "address": "AVENIDA DEL VALLES, 8",
+   "municipality": "972"
+  },
+  {
+   "id": "14644",
+   "brand": "FULL ENERGY - VILADAMAT",
+   "address": "CARRETERA GI-623 KM. 16,75",
+   "municipality": "2656"
+  },
+  {
+   "id": "14655",
+   "brand": "PETROLIS INDEPENDENTS - PETRO7",
+   "address": "CARRETERA N-142E KM. 110,5",
+   "municipality": "2466"
+  },
+  {
+   "id": "14657",
+   "brand": "BENZOIL",
+   "address": "AVENIDA SANTA EULALIA, DE, 240",
+   "municipality": "1141"
+  },
+  {
+   "id": "14684",
+   "brand": "AVANZA OIL",
+   "address": "AVENIDA EUROPA D', 1",
+   "municipality": "2664"
+  },
+  {
+   "id": "14706",
+   "brand": "ESCLATOIL",
+   "address": "AVENIDA AVINGUDA MESTRE MUNTANER CANTONADA CARRER LLEIDA, S/N",
+   "municipality": "967"
+  },
+  {
+   "id": "14716",
+   "brand": "BONAREA",
+   "address": "CALLE CAN GURRI, S/N",
+   "municipality": "1025"
+  },
+  {
+   "id": "14721",
+   "brand": "OIL PRIX",
+   "address": "CALLE EIX TRANSVERSAL S/N, S/N",
+   "municipality": "6494"
+  },
+  {
+   "id": "14729",
+   "brand": "ESCLATOIL",
+   "address": "AVINGUDA TARRAGONA, 13",
+   "municipality": "3997"
+  },
+  {
+   "id": "14730",
+   "brand": "ESCLATOIL",
+   "address": "CARRER DE NICARAGUA,S/N. PL. CAN BORRELL, S/N",
+   "municipality": "991"
+  },
+  {
+   "id": "14737",
+   "brand": "AUTONETOIL",
+   "address": "CALLE HORTA, 14",
+   "municipality": "990"
+  },
+  {
+   "id": "14762",
+   "brand": "GM FUEL STATIONS",
+   "address": "CARRER 29 DE LA ZONA FRANCA, 62",
+   "municipality": "881"
+  },
+  {
+   "id": "14788",
+   "brand": "PETREM VALL DE BIANYA",
+   "address": "CALLE INDUSTRIA, 1",
+   "municipality": "2646"
+  },
+  {
+   "id": "14790",
+   "brand": "HAM",
+   "address": "PASAJE TREBALL DEL, 1",
+   "municipality": "861"
+  },
+  {
+   "id": "14795",
+   "brand": "HAM",
+   "address": "CARRER FRANCISCO MORAGAS, 15",
+   "municipality": "1102"
+  },
+  {
+   "id": "14812",
+   "brand": "Q8",
+   "address": "CARRER ENGINY, 30",
+   "municipality": "955"
+  },
+  {
+   "id": "14813",
+   "brand": "EUROWAG FIGUERES",
+   "address": "CALLE LAYETAN, S/N",
+   "municipality": "2538"
+  },
+  {
+   "id": "14825",
+   "brand": "PETREM VALL D'EN BAS",
+   "address": "CALLE PRAT DE CAN GRONXA, 1",
+   "municipality": "2647"
+  },
+  {
+   "id": "14827",
+   "brand": "ES ADENOR POLINYA",
+   "address": "CARRETERA SENTMENAT KM. 2,3",
+   "municipality": "1032"
+  },
+  {
+   "id": "14836",
+   "brand": "SORIGUE",
+   "address": "CARRETERA C12 KM. 162",
+   "municipality": "3837"
+  },
+  {
+   "id": "14847",
+   "brand": "COVILALBA",
+   "address": "CALLE CERVANTES, 5",
+   "municipality": "6512"
+  },
+  {
+   "id": "14849",
+   "brand": "PETROPRIX",
+   "address": "CALLE ANTIC CAMI DE TORDERA, 1",
+   "municipality": "1020"
+  },
+  {
+   "id": "14860",
+   "brand": "PETROMARESWAGEN",
+   "address": "CARRETERA NACIONAL II JUNQUERA KM. 656",
+   "municipality": "867"
+  },
+  {
+   "id": "14874",
+   "brand": "GALP&GO",
+   "address": "POLIGONO LA RAVALETA, PARCELA, 1",
+   "municipality": "6477"
+  },
+  {
+   "id": "14885",
+   "brand": "ESCLATOIL",
+   "address": "AVINGUDA VIA AUGUSTA, 3",
+   "municipality": "1067"
+  },
+  {
+   "id": "14893",
+   "brand": "BONAREA",
+   "address": "CALLE FUSTERIES, S/N",
+   "municipality": "6383"
+  },
+  {
+   "id": "14925",
+   "brand": "MOLGAS",
+   "address": "CALLE BASSEGODA, 4",
+   "municipality": "2531"
+  },
+  {
+   "id": "14927",
+   "brand": "ESCLATOIL",
+   "address": "CALLE ENRIC GRANADOS S/N, S/N",
+   "municipality": "3826"
+  },
+  {
+   "id": "14951",
+   "brand": "MUXU",
+   "address": "AVENIDA 11 DE SETEMBRE, 1",
+   "municipality": "1080"
+  },
+  {
+   "id": "14962",
+   "brand": "NIEVES",
+   "address": "CARRER CARPETAN, S/N",
+   "municipality": "2538"
+  },
+  {
+   "id": "14972",
+   "brand": "SEROIL ENERGY",
+   "address": "PASSEIG SAN JUAN BOSCO, 8",
+   "municipality": "2524"
+  },
+  {
+   "id": "14996",
+   "brand": "ZONA ZERO",
+   "address": "CALLE TORROELLA, 25",
+   "municipality": "2559"
+  },
+  {
+   "id": "14999",
+   "brand": "GM OIL",
+   "address": "CALLE DE SALLENT, 91",
+   "municipality": "978"
+  },
+  {
+   "id": "15020",
+   "brand": "AVANZA OIL FIGUERES",
+   "address": "AVENIDA DE ROSES, 5",
+   "municipality": "2511"
+  },
+  {
+   "id": "15029",
+   "brand": "ES PARKING DEL BAIX LLOBREGAT",
+   "address": "CAMINO CAN BOIXERES, SN",
+   "municipality": "941"
+  },
+  {
+   "id": "15036",
+   "brand": "CAN CALDERÓN - CLAUS  (GNC)",
+   "address": "CALLE RIERA DEL FONOLLAR, 38",
+   "municipality": "1062"
+  },
+  {
+   "id": "15040",
+   "brand": "PETRORÀPITA",
+   "address": "POLIGONO INDUSTRIAL EL RAJOLAR, PARCEL·LA, 25",
+   "municipality": "6481"
+  },
+  {
+   "id": "15052",
+   "brand": "PETROLOWCOST",
+   "address": "CARRER ARQUIMEDES, 19",
+   "municipality": "880"
+  },
+  {
+   "id": "15054",
+   "brand": "HAM",
+   "address": "CARRETERA MONTCADA, DE KM. 670",
+   "municipality": "1141"
+  },
+  {
+   "id": "15061",
+   "brand": "SEROIL ENERGY",
+   "address": "CALLE JOSEP CARNER, 2",
+   "municipality": "6518"
+  },
+  {
+   "id": "15067",
+   "brand": "NATURGY IBERIA",
+   "address": "CARRETERA C-55 KM. 39",
+   "municipality": "1079"
+  },
+  {
+   "id": "15083",
+   "brand": "ALAS CENTRAL",
+   "address": "CARRER DE JOAN ORÓ, 2",
+   "municipality": "6508"
+  },
+  {
+   "id": "15087",
+   "brand": "GALP",
+   "address": "CARRETERA GI - 610 CRUCE G-614 KM. S/N",
+   "municipality": "2592"
+  },
+  {
+   "id": "15096",
+   "brand": "AND GO",
+   "address": "CALLE CARRER PEDRAFORCA Nº3, 3",
+   "municipality": "2531"
+  },
+  {
+   "id": "15097",
+   "brand": "ESCLATOIL",
+   "address": "AVENIDA CONFLENT, S/N",
+   "municipality": "875"
+  },
+  {
+   "id": "15118",
+   "brand": "BONAREA",
+   "address": "CARRETERA BV-5303 KM. 3,950",
+   "municipality": "1129"
+  },
+  {
+   "id": "15143",
+   "brand": "MOLGAS",
+   "address": "CARRETERA 230 KM. 6,5",
+   "municipality": "3916"
+  },
+  {
+   "id": "15150",
+   "brand": "NIEVES",
+   "address": "CARRETERA B-224 DE MARTORELL A CAPELLADES KM. 9,6",
+   "municipality": "1027"
+  },
+  {
+   "id": "15181",
+   "brand": "TRANSPORTES ABYCER S.L.",
+   "address": "POLIGONO BERENGUER, 2",
+   "municipality": "1055"
+  },
+  {
+   "id": "15191",
+   "brand": "ANDAMUR",
+   "address": "CALLE PEGASO, S/N",
+   "municipality": "2538"
+  },
+  {
+   "id": "15236",
+   "brand": "NEVADA ENERGIA",
+   "address": "CALLE COBALT, 1",
+   "municipality": "965"
+  },
+  {
+   "id": "15245",
+   "brand": "NATURGY SARRIA DE TER - GIRONA",
+   "address": "CARRETERA N-IIA KM. 719,4",
+   "municipality": "2624"
+  },
+  {
+   "id": "15277",
+   "brand": "SERGASA",
+   "address": "PARATGE MAS FERREROS, S",
+   "municipality": "2576"
+  },
+  {
+   "id": "15284",
+   "brand": "PETROFIGUERES NF",
+   "address": "AVENIDA DE ROSES, 4",
+   "municipality": "2511"
+  },
+  {
+   "id": "15293",
+   "brand": "PARKING SERVICE CASTELLBISBAL, SA",
+   "address": "TRAVESSIA CA N'ESTAPÉ, 5",
+   "municipality": "917"
+  },
+  {
+   "id": "15333",
+   "brand": "COUSO",
+   "address": "CALLE TORRENT DE CAN PAYÀS, 17",
+   "municipality": "994"
+  },
+  {
+   "id": "15342",
+   "brand": "ESTACIÓ DE SERVEIS CENTELLES",
+   "address": "CALLE HOSTALETS, 5",
+   "municipality": "929"
+  },
+  {
+   "id": "15360",
+   "brand": "GASAMP",
+   "address": "CALLE ORLEANS, 2",
+   "municipality": "6358"
+  },
+  {
+   "id": "15409",
+   "brand": "ESCLATOIL",
+   "address": "AVENIDA DE CATALUNÑA, S/N",
+   "municipality": "6346"
+  },
+  {
+   "id": "15433",
+   "brand": "SORLIGO",
+   "address": "CARRETERA MONTMELO KM. 70",
+   "municipality": "961"
+  },
+  {
+   "id": "15444",
+   "brand": "SORLIGO",
+   "address": "AVINGUDA DE LA PEDRA BLANCA, 12",
+   "municipality": "1038"
+  },
+  {
+   "id": "15468",
+   "brand": "PETRO7",
+   "address": "CALLE TEXTIL, 3",
+   "municipality": "1005"
+  },
+  {
+   "id": "15471",
+   "brand": "E.S. SANT MARTI D'ALBARS",
+   "address": "CARRETERA C-62 KM. 13",
+   "municipality": "1086"
+  },
+  {
+   "id": "15475",
+   "brand": "NUROIL",
+   "address": "CARRER CA MONTSENY CANTONADA RIERA SECA, S/N",
+   "municipality": "970"
+  },
+  {
+   "id": "15476",
+   "brand": "NUROIL",
+   "address": "CARRER DE LA SEGARRA, 4",
+   "municipality": "915"
+  },
+  {
+   "id": "15478",
+   "brand": "COOPERATIVA AGRÍCOLA DE CASTELLÓ D'EMPÚRIES",
+   "address": "CAMI VELL A FORTIÀ, S/N",
+   "municipality": "2492"
+  },
+  {
+   "id": "15482",
+   "brand": "SORLIGO",
+   "address": "AVENIDA CARLES TOLRA, 2",
+   "municipality": "892"
+  },
+  {
+   "id": "15498",
+   "brand": "RENOVA OIL",
+   "address": "CARRETERA N-230 KM. 6.5 KM. 6,5",
+   "municipality": "4008"
+  },
+  {
+   "id": "15505",
+   "brand": "ESCLATOIL",
+   "address": "CALLE LLUIS COMPANYS CANT C/FRANCESC MACIÀ, S/N",
+   "municipality": "2640"
+  },
+  {
+   "id": "15506",
+   "brand": "TRONOVA ENERGIA",
+   "address": "CALLE LOIRA, 38",
+   "municipality": "6358"
+  },
+  {
+   "id": "15544",
+   "brand": "CECATRANS TRANSPORT & LOGISTICS, S.L",
+   "address": "CALLE MOTORS, 1",
+   "municipality": "6359"
+  },
+  {
+   "id": "15550",
+   "brand": "GM OIL PALAMÓS",
+   "address": "CARRER RAFEL SAVALLS, 1",
+   "municipality": "2560"
+  },
+  {
+   "id": "15558",
+   "brand": "TRANSEGRE",
+   "address": "POLIGONO INDUSTRIAL EL SEGRE, PARCELA, 206",
+   "municipality": "3916"
+  },
+  {
+   "id": "15601",
+   "brand": "CEREALES TORREMORELL",
+   "address": "CAMINO PONT D'ESPADOS, 0",
+   "municipality": "3824"
+  },
+  {
+   "id": "15628",
+   "brand": "BALLENOIL",
+   "address": "CALLE CORDOBA, 2",
+   "municipality": "1116"
+  },
+  {
+   "id": "15641",
+   "brand": "MESTRANS",
+   "address": "CALLE PORTUGAL, 4",
+   "municipality": "967"
+  },
+  {
+   "id": "15652",
+   "brand": "BALTRAN S.A",
+   "address": "AVENIDA ENERGIA, 9",
+   "municipality": "861"
+  },
+  {
+   "id": "15718",
+   "brand": "PETROLOWCOST SL",
+   "address": "AVINGUDA COMPTE DEL LLOBREGAT, 35",
+   "municipality": "980"
+  },
+  {
+   "id": "15750",
+   "brand": "PLENERGY",
+   "address": "CARRER C-244, PK 0,05",
+   "municipality": "1008"
+  },
+  {
+   "id": "15751",
+   "brand": "PETROMIRALLES",
+   "address": "CARRETERA C1413A KM. 8,6",
+   "municipality": "1049"
+  },
+  {
+   "id": "15764",
+   "brand": "GALP",
+   "address": "CARRER CERAMICA, 0",
+   "municipality": "1167"
+  },
+  {
+   "id": "15779",
+   "brand": "SEROIL  ENERGY",
+   "address": "CARRETERA C-12 KM. 150,5",
+   "municipality": "3875"
+  },
+  {
+   "id": "15801",
+   "brand": "ICOR ENERGIA",
+   "address": "CARRER VILA SECA, 14",
+   "municipality": "6494"
+  },
+  {
+   "id": "15813",
+   "brand": "ESCLATOIL",
+   "address": "CARRETERA DE TERRASSA A OLESA DE MONTSERRAT KM. S/N",
+   "municipality": "1161"
+  },
+  {
+   "id": "15825",
+   "brand": "PETROPRIX",
+   "address": "CALLE ENERGIA, 1",
+   "municipality": "987"
+  },
+  {
+   "id": "15835",
+   "brand": "PETREM",
+   "address": "POLIGONO SECTOR SUD I-2 RICARDELL, 15",
+   "municipality": "2574"
+  },
+  {
+   "id": "15875",
+   "brand": "ESCLATOIL",
+   "address": "AVINGUDA DE FRANÇA, 125",
+   "municipality": "2624"
+  },
+  {
+   "id": "15881",
+   "brand": "PETROPRIX",
+   "address": "AVENIDA COMTE DE LLOBREGAT, 4",
+   "municipality": "980"
+  },
+  {
+   "id": "15904",
+   "brand": "TRAMUNTANA",
+   "address": "AVENIDA 11 DE SETEMBRE, 4",
+   "municipality": "2531"
+  },
+  {
+   "id": "15950",
+   "brand": "BALLENOIL",
+   "address": "AVINGUDA FRANCESC SANLLEHI I BOSCH, 11",
+   "municipality": "975"
+  },
+  {
+   "id": "15960",
+   "brand": "BENZOIL",
+   "address": "CARRER GORCS LLADÓ, 96",
+   "municipality": "880"
+  },
+  {
+   "id": "15974",
+   "brand": "GM OIL",
+   "address": "CALLE RIN, 59",
+   "municipality": "6358"
+  },
+  {
+   "id": "15998",
+   "brand": "BONAREA",
+   "address": "CALLE SANT JAUME, 80",
+   "municipality": "1046"
+  },
+  {
+   "id": "16003",
+   "brand": "GM OIL HOSPITALET DE LLOBREGAT",
+   "address": "CALLE MONTSERRAT ROIG Nº 25-29, 25,29",
+   "municipality": "965"
+  },
+  {
+   "id": "16006",
+   "brand": "PRIMER TRUCK AREA",
+   "address": "CALLE SUSQUEDA, DE, 16",
+   "municipality": "1158"
+  },
+  {
+   "id": "16044",
+   "brand": "HAM",
+   "address": "AUTOPISTA AP7 KM. 283",
+   "municipality": "6508"
+  },
+  {
+   "id": "16045",
+   "brand": "HAM",
+   "address": "AUTOPISTA AP7 KM. 317",
+   "municipality": "6348"
+  },
+  {
+   "id": "16068",
+   "brand": "HAM",
+   "address": "CALLE A2, 463",
+   "municipality": "3916"
+  },
+  {
+   "id": "16077",
+   "brand": "E. S. BETREN",
+   "address": "CARRETERA C/142 S/N KM. 1",
+   "municipality": "4023"
+  },
+  {
+   "id": "16087",
+   "brand": "PETROPRIX",
+   "address": "CALLE BERNAT METGE DE, 197",
+   "municipality": "1052"
+  },
+  {
+   "id": "16109",
+   "brand": "REPSOL",
+   "address": "CALLE COLON, 517",
+   "municipality": "1141"
+  },
+  {
+   "id": "16121",
+   "brand": "ESCLATOIL",
+   "address": "CALLE ANTONI DEU FONT, 19",
+   "municipality": "6509"
+  },
+  {
+   "id": "16123",
+   "brand": "BONAREA",
+   "address": "POLIGONO CAMI LA FLORA-FOU PARC, 15",
+   "municipality": "1011"
+  },
+  {
+   "id": "16137",
+   "brand": "BONAREA",
+   "address": "CALLE MONTSERRAT ROIG, 18",
+   "municipality": "923"
+  },
+  {
+   "id": "16152",
+   "brand": "PLENERGY",
+   "address": "CARRETERA DEL MIG KM. 36",
+   "municipality": "965"
+  },
+  {
+   "id": "16162",
+   "brand": "SHELL",
+   "address": "CARRER CARRER LA PIRETA PARCELA 11, 11",
+   "municipality": "2510"
+  },
+  {
+   "id": "16171",
+   "brand": "MAPISAOIL",
+   "address": "CARRETERA LLEIDA KM. 37",
+   "municipality": "3969"
+  },
+  {
+   "id": "16180",
+   "brand": "CAMPO",
+   "address": "POLIGONO CATALUNYA SUD, S/N",
+   "municipality": "6348"
+  },
+  {
+   "id": "16185",
+   "brand": "ESCLATOIL",
+   "address": "AVENIDA CANOVELLES, 112",
+   "municipality": "903"
+  },
+  {
+   "id": "16189",
+   "brand": "PLENERGY",
+   "address": "CARRER PLA DEL VIVER, 4",
+   "municipality": "1162"
+  },
+  {
+   "id": "16190",
+   "brand": "PLENERGY",
+   "address": "CARRER PAU 2-POUS D'EN ROSSELL, S/N",
+   "municipality": "1162"
+  },
+  {
+   "id": "16197",
+   "brand": "E.SERVEIS TG",
+   "address": "CARRER ALEMANYA, 32",
+   "municipality": "951"
+  },
+  {
+   "id": "16218",
+   "brand": "ALIARA ENERGIA",
+   "address": "PASSEIG CONCA DE BESOS, 26",
+   "municipality": "961"
+  },
+  {
+   "id": "16223",
+   "brand": "ESCLATOIL",
+   "address": "RAMBLA GARRAF, DEL, 4,12",
+   "municipality": "1092"
+  },
+  {
+   "id": "16224",
+   "brand": "HAM",
+   "address": "AUTOPISTA AP7 KM. 70",
+   "municipality": "2451"
+  },
+  {
+   "id": "16231",
+   "brand": "PLENERGY",
+   "address": "AVENIDA DEL VALLÈS, 720 B",
+   "municipality": "1141"
+  },
+  {
+   "id": "16239",
+   "brand": "ANDAMUR",
+   "address": "CARRER 29 DEL BZ, 50-62, 62",
+   "municipality": "881"
+  },
+  {
+   "id": "16240",
+   "brand": "MULTIGRUPO",
+   "address": "CARRETERA CARRETERA NACIONAL 340 KM. 1094",
+   "municipality": "6357"
+  },
+  {
+   "id": "16262",
+   "brand": "HAM",
+   "address": "AUTOPISTA AP7 KM. 7",
+   "municipality": "2531"
+  },
+  {
+   "id": "16277",
+   "brand": "ESCLATOIL",
+   "address": "CALLE JOSEP COLL, 1,7",
+   "municipality": "1141"
+  },
+  {
+   "id": "16284",
+   "brand": "ESCLATOIL",
+   "address": "CARRER DEL VAPOR, 2",
+   "municipality": "2456"
+  },
+  {
+   "id": "16300",
+   "brand": "ESCLATOIL",
+   "address": "CARRER ALT PIRINEU, 10",
+   "municipality": "3986"
+  },
+  {
+   "id": "16344",
+   "brand": "ESCLATOIL",
+   "address": "CARRETERA TV-3025, P2 KM. 0,7",
+   "municipality": "6356"
+  },
+  {
+   "id": "16357",
+   "brand": "BONOIL",
+   "address": "CALLE JUAN DE LA CIERVA, 42",
+   "municipality": "880"
+  },
+  {
+   "id": "16361",
+   "brand": "ESCLATOIL",
+   "address": "CARRER LLOBREGAT, S/N, S/N",
+   "municipality": "932"
+  },
+  {
+   "id": "16382",
+   "brand": "SHELL",
+   "address": "CALLE C/ DE LA VALL MORANTA C/V C/ CAN BORREL,, 2",
+   "municipality": "1052"
+  },
+  {
+   "id": "16396",
+   "brand": "BONAREA",
+   "address": "CALLE URGELL, 115,121",
+   "municipality": "3837"
+  },
+  {
+   "id": "16432",
+   "brand": "PLENERGY",
+   "address": "CARRER DEL PLA, 148",
+   "municipality": "6507"
+  },
+  {
+   "id": "16448",
+   "brand": "EURONOR ENERGY",
+   "address": "CALLE TORRENT D'EN BAIELL, 10",
+   "municipality": "1128"
+  },
+  {
+   "id": "16461",
+   "brand": "REPSOL",
+   "address": "CARRETERA N-240 KM. 3,7",
+   "municipality": "6494"
+  },
+  {
+   "id": "16472",
+   "brand": "PETROPRIX",
+   "address": "POLIGONO CARRETERA DE RUBI, 300",
+   "municipality": "1141"
+  },
+  {
+   "id": "16473",
+   "brand": "ESCLATOIL",
+   "address": "CARRETERA BV-1432 KM 2,3 KM. 2,3",
+   "municipality": "971"
+  },
+  {
+   "id": "16475",
+   "brand": "BALLENOIL",
+   "address": "CALLE PONT MAJOR, 131",
+   "municipality": "2524"
+  },
+  {
+   "id": "16481",
+   "brand": "ESCLATOIL",
+   "address": "CARRETERA DE CALDES DE MONTBUI KM. 147",
+   "municipality": "971"
+  },
+  {
+   "id": "16482",
+   "brand": "ESCLATOIL",
+   "address": "CARRETERA C17 KM. 30,27",
+   "municipality": "954"
+  },
+  {
+   "id": "16483",
+   "brand": "ESCLATOIL",
+   "address": "CARRETERA C1415B KM. 1,925",
+   "municipality": "895"
+  },
+  {
+   "id": "16505",
+   "brand": "TRAMUNTANA FIGUERES",
+   "address": "AVENIDA DE ROSES, 74",
+   "municipality": "2511"
+  },
+  {
+   "id": "16511",
+   "brand": "PETROEIGHT XXI",
+   "address": "CALLE SANT FRANCESC, 73",
+   "municipality": "2475"
+  },
+  {
+   "id": "16523",
+   "brand": "BONAREA",
+   "address": "LLOC LG. AU7-8 S.IND N-E MONTFULLÀ, S/N",
+   "municipality": "2466"
+  },
+  {
+   "id": "16527",
+   "brand": "ESCLATOIL",
+   "address": "CARRETERA BV-1432 KM. 2,3",
+   "municipality": "971"
+  },
+  {
+   "id": "16528",
+   "brand": "ESCLATOIL",
+   "address": "CARRER TORRENT MALET, 17",
+   "municipality": "1039"
+  },
+  {
+   "id": "16539",
+   "brand": "ESCLATOIL",
+   "address": "AVINGUDA PRAT DE LA RIBA, 178",
+   "municipality": "1022"
+  },
+  {
+   "id": "16546",
+   "brand": "HAM",
+   "address": "AUTOVIA A2 KM. 573",
+   "municipality": "887"
+  }
+ ]
+}
