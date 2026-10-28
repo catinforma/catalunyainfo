@@ -547,3 +547,21 @@ test("markets: hours answered first, Sunday question answered, no unverified gro
     assert.doesNotMatch(text, /\b20 (people|personas|persones)\b/);
   }
 });
+
+test("nuria: the lead answers the price; free travel, November and the ski pass are answered from FGC", () => {
+  const fare = { ca: /34 € anada i tornada/, es: /34 € ida y vuelta/, en: /€34 return/ } as const;
+  const free = { ca: /0 a 3 anys/, es: /0 a 3 años/, en: /under 4/ } as const;
+  for (const locale of LOCALES) {
+    const blocks = NURIA.editions[locale].blocks as { type: string; lead?: boolean; text?: string }[];
+    const lead = blocks.find((b) => b.type === "paragraph" && b.lead)?.text ?? "";
+    assert.match(lead, fare[locale], `${locale}: lead gives the return fare`);
+    assert.match(lead, /30 de novembre|30 de noviembre|30 November/, `${locale}: lead dates the fares`);
+    const text = bodyToPlainText(NURIA.editions[locale].blocks);
+    assert.match(text, free[locale], `${locale}: says who rides free`);
+    assert.match(text, /104/, `${locale}: annual season ticket`);
+    assert.match(text, /2026-2027|2026-27/, `${locale}: ski-pass status for the coming season`);
+    assert.match(text, /3 (al|to) 30 (de )?(novembre|noviembre|November)/, `${locale}: last November's weekday closure`);
+    assert.ok(NURIA.editions[locale].seoTitle.length <= 60, `${locale}: seoTitle fits`);
+    assert.ok(NURIA.editions[locale].seoDescription.length <= 155, `${locale}: description fits`);
+  }
+});

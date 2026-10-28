@@ -82,7 +82,7 @@ function ca(): Block[] {
       TABLE_NOTE.ca,
     ),
     ...paras(
-      `Guies pas a pas, amb horaris i preus: ${b2link("sitges", "ca", "Sitges en tren")}, ${b2link("girona", "ca", "Girona en tren")}, ${b2link("tarragona", "ca", "Tarragona en tren")}, ${b2link("figueres", "ca", "Figueres i el Museu Dalí")}, ${b2link("montserratFree", "ca", "Montserrat amb cremallera o Aeri")} i ${b2link("portaventura", "ca", "PortAventura")}.`,
+      `Guies pas a pas, amb horaris i preus: ${b2link("sitges", "ca", "Sitges en tren")}, ${b2link("girona", "ca", "Girona en tren")}, ${b2link("tarragona", "ca", "Tarragona en tren")}, ${b2link("figueres", "ca", "Figueres i el Museu Dalí")}, ${b2link("montserratFree", "ca", "Montserrat amb cremallera o Aeri")}, ${b2link("nuria", "ca", "el cremallera de Núria")} i ${b2link("portaventura", "ca", "PortAventura")}.`,
     ),
     ...h2(
       "1. Sitges",
@@ -200,7 +200,7 @@ function es(): Block[] {
       TABLE_NOTE.es,
     ),
     ...paras(
-      `Guías paso a paso, con horarios y precios: ${b2link("sitges", "es", "Sitges en tren")}, ${b2link("girona", "es", "Girona en tren")}, ${b2link("tarragona", "es", "Tarragona en tren")}, ${b2link("figueres", "es", "Figueres y el Museo Dalí")}, ${b2link("montserratFree", "es", "Montserrat en cremallera o Aeri")} y ${b2link("portaventura", "es", "PortAventura")}.`,
+      `Guías paso a paso, con horarios y precios: ${b2link("sitges", "es", "Sitges en tren")}, ${b2link("girona", "es", "Girona en tren")}, ${b2link("tarragona", "es", "Tarragona en tren")}, ${b2link("figueres", "es", "Figueres y el Museo Dalí")}, ${b2link("montserratFree", "es", "Montserrat en cremallera o Aeri")}, ${b2link("nuria", "es", "el cremallera de Núria")} y ${b2link("portaventura", "es", "PortAventura")}.`,
     ),
     ...h2(
       "1. Sitges",
@@ -316,7 +316,7 @@ function en(): Block[] {
       TABLE_NOTE.en,
     ),
     ...paras(
-      `Step-by-step guides with timetables and fares: ${b2link("sitges", "en", "Sitges by train")}, ${b2link("girona", "en", "Girona by train")}, ${b2link("tarragona", "en", "Tarragona by train")}, ${b2link("figueres", "en", "Figueres and the Dalí Museum")}, ${b2link("montserratFree", "en", "Montserrat by rack railway or cable car")} and ${b2link("portaventura", "en", "PortAventura")}.`,
+      `Step-by-step guides with timetables and fares: ${b2link("sitges", "en", "Sitges by train")}, ${b2link("girona", "en", "Girona by train")}, ${b2link("tarragona", "en", "Tarragona by train")}, ${b2link("figueres", "en", "Figueres and the Dalí Museum")}, ${b2link("montserratFree", "en", "Montserrat by rack railway or cable car")}, ${b2link("nuria", "en", "the Núria rack railway")} and ${b2link("portaventura", "en", "PortAventura")}.`,
     ),
     ...h2(
       "1. Sitges",
