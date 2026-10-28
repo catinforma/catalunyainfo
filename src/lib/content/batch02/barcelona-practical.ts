@@ -1,6 +1,7 @@
 import type { Block } from "@/lib/content/blocks";
 import { link } from "@/lib/content/features/shared";
 import { SOURCES as TMB_SOURCES, TICKETS, VERIFIED_AT } from "@/lib/content/transport-cards/rates";
+import { fuelPath } from "@/lib/programmatic/fuel/paths";
 
 import {
   b2Related,
@@ -664,6 +665,7 @@ export const ZBE: B2Article = {
           "No.",
           "Tenir autorització per circular per la ZBE no dona dret a aparcar gratis ni converteix una zona verda de residents en una plaça disponible per a visitants.",
           `Com funciona l'aparcament al carrer ho expliquem a part: ${b2link("parking", "ca", "zona blava i zona verda de Barcelona")}.`,
+          `Si has de posar benzina abans d'entrar-hi, aquí tens [les benzineres més barates de Barcelona ara](${fuelPath("ca", "city", "barcelona")}), amb el preu oficial del Ministeri.`,
         ),
         faq([
           { question: "Un cotxe estranger pot entrar a la ZBE de Barcelona?", answer: "Sí, si abans l'inscrius al registre de l'AMB: amb gasolina Euro 3 o dièsel Euro 4 o superior, una taxa de 7 € una sola vegada; si no compleix, fins a 24 autoritzacions diàries l'any." },
@@ -769,6 +771,7 @@ export const ZBE: B2Article = {
           "Circular no es aparcar",
           "Tener autorización para circular por la ZBE no da derecho a aparcar gratis ni convierte una zona verde de residentes en una plaza disponible para visitantes.",
           `Cómo funciona el aparcamiento en la calle lo explicamos aparte: ${b2link("parking", "es", "zona azul y zona verde de Barcelona")}.`,
+          `Si tienes que repostar antes de entrar, aquí tienes [las gasolineras más baratas de Barcelona ahora](${fuelPath("es", "city", "barcelona")}), con el precio oficial del Ministerio.`,
         ),
         faq([
           { question: "¿Puede entrar un coche extranjero en la ZBE de Barcelona?", answer: "Sí, si antes lo inscribes en el registro de la AMB: con gasolina Euro 3 o diésel Euro 4 o superior, una tasa de 7 € una sola vez; si no cumple, hasta 24 autorizaciones diarias al año." },

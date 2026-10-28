@@ -31,7 +31,8 @@
     "growth:report": "node --experimental-strip-types scripts/growth-report.ts",
     "site:audit": "node --experimental-strip-types scripts/site-audit.ts",
     "mushrooms:refresh": "node --experimental-strip-types scripts/mushroom-conditions.ts",
-    "holidays:snapshot": "node --experimental-strip-types --import ./tests/register-alias.mjs scripts/holidays-snapshot.ts"
+    "holidays:snapshot": "node --experimental-strip-types --import ./tests/register-alias.mjs scripts/holidays-snapshot.ts",
+    "fuel:snapshot": "node --experimental-strip-types --import ./tests/register-alias.mjs scripts/fuel-snapshot.ts"
   },
   "dependencies": {
     "@eslint/eslintrc": "^3.3.7",

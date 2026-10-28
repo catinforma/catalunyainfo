@@ -1,0 +1,4053 @@
+{
+ "readOn": "2026-10-28",
+ "ministryTimestamp": "28/10/2026 11:45:08",
+ "comarques": {
+  "10": "Baix Empordà",
+  "11": "Baix Llobregat",
+  "12": "Baix Penedès",
+  "13": "Barcelonès",
+  "14": "Berguedà",
+  "15": "Cerdanya",
+  "16": "Conca de Barberà",
+  "17": "Garraf",
+  "18": "Garrigues",
+  "19": "Garrotxa",
+  "20": "Gironès",
+  "21": "Maresme",
+  "22": "Montsià",
+  "23": "Noguera",
+  "24": "Osona",
+  "25": "Pallars Jussà",
+  "26": "Pallars Sobirà",
+  "27": "Pla d'Urgell",
+  "28": "Pla de l'Estany",
+  "29": "Priorat",
+  "30": "Ribera d'Ebre",
+  "31": "Ripollès",
+  "32": "Segarra",
+  "33": "Segrià",
+  "34": "Selva",
+  "35": "Solsonès",
+  "36": "Tarragonès",
+  "37": "Terra Alta",
+  "38": "Urgell",
+  "39": "Aran",
+  "40": "Vallès Occidental",
+  "41": "Vallès Oriental",
+  "42": "Moianès",
+  "43": "Lluçanès",
+  "01": "Alt Camp",
+  "02": "Alt Empordà",
+  "03": "Alt Penedès",
+  "04": "Alt Urgell",
+  "05": "Alta Ribagorça",
+  "06": "Anoia",
+  "07": "Bages",
+  "08": "Baix Camp",
+  "09": "Baix Ebre"
+ },
+ "municipalities": [
+  {
+   "id": "861",
+   "ine": "08001",
+   "name": "Abrera",
+   "ministryName": "Abrera",
+   "comarca": "11",
+   "province": "08",
+   "stations": 5
+  },
+  {
+   "id": "864",
+   "ine": "08003",
+   "name": "Alella",
+   "ministryName": "Alella",
+   "comarca": "21",
+   "province": "08",
+   "stations": 2
+  },
+  {
+   "id": "866",
+   "ine": "08005",
+   "name": "l'Ametlla del Vallès",
+   "ministryName": "Ametlla del Vallès (L')",
+   "comarca": "41",
+   "province": "08",
+   "stations": 2
+  },
+  {
+   "id": "867",
+   "ine": "08006",
+   "name": "Arenys de Mar",
+   "ministryName": "Arenys de Mar",
+   "comarca": "21",
+   "province": "08",
+   "stations": 3
+  },
+  {
+   "id": "868",
+   "ine": "08007",
+   "name": "Arenys de Munt",
+   "ministryName": "Arenys de Munt",
+   "comarca": "21",
+   "province": "08",
+   "stations": 1
+  },
+  {
+   "id": "870",
+   "ine": "08009",
+   "name": "Argentona",
+   "ministryName": "Argentona",
+   "comarca": "21",
+   "province": "08",
+   "stations": 1
+  },
+  {
+   "id": "871",
+   "ine": "08010",
+   "name": "Artés",
+   "ministryName": "Artés",
+   "comarca": "07",
+   "province": "08",
+   "stations": 1
+  },
+  {
+   "id": "873",
+   "ine": "08012",
+   "name": "Avinyó",
+   "ministryName": "Avinyó",
+   "comarca": "07",
+   "province": "08",
+   "stations": 1
+  },
+  {
+   "id": "875",
+   "ine": "08015",
+   "name": "Badalona",
+   "ministryName": "Badalona",
+   "comarca": "13",
+   "province": "08",
+   "stations": 17
+  },
+  {
+   "id": "878",
+   "ine": "08017",
+   "name": "Balenyà",
+   "ministryName": "Balenyà",
+   "comarca": "24",
+   "province": "08",
+   "stations": 1
+  },
+  {
+   "id": "879",
+   "ine": "08018",
+   "name": "Balsareny",
+   "ministryName": "Balsareny",
+   "comarca": "07",
+   "province": "08",
+   "stations": 1
+  },
+  {
+   "id": "881",
+   "ine": "08019",
+   "name": "Barcelona",
+   "ministryName": "Barcelona",
+   "comarca": "13",
+   "province": "08",
+   "stations": 79
+  },
+  {
+   "id": "882",
+   "ine": "08020",
+   "name": "Begues",
+   "ministryName": "Begues",
+   "comarca": "11",
+   "province": "08",
+   "stations": 1
+  },
+  {
+   "id": "884",
+   "ine": "08022",
+   "name": "Berga",
+   "ministryName": "Berga",
+   "comarca": "14",
+   "province": "08",
+   "stations": 5
+  },
+  {
+   "id": "885",
+   "ine": "08023",
+   "name": "Bigues i Riells del Fai",
+   "ministryName": "Bigues i Riells",
+   "comarca": "41",
+   "province": "08",
+   "stations": 1
+  },
+  {
+   "id": "887",
+   "ine": "08025",
+   "name": "el Bruc",
+   "ministryName": "Bruc (El)",
+   "comarca": "06",
+   "province": "08",
+   "stations": 4
+  },
+  {
+   "id": "890",
+   "ine": "08029",
+   "name": "Cabrera de Mar",
+   "ministryName": "Cabrera de Mar",
+   "comarca": "21",
+   "province": "08",
+   "stations": 5
+  },
+  {
+   "id": "892",
+   "ine": "08030",
+   "name": "Cabrils",
+   "ministryName": "Cabrils",
+   "comarca": "21",
+   "province": "08",
+   "stations": 2
+  },
+  {
+   "id": "893",
+   "ine": "08031",
+   "name": "Calaf",
+   "ministryName": "Calaf",
+   "comarca": "06",
+   "province": "08",
+   "stations": 2
+  },
+  {
+   "id": "895",
+   "ine": "08033",
+   "name": "Caldes de Montbui",
+   "ministryName": "Caldes de Montbui",
+   "comarca": "41",
+   "province": "08",
+   "stations": 4
+  },
+  {
+   "id": "894",
+   "ine": "08034",
+   "name": "Calders",
+   "ministryName": "Calders",
+   "comarca": "42",
+   "province": "08",
+   "stations": 1
+  },
+  {
+   "id": "897",
+   "ine": "08035",
+   "name": "Calella",
+   "ministryName": "Calella",
+   "comarca": "21",
+   "province": "08",
+   "stations": 1
+  },
+  {
+   "id": "898",
+   "ine": "08037",
+   "name": "Calldetenes",
+   "ministryName": "Calldetenes",
+   "comarca": "24",
+   "province": "08",
+   "stations": 1
+  },
+  {
+   "id": "902",
+   "ine": "08040",
+   "name": "Canet de Mar",
+   "ministryName": "Canet de Mar",
+   "comarca": "21",
+   "province": "08",
+   "stations": 3
+  },
+  {
+   "id": "903",
+   "ine": "08041",
+   "name": "Canovelles",
+   "ministryName": "Canovelles",
+   "comarca": "41",
+   "province": "08",
+   "stations": 3
+  },
+  {
+   "id": "905",
+   "ine": "08043",
+   "name": "Canyelles",
+   "ministryName": "Canyelles",
+   "comarca": "17",
+   "province": "08",
+   "stations": 2
+  },
+  {
+   "id": "908",
+   "ine": "08046",
+   "name": "Cardedeu",
+   "ministryName": "Cardedeu",
+   "comarca": "41",
+   "province": "08",
+   "stations": 4
+  },
+  {
+   "id": "909",
+   "ine": "08047",
+   "name": "Cardona",
+   "ministryName": "Cardona",
+   "comarca": "07",
+   "province": "08",
+   "stations": 2
+  },
+  {
+   "id": "915",
+   "ine": "08051",
+   "name": "Castellar del Vallès",
+   "ministryName": "Castellar del Vallès",
+   "comarca": "40",
+   "province": "08",
+   "stations": 8
+  },
+  {
+   "id": "916",
+   "ine": "08053",
+   "name": "Castellbell i el Vilar",
+   "ministryName": "Castellbell i el Vilar",
+   "comarca": "07",
+   "province": "08",
+   "stations": 2
+  },
+  {
+   "id": "917",
+   "ine": "08054",
+   "name": "Castellbisbal",
+   "ministryName": "Castellbisbal",
+   "comarca": "40",
+   "province": "08",
+   "stations": 8
+  },
+  {
+   "id": "919",
+   "ine": "08056",
+   "name": "Castelldefels",
+   "ministryName": "Castelldefels",
+   "comarca": "11",
+   "province": "08",
+   "stations": 7
+  },
+  {
+   "id": "920",
+   "ine": "08058",
+   "name": "Castellet i la Gornal",
+   "ministryName": "Castellet i la Gornal",
+   "comarca": "03",
+   "province": "08",
+   "stations": 1
+  },
+  {
+   "id": "923",
+   "ine": "08061",
+   "name": "Castellgalí",
+   "ministryName": "Castellgalí",
+   "comarca": "07",
+   "province": "08",
+   "stations": 1
+  },
+  {
+   "id": "926",
+   "ine": "08064",
+   "name": "Castellterçol",
+   "ministryName": "Castellterçol",
+   "comarca": "42",
+   "province": "08",
+   "stations": 1
+  },
+  {
+   "id": "929",
+   "ine": "08067",
+   "name": "Centelles",
+   "ministryName": "Centelles",
+   "comarca": "24",
+   "province": "08",
+   "stations": 2
+  },
+  {
+   "id": "932",
+   "ine": "08068",
+   "name": "Cervelló",
+   "ministryName": "Cervelló",
+   "comarca": "11",
+   "province": "08",
+   "stations": 2
+  },
+  {
+   "id": "933",
+   "ine": "08069",
+   "name": "Collbató",
+   "ministryName": "Collbató",
+   "comarca": "11",
+   "province": "08",
+   "stations": 2
+  },
+  {
+   "id": "937",
+   "ine": "08073",
+   "name": "Cornellà de Llobregat",
+   "ministryName": "Cornellà de Llobregat",
+   "comarca": "11",
+   "province": "08",
+   "stations": 11
+  },
+  {
+   "id": "938",
+   "ine": "08074",
+   "name": "Cubelles",
+   "ministryName": "Cubelles",
+   "comarca": "17",
+   "province": "08",
+   "stations": 7
+  },
+  {
+   "id": "939",
+   "ine": "08075",
+   "name": "Dosrius",
+   "ministryName": "Dosrius",
+   "comarca": "21",
+   "province": "08",
+   "stations": 1
+  },
+  {
+   "id": "940",
+   "ine": "08076",
+   "name": "Esparreguera",
+   "ministryName": "Esparreguera",
+   "comarca": "11",
+   "province": "08",
+   "stations": 4
+  },
+  {
+   "id": "941",
+   "ine": "08077",
+   "name": "Esplugues de Llobregat",
+   "ministryName": "Esplugues de Llobregat",
+   "comarca": "11",
+   "province": "08",
+   "stations": 4
+  },
+  {
+   "id": "946",
+   "ine": "08082",
+   "name": "Fogars de la Selva",
+   "ministryName": "Fogars de la Selva",
+   "comarca": "34",
+   "province": "08",
+   "stations": 1
+  },
+  {
+   "id": "951",
+   "ine": "08086",
+   "name": "les Franqueses del Vallès",
+   "ministryName": "Franqueses del Vallès (Les)",
+   "comarca": "41",
+   "province": "08",
+   "stations": 6
+  },
+  {
+   "id": "954",
+   "ine": "08088",
+   "name": "la Garriga",
+   "ministryName": "Garriga (La)",
+   "comarca": "41",
+   "province": "08",
+   "stations": 6
+  },
+  {
+   "id": "955",
+   "ine": "08089",
+   "name": "Gavà",
+   "ministryName": "Gavà",
+   "comarca": "11",
+   "province": "08",
+   "stations": 10
+  },
+  {
+   "id": "956",
+   "ine": "08091",
+   "name": "Gelida",
+   "ministryName": "Gelida",
+   "comarca": "03",
+   "province": "08",
+   "stations": 2
+  },
+  {
+   "id": "957",
+   "ine": "08092",
+   "name": "Gironella",
+   "ministryName": "Gironella",
+   "comarca": "14",
+   "province": "08",
+   "stations": 1
+  },
+  {
+   "id": "959",
+   "ine": "08094",
+   "name": "la Granada",
+   "ministryName": "Granada (La)",
+   "comarca": "03",
+   "province": "08",
+   "stations": 2
+  },
+  {
+   "id": "961",
+   "ine": "08096",
+   "name": "Granollers",
+   "ministryName": "Granollers",
+   "comarca": "41",
+   "province": "08",
+   "stations": 15
+  },
+  {
+   "id": "962",
+   "ine": "08097",
+   "name": "Gualba",
+   "ministryName": "Gualba",
+   "comarca": "41",
+   "province": "08",
+   "stations": 1
+  },
+  {
+   "id": "1104",
+   "ine": "08098",
+   "name": "Sant Salvador de Guardiola",
+   "ministryName": "Sant Salvador de Guardiola",
+   "comarca": "07",
+   "province": "08",
+   "stations": 1
+  },
+  {
+   "id": "963",
+   "ine": "08099",
+   "name": "Guardiola de Berguedà",
+   "ministryName": "Guardiola de Berguedà",
+   "comarca": "14",
+   "province": "08",
+   "stations": 1
+  },
+  {
+   "id": "964",
+   "ine": "08100",
+   "name": "Gurb",
+   "ministryName": "Gurb",
+   "comarca": "24",
+   "province": "08",
+   "stations": 2
+  },
+  {
+   "id": "965",
+   "ine": "08101",
+   "name": "l'Hospitalet de Llobregat",
+   "ministryName": "Hospitalet de Llobregat (L')",
+   "comarca": "13",
+   "province": "08",
+   "stations": 30
+  },
+  {
+   "id": "967",
+   "ine": "08102",
+   "name": "Igualada",
+   "ministryName": "Igualada",
+   "comarca": "06",
+   "province": "08",
+   "stations": 12
+  },
+  {
+   "id": "968",
+   "ine": "08103",
+   "name": "Jorba",
+   "ministryName": "Jorba",
+   "comarca": "06",
+   "province": "08",
+   "stations": 3
+  },
+  {
+   "id": "970",
+   "ine": "08105",
+   "name": "la Llagosta",
+   "ministryName": "Llagosta (La)",
+   "comarca": "41",
+   "province": "08",
+   "stations": 1
+  },
+  {
+   "id": "973",
+   "ine": "08106",
+   "name": "Llinars del Vallès",
+   "ministryName": "Llinars del Vallès",
+   "comarca": "41",
+   "province": "08",
+   "stations": 3
+  },
+  {
+   "id": "971",
+   "ine": "08107",
+   "name": "Lliçà d'Amunt",
+   "ministryName": "Lliçà d'Amunt",
+   "comarca": "41",
+   "province": "08",
+   "stations": 5
+  },
+  {
+   "id": "972",
+   "ine": "08108",
+   "name": "Lliçà de Vall",
+   "ministryName": "Lliçà de Vall",
+   "comarca": "41",
+   "province": "08",
+   "stations": 4
+  },
+  {
+   "id": "975",
+   "ine": "08110",
+   "name": "Malgrat de Mar",
+   "ministryName": "Malgrat de Mar",
+   "comarca": "21",
+   "province": "08",
+   "stations": 4
+  },
+  {
+   "id": "976",
+   "ine": "08111",
+   "name": "Malla",
+   "ministryName": "Malla",
+   "comarca": "24",
+   "province": "08",
+   "stations": 1
+  },
+  {
+   "id": "977",
+   "ine": "08112",
+   "name": "Manlleu",
+   "ministryName": "Manlleu",
+   "comarca": "24",
+   "province": "08",
+   "stations": 2
+  },
+  {
+   "id": "978",
+   "ine": "08113",
+   "name": "Manresa",
+   "ministryName": "Manresa",
+   "comarca": "07",
+   "province": "08",
+   "stations": 16
+  },
+  {
+   "id": "980",
+   "ine": "08114",
+   "name": "Martorell",
+   "ministryName": "Martorell",
+   "comarca": "11",
+   "province": "08",
+   "stations": 7
+  },
+  {
+   "id": "983",
+   "ine": "08117",
+   "name": "les Masies de Voltregà",
+   "ministryName": "Masies de Voltregà (Les)",
+   "comarca": "24",
+   "province": "08",
+   "stations": 2
+  },
+  {
+   "id": "984",
+   "ine": "08118",
+   "name": "el Masnou",
+   "ministryName": "Masnou (El)",
+   "comarca": "21",
+   "province": "08",
+   "stations": 3
+  },
+  {
+   "id": "985",
+   "ine": "08119",
+   "name": "Masquefa",
+   "ministryName": "Masquefa",
+   "comarca": "06",
+   "province": "08",
+   "stations": 2
+  },
+  {
+   "id": "987",
+   "ine": "08121",
+   "name": "Mataró",
+   "ministryName": "Mataró",
+   "comarca": "21",
+   "province": "08",
+   "stations": 17
+  },
+  {
+   "id": "990",
+   "ine": "08123",
+   "name": "Molins de Rei",
+   "ministryName": "Molins de Rei",
+   "comarca": "11",
+   "province": "08",
+   "stations": 8
+  },
+  {
+   "id": "991",
+   "ine": "08124",
+   "name": "Mollet del Vallès",
+   "ministryName": "Mollet del Vallès",
+   "comarca": "41",
+   "province": "08",
+   "stations": 5
+  },
+  {
+   "id": "994",
+   "ine": "08125",
+   "name": "Montcada i Reixac",
+   "ministryName": "Montcada i Reixac",
+   "comarca": "40",
+   "province": "08",
+   "stations": 12
+  },
+  {
+   "id": "997",
+   "ine": "08126",
+   "name": "Montgat",
+   "ministryName": "Montgat",
+   "comarca": "21",
+   "province": "08",
+   "stations": 1
+  },
+  {
+   "id": "993",
+   "ine": "08127",
+   "name": "Monistrol de Montserrat",
+   "ministryName": "Monistrol de Montserrat",
+   "comarca": "07",
+   "province": "08",
+   "stations": 1
+  },
+  {
+   "id": "999",
+   "ine": "08133",
+   "name": "Montmaneu",
+   "ministryName": "Montmaneu",
+   "comarca": "06",
+   "province": "08",
+   "stations": 2
+  },
+  {
+   "id": "1000",
+   "ine": "08135",
+   "name": "Montmeló",
+   "ministryName": "Montmeló",
+   "comarca": "41",
+   "province": "08",
+   "stations": 2
+  },
+  {
+   "id": "1001",
+   "ine": "08136",
+   "name": "Montornès del Vallès",
+   "ministryName": "Montornès del Vallès",
+   "comarca": "41",
+   "province": "08",
+   "stations": 3
+  },
+  {
+   "id": "1002",
+   "ine": "08137",
+   "name": "Montseny",
+   "ministryName": "Montseny",
+   "comarca": "41",
+   "province": "08",
+   "stations": 1
+  },
+  {
+   "id": "989",
+   "ine": "08138",
+   "name": "Moià",
+   "ministryName": "Moià",
+   "comarca": "42",
+   "province": "08",
+   "stations": 4
+  },
+  {
+   "id": "1005",
+   "ine": "08140",
+   "name": "Navarcles",
+   "ministryName": "Navarcles",
+   "comarca": "07",
+   "province": "08",
+   "stations": 1
+  },
+  {
+   "id": "1006",
+   "ine": "08141",
+   "name": "Navàs",
+   "ministryName": "Navàs",
+   "comarca": "07",
+   "province": "08",
+   "stations": 1
+  },
+  {
+   "id": "1008",
+   "ine": "08143",
+   "name": "Òdena",
+   "ministryName": "Òdena",
+   "comarca": "06",
+   "province": "08",
+   "stations": 3
+  },
+  {
+   "id": "1009",
+   "ine": "08145",
+   "name": "Olèrdola",
+   "ministryName": "Olèrdola",
+   "comarca": "03",
+   "province": "08",
+   "stations": 5
+  },
+  {
+   "id": "1011",
+   "ine": "08147",
+   "name": "Olesa de Montserrat",
+   "ministryName": "Olesa de Montserrat",
+   "comarca": "11",
+   "province": "08",
+   "stations": 6
+  },
+  {
+   "id": "1013",
+   "ine": "08149",
+   "name": "Olost",
+   "ministryName": "Olost",
+   "comarca": "43",
+   "province": "08",
+   "stations": 1
+  },
+  {
+   "id": "1019",
+   "ine": "08154",
+   "name": "Pacs del Penedès",
+   "ministryName": "Pacs del Penedès",
+   "comarca": "03",
+   "province": "08",
+   "stations": 1
+  },
+  {
+   "id": "1020",
+   "ine": "08155",
+   "name": "Palafolls",
+   "ministryName": "Palafolls",
+   "comarca": "21",
+   "province": "08",
+   "stations": 5
+  },
+  {
+   "id": "1021",
+   "ine": "08156",
+   "name": "Palau-solità i Plegamans",
+   "ministryName": "Palau-solità i Plegamans",
+   "comarca": "40",
+   "province": "08",
+   "stations": 2
+  },
+  {
+   "id": "1022",
+   "ine": "08157",
+   "name": "Pallejà",
+   "ministryName": "Pallejà",
+   "comarca": "11",
+   "province": "08",
+   "stations": 4
+  },
+  {
+   "id": "1024",
+   "ine": "08158",
+   "name": "el Papiol",
+   "ministryName": "Papiol (El)",
+   "comarca": "11",
+   "province": "08",
+   "stations": 1
+  },
+  {
+   "id": "1025",
+   "ine": "08159",
+   "name": "Parets del Vallès",
+   "ministryName": "Parets del Vallès",
+   "comarca": "41",
+   "province": "08",
+   "stations": 5
+  },
+  {
+   "id": "1027",
+   "ine": "08161",
+   "name": "Piera",
+   "ministryName": "Piera",
+   "comarca": "06",
+   "province": "08",
+   "stations": 3
+  },
+  {
+   "id": "1028",
+   "ine": "08163",
+   "name": "Pineda de Mar",
+   "ministryName": "Pineda de Mar",
+   "comarca": "21",
+   "province": "08",
+   "stations": 4
+  },
+  {
+   "id": "1029",
+   "ine": "08164",
+   "name": "el Pla del Penedès",
+   "ministryName": "Pla del Penedès (El)",
+   "comarca": "03",
+   "province": "08",
+   "stations": 1
+  },
+  {
+   "id": "1030",
+   "ine": "08165",
+   "name": "la Pobla de Claramunt",
+   "ministryName": "Pobla de Claramunt (La)",
+   "comarca": "06",
+   "province": "08",
+   "stations": 1
+  },
+  {
+   "id": "1031",
+   "ine": "08166",
+   "name": "la Pobla de Lillet",
+   "ministryName": "Pobla de Lillet (La)",
+   "comarca": "14",
+   "province": "08",
+   "stations": 1
+  },
+  {
+   "id": "1032",
+   "ine": "08167",
+   "name": "Polinyà",
+   "ministryName": "Polinyà",
+   "comarca": "40",
+   "province": "08",
+   "stations": 1
+  },
+  {
+   "id": "1035",
+   "ine": "08169",
+   "name": "el Prat de Llobregat",
+   "ministryName": "Prat de Llobregat (El)",
+   "comarca": "11",
+   "province": "08",
+   "stations": 11
+  },
+  {
+   "id": "1036",
+   "ine": "08171",
+   "name": "Prats de Lluçanès",
+   "ministryName": "Prats de Lluçanès",
+   "comarca": "43",
+   "province": "08",
+   "stations": 1
+  },
+  {
+   "id": "1039",
+   "ine": "08172",
+   "name": "Premià de Mar",
+   "ministryName": "Premià de Mar",
+   "comarca": "21",
+   "province": "08",
+   "stations": 1
+  },
+  {
+   "id": "1041",
+   "ine": "08175",
+   "name": "Puig-reig",
+   "ministryName": "Puig-reig",
+   "comarca": "14",
+   "province": "08",
+   "stations": 2
+  },
+  {
+   "id": "1046",
+   "ine": "08180",
+   "name": "Ripollet",
+   "ministryName": "Ripollet",
+   "comarca": "40",
+   "province": "08",
+   "stations": 8
+  },
+  {
+   "id": "1047",
+   "ine": "08181",
+   "name": "la Roca del Vallès",
+   "ministryName": "Roca del Vallès (La)",
+   "comarca": "41",
+   "province": "08",
+   "stations": 4
+  },
+  {
+   "id": "1033",
+   "ine": "08182",
+   "name": "el Pont de Vilomara i Rocafort",
+   "ministryName": "Pont de Vilomara i Rocafort (El)",
+   "comarca": "07",
+   "province": "08",
+   "stations": 1
+  },
+  {
+   "id": "1048",
+   "ine": "08183",
+   "name": "Roda de Ter",
+   "ministryName": "Roda de Ter",
+   "comarca": "24",
+   "province": "08",
+   "stations": 2
+  },
+  {
+   "id": "1049",
+   "ine": "08184",
+   "name": "Rubí",
+   "ministryName": "Rubí",
+   "comarca": "40",
+   "province": "08",
+   "stations": 13
+  },
+  {
+   "id": "1052",
+   "ine": "08187",
+   "name": "Sabadell",
+   "ministryName": "Sabadell",
+   "comarca": "40",
+   "province": "08",
+   "stations": 23
+  },
+  {
+   "id": "1096",
+   "ine": "08189",
+   "name": "Sant Pere Sallavinera",
+   "ministryName": "Sant Pere Sallavinera",
+   "comarca": "06",
+   "province": "08",
+   "stations": 2
+  },
+  {
+   "id": "1054",
+   "ine": "08190",
+   "name": "Saldes",
+   "ministryName": "Saldes",
+   "comarca": "14",
+   "province": "08",
+   "stations": 1
+  },
+  {
+   "id": "1055",
+   "ine": "08191",
+   "name": "Sallent",
+   "ministryName": "Sallent",
+   "comarca": "07",
+   "province": "08",
+   "stations": 4
+  },
+  {
+   "id": "1127",
+   "ine": "08192",
+   "name": "Santpedor",
+   "ministryName": "Santpedor",
+   "comarca": "07",
+   "province": "08",
+   "stations": 1
+  },
+  {
+   "id": "1077",
+   "ine": "08193",
+   "name": "Sant Iscle de Vallalta",
+   "ministryName": "Sant Iscle de Vallalta",
+   "comarca": "21",
+   "province": "08",
+   "stations": 1
+  },
+  {
+   "id": "1056",
+   "ine": "08194",
+   "name": "Sant Adrià de Besòs",
+   "ministryName": "Sant Adrià de Besòs",
+   "comarca": "13",
+   "province": "08",
+   "stations": 6
+  },
+  {
+   "id": "1058",
+   "ine": "08196",
+   "name": "Sant Andreu de la Barca",
+   "ministryName": "Sant Andreu de la Barca",
+   "comarca": "11",
+   "province": "08",
+   "stations": 4
+  },
+  {
+   "id": "1059",
+   "ine": "08197",
+   "name": "Sant Andreu de Llavaneres",
+   "ministryName": "Sant Andreu de Llavaneres",
+   "comarca": "21",
+   "province": "08",
+   "stations": 1
+  },
+  {
+   "id": "1060",
+   "ine": "08198",
+   "name": "Sant Antoni de Vilamajor",
+   "ministryName": "Sant Antoni de Vilamajor",
+   "comarca": "41",
+   "province": "08",
+   "stations": 1
+  },
+  {
+   "id": "1062",
+   "ine": "08200",
+   "name": "Sant Boi de Llobregat",
+   "ministryName": "Sant Boi de Llobregat",
+   "comarca": "11",
+   "province": "08",
+   "stations": 10
+  },
+  {
+   "id": "1065",
+   "ine": "08202",
+   "name": "Sant Celoni",
+   "ministryName": "Sant Celoni",
+   "comarca": "41",
+   "province": "08",
+   "stations": 4
+  },
+  {
+   "id": "1067",
+   "ine": "08205",
+   "name": "Sant Cugat del Vallès",
+   "ministryName": "Sant Cugat del Vallès",
+   "comarca": "40",
+   "province": "08",
+   "stations": 9
+  },
+  {
+   "id": "1068",
+   "ine": "08206",
+   "name": "Sant Cugat Sesgarrigues",
+   "ministryName": "Sant Cugat Sesgarrigues",
+   "comarca": "03",
+   "province": "08",
+   "stations": 3
+  },
+  {
+   "id": "1070",
+   "ine": "08208",
+   "name": "Sant Esteve Sesrovires",
+   "ministryName": "Sant Esteve Sesrovires",
+   "comarca": "11",
+   "province": "08",
+   "stations": 2
+  },
+  {
+   "id": "1074",
+   "ine": "08209",
+   "name": "Sant Fost de Campsentelles",
+   "ministryName": "Sant Fost de Campsentelles",
+   "comarca": "41",
+   "province": "08",
+   "stations": 2
+  },
+  {
+   "id": "1072",
+   "ine": "08211",
+   "name": "Sant Feliu de Llobregat",
+   "ministryName": "Sant Feliu de Llobregat",
+   "comarca": "11",
+   "province": "08",
+   "stations": 4
+  },
+  {
+   "id": "1075",
+   "ine": "08213",
+   "name": "Sant Fruitós de Bages",
+   "ministryName": "Sant Fruitós de Bages",
+   "comarca": "07",
+   "province": "08",
+   "stations": 5
+  },
+  {
+   "id": "1168",
+   "ine": "08214",
+   "name": "Vilassar de Dalt",
+   "ministryName": "Vilassar de Dalt",
+   "comarca": "21",
+   "province": "08",
+   "stations": 1
+  },
+  {
+   "id": "1080",
+   "ine": "08217",
+   "name": "Sant Joan Despí",
+   "ministryName": "Sant Joan Despí",
+   "comarca": "11",
+   "province": "08",
+   "stations": 6
+  },
+  {
+   "id": "1079",
+   "ine": "08218",
+   "name": "Sant Joan de Vilatorrada",
+   "ministryName": "Sant Joan de Vilatorrada",
+   "comarca": "07",
+   "province": "08",
+   "stations": 4
+  },
+  {
+   "id": "1169",
+   "ine": "08219",
+   "name": "Vilassar de Mar",
+   "ministryName": "Vilassar de Mar",
+   "comarca": "21",
+   "province": "08",
+   "stations": 2
+  },
+  {
+   "id": "1083",
+   "ine": "08221",
+   "name": "Sant Just Desvern",
+   "ministryName": "Sant Just Desvern",
+   "comarca": "11",
+   "province": "08",
+   "stations": 3
+  },
+  {
+   "id": "1084",
+   "ine": "08222",
+   "name": "Sant Llorenç d'Hortons",
+   "ministryName": "Sant Llorenç d'Hortons",
+   "comarca": "03",
+   "province": "08",
+   "stations": 1
+  },
+  {
+   "id": "1086",
+   "ine": "08225",
+   "name": "Sant Martí d'Albars",
+   "ministryName": "Sant Martí d'Albars",
+   "comarca": "43",
+   "province": "08",
+   "stations": 1
+  },
+  {
+   "id": "1038",
+   "ine": "08230",
+   "name": "Premià de Dalt",
+   "ministryName": "Premià de Dalt",
+   "comarca": "21",
+   "province": "08",
+   "stations": 1
+  },
+  {
+   "id": "1092",
+   "ine": "08231",
+   "name": "Sant Pere de Ribes",
+   "ministryName": "Sant Pere de Ribes",
+   "comarca": "17",
+   "province": "08",
+   "stations": 3
+  },
+  {
+   "id": "1093",
+   "ine": "08232",
+   "name": "Sant Pere de Riudebitlles",
+   "ministryName": "Sant Pere de Riudebitlles",
+   "comarca": "03",
+   "province": "08",
+   "stations": 1
+  },
+  {
+   "id": "1094",
+   "ine": "08233",
+   "name": "Sant Pere de Torelló",
+   "ministryName": "Sant Pere de Torelló",
+   "comarca": "24",
+   "province": "08",
+   "stations": 1
+  },
+  {
+   "id": "1097",
+   "ine": "08235",
+   "name": "Sant Pol de Mar",
+   "ministryName": "Sant Pol de Mar",
+   "comarca": "21",
+   "province": "08",
+   "stations": 1
+  },
+  {
+   "id": "1099",
+   "ine": "08237",
+   "name": "Sant Quirze de Besora",
+   "ministryName": "Sant Quirze de Besora",
+   "comarca": "24",
+   "province": "08",
+   "stations": 1
+  },
+  {
+   "id": "1100",
+   "ine": "08238",
+   "name": "Sant Quirze del Vallès",
+   "ministryName": "Sant Quirze del Vallès",
+   "comarca": "40",
+   "province": "08",
+   "stations": 4
+  },
+  {
+   "id": "1101",
+   "ine": "08239",
+   "name": "Sant Quirze Safaja",
+   "ministryName": "Sant Quirze Safaja",
+   "comarca": "42",
+   "province": "08",
+   "stations": 1
+  },
+  {
+   "id": "1102",
+   "ine": "08240",
+   "name": "Sant Sadurní d'Anoia",
+   "ministryName": "Sant Sadurní d'Anoia",
+   "comarca": "03",
+   "province": "08",
+   "stations": 4
+  },
+  {
+   "id": "1111",
+   "ine": "08245",
+   "name": "Santa Coloma de Gramenet",
+   "ministryName": "Santa Coloma de Gramenet",
+   "comarca": "13",
+   "province": "08",
+   "stations": 3
+  },
+  {
+   "id": "1114",
+   "ine": "08248",
+   "name": "Santa Eulàlia de Ronçana",
+   "ministryName": "Santa Eulàlia de Ronçana",
+   "comarca": "41",
+   "province": "08",
+   "stations": 1
+  },
+  {
+   "id": "1116",
+   "ine": "08250",
+   "name": "Santa Margarida de Montbui",
+   "ministryName": "Santa Margarida de Montbui",
+   "comarca": "06",
+   "province": "08",
+   "stations": 1
+  },
+  {
+   "id": "1117",
+   "ine": "08251",
+   "name": "Santa Margarida i els Monjos",
+   "ministryName": "Santa Margarida i els Monjos",
+   "comarca": "03",
+   "province": "08",
+   "stations": 1
+  },
+  {
+   "id": "880",
+   "ine": "08252",
+   "name": "Barberà del Vallès",
+   "ministryName": "Barberà del Vallès",
+   "comarca": "40",
+   "province": "08",
+   "stations": 7
+  },
+  {
+   "id": "1119",
+   "ine": "08254",
+   "name": "l'Esquirol",
+   "ministryName": "Santa Maria de Corcó",
+   "comarca": "24",
+   "province": "08",
+   "stations": 1
+  },
+  {
+   "id": "1122",
+   "ine": "08257",
+   "name": "Santa Maria de Miralles",
+   "ministryName": "Santa Maria de Miralles",
+   "comarca": "06",
+   "province": "08",
+   "stations": 1
+  },
+  {
+   "id": "1123",
+   "ine": "08259",
+   "name": "Santa Maria de Palautordera",
+   "ministryName": "Santa Maria de Palautordera",
+   "comarca": "41",
+   "province": "08",
+   "stations": 3
+  },
+  {
+   "id": "1125",
+   "ine": "08260",
+   "name": "Santa Perpètua de Mogoda",
+   "ministryName": "Santa Perpètua de Mogoda",
+   "comarca": "40",
+   "province": "08",
+   "stations": 14
+  },
+  {
+   "id": "1126",
+   "ine": "08261",
+   "name": "Santa Susanna",
+   "ministryName": "Santa Susanna",
+   "comarca": "21",
+   "province": "08",
+   "stations": 3
+  },
+  {
+   "id": "1105",
+   "ine": "08262",
+   "name": "Sant Vicenç de Castellet",
+   "ministryName": "Sant Vicenç de Castellet",
+   "comarca": "07",
+   "province": "08",
+   "stations": 2
+  },
+  {
+   "id": "1108",
+   "ine": "08263",
+   "name": "Sant Vicenç dels Horts",
+   "ministryName": "Sant Vicenç dels Horts",
+   "comarca": "11",
+   "province": "08",
+   "stations": 7
+  },
+  {
+   "id": "1106",
+   "ine": "08264",
+   "name": "Sant Vicenç de Montalt",
+   "ministryName": "Sant Vicenç de Montalt",
+   "comarca": "21",
+   "province": "08",
+   "stations": 1
+  },
+  {
+   "id": "1107",
+   "ine": "08265",
+   "name": "Sant Vicenç de Torelló",
+   "ministryName": "Sant Vicenç de Torelló",
+   "comarca": "24",
+   "province": "08",
+   "stations": 1
+  },
+  {
+   "id": "931",
+   "ine": "08266",
+   "name": "Cerdanyola del Vallès",
+   "ministryName": "Cerdanyola del Vallès",
+   "comarca": "40",
+   "province": "08",
+   "stations": 10
+  },
+  {
+   "id": "1128",
+   "ine": "08267",
+   "name": "Sentmenat",
+   "ministryName": "Sentmenat",
+   "comarca": "40",
+   "province": "08",
+   "stations": 3
+  },
+  {
+   "id": "930",
+   "ine": "08268",
+   "name": "Cercs",
+   "ministryName": "Cercs",
+   "comarca": "14",
+   "province": "08",
+   "stations": 2
+  },
+  {
+   "id": "1129",
+   "ine": "08269",
+   "name": "Seva",
+   "ministryName": "Seva",
+   "comarca": "24",
+   "province": "08",
+   "stations": 2
+  },
+  {
+   "id": "1130",
+   "ine": "08270",
+   "name": "Sitges",
+   "ministryName": "Sitges",
+   "comarca": "17",
+   "province": "08",
+   "stations": 3
+  },
+  {
+   "id": "1133",
+   "ine": "08273",
+   "name": "Subirats",
+   "ministryName": "Subirats",
+   "comarca": "03",
+   "province": "08",
+   "stations": 1
+  },
+  {
+   "id": "1134",
+   "ine": "08274",
+   "name": "Súria",
+   "ministryName": "Súria",
+   "comarca": "07",
+   "province": "08",
+   "stations": 2
+  },
+  {
+   "id": "1135",
+   "ine": "08276",
+   "name": "Tagamanent",
+   "ministryName": "Tagamanent",
+   "comarca": "41",
+   "province": "08",
+   "stations": 2
+  },
+  {
+   "id": "1137",
+   "ine": "08278",
+   "name": "Taradell",
+   "ministryName": "Taradell",
+   "comarca": "24",
+   "province": "08",
+   "stations": 1
+  },
+  {
+   "id": "1141",
+   "ine": "08279",
+   "name": "Terrassa",
+   "ministryName": "Terrassa",
+   "comarca": "40",
+   "province": "08",
+   "stations": 36
+  },
+  {
+   "id": "1140",
+   "ine": "08281",
+   "name": "Teià",
+   "ministryName": "Teià",
+   "comarca": "21",
+   "province": "08",
+   "stations": 2
+  },
+  {
+   "id": "1143",
+   "ine": "08283",
+   "name": "Tona",
+   "ministryName": "Tona",
+   "comarca": "24",
+   "province": "08",
+   "stations": 1
+  },
+  {
+   "id": "1144",
+   "ine": "08284",
+   "name": "Tordera",
+   "ministryName": "Tordera",
+   "comarca": "21",
+   "province": "08",
+   "stations": 1
+  },
+  {
+   "id": "1145",
+   "ine": "08285",
+   "name": "Torelló",
+   "ministryName": "Torelló",
+   "comarca": "24",
+   "province": "08",
+   "stations": 3
+  },
+  {
+   "id": "1146",
+   "ine": "08286",
+   "name": "la Torre de Claramunt",
+   "ministryName": "Torre de Claramunt (La)",
+   "comarca": "06",
+   "province": "08",
+   "stations": 1
+  },
+  {
+   "id": "1149",
+   "ine": "08289",
+   "name": "Torrelles de Llobregat",
+   "ministryName": "Torrelles de Llobregat",
+   "comarca": "11",
+   "province": "08",
+   "stations": 1
+  },
+  {
+   "id": "1151",
+   "ine": "08291",
+   "name": "Vacarisses",
+   "ministryName": "Vacarisses",
+   "comarca": "40",
+   "province": "08",
+   "stations": 5
+  },
+  {
+   "id": "1154",
+   "ine": "08294",
+   "name": "Vallgorguina",
+   "ministryName": "Vallgorguina",
+   "comarca": "41",
+   "province": "08",
+   "stations": 1
+  },
+  {
+   "id": "1155",
+   "ine": "08295",
+   "name": "Vallirana",
+   "ministryName": "Vallirana",
+   "comarca": "11",
+   "province": "08",
+   "stations": 4
+  },
+  {
+   "id": "1156",
+   "ine": "08296",
+   "name": "Vallromanes",
+   "ministryName": "Vallromanes",
+   "comarca": "41",
+   "province": "08",
+   "stations": 1
+  },
+  {
+   "id": "1158",
+   "ine": "08298",
+   "name": "Vic",
+   "ministryName": "Vic",
+   "comarca": "24",
+   "province": "08",
+   "stations": 14
+  },
+  {
+   "id": "1161",
+   "ine": "08300",
+   "name": "Viladecavalls",
+   "ministryName": "Viladecavalls",
+   "comarca": "40",
+   "province": "08",
+   "stations": 3
+  },
+  {
+   "id": "1160",
+   "ine": "08301",
+   "name": "Viladecans",
+   "ministryName": "Viladecans",
+   "comarca": "11",
+   "province": "08",
+   "stations": 8
+  },
+  {
+   "id": "1162",
+   "ine": "08305",
+   "name": "Vilafranca del Penedès",
+   "ministryName": "Vilafranca del Penedès",
+   "comarca": "03",
+   "province": "08",
+   "stations": 10
+  },
+  {
+   "id": "1167",
+   "ine": "08307",
+   "name": "Vilanova i la Geltrú",
+   "ministryName": "Vilanova i la Geltrú",
+   "comarca": "17",
+   "province": "08",
+   "stations": 11
+  },
+  {
+   "id": "1166",
+   "ine": "08902",
+   "name": "Vilanova del Vallès",
+   "ministryName": "Vilanova del Vallès",
+   "comarca": "41",
+   "province": "08",
+   "stations": 2
+  },
+  {
+   "id": "876",
+   "ine": "08904",
+   "name": "Badia del Vallès",
+   "ministryName": "Badia del Vallès",
+   "comarca": "40",
+   "province": "08",
+   "stations": 1
+  },
+  {
+   "id": "1023",
+   "ine": "08905",
+   "name": "la Palma de Cervelló",
+   "ministryName": "Palma de Cervelló (La)",
+   "comarca": "11",
+   "province": "08",
+   "stations": 1
+  },
+  {
+   "id": "2451",
+   "ine": "17002",
+   "name": "Aiguaviva",
+   "ministryName": "Aiguaviva",
+   "comarca": "20",
+   "province": "17",
+   "stations": 2
+  },
+  {
+   "id": "2510",
+   "ine": "17005",
+   "name": "el Far d'Empordà",
+   "ministryName": "Far d'Empordà (El)",
+   "comarca": "02",
+   "province": "17",
+   "stations": 1
+  },
+  {
+   "id": "2455",
+   "ine": "17007",
+   "name": "Amer",
+   "ministryName": "Amer",
+   "comarca": "34",
+   "province": "17",
+   "stations": 1
+  },
+  {
+   "id": "2456",
+   "ine": "17008",
+   "name": "Anglès",
+   "ministryName": "Anglès",
+   "comarca": "34",
+   "province": "17",
+   "stations": 2
+  },
+  {
+   "id": "2457",
+   "ine": "17009",
+   "name": "Arbúcies",
+   "ministryName": "Arbúcies",
+   "comarca": "34",
+   "province": "17",
+   "stations": 3
+  },
+  {
+   "id": "2460",
+   "ine": "17012",
+   "name": "Avinyonet de Puigventós",
+   "ministryName": "Avinyonet de Puigventós",
+   "comarca": "02",
+   "province": "17",
+   "stations": 1
+  },
+  {
+   "id": "2463",
+   "ine": "17013",
+   "name": "Begur",
+   "ministryName": "Begur",
+   "comarca": "10",
+   "province": "17",
+   "stations": 2
+  },
+  {
+   "id": "2461",
+   "ine": "17015",
+   "name": "Banyoles",
+   "ministryName": "Banyoles",
+   "comarca": "28",
+   "province": "17",
+   "stations": 6
+  },
+  {
+   "id": "2462",
+   "ine": "17016",
+   "name": "Bàscara",
+   "ministryName": "Bàscara",
+   "comarca": "02",
+   "province": "17",
+   "stations": 1
+  },
+  {
+   "id": "2464",
+   "ine": "17018",
+   "name": "Bellcaire d'Empordà",
+   "ministryName": "Bellcaire d'Empordà",
+   "comarca": "10",
+   "province": "17",
+   "stations": 1
+  },
+  {
+   "id": "2465",
+   "ine": "17019",
+   "name": "Besalú",
+   "ministryName": "Besalú",
+   "comarca": "19",
+   "province": "17",
+   "stations": 1
+  },
+  {
+   "id": "2466",
+   "ine": "17020",
+   "name": "Bescanó",
+   "ministryName": "Bescanó",
+   "comarca": "20",
+   "province": "17",
+   "stations": 3
+  },
+  {
+   "id": "2468",
+   "ine": "17022",
+   "name": "la Bisbal d'Empordà",
+   "ministryName": "Bisbal d'Empordà (La)",
+   "comarca": "10",
+   "province": "17",
+   "stations": 3
+  },
+  {
+   "id": "2470",
+   "ine": "17023",
+   "name": "Blanes",
+   "ministryName": "Blanes",
+   "comarca": "34",
+   "province": "17",
+   "stations": 7
+  },
+  {
+   "id": "2474",
+   "ine": "17026",
+   "name": "Borrassà",
+   "ministryName": "Borrassà",
+   "comarca": "02",
+   "province": "17",
+   "stations": 1
+  },
+  {
+   "id": "2475",
+   "ine": "17027",
+   "name": "Breda",
+   "ministryName": "Breda",
+   "comarca": "34",
+   "province": "17",
+   "stations": 1
+  },
+  {
+   "id": "2476",
+   "ine": "17028",
+   "name": "Brunyola i Sant Martí Sapresa",
+   "ministryName": "Brunyola",
+   "comarca": "34",
+   "province": "17",
+   "stations": 1
+  },
+  {
+   "id": "2479",
+   "ine": "17032",
+   "name": "Cadaqués",
+   "ministryName": "Cadaqués",
+   "comarca": "02",
+   "province": "17",
+   "stations": 1
+  },
+  {
+   "id": "2480",
+   "ine": "17033",
+   "name": "Caldes de Malavella",
+   "ministryName": "Caldes de Malavella",
+   "comarca": "34",
+   "province": "17",
+   "stations": 4
+  },
+  {
+   "id": "2481",
+   "ine": "17034",
+   "name": "Calonge i Sant Antoni",
+   "ministryName": "Calonge",
+   "comarca": "10",
+   "province": "17",
+   "stations": 4
+  },
+  {
+   "id": "2484",
+   "ine": "17037",
+   "name": "Campelles",
+   "ministryName": "Campelles",
+   "comarca": "31",
+   "province": "17",
+   "stations": 1
+  },
+  {
+   "id": "2486",
+   "ine": "17039",
+   "name": "Camprodon",
+   "ministryName": "Camprodon",
+   "comarca": "31",
+   "province": "17",
+   "stations": 1
+  },
+  {
+   "id": "2489",
+   "ine": "17042",
+   "name": "Capmany",
+   "ministryName": "Capmany",
+   "comarca": "02",
+   "province": "17",
+   "stations": 2
+  },
+  {
+   "id": "2490",
+   "ine": "17044",
+   "name": "Cassà de la Selva",
+   "ministryName": "Cassà de la Selva",
+   "comarca": "20",
+   "province": "17",
+   "stations": 5
+  },
+  {
+   "id": "2492",
+   "ine": "17047",
+   "name": "Castelló d'Empúries",
+   "ministryName": "Castelló d'Empúries",
+   "comarca": "02",
+   "province": "17",
+   "stations": 6
+  },
+  {
+   "id": "2493",
+   "ine": "17048",
+   "name": "Castell d'Aro, Platja d'Aro i s'Agaró",
+   "ministryName": "Castell-Platja d'Aro",
+   "comarca": "10",
+   "province": "17",
+   "stations": 4
+  },
+  {
+   "id": "2495",
+   "ine": "17049",
+   "name": "Celrà",
+   "ministryName": "Celrà",
+   "comarca": "20",
+   "province": "17",
+   "stations": 2
+  },
+  {
+   "id": "2496",
+   "ine": "17050",
+   "name": "Cervià de Ter",
+   "ministryName": "Cervià de Ter",
+   "comarca": "20",
+   "province": "17",
+   "stations": 1
+  },
+  {
+   "id": "2500",
+   "ine": "17057",
+   "name": "Corçà",
+   "ministryName": "Corçà",
+   "comarca": "10",
+   "province": "17",
+   "stations": 1
+  },
+  {
+   "id": "2506",
+   "ine": "17062",
+   "name": "l'Escala",
+   "ministryName": "Escala (L')",
+   "comarca": "02",
+   "province": "17",
+   "stations": 4
+  },
+  {
+   "id": "2511",
+   "ine": "17066",
+   "name": "Figueres",
+   "ministryName": "Figueres",
+   "comarca": "02",
+   "province": "17",
+   "stations": 15
+  },
+  {
+   "id": "2515",
+   "ine": "17070",
+   "name": "Fontanilles",
+   "ministryName": "Fontanilles",
+   "comarca": "10",
+   "province": "17",
+   "stations": 1
+  },
+  {
+   "id": "2518",
+   "ine": "17073",
+   "name": "Fornells de la Selva",
+   "ministryName": "Fornells de la Selva",
+   "comarca": "20",
+   "province": "17",
+   "stations": 1
+  },
+  {
+   "id": "2519",
+   "ine": "17074",
+   "name": "Fortià",
+   "ministryName": "Fortià",
+   "comarca": "02",
+   "province": "17",
+   "stations": 2
+  },
+  {
+   "id": "2520",
+   "ine": "17075",
+   "name": "Garrigàs",
+   "ministryName": "Garrigàs",
+   "comarca": "02",
+   "province": "17",
+   "stations": 2
+  },
+  {
+   "id": "2524",
+   "ine": "17079",
+   "name": "Girona",
+   "ministryName": "Girona",
+   "comarca": "20",
+   "province": "17",
+   "stations": 20
+  },
+  {
+   "id": "2528",
+   "ine": "17083",
+   "name": "Hostalric",
+   "ministryName": "Hostalric",
+   "comarca": "34",
+   "province": "17",
+   "stations": 2
+  },
+  {
+   "id": "2531",
+   "ine": "17086",
+   "name": "la Jonquera",
+   "ministryName": "Jonquera (La)",
+   "comarca": "02",
+   "province": "17",
+   "stations": 21
+  },
+  {
+   "id": "2532",
+   "ine": "17087",
+   "name": "Juià",
+   "ministryName": "Juià",
+   "comarca": "20",
+   "province": "17",
+   "stations": 1
+  },
+  {
+   "id": "2534",
+   "ine": "17089",
+   "name": "Llagostera",
+   "ministryName": "Llagostera",
+   "comarca": "20",
+   "province": "17",
+   "stations": 5
+  },
+  {
+   "id": "2537",
+   "ine": "17092",
+   "name": "Llançà",
+   "ministryName": "Llançà",
+   "comarca": "02",
+   "province": "17",
+   "stations": 2
+  },
+  {
+   "id": "2538",
+   "ine": "17093",
+   "name": "Llers",
+   "ministryName": "Llers",
+   "comarca": "02",
+   "province": "17",
+   "stations": 5
+  },
+  {
+   "id": "2539",
+   "ine": "17094",
+   "name": "Llívia",
+   "ministryName": "Llívia",
+   "comarca": "15",
+   "province": "17",
+   "stations": 1
+  },
+  {
+   "id": "2540",
+   "ine": "17095",
+   "name": "Lloret de Mar",
+   "ministryName": "Lloret de Mar",
+   "comarca": "34",
+   "province": "17",
+   "stations": 6
+  },
+  {
+   "id": "2542",
+   "ine": "17102",
+   "name": "Maçanet de Cabrenys",
+   "ministryName": "Maçanet de Cabrenys",
+   "comarca": "02",
+   "province": "17",
+   "stations": 1
+  },
+  {
+   "id": "2543",
+   "ine": "17103",
+   "name": "Maçanet de la Selva",
+   "ministryName": "Maçanet de la Selva",
+   "comarca": "34",
+   "province": "17",
+   "stations": 5
+  },
+  {
+   "id": "2553",
+   "ine": "17110",
+   "name": "Mont-ras",
+   "ministryName": "Mont-ras",
+   "comarca": "10",
+   "province": "17",
+   "stations": 1
+  },
+  {
+   "id": "2556",
+   "ine": "17114",
+   "name": "Olot",
+   "ministryName": "Olot",
+   "comarca": "19",
+   "province": "17",
+   "stations": 10
+  },
+  {
+   "id": "2559",
+   "ine": "17117",
+   "name": "Palafrugell",
+   "ministryName": "Palafrugell",
+   "comarca": "10",
+   "province": "17",
+   "stations": 7
+  },
+  {
+   "id": "2560",
+   "ine": "17118",
+   "name": "Palamós i Sant Joan",
+   "ministryName": "Palamós",
+   "comarca": "10",
+   "province": "17",
+   "stations": 4
+  },
+  {
+   "id": "2564",
+   "ine": "17123",
+   "name": "Palol de Revardit",
+   "ministryName": "Palol de Revardit",
+   "comarca": "28",
+   "province": "17",
+   "stations": 2
+  },
+  {
+   "id": "2568",
+   "ine": "17128",
+   "name": "Pau",
+   "ministryName": "Pau",
+   "comarca": "02",
+   "province": "17",
+   "stations": 1
+  },
+  {
+   "id": "2569",
+   "ine": "17129",
+   "name": "Pedret i Marzà",
+   "ministryName": "Pedret i Marzà",
+   "comarca": "02",
+   "province": "17",
+   "stations": 1
+  },
+  {
+   "id": "2570",
+   "ine": "17130",
+   "name": "la Pera",
+   "ministryName": "Pera (La)",
+   "comarca": "10",
+   "province": "17",
+   "stations": 1
+  },
+  {
+   "id": "2572",
+   "ine": "17133",
+   "name": "les Planes d'Hostoles",
+   "ministryName": "Planes d'Hostoles (Les)",
+   "comarca": "19",
+   "province": "17",
+   "stations": 1
+  },
+  {
+   "id": "2574",
+   "ine": "17135",
+   "name": "Pont de Molins",
+   "ministryName": "Pont de Molins",
+   "comarca": "02",
+   "province": "17",
+   "stations": 2
+  },
+  {
+   "id": "2576",
+   "ine": "17137",
+   "name": "Porqueres",
+   "ministryName": "Porqueres",
+   "comarca": "28",
+   "province": "17",
+   "stations": 1
+  },
+  {
+   "id": "2578",
+   "ine": "17138",
+   "name": "Portbou",
+   "ministryName": "Portbou",
+   "comarca": "02",
+   "province": "17",
+   "stations": 1
+  },
+  {
+   "id": "2579",
+   "ine": "17139",
+   "name": "les Preses",
+   "ministryName": "Preses (Les)",
+   "comarca": "19",
+   "province": "17",
+   "stations": 1
+  },
+  {
+   "id": "2577",
+   "ine": "17140",
+   "name": "el Port de la Selva",
+   "ministryName": "Port de la Selva (El)",
+   "comarca": "02",
+   "province": "17",
+   "stations": 1
+  },
+  {
+   "id": "2580",
+   "ine": "17141",
+   "name": "Puigcerdà",
+   "ministryName": "Puigcerdà",
+   "comarca": "15",
+   "province": "17",
+   "stations": 4
+  },
+  {
+   "id": "2581",
+   "ine": "17142",
+   "name": "Quart",
+   "ministryName": "Quart",
+   "comarca": "20",
+   "province": "17",
+   "stations": 1
+  },
+  {
+   "id": "2584",
+   "ine": "17144",
+   "name": "Regencós",
+   "ministryName": "Regencós",
+   "comarca": "10",
+   "province": "17",
+   "stations": 1
+  },
+  {
+   "id": "2587",
+   "ine": "17147",
+   "name": "Ripoll",
+   "ministryName": "Ripoll",
+   "comarca": "31",
+   "province": "17",
+   "stations": 3
+  },
+  {
+   "id": "2588",
+   "ine": "17148",
+   "name": "Riudarenes",
+   "ministryName": "Riudarenes",
+   "comarca": "34",
+   "province": "17",
+   "stations": 2
+  },
+  {
+   "id": "2590",
+   "ine": "17150",
+   "name": "Riudellots de la Selva",
+   "ministryName": "Riudellots de la Selva",
+   "comarca": "34",
+   "province": "17",
+   "stations": 3
+  },
+  {
+   "id": "2592",
+   "ine": "17152",
+   "name": "Roses",
+   "ministryName": "Roses",
+   "comarca": "02",
+   "province": "17",
+   "stations": 3
+  },
+  {
+   "id": "2595",
+   "ine": "17155",
+   "name": "Salt",
+   "ministryName": "Salt",
+   "comarca": "20",
+   "province": "17",
+   "stations": 5
+  },
+  {
+   "id": "2599",
+   "ine": "17159",
+   "name": "Sant Feliu de Buixalleu",
+   "ministryName": "Sant Feliu de Buixalleu",
+   "comarca": "34",
+   "province": "17",
+   "stations": 1
+  },
+  {
+   "id": "2600",
+   "ine": "17160",
+   "name": "Sant Feliu de Guíxols",
+   "ministryName": "Sant Feliu de Guíxols",
+   "comarca": "10",
+   "province": "17",
+   "stations": 2
+  },
+  {
+   "id": "2603",
+   "ine": "17163",
+   "name": "Sant Gregori",
+   "ministryName": "Sant Gregori",
+   "comarca": "20",
+   "province": "17",
+   "stations": 1
+  },
+  {
+   "id": "2604",
+   "ine": "17164",
+   "name": "Sant Hilari Sacalm",
+   "ministryName": "Sant Hilari Sacalm",
+   "comarca": "34",
+   "province": "17",
+   "stations": 2
+  },
+  {
+   "id": "2605",
+   "ine": "17165",
+   "name": "Sant Jaume de Llierca",
+   "ministryName": "Sant Jaume de Llierca",
+   "comarca": "19",
+   "province": "17",
+   "stations": 1
+  },
+  {
+   "id": "2609",
+   "ine": "17166",
+   "name": "Sant Jordi Desvalls",
+   "ministryName": "Sant Jordi Desvalls",
+   "comarca": "20",
+   "province": "17",
+   "stations": 1
+  },
+  {
+   "id": "2606",
+   "ine": "17167",
+   "name": "Sant Joan de les Abadesses",
+   "ministryName": "Sant Joan de les Abadesses",
+   "comarca": "31",
+   "province": "17",
+   "stations": 1
+  },
+  {
+   "id": "2619",
+   "ine": "17178",
+   "name": "Sant Pere Pescador",
+   "ministryName": "Sant Pere Pescador",
+   "comarca": "02",
+   "province": "17",
+   "stations": 1
+  },
+  {
+   "id": "2620",
+   "ine": "17180",
+   "name": "Santa Coloma de Farners",
+   "ministryName": "Santa Coloma de Farners",
+   "comarca": "34",
+   "province": "17",
+   "stations": 3
+  },
+  {
+   "id": "2621",
+   "ine": "17181",
+   "name": "Santa Cristina d'Aro",
+   "ministryName": "Santa Cristina d'Aro",
+   "comarca": "10",
+   "province": "17",
+   "stations": 1
+  },
+  {
+   "id": "2622",
+   "ine": "17182",
+   "name": "Santa Llogaia d'Àlguema",
+   "ministryName": "Santa Llogaia d'Àlguema",
+   "comarca": "02",
+   "province": "17",
+   "stations": 2
+  },
+  {
+   "id": "2608",
+   "ine": "17185",
+   "name": "Sant Joan les Fonts",
+   "ministryName": "Sant Joan les Fonts",
+   "comarca": "19",
+   "province": "17",
+   "stations": 1
+  },
+  {
+   "id": "2624",
+   "ine": "17186",
+   "name": "Sarrià de Ter",
+   "ministryName": "Sarrià de Ter",
+   "comarca": "20",
+   "province": "17",
+   "stations": 5
+  },
+  {
+   "id": "2625",
+   "ine": "17187",
+   "name": "Saus, Camallera i Llampaies",
+   "ministryName": "Saus",
+   "comarca": "02",
+   "province": "17",
+   "stations": 1
+  },
+  {
+   "id": "2494",
+   "ine": "17189",
+   "name": "la Cellera de Ter",
+   "ministryName": "Cellera de Ter (La)",
+   "comarca": "34",
+   "province": "17",
+   "stations": 1
+  },
+  {
+   "id": "2627",
+   "ine": "17190",
+   "name": "Serinyà",
+   "ministryName": "Serinyà",
+   "comarca": "28",
+   "province": "17",
+   "stations": 1
+  },
+  {
+   "id": "2628",
+   "ine": "17191",
+   "name": "Serra de Daró",
+   "ministryName": "Serra de Daró",
+   "comarca": "10",
+   "province": "17",
+   "stations": 1
+  },
+  {
+   "id": "2630",
+   "ine": "17193",
+   "name": "Sils",
+   "ministryName": "Sils",
+   "comarca": "34",
+   "province": "17",
+   "stations": 2
+  },
+  {
+   "id": "2637",
+   "ine": "17199",
+   "name": "Torroella de Montgrí",
+   "ministryName": "Torroella de Montgrí",
+   "comarca": "10",
+   "province": "17",
+   "stations": 3
+  },
+  {
+   "id": "2640",
+   "ine": "17202",
+   "name": "Tossa de Mar",
+   "ministryName": "Tossa de Mar",
+   "comarca": "34",
+   "province": "17",
+   "stations": 2
+  },
+  {
+   "id": "2641",
+   "ine": "17204",
+   "name": "Ullà",
+   "ministryName": "Ullà",
+   "comarca": "10",
+   "province": "17",
+   "stations": 1
+  },
+  {
+   "id": "2647",
+   "ine": "17207",
+   "name": "la Vall d'en Bas",
+   "ministryName": "Vall d'en Bas (La)",
+   "comarca": "19",
+   "province": "17",
+   "stations": 2
+  },
+  {
+   "id": "2646",
+   "ine": "17208",
+   "name": "la Vall de Bianya",
+   "ministryName": "Vall de Bianya (La)",
+   "comarca": "19",
+   "province": "17",
+   "stations": 1
+  },
+  {
+   "id": "2651",
+   "ine": "17211",
+   "name": "Verges",
+   "ministryName": "Verges",
+   "comarca": "10",
+   "province": "17",
+   "stations": 1
+  },
+  {
+   "id": "2653",
+   "ine": "17213",
+   "name": "Vidreres",
+   "ministryName": "Vidreres",
+   "comarca": "34",
+   "province": "17",
+   "stations": 2
+  },
+  {
+   "id": "2656",
+   "ine": "17217",
+   "name": "Viladamat",
+   "ministryName": "Viladamat",
+   "comarca": "02",
+   "province": "17",
+   "stations": 2
+  },
+  {
+   "id": "2658",
+   "ine": "17218",
+   "name": "Vilademuls",
+   "ministryName": "Vilademuls",
+   "comarca": "28",
+   "province": "17",
+   "stations": 1
+  },
+  {
+   "id": "2664",
+   "ine": "17226",
+   "name": "Vilamalla",
+   "ministryName": "Vilamalla",
+   "comarca": "02",
+   "province": "17",
+   "stations": 4
+  },
+  {
+   "id": "2669",
+   "ine": "17233",
+   "name": "Vilobí d'Onyar",
+   "ministryName": "Vilobí d'Onyar",
+   "comarca": "34",
+   "province": "17",
+   "stations": 2
+  },
+  {
+   "id": "2469",
+   "ine": "17234",
+   "name": "Biure",
+   "ministryName": "Biure",
+   "comarca": "02",
+   "province": "17",
+   "stations": 2
+  },
+  {
+   "id": "2517",
+   "ine": "17902",
+   "name": "Forallac",
+   "ministryName": "Forallac",
+   "comarca": "10",
+   "province": "17",
+   "stations": 1
+  },
+  {
+   "id": "3805",
+   "ine": "25002",
+   "name": "Àger",
+   "ministryName": "Àger",
+   "comarca": "23",
+   "province": "25",
+   "stations": 1
+  },
+  {
+   "id": "3806",
+   "ine": "25003",
+   "name": "Agramunt",
+   "ministryName": "Agramunt",
+   "comarca": "38",
+   "province": "25",
+   "stations": 2
+  },
+  {
+   "id": "3811",
+   "ine": "25007",
+   "name": "Albatàrrec",
+   "ministryName": "Albatàrrec",
+   "comarca": "33",
+   "province": "25",
+   "stations": 2
+  },
+  {
+   "id": "3812",
+   "ine": "25008",
+   "name": "Albesa",
+   "ministryName": "Albesa",
+   "comarca": "23",
+   "province": "25",
+   "stations": 1
+  },
+  {
+   "id": "3815",
+   "ine": "25011",
+   "name": "Alcarràs",
+   "ministryName": "Alcarràs",
+   "comarca": "33",
+   "province": "25",
+   "stations": 4
+  },
+  {
+   "id": "3816",
+   "ine": "25012",
+   "name": "Alcoletge",
+   "ministryName": "Alcoletge",
+   "comarca": "33",
+   "province": "25",
+   "stations": 1
+  },
+  {
+   "id": "3817",
+   "ine": "25013",
+   "name": "Alfarràs",
+   "ministryName": "Alfarràs",
+   "comarca": "33",
+   "province": "25",
+   "stations": 1
+  },
+  {
+   "id": "3818",
+   "ine": "25014",
+   "name": "Alfés",
+   "ministryName": "Alfés",
+   "comarca": "33",
+   "province": "25",
+   "stations": 3
+  },
+  {
+   "id": "3819",
+   "ine": "25015",
+   "name": "Algerri",
+   "ministryName": "Algerri",
+   "comarca": "23",
+   "province": "25",
+   "stations": 1
+  },
+  {
+   "id": "3820",
+   "ine": "25016",
+   "name": "Alguaire",
+   "ministryName": "Alguaire",
+   "comarca": "33",
+   "province": "25",
+   "stations": 1
+  },
+  {
+   "id": "3822",
+   "ine": "25019",
+   "name": "Almacelles",
+   "ministryName": "Almacelles",
+   "comarca": "33",
+   "province": "25",
+   "stations": 1
+  },
+  {
+   "id": "3824",
+   "ine": "25021",
+   "name": "Almenar",
+   "ministryName": "Almenar",
+   "comarca": "33",
+   "province": "25",
+   "stations": 2
+  },
+  {
+   "id": "3826",
+   "ine": "25023",
+   "name": "Alpicat",
+   "ministryName": "Alpicat",
+   "comarca": "33",
+   "province": "25",
+   "stations": 3
+  },
+  {
+   "id": "3935",
+   "ine": "25025",
+   "name": "Naut Aran",
+   "ministryName": "Naut Aran",
+   "comarca": "39",
+   "province": "25",
+   "stations": 1
+  },
+  {
+   "id": "3828",
+   "ine": "25027",
+   "name": "Anglesola",
+   "ministryName": "Anglesola",
+   "comarca": "38",
+   "province": "25",
+   "stations": 1
+  },
+  {
+   "id": "3832",
+   "ine": "25033",
+   "name": "Artesa de Lleida",
+   "ministryName": "Artesa de Lleida",
+   "comarca": "33",
+   "province": "25",
+   "stations": 1
+  },
+  {
+   "id": "3833",
+   "ine": "25034",
+   "name": "Artesa de Segre",
+   "ministryName": "Artesa de Segre",
+   "comarca": "23",
+   "province": "25",
+   "stations": 2
+  },
+  {
+   "id": "3834",
+   "ine": "25036",
+   "name": "Aspa",
+   "ministryName": "Aspa",
+   "comarca": "33",
+   "province": "25",
+   "stations": 1
+  },
+  {
+   "id": "3837",
+   "ine": "25040",
+   "name": "Balaguer",
+   "ministryName": "Balaguer",
+   "comarca": "23",
+   "province": "25",
+   "stations": 8
+  },
+  {
+   "id": "4015",
+   "ine": "25043",
+   "name": "la Vall de Boí",
+   "ministryName": "Vall de Boí (La)",
+   "comarca": "05",
+   "province": "25",
+   "stations": 1
+  },
+  {
+   "id": "3840",
+   "ine": "25044",
+   "name": "Bassella",
+   "ministryName": "Bassella",
+   "comarca": "04",
+   "province": "25",
+   "stations": 1
+  },
+  {
+   "id": "3841",
+   "ine": "25045",
+   "name": "Bausen",
+   "ministryName": "Bausen",
+   "comarca": "39",
+   "province": "25",
+   "stations": 1
+  },
+  {
+   "id": "3844",
+   "ine": "25047",
+   "name": "Bellcaire d'Urgell",
+   "ministryName": "Bellcaire d'Urgell",
+   "comarca": "23",
+   "province": "25",
+   "stations": 2
+  },
+  {
+   "id": "3845",
+   "ine": "25048",
+   "name": "Bell-lloc d'Urgell",
+   "ministryName": "Bell-lloc d'Urgell",
+   "comarca": "27",
+   "province": "25",
+   "stations": 1
+  },
+  {
+   "id": "3847",
+   "ine": "25050",
+   "name": "Bellpuig",
+   "ministryName": "Bellpuig",
+   "comarca": "38",
+   "province": "25",
+   "stations": 3
+  },
+  {
+   "id": "3848",
+   "ine": "25051",
+   "name": "Bellver de Cerdanya",
+   "ministryName": "Bellver de Cerdanya",
+   "comarca": "15",
+   "province": "25",
+   "stations": 4
+  },
+  {
+   "id": "3849",
+   "ine": "25052",
+   "name": "Bellvís",
+   "ministryName": "Bellvís",
+   "comarca": "27",
+   "province": "25",
+   "stations": 1
+  },
+  {
+   "id": "3850",
+   "ine": "25053",
+   "name": "Benavent de Segrià",
+   "ministryName": "Benavent de Segrià",
+   "comarca": "33",
+   "province": "25",
+   "stations": 1
+  },
+  {
+   "id": "3853",
+   "ine": "25058",
+   "name": "les Borges Blanques",
+   "ministryName": "Borges Blanques (Les)",
+   "comarca": "18",
+   "province": "25",
+   "stations": 5
+  },
+  {
+   "id": "3858",
+   "ine": "25062",
+   "name": "Camarasa",
+   "ministryName": "Camarasa",
+   "comarca": "23",
+   "province": "25",
+   "stations": 1
+  },
+  {
+   "id": "3862",
+   "ine": "25067",
+   "name": "Castelldans",
+   "ministryName": "Castelldans",
+   "comarca": "18",
+   "province": "25",
+   "stations": 1
+  },
+  {
+   "id": "3867",
+   "ine": "25072",
+   "name": "Cervera",
+   "ministryName": "Cervera",
+   "comarca": "32",
+   "province": "25",
+   "stations": 4
+  },
+  {
+   "id": "3875",
+   "ine": "25078",
+   "name": "Corbins",
+   "ministryName": "Corbins",
+   "comarca": "33",
+   "province": "25",
+   "stations": 1
+  },
+  {
+   "id": "3876",
+   "ine": "25079",
+   "name": "Cubells",
+   "ministryName": "Cubells",
+   "comarca": "23",
+   "province": "25",
+   "stations": 1
+  },
+  {
+   "id": "3878",
+   "ine": "25082",
+   "name": "Espot",
+   "ministryName": "Espot",
+   "comarca": "26",
+   "province": "25",
+   "stations": 1
+  },
+  {
+   "id": "3881",
+   "ine": "25086",
+   "name": "Esterri d'Àneu",
+   "ministryName": "Esterri d'Àneu",
+   "comarca": "26",
+   "province": "25",
+   "stations": 1
+  },
+  {
+   "id": "3886",
+   "ine": "25093",
+   "name": "Fondarella",
+   "ministryName": "Fondarella",
+   "comarca": "27",
+   "province": "25",
+   "stations": 2
+  },
+  {
+   "id": "3888",
+   "ine": "25096",
+   "name": "la Fuliola",
+   "ministryName": "Fuliola (La)",
+   "comarca": "38",
+   "province": "25",
+   "stations": 1
+  },
+  {
+   "id": "3892",
+   "ine": "25099",
+   "name": "Golmés",
+   "ministryName": "Golmés",
+   "comarca": "27",
+   "province": "25",
+   "stations": 3
+  },
+  {
+   "id": "3896",
+   "ine": "25103",
+   "name": "Granyanella",
+   "ministryName": "Granyanella",
+   "comarca": "32",
+   "province": "25",
+   "stations": 3
+  },
+  {
+   "id": "3901",
+   "ine": "25110",
+   "name": "Guissona",
+   "ministryName": "Guissona",
+   "comarca": "32",
+   "province": "25",
+   "stations": 3
+  },
+  {
+   "id": "3905",
+   "ine": "25113",
+   "name": "Ivars d'Urgell",
+   "ministryName": "Ivars d'Urgell",
+   "comarca": "27",
+   "province": "25",
+   "stations": 1
+  },
+  {
+   "id": "3908",
+   "ine": "25118",
+   "name": "Juncosa",
+   "ministryName": "Juncosa",
+   "comarca": "18",
+   "province": "25",
+   "stations": 2
+  },
+  {
+   "id": "3909",
+   "ine": "25119",
+   "name": "Juneda",
+   "ministryName": "Juneda",
+   "comarca": "18",
+   "province": "25",
+   "stations": 2
+  },
+  {
+   "id": "3916",
+   "ine": "25120",
+   "name": "Lleida",
+   "ministryName": "Lleida",
+   "comarca": "33",
+   "province": "25",
+   "stations": 24
+  },
+  {
+   "id": "3910",
+   "ine": "25121",
+   "name": "Les",
+   "ministryName": "Les",
+   "comarca": "39",
+   "province": "25",
+   "stations": 1
+  },
+  {
+   "id": "3911",
+   "ine": "25122",
+   "name": "Linyola",
+   "ministryName": "Linyola",
+   "comarca": "27",
+   "province": "25",
+   "stations": 1
+  },
+  {
+   "id": "3914",
+   "ine": "25125",
+   "name": "Llardecans",
+   "ministryName": "Llardecans",
+   "comarca": "33",
+   "province": "25",
+   "stations": 1
+  },
+  {
+   "id": "3917",
+   "ine": "25127",
+   "name": "Lles de Cerdanya",
+   "ministryName": "Lles de Cerdanya",
+   "comarca": "15",
+   "province": "25",
+   "stations": 1
+  },
+  {
+   "id": "3920",
+   "ine": "25133",
+   "name": "Maials",
+   "ministryName": "Maials",
+   "comarca": "33",
+   "province": "25",
+   "stations": 1
+  },
+  {
+   "id": "3925",
+   "ine": "25135",
+   "name": "Miralcamp",
+   "ministryName": "Miralcamp",
+   "comarca": "27",
+   "province": "25",
+   "stations": 1
+  },
+  {
+   "id": "3926",
+   "ine": "25137",
+   "name": "Mollerussa",
+   "ministryName": "Mollerussa",
+   "comarca": "27",
+   "province": "25",
+   "stations": 4
+  },
+  {
+   "id": "3929",
+   "ine": "25140",
+   "name": "Montferrer i Castellbò",
+   "ministryName": "Montferrer i Castellbò",
+   "comarca": "04",
+   "province": "25",
+   "stations": 1
+  },
+  {
+   "id": "3938",
+   "ine": "25149",
+   "name": "Oliana",
+   "ministryName": "Oliana",
+   "comarca": "04",
+   "province": "25",
+   "stations": 1
+  },
+  {
+   "id": "3940",
+   "ine": "25151",
+   "name": "Olius",
+   "ministryName": "Olius",
+   "comarca": "35",
+   "province": "25",
+   "stations": 1
+  },
+  {
+   "id": "3944",
+   "ine": "25155",
+   "name": "Organyà",
+   "ministryName": "Organyà",
+   "comarca": "04",
+   "province": "25",
+   "stations": 1
+  },
+  {
+   "id": "3955",
+   "ine": "25171",
+   "name": "la Pobla de Segur",
+   "ministryName": "Pobla de Segur (La)",
+   "comarca": "25",
+   "province": "25",
+   "stations": 1
+  },
+  {
+   "id": "3958",
+   "ine": "25172",
+   "name": "Ponts",
+   "ministryName": "Ponts",
+   "comarca": "23",
+   "province": "25",
+   "stations": 2
+  },
+  {
+   "id": "3957",
+   "ine": "25173",
+   "name": "el Pont de Suert",
+   "ministryName": "Pont de Suert (El)",
+   "comarca": "05",
+   "province": "25",
+   "stations": 1
+  },
+  {
+   "id": "3960",
+   "ine": "25175",
+   "name": "Prats i Sansor",
+   "ministryName": "Prats i Sansor",
+   "comarca": "15",
+   "province": "25",
+   "stations": 1
+  },
+  {
+   "id": "3967",
+   "ine": "25183",
+   "name": "Rialp",
+   "ministryName": "Rialp",
+   "comarca": "26",
+   "province": "25",
+   "stations": 1
+  },
+  {
+   "id": "3969",
+   "ine": "25185",
+   "name": "Ribera d'Urgellet",
+   "ministryName": "Ribera d'Urgellet",
+   "comarca": "04",
+   "province": "25",
+   "stations": 1
+  },
+  {
+   "id": "3972",
+   "ine": "25189",
+   "name": "Rosselló",
+   "ministryName": "Rosselló",
+   "comarca": "33",
+   "province": "25",
+   "stations": 1
+  },
+  {
+   "id": "3976",
+   "ine": "25192",
+   "name": "Sant Guim de Freixenet",
+   "ministryName": "Sant Guim de Freixenet",
+   "comarca": "32",
+   "province": "25",
+   "stations": 1
+  },
+  {
+   "id": "3978",
+   "ine": "25193",
+   "name": "Sant Llorenç de Morunys",
+   "ministryName": "Sant Llorenç de Morunys",
+   "comarca": "35",
+   "province": "25",
+   "stations": 1
+  },
+  {
+   "id": "3980",
+   "ine": "25194",
+   "name": "Sant Ramon",
+   "ministryName": "Sant Ramon",
+   "comarca": "32",
+   "province": "25",
+   "stations": 1
+  },
+  {
+   "id": "3986",
+   "ine": "25203",
+   "name": "la Seu d'Urgell",
+   "ministryName": "Seu d'Urgell (La)",
+   "comarca": "04",
+   "province": "25",
+   "stations": 2
+  },
+  {
+   "id": "3985",
+   "ine": "25204",
+   "name": "Seròs",
+   "ministryName": "Seròs",
+   "comarca": "33",
+   "province": "25",
+   "stations": 1
+  },
+  {
+   "id": "3987",
+   "ine": "25205",
+   "name": "Sidamon",
+   "ministryName": "Sidamon",
+   "comarca": "27",
+   "province": "25",
+   "stations": 1
+  },
+  {
+   "id": "3989",
+   "ine": "25207",
+   "name": "Solsona",
+   "ministryName": "Solsona",
+   "comarca": "35",
+   "province": "25",
+   "stations": 2
+  },
+  {
+   "id": "3990",
+   "ine": "25208",
+   "name": "Soriguera",
+   "ministryName": "Soriguera",
+   "comarca": "26",
+   "province": "25",
+   "stations": 1
+  },
+  {
+   "id": "3991",
+   "ine": "25209",
+   "name": "Sort",
+   "ministryName": "Sort",
+   "comarca": "26",
+   "province": "25",
+   "stations": 1
+  },
+  {
+   "id": "3992",
+   "ine": "25210",
+   "name": "Soses",
+   "ministryName": "Soses",
+   "comarca": "33",
+   "province": "25",
+   "stations": 1
+  },
+  {
+   "id": "3997",
+   "ine": "25217",
+   "name": "Tàrrega",
+   "ministryName": "Tàrrega",
+   "comarca": "38",
+   "province": "25",
+   "stations": 5
+  },
+  {
+   "id": "4000",
+   "ine": "25220",
+   "name": "Térmens",
+   "ministryName": "Térmens",
+   "comarca": "23",
+   "province": "25",
+   "stations": 3
+  },
+  {
+   "id": "4003",
+   "ine": "25223",
+   "name": "Torà",
+   "ministryName": "Torà",
+   "comarca": "35",
+   "province": "25",
+   "stations": 2
+  },
+  {
+   "id": "4005",
+   "ine": "25225",
+   "name": "Tornabous",
+   "ministryName": "Tornabous",
+   "comarca": "38",
+   "province": "25",
+   "stations": 1
+  },
+  {
+   "id": "4008",
+   "ine": "25228",
+   "name": "Torrefarrera",
+   "ministryName": "Torrefarrera",
+   "comarca": "33",
+   "province": "25",
+   "stations": 3
+  },
+  {
+   "id": "4010",
+   "ine": "25230",
+   "name": "Torregrossa",
+   "ministryName": "Torregrossa",
+   "comarca": "27",
+   "province": "25",
+   "stations": 3
+  },
+  {
+   "id": "4011",
+   "ine": "25231",
+   "name": "Torrelameu",
+   "ministryName": "Torrelameu",
+   "comarca": "23",
+   "province": "25",
+   "stations": 1
+  },
+  {
+   "id": "4012",
+   "ine": "25232",
+   "name": "Torres de Segre",
+   "ministryName": "Torres de Segre",
+   "comarca": "33",
+   "province": "25",
+   "stations": 2
+  },
+  {
+   "id": "4014",
+   "ine": "25234",
+   "name": "Tremp",
+   "ministryName": "Tremp",
+   "comarca": "25",
+   "province": "25",
+   "stations": 4
+  },
+  {
+   "id": "4018",
+   "ine": "25240",
+   "name": "Vallfogona de Balaguer",
+   "ministryName": "Vallfogona de Balaguer",
+   "comarca": "23",
+   "province": "25",
+   "stations": 3
+  },
+  {
+   "id": "4022",
+   "ine": "25242",
+   "name": "Verdú",
+   "ministryName": "Verdú",
+   "comarca": "38",
+   "province": "25",
+   "stations": 1
+  },
+  {
+   "id": "4023",
+   "ine": "25243",
+   "name": "Vielha e Mijaran",
+   "ministryName": "Vielha e Mijaran",
+   "comarca": "39",
+   "province": "25",
+   "stations": 3
+  },
+  {
+   "id": "4025",
+   "ine": "25245",
+   "name": "Vilaller",
+   "ministryName": "Vilaller",
+   "comarca": "05",
+   "province": "25",
+   "stations": 1
+  },
+  {
+   "id": "4026",
+   "ine": "25247",
+   "name": "Vilamòs",
+   "ministryName": "Vilamòs",
+   "comarca": "39",
+   "province": "25",
+   "stations": 1
+  },
+  {
+   "id": "4032",
+   "ine": "25252",
+   "name": "Vila-sana",
+   "ministryName": "Vila-sana",
+   "comarca": "27",
+   "province": "25",
+   "stations": 3
+  },
+  {
+   "id": "3952",
+   "ine": "25911",
+   "name": "els Plans de Sió",
+   "ministryName": "Plans de Sió (Els)",
+   "comarca": "32",
+   "province": "25",
+   "stations": 1
+  },
+  {
+   "id": "3891",
+   "ine": "25912",
+   "name": "Gimenells i el Pla de la Font",
+   "ministryName": "Gimenells i el Pla de la Font",
+   "comarca": "33",
+   "province": "25",
+   "stations": 1
+  },
+  {
+   "id": "6346",
+   "ine": "43004",
+   "name": "Alcanar",
+   "ministryName": "Alcanar",
+   "comarca": "22",
+   "province": "43",
+   "stations": 4
+  },
+  {
+   "id": "6347",
+   "ine": "43005",
+   "name": "Alcover",
+   "ministryName": "Alcover",
+   "comarca": "01",
+   "province": "43",
+   "stations": 2
+  },
+  {
+   "id": "6352",
+   "ine": "43009",
+   "name": "Alforja",
+   "ministryName": "Alforja",
+   "comarca": "08",
+   "province": "43",
+   "stations": 1
+  },
+  {
+   "id": "6355",
+   "ine": "43012",
+   "name": "Altafulla",
+   "ministryName": "Altafulla",
+   "comarca": "36",
+   "province": "43",
+   "stations": 3
+  },
+  {
+   "id": "6356",
+   "ine": "43013",
+   "name": "l'Ametlla de Mar",
+   "ministryName": "Ametlla de Mar (L')",
+   "comarca": "09",
+   "province": "43",
+   "stations": 5
+  },
+  {
+   "id": "6358",
+   "ine": "43014",
+   "name": "Amposta",
+   "ministryName": "Amposta",
+   "comarca": "22",
+   "province": "43",
+   "stations": 10
+  },
+  {
+   "id": "6359",
+   "ine": "43016",
+   "name": "l'Arboç",
+   "ministryName": "Arboç (L')",
+   "comarca": "12",
+   "province": "43",
+   "stations": 4
+  },
+  {
+   "id": "6368",
+   "ine": "43024",
+   "name": "Bellvei",
+   "ministryName": "Bellvei",
+   "comarca": "12",
+   "province": "43",
+   "stations": 1
+  },
+  {
+   "id": "6369",
+   "ine": "43025",
+   "name": "Benifallet",
+   "ministryName": "Benifallet",
+   "comarca": "09",
+   "province": "43",
+   "stations": 1
+  },
+  {
+   "id": "6372",
+   "ine": "43028",
+   "name": "la Bisbal del Penedès",
+   "ministryName": "Bisbal del Penedès (La)",
+   "comarca": "12",
+   "province": "43",
+   "stations": 2
+  },
+  {
+   "id": "6381",
+   "ine": "43037",
+   "name": "Calafell",
+   "ministryName": "Calafell",
+   "comarca": "12",
+   "province": "43",
+   "stations": 3
+  },
+  {
+   "id": "6383",
+   "ine": "43038",
+   "name": "Cambrils",
+   "ministryName": "Cambrils",
+   "comarca": "08",
+   "province": "43",
+   "stations": 6
+  },
+  {
+   "id": "6388",
+   "ine": "43043",
+   "name": "el Catllar",
+   "ministryName": "Catllar (El)",
+   "comarca": "36",
+   "province": "43",
+   "stations": 1
+  },
+  {
+   "id": "6492",
+   "ine": "43044",
+   "name": "la Sénia",
+   "ministryName": "Sénia (La)",
+   "comarca": "22",
+   "province": "43",
+   "stations": 1
+  },
+  {
+   "id": "6391",
+   "ine": "43047",
+   "name": "Constantí",
+   "ministryName": "Constantí",
+   "comarca": "36",
+   "province": "43",
+   "stations": 3
+  },
+  {
+   "id": "6393",
+   "ine": "43049",
+   "name": "Cornudella de Montsant",
+   "ministryName": "Cornudella de Montsant",
+   "comarca": "29",
+   "province": "43",
+   "stations": 1
+  },
+  {
+   "id": "6395",
+   "ine": "43051",
+   "name": "Cunit",
+   "ministryName": "Cunit",
+   "comarca": "12",
+   "province": "43",
+   "stations": 1
+  },
+  {
+   "id": "6525",
+   "ine": "43052",
+   "name": "Xerta",
+   "ministryName": "Xerta",
+   "comarca": "09",
+   "province": "43",
+   "stations": 1
+  },
+  {
+   "id": "6398",
+   "ine": "43054",
+   "name": "l'Espluga de Francolí",
+   "ministryName": "Espluga de Francolí (L')",
+   "comarca": "16",
+   "province": "43",
+   "stations": 1
+  },
+  {
+   "id": "6399",
+   "ine": "43055",
+   "name": "Falset",
+   "ministryName": "Falset",
+   "comarca": "29",
+   "province": "43",
+   "stations": 1
+  },
+  {
+   "id": "6400",
+   "ine": "43056",
+   "name": "la Fatarella",
+   "ministryName": "Fatarella (La)",
+   "comarca": "37",
+   "province": "43",
+   "stations": 1
+  },
+  {
+   "id": "6404",
+   "ine": "43060",
+   "name": "Flix",
+   "ministryName": "Flix",
+   "comarca": "30",
+   "province": "43",
+   "stations": 2
+  },
+  {
+   "id": "6407",
+   "ine": "43063",
+   "name": "la Galera",
+   "ministryName": "Galera (La)",
+   "comarca": "22",
+   "province": "43",
+   "stations": 1
+  },
+  {
+   "id": "6408",
+   "ine": "43064",
+   "name": "Gandesa",
+   "ministryName": "Gandesa",
+   "comarca": "37",
+   "province": "43",
+   "stations": 1
+  },
+  {
+   "id": "6418",
+   "ine": "43074",
+   "name": "Llorenç del Penedès",
+   "ministryName": "Llorenç del Penedès",
+   "comarca": "12",
+   "province": "43",
+   "stations": 1
+  },
+  {
+   "id": "6421",
+   "ine": "43077",
+   "name": "Mas de Barberans",
+   "ministryName": "Mas de Barberans",
+   "comarca": "22",
+   "province": "43",
+   "stations": 1
+  },
+  {
+   "id": "6430",
+   "ine": "43086",
+   "name": "Montblanc",
+   "ministryName": "Montblanc",
+   "comarca": "16",
+   "province": "43",
+   "stations": 6
+  },
+  {
+   "id": "6431",
+   "ine": "43088",
+   "name": "Montbrió del Camp",
+   "ministryName": "Montbrió del Camp",
+   "comarca": "08",
+   "province": "43",
+   "stations": 1
+  },
+  {
+   "id": "6435",
+   "ine": "43092",
+   "name": "Mont-roig del Camp",
+   "ministryName": "Mont-roig del Camp",
+   "comarca": "08",
+   "province": "43",
+   "stations": 3
+  },
+  {
+   "id": "6436",
+   "ine": "43093",
+   "name": "Móra d'Ebre",
+   "ministryName": "Móra d'Ebre",
+   "comarca": "30",
+   "province": "43",
+   "stations": 1
+  },
+  {
+   "id": "6437",
+   "ine": "43094",
+   "name": "Móra la Nova",
+   "ministryName": "Móra la Nova",
+   "comarca": "30",
+   "province": "43",
+   "stations": 3
+  },
+  {
+   "id": "6438",
+   "ine": "43095",
+   "name": "el Morell",
+   "ministryName": "Morell (El)",
+   "comarca": "36",
+   "province": "43",
+   "stations": 1
+  },
+  {
+   "id": "6446",
+   "ine": "43103",
+   "name": "Perafort",
+   "ministryName": "Perafort",
+   "comarca": "36",
+   "province": "43",
+   "stations": 2
+  },
+  {
+   "id": "6447",
+   "ine": "43104",
+   "name": "el Perelló",
+   "ministryName": "Perelló (El)",
+   "comarca": "09",
+   "province": "43",
+   "stations": 1
+  },
+  {
+   "id": "6451",
+   "ine": "43108",
+   "name": "el Pla de Santa Maria",
+   "ministryName": "Pla de Santa Maria (El)",
+   "comarca": "01",
+   "province": "43",
+   "stations": 1
+  },
+  {
+   "id": "6452",
+   "ine": "43109",
+   "name": "la Pobla de Mafumet",
+   "ministryName": "Pobla de Mafumet (La)",
+   "comarca": "36",
+   "province": "43",
+   "stations": 1
+  },
+  {
+   "id": "6460",
+   "ine": "43116",
+   "name": "Prades",
+   "ministryName": "Prades",
+   "comarca": "08",
+   "province": "43",
+   "stations": 1
+  },
+  {
+   "id": "6465",
+   "ine": "43121",
+   "name": "Rasquera",
+   "ministryName": "Rasquera",
+   "comarca": "30",
+   "province": "43",
+   "stations": 1
+  },
+  {
+   "id": "6467",
+   "ine": "43123",
+   "name": "Reus",
+   "ministryName": "Reus",
+   "comarca": "08",
+   "province": "43",
+   "stations": 21
+  },
+  {
+   "id": "6473",
+   "ine": "43129",
+   "name": "Riudoms",
+   "ministryName": "Riudoms",
+   "comarca": "08",
+   "province": "43",
+   "stations": 2
+  },
+  {
+   "id": "6475",
+   "ine": "43131",
+   "name": "Roda de Berà",
+   "ministryName": "Roda de Barà",
+   "comarca": "36",
+   "province": "43",
+   "stations": 4
+  },
+  {
+   "id": "6477",
+   "ine": "43133",
+   "name": "Roquetes",
+   "ministryName": "Roquetes",
+   "comarca": "09",
+   "province": "43",
+   "stations": 2
+  },
+  {
+   "id": "6481",
+   "ine": "43136",
+   "name": "la Ràpita",
+   "ministryName": "Sant Carles de la Ràpita",
+   "comarca": "22",
+   "province": "43",
+   "stations": 4
+  },
+  {
+   "id": "6482",
+   "ine": "43137",
+   "name": "Sant Jaume dels Domenys",
+   "ministryName": "Sant Jaume dels Domenys",
+   "comarca": "12",
+   "province": "43",
+   "stations": 1
+  },
+  {
+   "id": "6484",
+   "ine": "43138",
+   "name": "Santa Bàrbara",
+   "ministryName": "Santa Bàrbara",
+   "comarca": "22",
+   "province": "43",
+   "stations": 1
+  },
+  {
+   "id": "6485",
+   "ine": "43139",
+   "name": "Santa Coloma de Queralt",
+   "ministryName": "Santa Coloma de Queralt",
+   "comarca": "16",
+   "province": "43",
+   "stations": 2
+  },
+  {
+   "id": "6486",
+   "ine": "43140",
+   "name": "Santa Oliva",
+   "ministryName": "Santa Oliva",
+   "comarca": "12",
+   "province": "43",
+   "stations": 1
+  },
+  {
+   "id": "6487",
+   "ine": "43142",
+   "name": "Sarral",
+   "ministryName": "Sarral",
+   "comarca": "16",
+   "province": "43",
+   "stations": 1
+  },
+  {
+   "id": "6490",
+   "ine": "43145",
+   "name": "la Selva del Camp",
+   "ministryName": "Selva del Camp (La)",
+   "comarca": "08",
+   "province": "43",
+   "stations": 2
+  },
+  {
+   "id": "6493",
+   "ine": "43147",
+   "name": "Solivella",
+   "ministryName": "Solivella",
+   "comarca": "16",
+   "province": "43",
+   "stations": 1
+  },
+  {
+   "id": "6494",
+   "ine": "43148",
+   "name": "Tarragona",
+   "ministryName": "Tarragona",
+   "comarca": "36",
+   "province": "43",
+   "stations": 31
+  },
+  {
+   "id": "6496",
+   "ine": "43150",
+   "name": "Tivissa",
+   "ministryName": "Tivissa",
+   "comarca": "30",
+   "province": "43",
+   "stations": 1
+  },
+  {
+   "id": "6499",
+   "ine": "43153",
+   "name": "Torredembarra",
+   "ministryName": "Torredembarra",
+   "comarca": "36",
+   "province": "43",
+   "stations": 3
+  },
+  {
+   "id": "6501",
+   "ine": "43155",
+   "name": "Tortosa",
+   "ministryName": "Tortosa",
+   "comarca": "09",
+   "province": "43",
+   "stations": 8
+  },
+  {
+   "id": "6502",
+   "ine": "43156",
+   "name": "Ulldecona",
+   "ministryName": "Ulldecona",
+   "comarca": "22",
+   "province": "43",
+   "stations": 3
+  },
+  {
+   "id": "6507",
+   "ine": "43161",
+   "name": "Valls",
+   "ministryName": "Valls",
+   "comarca": "01",
+   "province": "43",
+   "stations": 10
+  },
+  {
+   "id": "6508",
+   "ine": "43162",
+   "name": "Vandellòs i l'Hospitalet de l'Infant",
+   "ministryName": "Vandellòs i l'Hospitalet de l'Infant",
+   "comarca": "08",
+   "province": "43",
+   "stations": 9
+  },
+  {
+   "id": "6509",
+   "ine": "43163",
+   "name": "el Vendrell",
+   "ministryName": "Vendrell (El)",
+   "comarca": "12",
+   "province": "43",
+   "stations": 7
+  },
+  {
+   "id": "6513",
+   "ine": "43166",
+   "name": "Vilallonga del Camp",
+   "ministryName": "Vilallonga del Camp",
+   "comarca": "36",
+   "province": "43",
+   "stations": 1
+  },
+  {
+   "id": "6517",
+   "ine": "43170",
+   "name": "Vila-rodona",
+   "ministryName": "Vila-rodona",
+   "comarca": "01",
+   "province": "43",
+   "stations": 4
+  },
+  {
+   "id": "6518",
+   "ine": "43171",
+   "name": "Vila-seca",
+   "ministryName": "Vila-seca",
+   "comarca": "36",
+   "province": "43",
+   "stations": 6
+  },
+  {
+   "id": "6512",
+   "ine": "43175",
+   "name": "Vilalba dels Arcs",
+   "ministryName": "Vilalba dels Arcs",
+   "comarca": "37",
+   "province": "43",
+   "stations": 1
+  },
+  {
+   "id": "6523",
+   "ine": "43177",
+   "name": "Vinebre",
+   "ministryName": "Vinebre",
+   "comarca": "30",
+   "province": "43",
+   "stations": 1
+  },
+  {
+   "id": "6524",
+   "ine": "43178",
+   "name": "Vinyols i els Arcs",
+   "ministryName": "Vinyols i els Arcs",
+   "comarca": "08",
+   "province": "43",
+   "stations": 2
+  },
+  {
+   "id": "6396",
+   "ine": "43901",
+   "name": "Deltebre",
+   "ministryName": "Deltebre",
+   "comarca": "09",
+   "province": "43",
+   "stations": 6
+  },
+  {
+   "id": "6483",
+   "ine": "43902",
+   "name": "Sant Jaume d'Enveja",
+   "ministryName": "Sant Jaume d'Enveja",
+   "comarca": "22",
+   "province": "43",
+   "stations": 2
+  },
+  {
+   "id": "6382",
+   "ine": "43903",
+   "name": "Camarles",
+   "ministryName": "Camarles",
+   "comarca": "09",
+   "province": "43",
+   "stations": 2
+  },
+  {
+   "id": "6348",
+   "ine": "43904",
+   "name": "l'Aldea",
+   "ministryName": "Aldea (L')",
+   "comarca": "09",
+   "province": "43",
+   "stations": 5
+  },
+  {
+   "id": "6480",
+   "ine": "43905",
+   "name": "Salou",
+   "ministryName": "Salou",
+   "comarca": "36",
+   "province": "43",
+   "stations": 2
+  },
+  {
+   "id": "6357",
+   "ine": "43906",
+   "name": "l'Ampolla",
+   "ministryName": "Ampolla (L')",
+   "comarca": "09",
+   "province": "43",
+   "stations": 4
+  }
+ ],
+ "sources": {
+  "prices": {
+   "name": "Instalaciones de suministro de combustibles a vehículos y embarcaciones con venta pública",
+   "publisher": "Ministerio para la Transición Ecológica y el Reto Demográfico",
+   "url": "https://catalogo.datosabiertos.miteco.gob.es/catalogo/dataset/902a266d-5ba2-4735-a378-45818ba5a4f4",
+   "api": "https://energia.serviciosmin.gob.es/ServiciosRESTCarburantes/PreciosCarburantes/EstacionesTerrestres/FiltroCCAA/09",
+   "licence": "CC BY 4.0",
+   "licenceUrl": "https://creativecommons.org/licenses/by/4.0/"
+  },
+  "comarques": {
+   "name": "Codis de municipis i comarques",
+   "publisher": "Idescat",
+   "url": "https://www.idescat.cat/codis/?id=50&n=9"
+  }
+ }
+}
