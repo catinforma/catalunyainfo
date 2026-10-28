@@ -4,6 +4,7 @@ import type { Block } from "@/lib/content/blocks";
 import { IMAGES } from "@/lib/content/images";
 import { publishArticle, upsertImages, type ArticleSpec, type ImageSpec, type PublishResult } from "@/lib/content/publish-article";
 import { LOCALES, type Locale } from "@/lib/i18n/config";
+import { reservoirHubPath } from "@/lib/programmatic/reservoirs/paths";
 
 import { RESERVOIR_SOURCE } from "./levels";
 
@@ -72,6 +73,7 @@ export const COPY: Record<Locale, Copy> = {
       "El **percentatge** és el volum d'aigua embassada dividit per la capacitat de l'embassament. Un **hm³** (hectòmetre cúbic) és un milió de metres cúbics, és a dir, mil milions de litres.",
       "El total no és la mitjana dels percentatges: és la suma de volums dividida per la suma de capacitats. Per això pesen molt més Susqueda i Sau, que entre tots dos fan més de la meitat de la capacitat, que no pas Foix o Riudecanyes.",
       "Una xifra sense data no serveix. Molts articles sobre «l'estat dels pantans» continuen apareixent setmanes després d'escrits, i hi ha webs que fan servir el butlletí setmanal del Ministeri; aquí la lectura és la més recent que ha publicat l'ACA, que en dona una cada dia, i la columna de canvi diu cap on va.",
+      `Cada embassament té també [la seva pàgina, amb el riu, la capacitat i com ha anat l'últim any](${reservoirHubPath("ca")}).`,
     ],
     barcelonaTitle: "Quins embassaments abasteixen Barcelona",
     barcelona: [
@@ -112,6 +114,7 @@ export const COPY: Record<Locale, Copy> = {
       "El **porcentaje** es el volumen de agua embalsada dividido por la capacidad del embalse. Un **hm³** (hectómetro cúbico) es un millón de metros cúbicos, es decir, mil millones de litros.",
       "El total no es la media de los porcentajes: es la suma de volúmenes dividida por la suma de capacidades. Por eso pesan mucho más Susqueda y Sau, que entre los dos suman más de la mitad de la capacidad, que Foix o Riudecanyes.",
       "Una cifra sin fecha no sirve. Muchos artículos sobre «el estado de los pantanos» siguen apareciendo semanas después de escritos, y hay webs que usan el boletín semanal del Ministerio; aquí la lectura es la más reciente que ha publicado la ACA, que da una cada día, y la columna de cambio dice hacia dónde va.",
+      `Cada embalse tiene también [su página, con el río, la capacidad y cómo ha ido el último año](${reservoirHubPath("es")}).`,
     ],
     barcelonaTitle: "Qué embalses abastecen Barcelona",
     barcelona: [
@@ -152,6 +155,7 @@ export const COPY: Record<Locale, Copy> = {
       "The **percentage** is the stored volume divided by the reservoir's capacity. One **hm³** (cubic hectometre) is a million cubic metres, or a billion litres.",
       "The total is not the average of the percentages: it is the sum of volumes over the sum of capacities. That is why Susqueda and Sau, which together hold more than half the capacity, weigh far more than Foix or Riudecanyes.",
       "A figure without a date is no use. Many articles on \"the state of the reservoirs\" keep showing up weeks after they were written, and some sites use the Spanish ministry's weekly bulletin; here the reading is the latest the ACA has published, one a day, and the change column shows which way it is going.",
+      `Each reservoir also has [its own page, with the river, the capacity and how the past year went](${reservoirHubPath("en")}).`,
     ],
     barcelonaTitle: "Which reservoirs supply Barcelona",
     barcelona: [

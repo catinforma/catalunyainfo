@@ -1,0 +1,1077 @@
+{
+ "readOn": "2026-10-28",
+ "latestDate": "2026-10-28",
+ "sources": {
+  "daily": {
+   "id": "gn9e-3qhr",
+   "name": "Quantitat d’aigua als embassaments de les Conques Internes de Catalunya",
+   "publisher": "Agència Catalana de l'Aigua (ACA)",
+   "url": "https://analisi.transparenciacatalunya.cat/d/gn9e-3qhr",
+   "terms": "Llicència oberta d'ús d'informació - Catalunya: cal citar «Generalitat de Catalunya. Departament de Territori, Habitatge i Transició Ecològica. Agència Catalana de l'Aigua» i la data de la darrera actualització",
+   "updated": "2026-10-28"
+  },
+  "history": {
+   "id": "vjx7-6kcp",
+   "name": "Quantitat d'aigua als embassaments de les conques internes de Catalunya (dades en temps de registre)",
+   "publisher": "Agència Catalana de l'Aigua (ACA)",
+   "url": "https://analisi.transparenciacatalunya.cat/d/vjx7-6kcp",
+   "terms": "Llicència oberta d'ús d'informació - Catalunya: cal citar «Generalitat de Catalunya. Departament de Territori, Habitatge i Transició Ecològica. Agència Catalana de l'Aigua» i la data de la darrera actualització",
+   "updated": "2026-10-28"
+  }
+ },
+ "reservoirs": [
+  {
+   "slug": "susqueda",
+   "name": "Susqueda",
+   "station": "Embassament de Susqueda (Osor)",
+   "place": "Osor",
+   "code": "E07",
+   "basin": "El Ter",
+   "subbasin": "Alt Ter",
+   "trend": {
+    "latest": {
+     "date": "2026-10-28",
+     "percent": 84.3,
+     "volume": 188.54,
+     "level": 344.4
+    },
+    "yearAgo": {
+     "date": "2025-10-28",
+     "percent": 83.9,
+     "volume": 187.61,
+     "level": 344.22
+    },
+    "min": {
+     "date": "2026-09-20",
+     "percent": 81.1,
+     "volume": 181.35,
+     "level": 342.94
+    },
+    "max": {
+     "date": "2026-03-08",
+     "percent": 102.1,
+     "volume": 228.36,
+     "level": 351.85
+    },
+    "monthly": [
+     {
+      "date": "2025-10-28",
+      "percent": 83.9,
+      "volume": 187.61,
+      "level": 344.22
+     },
+     {
+      "date": "2025-11-28",
+      "percent": 86.5,
+      "volume": 193.4,
+      "level": 345.37
+     },
+     {
+      "date": "2025-12-28",
+      "percent": 98.6,
+      "volume": 220.54,
+      "level": 350.46
+     },
+     {
+      "date": "2026-01-28",
+      "percent": 92.1,
+      "volume": 205.9,
+      "level": 347.77
+     },
+     {
+      "date": "2026-02-28",
+      "percent": 95.4,
+      "volume": 213.21,
+      "level": 349.12
+     },
+     {
+      "date": "2026-03-28",
+      "percent": 92.4,
+      "volume": 206.49,
+      "level": 347.88
+     },
+     {
+      "date": "2026-04-28",
+      "percent": 95.8,
+      "volume": 214.2,
+      "level": 349.3
+     },
+     {
+      "date": "2026-05-28",
+      "percent": 97,
+      "volume": 216.97,
+      "level": 349.81
+     },
+     {
+      "date": "2026-06-28",
+      "percent": 96.7,
+      "volume": 216.21,
+      "level": 349.67
+     },
+     {
+      "date": "2026-07-28",
+      "percent": 90.3,
+      "volume": 201.98,
+      "level": 347.03
+     },
+     {
+      "date": "2026-08-28",
+      "percent": 85.1,
+      "volume": 190.25,
+      "level": 344.75
+     },
+     {
+      "date": "2026-09-28",
+      "percent": 82.5,
+      "volume": 184.46,
+      "level": 343.58
+     },
+     {
+      "date": "2026-10-28",
+      "percent": 84.3,
+      "volume": 188.54,
+      "level": 344.4
+     }
+    ],
+    "validDays": 365,
+    "rejected": 0
+   }
+  },
+  {
+   "slug": "sau",
+   "name": "Sau",
+   "station": "Embassament de Sau (Vilanova de Sau)",
+   "place": "Vilanova de Sau",
+   "code": "E06",
+   "basin": "El Ter",
+   "subbasin": "Alt Ter",
+   "trend": {
+    "latest": {
+     "date": "2026-10-28",
+     "percent": 73.6,
+     "volume": 122.12,
+     "level": 416.99
+    },
+    "yearAgo": {
+     "date": "2025-10-28",
+     "percent": 55.9,
+     "volume": 92.68,
+     "level": 410.44
+    },
+    "min": {
+     "date": "2025-12-20",
+     "percent": 40.8,
+     "volume": 67.69,
+     "level": 403.83
+    },
+    "max": {
+     "date": "2026-03-07",
+     "percent": 98.7,
+     "volume": 163.62,
+     "level": 424.51
+    },
+    "monthly": [
+     {
+      "date": "2025-10-28",
+      "percent": 55.9,
+      "volume": 92.68,
+      "level": 410.44
+     },
+     {
+      "date": "2025-11-28",
+      "percent": 50.4,
+      "volume": 83.6,
+      "level": 408.17
+     },
+     {
+      "date": "2025-12-28",
+      "percent": 67.1,
+      "volume": 111.34,
+      "level": 414.73
+     },
+     {
+      "date": "2026-01-28",
+      "percent": 94.7,
+      "volume": 157.04,
+      "level": 423.41
+     },
+     {
+      "date": "2026-02-28",
+      "percent": 87.4,
+      "volume": 144.86,
+      "level": 421.3
+     },
+     {
+      "date": "2026-03-28",
+      "percent": 86.6,
+      "volume": 143.58,
+      "level": 421.07
+     },
+     {
+      "date": "2026-04-28",
+      "percent": 88.6,
+      "volume": 146.87,
+      "level": 421.66
+     },
+     {
+      "date": "2026-05-28",
+      "percent": 91.7,
+      "volume": 152.13,
+      "level": 422.57
+     },
+     {
+      "date": "2026-06-28",
+      "percent": 89.2,
+      "volume": 147.95,
+      "level": 421.85
+     },
+     {
+      "date": "2026-07-28",
+      "percent": 80.3,
+      "volume": 133.2,
+      "level": 419.16
+     },
+     {
+      "date": "2026-08-28",
+      "percent": 74.6,
+      "volume": 123.75,
+      "level": 417.32
+     },
+     {
+      "date": "2026-09-28",
+      "percent": 68.7,
+      "volume": 113.96,
+      "level": 415.3
+     },
+     {
+      "date": "2026-10-28",
+      "percent": 73.6,
+      "volume": 122.12,
+      "level": 416.99
+     }
+    ],
+    "validDays": 365,
+    "rejected": 0
+   }
+  },
+  {
+   "slug": "la-baells",
+   "name": "la Baells",
+   "station": "Embassament de la Baells (Cercs)",
+   "place": "Cercs",
+   "code": "E14",
+   "basin": "El Llobregat",
+   "subbasin": "Alt Llobregat",
+   "trend": {
+    "latest": {
+     "date": "2026-10-28",
+     "percent": 81.6,
+     "volume": 88.73,
+     "level": 624.11
+    },
+    "yearAgo": {
+     "date": "2025-10-28",
+     "percent": 83.6,
+     "volume": 90.91,
+     "level": 624.8
+    },
+    "min": {
+     "date": "2026-10-03",
+     "percent": 70.9,
+     "volume": 77.12,
+     "level": 620.25
+    },
+    "max": {
+     "date": "2026-02-10",
+     "percent": 99.6,
+     "volume": 108.29,
+     "level": 629.88
+    },
+    "monthly": [
+     {
+      "date": "2025-10-28",
+      "percent": 83.6,
+      "volume": 90.91,
+      "level": 624.8
+     },
+     {
+      "date": "2025-11-28",
+      "percent": 80.1,
+      "volume": 87.08,
+      "level": 623.59
+     },
+     {
+      "date": "2025-12-28",
+      "percent": 80.2,
+      "volume": 87.19,
+      "level": 623.62
+     },
+     {
+      "date": "2026-01-28",
+      "percent": 92.8,
+      "volume": 100.84,
+      "level": 627.77
+     },
+     {
+      "date": "2026-02-28",
+      "percent": 98,
+      "volume": 106.49,
+      "level": 629.38
+     },
+     {
+      "date": "2026-03-28",
+      "percent": 95.6,
+      "volume": 103.91,
+      "level": 628.65
+     },
+     {
+      "date": "2026-04-28",
+      "percent": 98.8,
+      "volume": 107.37,
+      "level": 629.63
+     },
+     {
+      "date": "2026-05-28",
+      "percent": 97,
+      "volume": 105.43,
+      "level": 629.08
+     },
+     {
+      "date": "2026-06-28",
+      "percent": 92,
+      "volume": 100.04,
+      "level": 627.53
+     },
+     {
+      "date": "2026-07-28",
+      "percent": 83.6,
+      "volume": 90.85,
+      "level": 624.78
+     },
+     {
+      "date": "2026-08-28",
+      "percent": 78.1,
+      "volume": 84.88,
+      "level": 622.87
+     },
+     {
+      "date": "2026-09-28",
+      "percent": 71.5,
+      "volume": 77.77,
+      "level": 620.47
+     },
+     {
+      "date": "2026-10-28",
+      "percent": 81.6,
+      "volume": 88.73,
+      "level": 624.11
+     }
+    ],
+    "validDays": 365,
+    "rejected": 0
+   }
+  },
+  {
+   "slug": "la-llosa-del-cavall",
+   "name": "la Llosa del Cavall",
+   "station": "Embassament de la Llosa del Cavall (Navès)",
+   "place": "Navès",
+   "code": "E12",
+   "basin": "El Llobregat",
+   "subbasin": "El Cardener",
+   "trend": {
+    "latest": {
+     "date": "2026-10-28",
+     "percent": 83.7,
+     "volume": 59.88,
+     "level": 801.37
+    },
+    "yearAgo": {
+     "date": "2025-10-28",
+     "percent": 89,
+     "volume": 63.68,
+     "level": 802.95
+    },
+    "min": {
+     "date": "2025-12-24",
+     "percent": 79.7,
+     "volume": 57.07,
+     "level": 800.15
+    },
+    "max": {
+     "date": "2026-02-14",
+     "percent": 100.9,
+     "volume": 72.24,
+     "level": 806.25
+    },
+    "monthly": [
+     {
+      "date": "2025-10-28",
+      "percent": 89,
+      "volume": 63.68,
+      "level": 802.95
+     },
+     {
+      "date": "2025-11-28",
+      "percent": 84.7,
+      "volume": 60.62,
+      "level": 801.68
+     },
+     {
+      "date": "2025-12-28",
+      "percent": 80.9,
+      "volume": 57.93,
+      "level": 800.53
+     },
+     {
+      "date": "2026-01-28",
+      "percent": 90.9,
+      "volume": 65.06,
+      "level": 803.51
+     },
+     {
+      "date": "2026-02-28",
+      "percent": 100.6,
+      "volume": 72.01,
+      "level": 806.17
+     },
+     {
+      "date": "2026-03-28",
+      "percent": 100.7,
+      "volume": 72.06,
+      "level": 806.18
+     },
+     {
+      "date": "2026-04-28",
+      "percent": 99.7,
+      "volume": 71.32,
+      "level": 805.91
+     },
+     {
+      "date": "2026-05-28",
+      "percent": 99.3,
+      "volume": 71.07,
+      "level": 805.82
+     },
+     {
+      "date": "2026-06-28",
+      "percent": 98.6,
+      "volume": 70.59,
+      "level": 805.64
+     },
+     {
+      "date": "2026-07-28",
+      "percent": 95.7,
+      "volume": 68.49,
+      "level": 804.84
+     },
+     {
+      "date": "2026-08-28",
+      "percent": 92.4,
+      "volume": 66.1,
+      "level": 803.92
+     },
+     {
+      "date": "2026-09-28",
+      "percent": 84.6,
+      "volume": 60.53,
+      "level": 801.64
+     },
+     {
+      "date": "2026-10-28",
+      "percent": 83.7,
+      "volume": 59.88,
+      "level": 801.37
+     }
+    ],
+    "validDays": 365,
+    "rejected": 0
+   }
+  },
+  {
+   "slug": "darnius-boadella",
+   "name": "Darnius Boadella",
+   "station": "Embassament de Darnius Boadella (Darnius)",
+   "place": "Darnius",
+   "code": "E01",
+   "basin": "La Muga",
+   "subbasin": "La Muga",
+   "trend": {
+    "latest": {
+     "date": "2026-10-28",
+     "percent": 60.8,
+     "volume": 38.5,
+     "level": 151.32
+    },
+    "yearAgo": {
+     "date": "2025-10-28",
+     "percent": 58.4,
+     "volume": 36.98,
+     "level": 150.75
+    },
+    "min": {
+     "date": "2025-12-14",
+     "percent": 56.9,
+     "volume": 36.03,
+     "level": 150.39
+    },
+    "max": {
+     "date": "2026-01-26",
+     "percent": 97.6,
+     "volume": 61.75,
+     "level": 158.58
+    },
+    "monthly": [
+     {
+      "date": "2025-10-28",
+      "percent": 58.4,
+      "volume": 36.98,
+      "level": 150.75
+     },
+     {
+      "date": "2025-11-28",
+      "percent": 57.6,
+      "volume": 36.47,
+      "level": 150.56
+     },
+     {
+      "date": "2025-12-28",
+      "percent": 77.3,
+      "volume": 48.94,
+      "level": 154.85
+     },
+     {
+      "date": "2026-01-28",
+      "percent": 95.5,
+      "volume": 60.42,
+      "level": 158.21
+     },
+     {
+      "date": "2026-02-28",
+      "percent": 92.5,
+      "volume": 58.56,
+      "level": 157.69
+     },
+     {
+      "date": "2026-03-28",
+      "percent": 88.2,
+      "volume": 55.86,
+      "level": 156.92
+     },
+     {
+      "date": "2026-04-28",
+      "percent": 88.1,
+      "volume": 55.78,
+      "level": 156.9
+     },
+     {
+      "date": "2026-05-28",
+      "percent": 91.3,
+      "volume": 57.8,
+      "level": 157.48
+     },
+     {
+      "date": "2026-06-28",
+      "percent": 85.6,
+      "volume": 54.17,
+      "level": 156.43
+     },
+     {
+      "date": "2026-07-28",
+      "percent": 73.2,
+      "volume": 46.35,
+      "level": 154.03
+     },
+     {
+      "date": "2026-08-28",
+      "percent": 63.8,
+      "volume": 40.41,
+      "level": 152.01
+     },
+     {
+      "date": "2026-09-28",
+      "percent": 59.8,
+      "volume": 37.84,
+      "level": 151.08
+     },
+     {
+      "date": "2026-10-28",
+      "percent": 60.8,
+      "volume": 38.5,
+      "level": 151.32
+     }
+    ],
+    "validDays": 365,
+    "rejected": 0
+   }
+  },
+  {
+   "slug": "sant-ponc",
+   "name": "Sant Ponç",
+   "station": "Embassament de Sant Ponç (Clariana de Cardener)",
+   "place": "Clariana de Cardener",
+   "code": "E13",
+   "basin": "El Llobregat",
+   "subbasin": "El Cardener",
+   "trend": {
+    "latest": {
+     "date": "2026-10-28",
+     "percent": 89.2,
+     "volume": 21.78,
+     "level": 528.09
+    },
+    "yearAgo": {
+     "date": "2025-10-28",
+     "percent": 83.5,
+     "volume": 20.39,
+     "level": 527.02
+    },
+    "min": {
+     "date": "2026-09-28",
+     "percent": 78.9,
+     "volume": 19.25,
+     "level": 526.11
+    },
+    "max": {
+     "date": "2026-02-16",
+     "percent": 97.7,
+     "volume": 23.84,
+     "level": 529.6
+    },
+    "monthly": [
+     {
+      "date": "2025-10-28",
+      "percent": 83.5,
+      "volume": 20.39,
+      "level": 527.02
+     },
+     {
+      "date": "2025-11-28",
+      "percent": 84,
+      "volume": 20.5,
+      "level": 527.11
+     },
+     {
+      "date": "2025-12-28",
+      "percent": 80.1,
+      "volume": 19.56,
+      "level": 526.36
+     },
+     {
+      "date": "2026-01-28",
+      "percent": 94.6,
+      "volume": 23.09,
+      "level": 529.06
+     },
+     {
+      "date": "2026-02-28",
+      "percent": 92,
+      "volume": 22.46,
+      "level": 528.6
+     },
+     {
+      "date": "2026-03-28",
+      "percent": 91.7,
+      "volume": 22.39,
+      "level": 528.55
+     },
+     {
+      "date": "2026-04-28",
+      "percent": 96.3,
+      "volume": 23.52,
+      "level": 529.37
+     },
+     {
+      "date": "2026-05-28",
+      "percent": 94.5,
+      "volume": 23.08,
+      "level": 529.05
+     },
+     {
+      "date": "2026-06-28",
+      "percent": 92.5,
+      "volume": 22.58,
+      "level": 528.69
+     },
+     {
+      "date": "2026-07-28",
+      "percent": 84.7,
+      "volume": 20.68,
+      "level": 527.25
+     },
+     {
+      "date": "2026-08-28",
+      "percent": 81.3,
+      "volume": 19.85,
+      "level": 526.59
+     },
+     {
+      "date": "2026-09-28",
+      "percent": 78.9,
+      "volume": 19.25,
+      "level": 526.11
+     },
+     {
+      "date": "2026-10-28",
+      "percent": 89.2,
+      "volume": 21.78,
+      "level": 528.09
+     }
+    ],
+    "validDays": 365,
+    "rejected": 0
+   }
+  },
+  {
+   "slug": "siurana",
+   "name": "Siurana",
+   "station": "Embassament de Siurana (Cornudella de Montsant)",
+   "place": "Cornudella de Montsant",
+   "code": "E18",
+   "basin": "L'Ebre",
+   "subbasin": "Riu de Siurana",
+   "trend": {
+    "latest": {
+     "date": "2026-10-28",
+     "percent": 71.3,
+     "volume": 8.56,
+     "level": 480.56
+    },
+    "yearAgo": {
+     "date": "2025-10-28",
+     "percent": 13.5,
+     "volume": 1.62,
+     "level": 462.46
+    },
+    "min": {
+     "date": "2025-12-13",
+     "percent": 12.4,
+     "volume": 1.49,
+     "level": 461.7
+    },
+    "max": {
+     "date": "2026-05-09",
+     "percent": 78.1,
+     "volume": 9.37,
+     "level": 481.95
+    },
+    "monthly": [
+     {
+      "date": "2025-10-28",
+      "percent": 13.5,
+      "volume": 1.62,
+      "level": 462.46
+     },
+     {
+      "date": "2025-11-28",
+      "percent": 12.9,
+      "volume": 1.55,
+      "level": 461.97
+     },
+     {
+      "date": "2025-12-28",
+      "percent": 15.3,
+      "volume": 1.84,
+      "level": 463.34
+     },
+     {
+      "date": "2026-01-28",
+      "percent": 42.9,
+      "volume": 5.15,
+      "level": 473.67
+     },
+     {
+      "date": "2026-02-28",
+      "percent": 50.9,
+      "volume": 6.11,
+      "level": 475.84
+     },
+     {
+      "date": "2026-03-28",
+      "percent": 75.6,
+      "volume": 9.08,
+      "level": 481.47
+     },
+     {
+      "date": "2026-04-28",
+      "percent": 77.9,
+      "volume": 9.36,
+      "level": 481.92
+     },
+     {
+      "date": "2026-05-28",
+      "percent": 77.9,
+      "volume": 9.36,
+      "level": 481.92
+     },
+     {
+      "date": "2026-06-28",
+      "percent": 76.8,
+      "volume": 9.22,
+      "level": 481.7
+     },
+     {
+      "date": "2026-07-28",
+      "percent": 74.9,
+      "volume": 9,
+      "level": 481.32
+     },
+     {
+      "date": "2026-08-28",
+      "percent": 73.3,
+      "volume": 8.8,
+      "level": 480.99
+     },
+     {
+      "date": "2026-09-28",
+      "percent": 71.7,
+      "volume": 8.61,
+      "level": 480.66
+     },
+     {
+      "date": "2026-10-28",
+      "percent": 71.3,
+      "volume": 8.56,
+      "level": 480.56
+     }
+    ],
+    "validDays": 365,
+    "rejected": 0
+   }
+  },
+  {
+   "slug": "riudecanyes",
+   "name": "Riudecanyes",
+   "station": "Embassament de Riudecanyes",
+   "place": null,
+   "code": "E19",
+   "basin": "Riera de Riudecanyes",
+   "subbasin": "Riera de Riudecanyes",
+   "trend": {
+    "latest": {
+     "date": "2026-10-28",
+     "percent": 27.8,
+     "volume": 1.48,
+     "level": 206.58
+    },
+    "yearAgo": {
+     "date": "2025-10-28",
+     "percent": 32.2,
+     "volume": 1.71,
+     "level": 207.81
+    },
+    "min": {
+     "date": "2026-10-18",
+     "percent": 26.8,
+     "volume": 1.43,
+     "level": 206.29
+    },
+    "max": {
+     "date": "2026-02-04",
+     "percent": 100,
+     "volume": 5.32,
+     "level": 219.52
+    },
+    "monthly": [
+     {
+      "date": "2025-10-28",
+      "percent": 32.2,
+      "volume": 1.71,
+      "level": 207.81
+     },
+     {
+      "date": "2025-11-28",
+      "percent": 30.6,
+      "volume": 1.63,
+      "level": 207.38
+     },
+     {
+      "date": "2025-12-28",
+      "percent": 42.6,
+      "volume": 2.27,
+      "level": 210.29
+     },
+     {
+      "date": "2026-01-28",
+      "percent": 99.9,
+      "volume": 5.32,
+      "level": 219.49
+     },
+     {
+      "date": "2026-02-28",
+      "percent": 99,
+      "volume": 5.27,
+      "level": 219.35
+     },
+     {
+      "date": "2026-03-28",
+      "percent": 99.3,
+      "volume": 5.28,
+      "level": 219.39
+     },
+     {
+      "date": "2026-04-28",
+      "percent": 99.8,
+      "volume": 5.31,
+      "level": 219.47
+     },
+     {
+      "date": "2026-05-28",
+      "percent": 98.8,
+      "volume": 5.26,
+      "level": 219.32
+     },
+     {
+      "date": "2026-06-28",
+      "percent": 88.2,
+      "volume": 4.69,
+      "level": 217.69
+     },
+     {
+      "date": "2026-07-28",
+      "percent": 65.3,
+      "volume": 3.47,
+      "level": 214.34
+     },
+     {
+      "date": "2026-08-28",
+      "percent": 40.9,
+      "volume": 2.18,
+      "level": 209.95
+     },
+     {
+      "date": "2026-09-28",
+      "percent": 30,
+      "volume": 1.6,
+      "level": 207.21
+     },
+     {
+      "date": "2026-10-28",
+      "percent": 27.8,
+      "volume": 1.48,
+      "level": 206.58
+     }
+    ],
+    "validDays": 365,
+    "rejected": 0
+   }
+  },
+  {
+   "slug": "foix",
+   "name": "Foix",
+   "station": "Embassament de Foix (Castellet i la Gornal)",
+   "place": "Castellet i la Gornal",
+   "code": "E16",
+   "basin": "El Foix",
+   "subbasin": "El Foix",
+   "trend": {
+    "latest": {
+     "date": "2026-10-28",
+     "percent": 53.9,
+     "volume": 1.82,
+     "level": 97.6
+    },
+    "yearAgo": {
+     "date": "2025-10-28",
+     "percent": 80.8,
+     "volume": 2.72,
+     "level": 99.42
+    },
+    "min": {
+     "date": "2026-09-15",
+     "percent": 49.1,
+     "volume": 1.65,
+     "level": 97.24
+    },
+    "max": {
+     "date": "2026-03-08",
+     "percent": 101.2,
+     "volume": 3.41,
+     "level": 100.55
+    },
+    "monthly": [
+     {
+      "date": "2025-10-28",
+      "percent": 80.8,
+      "volume": 2.72,
+      "level": 99.42
+     },
+     {
+      "date": "2025-11-28",
+      "percent": 75.5,
+      "volume": 2.54,
+      "level": 99.09
+     },
+     {
+      "date": "2025-12-28",
+      "percent": 88.6,
+      "volume": 2.99,
+      "level": 99.88
+     },
+     {
+      "date": "2026-01-28",
+      "percent": 84.2,
+      "volume": 2.84,
+      "level": 99.62
+     },
+     {
+      "date": "2026-02-28",
+      "percent": 82,
+      "volume": 2.76,
+      "level": 99.49
+     },
+     {
+      "date": "2026-03-28",
+      "percent": 83.2,
+      "volume": 2.8,
+      "level": 99.56
+     },
+     {
+      "date": "2026-04-28",
+      "percent": 79.7,
+      "volume": 2.69,
+      "level": 99.35
+     },
+     {
+      "date": "2026-05-28",
+      "percent": 80,
+      "volume": 2.7,
+      "level": 99.37
+     },
+     {
+      "date": "2026-06-28",
+      "percent": 70.5,
+      "volume": 2.38,
+      "level": 98.76
+     },
+     {
+      "date": "2026-07-28",
+      "percent": 60.8,
+      "volume": 2.05,
+      "level": 98.1
+     },
+     {
+      "date": "2026-08-28",
+      "percent": 54.3,
+      "volume": 1.83,
+      "level": 97.63
+     },
+     {
+      "date": "2026-09-28",
+      "percent": 54.4,
+      "volume": 1.83,
+      "level": 97.64
+     },
+     {
+      "date": "2026-10-28",
+      "percent": 53.9,
+      "volume": 1.82,
+      "level": 97.6
+     }
+    ],
+    "validDays": 365,
+    "rejected": 0
+   }
+  }
+ ]
+}
