@@ -46,6 +46,27 @@ export interface HolidayCopy {
   aranTitle: string;
   aran: string[];
 
+  /** Easter 2027: which of the days around it are holidays (rows built from the payload). */
+  easterTitle: string;
+  easterIntro: string;
+  easterHeaders: string[];
+  easterNames: { maundy: string; sunday: string };
+  easterStatus: { maundy: string; holiday: string; exceptAran: string; sunday: string; barcelona: string };
+  /** `{from}`, `{to}`: the school Easter holidays (Ordre EDF/66/2026). */
+  easterSchool: string;
+
+  /** Local holidays of other towns: when next year's appear, where this year's are. `{towns}`. */
+  localTitle: string;
+  local: string[];
+
+  /** The current year, for searches that still name it. `{last}`, `{dec7}`, `{bcn}`. */
+  year2026Title: string;
+  year2026Intro: string;
+  year2026Note: string;
+
+  /** One line to the school calendar, for parents. */
+  schoolLine: string;
+
   calendarTitle: string;
   calendarIntro: string;
   calendarDownload: string;
@@ -70,9 +91,9 @@ export const COPY: Record<Locale, HolidayCopy> = {
   ca: {
     path: "guies/calendari-laboral-catalunya",
     title: "Calendari laboral 2027 a Catalunya: tots els festius, ponts i dies per demanar vacances",
-    seoTitle: "Calendari laboral 2027 Catalunya: festius i ponts",
+    seoTitle: "Calendari laboral 2027 Catalunya: festius, ponts i Pasqua",
     seoDescription:
-      "Els 12 festius del 2027 a Catalunya segons el DOGC i el BOE, amb Divendres Sant i Pasqua Florida, les festes locals i quins dies demanar per fer pont.",
+      "Els 12 festius del 2027 a Catalunya (DOGC i BOE): Divendres Sant 26 i Pasqua 29 de març, els ponts, les festes locals i els festius que queden del 2026.",
     excerpt:
       "Els 12 festius oficials del 2027, els ponts que deixa el calendari i quins dies de vacances rendeixen més. Amb descàrrega per al teu calendari.",
 
@@ -91,7 +112,7 @@ export const COPY: Record<Locale, HolidayCopy> = {
       { label: "Festes locals", value: "2 per municipi" },
       { label: "Millor pont d'un dia", value: "7 de desembre" },
       { label: "Excepció d'Aran", value: "Sí, el 29 de març se substitueix" },
-      { label: "Última verificació", value: "23 d'octubre de 2026" },
+      { label: "Última verificació", value: "28 d'octubre de 2026" },
     ],
 
     tableTitle: "Tots els festius laborals de Catalunya el 2027",
@@ -131,11 +152,11 @@ export const COPY: Record<Locale, HolidayCopy> = {
     efficiencyNote:
       "Càlcul editorial de CatalunyaInfo sobre el calendari oficial, per a una setmana de dilluns a divendres. No substitueix el calendari laboral de cada empresa ni el conveni aplicable, i demanar un dia de vacances no vol dir que estigui concedit.",
 
-    barcelonaTitle: "Festes locals de Barcelona el 2027",
+    barcelonaTitle: "Calendari laboral de Barcelona 2027: les festes locals",
     barcelona: [
-      "Els dotze festius generals no són tot el calendari: cada municipi hi afegeix dues festes locals. A Barcelona, l'Ajuntament ja les ha fixades oficialment.",
+      "Els dotze festius generals no són tot el calendari: cada municipi hi afegeix dues festes locals. A Barcelona, l'Ajuntament ja les ha fixades oficialment, de manera que la ciutat té catorze festius el 2027.",
       "Totes dues cauen en dilluns o divendres, de manera que creen directament caps de setmana de tres dies per a moltes persones amb jornada de dilluns a divendres.",
-      "Si treballes en un altre municipi, consulta els dos festius locals corresponents: no els donem per suposats.",
+      "Tots els festius de Barcelona, dia a dia i amb les botigues que poden obrir, són a [festius de Barcelona](/ca/festius/barcelona/). Si treballes en un altre municipi, consulta els seus dos festius locals: no els donem per suposats.",
     ],
 
     aranTitle: "L'excepció d'Aran",
@@ -144,12 +165,42 @@ export const COPY: Record<Locale, HolidayCopy> = {
       "No és un festiu addicional: és un canvi. Per tant, els càlculs de ponts relacionats amb aquestes dues dates no s'apliquen igual al territori aranès.",
     ],
 
+    easterTitle: "Setmana Santa i Pasqua 2027: quins dies són festius",
+    easterIntro:
+      "A Catalunya són festius el Divendres Sant i el Dilluns de Pasqua Florida, de manera que, amb el cap de setmana, fan quatre dies seguits de festa. El Dijous Sant, que és festiu a la majoria de comunitats, aquí és laborable. La Pasqua Granada, set setmanes després, només és festa local als municipis que la trien, com Barcelona.",
+    easterHeaders: ["Data", "Dia", "Què és", "És festiu?"],
+    easterNames: { maundy: "Dijous Sant", sunday: "Diumenge de Pasqua" },
+    easterStatus: {
+      maundy: "No a Catalunya (sí a la majoria de comunitats)",
+      holiday: "Sí, a tot Catalunya",
+      exceptAran: "Sí, a tot Catalunya excepte l'Aran",
+      sunday: "Diumenge",
+      barcelona: "Festa local a Barcelona, no a tot Catalunya",
+    },
+    easterSchool:
+      "Les vacances escolars de Setmana Santa van del {from} al {to}, tots dos inclosos (Ordre EDF/66/2026): tot el curs és al [calendari escolar 2026-2027](/ca/guies/calendari-escolar-catalunya/).",
+
+    localTitle: "Festes locals del 2027: quan es publiquen",
+    local: [
+      "A més dels dotze festius, cada municipi en té dos de locals, que fixa una ordre del Departament d'Empresa i Treball a proposta dels ajuntaments. Les del 2027 encara no s'han publicat: a 28 d'octubre de 2026, les dades obertes de la Generalitat no en tenen cap. Les del 2026 van sortir al DOGC el 17 de desembre de 2025 (Ordre EMT/208/2025).",
+      "Mentrestant, les festes locals del 2026 són a [festius locals per municipi](/ca/festius/), amb una pàgina per a cadascun dels 100 municipis més poblats ({towns}), i la resta a [festius locals de tots els municipis](/ca/guies/festius-locals-catalunya/). Hi afegirem les del 2027 quan surti l'ordre.",
+    ],
+
+    year2026Title: "Calendari laboral 2026 a Catalunya",
+    year2026Intro:
+      "El 2026 també té dotze festius a tot Catalunya, fixats per l'Ordre EMT/66/2025. Els últims de l'any són el {last}. El {dec7}, en canvi, no és festiu a Catalunya: només és festa local en alguns municipis.",
+    year2026Note:
+      "Font: Ordre EMT/66/2025, de 30 d'abril (DOGC del 6 de maig de 2025). A l'Aran, el 26 de desembre se substitueix pel 17 de juny (Festa d'Aran). A Barcelona, les festes locals del 2026 són {bcn}.",
+
+    schoolLine:
+      "Si tens fills en edat escolar, les vacances de l'escola no coincideixen amb aquests festius: mira el [calendari escolar 2026-2027](/ca/guies/calendari-escolar-catalunya/).",
+
     calendarTitle: "Afegeix els festius al teu calendari",
     calendarIntro:
       "El fitxer conté només els **dotze festius oficials de Catalunya**. No inclou ni les festes locals ni els dies de vacances suggerits: aquests són recomanacions editorials, no festius.",
     calendarDownload: "Descarrega els festius (.ics)",
     calendarFilename: "festius-catalunya-2027",
-    calendarNote: "Dates transcrites de l'Ordre EMT/52/2026, verificades el 23 d'octubre de 2026 amb el BOE del 13 d'octubre.",
+    calendarNote: "Dates transcrites de l'Ordre EMT/52/2026, comprovades amb el BOE del 13 d'octubre i, el 28 d'octubre de 2026, amb el calendari del Departament d'Empresa i Treball.",
 
     closingTitle: "Guarda aquesta guia",
     closing: [
@@ -165,7 +216,7 @@ export const COPY: Record<Locale, HolidayCopy> = {
     title: "Calendario laboral 2027 en Cataluña: festivos, puentes y mejores días para pedir vacaciones",
     seoTitle: "Calendario laboral 2027 Cataluña: 12 festivos y puentes",
     seoDescription:
-      "Los 12 festivos de 2027 en Cataluña según el DOGC y el BOE, cuáles son nacionales, los festivos locales de Barcelona y qué días pedir para hacer puente.",
+      "Los 12 festivos de 2027 en Cataluña (DOGC y BOE): Viernes Santo 26 y Lunes de Pascua 29 de marzo, puentes, Barcelona y los festivos que quedan de 2026.",
     excerpt:
       "Los 12 festivos oficiales de 2027, los puentes que deja el calendario y qué días de vacaciones rinden más. Con descarga para tu calendario.",
 
@@ -184,7 +235,7 @@ export const COPY: Record<Locale, HolidayCopy> = {
       { label: "Fiestas locales", value: "2 por municipio" },
       { label: "Mejor puente de un día", value: "7 de diciembre" },
       { label: "Excepción de Arán", value: "Sí, el 29 de marzo se sustituye" },
-      { label: "Última verificación", value: "23 de octubre de 2026" },
+      { label: "Última verificación", value: "28 de octubre de 2026" },
     ],
 
     tableTitle: "Festivos oficiales en Cataluña en 2027",
@@ -222,11 +273,11 @@ export const COPY: Record<Locale, HolidayCopy> = {
     efficiencyNote:
       "Cálculo editorial de CatalunyaInfo sobre las fechas oficiales, para una semana laboral de lunes a viernes. No sustituye el calendario laboral de cada empresa ni el convenio aplicable, y pedir un día de vacaciones no significa tenerlo concedido.",
 
-    barcelonaTitle: "Festivos locales de Barcelona en 2027",
+    barcelonaTitle: "Calendario laboral Barcelona 2027: festivos locales",
     barcelona: [
-      "Los doce festivos generales no son todo el calendario: cada municipio añade dos fiestas locales. Barcelona ya ha aprobado oficialmente las suyas.",
+      "Los doce festivos generales no son todo el calendario: cada municipio añade dos fiestas locales. Barcelona ya ha aprobado oficialmente las suyas, así que la ciudad tiene catorce festivos en 2027.",
       "Ambas crean fines de semana de tres días para una jornada convencional de lunes a viernes.",
-      "En el resto de municipios deben consultarse las dos fiestas locales correspondientes: no las damos por supuestas.",
+      "Todos los festivos de Barcelona, día a día y con las tiendas que pueden abrir, están en [festivos de Barcelona](/es/festivos/barcelona/). En el resto de municipios deben consultarse sus dos fiestas locales: no las damos por supuestas.",
     ],
 
     aranTitle: "La excepción de Arán",
@@ -235,12 +286,42 @@ export const COPY: Record<Locale, HolidayCopy> = {
       "No es un festivo adicional: es un cambio. Por tanto, algunos de los cálculos anteriores no se aplican igual en este territorio.",
     ],
 
+    easterTitle: "Semana Santa 2027 en Cataluña: qué días son festivos",
+    easterIntro:
+      "En Cataluña son festivos el Viernes Santo y el Lunes de Pascua Florida, así que, con el fin de semana, suman cuatro días seguidos de fiesta. El Jueves Santo, festivo en la mayoría de comunidades, aquí es laborable. La Pascua Granada, siete semanas después, solo es fiesta local en los municipios que la eligen, como Barcelona.",
+    easterHeaders: ["Fecha", "Día", "Qué es", "¿Es festivo?"],
+    easterNames: { maundy: "Jueves Santo", sunday: "Domingo de Pascua" },
+    easterStatus: {
+      maundy: "No en Cataluña (sí en la mayoría de comunidades)",
+      holiday: "Sí, en toda Cataluña",
+      exceptAran: "Sí, en toda Cataluña excepto en Arán",
+      sunday: "Domingo",
+      barcelona: "Fiesta local en Barcelona, no en toda Cataluña",
+    },
+    easterSchool:
+      "Las vacaciones escolares de Semana Santa van del {from} al {to}, ambos incluidos (Orden EDF/66/2026): el curso entero está en el [calendario escolar 2026-2027](/es/guias/calendario-escolar-cataluna/).",
+
+    localTitle: "Fiestas locales 2027: cuándo se publican",
+    local: [
+      "Además de los doce festivos, cada municipio tiene dos fiestas locales, que fija una orden del Departament d'Empresa i Treball a propuesta de los ayuntamientos. Las de 2027 todavía no se han publicado: a 28 de octubre de 2026, los datos abiertos de la Generalitat no tienen ninguna. Las de 2026 salieron en el DOGC el 17 de diciembre de 2025 (Orden EMT/208/2025).",
+      "Mientras tanto, las fiestas locales de 2026 están en [festivos locales por municipio](/es/festivos/), con una página para cada uno de los 100 municipios más poblados ({towns}), y el resto en [festivos locales de todos los municipios](/es/guias/festivos-locales-cataluna/). Añadiremos las de 2027 cuando salga la orden.",
+    ],
+
+    year2026Title: "Calendario laboral 2026 en Cataluña",
+    year2026Intro:
+      "2026 también tiene doce festivos en toda Cataluña, fijados por la Orden EMT/66/2025. Los últimos del año son el {last}. El {dec7}, en cambio, no es festivo en Cataluña: solo es fiesta local en algunos municipios.",
+    year2026Note:
+      "Fuente: Orden EMT/66/2025, de 30 de abril (DOGC del 6 de mayo de 2025). En Arán, el 26 de diciembre se sustituye por el 17 de junio (Festa d'Aran). En Barcelona, las fiestas locales de 2026 son {bcn}.",
+
+    schoolLine:
+      "Si tienes hijos en edad escolar, las vacaciones del colegio no coinciden con estos festivos: mira el [calendario escolar 2026-2027](/es/guias/calendario-escolar-cataluna/).",
+
     calendarTitle: "Añade los festivos a tu calendario",
     calendarIntro:
       "El archivo contiene únicamente los **doce festivos oficiales de Cataluña**. No incluye fiestas locales ni los días de vacaciones sugeridos: eso son recomendaciones editoriales, no festivos.",
     calendarDownload: "Descargar los festivos (.ics)",
     calendarFilename: "festivos-cataluna-2027",
-    calendarNote: "Fechas transcritas de la Orden EMT/52/2026, verificadas el 23 de octubre de 2026 con el BOE del 13 de octubre.",
+    calendarNote: "Fechas transcritas de la Orden EMT/52/2026, comprobadas con el BOE del 13 de octubre y, el 28 de octubre de 2026, con el calendario del Departament d'Empresa i Treball.",
 
     closingTitle: "Guarda esta guía",
     closing: [
@@ -253,10 +334,10 @@ export const COPY: Record<Locale, HolidayCopy> = {
 
   en: {
     path: "guides/catalonia-public-holidays",
-    title: "Catalonia public holidays 2027: official dates, long weekends and days to take off",
-    seoTitle: "Catalonia public holidays 2027: dates and long weekends",
+    title: "Catalonia and Barcelona public holidays 2027: official dates, long weekends and days to take off",
+    seoTitle: "Barcelona & Catalonia public holidays 2027: all dates",
     seoDescription:
-      "All 12 Catalonia public holidays for 2027 (DOGC and BOE), Barcelona's two local days, the Easter dates and the best days to take off for a long weekend.",
+      "All 12 Catalonia public holidays for 2027 (DOGC and BOE), Barcelona's two local days, the Easter dates, long weekends and the holidays left in 2026.",
     excerpt:
       "The 12 official 2027 holidays, the long weekends the calendar creates, and which days of leave go furthest. With a calendar file to download.",
 
@@ -275,7 +356,7 @@ export const COPY: Record<Locale, HolidayCopy> = {
       { label: "Local holidays", value: "2 per municipality" },
       { label: "Best one-day bridge", value: "7 December" },
       { label: "Aran exception", value: "Yes — 29 March is replaced" },
-      { label: "Last verified", value: "23 October 2026" },
+      { label: "Last verified", value: "28 October 2026" },
     ],
 
     tableTitle: "Official Catalonia public holidays in 2027",
@@ -313,11 +394,11 @@ export const COPY: Record<Locale, HolidayCopy> = {
     efficiencyNote:
       "CatalunyaInfo editorial calculations based on the official calendar, assuming a Monday-to-Friday week. They are not a substitute for your employer's working calendar or collective agreement, and booking a day of leave is not the same as having it approved.",
 
-    barcelonaTitle: "Barcelona's local holidays in 2027",
+    barcelonaTitle: "Barcelona public holidays 2027: the two local days",
     barcelona: [
-      "The twelve Catalonia-wide dates are not the whole calendar: every municipality adds two local holidays. Barcelona has officially approved its two.",
+      "The twelve Catalonia-wide dates are not the whole calendar: every municipality adds two local holidays. Barcelona has officially approved its two, so the city has fourteen public (bank) holidays in 2027.",
       "Both fall on a Monday or a Friday, creating natural three-day weekends for many Monday-to-Friday workers.",
-      "If you work elsewhere in Catalonia, check the two local holidays set by that municipality. We do not guess at them.",
+      "If you work elsewhere in Catalonia, check the two local holidays set by that municipality in [local holidays in Catalonia](/en/guides/local-holidays-catalonia/). We do not guess at them.",
     ],
 
     aranTitle: "The Aran exception",
@@ -326,12 +407,42 @@ export const COPY: Record<Locale, HolidayCopy> = {
       "It is a substitution, not an extra holiday. Some of the combinations above therefore do not apply in the same way there.",
     ],
 
+    easterTitle: "Easter 2027 in Catalonia: which days are holidays",
+    easterIntro:
+      "Good Friday and Easter Monday are public holidays in Catalonia, so with the weekend they make four days off in a row. Maundy Thursday, a holiday in most of Spain, is a working day here. Whit Monday (Pasqua Granada), seven weeks later, is only a local holiday in the towns that choose it, such as Barcelona.",
+    easterHeaders: ["Date", "Day", "What it is", "Public holiday?"],
+    easterNames: { maundy: "Maundy Thursday", sunday: "Easter Sunday" },
+    easterStatus: {
+      maundy: "Not in Catalonia (it is in most of Spain)",
+      holiday: "Yes, across Catalonia",
+      exceptAran: "Yes, across Catalonia except Aran",
+      sunday: "Sunday",
+      barcelona: "Local holiday in Barcelona, not Catalonia-wide",
+    },
+    easterSchool:
+      "School Easter holidays run from {from} to {to}, both included (Order EDF/66/2026): the whole year is in the [Catalonia school calendar 2026-2027](/en/guides/catalonia-school-calendar/).",
+
+    localTitle: "Local holidays in 2027: when they are published",
+    local: [
+      "On top of the twelve, each town has two local holidays, set by an order of the Catalan labour department on the town councils' proposals. The 2027 ones are not out yet: on 28 October 2026 the Catalan government's open data had none. The 2026 ones were published in the DOGC on 17 December 2025 (Order EMT/208/2025).",
+      "Until then, each town's 2026 local holidays are in [local holidays in Catalonia](/en/guides/local-holidays-catalonia/). We will add the 2027 ones when the order appears.",
+    ],
+
+    year2026Title: "Catalonia public holidays 2026",
+    year2026Intro:
+      "2026 also has twelve Catalonia-wide holidays, set by Order EMT/66/2025. The last ones of the year are {last}. {dec7}, on the other hand, is not a public holiday in Catalonia, only a local holiday in some towns.",
+    year2026Note:
+      "Source: Order EMT/66/2025 of 30 April (DOGC, 6 May 2025). In Aran, 26 December is replaced by 17 June (Festa d'Aran). Barcelona's 2026 local holidays are {bcn}.",
+
+    schoolLine:
+      "If you have school-age children, school holidays do not line up with these dates: see the [Catalonia school calendar 2026-2027](/en/guides/catalonia-school-calendar/).",
+
     calendarTitle: "Add the holidays to your calendar",
     calendarIntro:
       "The file contains only the **twelve official Catalonia-wide holidays**. It does not include local holidays or the suggested days of leave: those are editorial recommendations, not public holidays.",
     calendarDownload: "Download the holidays (.ics)",
     calendarFilename: "catalonia-public-holidays-2027",
-    calendarNote: "Dates transcribed from Order EMT/52/2026, verified on 24 September 2026.",
+    calendarNote: "Dates transcribed from Order EMT/52/2026, checked against the BOE of 13 October and, on 28 October 2026, against the Catalan labour department's calendar.",
 
     closingTitle: "Save this guide",
     closing: [

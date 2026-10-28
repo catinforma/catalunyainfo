@@ -22,8 +22,13 @@ import {
   type Bridge,
   type Holiday,
 } from "./payload";
+import { SCHOOL_YEARS } from "@/lib/content/school/calendar";
+import { municipalityBySlug } from "@/lib/programmatic/holidays/data";
+import { joinList } from "@/lib/programmatic/holidays/names";
+import { datePath, isDatePage } from "@/lib/programmatic/holidays/paths";
+import { largestTownLinks } from "@/lib/programmatic/holidays/towns";
 import { COPY, type HolidayCopy } from "./copy";
-import { longDate } from "./calendar";
+import { HOLIDAYS_BY_YEAR, addDays, longDate } from "./calendar";
 
 /**
  * The public holiday guide.
@@ -103,6 +108,100 @@ function bridgeSection(bridge: Bridge, copy: HolidayCopy, locale: Locale): Block
   ];
 }
 
+/** "el 7 de desembre", "l'11 d'octubre" (Catalan elides before un and onze); nothing in English. */
+function dayArticle(day: string, locale: Locale): string {
+  if (locale === "en") return "";
+  return locale === "ca" && /^(1|11)\s/.test(day) ? "l'" : "el ";
+}
+
+function findHoliday(list: Holiday[], en: string): Holiday {
+  const holiday = list.find((h) => h.name.en.startsWith(en));
+  if (!holiday) throw new Error(`holiday guide: no ${en} in the ${YEAR} calendar`);
+  return holiday;
+}
+
+/**
+ * Easter 2027, for "divendres sant 2027", "pasqua 2027", "semana santa 2027":
+ * the days around it and which are holidays. Every date comes from the payload
+ * (Ordre EMT/52/2026, Barcelona's own calendar) or from the school order; the
+ * Thursday and Sunday are the days either side of the two holidays.
+ */
+function easterSection(copy: HolidayCopy, locale: Locale): Block[] {
+  const goodFriday = findHoliday(CATALONIA_HOLIDAYS, "Good Friday");
+  const easterMonday = findHoliday(CATALONIA_HOLIDAYS, "Easter Monday");
+  const whitMonday = findHoliday(BARCELONA_LOCAL, "Whit Monday");
+  const rows: [string, string, string][] = [
+    [addDays(goodFriday.date, -1), copy.easterNames.maundy, copy.easterStatus.maundy],
+    [goodFriday.date, goodFriday.name[locale], copy.easterStatus.holiday],
+    [addDays(easterMonday.date, -1), copy.easterNames.sunday, copy.easterStatus.sunday],
+    [easterMonday.date, easterMonday.name[locale], copy.easterStatus.exceptAran],
+    [whitMonday.date, whitMonday.name[locale], copy.easterStatus.barcelona],
+  ];
+  const school = SCHOOL_YEARS.find((y) => y.easter[0].startsWith(String(YEAR)));
+  if (!school) throw new Error(`holiday guide: no school Easter in ${YEAR}`);
+  return [
+    { type: "heading", level: 2, text: copy.easterTitle },
+    { type: "paragraph", text: copy.easterIntro },
+    {
+      type: "table",
+      caption: copy.easterTitle,
+      headers: copy.easterHeaders,
+      rows: rows.map(([iso, what, status]) => [formatDay(iso, copy, locale), weekdayOf(iso, copy), what, status]),
+      stickyColumn: 0,
+    },
+    {
+      type: "paragraph",
+      text: copy.easterSchool
+        .replace("{from}", formatDay(school.easter[0], copy, locale))
+        .replace("{to}", formatDay(school.easter[1], copy, locale)),
+    },
+  ];
+}
+
+/** When next year's local days appear, and where this year's are (the town pages). */
+function localSection(copy: HolidayCopy, locale: Locale): Block[] {
+  const towns = locale === "en" ? "" : joinList(largestTownLinks(locale), locale);
+  return [
+    { type: "heading", level: 2, text: copy.localTitle },
+    ...copy.local.map((text) => ({ type: "paragraph", text: text.replace("{towns}", towns) }) as Block),
+  ];
+}
+
+const DEC7_2026 = "2026-12-07";
+
+/**
+ * The current year's calendar (Ordre EMT/66/2025), for searches that still ask
+ * about 2026. Dates with a page of their own ("is 8 December a holiday?") link
+ * to it, so the December questions land on the page that answers them.
+ */
+function currentYearSection(copy: HolidayCopy, locale: Locale): Block[] {
+  const year = HOLIDAYS_BY_YEAR[2026] ?? [];
+  if (year.length !== 12) throw new Error("holiday guide: the 2026 calendar is incomplete");
+  const day = (iso: string) => formatDay(iso, copy, locale);
+  const linked = (iso: string, text: string) => (isDatePage(iso) ? `[${text}](${datePath(locale, iso)})` : text);
+  const last = joinList(
+    year.filter((h) => h.date.slice(5, 7) === "12").map((h) => linked(h.date, `${weekdayOf(h.date, copy)} ${day(h.date)}`)),
+    locale,
+  );
+  const dec7 = linked(DEC7_2026, `${weekdayOf(DEC7_2026, copy)} ${day(DEC7_2026)}`);
+  const barcelona = municipalityBySlug("barcelona");
+  if (!barcelona || barcelona.local.length !== 2) throw new Error("holiday guide: Barcelona's 2026 local days are missing");
+  const bcn = joinList(barcelona.local.map((iso) => `${dayArticle(day(iso), locale)}${day(iso)}`), locale);
+
+  return [
+    { type: "heading", level: 2, text: copy.year2026Title },
+    { type: "paragraph", text: copy.year2026Intro.replace("{last}", last).replace("{dec7}", dec7) },
+    {
+      type: "table",
+      caption: copy.year2026Title,
+      headers: copy.tableHeaders,
+      rows: year.map((h) => [linked(h.date, day(h.date)), weekdayOf(h.date, copy), h.name[locale]]),
+      note: copy.year2026Note.replace("{bcn}", bcn),
+      stickyColumn: 0,
+    },
+  ];
+}
+
 export function buildBody(locale: Locale, inlineMediaId?: string): Block[] {
   const copy = COPY[locale];
   const blocks: Block[] = [];
@@ -139,6 +238,9 @@ export function buildBody(locale: Locale, inlineMediaId?: string): Block[] {
   /* ---- National or Catalan ------------------------------------------------ */
   blocks.push({ type: "heading", level: 2, text: copy.nationalTitle });
   for (const text of copy.national) blocks.push({ type: "paragraph", text });
+
+  /* ---- Easter ------------------------------------------------------------ */
+  blocks.push(...easterSection(copy, locale));
 
   /* ---- Saturdays --------------------------------------------------------- */
   blocks.push({ type: "heading", level: 2, text: copy.saturdayTitle });
@@ -184,6 +286,9 @@ export function buildBody(locale: Locale, inlineMediaId?: string): Block[] {
   });
   for (const text of copy.barcelona.slice(1)) blocks.push({ type: "paragraph", text });
 
+  /* ---- Other towns' local days ------------------------------------------- */
+  blocks.push(...localSection(copy, locale));
+
   /* ---- Aran -------------------------------------------------------------- */
   blocks.push({ type: "heading", level: 2, text: copy.aranTitle });
   for (const text of copy.aran) blocks.push({ type: "paragraph", text });
@@ -193,6 +298,9 @@ export function buildBody(locale: Locale, inlineMediaId?: string): Block[] {
     title: ARAN_REPLACEMENT.name[locale],
     text: `${formatDay(ARAN_REPLACEMENT.date, copy, locale)} (${weekdayOf(ARAN_REPLACEMENT.date, copy)})`,
   });
+
+  /* ---- This year --------------------------------------------------------- */
+  blocks.push(...currentYearSection(copy, locale));
 
   /* ---- The calendar file -------------------------------------------------- */
   blocks.push({ type: "heading", level: 2, text: copy.calendarTitle });
@@ -224,6 +332,7 @@ export function buildBody(locale: Locale, inlineMediaId?: string): Block[] {
     en: `Once you know which days you have: ${link("weekend", "en", "what's on this weekend")}, ${link("trains", "en", "twelve day trips by train")} and ${link("montserrat", "en", "ten that are not Montserrat")}.`,
   };
   blocks.push({ type: "paragraph", text: related[locale] });
+  blocks.push({ type: "paragraph", text: copy.schoolLine });
 
   return blocks;
 }
@@ -344,6 +453,29 @@ function faqBlock(locale: Locale): Block {
   const cap = (text: string) => text.charAt(0).toUpperCase() + text.slice(1);
   const count = CATALONIA_HOLIDAYS.length;
   const path = HOLIDAY_PATH[locale];
+  const copy = COPY[locale];
+
+  // Long weekends, from the same BRIDGES the section above renders.
+  const span = (b: Bridge) => `${formatDay(b.from, copy, locale)} – ${formatDay(b.to, copy, locale)}`;
+  const free = joinList(
+    BRIDGES.filter((b) => b.take.length === 0).map((b) => `${b.label[locale]} (${span(b)}, ${copy.efficiencyResult(b.days)})`),
+    locale,
+  );
+  const oneDayItems = BRIDGES.filter((b) => b.take.length === 1).map((b) => {
+    const day = formatDay(b.take[0]!, copy, locale);
+    return `${dayArticle(day, locale)}${day} (${copy.efficiencyResult(b.days)}, ${span(b)})`;
+  });
+  const or = locale === "en" ? " or " : " o ";
+  const oneDay =
+    oneDayItems.length <= 1 ? oneDayItems.join("") : `${oneDayItems.slice(0, -1).join(", ")}${or}${oneDayItems.at(-1)}`;
+  const dec7 = datePath(locale, DEC7_2026);
+  const bcnDays = joinList(
+    BARCELONA_LOCAL.map((h) => {
+      const day = formatDay(h.date, copy, locale);
+      return `${dayArticle(day, locale)}${day} (${h.name[locale].replace(/ \(.*\)$/, "")})`;
+    }),
+    locale,
+  );
 
   const items: Record<Locale, { question: string; answer: string }[]> = {
     ca: [
@@ -352,6 +484,10 @@ function faqBlock(locale: Locale): Block {
       { question: `Quan és Pasqua Florida el ${YEAR}?`, answer: `El Dilluns de Pasqua Florida és ${easterMonday}, festiu a tot Catalunya excepte a l'Aran, on el substitueix la Festa d'Aran.` },
       { question: "El Dijous Sant és festiu a Catalunya?", answer: `No. El ${YEAR} cau el 25 de març i és festiu a la majoria de comunitats, però no a Catalunya, on el festiu és el Divendres Sant.` },
       { question: "El 30 d'octubre és festiu a Catalunya?", answer: `No a tot Catalunya: el divendres 30 d'octubre de 2026 no és al calendari oficial. Sí que és festa local en alguns municipis, com Salou, Ulldecona, Vilada o Riudellots de la Selva (vegeu les [festes locals](${path.local})), i el Consell d'Educació Municipal de Barcelona proposa que les escoles de la ciutat no facin classe aquell dia; cada centre decideix. L'1 de novembre de 2026 cau en diumenge i el dilluns 2 no és festiu.` },
+      { question: `Quins ponts hi ha el ${YEAR} a Catalunya?`, answer: `Sense gastar vacances: ${free}. Amb un sol dia de vacances, demanant ${oneDay}. Tot plegat, per a una setmana de dilluns a divendres.` },
+      { question: `Quants festius té Barcelona el ${YEAR}?`, answer: `Catorze: els ${count} de tot Catalunya i les dues festes locals de la ciutat, ${bcnDays}. Dia a dia, a [festius de Barcelona](/ca/festius/barcelona/).` },
+      { question: `Quan es publiquen les festes locals del ${YEAR}?`, answer: `Encara no s'han publicat: la Generalitat les fixa en una ordre del DOGC a proposta dels ajuntaments, i les del 2026 van sortir el 17 de desembre de 2025. Mentrestant, les del 2026 de cada municipi són a [festius locals per municipi](/ca/festius/).` },
+      { question: "El 7 de desembre de 2026 és festiu a Catalunya?", answer: `No. És un dia feiner a Catalunya; només és festa local en alguns municipis, que tens tots a [és festiu el 7 de desembre?](${dec7}).` },
       { question: "És festiu avui?", answer: `Ho diem dia a dia a [és festiu avui a Catalunya?](${path.today}), amb el pròxim festiu.` },
     ],
     es: [
@@ -360,6 +496,10 @@ function faqBlock(locale: Locale): Block {
       { question: `¿Cuándo es el Lunes de Pascua en ${YEAR}?`, answer: `${cap(easterMonday)}. Es festivo en toda Cataluña excepto en Arán, donde lo sustituye la Festa d'Aran.` },
       { question: "¿El Jueves Santo es festivo en Cataluña?", answer: `No. En ${YEAR} cae el 25 de marzo y es festivo en la mayoría de comunidades, pero no en Cataluña, donde el festivo es el Viernes Santo.` },
       { question: "¿El 30 de octubre es festivo en Cataluña?", answer: `No en toda Cataluña: el viernes 30 de octubre de 2026 no está en el calendario oficial. Sí es fiesta local en algunos municipios, como Salou, Ulldecona, Vilada o Riudellots de la Selva (consulta los [festivos locales](${path.local})), y el Consell d'Educació Municipal de Barcelona propone que las escuelas de la ciudad no tengan clase ese día; cada centro decide. El 1 de noviembre de 2026 cae en domingo y el lunes 2 no es festivo.` },
+      { question: `¿Qué puentes hay en ${YEAR} en Cataluña?`, answer: `Sin gastar vacaciones: ${free}. Con un solo día de vacaciones, pidiendo ${oneDay}. Todo ello, para una semana de lunes a viernes.` },
+      { question: `¿Cuántos festivos tiene Barcelona en ${YEAR}?`, answer: `Catorce: los ${count} de toda Cataluña y las dos fiestas locales de la ciudad, ${bcnDays}. Día a día, en [festivos de Barcelona](/es/festivos/barcelona/).` },
+      { question: `¿Cuándo se publican los festivos locales de ${YEAR}?`, answer: `Todavía no se han publicado: la Generalitat los fija en una orden del DOGC a propuesta de los ayuntamientos, y los de 2026 salieron el 17 de diciembre de 2025. Mientras tanto, los de 2026 de cada municipio están en [festivos locales por municipio](/es/festivos/).` },
+      { question: "¿El 7 de diciembre de 2026 es festivo en Cataluña?", answer: `No. Es laborable en Cataluña; solo es fiesta local en algunos municipios, que tienes todos en [¿es festivo el 7 de diciembre?](${dec7}).` },
       { question: "¿Es festivo hoy?", answer: `Lo decimos cada día en [¿es festivo hoy en Cataluña?](${path.today}), con el próximo festivo.` },
     ],
     en: [
@@ -367,7 +507,10 @@ function faqBlock(locale: Locale): Block {
       { question: `When is Good Friday in ${YEAR}?`, answer: `${cap(goodFriday)}. It is a public holiday across Catalonia.` },
       { question: `When is Easter Monday in ${YEAR}?`, answer: `${cap(easterMonday)}. It is a public holiday across Catalonia except in Aran, where the Festa d'Aran replaces it.` },
       { question: "Is Maundy Thursday a holiday in Catalonia?", answer: `No. In ${YEAR} it falls on 25 March and is a holiday in most of Spain, but not in Catalonia, where the holiday is Good Friday.` },
-      { question: `How many public holidays does Barcelona have in ${YEAR}?`, answer: `Fourteen: the ${count} Catalonia-wide days plus the city's two local holidays, Whit Monday (17 May) and La Mercè (24 September).` },
+      { question: `How many public holidays does Barcelona have in ${YEAR}?`, answer: `Fourteen: the ${count} Catalonia-wide days plus the city's two local holidays, ${bcnDays}.` },
+      { question: `What long weekends are there in ${YEAR}?`, answer: `Without using any leave: ${free}. With a single day of leave, take ${oneDay}. All of this assumes a Monday-to-Friday week.` },
+      { question: `When are the ${YEAR} local holidays published?`, answer: `Not yet: the Catalan government sets them in a DOGC order on the town councils' proposals, and the 2026 ones appeared on 17 December 2025. Until then, each town's 2026 dates are in [local holidays in Catalonia](${path.local}).` },
+      { question: "Is 7 December 2026 a public holiday in Catalonia?", answer: `No. It is a working day in Catalonia, except in the towns that keep it as a local holiday, all listed in [is 7 December a holiday?](${dec7}).` },
       { question: "Is today a public holiday?", answer: `We answer that every day at [is today a public holiday in Catalonia?](${path.today}), with the next one.` },
     ],
   };
