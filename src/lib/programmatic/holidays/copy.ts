@@ -44,26 +44,28 @@ function localList(dates: string[], locale: DateLocale): string {
 export function municipalityDescription(m: SnapshotMunicipality, locale: MuniLocale): string {
   const name = displayName(m, locale);
   const own = m.local.length > 0;
+  // Nuclei only: with two nuclei their days fit ("Bigues, 20 de gener i 29 de
+  // juny; Riells del Fai, …"); with more, or if that is too long, "by nucleus".
+  const byNucleus = (lang: MuniLocale) =>
+    m.nuclei.length <= 2 ? m.nuclei.map((n) => `${lang === "es" ? esName(n.name) : n.name}, ${localList(n.dates, lang)}`).join("; ") : null;
   if (locale === "ca") {
-    const days = own ? `${localList(m.local, "ca")}` : `segons el nucli`;
-    return fit(
-      [
-        `Festius locals ${caDe(m.name)} el ${YEAR}: ${days}. Tots els festius de l'any, si avui és festiu, botigues obertes i el ${NEXT}.`,
-        `Festius locals ${caDe(m.name)} el ${YEAR}: ${days}. Tots els festius de l'any i si avui és festiu.`,
-        `Festius locals ${caDe(m.name)} el ${YEAR}: ${days}.`,
-      ],
-      DESCRIPTION_MAX,
-    );
+    const candidates = (days: string) => [
+      `Festius locals ${caDe(m.name)} el ${YEAR}: ${days}. Tots els festius de l'any, si avui és festiu, botigues obertes i el ${NEXT}.`,
+      `Festius locals ${caDe(m.name)} el ${YEAR}: ${days}. Tots els festius de l'any i si avui és festiu.`,
+      `Festius locals ${caDe(m.name)} el ${YEAR}: ${days}.`,
+    ];
+    const nuclei = own ? null : byNucleus("ca");
+    const days = own ? localList(m.local, "ca") : nuclei && candidates(nuclei).at(-1)!.length <= DESCRIPTION_MAX ? nuclei : "segons el nucli";
+    return fit(candidates(days), DESCRIPTION_MAX);
   }
-  const days = own ? localList(m.local, "es") : "según el núcleo";
-  return fit(
-    [
-      `Festivos locales de ${name} en ${YEAR}: ${days}. Todos los festivos del año, si hoy es festivo, tiendas abiertas y ${NEXT}.`,
-      `Festivos locales de ${name} en ${YEAR}: ${days}. Todos los festivos del año y si hoy es festivo.`,
-      `Festivos locales de ${name} en ${YEAR}: ${days}.`,
-    ],
-    DESCRIPTION_MAX,
-  );
+  const candidates = (days: string) => [
+    `Festivos locales de ${name} en ${YEAR}: ${days}. Todos los festivos del año, si hoy es festivo, tiendas abiertas y ${NEXT}.`,
+    `Festivos locales de ${name} en ${YEAR}: ${days}. Todos los festivos del año y si hoy es festivo.`,
+    `Festivos locales de ${name} en ${YEAR}: ${days}.`,
+  ];
+  const nuclei = own ? null : byNucleus("es");
+  const days = own ? localList(m.local, "es") : nuclei && candidates(nuclei).at(-1)!.length <= DESCRIPTION_MAX ? nuclei : "según el núcleo";
+  return fit(candidates(days), DESCRIPTION_MAX);
 }
 
 /* -------------------------------------------------------------------------- */
@@ -236,6 +238,25 @@ export function municipalityCopy(m: SnapshotMunicipality, locale: MuniLocale, ne
   };
 }
 
+/**
+ * Lead-in to the date page that lists everyone with the same local day:
+ * "El dimecres 11 de novembre també és festa local a 49 llocs més de Catalunya:".
+ * When only some nuclei have the day, they are named first: "El dilluns 30 de
+ * novembre és festa local a Vilallobent i a 37 llocs més de Catalunya:".
+ */
+export function sharedDayLead(date: string, others: number, locale: MuniLocale, nuclei: string[] = []): string {
+  const day = weekdayDayMonth(date, locale);
+  const where = joinList(nuclei.map((n) => (locale === "es" ? esName(n) : n)), locale);
+  if (locale === "ca") {
+    const more = `${others} ${others === 1 ? "lloc" : "llocs"} més de Catalunya`;
+    if (where) return others > 0 ? `El ${day} és festa local a ${where} i a ${more}:` : `El ${day} és festa local a ${where} i enlloc més de Catalunya:`;
+    return others > 0 ? `El ${day} també és festa local a ${more}:` : `El ${day} no és festa local enlloc més de Catalunya:`;
+  }
+  const more = others === 1 ? "1 lugar más de Cataluña" : `otros ${others} lugares de Cataluña`;
+  if (where) return others > 0 ? `El ${day} es fiesta local en ${where} y en ${more}:` : `El ${day} es fiesta local en ${where} y en ningún otro lugar de Cataluña:`;
+  return others > 0 ? `El ${day} también es fiesta local en ${more}:` : `El ${day} no es fiesta local en ningún otro lugar de Cataluña:`;
+}
+
 /* -------------------------------------------------------------------------- */
 /* Hub                                                                        */
 /* -------------------------------------------------------------------------- */
@@ -255,6 +276,7 @@ export function hubCopy(locale: MuniLocale) {
         ? `${joinList(excluded, "ca")} ${excluded.length === 1 ? "no té" : "no tenen"} festius locals al calendari oficial del ${YEAR}: l'ordre hi diu «proposta no formulada» (l'ajuntament no va enviar la proposta a temps) i la modificació de gener no ho va canviar.`
         : null,
       datesTitle: "És festiu…?",
+      jump: "Per comarques:",
       population: `Municipis per població a 1 de gener de ${SNAPSHOT.sources.population.year} (Idescat).`,
       next: `Els festius locals del ${NEXT} encara no s'han publicat; l'ordre del ${YEAR} va sortir al DOGC el 17 de desembre de 2025.`,
       guidesTitle: "Més sobre festius",
@@ -272,6 +294,7 @@ export function hubCopy(locale: MuniLocale) {
       ? `${joinList(excluded, "es")} no ${excluded.length === 1 ? "tiene" : "tienen"} festivos locales en el calendario oficial de ${YEAR}: la orden dice «proposta no formulada» (el ayuntamiento no envió la propuesta a tiempo) y la modificación de enero no lo cambió.`
       : null,
     datesTitle: "¿Es festivo el…?",
+    jump: "Por comarcas:",
     population: `Municipios por población a 1 de enero de ${SNAPSHOT.sources.population.year} (Idescat).`,
     next: `Los festivos locales de ${NEXT} todavía no se han publicado; la orden de ${YEAR} salió en el DOGC el 17 de diciembre de 2025.`,
     guidesTitle: "Más sobre festivos",

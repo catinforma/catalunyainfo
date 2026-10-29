@@ -1,9 +1,9 @@
 import { SNAPSHOT, regionalDays, aranSwap, municipalities } from "./data";
-import { dayMonth, weekdayDayMonth, type DateLocale } from "./format";
-import type { GuideKey } from "./links";
+import { caDayArticle, capitalize, dayMonth, weekdayDayMonth, weekdayName, type DateLocale } from "./format";
+import { GUIDES, type GuideKey } from "./links";
 import { esName, joinList } from "./names";
 import type { DatePage } from "./paths";
-import type { DatePlace } from "./types";
+import type { DatePlace, SnapshotMunicipality } from "./types";
 
 /**
  * Content of the "És festiu el …?" pages. Every statement is either computed
@@ -19,6 +19,13 @@ import type { DatePlace } from "./types";
  *  - Ordre EMT/77/2025, Resolució EMT/4342/2025 and Ordre EMT/89/2026: the
  *    shop-opening Sundays and holidays of 2026 and 2027;
  *  - Ordre EDF/66/2026: Christmas school holidays, 22 Dec 2026 to 7 Jan 2027.
+ *
+ * Tranche 2 (29 Oct 2026) adds 1, 11 and 30 November and 24 and 31 December.
+ * None of them is in Ordre EMT/66/2025: 1 November 2026 falls on a Sunday and
+ * the order neither lists it nor moves it to Monday 2 November. Which places
+ * have a local holiday on those days comes from Ordre EMT/208/2025 as amended
+ * by Ordre EMT/3/2026 (`localByDate`); which councils may open shops, from
+ * Resolució EMT/4342/2025 (`shopsByDate`).
  */
 
 /** BOE-A-2025-21667, row "7 Lunes siguiente al Día de la Constitución Española" (read 27 Oct 2026). */
@@ -26,6 +33,18 @@ const MONDAY_7_REGIONS: Record<DateLocale, string[]> = {
   ca: ["Andalusia", "l'Aragó", "Astúries", "Cantàbria", "Castella i Lleó", "Extremadura", "la Comunitat de Madrid", "la Regió de Múrcia", "la Rioja", "Melilla"],
   es: ["Andalucía", "Aragón", "Asturias", "Cantabria", "Castilla y León", "Extremadura", "la Comunidad de Madrid", "la Región de Murcia", "La Rioja", "Melilla"],
   en: ["Andalusia", "Aragon", "Asturias", "Cantabria", "Castile and León", "Extremadura", "the Community of Madrid", "the Region of Murcia", "La Rioja", "Melilla"],
+};
+
+/**
+ * BOE-A-2025-21667, row "2 Día siguiente a Todos los Santos" (read 29 Oct
+ * 2026): marked in the columns of Andalucía, Aragón, Asturias, Canarias,
+ * Castilla-La Mancha, Castilla y León, Extremadura, Com. Madrid and C. Foral
+ * Navarra; the Cataluña column is empty.
+ */
+const MONDAY_NOV2_REGIONS: Record<DateLocale, string[]> = {
+  ca: ["Andalusia", "l'Aragó", "Astúries", "Canàries", "Castella-la Manxa", "Castella i Lleó", "Extremadura", "la Comunitat de Madrid", "Navarra"],
+  es: ["Andalucía", "Aragón", "Asturias", "Canarias", "Castilla-La Mancha", "Castilla y León", "Extremadura", "la Comunidad de Madrid", "Navarra"],
+  en: ["Andalusia", "Aragon", "Asturias", "the Canary Islands", "Castile-La Mancha", "Castile and León", "Extremadura", "the Community of Madrid", "Navarre"],
 };
 
 export interface DateSection {
@@ -38,6 +57,8 @@ export interface DateContent {
   holiday: boolean;
   answer: string;
   answerNote: string[];
+  /** One sentence with one link, after the answer (11 November: the general strike). */
+  notice?: { before: string; label: string; href: string; after: string };
   description: string;
   /** Places with a local holiday that day (or on the eve, when the day itself is Catalonia-wide). */
   local: { text: string; places: DatePlace[] };
@@ -61,7 +82,7 @@ function placeNames(places: DatePlace[], locale: DateLocale): string {
   return joinList(places.map((p) => (p.parent ? `${shown(p.name)} (${shown(p.parent)})` : shown(p.name))), locale);
 }
 
-/** Listed municipalities (the 100 with a page) whose shop days for 2026 leave this date out. */
+/** Listed municipalities (the ones with a page) whose shop days for 2026 leave this date out. */
 function shopsClosedAmongListed(iso: string): string[] {
   return municipalities()
     .filter((m) => !m.shops.includes(iso))
@@ -74,9 +95,60 @@ function regionalName(iso: string, locale: DateLocale): string | null {
   return regionalDays(year).find((d) => d.date === iso)?.name[locale] ?? null;
 }
 
+const NOV1 = "2026-11-01";
+const NOV2 = "2026-11-02";
+const NOV11 = "2026-11-11";
+const NOV30 = "2026-11-30";
 const DEC7 = "2026-12-07";
 const DEC24 = "2026-12-24";
 const DEC31 = "2026-12-31";
+
+/**
+ * Local-holiday dates that have a date page: the page itself, or, for 2
+ * November (the Monday after Tots Sants), the 1 November page that lists it.
+ */
+export const LOCAL_DATE_PAGES: Record<string, DatePage> = {
+  [NOV2]: NOV1,
+  [NOV11]: NOV11,
+  [NOV30]: NOV30,
+  [DEC7]: DEC7,
+  [DEC24]: DEC24,
+  [DEC31]: DEC31,
+};
+
+/** What the day is called; the date pages for working days name it in the answer. */
+const DAY_NAME: Record<string, Record<DateLocale, string>> = {
+  [NOV1]: { ca: "Tots Sants", es: "Todos los Santos", en: "All Saints' Day" },
+  [NOV11]: { ca: "Sant Martí", es: "San Martín", en: "Saint Martin's Day" },
+  [NOV30]: { ca: "Sant Andreu", es: "San Andrés", en: "Saint Andrew's Day" },
+  [DEC24]: { ca: "la vigília de Nadal", es: "Nochebuena", en: "Christmas Eve" },
+  [DEC31]: { ca: "l'últim dia de l'any", es: "Nochevieja", en: "New Year's Eve" },
+};
+
+/**
+ * The date pages that list this municipality's local days (its own or its
+ * nuclei's), with how many other places in Catalonia share each day.
+ */
+export function municipalityDatePages(
+  m: Pick<SnapshotMunicipality, "slug" | "name" | "local" | "nuclei">,
+): { date: string; page: DatePage; others: number; nuclei: string[] }[] {
+  const days = new Set([...m.local, ...m.nuclei.flatMap((n) => n.dates)]);
+  return Object.entries(LOCAL_DATE_PAGES)
+    .filter(([date]) => days.has(date))
+    .sort(([a], [b]) => a.localeCompare(b))
+    .map(([date, page]) => {
+      const places = SNAPSHOT.localByDate[date] ?? [];
+      const own = places.filter((p) => p.slug === m.slug || p.parent === m.name).length;
+      // When the day is not the town's own, the nuclei that have it.
+      const nuclei = m.local.includes(date) ? [] : m.nuclei.filter((n) => n.dates.includes(date)).map((n) => n.name);
+      return { date, page, others: places.length - own, nuclei };
+    });
+}
+
+/** Councils whose own shop-opening list includes a date outside the default list. */
+function shopsOpenOn(iso: string): DatePlace[] {
+  return SNAPSHOT.shopsByDate[iso] ?? [];
+}
 
 export function dateContent(iso: DatePage, locale: DateLocale): DateContent {
   const name = regionalName(iso, locale);
@@ -101,6 +173,238 @@ export function dateContent(iso: DatePage, locale: DateLocale): DateContent {
     "Para saber cómo abre y cierra el metro de Barcelona los festivos y las vísperas, mira la guía de horarios del metro.",
     "For how the Barcelona metro opens and closes on public holidays and the nights before them, see the metro hours guide.",
   );
+
+  const schoolWorkingDay = (weekday: string) =>
+    L(
+      `No és festiu escolar a tot Catalunya, però sí als municipis on és festa local. A més, cada escola tria quatre dies de lliure disposició i en pot fer servir un aquest ${weekday}: mira el calendari del teu centre (Ordre EDF/66/2026).`,
+      `No es festivo escolar en toda Cataluña, pero sí en los municipios donde es fiesta local. Además, cada escuela elige cuatro días de libre disposición y puede usar uno este ${weekday}: mira el calendario de tu centro (Orden EDF/66/2026).`,
+      `It is not a school holiday across Catalonia, but it is wherever it is a local holiday. Each school also picks four days of its own and may use one on this ${weekday}: check your school's calendar (Order EDF/66/2026).`,
+    );
+  /** Working day: shops keep their hours; where it is a local holiday, only the councils that chose it may open. */
+  const shopsWorkingDay = (date: string, open: DatePlace[]) => {
+    const dm = dayMonth(date, locale);
+    const where = names(open.map((p) => p.name));
+    return L(
+      `És un dia feiner: les botigues obren amb el seu horari habitual. Als municipis on és festa local, les botigues amb horari general només hi poden obrir si ${caDayArticle(date)}${dm} és un dels seus deu dies d'obertura comercial${open.length ? `, com passa a ${where}` : `, i no ho és en cap d'ells`} (Ordre EMT/77/2025 i Resolució EMT/4342/2025).`,
+      `Es laborable: las tiendas abren con su horario habitual. En los municipios donde es fiesta local, las tiendas con horario general solo pueden abrir si el ${dm} es uno de sus diez días de apertura comercial${open.length ? `, como ocurre en ${where}` : `, y no lo es en ninguno de ellos`} (Orden EMT/77/2025 y Resolución EMT/4342/2025).`,
+      `It is a working day, so shops keep their usual hours. Where it is a local holiday, shops on the general timetable may open only if ${dm} is one of that town's ten opening days${open.length ? `, as it is in ${where}` : `, and it is not in any of them`} (Order EMT/77/2025 and Resolution EMT/4342/2025).`,
+    );
+  };
+
+  if (iso === NOV1) {
+    const nov2 = SNAPSHOT.localByDate[NOV2] ?? [];
+    const n2 = placesPhrase(nov2, locale);
+    const open = shopsOpenOn(NOV1);
+    const where = names(open.map((p) => p.name));
+    const nov2Shops = shopsOpenOn(NOV2);
+    return {
+      holiday: false,
+      // Ordre EMT/66/2025, article 1.a, lists twelve days; neither 1 nor 2 November is one of them.
+      answer: L(
+        `No. El ${long}, Tots Sants, no és festiu oficial a Catalunya: l'Ordre EMT/66/2025 no l'inclou entre els dotze festius de l'any, i tampoc no hi inclou el dilluns 2 de novembre.`,
+        `No. El ${long}, Todos los Santos, no es festivo oficial en Cataluña: la Orden EMT/66/2025 no lo incluye entre los doce festivos del año, y tampoco incluye el lunes 2 de noviembre.`,
+        `No. ${long}, All Saints' Day, is not an official holiday in Catalonia: Order EMT/66/2025 leaves it out of the year's twelve holidays, and does not include Monday 2 November either.`,
+      ),
+      answerNote: [
+        nov2.length
+          ? L(
+              `El dilluns 2 de novembre és feiner a Catalunya, tret dels ${n2} on és festa local: ${placeNames(nov2, "ca")}.`,
+              `El lunes 2 de noviembre es laborable en Cataluña, salvo en los ${n2} donde es fiesta local: ${placeNames(nov2, "es")}.`,
+              `Monday 2 November is a working day in Catalonia, except in the ${n2} where it is a local holiday: ${placeNames(nov2, "en")}.`,
+            )
+          : L("El dilluns 2 de novembre és feiner a tot Catalunya.", "El lunes 2 de noviembre es laborable en toda Cataluña.", "Monday 2 November is a working day across Catalonia."),
+        L(
+          `En altres comunitats sí que és festiu el dilluns 2: el BOE el marca com a dia següent a Tots Sants a ${joinList(MONDAY_NOV2_REGIONS.ca, "ca")}, però no a Catalunya.`,
+          `En otras comunidades sí es festivo el lunes 2: el BOE lo marca como día siguiente a Todos los Santos en ${joinList(MONDAY_NOV2_REGIONS.es, "es")}, pero no en Cataluña.`,
+          `Elsewhere in Spain Monday 2 November is a holiday: the BOE lists it as the day after All Saints in ${joinList(MONDAY_NOV2_REGIONS.en, "en")}, but not in Catalonia.`,
+        ),
+      ],
+      description: L(
+        "No: l'1 de novembre de 2026 cau en diumenge i no és festiu oficial a Catalunya, ni ho és el dilluns 2. Botigues, escoles i festes locals.",
+        "No: el 1 de noviembre de 2026 cae en domingo y no es festivo oficial en Cataluña, ni lo es el lunes 2. Tiendas, escuelas y fiestas locales.",
+        "No: 1 November 2026 falls on a Sunday and is not an official holiday in Catalonia, nor is Monday the 2nd. Shops, schools and local holidays.",
+      ),
+      local: {
+        text: (local.length
+          ? L(
+              `L'1 de novembre és festa local a ${placesPhrase(local, "ca")}: ${placeNames(local, "ca")}.`,
+              `El 1 de noviembre es fiesta local en ${placesPhrase(local, "es")}: ${placeNames(local, "es")}.`,
+              `1 November is a local holiday in ${placesPhrase(local, "en")}: ${placeNames(local, "en")}.`,
+            )
+          : L(
+              "L'1 de novembre no és festa local a cap municipi (Ordre EMT/208/2025 i Ordre EMT/3/2026).",
+              "El 1 de noviembre no es fiesta local en ningún municipio (Orden EMT/208/2025 y Orden EMT/3/2026).",
+              "1 November is not a local holiday anywhere (Order EMT/208/2025 and Order EMT/3/2026).",
+            )) +
+          (nov2.length
+            ? L(
+                ` L'endemà, dilluns 2 de novembre, ho és a ${n2}:`,
+                ` Al día siguiente, lunes 2 de noviembre, lo es en ${n2}:`,
+                ` The next day, Monday 2 November, is one in ${n2}:`,
+              )
+            : ""),
+        places: nov2,
+      },
+      sections: [
+        {
+          title: L("Botigues", "Tiendas", "Shops"),
+          paragraphs: [
+            L(
+              `És diumenge i l'1 de novembre no és cap dels vuit dies d'obertura del calendari general (Ordre EMT/77/2025): les botigues amb horari general no poden obrir${open.length ? `, tret de les de ${where}, ${open.length === 1 ? "que l'ha triat" : "municipis que l'han triat"} com un dels seus deu dies (Resolució EMT/4342/2025)` : ""}. Poden obrir els establiments que la llei deixa fora d'aquest horari, com fleques, pastisseries, botigues de conveniència, floristeries o farmàcies (Llei 18/2017, article 37).`,
+              `Es domingo y el 1 de noviembre no es ninguno de los ocho días de apertura del calendario general (Orden EMT/77/2025): las tiendas con horario general no pueden abrir${open.length ? `, salvo en ${where}, que ${open.length === 1 ? "lo ha" : "lo han"} elegido como uno de sus diez días (Resolución EMT/4342/2025)` : ""}. Pueden abrir los establecimientos que la ley deja fuera de ese horario, como panaderías, pastelerías, tiendas de conveniencia, floristerías o farmacias (Ley 18/2017, artículo 37).`,
+              `It is a Sunday and 1 November is not one of the eight opening days of the general calendar (Order EMT/77/2025), so shops on the general timetable may not open${open.length ? `, except in ${where}, which chose it as one of ${open.length === 1 ? "its" : "their"} ten days (Resolution EMT/4342/2025)` : ""}. Businesses the law leaves outside that timetable may open, such as bakeries, pastry shops, convenience stores, florists and pharmacies (Llei 18/2017, article 37).`,
+            ),
+            nov2.length
+              ? L(
+                  `El dilluns 2 de novembre és feiner i les botigues obren amb el seu horari habitual. ${nov2Shops.length ? "" : `A ${placeNames(nov2, "ca")}, on és festa local, no és dia d'obertura comercial.`}`.trim(),
+                  `El lunes 2 de noviembre es laborable y las tiendas abren con su horario habitual. ${nov2Shops.length ? "" : `En ${placeNames(nov2, "es")}, donde es fiesta local, no es día de apertura comercial.`}`.trim(),
+                  `Monday 2 November is a working day and shops keep their usual hours. ${nov2Shops.length ? "" : `In ${placeNames(nov2, "en")}, where it is a local holiday, it is not a shop opening day.`}`.trim(),
+                )
+              : L(
+                  "El dilluns 2 de novembre és feiner i les botigues obren amb el seu horari habitual.",
+                  "El lunes 2 de noviembre es laborable y las tiendas abren con su horario habitual.",
+                  "Monday 2 November is a working day and shops keep their usual hours.",
+                ),
+          ],
+        },
+        {
+          title: L("Escoles", "Escuelas", "Schools"),
+          paragraphs: [
+            L(
+              "L'1 de novembre és diumenge. El dilluns 2 no és festiu escolar a tot Catalunya, però sí als municipis on és festa local; a més, cada escola tria quatre dies de lliure disposició i en pot fer servir un aquell dilluns: mira el calendari del teu centre (Ordre EDF/66/2026).",
+              "El 1 de noviembre es domingo. El lunes 2 no es festivo escolar en toda Cataluña, pero sí en los municipios donde es fiesta local; además, cada escuela elige cuatro días de libre disposición y puede usar uno ese lunes: mira el calendario de tu centro (Orden EDF/66/2026).",
+              "1 November is a Sunday. Monday the 2nd is not a school holiday across Catalonia, but it is wherever it is a local holiday; each school also picks four days of its own and may use one on that Monday: check your school's calendar (Order EDF/66/2026).",
+            ),
+          ],
+        },
+        {
+          title: L("Transport", "Transporte", "Getting around"),
+          paragraphs: [
+            L(
+              "Per saber l'horari del metro de Barcelona la nit del dissabte 31 d'octubre i el diumenge, mira la guia d'horaris del metro.",
+              "Para saber el horario del metro de Barcelona la noche del sábado 31 de octubre y el domingo, mira la guía de horarios del metro.",
+              "For the Barcelona metro's hours on the night of Saturday 31 October and on Sunday, see the metro hours guide.",
+            ),
+          ],
+        },
+      ],
+      guides: ["castanyada", "shops", "holidayToday", "workCalendar", "school", "metroHours"],
+    };
+  }
+
+  if (iso === NOV11 || iso === NOV30 || iso === DEC24 || iso === DEC31) {
+    const n = placesPhrase(local, locale);
+    const day = DAY_NAME[iso]![locale];
+    const wd = weekdayName(iso, locale);
+    const christmas = iso === DEC24 || iso === DEC31;
+    // Few places: named in the answer. Christmas week: "only", as the
+    // descriptions say; November: "it is a local holiday in…".
+    const few = local.length <= 4;
+    const only = few || christmas;
+    const listed = (lang: DateLocale) => (few ? `: ${placeNames(local, lang)}` : "");
+    const answerLocal = L(
+      only ? `Només és festa local a ${n}${listed("ca")}.` : `Sí que és festa local a ${n}.`,
+      only ? `Solo es fiesta local en ${n}${listed("es")}.` : `Sí es fiesta local en ${n}.`,
+      only ? `It is a local holiday only in ${n}${listed("en")}.` : `It is a local holiday in ${n}.`,
+    );
+    const answerNote: string[] =
+      iso === DEC24
+        ? [
+            L(
+              "L'endemà, divendres 25, Nadal, és festiu a tot Catalunya, i el dissabte 26, Sant Esteve, també ho és, excepte a l'Aran (Ordre EMT/66/2025).",
+              "Al día siguiente, viernes 25, Navidad, es festivo en toda Cataluña, y el sábado 26, San Esteban, también lo es, excepto en Arán (Orden EMT/66/2025).",
+              "The next day, Friday 25 December, Christmas Day, is a holiday across Catalonia, and Saturday 26 December, Saint Stephen's Day, is too, except in Aran (Order EMT/66/2025).",
+            ),
+          ]
+        : iso === DEC31
+          ? [
+              L(
+                "L'endemà, divendres 1 de gener de 2027, Cap d'Any, és festiu a tot Catalunya (Ordre EMT/52/2026).",
+                "Al día siguiente, viernes 1 de enero de 2027, Año Nuevo, es festivo en toda Cataluña (Orden EMT/52/2026).",
+                "The next day, Friday 1 January 2027, New Year's Day, is a holiday across Catalonia (Order EMT/52/2026).",
+              ),
+            ]
+          : [];
+    const descriptions: Record<string, Record<DateLocale, string>> = {
+      [NOV11]: {
+        ca: `No: l'11 de novembre de 2026 és feiner a Catalunya, però és festa local a ${placesPhrase(local, "ca")}. La llista, botigues i escoles.`,
+        es: `No: el 11 de noviembre de 2026 es laborable en Cataluña, pero es fiesta local en ${placesPhrase(local, "es")}. La lista, tiendas y escuelas.`,
+        en: `No: 11 November 2026 is a working day in Catalonia, but a local holiday in ${placesPhrase(local, "en")}. The list, shops and schools.`,
+      },
+      [NOV30]: {
+        ca: `No: el 30 de novembre de 2026, Sant Andreu, és feiner a Catalunya, però és festa local a ${placesPhrase(local, "ca")}. La llista i botigues.`,
+        es: `No: el 30 de noviembre de 2026, San Andrés, es laborable en Cataluña, pero es fiesta local en ${placesPhrase(local, "es")}. La lista y tiendas.`,
+        en: `No: 30 November 2026, Saint Andrew's Day, is a working day in Catalonia, but a local holiday in ${placesPhrase(local, "en")}. The list and shops.`,
+      },
+      [DEC24]: {
+        ca: `No: el 24 de desembre de 2026 és feiner a Catalunya; només és festa local a ${placesPhrase(local, "ca")}. Botigues, escoles i el metro.`,
+        es: `No: el 24 de diciembre de 2026 es laborable en Cataluña; solo es fiesta local en ${placesPhrase(local, "es")}. Tiendas, escuelas y el metro.`,
+        en: `No: 24 December 2026 is a working day in Catalonia; it is a local holiday in only ${placesPhrase(local, "en")}. Shops, schools, the metro.`,
+      },
+      [DEC31]: {
+        ca: `No: el 31 de desembre de 2026 és feiner a Catalunya; només és festa local a ${placesPhrase(local, "ca")}. Botigues, escoles i Cap d'Any.`,
+        es: `No: el 31 de diciembre de 2026 es laborable en Cataluña; solo es fiesta local en ${placesPhrase(local, "es")}. Tiendas, escuelas y Nochevieja.`,
+        en: `No: 31 December 2026 is a working day in Catalonia; it is a local holiday in only ${placesPhrase(local, "en")}. Shops, schools, New Year's Eve.`,
+      },
+    };
+    const sections: DateSection[] = [
+      { title: L("Botigues", "Tiendas", "Shops"), paragraphs: [shopsWorkingDay(iso, shopsOpenOn(iso))] },
+      { title: L("Escoles", "Escuelas", "Schools"), paragraphs: [christmas ? schoolChristmas : schoolWorkingDay(wd)] },
+    ];
+    if (christmas) {
+      sections.push({
+        title: L("Transport", "Transporte", "Getting around"),
+        paragraphs: [
+          iso === DEC24
+            ? L(
+                "Per saber a quina hora tanca el metro de Barcelona la Nit de Nadal, mira la guia d'horaris del metro.",
+                "Para saber a qué hora cierra el metro de Barcelona en Nochebuena, mira la guía de horarios del metro.",
+                "For when the Barcelona metro closes on Christmas Eve, see the metro hours guide.",
+              )
+            : L(
+                "Per saber com funciona el metro de Barcelona la nit de Cap d'Any, mira la guia d'horaris del metro; per a la nit a Barcelona, la guia de Cap d'Any.",
+                "Para saber cómo funciona el metro de Barcelona en Nochevieja, mira la guía de horarios del metro; para la noche en Barcelona, la guía de Nochevieja.",
+                "For how the Barcelona metro runs on New Year's Eve, see the metro hours guide; for the night itself, the New Year's Eve guide.",
+              ),
+        ],
+      });
+    }
+    const guides: GuideKey[] =
+      iso === DEC24
+        ? ["christmasTraditions", "christmasBarcelona", "shops", "metroHours", "school", "workCalendar"]
+        : iso === DEC31
+          ? ["newYear", "shops", "metroHours", "school", "workCalendar", "holidayToday"]
+          : ["holidayToday", "workCalendar", "localHolidays", "shops", "school"];
+    return {
+      holiday: false,
+      answer: L(
+        `No. El ${long}, ${day}, és un dia feiner a Catalunya: no és cap dels dotze festius de l'Ordre EMT/66/2025. ${answerLocal}`,
+        `No. El ${long}, ${day}, es laborable en Cataluña: no es ninguno de los doce festivos de la Orden EMT/66/2025. ${answerLocal}`,
+        `No. ${long}, ${day}, is a working day in Catalonia: it is not one of the twelve holidays in Order EMT/66/2025. ${answerLocal}`,
+      ),
+      answerNote,
+      notice:
+        iso === NOV11
+          ? {
+              before: L("Aquest dia també hi ha convocada una vaga general: què funciona i què no, a la ", "Ese día también hay convocada una huelga general: qué funciona y qué no, en la ", "A general strike has also been called for that day: what runs and what does not is on our "),
+              label: L("pàgina de vagues", "página de huelgas", "strikes page"),
+              href: GUIDES.strikes[locale],
+              after: ".",
+            }
+          : undefined,
+      description: descriptions[iso]![locale],
+      local: {
+        text: L(
+          `El ${weekdayDayMonth(iso, "ca")} és festa local a ${n} (Ordre EMT/208/2025 i Ordre EMT/3/2026):`,
+          `El ${weekdayDayMonth(iso, "es")} es fiesta local en ${n} (Orden EMT/208/2025 y Orden EMT/3/2026):`,
+          `${capitalize(weekdayDayMonth(iso, "en"))} is a local holiday in ${n} (Order EMT/208/2025 and Order EMT/3/2026):`,
+        ),
+        places: local,
+      },
+      sections,
+      guides,
+    };
+  }
 
   if (iso === DEC7) {
     const n = placesPhrase(local, locale);

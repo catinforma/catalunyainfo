@@ -17,6 +17,7 @@ import {
 } from "@/lib/content/holidays/calendar";
 import { BARCELONA_LOCAL } from "@/lib/content/holidays/payload";
 import { municipalityBySlug } from "@/lib/programmatic/holidays/data";
+import { townPageCount } from "@/lib/programmatic/holidays/towns";
 
 import { SCHOOL_SOURCE, SCHOOL_VERIFIED_AT, SCHOOL_YEARS, type SchoolYear } from "./calendar";
 
@@ -80,7 +81,7 @@ export const COPY: Record<Locale, Copy> = {
     freeTitle: "Els dies que no surten a la taula",
     free: [
       "Cada escola pot fixar **quatre dies de lliure disposició** per curs, repartits entre els tres trimestres. No poden coincidir amb el primer ni l'últim dia de curs, ni amb les vacances de Nadal o Setmana Santa. Els decideix cada centre, i el consell escolar municipal proposa quins convindria que fessin totes les escoles del mateix municipi: per saber-los, cal preguntar a l'escola o a l'ajuntament.",
-      "També són festius els dos dies de **festa local** del municipi. Si un festiu local cau en un dia no lectiu, l'escola el pot afegir als seus dies de lliure disposició. Els dels 100 municipis més poblats són a [festius locals per municipi](/ca/festius/), un per un, i els de tots els altres, a la pàgina de [festius locals](/ca/guies/festius-locals-catalunya/).",
+      `També són festius els dos dies de **festa local** del municipi. Si un festiu local cau en un dia no lectiu, l'escola el pot afegir als seus dies de lliure disposició. Els dels ${townPageCount()} municipis més poblats són a [festius locals per municipi](/ca/festius/), un per un, i els de tots els altres, a la pàgina de [festius locals](/ca/guies/festius-locals-catalunya/).`,
     ],
     juneTitle: "Juny: jornada continuada",
     june: [
@@ -119,7 +120,7 @@ export const COPY: Record<Locale, Copy> = {
     freeTitle: "Los días que no aparecen en la tabla",
     free: [
       "Cada colegio puede fijar **cuatro días de libre disposición** por curso, repartidos entre los tres trimestres. No pueden coincidir con el primer ni el último día de curso, ni con las vacaciones de Navidad o Semana Santa. Los decide cada centro, y el consejo escolar municipal propone cuáles convendría que hicieran todos los colegios del mismo municipio: para saberlos, hay que preguntar al colegio o al ayuntamiento.",
-      "También son festivos los dos días de **fiesta local** del municipio. Si un festivo local cae en un día no lectivo, el colegio puede añadirlo a sus días de libre disposición. Los de los 100 municipios más poblados están en [festivos locales por municipio](/es/festivos/), uno a uno, y los de todos los demás, en la página de [festivos locales](/es/guias/festivos-locales-cataluna/).",
+      `También son festivos los dos días de **fiesta local** del municipio. Si un festivo local cae en un día no lectivo, el colegio puede añadirlo a sus días de libre disposición. Los de los ${townPageCount()} municipios más poblados están en [festivos locales por municipio](/es/festivos/), uno a uno, y los de todos los demás, en la página de [festivos locales](/es/guias/festivos-locales-cataluna/).`,
     ],
     juneTitle: "Junio: jornada continua",
     june: [

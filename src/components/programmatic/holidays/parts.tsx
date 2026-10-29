@@ -17,6 +17,8 @@ const GUIDE_LABEL: Record<GuideKey, Record<DateLocale, string>> = {
   christmasTraditions: { ca: "Tradicions de Nadal a Catalunya", es: "Tradiciones de Navidad en Cataluña", en: "Catalan Christmas traditions" },
   christmasBarcelona: { ca: "Nadal a Barcelona", es: "Navidad en Barcelona", en: "Christmas in Barcelona" },
   newYear: { ca: "Cap d'Any a Barcelona", es: "Nochevieja en Barcelona", en: "New Year's Eve in Barcelona" },
+  castanyada: { ca: "La Castanyada i Tots Sants", es: "La Castañada y Todos los Santos", en: "The Castanyada and All Saints" },
+  strikes: { ca: "Vaga avui a Catalunya: què funciona", es: "Huelga hoy en Cataluña: qué funciona", en: "Strike in Catalonia today: what runs" },
 };
 
 export function GuideLinks({ keys, locale, title }: { keys: readonly GuideKey[]; locale: DateLocale; title: string }) {

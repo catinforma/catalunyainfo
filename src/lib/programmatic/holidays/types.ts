@@ -82,4 +82,10 @@ export interface HolidaySnapshot {
   excluded: { name: string; ine: string; population: number; comarca: string; reason: "no-proposal" }[];
   /** Places with a local holiday on dates the date pages talk about. */
   localByDate: Record<string, DatePlace[]>;
+  /**
+   * Councils whose own shop-opening list (Resolució EMT/4342/2025) includes a
+   * date the date pages talk about. Only dates outside the default list are
+   * keys: on those, these are the only places where shops may open.
+   */
+  shopsByDate: Record<string, DatePlace[]>;
 }
