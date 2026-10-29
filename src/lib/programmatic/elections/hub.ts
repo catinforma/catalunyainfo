@@ -4,14 +4,23 @@ import { b2href } from "@/lib/content/batch02/shared";
 import type { Locale } from "@/lib/i18n/config";
 
 import { longDate, LOREG_URL } from "./model";
-import { hubPath, PAGES_PER_LOCALE } from "./pages";
+import { EN_LARGEST, EN_RESORTS, hubPath, PAGES_PER_LOCALE } from "./pages";
 import { SNAPSHOT } from "./snapshot";
+
+/** Where the English set's resorts come from (see `EN_RESORTS`). */
+export const TOURISM_REGISTER = {
+  name: "Establiments d'allotjament turístic inscrits al Registre de Turisme de Catalunya",
+  publisher: "Generalitat de Catalunya, Departament d'Empresa i Treball",
+  url: "https://analisi.transparenciacatalunya.cat/d/t2h3-cgys",
+};
 
 export interface HubCopy {
   lead: string;
   readLine: string;
   intro: string[];
   listTitle: string;
+  /** Label of the row of links to each comarca's list. */
+  jumpLabel: string;
   listNote: string;
   guideTitle: string;
   guide: string[];
@@ -34,6 +43,7 @@ export function hubCopy(locale: Locale): HubCopy {
         `Per a qualsevol altre municipi, i per a totes les municipals des del 1979, fes servir el [cercador de resultats municipals](${b2href("municipalResults", "ca")}).`,
       ],
       listTitle: "Municipis per comarques",
+      jumpLabel: "Ves a la comarca",
       listNote: `Al costat de cada municipi, els habitants a l'1 de gener de ${year}.`,
       guideTitle: "Com llegir aquests resultats",
       guide: [
@@ -53,6 +63,7 @@ export function hubCopy(locale: Locale): HubCopy {
         `Para cualquier otro municipio, y para todas las municipales desde 1979, usa el [buscador de resultados municipales](${b2href("municipalResults", "es")}).`,
       ],
       listTitle: "Municipios por comarcas",
+      jumpLabel: "Ir a la comarca",
       listNote: `Junto a cada municipio, los habitantes a 1 de enero de ${year}.`,
       guideTitle: "Cómo leer estos resultados",
       guide: [
@@ -64,13 +75,14 @@ export function hubCopy(locale: Locale): HubCopy {
     };
   }
   return {
-    lead: `Results of the 2023 local election, the 2023 general election and the 2024 Catalan election in Catalonia's ${n} most populous municipalities, with space for the results of 29 November 2026.`,
+    lead: `Results of the 2023 local election, the 2023 general election and the 2024 Catalan election in ${n} Catalan towns, the largest and the main resorts, with space for the results of 29 November 2026.`,
     readLine: `Data read on ${read}`,
     intro: [
-      `Each page has every list's votes, percentage and councillors in the 2023 local election, how the seats were allocated, and the town's vote in the general and Catalan elections beside Catalonia's. These are the ${n} largest municipalities by population on 1 January ${year} (Idescat).`,
-      `The Catalan and Spanish editions cover the 100 largest: [in Catalan](${hubPath("ca")}), [in Spanish](${hubPath("es")}). For any municipality and every local election since 1979, use the [local results lookup](${b2href("municipalResults", "en")}).`,
+      `Each page has every list's votes, percentage and councillors in the 2023 local election, how the seats were allocated, and the town's vote in the general and Catalan elections beside Catalonia's. The towns are the ${EN_LARGEST} largest by population on 1 January ${year} (Idescat), the four provincial capitals among them, and the ${EN_RESORTS.length} with the most places in the Generalitat's register of tourist accommodation (hotels, campsites, rural tourism, tourist flats and homes).`,
+      `The Catalan and Spanish editions cover the ${PAGES_PER_LOCALE.ca} most populous municipalities: [in Catalan](${hubPath("ca")}), [in Spanish](${hubPath("es")}). For any municipality and every local election since 1979, use the [local results lookup](${b2href("municipalResults", "en")}).`,
     ],
     listTitle: "Towns by comarca",
+    jumpLabel: "Go to a comarca",
     listNote: `Beside each town, its population on 1 January ${year}.`,
     guideTitle: "How to read these results",
     guide: [
@@ -78,6 +90,6 @@ export function hubCopy(locale: Locale): HubCopy {
       `Results of 29 November by municipality will be added when the Spanish Ministry of the Interior publishes its official file. On the night itself: [how the count works](${b2href("electionNight", "en")}).`,
     ],
     sourcesTitle: "Sources",
-    sources,
+    sources: [...sources, TOURISM_REGISTER],
   };
 }

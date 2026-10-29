@@ -4,9 +4,17 @@
  * which reads the deployment's indexing switch like the rest of the sitemap.
  *
  * Tranche 1 (27 Oct 2026): the 100 most populous municipalities in Catalan and
- * Spanish, the 10 most populous in English. Population: Idescat, 1 Jan 2025.
+ * Spanish, the 10 most populous in English. Tranche 2 (29 Oct 2026): the 300
+ * most populous in Catalan and Spanish (down to 2,776 residents), 30 in
+ * English (the 11 largest and `EN_RESORTS`). Population: Idescat, 1 Jan 2025.
  * Every other municipality stays on the single lookup page
  * (`guies/resultats-eleccions-municipals-catalunya`), which covers all 947.
+ *
+ * Doorway guardrail: every page carries data that exists only for its place
+ * (the lists, votes and councillors, the D'Hondt quotients of its last seat,
+ * its turnout against Catalonia's) inside guidance written once; the
+ * snapshot script refuses any municipality whose figures do not add up or
+ * whose councillors D'Hondt does not reproduce.
  */
 
 import type { MetadataRoute } from "next";
@@ -14,16 +22,45 @@ import type { MetadataRoute } from "next";
 import { HTML_LANG, INTL_LOCALE, LOCALES, X_DEFAULT_LOCALE, type Locale } from "@/lib/i18n/config";
 import { absoluteUrl, indexingAllowed } from "@/lib/site";
 
-import { capitalised } from "./names";
-import { electionPath, hubPath } from "./paths";
+import { capitalised, slugify } from "./names";
+import { electionPath, hubPath, PAGES_PER_LOCALE } from "./paths";
 import { turnout } from "./results";
 import { SNAPSHOT } from "./snapshot";
 import type { Municipality } from "./types";
 
-export { ELECTIONS_SEGMENT, electionPath, hubPath } from "./paths";
+export { ELECTIONS_SEGMENT, electionPath, hubPath, PAGES_PER_LOCALE } from "./paths";
 
-/** How many municipalities get a page in each language. */
-export const PAGES_PER_LOCALE: Record<Locale, number> = { ca: 100, es: 100, en: 10 };
+/**
+ * English: the big towns and the resorts, where English-speaking readers are.
+ * The 11 most populous (the four provincial capitals among them), then the
+ * 19 municipalities with the most places in the Registre de Turisme de
+ * Catalunya (dataset `t2h3-cgys`: hotels, campsites, rural tourism, tourist
+ * flats and homes), read 29 Oct 2026 with `scripts/elections-snapshot.ts
+ * --tourism`. Fixed here, not recomputed: the register changes daily and URLs
+ * must not come and go with it.
+ */
+export const EN_LARGEST = 11;
+export const EN_RESORTS: readonly string[] = [
+  "salou",
+  "lloret-de-mar",
+  "castell-d-aro-platja-d-aro-i-s-agaro",
+  "torroella-de-montgri",
+  "cambrils",
+  "blanes",
+  "tossa-de-mar",
+  "calella",
+  "sitges",
+  "castello-d-empuries",
+  "santa-susanna",
+  "mont-roig-del-camp",
+  "calonge-i-sant-antoni",
+  "roses",
+  "malgrat-de-mar",
+  "vila-seca",
+  "l-ametlla-de-mar",
+  "pineda-de-mar",
+  "l-escala",
+];
 
 /** Prerendered at build time; the rest render once on first request. */
 export const PRERENDERED_PER_LOCALE = 20;
@@ -31,8 +68,19 @@ export const PRERENDERED_PER_LOCALE = 20;
 export const TITLE_LIMIT = 60;
 export const DESCRIPTION_LIMIT = 155;
 
+function pagesFor(locale: Locale): Municipality[] {
+  if (locale !== "en") return SNAPSHOT.municipalities.slice(0, PAGES_PER_LOCALE[locale]);
+  const english = new Set([...SNAPSHOT.municipalities.slice(0, EN_LARGEST).map((m) => m.slug), ...EN_RESORTS]);
+  return SNAPSHOT.municipalities.filter((m) => english.has(m.slug));
+}
+
+/** Computed once: the sitemap and every page's hreflang ask for them. */
+const PAGES = Object.fromEntries(LOCALES.map((locale) => [locale, pagesFor(locale)])) as Record<Locale, Municipality[]>;
+const SLUGS = Object.fromEntries(LOCALES.map((locale) => [locale, new Set(PAGES[locale].map((m) => m.slug))])) as Record<Locale, Set<string>>;
+
+/** The municipalities with a page in this language, largest first. */
 export function municipalitiesFor(locale: Locale): Municipality[] {
-  return SNAPSHOT.municipalities.slice(0, PAGES_PER_LOCALE[locale]);
+  return PAGES[locale];
 }
 
 /**
@@ -41,7 +89,7 @@ export function municipalitiesFor(locale: Locale): Municipality[] {
  * `/es/eleccions/sabadell/` and `/ca/elections/barcelona/` never render.
  */
 export function resolveElectionPage(routeLocale: Locale, locale: string, slug: string): Municipality | null {
-  if (locale !== routeLocale) return null;
+  if (locale !== routeLocale || !SLUGS[routeLocale].has(slug)) return null;
   return municipalitiesFor(routeLocale).find((m) => m.slug === slug) ?? null;
 }
 
@@ -68,7 +116,7 @@ export function electionsStaticParams(routeLocale: Locale): { locale: string; mu
 export function electionTranslations(m: Municipality): Partial<Record<Locale, string>> {
   const out: Partial<Record<Locale, string>> = {};
   for (const locale of LOCALES) {
-    if (municipalitiesFor(locale).some((x) => x.slug === m.slug)) out[locale] = electionPath(locale, m.slug);
+    if (SLUGS[locale].has(m.slug)) out[locale] = electionPath(locale, m.slug);
   }
   return out;
 }
@@ -93,6 +141,9 @@ const TITLES: Record<Locale, ((place: string) => string)[]> = {
     (p) => `Eleccions ${p}: municipals 2023, generals i 29N`,
     (p) => `Eleccions ${p}: municipals 2023 i 29N`,
     (p) => `Eleccions ${p}: resultats 2023`,
+    // Names of 36-37 characters (Castell d'Aro, Platja d'Aro i s'Agaró).
+    (p) => `Eleccions ${p}: 2023 i 29N`,
+    (p) => `${p}: eleccions 2023`,
   ],
   es: [
     (p) => `Resultados elecciones ${p}: municipales 2023, generales y 29N`,
@@ -100,6 +151,8 @@ const TITLES: Record<Locale, ((place: string) => string)[]> = {
     (p) => `Elecciones ${p}: municipales 2023, generales y 29N`,
     (p) => `Elecciones ${p}: municipales 2023 y 29N`,
     (p) => `Elecciones ${p}: resultados 2023`,
+    (p) => `Elecciones ${p}: 2023 y 29N`,
+    (p) => `${p}: elecciones 2023`,
   ],
   en: [
     (p) => `${p} election results: 2023 local, general and 29 Nov`,
@@ -107,6 +160,8 @@ const TITLES: Record<Locale, ((place: string) => string)[]> = {
     (p) => `${p} election results: 2023 and 29 Nov`,
     (p) => `${p} elections: 2023 local results and 29 Nov`,
     (p) => `${p} elections: 2023 results`,
+    (p) => `${p}: 2023 election results`,
+    (p) => `${p}: elections 2023`,
   ],
 };
 
@@ -148,21 +203,18 @@ export function electionDescription(locale: Locale, m: Municipality): string {
 
 const HUB_META: Record<Locale, { title: string; description: string; h1: string }> = {
   ca: {
-    title: "Resultats eleccions per municipi: els 100 més poblats",
-    description:
-      "Municipals 2023, generals 2023 i Parlament 2024 als 100 municipis més poblats de Catalunya, per comarques, amb dades oficials i espai per al 29N.",
+    title: `Resultats eleccions per municipi: els ${PAGES_PER_LOCALE.ca} més poblats`,
+    description: `Municipals 2023, generals 2023 i Parlament 2024 als ${PAGES_PER_LOCALE.ca} municipis més poblats de Catalunya, per comarques, amb dades oficials i espai per al 29N.`,
     h1: "Resultats de les eleccions per municipi",
   },
   es: {
-    title: "Resultados elecciones por municipio: los 100 más poblados",
-    description:
-      "Municipales 2023, generales 2023 y Parlament 2024 en los 100 municipios más poblados de Cataluña, por comarcas, con datos oficiales y espacio para el 29N.",
+    title: `Resultados elecciones por municipio: los ${PAGES_PER_LOCALE.es} más poblados`,
+    description: `Municipales 2023, generales 2023 y Parlament 2024 en los ${PAGES_PER_LOCALE.es} municipios más poblados de Cataluña, por comarcas, con datos oficiales y espacio para el 29N.`,
     h1: "Resultados de las elecciones por municipio",
   },
   en: {
-    title: "Catalonia election results by town: the 10 largest",
-    description:
-      "2023 local, 2023 general and 2024 Catalan election results in Catalonia's ten largest municipalities, from official data, with space for 29 November.",
+    title: "Catalonia election results by town: cities and resorts",
+    description: `2023 local, general and 2024 Catalan election results in ${PAGES_PER_LOCALE.en} towns: Catalonia's largest and its main resorts. Official data, with space for 29 November.`,
     h1: "Election results by town in Catalonia",
   },
 };
@@ -201,19 +253,34 @@ export function byComarca(locale: Locale): { comarca: string; municipalities: Mu
     .sort((a, b) => a.comarca.localeCompare(b.comarca, "ca"));
 }
 
+/** The hub's anchor for a comarca's list: "Vallès Oriental" -> "c-valles-oriental". */
+export const comarcaAnchor = (comarca: string): string => `c-${slugify(comarca)}`;
+
 /**
- * Other pages to read next: the same comarca first, then the nearest in size
- * in the same province, up to `limit`.
+ * Other pages to read next, up to `limit`: the same comarca, then the
+ * nearest in size elsewhere in the province. In a comarca with more pages
+ * than links (30 in the Vallès Oriental), the comarca's largest town and then
+ * the towns nearest in population; at least two links always go to other
+ * comarques, so a comarca with one page (Moià, the Moianès) is linked from
+ * its neighbours in size too. Every page is reached from other towns' pages,
+ * not only from the hub. Comarca links are listed largest first.
  */
+export const SIBLINGS_OTHER_COMARQUES = 2;
+
 export function siblings(m: Municipality, locale: Locale, limit = 8): { sameComarca: Municipality[]; sameProvince: Municipality[] } {
   const pool = municipalitiesFor(locale).filter((x) => x.slug !== m.slug);
-  const sameComarca = pool.filter((x) => x.comarca === m.comarca).slice(0, limit);
+  const nearest = (a: Municipality, b: Municipality) =>
+    Math.abs(a.population - m.population) - Math.abs(b.population - m.population) || b.population - a.population || a.slug.localeCompare(b.slug);
+  const province = pool.filter((x) => x.province === m.province && x.comarca !== m.comarca).sort(nearest);
+  const comarca = pool.filter((x) => x.comarca === m.comarca);
+  const comarcaRoom = Math.max(1, limit - Math.min(SIBLINGS_OTHER_COMARQUES, province.length));
+  const [largest, ...rest] = comarca;
+  const sameComarca =
+    comarca.length <= comarcaRoom || !largest
+      ? comarca
+      : [largest, ...rest.sort(nearest).slice(0, comarcaRoom - 1)].sort((a, b) => b.population - a.population || a.slug.localeCompare(b.slug));
   const room = Math.max(0, Math.min(4, limit - sameComarca.length));
-  const sameProvince = pool
-    .filter((x) => x.province === m.province && x.comarca !== m.comarca)
-    .sort((a, b) => Math.abs(a.population - m.population) - Math.abs(b.population - m.population))
-    .slice(0, room);
-  return { sameComarca, sameProvince };
+  return { sameComarca, sameProvince: province.slice(0, room) };
 }
 
 /* -------------------------------------------------------------------------- */

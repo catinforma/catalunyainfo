@@ -7,8 +7,8 @@ import { electionsStaticParams, resolveElectionPage } from "@/lib/programmatic/e
 
 /**
  * English edition of the election results per municipality
- * (`/en/elections/<slug>/`), for the ten largest municipalities only. Serves
- * `en` only: any other locale, or a town outside the ten, is a 404.
+ * (`/en/elections/<slug>/`), for 30 towns only (the 11 largest and `EN_RESORTS`). Serves
+ * `en` only: any other locale, or a town outside the 30, is a 404.
  */
 const LOCALE = "en";
 

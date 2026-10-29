@@ -19,7 +19,7 @@ We win where no single owner holds the SERP and the answer changes weekly or yea
 
 1. **Holiday engine** (week 1): per-municipality local holidays (top 100, ca/es) from `b4eh-r8up`, "is it a holiday today/tomorrow" computed in the browser, date pages for 7-8 Dec, 25-26 Dec, 1 and 6 Jan; swap in 2027 within 48 h of the DOGC order (expected late Nov - mid Dec). Peaks: December and January.
 2. **Strikes hub** (week 1): "Vaga avui: què funciona" ca/es/en, one evergreen URL, a dated section per strike; 11 Nov general strike once minimum services are official.
-3. **Election results per municipality** (weeks 1-2): top 100 ca/es + EN top 10 from Generalitat data, 29N slot filled from Interior; all 947 by March 2027 for the 23 May 2027 municipal elections (~250k searches in one week, the biggest single opportunity).
+3. **Election results per municipality** (weeks 1-2): top 100 ca/es + EN top 10 from Generalitat data (tranche 1, 27 Oct); tranche 2 (29 Oct): top 300 ca/es + EN 30 (11 largest + 19 resorts by RTC tourist places), 29N slot filled from Interior; all 947 by March 2027 for the 23 May 2027 municipal elections (~250k searches in one week, the biggest single opportunity).
 4. **Rodalies live per line** (week 2): static guidance + client-side Renfe GTFS-RT alerts (CC BY 4.0).
 5. **Fuel prices today** (week 3): comarques, cities, bonÀrea/Esclatoil; MITECO API, table client-side.
 6. **Mountain / ski weather now** (week 3), **weekend per province/coast** (week 4), **reservoir per reservoir** (week 4).
