@@ -53,6 +53,10 @@ import {
  *  - Minimum services out: set `minimumServices.status = "published"`, rewrite
  *    `minimumServices.text` and `msShort` from the order/operator, add the
  *    order to `sources`, move STRIKES_AS_OF, deploy, publish `?only=strikes`.
+ *  - 11 November: the general strike also has its own page (`strike-11n.ts`,
+ *    one minimum-services slot per sector). Update both and publish
+ *    `?only=strike-11n`, which republishes that page and this hub; a test
+ *    fails if this entry and that page disagree on whether the order is out.
  *  - The day after a listed strike: move STRIKES_AS_OF (the test
  *    "no listed strike is shown as upcoming after its last day" fails until
  *    you do), so it is rendered under "past strikes". A past strike may not
@@ -289,6 +293,7 @@ export const STRIKES: Strike[] = [
         "**Qui hi està cridat:** totes les persones treballadores, del sector públic i del privat, en totes les activitats.",
         "**Reivindicacions:** habitatge assequible, salaris, preus i serveis públics, segons els sindicats convocants.",
         "**Manifestacions:** a les principals capitals de província, segons CCOO de Catalunya, que n'anunciarà l'hora i el lloc als seus canals.",
+        `**Sector per sector:** els serveis mínims de cada servei, les escoles, la sanitat i els drets de qui fa vaga, a ${b2link("strike11n", "ca", "la guia de la vaga general de l'11 de novembre")}.`,
       ],
       es: [
         "**Convocatoria:** CCOO y UGT, que la presentaron el 19 de octubre de 2026 con CGT, CNT, la Confederación Intersindical, CO.BAS, el Sindicato de Inquilinas y la Unión de Actores y Actrices. En Cataluña la convocan CCOO de Catalunya, la UGT de Catalunya y CGT Catalunya, y el sindicato docente USTEC·STEs la ha ratificado para la educación.",
@@ -297,6 +302,7 @@ export const STRIKES: Strike[] = [
         "**A quién llama:** a todas las personas trabajadoras, del sector público y del privado, en todas las actividades.",
         "**Reivindicaciones:** vivienda asequible, salarios, precios y servicios públicos, según los sindicatos convocantes.",
         "**Manifestaciones:** en las principales capitales de provincia, según CCOO de Catalunya, que anunciará la hora y el lugar en sus canales.",
+        `**Sector por sector:** los servicios mínimos de cada servicio, los colegios, la sanidad y los derechos de quien hace huelga, en ${b2link("strike11n", "es", "la guía de la huelga general del 11 de noviembre")}.`,
       ],
       en: [
         "**Called by:** CCOO and UGT, who presented it on 19 October 2026 with CGT, CNT, Confederación Intersindical, CO.BAS, the Sindicato de Inquilinas tenants' union and the actors' union Unión de Actores y Actrices. In Catalonia it is called by CCOO de Catalunya, UGT de Catalunya and CGT Catalunya, and the teachers' union USTEC·STEs has ratified it for education.",
@@ -305,6 +311,7 @@ export const STRIKES: Strike[] = [
         "**Who is called out:** all workers, public and private, in every activity.",
         "**Demands:** affordable housing, wages, prices and public services, according to the unions.",
         "**Demonstrations:** in the main provincial capitals, according to CCOO de Catalunya, which will announce times and places on its channels.",
+        `**Sector by sector:** minimum services for each service, schools, health and strikers' rights, in ${b2link("strike11n", "en", "our guide to the 11 November general strike")}.`,
       ],
     },
     minimumServices: {

@@ -848,6 +848,42 @@ above; for the weather ES page, the month queries ("clima barcelona enero",
 
 **Outcome:** _pending_
 
+## 2026-10-29 — New page: 11 November general strike (publish group `strike-11n`)
+
+Why: the strikes hub got 136 Google clicks on 28 Oct from the Renfe strike of
+the 29th; a general strike draws far more, and the hub's title ("Vaga avui a
+Catalunya") does not carry the date people type. A page of its own:
+`/ca/guies/vaga-general-11-novembre/`, `/es/guias/huelga-general-11-noviembre/`,
+`/en/guides/general-strike-11-november-spain/`. Data in
+`src/lib/content/batch02/strike-11n.ts` (one minimum-services slot per sector,
+`STRIKE_11N_AS_OF`), facts re-read on 29 Oct 2026 on ccoo.es, 11n.cat, ugt.es,
+ugt.cat, cgtcatalunya.cat, sindicat.net, the BOE, the DOGC and Treball's strike
+pages. On that day no minimum services had been published.
+
+SEO titles: ca "Vaga general 11 de novembre: serveis mínims i què funciona"
+(58), es "Huelga general 11 de noviembre 2026: servicios mínimos" (54), en
+"General strike 11 November 2026 in Spain: what runs" (51).
+
+Link added: the hub's 11N section gains one fact line linking here (body only,
+hub titles untouched). The group republishes both pages, because every 11N
+update (the order coming out, the day after) touches both.
+
+**Cannibalisation risk:** the hub's description names "vaga general l'11 de
+novembre" and it already ranks. Read both pages' queries together; if Google
+alternates them for the 11N queries, keep the dedicated page as the target
+and leave the hub's 11N section short.
+
+**Queries aimed at:** vaga general 11 novembre, serveis mínims vaga 11
+novembre, hi ha escola 11N, huelga general 11 noviembre 2026, servicios
+mínimos 11 noviembre, hay colegio 11N, hay metro 11 noviembre, general strike
+spain 11 november.
+
+**Measure** on 18 Nov 2026 (the week after the strike) and again on 26 Nov
+(28 days): position and clicks per query and language for both this page and
+the hub.
+
+**Outcome:** _pending_
+
 ## Candidates not yet run
 
 Recorded so they are not lost, and so they are not all started at once.

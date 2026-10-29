@@ -52,6 +52,7 @@ import { CHRISTMAS_TRADITIONS } from "@/lib/content/batch02/christmas-traditions
 import { DECEMBER_BRIDGE } from "@/lib/content/batch02/december-bridge";
 import { MARATO_GUIDE } from "@/lib/content/batch02/marato";
 import { STRIKES_GUIDE } from "@/lib/content/batch02/strikes";
+import { STRIKE_11N } from "@/lib/content/batch02/strike-11n";
 import { publishHolidayTodayGuide } from "@/lib/content/holidays/today-publish";
 import { publishLocalHolidaysGuide } from "@/lib/content/holidays/local-publish";
 import { publishReservoirGuide } from "@/lib/content/reservoirs/publish";
@@ -180,6 +181,10 @@ export async function POST(request: Request) {
     // strike update never republishes two pages under a title experiment.
     if (wants("strikes")) published.push(await publishB2Article(STRIKES_GUIDE));
     if (wants("strikes-links")) published.push(await publishB2Article(HOURS), await publishB2Article(TRANSPORT));
+    // The 11 November 2026 general strike's own page, with the strikes hub,
+    // which links to it (one sentence) and carries the same minimum-services
+    // status: every 11N update goes out on both at once.
+    if (wants("strike-11n")) published.push(await publishB2Article(STRIKE_11N), await publishB2Article(STRIKES_GUIDE));
     // Rodalies live status (/ca/rodalies/ and the line pages are code routes,
     // not articles): the four guides that gained one body link to them.
     if (wants("rodalies-links")) {

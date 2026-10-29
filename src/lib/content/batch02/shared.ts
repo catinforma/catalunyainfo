@@ -68,7 +68,9 @@ export type B2Key =
   | "decemberBridge"
   | "marato"
   // x10 engines (27 Oct 2026): the evergreen strikes hub.
-  | "strikes";
+  | "strikes"
+  // 29 Oct 2026: the dedicated page for the 11 November 2026 general strike.
+  | "strike11n";
 
 /** Path after the locale prefix, no leading or trailing slash. */
 export const B2_PATHS: Record<B2Key, Record<Locale, string>> = {
@@ -331,6 +333,11 @@ export const B2_PATHS: Record<B2Key, Record<Locale, string>> = {
     ca: "guies/vaga-avui-catalunya",
     es: "guias/huelga-hoy-cataluna",
     en: "guides/strike-barcelona-catalonia-today",
+  },
+  strike11n: {
+    ca: "guies/vaga-general-11-novembre",
+    es: "guias/huelga-general-11-noviembre",
+    en: "guides/general-strike-11-november-spain",
   },
 };
 
@@ -603,6 +610,11 @@ export const B2_TITLES: Record<B2Key, Record<Locale, string>> = {
     ca: "Vaga avui a Catalunya: què funciona",
     es: "Huelga hoy en Cataluña: qué funciona",
     en: "Strike in Barcelona and Catalonia today: what runs",
+  },
+  strike11n: {
+    ca: "Vaga general de l'11 de novembre: serveis mínims",
+    es: "Huelga general del 11 de noviembre: servicios mínimos",
+    en: "General strike on 11 November: what runs",
   },
 };
 
