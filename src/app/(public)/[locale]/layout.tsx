@@ -5,6 +5,7 @@ import "../../globals.css";
 
 import { ConsentGate } from "@/components/ConsentGate";
 import { JsonLd } from "@/components/JsonLd";
+import { ScrollReset } from "@/components/ScrollReset";
 import { fontClassNames } from "@/lib/fonts";
 import { getMessages } from "@/lib/i18n";
 import { HTML_LANG, LOCALES, isLocale, type Locale } from "@/lib/i18n/config";
@@ -96,6 +97,7 @@ export default async function LocaleLayout({
           {t.common.skipToContent}
         </a>
         {children}
+        <ScrollReset />
         <JsonLd json={siteGraph} />
         <ConsentGate locale={typed} t={{ consent: getMessages(typed).consent, legalLabel: getMessages(typed).nav.legal }} />
       </body>

@@ -90,10 +90,13 @@ export default async function HomePage({
             </div>
 
             {/* The lead item sits beside the question rather than above it: it
-                is an example of an answer, not the headline of a newspaper. */}
+                is an example of an answer, not the headline of a newspaper.
+                Desktop only: on a phone it stacked under the search as one
+                full-screen card and pushed the live tools out of sight. */}
             {lead ? (
-              <aside aria-label={t.meta.relatedContent} className="lg:pt-9">
-                <EntryCard entry={lead} locale={locale} priority headingLevel={2} />
+              <aside aria-label={t.meta.relatedContent} className="hidden lg:block lg:pt-9">
+                {/* No preload: phones never show it, and they are 63 % of visits. */}
+                <EntryCard entry={lead} locale={locale} headingLevel={2} />
               </aside>
             ) : null}
           </div>
@@ -116,7 +119,7 @@ export default async function HomePage({
             {key === "events" ? (
               <EventList items={data.events} locale={locale} />
             ) : (
-              <div className="ci-grid">
+              <div className="ci-grid ci-grid--hub">
                 {items.map((item) => (
                   <EntryCard key={item.translationId} entry={item} locale={locale} />
                 ))}

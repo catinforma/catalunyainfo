@@ -5,6 +5,7 @@ import { notFound, permanentRedirect, redirect } from "next/navigation";
 import { Breadcrumbs, type Crumb } from "@/components/Breadcrumbs";
 import { EmptyState } from "@/components/EmptyState";
 import { EntryCard } from "@/components/EntryCard";
+import { SHORTCUTS_HEADING, hubShortcuts } from "@/lib/content/hub-shortcuts";
 import { JsonLd } from "@/components/JsonLd";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
@@ -272,6 +273,7 @@ export default async function CatchAllPage({
     // (the work calendar among them) had no link from any hub or the home
     // page, and Google left the English ones "discovered, not indexed".
     const items = await listBySection(locale, key, { limit: 500 });
+    const shortcuts = hubShortcuts(key, locale);
     const crumbs: Crumb[] = [
       { label: t.common.home, href: `/${locale}/` },
       { label: t.nav[key], href: sectionPath(key, locale) },
@@ -283,10 +285,28 @@ export default async function CatchAllPage({
         <main id="main" className="ci-shell py-10">
           <Breadcrumbs items={crumbs} locale={locale} />
           <h1>{t.nav[key]}</h1>
+          {t.hubMeta[key as keyof typeof t.hubMeta]?.description ? (
+            <p className="ci-hub-lead">{t.hubMeta[key as keyof typeof t.hubMeta]?.description}</p>
+          ) : null}
+
+          {shortcuts.length > 0 ? (
+            <nav className="ci-hub-shortcuts" aria-labelledby="hub-shortcuts-heading">
+              <h2 id="hub-shortcuts-heading" className="ci-hub-shortcuts-title">
+                {SHORTCUTS_HEADING[locale]}
+              </h2>
+              <ul>
+                {shortcuts.map((item) => (
+                  <li key={item.href}>
+                    <Link href={item.href}>{item.label}</Link>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+          ) : null}
 
           <div className="mt-8">
             {items.length > 0 ? (
-              <div className="ci-grid">
+              <div className="ci-grid ci-grid--hub">
                 {items.map((item, index) => (
                   <EntryCard
                     key={item.translationId}

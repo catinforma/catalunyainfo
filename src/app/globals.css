@@ -1161,6 +1161,77 @@
     grid-template-columns: repeat(auto-fill, minmax(min(100%, 16rem), 1fr));
   }
 
+  /* --- Section hubs ------------------------------------------------------ */
+  .ci-hub-lead {
+    margin-top: 0.75rem;
+    max-width: 42rem;
+    color: var(--color-muted);
+  }
+  .ci-hub-shortcuts {
+    margin-top: 1.5rem;
+  }
+  .ci-hub-shortcuts-title {
+    font-size: var(--text-sm);
+    font-family: inherit;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--color-muted);
+  }
+  .ci-hub-shortcuts ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 0.6rem;
+    padding: 0;
+    list-style: none;
+  }
+  .ci-hub-shortcuts a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.5rem;
+    padding: 0.4rem 0.9rem;
+    border: 1px solid var(--color-rule-strong);
+    border-radius: 999px;
+    font-size: var(--text-sm);
+    font-weight: 500;
+    color: var(--color-sea-deep);
+    text-decoration: none;
+    background: var(--color-surface);
+  }
+  .ci-hub-shortcuts a:hover {
+    border-color: currentColor;
+  }
+
+  /* On a phone a hub is a list to scan, not a stack of full-screen photos:
+     thumbnail beside the title, no excerpt or reading cue. */
+  @media (max-width: 39.99rem) {
+    .ci-grid--hub {
+      gap: 1rem;
+    }
+    .ci-grid--hub .ci-card {
+      display: grid;
+      grid-template-columns: 6.5rem minmax(0, 1fr);
+      column-gap: 0.9rem;
+      row-gap: 0.25rem;
+      align-items: start;
+    }
+    .ci-grid--hub .ci-card-media {
+      grid-row: 1 / span 3;
+      aspect-ratio: 1 / 1;
+    }
+    .ci-grid--hub .ci-card-title {
+      font-size: var(--text-base);
+    }
+    .ci-grid--hub .ci-card:not(:has(.ci-card-media)) {
+      display: flex;
+    }
+    .ci-grid--hub .ci-card > p.text-sm,
+    .ci-grid--hub .ci-card-more {
+      display: none;
+    }
+  }
+
   /* --- Content page layout: prose + marginalia -------------------------- */
   .ci-article-layout {
     display: grid;
