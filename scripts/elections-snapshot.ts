@@ -3,13 +3,17 @@
  * (`/ca/eleccions/<slug>/`, `/es/elecciones/<slug>/`, `/en/elections/<slug>/`).
  *
  * Usage: `node --experimental-strip-types scripts/elections-snapshot.ts`
+ *   [--dry-run]  read and check everything, write nothing
+ *   [--tourism]  also print the top 300 ranked by registered tourist
+ *                accommodation places (how the English set was chosen)
  * Writes `src/lib/programmatic/elections/snapshot.ts` (generated: do not edit
  * by hand). When nothing but the read date would change, the file is left
  * alone, so a re-run on unchanged data produces no diff and no revalidation.
  *
  * Sources, all official and all read at run time:
  *   - Idescat, population API (`pob/v1`): population on 1 January per
- *     municipality (padró municipal d'habitants). Picks the 100 largest.
+ *     municipality (padró municipal d'habitants). Picks the TOP largest
+ *     (100 in tranche 1, 27 Oct 2026; 300 in tranche 2, 29 Oct 2026).
  *   - Generalitat open data, Processos electorals: `tgns-3xuy` (elections),
  *     `irrv-2mfc` (electorate, voters, blank and null votes), `ntc4-rnwr`
  *     (votes and seats per list). Municipality rows (`MU`) for the 2023
@@ -26,12 +30,16 @@
  *
  * Every invariant the page relies on is asserted here before anything is
  * written: list votes + blank = valid, valid + null = voters, the lists' votes
- * add up to the list total, the councillors add up to the council size.
+ * add up to the list total, the councillors add up to the council size, the
+ * council size follows LOREG art. 179 and D'Hondt with the 5 % threshold
+ * gives every list exactly the councillors the source records. A municipality
+ * that fails any of them stops the run: nothing is written.
  */
 import { readFile, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 
 import { displayName, slugify } from "../src/lib/programmatic/elections/names.ts";
+import { councilSize, dhondt } from "../src/lib/programmatic/elections/results.ts";
 import type {
   CataloniaRegional,
   Counts,
@@ -45,7 +53,9 @@ import type {
   SourceRef,
 } from "../src/lib/programmatic/elections/types.ts";
 
-const TOP = 100;
+const TOP = 300;
+const DRY_RUN = process.argv.includes("--dry-run");
+const TOURISM = process.argv.includes("--tourism");
 const SOCRATA = "https://analisi.transparenciacatalunya.cat";
 const IDESCAT = "https://api.idescat.cat/pob/v1/cerca.json";
 const OUT = join(import.meta.dirname, "..", "src", "lib", "programmatic", "elections", "snapshot.ts");
@@ -152,8 +162,8 @@ async function main() {
   const readAt = madridToday();
   const population = await loadPopulation();
   const top = population.slice(0, TOP);
-  const codes = top.map((row) => row.idescat.slice(0, 5));
-  const variants = [...new Set(codes.flatMap((code) => [code, code.replace(/^0+/, "")]))].map((code) => `'${code}'`).join(",");
+  assert(top.length === TOP, `only ${top.length} municipalities`);
+  assert((population[TOP - 1]?.population ?? 0) > (population[TOP]?.population ?? 0), `tie at the ${TOP}th place`);
 
   const [electionRows, entities, mayors] = await Promise.all([
     soql("tgns-3xuy", `id_eleccio in('${Object.values(IDS).join("','")}')`, "id_eleccio,nom_eleccio,data_eleccio"),
@@ -177,7 +187,9 @@ async function main() {
 
   const turnoutSelect = "territori_codi,territori_nom,cens_electoral,votants,vots_nuls,vots_blancs,vots_candidatures,vots_valids,escons,padro";
   const voteSelect = "territori_codi,candidatura_codi,candidatura_sigles,candidatura_denominacio,vots,escons";
-  const mu = (id: string) => `id_eleccio='${id}' AND id_nivell_territorial='MU' AND territori_codi in(${variants})`;
+  // Every municipality of the election (about 950 turnout rows, under 20,000
+  // vote rows): a 300-code `in(...)` list would not fit in a URL.
+  const mu = (id: string) => `id_eleccio='${id}' AND id_nivell_territorial='MU'`;
   const ca = (id: string) => `id_eleccio='${id}' AND id_nivell_territorial='CA'`;
   // The vote from abroad appears as four pseudo-municipalities, code xx998.
   const abroad = (id: string) => `id_eleccio='${id}' AND id_nivell_territorial='MU' AND territori_codi in('08998','17998','25998','43998','8998')`;
@@ -287,6 +299,18 @@ async function main() {
     const seats = int(mRow?.escons, `${name} M escons total`);
     assert(lists.reduce((a, l) => a + l.votes, 0) === mCounts.listVotes, `${name} M20231: lists do not add up to the list total`);
     assert(lists.reduce((a, l) => a + l.seats, 0) === seats, `${name} M20231: councillors do not add up to ${seats}`);
+    // The page explains the allocation with these two rules, so they must
+    // reproduce the official result exactly.
+    const censusPopulation = int(mRow?.padro, `${name} padro`);
+    assert(councilSize(censusPopulation) === seats, `${name} M20231: ${seats} councillors, LOREG 179 gives ${councilSize(censusPopulation)} for ${censusPopulation}`);
+    const allocation = dhondt(lists, seats, mCounts.validVotes);
+    for (const list of lists) {
+      assert(allocation.seats[list.code] === list.seats, `${name} M20231: D'Hondt gives ${list.short} ${allocation.seats[list.code]}, the source ${list.seats}`);
+    }
+    // A tie on the last seat goes to the list with more votes; a tie in that
+    // too is settled by lot (LOREG 163.1.d), which no arithmetic reproduces.
+    const { last, nextOut } = allocation;
+    assert(!last || !nextOut || last.value !== nextOut.value || last.votes !== nextOut.votes, `${name} M20231: last seat drawn by lot`);
 
     // Mayor: only when both Generalitat registers agree on the name.
     const fold = (s: string | undefined) => (s ?? "").replace(/\s+/g, " ").trim().toLocaleLowerCase("ca");
@@ -313,7 +337,7 @@ async function main() {
       province: entity.provincia.trim(),
       population: place.population,
       mayor,
-      municipal: { ...mCounts, seats, censusPopulation: int(mRow?.padro, `${name} padro`), lists },
+      municipal: { ...mCounts, seats, censusPopulation, lists },
       congress: regional(`${name} G20231`, turnoutOf("congress"), votesOf("congress")),
       parliament: regional(`${name} A20241`, turnoutOf("parliament"), votesOf("parliament")),
     };
@@ -365,14 +389,38 @@ async function main() {
   // data, no diff, no revalidation, and the pages keep their one date.
   const previous = await readFile(OUT, "utf8").catch(() => "");
   const strip = (text: string) => text.replace(/"readAt": "[^"]*"/, "").replace(/"updated": "[^"]*"/g, "");
+  console.log(`population: ${first.period}, ${TOP}th = ${top[TOP - 1]?.sortName} ${top[TOP - 1]?.population}, ${TOP + 1}st = ${population[TOP]?.sortName} ${population[TOP]?.population}`);
+  console.log(`mayors kept: ${municipalities.filter((m) => m.mayor).length}/${municipalities.length}`);
+  if (TOURISM) await printTourism(municipalities);
+  if (DRY_RUN) {
+    console.log(`dry run: ${municipalities.length} municipalities checked, nothing written`);
+    return;
+  }
   if (previous && strip(previous) === strip(file)) {
     console.log(`unchanged (${municipalities.length} municipalities); kept readAt from the previous run`);
     return;
   }
   await writeFile(OUT, file, "utf8");
   console.log(`wrote ${OUT}: ${municipalities.length} municipalities, read ${readAt}`);
-  console.log(`population: ${first.period}, 100th = ${top[TOP - 1]?.sortName} ${top[TOP - 1]?.population}, 101st = ${population[TOP]?.sortName} ${population[TOP]?.population}`);
-  console.log(`mayors kept: ${municipalities.filter((m) => m.mayor).length}/${municipalities.length}`);
+}
+
+/**
+ * How the English resorts (`EN_RESORTS` in `pages.ts`) were chosen: places in the
+ * Registre de Turisme de Catalunya (`t2h3-cgys`: hotels, campsites, rural
+ * tourism, tourist flats and homes), summed per municipality. Printed only:
+ * the register changes every day and URLs must not follow it.
+ */
+async function printTourism(municipalities: Municipality[]) {
+  const select = "codi_municipi_idescat, count(*) as establishments, sum(total_places::number) as places";
+  const rows = await getJson<Row[]>(
+    `${SOCRATA}/resource/t2h3-cgys.json?$select=${encodeURIComponent(select)}&$where=${encodeURIComponent("estat='Alta'")}&$group=codi_municipi_idescat&$limit=5000`,
+  );
+  const places = new Map(rows.map((row) => [row.codi_municipi_idescat ?? "", Number(row.places ?? 0)]));
+  const ranked = municipalities
+    .map((m, i) => ({ rank: i + 1, slug: m.slug, places: places.get(m.idescat) ?? 0 }))
+    .sort((a, b) => b.places - a.places || a.rank - b.rank);
+  console.log(`tourism (t2h3-cgys, read ${madridToday()}): rank by places, population rank in brackets`);
+  ranked.slice(0, 40).forEach((row, i) => console.log(`${i + 1}. ${row.slug} (${row.rank}) ${row.places}`));
 }
 
 await main();

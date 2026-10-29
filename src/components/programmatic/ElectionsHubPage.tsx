@@ -8,7 +8,7 @@ import { renderInline } from "@/lib/content/inline";
 import { getMessages } from "@/lib/i18n";
 import { INTL_LOCALE, type Locale } from "@/lib/i18n/config";
 import { hubCopy } from "@/lib/programmatic/elections/hub";
-import { byComarca, electionPath, hubMeta, hubPath, hubTranslations, placeName } from "@/lib/programmatic/elections/pages";
+import { byComarca, comarcaAnchor, electionPath, hubMeta, hubPath, hubTranslations, placeName } from "@/lib/programmatic/elections/pages";
 import { SNAPSHOT } from "@/lib/programmatic/elections/snapshot";
 import { breadcrumbSchema, graph } from "@/lib/seo/jsonld";
 
@@ -49,10 +49,19 @@ export function ElectionsHubPage({ locale }: { locale: Locale }) {
             ))}
 
             <h2 id="comarques">{copy.listTitle}</h2>
+            <nav aria-label={copy.jumpLabel} className="text-sm">
+              <ul className="mt-1 flex list-none flex-wrap gap-x-4 gap-y-1 p-0">
+                {groups.map((group) => (
+                  <li key={group.comarca} className="!mt-0">
+                    <a href={`#${comarcaAnchor(group.comarca)}`}>{group.comarca}</a>
+                  </li>
+                ))}
+              </ul>
+            </nav>
             <p className="text-sm text-[var(--color-muted)]">{copy.listNote}</p>
             {groups.map((group) => (
-              <section key={group.comarca} aria-labelledby={`c-${group.municipalities[0]?.slug}`}>
-                <h3 id={`c-${group.municipalities[0]?.slug}`}>{group.comarca}</h3>
+              <section key={group.comarca} aria-labelledby={comarcaAnchor(group.comarca)}>
+                <h3 id={comarcaAnchor(group.comarca)}>{group.comarca}</h3>
                 <ul className="mt-1 flex list-none flex-wrap gap-x-5 gap-y-1 p-0">
                   {group.municipalities.map((m) => (
                     <li key={m.slug} className="!mt-0">

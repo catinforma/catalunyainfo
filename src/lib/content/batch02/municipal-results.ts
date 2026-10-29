@@ -1,6 +1,6 @@
 import type { Block } from "@/lib/content/blocks";
 import type { Locale } from "@/lib/i18n/config";
-import { hubPath } from "@/lib/programmatic/elections/paths";
+import { hubPath, PAGES_PER_LOCALE } from "@/lib/programmatic/elections/paths";
 
 import {
   b2Related,
@@ -160,11 +160,11 @@ const COPY: Record<Locale, T> = {
   },
 };
 
-/** 27 Oct 2026: one sentence pointing to the per-municipality pages (tranche 1). */
+/** One sentence pointing to the per-municipality pages (tranche 1, 27 Oct 2026; tranche 2, 29 Oct 2026). */
 const TOWN_PAGES: Record<Locale, string> = {
-  ca: `Per als 100 municipis més poblats hi ha també una pàgina per municipi, amb les municipals del 2023, les generals i el Parlament al costat de Catalunya: [resultats electorals per municipi](${hubPath("ca")}).`,
-  es: `Para los 100 municipios más poblados hay también una página por municipio, con las municipales de 2023, las generales y el Parlament junto a Cataluña: [resultados electorales por municipio](${hubPath("es")}).`,
-  en: `The ten largest towns also have a page each, with the 2023 local, general and Catalan elections beside Catalonia: [election results by town](${hubPath("en")}).`,
+  ca: `Per als ${PAGES_PER_LOCALE.ca} municipis més poblats hi ha també una pàgina per municipi, amb les municipals del 2023, les generals i el Parlament al costat de Catalunya: [resultats electorals per municipi](${hubPath("ca")}).`,
+  es: `Para los ${PAGES_PER_LOCALE.es} municipios más poblados hay también una página por municipio, con las municipales de 2023, las generales y el Parlament junto a Cataluña: [resultados electorales por municipio](${hubPath("es")}).`,
+  en: `${PAGES_PER_LOCALE.en} towns, the largest and the main resorts, also have a page each, with the 2023 local, general and Catalan elections beside Catalonia: [election results by town](${hubPath("en")}).`,
 };
 
 function body(locale: Locale): Block[] {

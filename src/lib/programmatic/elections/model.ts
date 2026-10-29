@@ -14,7 +14,7 @@ import { B2_TITLES, b2href, type B2Key } from "@/lib/content/batch02/shared";
 import { shortDate } from "@/lib/content/holidays/calendar";
 import { INTL_LOCALE, type Locale } from "@/lib/i18n/config";
 
-import { electionPath, hubPath, inCa, ofCa, placeName, siblings } from "./pages";
+import { electionPath, hubPath, inCa, ofCa, PAGES_PER_LOCALE, placeName, siblings } from "./pages";
 import { councilSize, municipalView, regionalView, turnout, type RegionalView } from "./results";
 import { SNAPSHOT } from "./snapshot";
 import type { DayLines } from "./today";
@@ -29,14 +29,17 @@ export const INTERIOR_DOWNLOADS: Record<Locale, string> = {
 
 /**
  * The official election-night results site. Null until the Interior Ministry
- * announces it: never guessed, never scraped. Checked 27 Oct 2026 on
+ * announces it: never guessed, never scraped. Checked 27 and 29 Oct 2026 on
  * infoelectoral.interior.gob.es and 29neleccionesgenerales.es (no results
- * section, no announcement).
+ * section, no announcement). Interior's note of 21 Oct 2026 ("Dispositivo de
+ * recepción de resultados provisionales...") is not one: it describes a data
+ * repository for accredited media only, whose address the media receive by
+ * email on 17 Nov. It names no public website.
  */
 export const ELECTION_NIGHT_RESULTS_URL: string | null = null;
 
 /** The date the Interior pages above were last checked. */
-export const INTERIOR_CHECKED = "2026-10-27";
+export const INTERIOR_CHECKED = "2026-10-29";
 
 export const LOREG_URL = "https://www.boe.es/buscar/act.php?id=BOE-A-1985-11672";
 export const RD_806_2026_URL = "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2026-20742";
@@ -110,7 +113,14 @@ const caApostrophe = (iso: string) => ["01", "11"].includes(iso.slice(8, 10));
 export const caEl = (iso: string) => `${caApostrophe(iso) ? "l'" : "el "}${longDate(iso, "ca")}`;
 export const caDel = (iso: string) => `${caApostrophe(iso) ? "de l'" : "del "}${longDate(iso, "ca")}`;
 
+/** The same rule for a printed percentage: "l'11,2 %", "de l'1,5 %", "el 21,0 %". */
+const caElides = (formatted: string) => /^(1|11)(,|\s|$)/.test(formatted);
+export const caElPct = (formatted: string) => `${caElides(formatted) ? "l'" : "el "}${formatted}`;
+export const caDelPct = (formatted: string) => `${caElides(formatted) ? "de l'" : "del "}${formatted}`;
+
 const ORDINAL_CA = (n: number) => (n === 1 ? "1r" : n === 2 ? "2n" : n === 3 ? "3r" : n === 4 ? "4t" : `${n}è`);
+/** "L'11è" (onzè), "El 13è": councils of 11 appear from 2,001 residents (tranche 2). */
+export const caTheOrdinal = (n: number) => `${n === 1 || n === 11 ? "L'" : "El "}${ORDINAL_CA(n)}`;
 const ORDINAL_ES = (n: number) => `${n}.º`;
 const ORDINAL_EN = (n: number) => {
   const mod100 = n % 100;
@@ -205,7 +215,7 @@ export function buildElectionPage(m: Municipality, locale: Locale, snapshot: Ele
       },
       municipal: {
         title: `Eleccions municipals del ${dates.municipal}`,
-        summary: `${Place} escull ${m.municipal.seats} regidors. Van votar ${f.n(m.municipal.voters)} persones d'un cens de ${f.n(m.municipal.electorate)}: una participació del ${f.p(mv.turnout)}, davant del ${f.p(cataloniaMunicipalTurnout)} del conjunt de Catalunya. La llista més votada va ser ${top.short}, amb ${f.n(top.votes)} vots (el ${f.p(top.share)} dels vots vàlids) i ${top.seats} ${top.seats === 1 ? "regidor" : "regidors"}.`,
+        summary: `${Place} escull ${m.municipal.seats} regidors. Van votar ${f.n(m.municipal.voters)} persones d'un cens de ${f.n(m.municipal.electorate)}: una participació ${caDelPct(f.p(mv.turnout))}, davant ${caDelPct(f.p(cataloniaMunicipalTurnout))} del conjunt de Catalunya. La llista més votada va ser ${top.short}, amb ${f.n(top.votes)} vots (${caElPct(f.p(top.share))} dels vots vàlids) i ${top.seats} ${top.seats === 1 ? "regidor" : "regidors"}.`,
         table: {
           caption: `Resultats de les eleccions municipals del 2023 ${a}`,
           headers: ["Candidatura", "Vots", "% vots vàlids", "Regidors"],
@@ -221,7 +231,7 @@ export function buildElectionPage(m: Municipality, locale: Locale, snapshot: Ele
         md: [
           `La llei electoral aplica el **sistema D'Hondt** ([LOREG, articles 163 i 180](${LOREG_URL})). Només hi entren les llistes amb almenys el **5 % dels vots vàlids**, que ${a} volia dir ${f.n(mv.threshold)} vots; ${mv.belowThreshold === 0 ? "totes les llistes el van superar" : mv.belowThreshold === 1 ? "una llista es va quedar per sota" : `${mv.belowThreshold} llistes es van quedar per sota`}. Els vots de cada llista que el supera es divideixen per 1, 2, 3… i els regidors van als quocients més alts.`,
           ...(last && nextOut
-            ? [`El ${ORDINAL_CA(m.municipal.seats)} i últim regidor el va obtenir ${shortOf(last.code)}, amb un quocient de ${f.q(last.value)} (${f.n(last.votes)} vots ÷ ${last.divisor}). El quocient més alt que es va quedar sense regidor: ${f.q(nextOut.value)} (${shortOf(nextOut.code)}, ${f.n(nextOut.votes)} ÷ ${nextOut.divisor}).`]
+            ? [`${caTheOrdinal(m.municipal.seats)} i últim regidor el va obtenir ${shortOf(last.code)}, amb un quocient de ${f.q(last.value)} (${f.n(last.votes)} vots ÷ ${last.divisor}). El quocient més alt que es va quedar sense regidor: ${f.q(nextOut.value)} (${shortOf(nextOut.code)}, ${f.n(nextOut.votes)} ÷ ${nextOut.divisor}).`]
             : []),
           ...(sizeOk
             ? [`El nombre de regidors depèn de la població: amb ${f.n(census)} habitants al padró de referència d'aquestes eleccions, ${a} li'n corresponen ${m.municipal.seats} (LOREG, article 179).`]
@@ -230,7 +240,7 @@ export function buildElectionPage(m: Municipality, locale: Locale, snapshot: Ele
       },
       congress: {
         title: `Eleccions generals del ${dates.congress} (Congrés)`,
-        summary: `${a.charAt(0).toUpperCase()}${a.slice(1)} van votar ${f.n(m.congress.voters)} persones d'un cens de ${f.n(m.congress.electorate)}: una participació del ${f.p(congress.turnout)}, davant del ${f.p(congress.cataloniaTurnout)} de Catalunya. La llista més votada va ser ${congress.rows[0]?.short}, amb el ${f.p(congress.rows[0]?.share ?? 0)} dels vots vàlids (${f.p(congress.rows[0]?.cataloniaShare ?? 0)} a Catalunya).`,
+        summary: `${a.charAt(0).toUpperCase()}${a.slice(1)} van votar ${f.n(m.congress.voters)} persones d'un cens de ${f.n(m.congress.electorate)}: una participació ${caDelPct(f.p(congress.turnout))}, davant ${caDelPct(f.p(congress.cataloniaTurnout))} de Catalunya. La llista més votada va ser ${congress.rows[0]?.short}, amb ${caElPct(f.p(congress.rows[0]?.share ?? 0))} dels vots vàlids (${f.p(congress.rows[0]?.cataloniaShare ?? 0)} a Catalunya).`,
         table: regionalTable(
           congress,
           `Vots al Congrés el 2023 ${a} i a Catalunya`,
@@ -242,7 +252,7 @@ export function buildElectionPage(m: Municipality, locale: Locale, snapshot: Ele
       },
       parliament: {
         title: `Eleccions al Parlament de Catalunya del ${dates.parliament}`,
-        summary: `${a.charAt(0).toUpperCase()}${a.slice(1)} van votar ${f.n(m.parliament.voters)} persones d'un cens de ${f.n(m.parliament.electorate)}: una participació del ${f.p(parliament.turnout)}, davant del ${f.p(parliament.cataloniaTurnout)} de Catalunya. La llista més votada va ser ${parliament.rows[0]?.short}, amb el ${f.p(parliament.rows[0]?.share ?? 0)} dels vots vàlids (${f.p(parliament.rows[0]?.cataloniaShare ?? 0)} a Catalunya).`,
+        summary: `${a.charAt(0).toUpperCase()}${a.slice(1)} van votar ${f.n(m.parliament.voters)} persones d'un cens de ${f.n(m.parliament.electorate)}: una participació ${caDelPct(f.p(parliament.turnout))}, davant ${caDelPct(f.p(parliament.cataloniaTurnout))} de Catalunya. La llista més votada va ser ${parliament.rows[0]?.short}, amb ${caElPct(f.p(parliament.rows[0]?.share ?? 0))} dels vots vàlids (${f.p(parliament.rows[0]?.cataloniaShare ?? 0)} a Catalunya).`,
         table: regionalTable(
           parliament,
           `Vots al Parlament el 2024 ${a} i a Catalunya`,
@@ -285,7 +295,7 @@ export function buildElectionPage(m: Municipality, locale: Locale, snapshot: Ele
       faq: [
         {
           question: `Quina llista va ser la més votada a les municipals del 2023 ${a}?`,
-          answer: `${top.short} (${top.name}), amb ${f.n(top.votes)} vots, el ${f.p(top.share)} dels vàlids, i ${top.seats} dels ${m.municipal.seats} regidors.`,
+          answer: `${top.short} (${top.name}), amb ${f.n(top.votes)} vots, ${caElPct(f.p(top.share))} dels vàlids, i ${top.seats} dels ${m.municipal.seats} regidors.`,
         },
         {
           question: `Quants regidors té l'Ajuntament ${de}?`,
@@ -302,7 +312,7 @@ export function buildElectionPage(m: Municipality, locale: Locale, snapshot: Ele
           ...(sameComarca.length ? [{ label: `${m.comarca}`, links: sameComarca.map(link) }] : []),
           ...(sameProvince.length ? [{ label: `Altres municipis de la província de ${m.province}`, links: sameProvince.map(link) }] : []),
         ],
-        hub: { ...hub, label: "Els 100 municipis més poblats, per comarques" },
+        hub: { ...hub, label: `Els ${PAGES_PER_LOCALE.ca} municipis més poblats, per comarques` },
       },
       related: { title: "Guies sobre les eleccions", links: related },
       sources: {
@@ -442,7 +452,7 @@ export function buildElectionPage(m: Municipality, locale: Locale, snapshot: Ele
           ...(sameComarca.length ? [{ label: `${m.comarca}`, links: sameComarca.map(link) }] : []),
           ...(sameProvince.length ? [{ label: `Otros municipios de la provincia de ${m.province}`, links: sameProvince.map(link) }] : []),
         ],
-        hub: { ...hub, label: "Los 100 municipios más poblados, por comarcas" },
+        hub: { ...hub, label: `Los ${PAGES_PER_LOCALE.es} municipios más poblados, por comarcas` },
       },
       related: { title: "Guías sobre las elecciones", links: related },
       sources: {
@@ -581,7 +591,7 @@ export function buildElectionPage(m: Municipality, locale: Locale, snapshot: Ele
         ...(sameComarca.length ? [{ label: `${m.comarca}`, links: sameComarca.map(link) }] : []),
         ...(sameProvince.length ? [{ label: `Elsewhere in the province of ${m.province}`, links: sameProvince.map(link) }] : []),
       ],
-      hub: { ...hub, label: "Catalonia's largest towns" },
+      hub: { ...hub, label: "Catalonia's largest towns and resorts, by comarca" },
     },
     related: { title: "Election guides", links: related },
     sources: {

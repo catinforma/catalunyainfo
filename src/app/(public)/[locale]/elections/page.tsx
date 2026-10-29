@@ -5,7 +5,7 @@ import { ElectionsHubPage } from "@/components/programmatic/ElectionsHubPage";
 import { electionsHubMetadata } from "@/lib/programmatic/elections/metadata";
 import { resolveElectionsHub } from "@/lib/programmatic/elections/pages";
 
-/** `/en/elections/`: the English municipality pages (the ten largest). `en` only. */
+/** `/en/elections/`: the English municipality pages (largest towns and resorts). `en` only. */
 const LOCALE = "en";
 
 export const revalidate = false;

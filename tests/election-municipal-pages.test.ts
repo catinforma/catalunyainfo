@@ -4,13 +4,28 @@ import { test } from "node:test";
 import { ELECTION_NIGHT } from "../src/lib/content/batch02/election-night.ts";
 import { MUNICIPAL_RESULTS } from "../src/lib/content/batch02/municipal-results.ts";
 import { LOCALES, type Locale } from "../src/lib/i18n/config.ts";
-import { ELECTION_NIGHT_RESULTS_URL, NEXT_MUNICIPAL, buildElectionPage, caEl } from "../src/lib/programmatic/elections/model.ts";
+import { VOTING } from "../src/lib/content/batch02/voting.ts";
+import {
+  ELECTION_NIGHT_RESULTS_URL,
+  INTERIOR_CHECKED,
+  NEXT_MUNICIPAL,
+  buildElectionPage,
+  caDelPct,
+  caEl,
+  caElPct,
+  caTheOrdinal,
+} from "../src/lib/programmatic/elections/model.ts";
 import { displayName, slugify } from "../src/lib/programmatic/elections/names.ts";
-import { hubCopy } from "../src/lib/programmatic/elections/hub.ts";
+import { TOURISM_REGISTER, hubCopy } from "../src/lib/programmatic/elections/hub.ts";
 import {
   DESCRIPTION_LIMIT,
+  EN_LARGEST,
+  EN_RESORTS,
+  PAGES_PER_LOCALE,
+  PRERENDERED_PER_LOCALE,
   TITLE_LIMIT,
   byComarca,
+  comarcaAnchor,
   electionDescription,
   electionPath,
   electionTitle,
@@ -44,11 +59,11 @@ const bySlug = (slug: string): Municipality => {
 /* Snapshot shape and invariants                                              */
 /* -------------------------------------------------------------------------- */
 
-test("the snapshot holds the 100 most populous municipalities, largest first, with unique slugs", () => {
-  assert.equal(ALL.length, 100);
+test("the snapshot holds the 300 most populous municipalities, largest first, with unique slugs", () => {
+  assert.equal(ALL.length, 300);
   for (let i = 1; i < ALL.length; i++) assert.ok(ALL[i - 1]!.population >= ALL[i]!.population, `order at ${ALL[i]!.slug}`);
-  assert.equal(new Set(ALL.map((m) => m.slug)).size, 100);
-  assert.equal(new Set(ALL.map((m) => m.code)).size, 100);
+  assert.equal(new Set(ALL.map((m) => m.slug)).size, 300);
+  assert.equal(new Set(ALL.map((m) => m.code)).size, 300);
   for (const m of ALL) {
     assert.match(m.code, /^\d{5}$/);
     assert.equal(m.idescat.slice(0, 5), m.code);
@@ -58,10 +73,20 @@ test("the snapshot holds the 100 most populous municipalities, largest first, wi
     assert.ok(["Barcelona", "Girona", "Lleida", "Tarragona"].includes(m.province), `${m.slug}: ${m.province}`);
   }
   assert.equal(ALL[0]!.slug, "barcelona");
-  // Population ranking: Idescat, 1 January 2025 (read 27 Oct 2026). 100th: Abrera, 13,227.
+  // Population ranking: Idescat, 1 January 2025, read 27 Oct 2026 (tranche 1)
+  // and 29 Oct 2026 (tranche 2, same release). 100th: Abrera, 13,227; 101st:
+  // Castellbisbal, 13,061; 300th: Castellet i la Gornal, 2,776 (301st:
+  // Linyola, 2,762, not included).
   assert.equal(SNAPSHOT.sources.population.period, "2025-01-01");
-  assert.equal(ALL[99]!.name, "Abrera");
-  assert.equal(ALL[99]!.population, 13227);
+  assert.deepEqual([ALL[99]!.name, ALL[99]!.population], ["Abrera", 13227]);
+  assert.deepEqual([ALL[100]!.name, ALL[100]!.population], ["Castellbisbal", 13061]);
+  assert.deepEqual([ALL[299]!.name, ALL[299]!.population], ["Castellet i la Gornal", 2776]);
+  assert.ok(!ALL.some((m) => m.slug === "linyola"));
+  // Tranche 1's hundred are still the first hundred, in the same order.
+  assert.deepEqual(
+    ALL.slice(0, 5).map((m) => m.slug),
+    ["barcelona", "l-hospitalet-de-llobregat", "terrassa", "badalona", "sabadell"],
+  );
 });
 
 test("the snapshot carries its sources, official and https, with ISO dates", () => {
@@ -215,6 +240,138 @@ test("known answers: four municipalities match the official source exactly", () 
   assert.equal(turnout(bySlug("barcelona").municipal).toFixed(2), "60.59");
 });
 
+/**
+ * Tranche 2: read on 29 Oct 2026 straight from analisi.transparenciacatalunya.cat
+ * (irrv-2mfc and ntc4-rnwr, `id_nivell_territorial='MU'`, one SoQL query per
+ * town and election, outside the snapshot script). The first new town (101st),
+ * the last (300th), a Costa Brava resort, the Aran's capital and Salou.
+ * [short, name, votes, councillors], as the source writes them.
+ */
+const KNOWN_T2 = {
+  castellbisbal: {
+    rank: 101,
+    municipal: { electorate: 9628, voters: 5523, nullVotes: 74, blankVotes: 68, validVotes: 5449, seats: 17, censusPopulation: 12735 },
+    lists: [
+      ["ALTpCB-C", "Alternativa per Castellbisbal - Confluència", 1577, 5],
+      ["CP", "Som-hi Castellbisbal - Candidatura de Progrés", 1350, 5],
+      ["SOM VEU", "Som Veu - Som Veïnes i Veïns d'Urbanitzacions de Castellbisbal", 835, 3],
+      ["CM", "Junts per Catalunya Castellbisbal - Compromís Municipal", 539, 2],
+      ["ERC-AM", "Esquerra Republicana de Catalunya - Acord Municipal", 414, 1],
+      ["VOX", "VOX", 325, 1],
+      ["CUP-AMUNT", "Candidatura d'Unitat Popular - Alternativa Municipalista", 180, 0],
+      ["Cs", "Ciutadans - Partido de la Ciudadanía", 161, 0],
+    ],
+    congress: { electorate: 9584, voters: 6748, validVotes: 6682, PSC: 2313 },
+    parliament: { electorate: 9750, voters: 5853, validVotes: 5784, PSC: 1697 },
+  },
+  "castellet-i-la-gornal": {
+    rank: 300,
+    municipal: { electorate: 1979, voters: 1015, nullVotes: 20, blankVotes: 24, validVotes: 995, seats: 11, censusPopulation: 2474 },
+    lists: [
+      ["PSC-CP", "Partit dels Socialistes de Catalunya - Candidatura de Progrés", 424, 5],
+      ["CM", "Junts per Castellet I la Gornal - Compromís Municipal", 224, 3],
+      ["ERC-AM", "Esquerra Republicana de Catalunya - Acord Municipal", 181, 2],
+      ["VALENTS", "Valents", 142, 1],
+    ],
+    congress: { electorate: 1974, voters: 1232, validVotes: 1217, PSC: 443 },
+    parliament: { electorate: 2005, voters: 1076, validVotes: 1063, PSC: 318 },
+  },
+  "tossa-de-mar": {
+    rank: 185,
+    municipal: { electorate: 4044, voters: 2498, nullVotes: 49, blankVotes: 47, validVotes: 2449, seats: 13, censusPopulation: 5956 },
+    lists: [
+      ["CM", "+ Tossa - Compromís Municipal", 759, 5],
+      ["TU-IdSELVA", "Tossa Unida - Independents de la Selva", 554, 3],
+      ["ENDAVANT TOSSA-FIC", "Endavant Tossa - FIC", 520, 3],
+      ["TOSSA SEMPRE!", "Tossa Sempre!", 282, 2],
+      ["PP", "Partido Popular", 133, 0],
+      ["ERC-AM", "Esquerra Republicana de Catalunya - Acord Municipal", 105, 0],
+      ["PSC-CP", "Socialistes de Tossa - Partit dels Socialistes de Catalunya - Candidatura de Progrés", 49, 0],
+    ],
+    congress: { electorate: 3945, voters: 2486, validVotes: 2445, PSC: 715 },
+    parliament: { electorate: 3981, voters: 2130, validVotes: 2105, PSC: 494 },
+  },
+  "vielha-e-mijaran": {
+    rank: 198,
+    municipal: { electorate: 3863, voters: 2285, nullVotes: 41, blankVotes: 48, validVotes: 2244, seats: 13, censusPopulation: 5581 },
+    lists: [
+      ["UA-PSC-CP", "Unitat d'Aran - Partit dels Socialistes de Catalunya - Candidatura de Progrés", 1188, 8],
+      ["CDA-PNA", "Convergéncia Democratica Aranesa - Partit Nacionalista Aranés", 577, 3],
+      ["AA-AM", "Aran Amassa - Acord Municipal", 308, 2],
+      ["VOX", "VOX", 62, 0],
+      ["PP", "Partido Popular", 61, 0],
+    ],
+    congress: { electorate: 3758, voters: 2307, validVotes: 2275, PSC: 813 },
+    parliament: { electorate: 3754, voters: 1751, validVotes: 1730, PSC: 638 },
+  },
+  salou: {
+    rank: 46,
+    municipal: { electorate: 16966, voters: 8093, nullVotes: 139, blankVotes: 104, validVotes: 7954, seats: 21, censusPopulation: 29028 },
+    lists: [
+      ["Sumen per Salou-PSC-CP", "Sumem per Salou - Partit dels Socialistes de Catalunya - Candidatura de Progrés", 2350, 8],
+      ["ERC-AM", "Esquerra Republicana de Catalunya - Acord Municipal", 1289, 4],
+      ["VOX", "VOX", 931, 3],
+      ["PP", "Partido Popular", 787, 3],
+      ["ARA PL", "Sempre Salou - Ara Pacte Local", 726, 2],
+      ["USAP", "Unidos Salou Acció Plural", 416, 1],
+      ["Cs", "Ciutadans - Partido de la Ciudadanía", 363, 0],
+      ["CM", "Junts per Salou - Compromís Municipal", 335, 0],
+      ["SECP-C", "Salou En Comú Podem - Confluència", 254, 0],
+      ["CNV", "Convergents", 249, 0],
+      ["VALENTS", "Valents", 76, 0],
+      ["A per TGN", "Asamblea Por Tarragona", 74, 0],
+    ],
+    congress: { electorate: 16437, voters: 9740, validVotes: 9658, PSC: 3175 },
+    parliament: { electorate: 16721, voters: 7983, validVotes: 7924, PSC: 2267 },
+  },
+} as const;
+
+test("known answers, tranche 2: five more municipalities match the official source exactly", () => {
+  for (const [slug, known] of Object.entries(KNOWN_T2)) {
+    const m = bySlug(slug);
+    assert.equal(ALL.indexOf(m) + 1, known.rank, `${slug} rank`);
+    for (const [field, value] of Object.entries(known.municipal)) {
+      assert.equal(m.municipal[field as keyof typeof known.municipal], value, `${slug} municipal ${field}`);
+    }
+    assert.equal(m.municipal.lists.length, known.lists.length, `${slug}: every list`);
+    known.lists.forEach(([short, name, votes, seats], i) => {
+      const list = m.municipal.lists[i];
+      assert.deepEqual([list?.short, list?.name, list?.votes, list?.seats], [short, name, votes, seats], `${slug} list ${i + 1}`);
+    });
+    for (const key of ["congress", "parliament"] as const) {
+      const k = known[key];
+      assert.equal(m[key].electorate, k.electorate, `${slug} ${key} electorate`);
+      assert.equal(m[key].voters, k.voters, `${slug} ${key} voters`);
+      assert.equal(m[key].validVotes, k.validVotes, `${slug} ${key} valid`);
+      assert.equal(m[key].votes["6"], k.PSC, `${slug} ${key} PSC (list code 6)`);
+    }
+  }
+});
+
+test("known answers, tranche 2: the last seat in a council of 11, worked by hand", () => {
+  // Castellet i la Gornal, 995 valid votes: threshold 50 (5 % = 49.75), all
+  // four lists in. Quotients in order: 424, 224, 212, 181, 142, 141.3, 112,
+  // 106, 90.5, 84.8, 74.7 (CM, 224 ÷ 3) = 11th seat; next 71 (VALENTS, 142 ÷ 2).
+  const m = bySlug("castellet-i-la-gornal");
+  const view = municipalView(m.municipal);
+  assert.equal(view.threshold, 50);
+  assert.equal(view.belowThreshold, 0);
+  assert.deepEqual([view.dhondt.last?.code, view.dhondt.last?.divisor], [m.municipal.lists[1]!.code, 3]);
+  assert.deepEqual([view.dhondt.nextOut?.votes, view.dhondt.nextOut?.divisor], [142, 2]);
+  const ca = buildElectionPage(m, "ca").seats.md.join(" ");
+  assert.match(ca, /L'11è i últim regidor el va obtenir CM, amb un quocient de 74,7 \(224 vots ÷ 3\)/);
+  assert.match(ca, /71 \(VALENTS, 142 ÷ 2\)/);
+  assert.match(buildElectionPage(m, "es").seats.md.join(" "), /El 11\.º y último concejal lo obtuvo CM/);
+  assert.match(buildElectionPage(m, "ca").seats.md.join(" "), /amb 2\.474 habitants al padró de referència/);
+  // Catalan elides the article before 1 and 11 in percentages too.
+  assert.equal(caElPct("11,2 %"), "l'11,2 %");
+  assert.equal(caDelPct("1,5 %"), "de l'1,5 %");
+  assert.equal(caDelPct("50,3 %"), "del 50,3 %");
+  assert.equal(caElPct("10,9 %"), "el 10,9 %");
+  assert.equal(caElPct("1.234"), "el 1.234", "a thousands separator is not a decimal comma");
+  assert.equal(caTheOrdinal(13), "El 13è");
+});
+
 test("known answers: Catalonia's vote from abroad is the four 'Residents Absents' rows", () => {
   const abroad = SNAPSHOT.catalonia.congress.abroad;
   assert.equal(abroad.electorate, 217682 + 24016 + 18277 + 21576);
@@ -302,12 +459,29 @@ test("each route serves only its own locale; anything else is a 404", () => {
   assert.equal(resolveElectionPage("ca", "en", "sabadell"), null, "/en/eleccions/sabadell/");
   assert.equal(resolveElectionPage("es", "ca", "sabadell"), null, "/ca/elecciones/sabadell/");
   assert.equal(resolveElectionPage("en", "ca", "barcelona"), null, "/ca/elections/barcelona/");
-  // English only for the ten largest: Girona is 11th.
-  assert.equal(municipalitiesFor("en").length, 10);
-  assert.equal(resolveElectionPage("en", "en", "girona"), null);
-  assert.equal(resolveElectionPage("ca", "ca", "girona")?.name, "Girona");
-  // Outside the 100, unknown and malformed slugs.
-  assert.equal(resolveElectionPage("ca", "ca", "castellbisbal"), null, "101st");
+  // English: the 11 largest (Girona is 11th) and the resorts; Sant Cugat (12th) is not one.
+  assert.equal(municipalitiesFor("en").length, 30);
+  assert.equal(resolveElectionPage("en", "en", "girona")?.name, "Girona");
+  assert.equal(resolveElectionPage("en", "en", "salou")?.name, "Salou");
+  assert.equal(resolveElectionPage("en", "en", "tossa-de-mar")?.name, "Tossa de Mar");
+  assert.equal(resolveElectionPage("en", "en", "sant-cugat-del-valles"), null, "12th, not a resort");
+  assert.equal(resolveElectionPage("en", "en", "castellbisbal"), null);
+  assert.equal(resolveElectionPage("ca", "ca", "sant-cugat-del-valles")?.name, "Sant Cugat del Vallès");
+  // Tranche 2 in Catalan and Spanish: the 101st to the 300th now resolve.
+  assert.equal(resolveElectionPage("ca", "ca", "castellbisbal")?.name, "Castellbisbal", "101st");
+  assert.equal(resolveElectionPage("es", "es", "castellbisbal")?.name, "Castellbisbal");
+  assert.equal(resolveElectionPage("ca", "ca", "castellet-i-la-gornal")?.name, "Castellet i la Gornal", "300th");
+  assert.equal(resolveElectionPage("es", "es", "vielha-e-mijaran")?.name, "Vielha e Mijaran");
+  assert.equal(resolveElectionPage("es", "ca", "castellbisbal"), null, "/ca/elecciones/castellbisbal/");
+  assert.equal(resolveElectionPage("ca", "es", "tossa-de-mar"), null, "/es/eleccions/tossa-de-mar/");
+  // Outside the 300, unknown and malformed slugs.
+  assert.equal(resolveElectionPage("ca", "ca", "linyola"), null, "301st");
+  assert.equal(resolveElectionPage("es", "es", "linyola"), null, "301st");
+  assert.equal(resolveElectionPage("ca", "ca", "prats-de-llucanes"), null, "302nd");
+  assert.equal(resolveElectionPage("ca", "ca", "pals"), null, "a resort outside the 300 (318th)");
+  assert.equal(resolveElectionPage("ca", "ca", "cadaques")?.name, "Cadaqués", "inside: 2,918 residents");
+  assert.equal(resolveElectionPage("ca", "ca", "castellbisbal/"), null);
+  assert.equal(resolveElectionPage("ca", "ca", ""), null);
   assert.equal(resolveElectionPage("ca", "ca", "Sabadell"), null);
   assert.equal(resolveElectionPage("ca", "ca", "../sabadell"), null);
   assert.equal(resolveElectionPage("ca", "xx", "sabadell"), null);
@@ -318,9 +492,15 @@ test("each route serves only its own locale; anything else is a 404", () => {
 });
 
 test("only the 20 largest are prerendered, and only in their own locale", () => {
+  // 300 + 300 + 30 pages, 60 at build time: the rest render once on first request.
+  assert.equal(PRERENDERED_PER_LOCALE, 20);
   assert.equal(electionsStaticParams("ca").length, 20);
   assert.equal(electionsStaticParams("es").length, 20);
-  assert.equal(electionsStaticParams("en").length, 10);
+  assert.equal(electionsStaticParams("en").length, 20);
+  assert.deepEqual(
+    electionsStaticParams("ca").map((p) => p.municipi),
+    ALL.slice(0, 20).map((m) => m.slug),
+  );
   for (const locale of LOCALES) {
     // Every entry names both segments: an entry without `municipi` made Next prerender nothing.
     assert.ok(electionsStaticParams(locale).every((p) => p.locale === locale && p.municipi), locale);
@@ -334,7 +514,16 @@ test("paths, hreflang alternates and Catalan prepositions", () => {
   assert.equal(electionPath("es", "sabadell"), "/es/elecciones/sabadell/");
   assert.equal(electionPath("en", "sabadell"), "/en/elections/sabadell/");
   assert.deepEqual(Object.keys(electionTranslations(bySlug("sabadell"))), ["ca", "es", "en"]);
-  assert.deepEqual(Object.keys(electionTranslations(bySlug("girona"))), ["ca", "es"]);
+  assert.deepEqual(Object.keys(electionTranslations(bySlug("girona"))), ["ca", "es", "en"]);
+  assert.deepEqual(Object.keys(electionTranslations(bySlug("sant-cugat-del-valles"))), ["ca", "es"]);
+  assert.deepEqual(Object.keys(electionTranslations(bySlug("castellet-i-la-gornal"))), ["ca", "es"]);
+  assert.deepEqual(Object.keys(electionTranslations(bySlug("l-escala"))), ["ca", "es", "en"]);
+  assert.equal(inCa("l'Ametlla de Mar"), "a l'Ametlla de Mar");
+  assert.equal(inCa("els Hostalets de Pierola"), "als Hostalets de Pierola");
+  assert.equal(ofCa("Ulldecona"), "d'Ulldecona");
+  assert.equal(ofCa("Hostalric"), "d'Hostalric");
+  assert.equal(slugify("Castell d'Aro, Platja d'Aro i s'Agaró"), "castell-d-aro-platja-d-aro-i-s-agaro");
+  assert.equal(displayName("Castell d'Aro, Platja d'Aro i s'Agaró"), "Castell d'Aro, Platja d'Aro i s'Agaró", "a comma that is not an article");
   assert.equal(displayName("Hospitalet de Llobregat, l'"), "l'Hospitalet de Llobregat");
   assert.equal(displayName("Prat de Llobregat, el"), "el Prat de Llobregat");
   assert.equal(slugify("l'Hospitalet de Llobregat"), "l-hospitalet-de-llobregat");
@@ -376,6 +565,17 @@ test("titles fit 60 characters with the place and the year; descriptions fit 155
   // The brief's own wording, where it fits.
   assert.equal(electionTitle("ca", bySlug("vic")), "Resultats eleccions Vic: municipals 2023, generals i 29N");
   assert.equal(electionTitle("es", bySlug("sabadell")), "Resultados elecciones Sabadell: municipales 2023 y 29N");
+  // The two longest names (37 and 36 characters) fall back to the short forms.
+  const platja = bySlug("castell-d-aro-platja-d-aro-i-s-agaro");
+  assert.equal(electionTitle("ca", platja), "Eleccions Castell d'Aro, Platja d'Aro i s'Agaró: 2023 i 29N");
+  assert.equal(electionTitle("es", platja), "Elecciones Castell d'Aro, Platja d'Aro i s'Agaró: 2023 y 29N");
+  assert.equal(electionTitle("en", platja), "Castell d'Aro, Platja d'Aro i s'Agaró: 2023 election results");
+  assert.equal(electionTitle("ca", bySlug("vandellos-i-l-hospitalet-de-l-infant")), "Eleccions Vandellòs i l'Hospitalet de l'Infant: 2023 i 29N");
+  // 630 town pages, every one with its own title and description.
+  assert.equal(LOCALES.reduce((n, locale) => n + municipalitiesFor(locale).length, 0), 630);
+  for (const m of municipalitiesFor("ca")) {
+    assert.doesNotMatch(electionDescription("ca", m), /\b(del|el) 1{1,2},/, `${m.slug}: Catalan elision`);
+  }
 });
 
 /* -------------------------------------------------------------------------- */
@@ -415,17 +615,30 @@ test("the 29N line: countdown, the day before, the day, the day after, and the s
 /* Sitemap                                                                    */
 /* -------------------------------------------------------------------------- */
 
-test("sitemap: 213 URLs with the snapshot date and their language alternates", () => {
+test("sitemap: 633 URLs with the snapshot date and their language alternates", () => {
   const entries = electionsSitemapPaths();
-  assert.equal(entries.length, 3 + 100 + 100 + 10);
+  assert.equal(entries.length, 3 + 300 + 300 + 30);
+  assert.equal(entries.filter((e) => e.path.startsWith("/ca/eleccions/")).length, 301);
+  assert.equal(entries.filter((e) => e.path.startsWith("/es/elecciones/")).length, 301);
+  assert.equal(entries.filter((e) => e.path.startsWith("/en/elections/")).length, 31);
+  // Every sitemap URL resolves, and nothing that 404s is listed.
+  for (const entry of entries) {
+    const [, locale, , slug] = entry.path.split("/");
+    if (!slug) continue;
+    assert.ok(resolveElectionPage(locale as Locale, locale!, slug), `${entry.path} resolves`);
+  }
+  assert.ok(!entries.some((e) => e.path.includes("/linyola/")));
+  assert.ok(!entries.some((e) => e.path === "/en/elections/sant-cugat-del-valles/"));
   assert.equal(new Set(entries.map((e) => e.path)).size, entries.length);
   for (const entry of entries) {
     assert.match(entry.path, /^\/(ca\/eleccions|es\/elecciones|en\/elections)\/([a-z0-9-]+\/)?$/);
     assert.equal(entry.lastModified, SNAPSHOT.readAt);
     assert.ok(Object.values(entry.translations).includes(entry.path), `${entry.path} lists itself`);
   }
-  const girona = entries.find((e) => e.path === "/es/elecciones/girona/");
-  assert.deepEqual(girona?.translations, { ca: "/ca/eleccions/girona/", es: "/es/elecciones/girona/" });
+  const santCugat = entries.find((e) => e.path === "/es/elecciones/sant-cugat-del-valles/");
+  assert.deepEqual(santCugat?.translations, { ca: "/ca/eleccions/sant-cugat-del-valles/", es: "/es/elecciones/sant-cugat-del-valles/" });
+  const tossa = entries.find((e) => e.path === "/en/elections/tossa-de-mar/");
+  assert.deepEqual(tossa?.translations, { ca: "/ca/eleccions/tossa-de-mar/", es: "/es/elecciones/tossa-de-mar/", en: "/en/elections/tossa-de-mar/" });
   const bcn = entries.find((e) => e.path === "/en/elections/barcelona/");
   assert.deepEqual(bcn?.translations, { ca: "/ca/eleccions/barcelona/", es: "/es/elecciones/barcelona/", en: "/en/elections/barcelona/" });
   assert.deepEqual(electionsSitemap(), [], "nothing on a deployment that may not be indexed");
@@ -437,16 +650,31 @@ test("sitemap: 213 URLs with the snapshot date and their language alternates", (
 
 const pageText = (m: Municipality, locale: Locale) => JSON.stringify(buildElectionPage(m, locale));
 
+/** The page minus every name copied from the source (a mayor called Maria Victoria is not a claim of victory). */
+const ownText = (m: Municipality, locale: Locale) => {
+  const labels = [SNAPSHOT.elections.congress.lists, SNAPSHOT.elections.parliament.lists].flatMap((l) => Object.values(l ?? {}));
+  const names = [m.mayor?.name ?? "", ...m.municipal.lists.flatMap((l) => [l.name, l.short]), ...labels.flatMap((l) => [l.name, l.short])]
+    .filter(Boolean)
+    .sort((a, b) => b.length - a.length);
+  return names.reduce((text, name) => text.split(JSON.stringify(name).slice(1, -1)).join(""), pageText(m, locale));
+};
+
 test("neutral: no polls, forecasts or winners; no guessed results site; no template leaks", () => {
   for (const locale of LOCALES) {
     for (const m of municipalitiesFor(locale)) {
       const text = pageText(m, locale);
-      assert.doesNotMatch(text, /enquest|sondeig|encuesta|sondeo|\bpolls?\b|previsi|pronòstic|pronóstico|forecast|projecci|proyecci|projection|guanyador|ganador|winner|victòria|victoria|victory/i, `${locale}/${m.slug}`);
+      assert.doesNotMatch(ownText(m, locale), /enquest|sondeig|encuesta|sondeo|\bpolls?\b|previsi|pronòstic|pronóstico|forecast|projecci|proyecci|projection|guanyador|ganador|winner|victòria|victoria|victory/i, `${locale}/${m.slug}`);
       assert.doesNotMatch(text, /aerobusbcn|resultados\.[a-z]|https?:\/\/resultados|generales\d+j?\.es/i, `${locale}/${m.slug}`);
       assert.doesNotMatch(text, /\$\{|undefined|NaN|\[object/, `${locale}/${m.slug}`);
+      // Catalan elides before "u" and "onze": "l'11è", "de l'1,5 %", never "el 11,2 %".
+      if (locale === "ca") assert.doesNotMatch(ownText(m, locale), /\b(el|del|El) 1{1,2}(,\d| %|è|r)/, `ca/${m.slug}: elision`);
     }
   }
   assert.equal(ELECTION_NIGHT_RESULTS_URL, null, "no results-night link until Interior announces it");
+  // Re-checked 29 Oct 2026: Interior's 21 Oct note is a media-only repository, not a public site.
+  assert.equal(INTERIOR_CHECKED, "2026-10-29");
+  assert.match(buildElectionPage(bySlug("salou"), "ca").slot.md[1]!, /comprovat el 29 d'octubre de 2026/);
+  assert.match(buildElectionPage(bySlug("salou"), "en").slot.md[1]!, /checked on 29 October 2026/);
 });
 
 test("each page carries its own data and the original guidance blocks", () => {
@@ -488,6 +716,92 @@ test("siblings and the hub: every page is linked, by comarca", () => {
     siblings(bySlug("sabadell"), "ca").sameComarca.map((m) => m.slug).slice(0, 2),
     ["terrassa", "sant-cugat-del-valles"],
   );
+});
+
+test("siblings reach every page: each Catalan and Spanish page is linked from another town's page", () => {
+  for (const locale of ["ca", "es"] as const) {
+    const inbound = new Map<string, number>();
+    for (const m of municipalitiesFor(locale)) {
+      const { sameComarca, sameProvince } = siblings(m, locale);
+      assert.ok(sameComarca.length + sameProvince.length <= 8, `${m.slug}: at most 8 links`);
+      assert.equal(new Set([...sameComarca, ...sameProvince].map((x) => x.slug)).size, sameComarca.length + sameProvince.length);
+      for (let i = 1; i < sameComarca.length; i++) assert.ok(sameComarca[i - 1]!.population >= sameComarca[i]!.population, `${m.slug}: largest first`);
+      for (const x of [...sameComarca, ...sameProvince]) inbound.set(x.slug, (inbound.get(x.slug) ?? 0) + 1);
+    }
+    const orphans = municipalitiesFor(locale).filter((m) => !inbound.get(m.slug)).map((m) => m.slug);
+    assert.deepEqual(orphans, [], `${locale}: pages only the hub links to`);
+  }
+  // In a comarca with more towns than links: its largest town, then the
+  // nearest in size, and two links to other comarques.
+  const small = siblings(bySlug("vallromanes"), "ca");
+  assert.equal(small.sameComarca.length, 6);
+  assert.equal(small.sameProvince.length, 2);
+  assert.equal(small.sameComarca[0]!.slug, "granollers", "the Vallès Oriental's largest town");
+  assert.ok(small.sameComarca.slice(1).every((x) => x.population < 20_000), "the rest are near Vallromanes in size");
+  // Moià, the only page in the Moianès, is linked from towns of its size.
+  assert.ok(municipalitiesFor("ca").some((m) => siblings(m, "ca").sameProvince.some((x) => x.slug === "moia")));
+  // A comarca with a single page falls back to the province.
+  const vielha = siblings(bySlug("vielha-e-mijaran"), "ca");
+  assert.equal(vielha.sameComarca.length, 0);
+  assert.equal(vielha.sameProvince.length, 4);
+  assert.ok(vielha.sameProvince.every((x) => x.province === "Lleida"));
+});
+
+test("the English set: the 11 largest and the 19 resorts, all with Catalan and Spanish pages", () => {
+  const en = municipalitiesFor("en");
+  assert.equal(en.length, PAGES_PER_LOCALE.en);
+  assert.equal(EN_LARGEST + EN_RESORTS.length, 30);
+  assert.equal(new Set(EN_RESORTS).size, EN_RESORTS.length);
+  const largest = ALL.slice(0, EN_LARGEST);
+  assert.deepEqual(en.slice(0, 7).map((m) => m.slug), largest.slice(0, 7).map((m) => m.slug));
+  for (const m of largest) assert.ok(en.includes(m), `${m.slug}: one of the 11 largest`);
+  // The hub says the four provincial capitals are among the 11.
+  for (const capital of ["barcelona", "girona", "lleida", "tarragona"]) assert.ok(largest.some((m) => m.slug === capital), capital);
+  for (const slug of EN_RESORTS) {
+    const m = bySlug(slug);
+    assert.ok(ALL.indexOf(m) >= EN_LARGEST, `${slug} is a resort, not one of the 11`);
+    assert.ok(en.includes(m), slug);
+  }
+  for (let i = 1; i < en.length; i++) assert.ok(en[i - 1]!.population >= en[i]!.population, "largest first");
+  for (const m of en) assert.ok(municipalitiesFor("ca").includes(m) && municipalitiesFor("es").includes(m), `${m.slug} in ca and es`);
+  const hub = hubCopy("en");
+  assert.ok(hub.sources.some((s) => s.url === TOURISM_REGISTER.url), "the register the resorts come from is cited");
+  assert.match(hub.intro.join(" "), /the 11 largest .* and the 19 with the most places/);
+  assert.match(hub.intro.join(" "), /cover the 300 most populous/);
+});
+
+test("the hubs: 300 pages by comarca with a jump list, 30 in English", () => {
+  for (const locale of LOCALES) {
+    const groups = byComarca(locale);
+    const anchors = groups.map((g) => comarcaAnchor(g.comarca));
+    assert.equal(new Set(anchors).size, anchors.length, `${locale}: anchors unique`);
+    for (const anchor of anchors) assert.match(anchor, /^c-[a-z0-9]+(-[a-z0-9]+)*$/);
+    assert.equal(groups.reduce((n, g) => n + g.municipalities.length, 0), PAGES_PER_LOCALE[locale]);
+    assert.ok(hubCopy(locale).jumpLabel);
+  }
+  assert.equal(byComarca("ca").length, 40, "40 of Catalonia's comarques have at least one page");
+  assert.equal(comarcaAnchor("Vallès Oriental"), "c-valles-oriental");
+  assert.equal(comarcaAnchor("Pla de l'Estany"), "c-pla-de-l-estany");
+  assert.match(hubMeta("ca").title, /els 300 més poblats/);
+  assert.match(hubMeta("es").title, /los 300 más poblados/);
+  assert.match(hubCopy("ca").lead, /als 300 municipis més poblats/);
+  for (const locale of LOCALES) {
+    const model = buildElectionPage(bySlug("salou"), locale);
+    assert.equal(model.siblings.hub.href, hubPath(locale));
+  }
+  assert.equal(buildElectionPage(bySlug("salou"), "ca").siblings.hub.label, "Els 300 municipis més poblats, per comarques");
+});
+
+test("the guides quote the page counts, not tranche 1's", () => {
+  for (const [name, article] of [["voting", VOTING], ["election night", ELECTION_NIGHT], ["municipal results", MUNICIPAL_RESULTS]] as const) {
+    for (const locale of LOCALES) {
+      const text = JSON.stringify(article.editions[locale].blocks);
+      assert.doesNotMatch(text, /100 municipis|100 municipios|ten largest/, `${name}/${locale}`);
+    }
+    assert.match(JSON.stringify(article.editions.ca.blocks), /300 municipis més poblats/, `${name}/ca`);
+    assert.match(JSON.stringify(article.editions.es.blocks), /300 municipios más poblados/, `${name}/es`);
+    assert.match(JSON.stringify(article.editions.en.blocks), /30 towns/, `${name}/en`);
+  }
 });
 
 test("the next municipal elections: fourth Sunday of May 2027, decree 55 days before", () => {

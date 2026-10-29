@@ -3,7 +3,7 @@
 import type { ElectionsSnapshot } from "./types";
 
 export const SNAPSHOT: ElectionsSnapshot = {
- "readAt": "2026-10-27",
+ "readAt": "2026-10-29",
  "sources": {
   "population": {
    "name": "Població a 1 de gener (padró municipal d'habitants), per municipis",
@@ -34,7 +34,7 @@ export const SNAPSHOT: ElectionsSnapshot = {
    "name": "Dades generals dels ens locals de Catalunya",
    "publisher": "Generalitat de Catalunya, Secretaria de Governs Locals i de Relacions amb l'Aran",
    "url": "https://analisi.transparenciacatalunya.cat/d/6nei-4b44",
-   "updated": "2026-10-27"
+   "updated": "2026-10-29"
   },
   "mayors": {
    "name": "Historial d’alcaldes/esses",
@@ -14284,6 +14284,22064 @@ export const SNAPSHOT: ElectionsSnapshot = {
      "1142": 4,
      "1143": 482,
      "1144": 11
+    }
+   }
+  },
+  {
+   "code": "08054",
+   "idescat": "080543",
+   "slug": "castellbisbal",
+   "name": "Castellbisbal",
+   "comarca": "Vallès Occidental",
+   "province": "Barcelona",
+   "population": 13061,
+   "mayor": {
+    "name": "Maria Dolores Conde Domínguez",
+    "party": "",
+    "since": "2023-06-17"
+   },
+   "municipal": {
+    "electorate": 9628,
+    "voters": 5523,
+    "nullVotes": 74,
+    "blankVotes": 68,
+    "listVotes": 5381,
+    "validVotes": 5449,
+    "seats": 17,
+    "censusPopulation": 12735,
+    "lists": [
+     {
+      "code": "80544230",
+      "short": "ALTpCB-C",
+      "name": "Alternativa per Castellbisbal - Confluència",
+      "votes": 1577,
+      "seats": 5
+     },
+     {
+      "code": "80544231",
+      "short": "CP",
+      "name": "Som-hi Castellbisbal - Candidatura de Progrés",
+      "votes": 1350,
+      "seats": 5
+     },
+     {
+      "code": "80544232",
+      "short": "SOM VEU",
+      "name": "Som Veu - Som Veïnes i Veïns d'Urbanitzacions de Castellbisbal",
+      "votes": 835,
+      "seats": 3
+     },
+     {
+      "code": "80544233",
+      "short": "CM",
+      "name": "Junts per Catalunya Castellbisbal - Compromís Municipal",
+      "votes": 539,
+      "seats": 2
+     },
+     {
+      "code": "193",
+      "short": "ERC-AM",
+      "name": "Esquerra Republicana de Catalunya - Acord Municipal",
+      "votes": 414,
+      "seats": 1
+     },
+     {
+      "code": "693",
+      "short": "VOX",
+      "name": "VOX",
+      "votes": 325,
+      "seats": 1
+     },
+     {
+      "code": "1039",
+      "short": "CUP-AMUNT",
+      "name": "Candidatura d'Unitat Popular - Alternativa Municipalista",
+      "votes": 180,
+      "seats": 0
+     },
+     {
+      "code": "301",
+      "short": "Cs",
+      "name": "Ciutadans - Partido de la Ciudadanía",
+      "votes": 161,
+      "seats": 0
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 9584,
+    "voters": 6748,
+    "nullVotes": 66,
+    "blankVotes": 54,
+    "listVotes": 6628,
+    "validVotes": 6682,
+    "votes": {
+     "6": 2313,
+     "10": 887,
+     "86": 791,
+     "693": 708,
+     "697": 3,
+     "1031": 546,
+     "1034": 6,
+     "1109": 136,
+     "1129": 86,
+     "1134": 20,
+     "1135": 1089,
+     "1136": 43
+    }
+   },
+   "parliament": {
+    "electorate": 9750,
+    "voters": 5853,
+    "nullVotes": 69,
+    "blankVotes": 70,
+    "listVotes": 5714,
+    "validVotes": 5784,
+    "votes": {
+     "6": 1697,
+     "10": 894,
+     "86": 576,
+     "301": 63,
+     "350": 7,
+     "693": 630,
+     "697": 7,
+     "1034": 7,
+     "1129": 94,
+     "1130": 144,
+     "1134": 26,
+     "1140": 354,
+     "1141": 208,
+     "1142": 2,
+     "1143": 977,
+     "1144": 28
+    }
+   }
+  },
+  {
+   "code": "08904",
+   "idescat": "089045",
+   "slug": "badia-del-valles",
+   "name": "Badia del Vallès",
+   "comarca": "Vallès Occidental",
+   "province": "Barcelona",
+   "population": 13060,
+   "mayor": {
+    "name": "Josep Martínez Valencia",
+    "party": "PSC-CP",
+    "since": "2024-06-29"
+   },
+   "municipal": {
+    "electorate": 10251,
+    "voters": 4953,
+    "nullVotes": 50,
+    "blankVotes": 68,
+    "listVotes": 4835,
+    "validVotes": 4903,
+    "seats": 17,
+    "censusPopulation": 13163,
+    "lists": [
+     {
+      "code": "842",
+      "short": "PSC-CP",
+      "name": "Partit dels Socialistes de Catalunya - Candidatura de Progrés",
+      "votes": 2508,
+      "seats": 11
+     },
+     {
+      "code": "89044231",
+      "short": "TFB-C",
+      "name": "Totes Fem Badia - Confluència",
+      "votes": 635,
+      "seats": 2
+     },
+     {
+      "code": "693",
+      "short": "VOX",
+      "name": "VOX",
+      "votes": 510,
+      "seats": 2
+     },
+     {
+      "code": "202386",
+      "short": "PP",
+      "name": "Partido Popular",
+      "votes": 406,
+      "seats": 1
+     },
+     {
+      "code": "193",
+      "short": "ERC-AM",
+      "name": "Esquerra Republicana de Catalunya - Acord Municipal",
+      "votes": 333,
+      "seats": 1
+     },
+     {
+      "code": "301",
+      "short": "Cs",
+      "name": "Ciutadans - Partido de la Ciudadanía",
+      "votes": 216,
+      "seats": 0
+     },
+     {
+      "code": "89044230",
+      "short": "CM",
+      "name": "Junts per Badia - Compromís Municipal",
+      "votes": 200,
+      "seats": 0
+     },
+     {
+      "code": "1126",
+      "short": "VALENTS",
+      "name": "Valents",
+      "votes": 27,
+      "seats": 0
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 10206,
+    "voters": 6219,
+    "nullVotes": 54,
+    "blankVotes": 57,
+    "listVotes": 6108,
+    "validVotes": 6165,
+    "votes": {
+     "6": 3001,
+     "10": 309,
+     "86": 824,
+     "693": 786,
+     "697": 10,
+     "1031": 59,
+     "1034": 7,
+     "1109": 50,
+     "1129": 97,
+     "1134": 17,
+     "1135": 943,
+     "1136": 5
+    }
+   },
+   "parliament": {
+    "electorate": 10257,
+    "voters": 5057,
+    "nullVotes": 38,
+    "blankVotes": 68,
+    "listVotes": 4951,
+    "validVotes": 5019,
+    "votes": {
+     "6": 2200,
+     "10": 443,
+     "86": 659,
+     "301": 112,
+     "350": 3,
+     "693": 717,
+     "697": 5,
+     "1034": 14,
+     "1129": 86,
+     "1130": 43,
+     "1134": 38,
+     "1140": 323,
+     "1141": 94,
+     "1142": 5,
+     "1143": 201,
+     "1144": 8
+    }
+   }
+  },
+  {
+   "code": "25203",
+   "idescat": "252038",
+   "slug": "la-seu-d-urgell",
+   "name": "la Seu d'Urgell",
+   "comarca": "Alt Urgell",
+   "province": "Lleida",
+   "population": 13009,
+   "mayor": {
+    "name": "Joan Barrera Aranda",
+    "party": "",
+    "since": "2023-06-17"
+   },
+   "municipal": {
+    "electorate": 9006,
+    "voters": 4480,
+    "nullVotes": 91,
+    "blankVotes": 91,
+    "listVotes": 4298,
+    "validVotes": 4389,
+    "seats": 17,
+    "censusPopulation": 12261,
+    "lists": [
+     {
+      "code": "252034231",
+      "short": "CxLS-CP",
+      "name": "Compromís X la Seu- Candidatura de Progrés",
+      "votes": 1876,
+      "seats": 8
+     },
+     {
+      "code": "252034232",
+      "short": "CM",
+      "name": "Junts per la Seu D’Urgell- Compromís Municipal",
+      "votes": 991,
+      "seats": 4
+     },
+     {
+      "code": "193",
+      "short": "ERC-AM",
+      "name": "Esquerra Republicana de Catalunya - Acord Municipal",
+      "votes": 665,
+      "seats": 3
+     },
+     {
+      "code": "252034230",
+      "short": "C.U.P.-AMUNT",
+      "name": "Candidatura d’Unitat Popular la Seu D’Urgell - Alternativa Municipalista",
+      "votes": 517,
+      "seats": 2
+     },
+     {
+      "code": "693",
+      "short": "VOX",
+      "name": "VOX",
+      "votes": 126,
+      "seats": 0
+     },
+     {
+      "code": "202386",
+      "short": "PP",
+      "name": "Partido Popular",
+      "votes": 123,
+      "seats": 0
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 8894,
+    "voters": 5058,
+    "nullVotes": 74,
+    "blankVotes": 38,
+    "listVotes": 4946,
+    "validVotes": 4984,
+    "votes": {
+     "6": 1667,
+     "10": 913,
+     "86": 647,
+     "643": 9,
+     "693": 263,
+     "697": 5,
+     "1031": 707,
+     "1034": 4,
+     "1109": 172,
+     "1129": 43,
+     "1134": 6,
+     "1135": 470,
+     "1136": 40
+    }
+   },
+   "parliament": {
+    "electorate": 8938,
+    "voters": 4520,
+    "nullVotes": 62,
+    "blankVotes": 95,
+    "listVotes": 4363,
+    "validVotes": 4458,
+    "votes": {
+     "6": 1199,
+     "10": 751,
+     "86": 367,
+     "301": 12,
+     "350": 6,
+     "546": 0,
+     "693": 262,
+     "697": 4,
+     "1034": 4,
+     "1130": 145,
+     "1134": 12,
+     "1140": 108,
+     "1141": 306,
+     "1143": 1173,
+     "1144": 14
+    }
+   }
+  },
+  {
+   "code": "17048",
+   "idescat": "170486",
+   "slug": "castell-d-aro-platja-d-aro-i-s-agaro",
+   "name": "Castell d'Aro, Platja d'Aro i s'Agaró",
+   "comarca": "Baix Empordà",
+   "province": "Girona",
+   "population": 12982,
+   "mayor": {
+    "name": "Mauricio Jiménez Ruiz",
+    "party": "PSC-CP",
+    "since": "2023-06-17"
+   },
+   "municipal": {
+    "electorate": 7493,
+    "voters": 3599,
+    "nullVotes": 43,
+    "blankVotes": 37,
+    "listVotes": 3519,
+    "validVotes": 3556,
+    "seats": 17,
+    "censusPopulation": 11757,
+    "lists": [
+     {
+      "code": "842",
+      "short": "PSC-CP",
+      "name": "Partit dels Socialistes de Catalunya - Candidatura de Progrés",
+      "votes": 1030,
+      "seats": 6
+     },
+     {
+      "code": "170484231",
+      "short": "CM",
+      "name": "Junts per Castell Platja d'Aro i S'Agaró",
+      "votes": 665,
+      "seats": 4
+     },
+     {
+      "code": "170484234",
+      "short": "BNC",
+      "name": "Bloc Nacionalista Catalá",
+      "votes": 387,
+      "seats": 2
+     },
+     {
+      "code": "170484230",
+      "short": "SOM-TE",
+      "name": "Som Castell d'Aro, Platja d'Aro i Sagaró - Tots Empordà",
+      "votes": 297,
+      "seats": 1
+     },
+     {
+      "code": "193",
+      "short": "ERC-AM",
+      "name": "Esquerra Republicana de Catalunya - Acord Municipal",
+      "votes": 248,
+      "seats": 1
+     },
+     {
+      "code": "170484233",
+      "short": "PARTIT AUTÒNOMS",
+      "name": "Partido Autónomos",
+      "votes": 240,
+      "seats": 1
+     },
+     {
+      "code": "170484232",
+      "short": "LVAEC-C",
+      "name": "La Vall d'Aro En Comú - Confluència",
+      "votes": 214,
+      "seats": 1
+     },
+     {
+      "code": "693",
+      "short": "VOX",
+      "name": "VOX",
+      "votes": 199,
+      "seats": 1
+     },
+     {
+      "code": "202386",
+      "short": "PP",
+      "name": "Partido Popular",
+      "votes": 129,
+      "seats": 0
+     },
+     {
+      "code": "170484235",
+      "short": "ARA PL",
+      "name": "Ara Castell Platja d'Aro i S'Agaró - Ara Pacte Local",
+      "votes": 110,
+      "seats": 0
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 6907,
+    "voters": 4216,
+    "nullVotes": 55,
+    "blankVotes": 28,
+    "listVotes": 4133,
+    "validVotes": 4161,
+    "votes": {
+     "6": 1360,
+     "10": 450,
+     "86": 650,
+     "693": 423,
+     "697": 4,
+     "1031": 677,
+     "1034": 12,
+     "1109": 65,
+     "1129": 51,
+     "1134": 4,
+     "1135": 373,
+     "1136": 64
+    }
+   },
+   "parliament": {
+    "electorate": 6986,
+    "voters": 3681,
+    "nullVotes": 31,
+    "blankVotes": 31,
+    "listVotes": 3619,
+    "validVotes": 3650,
+    "votes": {
+     "6": 935,
+     "10": 347,
+     "86": 434,
+     "301": 51,
+     "350": 1,
+     "693": 290,
+     "697": 0,
+     "1034": 5,
+     "1129": 33,
+     "1130": 256,
+     "1134": 9,
+     "1140": 91,
+     "1141": 66,
+     "1143": 1095,
+     "1144": 6
+    }
+   }
+  },
+  {
+   "code": "08302",
+   "idescat": "083020",
+   "slug": "vilanova-del-cami",
+   "name": "Vilanova del Camí",
+   "comarca": "Anoia",
+   "province": "Barcelona",
+   "population": 12936,
+   "mayor": {
+    "name": "Noemí Trucharte Cervera",
+    "party": "",
+    "since": "2023-06-17"
+   },
+   "municipal": {
+    "electorate": 9511,
+    "voters": 5296,
+    "nullVotes": 51,
+    "blankVotes": 90,
+    "listVotes": 5155,
+    "validVotes": 5245,
+    "seats": 17,
+    "censusPopulation": 12699,
+    "lists": [
+     {
+      "code": "842",
+      "short": "PSC-CP",
+      "name": "Partit dels Socialistes de Catalunya - Candidatura de Progrés",
+      "votes": 2418,
+      "seats": 9
+     },
+     {
+      "code": "83024230",
+      "short": "AM",
+      "name": "Fem Vilanova - Acord Municipal",
+      "votes": 1014,
+      "seats": 3
+     },
+     {
+      "code": "919",
+      "short": "V Vilanova365",
+      "name": "V Vilanova365",
+      "votes": 956,
+      "seats": 3
+     },
+     {
+      "code": "693",
+      "short": "VOX",
+      "name": "VOX",
+      "votes": 405,
+      "seats": 1
+     },
+     {
+      "code": "83024231",
+      "short": "CM",
+      "name": "Impulsem Vilanova - Compromís Municipal",
+      "votes": 362,
+      "seats": 1
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 9516,
+    "voters": 6070,
+    "nullVotes": 54,
+    "blankVotes": 66,
+    "listVotes": 5950,
+    "validVotes": 6016,
+    "votes": {
+     "6": 2620,
+     "10": 520,
+     "86": 784,
+     "693": 761,
+     "697": 8,
+     "1031": 233,
+     "1034": 9,
+     "1109": 65,
+     "1129": 75,
+     "1134": 15,
+     "1135": 844,
+     "1136": 16
+    }
+   },
+   "parliament": {
+    "electorate": 9534,
+    "voters": 5013,
+    "nullVotes": 69,
+    "blankVotes": 83,
+    "listVotes": 4861,
+    "validVotes": 4944,
+    "votes": {
+     "6": 1963,
+     "10": 542,
+     "86": 572,
+     "301": 47,
+     "350": 6,
+     "693": 694,
+     "697": 1,
+     "1034": 8,
+     "1129": 62,
+     "1130": 95,
+     "1134": 30,
+     "1140": 244,
+     "1141": 109,
+     "1142": 1,
+     "1143": 478,
+     "1144": 9
+    }
+   }
+  },
+  {
+   "code": "08240",
+   "idescat": "082401",
+   "slug": "sant-sadurni-d-anoia",
+   "name": "Sant Sadurní d'Anoia",
+   "comarca": "Alt Penedès",
+   "province": "Barcelona",
+   "population": 12911,
+   "mayor": {
+    "name": "Pere Vernet Caldu",
+    "party": "",
+    "since": "2023-06-17"
+   },
+   "municipal": {
+    "electorate": 9631,
+    "voters": 5466,
+    "nullVotes": 103,
+    "blankVotes": 118,
+    "listVotes": 5245,
+    "validVotes": 5363,
+    "seats": 17,
+    "censusPopulation": 12863,
+    "lists": [
+     {
+      "code": "193",
+      "short": "ERC-AM",
+      "name": "Esquerra Republicana de Catalunya - Acord Municipal",
+      "votes": 1668,
+      "seats": 6
+     },
+     {
+      "code": "82404231",
+      "short": "CM",
+      "name": "Junts per Sant Sadurni D´Anoia - Compromís Municipal",
+      "votes": 1144,
+      "seats": 4
+     },
+     {
+      "code": "842",
+      "short": "PSC-CP",
+      "name": "Partit dels Socialistes de Catalunya - Candidatura de Progrés",
+      "votes": 1082,
+      "seats": 4
+     },
+     {
+      "code": "1039",
+      "short": "CUP-AMUNT",
+      "name": "Candidatura d'Unitat Popular - Alternativa Municipalista",
+      "votes": 538,
+      "seats": 1
+     },
+     {
+      "code": "202386",
+      "short": "PP",
+      "name": "Partido Popular",
+      "votes": 529,
+      "seats": 1
+     },
+     {
+      "code": "82404230",
+      "short": "SSECP-C",
+      "name": "Sant Sadurní En Comú Podem - Confluència",
+      "votes": 284,
+      "seats": 1
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 9605,
+    "voters": 6620,
+    "nullVotes": 62,
+    "blankVotes": 40,
+    "listVotes": 6518,
+    "validVotes": 6558,
+    "votes": {
+     "6": 2299,
+     "10": 1384,
+     "86": 482,
+     "693": 305,
+     "697": 2,
+     "1031": 891,
+     "1034": 7,
+     "1109": 207,
+     "1129": 48,
+     "1134": 8,
+     "1135": 779,
+     "1136": 106
+    }
+   },
+   "parliament": {
+    "electorate": 9661,
+    "voters": 6069,
+    "nullVotes": 55,
+    "blankVotes": 71,
+    "listVotes": 5943,
+    "validVotes": 6014,
+    "votes": {
+     "6": 1588,
+     "10": 1120,
+     "86": 385,
+     "301": 17,
+     "350": 5,
+     "693": 250,
+     "697": 6,
+     "1034": 11,
+     "1129": 36,
+     "1130": 244,
+     "1134": 22,
+     "1140": 315,
+     "1141": 305,
+     "1142": 1,
+     "1143": 1608,
+     "1144": 30
+    }
+   }
+  },
+  {
+   "code": "08009",
+   "idescat": "080095",
+   "slug": "argentona",
+   "name": "Argentona",
+   "comarca": "Maresme",
+   "province": "Barcelona",
+   "population": 12891,
+   "mayor": {
+    "name": "Montserrat Capdevila Cañadas",
+    "party": "TxA",
+    "since": "2023-06-17"
+   },
+   "municipal": {
+    "electorate": 9898,
+    "voters": 4917,
+    "nullVotes": 160,
+    "blankVotes": 120,
+    "listVotes": 4637,
+    "validVotes": 4757,
+    "seats": 17,
+    "censusPopulation": 12745,
+    "lists": [
+     {
+      "code": "909",
+      "short": "TxA",
+      "name": "Tots per Argentona",
+      "votes": 1370,
+      "seats": 5
+     },
+     {
+      "code": "80094230",
+      "short": "UNITATAxR",
+      "name": "Unitat - Argentona per la República",
+      "votes": 741,
+      "seats": 3
+     },
+     {
+      "code": "202386",
+      "short": "PP",
+      "name": "Partido Popular",
+      "votes": 720,
+      "seats": 3
+     },
+     {
+      "code": "80094231",
+      "short": "CM",
+      "name": "Avancem Junts - Compromís Municipal",
+      "votes": 564,
+      "seats": 2
+     },
+     {
+      "code": "842",
+      "short": "PSC-CP",
+      "name": "Partit dels Socialistes de Catalunya - Candidatura de Progrés",
+      "votes": 554,
+      "seats": 2
+     },
+     {
+      "code": "80094232",
+      "short": "ARA PL",
+      "name": "Ara Pacte Local",
+      "votes": 364,
+      "seats": 1
+     },
+     {
+      "code": "193",
+      "short": "ERC-AM",
+      "name": "Esquerra Republicana de Catalunya - Acord Municipal",
+      "votes": 324,
+      "seats": 1
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 9825,
+    "voters": 6574,
+    "nullVotes": 92,
+    "blankVotes": 77,
+    "listVotes": 6405,
+    "validVotes": 6482,
+    "votes": {
+     "6": 1693,
+     "10": 990,
+     "86": 839,
+     "693": 519,
+     "697": 10,
+     "1031": 1023,
+     "1034": 8,
+     "1109": 230,
+     "1129": 61,
+     "1134": 11,
+     "1135": 896,
+     "1136": 125
+    }
+   },
+   "parliament": {
+    "electorate": 9893,
+    "voters": 5898,
+    "nullVotes": 64,
+    "blankVotes": 94,
+    "listVotes": 5740,
+    "validVotes": 5834,
+    "votes": {
+     "6": 1145,
+     "10": 830,
+     "86": 568,
+     "301": 33,
+     "350": 6,
+     "693": 407,
+     "697": 2,
+     "1034": 2,
+     "1129": 73,
+     "1130": 284,
+     "1134": 15,
+     "1140": 272,
+     "1141": 326,
+     "1142": 0,
+     "1143": 1742,
+     "1144": 35
+    }
+   }
+  },
+  {
+   "code": "08126",
+   "idescat": "081265",
+   "slug": "montgat",
+   "name": "Montgat",
+   "comarca": "Maresme",
+   "province": "Barcelona",
+   "population": 12879,
+   "mayor": {
+    "name": "Andreu Absil Solà",
+    "party": "",
+    "since": "2023-06-17"
+   },
+   "municipal": {
+    "electorate": 9137,
+    "voters": 4562,
+    "nullVotes": 86,
+    "blankVotes": 108,
+    "listVotes": 4368,
+    "validVotes": 4476,
+    "seats": 17,
+    "censusPopulation": 12277,
+    "lists": [
+     {
+      "code": "193",
+      "short": "ERC-AM",
+      "name": "Esquerra Republicana de Catalunya - Acord Municipal",
+      "votes": 962,
+      "seats": 4
+     },
+     {
+      "code": "842",
+      "short": "PSC-CP",
+      "name": "Partit dels Socialistes de Catalunya - Candidatura de Progrés",
+      "votes": 939,
+      "seats": 4
+     },
+     {
+      "code": "81264230",
+      "short": "SDM",
+      "name": "Som de Montgat",
+      "votes": 908,
+      "seats": 3
+     },
+     {
+      "code": "81264232",
+      "short": "CM",
+      "name": "Junts per Montgat - Compromís Municipal",
+      "votes": 739,
+      "seats": 3
+     },
+     {
+      "code": "81264231",
+      "short": "MECP-C",
+      "name": "Montgat En Comú Podem - Confluència",
+      "votes": 560,
+      "seats": 2
+     },
+     {
+      "code": "1126",
+      "short": "VALENTS",
+      "name": "Valents",
+      "votes": 260,
+      "seats": 1
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 9003,
+    "voters": 6073,
+    "nullVotes": 38,
+    "blankVotes": 54,
+    "listVotes": 5981,
+    "validVotes": 6035,
+    "votes": {
+     "6": 2022,
+     "10": 859,
+     "86": 808,
+     "693": 450,
+     "697": 8,
+     "1031": 505,
+     "1034": 2,
+     "1109": 113,
+     "1129": 77,
+     "1134": 11,
+     "1135": 1087,
+     "1136": 39
+    }
+   },
+   "parliament": {
+    "electorate": 9118,
+    "voters": 5340,
+    "nullVotes": 37,
+    "blankVotes": 62,
+    "listVotes": 5241,
+    "validVotes": 5303,
+    "votes": {
+     "6": 1520,
+     "10": 836,
+     "86": 638,
+     "301": 55,
+     "350": 3,
+     "693": 433,
+     "697": 6,
+     "1034": 4,
+     "1129": 86,
+     "1130": 134,
+     "1134": 22,
+     "1140": 385,
+     "1141": 163,
+     "1142": 2,
+     "1143": 939,
+     "1144": 15
+    }
+   }
+  },
+  {
+   "code": "17199",
+   "idescat": "171997",
+   "slug": "torroella-de-montgri",
+   "name": "Torroella de Montgrí",
+   "comarca": "Baix Empordà",
+   "province": "Girona",
+   "population": 12570,
+   "mayor": {
+    "name": "Jordi Colomí Massanas",
+    "party": "UPM",
+    "since": "2023-06-17"
+   },
+   "municipal": {
+    "electorate": 7783,
+    "voters": 4116,
+    "nullVotes": 99,
+    "blankVotes": 77,
+    "listVotes": 3940,
+    "validVotes": 4017,
+    "seats": 17,
+    "censusPopulation": 12061,
+    "lists": [
+     {
+      "code": "245",
+      "short": "UPM",
+      "name": "Unitat i Progrés Municipal",
+      "votes": 1191,
+      "seats": 6
+     },
+     {
+      "code": "171994232",
+      "short": "COMPROMÍS-ARA PL",
+      "name": "Compromís Amb Torroella I L'Estartit - Ara Pacte Local",
+      "votes": 538,
+      "seats": 2
+     },
+     {
+      "code": "171994230",
+      "short": "L'EST-TE",
+      "name": "L'Estartit Som Tots - Tots Empordà",
+      "votes": 521,
+      "seats": 2
+     },
+     {
+      "code": "193",
+      "short": "ERC-AM",
+      "name": "Esquerra Republicana de Catalunya - Acord Municipal",
+      "votes": 490,
+      "seats": 2
+     },
+     {
+      "code": "171994231",
+      "short": "OTE-AMUNT",
+      "name": "Objectiu Torroella L'Estartit - Alternativa Municipalista",
+      "votes": 462,
+      "seats": 2
+     },
+     {
+      "code": "171994233",
+      "short": "CM",
+      "name": "Junts per Catalunya - Compromís Municipal",
+      "votes": 424,
+      "seats": 2
+     },
+     {
+      "code": "842",
+      "short": "PSC-CP",
+      "name": "Partit dels Socialistes de Catalunya - Candidatura de Progrés",
+      "votes": 314,
+      "seats": 1
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 7260,
+    "voters": 4449,
+    "nullVotes": 46,
+    "blankVotes": 30,
+    "listVotes": 4373,
+    "validVotes": 4403,
+    "votes": {
+     "6": 1079,
+     "10": 761,
+     "86": 426,
+     "693": 306,
+     "697": 4,
+     "1031": 875,
+     "1034": 5,
+     "1109": 268,
+     "1129": 52,
+     "1134": 8,
+     "1135": 528,
+     "1136": 61
+    }
+   },
+   "parliament": {
+    "electorate": 7358,
+    "voters": 4126,
+    "nullVotes": 49,
+    "blankVotes": 52,
+    "listVotes": 4025,
+    "validVotes": 4077,
+    "votes": {
+     "6": 657,
+     "10": 495,
+     "86": 251,
+     "301": 10,
+     "350": 2,
+     "693": 248,
+     "697": 3,
+     "1034": 2,
+     "1129": 28,
+     "1130": 342,
+     "1134": 13,
+     "1140": 144,
+     "1141": 250,
+     "1143": 1566,
+     "1144": 14
+    }
+   }
+  },
+  {
+   "code": "17034",
+   "idescat": "170340",
+   "slug": "calonge-i-sant-antoni",
+   "name": "Calonge i Sant Antoni",
+   "comarca": "Baix Empordà",
+   "province": "Girona",
+   "population": 12335,
+   "mayor": {
+    "name": "Jordi Soler Casals",
+    "party": "CM",
+    "since": "2023-06-17"
+   },
+   "municipal": {
+    "electorate": 8133,
+    "voters": 3924,
+    "nullVotes": 76,
+    "blankVotes": 85,
+    "listVotes": 3763,
+    "validVotes": 3848,
+    "seats": 17,
+    "censusPopulation": 11712,
+    "lists": [
+     {
+      "code": "170344234",
+      "short": "CM",
+      "name": "Junts per Calonge i Sant Antoni - Compromís Municipal",
+      "votes": 1175,
+      "seats": 6
+     },
+     {
+      "code": "193",
+      "short": "ERC-AM",
+      "name": "Esquerra Republicana de Catalunya - Acord Municipal",
+      "votes": 794,
+      "seats": 4
+     },
+     {
+      "code": "842",
+      "short": "PSC-CP",
+      "name": "Partit dels Socialistes de Catalunya - Candidatura de Progrés",
+      "votes": 407,
+      "seats": 2
+     },
+     {
+      "code": "170344233",
+      "short": "AVANCEM-ARA PL",
+      "name": "Avancem per Calonge I Sant Antoni - Ara Pacte Local",
+      "votes": 329,
+      "seats": 1
+     },
+     {
+      "code": "170344231",
+      "short": "SOMCISA",
+      "name": "Som Calonge I San Antoni",
+      "votes": 299,
+      "seats": 1
+     },
+     {
+      "code": "170344232",
+      "short": "G-CiSA-AMUNT",
+      "name": "Guanyem Calonge i Sant Antoni - Alternativa Municipalista",
+      "votes": 285,
+      "seats": 1
+     },
+     {
+      "code": "202386",
+      "short": "PP",
+      "name": "Partido Popular",
+      "votes": 274,
+      "seats": 1
+     },
+     {
+      "code": "170344230",
+      "short": "TpP-TE",
+      "name": "Tots Pel Poble - Tots Empordà",
+      "votes": 200,
+      "seats": 1
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 7773,
+    "voters": 4816,
+    "nullVotes": 38,
+    "blankVotes": 33,
+    "listVotes": 4745,
+    "validVotes": 4778,
+    "votes": {
+     "6": 1438,
+     "10": 729,
+     "86": 545,
+     "693": 380,
+     "697": 3,
+     "1031": 851,
+     "1034": 9,
+     "1109": 149,
+     "1129": 74,
+     "1134": 5,
+     "1135": 528,
+     "1136": 34
+    }
+   },
+   "parliament": {
+    "electorate": 7934,
+    "voters": 4426,
+    "nullVotes": 33,
+    "blankVotes": 46,
+    "listVotes": 4347,
+    "validVotes": 4393,
+    "votes": {
+     "6": 968,
+     "10": 544,
+     "86": 343,
+     "301": 17,
+     "350": 3,
+     "693": 347,
+     "697": 3,
+     "1034": 6,
+     "1129": 52,
+     "1130": 273,
+     "1134": 8,
+     "1140": 144,
+     "1141": 124,
+     "1143": 1501,
+     "1144": 14
+    }
+   }
+  },
+  {
+   "code": "17047",
+   "idescat": "170470",
+   "slug": "castello-d-empuries",
+   "name": "Castelló d'Empúries",
+   "comarca": "Alt Empordà",
+   "province": "Girona",
+   "population": 12201,
+   "mayor": {
+    "name": "Anna Massot Font",
+    "party": "ERC-AM",
+    "since": "2023-06-17"
+   },
+   "municipal": {
+    "electorate": 5774,
+    "voters": 2697,
+    "nullVotes": 73,
+    "blankVotes": 40,
+    "listVotes": 2584,
+    "validVotes": 2624,
+    "seats": 17,
+    "censusPopulation": 11611,
+    "lists": [
+     {
+      "code": "193",
+      "short": "ERC-AM",
+      "name": "Esquerra Republicana de Catalunya - Acord Municipal",
+      "votes": 634,
+      "seats": 5
+     },
+     {
+      "code": "170474230",
+      "short": "SOMEC-TE",
+      "name": "Som Empuriabrava i Castelló - Tots Empordà",
+      "votes": 518,
+      "seats": 4
+     },
+     {
+      "code": "170474234",
+      "short": "CM",
+      "name": "Junts per Castelló I Empuriabrava - Compromís Municipal",
+      "votes": 333,
+      "seats": 2
+     },
+     {
+      "code": "170474233",
+      "short": "PSC-CP",
+      "name": "Partit Socialista de Catalunya - Candidatura de Progrés",
+      "votes": 312,
+      "seats": 2
+     },
+     {
+      "code": "1039",
+      "short": "CUP-AMUNT",
+      "name": "Candidatura d'Unitat Popular - Alternativa Municipalista",
+      "votes": 186,
+      "seats": 1
+     },
+     {
+      "code": "693",
+      "short": "VOX",
+      "name": "VOX",
+      "votes": 178,
+      "seats": 1
+     },
+     {
+      "code": "202386",
+      "short": "PP",
+      "name": "Partido Popular",
+      "votes": 168,
+      "seats": 1
+     },
+     {
+      "code": "170474231",
+      "short": "ARA PL",
+      "name": "Demòcrates de Castelló D'Empúries i Empuriabrava - Ara Pacte Local",
+      "votes": 142,
+      "seats": 1
+     },
+     {
+      "code": "170474232",
+      "short": "CEECPC-C",
+      "name": "Castelló d'Empúries En Comú Podem - Confluència",
+      "votes": 59,
+      "seats": 0
+     },
+     {
+      "code": "301",
+      "short": "Cs",
+      "name": "Ciutadans - Partido de la Ciudadanía",
+      "votes": 54,
+      "seats": 0
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 5254,
+    "voters": 2904,
+    "nullVotes": 44,
+    "blankVotes": 17,
+    "listVotes": 2843,
+    "validVotes": 2860,
+    "votes": {
+     "6": 766,
+     "10": 397,
+     "86": 414,
+     "693": 367,
+     "697": 2,
+     "1031": 403,
+     "1034": 1,
+     "1109": 132,
+     "1129": 31,
+     "1134": 4,
+     "1135": 280,
+     "1136": 46
+    }
+   },
+   "parliament": {
+    "electorate": 5407,
+    "voters": 2545,
+    "nullVotes": 36,
+    "blankVotes": 30,
+    "listVotes": 2479,
+    "validVotes": 2509,
+    "votes": {
+     "6": 502,
+     "10": 302,
+     "86": 272,
+     "301": 15,
+     "350": 3,
+     "693": 273,
+     "697": 2,
+     "1034": 3,
+     "1129": 32,
+     "1130": 228,
+     "1134": 3,
+     "1140": 66,
+     "1141": 108,
+     "1143": 656,
+     "1144": 14
+    }
+   }
+  },
+  {
+   "code": "43901",
+   "idescat": "439018",
+   "slug": "deltebre",
+   "name": "Deltebre",
+   "comarca": "Baix Ebre",
+   "province": "Tarragona",
+   "population": 12041,
+   "mayor": {
+    "name": "Lluís Soler I Panisello",
+    "party": "CM",
+    "since": "2023-06-17"
+   },
+   "municipal": {
+    "electorate": 8955,
+    "voters": 5974,
+    "nullVotes": 118,
+    "blankVotes": 89,
+    "listVotes": 5767,
+    "validVotes": 5856,
+    "seats": 17,
+    "censusPopulation": 11656,
+    "lists": [
+     {
+      "code": "439014231",
+      "short": "CM",
+      "name": "Enlairem Deltebre - Compromís Municipal",
+      "votes": 3779,
+      "seats": 12
+     },
+     {
+      "code": "193",
+      "short": "ERC-AM",
+      "name": "Esquerra Republicana de Catalunya - Acord Municipal",
+      "votes": 1721,
+      "seats": 5
+     },
+     {
+      "code": "842",
+      "short": "PSC-CP",
+      "name": "Partit dels Socialistes de Catalunya - Candidatura de Progrés",
+      "votes": 267,
+      "seats": 0
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 8862,
+    "voters": 4912,
+    "nullVotes": 74,
+    "blankVotes": 75,
+    "listVotes": 4763,
+    "validVotes": 4838,
+    "votes": {
+     "6": 1832,
+     "10": 1206,
+     "86": 369,
+     "693": 431,
+     "697": 6,
+     "1031": 444,
+     "1034": 5,
+     "1109": 75,
+     "1129": 17,
+     "1134": 4,
+     "1135": 353,
+     "1136": 18,
+     "1137": 2,
+     "1138": 1
+    }
+   },
+   "parliament": {
+    "electorate": 8910,
+    "voters": 4132,
+    "nullVotes": 89,
+    "blankVotes": 66,
+    "listVotes": 3977,
+    "validVotes": 4043,
+    "votes": {
+     "6": 953,
+     "10": 1248,
+     "86": 225,
+     "301": 5,
+     "350": 0,
+     "546": 2,
+     "693": 252,
+     "697": 2,
+     "1018": 4,
+     "1034": 4,
+     "1129": 12,
+     "1130": 136,
+     "1134": 8,
+     "1140": 96,
+     "1141": 112,
+     "1142": 2,
+     "1143": 904,
+     "1144": 12
+    }
+   }
+  },
+  {
+   "code": "08157",
+   "idescat": "081574",
+   "slug": "palleja",
+   "name": "Pallejà",
+   "comarca": "Baix Llobregat",
+   "province": "Barcelona",
+   "population": 12006,
+   "mayor": {
+    "name": "Ascensión Ratia Checa",
+    "party": "",
+    "since": "2023-06-17"
+   },
+   "municipal": {
+    "electorate": 8929,
+    "voters": 5589,
+    "nullVotes": 50,
+    "blankVotes": 66,
+    "listVotes": 5473,
+    "validVotes": 5539,
+    "seats": 17,
+    "censusPopulation": 11593,
+    "lists": [
+     {
+      "code": "81574230",
+      "short": "EP-C",
+      "name": "Entesa per Pallejà - Confluència",
+      "votes": 2209,
+      "seats": 8
+     },
+     {
+      "code": "842",
+      "short": "PSC-CP",
+      "name": "Partit dels Socialistes de Catalunya - Candidatura de Progrés",
+      "votes": 1221,
+      "seats": 4
+     },
+     {
+      "code": "193",
+      "short": "ERC-AM",
+      "name": "Esquerra Republicana de Catalunya - Acord Municipal",
+      "votes": 548,
+      "seats": 2
+     },
+     {
+      "code": "81574233",
+      "short": "SFP",
+      "name": "Somfontpineda",
+      "votes": 390,
+      "seats": 1
+     },
+     {
+      "code": "81574231",
+      "short": "P.D.F.",
+      "name": "Partit Pel Desenvolupament de Fontpineda",
+      "votes": 370,
+      "seats": 1
+     },
+     {
+      "code": "81574232",
+      "short": "CM",
+      "name": "Junts per Pallejà - Compromís Municipal",
+      "votes": 320,
+      "seats": 1
+     },
+     {
+      "code": "202386",
+      "short": "PP",
+      "name": "Partido Popular",
+      "votes": 270,
+      "seats": 0
+     },
+     {
+      "code": "693",
+      "short": "VOX",
+      "name": "VOX",
+      "votes": 145,
+      "seats": 0
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 8885,
+    "voters": 6278,
+    "nullVotes": 42,
+    "blankVotes": 53,
+    "listVotes": 6183,
+    "validVotes": 6236,
+    "votes": {
+     "6": 2284,
+     "10": 760,
+     "86": 881,
+     "693": 522,
+     "697": 4,
+     "1031": 470,
+     "1034": 3,
+     "1109": 112,
+     "1129": 80,
+     "1134": 6,
+     "1135": 1028,
+     "1136": 33
+    }
+   },
+   "parliament": {
+    "electorate": 8964,
+    "voters": 5546,
+    "nullVotes": 46,
+    "blankVotes": 75,
+    "listVotes": 5425,
+    "validVotes": 5500,
+    "votes": {
+     "6": 1803,
+     "10": 857,
+     "86": 647,
+     "301": 42,
+     "350": 7,
+     "693": 526,
+     "697": 8,
+     "1034": 7,
+     "1129": 76,
+     "1130": 110,
+     "1134": 22,
+     "1140": 356,
+     "1141": 138,
+     "1142": 1,
+     "1143": 812,
+     "1144": 13
+    }
+   }
+  },
+  {
+   "code": "08197",
+   "idescat": "081976",
+   "slug": "sant-andreu-de-llavaneres",
+   "name": "Sant Andreu de Llavaneres",
+   "comarca": "Maresme",
+   "province": "Barcelona",
+   "population": 11938,
+   "mayor": {
+    "name": "Alexandre Neira Marí",
+    "party": "",
+    "since": "2023-06-17"
+   },
+   "municipal": {
+    "electorate": 8545,
+    "voters": 4626,
+    "nullVotes": 62,
+    "blankVotes": 83,
+    "listVotes": 4481,
+    "validVotes": 4564,
+    "seats": 17,
+    "censusPopulation": 11593,
+    "lists": [
+     {
+      "code": "842",
+      "short": "PSC-CP",
+      "name": "Partit dels Socialistes de Catalunya - Candidatura de Progrés",
+      "votes": 1129,
+      "seats": 5
+     },
+     {
+      "code": "193",
+      "short": "ERC-AM",
+      "name": "Esquerra Republicana de Catalunya - Acord Municipal",
+      "votes": 901,
+      "seats": 4
+     },
+     {
+      "code": "202386",
+      "short": "PP",
+      "name": "Partido Popular",
+      "votes": 785,
+      "seats": 3
+     },
+     {
+      "code": "81974231",
+      "short": "CM",
+      "name": "Junts per Llavaneres - Compromís Municipal",
+      "votes": 702,
+      "seats": 3
+     },
+     {
+      "code": "81974232",
+      "short": "APLL",
+      "name": "Acord per Llavaneres",
+      "votes": 427,
+      "seats": 1
+     },
+     {
+      "code": "81974230",
+      "short": "MLL-C",
+      "name": "Movem Llavaneres - Confluència",
+      "votes": 409,
+      "seats": 1
+     },
+     {
+      "code": "1126",
+      "short": "VALENTS",
+      "name": "Valents",
+      "votes": 128,
+      "seats": 0
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 8446,
+    "voters": 5704,
+    "nullVotes": 45,
+    "blankVotes": 33,
+    "listVotes": 5626,
+    "validVotes": 5659,
+    "votes": {
+     "6": 1536,
+     "10": 786,
+     "86": 1114,
+     "693": 461,
+     "697": 5,
+     "1031": 865,
+     "1034": 0,
+     "1109": 87,
+     "1129": 55,
+     "1134": 5,
+     "1135": 594,
+     "1136": 118
+    }
+   },
+   "parliament": {
+    "electorate": 8480,
+    "voters": 5151,
+    "nullVotes": 31,
+    "blankVotes": 50,
+    "listVotes": 5070,
+    "validVotes": 5120,
+    "votes": {
+     "6": 1068,
+     "10": 636,
+     "86": 825,
+     "301": 20,
+     "350": 3,
+     "693": 386,
+     "697": 6,
+     "1034": 2,
+     "1129": 53,
+     "1130": 217,
+     "1134": 9,
+     "1140": 173,
+     "1141": 124,
+     "1142": 0,
+     "1143": 1531,
+     "1144": 17
+    }
+   }
+  },
+  {
+   "code": "17022",
+   "idescat": "170221",
+   "slug": "la-bisbal-d-emporda",
+   "name": "la Bisbal d'Empordà",
+   "comarca": "Baix Empordà",
+   "province": "Girona",
+   "population": 11757,
+   "mayor": null,
+   "municipal": {
+    "electorate": 7319,
+    "voters": 3912,
+    "nullVotes": 116,
+    "blankVotes": 102,
+    "listVotes": 3694,
+    "validVotes": 3796,
+    "seats": 17,
+    "censusPopulation": 11163,
+    "lists": [
+     {
+      "code": "193",
+      "short": "ERC-AM",
+      "name": "Esquerra Republicana de Catalunya - Acord Municipal",
+      "votes": 934,
+      "seats": 4
+     },
+     {
+      "code": "170224234",
+      "short": "PSC-IpLB-CP",
+      "name": "Partit dels Socialistes de Catalunya - Independents per la Bisbal - Candidatura de Progrés",
+      "votes": 781,
+      "seats": 4
+     },
+     {
+      "code": "170224231",
+      "short": "CUP-SP-AMUNT",
+      "name": "Candidatura d'Unitat Popular - Som Poble - Alternativa Municipalista",
+      "votes": 649,
+      "seats": 3
+     },
+     {
+      "code": "170224233",
+      "short": "CM",
+      "name": "Compromís X la Bisbal - Junts - Compromís Municipal",
+      "votes": 623,
+      "seats": 3
+     },
+     {
+      "code": "170224230",
+      "short": "TxLB-TE",
+      "name": "Tots per la Bisbal - Tots Empordà",
+      "votes": 382,
+      "seats": 2
+     },
+     {
+      "code": "170224232",
+      "short": "LBECP-C",
+      "name": "La Bisbal En Comú Podem - Confluència",
+      "votes": 325,
+      "seats": 1
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 7241,
+    "voters": 4472,
+    "nullVotes": 48,
+    "blankVotes": 49,
+    "listVotes": 4375,
+    "validVotes": 4424,
+    "votes": {
+     "6": 1395,
+     "10": 816,
+     "86": 266,
+     "693": 225,
+     "697": 2,
+     "1031": 754,
+     "1034": 4,
+     "1109": 324,
+     "1129": 43,
+     "1134": 9,
+     "1135": 511,
+     "1136": 26
+    }
+   },
+   "parliament": {
+    "electorate": 7322,
+    "voters": 4103,
+    "nullVotes": 32,
+    "blankVotes": 62,
+    "listVotes": 4009,
+    "validVotes": 4071,
+    "votes": {
+     "6": 744,
+     "10": 588,
+     "86": 141,
+     "301": 5,
+     "350": 1,
+     "693": 177,
+     "697": 4,
+     "1034": 2,
+     "1129": 29,
+     "1130": 359,
+     "1134": 4,
+     "1140": 160,
+     "1141": 289,
+     "1143": 1484,
+     "1144": 22
+    }
+   }
+  },
+  {
+   "code": "08218",
+   "idescat": "082188",
+   "slug": "sant-joan-de-vilatorrada",
+   "name": "Sant Joan de Vilatorrada",
+   "comarca": "Bages",
+   "province": "Barcelona",
+   "population": 11133,
+   "mayor": {
+    "name": "Jordi Solernou Vilalta",
+    "party": "AXSJ",
+    "since": "2023-06-17"
+   },
+   "municipal": {
+    "electorate": 8171,
+    "voters": 4576,
+    "nullVotes": 46,
+    "blankVotes": 72,
+    "listVotes": 4458,
+    "validVotes": 4530,
+    "seats": 17,
+    "censusPopulation": 10820,
+    "lists": [
+     {
+      "code": "82184232",
+      "short": "AXSJ",
+      "name": "Alternativa per Sant Joan",
+      "votes": 1441,
+      "seats": 6
+     },
+     {
+      "code": "82184230",
+      "short": "COMPROMÍS-C",
+      "name": "Compromís Amb Sant Joan - Confluència",
+      "votes": 921,
+      "seats": 4
+     },
+     {
+      "code": "842",
+      "short": "PSC-CP",
+      "name": "Partit dels Socialistes de Catalunya - Candidatura de Progrés",
+      "votes": 871,
+      "seats": 4
+     },
+     {
+      "code": "82184231",
+      "short": "CM",
+      "name": "Junts per Sant Joan de Vilatorrada I Sant Martí de Torruella - Compromís Municipal",
+      "votes": 514,
+      "seats": 2
+     },
+     {
+      "code": "193",
+      "short": "ERC-AM",
+      "name": "Esquerra Republicana de Catalunya - Acord Municipal",
+      "votes": 421,
+      "seats": 1
+     },
+     {
+      "code": "202386",
+      "short": "PP",
+      "name": "Partido Popular",
+      "votes": 156,
+      "seats": 0
+     },
+     {
+      "code": "301",
+      "short": "Cs",
+      "name": "Ciutadans - Partido de la Ciudadanía",
+      "votes": 134,
+      "seats": 0
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 8174,
+    "voters": 5389,
+    "nullVotes": 54,
+    "blankVotes": 52,
+    "listVotes": 5283,
+    "validVotes": 5335,
+    "votes": {
+     "6": 1979,
+     "10": 725,
+     "86": 549,
+     "693": 476,
+     "697": 5,
+     "1031": 626,
+     "1034": 2,
+     "1109": 149,
+     "1129": 51,
+     "1134": 10,
+     "1135": 682,
+     "1136": 29
+    }
+   },
+   "parliament": {
+    "electorate": 8253,
+    "voters": 4825,
+    "nullVotes": 49,
+    "blankVotes": 74,
+    "listVotes": 4702,
+    "validVotes": 4776,
+    "votes": {
+     "6": 1325,
+     "10": 568,
+     "86": 395,
+     "301": 34,
+     "350": 1,
+     "693": 422,
+     "697": 2,
+     "1034": 5,
+     "1129": 43,
+     "1130": 366,
+     "1134": 11,
+     "1140": 228,
+     "1141": 163,
+     "1142": 2,
+     "1143": 1126,
+     "1144": 11
+    }
+   }
+  },
+  {
+   "code": "17044",
+   "idescat": "170448",
+   "slug": "cassa-de-la-selva",
+   "name": "Cassà de la Selva",
+   "comarca": "Gironès",
+   "province": "Girona",
+   "population": 11131,
+   "mayor": {
+    "name": "Pau Presas I Bertran",
+    "party": "FC-AM",
+    "since": "2023-06-17"
+   },
+   "municipal": {
+    "electorate": 7297,
+    "voters": 4276,
+    "nullVotes": 82,
+    "blankVotes": 94,
+    "listVotes": 4100,
+    "validVotes": 4194,
+    "seats": 17,
+    "censusPopulation": 10680,
+    "lists": [
+     {
+      "code": "170444232",
+      "short": "FC-AM",
+      "name": "Fem Cassà - Acord Municipal",
+      "votes": 1897,
+      "seats": 8
+     },
+     {
+      "code": "170444230",
+      "short": "CM",
+      "name": "Junts per Cassà de la Selva - Compromís Municipal",
+      "votes": 1687,
+      "seats": 7
+     },
+     {
+      "code": "202386",
+      "short": "PP",
+      "name": "Partido Popular",
+      "votes": 263,
+      "seats": 1
+     },
+     {
+      "code": "170444231",
+      "short": "PSC-CP",
+      "name": "Partit dels Socialistes de Catalunya per Cassà de la Selva - Candidatura de Progrés",
+      "votes": 253,
+      "seats": 1
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 7235,
+    "voters": 4712,
+    "nullVotes": 68,
+    "blankVotes": 48,
+    "listVotes": 4596,
+    "validVotes": 4644,
+    "votes": {
+     "6": 1150,
+     "10": 840,
+     "86": 312,
+     "693": 231,
+     "697": 5,
+     "1031": 1232,
+     "1034": 9,
+     "1109": 293,
+     "1129": 56,
+     "1134": 4,
+     "1135": 417,
+     "1136": 47
+    }
+   },
+   "parliament": {
+    "electorate": 7275,
+    "voters": 4508,
+    "nullVotes": 51,
+    "blankVotes": 65,
+    "listVotes": 4392,
+    "validVotes": 4457,
+    "votes": {
+     "6": 680,
+     "10": 589,
+     "86": 201,
+     "301": 12,
+     "350": 3,
+     "693": 191,
+     "697": 5,
+     "1034": 5,
+     "1129": 50,
+     "1130": 386,
+     "1134": 7,
+     "1140": 98,
+     "1141": 213,
+     "1143": 1939,
+     "1144": 13
+    }
+   }
+  },
+  {
+   "code": "08181",
+   "idescat": "081810",
+   "slug": "la-roca-del-valles",
+   "name": "la Roca del Vallès",
+   "comarca": "Vallès Oriental",
+   "province": "Barcelona",
+   "population": 11014,
+   "mayor": {
+    "name": "Marta Pujol Armengol",
+    "party": "CM",
+    "since": "2023-06-17"
+   },
+   "municipal": {
+    "electorate": 8498,
+    "voters": 4650,
+    "nullVotes": 106,
+    "blankVotes": 115,
+    "listVotes": 4429,
+    "validVotes": 4544,
+    "seats": 17,
+    "censusPopulation": 10776,
+    "lists": [
+     {
+      "code": "81814232",
+      "short": "CM",
+      "name": "Junts per la Roca - Compromís Municipal",
+      "votes": 1443,
+      "seats": 6
+     },
+     {
+      "code": "842",
+      "short": "PSC-CP",
+      "name": "Partit dels Socialistes de Catalunya - Candidatura de Progrés",
+      "votes": 855,
+      "seats": 4
+     },
+     {
+      "code": "193",
+      "short": "ERC-AM",
+      "name": "Esquerra Republicana de Catalunya - Acord Municipal",
+      "votes": 633,
+      "seats": 3
+     },
+     {
+      "code": "81814234",
+      "short": "ARALAROCa",
+      "name": "Ara la Roca",
+      "votes": 486,
+      "seats": 2
+     },
+     {
+      "code": "81814230",
+      "short": "LREC-C",
+      "name": "La Roca En Comú - Confluència",
+      "votes": 365,
+      "seats": 1
+     },
+     {
+      "code": "693",
+      "short": "VOX",
+      "name": "VOX",
+      "votes": 231,
+      "seats": 1
+     },
+     {
+      "code": "81814233",
+      "short": "S.L.R.",
+      "name": "Sumem la Roca",
+      "votes": 196,
+      "seats": 0
+     },
+     {
+      "code": "202386",
+      "short": "PP",
+      "name": "Partido Popular",
+      "votes": 140,
+      "seats": 0
+     },
+     {
+      "code": "1126",
+      "short": "VALENTS",
+      "name": "Valents",
+      "votes": 80,
+      "seats": 0
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 8475,
+    "voters": 5637,
+    "nullVotes": 62,
+    "blankVotes": 49,
+    "listVotes": 5526,
+    "validVotes": 5575,
+    "votes": {
+     "6": 1873,
+     "10": 770,
+     "86": 712,
+     "693": 409,
+     "697": 5,
+     "1031": 693,
+     "1034": 4,
+     "1109": 161,
+     "1129": 60,
+     "1134": 8,
+     "1135": 763,
+     "1136": 68
+    }
+   },
+   "parliament": {
+    "electorate": 8560,
+    "voters": 5059,
+    "nullVotes": 58,
+    "blankVotes": 50,
+    "listVotes": 4951,
+    "validVotes": 5001,
+    "votes": {
+     "6": 1501,
+     "10": 645,
+     "86": 462,
+     "301": 25,
+     "350": 6,
+     "693": 346,
+     "697": 2,
+     "1034": 2,
+     "1129": 69,
+     "1130": 192,
+     "1134": 11,
+     "1140": 254,
+     "1141": 178,
+     "1142": 3,
+     "1143": 1231,
+     "1144": 24
+    }
+   }
+  },
+  {
+   "code": "08106",
+   "idescat": "081069",
+   "slug": "llinars-del-valles",
+   "name": "Llinars del Vallès",
+   "comarca": "Vallès Oriental",
+   "province": "Barcelona",
+   "population": 10956,
+   "mayor": {
+    "name": "Martí Pujol Casals",
+    "party": "ERC-AM",
+    "since": "2023-06-17"
+   },
+   "municipal": {
+    "electorate": 7992,
+    "voters": 4321,
+    "nullVotes": 84,
+    "blankVotes": 103,
+    "listVotes": 4134,
+    "validVotes": 4237,
+    "seats": 17,
+    "censusPopulation": 10205,
+    "lists": [
+     {
+      "code": "193",
+      "short": "ERC-AM",
+      "name": "Esquerra Republicana de Catalunya - Acord Municipal",
+      "votes": 1495,
+      "seats": 7
+     },
+     {
+      "code": "842",
+      "short": "PSC-CP",
+      "name": "Partit dels Socialistes de Catalunya - Candidatura de Progrés",
+      "votes": 717,
+      "seats": 3
+     },
+     {
+      "code": "81064230",
+      "short": "SxLl-C",
+      "name": "Sumem per Llinars - Confluència",
+      "votes": 655,
+      "seats": 3
+     },
+     {
+      "code": "81064232",
+      "short": "FPA-AMUNT",
+      "name": "Fer Poble - Amunt - Alternativa Municipalista",
+      "votes": 547,
+      "seats": 2
+     },
+     {
+      "code": "81064233",
+      "short": "MALL",
+      "name": "Moviment Alternatiu de Llinars",
+      "votes": 390,
+      "seats": 1
+     },
+     {
+      "code": "81064231",
+      "short": "CM",
+      "name": "Junts per Llinars - Compromís Municipal",
+      "votes": 330,
+      "seats": 1
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 7955,
+    "voters": 5279,
+    "nullVotes": 49,
+    "blankVotes": 37,
+    "listVotes": 5193,
+    "validVotes": 5230,
+    "votes": {
+     "6": 1642,
+     "10": 940,
+     "86": 546,
+     "693": 390,
+     "697": 4,
+     "1031": 529,
+     "1034": 6,
+     "1109": 211,
+     "1129": 79,
+     "1134": 14,
+     "1135": 794,
+     "1136": 38
+    }
+   },
+   "parliament": {
+    "electorate": 8101,
+    "voters": 4664,
+    "nullVotes": 70,
+    "blankVotes": 47,
+    "listVotes": 4547,
+    "validVotes": 4594,
+    "votes": {
+     "6": 1124,
+     "10": 799,
+     "86": 354,
+     "301": 34,
+     "350": 2,
+     "693": 322,
+     "697": 2,
+     "1034": 7,
+     "1129": 82,
+     "1130": 183,
+     "1134": 12,
+     "1140": 252,
+     "1141": 236,
+     "1142": 4,
+     "1143": 1106,
+     "1144": 28
+    }
+   }
+  },
+  {
+   "code": "17147",
+   "idescat": "171479",
+   "slug": "ripoll",
+   "name": "Ripoll",
+   "comarca": "Ripollès",
+   "province": "Girona",
+   "population": 10665,
+   "mayor": {
+    "name": "Sílvia Orriols Serra",
+    "party": "",
+    "since": "2023-06-17"
+   },
+   "municipal": {
+    "electorate": 7779,
+    "voters": 4622,
+    "nullVotes": 66,
+    "blankVotes": 97,
+    "listVotes": 4459,
+    "validVotes": 4556,
+    "seats": 17,
+    "censusPopulation": 10641,
+    "lists": [
+     {
+      "code": "1130",
+      "short": "ALIANÇA.CAT",
+      "name": "Aliança Catalana",
+      "votes": 1401,
+      "seats": 6
+     },
+     {
+      "code": "171474230",
+      "short": "CM",
+      "name": "Junts per Ripoll - Compromís Municipal",
+      "votes": 762,
+      "seats": 3
+     },
+     {
+      "code": "193",
+      "short": "ERC-AM",
+      "name": "Esquerra Republicana de Catalunya - Acord Municipal",
+      "votes": 734,
+      "seats": 3
+     },
+     {
+      "code": "842",
+      "short": "PSC-CP",
+      "name": "Partit dels Socialistes de Catalunya - Candidatura de Progrés",
+      "votes": 619,
+      "seats": 2
+     },
+     {
+      "code": "171474231",
+      "short": "ALTERNATIVA PER RIPOLL-C.U.P.- ALTERNATIVA MUNICIPALISTA",
+      "name": "Alternativa per Ripoll - C.U.P.- Alternativa Municipalista",
+      "votes": 563,
+      "seats": 2
+     },
+     {
+      "code": "171474232",
+      "short": "IdR-IDC",
+      "name": "Som-hi Ripoll Independents del Ripollès - Independents de Catalunya",
+      "votes": 380,
+      "seats": 1
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 7758,
+    "voters": 4642,
+    "nullVotes": 85,
+    "blankVotes": 45,
+    "listVotes": 4512,
+    "validVotes": 4557,
+    "votes": {
+     "6": 1576,
+     "10": 785,
+     "86": 350,
+     "693": 276,
+     "697": 2,
+     "1031": 782,
+     "1034": 6,
+     "1109": 183,
+     "1129": 54,
+     "1134": 14,
+     "1135": 405,
+     "1136": 79
+    }
+   },
+   "parliament": {
+    "electorate": 7776,
+    "voters": 4745,
+    "nullVotes": 36,
+    "blankVotes": 46,
+    "listVotes": 4663,
+    "validVotes": 4709,
+    "votes": {
+     "6": 856,
+     "10": 472,
+     "86": 180,
+     "301": 8,
+     "350": 4,
+     "693": 148,
+     "697": 4,
+     "1034": 9,
+     "1129": 31,
+     "1130": 1559,
+     "1134": 4,
+     "1140": 124,
+     "1141": 181,
+     "1143": 1060,
+     "1144": 23
+    }
+   }
+  },
+  {
+   "code": "08230",
+   "idescat": "082303",
+   "slug": "premia-de-dalt",
+   "name": "Premià de Dalt",
+   "comarca": "Maresme",
+   "province": "Barcelona",
+   "population": 10632,
+   "mayor": {
+    "name": "Josep Triadó I Bergés",
+    "party": "CM",
+    "since": "2023-06-17"
+   },
+   "municipal": {
+    "electorate": 7876,
+    "voters": 4651,
+    "nullVotes": 47,
+    "blankVotes": 66,
+    "listVotes": 4538,
+    "validVotes": 4604,
+    "seats": 17,
+    "censusPopulation": 10400,
+    "lists": [
+     {
+      "code": "82304230",
+      "short": "CM",
+      "name": "Som Impuls - Compromís Municipal",
+      "votes": 2115,
+      "seats": 9
+     },
+     {
+      "code": "82304232",
+      "short": "VxPD-ARA PL",
+      "name": "Veins per Premià de Dalt - Ara Pacte Local",
+      "votes": 854,
+      "seats": 4
+     },
+     {
+      "code": "193",
+      "short": "ERC-AM",
+      "name": "Esquerra Republicana de Catalunya - Acord Municipal",
+      "votes": 608,
+      "seats": 2
+     },
+     {
+      "code": "842",
+      "short": "PSC-CP",
+      "name": "Partit dels Socialistes de Catalunya - Candidatura de Progrés",
+      "votes": 390,
+      "seats": 1
+     },
+     {
+      "code": "82304231",
+      "short": "CPD-AMUNT",
+      "name": "Crida Premià de Dalt - Alternativa Municipalista",
+      "votes": 375,
+      "seats": 1
+     },
+     {
+      "code": "301",
+      "short": "Cs",
+      "name": "Ciutadans - Partido de la Ciudadanía",
+      "votes": 196,
+      "seats": 0
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 7803,
+    "voters": 5497,
+    "nullVotes": 43,
+    "blankVotes": 40,
+    "listVotes": 5414,
+    "validVotes": 5454,
+    "votes": {
+     "6": 1561,
+     "10": 696,
+     "86": 875,
+     "693": 427,
+     "697": 9,
+     "1031": 821,
+     "1034": 2,
+     "1109": 124,
+     "1129": 55,
+     "1134": 6,
+     "1135": 673,
+     "1136": 165
+    }
+   },
+   "parliament": {
+    "electorate": 7797,
+    "voters": 4863,
+    "nullVotes": 43,
+    "blankVotes": 47,
+    "listVotes": 4773,
+    "validVotes": 4820,
+    "votes": {
+     "6": 1139,
+     "10": 574,
+     "86": 616,
+     "301": 49,
+     "350": 4,
+     "693": 383,
+     "697": 3,
+     "1034": 4,
+     "1129": 57,
+     "1130": 132,
+     "1134": 8,
+     "1140": 224,
+     "1141": 135,
+     "1142": 1,
+     "1143": 1425,
+     "1144": 19
+    }
+   }
+  },
+  {
+   "code": "08250",
+   "idescat": "082508",
+   "slug": "santa-margarida-de-montbui",
+   "name": "Santa Margarida de Montbui",
+   "comarca": "Anoia",
+   "province": "Barcelona",
+   "population": 10631,
+   "mayor": {
+    "name": "Jesús Miguel Juárez Tamayo",
+    "party": "AM-LVDVDM",
+    "since": "2023-06-17"
+   },
+   "municipal": {
+    "electorate": 7302,
+    "voters": 4310,
+    "nullVotes": 26,
+    "blankVotes": 26,
+    "listVotes": 4258,
+    "validVotes": 4284,
+    "seats": 17,
+    "censusPopulation": 10294,
+    "lists": [
+     {
+      "code": "82504230",
+      "short": "AM-LVDVDM",
+      "name": "Ara Montbui - la Veu dels Veïns de Montbui",
+      "votes": 2577,
+      "seats": 11
+     },
+     {
+      "code": "842",
+      "short": "PSC-CP",
+      "name": "Partit dels Socialistes de Catalunya - Candidatura de Progrés",
+      "votes": 1059,
+      "seats": 4
+     },
+     {
+      "code": "693",
+      "short": "VOX",
+      "name": "VOX",
+      "votes": 281,
+      "seats": 1
+     },
+     {
+      "code": "82504231",
+      "short": "SOM-ERC-AM",
+      "name": "Som Montbui - Esquerra Republicana - Acord Municipal",
+      "votes": 229,
+      "seats": 1
+     },
+     {
+      "code": "202386",
+      "short": "PP",
+      "name": "Partido Popular",
+      "votes": 112,
+      "seats": 0
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 7297,
+    "voters": 4443,
+    "nullVotes": 38,
+    "blankVotes": 60,
+    "listVotes": 4345,
+    "validVotes": 4405,
+    "votes": {
+     "6": 1882,
+     "10": 405,
+     "86": 515,
+     "693": 582,
+     "697": 1,
+     "1031": 205,
+     "1034": 6,
+     "1109": 84,
+     "1129": 43,
+     "1134": 17,
+     "1135": 591,
+     "1136": 14
+    }
+   },
+   "parliament": {
+    "electorate": 7342,
+    "voters": 3709,
+    "nullVotes": 42,
+    "blankVotes": 59,
+    "listVotes": 3608,
+    "validVotes": 3667,
+    "votes": {
+     "6": 1357,
+     "10": 447,
+     "86": 345,
+     "301": 30,
+     "350": 3,
+     "693": 567,
+     "697": 5,
+     "1034": 6,
+     "1129": 38,
+     "1130": 114,
+     "1134": 22,
+     "1140": 186,
+     "1141": 94,
+     "1142": 6,
+     "1143": 382,
+     "1144": 6
+    }
+   }
+  },
+  {
+   "code": "17062",
+   "idescat": "170622",
+   "slug": "l-escala",
+   "name": "l'Escala",
+   "comarca": "Alt Empordà",
+   "province": "Girona",
+   "population": 10374,
+   "mayor": {
+    "name": "Josep Bofill Testart",
+    "party": "CP",
+    "since": "2023-06-17"
+   },
+   "municipal": {
+    "electorate": 6617,
+    "voters": 3238,
+    "nullVotes": 40,
+    "blankVotes": 57,
+    "listVotes": 3141,
+    "validVotes": 3198,
+    "seats": 17,
+    "censusPopulation": 10520,
+    "lists": [
+     {
+      "code": "838",
+      "short": "CP",
+      "name": "Candidatura de Progrés",
+      "votes": 1366,
+      "seats": 9
+     },
+     {
+      "code": "193",
+      "short": "ERC-AM",
+      "name": "Esquerra Republicana de Catalunya - Acord Municipal",
+      "votes": 409,
+      "seats": 2
+     },
+     {
+      "code": "170624231",
+      "short": "G'E-SP-AMUNT",
+      "name": "Gent de l'Escala - Som Poble - Alternativa Municipalista",
+      "votes": 404,
+      "seats": 2
+     },
+     {
+      "code": "170624233",
+      "short": "APL'E-ARA PL",
+      "name": "Alternativa per L'Escala - Ara Pacte Local",
+      "votes": 332,
+      "seats": 2
+     },
+     {
+      "code": "170624230",
+      "short": "CM",
+      "name": "Junts per L'Escala- Compromís Municipal",
+      "votes": 283,
+      "seats": 1
+     },
+     {
+      "code": "170624232",
+      "short": "ECL-C",
+      "name": "En Comú L'Escala- Confluència",
+      "votes": 203,
+      "seats": 1
+     },
+     {
+      "code": "693",
+      "short": "VOX",
+      "name": "VOX",
+      "votes": 144,
+      "seats": 0
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 6225,
+    "voters": 3635,
+    "nullVotes": 42,
+    "blankVotes": 21,
+    "listVotes": 3572,
+    "validVotes": 3593,
+    "votes": {
+     "6": 1082,
+     "10": 507,
+     "86": 352,
+     "693": 280,
+     "697": 0,
+     "1031": 662,
+     "1034": 3,
+     "1109": 201,
+     "1129": 41,
+     "1134": 4,
+     "1135": 413,
+     "1136": 27
+    }
+   },
+   "parliament": {
+    "electorate": 6350,
+    "voters": 3417,
+    "nullVotes": 39,
+    "blankVotes": 37,
+    "listVotes": 3341,
+    "validVotes": 3378,
+    "votes": {
+     "6": 700,
+     "10": 377,
+     "86": 238,
+     "301": 15,
+     "350": 1,
+     "693": 242,
+     "697": 1,
+     "1034": 4,
+     "1129": 28,
+     "1130": 235,
+     "1134": 1,
+     "1140": 112,
+     "1141": 150,
+     "1143": 1230,
+     "1144": 7
+    }
+   }
+  },
+  {
+   "code": "08003",
+   "idescat": "080039",
+   "slug": "alella",
+   "name": "Alella",
+   "comarca": "Maresme",
+   "province": "Barcelona",
+   "population": 10262,
+   "mayor": {
+    "name": "Marc Almendro Campillo",
+    "party": "",
+    "since": "2023-06-17"
+   },
+   "municipal": {
+    "electorate": 7384,
+    "voters": 3897,
+    "nullVotes": 67,
+    "blankVotes": 85,
+    "listVotes": 3745,
+    "validVotes": 3830,
+    "seats": 17,
+    "censusPopulation": 10079,
+    "lists": [
+     {
+      "code": "80034230",
+      "short": "ERC+SxAAM",
+      "name": "Esquerra Republicana de Catalunya + Sumem per Alella - Acord Municipal",
+      "votes": 1537,
+      "seats": 8
+     },
+     {
+      "code": "80034231",
+      "short": "CM",
+      "name": "Per Alella Junts - Compromís Municipal",
+      "votes": 913,
+      "seats": 4
+     },
+     {
+      "code": "202386",
+      "short": "PP",
+      "name": "Partido Popular",
+      "votes": 501,
+      "seats": 2
+     },
+     {
+      "code": "80034232",
+      "short": "AP-PSC-CP",
+      "name": "Alella Primer - Partit dels Socialistes de Catalunya - Candidatura de Progrés",
+      "votes": 455,
+      "seats": 2
+     },
+     {
+      "code": "1101",
+      "short": "MPIC",
+      "name": "Moviment Primàries per la Independència de Catalunya",
+      "votes": 268,
+      "seats": 1
+     },
+     {
+      "code": "1126",
+      "short": "VALENTS",
+      "name": "Valents",
+      "votes": 44,
+      "seats": 0
+     },
+     {
+      "code": "80034233",
+      "short": "ARA PL",
+      "name": "Ara Alella - Ara Pacte Local",
+      "votes": 27,
+      "seats": 0
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 7261,
+    "voters": 4965,
+    "nullVotes": 32,
+    "blankVotes": 34,
+    "listVotes": 4899,
+    "validVotes": 4933,
+    "votes": {
+     "6": 1258,
+     "10": 786,
+     "86": 877,
+     "693": 311,
+     "697": 6,
+     "1031": 846,
+     "1034": 1,
+     "1109": 153,
+     "1129": 49,
+     "1134": 7,
+     "1135": 506,
+     "1136": 99
+    }
+   },
+   "parliament": {
+    "electorate": 7319,
+    "voters": 4629,
+    "nullVotes": 29,
+    "blankVotes": 48,
+    "listVotes": 4552,
+    "validVotes": 4600,
+    "votes": {
+     "6": 940,
+     "10": 694,
+     "86": 593,
+     "301": 30,
+     "350": 3,
+     "693": 270,
+     "697": 0,
+     "1034": 2,
+     "1129": 35,
+     "1130": 158,
+     "1134": 2,
+     "1140": 170,
+     "1141": 147,
+     "1142": 2,
+     "1143": 1465,
+     "1144": 41
+    }
+   }
+  },
+  {
+   "code": "25011",
+   "idescat": "250117",
+   "slug": "alcarras",
+   "name": "Alcarràs",
+   "comarca": "Segrià",
+   "province": "Lleida",
+   "population": 10256,
+   "mayor": {
+    "name": "Jordi Castany i Camí",
+    "party": "ERC-AM",
+    "since": "2025-06-15"
+   },
+   "municipal": {
+    "electorate": 5557,
+    "voters": 3085,
+    "nullVotes": 35,
+    "blankVotes": 46,
+    "listVotes": 3004,
+    "validVotes": 3050,
+    "seats": 13,
+    "censusPopulation": 9637,
+    "lists": [
+     {
+      "code": "250114230",
+      "short": "SA-PSC-CP",
+      "name": "Sempre Alcarràs - Partit dels Socialistes de Catalunya - Candidatura de Progrés",
+      "votes": 1085,
+      "seats": 5
+     },
+     {
+      "code": "193",
+      "short": "ERC-AM",
+      "name": "Esquerra Republicana de Catalunya - Acord Municipal",
+      "votes": 733,
+      "seats": 4
+     },
+     {
+      "code": "250114232",
+      "short": "CM",
+      "name": "Junts per Alcarràs - Compromís Municipal",
+      "votes": 686,
+      "seats": 3
+     },
+     {
+      "code": "250114231",
+      "short": "CUP-AMUNT",
+      "name": "Candidatura d’Unitat Popular Alcarràs - Alternativa Municipalista",
+      "votes": 238,
+      "seats": 1
+     },
+     {
+      "code": "301",
+      "short": "Cs",
+      "name": "Ciutadans - Partido de la Ciudadanía",
+      "votes": 97,
+      "seats": 0
+     },
+     {
+      "code": "202386",
+      "short": "PP",
+      "name": "Partido Popular",
+      "votes": 83,
+      "seats": 0
+     },
+     {
+      "code": "693",
+      "short": "VOX",
+      "name": "VOX",
+      "votes": 82,
+      "seats": 0
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 5377,
+    "voters": 3046,
+    "nullVotes": 38,
+    "blankVotes": 24,
+    "listVotes": 2984,
+    "validVotes": 3008,
+    "votes": {
+     "6": 892,
+     "10": 663,
+     "86": 393,
+     "643": 11,
+     "693": 268,
+     "697": 3,
+     "1031": 404,
+     "1034": 1,
+     "1109": 76,
+     "1129": 24,
+     "1134": 5,
+     "1135": 211,
+     "1136": 33
+    }
+   },
+   "parliament": {
+    "electorate": 5399,
+    "voters": 2735,
+    "nullVotes": 24,
+    "blankVotes": 41,
+    "listVotes": 2670,
+    "validVotes": 2711,
+    "votes": {
+     "6": 564,
+     "10": 457,
+     "86": 202,
+     "301": 12,
+     "350": 5,
+     "546": 3,
+     "693": 198,
+     "697": 5,
+     "1034": 3,
+     "1130": 337,
+     "1134": 7,
+     "1140": 51,
+     "1141": 87,
+     "1143": 730,
+     "1144": 9
+    }
+   }
+  },
+  {
+   "code": "08262",
+   "idescat": "082628",
+   "slug": "sant-vicenc-de-castellet",
+   "name": "Sant Vicenç de Castellet",
+   "comarca": "Bages",
+   "province": "Barcelona",
+   "population": 10164,
+   "mayor": {
+    "name": "Dani Mauriz Vidal",
+    "party": "CM",
+    "since": "2023-06-17"
+   },
+   "municipal": {
+    "electorate": 7229,
+    "voters": 4079,
+    "nullVotes": 42,
+    "blankVotes": 45,
+    "listVotes": 3992,
+    "validVotes": 4037,
+    "seats": 13,
+    "censusPopulation": 9949,
+    "lists": [
+     {
+      "code": "82624232",
+      "short": "CM",
+      "name": "Junts per Sant Vicenç de Castellet - Compromís Municipal",
+      "votes": 1795,
+      "seats": 7
+     },
+     {
+      "code": "193",
+      "short": "ERC-AM",
+      "name": "Esquerra Republicana de Catalunya - Acord Municipal",
+      "votes": 848,
+      "seats": 3
+     },
+     {
+      "code": "82624231",
+      "short": "SV SOU VOSALTRES",
+      "name": "Sant Vicenç Sou Vosaltres",
+      "votes": 649,
+      "seats": 2
+     },
+     {
+      "code": "842",
+      "short": "PSC-CP",
+      "name": "Partit dels Socialistes de Catalunya - Candidatura de Progrés",
+      "votes": 289,
+      "seats": 1
+     },
+     {
+      "code": "693",
+      "short": "VOX",
+      "name": "VOX",
+      "votes": 226,
+      "seats": 0
+     },
+     {
+      "code": "82624230",
+      "short": "SVECP-C",
+      "name": "Sant Vicenç En Comú Podem - Confluència",
+      "votes": 122,
+      "seats": 0
+     },
+     {
+      "code": "82624233",
+      "short": "FSV-ARA PL",
+      "name": "Futur Sant Vicenç de Castellet- Ara Pacte Local",
+      "votes": 37,
+      "seats": 0
+     },
+     {
+      "code": "1071",
+      "short": "UCIN",
+      "name": "Unión de Ciudadanos Independientes",
+      "votes": 26,
+      "seats": 0
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 7188,
+    "voters": 4409,
+    "nullVotes": 40,
+    "blankVotes": 24,
+    "listVotes": 4345,
+    "validVotes": 4369,
+    "votes": {
+     "6": 1591,
+     "10": 673,
+     "86": 415,
+     "693": 373,
+     "697": 4,
+     "1031": 512,
+     "1034": 4,
+     "1109": 101,
+     "1129": 57,
+     "1134": 10,
+     "1135": 564,
+     "1136": 41
+    }
+   },
+   "parliament": {
+    "electorate": 7203,
+    "voters": 3810,
+    "nullVotes": 35,
+    "blankVotes": 44,
+    "listVotes": 3731,
+    "validVotes": 3775,
+    "votes": {
+     "6": 1066,
+     "10": 640,
+     "86": 274,
+     "301": 8,
+     "350": 2,
+     "693": 296,
+     "697": 1,
+     "1034": 2,
+     "1129": 39,
+     "1130": 269,
+     "1134": 25,
+     "1140": 168,
+     "1141": 130,
+     "1142": 1,
+     "1143": 800,
+     "1144": 10
+    }
+   }
+  },
+  {
+   "code": "08023",
+   "idescat": "080235",
+   "slug": "bigues-i-riells-del-fai",
+   "name": "Bigues i Riells del Fai",
+   "comarca": "Vallès Oriental",
+   "province": "Barcelona",
+   "population": 10139,
+   "mayor": {
+    "name": "Joan Josep Galiano Peralta",
+    "party": "ERC-I-AM",
+    "since": "2023-06-17"
+   },
+   "municipal": {
+    "electorate": 7736,
+    "voters": 3879,
+    "nullVotes": 82,
+    "blankVotes": 69,
+    "listVotes": 3728,
+    "validVotes": 3797,
+    "seats": 13,
+    "censusPopulation": 9757,
+    "lists": [
+     {
+      "code": "80234230",
+      "short": "ERC-I-AM",
+      "name": "Esquerra Republicana de Catalunya - Independents - Acord Municipal",
+      "votes": 1968,
+      "seats": 7
+     },
+     {
+      "code": "842",
+      "short": "PSC-CP",
+      "name": "Partit dels Socialistes de Catalunya - Candidatura de Progrés",
+      "votes": 596,
+      "seats": 2
+     },
+     {
+      "code": "80234231",
+      "short": "AGBIR",
+      "name": "Agrupació Veïnal Bigues I Riells",
+      "votes": 562,
+      "seats": 2
+     },
+     {
+      "code": "80234232",
+      "short": "CM",
+      "name": "Junts per Bigues i Riells del Fai - Compromís Municipal",
+      "votes": 301,
+      "seats": 1
+     },
+     {
+      "code": "202386",
+      "short": "PP",
+      "name": "Partido Popular",
+      "votes": 249,
+      "seats": 1
+     },
+     {
+      "code": "301",
+      "short": "Cs",
+      "name": "Ciutadans - Partido de la Ciudadanía",
+      "votes": 52,
+      "seats": 0
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 7680,
+    "voters": 4975,
+    "nullVotes": 64,
+    "blankVotes": 50,
+    "listVotes": 4861,
+    "validVotes": 4911,
+    "votes": {
+     "6": 1467,
+     "10": 957,
+     "86": 591,
+     "693": 434,
+     "697": 9,
+     "1031": 486,
+     "1034": 3,
+     "1109": 131,
+     "1129": 67,
+     "1134": 12,
+     "1135": 675,
+     "1136": 29
+    }
+   },
+   "parliament": {
+    "electorate": 7808,
+    "voters": 4260,
+    "nullVotes": 47,
+    "blankVotes": 54,
+    "listVotes": 4159,
+    "validVotes": 4213,
+    "votes": {
+     "6": 985,
+     "10": 821,
+     "86": 399,
+     "301": 31,
+     "350": 4,
+     "693": 352,
+     "697": 5,
+     "1034": 5,
+     "1129": 78,
+     "1130": 136,
+     "1134": 9,
+     "1140": 171,
+     "1141": 167,
+     "1142": 2,
+     "1143": 981,
+     "1144": 13
+    }
+   }
+  },
+  {
+   "code": "08119",
+   "idescat": "081192",
+   "slug": "masquefa",
+   "name": "Masquefa",
+   "comarca": "Anoia",
+   "province": "Barcelona",
+   "population": 10120,
+   "mayor": {
+    "name": "Daniel Gutiérrez Espartero",
+    "party": "",
+    "since": "2025-01-09"
+   },
+   "municipal": {
+    "electorate": 7475,
+    "voters": 4198,
+    "nullVotes": 43,
+    "blankVotes": 57,
+    "listVotes": 4098,
+    "validVotes": 4155,
+    "seats": 13,
+    "censusPopulation": 9744,
+    "lists": [
+     {
+      "code": "81194231",
+      "short": "CM",
+      "name": "Junts per Masquefa - Compromís Municipal",
+      "votes": 1331,
+      "seats": 5
+     },
+     {
+      "code": "81194230",
+      "short": "CP",
+      "name": "Sumem per Masquefa - Candidatura de Progrés",
+      "votes": 1183,
+      "seats": 4
+     },
+     {
+      "code": "193",
+      "short": "ERC-AM",
+      "name": "Esquerra Republicana de Catalunya - Acord Municipal",
+      "votes": 1050,
+      "seats": 3
+     },
+     {
+      "code": "693",
+      "short": "VOX",
+      "name": "VOX",
+      "votes": 325,
+      "seats": 1
+     },
+     {
+      "code": "202386",
+      "short": "PP",
+      "name": "Partido Popular",
+      "votes": 209,
+      "seats": 0
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 7469,
+    "voters": 4858,
+    "nullVotes": 35,
+    "blankVotes": 33,
+    "listVotes": 4790,
+    "validVotes": 4823,
+    "votes": {
+     "6": 1760,
+     "10": 705,
+     "86": 554,
+     "693": 590,
+     "697": 7,
+     "1031": 314,
+     "1034": 7,
+     "1109": 84,
+     "1129": 45,
+     "1134": 21,
+     "1135": 690,
+     "1136": 13
+    }
+   },
+   "parliament": {
+    "electorate": 7595,
+    "voters": 4090,
+    "nullVotes": 34,
+    "blankVotes": 49,
+    "listVotes": 4007,
+    "validVotes": 4056,
+    "votes": {
+     "6": 1191,
+     "10": 778,
+     "86": 373,
+     "301": 35,
+     "350": 4,
+     "693": 529,
+     "697": 4,
+     "1034": 20,
+     "1129": 71,
+     "1130": 90,
+     "1134": 20,
+     "1140": 160,
+     "1141": 118,
+     "1142": 21,
+     "1143": 586,
+     "1144": 7
+    }
+   }
+  },
+  {
+   "code": "43004",
+   "idescat": "430043",
+   "slug": "alcanar",
+   "name": "Alcanar",
+   "comarca": "Montsià",
+   "province": "Tarragona",
+   "population": 10104,
+   "mayor": {
+    "name": "Marc Chavalera i Esbri",
+    "party": "ERC-AM",
+    "since": "2026-01-08"
+   },
+   "municipal": {
+    "electorate": 6801,
+    "voters": 3866,
+    "nullVotes": 107,
+    "blankVotes": 98,
+    "listVotes": 3661,
+    "validVotes": 3759,
+    "seats": 13,
+    "censusPopulation": 9612,
+    "lists": [
+     {
+      "code": "193",
+      "short": "ERC-AM",
+      "name": "Esquerra Republicana de Catalunya - Acord Municipal",
+      "votes": 1704,
+      "seats": 7
+     },
+     {
+      "code": "430044231",
+      "short": "CM",
+      "name": "Junts per Alcanar, les Cases I Alcanar Platja - Compromís Municipal",
+      "votes": 803,
+      "seats": 3
+     },
+     {
+      "code": "430044230",
+      "short": "CUP-AMUNT",
+      "name": "Candidatura d'Unitat Popular Alcanar- les Cases-Alternativa Municipalista",
+      "votes": 663,
+      "seats": 2
+     },
+     {
+      "code": "842",
+      "short": "PSC-CP",
+      "name": "Partit dels Socialistes de Catalunya - Candidatura de Progrés",
+      "votes": 434,
+      "seats": 1
+     },
+     {
+      "code": "1126",
+      "short": "VALENTS",
+      "name": "Valents",
+      "votes": 57,
+      "seats": 0
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 6441,
+    "voters": 4134,
+    "nullVotes": 63,
+    "blankVotes": 28,
+    "listVotes": 4043,
+    "validVotes": 4071,
+    "votes": {
+     "6": 1262,
+     "10": 944,
+     "86": 462,
+     "693": 320,
+     "697": 1,
+     "1031": 430,
+     "1034": 2,
+     "1109": 150,
+     "1129": 16,
+     "1134": 3,
+     "1135": 435,
+     "1136": 13,
+     "1137": 4,
+     "1138": 1
+    }
+   },
+   "parliament": {
+    "electorate": 6525,
+    "voters": 3285,
+    "nullVotes": 63,
+    "blankVotes": 41,
+    "listVotes": 3181,
+    "validVotes": 3222,
+    "votes": {
+     "6": 708,
+     "10": 703,
+     "86": 298,
+     "301": 14,
+     "350": 5,
+     "546": 1,
+     "693": 201,
+     "697": 4,
+     "1018": 0,
+     "1034": 1,
+     "1129": 20,
+     "1130": 100,
+     "1134": 4,
+     "1140": 97,
+     "1141": 203,
+     "1142": 0,
+     "1143": 809,
+     "1144": 13
+    }
+   }
+  },
+  {
+   "code": "08259",
+   "idescat": "082592",
+   "slug": "santa-maria-de-palautordera",
+   "name": "Santa Maria de Palautordera",
+   "comarca": "Vallès Oriental",
+   "province": "Barcelona",
+   "population": 10080,
+   "mayor": {
+    "name": "Jordi Xena I Ibañez",
+    "party": "CM",
+    "since": "2023-06-17"
+   },
+   "municipal": {
+    "electorate": 7353,
+    "voters": 4088,
+    "nullVotes": 87,
+    "blankVotes": 112,
+    "listVotes": 3889,
+    "validVotes": 4001,
+    "seats": 13,
+    "censusPopulation": 9777,
+    "lists": [
+     {
+      "code": "82594231",
+      "short": "CM",
+      "name": "Junts per Palau - Compromís Municipal",
+      "votes": 2393,
+      "seats": 9
+     },
+     {
+      "code": "82594233",
+      "short": "SOM-CUP-AMUNT",
+      "name": "Som Palautordera - CUP - Alternativa Municipalista",
+      "votes": 549,
+      "seats": 2
+     },
+     {
+      "code": "82594230",
+      "short": "ERC-PA-AM",
+      "name": "Esquerra Republicana de Catalunya - Palau Avança - Acord Municipal",
+      "votes": 529,
+      "seats": 1
+     },
+     {
+      "code": "842",
+      "short": "PSC-CP",
+      "name": "Partit dels Socialistes de Catalunya - Candidatura de Progrés",
+      "votes": 418,
+      "seats": 1
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 7371,
+    "voters": 5039,
+    "nullVotes": 43,
+    "blankVotes": 46,
+    "listVotes": 4950,
+    "validVotes": 4996,
+    "votes": {
+     "6": 1513,
+     "10": 846,
+     "86": 344,
+     "693": 272,
+     "697": 2,
+     "1031": 910,
+     "1034": 8,
+     "1109": 236,
+     "1129": 59,
+     "1134": 9,
+     "1135": 715,
+     "1136": 36
+    }
+   },
+   "parliament": {
+    "electorate": 7439,
+    "voters": 4690,
+    "nullVotes": 47,
+    "blankVotes": 63,
+    "listVotes": 4580,
+    "validVotes": 4643,
+    "votes": {
+     "6": 991,
+     "10": 714,
+     "86": 261,
+     "301": 9,
+     "350": 4,
+     "693": 235,
+     "697": 7,
+     "1034": 6,
+     "1129": 56,
+     "1130": 327,
+     "1134": 7,
+     "1140": 228,
+     "1141": 288,
+     "1142": 2,
+     "1143": 1422,
+     "1144": 23
+    }
+   }
+  },
+  {
+   "code": "08155",
+   "idescat": "081555",
+   "slug": "palafolls",
+   "name": "Palafolls",
+   "comarca": "Maresme",
+   "province": "Barcelona",
+   "population": 10038,
+   "mayor": {
+    "name": "Francesc Alemany Martínez",
+    "party": "ERC-AM",
+    "since": "2023-06-17"
+   },
+   "municipal": {
+    "electorate": 7371,
+    "voters": 4011,
+    "nullVotes": 53,
+    "blankVotes": 69,
+    "listVotes": 3889,
+    "validVotes": 3958,
+    "seats": 13,
+    "censusPopulation": 9661,
+    "lists": [
+     {
+      "code": "193",
+      "short": "ERC-AM",
+      "name": "Esquerra Republicana de Catalunya - Acord Municipal",
+      "votes": 1555,
+      "seats": 6
+     },
+     {
+      "code": "842",
+      "short": "PSC-CP",
+      "name": "Partit dels Socialistes de Catalunya - Candidatura de Progrés",
+      "votes": 1204,
+      "seats": 5
+     },
+     {
+      "code": "81554230",
+      "short": "PLS",
+      "name": "Palafolls Som",
+      "votes": 596,
+      "seats": 2
+     },
+     {
+      "code": "202386",
+      "short": "PP",
+      "name": "Partido Popular",
+      "votes": 188,
+      "seats": 0
+     },
+     {
+      "code": "81554231",
+      "short": "EU-C",
+      "name": "Esquerra Unitària - Confluència",
+      "votes": 166,
+      "seats": 0
+     },
+     {
+      "code": "81554232",
+      "short": "CM",
+      "name": "Junts per Palafolls - Compromís Municipal",
+      "votes": 105,
+      "seats": 0
+     },
+     {
+      "code": "1061",
+      "short": "NPRS",
+      "name": "Nosotros Partido de la Regeneración Social",
+      "votes": 75,
+      "seats": 0
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 7406,
+    "voters": 4895,
+    "nullVotes": 41,
+    "blankVotes": 45,
+    "listVotes": 4809,
+    "validVotes": 4854,
+    "votes": {
+     "6": 1655,
+     "10": 706,
+     "86": 528,
+     "693": 536,
+     "697": 5,
+     "1031": 375,
+     "1034": 9,
+     "1109": 93,
+     "1129": 94,
+     "1134": 16,
+     "1135": 770,
+     "1136": 22
+    }
+   },
+   "parliament": {
+    "electorate": 7487,
+    "voters": 4084,
+    "nullVotes": 38,
+    "blankVotes": 51,
+    "listVotes": 3995,
+    "validVotes": 4046,
+    "votes": {
+     "6": 1229,
+     "10": 655,
+     "86": 324,
+     "301": 15,
+     "350": 4,
+     "693": 456,
+     "697": 4,
+     "1034": 6,
+     "1129": 82,
+     "1130": 139,
+     "1134": 28,
+     "1140": 195,
+     "1141": 135,
+     "1142": 4,
+     "1143": 704,
+     "1144": 15
+    }
+   }
+  },
+  {
+   "code": "17141",
+   "idescat": "171411",
+   "slug": "puigcerda",
+   "name": "Puigcerdà",
+   "comarca": "Cerdanya",
+   "province": "Girona",
+   "population": 10035,
+   "mayor": {
+    "name": "Joan Manel Serra Arenas",
+    "party": "",
+    "since": "2025-07-14"
+   },
+   "municipal": {
+    "electorate": 6338,
+    "voters": 3406,
+    "nullVotes": 77,
+    "blankVotes": 60,
+    "listVotes": 3269,
+    "validVotes": 3329,
+    "seats": 13,
+    "censusPopulation": 9484,
+    "lists": [
+     {
+      "code": "171414233",
+      "short": "IP-ERC-AM",
+      "name": "Impulsem Puigcerdà - Esquerra Republicana de Catalunya - Acord Municipal",
+      "votes": 954,
+      "seats": 5
+     },
+     {
+      "code": "171414231",
+      "short": "CM",
+      "name": "Junts per Puigcerdà - Compromís Municipal",
+      "votes": 939,
+      "seats": 4
+     },
+     {
+      "code": "171414232",
+      "short": "FTR",
+      "name": "Futur per Puigcerdà",
+      "votes": 873,
+      "seats": 4
+     },
+     {
+      "code": "202386",
+      "short": "PP",
+      "name": "Partido Popular",
+      "votes": 188,
+      "seats": 0
+     },
+     {
+      "code": "171414230",
+      "short": "TXPUIGCERDÀ-ARA PL",
+      "name": "Treballem per Puigcerdà - Ara Pacte Local",
+      "votes": 184,
+      "seats": 0
+     },
+     {
+      "code": "842",
+      "short": "PSC-CP",
+      "name": "Partit dels Socialistes de Catalunya - Candidatura de Progrés",
+      "votes": 131,
+      "seats": 0
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 6290,
+    "voters": 3596,
+    "nullVotes": 51,
+    "blankVotes": 36,
+    "listVotes": 3509,
+    "validVotes": 3545,
+    "votes": {
+     "6": 906,
+     "10": 577,
+     "86": 585,
+     "693": 289,
+     "697": 3,
+     "1031": 600,
+     "1034": 3,
+     "1109": 88,
+     "1129": 42,
+     "1134": 3,
+     "1135": 366,
+     "1136": 47
+    }
+   },
+   "parliament": {
+    "electorate": 6367,
+    "voters": 3059,
+    "nullVotes": 45,
+    "blankVotes": 42,
+    "listVotes": 2972,
+    "validVotes": 3014,
+    "votes": {
+     "6": 590,
+     "10": 441,
+     "86": 357,
+     "301": 16,
+     "350": 1,
+     "693": 226,
+     "697": 2,
+     "1034": 1,
+     "1129": 35,
+     "1130": 252,
+     "1134": 7,
+     "1140": 126,
+     "1141": 69,
+     "1143": 833,
+     "1144": 16
+    }
+   }
+  },
+  {
+   "code": "08120",
+   "idescat": "081206",
+   "slug": "matadepera",
+   "name": "Matadepera",
+   "comarca": "Vallès Occidental",
+   "province": "Barcelona",
+   "population": 9776,
+   "mayor": {
+    "name": "Guillermo Montagut Marques",
+    "party": "",
+    "since": "2023-06-17"
+   },
+   "municipal": {
+    "electorate": 7554,
+    "voters": 4316,
+    "nullVotes": 41,
+    "blankVotes": 55,
+    "listVotes": 4220,
+    "validVotes": 4275,
+    "seats": 13,
+    "censusPopulation": 9752,
+    "lists": [
+     {
+      "code": "81204231",
+      "short": "SOM-HI MATADEPERA",
+      "name": "Som-hi Matadepera",
+      "votes": 1463,
+      "seats": 5
+     },
+     {
+      "code": "81204232",
+      "short": "CM",
+      "name": "Junts per Matadepera - Compromís Municipal",
+      "votes": 1177,
+      "seats": 4
+     },
+     {
+      "code": "81204233",
+      "short": "S+MTDP-ARA PL",
+      "name": "Suma'T Matadepera - Ara Pacte Local",
+      "votes": 792,
+      "seats": 3
+     },
+     {
+      "code": "193",
+      "short": "ERC-AM",
+      "name": "Esquerra Republicana de Catalunya - Acord Municipal",
+      "votes": 288,
+      "seats": 1
+     },
+     {
+      "code": "202386",
+      "short": "PP",
+      "name": "Partido Popular",
+      "votes": 220,
+      "seats": 0
+     },
+     {
+      "code": "693",
+      "short": "VOX",
+      "name": "VOX",
+      "votes": 165,
+      "seats": 0
+     },
+     {
+      "code": "81204230",
+      "short": "PSC-CP-En Comú Matadepera",
+      "name": "Partit dels Socialistes de Catalunya - En Comú Matadepera - Candidatura de Progrés",
+      "votes": 102,
+      "seats": 0
+     },
+     {
+      "code": "301",
+      "short": "Cs",
+      "name": "Ciutadans - Partido de la Ciudadanía",
+      "votes": 13,
+      "seats": 0
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 7479,
+    "voters": 5166,
+    "nullVotes": 30,
+    "blankVotes": 50,
+    "listVotes": 5086,
+    "validVotes": 5136,
+    "votes": {
+     "6": 766,
+     "10": 736,
+     "86": 802,
+     "693": 358,
+     "697": 1,
+     "1031": 1590,
+     "1034": 1,
+     "1109": 134,
+     "1129": 51,
+     "1134": 3,
+     "1135": 337,
+     "1136": 307
+    }
+   },
+   "parliament": {
+    "electorate": 7513,
+    "voters": 5025,
+    "nullVotes": 24,
+    "blankVotes": 80,
+    "listVotes": 4921,
+    "validVotes": 5001,
+    "votes": {
+     "6": 484,
+     "10": 455,
+     "86": 534,
+     "301": 13,
+     "350": 4,
+     "693": 310,
+     "697": 0,
+     "1034": 5,
+     "1129": 36,
+     "1130": 315,
+     "1134": 4,
+     "1140": 90,
+     "1141": 137,
+     "1142": 0,
+     "1143": 2495,
+     "1144": 39
+    }
+   }
+  },
+  {
+   "code": "08068",
+   "idescat": "080689",
+   "slug": "cervello",
+   "name": "Cervelló",
+   "comarca": "Baix Llobregat",
+   "province": "Barcelona",
+   "population": 9743,
+   "mayor": {
+    "name": "Montserrat Canas Moldón",
+    "party": "",
+    "since": "2024-09-28"
+   },
+   "municipal": {
+    "electorate": 7132,
+    "voters": 3865,
+    "nullVotes": 56,
+    "blankVotes": 46,
+    "listVotes": 3763,
+    "validVotes": 3809,
+    "seats": 13,
+    "censusPopulation": 9307,
+    "lists": [
+     {
+      "code": "80684231",
+      "short": "M'ESTIMO CERVELLÓ-PSC-CP",
+      "name": "M'estimo Cervelló - Partit dels Socialistes de Catalunya - Candidatura de Progrés",
+      "votes": 1530,
+      "seats": 6
+     },
+     {
+      "code": "80684230",
+      "short": "ERC-AM",
+      "name": "Cervelló de Primera - Esquerra Republicana - Acord Municipal",
+      "votes": 1316,
+      "seats": 5
+     },
+     {
+      "code": "80684234",
+      "short": "SXC",
+      "name": "Sempre X Cervelló",
+      "votes": 373,
+      "seats": 1
+     },
+     {
+      "code": "693",
+      "short": "VOX",
+      "name": "VOX",
+      "votes": 258,
+      "seats": 1
+     },
+     {
+      "code": "80684233",
+      "short": "CM",
+      "name": "Junts per Cervelló - Compromís Municipal",
+      "votes": 179,
+      "seats": 0
+     },
+     {
+      "code": "80684232",
+      "short": "CECP-C",
+      "name": "Cervelló En Comú Podem - Confluència",
+      "votes": 107,
+      "seats": 0
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 7084,
+    "voters": 4843,
+    "nullVotes": 45,
+    "blankVotes": 53,
+    "listVotes": 4745,
+    "validVotes": 4798,
+    "votes": {
+     "6": 1508,
+     "10": 811,
+     "86": 654,
+     "693": 522,
+     "697": 5,
+     "1031": 378,
+     "1034": 1,
+     "1109": 81,
+     "1129": 66,
+     "1134": 12,
+     "1135": 679,
+     "1136": 28
+    }
+   },
+   "parliament": {
+    "electorate": 7230,
+    "voters": 4254,
+    "nullVotes": 43,
+    "blankVotes": 38,
+    "listVotes": 4173,
+    "validVotes": 4211,
+    "votes": {
+     "6": 1154,
+     "10": 761,
+     "86": 465,
+     "301": 48,
+     "350": 4,
+     "693": 427,
+     "697": 3,
+     "1034": 4,
+     "1129": 76,
+     "1130": 103,
+     "1134": 14,
+     "1140": 196,
+     "1141": 112,
+     "1142": 4,
+     "1143": 781,
+     "1144": 21
+    }
+   }
+  },
+  {
+   "code": "25207",
+   "idescat": "252075",
+   "slug": "solsona",
+   "name": "Solsona",
+   "comarca": "Solsonès",
+   "province": "Lleida",
+   "population": 9717,
+   "mayor": {
+    "name": "Judit Gisbert Ester",
+    "party": "",
+    "since": "2023-06-17"
+   },
+   "municipal": {
+    "electorate": 6448,
+    "voters": 3871,
+    "nullVotes": 67,
+    "blankVotes": 110,
+    "listVotes": 3694,
+    "validVotes": 3804,
+    "seats": 13,
+    "censusPopulation": 9131,
+    "lists": [
+     {
+      "code": "193",
+      "short": "ERC-AM",
+      "name": "Esquerra Republicana de Catalunya - Acord Municipal",
+      "votes": 1353,
+      "seats": 5
+     },
+     {
+      "code": "252074232",
+      "short": "CM",
+      "name": "Junts per Solsona - Compromís Municipal",
+      "votes": 714,
+      "seats": 3
+     },
+     {
+      "code": "252074230",
+      "short": "ARA PL",
+      "name": "Treballem per Solsona - Ara Pacte Local",
+      "votes": 712,
+      "seats": 3
+     },
+     {
+      "code": "252074231",
+      "short": "C.U.P.-AMUNT",
+      "name": "Candidatura d’Unitat Popular - Amunt",
+      "votes": 552,
+      "seats": 2
+     },
+     {
+      "code": "842",
+      "short": "PSC-CP",
+      "name": "Partit dels Socialistes de Catalunya - Candidatura de Progrés",
+      "votes": 196,
+      "seats": 0
+     },
+     {
+      "code": "693",
+      "short": "VOX",
+      "name": "VOX",
+      "votes": 85,
+      "seats": 0
+     },
+     {
+      "code": "202386",
+      "short": "PP",
+      "name": "Partido Popular",
+      "votes": 82,
+      "seats": 0
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 6397,
+    "voters": 3899,
+    "nullVotes": 63,
+    "blankVotes": 60,
+    "listVotes": 3776,
+    "validVotes": 3836,
+    "votes": {
+     "6": 952,
+     "10": 884,
+     "86": 317,
+     "643": 7,
+     "693": 146,
+     "697": 0,
+     "1031": 845,
+     "1034": 1,
+     "1109": 222,
+     "1129": 29,
+     "1134": 6,
+     "1135": 317,
+     "1136": 50
+    }
+   },
+   "parliament": {
+    "electorate": 6435,
+    "voters": 3863,
+    "nullVotes": 62,
+    "blankVotes": 77,
+    "listVotes": 3724,
+    "validVotes": 3801,
+    "votes": {
+     "6": 695,
+     "10": 651,
+     "86": 201,
+     "301": 5,
+     "350": 3,
+     "546": 5,
+     "693": 115,
+     "697": 1,
+     "1034": 3,
+     "1130": 335,
+     "1134": 14,
+     "1140": 62,
+     "1141": 296,
+     "1143": 1301,
+     "1144": 37
+    }
+   }
+  },
+  {
+   "code": "25072",
+   "idescat": "250729",
+   "slug": "cervera",
+   "name": "Cervera",
+   "comarca": "Segarra",
+   "province": "Lleida",
+   "population": 9603,
+   "mayor": {
+    "name": "Jan Pomés López",
+    "party": "PSC-CP",
+    "since": "2023-06-17"
+   },
+   "municipal": {
+    "electorate": 6047,
+    "voters": 3104,
+    "nullVotes": 135,
+    "blankVotes": 125,
+    "listVotes": 2844,
+    "validVotes": 2969,
+    "seats": 13,
+    "censusPopulation": 9393,
+    "lists": [
+     {
+      "code": "842",
+      "short": "PSC-CP",
+      "name": "Partit dels Socialistes de Catalunya - Candidatura de Progrés",
+      "votes": 926,
+      "seats": 5
+     },
+     {
+      "code": "250724231",
+      "short": "CM",
+      "name": "Junts per Cervera - Compromís Municipal",
+      "votes": 576,
+      "seats": 3
+     },
+     {
+      "code": "250724230",
+      "short": "SIF-FIC",
+      "name": "Solucions I Futur - Federació d’Independents de Catalunya",
+      "votes": 547,
+      "seats": 3
+     },
+     {
+      "code": "193",
+      "short": "ERC-AM",
+      "name": "Esquerra Republicana de Catalunya - Acord Municipal",
+      "votes": 526,
+      "seats": 2
+     },
+     {
+      "code": "202386",
+      "short": "PP",
+      "name": "Partido Popular",
+      "votes": 153,
+      "seats": 0
+     },
+     {
+      "code": "693",
+      "short": "VOX",
+      "name": "VOX",
+      "votes": 116,
+      "seats": 0
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 6015,
+    "voters": 3675,
+    "nullVotes": 47,
+    "blankVotes": 44,
+    "listVotes": 3584,
+    "validVotes": 3628,
+    "votes": {
+     "6": 1130,
+     "10": 623,
+     "86": 402,
+     "643": 8,
+     "693": 244,
+     "697": 0,
+     "1031": 723,
+     "1034": 0,
+     "1109": 110,
+     "1129": 29,
+     "1134": 3,
+     "1135": 266,
+     "1136": 46
+    }
+   },
+   "parliament": {
+    "electorate": 6035,
+    "voters": 3392,
+    "nullVotes": 50,
+    "blankVotes": 52,
+    "listVotes": 3290,
+    "validVotes": 3342,
+    "votes": {
+     "6": 741,
+     "10": 486,
+     "86": 244,
+     "301": 12,
+     "350": 1,
+     "546": 3,
+     "693": 205,
+     "697": 3,
+     "1034": 0,
+     "1130": 280,
+     "1134": 11,
+     "1140": 76,
+     "1141": 122,
+     "1143": 1075,
+     "1144": 31
+    }
+   }
+  },
+  {
+   "code": "17089",
+   "idescat": "170890",
+   "slug": "llagostera",
+   "name": "Llagostera",
+   "comarca": "Gironès",
+   "province": "Girona",
+   "population": 9585,
+   "mayor": {
+    "name": "Narcís Llinàs Gavilán",
+    "party": "CM",
+    "since": "2023-06-17"
+   },
+   "municipal": {
+    "electorate": 6245,
+    "voters": 3274,
+    "nullVotes": 40,
+    "blankVotes": 64,
+    "listVotes": 3170,
+    "validVotes": 3234,
+    "seats": 13,
+    "censusPopulation": 9024,
+    "lists": [
+     {
+      "code": "170894230",
+      "short": "CM",
+      "name": "Junts per Llagostera - Compromís Municipal",
+      "votes": 1378,
+      "seats": 6
+     },
+     {
+      "code": "193",
+      "short": "ERC-AM",
+      "name": "Esquerra Republicana de Catalunya - Acord Municipal",
+      "votes": 1089,
+      "seats": 5
+     },
+     {
+      "code": "170894232",
+      "short": "CUP-ALL-AMUNT",
+      "name": "CUP - Alternativa per Llagostera - Alternativa Municipalista",
+      "votes": 369,
+      "seats": 1
+     },
+     {
+      "code": "170894231",
+      "short": "PSC-CP",
+      "name": "Partit dels Socialistes de Catalunya per Llagostera - Candidatura de Progrés",
+      "votes": 334,
+      "seats": 1
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 6195,
+    "voters": 3692,
+    "nullVotes": 32,
+    "blankVotes": 23,
+    "listVotes": 3637,
+    "validVotes": 3660,
+    "votes": {
+     "6": 1039,
+     "10": 614,
+     "86": 285,
+     "693": 246,
+     "697": 3,
+     "1031": 815,
+     "1034": 6,
+     "1109": 140,
+     "1129": 46,
+     "1134": 4,
+     "1135": 397,
+     "1136": 42
+    }
+   },
+   "parliament": {
+    "electorate": 6341,
+    "voters": 3401,
+    "nullVotes": 39,
+    "blankVotes": 48,
+    "listVotes": 3314,
+    "validVotes": 3362,
+    "votes": {
+     "6": 628,
+     "10": 475,
+     "86": 186,
+     "301": 6,
+     "350": 2,
+     "693": 206,
+     "697": 2,
+     "1034": 3,
+     "1129": 34,
+     "1130": 267,
+     "1134": 6,
+     "1140": 102,
+     "1141": 138,
+     "1143": 1250,
+     "1144": 9
+    }
+   }
+  },
+  {
+   "code": "08007",
+   "idescat": "080076",
+   "slug": "arenys-de-munt",
+   "name": "Arenys de Munt",
+   "comarca": "Maresme",
+   "province": "Barcelona",
+   "population": 9558,
+   "mayor": {
+    "name": "Josep Sánchez I Camps",
+    "party": "ERC-AM",
+    "since": "2023-06-17"
+   },
+   "municipal": {
+    "electorate": 7149,
+    "voters": 3806,
+    "nullVotes": 115,
+    "blankVotes": 118,
+    "listVotes": 3573,
+    "validVotes": 3691,
+    "seats": 13,
+    "censusPopulation": 9278,
+    "lists": [
+     {
+      "code": "193",
+      "short": "ERC-AM",
+      "name": "Esquerra Republicana de Catalunya - Acord Municipal",
+      "votes": 1548,
+      "seats": 6
+     },
+     {
+      "code": "80074230",
+      "short": "CM",
+      "name": "Junts per Arenys de Munt - Compromís Municipal",
+      "votes": 1038,
+      "seats": 4
+     },
+     {
+      "code": "80074231",
+      "short": "CUP-AMUNT",
+      "name": "Candidatura d'Unitat Popular Arenys de Munt - Alternativa Municipalista",
+      "votes": 511,
+      "seats": 2
+     },
+     {
+      "code": "842",
+      "short": "PSC-CP",
+      "name": "Partit dels Socialistes de Catalunya - Candidatura de Progrés",
+      "votes": 407,
+      "seats": 1
+     },
+     {
+      "code": "80074232",
+      "short": "AM-IDC",
+      "name": "Alternativa Municipal Arenys de Munt \u0002Independents de Catalunya",
+      "votes": 69,
+      "seats": 0
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 7157,
+    "voters": 4661,
+    "nullVotes": 49,
+    "blankVotes": 36,
+    "listVotes": 4576,
+    "validVotes": 4612,
+    "votes": {
+     "6": 1092,
+     "10": 1013,
+     "86": 352,
+     "693": 222,
+     "697": 2,
+     "1031": 897,
+     "1034": 4,
+     "1109": 263,
+     "1129": 70,
+     "1134": 18,
+     "1135": 605,
+     "1136": 38
+    }
+   },
+   "parliament": {
+    "electorate": 7213,
+    "voters": 4299,
+    "nullVotes": 57,
+    "blankVotes": 46,
+    "listVotes": 4196,
+    "validVotes": 4242,
+    "votes": {
+     "6": 600,
+     "10": 816,
+     "86": 193,
+     "301": 13,
+     "350": 5,
+     "693": 205,
+     "697": 3,
+     "1034": 5,
+     "1129": 51,
+     "1130": 282,
+     "1134": 7,
+     "1140": 168,
+     "1141": 246,
+     "1142": 0,
+     "1143": 1571,
+     "1144": 31
+    }
+   }
+  },
+  {
+   "code": "08267",
+   "idescat": "082671",
+   "slug": "sentmenat",
+   "name": "Sentmenat",
+   "comarca": "Vallès Occidental",
+   "province": "Barcelona",
+   "population": 9548,
+   "mayor": {
+    "name": "Montserrat Rueda Miralles",
+    "party": "PSC-CP",
+    "since": "2023-06-17"
+   },
+   "municipal": {
+    "electorate": 7127,
+    "voters": 4071,
+    "nullVotes": 61,
+    "blankVotes": 75,
+    "listVotes": 3935,
+    "validVotes": 4010,
+    "seats": 13,
+    "censusPopulation": 9417,
+    "lists": [
+     {
+      "code": "842",
+      "short": "PSC-CP",
+      "name": "Partit dels Socialistes de Catalunya - Candidatura de Progrés",
+      "votes": 909,
+      "seats": 3
+     },
+     {
+      "code": "193",
+      "short": "ERC-AM",
+      "name": "Esquerra Republicana de Catalunya - Acord Municipal",
+      "votes": 727,
+      "seats": 2
+     },
+     {
+      "code": "693",
+      "short": "VOX",
+      "name": "VOX",
+      "votes": 590,
+      "seats": 2
+     },
+     {
+      "code": "82674231",
+      "short": "ACSENT-MCat",
+      "name": "Assemblea Ciutadana de Sentmenat - Municipalistes de Catalunya",
+      "votes": 578,
+      "seats": 2
+     },
+     {
+      "code": "82674230",
+      "short": "CM",
+      "name": "Junts per Sentmenat - Compromís Municipal",
+      "votes": 562,
+      "seats": 2
+     },
+     {
+      "code": "82674232",
+      "short": "CUP-AMUNT",
+      "name": "Candidatura d'Unitat Popular Sentmenat - Alternativa Municipalista",
+      "votes": 488,
+      "seats": 2
+     },
+     {
+      "code": "301",
+      "short": "Cs",
+      "name": "Ciutadans - Partido de la Ciudadanía",
+      "votes": 81,
+      "seats": 0
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 7109,
+    "voters": 4776,
+    "nullVotes": 39,
+    "blankVotes": 40,
+    "listVotes": 4697,
+    "validVotes": 4737,
+    "votes": {
+     "6": 1625,
+     "10": 669,
+     "86": 416,
+     "693": 573,
+     "697": 4,
+     "1031": 446,
+     "1034": 6,
+     "1109": 148,
+     "1129": 60,
+     "1134": 14,
+     "1135": 719,
+     "1136": 17
+    }
+   },
+   "parliament": {
+    "electorate": 7166,
+    "voters": 4012,
+    "nullVotes": 34,
+    "blankVotes": 44,
+    "listVotes": 3934,
+    "validVotes": 3978,
+    "votes": {
+     "6": 1048,
+     "10": 640,
+     "86": 291,
+     "301": 21,
+     "350": 3,
+     "693": 509,
+     "697": 4,
+     "1034": 6,
+     "1129": 61,
+     "1130": 111,
+     "1134": 21,
+     "1140": 214,
+     "1141": 184,
+     "1142": 1,
+     "1143": 803,
+     "1144": 17
+    }
+   }
+  },
+  {
+   "code": "08005",
+   "idescat": "080057",
+   "slug": "l-ametlla-del-valles",
+   "name": "l'Ametlla del Vallès",
+   "comarca": "Vallès Oriental",
+   "province": "Barcelona",
+   "population": 9474,
+   "mayor": {
+    "name": "Jan Santaló I Lloret",
+    "party": "A't",
+    "since": "2023-06-17"
+   },
+   "municipal": {
+    "electorate": 7114,
+    "voters": 3832,
+    "nullVotes": 40,
+    "blankVotes": 38,
+    "listVotes": 3754,
+    "validVotes": 3792,
+    "seats": 13,
+    "censusPopulation": 9020,
+    "lists": [
+     {
+      "code": "80054232",
+      "short": "A't",
+      "name": "Ametlla´T",
+      "votes": 1308,
+      "seats": 6
+     },
+     {
+      "code": "80054231",
+      "short": "CM",
+      "name": "Junts per l'Ametlla - Compromís Municipal",
+      "votes": 1017,
+      "seats": 4
+     },
+     {
+      "code": "193",
+      "short": "ERC-AM",
+      "name": "Esquerra Republicana de Catalunya - Acord Municipal",
+      "votes": 633,
+      "seats": 3
+     },
+     {
+      "code": "202386",
+      "short": "PP",
+      "name": "Partido Popular",
+      "votes": 195,
+      "seats": 0
+     },
+     {
+      "code": "80054230",
+      "short": "LAECP-C",
+      "name": "L'Ametlla En Comú Podem - Confluència",
+      "votes": 190,
+      "seats": 0
+     },
+     {
+      "code": "842",
+      "short": "PSC-CP",
+      "name": "Partit dels Socialistes de Catalunya - Candidatura de Progrés",
+      "votes": 182,
+      "seats": 0
+     },
+     {
+      "code": "80054234",
+      "short": "ARA'A-ARA PL",
+      "name": "Ara L'Ametlla - Ara Pacte Local",
+      "votes": 131,
+      "seats": 0
+     },
+     {
+      "code": "80054233",
+      "short": "VEÏNS",
+      "name": "Veïns Som Tots",
+      "votes": 98,
+      "seats": 0
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 7043,
+    "voters": 4759,
+    "nullVotes": 32,
+    "blankVotes": 34,
+    "listVotes": 4693,
+    "validVotes": 4727,
+    "votes": {
+     "6": 1215,
+     "10": 766,
+     "86": 593,
+     "693": 339,
+     "697": 2,
+     "1031": 922,
+     "1034": 5,
+     "1109": 114,
+     "1129": 48,
+     "1134": 5,
+     "1135": 595,
+     "1136": 89
+    }
+   },
+   "parliament": {
+    "electorate": 7127,
+    "voters": 4258,
+    "nullVotes": 25,
+    "blankVotes": 39,
+    "listVotes": 4194,
+    "validVotes": 4233,
+    "votes": {
+     "6": 781,
+     "10": 576,
+     "86": 370,
+     "301": 25,
+     "350": 5,
+     "693": 256,
+     "697": 2,
+     "1034": 4,
+     "1129": 45,
+     "1130": 191,
+     "1134": 5,
+     "1140": 170,
+     "1141": 145,
+     "1142": 0,
+     "1143": 1579,
+     "1144": 40
+    }
+   }
+  },
+  {
+   "code": "08209",
+   "idescat": "082093",
+   "slug": "sant-fost-de-campsentelles",
+   "name": "Sant Fost de Campsentelles",
+   "comarca": "Vallès Oriental",
+   "province": "Barcelona",
+   "population": 9419,
+   "mayor": {
+    "name": "Maria Montserrat Sanmarti Pratginestos",
+    "party": "IUSF",
+    "since": "2023-06-17"
+   },
+   "municipal": {
+    "electorate": 7294,
+    "voters": 3692,
+    "nullVotes": 54,
+    "blankVotes": 49,
+    "listVotes": 3589,
+    "validVotes": 3638,
+    "seats": 13,
+    "censusPopulation": 9064,
+    "lists": [
+     {
+      "code": "82094232",
+      "short": "IUSF",
+      "name": "Independents Units per Sant Fost",
+      "votes": 2100,
+      "seats": 9
+     },
+     {
+      "code": "82094230",
+      "short": "Ara Sant Fost-ERC-AM",
+      "name": "Ara Sant Fost - Esquerra Republicana de Catalunya - Acord Municipal",
+      "votes": 619,
+      "seats": 2
+     },
+     {
+      "code": "82094231",
+      "short": "SFECP-C",
+      "name": "Sant Fost En Comú Podem - Confluència",
+      "votes": 375,
+      "seats": 1
+     },
+     {
+      "code": "842",
+      "short": "PSC-CP",
+      "name": "Partit dels Socialistes de Catalunya - Candidatura de Progrés",
+      "votes": 231,
+      "seats": 1
+     },
+     {
+      "code": "82094233",
+      "short": "CM",
+      "name": "Junts per Sant Fost de Campsentelles - Compromís Municipal",
+      "votes": 165,
+      "seats": 0
+     },
+     {
+      "code": "301",
+      "short": "Cs",
+      "name": "Ciutadans - Partido de la Ciudadanía",
+      "votes": 99,
+      "seats": 0
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 7246,
+    "voters": 4798,
+    "nullVotes": 38,
+    "blankVotes": 44,
+    "listVotes": 4716,
+    "validVotes": 4760,
+    "votes": {
+     "6": 1512,
+     "10": 635,
+     "86": 778,
+     "693": 455,
+     "697": 10,
+     "1031": 424,
+     "1034": 9,
+     "1109": 78,
+     "1129": 57,
+     "1134": 9,
+     "1135": 727,
+     "1136": 22
+    }
+   },
+   "parliament": {
+    "electorate": 7285,
+    "voters": 4019,
+    "nullVotes": 30,
+    "blankVotes": 46,
+    "listVotes": 3943,
+    "validVotes": 3989,
+    "votes": {
+     "6": 1110,
+     "10": 569,
+     "86": 547,
+     "301": 42,
+     "350": 5,
+     "693": 401,
+     "697": 6,
+     "1034": 5,
+     "1129": 46,
+     "1130": 97,
+     "1134": 16,
+     "1140": 188,
+     "1141": 98,
+     "1142": 0,
+     "1143": 801,
+     "1144": 12
+    }
+   }
+  },
+  {
+   "code": "08214",
+   "idescat": "082140",
+   "slug": "vilassar-de-dalt",
+   "name": "Vilassar de Dalt",
+   "comarca": "Maresme",
+   "province": "Barcelona",
+   "population": 9404,
+   "mayor": {
+    "name": "Carola Llauró Sastre",
+    "party": "AM",
+    "since": "2023-06-17"
+   },
+   "municipal": {
+    "electorate": 7148,
+    "voters": 3586,
+    "nullVotes": 49,
+    "blankVotes": 97,
+    "listVotes": 3440,
+    "validVotes": 3537,
+    "seats": 13,
+    "censusPopulation": 9128,
+    "lists": [
+     {
+      "code": "82144230",
+      "short": "AM",
+      "name": "Ara Vilassar - Esquerra Republicana de Catalunya - Acord Municipal",
+      "votes": 1347,
+      "seats": 6
+     },
+     {
+      "code": "82144231",
+      "short": "CM",
+      "name": "Junts per Vilassar - Compromís Municipal",
+      "votes": 882,
+      "seats": 3
+     },
+     {
+      "code": "82144232",
+      "short": "CUP-AMUNT",
+      "name": "Candidatura d'Unitat Popular Vilassar - Alternativa Municipalista CUP AMUNT",
+      "votes": 532,
+      "seats": 2
+     },
+     {
+      "code": "842",
+      "short": "PSC-CP",
+      "name": "Partit dels Socialistes de Catalunya - Candidatura de Progrés",
+      "votes": 365,
+      "seats": 1
+     },
+     {
+      "code": "202386",
+      "short": "PP",
+      "name": "Partido Popular",
+      "votes": 314,
+      "seats": 1
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 7107,
+    "voters": 4925,
+    "nullVotes": 24,
+    "blankVotes": 33,
+    "listVotes": 4868,
+    "validVotes": 4901,
+    "votes": {
+     "6": 1281,
+     "10": 970,
+     "86": 558,
+     "693": 258,
+     "697": 2,
+     "1031": 820,
+     "1034": 0,
+     "1109": 172,
+     "1129": 61,
+     "1134": 7,
+     "1135": 629,
+     "1136": 110
+    }
+   },
+   "parliament": {
+    "electorate": 7148,
+    "voters": 4425,
+    "nullVotes": 32,
+    "blankVotes": 63,
+    "listVotes": 4330,
+    "validVotes": 4393,
+    "votes": {
+     "6": 838,
+     "10": 802,
+     "86": 343,
+     "301": 23,
+     "350": 2,
+     "693": 211,
+     "697": 2,
+     "1034": 1,
+     "1129": 54,
+     "1130": 154,
+     "1134": 9,
+     "1140": 183,
+     "1141": 226,
+     "1142": 5,
+     "1143": 1444,
+     "1144": 33
+    }
+   }
+  },
+  {
+   "code": "08213",
+   "idescat": "082135",
+   "slug": "sant-fruitos-de-bages",
+   "name": "Sant Fruitós de Bages",
+   "comarca": "Bages",
+   "province": "Barcelona",
+   "population": 9333,
+   "mayor": {
+    "name": "Joan Carles Batanés Subirana",
+    "party": "GfP",
+    "since": "2023-06-17"
+   },
+   "municipal": {
+    "electorate": 6891,
+    "voters": 4059,
+    "nullVotes": 55,
+    "blankVotes": 57,
+    "listVotes": 3947,
+    "validVotes": 4004,
+    "seats": 13,
+    "censusPopulation": 9025,
+    "lists": [
+     {
+      "code": "82134230",
+      "short": "GfP",
+      "name": "Gent Fent Poble",
+      "votes": 2358,
+      "seats": 9
+     },
+     {
+      "code": "193",
+      "short": "ERC-AM",
+      "name": "Esquerra Republicana de Catalunya - Acord Municipal",
+      "votes": 784,
+      "seats": 2
+     },
+     {
+      "code": "82134231",
+      "short": "SOM SFB-ARA PL",
+      "name": "Som Sant Fruitós - Ara Pacte Local",
+      "votes": 300,
+      "seats": 1
+     },
+     {
+      "code": "82134232",
+      "short": "CM",
+      "name": "Junts per Sant Fruitós de Bages - Compromís Municipal",
+      "votes": 294,
+      "seats": 1
+     },
+     {
+      "code": "842",
+      "short": "PSC-CP",
+      "name": "Partit dels Socialistes de Catalunya - Candidatura de Progrés",
+      "votes": 211,
+      "seats": 0
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 6862,
+    "voters": 4440,
+    "nullVotes": 37,
+    "blankVotes": 38,
+    "listVotes": 4365,
+    "validVotes": 4403,
+    "votes": {
+     "6": 1251,
+     "10": 769,
+     "86": 405,
+     "693": 356,
+     "697": 2,
+     "1031": 822,
+     "1034": 2,
+     "1109": 138,
+     "1129": 52,
+     "1134": 8,
+     "1135": 474,
+     "1136": 86
+    }
+   },
+   "parliament": {
+    "electorate": 6942,
+    "voters": 4160,
+    "nullVotes": 30,
+    "blankVotes": 53,
+    "listVotes": 4077,
+    "validVotes": 4130,
+    "votes": {
+     "6": 821,
+     "10": 513,
+     "86": 257,
+     "301": 16,
+     "350": 1,
+     "693": 291,
+     "697": 3,
+     "1034": 2,
+     "1129": 38,
+     "1130": 447,
+     "1134": 8,
+     "1140": 149,
+     "1141": 170,
+     "1142": 2,
+     "1143": 1331,
+     "1144": 28
+    }
+   }
+  },
+  {
+   "code": "08282",
+   "idescat": "082824",
+   "slug": "tiana",
+   "name": "Tiana",
+   "comarca": "Maresme",
+   "province": "Barcelona",
+   "population": 9331,
+   "mayor": {
+    "name": "Isaac Salvatierra Pujol",
+    "party": "JUNTS",
+    "since": "2023-06-17"
+   },
+   "municipal": {
+    "electorate": 7103,
+    "voters": 3966,
+    "nullVotes": 55,
+    "blankVotes": 73,
+    "listVotes": 3838,
+    "validVotes": 3911,
+    "seats": 13,
+    "censusPopulation": 9110,
+    "lists": [
+     {
+      "code": "82824230",
+      "short": "JUNTS",
+      "name": "Junts per Tiana",
+      "votes": 2026,
+      "seats": 8
+     },
+     {
+      "code": "842",
+      "short": "PSC-CP",
+      "name": "Partit dels Socialistes de Catalunya - Candidatura de Progrés",
+      "votes": 698,
+      "seats": 2
+     },
+     {
+      "code": "82824231",
+      "short": "CM",
+      "name": "Junts per Catalunya. Compromís Municipal",
+      "votes": 381,
+      "seats": 1
+     },
+     {
+      "code": "202386",
+      "short": "PP",
+      "name": "Partido Popular",
+      "votes": 327,
+      "seats": 1
+     },
+     {
+      "code": "193",
+      "short": "ERC-AM",
+      "name": "Esquerra Republicana de Catalunya - Acord Municipal",
+      "votes": 299,
+      "seats": 1
+     },
+     {
+      "code": "82824232",
+      "short": "CUP-AMUNT",
+      "name": "Candidatura d'Unitat Popular Tiana - Alternativa Municipalista CUP Amunt",
+      "votes": 107,
+      "seats": 0
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 7068,
+    "voters": 5046,
+    "nullVotes": 39,
+    "blankVotes": 53,
+    "listVotes": 4954,
+    "validVotes": 5007,
+    "votes": {
+     "6": 1353,
+     "10": 824,
+     "86": 653,
+     "693": 267,
+     "697": 1,
+     "1031": 793,
+     "1034": 3,
+     "1109": 156,
+     "1129": 54,
+     "1134": 9,
+     "1135": 748,
+     "1136": 93
+    }
+   },
+   "parliament": {
+    "electorate": 7134,
+    "voters": 4675,
+    "nullVotes": 19,
+    "blankVotes": 80,
+    "listVotes": 4576,
+    "validVotes": 4656,
+    "votes": {
+     "6": 1012,
+     "10": 649,
+     "86": 479,
+     "301": 34,
+     "350": 5,
+     "693": 205,
+     "697": 0,
+     "1034": 4,
+     "1129": 50,
+     "1130": 154,
+     "1134": 5,
+     "1140": 278,
+     "1141": 218,
+     "1142": 0,
+     "1143": 1440,
+     "1144": 43
+    }
+   }
+  },
+  {
+   "code": "08135",
+   "idescat": "081350",
+   "slug": "montmelo",
+   "name": "Montmeló",
+   "comarca": "Vallès Oriental",
+   "province": "Barcelona",
+   "population": 8886,
+   "mayor": {
+    "name": "Pedro Rodriguez Rodriguez",
+    "party": "PSC-CP",
+    "since": "2023-06-17"
+   },
+   "municipal": {
+    "electorate": 6872,
+    "voters": 4147,
+    "nullVotes": 51,
+    "blankVotes": 77,
+    "listVotes": 4019,
+    "validVotes": 4096,
+    "seats": 13,
+    "censusPopulation": 8793,
+    "lists": [
+     {
+      "code": "842",
+      "short": "PSC-CP",
+      "name": "Partit dels Socialistes de Catalunya - Candidatura de Progrés",
+      "votes": 1855,
+      "seats": 7
+     },
+     {
+      "code": "81354230",
+      "short": "CANVIEM-C",
+      "name": "Canviem Montmeló - Confluència",
+      "votes": 944,
+      "seats": 3
+     },
+     {
+      "code": "81354232",
+      "short": "FEM",
+      "name": "Fem Montmeló Opció Municipal",
+      "votes": 555,
+      "seats": 2
+     },
+     {
+      "code": "81354231",
+      "short": "CM",
+      "name": "Junts per Montmeló - Compromís Municipal",
+      "votes": 479,
+      "seats": 1
+     },
+     {
+      "code": "193",
+      "short": "ERC-AM",
+      "name": "Esquerra Republicana de Catalunya - Acord Municipal",
+      "votes": 186,
+      "seats": 0
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 6845,
+    "voters": 4892,
+    "nullVotes": 46,
+    "blankVotes": 48,
+    "listVotes": 4798,
+    "validVotes": 4846,
+    "votes": {
+     "6": 2047,
+     "10": 396,
+     "86": 636,
+     "693": 347,
+     "697": 2,
+     "1031": 275,
+     "1034": 8,
+     "1109": 86,
+     "1129": 62,
+     "1134": 9,
+     "1135": 913,
+     "1136": 17
+    }
+   },
+   "parliament": {
+    "electorate": 6884,
+    "voters": 4319,
+    "nullVotes": 36,
+    "blankVotes": 64,
+    "listVotes": 4219,
+    "validVotes": 4283,
+    "votes": {
+     "6": 1699,
+     "10": 477,
+     "86": 443,
+     "301": 42,
+     "350": 2,
+     "693": 363,
+     "697": 1,
+     "1034": 6,
+     "1129": 48,
+     "1130": 75,
+     "1134": 9,
+     "1140": 432,
+     "1141": 142,
+     "1142": 1,
+     "1143": 459,
+     "1144": 20
+    }
+   }
+  },
+  {
+   "code": "17213",
+   "idescat": "172137",
+   "slug": "vidreres",
+   "name": "Vidreres",
+   "comarca": "Selva",
+   "province": "Girona",
+   "population": 8862,
+   "mayor": {
+    "name": "Jordi Camps Vicente",
+    "party": "CM",
+    "since": "2023-06-17"
+   },
+   "municipal": {
+    "electorate": 5978,
+    "voters": 2981,
+    "nullVotes": 25,
+    "blankVotes": 46,
+    "listVotes": 2910,
+    "validVotes": 2956,
+    "seats": 13,
+    "censusPopulation": 8167,
+    "lists": [
+     {
+      "code": "172134231",
+      "short": "CM",
+      "name": "Junts per Vidreres - Compromís Municipal",
+      "votes": 1618,
+      "seats": 8
+     },
+     {
+      "code": "172134230",
+      "short": "AV-AM",
+      "name": "Activa Vidreres - Acord Municipal",
+      "votes": 972,
+      "seats": 4
+     },
+     {
+      "code": "842",
+      "short": "PSC-CP",
+      "name": "Partit dels Socialistes de Catalunya - Candidatura de Progrés",
+      "votes": 204,
+      "seats": 1
+     },
+     {
+      "code": "693",
+      "short": "VOX",
+      "name": "VOX",
+      "votes": 116,
+      "seats": 0
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 5899,
+    "voters": 3394,
+    "nullVotes": 37,
+    "blankVotes": 32,
+    "listVotes": 3325,
+    "validVotes": 3357,
+    "votes": {
+     "6": 910,
+     "10": 403,
+     "86": 314,
+     "693": 276,
+     "697": 5,
+     "1031": 810,
+     "1034": 5,
+     "1109": 119,
+     "1129": 63,
+     "1134": 10,
+     "1135": 393,
+     "1136": 17
+    }
+   },
+   "parliament": {
+    "electorate": 5941,
+    "voters": 2992,
+    "nullVotes": 22,
+    "blankVotes": 36,
+    "listVotes": 2934,
+    "validVotes": 2970,
+    "votes": {
+     "6": 601,
+     "10": 343,
+     "86": 194,
+     "301": 6,
+     "350": 1,
+     "693": 226,
+     "697": 4,
+     "1034": 5,
+     "1129": 27,
+     "1130": 173,
+     "1134": 8,
+     "1140": 97,
+     "1141": 115,
+     "1143": 1123,
+     "1144": 11
+    }
+   }
+  },
+  {
+   "code": "17033",
+   "idescat": "170335",
+   "slug": "caldes-de-malavella",
+   "name": "Caldes de Malavella",
+   "comarca": "Selva",
+   "province": "Girona",
+   "population": 8673,
+   "mayor": {
+    "name": "Sergi Mir i Miquel",
+    "party": "",
+    "since": "2025-04-05"
+   },
+   "municipal": {
+    "electorate": 6109,
+    "voters": 3031,
+    "nullVotes": 49,
+    "blankVotes": 35,
+    "listVotes": 2947,
+    "validVotes": 2982,
+    "seats": 13,
+    "censusPopulation": 8196,
+    "lists": [
+     {
+      "code": "170334232",
+      "short": "CM",
+      "name": "Junts per Caldes de Malavella - Compromís Municipal",
+      "votes": 1025,
+      "seats": 5
+     },
+     {
+      "code": "170334231",
+      "short": "Som Caldes-AMUNT",
+      "name": "Som Caldes - Alternativa Municipalista",
+      "votes": 809,
+      "seats": 4
+     },
+     {
+      "code": "193",
+      "short": "ERC-AM",
+      "name": "Esquerra Republicana de Catalunya - Acord Municipal",
+      "votes": 521,
+      "seats": 2
+     },
+     {
+      "code": "842",
+      "short": "PSC-CP",
+      "name": "Partit dels Socialistes de Catalunya - Candidatura de Progrés",
+      "votes": 249,
+      "seats": 1
+     },
+     {
+      "code": "202386",
+      "short": "PP",
+      "name": "Partido Popular",
+      "votes": 198,
+      "seats": 1
+     },
+     {
+      "code": "170334230",
+      "short": "CECP-C",
+      "name": "Caldes En Comú Podem - Confluència",
+      "votes": 145,
+      "seats": 0
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 6058,
+    "voters": 3611,
+    "nullVotes": 35,
+    "blankVotes": 32,
+    "listVotes": 3544,
+    "validVotes": 3576,
+    "votes": {
+     "6": 976,
+     "10": 484,
+     "86": 357,
+     "693": 320,
+     "697": 5,
+     "1031": 636,
+     "1034": 5,
+     "1109": 187,
+     "1129": 70,
+     "1134": 9,
+     "1135": 473,
+     "1136": 22
+    }
+   },
+   "parliament": {
+    "electorate": 6139,
+    "voters": 3197,
+    "nullVotes": 25,
+    "blankVotes": 39,
+    "listVotes": 3133,
+    "validVotes": 3172,
+    "votes": {
+     "6": 579,
+     "10": 436,
+     "86": 229,
+     "301": 10,
+     "350": 7,
+     "693": 250,
+     "697": 3,
+     "1034": 4,
+     "1129": 40,
+     "1130": 189,
+     "1134": 2,
+     "1140": 137,
+     "1141": 155,
+     "1143": 1072,
+     "1144": 20
+    }
+   }
+  },
+  {
+   "code": "43133",
+   "idescat": "431331",
+   "slug": "roquetes",
+   "name": "Roquetes",
+   "comarca": "Baix Ebre",
+   "province": "Tarragona",
+   "population": 8607,
+   "mayor": {
+    "name": "Ivan Garcia Maigí",
+    "party": "ERC-AM",
+    "since": "2023-06-17"
+   },
+   "municipal": {
+    "electorate": 5732,
+    "voters": 3068,
+    "nullVotes": 63,
+    "blankVotes": 56,
+    "listVotes": 2949,
+    "validVotes": 3005,
+    "seats": 13,
+    "censusPopulation": 8193,
+    "lists": [
+     {
+      "code": "193",
+      "short": "ERC-AM",
+      "name": "Esquerra Republicana de Catalunya - Acord Municipal",
+      "votes": 1409,
+      "seats": 7
+     },
+     {
+      "code": "842",
+      "short": "PSC-CP",
+      "name": "Partit dels Socialistes de Catalunya - Candidatura de Progrés",
+      "votes": 521,
+      "seats": 2
+     },
+     {
+      "code": "431334231",
+      "short": "MR-MTE-C",
+      "name": "Movem Roquetes - Movem Terres de l'Ebre - Confluència",
+      "votes": 452,
+      "seats": 2
+     },
+     {
+      "code": "431334230",
+      "short": "CM",
+      "name": "Junts per Roquetes I la Ravaleta - Compromís Municipal",
+      "votes": 389,
+      "seats": 2
+     },
+     {
+      "code": "693",
+      "short": "VOX",
+      "name": "VOX",
+      "votes": 103,
+      "seats": 0
+     },
+     {
+      "code": "1126",
+      "short": "VALENTS",
+      "name": "Valents",
+      "votes": 75,
+      "seats": 0
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 5699,
+    "voters": 3488,
+    "nullVotes": 51,
+    "blankVotes": 40,
+    "listVotes": 3397,
+    "validVotes": 3437,
+    "votes": {
+     "6": 1075,
+     "10": 755,
+     "86": 381,
+     "693": 287,
+     "697": 1,
+     "1031": 358,
+     "1034": 0,
+     "1109": 97,
+     "1129": 30,
+     "1134": 8,
+     "1135": 391,
+     "1136": 9,
+     "1137": 1,
+     "1138": 4
+    }
+   },
+   "parliament": {
+    "electorate": 5729,
+    "voters": 3032,
+    "nullVotes": 45,
+    "blankVotes": 41,
+    "listVotes": 2946,
+    "validVotes": 2987,
+    "votes": {
+     "6": 646,
+     "10": 702,
+     "86": 251,
+     "301": 7,
+     "350": 2,
+     "546": 0,
+     "693": 214,
+     "697": 8,
+     "1018": 1,
+     "1034": 3,
+     "1129": 32,
+     "1130": 141,
+     "1134": 11,
+     "1140": 110,
+     "1141": 136,
+     "1142": 1,
+     "1143": 671,
+     "1144": 10
+    }
+   }
+  },
+  {
+   "code": "08167",
+   "idescat": "081672",
+   "slug": "polinya",
+   "name": "Polinyà",
+   "comarca": "Vallès Occidental",
+   "province": "Barcelona",
+   "population": 8581,
+   "mayor": {
+    "name": "Javier Silva Perez",
+    "party": "PSC-CP",
+    "since": "2023-06-17"
+   },
+   "municipal": {
+    "electorate": 6179,
+    "voters": 3553,
+    "nullVotes": 23,
+    "blankVotes": 50,
+    "listVotes": 3480,
+    "validVotes": 3530,
+    "seats": 13,
+    "censusPopulation": 8451,
+    "lists": [
+     {
+      "code": "842",
+      "short": "PSC-CP",
+      "name": "Partit dels Socialistes de Catalunya - Candidatura de Progrés",
+      "votes": 2027,
+      "seats": 8
+     },
+     {
+      "code": "81674230",
+      "short": "CM",
+      "name": "Junts per Polinyà - Compromís Municipal",
+      "votes": 472,
+      "seats": 2
+     },
+     {
+      "code": "81674231",
+      "short": "PECP-C",
+      "name": "Polinyà En Comú Podem - Confluència",
+      "votes": 330,
+      "seats": 1
+     },
+     {
+      "code": "693",
+      "short": "VOX",
+      "name": "VOX",
+      "votes": 263,
+      "seats": 1
+     },
+     {
+      "code": "193",
+      "short": "ERC-AM",
+      "name": "Esquerra Republicana de Catalunya - Acord Municipal",
+      "votes": 260,
+      "seats": 1
+     },
+     {
+      "code": "202386",
+      "short": "PP",
+      "name": "Partido Popular",
+      "votes": 128,
+      "seats": 0
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 6182,
+    "voters": 4205,
+    "nullVotes": 40,
+    "blankVotes": 42,
+    "listVotes": 4123,
+    "validVotes": 4165,
+    "votes": {
+     "6": 1678,
+     "10": 429,
+     "86": 516,
+     "693": 517,
+     "697": 4,
+     "1031": 129,
+     "1034": 5,
+     "1109": 28,
+     "1129": 65,
+     "1134": 14,
+     "1135": 730,
+     "1136": 8
+    }
+   },
+   "parliament": {
+    "electorate": 6289,
+    "voters": 3517,
+    "nullVotes": 37,
+    "blankVotes": 33,
+    "listVotes": 3447,
+    "validVotes": 3480,
+    "votes": {
+     "6": 1351,
+     "10": 450,
+     "86": 327,
+     "301": 36,
+     "350": 2,
+     "693": 539,
+     "697": 6,
+     "1034": 5,
+     "1129": 48,
+     "1130": 41,
+     "1134": 27,
+     "1140": 189,
+     "1141": 67,
+     "1142": 4,
+     "1143": 347,
+     "1144": 8
+    }
+   }
+  },
+  {
+   "code": "08283",
+   "idescat": "082830",
+   "slug": "tona",
+   "name": "Tona",
+   "comarca": "Osona",
+   "province": "Barcelona",
+   "population": 8527,
+   "mayor": {
+    "name": "Judit Sardà Cabero",
+    "party": "ERC-AM",
+    "since": "2026-05-30"
+   },
+   "municipal": {
+    "electorate": 6303,
+    "voters": 3560,
+    "nullVotes": 53,
+    "blankVotes": 68,
+    "listVotes": 3439,
+    "validVotes": 3507,
+    "seats": 13,
+    "censusPopulation": 8368,
+    "lists": [
+     {
+      "code": "82834230",
+      "short": "ARA PL",
+      "name": "Tona Avança - Ara Pacte Local",
+      "votes": 1425,
+      "seats": 6
+     },
+     {
+      "code": "82834232",
+      "short": "AT",
+      "name": "Aixequem Tona",
+      "votes": 872,
+      "seats": 4
+     },
+     {
+      "code": "193",
+      "short": "ERC-AM",
+      "name": "Esquerra Republicana de Catalunya - Acord Municipal",
+      "votes": 450,
+      "seats": 2
+     },
+     {
+      "code": "82834231",
+      "short": "CM",
+      "name": "Junts per Tona - Compromís Municipal",
+      "votes": 399,
+      "seats": 1
+     },
+     {
+      "code": "202386",
+      "short": "PP",
+      "name": "Partido Popular",
+      "votes": 158,
+      "seats": 0
+     },
+     {
+      "code": "842",
+      "short": "PSC-CP",
+      "name": "Partit dels Socialistes de Catalunya - Candidatura de Progrés",
+      "votes": 135,
+      "seats": 0
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 6292,
+    "voters": 3820,
+    "nullVotes": 50,
+    "blankVotes": 44,
+    "listVotes": 3726,
+    "validVotes": 3770,
+    "votes": {
+     "6": 928,
+     "10": 687,
+     "86": 235,
+     "693": 197,
+     "697": 2,
+     "1031": 991,
+     "1034": 2,
+     "1109": 222,
+     "1129": 43,
+     "1134": 3,
+     "1135": 358,
+     "1136": 58
+    }
+   },
+   "parliament": {
+    "electorate": 6313,
+    "voters": 3757,
+    "nullVotes": 44,
+    "blankVotes": 55,
+    "listVotes": 3658,
+    "validVotes": 3713,
+    "votes": {
+     "6": 527,
+     "10": 499,
+     "86": 158,
+     "301": 4,
+     "350": 3,
+     "693": 134,
+     "697": 1,
+     "1034": 2,
+     "1129": 28,
+     "1130": 330,
+     "1134": 5,
+     "1140": 101,
+     "1141": 179,
+     "1142": 0,
+     "1143": 1653,
+     "1144": 34
+    }
+   }
+  },
+  {
+   "code": "08244",
+   "idescat": "082444",
+   "slug": "santa-coloma-de-cervello",
+   "name": "Santa Coloma de Cervelló",
+   "comarca": "Baix Llobregat",
+   "province": "Barcelona",
+   "population": 8273,
+   "mayor": {
+    "name": "Jordi Bartolomé Fernandez",
+    "party": "",
+    "since": "2024-12-14"
+   },
+   "municipal": {
+    "electorate": 6432,
+    "voters": 3775,
+    "nullVotes": 52,
+    "blankVotes": 85,
+    "listVotes": 3638,
+    "validVotes": 3723,
+    "seats": 13,
+    "censusPopulation": 8309,
+    "lists": [
+     {
+      "code": "82444231",
+      "short": "SANTA COLOMA DE CERVELLÓ SUMA- PSC-CP",
+      "name": "Santa Coloma de Cervelló Suma - Partit dels Socialistes de Catalunya - Candidatura de Progrés",
+      "votes": 1227,
+      "seats": 5
+     },
+     {
+      "code": "82444230",
+      "short": "COL·LABOREM-ERC-AM",
+      "name": "Col·laborem - Esquerra Republicana de Catalunya - Acord Municipal",
+      "votes": 1185,
+      "seats": 5
+     },
+     {
+      "code": "82444232",
+      "short": "P-C",
+      "name": "Progrés - Confluència",
+      "votes": 677,
+      "seats": 3
+     },
+     {
+      "code": "82444233",
+      "short": "CM",
+      "name": "Santa Coloma de Cervelló per la República (Junts) - Compromís Municipal",
+      "votes": 202,
+      "seats": 0
+     },
+     {
+      "code": "202386",
+      "short": "PP",
+      "name": "Partido Popular",
+      "votes": 176,
+      "seats": 0
+     },
+     {
+      "code": "693",
+      "short": "VOX",
+      "name": "VOX",
+      "votes": 171,
+      "seats": 0
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 6396,
+    "voters": 4564,
+    "nullVotes": 38,
+    "blankVotes": 37,
+    "listVotes": 4489,
+    "validVotes": 4526,
+    "votes": {
+     "6": 1531,
+     "10": 697,
+     "86": 552,
+     "693": 332,
+     "697": 1,
+     "1031": 304,
+     "1034": 5,
+     "1109": 96,
+     "1129": 50,
+     "1134": 7,
+     "1135": 896,
+     "1136": 18
+    }
+   },
+   "parliament": {
+    "electorate": 6424,
+    "voters": 4052,
+    "nullVotes": 40,
+    "blankVotes": 76,
+    "listVotes": 3936,
+    "validVotes": 4012,
+    "votes": {
+     "6": 1190,
+     "10": 736,
+     "86": 371,
+     "301": 32,
+     "350": 2,
+     "693": 310,
+     "697": 3,
+     "1034": 5,
+     "1129": 61,
+     "1130": 70,
+     "1134": 18,
+     "1140": 362,
+     "1141": 178,
+     "1142": 1,
+     "1143": 577,
+     "1144": 20
+    }
+   }
+  },
+  {
+   "code": "43131",
+   "idescat": "431310",
+   "slug": "roda-de-bera",
+   "name": "Roda de Berà",
+   "comarca": "Tarragonès",
+   "province": "Tarragona",
+   "population": 8260,
+   "mayor": {
+    "name": "Pere Virgili Dominguez",
+    "party": "TRIA RODA",
+    "since": "2023-06-17"
+   },
+   "municipal": {
+    "electorate": 5609,
+    "voters": 2999,
+    "nullVotes": 36,
+    "blankVotes": 31,
+    "listVotes": 2932,
+    "validVotes": 2963,
+    "seats": 13,
+    "censusPopulation": 7591,
+    "lists": [
+     {
+      "code": "431314230",
+      "short": "TRIA RODA",
+      "name": "Agrupació d'Electors Tria Roda de Berà",
+      "votes": 1323,
+      "seats": 7
+     },
+     {
+      "code": "842",
+      "short": "PSC-CP",
+      "name": "Partit dels Socialistes de Catalunya - Candidatura de Progrés",
+      "votes": 516,
+      "seats": 2
+     },
+     {
+      "code": "202386",
+      "short": "PP",
+      "name": "Partido Popular",
+      "votes": 471,
+      "seats": 2
+     },
+     {
+      "code": "193",
+      "short": "ERC-AM",
+      "name": "Esquerra Republicana de Catalunya - Acord Municipal",
+      "votes": 199,
+      "seats": 1
+     },
+     {
+      "code": "431314231",
+      "short": "CM",
+      "name": "Junts per Roda de Berà - Compromís Municipal",
+      "votes": 192,
+      "seats": 1
+     },
+     {
+      "code": "1126",
+      "short": "VALENTS",
+      "name": "Valents",
+      "votes": 127,
+      "seats": 0
+     },
+     {
+      "code": "431314232",
+      "short": "REC-C",
+      "name": "Roda En Comú - Confluència",
+      "votes": 104,
+      "seats": 0
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 5543,
+    "voters": 3465,
+    "nullVotes": 34,
+    "blankVotes": 22,
+    "listVotes": 3409,
+    "validVotes": 3431,
+    "votes": {
+     "6": 1180,
+     "10": 342,
+     "86": 672,
+     "693": 453,
+     "697": 0,
+     "1031": 215,
+     "1034": 2,
+     "1109": 28,
+     "1129": 34,
+     "1134": 5,
+     "1135": 457,
+     "1136": 19,
+     "1137": 0,
+     "1138": 2
+    }
+   },
+   "parliament": {
+    "electorate": 5681,
+    "voters": 2900,
+    "nullVotes": 26,
+    "blankVotes": 23,
+    "listVotes": 2851,
+    "validVotes": 2874,
+    "votes": {
+     "6": 863,
+     "10": 354,
+     "86": 513,
+     "301": 16,
+     "350": 1,
+     "546": 0,
+     "693": 391,
+     "697": 9,
+     "1018": 1,
+     "1034": 4,
+     "1129": 30,
+     "1130": 65,
+     "1134": 11,
+     "1140": 162,
+     "1141": 33,
+     "1142": 0,
+     "1143": 396,
+     "1144": 2
+    }
+   }
+  },
+  {
+   "code": "08091",
+   "idescat": "080919",
+   "slug": "gelida",
+   "name": "Gelida",
+   "comarca": "Alt Penedès",
+   "province": "Barcelona",
+   "population": 8198,
+   "mayor": {
+    "name": "Lluís Valls Comas",
+    "party": "",
+    "since": "2023-06-17"
+   },
+   "municipal": {
+    "electorate": 5753,
+    "voters": 3404,
+    "nullVotes": 32,
+    "blankVotes": 47,
+    "listVotes": 3325,
+    "validVotes": 3372,
+    "seats": 13,
+    "censusPopulation": 7814,
+    "lists": [
+     {
+      "code": "80914230",
+      "short": "PSC-GELIDA-CP",
+      "name": "Partit dels Socialistes de Catalunya - Gelida - Candidatura de Progrés",
+      "votes": 1780,
+      "seats": 8
+     },
+     {
+      "code": "193",
+      "short": "ERC-AM",
+      "name": "Esquerra Republicana de Catalunya - Acord Municipal",
+      "votes": 460,
+      "seats": 2
+     },
+     {
+      "code": "80914233",
+      "short": "GxR- FPFIC",
+      "name": "Gelida per la República - Fem Poble - Federació d'Independents de Catalunya",
+      "votes": 437,
+      "seats": 2
+     },
+     {
+      "code": "80914231",
+      "short": "CUP-AMUNT",
+      "name": "CUP Gelida - Alternativa Municipalista",
+      "votes": 331,
+      "seats": 1
+     },
+     {
+      "code": "80914232",
+      "short": "CM",
+      "name": "Junts per Gelida - Compromís Municipal",
+      "votes": 193,
+      "seats": 0
+     },
+     {
+      "code": "80914234",
+      "short": "GECP-C",
+      "name": "Gelida En Comú Podem - Confluència",
+      "votes": 124,
+      "seats": 0
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 5733,
+    "voters": 3786,
+    "nullVotes": 23,
+    "blankVotes": 24,
+    "listVotes": 3739,
+    "validVotes": 3763,
+    "votes": {
+     "6": 1404,
+     "10": 543,
+     "86": 320,
+     "693": 261,
+     "697": 3,
+     "1031": 368,
+     "1034": 8,
+     "1109": 121,
+     "1129": 51,
+     "1134": 15,
+     "1135": 623,
+     "1136": 22
+    }
+   },
+   "parliament": {
+    "electorate": 5822,
+    "voters": 3357,
+    "nullVotes": 28,
+    "blankVotes": 29,
+    "listVotes": 3300,
+    "validVotes": 3329,
+    "votes": {
+     "6": 933,
+     "10": 535,
+     "86": 240,
+     "301": 15,
+     "350": 0,
+     "693": 236,
+     "697": 2,
+     "1034": 5,
+     "1129": 52,
+     "1130": 78,
+     "1134": 26,
+     "1140": 223,
+     "1141": 190,
+     "1142": 0,
+     "1143": 755,
+     "1144": 10
+    }
+   }
+  },
+  {
+   "code": "08208",
+   "idescat": "082080",
+   "slug": "sant-esteve-sesrovires",
+   "name": "Sant Esteve Sesrovires",
+   "comarca": "Baix Llobregat",
+   "province": "Barcelona",
+   "population": 8121,
+   "mayor": {
+    "name": "Roser Brosed Yuste",
+    "party": "PSC-CP",
+    "since": "2025-10-25"
+   },
+   "municipal": {
+    "electorate": 6160,
+    "voters": 3478,
+    "nullVotes": 61,
+    "blankVotes": 72,
+    "listVotes": 3345,
+    "validVotes": 3417,
+    "seats": 13,
+    "censusPopulation": 7889,
+    "lists": [
+     {
+      "code": "82084230",
+      "short": "ERC i Més-AM",
+      "name": "Esquerra Republicana de Catalunya I Més - Acord Municipal",
+      "votes": 955,
+      "seats": 5
+     },
+     {
+      "code": "842",
+      "short": "PSC-CP",
+      "name": "Partit dels Socialistes de Catalunya - Candidatura de Progrés",
+      "votes": 893,
+      "seats": 5
+     },
+     {
+      "code": "82084236",
+      "short": "ARAses",
+      "name": "Ara I Sempre Sant Esteve",
+      "votes": 394,
+      "seats": 2
+     },
+     {
+      "code": "82084235",
+      "short": "SOM ALTERNATIVA",
+      "name": "Som Alternativa",
+      "votes": 356,
+      "seats": 1
+     },
+     {
+      "code": "82084231",
+      "short": "SECP-C",
+      "name": "Sesrovires En Comú Podem - Confluència",
+      "votes": 176,
+      "seats": 0
+     },
+     {
+      "code": "1126",
+      "short": "VALENTS",
+      "name": "Valents",
+      "votes": 156,
+      "seats": 0
+     },
+     {
+      "code": "82084234",
+      "short": "CM",
+      "name": "Junts per Sant Esteve Sesrovires - Junts per Catalunya - Compromís Municipal",
+      "votes": 120,
+      "seats": 0
+     },
+     {
+      "code": "82084232",
+      "short": "UXSES",
+      "name": "Units per Sanes",
+      "votes": 112,
+      "seats": 0
+     },
+     {
+      "code": "82084233",
+      "short": "TSS-ARA PL",
+      "name": "Tots Som Sanes - Ara Pacte Local",
+      "votes": 106,
+      "seats": 0
+     },
+     {
+      "code": "301",
+      "short": "Cs",
+      "name": "Ciutadans - Partido de la Ciudadanía",
+      "votes": 77,
+      "seats": 0
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 6113,
+    "voters": 4185,
+    "nullVotes": 34,
+    "blankVotes": 24,
+    "listVotes": 4127,
+    "validVotes": 4151,
+    "votes": {
+     "6": 1298,
+     "10": 675,
+     "86": 590,
+     "693": 345,
+     "697": 3,
+     "1031": 341,
+     "1034": 3,
+     "1109": 78,
+     "1129": 76,
+     "1134": 9,
+     "1135": 690,
+     "1136": 19
+    }
+   },
+   "parliament": {
+    "electorate": 6209,
+    "voters": 3636,
+    "nullVotes": 30,
+    "blankVotes": 47,
+    "listVotes": 3559,
+    "validVotes": 3606,
+    "votes": {
+     "6": 1031,
+     "10": 586,
+     "86": 389,
+     "301": 33,
+     "350": 6,
+     "693": 324,
+     "697": 0,
+     "1034": 2,
+     "1129": 58,
+     "1130": 93,
+     "1134": 13,
+     "1140": 238,
+     "1141": 101,
+     "1142": 1,
+     "1143": 663,
+     "1144": 21
+    }
+   }
+  },
+  {
+   "code": "17103",
+   "idescat": "171030",
+   "slug": "macanet-de-la-selva",
+   "name": "Maçanet de la Selva",
+   "comarca": "Selva",
+   "province": "Girona",
+   "population": 8071,
+   "mayor": {
+    "name": "Natàlia Figueras Pagès",
+    "party": "CM",
+    "since": "2023-06-17"
+   },
+   "municipal": {
+    "electorate": 5610,
+    "voters": 3074,
+    "nullVotes": 37,
+    "blankVotes": 33,
+    "listVotes": 3004,
+    "validVotes": 3037,
+    "seats": 13,
+    "censusPopulation": 7572,
+    "lists": [
+     {
+      "code": "171034231",
+      "short": "CM",
+      "name": "Som Maçanet - Compromís Municipal",
+      "votes": 2436,
+      "seats": 11
+     },
+     {
+      "code": "171034230",
+      "short": "MésxMç-ERC-AM",
+      "name": "Més per Maçanet - Esquerra Republicana de Catalunya - Acord Municipal",
+      "votes": 299,
+      "seats": 1
+     },
+     {
+      "code": "842",
+      "short": "PSC-CP",
+      "name": "Partit dels Socialistes de Catalunya - Candidatura de Progrés",
+      "votes": 269,
+      "seats": 1
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 5558,
+    "voters": 3222,
+    "nullVotes": 46,
+    "blankVotes": 16,
+    "listVotes": 3160,
+    "validVotes": 3176,
+    "votes": {
+     "6": 1036,
+     "10": 365,
+     "86": 324,
+     "693": 342,
+     "697": 2,
+     "1031": 458,
+     "1034": 6,
+     "1109": 112,
+     "1129": 63,
+     "1134": 13,
+     "1135": 417,
+     "1136": 22
+    }
+   },
+   "parliament": {
+    "electorate": 5627,
+    "voters": 2638,
+    "nullVotes": 31,
+    "blankVotes": 22,
+    "listVotes": 2585,
+    "validVotes": 2607,
+    "votes": {
+     "6": 667,
+     "10": 312,
+     "86": 219,
+     "301": 17,
+     "350": 0,
+     "693": 243,
+     "697": 3,
+     "1034": 3,
+     "1129": 42,
+     "1130": 102,
+     "1134": 13,
+     "1140": 122,
+     "1141": 99,
+     "1143": 733,
+     "1144": 10
+    }
+   }
+  },
+  {
+   "code": "08248",
+   "idescat": "082482",
+   "slug": "santa-eulalia-de-roncana",
+   "name": "Santa Eulàlia de Ronçana",
+   "comarca": "Vallès Oriental",
+   "province": "Barcelona",
+   "population": 7953,
+   "mayor": {
+    "name": "Francesc Bonet Nieto",
+    "party": "POBLE UNIT",
+    "since": "2023-06-17"
+   },
+   "municipal": {
+    "electorate": 6061,
+    "voters": 3169,
+    "nullVotes": 19,
+    "blankVotes": 25,
+    "listVotes": 3125,
+    "validVotes": 3150,
+    "seats": 13,
+    "censusPopulation": 7740,
+    "lists": [
+     {
+      "code": "82484231",
+      "short": "POBLE UNIT",
+      "name": "Poble Unit Ser",
+      "votes": 2160,
+      "seats": 11
+     },
+     {
+      "code": "82484230",
+      "short": "IND-ERC-AM",
+      "name": "Independents - Esquerra Republicana de Catalunya - Acord Municipal",
+      "votes": 381,
+      "seats": 2
+     },
+     {
+      "code": "842",
+      "short": "PSC-CP",
+      "name": "Partit dels Socialistes de Catalunya - Candidatura de Progrés",
+      "votes": 171,
+      "seats": 0
+     },
+     {
+      "code": "1126",
+      "short": "VALENTS",
+      "name": "Valents",
+      "votes": 145,
+      "seats": 0
+     },
+     {
+      "code": "82484232",
+      "short": "CUP-AMUNT",
+      "name": "Candidatura d'Unitat Popular de Santa Eulàlia de Roçana - Alternativa Municipalista",
+      "votes": 144,
+      "seats": 0
+     },
+     {
+      "code": "693",
+      "short": "VOX",
+      "name": "VOX",
+      "votes": 77,
+      "seats": 0
+     },
+     {
+      "code": "301",
+      "short": "Cs",
+      "name": "Ciutadans - Partido de la Ciudadanía",
+      "votes": 47,
+      "seats": 0
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 6043,
+    "voters": 3908,
+    "nullVotes": 28,
+    "blankVotes": 36,
+    "listVotes": 3844,
+    "validVotes": 3880,
+    "votes": {
+     "6": 1165,
+     "10": 649,
+     "86": 422,
+     "693": 276,
+     "697": 3,
+     "1031": 509,
+     "1034": 4,
+     "1109": 135,
+     "1129": 50,
+     "1134": 14,
+     "1135": 586,
+     "1136": 31
+    }
+   },
+   "parliament": {
+    "electorate": 6113,
+    "voters": 3403,
+    "nullVotes": 20,
+    "blankVotes": 51,
+    "listVotes": 3332,
+    "validVotes": 3383,
+    "votes": {
+     "6": 805,
+     "10": 543,
+     "86": 268,
+     "301": 26,
+     "350": 2,
+     "693": 250,
+     "697": 5,
+     "1034": 7,
+     "1129": 45,
+     "1130": 93,
+     "1134": 7,
+     "1140": 147,
+     "1141": 165,
+     "1142": 2,
+     "1143": 952,
+     "1144": 15
+    }
+   }
+  },
+  {
+   "code": "08067",
+   "idescat": "080673",
+   "slug": "centelles",
+   "name": "Centelles",
+   "comarca": "Osona",
+   "province": "Barcelona",
+   "population": 7864,
+   "mayor": {
+    "name": "Josep Paré Aregall",
+    "party": "PSC-CP",
+    "since": "2023-06-17"
+   },
+   "municipal": {
+    "electorate": 5967,
+    "voters": 3581,
+    "nullVotes": 37,
+    "blankVotes": 56,
+    "listVotes": 3488,
+    "validVotes": 3544,
+    "seats": 13,
+    "censusPopulation": 7641,
+    "lists": [
+     {
+      "code": "842",
+      "short": "PSC-CP",
+      "name": "Partit dels Socialistes de Catalunya - Candidatura de Progrés",
+      "votes": 2064,
+      "seats": 9
+     },
+     {
+      "code": "80674230",
+      "short": "L'IMPULS",
+      "name": "L'Impuls",
+      "votes": 935,
+      "seats": 4
+     },
+     {
+      "code": "193",
+      "short": "ERC-AM",
+      "name": "Esquerra Republicana de Catalunya - Acord Municipal",
+      "votes": 227,
+      "seats": 0
+     },
+     {
+      "code": "80674232",
+      "short": "CM",
+      "name": "Junts per Catalunya Centelles - Compromís Municipal",
+      "votes": 171,
+      "seats": 0
+     },
+     {
+      "code": "80674231",
+      "short": "CXR",
+      "name": "Centelles X La República",
+      "votes": 91,
+      "seats": 0
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 5954,
+    "voters": 3864,
+    "nullVotes": 66,
+    "blankVotes": 29,
+    "listVotes": 3769,
+    "validVotes": 3798,
+    "votes": {
+     "6": 1218,
+     "10": 713,
+     "86": 233,
+     "693": 156,
+     "697": 3,
+     "1031": 696,
+     "1034": 3,
+     "1109": 192,
+     "1129": 32,
+     "1134": 4,
+     "1135": 446,
+     "1136": 73
+    }
+   },
+   "parliament": {
+    "electorate": 6005,
+    "voters": 3609,
+    "nullVotes": 41,
+    "blankVotes": 44,
+    "listVotes": 3524,
+    "validVotes": 3568,
+    "votes": {
+     "6": 697,
+     "10": 540,
+     "86": 142,
+     "301": 3,
+     "350": 3,
+     "693": 127,
+     "697": 0,
+     "1034": 3,
+     "1129": 34,
+     "1130": 229,
+     "1134": 3,
+     "1140": 153,
+     "1141": 213,
+     "1142": 0,
+     "1143": 1349,
+     "1144": 28
+    }
+   }
+  },
+  {
+   "code": "08300",
+   "idescat": "083008",
+   "slug": "viladecavalls",
+   "name": "Viladecavalls",
+   "comarca": "Vallès Occidental",
+   "province": "Barcelona",
+   "population": 7817,
+   "mayor": {
+    "name": "Cesca Berenguer Priego",
+    "party": "CM",
+    "since": "2023-06-17"
+   },
+   "municipal": {
+    "electorate": 6219,
+    "voters": 3602,
+    "nullVotes": 34,
+    "blankVotes": 61,
+    "listVotes": 3507,
+    "validVotes": 3568,
+    "seats": 13,
+    "censusPopulation": 7644,
+    "lists": [
+     {
+      "code": "83004230",
+      "short": "CM",
+      "name": "Treballem Junts per Viladecavalls - Compromís Municipal",
+      "votes": 1603,
+      "seats": 6
+     },
+     {
+      "code": "193",
+      "short": "ERC-AM",
+      "name": "Esquerra Republicana de Catalunya - Acord Municipal",
+      "votes": 775,
+      "seats": 3
+     },
+     {
+      "code": "83004231",
+      "short": "FV-C",
+      "name": "Fem Viladecavalls - Confluència",
+      "votes": 606,
+      "seats": 2
+     },
+     {
+      "code": "842",
+      "short": "PSC-CP",
+      "name": "Partit dels Socialistes de Catalunya - Candidatura de Progrés",
+      "votes": 275,
+      "seats": 1
+     },
+     {
+      "code": "202386",
+      "short": "PP",
+      "name": "Partido Popular",
+      "votes": 248,
+      "seats": 1
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 6190,
+    "voters": 4359,
+    "nullVotes": 37,
+    "blankVotes": 35,
+    "listVotes": 4287,
+    "validVotes": 4322,
+    "votes": {
+     "6": 1279,
+     "10": 641,
+     "86": 587,
+     "693": 444,
+     "697": 2,
+     "1031": 461,
+     "1034": 6,
+     "1109": 91,
+     "1129": 62,
+     "1134": 23,
+     "1135": 663,
+     "1136": 28
+    }
+   },
+   "parliament": {
+    "electorate": 6240,
+    "voters": 3928,
+    "nullVotes": 33,
+    "blankVotes": 55,
+    "listVotes": 3840,
+    "validVotes": 3895,
+    "votes": {
+     "6": 925,
+     "10": 620,
+     "86": 446,
+     "301": 37,
+     "350": 3,
+     "693": 413,
+     "697": 6,
+     "1034": 6,
+     "1129": 57,
+     "1130": 131,
+     "1134": 17,
+     "1140": 219,
+     "1141": 119,
+     "1142": 0,
+     "1143": 831,
+     "1144": 10
+    }
+   }
+  },
+  {
+   "code": "08251",
+   "idescat": "082515",
+   "slug": "santa-margarida-i-els-monjos",
+   "name": "Santa Margarida i els Monjos",
+   "comarca": "Alt Penedès",
+   "province": "Barcelona",
+   "population": 7806,
+   "mayor": {
+    "name": "Esther Marmaneu Domingo",
+    "party": "PSC-CP",
+    "since": "2025-01-08"
+   },
+   "municipal": {
+    "electorate": 5265,
+    "voters": 3147,
+    "nullVotes": 33,
+    "blankVotes": 28,
+    "listVotes": 3086,
+    "validVotes": 3114,
+    "seats": 13,
+    "censusPopulation": 7624,
+    "lists": [
+     {
+      "code": "842",
+      "short": "PSC-CP",
+      "name": "Partit dels Socialistes de Catalunya - Candidatura de Progrés",
+      "votes": 1428,
+      "seats": 7
+     },
+     {
+      "code": "193",
+      "short": "ERC-AM",
+      "name": "Esquerra Republicana de Catalunya - Acord Municipal",
+      "votes": 494,
+      "seats": 2
+     },
+     {
+      "code": "82514232",
+      "short": "ARA PL",
+      "name": "Plataforma per Santa Margarida I Els Monjos - Ara Pacte Local",
+      "votes": 491,
+      "seats": 2
+     },
+     {
+      "code": "82514231",
+      "short": "CM",
+      "name": "Junts per Santa Margarida I Els Monjos - Compromís Municipal",
+      "votes": 263,
+      "seats": 1
+     },
+     {
+      "code": "82514230",
+      "short": "PA-AMUNT",
+      "name": "Poble Actiu- Alternativa Municipalista",
+      "votes": 180,
+      "seats": 1
+     },
+     {
+      "code": "82514233",
+      "short": "VOX",
+      "name": "VOX - Municipal",
+      "votes": 160,
+      "seats": 0
+     },
+     {
+      "code": "202386",
+      "short": "PP",
+      "name": "Partido Popular",
+      "votes": 70,
+      "seats": 0
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 5272,
+    "voters": 3411,
+    "nullVotes": 32,
+    "blankVotes": 21,
+    "listVotes": 3358,
+    "validVotes": 3379,
+    "votes": {
+     "6": 1387,
+     "10": 460,
+     "86": 345,
+     "693": 336,
+     "697": 8,
+     "1031": 331,
+     "1034": 3,
+     "1109": 65,
+     "1129": 47,
+     "1134": 10,
+     "1135": 352,
+     "1136": 14
+    }
+   },
+   "parliament": {
+    "electorate": 5298,
+    "voters": 3073,
+    "nullVotes": 28,
+    "blankVotes": 32,
+    "listVotes": 3013,
+    "validVotes": 3045,
+    "votes": {
+     "6": 1091,
+     "10": 453,
+     "86": 247,
+     "301": 16,
+     "350": 1,
+     "693": 271,
+     "697": 2,
+     "1034": 8,
+     "1129": 31,
+     "1130": 98,
+     "1134": 13,
+     "1140": 101,
+     "1141": 85,
+     "1142": 1,
+     "1143": 586,
+     "1144": 9
+    }
+   }
+  },
+  {
+   "code": "25110",
+   "idescat": "251109",
+   "slug": "guissona",
+   "name": "Guissona",
+   "comarca": "Segarra",
+   "province": "Lleida",
+   "population": 7774,
+   "mayor": {
+    "name": "Jaume Ars Bosch",
+    "party": "CM",
+    "since": "2023-06-17"
+   },
+   "municipal": {
+    "electorate": 2919,
+    "voters": 1624,
+    "nullVotes": 28,
+    "blankVotes": 27,
+    "listVotes": 1569,
+    "validVotes": 1596,
+    "seats": 13,
+    "censusPopulation": 7390,
+    "lists": [
+     {
+      "code": "251104231",
+      "short": "CM",
+      "name": "Junts per Guissona - Compromís Municipal",
+      "votes": 925,
+      "seats": 9
+     },
+     {
+      "code": "193",
+      "short": "ERC-AM",
+      "name": "Esquerra Republicana de Catalunya - Acord Municipal",
+      "votes": 356,
+      "seats": 3
+     },
+     {
+      "code": "842",
+      "short": "PSC-CP",
+      "name": "Partit dels Socialistes de Catalunya - Candidatura de Progrés",
+      "votes": 187,
+      "seats": 1
+     },
+     {
+      "code": "251104230",
+      "short": "CUP-AMUNT",
+      "name": "Candidatura d’Unitat Popular Guissona - Alternativa Municipalista",
+      "votes": 101,
+      "seats": 0
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 2770,
+    "voters": 1693,
+    "nullVotes": 12,
+    "blankVotes": 18,
+    "listVotes": 1663,
+    "validVotes": 1681,
+    "votes": {
+     "6": 494,
+     "10": 339,
+     "86": 133,
+     "643": 4,
+     "693": 78,
+     "697": 1,
+     "1031": 406,
+     "1034": 3,
+     "1109": 49,
+     "1129": 5,
+     "1134": 4,
+     "1135": 128,
+     "1136": 19
+    }
+   },
+   "parliament": {
+    "electorate": 2814,
+    "voters": 1640,
+    "nullVotes": 23,
+    "blankVotes": 30,
+    "listVotes": 1587,
+    "validVotes": 1617,
+    "votes": {
+     "6": 323,
+     "10": 298,
+     "86": 89,
+     "301": 4,
+     "350": 2,
+     "546": 1,
+     "693": 68,
+     "697": 0,
+     "1034": 2,
+     "1130": 113,
+     "1134": 3,
+     "1140": 20,
+     "1141": 75,
+     "1143": 583,
+     "1144": 6
+    }
+   }
+  },
+  {
+   "code": "08030",
+   "idescat": "080305",
+   "slug": "cabrils",
+   "name": "Cabrils",
+   "comarca": "Maresme",
+   "province": "Barcelona",
+   "population": 7765,
+   "mayor": {
+    "name": "Maite Viñals Clemente",
+    "party": "ERC-AM",
+    "since": "2023-06-17"
+   },
+   "municipal": {
+    "electorate": 5575,
+    "voters": 2759,
+    "nullVotes": 33,
+    "blankVotes": 92,
+    "listVotes": 2634,
+    "validVotes": 2726,
+    "seats": 13,
+    "censusPopulation": 7729,
+    "lists": [
+     {
+      "code": "80304231",
+      "short": "CM",
+      "name": "Junts per Cabrils - Compromís Municipal",
+      "votes": 831,
+      "seats": 4
+     },
+     {
+      "code": "193",
+      "short": "ERC-AM",
+      "name": "Esquerra Republicana de Catalunya - Acord Municipal",
+      "votes": 783,
+      "seats": 4
+     },
+     {
+      "code": "80304230",
+      "short": "MUC",
+      "name": "Municipalistes per Cabrils",
+      "votes": 438,
+      "seats": 2
+     },
+     {
+      "code": "842",
+      "short": "PSC-CP",
+      "name": "Partit dels Socialistes de Catalunya - Candidatura de Progrés",
+      "votes": 362,
+      "seats": 2
+     },
+     {
+      "code": "80304232",
+      "short": "UNITS X CABRILS",
+      "name": "Units per Cabrils",
+      "votes": 220,
+      "seats": 1
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 5468,
+    "voters": 3759,
+    "nullVotes": 31,
+    "blankVotes": 33,
+    "listVotes": 3695,
+    "validVotes": 3728,
+    "votes": {
+     "6": 914,
+     "10": 639,
+     "86": 536,
+     "693": 180,
+     "697": 2,
+     "1031": 762,
+     "1034": 0,
+     "1109": 76,
+     "1129": 38,
+     "1134": 3,
+     "1135": 421,
+     "1136": 124
+    }
+   },
+   "parliament": {
+    "electorate": 5462,
+    "voters": 3506,
+    "nullVotes": 16,
+    "blankVotes": 55,
+    "listVotes": 3435,
+    "validVotes": 3490,
+    "votes": {
+     "6": 638,
+     "10": 506,
+     "86": 335,
+     "301": 8,
+     "350": 4,
+     "693": 195,
+     "697": 2,
+     "1034": 2,
+     "1129": 34,
+     "1130": 159,
+     "1134": 3,
+     "1140": 137,
+     "1141": 118,
+     "1142": 1,
+     "1143": 1279,
+     "1144": 14
+    }
+   }
+  },
+  {
+   "code": "08192",
+   "idescat": "081923",
+   "slug": "santpedor",
+   "name": "Santpedor",
+   "comarca": "Bages",
+   "province": "Barcelona",
+   "population": 7744,
+   "mayor": {
+    "name": "Agustí Comas Guitó",
+    "party": "",
+    "since": "2023-06-17"
+   },
+   "municipal": {
+    "electorate": 5901,
+    "voters": 3446,
+    "nullVotes": 66,
+    "blankVotes": 89,
+    "listVotes": 3291,
+    "validVotes": 3380,
+    "seats": 13,
+    "censusPopulation": 7612,
+    "lists": [
+     {
+      "code": "193",
+      "short": "ERC-AM",
+      "name": "Esquerra Republicana de Catalunya - Acord Municipal",
+      "votes": 1110,
+      "seats": 5
+     },
+     {
+      "code": "81924230",
+      "short": "SEAM",
+      "name": "Santpedor És Un Altre Mon",
+      "votes": 951,
+      "seats": 4
+     },
+     {
+      "code": "81924232",
+      "short": "CUP-AMUNT",
+      "name": "Candidatura d'Unitat Popular Santpedor - Alternativa Municipalista",
+      "votes": 655,
+      "seats": 2
+     },
+     {
+      "code": "81924233",
+      "short": "CM",
+      "name": "Sumem X Santpedor Junts - Compromís Municipal",
+      "votes": 463,
+      "seats": 2
+     },
+     {
+      "code": "81924231",
+      "short": "SECP-C",
+      "name": "Santpedor En Comú Podem - Confluència",
+      "votes": 112,
+      "seats": 0
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 5873,
+    "voters": 3954,
+    "nullVotes": 38,
+    "blankVotes": 25,
+    "listVotes": 3891,
+    "validVotes": 3916,
+    "votes": {
+     "6": 1065,
+     "10": 874,
+     "86": 281,
+     "693": 260,
+     "697": 2,
+     "1031": 696,
+     "1034": 3,
+     "1109": 208,
+     "1129": 24,
+     "1134": 5,
+     "1135": 434,
+     "1136": 39
+    }
+   },
+   "parliament": {
+    "electorate": 5920,
+    "voters": 3780,
+    "nullVotes": 37,
+    "blankVotes": 50,
+    "listVotes": 3693,
+    "validVotes": 3743,
+    "votes": {
+     "6": 681,
+     "10": 688,
+     "86": 171,
+     "301": 14,
+     "350": 0,
+     "693": 190,
+     "697": 3,
+     "1034": 0,
+     "1129": 20,
+     "1130": 370,
+     "1134": 3,
+     "1140": 126,
+     "1141": 222,
+     "1142": 1,
+     "1143": 1174,
+     "1144": 30
+    }
+   }
+  },
+  {
+   "code": "08291",
+   "idescat": "082917",
+   "slug": "vacarisses",
+   "name": "Vacarisses",
+   "comarca": "Vallès Occidental",
+   "province": "Barcelona",
+   "population": 7729,
+   "mayor": {
+    "name": "Antoni Masana I Ubach",
+    "party": "ERC-AM",
+    "since": "2023-06-17"
+   },
+   "municipal": {
+    "electorate": 5619,
+    "voters": 2868,
+    "nullVotes": 23,
+    "blankVotes": 50,
+    "listVotes": 2795,
+    "validVotes": 2845,
+    "seats": 13,
+    "censusPopulation": 7325,
+    "lists": [
+     {
+      "code": "193",
+      "short": "ERC-AM",
+      "name": "Esquerra Republicana de Catalunya - Acord Municipal",
+      "votes": 1216,
+      "seats": 7
+     },
+     {
+      "code": "82914232",
+      "short": "CM",
+      "name": "UIPV - Junts - Compromís Municipal",
+      "votes": 368,
+      "seats": 2
+     },
+     {
+      "code": "842",
+      "short": "PSC-CP",
+      "name": "Partit dels Socialistes de Catalunya - Candidatura de Progrés",
+      "votes": 284,
+      "seats": 1
+     },
+     {
+      "code": "82914231",
+      "short": "LAVV",
+      "name": "La Voz de Vacarisses",
+      "votes": 253,
+      "seats": 1
+     },
+     {
+      "code": "82914233",
+      "short": "V per V",
+      "name": "Veïns per Vacarisses",
+      "votes": 231,
+      "seats": 1
+     },
+     {
+      "code": "693",
+      "short": "VOX",
+      "name": "VOX",
+      "votes": 181,
+      "seats": 1
+     },
+     {
+      "code": "82914230",
+      "short": "MV-ECP-C",
+      "name": "Movem Vacarisses - En Comú Podem - Confluència",
+      "votes": 136,
+      "seats": 0
+     },
+     {
+      "code": "202386",
+      "short": "PP",
+      "name": "Partido Popular",
+      "votes": 77,
+      "seats": 0
+     },
+     {
+      "code": "301",
+      "short": "Cs",
+      "name": "Ciutadans - Partido de la Ciudadanía",
+      "votes": 49,
+      "seats": 0
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 5591,
+    "voters": 3585,
+    "nullVotes": 42,
+    "blankVotes": 29,
+    "listVotes": 3514,
+    "validVotes": 3543,
+    "votes": {
+     "6": 987,
+     "10": 624,
+     "86": 336,
+     "693": 472,
+     "697": 5,
+     "1031": 309,
+     "1034": 4,
+     "1109": 85,
+     "1129": 70,
+     "1134": 8,
+     "1135": 601,
+     "1136": 13
+    }
+   },
+   "parliament": {
+    "electorate": 5712,
+    "voters": 3043,
+    "nullVotes": 22,
+    "blankVotes": 37,
+    "listVotes": 2984,
+    "validVotes": 3021,
+    "votes": {
+     "6": 703,
+     "10": 608,
+     "86": 220,
+     "301": 23,
+     "350": 4,
+     "693": 377,
+     "697": 0,
+     "1034": 5,
+     "1129": 77,
+     "1130": 89,
+     "1134": 15,
+     "1140": 146,
+     "1141": 140,
+     "1142": 1,
+     "1143": 562,
+     "1144": 14
+    }
+   }
+  },
+  {
+   "code": "08020",
+   "idescat": "080207",
+   "slug": "begues",
+   "name": "Begues",
+   "comarca": "Baix Llobregat",
+   "province": "Barcelona",
+   "population": 7561,
+   "mayor": {
+    "name": "Maria Mercè Esteve Pi",
+    "party": "CM",
+    "since": "2023-06-17"
+   },
+   "municipal": {
+    "electorate": 5522,
+    "voters": 3222,
+    "nullVotes": 69,
+    "blankVotes": 79,
+    "listVotes": 3074,
+    "validVotes": 3153,
+    "seats": 13,
+    "censusPopulation": 7450,
+    "lists": [
+     {
+      "code": "80204231",
+      "short": "CM",
+      "name": "Junts per Begues - Compromís Municipal",
+      "votes": 1083,
+      "seats": 5
+     },
+     {
+      "code": "842",
+      "short": "PSC-CP",
+      "name": "Partit dels Socialistes de Catalunya - Candidatura de Progrés",
+      "votes": 508,
+      "seats": 2
+     },
+     {
+      "code": "193",
+      "short": "ERC-AM",
+      "name": "Esquerra Republicana de Catalunya - Acord Municipal",
+      "votes": 460,
+      "seats": 2
+     },
+     {
+      "code": "80204230",
+      "short": "BECP-C",
+      "name": "Begues En Comú Podem - Confluència",
+      "votes": 416,
+      "seats": 2
+     },
+     {
+      "code": "1039",
+      "short": "CUP-AMUNT",
+      "name": "Candidatura d'Unitat Popular - Alternativa Municipalista",
+      "votes": 280,
+      "seats": 1
+     },
+     {
+      "code": "202386",
+      "short": "PP",
+      "name": "Partido Popular",
+      "votes": 222,
+      "seats": 1
+     },
+     {
+      "code": "693",
+      "short": "VOX",
+      "name": "VOX",
+      "votes": 105,
+      "seats": 0
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 5489,
+    "voters": 3976,
+    "nullVotes": 31,
+    "blankVotes": 30,
+    "listVotes": 3915,
+    "validVotes": 3945,
+    "votes": {
+     "6": 1108,
+     "10": 641,
+     "86": 488,
+     "693": 251,
+     "697": 0,
+     "1031": 560,
+     "1034": 4,
+     "1109": 130,
+     "1129": 49,
+     "1134": 10,
+     "1135": 635,
+     "1136": 39
+    }
+   },
+   "parliament": {
+    "electorate": 5519,
+    "voters": 3599,
+    "nullVotes": 34,
+    "blankVotes": 43,
+    "listVotes": 3522,
+    "validVotes": 3565,
+    "votes": {
+     "6": 874,
+     "10": 609,
+     "86": 349,
+     "301": 22,
+     "350": 3,
+     "693": 215,
+     "697": 2,
+     "1034": 0,
+     "1129": 39,
+     "1130": 90,
+     "1134": 7,
+     "1140": 206,
+     "1141": 185,
+     "1142": 0,
+     "1143": 909,
+     "1144": 12
+    }
+   }
+  },
+  {
+   "code": "43086",
+   "idescat": "430862",
+   "slug": "montblanc",
+   "name": "Montblanc",
+   "comarca": "Conca de Barberà",
+   "province": "Tarragona",
+   "population": 7542,
+   "mayor": {
+    "name": "Marc Vinya Miralles",
+    "party": "",
+    "since": "2025-06-28"
+   },
+   "municipal": {
+    "electorate": 5344,
+    "voters": 3442,
+    "nullVotes": 63,
+    "blankVotes": 53,
+    "listVotes": 3326,
+    "validVotes": 3379,
+    "seats": 13,
+    "censusPopulation": 7410,
+    "lists": [
+     {
+      "code": "430864233",
+      "short": "CM",
+      "name": "Montblanc Progressa - Compromís Municipal",
+      "votes": 1214,
+      "seats": 5
+     },
+     {
+      "code": "430864230",
+      "short": "JUNTSXMTB-ARA PL",
+      "name": "Junts per Montblanc - Ara Pacte Local",
+      "votes": 737,
+      "seats": 3
+     },
+     {
+      "code": "430864231",
+      "short": "EM-AM",
+      "name": "Esquerra Montblanc-Acord Municipal",
+      "votes": 665,
+      "seats": 3
+     },
+     {
+      "code": "430864232",
+      "short": "DP-FIC",
+      "name": "Despertem, Poble - Federació d'Independents de Catalunya",
+      "votes": 425,
+      "seats": 1
+     },
+     {
+      "code": "842",
+      "short": "PSC-CP",
+      "name": "Partit dels Socialistes de Catalunya - Candidatura de Progrés",
+      "votes": 285,
+      "seats": 1
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 5304,
+    "voters": 3543,
+    "nullVotes": 45,
+    "blankVotes": 30,
+    "listVotes": 3468,
+    "validVotes": 3498,
+    "votes": {
+     "6": 1048,
+     "10": 809,
+     "86": 167,
+     "693": 187,
+     "697": 4,
+     "1031": 706,
+     "1034": 3,
+     "1109": 158,
+     "1129": 27,
+     "1134": 3,
+     "1135": 306,
+     "1136": 46,
+     "1137": 2,
+     "1138": 2
+    }
+   },
+   "parliament": {
+    "electorate": 5347,
+    "voters": 3192,
+    "nullVotes": 36,
+    "blankVotes": 38,
+    "listVotes": 3118,
+    "validVotes": 3156,
+    "votes": {
+     "6": 616,
+     "10": 704,
+     "86": 107,
+     "301": 5,
+     "350": 2,
+     "546": 0,
+     "693": 130,
+     "697": 2,
+     "1018": 3,
+     "1034": 4,
+     "1129": 22,
+     "1130": 125,
+     "1134": 6,
+     "1140": 87,
+     "1141": 197,
+     "1142": 0,
+     "1143": 1082,
+     "1144": 26
+    }
+   }
+  },
+  {
+   "code": "43013",
+   "idescat": "430136",
+   "slug": "l-ametlla-de-mar",
+   "name": "l'Ametlla de Mar",
+   "comarca": "Baix Ebre",
+   "province": "Tarragona",
+   "population": 7446,
+   "mayor": {
+    "name": "Jordi Gaseni Blanch",
+    "party": "ERC-AM",
+    "since": "2026-04-17"
+   },
+   "municipal": {
+    "electorate": 4985,
+    "voters": 2980,
+    "nullVotes": 91,
+    "blankVotes": 84,
+    "listVotes": 2805,
+    "validVotes": 2889,
+    "seats": 13,
+    "censusPopulation": 7209,
+    "lists": [
+     {
+      "code": "193",
+      "short": "ERC-AM",
+      "name": "Esquerra Republicana de Catalunya - Acord Municipal",
+      "votes": 1037,
+      "seats": 5
+     },
+     {
+      "code": "430134230",
+      "short": "CM",
+      "name": "Junts per L'Ametlla de Mar-Compromís Municipal",
+      "votes": 978,
+      "seats": 5
+     },
+     {
+      "code": "842",
+      "short": "PSC-CP",
+      "name": "Partit dels Socialistes de Catalunya - Candidatura de Progrés",
+      "votes": 351,
+      "seats": 2
+     },
+     {
+      "code": "430134231",
+      "short": "EPC-MTE-C",
+      "name": "Entesa per la Cala - Movem Terres de l'Ebre - Confluència",
+      "votes": 274,
+      "seats": 1
+     },
+     {
+      "code": "202386",
+      "short": "PP",
+      "name": "Partido Popular",
+      "votes": 165,
+      "seats": 0
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 4692,
+    "voters": 2950,
+    "nullVotes": 44,
+    "blankVotes": 29,
+    "listVotes": 2877,
+    "validVotes": 2906,
+    "votes": {
+     "6": 767,
+     "10": 646,
+     "86": 345,
+     "693": 225,
+     "697": 1,
+     "1031": 471,
+     "1034": 3,
+     "1109": 47,
+     "1129": 33,
+     "1134": 4,
+     "1135": 322,
+     "1136": 11,
+     "1137": 1,
+     "1138": 1
+    }
+   },
+   "parliament": {
+    "electorate": 4706,
+    "voters": 2569,
+    "nullVotes": 35,
+    "blankVotes": 29,
+    "listVotes": 2505,
+    "validVotes": 2534,
+    "votes": {
+     "6": 459,
+     "10": 527,
+     "86": 213,
+     "301": 10,
+     "350": 1,
+     "546": 2,
+     "693": 141,
+     "697": 0,
+     "1018": 2,
+     "1034": 0,
+     "1129": 25,
+     "1130": 199,
+     "1134": 7,
+     "1140": 107,
+     "1141": 75,
+     "1142": 1,
+     "1143": 731,
+     "1144": 5
+    }
+   }
+  },
+  {
+   "code": "43162",
+   "idescat": "431628",
+   "slug": "vandellos-i-l-hospitalet-de-l-infant",
+   "name": "Vandellòs i l'Hospitalet de l'Infant",
+   "comarca": "Baix Camp",
+   "province": "Tarragona",
+   "population": 7143,
+   "mayor": {
+    "name": "Assumpció Castellví Auví",
+    "party": "CM",
+    "since": "2023-06-17"
+   },
+   "municipal": {
+    "electorate": 4709,
+    "voters": 3001,
+    "nullVotes": 41,
+    "blankVotes": 44,
+    "listVotes": 2916,
+    "validVotes": 2960,
+    "seats": 13,
+    "censusPopulation": 6750,
+    "lists": [
+     {
+      "code": "431624231",
+      "short": "CM",
+      "name": "Més Municipi - Compromís Municipal",
+      "votes": 917,
+      "seats": 5
+     },
+     {
+      "code": "842",
+      "short": "PSC-CP",
+      "name": "Partit dels Socialistes de Catalunya - Candidatura de Progrés",
+      "votes": 833,
+      "seats": 4
+     },
+     {
+      "code": "431624230",
+      "short": "AM VH-AM",
+      "name": "Acció Municipal Vh- Acord Municipal",
+      "votes": 315,
+      "seats": 1
+     },
+     {
+      "code": "548",
+      "short": "F.I.C.",
+      "name": "Federació d'Independents de Catalunya",
+      "votes": 266,
+      "seats": 1
+     },
+     {
+      "code": "1039",
+      "short": "CUP-AMUNT",
+      "name": "Candidatura d'Unitat Popular - Alternativa Municipalista",
+      "votes": 246,
+      "seats": 1
+     },
+     {
+      "code": "202386",
+      "short": "PP",
+      "name": "Partido Popular",
+      "votes": 227,
+      "seats": 1
+     },
+     {
+      "code": "301",
+      "short": "Cs",
+      "name": "Ciutadans - Partido de la Ciudadanía",
+      "votes": 112,
+      "seats": 0
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 4634,
+    "voters": 3173,
+    "nullVotes": 49,
+    "blankVotes": 29,
+    "listVotes": 3095,
+    "validVotes": 3124,
+    "votes": {
+     "6": 981,
+     "10": 394,
+     "86": 574,
+     "693": 277,
+     "697": 1,
+     "1031": 385,
+     "1034": 1,
+     "1109": 93,
+     "1129": 30,
+     "1134": 6,
+     "1135": 337,
+     "1136": 13,
+     "1137": 1,
+     "1138": 2
+    }
+   },
+   "parliament": {
+    "electorate": 4678,
+    "voters": 2723,
+    "nullVotes": 33,
+    "blankVotes": 32,
+    "listVotes": 2658,
+    "validVotes": 2690,
+    "votes": {
+     "6": 726,
+     "10": 374,
+     "86": 398,
+     "301": 19,
+     "350": 1,
+     "546": 2,
+     "693": 239,
+     "697": 2,
+     "1018": 1,
+     "1034": 2,
+     "1129": 21,
+     "1130": 74,
+     "1134": 11,
+     "1140": 93,
+     "1141": 161,
+     "1142": 2,
+     "1143": 519,
+     "1144": 13
+    }
+   }
+  },
+  {
+   "code": "43047",
+   "idescat": "430477",
+   "slug": "constanti",
+   "name": "Constantí",
+   "comarca": "Tarragonès",
+   "province": "Tarragona",
+   "population": 7108,
+   "mayor": {
+    "name": "Oscar Sánchez Ibarra",
+    "party": "",
+    "since": "2023-06-17"
+   },
+   "municipal": {
+    "electorate": 4373,
+    "voters": 2358,
+    "nullVotes": 41,
+    "blankVotes": 34,
+    "listVotes": 2283,
+    "validVotes": 2317,
+    "seats": 13,
+    "censusPopulation": 6685,
+    "lists": [
+     {
+      "code": "842",
+      "short": "PSC-CP",
+      "name": "Partit dels Socialistes de Catalunya - Candidatura de Progrés",
+      "votes": 1325,
+      "seats": 9
+     },
+     {
+      "code": "193",
+      "short": "ERC-AM",
+      "name": "Esquerra Republicana de Catalunya - Acord Municipal",
+      "votes": 549,
+      "seats": 3
+     },
+     {
+      "code": "693",
+      "short": "VOX",
+      "name": "VOX",
+      "votes": 213,
+      "seats": 1
+     },
+     {
+      "code": "202386",
+      "short": "PP",
+      "name": "Partido Popular",
+      "votes": 116,
+      "seats": 0
+     },
+     {
+      "code": "430474230",
+      "short": "CECP-C",
+      "name": "Constanti En Comú Podem - Confluència",
+      "votes": 80,
+      "seats": 0
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 4342,
+    "voters": 2477,
+    "nullVotes": 43,
+    "blankVotes": 31,
+    "listVotes": 2403,
+    "validVotes": 2434,
+    "votes": {
+     "6": 998,
+     "10": 279,
+     "86": 334,
+     "693": 378,
+     "697": 1,
+     "1031": 118,
+     "1034": 2,
+     "1109": 28,
+     "1129": 33,
+     "1134": 12,
+     "1135": 206,
+     "1136": 12,
+     "1137": 1,
+     "1138": 1
+    }
+   },
+   "parliament": {
+    "electorate": 4368,
+    "voters": 2083,
+    "nullVotes": 41,
+    "blankVotes": 37,
+    "listVotes": 2005,
+    "validVotes": 2042,
+    "votes": {
+     "6": 671,
+     "10": 305,
+     "86": 241,
+     "301": 15,
+     "350": 2,
+     "546": 0,
+     "693": 371,
+     "697": 0,
+     "1018": 0,
+     "1034": 1,
+     "1129": 29,
+     "1130": 38,
+     "1134": 2,
+     "1140": 62,
+     "1141": 32,
+     "1142": 0,
+     "1143": 230,
+     "1144": 6
+    }
+   }
+  },
+  {
+   "code": "08191",
+   "idescat": "081918",
+   "slug": "sallent",
+   "name": "Sallent",
+   "comarca": "Bages",
+   "province": "Barcelona",
+   "population": 7030,
+   "mayor": {
+    "name": "Oriol Ribalta I Pineda",
+    "party": "",
+    "since": "2023-06-17"
+   },
+   "municipal": {
+    "electorate": 5396,
+    "voters": 3305,
+    "nullVotes": 51,
+    "blankVotes": 52,
+    "listVotes": 3202,
+    "validVotes": 3254,
+    "seats": 13,
+    "censusPopulation": 6805,
+    "lists": [
+     {
+      "code": "193",
+      "short": "ERC-AM",
+      "name": "Esquerra Republicana de Catalunya - Acord Municipal",
+      "votes": 2024,
+      "seats": 9
+     },
+     {
+      "code": "81914230",
+      "short": "FMPS-AMUNT",
+      "name": "Fem Més Poble Sallent - Alternativa Municipalista",
+      "votes": 535,
+      "seats": 2
+     },
+     {
+      "code": "81914231",
+      "short": "CM",
+      "name": "Junts per Sallent Cabrianes I Cornet - Compromís Municipal",
+      "votes": 375,
+      "seats": 1
+     },
+     {
+      "code": "842",
+      "short": "PSC-CP",
+      "name": "Partit dels Socialistes de Catalunya - Candidatura de Progrés",
+      "votes": 268,
+      "seats": 1
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 5346,
+    "voters": 3464,
+    "nullVotes": 28,
+    "blankVotes": 39,
+    "listVotes": 3397,
+    "validVotes": 3436,
+    "votes": {
+     "6": 1142,
+     "10": 769,
+     "86": 201,
+     "693": 196,
+     "697": 0,
+     "1031": 459,
+     "1034": 6,
+     "1109": 219,
+     "1129": 45,
+     "1134": 5,
+     "1135": 330,
+     "1136": 25
+    }
+   },
+   "parliament": {
+    "electorate": 5365,
+    "voters": 3186,
+    "nullVotes": 31,
+    "blankVotes": 39,
+    "listVotes": 3116,
+    "validVotes": 3155,
+    "votes": {
+     "6": 759,
+     "10": 601,
+     "86": 151,
+     "301": 6,
+     "350": 0,
+     "693": 162,
+     "697": 2,
+     "1034": 8,
+     "1129": 30,
+     "1130": 197,
+     "1134": 7,
+     "1140": 97,
+     "1141": 265,
+     "1142": 0,
+     "1143": 824,
+     "1144": 7
+    }
+   }
+  },
+  {
+   "code": "25019",
+   "idescat": "250194",
+   "slug": "almacelles",
+   "name": "Almacelles",
+   "comarca": "Segrià",
+   "province": "Lleida",
+   "population": 7018,
+   "mayor": {
+    "name": "Antoni Arnó Rico",
+    "party": "",
+    "since": "2026-02-11"
+   },
+   "municipal": {
+    "electorate": 4597,
+    "voters": 2612,
+    "nullVotes": 101,
+    "blankVotes": 57,
+    "listVotes": 2454,
+    "validVotes": 2511,
+    "seats": 13,
+    "censusPopulation": 6922,
+    "lists": [
+     {
+      "code": "250194230",
+      "short": "CM",
+      "name": "Units per Almacelles - Junts - Compromís Municipal",
+      "votes": 636,
+      "seats": 4
+     },
+     {
+      "code": "250194232",
+      "short": "ARA PL",
+      "name": "Amunt Almacelles - Ara Pacte Local",
+      "votes": 571,
+      "seats": 3
+     },
+     {
+      "code": "842",
+      "short": "PSC-CP",
+      "name": "Partit dels Socialistes de Catalunya - Candidatura de Progrés",
+      "votes": 338,
+      "seats": 2
+     },
+     {
+      "code": "250194231",
+      "short": "AeC-C",
+      "name": "Almacelles En Comú - Confluència",
+      "votes": 332,
+      "seats": 2
+     },
+     {
+      "code": "193",
+      "short": "ERC-AM",
+      "name": "Esquerra Republicana de Catalunya - Acord Municipal",
+      "votes": 324,
+      "seats": 2
+     },
+     {
+      "code": "693",
+      "short": "VOX",
+      "name": "VOX",
+      "votes": 135,
+      "seats": 0
+     },
+     {
+      "code": "202386",
+      "short": "PP",
+      "name": "Partido Popular",
+      "votes": 105,
+      "seats": 0
+     },
+     {
+      "code": "301",
+      "short": "Cs",
+      "name": "Ciutadans - Partido de la Ciudadanía",
+      "votes": 13,
+      "seats": 0
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 4543,
+    "voters": 2662,
+    "nullVotes": 40,
+    "blankVotes": 25,
+    "listVotes": 2597,
+    "validVotes": 2622,
+    "votes": {
+     "6": 817,
+     "10": 443,
+     "86": 402,
+     "643": 7,
+     "693": 206,
+     "697": 2,
+     "1031": 354,
+     "1034": 0,
+     "1109": 57,
+     "1129": 21,
+     "1134": 4,
+     "1135": 260,
+     "1136": 24
+    }
+   },
+   "parliament": {
+    "electorate": 4543,
+    "voters": 2384,
+    "nullVotes": 46,
+    "blankVotes": 34,
+    "listVotes": 2304,
+    "validVotes": 2338,
+    "votes": {
+     "6": 564,
+     "10": 376,
+     "86": 276,
+     "301": 5,
+     "350": 4,
+     "546": 3,
+     "693": 199,
+     "697": 5,
+     "1034": 4,
+     "1130": 143,
+     "1134": 9,
+     "1140": 81,
+     "1141": 70,
+     "1143": 557,
+     "1144": 8
+    }
+   }
+  },
+  {
+   "code": "08183",
+   "idescat": "081831",
+   "slug": "roda-de-ter",
+   "name": "Roda de Ter",
+   "comarca": "Osona",
+   "province": "Barcelona",
+   "population": 6937,
+   "mayor": {
+    "name": "Toni Mas Febrer",
+    "party": "",
+    "since": "2023-06-17"
+   },
+   "municipal": {
+    "electorate": 4671,
+    "voters": 2404,
+    "nullVotes": 36,
+    "blankVotes": 83,
+    "listVotes": 2285,
+    "validVotes": 2368,
+    "seats": 13,
+    "censusPopulation": 6555,
+    "lists": [
+     {
+      "code": "81834231",
+      "short": "ERC-RodaRep-AM",
+      "name": "Esquerra Republicana - Roda Republicana - Acord Municipal",
+      "votes": 600,
+      "seats": 3
+     },
+     {
+      "code": "81834235",
+      "short": "AR-ARA PL",
+      "name": "Ara Roda - Ara Pacte Local",
+      "votes": 475,
+      "seats": 3
+     },
+     {
+      "code": "81834234",
+      "short": "IpR",
+      "name": "Independents per Al Progrés de Roda",
+      "votes": 345,
+      "seats": 2
+     },
+     {
+      "code": "81834232",
+      "short": "CM",
+      "name": "Junts Roda de Ter - Compromís Municipal",
+      "votes": 314,
+      "seats": 2
+     },
+     {
+      "code": "81834230",
+      "short": "CP",
+      "name": "Sumem per Roda de Ter - Candidatura de Progrés",
+      "votes": 310,
+      "seats": 2
+     },
+     {
+      "code": "81834233",
+      "short": "RD",
+      "name": "Rodem!",
+      "votes": 241,
+      "seats": 1
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 4660,
+    "voters": 2857,
+    "nullVotes": 34,
+    "blankVotes": 32,
+    "listVotes": 2791,
+    "validVotes": 2823,
+    "votes": {
+     "6": 753,
+     "10": 591,
+     "86": 144,
+     "693": 162,
+     "697": 1,
+     "1031": 681,
+     "1034": 2,
+     "1109": 156,
+     "1129": 25,
+     "1134": 2,
+     "1135": 238,
+     "1136": 36
+    }
+   },
+   "parliament": {
+    "electorate": 4716,
+    "voters": 2774,
+    "nullVotes": 35,
+    "blankVotes": 51,
+    "listVotes": 2688,
+    "validVotes": 2739,
+    "votes": {
+     "6": 397,
+     "10": 396,
+     "86": 85,
+     "301": 1,
+     "350": 4,
+     "693": 100,
+     "697": 0,
+     "1034": 0,
+     "1129": 22,
+     "1130": 362,
+     "1134": 7,
+     "1140": 78,
+     "1141": 146,
+     "1142": 0,
+     "1143": 1081,
+     "1144": 9
+    }
+   }
+  },
+  {
+   "code": "17193",
+   "idescat": "171931",
+   "slug": "sils",
+   "name": "Sils",
+   "comarca": "Selva",
+   "province": "Girona",
+   "population": 6920,
+   "mayor": {
+    "name": "Eduard Colomé Ribas",
+    "party": "CM",
+    "since": "2023-06-17"
+   },
+   "municipal": {
+    "electorate": 4664,
+    "voters": 2240,
+    "nullVotes": 29,
+    "blankVotes": 64,
+    "listVotes": 2147,
+    "validVotes": 2211,
+    "seats": 13,
+    "censusPopulation": 6507,
+    "lists": [
+     {
+      "code": "171934233",
+      "short": "CM",
+      "name": "Junts per Sils - Compromís Municipal",
+      "votes": 670,
+      "seats": 4
+     },
+     {
+      "code": "171934230",
+      "short": "IdSils-IdSelva",
+      "name": "Independents de Sils - Independents de la Selva",
+      "votes": 628,
+      "seats": 4
+     },
+     {
+      "code": "171934232",
+      "short": "F+S-AM",
+      "name": "Fem + Sils - Acord Municipal",
+      "votes": 452,
+      "seats": 3
+     },
+     {
+      "code": "171934231",
+      "short": "SECP-C",
+      "name": "Sils En Comú Podem - Confluència",
+      "votes": 206,
+      "seats": 1
+     },
+     {
+      "code": "842",
+      "short": "PSC-CP",
+      "name": "Partit dels Socialistes de Catalunya - Candidatura de Progrés",
+      "votes": 136,
+      "seats": 1
+     },
+     {
+      "code": "1126",
+      "short": "VALENTS",
+      "name": "Valents",
+      "votes": 55,
+      "seats": 0
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 4605,
+    "voters": 2831,
+    "nullVotes": 30,
+    "blankVotes": 21,
+    "listVotes": 2780,
+    "validVotes": 2801,
+    "votes": {
+     "6": 841,
+     "10": 360,
+     "86": 276,
+     "693": 295,
+     "697": 1,
+     "1031": 481,
+     "1034": 1,
+     "1109": 85,
+     "1129": 44,
+     "1134": 3,
+     "1135": 373,
+     "1136": 20
+    }
+   },
+   "parliament": {
+    "electorate": 4724,
+    "voters": 2439,
+    "nullVotes": 21,
+    "blankVotes": 25,
+    "listVotes": 2393,
+    "validVotes": 2418,
+    "votes": {
+     "6": 526,
+     "10": 290,
+     "86": 178,
+     "301": 9,
+     "350": 0,
+     "693": 247,
+     "697": 2,
+     "1034": 2,
+     "1129": 34,
+     "1130": 166,
+     "1134": 9,
+     "1140": 79,
+     "1141": 91,
+     "1143": 752,
+     "1144": 8
+    }
+   }
+  },
+  {
+   "code": "08108",
+   "idescat": "081081",
+   "slug": "llica-de-vall",
+   "name": "Lliçà de Vall",
+   "comarca": "Vallès Oriental",
+   "province": "Barcelona",
+   "population": 6903,
+   "mayor": {
+    "name": "Xavier Castillejo Fernández",
+    "party": "",
+    "since": "2025-06-14"
+   },
+   "municipal": {
+    "electorate": 5372,
+    "voters": 3077,
+    "nullVotes": 33,
+    "blankVotes": 48,
+    "listVotes": 2996,
+    "validVotes": 3044,
+    "seats": 13,
+    "censusPopulation": 6760,
+    "lists": [
+     {
+      "code": "193",
+      "short": "ERC-AM",
+      "name": "Esquerra Republicana de Catalunya - Acord Municipal",
+      "votes": 944,
+      "seats": 4
+     },
+     {
+      "code": "81084231",
+      "short": "CM",
+      "name": "Junts per Lliçà de Vall - Compromís Municipal",
+      "votes": 881,
+      "seats": 4
+     },
+     {
+      "code": "842",
+      "short": "PSC-CP",
+      "name": "Partit dels Socialistes de Catalunya - Candidatura de Progrés",
+      "votes": 589,
+      "seats": 3
+     },
+     {
+      "code": "301",
+      "short": "Cs",
+      "name": "Ciutadans - Partido de la Ciudadanía",
+      "votes": 265,
+      "seats": 1
+     },
+     {
+      "code": "81084230",
+      "short": "FEM-ECP-C",
+      "name": "Fem Lliçà En Comú Podem - Confluència",
+      "votes": 217,
+      "seats": 1
+     },
+     {
+      "code": "81084232",
+      "short": "CUP-AMUNT",
+      "name": "Candidatura d'Unitat Popular LLiçà de Vall - Alternativa Municipalista",
+      "votes": 100,
+      "seats": 0
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 5354,
+    "voters": 3705,
+    "nullVotes": 23,
+    "blankVotes": 39,
+    "listVotes": 3643,
+    "validVotes": 3682,
+    "votes": {
+     "6": 1207,
+     "10": 550,
+     "86": 578,
+     "693": 340,
+     "697": 5,
+     "1031": 371,
+     "1034": 1,
+     "1109": 45,
+     "1129": 41,
+     "1134": 5,
+     "1135": 488,
+     "1136": 12
+    }
+   },
+   "parliament": {
+    "electorate": 5430,
+    "voters": 3202,
+    "nullVotes": 36,
+    "blankVotes": 37,
+    "listVotes": 3129,
+    "validVotes": 3166,
+    "votes": {
+     "6": 880,
+     "10": 489,
+     "86": 390,
+     "301": 42,
+     "350": 0,
+     "693": 301,
+     "697": 7,
+     "1034": 4,
+     "1129": 34,
+     "1130": 69,
+     "1134": 11,
+     "1140": 154,
+     "1141": 60,
+     "1142": 0,
+     "1143": 680,
+     "1144": 8
+    }
+   }
+  },
+  {
+   "code": "08281",
+   "idescat": "082819",
+   "slug": "teia",
+   "name": "Teià",
+   "comarca": "Maresme",
+   "province": "Barcelona",
+   "population": 6898,
+   "mayor": {
+    "name": "Erica Busto Navarro",
+    "party": "CaT-ERC-AM",
+    "since": "2025-06-18"
+   },
+   "municipal": {
+    "electorate": 5066,
+    "voters": 2891,
+    "nullVotes": 72,
+    "blankVotes": 65,
+    "listVotes": 2754,
+    "validVotes": 2819,
+    "seats": 13,
+    "censusPopulation": 6635,
+    "lists": [
+     {
+      "code": "82814232",
+      "short": "GdT",
+      "name": "Gent de Teià",
+      "votes": 805,
+      "seats": 4
+     },
+     {
+      "code": "82814230",
+      "short": "CaT-ERC-AM",
+      "name": "Compromís Amb Teià-Esquerra Republicana de Catalunya - Acord Municipal",
+      "votes": 690,
+      "seats": 4
+     },
+     {
+      "code": "82814231",
+      "short": "CM",
+      "name": "Junts per Teià - Compromís Municipal",
+      "votes": 677,
+      "seats": 3
+     },
+     {
+      "code": "842",
+      "short": "PSC-CP",
+      "name": "Partit dels Socialistes de Catalunya - Candidatura de Progrés",
+      "votes": 283,
+      "seats": 1
+     },
+     {
+      "code": "202386",
+      "short": "PP",
+      "name": "Partido Popular",
+      "votes": 276,
+      "seats": 1
+     },
+     {
+      "code": "301",
+      "short": "Cs",
+      "name": "Ciutadans - Partido de la Ciudadanía",
+      "votes": 23,
+      "seats": 0
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 4990,
+    "voters": 3565,
+    "nullVotes": 24,
+    "blankVotes": 22,
+    "listVotes": 3519,
+    "validVotes": 3541,
+    "votes": {
+     "6": 855,
+     "10": 616,
+     "86": 469,
+     "693": 145,
+     "697": 3,
+     "1031": 716,
+     "1034": 4,
+     "1109": 130,
+     "1129": 29,
+     "1134": 3,
+     "1135": 485,
+     "1136": 64
+    }
+   },
+   "parliament": {
+    "electorate": 5060,
+    "voters": 3368,
+    "nullVotes": 36,
+    "blankVotes": 36,
+    "listVotes": 3296,
+    "validVotes": 3332,
+    "votes": {
+     "6": 615,
+     "10": 475,
+     "86": 348,
+     "301": 10,
+     "350": 3,
+     "693": 106,
+     "697": 2,
+     "1034": 5,
+     "1129": 26,
+     "1130": 114,
+     "1134": 6,
+     "1140": 158,
+     "1141": 163,
+     "1142": 0,
+     "1143": 1252,
+     "1144": 13
+    }
+   }
+  },
+  {
+   "code": "43129",
+   "idescat": "431299",
+   "slug": "riudoms",
+   "name": "Riudoms",
+   "comarca": "Baix Camp",
+   "province": "Tarragona",
+   "population": 6891,
+   "mayor": null,
+   "municipal": {
+    "electorate": 4971,
+    "voters": 3118,
+    "nullVotes": 92,
+    "blankVotes": 57,
+    "listVotes": 2969,
+    "validVotes": 3026,
+    "seats": 13,
+    "censusPopulation": 6721,
+    "lists": [
+     {
+      "code": "193",
+      "short": "ERC-AM",
+      "name": "Esquerra Republicana de Catalunya - Acord Municipal",
+      "votes": 1387,
+      "seats": 7
+     },
+     {
+      "code": "431294230",
+      "short": "CM",
+      "name": "Junts per Riudoms - Compromís Municipal",
+      "votes": 1280,
+      "seats": 6
+     },
+     {
+      "code": "842",
+      "short": "PSC-CP",
+      "name": "Partit dels Socialistes de Catalunya - Candidatura de Progrés",
+      "votes": 155,
+      "seats": 0
+     },
+     {
+      "code": "202386",
+      "short": "PP",
+      "name": "Partido Popular",
+      "votes": 147,
+      "seats": 0
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 4877,
+    "voters": 3260,
+    "nullVotes": 41,
+    "blankVotes": 22,
+    "listVotes": 3197,
+    "validVotes": 3219,
+    "votes": {
+     "6": 697,
+     "10": 563,
+     "86": 293,
+     "693": 277,
+     "697": 3,
+     "1031": 1021,
+     "1034": 8,
+     "1109": 89,
+     "1129": 26,
+     "1134": 5,
+     "1135": 192,
+     "1136": 22,
+     "1137": 0,
+     "1138": 1
+    }
+   },
+   "parliament": {
+    "electorate": 4942,
+    "voters": 2878,
+    "nullVotes": 49,
+    "blankVotes": 39,
+    "listVotes": 2790,
+    "validVotes": 2829,
+    "votes": {
+     "6": 444,
+     "10": 593,
+     "86": 196,
+     "301": 8,
+     "350": 0,
+     "546": 1,
+     "693": 215,
+     "697": 0,
+     "1018": 2,
+     "1034": 8,
+     "1129": 20,
+     "1130": 133,
+     "1134": 7,
+     "1140": 53,
+     "1141": 150,
+     "1142": 0,
+     "1143": 953,
+     "1144": 7
+    }
+   }
+  },
+  {
+   "code": "08278",
+   "idescat": "082785",
+   "slug": "taradell",
+   "name": "Taradell",
+   "comarca": "Osona",
+   "province": "Barcelona",
+   "population": 6854,
+   "mayor": {
+    "name": "M. Mercè Cabanas Solà",
+    "party": "",
+    "since": "2023-06-17"
+   },
+   "municipal": {
+    "electorate": 5094,
+    "voters": 2992,
+    "nullVotes": 49,
+    "blankVotes": 79,
+    "listVotes": 2864,
+    "validVotes": 2943,
+    "seats": 13,
+    "censusPopulation": 6699,
+    "lists": [
+     {
+      "code": "82784230",
+      "short": "FT-ERC-AM",
+      "name": "Fem Taradell - Esquerra Republicana de Catalunya - Acord Municipal",
+      "votes": 1865,
+      "seats": 9
+     },
+     {
+      "code": "82784231",
+      "short": "CM",
+      "name": "Junts per Taradell - Compromís Municipal",
+      "votes": 912,
+      "seats": 4
+     },
+     {
+      "code": "202386",
+      "short": "PP",
+      "name": "Partido Popular",
+      "votes": 87,
+      "seats": 0
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 5075,
+    "voters": 3306,
+    "nullVotes": 46,
+    "blankVotes": 44,
+    "listVotes": 3216,
+    "validVotes": 3260,
+    "votes": {
+     "6": 603,
+     "10": 723,
+     "86": 132,
+     "693": 89,
+     "697": 1,
+     "1031": 1071,
+     "1034": 6,
+     "1109": 252,
+     "1129": 19,
+     "1134": 1,
+     "1135": 271,
+     "1136": 48
+    }
+   },
+   "parliament": {
+    "electorate": 5105,
+    "voters": 3284,
+    "nullVotes": 17,
+    "blankVotes": 51,
+    "listVotes": 3216,
+    "validVotes": 3267,
+    "votes": {
+     "6": 299,
+     "10": 441,
+     "86": 78,
+     "301": 3,
+     "350": 0,
+     "693": 45,
+     "697": 0,
+     "1034": 3,
+     "1129": 22,
+     "1130": 348,
+     "1134": 2,
+     "1140": 58,
+     "1141": 204,
+     "1142": 0,
+     "1143": 1691,
+     "1144": 22
+    }
+   }
+  },
+  {
+   "code": "08138",
+   "idescat": "081385",
+   "slug": "moia",
+   "name": "Moià",
+   "comarca": "Moianès",
+   "province": "Barcelona",
+   "population": 6828,
+   "mayor": {
+    "name": "Dionís Guiteras I Rubio",
+    "party": "",
+    "since": "2023-06-17"
+   },
+   "municipal": {
+    "electorate": 4805,
+    "voters": 2742,
+    "nullVotes": 45,
+    "blankVotes": 40,
+    "listVotes": 2657,
+    "validVotes": 2697,
+    "seats": 13,
+    "censusPopulation": 6548,
+    "lists": [
+     {
+      "code": "81384232",
+      "short": "aramoià-AM",
+      "name": "Aramoià - Acord Municipal",
+      "votes": 1451,
+      "seats": 8
+     },
+     {
+      "code": "81384231",
+      "short": "CM",
+      "name": "Junts per Moià, Montví I Montjoia - Compromís Municipal",
+      "votes": 688,
+      "seats": 3
+     },
+     {
+      "code": "81384230",
+      "short": "CM-CUP-AMUNT",
+      "name": "Capgirem Moià - CUP - Alternativa Municipalista",
+      "votes": 253,
+      "seats": 1
+     },
+     {
+      "code": "842",
+      "short": "PSC-CP",
+      "name": "Partit dels Socialistes de Catalunya - Candidatura de Progrés",
+      "votes": 193,
+      "seats": 1
+     },
+     {
+      "code": "693",
+      "short": "VOX",
+      "name": "VOX",
+      "votes": 72,
+      "seats": 0
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 4782,
+    "voters": 3032,
+    "nullVotes": 27,
+    "blankVotes": 29,
+    "listVotes": 2976,
+    "validVotes": 3005,
+    "votes": {
+     "6": 737,
+     "10": 785,
+     "86": 190,
+     "693": 127,
+     "697": 0,
+     "1031": 507,
+     "1034": 4,
+     "1109": 177,
+     "1129": 24,
+     "1134": 5,
+     "1135": 398,
+     "1136": 22
+    }
+   },
+   "parliament": {
+    "electorate": 4845,
+    "voters": 2880,
+    "nullVotes": 38,
+    "blankVotes": 29,
+    "listVotes": 2813,
+    "validVotes": 2842,
+    "votes": {
+     "6": 467,
+     "10": 582,
+     "86": 137,
+     "301": 8,
+     "350": 3,
+     "693": 86,
+     "697": 2,
+     "1034": 189,
+     "1129": 18,
+     "1130": 158,
+     "1134": 6,
+     "1140": 137,
+     "1141": 161,
+     "1142": 32,
+     "1143": 804,
+     "1144": 23
+    }
+   }
+  },
+  {
+   "code": "08210",
+   "idescat": "082107",
+   "slug": "sant-feliu-de-codines",
+   "name": "Sant Feliu de Codines",
+   "comarca": "Vallès Oriental",
+   "province": "Barcelona",
+   "population": 6827,
+   "mayor": {
+    "name": "Pol Cabutí I Borrell",
+    "party": "",
+    "since": "2023-06-17"
+   },
+   "municipal": {
+    "electorate": 4846,
+    "voters": 2775,
+    "nullVotes": 28,
+    "blankVotes": 20,
+    "listVotes": 2727,
+    "validVotes": 2747,
+    "seats": 13,
+    "censusPopulation": 6460,
+    "lists": [
+     {
+      "code": "82104231",
+      "short": "PRIMÀRIES CODINES",
+      "name": "Primàries Codines",
+      "votes": 1182,
+      "seats": 6
+     },
+     {
+      "code": "82104232",
+      "short": "JUNTS per SFC",
+      "name": "Junts per Sant Feliu de Codines",
+      "votes": 1012,
+      "seats": 5
+     },
+     {
+      "code": "842",
+      "short": "PSC-CP",
+      "name": "Partit dels Socialistes de Catalunya - Candidatura de Progrés",
+      "votes": 197,
+      "seats": 1
+     },
+     {
+      "code": "82104230",
+      "short": "CM",
+      "name": "Junts per Catalunya - Sant Feliu de Codines, Junts per Codines - Compromís Municipal",
+      "votes": 192,
+      "seats": 1
+     },
+     {
+      "code": "193",
+      "short": "ERC-AM",
+      "name": "Esquerra Republicana de Catalunya - Acord Municipal",
+      "votes": 144,
+      "seats": 0
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 4834,
+    "voters": 2818,
+    "nullVotes": 29,
+    "blankVotes": 25,
+    "listVotes": 2764,
+    "validVotes": 2789,
+    "votes": {
+     "6": 727,
+     "10": 573,
+     "86": 180,
+     "693": 154,
+     "697": 1,
+     "1031": 485,
+     "1034": 7,
+     "1109": 128,
+     "1129": 36,
+     "1134": 8,
+     "1135": 433,
+     "1136": 32
+    }
+   },
+   "parliament": {
+    "electorate": 4920,
+    "voters": 2591,
+    "nullVotes": 28,
+    "blankVotes": 35,
+    "listVotes": 2528,
+    "validVotes": 2563,
+    "votes": {
+     "6": 462,
+     "10": 462,
+     "86": 130,
+     "301": 6,
+     "350": 2,
+     "693": 125,
+     "697": 1,
+     "1034": 3,
+     "1129": 29,
+     "1130": 131,
+     "1134": 5,
+     "1140": 112,
+     "1141": 155,
+     "1142": 0,
+     "1143": 885,
+     "1144": 20
+    }
+   }
+  },
+  {
+   "code": "08264",
+   "idescat": "082649",
+   "slug": "sant-vicenc-de-montalt",
+   "name": "Sant Vicenç de Montalt",
+   "comarca": "Maresme",
+   "province": "Barcelona",
+   "population": 6802,
+   "mayor": {
+    "name": "F. Javier Sandoval Carrillo",
+    "party": "SS-CP",
+    "since": "2023-06-17"
+   },
+   "municipal": {
+    "electorate": 4916,
+    "voters": 2871,
+    "nullVotes": 45,
+    "blankVotes": 75,
+    "listVotes": 2751,
+    "validVotes": 2826,
+    "seats": 13,
+    "censusPopulation": 6661,
+    "lists": [
+     {
+      "code": "82644235",
+      "short": "SS-CP",
+      "name": "Sempre SantVi - Candidatura de Progrés",
+      "votes": 769,
+      "seats": 5
+     },
+     {
+      "code": "82644234",
+      "short": "JUNTSXSVM-ARA PL",
+      "name": "Junts per Sant Vicenç de Montalt - Ara Pacte Local",
+      "votes": 591,
+      "seats": 3
+     },
+     {
+      "code": "82644232",
+      "short": "SOM-HI",
+      "name": "Som-Hi Sant Vicenç/Primàries",
+      "votes": 425,
+      "seats": 2
+     },
+     {
+      "code": "202386",
+      "short": "PP",
+      "name": "Partido Popular",
+      "votes": 317,
+      "seats": 2
+     },
+     {
+      "code": "82644231",
+      "short": "CM",
+      "name": "Junts per Catalunya - CM",
+      "votes": 296,
+      "seats": 1
+     },
+     {
+      "code": "193",
+      "short": "ERC-AM",
+      "name": "Esquerra Republicana de Catalunya - Acord Municipal",
+      "votes": 130,
+      "seats": 0
+     },
+     {
+      "code": "1126",
+      "short": "VALENTS",
+      "name": "Valents",
+      "votes": 85,
+      "seats": 0
+     },
+     {
+      "code": "82644230",
+      "short": "GSV",
+      "name": "Gent de Sant Vicenç",
+      "votes": 72,
+      "seats": 0
+     },
+     {
+      "code": "82644233",
+      "short": "IRC",
+      "name": "Impulsors República Catalana",
+      "votes": 66,
+      "seats": 0
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 4822,
+    "voters": 3358,
+    "nullVotes": 32,
+    "blankVotes": 41,
+    "listVotes": 3285,
+    "validVotes": 3326,
+    "votes": {
+     "6": 804,
+     "10": 398,
+     "86": 730,
+     "693": 276,
+     "697": 6,
+     "1031": 576,
+     "1034": 4,
+     "1109": 48,
+     "1129": 35,
+     "1134": 1,
+     "1135": 315,
+     "1136": 92
+    }
+   },
+   "parliament": {
+    "electorate": 4876,
+    "voters": 3044,
+    "nullVotes": 24,
+    "blankVotes": 42,
+    "listVotes": 2978,
+    "validVotes": 3020,
+    "votes": {
+     "6": 562,
+     "10": 301,
+     "86": 506,
+     "301": 13,
+     "350": 1,
+     "693": 217,
+     "697": 2,
+     "1034": 2,
+     "1129": 36,
+     "1130": 179,
+     "1134": 2,
+     "1140": 93,
+     "1141": 63,
+     "1142": 1,
+     "1143": 994,
+     "1144": 6
+    }
+   }
+  },
+  {
+   "code": "08198",
+   "idescat": "081982",
+   "slug": "sant-antoni-de-vilamajor",
+   "name": "Sant Antoni de Vilamajor",
+   "comarca": "Vallès Oriental",
+   "province": "Barcelona",
+   "population": 6724,
+   "mayor": {
+    "name": "Raül Valentín i del Valle",
+    "party": "Canvi",
+    "since": "2023-06-17"
+   },
+   "municipal": {
+    "electorate": 5019,
+    "voters": 2697,
+    "nullVotes": 62,
+    "blankVotes": 63,
+    "listVotes": 2572,
+    "validVotes": 2635,
+    "seats": 13,
+    "censusPopulation": 6483,
+    "lists": [
+     {
+      "code": "81984232",
+      "short": "Canvi",
+      "name": "Canvi - Candidatura per Vilamajor",
+      "votes": 725,
+      "seats": 4
+     },
+     {
+      "code": "81984231",
+      "short": "CM",
+      "name": "Junts per Sant Antoni de Vilamajor (Junts per SAV) - Compromís Municipal",
+      "votes": 621,
+      "seats": 3
+     },
+     {
+      "code": "81984230",
+      "short": "P.U.S.A.",
+      "name": "Partit de les Urbanitzacions de Sant Antoni",
+      "votes": 559,
+      "seats": 3
+     },
+     {
+      "code": "193",
+      "short": "ERC-AM",
+      "name": "Esquerra Republicana de Catalunya - Acord Municipal",
+      "votes": 446,
+      "seats": 2
+     },
+     {
+      "code": "842",
+      "short": "PSC-CP",
+      "name": "Partit dels Socialistes de Catalunya - Candidatura de Progrés",
+      "votes": 221,
+      "seats": 1
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 4971,
+    "voters": 3383,
+    "nullVotes": 32,
+    "blankVotes": 29,
+    "listVotes": 3322,
+    "validVotes": 3351,
+    "votes": {
+     "6": 856,
+     "10": 632,
+     "86": 324,
+     "693": 207,
+     "697": 6,
+     "1031": 549,
+     "1034": 4,
+     "1109": 165,
+     "1129": 55,
+     "1134": 7,
+     "1135": 476,
+     "1136": 41
+    }
+   },
+   "parliament": {
+    "electorate": 5045,
+    "voters": 3095,
+    "nullVotes": 25,
+    "blankVotes": 26,
+    "listVotes": 3044,
+    "validVotes": 3070,
+    "votes": {
+     "6": 535,
+     "10": 528,
+     "86": 225,
+     "301": 12,
+     "350": 1,
+     "693": 164,
+     "697": 2,
+     "1034": 2,
+     "1129": 46,
+     "1130": 147,
+     "1134": 7,
+     "1140": 162,
+     "1141": 183,
+     "1142": 4,
+     "1143": 1002,
+     "1144": 24
+    }
+   }
+  },
+  {
+   "code": "43156",
+   "idescat": "431567",
+   "slug": "ulldecona",
+   "name": "Ulldecona",
+   "comarca": "Montsià",
+   "province": "Tarragona",
+   "population": 6714,
+   "mayor": {
+    "name": "Nuria Ventura Brusca",
+    "party": "SU-CP",
+    "since": "2023-06-17"
+   },
+   "municipal": {
+    "electorate": 4144,
+    "voters": 2779,
+    "nullVotes": 42,
+    "blankVotes": 54,
+    "listVotes": 2683,
+    "validVotes": 2737,
+    "seats": 13,
+    "censusPopulation": 6241,
+    "lists": [
+     {
+      "code": "431564232",
+      "short": "SU-CP",
+      "name": "Socialistes D'Ulldecona-Candidatura de Progrés",
+      "votes": 1126,
+      "seats": 6
+     },
+     {
+      "code": "431564233",
+      "short": "ACTIVEMUIB-ARA PL",
+      "name": "Activem Ulldecona i Barris",
+      "votes": 442,
+      "seats": 2
+     },
+     {
+      "code": "431564231",
+      "short": "FEM POBLE",
+      "name": "Fem Poble! Ulldecona",
+      "votes": 393,
+      "seats": 2
+     },
+     {
+      "code": "202386",
+      "short": "PP",
+      "name": "Partido Popular",
+      "votes": 380,
+      "seats": 2
+     },
+     {
+      "code": "193",
+      "short": "ERC-AM",
+      "name": "Esquerra Republicana de Catalunya - Acord Municipal",
+      "votes": 209,
+      "seats": 1
+     },
+     {
+      "code": "431564230",
+      "short": "CM",
+      "name": "Junts per Ulldecona - Compromís Municipal",
+      "votes": 133,
+      "seats": 0
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 3933,
+    "voters": 2619,
+    "nullVotes": 32,
+    "blankVotes": 33,
+    "listVotes": 2554,
+    "validVotes": 2587,
+    "votes": {
+     "6": 905,
+     "10": 421,
+     "86": 426,
+     "693": 214,
+     "697": 2,
+     "1031": 251,
+     "1034": 0,
+     "1109": 56,
+     "1129": 8,
+     "1134": 1,
+     "1135": 248,
+     "1136": 19,
+     "1137": 3,
+     "1138": 0
+    }
+   },
+   "parliament": {
+    "electorate": 3971,
+    "voters": 2260,
+    "nullVotes": 31,
+    "blankVotes": 32,
+    "listVotes": 2197,
+    "validVotes": 2229,
+    "votes": {
+     "6": 589,
+     "10": 386,
+     "86": 351,
+     "301": 8,
+     "350": 1,
+     "546": 0,
+     "693": 160,
+     "697": 1,
+     "1018": 0,
+     "1034": 1,
+     "1129": 17,
+     "1130": 47,
+     "1134": 3,
+     "1140": 69,
+     "1141": 87,
+     "1142": 0,
+     "1143": 469,
+     "1144": 8
+    }
+   }
+  },
+  {
+   "code": "17009",
+   "idescat": "170097",
+   "slug": "arbucies",
+   "name": "Arbúcies",
+   "comarca": "Selva",
+   "province": "Girona",
+   "population": 6665,
+   "mayor": {
+    "name": "Pere Garriga Solà",
+    "party": "",
+    "since": "2023-06-17"
+   },
+   "municipal": {
+    "electorate": 4198,
+    "voters": 2435,
+    "nullVotes": 174,
+    "blankVotes": 123,
+    "listVotes": 2138,
+    "validVotes": 2261,
+    "seats": 13,
+    "censusPopulation": 6474,
+    "lists": [
+     {
+      "code": "170094230",
+      "short": "EA-IdSELVA",
+      "name": "Entesa per Arbúcies - Independents de la Selva",
+      "votes": 1214,
+      "seats": 8
+     },
+     {
+      "code": "193",
+      "short": "ERC-AM",
+      "name": "Esquerra Republicana de Catalunya - Acord Municipal",
+      "votes": 858,
+      "seats": 5
+     },
+     {
+      "code": "842",
+      "short": "PSC-CP",
+      "name": "Partit dels Socialistes de Catalunya - Candidatura de Progrés",
+      "votes": 66,
+      "seats": 0
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 4139,
+    "voters": 2664,
+    "nullVotes": 38,
+    "blankVotes": 24,
+    "listVotes": 2602,
+    "validVotes": 2626,
+    "votes": {
+     "6": 649,
+     "10": 536,
+     "86": 141,
+     "693": 88,
+     "697": 2,
+     "1031": 585,
+     "1034": 4,
+     "1109": 240,
+     "1129": 18,
+     "1134": 3,
+     "1135": 282,
+     "1136": 54
+    }
+   },
+   "parliament": {
+    "electorate": 4167,
+    "voters": 2521,
+    "nullVotes": 34,
+    "blankVotes": 28,
+    "listVotes": 2459,
+    "validVotes": 2487,
+    "votes": {
+     "6": 311,
+     "10": 324,
+     "86": 90,
+     "301": 1,
+     "350": 1,
+     "693": 79,
+     "697": 1,
+     "1034": 2,
+     "1129": 8,
+     "1130": 329,
+     "1134": 6,
+     "1140": 89,
+     "1141": 184,
+     "1143": 1013,
+     "1144": 21
+    }
+   }
+  },
+  {
+   "code": "25023",
+   "idescat": "250236",
+   "slug": "alpicat",
+   "name": "Alpicat",
+   "comarca": "Segrià",
+   "province": "Lleida",
+   "population": 6515,
+   "mayor": {
+    "name": "Joan Gilart Escuer",
+    "party": "CM",
+    "since": "2023-06-17"
+   },
+   "municipal": {
+    "electorate": 4770,
+    "voters": 2592,
+    "nullVotes": 54,
+    "blankVotes": 65,
+    "listVotes": 2473,
+    "validVotes": 2538,
+    "seats": 13,
+    "censusPopulation": 6333,
+    "lists": [
+     {
+      "code": "250234230",
+      "short": "CM",
+      "name": "Junts Impulsem Alpicat - Compromís Municipal",
+      "votes": 1329,
+      "seats": 8
+     },
+     {
+      "code": "193",
+      "short": "ERC-AM",
+      "name": "Esquerra Republicana de Catalunya - Acord Municipal",
+      "votes": 493,
+      "seats": 3
+     },
+     {
+      "code": "842",
+      "short": "PSC-CP",
+      "name": "Partit dels Socialistes de Catalunya - Candidatura de Progrés",
+      "votes": 275,
+      "seats": 1
+     },
+     {
+      "code": "202386",
+      "short": "PP",
+      "name": "Partido Popular",
+      "votes": 197,
+      "seats": 1
+     },
+     {
+      "code": "693",
+      "short": "VOX",
+      "name": "VOX",
+      "votes": 113,
+      "seats": 0
+     },
+     {
+      "code": "301",
+      "short": "Cs",
+      "name": "Ciutadans - Partido de la Ciudadanía",
+      "votes": 66,
+      "seats": 0
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 4754,
+    "voters": 3136,
+    "nullVotes": 35,
+    "blankVotes": 33,
+    "listVotes": 3068,
+    "validVotes": 3101,
+    "votes": {
+     "6": 818,
+     "10": 543,
+     "86": 528,
+     "643": 8,
+     "693": 224,
+     "697": 2,
+     "1031": 576,
+     "1034": 1,
+     "1109": 55,
+     "1129": 13,
+     "1134": 3,
+     "1135": 263,
+     "1136": 34
+    }
+   },
+   "parliament": {
+    "electorate": 4791,
+    "voters": 2800,
+    "nullVotes": 26,
+    "blankVotes": 46,
+    "listVotes": 2728,
+    "validVotes": 2774,
+    "votes": {
+     "6": 500,
+     "10": 380,
+     "86": 317,
+     "301": 15,
+     "350": 6,
+     "546": 1,
+     "693": 192,
+     "697": 6,
+     "1034": 1,
+     "1130": 263,
+     "1134": 8,
+     "1140": 46,
+     "1141": 69,
+     "1143": 917,
+     "1144": 7
+    }
+   }
+  },
+  {
+   "code": "25058",
+   "idescat": "250582",
+   "slug": "les-borges-blanques",
+   "name": "les Borges Blanques",
+   "comarca": "Garrigues",
+   "province": "Lleida",
+   "population": 6482,
+   "mayor": {
+    "name": "Josep Ramon Farran Belart",
+    "party": "Bx Rep-xtu",
+    "since": "2023-06-17"
+   },
+   "municipal": {
+    "electorate": 4349,
+    "voters": 2482,
+    "nullVotes": 60,
+    "blankVotes": 57,
+    "listVotes": 2365,
+    "validVotes": 2422,
+    "seats": 13,
+    "censusPopulation": 6248,
+    "lists": [
+     {
+      "code": "250584231",
+      "short": "CM",
+      "name": "Junts per les Borges Blanques - Compromís Municipal",
+      "votes": 990,
+      "seats": 6
+     },
+     {
+      "code": "250584230",
+      "short": "Bx Rep-xtu",
+      "name": "Borges per la República - Per Tu",
+      "votes": 721,
+      "seats": 4
+     },
+     {
+      "code": "193",
+      "short": "ERC-AM",
+      "name": "Esquerra Republicana de Catalunya - Acord Municipal",
+      "votes": 439,
+      "seats": 3
+     },
+     {
+      "code": "842",
+      "short": "PSC-CP",
+      "name": "Partit dels Socialistes de Catalunya - Candidatura de Progrés",
+      "votes": 143,
+      "seats": 0
+     },
+     {
+      "code": "202386",
+      "short": "PP",
+      "name": "Partido Popular",
+      "votes": 72,
+      "seats": 0
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 4318,
+    "voters": 2582,
+    "nullVotes": 25,
+    "blankVotes": 36,
+    "listVotes": 2521,
+    "validVotes": 2557,
+    "votes": {
+     "6": 612,
+     "10": 694,
+     "86": 185,
+     "643": 5,
+     "693": 113,
+     "697": 1,
+     "1031": 609,
+     "1034": 5,
+     "1109": 111,
+     "1129": 25,
+     "1134": 3,
+     "1135": 137,
+     "1136": 21
+    }
+   },
+   "parliament": {
+    "electorate": 4353,
+    "voters": 2502,
+    "nullVotes": 26,
+    "blankVotes": 37,
+    "listVotes": 2439,
+    "validVotes": 2476,
+    "votes": {
+     "6": 325,
+     "10": 525,
+     "86": 118,
+     "301": 1,
+     "350": 3,
+     "546": 3,
+     "693": 107,
+     "697": 3,
+     "1034": 2,
+     "1130": 212,
+     "1134": 7,
+     "1140": 33,
+     "1141": 139,
+     "1143": 949,
+     "1144": 12
+    }
+   }
+  },
+  {
+   "code": "17202",
+   "idescat": "172023",
+   "slug": "tossa-de-mar",
+   "name": "Tossa de Mar",
+   "comarca": "Selva",
+   "province": "Girona",
+   "population": 6347,
+   "mayor": {
+    "name": "Martí Pujals Castelló",
+    "party": "CM",
+    "since": "2023-06-17"
+   },
+   "municipal": {
+    "electorate": 4044,
+    "voters": 2498,
+    "nullVotes": 49,
+    "blankVotes": 47,
+    "listVotes": 2402,
+    "validVotes": 2449,
+    "seats": 13,
+    "censusPopulation": 5956,
+    "lists": [
+     {
+      "code": "172024233",
+      "short": "CM",
+      "name": "+ Tossa - Compromís Municipal",
+      "votes": 759,
+      "seats": 5
+     },
+     {
+      "code": "172024230",
+      "short": "TU-IdSELVA",
+      "name": "Tossa Unida - Independents de la Selva",
+      "votes": 554,
+      "seats": 3
+     },
+     {
+      "code": "172024232",
+      "short": "ENDAVANT TOSSA-FIC",
+      "name": "Endavant Tossa - FIC",
+      "votes": 520,
+      "seats": 3
+     },
+     {
+      "code": "172024231",
+      "short": "TOSSA SEMPRE!",
+      "name": "Tossa Sempre!",
+      "votes": 282,
+      "seats": 2
+     },
+     {
+      "code": "202386",
+      "short": "PP",
+      "name": "Partido Popular",
+      "votes": 133,
+      "seats": 0
+     },
+     {
+      "code": "193",
+      "short": "ERC-AM",
+      "name": "Esquerra Republicana de Catalunya - Acord Municipal",
+      "votes": 105,
+      "seats": 0
+     },
+     {
+      "code": "172024234",
+      "short": "PSC-CP",
+      "name": "Socialistes de Tossa - Partit dels Socialistes de Catalunya - Candidatura de Progrés",
+      "votes": 49,
+      "seats": 0
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 3945,
+    "voters": 2486,
+    "nullVotes": 41,
+    "blankVotes": 22,
+    "listVotes": 2423,
+    "validVotes": 2445,
+    "votes": {
+     "6": 715,
+     "10": 400,
+     "86": 328,
+     "693": 122,
+     "697": 1,
+     "1031": 473,
+     "1034": 3,
+     "1109": 73,
+     "1129": 44,
+     "1134": 1,
+     "1135": 247,
+     "1136": 16
+    }
+   },
+   "parliament": {
+    "electorate": 3981,
+    "voters": 2130,
+    "nullVotes": 25,
+    "blankVotes": 35,
+    "listVotes": 2070,
+    "validVotes": 2105,
+    "votes": {
+     "6": 494,
+     "10": 307,
+     "86": 208,
+     "301": 14,
+     "350": 0,
+     "693": 102,
+     "697": 0,
+     "1034": 1,
+     "1129": 40,
+     "1130": 88,
+     "1134": 1,
+     "1140": 65,
+     "1141": 71,
+     "1143": 671,
+     "1144": 8
+    }
+   }
+  },
+  {
+   "code": "08075",
+   "idescat": "080752",
+   "slug": "dosrius",
+   "name": "Dosrius",
+   "comarca": "Maresme",
+   "province": "Barcelona",
+   "population": 6287,
+   "mayor": {
+    "name": "Silvia V. Garrido Galera",
+    "party": "PSC-CP",
+    "since": "2023-06-17"
+   },
+   "municipal": {
+    "electorate": 4542,
+    "voters": 2528,
+    "nullVotes": 31,
+    "blankVotes": 47,
+    "listVotes": 2450,
+    "validVotes": 2497,
+    "seats": 13,
+    "censusPopulation": 5710,
+    "lists": [
+     {
+      "code": "842",
+      "short": "PSC-CP",
+      "name": "Partit dels Socialistes de Catalunya - Candidatura de Progrés",
+      "votes": 919,
+      "seats": 5
+     },
+     {
+      "code": "193",
+      "short": "ERC-AM",
+      "name": "Esquerra Republicana de Catalunya - Acord Municipal",
+      "votes": 559,
+      "seats": 3
+     },
+     {
+      "code": "80754231",
+      "short": "CM",
+      "name": "Junts per Catalunya - CM",
+      "votes": 336,
+      "seats": 2
+     },
+     {
+      "code": "202386",
+      "short": "PP",
+      "name": "Partido Popular",
+      "votes": 243,
+      "seats": 1
+     },
+     {
+      "code": "80754230",
+      "short": "LA PAC",
+      "name": "La Plataforma Alternativa Ciudadana de Dosrius",
+      "votes": 224,
+      "seats": 1
+     },
+     {
+      "code": "80754232",
+      "short": "SDP",
+      "name": "Som Del Poble",
+      "votes": 169,
+      "seats": 1
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 4514,
+    "voters": 2956,
+    "nullVotes": 31,
+    "blankVotes": 18,
+    "listVotes": 2907,
+    "validVotes": 2925,
+    "votes": {
+     "6": 878,
+     "10": 456,
+     "86": 383,
+     "693": 319,
+     "697": 0,
+     "1031": 312,
+     "1034": 1,
+     "1109": 70,
+     "1129": 46,
+     "1134": 12,
+     "1135": 419,
+     "1136": 11
+    }
+   },
+   "parliament": {
+    "electorate": 4628,
+    "voters": 2531,
+    "nullVotes": 23,
+    "blankVotes": 24,
+    "listVotes": 2484,
+    "validVotes": 2508,
+    "votes": {
+     "6": 587,
+     "10": 401,
+     "86": 213,
+     "301": 16,
+     "350": 2,
+     "693": 293,
+     "697": 2,
+     "1034": 3,
+     "1129": 55,
+     "1130": 81,
+     "1134": 15,
+     "1140": 118,
+     "1141": 96,
+     "1142": 0,
+     "1143": 588,
+     "1144": 14
+    }
+   }
+  },
+  {
+   "code": "08140",
+   "idescat": "081402",
+   "slug": "navarcles",
+   "name": "Navarcles",
+   "comarca": "Bages",
+   "province": "Barcelona",
+   "population": 6276,
+   "mayor": {
+    "name": "Alba Pérez I Subirana",
+    "party": "",
+    "since": "2023-06-17"
+   },
+   "municipal": {
+    "electorate": 4856,
+    "voters": 2430,
+    "nullVotes": 75,
+    "blankVotes": 66,
+    "listVotes": 2289,
+    "validVotes": 2355,
+    "seats": 13,
+    "censusPopulation": 6067,
+    "lists": [
+     {
+      "code": "81404230",
+      "short": "ARA-AM",
+      "name": "Ara Navarcles - Acord Municipal",
+      "votes": 911,
+      "seats": 6
+     },
+     {
+      "code": "81404232",
+      "short": "CM",
+      "name": "Junts per Catalunya Navarcles - Compromís Municipal",
+      "votes": 583,
+      "seats": 3
+     },
+     {
+      "code": "842",
+      "short": "PSC-CP",
+      "name": "Partit dels Socialistes de Catalunya - Candidatura de Progrés",
+      "votes": 435,
+      "seats": 2
+     },
+     {
+      "code": "81404231",
+      "short": "NECP-C",
+      "name": "Navarcles En Comú Podem - Confluència",
+      "votes": 360,
+      "seats": 2
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 4850,
+    "voters": 3121,
+    "nullVotes": 41,
+    "blankVotes": 31,
+    "listVotes": 3049,
+    "validVotes": 3080,
+    "votes": {
+     "6": 973,
+     "10": 534,
+     "86": 257,
+     "693": 226,
+     "697": 0,
+     "1031": 532,
+     "1034": 3,
+     "1109": 70,
+     "1129": 25,
+     "1134": 3,
+     "1135": 390,
+     "1136": 36
+    }
+   },
+   "parliament": {
+    "electorate": 4845,
+    "voters": 2854,
+    "nullVotes": 27,
+    "blankVotes": 37,
+    "listVotes": 2790,
+    "validVotes": 2827,
+    "votes": {
+     "6": 633,
+     "10": 451,
+     "86": 183,
+     "301": 1,
+     "350": 1,
+     "693": 155,
+     "697": 1,
+     "1034": 8,
+     "1129": 14,
+     "1130": 259,
+     "1134": 12,
+     "1140": 133,
+     "1141": 91,
+     "1142": 1,
+     "1143": 823,
+     "1144": 24
+    }
+   }
+  },
+  {
+   "code": "08141",
+   "idescat": "081419",
+   "slug": "navas",
+   "name": "Navàs",
+   "comarca": "Bages",
+   "province": "Barcelona",
+   "population": 6238,
+   "mayor": {
+    "name": "Jaume Casals Ció",
+    "party": "",
+    "since": "2023-06-17"
+   },
+   "municipal": {
+    "electorate": 4632,
+    "voters": 2699,
+    "nullVotes": 72,
+    "blankVotes": 76,
+    "listVotes": 2551,
+    "validVotes": 2627,
+    "seats": 13,
+    "censusPopulation": 6018,
+    "lists": [
+     {
+      "code": "81414230",
+      "short": "CUP-AMUNT",
+      "name": "Candidatura d'Unitat Popular Navàs - Alternativa Municipalista",
+      "votes": 999,
+      "seats": 5
+     },
+     {
+      "code": "193",
+      "short": "ERC-AM",
+      "name": "Esquerra Republicana de Catalunya - Acord Municipal",
+      "votes": 745,
+      "seats": 4
+     },
+     {
+      "code": "842",
+      "short": "PSC-CP",
+      "name": "Partit dels Socialistes de Catalunya - Candidatura de Progrés",
+      "votes": 459,
+      "seats": 2
+     },
+     {
+      "code": "81414231",
+      "short": "CM",
+      "name": "Junts per Navàs - Compromís Municipal",
+      "votes": 348,
+      "seats": 2
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 4602,
+    "voters": 3014,
+    "nullVotes": 29,
+    "blankVotes": 29,
+    "listVotes": 2956,
+    "validVotes": 2985,
+    "votes": {
+     "6": 857,
+     "10": 650,
+     "86": 213,
+     "693": 150,
+     "697": 2,
+     "1031": 566,
+     "1034": 2,
+     "1109": 250,
+     "1129": 22,
+     "1134": 3,
+     "1135": 216,
+     "1136": 25
+    }
+   },
+   "parliament": {
+    "electorate": 4625,
+    "voters": 2818,
+    "nullVotes": 48,
+    "blankVotes": 44,
+    "listVotes": 2726,
+    "validVotes": 2770,
+    "votes": {
+     "6": 539,
+     "10": 409,
+     "86": 149,
+     "301": 5,
+     "350": 0,
+     "693": 120,
+     "697": 2,
+     "1034": 2,
+     "1129": 25,
+     "1130": 224,
+     "1134": 3,
+     "1140": 57,
+     "1141": 193,
+     "1142": 0,
+     "1143": 975,
+     "1144": 23
+    }
+   }
+  },
+  {
+   "code": "08010",
+   "idescat": "080109",
+   "slug": "artes",
+   "name": "Artés",
+   "comarca": "Bages",
+   "province": "Barcelona",
+   "population": 6225,
+   "mayor": {
+    "name": "Enric Forcada I Valiente",
+    "party": "",
+    "since": "2023-06-17"
+   },
+   "municipal": {
+    "electorate": 4360,
+    "voters": 2422,
+    "nullVotes": 93,
+    "blankVotes": 101,
+    "listVotes": 2228,
+    "validVotes": 2329,
+    "seats": 13,
+    "censusPopulation": 5902,
+    "lists": [
+     {
+      "code": "193",
+      "short": "ERC-AM",
+      "name": "Esquerra Republicana de Catalunya - Acord Municipal",
+      "votes": 1201,
+      "seats": 8
+     },
+     {
+      "code": "80104230",
+      "short": "GdA",
+      "name": "Gent d'Artés",
+      "votes": 405,
+      "seats": 2
+     },
+     {
+      "code": "301",
+      "short": "Cs",
+      "name": "Ciutadans - Partido de la Ciudadanía",
+      "votes": 273,
+      "seats": 1
+     },
+     {
+      "code": "80104231",
+      "short": "CM",
+      "name": "Junts Despertem Artés - Compromís Municipal",
+      "votes": 195,
+      "seats": 1
+     },
+     {
+      "code": "842",
+      "short": "PSC-CP",
+      "name": "Partit dels Socialistes de Catalunya - Candidatura de Progrés",
+      "votes": 154,
+      "seats": 1
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 4353,
+    "voters": 2749,
+    "nullVotes": 32,
+    "blankVotes": 21,
+    "listVotes": 2696,
+    "validVotes": 2717,
+    "votes": {
+     "6": 720,
+     "10": 587,
+     "86": 190,
+     "693": 198,
+     "697": 1,
+     "1031": 490,
+     "1034": 6,
+     "1109": 191,
+     "1129": 32,
+     "1134": 7,
+     "1135": 244,
+     "1136": 30
+    }
+   },
+   "parliament": {
+    "electorate": 4383,
+    "voters": 2661,
+    "nullVotes": 36,
+    "blankVotes": 29,
+    "listVotes": 2596,
+    "validVotes": 2625,
+    "votes": {
+     "6": 441,
+     "10": 416,
+     "86": 110,
+     "301": 43,
+     "350": 1,
+     "693": 160,
+     "697": 0,
+     "1034": 6,
+     "1129": 20,
+     "1130": 277,
+     "1134": 9,
+     "1140": 78,
+     "1141": 173,
+     "1142": 0,
+     "1143": 843,
+     "1144": 19
+    }
+   }
+  },
+  {
+   "code": "08274",
+   "idescat": "082747",
+   "slug": "suria",
+   "name": "Súria",
+   "comarca": "Bages",
+   "province": "Barcelona",
+   "population": 6200,
+   "mayor": {
+    "name": "Albert Coberó Aymerich",
+    "party": "PSC-CP",
+    "since": "2023-06-17"
+   },
+   "municipal": {
+    "electorate": 4598,
+    "voters": 2754,
+    "nullVotes": 22,
+    "blankVotes": 39,
+    "listVotes": 2693,
+    "validVotes": 2732,
+    "seats": 13,
+    "censusPopulation": 5921,
+    "lists": [
+     {
+      "code": "842",
+      "short": "PSC-CP",
+      "name": "Partit dels Socialistes de Catalunya - Candidatura de Progrés",
+      "votes": 1321,
+      "seats": 7
+     },
+     {
+      "code": "193",
+      "short": "ERC-AM",
+      "name": "Esquerra Republicana de Catalunya - Acord Municipal",
+      "votes": 602,
+      "seats": 3
+     },
+     {
+      "code": "82744230",
+      "short": "FS-AMUNT",
+      "name": "Fem Súria - Alternativa Municipalista",
+      "votes": 365,
+      "seats": 1
+     },
+     {
+      "code": "82744232",
+      "short": "CM",
+      "name": "Junts per Súria - Compromís Municipal",
+      "votes": 221,
+      "seats": 1
+     },
+     {
+      "code": "82744231",
+      "short": "GIIS",
+      "name": "Grup Independent de Suria",
+      "votes": 184,
+      "seats": 1
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 4585,
+    "voters": 3013,
+    "nullVotes": 24,
+    "blankVotes": 13,
+    "listVotes": 2976,
+    "validVotes": 2989,
+    "votes": {
+     "6": 1231,
+     "10": 511,
+     "86": 237,
+     "693": 182,
+     "697": 1,
+     "1031": 346,
+     "1034": 4,
+     "1109": 108,
+     "1129": 17,
+     "1134": 6,
+     "1135": 312,
+     "1136": 21
+    }
+   },
+   "parliament": {
+    "electorate": 4620,
+    "voters": 2812,
+    "nullVotes": 24,
+    "blankVotes": 32,
+    "listVotes": 2756,
+    "validVotes": 2788,
+    "votes": {
+     "6": 912,
+     "10": 420,
+     "86": 189,
+     "301": 12,
+     "350": 3,
+     "693": 171,
+     "697": 0,
+     "1034": 6,
+     "1129": 27,
+     "1130": 100,
+     "1134": 12,
+     "1140": 90,
+     "1141": 109,
+     "1142": 2,
+     "1143": 691,
+     "1144": 12
+    }
+   }
+  },
+  {
+   "code": "08289",
+   "idescat": "082896",
+   "slug": "torrelles-de-llobregat",
+   "name": "Torrelles de Llobregat",
+   "comarca": "Baix Llobregat",
+   "province": "Barcelona",
+   "population": 6170,
+   "mayor": {
+    "name": "Margaleff Falgàs Marco",
+    "party": "CM",
+    "since": "2025-09-18"
+   },
+   "municipal": {
+    "electorate": 4747,
+    "voters": 2352,
+    "nullVotes": 38,
+    "blankVotes": 58,
+    "listVotes": 2256,
+    "validVotes": 2314,
+    "seats": 13,
+    "censusPopulation": 6186,
+    "lists": [
+     {
+      "code": "82894231",
+      "short": "CAT",
+      "name": "Compromís I Acord per Torrelles",
+      "votes": 800,
+      "seats": 5
+     },
+     {
+      "code": "82894230",
+      "short": "CM",
+      "name": "Junts per Torrelles - Compromís Municipal",
+      "votes": 714,
+      "seats": 4
+     },
+     {
+      "code": "193",
+      "short": "ERC-AM",
+      "name": "Esquerra Republicana de Catalunya - Acord Municipal",
+      "votes": 376,
+      "seats": 2
+     },
+     {
+      "code": "842",
+      "short": "PSC-CP",
+      "name": "Partit dels Socialistes de Catalunya - Candidatura de Progrés",
+      "votes": 366,
+      "seats": 2
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 4684,
+    "voters": 3163,
+    "nullVotes": 31,
+    "blankVotes": 42,
+    "listVotes": 3090,
+    "validVotes": 3132,
+    "votes": {
+     "6": 857,
+     "10": 626,
+     "86": 271,
+     "693": 207,
+     "697": 0,
+     "1031": 361,
+     "1034": 4,
+     "1109": 170,
+     "1129": 30,
+     "1134": 7,
+     "1135": 538,
+     "1136": 19
+    }
+   },
+   "parliament": {
+    "electorate": 4671,
+    "voters": 2735,
+    "nullVotes": 18,
+    "blankVotes": 41,
+    "listVotes": 2676,
+    "validVotes": 2717,
+    "votes": {
+     "6": 565,
+     "10": 538,
+     "86": 184,
+     "301": 11,
+     "350": 1,
+     "693": 172,
+     "697": 2,
+     "1034": 1,
+     "1129": 31,
+     "1130": 83,
+     "1134": 13,
+     "1140": 181,
+     "1141": 183,
+     "1142": 1,
+     "1143": 685,
+     "1144": 25
+    }
+   }
+  },
+  {
+   "code": "25234",
+   "idescat": "252347",
+   "slug": "tremp",
+   "name": "Tremp",
+   "comarca": "Pallars Jussà",
+   "province": "Lleida",
+   "population": 6123,
+   "mayor": {
+    "name": "Sílvia Romero Galera",
+    "party": "CXT-CP",
+    "since": "2023-06-17"
+   },
+   "municipal": {
+    "electorate": 4224,
+    "voters": 2597,
+    "nullVotes": 64,
+    "blankVotes": 46,
+    "listVotes": 2487,
+    "validVotes": 2533,
+    "seats": 13,
+    "censusPopulation": 5847,
+    "lists": [
+     {
+      "code": "252344232",
+      "short": "CXT-CP",
+      "name": "Compromís x Tremp - Candidatura de Progrés",
+      "votes": 1253,
+      "seats": 7
+     },
+     {
+      "code": "252344230",
+      "short": "JUNTS PER TREMP-COMPROMÍS MUNICIPAL",
+      "name": "Junts per Tremp - Compromís Municipal",
+      "votes": 503,
+      "seats": 3
+     },
+     {
+      "code": "193",
+      "short": "ERC-AM",
+      "name": "Esquerra Republicana de Catalunya - Acord Municipal",
+      "votes": 371,
+      "seats": 2
+     },
+     {
+      "code": "252344233",
+      "short": "ARA PL",
+      "name": "Ara Tremp Pacte Local",
+      "votes": 217,
+      "seats": 1
+     },
+     {
+      "code": "202386",
+      "short": "PP",
+      "name": "Partido Popular",
+      "votes": 81,
+      "seats": 0
+     },
+     {
+      "code": "693",
+      "short": "VOX",
+      "name": "VOX",
+      "votes": 37,
+      "seats": 0
+     },
+     {
+      "code": "252344231",
+      "short": "SUMEM PER TREMP-CONFLUÈNCIA",
+      "name": "Sumem per Tremp - Confluència",
+      "votes": 25,
+      "seats": 0
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 4161,
+    "voters": 2545,
+    "nullVotes": 33,
+    "blankVotes": 23,
+    "listVotes": 2489,
+    "validVotes": 2512,
+    "votes": {
+     "6": 904,
+     "10": 350,
+     "86": 237,
+     "643": 4,
+     "693": 120,
+     "697": 4,
+     "1031": 535,
+     "1034": 2,
+     "1109": 81,
+     "1129": 11,
+     "1134": 8,
+     "1135": 215,
+     "1136": 18
+    }
+   },
+   "parliament": {
+    "electorate": 4181,
+    "voters": 2295,
+    "nullVotes": 39,
+    "blankVotes": 36,
+    "listVotes": 2220,
+    "validVotes": 2256,
+    "votes": {
+     "6": 546,
+     "10": 304,
+     "86": 160,
+     "301": 6,
+     "350": 3,
+     "546": 1,
+     "693": 92,
+     "697": 3,
+     "1034": 1,
+     "1130": 132,
+     "1134": 5,
+     "1140": 55,
+     "1141": 109,
+     "1143": 788,
+     "1144": 15
+    }
+   }
+  },
+  {
+   "code": "17164",
+   "idescat": "171642",
+   "slug": "sant-hilari-sacalm",
+   "name": "Sant Hilari Sacalm",
+   "comarca": "Selva",
+   "province": "Girona",
+   "population": 6069,
+   "mayor": {
+    "name": "Jordi Rotllant Cors",
+    "party": "",
+    "since": "2023-06-17"
+   },
+   "municipal": {
+    "electorate": 4012,
+    "voters": 2181,
+    "nullVotes": 66,
+    "blankVotes": 67,
+    "listVotes": 2048,
+    "validVotes": 2115,
+    "seats": 13,
+    "censusPopulation": 5836,
+    "lists": [
+     {
+      "code": "171644230",
+      "short": "PIG-IdSelva",
+      "name": "Partit Independent de les Guilleries Independents de la Selva",
+      "votes": 953,
+      "seats": 7
+     },
+     {
+      "code": "171644231",
+      "short": "ERC-AM",
+      "name": "Esquerra Sant Hilari - Acord Municipal",
+      "votes": 646,
+      "seats": 4
+     },
+     {
+      "code": "171644232",
+      "short": "CM",
+      "name": "Junts per Sant Hilari Sacalm - Compromís Municipal",
+      "votes": 396,
+      "seats": 2
+     },
+     {
+      "code": "842",
+      "short": "PSC-CP",
+      "name": "Partit dels Socialistes de Catalunya - Candidatura de Progrés",
+      "votes": 53,
+      "seats": 0
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 3977,
+    "voters": 2319,
+    "nullVotes": 42,
+    "blankVotes": 16,
+    "listVotes": 2261,
+    "validVotes": 2277,
+    "votes": {
+     "6": 587,
+     "10": 462,
+     "86": 109,
+     "693": 82,
+     "697": 1,
+     "1031": 605,
+     "1034": 6,
+     "1109": 173,
+     "1129": 16,
+     "1134": 15,
+     "1135": 174,
+     "1136": 31
+    }
+   },
+   "parliament": {
+    "electorate": 4013,
+    "voters": 2353,
+    "nullVotes": 29,
+    "blankVotes": 27,
+    "listVotes": 2297,
+    "validVotes": 2324,
+    "votes": {
+     "6": 377,
+     "10": 298,
+     "86": 59,
+     "301": 1,
+     "350": 1,
+     "693": 61,
+     "697": 2,
+     "1034": 1,
+     "1129": 10,
+     "1130": 324,
+     "1134": 3,
+     "1140": 36,
+     "1141": 113,
+     "1143": 1003,
+     "1144": 8
+    }
+   }
+  },
+  {
+   "code": "43907",
+   "idescat": "439076",
+   "slug": "la-canonja",
+   "name": "la Canonja",
+   "comarca": "Tarragonès",
+   "province": "Tarragona",
+   "population": 6001,
+   "mayor": {
+    "name": "Roc Muñoz Martínez",
+    "party": "PSC-CP",
+    "since": "2023-06-17"
+   },
+   "municipal": {
+    "electorate": 4442,
+    "voters": 2507,
+    "nullVotes": 17,
+    "blankVotes": 21,
+    "listVotes": 2469,
+    "validVotes": 2490,
+    "seats": 13,
+    "censusPopulation": 5873,
+    "lists": [
+     {
+      "code": "842",
+      "short": "PSC-CP",
+      "name": "Partit dels Socialistes de Catalunya - Candidatura de Progrés",
+      "votes": 1525,
+      "seats": 10
+     },
+     {
+      "code": "439074231",
+      "short": "SPC-AMUNT",
+      "name": "Som Poble la Canonja - Alternativa Municipalista",
+      "votes": 346,
+      "seats": 2
+     },
+     {
+      "code": "193",
+      "short": "ERC-AM",
+      "name": "Esquerra Republicana de Catalunya - Acord Municipal",
+      "votes": 142,
+      "seats": 1
+     },
+     {
+      "code": "439074233",
+      "short": "CM",
+      "name": "Junts per la Canonja - Compromís Municipal",
+      "votes": 133,
+      "seats": 0
+     },
+     {
+      "code": "693",
+      "short": "VOX",
+      "name": "VOX",
+      "votes": 110,
+      "seats": 0
+     },
+     {
+      "code": "202386",
+      "short": "PP",
+      "name": "Partido Popular",
+      "votes": 108,
+      "seats": 0
+     },
+     {
+      "code": "439074232",
+      "short": "LCECP-C",
+      "name": "La Canonja En Comú Podem - Confluència",
+      "votes": 91,
+      "seats": 0
+     },
+     {
+      "code": "301",
+      "short": "Cs",
+      "name": "Ciutadans - Partido de la Ciudadanía",
+      "votes": 14,
+      "seats": 0
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 4441,
+    "voters": 2942,
+    "nullVotes": 27,
+    "blankVotes": 27,
+    "listVotes": 2888,
+    "validVotes": 2915,
+    "votes": {
+     "6": 1222,
+     "10": 188,
+     "86": 454,
+     "693": 419,
+     "697": 0,
+     "1031": 134,
+     "1034": 6,
+     "1109": 22,
+     "1129": 45,
+     "1134": 11,
+     "1135": 383,
+     "1136": 4,
+     "1137": 0,
+     "1138": 0
+    }
+   },
+   "parliament": {
+    "electorate": 4449,
+    "voters": 2374,
+    "nullVotes": 19,
+    "blankVotes": 36,
+    "listVotes": 2319,
+    "validVotes": 2355,
+    "votes": {
+     "6": 905,
+     "10": 213,
+     "86": 318,
+     "301": 19,
+     "350": 3,
+     "546": 1,
+     "693": 363,
+     "697": 1,
+     "1018": 0,
+     "1034": 1,
+     "1129": 41,
+     "1130": 42,
+     "1134": 14,
+     "1140": 121,
+     "1141": 54,
+     "1142": 0,
+     "1143": 218,
+     "1144": 5
+    }
+   }
+  },
+  {
+   "code": "17181",
+   "idescat": "171812",
+   "slug": "santa-cristina-d-aro",
+   "name": "Santa Cristina d'Aro",
+   "comarca": "Baix Empordà",
+   "province": "Girona",
+   "population": 5987,
+   "mayor": {
+    "name": "Josep Xifre Deulofeu",
+    "party": "",
+    "since": "2023-06-17"
+   },
+   "municipal": {
+    "electorate": 3999,
+    "voters": 2299,
+    "nullVotes": 37,
+    "blankVotes": 18,
+    "listVotes": 2244,
+    "validVotes": 2262,
+    "seats": 13,
+    "censusPopulation": 5585,
+    "lists": [
+     {
+      "code": "171814230",
+      "short": "TXSCA-TE",
+      "name": "Tots per Santa Cristina d'Aro - Tots Empordà",
+      "votes": 949,
+      "seats": 7
+     },
+     {
+      "code": "193",
+      "short": "ERC-AM",
+      "name": "Esquerra Republicana de Catalunya - Acord Municipal",
+      "votes": 349,
+      "seats": 2
+     },
+     {
+      "code": "171814231",
+      "short": "GNR-C",
+      "name": "Guanyarem Santa Cristina des del Carrer - Confluència",
+      "votes": 276,
+      "seats": 2
+     },
+     {
+      "code": "171814232",
+      "short": "CM",
+      "name": "Junts per Santa Cristina - Compromís Municipal",
+      "votes": 205,
+      "seats": 1
+     },
+     {
+      "code": "842",
+      "short": "PSC-CP",
+      "name": "Partit dels Socialistes de Catalunya - Candidatura de Progrés",
+      "votes": 191,
+      "seats": 1
+     },
+     {
+      "code": "1106",
+      "short": "SUPORT",
+      "name": "Suport Civil Català",
+      "votes": 128,
+      "seats": 0
+     },
+     {
+      "code": "202386",
+      "short": "PP",
+      "name": "Partido Popular",
+      "votes": 108,
+      "seats": 0
+     },
+     {
+      "code": "301",
+      "short": "Cs",
+      "name": "Ciutadans - Partido de la Ciudadanía",
+      "votes": 38,
+      "seats": 0
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 3746,
+    "voters": 2434,
+    "nullVotes": 26,
+    "blankVotes": 20,
+    "listVotes": 2388,
+    "validVotes": 2408,
+    "votes": {
+     "6": 678,
+     "10": 375,
+     "86": 295,
+     "693": 179,
+     "697": 0,
+     "1031": 423,
+     "1034": 6,
+     "1109": 55,
+     "1129": 41,
+     "1134": 2,
+     "1135": 300,
+     "1136": 34
+    }
+   },
+   "parliament": {
+    "electorate": 3868,
+    "voters": 2212,
+    "nullVotes": 25,
+    "blankVotes": 26,
+    "listVotes": 2161,
+    "validVotes": 2187,
+    "votes": {
+     "6": 463,
+     "10": 294,
+     "86": 190,
+     "301": 12,
+     "350": 0,
+     "693": 146,
+     "697": 3,
+     "1034": 3,
+     "1129": 35,
+     "1130": 176,
+     "1134": 3,
+     "1140": 96,
+     "1141": 57,
+     "1143": 681,
+     "1144": 2
+    }
+   }
+  },
+  {
+   "code": "17008",
+   "idescat": "170084",
+   "slug": "angles",
+   "name": "Anglès",
+   "comarca": "Selva",
+   "province": "Girona",
+   "population": 5944,
+   "mayor": {
+    "name": "Jordi Pibernat Casas",
+    "party": "CM",
+    "since": "2023-06-17"
+   },
+   "municipal": {
+    "electorate": 3727,
+    "voters": 1646,
+    "nullVotes": 79,
+    "blankVotes": 58,
+    "listVotes": 1509,
+    "validVotes": 1567,
+    "seats": 13,
+    "censusPopulation": 5682,
+    "lists": [
+     {
+      "code": "170084230",
+      "short": "CM",
+      "name": "Fem Anglès - Compromís Municipal",
+      "votes": 1195,
+      "seats": 11
+     },
+     {
+      "code": "193",
+      "short": "ERC-AM",
+      "name": "Esquerra Republicana de Catalunya - Acord Municipal",
+      "votes": 211,
+      "seats": 2
+     },
+     {
+      "code": "170084231",
+      "short": "CP",
+      "name": "Independents X Anglès - Candidatura de Progrés",
+      "votes": 103,
+      "seats": 0
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 3686,
+    "voters": 2136,
+    "nullVotes": 28,
+    "blankVotes": 15,
+    "listVotes": 2093,
+    "validVotes": 2108,
+    "votes": {
+     "6": 523,
+     "10": 316,
+     "86": 120,
+     "693": 117,
+     "697": 2,
+     "1031": 653,
+     "1034": 4,
+     "1109": 142,
+     "1129": 15,
+     "1134": 3,
+     "1135": 179,
+     "1136": 19
+    }
+   },
+   "parliament": {
+    "electorate": 3729,
+    "voters": 2138,
+    "nullVotes": 12,
+    "blankVotes": 16,
+    "listVotes": 2110,
+    "validVotes": 2126,
+    "votes": {
+     "6": 281,
+     "10": 187,
+     "86": 45,
+     "301": 2,
+     "350": 0,
+     "693": 81,
+     "697": 0,
+     "1034": 3,
+     "1129": 14,
+     "1130": 250,
+     "1134": 4,
+     "1140": 36,
+     "1141": 114,
+     "1143": 1085,
+     "1144": 8
+    }
+   }
+  },
+  {
+   "code": "43012",
+   "idescat": "430120",
+   "slug": "altafulla",
+   "name": "Altafulla",
+   "comarca": "Tarragonès",
+   "province": "Tarragona",
+   "population": 5870,
+   "mayor": {
+    "name": "Jordi Molinera Poblet",
+    "party": "",
+    "since": "2023-06-17"
+   },
+   "municipal": {
+    "electorate": 4145,
+    "voters": 2651,
+    "nullVotes": 36,
+    "blankVotes": 42,
+    "listVotes": 2573,
+    "validVotes": 2615,
+    "seats": 13,
+    "censusPopulation": 5609,
+    "lists": [
+     {
+      "code": "430124231",
+      "short": "L'EINA-ERC-AM",
+      "name": "L'Esquerra Independentista d'Altafulla - Esquerra Republicana de Catalunya - Acord Municipal",
+      "votes": 847,
+      "seats": 5
+     },
+     {
+      "code": "430124230",
+      "short": "AA-C",
+      "name": "Alternativa Altafulla - Confluència",
+      "votes": 818,
+      "seats": 5
+     },
+     {
+      "code": "430124232",
+      "short": "CM",
+      "name": "Junts per Altafulla - Compromís Municipal",
+      "votes": 355,
+      "seats": 2
+     },
+     {
+      "code": "842",
+      "short": "PSC-CP",
+      "name": "Partit dels Socialistes de Catalunya - Candidatura de Progrés",
+      "votes": 248,
+      "seats": 1
+     },
+     {
+      "code": "430124233",
+      "short": "ARA PL",
+      "name": "Ara Altafulla",
+      "votes": 154,
+      "seats": 0
+     },
+     {
+      "code": "202386",
+      "short": "PP",
+      "name": "Partido Popular",
+      "votes": 151,
+      "seats": 0
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 4049,
+    "voters": 2986,
+    "nullVotes": 27,
+    "blankVotes": 18,
+    "listVotes": 2941,
+    "validVotes": 2959,
+    "votes": {
+     "6": 842,
+     "10": 500,
+     "86": 400,
+     "693": 196,
+     "697": 1,
+     "1031": 348,
+     "1034": 4,
+     "1109": 80,
+     "1129": 23,
+     "1134": 0,
+     "1135": 516,
+     "1136": 29,
+     "1137": 1,
+     "1138": 1
+    }
+   },
+   "parliament": {
+    "electorate": 4112,
+    "voters": 2695,
+    "nullVotes": 26,
+    "blankVotes": 28,
+    "listVotes": 2641,
+    "validVotes": 2669,
+    "votes": {
+     "6": 690,
+     "10": 399,
+     "86": 318,
+     "301": 9,
+     "350": 1,
+     "546": 0,
+     "693": 145,
+     "697": 4,
+     "1018": 2,
+     "1034": 1,
+     "1129": 26,
+     "1130": 81,
+     "1134": 7,
+     "1140": 191,
+     "1141": 119,
+     "1142": 2,
+     "1143": 635,
+     "1144": 11
+    }
+   }
+  },
+  {
+   "code": "25243",
+   "idescat": "252430",
+   "slug": "vielha-e-mijaran",
+   "name": "Vielha e Mijaran",
+   "comarca": "Aran",
+   "province": "Lleida",
+   "population": 5865,
+   "mayor": {
+    "name": "Juan Antonio Serrano Iglesias",
+    "party": "UA-PSC-CP",
+    "since": "2023-06-17"
+   },
+   "municipal": {
+    "electorate": 3863,
+    "voters": 2285,
+    "nullVotes": 41,
+    "blankVotes": 48,
+    "listVotes": 2196,
+    "validVotes": 2244,
+    "seats": 13,
+    "censusPopulation": 5581,
+    "lists": [
+     {
+      "code": "1118",
+      "short": "UA-PSC-CP",
+      "name": "Unitat d'Aran - Partit dels Socialistes de Catalunya - Candidatura de Progrés",
+      "votes": 1188,
+      "seats": 8
+     },
+     {
+      "code": "2023434",
+      "short": "CDA-PNA",
+      "name": "Convergéncia Democratica Aranesa - Partit Nacionalista Aranés",
+      "votes": 577,
+      "seats": 3
+     },
+     {
+      "code": "1117",
+      "short": "AA-AM",
+      "name": "Aran Amassa - Acord Municipal",
+      "votes": 308,
+      "seats": 2
+     },
+     {
+      "code": "693",
+      "short": "VOX",
+      "name": "VOX",
+      "votes": 62,
+      "seats": 0
+     },
+     {
+      "code": "202386",
+      "short": "PP",
+      "name": "Partido Popular",
+      "votes": 61,
+      "seats": 0
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 3758,
+    "voters": 2307,
+    "nullVotes": 32,
+    "blankVotes": 29,
+    "listVotes": 2246,
+    "validVotes": 2275,
+    "votes": {
+     "6": 813,
+     "10": 207,
+     "86": 573,
+     "643": 2,
+     "693": 219,
+     "697": 0,
+     "1031": 150,
+     "1034": 8,
+     "1109": 20,
+     "1129": 16,
+     "1134": 3,
+     "1135": 221,
+     "1136": 14
+    }
+   },
+   "parliament": {
+    "electorate": 3754,
+    "voters": 1751,
+    "nullVotes": 21,
+    "blankVotes": 29,
+    "listVotes": 1701,
+    "validVotes": 1730,
+    "votes": {
+     "6": 638,
+     "10": 192,
+     "86": 328,
+     "301": 13,
+     "350": 3,
+     "546": 0,
+     "693": 152,
+     "697": 0,
+     "1034": 5,
+     "1130": 29,
+     "1134": 11,
+     "1140": 44,
+     "1141": 36,
+     "1143": 249,
+     "1144": 1
+    }
+   }
+  },
+  {
+   "code": "43093",
+   "idescat": "430939",
+   "slug": "mora-d-ebre",
+   "name": "Móra d'Ebre",
+   "comarca": "Ribera d'Ebre",
+   "province": "Tarragona",
+   "population": 5811,
+   "mayor": {
+    "name": "Rubén Biarnés Renedo",
+    "party": "CM",
+    "since": "2023-06-17"
+   },
+   "municipal": {
+    "electorate": 3868,
+    "voters": 2394,
+    "nullVotes": 61,
+    "blankVotes": 53,
+    "listVotes": 2280,
+    "validVotes": 2333,
+    "seats": 13,
+    "censusPopulation": 5585,
+    "lists": [
+     {
+      "code": "430934231",
+      "short": "CM",
+      "name": "Junts per Móra D'Ebre-Compromís Municipal",
+      "votes": 871,
+      "seats": 6
+     },
+     {
+      "code": "193",
+      "short": "ERC-AM",
+      "name": "Esquerra Republicana de Catalunya - Acord Municipal",
+      "votes": 553,
+      "seats": 3
+     },
+     {
+      "code": "430934233",
+      "short": "FM-AMUNT",
+      "name": "Fem Móra - Alternativa Municipalista",
+      "votes": 217,
+      "seats": 1
+     },
+     {
+      "code": "842",
+      "short": "PSC-CP",
+      "name": "Partit dels Socialistes de Catalunya - Candidatura de Progrés",
+      "votes": 200,
+      "seats": 1
+     },
+     {
+      "code": "430934232",
+      "short": "EPM-ARA PL",
+      "name": "Endavant per Móra - Ara Pacte Local",
+      "votes": 155,
+      "seats": 1
+     },
+     {
+      "code": "430934230",
+      "short": "UPM-FIC",
+      "name": "Units per Móra - Federació d'Independents de Catalunya",
+      "votes": 149,
+      "seats": 1
+     },
+     {
+      "code": "202386",
+      "short": "PP",
+      "name": "Partido Popular",
+      "votes": 135,
+      "seats": 0
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 3810,
+    "voters": 2407,
+    "nullVotes": 38,
+    "blankVotes": 14,
+    "listVotes": 2355,
+    "validVotes": 2369,
+    "votes": {
+     "6": 796,
+     "10": 437,
+     "86": 228,
+     "693": 137,
+     "697": 2,
+     "1031": 412,
+     "1034": 4,
+     "1109": 85,
+     "1129": 22,
+     "1134": 5,
+     "1135": 214,
+     "1136": 13,
+     "1137": 0,
+     "1138": 0
+    }
+   },
+   "parliament": {
+    "electorate": 3817,
+    "voters": 2121,
+    "nullVotes": 22,
+    "blankVotes": 32,
+    "listVotes": 2067,
+    "validVotes": 2099,
+    "votes": {
+     "6": 503,
+     "10": 392,
+     "86": 178,
+     "301": 3,
+     "350": 0,
+     "546": 1,
+     "693": 87,
+     "697": 1,
+     "1018": 6,
+     "1034": 5,
+     "1129": 16,
+     "1130": 111,
+     "1134": 3,
+     "1140": 69,
+     "1141": 88,
+     "1142": 0,
+     "1143": 600,
+     "1144": 4
+    }
+   }
+  },
+  {
+   "code": "08235",
+   "idescat": "082359",
+   "slug": "sant-pol-de-mar",
+   "name": "Sant Pol de Mar",
+   "comarca": "Maresme",
+   "province": "Barcelona",
+   "population": 5793,
+   "mayor": {
+    "name": "Albert Zanca Brossa",
+    "party": "ERC-AM",
+    "since": "2025-06-25"
+   },
+   "municipal": {
+    "electorate": 4172,
+    "voters": 2595,
+    "nullVotes": 51,
+    "blankVotes": 38,
+    "listVotes": 2506,
+    "validVotes": 2544,
+    "seats": 13,
+    "censusPopulation": 5680,
+    "lists": [
+     {
+      "code": "82354230",
+      "short": "CM",
+      "name": "Junts per Catalunya - Sant Pol de Mar - Compromís Municipal",
+      "votes": 1118,
+      "seats": 6
+     },
+     {
+      "code": "193",
+      "short": "ERC-AM",
+      "name": "Esquerra Republicana de Catalunya - Acord Municipal",
+      "votes": 483,
+      "seats": 3
+     },
+     {
+      "code": "82354231",
+      "short": "MSP",
+      "name": "més SANT POL",
+      "votes": 386,
+      "seats": 2
+     },
+     {
+      "code": "82354232",
+      "short": "CUP-AMUNT",
+      "name": "Candidatura d'Unitat Popular Sant Pol de Mar - Alternativa Municipalista",
+      "votes": 332,
+      "seats": 2
+     },
+     {
+      "code": "842",
+      "short": "PSC-CP",
+      "name": "Partit dels Socialistes de Catalunya - Candidatura de Progrés",
+      "votes": 104,
+      "seats": 0
+     },
+     {
+      "code": "202386",
+      "short": "PP",
+      "name": "Partido Popular",
+      "votes": 83,
+      "seats": 0
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 4165,
+    "voters": 2852,
+    "nullVotes": 24,
+    "blankVotes": 22,
+    "listVotes": 2806,
+    "validVotes": 2828,
+    "votes": {
+     "6": 690,
+     "10": 538,
+     "86": 209,
+     "693": 85,
+     "697": 2,
+     "1031": 705,
+     "1034": 0,
+     "1109": 129,
+     "1129": 25,
+     "1134": 7,
+     "1135": 368,
+     "1136": 48
+    }
+   },
+   "parliament": {
+    "electorate": 4179,
+    "voters": 2707,
+    "nullVotes": 22,
+    "blankVotes": 26,
+    "listVotes": 2659,
+    "validVotes": 2685,
+    "votes": {
+     "6": 376,
+     "10": 501,
+     "86": 140,
+     "301": 8,
+     "350": 3,
+     "693": 73,
+     "697": 2,
+     "1034": 3,
+     "1129": 33,
+     "1130": 107,
+     "1134": 2,
+     "1140": 120,
+     "1141": 141,
+     "1142": 0,
+     "1143": 1127,
+     "1144": 23
+    }
+   }
+  },
+  {
+   "code": "43145",
+   "idescat": "431457",
+   "slug": "la-selva-del-camp",
+   "name": "la Selva del Camp",
+   "comarca": "Baix Camp",
+   "province": "Tarragona",
+   "population": 5732,
+   "mayor": {
+    "name": "Josep Masdeu Isern",
+    "party": "",
+    "since": "2023-06-17"
+   },
+   "municipal": {
+    "electorate": 4332,
+    "voters": 2793,
+    "nullVotes": 59,
+    "blankVotes": 39,
+    "listVotes": 2695,
+    "validVotes": 2734,
+    "seats": 13,
+    "censusPopulation": 5696,
+    "lists": [
+     {
+      "code": "842",
+      "short": "PSC-CP",
+      "name": "Partit dels Socialistes de Catalunya - Candidatura de Progrés",
+      "votes": 970,
+      "seats": 5
+     },
+     {
+      "code": "431454230",
+      "short": "CM",
+      "name": "Junts per la Selva Del Camp - Compromís Municipal",
+      "votes": 776,
+      "seats": 4
+     },
+     {
+      "code": "193",
+      "short": "ERC-AM",
+      "name": "Esquerra Republicana de Catalunya - Acord Municipal",
+      "votes": 544,
+      "seats": 2
+     },
+     {
+      "code": "1039",
+      "short": "CUP-AMUNT",
+      "name": "Candidatura d'Unitat Popular - Alternativa Municipalista",
+      "votes": 405,
+      "seats": 2
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 4319,
+    "voters": 3039,
+    "nullVotes": 39,
+    "blankVotes": 27,
+    "listVotes": 2973,
+    "validVotes": 3000,
+    "votes": {
+     "6": 1018,
+     "10": 504,
+     "86": 223,
+     "693": 206,
+     "697": 2,
+     "1031": 514,
+     "1034": 2,
+     "1109": 190,
+     "1129": 36,
+     "1134": 1,
+     "1135": 251,
+     "1136": 20,
+     "1137": 4,
+     "1138": 2
+    }
+   },
+   "parliament": {
+    "electorate": 4366,
+    "voters": 2799,
+    "nullVotes": 34,
+    "blankVotes": 38,
+    "listVotes": 2727,
+    "validVotes": 2765,
+    "votes": {
+     "6": 634,
+     "10": 485,
+     "86": 162,
+     "301": 7,
+     "350": 0,
+     "546": 3,
+     "693": 151,
+     "697": 1,
+     "1018": 0,
+     "1034": 6,
+     "1129": 32,
+     "1130": 121,
+     "1134": 3,
+     "1140": 110,
+     "1141": 226,
+     "1142": 0,
+     "1143": 767,
+     "1144": 19
+    }
+   }
+  },
+  {
+   "code": "43016",
+   "idescat": "430167",
+   "slug": "l-arboc",
+   "name": "l'Arboç",
+   "comarca": "Baix Penedès",
+   "province": "Tarragona",
+   "population": 5721,
+   "mayor": {
+    "name": "Joan Sans Freixas",
+    "party": "PSC-CP",
+    "since": "2023-06-17"
+   },
+   "municipal": {
+    "electorate": 3639,
+    "voters": 2382,
+    "nullVotes": 32,
+    "blankVotes": 16,
+    "listVotes": 2334,
+    "validVotes": 2350,
+    "seats": 13,
+    "censusPopulation": 5604,
+    "lists": [
+     {
+      "code": "842",
+      "short": "PSC-CP",
+      "name": "Partit dels Socialistes de Catalunya - Candidatura de Progrés",
+      "votes": 1115,
+      "seats": 7
+     },
+     {
+      "code": "430164230",
+      "short": "AxL´A",
+      "name": "Alternativa per L'Arboç",
+      "votes": 832,
+      "seats": 5
+     },
+     {
+      "code": "193",
+      "short": "ERC-AM",
+      "name": "Esquerra Republicana de Catalunya - Acord Municipal",
+      "votes": 276,
+      "seats": 1
+     },
+     {
+      "code": "202386",
+      "short": "PP",
+      "name": "Partido Popular",
+      "votes": 111,
+      "seats": 0
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 3514,
+    "voters": 2344,
+    "nullVotes": 30,
+    "blankVotes": 14,
+    "listVotes": 2300,
+    "validVotes": 2314,
+    "votes": {
+     "6": 954,
+     "10": 293,
+     "86": 227,
+     "693": 208,
+     "697": 5,
+     "1031": 228,
+     "1034": 1,
+     "1109": 75,
+     "1129": 22,
+     "1134": 4,
+     "1135": 268,
+     "1136": 13,
+     "1137": 0,
+     "1138": 2
+    }
+   },
+   "parliament": {
+    "electorate": 3515,
+    "voters": 2046,
+    "nullVotes": 30,
+    "blankVotes": 19,
+    "listVotes": 1997,
+    "validVotes": 2016,
+    "votes": {
+     "6": 695,
+     "10": 287,
+     "86": 181,
+     "301": 10,
+     "350": 0,
+     "546": 1,
+     "693": 205,
+     "697": 1,
+     "1018": 0,
+     "1034": 1,
+     "1129": 22,
+     "1130": 51,
+     "1134": 14,
+     "1140": 74,
+     "1141": 88,
+     "1142": 1,
+     "1143": 364,
+     "1144": 2
+    }
+   }
+  },
+  {
+   "code": "08902",
+   "idescat": "089024",
+   "slug": "vilanova-del-valles",
+   "name": "Vilanova del Vallès",
+   "comarca": "Vallès Oriental",
+   "province": "Barcelona",
+   "population": 5693,
+   "mayor": {
+    "name": "Josep Casals Centellas",
+    "party": "",
+    "since": "2026-07-14"
+   },
+   "municipal": {
+    "electorate": 4226,
+    "voters": 2550,
+    "nullVotes": 42,
+    "blankVotes": 61,
+    "listVotes": 2447,
+    "validVotes": 2508,
+    "seats": 13,
+    "censusPopulation": 5557,
+    "lists": [
+     {
+      "code": "89024230",
+      "short": "iVDV",
+      "name": "Impulsem Vilanova",
+      "votes": 1044,
+      "seats": 6
+     },
+     {
+      "code": "776",
+      "short": "UpVV",
+      "name": "Unitat per Vilanova",
+      "votes": 835,
+      "seats": 5
+     },
+     {
+      "code": "842",
+      "short": "PSC-CP",
+      "name": "Partit dels Socialistes de Catalunya - Candidatura de Progrés",
+      "votes": 371,
+      "seats": 2
+     },
+     {
+      "code": "89024231",
+      "short": "CM",
+      "name": "Junts per Vilanova del Vallès - Compromís Municipal",
+      "votes": 129,
+      "seats": 0
+     },
+     {
+      "code": "193",
+      "short": "ERC-AM",
+      "name": "Esquerra Republicana de Catalunya - Acord Municipal",
+      "votes": 68,
+      "seats": 0
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 4201,
+    "voters": 2890,
+    "nullVotes": 19,
+    "blankVotes": 25,
+    "listVotes": 2846,
+    "validVotes": 2871,
+    "votes": {
+     "6": 950,
+     "10": 367,
+     "86": 364,
+     "693": 259,
+     "697": 2,
+     "1031": 369,
+     "1034": 1,
+     "1109": 47,
+     "1129": 35,
+     "1134": 4,
+     "1135": 421,
+     "1136": 27
+    }
+   },
+   "parliament": {
+    "electorate": 4273,
+    "voters": 2528,
+    "nullVotes": 20,
+    "blankVotes": 33,
+    "listVotes": 2475,
+    "validVotes": 2508,
+    "votes": {
+     "6": 637,
+     "10": 300,
+     "86": 252,
+     "301": 19,
+     "350": 2,
+     "693": 222,
+     "697": 0,
+     "1034": 4,
+     "1129": 32,
+     "1130": 74,
+     "1134": 8,
+     "1140": 127,
+     "1141": 81,
+     "1142": 0,
+     "1143": 700,
+     "1144": 17
+    }
+   }
+  },
+  {
+   "code": "17221",
+   "idescat": "172214",
+   "slug": "vilafant",
+   "name": "Vilafant",
+   "comarca": "Alt Empordà",
+   "province": "Girona",
+   "population": 5663,
+   "mayor": {
+    "name": "Montserrat De La Llave Alegri",
+    "party": "",
+    "since": "2023-06-17"
+   },
+   "municipal": {
+    "electorate": 4259,
+    "voters": 2409,
+    "nullVotes": 39,
+    "blankVotes": 42,
+    "listVotes": 2328,
+    "validVotes": 2370,
+    "seats": 13,
+    "censusPopulation": 5562,
+    "lists": [
+     {
+      "code": "842",
+      "short": "PSC-CP",
+      "name": "Partit dels Socialistes de Catalunya - Candidatura de Progrés",
+      "votes": 749,
+      "seats": 5
+     },
+     {
+      "code": "193",
+      "short": "ERC-AM",
+      "name": "Esquerra Republicana de Catalunya - Acord Municipal",
+      "votes": 576,
+      "seats": 3
+     },
+     {
+      "code": "172214230",
+      "short": "SV-TE",
+      "name": "Som Vilafant - Tots Empordà",
+      "votes": 486,
+      "seats": 3
+     },
+     {
+      "code": "172214231",
+      "short": "CM",
+      "name": "Junts per Vilafant - Compromís Municipal",
+      "votes": 199,
+      "seats": 1
+     },
+     {
+      "code": "301",
+      "short": "Cs",
+      "name": "Ciutadans - Partido de la Ciudadanía",
+      "votes": 186,
+      "seats": 1
+     },
+     {
+      "code": "202386",
+      "short": "PP",
+      "name": "Partido Popular",
+      "votes": 132,
+      "seats": 0
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 4251,
+    "voters": 2827,
+    "nullVotes": 32,
+    "blankVotes": 24,
+    "listVotes": 2771,
+    "validVotes": 2795,
+    "votes": {
+     "6": 881,
+     "10": 393,
+     "86": 404,
+     "693": 348,
+     "697": 2,
+     "1031": 379,
+     "1034": 4,
+     "1109": 85,
+     "1129": 23,
+     "1134": 3,
+     "1135": 221,
+     "1136": 28
+    }
+   },
+   "parliament": {
+    "electorate": 4307,
+    "voters": 2594,
+    "nullVotes": 22,
+    "blankVotes": 22,
+    "listVotes": 2550,
+    "validVotes": 2572,
+    "votes": {
+     "6": 568,
+     "10": 297,
+     "86": 262,
+     "301": 19,
+     "350": 4,
+     "693": 259,
+     "697": 3,
+     "1034": 0,
+     "1129": 20,
+     "1130": 336,
+     "1134": 2,
+     "1140": 65,
+     "1141": 80,
+     "1143": 628,
+     "1144": 7
+    }
+   }
+  },
+  {
+   "code": "25003",
+   "idescat": "250030",
+   "slug": "agramunt",
+   "name": "Agramunt",
+   "comarca": "Urgell",
+   "province": "Lleida",
+   "population": 5653,
+   "mayor": null,
+   "municipal": {
+    "electorate": 3740,
+    "voters": 2092,
+    "nullVotes": 47,
+    "blankVotes": 70,
+    "listVotes": 1975,
+    "validVotes": 2045,
+    "seats": 13,
+    "censusPopulation": 5479,
+    "lists": [
+     {
+      "code": "250034232",
+      "short": "AD’E-AM",
+      "name": "Acord d’Esquerra - AM",
+      "votes": 1258,
+      "seats": 9
+     },
+     {
+      "code": "250034231",
+      "short": "CM",
+      "name": "Junts per Agramunt-Compromís Municipal",
+      "votes": 429,
+      "seats": 3
+     },
+     {
+      "code": "842",
+      "short": "PSC-CP",
+      "name": "Partit dels Socialistes de Catalunya - Candidatura de Progrés",
+      "votes": 217,
+      "seats": 1
+     },
+     {
+      "code": "250034230",
+      "short": "PDeCAT-ARA PL",
+      "name": "Partit Demòcrata Europeu Català-Ara Pacte Local",
+      "votes": 71,
+      "seats": 0
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 3691,
+    "voters": 2227,
+    "nullVotes": 22,
+    "blankVotes": 25,
+    "listVotes": 2180,
+    "validVotes": 2205,
+    "votes": {
+     "6": 544,
+     "10": 514,
+     "86": 217,
+     "643": 10,
+     "693": 152,
+     "697": 0,
+     "1031": 488,
+     "1034": 3,
+     "1109": 46,
+     "1129": 12,
+     "1134": 5,
+     "1135": 153,
+     "1136": 36
+    }
+   },
+   "parliament": {
+    "electorate": 3717,
+    "voters": 2008,
+    "nullVotes": 24,
+    "blankVotes": 42,
+    "listVotes": 1942,
+    "validVotes": 1984,
+    "votes": {
+     "6": 341,
+     "10": 341,
+     "86": 124,
+     "301": 4,
+     "350": 4,
+     "546": 1,
+     "693": 95,
+     "697": 1,
+     "1034": 2,
+     "1130": 193,
+     "1134": 4,
+     "1140": 30,
+     "1141": 52,
+     "1143": 739,
+     "1144": 11
+    }
+   }
+  },
+  {
+   "code": "17049",
+   "idescat": "170499",
+   "slug": "celra",
+   "name": "Celrà",
+   "comarca": "Gironès",
+   "province": "Girona",
+   "population": 5621,
+   "mayor": {
+    "name": "David Planas Lladó",
+    "party": "",
+    "since": "2023-06-17"
+   },
+   "municipal": {
+    "electorate": 3500,
+    "voters": 2111,
+    "nullVotes": 71,
+    "blankVotes": 39,
+    "listVotes": 2001,
+    "validVotes": 2040,
+    "seats": 13,
+    "censusPopulation": 5503,
+    "lists": [
+     {
+      "code": "170494231",
+      "short": "SP-CUP-AMUNT",
+      "name": "Som Poble - Candidatura d'Unitat Popular - Alternativa Municipalista",
+      "votes": 1010,
+      "seats": 7
+     },
+     {
+      "code": "170494230",
+      "short": "CM",
+      "name": "Junts per Celrà - Compromís Municipal",
+      "votes": 499,
+      "seats": 3
+     },
+     {
+      "code": "170494232",
+      "short": "FC-AM",
+      "name": "Fem Celrà - Acord Municipal",
+      "votes": 308,
+      "seats": 2
+     },
+     {
+      "code": "842",
+      "short": "PSC-CP",
+      "name": "Partit dels Socialistes de Catalunya - Candidatura de Progrés",
+      "votes": 184,
+      "seats": 1
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 3352,
+    "voters": 2301,
+    "nullVotes": 36,
+    "blankVotes": 11,
+    "listVotes": 2254,
+    "validVotes": 2265,
+    "votes": {
+     "6": 540,
+     "10": 337,
+     "86": 111,
+     "693": 114,
+     "697": 4,
+     "1031": 406,
+     "1034": 0,
+     "1109": 391,
+     "1129": 19,
+     "1134": 3,
+     "1135": 316,
+     "1136": 13
+    }
+   },
+   "parliament": {
+    "electorate": 3426,
+    "voters": 2224,
+    "nullVotes": 31,
+    "blankVotes": 24,
+    "listVotes": 2169,
+    "validVotes": 2193,
+    "votes": {
+     "6": 352,
+     "10": 235,
+     "86": 68,
+     "301": 5,
+     "350": 4,
+     "693": 102,
+     "697": 1,
+     "1034": 3,
+     "1129": 24,
+     "1130": 152,
+     "1134": 4,
+     "1140": 86,
+     "1141": 349,
+     "1143": 770,
+     "1144": 14
+    }
+   }
+  },
+  {
+   "code": "08044",
+   "idescat": "080446",
+   "slug": "capellades",
+   "name": "Capellades",
+   "comarca": "Anoia",
+   "province": "Barcelona",
+   "population": 5608,
+   "mayor": {
+    "name": "Salvador Vives Alari",
+    "party": "ERC-AM",
+    "since": "2023-06-17"
+   },
+   "municipal": {
+    "electorate": 4213,
+    "voters": 2472,
+    "nullVotes": 34,
+    "blankVotes": 33,
+    "listVotes": 2405,
+    "validVotes": 2438,
+    "seats": 13,
+    "censusPopulation": 5344,
+    "lists": [
+     {
+      "code": "193",
+      "short": "ERC-AM",
+      "name": "Esquerra Republicana de Catalunya - Acord Municipal",
+      "votes": 710,
+      "seats": 4
+     },
+     {
+      "code": "842",
+      "short": "PSC-CP",
+      "name": "Partit dels Socialistes de Catalunya - Candidatura de Progrés",
+      "votes": 484,
+      "seats": 3
+     },
+     {
+      "code": "80444230",
+      "short": "VdC-CUP-AMUNT",
+      "name": "Vila de Capellades- CUP - Alternativa Municipalista",
+      "votes": 467,
+      "seats": 3
+     },
+     {
+      "code": "80444231",
+      "short": "CM",
+      "name": "Junts per Capellades - Compromís Municipal",
+      "votes": 435,
+      "seats": 2
+     },
+     {
+      "code": "301",
+      "short": "Cs",
+      "name": "Ciutadans - Partido de la Ciudadanía",
+      "votes": 232,
+      "seats": 1
+     },
+     {
+      "code": "693",
+      "short": "VOX",
+      "name": "VOX",
+      "votes": 77,
+      "seats": 0
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 4196,
+    "voters": 2743,
+    "nullVotes": 24,
+    "blankVotes": 18,
+    "listVotes": 2701,
+    "validVotes": 2719,
+    "votes": {
+     "6": 1000,
+     "10": 468,
+     "86": 214,
+     "693": 183,
+     "697": 2,
+     "1031": 312,
+     "1034": 0,
+     "1109": 193,
+     "1129": 22,
+     "1134": 4,
+     "1135": 287,
+     "1136": 16
+    }
+   },
+   "parliament": {
+    "electorate": 4254,
+    "voters": 2417,
+    "nullVotes": 27,
+    "blankVotes": 22,
+    "listVotes": 2368,
+    "validVotes": 2390,
+    "votes": {
+     "6": 653,
+     "10": 409,
+     "86": 156,
+     "301": 27,
+     "350": 2,
+     "693": 138,
+     "697": 1,
+     "1034": 3,
+     "1129": 23,
+     "1130": 73,
+     "1134": 6,
+     "1140": 100,
+     "1141": 191,
+     "1142": 1,
+     "1143": 577,
+     "1144": 8
+    }
+   }
+  },
+  {
+   "code": "43044",
+   "idescat": "430445",
+   "slug": "la-senia",
+   "name": "la Sénia",
+   "comarca": "Montsià",
+   "province": "Tarragona",
+   "population": 5516,
+   "mayor": {
+    "name": "Maria Victoria Almuni I Balada",
+    "party": "ES-ERC-AM",
+    "since": "2023-06-17"
+   },
+   "municipal": {
+    "electorate": 3954,
+    "voters": 2648,
+    "nullVotes": 51,
+    "blankVotes": 51,
+    "listVotes": 2546,
+    "validVotes": 2597,
+    "seats": 13,
+    "censusPopulation": 5475,
+    "lists": [
+     {
+      "code": "430444230",
+      "short": "ES-ERC-AM",
+      "name": "Endavant la Senia - Esquerra Republicana de Catalunya - Acord Municipal",
+      "votes": 977,
+      "seats": 5
+     },
+     {
+      "code": "430444231",
+      "short": "FS-MTE-C",
+      "name": "Futur per la Sénia - Movem Terres de l'Ebre - Confluència",
+      "votes": 895,
+      "seats": 5
+     },
+     {
+      "code": "430444232",
+      "short": "AS",
+      "name": "Alternativa Senienca",
+      "votes": 390,
+      "seats": 2
+     },
+     {
+      "code": "842",
+      "short": "PSC-CP",
+      "name": "Partit dels Socialistes de Catalunya - Candidatura de Progrés",
+      "votes": 284,
+      "seats": 1
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 3824,
+    "voters": 2685,
+    "nullVotes": 42,
+    "blankVotes": 25,
+    "listVotes": 2618,
+    "validVotes": 2643,
+    "votes": {
+     "6": 853,
+     "10": 474,
+     "86": 456,
+     "693": 265,
+     "697": 0,
+     "1031": 151,
+     "1034": 2,
+     "1109": 38,
+     "1129": 20,
+     "1134": 4,
+     "1135": 344,
+     "1136": 9,
+     "1137": 1,
+     "1138": 1
+    }
+   },
+   "parliament": {
+    "electorate": 3835,
+    "voters": 2260,
+    "nullVotes": 58,
+    "blankVotes": 32,
+    "listVotes": 2170,
+    "validVotes": 2202,
+    "votes": {
+     "6": 644,
+     "10": 434,
+     "86": 330,
+     "301": 7,
+     "350": 3,
+     "546": 0,
+     "693": 207,
+     "697": 1,
+     "1018": 3,
+     "1034": 2,
+     "1129": 12,
+     "1130": 46,
+     "1134": 3,
+     "1140": 106,
+     "1141": 73,
+     "1142": 1,
+     "1143": 287,
+     "1144": 11
+    }
+   }
+  },
+  {
+   "code": "25050",
+   "idescat": "250501",
+   "slug": "bellpuig",
+   "name": "Bellpuig",
+   "comarca": "Urgell",
+   "province": "Lleida",
+   "population": 5510,
+   "mayor": {
+    "name": "Jordi Estiarte I Berenguer",
+    "party": "AMR-AM",
+    "since": "2023-06-17"
+   },
+   "municipal": {
+    "electorate": 3308,
+    "voters": 1987,
+    "nullVotes": 66,
+    "blankVotes": 69,
+    "listVotes": 1852,
+    "validVotes": 1921,
+    "seats": 13,
+    "censusPopulation": 5168,
+    "lists": [
+     {
+      "code": "250504230",
+      "short": "AMR-AM",
+      "name": "Acord Municipal Republicà - Acord Municipal",
+      "votes": 853,
+      "seats": 7
+     },
+     {
+      "code": "250504231",
+      "short": "CM",
+      "name": "Compromís Municipal - Compromís Municipal",
+      "votes": 475,
+      "seats": 3
+     },
+     {
+      "code": "250504233",
+      "short": "GRUP INDEPENDENT IL.LUSIONA'T",
+      "name": "Grup Independent Il·lusiona’t",
+      "votes": 283,
+      "seats": 2
+     },
+     {
+      "code": "202386",
+      "short": "PP",
+      "name": "Partido Popular",
+      "votes": 144,
+      "seats": 1
+     },
+     {
+      "code": "250504232",
+      "short": "TxB-CP",
+      "name": "Treballem per Bellpuig - Candidatura de Progrés",
+      "votes": 97,
+      "seats": 0
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 3279,
+    "voters": 1997,
+    "nullVotes": 16,
+    "blankVotes": 24,
+    "listVotes": 1957,
+    "validVotes": 1981,
+    "votes": {
+     "6": 456,
+     "10": 664,
+     "86": 154,
+     "643": 3,
+     "693": 113,
+     "697": 2,
+     "1031": 355,
+     "1034": 3,
+     "1109": 72,
+     "1129": 10,
+     "1134": 0,
+     "1135": 111,
+     "1136": 14
+    }
+   },
+   "parliament": {
+    "electorate": 3312,
+    "voters": 1894,
+    "nullVotes": 30,
+    "blankVotes": 37,
+    "listVotes": 1827,
+    "validVotes": 1864,
+    "votes": {
+     "6": 283,
+     "10": 435,
+     "86": 96,
+     "301": 1,
+     "350": 3,
+     "546": 2,
+     "693": 60,
+     "697": 1,
+     "1034": 2,
+     "1130": 165,
+     "1134": 3,
+     "1140": 29,
+     "1141": 92,
+     "1143": 644,
+     "1144": 11
+    }
+   }
+  },
+  {
+   "code": "08043",
+   "idescat": "080431",
+   "slug": "canyelles",
+   "name": "Canyelles",
+   "comarca": "Garraf",
+   "province": "Barcelona",
+   "population": 5505,
+   "mayor": {
+    "name": "Rosa Huguet I Sugranyes",
+    "party": "CM",
+    "since": "2023-06-17"
+   },
+   "municipal": {
+    "electorate": 3908,
+    "voters": 2126,
+    "nullVotes": 16,
+    "blankVotes": 30,
+    "listVotes": 2080,
+    "validVotes": 2110,
+    "seats": 13,
+    "censusPopulation": 5007,
+    "lists": [
+     {
+      "code": "80434231",
+      "short": "CM",
+      "name": "Junts per Catalunya Canyelles - Compromís Municipal",
+      "votes": 1597,
+      "seats": 12
+     },
+     {
+      "code": "842",
+      "short": "PSC-CP",
+      "name": "Partit dels Socialistes de Catalunya - Candidatura de Progrés",
+      "votes": 190,
+      "seats": 1
+     },
+     {
+      "code": "193",
+      "short": "ERC-AM",
+      "name": "Esquerra Republicana de Catalunya - Acord Municipal",
+      "votes": 90,
+      "seats": 0
+     },
+     {
+      "code": "80434230",
+      "short": "CECP-C",
+      "name": "Canyelles En Comú Podem - Confluència",
+      "votes": 78,
+      "seats": 0
+     },
+     {
+      "code": "202386",
+      "short": "PP",
+      "name": "Partido Popular",
+      "votes": 67,
+      "seats": 0
+     },
+     {
+      "code": "693",
+      "short": "VOX",
+      "name": "VOX",
+      "votes": 58,
+      "seats": 0
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 3841,
+    "voters": 2425,
+    "nullVotes": 21,
+    "blankVotes": 30,
+    "listVotes": 2374,
+    "validVotes": 2404,
+    "votes": {
+     "6": 840,
+     "10": 266,
+     "86": 309,
+     "693": 284,
+     "697": 6,
+     "1031": 239,
+     "1034": 3,
+     "1109": 31,
+     "1129": 30,
+     "1134": 4,
+     "1135": 352,
+     "1136": 10
+    }
+   },
+   "parliament": {
+    "electorate": 3954,
+    "voters": 2048,
+    "nullVotes": 20,
+    "blankVotes": 22,
+    "listVotes": 2006,
+    "validVotes": 2028,
+    "votes": {
+     "6": 582,
+     "10": 259,
+     "86": 215,
+     "301": 32,
+     "350": 1,
+     "693": 226,
+     "697": 3,
+     "1034": 2,
+     "1129": 32,
+     "1130": 71,
+     "1134": 5,
+     "1140": 115,
+     "1141": 56,
+     "1142": 1,
+     "1143": 398,
+     "1144": 8
+    }
+   }
+  },
+  {
+   "code": "17186",
+   "idescat": "171864",
+   "slug": "sarria-de-ter",
+   "name": "Sarrià de Ter",
+   "comarca": "Gironès",
+   "province": "Girona",
+   "population": 5406,
+   "mayor": {
+    "name": "Isaac Ramió Lafuente",
+    "party": "PAS-AMUNT",
+    "since": "2023-06-17"
+   },
+   "municipal": {
+    "electorate": 3986,
+    "voters": 2237,
+    "nullVotes": 61,
+    "blankVotes": 51,
+    "listVotes": 2125,
+    "validVotes": 2176,
+    "seats": 13,
+    "censusPopulation": 5294,
+    "lists": [
+     {
+      "code": "171864232",
+      "short": "PAS-AMUNT",
+      "name": "Poble Actiu Sarrià de Ter. Alternativa Municipalista",
+      "votes": 933,
+      "seats": 6
+     },
+     {
+      "code": "193",
+      "short": "ERC-AM",
+      "name": "Esquerra Republicana de Catalunya - Acord Municipal",
+      "votes": 578,
+      "seats": 4
+     },
+     {
+      "code": "842",
+      "short": "PSC-CP",
+      "name": "Partit dels Socialistes de Catalunya - Candidatura de Progrés",
+      "votes": 368,
+      "seats": 2
+     },
+     {
+      "code": "171864231",
+      "short": "CM",
+      "name": "Junts per Sarrià de Ter - Compromís Municipal",
+      "votes": 246,
+      "seats": 1
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 3952,
+    "voters": 2640,
+    "nullVotes": 28,
+    "blankVotes": 32,
+    "listVotes": 2580,
+    "validVotes": 2612,
+    "votes": {
+     "6": 870,
+     "10": 328,
+     "86": 235,
+     "693": 192,
+     "697": 1,
+     "1031": 351,
+     "1034": 5,
+     "1109": 187,
+     "1129": 42,
+     "1134": 8,
+     "1135": 345,
+     "1136": 16
+    }
+   },
+   "parliament": {
+    "electorate": 3962,
+    "voters": 2440,
+    "nullVotes": 32,
+    "blankVotes": 24,
+    "listVotes": 2384,
+    "validVotes": 2408,
+    "votes": {
+     "6": 628,
+     "10": 272,
+     "86": 157,
+     "301": 8,
+     "350": 2,
+     "693": 177,
+     "697": 4,
+     "1034": 4,
+     "1129": 33,
+     "1130": 173,
+     "1134": 9,
+     "1140": 73,
+     "1141": 112,
+     "1143": 722,
+     "1144": 10
+    }
+   }
+  },
+  {
+   "code": "43043",
+   "idescat": "430430",
+   "slug": "el-catllar",
+   "name": "el Catllar",
+   "comarca": "Tarragonès",
+   "province": "Tarragona",
+   "population": 5375,
+   "mayor": {
+    "name": "Jordi Ruiz Domènech",
+    "party": "CM",
+    "since": "2023-06-17"
+   },
+   "municipal": {
+    "electorate": 3766,
+    "voters": 2132,
+    "nullVotes": 14,
+    "blankVotes": 12,
+    "listVotes": 2106,
+    "validVotes": 2118,
+    "seats": 11,
+    "censusPopulation": 4921,
+    "lists": [
+     {
+      "code": "430434231",
+      "short": "SOMOS CATLLAR",
+      "name": "Somos Catllar",
+      "votes": 606,
+      "seats": 4
+     },
+     {
+      "code": "842",
+      "short": "PSC-CP",
+      "name": "Partit dels Socialistes de Catalunya - Candidatura de Progrés",
+      "votes": 409,
+      "seats": 2
+     },
+     {
+      "code": "430434232",
+      "short": "MO1-TE",
+      "name": "Mo1-Te Pel Catllar",
+      "votes": 304,
+      "seats": 2
+     },
+     {
+      "code": "430434230",
+      "short": "CM",
+      "name": "Junts per El Catllar - Compromís Municipal",
+      "votes": 283,
+      "seats": 2
+     },
+     {
+      "code": "193",
+      "short": "ERC-AM",
+      "name": "Esquerra Republicana de Catalunya - Acord Municipal",
+      "votes": 235,
+      "seats": 1
+     },
+     {
+      "code": "202386",
+      "short": "PP",
+      "name": "Partido Popular",
+      "votes": 122,
+      "seats": 0
+     },
+     {
+      "code": "430434233",
+      "short": "UCU-FIC",
+      "name": "Urbanitzacions del Catllar Unides Federació d'Independents de Catalunya",
+      "votes": 81,
+      "seats": 0
+     },
+     {
+      "code": "430434234",
+      "short": "ECECP-C",
+      "name": "El Catllar En Comú Podem - Confluència",
+      "votes": 66,
+      "seats": 0
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 3730,
+    "voters": 2545,
+    "nullVotes": 20,
+    "blankVotes": 24,
+    "listVotes": 2501,
+    "validVotes": 2525,
+    "votes": {
+     "6": 711,
+     "10": 333,
+     "86": 381,
+     "693": 297,
+     "697": 4,
+     "1031": 274,
+     "1034": 1,
+     "1109": 79,
+     "1129": 32,
+     "1134": 6,
+     "1135": 363,
+     "1136": 16,
+     "1137": 1,
+     "1138": 3
+    }
+   },
+   "parliament": {
+    "electorate": 3802,
+    "voters": 2251,
+    "nullVotes": 21,
+    "blankVotes": 27,
+    "listVotes": 2203,
+    "validVotes": 2230,
+    "votes": {
+     "6": 503,
+     "10": 305,
+     "86": 310,
+     "301": 10,
+     "350": 0,
+     "546": 0,
+     "693": 253,
+     "697": 1,
+     "1018": 1,
+     "1034": 2,
+     "1129": 37,
+     "1130": 52,
+     "1134": 10,
+     "1140": 108,
+     "1141": 111,
+     "1142": 0,
+     "1143": 492,
+     "1144": 8
+    }
+   }
+  },
+  {
+   "code": "43005",
+   "idescat": "430056",
+   "slug": "alcover",
+   "name": "Alcover",
+   "comarca": "Alt Camp",
+   "province": "Tarragona",
+   "population": 5362,
+   "mayor": {
+    "name": "Robert Figueras Roca",
+    "party": "ApCANVI",
+    "since": "2023-06-17"
+   },
+   "municipal": {
+    "electorate": 3886,
+    "voters": 2191,
+    "nullVotes": 71,
+    "blankVotes": 76,
+    "listVotes": 2044,
+    "validVotes": 2120,
+    "seats": 13,
+    "censusPopulation": 5290,
+    "lists": [
+     {
+      "code": "430054230",
+      "short": "ApCANVI",
+      "name": "Alcoverencs Pel Canvi",
+      "votes": 1638,
+      "seats": 11
+     },
+     {
+      "code": "193",
+      "short": "ERC-AM",
+      "name": "Esquerra Republicana de Catalunya - Acord Municipal",
+      "votes": 292,
+      "seats": 2
+     },
+     {
+      "code": "842",
+      "short": "PSC-CP",
+      "name": "Partit dels Socialistes de Catalunya - Candidatura de Progrés",
+      "votes": 114,
+      "seats": 0
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 3820,
+    "voters": 2469,
+    "nullVotes": 37,
+    "blankVotes": 32,
+    "listVotes": 2400,
+    "validVotes": 2432,
+    "votes": {
+     "6": 767,
+     "10": 425,
+     "86": 250,
+     "693": 223,
+     "697": 0,
+     "1031": 321,
+     "1034": 3,
+     "1109": 92,
+     "1129": 18,
+     "1134": 3,
+     "1135": 270,
+     "1136": 26,
+     "1137": 1,
+     "1138": 1
+    }
+   },
+   "parliament": {
+    "electorate": 3880,
+    "voters": 2116,
+    "nullVotes": 33,
+    "blankVotes": 36,
+    "listVotes": 2047,
+    "validVotes": 2083,
+    "votes": {
+     "6": 445,
+     "10": 348,
+     "86": 168,
+     "301": 4,
+     "350": 0,
+     "546": 2,
+     "693": 187,
+     "697": 3,
+     "1018": 2,
+     "1034": 1,
+     "1129": 12,
+     "1130": 110,
+     "1134": 4,
+     "1140": 72,
+     "1141": 123,
+     "1142": 1,
+     "1143": 556,
+     "1144": 9
+    }
+   }
+  },
+  {
+   "code": "17020",
+   "idescat": "170209",
+   "slug": "bescano",
+   "name": "Bescanó",
+   "comarca": "Gironès",
+   "province": "Girona",
+   "population": 5088,
+   "mayor": {
+    "name": "Xavier Vinyoles i Compta",
+    "party": "",
+    "since": "2023-06-17"
+   },
+   "municipal": {
+    "electorate": 3865,
+    "voters": 2311,
+    "nullVotes": 47,
+    "blankVotes": 58,
+    "listVotes": 2206,
+    "validVotes": 2264,
+    "seats": 13,
+    "censusPopulation": 5156,
+    "lists": [
+     {
+      "code": "170204230",
+      "short": "CM",
+      "name": "Junts per Bescanó - Compromís Municipal",
+      "votes": 991,
+      "seats": 6
+     },
+     {
+      "code": "170204231",
+      "short": "ERC-IdB- AM",
+      "name": "Esquerra Republicana de Catalunya - Independents de Bescanó - Acord Municipal",
+      "votes": 900,
+      "seats": 6
+     },
+     {
+      "code": "170204232",
+      "short": "SP-AMUNT",
+      "name": "Som Poble - Alternativa Municipalista",
+      "votes": 253,
+      "seats": 1
+     },
+     {
+      "code": "170204233",
+      "short": "CP",
+      "name": "Progrés Bescanó- Candidatura de Progrés",
+      "votes": 62,
+      "seats": 0
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 3854,
+    "voters": 2494,
+    "nullVotes": 30,
+    "blankVotes": 24,
+    "listVotes": 2440,
+    "validVotes": 2464,
+    "votes": {
+     "6": 544,
+     "10": 424,
+     "86": 124,
+     "693": 104,
+     "697": 0,
+     "1031": 751,
+     "1034": 3,
+     "1109": 199,
+     "1129": 31,
+     "1134": 1,
+     "1135": 242,
+     "1136": 17
+    }
+   },
+   "parliament": {
+    "electorate": 3866,
+    "voters": 2505,
+    "nullVotes": 32,
+    "blankVotes": 29,
+    "listVotes": 2444,
+    "validVotes": 2473,
+    "votes": {
+     "6": 260,
+     "10": 284,
+     "86": 65,
+     "301": 6,
+     "350": 0,
+     "693": 77,
+     "697": 0,
+     "1034": 0,
+     "1129": 20,
+     "1130": 256,
+     "1134": 4,
+     "1140": 45,
+     "1141": 122,
+     "1143": 1281,
+     "1144": 24
+    }
+   }
+  },
+  {
+   "code": "08092",
+   "idescat": "080924",
+   "slug": "gironella",
+   "name": "Gironella",
+   "comarca": "Berguedà",
+   "province": "Barcelona",
+   "population": 5083,
+   "mayor": {
+    "name": "David Font Simon",
+    "party": "MxGi",
+    "since": "2023-06-17"
+   },
+   "municipal": {
+    "electorate": 3678,
+    "voters": 2121,
+    "nullVotes": 82,
+    "blankVotes": 66,
+    "listVotes": 1973,
+    "validVotes": 2039,
+    "seats": 11,
+    "censusPopulation": 4940,
+    "lists": [
+     {
+      "code": "80924230",
+      "short": "MxGi",
+      "name": "Més per Gironella",
+      "votes": 1862,
+      "seats": 11
+     },
+     {
+      "code": "842",
+      "short": "PSC-CP",
+      "name": "Partit dels Socialistes de Catalunya - Candidatura de Progrés",
+      "votes": 111,
+      "seats": 0
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 3678,
+    "voters": 2413,
+    "nullVotes": 45,
+    "blankVotes": 20,
+    "listVotes": 2348,
+    "validVotes": 2368,
+    "votes": {
+     "6": 663,
+     "10": 515,
+     "86": 136,
+     "693": 104,
+     "697": 3,
+     "1031": 521,
+     "1034": 4,
+     "1109": 147,
+     "1129": 17,
+     "1134": 1,
+     "1135": 201,
+     "1136": 36
+    }
+   },
+   "parliament": {
+    "electorate": 3690,
+    "voters": 2302,
+    "nullVotes": 33,
+    "blankVotes": 20,
+    "listVotes": 2249,
+    "validVotes": 2269,
+    "votes": {
+     "6": 372,
+     "10": 376,
+     "86": 86,
+     "301": 3,
+     "350": 0,
+     "693": 81,
+     "697": 1,
+     "1034": 1,
+     "1129": 15,
+     "1130": 257,
+     "1134": 1,
+     "1140": 48,
+     "1141": 128,
+     "1142": 0,
+     "1143": 853,
+     "1144": 27
+    }
+   }
+  },
+  {
+   "code": "08234",
+   "idescat": "082346",
+   "slug": "sant-pere-de-vilamajor",
+   "name": "Sant Pere de Vilamajor",
+   "comarca": "Vallès Oriental",
+   "province": "Barcelona",
+   "population": 5074,
+   "mayor": {
+    "name": "Jésica Pérez Carbonell",
+    "party": "",
+    "since": "2025-06-05"
+   },
+   "municipal": {
+    "electorate": 3760,
+    "voters": 1825,
+    "nullVotes": 71,
+    "blankVotes": 72,
+    "listVotes": 1682,
+    "validVotes": 1754,
+    "seats": 11,
+    "censusPopulation": 4815,
+    "lists": [
+     {
+      "code": "193",
+      "short": "ERC-AM",
+      "name": "Esquerra Republicana de Catalunya - Acord Municipal",
+      "votes": 504,
+      "seats": 3
+     },
+     {
+      "code": "842",
+      "short": "PSC-CP",
+      "name": "Partit dels Socialistes de Catalunya - Candidatura de Progrés",
+      "votes": 428,
+      "seats": 3
+     },
+     {
+      "code": "82344231",
+      "short": "CM",
+      "name": "Junts per Sant Pere de Vilamajor - Compromís Municipal",
+      "votes": 398,
+      "seats": 3
+     },
+     {
+      "code": "82344230",
+      "short": "ISP",
+      "name": "Independents per Sant Pere",
+      "votes": 352,
+      "seats": 2
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 3730,
+    "voters": 2514,
+    "nullVotes": 20,
+    "blankVotes": 29,
+    "listVotes": 2465,
+    "validVotes": 2494,
+    "votes": {
+     "6": 670,
+     "10": 483,
+     "86": 259,
+     "693": 170,
+     "697": 3,
+     "1031": 318,
+     "1034": 3,
+     "1109": 101,
+     "1129": 43,
+     "1134": 6,
+     "1135": 387,
+     "1136": 22
+    }
+   },
+   "parliament": {
+    "electorate": 3793,
+    "voters": 2244,
+    "nullVotes": 24,
+    "blankVotes": 44,
+    "listVotes": 2176,
+    "validVotes": 2220,
+    "votes": {
+     "6": 435,
+     "10": 385,
+     "86": 183,
+     "301": 5,
+     "350": 2,
+     "693": 137,
+     "697": 1,
+     "1034": 2,
+     "1129": 37,
+     "1130": 77,
+     "1134": 4,
+     "1140": 133,
+     "1141": 119,
+     "1142": 1,
+     "1143": 636,
+     "1144": 19
+    }
+   }
+  },
+  {
+   "code": "08029",
+   "idescat": "080291",
+   "slug": "cabrera-de-mar",
+   "name": "Cabrera de Mar",
+   "comarca": "Maresme",
+   "province": "Barcelona",
+   "population": 5045,
+   "mayor": {
+    "name": "Oscar Fernandez I Cuñado",
+    "party": "CM",
+    "since": "2023-06-17"
+   },
+   "municipal": {
+    "electorate": 3788,
+    "voters": 2338,
+    "nullVotes": 28,
+    "blankVotes": 40,
+    "listVotes": 2270,
+    "validVotes": 2310,
+    "seats": 11,
+    "censusPopulation": 4848,
+    "lists": [
+     {
+      "code": "80294231",
+      "short": "CM",
+      "name": "Junts per Cabrera - Compromís Municipal",
+      "votes": 1431,
+      "seats": 8
+     },
+     {
+      "code": "842",
+      "short": "PSC-CP",
+      "name": "Partit dels Socialistes de Catalunya - Candidatura de Progrés",
+      "votes": 358,
+      "seats": 2
+     },
+     {
+      "code": "80294230",
+      "short": "CUP-AMUNT",
+      "name": "Candidatura d'Unitat Popular Cabrera de Mar - Alternativa Municipalista",
+      "votes": 182,
+      "seats": 1
+     },
+     {
+      "code": "202386",
+      "short": "PP",
+      "name": "Partido Popular",
+      "votes": 161,
+      "seats": 0
+     },
+     {
+      "code": "193",
+      "short": "ERC-AM",
+      "name": "Esquerra Republicana de Catalunya - Acord Municipal",
+      "votes": 138,
+      "seats": 0
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 3759,
+    "voters": 2758,
+    "nullVotes": 19,
+    "blankVotes": 26,
+    "listVotes": 2713,
+    "validVotes": 2739,
+    "votes": {
+     "6": 682,
+     "10": 377,
+     "86": 402,
+     "693": 133,
+     "697": 1,
+     "1031": 649,
+     "1034": 1,
+     "1109": 83,
+     "1129": 34,
+     "1134": 2,
+     "1135": 262,
+     "1136": 87
+    }
+   },
+   "parliament": {
+    "electorate": 3782,
+    "voters": 2548,
+    "nullVotes": 16,
+    "blankVotes": 41,
+    "listVotes": 2491,
+    "validVotes": 2532,
+    "votes": {
+     "6": 488,
+     "10": 280,
+     "86": 306,
+     "301": 12,
+     "350": 1,
+     "693": 107,
+     "697": 0,
+     "1034": 0,
+     "1129": 29,
+     "1130": 93,
+     "1134": 9,
+     "1140": 76,
+     "1141": 79,
+     "1142": 1,
+     "1143": 990,
+     "1144": 20
+    }
+   }
+  },
+  {
+   "code": "43100",
+   "idescat": "431009",
+   "slug": "els-pallaresos",
+   "name": "els Pallaresos",
+   "comarca": "Tarragonès",
+   "province": "Tarragona",
+   "population": 5028,
+   "mayor": {
+    "name": "Jordi Sans Ferrer",
+    "party": "PSC-CP",
+    "since": "2023-06-17"
+   },
+   "municipal": {
+    "electorate": 3774,
+    "voters": 1965,
+    "nullVotes": 56,
+    "blankVotes": 29,
+    "listVotes": 1880,
+    "validVotes": 1909,
+    "seats": 11,
+    "censusPopulation": 4930,
+    "lists": [
+     {
+      "code": "842",
+      "short": "PSC-CP",
+      "name": "Partit dels Socialistes de Catalunya - Candidatura de Progrés",
+      "votes": 478,
+      "seats": 3
+     },
+     {
+      "code": "431004232",
+      "short": "IP-FIC",
+      "name": "Independents dels Pallaresos - Federació d'Independents de Catalunya",
+      "votes": 454,
+      "seats": 3
+     },
+     {
+      "code": "431004230",
+      "short": "SEP-AM",
+      "name": "Som Els Pallaresos - Acord Municipal",
+      "votes": 389,
+      "seats": 3
+     },
+     {
+      "code": "431004231",
+      "short": "CM",
+      "name": "Junts Pels Pallaresos - Compromís Municipal",
+      "votes": 232,
+      "seats": 1
+     },
+     {
+      "code": "202386",
+      "short": "PP",
+      "name": "Partido Popular",
+      "votes": 219,
+      "seats": 1
+     },
+     {
+      "code": "301",
+      "short": "Cs",
+      "name": "Ciutadans - Partido de la Ciudadanía",
+      "votes": 108,
+      "seats": 0
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 3760,
+    "voters": 2638,
+    "nullVotes": 38,
+    "blankVotes": 18,
+    "listVotes": 2582,
+    "validVotes": 2600,
+    "votes": {
+     "6": 836,
+     "10": 318,
+     "86": 411,
+     "693": 305,
+     "697": 2,
+     "1031": 183,
+     "1034": 4,
+     "1109": 38,
+     "1129": 43,
+     "1134": 12,
+     "1135": 415,
+     "1136": 12,
+     "1137": 1,
+     "1138": 2
+    }
+   },
+   "parliament": {
+    "electorate": 3799,
+    "voters": 2212,
+    "nullVotes": 30,
+    "blankVotes": 24,
+    "listVotes": 2158,
+    "validVotes": 2182,
+    "votes": {
+     "6": 581,
+     "10": 286,
+     "86": 327,
+     "301": 14,
+     "350": 0,
+     "546": 3,
+     "693": 257,
+     "697": 2,
+     "1018": 0,
+     "1034": 1,
+     "1129": 29,
+     "1130": 86,
+     "1134": 22,
+     "1140": 97,
+     "1141": 62,
+     "1142": 1,
+     "1143": 387,
+     "1144": 3
+    }
+   }
+  },
+  {
+   "code": "08115",
+   "idescat": "081154",
+   "slug": "martorelles",
+   "name": "Martorelles",
+   "comarca": "Vallès Oriental",
+   "province": "Barcelona",
+   "population": 4992,
+   "mayor": {
+    "name": "Marc Candela Callado",
+    "party": "ERC-AM",
+    "since": "2023-06-17"
+   },
+   "municipal": {
+    "electorate": 3791,
+    "voters": 2141,
+    "nullVotes": 60,
+    "blankVotes": 57,
+    "listVotes": 2024,
+    "validVotes": 2081,
+    "seats": 11,
+    "censusPopulation": 4859,
+    "lists": [
+     {
+      "code": "193",
+      "short": "ERC-AM",
+      "name": "Esquerra Republicana de Catalunya - Acord Municipal",
+      "votes": 865,
+      "seats": 5
+     },
+     {
+      "code": "81154230",
+      "short": "PSC-MAPM-CP",
+      "name": "Partit dels Socialistes de Catalunya - Més Acció per Martorelles - Candidatura de Progrés",
+      "votes": 497,
+      "seats": 3
+     },
+     {
+      "code": "81154231",
+      "short": "MEC-C",
+      "name": "Martorelles En Comú - Confluència",
+      "votes": 417,
+      "seats": 2
+     },
+     {
+      "code": "81154232",
+      "short": "CM",
+      "name": "Junts per Martorelles - Compromís Municipal",
+      "votes": 245,
+      "seats": 1
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 3787,
+    "voters": 2556,
+    "nullVotes": 32,
+    "blankVotes": 21,
+    "listVotes": 2503,
+    "validVotes": 2524,
+    "votes": {
+     "6": 869,
+     "10": 393,
+     "86": 305,
+     "693": 206,
+     "697": 1,
+     "1031": 216,
+     "1034": 1,
+     "1109": 39,
+     "1129": 33,
+     "1134": 4,
+     "1135": 423,
+     "1136": 13
+    }
+   },
+   "parliament": {
+    "electorate": 3822,
+    "voters": 2197,
+    "nullVotes": 27,
+    "blankVotes": 19,
+    "listVotes": 2151,
+    "validVotes": 2170,
+    "votes": {
+     "6": 658,
+     "10": 355,
+     "86": 212,
+     "301": 8,
+     "350": 2,
+     "693": 168,
+     "697": 2,
+     "1034": 5,
+     "1129": 34,
+     "1130": 43,
+     "1134": 7,
+     "1140": 160,
+     "1141": 60,
+     "1142": 2,
+     "1143": 429,
+     "1144": 6
+    }
+   }
+  },
+  {
+   "code": "25228",
+   "idescat": "252287",
+   "slug": "torrefarrera",
+   "name": "Torrefarrera",
+   "comarca": "Segrià",
+   "province": "Lleida",
+   "population": 4900,
+   "mayor": {
+    "name": "Jordi Latorre Sotus",
+    "party": "CM",
+    "since": "2023-06-17"
+   },
+   "municipal": {
+    "electorate": 3378,
+    "voters": 2104,
+    "nullVotes": 35,
+    "blankVotes": 18,
+    "listVotes": 2051,
+    "validVotes": 2069,
+    "seats": 11,
+    "censusPopulation": 4730,
+    "lists": [
+     {
+      "code": "252284231",
+      "short": "CM",
+      "name": "Junts per Torrefarrera - Compromís Municipal",
+      "votes": 1033,
+      "seats": 6
+     },
+     {
+      "code": "252284232",
+      "short": "ARA PL",
+      "name": "Torrefarrera Primer - Ara Pacte Local",
+      "votes": 452,
+      "seats": 3
+     },
+     {
+      "code": "193",
+      "short": "ERC-AM",
+      "name": "Esquerra Republicana de Catalunya - Acord Municipal",
+      "votes": 271,
+      "seats": 1
+     },
+     {
+      "code": "252284233",
+      "short": "PSC-UNITS-CP",
+      "name": "Partit dels Socialistes de Catalunya - Units per Avançar - Candidatura de Progrés",
+      "votes": 173,
+      "seats": 1
+     },
+     {
+      "code": "202386",
+      "short": "PP",
+      "name": "Partido Popular",
+      "votes": 47,
+      "seats": 0
+     },
+     {
+      "code": "693",
+      "short": "VOX",
+      "name": "VOX",
+      "votes": 46,
+      "seats": 0
+     },
+     {
+      "code": "252284230",
+      "short": "TeC-CONFLUÈNCIA",
+      "name": "Torrefarrera En Comú - Confluència",
+      "votes": 29,
+      "seats": 0
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 3294,
+    "voters": 2069,
+    "nullVotes": 18,
+    "blankVotes": 31,
+    "listVotes": 2020,
+    "validVotes": 2051,
+    "votes": {
+     "6": 546,
+     "10": 394,
+     "86": 270,
+     "643": 9,
+     "693": 179,
+     "697": 0,
+     "1031": 385,
+     "1034": 2,
+     "1109": 29,
+     "1129": 17,
+     "1134": 1,
+     "1135": 167,
+     "1136": 21
+    }
+   },
+   "parliament": {
+    "electorate": 3332,
+    "voters": 1885,
+    "nullVotes": 29,
+    "blankVotes": 28,
+    "listVotes": 1828,
+    "validVotes": 1856,
+    "votes": {
+     "6": 353,
+     "10": 293,
+     "86": 151,
+     "301": 4,
+     "350": 1,
+     "546": 0,
+     "693": 140,
+     "697": 3,
+     "1034": 1,
+     "1130": 173,
+     "1134": 5,
+     "1140": 23,
+     "1141": 53,
+     "1143": 627,
+     "1144": 1
+    }
+   }
+  },
+  {
+   "code": "17092",
+   "idescat": "170926",
+   "slug": "llanca",
+   "name": "Llançà",
+   "comarca": "Alt Empordà",
+   "province": "Girona",
+   "population": 4892,
+   "mayor": {
+    "name": "Núria Escarpanter Olivet",
+    "party": "CM",
+    "since": "2023-06-17"
+   },
+   "municipal": {
+    "electorate": 3736,
+    "voters": 2303,
+    "nullVotes": 44,
+    "blankVotes": 51,
+    "listVotes": 2208,
+    "validVotes": 2259,
+    "seats": 11,
+    "censusPopulation": 4905,
+    "lists": [
+     {
+      "code": "170924232",
+      "short": "CM",
+      "name": "Junts per Llançà - Compromís Municipal",
+      "votes": 729,
+      "seats": 4
+     },
+     {
+      "code": "170924230",
+      "short": "AxL-TE",
+      "name": "Alternativa X Llançà - Tots Empordà",
+      "votes": 512,
+      "seats": 3
+     },
+     {
+      "code": "170924231",
+      "short": "PSC-CP",
+      "name": "Partit dels Socialistes de Catalunya per Llançà - Candidatura de Progrés",
+      "votes": 492,
+      "seats": 2
+     },
+     {
+      "code": "193",
+      "short": "ERC-AM",
+      "name": "Esquerra Republicana de Catalunya - Acord Municipal",
+      "votes": 475,
+      "seats": 2
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 3584,
+    "voters": 2349,
+    "nullVotes": 28,
+    "blankVotes": 18,
+    "listVotes": 2303,
+    "validVotes": 2321,
+    "votes": {
+     "6": 731,
+     "10": 417,
+     "86": 189,
+     "693": 162,
+     "697": 4,
+     "1031": 443,
+     "1034": 5,
+     "1109": 86,
+     "1129": 29,
+     "1134": 2,
+     "1135": 223,
+     "1136": 12
+    }
+   },
+   "parliament": {
+    "electorate": 3657,
+    "voters": 2123,
+    "nullVotes": 25,
+    "blankVotes": 25,
+    "listVotes": 2073,
+    "validVotes": 2098,
+    "votes": {
+     "6": 436,
+     "10": 318,
+     "86": 136,
+     "301": 4,
+     "350": 5,
+     "693": 128,
+     "697": 1,
+     "1034": 3,
+     "1129": 41,
+     "1130": 244,
+     "1134": 4,
+     "1140": 58,
+     "1141": 73,
+     "1143": 614,
+     "1144": 8
+    }
+   }
+  },
+  {
+   "code": "08069",
+   "idescat": "080692",
+   "slug": "collbato",
+   "name": "Collbató",
+   "comarca": "Baix Llobregat",
+   "province": "Barcelona",
+   "population": 4828,
+   "mayor": {
+    "name": "Gemma Rodríguez Quiñonero",
+    "party": "",
+    "since": "2023-06-17"
+   },
+   "municipal": {
+    "electorate": 3726,
+    "voters": 2100,
+    "nullVotes": 30,
+    "blankVotes": 41,
+    "listVotes": 2029,
+    "validVotes": 2070,
+    "seats": 11,
+    "censusPopulation": 4726,
+    "lists": [
+     {
+      "code": "80694230",
+      "short": "SdeC -\nCP",
+      "name": "Socialistes de Collbató - Candidatura de Progrés",
+      "votes": 531,
+      "seats": 3
+     },
+     {
+      "code": "80694231",
+      "short": "AM",
+      "name": "Esquerra Republicana de Catalunya - Grup d'Independents Collbató - Acord Municipal",
+      "votes": 507,
+      "seats": 3
+     },
+     {
+      "code": "80694232",
+      "short": "COLLBATOTS",
+      "name": "Agrupación de Electores \"Collbatots\"",
+      "votes": 467,
+      "seats": 3
+     },
+     {
+      "code": "80694234",
+      "short": "CM",
+      "name": "Junts per Collbató - Compromís Municipal",
+      "votes": 263,
+      "seats": 1
+     },
+     {
+      "code": "202386",
+      "short": "PP",
+      "name": "Partido Popular",
+      "votes": 149,
+      "seats": 1
+     },
+     {
+      "code": "80694233",
+      "short": "MC-somMEScat",
+      "name": "Més Collbató - Som Moviment d'Esquerres de Catalunya",
+      "votes": 112,
+      "seats": 0
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 3712,
+    "voters": 2581,
+    "nullVotes": 16,
+    "blankVotes": 24,
+    "listVotes": 2541,
+    "validVotes": 2565,
+    "votes": {
+     "6": 715,
+     "10": 433,
+     "86": 325,
+     "693": 196,
+     "697": 4,
+     "1031": 318,
+     "1034": 3,
+     "1109": 69,
+     "1129": 36,
+     "1134": 3,
+     "1135": 404,
+     "1136": 35
+    }
+   },
+   "parliament": {
+    "electorate": 3766,
+    "voters": 2306,
+    "nullVotes": 14,
+    "blankVotes": 24,
+    "listVotes": 2268,
+    "validVotes": 2292,
+    "votes": {
+     "6": 507,
+     "10": 363,
+     "86": 209,
+     "301": 11,
+     "350": 1,
+     "693": 186,
+     "697": 2,
+     "1034": 2,
+     "1129": 29,
+     "1130": 106,
+     "1134": 4,
+     "1140": 112,
+     "1141": 92,
+     "1142": 0,
+     "1143": 632,
+     "1144": 12
+    }
+   }
+  },
+  {
+   "code": "17137",
+   "idescat": "171371",
+   "slug": "porqueres",
+   "name": "Porqueres",
+   "comarca": "Pla de l'Estany",
+   "province": "Girona",
+   "population": 4811,
+   "mayor": {
+    "name": "Francesc Castañer Campolier",
+    "party": "IdP-AM",
+    "since": "2023-06-17"
+   },
+   "municipal": {
+    "electorate": 3598,
+    "voters": 2099,
+    "nullVotes": 42,
+    "blankVotes": 84,
+    "listVotes": 1973,
+    "validVotes": 2057,
+    "seats": 11,
+    "censusPopulation": 4712,
+    "lists": [
+     {
+      "code": "171374231",
+      "short": "IdP-AM",
+      "name": "Independents de Porqueres- Acord Municipal",
+      "votes": 1551,
+      "seats": 9
+     },
+     {
+      "code": "171374230",
+      "short": "CM",
+      "name": "Junts per Porqueres - Compromís Municipal",
+      "votes": 377,
+      "seats": 2
+     },
+     {
+      "code": "842",
+      "short": "PSC-CP",
+      "name": "Partit dels Socialistes de Catalunya - Candidatura de Progrés",
+      "votes": 45,
+      "seats": 0
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 3574,
+    "voters": 2471,
+    "nullVotes": 42,
+    "blankVotes": 28,
+    "listVotes": 2401,
+    "validVotes": 2429,
+    "votes": {
+     "6": 526,
+     "10": 578,
+     "86": 97,
+     "693": 76,
+     "697": 1,
+     "1031": 688,
+     "1034": 3,
+     "1109": 167,
+     "1129": 22,
+     "1134": 1,
+     "1135": 219,
+     "1136": 23
+    }
+   },
+   "parliament": {
+    "electorate": 3638,
+    "voters": 2448,
+    "nullVotes": 15,
+    "blankVotes": 48,
+    "listVotes": 2385,
+    "validVotes": 2433,
+    "votes": {
+     "6": 266,
+     "10": 384,
+     "86": 63,
+     "301": 0,
+     "350": 0,
+     "693": 59,
+     "697": 0,
+     "1034": 3,
+     "1129": 18,
+     "1130": 295,
+     "1134": 5,
+     "1140": 55,
+     "1141": 136,
+     "1143": 1085,
+     "1144": 16
+    }
+   }
+  },
+  {
+   "code": "43904",
+   "idescat": "439044",
+   "slug": "l-aldea",
+   "name": "l'Aldea",
+   "comarca": "Baix Ebre",
+   "province": "Tarragona",
+   "population": 4657,
+   "mayor": {
+    "name": "Xavier Royo Franch",
+    "party": "CM",
+    "since": "2023-06-17"
+   },
+   "municipal": {
+    "electorate": 2896,
+    "voters": 2098,
+    "nullVotes": 18,
+    "blankVotes": 24,
+    "listVotes": 2056,
+    "validVotes": 2080,
+    "seats": 11,
+    "censusPopulation": 4332,
+    "lists": [
+     {
+      "code": "439044231",
+      "short": "CM",
+      "name": "Junts per L'Aldea-Compromís Municipal",
+      "votes": 1092,
+      "seats": 6
+     },
+     {
+      "code": "439044230",
+      "short": "EA-ERC-AM",
+      "name": "Endavant L'Aldea-Esquerra Republicana-Acord Municipal",
+      "votes": 695,
+      "seats": 4
+     },
+     {
+      "code": "439044232",
+      "short": "PSC-CP",
+      "name": "Independents per L'Aldea - Candidatura de Progrés",
+      "votes": 269,
+      "seats": 1
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 2863,
+    "voters": 1797,
+    "nullVotes": 29,
+    "blankVotes": 28,
+    "listVotes": 1740,
+    "validVotes": 1768,
+    "votes": {
+     "6": 516,
+     "10": 342,
+     "86": 182,
+     "693": 161,
+     "697": 2,
+     "1031": 378,
+     "1034": 0,
+     "1109": 23,
+     "1129": 9,
+     "1134": 4,
+     "1135": 119,
+     "1136": 4,
+     "1137": 0,
+     "1138": 0
+    }
+   },
+   "parliament": {
+    "electorate": 2900,
+    "voters": 1543,
+    "nullVotes": 47,
+    "blankVotes": 25,
+    "listVotes": 1471,
+    "validVotes": 1496,
+    "votes": {
+     "6": 338,
+     "10": 310,
+     "86": 123,
+     "301": 0,
+     "350": 3,
+     "546": 1,
+     "693": 130,
+     "697": 1,
+     "1018": 5,
+     "1034": 1,
+     "1129": 5,
+     "1130": 72,
+     "1134": 2,
+     "1140": 36,
+     "1141": 21,
+     "1142": 0,
+     "1143": 422,
+     "1144": 1
+    }
+   }
+  },
+  {
+   "code": "17146",
+   "idescat": "171463",
+   "slug": "riells-i-viabrea",
+   "name": "Riells i Viabrea",
+   "comarca": "Selva",
+   "province": "Girona",
+   "population": 4635,
+   "mayor": {
+    "name": "Josep Maria Bagot Belfort",
+    "party": "",
+    "since": "2023-06-17"
+   },
+   "municipal": {
+    "electorate": 3434,
+    "voters": 1742,
+    "nullVotes": 37,
+    "blankVotes": 40,
+    "listVotes": 1665,
+    "validVotes": 1705,
+    "seats": 11,
+    "censusPopulation": 4279,
+    "lists": [
+     {
+      "code": "171464230",
+      "short": "ERC-GIR-AM",
+      "name": "Esquerra Republicana de Catalunya - Grup Independent de Riells I Viabrea - Acord Municipal",
+      "votes": 941,
+      "seats": 6
+     },
+     {
+      "code": "171464231",
+      "short": "SE-RiV-IdSELVA",
+      "name": "Som Equip - Independents de la Selva",
+      "votes": 439,
+      "seats": 3
+     },
+     {
+      "code": "171464232",
+      "short": "CP",
+      "name": "Socialistes de Riells - Candidatura de Progrés",
+      "votes": 285,
+      "seats": 2
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 3402,
+    "voters": 2104,
+    "nullVotes": 21,
+    "blankVotes": 17,
+    "listVotes": 2066,
+    "validVotes": 2083,
+    "votes": {
+     "6": 645,
+     "10": 407,
+     "86": 185,
+     "693": 202,
+     "697": 3,
+     "1031": 216,
+     "1034": 6,
+     "1109": 62,
+     "1129": 46,
+     "1134": 3,
+     "1135": 287,
+     "1136": 4
+    }
+   },
+   "parliament": {
+    "electorate": 3469,
+    "voters": 1822,
+    "nullVotes": 26,
+    "blankVotes": 13,
+    "listVotes": 1783,
+    "validVotes": 1796,
+    "votes": {
+     "6": 392,
+     "10": 340,
+     "86": 134,
+     "301": 3,
+     "350": 1,
+     "693": 145,
+     "697": 2,
+     "1034": 1,
+     "1129": 56,
+     "1130": 89,
+     "1134": 4,
+     "1140": 66,
+     "1141": 85,
+     "1143": 456,
+     "1144": 9
+    }
+   }
+  },
+  {
+   "code": "08175",
+   "idescat": "081751",
+   "slug": "puig-reig",
+   "name": "Puig-reig",
+   "comarca": "Berguedà",
+   "province": "Barcelona",
+   "population": 4565,
+   "mayor": {
+    "name": "Eva Serra Casellas",
+    "party": "CM",
+    "since": "2023-06-17"
+   },
+   "municipal": {
+    "electorate": 3398,
+    "voters": 1809,
+    "nullVotes": 66,
+    "blankVotes": 35,
+    "listVotes": 1708,
+    "validVotes": 1743,
+    "seats": 11,
+    "censusPopulation": 4327,
+    "lists": [
+     {
+      "code": "81754231",
+      "short": "CM",
+      "name": "Avancem Junts - Compromís Municipal",
+      "votes": 968,
+      "seats": 6
+     },
+     {
+      "code": "81754230",
+      "short": "ERC-AM",
+      "name": "Amb Tu Fem Puig-Reig - Acord Municipal",
+      "votes": 740,
+      "seats": 5
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 3390,
+    "voters": 2038,
+    "nullVotes": 27,
+    "blankVotes": 16,
+    "listVotes": 1995,
+    "validVotes": 2011,
+    "votes": {
+     "6": 464,
+     "10": 506,
+     "86": 151,
+     "693": 101,
+     "697": 0,
+     "1031": 445,
+     "1034": 1,
+     "1109": 134,
+     "1129": 20,
+     "1134": 3,
+     "1135": 140,
+     "1136": 30
+    }
+   },
+   "parliament": {
+    "electorate": 3392,
+    "voters": 1996,
+    "nullVotes": 19,
+    "blankVotes": 31,
+    "listVotes": 1946,
+    "validVotes": 1977,
+    "votes": {
+     "6": 299,
+     "10": 367,
+     "86": 111,
+     "301": 6,
+     "350": 0,
+     "693": 70,
+     "697": 4,
+     "1034": 2,
+     "1129": 15,
+     "1130": 172,
+     "1134": 7,
+     "1140": 46,
+     "1141": 94,
+     "1142": 1,
+     "1143": 738,
+     "1144": 14
+    }
+   }
+  },
+  {
+   "code": "08047",
+   "idescat": "080478",
+   "slug": "cardona",
+   "name": "Cardona",
+   "comarca": "Bages",
+   "province": "Barcelona",
+   "population": 4553,
+   "mayor": {
+    "name": "LluÏsa Aliste Sanchez",
+    "party": "",
+    "since": "2025-07-21"
+   },
+   "municipal": {
+    "electorate": 3634,
+    "voters": 2206,
+    "nullVotes": 162,
+    "blankVotes": 71,
+    "listVotes": 1973,
+    "validVotes": 2044,
+    "seats": 11,
+    "censusPopulation": 4575,
+    "lists": [
+     {
+      "code": "193",
+      "short": "ERC-AM",
+      "name": "Esquerra Republicana de Catalunya - Acord Municipal",
+      "votes": 1015,
+      "seats": 6
+     },
+     {
+      "code": "842",
+      "short": "PSC-CP",
+      "name": "Partit dels Socialistes de Catalunya - Candidatura de Progrés",
+      "votes": 779,
+      "seats": 4
+     },
+     {
+      "code": "80474230",
+      "short": "CM",
+      "name": "Junts per Cardona - Compromís Municipal",
+      "votes": 179,
+      "seats": 1
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 3619,
+    "voters": 2295,
+    "nullVotes": 35,
+    "blankVotes": 18,
+    "listVotes": 2242,
+    "validVotes": 2260,
+    "votes": {
+     "6": 912,
+     "10": 446,
+     "86": 233,
+     "693": 117,
+     "697": 2,
+     "1031": 241,
+     "1034": 0,
+     "1109": 66,
+     "1129": 21,
+     "1134": 1,
+     "1135": 174,
+     "1136": 29
+    }
+   },
+   "parliament": {
+    "electorate": 3616,
+    "voters": 2090,
+    "nullVotes": 37,
+    "blankVotes": 35,
+    "listVotes": 2018,
+    "validVotes": 2053,
+    "votes": {
+     "6": 611,
+     "10": 424,
+     "86": 169,
+     "301": 6,
+     "350": 1,
+     "693": 106,
+     "697": 2,
+     "1034": 0,
+     "1129": 13,
+     "1130": 115,
+     "1134": 3,
+     "1140": 49,
+     "1141": 81,
+     "1142": 1,
+     "1143": 429,
+     "1144": 8
+    }
+   }
+  },
+  {
+   "code": "17083",
+   "idescat": "170834",
+   "slug": "hostalric",
+   "name": "Hostalric",
+   "comarca": "Selva",
+   "province": "Girona",
+   "population": 4493,
+   "mayor": {
+    "name": "Nil Papiol Champagne",
+    "party": "SxH-AM",
+    "since": "2023-06-17"
+   },
+   "municipal": {
+    "electorate": 3100,
+    "voters": 1926,
+    "nullVotes": 8,
+    "blankVotes": 38,
+    "listVotes": 1880,
+    "validVotes": 1918,
+    "seats": 11,
+    "censusPopulation": 4370,
+    "lists": [
+     {
+      "code": "170834232",
+      "short": "SxH-AM",
+      "name": "Sumem per Hostalric - Acord Municipal",
+      "votes": 1125,
+      "seats": 8
+     },
+     {
+      "code": "170834230",
+      "short": "HA-IdSELVA",
+      "name": "Hostalric Activa't - Independents de la Selva",
+      "votes": 469,
+      "seats": 3
+     },
+     {
+      "code": "170834233",
+      "short": "CM",
+      "name": "Junts per Hostalric - Compromís Municipal",
+      "votes": 129,
+      "seats": 0
+     },
+     {
+      "code": "170834231",
+      "short": "HEC-C",
+      "name": "Hostalric En Comú - Confluència",
+      "votes": 98,
+      "seats": 0
+     },
+     {
+      "code": "842",
+      "short": "PSC-CP",
+      "name": "Partit dels Socialistes de Catalunya - Candidatura de Progrés",
+      "votes": 59,
+      "seats": 0
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 3098,
+    "voters": 1975,
+    "nullVotes": 18,
+    "blankVotes": 22,
+    "listVotes": 1935,
+    "validVotes": 1957,
+    "votes": {
+     "6": 564,
+     "10": 302,
+     "86": 163,
+     "693": 114,
+     "697": 3,
+     "1031": 353,
+     "1034": 2,
+     "1109": 85,
+     "1129": 22,
+     "1134": 6,
+     "1135": 314,
+     "1136": 7
+    }
+   },
+   "parliament": {
+    "electorate": 3147,
+    "voters": 1780,
+    "nullVotes": 11,
+    "blankVotes": 18,
+    "listVotes": 1751,
+    "validVotes": 1769,
+    "votes": {
+     "6": 399,
+     "10": 315,
+     "86": 103,
+     "301": 9,
+     "350": 1,
+     "693": 110,
+     "697": 0,
+     "1034": 1,
+     "1129": 30,
+     "1130": 110,
+     "1134": 10,
+     "1140": 83,
+     "1141": 62,
+     "1143": 512,
+     "1144": 6
+    }
+   }
+  },
+  {
+   "code": "08148",
+   "idescat": "081483",
+   "slug": "olivella",
+   "name": "Olivella",
+   "comarca": "Garraf",
+   "province": "Barcelona",
+   "population": 4435,
+   "mayor": {
+    "name": "Marta Verdejo Sánchez",
+    "party": "PSC-CP",
+    "since": "2023-06-17"
+   },
+   "municipal": {
+    "electorate": 2734,
+    "voters": 1379,
+    "nullVotes": 7,
+    "blankVotes": 23,
+    "listVotes": 1349,
+    "validVotes": 1372,
+    "seats": 11,
+    "censusPopulation": 4339,
+    "lists": [
+     {
+      "code": "842",
+      "short": "PSC-CP",
+      "name": "Partit dels Socialistes de Catalunya - Candidatura de Progrés",
+      "votes": 616,
+      "seats": 6
+     },
+     {
+      "code": "81484230",
+      "short": "CM",
+      "name": "Tots Som Olivella - Compromís Municipal",
+      "votes": 340,
+      "seats": 3
+     },
+     {
+      "code": "193",
+      "short": "ERC-AM",
+      "name": "Esquerra Republicana de Catalunya - Acord Municipal",
+      "votes": 198,
+      "seats": 1
+     },
+     {
+      "code": "693",
+      "short": "VOX",
+      "name": "VOX",
+      "votes": 130,
+      "seats": 1
+     },
+     {
+      "code": "202386",
+      "short": "PP",
+      "name": "Partido Popular",
+      "votes": 65,
+      "seats": 0
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 2624,
+    "voters": 1648,
+    "nullVotes": 18,
+    "blankVotes": 14,
+    "listVotes": 1616,
+    "validVotes": 1630,
+    "votes": {
+     "6": 521,
+     "10": 166,
+     "86": 222,
+     "693": 263,
+     "697": 1,
+     "1031": 99,
+     "1034": 3,
+     "1109": 37,
+     "1129": 34,
+     "1134": 2,
+     "1135": 262,
+     "1136": 6
+    }
+   },
+   "parliament": {
+    "electorate": 2676,
+    "voters": 1334,
+    "nullVotes": 11,
+    "blankVotes": 12,
+    "listVotes": 1311,
+    "validVotes": 1323,
+    "votes": {
+     "6": 382,
+     "10": 180,
+     "86": 149,
+     "301": 25,
+     "350": 1,
+     "693": 219,
+     "697": 2,
+     "1034": 2,
+     "1129": 20,
+     "1130": 25,
+     "1134": 8,
+     "1140": 64,
+     "1141": 44,
+     "1142": 0,
+     "1143": 187,
+     "1144": 3
+    }
+   }
+  },
+  {
+   "code": "08158",
+   "idescat": "081580",
+   "slug": "el-papiol",
+   "name": "el Papiol",
+   "comarca": "Baix Llobregat",
+   "province": "Barcelona",
+   "population": 4404,
+   "mayor": {
+    "name": "Jordi Bou Compte",
+    "party": "CM",
+    "since": "2023-06-17"
+   },
+   "municipal": {
+    "electorate": 3257,
+    "voters": 1924,
+    "nullVotes": 26,
+    "blankVotes": 52,
+    "listVotes": 1846,
+    "validVotes": 1898,
+    "seats": 11,
+    "censusPopulation": 4274,
+    "lists": [
+     {
+      "code": "81584232",
+      "short": "CM",
+      "name": "Fem El Papiol - Compromís Municipal",
+      "votes": 856,
+      "seats": 5
+     },
+     {
+      "code": "81584230",
+      "short": "SUMEM PER EL PAPIOL- CP",
+      "name": "Sumem per El Papiol - Candidatura de Progrés",
+      "votes": 654,
+      "seats": 4
+     },
+     {
+      "code": "193",
+      "short": "ERC-AM",
+      "name": "Esquerra Republicana de Catalunya - Acord Municipal",
+      "votes": 188,
+      "seats": 1
+     },
+     {
+      "code": "81584231",
+      "short": "APM-AMUNT",
+      "name": "Assemblea Papiolenca Municipalista - Alternativa Municipalista",
+      "votes": 148,
+      "seats": 1
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 3221,
+    "voters": 2193,
+    "nullVotes": 15,
+    "blankVotes": 20,
+    "listVotes": 2158,
+    "validVotes": 2178,
+    "votes": {
+     "6": 738,
+     "10": 341,
+     "86": 250,
+     "693": 141,
+     "697": 0,
+     "1031": 267,
+     "1034": 0,
+     "1109": 57,
+     "1129": 29,
+     "1134": 6,
+     "1135": 315,
+     "1136": 14
+    }
+   },
+   "parliament": {
+    "electorate": 3255,
+    "voters": 1908,
+    "nullVotes": 22,
+    "blankVotes": 29,
+    "listVotes": 1857,
+    "validVotes": 1886,
+    "votes": {
+     "6": 493,
+     "10": 315,
+     "86": 185,
+     "301": 5,
+     "350": 3,
+     "693": 132,
+     "697": 2,
+     "1034": 1,
+     "1129": 23,
+     "1130": 59,
+     "1134": 4,
+     "1140": 93,
+     "1141": 89,
+     "1142": 0,
+     "1143": 447,
+     "1144": 6
+    }
+   }
+  },
+  {
+   "code": "17013",
+   "idescat": "170139",
+   "slug": "begur",
+   "name": "Begur",
+   "comarca": "Baix Empordà",
+   "province": "Girona",
+   "population": 4291,
+   "mayor": {
+    "name": "Maria Teresa Selva Huertas",
+    "party": "CM",
+    "since": "2023-06-17"
+   },
+   "municipal": {
+    "electorate": 3090,
+    "voters": 1902,
+    "nullVotes": 54,
+    "blankVotes": 31,
+    "listVotes": 1817,
+    "validVotes": 1848,
+    "seats": 11,
+    "censusPopulation": 4177,
+    "lists": [
+     {
+      "code": "170134232",
+      "short": "CM",
+      "name": "Sempre per Begur i Esclanyà - Junts - Compromís Municipal",
+      "votes": 707,
+      "seats": 5
+     },
+     {
+      "code": "170134230",
+      "short": "TXBE-TE",
+      "name": "Tots per Begur Esclanyà - Tots Empordà",
+      "votes": 354,
+      "seats": 2
+     },
+     {
+      "code": "170134233",
+      "short": "+BE-C",
+      "name": "+BegurEsclanya",
+      "votes": 322,
+      "seats": 2
+     },
+     {
+      "code": "170134234",
+      "short": "JxB-E-ERC-AM",
+      "name": "JuntsxBegur-Esclanyà - Esquerra Republicana de Catalunya - Acord Municipal",
+      "votes": 256,
+      "seats": 1
+     },
+     {
+      "code": "170134231",
+      "short": "PSC-CP",
+      "name": "Partit dels Socialistes de Catalunya per Begur - Candidatura de Progrés",
+      "votes": 178,
+      "seats": 1
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 2920,
+    "voters": 1941,
+    "nullVotes": 19,
+    "blankVotes": 25,
+    "listVotes": 1897,
+    "validVotes": 1922,
+    "votes": {
+     "6": 597,
+     "10": 254,
+     "86": 236,
+     "693": 154,
+     "697": 1,
+     "1031": 342,
+     "1034": 2,
+     "1109": 50,
+     "1129": 17,
+     "1134": 4,
+     "1135": 218,
+     "1136": 22
+    }
+   },
+   "parliament": {
+    "electorate": 2914,
+    "voters": 1720,
+    "nullVotes": 26,
+    "blankVotes": 26,
+    "listVotes": 1668,
+    "validVotes": 1694,
+    "votes": {
+     "6": 381,
+     "10": 194,
+     "86": 152,
+     "301": 3,
+     "350": 0,
+     "693": 133,
+     "697": 0,
+     "1034": 0,
+     "1129": 17,
+     "1130": 120,
+     "1134": 4,
+     "1140": 57,
+     "1141": 28,
+     "1143": 574,
+     "1144": 5
+    }
+   }
+  },
+  {
+   "code": "43028",
+   "idescat": "430287",
+   "slug": "la-bisbal-del-penedes",
+   "name": "la Bisbal del Penedès",
+   "comarca": "Baix Penedès",
+   "province": "Tarragona",
+   "population": 4278,
+   "mayor": {
+    "name": "Agnès Ferré Cañellas",
+    "party": "",
+    "since": "2023-06-17"
+   },
+   "municipal": {
+    "electorate": 3200,
+    "voters": 1799,
+    "nullVotes": 32,
+    "blankVotes": 16,
+    "listVotes": 1751,
+    "validVotes": 1767,
+    "seats": 11,
+    "censusPopulation": 4062,
+    "lists": [
+     {
+      "code": "430284232",
+      "short": "CARA PL",
+      "name": "Compromís - Ara Pacte Local",
+      "votes": 696,
+      "seats": 5
+     },
+     {
+      "code": "430284231",
+      "short": "CM",
+      "name": "La Bisbal Decideix - Compromís Municipal",
+      "votes": 364,
+      "seats": 2
+     },
+     {
+      "code": "430284230",
+      "short": "TSB",
+      "name": "Tots Som la Bisbal-Urbanizaciones Unidas",
+      "votes": 342,
+      "seats": 2
+     },
+     {
+      "code": "842",
+      "short": "PSC-CP",
+      "name": "Partit dels Socialistes de Catalunya - Candidatura de Progrés",
+      "votes": 175,
+      "seats": 1
+     },
+     {
+      "code": "193",
+      "short": "ERC-AM",
+      "name": "Esquerra Republicana de Catalunya - Acord Municipal",
+      "votes": 174,
+      "seats": 1
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 3148,
+    "voters": 1901,
+    "nullVotes": 16,
+    "blankVotes": 14,
+    "listVotes": 1871,
+    "validVotes": 1885,
+    "votes": {
+     "6": 646,
+     "10": 255,
+     "86": 205,
+     "693": 233,
+     "697": 1,
+     "1031": 187,
+     "1034": 4,
+     "1109": 52,
+     "1129": 21,
+     "1134": 6,
+     "1135": 244,
+     "1136": 16,
+     "1137": 0,
+     "1138": 1
+    }
+   },
+   "parliament": {
+    "electorate": 3197,
+    "voters": 1558,
+    "nullVotes": 13,
+    "blankVotes": 15,
+    "listVotes": 1530,
+    "validVotes": 1545,
+    "votes": {
+     "6": 396,
+     "10": 248,
+     "86": 120,
+     "301": 7,
+     "350": 3,
+     "546": 0,
+     "693": 183,
+     "697": 3,
+     "1018": 0,
+     "1034": 0,
+     "1129": 17,
+     "1130": 50,
+     "1134": 8,
+     "1140": 70,
+     "1141": 69,
+     "1142": 1,
+     "1143": 350,
+     "1144": 5
+    }
+   }
+  },
+  {
+   "code": "43050",
+   "idescat": "430509",
+   "slug": "creixell",
+   "name": "Creixell",
+   "comarca": "Tarragonès",
+   "province": "Tarragona",
+   "population": 4261,
+   "mayor": {
+    "name": "Montserrat Muñoz Madueño",
+    "party": "PSC-CP",
+    "since": "2023-06-17"
+   },
+   "municipal": {
+    "electorate": 2941,
+    "voters": 1659,
+    "nullVotes": 9,
+    "blankVotes": 21,
+    "listVotes": 1629,
+    "validVotes": 1650,
+    "seats": 11,
+    "censusPopulation": 3981,
+    "lists": [
+     {
+      "code": "430504230",
+      "short": "SOM CREIXELL",
+      "name": "Som Creixell",
+      "votes": 535,
+      "seats": 4
+     },
+     {
+      "code": "842",
+      "short": "PSC-CP",
+      "name": "Partit dels Socialistes de Catalunya - Candidatura de Progrés",
+      "votes": 230,
+      "seats": 2
+     },
+     {
+      "code": "430504235",
+      "short": "UPC-FIC",
+      "name": "Fic-Units per Creixell Federació d'Independents de Catalunya",
+      "votes": 176,
+      "seats": 1
+     },
+     {
+      "code": "430504231",
+      "short": "CM",
+      "name": "Junts per Creixell - Compromís Municipal",
+      "votes": 168,
+      "seats": 1
+     },
+     {
+      "code": "202386",
+      "short": "PP",
+      "name": "Partido Popular",
+      "votes": 138,
+      "seats": 1
+     },
+     {
+      "code": "193",
+      "short": "ERC-AM",
+      "name": "Esquerra Republicana de Catalunya - Acord Municipal",
+      "votes": 136,
+      "seats": 1
+     },
+     {
+      "code": "430504232",
+      "short": "VALENTS",
+      "name": "Valents Creixell",
+      "votes": 114,
+      "seats": 1
+     },
+     {
+      "code": "430504234",
+      "short": "CC-AMUNT",
+      "name": "Capgirem Creixell - Alternativa Municipalista",
+      "votes": 104,
+      "seats": 0
+     },
+     {
+      "code": "430504233",
+      "short": "CECP-C",
+      "name": "Creixell en Comú Podem - Confluència",
+      "votes": 28,
+      "seats": 0
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 2877,
+    "voters": 1801,
+    "nullVotes": 32,
+    "blankVotes": 20,
+    "listVotes": 1749,
+    "validVotes": 1769,
+    "votes": {
+     "6": 607,
+     "10": 225,
+     "86": 273,
+     "693": 214,
+     "697": 4,
+     "1031": 137,
+     "1034": 1,
+     "1109": 14,
+     "1129": 44,
+     "1134": 3,
+     "1135": 218,
+     "1136": 8,
+     "1137": 0,
+     "1138": 1
+    }
+   },
+   "parliament": {
+    "electorate": 2951,
+    "voters": 1474,
+    "nullVotes": 12,
+    "blankVotes": 5,
+    "listVotes": 1457,
+    "validVotes": 1462,
+    "votes": {
+     "6": 478,
+     "10": 193,
+     "86": 192,
+     "301": 11,
+     "350": 0,
+     "546": 0,
+     "693": 198,
+     "697": 1,
+     "1018": 3,
+     "1034": 3,
+     "1129": 23,
+     "1130": 29,
+     "1134": 5,
+     "1140": 47,
+     "1141": 29,
+     "1142": 1,
+     "1143": 242,
+     "1144": 2
+    }
+   }
+  },
+  {
+   "code": "08182",
+   "idescat": "081825",
+   "slug": "el-pont-de-vilomara-i-rocafort",
+   "name": "el Pont de Vilomara i Rocafort",
+   "comarca": "Bages",
+   "province": "Barcelona",
+   "population": 4193,
+   "mayor": {
+    "name": "Lidia Delgado Gómez",
+    "party": "PSC-CP",
+    "since": "2025-05-06"
+   },
+   "municipal": {
+    "electorate": 3140,
+    "voters": 1780,
+    "nullVotes": 18,
+    "blankVotes": 63,
+    "listVotes": 1699,
+    "validVotes": 1762,
+    "seats": 11,
+    "censusPopulation": 4024,
+    "lists": [
+     {
+      "code": "842",
+      "short": "PSC-CP",
+      "name": "Partit dels Socialistes de Catalunya - Candidatura de Progrés",
+      "votes": 994,
+      "seats": 7
+     },
+     {
+      "code": "193",
+      "short": "ERC-AM",
+      "name": "Esquerra Republicana de Catalunya - Acord Municipal",
+      "votes": 605,
+      "seats": 4
+     },
+     {
+      "code": "81824230",
+      "short": "CM",
+      "name": "Junts Pel Pont I Rocafort- Compromís Municipal",
+      "votes": 100,
+      "seats": 0
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 3091,
+    "voters": 1944,
+    "nullVotes": 9,
+    "blankVotes": 7,
+    "listVotes": 1928,
+    "validVotes": 1935,
+    "votes": {
+     "6": 697,
+     "10": 260,
+     "86": 247,
+     "693": 308,
+     "697": 1,
+     "1031": 123,
+     "1034": 2,
+     "1109": 34,
+     "1129": 26,
+     "1134": 8,
+     "1135": 219,
+     "1136": 3
+    }
+   },
+   "parliament": {
+    "electorate": 3116,
+    "voters": 1644,
+    "nullVotes": 14,
+    "blankVotes": 17,
+    "listVotes": 1613,
+    "validVotes": 1630,
+    "votes": {
+     "6": 498,
+     "10": 244,
+     "86": 144,
+     "301": 9,
+     "350": 0,
+     "693": 267,
+     "697": 0,
+     "1034": 2,
+     "1129": 22,
+     "1130": 110,
+     "1134": 6,
+     "1140": 65,
+     "1141": 33,
+     "1142": 0,
+     "1143": 205,
+     "1144": 8
+    }
+   }
+  },
+  {
+   "code": "17163",
+   "idescat": "171637",
+   "slug": "sant-gregori",
+   "name": "Sant Gregori",
+   "comarca": "Gironès",
+   "province": "Girona",
+   "population": 4191,
+   "mayor": {
+    "name": "Joaquim Roca Ventura",
+    "party": "CM",
+    "since": "2023-06-17"
+   },
+   "municipal": {
+    "electorate": 3075,
+    "voters": 1941,
+    "nullVotes": 29,
+    "blankVotes": 30,
+    "listVotes": 1882,
+    "validVotes": 1912,
+    "seats": 11,
+    "censusPopulation": 4085,
+    "lists": [
+     {
+      "code": "171634230",
+      "short": "CM",
+      "name": "Junts per Sant Gregori - Compromís Municipal",
+      "votes": 1242,
+      "seats": 8
+     },
+     {
+      "code": "193",
+      "short": "ERC-AM",
+      "name": "Esquerra Republicana de Catalunya - Acord Municipal",
+      "votes": 343,
+      "seats": 2
+     },
+     {
+      "code": "1039",
+      "short": "CUP-AMUNT",
+      "name": "Candidatura d'Unitat Popular - Alternativa Municipalista",
+      "votes": 232,
+      "seats": 1
+     },
+     {
+      "code": "842",
+      "short": "PSC-CP",
+      "name": "Partit dels Socialistes de Catalunya - Candidatura de Progrés",
+      "votes": 65,
+      "seats": 0
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 3062,
+    "voters": 2102,
+    "nullVotes": 33,
+    "blankVotes": 24,
+    "listVotes": 2045,
+    "validVotes": 2069,
+    "votes": {
+     "6": 396,
+     "10": 396,
+     "86": 101,
+     "693": 65,
+     "697": 0,
+     "1031": 615,
+     "1034": 1,
+     "1109": 207,
+     "1129": 29,
+     "1134": 1,
+     "1135": 213,
+     "1136": 21
+    }
+   },
+   "parliament": {
+    "electorate": 3128,
+    "voters": 2145,
+    "nullVotes": 16,
+    "blankVotes": 33,
+    "listVotes": 2096,
+    "validVotes": 2129,
+    "votes": {
+     "6": 260,
+     "10": 247,
+     "86": 64,
+     "301": 3,
+     "350": 1,
+     "693": 38,
+     "697": 0,
+     "1034": 0,
+     "1129": 19,
+     "1130": 166,
+     "1134": 0,
+     "1140": 56,
+     "1141": 141,
+     "1143": 1088,
+     "1144": 13
+    }
+   }
+  },
+  {
+   "code": "08204",
+   "idescat": "082042",
+   "slug": "sant-climent-de-llobregat",
+   "name": "Sant Climent de Llobregat",
+   "comarca": "Baix Llobregat",
+   "province": "Barcelona",
+   "population": 4187,
+   "mayor": {
+    "name": "Jordi Pérez Condeminas",
+    "party": "",
+    "since": "2026-02-14"
+   },
+   "municipal": {
+    "electorate": 3221,
+    "voters": 2056,
+    "nullVotes": 38,
+    "blankVotes": 59,
+    "listVotes": 1959,
+    "validVotes": 2018,
+    "seats": 11,
+    "censusPopulation": 4170,
+    "lists": [
+     {
+      "code": "1123",
+      "short": "CM",
+      "name": "Junts - Compromís Municipal",
+      "votes": 849,
+      "seats": 5
+     },
+     {
+      "code": "82044230",
+      "short": "GxSC-CP",
+      "name": "Gent per Sant Climent - Candidatura de Progrés",
+      "votes": 745,
+      "seats": 5
+     },
+     {
+      "code": "193",
+      "short": "ERC-AM",
+      "name": "Esquerra Republicana de Catalunya - Acord Municipal",
+      "votes": 277,
+      "seats": 1
+     },
+     {
+      "code": "202386",
+      "short": "PP",
+      "name": "Partido Popular",
+      "votes": 50,
+      "seats": 0
+     },
+     {
+      "code": "301",
+      "short": "Cs",
+      "name": "Ciutadans - Partido de la Ciudadanía",
+      "votes": 38,
+      "seats": 0
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 3214,
+    "voters": 2277,
+    "nullVotes": 12,
+    "blankVotes": 26,
+    "listVotes": 2239,
+    "validVotes": 2265,
+    "votes": {
+     "6": 801,
+     "10": 328,
+     "86": 227,
+     "693": 144,
+     "697": 2,
+     "1031": 270,
+     "1034": 7,
+     "1109": 54,
+     "1129": 33,
+     "1134": 2,
+     "1135": 366,
+     "1136": 5
+    }
+   },
+   "parliament": {
+    "electorate": 3250,
+    "voters": 1983,
+    "nullVotes": 19,
+    "blankVotes": 43,
+    "listVotes": 1921,
+    "validVotes": 1964,
+    "votes": {
+     "6": 539,
+     "10": 337,
+     "86": 150,
+     "301": 23,
+     "350": 0,
+     "693": 147,
+     "697": 5,
+     "1034": 0,
+     "1129": 39,
+     "1130": 59,
+     "1134": 10,
+     "1140": 118,
+     "1141": 73,
+     "1142": 2,
+     "1143": 410,
+     "1144": 9
+    }
+   }
+  },
+  {
+   "code": "43109",
+   "idescat": "431093",
+   "slug": "la-pobla-de-mafumet",
+   "name": "la Pobla de Mafumet",
+   "comarca": "Tarragonès",
+   "province": "Tarragona",
+   "population": 4175,
+   "mayor": {
+    "name": "Joan Maria Sardà Padrell",
+    "party": "UAS-POBLA",
+    "since": "2023-06-17"
+   },
+   "municipal": {
+    "electorate": 2841,
+    "voters": 1809,
+    "nullVotes": 17,
+    "blankVotes": 11,
+    "listVotes": 1781,
+    "validVotes": 1792,
+    "seats": 11,
+    "censusPopulation": 4052,
+    "lists": [
+     {
+      "code": "431094230",
+      "short": "UAS-POBLA",
+      "name": "Units Amb Sarda per la Pobla",
+      "votes": 1283,
+      "seats": 9
+     },
+     {
+      "code": "193",
+      "short": "ERC-AM",
+      "name": "Esquerra Republicana de Catalunya - Acord Municipal",
+      "votes": 227,
+      "seats": 1
+     },
+     {
+      "code": "842",
+      "short": "PSC-CP",
+      "name": "Partit dels Socialistes de Catalunya - Candidatura de Progrés",
+      "votes": 161,
+      "seats": 1
+     },
+     {
+      "code": "693",
+      "short": "VOX",
+      "name": "VOX",
+      "votes": 87,
+      "seats": 0
+     },
+     {
+      "code": "202386",
+      "short": "PP",
+      "name": "Partido Popular",
+      "votes": 23,
+      "seats": 0
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 2806,
+    "voters": 1753,
+    "nullVotes": 28,
+    "blankVotes": 13,
+    "listVotes": 1712,
+    "validVotes": 1725,
+    "votes": {
+     "6": 543,
+     "10": 183,
+     "86": 237,
+     "693": 363,
+     "697": 3,
+     "1031": 86,
+     "1034": 4,
+     "1109": 11,
+     "1129": 55,
+     "1134": 5,
+     "1135": 216,
+     "1136": 5,
+     "1137": 1,
+     "1138": 0
+    }
+   },
+   "parliament": {
+    "electorate": 2817,
+    "voters": 1466,
+    "nullVotes": 17,
+    "blankVotes": 14,
+    "listVotes": 1435,
+    "validVotes": 1449,
+    "votes": {
+     "6": 402,
+     "10": 195,
+     "86": 157,
+     "301": 13,
+     "350": 2,
+     "546": 0,
+     "693": 340,
+     "697": 1,
+     "1018": 0,
+     "1034": 4,
+     "1129": 35,
+     "1130": 40,
+     "1134": 13,
+     "1140": 48,
+     "1141": 25,
+     "1142": 0,
+     "1143": 155,
+     "1144": 5
+    }
+   }
+  },
+  {
+   "code": "17142",
+   "idescat": "171426",
+   "slug": "quart",
+   "name": "Quart",
+   "comarca": "Gironès",
+   "province": "Girona",
+   "population": 4165,
+   "mayor": {
+    "name": "Ferran Rodero Tomas",
+    "party": "CM",
+    "since": "2023-06-17"
+   },
+   "municipal": {
+    "electorate": 2883,
+    "voters": 1993,
+    "nullVotes": 16,
+    "blankVotes": 25,
+    "listVotes": 1952,
+    "validVotes": 1977,
+    "seats": 11,
+    "censusPopulation": 3906,
+    "lists": [
+     {
+      "code": "171424233",
+      "short": "CM",
+      "name": "Gent de Quart - Compromís Municipal",
+      "votes": 714,
+      "seats": 4
+     },
+     {
+      "code": "171424231",
+      "short": "QA",
+      "name": "Quart Actiu Activisme Municipal",
+      "votes": 440,
+      "seats": 3
+     },
+     {
+      "code": "171424230",
+      "short": "PSC-CP",
+      "name": "Partit dels Socialistes de Catalunya per Quart - Candidatura de Progrés",
+      "votes": 368,
+      "seats": 2
+     },
+     {
+      "code": "171424232",
+      "short": "CUP-SP-AMUNT",
+      "name": "CUP - Som Poble - Alternativa Municipalista",
+      "votes": 228,
+      "seats": 1
+     },
+     {
+      "code": "193",
+      "short": "ERC-AM",
+      "name": "Esquerra Republicana de Catalunya - Acord Municipal",
+      "votes": 202,
+      "seats": 1
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 2859,
+    "voters": 2000,
+    "nullVotes": 27,
+    "blankVotes": 28,
+    "listVotes": 1945,
+    "validVotes": 1973,
+    "votes": {
+     "6": 512,
+     "10": 271,
+     "86": 215,
+     "693": 152,
+     "697": 1,
+     "1031": 433,
+     "1034": 0,
+     "1109": 138,
+     "1129": 15,
+     "1134": 3,
+     "1135": 189,
+     "1136": 16
+    }
+   },
+   "parliament": {
+    "electorate": 2910,
+    "voters": 1939,
+    "nullVotes": 22,
+    "blankVotes": 30,
+    "listVotes": 1887,
+    "validVotes": 1917,
+    "votes": {
+     "6": 358,
+     "10": 194,
+     "86": 118,
+     "301": 6,
+     "350": 1,
+     "693": 131,
+     "697": 1,
+     "1034": 0,
+     "1129": 19,
+     "1130": 144,
+     "1134": 5,
+     "1140": 59,
+     "1141": 86,
+     "1143": 753,
+     "1144": 12
+    }
+   }
+  },
+  {
+   "code": "08053",
+   "idescat": "080538",
+   "slug": "castellbell-i-el-vilar",
+   "name": "Castellbell i el Vilar",
+   "comarca": "Bages",
+   "province": "Barcelona",
+   "population": 4159,
+   "mayor": {
+    "name": "Adrià Valls I Sellés",
+    "party": "",
+    "since": "2023-06-17"
+   },
+   "municipal": {
+    "electorate": 3119,
+    "voters": 1718,
+    "nullVotes": 25,
+    "blankVotes": 40,
+    "listVotes": 1653,
+    "validVotes": 1693,
+    "seats": 11,
+    "censusPopulation": 3889,
+    "lists": [
+     {
+      "code": "80534230",
+      "short": "SxCV-AM",
+      "name": "Sumem per Castellbell i el Vilar - Acord Municipal",
+      "votes": 827,
+      "seats": 6
+     },
+     {
+      "code": "842",
+      "short": "PSC-CP",
+      "name": "Partit dels Socialistes de Catalunya - Candidatura de Progrés",
+      "votes": 826,
+      "seats": 5
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 3110,
+    "voters": 1920,
+    "nullVotes": 16,
+    "blankVotes": 14,
+    "listVotes": 1890,
+    "validVotes": 1904,
+    "votes": {
+     "6": 627,
+     "10": 339,
+     "86": 181,
+     "693": 231,
+     "697": 1,
+     "1031": 207,
+     "1034": 0,
+     "1109": 42,
+     "1129": 15,
+     "1134": 5,
+     "1135": 234,
+     "1136": 8
+    }
+   },
+   "parliament": {
+    "electorate": 3176,
+    "voters": 1544,
+    "nullVotes": 19,
+    "blankVotes": 20,
+    "listVotes": 1505,
+    "validVotes": 1525,
+    "votes": {
+     "6": 397,
+     "10": 239,
+     "86": 98,
+     "301": 2,
+     "350": 2,
+     "693": 174,
+     "697": 2,
+     "1034": 1,
+     "1129": 18,
+     "1130": 57,
+     "1134": 7,
+     "1140": 64,
+     "1141": 52,
+     "1142": 0,
+     "1143": 388,
+     "1144": 4
+    }
+   }
+  },
+  {
+   "code": "08286",
+   "idescat": "082861",
+   "slug": "la-torre-de-claramunt",
+   "name": "la Torre de Claramunt",
+   "comarca": "Anoia",
+   "province": "Barcelona",
+   "population": 4158,
+   "mayor": {
+    "name": "Jaume Riba Bayo",
+    "party": "CM",
+    "since": "2023-06-17"
+   },
+   "municipal": {
+    "electorate": 3188,
+    "voters": 1796,
+    "nullVotes": 19,
+    "blankVotes": 15,
+    "listVotes": 1762,
+    "validVotes": 1777,
+    "seats": 11,
+    "censusPopulation": 3966,
+    "lists": [
+     {
+      "code": "82864231",
+      "short": "CM",
+      "name": "Junts per la Torre de Claramunt - Compromís Municipal",
+      "votes": 786,
+      "seats": 5
+     },
+     {
+      "code": "842",
+      "short": "PSC-CP",
+      "name": "Partit dels Socialistes de Catalunya - Candidatura de Progrés",
+      "votes": 432,
+      "seats": 3
+     },
+     {
+      "code": "82864230",
+      "short": "RE",
+      "name": "Republicans d'Esquerra per la Torre",
+      "votes": 205,
+      "seats": 1
+     },
+     {
+      "code": "693",
+      "short": "VOX",
+      "name": "VOX",
+      "votes": 200,
+      "seats": 1
+     },
+     {
+      "code": "82864232",
+      "short": "ERC-SA-AM",
+      "name": "Esquerra Republicana de Catalunya - Som L'Alternativa - Acord Municipal",
+      "votes": 139,
+      "seats": 1
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 3178,
+    "voters": 2038,
+    "nullVotes": 19,
+    "blankVotes": 15,
+    "listVotes": 2004,
+    "validVotes": 2019,
+    "votes": {
+     "6": 723,
+     "10": 259,
+     "86": 256,
+     "693": 260,
+     "697": 1,
+     "1031": 170,
+     "1034": 3,
+     "1109": 60,
+     "1129": 29,
+     "1134": 5,
+     "1135": 233,
+     "1136": 5
+    }
+   },
+   "parliament": {
+    "electorate": 3276,
+    "voters": 1750,
+    "nullVotes": 15,
+    "blankVotes": 19,
+    "listVotes": 1716,
+    "validVotes": 1735,
+    "votes": {
+     "6": 483,
+     "10": 233,
+     "86": 184,
+     "301": 12,
+     "350": 0,
+     "693": 234,
+     "697": 0,
+     "1034": 1,
+     "1129": 28,
+     "1130": 36,
+     "1134": 10,
+     "1140": 78,
+     "1141": 69,
+     "1142": 0,
+     "1143": 345,
+     "1144": 3
+    }
+   }
+  },
+  {
+   "code": "08261",
+   "idescat": "082613",
+   "slug": "santa-susanna",
+   "name": "Santa Susanna",
+   "comarca": "Maresme",
+   "province": "Barcelona",
+   "population": 4099,
+   "mayor": {
+    "name": "Joan Campolier I Montsant",
+    "party": "CM",
+    "since": "2023-06-17"
+   },
+   "municipal": {
+    "electorate": 2624,
+    "voters": 1686,
+    "nullVotes": 15,
+    "blankVotes": 16,
+    "listVotes": 1655,
+    "validVotes": 1671,
+    "seats": 11,
+    "censusPopulation": 3755,
+    "lists": [
+     {
+      "code": "82614233",
+      "short": "CM",
+      "name": "Ara i Sempre Santa Susanna - Compromís Municipal",
+      "votes": 826,
+      "seats": 6
+     },
+     {
+      "code": "82614231",
+      "short": "USS-AM",
+      "name": "Unitat per Santa Susanna - Acord Municipal",
+      "votes": 385,
+      "seats": 3
+     },
+     {
+      "code": "202386",
+      "short": "PP",
+      "name": "Partido Popular",
+      "votes": 164,
+      "seats": 1
+     },
+     {
+      "code": "82614230",
+      "short": "XS-PSC-CP",
+      "name": "XSanta - Partit dels Socialistes de Catalunya - Candidatura de Progrés",
+      "votes": 154,
+      "seats": 1
+     },
+     {
+      "code": "82614232",
+      "short": "Cs AxSS-CS",
+      "name": "Alternativa x Santa Susanna - Ciutadans",
+      "votes": 126,
+      "seats": 0
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 2634,
+    "voters": 1731,
+    "nullVotes": 18,
+    "blankVotes": 18,
+    "listVotes": 1695,
+    "validVotes": 1713,
+    "votes": {
+     "6": 506,
+     "10": 261,
+     "86": 269,
+     "693": 180,
+     "697": 1,
+     "1031": 155,
+     "1034": 1,
+     "1109": 55,
+     "1129": 30,
+     "1134": 2,
+     "1135": 221,
+     "1136": 14
+    }
+   },
+   "parliament": {
+    "electorate": 2682,
+    "voters": 1516,
+    "nullVotes": 21,
+    "blankVotes": 20,
+    "listVotes": 1475,
+    "validVotes": 1495,
+    "votes": {
+     "6": 348,
+     "10": 256,
+     "86": 167,
+     "301": 19,
+     "350": 3,
+     "693": 146,
+     "697": 1,
+     "1034": 0,
+     "1129": 14,
+     "1130": 58,
+     "1134": 0,
+     "1140": 65,
+     "1141": 69,
+     "1142": 0,
+     "1143": 325,
+     "1144": 4
+    }
+   }
+  },
+  {
+   "code": "17215",
+   "idescat": "172155",
+   "slug": "vilablareix",
+   "name": "Vilablareix",
+   "comarca": "Gironès",
+   "province": "Girona",
+   "population": 4077,
+   "mayor": {
+    "name": "Maria Teresa Tixis Padrosa",
+    "party": "ERC-AM",
+    "since": "2023-06-17"
+   },
+   "municipal": {
+    "electorate": 2648,
+    "voters": 1751,
+    "nullVotes": 45,
+    "blankVotes": 37,
+    "listVotes": 1669,
+    "validVotes": 1706,
+    "seats": 11,
+    "censusPopulation": 3396,
+    "lists": [
+     {
+      "code": "193",
+      "short": "ERC-AM",
+      "name": "Esquerra Republicana de Catalunya - Acord Municipal",
+      "votes": 835,
+      "seats": 7
+     },
+     {
+      "code": "172154230",
+      "short": "CM",
+      "name": "Junts per Vilablareix - Compromís Municipal",
+      "votes": 471,
+      "seats": 3
+     },
+     {
+      "code": "172154231",
+      "short": "UxVI-IDC",
+      "name": "Units per Vilablareix - Independents de Catalunya",
+      "votes": 200,
+      "seats": 1
+     },
+     {
+      "code": "172154232",
+      "short": "SOM VILABLAREIX",
+      "name": "Som Vilablareix",
+      "votes": 94,
+      "seats": 0
+     },
+     {
+      "code": "842",
+      "short": "PSC-CP",
+      "name": "Partit dels Socialistes de Catalunya - Candidatura de Progrés",
+      "votes": 69,
+      "seats": 0
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 2646,
+    "voters": 1889,
+    "nullVotes": 21,
+    "blankVotes": 13,
+    "listVotes": 1855,
+    "validVotes": 1868,
+    "votes": {
+     "6": 508,
+     "10": 393,
+     "86": 156,
+     "693": 93,
+     "697": 0,
+     "1031": 390,
+     "1034": 1,
+     "1109": 101,
+     "1129": 22,
+     "1134": 4,
+     "1135": 157,
+     "1136": 30
+    }
+   },
+   "parliament": {
+    "electorate": 2816,
+    "voters": 1973,
+    "nullVotes": 20,
+    "blankVotes": 25,
+    "listVotes": 1928,
+    "validVotes": 1953,
+    "votes": {
+     "6": 329,
+     "10": 320,
+     "86": 113,
+     "301": 5,
+     "350": 1,
+     "693": 91,
+     "697": 1,
+     "1034": 3,
+     "1129": 28,
+     "1130": 219,
+     "1134": 0,
+     "1140": 38,
+     "1141": 66,
+     "1143": 705,
+     "1144": 9
+    }
+   }
+  },
+  {
+   "code": "08017",
+   "idescat": "080174",
+   "slug": "balenya",
+   "name": "Balenyà",
+   "comarca": "Osona",
+   "province": "Barcelona",
+   "population": 4021,
+   "mayor": {
+    "name": "Carles Valls Arno",
+    "party": "JpB",
+    "since": "2023-06-17"
+   },
+   "municipal": {
+    "electorate": 2928,
+    "voters": 1595,
+    "nullVotes": 19,
+    "blankVotes": 27,
+    "listVotes": 1549,
+    "validVotes": 1576,
+    "seats": 11,
+    "censusPopulation": 3948,
+    "lists": [
+     {
+      "code": "80174232",
+      "short": "JpB",
+      "name": "Junts per Balenyà",
+      "votes": 536,
+      "seats": 4
+     },
+     {
+      "code": "80174231",
+      "short": "CM",
+      "name": "Units Pel Poble - Compromís Municipal",
+      "votes": 467,
+      "seats": 3
+     },
+     {
+      "code": "80174230",
+      "short": "CP",
+      "name": "Sumem per Balenyà - Candidatura de Progrés",
+      "votes": 356,
+      "seats": 3
+     },
+     {
+      "code": "193",
+      "short": "ERC-AM",
+      "name": "Esquerra Republicana de Catalunya - Acord Municipal",
+      "votes": 190,
+      "seats": 1
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 2919,
+    "voters": 1880,
+    "nullVotes": 23,
+    "blankVotes": 15,
+    "listVotes": 1842,
+    "validVotes": 1857,
+    "votes": {
+     "6": 587,
+     "10": 347,
+     "86": 116,
+     "693": 117,
+     "697": 3,
+     "1031": 351,
+     "1034": 1,
+     "1109": 73,
+     "1129": 19,
+     "1134": 6,
+     "1135": 205,
+     "1136": 17
+    }
+   },
+   "parliament": {
+    "electorate": 2925,
+    "voters": 1647,
+    "nullVotes": 13,
+    "blankVotes": 22,
+    "listVotes": 1612,
+    "validVotes": 1634,
+    "votes": {
+     "6": 340,
+     "10": 235,
+     "86": 67,
+     "301": 9,
+     "350": 2,
+     "693": 89,
+     "697": 3,
+     "1034": 2,
+     "1129": 16,
+     "1130": 93,
+     "1134": 4,
+     "1140": 68,
+     "1141": 60,
+     "1142": 0,
+     "1143": 611,
+     "1144": 13
+    }
+   }
+  },
+  {
+   "code": "17027",
+   "idescat": "170274",
+   "slug": "breda",
+   "name": "Breda",
+   "comarca": "Selva",
+   "province": "Girona",
+   "population": 3969,
+   "mayor": {
+    "name": "Dídac Manresa Molins",
+    "party": "ERC-AM",
+    "since": "2023-06-17"
+   },
+   "municipal": {
+    "electorate": 2993,
+    "voters": 1697,
+    "nullVotes": 32,
+    "blankVotes": 38,
+    "listVotes": 1627,
+    "validVotes": 1665,
+    "seats": 11,
+    "censusPopulation": 3842,
+    "lists": [
+     {
+      "code": "193",
+      "short": "ERC-AM",
+      "name": "Esquerra Republicana de Catalunya - Acord Municipal",
+      "votes": 947,
+      "seats": 7
+     },
+     {
+      "code": "170274230",
+      "short": "CM",
+      "name": "Junts per Breda - Compromís Municipal",
+      "votes": 396,
+      "seats": 3
+     },
+     {
+      "code": "1039",
+      "short": "CUP-AMUNT",
+      "name": "Candidatura d'Unitat Popular - Alternativa Municipalista",
+      "votes": 234,
+      "seats": 1
+     },
+     {
+      "code": "842",
+      "short": "PSC-CP",
+      "name": "Partit dels Socialistes de Catalunya - Candidatura de Progrés",
+      "votes": 50,
+      "seats": 0
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 2993,
+    "voters": 1949,
+    "nullVotes": 24,
+    "blankVotes": 9,
+    "listVotes": 1916,
+    "validVotes": 1925,
+    "votes": {
+     "6": 485,
+     "10": 498,
+     "86": 101,
+     "693": 54,
+     "697": 1,
+     "1031": 385,
+     "1034": 0,
+     "1109": 117,
+     "1129": 15,
+     "1134": 1,
+     "1135": 238,
+     "1136": 21
+    }
+   },
+   "parliament": {
+    "electorate": 3005,
+    "voters": 1835,
+    "nullVotes": 27,
+    "blankVotes": 13,
+    "listVotes": 1795,
+    "validVotes": 1808,
+    "votes": {
+     "6": 273,
+     "10": 342,
+     "86": 62,
+     "301": 1,
+     "350": 0,
+     "693": 63,
+     "697": 2,
+     "1034": 1,
+     "1129": 16,
+     "1130": 104,
+     "1134": 2,
+     "1140": 71,
+     "1141": 138,
+     "1143": 714,
+     "1144": 6
+    }
+   }
+  },
+  {
+   "code": "08145",
+   "idescat": "081458",
+   "slug": "olerdola",
+   "name": "Olèrdola",
+   "comarca": "Alt Penedès",
+   "province": "Barcelona",
+   "population": 3945,
+   "mayor": {
+    "name": "Jordi Àlvarez Rovirosa",
+    "party": "CM",
+    "since": "2025-06-21"
+   },
+   "municipal": {
+    "electorate": 2913,
+    "voters": 1802,
+    "nullVotes": 23,
+    "blankVotes": 33,
+    "listVotes": 1746,
+    "validVotes": 1779,
+    "seats": 11,
+    "censusPopulation": 3884,
+    "lists": [
+     {
+      "code": "81454231",
+      "short": "APO",
+      "name": "Alternativa per Olèrdola",
+      "votes": 772,
+      "seats": 5
+     },
+     {
+      "code": "81454230",
+      "short": "CM",
+      "name": "Impulsem Olèrdola - Compromís Municipal",
+      "votes": 364,
+      "seats": 2
+     },
+     {
+      "code": "193",
+      "short": "ERC-AM",
+      "name": "Esquerra Republicana de Catalunya - Acord Municipal",
+      "votes": 311,
+      "seats": 2
+     },
+     {
+      "code": "842",
+      "short": "PSC-CP",
+      "name": "Partit dels Socialistes de Catalunya - Candidatura de Progrés",
+      "votes": 299,
+      "seats": 2
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 2899,
+    "voters": 1984,
+    "nullVotes": 22,
+    "blankVotes": 20,
+    "listVotes": 1942,
+    "validVotes": 1962,
+    "votes": {
+     "6": 586,
+     "10": 357,
+     "86": 174,
+     "693": 156,
+     "697": 3,
+     "1031": 289,
+     "1034": 1,
+     "1109": 98,
+     "1129": 26,
+     "1134": 7,
+     "1135": 218,
+     "1136": 27
+    }
+   },
+   "parliament": {
+    "electorate": 2935,
+    "voters": 1795,
+    "nullVotes": 17,
+    "blankVotes": 10,
+    "listVotes": 1768,
+    "validVotes": 1778,
+    "votes": {
+     "6": 413,
+     "10": 273,
+     "86": 122,
+     "301": 9,
+     "350": 0,
+     "693": 115,
+     "697": 0,
+     "1034": 1,
+     "1129": 25,
+     "1130": 94,
+     "1134": 7,
+     "1140": 75,
+     "1141": 97,
+     "1142": 2,
+     "1143": 533,
+     "1144": 2
+    }
+   }
+  },
+  {
+   "code": "08203",
+   "idescat": "082037",
+   "slug": "sant-cebria-de-vallalta",
+   "name": "Sant Cebrià de Vallalta",
+   "comarca": "Maresme",
+   "province": "Barcelona",
+   "population": 3872,
+   "mayor": {
+    "name": "Albert Pla I Besolí",
+    "party": "ERC-AM",
+    "since": "2023-06-17"
+   },
+   "municipal": {
+    "electorate": 2725,
+    "voters": 1472,
+    "nullVotes": 13,
+    "blankVotes": 21,
+    "listVotes": 1438,
+    "validVotes": 1459,
+    "seats": 11,
+    "censusPopulation": 3619,
+    "lists": [
+     {
+      "code": "193",
+      "short": "ERC-AM",
+      "name": "Esquerra Republicana de Catalunya - Acord Municipal",
+      "votes": 549,
+      "seats": 5
+     },
+     {
+      "code": "82034232",
+      "short": "AVSC",
+      "name": "Agrupación de Electores \"Agrupació Sant Cebrià\"",
+      "votes": 502,
+      "seats": 4
+     },
+     {
+      "code": "82034231",
+      "short": "CM",
+      "name": "Junts per Catalunya - Compromís Municipal",
+      "votes": 197,
+      "seats": 1
+     },
+     {
+      "code": "82034230",
+      "short": "CUP-AMUNT",
+      "name": "Candidatura d'Unitat Popular Sant Cebrià de Vallalta - Alternativa Municipalista",
+      "votes": 113,
+      "seats": 1
+     },
+     {
+      "code": "842",
+      "short": "PSC-CP",
+      "name": "Partit dels Socialistes de Catalunya - Candidatura de Progrés",
+      "votes": 77,
+      "seats": 0
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 2726,
+    "voters": 1626,
+    "nullVotes": 8,
+    "blankVotes": 15,
+    "listVotes": 1603,
+    "validVotes": 1618,
+    "votes": {
+     "6": 427,
+     "10": 347,
+     "86": 170,
+     "693": 129,
+     "697": 3,
+     "1031": 219,
+     "1034": 1,
+     "1109": 61,
+     "1129": 24,
+     "1134": 3,
+     "1135": 205,
+     "1136": 14
+    }
+   },
+   "parliament": {
+    "electorate": 2745,
+    "voters": 1434,
+    "nullVotes": 4,
+    "blankVotes": 18,
+    "listVotes": 1412,
+    "validVotes": 1430,
+    "votes": {
+     "6": 271,
+     "10": 248,
+     "86": 101,
+     "301": 7,
+     "350": 0,
+     "693": 127,
+     "697": 1,
+     "1034": 4,
+     "1129": 27,
+     "1130": 67,
+     "1134": 5,
+     "1140": 50,
+     "1141": 64,
+     "1142": 0,
+     "1143": 436,
+     "1144": 4
+    }
+   }
+  },
+  {
+   "code": "43138",
+   "idescat": "431384",
+   "slug": "santa-barbara",
+   "name": "Santa Bàrbara",
+   "comarca": "Montsià",
+   "province": "Tarragona",
+   "population": 3871,
+   "mayor": {
+    "name": "Josep Lluís Gimeno Vegué",
+    "party": "",
+    "since": "2025-06-18"
+   },
+   "municipal": {
+    "electorate": 2689,
+    "voters": 1725,
+    "nullVotes": 68,
+    "blankVotes": 24,
+    "listVotes": 1633,
+    "validVotes": 1657,
+    "seats": 11,
+    "censusPopulation": 3791,
+    "lists": [
+     {
+      "code": "431384230",
+      "short": "CM",
+      "name": "Junts per Santa Bàrbara - Compromís Municipal",
+      "votes": 502,
+      "seats": 3
+     },
+     {
+      "code": "431384231",
+      "short": "PerSB'",
+      "name": "Agrupació d'Electores i Electors \"Per Santa Bárbara\"",
+      "votes": 422,
+      "seats": 3
+     },
+     {
+      "code": "193",
+      "short": "ERC-AM",
+      "name": "Esquerra Republicana de Catalunya - Acord Municipal",
+      "votes": 380,
+      "seats": 3
+     },
+     {
+      "code": "842",
+      "short": "PSC-CP",
+      "name": "Partit dels Socialistes de Catalunya - Candidatura de Progrés",
+      "votes": 171,
+      "seats": 1
+     },
+     {
+      "code": "431384232",
+      "short": "SBAU-ARA PL",
+      "name": "Santa Bàrbara Avança Unida - Ara Pacte Local",
+      "votes": 158,
+      "seats": 1
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 2647,
+    "voters": 1609,
+    "nullVotes": 34,
+    "blankVotes": 20,
+    "listVotes": 1555,
+    "validVotes": 1575,
+    "votes": {
+     "6": 542,
+     "10": 248,
+     "86": 194,
+     "693": 201,
+     "697": 3,
+     "1031": 201,
+     "1034": 1,
+     "1109": 17,
+     "1129": 16,
+     "1134": 1,
+     "1135": 117,
+     "1136": 11,
+     "1137": 2,
+     "1138": 1
+    }
+   },
+   "parliament": {
+    "electorate": 2654,
+    "voters": 1370,
+    "nullVotes": 55,
+    "blankVotes": 25,
+    "listVotes": 1290,
+    "validVotes": 1315,
+    "votes": {
+     "6": 331,
+     "10": 235,
+     "86": 142,
+     "301": 5,
+     "350": 1,
+     "546": 0,
+     "693": 131,
+     "697": 2,
+     "1018": 1,
+     "1034": 1,
+     "1129": 7,
+     "1130": 66,
+     "1134": 1,
+     "1140": 36,
+     "1141": 43,
+     "1142": 0,
+     "1143": 285,
+     "1144": 3
+    }
+   }
+  },
+  {
+   "code": "43054",
+   "idescat": "430542",
+   "slug": "l-espluga-de-francoli",
+   "name": "l'Espluga de Francolí",
+   "comarca": "Conca de Barberà",
+   "province": "Tarragona",
+   "population": 3863,
+   "mayor": {
+    "name": "Josep Maria Vidal Minguella",
+    "party": "",
+    "since": "2023-06-17"
+   },
+   "municipal": {
+    "electorate": 2845,
+    "voters": 1856,
+    "nullVotes": 33,
+    "blankVotes": 51,
+    "listVotes": 1772,
+    "validVotes": 1823,
+    "seats": 11,
+    "censusPopulation": 3698,
+    "lists": [
+     {
+      "code": "430544230",
+      "short": "Som Espluga-AM",
+      "name": "Som Espluga - Acord Municipal",
+      "votes": 989,
+      "seats": 6
+     },
+     {
+      "code": "430544231",
+      "short": "CM",
+      "name": "Junts per L'Espluga de Francolí - Compromís Municipal",
+      "votes": 577,
+      "seats": 4
+     },
+     {
+      "code": "430544232",
+      "short": "Nova Espluga-PSC-CP",
+      "name": "Nova Espluga - Partit dels Socialistes de Catalunya - Candidatura de Progrés",
+      "votes": 206,
+      "seats": 1
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 2809,
+    "voters": 1853,
+    "nullVotes": 24,
+    "blankVotes": 16,
+    "listVotes": 1813,
+    "validVotes": 1829,
+    "votes": {
+     "6": 474,
+     "10": 494,
+     "86": 100,
+     "693": 82,
+     "697": 0,
+     "1031": 422,
+     "1034": 0,
+     "1109": 78,
+     "1129": 10,
+     "1134": 3,
+     "1135": 133,
+     "1136": 16,
+     "1137": 0,
+     "1138": 1
+    }
+   },
+   "parliament": {
+    "electorate": 2841,
+    "voters": 1676,
+    "nullVotes": 22,
+    "blankVotes": 28,
+    "listVotes": 1626,
+    "validVotes": 1654,
+    "votes": {
+     "6": 228,
+     "10": 408,
+     "86": 71,
+     "301": 2,
+     "350": 2,
+     "546": 3,
+     "693": 67,
+     "697": 2,
+     "1018": 0,
+     "1034": 2,
+     "1129": 11,
+     "1130": 61,
+     "1134": 3,
+     "1140": 21,
+     "1141": 105,
+     "1142": 1,
+     "1143": 629,
+     "1144": 10
+    }
+   }
+  },
+  {
+   "code": "43095",
+   "idescat": "430957",
+   "slug": "el-morell",
+   "name": "el Morell",
+   "comarca": "Tarragonès",
+   "province": "Tarragona",
+   "population": 3811,
+   "mayor": {
+    "name": "Eloi Calbet Ferran",
+    "party": "CM",
+    "since": "2023-06-17"
+   },
+   "municipal": {
+    "electorate": 2715,
+    "voters": 1772,
+    "nullVotes": 15,
+    "blankVotes": 17,
+    "listVotes": 1740,
+    "validVotes": 1757,
+    "seats": 11,
+    "censusPopulation": 3803,
+    "lists": [
+     {
+      "code": "430954230",
+      "short": "CM",
+      "name": "Junts Pel Morell - Compromís Municipal",
+      "votes": 759,
+      "seats": 6
+     },
+     {
+      "code": "430954231",
+      "short": "#COMPARTIM-FIC",
+      "name": "#Compartim - Federació d'Independents de Catalunya",
+      "votes": 283,
+      "seats": 2
+     },
+     {
+      "code": "430954232",
+      "short": "ARA PL",
+      "name": "Ara El Morell - Ara Pacte Local",
+      "votes": 256,
+      "seats": 2
+     },
+     {
+      "code": "193",
+      "short": "ERC-AM",
+      "name": "Esquerra Republicana de Catalunya - Acord Municipal",
+      "votes": 219,
+      "seats": 1
+     },
+     {
+      "code": "842",
+      "short": "PSC-CP",
+      "name": "Partit dels Socialistes de Catalunya - Candidatura de Progrés",
+      "votes": 121,
+      "seats": 0
+     },
+     {
+      "code": "1126",
+      "short": "VALENTS",
+      "name": "Valents",
+      "votes": 66,
+      "seats": 0
+     },
+     {
+      "code": "202386",
+      "short": "PP",
+      "name": "Partido Popular",
+      "votes": 36,
+      "seats": 0
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 2695,
+    "voters": 1816,
+    "nullVotes": 30,
+    "blankVotes": 5,
+    "listVotes": 1781,
+    "validVotes": 1786,
+    "votes": {
+     "6": 491,
+     "10": 316,
+     "86": 242,
+     "693": 209,
+     "697": 3,
+     "1031": 226,
+     "1034": 0,
+     "1109": 41,
+     "1129": 30,
+     "1134": 11,
+     "1135": 196,
+     "1136": 15,
+     "1137": 0,
+     "1138": 1
+    }
+   },
+   "parliament": {
+    "electorate": 2718,
+    "voters": 1563,
+    "nullVotes": 21,
+    "blankVotes": 21,
+    "listVotes": 1521,
+    "validVotes": 1542,
+    "votes": {
+     "6": 347,
+     "10": 275,
+     "86": 179,
+     "301": 9,
+     "350": 0,
+     "546": 2,
+     "693": 164,
+     "697": 3,
+     "1018": 1,
+     "1034": 1,
+     "1129": 26,
+     "1130": 44,
+     "1134": 6,
+     "1140": 42,
+     "1141": 74,
+     "1142": 1,
+     "1143": 344,
+     "1144": 3
+    }
+   }
+  },
+  {
+   "code": "08269",
+   "idescat": "082690",
+   "slug": "seva",
+   "name": "Seva",
+   "comarca": "Osona",
+   "province": "Barcelona",
+   "population": 3808,
+   "mayor": {
+    "name": "Pol Barnils Crusats",
+    "party": "",
+    "since": "2023-06-17"
+   },
+   "municipal": {
+    "electorate": 2926,
+    "voters": 1738,
+    "nullVotes": 45,
+    "blankVotes": 42,
+    "listVotes": 1651,
+    "validVotes": 1693,
+    "seats": 11,
+    "censusPopulation": 3736,
+    "lists": [
+     {
+      "code": "82694230",
+      "short": "SUMEM-AM",
+      "name": "Sumem - Acord Municipal",
+      "votes": 1034,
+      "seats": 7
+     },
+     {
+      "code": "82694231",
+      "short": "CM",
+      "name": "Junts per Catalunya - Compromís Municipal",
+      "votes": 617,
+      "seats": 4
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 2915,
+    "voters": 1946,
+    "nullVotes": 24,
+    "blankVotes": 23,
+    "listVotes": 1899,
+    "validVotes": 1922,
+    "votes": {
+     "6": 370,
+     "10": 460,
+     "86": 108,
+     "693": 98,
+     "697": 0,
+     "1031": 512,
+     "1034": 5,
+     "1109": 119,
+     "1129": 27,
+     "1134": 1,
+     "1135": 176,
+     "1136": 23
+    }
+   },
+   "parliament": {
+    "electorate": 2946,
+    "voters": 1887,
+    "nullVotes": 17,
+    "blankVotes": 26,
+    "listVotes": 1844,
+    "validVotes": 1870,
+    "votes": {
+     "6": 189,
+     "10": 313,
+     "86": 89,
+     "301": 3,
+     "350": 1,
+     "693": 65,
+     "697": 1,
+     "1034": 2,
+     "1129": 17,
+     "1130": 145,
+     "1134": 0,
+     "1140": 54,
+     "1141": 109,
+     "1142": 0,
+     "1143": 844,
+     "1144": 12
+    }
+   }
+  },
+  {
+   "code": "43906",
+   "idescat": "439060",
+   "slug": "l-ampolla",
+   "name": "l'Ampolla",
+   "comarca": "Baix Ebre",
+   "province": "Tarragona",
+   "population": 3785,
+   "mayor": {
+    "name": "Víctor Colomines Albiol",
+    "party": "CM",
+    "since": "2026-09-30"
+   },
+   "municipal": {
+    "electorate": 2489,
+    "voters": 1671,
+    "nullVotes": 27,
+    "blankVotes": 25,
+    "listVotes": 1619,
+    "validVotes": 1644,
+    "seats": 11,
+    "censusPopulation": 3563,
+    "lists": [
+     {
+      "code": "439064231",
+      "short": "CM",
+      "name": "Sumem per L'Ampolla - Junts - CM",
+      "votes": 866,
+      "seats": 6
+     },
+     {
+      "code": "439064230",
+      "short": "MLA-AM",
+      "name": "L'Ampolla Millorem l'Ampolla- Acord Municipal",
+      "votes": 483,
+      "seats": 3
+     },
+     {
+      "code": "439064232",
+      "short": "AST-PSC-CP",
+      "name": "L'Ampolla Som Tots i Totes - Partit dels Socialistes de Catalunya - Candidatura de Progrés",
+      "votes": 270,
+      "seats": 2
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 2352,
+    "voters": 1497,
+    "nullVotes": 17,
+    "blankVotes": 13,
+    "listVotes": 1467,
+    "validVotes": 1480,
+    "votes": {
+     "6": 396,
+     "10": 259,
+     "86": 138,
+     "693": 113,
+     "697": 0,
+     "1031": 319,
+     "1034": 1,
+     "1109": 39,
+     "1129": 14,
+     "1134": 2,
+     "1135": 170,
+     "1136": 15,
+     "1137": 0,
+     "1138": 1
+    }
+   },
+   "parliament": {
+    "electorate": 2398,
+    "voters": 1419,
+    "nullVotes": 17,
+    "blankVotes": 16,
+    "listVotes": 1386,
+    "validVotes": 1402,
+    "votes": {
+     "6": 300,
+     "10": 264,
+     "86": 101,
+     "301": 7,
+     "350": 0,
+     "546": 0,
+     "693": 74,
+     "697": 0,
+     "1018": 4,
+     "1034": 1,
+     "1129": 7,
+     "1130": 49,
+     "1134": 3,
+     "1140": 53,
+     "1141": 37,
+     "1142": 1,
+     "1143": 483,
+     "1144": 2
+    }
+   }
+  },
+  {
+   "code": "08143",
+   "idescat": "081430",
+   "slug": "odena",
+   "name": "Òdena",
+   "comarca": "Anoia",
+   "province": "Barcelona",
+   "population": 3760,
+   "mayor": {
+    "name": "Jaume Xaus Regordosa",
+    "party": "AM",
+    "since": "2023-06-17"
+   },
+   "municipal": {
+    "electorate": 2806,
+    "voters": 1637,
+    "nullVotes": 39,
+    "blankVotes": 37,
+    "listVotes": 1561,
+    "validVotes": 1598,
+    "seats": 11,
+    "censusPopulation": 3728,
+    "lists": [
+     {
+      "code": "81434232",
+      "short": "AM",
+      "name": "Fem Òdena - Acord Municipal",
+      "votes": 706,
+      "seats": 6
+     },
+     {
+      "code": "81434230",
+      "short": "PSC-ÒDENA PROGRÉS-CP",
+      "name": "Partit dels Socialistes de Catalunya - Òdena Progrés - Candidatura de Progrés",
+      "votes": 566,
+      "seats": 4
+     },
+     {
+      "code": "81434231",
+      "short": "ÒAF",
+      "name": "Òdena A Fons Avancem",
+      "votes": 195,
+      "seats": 1
+     },
+     {
+      "code": "81434233",
+      "short": "CM",
+      "name": "Junts per Òdena - Compromís Municipal",
+      "votes": 94,
+      "seats": 0
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 2814,
+    "voters": 1791,
+    "nullVotes": 15,
+    "blankVotes": 16,
+    "listVotes": 1760,
+    "validVotes": 1776,
+    "votes": {
+     "6": 624,
+     "10": 273,
+     "86": 176,
+     "693": 146,
+     "697": 0,
+     "1031": 206,
+     "1034": 3,
+     "1109": 59,
+     "1129": 21,
+     "1134": 5,
+     "1135": 219,
+     "1136": 28
+    }
+   },
+   "parliament": {
+    "electorate": 2816,
+    "voters": 1756,
+    "nullVotes": 31,
+    "blankVotes": 15,
+    "listVotes": 1710,
+    "validVotes": 1725,
+    "votes": {
+     "6": 449,
+     "10": 271,
+     "86": 119,
+     "301": 9,
+     "350": 2,
+     "693": 129,
+     "697": 2,
+     "1034": 0,
+     "1129": 26,
+     "1130": 88,
+     "1134": 3,
+     "1140": 48,
+     "1141": 71,
+     "1142": 1,
+     "1143": 486,
+     "1144": 6
+    }
+   }
+  },
+  {
+   "code": "43902",
+   "idescat": "439023",
+   "slug": "sant-jaume-d-enveja",
+   "name": "Sant Jaume d'Enveja",
+   "comarca": "Montsià",
+   "province": "Tarragona",
+   "population": 3745,
+   "mayor": {
+    "name": "Maria Teresa Solsona I Beltri",
+    "party": "",
+    "since": "2023-06-17"
+   },
+   "municipal": {
+    "electorate": 2839,
+    "voters": 1892,
+    "nullVotes": 33,
+    "blankVotes": 28,
+    "listVotes": 1831,
+    "validVotes": 1859,
+    "seats": 11,
+    "censusPopulation": 3669,
+    "lists": [
+     {
+      "code": "842",
+      "short": "PSC-CP",
+      "name": "Partit dels Socialistes de Catalunya - Candidatura de Progrés",
+      "votes": 753,
+      "seats": 5
+     },
+     {
+      "code": "439024230",
+      "short": "CM",
+      "name": "Endavant Sant Jaume - Compromís Municipal",
+      "votes": 704,
+      "seats": 4
+     },
+     {
+      "code": "193",
+      "short": "ERC-AM",
+      "name": "Esquerra Republicana de Catalunya - Acord Municipal",
+      "votes": 233,
+      "seats": 1
+     },
+     {
+      "code": "439024231",
+      "short": "ARA PL",
+      "name": "Ara Poble - Sant Jaume",
+      "votes": 141,
+      "seats": 1
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 2825,
+    "voters": 1660,
+    "nullVotes": 27,
+    "blankVotes": 16,
+    "listVotes": 1617,
+    "validVotes": 1633,
+    "votes": {
+     "6": 683,
+     "10": 282,
+     "86": 148,
+     "693": 145,
+     "697": 1,
+     "1031": 141,
+     "1034": 1,
+     "1109": 32,
+     "1129": 6,
+     "1134": 0,
+     "1135": 175,
+     "1136": 3,
+     "1137": 0,
+     "1138": 0
+    }
+   },
+   "parliament": {
+    "electorate": 2840,
+    "voters": 1418,
+    "nullVotes": 31,
+    "blankVotes": 26,
+    "listVotes": 1361,
+    "validVotes": 1387,
+    "votes": {
+     "6": 447,
+     "10": 284,
+     "86": 86,
+     "301": 6,
+     "350": 1,
+     "546": 0,
+     "693": 100,
+     "697": 1,
+     "1018": 2,
+     "1034": 1,
+     "1129": 3,
+     "1130": 41,
+     "1134": 3,
+     "1140": 55,
+     "1141": 36,
+     "1142": 0,
+     "1143": 294,
+     "1144": 1
+    }
+   }
+  },
+  {
+   "code": "17169",
+   "idescat": "171693",
+   "slug": "sant-julia-de-ramis",
+   "name": "Sant Julià de Ramis",
+   "comarca": "Gironès",
+   "province": "Girona",
+   "population": 3715,
+   "mayor": {
+    "name": "Marc Sayols Batlle",
+    "party": "ERC-AM",
+    "since": "2024-10-01"
+   },
+   "municipal": {
+    "electorate": 2680,
+    "voters": 1476,
+    "nullVotes": 47,
+    "blankVotes": 28,
+    "listVotes": 1401,
+    "validVotes": 1429,
+    "seats": 11,
+    "censusPopulation": 3623,
+    "lists": [
+     {
+      "code": "193",
+      "short": "ERC-AM",
+      "name": "Esquerra Republicana de Catalunya - Acord Municipal",
+      "votes": 739,
+      "seats": 6
+     },
+     {
+      "code": "171694231",
+      "short": "SP1972-AMUNT",
+      "name": "Som Poble 1972 - Alternativa Municipalista",
+      "votes": 267,
+      "seats": 2
+     },
+     {
+      "code": "171694230",
+      "short": "CM",
+      "name": "Junts per Sant Julià de Ramis - Compromís Municipal",
+      "votes": 218,
+      "seats": 2
+     },
+     {
+      "code": "842",
+      "short": "PSC-CP",
+      "name": "Partit dels Socialistes de Catalunya - Candidatura de Progrés",
+      "votes": 177,
+      "seats": 1
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 2660,
+    "voters": 1773,
+    "nullVotes": 29,
+    "blankVotes": 10,
+    "listVotes": 1734,
+    "validVotes": 1744,
+    "votes": {
+     "6": 513,
+     "10": 273,
+     "86": 151,
+     "693": 133,
+     "697": 0,
+     "1031": 327,
+     "1034": 1,
+     "1109": 129,
+     "1129": 26,
+     "1134": 6,
+     "1135": 158,
+     "1136": 17
+    }
+   },
+   "parliament": {
+    "electorate": 2648,
+    "voters": 1648,
+    "nullVotes": 25,
+    "blankVotes": 15,
+    "listVotes": 1608,
+    "validVotes": 1623,
+    "votes": {
+     "6": 344,
+     "10": 159,
+     "86": 94,
+     "301": 4,
+     "350": 1,
+     "693": 103,
+     "697": 2,
+     "1034": 0,
+     "1129": 11,
+     "1130": 112,
+     "1134": 6,
+     "1140": 44,
+     "1141": 86,
+     "1143": 634,
+     "1144": 8
+    }
+   }
+  },
+  {
+   "code": "43140",
+   "idescat": "431401",
+   "slug": "santa-oliva",
+   "name": "Santa Oliva",
+   "comarca": "Baix Penedès",
+   "province": "Tarragona",
+   "population": 3711,
+   "mayor": {
+    "name": "Christian Martínez Rodríguez",
+    "party": "PSC-CP",
+    "since": "2023-06-17"
+   },
+   "municipal": {
+    "electorate": 2608,
+    "voters": 1482,
+    "nullVotes": 42,
+    "blankVotes": 19,
+    "listVotes": 1421,
+    "validVotes": 1440,
+    "seats": 11,
+    "censusPopulation": 3560,
+    "lists": [
+     {
+      "code": "842",
+      "short": "PSC-CP",
+      "name": "Partit dels Socialistes de Catalunya - Candidatura de Progrés",
+      "votes": 605,
+      "seats": 5
+     },
+     {
+      "code": "431404230",
+      "short": "CPSOECP-C",
+      "name": "Compromís per Santa Oliva En Comú Podem - Confluència",
+      "votes": 336,
+      "seats": 3
+     },
+     {
+      "code": "193",
+      "short": "ERC-AM",
+      "name": "Esquerra Republicana de Catalunya - Acord Municipal",
+      "votes": 275,
+      "seats": 2
+     },
+     {
+      "code": "202386",
+      "short": "PP",
+      "name": "Partido Popular",
+      "votes": 110,
+      "seats": 1
+     },
+     {
+      "code": "693",
+      "short": "VOX",
+      "name": "VOX",
+      "votes": 91,
+      "seats": 0
+     },
+     {
+      "code": "1070",
+      "short": "SOMI",
+      "name": "Som Identitaris",
+      "votes": 4,
+      "seats": 0
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 2599,
+    "voters": 1703,
+    "nullVotes": 18,
+    "blankVotes": 11,
+    "listVotes": 1674,
+    "validVotes": 1685,
+    "votes": {
+     "6": 610,
+     "10": 170,
+     "86": 232,
+     "693": 263,
+     "697": 2,
+     "1031": 119,
+     "1034": 0,
+     "1109": 20,
+     "1129": 24,
+     "1134": 2,
+     "1135": 224,
+     "1136": 4,
+     "1137": 0,
+     "1138": 4
+    }
+   },
+   "parliament": {
+    "electorate": 2615,
+    "voters": 1400,
+    "nullVotes": 14,
+    "blankVotes": 17,
+    "listVotes": 1369,
+    "validVotes": 1386,
+    "votes": {
+     "6": 451,
+     "10": 184,
+     "86": 157,
+     "301": 9,
+     "350": 1,
+     "546": 0,
+     "693": 220,
+     "697": 0,
+     "1018": 0,
+     "1034": 0,
+     "1129": 15,
+     "1130": 31,
+     "1134": 1,
+     "1140": 57,
+     "1141": 23,
+     "1142": 0,
+     "1143": 220,
+     "1144": 0
+    }
+   }
+  },
+  {
+   "code": "08215",
+   "idescat": "082153",
+   "slug": "sant-hipolit-de-voltrega",
+   "name": "Sant Hipòlit de Voltregà",
+   "comarca": "Osona",
+   "province": "Barcelona",
+   "population": 3666,
+   "mayor": {
+    "name": "Gerard Sancho Vilalta",
+    "party": "CM",
+    "since": "2023-06-17"
+   },
+   "municipal": {
+    "electorate": 2708,
+    "voters": 1511,
+    "nullVotes": 27,
+    "blankVotes": 26,
+    "listVotes": 1458,
+    "validVotes": 1484,
+    "seats": 11,
+    "censusPopulation": 3644,
+    "lists": [
+     {
+      "code": "82154232",
+      "short": "CM",
+      "name": "Junts per Sant Hipòlit - Compromís Municipal",
+      "votes": 980,
+      "seats": 8
+     },
+     {
+      "code": "82154230",
+      "short": "CP",
+      "name": "Sumem per Sant Hipòlit de Voltregà - Candidatura de Progrés",
+      "votes": 317,
+      "seats": 2
+     },
+     {
+      "code": "82154231",
+      "short": "SOMVOLTREGÀ-AM",
+      "name": "Som Voltregà - Acord Municipal",
+      "votes": 161,
+      "seats": 1
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 2665,
+    "voters": 1685,
+    "nullVotes": 14,
+    "blankVotes": 25,
+    "listVotes": 1646,
+    "validVotes": 1671,
+    "votes": {
+     "6": 424,
+     "10": 312,
+     "86": 112,
+     "693": 95,
+     "697": 0,
+     "1031": 469,
+     "1034": 0,
+     "1109": 80,
+     "1129": 12,
+     "1134": 2,
+     "1135": 121,
+     "1136": 19
+    }
+   },
+   "parliament": {
+    "electorate": 2649,
+    "voters": 1605,
+    "nullVotes": 10,
+    "blankVotes": 24,
+    "listVotes": 1571,
+    "validVotes": 1595,
+    "votes": {
+     "6": 248,
+     "10": 186,
+     "86": 55,
+     "301": 5,
+     "350": 0,
+     "693": 65,
+     "697": 0,
+     "1034": 0,
+     "1129": 13,
+     "1130": 164,
+     "1134": 4,
+     "1140": 35,
+     "1141": 73,
+     "1142": 0,
+     "1143": 711,
+     "1144": 12
+    }
+   }
+  },
+  {
+   "code": "08031",
+   "idescat": "080312",
+   "slug": "calaf",
+   "name": "Calaf",
+   "comarca": "Anoia",
+   "province": "Barcelona",
+   "population": 3644,
+   "mayor": {
+    "name": "Montserrat Mases Sala",
+    "party": "JxC-AM",
+    "since": "2023-06-17"
+   },
+   "municipal": {
+    "electorate": 2313,
+    "voters": 1403,
+    "nullVotes": 49,
+    "blankVotes": 48,
+    "listVotes": 1306,
+    "validVotes": 1354,
+    "seats": 11,
+    "censusPopulation": 3590,
+    "lists": [
+     {
+      "code": "80314230",
+      "short": "JxC-AM",
+      "name": "Junts per Calaf- Acord Municipal",
+      "votes": 676,
+      "seats": 6
+     },
+     {
+      "code": "80314231",
+      "short": "SC-CP",
+      "name": "Sumem per Calaf - Candidatura de Progrés",
+      "votes": 384,
+      "seats": 3
+     },
+     {
+      "code": "80314232",
+      "short": "CM",
+      "name": "Junts per Catalunya - Compromís Municipal",
+      "votes": 246,
+      "seats": 2
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 2293,
+    "voters": 1487,
+    "nullVotes": 18,
+    "blankVotes": 25,
+    "listVotes": 1444,
+    "validVotes": 1469,
+    "votes": {
+     "6": 477,
+     "10": 271,
+     "86": 134,
+     "693": 93,
+     "697": 1,
+     "1031": 271,
+     "1034": 0,
+     "1109": 44,
+     "1129": 12,
+     "1134": 1,
+     "1135": 127,
+     "1136": 13
+    }
+   },
+   "parliament": {
+    "electorate": 2303,
+    "voters": 1441,
+    "nullVotes": 23,
+    "blankVotes": 15,
+    "listVotes": 1403,
+    "validVotes": 1418,
+    "votes": {
+     "6": 303,
+     "10": 223,
+     "86": 100,
+     "301": 4,
+     "350": 0,
+     "693": 58,
+     "697": 1,
+     "1034": 2,
+     "1129": 12,
+     "1130": 136,
+     "1134": 1,
+     "1140": 34,
+     "1141": 47,
+     "1142": 0,
+     "1143": 480,
+     "1144": 2
+    }
+   }
+  },
+  {
+   "code": "25012",
+   "idescat": "250122",
+   "slug": "alcoletge",
+   "name": "Alcoletge",
+   "comarca": "Segrià",
+   "province": "Lleida",
+   "population": 3640,
+   "mayor": {
+    "name": "Josep Maria Gras Charles",
+    "party": "",
+    "since": "2023-06-17"
+   },
+   "municipal": {
+    "electorate": 2486,
+    "voters": 1352,
+    "nullVotes": 27,
+    "blankVotes": 26,
+    "listVotes": 1299,
+    "validVotes": 1325,
+    "seats": 11,
+    "censusPopulation": 3470,
+    "lists": [
+     {
+      "code": "250124231",
+      "short": "AGRUPACIÓ D'ELECTORS-PRIMER ALCOLETGE",
+      "name": "Agrupació d'Electors Primer Alcoletge",
+      "votes": 847,
+      "seats": 8
+     },
+     {
+      "code": "842",
+      "short": "PSC-CP",
+      "name": "Partit dels Socialistes de Catalunya - Candidatura de Progrés",
+      "votes": 362,
+      "seats": 3
+     },
+     {
+      "code": "250124230",
+      "short": "RdA-AM",
+      "name": "Republicans d’Alcoletge - Acord Municipal",
+      "votes": 48,
+      "seats": 0
+     },
+     {
+      "code": "202386",
+      "short": "PP",
+      "name": "Partido Popular",
+      "votes": 42,
+      "seats": 0
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 2383,
+    "voters": 1413,
+    "nullVotes": 29,
+    "blankVotes": 19,
+    "listVotes": 1365,
+    "validVotes": 1384,
+    "votes": {
+     "6": 422,
+     "10": 228,
+     "86": 171,
+     "643": 9,
+     "693": 137,
+     "697": 1,
+     "1031": 160,
+     "1034": 3,
+     "1109": 35,
+     "1129": 27,
+     "1134": 7,
+     "1135": 154,
+     "1136": 11
+    }
+   },
+   "parliament": {
+    "electorate": 2425,
+    "voters": 1169,
+    "nullVotes": 14,
+    "blankVotes": 9,
+    "listVotes": 1146,
+    "validVotes": 1155,
+    "votes": {
+     "6": 264,
+     "10": 190,
+     "86": 73,
+     "301": 9,
+     "350": 1,
+     "546": 1,
+     "693": 107,
+     "697": 3,
+     "1034": 5,
+     "1130": 85,
+     "1134": 9,
+     "1140": 23,
+     "1141": 35,
+     "1143": 331,
+     "1144": 10
+    }
+   }
+  },
+  {
+   "code": "08098",
+   "idescat": "080983",
+   "slug": "sant-salvador-de-guardiola",
+   "name": "Sant Salvador de Guardiola",
+   "comarca": "Bages",
+   "province": "Barcelona",
+   "population": 3612,
+   "mayor": {
+    "name": "Anna Maria Llobet Solé",
+    "party": "CM",
+    "since": "2023-06-17"
+   },
+   "municipal": {
+    "electorate": 2668,
+    "voters": 1436,
+    "nullVotes": 28,
+    "blankVotes": 33,
+    "listVotes": 1375,
+    "validVotes": 1408,
+    "seats": 11,
+    "censusPopulation": 3351,
+    "lists": [
+     {
+      "code": "80984230",
+      "short": "CM",
+      "name": "Junts per Guardiola - Compromís Municipal",
+      "votes": 760,
+      "seats": 7
+     },
+     {
+      "code": "80984231",
+      "short": "SUMEM-AM",
+      "name": "Sumem-Acord Municipal",
+      "votes": 410,
+      "seats": 3
+     },
+     {
+      "code": "842",
+      "short": "PSC-CP",
+      "name": "Partit dels Socialistes de Catalunya - Candidatura de Progrés",
+      "votes": 205,
+      "seats": 1
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 2667,
+    "voters": 1743,
+    "nullVotes": 21,
+    "blankVotes": 23,
+    "listVotes": 1699,
+    "validVotes": 1722,
+    "votes": {
+     "6": 477,
+     "10": 253,
+     "86": 179,
+     "693": 161,
+     "697": 5,
+     "1031": 267,
+     "1034": 3,
+     "1109": 66,
+     "1129": 24,
+     "1134": 9,
+     "1135": 230,
+     "1136": 25
+    }
+   },
+   "parliament": {
+    "electorate": 2703,
+    "voters": 1596,
+    "nullVotes": 15,
+    "blankVotes": 23,
+    "listVotes": 1558,
+    "validVotes": 1581,
+    "votes": {
+     "6": 314,
+     "10": 193,
+     "86": 111,
+     "301": 9,
+     "350": 3,
+     "693": 151,
+     "697": 0,
+     "1034": 2,
+     "1129": 21,
+     "1130": 112,
+     "1134": 3,
+     "1140": 69,
+     "1141": 79,
+     "1142": 0,
+     "1143": 480,
+     "1144": 11
+    }
+   }
+  },
+  {
+   "code": "25034",
+   "idescat": "250349",
+   "slug": "artesa-de-segre",
+   "name": "Artesa de Segre",
+   "comarca": "Noguera",
+   "province": "Lleida",
+   "population": 3559,
+   "mayor": {
+    "name": "Francesc Puigpinos Porta",
+    "party": "APC",
+    "since": "2023-06-17"
+   },
+   "municipal": {
+    "electorate": 2316,
+    "voters": 1490,
+    "nullVotes": 55,
+    "blankVotes": 42,
+    "listVotes": 1393,
+    "validVotes": 1435,
+    "seats": 11,
+    "censusPopulation": 3470,
+    "lists": [
+     {
+      "code": "250344230",
+      "short": "APC",
+      "name": "Artesa Pel Canvi - APC",
+      "votes": 783,
+      "seats": 6
+     },
+     {
+      "code": "193",
+      "short": "ERC-AM",
+      "name": "Esquerra Republicana de Catalunya - Acord Municipal",
+      "votes": 610,
+      "seats": 5
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 2275,
+    "voters": 1399,
+    "nullVotes": 17,
+    "blankVotes": 9,
+    "listVotes": 1373,
+    "validVotes": 1382,
+    "votes": {
+     "6": 270,
+     "10": 392,
+     "86": 121,
+     "643": 6,
+     "693": 66,
+     "697": 1,
+     "1031": 345,
+     "1034": 0,
+     "1109": 55,
+     "1129": 13,
+     "1134": 0,
+     "1135": 79,
+     "1136": 25
+    }
+   },
+   "parliament": {
+    "electorate": 2255,
+    "voters": 1324,
+    "nullVotes": 21,
+    "blankVotes": 17,
+    "listVotes": 1286,
+    "validVotes": 1303,
+    "votes": {
+     "6": 151,
+     "10": 307,
+     "86": 62,
+     "301": 6,
+     "350": 2,
+     "546": 1,
+     "693": 44,
+     "697": 1,
+     "1034": 2,
+     "1130": 83,
+     "1134": 2,
+     "1140": 28,
+     "1141": 54,
+     "1143": 535,
+     "1144": 8
+    }
+   }
+  },
+  {
+   "code": "08227",
+   "idescat": "082270",
+   "slug": "sant-marti-sarroca",
+   "name": "Sant Martí Sarroca",
+   "comarca": "Alt Penedès",
+   "province": "Barcelona",
+   "population": 3485,
+   "mayor": {
+    "name": "Joan Olivella Cruset",
+    "party": "",
+    "since": "2025-07-05"
+   },
+   "municipal": {
+    "electorate": 2504,
+    "voters": 1534,
+    "nullVotes": 10,
+    "blankVotes": 32,
+    "listVotes": 1492,
+    "validVotes": 1524,
+    "seats": 11,
+    "censusPopulation": 3313,
+    "lists": [
+     {
+      "code": "82274231",
+      "short": "CM",
+      "name": "Junts per Sant Martí Sarroca - Compromís Municipal",
+      "votes": 438,
+      "seats": 3
+     },
+     {
+      "code": "82274232",
+      "short": "FOMENENC",
+      "name": "Foment Martinenc",
+      "votes": 419,
+      "seats": 3
+     },
+     {
+      "code": "193",
+      "short": "ERC-AM",
+      "name": "Esquerra Republicana de Catalunya - Acord Municipal",
+      "votes": 390,
+      "seats": 3
+     },
+     {
+      "code": "82274230",
+      "short": "Movem-CP",
+      "name": "Movem Sant Martí - Col·lectiiu Socialista - Candidatura de Progrés",
+      "votes": 245,
+      "seats": 2
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 2487,
+    "voters": 1637,
+    "nullVotes": 25,
+    "blankVotes": 19,
+    "listVotes": 1593,
+    "validVotes": 1612,
+    "votes": {
+     "6": 458,
+     "10": 332,
+     "86": 113,
+     "693": 90,
+     "697": 3,
+     "1031": 276,
+     "1034": 0,
+     "1109": 101,
+     "1129": 19,
+     "1134": 2,
+     "1135": 178,
+     "1136": 21
+    }
+   },
+   "parliament": {
+    "electorate": 2507,
+    "voters": 1496,
+    "nullVotes": 12,
+    "blankVotes": 13,
+    "listVotes": 1471,
+    "validVotes": 1484,
+    "votes": {
+     "6": 306,
+     "10": 265,
+     "86": 65,
+     "301": 3,
+     "350": 1,
+     "693": 69,
+     "697": 1,
+     "1034": 0,
+     "1129": 15,
+     "1130": 66,
+     "1134": 2,
+     "1140": 50,
+     "1141": 111,
+     "1142": 1,
+     "1143": 510,
+     "1144": 6
+    }
+   }
+  },
+  {
+   "code": "43903",
+   "idescat": "439039",
+   "slug": "camarles",
+   "name": "Camarles",
+   "comarca": "Baix Ebre",
+   "province": "Tarragona",
+   "population": 3465,
+   "mayor": {
+    "name": "Joan Curto Querol",
+    "party": "CP",
+    "since": "2023-06-17"
+   },
+   "municipal": {
+    "electorate": 2439,
+    "voters": 1604,
+    "nullVotes": 31,
+    "blankVotes": 34,
+    "listVotes": 1539,
+    "validVotes": 1573,
+    "seats": 11,
+    "censusPopulation": 3309,
+    "lists": [
+     {
+      "code": "439034231",
+      "short": "CP",
+      "name": "Progrés per Camarles I Lligallos-Candidatura de Progrés",
+      "votes": 687,
+      "seats": 5
+     },
+     {
+      "code": "439034230",
+      "short": "CM",
+      "name": "Junts per Camarles I Lligallos - Compromís Municipal",
+      "votes": 516,
+      "seats": 4
+     },
+     {
+      "code": "193",
+      "short": "ERC-AM",
+      "name": "Esquerra Republicana de Catalunya - Acord Municipal",
+      "votes": 336,
+      "seats": 2
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 2389,
+    "voters": 1416,
+    "nullVotes": 14,
+    "blankVotes": 10,
+    "listVotes": 1392,
+    "validVotes": 1402,
+    "votes": {
+     "6": 520,
+     "10": 294,
+     "86": 140,
+     "693": 107,
+     "697": 1,
+     "1031": 199,
+     "1034": 1,
+     "1109": 14,
+     "1129": 3,
+     "1134": 0,
+     "1135": 107,
+     "1136": 6,
+     "1137": 0,
+     "1138": 0
+    }
+   },
+   "parliament": {
+    "electorate": 2418,
+    "voters": 1141,
+    "nullVotes": 17,
+    "blankVotes": 17,
+    "listVotes": 1107,
+    "validVotes": 1124,
+    "votes": {
+     "6": 270,
+     "10": 280,
+     "86": 77,
+     "301": 1,
+     "350": 0,
+     "546": 0,
+     "693": 66,
+     "697": 1,
+     "1018": 0,
+     "1034": 1,
+     "1129": 4,
+     "1130": 49,
+     "1134": 0,
+     "1140": 27,
+     "1141": 35,
+     "1142": 0,
+     "1143": 294,
+     "1144": 2
+    }
+   }
+  },
+  {
+   "code": "25119",
+   "idescat": "251193",
+   "slug": "juneda",
+   "name": "Juneda",
+   "comarca": "Garrigues",
+   "province": "Lleida",
+   "population": 3453,
+   "mayor": {
+    "name": "Antoni Villas Miranda",
+    "party": "CM",
+    "since": "2023-06-17"
+   },
+   "municipal": {
+    "electorate": 2295,
+    "voters": 1491,
+    "nullVotes": 60,
+    "blankVotes": 51,
+    "listVotes": 1380,
+    "validVotes": 1431,
+    "seats": 11,
+    "censusPopulation": 3558,
+    "lists": [
+     {
+      "code": "251194230",
+      "short": "CM",
+      "name": "Impulsem Juneda-Compromís Municipal",
+      "votes": 764,
+      "seats": 6
+     },
+     {
+      "code": "251194231",
+      "short": "J X TU",
+      "name": "Juneda, per Tu",
+      "votes": 375,
+      "seats": 3
+     },
+     {
+      "code": "842",
+      "short": "PSC-CP",
+      "name": "Partit dels Socialistes de Catalunya - Candidatura de Progrés",
+      "votes": 241,
+      "seats": 2
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 2221,
+    "voters": 1432,
+    "nullVotes": 21,
+    "blankVotes": 16,
+    "listVotes": 1395,
+    "validVotes": 1411,
+    "votes": {
+     "6": 368,
+     "10": 330,
+     "86": 114,
+     "643": 1,
+     "693": 33,
+     "697": 0,
+     "1031": 396,
+     "1034": 0,
+     "1109": 55,
+     "1129": 6,
+     "1134": 1,
+     "1135": 76,
+     "1136": 15
+    }
+   },
+   "parliament": {
+    "electorate": 2224,
+    "voters": 1372,
+    "nullVotes": 23,
+    "blankVotes": 23,
+    "listVotes": 1326,
+    "validVotes": 1349,
+    "votes": {
+     "6": 234,
+     "10": 277,
+     "86": 78,
+     "301": 2,
+     "350": 1,
+     "546": 0,
+     "693": 18,
+     "697": 0,
+     "1034": 1,
+     "1130": 93,
+     "1134": 0,
+     "1140": 15,
+     "1141": 81,
+     "1143": 523,
+     "1144": 3
+    }
+   }
+  },
+  {
+   "code": "43111",
+   "idescat": "431114",
+   "slug": "la-pobla-de-montornes",
+   "name": "la Pobla de Montornès",
+   "comarca": "Tarragonès",
+   "province": "Tarragona",
+   "population": 3440,
+   "mayor": {
+    "name": "Francesc Larios Mercadé",
+    "party": "ERC-AM",
+    "since": "2023-06-17"
+   },
+   "municipal": {
+    "electorate": 2440,
+    "voters": 1252,
+    "nullVotes": 28,
+    "blankVotes": 17,
+    "listVotes": 1207,
+    "validVotes": 1224,
+    "seats": 11,
+    "censusPopulation": 3101,
+    "lists": [
+     {
+      "code": "193",
+      "short": "ERC-AM",
+      "name": "Esquerra Republicana de Catalunya - Acord Municipal",
+      "votes": 564,
+      "seats": 6
+     },
+     {
+      "code": "431114231",
+      "short": "AMPM-PSC-CP",
+      "name": "Alternativa Municipal de la Pobla de Montornés - Partit dels Socialistes de Catalunya - Candidatura de Progrés (PSC-PSOE)",
+      "votes": 388,
+      "seats": 4
+     },
+     {
+      "code": "202386",
+      "short": "PP",
+      "name": "Partido Popular",
+      "votes": 110,
+      "seats": 1
+     },
+     {
+      "code": "431114230",
+      "short": "VALENTS",
+      "name": "Valents Pobla de Montornés",
+      "votes": 93,
+      "seats": 0
+     },
+     {
+      "code": "431114232",
+      "short": "ECP-C",
+      "name": "En Comú Podem la Pobla de Montornés ECP-C Confluència",
+      "votes": 52,
+      "seats": 0
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 2412,
+    "voters": 1532,
+    "nullVotes": 16,
+    "blankVotes": 13,
+    "listVotes": 1503,
+    "validVotes": 1516,
+    "votes": {
+     "6": 502,
+     "10": 217,
+     "86": 195,
+     "693": 207,
+     "697": 0,
+     "1031": 94,
+     "1034": 0,
+     "1109": 18,
+     "1129": 32,
+     "1134": 4,
+     "1135": 226,
+     "1136": 4,
+     "1137": 1,
+     "1138": 3
+    }
+   },
+   "parliament": {
+    "electorate": 2474,
+    "voters": 1285,
+    "nullVotes": 18,
+    "blankVotes": 12,
+    "listVotes": 1255,
+    "validVotes": 1267,
+    "votes": {
+     "6": 378,
+     "10": 178,
+     "86": 148,
+     "301": 14,
+     "350": 1,
+     "546": 1,
+     "693": 174,
+     "697": 1,
+     "1018": 1,
+     "1034": 0,
+     "1129": 24,
+     "1130": 40,
+     "1134": 1,
+     "1140": 57,
+     "1141": 31,
+     "1142": 2,
+     "1143": 200,
+     "1144": 4
+    }
+   }
+  },
+  {
+   "code": "17086",
+   "idescat": "170865",
+   "slug": "la-jonquera",
+   "name": "la Jonquera",
+   "comarca": "Alt Empordà",
+   "province": "Girona",
+   "population": 3420,
+   "mayor": {
+    "name": "Miriam Lanero Carrillo",
+    "party": "CM",
+    "since": "2023-06-17"
+   },
+   "municipal": {
+    "electorate": 1776,
+    "voters": 1200,
+    "nullVotes": 14,
+    "blankVotes": 11,
+    "listVotes": 1175,
+    "validVotes": 1186,
+    "seats": 11,
+    "censusPopulation": 3317,
+    "lists": [
+     {
+      "code": "170864230",
+      "short": "CM",
+      "name": "Junts per la Jonquera - Compromís Municipal",
+      "votes": 478,
+      "seats": 5
+     },
+     {
+      "code": "193",
+      "short": "ERC-AM",
+      "name": "Esquerra Republicana de Catalunya - Acord Municipal",
+      "votes": 447,
+      "seats": 5
+     },
+     {
+      "code": "170864231",
+      "short": "TpLJ-SOS-CP",
+      "name": "Tots per la Jonquera - Seguretat, Ordre I Serveis - Candidatura de Progrés",
+      "votes": 175,
+      "seats": 1
+     },
+     {
+      "code": "693",
+      "short": "VOX",
+      "name": "VOX",
+      "votes": 39,
+      "seats": 0
+     },
+     {
+      "code": "301",
+      "short": "Cs",
+      "name": "Ciutadans - Partido de la Ciudadanía",
+      "votes": 19,
+      "seats": 0
+     },
+     {
+      "code": "202386",
+      "short": "PP",
+      "name": "Partido Popular",
+      "votes": 17,
+      "seats": 0
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 1743,
+    "voters": 1016,
+    "nullVotes": 11,
+    "blankVotes": 8,
+    "listVotes": 997,
+    "validVotes": 1005,
+    "votes": {
+     "6": 314,
+     "10": 127,
+     "86": 187,
+     "693": 122,
+     "697": 0,
+     "1031": 98,
+     "1034": 1,
+     "1109": 25,
+     "1129": 19,
+     "1134": 4,
+     "1135": 97,
+     "1136": 3
+    }
+   },
+   "parliament": {
+    "electorate": 1748,
+    "voters": 904,
+    "nullVotes": 10,
+    "blankVotes": 24,
+    "listVotes": 870,
+    "validVotes": 894,
+    "votes": {
+     "6": 197,
+     "10": 141,
+     "86": 118,
+     "301": 9,
+     "350": 2,
+     "693": 100,
+     "697": 1,
+     "1034": 2,
+     "1129": 12,
+     "1130": 72,
+     "1134": 3,
+     "1140": 17,
+     "1141": 33,
+     "1143": 160,
+     "1144": 3
+    }
+   }
+  },
+  {
+   "code": "25189",
+   "idescat": "251898",
+   "slug": "rossello",
+   "name": "Rosselló",
+   "comarca": "Segrià",
+   "province": "Lleida",
+   "population": 3416,
+   "mayor": {
+    "name": "Joan Andreu Urbano Fernández",
+    "party": "CM",
+    "since": "2023-06-17"
+   },
+   "municipal": {
+    "electorate": 2310,
+    "voters": 1320,
+    "nullVotes": 31,
+    "blankVotes": 20,
+    "listVotes": 1269,
+    "validVotes": 1289,
+    "seats": 11,
+    "censusPopulation": 3278,
+    "lists": [
+     {
+      "code": "251894231",
+      "short": "CM",
+      "name": "Junts Impulsem Rosselló - Compromís Municipal",
+      "votes": 574,
+      "seats": 6
+     },
+     {
+      "code": "251894232",
+      "short": "VR-AM",
+      "name": "Vivim Rosselló - Acord Municipal",
+      "votes": 326,
+      "seats": 3
+     },
+     {
+      "code": "251894230",
+      "short": "AR-CP",
+      "name": "Ara Roselló - Candidatura de Progrés",
+      "votes": 210,
+      "seats": 2
+     },
+     {
+      "code": "251894233",
+      "short": "REC-C",
+      "name": "Rosselló En Comú -Confluència",
+      "votes": 86,
+      "seats": 0
+     },
+     {
+      "code": "202386",
+      "short": "PP",
+      "name": "Partido Popular",
+      "votes": 38,
+      "seats": 0
+     },
+     {
+      "code": "693",
+      "short": "VOX",
+      "name": "VOX",
+      "votes": 35,
+      "seats": 0
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 2281,
+    "voters": 1333,
+    "nullVotes": 21,
+    "blankVotes": 18,
+    "listVotes": 1294,
+    "validVotes": 1312,
+    "votes": {
+     "6": 398,
+     "10": 233,
+     "86": 149,
+     "643": 2,
+     "693": 108,
+     "697": 0,
+     "1031": 213,
+     "1034": 0,
+     "1109": 42,
+     "1129": 17,
+     "1134": 0,
+     "1135": 126,
+     "1136": 6
+    }
+   },
+   "parliament": {
+    "electorate": 2300,
+    "voters": 1213,
+    "nullVotes": 16,
+    "blankVotes": 20,
+    "listVotes": 1177,
+    "validVotes": 1197,
+    "votes": {
+     "6": 247,
+     "10": 200,
+     "86": 87,
+     "301": 2,
+     "350": 0,
+     "546": 0,
+     "693": 108,
+     "697": 4,
+     "1034": 1,
+     "1130": 117,
+     "1134": 3,
+     "1140": 28,
+     "1141": 37,
+     "1143": 343,
+     "1144": 0
+    }
+   }
+  },
+  {
+   "code": "17167",
+   "idescat": "171674",
+   "slug": "sant-joan-de-les-abadesses",
+   "name": "Sant Joan de les Abadesses",
+   "comarca": "Ripollès",
+   "province": "Girona",
+   "population": 3404,
+   "mayor": {
+    "name": "Ramon Roqué Riu",
+    "party": "",
+    "since": "2023-06-17"
+   },
+   "municipal": {
+    "electorate": 2581,
+    "voters": 1891,
+    "nullVotes": 19,
+    "blankVotes": 16,
+    "listVotes": 1856,
+    "validVotes": 1872,
+    "seats": 11,
+    "censusPopulation": 3274,
+    "lists": [
+     {
+      "code": "171674231",
+      "short": "MES-somMEScat",
+      "name": "Més Moviment d'Esquerres - Som Moviment d'Esquerres de Catalunya",
+      "votes": 948,
+      "seats": 6
+     },
+     {
+      "code": "193",
+      "short": "ERC-AM",
+      "name": "Esquerra Republicana de Catalunya - Acord Municipal",
+      "votes": 800,
+      "seats": 5
+     },
+     {
+      "code": "171674230",
+      "short": "CM",
+      "name": "Avancem per Sant Joan - Compromís Municipal",
+      "votes": 108,
+      "seats": 0
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 2577,
+    "voters": 1737,
+    "nullVotes": 31,
+    "blankVotes": 23,
+    "listVotes": 1683,
+    "validVotes": 1706,
+    "votes": {
+     "6": 481,
+     "10": 371,
+     "86": 89,
+     "693": 57,
+     "697": 1,
+     "1031": 432,
+     "1034": 0,
+     "1109": 95,
+     "1129": 15,
+     "1134": 1,
+     "1135": 121,
+     "1136": 20
+    }
+   },
+   "parliament": {
+    "electorate": 2612,
+    "voters": 1719,
+    "nullVotes": 22,
+    "blankVotes": 24,
+    "listVotes": 1673,
+    "validVotes": 1697,
+    "votes": {
+     "6": 253,
+     "10": 239,
+     "86": 46,
+     "301": 2,
+     "350": 0,
+     "693": 25,
+     "697": 0,
+     "1034": 1,
+     "1129": 13,
+     "1130": 292,
+     "1134": 0,
+     "1140": 38,
+     "1141": 91,
+     "1143": 665,
+     "1144": 8
+    }
+   }
+  },
+  {
+   "code": "08042",
+   "idescat": "080425",
+   "slug": "canoves-i-samalus",
+   "name": "Cànoves i Samalús",
+   "comarca": "Vallès Oriental",
+   "province": "Barcelona",
+   "population": 3399,
+   "mayor": {
+    "name": "Josep Cuch Codina",
+    "party": "CM",
+    "since": "2023-06-17"
+   },
+   "municipal": {
+    "electorate": 2581,
+    "voters": 1560,
+    "nullVotes": 20,
+    "blankVotes": 19,
+    "listVotes": 1521,
+    "validVotes": 1540,
+    "seats": 11,
+    "censusPopulation": 3289,
+    "lists": [
+     {
+      "code": "80424231",
+      "short": "CM",
+      "name": "Nou Impuls i Unitat - Compromís Municipal",
+      "votes": 927,
+      "seats": 7
+     },
+     {
+      "code": "842",
+      "short": "PSC-CP",
+      "name": "Partit dels Socialistes de Catalunya - Candidatura de Progrés",
+      "votes": 390,
+      "seats": 3
+     },
+     {
+      "code": "80424230",
+      "short": "Esquerra en comú-AM",
+      "name": "Esquerra En Comú - Acord Municipal",
+      "votes": 204,
+      "seats": 1
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 2562,
+    "voters": 1676,
+    "nullVotes": 25,
+    "blankVotes": 11,
+    "listVotes": 1640,
+    "validVotes": 1651,
+    "votes": {
+     "6": 515,
+     "10": 247,
+     "86": 229,
+     "693": 150,
+     "697": 1,
+     "1031": 151,
+     "1034": 2,
+     "1109": 39,
+     "1129": 22,
+     "1134": 2,
+     "1135": 270,
+     "1136": 12
+    }
+   },
+   "parliament": {
+    "electorate": 2555,
+    "voters": 1459,
+    "nullVotes": 11,
+    "blankVotes": 26,
+    "listVotes": 1422,
+    "validVotes": 1448,
+    "votes": {
+     "6": 365,
+     "10": 223,
+     "86": 143,
+     "301": 6,
+     "350": 1,
+     "693": 141,
+     "697": 0,
+     "1034": 0,
+     "1129": 25,
+     "1130": 52,
+     "1134": 7,
+     "1140": 81,
+     "1141": 61,
+     "1142": 1,
+     "1143": 310,
+     "1144": 6
+    }
+   }
+  },
+  {
+   "code": "43020",
+   "idescat": "430206",
+   "slug": "banyeres-del-penedes",
+   "name": "Banyeres del Penedès",
+   "comarca": "Baix Penedès",
+   "province": "Tarragona",
+   "population": 3395,
+   "mayor": {
+    "name": "Amadeu Benach Miquel",
+    "party": "BNY-AM",
+    "since": "2023-06-17"
+   },
+   "municipal": {
+    "electorate": 2504,
+    "voters": 1482,
+    "nullVotes": 24,
+    "blankVotes": 16,
+    "listVotes": 1442,
+    "validVotes": 1458,
+    "seats": 11,
+    "censusPopulation": 3271,
+    "lists": [
+     {
+      "code": "430204231",
+      "short": "BNY-AM",
+      "name": "Bny-Un Nou Banyeres-Acord Municipal",
+      "votes": 605,
+      "seats": 5
+     },
+     {
+      "code": "842",
+      "short": "PSC-CP",
+      "name": "Partit dels Socialistes de Catalunya - Candidatura de Progrés",
+      "votes": 441,
+      "seats": 3
+     },
+     {
+      "code": "430204232",
+      "short": "CM",
+      "name": "Més Banyeres - Compromís Municipal",
+      "votes": 232,
+      "seats": 2
+     },
+     {
+      "code": "430204230",
+      "short": "BV-C",
+      "name": "Banyeres Verds - Confluència",
+      "votes": 164,
+      "seats": 1
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 2485,
+    "voters": 1673,
+    "nullVotes": 20,
+    "blankVotes": 8,
+    "listVotes": 1645,
+    "validVotes": 1653,
+    "votes": {
+     "6": 581,
+     "10": 210,
+     "86": 192,
+     "693": 204,
+     "697": 3,
+     "1031": 142,
+     "1034": 0,
+     "1109": 36,
+     "1129": 19,
+     "1134": 4,
+     "1135": 239,
+     "1136": 14,
+     "1137": 1,
+     "1138": 0
+    }
+   },
+   "parliament": {
+    "electorate": 2493,
+    "voters": 1421,
+    "nullVotes": 15,
+    "blankVotes": 16,
+    "listVotes": 1390,
+    "validVotes": 1406,
+    "votes": {
+     "6": 439,
+     "10": 201,
+     "86": 127,
+     "301": 7,
+     "350": 1,
+     "546": 0,
+     "693": 164,
+     "697": 2,
+     "1018": 0,
+     "1034": 2,
+     "1129": 16,
+     "1130": 39,
+     "1134": 7,
+     "1140": 70,
+     "1141": 48,
+     "1142": 0,
+     "1143": 265,
+     "1144": 2
+    }
+   }
+  },
+  {
+   "code": "08018",
+   "idescat": "080180",
+   "slug": "balsareny",
+   "name": "Balsareny",
+   "comarca": "Bages",
+   "province": "Barcelona",
+   "population": 3380,
+   "mayor": {
+    "name": "Isidre Viu Payerols",
+    "party": "",
+    "since": "2025-06-14"
+   },
+   "municipal": {
+    "electorate": 2610,
+    "voters": 1506,
+    "nullVotes": 37,
+    "blankVotes": 46,
+    "listVotes": 1423,
+    "validVotes": 1469,
+    "seats": 11,
+    "censusPopulation": 3249,
+    "lists": [
+     {
+      "code": "80184230",
+      "short": "Endavant Balsareny",
+      "name": "Endavant Balsareny",
+      "votes": 538,
+      "seats": 4
+     },
+     {
+      "code": "193",
+      "short": "ERC-AM",
+      "name": "Esquerra Republicana de Catalunya - Acord Municipal",
+      "votes": 492,
+      "seats": 4
+     },
+     {
+      "code": "80184231",
+      "short": "CM",
+      "name": "Som i Sentim Balsareny - Compromís Municipal",
+      "votes": 334,
+      "seats": 3
+     },
+     {
+      "code": "202386",
+      "short": "PP",
+      "name": "Partido Popular",
+      "votes": 59,
+      "seats": 0
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 2614,
+    "voters": 1642,
+    "nullVotes": 17,
+    "blankVotes": 14,
+    "listVotes": 1611,
+    "validVotes": 1625,
+    "votes": {
+     "6": 495,
+     "10": 330,
+     "86": 132,
+     "693": 104,
+     "697": 3,
+     "1031": 240,
+     "1034": 4,
+     "1109": 64,
+     "1129": 28,
+     "1134": 3,
+     "1135": 191,
+     "1136": 17
+    }
+   },
+   "parliament": {
+    "electorate": 2630,
+    "voters": 1499,
+    "nullVotes": 23,
+    "blankVotes": 28,
+    "listVotes": 1448,
+    "validVotes": 1476,
+    "votes": {
+     "6": 323,
+     "10": 259,
+     "86": 86,
+     "301": 4,
+     "350": 1,
+     "693": 112,
+     "697": 0,
+     "1034": 4,
+     "1129": 17,
+     "1130": 99,
+     "1134": 7,
+     "1140": 59,
+     "1141": 71,
+     "1142": 0,
+     "1143": 402,
+     "1144": 4
+    }
+   }
+  },
+  {
+   "code": "25021",
+   "idescat": "250215",
+   "slug": "almenar",
+   "name": "Almenar",
+   "comarca": "Segrià",
+   "province": "Lleida",
+   "population": 3369,
+   "mayor": {
+    "name": "Maria Teresa Malla I Aige",
+    "party": "ERC-AM",
+    "since": "2023-06-17"
+   },
+   "municipal": {
+    "electorate": 2497,
+    "voters": 1497,
+    "nullVotes": 24,
+    "blankVotes": 51,
+    "listVotes": 1422,
+    "validVotes": 1473,
+    "seats": 11,
+    "censusPopulation": 3401,
+    "lists": [
+     {
+      "code": "193",
+      "short": "ERC-AM",
+      "name": "Esquerra Republicana de Catalunya - Acord Municipal",
+      "votes": 627,
+      "seats": 5
+     },
+     {
+      "code": "250214230",
+      "short": "CM",
+      "name": "Impulsem Almenar - Compromís Municipal",
+      "votes": 543,
+      "seats": 4
+     },
+     {
+      "code": "842",
+      "short": "PSC-CP",
+      "name": "Partit dels Socialistes de Catalunya - Candidatura de Progrés",
+      "votes": 233,
+      "seats": 2
+     },
+     {
+      "code": "202386",
+      "short": "PP",
+      "name": "Partido Popular",
+      "votes": 19,
+      "seats": 0
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 2478,
+    "voters": 1493,
+    "nullVotes": 21,
+    "blankVotes": 21,
+    "listVotes": 1451,
+    "validVotes": 1472,
+    "votes": {
+     "6": 503,
+     "10": 359,
+     "86": 104,
+     "643": 2,
+     "693": 83,
+     "697": 0,
+     "1031": 256,
+     "1034": 0,
+     "1109": 36,
+     "1129": 6,
+     "1134": 1,
+     "1135": 88,
+     "1136": 13
+    }
+   },
+   "parliament": {
+    "electorate": 2488,
+    "voters": 1362,
+    "nullVotes": 18,
+    "blankVotes": 20,
+    "listVotes": 1324,
+    "validVotes": 1344,
+    "votes": {
+     "6": 289,
+     "10": 310,
+     "86": 66,
+     "301": 2,
+     "350": 1,
+     "546": 0,
+     "693": 69,
+     "697": 2,
+     "1034": 2,
+     "1130": 94,
+     "1134": 0,
+     "1140": 26,
+     "1141": 48,
+     "1143": 407,
+     "1144": 8
+    }
+   }
+  },
+  {
+   "code": "08032",
+   "idescat": "080327",
+   "slug": "caldes-d-estrac",
+   "name": "Caldes d'Estrac",
+   "comarca": "Maresme",
+   "province": "Barcelona",
+   "population": 3356,
+   "mayor": {
+    "name": "Elisabeth Segura Gubern",
+    "party": "CM",
+    "since": "2025-06-14"
+   },
+   "municipal": {
+    "electorate": 2274,
+    "voters": 1221,
+    "nullVotes": 42,
+    "blankVotes": 21,
+    "listVotes": 1158,
+    "validVotes": 1179,
+    "seats": 11,
+    "censusPopulation": 3148,
+    "lists": [
+     {
+      "code": "842",
+      "short": "PSC-CP",
+      "name": "Partit dels Socialistes de Catalunya - Candidatura de Progrés",
+      "votes": 329,
+      "seats": 3
+     },
+     {
+      "code": "80324231",
+      "short": "GdE",
+      "name": "Gent d'Estrac",
+      "votes": 312,
+      "seats": 3
+     },
+     {
+      "code": "80324230",
+      "short": "CM",
+      "name": "Junts per Caldes d'Estrac - CM",
+      "votes": 308,
+      "seats": 3
+     },
+     {
+      "code": "193",
+      "short": "ERC-AM",
+      "name": "Esquerra Republicana de Catalunya - Acord Municipal",
+      "votes": 209,
+      "seats": 2
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 2244,
+    "voters": 1510,
+    "nullVotes": 12,
+    "blankVotes": 9,
+    "listVotes": 1489,
+    "validVotes": 1498,
+    "votes": {
+     "6": 469,
+     "10": 220,
+     "86": 165,
+     "693": 92,
+     "697": 1,
+     "1031": 244,
+     "1034": 4,
+     "1109": 41,
+     "1129": 13,
+     "1134": 4,
+     "1135": 218,
+     "1136": 18
+    }
+   },
+   "parliament": {
+    "electorate": 2262,
+    "voters": 1328,
+    "nullVotes": 7,
+    "blankVotes": 15,
+    "listVotes": 1306,
+    "validVotes": 1321,
+    "votes": {
+     "6": 312,
+     "10": 196,
+     "86": 129,
+     "301": 3,
+     "350": 1,
+     "693": 60,
+     "697": 0,
+     "1034": 0,
+     "1129": 13,
+     "1130": 44,
+     "1134": 4,
+     "1140": 72,
+     "1141": 38,
+     "1142": 1,
+     "1143": 431,
+     "1144": 2
+    }
+   }
+  },
+  {
+   "code": "43094",
+   "idescat": "430944",
+   "slug": "mora-la-nova",
+   "name": "Móra la Nova",
+   "comarca": "Ribera d'Ebre",
+   "province": "Tarragona",
+   "population": 3350,
+   "mayor": {
+    "name": "Jesús Álvarez Vilás",
+    "party": "",
+    "since": "2024-12-18"
+   },
+   "municipal": {
+    "electorate": 2196,
+    "voters": 1474,
+    "nullVotes": 47,
+    "blankVotes": 26,
+    "listVotes": 1401,
+    "validVotes": 1427,
+    "seats": 11,
+    "censusPopulation": 3198,
+    "lists": [
+     {
+      "code": "193",
+      "short": "ERC-AM",
+      "name": "Esquerra Republicana de Catalunya - Acord Municipal",
+      "votes": 631,
+      "seats": 5
+     },
+     {
+      "code": "430944230",
+      "short": "CM",
+      "name": "Junts per Móra la Nova-Compromís Municipal",
+      "votes": 387,
+      "seats": 3
+     },
+     {
+      "code": "842",
+      "short": "PSC-CP",
+      "name": "Partit dels Socialistes de Catalunya - Candidatura de Progrés",
+      "votes": 383,
+      "seats": 3
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 2160,
+    "voters": 1448,
+    "nullVotes": 31,
+    "blankVotes": 7,
+    "listVotes": 1410,
+    "validVotes": 1417,
+    "votes": {
+     "6": 424,
+     "10": 345,
+     "86": 120,
+     "693": 87,
+     "697": 2,
+     "1031": 244,
+     "1034": 1,
+     "1109": 30,
+     "1129": 9,
+     "1134": 1,
+     "1135": 135,
+     "1136": 11,
+     "1137": 1,
+     "1138": 0
+    }
+   },
+   "parliament": {
+    "electorate": 2163,
+    "voters": 1321,
+    "nullVotes": 45,
+    "blankVotes": 16,
+    "listVotes": 1260,
+    "validVotes": 1276,
+    "votes": {
+     "6": 272,
+     "10": 308,
+     "86": 81,
+     "301": 1,
+     "350": 3,
+     "546": 1,
+     "693": 62,
+     "697": 0,
+     "1018": 1,
+     "1034": 1,
+     "1129": 6,
+     "1130": 54,
+     "1134": 1,
+     "1140": 40,
+     "1141": 50,
+     "1142": 1,
+     "1143": 378,
+     "1144": 0
+    }
+   }
+  },
+  {
+   "code": "08117",
+   "idescat": "081173",
+   "slug": "les-masies-de-voltrega",
+   "name": "les Masies de Voltregà",
+   "comarca": "Osona",
+   "province": "Barcelona",
+   "population": 3345,
+   "mayor": {
+    "name": "Alejandre Gil Codina",
+    "party": "ARA PL",
+    "since": "2026-07-02"
+   },
+   "municipal": {
+    "electorate": 2556,
+    "voters": 1543,
+    "nullVotes": 16,
+    "blankVotes": 37,
+    "listVotes": 1490,
+    "validVotes": 1527,
+    "seats": 11,
+    "censusPopulation": 3133,
+    "lists": [
+     {
+      "code": "81174232",
+      "short": "CP",
+      "name": "Sumen per les Masies de Voltregà - Candidatura de Progrés",
+      "votes": 596,
+      "seats": 5
+     },
+     {
+      "code": "81174231",
+      "short": "CM",
+      "name": "Junts per les Masies de Voltregà - Compromís Municipal",
+      "votes": 536,
+      "seats": 4
+     },
+     {
+      "code": "81174233",
+      "short": "ARA PL",
+      "name": "Fem les Masies de Voltregà - Ara Pacte Local",
+      "votes": 230,
+      "seats": 1
+     },
+     {
+      "code": "81174230",
+      "short": "SOMVOLTREGA-AM",
+      "name": "Som Voltregà - Acord Municipal",
+      "votes": 128,
+      "seats": 1
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 2559,
+    "voters": 1657,
+    "nullVotes": 10,
+    "blankVotes": 18,
+    "listVotes": 1629,
+    "validVotes": 1647,
+    "votes": {
+     "6": 443,
+     "10": 315,
+     "86": 115,
+     "693": 107,
+     "697": 0,
+     "1031": 421,
+     "1034": 1,
+     "1109": 76,
+     "1129": 7,
+     "1134": 3,
+     "1135": 126,
+     "1136": 15
+    }
+   },
+   "parliament": {
+    "electorate": 2592,
+    "voters": 1682,
+    "nullVotes": 15,
+    "blankVotes": 18,
+    "listVotes": 1649,
+    "validVotes": 1667,
+    "votes": {
+     "6": 277,
+     "10": 195,
+     "86": 72,
+     "301": 5,
+     "350": 0,
+     "693": 80,
+     "697": 0,
+     "1034": 0,
+     "1129": 9,
+     "1130": 226,
+     "1134": 1,
+     "1140": 42,
+     "1141": 102,
+     "1142": 2,
+     "1143": 625,
+     "1144": 13
+    }
+   }
+  },
+  {
+   "code": "43060",
+   "idescat": "430607",
+   "slug": "flix",
+   "name": "Flix",
+   "comarca": "Ribera d'Ebre",
+   "province": "Tarragona",
+   "population": 3340,
+   "mayor": {
+    "name": "Francesc Barbero Escrivà",
+    "party": "",
+    "since": "2023-06-17"
+   },
+   "municipal": {
+    "electorate": 2583,
+    "voters": 1818,
+    "nullVotes": 75,
+    "blankVotes": 63,
+    "listVotes": 1680,
+    "validVotes": 1743,
+    "seats": 11,
+    "censusPopulation": 3426,
+    "lists": [
+     {
+      "code": "430604230",
+      "short": "ERC- EpF- AM",
+      "name": "Esquerra Republicana de Catalunya-Entesa per Flix-Acord Municipal",
+      "votes": 873,
+      "seats": 6
+     },
+     {
+      "code": "430604232",
+      "short": "CM",
+      "name": "Junts per Flix - Compromís Municipal",
+      "votes": 440,
+      "seats": 3
+     },
+     {
+      "code": "430604231",
+      "short": "AxF-CP",
+      "name": "Alternativa per Flix - Candidatura de Progrés",
+      "votes": 186,
+      "seats": 1
+     },
+     {
+      "code": "430604233",
+      "short": "CUP-AMUNT",
+      "name": "Candidatura d'Unitat Popular Flix - Alternativa Municipalista",
+      "votes": 181,
+      "seats": 1
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 2555,
+    "voters": 1833,
+    "nullVotes": 32,
+    "blankVotes": 20,
+    "listVotes": 1781,
+    "validVotes": 1801,
+    "votes": {
+     "6": 455,
+     "10": 685,
+     "86": 127,
+     "693": 51,
+     "697": 0,
+     "1031": 230,
+     "1034": 9,
+     "1109": 71,
+     "1129": 18,
+     "1134": 3,
+     "1135": 130,
+     "1136": 2,
+     "1137": 0,
+     "1138": 0
+    }
+   },
+   "parliament": {
+    "electorate": 2531,
+    "voters": 1657,
+    "nullVotes": 27,
+    "blankVotes": 28,
+    "listVotes": 1602,
+    "validVotes": 1630,
+    "votes": {
+     "6": 282,
+     "10": 510,
+     "86": 85,
+     "301": 3,
+     "350": 0,
+     "546": 0,
+     "693": 45,
+     "697": 1,
+     "1018": 0,
+     "1034": 2,
+     "1129": 15,
+     "1130": 47,
+     "1134": 0,
+     "1140": 38,
+     "1141": 115,
+     "1142": 0,
+     "1143": 453,
+     "1144": 6
+    }
+   }
+  },
+  {
+   "code": "08220",
+   "idescat": "082205",
+   "slug": "sant-julia-de-vilatorta",
+   "name": "Sant Julià de Vilatorta",
+   "comarca": "Osona",
+   "province": "Barcelona",
+   "population": 3323,
+   "mayor": {
+    "name": "Marta Cornellas Torrents",
+    "party": "",
+    "since": "2023-06-17"
+   },
+   "municipal": {
+    "electorate": 2528,
+    "voters": 1673,
+    "nullVotes": 30,
+    "blankVotes": 36,
+    "listVotes": 1607,
+    "validVotes": 1643,
+    "seats": 11,
+    "censusPopulation": 3193,
+    "lists": [
+     {
+      "code": "82204230",
+      "short": "AVV-AM",
+      "name": "Acord per Vilatorta I Vilalleons - Acord Municipal",
+      "votes": 701,
+      "seats": 5
+     },
+     {
+      "code": "82204231",
+      "short": "CM",
+      "name": "Compromes@S Amb Sant Julià I Vilalleons - Compromís Municipal",
+      "votes": 635,
+      "seats": 5
+     },
+     {
+      "code": "82204232",
+      "short": "VP",
+      "name": "La Veu Del Poble",
+      "votes": 233,
+      "seats": 1
+     },
+     {
+      "code": "842",
+      "short": "PSC-CP",
+      "name": "Partit dels Socialistes de Catalunya - Candidatura de Progrés",
+      "votes": 38,
+      "seats": 0
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 2522,
+    "voters": 1762,
+    "nullVotes": 21,
+    "blankVotes": 22,
+    "listVotes": 1719,
+    "validVotes": 1741,
+    "votes": {
+     "6": 244,
+     "10": 394,
+     "86": 63,
+     "693": 35,
+     "697": 0,
+     "1031": 677,
+     "1034": 1,
+     "1109": 125,
+     "1129": 9,
+     "1134": 0,
+     "1135": 121,
+     "1136": 50
+    }
+   },
+   "parliament": {
+    "electorate": 2580,
+    "voters": 1846,
+    "nullVotes": 12,
+    "blankVotes": 32,
+    "listVotes": 1802,
+    "validVotes": 1834,
+    "votes": {
+     "6": 133,
+     "10": 218,
+     "86": 36,
+     "301": 2,
+     "350": 0,
+     "693": 29,
+     "697": 0,
+     "1034": 0,
+     "1129": 6,
+     "1130": 199,
+     "1134": 1,
+     "1140": 29,
+     "1141": 63,
+     "1142": 0,
+     "1143": 1069,
+     "1144": 17
+    }
+   }
+  },
+  {
+   "code": "17233",
+   "idescat": "172333",
+   "slug": "vilobi-d-onyar",
+   "name": "Vilobí d'Onyar",
+   "comarca": "Selva",
+   "province": "Girona",
+   "population": 3297,
+   "mayor": {
+    "name": "Lluís Salvi i Camps",
+    "party": "",
+    "since": "2023-09-25"
+   },
+   "municipal": {
+    "electorate": 2421,
+    "voters": 1631,
+    "nullVotes": 27,
+    "blankVotes": 23,
+    "listVotes": 1581,
+    "validVotes": 1604,
+    "seats": 11,
+    "censusPopulation": 3304,
+    "lists": [
+     {
+      "code": "172334230",
+      "short": "GMI-VO-IdSelva",
+      "name": "Grup Municipal Independent de Vilobí D'Onyar Independents de la Selva",
+      "votes": 675,
+      "seats": 5
+     },
+     {
+      "code": "1123",
+      "short": "CM",
+      "name": "Junts - Compromís Municipal",
+      "votes": 509,
+      "seats": 4
+     },
+     {
+      "code": "172334231",
+      "short": "VIU-ARA PL",
+      "name": "Viu Vilobí Salitja Sant Dalmai - Ara Pacte Local",
+      "votes": 274,
+      "seats": 2
+     },
+     {
+      "code": "172334232",
+      "short": "SOM-AM",
+      "name": "Som - Acord Municipal",
+      "votes": 95,
+      "seats": 0
+     },
+     {
+      "code": "842",
+      "short": "PSC-CP",
+      "name": "Partit dels Socialistes de Catalunya - Candidatura de Progrés",
+      "votes": 28,
+      "seats": 0
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 2404,
+    "voters": 1638,
+    "nullVotes": 31,
+    "blankVotes": 11,
+    "listVotes": 1596,
+    "validVotes": 1607,
+    "votes": {
+     "6": 348,
+     "10": 245,
+     "86": 125,
+     "693": 78,
+     "697": 0,
+     "1031": 480,
+     "1034": 4,
+     "1109": 92,
+     "1129": 18,
+     "1134": 12,
+     "1135": 168,
+     "1136": 26
+    }
+   },
+   "parliament": {
+    "electorate": 2458,
+    "voters": 1628,
+    "nullVotes": 16,
+    "blankVotes": 26,
+    "listVotes": 1586,
+    "validVotes": 1612,
+    "votes": {
+     "6": 177,
+     "10": 158,
+     "86": 77,
+     "301": 1,
+     "350": 3,
+     "693": 71,
+     "697": 1,
+     "1034": 1,
+     "1129": 16,
+     "1130": 184,
+     "1134": 2,
+     "1140": 43,
+     "1141": 69,
+     "1143": 774,
+     "1144": 9
+    }
+   }
+  },
+  {
+   "code": "08273",
+   "idescat": "082732",
+   "slug": "subirats",
+   "name": "Subirats",
+   "comarca": "Alt Penedès",
+   "province": "Barcelona",
+   "population": 3288,
+   "mayor": {
+    "name": "Jaume Domènech I Via",
+    "party": "ERC-AM",
+    "since": "2023-06-17"
+   },
+   "municipal": {
+    "electorate": 2568,
+    "voters": 1622,
+    "nullVotes": 33,
+    "blankVotes": 33,
+    "listVotes": 1556,
+    "validVotes": 1589,
+    "seats": 11,
+    "censusPopulation": 3241,
+    "lists": [
+     {
+      "code": "82734231",
+      "short": "CM",
+      "name": "Junts per Subirats - Compromís Municipal",
+      "votes": 591,
+      "seats": 5
+     },
+     {
+      "code": "193",
+      "short": "ERC-AM",
+      "name": "Esquerra Republicana de Catalunya - Acord Municipal",
+      "votes": 497,
+      "seats": 4
+     },
+     {
+      "code": "82734230",
+      "short": "APS-CUP-AMUNT",
+      "name": "Alternativa per Subirats - Candidatura d´Unitat popular - Alternativa Municipalista",
+      "votes": 292,
+      "seats": 2
+     },
+     {
+      "code": "842",
+      "short": "PSC-CP",
+      "name": "Partit dels Socialistes de Catalunya - Candidatura de Progrés",
+      "votes": 111,
+      "seats": 0
+     },
+     {
+      "code": "202386",
+      "short": "PP",
+      "name": "Partido Popular",
+      "votes": 65,
+      "seats": 0
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 2549,
+    "voters": 1783,
+    "nullVotes": 18,
+    "blankVotes": 18,
+    "listVotes": 1747,
+    "validVotes": 1765,
+    "votes": {
+     "6": 405,
+     "10": 410,
+     "86": 103,
+     "693": 87,
+     "697": 1,
+     "1031": 372,
+     "1034": 4,
+     "1109": 152,
+     "1129": 14,
+     "1134": 5,
+     "1135": 168,
+     "1136": 26
+    }
+   },
+   "parliament": {
+    "electorate": 2589,
+    "voters": 1632,
+    "nullVotes": 13,
+    "blankVotes": 14,
+    "listVotes": 1605,
+    "validVotes": 1619,
+    "votes": {
+     "6": 183,
+     "10": 315,
+     "86": 60,
+     "301": 4,
+     "350": 0,
+     "693": 62,
+     "697": 0,
+     "1034": 1,
+     "1129": 12,
+     "1130": 73,
+     "1134": 8,
+     "1140": 51,
+     "1141": 176,
+     "1142": 0,
+     "1143": 642,
+     "1144": 18
+    }
+   }
+  },
+  {
+   "code": "17207",
+   "idescat": "172076",
+   "slug": "la-vall-d-en-bas",
+   "name": "la Vall d'en Bas",
+   "comarca": "Garrotxa",
+   "province": "Girona",
+   "population": 3269,
+   "mayor": {
+    "name": "Magdalena Roca Viñals",
+    "party": "LVP-AM",
+    "since": "2025-07-22"
+   },
+   "municipal": {
+    "electorate": 2520,
+    "voters": 1698,
+    "nullVotes": 45,
+    "blankVotes": 49,
+    "listVotes": 1604,
+    "validVotes": 1653,
+    "seats": 11,
+    "censusPopulation": 3143,
+    "lists": [
+     {
+      "code": "172074231",
+      "short": "LVP-AM",
+      "name": "La Vall Plural - Acord Municipal",
+      "votes": 977,
+      "seats": 7
+     },
+     {
+      "code": "172074230",
+      "short": "CM",
+      "name": "Junts per la Vall d'En Bas - Compromís Municipal",
+      "votes": 627,
+      "seats": 4
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 2505,
+    "voters": 1691,
+    "nullVotes": 21,
+    "blankVotes": 26,
+    "listVotes": 1644,
+    "validVotes": 1670,
+    "votes": {
+     "6": 263,
+     "10": 300,
+     "86": 71,
+     "693": 40,
+     "697": 1,
+     "1031": 534,
+     "1034": 1,
+     "1109": 190,
+     "1129": 20,
+     "1134": 1,
+     "1135": 197,
+     "1136": 26
+    }
+   },
+   "parliament": {
+    "electorate": 2540,
+    "voters": 1813,
+    "nullVotes": 34,
+    "blankVotes": 38,
+    "listVotes": 1741,
+    "validVotes": 1779,
+    "votes": {
+     "6": 135,
+     "10": 220,
+     "86": 39,
+     "301": 2,
+     "350": 1,
+     "693": 31,
+     "697": 0,
+     "1034": 0,
+     "1129": 11,
+     "1130": 266,
+     "1134": 1,
+     "1140": 72,
+     "1141": 134,
+     "1143": 800,
+     "1144": 29
+    }
+   }
+  },
+  {
+   "code": "08294",
+   "idescat": "082943",
+   "slug": "vallgorguina",
+   "name": "Vallgorguina",
+   "comarca": "Vallès Oriental",
+   "province": "Barcelona",
+   "population": 3261,
+   "mayor": {
+    "name": "Mercè Llistosella Caballè",
+    "party": "",
+    "since": "2023-12-13"
+   },
+   "municipal": {
+    "electorate": 2326,
+    "voters": 1137,
+    "nullVotes": 37,
+    "blankVotes": 50,
+    "listVotes": 1050,
+    "validVotes": 1100,
+    "seats": 11,
+    "censusPopulation": 3144,
+    "lists": [
+     {
+      "code": "82944230",
+      "short": "CM",
+      "name": "Junts per Vallgorguina - Compromís Municipal",
+      "votes": 491,
+      "seats": 5
+     },
+     {
+      "code": "82944231",
+      "short": "ALTERNATIVA-AMUNT",
+      "name": "Alternativa per Vallgorguina - Alternativa Municipalista",
+      "votes": 351,
+      "seats": 4
+     },
+     {
+      "code": "193",
+      "short": "ERC-AM",
+      "name": "Esquerra Republicana de Catalunya - Acord Municipal",
+      "votes": 208,
+      "seats": 2
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 2332,
+    "voters": 1520,
+    "nullVotes": 8,
+    "blankVotes": 12,
+    "listVotes": 1500,
+    "validVotes": 1512,
+    "votes": {
+     "6": 280,
+     "10": 321,
+     "86": 137,
+     "693": 99,
+     "697": 1,
+     "1031": 293,
+     "1034": 0,
+     "1109": 82,
+     "1129": 23,
+     "1134": 3,
+     "1135": 256,
+     "1136": 5
+    }
+   },
+   "parliament": {
+    "electorate": 2325,
+    "voters": 1321,
+    "nullVotes": 13,
+    "blankVotes": 15,
+    "listVotes": 1293,
+    "validVotes": 1308,
+    "votes": {
+     "6": 172,
+     "10": 217,
+     "86": 74,
+     "301": 2,
+     "350": 0,
+     "693": 77,
+     "697": 3,
+     "1034": 1,
+     "1129": 18,
+     "1130": 57,
+     "1134": 7,
+     "1140": 66,
+     "1141": 127,
+     "1142": 0,
+     "1143": 459,
+     "1144": 13
+    }
+   }
+  },
+  {
+   "code": "08162",
+   "idescat": "081629",
+   "slug": "els-hostalets-de-pierola",
+   "name": "els Hostalets de Pierola",
+   "comarca": "Anoia",
+   "province": "Barcelona",
+   "population": 3258,
+   "mayor": {
+    "name": "Gerard Parcerisas Valls",
+    "party": "ERC-AM",
+    "since": "2025-07-02"
+   },
+   "municipal": {
+    "electorate": 2323,
+    "voters": 1492,
+    "nullVotes": 17,
+    "blankVotes": 20,
+    "listVotes": 1455,
+    "validVotes": 1475,
+    "seats": 11,
+    "censusPopulation": 3127,
+    "lists": [
+     {
+      "code": "81624232",
+      "short": "CM",
+      "name": "Junts Pels Hostalets - Compromís Municipal",
+      "votes": 451,
+      "seats": 4
+     },
+     {
+      "code": "193",
+      "short": "ERC-AM",
+      "name": "Esquerra Republicana de Catalunya - Acord Municipal",
+      "votes": 397,
+      "seats": 4
+     },
+     {
+      "code": "81624230",
+      "short": "CP",
+      "name": "Cp-Sumem Pels Hostalets-Candidatura de Progrés",
+      "votes": 394,
+      "seats": 3
+     },
+     {
+      "code": "81624231",
+      "short": "UHPU",
+      "name": "Urbanitzacions Hostalets de Pierola Unides",
+      "votes": 96,
+      "seats": 0
+     },
+     {
+      "code": "1039",
+      "short": "CUP-AMUNT",
+      "name": "Candidatura d'Unitat Popular - Alternativa Municipalista",
+      "votes": 47,
+      "seats": 0
+     },
+     {
+      "code": "301",
+      "short": "Cs",
+      "name": "Ciutadans - Partido de la Ciudadanía",
+      "votes": 41,
+      "seats": 0
+     },
+     {
+      "code": "202386",
+      "short": "PP",
+      "name": "Partido Popular",
+      "votes": 29,
+      "seats": 0
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 2315,
+    "voters": 1523,
+    "nullVotes": 15,
+    "blankVotes": 11,
+    "listVotes": 1497,
+    "validVotes": 1508,
+    "votes": {
+     "6": 453,
+     "10": 275,
+     "86": 154,
+     "693": 144,
+     "697": 2,
+     "1031": 167,
+     "1034": 1,
+     "1109": 54,
+     "1129": 18,
+     "1134": 3,
+     "1135": 222,
+     "1136": 4
+    }
+   },
+   "parliament": {
+    "electorate": 2346,
+    "voters": 1317,
+    "nullVotes": 23,
+    "blankVotes": 16,
+    "listVotes": 1278,
+    "validVotes": 1294,
+    "votes": {
+     "6": 276,
+     "10": 237,
+     "86": 81,
+     "301": 8,
+     "350": 1,
+     "693": 130,
+     "697": 0,
+     "1034": 2,
+     "1129": 19,
+     "1130": 41,
+     "1134": 4,
+     "1140": 77,
+     "1141": 68,
+     "1142": 1,
+     "1143": 316,
+     "1144": 17
+    }
+   }
+  },
+  {
+   "code": "08127",
+   "idescat": "081271",
+   "slug": "monistrol-de-montserrat",
+   "name": "Monistrol de Montserrat",
+   "comarca": "Bages",
+   "province": "Barcelona",
+   "population": 3250,
+   "mayor": {
+    "name": "Núria Carreras Povill",
+    "party": "PP",
+    "since": "2023-06-17"
+   },
+   "municipal": {
+    "electorate": 2269,
+    "voters": 1358,
+    "nullVotes": 38,
+    "blankVotes": 24,
+    "listVotes": 1296,
+    "validVotes": 1320,
+    "seats": 11,
+    "censusPopulation": 3166,
+    "lists": [
+     {
+      "code": "202386",
+      "short": "PP",
+      "name": "Partido Popular",
+      "votes": 422,
+      "seats": 4
+     },
+     {
+      "code": "193",
+      "short": "ERC-AM",
+      "name": "Esquerra Republicana de Catalunya - Acord Municipal",
+      "votes": 386,
+      "seats": 4
+     },
+     {
+      "code": "81274231",
+      "short": "CUP-AMUNT",
+      "name": "Candidatura d'Unitat Popular Monistrol de Montserrat - Alternativa Municipalista",
+      "votes": 193,
+      "seats": 1
+     },
+     {
+      "code": "842",
+      "short": "PSC-CP",
+      "name": "Partit dels Socialistes de Catalunya - Candidatura de Progrés",
+      "votes": 130,
+      "seats": 1
+     },
+     {
+      "code": "81274232",
+      "short": "CM",
+      "name": "Junts per Monistrol de Montserrat - Compromís Municipal",
+      "votes": 102,
+      "seats": 1
+     },
+     {
+      "code": "81274230",
+      "short": "ECPM-C",
+      "name": "En Comú Podem Monistrol - Confluència",
+      "votes": 63,
+      "seats": 0
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 2268,
+    "voters": 1408,
+    "nullVotes": 24,
+    "blankVotes": 7,
+    "listVotes": 1377,
+    "validVotes": 1384,
+    "votes": {
+     "6": 446,
+     "10": 240,
+     "86": 137,
+     "693": 111,
+     "697": 1,
+     "1031": 176,
+     "1034": 3,
+     "1109": 59,
+     "1129": 18,
+     "1134": 5,
+     "1135": 172,
+     "1136": 9
+    }
+   },
+   "parliament": {
+    "electorate": 2253,
+    "voters": 1228,
+    "nullVotes": 20,
+    "blankVotes": 15,
+    "listVotes": 1193,
+    "validVotes": 1208,
+    "votes": {
+     "6": 296,
+     "10": 174,
+     "86": 95,
+     "301": 4,
+     "350": 2,
+     "693": 95,
+     "697": 0,
+     "1034": 1,
+     "1129": 15,
+     "1130": 80,
+     "1134": 5,
+     "1140": 50,
+     "1141": 65,
+     "1142": 1,
+     "1143": 305,
+     "1144": 5
+    }
+   }
+  },
+  {
+   "code": "17036",
+   "idescat": "170366",
+   "slug": "campdevanol",
+   "name": "Campdevànol",
+   "comarca": "Ripollès",
+   "province": "Girona",
+   "population": 3241,
+   "mayor": {
+    "name": "Oriol Lázaro Llovera",
+    "party": "CM",
+    "since": "2023-06-17"
+   },
+   "municipal": {
+    "electorate": 2596,
+    "voters": 1653,
+    "nullVotes": 49,
+    "blankVotes": 39,
+    "listVotes": 1565,
+    "validVotes": 1604,
+    "seats": 11,
+    "censusPopulation": 3217,
+    "lists": [
+     {
+      "code": "170364231",
+      "short": "CM",
+      "name": "Sumem per Campdevànol - Compromís Municipal",
+      "votes": 540,
+      "seats": 4
+     },
+     {
+      "code": "193",
+      "short": "ERC-AM",
+      "name": "Esquerra Republicana de Catalunya - Acord Municipal",
+      "votes": 296,
+      "seats": 2
+     },
+     {
+      "code": "170364230",
+      "short": "IdR-IDC",
+      "name": "Gent del Poble Independents del Ripollès - Independents de Catalunya",
+      "votes": 279,
+      "seats": 2
+     },
+     {
+      "code": "170364233",
+      "short": "CP",
+      "name": "100% Campdevànol - Candidatura de Progrés",
+      "votes": 277,
+      "seats": 2
+     },
+     {
+      "code": "170364232",
+      "short": "CUP-AMUNT",
+      "name": "Candidatura d'Unitat Popular Campdevànol - Alternativa Municipalista",
+      "votes": 173,
+      "seats": 1
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 2597,
+    "voters": 1679,
+    "nullVotes": 29,
+    "blankVotes": 20,
+    "listVotes": 1630,
+    "validVotes": 1650,
+    "votes": {
+     "6": 510,
+     "10": 313,
+     "86": 106,
+     "693": 93,
+     "697": 0,
+     "1031": 284,
+     "1034": 2,
+     "1109": 87,
+     "1129": 11,
+     "1134": 11,
+     "1135": 201,
+     "1136": 12
+    }
+   },
+   "parliament": {
+    "electorate": 2630,
+    "voters": 1654,
+    "nullVotes": 33,
+    "blankVotes": 14,
+    "listVotes": 1607,
+    "validVotes": 1621,
+    "votes": {
+     "6": 250,
+     "10": 206,
+     "86": 61,
+     "301": 4,
+     "350": 2,
+     "693": 44,
+     "697": 2,
+     "1034": 0,
+     "1129": 16,
+     "1130": 430,
+     "1134": 5,
+     "1140": 68,
+     "1141": 98,
+     "1143": 403,
+     "1144": 18
+    }
+   }
+  },
+  {
+   "code": "17185",
+   "idescat": "171851",
+   "slug": "sant-joan-les-fonts",
+   "name": "Sant Joan les Fonts",
+   "comarca": "Garrotxa",
+   "province": "Girona",
+   "population": 3167,
+   "mayor": {
+    "name": "Maria Vidal I Jodar",
+    "party": "CM",
+    "since": "2023-06-17"
+   },
+   "municipal": {
+    "electorate": 2256,
+    "voters": 1330,
+    "nullVotes": 43,
+    "blankVotes": 34,
+    "listVotes": 1253,
+    "validVotes": 1287,
+    "seats": 11,
+    "censusPopulation": 3054,
+    "lists": [
+     {
+      "code": "171854230",
+      "short": "CM",
+      "name": "Junts per Sant Joan les Fonts - Compromís Municipal",
+      "votes": 829,
+      "seats": 7
+     },
+     {
+      "code": "171854231",
+      "short": "AM",
+      "name": "Sant Joan Plural - Acord Municipal",
+      "votes": 424,
+      "seats": 4
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 2250,
+    "voters": 1379,
+    "nullVotes": 22,
+    "blankVotes": 18,
+    "listVotes": 1339,
+    "validVotes": 1357,
+    "votes": {
+     "6": 394,
+     "10": 213,
+     "86": 63,
+     "693": 43,
+     "697": 2,
+     "1031": 404,
+     "1034": 1,
+     "1109": 76,
+     "1129": 14,
+     "1134": 2,
+     "1135": 114,
+     "1136": 13
+    }
+   },
+   "parliament": {
+    "electorate": 2240,
+    "voters": 1395,
+    "nullVotes": 18,
+    "blankVotes": 19,
+    "listVotes": 1358,
+    "validVotes": 1377,
+    "votes": {
+     "6": 239,
+     "10": 155,
+     "86": 42,
+     "301": 0,
+     "350": 0,
+     "693": 34,
+     "697": 0,
+     "1034": 1,
+     "1129": 8,
+     "1130": 250,
+     "1134": 3,
+     "1140": 34,
+     "1141": 54,
+     "1143": 533,
+     "1144": 5
+    }
+   }
+  },
+  {
+   "code": "43088",
+   "idescat": "430884",
+   "slug": "montbrio-del-camp",
+   "name": "Montbrió del Camp",
+   "comarca": "Baix Camp",
+   "province": "Tarragona",
+   "population": 3157,
+   "mayor": {
+    "name": "Carmina Blay Boquera",
+    "party": "",
+    "since": "2023-06-17"
+   },
+   "municipal": {
+    "electorate": 2187,
+    "voters": 1295,
+    "nullVotes": 22,
+    "blankVotes": 22,
+    "listVotes": 1251,
+    "validVotes": 1273,
+    "seats": 11,
+    "censusPopulation": 3073,
+    "lists": [
+     {
+      "code": "430884230",
+      "short": "AM-AM",
+      "name": "Acció per Montbrio - Acord Municipal",
+      "votes": 647,
+      "seats": 6
+     },
+     {
+      "code": "1125",
+      "short": "xtu",
+      "name": "Per Tu",
+      "votes": 316,
+      "seats": 3
+     },
+     {
+      "code": "430884231",
+      "short": "CM",
+      "name": "Junts per Montbrió Del Camp - Compromís Municipal",
+      "votes": 251,
+      "seats": 2
+     },
+     {
+      "code": "842",
+      "short": "PSC-CP",
+      "name": "Partit dels Socialistes de Catalunya - Candidatura de Progrés",
+      "votes": 37,
+      "seats": 0
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 2157,
+    "voters": 1378,
+    "nullVotes": 12,
+    "blankVotes": 12,
+    "listVotes": 1354,
+    "validVotes": 1366,
+    "votes": {
+     "6": 299,
+     "10": 322,
+     "86": 128,
+     "693": 131,
+     "697": 0,
+     "1031": 244,
+     "1034": 0,
+     "1109": 31,
+     "1129": 20,
+     "1134": 1,
+     "1135": 165,
+     "1136": 13,
+     "1137": 0,
+     "1138": 0
+    }
+   },
+   "parliament": {
+    "electorate": 2187,
+    "voters": 1259,
+    "nullVotes": 17,
+    "blankVotes": 5,
+    "listVotes": 1237,
+    "validVotes": 1242,
+    "votes": {
+     "6": 190,
+     "10": 259,
+     "86": 99,
+     "301": 6,
+     "350": 1,
+     "546": 0,
+     "693": 110,
+     "697": 1,
+     "1018": 1,
+     "1034": 0,
+     "1129": 19,
+     "1130": 68,
+     "1134": 3,
+     "1140": 44,
+     "1141": 61,
+     "1142": 0,
+     "1143": 365,
+     "1144": 10
+    }
+   }
+  },
+  {
+   "code": "43064",
+   "idescat": "430640",
+   "slug": "gandesa",
+   "name": "Gandesa",
+   "comarca": "Terra Alta",
+   "province": "Tarragona",
+   "population": 3150,
+   "mayor": {
+    "name": "Carles Luz Muñoz",
+    "party": "CM",
+    "since": "2023-06-17"
+   },
+   "municipal": {
+    "electorate": 2166,
+    "voters": 1618,
+    "nullVotes": 40,
+    "blankVotes": 36,
+    "listVotes": 1542,
+    "validVotes": 1578,
+    "seats": 11,
+    "censusPopulation": 3100,
+    "lists": [
+     {
+      "code": "430644232",
+      "short": "CM",
+      "name": "Junts per Gandesa - Compromís Municipal",
+      "votes": 709,
+      "seats": 5
+     },
+     {
+      "code": "430644230",
+      "short": "ApG-ERC-AM",
+      "name": "Alternativa per Gandesa - Esquerra Republicana de Catalunya - Acord Municipal",
+      "votes": 565,
+      "seats": 4
+     },
+     {
+      "code": "430644231",
+      "short": "SxG-CP",
+      "name": "Som per Gandesa-Candidatura de Progrés",
+      "votes": 141,
+      "seats": 1
+     },
+     {
+      "code": "202386",
+      "short": "PP",
+      "name": "Partido Popular",
+      "votes": 127,
+      "seats": 1
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 2009,
+    "voters": 1375,
+    "nullVotes": 16,
+    "blankVotes": 12,
+    "listVotes": 1347,
+    "validVotes": 1359,
+    "votes": {
+     "6": 349,
+     "10": 362,
+     "86": 175,
+     "693": 84,
+     "697": 0,
+     "1031": 230,
+     "1034": 1,
+     "1109": 44,
+     "1129": 10,
+     "1134": 0,
+     "1135": 84,
+     "1136": 8,
+     "1137": 0,
+     "1138": 0
+    }
+   },
+   "parliament": {
+    "electorate": 2008,
+    "voters": 1297,
+    "nullVotes": 32,
+    "blankVotes": 10,
+    "listVotes": 1255,
+    "validVotes": 1265,
+    "votes": {
+     "6": 223,
+     "10": 345,
+     "86": 137,
+     "301": 3,
+     "350": 1,
+     "546": 0,
+     "693": 64,
+     "697": 1,
+     "1018": 1,
+     "1034": 0,
+     "1129": 9,
+     "1130": 36,
+     "1134": 1,
+     "1140": 29,
+     "1141": 46,
+     "1142": 0,
+     "1143": 358,
+     "1144": 1
+    }
+   }
+  },
+  {
+   "code": "25171",
+   "idescat": "251713",
+   "slug": "la-pobla-de-segur",
+   "name": "la Pobla de Segur",
+   "comarca": "Pallars Jussà",
+   "province": "Lleida",
+   "population": 3143,
+   "mayor": {
+    "name": "Marc Baró Bernaduca",
+    "party": "",
+    "since": "2023-06-17"
+   },
+   "municipal": {
+    "electorate": 2154,
+    "voters": 1331,
+    "nullVotes": 23,
+    "blankVotes": 15,
+    "listVotes": 1293,
+    "validVotes": 1308,
+    "seats": 11,
+    "censusPopulation": 3055,
+    "lists": [
+     {
+      "code": "193",
+      "short": "ERC-AM",
+      "name": "Esquerra Republicana de Catalunya - Acord Municipal",
+      "votes": 688,
+      "seats": 6
+     },
+     {
+      "code": "842",
+      "short": "PSC-CP",
+      "name": "Partit dels Socialistes de Catalunya - Candidatura de Progrés",
+      "votes": 321,
+      "seats": 3
+     },
+     {
+      "code": "251714230",
+      "short": "JUNTS PER LA POBLA DE SEGUR CM",
+      "name": "Junts per la Pobla de Segur CM",
+      "votes": 284,
+      "seats": 2
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 2136,
+    "voters": 1339,
+    "nullVotes": 8,
+    "blankVotes": 9,
+    "listVotes": 1322,
+    "validVotes": 1331,
+    "votes": {
+     "6": 434,
+     "10": 333,
+     "86": 74,
+     "643": 1,
+     "693": 42,
+     "697": 0,
+     "1031": 278,
+     "1034": 1,
+     "1109": 47,
+     "1129": 6,
+     "1134": 1,
+     "1135": 92,
+     "1136": 13
+    }
+   },
+   "parliament": {
+    "electorate": 2128,
+    "voters": 1260,
+    "nullVotes": 18,
+    "blankVotes": 19,
+    "listVotes": 1223,
+    "validVotes": 1242,
+    "votes": {
+     "6": 284,
+     "10": 270,
+     "86": 34,
+     "301": 4,
+     "350": 4,
+     "546": 0,
+     "693": 24,
+     "697": 2,
+     "1034": 0,
+     "1130": 54,
+     "1134": 1,
+     "1140": 21,
+     "1141": 77,
+     "1143": 442,
+     "1144": 6
+    }
+   }
+  },
+  {
+   "code": "08207",
+   "idescat": "082074",
+   "slug": "sant-esteve-de-palautordera",
+   "name": "Sant Esteve de Palautordera",
+   "comarca": "Vallès Oriental",
+   "province": "Barcelona",
+   "population": 3099,
+   "mayor": {
+    "name": "Tomeu Aspa I Miralta",
+    "party": "",
+    "since": "2023-06-17"
+   },
+   "municipal": {
+    "electorate": 2246,
+    "voters": 1442,
+    "nullVotes": 25,
+    "blankVotes": 42,
+    "listVotes": 1375,
+    "validVotes": 1417,
+    "seats": 11,
+    "censusPopulation": 3043,
+    "lists": [
+     {
+      "code": "82074231",
+      "short": "CM",
+      "name": "Junts per Sant Esteve - Compromís Municipal",
+      "votes": 617,
+      "seats": 5
+     },
+     {
+      "code": "82074230",
+      "short": "M",
+      "name": "Som Vallflorida",
+      "votes": 501,
+      "seats": 4
+     },
+     {
+      "code": "193",
+      "short": "ERC-AM",
+      "name": "Esquerra Republicana de Catalunya - Acord Municipal",
+      "votes": 228,
+      "seats": 2
+     },
+     {
+      "code": "842",
+      "short": "PSC-CP",
+      "name": "Partit dels Socialistes de Catalunya - Candidatura de Progrés",
+      "votes": 29,
+      "seats": 0
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 2243,
+    "voters": 1593,
+    "nullVotes": 28,
+    "blankVotes": 17,
+    "listVotes": 1548,
+    "validVotes": 1565,
+    "votes": {
+     "6": 256,
+     "10": 318,
+     "86": 78,
+     "693": 42,
+     "697": 1,
+     "1031": 450,
+     "1034": 2,
+     "1109": 171,
+     "1129": 12,
+     "1134": 1,
+     "1135": 205,
+     "1136": 12
+    }
+   },
+   "parliament": {
+    "electorate": 2269,
+    "voters": 1535,
+    "nullVotes": 9,
+    "blankVotes": 23,
+    "listVotes": 1503,
+    "validVotes": 1526,
+    "votes": {
+     "6": 137,
+     "10": 244,
+     "86": 38,
+     "301": 0,
+     "350": 1,
+     "693": 34,
+     "697": 1,
+     "1034": 6,
+     "1129": 11,
+     "1130": 82,
+     "1134": 0,
+     "1140": 68,
+     "1141": 170,
+     "1142": 0,
+     "1143": 700,
+     "1144": 11
+    }
+   }
+  },
+  {
+   "code": "25016",
+   "idescat": "250169",
+   "slug": "alguaire",
+   "name": "Alguaire",
+   "comarca": "Segrià",
+   "province": "Lleida",
+   "population": 3060,
+   "mayor": {
+    "name": "Joan Guillaumet Illa",
+    "party": "",
+    "since": "2024-06-19"
+   },
+   "municipal": {
+    "electorate": 2055,
+    "voters": 1331,
+    "nullVotes": 6,
+    "blankVotes": 24,
+    "listVotes": 1301,
+    "validVotes": 1325,
+    "seats": 11,
+    "censusPopulation": 3040,
+    "lists": [
+     {
+      "code": "193",
+      "short": "ERC-AM",
+      "name": "Esquerra Republicana de Catalunya - Acord Municipal",
+      "votes": 566,
+      "seats": 5
+     },
+     {
+      "code": "250164230",
+      "short": "HORITZÓ32",
+      "name": "Horitzó Alguaire 31",
+      "votes": 558,
+      "seats": 5
+     },
+     {
+      "code": "250164231",
+      "short": "CM",
+      "name": "Junts Impulsem Alguaire - Compromís Municipal",
+      "votes": 177,
+      "seats": 1
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 2043,
+    "voters": 1218,
+    "nullVotes": 15,
+    "blankVotes": 10,
+    "listVotes": 1193,
+    "validVotes": 1203,
+    "votes": {
+     "6": 309,
+     "10": 333,
+     "86": 119,
+     "643": 3,
+     "693": 60,
+     "697": 1,
+     "1031": 247,
+     "1034": 1,
+     "1109": 34,
+     "1129": 2,
+     "1134": 0,
+     "1135": 72,
+     "1136": 12
+    }
+   },
+   "parliament": {
+    "electorate": 2046,
+    "voters": 1100,
+    "nullVotes": 8,
+    "blankVotes": 22,
+    "listVotes": 1070,
+    "validVotes": 1092,
+    "votes": {
+     "6": 181,
+     "10": 226,
+     "86": 72,
+     "301": 1,
+     "350": 1,
+     "546": 0,
+     "693": 37,
+     "697": 1,
+     "1034": 1,
+     "1130": 87,
+     "1134": 4,
+     "1140": 16,
+     "1141": 53,
+     "1143": 383,
+     "1144": 7
+    }
+   }
+  },
+  {
+   "code": "08905",
+   "idescat": "089058",
+   "slug": "la-palma-de-cervello",
+   "name": "la Palma de Cervelló",
+   "comarca": "Baix Llobregat",
+   "province": "Barcelona",
+   "population": 3056,
+   "mayor": {
+    "name": "Anna Pascual Roca",
+    "party": "CM",
+    "since": "2023-06-17"
+   },
+   "municipal": {
+    "electorate": 2362,
+    "voters": 1534,
+    "nullVotes": 24,
+    "blankVotes": 53,
+    "listVotes": 1457,
+    "validVotes": 1510,
+    "seats": 11,
+    "censusPopulation": 3026,
+    "lists": [
+     {
+      "code": "89054232",
+      "short": "CM",
+      "name": "Junts per la Palma - Compromís Municipal",
+      "votes": 836,
+      "seats": 7
+     },
+     {
+      "code": "89054230",
+      "short": "LA PALMA SEMPRE-ERC-AM",
+      "name": "La Palma Sempre - Esquerra Republicana - Acord Municipal",
+      "votes": 296,
+      "seats": 2
+     },
+     {
+      "code": "89054231",
+      "short": "SAC-C",
+      "name": "Som Alternativa Pel Canvi - Confluència",
+      "votes": 168,
+      "seats": 1
+     },
+     {
+      "code": "842",
+      "short": "PSC-CP",
+      "name": "Partit dels Socialistes de Catalunya - Candidatura de Progrés",
+      "votes": 157,
+      "seats": 1
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 2340,
+    "voters": 1677,
+    "nullVotes": 13,
+    "blankVotes": 14,
+    "listVotes": 1650,
+    "validVotes": 1664,
+    "votes": {
+     "6": 489,
+     "10": 316,
+     "86": 154,
+     "693": 108,
+     "697": 0,
+     "1031": 253,
+     "1034": 0,
+     "1109": 62,
+     "1129": 20,
+     "1134": 3,
+     "1135": 216,
+     "1136": 29
+    }
+   },
+   "parliament": {
+    "electorate": 2367,
+    "voters": 1556,
+    "nullVotes": 17,
+    "blankVotes": 38,
+    "listVotes": 1501,
+    "validVotes": 1539,
+    "votes": {
+     "6": 379,
+     "10": 285,
+     "86": 111,
+     "301": 12,
+     "350": 2,
+     "693": 74,
+     "697": 1,
+     "1034": 2,
+     "1129": 20,
+     "1130": 48,
+     "1134": 2,
+     "1140": 84,
+     "1141": 78,
+     "1142": 0,
+     "1143": 400,
+     "1144": 3
+    }
+   }
+  },
+  {
+   "code": "43042",
+   "idescat": "430424",
+   "slug": "castellvell-del-camp",
+   "name": "Castellvell del Camp",
+   "comarca": "Baix Camp",
+   "province": "Tarragona",
+   "population": 3002,
+   "mayor": {
+    "name": "Josep Manel Sabaté Papiol",
+    "party": "ERC-AM",
+    "since": "2023-06-17"
+   },
+   "municipal": {
+    "electorate": 2351,
+    "voters": 1390,
+    "nullVotes": 20,
+    "blankVotes": 26,
+    "listVotes": 1344,
+    "validVotes": 1370,
+    "seats": 11,
+    "censusPopulation": 2946,
+    "lists": [
+     {
+      "code": "193",
+      "short": "ERC-AM",
+      "name": "Esquerra Republicana de Catalunya - Acord Municipal",
+      "votes": 475,
+      "seats": 4
+     },
+     {
+      "code": "430424231",
+      "short": "CM",
+      "name": "Junts per Castellvell - Compromís Municipal",
+      "votes": 344,
+      "seats": 3
+     },
+     {
+      "code": "430424230",
+      "short": "ARA PL",
+      "name": "Ara Castellvell - Ara Pacte Local",
+      "votes": 301,
+      "seats": 2
+     },
+     {
+      "code": "842",
+      "short": "PSC-CP",
+      "name": "Partit dels Socialistes de Catalunya - Candidatura de Progrés",
+      "votes": 120,
+      "seats": 1
+     },
+     {
+      "code": "202386",
+      "short": "PP",
+      "name": "Partido Popular",
+      "votes": 104,
+      "seats": 1
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 2342,
+    "voters": 1722,
+    "nullVotes": 14,
+    "blankVotes": 16,
+    "listVotes": 1692,
+    "validVotes": 1708,
+    "votes": {
+     "6": 366,
+     "10": 336,
+     "86": 251,
+     "693": 159,
+     "697": 1,
+     "1031": 301,
+     "1034": 0,
+     "1109": 59,
+     "1129": 20,
+     "1134": 7,
+     "1135": 165,
+     "1136": 26,
+     "1137": 1,
+     "1138": 0
+    }
+   },
+   "parliament": {
+    "electorate": 2336,
+    "voters": 1573,
+    "nullVotes": 13,
+    "blankVotes": 17,
+    "listVotes": 1543,
+    "validVotes": 1560,
+    "votes": {
+     "6": 238,
+     "10": 232,
+     "86": 172,
+     "301": 4,
+     "350": 0,
+     "546": 0,
+     "693": 159,
+     "697": 0,
+     "1018": 0,
+     "1034": 6,
+     "1129": 10,
+     "1130": 98,
+     "1134": 4,
+     "1140": 39,
+     "1141": 84,
+     "1142": 1,
+     "1143": 491,
+     "1144": 5
+    }
+   }
+  },
+  {
+   "code": "43104",
+   "idescat": "431042",
+   "slug": "el-perello",
+   "name": "el Perelló",
+   "comarca": "Baix Ebre",
+   "province": "Tarragona",
+   "population": 2948,
+   "mayor": {
+    "name": "Samuel Ferré I Pallarés",
+    "party": "AP-ERC-AM",
+    "since": "2023-06-17"
+   },
+   "municipal": {
+    "electorate": 1847,
+    "voters": 1290,
+    "nullVotes": 81,
+    "blankVotes": 31,
+    "listVotes": 1178,
+    "validVotes": 1209,
+    "seats": 11,
+    "censusPopulation": 2885,
+    "lists": [
+     {
+      "code": "431044230",
+      "short": "AP-ERC-AM",
+      "name": "Avant El Perello-Esquerra Republicana-Acord Municipal",
+      "votes": 602,
+      "seats": 6
+     },
+     {
+      "code": "431044231",
+      "short": "CM",
+      "name": "Junts Pel Perelló - Compromís Municipal",
+      "votes": 490,
+      "seats": 5
+     },
+     {
+      "code": "842",
+      "short": "PSC-CP",
+      "name": "Partit dels Socialistes de Catalunya - Candidatura de Progrés",
+      "votes": 86,
+      "seats": 0
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 1734,
+    "voters": 1125,
+    "nullVotes": 42,
+    "blankVotes": 14,
+    "listVotes": 1069,
+    "validVotes": 1083,
+    "votes": {
+     "6": 342,
+     "10": 296,
+     "86": 43,
+     "693": 54,
+     "697": 0,
+     "1031": 193,
+     "1034": 1,
+     "1109": 36,
+     "1129": 11,
+     "1134": 0,
+     "1135": 82,
+     "1136": 10,
+     "1137": 1,
+     "1138": 0
+    }
+   },
+   "parliament": {
+    "electorate": 1760,
+    "voters": 1044,
+    "nullVotes": 27,
+    "blankVotes": 15,
+    "listVotes": 1002,
+    "validVotes": 1017,
+    "votes": {
+     "6": 194,
+     "10": 275,
+     "86": 30,
+     "301": 1,
+     "350": 0,
+     "546": 0,
+     "693": 27,
+     "697": 1,
+     "1018": 0,
+     "1034": 1,
+     "1129": 7,
+     "1130": 80,
+     "1134": 2,
+     "1140": 27,
+     "1141": 44,
+     "1142": 0,
+     "1143": 305,
+     "1144": 8
+    }
+   }
+  },
+  {
+   "code": "17032",
+   "idescat": "170329",
+   "slug": "cadaques",
+   "name": "Cadaqués",
+   "comarca": "Alt Empordà",
+   "province": "Girona",
+   "population": 2918,
+   "mayor": {
+    "name": "Maria Pia Serinyana Torrents",
+    "party": "FEMCDQ-IDC",
+    "since": "2023-06-17"
+   },
+   "municipal": {
+    "electorate": 1984,
+    "voters": 1083,
+    "nullVotes": 73,
+    "blankVotes": 27,
+    "listVotes": 983,
+    "validVotes": 1010,
+    "seats": 11,
+    "censusPopulation": 2889,
+    "lists": [
+     {
+      "code": "170324230",
+      "short": "FEMCDQ-IDC",
+      "name": "Fem Cadaqués - Independents de Catalunya",
+      "votes": 612,
+      "seats": 7
+     },
+     {
+      "code": "170324232",
+      "short": "CM",
+      "name": "Juntes per Cadaqués - Compromís Municipal",
+      "votes": 323,
+      "seats": 4
+     },
+     {
+      "code": "170324231",
+      "short": "IC-PSC-CP",
+      "name": "Independents per Cadaqués - Partit dels Socialistes de Catalunya - Candidatura de Progrés",
+      "votes": 48,
+      "seats": 0
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 1901,
+    "voters": 1120,
+    "nullVotes": 21,
+    "blankVotes": 19,
+    "listVotes": 1080,
+    "validVotes": 1099,
+    "votes": {
+     "6": 302,
+     "10": 199,
+     "86": 66,
+     "693": 28,
+     "697": 0,
+     "1031": 270,
+     "1034": 3,
+     "1109": 52,
+     "1129": 13,
+     "1134": 1,
+     "1135": 135,
+     "1136": 11
+    }
+   },
+   "parliament": {
+    "electorate": 1934,
+    "voters": 966,
+    "nullVotes": 14,
+    "blankVotes": 10,
+    "listVotes": 942,
+    "validVotes": 952,
+    "votes": {
+     "6": 195,
+     "10": 136,
+     "86": 46,
+     "301": 0,
+     "350": 0,
+     "693": 21,
+     "697": 1,
+     "1034": 0,
+     "1129": 2,
+     "1130": 56,
+     "1134": 0,
+     "1140": 32,
+     "1141": 44,
+     "1143": 408,
+     "1144": 1
+    }
+   }
+  },
+  {
+   "code": "43055",
+   "idescat": "430555",
+   "slug": "falset",
+   "name": "Falset",
+   "comarca": "Priorat",
+   "province": "Tarragona",
+   "population": 2890,
+   "mayor": {
+    "name": "Carlos Brull Fornt",
+    "party": "",
+    "since": "2023-06-17"
+   },
+   "municipal": {
+    "electorate": 2003,
+    "voters": 1455,
+    "nullVotes": 28,
+    "blankVotes": 41,
+    "listVotes": 1386,
+    "validVotes": 1427,
+    "seats": 11,
+    "censusPopulation": 2740,
+    "lists": [
+     {
+      "code": "430554230",
+      "short": "IpF-AM",
+      "name": "Independents per Falset - Acord Municipal",
+      "votes": 1026,
+      "seats": 9
+     },
+     {
+      "code": "430554231",
+      "short": "CM",
+      "name": "Junts per Falset - Compromís Municipal",
+      "votes": 184,
+      "seats": 1
+     },
+     {
+      "code": "430554232",
+      "short": "CP",
+      "name": "Falset Pot Més - Candidatura de Progrés",
+      "votes": 176,
+      "seats": 1
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 1966,
+    "voters": 1423,
+    "nullVotes": 15,
+    "blankVotes": 11,
+    "listVotes": 1397,
+    "validVotes": 1408,
+    "votes": {
+     "6": 389,
+     "10": 358,
+     "86": 63,
+     "693": 61,
+     "697": 0,
+     "1031": 285,
+     "1034": 5,
+     "1109": 95,
+     "1129": 7,
+     "1134": 2,
+     "1135": 115,
+     "1136": 15,
+     "1137": 0,
+     "1138": 2
+    }
+   },
+   "parliament": {
+    "electorate": 1977,
+    "voters": 1362,
+    "nullVotes": 19,
+    "blankVotes": 16,
+    "listVotes": 1327,
+    "validVotes": 1343,
+    "votes": {
+     "6": 224,
+     "10": 402,
+     "86": 35,
+     "301": 1,
+     "350": 0,
+     "546": 0,
+     "693": 43,
+     "697": 0,
+     "1018": 0,
+     "1034": 0,
+     "1129": 7,
+     "1130": 63,
+     "1134": 2,
+     "1140": 28,
+     "1141": 94,
+     "1142": 0,
+     "1143": 424,
+     "1144": 4
+    }
+   }
+  },
+  {
+   "code": "43137",
+   "idescat": "431378",
+   "slug": "sant-jaume-dels-domenys",
+   "name": "Sant Jaume dels Domenys",
+   "comarca": "Baix Penedès",
+   "province": "Tarragona",
+   "population": 2819,
+   "mayor": {
+    "name": "Magí Pallarès i Morgades",
+    "party": "",
+    "since": "2023-06-17"
+   },
+   "municipal": {
+    "electorate": 2076,
+    "voters": 1295,
+    "nullVotes": 17,
+    "blankVotes": 19,
+    "listVotes": 1259,
+    "validVotes": 1278,
+    "seats": 11,
+    "censusPopulation": 2695,
+    "lists": [
+     {
+      "code": "193",
+      "short": "ERC-AM",
+      "name": "Esquerra Republicana de Catalunya - Acord Municipal",
+      "votes": 399,
+      "seats": 4
+     },
+     {
+      "code": "431374230",
+      "short": "CSJ-ARA PL",
+      "name": "Convergents per Sant Jaume Ara Pacte Local",
+      "votes": 397,
+      "seats": 4
+     },
+     {
+      "code": "431374231",
+      "short": "CM",
+      "name": "Endavant Sant Jaume - Compromís Municipal",
+      "votes": 325,
+      "seats": 3
+     },
+     {
+      "code": "842",
+      "short": "PSC-CP",
+      "name": "Partit dels Socialistes de Catalunya - Candidatura de Progrés",
+      "votes": 81,
+      "seats": 0
+     },
+     {
+      "code": "202386",
+      "short": "PP",
+      "name": "Partido Popular",
+      "votes": 57,
+      "seats": 0
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 2067,
+    "voters": 1361,
+    "nullVotes": 26,
+    "blankVotes": 12,
+    "listVotes": 1323,
+    "validVotes": 1335,
+    "votes": {
+     "6": 384,
+     "10": 231,
+     "86": 144,
+     "693": 162,
+     "697": 0,
+     "1031": 126,
+     "1034": 1,
+     "1109": 45,
+     "1129": 16,
+     "1134": 5,
+     "1135": 158,
+     "1136": 48,
+     "1137": 0,
+     "1138": 3
+    }
+   },
+   "parliament": {
+    "electorate": 2083,
+    "voters": 1180,
+    "nullVotes": 18,
+    "blankVotes": 18,
+    "listVotes": 1144,
+    "validVotes": 1162,
+    "votes": {
+     "6": 226,
+     "10": 224,
+     "86": 83,
+     "301": 8,
+     "350": 0,
+     "546": 1,
+     "693": 150,
+     "697": 2,
+     "1018": 13,
+     "1034": 4,
+     "1129": 21,
+     "1130": 33,
+     "1134": 6,
+     "1140": 36,
+     "1141": 48,
+     "1142": 0,
+     "1143": 282,
+     "1144": 7
+    }
+   }
+  },
+  {
+   "code": "17073",
+   "idescat": "170736",
+   "slug": "fornells-de-la-selva",
+   "name": "Fornells de la Selva",
+   "comarca": "Gironès",
+   "province": "Girona",
+   "population": 2818,
+   "mayor": {
+    "name": "Sònia Gràcia Xuclà",
+    "party": "CM",
+    "since": "2023-06-17"
+   },
+   "municipal": {
+    "electorate": 2034,
+    "voters": 1412,
+    "nullVotes": 19,
+    "blankVotes": 31,
+    "listVotes": 1362,
+    "validVotes": 1393,
+    "seats": 11,
+    "censusPopulation": 2693,
+    "lists": [
+     {
+      "code": "170734230",
+      "short": "CM",
+      "name": "Junts per Fornells de la Selva - Compromís Municipal",
+      "votes": 817,
+      "seats": 7
+     },
+     {
+      "code": "170734231",
+      "short": "IPF-AMUNT",
+      "name": "Independents per Fornells - Aternativa Municipalista",
+      "votes": 325,
+      "seats": 3
+     },
+     {
+      "code": "193",
+      "short": "ERC-AM",
+      "name": "Esquerra Republicana de Catalunya - Acord Municipal",
+      "votes": 193,
+      "seats": 1
+     },
+     {
+      "code": "842",
+      "short": "PSC-CP",
+      "name": "Partit dels Socialistes de Catalunya - Candidatura de Progrés",
+      "votes": 27,
+      "seats": 0
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 2021,
+    "voters": 1463,
+    "nullVotes": 14,
+    "blankVotes": 15,
+    "listVotes": 1434,
+    "validVotes": 1449,
+    "votes": {
+     "6": 288,
+     "10": 208,
+     "86": 138,
+     "693": 55,
+     "697": 0,
+     "1031": 466,
+     "1034": 1,
+     "1109": 133,
+     "1129": 13,
+     "1134": 0,
+     "1135": 104,
+     "1136": 28
+    }
+   },
+   "parliament": {
+    "electorate": 2063,
+    "voters": 1501,
+    "nullVotes": 27,
+    "blankVotes": 12,
+    "listVotes": 1462,
+    "validVotes": 1474,
+    "votes": {
+     "6": 160,
+     "10": 156,
+     "86": 97,
+     "301": 2,
+     "350": 0,
+     "693": 48,
+     "697": 0,
+     "1034": 0,
+     "1129": 11,
+     "1130": 128,
+     "1134": 0,
+     "1140": 29,
+     "1141": 75,
+     "1143": 739,
+     "1144": 17
+    }
+   }
+  },
+  {
+   "code": "25013",
+   "idescat": "250138",
+   "slug": "alfarras",
+   "name": "Alfarràs",
+   "comarca": "Segrià",
+   "province": "Lleida",
+   "population": 2805,
+   "mayor": {
+    "name": "Joan Carles Garcia I Guillamon",
+    "party": "CM",
+    "since": "2023-06-17"
+   },
+   "municipal": {
+    "electorate": 2048,
+    "voters": 1362,
+    "nullVotes": 18,
+    "blankVotes": 19,
+    "listVotes": 1325,
+    "validVotes": 1344,
+    "seats": 11,
+    "censusPopulation": 2795,
+    "lists": [
+     {
+      "code": "250134230",
+      "short": "CM",
+      "name": "Alfarràs Unitat i Progrés -Compromís Municipal",
+      "votes": 902,
+      "seats": 8
+     },
+     {
+      "code": "842",
+      "short": "PSC-CP",
+      "name": "Partit dels Socialistes de Catalunya - Candidatura de Progrés",
+      "votes": 208,
+      "seats": 2
+     },
+     {
+      "code": "193",
+      "short": "ERC-AM",
+      "name": "Esquerra Republicana de Catalunya - Acord Municipal",
+      "votes": 172,
+      "seats": 1
+     },
+     {
+      "code": "202386",
+      "short": "PP",
+      "name": "Partido Popular",
+      "votes": 43,
+      "seats": 0
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 2031,
+    "voters": 1218,
+    "nullVotes": 6,
+    "blankVotes": 12,
+    "listVotes": 1200,
+    "validVotes": 1212,
+    "votes": {
+     "6": 442,
+     "10": 169,
+     "86": 156,
+     "643": 4,
+     "693": 59,
+     "697": 2,
+     "1031": 243,
+     "1034": 1,
+     "1109": 12,
+     "1129": 20,
+     "1134": 0,
+     "1135": 88,
+     "1136": 4
+    }
+   },
+   "parliament": {
+    "electorate": 2006,
+    "voters": 1052,
+    "nullVotes": 12,
+    "blankVotes": 23,
+    "listVotes": 1017,
+    "validVotes": 1040,
+    "votes": {
+     "6": 306,
+     "10": 172,
+     "86": 99,
+     "301": 4,
+     "350": 3,
+     "546": 0,
+     "693": 51,
+     "697": 0,
+     "1034": 2,
+     "1130": 51,
+     "1134": 1,
+     "1140": 15,
+     "1141": 28,
+     "1143": 283,
+     "1144": 2
+    }
+   }
+  },
+  {
+   "code": "43139",
+   "idescat": "431397",
+   "slug": "santa-coloma-de-queralt",
+   "name": "Santa Coloma de Queralt",
+   "comarca": "Conca de Barberà",
+   "province": "Tarragona",
+   "population": 2795,
+   "mayor": {
+    "name": "Josep Jaume Corsellas Corbella",
+    "party": "CM",
+    "since": "2023-06-17"
+   },
+   "municipal": {
+    "electorate": 2067,
+    "voters": 1303,
+    "nullVotes": 71,
+    "blankVotes": 38,
+    "listVotes": 1194,
+    "validVotes": 1232,
+    "seats": 11,
+    "censusPopulation": 2755,
+    "lists": [
+     {
+      "code": "431394230",
+      "short": "CM",
+      "name": "Junts per Santa Coloma de Queralt - Compromís Municipal",
+      "votes": 664,
+      "seats": 6
+     },
+     {
+      "code": "193",
+      "short": "ERC-AM",
+      "name": "Esquerra Republicana de Catalunya - Acord Municipal",
+      "votes": 530,
+      "seats": 5
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 2054,
+    "voters": 1264,
+    "nullVotes": 25,
+    "blankVotes": 16,
+    "listVotes": 1223,
+    "validVotes": 1239,
+    "votes": {
+     "6": 273,
+     "10": 244,
+     "86": 80,
+     "693": 54,
+     "697": 0,
+     "1031": 376,
+     "1034": 1,
+     "1109": 66,
+     "1129": 12,
+     "1134": 2,
+     "1135": 102,
+     "1136": 13,
+     "1137": 0,
+     "1138": 0
+    }
+   },
+   "parliament": {
+    "electorate": 2047,
+    "voters": 1187,
+    "nullVotes": 19,
+    "blankVotes": 16,
+    "listVotes": 1152,
+    "validVotes": 1168,
+    "votes": {
+     "6": 145,
+     "10": 187,
+     "86": 48,
+     "301": 0,
+     "350": 0,
+     "546": 0,
+     "693": 24,
+     "697": 0,
+     "1018": 0,
+     "1034": 0,
+     "1129": 3,
+     "1130": 103,
+     "1134": 5,
+     "1140": 32,
+     "1141": 82,
+     "1142": 0,
+     "1143": 507,
+     "1144": 16
+    }
+   }
+  },
+  {
+   "code": "08296",
+   "idescat": "082969",
+   "slug": "vallromanes",
+   "name": "Vallromanes",
+   "comarca": "Vallès Oriental",
+   "province": "Barcelona",
+   "population": 2778,
+   "mayor": {
+    "name": "Jordi Pereda Manyer",
+    "party": "",
+    "since": "2023-06-17"
+   },
+   "municipal": {
+    "electorate": 2024,
+    "voters": 1267,
+    "nullVotes": 28,
+    "blankVotes": 34,
+    "listVotes": 1205,
+    "validVotes": 1239,
+    "seats": 11,
+    "censusPopulation": 2632,
+    "lists": [
+     {
+      "code": "82964230",
+      "short": "MxV-ERC-AM",
+      "name": "Més per Vallromanes - Esquerra Republicana de Catalunya - Acord Municipal",
+      "votes": 389,
+      "seats": 4
+     },
+     {
+      "code": "82964232",
+      "short": "GdV",
+      "name": "Gent de Vallromanes",
+      "votes": 287,
+      "seats": 3
+     },
+     {
+      "code": "82964234",
+      "short": "AV-ARA PL",
+      "name": "Ara Vallromanes - Ara Pacte Local",
+      "votes": 173,
+      "seats": 2
+     },
+     {
+      "code": "82964231",
+      "short": "IVALL",
+      "name": "Independents de Vallromanes",
+      "votes": 166,
+      "seats": 1
+     },
+     {
+      "code": "82964233",
+      "short": "CM",
+      "name": "Junts per Vallromanes - Compromís Municipal",
+      "votes": 122,
+      "seats": 1
+     },
+     {
+      "code": "842",
+      "short": "PSC-CP",
+      "name": "Partit dels Socialistes de Catalunya - Candidatura de Progrés",
+      "votes": 68,
+      "seats": 0
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 1997,
+    "voters": 1410,
+    "nullVotes": 12,
+    "blankVotes": 17,
+    "listVotes": 1381,
+    "validVotes": 1398,
+    "votes": {
+     "6": 360,
+     "10": 233,
+     "86": 202,
+     "693": 125,
+     "697": 1,
+     "1031": 248,
+     "1034": 0,
+     "1109": 23,
+     "1129": 17,
+     "1134": 2,
+     "1135": 138,
+     "1136": 32
+    }
+   },
+   "parliament": {
+    "electorate": 2035,
+    "voters": 1310,
+    "nullVotes": 12,
+    "blankVotes": 16,
+    "listVotes": 1282,
+    "validVotes": 1298,
+    "votes": {
+     "6": 264,
+     "10": 170,
+     "86": 154,
+     "301": 6,
+     "350": 1,
+     "693": 90,
+     "697": 0,
+     "1034": 2,
+     "1129": 17,
+     "1130": 64,
+     "1134": 1,
+     "1140": 46,
+     "1141": 38,
+     "1142": 1,
+     "1143": 423,
+     "1144": 5
+    }
+   }
+  },
+  {
+   "code": "08058",
+   "idescat": "080581",
+   "slug": "castellet-i-la-gornal",
+   "name": "Castellet i la Gornal",
+   "comarca": "Alt Penedès",
+   "province": "Barcelona",
+   "population": 2776,
+   "mayor": {
+    "name": "Xavier Revuelta Esteve",
+    "party": "PSC-CP",
+    "since": "2023-06-17"
+   },
+   "municipal": {
+    "electorate": 1979,
+    "voters": 1015,
+    "nullVotes": 20,
+    "blankVotes": 24,
+    "listVotes": 971,
+    "validVotes": 995,
+    "seats": 11,
+    "censusPopulation": 2474,
+    "lists": [
+     {
+      "code": "842",
+      "short": "PSC-CP",
+      "name": "Partit dels Socialistes de Catalunya - Candidatura de Progrés",
+      "votes": 424,
+      "seats": 5
+     },
+     {
+      "code": "80584230",
+      "short": "CM",
+      "name": "Junts per Castellet I la Gornal - Compromís Municipal",
+      "votes": 224,
+      "seats": 3
+     },
+     {
+      "code": "193",
+      "short": "ERC-AM",
+      "name": "Esquerra Republicana de Catalunya - Acord Municipal",
+      "votes": 181,
+      "seats": 2
+     },
+     {
+      "code": "1126",
+      "short": "VALENTS",
+      "name": "Valents",
+      "votes": 142,
+      "seats": 1
+     }
+    ]
+   },
+   "congress": {
+    "electorate": 1974,
+    "voters": 1232,
+    "nullVotes": 15,
+    "blankVotes": 9,
+    "listVotes": 1208,
+    "validVotes": 1217,
+    "votes": {
+     "6": 443,
+     "10": 183,
+     "86": 98,
+     "693": 141,
+     "697": 2,
+     "1031": 102,
+     "1034": 2,
+     "1109": 28,
+     "1129": 23,
+     "1134": 9,
+     "1135": 173,
+     "1136": 4
+    }
+   },
+   "parliament": {
+    "electorate": 2005,
+    "voters": 1076,
+    "nullVotes": 13,
+    "blankVotes": 10,
+    "listVotes": 1053,
+    "validVotes": 1063,
+    "votes": {
+     "6": 318,
+     "10": 176,
+     "86": 73,
+     "301": 5,
+     "350": 1,
+     "693": 125,
+     "697": 0,
+     "1034": 3,
+     "1129": 13,
+     "1130": 43,
+     "1134": 9,
+     "1140": 40,
+     "1141": 47,
+     "1142": 0,
+     "1143": 194,
+     "1144": 6
     }
    }
   }
