@@ -2,7 +2,7 @@ import Link from "next/link";
 
 import { Breadcrumbs, type Crumb } from "@/components/Breadcrumbs";
 import { getMessages } from "@/lib/i18n";
-import { municipalityCopy, displayName, municipalityH1 } from "@/lib/programmatic/holidays/copy";
+import { municipalityCopy, displayName, municipalityH1, sharedDayLead } from "@/lib/programmatic/holidays/copy";
 import {
   NEXT,
   YEAR,
@@ -15,10 +15,11 @@ import {
   statusDays,
   yearRows,
 } from "@/lib/programmatic/holidays/data";
+import { municipalityDatePages } from "@/lib/programmatic/holidays/dates";
 import { dayMonth, weekdayDayMonth } from "@/lib/programmatic/holidays/format";
 import { OFFICIAL } from "@/lib/programmatic/holidays/links";
-import { caComarca, joinList } from "@/lib/programmatic/holidays/names";
-import { DATE_PAGES, datePath, hubPath, municipalityPath, type MuniLocale } from "@/lib/programmatic/holidays/paths";
+import { caComarca, caDe, joinList } from "@/lib/programmatic/holidays/names";
+import { DATE_PAGES, comarcaAnchor, datePath, hubPath, municipalityPath, type MuniLocale } from "@/lib/programmatic/holidays/paths";
 import { dateQuestion } from "@/lib/programmatic/holidays/copy";
 import type { SnapshotMunicipality } from "@/lib/programmatic/holidays/types";
 
@@ -83,8 +84,9 @@ export function MunicipalityPage({ m, locale }: { m: SnapshotMunicipality; local
   const name = displayName(m, locale);
   const rows = yearRows(m, YEAR, locale);
   const rows2027 = yearRows(m, NEXT, locale);
-  const { sameComarca, others } = siblings(m);
+  const { sameComarca, others, comarcaTotal } = siblings(m);
   const crumbs = municipalityCrumbs(m, locale);
+  const shared = municipalityDatePages(m);
 
   return (
     <article>
@@ -139,6 +141,13 @@ export function MunicipalityPage({ m, locale }: { m: SnapshotMunicipality; local
               </div>
             </>
           ) : null}
+
+          {/* Local days that have a date page of their own: who else is off that day. */}
+          {shared.map((s) => (
+            <p key={s.date}>
+              {sharedDayLead(s.date, s.others, locale, s.nuclei)} <Link href={datePath(locale, s.page)}>{dateQuestion(s.page, locale)}</Link>
+            </p>
+          ))}
 
           <h2 id="festius-2027">{t.nextTitle}</h2>
           {t.nextPublished ? (
@@ -199,6 +208,16 @@ export function MunicipalityPage({ m, locale }: { m: SnapshotMunicipality; local
             </>
           ) : null}
           <p className="mt-4 text-sm">
+            {comarcaTotal - 1 > sameComarca.length ? (
+              <>
+                <Link href={`${hubPath(locale)}#${comarcaAnchor(m.comarca)}`}>
+                  {locale === "ca"
+                    ? `Els ${comarcaTotal} municipis ${caDe(comarcaLabel)} d'aquest recull`
+                    : `Los ${comarcaTotal} municipios de la comarca (${m.comarca}) en esta guía`}
+                </Link>
+                {" · "}
+              </>
+            ) : null}
             <Link href={hubPath(locale)}>{locale === "ca" ? "Tots els municipis, per comarques" : "Todos los municipios, por comarcas"}</Link>
           </p>
         </section>

@@ -6,6 +6,7 @@ import { test } from "node:test";
 import { HOLIDAYS_BY_YEAR, longDate as calendarLongDate } from "../src/lib/content/holidays/calendar.ts";
 import { COPY as LOCAL_COPY } from "../src/lib/content/holidays/local-publish.ts";
 import { B2_PATHS } from "../src/lib/content/batch02/shared.ts";
+import { ARTICLE_PATHS } from "../src/lib/content/features/shared.ts";
 import { buildMetadata } from "../src/lib/seo/metadata.ts";
 import {
   dateQuestion,
@@ -14,9 +15,10 @@ import {
   municipalityDescription,
   municipalityH1,
   municipalityTitle,
+  sharedDayLead,
 } from "../src/lib/programmatic/holidays/copy.ts";
 import { NEXT, SNAPSHOT, YEAR, byComarca, regionalDays, siblings, statusDays, yearRows } from "../src/lib/programmatic/holidays/data.ts";
-import { dateContent } from "../src/lib/programmatic/holidays/dates.ts";
+import { LOCAL_DATE_PAGES, dateContent, municipalityDatePages } from "../src/lib/programmatic/holidays/dates.ts";
 import {
   articleFirst,
   nameKey,
@@ -70,11 +72,11 @@ function entry(comarca: string, name: string, order = AMENDED_2026.comarques) {
 /* Snapshot shape and invariants                                              */
 /* -------------------------------------------------------------------------- */
 
-test("snapshot: 100 municipalities, ranked by population, unique slugs and codes", () => {
+test("snapshot: 300 municipalities, ranked by population, unique slugs and codes", () => {
   const list = SNAPSHOT.municipalities;
-  assert.equal(list.length, 100);
-  assert.equal(new Set(list.map((m) => m.slug)).size, 100);
-  assert.equal(new Set(list.map((m) => m.ine)).size, 100);
+  assert.equal(list.length, 300);
+  assert.equal(new Set(list.map((m) => m.slug)).size, 300);
+  assert.equal(new Set(list.map((m) => m.ine)).size, 300);
   list.forEach((m, i) => {
     assert.equal(m.rank, i + 1);
     assert.match(m.ine, /^\d{5}$/);
@@ -119,7 +121,20 @@ test("snapshot: municipalities left out are those the order gives no days, all b
   const last = SNAPSHOT.municipalities.at(-1)!;
   assert.deepEqual(
     SNAPSHOT.excluded.map((e) => e.name).sort(),
-    ["Barberà del Vallès", "Cerdanyola del Vallès", "Malgrat de Mar", "Torelló"],
+    [
+      "Argentona",
+      "Barberà del Vallès",
+      "Calaf",
+      "Canyelles",
+      "Cerdanyola del Vallès",
+      "Cànoves i Samalús",
+      "Gironella",
+      "Malgrat de Mar",
+      "Monistrol de Montserrat",
+      "Sant Pere de Vilamajor",
+      "Santa Eulàlia de Ronçana",
+      "Torelló",
+    ],
   );
   for (const e of SNAPSHOT.excluded) {
     assert.equal(e.reason, "no-proposal");
@@ -278,6 +293,223 @@ test("7 December 2026: 43 municipalities and 2 nuclei, Gallifa included", () => 
   for (const d of ["2026-12-08", "2026-12-25", "2026-12-26"]) assert.equal(SNAPSHOT.localByDate[d]?.length, 0, d);
 });
 
+test("local holidays by date: one place per entry of the amended DOGC order, no more, no fewer", () => {
+  // Every date a date page talks about, counted straight from the order text.
+  for (const date of Object.keys(SNAPSHOT.localByDate)) {
+    const entries = AMENDED_2026.comarques.flatMap((c) => c.entries.filter((e) => e.dates.includes(date)));
+    assert.equal(SNAPSHOT.localByDate[date]?.length, entries.length, date);
+  }
+  // 1 November 2026 is nobody's local holiday; Monday 2 November is two councils'.
+  assert.deepEqual(SNAPSHOT.localByDate["2026-11-01"], []);
+  assert.deepEqual(SNAPSHOT.localByDate["2026-11-02"]?.map((p) => p.name), ["Bossòst", "Sant Esteve de Palautordera"]);
+  const count = (date: string) => {
+    const list = SNAPSHOT.localByDate[date] ?? [];
+    return [list.filter((p) => !p.parent).length, list.filter((p) => p.parent).length];
+  };
+  assert.deepEqual(count("2026-11-11"), [29, 21]);
+  assert.deepEqual(count("2026-11-30"), [24, 14]);
+  assert.deepEqual(count("2026-12-24"), [3, 0]);
+  assert.deepEqual(count("2026-12-31"), [7, 2]);
+  assert.deepEqual(SNAPSHOT.localByDate["2026-12-24"]?.map((p) => p.name), ["Copons", "la Vajol", "Sant Jaume de Frontanyà"]);
+  // The DOGC names the municipality even where the open data lists only its nuclei.
+  assert.ok(SNAPSHOT.localByDate["2026-11-30"]?.some((p) => p.name === "Rupit i Pruit" && !p.parent));
+  assert.ok(SNAPSHOT.localByDate["2026-11-11"]?.some((p) => p.name === "Boadella i les Escaules" && !p.parent));
+  // Places with a page link to it.
+  for (const slug of ["sentmenat", "teia", "altafulla", "puig-reig"]) assert.ok(SNAPSHOT.localByDate["2026-11-11"]?.some((p) => p.slug === slug), slug);
+  for (const slug of ["sant-andreu-de-la-barca", "sant-andreu-de-llavaneres", "tona", "torroella-de-montgri"]) {
+    assert.ok(SNAPSHOT.localByDate["2026-11-30"]?.some((p) => p.slug === slug), slug);
+  }
+  for (const list of Object.values(SNAPSHOT.localByDate)) {
+    for (const p of list) if (p.slug) assert.ok(SNAPSHOT.municipalities.some((m) => m.slug === p.slug), p.slug);
+  }
+});
+
+test("shop days by date: the resolution's own lists, and only where that day is a local holiday or a Sunday", () => {
+  for (const [date, list] of Object.entries(SNAPSHOT.shopsByDate)) {
+    assert.ok(!SHOPS_2026.defaults.includes(date), `${date} is a default day, not a per-council one`);
+    const councils = SHOPS_2026.councils.filter((c) => c.dates.includes(date)).map((c) => nameKey(c.name)).sort();
+    assert.deepEqual(list.map((p) => nameKey(p.name)).sort(), councils, date);
+    const sunday = new Date(`${date}T12:00:00Z`).getUTCDay() === 0;
+    for (const p of list) {
+      if (!sunday) assert.ok(SNAPSHOT.localByDate[date]?.some((l) => nameKey(l.name) === nameKey(p.name)), `${p.name} opens on ${date}, its local holiday`);
+    }
+  }
+  assert.deepEqual(SNAPSHOT.shopsByDate["2026-11-01"]?.map((p) => p.slug), ["l-ametlla-del-valles", "mollet-del-valles"]);
+  assert.deepEqual(SNAPSHOT.shopsByDate["2026-11-30"]?.map((p) => p.name), ["Sant Andreu de la Barca"]);
+  assert.deepEqual(SNAPSHOT.shopsByDate["2026-12-31"]?.map((p) => p.name), ["Centelles"]);
+  assert.deepEqual(SNAPSHOT.shopsByDate["2026-11-11"], []);
+  assert.deepEqual(SNAPSHOT.shopsByDate["2026-12-24"], []);
+});
+
+/* -------------------------------------------------------------------------- */
+/* Tranche 2: towns 101-300, known answers from the DOGC text                 */
+/* -------------------------------------------------------------------------- */
+
+test("tranche 2: new towns carry the days the DOGC order prints for them", () => {
+  const raw = fixture("ordre-emt-208-2025.txt").replace(/\r\n?/g, "\n");
+  const known: { slug: string; comarca: string; text: string; local: string[]; nuclei?: { name: string; dates: string[] }[] }[] = [
+    { slug: "sentmenat", comarca: "Vallès Occidental", text: "Sentmenat, 7 de setembre i 11 de novembre.", local: ["2026-09-07", "2026-11-11"] },
+    { slug: "tona", comarca: "Osona", text: "Tona, 25 de maig i 30 de novembre.", local: ["2026-05-25", "2026-11-30"] },
+    { slug: "centelles", comarca: "Osona", text: "Centelles, 1 de setembre i 31 de desembre.", local: ["2026-09-01", "2026-12-31"] },
+    { slug: "sant-esteve-de-palautordera", comarca: "Vallès Oriental", text: "Sant Esteve de Palautordera, 3 d'agost i 2 de novembre.", local: ["2026-08-03", "2026-11-02"] },
+    { slug: "santa-coloma-de-cervello", comarca: "Baix Llobregat", text: "Santa Coloma de Cervelló, 7 de desembre i 31 de desembre.", local: ["2026-12-07", "2026-12-31"] },
+    {
+      slug: "bigues-i-riells-del-fai",
+      comarca: "Vallès Oriental",
+      // The order keeps the former name and lists only the two nuclei.
+      text: "Bigues i Riells\nBigues, 20 de gener i 29 de juny. Riells del Fai, 22 de gener i 7 d'agost.",
+      local: [],
+      nuclei: [
+        { name: "Bigues", dates: ["2026-01-20", "2026-06-29"] },
+        { name: "Riells del Fai", dates: ["2026-01-22", "2026-08-07"] },
+      ],
+    },
+  ];
+  for (const k of known) {
+    assert.ok(raw.includes(k.text), `${k.slug}: the fixture prints "${k.text}"`);
+    const m = SNAPSHOT.municipalities.find((x) => x.slug === k.slug);
+    assert.ok(m, k.slug);
+    assert.ok(m.rank > 100 && m.rank <= 300, `${k.slug} is a tranche 2 town (rank ${m.rank})`);
+    assert.equal(m.comarca, k.comarca);
+    assert.deepEqual(m.local, k.local, k.slug);
+    assert.deepEqual(m.nuclei, k.nuclei ?? [], k.slug);
+    if (k.local.length) assert.deepEqual([...(entry(k.comarca, m.dogcName)?.dates ?? [])].sort(), k.local, `${k.slug}: parsed order`);
+  }
+  const bigues = SNAPSHOT.municipalities.find((m) => m.slug === "bigues-i-riells-del-fai")!;
+  assert.equal(bigues.dogcName, "Bigues i Riells");
+  // Two nuclei: their days are in the description, not "by nucleus".
+  assert.match(municipalityDescription(bigues, "ca"), /^Festius locals de Bigues i Riells del Fai el 2026: Bigues, 20 de gener i 29 de juny; Riells del Fai, 22 de gener i 7 d'agost\./);
+  assert.match(municipalityDescription(bigues, "es"), /^Festivos locales de Bigues i Riells del Fai en 2026: Bigues, 20 de enero y 29 de junio; Riells del Fai, 22 de enero y 7 de agosto\./);
+  assert.match(municipalityDescription(SNAPSHOT.municipalities.find((m) => m.slug === "subirats")!, "ca"), /segons el nucli/);
+  // Centelles chose its local holiday as a shop-opening day.
+  const centelles = SNAPSHOT.municipalities.find((m) => m.slug === "centelles")!;
+  assert.ok(centelles.shopsOwnList && centelles.shops.includes("2026-12-31"));
+  // The first hundred did not move.
+  assert.equal(SNAPSHOT.municipalities[99]?.slug, "castell-d-aro-platja-d-aro-i-s-agaro");
+  assert.equal(SNAPSHOT.municipalities[299]?.population, 2592);
+});
+
+test("town pages send their shared local days to the date page that lists them", () => {
+  const pages = (slug: string) => municipalityDatePages(SNAPSHOT.municipalities.find((m) => m.slug === slug)!);
+  assert.deepEqual(pages("sentmenat"), [{ date: "2026-11-11", page: "2026-11-11", others: 49, nuclei: [] }]);
+  assert.deepEqual(pages("tona"), [{ date: "2026-11-30", page: "2026-11-30", others: 37, nuclei: [] }]);
+  assert.deepEqual(pages("sant-esteve-de-palautordera"), [{ date: "2026-11-02", page: "2026-11-01", others: 1, nuclei: [] }]);
+  assert.deepEqual(pages("santa-coloma-de-cervello").map((p) => p.page), ["2026-12-07", "2026-12-31"]);
+  // A nucleus's day counts for its town: Sant Martí Sarroca's own day and two of its nuclei on 11 November.
+  assert.deepEqual(pages("sant-marti-sarroca"), [{ date: "2026-11-11", page: "2026-11-11", others: 47, nuclei: [] }]);
+  // A day that is only a nucleus's names the nucleus.
+  assert.deepEqual(pages("puigcerda"), [{ date: "2026-11-30", page: "2026-11-30", others: 37, nuclei: ["Vilallobent"] }]);
+  assert.deepEqual(pages("vielha-e-mijaran"), [{ date: "2026-11-11", page: "2026-11-11", others: 48, nuclei: ["Aubèrt", "Gausac"] }]);
+  assert.deepEqual(pages("girona"), []);
+  for (const m of SNAPSHOT.municipalities) {
+    for (const p of municipalityDatePages(m)) {
+      assert.ok(DATE_PAGES.includes(p.page), `${m.slug}: ${p.page}`);
+      assert.equal(LOCAL_DATE_PAGES[p.date], p.page);
+      // The town is on the list the date page shows.
+      assert.ok(SNAPSHOT.localByDate[p.date]?.some((l) => l.slug === m.slug || l.parent === m.name), `${m.slug} on ${p.date}`);
+    }
+  }
+  assert.equal(sharedDayLead("2026-11-11", 49, "ca"), "El dimecres 11 de novembre també és festa local a 49 llocs més de Catalunya:");
+  assert.equal(sharedDayLead("2026-11-02", 1, "es"), "El lunes 2 de noviembre también es fiesta local en 1 lugar más de Cataluña:");
+  assert.equal(sharedDayLead("2026-11-30", 37, "ca", ["Vilallobent"]), "El dilluns 30 de novembre és festa local a Vilallobent i a 37 llocs més de Catalunya:");
+  assert.equal(sharedDayLead("2026-11-11", 48, "es", ["Aubèrt", "Gausac"]), "El miércoles 11 de noviembre es fiesta local en Aubèrt y Gausac y en otros 48 lugares de Cataluña:");
+});
+
+/* -------------------------------------------------------------------------- */
+/* Tranche 2 date pages                                                       */
+/* -------------------------------------------------------------------------- */
+
+test("1 November 2026: a Sunday the order leaves out, with no substitute day; 2 November elsewhere in Spain", () => {
+  assert.equal(new Date("2026-11-01T12:00:00Z").getUTCDay(), 0, "a Sunday");
+  // Ordre EMT/66/2025 lists twelve days, neither 1 nor 2 November.
+  const regional = parseRegionalOrder(fixture("ordre-emt-66-2025.txt")).dates;
+  assert.ok(!regional.includes("2026-11-01") && !regional.includes("2026-11-02"));
+  const ca = dateContent("2026-11-01", "ca");
+  const es = dateContent("2026-11-01", "es");
+  const en = dateContent("2026-11-01", "en");
+  assert.equal(ca.holiday, false);
+  assert.equal(ca.answer, "No. El diumenge 1 de novembre de 2026, Tots Sants, no és festiu oficial a Catalunya: l'Ordre EMT/66/2025 no l'inclou entre els dotze festius de l'any, i tampoc no hi inclou el dilluns 2 de novembre.");
+  assert.match(es.answer, /^No\. El domingo 1 de noviembre de 2026, Todos los Santos, no es festivo oficial en Cataluña: la Orden EMT\/66\/2025/);
+  assert.match(en.answer, /^No\. Sunday 1 November 2026, All Saints' Day, is not an official holiday in Catalonia/);
+  for (const c of [ca, es, en]) {
+    // No invented substitute: nothing says the holiday "moves" to Monday in Catalonia.
+    assert.doesNotMatch(JSON.stringify(c), /trasllada al dilluns|se traslada al lunes|moved to Monday|substitut|sustitu/i);
+    assert.equal(c.local.places.length, 2, "the list under the text is 2 November's");
+  }
+  assert.match(ca.answerNote[0] ?? "", /tret dels 2 municipis on és festa local: Bossòst i Sant Esteve de Palautordera/);
+  // BOE-A-2025-21667, row "2 Día siguiente a Todos los Santos".
+  assert.match(es.answerNote[1] ?? "", /Andalucía, Aragón, Asturias, Canarias, Castilla-La Mancha, Castilla y León, Extremadura, la Comunidad de Madrid y Navarra, pero no en Cataluña/);
+  assert.match(ca.local.text, /^L'1 de novembre no és festa local a cap municipi/);
+  assert.match(ca.sections[0]!.paragraphs[0]!, /tret de les de l'Ametlla del Vallès i Mollet del Vallès/);
+  assert.ok(ca.guides.includes("castanyada"));
+});
+
+test("11 and 30 November, 24 and 31 December 2026: working days with the order's local holidays, per locale", () => {
+  const nov11 = { ca: dateContent("2026-11-11", "ca"), es: dateContent("2026-11-11", "es"), en: dateContent("2026-11-11", "en") };
+  assert.match(nov11.ca.answer, /^No\. El dimecres 11 de novembre de 2026, Sant Martí, és un dia feiner a Catalunya: no és cap dels dotze festius de l'Ordre EMT\/66\/2025\. Sí que és festa local a 29 municipis i 21 nuclis\.$/);
+  assert.match(nov11.es.answer, /San Martín, es laborable en Cataluña.*29 municipios y 21 núcleos/);
+  assert.match(nov11.en.answer, /Saint Martin's Day, is a working day in Catalonia.*29 towns and 21 villages/);
+  // The general strike: one sentence, one link, to the strikes hub.
+  for (const locale of DATE_LOCALES) {
+    const notice = dateContent("2026-11-11", locale).notice!;
+    assert.equal(notice.href, GUIDES.strikes[locale]);
+    const sentence = `${notice.before}${notice.label}${notice.after}`;
+    assert.equal(sentence.split(/[.!?](\s|$)/).filter((s) => s && s.trim()).length, 1, sentence);
+    assert.ok(!JSON.stringify(dateContent("2026-11-11", locale).sections).match(/vaga|huelga|strike/i), "the strike is not repeated");
+  }
+  for (const iso of ["2026-11-01", "2026-11-30", "2026-12-07", "2026-12-24", "2026-12-31"] as const) assert.equal(dateContent(iso, "ca").notice, undefined, iso);
+
+  const nov30 = dateContent("2026-11-30", "ca");
+  assert.match(nov30.answer, /El dilluns 30 de novembre de 2026, Sant Andreu, és un dia feiner a Catalunya.*24 municipis i 14 nuclis/);
+  assert.match(nov30.sections[0]!.paragraphs[0]!, /si el 30 de novembre és un dels seus deu dies d'obertura comercial, com passa a Sant Andreu de la Barca/);
+  assert.match(dateContent("2026-11-11", "ca").sections[0]!.paragraphs[0]!, /si l'11 de novembre és un dels seus deu dies d'obertura comercial, i no ho és en cap d'ells/);
+
+  const dec24 = { ca: dateContent("2026-12-24", "ca"), es: dateContent("2026-12-24", "es"), en: dateContent("2026-12-24", "en") };
+  assert.match(dec24.ca.answer, /la vigília de Nadal, és un dia feiner a Catalunya.*Només és festa local a 3 municipis: Copons, la Vajol i Sant Jaume de Frontanyà\.$/);
+  assert.match(dec24.es.answer, /Nochebuena, es laborable en Cataluña.*Solo es fiesta local en 3 municipios: Copons, La Vajol y Sant Jaume de Frontanyà\.$/);
+  assert.match(dec24.en.answer, /Christmas Eve, is a working day in Catalonia.*only in 3 towns: Copons, la Vajol and Sant Jaume de Frontanyà\.$/);
+  assert.match(dec24.ca.sections[1]!.paragraphs[0]!, /22 de desembre de 2026 al 7 de gener de 2027/);
+
+  const dec31 = { ca: dateContent("2026-12-31", "ca"), es: dateContent("2026-12-31", "es"), en: dateContent("2026-12-31", "en") };
+  assert.match(dec31.ca.answer, /l'últim dia de l'any, és un dia feiner a Catalunya.*Només és festa local a 7 municipis i 2 nuclis\.$/);
+  assert.match(dec31.es.answer, /Nochevieja, es laborable en Cataluña/);
+  assert.match(dec31.en.answer, /New Year's Eve, is a working day in Catalonia/);
+  assert.match(dec31.ca.answerNote[0]!, /divendres 1 de gener de 2027, Cap d'Any, és festiu a tot Catalunya \(Ordre EMT\/52\/2026\)/);
+  assert.match(dec31.ca.sections[0]!.paragraphs[0]!, /com passa a Centelles/);
+  for (const c of [nov11.ca, nov30, dec24.ca, dec31.ca]) assert.equal(c.holiday, false);
+  for (const locale of DATE_LOCALES) {
+    assert.ok(!dateContent("2026-12-24", locale).guides.includes("strikes"));
+    assert.equal(dateContent("2026-11-30", locale).local.places.length, 38);
+  }
+});
+
+test("tranche 2 date pages: slugs, titles and 404s", () => {
+  assert.equal(datePath("ca", "2026-11-01"), "/ca/festius/dia/1-novembre-2026/");
+  assert.equal(datePath("es", "2026-11-11"), "/es/festivos/dia/11-noviembre-2026/");
+  assert.equal(datePath("en", "2026-11-30"), "/en/holidays/day/30-november-2026/");
+  assert.equal(datePath("ca", "2026-12-24"), "/ca/festius/dia/24-desembre-2026/");
+  assert.equal(datePath("es", "2026-12-31"), "/es/festivos/dia/31-diciembre-2026/");
+  assert.equal(dateQuestion("2026-11-11", "ca"), "És festiu l'11 de novembre de 2026 a Catalunya?");
+  assert.equal(dateQuestion("2026-11-01", "es"), "¿Es festivo el 1 de noviembre de 2026 en Cataluña?");
+  assert.equal(dateQuestion("2026-12-31", "en"), "Is 31 December 2026 a public holiday in Catalonia?");
+  assert.equal(resolveDatePage("ca", "ca", "1-novembre-2026"), "2026-11-01");
+  assert.equal(resolveDatePage("en", "en", "11-november-2026"), "2026-11-11");
+  assert.equal(resolveDatePage("es", "es", "30-noviembre-2026"), "2026-11-30");
+  // Not pages: the Monday after Tots Sants, other days, other locales' slugs, other routes' locales.
+  assert.equal(resolveDatePage("ca", "ca", "2-novembre-2026"), null);
+  assert.equal(resolveDatePage("ca", "ca", "1-novembre-2027"), null);
+  assert.equal(resolveDatePage("es", "es", "1-novembre-2026"), null);
+  assert.equal(resolveDatePage("en", "ca", "1-november-2026"), null);
+  assert.equal(resolveDatePage("es", "en", "24-diciembre-2026"), null);
+  // Tranche 2 towns render in both locales; towns with no official days do not.
+  assert.equal(resolveMunicipality("ca", "ca", "sentmenat")?.name, "Sentmenat");
+  assert.equal(resolveMunicipality("es", "es", "bigues-i-riells-del-fai")?.name, "Bigues i Riells del Fai");
+  assert.equal(resolveMunicipality("es", "ca", "sentmenat"), null);
+  for (const slug of ["argentona", "calaf", "monistrol-de-montserrat", "torello"]) assert.equal(resolveMunicipality("ca", "ca", slug), null, slug);
+  // Only the 20 biggest are prerendered; tranche 2 renders on first request.
+  assert.ok(!municipalityStaticParams("ca").some((p) => p.municipi === "sentmenat"));
+});
+
 /* -------------------------------------------------------------------------- */
 /* Routing                                                                    */
 /* -------------------------------------------------------------------------- */
@@ -302,7 +534,7 @@ test("routes: each folder answers its own locale only; anything else is a 404", 
   assert.equal(resolveDatePage("ca", "ca", "2026-12-08"), null);
 });
 
-test("routes: static params - 20 towns and all six dates, always complete and in the route's own locale", () => {
+test("routes: static params - 20 towns and all eleven dates, always complete and in the route's own locale", () => {
   for (const locale of MUNI_LOCALES) {
     const params = municipalityStaticParams(locale);
     assert.equal(params.length, 20);
@@ -312,7 +544,7 @@ test("routes: static params - 20 towns and all six dates, always complete and in
   }
   for (const locale of DATE_LOCALES) {
     const params = dateStaticParams(locale);
-    assert.equal(params.length, 6);
+    assert.equal(params.length, 11);
     assert.ok(params.every((p) => p.locale === locale && resolveDatePage(locale, p.locale, p.dia)));
   }
 });
@@ -472,9 +704,10 @@ test("a town whose days belong to its nuclei says which nuclei are off", () => {
 /* Sitemap                                                                    */
 /* -------------------------------------------------------------------------- */
 
-test("sitemap: 220 URLs, unique, dated with the dataset, with hreflang", () => {
+test("sitemap: 635 URLs, unique, dated with the dataset, with hreflang", () => {
   const entries = holidaySitemapEntries();
-  assert.equal(entries.length, 2 + 200 + 18);
+  // 2 hubs, 300 towns x 2 locales, 11 dates x 3 locales.
+  assert.equal(entries.length, 2 + 600 + 33);
   assert.equal(new Set(entries.map((e) => e.url)).size, entries.length);
   assert.equal(holidayFamilyPaths().length, entries.length);
   for (const e of entries) {
@@ -537,11 +770,13 @@ test("page copy: the answer comes first and names the official order", () => {
   }
 });
 
-test("date pages: only 7 December is not a holiday; nothing unfilled", () => {
+test("date pages: 1, 11 and 30 Nov and 7, 24 and 31 Dec are not holidays; nothing unfilled", () => {
+  const working = new Set(["2026-11-01", "2026-11-11", "2026-11-30", "2026-12-07", "2026-12-24", "2026-12-31"]);
   for (const locale of DATE_LOCALES) {
     for (const iso of DATE_PAGES) {
       const content = dateContent(iso, locale);
-      assert.equal(content.holiday, iso !== "2026-12-07", `${iso} ${locale}`);
+      assert.equal(content.holiday, !working.has(iso), `${iso} ${locale}`);
+      assert.equal(content.holiday, regionalDays(Number(iso.slice(0, 4))).some((d) => d.date === iso), `${iso}: the answer is the order's`);
       const text = JSON.stringify({ ...content, local: { ...content.local, places: [] } });
       assert.ok(!/\{\w+\}|undefined|NaN|null/.test(text), `${iso} ${locale}`);
       assert.ok(content.guides.length >= 4);
@@ -552,12 +787,31 @@ test("date pages: only 7 December is not a holiday; nothing unfilled", () => {
 });
 
 test("siblings: every page links to at least six other towns, same comarca first", () => {
+  const linkedFrom = new Map<string, number>();
   for (const m of SNAPSHOT.municipalities) {
-    const { sameComarca, others } = siblings(m);
+    const { sameComarca, others, comarcaTotal } = siblings(m);
     assert.ok(sameComarca.length + others.length >= 6, m.name);
+    assert.ok(sameComarca.length <= 12, `${m.name}: ${sameComarca.length} comarca links`);
     assert.ok(sameComarca.every((o) => o.comarca === m.comarca && o.slug !== m.slug));
+    assert.equal(comarcaTotal, SNAPSHOT.municipalities.filter((o) => o.comarca === m.comarca).length);
+    // Below the cap a page lists its whole comarca.
+    if (comarcaTotal <= 13) assert.equal(sameComarca.length, comarcaTotal - 1, m.name);
+    for (const o of [...sameComarca, ...others]) linkedFrom.set(o.slug, (linkedFrom.get(o.slug) ?? 0) + 1);
   }
-  assert.equal(byComarca().reduce((n, g) => n + g.municipalities.length, 0), 100);
+  // Every town page that shares its comarca, tranche 2 included, is linked from other town pages, not only from the hub.
+  for (const m of SNAPSHOT.municipalities) {
+    if (siblings(m).comarcaTotal > 1) assert.ok((linkedFrom.get(m.slug) ?? 0) >= 1, `${m.slug}: linked from no town page`);
+  }
+  const sbl = siblings(SNAPSHOT.municipalities.find((m) => m.slug === "sant-boi-de-llobregat")!);
+  assert.equal(sbl.comarcaTotal, 29);
+  assert.equal(sbl.sameComarca.length, 12);
+  // The comarca's largest towns are on every page of the comarca.
+  for (const g of byComarca()) {
+    for (const big of g.municipalities.slice(0, 3)) {
+      for (const m of g.municipalities) if (m !== big) assert.ok(siblings(m).sameComarca.includes(big), `${m.slug} -> ${big.slug}`);
+    }
+  }
+  assert.equal(byComarca().reduce((n, g) => n + g.municipalities.length, 0), 300);
 });
 
 test("links go to the published guides", () => {
@@ -572,6 +826,8 @@ test("links go to the published guides", () => {
     assert.equal(GUIDES.christmasBarcelona[locale], b2("christmasBarcelona", locale));
     assert.equal(GUIDES.newYear[locale], b2("newYear", locale));
     assert.equal(GUIDES.localHolidays[locale], `/${locale}/${LOCAL_COPY[locale].path}/`);
+    assert.equal(GUIDES.strikes[locale], b2("strikes", locale));
+    assert.equal(GUIDES.castanyada[locale], `/${locale}/${ARTICLE_PATHS.castanyada[locale]}/`);
   }
   const school = readFileSync(join(ROOT, "src/lib/content/school/publish.ts"), "utf8");
   for (const locale of ["ca", "es", "en"] as const) assert.ok(school.includes(`path: "${GUIDES.school[locale].slice(4, -1)}"`), locale);

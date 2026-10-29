@@ -21,7 +21,7 @@ import { LOCAL_SOURCE, loadLocalCalendar, placesWithHolidayOn, type LocalHoliday
 import { getMessages } from "@/lib/i18n";
 import type { Locale } from "@/lib/i18n/config";
 import { dateQuestion } from "@/lib/programmatic/holidays/copy";
-import { municipalityForCode } from "@/lib/programmatic/holidays/data";
+import { municipalities, municipalityForCode } from "@/lib/programmatic/holidays/data";
 import { GUIDES } from "@/lib/programmatic/holidays/links";
 import { DATE_PAGES, datePath, hubPath, isDatePage, municipalityPath } from "@/lib/programmatic/holidays/paths";
 
@@ -164,7 +164,7 @@ export async function HolidayToday({ locale, now }: { locale: Locale; now?: Date
       {/* Local questions go to the town pages (ca/es) or the all-towns guide (en). */}
       <p className="ci-today-find">
         {t.findTown}{" "}
-        <Link href={locale === "en" ? GUIDES.localHolidays.en : hubPath(locale)}>{t.findTownLink}</Link>
+        <Link href={locale === "en" ? GUIDES.localHolidays.en : hubPath(locale)}>{t.findTownLink.replace("{n}", String(municipalities().length))}</Link>
         {locale === "en" ? null : (
           <>
             {" · "}

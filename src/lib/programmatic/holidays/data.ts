@@ -40,7 +40,7 @@ const fold = (name: string) => name.normalize("NFD").replace(/[̀-ͯ]/g, "").toL
  * is the five-digit INE code plus a three-digit nucleus code: a nucleus maps to
  * the municipality it belongs to, whose page lists the nucleus's days. A place
  * added from a DOGC correction carries `dogc:<name>` and is matched by name.
- * Null when the place has no page (the family covers the 100 largest).
+ * Null when the place has no page (the family covers the 300 largest).
  */
 export function municipalityForCode(code: string): SnapshotMunicipality | null {
   if (/^\d{8}$/.test(code)) return BY_INE.get(code.slice(0, 5)) ?? null;
@@ -176,19 +176,33 @@ export function byComarca(): { comarca: string; municipalities: SnapshotMunicipa
     .map(([comarca, list]) => ({ comarca, municipalities: list.sort((a, b) => a.rank - b.rank) }));
 }
 
+const byPopulationDistance = (m: SnapshotMunicipality) => (a: SnapshotMunicipality, b: SnapshotMunicipality) =>
+  Math.abs(a.rank - m.rank) - Math.abs(b.rank - m.rank) || a.rank - b.rank;
+
 /**
- * Links to other municipalities: the rest of its comarca first, then the
- * nearest in population, so every page links to at least `min` siblings.
+ * Links to other municipalities: its comarca first, then the nearest in
+ * population, so every page links to at least `min` siblings. Since tranche 2
+ * a comarca can hold 29 listed towns (Baix Llobregat): past `max`, a page
+ * links the comarca's three largest towns and the towns closest to it in
+ * population, and the hub's comarca section lists the rest (`comarcaTotal`
+ * says how many there are).
  */
-export function siblings(m: SnapshotMunicipality, min = 6): { sameComarca: SnapshotMunicipality[]; others: SnapshotMunicipality[] } {
-  const sameComarca = SNAPSHOT.municipalities.filter((o) => o.comarca === m.comarca && o.slug !== m.slug).sort((a, b) => a.rank - b.rank);
+export function siblings(
+  m: SnapshotMunicipality,
+  min = 6,
+  max = 12,
+): { sameComarca: SnapshotMunicipality[]; others: SnapshotMunicipality[]; comarcaTotal: number } {
+  const all = SNAPSHOT.municipalities.filter((o) => o.comarca === m.comarca && o.slug !== m.slug).sort((a, b) => a.rank - b.rank);
+  const largest = all.slice(0, 3);
+  const nearest = all.filter((o) => !largest.includes(o)).sort(byPopulationDistance(m)).slice(0, Math.max(0, max - largest.length));
+  const sameComarca = [...largest, ...nearest].sort((a, b) => a.rank - b.rank);
   const need = Math.max(0, min - sameComarca.length);
   const others = SNAPSHOT.municipalities
     .filter((o) => o.comarca !== m.comarca)
-    .sort((a, b) => Math.abs(a.rank - m.rank) - Math.abs(b.rank - m.rank) || a.rank - b.rank)
+    .sort(byPopulationDistance(m))
     .slice(0, need)
     .sort((a, b) => a.rank - b.rank);
-  return { sameComarca, others };
+  return { sameComarca, others, comarcaTotal: all.length + 1 };
 }
 
 /** The `generateStaticParams` set: the biggest places only, to keep the build short. */

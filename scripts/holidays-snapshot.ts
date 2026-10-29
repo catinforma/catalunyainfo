@@ -52,9 +52,25 @@ const LOCAL_2027 = join(ROOT, "src/lib/programmatic/holidays/local-2027.json");
 const FIXTURES = join(ROOT, "tests/fixtures/holidays");
 
 const YEAR = 2026;
-const TOP = 100;
-/** Dates the date pages (and the bridge/Christmas guides) talk about. */
-const DATES_OF_INTEREST = ["2026-12-07", "2026-12-08", "2026-12-24", "2026-12-25", "2026-12-26", "2026-12-31"];
+/** Tranche 1 (27 Oct 2026): 100. Tranche 2 (29 Oct 2026): 300. */
+const TOP = 300;
+/**
+ * Dates the date pages (and the bridge/Christmas guides) talk about. 2 Nov is
+ * here for the 1 November page: Tots Sants falls on a Sunday in 2026 and the
+ * page says where the Monday after is a local holiday.
+ */
+const DATES_OF_INTEREST = [
+  "2026-11-01",
+  "2026-11-02",
+  "2026-11-11",
+  "2026-11-30",
+  "2026-12-07",
+  "2026-12-08",
+  "2026-12-24",
+  "2026-12-25",
+  "2026-12-26",
+  "2026-12-31",
+];
 
 const SOCRATA = "https://analisi.transparenciacatalunya.cat";
 const DATASET = "b4eh-r8up";
@@ -65,9 +81,14 @@ const dogcPage = (id: string) => `https://dogc.gencat.cat/ca/document-del-dogc/?
 
 /**
  * Names the order prints differently from Idescat. Found by the build's own
- * report; every entry was checked against both texts on 27 Oct 2026.
+ * report; every entry was checked against both texts on 29 Oct 2026.
  */
-const DOGC_NAME_ALIASES: Record<string, string> = {};
+const DOGC_NAME_ALIASES: Record<string, string> = {
+  // Idescat: "Bigues i Riells del Fai" (Vallès Oriental). Ordre EMT/208/2025
+  // keeps the former name and lists only its two nuclei: "Bigues i Riells
+  // Bigues, 20 de gener i 29 de juny. Riells del Fai, 22 de gener i 7 d'agost."
+  "08023": "Bigues i Riells",
+};
 
 /* -------------------------------------------------------------------------- */
 
@@ -280,18 +301,23 @@ async function build(): Promise<void> {
   };
   // Nuclei are looked up per municipality, all of its nuclei at once, after
   // the municipality's entry (their names repeat across the comarca).
-  const nucleusEntries = new Map<string, Map<string, (typeof comarques)[number]["entries"][number]>>();
+  type Entry = (typeof comarques)[number]["entries"][number];
+  const nucleusEntries = new Map<string, Map<string, Entry>>();
+  /** The municipality's own entry in the order, for municipalities the open data lists by nuclei only. */
+  const municipalityEntry = new Map<string, Entry>();
   for (const ine of new Set([...places.values()].filter((p) => p.nucleus).map((p) => p.ine))) {
     const comarca = comarcaOf(ine);
     const parentName = population.get(ine)?.name ?? "";
-    const parent = [parentName, [...places.values()].find((p) => p.ine === ine && !p.nucleus)?.name]
+    const parent = [DOGC_NAME_ALIASES[ine], parentName, [...places.values()].find((p) => p.ine === ine && !p.nucleus)?.name]
       .filter((n): n is string => !!n)
       .map((n) => ({ n, at: safeLocate(comarca, n, parentName) }))
       .find((x) => x.at);
     if (!parent?.at) continue;
+    if (parent.at.shape === "own") municipalityEntry.set(ine, parent.at.entry);
     const names = [...places.values()].filter((p) => p.ine === ine && p.nucleus).map((p) => p.name);
     nucleusEntries.set(ine, nucleiAfter(comarca, parent.at, parent.n, names).found);
   }
+  const standIns = new Set<string>();
   for (const place of places.values()) {
     const comarca = comarcaOf(place.ine);
     const parentName = population.get(place.ine)?.name ?? "";
@@ -319,8 +345,21 @@ async function build(): Promise<void> {
       } else {
         // Not named in the order: it keeps its municipality's days, so it is
         // not a place of its own (Baltarga, Bor and Pi in Bellver de Cerdanya).
-        const parentDates = [...places.values()].find((p) => p.ine === place.ine && !p.nucleus)?.dates ?? [];
-        if (parentDates.join(",") === place.dates.join(",")) continue;
+        const parentRow = [...places.values()].find((p) => p.ine === place.ine && !p.nucleus);
+        if ((parentRow?.dates ?? []).join(",") === place.dates.join(",")) continue;
+        // The open data lists only the nuclei, the order the municipality
+        // itself with the same days (Rupit i Pruit, Boadella i les Escaules):
+        // the place is the municipality, as the DOGC names it.
+        const own = municipalityEntry.get(place.ine);
+        if (!parentRow && own && !own.noProposal && [...own.dates].sort().join(",") === place.dates.join(",")) {
+          matchedEntries.add(own);
+          if (!standIns.has(place.ine)) {
+            standIns.add(place.ine);
+            report.push(`The order names the municipality, the open data only its nuclei (listed as the municipality): ${parentName}`);
+            merged.push({ name: articleFirst(parentName), parent: null, ine: place.ine, dates: [...own.dates].sort() });
+          }
+          continue;
+        }
         report.push(`CHECK BY HAND: nucleus not in the order with its own days in the open data, kept: ${parentName} / ${place.name} [${place.dates.join(", ")}]`);
       }
     }
@@ -352,6 +391,19 @@ async function build(): Promise<void> {
       .sort((a, b) => a.name.localeCompare(b.name, "ca"));
   }
 
+  // Councils whose own shop-opening list (Resolució EMT/4342/2025) includes a
+  // date of interest. None of these dates is in the default list, so this is
+  // every place where shops on the general timetable may open that day.
+  const slugByKey = new Map(municipalities.flatMap((m) => [[nameKey(m.name), m.slug], [nameKey(m.dogcName), m.slug]] as const));
+  const shopsByDate: Record<string, DatePlace[]> = {};
+  for (const date of DATES_OF_INTEREST) {
+    if (shops.defaults.includes(date)) continue;
+    shopsByDate[date] = shops.councils
+      .filter((c) => c.dates.includes(date))
+      .map((c) => ({ name: articleFirst(c.name.replace(/^(La|El|Les|Els) /, (a) => a.toLowerCase()).replace(/^L'/, "l'")), parent: null, slug: slugByKey.get(nameKey(c.name)) ?? null }))
+      .sort((a, b) => a.name.localeCompare(b.name, "ca"));
+  }
+
   const snapshot: HolidaySnapshot = {
     schema: 1,
     readOn,
@@ -378,12 +430,14 @@ async function build(): Promise<void> {
     municipalities,
     excluded,
     localByDate,
+    shopsByDate,
   };
 
   writeFileSync(SNAPSHOT, `${JSON.stringify(snapshot, null, 1)}\n`);
   console.log(`snapshot: ${municipalities.length} municipalities, ${excluded.length} excluded, read ${readOn}`);
   console.log(`open data: ${rows.length} rows, updated ${snapshot.sources.localOpenData.rowsUpdatedAt}; Idescat population ${popYear}`);
   for (const [date, list] of Object.entries(localByDate)) console.log(`${date}: ${list.length} places`);
+  for (const [date, list] of Object.entries(shopsByDate)) console.log(`${date}: shops may open in ${list.map((p) => p.name).join(", ") || "no council"}`);
   for (const line of report) console.log(line);
   for (const item of excluded) console.log(`excluded (no proposal in the order): ${item.name} (${item.population})`);
 }

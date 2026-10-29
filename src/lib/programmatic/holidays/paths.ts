@@ -4,11 +4,12 @@ import { absoluteUrl } from "@/lib/site";
 
 import { MONTHS, type DateLocale } from "./format";
 import { NEXT_YEAR, SNAPSHOT } from "./data";
+import { slugify } from "./slug";
 
 /**
  * URLs of the holiday family.
  *
- *   ca  /ca/festius/                       hub, the 100 municipalities by comarca
+ *   ca  /ca/festius/                       hub, the 300 municipalities by comarca
  *       /ca/festius/<slug>/                one municipality
  *       /ca/festius/dia/8-desembre-2026/   "És festiu el 8 de desembre?"
  *   es  /es/festivos/ …  /es/festivos/dia/8-diciembre-2026/
@@ -28,8 +29,24 @@ export const ROUTE = {
   en: { root: "holidays", day: "day" },
 } as const satisfies Record<DateLocale, { root: string; day: string }>;
 
-/** The date pages, in calendar order. */
-export const DATE_PAGES = ["2026-12-07", "2026-12-08", "2026-12-25", "2026-12-26", "2027-01-01", "2027-01-06"] as const;
+/**
+ * The date pages, in calendar order. Tranche 1 (27 Oct 2026): 7, 8, 25 and 26
+ * December, 1 and 6 January. Tranche 2 (29 Oct 2026): 1, 11 and 30 November,
+ * 24 and 31 December.
+ */
+export const DATE_PAGES = [
+  "2026-11-01",
+  "2026-11-11",
+  "2026-11-30",
+  "2026-12-07",
+  "2026-12-08",
+  "2026-12-24",
+  "2026-12-25",
+  "2026-12-26",
+  "2026-12-31",
+  "2027-01-01",
+  "2027-01-06",
+] as const;
 export type DatePage = (typeof DATE_PAGES)[number];
 
 export function isDatePage(iso: string): iso is DatePage {
@@ -38,6 +55,11 @@ export function isDatePage(iso: string): iso is DatePage {
 
 export function hubPath(locale: MuniLocale): string {
   return `/${locale}/${ROUTE[locale].root}/`;
+}
+
+/** Id of a comarca's section on the hub: "c-baix-llobregat". */
+export function comarcaAnchor(comarca: string): string {
+  return `c-${slugify(comarca)}`;
 }
 
 export function municipalityPath(locale: MuniLocale, slug: string): string {

@@ -26,7 +26,7 @@ import { SCHOOL_YEARS } from "@/lib/content/school/calendar";
 import { municipalityBySlug } from "@/lib/programmatic/holidays/data";
 import { joinList } from "@/lib/programmatic/holidays/names";
 import { datePath, isDatePage } from "@/lib/programmatic/holidays/paths";
-import { largestTownLinks } from "@/lib/programmatic/holidays/towns";
+import { largestTownLinks, townPageCount } from "@/lib/programmatic/holidays/towns";
 import { COPY, type HolidayCopy } from "./copy";
 import { HOLIDAYS_BY_YEAR, addDays, longDate } from "./calendar";
 
@@ -163,7 +163,7 @@ function localSection(copy: HolidayCopy, locale: Locale): Block[] {
   const towns = locale === "en" ? "" : joinList(largestTownLinks(locale), locale);
   return [
     { type: "heading", level: 2, text: copy.localTitle },
-    ...copy.local.map((text) => ({ type: "paragraph", text: text.replace("{towns}", towns) }) as Block),
+    ...copy.local.map((text) => ({ type: "paragraph", text: text.replace("{towns}", towns).replace("{count}", String(townPageCount())) }) as Block),
   ];
 }
 

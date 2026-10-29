@@ -55,7 +55,7 @@ export interface HolidayCopy {
   /** `{from}`, `{to}`: the school Easter holidays (Ordre EDF/66/2026). */
   easterSchool: string;
 
-  /** Local holidays of other towns: when next year's appear, where this year's are. `{towns}`. */
+  /** Local holidays of other towns: when next year's appear, where this year's are. `{towns}`, `{count}` (how many towns have a page). */
   localTitle: string;
   local: string[];
 
@@ -183,7 +183,7 @@ export const COPY: Record<Locale, HolidayCopy> = {
     localTitle: "Festes locals del 2027: quan es publiquen",
     local: [
       "A més dels dotze festius, cada municipi en té dos de locals, que fixa una ordre del Departament d'Empresa i Treball a proposta dels ajuntaments. Les del 2027 encara no s'han publicat: a 28 d'octubre de 2026, les dades obertes de la Generalitat no en tenen cap. Les del 2026 van sortir al DOGC el 17 de desembre de 2025 (Ordre EMT/208/2025).",
-      "Mentrestant, les festes locals del 2026 són a [festius locals per municipi](/ca/festius/), amb una pàgina per a cadascun dels 100 municipis més poblats ({towns}), i la resta a [festius locals de tots els municipis](/ca/guies/festius-locals-catalunya/). Hi afegirem les del 2027 quan surti l'ordre.",
+      "Mentrestant, les festes locals del 2026 són a [festius locals per municipi](/ca/festius/), amb una pàgina per a cadascun dels {count} municipis més poblats ({towns}), i la resta a [festius locals de tots els municipis](/ca/guies/festius-locals-catalunya/). Hi afegirem les del 2027 quan surti l'ordre.",
     ],
 
     year2026Title: "Calendari laboral 2026 a Catalunya",
@@ -304,7 +304,7 @@ export const COPY: Record<Locale, HolidayCopy> = {
     localTitle: "Fiestas locales 2027: cuándo se publican",
     local: [
       "Además de los doce festivos, cada municipio tiene dos fiestas locales, que fija una orden del Departament d'Empresa i Treball a propuesta de los ayuntamientos. Las de 2027 todavía no se han publicado: a 28 de octubre de 2026, los datos abiertos de la Generalitat no tienen ninguna. Las de 2026 salieron en el DOGC el 17 de diciembre de 2025 (Orden EMT/208/2025).",
-      "Mientras tanto, las fiestas locales de 2026 están en [festivos locales por municipio](/es/festivos/), con una página para cada uno de los 100 municipios más poblados ({towns}), y el resto en [festivos locales de todos los municipios](/es/guias/festivos-locales-cataluna/). Añadiremos las de 2027 cuando salga la orden.",
+      "Mientras tanto, las fiestas locales de 2026 están en [festivos locales por municipio](/es/festivos/), con una página para cada uno de los {count} municipios más poblados ({towns}), y el resto en [festivos locales de todos los municipios](/es/guias/festivos-locales-cataluna/). Añadiremos las de 2027 cuando salga la orden.",
     ],
 
     year2026Title: "Calendario laboral 2026 en Cataluña",

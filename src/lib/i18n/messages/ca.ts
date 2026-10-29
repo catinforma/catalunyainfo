@@ -105,7 +105,7 @@ const ca = {
     upcomingTitle: "Pròxims festius a Catalunya",
     whereTitle: "On és festiu avui a Catalunya?",
     findTown: "Els festius del teu municipi:",
-    findTownLink: "festes locals de 100 municipis, un per un",
+    findTownLink: "festes locals de {n} municipis, un per un",
     allTownsLink: "tots els municipis de Catalunya",
     dateQuestionsTitle: "Els dies pels quals més es pregunta",
     colDate: "Data",

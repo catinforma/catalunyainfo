@@ -5,7 +5,7 @@ import { HubRoute, hubMetadata } from "@/components/programmatic/holidays/routes
 import { hubAllowed } from "@/lib/programmatic/holidays/routing";
 
 /**
- * /ca/festius/ — local holidays of the 100 most populous municipalities, by
+ * /ca/festius/ — local holidays of the 300 most populous municipalities, by
  * comarca. Catalan only; /es/festivos/ is its Spanish twin. Data comes from
  * the committed snapshot (src/lib/programmatic/holidays), never the database.
  */

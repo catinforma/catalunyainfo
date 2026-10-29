@@ -106,7 +106,7 @@ const es: Messages = {
     upcomingTitle: "Próximos festivos en Cataluña",
     whereTitle: "¿Dónde es festivo hoy en Cataluña?",
     findTown: "Los festivos de tu municipio:",
-    findTownLink: "fiestas locales de 100 municipios, uno a uno",
+    findTownLink: "fiestas locales de {n} municipios, uno a uno",
     allTownsLink: "todos los municipios de Cataluña",
     dateQuestionsTitle: "Los días por los que más se pregunta",
     colDate: "Fecha",

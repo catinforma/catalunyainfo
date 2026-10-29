@@ -39,7 +39,7 @@ export function municipalityStaticParams(route: MuniLocale): { locale: MuniLocal
   return prerenderSlugs(20).map((municipi) => ({ locale: route, municipi }));
 }
 
-/** All six date pages are built at deploy. */
+/** All eleven date pages are built at deploy (DATE_PAGES). */
 export function dateStaticParams(route: DateLocale): { locale: DateLocale; dia: string }[] {
   return DATE_PAGES.map((iso) => ({ locale: route, dia: dateSlug(iso, route) }));
 }

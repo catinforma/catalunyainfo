@@ -27,7 +27,18 @@ export function DatePageView({ iso, locale }: { iso: DatePageIso; locale: DateLo
   const year = iso.slice(0, 4);
   const sources: SourceKey[] =
     year === "2026"
-      ? ["regional2026", "localOrder", "amendment", "boe2026", "shopsOrder", "shops", "retailLaw", "school"]
+      ? [
+          "regional2026",
+          // 31 December: the answer names 1 January 2027 (Ordre EMT/52/2026).
+          ...(iso === "2026-12-31" ? (["regional2027"] as const) : []),
+          "localOrder",
+          "amendment",
+          "boe2026",
+          "shopsOrder",
+          "shops",
+          "retailLaw",
+          "school",
+        ]
       : ["regional2027", "localOrder", "retailLaw", "school"];
 
   return (
@@ -51,6 +62,13 @@ export function DatePageView({ iso, locale }: { iso: DatePageIso; locale: DateLo
           {content.answerNote.map((p) => (
             <p key={p}>{p}</p>
           ))}
+          {content.notice ? (
+            <p>
+              {content.notice.before}
+              <Link href={content.notice.href}>{content.notice.label}</Link>
+              {content.notice.after}
+            </p>
+          ) : null}
 
           <h2 id="local">{ui.localTitle}</h2>
           <p>{content.local.text}</p>

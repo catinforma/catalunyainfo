@@ -77,11 +77,12 @@ export function cleanText(raw: string): string[] {
 /**
  * The gazette writes articles after the name ("Prat de Llobregat, el",
  * "Hospitalet de Llobregat, l'"). Puts them back in front, lower case:
- * "el Prat de Llobregat", "l'Hospitalet de Llobregat".
+ * "el Prat de Llobregat", "l'Hospitalet de Llobregat". Aranese names carry
+ * "es" the same way ("Bòrdes, Es" -> "es Bòrdes").
  */
 export function articleFirst(name: string): string {
   const clean = name.replace(/[’]/g, "'").replace(/\s+/g, " ").trim();
-  const match = /^(.*?),\s*(la|el|les|els|l')$/i.exec(clean);
+  const match = /^(.*?),\s*(la|el|les|els|l'|es)$/i.exec(clean);
   if (!match) return clean;
   const base = match[1] ?? "";
   const article = (match[2] ?? "").toLowerCase();
