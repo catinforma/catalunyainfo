@@ -74,8 +74,15 @@ function setColumns(text: string, pick: (line: string) => boolean, start: number
 
 const refuses = (fn: () => unknown, message: RegExp) => assert.throws(fn, (error: unknown) => error instanceof InteriorFileError && message.test(error.message));
 
-const bySlug = (slug: string): Municipality => {
-  const found = SNAPSHOT.municipalities.find((m) => m.slug === slug);
+/** The committed snapshot without any 29N data, whether or not the import has run. */
+const BASE: ElectionsSnapshot = {
+  ...SNAPSHOT,
+  general2026: undefined,
+  municipalities: SNAPSHOT.municipalities.map((m) => ({ ...m, g2026: undefined })),
+};
+
+const bySlug = (slug: string, snapshot: ElectionsSnapshot = BASE): Municipality => {
+  const found = snapshot.municipalities.find((m) => m.slug === slug);
   assert.ok(found, slug);
   return found;
 };
@@ -465,18 +472,20 @@ test("zip reader: stored and deflated members, dates, CRC; the fixture through a
 /* -------------------------------------------------------------------------- */
 
 test("render without g2026: the honest empty slot, unchanged", () => {
-  assert.equal(SNAPSHOT.general2026 === undefined, SNAPSHOT.municipalities.every((m) => m.g2026 === undefined), "both or neither");
-  if (SNAPSHOT.general2026) return; // After the import, the other test covers the committed data.
   for (const locale of LOCALES) {
-    const model = buildElectionPage(bySlug("sabadell"), locale);
+    const model = buildElectionPage(bySlug("sabadell"), locale, BASE);
     assert.equal(model.slot.results, null);
     assert.match(model.slot.md[0]!, /Ministeri de l'Interior publiqui|Ministerio del Interior publique|Ministry of the Interior publishes/);
+    assert.match(model.slot.md[1]!, /provisional/i, "says honestly that the night's provisional site is not announced");
     assert.equal(model.turnout.table.rows.length, 3);
-    assert.equal(model.dataDate, SNAPSHOT.readAt);
+    assert.equal(model.dataDate, BASE.readAt);
     assert.ok(!model.sources.items.some((s) => s.publisher === "Ministerio del Interior"));
+    assert.match(model.standfirst, /un espai per als resultats|un espacio para los resultados|with space for the results/);
   }
-  assert.equal(latestDataDate(), SNAPSHOT.readAt);
+  assert.equal(latestDataDate(BASE), BASE.readAt);
   assert.equal(ELECTION_NIGHT_RESULTS_URL, null, "no results-night link until Interior announces it");
+  // Today (30 Oct 2026) nothing is imported: the committed pages show the empty slot.
+  assert.equal(SNAPSHOT.general2026 === undefined, SNAPSHOT.municipalities.every((m) => m.g2026 === undefined), "both or neither");
 });
 
 /**
@@ -501,8 +510,8 @@ function snapshotWith2023(): ElectionsSnapshot {
   };
   const towns = new Set<string>(Object.values(TOWNS));
   return {
-    ...SNAPSHOT,
-    municipalities: SNAPSHOT.municipalities.map((m) => (towns.has(m.code) ? { ...m, g2026: townResult(p, m.code) } : m)),
+    ...BASE,
+    municipalities: BASE.municipalities.map((m) => (towns.has(m.code) ? { ...m, g2026: townResult(p, m.code) } : m)),
     general2026,
   };
 }
@@ -637,12 +646,13 @@ test("snapshot file: a Generalitat refresh carries the 29N import, or refuses to
   const withImport = snapshotWith2023();
   // Every town imported.
   const full: ElectionsSnapshot = { ...withImport, municipalities: withImport.municipalities.map((m) => ({ ...m, g2026: m.g2026 ?? { ...m.congress } })) };
-  const refreshed = carryGeneral2026(full, SNAPSHOT);
+  const refreshed = carryGeneral2026(full, BASE);
   assert.deepEqual(refreshed.general2026, full.general2026);
   assert.ok(refreshed.municipalities.every((m) => m.g2026));
   assert.match(renderSnapshotFile(refreshed), /scripts\/elections-29n\.ts/);
+  assert.doesNotMatch(renderSnapshotFile(BASE), /elections-29n/, "no 29N header line before the import");
   // Some towns without results: refused unless told to drop the import.
-  assert.throws(() => carryGeneral2026(withImport, SNAPSHOT), /municipalities now in the set have none .* --drop-29n/);
-  assert.equal(carryGeneral2026(withImport, SNAPSHOT, true).general2026, undefined);
-  assert.equal(carryGeneral2026(SNAPSHOT, SNAPSHOT), SNAPSHOT, "nothing imported: nothing to carry");
+  assert.throws(() => carryGeneral2026(withImport, BASE), /municipalities now in the set have none .* --drop-29n/);
+  assert.equal(carryGeneral2026(withImport, BASE, true).general2026, undefined);
+  assert.equal(carryGeneral2026(BASE, BASE), BASE, "nothing imported: nothing to carry");
 });
