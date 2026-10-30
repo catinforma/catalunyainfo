@@ -148,7 +148,7 @@ test("fair Events: only the fairs the page lists, confirmed dates only, each wit
     const listed = weekendData.listedFairs(zone, window);
     const events = weekend.fairEvents(listed, "/es/fin-de-semana/", "es");
     const shown = new Set([...listed.now, ...listed.next].map((f) => f.id));
-    const confirmed = [...shown].filter((id) => !weekendData.SNAPSHOT.fairs.find((f) => f.id === id)!.toConfirm);
+    const confirmed = [...shown].filter((id) => !weekendData.FAIRS.find((f) => f.id === id)!.toConfirm);
     assert.equal(events.length, confirmed.length, `zone ${zone?.id ?? "hub"}`);
     for (const event of events) {
       assert.equal(event["@type"], "Event");

@@ -8,6 +8,7 @@ import { slugify } from "@/lib/content/weekend/agenda";
 import { LINES } from "@/lib/programmatic/rodalies/data";
 import type { LineId } from "@/lib/programmatic/rodalies/types";
 
+import { FAIR_CORRECTIONS, applyFairCorrections } from "./corrections";
 import snapshotJson from "./snapshot.json" with { type: "json" };
 import type { RegisterMunicipality, SnapshotFair, WeekendSnapshot, ZoneVolume } from "./types";
 import { MIN_EVENTS, ZONES, type ZoneDef, type ZoneFilter, zoneFilter, zoneById } from "./zones";
@@ -63,10 +64,16 @@ export function widerZone(zone: ZoneDef): ZoneDef | null {
 /* Fairs (server, from the snapshot)                                          */
 /* -------------------------------------------------------------------------- */
 
+/**
+ * The calendar's fairs as the pages list them (and mark them up): the
+ * snapshot with the organisers' corrections applied (`corrections.ts`).
+ */
+export const FAIRS: readonly SnapshotFair[] = applyFairCorrections(SNAPSHOT.fairs, FAIR_CORRECTIONS, SNAPSHOT.readOn);
+
 export function fairsIn(zone: ZoneDef | null): SnapshotFair[] {
-  if (!zone) return SNAPSHOT.fairs;
+  if (!zone) return [...FAIRS];
   const filter = zoneFilter(zone);
-  return SNAPSHOT.fairs.filter((f) => inFilter({ ine: f.ine, comarca: f.comarca, province: f.province }, filter));
+  return FAIRS.filter((f) => inFilter({ ine: f.ine, comarca: f.comarca, province: f.province }, filter));
 }
 
 /** Fairs open on at least one day of the window. */
@@ -94,7 +101,7 @@ export function fairsAfter(fairs: readonly SnapshotFair[], window: { to: string 
 
 /** The last day the fairs calendar covers (its own year). */
 export function fairsCalendarYear(): number {
-  const last = SNAPSHOT.fairs.at(-1)?.end ?? SNAPSHOT.readOn;
+  const last = FAIRS.at(-1)?.end ?? SNAPSHOT.readOn;
   return Number(last.slice(0, 4));
 }
 

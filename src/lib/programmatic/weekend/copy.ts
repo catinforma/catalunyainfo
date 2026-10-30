@@ -229,11 +229,24 @@ export function guidance(locale: WeekendLocale, zone: ZoneDef | null, widerName:
   return { title: es ? "Cómo leer esta página" : "Com llegir aquesta pàgina", paragraphs };
 }
 
+/**
+ * Under a fair whose organiser's page gives other dates than the calendar
+ * (`corrections.ts`): whose dates the list shows, and the calendar's.
+ */
+export function correctionNote(fair: { corrected?: { start: string; end: string; publisher: string } }, locale: WeekendLocale): string | null {
+  const c = fair.corrected;
+  if (!c) return null;
+  const calendar = dayRange(c.start, c.end, locale);
+  return locale === "es"
+    ? `Fechas de la web del organizador (${c.publisher}); el calendario de ferias de la Generalitat dice ${calendar}.`
+    : `Dates del web de l'organitzador (${c.publisher}); el calendari de fires de la Generalitat diu ${calendar}.`;
+}
+
 /** Attribution in the form the Generalitat's open-data licence asks for. */
 export function attribution(locale: WeekendLocale, dates: { agenda: string; fairs: string }): string {
   return locale === "es"
-    ? `Fuentes: Generalitat de Catalunya. Departament de Cultura (Agenda Cultural de Catalunya, leída en directo; datos actualizados el ${dates.agenda} cuando preparamos esta página) y Generalitat de Catalunya. Departament d'Empresa i Treball (calendario de ferias, actualizado el ${dates.fairs}). CatalunyaInfo filtra los datos por zona y no los modifica; la Generalitat no participa en esta página.`
-    : `Fonts: Generalitat de Catalunya. Departament de Cultura (Agenda Cultural de Catalunya, llegida en directe; dades actualitzades el ${dates.agenda} quan vam preparar aquesta pàgina) i Generalitat de Catalunya. Departament d'Empresa i Treball (calendari de fires, actualitzat el ${dates.fairs}). CatalunyaInfo filtra les dades per zona i no les modifica; la Generalitat no participa en aquesta pàgina.`;
+    ? `Fuentes: Generalitat de Catalunya. Departament de Cultura (Agenda Cultural de Catalunya, leída en directo; datos actualizados el ${dates.agenda} cuando preparamos esta página) y Generalitat de Catalunya. Departament d'Empresa i Treball (calendario de ferias, actualizado el ${dates.fairs}). CatalunyaInfo filtra los datos por zona y no los modifica, salvo cuando la web oficial del organizador da otras fechas para una feria: entonces mostramos las del organizador y lo indicamos en esa feria. La Generalitat no participa en esta página.`
+    : `Fonts: Generalitat de Catalunya. Departament de Cultura (Agenda Cultural de Catalunya, llegida en directe; dades actualitzades el ${dates.agenda} quan vam preparar aquesta pàgina) i Generalitat de Catalunya. Departament d'Empresa i Treball (calendari de fires, actualitzat el ${dates.fairs}). CatalunyaInfo filtra les dades per zona i no les modifica, tret de quan el web oficial de l'organitzador dona unes altres dates per a una fira: aleshores mostrem les de l'organitzador i ho indiquem en aquella fira. La Generalitat no participa en aquesta pàgina.`;
 }
 
 /* -------------------------------------------------------------------------- */
