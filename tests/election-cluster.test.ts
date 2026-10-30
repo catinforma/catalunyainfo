@@ -170,10 +170,12 @@ test("voting: MiDNI stays suspended; the JEC's 22 Oct condition is cited, not re
 
 test("titles and descriptions are exactly what main serves (measurement windows)", () => {
   const frozen = {
+    // Changed in the 30 Oct 2026 CTR sweep (owner lifted the 14 Nov freeze;
+    // logged in docs/SEO_EXPERIMENTS.md): the draw window leads the snippet.
     mesa: {
-      ca: ["Membre de mesa electoral: què fer si t'ha tocat, quant es cobra i com excusar-te", "Membre de mesa electoral 2026: es cobren 75 €, excuses i què fer", "Si t'ha tocat ser membre de mesa: terminis per excusar-te, excuses acceptades, la dieta de 75 €, permís a la feina, què passa si no hi vas i horari del dia."],
-      es: ["Miembro de mesa electoral: qué hacer si te ha tocado, cuánto se cobra y cómo excusarte", "Mesa electoral 2026: se cobran 75 €, excusas y qué hacer", "Si te ha tocado ser miembro de mesa: plazos para excusarte, excusas aceptadas, la dieta de 75 €, permiso en el trabajo, qué pasa si no vas y horario del día."],
-      en: ["Drawn for polling-station duty in Spain on 29 November: the €75 pay, excuses and what to do", "Polling-station duty in Spain 2026: €75 pay, excuses, time off", "Drawn to sit on a Spanish polling-station table (mesa electoral)? The deadlines to be excused, accepted reasons, the €75 allowance, time off work and the day."],
+      ca: ["Membre de mesa electoral: què fer si t'ha tocat, quant es cobra i com excusar-te", "Membre de mesa electoral 2026: 75 €, sorteig i excuses", "Sorteig del 31 d'octubre al 4 de novembre; t'ho notifiquen en 3 dies i en tens 7 per excusar-te. Es cobren 75 € sense IRPF. Què fer si et toca."],
+      es: ["Miembro de mesa electoral: qué hacer si te ha tocado, cuánto se cobra y cómo excusarte", "Mesa electoral 2026: se cobran 75 €, sorteo y excusas", "Sorteo del 31 de octubre al 4 de noviembre; te lo notifican en 3 días y tienes 7 para excusarte. Se cobran 75 € sin IRPF. Qué hacer si te toca."],
+      en: ["Drawn for polling-station duty in Spain on 29 November: the €75 pay, excuses and what to do", "Polling-station duty in Spain 2026: €75 pay, excuses, time off", "Draw from 31 Oct to 4 Nov; you are notified within 3 days and have 7 to ask to be excused. The €75 allowance is tax-free. What to do if drawn."],
     },
     // Changed in the 30 Oct 2026 top-3 push (owner lifted the freeze; logged in docs/SEO_EXPERIMENTS.md).
     voting: {

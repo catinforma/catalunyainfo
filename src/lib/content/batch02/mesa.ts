@@ -48,6 +48,13 @@ import {
  * one is cited as such) and any "check if you were drawn" service, because
  * none exists. After 29N the dated section must move to the May 2027
  * municipal elections once their decree is in the BOE.
+ *
+ * 30 Oct 2026 (CTR sweep; owner lifted the 14 Nov freeze): ca/es titles add
+ * "sorteig/sorteo" and all three descriptions lead with the draw window, the
+ * 3-day notification and the 7 days to object, re-read that day in the JEC
+ * 29N calendar ("Sorteo ... 31 de octubre a 4 de noviembre"; "Notificación
+ * ... Plazo de 3 días a partir del sorteo"; "Plazo para alegar de 7 días
+ * desde la notificación"). The draw starts tomorrow.
  */
 
 const VERIFIED = "2026-10-28";
@@ -73,18 +80,18 @@ const META: Record<Locale, { path: string; title: string; seoTitle: string; seoD
   ca: {
     path: "guies/membre-mesa-electoral",
     title: "Membre de mesa electoral: què fer si t'ha tocat, quant es cobra i com excusar-te",
-    seoTitle: "Membre de mesa electoral 2026: es cobren 75 €, excuses i què fer",
+    seoTitle: "Membre de mesa electoral 2026: 75 €, sorteig i excuses",
     seoDescription:
-      "Si t'ha tocat ser membre de mesa: terminis per excusar-te, excuses acceptades, la dieta de 75 €, permís a la feina, què passa si no hi vas i horari del dia.",
+      "Sorteig del 31 d'octubre al 4 de novembre; t'ho notifiquen en 3 dies i en tens 7 per excusar-te. Es cobren 75 € sense IRPF. Què fer si et toca.",
     excerpt:
       "Com es tria la mesa electoral, els terminis del 29N, les excuses que s'accepten, la dieta, els permisos laborals i el que es fa durant el dia, segons la LOREG.",
   },
   es: {
     path: "guias/miembro-mesa-electoral",
     title: "Miembro de mesa electoral: qué hacer si te ha tocado, cuánto se cobra y cómo excusarte",
-    seoTitle: "Mesa electoral 2026: se cobran 75 €, excusas y qué hacer",
+    seoTitle: "Mesa electoral 2026: se cobran 75 €, sorteo y excusas",
     seoDescription:
-      "Si te ha tocado ser miembro de mesa: plazos para excusarte, excusas aceptadas, la dieta de 75 €, permiso en el trabajo, qué pasa si no vas y horario del día.",
+      "Sorteo del 31 de octubre al 4 de noviembre; te lo notifican en 3 días y tienes 7 para excusarte. Se cobran 75 € sin IRPF. Qué hacer si te toca.",
     excerpt:
       "Cómo se elige la mesa electoral, los plazos del 29N, las excusas que se aceptan, la dieta, los permisos laborales y lo que se hace durante el día, según la LOREG.",
   },
@@ -93,7 +100,7 @@ const META: Record<Locale, { path: string; title: string; seoTitle: string; seoD
     title: "Drawn for polling-station duty in Spain on 29 November: the €75 pay, excuses and what to do",
     seoTitle: "Polling-station duty in Spain 2026: €75 pay, excuses, time off",
     seoDescription:
-      "Drawn to sit on a Spanish polling-station table (mesa electoral)? The deadlines to be excused, accepted reasons, the €75 allowance, time off work and the day.",
+      "Draw from 31 Oct to 4 Nov; you are notified within 3 days and have 7 to ask to be excused. The €75 allowance is tax-free. What to do if drawn.",
     excerpt:
       "How mesa members are drawn, the deadlines for the 29 November election, accepted excuses, the allowance, time off work and what happens on the day, from Spanish electoral law.",
   },
