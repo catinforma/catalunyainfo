@@ -142,14 +142,14 @@ function unlistedText(m: SnapshotMunicipality, locale: MuniLocale): string | nul
   if (locale === "ca") {
     const who =
       unlisted.length === 1
-        ? `al nucli de ${first!.name} uns altres dies, ${artList(first!.dates, "ca")}`
-        : `als nuclis de ${joinList(unlisted.map((n) => `${n.name} (${artList(n.dates, "ca")})`), "ca")} uns altres dies`;
+        ? `al nucli de ${first!.name} ${artList(first!.dates, "ca")}`
+        : `als nuclis de ${joinList(unlisted.map((n) => `${n.name} (${artList(n.dates, "ca")})`), "ca")}`;
     return `Les dades obertes de la Generalitat donen ${who}, però l'ordre del DOGC no ${unlisted.length === 1 ? "l'esmenta" : "els esmenta"}: només fixa els dies del municipi, que són els d'aquesta pàgina.`;
   }
   const who =
     unlisted.length === 1
-      ? `al núcleo de ${esName(first!.name)} otros días, ${artList(first!.dates, "es")}`
-      : `a los núcleos de ${joinList(unlisted.map((n) => `${esName(n.name)} (${artList(n.dates, "es")})`), "es")} otros días`;
+      ? `al núcleo de ${esName(first!.name)} ${artList(first!.dates, "es")}`
+      : `a los núcleos de ${joinList(unlisted.map((n) => `${esName(n.name)} (${artList(n.dates, "es")})`), "es")}`;
   return `Los datos abiertos de la Generalitat dan ${who}, pero la orden del DOGC no ${unlisted.length === 1 ? "lo menciona" : "los menciona"}: solo fija los días del municipio, que son los de esta página.`;
 }
 
@@ -559,7 +559,7 @@ export function comarcaCopy(g: ComarcaGroup, locale: MuniLocale): ComarcaCopy {
       breadcrumb: g.comarca,
       lead:
         `${caStart(caA(label))} ${n === 1 ? "hi ha 1 municipi" : `hi ha ${n} municipis`} amb festius locals al calendari oficial del ${YEAR}, que fixa ${LOCAL_ORDER.ca}${amended ? `, ${AMENDMENT.ca}` : ""}. ` +
-        `Cada ajuntament en proposa dos, que se sumen als dotze festius de tot Catalunya${withNuclei ? `; a ${withNuclei === 1 ? "1 municipi" : `${withNuclei} municipis`}, alguns nuclis en tenen de propis` : ""}.`,
+        `Cada ajuntament en proposa dos, que se sumen als dotze festius de tot Catalunya${withNuclei ? `; a ${withNuclei === 1 ? "un municipi" : `${withNuclei} municipis`}, alguns nuclis en tenen de propis` : ""}.`,
       nucleiOnly: nucleiOnly.length
         ? `${names(nucleiOnly)} no ${nucleiOnly.length === 1 ? "té" : "tenen"} dies per a tot el municipi: l'ordre els fixa nucli per nucli.`
         : null,
@@ -591,7 +591,7 @@ export function comarcaCopy(g: ComarcaGroup, locale: MuniLocale): ComarcaCopy {
     breadcrumb: g.comarca,
     lead:
       `En esta comarca ${n === 1 ? "hay 1 municipio" : `hay ${n} municipios`} con festivos locales en el calendario oficial de ${YEAR}, que fija ${LOCAL_ORDER.es}${amended ? `, ${AMENDMENT.es}` : ""}. ` +
-      `Cada ayuntamiento propone dos, que se suman a los doce festivos de toda Cataluña${withNuclei ? `; en ${withNuclei === 1 ? "1 municipio" : `${withNuclei} municipios`}, algunos núcleos tienen los suyos propios` : ""}.`,
+      `Cada ayuntamiento propone dos, que se suman a los doce festivos de toda Cataluña${withNuclei ? `; en ${withNuclei === 1 ? "un municipio" : `${withNuclei} municipios`}, algunos núcleos tienen los suyos propios` : ""}.`,
     nucleiOnly: nucleiOnly.length
       ? `${names(nucleiOnly)} no ${nucleiOnly.length === 1 ? "tiene" : "tienen"} días para todo el municipio: la orden los fija núcleo por núcleo.`
       : null,

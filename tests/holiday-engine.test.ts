@@ -10,6 +10,7 @@ import { ARTICLE_PATHS } from "../src/lib/content/features/shared.ts";
 import { buildMetadata } from "../src/lib/seo/metadata.ts";
 import {
   comarcaCopy,
+  comarcaLinkLabel,
   comarcaDescription,
   comarcaH1,
   comarcaTitle,
@@ -586,7 +587,7 @@ test("tranche 3: towns the order lists by nuclei only, and nuclei it does not na
   assert.deepEqual(montgai.unlisted, [{ name: "Butsènit", dates: ["2026-05-25", "2026-09-07"] }]);
   assert.equal(
     municipalityCopy(montgai, "ca", null, montgai.comarca).unlisted,
-    "Les dades obertes de la Generalitat donen al nucli de Butsènit uns altres dies, el 25 de maig i el 7 de setembre, però l'ordre del DOGC no l'esmenta: només fixa els dies del municipi, que són els d'aquesta pàgina.",
+    "Les dades obertes de la Generalitat donen al nucli de Butsènit el 25 de maig i el 7 de setembre, però l'ordre del DOGC no l'esmenta: només fixa els dies del municipi, que són els d'aquesta pàgina.",
   );
   // In la Baronia de Rialb, the open data's "Vilaplana" carries the Baix Camp municipality of Vilaplana's days.
   assert.ok(raw.includes("Vilaplana, 20 de gener i 15 de maig."));
@@ -596,7 +597,7 @@ test("tranche 3: towns the order lists by nuclei only, and nuclei it does not na
   assert.deepEqual(baronia.unlisted, [{ name: "Vilaplana", dates: ["2026-01-20", "2026-05-15"] }]);
   // The open data lists la Baronia by nuclei only, with the order's days: no correction.
   assert.equal(baronia.correction, null);
-  assert.match(municipalityCopy(baronia, "es", null, baronia.comarca).unlisted ?? "", /^Los datos abiertos de la Generalitat dan al núcleo de Vilaplana otros días/);
+  assert.match(municipalityCopy(baronia, "es", null, baronia.comarca).unlisted ?? "", /^Los datos abiertos de la Generalitat dan al núcleo de Vilaplana el 20 de enero y el 15 de mayo, pero la orden del DOGC no lo menciona/);
   assert.equal(SNAPSHOT.municipalities.filter((m) => m.unlisted).length, 2);
   for (const m of SNAPSHOT.municipalities) if (!m.unlisted) assert.equal(municipalityCopy(m, "ca", null, m.comarca).unlisted, null);
 });
@@ -644,6 +645,30 @@ test("tranche 3: comarca pages hold every town with its days, plus the comarca's
   assert.match(comarcaCopy(comarcaBySlug("aran")!, "ca").shops, /^Cap ajuntament de l'Aran no consta a la Resolució EMT\/4342\/2025/);
   // Nuclei-only towns are named on their comarca's page.
   assert.match(comarcaCopy(comarcaBySlug("aran")!, "ca").nucleiOnly ?? "", /Vielha e Mijaran/);
+});
+
+test("tranche 3 hub: every town one click away, grouped by comarca, the excluded councils named", () => {
+  for (const locale of MUNI_LOCALES) {
+    const t = hubCopy(locale);
+    assert.match(t.lead, /917 (municipis|municipios), per comarques|917 (municipis|municipios), por comarcas/);
+    assert.match(t.excludedLead, /30 (municipis|municipios)/);
+    assert.match(t.excludedLead, /proposta no formulada/);
+    assert.ok(!/més poblats|más poblados/.test(JSON.stringify({ ...t, towns: null, table: null, more: null })), locale);
+    assert.equal(t.table("Alt Empordà", 68), comarcaLinkLabel("Alt Empordà", 68, locale));
+  }
+  assert.equal(comarcaLinkLabel("Alt Empordà", 68, "ca"), "Festius locals de l'Alt Empordà: els 68 municipis, en una taula");
+  assert.equal(comarcaLinkLabel("Osona", 41, "es"), "Festivos locales Osona: los 41 municipios, en una tabla");
+  const hub = readFileSync(join(ROOT, "src/components/programmatic/holidays/HubPage.tsx"), "utf8");
+  // The largest towns with their days, the rest folded by name (all linked), the comarca's table, the jump list, the exclusions.
+  assert.match(hub, /group\.municipalities\.slice\(0, HUB_VISIBLE\)/);
+  assert.match(hub, /group\.municipalities\.slice\(HUB_VISIBLE\)/);
+  assert.match(hub, /<details/);
+  assert.match(hub, /comarcaPath\(locale, group\.slug\)/);
+  assert.match(hub, /href=\{`#\$\{comarcaAnchor\(group\.comarca\)\}`\}/);
+  assert.match(hub, /SNAPSHOT\.excluded/);
+  // Date pages link a nucleus's municipality.
+  const datePage = readFileSync(join(ROOT, "src/components/programmatic/holidays/DatePage.tsx"), "utf8");
+  assert.match(datePage, /href \? <Link href=\{href\}>\{parent\}<\/Link> : parent/);
 });
 
 /* -------------------------------------------------------------------------- */

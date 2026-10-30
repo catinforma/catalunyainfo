@@ -82,22 +82,21 @@ export function HubPage({ locale }: { locale: MuniLocale }) {
                   <span className="text-[var(--color-muted)]">{t.towns(group.municipalities.length)} · </span>
                   <Link href={comarcaPath(locale, group.slug)}>{t.table(group.comarca, group.municipalities.length)}</Link>
                 </p>
-                <ul className="mt-3 grid list-none gap-2 p-0 sm:grid-cols-2 lg:grid-cols-3">
+                {/* ~900 items on one page: styles sit on the lists, not on each item, to keep the HTML small. */}
+                <ul className="mt-3 grid list-none gap-2 p-0 sm:grid-cols-2 lg:grid-cols-3 [&_small]:block [&_small]:text-xs [&_small]:text-[var(--color-muted)]">
                   {visible.map((m) => (
                     <li key={m.slug}>
                       <Link href={municipalityPath(locale, m.slug)}>{displayName(m, locale)}</Link>
-                      <span className="block text-xs text-[var(--color-muted)]">
-                        {m.local.length > 0 ? joinList(m.local.map((d) => dayMonth(d, locale)), locale) : t.byNucleus}
-                      </span>
+                      <small>{m.local.length > 0 ? joinList(m.local.map((d) => dayMonth(d, locale)), locale) : t.byNucleus}</small>
                     </li>
                   ))}
                 </ul>
                 {rest.length > 0 ? (
                   <details className="mt-3">
                     <summary className="cursor-pointer text-sm">{t.more(rest.length)}</summary>
-                    <ul className="mt-2 list-none columns-2 gap-x-6 p-0 text-sm sm:columns-3 lg:columns-4">
+                    <ul className="mt-2 list-none columns-2 gap-x-6 p-0 text-sm sm:columns-3 lg:columns-4 [&>li]:break-inside-avoid [&>li]:py-0.5">
                       {rest.map((m) => (
-                        <li key={m.slug} className="break-inside-avoid py-0.5">
+                        <li key={m.slug}>
                           <Link href={municipalityPath(locale, m.slug)}>{displayName(m, locale)}</Link>
                         </li>
                       ))}
@@ -113,12 +112,12 @@ export function HubPage({ locale }: { locale: MuniLocale }) {
           <section className="mt-12" aria-labelledby="ci-hol-excluded">
             <h2 id="ci-hol-excluded">{t.excludedTitle}</h2>
             <p className="ci-measure mt-3">{t.excludedLead}</p>
-            <ul className="mt-3 list-none columns-1 gap-x-6 p-0 text-sm sm:columns-2 lg:columns-3">
+            <ul className="mt-3 list-none columns-1 gap-x-6 p-0 text-sm sm:columns-2 lg:columns-3 [&>li]:break-inside-avoid [&>li]:py-0.5 [&_span]:text-[var(--color-muted)]">
               {[...SNAPSHOT.excluded]
                 .sort((a, b) => a.name.localeCompare(b.name, "ca"))
                 .map((e) => (
-                  <li key={e.ine} className="break-inside-avoid py-0.5">
-                    {show(e.name)} <span className="text-[var(--color-muted)]">({e.comarca})</span>
+                  <li key={e.ine}>
+                    {show(e.name)} <span>({e.comarca})</span>
                   </li>
                 ))}
             </ul>

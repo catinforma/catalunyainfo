@@ -20,7 +20,7 @@ import {
   type DatePage,
   type MuniLocale,
 } from "@/lib/programmatic/holidays/paths";
-import { holidayHubDataset, municipalityDataset } from "@/lib/programmatic/holidays/structured";
+import { comarcaDataset, holidayHubDataset, municipalityDataset } from "@/lib/programmatic/holidays/structured";
 import { breadcrumbSchema, faqSchema, graph } from "@/lib/seo/jsonld";
 import { buildMetadata } from "@/lib/seo/metadata";
 
@@ -121,7 +121,7 @@ export function ComarcaRoute({ locale, slug }: { locale: MuniLocale; slug: strin
       <main id="main">
         <ComarcaPage g={g} locale={locale} />
       </main>
-      <JsonLd json={graph([breadcrumbSchema(comarcaCrumbs(g, locale))])} />
+      <JsonLd json={graph([breadcrumbSchema(comarcaCrumbs(g, locale)), comarcaDataset(g, locale)])} />
       <SiteFooter locale={locale} />
     </>
   );
