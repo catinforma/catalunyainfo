@@ -311,6 +311,40 @@ test("airport: official figures only, no operator link or fare for the express b
   assert.ok(AIRPORT.sources.every((s) => !/aerobus/i.test(s.url)), "no operator source");
 });
 
+/**
+ * ZBE day permit, 30 Oct 2026 (zberegistre AutoritzacionsDiaries and FAQ,
+ * zbe.barcelona vehicles-afectats): any vehicle without a DGT label, Spanish
+ * or foreign, up to 24 days a year from the registration decision, 5 € (6 €
+ * vans and heavier), notify and pay until 23:59 the day after, registration
+ * first (up to 15 working days). The ES page's queries are about this permit.
+ */
+test("ZBE: a day-permit section and FAQ in every locale; the ES snippet promises it", () => {
+  const facts: Record<"ca" | "es" | "en", RegExp[]> = {
+    ca: [/qualsevol vehicle sense etiqueta/, /fins a 24 dies de circulació l'any/, /5 € per dia/, /6 € per a furgonetes/, /23:59 de l'endemà/, /15 dies hàbils/, /no es pot anul·lar/],
+    es: [/cualquier vehículo sin etiqueta/, /hasta 24 días de circulación al año/, /5 € por día/, /6 € para furgonetas/, /23:59 del día siguiente/, /15 días hábiles/, /no se puede cancelar/],
+    en: [/any vehicle without a DGT environmental label/, /up to 24 driving days a year/, /€5 a day/, /€6 for vans/, /23:59 on the day after/, /15 working days/, /cannot be cancelled/],
+  };
+  const faqWords = { ca: /autorització diària/, es: /autorización diaria/, en: /day permit/ };
+  for (const locale of ["ca", "es", "en"] as const) {
+    const blocks = ZBE.editions[locale].blocks as { type: string; title?: string; items?: { question?: string; title?: string; text?: string }[] }[];
+    const text = bodyToPlainText(ZBE.editions[locale].blocks);
+    for (const fact of facts[locale]) assert.match(text, fact, `${locale}: ${fact}`);
+    const stepsBlock = blocks.find((b) => b.type === "steps" && b.items?.some((i) => /zberegistre\.ambmobilitat\.cat\/(ca|es|en)\/AutoritzacionsDiaries/.test(i.text ?? "")));
+    assert.ok(stepsBlock, `${locale}: how-to steps linking the register's day-permit page`);
+    const questions = blocks.filter((b) => b.type === "faq").flatMap((b) => b.items ?? []).map((i) => i.question ?? "");
+    assert.ok(questions.filter((q) => faqWords[locale].test(q)).length >= 2, `${locale}: day-permit questions in the FAQ`);
+  }
+  const es = ZBE.editions.es;
+  assert.ok(es.seoTitle.length <= 60, `es title: ${es.seoTitle.length}`);
+  assert.ok(es.seoDescription.length <= 155, `es description: ${es.seoDescription.length}`);
+  assert.match(es.seoTitle, /^Autorización diaria ZBE Barcelona/);
+  assert.match(es.seoDescription, /sin etiqueta/);
+  assert.match(es.seoDescription, /24 días al año/);
+  assert.match(es.seoDescription, /5 € el día/);
+  assert.match(es.seoDescription, /coche extranjero/);
+  assert.doesNotMatch(bodyToPlainText(es.blocks), /Autorizaciones diarias: cómo se usan y se pagan/);
+});
+
 test("the ZBE page states working days, not calendar days", () => {
   assert.match(bodyToPlainText(ZBE.editions.ca.blocks), /15 dies hàbils/);
   assert.match(bodyToPlainText(ZBE.editions.es.blocks), /15 días hábiles/);

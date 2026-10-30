@@ -535,7 +535,14 @@ const ZBE_SOURCES = [
 // Spanish or English. Not printed: whether weekday public holidays are exempt
 // (the page says "dies laborables, de dilluns a divendres" and nothing more)
 // and any map we could link.
-const ZBE_VERIFIED = "2026-10-28";
+// Re-checked 30 Oct 2026 for the day-permit section (ZBE_DAY_PERMIT below):
+// zbe.barcelona la-zbe ("de 7.00 h a 20.00 h de dilluns a divendres", "més de
+// 95 km2", same exclusions), vehicles-afectats (vehicles "sense etiqueta
+// ambiental", "multa a partir de 200 euros"), the register's FAQ (7 € for a
+// qualifying foreign car; 5 € / 6 € a day since January 2022). The table's
+// note keeps its own date (28 Oct). Not re-read: the end of the 2026
+// suspension on 16 March (left as written).
+const ZBE_VERIFIED = "2026-10-30";
 
 const ZBE_TABLE: Record<"ca" | "es" | "en", { title: string; caption: string; headers: string[]; rows: string[][]; note: string }> = {
   ca: {
@@ -579,6 +586,125 @@ const ZBE_TABLE: Record<"ca" | "es" | "en", { title: string; caption: string; he
 function zbeTable(locale: "ca" | "es" | "en"): Block[] {
   const t = ZBE_TABLE[locale];
   return [...h2(t.title), table(t.caption, t.headers, t.rows, t.note)];
+}
+
+// The day permit for any vehicle without a DGT label, Spanish or foreign
+// (Search Console: "autorización diaria ZBE", "permiso diario zona bajas
+// emisiones barcelona", "como pedir autorización zbe"). Read on 30 Oct 2026:
+//  - zberegistre AutoritzacionsDiaries (ca/es/en, "Actualizado: 16/12/2024"):
+//    "Los vehículos que no cumplen los requisitos para circular por las ZBE …
+//    deben inscribirse en el Registro para poder solicitar hasta 24
+//    autorizaciones (accesos diarios) al año"; "se concederán hasta 24 días de
+//    circulación al año, a contar desde la fecha de resolución del
+//    expediente"; unused days do not carry over; the vehicle's registration
+//    is resolved "en los 15 días hábiles siguientes" and meanwhile no day
+//    permit can be requested; "comunicar y pagar la tasa correspondiente antes
+//    de las 23.59 horas del día posterior" (online; other channels follow
+//    their opening hours); registration online with a digital ID, by post,
+//    or in person at the AMB's office (C/ 62, 16-18, Zona Franca) "únicamente
+//    con cita previa"; days paid in the user area, at any Correos office
+//    ("con un coste de gestión añadido") or at that office by appointment;
+//    "Las autorizaciones no serán transferibles entre vehículos".
+//    Reduced fee (FAQ): 2 € for L, M1 and N1 vehicles without a label
+//    "censats en l'àmbit de les ZBE" whose keeper's income is low, free below
+//    a lower income threshold. Not printed: that registering for day permits
+//    is free (no page says so outright).
+//  - zberegistre PreguntesFrequents: "Disponibles per a tots els tipus de
+//    vehicles que necessitin un accés esporàdic a les ZBE"; "Des del gener del
+//    2022, el cost és de 5 € per a turismes, motocicletes i ciclomotors, i de
+//    6 € per a furgonetes, camions, autocars i autobusos"; dates can be changed
+//    "fins al dia anterior a la circulació" and "no es poden cancel·lar si ja
+//    s'han abonat"; idCAT, Cl@ve, electronic DNI or FNMT for the web form.
+//  - zbe.barcelona vehicles-afectats: metropolitan and other Spanish vehicles
+//    without a label, "accés esporàdic … amb un màxim de 24 dies de circulació
+//    autoritzada per any".
+// Left out, as before: the medical-urgency deadline (the register says three
+// days counting the day driven, the FAQ two days after) and the income
+// thresholds of the reduced fees.
+const ZBE_DAY_PERMIT: Record<"ca" | "es" | "en", { title: string; paragraphs: string[]; stepsTitle: string; steps: { title: string; text: string }[] }> = {
+  ca: {
+    title: "Autorització diària de la ZBE: per a qualsevol cotxe sense etiqueta",
+    paragraphs: [
+      "L'autorització diària serveix a **qualsevol vehicle sense etiqueta ambiental de la DGT** que hagi d'entrar a la ZBE de tant en tant, tant si està matriculat a l'àrea metropolitana com a la resta d'Espanya o a l'estranger. Dona **fins a 24 dies de circulació l'any**, comptats des de la data en què s'accepta el registre del vehicle; els dies que no facis servir no s'acumulen per a l'any següent.",
+      "**Preu:** 5 € per dia per a turismes, motos i ciclomotors, i 6 € per a furgonetes, camions, autocars i autobusos (taxes vigents des del gener del 2022; l'AMB les revisa i les publica cada any). Si el vehicle (moto, turisme o furgoneta) està censat a l'àmbit de les ZBE metropolitanes i els ingressos del titular són baixos, la taxa baixa a 2 € o és gratuïta.",
+    ],
+    stepsTitle: "Com es demana l'autorització diària",
+    steps: [
+      {
+        title: "Registra el vehicle una sola vegada",
+        text: "El titular (persona o empresa) l'inscriu al [registre de la ZBE de l'AMB](https://zberegistre.ambmobilitat.cat/ca/AutoritzacionsDiaries). En línia cal identificació digital (idCAT, Cl@ve, DNI electrònic o certificat de la FNMT); també es pot enviar el formulari per correu postal o presentar-lo a l'oficina de l'AMB a la Zona Franca (carrer 62, 16-18), amb cita prèvia.",
+      },
+      {
+        title: "Espera que l'acceptin",
+        text: "L'alta es resol en un màxim de 15 dies hàbils, i mentrestant no es poden demanar autoritzacions diàries. Registra't amb temps, no el dia del viatge.",
+      },
+      {
+        title: "Comunica i paga cada dia que hi circulis",
+        text: "A la teva àrea d'usuari del web, fins a les 23:59 de l'endemà del dia que hi hagis circulat. També es pot fer a qualsevol oficina de Correus, amb un cost de gestió afegit, o a l'oficina de l'AMB amb cita prèvia, dins del seu horari.",
+      },
+      {
+        title: "Canvis",
+        text: "Pots canviar la data fins al dia abans de circular. Una autorització pagada no es pot anul·lar ni passar a un altre vehicle.",
+      },
+    ],
+  },
+  es: {
+    title: "Autorización diaria de la ZBE: para cualquier coche sin etiqueta",
+    paragraphs: [
+      "La autorización diaria sirve para **cualquier vehículo sin etiqueta ambiental de la DGT** que tenga que entrar en la ZBE de forma puntual, esté matriculado en el área metropolitana, en el resto de España o en el extranjero. Da **hasta 24 días de circulación al año**, contados desde la fecha en que se acepta el registro del vehículo; los días que no uses no se acumulan para el año siguiente.",
+      "**Precio:** 5 € por día para turismos, motos y ciclomotores, y 6 € para furgonetas, camiones, autocares y autobuses (tasas vigentes desde enero de 2022; la AMB las revisa y publica cada año). Si el vehículo (moto, turismo o furgoneta) está censado en el ámbito de las ZBE metropolitanas y el titular tiene ingresos bajos, la tasa baja a 2 € o es gratuita.",
+    ],
+    stepsTitle: "Cómo se pide la autorización diaria",
+    steps: [
+      {
+        title: "Registra el vehículo una sola vez",
+        text: "El titular (persona o empresa) lo inscribe en el [registro de la ZBE de la AMB](https://zberegistre.ambmobilitat.cat/es/AutoritzacionsDiaries). En línea hace falta identificación digital (idCAT, Cl@ve, DNI electrónico o certificado de la FNMT); también se puede enviar el formulario por correo postal o presentarlo en la oficina de la AMB en la Zona Franca (calle 62, 16-18), con cita previa.",
+      },
+      {
+        title: "Espera a que lo acepten",
+        text: "El alta se resuelve en un máximo de 15 días hábiles, y mientras tanto no se pueden pedir autorizaciones diarias. Regístrate con tiempo, no el día del viaje.",
+      },
+      {
+        title: "Comunica y paga cada día que circules",
+        text: "En tu área de usuario de la web, hasta las 23:59 del día siguiente al que hayas circulado. También se puede hacer en cualquier oficina de Correos, con un coste de gestión añadido, o en la oficina de la AMB con cita previa, dentro de su horario.",
+      },
+      {
+        title: "Cambios",
+        text: "Puedes cambiar la fecha hasta el día antes de circular. Una autorización pagada no se puede cancelar ni pasar a otro vehículo.",
+      },
+    ],
+  },
+  en: {
+    title: "ZBE day permit: for any car without a DGT label",
+    paragraphs: [
+      "The day permit is for **any vehicle without a DGT environmental label** that needs to enter the zone now and then, whether it is registered in the Barcelona area, elsewhere in Spain or abroad. It gives **up to 24 driving days a year**, counted from the date the vehicle's registration is accepted; unused days do not carry over to the next year.",
+      "**Price:** €5 a day for cars, motorbikes and mopeds, and €6 for vans, lorries, coaches and buses (the fees in force since January 2022; the AMB reviews and publishes them each year). If the vehicle (a motorbike, car or van) is registered to an address inside the metropolitan low-emission zones and the keeper's income is low, the fee drops to €2 or is waived.",
+    ],
+    stepsTitle: "How to get a day permit",
+    steps: [
+      {
+        title: "Register the vehicle once",
+        text: "The keeper (a person or a company) enters it in the [AMB's ZBE register](https://zberegistre.ambmobilitat.cat/en/AutoritzacionsDiaries). Online you need a Spanish digital ID (idCAT, Cl@ve, an electronic DNI or an FNMT certificate); you can also post the form, or hand it in at the AMB office in the Zona Franca (Carrer 62, 16-18) by appointment.",
+      },
+      {
+        title: "Wait for it to be accepted",
+        text: "Registration is decided within 15 working days, and until then no day permit can be requested. Register well before the trip.",
+      },
+      {
+        title: "Notify and pay for each day you drive in",
+        text: "In your user area on the website, until 23:59 on the day after you drove in. You can also do it at any Correos post office, for an extra handling fee, or at the AMB office by appointment, within its opening hours.",
+      },
+      {
+        title: "Changes",
+        text: "You can change the date until the day before you drive. A permit you have paid for cannot be cancelled or moved to another vehicle.",
+      },
+    ],
+  },
+};
+
+function zbeDayPermit(locale: "ca" | "es" | "en"): Block[] {
+  const t = ZBE_DAY_PERMIT[locale];
+  return [...h2(t.title, ...t.paragraphs), steps(t.stepsTitle, t.steps)];
 }
 
 export const ZBE: B2Article = {
@@ -638,7 +764,7 @@ export const ZBE: B2Article = {
           { label: "Dièsel (turismes)", value: "Euro 4 o superior" },
           { label: "Autoritzacions esporàdiques", value: "Fins a 24 diàries l'any" },
           { label: "Horari", value: "Dl.–dv., 7:00–20:00" },
-          { label: "Última verificació", value: "28 d'octubre de 2026" },
+          { label: "Última verificació", value: "30 d'octubre de 2026" },
         ]),
         ...h2(
           "Quins requisits ambientals demanen",
@@ -657,11 +783,7 @@ export const ZBE: B2Article = {
           "Quant costa",
           "Si el vehicle compleix els requisits, la inscripció té una **taxa de gestió de 7 €, una sola vegada**. Si no els compleix, inscriure'l no costa res, i cada autorització diària costa **5 €** per a turismes i motos i **6 €** per a furgonetes, segons les taxes vigents des del gener del 2022; l'AMB les revisa i les publica cada any.",
         ),
-        ...h2(
-          "Autoritzacions diàries: com funcionen",
-          "Un cop acceptada la inscripció, tens fins a **24 dies de circulació l'any**, comptats des de la data de resolució; els que no facis servir no s'acumulen per a l'any següent. Has de **comunicar i pagar cada dia abans de les 23:59 de l'endemà** del dia que hi hagis circulat.",
-          "Les dates es poden canviar fins al dia abans de circular, però una autorització ja pagada no es pot anul·lar.",
-        ),
+        ...zbeDayPermit("ca"),
         ...h2(
           "I si hi entro sense registrar?",
           "Segons l'AMB, un vehicle estranger que compleix els requisits però no s'ha registrat abans pot rebre una **multa a partir de 200 euros**.",
@@ -711,6 +833,10 @@ export const ZBE: B2Article = {
           `Si has de posar benzina abans d'entrar-hi, aquí tens [les benzineres més barates de Barcelona ara](${fuelPath("ca", "city", "barcelona")}), amb el preu oficial del Ministeri.`,
         ),
         faq([
+          { question: "Com es demana l'autorització diària de la ZBE?", answer: "Primer registres el vehicle una sola vegada al registre de la ZBE de l'AMB, que el resol en un màxim de 15 dies hàbils. Després, cada dia que hi circulis el comuniques i el pagues a l'àrea d'usuari del web, fins a les 23:59 de l'endemà." },
+          { question: "Quants dies l'any pot entrar a la ZBE un cotxe sense etiqueta?", answer: "Fins a 24 dies l'any amb autoritzacions diàries, comptats des que s'accepta el registre del vehicle. Val per a cotxes sense etiqueta matriculats a Espanya o a l'estranger; els dies no utilitzats no passen a l'any següent." },
+          { question: "Quant costa l'autorització diària de la ZBE de Barcelona?", answer: "5 € per dia per a turismes, motos i ciclomotors, i 6 € per a furgonetes, camions, autocars i autobusos. Amb el vehicle censat a l'àmbit de les ZBE i ingressos baixos, 2 € o res." },
+          { question: "Puc demanar l'autorització diària després d'haver entrat a la ZBE?", answer: "Sí, fins a les 23:59 de l'endemà, però només si el vehicle ja estava registrat. El registre triga fins a 15 dies hàbils, i mentrestant no es poden demanar autoritzacions diàries." },
           { question: "Un cotxe estranger pot entrar a la ZBE de Barcelona?", answer: "Sí, si abans l'inscrius al registre de l'AMB: amb gasolina Euro 3 o dièsel Euro 4 o superior, una taxa de 7 € una sola vegada; si no compleix, fins a 24 autoritzacions diàries l'any." },
           { question: "Quin és l'horari de la ZBE de Barcelona?", answer: "De dilluns a divendres, de 7:00 a 20:00, tot l'any. Fora d'aquest horari i el cap de setmana no s'aplica la restricció permanent." },
           { question: "Quins dièsel poden entrar a la ZBE?", answer: "Els Euro 4 o superiors, habitualment els matriculats a partir del 2005 o 2006. Mana el nivell Euro del permís de circulació." },
@@ -724,21 +850,21 @@ export const ZBE: B2Article = {
 
     es: {
       path: "guias/zbe-barcelona-vehiculos-extranjeros",
-      title: "ZBE de Barcelona: qué hacer si llegas con un coche extranjero",
-      seoTitle: "Autorización ZBE Barcelona: cómo pedirla (coche extranjero)",
+      title: "ZBE de Barcelona: autorización diaria para coches sin etiqueta y qué hacer con un coche extranjero",
+      seoTitle: "Autorización diaria ZBE Barcelona: cómo pedirla y precio",
       seoDescription:
-        "Cómo pedir la autorización para entrar en la ZBE de Barcelona con matrícula extranjera: registro AMB (7 €), hasta 15 días hábiles, 24 días al año.",
+        "Autorización diaria ZBE Barcelona sin etiqueta: 24 días al año, 5 € el día. Cómo pedirla en la AMB, plazos y qué hacer con un coche extranjero (7 €).",
       excerpt:
-        "Con matrícula extranjera hay que registrarse antes de circular por la ZBE. La comprobación ordinaria puede tardar hasta 15 días hábiles.",
+        "Un coche sin etiqueta, español o extranjero, puede entrar en la ZBE hasta 24 días al año con la autorización diaria (5 € el día). Antes hay que registrarlo, y el registro tarda hasta 15 días hábiles.",
       blocks: [
         lead(
-          "Para entrar en la ZBE de Barcelona con un coche de matrícula extranjera hay que inscribirlo antes en el Registro metropolitano de la AMB, porque los vehículos extranjeros no tienen etiqueta de la DGT. Si cumple los requisitos (gasolina Euro 3, diésel Euro 4) la inscripción cuesta 7 € una sola vez; si no, puedes pedir hasta 24 autorizaciones diarias al año a 5 € cada una. La zona funciona de lunes a viernes de 7:00 a 20:00.",
+          "Un coche sin etiqueta ambiental de la DGT, con matrícula española o extranjera, puede entrar en la ZBE de Barcelona hasta 24 días al año con la autorización diaria de la AMB: se registra el vehículo una vez y se pagan 5 € por cada día que circules (6 € las furgonetas). Un coche extranjero que cumple los requisitos (gasolina Euro 3, diésel Euro 4) se inscribe una sola vez por 7 € y después circula libremente. La zona funciona de lunes a viernes de 7:00 a 20:00.",
         ),
         ...paras("La comprobación ordinaria puede tardar hasta **15 días hábiles**, y hasta que llega la confirmación el vehículo no consta como registrado y no puede circular por la ZBE."),
         callout(
           "warning",
           "Respuesta rápida",
-          "Los vehículos con matrícula extranjera no tienen etiqueta ambiental de la DGT, y por eso todos deben registrarse antes de circular por la ZBE. Tramítalo antes del viaje.",
+          "La autorización diaria se puede pagar hasta las 23:59 del día siguiente, pero solo si el vehículo ya está registrado, y el registro tarda hasta 15 días hábiles. Los coches con matrícula extranjera no tienen etiqueta de la DGT, así que también deben registrarse. Tramítalo antes del viaje.",
         ),
         keyFacts("Datos clave", [
           { label: "Registro previo", value: "Obligatorio para toda matrícula extranjera" },
@@ -747,8 +873,9 @@ export const ZBE: B2Article = {
           { label: "Diésel (turismos)", value: "Euro 4 o superior" },
           { label: "Autorizaciones esporádicas", value: "Hasta 24 diarias al año" },
           { label: "Horario", value: "L–V, 7:00–20:00" },
-          { label: "Última verificación", value: "28 de octubre de 2026" },
+          { label: "Última verificación", value: "30 de octubre de 2026" },
         ]),
+        ...zbeDayPermit("es"),
         ...h2(
           "Requisitos ambientales",
           "Los turismos de gasolina deben cumplir al menos **Euro 3** y los diésel **Euro 4** para obtener la autorización ambiental de larga duración.",
@@ -765,11 +892,6 @@ export const ZBE: B2Article = {
         ...h2(
           "Cuánto cuesta",
           "Si el vehículo cumple los requisitos, la inscripción tiene una **tasa de gestión de 7 €, una sola vez**. Si no los cumple, inscribirlo no cuesta nada, y cada autorización diaria cuesta **5 €** para turismos y motos y **6 €** para furgonetas, según las tasas vigentes desde enero de 2022; la AMB las revisa y las publica cada año.",
-        ),
-        ...h2(
-          "Autorizaciones diarias: cómo se usan y se pagan",
-          "Una vez aceptada la inscripción, tienes hasta **24 días de circulación al año**, contados desde la fecha de resolución; los que no uses no se acumulan para el año siguiente. Hay que **comunicar y pagar cada día antes de las 23:59 del día siguiente** al que hayas circulado.",
-          "Las fechas se pueden cambiar hasta el día antes de circular, pero una autorización ya pagada no se puede cancelar.",
         ),
         ...h2(
           "Multa si entras sin registrar",
@@ -817,6 +939,10 @@ export const ZBE: B2Article = {
           `Si tienes que repostar antes de entrar, aquí tienes [las gasolineras más baratas de Barcelona ahora](${fuelPath("es", "city", "barcelona")}), con el precio oficial del Ministerio.`,
         ),
         faq([
+          { question: "¿Cómo se pide la autorización diaria de la ZBE?", answer: "Primero registras el vehículo una sola vez en el registro de la ZBE de la AMB, que lo resuelve en un máximo de 15 días hábiles. Después, cada día que circules lo comunicas y lo pagas en el área de usuario de la web, hasta las 23:59 del día siguiente." },
+          { question: "¿Cuántos días al año puede entrar en la ZBE un coche sin etiqueta?", answer: "Hasta 24 días al año con autorizaciones diarias, contados desde que se acepta el registro del vehículo. Vale para coches sin etiqueta matriculados en España o en el extranjero; los días no usados no pasan al año siguiente." },
+          { question: "¿Cuánto cuesta el permiso diario de la ZBE de Barcelona?", answer: "5 € por día para turismos, motos y ciclomotores, y 6 € para furgonetas, camiones, autocares y autobuses. Con el vehículo censado en el ámbito de las ZBE e ingresos bajos, 2 € o nada." },
+          { question: "¿Puedo pedir la autorización diaria después de haber entrado en la ZBE?", answer: "Sí, hasta las 23:59 del día siguiente, pero solo si el vehículo ya estaba registrado. El registro tarda hasta 15 días hábiles, y mientras tanto no se pueden pedir autorizaciones diarias." },
           { question: "¿Puede entrar un coche extranjero en la ZBE de Barcelona?", answer: "Sí, si antes lo inscribes en el registro de la AMB: con gasolina Euro 3 o diésel Euro 4 o superior, una tasa de 7 € una sola vez; si no cumple, hasta 24 autorizaciones diarias al año." },
           { question: "¿Cuál es el horario de la ZBE de Barcelona?", answer: "De lunes a viernes, de 7:00 a 20:00, todo el año. Fuera de ese horario y el fin de semana no se aplica la restricción permanente." },
           { question: "¿Qué diésel pueden entrar en la ZBE?", answer: "Los Euro 4 o superiores, normalmente los matriculados a partir de 2005 o 2006. Manda el nivel Euro del permiso de circulación." },
@@ -856,7 +982,7 @@ export const ZBE: B2Article = {
           { label: "Diesel cars", value: "Euro 4 or higher" },
           { label: "Day authorisations", value: "Up to 24 per year" },
           { label: "Hours", value: "Mon–Fri, 07:00–20:00" },
-          { label: "Last verified", value: "28 October 2026" },
+          { label: "Last verified", value: "30 October 2026" },
         ]),
         ...h2(
           "Environmental standards",
@@ -875,11 +1001,7 @@ export const ZBE: B2Article = {
           "What it costs",
           "If your vehicle meets the standard, registration carries a **€7 handling fee, once**. If it does not, registering it is free and each day permit costs **€5** for cars and motorbikes and **€6** for vans, under the fees in force since January 2022; the AMB reviews and publishes them each year.",
         ),
-        ...h2(
-          "Day permits: 24 a year",
-          "Once your registration is accepted you get up to **24 driving days a year**, counted from the date of the decision; unused days do not carry over. You must **notify and pay for each day before 23:59 on the following day**.",
-          "You can change the dates until the day before you drive, but a permit you have paid for cannot be cancelled.",
-        ),
+        ...zbeDayPermit("en"),
         ...h2(
           "What if you drive in without registering",
           "According to the AMB, a foreign vehicle that meets the standard but was not registered in advance can be fined **from €200**.",
@@ -925,6 +1047,10 @@ export const ZBE: B2Article = {
           `Street parking is a separate question: ${b2link("parking", "en", "Barcelona's blue and green zones")}.`,
         ),
         faq([
+          { question: "How do I get a Barcelona ZBE day permit?", answer: "Register the vehicle once in the AMB's ZBE register, which decides within 15 working days. Then, for each day you drive in, notify and pay in your user area on the website until 23:59 the following day." },
+          { question: "How many days a year can a car without a label enter the zone?", answer: "Up to 24 days a year with day permits, counted from the date the vehicle's registration is accepted. This applies to cars without a label registered in Spain or abroad; unused days do not carry over." },
+          { question: "How much does a ZBE day permit cost?", answer: "€5 a day for cars, motorbikes and mopeds, and €6 for vans, lorries, coaches and buses. For vehicles registered inside the metropolitan zones whose keeper has a low income, €2 or nothing." },
+          { question: "Can I get the day permit after driving into the zone?", answer: "Yes, until 23:59 the following day, but only if the vehicle was already registered. Registration takes up to 15 working days, and no day permit can be requested until it is accepted." },
           { question: "Can foreign cars drive in Barcelona's low emission zone?", answer: "Yes, once registered with the AMB: a petrol Euro 3 or diesel Euro 4 car (or better) pays a €7 fee once; one that does not qualify can use up to 24 day permits a year." },
           { question: "What are the Barcelona low emission zone hours?", answer: "Monday to Friday, 07:00 to 20:00, all year. Outside those hours and at weekends the permanent restriction does not apply." },
           { question: "Can a diesel car enter the Barcelona LEZ?", answer: "Yes if it is Euro 4 or higher, which usually means registered from 2005 or 2006. The Euro level on your registration document is what counts." },
