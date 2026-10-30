@@ -62,8 +62,10 @@ export interface HolidayData {
 
 export interface TodayStrike {
   id: string;
-  /** Every day of strike action, ascending. */
+  /** Every day of strike action, ascending. An indefinite strike lists its first day only. */
   dates: string[];
+  /** An indefinite strike: on every day from `dates[0]`, up to `endedOn` once it has ended. */
+  indefinite?: { endedOn?: string };
   /** "vaga general de 24 hores". */
   title: string;
   /** One line on minimum services, as the strikes page states it. */
@@ -211,8 +213,13 @@ export function nextBridge(today: string, data: Pick<HolidayData, "regional">): 
 /* Strikes                                                                    */
 /* -------------------------------------------------------------------------- */
 
+/** The strikes on `date`: one of its days, or any day of an indefinite strike from its first day until it ended. */
 export function strikesOn(date: string, strikes: readonly TodayStrike[]): TodayStrike[] {
-  return strikes.filter((strike) => strike.dates.includes(date));
+  return strikes.filter((strike) => {
+    if (!strike.indefinite) return strike.dates.includes(date);
+    const end = strike.indefinite.endedOn;
+    return (strike.dates[0] ?? "") <= date && (!end || date <= end);
+  });
 }
 
 /** The first strike day strictly after `after`, with its strike. */

@@ -47,6 +47,14 @@ import { STRIKE_URLS } from "./strikes";
  * doctors' indefinite strike since 28 Oct (Metges de Catalunya), from the
  * Generalitat's order of 22 Oct; both also sit in the strikes hub.
  *
+ * Re-checked on the evening of 30 Oct 2026: still no 11N order in the DOGC
+ * (up to núm. 9784, 30 Oct) or on Treball's e-Tauler list (newest 23 Oct), no
+ * 11N resolution on the Ministry of Transport's rail or air lists, no notice at
+ * Rodalies, Renfe, TMB or FGC, and neither 11n.cat nor ugt.cat gives a
+ * demonstration time or place. The doctors' order is now cited by its DOGC
+ * number (Ordre EMT/209/2026), and Ouigo's minimum services by the Ministry's
+ * own resolution of 27 Oct.
+ *
  * Left out on purpose: the demonstrations' times and places (no organiser had
  * published them), any minimum-service figure for 11N, anything about taxis
  * beyond what the 2024 orders say (nothing), and health or school advice that
@@ -191,9 +199,10 @@ const BASE_SOURCES: B2Source[] = [
   { name: "Renfe", url: U.renfe, publisher: "Renfe" },
   { name: "OUIGO España", url: U.ouigo, publisher: "OUIGO España" },
   { name: "Trenes afectados por huelga de maquinistas (servicios mínimos aprobados por el Ministerio de Transportes)", url: U.ouigoStrike, publisher: "OUIGO España" },
+  { name: "Resolución de 27 de octubre de 2026: servicios mínimos durante la huelga convocada por SEMAF en OUIGO España", url: U.ouigoResolution, publisher: "Ministerio de Transportes y Movilidad Sostenible" },
   { name: "Infovuelos", url: U.aena, publisher: "Aena" },
   { name: "SEMAF continúa convocando huelgas los días 10 y 12 de noviembre en el Grupo Renfe (nº 2026-51, 29/10/2026)", url: U.semaf1012, publisher: "SEMAF" },
-  { name: "Ordre de 22 d'octubre de 2026: servei essencial d'assistència sanitària dels centres del SISCAT (vaga indefinida de Metges de Catalunya, e-Tauler)", url: U.ordreMetges, publisher: "Departament d'Empresa i Treball" },
+  { name: "Ordre EMT/209/2026, de 22 d'octubre: servei essencial d'assistència sanitària dels centres del SISCAT (vaga indefinida de Metges de Catalunya, DOGC núm. 9780)", url: U.ordreMetges, publisher: "DOGC" },
 ];
 
 /** Every source the page cites: the fixed ones plus each published sector's order or notice, once. */
@@ -463,7 +472,7 @@ const COPY: Record<Locale, Copy> = {
       rodalies: `Rodalies publica l'horari de serveis mínims de cada línia al seu ${link(U.rodaliesStatus, "web d'alteracions del servei")}: per a la vaga de Renfe del 29 d'octubre de 2026, l'avís amb els percentatges ja era actualitzat el dia 26. El mateix dia de la vaga, mira [els avisos de la teva línia avui](${rodaliesHub("ca")}), llegits en directe de Rodalies de Catalunya. **El dia abans i el dia després també hi ha vaga a Renfe:** el sindicat de maquinistes SEMAF ha convocat una aturada total el dimarts 10 de novembre i aturades parcials al llarg del dijous 12, segons ${link(U.semaf1012, "el seu comunicat del 29 d'octubre")}, sense hores ni serveis mínims publicats encara.`,
       tmb: `TMB els publica als seus ${link(U.tmb, "avisos de servei")}. L'horari d'un dia normal és a ${b2link("hours", "ca", "l'horari del metro i del NitBus")}.`,
       fgcTram: `FGC informa de l'estat del servei a ${link(U.fgc, "fgc.cat")}. Les ordres de les vagues generals del 2024 també hi incloïen el tramvia i la resta d'autobusos urbans i interurbans.`,
-      longDistance: `Els trens d'alta velocitat i de llarga distància són serveis de l'Estat, i per això no són a l'ordre de la Generalitat: per a la vaga d'Ouigo d'aquesta tardor, els serveis mínims els va aprovar el Ministeri de Transports, segons ${link(U.ouigoStrike, "l'avís d'Ouigo")}. Si tens bitllet per a l'11, mira ${link(U.renfe, "renfe.com")} o el web del teu operador; la vaga de maquinistes de SEMAF del 10 i el 12 de novembre també afecta els trens de Renfe.`,
+      longDistance: `Els trens d'alta velocitat i de llarga distància són serveis de l'Estat, i per això no són a l'ordre de la Generalitat: per a la vaga d'Ouigo d'aquesta tardor, els serveis mínims els va fixar el Ministeri de Transports, amb ${link(U.ouigoResolution, "una resolució del 27 d'octubre")}. Si tens bitllet per a l'11, mira ${link(U.renfe, "renfe.com")} o el web del teu operador; la vaga de maquinistes de SEMAF del 10 i el 12 de novembre també afecta els trens de Renfe.`,
       airports: `Les ordres de la Generalitat només fixen l'operativa dels aeroports que gestiona ella, Lleida-Alguaire i Andorra-la Seu d'Urgell. Per als vols del Prat, Girona i Reus, que són d'Aena, mira l'estat del vol a la teva companyia o a ${link(U.aena, "Infovuelos d'Aena")}, i les maneres d'arribar-hi a ${b2link("airport", "ca", "la guia de l'aeroport al centre de Barcelona")}.`,
     },
     taxiHeading: "Taxi",
@@ -681,7 +690,7 @@ const COPY: Record<Locale, Copy> = {
       rodalies: `Rodalies publica el horario de servicios mínimos de cada línea en su ${link(U.rodaliesStatus, "web de alteraciones del servicio")}: para la huelga de Renfe del 29 de octubre de 2026, el aviso con los porcentajes ya estaba actualizado el día 26. El mismo día de la huelga, mira [los avisos de tu línea hoy](${rodaliesHub("es")}), leídos en directo de Rodalies de Catalunya. **El día antes y el día después también hay huelga en Renfe:** el sindicato de maquinistas SEMAF ha convocado un paro total el martes 10 de noviembre y paros parciales a lo largo del jueves 12, según ${link(U.semaf1012, "su comunicado del 29 de octubre")}, sin horas ni servicios mínimos publicados todavía.`,
       tmb: `TMB los publica en sus ${link(U.tmb, "avisos de servicio")}. El horario de un día normal está en ${b2link("hours", "es", "el horario del metro y del NitBus")}.`,
       fgcTram: `FGC informa del estado del servicio en ${link(U.fgc, "fgc.cat")}. Las órdenes de las huelgas generales de 2024 también incluían el tranvía y el resto de autobuses urbanos e interurbanos.`,
-      longDistance: `Los trenes de alta velocidad y de larga distancia son servicios del Estado, y por eso no están en la orden de la Generalitat: para la huelga de Ouigo de este otoño, los servicios mínimos los aprobó el Ministerio de Transportes, según ${link(U.ouigoStrike, "el aviso de Ouigo")}. Si tienes billete para el 11, mira ${link(U.renfe, "renfe.com")} o la web de tu operador; la huelga de maquinistas de SEMAF del 10 y el 12 de noviembre también afecta a los trenes de Renfe.`,
+      longDistance: `Los trenes de alta velocidad y de larga distancia son servicios del Estado, y por eso no están en la orden de la Generalitat: para la huelga de Ouigo de este otoño, los servicios mínimos los fijó el Ministerio de Transportes, con ${link(U.ouigoResolution, "una resolución del 27 de octubre")}. Si tienes billete para el 11, mira ${link(U.renfe, "renfe.com")} o la web de tu operador; la huelga de maquinistas de SEMAF del 10 y el 12 de noviembre también afecta a los trenes de Renfe.`,
       airports: `Las órdenes de la Generalitat solo fijan la operativa de los aeropuertos que gestiona ella, Lleida-Alguaire y Andorra-La Seu d'Urgell. Para los vuelos de El Prat, Girona y Reus, que son de Aena, mira el estado del vuelo en tu compañía o en ${link(U.aena, "Infovuelos de Aena")}, y las formas de llegar en ${b2link("airport", "es", "la guía del aeropuerto al centro de Barcelona")}.`,
     },
     taxiHeading: "Taxi",
@@ -899,7 +908,7 @@ const COPY: Record<Locale, Copy> = {
       rodalies: `Rodalies publishes a minimum-service timetable for every line on its ${link(U.rodaliesStatus, "service changes page")}: for the Renfe strike of 29 October 2026, the notice with the percentages had been updated by the 26th. On the strike day, check [today's notices for your line](${rodaliesHub("en")}), read live from Rodalies de Catalunya. **Renfe has strikes the day before and the day after too:** the train drivers' union SEMAF has called a full stoppage on Tuesday 10 November and partial stoppages during Thursday 12 November, according to ${link(U.semaf1012, "its notice of 29 October")}, with no hours or minimum services published yet.`,
       tmb: `TMB publishes them in its ${link(U.tmb, "service notices")}. Normal-day hours are in ${b2link("hours", "en", "Barcelona metro and night bus hours")}.`,
       fgcTram: `FGC posts its service status on ${link(U.fgc, "fgc.cat")}. The 2024 general-strike orders also covered the tram and all other urban and interurban buses.`,
-      longDistance: `High-speed and long-distance trains are State services, so they are not in the Generalitat's order: for Ouigo's strike this autumn, the Ministry of Transport approved the minimum services, according to ${link(U.ouigoStrike, "Ouigo's notice")}. If you have a ticket for the 11th, check ${link(U.renfe, "renfe.com")} or your operator's website; SEMAF's drivers' strike on 10 and 12 November also affects Renfe trains.`,
+      longDistance: `High-speed and long-distance trains are State services, so they are not in the Generalitat's order: for Ouigo's strike this autumn, the Ministry of Transport set the minimum services in ${link(U.ouigoResolution, "a resolution of 27 October")}. If you have a ticket for the 11th, check ${link(U.renfe, "renfe.com")} or your operator's website; SEMAF's drivers' strike on 10 and 12 November also affects Renfe trains.`,
       airports: `The Generalitat's orders only set the operations of the two airports it runs, Lleida-Alguaire and Andorra-La Seu d'Urgell. For flights at Barcelona-El Prat, Girona and Reus, which Aena runs, check your flight with your airline or on ${link(U.aena, "Aena's Infovuelos")}, and the ways to get there in ${b2link("airport", "en", "our airport to city centre guide")}.`,
     },
     taxiHeading: "Taxis",
