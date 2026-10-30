@@ -1056,6 +1056,14 @@ test("portaventura: the standard price leads, the Halloween price is labelled, t
   }
 });
 
+test("portaventura EN: the snippet leads with the 2026-27 opening dates (feed re-read 30 Oct)", () => {
+  const en = PORTAVENTURA.editions.en;
+  assert.match(en.seoTitle, /^PortAventura opening dates 2026-27/);
+  assert.ok(en.seoDescription.length <= 155, en.seoDescription);
+  assert.match(en.seoDescription, /6 Jan.*7 Jan-19 Feb 2027.*20 Feb.*18 Mar/);
+  assert.match(JSON.stringify(en.blocks), /Is PortAventura open in January 2027\?/);
+});
+
 test("ripolles: the comarca in Idescat's figures and a villages table; setcases answers what to do", () => {
   const villages = { ca: "Pobles bonics a prop de Ripoll", es: "Pueblos bonitos cerca de Ripoll", en: "Pretty villages near Ripoll" } as const;
   for (const locale of LOCALES) {
