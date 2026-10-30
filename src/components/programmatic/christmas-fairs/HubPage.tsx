@@ -41,7 +41,7 @@ export function HubPage({ locale }: { locale: FairsLocale }) {
     province: g.province,
     towns: g.towns.filter((town) => locale !== "en" || hasEnglish(town)),
   }));
-  const guides = (["christmas", "christmasBarcelona", "pessebres", "christmasTraditions", "shops"] as const).map((key) => ({
+  const guides = (["christmas", "christmasBarcelona", "decemberBridge", "marato", "pessebres", "christmasTraditions", "shops"] as const).map((key) => ({
     label: B2_TITLES[key][locale],
     href: b2href(key, locale),
   }));

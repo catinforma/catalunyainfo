@@ -541,6 +541,13 @@ test("links: both Christmas guides and the weekend pages point at the hub", () =
   }
 });
 
+test("links (30 Oct 2026): the hub's guides include the December bridge and La Marató, each town page's the bridge", () => {
+  const hub = readFileSync(join(ROOT, "src/components/programmatic/christmas-fairs/HubPage.tsx"), "utf8");
+  assert.match(hub, /const guides = \(\[[^\]]*"christmasBarcelona"[^\]]*"decemberBridge"[^\]]*"marato"[^\]]*\] as const\)/);
+  const town = readFileSync(join(ROOT, "src/components/programmatic/christmas-fairs/TownPage.tsx"), "utf8");
+  assert.match(town, /const GUIDES = \[[^\]]*"christmasBarcelona"[^\]]*"decemberBridge"[^\]]*\] as const;/);
+});
+
 test("deterministic: no clock in the server code of the family", () => {
   for (const file of [
     "src/lib/programmatic/christmas-fairs/data.ts",

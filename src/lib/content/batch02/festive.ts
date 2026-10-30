@@ -34,6 +34,11 @@ export const FESTIVE_VERIFIED = "2026-10-25";
  * site still says it will be updated "al voltant del mes de novembre del
  * 2026"; the Santa Llúcia fair's site still shows its 2025 calendar. The other
  * facts (TMB, sights, shops) keep FESTIVE_VERIFIED.
+ *
+ * Read again in the afternoon of 30 Oct 2026 (seasonal top-3 push): press
+ * room home (latest items 29-30 Oct, none about Christmas), the "nadal-2026"
+ * tag (latest 9 Jul 2026) and barcelona.cat/nadal: still nothing. In 2023,
+ * 2024 and 2025 the date was out by 23, 14 and 16 October.
  */
 export const ANNOUNCEMENTS_CHECKED = "2026-10-30";
 
@@ -54,6 +59,8 @@ export interface Announcement {
   time?: string;
   /** Where, as the source states it, in each language. */
   place?: Record<Locale, string>;
+  /** Who switches the lights on (or presides), as the source names them, in each language. */
+  who?: Record<Locale, string>;
   /** The official page that announced it. */
   url: string;
 }
@@ -119,6 +126,11 @@ export const DAYS = {
 
 /** Previous seasons, always printed with their year. */
 export const PAST = {
+  lights2023: {
+    announced: "2023-10-23",
+    switchOn: "2023-11-23",
+    url: "https://ajuntament.barcelona.cat/premsa/2023/10/23/la-comissio-de-govern-aprova-els-horaris-de-lenllumenat-de-nadal/",
+  },
   lights2024: {
     announced: "2024-10-14",
     switchOn: "2024-11-28",
@@ -174,6 +186,83 @@ export const LIGHTS_PLAN_2026 = {
   presented: "2026-07-09",
   km: 130,
   url: "https://ajuntament.barcelona.cat/premsa/2026/07/09/barcelona-consolida-el-festival-de-llums-de-nadal/",
+} as const;
+
+/**
+ * The day the last three switch-ons were read on the City Council's own notes
+ * (research_notes/seasonal-top3-30oct.md): the call to the press of the week
+ * itself for the time and place, and the note published that evening for who
+ * switched the lights on.
+ */
+export const SWITCH_ON_HISTORY_CHECKED = "2026-10-30";
+
+export interface PastSwitchOn {
+  /** ISO day of the switch-on. */
+  date: string;
+  /** Start time in the City Council's note of that week. */
+  time: string;
+  /** The time the first announcement gave, when the note of the week changed it. */
+  firstAnnounced?: string;
+  /** The stretch of Passeig de Gràcia, when the note names it. */
+  stretch: boolean;
+  /** Who switched the lights on or presided, as the City Council's notes say. */
+  who: Record<Locale, string>;
+  /** The note of the week (time and place) and the note of the evening (who). */
+  callUrl: string;
+  reportUrl: string;
+}
+
+/**
+ * The last three switch-ons, newest first. All on Passeig de Gràcia at 18:00.
+ * In 2023 and 2025 the October announcement said 18:30 and the note of the
+ * week 18:00; the page prints 18:00 and says so. The 2024 pair are described,
+ * not named: one of them was 16.
+ */
+export const SWITCH_ON_HISTORY: readonly PastSwitchOn[] = [
+  {
+    date: PAST.lights2025.switchOn,
+    time: "18:00",
+    firstAnnounced: "18:30",
+    stretch: true,
+    who: {
+      ca: "L'alcalde, Jaume Collboni, i l'alcalde de Betlem, Maher Canawatique, van prémer el polsador",
+      es: "El alcalde, Jaume Collboni, y el alcalde de Belén, Maher Canawatique, pulsaron el botón",
+      en: "The mayor, Jaume Collboni, and the mayor of Bethlehem, Maher Canawatique, pressed the button",
+    },
+    callUrl: "https://ajuntament.barcelona.cat/premsa/2025/11/19/acreditacio-per-a-cobrir-lencesa-de-llums-de-barcelona-del-nadal-2025/",
+    reportUrl: "https://ajuntament.barcelona.cat/premsa/2025/11/22/barcelona-encen-el-nadal-amb-la-illuminacio-simultania-de-tots-els-barris-despres-de-lespectacle-inaugural-del-passeig-de-gracia/",
+  },
+  {
+    date: PAST.lights2024.switchOn,
+    time: "18:00",
+    stretch: true,
+    who: {
+      ca: "Dos joves de 18 i 16 anys de la campanya «Veus contra el racisme», amb un dispositiu mòbil i amb l'alcalde present",
+      es: "Dos jóvenes de 18 y 16 años de la campaña «Veus contra el racisme», con un dispositivo móvil y con el alcalde presente",
+      en: "Two young people aged 18 and 16 from the 'Veus contra el racisme' (Voices against racism) campaign, from a mobile device, with the mayor present",
+    },
+    callUrl: "https://ajuntament.barcelona.cat/premsa/2024/11/27/jaume-collboni-presideix-lacte-dencesa-dels-llums-de-nadal/",
+    reportUrl: "https://ajuntament.barcelona.cat/premsa/2024/11/28/barcelona-encen-els-llums-de-nadal-2024/",
+  },
+  {
+    date: PAST.lights2023.switchOn,
+    time: "18:00",
+    firstAnnounced: "18:30",
+    stretch: false,
+    who: {
+      ca: "L'alcalde, Jaume Collboni, va presidir l'acte",
+      es: "El alcalde, Jaume Collboni, presidió el acto",
+      en: "The mayor, Jaume Collboni, presided",
+    },
+    callUrl: "https://ajuntament.barcelona.cat/premsa/2023/11/21/lalcalde-jaume-collboni-presideix-lacte-dencesa-de-llums-de-nadal-2023/",
+    reportUrl: "https://ajuntament.barcelona.cat/premsa/2023/11/23/barcelona-encen-els-llums-de-nadal-2023/",
+  },
+];
+
+/** The 2025 traffic notice: Passeig de Gràcia closed from 17:30 between Gran Via and Aragó. */
+export const MOBILITY_2025 = {
+  published: "2025-11-21",
+  url: "https://www.barcelona.cat/mobilitat/ca/actualitat-i-recursos/noticies/afectacions-de-la-mobilitat-per-lencesa-de-llums-de-nadal-2025-1574224",
 } as const;
 
 /* -------------------------------------------------------------------------- */

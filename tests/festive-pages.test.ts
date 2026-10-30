@@ -4,7 +4,13 @@ import { test } from "node:test";
 import { bodySchema, bodyToPlainText, wordCount, type Block } from "../src/lib/content/blocks.ts";
 import { BARCELONA_HUB } from "../src/lib/content/batch02/barcelona-hub.ts";
 import { CHRISTMAS } from "../src/lib/content/batch02/christmas.ts";
-import { CHRISTMAS_BARCELONA, buildChristmasBarcelonaBody, christmasBarcelonaDescription, lightsLead } from "../src/lib/content/batch02/christmas-barcelona.ts";
+import {
+  CHRISTMAS_BARCELONA,
+  buildChristmasBarcelonaBody,
+  christmasBarcelonaDescription,
+  christmasBarcelonaTitle,
+  lightsLead,
+} from "../src/lib/content/batch02/christmas-barcelona.ts";
 import {
   ANNOUNCED_2026,
   ANNOUNCEMENTS_CHECKED,
@@ -12,6 +18,8 @@ import {
   FESTIVE_VERIFIED,
   METRO_DAYS,
   PAST,
+  SWITCH_ON_HISTORY,
+  SWITCH_ON_HISTORY_CHECKED,
   announcementProblems,
   dayDate,
   metroRows,
@@ -232,10 +240,12 @@ test("an announced date replaces the 'not announced' line, with the right weekda
 test("the Christmas snippet answers 'when are the lights switched on' and the leads carry the announcements check date (30 Oct 2026)", () => {
   assert.equal(ANNOUNCEMENTS_CHECKED, "2026-10-30");
   assert.ok(ANNOUNCEMENTS_CHECKED >= FESTIVE_VERIFIED);
+  // Seasonal top-3 push (30 Oct, afternoon): last year's time and place, from
+  // the City Council's note of that week, follow last year's day.
   const notYet: Record<Locale, RegExp> = {
-    ca: /^Encesa de llums de Nadal de Barcelona 2026: encara sense data oficial \(el 2025, dissabte 22 de novembre\)/,
-    es: /^Encendido de luces de Navidad de Barcelona 2026: aún sin fecha oficial \(en 2025, sábado 22 de noviembre\)/,
-    en: /^Barcelona Christmas lights 2026: switch-on date not announced yet \(2025: Saturday 22 November\)/,
+    ca: /^Encesa de llums de Nadal de Barcelona 2026: encara sense data oficial \(el 2025, dissabte 22 de novembre, a les 18:00 al passeig de Gràcia\)/,
+    es: /^Encendido de luces de Navidad de Barcelona 2026: aún sin fecha oficial \(en 2025, sábado 22 de noviembre, a las 18:00 en el paseo de Gràcia\)/,
+    en: /^Barcelona Christmas lights 2026: switch-on date not announced yet \(2025: Saturday 22 November, 18:00, Passeig de Gràcia\)/,
   };
   const checked: Record<Locale, RegExp> = { ca: /comprovat el 30 d'octubre de 2026/, es: /comprobado el 30 de octubre de 2026/, en: /checked on 30 October 2026/ };
   for (const locale of LOCALES) {
@@ -286,6 +296,110 @@ test("every 2024 or 2025 date is printed with its own year, never with 2026", ()
   // And it would catch one printed bare.
   const bare = sentences("Les llums s'encenen el 22 de novembre. El 2025 també.").filter((s) => /22 de novembre/.test(s));
   assert.doesNotMatch(bare[0] ?? "", /2024|2025/);
+});
+
+test("the 2023 switch-on, added on 30 Oct 2026, is printed with 2023 and never with 2026", () => {
+  let checked = 0;
+  for (const locale of LOCALES) {
+    const body = text(buildChristmasBarcelonaBody(locale, NONE)) + " " + text(CHRISTMAS_BARCELONA.editions[locale].blocks);
+    for (const iso of [PAST.lights2023.switchOn]) {
+      const day = shortDate(iso, locale);
+      assert.ok(!new RegExp(`\\b${day} (de )?2026`).test(body), `${locale}: ${day} printed as 2026`);
+      for (const sentence of sentences(body).filter((s) => new RegExp(`(^|\\D)${day}(?!\\d)`).test(s))) {
+        checked += 1;
+        assert.match(sentence, /2023/, `${locale}: "${sentence}" gives ${day} without 2023`);
+      }
+    }
+  }
+  assert.ok(checked >= 6, `only ${checked} sentences checked`);
+});
+
+/* -------------------------------------------------------------------------- */
+/* Seasonal top-3 push (30 Oct 2026): title, pattern of past switch-ons, FAQ  */
+/* -------------------------------------------------------------------------- */
+
+test("the lights title promises date, time and place until the date is out, then gives the date, always within 60", () => {
+  const pending: Record<Locale, string> = {
+    ca: "Encesa de llums de Nadal Barcelona 2026: data, hora i lloc",
+    es: "Encendido luces Navidad Barcelona 2026: fecha, hora y lugar",
+    en: "Barcelona Christmas lights 2026: switch-on date, what's open",
+  };
+  for (const locale of LOCALES) {
+    assert.equal(christmasBarcelonaTitle(locale, NONE), pending[locale], locale);
+    assert.equal(CHRISTMAS_BARCELONA.editions[locale].seoTitle, christmasBarcelonaTitle(locale), locale);
+  }
+  // Every possible switch-on day of the season, with and without a time.
+  let days = 0;
+  for (let t = Date.parse("2026-11-01T12:00:00Z"); t <= Date.parse("2027-01-31T12:00:00Z"); t += 86_400_000) {
+    const date = new Date(t).toISOString().slice(0, 10);
+    days += 1;
+    for (const time of [undefined, "18:00"]) {
+      const facts: Announcements = { ...NONE, lightsSwitchOn: { date, ...(time ? { time } : {}), url: "https://ajuntament.barcelona.cat/premsa/x/" } };
+      for (const locale of LOCALES) {
+        const title = christmasBarcelonaTitle(locale, facts);
+        assert.ok(title.length <= 60, `${locale} ${date}: ${title.length} ${title}`);
+        assert.match(title, /2026/, `${locale} ${date}: ${title}`);
+        assert.ok(title.includes(shortDate(date, locale)), `${locale} ${date}: ${title} does not give the day`);
+        assert.doesNotMatch(title, /hora|time/i, `${locale} ${date}: ${title}`);
+        const description = christmasBarcelonaDescription(locale, facts);
+        assert.ok(description.length > 60 && description.length <= 155, `${locale} ${date}: ${description.length} ${description}`);
+        assert.ok(description.includes(dayDate(date, locale)), `${locale} ${date}: ${description}`);
+        if (time) assert.ok(description.includes(time), `${locale} ${date}: ${description}`);
+      }
+    }
+  }
+  assert.equal(days, 92);
+});
+
+test("the last three switch-ons are on the weekdays printed, all on Passeig de Gràcia at 18:00, from the City Council's notes", () => {
+  assert.deepEqual(SWITCH_ON_HISTORY.map((s) => s.date), [PAST.lights2025.switchOn, PAST.lights2024.switchOn, PAST.lights2023.switchOn]);
+  assert.deepEqual(SWITCH_ON_HISTORY.map((s) => weekdayIndex(s.date)), [6, 4, 4]);
+  assert.equal(SWITCH_ON_HISTORY_CHECKED, "2026-10-30");
+  for (const s of SWITCH_ON_HISTORY) {
+    assert.equal(s.time, "18:00", s.date);
+    assert.match(s.callUrl, /^https:\/\/ajuntament\.barcelona\.cat\/premsa\//, s.date);
+    assert.match(s.reportUrl, /^https:\/\/ajuntament\.barcelona\.cat\/premsa\//, s.date);
+    assert.ok(s.callUrl.includes(`/premsa/${s.date.slice(0, 4)}/`) && s.reportUrl.includes(`/premsa/${s.date.slice(0, 4)}/`), s.date);
+    assert.ok(CHRISTMAS_BARCELONA.sources.some((source) => source.url === s.callUrl), `${s.date}: the press call is a source`);
+  }
+  for (const locale of LOCALES) {
+    const leadText = text(CHRISTMAS_BARCELONA.editions[locale].blocks.slice(0, 1));
+    // One sentence after the "not announced" one gives the pattern: place, time, the three days.
+    assert.match(leadText, /passeig de Gràcia|paseo de Gràcia|Passeig de Gràcia/, locale);
+    assert.match(leadText, /18:00/, locale);
+    for (const s of SWITCH_ON_HISTORY) assert.ok(leadText.includes(dayDate(s.date, locale)), `${locale}: ${s.date}`);
+    const rows = (CHRISTMAS_BARCELONA.editions[locale].blocks as { type: string; rows?: string[][] }[]).find((b) => b.type === "table" && b.rows?.[0]?.[0] === "2025")?.rows;
+    assert.ok(rows, `${locale}: history table`);
+    assert.deepEqual(rows.map((r) => r[0]), ["2025", "2024", "2023"], locale);
+    // The 2024 pair are described, not named: one of them was 16.
+    assert.doesNotMatch(JSON.stringify(CHRISTMAS_BARCELONA.editions[locale].blocks), /Qirui|Esemre/, locale);
+  }
+});
+
+test("the FAQ answers 'a quina hora', 'on' and 'qui encén els llums' without a 2026 fact nobody announced", () => {
+  const questions: Record<Locale, RegExp[]> = {
+    ca: [/^Quan s'encenen els llums/, /^A quina hora és l'encesa/, /^On es fa l'encesa/, /^Qui encén els llums/],
+    es: [/^¿Cuándo se encienden las luces/, /^¿A qué hora es el encendido/, /^¿Dónde es el encendido/, /^¿Quién enciende las luces/],
+    en: [/^When are the Christmas lights switched on/, /^What time is the Barcelona Christmas lights switch-on/, /^Where is the Barcelona Christmas lights switch-on/, /^Who switches on Barcelona's Christmas lights/],
+  };
+  const pending = /no s'ha anunciat|encara no|no se ha anunciado|aún no|not been announced|has not|not announced/;
+  for (const locale of LOCALES) {
+    const items = (buildChristmasBarcelonaBody(locale, NONE).find((b) => b.type === "faq") as { items: { question: string; answer: string }[] }).items;
+    for (const [i, pattern] of questions[locale].entries()) {
+      assert.match(items[i]?.question ?? "", pattern, `${locale}: question ${i}`);
+      assert.match(items[i]?.answer ?? "", pending, `${locale}: answer ${i} must say 2026 is pending`);
+    }
+    // With an announcement that names time, place and who, the answers print them.
+    const facts: Announcements = {
+      ...NONE,
+      lightsSwitchOn: { ...GOOD, place: { ca: "la plaça de Catalunya", es: "la plaza de Catalunya", en: "Plaça de Catalunya" }, who: { ca: "la cantant X", es: "la cantante X", en: "the singer X" } },
+    };
+    const announced = (buildChristmasBarcelonaBody(locale, facts).find((b) => b.type === "faq") as { items: { answer: string }[] }).items;
+    assert.ok(announced[1]?.answer.includes(GOOD.time!), `${locale}: time`);
+    assert.ok(announced[2]?.answer.includes(facts.lightsSwitchOn!.place![locale]), `${locale}: place`);
+    assert.ok(announced[3]?.answer.includes(facts.lightsSwitchOn!.who![locale]), `${locale}: who`);
+    assert.ok(lightsLead(locale, facts).includes(facts.lightsSwitchOn!.who![locale]), `${locale}: lead names who`);
+  }
 });
 
 test("no 2026 switch-on, nativity or New Year's Eve date is printed while none is announced", () => {

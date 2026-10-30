@@ -1,7 +1,10 @@
 import type { Locale } from "@/lib/i18n/config";
+import { FAIRS, familyLastChecked, towns } from "@/lib/programmatic/christmas-fairs/data";
 import { fairsHubPath, townPath as fairsTownPath } from "@/lib/programmatic/christmas-fairs/paths";
 import { weekendHubPath } from "@/lib/programmatic/weekend/paths";
 
+import { LOCAL_MONDAY_7 } from "./december-bridge";
+import { dateYear } from "./festive";
 import {
   b2Related,
   b2link,
@@ -70,7 +73,31 @@ import {
 // says 30 Oct); CA title in the words of "fires de nadal catalunya 2026",
 // ES in "mercados navideños cataluña 2026"; descriptions give one official
 // 2026 date and say Santa Llúcia has none yet. Other dates not re-read.
+//
+// 30 Oct 2026, seasonal top-3 push: "fires de nadal catalunya 2026" asks for
+// the list, so the ca/es lead, descriptions and first FAQ now open with how
+// many fairs have an official date (FAMILY, the same count as the Christmas
+// fairs hub, from the Generalitat fairs calendar and the councils) and link
+// the hub; a paragraph gives the fairs on the December bridge and on La
+// Marató's weekend, with links to both pages. Titles kept.
 const VERIFIED = "2026-10-30";
+
+/** Fairs open on at least one day between `from` and `to`. */
+const openBetween = (from: string, to: string) => FAIRS.filter((f) => f.start <= to && f.end >= from).length;
+
+/**
+ * The Christmas fairs family's figures when the guide is published, so the
+ * guide and the hub (`/ca/fires-de-nadal/`) give the same count.
+ */
+export const FAMILY = {
+  fairs: FAIRS.length,
+  towns: towns().length,
+  checked: familyLastChecked(),
+  /** Saturday 5 to Tuesday 8 December 2026. */
+  bridge: openBetween("2026-12-05", "2026-12-08"),
+  /** 12 and 13 December 2026, La Marató's weekend. */
+  maratoWeekend: openBetween("2026-12-12", "2026-12-13"),
+} as const;
 
 const SOURCES: B2Source[] = [
   { name: "Fira de Santa Llúcia", url: "https://www.barcelona.cat/culturapopular/ca/festes-i-tradicions/fires/fira-de-santa-llucia", publisher: "Ajuntament de Barcelona" },
@@ -105,8 +132,7 @@ const META: Record<Locale, { path: string; title: string; seoTitle: string; seoD
     path: "tradicions/mercats-de-nadal-catalunya",
     title: "Fires i mercats de Nadal a Catalunya 2026: Fira de Santa Llúcia, dates i llocs",
     seoTitle: "Fires i mercats de Nadal Catalunya 2026: dates i llocs",
-    seoDescription:
-      "Fires de Nadal Catalunya 2026: dates oficials, com l'Avet d'Espinelves (28 de novembre-8 de desembre). Santa Llúcia, encara sense dates.",
+    seoDescription: `Fires de Nadal Catalunya 2026: ${FAMILY.fairs} amb data oficial, com l'Avet d'Espinelves (28 de novembre-8 de desembre). Santa Llúcia, encara sense dates.`,
     excerpt:
       "Els mercats de Nadal de Catalunya el 2026: quines dates han confirmat els organitzadors, quines eren les del 2025 i on es fa cada fira.",
   },
@@ -114,8 +140,7 @@ const META: Record<Locale, { path: string; title: string; seoTitle: string; seoD
     path: "tradiciones/mercados-navidad-cataluna",
     title: "Mercados navideños en Cataluña 2026: Fira de Santa Llúcia, fechas y lugares",
     seoTitle: "Mercados navideños Cataluña 2026: fechas y Santa Llúcia",
-    seoDescription:
-      "Mercados navideños Cataluña 2026: fechas oficiales, como el Avet de Espinelves (28 de noviembre-8 de diciembre). Santa Llúcia, aún sin fechas.",
+    seoDescription: `Mercados navideños Cataluña 2026: ${FAMILY.fairs} con fecha oficial, como el Avet de Espinelves (28 de noviembre-8 de diciembre). Santa Llúcia, aún sin fechas.`,
     excerpt:
       "Los mercados de Navidad de Cataluña en 2026: qué fechas han confirmado los organizadores, cuáles fueron las de 2025 y dónde se hace cada feria.",
   },
@@ -223,11 +248,30 @@ const CONFIRMED: Record<Locale, string[]> = {
   ],
 };
 
+/** The opening sentence: how many fairs have an official date, and where the list is. */
+function countSentence(locale: Locale): string {
+  const checked = dateYear(FAMILY.checked, locale);
+  return {
+    ca: `**${FAMILY.fairs} fires i mercats de Nadal de Catalunya ja tenen data oficial per al 2026**, a ${FAMILY.towns} municipis, segons el calendari oficial de fires de la Generalitat i els ajuntaments (revisat el ${checked}); són totes, poble a poble, a [fires de Nadal per municipi](${fairsHubPath("ca")}).`,
+    es: `**${FAMILY.fairs} ferias y mercados de Navidad de Cataluña ya tienen fecha oficial para 2026**, en ${FAMILY.towns} municipios, según el calendario oficial de ferias de la Generalitat y los ayuntamientos (revisado el ${checked}); están todas, pueblo a pueblo, en [ferias de Navidad por municipio](${fairsHubPath("es")}).`,
+    en: `**${FAMILY.fairs} Christmas markets and fairs in Catalonia already have an official 2026 date**, in ${FAMILY.towns} towns, according to the Catalan government's official fairs calendar and the town councils (checked on ${checked}); they are all, town by town, in [Christmas markets by town](${fairsHubPath("en")}).`,
+  }[locale];
+}
+
+/** The fairs on the December bridge and on La Marató's weekend, with both pages linked. */
+function busyWeekends(locale: Locale): string {
+  return {
+    ca: `**Pel pont de desembre**, del dissabte 5 al dimarts 8, hi ha ${FAMILY.bridge} fires de Nadal amb data oficial, i el **cap de setmana del 12 i 13 de desembre**, el de ${b2link("marato", "ca", "La Marató de TV3")}, n'hi ha ${FAMILY.maratoWeekend}. Quins dies són festius aquell pont, a ${b2link("decemberBridge", "ca", "el pont de desembre del 2026")}.`,
+    es: `**En el puente de diciembre**, del sábado 5 al martes 8, hay ${FAMILY.bridge} ferias de Navidad con fecha oficial, y el **fin de semana del 12 y 13 de diciembre**, el de ${b2link("marato", "es", "La Marató de TV3")}, hay ${FAMILY.maratoWeekend}. Qué días son festivos ese puente, en ${b2link("decemberBridge", "es", "el puente de diciembre de 2026")}.`,
+    en: `**Over the December long weekend**, Saturday 5 to Tuesday 8, ${FAMILY.bridge} Christmas fairs have official dates, and on the **weekend of 12 and 13 December**, ${b2link("marato", "en", "La Marató")}'s weekend, ${FAMILY.maratoWeekend} do. Which days are holidays that weekend: ${b2link("decemberBridge", "en", "the December 2026 long weekend")}.`,
+  }[locale];
+}
+
 function body(locale: Locale) {
   if (locale === "ca") {
     return [
       lead(
-        "Les dates de la **Fira de Santa Llúcia 2026** encara no s'han publicat: el 30 d'octubre el web de l'organització encara mostra el calendari del 2025, quan la fira va obrir el 28 de novembre i va tancar el 23 de desembre davant de la Catedral de Barcelona. El mercat de Nadal amb data oficial més gran per ara és la **Fira de l'Avet d'Espinelves**, del 28 de novembre al 8 de desembre de 2026.",
+        `${countSentence("ca")} Les dates de la **Fira de Santa Llúcia 2026** de Barcelona encara no s'han publicat: el 30 d'octubre el web de l'organització encara mostra el calendari del 2025, quan la fira va obrir el 28 de novembre i va tancar el 23 de desembre davant de la Catedral. El mercat de Nadal amb data oficial més gran per ara és la **Fira de l'Avet d'Espinelves**, del 28 de novembre al 8 de desembre de 2026.`,
       ),
       callout(
         "info",
@@ -240,6 +284,7 @@ function body(locale: Locale) {
       ...paras(
         "També al desembre, tot i que no és un mercat de Nadal: el **Mercat Medieval de Vic** ocupa el centre històric de la ciutat del 5 al 8 de desembre de 2026, segons l'agenda de l'Ajuntament de Vic.",
         `Totes les fires de Nadal amb data oficial, municipi per municipi i amb el lloc i com arribar-hi, són a [fires de Nadal per municipi](${fairsHubPath("ca")}).`,
+        busyWeekends("ca"),
       ),
       ...h2(
         "Fira de Santa Llúcia 2026: quan i on",
@@ -269,10 +314,14 @@ function body(locale: Locale) {
       ...h2(
         "Abans d'anar-hi",
         `Els organitzadors canvien dates i emplaçaments d'un any a l'altre: comprova-ho al seu web el dia que hi vagis. Si vas a comprar un diumenge o festiu de desembre, mira ${b2link("shops", "ca", "quins dies poden obrir les botigues")}: el 2026 ho poden fer els diumenges 6, 13, 20 i 27 de desembre i el dimarts 8. Per als ponts, ${b2link("workCalendar", "ca", "el calendari de festius")}.`,
-        `Per a la resta del Nadal a la ciutat (els llums, el pessebre de Sant Jaume i què obre els festius), mira ${b2link("christmasBarcelona", "ca", "Nadal a Barcelona")}.`,
+        `Per a la resta del Nadal a la ciutat, mira ${b2link("christmasBarcelona", "ca", "l'encesa de llums de Nadal a Barcelona")}, amb el pessebre de Sant Jaume i què obre els festius.`,
         `Per saber quines fires i mercats hi ha cada cap de setmana a la teva zona, segons el calendari oficial de fires, mira [les fires i mercats d'aquest cap de setmana](${weekendHubPath("ca")}).`,
       ),
       faq([
+        {
+          question: "Quines fires de Nadal hi ha a Catalunya el 2026?",
+          answer: `A ${dateYear(FAMILY.checked, "ca")}, ${FAMILY.fairs} fires i mercats de Nadal tenen data oficial del 2026, a ${FAMILY.towns} municipis: entre d'altres, la Fira de l'Avet d'Espinelves (del 28 de novembre al 8 de desembre), el Mercat de Nadal de Figueres (del 27 de novembre al 24 de desembre) i la Fira de Santa Llúcia de Manresa (12 i 13 de desembre). La llista completa és a la pàgina de fires de Nadal per municipi. Les dues grans de Barcelona, Santa Llúcia i la Sagrada Família, encara no tenen dates.`,
+        },
         {
           question: "Quan és la Fira de Santa Llúcia 2026?",
           answer:
@@ -283,9 +332,8 @@ function body(locale: Locale) {
           answer: "Davant de la Catedral de Barcelona, al pla de la Seu i l'avinguda de la Catedral, on es fa des del 1786.",
         },
         {
-          question: "Quins mercats de Nadal tenen ja dates per al 2026?",
-          answer:
-            "A 28 d'octubre, la Fira de l'Avet d'Espinelves (del 28 de novembre al 8 de desembre) i diverses fires municipals: Canyelles, Sant Antoni de Vilamajor, Garriguella, Altafulla, Sant Pere de Vilamajor, Roquetes, Cubelles i les Masies de Voltregà. Els grans de Barcelona encara no.",
+          question: "Quines fires de Nadal hi ha pel pont de desembre?",
+          answer: `Del dissabte 5 al dimarts 8 de desembre de 2026 hi ha ${FAMILY.bridge} fires de Nadal amb data oficial, com la Fira de l'Avet d'Espinelves, que s'acaba el dia 8, i el Mercat de Nadal de Garriguella, el mateix dimarts 8. L'únic festiu a tot Catalunya és el dimarts 8; el dilluns 7 només ho és en ${LOCAL_MONDAY_7.municipalities} municipis.`,
         },
         {
           question: "Quins dies obren les botigues al desembre del 2026?",
@@ -300,7 +348,7 @@ function body(locale: Locale) {
   if (locale === "es") {
     return [
       lead(
-        "Las fechas de la **Fira de Santa Llúcia 2026** aún no se han publicado: a 30 de octubre la web de la organización aún muestra el calendario de 2025, cuando la feria abrió el 28 de noviembre y cerró el 23 de diciembre frente a la Catedral de Barcelona. El mercado de Navidad con fecha oficial más grande por ahora es la **Fira de l'Avet de Espinelves**, del 28 de noviembre al 8 de diciembre de 2026.",
+        `${countSentence("es")} Las fechas de la **Fira de Santa Llúcia 2026** de Barcelona aún no se han publicado: a 30 de octubre la web de la organización aún muestra el calendario de 2025, cuando la feria abrió el 28 de noviembre y cerró el 23 de diciembre frente a la Catedral. El mercado de Navidad con fecha oficial más grande por ahora es la **Fira de l'Avet de Espinelves**, del 28 de noviembre al 8 de diciembre de 2026.`,
       ),
       callout(
         "info",
@@ -313,6 +361,7 @@ function body(locale: Locale) {
       ...paras(
         "También en diciembre, aunque no es un mercado de Navidad: el **Mercat Medieval de Vic** ocupa el centro histórico de la ciudad del 5 al 8 de diciembre de 2026, según la agenda del Ayuntamiento de Vic.",
         `Todas las ferias de Navidad con fecha oficial, municipio por municipio y con el lugar y cómo llegar, están en [ferias de Navidad por municipio](${fairsHubPath("es")}).`,
+        busyWeekends("es"),
       ),
       ...h2(
         "Fira de Santa Llúcia 2026: cuándo y dónde",
@@ -342,10 +391,14 @@ function body(locale: Locale) {
       ...h2(
         "Antes de ir",
         `Los organizadores cambian fechas y emplazamientos de un año a otro: compruébalo en su web el día que vayas. Si vas a comprar un domingo o festivo de diciembre, mira ${b2link("shops", "es", "qué días pueden abrir las tiendas")}: en 2026 pueden hacerlo los domingos 6, 13, 20 y 27 de diciembre y el martes 8. Para los puentes, ${b2link("workCalendar", "es", "el calendario de festivos")}.`,
-        `Para el resto de la Navidad en la ciudad (las luces, el belén de Sant Jaume y qué abre los festivos), mira ${b2link("christmasBarcelona", "es", "Navidad en Barcelona")}.`,
+        `Para el resto de la Navidad en la ciudad, mira ${b2link("christmasBarcelona", "es", "el encendido de luces de Navidad en Barcelona")}, con el belén de Sant Jaume y qué abre los festivos.`,
         `Para saber qué ferias y mercados hay cada fin de semana en tu zona, según el calendario oficial de ferias, mira [las ferias y mercados de este fin de semana](${weekendHubPath("es")}).`,
       ),
       faq([
+        {
+          question: "¿Qué ferias de Navidad hay en Cataluña en 2026?",
+          answer: `A ${dateYear(FAMILY.checked, "es")}, ${FAMILY.fairs} ferias y mercados de Navidad tienen fecha oficial de 2026, en ${FAMILY.towns} municipios: entre otros, la Fira de l'Avet de Espinelves (del 28 de noviembre al 8 de diciembre), el Mercat de Nadal de Figueres (del 27 de noviembre al 24 de diciembre) y la Fira de Santa Llúcia de Manresa (12 y 13 de diciembre). La lista completa está en la página de ferias de Navidad por municipio. Las dos grandes de Barcelona, Santa Llúcia y la Sagrada Família, aún no tienen fechas.`,
+        },
         {
           question: "¿Cuándo es la Fira de Santa Llúcia 2026?",
           answer:
@@ -356,9 +409,8 @@ function body(locale: Locale) {
           answer: "Frente a la Catedral de Barcelona, en el pla de la Seu y la avenida de la Catedral, donde se celebra desde 1786.",
         },
         {
-          question: "¿Qué mercados de Navidad tienen ya fechas para 2026?",
-          answer:
-            "A 28 de octubre, la Fira de l'Avet de Espinelves (del 28 de noviembre al 8 de diciembre) y varias ferias municipales: Canyelles, Sant Antoni de Vilamajor, Garriguella, Altafulla, Sant Pere de Vilamajor, Roquetes, Cubelles y les Masies de Voltregà. Los grandes de Barcelona, todavía no.",
+          question: "¿Qué ferias de Navidad hay en el puente de diciembre?",
+          answer: `Del sábado 5 al martes 8 de diciembre de 2026 hay ${FAMILY.bridge} ferias de Navidad con fecha oficial, como la Fira de l'Avet de Espinelves, que acaba el día 8, y el Mercat de Nadal de Garriguella, el mismo martes 8. El único festivo en toda Cataluña es el martes 8; el lunes 7 solo lo es en ${LOCAL_MONDAY_7.municipalities} municipios.`,
         },
         {
           question: "¿Qué días abren las tiendas en diciembre de 2026?",
@@ -384,7 +436,8 @@ function body(locale: Locale) {
     list(...CONFIRMED.en),
     ...paras(
       "Also in December, though not a Christmas market: **Vic's Medieval Market** fills the historic centre from 5 to 8 December 2026, according to Vic City Council's events listing.",
-      `Every Christmas market in Catalonia with official dates, town by town, with the place and how to get there, is in [Christmas markets by town](${fairsHubPath("en")}).`,
+      `Every Christmas market in Catalonia with official dates, town by town, with the place and how to get there, is in [Christmas markets by town](${fairsHubPath("en")}): ${FAMILY.fairs} of them in ${FAMILY.towns} towns as of ${dateYear(FAMILY.checked, "en")}.`,
+      busyWeekends("en"),
     ),
     ...h2(
       "Fira de Santa Llúcia 2026: when and where",
@@ -414,7 +467,7 @@ function body(locale: Locale) {
     ...h2(
       "Before you go",
       `Organisers change dates and venues from year to year, so check their website for your day. If you plan to shop on a December Sunday or holiday, see ${b2link("shops", "en", "which days shops may open")}: in 2026 they may open on Sundays 6, 13, 20 and 27 December and on Tuesday 8 December. For long weekends, ${b2link("workCalendar", "en", "the public holiday calendar")}.`,
-      `For the rest of Christmas in the city (the lights, the Plaça Sant Jaume nativity scene and what is open on the holidays), see ${b2link("christmasBarcelona", "en", "Christmas in Barcelona")}.`,
+      `For the rest of Christmas in the city, see ${b2link("christmasBarcelona", "en", "the Barcelona Christmas lights switch-on")}, with the Plaça Sant Jaume nativity scene and what is open on the holidays.`,
     ),
     faq([
       {
@@ -429,8 +482,7 @@ function body(locale: Locale) {
       },
       {
         question: "Which Christmas markets have confirmed 2026 dates?",
-        answer:
-          "As of 28 October, the Espinelves Fir Tree Fair (28 November to 8 December) and several municipal fairs: Canyelles, Sant Antoni de Vilamajor, Garriguella, Altafulla, Sant Pere de Vilamajor, Roquetes, Cubelles and Les Masies de Voltregà. Barcelona's big two have not announced theirs.",
+        answer: `As of ${dateYear(FAMILY.checked, "en")}, ${FAMILY.fairs} Christmas markets and fairs in ${FAMILY.towns} towns have official 2026 dates, among them the Espinelves Fir Tree Fair (28 November to 8 December), Figueres's Christmas market (27 November to 24 December) and Manresa's Fira de Santa Llúcia (12 and 13 December). The full list is on the Christmas markets by town page. Barcelona's big two have not announced theirs.`,
       },
       {
         question: "Is Barcelona the European Capital of Christmas 2026?",
