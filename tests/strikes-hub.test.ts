@@ -315,7 +315,9 @@ test("upcoming strikes come first, answer first: the lead names each one and eac
     const firstStrike = h2.findIndex((h) => h.id === upcomingStrikes(STRIKES_AS_OF)[0]?.id);
     const how = h2.findIndex((h) => /serveis mínims a Catalunya|servicios mínimos en Cataluña|minimum services work/.test(h.text));
     assert.ok(firstStrike >= 0 && firstStrike < how, locale);
-    assert.equal(h2.some((h) => /Vagues anteriors|Huelgas anteriores|Past strikes/.test(h.text)), false, `${locale}: nothing is past yet`);
+    // A "past strikes" section exists exactly when some listed strike has ended.
+    const anyPast = pastStrikes(STRIKES_AS_OF).length > 0;
+    assert.equal(h2.some((h) => /Vagues anteriors|Huelgas anteriores|Past strikes/.test(h.text)), anyPast, `${locale}: past section`);
   }
 });
 

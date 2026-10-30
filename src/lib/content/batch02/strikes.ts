@@ -68,7 +68,7 @@ import {
  * against this date, never against the clock: the HTML must be the same
  * whichever day it is rendered.
  */
-export const STRIKES_AS_OF = "2026-10-27";
+export const STRIKES_AS_OF = "2026-10-30";
 
 /**
  * The day the facts on the page were last read on the sources. Bringing the
@@ -227,9 +227,9 @@ export const STRIKES: Strike[] = [
       en: "Ouigo train drivers' strike (SEMAF)",
     },
     short: {
-      ca: "vaga de maquinistes d'Ouigo, amb tots els seus trens de Barcelona en servei",
-      es: "huelga de maquinistas de Ouigo, con todos sus trenes de Barcelona en servicio",
-      en: "Ouigo train drivers' strike, with all its Barcelona trains running",
+      ca: "vaga de maquinistes d'Ouigo: comprova el teu tren a la web d'Ouigo",
+      es: "huelga de maquinistas de Ouigo: comprueba tu tren en la web de Ouigo",
+      en: "Ouigo train drivers' strike: check your train on Ouigo's website",
     },
     label: {
       ca: "Ouigo el 30 d'octubre i el 2 de novembre",
@@ -253,14 +253,14 @@ export const STRIKES: Strike[] = [
     minimumServices: {
       status: "published",
       msShort: {
-        ca: "Serveis mínims del 71%: tots els trens d'Ouigo de Barcelona circulen",
-        es: "Servicios mínimos del 71%: todos los trenes de Ouigo de Barcelona circulan",
-        en: "71% minimum service: every Ouigo train to or from Barcelona runs",
+        ca: "Serveis mínims: comprova cada tren a la web d'Ouigo",
+        es: "Servicios mínimos: comprueba cada tren en la web de Ouigo",
+        en: "Minimum service: check each train on Ouigo's website",
       },
       text: {
-        ca: `El Ministeri de Transports i Mobilitat Sostenible hi ha aprovat uns serveis mínims del **71%**: 55 de les 77 circulacions programades per a les dues jornades, segons ${link(U.ouigoStrike, "l'avís d'Ouigo")}. A la llista que publica Ouigo, **tots els trens amb origen o destinació a Barcelona circulen** tots dos dies (deu cada dia, entre els Barcelona-Madrid i els Barcelona-Sevilla); els cancel·lats són de les rutes de Madrid a Sevilla, València, Múrcia i Màlaga.`,
-        es: `El Ministerio de Transportes y Movilidad Sostenible ha aprobado unos servicios mínimos del **71%**: 55 de las 77 circulaciones programadas para las dos jornadas, según ${link(U.ouigoStrike, "el aviso de Ouigo")}. En la lista que publica Ouigo, **todos los trenes con origen o destino en Barcelona circulan** los dos días (diez cada día, entre los Barcelona-Madrid y los Barcelona-Sevilla); los cancelados son de las rutas de Madrid a Sevilla, Valencia, Murcia y Málaga.`,
-        en: `Spain's Ministry of Transport approved a **71%** minimum service: 55 of the 77 trains scheduled over the two days, according to ${link(U.ouigoStrike, "Ouigo's notice")}. On the list Ouigo publishes, **every train to or from Barcelona runs** on both days (ten a day, between Barcelona–Madrid and Barcelona–Seville); the cancelled trains are on routes from Madrid to Seville, Valencia, Murcia and Málaga.`,
+        ca: `El Ministeri de Transports i Mobilitat Sostenible hi ha aprovat uns serveis mínims del **71%**: 55 de les 77 circulacions programades per a les dues jornades, segons ${link(U.ouigoStrike, "l'avís d'Ouigo")}. Així ho llegíem el 27 d'octubre; el 30 d'octubre la web d'Ouigo no es podia consultar des d'aquí i la situació pot haver canviat. **Abans de viatjar, comprova el teu tren a la web d'Ouigo**: és l'única font que diu quins trens circulen.`,
+        es: `El Ministerio de Transportes y Movilidad Sostenible ha aprobado unos servicios mínimos del **71%**: 55 de las 77 circulaciones programadas para las dos jornadas, según ${link(U.ouigoStrike, "el aviso de Ouigo")}. Así lo leímos el 27 de octubre; el 30 de octubre la web de Ouigo no se podía consultar desde aquí y la situación puede haber cambiado. **Antes de viajar, comprueba tu tren en la web de Ouigo**: es la única fuente que dice qué trenes circulan.`,
+        en: `Spain's Ministry of Transport approved a **71%** minimum service: 55 of the 77 trains scheduled over the two days, according to ${link(U.ouigoStrike, "Ouigo's notice")}. That is how it read on 27 October; on 30 October Ouigo's website could not be read from here and the situation may have changed. **Before you travel, check your train on Ouigo's website**: it is the only source for which trains run.`,
       },
     },
     advice: {
