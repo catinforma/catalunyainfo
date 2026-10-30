@@ -1,4 +1,6 @@
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
 import { test } from "node:test";
 
 import { bodySchema, bodyToPlainText, wordCount } from "../src/lib/content/blocks.ts";
@@ -27,7 +29,8 @@ import { BEACHES_GUIDE } from "../src/lib/content/batch02/beaches.ts";
 import { MESA } from "../src/lib/content/batch02/mesa.ts";
 import { MUNICIPAL_RESULTS } from "../src/lib/content/batch02/municipal-results.ts";
 import { CLIMATE } from "../src/lib/content/batch02/climate.ts";
-import { SHOPS } from "../src/lib/content/batch02/shops.ts";
+import { SHOPS, TOWNS_NOV_DEC } from "../src/lib/content/batch02/shops.ts";
+import { parseShopResolution } from "../src/lib/programmatic/holidays/dogc.ts";
 import { ELECTION_NIGHT } from "../src/lib/content/batch02/election-night.ts";
 import { CONGRESS_RESULTS, PARLIAMENT_RESULTS } from "../src/lib/content/batch02/election-results.ts";
 import { B2_PATHS, type B2Article } from "../src/lib/content/batch02/shared.ts";
@@ -463,11 +466,53 @@ test("shops: the DOGC dates are all there and nothing the orders do not say", ()
     const text = bodyToPlainText(SHOPS.editions[locale].blocks);
     const days2026 = locale === "en" ? ["29 November", "6 December", "8 December", "13 December", "20 December", "27 December"] : locale === "es" ? ["29 de noviembre", "6 de diciembre", "8 de diciembre", "13 de diciembre", "20 de diciembre", "27 de diciembre"] : ["29 de novembre", "6 de desembre", "8 de desembre", "13 de desembre", "20 de desembre", "27 de desembre"];
     for (const day of days2026) assert.ok(text.includes(day), `${locale}: ${day}`);
-    const table2027 = SHOPS.editions[locale].blocks.filter((b) => b.type === "table")[1] as { rows: string[][] };
+    // 30 Oct 2026: the towns table now sits between the 2026 and 2027 tables.
+    const table2027 = SHOPS.editions[locale].blocks.filter((b) => b.type === "table" && /2027/.test((b as { caption?: string }).caption ?? ""))[0] as { rows: string[][] };
     assert.equal(table2027.rows.length, 10, `${locale}: 8 general + 2 default municipal days in 2027`);
     assert.doesNotMatch(text, /black friday/i);
     assert.doesNotMatch(text, /(rebaixes|rebajas|sales)[^.]*3 (de )?(gener|enero|January)/i);
   }
+});
+
+/**
+ * Shops, 30 Oct 2026 (top-3 push): the towns whose November-December days
+ * differ from the default are transcribed by hand in TOWNS_NOV_DEC. They must
+ * be exactly what the holiday engine's parser reads from the same DOGC
+ * resolution (tests/fixtures/holidays/resolucio-emt-4342-2025.txt), so a
+ * transcription slip cannot reach the page. The 300 m² exemptions (art.
+ * 37.1.j/k, restored by Llei 3/2023) are on the "always open" list.
+ */
+test("shops: the November-December towns table is the DOGC resolution's, town by town", () => {
+  const raw = readFileSync(join(import.meta.dirname, "fixtures/holidays/resolucio-emt-4342-2025.txt"), "utf8");
+  const resolution = parseShopResolution(raw);
+  const restOfYear = (dates: string[]) => dates.filter((d) => d >= "2026-11-01");
+  const defaults = restOfYear(resolution.defaults);
+  const expected = resolution.councils
+    .map((c) => ({ town: c.name, closed: defaults.filter((d) => !c.dates.includes(d)), extra: restOfYear(c.dates).filter((d) => !defaults.includes(d)) }))
+    .filter((c) => c.closed.length > 0 || c.extra.length > 0);
+  const key = (name: string) => name.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
+  assert.deepEqual(
+    TOWNS_NOV_DEC.map((t) => ({ ...t, town: key(t.town) })).sort((a, b) => a.town.localeCompare(b.town)),
+    expected.map((t) => ({ ...t, town: key(t.town) })).sort((a, b) => a.town.localeCompare(b.town)),
+  );
+  for (const locale of ["ca", "es", "en"] as const) {
+    const text = bodyToPlainText(SHOPS.editions[locale].blocks);
+    assert.match(text, /300 m²/, `${locale}: art. 37.1.j/k exemptions`);
+    assert.match(text, /3\/2023/, `${locale}: Llei 3/2023`);
+    const towns = SHOPS.editions[locale].blocks.filter((b) => b.type === "table")[1] as { rows: string[][] };
+    assert.equal(towns.rows.length, TOWNS_NOV_DEC.length, `${locale}: towns table`);
+    assert.ok(SHOPS.editions[locale].seoDescription.length <= 155, `${locale}: description budget`);
+    assert.ok(SHOPS.editions[locale].seoTitle.length <= 60, `${locale}: title budget`);
+  }
+  // The leads count the towns that do not open on 8 December in words.
+  const no8 = TOWNS_NOV_DEC.filter((t) => t.closed.includes("2026-12-08")).length;
+  for (const locale of ["ca", "es", "en"] as const) {
+    const first = SHOPS.editions[locale].blocks.find((b) => b.type === "paragraph") as { text: string };
+    assert.ok(first.text.includes(` ${no8} `), `${locale}: lead says ${no8} towns`);
+    assert.ok(SHOPS.editions[locale].seoDescription.includes(` ${TOWNS_NOV_DEC.length} `), `${locale}: description count`);
+  }
+  assert.equal(SHOPS.editions.es.seoTitle, "Domingos y festivos de apertura 2026 en Cataluña y Barcelona");
+  assert.equal(SHOPS.verifiedAt, "2026-10-30");
 });
 
 /**
