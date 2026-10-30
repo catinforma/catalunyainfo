@@ -6,7 +6,7 @@ import { comarcaPageFor, cityOrChainBySlug, provincePageFor } from "@/lib/progra
 import { fuelPath } from "@/lib/programmatic/fuel/paths";
 import { caComarca, esName, joinList } from "@/lib/programmatic/holidays/names";
 import { hubPath as rodaliesHub, linePath } from "@/lib/programmatic/rodalies/paths";
-import { attribution, dayRange, fullDate, guidance, sectionTitles } from "@/lib/programmatic/weekend/copy";
+import { attribution, correctionNote, dayRange, fullDate, guidance, sectionTitles } from "@/lib/programmatic/weekend/copy";
 import { SNAPSHOT, comarcaName, linesIn, meteocatUrl, weatherTowns } from "@/lib/programmatic/weekend/data";
 import type { SnapshotFair } from "@/lib/programmatic/weekend/types";
 import type { WeekendLocale, ZoneDef } from "@/lib/programmatic/weekend/zones";
@@ -28,6 +28,7 @@ export function FairList({ fairs, locale, showComarca = true }: { fairs: readonl
       {fairs.map((f) => {
         const name = f.name;
         const where = showComarca ? `${townName(f.town, locale)} (${comarcaName(f.comarca)})` : townName(f.town, locale);
+        const note = correctionNote(f, locale);
         return (
           <li key={f.id} className="ci-agenda-item">
             <p className="ci-agenda-title">
@@ -42,6 +43,7 @@ export function FairList({ fairs, locale, showComarca = true }: { fairs: readonl
             <p className="ci-agenda-meta">
               {where} · {dayRange(f.start, f.end, locale)} · {locale === "es" ? f.sectorEs : f.sector}
             </p>
+            {note ? <p className="ci-agenda-meta">{note}</p> : null}
           </li>
         );
       })}

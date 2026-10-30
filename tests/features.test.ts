@@ -328,3 +328,32 @@ test("the Castanyada lists only events with a published 2026 date", () => {
     assert.match(text, /31/, locale);
   }
 });
+
+/** Every string inside a body, depth first. */
+function strings(value: unknown): string[] {
+  if (typeof value === "string") return [value];
+  if (Array.isArray(value)) return value.flatMap(strings);
+  if (value && typeof value === "object") return Object.values(value).flatMap(strings);
+  return [];
+}
+
+/**
+ * The Aquàrium's calendar, read on 30 Oct 2026 (the calendar embedded in its
+ * opening-hours page): the rainy-day guide must be right from 1 November on,
+ * so no "until 1 November" period, and the published Christmas change.
+ */
+test("the rainy-day guide gives the Aquàrium's hours from November on, with the published Christmas change", () => {
+  const expected = {
+    ca: [/de 10:00 a 20:00 els caps de setmana/, /de 10:00 a 19:00 del 2 de novembre al 20 de desembre/, /7 i 8 de desembre/, /del 21 de desembre al 4 de gener, de 10:00 a 20:00/, /24 i el 31 de desembre, que tanca a les 19:00/],
+    es: [/de 10:00 a 20:00 los fines de semana/, /de 10:00 a 19:00 del 2 de noviembre al 20 de diciembre/, /7 y 8 de diciembre/, /del 21 de diciembre al 4 de enero, de 10:00 a 20:00/, /24 y el 31 de diciembre, que cierra a las 19:00/],
+    en: [/10:00–20:00 at weekends/, /10:00–19:00 from 2 November to 20 December/, /7 and 8 December/, /from 21 December to 4 January, 10:00–20:00/, /24 and 31 December, when it closes at 19:00/],
+  } as const;
+  for (const locale of LOCALES) {
+    const lines = strings(RAINY.editions[locale].blocks).filter((s) => s.includes("L'Aquàrium**") && s.includes("Port Vell"));
+    assert.equal(lines.length, 1, `${locale}: one Aquàrium line`);
+    const line = lines[0]!;
+    assert.doesNotMatch(line, /1 November|1 de noviembre|1 de novembre/, `${locale}: no stale "until 1 November"`);
+    for (const re of expected[locale]) assert.match(line, re, `${locale}: ${re}`);
+  }
+  assert.ok(RAINY.sources.some((s) => s.url === "https://www.aquariumbcn.com/en/plan-your-visit/opening-hours/"));
+});

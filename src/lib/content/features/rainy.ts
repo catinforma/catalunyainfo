@@ -44,8 +44,16 @@ const CAVE_WARNING = {
  * timetable, the markets institute). The same figures are in the linked
  * guides, which carry the detail. CosmoCaixa is left out: its site refused
  * every fetch, so nothing about it could be checked.
+ *
+ * Aquàrium re-checked 30 Oct 2026: prices unchanged on the prices page (30 €,
+ * 5-10 years 23 €, 0-2 free); hours from the calendar the opening-hours page
+ * embeds (`openingHoursData`, to 31 Jan 2027): weekends 10-20; weekdays 10-19
+ * from 2 Nov to 20 Dec, except 7-8 Dec 10-20; 21 Dec - 4 Jan 10-20 daily
+ * except 24 and 31 Dec 10-19; ticket office closes an hour before closing.
+ * The line stops at 4 Jan; after that, weekdays are 10-19 again (5 Jan on).
  */
 const AQUARIUM = "https://www.aquariumbcn.com/en/visit/prices/";
+const AQUARIUM_HOURS = "https://www.aquariumbcn.com/en/plan-your-visit/opening-hours/";
 const SAGRADA = "https://sagradafamilia.org/en/prices";
 const BATLLO = "https://www.casabatllo.es/en/online-tickets/";
 const PALAU = "https://www.palaumusica.cat/1649781";
@@ -57,7 +65,7 @@ const BCN_COPY: Record<"ca" | "es" | "en", { title: string; intro: string; items
     title: "What to do in Barcelona when it rains",
     intro: "In the city itself, these plans stay fully under cover. Prices and hours were checked on each venue's own site on 24 October 2026:",
     items: [
-      `**L'Aquàrium** (Port Vell): €30, ages 5 to 10 €23, under-3s free; open every day 10:00–20:00 until 1 November, then, from 2 November to 20 December, 10:00–19:00 on weekdays and 10:00–20:00 at weekends. More in ${b2link("zooAquarium", "en", "our Zoo and Aquarium guide")}.`,
+      `**L'Aquàrium** (Port Vell): €30, ages 5 to 10 €23, under-3s free; open every day, 10:00–20:00 at weekends and, on weekdays, 10:00–19:00 from 2 November to 20 December (10:00–20:00 on the 7 and 8 December holidays); from 21 December to 4 January, 10:00–20:00 every day except 24 and 31 December, when it closes at 19:00. The ticket office closes an hour before closing time (hours checked on 30 October 2026). More in ${b2link("zooAquarium", "en", "our Zoo and Aquarium guide")}.`,
       `**Sagrada Família**: €26 with the audio-guide app, timed tickets in the visitor's name; from November to February it opens Monday to Saturday 9:00–18:00 and Sunday 10:30–18:00 (${b2link("monuments", "en", "Gaudí ticket guide")}).`,
       "**Casa Batlló**: from €29 depending on the date; the general visit admits every day from 9:00 to 19:45.",
       "**Palau de la Música Catalana**: guided tour €24 (under 10s free with an adult), about 50 minutes, between 9:00 and 15:30; €2 more at the box office.",
@@ -71,7 +79,7 @@ const BCN_COPY: Record<"ca" | "es" | "en", { title: string; intro: string; items
     title: "Qué hacer en Barcelona cuando llueve",
     intro: "En la propia ciudad, estos planes quedan del todo bajo techo. Precios y horarios comprobados en la web de cada lugar el 24 de octubre de 2026:",
     items: [
-      `**L'Aquàrium** (Port Vell): 30 €, de 5 a 10 años 23 €, menores de 3 gratis; abre todos los días de 10:00 a 20:00 hasta el 1 de noviembre, y del 2 de noviembre al 20 de diciembre, de 10:00 a 19:00 entre semana y de 10:00 a 20:00 los fines de semana. Más en ${b2link("zooAquarium", "es", "nuestra guía del Zoo y el Aquarium")}.`,
+      `**L'Aquàrium** (Port Vell): 30 €, de 5 a 10 años 23 €, menores de 3 gratis; abre todos los días: de 10:00 a 20:00 los fines de semana y, entre semana, de 10:00 a 19:00 del 2 de noviembre al 20 de diciembre (de 10:00 a 20:00 los festivos 7 y 8 de diciembre); del 21 de diciembre al 4 de enero, de 10:00 a 20:00 cada día, salvo el 24 y el 31 de diciembre, que cierra a las 19:00. La taquilla cierra una hora antes (horario comprobado el 30 de octubre de 2026). Más en ${b2link("zooAquarium", "es", "nuestra guía del Zoo y el Aquarium")}.`,
       `**Sagrada Familia**: 26 € con la audioguía en app, entradas con hora y nominativas; de noviembre a febrero abre de lunes a sábado de 9:00 a 18:00 y el domingo de 10:30 a 18:00 (${b2link("monuments", "es", "guía de entradas de Gaudí")}).`,
       "**Casa Batlló**: desde 29 € según la fecha; la visita general admite todos los días de 9:00 a 19:45.",
       "**Palau de la Música Catalana**: visita guiada 24 € (menores de 10 gratis con un adulto), unos 50 minutos, entre las 9:00 y las 15:30; 2 € más en taquilla.",
@@ -85,7 +93,7 @@ const BCN_COPY: Record<"ca" | "es" | "en", { title: string; intro: string; items
     title: "Què fer a Barcelona quan plou",
     intro: "A la mateixa ciutat, aquests plans queden del tot sota cobert. Preus i horaris comprovats al web de cada lloc el 24 d'octubre de 2026:",
     items: [
-      `**L'Aquàrium** (Port Vell): 30 €, de 5 a 10 anys 23 €, menors de 3 gratis; obre cada dia de 10:00 a 20:00 fins a l'1 de novembre, i del 2 de novembre al 20 de desembre, de 10:00 a 19:00 entre setmana i de 10:00 a 20:00 els caps de setmana. Més a ${b2link("zooAquarium", "ca", "la nostra guia del Zoo i l'Aquàrium")}.`,
+      `**L'Aquàrium** (Port Vell): 30 €, de 5 a 10 anys 23 €, menors de 3 gratis; obre cada dia: de 10:00 a 20:00 els caps de setmana i, entre setmana, de 10:00 a 19:00 del 2 de novembre al 20 de desembre (de 10:00 a 20:00 els festius 7 i 8 de desembre); del 21 de desembre al 4 de gener, de 10:00 a 20:00 cada dia, llevat del 24 i el 31 de desembre, que tanca a les 19:00. La taquilla tanca una hora abans (horari comprovat el 30 d'octubre de 2026). Més a ${b2link("zooAquarium", "ca", "la nostra guia del Zoo i l'Aquàrium")}.`,
       `**Sagrada Família**: 26 € amb l'audioguia en app, entrades amb hora i nominatives; de novembre a febrer obre de dilluns a dissabte de 9:00 a 18:00 i el diumenge de 10:30 a 18:00 (${b2link("monuments", "ca", "guia d'entrades de Gaudí")}).`,
       "**Casa Batlló**: des de 29 € segons la data; la visita general admet cada dia de 9:00 a 19:45.",
       "**Palau de la Música Catalana**: visita guiada 24 € (menors de 10 gratis amb un adult), uns 50 minuts, entre les 9:00 i les 15:30; 2 € més a taquilla.",
@@ -342,6 +350,7 @@ export const RAINY: FeatureArticle = {
     { name: "Valores climatológicos normales: Barcelona Aeropuerto", url: "https://www.aemet.es/es/serviciosclimaticos/datosclimatologicos/valoresclimatologicos?l=0076&k=cat", publisher: "AEMET" },
     { name: "Horaris de Rodalies de Catalunya", url: RODALIES, publisher: "Generalitat de Catalunya" },
     { name: "L'Aquàrium de Barcelona — prices", url: AQUARIUM, publisher: "L'Aquàrium de Barcelona" },
+    { name: "L'Aquàrium de Barcelona — opening hours", url: AQUARIUM_HOURS, publisher: "L'Aquàrium de Barcelona" },
     { name: "Sagrada Família — prices", url: SAGRADA, publisher: "Junta Constructora del Temple de la Sagrada Família" },
     { name: "Casa Batlló — tickets", url: BATLLO, publisher: "Casa Batlló" },
     { name: "Palau de la Música Catalana — guided tour", url: PALAU, publisher: "Palau de la Música Catalana" },

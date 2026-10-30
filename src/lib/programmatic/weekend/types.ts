@@ -67,6 +67,23 @@ export interface SnapshotFair {
   web: string | null;
   /** `dates_a_confirmar` = "Sí". */
   toConfirm: boolean;
+  /**
+   * Never in snapshot.json: set by `corrections.ts` when the organiser's own
+   * page gives other dates. `start`/`end` are then the organiser's, `web` its
+   * page, and this keeps the calendar's dates and where the others come from.
+   */
+  corrected?: FairCorrection;
+}
+
+/** The calendar's dates for a fair the organiser's page dates otherwise, and that page. */
+export interface FairCorrection {
+  /** The calendar's (`vm32-przc`) dates. */
+  start: string;
+  end: string;
+  url: string;
+  publisher: string;
+  readOn: string;
+  quote: string;
 }
 
 /** Weekend counts of agenda activities in one zone, over the year before `readOn`. */
