@@ -567,3 +567,18 @@ test("deterministic: no clock in the server code of the family", () => {
   assert.match(client, /^"use client";/);
   assert.match(client, /useEffect\(\(\) => \{\s+const today = todayInMadrid\(new Date\(\)\);/);
 });
+
+test("every outbound link in the fair data is https (no javascript: or other schemes)", () => {
+  const links: string[] = [];
+  const walk = (value: unknown, key?: string): void => {
+    if (Array.isArray(value)) value.forEach((v) => walk(v, key));
+    else if (value && typeof value === "object") for (const [k, v] of Object.entries(value)) walk(v, k);
+    else if (typeof value === "string" && key && /url|href|link|web/i.test(key)) links.push(value);
+  };
+  walk(SNAPSHOT);
+  walk(ORGANISER_FAIRS);
+  walk(PENDING_MARKETS);
+  walk(FAIRS);
+  assert.ok(links.length > 0);
+  for (const link of links) assert.match(link, /^https:\/\/[^\s"<>]+$/, link);
+});

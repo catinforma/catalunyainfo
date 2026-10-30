@@ -16,7 +16,7 @@ import { buildLlmsTxt, type LlmsEntry } from "@/lib/seo/llms";
  * it cannot list a page that does not exist and the same content always gives
  * the same file.
  */
-export const revalidate = 3600;
+export const revalidate = 86400;
 
 export async function GET() {
   const guides: Partial<Record<Locale, LlmsEntry[]>> = {};
