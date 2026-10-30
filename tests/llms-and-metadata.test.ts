@@ -15,6 +15,7 @@ const { rodaliesFamilyPaths } = await import("../src/lib/programmatic/rodalies/p
 const { reservoirFamilyPaths } = await import("../src/lib/programmatic/reservoirs/pages.ts");
 const { electionsSitemapPaths } = await import("../src/lib/programmatic/elections/pages.ts");
 const { weekendFamilyPaths } = await import("../src/lib/programmatic/weekend/sitemap.ts");
+const { christmasFairsPaths } = await import("../src/lib/programmatic/christmas-fairs/sitemap.ts");
 const { GUIDES } = await import("../src/lib/programmatic/holidays/links.ts");
 const { PATHS: TOOL_PATHS } = await import("../src/lib/content/home-tools.ts");
 
@@ -49,6 +50,7 @@ test("llms.txt lists every live tool and hub, each with a one-line description",
     "/ca/embassaments/", "/es/embalses/", "/en/reservoirs/",
     "/ca/eleccions/", "/es/elecciones/", "/en/elections/",
     "/ca/cap-de-setmana/", "/es/fin-de-semana/",
+    "/ca/fires-de-nadal/", "/es/mercados-navidad/", "/en/christmas-markets/",
     GUIDES.strikes.ca, GUIDES.strikes.es, GUIDES.strikes.en,
   ];
   for (const hub of hubs) assert.ok(text.includes(`(${ORIGIN}${hub})`), `llms.txt does not link ${hub}`);
@@ -68,6 +70,7 @@ test("every URL llms.txt names is a page a family or guide publishes", () => {
     ...reservoirFamilyPaths().map((p) => p.path),
     ...electionsSitemapPaths().map((p) => p.path),
     ...weekendFamilyPaths().map((p) => p.path),
+    ...christmasFairsPaths().map((p) => p.path),
     ...Object.values(GUIDES.strikes),
     ...LOCALES.map((l) => `/${l}/${TOOL_PATHS.weekend[l]}/`),
     ...LOCALES.map((l) => todayPath(l)),

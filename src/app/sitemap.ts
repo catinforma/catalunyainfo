@@ -12,6 +12,7 @@ import { rodaliesSitemap } from "@/lib/programmatic/rodalies/pages";
 import { reservoirSitemapEntries } from "@/lib/programmatic/reservoirs/pages";
 import { weekendSitemapEntries } from "@/lib/programmatic/weekend/sitemap";
 import { todaySitemapEntries } from "@/lib/programmatic/today/page";
+import { christmasFairsSitemapEntries } from "@/lib/programmatic/christmas-fairs/sitemap";
 
 /**
  * Rendered on request, not through ISR. The cached copy depended on ISR
@@ -130,6 +131,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...reservoirSitemapEntries(),
     ...weekendSitemapEntries(),
     ...todaySitemapEntries(),
+    ...christmasFairsSitemapEntries(),
   ];
 }
 

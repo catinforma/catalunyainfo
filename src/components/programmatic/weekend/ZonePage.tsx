@@ -5,6 +5,8 @@ import { B2_TITLES, b2href } from "@/lib/content/batch02/shared";
 import { AGENDA_SOURCE, type WeekendWindow } from "@/lib/content/weekend/agenda";
 import { EVERGREEN } from "@/lib/content/weekend/evergreen";
 import { getMessages } from "@/lib/i18n";
+import { SEASON, SEASON_YEAR } from "@/lib/programmatic/christmas-fairs/classify";
+import { fairsHubPath } from "@/lib/programmatic/christmas-fairs/paths";
 import { HUB_CRUMB, fullDate, liveLabels, longWeekendNote, rangeLong, sectionTitles, widerPhrase, zoneH1, zoneLead, zoneScope } from "@/lib/programmatic/weekend/copy";
 import {
   SNAPSHOT,
@@ -56,6 +58,8 @@ export function ZonePage({ zone, locale, window }: { zone: ZoneDef; locale: Week
   const guides = zone.guides
     .filter((key) => key !== "snowNow" && key !== "climate")
     .map((key) => ({ label: B2_TITLES[key][locale], href: b2href(key, locale) }));
+  // Until the Christmas season ends, the dated Christmas fairs town by town.
+  if (window.from <= SEASON.to) guides.push({ label: locale === "es" ? `Ferias de Navidad ${SEASON_YEAR} por municipio` : `Fires de Nadal ${SEASON_YEAR} per municipi`, href: fairsHubPath(locale) });
 
   return (
     <article>

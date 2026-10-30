@@ -1,4 +1,5 @@
 import type { Locale } from "@/lib/i18n/config";
+import { fairsHubPath } from "@/lib/programmatic/christmas-fairs/paths";
 import { weekendHubPath } from "@/lib/programmatic/weekend/paths";
 
 import {
@@ -227,6 +228,7 @@ function body(locale: Locale) {
       list(...CONFIRMED.ca),
       ...paras(
         "També al desembre, tot i que no és un mercat de Nadal: el **Mercat Medieval de Vic** ocupa el centre històric de la ciutat del 5 al 8 de desembre de 2026, segons l'agenda de l'Ajuntament de Vic.",
+        `Totes les fires de Nadal amb data oficial, municipi per municipi i amb el lloc i com arribar-hi, són a [fires de Nadal per municipi](${fairsHubPath("ca")}).`,
       ),
       ...h2(
         "Fira de Santa Llúcia 2026: quan i on",
@@ -299,6 +301,7 @@ function body(locale: Locale) {
       list(...CONFIRMED.es),
       ...paras(
         "También en diciembre, aunque no es un mercado de Navidad: el **Mercat Medieval de Vic** ocupa el centro histórico de la ciudad del 5 al 8 de diciembre de 2026, según la agenda del Ayuntamiento de Vic.",
+        `Todas las ferias de Navidad con fecha oficial, municipio por municipio y con el lugar y cómo llegar, están en [ferias de Navidad por municipio](${fairsHubPath("es")}).`,
       ),
       ...h2(
         "Fira de Santa Llúcia 2026: cuándo y dónde",
@@ -370,6 +373,7 @@ function body(locale: Locale) {
     list(...CONFIRMED.en),
     ...paras(
       "Also in December, though not a Christmas market: **Vic's Medieval Market** fills the historic centre from 5 to 8 December 2026, according to Vic City Council's events listing.",
+      `Every Christmas market in Catalonia with official dates, town by town, with the place and how to get there, is in [Christmas markets by town](${fairsHubPath("en")}).`,
     ),
     ...h2(
       "Fira de Santa Llúcia 2026: when and where",
