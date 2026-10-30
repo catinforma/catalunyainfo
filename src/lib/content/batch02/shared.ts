@@ -543,10 +543,13 @@ export const B2_TITLES: Record<B2Key, Record<Locale, string>> = {
     es: "Mercados y ferias de Navidad en Cataluña",
     en: "Christmas markets in Catalonia",
   },
+  // 30 Oct 2026 (seasonal top-3 push): this, decemberBridge and marato read
+  // in the searchers' words; the EN bridge label no longer implies 6 and 7
+  // December are holidays.
   christmasBarcelona: {
-    ca: "Nadal a Barcelona: llums, pessebre i què obre",
-    es: "Navidad en Barcelona: luces, belén y qué abre",
-    en: "Christmas in Barcelona: lights, nativity and what's open",
+    ca: "Encesa de llums de Nadal a Barcelona i què obre",
+    es: "Encendido de luces de Navidad en Barcelona y qué abre",
+    en: "Barcelona Christmas lights switch-on and what's open",
   },
   newYear: {
     ca: "Cap d'Any a Barcelona: la festa de Montjuïc i el metro",
@@ -606,12 +609,12 @@ export const B2_TITLES: Record<B2Key, Record<Locale, string>> = {
   decemberBridge: {
     ca: "Pont de desembre 2026: quins dies són festius",
     es: "Puente de diciembre 2026: qué días son festivos",
-    en: "December 2026 holidays in Catalonia: 6, 7 and 8 December",
+    en: "December 2026 public holidays in Catalonia: 8, 25 and 26 Dec",
   },
   marato: {
-    ca: "La Marató de 3Cat 2026: quan és i com col·laborar",
-    es: "La Marató de 3Cat 2026: cuándo es y cómo colaborar",
-    en: "La Marató 2026: date, cause and how to donate",
+    ca: "La Marató de TV3 2026: 13 de desembre i com col·laborar",
+    es: "La Marató de TV3 2026: 13 de diciembre y cómo colaborar",
+    en: "La Marató 2026: TV3 telethon on 13 December",
   },
   strikes: {
     ca: "Vaga avui a Catalunya: què funciona",

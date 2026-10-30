@@ -1,6 +1,7 @@
 import type { Block } from "@/lib/content/blocks";
 import { addDays, daysBetween, holidayOn, weekdayIndex } from "@/lib/content/holidays/calendar";
 import type { Locale } from "@/lib/i18n/config";
+import { fairsHubPath } from "@/lib/programmatic/christmas-fairs/paths";
 
 import { dayDate, span } from "./festive";
 import { SHOPS } from "./shops";
@@ -69,6 +70,10 @@ import {
  * local holiday; a ca/es FAQ in the words of "puente de la purísima 2026".
  * No new fact: every one is already verified above. Titles kept (an answer
  * like "only the 8th" would be wrong in those 43 towns).
+ *
+ * 30 Oct 2026 (seasonal top-3 push): the "Christmas markets" item links the
+ * Christmas fairs hub, and the link to the Christmas page reads "encesa de
+ * llums" / "encendido de luces", the words its searchers use.
  */
 export const BRIDGE_VERIFIED = "2026-10-26";
 
@@ -380,9 +385,9 @@ export function buildDecemberBridgeBody(locale: Locale): Block[] {
         "Algunes idees amb data oficial i les guies on les seguim:",
       ),
       list(
-        `**Mercats de Nadal.** La 45a Fira de l'Avet d'Espinelves (Osona) és del 28 de novembre al 8 de desembre de 2026, segons l'Ajuntament d'Espinelves, i el Mercat Medieval de Vic comença el 5 de desembre, segons l'agenda de l'Ajuntament de Vic (mireu-ne el programa abans d'anar-hi). Les dates de la Fira de Santa Llúcia de Barcelona del 2026 encara no s'han publicat. Tots, a ${b2link("christmas", "ca", "la guia de mercats de Nadal")}.`,
+        `**Mercats de Nadal.** La 45a Fira de l'Avet d'Espinelves (Osona) és del 28 de novembre al 8 de desembre de 2026, segons l'Ajuntament d'Espinelves, i el Mercat Medieval de Vic comença el 5 de desembre, segons l'agenda de l'Ajuntament de Vic (mireu-ne el programa abans d'anar-hi). Les dates de la Fira de Santa Llúcia de Barcelona del 2026 encara no s'han publicat. Tots, a ${b2link("christmas", "ca", "la guia de mercats de Nadal")}, i les fires amb data oficial de cada poble, a [fires de Nadal per municipi](${fairsHubPath("ca")}).`,
         `**Pessebres vivents.** El calendari, amb les dates de cada un quan les publiquen, és a ${b2link("pessebres", "ca", "la guia de pessebres vivents")}.`,
-        `**Nadal a Barcelona.** Els llums, el pessebre de la plaça de Sant Jaume i què obre per les festes, a ${b2link("christmasBarcelona", "ca", "Nadal a Barcelona")}.`,
+        `**Nadal a Barcelona.** Els llums, el pessebre de la plaça de Sant Jaume i què obre per les festes, a ${b2link("christmasBarcelona", "ca", "l'encesa de llums de Nadal a Barcelona")}.`,
         `**Neu i esquí.** Baqueira Beret té previst obrir la temporada el 28 de novembre, si la meteorologia i la neu ho permeten (notícia de l'estació del 28 de juliol de 2026); cap obertura és segura fins que no hi ha neu. Mira ${b2link("snowNow", "ca", "si hi ha neu al Pirineu avui")} i ${b2link("ski", "ca", "les estacions d'esquí de Catalunya")}.`,
         `**El temps.** Les mitjanes del desembre són a ${b2link("climate", "ca", "la guia del temps a Barcelona mes a mes")}.`,
       ),
@@ -465,9 +470,9 @@ export function buildDecemberBridgeBody(locale: Locale): Block[] {
         "Algunas ideas con fecha oficial y las guías donde las seguimos:",
       ),
       list(
-        `**Mercados de Navidad.** La 45ª Fira de l'Avet de Espinelves (Osona) es del 28 de noviembre al 8 de diciembre de 2026, según el Ayuntamiento de Espinelves, y el Mercat Medieval de Vic empieza el 5 de diciembre, según la agenda del Ayuntamiento de Vic (consultad el programa antes de ir). Las fechas de la Fira de Santa Llúcia de Barcelona de 2026 aún no se han publicado. Todos, en ${b2link("christmas", "es", "la guía de mercados de Navidad")}.`,
+        `**Mercados de Navidad.** La 45ª Fira de l'Avet de Espinelves (Osona) es del 28 de noviembre al 8 de diciembre de 2026, según el Ayuntamiento de Espinelves, y el Mercat Medieval de Vic empieza el 5 de diciembre, según la agenda del Ayuntamiento de Vic (consultad el programa antes de ir). Las fechas de la Fira de Santa Llúcia de Barcelona de 2026 aún no se han publicado. Todos, en ${b2link("christmas", "es", "la guía de mercados de Navidad")}, y las ferias con fecha oficial de cada pueblo, en [ferias de Navidad por municipio](${fairsHubPath("es")}).`,
         `**Belenes vivientes.** El calendario, con las fechas de cada uno cuando se publican, está en ${b2link("pessebres", "es", "la guía de belenes vivientes")}.`,
-        `**Navidad en Barcelona.** Las luces, el belén de la plaza de Sant Jaume y qué abre en las fiestas, en ${b2link("christmasBarcelona", "es", "Navidad en Barcelona")}.`,
+        `**Navidad en Barcelona.** Las luces, el belén de la plaza de Sant Jaume y qué abre en las fiestas, en ${b2link("christmasBarcelona", "es", "el encendido de luces de Navidad en Barcelona")}.`,
         `**Nieve y esquí.** Baqueira Beret tiene previsto abrir la temporada el 28 de noviembre «siempre que las condiciones meteorológicas y de nieve lo permitan» (noticia de la estación del 28 de julio de 2026); ninguna apertura es segura hasta que hay nieve. Mira ${b2link("snowNow", "es", "si hay nieve en el Pirineo hoy")} y ${b2link("ski", "es", "las estaciones de esquí de Cataluña")}.`,
         `**El tiempo.** Las medias de diciembre están en ${b2link("climate", "es", "la guía del tiempo en Barcelona mes a mes")}.`,
       ),
@@ -549,9 +554,9 @@ export function buildDecemberBridgeBody(locale: Locale): Block[] {
       "A few ideas with official dates, and the guides where we follow them:",
     ),
     list(
-      `**Christmas markets.** The 45th Fira de l'Avet in Espinelves (Osona) runs from 28 November to 8 December 2026, according to Espinelves town council, and the Vic Medieval Market starts on 5 December, according to Vic town council's listings (check the programme before you go). Barcelona's Fira de Santa Llúcia has not published its 2026 dates yet. All of them are in ${b2link("christmas", "en", "our Christmas markets guide")}.`,
+      `**Christmas markets.** The 45th Fira de l'Avet in Espinelves (Osona) runs from 28 November to 8 December 2026, according to Espinelves town council, and the Vic Medieval Market starts on 5 December, according to Vic town council's listings (check the programme before you go). Barcelona's Fira de Santa Llúcia has not published its 2026 dates yet. All of them are in ${b2link("christmas", "en", "our Christmas markets guide")}, and each town's markets with official dates in [Christmas markets by town](${fairsHubPath("en")}).`,
       `**Living nativity scenes.** The calendar, with each one's dates once published, is in ${b2link("pessebres", "en", "our living nativity scenes guide")}.`,
-      `**Christmas in Barcelona.** The lights, the Plaça de Sant Jaume nativity scene and what is open over the holidays: ${b2link("christmasBarcelona", "en", "Christmas in Barcelona")}.`,
+      `**Christmas in Barcelona.** The lights, the Plaça de Sant Jaume nativity scene and what is open over the holidays: ${b2link("christmasBarcelona", "en", "the Barcelona Christmas lights switch-on")}.`,
       `**Snow and skiing.** Baqueira Beret plans to open its season on 28 November, weather and snow permitting (the resort's news item of 28 July 2026); no opening is certain until the snow is there. Check ${b2link("snowNow", "en", "whether there is snow in the Pyrenees today")} and ${b2link("ski", "en", "Catalonia's ski resorts")}.`,
       `**Weather.** December averages are in ${b2link("climate", "en", "our Barcelona weather by month guide")}.`,
     ),

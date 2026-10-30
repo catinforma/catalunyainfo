@@ -1,5 +1,6 @@
 import type { Block } from "@/lib/content/blocks";
 import type { Locale } from "@/lib/i18n/config";
+import { fairsHubPath } from "@/lib/programmatic/christmas-fairs/paths";
 
 import { dayDate } from "./festive";
 import { SHOPS } from "./shops";
@@ -65,6 +66,13 @@ import {
  * 35th edition, no start time) and the donation page (Bizum 33333, no phone
  * number); nothing new to add.
  *
+ * 30 Oct 2026, afternoon (seasonal top-3 push): the 2026 hub, the donation
+ * page and the volunteering page read again (still no start time and no phone
+ * number; pre-registration until 10:00 on 10 November). Titles kept; the H1
+ * and the lead now say "La Marató de TV3", the words people search ("marató
+ * tv3 2026"), and the FAQ answers "a quina hora", "on es veu" and "com ser
+ * voluntari" as well as "quan és". Links: the Christmas fairs hub.
+ *
  * No new photograph: the hero is the shops guide's lead picture (Christmas
  * lights), with the same alt text and caption.
  */
@@ -103,25 +111,25 @@ const SOURCES: B2Source[] = [
 export const MARATO_META: Record<Locale, { path: string; title: string; seoTitle: string; seoDescription: string; excerpt: string }> = {
   ca: {
     path: "guies/la-marato-tv3-3cat",
-    title: "La Marató de 3Cat 2026: quan és, a què es dedica i com fer un donatiu",
+    title: "La Marató de TV3 2026: diumenge 13 de desembre, a què es dedica i com fer un donatiu",
     seoTitle: "La Marató de TV3 2026: 13 de desembre, causa i donatius",
     seoDescription:
-      "La Marató de 3Cat 2026 és el diumenge 13 de desembre i es dedica a les malalties neurodegeneratives i neuromusculars. Com veure-la i fer un donatiu.",
+      "La Marató de TV3 2026 és el diumenge 13 de desembre i es dedica a les malalties neurodegeneratives i neuromusculars. Com veure-la i fer un donatiu.",
     excerpt:
       "La Marató 2026, la 35a: quan és, a quines malalties es dedica, qui la presenta, com veure-la i com col·laborar-hi per canals oficials.",
   },
   es: {
     path: "guias/la-marato-tv3-3cat",
-    title: "La Marató de 3Cat 2026: cuándo es, a qué se dedica y cómo donar",
+    title: "La Marató de TV3 2026: domingo 13 de diciembre, a qué se dedica y cómo donar",
     seoTitle: "La Marató de TV3 2026: 13 de diciembre, causa y cómo donar",
     seoDescription:
-      "La Marató de 3Cat 2026 es el domingo 13 de diciembre y se dedica a las enfermedades neurodegenerativas y neuromusculares. Cómo verla y cómo donar.",
+      "La Marató de TV3 2026 es el domingo 13 de diciembre y se dedica a las enfermedades neurodegenerativas y neuromusculares. Cómo verla y cómo donar.",
     excerpt:
       "La Marató 2026, la 35ª: cuándo es, a qué enfermedades se dedica, quién la presenta, cómo verla y cómo colaborar por canales oficiales.",
   },
   en: {
     path: "guides/la-marato-tv3-telethon",
-    title: "La Marató 2026: date, cause and how to donate to Catalonia's TV3 telethon",
+    title: "La Marató 2026: Catalonia's TV3 telethon on Sunday 13 December, cause and how to donate",
     seoTitle: "La Marató 2026: TV3 telethon on 13 December, how to donate",
     seoDescription:
       "La Marató de 3Cat 2026, Catalonia's TV3 telethon, is on Sunday 13 December, for neurodegenerative and neuromuscular diseases. How to watch and donate.",
@@ -142,7 +150,7 @@ export function buildMaratoBody(locale: Locale): Block[] {
   if (locale === "ca") {
     return [
       lead(
-        `**La Marató de 3Cat 2026 és el ${dayNoYear} i es dedica a les malalties neurodegeneratives i neuromusculars.** És la ${MARATO.edition}a edició del programa solidari de TV3 i Catalunya Ràdio, que recull diners per a la recerca: la presenten Raquel Sans i Miki Núñez a TV3 i Roger Escapa a Catalunya Ràdio.`,
+        `**La Marató de TV3 2026 és el ${dayNoYear} i es dedica a les malalties neurodegeneratives i neuromusculars.** És la ${MARATO.edition}a edició del programa solidari de TV3 i Catalunya Ràdio, que ara es diu La Marató de 3Cat i recull diners per a la recerca: la presenten Raquel Sans i Miki Núñez a TV3 i Roger Escapa a Catalunya Ràdio.`,
       ),
       keyFacts("La Marató 2026, d'un cop d'ull", [
         { label: "Data", value: dayDate(MARATO.date, "ca").replace(/^d/, "D") },
@@ -160,7 +168,7 @@ export function buildMaratoBody(locale: Locale): Block[] {
       ),
       ...h2(
         "Quan és La Marató 2026?",
-        `El **${day}**. Segons la Fundació, el programa de televisió i ràdio dura unes quinze hores en directe; l'hora d'inici i la graella del 2026 encara no s'han publicat (consultat el 26 d'octubre de 2026).`,
+        `El **${day}**. Segons la Fundació, el programa de televisió i ràdio dura unes quinze hores en directe; l'hora d'inici i la graella del 2026 encara no s'han publicat (consultat el 30 d'octubre de 2026).`,
         `És el diumenge després del ${b2link("decemberBridge", "ca", "pont de desembre")}. Aquell dia les botigues de Barcelona poden obrir, perquè el 13 de desembre és un dels diumenges d'obertura del calendari comercial del 2026: ho detallem a ${b2link("shops", "ca", "la guia de botigues obertes en diumenges i festius")}.`,
       ),
       ...h2(
@@ -203,14 +211,18 @@ export function buildMaratoBody(locale: Locale): Block[] {
       ),
       ...h2(
         "Més plans per al desembre",
-        `El pont, els mercats i el Nadal: ${b2link("decemberBridge", "ca", "el pont de desembre del 2026")}, ${b2link("christmas", "ca", "els mercats de Nadal de Catalunya")}, ${b2link("pessebres", "ca", "els pessebres vivents")} i ${b2link("christmasBarcelona", "ca", "el Nadal a Barcelona")}.`,
+        `El pont, els mercats i el Nadal: ${b2link("decemberBridge", "ca", "el pont de desembre del 2026")}, ${b2link("christmas", "ca", "els mercats de Nadal de Catalunya")}, ${b2link("pessebres", "ca", "els pessebres vivents")} i ${b2link("christmasBarcelona", "ca", "l'encesa de llums de Nadal a Barcelona")}.`,
+        `El cap de setmana de La Marató també és de fires de Nadal en molts municipis: les que tenen data oficial, poble a poble, són a [fires de Nadal per municipi](${fairsHubPath("ca")}).`,
       ),
       faq([
-        { question: "Quan és La Marató 2026?", answer: `El ${day}, a TV3 i Catalunya Ràdio.` },
+        { question: "Quan és La Marató de TV3 2026?", answer: `El ${day}, a TV3 i Catalunya Ràdio.` },
+        { question: "A quina hora comença La Marató 2026?", answer: "3Cat encara no ho ha publicat (consultat el 30 d'octubre de 2026). Segons la Fundació, el programa dura unes quinze hores en directe, a TV3 i a Catalunya Ràdio." },
+        { question: "On es pot veure La Marató?", answer: "A TV3 i a Catalunya Ràdio, i per internet a la secció de directes de 3Cat (3cat.cat), que emet els dos canals en directe." },
         { question: "A què es dedica La Marató 2026?", answer: "A les malalties neurodegeneratives i neuromusculars, com l'Alzheimer, el Parkinson, l'esclerosi múltiple, l'ELA o les distròfies musculars." },
         { question: "Qui presenta La Marató 2026?", answer: "Raquel Sans i Miki Núñez a TV3, i Roger Escapa a Catalunya Ràdio." },
         { question: "Com puc fer un donatiu a La Marató?", answer: `A la pàgina oficial de donatius de 3Cat: per internet, per Bizum amb el codi ${MARATO.bizum} (a «Donacions») o per transferència al compte que hi publica la Fundació.` },
-        { question: "Quin és el telèfon de La Marató 2026?", answer: "El 26 d'octubre de 2026 encara no s'havia publicat. Les trucades del dia s'atenen a les seus de Barcelona, Girona, Tarragona i Lleida; fes servir només el número que publiqui 3Cat." },
+        { question: "Quin és el telèfon de La Marató 2026?", answer: "El 30 d'octubre de 2026 encara no s'havia publicat. Les trucades del dia s'atenen a les seus de Barcelona, Girona, Tarragona i Lleida; fes servir només el número que publiqui 3Cat." },
+        { question: "Com puc ser voluntari de La Marató 2026?", answer: "Preinscrivint-te a marato.voluntariat.org fins a les 10 h del 10 de novembre de 2026; les places per atendre trucades a les seus telefòniques el dia de La Marató se sortegen entre totes les persones preinscrites." },
         { question: "Els donatius a La Marató desgraven?", answer: "Sí, per als contribuents de l'IRPF: la Llei 49/2002 permet deduir el 80% dels primers 250 € i el 40% de la resta (el 45% per a qui hi va donar el mateix o més els dos anys anteriors). El certificat s'ha de demanar a la Fundació abans del 31 de desembre." },
       ]),
       ...paras(verifiedLine("ca", MARATO_VERIFIED)),
@@ -221,7 +233,7 @@ export function buildMaratoBody(locale: Locale): Block[] {
   if (locale === "es") {
     return [
       lead(
-        `**La Marató de 3Cat 2026 es el ${dayNoYear} y se dedica a las enfermedades neurodegenerativas y neuromusculares.** Es la ${MARATO.edition}ª edición del programa solidario de TV3 y Catalunya Ràdio, que recauda dinero para la investigación: la presentan Raquel Sans y Miki Núñez en TV3 y Roger Escapa en Catalunya Ràdio.`,
+        `**La Marató de TV3 2026 es el ${dayNoYear} y se dedica a las enfermedades neurodegenerativas y neuromusculares.** Es la ${MARATO.edition}ª edición del programa solidario de TV3 y Catalunya Ràdio, que ahora se llama La Marató de 3Cat y recauda dinero para la investigación: la presentan Raquel Sans y Miki Núñez en TV3 y Roger Escapa en Catalunya Ràdio.`,
       ),
       keyFacts("La Marató 2026, de un vistazo", [
         { label: "Fecha", value: dayDate(MARATO.date, "es").replace(/^d/, "D") },
@@ -239,7 +251,7 @@ export function buildMaratoBody(locale: Locale): Block[] {
       ),
       ...h2(
         "¿Cuándo es La Marató 2026?",
-        `El **${day}**. Según la Fundació, el programa de televisión y radio dura unas quince horas en directo; la hora de inicio y la parrilla de 2026 aún no se han publicado (consultado el 26 de octubre de 2026).`,
+        `El **${day}**. Según la Fundació, el programa de televisión y radio dura unas quince horas en directo; la hora de inicio y la parrilla de 2026 aún no se han publicado (consultado el 30 de octubre de 2026).`,
         `Es el domingo después del ${b2link("decemberBridge", "es", "puente de diciembre")}. Ese día las tiendas de Barcelona pueden abrir, porque el 13 de diciembre es uno de los domingos de apertura del calendario comercial de 2026: lo detallamos en ${b2link("shops", "es", "la guía de tiendas abiertas en domingos y festivos")}.`,
       ),
       ...h2(
@@ -282,14 +294,18 @@ export function buildMaratoBody(locale: Locale): Block[] {
       ),
       ...h2(
         "Más planes para diciembre",
-        `El puente, los mercados y la Navidad: ${b2link("decemberBridge", "es", "el puente de diciembre de 2026")}, ${b2link("christmas", "es", "los mercados de Navidad de Cataluña")}, ${b2link("pessebres", "es", "los belenes vivientes")} y ${b2link("christmasBarcelona", "es", "la Navidad en Barcelona")}.`,
+        `El puente, los mercados y la Navidad: ${b2link("decemberBridge", "es", "el puente de diciembre de 2026")}, ${b2link("christmas", "es", "los mercados de Navidad de Cataluña")}, ${b2link("pessebres", "es", "los belenes vivientes")} y ${b2link("christmasBarcelona", "es", "el encendido de luces de Navidad en Barcelona")}.`,
+        `El fin de semana de La Marató también es de ferias de Navidad en muchos municipios: las que tienen fecha oficial, pueblo a pueblo, están en [ferias de Navidad por municipio](${fairsHubPath("es")}).`,
       ),
       faq([
-        { question: "¿Cuándo es La Marató 2026?", answer: `El ${day}, en TV3 y Catalunya Ràdio.` },
+        { question: "¿Cuándo es La Marató de TV3 2026?", answer: `El ${day}, en TV3 y Catalunya Ràdio.` },
+        { question: "¿A qué hora empieza La Marató 2026?", answer: "3Cat aún no lo ha publicado (consultado el 30 de octubre de 2026). Según la Fundació, el programa dura unas quince horas en directo, en TV3 y en Catalunya Ràdio." },
+        { question: "¿Dónde se puede ver La Marató?", answer: "En TV3 y en Catalunya Ràdio, y por internet en la sección de directos de 3Cat (3cat.cat), que emite los dos canales en directo." },
         { question: "¿A qué se dedica La Marató 2026?", answer: "A las enfermedades neurodegenerativas y neuromusculares, como el alzhéimer, el párkinson, la esclerosis múltiple, la ELA o las distrofias musculares." },
         { question: "¿Quién presenta La Marató 2026?", answer: "Raquel Sans y Miki Núñez en TV3, y Roger Escapa en Catalunya Ràdio." },
         { question: "¿Cómo puedo hacer un donativo a La Marató?", answer: `En la página oficial de donativos de 3Cat: por internet, por Bizum con el código ${MARATO.bizum} (en el apartado de donaciones) o por transferencia a la cuenta que publica la Fundació.` },
-        { question: "¿Cuál es el teléfono de La Marató 2026?", answer: "El 26 de octubre de 2026 aún no se había publicado. Las llamadas del día se atienden en los centros de Barcelona, Girona, Tarragona y Lleida; usa solo el número que publique 3Cat." },
+        { question: "¿Cuál es el teléfono de La Marató 2026?", answer: "El 30 de octubre de 2026 aún no se había publicado. Las llamadas del día se atienden en los centros de Barcelona, Girona, Tarragona y Lleida; usa solo el número que publique 3Cat." },
+        { question: "¿Cómo puedo ser voluntario de La Marató 2026?", answer: "Preinscribiéndote en marato.voluntariat.org hasta las 10 h del 10 de noviembre de 2026; las plazas para atender llamadas en los centros telefónicos el día de La Marató se sortean entre todas las personas preinscritas." },
         { question: "¿Los donativos a La Marató desgravan?", answer: "Sí, para los contribuyentes del IRPF: la Ley 49/2002 permite deducir el 80% de los primeros 250 € y el 40% del resto (el 45% para quien donó lo mismo o más los dos años anteriores). El certificado se pide a la Fundació antes del 31 de diciembre." },
       ]),
       ...paras(verifiedLine("es", MARATO_VERIFIED)),
@@ -299,7 +315,7 @@ export function buildMaratoBody(locale: Locale): Block[] {
 
   return [
     lead(
-      `**La Marató de 3Cat 2026 is on ${dayNoYear} and is dedicated to neurodegenerative and neuromuscular diseases.** It is the ${MARATO.edition}th edition of the TV3 and Catalunya Ràdio telethon that raises money for medical research: Raquel Sans and Miki Núñez present it on TV3, Roger Escapa on Catalunya Ràdio.`,
+      `**La Marató de TV3 2026 is on ${dayNoYear} and is dedicated to neurodegenerative and neuromuscular diseases.** It is the ${MARATO.edition}th edition of the TV3 and Catalunya Ràdio telethon, now called La Marató de 3Cat, that raises money for medical research: Raquel Sans and Miki Núñez present it on TV3, Roger Escapa on Catalunya Ràdio.`,
     ),
     keyFacts("La Marató 2026 at a glance", [
       { label: "Date", value: dayDate(MARATO.date, "en") },
@@ -317,7 +333,7 @@ export function buildMaratoBody(locale: Locale): Block[] {
     ),
     ...h2(
       "When is La Marató 2026?",
-      `On **${day}**. According to the Fundació, the TV and radio programme runs for about fifteen hours live; the 2026 start time and running order have not been published (checked on 26 October 2026).`,
+      `On **${day}**. According to the Fundació, the TV and radio programme runs for about fifteen hours live; the 2026 start time and running order have not been published (checked on 30 October 2026).`,
       `It is the Sunday after the ${b2link("decemberBridge", "en", "December long weekend")}. Shops in Barcelona may open that day, because 13 December is one of the Sunday opening days in the 2026 shopping calendar: details in ${b2link("shops", "en", "our guide to shops open on Sundays and holidays")}.`,
     ),
     ...h2(
@@ -360,14 +376,18 @@ export function buildMaratoBody(locale: Locale): Block[] {
     ),
     ...h2(
       "More for December",
-      `The long weekend, the markets and Christmas: ${b2link("decemberBridge", "en", "the December 2026 long weekend")}, ${b2link("christmas", "en", "Christmas markets in Catalonia")}, ${b2link("pessebres", "en", "living nativity scenes")} and ${b2link("christmasBarcelona", "en", "Christmas in Barcelona")}.`,
+      `The long weekend, the markets and Christmas: ${b2link("decemberBridge", "en", "the December 2026 long weekend")}, ${b2link("christmas", "en", "Christmas markets in Catalonia")}, ${b2link("pessebres", "en", "living nativity scenes")} and ${b2link("christmasBarcelona", "en", "the Barcelona Christmas lights switch-on")}.`,
+      `La Marató's weekend is also a Christmas market weekend in many towns: those with official dates, town by town, are in [Christmas markets by town](${fairsHubPath("en")}).`,
     ),
     faq([
-      { question: "When is La Marató 2026?", answer: `On ${day}, on TV3 and Catalunya Ràdio.` },
+      { question: "When is La Marató de TV3 2026?", answer: `On ${day}, on TV3 and Catalunya Ràdio.` },
+      { question: "What time does La Marató 2026 start?", answer: "3Cat has not published it yet (checked on 30 October 2026). According to the Fundació, the programme runs for about fifteen hours live on TV3 and Catalunya Ràdio." },
+      { question: "Where can I watch La Marató?", answer: "On TV3 and Catalunya Ràdio, and online in 3Cat's live section (3cat.cat), which streams both channels." },
       { question: "What is La Marató 2026 for?", answer: "Neurodegenerative and neuromuscular diseases, such as Alzheimer's, Parkinson's, multiple sclerosis, ALS and the muscular dystrophies." },
       { question: "Who presents La Marató 2026?", answer: "Raquel Sans and Miki Núñez on TV3, and Roger Escapa on Catalunya Ràdio." },
       { question: "How can I donate to La Marató?", answer: `On 3Cat's official donation page: online, by Bizum with code ${MARATO.bizum} (in the donations section) or by bank transfer to the account the Fundació publishes there.` },
-      { question: "What is La Marató 2026's phone number?", answer: "It had not been published on 26 October 2026. Calls on the day are taken at centres in Barcelona, Girona, Tarragona and Lleida; only use the number 3Cat publishes." },
+      { question: "What is La Marató 2026's phone number?", answer: "It had not been published on 30 October 2026. Calls on the day are taken at centres in Barcelona, Girona, Tarragona and Lleida; only use the number 3Cat publishes." },
+      { question: "How can I volunteer for La Marató 2026?", answer: "Pre-register at marato.voluntariat.org before 10:00 on 10 November 2026; places answering calls at the phone centres on the day are drawn by lot among everyone who signs up." },
       { question: "Are donations to La Marató tax-deductible?", answer: "Yes, for Spanish income tax (IRPF) payers: Law 49/2002 allows a deduction of 80% of the first €250 and 40% of the rest (45% for repeat donors who gave the same or more in the two previous years). Request the certificate from the Fundació before 31 December." },
     ]),
     ...paras(verifiedLine("en", MARATO_VERIFIED)),

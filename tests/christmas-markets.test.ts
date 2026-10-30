@@ -1,9 +1,13 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
 
-import { CHRISTMAS } from "../src/lib/content/batch02/christmas.ts";
-import { FAIRS, townBySlug } from "../src/lib/programmatic/christmas-fairs/data.ts";
+import { CHRISTMAS, FAMILY } from "../src/lib/content/batch02/christmas.ts";
+import { LOCAL_MONDAY_7 } from "../src/lib/content/batch02/december-bridge.ts";
+import { B2_PATHS } from "../src/lib/content/batch02/shared.ts";
+import { FAIRS, familyLastChecked, townBySlug, towns } from "../src/lib/programmatic/christmas-fairs/data.ts";
+import { fairsHubPath } from "../src/lib/programmatic/christmas-fairs/paths.ts";
 import { bodyToPlainText } from "../src/lib/content/blocks.ts";
+import { holidayOn } from "../src/lib/content/holidays/calendar.ts";
 import { IMAGE_BY_KEY } from "../src/lib/content/images.ts";
 import { LOCALES } from "../src/lib/i18n/config.ts";
 
@@ -94,4 +98,62 @@ test("Manresa: 12-13 Dec 2026, attributed to the Generalitat fairs calendar, as 
   assert.match(JSON.stringify(CHRISTMAS.editions.ca.blocks), /\/ca\/fires-de-nadal\/manresa\//);
   assert.match(JSON.stringify(CHRISTMAS.editions.es.blocks), /\/es\/mercados-navidad\/manresa\//);
   assert.ok(CHRISTMAS.sources.some((s) => s.url === "https://analisi.transparenciacatalunya.cat/d/vm32-przc"));
+});
+
+/**
+ * Seasonal top-3 push, 30 Oct 2026: "fires de nadal catalunya 2026" asks for
+ * the list. The ca/es snippet and lead open with how many fairs have an
+ * official date, the same count the Christmas fairs hub shows, and link it.
+ */
+test("every edition's title fits in 60 characters and its description in 155", () => {
+  for (const locale of LOCALES) {
+    const { seoTitle, seoDescription, title } = CHRISTMAS.editions[locale];
+    assert.ok(seoTitle.length > 10 && seoTitle.length <= 60, `${locale} title ${seoTitle.length}: ${seoTitle}`);
+    assert.ok(seoDescription.length > 60 && seoDescription.length <= 155, `${locale} description ${seoDescription.length}: ${seoDescription}`);
+    assert.match(seoTitle, /2026/, locale);
+    assert.match(title, /2026/, locale);
+  }
+  assert.match(CHRISTMAS.editions.ca.seoTitle, /^Fires i mercats de Nadal Catalunya 2026/);
+});
+
+test("the count of fairs with an official date is the hub's, and the ca/es snippet and lead open with it", () => {
+  assert.equal(FAMILY.fairs, FAIRS.length);
+  assert.equal(FAMILY.towns, towns().length);
+  assert.equal(FAMILY.checked, familyLastChecked());
+  assert.ok(FAMILY.fairs >= 30, `only ${FAMILY.fairs} fairs`);
+  const open = (from: string, to: string) => FAIRS.filter((f) => f.start <= to && f.end >= from).length;
+  assert.equal(FAMILY.bridge, open("2026-12-05", "2026-12-08"));
+  assert.equal(FAMILY.maratoWeekend, open("2026-12-12", "2026-12-13"));
+  const snippet = { ca: new RegExp(`^Fires de Nadal Catalunya 2026: ${FAMILY.fairs} amb data oficial`), es: new RegExp(`^Mercados navideños Cataluña 2026: ${FAMILY.fairs} con fecha oficial`) };
+  const leadStart = { ca: `${FAMILY.fairs} fires i mercats de Nadal de Catalunya ja tenen data oficial per al 2026`, es: `${FAMILY.fairs} ferias y mercados de Navidad de Cataluña ya tienen fecha oficial para 2026` };
+  for (const locale of ["ca", "es"] as const) {
+    const edition = CHRISTMAS.editions[locale];
+    assert.match(edition.seoDescription, snippet[locale], locale);
+    const leadBlock = edition.blocks[0] as { type: string; lead?: boolean; text: string };
+    assert.ok(leadBlock.lead, locale);
+    assert.ok(bodyToPlainText([edition.blocks[0]!]).startsWith(leadStart[locale]), `${locale}: ${leadBlock.text.slice(0, 120)}`);
+    assert.ok(leadBlock.text.includes(`](${fairsHubPath(locale)})`), `${locale}: the lead links the hub`);
+    assert.match(leadBlock.text, /Fira de Santa Llúcia 2026/, `${locale}: Santa Llúcia still answered in the lead`);
+    const faqBlock = edition.blocks.find((b) => b.type === "faq") as { items: { question: string; answer: string }[] };
+    assert.match(faqBlock.items[0]!.question, /^(Quines fires de Nadal hi ha a Catalunya el 2026\?|¿Qué ferias de Navidad hay en Cataluña en 2026\?)$/, locale);
+    assert.ok(faqBlock.items[0]!.answer.includes(String(FAMILY.fairs)), locale);
+  }
+});
+
+test("the guide links La Marató and the December bridge, and says only Tuesday 8 is a holiday everywhere", () => {
+  assert.ok(holidayOn("2026-12-08"));
+  assert.equal(holidayOn("2026-12-07"), null);
+  for (const locale of LOCALES) {
+    const json = JSON.stringify(CHRISTMAS.editions[locale].blocks);
+    assert.ok(json.includes(`](/${locale}/${B2_PATHS.marato[locale]}/)`), `${locale}: -> marato`);
+    assert.ok(json.includes(`](/${locale}/${B2_PATHS.decemberBridge[locale]}/)`), `${locale}: -> bridge`);
+    const text = bodyToPlainText(CHRISTMAS.editions[locale].blocks);
+    assert.ok(text.includes(String(FAMILY.bridge)) && text.includes(String(FAMILY.maratoWeekend)), locale);
+  }
+  for (const locale of ["ca", "es"] as const) {
+    const faqBlock = CHRISTMAS.editions[locale].blocks.find((b) => b.type === "faq") as { items: { answer: string }[] };
+    const bridge = faqBlock.items.find((item) => /pont de desembre|puente de diciembre/.test(JSON.stringify(item)))!;
+    assert.match(bridge.answer, /únic festiu a tot Catalunya és el dimarts 8|único festivo en toda Cataluña es el martes 8/, locale);
+    assert.ok(bridge.answer.includes(String(LOCAL_MONDAY_7.municipalities)), `${locale}: the local Monday-7 holidays are not hidden`);
+  }
 });

@@ -36,7 +36,7 @@ export function townCrumbs(town: Town, locale: FairsLocale): Crumb[] {
   ];
 }
 
-const GUIDES = ["christmas", "christmasBarcelona", "pessebres", "christmasTraditions", "shops"] as const;
+const GUIDES = ["christmas", "christmasBarcelona", "decemberBridge", "pessebres", "christmasTraditions", "shops"] as const;
 
 /** One town's Christmas fairs, with how to get there, holidays and shops on those days, and what is nearby. */
 export function TownPage({ town, locale }: { town: Town; locale: FairsLocale }) {

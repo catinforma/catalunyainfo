@@ -28,6 +28,8 @@ import { buildBody as buildHolidayBody } from "../src/lib/content/holidays/publi
 import { IMAGE_BY_KEY } from "../src/lib/content/images.ts";
 import { COPY as SCHOOL_COPY } from "../src/lib/content/school/publish.ts";
 import { LOCALES, type Locale } from "../src/lib/i18n/config.ts";
+import { fairsHubPath } from "../src/lib/programmatic/christmas-fairs/paths.ts";
+import { christmasFairsPaths } from "../src/lib/programmatic/christmas-fairs/sitemap.ts";
 
 /**
  * Round 4 (26 Oct 2026): the December 2026 bridge and La Marató 2026.
@@ -44,11 +46,13 @@ const ARTICLES: B2Article[] = [DECEMBER_BRIDGE, MARATO_GUIDE];
 const text = (blocks: Block[]) => bodyToPlainText(blocks);
 const sentences = (value: string) => value.split(/(?<=[.!?])\s+(?=[A-ZÀ-ÚÇ¿«"(*])/u);
 
-const PUBLISHED = new Set(
-  [...Object.values(B2_PATHS), ...Object.values(ARTICLE_PATHS), ...Object.values(SIBLING_PATHS)].flatMap((paths) =>
+const PUBLISHED = new Set([
+  ...[...Object.values(B2_PATHS), ...Object.values(ARTICLE_PATHS), ...Object.values(SIBLING_PATHS)].flatMap((paths) =>
     LOCALES.map((locale) => `/${locale}/${paths[locale]}/`),
   ),
-);
+  // Programmatic family pages, as their own module lists what it publishes (30 Oct: both pages link the fairs hub).
+  ...christmasFairsPaths().map((p) => p.path),
+]);
 
 /* -------------------------------------------------------------------------- */
 /* Structure, SEO, links, photo                                               */
@@ -393,4 +397,49 @@ test("top-3 push (30 Oct 2026): the bridge snippet lists December's holidays and
   for (const iso of ["2026-12-08", "2026-12-25", "2026-12-26"]) assert.ok(holidayOn(iso), iso);
   assert.equal(holidayOn("2026-12-07"), null);
   assert.equal(MARATO.date, "2026-12-13");
+});
+
+/* -------------------------------------------------------------------------- */
+/* Seasonal top-3 push (30 Oct 2026, afternoon)                               */
+/* -------------------------------------------------------------------------- */
+
+test("La Marató answers in the searchers' words: TV3 in the H1, lead and snippet; FAQ for when, what time, where and volunteering", () => {
+  const questions: Record<Locale, string[]> = {
+    ca: ["Quan és La Marató de TV3 2026?", "A quina hora comença La Marató 2026?", "On es pot veure La Marató?", "Com puc ser voluntari de La Marató 2026?"],
+    es: ["¿Cuándo es La Marató de TV3 2026?", "¿A qué hora empieza La Marató 2026?", "¿Dónde se puede ver La Marató?", "¿Cómo puedo ser voluntario de La Marató 2026?"],
+    en: ["When is La Marató de TV3 2026?", "What time does La Marató 2026 start?", "Where can I watch La Marató?", "How can I volunteer for La Marató 2026?"],
+  };
+  const h1Day: Record<Locale, string> = { ca: "diumenge 13 de desembre", es: "domingo 13 de diciembre", en: "Sunday 13 December" };
+  for (const locale of LOCALES) {
+    const edition = MARATO_GUIDE.editions[locale];
+    assert.match(edition.title, /TV3/, locale);
+    assert.ok(edition.title.includes(h1Day[locale]), `${locale}: the H1 gives the day`);
+    assert.equal(dayDate(MARATO.date, locale, false).toLowerCase(), h1Day[locale].toLowerCase());
+    assert.match(text(edition.blocks.slice(0, 1)), /^La Marató de TV3 2026/, locale);
+    assert.match(edition.seoDescription, /TV3/, locale);
+    const items = (edition.blocks.find((b) => b.type === "faq") as { items: { question: string; answer: string }[] }).items;
+    for (const question of questions[locale]) assert.ok(items.some((item) => item.question === question), `${locale}: ${question}`);
+    const answer = (question: string) => items.find((item) => item.question === question)!.answer;
+    assert.ok(answer(questions[locale][0]!).includes(dayDate(MARATO.date, locale)), locale);
+    // No start time was published: the answer says so and prints none.
+    const time = answer(questions[locale][1]!);
+    assert.match(time, /encara no ho ha publicat|aún no lo ha publicado|has not published/, locale);
+    assert.doesNotMatch(time, /\b(?:[01]?\d|2[0-3])(?::[0-5]\d| h\b)/, `${locale}: a clock time in "${time}"`);
+    const volunteer = answer(questions[locale][3]!);
+    assert.match(volunteer, /marato\.voluntariat\.org/, locale);
+    assert.match(volunteer, /10 (de )?(novembre|noviembre|November) (de )?2026/, locale);
+  }
+});
+
+test("cluster links (30 Oct): La Marató and the bridge link the Christmas fairs hub; shops links the lights and the bridge; the lights page links the bridge", () => {
+  for (const locale of LOCALES) {
+    const hub = `](${fairsHubPath(locale)})`;
+    assert.ok(JSON.stringify(MARATO_GUIDE.editions[locale].blocks).includes(hub), `marato -> fairs hub ${locale}`);
+    assert.ok(JSON.stringify(DECEMBER_BRIDGE.editions[locale].blocks).includes(hub), `bridge -> fairs hub ${locale}`);
+    const shops = JSON.stringify(SHOPS.editions[locale].blocks);
+    assert.ok(shops.includes(`](/${locale}/${B2_PATHS.christmasBarcelona[locale]}/)`), `shops -> lights ${locale}`);
+    assert.ok(shops.includes(`](/${locale}/${B2_PATHS.decemberBridge[locale]}/)`), `shops -> bridge ${locale}`);
+    const lights = JSON.stringify(CHRISTMAS_BARCELONA.editions[locale].blocks);
+    assert.ok(lights.includes(`](/${locale}/${B2_PATHS.decemberBridge[locale]}/)`), `lights -> bridge ${locale}`);
+  }
 });

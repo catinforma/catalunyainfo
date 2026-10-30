@@ -398,10 +398,12 @@ const COPY: Record<Locale, T> = {
 
 function body(locale: Locale) {
   const t = COPY[locale];
+  // 30 Oct 2026 (seasonal top-3 push): the strongest page of the December
+  // cluster also links the lights and the December bridge.
   const christmas: Record<Locale, string> = {
-    ca: `Si surts a comprar per Nadal, mira també ${b2link("christmas", "ca", "els mercats de Nadal de Catalunya i les seves dates")}.`,
-    es: `Si sales de compras por Navidad, mira también ${b2link("christmas", "es", "los mercados de Navidad de Cataluña y sus fechas")}.`,
-    en: `If you are out Christmas shopping, see also ${b2link("christmas", "en", "Catalonia's Christmas markets and their dates")}.`,
+    ca: `Si surts a comprar per Nadal, mira també ${b2link("christmas", "ca", "els mercats de Nadal de Catalunya i les seves dates")}, ${b2link("christmasBarcelona", "ca", "quan és l'encesa de llums de Nadal a Barcelona")} i ${b2link("decemberBridge", "ca", "quins dies són festius al pont de desembre")}.`,
+    es: `Si sales de compras por Navidad, mira también ${b2link("christmas", "es", "los mercados de Navidad de Cataluña y sus fechas")}, ${b2link("christmasBarcelona", "es", "cuándo es el encendido de luces de Navidad en Barcelona")} y ${b2link("decemberBridge", "es", "qué días son festivos en el puente de diciembre")}.`,
+    en: `If you are out Christmas shopping, see also ${b2link("christmas", "en", "Catalonia's Christmas markets and their dates")}, ${b2link("christmasBarcelona", "en", "when Barcelona switches on its Christmas lights")} and ${b2link("decemberBridge", "en", "which days are holidays over the December long weekend")}.`,
   };
   const days = (isos: string[]) => (isos.length ? isos.map((iso) => weekdayDayMonth(iso, locale)).join(", ") : "—");
   return [

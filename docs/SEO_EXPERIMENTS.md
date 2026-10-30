@@ -1134,6 +1134,103 @@ nears, with clicks on the "register" and "dates" queries (zero now). CA shops
 page's demand ends on 29 Nov) and on 30 Nov (28 days): position, CTR and
 clicks per page and per target query. Check the last crawl date first.
 
+## 2026-10-30 — Seasonal top-3 push: Barcelona lights, La Marató, Christmas fairs
+
+Goal: move three seasonal clusters from positions 5-9 into the top 3 and lift
+CTR. This builds on the news-cycle push and the CTR sweep above (merged, not
+deployed; they deploy on 31 Oct), so the "old" titles below are those two
+entries' new ones and the baselines were earned under the titles before them.
+Facts read on the official pages on 30 Oct 2026 in the afternoon
+(`research_notes/seasonal-top3-30oct.md`).
+
+**Baseline, GSC 2-30 Oct 2026** (impressions / clicks / average position):
+
+- Lights: "encendido luces navidad barcelona 2026" 247/1/6.3, "cuando
+  encienden las luces de navidad en barcelona 2026" 242/1/5.5, "encesa llums
+  nadal barcelona 2026" 163/3/7.3 (ES page 71 at 6.3, CA page 99 at 8.0),
+  "encesa de llums barcelona 2026" 107/1/6.3, "encendido de luces barcelona
+  2026" 93/0/6.0, "luces navidad barcelona 2026" 50/0/9.6. Cluster 1,375
+  impressions, 12 clicks.
+- La Marató: "marato tv3 2026" 113/0/8.3, "marató tv3 2026" 105/0/7.7, "la
+  marato 2026" 62/0/7.8, "marató tv3 2026 data" 46/0/4.4, "la marató 2026"
+  36/0/5.3. Cluster 548 impressions, 0 clicks.
+- Christmas fairs: "fires de nadal catalunya 2026" 70/5/6.4 (CA markets
+  guide).
+
+**SERP check (30 Oct).** For the lights queries the pages above us promise the
+time and the place as well as the date: "Encendido de las luces de Navidad
+2026 en Barcelona: horarios y novedades del espectáculo inaugural", "…lugar,
+fecha y horario". Ours promised "cuándo es" / "què obre". No one has an
+official 2026 date.
+
+**Barcelona lights** (`christmas-bcn`; `marato` republishes it too).
+- Still not announced: press room home (latest items 29-30 Oct, none on
+  Christmas), the `nadal-2026` tag (latest 9 Jul) and barcelona.cat/nadal
+  ("es tornarà a actualitzar al voltant del mes de novembre del 2026"). In
+  2023, 2024 and 2025 the date was public by 23 October.
+- New verified pattern, from the City Council's notes: Thursday 23 Nov 2023,
+  Thursday 28 Nov 2024 and Saturday 22 Nov 2025, all on Passeig de Gràcia at
+  18:00 (the October announcements of 2023 and 2025 said 18:30; the press
+  calls of the week, 18:00); 2025 pressed by Jaume Collboni and the mayor of
+  Bethlehem, 2024 by two young people from "Veus contra el racisme" (not
+  named, one was 16), 2023 presided by the mayor.
+- Titles: ca "Encesa de llums de Nadal Barcelona 2026: quan és i què obre" →
+  "Encesa de llums de Nadal Barcelona 2026: data, hora i lloc"; es "Luces de
+  Navidad Barcelona 2026: cuándo es el encendido" → "Encendido luces Navidad
+  Barcelona 2026: fecha, hora y lugar"; en kept ("Barcelona Christmas lights
+  2026: switch-on date, what's open"). Once `ANNOUNCED_2026.lightsSwitchOn`
+  is filled the title becomes the date ("Encesa de llums Barcelona 2026:
+  dimecres 25 de novembre"), like the description.
+- Descriptions: "…encara sense data oficial (el 2025, dissabte 22 de
+  novembre). Carrers il·luminats, pessebre i què obre." → "…(el 2025,
+  dissabte 22 de novembre, a les 18:00 al passeig de Gràcia). Què obre."
+  (es/en the same).
+- Body: the lead's second sentence gives the three-year pattern; a table of
+  the last three switch-ons; FAQ "A quina hora és l'encesa", "On es fa", "Qui
+  encén els llums" (ca/es/en), each saying 2026 is pending.
+
+**La Marató** (`marato`). Re-read: 2026 hub (13 Dec, 35th, no start time),
+donation page (Bizum 33333, no phone number), volunteering (to 10:00 on
+10 Nov). Titles kept (they already give 13 December). H1 ca "La Marató de
+3Cat 2026: quan és, a què es dedica i com fer un donatiu" → "La Marató de TV3
+2026: diumenge 13 de desembre, a què es dedica i com fer un donatiu" (es/en
+alike). Descriptions ca/es "La Marató de 3Cat 2026 és el diumenge 13 de
+desembre…" → "La Marató de TV3 2026 és…" (the searched words). Lead opens
+"La Marató de TV3 2026 és el diumenge 13 de desembre". FAQ: "Quan és La
+Marató de TV3 2026?", "A quina hora comença" (not published, about fifteen
+hours live), "On es pot veure", "Com puc ser voluntari".
+
+**Christmas fairs** (`christmas`). Titles kept. Descriptions ca "Fires de
+Nadal Catalunya 2026: dates oficials, com l'Avet d'Espinelves…" → "Fires de
+Nadal Catalunya 2026: 41 amb data oficial, com l'Avet d'Espinelves…"; es
+"…fechas oficiales…" → "…41 con fecha oficial…". Lead opens with the count
+(the fairs family's, the same the hub shows) and links the hub; first FAQ
+"Quines fires de Nadal hi ha a Catalunya el 2026?"; FAQ on the bridge; 15
+fairs on the bridge and 19 on La Marató's weekend, both pages linked.
+
+**Internal links.** Lights → bridge; Marató → fairs hub; bridge → fairs hub;
+markets guide → Marató and bridge; shops (strongest December page, ES 1,172
+impressions) → lights and bridge; fairs hub → bridge and Marató; 41 fair town
+pages → bridge. Anchors to the lights page read "encesa de llums" /
+"encendido de luces"; `B2_TITLES` labels for the lights, Marató and (EN)
+bridge pages rewritten, the EN bridge one no longer saying "6, 7 and 8
+December".
+
+**Prediction.** Lights ca/es into the top 3 for "encendido luces navidad
+barcelona 2026" and "encesa llums nadal barcelona 2026" once the date is out
+and the title carries it; before that, CTR ≥ 3 % at the same position. La
+Marató CA ≥ 3 % CTR on "marató tv3 2026" by early December. "fires de nadal
+catalunya 2026" ≥ 10 % CTR at ≤ 5.
+
+**Follow-up.** Fill `ANNOUNCED_2026.lightsSwitchOn` (date, time, place, who,
+press-room URL) when barcelona.cat publishes it, expected early to mid
+November, and republish `christmas-bcn` (`nye` too if the New Year's Eve or
+parade fields are filled at the same time). Re-read 3Cat for
+the Marató start time and phone number from late November.
+
+**Measure on 30 Nov 2026** (and 14 Dec for La Marató): position, CTR and
+clicks per query above, per language.
+
 **Outcome:** _pending_
 
 ## Candidates not yet run
