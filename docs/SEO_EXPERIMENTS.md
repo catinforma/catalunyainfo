@@ -1093,6 +1093,49 @@ per target query; for the mushroom pages, which page the CA queries land on.
 
 **Outcome:** _pending_
 
+## 2026-10-30 — CTR sweep wave 4 (7-day data)
+
+Input: Search Console, 23-30 Oct 2026 (`dataState: all`), page and
+page × query; list and dispositions in
+`research_notes/x10/ctr-sweep-wave4-30oct.json`. Seven days, not 28, because
+many pages only started ranking this week. The curve is the site's own,
+page-level (every page's clicks over its impressions, by rounded position,
+pooled where a later position beat an earlier one): 1: 16.7 %, 2: 13.8 %,
+3: 7.2 %, 4-5: 6.3 %, 6: 3.8 %, 7: 1.0 %, 8: 0.8 %, 9-12: 0.6 %. The
+query-level curve is useless here: anonymised queries carry most clicks
+(page × query rows hold 340 of ~2,500).
+
+**The shortlist (≥ 80 impressions, position ≤ 10, CTR under half the curve)
+has 32 pages, and 30 are not touched**, because the 30 Oct entries above
+(merged, not deployed: Google has not seen those titles) already rewrote
+them, or another agent owns them (Christmas lights ca/es, La Marató,
+`src/lib/programmatic/elections/`), or the clock-change titles moved to March
+on 26 Oct. For each rewritten page the pending title was compared with the
+7-day queries; only one still missed them. The JSON gives the reason per page.
+
+| Page (publish group) | Title served → title merged 30 Oct (never served) → new | Baseline 7 d: impr. / clicks / position / CTR, curve | Target queries (7 d) | What changed |
+| --- | --- | --- | --- | --- |
+| `/en/guides/how-to-vote-catalonia/` (`voting`) | "How to vote in Spain's 2026 general election (29 November)" → "Spain general election 2026: how to vote, register, dates" → **"Spain general election 29 Nov 2026: how to vote, register"** | 2,059 / 31 / 5.5 / 1.5 %; curve 5.1 % | 2026 spain general election how to register to vote 85 at 6.3, … dates 79 at 8.2, how to vote 2026 spain general election 70 at 4.5, … polling stations 16 at 3.6, spain election date 13, when are the elections in spain 9, when is the election in spain 7; plus "como votar / cadastro para / inscription aux pilihan raya umum sepanyol 2026" 103 at 3.5, 57 at 4.6, 6 at 1.8 (searchers from abroad) | Why again: the merged title swapped the date for the word "dates", and date/"when" queries are the largest family (~150 impr.). Description → "Sunday 29 November, polls 9:00-20:00. Only Spanish citizens can vote; no sign-up, the roll is automatic. Find your polling station; postal vote by 19 Nov." (was "Spain votes on Sunday 29 November 2026 (Royal Decree 806/2026): no registration step…"). Lead's first sentence: date, hours, only Spanish citizens vote (EU and other foreign residents cannot); CERA deadlines in the key dates. Register section opens with who can vote (LOREG art. 2.1). FAQs: "When is the 2026 Spain general election?", "Can foreigners or EU citizens vote in Spain's general election?" (moved up from "Can foreigners vote in Catalonia?"), "How do I find my polling station…" (was "Where do I vote on 29 November?"), "How do Spaniards living abroad vote (CERA)?". ca/es untouched |
+| `/ca/guies/botigues-obertes-festius-catalunya/` (`shops`) | "Botigues obertes en festius i diumenges a Catalunya 2026-27" (kept by the top-3 push) → **"Festius i diumenges d'obertura 2026 a Catalunya i Barcelona"** | 336 / 6 / 5.8 / 1.8 %; curve 4.4 % | festius obertura comercial 2026 5.7, festius oberts catalunya 2026 8.3, festius comerços oberts 2026 8, diumenges oberts 2026 10, botigues obertes avui a barcelona 2026 7.5 (2-3 impr. each; the rest anonymised) | Title in the searchers' words, like the ES title of the top-3 push. Description and lead already answer (top-3 push, not deployed); one FAQ first: "Quins festius d'obertura comercial queden el 2026?" (29 Nov; 6, 8, 13, 20, 27 Dec; the 30 towns that differ, counted from `TOWNS_NOV_DEC`). No new facts |
+
+**Facts (voting EN), read on 30 Oct 2026:** RD 806/2026 arts. 2, 4, 5 (BOE-A-2026-20742); LOREG art. 2.1 ("El derecho de sufragio corresponde a los españoles mayores de edad"); Interior's notes of 20 Oct (guide: "Pueden votar todos los españoles mayores de edad inscritos en el censo electoral", 9:00-20:00; postal vote until 19 Nov, hand in before 25 Nov; CERA by post to the consulate by 24 Nov, ballot box 21-26 Nov; CERA voters in Spain via Correos until 19 Nov); the JEC calendar PDF (postal request 6 Oct-19 Nov, voter hands in 10-25 Nov, CERA 75.10 and 75.4, temporarily abroad 6-31 Oct, reflection 28 Nov); INE cid=1700 (finder, roll of "españoles mayores de edad") and cid=383 (EU citizens: municipal 23 May 2027, declaration by 30 Dec 2026). Conflict left as it was: CERA ballot download "2 a 7 de noviembre" (JEC) / "hasta el 7" (Interior) against the INE's "hasta el 26 de noviembre"; no new copy repeats it. `VERIFIED` stays 28 Oct: the JEC's sessions after 22 Oct (MiDNI) and the DOGC paid-time-off order were unreadable from here.
+
+**Not done on purpose.**
+- "Is it a holiday" (ES): "viernes 30 de octubre es festivo" (calendario laboral, 7.0) and "el lunes 2 de noviembre es festivo en barcelona" (town page, 8.3) are dated queries that expire before a recrawl after the 31 Oct deploy; the town template and the work calendar already got the 2 Nov answer in the top-3 push. "hoy es festivo" lands on town pages (Girona 4.3) and on the "es festivo hoy" page at 11.8; "mañana es festivo" sits at 23-73, a ranking problem a title cannot fix.
+- EN weather by month: the merged title and description already say "temperature by month" and name January (13.6/4.7 °C, 56/40 °F) and August.
+- EN election night and candidates: wave 3's title already says "Spain general election results 2026"; the candidates page's impressions are `site:boe.es` queries.
+- EN shops: 130 impr., 0 clicks at 5.6, but its queries are anonymised fragments ("sunday open?", "y consum"), so nothing says the title misses.
+
+**Prediction.** EN how-to-vote CTR from 1.5 % to 4 %+ at 5-6 as polling day
+nears, with clicks on the "register" and "dates" queries (zero now). CA shops
+≥ 3.5 % at the same position, with its peak in the week of 29 Nov.
+
+**Measure** on 26 Nov 2026 (the EN voting page before polling day; this
+page's demand ends on 29 Nov) and on 30 Nov (28 days): position, CTR and
+clicks per page and per target query. Check the last crawl date first.
+
+**Outcome:** _pending_
+
 ## Candidates not yet run
 
 Recorded so they are not lost, and so they are not all started at once.

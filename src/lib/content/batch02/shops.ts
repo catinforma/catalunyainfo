@@ -51,6 +51,12 @@ import {
  *   added both letters back; the BOE consolidated text prints them. The
  *   24 Oct note that removed them from this page was wrong; they are back in
  *   the "always open" list.
+ *
+ * 30 Oct 2026 (CTR sweep wave 4, logged in docs/SEO_EXPERIMENTS.md): the CA
+ * title in the searchers' words ("festius obertura comercial 2026", "festius
+ * oberts", "diumenges oberts 2026"), like the ES one, and a first FAQ for
+ * "quins festius d'obertura queden". No new facts: the dates and the count
+ * are the ones above.
  */
 
 const VERIFIED = "2026-10-30";
@@ -70,7 +76,7 @@ const META: Record<Locale, { path: string; title: string; seoTitle: string; seoD
   ca: {
     path: "guies/botigues-obertes-festius-catalunya",
     title: "Botigues obertes en diumenges i festius a Catalunya: calendari 2026 i 2027",
-    seoTitle: "Botigues obertes en festius i diumenges a Catalunya 2026-27",
+    seoTitle: "Festius i diumenges d'obertura 2026 a Catalunya i Barcelona",
     seoDescription:
       "Festius d'obertura que queden el 2026: 29 de novembre i 6, 8, 13, 20 i 27 de desembre. Els 30 municipis que en canvien algun, i el calendari 2027.",
     excerpt:
@@ -253,6 +259,7 @@ const COPY: Record<Locale, T> = {
       "No hi ha cap data obligatòria: cada botiga decideix si fa rebaixes, i les ha d'anunciar amb aquest nom i amb el període que duren. El Consell Assessor de la Generalitat en matèria de comerç proposa cada any unes dates recomanades. El preu de referència ha de ser el més baix dels trenta dies anteriors, segons l'Agència Catalana del Consum.",
     ],
     faq: [
+      { question: "Quins festius d'obertura comercial queden el 2026?", answer: `A Barcelona i a la majoria de municipis, el diumenge 29 de novembre i el 6, 8, 13, 20 i 27 de desembre. Són dies en què les botigues poden obrir, no dies en què hagin d'obrir. ${TOWNS_NOV_DEC.length} municipis en canvien algun (són a la taula de dalt), i l'1 de novembre només és dia d'obertura a l'Ametlla del Vallès i Mollet del Vallès.` },
       { question: "Obren les botigues l'1 de novembre de 2026?", answer: "En general no: el diumenge 1 de novembre no és dia d'obertura comercial a Barcelona ni a la majoria de municipis. Només l'han triat l'Ametlla del Vallès i Mollet del Vallès. Sí que poden obrir els establiments exclosos de l'horari general, com fleques, botigues de conveniència o farmàcies." },
       { question: "Quins diumenges obren les botigues el desembre del 2026?", answer: "A Barcelona i a la majoria de municipis, els diumenges 6, 13, 20 i 27 de desembre, i també el dimarts 8 de desembre. Alguns municipis, com Terrassa, Manresa, Olot o Badalona, en canvien algun." },
       { question: "Obren les botigues el dia de Nadal o Sant Esteve?", answer: "Les botigues amb horari general, no: el 25 i el 26 de desembre són dies de tancament, igual que l'1 i el 6 de gener. Els establiments exclosos de l'horari general (fleques, conveniència, farmàcies...) sí que poden obrir." },

@@ -62,6 +62,28 @@ import {
  * after 22 Oct (MiDNI line stays dated 28 Oct) and the DOGC order on paid
  * time off to vote (line stays dated 24 Oct).
  *
+ * 30 Oct 2026, later (CTR sweep wave 4, English only, logged in
+ * docs/SEO_EXPERIMENTS.md): the 7-day queries are "2026 spain general election
+ * how to register to vote / dates / how to vote / polling stations", many from
+ * foreigners. The EN title gets the date back and the description says
+ * plainly that only Spanish citizens vote; the lead's first sentence answers
+ * date, hours and who can vote; FAQs for "when", "can foreigners or EU
+ * citizens vote", the polling-station finder and CERA. Re-read that day: RD
+ * 806/2026 arts. 2, 4 and 5 (BOE); LOREG art. 2.1 ("El derecho de sufragio
+ * corresponde a los españoles mayores de edad"); Interior's notes of 20 Oct
+ * (guide: "Pueden votar todos los españoles mayores de edad inscritos en el
+ * censo electoral", 9:00 to 20:00; postal vote until 19 Nov; CERA post to the
+ * consulate by 24 Nov, ballot box 21-26 Nov); the JEC calendar (postal vote
+ * requested 6 Oct-19 Nov, handed in by the voter 10-25 Nov; CERA 75.4 21-26 Nov and 75.10
+ * 6 Oct-24 Nov; temporarily abroad 6-31 Oct; day of reflection 28 Nov); the
+ * INE's 29N page (cid=1700) and EU-citizen page (cid=383). CERA ballot
+ * download: the JEC calendar prints "2 a 7 de noviembre" as availability and
+ * Interior's note says "hasta el 7 de noviembre", while the INE's page
+ * (cid=1030) says "hasta el día 26 de noviembre de 2026"; the INE runs the
+ * download, so the line stays, and no new copy repeats the date. VERIFIED
+ * stays 28 Oct: the JEC's sessions after 22 Oct (MiDNI) and the DOGC
+ * paid-time-off order could not be read that day.
+ *
  * The URL is evergreen on purpose: after 29 November the same page switches
  * its worked example to the municipal elections, whose date is fixed by law
  * (LOREG art. 42.3, fourth Sunday of May). Strictly procedural and
@@ -124,9 +146,9 @@ const META: Record<Locale, { path: string; title: string; seoTitle: string; seoD
   en: {
     path: "guides/how-to-vote-catalonia",
     title: "How to vote in Spain's 2026 general election on 29 November: registration, polling stations and dates",
-    seoTitle: "Spain general election 2026: how to vote, register, dates",
+    seoTitle: "Spain general election 29 Nov 2026: how to vote, register",
     seoDescription:
-      "Sunday 29 November 2026, polls 9:00-20:00. Spanish citizens are registered automatically; find your polling station online; postal vote by 19 November.",
+      "Sunday 29 November, polls 9:00-20:00. Only Spanish citizens can vote; no sign-up, the roll is automatic. Find your polling station; postal vote by 19 Nov.",
     excerpt:
       "Everything you need to vote in Spain's 29 November general election in Catalonia: registration, where you vote, hours, ID, the postal vote and the full official calendar.",
   },
@@ -151,7 +173,7 @@ type T = {
 
 const COPY: Record<Locale, T> = {
   en: {
-    lead: `Spain holds a **general election on Sunday 29 November 2026** to elect the Congress of Deputies and the Senate, called by Royal Decree 806/2026 (BOE, 6 October 2026). **Spanish citizens do not register to vote:** the electoral roll is built automatically from the municipal register. Polling stations are open from **9:00 to 20:00**, and the ${a("INE's official finder", URL.mesas)} tells you where you vote from your province, town and the first letter of your first surname, with no ID number or login. Key dates: request a postal vote at Correos **by 19 November** and hand it in by 25 November; the voter card with your polling station arrives by post between 2 and 10 November.`,
+    lead: `Spain's general election is on **Sunday 29 November 2026**, polling stations are open from **9:00 to 20:00**, and **only Spanish citizens can vote**: EU citizens and other foreign residents cannot, even if they live in Catalonia. **Spanish citizens do not register to vote:** the electoral roll is built automatically from the municipal register, and the ${a("INE's official finder", URL.mesas)} tells you where you vote from your province, town and the first letter of your first surname, with no ID number or login. Key dates: request a postal vote at Correos **by 19 November** and hand it in by 25 November; the voter card with your polling station arrives by post between 2 and 10 November; Spaniards on the overseas roll (CERA) post their vote to the consulate by 24 November or vote there from 21 to 26 November. The election, called by Royal Decree 806/2026 (BOE, 6 October 2026), chooses the Congress of Deputies and the Senate.`,
     nextTitle: "Next elections in Catalonia",
     next: [
       `The next election is the **general election on Sunday 29 November 2026** (Congress and Senate). After that come the **municipal elections, expected on Sunday 23 May 2027**: the electoral law sets them on the fourth Sunday of May, and the decree calling them is issued 55 days before and published in the BOE the next day, on 29 and 30 March 2027 (${a("LOREG, article 42.3", URL.loreg)}). That decree has not been published yet. No election to the Parliament of Catalonia has been called.`,
@@ -197,7 +219,8 @@ const COPY: Record<Locale, T> = {
     registerTitle: "Do I need to register to vote in Spain's 2026 general election?",
     register: [
       "**No, if you are a Spanish citizen living in Spain.** Being on the electoral roll is compulsory and you do not apply for it: the INE's Oficina del Censo Electoral builds the roll from the municipal register (padró), whose changes town halls send it every month (electoral law, arts. 29, 32 and 35). The roll used on 29 November is the one closed on 1 August 2026, and the window to check it and claim (12 to 19 October) has closed. So there is nothing to sign up for: just check where you vote with the INE's finder.",
-      "**Spaniards living abroad** must be on their consulate's register (Matrícula Consular) to appear on the overseas roll (CERA). **Foreign residents, EU citizens included, cannot vote** in a general election.",
+      "**Who can vote:** only Spanish citizens aged 18 or over who are on the electoral roll (electoral law, article 2). **Foreign residents, EU citizens included, cannot vote in a general election**, so there is no registration a foreign resident can make for 29 November; EU citizens can vote in the municipal elections instead (see below).",
+      "**Spaniards living abroad** must be on their consulate's register (Matrícula Consular) to appear on the overseas roll (CERA).",
     ],
     whereTitle: "Where do I vote? Finding your polling station for 29 November",
     where: [
@@ -233,17 +256,19 @@ const COPY: Record<Locale, T> = {
       `EU citizens can make that declaration online on the ${a("INE's site", URL.eu)}, by post or at the town hall, and it stays valid for future elections. Some non-EU nationals with a reciprocity agreement can also vote, but they must apply each time; the 2027 list and window have not been published yet.`,
     ],
     faq: [
-      { question: "What are the next elections in Catalonia?", answer: "The general election on Sunday 29 November 2026 (Congress and Senate). Then the municipal elections, expected on 23 May 2027, the fourth Sunday of May as the electoral law sets; their decree is due on 30 March 2027. No election to the Parliament of Catalonia has been called." },
-      { question: "How do I vote in the 2026 Spanish general election?", answer: "Go to your polling station on Sunday 29 November between 9:00 and 20:00 with your original DNI, passport or driving licence; the INE's finder and the voter card posted from 2 to 10 November tell you where. If you will be away, request a postal vote at Correos by 19 November. Spanish citizens living in Spain do not need to register." },
+      { question: "When is the 2026 Spain general election?", answer: "On Sunday 29 November 2026, with polling stations open from 9:00 to 20:00. It was called by Royal Decree 806/2026, published in the BOE on 6 October; the campaign runs from 13 to 27 November, Saturday 28 November is the day of reflection, and the new Congress and Senate meet on 23 December." },
+      { question: "How do I vote in the 2026 Spanish general election?", answer: "Go to your polling station on Sunday 29 November between 9:00 and 20:00 with your original DNI, passport or driving licence; the INE's finder and the voter card posted from 2 to 10 November tell you where. If you will be away, request a postal vote at Correos by 19 November. Only Spanish citizens can vote, and those living in Spain do not need to register." },
+      { question: "Can foreigners or EU citizens vote in Spain's general election?", answer: "No. Only Spanish citizens aged 18 or over who are on the electoral roll can vote in a general election (electoral law, article 2), whatever a foreign resident's status or length of stay. EU citizens living in Spain can vote in the municipal elections of 23 May 2027 if they are on the padró and declare their wish to vote by 30 December 2026." },
       { question: "Do I need to register to vote in the 2026 Spanish general election?", answer: "Not if you are a Spanish citizen living in Spain: the INE builds the electoral roll from the municipal register. The roll for 29 November closed on 1 August 2026. Spaniards abroad must be on their consulate's register; foreign residents cannot vote in a general election." },
-      { question: "Where do I vote on 29 November?", answer: "The INE's polling-station finder shows your table and venue from your province, municipality, the first letter of your first surname and your street, with no login. The voter card that arrives by post between 2 and 10 November says the same, and the INE publishes the final list on 19 November." },
+      { question: "How do I find my polling station for the 2026 Spain general election?", answer: "Use the INE's polling-station finder: it shows your table and venue from your province, municipality, the first letter of your first surname and your street, with no login. The voter card that arrives by post between 2 and 10 November says the same, and the INE publishes the final list on 19 November." },
+      { question: "What are the next elections in Catalonia?", answer: "The general election on Sunday 29 November 2026 (Congress and Senate). Then the municipal elections, expected on 23 May 2027, the fourth Sunday of May as the electoral law sets; their decree is due on 30 March 2027. No election to the Parliament of Catalonia has been called." },
       { question: "What are the key dates of the 2026 Spain general election?", answer: "Voter cards are posted from 2 to 10 November; the campaign runs from 13 November (00:00) to 27 November (24:00); postal votes must be requested at Correos by 19 November and handed in by 25 November; Saturday 28 November is the day of reflection; polling day is Sunday 29 November, 9:00 to 20:00; the provincial boards hold the general count from 4 to 7 December, and the new Congress and Senate meet on 23 December." },
       { question: "Do I need my DNI to find my polling station?", answer: "No. The INE's public finder only asks for your province, your municipality and the first letter of your first surname, plus your street if you want to narrow it down; it needs no ID number, Cl@ve or certificate. With Cl@ve you can also see your full entry on the electoral roll on the INE's website." },
       { question: "What time do the polls open and close on 29 November?", answer: "From 9:00 to 20:00 on Sunday 29 November 2026. Anyone inside or at the door at 20:00 can still vote." },
       { question: "Until when can I request a postal vote?", answer: "Until 19 November 2026, in person at Correos with your original ID or online with an electronic DNI or digital certificate; the vote must be handed in by 25 November." },
+      { question: "How do Spaniards living abroad vote (CERA)?", answer: "Voters on the overseas roll (CERA) do not have to request anything: the census office posts them the documents. They can send their vote to the consulate by registered mail by 24 November, or vote in person at the consulate or polling centre from 21 to 26 November. CERA voters who are in Spain can request a postal vote at Correos until 19 November. Spaniards who live in Spain but are temporarily abroad request their vote at the consulate by 31 October." },
       { question: "What ID do I need? Is the digital DNI on my phone valid?", answer: "Your original DNI, passport or driving licence with a photo; the DNI and passport are valid even if expired. The MiDNI app is suspended: on 22 October the Central Electoral Board said it will allow it again once every table has a reader for its QR code, and it had not done so on 28 October." },
       { question: "What is Royal Decree 806/2026?", answer: "The decree of 5 October 2026, published in the BOE on 6 October, that dissolved the Congress and the Senate and called the election for 29 November. It sets the campaign from 13 to 27 November and the first sitting of the new chambers on 23 December." },
-      { question: "Can foreigners vote in Catalonia?", answer: "Not in the general election. EU citizens can vote in the municipal elections of 23 May 2027 if they register their wish to vote by 30 December 2026." },
     ],
     note: "Electoral deadlines are fixed by law, the Central Electoral Board and the INE; check the official calendar if a date seems to have changed.",
     warnTitle: "Postal vote: request it by 19 November",
