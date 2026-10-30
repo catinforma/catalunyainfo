@@ -1,11 +1,25 @@
 import type { Locale } from "@/lib/i18n/config";
 
-/** Editorial copy for the tourist tax guide. No figure is written here. */
+/**
+ * Editorial copy for the tourist tax guide. No figure is written here.
+ *
+ * Placeholders, filled from `rates.ts` by `publish.ts` (`fillFigures`):
+ * `{bcnMin}`/`{bcnMax}` the cheapest and dearest Barcelona total per person
+ * per night now, `{bcnSur}` Barcelona's surcharge, `{bcn4}` `{bcn5}`
+ * `{bcnFlat}` `{bcnHostel}` Barcelona totals by type, `{rest4}` `{rest5}`
+ * `{restHostel}` the regional rate elsewhere, `{rest4next}` the four-star rate
+ * elsewhere from 1 April 2027, `{s0}`/`{s1}` Barcelona's surcharge now and from
+ * 1 April 2027, `{hosp4}`/`{hosp4total}` L'Hospitalet's four-star surcharge and
+ * total, `{te1}` `{te2}` `{te3}` the special rate, `{minInt}` `{maxInt}`
+ * `{surInt}` whole-euro forms for the search title, `{age}` and `{max}`.
+ */
 
 export interface TaxCopy {
   path: string;
   title: string;
+  /** May carry `{minInt}`, `{maxInt}`; filled by publish.ts. */
   seoTitle: string;
+  /** May carry `{minInt}`, `{maxInt}`, `{surInt}`, `{max}`, `{age}`. */
   seoDescription: string;
   excerpt: string;
 
@@ -48,6 +62,17 @@ export interface TaxCopy {
   noSurcharge: string;
   tableNote: string;
 
+  /** The seven municipal surcharges (ATC, from 1 Oct 2026). */
+  muniTitle: string;
+  muni: string[];
+  muniCaption: string;
+  muniHeaders: { municipality: string; hotel5: string; hotel4: string; flat: string; hostel: string; other: string };
+  muniNote: string;
+  special: string;
+
+  faqTitle: string;
+  faq: { question: string; answer: string }[];
+
   futureTitle: string;
   future: string[];
   futureCaption: string;
@@ -82,16 +107,16 @@ export interface TaxCopy {
 export const COPY: Record<Locale, TaxCopy> = {
   ca: {
     path: "guies/taxa-turistica-barcelona-catalunya",
-    title: "Taxa turística a Barcelona i Catalunya: quant pagaràs realment",
-    seoTitle: "Taxa turística Barcelona i Catalunya: tarifes i calculadora",
+    title: "Quant és la taxa turística a Barcelona? Tarifes 2026 a Barcelona i Catalunya",
+    seoTitle: "Taxa turística Barcelona 2026: de {minInt} a {maxInt} € per persona i nit",
     seoDescription:
-      "Quant és la taxa turística a Barcelona i Catalunya el 2026-2027: tarifa de la Generalitat més recàrrec, per allotjament i nit. Amb calculadora.",
+      "Taxa turística a Barcelona: de {minInt} a {maxInt} € per persona i nit (Generalitat + {surInt} € de l'Ajuntament). Màxim {max} nits; fins a {age} anys, gratis. Calculadora.",
     excerpt:
       "Quant costa realment la taxa turística segons on dorms, quantes persones tributen i quantes nits. Amb calculadora i tarifes oficials verificades.",
 
     lead: [
-      "Allotjar-se a Barcelona afegeix una quantitat fixa per persona i per nit a la factura, i fora de Barcelona les tarifes són sensiblement més baixes. La diferència entre un cas i l'altre és prou gran com per notar-se en el pressupost d'un viatge curt.",
-      "La quantitat exacta depèn de quatre coses: **on dorms, el tipus d'allotjament, quantes persones tributen i quantes unitats d'estada es computen**.",
+      "La taxa turística a Barcelona costa **de {bcnMin} a {bcnMax} per persona i nit** fins al 31 de març de 2027, segons l'allotjament: la tarifa de la Generalitat més {bcnSur} de recàrrec de l'Ajuntament. En un hotel de 4 estrelles són **{bcn4}**; en un habitatge d'ús turístic, **{bcnFlat}**.",
+      "Oficialment es diu impost sobre les estades en establiments turístics (IEET). Es paga com a màxim per {max} nits per persona, qui té {age} anys o menys no paga, i fora de Barcelona la tarifa és més baixa, llevat de set municipis amb recàrrec propi. El que pagaràs depèn de quatre coses: **on dorms, el tipus d'allotjament, quantes persones tributen i quantes nits**.",
     ],
     directAnswerTitle: "Resposta ràpida",
     directAnswer:
@@ -109,7 +134,7 @@ export const COPY: Record<Locale, TaxCopy> = {
     keyFactValues: {
       exemption: "16 anys o menys",
       scope: "Recàrrec municipal vigent des de l'1/10/2026 a Castelldefels, Esplugues, l'Hospitalet, el Prat, Sabadell, Sant Cugat i Sant Just Desvern",
-      verified: "18 d'octubre de 2026",
+      verified: "30 d'octubre de 2026",
       review: "1 de desembre de 2026",
     },
 
@@ -134,7 +159,28 @@ export const COPY: Record<Locale, TaxCopy> = {
     },
     noSurcharge: "Cal comprovar-ho",
     tableNote:
-      "Tarifes verificades el 18 d'octubre de 2026 a l'Agència Tributària de Catalunya. Import per persona i unitat d'estada.",
+      "Tarifes verificades el 30 d'octubre de 2026 a l'Agència Tributària de Catalunya. Import per persona i unitat d'estada.",
+
+    muniTitle: "Taxa turística a l'Hospitalet, Sabadell, Sant Cugat i els altres municipis amb recàrrec",
+    muni: [
+      "Des de l'1 d'octubre de 2026, set municipis sumen un recàrrec propi a la tarifa de la Generalitat. Per exemple, en un hotel de 4 estrelles de l'Hospitalet pagues {hosp4} de recàrrec més {rest4} de tarifa autonòmica: **{hosp4total} per persona i nit**. Aquests són els recàrrecs que publica l'Agència Tributària de Catalunya, vigents fins al 31 de març de 2027:",
+    ],
+    muniCaption: "Recàrrec municipal fora de Barcelona, per persona i unitat d'estada (1/10/2026–31/3/2027)",
+    muniHeaders: { municipality: "Municipi", hotel5: "Hotel 5★", hotel4: "Hotel 4★", flat: "Habitatge d'ús turístic", hostel: "Alberg", other: "Resta" },
+    muniNote:
+      "Agència Tributària de Catalunya, consultada el 30 d'octubre de 2026. S'afegeix a la tarifa de la Generalitat. «—»: l'ATC no hi publica recàrrec per a aquesta categoria. Les xifres d'Esplugues són les que publica l'ATC. No s'hi inclouen els recàrrecs de creuers de Castelldefels i el Prat.",
+    special:
+      "També hi ha una tarifa especial per als establiments d'un centre recreatiu turístic situats a les zones on s'admet el joc: {te1} als hotels de 5 estrelles, {te2} als de 4 i {te3} a la resta, per persona i nit.",
+
+    faqTitle: "Preguntes freqüents sobre la taxa turística",
+    faq: [
+      { question: "Quant és la taxa turística a Barcelona?", answer: "De {bcnMin} a {bcnMax} per persona i nit fins al 31 de març de 2027: {bcnHostel} en un alberg de joventut, {bcn4} en un hotel de 4 estrelles, {bcnFlat} en un habitatge d'ús turístic i {bcn5} en un hotel de 5 estrelles. Inclou {bcnSur} de recàrrec municipal." },
+      { question: "Quant és la taxa turística a Catalunya fora de Barcelona?", answer: "La tarifa de la Generalitat va de {restHostel} (alberg) a {rest5} (hotel de 5 estrelles) per persona i nit; {rest4} en un hotel de 4 estrelles. A Castelldefels, Esplugues, l'Hospitalet, el Prat, Sabadell, Sant Cugat i Sant Just Desvern s'hi suma un recàrrec municipal." },
+      { question: "Els nens paguen la taxa turística?", answer: "No. Les persones de {age} anys o menys n'estan exemptes." },
+      { question: "Quantes nits es paga la taxa turística?", answer: "Com a màxim {max} per persona en una estada continuada al mateix establiment; si canvies d'allotjament, el còmput torna a començar." },
+      { question: "Puja la taxa turística el 2027?", answer: "Sí, l'1 d'abril de 2027: a Barcelona el recàrrec municipal passa de {s0} a {s1} per persona i nit, i fora de Barcelona puja la tarifa de la Generalitat (en un hotel de 4 estrelles, de {rest4} a {rest4next})." },
+      { question: "Qui cobra la taxa turística?", answer: "L'allotjament, que la cobra a qui s'hi allotja i la declara. A la factura ha d'aparèixer separada del preu, amb les unitats d'estada i la tarifa aplicada." },
+    ],
 
     futureTitle: "Què canvia l'1 d'abril de 2027",
     future: [
@@ -206,16 +252,16 @@ export const COPY: Record<Locale, TaxCopy> = {
 
   es: {
     path: "guias/tasa-turistica-barcelona-cataluna",
-    title: "Tasa turística en Barcelona y Cataluña: cuánto pagarás realmente",
-    seoTitle: "Tasa turística Barcelona y Cataluña: tarifas y calculadora",
+    title: "¿Cuánto es la tasa turística en Barcelona? Tarifas 2026 en Barcelona y Cataluña",
+    seoTitle: "Tasa turística Barcelona 2026: {minInt} a {maxInt} € por persona y noche",
     seoDescription:
-      "Cuánto es la tasa turística en Barcelona y Cataluña en 2026-2027: tarifa de la Generalitat más recargo, por alojamiento y noche. Con calculadora.",
+      "Tasa turística en Barcelona: de {minInt} a {maxInt} € por persona y noche (Generalitat + {surInt} € del Ayuntamiento). Máximo {max} noches; hasta {age} años, gratis.",
     excerpt:
       "Cuánto cuesta realmente la tasa turística según dónde duermes, cuántas personas tributan y cuántas noches. Con calculadora y tarifas oficiales verificadas.",
 
     lead: [
-      "Dormir en Barcelona añade una cantidad fija por persona y noche a la factura del alojamiento, y fuera de la ciudad las tarifas son bastante menores. La diferencia es lo bastante grande como para notarse en el presupuesto de un viaje corto.",
-      "La cantidad depende de cuatro cosas: **dónde te alojas, el tipo de establecimiento, cuántas personas tributan y cuántas unidades de estancia se computan**.",
+      "La tasa turística en Barcelona cuesta **de {bcnMin} a {bcnMax} por persona y noche** hasta el 31 de marzo de 2027, según el alojamiento: la tarifa de la Generalitat más {bcnSur} de recargo del Ayuntamiento. En un hotel de 4 estrellas son **{bcn4}**; en una vivienda de uso turístico, **{bcnFlat}**.",
+      "Oficialmente se llama impuesto sobre las estancias en establecimientos turísticos (IEET). Se paga como máximo por {max} noches por persona, quien tiene {age} años o menos no paga, y fuera de Barcelona la tarifa es más baja, salvo en siete municipios con recargo propio. Lo que pagarás depende de **dónde te alojas, el tipo de establecimiento, cuántas personas tributan y cuántas noches**.",
     ],
     directAnswerTitle: "Respuesta rápida",
     directAnswer:
@@ -233,7 +279,7 @@ export const COPY: Record<Locale, TaxCopy> = {
     keyFactValues: {
       exemption: "16 años o menos",
       scope: "Recargo municipal vigente desde el 1/10/2026 en Castelldefels, Esplugues, L'Hospitalet, El Prat, Sabadell, Sant Cugat y Sant Just Desvern",
-      verified: "18 de octubre de 2026",
+      verified: "30 de octubre de 2026",
       review: "1 de diciembre de 2026",
     },
 
@@ -258,7 +304,28 @@ export const COPY: Record<Locale, TaxCopy> = {
     },
     noSurcharge: "Hay que comprobarlo",
     tableNote:
-      "Tarifas verificadas el 18 de octubre de 2026 en la Agència Tributària de Catalunya. Importe por persona y unidad de estancia.",
+      "Tarifas verificadas el 30 de octubre de 2026 en la Agència Tributària de Catalunya. Importe por persona y unidad de estancia.",
+
+    muniTitle: "Tasa turística en L'Hospitalet, Sabadell, Sant Cugat y los demás municipios con recargo",
+    muni: [
+      "Desde el 1 de octubre de 2026, siete municipios suman un recargo propio a la tarifa de la Generalitat. Por ejemplo, en un hotel de 4 estrellas de L'Hospitalet pagas {hosp4} de recargo más {rest4} de tarifa autonómica: **{hosp4total} por persona y noche**. Estos son los recargos que publica la Agència Tributària de Catalunya, vigentes hasta el 31 de marzo de 2027:",
+    ],
+    muniCaption: "Recargo municipal fuera de Barcelona, por persona y unidad de estancia (1/10/2026–31/3/2027)",
+    muniHeaders: { municipality: "Municipio", hotel5: "Hotel 5★", hotel4: "Hotel 4★", flat: "Vivienda de uso turístico", hostel: "Albergue", other: "Resto" },
+    muniNote:
+      "Agència Tributària de Catalunya, consultada el 30 de octubre de 2026. Se suma a la tarifa de la Generalitat. «—»: la ATC no publica recargo para esa categoría. Las cifras de Esplugues son las que publica la ATC. No se incluyen los recargos de cruceros de Castelldefels y El Prat.",
+    special:
+      "Hay además una tarifa especial para los establecimientos de un centro recreativo turístico situados en las zonas donde se admite el juego: {te1} en hoteles de 5 estrellas, {te2} en los de 4 y {te3} en el resto, por persona y noche.",
+
+    faqTitle: "Preguntas frecuentes sobre la tasa turística",
+    faq: [
+      { question: "¿Cuánto es la tasa turística en Barcelona?", answer: "De {bcnMin} a {bcnMax} por persona y noche hasta el 31 de marzo de 2027: {bcnHostel} en un albergue de juventud, {bcn4} en un hotel de 4 estrellas, {bcnFlat} en una vivienda de uso turístico y {bcn5} en un hotel de 5 estrellas. Incluye {bcnSur} de recargo municipal." },
+      { question: "¿Cuánto es la tasa turística en Cataluña fuera de Barcelona?", answer: "La tarifa de la Generalitat va de {restHostel} (albergue) a {rest5} (hotel de 5 estrellas) por persona y noche; {rest4} en un hotel de 4 estrellas. En Castelldefels, Esplugues, L'Hospitalet, El Prat, Sabadell, Sant Cugat y Sant Just Desvern se suma un recargo municipal." },
+      { question: "¿Los niños pagan la tasa turística?", answer: "No. Las personas de {age} años o menos están exentas." },
+      { question: "¿Cuántas noches se paga la tasa turística?", answer: "Como máximo {max} por persona en una estancia continuada en el mismo establecimiento; si cambias de alojamiento, el cómputo empieza de nuevo." },
+      { question: "¿Sube la tasa turística en 2027?", answer: "Sí, el 1 de abril de 2027: en Barcelona el recargo municipal pasa de {s0} a {s1} por persona y noche, y fuera de Barcelona sube la tarifa de la Generalitat (en un hotel de 4 estrellas, de {rest4} a {rest4next})." },
+      { question: "¿Quién cobra la tasa turística?", answer: "El alojamiento, que la cobra a quien se aloja y la declara. En la factura debe aparecer separada del precio, con las unidades de estancia y la tarifa aplicada." },
+    ],
 
     futureTitle: "Qué cambia el 1 de abril de 2027",
     future: [
@@ -338,8 +405,8 @@ export const COPY: Record<Locale, TaxCopy> = {
       "What the tourist tax really costs, by where you stay, how many guests are liable and how many nights. With a calculator and verified official rates.",
 
     lead: [
-      "Staying in Barcelona adds a fixed amount per liable guest per night to your accommodation bill. Elsewhere in Catalonia the rates are considerably lower — the gap is big enough to matter on a short trip.",
-      "What you pay depends on four things: **where you sleep, the type of accommodation, how many guests are liable, and how many stay units count**.",
+      "Barcelona's tourist tax (city tax) is **{bcnMin} to {bcnMax} per person per night** until 31 March 2027, depending on the accommodation: the Catalan rate plus the city council's {bcnSur} surcharge. A four-star hotel costs **{bcn4}** a night; a licensed tourist dwelling, **{bcnFlat}**.",
+      "Its official name is the tax on stays in tourist establishments (IEET). It is charged for at most {max} nights per person, guests aged {age} or younger are exempt, and elsewhere in Catalonia the rate is lower, except in seven municipalities with their own surcharge. What you pay depends on **where you sleep, the type of accommodation, how many guests are liable, and how many nights**.",
     ],
     directAnswerTitle: "Quick answer",
     directAnswer:
@@ -357,7 +424,7 @@ export const COPY: Record<Locale, TaxCopy> = {
     keyFactValues: {
       exemption: "16 or younger",
       scope: "Municipal surcharge in force since 1 Oct 2026 in Castelldefels, Esplugues, L'Hospitalet, El Prat, Sabadell, Sant Cugat and Sant Just Desvern",
-      verified: "18 October 2026",
+      verified: "30 October 2026",
       review: "1 December 2026",
     },
 
@@ -382,7 +449,28 @@ export const COPY: Record<Locale, TaxCopy> = {
     },
     noSurcharge: "Needs checking",
     tableNote:
-      "Rates verified on 18 October 2026 against the Catalan Tax Agency. Amount per liable guest per stay unit.",
+      "Rates verified on 30 October 2026 against the Catalan Tax Agency. Amount per liable guest per stay unit.",
+
+    muniTitle: "Tourist tax in L'Hospitalet, Sabadell, Sant Cugat and the other towns with a surcharge",
+    muni: [
+      "Since 1 October 2026, seven municipalities have added their own surcharge to the Catalan rate. In a four-star hotel in L'Hospitalet, for example, you pay a {hosp4} surcharge plus the {rest4} regional rate: **{hosp4total} per person per night**. These are the surcharges the Catalan Tax Agency publishes, valid until 31 March 2027:",
+    ],
+    muniCaption: "Municipal surcharge outside Barcelona, per liable guest per stay unit (1 Oct 2026–31 Mar 2027)",
+    muniHeaders: { municipality: "Municipality", hotel5: "5★ hotel", hotel4: "4★ hotel", flat: "Tourist dwelling", hostel: "Youth hostel", other: "Other" },
+    muniNote:
+      "Catalan Tax Agency (ATC), read on 30 October 2026. Added to the Catalan rate. \"—\": the ATC lists no surcharge for that category. Esplugues figures are as the ATC publishes them. Cruise surcharges in Castelldefels and El Prat are not shown.",
+    special:
+      "There is also a special rate for establishments inside a tourist recreation centre in the areas where gaming is allowed: {te1} in five-star hotels, {te2} in four-star hotels and {te3} elsewhere, per person per night.",
+
+    faqTitle: "Tourist tax: frequently asked questions",
+    faq: [
+      { question: "How much is the tourist tax in Barcelona?", answer: "{bcnMin} to {bcnMax} per person per night until 31 March 2027: {bcnHostel} in a youth hostel, {bcn4} in a four-star hotel, {bcnFlat} in a licensed tourist dwelling and {bcn5} in a five-star hotel. That includes the {bcnSur} municipal surcharge." },
+      { question: "How much is the tourist tax elsewhere in Catalonia?", answer: "The Catalan rate runs from {restHostel} (youth hostel) to {rest5} (five-star hotel) per person per night; {rest4} in a four-star hotel. Castelldefels, Esplugues, L'Hospitalet, El Prat, Sabadell, Sant Cugat and Sant Just Desvern add a municipal surcharge." },
+      { question: "Do children pay the tourist tax?", answer: "No. Guests aged {age} or younger are exempt." },
+      { question: "How many nights is the tourist tax charged for?", answer: "At most {max} per person for one continuous stay at the same establishment; if you change accommodation, the count starts again." },
+      { question: "Is the tourist tax going up in 2027?", answer: "Yes, on 1 April 2027: Barcelona's municipal surcharge rises from {s0} to {s1} per person per night, and the Catalan rate rises outside Barcelona (from {rest4} to {rest4next} in a four-star hotel)." },
+      { question: "Who collects the tourist tax?", answer: "The accommodation, which charges it to the guest and files it. On the invoice it must be shown separately from the price, with the stay units and the rate applied." },
+    ],
 
     futureTitle: "What changes on 1 April 2027",
     future: [

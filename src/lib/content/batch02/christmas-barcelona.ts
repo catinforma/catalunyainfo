@@ -352,6 +352,7 @@ export function buildChristmasBarcelonaBody(locale: Locale, facts: Announcements
       ...paras(
         "**Autobusos:** el 24 de desembre els autobusos de TMB fan l'última sortida des de la parada d'origen a les 22:00, «com cada any», segons TMB el 2025. Per a la temporada 2025-26, TMB va avisar que el Barcelona Bus Turístic no circularia el dia de Nadal ni el d'Any Nou.",
         `Per als autobusos nocturns i el detall de cada nit, mira ${b2link("hours", "ca", "l'horari del metro i del NitBus")}. La nit de Cap d'Any, el metro no tanca: l'espectacle, els accessos i les estacions són a ${b2link("newYear", "ca", "la guia de Cap d'Any a Barcelona")}.`,
+        `Si hi vas en cotxe: el diumenge, fora de la platja, la zona blava i la verda no es paguen; el dissabte, la blava del centre sí. Preus i horaris a ${b2link("parking", "ca", "zona blava i verda de Barcelona")}.`,
       ),
       ...h2(
         "Tradicions de Nadal, en breu",
@@ -462,6 +463,7 @@ export function buildChristmasBarcelonaBody(locale: Locale, facts: Announcements
       ...paras(
         "**Autobuses:** el 24 de diciembre los autobuses de TMB hacen la última salida desde la parada de origen a las 22:00, «como cada año», según TMB en 2025. Para la temporada 2025-26, TMB avisó de que el Barcelona Bus Turístic no circularía el día de Navidad ni el de Año Nuevo.",
         `Para los autobuses nocturnos y el detalle de cada noche, mira ${b2link("hours", "es", "el horario del metro y del NitBus")}. En Nochevieja el metro no cierra: el espectáculo, los accesos y las estaciones están en ${b2link("newYear", "es", "la guía de Nochevieja en Barcelona")}.`,
+        `Si vas en coche: el domingo, fuera de la playa, la zona azul y la verde no se pagan; el sábado, la azul del centro sí. Precios y horarios en ${b2link("parking", "es", "zona azul y verde de Barcelona")}.`,
       ),
       ...h2(
         "Tradiciones de Navidad en Cataluña, en breve",

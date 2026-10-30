@@ -30,7 +30,9 @@ const TMB_HOLA =
 const HOLA_PRICES = "https://www.holabarcelona.com/en";
 const HOLA_VERIFIED_AT = "2026-10-12";
 
-export const VERIFIED_AT = "2026-10-28";
+// 30 Oct 2026: TMB's 2026 table re-read (single, T-casual, T-dia, T-usual,
+// T-familiar, T-grup for zones 1-7 and the €5.90 airport ticket: unchanged).
+export const VERIFIED_AT = "2026-10-30";
 
 export const TICKETS: Ticket[] = [
   {

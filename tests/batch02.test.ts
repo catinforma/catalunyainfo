@@ -1,4 +1,6 @@
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
 import { test } from "node:test";
 
 import { bodySchema, bodyToPlainText, wordCount } from "../src/lib/content/blocks.ts";
@@ -27,7 +29,8 @@ import { BEACHES_GUIDE } from "../src/lib/content/batch02/beaches.ts";
 import { MESA } from "../src/lib/content/batch02/mesa.ts";
 import { MUNICIPAL_RESULTS } from "../src/lib/content/batch02/municipal-results.ts";
 import { CLIMATE } from "../src/lib/content/batch02/climate.ts";
-import { SHOPS } from "../src/lib/content/batch02/shops.ts";
+import { SHOPS, TOWNS_NOV_DEC } from "../src/lib/content/batch02/shops.ts";
+import { parseShopResolution } from "../src/lib/programmatic/holidays/dogc.ts";
 import { ELECTION_NIGHT } from "../src/lib/content/batch02/election-night.ts";
 import { CONGRESS_RESULTS, PARLIAMENT_RESULTS } from "../src/lib/content/batch02/election-results.ts";
 import { B2_PATHS, type B2Article } from "../src/lib/content/batch02/shared.ts";
@@ -423,6 +426,33 @@ test("transport: 2026 fares for every zone, no 2025 fares, Hola vs T-casual comp
   assert.match(bodyToPlainText(TRANSPORT.editions.ca.blocks), /Ocata[^.]*zona 2/);
 });
 
+/**
+ * Transport EN and ES snippets, 30 Oct 2026 (top-3 push): TMB's table re-read;
+ * the EN page gets the zone table, the Hola vs T-casual sums and an FAQ it
+ * lacked, and both snippets carry the T-casual price.
+ */
+test("transport: EN zone table and FAQ, prices in the EN and ES snippets", () => {
+  const en = TRANSPORT.editions.en;
+  const blocks = en.blocks as { type: string; rows?: string[][] }[];
+  const zones = blocks.find((b) => b.type === "table" && (b.rows?.length ?? 0) === 7);
+  assert.deepEqual(zones?.rows?.[0], ["1", "€2.90", "€13.00", "€12.00", "€22.80"], "EN zone 1 row");
+  assert.deepEqual(zones?.rows?.[1], ["2", "€4.15", "€25.50", "€18.30", "€30.55"], "EN zone 2 row");
+  const text = bodyToPlainText(en.blocks);
+  assert.match(text.slice(0, 200), /T-casual.*€13.*T-dia.*€12/, "EN answer first");
+  assert.match(text, /€24\.80/, "EN: T-casual plus two airport tickets");
+  assert.match(text, /T-familiar[^.]*€11\.50/, "EN: T-familiar fare");
+  assert.match(text, /2027 fares had not been announced/);
+  assert.ok(blocks.some((b) => b.type === "faq"), "EN FAQ");
+  assert.ok(JSON.stringify(en.blocks).includes(`](/en/${B2_PATHS.hours.en}/)`), "EN links the metro hours page");
+  for (const locale of ["es", "en"] as const) {
+    const { seoTitle, seoDescription } = TRANSPORT.editions[locale];
+    assert.ok(seoTitle.length <= 60, `${locale}: ${seoTitle.length}`);
+    assert.ok(seoDescription.length <= 155, `${locale}: ${seoDescription.length}`);
+    assert.match(seoTitle, /T-casual.*13/, `${locale}: T-casual price in the title`);
+  }
+  assert.equal(TRANSPORT.verifiedAt, "2026-10-30");
+});
+
 test("the selector block is placed on the transport article in every language", () => {
   for (const locale of LOCALES) {
     const count = TRANSPORT.editions[locale].blocks.filter(
@@ -463,11 +493,53 @@ test("shops: the DOGC dates are all there and nothing the orders do not say", ()
     const text = bodyToPlainText(SHOPS.editions[locale].blocks);
     const days2026 = locale === "en" ? ["29 November", "6 December", "8 December", "13 December", "20 December", "27 December"] : locale === "es" ? ["29 de noviembre", "6 de diciembre", "8 de diciembre", "13 de diciembre", "20 de diciembre", "27 de diciembre"] : ["29 de novembre", "6 de desembre", "8 de desembre", "13 de desembre", "20 de desembre", "27 de desembre"];
     for (const day of days2026) assert.ok(text.includes(day), `${locale}: ${day}`);
-    const table2027 = SHOPS.editions[locale].blocks.filter((b) => b.type === "table")[1] as { rows: string[][] };
+    // 30 Oct 2026: the towns table now sits between the 2026 and 2027 tables.
+    const table2027 = SHOPS.editions[locale].blocks.filter((b) => b.type === "table" && /2027/.test((b as { caption?: string }).caption ?? ""))[0] as { rows: string[][] };
     assert.equal(table2027.rows.length, 10, `${locale}: 8 general + 2 default municipal days in 2027`);
     assert.doesNotMatch(text, /black friday/i);
     assert.doesNotMatch(text, /(rebaixes|rebajas|sales)[^.]*3 (de )?(gener|enero|January)/i);
   }
+});
+
+/**
+ * Shops, 30 Oct 2026 (top-3 push): the towns whose November-December days
+ * differ from the default are transcribed by hand in TOWNS_NOV_DEC. They must
+ * be exactly what the holiday engine's parser reads from the same DOGC
+ * resolution (tests/fixtures/holidays/resolucio-emt-4342-2025.txt), so a
+ * transcription slip cannot reach the page. The 300 m² exemptions (art.
+ * 37.1.j/k, restored by Llei 3/2023) are on the "always open" list.
+ */
+test("shops: the November-December towns table is the DOGC resolution's, town by town", () => {
+  const raw = readFileSync(join(import.meta.dirname, "fixtures/holidays/resolucio-emt-4342-2025.txt"), "utf8");
+  const resolution = parseShopResolution(raw);
+  const restOfYear = (dates: string[]) => dates.filter((d) => d >= "2026-11-01");
+  const defaults = restOfYear(resolution.defaults);
+  const expected = resolution.councils
+    .map((c) => ({ town: c.name, closed: defaults.filter((d) => !c.dates.includes(d)), extra: restOfYear(c.dates).filter((d) => !defaults.includes(d)) }))
+    .filter((c) => c.closed.length > 0 || c.extra.length > 0);
+  const key = (name: string) => name.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
+  assert.deepEqual(
+    TOWNS_NOV_DEC.map((t) => ({ ...t, town: key(t.town) })).sort((a, b) => a.town.localeCompare(b.town)),
+    expected.map((t) => ({ ...t, town: key(t.town) })).sort((a, b) => a.town.localeCompare(b.town)),
+  );
+  for (const locale of ["ca", "es", "en"] as const) {
+    const text = bodyToPlainText(SHOPS.editions[locale].blocks);
+    assert.match(text, /300 m²/, `${locale}: art. 37.1.j/k exemptions`);
+    assert.match(text, /3\/2023/, `${locale}: Llei 3/2023`);
+    const towns = SHOPS.editions[locale].blocks.filter((b) => b.type === "table")[1] as { rows: string[][] };
+    assert.equal(towns.rows.length, TOWNS_NOV_DEC.length, `${locale}: towns table`);
+    assert.ok(SHOPS.editions[locale].seoDescription.length <= 155, `${locale}: description budget`);
+    assert.ok(SHOPS.editions[locale].seoTitle.length <= 60, `${locale}: title budget`);
+  }
+  // The leads count the towns that do not open on 8 December in words.
+  const no8 = TOWNS_NOV_DEC.filter((t) => t.closed.includes("2026-12-08")).length;
+  for (const locale of ["ca", "es", "en"] as const) {
+    const first = SHOPS.editions[locale].blocks.find((b) => b.type === "paragraph") as { text: string };
+    assert.ok(first.text.includes(` ${no8} `), `${locale}: lead says ${no8} towns`);
+    assert.ok(SHOPS.editions[locale].seoDescription.includes(` ${TOWNS_NOV_DEC.length} `), `${locale}: description count`);
+  }
+  assert.equal(SHOPS.editions.es.seoTitle, "Domingos y festivos de apertura 2026 en Cataluña y Barcelona");
+  assert.equal(SHOPS.verifiedAt, "2026-10-30");
 });
 
 /**
@@ -542,7 +614,8 @@ test("parking: zone summary table and a blue-vs-green answer that matches the ra
   for (const locale of ["ca", "es", "en"] as const) {
     const blocks = PARKING.editions[locale].blocks as { type: string; rows?: string[][]; text?: string }[];
     const tables = blocks.filter((b) => b.type === "table");
-    assert.equal(tables.length, 3, `${locale}: summary + blue + green tables`);
+    // 30 Oct 2026: a day-by-day table joined the summary, blue and green ones.
+    assert.equal(tables.length, 4, `${locale}: summary + days + blue + green tables`);
     assert.equal(tables[0]?.rows?.length, 5, `${locale}: five kinds of space in the summary`);
     const lead = blocks.find((b) => b.type === "paragraph")?.text ?? "";
     assert.match(lead, /1[,.]40/, `${locale}: the lead gives the green non-resident price`);
@@ -576,6 +649,36 @@ test("parking: August answered from AREA, Rate A areas, four steps, no invented 
 });
 
 /**
+ * Parking, 30 Oct 2026 (top-3 push): AREA's blue tables carry their own
+ * limits ("Tarifa A (màx. 1h o 2h)", "Tarifa B (màx. 2h)"); Zone 36 in
+ * Trinitat Vella goes live on 9 Nov 2026 with 632 green spaces and a 2-hour
+ * limit for non-residents (AREA news, 22.9.2026); AREA's indicative map is
+ * linked in the first step; a day-by-day table answers "horario". The
+ * search title states the price range in CA and the query words in ES.
+ */
+test("parking: per-rate limits, Trinitat Vella zone 36, the AREA map and a day-by-day table", () => {
+  const limits = { ca: /1 o 2 hores a la tarifa A i 2 hores a la tarifa B/, es: /1 o 2 horas en tarifa A y 2 horas en tarifa B/, en: /1 or 2 hours on Rate A and 2 hours on Rate B/ };
+  const map = { ca: "https://areaverda.cat/ca/planol", es: "https://areaverda.cat/es/plano", en: "https://areaverda.cat/es/plano" };
+  for (const locale of ["ca", "es", "en"] as const) {
+    const blocks = PARKING.editions[locale].blocks as { type: string; rows?: string[][]; items?: { text: string }[] }[];
+    const text = bodyToPlainText(PARKING.editions[locale].blocks);
+    assert.match(text, limits[locale], `${locale}: per-rate limits`);
+    assert.match(text, /632/, `${locale}: zone 36 spaces`);
+    assert.match(text, /9 (de )?(novembre|noviembre|November) (de )?2026/, `${locale}: zone 36 start`);
+    assert.ok(JSON.stringify(blocks).includes(map[locale]), `${locale}: AREA map link`);
+    const days = blocks.filter((b) => b.type === "table")[1];
+    assert.equal(days?.rows?.length, 3, `${locale}: weekdays, Saturday, Sunday`);
+    const edition = PARKING.editions[locale];
+    assert.ok(edition.seoTitle.length <= 60, `${locale}: title budget`);
+    assert.ok(edition.seoDescription.length <= 155, `${locale}: description budget`);
+  }
+  assert.match(PARKING.editions.ca.seoTitle, /^Preu zona blava i verda Barcelona: 1,15-4,25 €\/h/);
+  assert.match(PARKING.editions.es.seoTitle, /^Zona azul y verde Barcelona: cómo funciona, horario y precio$/);
+  assert.equal(PARKING.verifiedAt, "2026-10-30");
+  assert.ok(PARKING.sources.some((s) => s.url === "https://areaverda.cat/es/plano"));
+});
+
+/**
  * Zoo and markets, re-checked 24 Oct 2026; Zoo hours updated 26 Oct 2026,
  * after the clock change. The Zoo says visitors enter only through the
  * Ciutadella entrance. Since 26 Oct it closes at 16:30 on weekdays (17:30 at
@@ -596,6 +699,28 @@ test("zoo: Ciutadella-only entrance, winter zoo hours table, aquarium calendar",
     assert.equal(tables[1]?.rows?.length, 3, `${locale}: zoo winter date ranges to 28 Feb 2027`);
     assert.equal(tables[2]?.rows?.length, 6, `${locale}: aquarium date ranges to 31 Jan 2027`);
   }
+});
+
+/**
+ * Zoo EN, 30 Oct 2026 (top-3 push): both venues' prices re-read; the title
+ * names both tickets, the description and the first line give the adult,
+ * child and family-pack prices, and the "family ticket" and "cheaper online"
+ * questions have answers. The Aquarium's companion rule (65 %) is new.
+ */
+test("zoo EN: both prices in the snippet and the first line, family pack and online questions", () => {
+  const en = ZOO_AQUARIUM.editions.en;
+  assert.ok(en.seoTitle.length <= 60 && en.seoDescription.length <= 155, `${en.seoTitle.length}/${en.seoDescription.length}`);
+  assert.match(en.seoTitle, /Zoo & Aquarium tickets 2026: Zoo €23, Aquarium €30/);
+  assert.match(en.seoDescription, /€13\.90.*€30.*€23.*€88/);
+  const text = bodyToPlainText(en.blocks);
+  assert.match(text.slice(0, 260), /Zoo tickets cost €23.*€13\.90.*Aquarium tickets cost €30.*€23.*€88/, "answer first");
+  assert.doesNotMatch(text.slice(0, 700), /until 1 November/, "the lead no longer leads with hours that end on 1 November");
+  assert.match(text, /Is there a family ticket for the Barcelona Aquarium\?/);
+  assert.match(text, /Is it cheaper to buy Barcelona Zoo tickets online\?/);
+  for (const locale of ["ca", "es", "en"] as const) {
+    assert.match(bodyToPlainText(ZOO_AQUARIUM.editions[locale].blocks), /65 %|65%/, `${locale}: Aquarium companion rule`);
+  }
+  assert.equal(ZOO_AQUARIUM.verifiedAt, "2026-10-30");
 });
 
 /**
@@ -715,6 +840,31 @@ test("climate: 1981-2010 table with the year row, city-centre table, a section p
   const ca = bodyToPlainText(CLIMATE.editions.ca.blocks);
   assert.match(ca, /l'1 de març del 1988/, "Catalan elides the article before 1");
   assert.doesNotMatch(ca, /el 1 de|el 11 de/, "no 'el 1 de' in Catalan");
+});
+
+/**
+ * Climate EN, 30 Oct 2026 (top-3 push): the AEMET 0076 table re-read, humidity
+ * (column H) added in every locale, °F beside °C in English, and the snippet
+ * names the coldest and warmest months with their figures.
+ */
+test("climate: humidity column from AEMET, °F in English, the answer in the EN snippet and lead", () => {
+  for (const locale of ["ca", "es", "en"] as const) {
+    const blocks = CLIMATE.editions[locale].blocks as { type: string; headers?: string[]; rows?: string[][] }[];
+    const airport = blocks.find((b) => b.type === "table");
+    assert.equal(airport?.headers?.length, 8, `${locale}: humidity column`);
+    assert.equal(airport?.rows?.[9]?.[6], "73 %", `${locale}: October humidity 73 %`);
+    assert.equal(airport?.rows?.[12]?.[6], "69 %", `${locale}: annual humidity 69 %`);
+  }
+  const en = CLIMATE.editions.en;
+  const airport = (en.blocks as { type: string; rows?: string[][] }[]).find((b) => b.type === "table");
+  assert.equal(airport?.rows?.[0]?.[2], "13.6 (56)", "January high in °C (°F)");
+  assert.equal(airport?.rows?.[7]?.[2], "28.5 (83)", "August high in °C (°F)");
+  assert.ok(en.seoTitle.length <= 60 && en.seoDescription.length <= 155);
+  assert.match(en.seoTitle, /weather and temperature by month/);
+  assert.match(en.seoDescription, /January.*13\.6 °C \(56 °F\).*August.*28\.5 °C \(83 °F\).*October.*91 mm/);
+  const first = bodyToPlainText(en.blocks).slice(0, 220);
+  assert.match(first, /January.*coldest.*13\.6 °C \(56 °F\)/, "answer in the first lines");
+  assert.equal(CLIMATE.verifiedAt, "2026-10-30");
 });
 
 /**

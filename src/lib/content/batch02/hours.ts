@@ -33,9 +33,18 @@ import {
  * Left out: daytime bus hours (TMB publishes them stop by stop), FGC and
  * Rodalies first and last trains, Christmas 2026 and 5 January hours (not
  * announced), and the line count of the NitBus (not re-read today).
+ *
+ * Re-read 30 Oct 2026 on TMB's EN hours page: same rules, the funicular dates,
+ * and one rule the page had left out: Mas Blau, Mercabarna and Parc Logístic
+ * (L9 Sud) and ZAL | Riu Vell, Ecoparc, Port Comercial and La Factoria (L10
+ * Sud) run 5:00-24:00 every day (23:00 on 24 December), so they do not stay
+ * open until 2:00 on Fridays or all night on Saturdays. TMB still lists no
+ * special hours for 5 January; none are printed. "Every 20 minutes on every
+ * line" became "on most lines": AMB's airport lines N17 and N18 run every 15
+ * minutes (see the airport guide).
  */
 
-const VERIFIED = "2026-10-28";
+const VERIFIED = "2026-10-30";
 
 const SOURCES: B2Source[] = [
   { name: "Metro opening hours", url: "https://www.tmb.cat/en/barcelona-transport/operating-hours-metro-bus", publisher: "TMB" },
@@ -66,10 +75,10 @@ const META: Record<Locale, { path: string; title: string; seoTitle: string; seoD
   },
   en: {
     path: "guides/barcelona-metro-hours",
-    title: "Barcelona metro hours: when it opens and closes, and the night bus",
-    seoTitle: "Barcelona metro hours: 5:00 to midnight, Fridays until 2:00",
+    title: "Barcelona metro hours: what time it closes tonight, and when it runs all night",
+    seoTitle: "Barcelona metro hours: closes 12am, 2am Fri, all night Sat",
     seoDescription:
-      "Barcelona's metro opens at 5:00; it closes at midnight Monday to Thursday, at 2:00 on Fridays and runs all night on Saturdays. Special nights and NitBus.",
+      "Last metro at midnight Sunday to Thursday and 2:00 on Fridays; on Saturdays it runs all night. Opens at 5:00. Closing time tonight, special nights, NitBus.",
     excerpt:
       "When the Barcelona metro opens and closes each day, the nights it runs non-stop, and how to get around once it shuts: NitBus, tram and funicular.",
   },
@@ -107,7 +116,7 @@ type T = {
 
 const COPY: Record<Locale, T> = {
   en: {
-    lead: "The Barcelona metro opens at **5:00** Monday to Saturday and closes at **midnight** from Sunday to Thursday, at **2:00** on Friday nights and the nights before midweek public holidays. On **Saturday it runs all night** into Sunday, so on Sunday morning it is already running. When it is closed, the **NitBus** night buses take over.",
+    lead: "The last Barcelona metro leaves at **midnight** from Sunday to Thursday and at **2:00** on Friday nights and the nights before midweek public holidays; on **Saturday it runs all night** into Sunday. It opens at **5:00** Monday to Saturday (on Sunday morning it is already running). When it is closed, the **NitBus** night buses take over.",
     tableTitle: "Barcelona metro hours by day",
     tableCaption: "Metro opening hours",
     headers: ["Day", "Opens", "Closes"],
@@ -118,25 +127,26 @@ const COPY: Record<Locale, T> = {
       ["Sunday", "Running since Saturday night", "Midnight (24:00)"],
       ["Public holiday Monday to Thursday", "5:00", "Midnight (24:00)"],
       ["Night before a midweek public holiday", "5:00", "2:00"],
+      ["Mas Blau, Mercabarna, Parc Logístic (L9 Sud) and ZAL | Riu Vell, Ecoparc, Port Comercial, La Factoria (L10 Sud)", "5:00 (all week)", "Midnight, all week (23:00 on 24 December)"],
     ],
-    tableNote: "From TMB's hours page, checked on 28 October 2026.",
+    tableNote: "From TMB's hours page, checked on 30 October 2026. The seven stations in the last row keep 5:00 to midnight all week: no 2:00 close on Fridays and no all-night Saturday.",
     fridayTitle: "What time does the metro close on Fridays?",
     friday: "At **2:00** in the early hours of Saturday. The same 2:00 closing applies on the night before a public holiday that falls Monday to Friday.",
     sundayTitle: "Metro hours on Sundays and public holidays",
     sunday: `On Sunday the metro does not open at 5:00, because it has been running non-stop since Saturday night; it closes at **midnight**. A public holiday from Monday to Thursday also runs from 5:00 to midnight, and the night before it the metro closes at 2:00; the dates are in ${b2link("workCalendar", "en", "the Catalonia public holiday calendar")}.`,
-    closeTitle: "What 'closing time' means",
-    close: "TMB's closing time is when the last train leaves the terminal station at each end of the line, so a station in the middle sees its last train later than that. If you are cutting it fine, aim for the earlier end of the line.",
-    specialTitle: "Is there metro all night?",
+    closeTitle: "What time is the last metro in Barcelona?",
+    close: "The last trains leave the terminal stations at **midnight** from Sunday to Thursday and at **2:00** on Fridays and the nights before midweek holidays; on Saturday nights there is no last train. TMB's closing time is when the last train leaves the terminal station at each end of the line, so a station in the middle sees its last train later than that. If you are cutting it fine, aim for the earlier end of the line.",
+    specialTitle: "Does the Barcelona metro run 24 hours?",
     special: [
       "**Every Saturday night**, from Saturday morning to Sunday at midnight without a break.",
       "**All night as well:** 23 June (Sant Joan), 23 September (La Mercè) and 31 December (New Year's Eve).",
       "**Early close:** on 24 December the metro runs from 5:00 to 23:00.",
       "TMB can change these at short notice: on Saturday 3 October 2026 it closed at midnight instead of running all night because of the weather, and during La Mercè it added extra all-night service. Check TMB's news before a big night.",
     ],
-    nightTitle: "After the metro closes: NitBus",
+    nightTitle: "NitBus: Barcelona night buses after the metro closes",
     night: [
-      "The AMB's **NitBus** network runs from about **22:30 to 6:00 every night of the year**, every 20 minutes on every line. Every line except the N0 and N19 goes through **Plaça de Catalunya**, the network's hub.",
-      "The Hola Barcelona travel card includes the NitBus. If you hold another pass, check its conditions before relying on it at night.",
+      "The AMB's **NitBus** network runs from about **22:30 to 6:00 every night of the year**, about every 20 minutes on most lines (the airport lines N17 and N18 run every 15). Every line except the N0 and N19 goes through **Plaça de Catalunya**, the network's hub.",
+      `The Hola Barcelona travel card includes the NitBus. If you hold another pass, check its conditions before relying on it at night; what each pass costs and covers is in ${b2link("transport", "en", "Barcelona transport passes and prices")}.`,
     ],
     tramTitle: "Barcelona tram hours",
     tramCaption: "Tram (Trambaix and Trambesòs) hours",
@@ -160,11 +170,13 @@ const COPY: Record<Locale, T> = {
     ],
     faq: [
       { question: "What time does the Barcelona metro close?", answer: "At midnight from Sunday to Thursday, at 2:00 on Fridays and the night before a midweek public holiday; on Saturdays it runs all night." },
-      { question: "Does the Barcelona metro run 24 hours?", answer: "Only on Saturday nights and a few special nights: 23 June, 23 September and 31 December." },
+      { question: "What time is the last metro in Barcelona?", answer: "The last trains leave the end stations at midnight from Sunday to Thursday and at 2:00 on Friday nights; stations in the middle of a line see them a little later. On Saturday nights the metro does not stop." },
+      { question: "Does the Barcelona metro run 24 hours?", answer: "Only on Saturday nights and a few special nights: 23 June, 23 September and 31 December. Seven outer stations on L9 Sud and L10 Sud (Mas Blau, Mercabarna, Parc Logístic, ZAL | Riu Vell, Ecoparc, Port Comercial and La Factoria) keep 5:00 to midnight every day, Saturdays included." },
+      { question: "How late does the Barcelona metro run on Saturday?", answer: "All night: it opens at 5:00 on Saturday and runs without a break until midnight on Sunday." },
       { question: "What time does the Barcelona metro open?", answer: "At 5:00 Monday to Saturday. On Sunday it is already running, because it ran all through Saturday night." },
       { question: "What time does the metro close on Sundays?", answer: "At midnight." },
       { question: "What are the Barcelona tram hours?", answer: "5:00 to midnight Monday to Thursday, Sundays and holidays; 5:00 to 2:00 on Fridays, Saturdays and nights before a holiday." },
-      { question: "How do I get around Barcelona at night?", answer: "On the NitBus: from about 22:30 to 6:00 every night, every 20 minutes, almost every line through Plaça de Catalunya." },
+      { question: "How do I get around Barcelona at night?", answer: "On the NitBus: from about 22:30 to 6:00 every night, about every 20 minutes on most lines, almost every line through Plaça de Catalunya." },
     ],
     note: "Special-night hours change from year to year: check TMB before a big night out.",
   },
@@ -180,14 +192,15 @@ const COPY: Record<Locale, T> = {
       ["Domingo", "Abierto desde el sábado", "24:00 (medianoche)"],
       ["Festivo de lunes a jueves", "5:00", "24:00 (medianoche)"],
       ["Víspera de festivo entre semana", "5:00", "2:00"],
+      ["Mas Blau, Mercabarna, Parc Logístic (L9 Sud) y ZAL | Riu Vell, Ecoparc, Port Comercial, La Factoria (L10 Sud)", "5:00 (toda la semana)", "24:00, toda la semana (23:00 el 24 de diciembre)"],
     ],
-    tableNote: "De la página de horarios de TMB, comprobada el 28 de octubre de 2026.",
+    tableNote: "De la página de horarios de TMB, comprobada el 30 de octubre de 2026. Las siete estaciones de la última fila mantienen de 5:00 a 24:00 toda la semana: ni cierre a las 2:00 el viernes ni noche entera el sábado.",
     fridayTitle: "¿A qué hora cierra el metro los viernes?",
     friday: "A las **2:00** de la madrugada del sábado. El mismo cierre a las 2:00 se aplica la víspera de un festivo que cae de lunes a viernes.",
     sundayTitle: "Horario del metro el domingo y los festivos",
     sunday: "El domingo el metro no abre a las 5:00 porque funciona sin parar desde la noche del sábado; cierra a **medianoche**. Un festivo de lunes a jueves también funciona de 5:00 a medianoche, y la víspera el metro cierra a las 2:00: las fechas están en [el calendario de festivos de Barcelona](/es/festivos/barcelona/).",
-    closeTitle: "Qué quiere decir la hora de cierre",
-    close: "La hora de cierre de TMB es la de salida del último tren desde la estación de cabecera de cada extremo de la línea, así que en una estación intermedia el último tren pasa más tarde. Si vas justo, cuenta con el extremo que salga antes.",
+    closeTitle: "¿A qué hora pasa el último metro?",
+    close: "Los últimos trenes salen de las cabeceras a las **24:00** de domingo a jueves y a las **2:00** los viernes y vísperas de festivo entre semana; la noche del sábado no hay último tren. La hora de cierre de TMB es la de salida del último tren desde la estación de cabecera de cada extremo de la línea, así que en una estación intermedia el último tren pasa más tarde. Si vas justo, cuenta con el extremo que salga antes.",
     specialTitle: "¿Hay metro toda la noche?",
     special: [
       "**Todos los sábados**, desde las 5:00 del sábado hasta la medianoche del domingo sin interrupción.",
@@ -197,8 +210,8 @@ const COPY: Record<Locale, T> = {
     ],
     nightTitle: "Cuando cierra el metro: NitBus",
     night: [
-      "La red **NitBus** del AMB funciona aproximadamente de **22:30 a 6:00 todas las noches del año**, cada 20 minutos en todas las líneas. Todas las líneas excepto la N0 y la N19 pasan por **plaza Catalunya**, el centro de la red.",
-      "La Hola Barcelona incluye el NitBus. Si tienes otro título, comprueba sus condiciones antes de contar con él de noche.",
+      "La red **NitBus** del AMB funciona aproximadamente de **22:30 a 6:00 todas las noches del año**, cada 20 minutos aproximadamente en la mayoría de líneas (las del aeropuerto, N17 y N18, cada 15). Todas las líneas excepto la N0 y la N19 pasan por **plaza Catalunya**, el centro de la red.",
+      `La Hola Barcelona incluye el NitBus. Si tienes otro título, comprueba sus condiciones antes de contar con él de noche; qué cubre y cuánto cuesta cada uno está en ${b2link("transport", "es", "el precio de la T-casual y las tarjetas de transporte")}.`,
     ],
     tramTitle: "Horario del tranvía de Barcelona",
     tramCaption: "Horario del tranvía (Trambaix y Trambesòs)",
@@ -223,11 +236,12 @@ const COPY: Record<Locale, T> = {
     faq: [
       { question: "¿A qué hora cierra el metro de Barcelona hoy?", answer: "Depende del día: a medianoche de domingo a jueves, a las 2:00 los viernes y vísperas de festivo entre semana, y el sábado no cierra en toda la noche. Arriba tienes el horario de hoy y de mañana." },
       { question: "¿A qué hora abre el metro de Barcelona?", answer: "A las 5:00 de lunes a sábado. El domingo ya está abierto, porque funciona toda la noche del sábado." },
-      { question: "¿Hay metro toda la noche?", answer: "Solo la noche del sábado y algunas noches especiales: 23 de junio, 23 de septiembre y 31 de diciembre." },
+      { question: "¿Hay metro toda la noche?", answer: "Solo la noche del sábado y algunas noches especiales: 23 de junio, 23 de septiembre y 31 de diciembre. Siete estaciones de los extremos de la L9 Sud y la L10 Sud (Mas Blau, Mercabarna, Parc Logístic, ZAL | Riu Vell, Ecoparc, Port Comercial y La Factoria) mantienen de 5:00 a 24:00 todos los días, sábados incluidos." },
+      { question: "¿Hasta qué hora funciona el metro hoy?", answer: "Hasta las 24:00 de domingo a jueves, hasta las 2:00 el viernes y las vísperas de festivo entre semana, y toda la noche el sábado. El recuadro del principio dice el cierre de esta noche." },
       { question: "¿A qué hora cierra el metro los viernes?", answer: "A las 2:00 de la madrugada del sábado." },
       { question: "¿Hasta qué hora funciona el metro el domingo?", answer: "Hasta medianoche (24:00)." },
       { question: "¿Cuál es el horario del tranvía de Barcelona?", answer: "De 5:00 a 24:00 de lunes a jueves, domingos y festivos, y de 5:00 a 2:00 los viernes, sábados y vísperas de festivo." },
-      { question: "¿Cómo moverse por Barcelona de noche?", answer: "Con el NitBus: aproximadamente de 22:30 a 6:00 todas las noches, cada 20 minutos, casi todas las líneas por plaza Catalunya." },
+      { question: "¿Cómo moverse por Barcelona de noche?", answer: "Con el NitBus: aproximadamente de 22:30 a 6:00 todas las noches, cada 20 minutos en la mayoría de líneas, casi todas por plaza Catalunya." },
     ],
     note: "El horario de las noches especiales cambia cada año: consulta TMB antes de una noche señalada.",
   },
@@ -243,14 +257,15 @@ const COPY: Record<Locale, T> = {
       ["Diumenge", "Obert des del dissabte", "24:00 (mitjanit)"],
       ["Festiu de dilluns a dijous", "5:00", "24:00 (mitjanit)"],
       ["Vigília de festiu entre setmana", "5:00", "2:00"],
+      ["Mas Blau, Mercabarna, Parc Logístic (L9 Sud) i ZAL | Riu Vell, Ecoparc, Port Comercial, La Factoria (L10 Sud)", "5:00 (tota la setmana)", "24:00, tota la setmana (23:00 el 24 de desembre)"],
     ],
-    tableNote: "De la pàgina d'horaris de TMB, comprovada el 28 d'octubre de 2026.",
+    tableNote: "De la pàgina d'horaris de TMB, comprovada el 30 d'octubre de 2026. Les set estacions de l'última fila mantenen de 5:00 a 24:00 tota la setmana: ni tancament a les 2:00 el divendres ni nit sencera el dissabte.",
     fridayTitle: "A quina hora tanca el metro els divendres?",
     friday: "A les **2:00** de la matinada del dissabte. El mateix tancament a les 2:00 s'aplica la vigília d'un festiu que cau de dilluns a divendres.",
     sundayTitle: "Horari del metro el diumenge i els festius",
     sunday: "El diumenge el metro no obre a les 5:00 perquè funciona sense parar des de la nit del dissabte; tanca a **mitjanit**. Un festiu de dilluns a dijous també funciona de 5:00 a mitjanit, i la vigília el metro tanca a les 2:00: les dates són al [calendari de festius de Barcelona](/ca/festius/barcelona/).",
-    closeTitle: "Què vol dir l'hora de tancament",
-    close: "L'hora de tancament de TMB és la de sortida de l'últim tren des de l'estació de capçalera de cada extrem de la línia, així que en una estació del mig l'últim tren hi passa més tard. Si vas just, compta amb l'extrem que surti abans.",
+    closeTitle: "A quina hora passa l'últim metro?",
+    close: "Els últims trens surten de les capçaleres a les **24:00** de diumenge a dijous i a les **2:00** els divendres i vigílies de festiu entre setmana; la nit del dissabte no hi ha últim tren. L'hora de tancament de TMB és la de sortida de l'últim tren des de l'estació de capçalera de cada extrem de la línia, així que en una estació del mig l'últim tren hi passa més tard. Si vas just, compta amb l'extrem que surti abans.",
     specialTitle: "Hi ha metro tota la nit?",
     special: [
       "**Tots els dissabtes**, des de les 5:00 del dissabte fins a la mitjanit del diumenge sense interrupció.",
@@ -260,8 +275,8 @@ const COPY: Record<Locale, T> = {
     ],
     nightTitle: "Quan tanca el metro: NitBus",
     night: [
-      "La xarxa **NitBus** de l'AMB funciona aproximadament de **22:30 a 6:00 totes les nits de l'any**, cada 20 minuts a totes les línies. Totes les línies excepte la N0 i la N19 passen per la **plaça de Catalunya**, el centre de la xarxa.",
-      "La Hola Barcelona inclou el NitBus. Si tens un altre títol, comprova'n les condicions abans de comptar-hi de nit.",
+      "La xarxa **NitBus** de l'AMB funciona aproximadament de **22:30 a 6:00 totes les nits de l'any**, cada 20 minuts aproximadament a la majoria de línies (les de l'aeroport, N17 i N18, cada 15). Totes les línies excepte la N0 i la N19 passen per la **plaça de Catalunya**, el centre de la xarxa.",
+      `La Hola Barcelona inclou el NitBus. Si tens un altre títol, comprova'n les condicions abans de comptar-hi de nit; què cobreix i quant costa cadascun és a ${b2link("transport", "ca", "el preu de la T-casual i les targetes de transport")}.`,
     ],
     tramTitle: "Horari del tramvia de Barcelona",
     tramCaption: "Horari del tramvia (Trambaix i Trambesòs)",
@@ -286,11 +301,11 @@ const COPY: Record<Locale, T> = {
     faq: [
       { question: "A quina hora tanca el metro de Barcelona avui?", answer: "Depèn del dia: a mitjanit de diumenge a dijous, a les 2:00 els divendres i vigílies de festiu entre setmana, i el dissabte no tanca en tota la nit. A dalt tens l'horari d'avui i de demà." },
       { question: "A quina hora obre el metro de Barcelona?", answer: "A les 5:00 de dilluns a dissabte. El diumenge ja és obert, perquè funciona tota la nit del dissabte." },
-      { question: "Hi ha metro tota la nit?", answer: "Només la nit del dissabte i algunes nits especials: 23 de juny, 23 de setembre i 31 de desembre." },
+      { question: "Hi ha metro tota la nit?", answer: "Només la nit del dissabte i algunes nits especials: 23 de juny, 23 de setembre i 31 de desembre. Set estacions dels extrems de la L9 Sud i la L10 Sud (Mas Blau, Mercabarna, Parc Logístic, ZAL | Riu Vell, Ecoparc, Port Comercial i La Factoria) mantenen de 5:00 a 24:00 cada dia, dissabtes inclosos." },
       { question: "Quin és l'horari del metro el divendres?", answer: "De 5:00 a 2:00 de la matinada del dissabte." },
       { question: "Quin és l'horari del metro el dissabte?", answer: "Obre a les 5:00 i no tanca fins a la mitjanit del diumenge." },
       { question: "Quin és l'horari del tramvia de Barcelona?", answer: "De 5:00 a 24:00 de dilluns a dijous, diumenges i festius, i de 5:00 a 2:00 els divendres, dissabtes i vigílies de festiu." },
-      { question: "Com moure's per Barcelona de nit?", answer: "Amb el NitBus: aproximadament de 22:30 a 6:00 totes les nits, cada 20 minuts, gairebé totes les línies per la plaça de Catalunya." },
+      { question: "Com moure's per Barcelona de nit?", answer: "Amb el NitBus: aproximadament de 22:30 a 6:00 totes les nits, cada 20 minuts a la majoria de línies, gairebé totes per la plaça de Catalunya." },
     ],
     note: "L'horari de les nits especials canvia cada any: consulta TMB abans d'una nit assenyalada.",
   },

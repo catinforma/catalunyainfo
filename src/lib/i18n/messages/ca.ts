@@ -204,7 +204,7 @@ const ca = {
     nextChristmas: "Vacances de Nadal: a partir del {from}, d'aquí a {n} dies.",
     nextEaster: "Vacances de Setmana Santa: a partir del {from}, d'aquí a {n} dies.",
     nextSummer: "Últim dia de curs (infantil, primària i ESO): {from}, d'aquí a {n} dies.",
-    todayCaveat: "Els caps de setmana, els festius, els dos festius locals i els quatre dies de lliure disposició de cada escola no hi són comptats.",
+    todayCaveat: "Compta els caps de setmana, els festius de tot Catalunya i les vacances. No hi són els dos festius locals del municipi ni els quatre dies de lliure disposició de cada escola.",
     unknown: "El calendari publicat no arriba a aquesta data.",
     colYear: "Curs",
     rowStart: "Inici (infantil, primària, ESO, batxillerat)",

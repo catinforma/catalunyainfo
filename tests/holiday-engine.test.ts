@@ -13,6 +13,7 @@ import {
   hubCopy,
   municipalityCopy,
   municipalityDescription,
+  municipalityFaq,
   municipalityH1,
   municipalityTitle,
   sharedDayLead,
@@ -615,8 +616,13 @@ test("metadata: every title <= 60 and description <= 155, in the searched words 
       assert.ok(description.includes(String(YEAR)));
     }
   }
-  assert.equal(municipalityTitle(SNAPSHOT.municipalities.find((m) => m.slug === "girona")!, "ca"), "Festius locals Girona 2026 i 2027: quins dies són festa");
-  assert.equal(municipalityTitle(SNAPSHOT.municipalities.find((m) => m.slug === "girona")!, "es"), "Festivos locales Girona 2026 y 2027: qué días son festivo");
+  // Top-3 push, 30 Oct 2026: the tail asks the "hoy es festivo en …" question the status block answers.
+  assert.equal(municipalityTitle(SNAPSHOT.municipalities.find((m) => m.slug === "girona")!, "ca"), "Festius locals Girona 2026 i 2027: avui és festiu?");
+  assert.equal(municipalityTitle(SNAPSHOT.municipalities.find((m) => m.slug === "girona")!, "es"), "Festivos locales Girona 2026 y 2027: ¿hoy es festivo?");
+  assert.match(
+    municipalityDescription(SNAPSHOT.municipalities.find((m) => m.slug === "tarragona")!, "es"),
+    /^Festivos locales de Tarragona en 2026: 19 de agosto y 23 de septiembre\. Calendario laboral 2027/,
+  );
   for (const locale of MUNI_LOCALES) {
     const hub = hubCopy(locale);
     assert.ok(hub.title.length <= 60 && hub.description.length <= 155, hub.title);
@@ -859,4 +865,52 @@ test("server output carries no clock: no argument-less new Date() outside the br
   const client = readFileSync(join(ROOT, "src/components/programmatic/holidays/HolidayStatus.tsx"), "utf8");
   assert.match(client, /^"use client";/);
   assert.match(client, /useEffect\(/, "the date is read after mount, never during the server render");
+});
+
+/* -------------------------------------------------------------------------- */
+/* Top-3 push, 30 Oct 2026: questions in the searchers' words                 */
+/* -------------------------------------------------------------------------- */
+
+test("town FAQ: hoy, mañana, calendario laboral 2027 and the next two asked dates, answered from the DOGC data", () => {
+  const bcn = SNAPSHOT.municipalities.find((m) => m.slug === "barcelona")!;
+  const es = municipalityFaq(bcn, "es", null, "2026-10-31");
+  assert.deepEqual(
+    es.map((i) => i.question),
+    [
+      "¿Hoy es festivo en Barcelona?",
+      "¿Mañana es festivo en Barcelona?",
+      "¿Cuál es el calendario laboral 2027 de Barcelona?",
+      "¿El lunes 2 de noviembre es festivo en Barcelona?",
+      "¿El miércoles 11 de noviembre es festivo en Barcelona?",
+    ],
+  );
+  assert.match(es[0]!.answer, /el lunes 25 de mayo y el jueves 24 de septiembre/);
+  assert.match(es[2]!.answer, /todavía no se han publicado/);
+  assert.match(es[3]!.answer, /^No: en Barcelona es laborable\./);
+  assert.equal(es[3]!.link?.href, "/es/festivos/dia/1-noviembre-2026/");
+  // A town whose own local day is asked about says yes; one where only a nucleus has it says so.
+  for (const m of SNAPSHOT.municipalities) {
+    for (const locale of ["ca", "es"] as const) {
+      const faq = municipalityFaq(m, locale, null, "2026-11-01");
+      assert.equal(faq.length, 5, m.slug);
+      for (const item of faq) assert.ok(!/undefined|NaN|\$\{|\{\w+\}/.test(item.question + item.answer), `${m.slug} ${locale}: ${item.answer}`);
+      const nov11 = faq.find((i) => i.question.includes("11 de novembre") || i.question.includes("11 de noviembre"))!;
+      if (m.local.includes("2026-11-11")) assert.match(nov11.answer, /^Sí/, m.slug);
+      else if (m.nuclei.some((n) => n.dates.includes("2026-11-11"))) assert.match(nov11.answer, /^(Només|Solo) en part/, m.slug);
+      else assert.match(nov11.answer, /^No/, m.slug);
+    }
+  }
+  // After the last asked date there is nothing left to ask about.
+  assert.equal(municipalityFaq(bcn, "ca", null, "2027-01-01").length, 3);
+});
+
+test("town pages link the work and school calendars with the year in the anchor", () => {
+  const parts = readFileSync(join(ROOT, "src/components/programmatic/holidays/parts.tsx"), "utf8");
+  assert.match(parts, /Calendario laboral \$\{PLANNER_YEAR\} de Cataluña/);
+  assert.match(parts, /Calendario escolar \$\{SCHOOL_LABEL\}/);
+  const page = readFileSync(join(ROOT, "src/components/programmatic/holidays/MunicipalityPage.tsx"), "utf8");
+  assert.match(page, /GUIDES\.school\[locale\]/);
+  assert.match(page, /municipalityFaq\(/);
+  const routes = readFileSync(join(ROOT, "src/components/programmatic/holidays/routes.tsx"), "utf8");
+  assert.match(routes, /faqSchema\(/);
 });

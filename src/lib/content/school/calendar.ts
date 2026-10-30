@@ -20,7 +20,10 @@ export const SCHOOL_SOURCE = {
 };
 
 // Re-read 28 Oct 2026: the order's PDF (dates below unchanged) and the CEMB proposal.
-export const SCHOOL_VERIFIED_AT = "2026-10-28";
+// Re-read 30 Oct 2026: the order's PDF again (dates unchanged; sections 2.4 c-d on
+// consecutive free-choice days, 3.5 gradual start in infant, 3.6 d shared bus
+// routes and 3.7 c the last day before Christmas, now quoted on the page).
+export const SCHOOL_VERIFIED_AT = "2026-10-30";
 
 export interface SchoolYear {
   /** "2026-2027" */

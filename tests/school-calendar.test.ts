@@ -2,7 +2,19 @@ import assert from "node:assert/strict";
 import { test } from "node:test";
 
 import { bodySchema } from "../src/lib/content/blocks.ts";
-import { todayInCatalonia, weekdayIndex } from "../src/lib/content/holidays/calendar.ts";
+import { addDays, todayInCatalonia, weekdayIndex } from "../src/lib/content/holidays/calendar.ts";
+import { liveEntryDescription, liveEntryTitle } from "../src/lib/content/live-title.ts";
+import {
+  SCHOOL_DESCRIPTION_MAX,
+  SCHOOL_TITLE_MAX,
+  bridgeDays,
+  generalSchoolDays,
+  liveSchoolDescription,
+  liveSchoolTitle,
+  nextHolidayInTerm,
+  schoolDay,
+  schoolDayLine,
+} from "../src/lib/content/school/snippet.ts";
 import { IMAGES } from "../src/lib/content/images.ts";
 import { SCHOOL_YEARS, isSchoolCovered, schoolStatusOn } from "../src/lib/content/school/calendar.ts";
 import { COPY, buildBody, schoolBridges } from "../src/lib/content/school/publish.ts";
@@ -123,4 +135,77 @@ test("the school page sends local questions to the town pages", () => {
   assert.ok(JSON.stringify(buildBody("es")).includes("(/es/festivos/)"));
   assert.ok(JSON.stringify(buildBody("es")).includes("/es/festivos/barcelona/"));
   assert.ok(JSON.stringify(buildBody("en")).includes("/en/guides/local-holidays-catalonia/"));
+});
+
+/* -------------------------------------------------------------------------- */
+/* Top-3 push, 30 Oct 2026: the snippet names the next day off                */
+/* -------------------------------------------------------------------------- */
+
+test("the live title and description fit every day the order covers, in every language", () => {
+  const last = SCHOOL_YEARS[SCHOOL_YEARS.length - 1]!.end;
+  for (let iso = "2026-09-01"; iso <= last; iso = addDays(iso, 1)) {
+    for (const locale of LOCALES) {
+      const title = liveSchoolTitle(locale, iso);
+      const description = liveSchoolDescription(locale, iso);
+      assert.ok(title.length <= SCHOOL_TITLE_MAX && title.length <= 60, `${iso} ${locale}: ${title}`);
+      assert.ok(description.length > 40 && description.length <= SCHOOL_DESCRIPTION_MAX, `${iso} ${locale}: ${description}`);
+      assert.ok(!/undefined|NaN|\$\{/.test(title + description), `${iso} ${locale}`);
+    }
+  }
+});
+
+test("the title follows the breaks: Christmas until 7 Jan, then Easter, then the last day, then the next start", () => {
+  assert.equal(liveSchoolTitle("ca", "2026-10-30"), "Calendari escolar 2026-27 Catalunya: Nadal del 22/12 al 7/1");
+  assert.equal(liveSchoolTitle("es", "2026-10-30"), "Calendario escolar 2026-27 Cataluña: Navidad 22/12-7/1");
+  assert.match(liveSchoolTitle("en", "2026-10-30"), /Christmas 22 Dec–7 Jan/);
+  assert.match(liveSchoolTitle("ca", "2027-01-08"), /Setmana Santa 20-29\/3/);
+  assert.match(liveSchoolTitle("es", "2027-04-10"), /termina el 21 de junio/);
+  assert.match(liveSchoolTitle("ca", "2027-07-01"), /2027-28 Catalunya: comença el 8\/9/);
+});
+
+test("the description leads with the next weekday off for all schools", () => {
+  assert.match(liveSchoolDescription("ca", "2026-10-30"), /^Pròxim festiu escolar: dimarts 8 de desembre\. Nadal: del 22 de desembre al 7 de gener\./);
+  assert.match(liveSchoolDescription("es", "2026-10-30"), /^Próximo festivo escolar: martes 8 de diciembre\./);
+  assert.match(liveSchoolDescription("en", "2026-12-23"), /^Christmas holidays until 7 January: classes restart on Friday 8 January\./);
+  assert.equal(nextHolidayInTerm("2026-10-30")?.date, "2026-12-08");
+  assert.equal(nextHolidayInTerm("2026-12-09"), null, "after 8 Dec the next day off is the Christmas break itself");
+});
+
+test("today and tomorrow: weekend, holiday, bridge day and break are told apart", () => {
+  assert.equal(schoolDay("2026-10-31").kind, "weekend");
+  assert.equal(schoolDay("2026-12-08").kind, "holiday");
+  assert.equal(schoolDay("2026-12-07").kind, "school");
+  assert.equal(schoolDay("2026-12-23").kind, "christmas");
+  assert.equal(schoolDay("2027-07-15").kind, "summer");
+  assert.equal(schoolDayLine("2026-12-08", "ca", "tomorrow"), "Demà, dimarts 8 de desembre: no hi ha classe, és festiu a tot Catalunya (la Immaculada).");
+  assert.match(schoolDayLine("2026-12-23", "es", "today"), /Se vuelve a clase el viernes 8 de enero\./);
+});
+
+test("the 7 December bridge and the school-day count come from the order and the holiday calendars", () => {
+  assert.deepEqual(bridgeDays(Y).map((b) => b.day), ["2026-12-07"]);
+  const days = generalSchoolDays(Y);
+  assert.equal(days, 183);
+  // Minus two local holidays and four free-choice days: inside the 175-178 the law requires.
+  assert.ok(days! - 6 >= 175 && days! - 6 <= 178);
+  // Years whose holiday calendar is not published yet are not counted.
+  assert.equal(generalSchoolDays(SCHOOL_YEARS[2]!), null);
+  const questions = { ca: /Hi ha escola el dilluns 7 de desembre\?/, es: /¿Hay cole el lunes 7 de diciembre\?/, en: /Is there school on Monday 7 December\?/ };
+  const freeTitles = { ca: "Dies de lliure disposició i festius locals", es: "Días de libre disposición y festivos locales", en: "Free-choice days and local holidays" };
+  for (const locale of LOCALES) {
+    const body = buildBody(locale);
+    const text = JSON.stringify(body);
+    assert.match(text, questions[locale], locale);
+    assert.ok(body.some((b) => b.type === "heading" && b.text === freeTitles[locale]), locale);
+    assert.ok(body.some((b) => b.type === "heading" && /2027-2028 (i|y|and) 2028-2029/.test(b.text)), `${locale}: next years`);
+    assert.ok(text.includes("183"), `${locale}: day count`);
+  }
+});
+
+test("the page metadata uses the live title and description wherever the school block is", async () => {
+  const body = [{ type: "schoolCalendar" }] as Parameters<typeof liveEntryDescription>[0];
+  for (const locale of LOCALES) {
+    assert.equal(await liveEntryTitle(body, locale), liveSchoolTitle(locale, todayInCatalonia()));
+    assert.equal(liveEntryDescription(body, locale), liveSchoolDescription(locale, todayInCatalonia()));
+  }
+  assert.equal(liveEntryDescription([{ type: "paragraph", text: "x" }] as Parameters<typeof liveEntryDescription>[0], "ca"), null);
 });
