@@ -931,8 +931,14 @@ test("metadata: every title <= 60 and description <= 155, in the searched words 
     }
   }
   // Top-3 push, 30 Oct 2026: the tail asks the "hoy es festivo en …" question the status block answers.
-  assert.equal(municipalityTitle(SNAPSHOT.municipalities.find((m) => m.slug === "girona")!, "ca"), "Festius locals Girona 2026 i 2027: avui és festiu?");
-  assert.equal(municipalityTitle(SNAPSHOT.municipalities.find((m) => m.slug === "girona")!, "es"), "Festivos locales Girona 2026 y 2027: ¿hoy es festivo?");
+  // Girona's council has since approved its 2027 days (council-2027.ts), so its title gives them;
+  // without council data it is the question, as for Tarragona.
+  const girona = SNAPSHOT.municipalities.find((m) => m.slug === "girona")!;
+  assert.equal(municipalityTitle(girona, "ca", null), "Festius locals Girona 2026 i 2027: avui és festiu?");
+  assert.equal(municipalityTitle(girona, "es", null), "Festivos locales Girona 2026 y 2027: ¿hoy es festivo?");
+  assert.equal(municipalityTitle(SNAPSHOT.municipalities.find((m) => m.slug === "tarragona")!, "es"), "Festivos locales Tarragona 2026 y 2027: ¿hoy es festivo?");
+  assert.equal(municipalityTitle(girona, "ca"), "Festius Girona 2026 i 2027: 26 de juliol i 29 d'octubre");
+  assert.equal(municipalityTitle(girona, "es"), "Festivos Girona 2026 y 2027: 26 de julio y 29 de octubre");
   assert.match(
     municipalityDescription(SNAPSHOT.municipalities.find((m) => m.slug === "tarragona")!, "es"),
     /^Festivos locales de Tarragona en 2026: 19 de agosto y 23 de septiembre\. Calendario laboral 2027/,
@@ -1222,7 +1228,10 @@ test("town FAQ: hoy, mañana, calendario laboral 2027 and the next two asked dat
     ],
   );
   assert.match(es[0]!.answer, /el lunes 25 de mayo y el jueves 24 de septiembre/);
-  assert.match(es[2]!.answer, /todavía no se han publicado/);
+  // Barcelona's 2027 days are fixed by mayoral decree (council-2027.ts): the answer gives them,
+  // labelled; without council data it says the local days are not out yet.
+  assert.match(es[2]!.answer, /serán el lunes 17 de mayo y el viernes 24 de septiembre, aprobados por el Ayuntamiento \(decreto de alcaldía del 4 de junio de 2026\), pendientes de la orden del DOGC/);
+  assert.match(municipalityFaq(bcn, "es", null, "2026-10-31", null)[2]!.answer, /todavía no se han publicado/);
   assert.match(es[3]!.answer, /^No: en Barcelona es laborable\./);
   assert.equal(es[3]!.link?.href, "/es/festivos/dia/1-noviembre-2026/");
   // A town whose own local day is asked about says yes; one where only a nucleus has it says so.

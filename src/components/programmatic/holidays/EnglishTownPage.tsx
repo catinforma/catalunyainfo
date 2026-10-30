@@ -2,7 +2,7 @@ import Link from "next/link";
 
 import { Breadcrumbs, type Crumb } from "@/components/Breadcrumbs";
 import { getMessages } from "@/lib/i18n";
-import { NEXT, YEAR, localThrough, nextYearFor, regionalThrough, statusDays, yearRows } from "@/lib/programmatic/holidays/data";
+import { NEXT, YEAR, councilApproved2027, localThrough, nextYearFor, regionalThrough, statusDays, yearRows } from "@/lib/programmatic/holidays/data";
 import { englishTowns, isLargestTown } from "@/lib/programmatic/holidays/english";
 import { enName, englishHubCopy, englishTownCopy, englishTownFaq, englishTownH1, townDateAnswers } from "@/lib/programmatic/holidays/english-copy";
 import { dayMonth, longDate, weekdayDayMonth } from "@/lib/programmatic/holidays/format";
@@ -12,7 +12,7 @@ import { datePath, hubPath, municipalityPath } from "@/lib/programmatic/holidays
 import type { SnapshotMunicipality } from "@/lib/programmatic/holidays/types";
 
 import { HolidayStatus, type StatusLabels } from "./HolidayStatus";
-import { DateList, GuideLinks, HolidayTable, Sources } from "./parts";
+import { CouncilSourceLine, DateList, GuideLinks, HolidayTable, Sources } from "./parts";
 
 /**
  * `/en/holidays/<slug>/`: one town of the English selection. Server-rendered
@@ -51,6 +51,7 @@ export function englishTownCrumbs(m: SnapshotMunicipality): Crumb[] {
 
 export function EnglishTownPage({ m }: { m: SnapshotMunicipality }) {
   const next = nextYearFor(m.slug);
+  const council = next ? null : councilApproved2027(m.slug);
   const t = englishTownCopy(m, next);
   const name = enName(m);
   const faq = englishTownFaq(m, next);
@@ -82,6 +83,11 @@ export function EnglishTownPage({ m }: { m: SnapshotMunicipality }) {
           <p className="ci-lead">
             {t.lead} {t.source}
           </p>
+          {t.nextLead ? (
+            <p className="ci-callout ci-callout-official">
+              {t.nextLead} <a href="#holidays-2027">{`The ${NEXT} calendar`}</a>
+            </p>
+          ) : null}
           {t.nucleiLead ? <p>{t.nucleiLead}</p> : null}
           {t.correction ? <p className="ci-callout ci-callout-official">{t.correction}</p> : null}
 
@@ -125,7 +131,9 @@ export function EnglishTownPage({ m }: { m: SnapshotMunicipality }) {
           {t.next.map((p) => (
             <p key={p}>{p}</p>
           ))}
-          <HolidayTable rows={yearRows(m, NEXT, "en")} locale="en" caption={t.nextCaption} />
+          {t.councilSource ? <CouncilSourceLine source={t.councilSource} /> : null}
+          {/* Before the DOGC order: the council's own days, if it has approved them, marked pending. */}
+          <HolidayTable rows={yearRows(m, NEXT, "en", { council: true })} locale="en" caption={t.nextCaption} />
           {next ? null : (
             <p>
               <a href={OFFICIAL.treballCalendar} rel="noopener" target="_blank">
@@ -254,6 +262,7 @@ export function EnglishTownPage({ m }: { m: SnapshotMunicipality }) {
           keys={["localOrder", "amendment", "openData", "regional2026", "regional2027", "shops", "shopsOrder", "school", "retailLaw", "population"]}
           locale="en"
           title={t.sourcesTitle}
+          extra={council ? [council.source] : []}
         />
       </div>
     </article>

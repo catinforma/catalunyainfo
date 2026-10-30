@@ -1,9 +1,11 @@
 import { EN_LARGEST, EN_RESORTS, TOURISM_REGISTER } from "@/lib/programmatic/elections/english";
 
-import { NEXT, SNAPSHOT, YEAR, aranSwap, isAran, regionalDays } from "./data";
+import { councilLabel, councilSource, type CouncilSource } from "./copy";
+import type { CouncilApproved } from "./council-2027";
+import { NEXT, SNAPSHOT, YEAR, aranSwap, councilApproved2027, isAran, regionalDays } from "./data";
 import { dateContent } from "./dates";
 import { englishTowns, englishWithoutDays } from "./english";
-import { dayMonth, weekdayDayMonth, weekdayName } from "./format";
+import { dayMonth, dayPair, weekdayDayMonth, weekdayName } from "./format";
 import { joinList } from "./names";
 import { DATE_PAGES, type DatePage } from "./paths";
 import type { SnapshotMunicipality } from "./types";
@@ -47,12 +49,15 @@ function regionalCount(year: number): number {
 /**
  * "Sitges public holidays 2026 and 2027: local dates": the town first, as
  * people type it ("public holidays barcelona 2026", "sitges public holidays
- * 2026"), then both years.
+ * 2026"), then both years. Where the council has already approved next
+ * year's days (council-2027.ts), they replace "local dates" when they fit.
  */
-export function englishTownTitle(m: SnapshotMunicipality): string {
+export function englishTownTitle(m: SnapshotMunicipality, council: CouncilApproved | null = councilApproved2027(m.slug)): string {
   const name = enName(m);
+  const days = council ? dayPair(council.local[0], council.local[1], "en") : null;
   return fit(
     [
+      ...(days ? [`${name} public holidays ${YEAR} and ${NEXT}: ${days}`, `${name} holidays ${YEAR} and ${NEXT}: ${days}`] : []),
       `${name} public holidays ${YEAR} and ${NEXT}: local dates`,
       `${name} public holidays ${YEAR} and ${NEXT}`,
       // Castell d'Aro, Platja d'Aro i s'Agaró (37 characters).
@@ -73,9 +78,23 @@ function localPhrase(m: SnapshotMunicipality): string {
   return `local holidays set village by village in ${YEAR}`;
 }
 
-/** Both local dates first, then what else the page answers. */
-export function englishTownDescription(m: SnapshotMunicipality): string {
+/**
+ * Both local dates first, then what else the page answers. With next year's
+ * days approved by the council, those lead and this year's follow.
+ */
+export function englishTownDescription(m: SnapshotMunicipality, council: CouncilApproved | null = councilApproved2027(m.slug)): string {
   const name = enName(m);
+  if (council && m.local.length > 0) {
+    const next = dayPair(council.local[0], council.local[1], "en");
+    // A council page that names no act "set" the days; a plenary, decree or board "approved" them.
+    const by = council.act.kind === "web" ? "set" : "approved";
+    const chosen = [
+      `${name}'s local holidays in ${NEXT}: ${next}, ${by} by the council and pending the DOGC order. In ${YEAR}: ${dates(m.local)}, plus Catalonia's ${regionalCount(YEAR)}.`,
+      `${name}'s local holidays in ${NEXT}: ${next}, ${by} by the council. In ${YEAR}: ${dates(m.local)}, plus Catalonia's ${regionalCount(YEAR)}.`,
+      `${name} local holidays ${NEXT}: ${next}, already ${by}. In ${YEAR}: ${dates(m.local)}.`,
+    ].find((c) => c.length <= DESCRIPTION_MAX);
+    if (chosen) return chosen;
+  }
   const head = `${name} has ${localPhrase(m)}, plus Catalonia's ${regionalCount(YEAR)}.`;
   return fit(
     [
@@ -103,8 +122,12 @@ export interface EnglishTownCopy {
   nucleiTitle: string;
   nucleiCols: { place: string; days: string };
   nextTitle: string;
+  /** Under the lead: next year's days as the council approved them, before the DOGC order. */
+  nextLead: string | null;
   /** Paragraphs before the 2027 table. */
   next: string[];
+  /** Where the council's days were read, when the page gives them. */
+  councilSource: CouncilSource | null;
   nextCaption: string;
   closesTitle: string;
   shops: { title: string; lead: string; local: string[]; rules: string[]; guide: string };
@@ -128,12 +151,21 @@ export interface EnglishTownCopy {
   sourcesTitle: string;
 }
 
-export function englishTownCopy(m: SnapshotMunicipality, next: { local: string[] } | null): EnglishTownCopy {
+export function englishTownCopy(
+  m: SnapshotMunicipality,
+  next: { local: string[] } | null,
+  approved: CouncilApproved | null = councilApproved2027(m.slug),
+): EnglishTownCopy {
   const name = enName(m);
   const regional = regionalCount(YEAR);
   const own = m.local.length > 0;
   const aran = isAran(m);
   const c = m.correction;
+  // The DOGC order, once parsed, always wins over the council's own word.
+  const council = next ? null : approved;
+  const councilNuclei = council?.nuclei?.length
+    ? joinList(council.nuclei.map((n) => `${enName(n)} (${dayPair(n.dates[0]!, n.dates[1]!, "en")})`), "en")
+    : null;
 
   const lead = own
     ? `${name} has ${count(m.local.length)} local public ${m.local.length === 1 ? "holiday" : "holidays"} in ${YEAR}: ${wdDates(m.local)}. ${m.local.length === 1 ? "It comes" : "They come"} on top of the ${regional} public holidays that apply across Catalonia${aran ? " (in Aran, with the Festa d'Aran in place of one of them)" : ""}, so the town has ${regional + m.local.length} in all, every one of them in the table below.`
@@ -160,13 +192,24 @@ export function englishTownCopy(m: SnapshotMunicipality, next: { local: string[]
     nucleiTitle: own ? "Villages with holidays of their own" : `Local holidays in each village of ${name}`,
     nucleiCols: { place: "Village", days: `Local holidays ${YEAR}` },
     nextTitle: `Public holidays in ${name} in ${NEXT}`,
+    nextLead: council ? `Local holidays in ${NEXT}: ${dayPair(council.local[0], council.local[1], "en")}, ${councilLabel(council, "en")}.` : null,
     next: next
       ? [`The local holidays in ${name} in ${NEXT} are ${wdDates(next.local)}, on top of Catalonia's ${regionalCount(NEXT)}.`]
-      : [
-          `Catalonia's ${regionalCount(NEXT)} public holidays for ${NEXT} are already official (Order EMT/52/2026), and they are all in the table below. The local holidays of ${name} for ${NEXT} are not out yet: every year an order of the Catalan government's Department of Enterprise and Labour sets them from each council's proposal, and the one for ${YEAR} appeared in the DOGC on 17 December 2025.`,
-          `We will add the ${NEXT} local dates here as soon as the order is published. Until then, do not assume they repeat: councils move their local holidays more often than you might think.`,
-        ],
-    nextCaption: next ? `Catalonia-wide and local public holidays in ${name}, ${NEXT}` : `Catalonia-wide public holidays, ${NEXT} (local days not yet published)`,
+      : council
+        ? [
+            `The local holidays in ${name} in ${NEXT} will be ${wdDates(council.local)}: ${councilLabel(council, "en")}.${councilNuclei ? ` ${council.nuclei!.length === 1 ? "One village has" : "Some villages have"} days of ${council.nuclei!.length === 1 ? "its" : "their"} own: ${councilNuclei}.` : ""} They come on top of Catalonia's ${regionalCount(NEXT)} public holidays for ${NEXT}, already official (Order EMT/52/2026); all of them are in the table below.`,
+            `The order of the Catalan government's Department of Enterprise and Labour that makes local holidays official, from each council's proposal, is not out yet; the one for ${YEAR} appeared in the DOGC on 17 December 2025. Once it is published, this page will give its dates.`,
+          ]
+        : [
+            `Catalonia's ${regionalCount(NEXT)} public holidays for ${NEXT} are already official (Order EMT/52/2026), and they are all in the table below. The local holidays of ${name} for ${NEXT} are not out yet: every year an order of the Catalan government's Department of Enterprise and Labour sets them from each council's proposal, and the one for ${YEAR} appeared in the DOGC on 17 December 2025.`,
+            `We will add the ${NEXT} local dates here as soon as the order is published. Until then, do not assume they repeat: councils move their local holidays more often than you might think.`,
+          ],
+    councilSource: council ? councilSource(council, "en") : null,
+    nextCaption: next
+      ? `Catalonia-wide and local public holidays in ${name}, ${NEXT}`
+      : council
+        ? `Catalonia-wide and local public holidays in ${name}, ${NEXT} (local days pending the DOGC order)`
+        : `Catalonia-wide public holidays, ${NEXT} (local days not yet published)`,
     closesTitle: `What closes on a public holiday in ${name}`,
     shops: {
       title: "Shops",
@@ -294,8 +337,13 @@ export interface EnglishFaqItem {
  * questions, no date picked from the build day, so the answers never go
  * stale before the data does.
  */
-export function englishTownFaq(m: SnapshotMunicipality, next: { local: string[] } | null): EnglishFaqItem[] {
+export function englishTownFaq(
+  m: SnapshotMunicipality,
+  next: { local: string[] } | null,
+  approved: CouncilApproved | null = councilApproved2027(m.slug),
+): EnglishFaqItem[] {
   const name = enName(m);
+  const council = next ? null : approved;
   const own = m.local.length > 0;
   const aran = isAran(m);
   const regional2026 = regionalDays(YEAR, aran);
@@ -319,7 +367,9 @@ export function englishTownFaq(m: SnapshotMunicipality, next: { local: string[] 
       question: `What are the bank holidays in ${name} in ${NEXT}?`,
       answer: next
         ? `The local holidays are ${wdDates(next.local)}, and Catalonia's ${regionalNext.length} are ${dates(regionalNext.map((d) => d.date))}.`
-        : `Catalonia's ${regionalNext.length} public holidays for ${NEXT} are official (Order EMT/52/2026): ${dates(regionalNext.map((d) => d.date))}. The local holidays of ${name} for ${NEXT} have not been published yet; the order for ${YEAR} came out on 17 December 2025.`,
+        : council
+          ? `The local holidays will be ${wdDates(council.local)}, ${councilLabel(council, "en")}. Catalonia's ${regionalNext.length} are official (Order EMT/52/2026): ${dates(regionalNext.map((d) => d.date))}.`
+          : `Catalonia's ${regionalNext.length} public holidays for ${NEXT} are official (Order EMT/52/2026): ${dates(regionalNext.map((d) => d.date))}. The local holidays of ${name} for ${NEXT} have not been published yet; the order for ${YEAR} came out on 17 December 2025.`,
     },
     {
       question: `Are shops open on public holidays in ${name}?`,
@@ -331,6 +381,18 @@ export function englishTownFaq(m: SnapshotMunicipality, next: { local: string[] 
 /* -------------------------------------------------------------------------- */
 /* English hub                                                                */
 /* -------------------------------------------------------------------------- */
+
+/** " The councils of Barcelona (17 May and 24 September) and … have already approved theirs, pending the order." */
+function councilLine(towns: SnapshotMunicipality[]): string {
+  const approved = towns.flatMap((m) => {
+    const c = councilApproved2027(m.slug);
+    return c ? [`${enName(m)} (${dayPair(c.local[0], c.local[1], "en")})`] : [];
+  });
+  if (approved.length === 0) return "";
+  return approved.length === 1
+    ? ` The council of ${approved[0]} has already approved its days, pending the order.`
+    : ` The councils of ${joinList(approved, "en")} have already approved theirs, pending the order.`;
+}
 
 export function englishHubCopy() {
   const towns = englishTowns();
@@ -381,7 +443,7 @@ export function englishHubCopy() {
       electionsLabel: "election results in English",
     },
     editions: `The Catalan and Spanish editions cover all ${SNAPSHOT.municipalities.length} towns with local holidays in ${YEAR}, with a table for each comarca:`,
-    next: `The local holidays for ${NEXT} have not been published yet; the order for ${YEAR} appeared in the DOGC on 17 December 2025.`,
+    next: `The local holidays for ${NEXT} have not been published yet; the order for ${YEAR} appeared in the DOGC on 17 December 2025.${councilLine(towns)}`,
     datesTitle: "Is it a public holiday on…?",
     guidesTitle: "More on public holidays",
     sourcesTitle: "Sources",

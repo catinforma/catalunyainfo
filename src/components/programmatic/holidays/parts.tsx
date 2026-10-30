@@ -3,6 +3,7 @@ import Link from "next/link";
 import { todayInCatalonia } from "@/lib/content/holidays/calendar";
 import { SCHOOL_YEARS } from "@/lib/content/school/calendar";
 import { YEAR as PLANNER_YEAR } from "@/lib/content/holidays/payload";
+import type { CouncilSource } from "@/lib/programmatic/holidays/copy";
 import { SNAPSHOT, type HolidayRow } from "@/lib/programmatic/holidays/data";
 import { dayMonth, dayMonthYear, weekdayName, type DateLocale } from "@/lib/programmatic/holidays/format";
 import { GUIDES, OFFICIAL, type GuideKey } from "@/lib/programmatic/holidays/links";
@@ -50,6 +51,13 @@ const SCOPE_LABEL: Record<DateLocale, Record<HolidayRow["kind"], string>> = {
   en: { catalonia: "Catalonia", local: "Local", aran: "Aran" },
 };
 
+/** Under a local day the council has approved and the DOGC has not yet published (`council-2027.ts`). */
+const PENDING_LABEL: Record<DateLocale, string> = {
+  ca: "Aprovat per l'Ajuntament, pendent del DOGC",
+  es: "Aprobado por el Ayuntamiento, pendiente del DOGC",
+  en: "Approved by the council, pending the DOGC order",
+};
+
 const COLS: Record<DateLocale, { date: string; name: string; scope: string }> = {
   ca: { date: "Dia", name: "Festa", scope: "Àmbit" },
   es: { date: "Día", name: "Fiesta", scope: "Ámbito" },
@@ -85,6 +93,7 @@ export function HolidayTable({ rows, locale, caption }: { rows: HolidayRow[]; lo
               <td>
                 {row.kind === "local" ? <strong>{row.name}</strong> : row.name.charAt(0).toUpperCase() + row.name.slice(1)}
                 {row.where ? <small className="block">{row.where.join(", ")}</small> : null}
+                {row.pending ? <small className="block">{PENDING_LABEL[locale]}</small> : null}
               </td>
               <td>{SCOPE_LABEL[locale][row.kind]}</td>
             </tr>
@@ -144,7 +153,34 @@ function source(key: SourceKey) {
   }
 }
 
-export function Sources({ keys, locale, title }: { keys: readonly SourceKey[]; locale: DateLocale; title: string }) {
+/** "Font: <the council's page> — Ajuntament de …. Consultada el …", under the council's own days. */
+export function CouncilSourceLine({ source }: { source: CouncilSource }) {
+  return (
+    <p className="text-sm">
+      {source.lead}{" "}
+      <a href={source.url} rel="noopener nofollow" target="_blank">
+        {source.name}
+      </a>
+      <span className="text-[var(--color-muted)]">
+        {" "}
+        — {source.ref}. {source.read}
+      </span>
+    </p>
+  );
+}
+
+export function Sources({
+  keys,
+  locale,
+  title,
+  extra = [],
+}: {
+  keys: readonly SourceKey[];
+  locale: DateLocale;
+  title: string;
+  /** Sources outside the snapshot, listed last: the council's page for next year's days. */
+  extra?: readonly { name: string; ref: string; url: string }[];
+}) {
   const read = dayMonthYear(SNAPSHOT.readOn, locale);
   const readLine = { ca: `Dades llegides el ${read} de les fonts oficials.`, es: `Datos leídos el ${read} de las fuentes oficiales.`, en: `Data read on ${read} from the official sources.` }[locale];
   return (
@@ -156,8 +192,7 @@ export function Sources({ keys, locale, title }: { keys: readonly SourceKey[]; l
         <time dateTime={SNAPSHOT.readOn}>{readLine}</time>
       </p>
       <ol className="ci-sources mt-3">
-        {keys.map((key) => {
-          const item = source(key);
+        {[...keys.map((key) => ({ key, item: source(key) })), ...extra.map((item) => ({ key: item.url, item }))].map(({ key, item }) => {
           if (!item) return null;
           return (
             <li key={key}>

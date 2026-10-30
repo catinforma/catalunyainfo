@@ -40,6 +40,16 @@ export function dayMonth(iso: string, locale: DateLocale): string {
   return `${day} de ${name}`;
 }
 
+/**
+ * Two dates, the month said once when they share it: "11 i 17 de maig",
+ * "17 de maig i 24 de setembre", "11 y 17 de mayo", "11 and 17 May".
+ */
+export function dayPair(a: string, b: string, locale: DateLocale): string {
+  const and = locale === "ca" ? "i" : locale === "es" ? "y" : "and";
+  const first = a.slice(0, 7) === b.slice(0, 7) ? String(parts(a).day) : dayMonth(a, locale);
+  return `${first} ${and} ${dayMonth(b, locale)}`;
+}
+
 /** "dimarts 8 de desembre", "martes 8 de diciembre", "Tuesday 8 December". */
 export function weekdayDayMonth(iso: string, locale: DateLocale): string {
   return `${weekdayName(iso, locale)} ${dayMonth(iso, locale)}`;

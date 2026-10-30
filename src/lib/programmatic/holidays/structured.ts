@@ -11,7 +11,7 @@
 import { GENCAT_OPEN_DATA_LICENCE, datasetSchema } from "@/lib/seo/jsonld";
 
 import { comarcaDescription, comarcaH1, displayName, hubCopy, municipalityDescription, municipalityH1 } from "./copy";
-import { NEXT, SNAPSHOT, YEAR, nextYearFor, type ComarcaGroup } from "./data";
+import { NEXT, SNAPSHOT, YEAR, councilApproved2027, nextYearFor, type ComarcaGroup } from "./data";
 import { enName, englishHubCopy, englishTownDescription, englishTownH1 } from "./english-copy";
 import { comarcaPath, hubPath, municipalityPath, type MuniLocale } from "./paths";
 import type { SnapshotMunicipality } from "./types";
@@ -20,13 +20,15 @@ export const HOLIDAY_DATA_CREATOR = "Generalitat de Catalunya. Departament d'Emp
 
 const CATALONIA: Record<MuniLocale, string> = { ca: "Catalunya", es: "Cataluña" };
 
-function basedOn(): string[] {
-  return [SNAPSHOT.sources.localOpenData.url, SNAPSHOT.sources.localOrder.url];
+/** The Generalitat's two sources, plus the council's own page when the town page gives next year's days from it. */
+function basedOn(slug: string | null = null): string[] {
+  const council = slug ? councilApproved2027(slug) : null;
+  return [SNAPSHOT.sources.localOpenData.url, SNAPSHOT.sources.localOrder.url, ...(council ? [council.source.url] : [])];
 }
 
-/** The calendar years the page lists: this year, and next year once its order is out. */
+/** The calendar years the page lists: this year, and next year once its order is out or the council has approved its days. */
 function coverage(slug: string | null): string {
-  const next = slug ? nextYearFor(slug) : null;
+  const next = slug ? nextYearFor(slug) ?? councilApproved2027(slug) : null;
   return next ? `${YEAR}/${NEXT}` : String(YEAR);
 }
 
@@ -38,7 +40,7 @@ export function municipalityDataset(m: SnapshotMunicipality, locale: MuniLocale)
     locale,
     creator: HOLIDAY_DATA_CREATOR,
     license: GENCAT_OPEN_DATA_LICENCE,
-    isBasedOn: basedOn(),
+    isBasedOn: basedOn(m.slug),
     spatialCoverage: `${displayName(m, locale)}, ${CATALONIA[locale]}`,
     temporalCoverage: coverage(m.slug),
     dateModified: SNAPSHOT.readOn,
@@ -71,7 +73,7 @@ export function englishTownDataset(m: SnapshotMunicipality) {
     locale: "en",
     creator: HOLIDAY_DATA_CREATOR,
     license: GENCAT_OPEN_DATA_LICENCE,
-    isBasedOn: basedOn(),
+    isBasedOn: basedOn(m.slug),
     spatialCoverage: `${enName(m)}, Catalonia`,
     temporalCoverage: coverage(m.slug),
     dateModified: SNAPSHOT.readOn,

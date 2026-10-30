@@ -541,6 +541,12 @@ async function prepare(): Promise<void> {
     const found = result.municipalities[m.slug];
     console.log(`${m.name}: ${found ? found.local.join(", ") || "(nuclei only)" : "NOT FOUND"}`);
   }
+  // The pages showed these councils' own days before the order (council-2027.ts); the order now
+  // wins. Where the two differ, check the town before the deploy: the page's days will change.
+  const { councilDisagreements } = await import("../src/lib/programmatic/holidays/council-2027.ts");
+  for (const d of councilDisagreements(result.municipalities)) {
+    console.log(`COUNCIL DIFFERS: ${d.slug}: council ${d.council.join(", ")}; order ${d.dogc.join(", ") || "(none)"}`);
+  }
   if (process.argv.includes("--write")) {
     if (result.problems.length || amended.unmatched.length) throw new Error("not written: fix the problems above first");
     const ref = arg("ref") ?? "";
