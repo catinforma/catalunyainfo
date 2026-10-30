@@ -136,6 +136,25 @@ test("voting: English answers the registration question in the first lines", () 
   assert.ok(faqQuestions(VOTING, "ca").includes("Puc saber on voto amb el DNI?"));
   assert.ok(faqQuestions(VOTING, "en").includes("What are the key dates of the 2026 Spain general election?"));
   assert.ok(faqQuestions(VOTING, "en").includes("What time do the polls open and close on 29 November?"));
+  // 30 Oct 2026, wave 4: English searchers are often foreigners. The lead's
+  // first sentence says who can vote (LOREG art. 2.1: Spanish citizens only),
+  // and the FAQ answers "when", "can foreigners vote", the finder and CERA.
+  const firstSentence = leadOf(VOTING, "en").split(/\.\s/)[0] ?? "";
+  assert.match(firstSentence, /Sunday 29 November 2026/);
+  assert.match(firstSentence, /9:00 to 20:00/);
+  assert.match(firstSentence, /only Spanish citizens can vote/);
+  assert.match(firstSentence, /EU citizens and other foreign residents cannot/);
+  assert.match(VOTING.editions.en.seoDescription, /Only Spanish citizens can vote/);
+  for (const q of [
+    "When is the 2026 Spain general election?",
+    "Can foreigners or EU citizens vote in Spain's general election?",
+    "How do I find my polling station for the 2026 Spain general election?",
+    "How do Spaniards living abroad vote (CERA)?",
+  ]) assert.ok(faqQuestions(VOTING, "en").includes(q), `en FAQ: ${q}`);
+  const enText = bodyToPlainText(VOTING.editions.en.blocks);
+  assert.match(enText, /by 24 November/, "en: CERA postal deadline");
+  assert.match(enText, /from 21 to 26 November/, "en: CERA ballot box at the consulate");
+  assert.doesNotMatch(enText, /EU citizens (can|may) vote in (the|a) general election/i);
   // The finder is linked in the lead with what it asks for (read on 30 Oct 2026: no ID, Cl@ve or certificate).
   const finder = "](https://sede.ine.gob.es/ce-mesas/?lang=es_ES)";
   const noId: Record<"ca" | "es" | "en", RegExp> = { ca: /sense DNI ni Cl@ve/, es: /sin DNI ni Cl@ve/, en: /with no ID number or login/ };
@@ -181,7 +200,8 @@ test("titles and descriptions are exactly what main serves (measurement windows)
     voting: {
       ca: ["Properes eleccions a Catalunya: quan són i com votar el 29 de novembre (on, horari, vot per correu)", "Properes eleccions a Catalunya: quan són i on votar el 29N", "Són el diumenge 29 de novembre de 2026 (generals), de 9 a 20 h. On voto: cercador de l'INE, sense DNI ni Cl@ve. Vot per correu fins al 19 de novembre."],
       es: ["Próximas elecciones en Cataluña: cuándo son y cómo votar el 29 de noviembre (dónde, horario, voto por correo)", "Próximas elecciones en Cataluña: cuándo son y dónde votar", "Son el domingo 29 de noviembre de 2026 (generales), de 9 a 20 h. Dónde voto: buscador del INE, sin DNI ni Cl@ve. Voto por correo hasta el 19 de noviembre."],
-      en: ["How to vote in Spain's 2026 general election on 29 November: registration, polling stations and dates", "Spain general election 2026: how to vote, register, dates", "Sunday 29 November 2026, polls 9:00-20:00. Spanish citizens are registered automatically; find your polling station online; postal vote by 19 November."],
+      // EN title and description changed again in the 30 Oct 2026 CTR sweep wave 4 (before deploy): the date back in the title, who can vote in the description.
+      en: ["How to vote in Spain's 2026 general election on 29 November: registration, polling stations and dates", "Spain general election 29 Nov 2026: how to vote, register", "Sunday 29 November, polls 9:00-20:00. Only Spanish citizens can vote; no sign-up, the roll is automatic. Find your polling station; postal vote by 19 Nov."],
     },
   };
   for (const locale of LOCALES) {
