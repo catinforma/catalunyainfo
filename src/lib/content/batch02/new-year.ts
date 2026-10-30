@@ -218,6 +218,7 @@ export function buildNewYearBody(locale: Locale, facts: Announcements = ANNOUNCE
         "**L'home dels Nassos.** El 31 de desembre s'anima la mainada a buscar l'home que té tants nassos com dies té l'any. La gràcia és que aquell dia tothom en té tants com dies queden: un.",
         "**La Cursa dels Nassos.** Barcelona fa des del 1999 aquesta cursa de Sant Silvestre, el darrer dia de l'any, en què és habitual córrer disfressat.",
         "**El primer bany de l'any.** L'1 de gener, cap al migdia, els més valents es capbussen al Mediterrani, i hi ha brou calent per a tothom qui s'hi banya, segons l'Ajuntament.",
+        `**La Grossa de Cap d'Any**, la loteria de la Generalitat, se sorteja el mateix 31 de desembre: l'hora, els premis i els números premiats són a ${b2link("grossa", "ca", "la guia de La Grossa de Cap d'Any")}.`,
       ),
       ...h2(
         "Què obre l'1 de gener a Barcelona?",
@@ -299,6 +300,7 @@ export function buildNewYearBody(locale: Locale, facts: Announcements = ANNOUNCE
         "**L'home dels Nassos.** En Cataluña, el 31 de diciembre se anima a los niños a buscar al hombre que tiene tantas narices como días tiene el año. La gracia es que ese día todos tenemos tantas como días quedan: una.",
         "**La Cursa dels Nassos.** Barcelona celebra desde 1999 esta carrera de San Silvestre, el último día del año, en la que es habitual correr disfrazado.",
         "**El primer baño del año.** El 1 de enero, hacia el mediodía, los más valientes se zambullen en el Mediterráneo, y hay caldo caliente para todos los que se bañan, según el Ayuntamiento.",
+        `**La Grossa de Cap d'Any**, la lotería de la Generalitat, se sortea el mismo 31 de diciembre: la hora, los premios y los números premiados están en ${b2link("grossa", "es", "la guía de La Grossa de Cap d'Any")}.`,
       ),
       ...h2(
         "¿Qué abre el 1 de enero en Barcelona?",
@@ -379,6 +381,7 @@ export function buildNewYearBody(locale: Locale, facts: Announcements = ANNOUNCE
       "**L'home dels Nassos.** On 31 December Catalan children are sent to look for the Man with the Noses, who has as many noses as there are days in the year. The joke is that on that day everyone has as many as there are days left: one.",
       "**Cursa dels Nassos.** Barcelona has run this Sant Silvestre race on the last day of the year since 1999, and running in fancy dress is the norm.",
       "**First swim of the year.** On 1 January, around midday, the bravest take a group dip in the Mediterranean, with hot broth for everyone who goes in, according to the City Council.",
+      `**La Grossa de Cap d'Any**, the Catalan government's lottery, is drawn on 31 December itself: the time, the prizes and the winning numbers are in ${b2link("grossa", "en", "our La Grossa de Cap d'Any guide")}.`,
     ),
     ...h2(
       "What is open on 1 January in Barcelona?",

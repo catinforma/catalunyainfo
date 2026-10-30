@@ -70,7 +70,9 @@ export type B2Key =
   // x10 engines (27 Oct 2026): the evergreen strikes hub.
   | "strikes"
   // 29 Oct 2026: the dedicated page for the 11 November 2026 general strike.
-  | "strike11n";
+  | "strike11n"
+  // 30 Oct 2026: La Grossa de Cap d'Any 2026 (draw and results, 31 Dec).
+  | "grossa";
 
 /** Path after the locale prefix, no leading or trailing slash. */
 export const B2_PATHS: Record<B2Key, Record<Locale, string>> = {
@@ -338,6 +340,11 @@ export const B2_PATHS: Record<B2Key, Record<Locale, string>> = {
     ca: "guies/vaga-general-11-novembre",
     es: "guias/huelga-general-11-noviembre",
     en: "guides/general-strike-11-november-spain",
+  },
+  grossa: {
+    ca: "guies/la-grossa-cap-d-any",
+    es: "guias/la-grossa-fin-de-ano",
+    en: "guides/la-grossa-new-years-eve-lottery",
   },
 };
 
@@ -615,6 +622,11 @@ export const B2_TITLES: Record<B2Key, Record<Locale, string>> = {
     ca: "Vaga general de l'11 de novembre: serveis mínims",
     es: "Huelga general del 11 de noviembre: servicios mínimos",
     en: "General strike on 11 November: what runs",
+  },
+  grossa: {
+    ca: "La Grossa de Cap d'Any 2026: resultats i premis",
+    es: "La Grossa de Cap d'Any 2026: resultados y premios",
+    en: "La Grossa de Cap d'Any 2026: results and prizes",
   },
 };
 
