@@ -189,7 +189,12 @@ export function MunicipalityPage({ m, locale }: { m: SnapshotMunicipality; local
           {t.shopsLocal.map((p) => (
             <p key={p}>{p}</p>
           ))}
-          <p>{t.shopsNote}</p>
+          <p>
+            {t.shopsNote}{" "}
+            <Link href={GUIDES.shops[locale]}>
+              {locale === "ca" ? `Diumenges i festius d'obertura ${YEAR} a tot Catalunya.` : `Domingos y festivos de apertura ${YEAR} en toda Cataluña.`}
+            </Link>
+          </p>
 
           <h2 id="que-vol-dir">{t.meaningTitle}</h2>
           {[t.work, t.school, t.shopsMeaning].map((block) => (
