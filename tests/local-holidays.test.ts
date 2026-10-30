@@ -97,7 +97,7 @@ test("ca/es: snippet promises the search, lead links the town pages, counts matc
     const body = buildBody(locale);
     const lead = JSON.stringify(body[0]);
     assert.ok(lead.includes(hub[locale]), `${locale}: hub link in the lead`);
-    assert.match(lead, /300/, `${locale}: town-page count`);
+    assert.ok(lead.includes(String(SNAPSHOT.municipalities.length)), `${locale}: town-page count from the snapshot`);
     assert.match(lead, /\(\/(ca\/festius|es\/festivos)\/barcelona\/\)/, `${locale}: links Barcelona's page`);
     const upcoming = JSON.stringify(body[1]);
     assert.ok(upcoming.includes(nov11[locale]), `${locale}: 11 Nov date page`);

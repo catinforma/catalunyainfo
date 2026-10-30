@@ -58,10 +58,10 @@ const COPY: Record<Locale, Copy> = {
     title: "Festius locals de Catalunya: el calendari de tots els municipis",
     seoTitle: "Festius locals Catalunya 2026 per municipi: busca el teu",
     seoDescription:
-      "Busca els dos festius locals del teu municipi de Catalunya; els 300 més poblats tenen la seva pàgina. Propers: 11 i 30 de novembre i 7 de desembre.",
+      "Busca els dos festius locals del teu municipi de Catalunya: cada municipi té la seva pàgina. Propers: 11 i 30 de novembre i 7 de desembre.",
     excerpt:
       "Els dos dies de festa local de cada municipi de Catalunya, en una sola taula amb cercador i dades oficials de la Generalitat.",
-    lead: "A banda dels dotze festius de tot Catalunya, **cada municipi en fixa dos de propis**. Busca el teu a la taula, amb tots els municipis; els {count} més poblats tenen, a més, la seva pàgina amb l'any sencer i si avui és festiu: **[festius locals per municipi](/ca/festius/)** ({towns}…).",
+    lead: "A banda dels dotze festius de tot Catalunya, **cada municipi en fixa dos de propis**. Busca el teu a la taula, amb tots els municipis; els {count} que tenen festius oficials tenen, a més, la seva pàgina amb l'any sencer i si avui és festiu: **[festius locals per municipi](/ca/festius/)** ({towns}…).",
     upcoming:
       "Els dies amb més festius locals del que queda del 2026: l'**11 de novembre**, Sant Martí, en {n:2026-11-11} llocs (municipis o nuclis); el **30 de novembre**, Sant Andreu, en {n:2026-11-30}, i el **7 de desembre**, el dilluns del pont, en {n:2026-12-07}. Cada dia té la seva pàgina amb la llista: [11 de novembre]({p:2026-11-11}), [30 de novembre]({p:2026-11-30}) i [7 de desembre]({p:2026-12-07}).",
     nextYear:
@@ -89,10 +89,10 @@ const COPY: Record<Locale, Copy> = {
     title: "Festivos locales de Cataluña: el calendario de todos los municipios",
     seoTitle: "Festivos locales Cataluña 2026 por municipio: busca el tuyo",
     seoDescription:
-      "Busca los dos festivos locales de tu municipio en Cataluña; los 300 más poblados tienen su página. Próximos: 11 y 30 de noviembre y 7 de diciembre.",
+      "Busca los dos festivos locales de tu municipio en Cataluña: cada municipio tiene su página. Próximos: 11 y 30 de noviembre y 7 de diciembre.",
     excerpt:
       "Los dos días de fiesta local de cada municipio de Cataluña, en una sola tabla con buscador y datos oficiales de la Generalitat.",
-    lead: "Además de los doce festivos de toda Cataluña, **cada municipio fija dos propios**. Busca el tuyo en la tabla, con todos los municipios; los {count} más poblados tienen, además, su página con el año entero y si hoy es festivo: **[festivos locales por municipio](/es/festivos/)** ({towns}…).",
+    lead: "Además de los doce festivos de toda Cataluña, **cada municipio fija dos propios**. Busca el tuyo en la tabla, con todos los municipios; los {count} que tienen festivos oficiales tienen, además, su página con el año entero y si hoy es festivo: **[festivos locales por municipio](/es/festivos/)** ({towns}…).",
     upcoming:
       "Los días con más festivos locales en lo que queda de 2026: el **11 de noviembre**, San Martín, en {n:2026-11-11} lugares (municipios o núcleos); el **30 de noviembre**, San Andrés, en {n:2026-11-30}, y el **7 de diciembre**, el lunes del puente, en {n:2026-12-07}. Cada día tiene su página con la lista: [11 de noviembre]({p:2026-11-11}), [30 de noviembre]({p:2026-11-30}) y [7 de diciembre]({p:2026-12-07}).",
     nextYear:
