@@ -61,7 +61,10 @@ test("the metro guide never says it opens at 5:00 every day, and gives tram and 
     assert.match(text, /22:30/, `${locale}: tram on 24 December`);
     const tables = blocks.filter((b) => b.type === "table");
     assert.equal(tables.length, 2, `${locale}: metro + tram tables`);
-    assert.equal(tables[0]?.rows?.length, 6, `${locale}: six day types`);
+    // Six day types, plus TMB's seven outer L9 Sud / L10 Sud stations (5:00-24:00 every day, re-read 30 Oct 2026).
+    assert.equal(tables[0]?.rows?.length, 7, `${locale}: six day types and the outer stations`);
+    assert.match(tables[0]?.rows?.[6]?.[0] ?? "", /Mas Blau.*La Factoria/, `${locale}: outer stations row`);
+    assert.match(tables[0]?.rows?.[6]?.[2] ?? "", /24 (December|de diciembre|de desembre)/, `${locale}: 23:00 on 24 December`);
     assert.equal(tables[1]?.rows?.length, 4, `${locale}: four tram rows`);
     assert.doesNotMatch(text, /Aerob[uú]s[^.]*24 (hores|horas|hours)/, `${locale}: the airport bus is not said to run 24 hours`);
   }
@@ -73,4 +76,26 @@ test("the metro guide carries the block right after its lead, and the cron refre
     const body = HOURS.editions[locale].blocks;
     assert.equal(body[1]?.type, "metroTonight", locale);
   }
+});
+
+/**
+ * Top-3 push, 30 Oct 2026: the EN snippet answers the three closing times
+ * (Saturday all night was missing from the title), the first line of every
+ * edition names the last metro, and the "last metro" question has its own H2.
+ */
+test("metro hours: the EN snippet and every lead give the last-metro answer first", async () => {
+  const { bodyToPlainText } = await import("../src/lib/content/blocks.ts");
+  const en = HOURS.editions.en;
+  assert.ok(en.seoTitle.length <= 60, en.seoTitle);
+  assert.ok(en.seoDescription.length <= 155, String(en.seoDescription.length));
+  assert.match(en.seoTitle, /all night Sat/);
+  assert.match(en.seoDescription, /midnight.*2:00.*Saturdays it runs all night/);
+  assert.match(bodyToPlainText(en.blocks).slice(0, 120), /last Barcelona metro leaves at midnight/);
+  const lastTrain = { ca: "A quina hora passa l'últim metro?", es: "¿A qué hora pasa el último metro?", en: "What time is the last metro in Barcelona?" };
+  for (const locale of ["ca", "es", "en"] as const) {
+    const headings = (HOURS.editions[locale].blocks as { type: string; text?: string }[]).filter((b) => b.type === "heading").map((b) => b.text);
+    assert.ok(headings.includes(lastTrain[locale]), `${locale}: last-metro H2`);
+    assert.doesNotMatch(bodyToPlainText(HOURS.editions[locale].blocks), /every 20 minutes on every line|cada 20 minutos en todas las líneas|cada 20 minuts a totes les línies/, `${locale}: NitBus frequency is not claimed for every line`);
+  }
+  assert.equal(HOURS.verifiedAt, "2026-10-30");
 });

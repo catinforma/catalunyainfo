@@ -423,6 +423,33 @@ test("transport: 2026 fares for every zone, no 2025 fares, Hola vs T-casual comp
   assert.match(bodyToPlainText(TRANSPORT.editions.ca.blocks), /Ocata[^.]*zona 2/);
 });
 
+/**
+ * Transport EN and ES snippets, 30 Oct 2026 (top-3 push): TMB's table re-read;
+ * the EN page gets the zone table, the Hola vs T-casual sums and an FAQ it
+ * lacked, and both snippets carry the T-casual price.
+ */
+test("transport: EN zone table and FAQ, prices in the EN and ES snippets", () => {
+  const en = TRANSPORT.editions.en;
+  const blocks = en.blocks as { type: string; rows?: string[][] }[];
+  const zones = blocks.find((b) => b.type === "table" && (b.rows?.length ?? 0) === 7);
+  assert.deepEqual(zones?.rows?.[0], ["1", "€2.90", "€13.00", "€12.00", "€22.80"], "EN zone 1 row");
+  assert.deepEqual(zones?.rows?.[1], ["2", "€4.15", "€25.50", "€18.30", "€30.55"], "EN zone 2 row");
+  const text = bodyToPlainText(en.blocks);
+  assert.match(text.slice(0, 200), /T-casual.*€13.*T-dia.*€12/, "EN answer first");
+  assert.match(text, /€24\.80/, "EN: T-casual plus two airport tickets");
+  assert.match(text, /T-familiar[^.]*€11\.50/, "EN: T-familiar fare");
+  assert.match(text, /2027 fares had not been announced/);
+  assert.ok(blocks.some((b) => b.type === "faq"), "EN FAQ");
+  assert.ok(JSON.stringify(en.blocks).includes(`](/en/${B2_PATHS.hours.en}/)`), "EN links the metro hours page");
+  for (const locale of ["es", "en"] as const) {
+    const { seoTitle, seoDescription } = TRANSPORT.editions[locale];
+    assert.ok(seoTitle.length <= 60, `${locale}: ${seoTitle.length}`);
+    assert.ok(seoDescription.length <= 155, `${locale}: ${seoDescription.length}`);
+    assert.match(seoTitle, /T-casual.*13/, `${locale}: T-casual price in the title`);
+  }
+  assert.equal(TRANSPORT.verifiedAt, "2026-10-30");
+});
+
 test("the selector block is placed on the transport article in every language", () => {
   for (const locale of LOCALES) {
     const count = TRANSPORT.editions[locale].blocks.filter(
@@ -599,6 +626,28 @@ test("zoo: Ciutadella-only entrance, winter zoo hours table, aquarium calendar",
 });
 
 /**
+ * Zoo EN, 30 Oct 2026 (top-3 push): both venues' prices re-read; the title
+ * names both tickets, the description and the first line give the adult,
+ * child and family-pack prices, and the "family ticket" and "cheaper online"
+ * questions have answers. The Aquarium's companion rule (65 %) is new.
+ */
+test("zoo EN: both prices in the snippet and the first line, family pack and online questions", () => {
+  const en = ZOO_AQUARIUM.editions.en;
+  assert.ok(en.seoTitle.length <= 60 && en.seoDescription.length <= 155, `${en.seoTitle.length}/${en.seoDescription.length}`);
+  assert.match(en.seoTitle, /Zoo & Aquarium tickets 2026: Zoo €23, Aquarium €30/);
+  assert.match(en.seoDescription, /€13\.90.*€30.*€23.*€88/);
+  const text = bodyToPlainText(en.blocks);
+  assert.match(text.slice(0, 260), /Zoo tickets cost €23.*€13\.90.*Aquarium tickets cost €30.*€23.*€88/, "answer first");
+  assert.doesNotMatch(text.slice(0, 700), /until 1 November/, "the lead no longer leads with hours that end on 1 November");
+  assert.match(text, /Is there a family ticket for the Barcelona Aquarium\?/);
+  assert.match(text, /Is it cheaper to buy Barcelona Zoo tickets online\?/);
+  for (const locale of ["ca", "es", "en"] as const) {
+    assert.match(bodyToPlainText(ZOO_AQUARIUM.editions[locale].blocks), /65 %|65%/, `${locale}: Aquarium companion rule`);
+  }
+  assert.equal(ZOO_AQUARIUM.verifiedAt, "2026-10-30");
+});
+
+/**
  * Zoo, Aquarium and markets, 28 Oct 2026: the Aquarium's online Flexiticket
  * (90 days) and the Zoo Club are on the official price pages; the Zoo itself
  * says only "closed in the afternoon" on Christmas Day, so the 14:00 is
@@ -715,6 +764,31 @@ test("climate: 1981-2010 table with the year row, city-centre table, a section p
   const ca = bodyToPlainText(CLIMATE.editions.ca.blocks);
   assert.match(ca, /l'1 de març del 1988/, "Catalan elides the article before 1");
   assert.doesNotMatch(ca, /el 1 de|el 11 de/, "no 'el 1 de' in Catalan");
+});
+
+/**
+ * Climate EN, 30 Oct 2026 (top-3 push): the AEMET 0076 table re-read, humidity
+ * (column H) added in every locale, °F beside °C in English, and the snippet
+ * names the coldest and warmest months with their figures.
+ */
+test("climate: humidity column from AEMET, °F in English, the answer in the EN snippet and lead", () => {
+  for (const locale of ["ca", "es", "en"] as const) {
+    const blocks = CLIMATE.editions[locale].blocks as { type: string; headers?: string[]; rows?: string[][] }[];
+    const airport = blocks.find((b) => b.type === "table");
+    assert.equal(airport?.headers?.length, 8, `${locale}: humidity column`);
+    assert.equal(airport?.rows?.[9]?.[6], "73 %", `${locale}: October humidity 73 %`);
+    assert.equal(airport?.rows?.[12]?.[6], "69 %", `${locale}: annual humidity 69 %`);
+  }
+  const en = CLIMATE.editions.en;
+  const airport = (en.blocks as { type: string; rows?: string[][] }[]).find((b) => b.type === "table");
+  assert.equal(airport?.rows?.[0]?.[2], "13.6 (56)", "January high in °C (°F)");
+  assert.equal(airport?.rows?.[7]?.[2], "28.5 (83)", "August high in °C (°F)");
+  assert.ok(en.seoTitle.length <= 60 && en.seoDescription.length <= 155);
+  assert.match(en.seoTitle, /weather and temperature by month/);
+  assert.match(en.seoDescription, /January.*13\.6 °C \(56 °F\).*August.*28\.5 °C \(83 °F\).*October.*91 mm/);
+  const first = bodyToPlainText(en.blocks).slice(0, 220);
+  assert.match(first, /January.*coldest.*13\.6 °C \(56 °F\)/, "answer in the first lines");
+  assert.equal(CLIMATE.verifiedAt, "2026-10-30");
 });
 
 /**
