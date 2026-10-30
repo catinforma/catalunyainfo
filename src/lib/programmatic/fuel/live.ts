@@ -5,6 +5,9 @@
  * bundled for the client.
  */
 
+/** Our CDN-cached relay of the Ministry's list (app/api/fuel/catalonia/route.ts). */
+export const FUEL_ENDPOINT = "/api/fuel/catalonia/";
+
 /** The four products the pages rank, in the order the selector shows them. */
 export const FUELS = ["e95", "goa", "e98", "glp"] as const;
 export type Fuel = (typeof FUELS)[number];

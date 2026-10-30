@@ -28,6 +28,7 @@ import { RESERVOIR_DATA, SNAPSHOT, siblingsOf, snapshotReadings } from "@/lib/pr
 import { formatDate, formatNumber } from "@/lib/programmatic/reservoirs/live";
 import { OFFICIAL, indicatorsOf, officialUrl } from "@/lib/programmatic/reservoirs/official";
 import { reservoirHubPath, reservoirHubTranslations, reservoirPath, reservoirTranslations } from "@/lib/programmatic/reservoirs/paths";
+import { reservoirDataset, reservoirHubDataset } from "@/lib/programmatic/reservoirs/structured";
 import type { SnapshotReservoir } from "@/lib/programmatic/reservoirs/types";
 import { breadcrumbSchema, faqSchema, graph } from "@/lib/seo/jsonld";
 
@@ -247,7 +248,7 @@ export function ReservoirPage({ reservoir: r, locale }: { reservoir: SnapshotRes
           </div>
         </article>
       </main>
-      <JsonLd json={graph([breadcrumbSchema(crumbs), faqSchema([faqBlock])])} />
+      <JsonLd json={graph([breadcrumbSchema(crumbs), reservoirDataset(r, locale), faqSchema([faqBlock])])} />
       <SiteFooter locale={locale} />
     </>
   );
@@ -306,7 +307,7 @@ export function ReservoirHubPage({ locale }: { locale: Locale }) {
           </div>
         </div>
       </main>
-      <JsonLd json={graph([breadcrumbSchema(crumbs)])} />
+      <JsonLd json={graph([breadcrumbSchema(crumbs), reservoirHubDataset(locale)])} />
       <SiteFooter locale={locale} />
     </>
   );

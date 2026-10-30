@@ -2,7 +2,7 @@
 
 import { useEffect, useId, useRef, useState } from "react";
 
-import { getMessages } from "@/lib/i18n";
+import type { Messages } from "@/lib/i18n";
 import type { Locale } from "@/lib/i18n/config";
 import { legalPath } from "@/lib/i18n/routes";
 import { SITE } from "@/lib/site";
@@ -47,8 +47,9 @@ function withLink(template: string, href: string) {
   );
 }
 
-export function ContactForm({ locale }: { locale: Locale }) {
-  const t = getMessages(locale).contactForm;
+/** `copy` comes from the server: getMessages here shipped all three dictionaries. */
+export function ContactForm({ locale, copy }: { locale: Locale; copy: Messages["contactForm"] }) {
+  const t = copy;
   const fieldId = useId();
   const formRef = useRef<HTMLFormElement>(null);
   // Reading the clock during render is impure; the timestamp is only needed

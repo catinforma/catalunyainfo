@@ -76,9 +76,48 @@ export function HolidayStatus({
   }, [days, coverage]);
 
   if (!status) {
+    /*
+     * The box keeps the shape of the answer it will hold, so nothing below it
+     * moves when the answer arrives. It sat right under the lead and grew from
+     * one note to the full answer after hydration: Lighthouse (mobile) scored
+     * that shift at 0.035 on every municipality page. The skeleton is
+     * invisible and hidden from assistive tech; the fallback (the only thing
+     * a reader without JavaScript sees) is laid over it.
+     */
     return (
       <div className="ci-today" aria-live="polite">
-        <p className="ci-today-note m-0">{fill(labels.fallback, { place })}</p>
+        <div className="ci-live-pending">
+          <div className="ci-live-skeleton" aria-hidden="true">
+            <p className="ci-today-answer is-not">
+              {" "}
+              <br className="sm:hidden" />
+              {" "}
+            </p>
+            <p className="ci-today-date">{" "}</p>
+            <dl className="ci-today-facts">
+              <div>
+                <dt>{labels.tomorrow}</dt>
+                <dd>{" "}</dd>
+              </div>
+              <div>
+                <dt>{labels.next}</dt>
+                {/* "la Inmaculada: martes 8 de diciembre de 2026 (dentro de 39 días)"
+                    takes three lines in its column at 390 px and at 1350 px alike. */}
+                <dd>
+                  {" "}
+                  <br />
+                  {" "}
+                  <br />
+                  {" "}
+                </dd>
+              </div>
+            </dl>
+            {/* Inside the skeleton, not after it: a visible node React reused for
+                the answer's date line counted as a shift when it moved. */}
+            <p className="ci-today-note">{labels.timezone}</p>
+          </div>
+          <p className="ci-today-note ci-live-placeholder">{fill(labels.fallback, { place })}</p>
+        </div>
       </div>
     );
   }

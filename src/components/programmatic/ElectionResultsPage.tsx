@@ -12,6 +12,7 @@ import type { Locale } from "@/lib/i18n/config";
 import { buildElectionPage, type Table } from "@/lib/programmatic/elections/model";
 import { electionPath, electionTranslations, hubMeta, hubPath, placeName } from "@/lib/programmatic/elections/pages";
 import { SNAPSHOT } from "@/lib/programmatic/elections/snapshot";
+import { electionDataset } from "@/lib/programmatic/elections/structured";
 import type { Municipality } from "@/lib/programmatic/elections/types";
 import { breadcrumbSchema, faqSchema, graph } from "@/lib/seo/jsonld";
 
@@ -207,7 +208,7 @@ export function ElectionResultsPage({ locale, municipality }: { locale: Locale; 
           </div>
         </article>
       </main>
-      <JsonLd json={graph([breadcrumbSchema(crumbs), faqSchema([faqBlock])])} />
+      <JsonLd json={graph([breadcrumbSchema(crumbs), electionDataset(municipality, locale, model.h1), faqSchema([faqBlock])])} />
       <SiteFooter locale={locale} />
     </>
   );
