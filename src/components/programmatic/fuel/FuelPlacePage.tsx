@@ -98,6 +98,7 @@ export function FuelPlacePage({ place, locale }: { place: Place; locale: FuelLoc
             locale={locale}
             labels={liveLabels(locale)}
             geoportalUrl={GEOPORTAL_HOME}
+            expectedRows={Math.min(10, stations.length)}
           />
 
           <h2 id="estacions">{t.stations}</h2>

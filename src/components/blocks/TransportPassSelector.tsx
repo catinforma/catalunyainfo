@@ -3,7 +3,7 @@
 import { useMemo, useState } from "react";
 
 import { TICKETS, cheapest, compareTickets } from "@/lib/content/transport-cards/rates";
-import { getMessages } from "@/lib/i18n";
+import type { Messages } from "@/lib/i18n";
 import type { Locale } from "@/lib/i18n/config";
 
 /**
@@ -35,8 +35,9 @@ import type { Locale } from "@/lib/i18n/config";
 
 const ZONE = "1";
 
-export function TransportPassSelector({ locale }: { locale: Locale }) {
-  const t = getMessages(locale).transportPasses;
+/** `copy` comes from the server: getMessages here shipped all three dictionaries. */
+export function TransportPassSelector({ locale, copy }: { locale: Locale; copy: Messages["transportPasses"] }) {
+  const t = copy;
 
   const [days, setDays] = useState("3");
   const [journeysPerDay, setJourneysPerDay] = useState("4");

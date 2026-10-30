@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 
 import type { LiveLabels } from "@/lib/programmatic/fuel/copy";
-import { FUELS, freshness, rank, type Freshness, type Fuel, type LivePayload, type StationFilter } from "@/lib/programmatic/fuel/live";
+import { FUELS, FUEL_ENDPOINT, freshness, rank, type Freshness, type Fuel, type LivePayload, type StationFilter } from "@/lib/programmatic/fuel/live";
 
 /**
  * Today's prices, in the browser.
@@ -37,6 +37,7 @@ export function FuelPrices({
   locale,
   labels,
   geoportalUrl,
+  expectedRows = 10,
 }: {
   filter: StationFilter;
   /** "de Manresa" / "de la provincia de Girona": completes the median line. */
@@ -46,6 +47,8 @@ export function FuelPrices({
   locale: "ca" | "es";
   labels: LiveLabels;
   geoportalUrl: string;
+  /** Rows the price table will most likely have: min(10, stations behind the page). */
+  expectedRows?: number;
 }) {
   const [state, setState] = useState<State>({ kind: "loading" });
   const [fuel, setFuel] = useState<Fuel>("e95");
@@ -56,7 +59,7 @@ export function FuelPrices({
     // One state update after mount: the server render stays price-free.
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setMounted(true);
-    fetch("/api/fuel/catalonia/")
+    fetch(FUEL_ENDPOINT)
       .then(async (response) => {
         if (!response.ok) throw new Error(String(response.status));
         const payload = (await response.json()) as LivePayload;
@@ -96,17 +99,13 @@ export function FuelPrices({
     );
   };
 
-  if (!mounted) {
+  if (!mounted || state.kind === "loading") {
     return (
-      <div className="ci-today" aria-live="polite">
-        <p className="m-0">{withGeoportal(labels.fallback)}</p>
-      </div>
-    );
-  }
-  if (state.kind === "loading") {
-    return (
-      <div className="ci-today" aria-live="polite" aria-busy="true">
-        <p className="m-0">{labels.loading}</p>
+      <div className="ci-today" aria-live="polite" aria-busy={mounted}>
+        <div className="ci-live-pending">
+          <PriceSkeleton labels={labels} showTown={showTown} rows={expectedRows} placeOf={placeOf} />
+          <p className="ci-live-placeholder">{mounted ? labels.loading : withGeoportal(labels.fallback)}</p>
+        </div>
       </div>
     );
   }
@@ -209,6 +208,64 @@ export function FuelPrices({
           </div>
         </>
       )}
+    </div>
+  );
+}
+
+/**
+ * The shape of the price list, invisible, while it loads.
+ *
+ * The list arrives after hydration and is the tallest thing on the page (up to
+ * ten rows of station, address and price). Without a reserved space everything
+ * under it jumped down when it came in: Lighthouse (mobile) scored that shift
+ * at 0.036 on the hub, and on desktop the box sits higher, so more of the page
+ * moved. The skeleton uses the same elements and classes as the real list, so
+ * it wraps the same way at every width; the template lines are filled with
+ * zeros of the same length, never with figures. Hidden from assistive tech:
+ * the visible placeholder line says what is happening.
+ */
+function PriceSkeleton({ labels, showTown, rows, placeOf }: { labels: LiveLabels; showTown: boolean; rows: number; placeOf: string }) {
+  const n = Math.max(1, Math.min(10, Math.round(rows)));
+  return (
+    <div className="ci-live-skeleton" aria-hidden="true">
+      <p className="m-0 text-sm">{fill(labels.updated, { time: "00:00", date: "00/00/0000" })}</p>
+      <div className="mt-4 flex flex-wrap gap-2">
+        {FUELS.map((f) => (
+          <span key={f} className="ci-btn ci-btn-quiet !px-3 !py-1.5 text-sm">
+            {labels.fuelNames[f]}
+          </span>
+        ))}
+      </div>
+      <p className="mt-4 mb-0">{fill(labels.median, { count: 100, place: placeOf, price: `0,000 ${labels.perLitre}` })}</p>
+      <div className="ci-table-scroll mt-3">
+        <table className="ci-local-table">
+          <caption className="pb-2 text-left text-sm">{fill(labels.caption, { n, fuel: labels.fuelNames.e95 })}</caption>
+          <thead>
+            <tr>
+              <th scope="col">{labels.cols.rank}</th>
+              <th scope="col">{labels.cols.station}</th>
+              {showTown ? <th scope="col">{labels.cols.town}</th> : null}
+              <th scope="col">{labels.cols.price}</th>
+              <th scope="col">{" "}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {Array.from({ length: n }, (_, i) => (
+              <tr key={i} className={showTown ? "ci-skeleton-row ci-skeleton-row-town" : "ci-skeleton-row"}>
+                <td>{" "}</td>
+                <td>
+                  {" "}
+                  <br />
+                  <small>{" "}</small>
+                </td>
+                {showTown ? <td>{" "}</td> : null}
+                <td>{" "}</td>
+                <td>{" "}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }

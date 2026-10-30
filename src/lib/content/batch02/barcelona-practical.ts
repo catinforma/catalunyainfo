@@ -76,7 +76,7 @@ const DAYS_COPY = {
       `Para dos días o más, si en total harás diez trayectos o menos, una **T-casual (${casual})** sale más barata que cualquiera de las dos, pero no vale en las estaciones de metro del aeropuerto.`,
   },
   en: {
-    title: "What it costs for 1 to 5 days",
+    title: "Transport pass for 1, 2, 3, 4 or 5 days: what it costs",
     caption: "Hola Barcelona or one T-dia a day, zone 1, 2026 prices",
     headers: ["Days", "Hola Barcelona", "Per day", "One T-dia each day"],
     day: (n: number) => (n === 1 ? "1 day (24 h)" : `${n} days (${n * 24} h)`),
@@ -112,7 +112,9 @@ const PROFILE_HEADERS: Record<string, string[]> = {
 // ATM's T-casual page shows the same T-casual row (and the 2025 fares lower
 // down, which are not used). Only zone 1 is in TICKETS, which drives the
 // calculator. T-familiar and T-grup from the same TMB table and ATM's pages.
-// ATM had announced no 2027 fares on 28 Oct 2026.
+// ATM had announced no 2027 fares on 28 Oct 2026. Re-read 30 Oct 2026 on the
+// same TMB table: every zone, T-familiar, T-grup and the €5.90 airport ticket
+// unchanged; still no 2027 fares.
 const ZONE_FARES: string[][] = [
   ["1", "2,90 €", "13,00 €", "12,00 €", "22,80 €"],
   ["2", "4,15 €", "25,50 €", "18,30 €", "30,55 €"],
@@ -123,7 +125,13 @@ const ZONE_FARES: string[][] = [
   ["7", "11,60 €", "57,60 €", "34,70 €", "67,65 €"],
 ];
 
-/** TMB's airport ticket: one metro journey including Aeroport T1 and T2 (checked 28 Oct 2026). */
+/** The zone table with English money formatting: "2,90 €" -> "€2.90". */
+const ZONE_FARES_EN: string[][] = ZONE_FARES.map(([zone, ...cells]) => [
+  zone ?? "",
+  ...cells.map((cell) => `€${cell.replace(" €", "").replace(",", ".")}`),
+]);
+
+/** TMB's airport ticket: one metro journey including Aeroport T1 and T2 (re-read 30 Oct 2026). */
 const AIRPORT_TICKET = 5.9;
 
 const VS_COPY = {
@@ -137,9 +145,14 @@ const VS_COPY = {
     text: (casual: string, hola2: string, hola3: string, airport: string, casualAirport: string, usual: string) =>
       `Si tus diez viajes o menos se reparten en dos días o más y no usas el metro del aeropuerto, la **T-casual (${casual})** es más barata que cualquier Hola Barcelona de 48 horas o más (desde ${hola2}). El aeropuerto cambia la cuenta: con la T-casual tendrías que pagar aparte el billete aeropuerto (${airport} por trayecto), así que diez viajes más la ida y vuelta al aeropuerto salen por **${casualAirport}**, más que una Hola de 48 h (${hola2}) y menos que una de 72 h (${hola3}). Para tres días o más con aeropuerto, compara también la T-usual (${usual}, 30 días, aeropuerto incluido).`,
   },
+  en: {
+    title: "Hola Barcelona or T-casual?",
+    text: (casual: string, hola2: string, hola3: string, airport: string, casualAirport: string, usual: string) =>
+      `If your ten journeys or fewer are spread over two days or more and you do not use the airport metro, the **T-casual (${casual})** is cheaper than any Hola Barcelona card of 48 hours or more (from ${hola2}). The airport changes the sum: with a T-casual you pay the airport ticket on top (${airport} per journey), so ten journeys plus the airport metro there and back come to **${casualAirport}**, more than a 48-hour Hola (${hola2}) and less than a 72-hour one (${hola3}). For three days or more with the airport, also compare the T-usual (${usual}, 30 days, airport included).`,
+  },
 } as const;
 
-function versusBlocks(locale: "ca" | "es"): Block[] {
+function versusBlocks(locale: "ca" | "es" | "en"): Block[] {
   const t = VS_COPY[locale];
   const casual = fareFor("t-casual");
   return h2(
@@ -166,6 +179,7 @@ export const TRANSPORT: B2Article = {
     { name: "2026 transport ticket fares (in force from 15 January 2026)", url: "https://www.tmb.cat/en/barcelona-fares-metro-bus/transport-ticket-fares", publisher: "TMB" },
     { name: "T-familiar", url: "https://www.atm.cat/en/titols-tarifes/titols-i-tarifes/t-familiar", publisher: "Autoritat del Transport Metropolità" },
     { name: "T-grup", url: "https://www.atm.cat/en/titols-tarifes/titols-i-tarifes/t-grup", publisher: "Autoritat del Transport Metropolità" },
+    { name: "Hola Barcelona Travel Card — conditions", url: "https://www.holabarcelona.com/en/tickets/hola-bcn-barcelona-travel-card", publisher: "Transports Metropolitans de Barcelona" },
   ],
   heroKey: "b2-transport-metro-barcelona",
   secondaryKey: "b2-transport-tram-barcelona",
@@ -218,7 +232,7 @@ export const TRANSPORT: B2Article = {
         ),
         table("Preus de TMB per zones, 2026", ["Zones", "Bitllet senzill", "T-casual (10 viatges)", "T-dia (24 h)", "T-usual (30 dies)"], ZONE_FARES, "Font: TMB, preus vigents des del 15 de gener de 2026; la T-usual porta el 50 % de descompte del Reial decret llei 17/2025. Barcelona i el Prat de Llobregat són a la zona 1."),
         ...paras(
-          "Aquests preus valen fins al pròxim canvi de tarifes de l'ATM; a 28 d'octubre de 2026 encara no s'han anunciat els del 2027.",
+          "Aquests preus valen fins al pròxim canvi de tarifes de l'ATM; a 30 d'octubre de 2026 encara no s'han anunciat els del 2027.",
           "**Quantes zones necessites?** Compta el sector tarifari d'on surts i el d'arribada: per anar de Barcelona (zona 1) a Sabadell (zona 2C) cal un títol de 2 zones, segons TMB. Badalona i Montgat són a la zona 1; el Masnou (amb Ocata) i Premià de Mar, a la zona 2. Cada viatge permet fins a 3 transbordaments en 75 minuts en una zona, 15 minuts més per cada zona addicional. La T-casual en targeta de cartró T-mobilitat costa 1 € més.",
         ),
         ...h2(
@@ -292,9 +306,9 @@ export const TRANSPORT: B2Article = {
       path: "guias/tarjetas-transporte-barcelona",
       title:
         "Tarjetas de transporte de Barcelona 2026: precio de la T-casual por zonas, T-dia, T-usual y Hola Barcelona",
-      seoTitle: "T-casual 2026: precio por zonas y tarjetas metro Barcelona",
+      seoTitle: "Precio T-casual Barcelona 2026: 13 € (1 zona) y 25,50 € (2)",
       seoDescription:
-        "T-casual: 13 € (1 zona), 25,50 € (2) y 34,70 € (3). Precios 2026 de todas las tarjetas por zonas, dónde no valen y si compensa más la Hola Barcelona.",
+        "T-casual: 13 € (1 zona), 25,50 € (2) y 34,70 € (3). Tarjetas de metro de Barcelona 2026: T-dia 12 €, T-usual 22,80 €, Hola Barcelona y cuál compensa.",
       excerpt:
         "La tarjeta dirigida a turistas no siempre es la más barata. Compara los títulos según días, trayectos y aeropuerto.",
       blocks: [
@@ -316,7 +330,7 @@ export const TRANSPORT: B2Article = {
         ),
         table("Precios de TMB por zonas, 2026", ["Zonas", "Billete sencillo", "T-casual (10 viajes)", "T-dia (24 h)", "T-usual (30 días)"], ZONE_FARES, "Fuente: TMB, precios vigentes desde el 15 de enero de 2026; la T-usual lleva el 50 % de descuento del Real Decreto-ley 17/2025. Barcelona y El Prat de Llobregat están en la zona 1."),
         ...paras(
-          "Estos precios valen hasta el próximo cambio de tarifas de la ATM; a 28 de octubre de 2026 aún no se han anunciado los de 2027.",
+          "Estos precios valen hasta el próximo cambio de tarifas de la ATM; a 30 de octubre de 2026 aún no se han anunciado los de 2027.",
           "**¿Cuántas zonas necesitas?** Cuenta el sector tarifario de salida y el de llegada: para ir de Barcelona (zona 1) a Sabadell (zona 2C) hace falta un título de 2 zonas, según TMB. Badalona y Montgat están en la zona 1; El Masnou (con Ocata) y Premià de Mar, en la zona 2. Cada viaje permite hasta 3 transbordos en 75 minutos en una zona, 15 minutos más por cada zona adicional. La T-casual en tarjeta de cartón T-mobilitat cuesta 1 € más.",
         ),
         ...h2(
@@ -382,18 +396,18 @@ export const TRANSPORT: B2Article = {
     en: {
       path: "guides/barcelona-transport-passes",
       title:
-        "T-casual, T-dia, T-usual or Hola Barcelona: which transport pass should you buy?",
-      seoTitle: "Barcelona transport pass for 1 to 5 days: 2026 prices",
+        "Barcelona transport passes 2026: T-casual, T-dia, T-usual or Hola Barcelona, and what each costs",
+      seoTitle: "Barcelona transport pass 2026: T-casual €13, 1 to 5 days",
       seoDescription:
-        "Compare T-casual, T-dia, T-usual and Hola Barcelona by days, journeys and whether you need the airport metro. With a selector.",
+        "T-casual €13 for 10 journeys, T-dia €12 for 24 hours, Hola Barcelona from €12.50. 2026 prices by zone and days, airport metro rules and which to buy.",
       excerpt:
         "The obvious tourist card is not automatically the cheapest. Compare the passes by days, journeys and airport use.",
       blocks: [
         lead(
-          "Barcelona's ticket system can be confusing because the obvious tourist product is **not automatically the cheapest option for every trip**.",
+          "A **T-casual** costs **€13** for ten journeys in zone 1, a **T-dia** **€12** for 24 hours of unlimited travel and a **T-usual** **€22.80** for 30 days (2026 fares, in force since 15 January). They cover metro, bus, tram and trains alike. The T-casual is not valid at the airport metro stations, and the tourist card, Hola Barcelona, is **not automatically the cheapest**.",
         ),
         ...paras(
-          "In 2026, a one-zone T-casual costs €13, a T-dia €12 and a T-usual €22.80. Hola Barcelona provides unlimited transport for consecutive periods from 24 to 120 hours.",
+          "A single ticket costs €2.90 and the airport metro ticket €5.90. Hola Barcelona gives unlimited travel for consecutive periods of 24 to 120 hours, from €12.50.",
         ),
         callout(
           "info",
@@ -402,12 +416,21 @@ export const TRANSPORT: B2Article = {
         ),
         { type: "transportPasses" } as Block,
         ...h2(
-          "T-casual: ten journeys",
-          "The **T-casual** gives you ten journeys for €13 in one zone, but it cannot be used through the L9 Sud airport metro gates at T1 or T2.",
+          "T-casual price by zone, and the other passes (2026)",
+          "The T-casual is valid for **ten integrated journeys** on every mode of transport. It costs **€13** in one zone, **€25.50** in two and **€34.70** in three: €1.30 a journey in one zone, against €2.90 for a single ticket.",
+        ),
+        table("TMB fares by zone, 2026", ["Zones", "Single ticket", "T-casual (10 journeys)", "T-dia (24 h)", "T-usual (30 days)"], ZONE_FARES_EN, "Source: TMB, prices in force from 15 January 2026; the T-usual carries the 50% discount of Royal Decree-Law 17/2025. Barcelona and El Prat de Llobregat are in zone 1."),
+        ...paras(
+          "These prices apply until ATM's next fare change; as of 30 October 2026 the 2027 fares had not been announced.",
+          "**How many zones do you need?** Count the fare sector you leave from and the one you arrive in: Barcelona (zone 1) to Sabadell (zone 2C) needs a 2-zone ticket, according to TMB. Badalona and Montgat are in zone 1; El Masnou (with Ocata) and Premià de Mar in zone 2. Each journey allows up to 3 transfers within 75 minutes in one zone, plus 15 minutes for each extra zone. A T-casual on a cardboard T-mobilitat card costs €1 more.",
+        ),
+        ...h2(
+          "T-casual: Barcelona's 10-journey ticket",
+          "The **T-casual** gives you ten journeys for €13 in one zone, but it cannot be used through the L9 Sud airport metro gates at T1 or T2. It is loaded onto a T-mobilitat: a personal card, an NFC phone or an anonymous card.",
           "It is one person per journey: it is not tied to a name, but it cannot be used by more than one person at the same time.",
         ),
         ...h2(
-          "T-dia: 24 unlimited hours",
+          "T-dia: 24 hours of unlimited travel for €12",
           "The **T-dia** costs €12 in one zone and gives unlimited travel for 24 hours from first validation.",
           "It includes one outbound and one return airport metro journey.",
         ),
@@ -417,16 +440,21 @@ export const TRANSPORT: B2Article = {
           "It is personal and non-transferable, and it is valid through the T1 and T2 airport metro stations.",
         ),
         ...h2(
-          "Hola Barcelona",
+          "Travelling together: T-familiar and T-grup",
+          "The **T-familiar** (€11.50 in one zone) gives 8 journeys in 30 days and, unlike the T-casual, several people can use it for the same journey. The **T-grup** (€91 in one zone) gives 70 journeys in 30 days, also for several people at once. Neither is valid at the Aeroport T1 and T2 stations on L9 Sud.",
+        ),
+        ...h2(
+          "Hola Barcelona Travel Card: price and what it covers",
           "The **Hola Barcelona Travel Card** offers unlimited travel for 24, 48, 72, 96 or 120 hours and covers TMB metro and buses, NitBus, the Montjuïc funicular, FGC zone 1, the tram and Rodalies zone 1. Airport metro travel is included; the Montjuïc Cable Car is not.",
         ),
         callout(
           "official",
           "Hola Barcelona prices",
-          `On TMB's own Hola Barcelona site (holabarcelona.com), full price: €12.50 (24 h), €18.70 (48 h), €27.30 (72 h), €35.60 (96 h) and €43.60 (120 h); TMB advertises 10% off online. Torn between this and the Barcelona Card? See ${b2link("cards", "en", "which one is worth it")}.`,
+          `On TMB's own Hola Barcelona site (holabarcelona.com), full price: €12.50 (24 h), €18.70 (48 h), €27.30 (72 h), €35.60 (96 h) and €43.60 (120 h), checked on 12 October 2026; TMB advertises 10% off online (on 30 October 2026 the site showed "from €12.50", €11.25 online). The card is non-transferable, and an online reservation is valid for 180 days from purchase and no later than the last day of February of the following year. Torn between this and the Barcelona Card? See ${b2link("cards", "en", "which one is worth it")}.`,
         ),
         ...daysBlocks("en"),
-        ...h2("Where to start looking"),
+        ...versusBlocks("en"),
+        ...h2("Which pass should you buy?"),
         table(
           "A starting point, not a ranking",
           PROFILE_HEADERS.en ?? [],
@@ -438,7 +466,18 @@ export const TRANSPORT: B2Article = {
           ],
           "There is no single best pass: it depends on your journeys, your zones and the airport.",
         ),
+        faq([
+          { question: "How much is the T-casual in 2026?", answer: "€13 in 1 zone, €25.50 in 2 zones and €34.70 in 3 zones, for ten journeys. These are the fares in force since 15 January 2026." },
+          { question: "What is the T-dia in Barcelona?", answer: "A 24-hour pass with unlimited journeys on metro, bus, tram and trains from first validation: €12 in one zone. It includes one airport metro journey each way." },
+          { question: "Is the T-casual valid on the airport metro?", answer: "No: it cannot be used to enter or leave the Aeroport T1 and T2 stations on L9 Sud. There you need the airport ticket (€5.90), the T-dia, the T-usual or Hola Barcelona." },
+          {
+            question: "Which Barcelona transport pass is best for 3 days?",
+            answer: `For ten journeys or fewer over the three days, the T-casual (${euros(fareFor("t-casual"), "en")}); with the airport metro there and back on top, ${euros(fareFor("t-casual") + 2 * AIRPORT_TICKET, "en")}, still less than the 72-hour Hola Barcelona (${euros(fareFor("hola-barcelona", 3), "en")}). For more journeys than that, compare the 72-hour Hola Barcelona with three T-dia (${euros(fareFor("t-dia") * 3, "en")}): the table above has the sums for 1 to 5 days.`,
+          },
+          { question: "Can two people share a T-casual?", answer: "Not at the same time: it is not in anyone's name, but only one person can use it on each journey. To share, there is the T-familiar (8 journeys, €11.50 in one zone) or the T-grup." },
+        ]),
         ...paras(
+          `To know how late you can use your pass each night, see ${b2link("hours", "en", "Barcelona metro hours and night buses")}; from the airport, see ${b2link("airport", "en", "the bus, metro and train from the airport to the centre")}.`,
           `Driving in? See ${b2link("zbe", "en", "what foreign-registered cars must do first")} and ${b2link("parking", "en", "how the blue and green parking zones work")}.`,
           `If a strike has been called, check ${b2link("strikes", "en", "what runs on strike days")}: we add the official minimum services for the metro, buses and Rodalies as they are published.`,
           `Before you take a Rodalies train, check [Rodalies disruptions today](${rodaliesHub("en")}).`,
@@ -926,8 +965,23 @@ const PARKING_SOURCES = [
   { name: "Voreres lliures de motos als accessos d'escoles i hospitals", url: "https://www.barcelona.cat/infobarcelona/ca/tema/mobilitat-i-transports/voreres-lliures-de-motos-als-accessos-descoles-i-hospitals_1491548.html", publisher: "Ajuntament de Barcelona" },
   { name: "Tipos de plazas: Área Verde", url: "https://www.areaverda.cat/es/informacion/tipos-de-plazas/area-verde", publisher: "Barcelona de Serveis Municipals" },
   { name: "Tipos de plazas: Área Azul", url: "https://www.areaverda.cat/es/informacion/tipos-de-plazas/area-azul", publisher: "Barcelona de Serveis Municipals" },
+  { name: "Plano AREA (orientativo): plazas azules, verdes y exclusivas para residentes", url: "https://areaverda.cat/es/plano", publisher: "Barcelona de Serveis Municipals" },
+  { name: "SMOU: preguntes freqüents (pagament per minuts, avís de 15 minuts)", url: "https://www.smou.cat/en/faqs/parking-meter", publisher: "Ajuntament de Barcelona" },
 ];
 
+// Re-checked 30 Oct 2026 against areaverda.cat (ES/CA blue and green "tipos
+// de plazas" pages, meter FAQs, the Zone 36 news item, the map page) and
+// smou.cat: every rate and schedule unchanged. Added from those pages: the
+// blue tables' own limits ("Tarifa A (màx. 1h o 2h)", "Tarifa B (màx. 2h)");
+// some meters take only cards; the official indicative map
+// (areaverda.cat/es/plano, /ca/planol) with blue, green and resident-only
+// filters; Zone 36 in Trinitat Vella: 632 green spaces between Passeig de
+// Santa Coloma, Avinguda Meridiana and the Trinitat interchange, 231
+// motorbike spaces, active from 9 Nov 2026, non-residents 2 hours at most.
+// Not printed: the green page's "se incrementa en 2 €/hora el componente
+// base" (the page does not say when it applies) and "Tarifa Gremis" (no
+// conditions given), and any rule for weekday public holidays outside the
+// beach zone (no AREA page states one).
 // Re-checked 28 Oct 2026 against areaverda.cat (blue, green-area, the ES
 // "tipos de plazas" pages for blue and green, meter FAQs): every rate and
 // schedule unchanged. Added from those pages: about 5,400 blue and 57,000
@@ -949,7 +1003,7 @@ const PARKING_SOURCES = [
 // spaces. Not printed, because no official page states them: the fine if a
 // notice is not cancelled, a deadline for the €9 cancellation, August or
 // weekday-holiday rules for green spaces, and motorbikes in blue/green bays.
-const PARKING_VERIFIED = "2026-10-28";
+const PARKING_VERIFIED = "2026-10-30";
 
 /**
  * The full label-by-label table.
@@ -1027,6 +1081,15 @@ type ParkingCopy = {
   cheaper: (blueCA: string, greenCA: string) => string;
   ruleTitle: string;
   rule: string;
+  /** "When do you pay?": one row per day of the week, from AREA's pages. */
+  daysTitle: string;
+  daysCaption: string;
+  daysHeaders: string[];
+  daysRows: string[][];
+  daysNote: string;
+  /** Zone 36, Trinitat Vella (AREA news item of 22.9.2026). */
+  trinitatTitle: string;
+  trinitat: string;
   stepsTitle: string;
   steps: { title: string; text: string }[];
   augustTitle: string;
@@ -1057,7 +1120,7 @@ type ParkingCopy = {
 
 const PARKING_COPY: Record<"ca" | "es" | "en", ParkingCopy> = {
   ca: {
-    lead: "Aparcar al carrer en zona regulada de Barcelona costa **d'1,15 a 4,25 € l'hora**. La **zona blava** és per a estades curtes de qualsevol conductor: de dilluns a divendres de 9.00 a 20.00 h, d'1,15 a 3,75 € l'hora i normalment 1 o 2 hores com a màxim. La **zona verda** és per als veïns, però els no residents també hi poden aparcar per 1,40 a 4,25 € l'hora, normalment 1 o 2 hores. El preu exacte depèn de la tarifa de la zona (A als barris de més demanda, B a la resta) i del distintiu ambiental del cotxe.",
+    lead: "Aparcar al carrer en zona regulada de Barcelona costa **d'1,15 a 4,25 € l'hora**. La **zona blava** és per a estades curtes de qualsevol conductor: de dilluns a divendres de 9.00 a 20.00 h, d'1,15 a 3,75 € l'hora i normalment 1 o 2 hores com a màxim. La **zona verda** és per als veïns, però els no residents també hi poden aparcar per 1,40 a 4,25 € l'hora, normalment 1 o 2 hores. El preu exacte depèn de la tarifa de la zona (A als barris de més demanda, B a la resta) i del distintiu ambiental del cotxe. El diumenge, fora de la platja, ni la blava ni la verda es paguen.",
     summaryTitle: "Zona blava i zona verda: preu, horari i temps màxim",
     summaryCaption: "Les zones d'aparcament regulat de Barcelona, el 2026",
     summaryHeaders: ["Zona", "Qui hi pot aparcar", "Horari habitual", "Temps màxim", "Preu"],
@@ -1073,10 +1136,21 @@ const PARKING_COPY: Record<"ca" | "es" | "en", ParkingCopy> = {
       `La blava. Amb el mateix distintiu i la mateixa tarifa, una hora en zona blava costa 0,50 € menys que en zona verda (0,25 € menys amb un cotxe zero emissions): amb distintiu C i tarifa A, **${blueCA}** l'hora a la blava i **${greenCA}** a la verda. Totes dues limiten l'estada, normalment a 1 o 2 hores, així que per deixar el cotxe tot el dia cap de les dues serveix a un visitant.`,
     ruleTitle: "La regla més important",
     rule: "Mana sempre el senyal vertical del tram: l'horari i el temps màxim poden canviar d'un carrer a un altre.",
+    daysTitle: "Quan es paga la zona blava i la verda? Horari per dies",
+    daysCaption: "Quins dies i hores es paga l'aparcament regulat a Barcelona",
+    daysHeaders: ["Dia", "Zona blava", "Zona verda (no residents)", "Places exclusives per a residents"],
+    daysRows: [
+      ["Dilluns a divendres", "9.00–20.00 h", "8.00–20.00 h o 8.00–22.00 h, segons la zona", "Reservades 8.00–20.00 h"],
+      ["Dissabte", "Només al centre de la ciutat", "Només a les zones que funcionen de dilluns a dissabte", "Reservades 8.00–20.00 h"],
+      ["Diumenge", "Només a la zona de platja", "No es paga", "Reservades 8.00–20.00 h"],
+    ],
+    daysNote: "Fora d'aquestes hores s'aparca gratis, llevat que el senyal digui una altra cosa. A la zona de platja, la blava també es paga els festius; des de l'1 d'octubre només hi manté l'horari de set dies el tram de l'avinguda Litoral entre Joan Miró i Jonquera. A la Barceloneta i el Born, les places exclusives per a residents ho són les 24 hores. Font: AREA (B:SM), comprovat el 30 d'octubre de 2026.",
+    trinitatTitle: "Zona verda nova a Trinitat Vella (zona 36)",
+    trinitat: "El **9 de novembre de 2026** s'activa la zona verda 36, a Trinitat Vella (Sant Andreu): **632 places** noves de zona verda als carrers entre el passeig de Santa Coloma, l'avinguda Meridiana i l'intercanviador de la Trinitat, i 231 places per a motos. Els no residents hi poden aparcar **2 hores com a màxim**, amb la tarifa de zona verda que els toqui pel distintiu ambiental; els veïns empadronats a la zona amb el cotxe donat d'alta a Barcelona paguen la tarifa de resident.",
     stepsTitle: "Com aparcar en zona blava o verda, pas a pas",
     steps: [
-      { title: "Llegeix el senyal del tram", text: "El senyal vertical diu quin tipus de plaça és, l'horari i el temps màxim. Si diu que és exclusiva per a residents, no hi pots aparcar." },
-      { title: "Treu el tiquet amb la matrícula", text: "Al parquímetre tria el tipus de zona, escriu la matrícula i paga amb targeta o monedes justes (no torna canvi), o paga amb l'app SMOU. Si el cotxe és elèctric, el parquímetre aplica el descompte en comprovar la matrícula." },
+      { title: "Llegeix el senyal del tram", text: "El senyal vertical diu quin tipus de plaça és, l'horari i el temps màxim. Si diu que és exclusiva per a residents, no hi pots aparcar. Per veure abans de sortir quines places hi ha a cada carrer, AREA té un [plànol orientatiu](https://areaverda.cat/ca/planol) amb les places blaves, les verdes i les exclusives per a residents." },
+      { title: "Treu el tiquet amb la matrícula", text: "Al parquímetre tria el tipus de zona, escriu la matrícula i paga amb targeta o monedes justes (no torna canvi; alguns parquímetres només accepten targeta), o paga amb l'app SMOU. Si el cotxe és elèctric, el parquímetre aplica el descompte en comprovar la matrícula." },
       { title: "No cal deixar res al cotxe", text: "Els agents d'AREA comproven la matrícula de manera electrònica; el rebut imprès és opcional." },
       { title: "Torna abans del temps màxim", text: "SMOU t'avisa 15 minuts abans. El tiquet no es pot renovar a la mateixa zona: quan s'acaba el temps, has de moure el cotxe." },
     ],
@@ -1090,22 +1164,21 @@ const PARKING_COPY: Record<"ca" | "es" | "en", ParkingCopy> = {
       "**Cap de setmana:** el dissabte només es paga la zona blava del centre i les zones verdes que funcionen de dilluns a dissabte; el diumenge, fora de la platja, ni la blava ni la verda es paguen. Les **places exclusives per a residents**, en canvi, estan reservades de 8.00 a 20.00 h tots els dies, festius inclosos (a la Barceloneta i el Born, les 24 hores).",
     ],
     blueTitle: "Preu de la zona blava a Barcelona",
-    blue: "És per a estades curtes de qualsevol conductor (hi ha unes 5.400 places blaves a la ciutat): el temps màxim és el que indica el senyal, normalment 1 o 2 hores. La tarifa A s'aplica a les zones de més demanda, com l'Eixample i Ciutat Vella; la B, a la resta.",
+    blue: "És per a estades curtes de qualsevol conductor (hi ha unes 5.400 places blaves a la ciutat): el temps màxim és el que indica el senyal, **1 o 2 hores a la tarifa A i 2 hores a la tarifa B**. La tarifa A s'aplica a les zones de més demanda, com l'Eixample i Ciutat Vella; la B, a la resta.",
     blueCaption: "AREA Blava, preus per hora el 2026",
     greenTitle: "Com funciona la zona verda a Barcelona",
     green: [
       "La zona verda (unes 57.000 places en 35 zones de residents) prioritza els veïns, però a les seves places hi poden aparcar tant residents com no residents. Si no hi vius, pagues la tarifa de no resident i t'hi pots quedar el temps que indica el senyal, normalment 1 o 2 hores. El que no pots fer és aparcar a les **places exclusives per a residents**: unes 2.900 a Ciutat Vella, els centres històrics de Gràcia i Sarrià, Camp de l'Arpa, el Raval, la Barceloneta, el Born i el Carmel.",
       "Els residents autoritzats paguen 0,20 € al dia, amb un màxim d'1 € la setmana, i només dins de la seva zona: si aparquen fora, paguen com a no residents.",
-      "A Trinitat Vella (Sant Andreu) s'activa una zona verda nova el 9 de novembre del 2026, amb un màxim de 2 hores per als no residents.",
     ],
     greenCaption: "AREA Verda per a no residents, preus per hora el 2026",
-    tableNote: "Font: AREA (B:SM), comprovat el 28 d'octubre de 2026.",
+    tableNote: "Font: AREA (B:SM), comprovat el 30 d'octubre de 2026.",
     costTitle: "Quant et costarà",
     cost: (greenC, blueEco) =>
       `Dues hores en zona verda amb tarifa A i un cotxe amb distintiu C costen **${greenC}**. Dues hores en zona blava amb tarifa B i distintiu ECO, **${blueEco}**. Els cotxes elèctrics també han de treure tiquet: paguen la tarifa més baixa, però no és gratis.`,
-    payTitle: "Com pagar",
+    payTitle: "Com pagar al parquímetre o amb l'app SMOU",
     pay: [
-      "Paga en un parquímetre (tria el tipus de zona, introdueix la matrícula i paga amb targeta o monedes, sense canvi) o amb una aplicació autoritzada com SMOU. Ja no cal deixar el tiquet al cotxe: els agents comproven la matrícula digitalment i el rebut imprès és opcional.",
+      "Paga en un parquímetre (tria el tipus de zona, introdueix la matrícula i paga amb targeta o monedes, sense canvi; alguns només accepten targeta) o amb una aplicació autoritzada com SMOU. Ja no cal deixar el tiquet al cotxe: els agents comproven la matrícula digitalment i el rebut imprès és opcional.",
       "Amb SMOU només pagues el temps que fas servir i reps un avís 15 minuts abans del temps màxim. Quan s'acaba el temps màxim has de treure el cotxe: el tiquet no es pot renovar a la mateixa zona.",
     ],
     fineTitle: "Si et passes de temps",
@@ -1123,12 +1196,15 @@ const PARKING_COPY: Record<"ca" | "es" | "en", ParkingCopy> = {
       { question: "Què és més barat, la zona blava o la verda?", answer: "La blava: amb el mateix distintiu i la mateixa tarifa, 0,50 € menys l'hora (0,25 € menys amb un cotxe zero emissions)." },
       { question: "Es paga la zona blava el dissabte?", answer: "Només al centre de la ciutat, on la regulació s'amplia al dissabte. A la resta, el dissabte la zona blava és lliure; algunes zones verdes sí que es paguen de dilluns a dissabte. Mira el senyal del tram." },
       { question: "Quin és l'horari de la zona blava a Barcelona?", answer: "De dilluns a divendres de 9.00 a 20.00 h sense interrupció; al centre també el dissabte i a les zones de platja també diumenges i festius. Fora d'aquest horari s'aparca gratis, llevat que el senyal digui una altra cosa." },
-      { question: "Quin preu té la zona verda a Barcelona?", answer: "Per als no residents, d'1,40 a 4,25 € l'hora segons la tarifa (A o B) i el distintiu: amb distintiu C, 3,75 € a la tarifa A i 3,50 € a la B. Els residents autoritzats paguen 0,20 € al dia (màxim 1 € la setmana)." },
+      { question: "Quin preu té la zona verda a Barcelona per als no residents?", answer: "D'1,40 a 4,25 € l'hora segons la tarifa (A o B) i el distintiu: amb distintiu C, 3,75 € a la tarifa A i 3,50 € a la B. Els residents autoritzats paguen 0,20 € al dia (màxim 1 € la setmana)." },
       { question: "Es paga la zona verda a l'agost?", answer: "Sí. La tarifa de residents s'aplica tot l'any, agost inclòs, i AREA no preveu cap excepció d'agost per als no residents: es paga amb l'horari del senyal." },
+      { question: "Quant temps es pot aparcar a la zona blava de Barcelona?", answer: "El que indica el senyal: a la tarifa A, 1 o 2 hores; a la tarifa B, 2 hores. Quan s'acaba el temps has de moure el cotxe: el tiquet no es pot renovar a la mateixa zona." },
+      { question: "Hi ha un mapa de la zona blava i verda de Barcelona?", answer: "Sí: AREA publica un plànol orientatiu a areaverda.cat amb les places blaves, les verdes i les exclusives per a residents de cada carrer. Al carrer, mana el senyal del tram." },
+      { question: "On és la zona verda nova de Trinitat Vella?", answer: "És la zona 36: els carrers entre el passeig de Santa Coloma, l'avinguda Meridiana i l'intercanviador de la Trinitat. S'activa el 9 de novembre de 2026 i els no residents hi poden aparcar 2 hores com a màxim." },
     ],
   },
   es: {
-    lead: "Aparcar en la calle en zona regulada de Barcelona cuesta **de 1,15 a 4,25 € la hora**. La **zona azul** es para estancias cortas de cualquier conductor: de lunes a viernes de 9:00 a 20:00, de 1,15 a 3,75 € la hora y normalmente 1 o 2 horas como máximo. La **zona verde** es para los vecinos, pero los no residentes también pueden aparcar pagando de 1,40 a 4,25 € la hora, normalmente 1 o 2 horas. El precio exacto depende de la tarifa de la zona (A en los barrios de más demanda, B en el resto) y del distintivo ambiental del coche.",
+    lead: "Aparcar en la calle en zona regulada de Barcelona cuesta **de 1,15 a 4,25 € la hora**. La **zona azul** es para estancias cortas de cualquier conductor: de lunes a viernes de 9:00 a 20:00, de 1,15 a 3,75 € la hora y normalmente 1 o 2 horas como máximo. La **zona verde** es para los vecinos, pero los no residentes también pueden aparcar pagando de 1,40 a 4,25 € la hora, normalmente 1 o 2 horas. El precio exacto depende de la tarifa de la zona (A en los barrios de más demanda, B en el resto) y del distintivo ambiental del coche. El domingo, fuera de la playa, no se paga ni la azul ni la verde.",
     summaryTitle: "Zona azul y zona verde: precio, horario y tiempo máximo",
     summaryCaption: "Las zonas de aparcamiento regulado de Barcelona en 2026",
     summaryHeaders: ["Zona", "Quién puede aparcar", "Horario habitual", "Tiempo máximo", "Precio"],
@@ -1144,10 +1220,21 @@ const PARKING_COPY: Record<"ca" | "es" | "en", ParkingCopy> = {
       `La azul. Con el mismo distintivo y la misma tarifa, una hora en zona azul cuesta 0,50 € menos que en zona verde (0,25 € menos con un coche cero emisiones): con distintivo C y tarifa A, **${blueCA}** la hora en azul y **${greenCA}** en verde. Las dos limitan la estancia, normalmente a 1 o 2 horas, así que para dejar el coche todo el día ninguna sirve a un visitante.`,
     ruleTitle: "La regla más importante",
     rule: "Manda siempre la señal vertical del tramo: el horario y el tiempo máximo pueden cambiar de una calle a otra.",
+    daysTitle: "¿Cuándo se paga la zona azul y la verde? Horario por días",
+    daysCaption: "Qué días y horas se paga el aparcamiento regulado en Barcelona",
+    daysHeaders: ["Día", "Zona azul", "Zona verde (no residentes)", "Plazas exclusivas para residentes"],
+    daysRows: [
+      ["Lunes a viernes", "9:00–20:00", "8:00–20:00 u 8:00–22:00, según la zona", "Reservadas 8:00–20:00"],
+      ["Sábado", "Solo en el centro de la ciudad", "Solo en las zonas que funcionan de lunes a sábado", "Reservadas 8:00–20:00"],
+      ["Domingo", "Solo en la zona de playa", "No se paga", "Reservadas 8:00–20:00"],
+    ],
+    daysNote: "Fuera de estas horas se aparca gratis, salvo que la señal diga otra cosa. En la zona de playa, la azul también se paga los festivos; desde el 1 de octubre solo mantiene el horario de siete días el tramo de la avenida Litoral entre Joan Miró y Jonquera. En la Barceloneta y El Born, las plazas exclusivas para residentes lo son las 24 horas. Fuente: AREA (B:SM), comprobado el 30 de octubre de 2026.",
+    trinitatTitle: "Zona verde nueva en Trinitat Vella (zona 36)",
+    trinitat: "El **9 de noviembre de 2026** se activa la zona verde 36, en Trinitat Vella (Sant Andreu): **632 plazas** nuevas de zona verde en las calles entre el paseo de Santa Coloma, la avenida Meridiana y el intercambiador de la Trinitat, y 231 plazas para motos. Los no residentes pueden aparcar **2 horas como máximo**, con la tarifa de zona verde que les toque por el distintivo ambiental; los vecinos empadronados en la zona con el coche dado de alta en Barcelona pagan la tarifa de residente.",
     stepsTitle: "Cómo aparcar en zona azul o verde, paso a paso",
     steps: [
-      { title: "Lee la señal del tramo", text: "La señal vertical dice qué tipo de plaza es, el horario y el tiempo máximo. Si dice que es exclusiva para residentes, no puedes aparcar." },
-      { title: "Saca el tique con la matrícula", text: "En el parquímetro elige el tipo de zona, escribe la matrícula y paga con tarjeta o monedas justas (no devuelve cambio), o paga con la app SMOU. Si el coche es eléctrico, el parquímetro aplica el descuento al comprobar la matrícula." },
+      { title: "Lee la señal del tramo", text: "La señal vertical dice qué tipo de plaza es, el horario y el tiempo máximo. Si dice que es exclusiva para residentes, no puedes aparcar. Para ver antes de salir qué plazas hay en cada calle, AREA tiene un [plano orientativo](https://areaverda.cat/es/plano) con las plazas azules, las verdes y las exclusivas para residentes." },
+      { title: "Saca el tique con la matrícula", text: "En el parquímetro elige el tipo de zona, escribe la matrícula y paga con tarjeta o monedas justas (no devuelve cambio; algunos parquímetros solo aceptan tarjeta), o paga con la app SMOU. Si el coche es eléctrico, el parquímetro aplica el descuento al comprobar la matrícula." },
       { title: "No hace falta dejar nada en el coche", text: "Los agentes de AREA comprueban la matrícula de forma electrónica; el recibo impreso es opcional." },
       { title: "Vuelve antes del tiempo máximo", text: "SMOU te avisa 15 minutos antes. El tique no se puede renovar en la misma zona: cuando se acaba el tiempo, tienes que mover el coche." },
     ],
@@ -1161,22 +1248,21 @@ const PARKING_COPY: Record<"ca" | "es" | "en", ParkingCopy> = {
       "**Fin de semana:** el sábado solo se paga la zona azul del centro y las zonas verdes que funcionan de lunes a sábado; el domingo, fuera de la playa, ni la azul ni la verde se pagan. Las **plazas exclusivas para residentes**, en cambio, están reservadas de 8:00 a 20:00 todos los días, festivos incluidos (en la Barceloneta y El Born, las 24 horas).",
     ],
     blueTitle: "Precio de la zona azul en Barcelona",
-    blue: "Es para estancias cortas de cualquier conductor (hay unas 5.400 plazas azules en la ciudad): el tiempo máximo es el que indica la señal, normalmente 1 o 2 horas. La tarifa A se aplica en las zonas de más demanda, como el Eixample y Ciutat Vella; la B, en el resto.",
+    blue: "Es para estancias cortas de cualquier conductor (hay unas 5.400 plazas azules en la ciudad): el tiempo máximo es el que indica la señal, **1 o 2 horas en tarifa A y 2 horas en tarifa B**. La tarifa A se aplica en las zonas de más demanda, como el Eixample y Ciutat Vella; la B, en el resto.",
     blueCaption: "AREA Azul, precios por hora en 2026",
     greenTitle: "Cómo funciona la zona verde en Barcelona",
     green: [
       "La zona verde (unas 57.000 plazas en 35 zonas de residentes) prioriza a los vecinos, pero en sus plazas pueden aparcar tanto residentes como no residentes. Si no vives allí, pagas la tarifa de no residente y puedes quedarte el tiempo que indique la señal, normalmente 1 o 2 horas. Lo que no puedes hacer es aparcar en las **plazas exclusivas para residentes**: unas 2.900 en Ciutat Vella, los centros históricos de Gràcia y Sarrià, Camp de l'Arpa, El Raval, la Barceloneta, El Born y El Carmel.",
       "Los residentes autorizados pagan 0,20 € al día, con un máximo de 1 € a la semana, y solo dentro de su zona: si aparcan fuera, pagan como no residentes.",
-      "En Trinitat Vella (Sant Andreu) se activa una zona verde nueva el 9 de noviembre de 2026, con un máximo de 2 horas para los no residentes.",
     ],
     greenCaption: "AREA Verde para no residentes, precios por hora en 2026",
-    tableNote: "Fuente: AREA (B:SM), comprobado el 28 de octubre de 2026.",
+    tableNote: "Fuente: AREA (B:SM), comprobado el 30 de octubre de 2026.",
     costTitle: "Cuánto te costará",
     cost: (greenC, blueEco) =>
       `Dos horas en zona verde con tarifa A y un coche con distintivo C cuestan **${greenC}**. Dos horas en zona azul con tarifa B y distintivo ECO, **${blueEco}**. Los coches eléctricos también tienen que sacar tique: pagan la tarifa más baja, pero no es gratis.`,
-    payTitle: "Cómo pagar",
+    payTitle: "Cómo pagar en el parquímetro o con la app SMOU",
     pay: [
-      "Paga en un parquímetro (elige el tipo de zona, introduce la matrícula y paga con tarjeta o monedas, sin cambio) o con una aplicación autorizada como SMOU. Ya no hace falta dejar el tique en el coche: los agentes comprueban la matrícula de forma digital y el recibo impreso es opcional.",
+      "Paga en un parquímetro (elige el tipo de zona, introduce la matrícula y paga con tarjeta o monedas, sin cambio; algunos solo aceptan tarjeta) o con una aplicación autorizada como SMOU. Ya no hace falta dejar el tique en el coche: los agentes comprueban la matrícula de forma digital y el recibo impreso es opcional.",
       "Con SMOU solo pagas el tiempo que usas y recibes un aviso 15 minutos antes del tiempo máximo. Cuando se acaba el tiempo máximo tienes que mover el coche: el tique no se puede renovar en la misma zona.",
     ],
     fineTitle: "Si te pasas de tiempo",
@@ -1196,10 +1282,13 @@ const PARKING_COPY: Record<"ca" | "es" | "en", ParkingCopy> = {
       { question: "¿Cuál es el horario de la zona azul en Barcelona?", answer: "De lunes a viernes de 9:00 a 20:00 sin interrupción; en el centro también los sábados y en las zonas de playa también domingos y festivos. Fuera de ese horario se aparca gratis, salvo que la señal diga otra cosa." },
       { question: "¿Cuánto vale la zona verde en Barcelona?", answer: "Para no residentes, de 1,40 a 4,25 € la hora según la tarifa (A o B) y el distintivo: con distintivo C, 3,75 € en tarifa A y 3,50 € en tarifa B. Los residentes autorizados pagan 0,20 € al día (máximo 1 € a la semana)." },
       { question: "¿Se paga la zona verde en agosto?", answer: "Sí. La tarifa de residentes se aplica todo el año, agosto incluido, y AREA no prevé ninguna excepción de agosto para los no residentes: se paga con el horario de la señal." },
+      { question: "¿Cuánto tiempo se puede aparcar en zona azul en Barcelona?", answer: "El que indica la señal: en tarifa A, 1 o 2 horas; en tarifa B, 2 horas. Cuando se acaba el tiempo tienes que mover el coche: el tique no se puede renovar en la misma zona." },
+      { question: "¿Hay un mapa de la zona azul y verde de Barcelona?", answer: "Sí: AREA publica un plano orientativo en areaverda.cat con las plazas azules, las verdes y las exclusivas para residentes de cada calle. En la calle, manda la señal del tramo." },
+      { question: "¿Dónde está la nueva zona verde de Trinitat Vella?", answer: "Es la zona 36: las calles entre el paseo de Santa Coloma, la avenida Meridiana y el intercambiador de la Trinitat. Se activa el 9 de noviembre de 2026 y los no residentes pueden aparcar 2 horas como máximo." },
     ],
   },
   en: {
-    lead: "Regulated street parking in Barcelona costs **€1.15 to €4.25 an hour**. **Blue** spaces are for short stays by anyone: Monday to Friday, 9:00 to 20:00, €1.15 to €3.75 an hour, usually for 1 or 2 hours at most. **Green** spaces are for residents, but non-residents can park there too for €1.40 to €4.25 an hour, usually for 1 or 2 hours. The exact price depends on the zone's rate (A in the busiest districts, B elsewhere) and your car's environmental label.",
+    lead: "Regulated street parking in Barcelona costs **€1.15 to €4.25 an hour**. **Blue** spaces are for short stays by anyone: Monday to Friday, 9:00 to 20:00, €1.15 to €3.75 an hour, usually for 1 or 2 hours at most. **Green** spaces are for residents, but non-residents can park there too for €1.40 to €4.25 an hour, usually for 1 or 2 hours. The exact price depends on the zone's rate (A in the busiest districts, B elsewhere) and your car's environmental label. On Sundays, away from the beach, neither blue nor green spaces are charged.",
     summaryTitle: "Blue vs green zone: price, hours and maximum stay",
     summaryCaption: "Barcelona's regulated parking zones in 2026",
     summaryHeaders: ["Zone", "Who can park", "Usual hours", "Maximum stay", "Price"],
@@ -1215,10 +1304,21 @@ const PARKING_COPY: Record<"ca" | "es" | "en", ParkingCopy> = {
       `Blue. For the same label and the same rate, an hour in a blue space costs €0.50 less than in a green one (€0.25 less for a zero-emission car): with a C label on Rate A it is **${blueCA}** an hour in blue and **${greenCA}** in green. Both limit your stay, usually to 1 or 2 hours, so neither works for a visitor who wants to leave the car all day.`,
     ruleTitle: "The rule that matters most",
     rule: "The vertical sign for that stretch of street always wins: hours and the maximum stay change from street to street.",
+    daysTitle: "When do you pay? Blue and green zone hours by day",
+    daysCaption: "Which days and hours regulated parking is charged in Barcelona",
+    daysHeaders: ["Day", "Blue zone", "Green zone (non-residents)", "Resident-only spaces"],
+    daysRows: [
+      ["Monday to Friday", "9:00–20:00", "8:00–20:00 or 8:00–22:00, depending on the area", "Reserved 8:00–20:00"],
+      ["Saturday", "Only in the city centre", "Only in areas that run Monday to Saturday", "Reserved 8:00–20:00"],
+      ["Sunday", "Only in the beach zone", "Not charged", "Reserved 8:00–20:00"],
+    ],
+    daysNote: "Outside these hours parking is free unless the sign says otherwise. In the beach zone, blue spaces are also charged on public holidays; since 1 October only the Avinguda Litoral stretch between Joan Miró and Jonquera keeps the seven-day schedule. In Barceloneta and El Born, resident-only spaces are reserved 24 hours. Source: AREA (B:SM), checked on 30 October 2026.",
+    trinitatTitle: "New green zone in Trinitat Vella (Zone 36)",
+    trinitat: "On **9 November 2026** green Zone 36 goes live in Trinitat Vella (Sant Andreu): **632 new green spaces** on the streets between Passeig de Santa Coloma, Avinguda Meridiana and the Trinitat interchange, plus 231 motorbike spaces. Non-residents can park for **2 hours at most**, at the green rate for their car's environmental label; residents registered in the zone with a Barcelona-registered car pay the resident rate.",
     stepsTitle: "How to park in a blue or green space, step by step",
     steps: [
-      { title: "Read the sign for that stretch", text: "The vertical sign tells you the type of space, the hours and the maximum stay. If it says the space is for residents only, you cannot park there." },
-      { title: "Buy the ticket with your number plate", text: "At the meter, choose the zone type, type your plate and pay by card or exact coins (no change given), or pay in the SMOU app. For an electric car, the meter applies the discount when it checks the plate." },
+      { title: "Read the sign for that stretch", text: "The vertical sign tells you the type of space, the hours and the maximum stay. If it says the space is for residents only, you cannot park there. To see which spaces each street has before you set off, AREA publishes an [indicative map](https://areaverda.cat/es/plano) with blue, green and resident-only spaces." },
+      { title: "Buy the ticket with your number plate", text: "At the meter, choose the zone type, type your plate and pay by card or exact coins (no change given; some meters take cards only), or pay in the SMOU app. For an electric car, the meter applies the discount when it checks the plate." },
       { title: "Leave nothing in the car", text: "AREA officers check the number plate electronically; the printed receipt is optional." },
       { title: "Be back before the maximum stay", text: "SMOU warns you 15 minutes before. The ticket cannot be renewed in the same area: when the time is up, you have to move the car." },
     ],
@@ -1232,22 +1332,21 @@ const PARKING_COPY: Record<"ca" | "es" | "en", ParkingCopy> = {
       "**Weekends:** on Saturdays you pay only in blue spaces in the centre and in green areas that run Monday to Saturday; on Sundays, away from the beach, neither blue nor green spaces are charged. **Resident-only spaces**, though, are reserved 8:00 to 20:00 every day including public holidays (24 hours in Barceloneta and El Born).",
     ],
     blueTitle: "Blue zone prices in Barcelona",
-    blue: "Blue spaces are for short stays by any driver (there are about 5,400 of them in the city): the maximum stay is what the sign says, usually 1 or 2 hours. Rate A applies in high-demand areas such as the Eixample and Ciutat Vella; Rate B everywhere else.",
+    blue: "Blue spaces are for short stays by any driver (there are about 5,400 of them in the city): the maximum stay is what the sign says, **1 or 2 hours on Rate A and 2 hours on Rate B**. Rate A applies in high-demand areas such as the Eixample and Ciutat Vella; Rate B everywhere else.",
     blueCaption: "AREA Blue, hourly prices in 2026",
     greenTitle: "How green zones work in Barcelona",
     green: [
       "Green spaces (about 57,000 in 35 resident zones) give residents priority, but both residents and non-residents can park in them. If you do not live there, you pay the non-resident rate and can stay as long as the sign says, usually 1 or 2 hours. What visitors cannot use are the **resident-only spaces**: about 2,900 of them in Ciutat Vella, the historic centres of Gràcia and Sarrià, Camp de l'Arpa, El Raval, Barceloneta, El Born and El Carmel.",
       "Authorised residents pay €0.20 a day, capped at €1 a week, and only inside their own zone: outside it they pay the non-resident rate.",
-      "A new green zone opens in Trinitat Vella (Sant Andreu) on 9 November 2026, with a 2-hour limit for non-residents.",
     ],
     greenCaption: "AREA Green for non-residents, hourly prices in 2026",
-    tableNote: "Source: AREA (B:SM), checked on 28 October 2026.",
+    tableNote: "Source: AREA (B:SM), checked on 30 October 2026.",
     costTitle: "What it will cost you",
     cost: (greenC, blueEco) =>
       `Two hours in a green space on Rate A with a C-label car cost **${greenC}**. Two hours in a blue space on Rate B with an ECO label, **${blueEco}**. Electric cars still need a ticket: they pay the lowest rate, but parking is not free.`,
-    payTitle: "How to pay",
+    payTitle: "How to pay: parking meter or the SMOU app",
     pay: [
-      "Pay at a parking meter (choose the zone type, type your number plate, pay by card or exact coins) or with an authorised app such as SMOU. You no longer need to leave a paper ticket in the car: enforcement officers check your plate digitally, and a printed receipt is optional.",
+      "Pay at a parking meter (choose the zone type, type your number plate, pay by card or exact coins; some meters take cards only) or with an authorised app such as SMOU. You no longer need to leave a paper ticket in the car: enforcement officers check your plate digitally, and a printed receipt is optional.",
       "With SMOU you pay only for the time you use, and you get a warning 15 minutes before the maximum stay. When the maximum is up you have to move the car: the ticket cannot be renewed in the same area.",
     ],
     fineTitle: "If you overstay",
@@ -1267,6 +1366,9 @@ const PARKING_COPY: Record<"ca" | "es" | "en", ParkingCopy> = {
       { question: "What are the blue zone hours in Barcelona?", answer: "Monday to Friday, 9:00 to 20:00 without a break; in the centre also on Saturdays, and in beach areas also on Sundays and public holidays. Outside those hours parking is free unless the sign says otherwise." },
       { question: "How much is green zone parking in Barcelona?", answer: "For non-residents, €1.40 to €4.25 an hour depending on the rate (A or B) and the label: with a C label, €3.75 on Rate A and €3.50 on Rate B. Authorised residents pay €0.20 a day (capped at €1 a week)." },
       { question: "Do you pay for green zones in August?", answer: "Yes. The resident rate applies all year, August included, and AREA makes no August exception for non-residents: you pay by the hours on the sign." },
+      { question: "How long can you park in a blue zone in Barcelona?", answer: "As long as the sign says: 1 or 2 hours on Rate A, 2 hours on Rate B. When the time is up you have to move the car: the ticket cannot be renewed in the same area." },
+      { question: "Is there a map of Barcelona's blue and green zones?", answer: "Yes: AREA publishes an indicative map on areaverda.cat showing blue, green and resident-only spaces street by street. On the street, the sign for that stretch is what counts." },
+      { question: "Where is the new green zone in Trinitat Vella?", answer: "It is Zone 36: the streets between Passeig de Santa Coloma, Avinguda Meridiana and the Trinitat interchange. It goes live on 9 November 2026 and non-residents can park for 2 hours at most." },
     ],
   },
 };
@@ -1286,6 +1388,8 @@ function parkingBody(locale: "ca" | "es" | "en"): Block[] {
     lead(t.lead),
     ...h2(t.summaryTitle),
     table(t.summaryCaption, t.summaryHeaders, t.summaryRows, t.tableNote),
+    ...h2(t.daysTitle),
+    table(t.daysCaption, t.daysHeaders, t.daysRows, t.daysNote),
     callout("warning", t.ruleTitle, t.rule),
     steps(t.stepsTitle, t.steps),
     ...h2(t.hoursTitle, ...t.hours),
@@ -1293,6 +1397,7 @@ function parkingBody(locale: "ca" | "es" | "en"): Block[] {
     table(t.blueCaption, LABEL_HEADERS[locale] ?? [], blue, t.tableNote),
     ...h2(t.greenTitle, ...t.green),
     table(t.greenCaption, LABEL_HEADERS[locale] ?? [], green, t.tableNote),
+    ...h2(t.trinitatTitle, t.trinitat),
     ...h2(t.augustTitle, t.august),
     ...h2(t.cheaperTitle, t.cheaper(blueCA, greenCA)),
     ...h2(t.costTitle, t.cost(greenC, blueEco)),
@@ -1340,10 +1445,10 @@ export const PARKING: B2Article = {
     ca: {
       path: "guies/aparcar-barcelona-zona-blava-verda",
       title:
-        "Zona blava i zona verda de Barcelona: com funcionen, preu i horari el 2026",
-      seoTitle: "Zona blava i verda Barcelona: preu, horari i com funciona",
+        "Preu de la zona blava i la zona verda de Barcelona el 2026: horari i com funcionen",
+      seoTitle: "Preu zona blava i verda Barcelona: 1,15-4,25 €/h i horari",
       seoDescription:
-        "Zona blava: 1,15-3,75 €/h, dl-dv de 9 a 20 h. Zona verda per a no residents: 1,40-4,25 €/h, 1 o 2 h. Com funciona, horari, agost i com pagar.",
+        "Zona blava: dl-dv 9-20 h, 1,15-3,75 €/h, màx. 1-2 h. Zona verda per a no residents: 1,40-4,25 €/h. Diumenge gratis fora de la platja. Mapa i com pagar.",
       excerpt:
         "Els preus de l'aparcament regulat depenen de la zona i del distintiu ambiental del vehicle. Taula completa de 2026.",
       blocks: parkingBody("ca"),
@@ -1351,10 +1456,10 @@ export const PARKING: B2Article = {
 
     es: {
       path: "guias/aparcar-barcelona-zona-azul-verde",
-      title: "Cómo funciona la zona verde y la zona azul en Barcelona: precio y horario 2026",
-      seoTitle: "Zona verde y azul Barcelona: cómo funciona, precio y horario",
+      title: "Cómo funciona la zona verde y la zona azul en Barcelona: horario y precio 2026",
+      seoTitle: "Zona azul y verde Barcelona: cómo funciona, horario y precio",
       seoDescription:
-        "Zona azul: 1,15-3,75 €/h, lun-vie de 9 a 20 h. Zona verde para no residentes: 1,40-4,25 €/h, 1 o 2 h. Cómo funciona, horario, agosto y cómo pagar.",
+        "Zona azul: lun-vie 9-20 h, 1,15-3,75 €/h, máx. 1-2 h. Zona verde: no residentes 1,40-4,25 €/h. Domingo gratis fuera de la playa. Mapa y cómo pagar.",
       excerpt:
         "Las tarifas del aparcamiento regulado dependen de la zona y del distintivo ambiental. Tabla completa de 2026.",
       blocks: parkingBody("es"),

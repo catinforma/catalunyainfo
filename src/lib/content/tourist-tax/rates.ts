@@ -9,7 +9,10 @@ import type { Locale } from "@/lib/i18n/config";
  *
  * Verified against the Agència Tributària de Catalunya's tariff page, Llei
  * 2/2026 (DOGC 9621) and Barcelona's Ordenança fiscal 2.2 (BOPB 2-2-2026) on
- * 18 October 2026 (research_notes/audits/p0_data_accuracy.md).
+ * 18 October 2026 (research_notes/audits/p0_data_accuracy.md). Re-read on the
+ * ATC tariff page on 30 October 2026: every Barcelona and rest-of-Catalonia
+ * figure unchanged, Barcelona's €6 and €7 steps listed by the ATC too; the
+ * seven municipal surcharges and the special rate were added below.
  *
  * ## Barcelona from April 2027
  *
@@ -100,7 +103,7 @@ export const RATE_PERIODS: RatePeriod[] = [
     regional: BARCELONA_REGIONAL,
     surcharge,
     sourceUrl: surcharge === 5.0 ? ATC_RATES : BCN_ORDINANCE,
-    verifiedAt: "2026-10-18",
+    verifiedAt: "2026-10-30",
   })),
   {
     scope: "rest-of-catalonia",
@@ -119,7 +122,7 @@ export const RATE_PERIODS: RatePeriod[] = [
     // (seven municipalities have one since 1 Oct 2026; the page names them).
     surcharge: null,
     sourceUrl: ATC_RATES,
-    verifiedAt: "2026-10-18",
+    verifiedAt: "2026-10-30",
   },
   {
     scope: "rest-of-catalonia",
@@ -136,7 +139,7 @@ export const RATE_PERIODS: RatePeriod[] = [
     },
     surcharge: null,
     sourceUrl: ATC_RATES,
-    verifiedAt: "2026-10-18",
+    verifiedAt: "2026-10-30",
   },
 ];
 
@@ -307,6 +310,46 @@ export const SOURCES = [
   },
 ];
 
-export const LAST_VERIFIED = "2026-10-18";
+/* -------------------------------------------------------------------------- */
+/* Municipal surcharges outside Barcelona                                      */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * The seven municipal surcharges in force since 1 October 2026, as the ATC's
+ * tariff page lists them (read 30 Oct 2026, section "Recàrrecs d'altres
+ * municipis"). Amounts are per person and stay unit, on top of the regional
+ * rate, for 1 Oct 2026 to 31 Mar 2027. `null` = the ATC table has no row for
+ * that category in that municipality (Esplugues lists only three categories).
+ *
+ * Esplugues is transcribed as printed (tourist dwelling 0,90 €, other
+ * establishments 1,75 €), even though it reads like the other towns' two
+ * values swapped: the ATC page is the source, and the page says so.
+ */
+export interface MunicipalSurcharge {
+  municipality: string;
+  amounts: Partial<Record<"hotel-5" | "hotel-4" | "tourist-dwelling" | "hostel" | "other", number | null>>;
+}
+
+export const MUNICIPAL_SURCHARGES: MunicipalSurcharge[] = [
+  { municipality: "Castelldefels", amounts: { "hotel-5": 4.0, "hotel-4": 1.8, "tourist-dwelling": 1.75, hostel: 0.8, other: 0.9 } },
+  { municipality: "Esplugues de Llobregat", amounts: { "hotel-5": null, "hotel-4": 1.8, "tourist-dwelling": 0.9, hostel: null, other: 1.75 } },
+  { municipality: "L'Hospitalet de Llobregat", amounts: { "hotel-5": 4.0, "hotel-4": 1.8, "tourist-dwelling": 1.75, hostel: 0.8, other: 0.9 } },
+  { municipality: "El Prat de Llobregat", amounts: { "hotel-5": 4.0, "hotel-4": 1.8, "tourist-dwelling": 1.75, hostel: 0.8, other: 0.9 } },
+  { municipality: "Sabadell", amounts: { "hotel-5": 4.0, "hotel-4": 1.8, "tourist-dwelling": 1.75, hostel: 0.8, other: 0.9 } },
+  { municipality: "Sant Cugat del Vallès", amounts: { "hotel-5": 4.0, "hotel-4": 1.8, "tourist-dwelling": 1.75, hostel: 0.8, other: 0.9 } },
+  { municipality: "Sant Just Desvern", amounts: { "hotel-5": 4.0, "hotel-4": 1.8, "tourist-dwelling": 1.75, hostel: 0.8, other: 0.9 } },
+];
+
+/** The categories the municipal table shows, in page order. */
+export const MUNICIPAL_COLUMNS = ["hotel-5", "hotel-4", "tourist-dwelling", "hostel", "other"] as const;
+
+/**
+ * Special rate (from 1 Apr 2026) for establishments inside a "centre
+ * recreatiu turístic" located in the areas where gaming is allowed (ATC tariff
+ * page, "Tarifa especial", read 30 Oct 2026).
+ */
+export const SPECIAL_RATE = { "hotel-5": 10.0, "hotel-4": 7.0, other: 5.0 } as const;
+
+export const LAST_VERIFIED = "2026-10-30";
 // New municipal surcharges approved this autumn; then again before 1 Apr 2027.
 export const NEXT_REVIEW = "2026-12-01";

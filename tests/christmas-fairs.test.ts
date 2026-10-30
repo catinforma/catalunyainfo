@@ -42,6 +42,7 @@ import { EN_TOWNS, FAIRS_LOCALES, FAIRS_ROUTE, fairsHubPath, hubTranslations, to
 import { PRERENDER, hubAllowed, resolveTown, townStaticParams } from "../src/lib/programmatic/christmas-fairs/routing.ts";
 import { WEB_REPLACEMENTS, agendaFairs, fairFromRow, organiserWeb } from "../src/lib/programmatic/christmas-fairs/rows.ts";
 import { christmasFairsPaths, christmasFairsSitemapEntries } from "../src/lib/programmatic/christmas-fairs/sitemap.ts";
+import { christmasFairEvents } from "../src/lib/programmatic/christmas-fairs/structured.ts";
 import { fill, seasonStatus, todayInMadrid, type DatedFair } from "../src/lib/programmatic/christmas-fairs/today.ts";
 import type { ChristmasSnapshot } from "../src/lib/programmatic/christmas-fairs/types.ts";
 import { buildLookup, municipalityNames } from "../src/lib/programmatic/weekend/compact.ts";
@@ -485,6 +486,28 @@ test("guidance: trains, holidays, shops and the weekend zone come from the other
   const near = nearbyTowns(vic);
   assert.ok(near.length > 0 && !near.some((t) => t.ine === vic.ine));
   assert.equal(municipality(near[0]!.ine)?.comarca, vic.comarca);
+});
+
+test("structured data: one Event per dated fair, on its town page only", () => {
+  const vic = townBySlug("vic")!;
+  const events = christmasFairEvents(vic.fairs, townPath("en", vic.slug), "en") as Record<string, unknown>[];
+  assert.equal(events.length, 1);
+  assert.equal(events[0]!["@type"], "Event");
+  assert.equal(events[0]!.startDate, "2026-12-05");
+  assert.equal(events[0]!.endDate, "2027-01-04");
+  assert.equal((events[0]!.location as { address: { addressLocality: string } }).address.addressLocality, "Vic");
+  assert.ok(String(events[0]!["@id"]).startsWith(`${absoluteUrl("/en/christmas-markets/vic/")}#event-org-vic-`), String(events[0]!["@id"]));
+  // A council homepage standing in for a dead organiser website is not the event's URL.
+  const asco = townBySlug("asco")!;
+  assert.equal((christmasFairEvents(asco.fairs, townPath("ca", "asco"), "ca")[0] as Record<string, unknown>).url, undefined);
+  // Dates to confirm: no Event.
+  const unsure = { ...vic.fairs[0]!, toConfirm: true };
+  assert.deepEqual(christmasFairEvents([unsure], "/ca/fires-de-nadal/vic/", "ca"), []);
+  // The hub carries no Event markup (each fair is described by its town page).
+  const routes = readFileSync(join(ROOT, "src/components/programmatic/christmas-fairs/routes.tsx"), "utf8");
+  const hubRoute = routes.slice(routes.indexOf("export function HubRoute"), routes.indexOf("export function townMetadata"));
+  assert.ok(hubRoute.length > 0 && !hubRoute.includes("christmasFairEvents"));
+  assert.ok(routes.includes("christmasFairEvents(town.fairs"));
 });
 
 /* -------------------------------------------------------------------------- */

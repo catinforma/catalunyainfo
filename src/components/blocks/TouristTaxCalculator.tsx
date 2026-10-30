@@ -13,7 +13,7 @@ import {
   type AccommodationType,
   type Scope,
 } from "@/lib/content/tourist-tax/rates";
-import { getMessages } from "@/lib/i18n";
+import type { Messages } from "@/lib/i18n";
 import type { Locale } from "@/lib/i18n/config";
 
 /**
@@ -48,8 +48,9 @@ const DATE_MIN = RATE_PERIODS.reduce(
   RATE_PERIODS[0]?.from ?? "2026-04-01",
 );
 
-export function TouristTaxCalculator({ locale }: { locale: Locale }) {
-  const t = getMessages(locale).touristTax;
+/** `copy` comes from the server: getMessages here shipped all three dictionaries. */
+export function TouristTaxCalculator({ locale, copy }: { locale: Locale; copy: Messages["touristTax"] }) {
+  const t = copy;
 
   const [scope, setScope] = useState<Scope>("barcelona");
   const [date, setDate] = useState(() => {

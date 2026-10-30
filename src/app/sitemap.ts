@@ -11,6 +11,7 @@ import { fuelSitemapEntries } from "@/lib/programmatic/fuel/sitemap";
 import { rodaliesSitemap } from "@/lib/programmatic/rodalies/pages";
 import { reservoirSitemapEntries } from "@/lib/programmatic/reservoirs/pages";
 import { weekendSitemapEntries } from "@/lib/programmatic/weekend/sitemap";
+import { todaySitemapEntries } from "@/lib/programmatic/today/page";
 import { christmasFairsSitemapEntries } from "@/lib/programmatic/christmas-fairs/sitemap";
 
 /**
@@ -129,6 +130,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...rodaliesSitemap(),
     ...reservoirSitemapEntries(),
     ...weekendSitemapEntries(),
+    ...todaySitemapEntries(),
     ...christmasFairsSitemapEntries(),
   ];
 }

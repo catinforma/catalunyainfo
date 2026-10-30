@@ -55,6 +55,12 @@ import {
 // Barcelona as European Capital of Christmas 2026 (infoBarcelona). The
 // Sagrada Família's 2025 dates and the 2025 opening hours stay out: the
 // stale-date guard in tests/christmas-markets.test.ts forbids them.
+//
+// 30 Oct 2026 (top-3 push): firadesantallucia.cat re-read (home and
+// calendari.php still show the 2025 calendar, so the Santa Llúcia line now
+// says 30 Oct); CA title in the words of "fires de nadal catalunya 2026",
+// ES in "mercados navideños cataluña 2026"; descriptions give one official
+// 2026 date and say Santa Llúcia has none yet. Other dates not re-read.
 const VERIFIED = "2026-10-28";
 
 const SOURCES: B2Source[] = [
@@ -86,19 +92,19 @@ const SOURCES: B2Source[] = [
 const META: Record<Locale, { path: string; title: string; seoTitle: string; seoDescription: string; excerpt: string }> = {
   ca: {
     path: "tradicions/mercats-de-nadal-catalunya",
-    title: "Mercats de Nadal a Catalunya 2026: Fira de Santa Llúcia, dates i llocs",
-    seoTitle: "Mercats de Nadal Catalunya 2026: Santa Llúcia i dates",
+    title: "Fires i mercats de Nadal a Catalunya 2026: Fira de Santa Llúcia, dates i llocs",
+    seoTitle: "Fires i mercats de Nadal Catalunya 2026: dates i llocs",
     seoDescription:
-      "Fira de Santa Llúcia 2026, la de la Sagrada Família, l'Avet d'Espinelves i més: les dates de 2026 que ja són oficials, les del 2025 i on es fa cada mercat.",
+      "Fires de Nadal Catalunya 2026: dates oficials, com l'Avet d'Espinelves (28 de novembre-8 de desembre). Santa Llúcia, encara sense dates.",
     excerpt:
       "Els mercats de Nadal de Catalunya el 2026: quines dates han confirmat els organitzadors, quines eren les del 2025 i on es fa cada fira.",
   },
   es: {
     path: "tradiciones/mercados-navidad-cataluna",
-    title: "Mercados de Navidad en Cataluña 2026: Fira de Santa Llúcia, fechas y lugares",
-    seoTitle: "Mercados de Navidad Cataluña 2026: Santa Llúcia y fechas",
+    title: "Mercados navideños en Cataluña 2026: Fira de Santa Llúcia, fechas y lugares",
+    seoTitle: "Mercados navideños Cataluña 2026: fechas y Santa Llúcia",
     seoDescription:
-      "Fira de Santa Llúcia 2026, la de la Sagrada Família, el Avet de Espinelves y más: las fechas de 2026 ya oficiales, las de 2025 y dónde es cada mercado.",
+      "Mercados navideños Cataluña 2026: fechas oficiales, como el Avet de Espinelves (28 de noviembre-8 de diciembre). Santa Llúcia, aún sin fechas.",
     excerpt:
       "Los mercados de Navidad de Cataluña en 2026: qué fechas han confirmado los organizadores, cuáles fueron las de 2025 y dónde se hace cada feria.",
   },
@@ -210,7 +216,7 @@ function body(locale: Locale) {
   if (locale === "ca") {
     return [
       lead(
-        "Les dates de la **Fira de Santa Llúcia 2026** encara no s'han publicat: el 28 d'octubre el web de l'organització mostra el calendari del 2025, quan la fira va obrir el 28 de novembre i va tancar el 23 de desembre davant de la Catedral de Barcelona. El mercat de Nadal amb data oficial més gran per ara és la **Fira de l'Avet d'Espinelves**, del 28 de novembre al 8 de desembre de 2026.",
+        "Les dates de la **Fira de Santa Llúcia 2026** encara no s'han publicat: el 30 d'octubre el web de l'organització encara mostra el calendari del 2025, quan la fira va obrir el 28 de novembre i va tancar el 23 de desembre davant de la Catedral de Barcelona. El mercat de Nadal amb data oficial més gran per ara és la **Fira de l'Avet d'Espinelves**, del 28 de novembre al 8 de desembre de 2026.",
       ),
       callout(
         "info",
@@ -283,7 +289,7 @@ function body(locale: Locale) {
   if (locale === "es") {
     return [
       lead(
-        "Las fechas de la **Fira de Santa Llúcia 2026** aún no se han publicado: a 28 de octubre la web de la organización muestra el calendario de 2025, cuando la feria abrió el 28 de noviembre y cerró el 23 de diciembre frente a la Catedral de Barcelona. El mercado de Navidad con fecha oficial más grande por ahora es la **Fira de l'Avet de Espinelves**, del 28 de noviembre al 8 de diciembre de 2026.",
+        "Las fechas de la **Fira de Santa Llúcia 2026** aún no se han publicado: a 30 de octubre la web de la organización aún muestra el calendario de 2025, cuando la feria abrió el 28 de noviembre y cerró el 23 de diciembre frente a la Catedral de Barcelona. El mercado de Navidad con fecha oficial más grande por ahora es la **Fira de l'Avet de Espinelves**, del 28 de noviembre al 8 de diciembre de 2026.",
       ),
       callout(
         "info",
@@ -355,7 +361,7 @@ function body(locale: Locale) {
 
   return [
     lead(
-      "Barcelona's Christmas market is the **Fira de Santa Llúcia**, in front of the Cathedral, and its **2026 dates have not been published yet**: on 28 October the organiser's website still shows the 2025 calendar, when it opened on 28 November and closed on 23 December. The city's second fair, at the **Sagrada Família**, has not announced its dates either. The biggest Christmas market with an official 2026 date so far is the **Espinelves Fir Tree Fair**, 28 November to 8 December 2026, and Barcelona is this year's **European Capital of Christmas**, according to the City Council.",
+      "Barcelona's Christmas market is the **Fira de Santa Llúcia**, in front of the Cathedral, and its **2026 dates have not been published yet**: on 30 October the organiser's website still showed the 2025 calendar, when it opened on 28 November and closed on 23 December. The city's second fair, at the **Sagrada Família**, has not announced its dates either. The biggest Christmas market with an official 2026 date so far is the **Espinelves Fir Tree Fair**, 28 November to 8 December 2026, and Barcelona is this year's **European Capital of Christmas**, according to the City Council.",
     ),
     callout(
       "info",

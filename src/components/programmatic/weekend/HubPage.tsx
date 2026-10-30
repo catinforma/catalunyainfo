@@ -8,7 +8,7 @@ import { getMessages } from "@/lib/i18n";
 import { SEASON, SEASON_YEAR } from "@/lib/programmatic/christmas-fairs/classify";
 import { fairsHubPath } from "@/lib/programmatic/christmas-fairs/paths";
 import { HUB_CRUMB, fullDate, hubMeta, liveLabels, longWeekendNote, rangeLong, sectionTitles } from "@/lib/programmatic/weekend/copy";
-import { SNAPSHOT, fairsAfter, fairsIn, fairsInWindow, shippedZones } from "@/lib/programmatic/weekend/data";
+import { SNAPSHOT, listedFairs, shippedZones } from "@/lib/programmatic/weekend/data";
 import { weekendHubPath, zonePath } from "@/lib/programmatic/weekend/paths";
 import type { WeekendLocale } from "@/lib/programmatic/weekend/zones";
 
@@ -42,9 +42,7 @@ export function HubPage({ locale, window }: { locale: WeekendLocale; window: Wee
   const meta = hubMeta(locale, window);
   const copy = COPY[locale];
   const messages = getMessages(locale).weekendAgenda;
-  const all = fairsIn(null);
-  const now = fairsInWindow(all, window);
-  const next = fairsAfter(all, window, 12);
+  const { now, next } = listedFairs(null, window);
   const longNote = longWeekendNote(window, locale);
   const zones = shippedZones().map((z) => ({ label: z.name[locale], href: zonePath(locale, z) }));
 

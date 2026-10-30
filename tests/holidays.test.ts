@@ -10,7 +10,7 @@ import {
   YEAR,
 } from "../src/lib/content/holidays/payload.ts";
 import { COPY } from "../src/lib/content/holidays/copy.ts";
-import { buildBody, formatDay, runLength, weekdayOf } from "../src/lib/content/holidays/publish.ts";
+import { buildBody, formatDay, runLength, weekdayOf, workingDays } from "../src/lib/content/holidays/publish.ts";
 import { LOCALES } from "../src/lib/i18n/config.ts";
 
 /**
@@ -335,5 +335,39 @@ test("the opening sentence names every 2027 holiday, so it cannot drift from the
       assert.match(lead, new RegExp(String.raw`(?<!\d)${day}(?!\d)[^.]*?${month}`), `${locale}: ${holiday.date}`);
     }
     assert.match(lead, /BOE/, locale);
+  }
+});
+
+/* -------------------------------------------------------------------------- */
+/* Top-3 push, 30 Oct 2026                                                    */
+/* -------------------------------------------------------------------------- */
+
+test("the CA and ES search descriptions list every 2027 holiday", () => {
+  for (const locale of ["ca", "es"] as const) {
+    const description = COPY[locale].seoDescription;
+    for (const holiday of CATALONIA_HOLIDAYS) {
+      assert.ok(description.includes(String(Number(holiday.date.slice(8, 10)))), `${locale}: ${holiday.date}`);
+    }
+    assert.match(description, /^Els 12 festius 2027|^Los 12 festivos 2027/, locale);
+  }
+});
+
+test("working days 2027: 261 weekdays, 9 of them holidays, 252 left", () => {
+  assert.deepEqual(workingDays(), { weekdays: 261, working: 252 });
+  for (const locale of LOCALES) {
+    const body = buildBody(locale);
+    const facts = body.find((b) => b.type === "keyFacts");
+    assert.ok(facts && facts.type === "keyFacts" && facts.items.some((i) => i.value.startsWith("252 (250")), locale);
+    assert.match(JSON.stringify(body), /252/, locale);
+  }
+});
+
+test("the 30 October question is gone; 2 November points to the 1 November date page", () => {
+  const nov1 = { ca: "/ca/festius/dia/1-novembre-2026/", es: "/es/festivos/dia/1-noviembre-2026/" };
+  for (const locale of ["ca", "es"] as const) {
+    const text = JSON.stringify(buildBody(locale));
+    assert.ok(!/30 d'octubre és festiu|30 de octubre es festivo/.test(text), locale);
+    assert.match(text, /2 de novembre és festiu|2 de noviembre es festivo/, locale);
+    assert.ok(text.includes(nov1[locale]), `${locale}: ${nov1[locale]}`);
   }
 });

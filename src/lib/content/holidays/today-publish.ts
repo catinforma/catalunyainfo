@@ -10,10 +10,13 @@ import {
 } from "@/lib/content/publish-article";
 import { LOCALES, type Locale } from "@/lib/i18n/config";
 
+import { SNAPSHOT, municipalityBySlug } from "@/lib/programmatic/holidays/data";
+import { LOCAL_DATE_PAGES } from "@/lib/programmatic/holidays/dates";
 import { joinList } from "@/lib/programmatic/holidays/names";
+import { datePath } from "@/lib/programmatic/holidays/paths";
 import { largestTownLinks, townPageCount } from "@/lib/programmatic/holidays/towns";
 
-import { CALENDAR_VERIFIED_AT, HOLIDAY_SOURCE, shortDate } from "./calendar";
+import { CALENDAR_VERIFIED_AT, HOLIDAY_SOURCE, shortDate, todayInCatalonia } from "./calendar";
 import { COPY as CALENDAR_COPY } from "./copy";
 import { LOCAL_SOURCE } from "./local";
 import { BARCELONA_LOCAL } from "./payload";
@@ -240,10 +243,70 @@ export function buildBody(locale: Locale): Block[] {
   section(copy.howTitle, copy.how);
   section(copy.weekendTitle, copy.weekend);
 
+  blocks.push(faqBlock(locale));
   blocks.push({ type: "paragraph", text: copy.plannerLine });
 
   return blocks;
 }
+
+/**
+ * The questions in the words Search Console shows ("hoy es festivo en
+ * cataluña", "mañana es festivo", "donde es festivo hoy en cataluña").
+ * Nothing here depends on the publish date except the list of local-holiday
+ * dates still ahead, which links each to its own page (past ones stay
+ * correct: those pages switch to the past tense).
+ */
+function faqBlock(locale: Locale): Block {
+  const today = todayInCatalonia();
+  // Only the days with many local holidays (11 Nov, 30 Nov, 7 Dec...), not the odd one.
+  const ahead = Object.keys(LOCAL_DATE_PAGES)
+    .filter((iso) => iso >= today && (SNAPSHOT.localByDate[iso]?.length ?? 0) >= 10)
+    .sort()
+    .slice(0, 4);
+  const dates = joinList(
+    ahead.map((iso) => {
+      const n = SNAPSHOT.localByDate[iso]!.length;
+      const page = datePath(locale, LOCAL_DATE_PAGES[iso]!);
+      const when = shortDate(iso, locale);
+      return locale === "ca"
+        ? `[${/^1?1 /.test(when) ? "l'" : "el "}${when}](${page}) (${n} ${n === 1 ? "lloc" : "llocs"})`
+        : locale === "es"
+          ? `[el ${when}](${page}) (${n} ${n === 1 ? "lugar" : "lugares"})`
+          : `[${when}](${page}) (${n} ${n === 1 ? "place" : "places"})`;
+    }),
+    locale,
+  );
+  const bcn2026 = municipalityBySlug("barcelona")?.local ?? [];
+  const bcnList = (days: string[], loc: Locale) => joinList(days.map((iso) => `${loc === "en" ? "" : "el "}${shortDate(iso, loc)}`), loc);
+
+  const items: Record<Locale, { question: string; answer: string }[]> = {
+    ca: [
+      { question: "Avui és festiu a Catalunya?", answer: "El requadre del principi ho respon cada dia amb el calendari oficial de la Generalitat: si avui és un dels dotze festius de tot Catalunya i a quins municipis és avui festa local. Si no n'hi surt cap, avui és feiner a tot Catalunya." },
+      { question: "Demà és festiu a Catalunya?", answer: "Ho diu la línia «Demà és festiu?» del requadre, i a sota hi ha els municipis on demà és festa local. Un dia només és festiu a tot Catalunya si és un dels dotze del calendari de la Generalitat (Ordre EMT/66/2025 per al 2026 i Ordre EMT/52/2026 per al 2027)." },
+      { question: "On és festiu avui a Catalunya?", answer: `On avui és festa local: cada municipi en fixa dues l'any (Ordre EMT/208/2025, modificada per l'Ordre EMT/3/2026), i el requadre en dona la llista del dia.${dates ? ` Els dies amb més festes locals que vénen són ${dates}.` : ""}` },
+      { question: "Avui és festiu a Barcelona?", answer: `Barcelona fa els dotze festius de tot Catalunya i dues festes locals: el ${YEAR_2026} van ser ${bcnList(bcn2026, "ca")}, i el 2027 són ${bcnList(BARCELONA_LOCAL.map((h) => h.date), "ca")}. Tot l'any, a [festius de Barcelona](/ca/festius/barcelona/).` },
+    ],
+    es: [
+      { question: "¿Hoy es festivo en Cataluña?", answer: "El recuadro del principio lo responde cada día con el calendario oficial de la Generalitat: si hoy es uno de los doce festivos de toda Cataluña y en qué municipios es hoy fiesta local. Si no aparece ninguno, hoy es laborable en toda Cataluña." },
+      { question: "¿Mañana es festivo en Cataluña?", answer: "Lo dice la línea «¿Mañana es festivo?» del recuadro, y debajo están los municipios donde mañana es fiesta local. Un día solo es festivo en toda Cataluña si es uno de los doce del calendario de la Generalitat (Orden EMT/66/2025 para 2026 y Orden EMT/52/2026 para 2027)." },
+      { question: "¿Dónde es festivo hoy en Cataluña?", answer: `Donde hoy es fiesta local: cada municipio fija dos al año (Orden EMT/208/2025, modificada por la Orden EMT/3/2026), y el recuadro da la lista del día.${dates ? ` Los días con más fiestas locales que vienen son ${dates}.` : ""}` },
+      { question: "¿Hoy es festivo en Barcelona?", answer: `Barcelona tiene los doce festivos de toda Cataluña y dos fiestas locales: en ${YEAR_2026} fueron ${bcnList(bcn2026, "es")}, y en 2027 son ${bcnList(BARCELONA_LOCAL.map((h) => h.date), "es")}. Todo el año, en [festivos de Barcelona](/es/festivos/barcelona/).` },
+    ],
+    en: [
+      { question: "Is today a public holiday in Catalonia?", answer: "The box at the top answers that every day from the Catalan government's official calendar: whether today is one of the twelve Catalonia-wide holidays and which towns have a local holiday today. If none is listed, today is a working day everywhere in Catalonia." },
+      { question: "Is tomorrow a holiday in Catalonia?", answer: "The \"Is tomorrow a holiday?\" line in the box says so, with the towns where tomorrow is a local holiday listed below it. A day is a holiday across Catalonia only if it is one of the twelve in the Catalan government's calendar (Order EMT/66/2025 for 2026, Order EMT/52/2026 for 2027)." },
+      { question: "Is today a holiday in Barcelona?", answer: `Barcelona keeps the twelve Catalonia-wide holidays plus two local ones: in ${YEAR_2026} they were ${bcnList(bcn2026, "en")}, and in 2027 they are ${bcnList(BARCELONA_LOCAL.map((h) => h.date), "en")}.` },
+      { question: "Where is it a holiday today in Catalonia?", answer: `Wherever today is a local holiday: each town sets two a year (Order EMT/208/2025, amended by Order EMT/3/2026), and the box lists today's.${dates ? ` The coming days with the most local holidays are ${dates}.` : ""}` },
+    ],
+  };
+  return {
+    type: "faq",
+    title: locale === "ca" ? "Preguntes freqüents" : locale === "es" ? "Preguntas frecuentes" : "Frequently asked questions",
+    items: items[locale],
+  };
+}
+
+const YEAR_2026 = "2026";
 
 export async function publishHolidayTodayGuide(): Promise<PublishResult> {
   const spec: ArticleSpec = {

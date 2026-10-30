@@ -372,3 +372,24 @@ test("no other edition's figures are printed as 2026's", () => {
     }
   }
 });
+
+test("top-3 push (30 Oct 2026): the bridge snippet lists December's holidays and the FAQ asks for the Purísima bridge; La Marató's title gives the date", () => {
+  const description: Record<"ca" | "es", RegExp> = {
+    ca: /^Festius de desembre 2026 a Catalunya: dimarts 8 \(la Immaculada\), 25 i 26\./,
+    es: /^Festivos de diciembre 2026 en Cataluña: martes 8 \(la Purísima\), 25 y 26\./,
+  };
+  const question: Record<"ca" | "es", string> = { ca: "Quan és el pont de la Puríssima del 2026?", es: "¿Cuándo es el puente de la Purísima de 2026?" };
+  for (const locale of ["ca", "es"] as const) {
+    const edition = DECEMBER_BRIDGE.editions[locale];
+    assert.match(edition.seoDescription, description[locale], locale);
+    assert.ok(edition.seoDescription.includes(String(LOCAL_MONDAY_7.municipalities)), `${locale}: the local Monday-7 holidays are not hidden`);
+    const faqBlock = edition.blocks.find((b) => b.type === "faq") as { items: { question: string }[] };
+    assert.ok(faqBlock.items.some((item) => item.question === question[locale]), locale);
+    assert.match(MARATO_GUIDE.editions[locale].seoTitle, /13 de (desembre|diciembre)/, locale);
+  }
+  // The days named in the snippet are what the holiday calendar says.
+  assert.equal(weekdayIndex("2026-12-08"), 2);
+  for (const iso of ["2026-12-08", "2026-12-25", "2026-12-26"]) assert.ok(holidayOn(iso), iso);
+  assert.equal(holidayOn("2026-12-07"), null);
+  assert.equal(MARATO.date, "2026-12-13");
+});

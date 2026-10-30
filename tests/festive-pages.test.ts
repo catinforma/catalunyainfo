@@ -4,9 +4,10 @@ import { test } from "node:test";
 import { bodySchema, bodyToPlainText, wordCount, type Block } from "../src/lib/content/blocks.ts";
 import { BARCELONA_HUB } from "../src/lib/content/batch02/barcelona-hub.ts";
 import { CHRISTMAS } from "../src/lib/content/batch02/christmas.ts";
-import { CHRISTMAS_BARCELONA, buildChristmasBarcelonaBody, lightsLead } from "../src/lib/content/batch02/christmas-barcelona.ts";
+import { CHRISTMAS_BARCELONA, buildChristmasBarcelonaBody, christmasBarcelonaDescription, lightsLead } from "../src/lib/content/batch02/christmas-barcelona.ts";
 import {
   ANNOUNCED_2026,
+  ANNOUNCEMENTS_CHECKED,
   DAYS,
   FESTIVE_VERIFIED,
   METRO_DAYS,
@@ -21,6 +22,7 @@ import {
 import { NEW_YEAR, buildNewYearBody, newYearLead } from "../src/lib/content/batch02/new-year.ts";
 import { B2_PATHS, withReadNext, type B2Article } from "../src/lib/content/batch02/shared.ts";
 import { ARTICLE_PATHS } from "../src/lib/content/features/shared.ts";
+import { christmasFairsPaths } from "../src/lib/programmatic/christmas-fairs/sitemap.ts";
 import { holidayOn, shortDate, weekdayIndex } from "../src/lib/content/holidays/calendar.ts";
 import { IMAGE_BY_KEY } from "../src/lib/content/images.ts";
 import { metroDay } from "../src/lib/content/metro/tonight.ts";
@@ -97,9 +99,11 @@ test("sources are https, untracked, and the reader sees the check date", () => {
 });
 
 test("internal links stay in their language, end in a slash and point at a published path", () => {
-  const published = new Set(
-    [...Object.values(B2_PATHS), ...Object.values(ARTICLE_PATHS)].flatMap((paths) => LOCALES.map((locale) => `/${locale}/${paths[locale]}/`)),
-  );
+  const published = new Set([
+    ...[...Object.values(B2_PATHS), ...Object.values(ARTICLE_PATHS)].flatMap((paths) => LOCALES.map((locale) => `/${locale}/${paths[locale]}/`)),
+    // Programmatic family pages, as their own module lists what it publishes.
+    ...christmasFairsPaths().map((p) => p.path),
+  ]);
   for (const article of ARTICLES) {
     for (const locale of LOCALES) {
       const json = JSON.stringify(article.editions[locale].blocks);
@@ -223,6 +227,27 @@ test("an announced date replaces the 'not announced' line, with the right weekda
   assert.equal(weekdayIndex("2026-11-26"), 4);
   assert.match(dayDate("2026-11-26", "en"), /^Thursday 26 November 2026$/);
   assert.match(dayDate("2026-11-26", "ca"), /^dijous 26 de novembre de 2026$/);
+});
+
+test("the Christmas snippet answers 'when are the lights switched on' and the leads carry the announcements check date (30 Oct 2026)", () => {
+  assert.equal(ANNOUNCEMENTS_CHECKED, "2026-10-30");
+  assert.ok(ANNOUNCEMENTS_CHECKED >= FESTIVE_VERIFIED);
+  const notYet: Record<Locale, RegExp> = {
+    ca: /^Encesa de llums de Nadal de Barcelona 2026: encara sense data oficial \(el 2025, dissabte 22 de novembre\)/,
+    es: /^Encendido de luces de Navidad de Barcelona 2026: aún sin fecha oficial \(en 2025, sábado 22 de noviembre\)/,
+    en: /^Barcelona Christmas lights 2026: switch-on date not announced yet \(2025: Saturday 22 November\)/,
+  };
+  const checked: Record<Locale, RegExp> = { ca: /comprovat el 30 d'octubre de 2026/, es: /comprobado el 30 de octubre de 2026/, en: /checked on 30 October 2026/ };
+  for (const locale of LOCALES) {
+    for (const description of [christmasBarcelonaDescription(locale, NONE), christmasBarcelonaDescription(locale, { ...NONE, lightsSwitchOn: GOOD })]) {
+      assert.ok(description.length > 60 && description.length <= 155, `${locale}: ${description.length} ${description}`);
+    }
+    assert.match(christmasBarcelonaDescription(locale, NONE), notYet[locale], locale);
+    assert.ok(christmasBarcelonaDescription(locale, { ...NONE, lightsSwitchOn: GOOD }).includes(dayDate(GOOD.date, locale)), locale);
+    assert.equal(CHRISTMAS_BARCELONA.editions[locale].seoDescription, christmasBarcelonaDescription(locale));
+    if (!ANNOUNCED_2026.lightsSwitchOn) assert.match(text(CHRISTMAS_BARCELONA.editions[locale].blocks.slice(0, 1)), checked[locale], locale);
+    if (!ANNOUNCED_2026.newYearShow) assert.match(text(NEW_YEAR.editions[locale].blocks.slice(0, 1)), checked[locale], locale);
+  }
 });
 
 /* -------------------------------------------------------------------------- */

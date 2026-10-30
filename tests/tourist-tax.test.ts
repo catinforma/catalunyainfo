@@ -11,6 +11,7 @@ import {
   periodFor,
 } from "../src/lib/content/tourist-tax/rates.ts";
 import { COPY } from "../src/lib/content/tourist-tax/copy.ts";
+import * as PUBLISH from "../src/lib/content/tourist-tax/publish.ts";
 import { EXAMPLES, buildBody, exampleResult } from "../src/lib/content/tourist-tax/publish.ts";
 import { LOCALES } from "../src/lib/i18n/config.ts";
 
@@ -222,5 +223,45 @@ test("Barcelona's future surcharges in the prose come from the rate table", () =
     assert.doesNotMatch(text, /\{s[0-3]\}|\{step\}/, `${locale}: unfilled placeholder`);
     // 6 EUR from 1 April 2027 (Ordenança fiscal 2.2), formatted per locale.
     assert.match(text, locale === "en" ? /€6\.00/ : /6,00\s?€/, `${locale}: 2027 surcharge missing`);
+  }
+});
+
+/* -------------------------------------------------------------------------- */
+/* Top-3 push, 30 Oct 2026                                                    */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * Re-read on the ATC tariff page on 30 Oct 2026: the seven municipal
+ * surcharges in force since 1 Oct 2026 are now priced on the page (the
+ * calculator's "rest of Catalonia" stays regional-only), the lead answers
+ * "cuánto es la tasa turística en Barcelona" with the range in its first
+ * sentence, and the search title carries that range, computed from the rates.
+ */
+test("the search title states Barcelona's range per night, computed from the rate table", () => {
+  const { seoFor } = PUBLISH;
+  assert.equal(seoFor("es").seoTitle, "Tasa turística Barcelona 2026: 6 a 12 € por persona y noche");
+  assert.equal(seoFor("ca").seoTitle, "Taxa turística Barcelona 2026: de 6 a 12 € per persona i nit");
+  for (const locale of LOCALES) {
+    const { seoTitle, seoDescription } = seoFor(locale);
+    assert.ok(seoTitle.length <= 60, `${locale}: ${seoTitle.length}`);
+    assert.ok(seoDescription.length <= 155, `${locale}: ${seoDescription.length}`);
+    assert.doesNotMatch(`${seoTitle} ${seoDescription}`, /\{\w+\}/, `${locale}: unfilled placeholder`);
+  }
+});
+
+test("the lead gives the Barcelona range first; the municipal surcharges and an FAQ are on the page", () => {
+  const lead = { ca: /de 6,00\s?€ a 12,00\s?€ per persona i nit/, es: /de 6,00\s?€ a 12,00\s?€ por persona y noche/, en: /€6\.00 to €12\.00 per person per night/ };
+  for (const locale of LOCALES) {
+    const body = buildBody(locale);
+    const first = body.find((b) => b.type === "paragraph") as { text: string };
+    assert.match(first.text, lead[locale], `${locale}: answer in the first line`);
+    const text = bodyToPlainText(body);
+    assert.doesNotMatch(text, /\{\w+\}/, `${locale}: unfilled placeholder`);
+    const muni = body.find((b) => b.type === "table" && JSON.stringify(b).includes("Sant Just Desvern")) as { rows: string[][] } | undefined;
+    assert.equal(muni?.rows.length, 7, `${locale}: seven municipalities`);
+    const hospitalet = muni?.rows.find((r) => r[0] === "L'Hospitalet de Llobregat");
+    assert.match(hospitalet?.[2] ?? "", /1[.,]80/, `${locale}: L'Hospitalet four-star surcharge`);
+    assert.ok(body.some((b) => b.type === "faq"), `${locale}: FAQ`);
+    assert.match(text, /3[.,]60/, `${locale}: L'Hospitalet four-star total`);
   }
 });

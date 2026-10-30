@@ -884,6 +884,173 @@ the hub.
 
 **Outcome:** _pending_
 
+---
+
+## 2026-10-30 — Top-3 push, evergreen utilities (calendars, "is it a holiday", town template, Barcelona practical)
+
+Owner decision of 28 Oct ("every page in the top 3"): windows and frozen
+titles lifted for these pages; several were edited on 28 Oct and are edited
+again here (Google had not recrawled most of them: ES school calendar last
+crawled 9 Oct, ES "festivo hoy" 28 Oct 02:22 before that day's deploy, metro
+EN/ES 13 Oct, parking/tax/shops ES 24-26 Oct). Positions are Search Console,
+28 days to 29 Oct (`research_notes/x10/top3-inventory-30oct.json` plus GSC
+page × query pulls). Every new fact was read on the official source on
+30 Oct 2026 and `verifiedAt` moved to that day. Several things change per
+page (title, description, lead, H2s, FAQ, links), so read per page.
+
+**What is new in this round: live snippets.** Three pages now compute their
+`<title>` and meta description at render time (`src/lib/content/live-title.ts`,
+`liveEntryDescription`), rebuilt nightly by the cron because their blocks are
+day-dependent:
+
+- school calendar: the title names the next break (Christmas until 7 Jan,
+  then Easter, then the last day, then the next start), the description the
+  next weekday off for every school (8 Dec) and the breaks;
+- "is today a holiday": the title names the next Catalonia-wide holiday
+  counting today ("Próximo festivo: 8 de diciembre"), so a snippet crawled
+  before a holiday is still right on the day; it never says "today is not a
+  holiday".
+
+| Page (publish group) | Old title → new title | Target queries, position now | What changed |
+| --- | --- | --- | --- |
+| `/ca/guies/calendari-escolar-catalunya/` (`school-calendar`) | "Calendari escolar 2026-2027 Catalunya: vacances i festius" → live "Calendari escolar 2026-27 Catalunya: Nadal del 22/12 al 7/1"; description live "Pròxim festiu escolar: dimarts 8 de desembre. Nadal: del 22 de desembre al 7 de gener…" | page 4.7-4.8 with ~430 impressions/day and ~1 % CTR (7 d: 2,195 / 18); vacances de nadal 5.0, vacances de nadal 2026 8, vacances nadal escoles 2026 9, dema hi ha escola a catalunya 5.4, dies de lliure disposició 5.5, inici de curs 4.6, quantes setmanes té un curs escolar 5.5, setmana santa 2027 catalunya escolar 7.4, setmana santa 2028 catalunya 6.5, calendari escolar 2027-2028 8.4, ordre edf/66/2026 7.8, festius escolars catalunya 2026 9 | Block: today and tomorrow (weekend / holiday / break / school day) and the next weekday off for everyone. H2s "Ordre EDF/66/2026: com es fixa…", "Dies de lliure disposició i festius locals", "Calendari escolar 2027-2028 i 2028-2029". 7 Dec bridge paragraph + FAQ; school-day count (183 in the general calendar, 177 per school), weeks, Easter 2028, last day before Christmas. Order re-read: consecutive free days need consell escolar + serveis territorials; gradual P3-P5 start; shared bus routes choose the same days |
+| `/es/guias/calendario-escolar-cataluna/` (`school-calendar`) | "Calendario escolar Cataluña 2026-2027: vacaciones y festivos" → live "Calendario escolar 2026-27 Cataluña: Navidad 22/12-7/1" | page 27 (7 d): its impressions are Spain-wide head terms (calendario escolar 24, año escolar 54.6, lectivo 38.5, "cuándo empiezan las clases" 40-90); Catalonia ones: calendario escolar cataluña 28.2, hoy hay cole en cataluña 6.3, hoy hay instituto 7.7, calendario escolar 2027-2028 9.2, calendario escolar 2025-26 7.2 | Why it lags: last crawled 9 Oct and its only referring URL is the CA edition. Now linked from all 300 ES town pages (anchor "Calendario escolar 2026-2027") and the snippet names the answer. Request indexing first |
+| `/en/guides/catalonia-school-calendar/` (`school-calendar`) | "Catalonia school calendar 2026-2027: holidays and term dates" → live "Catalonia school calendar 2026-27: Christmas 22 Dec–7 Jan" | page 4.3 (312 impressions), barcelona school holidays 2027 6.5 | same module |
+| `/es/guias/calendario-laboral-cataluna/` (`holidays`) | title kept ("Calendario laboral 2027 Cataluña: 12 festivos y puentes"); description → "Los 12 festivos 2027 en Cataluña: 1 y 6 de enero, 26 y 29 de marzo, … 6, 8 y 25 dic. Y los puentes." | page 10.0 (1,655 / 14 clicks); calendario laboral cataluña 2027 1.0, calendario laboral 2027 catalunya 9.5, festivos catalunya 2027 9.3, festivos 2027 catalunya 10.1, calendari laboral 2027 catalunya 8.6 (CA query on the ES page); "30 de octubre es festivo" 6-8 (expired) | Working days 2027 (252; 250 with two local days) as key fact + FAQ; the past 30 Oct FAQ → "¿El lunes 2 de noviembre es festivo?" linked to the 1 Nov date page |
+| `/ca/guies/calendari-laboral-catalunya/` (`holidays`) | title kept ("Calendari laboral 2027 Catalunya: festius, ponts i Pasqua"); description lists all twelve dates | page 9.5; calendari laboral 2027 catalunya 9.6, divendres sant 2027 10, ponts 2027 9.6, pasqua florida 2027 9.2, dilluns de pasqua 2027 5.1, festius catalunya 2027 15.6, festes locals catalunya 2027 5 | same; town pages now link it as "Calendari laboral 2027 de Catalunya" |
+| `/es/guias/es-festivo-hoy-cataluna/` (`holiday-today`) | "¿Hoy es festivo en Cataluña? Hoy, mañana y en tu municipio" → live "¿Hoy es festivo en Cataluña? Próximo festivo: 8 de diciembre" (CA "Avui és festiu a Catalunya? Pròxim festiu: 8 de desembre", EN "Is today a holiday in Barcelona and Catalonia? Next: 8 Dec") | page 21.8 (dragged by "festividades" 85.5 and "mañana es festivo" 54.1); hoy es festivo en cataluña 9.1 (14 d 7.1), es festivo hoy en cataluña 11.2, festivos hoy 10.1 (14 d 2.6), festivo hoy cataluña 10.1, hoy es fiesta en cataluña 12.5, donde es festivo hoy en cataluña 5.3, hoy es festivo 17.1 | FAQ in the query words (hoy, mañana, dónde es festivo hoy, Barcelona) linking the 11 Nov, 30 Nov and 7 Dec date pages with their counts |
+| Town template `/es/festivos/<town>/`, `/ca/festius/<town>/` (static, ships with the deploy) | "Festivos locales Girona 2026 y 2027: qué días son festivo" → "Festivos locales Girona 2026 y 2027: ¿hoy es festivo?"; CA "…: quins dies són festa" → "…: avui és festiu?" | Girona page 7.4 (hoy es festivo en girona 9.6, hoy es fiesta en girona 9.1, mañana es festivo en girona 9); Barcelona 10.0 (el lunes 2 de noviembre es festivo en barcelona 8.2, el lunes es festivo en barcelona 9.5); Tarragona 8.2 (festivos tarragona 2027 5.8, calendario laboral tarragona 2027 9.8, festivos locales tarragona 2027 7.3); calendario laboral reus 2027 4.9, badalona 2027 8.8, mataro 2027 6.1, festivos granollers 2027 7.4 | Description: both local dates first, then "Calendario laboral 2027, si hoy o mañana es festivo". New FAQ + FAQPage JSON-LD: hoy, mañana, calendario laboral 2027 (Aran-aware; local 2027 pending), and the next two asked working days with a date page (2 Nov, 11 Nov…) answered yes / some nuclei / no from the DOGC snapshot. Links: school calendar in "En la escuela", shop-opening guide in the shops section, year in the guide anchors |
+| `/en/guides/barcelona-weather-by-month/` (`climate`) | "Barcelona weather by month: temperatures, rain, sunshine" → "Barcelona weather and temperature by month (°C and °F)" | page 6.4 (1,461 / 2 clicks); temperature by month 8.6, weather january 7.6, weather by month 9.2, weather august 3, coldest month in barcelona 4.5, by month celsius 10.5, winter temperature 9.1 | Coldest/warmest/wettest month with °C/°F in the description and lead; °F throughout; humidity column (AEMET 0076, 67-73 %) |
+| `/en/guides/barcelona-metro-hours/` (`hours`) | "Barcelona metro hours: 5:00 to midnight, Fridays until 2:00" → "Barcelona metro hours: closes 12am, 2am Fri, all night Sat" | page 6.4; today metro closing time 10.8, last metro in barcelona 7.5, does the barcelona metro run all night 4.4, is barcelona metro 24 hours 8.3, how late does barcelona metro run 7.4, nitbus barcelona 8.2 | Last-metro answer first; "What time is the last metro" / "Does it run 24 hours" H2s; seven outer stations 5:00-24:00 every day (TMB); NitBus frequency corrected |
+| `/es/guias/horarios-metro-barcelona/` (`hours`) | title kept ("Horario metro Barcelona hoy: a qué hora abre y cierra") | page 10.5; horario metro 9.9, a que hora cierra el metro 12.8, horario metro viernes 11.6, horario metro domingo 15.4, hay metro toda la noche hoy 8.5, hasta que hora funciona el metro 9.7 | "Último metro" H2, station row, FAQ |
+| `/en/guides/barcelona-transport-passes/` (`transport`) | "Barcelona transport pass for 1 to 5 days: 2026 prices" → "Barcelona transport pass 2026: T-casual €13, 1 to 5 days" | page 7.5; barcelona transport pass 17.9, t casual barcelona 10.5, t-dia barcelona 7, hola barcelona travel card price 9.2 | Zone table, T-familiar/T-grup, Hola vs T-casual computed, FAQ (TMB fares re-read) |
+| `/es/guias/tarjetas-transporte-barcelona/` (`transport`) | "T-casual 2026: precio por zonas y tarjetas metro Barcelona" → "Precio T-casual Barcelona 2026: 13 € (1 zona) y 25,50 € (2)" | page 8.3 (683 / 0 clicks); t casual 19.6, tarjeta de metro barcelona precios 2026 12.8, precio t casual 16.8, precio t casual 2026 10, t casual 2 zonas precio 2026 9.7 | Price in title and description |
+| `/en/guides/barcelona-zoo-aquarium-tickets/` (`family-markets`) | "Barcelona Zoo tickets and prices 2026: €23, Aquarium €30" → "Barcelona Zoo & Aquarium tickets 2026: Zoo €23, Aquarium €30" | page 7.9; zoo tickets 9.7, zoo prices 8.6, aquarium tickets price 9.5, aquarium and zoo tickets 10.6, aquarium family ticket 9 | Answer-first lead (no stale Aquarium hours), family pack, companion rule |
+| `/es/guias/aparcar-barcelona-zona-azul-verde/` (`parking`) | "Zona verde y azul Barcelona: cómo funciona, precio y horario" → "Zona azul y verde Barcelona: cómo funciona, horario y precio" | page 8.5 (1,615 / 2 clicks); como funciona la zona verde en barcelona 21.9, horario zona azul barcelona 16.8, precio zona azul barcelona 9.2, zona azul barcelona precio hora 10.8, zona verde trinitat vella 9, parquimetro en barcelona 17.2 | Day-by-day "when you pay" table, maximum stay per rate, zone 36 Trinitat Vella (from 9 Nov), AREA map, card-only meters; linked from Christmas in Barcelona |
+| `/ca/guies/aparcar-barcelona-zona-blava-verda/` (`parking`) | "Zona blava i verda Barcelona: preu, horari i com funciona" → "Preu zona blava i verda Barcelona: 1,15-4,25 €/h i horari" | page 5.3; preu zona blava barcelona 4.9, preu zona verda barcelona 5.8, preu zona verda barcelona no residents 7.6, zona blava barcelona diumenge 6 | same module |
+| `/es/guias/tasa-turistica-barcelona-cataluna/` (`tourist-tax`; CA title too) | "Tasa turística Barcelona y Cataluña: tarifas y calculadora" → "Tasa turística Barcelona 2026: 6 a 12 € por persona y noche" (CA "Taxa turística Barcelona 2026: de 6 a 12 € per persona i nit") | page 7.3 (1,263 / 6); tasa turistica barcelona 12.5, cuanto es la tasa turistica en barcelona 9.6, cuanto cuesta la tasa turistica en barcelona 8.6, tasa turistica catalunya 9.5, taxa turistica barcelona 10.3 (on ES), impuesto turistico barcelona 17 | Range in the first line; seven municipal surcharges since 1 Oct 2026 (ATC); gaming-area hotel rate; FAQ |
+| `/es/guias/tiendas-abiertas-festivos-cataluna/` (`shops`; CA body) | "Tiendas abiertas en domingos y festivos en Cataluña 2026-27" → "Domingos y festivos de apertura 2026 en Cataluña y Barcelona" | ES 5.6, CA 5.9; domingos y festivos de apertura 2026 3.3, festivos y domingos de apertura 2026 4.0, domingos de apertura 2026 4.3, festivos apertura cataluña 2026 7.2, festivos que abren los centros comerciales 2026 8.2, horarios comerciales cataluña 7.3; CA festius obertura comercial 2026 8 | Days left in 2026 first; table of the 30 towns whose Nov-Dec days differ; malls section; 300 m² exemptions restored (Llei 3/2023 art. 83 re-added art. 37.1.j-k after STC 117/2022; BOE consolidated text checked 30 Oct) |
+
+**Not done on purpose.** A live "tonight" title for metro hours: a stale
+snippet would say the wrong closing time on another day; the static title
+now carries the full rule (midnight, Friday 2:00, Saturday all night).
+Head terms left alone: "calendario escolar", "calendario laboral",
+"festividades", "zona azul barcelona", "tasa turistica barcelona" at 12-85.
+
+**Prediction.** CA school calendar CTR from ~1 % to 3 %+ at the same
+position (the snippet now names Christmas and the next day off); ES school
+calendar into the top 10 for its Catalonia queries once recrawled with 300
+new internal links; "hoy es festivo en cataluña" into the top 5; town pages
+take clicks on "festivos <town> 2027" / "calendario laboral <town> 2027" in
+December when the 2027 local order appears; price-in-title pages (passes ES,
+tourist tax, zoo, weather) gain CTR at positions 7-10.
+
+**Measure on 30 Nov 2026** (28 days): per page, position and clicks for the
+queries above, with `scripts/rank-inventory.py`; check the last-crawl date
+first. Demand peaks to read separately: 7 Dec bridge, 22 Dec school break,
+the DOGC local-holiday order for 2027 (mid-December).
+
+## 2026-10-30 — Top-3 push, news cycle: strikes, elections, Christmas (owner lifted the freezes)
+
+Why: the owner's 28 Oct decision ("every page in the top 3"). These pages peak
+in the next four weeks (11N, 29N, the lights switch-on, Santa Llúcia, the
+December bridge). Positions below are the 7-day GSC positions in
+`research_notes/x10/top3-inventory-30oct.json`. Every new fact was read on
+30 Oct 2026 on the organiser's or the official page; nothing press-only.
+
+**Strikes hub** (`strikes`, republished by `strike-11n`). 7,029 impr. ES at 5.9.
+- Titles: ca "Vaga avui a Catalunya: què funciona i serveis mínims" → "Vaga
+  avui i demà a Catalunya: què funciona i serveis mínims"; es "Huelga hoy en
+  Cataluña: qué funciona y servicios mínimos" → "Huelga hoy y mañana en
+  Cataluña: qué funciona y calendario"; en "Strike in Barcelona and Catalonia
+  today: what runs" → "Barcelona strike today: trains, metro and what runs".
+  Descriptions now name the strike in progress first ("Huelgas: médicos desde
+  el 28 de octubre, Renfe el 10 y el 12 de noviembre, huelga general el 11…").
+- Body: lead answers "is there a strike today" (strikes under way on the as-of
+  day), then "coming up", then whether metro, bus and FGC are touched; new
+  "what runs" table, one row per service. New entries: Metges de Catalunya's
+  indefinite doctors' strike since 28 Oct (Treball order of 22 Oct, e-Tauler
+  654506) and SEMAF's Renfe drivers' strike on 10 (full) and 12 Nov (partial),
+  SEMAF notice 2026-51. 29 Oct now cites the order itself (e-Tauler 654526).
+  Left out: Ouigo 6/9 Nov and 4/8 Dec (no readable official source).
+- Target queries and positions now: huelga hoy 8.4, hoy hay huelga 5.8,
+  mañana hay huelga 7.8, huelga mañana 9.1, vaga hoy 6.4, hay vaga mañana en
+  cataluña 2.6, huelga cataluña 6.6, train strike barcelona 8.8, strike
+  barcelona today 2.5, vaga avui 6.0, vaga renfe catalunya 9.5. Dated queries
+  (vaga 29 octubre 8.9) are left to fade.
+
+**11N page** (`strike-11n`): as of 30 Oct; SEMAF's 10 and 12 Nov strikes in
+the lead, key facts, Rodalies/long-distance sections and FAQ; the doctors'
+strike in the health section. Titles unchanged. Targets: huelga general 11
+noviembre barcelona (6.7 on the hub), serveis mínims vaga 11 novembre (2.2 on
+the hub).
+
+**How to vote** (`voting`). ES 3,291 impr. at 5.5, EN 1,936 at 5.4 (1.4% CTR).
+- Titles: ca "Properes eleccions a Catalunya: 29N, on i com votar" → "Properes
+  eleccions a Catalunya: quan són i on votar el 29N"; es "Próximas elecciones
+  en Cataluña: 29N, dónde y cómo votar" → "Próximas elecciones en Cataluña:
+  cuándo son y dónde votar"; en "How to vote in Spain's 2026 general election
+  (29 November)" → "Spain general election 2026: how to vote, register,
+  dates". Descriptions state the date, hours and "sin DNI ni Cl@ve".
+- Body: INE finder linked in the lead with what it asks for; FAQs "dónde voto
+  con el DNI" (ca/es/en), EN key dates and polls' hours.
+- Targets: próximas elecciones en cataluña 2026 4.0, cuando son las elecciones
+  en cataluña 6.4, cuándo son las próximas elecciones en cataluña 6.3, donde
+  tengo que ir a votar 2026 6.4, donde voto el 29 de noviembre 8.3, donde voto
+  dni 2026 7.8, quan son les proximes eleccions a catalunya 10.2, 2026 spain
+  general election how to register to vote 6.2, 2026 spain general election
+  dates 8.2.
+
+**Candidates** (`candidates`). ES 2,419 impr. at 4.8 (18% CTR: ES and EN titles
+kept). ca "Candidats eleccions generals 2026 a Barcelona i Catalunya" →
+"Candidats i llistes electorals 2026 a Barcelona i Catalunya". Lead links the
+BOE of 28 Oct (BOE-A-2026-22607, filed lists); first FAQ "qui es presenta /
+cuáles son los candidatos". Targets: llistes electorals 2026 5.7,
+candidatures eleccions generals 2026 5.8, qui es presenta a les eleccions
+generals 4.3, cuales son los candidatos para las elecciones 2026 7.2.
+
+**Christmas in Barcelona** (`christmas-bcn`; `nye` too, its "not announced"
+line now carries 30 Oct). ES 2,189 impr., 38 clicks at 5.9.
+- Titles: ca "Nadal a Barcelona 2026: encesa de llums i què obre" → "Encesa
+  de llums de Nadal Barcelona 2026: quan és i què obre"; es "Navidad en
+  Barcelona 2026: encendido de luces y qué abre" → "Luces de Navidad Barcelona
+  2026: cuándo es el encendido"; en "Christmas in Barcelona 2026: lights and
+  what's open" → "Barcelona Christmas lights 2026: switch-on date, what's
+  open". Description built from ANNOUNCED_2026 ("aún sin fecha oficial (en
+  2025, sábado 22 de noviembre)" until the date is out).
+- Nothing announced on 30 Oct (press room, barcelona.cat/nadal); the leads now
+  say "comprobado el 30 de octubre".
+- Targets: encendido luces navidad barcelona 2026 6.2, cuando encienden las
+  luces de navidad en barcelona 2026 5.5, encesa llums nadal barcelona 2026
+  6.3 (ES page) / 8.0 (CA page), encesa de llums barcelona 2026 6.3, luces
+  navidad barcelona 2026 9.6.
+
+**Christmas markets** (`christmas`): ca "Mercats de Nadal Catalunya 2026:
+Santa Llúcia i dates" → "Fires i mercats de Nadal Catalunya 2026: dates i
+llocs"; es "Mercados de Navidad Cataluña 2026: Santa Llúcia y fechas" →
+"Mercados navideños Cataluña 2026: fechas y Santa Llúcia". Santa Llúcia line
+dated 30 Oct (organiser still shows 2025). Targets: fires de nadal catalunya
+2026 6.4, mercados navideños cataluña 2026 6.2, fires nadal catalunya 2026 7.8
+(ES page, a CA query: the CA title now carries "fires").
+
+**La Marató** (`marato`): CA 657 impr., 4 clicks at 6.1. ca "La Marató de TV3
+2026: quan és, causa i com fer un donatiu" → "La Marató de TV3 2026: 13 de
+desembre, causa i donatius"; es "La Marató de TV3 2026: cuándo es, causa y
+cómo donar" → "La Marató de TV3 2026: 13 de diciembre, causa y cómo donar".
+Targets: marató tv3 2026 7.8, marato tv3 2026 7.7, marató tv3 2026 data 4.4.
+
+**December bridge** (`pont-desembre`): titles kept ("only the 8th" would be
+wrong in the 43 towns where Monday 7 is a local holiday); ca/es descriptions
+list 8, 25 and 26 December, Purísima named; FAQ "¿Cuándo es el puente de la
+Purísima de 2026?". Targets: puente de la purisima 2026 5.2, festivos
+diciembre 2026 5.3, cuando es el puente de diciembre 7.3, pont de desembre
+2026 5.7.
+
+**Measure** on 30 Nov 2026 (position, CTR and clicks per target query and
+language; for the strikes pages also the week of 9-13 Nov).
+
+**Outcome:** _pending_
+
 ## Candidates not yet run
 
 Recorded so they are not lost, and so they are not all started at once.

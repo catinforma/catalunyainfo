@@ -1,0 +1,61 @@
+/**
+ * Dataset markup for the holiday pages (Google Dataset Search).
+ *
+ * The figures are the Generalitat's: the local-holiday order in the DOGC and
+ * its open-data twin on the transparency portal (b4eh-r8up, signed
+ * "Departament d'Empresa i Treball", licence: the Generalitat's open-data
+ * licence). Name and description are the page's own H1 and meta description,
+ * so the markup says nothing the page does not.
+ */
+
+import { GENCAT_OPEN_DATA_LICENCE, datasetSchema } from "@/lib/seo/jsonld";
+
+import { displayName, hubCopy, municipalityDescription, municipalityH1 } from "./copy";
+import { NEXT, SNAPSHOT, YEAR, nextYearFor } from "./data";
+import { hubPath, municipalityPath, type MuniLocale } from "./paths";
+import type { SnapshotMunicipality } from "./types";
+
+export const HOLIDAY_DATA_CREATOR = "Generalitat de Catalunya. Departament d'Empresa i Treball";
+
+const CATALONIA: Record<MuniLocale, string> = { ca: "Catalunya", es: "Cataluña" };
+
+function basedOn(): string[] {
+  return [SNAPSHOT.sources.localOpenData.url, SNAPSHOT.sources.localOrder.url];
+}
+
+/** The calendar years the page lists: this year, and next year once its order is out. */
+function coverage(slug: string | null): string {
+  const next = slug ? nextYearFor(slug) : null;
+  return next ? `${YEAR}/${NEXT}` : String(YEAR);
+}
+
+export function municipalityDataset(m: SnapshotMunicipality, locale: MuniLocale) {
+  return datasetSchema({
+    path: municipalityPath(locale, m.slug),
+    name: municipalityH1(m, locale),
+    description: municipalityDescription(m, locale),
+    locale,
+    creator: HOLIDAY_DATA_CREATOR,
+    license: GENCAT_OPEN_DATA_LICENCE,
+    isBasedOn: basedOn(),
+    spatialCoverage: `${displayName(m, locale)}, ${CATALONIA[locale]}`,
+    temporalCoverage: coverage(m.slug),
+    dateModified: SNAPSHOT.readOn,
+  });
+}
+
+export function holidayHubDataset(locale: MuniLocale) {
+  const t = hubCopy(locale);
+  return datasetSchema({
+    path: hubPath(locale),
+    name: t.h1,
+    description: t.description,
+    locale,
+    creator: HOLIDAY_DATA_CREATOR,
+    license: GENCAT_OPEN_DATA_LICENCE,
+    isBasedOn: basedOn(),
+    spatialCoverage: CATALONIA[locale],
+    temporalCoverage: String(YEAR),
+    dateModified: SNAPSHOT.readOn,
+  });
+}

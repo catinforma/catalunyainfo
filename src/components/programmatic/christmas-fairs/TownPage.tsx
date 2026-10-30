@@ -46,14 +46,18 @@ export function TownPage({ town, locale }: { town: Town; locale: FairsLocale }) 
   const trains = trainLines(town.name, linesFor(town), locale);
   const holiday = holidayTown(town.ine);
   const fairDays = (d: string) => town.fairs.some((f) => d >= f.start && d <= f.end);
+  const regional = regionalHolidaysIn(town.fairs, locale);
+  const local = (holiday?.local ?? []).filter(fairDays);
+  // The "is it a holiday?" pages for the fair days that are holidays here.
+  const holidayDays = new Set([...regional.map((h) => h.date), ...local]);
   const holidays = holidaySentences(
     town.name,
     {
-      regional: regionalHolidaysIn(town.fairs, locale),
-      local: (holiday?.local ?? []).filter(fairDays),
+      regional,
+      local,
       shops: holiday?.shops ?? [],
       holidaySlug: holiday?.slug ?? null,
-      datePages: [...new Set(town.fairs.flatMap((f) => holidayDatesIn(f.start, f.end)))].sort(),
+      datePages: [...new Set(town.fairs.flatMap((f) => holidayDatesIn(f.start, f.end)))].filter((d) => holidayDays.has(d)).sort(),
     },
     locale,
   );

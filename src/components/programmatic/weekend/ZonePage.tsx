@@ -11,9 +11,7 @@ import { HUB_CRUMB, fullDate, liveLabels, longWeekendNote, rangeLong, sectionTit
 import {
   SNAPSHOT,
   comarquesIn,
-  fairsAfter,
-  fairsIn,
-  fairsInWindow,
+  listedFairs,
   municipalitiesIn,
   municipality,
   shippedZones,
@@ -50,9 +48,7 @@ export function ZonePage({ zone, locale, window }: { zone: ZoneDef; locale: Week
   const wider = widerZone(zone);
   const widerText = wider ? widerPhrase(wider, locale) : null;
 
-  const zoneFairs = fairsIn(zone);
-  const fairsNow = fairsInWindow(zoneFairs, window);
-  const fairsNext = fairsAfter(zoneFairs, window, 8);
+  const { now: fairsNow, next: fairsNext } = listedFairs(zone, window);
   const longNote = longWeekendNote(window, locale);
   const brandNames = (zone.brands ?? []).map((b) => BRAND_NAMES[locale][b] ?? b).join(locale === "es" ? " y " : " i ");
 

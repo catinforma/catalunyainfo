@@ -6,6 +6,7 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { hubMeta, townDescription, townTitle } from "@/lib/programmatic/christmas-fairs/copy";
 import { familyLastChecked, type Town } from "@/lib/programmatic/christmas-fairs/data";
 import { fairsHubPath, hubTranslations, townPath, townTranslations, type FairsLocale } from "@/lib/programmatic/christmas-fairs/paths";
+import { christmasFairEvents } from "@/lib/programmatic/christmas-fairs/structured";
 import { breadcrumbSchema, graph } from "@/lib/seo/jsonld";
 import { buildMetadata } from "@/lib/seo/metadata";
 
@@ -57,7 +58,7 @@ export function TownRoute({ locale, town }: { locale: FairsLocale; town: Town })
       <main id="main">
         <TownPage town={town} locale={locale} />
       </main>
-      <JsonLd json={graph([breadcrumbSchema(townCrumbs(town, locale))])} />
+      <JsonLd json={graph([breadcrumbSchema(townCrumbs(town, locale)), ...christmasFairEvents(town.fairs, townPath(locale, town.slug), locale)])} />
       <SiteFooter locale={locale} />
     </>
   );

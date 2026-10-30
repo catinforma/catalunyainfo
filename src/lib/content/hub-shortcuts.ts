@@ -6,6 +6,7 @@ import { fuelHubTranslations } from "@/lib/programmatic/fuel/paths";
 import { hubTranslations as holidayHubs } from "@/lib/programmatic/holidays/paths";
 import { reservoirHubTranslations } from "@/lib/programmatic/reservoirs/paths";
 import { hubTranslations as rodaliesHubs } from "@/lib/programmatic/rodalies/paths";
+import { TODAY_NAME, todayTranslations } from "@/lib/programmatic/today/paths";
 import { hubTranslations as weekendHubs } from "@/lib/programmatic/weekend/paths";
 
 /**
@@ -32,6 +33,10 @@ const page = (paths: Record<Locale, string>): Record<Locale, string> => ({
   en: `/en/${paths.en}/`,
 });
 
+const TODAY: Shortcut = {
+  label: TODAY_NAME,
+  href: todayTranslations(),
+};
 const HOLIDAY_TODAY: Shortcut = {
   label: { ca: "És festiu avui?", es: "¿Hoy es festivo?", en: "Is today a holiday?" },
   href: page(PATHS.holiday),
@@ -82,9 +87,9 @@ const SNOW: Shortcut = {
 };
 
 const BY_SECTION: Record<HubSection, Shortcut[]> = {
-  guides: [HOLIDAY_TODAY, HOLIDAYS_BY_TOWN, STRIKES, RODALIES, METRO, FUEL, RESERVOIRS, ELECTIONS],
-  events: [WEEKEND, WEEKEND_BY_ZONE, HOLIDAY_TODAY, STRIKES, MUSHROOMS, SNOW],
-  destinations: [WEEKEND_BY_ZONE, RODALIES, SNOW, RESERVOIRS, FUEL, MUSHROOMS],
+  guides: [TODAY, HOLIDAY_TODAY, HOLIDAYS_BY_TOWN, STRIKES, RODALIES, METRO, FUEL, RESERVOIRS, ELECTIONS],
+  events: [TODAY, WEEKEND, WEEKEND_BY_ZONE, HOLIDAY_TODAY, STRIKES, MUSHROOMS, SNOW],
+  destinations: [TODAY, WEEKEND_BY_ZONE, RODALIES, SNOW, RESERVOIRS, FUEL, MUSHROOMS],
 };
 
 export const SHORTCUTS_HEADING: Record<Locale, string> = {

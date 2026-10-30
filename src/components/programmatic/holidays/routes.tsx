@@ -3,8 +3,9 @@ import type { Metadata } from "next";
 import { JsonLd } from "@/components/JsonLd";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
-import { dateQuestion, hubCopy, municipalityDescription, municipalityTitle } from "@/lib/programmatic/holidays/copy";
-import { municipalityBySlug } from "@/lib/programmatic/holidays/data";
+import { todayInCatalonia } from "@/lib/content/holidays/calendar";
+import { dateQuestion, hubCopy, municipalityDescription, municipalityFaq, municipalityTitle } from "@/lib/programmatic/holidays/copy";
+import { municipalityBySlug, nextYearFor } from "@/lib/programmatic/holidays/data";
 import { dateContent } from "@/lib/programmatic/holidays/dates";
 import type { DateLocale } from "@/lib/programmatic/holidays/format";
 import {
@@ -17,7 +18,8 @@ import {
   type DatePage,
   type MuniLocale,
 } from "@/lib/programmatic/holidays/paths";
-import { breadcrumbSchema, graph } from "@/lib/seo/jsonld";
+import { holidayHubDataset, municipalityDataset } from "@/lib/programmatic/holidays/structured";
+import { breadcrumbSchema, faqSchema, graph } from "@/lib/seo/jsonld";
 import { buildMetadata } from "@/lib/seo/metadata";
 
 import { DatePageView, dateCrumbs } from "./DatePage";
@@ -44,7 +46,7 @@ export function HubRoute({ locale }: { locale: MuniLocale }) {
       <main id="main">
         <HubPage locale={locale} />
       </main>
-      <JsonLd json={graph([breadcrumbSchema(hubCrumbs(locale))])} />
+      <JsonLd json={graph([breadcrumbSchema(hubCrumbs(locale)), holidayHubDataset(locale)])} />
       <SiteFooter locale={locale} />
     </>
   );
@@ -74,7 +76,19 @@ export function MunicipalityRoute({ locale, slug }: { locale: MuniLocale; slug: 
       <main id="main">
         <MunicipalityPage m={m} locale={locale} />
       </main>
-      <JsonLd json={graph([breadcrumbSchema(municipalityCrumbs(m, locale))])} />
+      <JsonLd
+        json={graph([
+          breadcrumbSchema(municipalityCrumbs(m, locale)),
+          municipalityDataset(m, locale),
+          // The same questions the page prints (copy.ts municipalityFaq), as FAQPage.
+          faqSchema([
+            {
+              type: "faq",
+              items: municipalityFaq(m, locale, nextYearFor(m.slug), todayInCatalonia()).map(({ question, answer }) => ({ question, answer })),
+            },
+          ]),
+        ])}
+      />
       <SiteFooter locale={locale} />
     </>
   );

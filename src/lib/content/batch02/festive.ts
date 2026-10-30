@@ -25,6 +25,18 @@ import type { Locale } from "@/lib/i18n/config";
 
 export const FESTIVE_VERIFIED = "2026-10-25";
 
+/**
+ * The day the City Council's press room (ajuntament.barcelona.cat/premsa,
+ * latest items and the "nadal-2026" tag), barcelona.cat/nadal and
+ * firadesantallucia.cat were last read for 2026-27 dates. Printed next to
+ * every "not announced yet". Re-read on 30 Oct 2026: no switch-on, nativity
+ * scene, Sant Jaume projection, New Year's Eve or parade date; the Christmas
+ * site still says it will be updated "al voltant del mes de novembre del
+ * 2026"; the Santa Llúcia fair's site still shows its 2025 calendar. The other
+ * facts (TMB, sights, shops) keep FESTIVE_VERIFIED.
+ */
+export const ANNOUNCEMENTS_CHECKED = "2026-10-30";
+
 /** The pages to watch for the 2026-27 dates. */
 export const WATCH = {
   pressTag: "https://ajuntament.barcelona.cat/premsa/tag/nadal-2026/",
