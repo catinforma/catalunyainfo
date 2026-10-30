@@ -282,6 +282,37 @@ test("known answers: who sets minimum services, when they came out in 2024, wher
   }
 });
 
+test("known answers read on 30 October 2026: SEMAF's Renfe strikes either side of 11N and the doctors' strike already on", () => {
+  const lead: Record<Locale, RegExp> = {
+    ca: /Compte també amb el 10 i el 12 de novembre: el sindicat de maquinistes SEMAF hi ha convocat vaga al Grup Renfe \(aturada total el 10, aturades parcials el 12\)/,
+    es: /Ojo también al 10 y al 12 de noviembre: el sindicato de maquinistas SEMAF ha convocado huelga en el Grupo Renfe \(paro total el 10, paros parciales el 12\)/,
+    en: /Watch 10 and 12 November too: the train drivers' union SEMAF has called strikes at the Renfe Group \(a full stoppage on the 10th, partial stoppages on the 12th\)/,
+  };
+  const doctors: Record<Locale, RegExp> = {
+    ca: /Metges de Catalunya fa des del 28 d'octubre de 2026 una vaga indefinida/,
+    es: /Metges de Catalunya mantiene desde el 28 de octubre de 2026 una huelga indefinida/,
+    en: /since 28 October 2026 the doctors' union Metges de Catalunya has held an indefinite strike/,
+  };
+  assert.equal(weekdayIndex("2026-11-10"), 2); // Tuesday
+  assert.equal(weekdayIndex("2026-11-12"), 4); // Thursday
+  for (const locale of LOCALES) {
+    assert.match(text(STRIKE_11N.editions[locale].blocks.slice(0, 1)), lead[locale], locale);
+    const all = body(locale);
+    assert.match(all, doctors[locale], locale);
+    const blocks = json(locale);
+    assert.ok(blocks.includes(`](${STRIKE_11N_URLS.semaf1012})`), `${locale}: no link to SEMAF's notice`);
+    assert.ok(blocks.includes(`](${STRIKE_11N_URLS.ordreMetges})`), `${locale}: no link to the doctors' minimum-services order`);
+    assert.ok(blocks.includes(`](/${locale}/${B2_PATHS.strikes[locale]}/)`), `${locale}: no body link to the hub`);
+  }
+  // Once the strike is past, the lead and the health section stop speaking of what is coming.
+  for (const locale of LOCALES) {
+    const after = text(buildStrike11nBody(locale, "2026-11-12", filled()));
+    assert.doesNotMatch(after, /Compte també|Ojo también|Watch 10 and 12 November/, locale);
+    assert.doesNotMatch(after, /ja són en vaga|ya están en huelga|already on strike/, locale);
+  }
+  assert.ok(STRIKE_11N.sources.some((s) => new URL(s.url).host === "www.semaf.org"));
+});
+
 test("known answers: schools are open, it is a school day and not a Catalan holiday", () => {
   assert.equal(holidayOn(STRIKE_11N_DATE), null, "11 November 2026 is a Catalan public holiday");
   assert.equal(schoolStatusOn(STRIKE_11N_DATE).kind, "term");
@@ -496,10 +527,10 @@ test("the strikes hub links here once per language and agrees on whether the ord
     !generalitatOrderPublished(),
     "strikes.ts (11N entry) and strike-11n.ts disagree on whether the Generalitat's order is out: update both",
   );
-  // The hub's own titles are untouched.
-  assert.equal(STRIKES_GUIDE.editions.ca.seoTitle, "Vaga avui a Catalunya: què funciona i serveis mínims");
-  assert.equal(STRIKES_GUIDE.editions.es.seoTitle, "Huelga hoy en Cataluña: qué funciona y servicios mínimos");
-  assert.equal(STRIKES_GUIDE.editions.en.seoTitle, "Strike in Barcelona and Catalonia today: what runs");
+  // The hub's own titles (changed in the 30 Oct 2026 top-3 push; logged in docs/SEO_EXPERIMENTS.md).
+  assert.equal(STRIKES_GUIDE.editions.ca.seoTitle, "Vaga avui i demà a Catalunya: què funciona i serveis mínims");
+  assert.equal(STRIKES_GUIDE.editions.es.seoTitle, "Huelga hoy y mañana en Cataluña: qué funciona y calendario");
+  assert.equal(STRIKES_GUIDE.editions.en.seoTitle, "Barcelona strike today: trains, metro and what runs");
 });
 
 test("the publish route has a strike-11n group that also republishes the hub", () => {

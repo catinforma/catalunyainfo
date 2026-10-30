@@ -39,6 +39,14 @@ import { STRIKE_URLS } from "./strikes";
  * research_notes/x10/strike-11n-factpack.md). On that day no minimum services
  * had been published for 11 November anywhere.
  *
+ * Re-checked on 30 Oct 2026: the Departament d'Empresa i Treball's list of
+ * strikes with minimum services (e-Tauler) had no 11N order; Rodalies, TMB and
+ * FGC had no 11N notice; 11n.cat still gave no demonstration time or place.
+ * Added that day: SEMAF's Renfe drivers' strikes on 10 Nov (full stoppage)
+ * and 12 Nov (partial stoppages), from SEMAF's notice nº 2026-51, and the
+ * doctors' indefinite strike since 28 Oct (Metges de Catalunya), from the
+ * Generalitat's order of 22 Oct; both also sit in the strikes hub.
+ *
  * Left out on purpose: the demonstrations' times and places (no organiser had
  * published them), any minimum-service figure for 11N, anything about taxis
  * beyond what the 2024 orders say (nothing), and health or school advice that
@@ -67,7 +75,7 @@ export const STRIKE_11N_DATE = "2026-11-11";
  * on or after the day) is decided against this date, never the clock: the
  * HTML is the same whichever day it is rendered.
  */
-export const STRIKE_11N_AS_OF = "2026-10-29";
+export const STRIKE_11N_AS_OF = "2026-10-30";
 
 /** The facts were re-read on the sources on the as-of day: one constant to move. */
 export const STRIKE_11N_VERIFIED = STRIKE_11N_AS_OF;
@@ -184,6 +192,8 @@ const BASE_SOURCES: B2Source[] = [
   { name: "OUIGO España", url: U.ouigo, publisher: "OUIGO España" },
   { name: "Trenes afectados por huelga de maquinistas (servicios mínimos aprobados por el Ministerio de Transportes)", url: U.ouigoStrike, publisher: "OUIGO España" },
   { name: "Infovuelos", url: U.aena, publisher: "Aena" },
+  { name: "SEMAF continúa convocando huelgas los días 10 y 12 de noviembre en el Grupo Renfe (nº 2026-51, 29/10/2026)", url: U.semaf1012, publisher: "SEMAF" },
+  { name: "Ordre de 22 d'octubre de 2026: servei essencial d'assistència sanitària dels centres del SISCAT (vaga indefinida de Metges de Catalunya, e-Tauler)", url: U.ordreMetges, publisher: "Departament d'Empresa i Treball" },
 ];
 
 /** Every source the page cites: the fixed ones plus each published sector's order or notice, once. */
@@ -355,7 +365,7 @@ const COPY: Record<Locale, Copy> = {
         partial: ` **Una part dels serveis mínims ja s'ha publicat** i la resta encara no (consultat el ${c.checked}): la taula de més avall diu quins.`,
         published: " **Els serveis mínims ja s'han publicat:** els tens a la taula de més avall, sector per sector, amb l'enllaç a l'ordre o a l'avís oficial.",
       }[c.state];
-      return `${first}${ms}`;
+      return `${first}${ms} **Compte també amb el 10 i el 12 de novembre:** el sindicat de maquinistes SEMAF hi ha convocat vaga al Grup Renfe (aturada total el 10, aturades parcials el 12), que afecta Rodalies.`;
     },
     keyFactsTitle: "La vaga general de l'11 de novembre, d'un cop d'ull",
     keyFacts: (c) => [
@@ -372,6 +382,7 @@ const COPY: Record<Locale, Copy> = {
         }[c.state],
       },
       { label: "Escoles", value: "És dia lectiu: les escoles obren amb el personal mínim que fixi l'ordre de serveis mínims" },
+      { label: "10 i 12 de novembre", value: "Vaga de maquinistes del Grup Renfe (SEMAF), que afecta Rodalies: aturada total el 10 i aturades parcials el 12" },
     ],
     data: (c) =>
       `Només hi posem el que publiquen els sindicats convocants, el BOE, el DOGC, el Departament d'Empresa i Treball i els operadors de transport, i no el que avança la premsa.${c.state === "published" ? "" : " Quan surtin els serveis mínims, els afegirem a la taula, sector per sector, amb l'enllaç a l'ordre."}`,
@@ -379,7 +390,7 @@ const COPY: Record<Locale, Copy> = {
     msIntro: (c) =>
       c.state === "pending"
         ? [
-            `**Encara no s'han publicat.** El ${c.checked}, ni el ${link(U.dogc, "DOGC")} ni la ${link(U.treballMs, "llista de vagues amb serveis mínims del Departament d'Empresa i Treball")} no tenien cap ordre per a l'11 de novembre, i Rodalies, TMB, FGC i Renfe no hi tenien cap avís.`,
+            `**Encara no s'han publicat.** El ${c.checked}, la ${link(U.treballMs, "llista de vagues amb serveis mínims del Departament d'Empresa i Treball")} no tenia cap ordre per a l'11 de novembre, i Rodalies, TMB i FGC no hi tenien cap avís. Quan surti, l'ordre també es publicarà al ${link(U.dogc, "DOGC")}.`,
             `Els dels serveis que depenen de la Generalitat (Rodalies i regionals, metro, autobusos, tramvia, FGC, escoles, sanitat pública i la mateixa Administració) els fixarà el Departament d'Empresa i Treball amb una ordre que es publica al DOGC. Els dels serveis de l'Estat, com l'alta velocitat i la llarga distància, els fixa el Govern espanyol.`,
             `**Quan surten:** a les vagues generals del 2024, l'ordre es va signar dos o tres dies abans. L'${link(U.emt38, "Ordre EMT/38/2024")} es va signar el 5 de març per a la vaga del 8, i el DOGC la va publicar el 6; l'${link(U.emt201, "Ordre EMT/201/2024")} es va signar el 25 de setembre per a la del 27, i el DOGC la va publicar el mateix dia 27. Si es repeteix aquest calendari, l'ordre de l'11 de novembre es signaria cap al 8 o el 9 de novembre, però no hi ha cap data oficial.`,
           ]
@@ -449,10 +460,10 @@ const COPY: Record<Locale, Copy> = {
     transportHeading: "Transport: Rodalies, metro, bus, FGC, trens i avions",
     transportIntro: "Una vaga general pot afectar tots els operadors alhora, i cadascun publica els seus horaris de serveis mínims quan surt l'ordre. Mira'ls el vespre abans i el mateix matí: les ordres permeten repartir el percentatge de manera desigual al llarg del dia, així que no tots els trens o autobusos de la teva hora hi seran.",
     more: {
-      rodalies: `Rodalies publica l'horari de serveis mínims de cada línia al seu ${link(U.rodaliesStatus, "web d'alteracions del servei")}: per a la vaga de Renfe del 29 d'octubre de 2026, l'avís amb els percentatges ja era actualitzat el dia 26. El mateix dia de la vaga, mira [els avisos de la teva línia avui](${rodaliesHub("ca")}), llegits en directe de Rodalies de Catalunya.`,
+      rodalies: `Rodalies publica l'horari de serveis mínims de cada línia al seu ${link(U.rodaliesStatus, "web d'alteracions del servei")}: per a la vaga de Renfe del 29 d'octubre de 2026, l'avís amb els percentatges ja era actualitzat el dia 26. El mateix dia de la vaga, mira [els avisos de la teva línia avui](${rodaliesHub("ca")}), llegits en directe de Rodalies de Catalunya. **El dia abans i el dia després també hi ha vaga a Renfe:** el sindicat de maquinistes SEMAF ha convocat una aturada total el dimarts 10 de novembre i aturades parcials al llarg del dijous 12, segons ${link(U.semaf1012, "el seu comunicat del 29 d'octubre")}, sense hores ni serveis mínims publicats encara.`,
       tmb: `TMB els publica als seus ${link(U.tmb, "avisos de servei")}. L'horari d'un dia normal és a ${b2link("hours", "ca", "l'horari del metro i del NitBus")}.`,
       fgcTram: `FGC informa de l'estat del servei a ${link(U.fgc, "fgc.cat")}. Les ordres de les vagues generals del 2024 també hi incloïen el tramvia i la resta d'autobusos urbans i interurbans.`,
-      longDistance: `Els trens d'alta velocitat i de llarga distància són serveis de l'Estat, i per això no són a l'ordre de la Generalitat: per a la vaga d'Ouigo d'aquesta tardor, els serveis mínims els va aprovar el Ministeri de Transports, segons ${link(U.ouigoStrike, "l'avís d'Ouigo")}. Si tens bitllet per a l'11, mira ${link(U.renfe, "renfe.com")} o el web del teu operador.`,
+      longDistance: `Els trens d'alta velocitat i de llarga distància són serveis de l'Estat, i per això no són a l'ordre de la Generalitat: per a la vaga d'Ouigo d'aquesta tardor, els serveis mínims els va aprovar el Ministeri de Transports, segons ${link(U.ouigoStrike, "l'avís d'Ouigo")}. Si tens bitllet per a l'11, mira ${link(U.renfe, "renfe.com")} o el web del teu operador; la vaga de maquinistes de SEMAF del 10 i el 12 de novembre també afecta els trens de Renfe.`,
       airports: `Les ordres de la Generalitat només fixen l'operativa dels aeroports que gestiona ella, Lleida-Alguaire i Andorra-la Seu d'Urgell. Per als vols del Prat, Girona i Reus, que són d'Aena, mira l'estat del vol a la teva companyia o a ${link(U.aena, "Infovuelos d'Aena")}, i les maneres d'arribar-hi a ${b2link("airport", "ca", "la guia de l'aeroport al centre de Barcelona")}.`,
     },
     taxiHeading: "Taxi",
@@ -476,6 +487,11 @@ const COPY: Record<Locale, Copy> = {
           ? `**Serveis mínims:** ${s.text.ca}`
           : `**Serveis mínims:** encara no publicats (consultat el ${c.checked}). Els fixarà la mateixa ordre de la Generalitat, que a la vaga general del 2024 cobria tant els centres sanitaris públics com els privats.`,
         "**Què va fixar l'última vaga general, només com a referència:** per a la del 27 de setembre de 2024, l'Ordre EMT/201/2024 va mantenir el funcionament normal de les urgències dels hospitals i de les unitats especials (cures intensives, diàlisi, parts, radioteràpia i quimioteràpia), l'atenció urgent als centres fora de l'hospital durant el seu horari habitual, el transport sanitari urgent i les farmàcies de guàrdia.",
+        ...(c.phase === "past"
+          ? []
+          : [
+              `**A més, els metges ja són en vaga:** Metges de Catalunya fa des del 28 d'octubre de 2026 una vaga indefinida del personal facultatiu, que continuava el ${c.checked}. ${link(U.ordreMetges, "L'ordre del Departament d'Empresa i Treball del 22 d'octubre")} hi manté amb normalitat les urgències i les unitats especials. Els detalls, a ${b2link("strikes", "ca", "la guia de vagues a Catalunya")}.`,
+            ]),
       ];
     },
     callHeading: "Qui convoca la vaga general i per què",
@@ -528,7 +544,7 @@ const COPY: Record<Locale, Copy> = {
         },
         {
           question: "Hi ha Rodalies l'11 de novembre?",
-          answer: sectorAnswer(c, "rodalies", `Sí, amb serveis mínims, que fixarà la Generalitat i que ${pendingCheck}. Rodalies publica l'horari de serveis mínims de cada línia al seu web quan surt l'ordre.`),
+          answer: `${sectorAnswer(c, "rodalies", `Sí, amb serveis mínims, que fixarà la Generalitat i que ${pendingCheck}. Rodalies publica l'horari de serveis mínims de cada línia al seu web quan surt l'ordre.`)} A més, el 10 i el 12 de novembre hi ha vaga de maquinistes del Grup Renfe convocada per SEMAF.`,
         },
         {
           question: "A quina hora comença la vaga general?",
@@ -567,7 +583,7 @@ const COPY: Record<Locale, Copy> = {
         partial: ` **Una parte de los servicios mínimos ya se ha publicado** y el resto aún no (consultado el ${c.checked}): la tabla de más abajo dice cuáles.`,
         published: " **Los servicios mínimos ya se han publicado:** los tienes en la tabla de más abajo, sector por sector, con el enlace a la orden o al aviso oficial.",
       }[c.state];
-      return `${first}${ms}`;
+      return `${first}${ms} **Ojo también al 10 y al 12 de noviembre:** el sindicato de maquinistas SEMAF ha convocado huelga en el Grupo Renfe (paro total el 10, paros parciales el 12), que afecta a Rodalies.`;
     },
     keyFactsTitle: "La huelga general del 11 de noviembre, de un vistazo",
     keyFacts: (c) => [
@@ -584,6 +600,7 @@ const COPY: Record<Locale, Copy> = {
         }[c.state],
       },
       { label: "Colegios", value: "Es día lectivo: los colegios abren con el personal mínimo que fije la orden de servicios mínimos" },
+      { label: "10 y 12 de noviembre", value: "Huelga de maquinistas del Grupo Renfe (SEMAF), que afecta a Rodalies: paro total el 10 y paros parciales el 12" },
     ],
     data: (c) =>
       `Solo ponemos lo que publican los sindicatos convocantes, el BOE, el DOGC, el Departament d'Empresa i Treball y los operadores de transporte, no lo que adelanta la prensa.${c.state === "published" ? "" : " Cuando salgan los servicios mínimos, los añadiremos a la tabla, sector por sector, con el enlace a la orden."}`,
@@ -591,7 +608,7 @@ const COPY: Record<Locale, Copy> = {
     msIntro: (c) =>
       c.state === "pending"
         ? [
-            `**Aún no se han publicado.** El ${c.checked}, ni el ${link(U.dogc, "DOGC")} ni la ${link(U.treballMs, "lista de huelgas con servicios mínimos del Departament d'Empresa i Treball")} tenían ninguna orden para el 11 de noviembre, y Rodalies, TMB, FGC y Renfe no tenían ningún aviso.`,
+            `**Aún no se han publicado.** El ${c.checked}, la ${link(U.treballMs, "lista de huelgas con servicios mínimos del Departament d'Empresa i Treball")} no tenía ninguna orden para el 11 de noviembre, y Rodalies, TMB y FGC no tenían ningún aviso. Cuando salga, la orden también se publicará en el ${link(U.dogc, "DOGC")}.`,
             `Los de los servicios que dependen de la Generalitat (Rodalies y regionales, metro, autobuses, tranvía, FGC, escuelas, sanidad pública y la propia Administración) los fijará el Departament d'Empresa i Treball con una orden que se publica en el DOGC. Los de los servicios del Estado, como la alta velocidad y la larga distancia, los fija el Gobierno de España.`,
             `**Cuándo salen:** en las huelgas generales de 2024, la orden se firmó dos o tres días antes. La ${link(U.emt38, "Ordre EMT/38/2024")} se firmó el 5 de marzo para la huelga del 8, y el DOGC la publicó el 6; la ${link(U.emt201, "Ordre EMT/201/2024")} se firmó el 25 de septiembre para la del 27, y el DOGC la publicó el mismo día 27. Si se repite ese calendario, la orden del 11 de noviembre se firmaría hacia el 8 o el 9 de noviembre, pero no hay ninguna fecha oficial.`,
           ]
@@ -661,10 +678,10 @@ const COPY: Record<Locale, Copy> = {
     transportHeading: "Transporte: Rodalies, metro, bus, FGC, trenes y aviones",
     transportIntro: "Una huelga general puede afectar a todos los operadores a la vez, y cada uno publica sus horarios de servicios mínimos cuando sale la orden. Míralos la noche antes y la misma mañana: las órdenes permiten repartir el porcentaje de forma desigual a lo largo del día, así que no todos los trenes o autobuses de tu hora estarán.",
     more: {
-      rodalies: `Rodalies publica el horario de servicios mínimos de cada línea en su ${link(U.rodaliesStatus, "web de alteraciones del servicio")}: para la huelga de Renfe del 29 de octubre de 2026, el aviso con los porcentajes ya estaba actualizado el día 26. El mismo día de la huelga, mira [los avisos de tu línea hoy](${rodaliesHub("es")}), leídos en directo de Rodalies de Catalunya.`,
+      rodalies: `Rodalies publica el horario de servicios mínimos de cada línea en su ${link(U.rodaliesStatus, "web de alteraciones del servicio")}: para la huelga de Renfe del 29 de octubre de 2026, el aviso con los porcentajes ya estaba actualizado el día 26. El mismo día de la huelga, mira [los avisos de tu línea hoy](${rodaliesHub("es")}), leídos en directo de Rodalies de Catalunya. **El día antes y el día después también hay huelga en Renfe:** el sindicato de maquinistas SEMAF ha convocado un paro total el martes 10 de noviembre y paros parciales a lo largo del jueves 12, según ${link(U.semaf1012, "su comunicado del 29 de octubre")}, sin horas ni servicios mínimos publicados todavía.`,
       tmb: `TMB los publica en sus ${link(U.tmb, "avisos de servicio")}. El horario de un día normal está en ${b2link("hours", "es", "el horario del metro y del NitBus")}.`,
       fgcTram: `FGC informa del estado del servicio en ${link(U.fgc, "fgc.cat")}. Las órdenes de las huelgas generales de 2024 también incluían el tranvía y el resto de autobuses urbanos e interurbanos.`,
-      longDistance: `Los trenes de alta velocidad y de larga distancia son servicios del Estado, y por eso no están en la orden de la Generalitat: para la huelga de Ouigo de este otoño, los servicios mínimos los aprobó el Ministerio de Transportes, según ${link(U.ouigoStrike, "el aviso de Ouigo")}. Si tienes billete para el 11, mira ${link(U.renfe, "renfe.com")} o la web de tu operador.`,
+      longDistance: `Los trenes de alta velocidad y de larga distancia son servicios del Estado, y por eso no están en la orden de la Generalitat: para la huelga de Ouigo de este otoño, los servicios mínimos los aprobó el Ministerio de Transportes, según ${link(U.ouigoStrike, "el aviso de Ouigo")}. Si tienes billete para el 11, mira ${link(U.renfe, "renfe.com")} o la web de tu operador; la huelga de maquinistas de SEMAF del 10 y el 12 de noviembre también afecta a los trenes de Renfe.`,
       airports: `Las órdenes de la Generalitat solo fijan la operativa de los aeropuertos que gestiona ella, Lleida-Alguaire y Andorra-La Seu d'Urgell. Para los vuelos de El Prat, Girona y Reus, que son de Aena, mira el estado del vuelo en tu compañía o en ${link(U.aena, "Infovuelos de Aena")}, y las formas de llegar en ${b2link("airport", "es", "la guía del aeropuerto al centro de Barcelona")}.`,
     },
     taxiHeading: "Taxi",
@@ -688,6 +705,11 @@ const COPY: Record<Locale, Copy> = {
           ? `**Servicios mínimos:** ${s.text.es}`
           : `**Servicios mínimos:** aún no publicados (consultado el ${c.checked}). Los fijará la misma orden de la Generalitat, que en la huelga general de 2024 cubría tanto los centros sanitarios públicos como los privados.`,
         "**Qué fijó la última huelga general, solo como referencia:** para la del 27 de septiembre de 2024, la Ordre EMT/201/2024 mantuvo el funcionamiento normal de las urgencias de los hospitales y de las unidades especiales (cuidados intensivos, diálisis, partos, radioterapia y quimioterapia), la atención urgente en los centros fuera del hospital durante su horario habitual, el transporte sanitario urgente y las farmacias de guardia.",
+        ...(c.phase === "past"
+          ? []
+          : [
+              `**Además, los médicos ya están en huelga:** Metges de Catalunya mantiene desde el 28 de octubre de 2026 una huelga indefinida del personal facultativo, que seguía el ${c.checked}. ${link(U.ordreMetges, "La orden del Departament d'Empresa i Treball del 22 de octubre")} mantiene con normalidad las urgencias y las unidades especiales. Los detalles, en ${b2link("strikes", "es", "la guía de huelgas en Cataluña")}.`,
+            ]),
       ];
     },
     callHeading: "Quién convoca la huelga general y por qué",
@@ -740,7 +762,7 @@ const COPY: Record<Locale, Copy> = {
         },
         {
           question: "¿Hay Rodalies el 11 de noviembre?",
-          answer: sectorAnswer(c, "rodalies", `Sí, con servicios mínimos, que fijará la Generalitat y que ${pendingCheck}. Rodalies publica el horario de servicios mínimos de cada línea en su web cuando sale la orden.`),
+          answer: `${sectorAnswer(c, "rodalies", `Sí, con servicios mínimos, que fijará la Generalitat y que ${pendingCheck}. Rodalies publica el horario de servicios mínimos de cada línea en su web cuando sale la orden.`)} Además, el 10 y el 12 de noviembre hay huelga de maquinistas del Grupo Renfe convocada por SEMAF.`,
         },
         {
           question: "¿A qué hora empieza la huelga general?",
@@ -779,7 +801,7 @@ const COPY: Record<Locale, Copy> = {
         partial: ` **Some minimum services have been published and others not yet** (checked on ${c.checked}): the table below shows which.`,
         published: " **Minimum services have been published:** they are in the table below, sector by sector, with a link to the official order or notice.",
       }[c.state];
-      return `${first}${ms}`;
+      return `${first}${ms} **Watch 10 and 12 November too:** the train drivers' union SEMAF has called strikes at the Renfe Group (a full stoppage on the 10th, partial stoppages on the 12th), which affect Rodalies.`;
     },
     keyFactsTitle: "The 11 November general strike at a glance",
     keyFacts: (c) => [
@@ -796,6 +818,7 @@ const COPY: Record<Locale, Copy> = {
         }[c.state],
       },
       { label: "Schools", value: "A school day: schools open with the minimum staff the minimum-services order sets" },
+      { label: "10 and 12 November", value: "Renfe Group train drivers' strike (SEMAF), which affects Rodalies: a full stoppage on the 10th, partial stoppages on the 12th" },
     ],
     data: (c) =>
       `We only print what the unions calling the strike, the BOE and DOGC gazettes, the Generalitat's Department of Business and Labour and the transport operators publish, never what the press reports ahead of them.${c.state === "published" ? "" : " When minimum services come out, we will add them to the table, sector by sector, with a link to the order."}`,
@@ -803,7 +826,7 @@ const COPY: Record<Locale, Copy> = {
     msIntro: (c) =>
       c.state === "pending"
         ? [
-            `**Not published yet.** On ${c.checked}, neither the ${link(U.dogc, "DOGC")} nor the ${link(U.treballMs, "Department of Business and Labour's list of strikes with minimum services")} had any order for 11 November, and Rodalies, TMB, FGC and Renfe had no notice about it.`,
+            `**Not published yet.** On ${c.checked}, the ${link(U.treballMs, "Department of Business and Labour's list of strikes with minimum services")} had no order for 11 November, and Rodalies, TMB and FGC had no notice about it. Once out, the order will also be published in the ${link(U.dogc, "DOGC")}.`,
             `For services that answer to the Generalitat (Rodalies and regional trains, metro, buses, tram, FGC, schools, public healthcare and the Catalan administration itself), the Department of Business and Labour will set them in an order published in the DOGC. For State services such as high-speed and long-distance trains, the Spanish government sets them.`,
             `**When they come out:** in the 2024 general strikes the order was signed two or three days before. ${link(U.emt38, "Order EMT/38/2024")} was signed on 5 March for the strike on the 8th and published in the DOGC on the 6th; ${link(U.emt201, "Order EMT/201/2024")} was signed on 25 September for the strike on the 27th and published in the DOGC on the 27th itself. If that timing repeats, the 11 November order would be signed around 8 or 9 November, but there is no official date.`,
           ]
@@ -873,10 +896,10 @@ const COPY: Record<Locale, Copy> = {
     transportHeading: "Transport: Rodalies, metro, buses, FGC, trains and flights",
     transportIntro: "A general strike can hit every operator at once, and each publishes its minimum-service timetables once the order is out. Check them the evening before and that morning: the orders let operators spread the percentage unevenly over the day, so not every train or bus at your usual time will run.",
     more: {
-      rodalies: `Rodalies publishes a minimum-service timetable for every line on its ${link(U.rodaliesStatus, "service changes page")}: for the Renfe strike of 29 October 2026, the notice with the percentages had been updated by the 26th. On the strike day, check [today's notices for your line](${rodaliesHub("en")}), read live from Rodalies de Catalunya.`,
+      rodalies: `Rodalies publishes a minimum-service timetable for every line on its ${link(U.rodaliesStatus, "service changes page")}: for the Renfe strike of 29 October 2026, the notice with the percentages had been updated by the 26th. On the strike day, check [today's notices for your line](${rodaliesHub("en")}), read live from Rodalies de Catalunya. **Renfe has strikes the day before and the day after too:** the train drivers' union SEMAF has called a full stoppage on Tuesday 10 November and partial stoppages during Thursday 12 November, according to ${link(U.semaf1012, "its notice of 29 October")}, with no hours or minimum services published yet.`,
       tmb: `TMB publishes them in its ${link(U.tmb, "service notices")}. Normal-day hours are in ${b2link("hours", "en", "Barcelona metro and night bus hours")}.`,
       fgcTram: `FGC posts its service status on ${link(U.fgc, "fgc.cat")}. The 2024 general-strike orders also covered the tram and all other urban and interurban buses.`,
-      longDistance: `High-speed and long-distance trains are State services, so they are not in the Generalitat's order: for Ouigo's strike this autumn, the Ministry of Transport approved the minimum services, according to ${link(U.ouigoStrike, "Ouigo's notice")}. If you have a ticket for the 11th, check ${link(U.renfe, "renfe.com")} or your operator's website.`,
+      longDistance: `High-speed and long-distance trains are State services, so they are not in the Generalitat's order: for Ouigo's strike this autumn, the Ministry of Transport approved the minimum services, according to ${link(U.ouigoStrike, "Ouigo's notice")}. If you have a ticket for the 11th, check ${link(U.renfe, "renfe.com")} or your operator's website; SEMAF's drivers' strike on 10 and 12 November also affects Renfe trains.`,
       airports: `The Generalitat's orders only set the operations of the two airports it runs, Lleida-Alguaire and Andorra-La Seu d'Urgell. For flights at Barcelona-El Prat, Girona and Reus, which Aena runs, check your flight with your airline or on ${link(U.aena, "Aena's Infovuelos")}, and the ways to get there in ${b2link("airport", "en", "our airport to city centre guide")}.`,
     },
     taxiHeading: "Taxis",
@@ -900,6 +923,11 @@ const COPY: Record<Locale, Copy> = {
           ? `**Minimum services:** ${s.text.en}`
           : `**Minimum services:** not published yet (checked on ${c.checked}). The same Generalitat order will set them; in the 2024 general strike it covered both public and private health centres.`,
         "**What the last general strike's order set, for reference only:** for the strike of 27 September 2024, Order EMT/201/2024 kept hospital A&E and the special units (intensive care, dialysis, maternity, radiotherapy and chemotherapy) running normally, urgent care at health centres outside hospitals during their usual hours, urgent patient transport and the duty pharmacies.",
+        ...(c.phase === "past"
+          ? []
+          : [
+              `**Doctors are already on strike:** since 28 October 2026 the doctors' union Metges de Catalunya has held an indefinite strike of medical staff, still on as of ${c.checked}. ${link(U.ordreMetges, "The Department of Business and Labour's order of 22 October")} keeps A&E and the special units running normally. Details in ${b2link("strikes", "en", "our guide to strikes in Barcelona and Catalonia")}.`,
+            ]),
       ];
     },
     callHeading: "Who called the general strike and why",
@@ -952,7 +980,7 @@ const COPY: Record<Locale, Copy> = {
         },
         {
           question: "Are Rodalies trains running on 11 November?",
-          answer: sectorAnswer(c, "rodalies", `Yes, on minimum services, which the Generalitat will set and which ${pendingCheck}. Rodalies publishes a minimum-service timetable for each line on its website once the order is out.`),
+          answer: `${sectorAnswer(c, "rodalies", `Yes, on minimum services, which the Generalitat will set and which ${pendingCheck}. Rodalies publishes a minimum-service timetable for each line on its website once the order is out.`)} On top of that, SEMAF has called a Renfe Group drivers' strike on 10 and 12 November.`,
         },
         {
           question: "What time does the general strike start?",
