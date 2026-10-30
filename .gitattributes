@@ -1,0 +1,2 @@
+# Byte-exact cuts of official files (Interior Ministry .DAT, ANSI, LF): never convert line endings.
+tests/fixtures/interior/** -text

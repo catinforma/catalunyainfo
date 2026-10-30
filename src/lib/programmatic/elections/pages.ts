@@ -26,7 +26,7 @@ import { capitalised, slugify } from "./names";
 import { electionPath, hubPath, PAGES_PER_LOCALE } from "./paths";
 import { turnout } from "./results";
 import { SNAPSHOT } from "./snapshot";
-import type { Municipality } from "./types";
+import type { ElectionsSnapshot, Municipality } from "./types";
 
 export { ELECTIONS_SEGMENT, electionPath, hubPath, PAGES_PER_LOCALE } from "./paths";
 
@@ -61,6 +61,15 @@ export const EN_RESORTS: readonly string[] = [
   "pineda-de-mar",
   "l-escala",
 ];
+
+/**
+ * The newest data the pages carry: the date the Generalitat's data were read,
+ * or the date the 29N file was imported (`scripts/elections-29n.ts`) when later.
+ */
+export function latestDataDate(snapshot: ElectionsSnapshot = SNAPSHOT): string {
+  const imported = snapshot.general2026?.source.importedAt;
+  return imported && imported > snapshot.readAt ? imported : snapshot.readAt;
+}
 
 /** Prerendered at build time; the rest render once on first request. */
 export const PRERENDERED_PER_LOCALE = 20;
@@ -204,17 +213,23 @@ export function electionDescription(locale: Locale, m: Municipality): string {
 const HUB_META: Record<Locale, { title: string; description: string; h1: string }> = {
   ca: {
     title: `Resultats eleccions per municipi: els ${PAGES_PER_LOCALE.ca} més poblats`,
-    description: `Municipals 2023, generals 2023 i Parlament 2024 als ${PAGES_PER_LOCALE.ca} municipis més poblats de Catalunya, per comarques, amb dades oficials i espai per al 29N.`,
+    description: SNAPSHOT.general2026
+      ? `Generals del 29N, municipals 2023, generals 2023 i Parlament 2024 als ${PAGES_PER_LOCALE.ca} municipis més poblats de Catalunya, per comarques. Dades oficials.`
+      : `Municipals 2023, generals 2023 i Parlament 2024 als ${PAGES_PER_LOCALE.ca} municipis més poblats de Catalunya, per comarques, amb dades oficials i espai per al 29N.`,
     h1: "Resultats de les eleccions per municipi",
   },
   es: {
     title: `Resultados elecciones por municipio: los ${PAGES_PER_LOCALE.es} más poblados`,
-    description: `Municipales 2023, generales 2023 y Parlament 2024 en los ${PAGES_PER_LOCALE.es} municipios más poblados de Cataluña, por comarcas, con datos oficiales y espacio para el 29N.`,
+    description: SNAPSHOT.general2026
+      ? `Generales del 29N, municipales 2023, generales 2023 y Parlament 2024 en los ${PAGES_PER_LOCALE.es} municipios más poblados de Cataluña, por comarcas. Datos oficiales.`
+      : `Municipales 2023, generales 2023 y Parlament 2024 en los ${PAGES_PER_LOCALE.es} municipios más poblados de Cataluña, por comarcas, con datos oficiales y espacio para el 29N.`,
     h1: "Resultados de las elecciones por municipio",
   },
   en: {
     title: "Catalonia election results by town: cities and resorts",
-    description: `2023 local, general and 2024 Catalan election results in ${PAGES_PER_LOCALE.en} towns: Catalonia's largest and its main resorts. Official data, with space for 29 November.`,
+    description: SNAPSHOT.general2026
+      ? `29 November general election, 2023 local and general and 2024 Catalan results in ${PAGES_PER_LOCALE.en} towns: Catalonia's largest and its main resorts. Official data.`
+      : `2023 local, general and 2024 Catalan election results in ${PAGES_PER_LOCALE.en} towns: Catalonia's largest and its main resorts. Official data, with space for 29 November.`,
     h1: "Election results by town in Catalonia",
   },
 };
@@ -289,13 +304,13 @@ export function siblings(m: Municipality, locale: Locale, limit = 8): { sameComa
 
 export interface ElectionsSitemapPath {
   path: string;
-  /** The snapshot's read date: the only date these pages carry. */
+  /** The snapshot's newest data date (`latestDataDate`): the only date these pages carry. */
   lastModified: string;
   translations: Partial<Record<Locale, string>>;
 }
 
 export function electionsSitemapPaths(): ElectionsSitemapPath[] {
-  const lastModified = SNAPSHOT.readAt;
+  const lastModified = latestDataDate();
   const hubs = LOCALES.map((locale) => ({ path: hubPath(locale), lastModified, translations: hubTranslations() }));
   const pages = LOCALES.flatMap((locale) =>
     municipalitiesFor(locale).map((m) => ({ path: electionPath(locale, m.slug), lastModified, translations: electionTranslations(m) })),

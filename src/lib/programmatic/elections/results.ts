@@ -7,7 +7,7 @@
  * print. Turnout is voters over electorate.
  */
 
-import type { CataloniaRegional, Counts, ListLabel, MunicipalList, MunicipalResult, RegionalVotes } from "./types";
+import type { CataloniaRegional, Counts, General2026, ListLabel, MunicipalList, MunicipalResult, RegionalVotes } from "./types";
 
 export const share = (part: number, whole: number): number => (whole > 0 ? (part / whole) * 100 : 0);
 
@@ -188,5 +188,54 @@ export function regionalView(local: RegionalVotes, catalonia: CataloniaRegional,
     turnout: turnout(local),
     cataloniaTurnout: turnout(region),
     cataloniaTurnoutWithAbroad: turnout(catalonia.total),
+  };
+}
+
+/* -------------------------------------------------------------------------- */
+
+export interface GeneralView {
+  /** Every candidacy on the town's ballot, most votes first; names as the Ministry's file writes them. */
+  rows: RegionalRow[];
+  blank: { votes: number; share: number; cataloniaShare: number };
+  /** The candidacies with the most votes (more than one only on a tie). */
+  leaders: RegionalRow[];
+  turnout: number;
+  /** Catalonia without the vote from abroad, like the 2023 and 2024 comparisons. */
+  cataloniaTurnout: number;
+  cataloniaTurnoutWithAbroad: number;
+  /** Seats Catalonia elects (sum of the file's Catalonia row). */
+  cataloniaSeats: number;
+}
+
+/**
+ * One municipality's 29N vote beside Catalonia's, from the imported Interior
+ * file. A candidacy's Catalonia share is that of its regional code, under
+ * which the file adds up the party's candidacies in the four provinces.
+ */
+export function generalView(local: RegionalVotes, general: General2026): GeneralView {
+  const region = general.catalonia;
+  const rows = Object.entries(local.votes)
+    .map(([code, votes]) => {
+      const list = general.lists[code] ?? { short: code, name: "", regional: code };
+      return {
+        code,
+        short: list.short,
+        name: list.name,
+        votes,
+        share: share(votes, local.validVotes),
+        cataloniaShare: share(region.votes[list.regional] ?? 0, region.validVotes),
+        cataloniaSeats: general.cataloniaSeats[list.regional] ?? 0,
+      };
+    })
+    .sort((a, b) => b.votes - a.votes || b.cataloniaShare - a.cataloniaShare || a.code.localeCompare(b.code));
+  const most = rows[0]?.votes ?? 0;
+  return {
+    rows,
+    blank: { votes: local.blankVotes, share: share(local.blankVotes, local.validVotes), cataloniaShare: share(region.blankVotes, region.validVotes) },
+    leaders: most > 0 ? rows.filter((row) => row.votes === most) : [],
+    turnout: turnout(local),
+    cataloniaTurnout: turnout(region),
+    cataloniaTurnoutWithAbroad: turnout(general.cataloniaTotal),
+    cataloniaSeats: Object.values(general.cataloniaSeats).reduce((a, b) => a + b, 0),
   };
 }

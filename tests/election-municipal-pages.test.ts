@@ -652,7 +652,7 @@ const pageText = (m: Municipality, locale: Locale) => JSON.stringify(buildElecti
 
 /** The page minus every name copied from the source (a mayor called Maria Victoria is not a claim of victory). */
 const ownText = (m: Municipality, locale: Locale) => {
-  const labels = [SNAPSHOT.elections.congress.lists, SNAPSHOT.elections.parliament.lists].flatMap((l) => Object.values(l ?? {}));
+  const labels = [SNAPSHOT.elections.congress.lists, SNAPSHOT.elections.parliament.lists, SNAPSHOT.general2026?.lists].flatMap((l) => Object.values(l ?? {}));
   const names = [m.mayor?.name ?? "", ...m.municipal.lists.flatMap((l) => [l.name, l.short]), ...labels.flatMap((l) => [l.name, l.short])]
     .filter(Boolean)
     .sort((a, b) => b.length - a.length);
