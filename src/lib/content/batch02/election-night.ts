@@ -150,7 +150,7 @@ const COPY: Record<Locale, T> = {
     final: [
       "Del 4 al 7 de desembre, les juntes electorals provincials fan l'escrutini general: revisen les actes i hi afegeixen el vot CERA. Després resolen les reclamacions i proclamen els electes, entre el 8 i el 16 de desembre segons el calendari oficial. La Junta Electoral Central publica els resultats al BOE en els 40 dies següents. Interior ho resumeix així: els resultats oficials són els que es publiquen al BOE.",
       "Les dades definitives, en format obert, les publica Interior a Infoelectoral (llicència CC BY 4.0). Quan hi siguin, les afegirem a la pàgina de resultats històrics de les eleccions generals a Catalunya.",
-      `Per als ${PAGES_PER_LOCALE.ca} municipis més poblats, els resultats del 29N també s'afegiran a les [pàgines de resultats electorals per municipi](${hubPath("ca")}), al costat de les municipals del 2023.`,
+      `Per als ${PAGES_PER_LOCALE.ca} municipis de Catalunya, els resultats del 29N també s'afegiran a les [pàgines de resultats electorals per municipi](${hubPath("ca")}), al costat de les municipals del 2023.`,
     ],
     catTitle: "Què s'elegeix a Catalunya",
     cat: [
@@ -206,7 +206,7 @@ const COPY: Record<Locale, T> = {
     final: [
       "Del 4 al 7 de diciembre, las juntas electorales provinciales hacen el escrutinio general: revisan las actas y añaden el voto CERA. Después resuelven las reclamaciones y proclaman a los electos, entre el 8 y el 16 de diciembre según el calendario oficial. La Junta Electoral Central publica los resultados en el BOE en los 40 días siguientes. Interior lo resume así: los resultados oficiales son los que se publican en el BOE.",
       "Los datos definitivos, en formato abierto, los publica Interior en Infoelectoral (licencia CC BY 4.0). Cuando estén, los añadiremos a la página de resultados históricos de las elecciones generales en Cataluña.",
-      `Para los ${PAGES_PER_LOCALE.es} municipios más poblados, los resultados del 29N también se añadirán a las [páginas de resultados electorales por municipio](${hubPath("es")}), junto a las municipales de 2023.`,
+      `Para los ${PAGES_PER_LOCALE.es} municipios de Cataluña, los resultados del 29N también se añadirán a las [páginas de resultados electorales por municipio](${hubPath("es")}), junto a las municipales de 2023.`,
     ],
     catTitle: "Qué se elige en Cataluña",
     cat: [

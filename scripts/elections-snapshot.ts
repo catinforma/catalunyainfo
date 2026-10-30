@@ -15,8 +15,9 @@
  *
  * Sources, all official and all read at run time:
  *   - Idescat, population API (`pob/v1`): population on 1 January per
- *     municipality (padró municipal d'habitants). Picks the TOP largest
- *     (100 in tranche 1, 27 Oct 2026; 300 in tranche 2, 29 Oct 2026).
+ *     municipality (padró municipal d'habitants). The 100 largest in
+ *     tranche 1 (27 Oct 2026), 300 in tranche 2 (29 Oct 2026), every
+ *     municipality in Catalonia (947) since tranche 3 (30 Oct 2026).
  *   - Generalitat open data, Processos electorals: `tgns-3xuy` (elections),
  *     `irrv-2mfc` (electorate, voters, blank and null votes), `ntc4-rnwr`
  *     (votes and seats per list). Municipality rows (`MU`) for the 2023
@@ -32,11 +33,24 @@
  * `src/lib/content/elections/history.ts` for the case of a wrong one).
  *
  * Every invariant the page relies on is asserted here before anything is
- * written: list votes + blank = valid, valid + null = voters, the lists' votes
- * add up to the list total, the councillors add up to the council size, the
- * council size follows LOREG art. 179 and D'Hondt with the 5 % threshold
- * gives every list exactly the councillors the source records. A municipality
- * that fails any of them stops the run: nothing is written.
+ * written: list votes + blank = valid, valid + null = voters, and then, by
+ * how the council is elected (`councilSystem` in results.ts, LOREG read on
+ * the BOE on 30 Oct 2026):
+ *   - over 250 residents ("lists"): the lists' votes add up to the list
+ *     total, the councillors to the council size, the size follows the
+ *     scale of art. 179.1, and D'Hondt with the 5 % threshold gives every
+ *     list exactly the councillors the source records, except a last seat
+ *     tied in quotient and in votes, which the law settles by lot (art.
+ *     163.1.d) and which must then go to one of the tied lists;
+ *   - up to 250 ("open", art. 184): the size follows the scale (3 or 5) and
+ *     no more councillors are recorded than that. Not checked, for a stated
+ *     reason: D'Hondt and the threshold (art. 184 elects candidates, not
+ *     lists) and the lists adding up to the list total (each voter marks up
+ *     to 2 or 4 names, so a list's figure is not a count of ballots);
+ *   - concejo abierto ("council", art. 179.2): one post, the mayoralty,
+ *     in a municipality of up to 100 residents; the lists add up to the
+ *     list total and the post goes to the one list with most votes.
+ * A municipality that fails any of them stops the run: nothing is written.
  */
 import { existsSync } from "node:fs";
 import { readFile, writeFile } from "node:fs/promises";
@@ -44,7 +58,7 @@ import { pathToFileURL } from "node:url";
 
 import { carryGeneral2026, renderSnapshotFile, SNAPSHOT_FILE } from "./lib/elections-snapshot-file.ts";
 import { displayName, slugify } from "../src/lib/programmatic/elections/names.ts";
-import { councilSize, dhondt } from "../src/lib/programmatic/elections/results.ts";
+import { councilSize, councilSystem, electedCount, matchDhondt } from "../src/lib/programmatic/elections/results.ts";
 import type {
   CataloniaRegional,
   Counts,
@@ -58,7 +72,6 @@ import type {
   SourceRef,
 } from "../src/lib/programmatic/elections/types.ts";
 
-const TOP = 300;
 const DRY_RUN = process.argv.includes("--dry-run");
 const TOURISM = process.argv.includes("--tourism");
 const SOCRATA = "https://analisi.transparenciacatalunya.cat";
@@ -166,10 +179,9 @@ async function loadPopulation() {
 
 async function main() {
   const readAt = madridToday();
+  // Every municipality (tranche 3): no cut-off, so no tie at a cut-off to guard.
   const population = await loadPopulation();
-  const top = population.slice(0, TOP);
-  assert(top.length === TOP, `only ${top.length} municipalities`);
-  assert((population[TOP - 1]?.population ?? 0) > (population[TOP]?.population ?? 0), `tie at the ${TOP}th place`);
+  const top = population;
 
   const [electionRows, entities, mayors] = await Promise.all([
     soql("tgns-3xuy", `id_eleccio in('${Object.values(IDS).join("','")}')`, "id_eleccio,nom_eleccio,data_eleccio"),
@@ -270,6 +282,15 @@ async function main() {
   assert(Object.values(catalonia.congress.seats).reduce((a, b) => a + b, 0) === 48, "Congress: Catalonia elects 48");
   assert(Object.values(catalonia.parliament.seats).reduce((a, b) => a + b, 0) === 135, "Parliament has 135 seats");
 
+  // The same municipalities in Idescat's list and in each election's data, no more, no fewer.
+  const ours = new Set(top.map((place) => place.idescat.slice(0, 5)));
+  for (const key of Object.keys(IDS) as ElectionKey[]) {
+    const theirs = new Set(turnout[key].map((row) => pad(row.territori_codi)).filter((code) => !code.endsWith("998")));
+    const missing = [...ours].filter((code) => !theirs.has(code));
+    const extra = [...theirs].filter((code) => !ours.has(code));
+    assert(missing.length === 0 && extra.length === 0, `${IDS[key]}: municipalities missing ${missing.join(",")} / not in Idescat ${extra.join(",")}`);
+  }
+
   const slugs = new Set<string>();
   const municipalities: Municipality[] = top.map((place) => {
     const code = place.idescat.slice(0, 5);
@@ -303,20 +324,35 @@ async function main() {
     assert(lists.length > 0 && lists.every((list) => list.code && list.short), `${name} M20231: empty lists`);
     assert(new Set(lists.map((list) => list.code)).size === lists.length, `${name} M20231: duplicate list codes`);
     const seats = int(mRow?.escons, `${name} M escons total`);
-    assert(lists.reduce((a, l) => a + l.votes, 0) === mCounts.listVotes, `${name} M20231: lists do not add up to the list total`);
-    assert(lists.reduce((a, l) => a + l.seats, 0) === seats, `${name} M20231: councillors do not add up to ${seats}`);
-    // The page explains the allocation with these two rules, so they must
-    // reproduce the official result exactly.
     const censusPopulation = int(mRow?.padro, `${name} padro`);
-    assert(councilSize(censusPopulation) === seats, `${name} M20231: ${seats} councillors, LOREG 179 gives ${councilSize(censusPopulation)} for ${censusPopulation}`);
-    const allocation = dhondt(lists, seats, mCounts.validVotes);
-    for (const list of lists) {
-      assert(allocation.seats[list.code] === list.seats, `${name} M20231: D'Hondt gives ${list.short} ${allocation.seats[list.code]}, the source ${list.seats}`);
+    const municipal = { ...mCounts, seats, censusPopulation, lists };
+    const system = councilSystem(municipal);
+    const listSum = lists.reduce((a, l) => a + l.votes, 0);
+    if (system === "lists") {
+      // The page explains the allocation with these rules, so they must
+      // reproduce the official result exactly.
+      assert(listSum === mCounts.listVotes, `${name} M20231: lists do not add up to the list total`);
+      assert(electedCount(municipal) === seats, `${name} M20231: councillors do not add up to ${seats}`);
+      assert(councilSize(censusPopulation) === seats, `${name} M20231: ${seats} councillors, LOREG 179 gives ${councilSize(censusPopulation)} for ${censusPopulation}`);
+      // A tie on the last seat in quotient and in votes is settled by lot
+      // (LOREG 163.1.d): the seat must then go to one of the tied lists.
+      const match = matchDhondt(lists, seats, mCounts.validVotes);
+      assert(match.ok, `${name} M20231: D'Hondt does not give the official councillors (${lists.map((l) => `${l.short} ${l.seats}`).join(", ")})`);
+      if (match.drawnBy.length) console.log(`  ${name}: last seat tied (${match.tiedLists.join(", ")}), settled by lot; the source gives it to ${match.drawnBy.join(", ")}`);
+    } else if (system === "open") {
+      // LOREG 184: open lists. D'Hondt, the threshold and the lists' sum do
+      // not apply (see the header); the size and the count of seats do.
+      assert(councilSize(censusPopulation) === seats, `${name} M20231: ${seats} councillors, LOREG 179 gives ${councilSize(censusPopulation)} for ${censusPopulation}`);
+      const elected = electedCount(municipal);
+      assert(elected > 0 && elected <= seats, `${name} M20231: ${elected} councillors for a council of ${seats}`);
+      if (elected < seats) console.log(`  ${name}: the source records ${elected} councillors elected for a council of ${seats}`);
+    } else {
+      // LOREG 179.2: concejo abierto, one post (the mayoralty) by majority.
+      assert(listSum === mCounts.listVotes, `${name} M20231 (concejo abierto): lists do not add up to the list total`);
+      const winners = lists.filter((l) => l.seats > 0);
+      assert(winners.length === 1 && winners[0]!.seats === 1, `${name} M20231 (concejo abierto): ${winners.length} lists hold the post`);
+      assert(lists.every((l) => l === winners[0] || l.votes < winners[0]!.votes), `${name} M20231 (concejo abierto): the mayoralty did not go to the one list with most votes`);
     }
-    // A tie on the last seat goes to the list with more votes; a tie in that
-    // too is settled by lot (LOREG 163.1.d), which no arithmetic reproduces.
-    const { last, nextOut } = allocation;
-    assert(!last || !nextOut || last.value !== nextOut.value || last.votes !== nextOut.votes, `${name} M20231: last seat drawn by lot`);
 
     // Mayor: only when both Generalitat registers agree on the name.
     const fold = (s: string | undefined) => (s ?? "").replace(/\s+/g, " ").trim().toLocaleLowerCase("ca");
@@ -343,7 +379,7 @@ async function main() {
       province: entity.provincia.trim(),
       population: place.population,
       mayor,
-      municipal: { ...mCounts, seats, censusPopulation, lists },
+      municipal,
       congress: regional(`${name} G20231`, turnoutOf("congress"), votesOf("congress")),
       parliament: regional(`${name} A20241`, turnoutOf("parliament"), votesOf("parliament")),
     };
@@ -389,7 +425,14 @@ async function main() {
   // data, no diff, no revalidation, and the pages keep their one date.
   const previous = await readFile(OUT, "utf8").catch(() => "");
   const strip = (text: string) => text.replace(/"readAt": "[^"]*"/, "").replace(/"updated": "[^"]*"/g, "");
-  console.log(`population: ${first.period}, ${TOP}th = ${top[TOP - 1]?.sortName} ${top[TOP - 1]?.population}, ${TOP + 1}st = ${population[TOP]?.sortName} ${population[TOP]?.population}`);
+  const smallest = population[population.length - 1];
+  console.log(`population: ${first.period}, ${population.length} municipalities, smallest ${smallest?.sortName} ${smallest?.population}`);
+  const bySystem = (system: string) => municipalities.filter((m) => councilSystem(m.municipal) === system);
+  console.log(
+    `councils: lists ${bySystem("lists").length}, open ${bySystem("open").length}, council ${bySystem("council").length}; concejo abierto: ${bySystem("council")
+      .map((m) => m.name)
+      .join(", ")}`,
+  );
   console.log(`mayors kept: ${municipalities.filter((m) => m.mayor).length}/${municipalities.length}`);
   if (TOURISM) await printTourism(municipalities);
   if (DRY_RUN) {

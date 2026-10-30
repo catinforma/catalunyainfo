@@ -10,7 +10,7 @@ import { renderInline } from "@/lib/content/inline";
 import { getMessages } from "@/lib/i18n";
 import type { Locale } from "@/lib/i18n/config";
 import { buildElectionPage, type Table } from "@/lib/programmatic/elections/model";
-import { electionPath, electionTranslations, hubMeta, hubPath, placeName } from "@/lib/programmatic/elections/pages";
+import { comarcaOf, comarcaPath, electionPath, electionTranslations, hubMeta, hubPath, isComarcaLocale, placeName } from "@/lib/programmatic/elections/pages";
 import { electionDataset } from "@/lib/programmatic/elections/structured";
 import type { Municipality } from "@/lib/programmatic/elections/types";
 import { breadcrumbSchema, faqSchema, graph } from "@/lib/seo/jsonld";
@@ -22,9 +22,12 @@ import { breadcrumbSchema, faqSchema, graph } from "@/lib/seo/jsonld";
  */
 export function electionCrumbs(locale: Locale, m: Municipality): Crumb[] {
   const t = getMessages(locale);
+  // Catalan and Spanish have a page per comarca between the hub and the town.
+  const comarca = isComarcaLocale(locale) ? [{ label: m.comarca, href: comarcaPath(locale, comarcaOf(m).slug) }] : [];
   return [
     { label: t.common.home, href: `/${locale}/` },
     { label: hubMeta(locale).h1, href: hubPath(locale) },
+    ...comarca,
     { label: placeName(m, locale), href: electionPath(locale, m.slug) },
   ];
 }
@@ -164,6 +167,11 @@ export function ElectionResultsPage({ locale, municipality }: { locale: Locale; 
                       </ul>
                     </div>
                   ))}
+                  {model.siblings.comarca ? (
+                    <p className="mt-3">
+                      <Link href={model.siblings.comarca.href}>{model.siblings.comarca.label}</Link>
+                    </p>
+                  ) : null}
                   <p className="mt-3">
                     <Link href={model.siblings.hub.href}>{model.siblings.hub.label}</Link>
                   </p>

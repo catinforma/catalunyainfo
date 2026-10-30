@@ -96,7 +96,7 @@ export function liveTools(): LiveTool[] {
     {
       name: "Election results by town",
       hubs: { ca: electionsHub("ca"), es: electionsHub("es"), en: electionsHub("en") },
-      description: `2023 local, 2023 general and 2024 Catalan Parliament results for the ${PAGES_PER_LOCALE.ca} most populous municipalities (${PAGES_PER_LOCALE.en} in English), from the Generalitat's open data.`,
+      description: `2023 local, 2023 general and 2024 Catalan Parliament results for all ${PAGES_PER_LOCALE.ca} municipalities in Catalonia (${PAGES_PER_LOCALE.en} in English), with a table per comarca, from the Generalitat's open data.`,
     },
     {
       name: "What to do this weekend",

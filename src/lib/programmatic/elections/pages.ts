@@ -6,29 +6,36 @@
  * Tranche 1 (27 Oct 2026): the 100 most populous municipalities in Catalan and
  * Spanish, the 10 most populous in English. Tranche 2 (29 Oct 2026): the 300
  * most populous in Catalan and Spanish (down to 2,776 residents), 30 in
- * English (the 11 largest and `EN_RESORTS`). Population: Idescat, 1 Jan 2025.
- * Every other municipality stays on the single lookup page
- * (`guies/resultats-eleccions-municipals-catalunya`), which covers all 947.
+ * English (the 11 largest and `EN_RESORTS`). Tranche 3 (30 Oct 2026): all
+ * 947 municipalities in Catalan and Spanish, down to Sant Jaume de Frontanyà
+ * (25 residents), plus a page per comarca (43) with every town's 2023 result
+ * in a table; English stays at 30. Population: Idescat, 1 Jan 2025.
+ *
+ * Small councils are rendered by their own rules (`councilSystem` in
+ * results.ts): 174 councils of up to 250 residents elected with open lists
+ * (LOREG art. 184), where the page prints no percentages and no D'Hondt,
+ * and 5 in concejo abierto (art. 179.2), where voters elect the mayor.
  *
  * Doorway guardrail: every page carries data that exists only for its place
  * (the lists, votes and councillors, the D'Hondt quotients of its last seat,
  * its turnout against Catalonia's) inside guidance written once; the
  * snapshot script refuses any municipality whose figures do not add up or
- * whose councillors D'Hondt does not reproduce.
+ * whose councillors the rule for its size does not reproduce.
  */
 
 import type { MetadataRoute } from "next";
 
+import { caA, caComarca, caDe } from "@/lib/programmatic/holidays/names";
 import { HTML_LANG, INTL_LOCALE, LOCALES, X_DEFAULT_LOCALE, type Locale } from "@/lib/i18n/config";
 import { absoluteUrl, indexingAllowed } from "@/lib/site";
 
 import { capitalised, slugify } from "./names";
-import { electionPath, hubPath, PAGES_PER_LOCALE } from "./paths";
-import { turnout } from "./results";
+import { COMARCA_LOCALES, comarcaPath, electionPath, hubPath, PAGES_PER_LOCALE, type ComarcaLocale } from "./paths";
+import { councilSystem, pooledTurnout, turnout } from "./results";
 import { SNAPSHOT } from "./snapshot";
 import type { ElectionsSnapshot, Municipality } from "./types";
 
-export { ELECTIONS_SEGMENT, electionPath, hubPath, PAGES_PER_LOCALE } from "./paths";
+export { COMARCA_LOCALES, comarcaPath, ELECTIONS_SEGMENT, electionPath, hubPath, isComarcaLocale, PAGES_PER_LOCALE, type ComarcaLocale } from "./paths";
 
 /**
  * English: the big towns and the resorts, where English-speaking readers are.
@@ -73,6 +80,8 @@ export function latestDataDate(snapshot: ElectionsSnapshot = SNAPSHOT): string {
 
 /** Prerendered at build time; the rest render once on first request. */
 export const PRERENDERED_PER_LOCALE = 20;
+/** Comarca pages prerendered at build time, the most populous first; the rest render on first request. */
+export const PRERENDERED_COMARQUES = 4;
 
 export const TITLE_LIMIT = 60;
 export const DESCRIPTION_LIMIT = 155;
@@ -152,6 +161,7 @@ const TITLES: Record<Locale, ((place: string) => string)[]> = {
     (p) => `Eleccions ${p}: resultats 2023`,
     // Names of 36-37 characters (Castell d'Aro, Platja d'Aro i s'Agaró).
     (p) => `Eleccions ${p}: 2023 i 29N`,
+    // 42: Cruïlles, Monells i Sant Sadurní de l'Heura.
     (p) => `${p}: eleccions 2023`,
   ],
   es: [
@@ -189,8 +199,24 @@ export function electionDescription(locale: Locale, m: Municipality): string {
   const place = placeName(m, locale);
   const seats = m.municipal.seats;
   const t = pct(turnout(m.municipal), locale);
-  const options: string[] =
-    locale === "ca"
+  // Concejo abierto (LOREG 179.2): one post, the mayoralty, not councillors.
+  const council = councilSystem(m.municipal) === "council";
+  const options: string[] = council
+    ? locale === "ca"
+      ? [
+          `Municipals 2023 ${inCa(place)}: consell obert, amb elecció directa de l'alcaldia i participació del ${t} %. Generals 2023 i Parlament 2024 davant de Catalunya, i el 29N.`,
+          `Municipals 2023 ${inCa(place)}: consell obert, elecció directa de l'alcaldia, participació del ${t} %. Generals, Parlament i 29N.`,
+        ]
+      : locale === "es"
+        ? [
+            `Municipales 2023 en ${place}: concejo abierto, con elección directa de la alcaldía y participación del ${t} %. Generales 2023 y Parlament 2024 frente a Cataluña, y el 29N.`,
+            `Municipales 2023 en ${place}: concejo abierto, elección directa de la alcaldía, participación del ${t} %. Generales, Parlament y 29N.`,
+          ]
+        : [
+            `${place} local election 2023: open council, the mayor elected directly, ${t}% turnout; the 2023 general and 2024 Catalan elections, and 29 Nov.`,
+            `${place} local election 2023: open council, mayor elected directly, ${t}% turnout; general, Catalan and 29 Nov elections.`,
+          ]
+    : locale === "ca"
       ? [
           `Municipals 2023 ${inCa(place)}: ${seats} regidors i participació del ${t} %. Vots de cada llista, generals 2023 i Parlament 2024 davant de Catalunya, i el 29N.`,
           `Municipals 2023 ${inCa(place)}: ${seats} regidors, participació del ${t} %. Vots per llista, generals, Parlament i 29N.`,
@@ -212,17 +238,17 @@ export function electionDescription(locale: Locale, m: Municipality): string {
 
 const HUB_META: Record<Locale, { title: string; description: string; h1: string }> = {
   ca: {
-    title: `Resultats eleccions per municipi: els ${PAGES_PER_LOCALE.ca} més poblats`,
+    title: `Resultats eleccions per municipi: els ${PAGES_PER_LOCALE.ca} de Catalunya`,
     description: SNAPSHOT.general2026
-      ? `Generals del 29N, municipals 2023, generals 2023 i Parlament 2024 als ${PAGES_PER_LOCALE.ca} municipis més poblats de Catalunya, per comarques. Dades oficials.`
-      : `Municipals 2023, generals 2023 i Parlament 2024 als ${PAGES_PER_LOCALE.ca} municipis més poblats de Catalunya, per comarques, amb dades oficials i espai per al 29N.`,
+      ? `Generals del 29N, municipals 2023, generals 2023 i Parlament 2024 als ${PAGES_PER_LOCALE.ca} municipis de Catalunya, per comarques. Dades oficials.`
+      : `Municipals 2023, generals 2023 i Parlament 2024 als ${PAGES_PER_LOCALE.ca} municipis de Catalunya, per comarques, amb dades oficials i espai per al 29N.`,
     h1: "Resultats de les eleccions per municipi",
   },
   es: {
-    title: `Resultados elecciones por municipio: los ${PAGES_PER_LOCALE.es} más poblados`,
+    title: `Resultados elecciones por municipio: los ${PAGES_PER_LOCALE.es} de Cataluña`,
     description: SNAPSHOT.general2026
-      ? `Generales del 29N, municipales 2023, generales 2023 y Parlament 2024 en los ${PAGES_PER_LOCALE.es} municipios más poblados de Cataluña, por comarcas. Datos oficiales.`
-      : `Municipales 2023, generales 2023 y Parlament 2024 en los ${PAGES_PER_LOCALE.es} municipios más poblados de Cataluña, por comarcas, con datos oficiales y espacio para el 29N.`,
+      ? `Generales del 29N, municipales 2023, generales 2023 y Parlament 2024 en los ${PAGES_PER_LOCALE.es} municipios de Cataluña, por comarcas. Datos oficiales.`
+      : `Municipales 2023, generales 2023 y Parlament 2024 en los ${PAGES_PER_LOCALE.es} municipios de Cataluña, por comarcas, con datos oficiales y espacio para el 29N.`,
     h1: "Resultados de las elecciones por municipio",
   },
   en: {
@@ -260,16 +286,116 @@ export function ofCa(name: string): string {
 /* Hub groups and siblings                                                    */
 /* -------------------------------------------------------------------------- */
 
-export function byComarca(locale: Locale): { comarca: string; municipalities: Municipality[] }[] {
+export interface ComarcaGroup {
+  /** As the register of local authorities writes it: "Vallès Oriental". */
+  comarca: string;
+  /** URL segment of the comarca page, the same as the holiday family's: "valles-oriental". */
+  slug: string;
+  /** Its municipalities with a page in the language asked for, largest first. */
+  municipalities: Municipality[];
+}
+
+function groupsOf(list: Municipality[]): ComarcaGroup[] {
   const groups = new Map<string, Municipality[]>();
-  for (const m of municipalitiesFor(locale)) groups.set(m.comarca, [...(groups.get(m.comarca) ?? []), m]);
+  for (const m of list) groups.set(m.comarca, [...(groups.get(m.comarca) ?? []), m]);
   return [...groups.entries()]
-    .map(([comarca, list]) => ({ comarca, municipalities: list }))
+    .map(([comarca, towns]) => ({ comarca, slug: slugify(comarca), municipalities: towns }))
     .sort((a, b) => a.comarca.localeCompare(b.comarca, "ca"));
+}
+
+const GROUPS = Object.fromEntries(LOCALES.map((locale) => [locale, groupsOf(PAGES[locale])])) as Record<Locale, ComarcaGroup[]>;
+
+/** The comarques with at least one page in this language, by name; each with its towns, largest first. */
+export function byComarca(locale: Locale): ComarcaGroup[] {
+  return GROUPS[locale];
 }
 
 /** The hub's anchor for a comarca's list: "Vallès Oriental" -> "c-valles-oriental". */
 export const comarcaAnchor = (comarca: string): string => `c-${slugify(comarca)}`;
+
+/** Every comarca, with all its municipalities: the comarca pages (Catalan and Spanish, which cover every town). */
+export function comarques(): ComarcaGroup[] {
+  return GROUPS.ca;
+}
+
+const COMARCA_BY_SLUG = new Map(GROUPS.ca.map((g) => [g.slug, g]));
+
+/** The comarca of a municipality, with every town in it. */
+export function comarcaOf(m: Pick<Municipality, "comarca">): ComarcaGroup {
+  return COMARCA_BY_SLUG.get(slugify(m.comarca))!;
+}
+
+/**
+ * The comarca behind a URL, or null for a 404: `routeLocale` is the language
+ * the route folder serves (ca or es; English has no comarca pages), and any
+ * other `[locale]` param or unknown slug is a 404.
+ */
+export function resolveComarcaPage(routeLocale: ComarcaLocale, locale: string, slug: string): ComarcaGroup | null {
+  if (locale !== routeLocale) return null;
+  return COMARCA_BY_SLUG.get(slug) ?? null;
+}
+
+/** Both segments, always in the route's own locale (see `electionsStaticParams`): the most populous comarques. */
+export function comarcaStaticParams(routeLocale: ComarcaLocale): { locale: string; comarca: string }[] {
+  const people = (g: ComarcaGroup) => g.municipalities.reduce((n, m) => n + m.population, 0);
+  return [...comarques()]
+    .sort((a, b) => people(b) - people(a) || a.slug.localeCompare(b.slug))
+    .slice(0, PRERENDERED_COMARQUES)
+    .map((g) => ({ locale: routeLocale, comarca: g.slug }));
+}
+
+export function comarcaTranslations(slug: string): Record<ComarcaLocale, string> {
+  return Object.fromEntries(COMARCA_LOCALES.map((locale) => [locale, comarcaPath(locale, slug)])) as Record<ComarcaLocale, string>;
+}
+
+/** "al Bages", "a l'Alt Empordà", "a la Selva", "a Osona". */
+export const caInComarca = (comarca: string): string => caA(caComarca(comarca));
+/** "del Bages", "de l'Alt Empordà", "d'Osona". */
+export const caOfComarca = (comarca: string): string => caDe(caComarca(comarca));
+
+const fit = (options: string[], limit: number) => options.find((text) => text.length <= limit) ?? options[options.length - 1]!;
+
+export function comarcaTitle(locale: ComarcaLocale, g: ComarcaGroup): string {
+  const n = g.municipalities.length;
+  if (locale === "ca") {
+    const a = caInComarca(g.comarca);
+    return fit(
+      [`Eleccions municipals 2023 ${a}: resultats per municipi`, `Municipals 2023 ${a}: resultats per municipi`, `Municipals 2023 ${a}: els ${n} municipis`, `Eleccions ${g.comarca} 2023`],
+      TITLE_LIMIT,
+    );
+  }
+  return fit([`${g.comarca}: elecciones municipales 2023 por municipio`, `${g.comarca}: municipales 2023 por municipio`, `Elecciones ${g.comarca} 2023`], TITLE_LIMIT);
+}
+
+export function comarcaH1(locale: ComarcaLocale, g: ComarcaGroup): string {
+  return locale === "ca"
+    ? `Resultats de les eleccions municipals del 2023 ${caInComarca(g.comarca)}`
+    : `${g.comarca}: resultados de las elecciones municipales de 2023 por municipio`;
+}
+
+export function comarcaDescription(locale: ComarcaLocale, g: ComarcaGroup): string {
+  const n = g.municipalities.length;
+  const t = pct(pooledTurnout(g.municipalities.map((m) => m.municipal)), locale);
+  if (locale === "ca") {
+    const de = caOfComarca(g.comarca);
+    return fit(
+      [
+        `Municipals del 2023 als ${n} municipis ${de}: la llista amb més regidors, els regidors i la participació de cadascun. Participació conjunta: ${t} %.`,
+        `Municipals del 2023 als ${n} municipis ${de}: llista amb més regidors i participació de cadascun. Participació: ${t} %.`,
+        `Municipals del 2023 als ${n} municipis ${de}: regidors i participació de cadascun.`,
+      ],
+      DESCRIPTION_LIMIT,
+    );
+  }
+  return fit(
+    [
+      `Municipales de 2023 en los ${n} municipios de la comarca ${g.comarca}: la lista con más concejales, los concejales y la participación de cada uno. Participación: ${t} %.`,
+      `Municipales de 2023 en los ${n} municipios de la comarca ${g.comarca}: lista con más concejales y participación de cada uno. Participación: ${t} %.`,
+      `Municipales de 2023 en los ${n} municipios de la comarca ${g.comarca}: concejales y participación de cada uno.`,
+    ],
+    DESCRIPTION_LIMIT,
+  );
+}
 
 /**
  * Other pages to read next, up to `limit`: the same comarca, then the
@@ -277,8 +403,9 @@ export const comarcaAnchor = (comarca: string): string => `c-${slugify(comarca)}
  * than links (30 in the Vallès Oriental), the comarca's largest town and then
  * the towns nearest in population; at least two links always go to other
  * comarques, so a comarca with one page (Moià, the Moianès) is linked from
- * its neighbours in size too. Every page is reached from other towns' pages,
- * not only from the hub. Comarca links are listed largest first.
+ * its neighbours in size too. Comarca links are listed largest first. Since
+ * tranche 3 a comarca can hold 68 towns (Alt Empordà): the comarca page
+ * links every one of them, and every town page links its comarca page.
  */
 export const SIBLINGS_OTHER_COMARQUES = 2;
 
@@ -312,10 +439,13 @@ export interface ElectionsSitemapPath {
 export function electionsSitemapPaths(): ElectionsSitemapPath[] {
   const lastModified = latestDataDate();
   const hubs = LOCALES.map((locale) => ({ path: hubPath(locale), lastModified, translations: hubTranslations() }));
+  const groups = COMARCA_LOCALES.flatMap((locale) =>
+    comarques().map((g) => ({ path: comarcaPath(locale, g.slug), lastModified, translations: comarcaTranslations(g.slug) })),
+  );
   const pages = LOCALES.flatMap((locale) =>
     municipalitiesFor(locale).map((m) => ({ path: electionPath(locale, m.slug), lastModified, translations: electionTranslations(m) })),
   );
-  return [...hubs, ...pages];
+  return [...hubs, ...groups, ...pages];
 }
 
 /** Sitemap entries, with hreflang alternates; nothing on a non-indexable deployment. */

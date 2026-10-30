@@ -160,10 +160,10 @@ const COPY: Record<Locale, T> = {
   },
 };
 
-/** One sentence pointing to the per-municipality pages (tranche 1, 27 Oct 2026; tranche 2, 29 Oct 2026). */
+/** One sentence pointing to the per-municipality pages (tranche 1, 27 Oct 2026; tranche 2, 29 Oct 2026; tranche 3, every municipality, 30 Oct 2026). */
 const TOWN_PAGES: Record<Locale, string> = {
-  ca: `Per als ${PAGES_PER_LOCALE.ca} municipis més poblats hi ha també una pàgina per municipi, amb les municipals del 2023, les generals i el Parlament al costat de Catalunya: [resultats electorals per municipi](${hubPath("ca")}).`,
-  es: `Para los ${PAGES_PER_LOCALE.es} municipios más poblados hay también una página por municipio, con las municipales de 2023, las generales y el Parlament junto a Cataluña: [resultados electorales por municipio](${hubPath("es")}).`,
+  ca: `Cadascun dels ${PAGES_PER_LOCALE.ca} municipis de Catalunya té també la seva pàgina, amb les municipals del 2023, les generals i el Parlament al costat de Catalunya: [resultats electorals per municipi](${hubPath("ca")}).`,
+  es: `Cada uno de los ${PAGES_PER_LOCALE.es} municipios de Cataluña tiene también su página, con las municipales de 2023, las generales y el Parlament junto a Cataluña: [resultados electorales por municipio](${hubPath("es")}).`,
   en: `${PAGES_PER_LOCALE.en} towns, the largest and the main resorts, also have a page each, with the 2023 local, general and Catalan elections beside Catalonia: [election results by town](${hubPath("en")}).`,
 };
 

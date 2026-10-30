@@ -7,12 +7,27 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { renderInline } from "@/lib/content/inline";
 import { getMessages } from "@/lib/i18n";
 import { INTL_LOCALE, type Locale } from "@/lib/i18n/config";
-import { hubCopy } from "@/lib/programmatic/elections/hub";
-import { byComarca, comarcaAnchor, electionPath, hubMeta, hubPath, hubTranslations, latestDataDate, placeName } from "@/lib/programmatic/elections/pages";
+import { HUB_VISIBLE, hubCopy } from "@/lib/programmatic/elections/hub";
+import {
+  byComarca,
+  comarcaAnchor,
+  comarcaPath,
+  electionPath,
+  hubMeta,
+  hubPath,
+  hubTranslations,
+  isComarcaLocale,
+  latestDataDate,
+  placeName,
+} from "@/lib/programmatic/elections/pages";
 import { electionHubDataset } from "@/lib/programmatic/elections/structured";
 import { breadcrumbSchema, graph } from "@/lib/seo/jsonld";
 
-/** The family's index: every municipality page in this language, by comarca. */
+/**
+ * The family's index: every municipality page in this language, by comarca.
+ * Since tranche 3 (947 towns) each comarca shows its largest towns and folds
+ * the rest; its comarca page has them all, with their 2023 result, in a table.
+ */
 export function ElectionsHubPage({ locale }: { locale: Locale }) {
   const t = getMessages(locale);
   const meta = hubMeta(locale);
@@ -59,19 +74,41 @@ export function ElectionsHubPage({ locale }: { locale: Locale }) {
               </ul>
             </nav>
             <p className="text-sm text-[var(--color-muted)]">{copy.listNote}</p>
-            {groups.map((group) => (
-              <section key={group.comarca} aria-labelledby={comarcaAnchor(group.comarca)}>
-                <h3 id={comarcaAnchor(group.comarca)}>{group.comarca}</h3>
-                <ul className="mt-1 flex list-none flex-wrap gap-x-5 gap-y-1 p-0">
-                  {group.municipalities.map((m) => (
-                    <li key={m.slug} className="!mt-0">
-                      <Link href={electionPath(locale, m.slug)}>{placeName(m, locale)}</Link>{" "}
-                      <span className="text-xs text-[var(--color-muted)]">{whole.format(m.population)}</span>
-                    </li>
-                  ))}
-                </ul>
-              </section>
-            ))}
+            {/* 947 towns on one page: the largest of each comarca shown, the rest folded; styles sit on the lists to keep the HTML small. */}
+            {groups.map((group) => {
+              const visible = group.municipalities.slice(0, HUB_VISIBLE);
+              const rest = group.municipalities.slice(HUB_VISIBLE);
+              return (
+                <section key={group.comarca} aria-labelledby={comarcaAnchor(group.comarca)}>
+                  <h3 id={comarcaAnchor(group.comarca)}>{group.comarca}</h3>
+                  {copy.table && isComarcaLocale(locale) ? (
+                    <p className="!mt-1 text-sm">
+                      <span className="text-[var(--color-muted)]">{copy.towns(group.municipalities.length)} · </span>
+                      <Link href={comarcaPath(locale, group.slug)}>{copy.table(group.comarca)}</Link>
+                    </p>
+                  ) : null}
+                  <ul className="mt-1 flex list-none flex-wrap gap-x-5 gap-y-1 p-0 [&>li]:!mt-0 [&_span]:text-xs [&_span]:text-[var(--color-muted)]">
+                    {visible.map((m) => (
+                      <li key={m.slug}>
+                        <Link href={electionPath(locale, m.slug)}>{placeName(m, locale)}</Link> <span>{whole.format(m.population)}</span>
+                      </li>
+                    ))}
+                  </ul>
+                  {rest.length > 0 ? (
+                    <details className="mt-2">
+                      <summary className="cursor-pointer text-sm">{copy.more(rest.length)}</summary>
+                      <ul className="mt-2 list-none columns-2 gap-x-6 p-0 text-sm sm:columns-3 [&>li]:!mt-0 [&>li]:break-inside-avoid [&>li]:py-0.5">
+                        {rest.map((m) => (
+                          <li key={m.slug}>
+                            <Link href={electionPath(locale, m.slug)}>{placeName(m, locale)}</Link>
+                          </li>
+                        ))}
+                      </ul>
+                    </details>
+                  ) : null}
+                </section>
+              );
+            })}
 
             <h2 id="guia">{copy.guideTitle}</h2>
             {copy.guide.map((text) => (

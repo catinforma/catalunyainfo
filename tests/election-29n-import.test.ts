@@ -381,6 +381,81 @@ test("import: a complete, consistent file passes, with Catalonia's residents, to
   assert.equal(imported.towns.size, 2);
 });
 
+/**
+ * Tranche 3: the importer asks the file for every municipality in the
+ * snapshot, 947 of them. A complete, consistent file (built with the same
+ * writer as above) holding all 947 under their INE codes must import every
+ * one, and the slot must render in a town of each kind: open lists,
+ * concejo abierto, a D'Hondt town with a drawn seat, and the largest.
+ * (The real 2023 archive, 02202307_MUNI.zip, was run through the same code
+ * with `npm run elections:29n -- crosscheck` on 30 Oct 2026: 947/947 towns
+ * equal to the Generalitat's data, Catalonia's totals and 48 seats too.)
+ */
+function everyTown(): Mini {
+  return {
+    towns: BASE.municipalities.map((m) => {
+      const list = m.congress.listVotes;
+      const girona = m.code.startsWith("17");
+      return {
+        code: m.code,
+        region: "09",
+        population: m.population,
+        stations: 1,
+        electorate: m.congress.electorate,
+        blank: m.congress.blankVotes,
+        null: m.congress.nullVotes,
+        votes: { "000001": Math.ceil(list / 2), [girona ? "000003" : "000002"]: Math.floor(list / 2) },
+      };
+    }),
+    provinces: mini().provinces,
+  };
+}
+
+test("import: a complete file with all 947 municipalities imports every one, and each kind of council renders the slot", () => {
+  const codes = BASE.municipalities.map((m) => m.code);
+  assert.equal(codes.length, 947);
+  const parsed = miniFiles(everyTown());
+  const imported = buildGeneralImport(parsed, codes, SLOT_DAY);
+  assert.equal(imported.towns.size, 947);
+  for (const m of BASE.municipalities) {
+    const town = imported.towns.get(m.code)!;
+    assert.deepEqual([town.electorate, town.voters, town.validVotes, town.listVotes], [m.congress.electorate, m.congress.voters, m.congress.validVotes, m.congress.listVotes], m.slug);
+  }
+  // The same file read into a snapshot, as `npm run elections:29n -- import` writes it.
+  const snap: ElectionsSnapshot = {
+    ...BASE,
+    municipalities: BASE.municipalities.map((m) => ({ ...m, g2026: imported.towns.get(m.code)! })),
+    general2026: {
+      date: imported.date,
+      source: { name: "Resultados por municipio (test)", publisher: "Ministerio del Interior", file: "02202611_MUNI.zip", fileDate: "2026-12-10", sha256: "0".repeat(64), importedAt: "2026-12-14" },
+      lists: imported.lists,
+      catalonia: imported.catalonia,
+      cataloniaTotal: imported.cataloniaTotal,
+      cataloniaSeats: imported.cataloniaSeats,
+    },
+  };
+  // Carried over a Generalitat refresh of the same 947 towns, nothing dropped.
+  assert.equal(carryGeneral2026(snap, BASE).municipalities.filter((m) => m.g2026).length, 947);
+  for (const slug of ["sant-jaume-de-frontanya", "argencola", "la-floresta", "gisclareny", "rasquera", "barcelona"]) {
+    const m = snap.municipalities.find((x) => x.slug === slug)!;
+    for (const locale of ["ca", "es"] as const) {
+      const model = buildElectionPage(m, locale, snap);
+      assert.ok(model.slot.results, `${locale}/${slug}: the slot shows results`);
+      assert.equal(model.turnout.table.rows.length, 4, `${locale}/${slug}: four elections`);
+      assert.doesNotMatch(JSON.stringify(model), /\$\{|undefined|NaN|\[object/, `${locale}/${slug}`);
+    }
+  }
+  // Every town's slot adds up.
+  for (const m of snap.municipalities) {
+    const view = generalView(m.g2026!, snap.general2026!);
+    const total = view.rows.reduce((a, r) => a + r.share, 0) + view.blank.share;
+    assert.ok(Math.abs(total - 100) < 1e-9, `${m.slug}: shares sum to ${total}`);
+  }
+  // A town missing from the file is refused, not skipped.
+  const short = { ...parsed, municipalities: new Map([...parsed.municipalities].filter(([code]) => code !== "08093")) };
+  refuses(() => buildGeneralImport(short, codes, SLOT_DAY), /Province 08: its .* municipalities add up to .* population, the province row says .*; the file is incomplete/);
+});
+
 test("import refuses each Catalonia-wide inconsistency", () => {
   // A municipality missing (Lleida's only one): its province no longer adds up.
   const p = miniFiles(mini());
@@ -617,13 +692,13 @@ test("committed snapshot: once imported, every town has 29N counts that add up, 
 });
 
 test("routing is unchanged by the 29N slot", () => {
-  assert.equal(municipalitiesFor("ca").length, 300);
-  assert.equal(municipalitiesFor("es").length, 300);
+  assert.equal(municipalitiesFor("ca").length, 947);
+  assert.equal(municipalitiesFor("es").length, 947);
   assert.equal(municipalitiesFor("en").length, 30);
   assert.equal(resolveElectionPage("ca", "ca", "sabadell")?.slug, "sabadell");
   assert.equal(resolveElectionPage("en", "en", "salou")?.slug, "salou");
   assert.equal(resolveElectionPage("es", "ca", "sabadell"), null);
-  assert.equal(resolveElectionPage("ca", "ca", "linyola"), null);
+  assert.equal(resolveElectionPage("en", "en", "linyola"), null);
   assert.deepEqual(electionsStaticParams("ca")[0], { locale: "ca", municipi: "barcelona" });
   // The slot's anchor and title stay put, with or without results.
   const snap = snapshotWith2023();
