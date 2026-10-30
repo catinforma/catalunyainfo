@@ -79,3 +79,30 @@ test("the DOGC corrections the open data never applied win (Ordre EMT/3/2026, Ga
   // An unreachable source stays an honest empty list, not a list of corrections.
   assert.deepEqual(applyDogcCorrections([], 2026), []);
 });
+
+/**
+ * 30 Oct 2026 (top-3 push): the ES page had 359 impressions at 5.7 and 0.8 %
+ * CTR. The snippet now promises the search and the town pages, the lead links
+ * the 300 town pages and the hub, and the busiest days left in the year come
+ * from the same DOGC snapshot as the date pages, with a link to each.
+ */
+test("ca/es: snippet promises the search, lead links the town pages, counts match the snapshot", async () => {
+  const { SNAPSHOT } = await import("../src/lib/programmatic/holidays/data.ts");
+  const hub = { ca: "(/ca/festius/)", es: "(/es/festivos/)" };
+  const nov11 = { ca: "/ca/festius/dia/11-novembre-2026/", es: "/es/festivos/dia/11-noviembre-2026/" };
+  for (const locale of ["ca", "es"] as const) {
+    const copy = COPY[locale];
+    assert.ok(copy.seoTitle.length <= 60 && copy.seoDescription.length <= 155, copy.seoDescription);
+    assert.match(copy.seoTitle, /2026 p[eo]r municipi/);
+    const body = buildBody(locale);
+    const lead = JSON.stringify(body[0]);
+    assert.ok(lead.includes(hub[locale]), `${locale}: hub link in the lead`);
+    assert.match(lead, /300/, `${locale}: town-page count`);
+    assert.match(lead, /\(\/(ca\/festius|es\/festivos)\/barcelona\/\)/, `${locale}: links Barcelona's page`);
+    const upcoming = JSON.stringify(body[1]);
+    assert.ok(upcoming.includes(nov11[locale]), `${locale}: 11 Nov date page`);
+    assert.ok(upcoming.includes(`en ${SNAPSHOT.localByDate["2026-11-11"]!.length} `), `${locale}: 11 Nov count from the snapshot`);
+    assert.doesNotMatch(upcoming, /\{[np]:/, `${locale}: unfilled placeholder`);
+  }
+  assert.ok(JSON.stringify(buildBody("en")[1]).includes("/en/holidays/day/7-december-2026/"));
+});
