@@ -128,7 +128,7 @@ const COPY: Record<Locale, TodayCopy> = {
     localTitle: "És festiu avui al teu municipi?",
     local: [
       "A banda dels dotze dies de tot Catalunya, **cada municipi en fixa dos més**, que són els seus festius locals. Varien de poble a poble i no surten a la llista de pròxims festius: a dalt, a «On és festiu avui?», hi ha els municipis i nuclis que avui i demà fan festa local, segons les dades obertes de la Generalitat.",
-      "Per veure l'any sencer d'una ciutat, cadascun dels {count} municipis més poblats té la seva pàgina amb tots els festius ({towns}); els tens tots a [festius locals per municipi](/ca/festius/). Qualsevol altre municipi és a [festius locals de Catalunya](/ca/guies/festius-locals-catalunya/).",
+      "Per veure l'any sencer d'un municipi, cadascun dels {count} que tenen festius locals té la seva pàgina amb tots els festius ({towns}); els tens tots, per comarques, a [festius locals per municipi](/ca/festius/), i en una sola llista a [festius locals de Catalunya](/ca/guies/festius-locals-catalunya/).",
       "Si el que vols saber és si demà obre la teva escola, compta-hi també els dies de lliure disposició de cada centre: el curs sencer és al [calendari escolar 2026-2027](/ca/guies/calendari-escolar-catalunya/).",
     ],
     weekendTitle: "Un festiu en dissabte es trasllada?",
@@ -160,7 +160,7 @@ const COPY: Record<Locale, TodayCopy> = {
     localTitle: "¿Es festivo hoy en tu municipio?",
     local: [
       "Además de los doce días de toda Cataluña, **cada municipio fija dos más**, que son sus festivos locales. Varían de un pueblo a otro y no salen en la lista de próximos festivos: arriba, en «¿Dónde es festivo hoy?», están los municipios y núcleos que hoy y mañana tienen fiesta local, según los datos abiertos de la Generalitat.",
-      "Para ver el año entero de una ciudad, cada uno de los {count} municipios más poblados tiene su página con todos los festivos ({towns}); los tienes todos en [festivos locales por municipio](/es/festivos/). Cualquier otro municipio está en [festivos locales de Cataluña](/es/guias/festivos-locales-cataluna/).",
+      "Para ver el año entero de un municipio, cada uno de los {count} que tienen festivos locales tiene su página con todos los festivos ({towns}); los tienes todos, por comarcas, en [festivos locales por municipio](/es/festivos/), y en una sola lista en [festivos locales de Cataluña](/es/guias/festivos-locales-cataluna/).",
       "Si lo que quieres saber es si mañana hay cole, cuenta también los días de libre disposición de cada centro: el curso entero está en el [calendario escolar 2026-2027](/es/guias/calendario-escolar-cataluna/).",
     ],
     weekendTitle: "¿Un festivo en sábado se traslada?",

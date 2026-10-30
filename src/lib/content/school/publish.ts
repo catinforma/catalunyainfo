@@ -86,7 +86,7 @@ export const COPY: Record<Locale, Copy> = {
     free: [
       "Cada escola pot fixar **quatre dies de lliure disposició** per curs, repartits entre els tres trimestres. No poden coincidir amb el primer ni l'últim dia de curs, ni amb les vacances de Nadal o Setmana Santa. Els decideix cada centre, i el consell escolar municipal proposa quins convindria que fessin totes les escoles del mateix municipi: per saber-los, cal preguntar a l'escola o a l'ajuntament.",
       "Només de manera excepcional una escola pot posar dies de lliure disposició seguits dins un mateix trimestre: cal l'acord previ del seu consell escolar i l'autorització dels serveis territorials d'Educació. I les escoles que comparteixen línia de transport escolar han de procurar triar els mateixos dies.",
-      `També són festius els dos dies de **festa local** del municipi. Si un festiu local cau en un dia no lectiu, l'escola el pot afegir als seus dies de lliure disposició. Els dels ${townPageCount()} municipis més poblats són a [festius locals per municipi](/ca/festius/), un per un, i els de tots els altres, a la pàgina de [festius locals](/ca/guies/festius-locals-catalunya/).`,
+      `També són festius els dos dies de **festa local** del municipi. Si un festiu local cau en un dia no lectiu, l'escola el pot afegir als seus dies de lliure disposició. Els dels ${townPageCount()} municipis que en tenen són a [festius locals per municipi](/ca/festius/), un per un i per comarques, i en una sola llista a la pàgina de [festius locals](/ca/guies/festius-locals-catalunya/).`,
     ],
     juneTitle: "Juny: jornada continuada",
     june: [
@@ -127,7 +127,7 @@ export const COPY: Record<Locale, Copy> = {
     free: [
       "Cada colegio puede fijar **cuatro días de libre disposición** por curso, repartidos entre los tres trimestres. No pueden coincidir con el primer ni el último día de curso, ni con las vacaciones de Navidad o Semana Santa. Los decide cada centro, y el consejo escolar municipal propone cuáles convendría que hicieran todos los colegios del mismo municipio: para saberlos, hay que preguntar al colegio o al ayuntamiento.",
       "Solo de forma excepcional un colegio puede poner días de libre disposición seguidos dentro de un mismo trimestre: hace falta el acuerdo previo de su consejo escolar y la autorización de los servicios territoriales de Educación. Y los colegios que comparten línea de transporte escolar deben procurar elegir los mismos días.",
-      `También son festivos los dos días de **fiesta local** del municipio. Si un festivo local cae en un día no lectivo, el colegio puede añadirlo a sus días de libre disposición. Los de los ${townPageCount()} municipios más poblados están en [festivos locales por municipio](/es/festivos/), uno a uno, y los de todos los demás, en la página de [festivos locales](/es/guias/festivos-locales-cataluna/).`,
+      `También son festivos los dos días de **fiesta local** del municipio. Si un festivo local cae en un día no lectivo, el colegio puede añadirlo a sus días de libre disposición. Los de los ${townPageCount()} municipios que los tienen están en [festivos locales por municipio](/es/festivos/), uno a uno y por comarcas, y en una sola lista en la página de [festivos locales](/es/guias/festivos-locales-cataluna/).`,
     ],
     juneTitle: "Junio: jornada continua",
     june: [

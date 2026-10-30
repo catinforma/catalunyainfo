@@ -67,7 +67,7 @@ const COPY: Record<Locale, Copy> = {
       "El festiu local que t'afecta a la feina és el del municipi on és el centre de treball, no el d'on vius. Una persona que viu a Badalona i treballa a Barcelona fa els festius locals de Barcelona.",
     ],
     related:
-      "Per als dotze festius de tot Catalunya, mira el [calendari laboral](/ca/guies/calendari-laboral-catalunya/); per saber si avui és festiu, la pàgina [és festiu avui](/ca/guies/es-festiu-avui-catalunya/). Per saber quins dies no hi ha classe, mira el [calendari escolar](/ca/guies/calendari-escolar-catalunya/). Els municipis més poblats tenen cadascun la seva pàgina, amb tots els festius de l'any i si avui és festiu: [festius locals per municipi](/ca/festius/).",
+      "Per als dotze festius de tot Catalunya, mira el [calendari laboral](/ca/guies/calendari-laboral-catalunya/); per saber si avui és festiu, la pàgina [és festiu avui](/ca/guies/es-festiu-avui-catalunya/). Per saber quins dies no hi ha classe, mira el [calendari escolar](/ca/guies/calendari-escolar-catalunya/). Cada municipi té, a més, la seva pàgina, amb tots els festius de l'any i si avui és festiu: [festius locals per municipi](/ca/festius/).",
     heroAlt: "Gegants desfilant per un carrer ple de gent durant una festa major a Catalunya",
     heroCaption: "Molts festius locals coincideixen amb la festa major del poble.",
   },
@@ -94,7 +94,7 @@ const COPY: Record<Locale, Copy> = {
       "El festivo local que te afecta en el trabajo es el del municipio donde está el centro de trabajo, no el de donde vives. Una persona que vive en Badalona y trabaja en Barcelona hace los festivos locales de Barcelona.",
     ],
     related:
-      "Para los doce festivos de toda Cataluña, mira el [calendario laboral](/es/guias/calendario-laboral-cataluna/); para saber si hoy es festivo, la página [es festivo hoy](/es/guias/es-festivo-hoy-cataluna/). Para saber qué días no hay clase, mira el [calendario escolar](/es/guias/calendario-escolar-cataluna/). Los municipios más poblados tienen cada uno su página, con todos los festivos del año y si hoy es festivo: [festivos locales por municipio](/es/festivos/).",
+      "Para los doce festivos de toda Cataluña, mira el [calendario laboral](/es/guias/calendario-laboral-cataluna/); para saber si hoy es festivo, la página [es festivo hoy](/es/guias/es-festivo-hoy-cataluna/). Para saber qué días no hay clase, mira el [calendario escolar](/es/guias/calendario-escolar-cataluna/). Cada municipio tiene, además, su página, con todos los festivos del año y si hoy es festivo: [festivos locales por municipio](/es/festivos/).",
     heroAlt: "Gigantes desfilando por una calle llena de gente durante una fiesta mayor en Cataluña",
     heroCaption: "Muchos festivos locales coinciden con la fiesta mayor del pueblo.",
   },

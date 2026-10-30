@@ -222,8 +222,10 @@ test("a place in the live local data maps to its town page, nuclei to their muni
   assert.equal(municipalityForCode("08019001")?.slug, "barcelona", "a nucleus maps to its municipality");
   // A DOGC correction carries its folded name.
   assert.equal(municipalityForCode("dogc:castelldefels")?.slug, "castelldefels");
-  // A village outside the 100 has no page.
-  assert.equal(municipalityForCode("25123001"), null);
+  // Since tranche 3 every town has a page: a Lladorre nucleus maps to Lladorre.
+  assert.equal(municipalityForCode("25123001")?.slug, "lladorre");
+  // A council with "proposta no formulada" has none (Cerdanyola del Vallès).
+  assert.equal(municipalityForCode("08266000"), null);
   assert.equal(municipalityForCode("nonsense"), null);
 });
 

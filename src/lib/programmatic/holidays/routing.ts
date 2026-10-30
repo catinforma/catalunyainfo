@@ -1,4 +1,4 @@
-import { municipalityBySlug, prerenderSlugs } from "./data";
+import { comarcaBySlug, municipalityBySlug, prerenderComarques, prerenderSlugs, type ComarcaGroup } from "./data";
 import type { DateLocale } from "./format";
 import { DATE_PAGES, dateFromSlug, dateSlug, type DatePage, type MuniLocale } from "./paths";
 import type { SnapshotMunicipality } from "./types";
@@ -19,6 +19,11 @@ export function resolveMunicipality(route: MuniLocale, locale: string, slug: str
   return municipalityBySlug(slug);
 }
 
+export function resolveComarca(route: MuniLocale, locale: string, slug: string): ComarcaGroup | null {
+  if (route !== locale) return null;
+  return comarcaBySlug(slug);
+}
+
 export function resolveDatePage(route: DateLocale, locale: string, slug: string): DatePage | null {
   if (route !== locale) return null;
   return dateFromSlug(slug, route);
@@ -34,9 +39,18 @@ export function resolveDatePage(route: DateLocale, locale: string, slug: string)
  * time overrides the parent's locale and the duplicates collapse.
  */
 
-/** Built at deploy: the 20 biggest places only; the rest render on first request. */
+/**
+ * Built at deploy: the 20 biggest places only. The other ~900 town pages
+ * (tranche 3: every municipality with days in the order) render on their
+ * first request and stay cached until the next deploy.
+ */
 export function municipalityStaticParams(route: MuniLocale): { locale: MuniLocale; municipi: string }[] {
   return prerenderSlugs(20).map((municipi) => ({ locale: route, municipi }));
+}
+
+/** Built at deploy: the four most populous comarques (as the fuel family does); the rest on first request. */
+export function comarcaStaticParams(route: MuniLocale): { locale: MuniLocale; comarca: string }[] {
+  return prerenderComarques(4).map((comarca) => ({ locale: route, comarca }));
 }
 
 /** All eleven date pages are built at deploy (DATE_PAGES). */

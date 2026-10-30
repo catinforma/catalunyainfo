@@ -4,11 +4,13 @@ import { JsonLd } from "@/components/JsonLd";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
 import { todayInCatalonia } from "@/lib/content/holidays/calendar";
-import { dateQuestion, hubCopy, municipalityDescription, municipalityFaq, municipalityTitle } from "@/lib/programmatic/holidays/copy";
-import { municipalityBySlug, nextYearFor } from "@/lib/programmatic/holidays/data";
+import { comarcaDescription, comarcaTitle, dateQuestion, hubCopy, municipalityDescription, municipalityFaq, municipalityTitle } from "@/lib/programmatic/holidays/copy";
+import { comarcaBySlug, municipalityBySlug, nextYearFor } from "@/lib/programmatic/holidays/data";
 import { dateContent } from "@/lib/programmatic/holidays/dates";
 import type { DateLocale } from "@/lib/programmatic/holidays/format";
 import {
+  comarcaPath,
+  comarcaTranslations,
   datePath,
   dateTranslations,
   hubPath,
@@ -21,6 +23,7 @@ import {
 import { breadcrumbSchema, faqSchema, graph } from "@/lib/seo/jsonld";
 import { buildMetadata } from "@/lib/seo/metadata";
 
+import { ComarcaPage, comarcaCrumbs } from "./ComarcaPage";
 import { DatePageView, dateCrumbs } from "./DatePage";
 import { HubPage, hubCrumbs } from "./HubPage";
 import { MunicipalityPage, municipalityCrumbs } from "./MunicipalityPage";
@@ -87,6 +90,36 @@ export function MunicipalityRoute({ locale, slug }: { locale: MuniLocale; slug: 
           ]),
         ])}
       />
+      <SiteFooter locale={locale} />
+    </>
+  );
+}
+
+/* ------------------------------------------------------------ Comarca --- */
+
+export function comarcaMetadata(locale: MuniLocale, slug: string): Metadata {
+  const g = comarcaBySlug(slug);
+  if (!g) return { robots: { index: false, follow: false } };
+  return buildMetadata({
+    locale,
+    path: comarcaPath(locale, g.slug),
+    title: comarcaTitle(g, locale),
+    description: comarcaDescription(g, locale),
+    translations: comarcaTranslations(g.slug),
+  });
+}
+
+/** Null when the slug is not one of the comarques (the page then 404s). */
+export function ComarcaRoute({ locale, slug }: { locale: MuniLocale; slug: string }) {
+  const g = comarcaBySlug(slug);
+  if (!g) return null;
+  return (
+    <>
+      <SiteHeader locale={locale} translations={comarcaTranslations(g.slug)} />
+      <main id="main">
+        <ComarcaPage g={g} locale={locale} />
+      </main>
+      <JsonLd json={graph([breadcrumbSchema(comarcaCrumbs(g, locale))])} />
       <SiteFooter locale={locale} />
     </>
   );

@@ -42,13 +42,22 @@ export interface SnapshotMunicipality {
   shops: string[];
   /** True when the council is listed by name in the shop-opening resolution. */
   shopsOwnList: boolean;
+  /**
+   * Nuclei the open data gives days of their own that the order does not
+   * name (checked by hand, `NUCLEI_NOT_IN_ORDER` in the snapshot script). The
+   * page uses the order's days for the whole municipality and quotes these.
+   */
+  unlisted?: NucleusDays[];
 }
 
 export interface DatePlace {
   name: string;
   /** Municipality the nucleus belongs to; null when the place is the municipality. */
   parent: string | null;
-  /** Slug of the municipality page, when it has one. */
+  /**
+   * Slug of the page that lists the place's days: the municipality's own, or,
+   * for a nucleus, its municipality's. Null only if that municipality has no page.
+   */
   slug: string | null;
 }
 
@@ -78,7 +87,7 @@ export interface HolidaySnapshot {
     comarques: SourceRef;
   };
   municipalities: SnapshotMunicipality[];
-  /** More populous than the last listed, left out because the order gives them no local days. */
+  /** Left out because the order gives them no local days ("proposta no formulada") and they have no nuclei that have. */
   excluded: { name: string; ine: string; population: number; comarca: string; reason: "no-proposal" }[];
   /** Places with a local holiday on dates the date pages talk about. */
   localByDate: Record<string, DatePlace[]>;
