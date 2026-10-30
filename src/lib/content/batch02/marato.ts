@@ -122,7 +122,7 @@ export const MARATO_META: Record<Locale, { path: string; title: string; seoTitle
   en: {
     path: "guides/la-marato-tv3-telethon",
     title: "La Marató 2026: date, cause and how to donate to Catalonia's TV3 telethon",
-    seoTitle: "La Marató 2026 (TV3 telethon): date, cause, how to donate",
+    seoTitle: "La Marató 2026: TV3 telethon on 13 December, how to donate",
     seoDescription:
       "La Marató de 3Cat 2026, Catalonia's TV3 telethon, is on Sunday 13 December, for neurodegenerative and neuromuscular diseases. How to watch and donate.",
     excerpt:

@@ -43,6 +43,9 @@ test("the EN guide answers 'barcelona christmas market' first and every edition 
   const en = CHRISTMAS.editions.en;
   assert.ok(en.seoTitle.startsWith("Barcelona Christmas markets 2026"), en.seoTitle);
   assert.ok(en.seoTitle.length <= 60);
+  // 30 Oct CTR sweep: the EN snippet states the answer, as the ca/es ones do.
+  assert.match(en.seoDescription, /^Fira de Santa Llúcia 2026 dates not published yet \(2025: 28 Nov–23 Dec/);
+  assert.ok(en.seoDescription.length <= 155);
   const blocks = en.blocks as { type: string; lead?: boolean; text?: string }[];
   const lead = blocks.find((b) => b.type === "paragraph" && b.lead)?.text ?? "";
   assert.match(lead, /Fira de Santa Llúcia/);
