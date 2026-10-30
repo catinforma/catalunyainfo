@@ -16,16 +16,26 @@ import {
   caTheOrdinal,
 } from "../src/lib/programmatic/elections/model.ts";
 import { displayName, slugify } from "../src/lib/programmatic/elections/names.ts";
-import { TOURISM_REGISTER, hubCopy } from "../src/lib/programmatic/elections/hub.ts";
+import { HUB_VISIBLE, TOURISM_REGISTER, hubCopy } from "../src/lib/programmatic/elections/hub.ts";
+import { buildComarcaPage } from "../src/lib/programmatic/elections/comarca.ts";
 import {
+  COMARCA_LOCALES,
   DESCRIPTION_LIMIT,
   EN_LARGEST,
   EN_RESORTS,
   PAGES_PER_LOCALE,
+  PRERENDERED_COMARQUES,
   PRERENDERED_PER_LOCALE,
   TITLE_LIMIT,
   byComarca,
   comarcaAnchor,
+  comarcaDescription,
+  comarcaH1,
+  comarcaOf,
+  comarcaPath,
+  comarcaStaticParams,
+  comarcaTitle,
+  comarques,
   electionDescription,
   electionPath,
   electionTitle,
@@ -39,11 +49,28 @@ import {
   inCa,
   municipalitiesFor,
   ofCa,
+  resolveComarcaPage,
   resolveElectionPage,
   resolveElectionsHub,
   siblings,
 } from "../src/lib/programmatic/elections/pages.ts";
-import { councilSize, dhondt, municipalView, regionalView, residents, share, thresholdVotes, turnout } from "../src/lib/programmatic/elections/results.ts";
+import { ALL_MUNICIPALITIES, COMARCA_SEGMENT } from "../src/lib/programmatic/elections/paths.ts";
+import {
+  councilSize,
+  councilSystem,
+  dhondt,
+  electedCount,
+  leadingLists,
+  matchDhondt,
+  municipalView,
+  OPEN_LIST_MAX,
+  pooledTurnout,
+  regionalView,
+  residents,
+  share,
+  thresholdVotes,
+  turnout,
+} from "../src/lib/programmatic/elections/results.ts";
 import { SNAPSHOT } from "../src/lib/programmatic/elections/snapshot.ts";
 import { dayLine, daysBetween, electionDayStatus, madridDate } from "../src/lib/programmatic/elections/today.ts";
 import type { Counts, Municipality } from "../src/lib/programmatic/elections/types.ts";
@@ -60,11 +87,13 @@ const bySlug = (slug: string): Municipality => {
 /* Snapshot shape and invariants                                              */
 /* -------------------------------------------------------------------------- */
 
-test("the snapshot holds the 300 most populous municipalities, largest first, with unique slugs", () => {
-  assert.equal(ALL.length, 300);
+test("the snapshot holds every municipality in Catalonia, largest first, with unique slugs", () => {
+  // Tranche 3 (30 Oct 2026): all 947, the number Idescat and the election data both give.
+  assert.equal(ALL.length, 947);
+  assert.equal(ALL_MUNICIPALITIES, ALL.length);
   for (let i = 1; i < ALL.length; i++) assert.ok(ALL[i - 1]!.population >= ALL[i]!.population, `order at ${ALL[i]!.slug}`);
-  assert.equal(new Set(ALL.map((m) => m.slug)).size, 300);
-  assert.equal(new Set(ALL.map((m) => m.code)).size, 300);
+  assert.equal(new Set(ALL.map((m) => m.slug)).size, 947);
+  assert.equal(new Set(ALL.map((m) => m.code)).size, 947);
   for (const m of ALL) {
     assert.match(m.code, /^\d{5}$/);
     assert.equal(m.idescat.slice(0, 5), m.code);
@@ -74,20 +103,24 @@ test("the snapshot holds the 300 most populous municipalities, largest first, wi
     assert.ok(["Barcelona", "Girona", "Lleida", "Tarragona"].includes(m.province), `${m.slug}: ${m.province}`);
   }
   assert.equal(ALL[0]!.slug, "barcelona");
-  // Population ranking: Idescat, 1 January 2025, read 27 Oct 2026 (tranche 1)
-  // and 29 Oct 2026 (tranche 2, same release). 100th: Abrera, 13,227; 101st:
-  // Castellbisbal, 13,061; 300th: Castellet i la Gornal, 2,776 (301st:
-  // Linyola, 2,762, not included).
+  // Population ranking: Idescat, 1 January 2025, read 27 Oct 2026 (tranche 1),
+  // 29 Oct 2026 (tranche 2) and 30 Oct 2026 (tranche 3, same release). 100th:
+  // Abrera, 13,227; 101st: Castellbisbal, 13,061; 300th: Castellet i la
+  // Gornal, 2,776; 301st: Linyola, 2,762; the smallest, Sant Jaume de
+  // Frontanyà, 25.
   assert.equal(SNAPSHOT.sources.population.period, "2025-01-01");
   assert.deepEqual([ALL[99]!.name, ALL[99]!.population], ["Abrera", 13227]);
   assert.deepEqual([ALL[100]!.name, ALL[100]!.population], ["Castellbisbal", 13061]);
   assert.deepEqual([ALL[299]!.name, ALL[299]!.population], ["Castellet i la Gornal", 2776]);
-  assert.ok(!ALL.some((m) => m.slug === "linyola"));
+  assert.deepEqual([ALL[300]!.name, ALL[300]!.population], ["Linyola", 2762]);
+  assert.deepEqual([ALL[946]!.name, ALL[946]!.population], ["Sant Jaume de Frontanyà", 25]);
   // Tranche 1's hundred are still the first hundred, in the same order.
   assert.deepEqual(
     ALL.slice(0, 5).map((m) => m.slug),
     ["barcelona", "l-hospitalet-de-llobregat", "terrassa", "badalona", "sabadell"],
   );
+  // No town can shadow the comarca pages' static segment.
+  assert.ok(!ALL.some((m) => m.slug === COMARCA_SEGMENT));
 });
 
 test("the snapshot carries its sources, official and https, with ISO dates", () => {
@@ -115,8 +148,17 @@ test("every count adds up, in every municipality and election", () => {
     assertCounts(m.municipal, `${m.slug} municipal`);
     assertCounts(m.congress, `${m.slug} congress`);
     assertCounts(m.parliament, `${m.slug} parliament`);
-    assert.equal(m.municipal.lists.reduce((a, l) => a + l.votes, 0), m.municipal.listVotes, `${m.slug}: municipal lists`);
-    assert.equal(m.municipal.lists.reduce((a, l) => a + l.seats, 0), m.municipal.seats, `${m.slug}: councillors`);
+    const system = councilSystem(m.municipal);
+    if (system === "open") {
+      // Not checked, for a stated reason: under open lists (LOREG 184) a list's
+      // figure is not a count of ballots, so the lists need not add up to the
+      // ballots cast for candidacies. The ballots themselves add up (above),
+      // and no more councillors are recorded than the council has.
+      assert.ok(electedCount(m.municipal) > 0 && electedCount(m.municipal) <= m.municipal.seats, `${m.slug}: councillors`);
+    } else {
+      assert.equal(m.municipal.lists.reduce((a, l) => a + l.votes, 0), m.municipal.listVotes, `${m.slug}: municipal lists`);
+      assert.equal(m.municipal.lists.reduce((a, l) => a + l.seats, 0), m.municipal.seats, `${m.slug}: councillors`);
+    }
     assert.equal(Object.values(m.congress.votes).reduce((a, b) => a + b, 0), m.congress.listVotes, `${m.slug}: congress lists`);
     assert.equal(Object.values(m.parliament.votes).reduce((a, b) => a + b, 0), m.parliament.listVotes, `${m.slug}: parliament lists`);
     for (const code of [...Object.keys(m.congress.votes)]) assert.ok(SNAPSHOT.elections.congress.lists?.[code], `${m.slug}: unknown congress list ${code}`);
@@ -132,12 +174,60 @@ test("every count adds up, in every municipality and election", () => {
   assert.equal(Object.values(SNAPSHOT.catalonia.parliament.seats).reduce((a, b) => a + b, 0), 135);
 });
 
+/**
+ * The exceptions, each with its reason, as found on 30 Oct 2026 when tranche
+ * 3 brought in every municipality. Anything else that departs from the
+ * rules fails here, as it fails the snapshot script.
+ */
+const DRAWN_BY_LOT = { rasquera: "CM", "sant-feliu-de-buixalleu": "ERC-AM" } as const;
+const CONCEJO_ABIERTO = ["castell-de-l-areny", "figols", "gisclareny", "la-quar", "senan"];
+const SEATS_LEFT_EMPTY = { "la-floresta": 4 } as const;
+
 test("council sizes follow LOREG art. 179 and D'Hondt with the 5 % threshold reproduces every official seat", () => {
+  const counts = { lists: 0, open: 0, council: 0 };
   for (const m of ALL) {
-    assert.equal(councilSize(m.municipal.censusPopulation), m.municipal.seats, `${m.slug}: council size`);
-    const { seats } = dhondt(m.municipal.lists, m.municipal.seats, m.municipal.validVotes);
-    for (const list of m.municipal.lists) assert.equal(seats[list.code], list.seats, `${m.slug}: ${list.short}`);
+    const system = councilSystem(m.municipal);
+    counts[system]++;
+    if (system === "lists") {
+      // Over 250 residents: the scale, and D'Hondt seat by seat, except a last
+      // seat tied in quotient and votes, which the law settles by lot.
+      assert.ok(m.municipal.censusPopulation > OPEN_LIST_MAX);
+      assert.equal(councilSize(m.municipal.censusPopulation), m.municipal.seats, `${m.slug}: council size`);
+      const match = matchDhondt(m.municipal.lists, m.municipal.seats, m.municipal.validVotes);
+      assert.ok(match.ok, `${m.slug}: D'Hondt`);
+      const drawn = match.drawnBy.map((code) => m.municipal.lists.find((l) => l.code === code)!.short);
+      if (m.slug in DRAWN_BY_LOT) assert.deepEqual(drawn, [DRAWN_BY_LOT[m.slug as keyof typeof DRAWN_BY_LOT]], m.slug);
+      else {
+        assert.deepEqual(drawn, [], `${m.slug}: no draw`);
+        const { seats } = dhondt(m.municipal.lists, m.municipal.seats, m.municipal.validVotes);
+        for (const list of m.municipal.lists) assert.equal(seats[list.code], list.seats, `${m.slug}: ${list.short}`);
+      }
+    } else if (system === "open") {
+      // Up to 250 residents: open lists (LOREG 184). The scale still applies
+      // (3 or 5); D'Hondt and the 5 % threshold do not, so they are not checked.
+      assert.ok(m.municipal.censusPopulation <= OPEN_LIST_MAX);
+      assert.equal(councilSize(m.municipal.censusPopulation), m.municipal.seats, `${m.slug}: council size`);
+      assert.ok([3, 5].includes(m.municipal.seats), m.slug);
+      const elected = electedCount(m.municipal);
+      if (m.slug in SEATS_LEFT_EMPTY) assert.equal(elected, SEATS_LEFT_EMPTY[m.slug as keyof typeof SEATS_LEFT_EMPTY], m.slug);
+      else assert.equal(elected, m.municipal.seats, `${m.slug}: every seat filled`);
+    } else {
+      // Concejo abierto (LOREG 179.2): one post, the mayoralty, to the list with most votes.
+      assert.ok(CONCEJO_ABIERTO.includes(m.slug), m.slug);
+      assert.equal(m.municipal.seats, 1);
+      assert.ok(m.municipal.censusPopulation <= 100);
+      const [mayor] = leadingLists(m.municipal);
+      assert.ok(m.municipal.lists.every((l) => l === mayor || l.votes < mayor!.votes), m.slug);
+    }
   }
+  assert.deepEqual(counts, { lists: 768, open: 174, council: 5 });
+  for (const slug of Object.keys(DRAWN_BY_LOT)) assert.equal(councilSystem(bySlug(slug).municipal), "lists", slug);
+  // A tie that the law settles by lot: arithmetic accepts either outcome, nothing else.
+  const rasquera = bySlug("rasquera").municipal;
+  const swapped = rasquera.lists.map((l) => ({ ...l, seats: l.short === "CM" ? 2 : l.short === "SI-Solidaritat" ? 3 : l.seats }));
+  assert.deepEqual(matchDhondt(swapped, 7, rasquera.validVotes).drawnBy.length, 1, "the other outcome of the draw is as valid");
+  const wrong = rasquera.lists.map((l) => ({ ...l, seats: l.short === "CM" ? 2 : l.short === "ERC-AM" ? 3 : l.seats }));
+  assert.equal(matchDhondt(wrong, 7, rasquera.validVotes).ok, false, "a seat given to a list outside the tie");
   // The scale itself, at its edges.
   assert.deepEqual([100, 101, 250, 251, 1000, 1001, 2000, 2001, 5000, 5001, 10000, 10001, 20000, 20001, 50000, 50001, 100000].map(councilSize), [3, 5, 5, 7, 7, 9, 9, 11, 11, 13, 13, 17, 17, 21, 21, 25, 25]);
   assert.equal(councilSize(100_001), 27, "26 is even, so one more");
@@ -373,6 +463,166 @@ test("known answers, tranche 2: the last seat in a council of 11, worked by hand
   assert.equal(caTheOrdinal(13), "El 13è");
 });
 
+/**
+ * Tranche 3: read on 30 Oct 2026 straight from analisi.transparenciacatalunya.cat
+ * with plain SoQL queries (irrv-2mfc and ntc4-rnwr, `id_nivell_territorial='MU'`,
+ * `territori_codi in(...)`, outside the snapshot script), one town for each
+ * rule the small councils follow. [short, name, votes, councillors], as the
+ * source writes them; in open-list towns "votes" is the source's per-list
+ * figure, which is not a count of ballots. Congress (G20231) and Parliament
+ * (A20241) electorate, voters, valid votes and PSC (list code 6).
+ *
+ *   gisclareny               28 residents, concejo abierto: one post, the mayoralty
+ *   sant-jaume-de-frontanya  25 residents (31 on the 2023 register), open lists of 3
+ *   savalla-del-comtat       52 on the register: open lists of 3 (not concejo abierto in 2023)
+ *   argencola                216 on the register: open lists of 5
+ *   la-floresta              154 on the register: open lists, 4 of 5 seats filled
+ *   rasquera                 822 on the register: D'Hondt, last seat drawn by lot
+ */
+const KNOWN_T3 = {
+  gisclareny: {
+    system: "council",
+    municipal: { electorate: 25, voters: 23, nullVotes: 1, blankVotes: 1, listVotes: 21, validVotes: 22, seats: 1, censusPopulation: 28 },
+    lists: [
+      ["G-AM", "Gisclareny - Acord Municipal", 21, 1],
+      ["CxG -CP", "Compromís per Gisclareny - Candidatura de Progrés", 0, 0],
+    ],
+    congress: { electorate: 25, voters: 19, validVotes: 18, PSC: 4 },
+    parliament: { electorate: 28, voters: 28, validVotes: 28, PSC: 0 },
+  },
+  "sant-jaume-de-frontanya": {
+    system: "open",
+    municipal: { electorate: 23, voters: 23, nullVotes: 1, blankVotes: 1, listVotes: 21, validVotes: 22, seats: 3, censusPopulation: 31 },
+    lists: [["CxSJF -CP", "Compromís per Sant Jaume de Frontanyà - Candidatura de Progrés", 14, 3]],
+    congress: { electorate: 23, voters: 12, validVotes: 11, PSC: 2 },
+    parliament: { electorate: 23, voters: 16, validVotes: 16, PSC: 6 },
+  },
+  "savalla-del-comtat": {
+    system: "open",
+    municipal: { electorate: 51, voters: 44, nullVotes: 1, blankVotes: 0, listVotes: 43, validVotes: 43, seats: 3, censusPopulation: 52 },
+    lists: [
+      ["CM", "Junts per Savallà I Segura - Compromís Municipal", 22, 2],
+      ["ERC-AM", "Esquerra Republicana de Catalunya - Acord Municipal", 21, 1],
+      ["PSC-CP", "Partit dels Socialistes de Catalunya - Candidatura de Progrés", 0, 0],
+    ],
+    congress: { electorate: 51, voters: 35, validVotes: 34, PSC: 1 },
+    parliament: { electorate: 48, voters: 32, validVotes: 32, PSC: 0 },
+  },
+  argencola: {
+    system: "open",
+    municipal: { electorate: 181, voters: 147, nullVotes: 4, blankVotes: 1, listVotes: 142, validVotes: 143, seats: 5, censusPopulation: 216 },
+    lists: [
+      ["AM", "Esquerra Republicana de Catalunya - Argençola Entre Tots - Acord Municipal", 89, 5],
+      ["CM", "Junts per Argençola - Compromís Municipal", 47, 0],
+      ["PSC-CP", "Partit dels Socialistes de Catalunya - Candidatura de Progrés", 4, 0],
+    ],
+    congress: { electorate: 175, voters: 116, validVotes: 114, PSC: 22 },
+    parliament: { electorate: 180, voters: 110, validVotes: 109, PSC: 8 },
+  },
+  "la-floresta": {
+    system: "open",
+    municipal: { electorate: 130, voters: 106, nullVotes: 0, blankVotes: 0, listVotes: 106, validVotes: 106, seats: 5, censusPopulation: 154 },
+    lists: [
+      ["ERC-AM", "Esquerra Republicana de Catalunya - Acord Municipal", 53, 4],
+      ["CM", "Junts per la Floresta-Compromís Municipal", 49, 0],
+      ["PSC-CP", "Partit dels Socialistes de Catalunya - Candidatura de Progrés", 1, 0],
+      ["PP", "Partido Popular", 0, 0],
+    ],
+    congress: { electorate: 129, voters: 90, validVotes: 90, PSC: 18 },
+    parliament: { electorate: 130, voters: 94, validVotes: 94, PSC: 11 },
+  },
+  rasquera: {
+    system: "lists",
+    municipal: { electorate: 588, voters: 426, nullVotes: 25, blankVotes: 19, listVotes: 382, validVotes: 401, seats: 7, censusPopulation: 822 },
+    lists: [
+      ["CM", "Junts per Rasquera - Compromís Municipal", 132, 3],
+      ["SI-Solidaritat", "Solidaritat per la Independencia", 132, 2],
+      ["ERC-AM", "Esquerra Republicana de Catalunya - Acord Municipal", 118, 2],
+    ],
+    congress: { electorate: 565, voters: 379, validVotes: 369, PSC: 124 },
+    parliament: { electorate: 552, voters: 339, validVotes: 336, PSC: 61 },
+  },
+} as const;
+
+test("known answers, tranche 3: six small towns match the official source exactly, one per rule", () => {
+  for (const [slug, known] of Object.entries(KNOWN_T3)) {
+    const m = bySlug(slug);
+    assert.equal(councilSystem(m.municipal), known.system, `${slug} system`);
+    for (const [field, value] of Object.entries(known.municipal)) {
+      assert.equal(m.municipal[field as keyof typeof known.municipal], value, `${slug} municipal ${field}`);
+    }
+    assert.equal(m.municipal.lists.length, known.lists.length, `${slug}: every list`);
+    known.lists.forEach(([short, name, votes, seats], i) => {
+      const list = m.municipal.lists[i];
+      assert.deepEqual([list?.short, list?.name, list?.votes, list?.seats], [short, name, votes, seats], `${slug} list ${i + 1}`);
+    });
+    for (const key of ["congress", "parliament"] as const) {
+      const k = known[key];
+      assert.equal(m[key].electorate, k.electorate, `${slug} ${key} electorate`);
+      assert.equal(m[key].voters, k.voters, `${slug} ${key} voters`);
+      assert.equal(m[key].validVotes, k.validVotes, `${slug} ${key} valid`);
+      assert.equal(m[key].votes["6"] ?? 0, k.PSC, `${slug} ${key} PSC (list code 6)`);
+    }
+  }
+  // Open lists: the lists' figures are the source's, and do not add up to the ballots.
+  const argencola = bySlug("argencola").municipal;
+  assert.equal(argencola.lists.reduce((a, l) => a + l.votes, 0), 140);
+  assert.equal(argencola.listVotes, 142);
+});
+
+test("open lists render without shares, D'Hondt or threshold, and say why", () => {
+  const m = bySlug("argencola");
+  for (const locale of ["ca", "es"] as const) {
+    const page = buildElectionPage(m, locale);
+    assert.equal(page.municipal.table.headers.length, 3, `${locale}: no share column`);
+    assert.doesNotMatch(JSON.stringify(page.municipal.table.rows), /%/, `${locale}: no percentage per list`);
+    assert.deepEqual(page.municipal.table.rows[0], ["AM\nEsquerra Republicana de Catalunya - Argençola Entre Tots - Acord Municipal", "89", "5"]);
+    const seats = page.seats.md.join(" ");
+    assert.match(seats, /article 184|artículo 184/);
+    assert.match(seats, /cada elector en pot marcar fins a 4|cada elector puede marcar hasta 4/, `${locale}: 101-250 residents`);
+    assert.doesNotMatch(seats, /quocient|cociente|vots ÷|votos ÷/, `${locale}: no quotient`);
+    assert.match(page.municipal.table.note, /140.*142/, `${locale}: the figures that do not add up, quoted`);
+  }
+  const ca = buildElectionPage(m, "ca");
+  assert.equal(ca.municipal.summary, "Argençola escull 5 regidors amb llistes obertes. Van votar 147 persones d'un cens de 181: una participació del 81,2 %, davant del 55,6 % del conjunt de Catalunya. La candidatura amb més regidors va ser AM, amb 5 dels 5.");
+  assert.match(ca.municipal.mayorRule, /de 100 a 250 habitants tots els regidors hi poden ser candidats/);
+  // Up to 100 residents: 3 names, 2 marks, and no 100-250 mayor rule.
+  const tiny = buildElectionPage(bySlug("sant-jaume-de-frontanya"), "ca");
+  assert.match(tiny.seats.md[0]!, /Fins a 100 residents, cada candidatura presenta com a màxim 3 noms i cada elector en pot marcar fins a 2/);
+  assert.doesNotMatch(tiny.municipal.mayorRule, /100 a 250/);
+  // A seat left empty is stated, not hidden.
+  const floresta = buildElectionPage(bySlug("la-floresta"), "ca");
+  assert.match(floresta.municipal.summary, /Les dades oficials hi registren 4 regidors elegits dels 5 del ple\./);
+  assert.match(floresta.faq[1]!.answer, /4 regidors elegits/);
+  assert.match(buildElectionPage(bySlug("la-floresta"), "es").municipal.summary, /registran 4 concejales electos de los 5 del pleno/);
+});
+
+test("concejo abierto: the mayoralty, elected directly, with shares (one vote per voter)", () => {
+  const ca = buildElectionPage(bySlug("gisclareny"), "ca");
+  assert.deepEqual(ca.municipal.table.headers, ["Candidatura", "Vots", "% vots vàlids", "Alcaldia"]);
+  assert.deepEqual(ca.municipal.table.rows[0], ["G-AM\nGisclareny - Acord Municipal", "21", "95,5 %", "Sí"]);
+  assert.match(ca.seats.md[0]!, /un sol càrrec a elegir a Gisclareny, l'alcaldia, i no els 3 regidors/);
+  assert.match(ca.seats.md[0]!, /article 179\.2/);
+  assert.ok(ca.facts.some((f) => f.label === "Règim municipal"));
+  assert.ok(!ca.facts.some((f) => f.label === "Regidors al ple"), "no councillors claimed");
+  assert.match(ca.faq[1]!.answer, /^Cap: Gisclareny funciona en consell obert/);
+  assert.match(electionDescription("ca", bySlug("gisclareny")), /consell obert/);
+  assert.doesNotMatch(electionDescription("es", bySlug("gisclareny")), /concejales/);
+  const es = buildElectionPage(bySlug("senan"), "es");
+  assert.match(es.municipal.summary, /^Senan funciona en régimen de concejo abierto/);
+});
+
+test("a last seat drawn by lot is said to be, with the tied quotient", () => {
+  const ca = buildElectionPage(bySlug("rasquera"), "ca");
+  assert.match(ca.seats.md[1]!, /^El 7è i últim regidor es va decidir per sorteig: CM i SI-Solidaritat hi empataven amb el mateix quocient, 44 \(132 vots ÷ 3\)/);
+  assert.match(ca.seats.md[1]!, /el regidor va ser per a CM\.$/);
+  // Two lists level on most votes: both named, neither called "the" most voted.
+  assert.match(ca.municipal.summary, /Les llistes més votades van ser CM i SI-Solidaritat, empatades amb 132 vots cadascuna/);
+  assert.doesNotMatch(ca.municipal.summary, /La llista més votada/);
+  assert.match(buildElectionPage(bySlug("sant-feliu-de-buixalleu"), "es").seats.md[1]!, /se decidió por sorteo: CM y ERC-AM .* el concejal fue para ERC-AM\.$/);
+  assert.match(buildElectionPage(bySlug("rasquera"), "en").seats.md[1]!, /was decided by lot/);
+});
+
 test("known answers: Catalonia's vote from abroad is the four 'Residents Absents' rows", () => {
   const abroad = SNAPSHOT.catalonia.congress.abroad;
   assert.equal(abroad.electorate, 217682 + 24016 + 18277 + 21576);
@@ -389,12 +639,18 @@ test("known answers: Catalonia's vote from abroad is the four 'Residents Absents
 test("percentages are computed from counts and sum to 100 with blank votes", () => {
   for (const m of ALL) {
     const mv = municipalView(m.municipal);
-    const total = mv.rows.reduce((a, r) => a + r.share, 0) + mv.blankShare;
-    assert.ok(Math.abs(total - 100) < 1e-9, `${m.slug}: municipal shares sum to ${total}`);
-    for (const row of mv.rows) assert.equal(row.share, share(row.votes, m.municipal.validVotes));
-    // Printed to one decimal, the rounding error stays within half a tenth per row.
-    const printed = mv.rows.reduce((a, r) => a + Number(r.share.toFixed(1)), 0) + Number(mv.blankShare.toFixed(1));
-    assert.ok(Math.abs(printed - 100) <= 0.05 * (mv.rows.length + 1) + 1e-9, `${m.slug}: printed shares ${printed}`);
+    // Open lists (LOREG 184): the lists' figures are not ballots, so the page
+    // prints no share for them (tested above) and there is nothing to sum.
+    if (councilSystem(m.municipal) !== "open") {
+      const total = mv.rows.reduce((a, r) => a + r.share, 0) + mv.blankShare;
+      assert.ok(Math.abs(total - 100) < 1e-9, `${m.slug}: municipal shares sum to ${total}`);
+      for (const row of mv.rows) assert.equal(row.share, share(row.votes, m.municipal.validVotes));
+      // Printed to one decimal, the rounding error stays within half a tenth per row.
+      const printed = mv.rows.reduce((a, r) => a + Number(r.share.toFixed(1)), 0) + Number(mv.blankShare.toFixed(1));
+      assert.ok(Math.abs(printed - 100) <= 0.05 * (mv.rows.length + 1) + 1e-9, `${m.slug}: printed shares ${printed}`);
+    } else {
+      assert.doesNotMatch(JSON.stringify(buildElectionPage(m, "ca").municipal.table.rows), /%/, `${m.slug}: no list share printed`);
+    }
 
     for (const key of ["congress", "parliament"] as const) {
       const view = regionalView(m[key], SNAPSHOT.catalonia[key], SNAPSHOT.elections[key].lists ?? {});
@@ -402,7 +658,7 @@ test("percentages are computed from counts and sum to 100 with blank votes", () 
       const region = view.rows.reduce((a, r) => a + r.cataloniaShare, 0) + view.others.cataloniaShare + view.blank.cataloniaShare;
       assert.ok(Math.abs(local - 100) < 1e-9, `${m.slug} ${key}: local shares ${local}`);
       assert.ok(Math.abs(region - 100) < 1e-9, `${m.slug} ${key}: Catalonia shares ${region}`);
-      assert.ok(view.turnout > 0 && view.turnout < 100);
+      assert.ok(view.turnout > 0 && view.turnout <= 100, `${m.slug} ${key}: turnout`); // 100 % happens: Gisclareny, Parliament 2024, 28 of 28
     }
   }
 });
@@ -437,14 +693,30 @@ test("list names reach the page exactly as the source writes them", () => {
   assert.deepEqual(parliament["6"], { short: "PSC", name: "Partit dels Socialistes de Catalunya (PSC-PSOE)" });
 });
 
-test("no source name contains inline-formatting characters, so summaries print it verbatim", () => {
+test("source names with inline-formatting characters never reach a formatted (md) field", () => {
+  // Summaries, tables and FAQs are plain text and print any name verbatim.
+  // The `md` fields go through the inline formatter, where "_..._" would
+  // turn italic; names reach them only in the D'Hondt paragraph (the lists
+  // of the last seat) and, on comarca pages, town names.
+  const odd = (name: string) => /[*_`[\]]/.test(name);
   const names = [
-    ...ALL.flatMap((m) => m.municipal.lists.flatMap((l) => [l.short, l.name])),
     ...Object.values(SNAPSHOT.elections.congress.lists ?? {}).flatMap((l) => [l.short, l.name]),
     ...Object.values(SNAPSHOT.elections.parliament.lists ?? {}).flatMap((l) => [l.short, l.name]),
     ...ALL.flatMap((m) => [m.name, m.comarca, m.mayor?.name ?? ""]),
   ];
-  for (const name of names) assert.doesNotMatch(name, /[*_`[\]]/, name);
+  for (const name of names) assert.ok(!odd(name), name);
+  // One municipal list does (read 30 Oct 2026): Vilajuïga's "PSC_CP", 13 votes, under the 5 % threshold.
+  const oddLists = ALL.flatMap((m) => m.municipal.lists.filter((l) => odd(l.short) || odd(l.name)).map((l) => `${m.slug}:${l.short}`));
+  assert.deepEqual(oddLists, ["vilajuiga:PSC_CP"]);
+  for (const m of ALL) {
+    const lists = m.municipal.lists.filter((l) => odd(l.short) || odd(l.name));
+    if (!lists.length) continue;
+    for (const locale of COMARCA_LOCALES) {
+      const page = buildElectionPage(m, locale);
+      const md = [...page.seats.md, ...page.slot.md, ...page.census.md, ...page.next.md].join("\n");
+      for (const l of lists) assert.ok(!md.includes(l.short) && !md.includes(l.name), `${locale}/${m.slug}: ${l.short} in a formatted field`);
+    }
+  }
 });
 
 /* -------------------------------------------------------------------------- */
@@ -475,25 +747,104 @@ test("each route serves only its own locale; anything else is a 404", () => {
   assert.equal(resolveElectionPage("es", "es", "vielha-e-mijaran")?.name, "Vielha e Mijaran");
   assert.equal(resolveElectionPage("es", "ca", "castellbisbal"), null, "/ca/elecciones/castellbisbal/");
   assert.equal(resolveElectionPage("ca", "es", "tossa-de-mar"), null, "/es/eleccions/tossa-de-mar/");
-  // Outside the 300, unknown and malformed slugs.
-  assert.equal(resolveElectionPage("ca", "ca", "linyola"), null, "301st");
-  assert.equal(resolveElectionPage("es", "es", "linyola"), null, "301st");
-  assert.equal(resolveElectionPage("ca", "ca", "prats-de-llucanes"), null, "302nd");
-  assert.equal(resolveElectionPage("ca", "ca", "pals"), null, "a resort outside the 300 (318th)");
-  assert.equal(resolveElectionPage("ca", "ca", "cadaques")?.name, "Cadaqués", "inside: 2,918 residents");
+  // Tranche 3: every municipality in Catalan and Spanish, none more in English.
+  assert.equal(resolveElectionPage("ca", "ca", "linyola")?.name, "Linyola", "301st");
+  assert.equal(resolveElectionPage("es", "es", "linyola")?.name, "Linyola", "301st");
+  assert.equal(resolveElectionPage("ca", "ca", "pals")?.name, "Pals", "a resort, 318th");
+  assert.equal(resolveElectionPage("ca", "ca", "sant-jaume-de-frontanya")?.name, "Sant Jaume de Frontanyà", "the smallest");
+  assert.equal(resolveElectionPage("es", "es", "gisclareny")?.name, "Gisclareny", "concejo abierto");
+  assert.equal(resolveElectionPage("ca", "ca", "cruilles-monells-i-sant-sadurni-de-l-heura")?.name, "Cruïlles, Monells i Sant Sadurní de l'Heura");
+  assert.equal(resolveElectionPage("en", "en", "linyola"), null, "English stays at 30");
+  assert.equal(resolveElectionPage("en", "en", "gisclareny"), null);
+  assert.equal(resolveElectionPage("es", "ca", "gisclareny"), null, "/ca/elecciones/gisclareny/");
+  assert.equal(resolveElectionPage("ca", "es", "linyola"), null, "/es/eleccions/linyola/");
+  // Unknown and malformed slugs.
+  assert.equal(resolveElectionPage("ca", "ca", "cadaques")?.name, "Cadaqués");
   assert.equal(resolveElectionPage("ca", "ca", "castellbisbal/"), null);
   assert.equal(resolveElectionPage("ca", "ca", ""), null);
   assert.equal(resolveElectionPage("ca", "ca", "Sabadell"), null);
   assert.equal(resolveElectionPage("ca", "ca", "../sabadell"), null);
   assert.equal(resolveElectionPage("ca", "xx", "sabadell"), null);
+  assert.equal(resolveElectionPage("ca", "ca", "comarca"), null, "the comarca segment is not a town");
+  assert.equal(resolveElectionPage("ca", "ca", "bages"), null, "a comarca slug is not a town");
   // Hubs.
   assert.equal(resolveElectionsHub("ca", "ca"), true);
   assert.equal(resolveElectionsHub("ca", "es"), false);
   assert.equal(resolveElectionsHub("en", "ca"), false);
 });
 
+test("comarca pages: one per comarca in Catalan and Spanish, each in its own locale; anything else is a 404", () => {
+  assert.equal(comarques().length, 43);
+  assert.equal(resolveComarcaPage("ca", "ca", "bages")?.comarca, "Bages");
+  assert.equal(resolveComarcaPage("es", "es", "alt-emporda")?.municipalities.length, 68);
+  assert.equal(resolveComarcaPage("ca", "ca", "llucanes")?.comarca, "Lluçanès", "the newest comarca (2023)");
+  assert.equal(resolveComarcaPage("ca", "ca", "aran")?.comarca, "Aran");
+  assert.equal(resolveComarcaPage("ca", "es", "bages"), null, "/es/eleccions/comarca/bages/");
+  assert.equal(resolveComarcaPage("es", "ca", "bages"), null, "/ca/elecciones/comarca/bages/");
+  assert.equal(resolveComarcaPage("ca", "en", "bages"), null, "no English comarca pages");
+  assert.equal(resolveComarcaPage("ca", "ca", "sabadell"), null, "a town is not a comarca");
+  assert.equal(resolveComarcaPage("ca", "ca", "Bages"), null);
+  assert.equal(resolveComarcaPage("ca", "ca", ""), null);
+  assert.equal(resolveComarcaPage("ca", "ca", "bages/"), null);
+  assert.equal(resolveComarcaPage("ca", "ca", "../bages"), null);
+  assert.equal(comarcaPath("ca", "valles-oriental"), "/ca/eleccions/comarca/valles-oriental/");
+  assert.equal(comarcaPath("es", "valles-oriental"), "/es/elecciones/comarca/valles-oriental/");
+  // Every town sits in exactly one comarca page, the same slugs as the holiday family's.
+  const listed = comarques().flatMap((g) => g.municipalities.map((m) => m.slug));
+  assert.equal(listed.length, ALL.length);
+  assert.equal(new Set(listed).size, ALL.length);
+  for (const m of ALL) assert.ok(comarcaOf(m).municipalities.includes(m), m.slug);
+  for (const g of comarques()) {
+    assert.equal(g.slug, slugify(g.comarca));
+    for (let i = 1; i < g.municipalities.length; i++) assert.ok(g.municipalities[i - 1]!.population >= g.municipalities[i]!.population, `${g.slug}: largest first`);
+  }
+  // Four prerendered per locale (the most populous comarques); the rest on first request.
+  assert.equal(PRERENDERED_COMARQUES, 4);
+  for (const locale of COMARCA_LOCALES) {
+    const params = comarcaStaticParams(locale);
+    assert.deepEqual(params.map((p) => p.comarca), ["barcelones", "valles-occidental", "baix-llobregat", "maresme"]);
+    for (const p of params) assert.ok(resolveComarcaPage(locale, p.locale, p.comarca), `${locale}/${p.comarca}`);
+  }
+});
+
+test("comarca page: every town's 2023 result in a row, from the snapshot", () => {
+  const g = resolveComarcaPage("ca", "ca", "bergueda")!;
+  const ca = buildComarcaPage(g, "ca");
+  assert.equal(ca.h1, "Resultats de les eleccions municipals del 2023 al Berguedà");
+  assert.equal(ca.table.rows.length, 31);
+  assert.deepEqual(ca.table.headers, ["Municipi", "Habitants", "Llista amb més regidors", "Regidors", "Participació"]);
+  const row = (town: string) => ca.table.rows.find((r) => r.town === town)!;
+  assert.deepEqual([row("Berga").leading, row("Berga").seats, row("Berga").href], ["CUP-AMUNT", "6 de 17", "/ca/eleccions/berga/"]);
+  assert.deepEqual([row("Cercs").leading, row("Cercs").seats], ["SOM CERCS i CM", "3 de 9 cadascuna"], "a tie names both");
+  assert.deepEqual([row("Gisclareny").leading, row("Gisclareny").seats], ["G-AM", "alcaldia"], "concejo abierto");
+  assert.equal(row("Gisclareny").turnout, "92,0 %");
+  assert.match(ca.systems ?? "", /llistes obertes/);
+  assert.match(ca.systems ?? "", /Castell de l'Areny, la Quar, Fígols i Gisclareny funcionen en règim de \*\*consell obert\*\*/);
+  // Turnout pooled from the counts, beside Catalonia's.
+  const pooled = pooledTurnout(g.municipalities.map((m) => m.municipal));
+  assert.equal(pooled, (g.municipalities.reduce((a, m) => a + m.municipal.voters, 0) / g.municipalities.reduce((a, m) => a + m.municipal.electorate, 0)) * 100);
+  assert.match(ca.facts[2]!.value, /^58,7 % al Berguedà; 55,6 % a Catalunya$/);
+  const es = buildComarcaPage(resolveComarcaPage("es", "es", "garrigues")!, "es");
+  assert.equal(es.h1, "Garrigues: resultados de las elecciones municipales de 2023 por municipio");
+  assert.match(es.table.note, /La Floresta: los datos oficiales registran menos concejales electos que plazas en el pleno/);
+  assert.equal(es.table.rows.find((r) => r.town === "La Floresta")?.seats, "4 de 5");
+  // A comarca with no small council says nothing about them.
+  assert.equal(buildComarcaPage(resolveComarcaPage("ca", "ca", "barcelones")!, "ca").systems, null);
+  for (const locale of COMARCA_LOCALES) {
+    for (const group of comarques()) {
+      const model = buildComarcaPage(group, locale);
+      const text = JSON.stringify(model);
+      assert.doesNotMatch(text, /\$\{|undefined|NaN|\[object/, `${locale}/${group.slug}`);
+      assert.doesNotMatch(text, /guanyador|ganador|winner|victòria|victoria|enquest|encuesta|sondeo|sondeig/i, `${locale}/${group.slug}`);
+      assert.equal(model.table.rows.length, group.municipalities.length);
+      assert.equal(model.others.links.length, 42);
+      assert.ok(model.table.rows.every((r) => r.leading && r.seats && /%$/.test(r.turnout)), `${locale}/${group.slug}`);
+    }
+  }
+});
+
 test("only the 20 largest are prerendered, and only in their own locale", () => {
-  // 300 + 300 + 30 pages, 60 at build time: the rest render once on first request.
+  // 947 + 947 + 30 pages, 60 at build time: the rest render once on first request.
   assert.equal(PRERENDERED_PER_LOCALE, 20);
   assert.equal(electionsStaticParams("ca").length, 20);
   assert.equal(electionsStaticParams("es").length, 20);
@@ -572,11 +923,42 @@ test("titles fit 60 characters with the place and the year; descriptions fit 155
   assert.equal(electionTitle("es", platja), "Elecciones Castell d'Aro, Platja d'Aro i s'Agaró: 2023 y 29N");
   assert.equal(electionTitle("en", platja), "Castell d'Aro, Platja d'Aro i s'Agaró: 2023 election results");
   assert.equal(electionTitle("ca", bySlug("vandellos-i-l-hospitalet-de-l-infant")), "Eleccions Vandellòs i l'Hospitalet de l'Infant: 2023 i 29N");
-  // 630 town pages, every one with its own title and description.
-  assert.equal(LOCALES.reduce((n, locale) => n + municipalitiesFor(locale).length, 0), 630);
+  // The longest name (42 characters, tranche 3) takes the shortest form.
+  const cruilles = bySlug("cruilles-monells-i-sant-sadurni-de-l-heura");
+  assert.equal(electionTitle("ca", cruilles), "Cruïlles, Monells i Sant Sadurní de l'Heura: eleccions 2023");
+  assert.equal(electionTitle("es", cruilles), "Cruïlles, Monells i Sant Sadurní de l'Heura: elecciones 2023");
+  // 1,924 town pages, every one with its own title and description.
+  assert.equal(LOCALES.reduce((n, locale) => n + municipalitiesFor(locale).length, 0), 947 + 947 + 30);
   for (const m of municipalitiesFor("ca")) {
     assert.doesNotMatch(electionDescription("ca", m), /\b(del|el) 1{1,2},/, `${m.slug}: Catalan elision`);
   }
+});
+
+test("comarca titles fit 60 characters and descriptions 155, unique, with the comarca and the year", () => {
+  for (const locale of COMARCA_LOCALES) {
+    const titles = new Set<string>();
+    const descriptions = new Set<string>();
+    for (const g of comarques()) {
+      const title = comarcaTitle(locale, g);
+      const rendered = composeTitle(title, comarcaPath(locale, g.slug), "2026-10-30");
+      const shown = typeof rendered === "string" ? `${rendered} · CatalunyaInfo` : rendered.absolute;
+      assert.ok(title.length <= TITLE_LIMIT, `${locale}/${g.slug}: ${title.length} "${title}"`);
+      assert.ok(shown.length <= 60, `${locale}/${g.slug}: rendered ${shown.length}`);
+      assert.match(title, /2023/);
+      assert.ok(title.includes(g.comarca), `${locale}/${g.slug}: comarca in the title`);
+      const description = comarcaDescription(locale, g);
+      assert.ok(description.length <= DESCRIPTION_LIMIT && description.length >= 70, `${locale}/${g.slug}: description ${description.length}`);
+      assert.ok(comarcaH1(locale, g).includes(g.comarca));
+      if (locale === "ca") assert.doesNotMatch(description, /\b(del|el) 1{1,2},/, `${g.slug}: Catalan elision`);
+      titles.add(title);
+      descriptions.add(description);
+    }
+    assert.equal(titles.size, 43, `${locale}: titles are unique`);
+    assert.equal(descriptions.size, 43, `${locale}: descriptions are unique`);
+  }
+  assert.equal(comarcaTitle("ca", resolveComarcaPage("ca", "ca", "bages")!), "Eleccions municipals 2023 al Bages: resultats per municipi");
+  assert.equal(comarcaTitle("ca", resolveComarcaPage("ca", "ca", "valles-occidental")!), "Municipals 2023 al Vallès Occidental: resultats per municipi");
+  assert.equal(comarcaTitle("es", resolveComarcaPage("es", "es", "alt-emporda")!), "Alt Empordà: elecciones municipales 2023 por municipio");
 });
 
 /* -------------------------------------------------------------------------- */
@@ -616,23 +998,33 @@ test("the 29N line: countdown, the day before, the day, the day after, and the s
 /* Sitemap                                                                    */
 /* -------------------------------------------------------------------------- */
 
-test("sitemap: 633 URLs with the snapshot date and their language alternates", () => {
+test("sitemap: 2,013 URLs with the snapshot date and their language alternates", () => {
   const entries = electionsSitemapPaths();
-  assert.equal(entries.length, 3 + 300 + 300 + 30);
-  assert.equal(entries.filter((e) => e.path.startsWith("/ca/eleccions/")).length, 301);
-  assert.equal(entries.filter((e) => e.path.startsWith("/es/elecciones/")).length, 301);
+  // 3 hubs, 43 comarca pages in Catalan and in Spanish, 947 + 947 + 30 towns.
+  assert.equal(entries.length, 3 + 43 * 2 + 947 + 947 + 30);
+  assert.equal(entries.filter((e) => e.path.startsWith("/ca/eleccions/")).length, 1 + 43 + 947);
+  assert.equal(entries.filter((e) => e.path.startsWith("/es/elecciones/")).length, 1 + 43 + 947);
   assert.equal(entries.filter((e) => e.path.startsWith("/en/elections/")).length, 31);
+  assert.equal(entries.filter((e) => e.path.includes("/comarca/")).length, 86);
   // Every sitemap URL resolves, and nothing that 404s is listed.
   for (const entry of entries) {
-    const [, locale, , slug] = entry.path.split("/");
+    const [, locale, , slug, comarca] = entry.path.split("/");
     if (!slug) continue;
+    if (slug === COMARCA_SEGMENT) {
+      assert.ok(locale === "ca" || locale === "es", entry.path);
+      assert.ok(resolveComarcaPage(locale, locale, comarca!), `${entry.path} resolves`);
+      assert.deepEqual(entry.translations, { ca: `/ca/eleccions/comarca/${comarca}/`, es: `/es/elecciones/comarca/${comarca}/` });
+      continue;
+    }
     assert.ok(resolveElectionPage(locale as Locale, locale!, slug), `${entry.path} resolves`);
   }
-  assert.ok(!entries.some((e) => e.path.includes("/linyola/")));
+  assert.ok(entries.some((e) => e.path === "/ca/eleccions/linyola/"));
+  assert.ok(entries.some((e) => e.path === "/es/elecciones/sant-jaume-de-frontanya/"));
   assert.ok(!entries.some((e) => e.path === "/en/elections/sant-cugat-del-valles/"));
+  assert.ok(!entries.some((e) => e.path.startsWith("/en/elections/comarca/")));
   assert.equal(new Set(entries.map((e) => e.path)).size, entries.length);
   for (const entry of entries) {
-    assert.match(entry.path, /^\/(ca\/eleccions|es\/elecciones|en\/elections)\/([a-z0-9-]+\/)?$/);
+    assert.match(entry.path, /^\/(ca\/eleccions|es\/elecciones|en\/elections)\/((comarca\/)?[a-z0-9-]+\/)?$/);
     // The read date, or the 29N import date once the Interior file is in.
     assert.equal(entry.lastModified, latestDataDate());
     assert.ok(Object.values(entry.translations).includes(entry.path), `${entry.path} lists itself`);
@@ -745,13 +1137,20 @@ test("siblings reach every page: each Catalan and Spanish page is linked from an
   assert.equal(small.sameProvince.length, 2);
   assert.equal(small.sameComarca[0]!.slug, "granollers", "the Vallès Oriental's largest town");
   assert.ok(small.sameComarca.slice(1).every((x) => x.population < 20_000), "the rest are near Vallromanes in size");
-  // Moià, the only page in the Moianès, is linked from towns of its size.
-  assert.ok(municipalitiesFor("ca").some((m) => siblings(m, "ca").sameProvince.some((x) => x.slug === "moia")));
-  // A comarca with a single page falls back to the province.
+  // Since tranche 3 the Aran has all nine of its towns: Vielha links its own comarca first.
   const vielha = siblings(bySlug("vielha-e-mijaran"), "ca");
-  assert.equal(vielha.sameComarca.length, 0);
-  assert.equal(vielha.sameProvince.length, 4);
+  assert.equal(vielha.sameComarca.length, 6);
+  assert.ok(vielha.sameComarca.some((x) => x.slug === "es-bordes"), "Aranese article first, as the holiday family writes it");
+  assert.equal(vielha.sameProvince.length, 2);
   assert.ok(vielha.sameProvince.every((x) => x.province === "Lleida"));
+  // Every Catalan and Spanish town page links its comarca page, which links every town.
+  for (const locale of COMARCA_LOCALES) {
+    for (const m of [bySlug("gisclareny"), bySlug("barcelona"), bySlug("es-bordes")]) {
+      assert.equal(buildElectionPage(m, locale).siblings.comarca?.href, comarcaPath(locale, comarcaOf(m).slug));
+    }
+  }
+  assert.equal(buildElectionPage(bySlug("barcelona"), "en").siblings.comarca, null, "no comarca pages in English");
+  assert.equal(displayName("Bòrdes, Es"), "es Bòrdes");
 });
 
 test("the English set: the 11 largest and the 19 resorts, all with Catalan and Spanish pages", () => {
@@ -774,10 +1173,10 @@ test("the English set: the 11 largest and the 19 resorts, all with Catalan and S
   const hub = hubCopy("en");
   assert.ok(hub.sources.some((s) => s.url === TOURISM_REGISTER.url), "the register the resorts come from is cited");
   assert.match(hub.intro.join(" "), /the 11 largest .* and the 19 with the most places/);
-  assert.match(hub.intro.join(" "), /cover the 300 most populous/);
+  assert.match(hub.intro.join(" "), /cover all 947 municipalities in Catalonia/);
 });
 
-test("the hubs: 300 pages by comarca with a jump list, 30 in English", () => {
+test("the hubs: 947 pages by comarca with a jump list, the rest folded; 30 in English", () => {
   for (const locale of LOCALES) {
     const groups = byComarca(locale);
     const anchors = groups.map((g) => comarcaAnchor(g.comarca));
@@ -786,27 +1185,35 @@ test("the hubs: 300 pages by comarca with a jump list, 30 in English", () => {
     assert.equal(groups.reduce((n, g) => n + g.municipalities.length, 0), PAGES_PER_LOCALE[locale]);
     assert.ok(hubCopy(locale).jumpLabel);
   }
-  assert.equal(byComarca("ca").length, 40, "40 of Catalonia's comarques have at least one page");
+  assert.equal(byComarca("ca").length, 43, "all of Catalonia's comarques, the Aran and the Lluçanès included");
+  assert.equal(PAGES_PER_LOCALE.ca, SNAPSHOT.municipalities.length, "the guides' number is the snapshot's");
+  assert.equal(PAGES_PER_LOCALE.es, SNAPSHOT.municipalities.length);
+  // Light: each comarca shows its six largest towns; the rest are folded, and its comarca page has them all.
+  assert.equal(HUB_VISIBLE, 6);
+  assert.equal(byComarca("ca").filter((g) => g.municipalities.length > HUB_VISIBLE).length, 40, "the Barcelonès, the Garraf and the Alta Ribagorça fit unfolded");
+  assert.match(hubCopy("ca").table!("Bages"), /^Taula de resultats del Bages$/);
+  assert.equal(hubCopy("en").table, null, "no comarca pages in English");
   assert.equal(comarcaAnchor("Vallès Oriental"), "c-valles-oriental");
   assert.equal(comarcaAnchor("Pla de l'Estany"), "c-pla-de-l-estany");
-  assert.match(hubMeta("ca").title, /els 300 més poblats/);
-  assert.match(hubMeta("es").title, /los 300 más poblados/);
-  assert.match(hubCopy("ca").lead, /als 300 municipis més poblats/);
+  assert.match(hubMeta("ca").title, /els 947 de Catalunya/);
+  assert.match(hubMeta("es").title, /los 947 de Cataluña/);
+  assert.match(hubCopy("ca").lead, /als 947 municipis de Catalunya/);
+  assert.match(hubCopy("ca").guide[0]!, /Als 174 municipis de fins a 250 habitants es vota amb llistes obertes .* 5 municipis funcionen en consell obert/);
   for (const locale of LOCALES) {
     const model = buildElectionPage(bySlug("salou"), locale);
     assert.equal(model.siblings.hub.href, hubPath(locale));
   }
-  assert.equal(buildElectionPage(bySlug("salou"), "ca").siblings.hub.label, "Els 300 municipis més poblats, per comarques");
+  assert.equal(buildElectionPage(bySlug("salou"), "ca").siblings.hub.label, "Els 947 municipis de Catalunya, per comarques");
 });
 
-test("the guides quote the page counts, not tranche 1's", () => {
+test("the guides quote the page counts, not an earlier tranche's", () => {
   for (const [name, article] of [["voting", VOTING], ["election night", ELECTION_NIGHT], ["municipal results", MUNICIPAL_RESULTS]] as const) {
     for (const locale of LOCALES) {
       const text = JSON.stringify(article.editions[locale].blocks);
-      assert.doesNotMatch(text, /100 municipis|100 municipios|ten largest/, `${name}/${locale}`);
+      assert.doesNotMatch(text, /100 municipis|100 municipios|ten largest|300 municipis|300 municipios|més poblats|más poblados/, `${name}/${locale}`);
     }
-    assert.match(JSON.stringify(article.editions.ca.blocks), /300 municipis més poblats/, `${name}/ca`);
-    assert.match(JSON.stringify(article.editions.es.blocks), /300 municipios más poblados/, `${name}/es`);
+    assert.match(JSON.stringify(article.editions.ca.blocks), /947 municipis de Catalunya/, `${name}/ca`);
+    assert.match(JSON.stringify(article.editions.es.blocks), /947 municipios de Cataluña/, `${name}/es`);
     assert.match(JSON.stringify(article.editions.en.blocks), /30 towns/, `${name}/en`);
   }
 });

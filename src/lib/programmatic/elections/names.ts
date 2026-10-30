@@ -5,12 +5,15 @@
 
 /**
  * Idescat lists names in sorting order ("Hospitalet de Llobregat, l'");
- * the official name in running text puts the article first.
+ * the official name in running text puts the article first, lower case.
+ * Aranese "es" too ("Bòrdes, Es" -> "es Bòrdes"), as the holiday family does
+ * (`articleFirst` in holidays/dogc.ts), so both families share the slug.
  */
 export function displayName(sortName: string): string {
-  const match = /^(.*), (l'|el|la|els|les)$/.exec(sortName.trim());
+  const match = /^(.*), (l'|el|la|els|les|es)$/i.exec(sortName.trim());
   if (!match) return sortName.trim();
-  const [, rest, article] = match;
+  const [, rest, found] = match;
+  const article = found!.toLowerCase();
   return article === "l'" ? `l'${rest}` : `${article} ${rest}`;
 }
 

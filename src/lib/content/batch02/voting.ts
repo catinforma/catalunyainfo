@@ -279,7 +279,7 @@ const COPY: Record<Locale, T> = {
     nextTitle: "Próximas elecciones en Cataluña",
     next: [
       `Las próximas son las **elecciones generales del domingo 29 de noviembre de 2026** (Congreso y Senado). Después vienen las **municipales, previstas para el domingo 23 de mayo de 2027**: la ley las fija el cuarto domingo de mayo, y el decreto de convocatoria se expide 55 días antes y se publica al día siguiente en el BOE, el 29 y el 30 de marzo de 2027 (${a("LOREG, artículo 42.3", URL.loreg)}). Ese decreto todavía no se ha publicado. Elecciones al Parlament no hay ninguna convocada.`,
-      `¿Cómo votó tu municipio la última vez? Consulta los [resultados electorales en tu municipio](${hubPath("es")}): municipales de 2023, generales de 2023 y Parlament de 2024 en los ${PAGES_PER_LOCALE.es} municipios más poblados de Cataluña.`,
+      `¿Cómo votó tu municipio la última vez? Consulta los [resultados electorales en tu municipio](${hubPath("es")}): municipales de 2023, generales de 2023 y Parlament de 2024 en los ${PAGES_PER_LOCALE.es} municipios de Cataluña.`,
     ],
     nextCaption: "Próximas elecciones en Cataluña",
     nextHeaders: ["Elección", "Fecha", "Situación"],
@@ -376,7 +376,7 @@ const COPY: Record<Locale, T> = {
     nextTitle: "Properes eleccions a Catalunya",
     next: [
       `Les properes són les **eleccions generals del diumenge 29 de novembre de 2026** (Congrés i Senat). Després vénen les **municipals, previstes per al diumenge 23 de maig de 2027**: la llei les fixa el quart diumenge de maig, i el decret de convocatòria s'expedeix 55 dies abans i es publica l'endemà al BOE, el 29 i el 30 de març de 2027 (${a("LOREG, article 42.3", URL.loreg)}). Aquest decret encara no s'ha publicat. Eleccions al Parlament no n'hi ha cap de convocada.`,
-      `Com va votar el teu municipi l'última vegada? Mira els [resultats electorals al teu municipi](${hubPath("ca")}): municipals del 2023, generals del 2023 i Parlament del 2024 als ${PAGES_PER_LOCALE.ca} municipis més poblats de Catalunya.`,
+      `Com va votar el teu municipi l'última vegada? Mira els [resultats electorals al teu municipi](${hubPath("ca")}): municipals del 2023, generals del 2023 i Parlament del 2024 als ${PAGES_PER_LOCALE.ca} municipis de Catalunya.`,
     ],
     nextCaption: "Properes eleccions a Catalunya",
     nextHeaders: ["Elecció", "Data", "Situació"],

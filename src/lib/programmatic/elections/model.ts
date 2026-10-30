@@ -12,10 +12,25 @@
 
 import { B2_TITLES, b2href, type B2Key } from "@/lib/content/batch02/shared";
 import { shortDate } from "@/lib/content/holidays/calendar";
+import { joinList } from "@/lib/programmatic/holidays/names";
 import { INTL_LOCALE, type Locale } from "@/lib/i18n/config";
 
-import { electionPath, hubPath, inCa, latestDataDate, ofCa, PAGES_PER_LOCALE, placeName, siblings } from "./pages";
-import { councilSize, generalView, municipalView, regionalView, turnout, type GeneralView, type RegionalView } from "./results";
+import { caOfComarca, comarcaOf, comarcaPath, electionPath, hubPath, inCa, isComarcaLocale, latestDataDate, ofCa, PAGES_PER_LOCALE, placeName, siblings } from "./pages";
+import {
+  councilSize,
+  councilSystem,
+  electedCount,
+  generalView,
+  leadingLists,
+  matchDhondt,
+  municipalView,
+  regionalView,
+  SMALLEST_STEP,
+  turnout,
+  type GeneralView,
+  type MunicipalView,
+  type RegionalView,
+} from "./results";
 import { SNAPSHOT } from "./snapshot";
 import type { DayLines } from "./today";
 import type { ElectionsSnapshot, General2026, Municipality, RegionalVotes } from "./types";
@@ -95,7 +110,8 @@ export interface ElectionPageModel {
   next: { title: string; md: string[] };
   faqTitle: string;
   faq: { question: string; answer: string }[];
-  siblings: { title: string; groups: { label: string; links: Link[] }[]; hub: Link };
+  /** `comarca`: the comarca page, every town's 2023 result in a table (Catalan and Spanish only). */
+  siblings: { title: string; groups: { label: string; links: Link[] }[]; hub: Link; comarca: Link | null };
   related: { title: string; links: Link[] };
   sources: { title: string; note: string; items: { name: string; publisher: string; url: string; updated: string }[] };
 }
@@ -148,6 +164,283 @@ const ORDINAL_EN = (n: number) => {
 
 const RELATED: B2Key[] = ["electionNight", "voting", "candidates", "municipalResults", "congressResults", "parliamentResults"];
 
+/* -------------------------------------------------------------------------- */
+/* Small councils: open lists (LOREG 184) and concejo abierto (179.2)         */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * The parts of the page that change for a council not elected by D'Hondt
+ * (`councilSystem`): the council fact, the 2023 summary and table, the
+ * mayor rule, the "how" section and the first two questions. Everything else
+ * on the page is the same for every town.
+ *
+ *  - Open lists: votes go to candidates, so a list's figure in the source is
+ *    not a count of ballots (the figures do not add up to the ballots cast
+ *    for candidacies, and can exceed them). The table prints it as the
+ *    source's figure, with councillors, and no percentage, no threshold and
+ *    no quotient; the leading list is the one with most councillors.
+ *  - Concejo abierto: one post, the mayoralty, by majority; each voter casts
+ *    one vote, so shares of valid votes hold and are printed.
+ */
+interface SmallCouncilCopy {
+  fact: { label: string; value: string };
+  summary: string;
+  table: Table;
+  mayorRule: string;
+  seats: { title: string; md: string[] };
+  faq: { question: string; answer: string }[];
+}
+
+function smallCouncilCopy(m: Municipality, locale: Locale, mv: MunicipalView, cataloniaTurnout: number): SmallCouncilCopy {
+  const f = formats(locale);
+  const r = m.municipal;
+  const place = placeName(m, locale);
+  const Place = place.charAt(0).toLocaleUpperCase(locale) + place.slice(1);
+  const census = r.censusPopulation;
+  const council = councilSystem(r) === "council";
+  const elected = electedCount(r);
+  const leading = leadingLists(r);
+  const lead = leading[0]!;
+  const leadRow = mv.rows.find((row) => row.code === lead.code)!;
+  const listSum = r.lists.reduce((sum, list) => sum + list.votes, 0);
+  const smallest = census <= SMALLEST_STEP;
+  const scale = councilSize(census);
+  const shorts = joinList(
+    leading.map((list) => list.short),
+    locale,
+  );
+  const named = (and: string) => leading.map((list) => `${list.short} (${list.name})`).join(and);
+
+  if (locale === "ca") {
+    const a = inCa(place);
+    const de = ofCa(place);
+    const A = a.charAt(0).toUpperCase() + a.slice(1);
+    if (council) {
+      return {
+        fact: { label: "Règim municipal", value: "consell obert: s'elegeix directament l'alcaldia" },
+        summary: `${Place} funciona en règim de consell obert: a les municipals s'elegeix directament l'alcaldia. Van votar ${f.n(r.voters)} persones d'un cens de ${f.n(r.electorate)}: una participació ${caDelPct(f.p(mv.turnout))}, davant ${caDelPct(f.p(cataloniaTurnout))} del conjunt de Catalunya. L'alcaldia la va obtenir ${lead.short}, amb ${f.n(lead.votes)} vots (${caElPct(f.p(leadRow.share))} dels vots vàlids).`,
+        table: {
+          caption: `Resultats de les eleccions municipals del 2023 ${a}`,
+          headers: ["Candidatura", "Vots", "% vots vàlids", "Alcaldia"],
+          rows: mv.rows.map((row) => [`${row.short}\n${row.name}`, f.n(row.votes), f.p(row.share), row.seats > 0 ? "Sí" : "No"]),
+          footRows: [["Vots en blanc", f.n(r.blankVotes), f.p(mv.blankShare), ""]],
+          note: `Vots vàlids: ${f.n(r.validVotes)}, amb els vots en blanc. Vots nuls: ${f.n(r.nullVotes)}, que no compten en els percentatges. Percentatges calculats a partir dels recomptes oficials.`,
+        },
+        mayorRule: "Al consell obert, els electors elegeixen directament l'alcalde per sistema majoritari (llei electoral, article 179.2).",
+        seats: {
+          title: "Com es va elegir l'alcaldia",
+          md: [
+            `Les dades oficials registren un sol càrrec a elegir ${a}, l'alcaldia, i no els ${scale} regidors que l'escala de la llei electoral dona a un municipi de ${f.n(census)} habitants. És el règim de **consell obert**: l'escala no s'hi aplica i els electors elegeixen directament l'alcalde per sistema majoritari ([LOREG, article 179.2](${LOREG_URL})).`,
+            `L'alcaldia va ser per a la candidatura més votada, ${lead.short}: ${f.n(lead.votes)} dels ${f.n(r.validVotes)} vots vàlids.`,
+          ],
+        },
+        faq: [
+          {
+            question: `Quina candidatura va obtenir l'alcaldia a les municipals del 2023 ${a}?`,
+            answer: `${lead.short} (${lead.name}), amb ${f.n(lead.votes)} vots, ${caElPct(f.p(leadRow.share))} dels vàlids. ${Place} funciona en consell obert: els electors elegeixen directament l'alcalde.`,
+          },
+          {
+            question: `Quants regidors s'elegeixen ${a}?`,
+            answer: `Cap: ${place} funciona en consell obert i a les municipals s'elegeix directament l'alcaldia (llei electoral, article 179.2).`,
+          },
+        ],
+      };
+    }
+    const most = lead.seats;
+    return {
+      fact: { label: "Regidors al ple", value: `${r.seats}, amb llistes obertes` },
+      summary: `${Place} escull ${r.seats} regidors amb llistes obertes. Van votar ${f.n(r.voters)} persones d'un cens de ${f.n(r.electorate)}: una participació ${caDelPct(f.p(mv.turnout))}, davant ${caDelPct(f.p(cataloniaTurnout))} del conjunt de Catalunya. ${
+        leading.length === 1 ? `La candidatura amb més regidors va ser ${lead.short}, amb ${most} dels ${r.seats}.` : `${shorts} van obtenir ${most} ${most === 1 ? "regidor" : "regidors"} cadascuna.`
+      }${elected < r.seats ? ` Les dades oficials hi registren ${elected} regidors elegits dels ${r.seats} del ple.` : ""}`,
+      table: {
+        caption: `Resultats de les eleccions municipals del 2023 ${a}`,
+        headers: ["Candidatura", "Vots de la candidatura", "Regidors"],
+        rows: r.lists.map((list) => [`${list.short}\n${list.name}`, f.n(list.votes), String(list.seats)]),
+        footRows: [],
+        note: `Vots en blanc: ${f.n(r.blankVotes)}. Vots nuls: ${f.n(r.nullVotes)}. Aquí es vota a candidats, no a llistes: la xifra de cada candidatura és la que publica la Generalitat i no és un recompte de paperetes${
+          listSum !== r.listVotes ? ` (les candidatures sumen ${f.n(listSum)}, i les paperetes amb vot a candidatures van ser ${f.n(r.listVotes)})` : ""
+        }, de manera que no en calculem percentatges.`,
+      },
+      mayorRule: smallest
+        ? "L'alcaldia no la decideix directament el vot: els regidors elegeixen l'alcalde en el ple de constitució (llei electoral, article 196)."
+        : "L'alcaldia no la decideix directament el vot: els regidors elegeixen l'alcalde en el ple de constitució. Als municipis de 100 a 250 habitants tots els regidors hi poden ser candidats; si cap no obté la majoria absoluta dels regidors, és alcalde el regidor que va obtenir més vots populars (llei electoral, article 196).",
+      seats: {
+        title: `Com es van elegir els ${r.seats} regidors`,
+        md: [
+          `Als municipis de fins a 250 habitants es vota amb **llistes obertes** ([LOREG, article 184](${LOREG_URL})): no es reparteixen regidors entre llistes, sinó que surten elegits els candidats amb més vots, siguin de la llista que siguin, fins a completar els ${r.seats} regidors. ${
+            smallest
+              ? "Fins a 100 residents, cada candidatura presenta com a màxim 3 noms i cada elector en pot marcar fins a 2"
+              : "Entre 101 i 250 residents, cada candidatura presenta com a màxim 5 noms i cada elector en pot marcar fins a 4"
+          }; els empats es resolen per sorteig. No hi ha llindar del 5 % ni sistema D'Hondt.`,
+          `El nombre de regidors depèn de la població: amb ${f.n(census)} habitants al padró de referència d'aquestes eleccions, ${a} li'n corresponen ${r.seats} (LOREG, article 179).`,
+          ...(elected < r.seats ? [`Les dades oficials registren ${elected} regidors elegits dels ${r.seats} que corresponen ${a}.`] : []),
+        ],
+      },
+      faq: [
+        {
+          question: `Quina candidatura va obtenir més regidors a les municipals del 2023 ${a}?`,
+          answer:
+            leading.length === 1
+              ? `${named(" i ")}, amb ${most} dels ${r.seats} regidors. ${A} es vota amb llistes obertes: els regidors són els candidats més votats.`
+              : `${named(" i ")}, amb ${most} ${most === 1 ? "regidor" : "regidors"} cadascuna dels ${r.seats}. ${A} es vota amb llistes obertes: els regidors són els candidats més votats.`,
+        },
+        {
+          question: `Quants regidors té l'Ajuntament ${de}?`,
+          answer: `${r.seats}, segons l'escala de l'article 179 de la llei electoral aplicada a la població del municipi.${elected < r.seats ? ` Les dades oficials del 2023 hi registren ${elected} regidors elegits.` : ""}`,
+        },
+      ],
+    };
+  }
+
+  if (locale === "es") {
+    if (council) {
+      return {
+        fact: { label: "Régimen municipal", value: "concejo abierto: se elige directamente la alcaldía" },
+        summary: `${place} funciona en régimen de concejo abierto: en las municipales se elige directamente la alcaldía. Votaron ${f.n(r.voters)} personas de un censo de ${f.n(r.electorate)}: una participación del ${f.p(mv.turnout)}, frente al ${f.p(cataloniaTurnout)} del conjunto de Cataluña. La alcaldía la obtuvo ${lead.short}, con ${f.n(lead.votes)} votos (el ${f.p(leadRow.share)} de los votos válidos).`,
+        table: {
+          caption: `Resultados de las elecciones municipales de 2023 en ${place}`,
+          headers: ["Candidatura", "Votos", "% votos válidos", "Alcaldía"],
+          rows: mv.rows.map((row) => [`${row.short}\n${row.name}`, f.n(row.votes), f.p(row.share), row.seats > 0 ? "Sí" : "No"]),
+          footRows: [["Votos en blanco", f.n(r.blankVotes), f.p(mv.blankShare), ""]],
+          note: `Votos válidos: ${f.n(r.validVotes)}, con los votos en blanco. Votos nulos: ${f.n(r.nullVotes)}, que no cuentan en los porcentajes. Porcentajes calculados a partir de los recuentos oficiales.`,
+        },
+        mayorRule: "En el concejo abierto, los electores eligen directamente al alcalde por sistema mayoritario (ley electoral, artículo 179.2).",
+        seats: {
+          title: "Cómo se eligió la alcaldía",
+          md: [
+            `Los datos oficiales registran un solo cargo a elegir en ${place}, la alcaldía, y no los ${scale} concejales que la escala de la ley electoral da a un municipio de ${f.n(census)} habitantes. Es el régimen de **concejo abierto**: la escala no se aplica y los electores eligen directamente al alcalde por sistema mayoritario ([LOREG, artículo 179.2](${LOREG_URL})).`,
+            `La alcaldía fue para la candidatura más votada, ${lead.short}: ${f.n(lead.votes)} de los ${f.n(r.validVotes)} votos válidos.`,
+          ],
+        },
+        faq: [
+          {
+            question: `¿Qué candidatura obtuvo la alcaldía en las municipales de 2023 en ${place}?`,
+            answer: `${lead.short} (${lead.name}), con ${f.n(lead.votes)} votos, el ${f.p(leadRow.share)} de los válidos. ${place} funciona en concejo abierto: los electores eligen directamente al alcalde.`,
+          },
+          {
+            question: `¿Cuántos concejales se eligen en ${place}?`,
+            answer: `Ninguno: ${place} funciona en concejo abierto y en las municipales se elige directamente la alcaldía (ley electoral, artículo 179.2).`,
+          },
+        ],
+      };
+    }
+    const most = lead.seats;
+    return {
+      fact: { label: "Concejales en el pleno", value: `${r.seats}, con listas abiertas` },
+      summary: `${place} elige ${r.seats} concejales con listas abiertas. Votaron ${f.n(r.voters)} personas de un censo de ${f.n(r.electorate)}: una participación del ${f.p(mv.turnout)}, frente al ${f.p(cataloniaTurnout)} del conjunto de Cataluña. ${
+        leading.length === 1 ? `La candidatura con más concejales fue ${lead.short}, con ${most} de ${r.seats}.` : `${shorts} obtuvieron ${most} ${most === 1 ? "concejal" : "concejales"} cada una.`
+      }${elected < r.seats ? ` Los datos oficiales registran ${elected} concejales electos de los ${r.seats} del pleno.` : ""}`,
+      table: {
+        caption: `Resultados de las elecciones municipales de 2023 en ${place}`,
+        headers: ["Candidatura", "Votos de la candidatura", "Concejales"],
+        rows: r.lists.map((list) => [`${list.short}\n${list.name}`, f.n(list.votes), String(list.seats)]),
+        footRows: [],
+        note: `Votos en blanco: ${f.n(r.blankVotes)}. Votos nulos: ${f.n(r.nullVotes)}. Aquí se vota a candidatos, no a listas: la cifra de cada candidatura es la que publica la Generalitat y no es un recuento de papeletas${
+          listSum !== r.listVotes ? ` (las candidaturas suman ${f.n(listSum)}, y las papeletas con voto a candidaturas fueron ${f.n(r.listVotes)})` : ""
+        }, así que no calculamos porcentajes.`,
+      },
+      mayorRule: smallest
+        ? "La alcaldía no la decide directamente el voto: los concejales eligen al alcalde en el pleno de constitución (ley electoral, artículo 196)."
+        : "La alcaldía no la decide directamente el voto: los concejales eligen al alcalde en el pleno de constitución. En los municipios de 100 a 250 habitantes todos los concejales pueden ser candidatos; si ninguno obtiene la mayoría absoluta de los concejales, es alcalde el concejal que obtuvo más votos populares (ley electoral, artículo 196).",
+      seats: {
+        title: `Cómo se eligieron los ${r.seats} concejales`,
+        md: [
+          `En los municipios de hasta 250 habitantes se vota con **listas abiertas** ([LOREG, artículo 184](${LOREG_URL})): no se reparten concejales entre listas, sino que salen elegidos los candidatos con más votos, sean de la lista que sean, hasta completar los ${r.seats} concejales. ${
+            smallest
+              ? "Hasta 100 residentes, cada candidatura presenta como máximo 3 nombres y cada elector puede marcar hasta 2"
+              : "Entre 101 y 250 residentes, cada candidatura presenta como máximo 5 nombres y cada elector puede marcar hasta 4"
+          }; los empates se resuelven por sorteo. No hay umbral del 5 % ni sistema D'Hondt.`,
+          `El número de concejales depende de la población: con ${f.n(census)} habitantes en el padrón de referencia de estas elecciones, a ${place} le corresponden ${r.seats} (LOREG, artículo 179).`,
+          ...(elected < r.seats ? [`Los datos oficiales registran ${elected} concejales electos de los ${r.seats} que corresponden a ${place}.`] : []),
+        ],
+      },
+      faq: [
+        {
+          question: `¿Qué candidatura obtuvo más concejales en las municipales de 2023 en ${place}?`,
+          answer:
+            leading.length === 1
+              ? `${named(" y ")}, con ${most} de los ${r.seats} concejales. En ${place} se vota con listas abiertas: los concejales son los candidatos más votados.`
+              : `${named(" y ")}, con ${most} ${most === 1 ? "concejal" : "concejales"} cada una de los ${r.seats}. En ${place} se vota con listas abiertas: los concejales son los candidatos más votados.`,
+        },
+        {
+          question: `¿Cuántos concejales tiene el Ayuntamiento de ${place}?`,
+          answer: `${r.seats}, según la escala del artículo 179 de la ley electoral aplicada a la población del municipio.${elected < r.seats ? ` Los datos oficiales de 2023 registran ${elected} concejales electos.` : ""}`,
+        },
+      ],
+    };
+  }
+
+  if (council) {
+    return {
+      fact: { label: "Local government", value: "open council (concejo abierto): voters elect the mayor directly" },
+      summary: `${place} is governed as an open council (concejo abierto): at local elections voters elect the mayor directly. Turnout was ${f.p(mv.turnout)} (${f.n(r.voters)} voters out of an electorate of ${f.n(r.electorate)}), against ${f.p(cataloniaTurnout)} across Catalonia. The mayoralty went to ${lead.short}, with ${f.n(lead.votes)} votes (${f.p(leadRow.share)} of valid votes).`,
+      table: {
+        caption: `Results of the 2023 local election in ${place}`,
+        headers: ["List", "Votes", "% of valid votes", "Mayor"],
+        rows: mv.rows.map((row) => [`${row.short}\n${row.name}`, f.n(row.votes), f.p(row.share), row.seats > 0 ? "Yes" : "No"]),
+        footRows: [["Blank votes", f.n(r.blankVotes), f.p(mv.blankShare), ""]],
+        note: `Valid votes: ${f.n(r.validVotes)}, including blank votes. Spoilt (null) votes: ${f.n(r.nullVotes)}, not counted in the percentages. Percentages computed from the official counts.`,
+      },
+      mayorRule: "In an open council, voters elect the mayor directly by simple majority (electoral law, article 179.2).",
+      seats: {
+        title: "How the mayor was elected",
+        md: [
+          `The official data record a single post to fill in ${place}, the mayoralty, rather than the ${scale} councillors the electoral law's scale gives a municipality of ${f.n(census)} residents. This is the **open council** (concejo abierto): the scale does not apply and voters elect the mayor directly by majority ([LOREG, article 179.2](${LOREG_URL})).`,
+          `The mayoralty went to the list with most votes, ${lead.short}: ${f.n(lead.votes)} of ${f.n(r.validVotes)} valid votes.`,
+        ],
+      },
+      faq: [
+        {
+          question: `Which list won the mayoralty in the 2023 local election in ${place}?`,
+          answer: `${lead.short} (${lead.name}), with ${f.n(lead.votes)} votes, ${f.p(leadRow.share)} of valid votes. ${place} is an open council: voters elect the mayor directly.`,
+        },
+        { question: `How many councillors does ${place} elect?`, answer: `None: ${place} is an open council, and at local elections voters elect the mayor directly (electoral law, article 179.2).` },
+      ],
+    };
+  }
+  const most = lead.seats;
+  return {
+    fact: { label: "Councillors", value: `${r.seats}, open lists` },
+    summary: `${place} elects ${r.seats} councillors from open lists. Turnout was ${f.p(mv.turnout)} (${f.n(r.voters)} voters out of an electorate of ${f.n(r.electorate)}), against ${f.p(cataloniaTurnout)} across Catalonia. ${
+      leading.length === 1 ? `The list with most councillors was ${lead.short}, with ${most} of ${r.seats}.` : `${shorts} won ${most} ${most === 1 ? "councillor" : "councillors"} each.`
+    }${elected < r.seats ? ` The official data record ${elected} councillors elected out of ${r.seats}.` : ""}`,
+    table: {
+      caption: `Results of the 2023 local election in ${place}`,
+      headers: ["List", "List's votes", "Councillors"],
+      rows: r.lists.map((list) => [`${list.short}\n${list.name}`, f.n(list.votes), String(list.seats)]),
+      footRows: [],
+      note: `Blank votes: ${f.n(r.blankVotes)}. Spoilt (null) votes: ${f.n(r.nullVotes)}. Here people vote for candidates, not lists: each list's figure is the one the Generalitat publishes and is not a count of ballots${
+        listSum !== r.listVotes ? ` (the lists add up to ${f.n(listSum)}, while ${f.n(r.listVotes)} ballots had votes for candidates)` : ""
+      }, so no percentages are computed.`,
+    },
+    mayorRule: smallest
+      ? "Voters do not elect the mayor directly: the councillors do, at the council's first meeting (electoral law, article 196)."
+      : "Voters do not elect the mayor directly: the councillors do, at the council's first meeting. In municipalities of 100 to 250 residents any councillor may stand; if none wins an absolute majority of the councillors, the councillor with most popular votes becomes mayor (electoral law, article 196).",
+    seats: {
+      title: `How the ${r.seats} councillors were elected`,
+      md: [
+        `Municipalities of up to 250 residents vote with **open lists** ([LOREG, article 184](${LOREG_URL})): seats are not shared out between lists; the candidates with most votes are elected, whatever their list, up to ${r.seats} councillors. ${
+          smallest
+            ? "Up to 100 residents, each list has at most 3 names and each voter may mark up to 2"
+            : "From 101 to 250 residents, each list has at most 5 names and each voter may mark up to 4"
+        }; ties are settled by lot. There is no 5% threshold and no D'Hondt.`,
+        `The size of the council depends on population: with ${f.n(census)} residents on the register used for this election, ${place} elects ${r.seats} (LOREG, article 179).`,
+        ...(elected < r.seats ? [`The official data record ${elected} councillors elected out of the ${r.seats} ${place} elects.`] : []),
+      ],
+    },
+    faq: [
+      {
+        question: `Which list won most councillors in the 2023 local election in ${place}?`,
+        answer: `${named(" and ")}, with ${most} of the ${r.seats} councillors${leading.length > 1 ? " each" : ""}. ${place} votes with open lists: the councillors are the candidates with most votes.`,
+      },
+      {
+        question: `How many councillors does ${place} have?`,
+        answer: `${r.seats}, under the scale in article 179 of the electoral law applied to the municipality's population.${elected < r.seats ? ` The official 2023 data record ${elected} elected.` : ""}`,
+      },
+    ],
+  };
+}
+
 /** The town's 29N results, when the official file has been imported and covers it. */
 export function generalOf(m: Municipality, snapshot: ElectionsSnapshot = SNAPSHOT): { meta: General2026; counts: RegionalVotes; view: GeneralView } | null {
   if (!snapshot.general2026 || !m.g2026) return null;
@@ -164,6 +457,9 @@ export function buildElectionPage(m: Municipality, locale: Locale, snapshot: Ele
   const parliament = regionalView(m.parliament, snapshot.catalonia.parliament, snapshot.elections.parliament.lists ?? {});
   const cataloniaMunicipalTurnout = turnout(snapshot.catalonia.municipal);
   const top = mv.rows[0]!;
+  // Lists level on most votes (Rasquera, Sant Feliu de Buixalleu): every one is named, none is "the" most voted.
+  const tops = mv.rows.filter((row) => row.votes === top.votes);
+  const topsTied = tops.length > 1;
   const general = generalOf(m, snapshot);
   const dataDate = latestDataDate(snapshot);
   const dates = {
@@ -181,6 +477,25 @@ export function buildElectionPage(m: Municipality, locale: Locale, snapshot: Ele
   const mayorParty = mayor?.party ? ` (${mayor.party})` : "";
   const census = m.municipal.censusPopulation;
   const sizeOk = councilSize(census) === m.municipal.seats;
+  // Open lists or concejo abierto: their own council copy (D'Hondt towns keep theirs below).
+  const small = councilSystem(m.municipal) === "lists" ? null : smallCouncilCopy(m, locale, mv, turnout(snapshot.catalonia.municipal));
+  // A last seat tied in quotient and in votes, settled by lot (LOREG 163.1.d).
+  const draw = small ? null : matchDhondt(m.municipal.lists, m.municipal.seats, m.municipal.validVotes);
+  const drawn = draw && draw.drawnBy.length > 0 ? draw : null;
+  const shortsOf = (codes: string[]) =>
+    joinList(
+      codes.map((code) => shortOf(code)),
+      locale,
+    );
+  const comarca: Link | null = isComarcaLocale(locale)
+    ? {
+        href: comarcaPath(locale, comarcaOf(m).slug),
+        label:
+          locale === "ca"
+            ? `Tots els municipis ${caOfComarca(m.comarca)}: resultats de les municipals del 2023`
+            : `Todos los municipios de la comarca ${m.comarca}: resultados de las municipales de 2023`,
+      }
+    : null;
 
   const municipalRows = mv.rows.map((row) => [`${row.short}\n${row.name}`, f.n(row.votes), f.p(row.share), String(row.seats)]);
   const regionalTable = (view: RegionalView, caption: string, headers: string[], othersLabel: (n: number) => string, blankLabel: string, note: string): Table => ({
@@ -229,7 +544,7 @@ export function buildElectionPage(m: Municipality, locale: Locale, snapshot: Ele
       facts: [
         { label: "Població", value: `${f.n(m.population)} habitants (1 de gener de ${snapshot.sources.population.period.slice(0, 4)}, Idescat)` },
         { label: "Comarca i província", value: `${m.comarca} · ${m.province}` },
-        { label: "Regidors al ple", value: String(m.municipal.seats) },
+        small ? small.fact : { label: "Regidors al ple", value: String(m.municipal.seats) },
         ...(mayor ? [{ label: "Alcaldia", value: `${mayor.name}${mayorParty}, des ${caDel(mayor.since)}` }] : []),
         { label: "Pròximes municipals", value: "diumenge 23 de maig de 2027 (previstes)" },
       ],
@@ -275,24 +590,36 @@ export function buildElectionPage(m: Municipality, locale: Locale, snapshot: Ele
       },
       municipal: {
         title: `Eleccions municipals del ${dates.municipal}`,
-        summary: `${Place} escull ${m.municipal.seats} regidors. Van votar ${f.n(m.municipal.voters)} persones d'un cens de ${f.n(m.municipal.electorate)}: una participació ${caDelPct(f.p(mv.turnout))}, davant ${caDelPct(f.p(cataloniaMunicipalTurnout))} del conjunt de Catalunya. La llista més votada va ser ${top.short}, amb ${f.n(top.votes)} vots (${caElPct(f.p(top.share))} dels vots vàlids) i ${top.seats} ${top.seats === 1 ? "regidor" : "regidors"}.`,
-        table: {
+        summary:
+          small?.summary ??
+          `${Place} escull ${m.municipal.seats} regidors. Van votar ${f.n(m.municipal.voters)} persones d'un cens de ${f.n(m.municipal.electorate)}: una participació ${caDelPct(f.p(mv.turnout))}, davant ${caDelPct(f.p(cataloniaMunicipalTurnout))} del conjunt de Catalunya. ${
+            topsTied
+              ? `Les llistes més votades van ser ${shortsOf(tops.map((row) => row.code))}, empatades amb ${f.n(top.votes)} vots cadascuna (${caElPct(f.p(top.share))} dels vots vàlids): ${tops.map((row) => `${row.short}, ${row.seats} ${row.seats === 1 ? "regidor" : "regidors"}`).join("; ")}.`
+              : `La llista més votada va ser ${top.short}, amb ${f.n(top.votes)} vots (${caElPct(f.p(top.share))} dels vots vàlids) i ${top.seats} ${top.seats === 1 ? "regidor" : "regidors"}.`
+          }`,
+        table: small?.table ?? {
           caption: `Resultats de les eleccions municipals del 2023 ${a}`,
           headers: ["Candidatura", "Vots", "% vots vàlids", "Regidors"],
           rows: municipalRows,
           footRows: [["Vots en blanc", f.n(m.municipal.blankVotes), f.p(mv.blankShare), ""]],
           note: `Vots vàlids: ${f.n(m.municipal.validVotes)}, amb els vots en blanc. Vots nuls: ${f.n(m.municipal.nullVotes)}, que no compten en els percentatges. Percentatges calculats a partir dels recomptes oficials.`,
         },
-        mayorRule: "L'alcaldia no la decideix directament el vot: els regidors elegeixen l'alcalde en el ple de constitució. Si cap dels caps de llista no obté la majoria absoluta dels regidors, és alcalde qui encapçala la llista més votada (llei electoral, article 196).",
+        mayorRule:
+          small?.mayorRule ??
+          "L'alcaldia no la decideix directament el vot: els regidors elegeixen l'alcalde en el ple de constitució. Si cap dels caps de llista no obté la majoria absoluta dels regidors, és alcalde qui encapçala la llista més votada (llei electoral, article 196).",
         mayor: mayor ? `Segons el registre d'ens locals de la Generalitat, l'alcaldia ${de} l'ocupa ${mayor.name}${mayorParty}, que en va prendre possessió ${caEl(mayor.since)}.` : null,
       },
-      seats: {
+      seats: small?.seats ?? {
         title: `Com es van repartir els ${m.municipal.seats} regidors`,
         md: [
           `La llei electoral aplica el **sistema D'Hondt** ([LOREG, articles 163 i 180](${LOREG_URL})). Només hi entren les llistes amb almenys el **5 % dels vots vàlids**, que ${a} volia dir ${f.n(mv.threshold)} vots; ${mv.belowThreshold === 0 ? "totes les llistes el van superar" : mv.belowThreshold === 1 ? "una llista es va quedar per sota" : `${mv.belowThreshold} llistes es van quedar per sota`}. Els vots de cada llista que el supera es divideixen per 1, 2, 3… i els regidors van als quocients més alts.`,
-          ...(last && nextOut
-            ? [`${caTheOrdinal(m.municipal.seats)} i últim regidor el va obtenir ${shortOf(last.code)}, amb un quocient de ${f.q(last.value)} (${f.n(last.votes)} vots ÷ ${last.divisor}). El quocient més alt que es va quedar sense regidor: ${f.q(nextOut.value)} (${shortOf(nextOut.code)}, ${f.n(nextOut.votes)} ÷ ${nextOut.divisor}).`]
-            : []),
+          ...(drawn && last
+            ? [
+                `${caTheOrdinal(m.municipal.seats)} i últim regidor es va decidir per sorteig: ${shortsOf(drawn.tiedLists)} hi empataven amb el mateix quocient, ${f.q(last.value)} (${f.n(last.votes)} vots ÷ ${last.divisor}), i el mateix nombre total de vots. La llei resol el primer d'aquests empats per sorteig i els següents alternant (LOREG, article 163.1). Segons el resultat oficial, el regidor va ser per a ${shortsOf(drawn.drawnBy)}.`,
+              ]
+            : last && nextOut
+              ? [`${caTheOrdinal(m.municipal.seats)} i últim regidor el va obtenir ${shortOf(last.code)}, amb un quocient de ${f.q(last.value)} (${f.n(last.votes)} vots ÷ ${last.divisor}). El quocient més alt que es va quedar sense regidor: ${f.q(nextOut.value)} (${shortOf(nextOut.code)}, ${f.n(nextOut.votes)} ÷ ${nextOut.divisor}).`]
+              : []),
           ...(sizeOk
             ? [`El nombre de regidors depèn de la població: amb ${f.n(census)} habitants al padró de referència d'aquestes eleccions, ${a} li'n corresponen ${m.municipal.seats} (LOREG, article 179).`]
             : []),
@@ -354,14 +681,18 @@ export function buildElectionPage(m: Municipality, locale: Locale, snapshot: Ele
       },
       faqTitle: "Preguntes freqüents",
       faq: [
-        {
-          question: `Quina llista va ser la més votada a les municipals del 2023 ${a}?`,
-          answer: `${top.short} (${top.name}), amb ${f.n(top.votes)} vots, ${caElPct(f.p(top.share))} dels vàlids, i ${top.seats} dels ${m.municipal.seats} regidors.`,
-        },
-        {
-          question: `Quants regidors té l'Ajuntament ${de}?`,
-          answer: `${m.municipal.seats}, segons l'escala de l'article 179 de la llei electoral aplicada a la població del municipi.`,
-        },
+        ...(small?.faq ?? [
+          {
+            question: `Quina llista va ser la més votada a les municipals del 2023 ${a}?`,
+            answer: topsTied
+              ? `${tops.map((row) => `${row.short} (${row.name})`).join(" i ")}, empatades amb ${f.n(top.votes)} vots cadascuna, ${caElPct(f.p(top.share))} dels vàlids. Dels ${m.municipal.seats} regidors, ${tops.map((row) => `${row.short} en va obtenir ${row.seats}`).join(" i ")}.`
+              : `${top.short} (${top.name}), amb ${f.n(top.votes)} vots, ${caElPct(f.p(top.share))} dels vàlids, i ${top.seats} dels ${m.municipal.seats} regidors.`,
+          },
+          {
+            question: `Quants regidors té l'Ajuntament ${de}?`,
+            answer: `${m.municipal.seats}, segons l'escala de l'article 179 de la llei electoral aplicada a la població del municipi.`,
+          },
+        ]),
         g && general && g.leaders.length
           ? {
               question: `Quina candidatura va tenir més vots el 29N ${a}?`,
@@ -378,7 +709,8 @@ export function buildElectionPage(m: Municipality, locale: Locale, snapshot: Ele
           ...(sameComarca.length ? [{ label: `${m.comarca}`, links: sameComarca.map(link) }] : []),
           ...(sameProvince.length ? [{ label: `Altres municipis de la província de ${m.province}`, links: sameProvince.map(link) }] : []),
         ],
-        hub: { ...hub, label: `Els ${PAGES_PER_LOCALE.ca} municipis més poblats, per comarques` },
+        hub: { ...hub, label: `Els ${PAGES_PER_LOCALE.ca} municipis de Catalunya, per comarques` },
+        comarca,
       },
       related: { title: "Guies sobre les eleccions", links: related },
       sources: {
@@ -401,7 +733,7 @@ export function buildElectionPage(m: Municipality, locale: Locale, snapshot: Ele
       facts: [
         { label: "Población", value: `${f.n(m.population)} habitantes (1 de enero de ${snapshot.sources.population.period.slice(0, 4)}, Idescat)` },
         { label: "Comarca y provincia", value: `${m.comarca} · ${m.province}` },
-        { label: "Concejales en el pleno", value: String(m.municipal.seats) },
+        small ? small.fact : { label: "Concejales en el pleno", value: String(m.municipal.seats) },
         ...(mayor ? [{ label: "Alcaldía", value: `${mayor.name}${mayorParty}, desde el ${f.date(mayor.since)}` }] : []),
         { label: "Próximas municipales", value: "domingo 23 de mayo de 2027 (previstas)" },
       ],
@@ -447,24 +779,36 @@ export function buildElectionPage(m: Municipality, locale: Locale, snapshot: Ele
       },
       municipal: {
         title: `Elecciones municipales del ${dates.municipal}`,
-        summary: `${place} elige ${m.municipal.seats} concejales. Votaron ${f.n(m.municipal.voters)} personas de un censo de ${f.n(m.municipal.electorate)}: una participación del ${f.p(mv.turnout)}, frente al ${f.p(cataloniaMunicipalTurnout)} del conjunto de Cataluña. La lista más votada fue ${top.short}, con ${f.n(top.votes)} votos (el ${f.p(top.share)} de los votos válidos) y ${top.seats} ${top.seats === 1 ? "concejal" : "concejales"}.`,
-        table: {
+        summary:
+          small?.summary ??
+          `${place} elige ${m.municipal.seats} concejales. Votaron ${f.n(m.municipal.voters)} personas de un censo de ${f.n(m.municipal.electorate)}: una participación del ${f.p(mv.turnout)}, frente al ${f.p(cataloniaMunicipalTurnout)} del conjunto de Cataluña. ${
+            topsTied
+              ? `Las listas más votadas fueron ${shortsOf(tops.map((row) => row.code))}, empatadas con ${f.n(top.votes)} votos cada una (el ${f.p(top.share)} de los votos válidos): ${tops.map((row) => `${row.short}, ${row.seats} ${row.seats === 1 ? "concejal" : "concejales"}`).join("; ")}.`
+              : `La lista más votada fue ${top.short}, con ${f.n(top.votes)} votos (el ${f.p(top.share)} de los votos válidos) y ${top.seats} ${top.seats === 1 ? "concejal" : "concejales"}.`
+          }`,
+        table: small?.table ?? {
           caption: `Resultados de las elecciones municipales de 2023 en ${place}`,
           headers: ["Candidatura", "Votos", "% votos válidos", "Concejales"],
           rows: municipalRows,
           footRows: [["Votos en blanco", f.n(m.municipal.blankVotes), f.p(mv.blankShare), ""]],
           note: `Votos válidos: ${f.n(m.municipal.validVotes)}, con los votos en blanco. Votos nulos: ${f.n(m.municipal.nullVotes)}, que no cuentan en los porcentajes. Porcentajes calculados a partir de los recuentos oficiales.`,
         },
-        mayorRule: "La alcaldía no la decide directamente el voto: los concejales eligen al alcalde en el pleno de constitución. Si ningún cabeza de lista obtiene la mayoría absoluta de los concejales, es alcalde el cabeza de la lista más votada (ley electoral, artículo 196).",
+        mayorRule:
+          small?.mayorRule ??
+          "La alcaldía no la decide directamente el voto: los concejales eligen al alcalde en el pleno de constitución. Si ningún cabeza de lista obtiene la mayoría absoluta de los concejales, es alcalde el cabeza de la lista más votada (ley electoral, artículo 196).",
         mayor: mayor ? `Según el registro de entes locales de la Generalitat, la alcaldía de ${place} la ocupa ${mayor.name}${mayorParty}, que tomó posesión el ${f.date(mayor.since)}.` : null,
       },
-      seats: {
+      seats: small?.seats ?? {
         title: `Cómo se repartieron los ${m.municipal.seats} concejales`,
         md: [
           `La ley electoral aplica el **sistema D'Hondt** ([LOREG, artículos 163 y 180](${LOREG_URL})). Solo entran las listas con al menos el **5 % de los votos válidos**, que en ${place} significaba ${f.n(mv.threshold)} votos; ${mv.belowThreshold === 0 ? "todas las listas lo superaron" : mv.belowThreshold === 1 ? "una lista se quedó por debajo" : `${mv.belowThreshold} listas se quedaron por debajo`}. Los votos de cada lista que lo supera se dividen por 1, 2, 3… y los concejales van a los cocientes más altos.`,
-          ...(last && nextOut
-            ? [`El ${ORDINAL_ES(m.municipal.seats)} y último concejal lo obtuvo ${shortOf(last.code)}, con un cociente de ${f.q(last.value)} (${f.n(last.votes)} votos ÷ ${last.divisor}). El cociente más alto que se quedó sin concejal: ${f.q(nextOut.value)} (${shortOf(nextOut.code)}, ${f.n(nextOut.votes)} ÷ ${nextOut.divisor}).`]
-            : []),
+          ...(drawn && last
+            ? [
+                `El ${ORDINAL_ES(m.municipal.seats)} y último concejal se decidió por sorteo: ${shortsOf(drawn.tiedLists)} empataban con el mismo cociente, ${f.q(last.value)} (${f.n(last.votes)} votos ÷ ${last.divisor}), y el mismo número total de votos. La ley resuelve el primero de estos empates por sorteo y los siguientes de forma alternativa (LOREG, artículo 163.1). Según el resultado oficial, el concejal fue para ${shortsOf(drawn.drawnBy)}.`,
+              ]
+            : last && nextOut
+              ? [`El ${ORDINAL_ES(m.municipal.seats)} y último concejal lo obtuvo ${shortOf(last.code)}, con un cociente de ${f.q(last.value)} (${f.n(last.votes)} votos ÷ ${last.divisor}). El cociente más alto que se quedó sin concejal: ${f.q(nextOut.value)} (${shortOf(nextOut.code)}, ${f.n(nextOut.votes)} ÷ ${nextOut.divisor}).`]
+              : []),
           ...(sizeOk
             ? [`El número de concejales depende de la población: con ${f.n(census)} habitantes en el padrón de referencia de estas elecciones, a ${place} le corresponden ${m.municipal.seats} (LOREG, artículo 179).`]
             : []),
@@ -526,14 +870,18 @@ export function buildElectionPage(m: Municipality, locale: Locale, snapshot: Ele
       },
       faqTitle: "Preguntas frecuentes",
       faq: [
-        {
-          question: `¿Qué lista fue la más votada en las municipales de 2023 en ${place}?`,
-          answer: `${top.short} (${top.name}), con ${f.n(top.votes)} votos, el ${f.p(top.share)} de los válidos, y ${top.seats} de los ${m.municipal.seats} concejales.`,
-        },
-        {
-          question: `¿Cuántos concejales tiene el Ayuntamiento de ${place}?`,
-          answer: `${m.municipal.seats}, según la escala del artículo 179 de la ley electoral aplicada a la población del municipio.`,
-        },
+        ...(small?.faq ?? [
+          {
+            question: `¿Qué lista fue la más votada en las municipales de 2023 en ${place}?`,
+            answer: topsTied
+              ? `${tops.map((row) => `${row.short} (${row.name})`).join(" y ")}, empatadas con ${f.n(top.votes)} votos cada una, el ${f.p(top.share)} de los válidos. De los ${m.municipal.seats} concejales, ${tops.map((row) => `${row.short} obtuvo ${row.seats}`).join(" y ")}.`
+              : `${top.short} (${top.name}), con ${f.n(top.votes)} votos, el ${f.p(top.share)} de los válidos, y ${top.seats} de los ${m.municipal.seats} concejales.`,
+          },
+          {
+            question: `¿Cuántos concejales tiene el Ayuntamiento de ${place}?`,
+            answer: `${m.municipal.seats}, según la escala del artículo 179 de la ley electoral aplicada a la población del municipio.`,
+          },
+        ]),
         g && general && g.leaders.length
           ? {
               question: `¿Qué candidatura tuvo más votos el 29N en ${place}?`,
@@ -550,7 +898,8 @@ export function buildElectionPage(m: Municipality, locale: Locale, snapshot: Ele
           ...(sameComarca.length ? [{ label: `${m.comarca}`, links: sameComarca.map(link) }] : []),
           ...(sameProvince.length ? [{ label: `Otros municipios de la provincia de ${m.province}`, links: sameProvince.map(link) }] : []),
         ],
-        hub: { ...hub, label: `Los ${PAGES_PER_LOCALE.es} municipios más poblados, por comarcas` },
+        hub: { ...hub, label: `Los ${PAGES_PER_LOCALE.es} municipios de Cataluña, por comarcas` },
+        comarca,
       },
       related: { title: "Guías sobre las elecciones", links: related },
       sources: {
@@ -572,7 +921,7 @@ export function buildElectionPage(m: Municipality, locale: Locale, snapshot: Ele
     facts: [
       { label: "Population", value: `${f.n(m.population)} (1 January ${snapshot.sources.population.period.slice(0, 4)}, Idescat)` },
       { label: "Comarca and province", value: `${m.comarca} · ${m.province}` },
-      { label: "Councillors", value: String(m.municipal.seats) },
+      small ? small.fact : { label: "Councillors", value: String(m.municipal.seats) },
       ...(mayor ? [{ label: "Mayor", value: `${mayor.name}${mayorParty}, since ${f.date(mayor.since)}` }] : []),
       { label: "Next local elections", value: "Sunday 23 May 2027 (expected)" },
     ],
@@ -618,24 +967,36 @@ export function buildElectionPage(m: Municipality, locale: Locale, snapshot: Ele
     },
     municipal: {
       title: `Local election of ${dates.municipal}`,
-      summary: `${place} elects ${m.municipal.seats} councillors. Turnout was ${f.p(mv.turnout)} (${f.n(m.municipal.voters)} voters out of an electorate of ${f.n(m.municipal.electorate)}), against ${f.p(cataloniaMunicipalTurnout)} across Catalonia. The list with most votes was ${top.short}, with ${f.n(top.votes)} votes (${f.p(top.share)} of valid votes) and ${top.seats} ${top.seats === 1 ? "councillor" : "councillors"}.`,
-      table: {
+      summary:
+        small?.summary ??
+        `${place} elects ${m.municipal.seats} councillors. Turnout was ${f.p(mv.turnout)} (${f.n(m.municipal.voters)} voters out of an electorate of ${f.n(m.municipal.electorate)}), against ${f.p(cataloniaMunicipalTurnout)} across Catalonia. ${
+          topsTied
+            ? `The lists with most votes were ${shortsOf(tops.map((row) => row.code))}, tied on ${f.n(top.votes)} votes each (${f.p(top.share)} of valid votes): ${tops.map((row) => `${row.short}, ${row.seats} ${row.seats === 1 ? "councillor" : "councillors"}`).join("; ")}.`
+            : `The list with most votes was ${top.short}, with ${f.n(top.votes)} votes (${f.p(top.share)} of valid votes) and ${top.seats} ${top.seats === 1 ? "councillor" : "councillors"}.`
+        }`,
+      table: small?.table ?? {
         caption: `Results of the 2023 local election in ${place}`,
         headers: ["List", "Votes", "% of valid votes", "Councillors"],
         rows: municipalRows,
         footRows: [["Blank votes", f.n(m.municipal.blankVotes), f.p(mv.blankShare), ""]],
         note: `Valid votes: ${f.n(m.municipal.validVotes)}, including blank votes. Spoilt (null) votes: ${f.n(m.municipal.nullVotes)}, not counted in the percentages. Percentages computed from the official counts.`,
       },
-      mayorRule: "Voters do not elect the mayor directly: the councillors do, at the council's first meeting. If no list leader wins an absolute majority of the councillors, the leader of the list with most votes becomes mayor (electoral law, article 196).",
+      mayorRule:
+        small?.mayorRule ??
+        "Voters do not elect the mayor directly: the councillors do, at the council's first meeting. If no list leader wins an absolute majority of the councillors, the leader of the list with most votes becomes mayor (electoral law, article 196).",
       mayor: mayor ? `According to the Catalan government's register of local authorities, the mayor of ${place} is ${mayor.name}${mayorParty}, in office since ${f.date(mayor.since)}.` : null,
     },
-    seats: {
+    seats: small?.seats ?? {
       title: `How the ${m.municipal.seats} councillors were allocated`,
       md: [
         `Spanish electoral law uses the **D'Hondt method** ([LOREG, articles 163 and 180](${LOREG_URL})). Only lists with at least **5% of the valid votes** take part, which in ${place} meant ${f.n(mv.threshold)} votes; ${mv.belowThreshold === 0 ? "every list passed it" : mv.belowThreshold === 1 ? "one list fell short" : `${mv.belowThreshold} lists fell short`}. Each remaining list's votes are divided by 1, 2, 3… and the seats go to the largest quotients.`,
-        ...(last && nextOut
-          ? [`The ${ORDINAL_EN(m.municipal.seats)} and last seat went to ${shortOf(last.code)}, with a quotient of ${f.q(last.value)} (${f.n(last.votes)} votes ÷ ${last.divisor}). The highest quotient left without a seat: ${f.q(nextOut.value)} (${shortOf(nextOut.code)}, ${f.n(nextOut.votes)} ÷ ${nextOut.divisor}).`]
-          : []),
+        ...(drawn && last
+          ? [
+              `The ${ORDINAL_EN(m.municipal.seats)} and last seat was decided by lot: ${shortsOf(drawn.tiedLists)} were level on the same quotient, ${f.q(last.value)} (${f.n(last.votes)} votes ÷ ${last.divisor}), and the same total votes. The law settles the first such tie by lot and later ones alternately (LOREG, article 163.1). According to the official result, the seat went to ${shortsOf(drawn.drawnBy)}.`,
+            ]
+          : last && nextOut
+            ? [`The ${ORDINAL_EN(m.municipal.seats)} and last seat went to ${shortOf(last.code)}, with a quotient of ${f.q(last.value)} (${f.n(last.votes)} votes ÷ ${last.divisor}). The highest quotient left without a seat: ${f.q(nextOut.value)} (${shortOf(nextOut.code)}, ${f.n(nextOut.votes)} ÷ ${nextOut.divisor}).`]
+            : []),
         ...(sizeOk
           ? [`The size of the council depends on population: with ${f.n(census)} residents on the register used for this election, ${place} elects ${m.municipal.seats} (LOREG, article 179).`]
           : []),
@@ -697,14 +1058,18 @@ export function buildElectionPage(m: Municipality, locale: Locale, snapshot: Ele
     },
     faqTitle: "Common questions",
     faq: [
-      {
-        question: `Which list won most votes in the 2023 local election in ${place}?`,
-        answer: `${top.short} (${top.name}), with ${f.n(top.votes)} votes, ${f.p(top.share)} of valid votes, and ${top.seats} of the ${m.municipal.seats} councillors.`,
-      },
-      {
-        question: `How many councillors does ${place} have?`,
-        answer: `${m.municipal.seats}, under the scale in article 179 of the electoral law applied to the municipality's population.`,
-      },
+      ...(small?.faq ?? [
+        {
+          question: `Which list won most votes in the 2023 local election in ${place}?`,
+          answer: topsTied
+            ? `${tops.map((row) => `${row.short} (${row.name})`).join(" and ")}, tied on ${f.n(top.votes)} votes each, ${f.p(top.share)} of valid votes. Of the ${m.municipal.seats} councillors, ${tops.map((row) => `${row.short} won ${row.seats}`).join(" and ")}.`
+            : `${top.short} (${top.name}), with ${f.n(top.votes)} votes, ${f.p(top.share)} of valid votes, and ${top.seats} of the ${m.municipal.seats} councillors.`,
+        },
+        {
+          question: `How many councillors does ${place} have?`,
+          answer: `${m.municipal.seats}, under the scale in article 179 of the electoral law applied to the municipality's population.`,
+        },
+      ]),
       g && general && g.leaders.length
         ? {
             question: `Which list won most votes on 29 November in ${place}?`,
@@ -722,6 +1087,7 @@ export function buildElectionPage(m: Municipality, locale: Locale, snapshot: Ele
         ...(sameProvince.length ? [{ label: `Elsewhere in the province of ${m.province}`, links: sameProvince.map(link) }] : []),
       ],
       hub: { ...hub, label: "Catalonia's largest towns and resorts, by comarca" },
+      comarca,
     },
     related: { title: "Election guides", links: related },
     sources: {

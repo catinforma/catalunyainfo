@@ -9,7 +9,7 @@
  *   npm run elections:29n -- crosscheck <path-or-url to 02202307_MUNI.zip> [--preview <slug>]
  *   npm run elections:29n -- status
  *
- * `import` writes a `g2026` object to each of the 300 municipalities and a
+ * `import` writes a `g2026` object to each of the 947 municipalities and a
  * `general2026` block (source, Catalonia's totals and seats, list names) to
  * the snapshot, or writes nothing and says why. Parser and checks:
  * `src/lib/programmatic/elections/interior.ts` (FICHEROS.doc, the format
@@ -25,15 +25,15 @@
  *   - counts add up: candidacies = list votes in every municipality and
  *     district; municipalities <= province row (the gap is the vote from
  *     abroad); Catalonia row = the four provinces; seats = each row's total;
- *   - each of the 300 towns present, with voters <= electors;
+ *   - each of the 947 towns present, with voters <= electors;
  *   - names are copied exactly as file 03 writes them; candidacy codes are
  *     mapped to names only through that table.
  * Percentages are never stored: the page computes them from the counts.
  *
  * `crosscheck` runs the same parser and checks on the 2023 file (23 July
- * 2023, the same format) and compares all 300 towns with the Generalitat's
+ * 2023, the same format) and compares all 947 towns with the Generalitat's
  * open data already in the snapshot (G20231): census, voters, blank, null and
- * every list's votes must match exactly. Verified 30 Oct 2026: 300/300.
+ * every list's votes must match exactly. Verified 30 Oct 2026: 300/300, and 947/947 after tranche 3 (every municipality).
  *
  * -------------------------------------------------------------------------
  * ON THE DAY THE 2026 FILE APPEARS (for the lead)

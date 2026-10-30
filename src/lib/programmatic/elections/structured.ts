@@ -15,8 +15,8 @@ import type { Locale } from "@/lib/i18n/config";
 import { GENCAT_OPEN_DATA_LICENCE, datasetSchema } from "@/lib/seo/jsonld";
 
 import { INTERIOR_DOWNLOADS } from "./model";
-import { electionDescription, hubMeta, latestDataDate, placeName } from "./pages";
-import { electionPath, hubPath } from "./paths";
+import { comarcaDescription, comarcaH1, electionDescription, hubMeta, latestDataDate, placeName, type ComarcaGroup } from "./pages";
+import { comarcaPath, electionPath, hubPath, type ComarcaLocale } from "./paths";
 import { SNAPSHOT } from "./snapshot";
 import type { Municipality } from "./types";
 
@@ -44,6 +44,26 @@ export function electionDataset(m: Municipality, locale: Locale, name: string) {
     locale,
     ...common(),
     spatialCoverage: `${placeName(m, locale)}, ${CATALONIA[locale]}`,
+  });
+}
+
+/**
+ * A comarca page tabulates one election, the 2023 local one, from the
+ * Generalitat's votes, turnout and calls; nothing from the 29N file.
+ */
+export function electionComarcaDataset(g: ComarcaGroup, locale: ComarcaLocale) {
+  const { votes, turnout, elections } = SNAPSHOT.sources;
+  return datasetSchema({
+    path: comarcaPath(locale, g.slug),
+    name: comarcaH1(locale, g),
+    description: comarcaDescription(locale, g),
+    locale,
+    creator: votes.publisher,
+    license: GENCAT_OPEN_DATA_LICENCE,
+    isBasedOn: [votes.url, turnout.url, elections.url],
+    spatialCoverage: `${g.comarca}, ${CATALONIA[locale]}`,
+    temporalCoverage: SNAPSHOT.elections.municipal.date,
+    dateModified: latestDataDate(),
   });
 }
 
