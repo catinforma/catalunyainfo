@@ -3,16 +3,13 @@
 import { b2href } from "@/lib/content/batch02/shared";
 import type { Locale } from "@/lib/i18n/config";
 
+import { EN_LARGEST, EN_RESORTS, TOURISM_REGISTER } from "./english";
 import { longDate, LOREG_URL } from "./model";
-import { EN_LARGEST, EN_RESORTS, hubPath, PAGES_PER_LOCALE } from "./pages";
+import { hubPath, PAGES_PER_LOCALE } from "./pages";
 import { SNAPSHOT } from "./snapshot";
 
-/** Where the English set's resorts come from (see `EN_RESORTS`). */
-export const TOURISM_REGISTER = {
-  name: "Establiments d'allotjament turístic inscrits al Registre de Turisme de Catalunya",
-  publisher: "Generalitat de Catalunya, Departament d'Empresa i Treball",
-  url: "https://analisi.transparenciacatalunya.cat/d/t2h3-cgys",
-};
+/** Where the English set's resorts come from (see `EN_RESORTS` in `english.ts`). */
+export { TOURISM_REGISTER };
 
 export interface HubCopy {
   lead: string;

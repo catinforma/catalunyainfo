@@ -22,6 +22,7 @@ import type { MetadataRoute } from "next";
 import { HTML_LANG, INTL_LOCALE, LOCALES, X_DEFAULT_LOCALE, type Locale } from "@/lib/i18n/config";
 import { absoluteUrl, indexingAllowed } from "@/lib/site";
 
+import { englishSelection } from "./english";
 import { capitalised, slugify } from "./names";
 import { electionPath, hubPath, PAGES_PER_LOCALE } from "./paths";
 import { turnout } from "./results";
@@ -31,36 +32,11 @@ import type { Municipality } from "./types";
 export { ELECTIONS_SEGMENT, electionPath, hubPath, PAGES_PER_LOCALE } from "./paths";
 
 /**
- * English: the big towns and the resorts, where English-speaking readers are.
- * The 11 most populous (the four provincial capitals among them), then the
- * 19 municipalities with the most places in the Registre de Turisme de
- * Catalunya (dataset `t2h3-cgys`: hotels, campsites, rural tourism, tourist
- * flats and homes), read 29 Oct 2026 with `scripts/elections-snapshot.ts
- * --tourism`. Fixed here, not recomputed: the register changes daily and URLs
- * must not come and go with it.
+ * English: the big towns and the resorts, where English-speaking readers are
+ * (`EN_LARGEST` and `EN_RESORTS`, in `english.ts`: the holiday family uses
+ * the same selection).
  */
-export const EN_LARGEST = 11;
-export const EN_RESORTS: readonly string[] = [
-  "salou",
-  "lloret-de-mar",
-  "castell-d-aro-platja-d-aro-i-s-agaro",
-  "torroella-de-montgri",
-  "cambrils",
-  "blanes",
-  "tossa-de-mar",
-  "calella",
-  "sitges",
-  "castello-d-empuries",
-  "santa-susanna",
-  "mont-roig-del-camp",
-  "calonge-i-sant-antoni",
-  "roses",
-  "malgrat-de-mar",
-  "vila-seca",
-  "l-ametlla-de-mar",
-  "pineda-de-mar",
-  "l-escala",
-];
+export { EN_LARGEST, EN_RESORTS } from "./english";
 
 /** Prerendered at build time; the rest render once on first request. */
 export const PRERENDERED_PER_LOCALE = 20;
@@ -70,8 +46,7 @@ export const DESCRIPTION_LIMIT = 155;
 
 function pagesFor(locale: Locale): Municipality[] {
   if (locale !== "en") return SNAPSHOT.municipalities.slice(0, PAGES_PER_LOCALE[locale]);
-  const english = new Set([...SNAPSHOT.municipalities.slice(0, EN_LARGEST).map((m) => m.slug), ...EN_RESORTS]);
-  return SNAPSHOT.municipalities.filter((m) => english.has(m.slug));
+  return englishSelection(SNAPSHOT.municipalities);
 }
 
 /** Computed once: the sitemap and every page's hreflang ask for them. */

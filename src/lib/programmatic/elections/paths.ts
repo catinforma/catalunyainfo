@@ -13,7 +13,7 @@ export const ELECTIONS_SEGMENT: Record<Locale, string> = {
 /**
  * How many municipalities get a page in each language: the 300 most populous
  * in Catalan and Spanish; in English the big towns and the resorts (see
- * `EN_RESORTS` in `pages.ts`). Here so the guides can quote the numbers.
+ * `EN_RESORTS` in `english.ts`). Here so the guides can quote the numbers.
  */
 export const PAGES_PER_LOCALE: Record<Locale, number> = { ca: 300, es: 300, en: 30 };
 
