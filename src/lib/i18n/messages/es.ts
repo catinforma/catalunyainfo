@@ -204,7 +204,7 @@ const es: Messages = {
     nextChristmas: "Vacaciones de Navidad: a partir del {from}, dentro de {n} días.",
     nextEaster: "Vacaciones de Semana Santa: a partir del {from}, dentro de {n} días.",
     nextSummer: "Último día de curso (infantil, primaria y ESO): {from}, dentro de {n} días.",
-    todayCaveat: "No se cuentan los fines de semana, los festivos, los dos festivos locales ni los cuatro días de libre disposición de cada colegio.",
+    todayCaveat: "Cuenta los fines de semana, los festivos de toda Cataluña y las vacaciones. No incluye los dos festivos locales del municipio ni los cuatro días de libre disposición de cada colegio.",
     unknown: "El calendario publicado no llega a esta fecha.",
     colYear: "Curso",
     rowStart: "Inicio (infantil, primaria, ESO, bachillerato)",

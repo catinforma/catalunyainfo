@@ -23,7 +23,7 @@ import {
   resolvePath,
   summariesByEntryIds,
 } from "@/lib/content/repository";
-import { liveEntryTitle } from "@/lib/content/live-title";
+import { liveEntryDescription, liveEntryTitle } from "@/lib/content/live-title";
 import type { EntryDetail, MediaView, SourceView } from "@/lib/content/types";
 import { getMessages } from "@/lib/i18n";
 import { LOCALES, isLocale, type Locale } from "@/lib/i18n/config";
@@ -211,9 +211,10 @@ export async function generateMetadata({
       return buildMetadata({
         locale,
         path: entry.href,
-        // A live figure in the title where the page has one (reservoirs).
+        // A live figure in the title where the page has one (reservoirs,
+        // weekend dates, the school calendar's next break).
         title: (await liveEntryTitle(entry.body, locale)) ?? entry.seoTitle ?? entry.title,
-        description: entry.seoDescription ?? entry.excerpt,
+        description: liveEntryDescription(entry.body, locale) ?? entry.seoDescription ?? entry.excerpt,
         translations: entry.translations,
         canonicalOverride: entry.canonicalUrl,
         // Demo fixtures and drafts are never indexable, wherever they render.

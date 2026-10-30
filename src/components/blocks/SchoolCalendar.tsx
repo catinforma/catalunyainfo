@@ -1,19 +1,25 @@
-import { daysBetween, shortDate, todayInCatalonia } from "@/lib/content/holidays/calendar";
+import { addDays, daysBetween, shortDate, todayInCatalonia } from "@/lib/content/holidays/calendar";
 import { SCHOOL_SOURCE, SCHOOL_YEARS, schoolStatusOn } from "@/lib/content/school/calendar";
+import { nextHolidayLine, schoolDayLine } from "@/lib/content/school/snippet";
 import { getMessages } from "@/lib/i18n";
 import type { Locale } from "@/lib/i18n/config";
 
 /**
- * The general school calendar: what it says about today, then the three
+ * The general school calendar: what it says about today and tomorrow, the
+ * next weekday without school for everyone, the next break, then the three
  * school years the current order sets, side by side.
  *
- * Server-rendered and computed in Europe/Madrid; the route revalidates every
- * few minutes, so "today" is never a day out.
+ * Server-rendered and computed in Europe/Madrid; the nightly cron rebuilds
+ * the page just after midnight (`schoolCalendar` is in DAY_DEPENDENT_BLOCKS),
+ * so "today" and "tomorrow" are never a day out.
  */
 export function SchoolCalendar({ locale }: { locale: Locale }) {
   const t = getMessages(locale).school;
   const today = todayInCatalonia();
   const status = schoolStatusOn(today);
+  const todayLine = schoolDayLine(today, locale, "today");
+  const tomorrowLine = schoolDayLine(addDays(today, 1), locale, "tomorrow");
+  const holidayLine = nextHolidayLine(today, locale);
   const day = (iso: string) => shortDate(iso, locale);
   const withYear = (iso: string) => `${day(iso)}${locale === "en" ? " " : " de "}${iso.slice(0, 4)}`;
   const range = ([from, to]: [string, string]) =>
@@ -46,7 +52,10 @@ export function SchoolCalendar({ locale }: { locale: Locale }) {
   return (
     <section className="ci-school" aria-label={t.title}>
       <div className="ci-reservoirs-head">
-        <p className="ci-reservoirs-figure">{headline}</p>
+        {/* In term the useful answer is about this very day (weekend, holiday or school day). */}
+        <p className="ci-reservoirs-figure">{status.kind === "term" ? todayLine : headline}</p>
+        <p>{tomorrowLine}</p>
+        {holidayLine ? <p>{holidayLine}</p> : null}
         {next ? <p>{next}</p> : null}
         <p className="ci-calc-note">{t.todayCaveat}</p>
       </div>

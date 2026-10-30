@@ -204,7 +204,7 @@ const en: Messages = {
     nextChristmas: "Christmas holidays: from {from}, in {n} days.",
     nextEaster: "Easter holidays: from {from}, in {n} days.",
     nextSummer: "Last day of the school year (infant, primary, ESO): {from}, in {n} days.",
-    todayCaveat: "Weekends, public holidays, the two local holidays and each school's four free-choice days are not counted here.",
+    todayCaveat: "Weekends, Catalonia-wide public holidays and the school breaks are counted. The town's two local holidays and each school's four free-choice days are not.",
     unknown: "The published calendar does not reach this date.",
     colYear: "School year",
     rowStart: "Start (infant, primary, ESO, batxillerat)",
