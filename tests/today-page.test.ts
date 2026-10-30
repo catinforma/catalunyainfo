@@ -402,6 +402,29 @@ test("strikes: today, tomorrow and next from the embedded dates; the list's age"
   assert.ok(strikesOn("2026-11-11", todayStrikes("ca")).some((s) => s.id === "vaga-general-2026-11-11"));
 });
 
+test("strikes: an indefinite strike is on every day from its first, until the day it ended, and is never 'next' once begun", () => {
+  const open: TodayStrike = { id: "m", dates: ["2026-10-28"], indefinite: {}, title: "vaga M", ms: "serveis M", href: "/ca/x/#m" };
+  const ended: TodayStrike = { ...open, id: "e", indefinite: { endedOn: "2026-11-20" } };
+  const list = [open, ...STRIKE_FIXTURE];
+  assert.deepEqual(strikesOn("2026-10-27", list), []);
+  assert.deepEqual(strikesOn("2026-10-28", list).map((s) => s.id), ["m"]);
+  // The Saturday after the Ouigo Friday: only the open strike.
+  assert.deepEqual(strikesOn("2026-10-31", list).map((s) => s.id), ["m"]);
+  assert.deepEqual(strikesOn("2026-11-02", list).map((s) => s.id), ["m", "a"]);
+  assert.deepEqual(strikesOn("2027-06-01", list).map((s) => s.id), ["m"]);
+  assert.deepEqual(strikesOn("2026-11-20", [ended]).map((s) => s.id), ["e"]);
+  assert.deepEqual(strikesOn("2026-11-21", [ended]), []);
+  assert.deepEqual(nextStrike("2026-10-31", list), { strike: STRIKE_FIXTURE[0], date: "2026-11-02" });
+  // On the real list: a strike the hub lists as in progress is on today's answer too.
+  for (const locale of LOCALES) {
+    const real = todayStrikes(locale);
+    for (const strike of STRIKES.filter((s) => s.indefinite && !s.indefinite.endedOn && upcomingStrikes(STRIKES_AS_OF).includes(s))) {
+      assert.ok(real.find((s) => s.id === strike.id)?.indefinite, `${locale}: ${strike.id} lost its indefinite flag`);
+      assert.ok(strikesOn(STRIKES_AS_OF, real).some((s) => s.id === strike.id), `${locale}: ${strike.id} not on ${STRIKES_AS_OF}`);
+    }
+  }
+});
+
 const alert = (id: string, lines: CompactAlert["lines"]): CompactAlert => ({ id, lines, stations: [], date: "2026-10-30", time: "07:10", text: { ca: id, es: id, en: null } });
 
 test("Rodalies: notice count and affected lines in the official order", () => {

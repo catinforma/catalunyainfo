@@ -122,6 +122,8 @@ export function todayStrikes(locale: Locale): TodayStrike[] {
   return upcomingStrikes(STRIKES_AS_OF).map((strike) => ({
     id: strike.id,
     dates: [...strike.dates],
+    // An indefinite strike is on every day from its first, not only on dates[0].
+    ...(strike.indefinite ? { indefinite: strike.indefinite.endedOn ? { endedOn: strike.indefinite.endedOn } : {} } : {}),
     title: strike.title[locale],
     ms: strike.minimumServices.msShort[locale],
     href: strikeHref(strike, locale),

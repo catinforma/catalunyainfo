@@ -260,7 +260,8 @@ const EN: TodayLabels = {
     tomorrowLocalUnknown: "not a Catalonia-wide holiday; local holidays for {year} not published yet",
   },
   strikes: {
-    today: "Yes: today there is a {title}.",
+    // No article before {title}: "an indefinite doctors' strike" and two titles in a row both read wrong after "a".
+    today: "Yes, today: {title}.",
     todayNone: "No: there is no strike on our list today.",
     tomorrow: "Tomorrow",
     tomorrowNone: "no strike on the list",
