@@ -423,6 +423,33 @@ test("transport: 2026 fares for every zone, no 2025 fares, Hola vs T-casual comp
   assert.match(bodyToPlainText(TRANSPORT.editions.ca.blocks), /Ocata[^.]*zona 2/);
 });
 
+/**
+ * Transport EN and ES snippets, 30 Oct 2026 (top-3 push): TMB's table re-read;
+ * the EN page gets the zone table, the Hola vs T-casual sums and an FAQ it
+ * lacked, and both snippets carry the T-casual price.
+ */
+test("transport: EN zone table and FAQ, prices in the EN and ES snippets", () => {
+  const en = TRANSPORT.editions.en;
+  const blocks = en.blocks as { type: string; rows?: string[][] }[];
+  const zones = blocks.find((b) => b.type === "table" && (b.rows?.length ?? 0) === 7);
+  assert.deepEqual(zones?.rows?.[0], ["1", "€2.90", "€13.00", "€12.00", "€22.80"], "EN zone 1 row");
+  assert.deepEqual(zones?.rows?.[1], ["2", "€4.15", "€25.50", "€18.30", "€30.55"], "EN zone 2 row");
+  const text = bodyToPlainText(en.blocks);
+  assert.match(text.slice(0, 200), /T-casual.*€13.*T-dia.*€12/, "EN answer first");
+  assert.match(text, /€24\.80/, "EN: T-casual plus two airport tickets");
+  assert.match(text, /T-familiar[^.]*€11\.50/, "EN: T-familiar fare");
+  assert.match(text, /2027 fares had not been announced/);
+  assert.ok(blocks.some((b) => b.type === "faq"), "EN FAQ");
+  assert.ok(JSON.stringify(en.blocks).includes(`](/en/${B2_PATHS.hours.en}/)`), "EN links the metro hours page");
+  for (const locale of ["es", "en"] as const) {
+    const { seoTitle, seoDescription } = TRANSPORT.editions[locale];
+    assert.ok(seoTitle.length <= 60, `${locale}: ${seoTitle.length}`);
+    assert.ok(seoDescription.length <= 155, `${locale}: ${seoDescription.length}`);
+    assert.match(seoTitle, /T-casual.*13/, `${locale}: T-casual price in the title`);
+  }
+  assert.equal(TRANSPORT.verifiedAt, "2026-10-30");
+});
+
 test("the selector block is placed on the transport article in every language", () => {
   for (const locale of LOCALES) {
     const count = TRANSPORT.editions[locale].blocks.filter(

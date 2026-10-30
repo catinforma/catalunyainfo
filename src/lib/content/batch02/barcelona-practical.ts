@@ -76,7 +76,7 @@ const DAYS_COPY = {
       `Para dos días o más, si en total harás diez trayectos o menos, una **T-casual (${casual})** sale más barata que cualquiera de las dos, pero no vale en las estaciones de metro del aeropuerto.`,
   },
   en: {
-    title: "What it costs for 1 to 5 days",
+    title: "Transport pass for 1, 2, 3, 4 or 5 days: what it costs",
     caption: "Hola Barcelona or one T-dia a day, zone 1, 2026 prices",
     headers: ["Days", "Hola Barcelona", "Per day", "One T-dia each day"],
     day: (n: number) => (n === 1 ? "1 day (24 h)" : `${n} days (${n * 24} h)`),
@@ -112,7 +112,9 @@ const PROFILE_HEADERS: Record<string, string[]> = {
 // ATM's T-casual page shows the same T-casual row (and the 2025 fares lower
 // down, which are not used). Only zone 1 is in TICKETS, which drives the
 // calculator. T-familiar and T-grup from the same TMB table and ATM's pages.
-// ATM had announced no 2027 fares on 28 Oct 2026.
+// ATM had announced no 2027 fares on 28 Oct 2026. Re-read 30 Oct 2026 on the
+// same TMB table: every zone, T-familiar, T-grup and the €5.90 airport ticket
+// unchanged; still no 2027 fares.
 const ZONE_FARES: string[][] = [
   ["1", "2,90 €", "13,00 €", "12,00 €", "22,80 €"],
   ["2", "4,15 €", "25,50 €", "18,30 €", "30,55 €"],
@@ -123,7 +125,13 @@ const ZONE_FARES: string[][] = [
   ["7", "11,60 €", "57,60 €", "34,70 €", "67,65 €"],
 ];
 
-/** TMB's airport ticket: one metro journey including Aeroport T1 and T2 (checked 28 Oct 2026). */
+/** The zone table with English money formatting: "2,90 €" -> "€2.90". */
+const ZONE_FARES_EN: string[][] = ZONE_FARES.map(([zone, ...cells]) => [
+  zone ?? "",
+  ...cells.map((cell) => `€${cell.replace(" €", "").replace(",", ".")}`),
+]);
+
+/** TMB's airport ticket: one metro journey including Aeroport T1 and T2 (re-read 30 Oct 2026). */
 const AIRPORT_TICKET = 5.9;
 
 const VS_COPY = {
@@ -137,9 +145,14 @@ const VS_COPY = {
     text: (casual: string, hola2: string, hola3: string, airport: string, casualAirport: string, usual: string) =>
       `Si tus diez viajes o menos se reparten en dos días o más y no usas el metro del aeropuerto, la **T-casual (${casual})** es más barata que cualquier Hola Barcelona de 48 horas o más (desde ${hola2}). El aeropuerto cambia la cuenta: con la T-casual tendrías que pagar aparte el billete aeropuerto (${airport} por trayecto), así que diez viajes más la ida y vuelta al aeropuerto salen por **${casualAirport}**, más que una Hola de 48 h (${hola2}) y menos que una de 72 h (${hola3}). Para tres días o más con aeropuerto, compara también la T-usual (${usual}, 30 días, aeropuerto incluido).`,
   },
+  en: {
+    title: "Hola Barcelona or T-casual?",
+    text: (casual: string, hola2: string, hola3: string, airport: string, casualAirport: string, usual: string) =>
+      `If your ten journeys or fewer are spread over two days or more and you do not use the airport metro, the **T-casual (${casual})** is cheaper than any Hola Barcelona card of 48 hours or more (from ${hola2}). The airport changes the sum: with a T-casual you pay the airport ticket on top (${airport} per journey), so ten journeys plus the airport metro there and back come to **${casualAirport}**, more than a 48-hour Hola (${hola2}) and less than a 72-hour one (${hola3}). For three days or more with the airport, also compare the T-usual (${usual}, 30 days, airport included).`,
+  },
 } as const;
 
-function versusBlocks(locale: "ca" | "es"): Block[] {
+function versusBlocks(locale: "ca" | "es" | "en"): Block[] {
   const t = VS_COPY[locale];
   const casual = fareFor("t-casual");
   return h2(
@@ -166,6 +179,7 @@ export const TRANSPORT: B2Article = {
     { name: "2026 transport ticket fares (in force from 15 January 2026)", url: "https://www.tmb.cat/en/barcelona-fares-metro-bus/transport-ticket-fares", publisher: "TMB" },
     { name: "T-familiar", url: "https://www.atm.cat/en/titols-tarifes/titols-i-tarifes/t-familiar", publisher: "Autoritat del Transport Metropolità" },
     { name: "T-grup", url: "https://www.atm.cat/en/titols-tarifes/titols-i-tarifes/t-grup", publisher: "Autoritat del Transport Metropolità" },
+    { name: "Hola Barcelona Travel Card — conditions", url: "https://www.holabarcelona.com/en/tickets/hola-bcn-barcelona-travel-card", publisher: "Transports Metropolitans de Barcelona" },
   ],
   heroKey: "b2-transport-metro-barcelona",
   secondaryKey: "b2-transport-tram-barcelona",
@@ -218,7 +232,7 @@ export const TRANSPORT: B2Article = {
         ),
         table("Preus de TMB per zones, 2026", ["Zones", "Bitllet senzill", "T-casual (10 viatges)", "T-dia (24 h)", "T-usual (30 dies)"], ZONE_FARES, "Font: TMB, preus vigents des del 15 de gener de 2026; la T-usual porta el 50 % de descompte del Reial decret llei 17/2025. Barcelona i el Prat de Llobregat són a la zona 1."),
         ...paras(
-          "Aquests preus valen fins al pròxim canvi de tarifes de l'ATM; a 28 d'octubre de 2026 encara no s'han anunciat els del 2027.",
+          "Aquests preus valen fins al pròxim canvi de tarifes de l'ATM; a 30 d'octubre de 2026 encara no s'han anunciat els del 2027.",
           "**Quantes zones necessites?** Compta el sector tarifari d'on surts i el d'arribada: per anar de Barcelona (zona 1) a Sabadell (zona 2C) cal un títol de 2 zones, segons TMB. Badalona i Montgat són a la zona 1; el Masnou (amb Ocata) i Premià de Mar, a la zona 2. Cada viatge permet fins a 3 transbordaments en 75 minuts en una zona, 15 minuts més per cada zona addicional. La T-casual en targeta de cartró T-mobilitat costa 1 € més.",
         ),
         ...h2(
@@ -292,9 +306,9 @@ export const TRANSPORT: B2Article = {
       path: "guias/tarjetas-transporte-barcelona",
       title:
         "Tarjetas de transporte de Barcelona 2026: precio de la T-casual por zonas, T-dia, T-usual y Hola Barcelona",
-      seoTitle: "T-casual 2026: precio por zonas y tarjetas metro Barcelona",
+      seoTitle: "Precio T-casual Barcelona 2026: 13 € (1 zona) y 25,50 € (2)",
       seoDescription:
-        "T-casual: 13 € (1 zona), 25,50 € (2) y 34,70 € (3). Precios 2026 de todas las tarjetas por zonas, dónde no valen y si compensa más la Hola Barcelona.",
+        "T-casual: 13 € (1 zona), 25,50 € (2) y 34,70 € (3). Tarjetas de metro de Barcelona 2026: T-dia 12 €, T-usual 22,80 €, Hola Barcelona y cuál compensa.",
       excerpt:
         "La tarjeta dirigida a turistas no siempre es la más barata. Compara los títulos según días, trayectos y aeropuerto.",
       blocks: [
@@ -316,7 +330,7 @@ export const TRANSPORT: B2Article = {
         ),
         table("Precios de TMB por zonas, 2026", ["Zonas", "Billete sencillo", "T-casual (10 viajes)", "T-dia (24 h)", "T-usual (30 días)"], ZONE_FARES, "Fuente: TMB, precios vigentes desde el 15 de enero de 2026; la T-usual lleva el 50 % de descuento del Real Decreto-ley 17/2025. Barcelona y El Prat de Llobregat están en la zona 1."),
         ...paras(
-          "Estos precios valen hasta el próximo cambio de tarifas de la ATM; a 28 de octubre de 2026 aún no se han anunciado los de 2027.",
+          "Estos precios valen hasta el próximo cambio de tarifas de la ATM; a 30 de octubre de 2026 aún no se han anunciado los de 2027.",
           "**¿Cuántas zonas necesitas?** Cuenta el sector tarifario de salida y el de llegada: para ir de Barcelona (zona 1) a Sabadell (zona 2C) hace falta un título de 2 zonas, según TMB. Badalona y Montgat están en la zona 1; El Masnou (con Ocata) y Premià de Mar, en la zona 2. Cada viaje permite hasta 3 transbordos en 75 minutos en una zona, 15 minutos más por cada zona adicional. La T-casual en tarjeta de cartón T-mobilitat cuesta 1 € más.",
         ),
         ...h2(
@@ -382,18 +396,18 @@ export const TRANSPORT: B2Article = {
     en: {
       path: "guides/barcelona-transport-passes",
       title:
-        "T-casual, T-dia, T-usual or Hola Barcelona: which transport pass should you buy?",
-      seoTitle: "Barcelona transport pass for 1 to 5 days: 2026 prices",
+        "Barcelona transport passes 2026: T-casual, T-dia, T-usual or Hola Barcelona, and what each costs",
+      seoTitle: "Barcelona transport pass 2026: T-casual €13, 1 to 5 days",
       seoDescription:
-        "Compare T-casual, T-dia, T-usual and Hola Barcelona by days, journeys and whether you need the airport metro. With a selector.",
+        "T-casual €13 for 10 journeys, T-dia €12 for 24 hours, Hola Barcelona from €12.50. 2026 prices by zone and days, airport metro rules and which to buy.",
       excerpt:
         "The obvious tourist card is not automatically the cheapest. Compare the passes by days, journeys and airport use.",
       blocks: [
         lead(
-          "Barcelona's ticket system can be confusing because the obvious tourist product is **not automatically the cheapest option for every trip**.",
+          "A **T-casual** costs **€13** for ten journeys in zone 1, a **T-dia** **€12** for 24 hours of unlimited travel and a **T-usual** **€22.80** for 30 days (2026 fares, in force since 15 January). They cover metro, bus, tram and trains alike. The T-casual is not valid at the airport metro stations, and the tourist card, Hola Barcelona, is **not automatically the cheapest**.",
         ),
         ...paras(
-          "In 2026, a one-zone T-casual costs €13, a T-dia €12 and a T-usual €22.80. Hola Barcelona provides unlimited transport for consecutive periods from 24 to 120 hours.",
+          "A single ticket costs €2.90 and the airport metro ticket €5.90. Hola Barcelona gives unlimited travel for consecutive periods of 24 to 120 hours, from €12.50.",
         ),
         callout(
           "info",
@@ -402,12 +416,21 @@ export const TRANSPORT: B2Article = {
         ),
         { type: "transportPasses" } as Block,
         ...h2(
-          "T-casual: ten journeys",
-          "The **T-casual** gives you ten journeys for €13 in one zone, but it cannot be used through the L9 Sud airport metro gates at T1 or T2.",
+          "T-casual price by zone, and the other passes (2026)",
+          "The T-casual is valid for **ten integrated journeys** on every mode of transport. It costs **€13** in one zone, **€25.50** in two and **€34.70** in three: €1.30 a journey in one zone, against €2.90 for a single ticket.",
+        ),
+        table("TMB fares by zone, 2026", ["Zones", "Single ticket", "T-casual (10 journeys)", "T-dia (24 h)", "T-usual (30 days)"], ZONE_FARES_EN, "Source: TMB, prices in force from 15 January 2026; the T-usual carries the 50% discount of Royal Decree-Law 17/2025. Barcelona and El Prat de Llobregat are in zone 1."),
+        ...paras(
+          "These prices apply until ATM's next fare change; as of 30 October 2026 the 2027 fares had not been announced.",
+          "**How many zones do you need?** Count the fare sector you leave from and the one you arrive in: Barcelona (zone 1) to Sabadell (zone 2C) needs a 2-zone ticket, according to TMB. Badalona and Montgat are in zone 1; El Masnou (with Ocata) and Premià de Mar in zone 2. Each journey allows up to 3 transfers within 75 minutes in one zone, plus 15 minutes for each extra zone. A T-casual on a cardboard T-mobilitat card costs €1 more.",
+        ),
+        ...h2(
+          "T-casual: Barcelona's 10-journey ticket",
+          "The **T-casual** gives you ten journeys for €13 in one zone, but it cannot be used through the L9 Sud airport metro gates at T1 or T2. It is loaded onto a T-mobilitat: a personal card, an NFC phone or an anonymous card.",
           "It is one person per journey: it is not tied to a name, but it cannot be used by more than one person at the same time.",
         ),
         ...h2(
-          "T-dia: 24 unlimited hours",
+          "T-dia: 24 hours of unlimited travel for €12",
           "The **T-dia** costs €12 in one zone and gives unlimited travel for 24 hours from first validation.",
           "It includes one outbound and one return airport metro journey.",
         ),
@@ -417,16 +440,21 @@ export const TRANSPORT: B2Article = {
           "It is personal and non-transferable, and it is valid through the T1 and T2 airport metro stations.",
         ),
         ...h2(
-          "Hola Barcelona",
+          "Travelling together: T-familiar and T-grup",
+          "The **T-familiar** (€11.50 in one zone) gives 8 journeys in 30 days and, unlike the T-casual, several people can use it for the same journey. The **T-grup** (€91 in one zone) gives 70 journeys in 30 days, also for several people at once. Neither is valid at the Aeroport T1 and T2 stations on L9 Sud.",
+        ),
+        ...h2(
+          "Hola Barcelona Travel Card: price and what it covers",
           "The **Hola Barcelona Travel Card** offers unlimited travel for 24, 48, 72, 96 or 120 hours and covers TMB metro and buses, NitBus, the Montjuïc funicular, FGC zone 1, the tram and Rodalies zone 1. Airport metro travel is included; the Montjuïc Cable Car is not.",
         ),
         callout(
           "official",
           "Hola Barcelona prices",
-          `On TMB's own Hola Barcelona site (holabarcelona.com), full price: €12.50 (24 h), €18.70 (48 h), €27.30 (72 h), €35.60 (96 h) and €43.60 (120 h); TMB advertises 10% off online. Torn between this and the Barcelona Card? See ${b2link("cards", "en", "which one is worth it")}.`,
+          `On TMB's own Hola Barcelona site (holabarcelona.com), full price: €12.50 (24 h), €18.70 (48 h), €27.30 (72 h), €35.60 (96 h) and €43.60 (120 h), checked on 12 October 2026; TMB advertises 10% off online (on 30 October 2026 the site showed "from €12.50", €11.25 online). The card is non-transferable, and an online reservation is valid for 180 days from purchase and no later than the last day of February of the following year. Torn between this and the Barcelona Card? See ${b2link("cards", "en", "which one is worth it")}.`,
         ),
         ...daysBlocks("en"),
-        ...h2("Where to start looking"),
+        ...versusBlocks("en"),
+        ...h2("Which pass should you buy?"),
         table(
           "A starting point, not a ranking",
           PROFILE_HEADERS.en ?? [],
@@ -438,7 +466,18 @@ export const TRANSPORT: B2Article = {
           ],
           "There is no single best pass: it depends on your journeys, your zones and the airport.",
         ),
+        faq([
+          { question: "How much is the T-casual in 2026?", answer: "€13 in 1 zone, €25.50 in 2 zones and €34.70 in 3 zones, for ten journeys. These are the fares in force since 15 January 2026." },
+          { question: "What is the T-dia in Barcelona?", answer: "A 24-hour pass with unlimited journeys on metro, bus, tram and trains from first validation: €12 in one zone. It includes one airport metro journey each way." },
+          { question: "Is the T-casual valid on the airport metro?", answer: "No: it cannot be used to enter or leave the Aeroport T1 and T2 stations on L9 Sud. There you need the airport ticket (€5.90), the T-dia, the T-usual or Hola Barcelona." },
+          {
+            question: "Which Barcelona transport pass is best for 3 days?",
+            answer: `For ten journeys or fewer over the three days, the T-casual (${euros(fareFor("t-casual"), "en")}); with the airport metro there and back on top, ${euros(fareFor("t-casual") + 2 * AIRPORT_TICKET, "en")}, still less than the 72-hour Hola Barcelona (${euros(fareFor("hola-barcelona", 3), "en")}). For more journeys than that, compare the 72-hour Hola Barcelona with three T-dia (${euros(fareFor("t-dia") * 3, "en")}): the table above has the sums for 1 to 5 days.`,
+          },
+          { question: "Can two people share a T-casual?", answer: "Not at the same time: it is not in anyone's name, but only one person can use it on each journey. To share, there is the T-familiar (8 journeys, €11.50 in one zone) or the T-grup." },
+        ]),
         ...paras(
+          `To know how late you can use your pass each night, see ${b2link("hours", "en", "Barcelona metro hours and night buses")}; from the airport, see ${b2link("airport", "en", "the bus, metro and train from the airport to the centre")}.`,
           `Driving in? See ${b2link("zbe", "en", "what foreign-registered cars must do first")} and ${b2link("parking", "en", "how the blue and green parking zones work")}.`,
           `If a strike has been called, check ${b2link("strikes", "en", "what runs on strike days")}: we add the official minimum services for the metro, buses and Rodalies as they are published.`,
           `Before you take a Rodalies train, check [Rodalies disruptions today](${rodaliesHub("en")}).`,

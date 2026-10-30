@@ -146,7 +146,7 @@ const COPY: Record<Locale, T> = {
     nightTitle: "NitBus: Barcelona night buses after the metro closes",
     night: [
       "The AMB's **NitBus** network runs from about **22:30 to 6:00 every night of the year**, about every 20 minutes on most lines (the airport lines N17 and N18 run every 15). Every line except the N0 and N19 goes through **Plaça de Catalunya**, the network's hub.",
-      "The Hola Barcelona travel card includes the NitBus. If you hold another pass, check its conditions before relying on it at night.",
+      `The Hola Barcelona travel card includes the NitBus. If you hold another pass, check its conditions before relying on it at night; what each pass costs and covers is in ${b2link("transport", "en", "Barcelona transport passes and prices")}.`,
     ],
     tramTitle: "Barcelona tram hours",
     tramCaption: "Tram (Trambaix and Trambesòs) hours",
@@ -211,7 +211,7 @@ const COPY: Record<Locale, T> = {
     nightTitle: "Cuando cierra el metro: NitBus",
     night: [
       "La red **NitBus** del AMB funciona aproximadamente de **22:30 a 6:00 todas las noches del año**, cada 20 minutos aproximadamente en la mayoría de líneas (las del aeropuerto, N17 y N18, cada 15). Todas las líneas excepto la N0 y la N19 pasan por **plaza Catalunya**, el centro de la red.",
-      "La Hola Barcelona incluye el NitBus. Si tienes otro título, comprueba sus condiciones antes de contar con él de noche.",
+      `La Hola Barcelona incluye el NitBus. Si tienes otro título, comprueba sus condiciones antes de contar con él de noche; qué cubre y cuánto cuesta cada uno está en ${b2link("transport", "es", "el precio de la T-casual y las tarjetas de transporte")}.`,
     ],
     tramTitle: "Horario del tranvía de Barcelona",
     tramCaption: "Horario del tranvía (Trambaix y Trambesòs)",
@@ -276,7 +276,7 @@ const COPY: Record<Locale, T> = {
     nightTitle: "Quan tanca el metro: NitBus",
     night: [
       "La xarxa **NitBus** de l'AMB funciona aproximadament de **22:30 a 6:00 totes les nits de l'any**, cada 20 minuts aproximadament a la majoria de línies (les de l'aeroport, N17 i N18, cada 15). Totes les línies excepte la N0 i la N19 passen per la **plaça de Catalunya**, el centre de la xarxa.",
-      "La Hola Barcelona inclou el NitBus. Si tens un altre títol, comprova'n les condicions abans de comptar-hi de nit.",
+      `La Hola Barcelona inclou el NitBus. Si tens un altre títol, comprova'n les condicions abans de comptar-hi de nit; què cobreix i quant costa cadascun és a ${b2link("transport", "ca", "el preu de la T-casual i les targetes de transport")}.`,
     ],
     tramTitle: "Horari del tramvia de Barcelona",
     tramCaption: "Horari del tramvia (Trambaix i Trambesòs)",
