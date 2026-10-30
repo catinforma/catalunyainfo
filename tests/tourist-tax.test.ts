@@ -241,6 +241,9 @@ test("the search title states Barcelona's range per night, computed from the rat
   const { seoFor } = PUBLISH;
   assert.equal(seoFor("es").seoTitle, "Tasa turística Barcelona 2026: 6 a 12 € por persona y noche");
   assert.equal(seoFor("ca").seoTitle, "Taxa turística Barcelona 2026: de 6 a 12 € per persona i nit");
+  // EN retitled 30 Oct (CTR sweep: 215 impressions at 6.5, 1.4 %), same range.
+  assert.equal(seoFor("en").seoTitle, "Barcelona tourist tax 2026: €6 to €12 per person per night");
+  assert.match(seoFor("en").seoDescription, /^Barcelona city tax: €6 to €12 per person per night \(Catalan rate \+ €5 city surcharge\)/);
   for (const locale of LOCALES) {
     const { seoTitle, seoDescription } = seoFor(locale);
     assert.ok(seoTitle.length <= 60, `${locale}: ${seoTitle.length}`);
