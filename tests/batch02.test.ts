@@ -542,7 +542,8 @@ test("parking: zone summary table and a blue-vs-green answer that matches the ra
   for (const locale of ["ca", "es", "en"] as const) {
     const blocks = PARKING.editions[locale].blocks as { type: string; rows?: string[][]; text?: string }[];
     const tables = blocks.filter((b) => b.type === "table");
-    assert.equal(tables.length, 3, `${locale}: summary + blue + green tables`);
+    // 30 Oct 2026: a day-by-day table joined the summary, blue and green ones.
+    assert.equal(tables.length, 4, `${locale}: summary + days + blue + green tables`);
     assert.equal(tables[0]?.rows?.length, 5, `${locale}: five kinds of space in the summary`);
     const lead = blocks.find((b) => b.type === "paragraph")?.text ?? "";
     assert.match(lead, /1[,.]40/, `${locale}: the lead gives the green non-resident price`);
@@ -573,6 +574,36 @@ test("parking: August answered from AREA, Rate A areas, four steps, no invented 
     assert.doesNotMatch(text, /(gratis|gratuïta|free)[^.]*(agost|agosto|August)/i, `${locale}: no August exemption`);
     assert.doesNotMatch(text, /l[ií]neas? (azul|verde)|línies (blav|verd)|(blue|green) lines/i, `${locale}: no unverified markings`);
   }
+});
+
+/**
+ * Parking, 30 Oct 2026 (top-3 push): AREA's blue tables carry their own
+ * limits ("Tarifa A (màx. 1h o 2h)", "Tarifa B (màx. 2h)"); Zone 36 in
+ * Trinitat Vella goes live on 9 Nov 2026 with 632 green spaces and a 2-hour
+ * limit for non-residents (AREA news, 22.9.2026); AREA's indicative map is
+ * linked in the first step; a day-by-day table answers "horario". The
+ * search title states the price range in CA and the query words in ES.
+ */
+test("parking: per-rate limits, Trinitat Vella zone 36, the AREA map and a day-by-day table", () => {
+  const limits = { ca: /1 o 2 hores a la tarifa A i 2 hores a la tarifa B/, es: /1 o 2 horas en tarifa A y 2 horas en tarifa B/, en: /1 or 2 hours on Rate A and 2 hours on Rate B/ };
+  const map = { ca: "https://areaverda.cat/ca/planol", es: "https://areaverda.cat/es/plano", en: "https://areaverda.cat/es/plano" };
+  for (const locale of ["ca", "es", "en"] as const) {
+    const blocks = PARKING.editions[locale].blocks as { type: string; rows?: string[][]; items?: { text: string }[] }[];
+    const text = bodyToPlainText(PARKING.editions[locale].blocks);
+    assert.match(text, limits[locale], `${locale}: per-rate limits`);
+    assert.match(text, /632/, `${locale}: zone 36 spaces`);
+    assert.match(text, /9 (de )?(novembre|noviembre|November) (de )?2026/, `${locale}: zone 36 start`);
+    assert.ok(JSON.stringify(blocks).includes(map[locale]), `${locale}: AREA map link`);
+    const days = blocks.filter((b) => b.type === "table")[1];
+    assert.equal(days?.rows?.length, 3, `${locale}: weekdays, Saturday, Sunday`);
+    const edition = PARKING.editions[locale];
+    assert.ok(edition.seoTitle.length <= 60, `${locale}: title budget`);
+    assert.ok(edition.seoDescription.length <= 155, `${locale}: description budget`);
+  }
+  assert.match(PARKING.editions.ca.seoTitle, /^Preu zona blava i verda Barcelona: 1,15-4,25 €\/h/);
+  assert.match(PARKING.editions.es.seoTitle, /^Zona azul y verde Barcelona: cómo funciona, horario y precio$/);
+  assert.equal(PARKING.verifiedAt, "2026-10-30");
+  assert.ok(PARKING.sources.some((s) => s.url === "https://areaverda.cat/es/plano"));
 });
 
 /**
