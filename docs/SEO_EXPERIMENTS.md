@@ -1093,6 +1093,89 @@ per target query; for the mushroom pages, which page the CA queries land on.
 
 **Outcome:** _pending_
 
+## 2026-10-30 — Council-approved 2027 local holidays on town pages
+
+**URLs:** `/ca/festius/<town>/`, `/es/festivos/<town>/`, `/en/holidays/<town>/`
+for 46 towns (static, ships with the deploy; no publish group). Comarca pages
+and the three hubs change their 2027 paragraph.
+
+**Observation.** "festivos <town> 2027", "calendario laboral <town> 2027" and
+"festius <town> 2027" already land on the town pages at 3-10, and those pages
+said the 2027 local days were "not published yet": the DOGC order comes in
+mid-December (the 2026 one on 17 Dec 2025). Many councils fixed their 2027
+days months ago, by plenary, mayoral decree or Junta de Govern Local, and
+publish them on their own sites.
+
+**Change.** `src/lib/programmatic/holidays/council-2027.ts`: 46 councils'
+2027 days, each read on the council's own channel on 30 Oct 2026 (plenary
+minutes, agreement summaries, seu electrònica calendars, a decree in the
+Gaseta Municipal), with the quote, the act and its date. Press was used only
+to find sources. 32 of the 68 towns over 20,000 people (Barcelona,
+L'Hospitalet, Badalona, Lleida, Mataró, Reus, Girona, Cornellà, Sant Boi,
+Rubí, Manresa, Granollers, Figueres, Esplugues, Blanes, Vilafranca, Ripollet,
+Olot, Sant Adrià, Montcada, Tortosa, Sant Joan Despí, Premià de Mar, Sant
+Vicenç dels Horts, Molins de Rei, Sant Andreu de la Barca, Palafrugell,
+Vila-seca, Amposta, Sant Just Desvern, Banyoles, Roses), 10 of the 29 English
+towns, and 14 smaller ones (Caldes de Montbui, la Llagosta, Premià de Dalt,
+Alella, Cervera, Sant Fost, Vidreres, Artés, Capellades, Castellbell i el
+Vilar, Castellví de Rosanes, la Llacuna, Riudarenes, Pau).
+
+The pages give the days labelled "aprovats per l'Ajuntament (ple del …),
+pendents de l'ordre del DOGC" / "aprobados por el Ayuntamiento (…),
+pendientes de la orden del DOGC" / "approved by the council (…), pending the
+DOGC order" ("fixats per l'Ajuntament, segons el seu web" where the page
+names no act): a line under the lead, then in the 2027 section the answer,
+the source link and the 2027 table with the two days marked pending, the
+FAQ answer, the Dataset (description, coverage 2026/2027, council page in
+`isBasedOn`). The status box is unchanged. When `prepare2027` writes
+`local-2027.json`, the order wins everywhere and the council file is ignored.
+
+Title pattern, only where it fits 60 characters (otherwise the old title
+stays and the description, which now leads with 2027, carries the dates):
+
+```
+Festius Girona 2026 i 2027: 26 de juliol i 29 d'octubre
+Festivos Granollers 2026 y 2027: 7 de mayo y 27 de agosto
+Festivos Barcelona 2026-2027: 17 de mayo y 24 de septiembre
+Blanes public holidays 2026 and 2027: 30 March and 26 July
+```
+
+Too long for the dates, L'Hospitalet keeps "Festivos locales L'Hospitalet de
+Llobregat 2026 y 2027" and the description says "Festivos de L'Hospitalet de
+Llobregat en 2027: 17 de mayo y 24 de septiembre, ya aprobados. En 2026: 25
+de mayo y 24 de septiembre."
+
+Dated titles: 33 CA, 30 ES, 9 EN of the 46 / 10. This is the second title
+change on these pages today (the top-3 push above set "…: ¿hoy es festivo?");
+Google has not recrawled most of them since, so it counts as one change.
+
+**Baseline** (Search Console, ES pages, 16-30 Oct 2026, `dataState: all`):
+
+| Page | Impr. | Clicks | Pos. | 2027 queries (impr., pos.) |
+| --- | --- | --- | --- | --- |
+| /es/festivos/barcelona/ | 1,283 | 6 | 9.3 | festius locals barcelona 2027 (2, 8.5), festivos barcelona 2027 (1, 11) |
+| /es/festivos/girona/ | 890 | 2 | 7.4 | calendario laboral girona 2027 (1, 8) |
+| /es/festivos/lleida/ | 323 | 1 | 7.1 | calendario laboral lleida 2027 (3, 8.3) |
+| /es/festivos/reus/ | 171 | 3 | 6.2 | calendario laboral reus 2027 (8, 4.9), festivos reus 2027 (6, 3.2) |
+| /es/festivos/granollers/ | 120 | 4 | 6.4 | festivos granollers 2027 (7, 7.4) |
+| /es/festivos/badalona/ | 115 | 2 | 7.0 | calendario laboral badalona 2027 (10, 8.8), festivos badalona 2027 (6, 8.5) |
+| /es/festivos/mataro/ | 112 | 4 | 6.1 | calendario laboral mataro 2027 (9, 6.3), festivos mataro 2027 (4, 5.5) |
+| /es/festivos/manresa/ | — | — | — | calendario laboral manresa 2027 (5, 5.8), festivos manresa 2027 (4, 8.8) |
+
+Control: Tarragona (627 impr., 8.0; no council source found) keeps the old
+title.
+
+**Prediction.** CTR on the 2027 queries of the dated-title pages above the
+control's at the same position, and rising with December demand; the
+"calendario laboral <town> 2027" queries move up a position or two as the
+pages now answer them.
+
+**Measure on 30 Nov 2026** and again after the DOGC order: per page, 2027
+queries' clicks and CTR against Tarragona and the towns with no council data.
+After the order, check the `COUNCIL DIFFERS` lines `prepare2027` prints.
+
+**Outcome:** _pending_
+
 ## Candidates not yet run
 
 Recorded so they are not lost, and so they are not all started at once.
