@@ -1,6 +1,18 @@
-import type { OrderComarca } from "./dogc";
-import { locate, nucleiAfter, sameComarca } from "./match";
+import { nameKey, type OrderComarca } from "./dogc";
+import { locate, nucleiAfter, sameComarca, type Located } from "./match";
 import type { SnapshotMunicipality } from "./types";
+
+/**
+ * Idescat and the order can file a municipality under different comarques
+ * (Torà and Biosca: Solsonès / Segarra in Ordre EMT/208/2025). Outside its
+ * own comarca, only a unique exact match of the name is accepted.
+ */
+function locateAnywhere(comarques: OrderComarca[], dogcName: string): { comarca: OrderComarca; located: Located } | null {
+  const hits = comarques.flatMap((comarca) =>
+    comarca.entries.flatMap((entry, index) => (nameKey(entry.name) === nameKey(dogcName) ? [{ comarca, located: { entry, index, shape: "own" as const } }] : [])),
+  );
+  return hits.length === 1 ? hits[0]! : null;
+}
 
 /**
  * The 48-hour swap: reads next year's local-holiday order for the
@@ -19,17 +31,21 @@ export function extractLocalDays(
   const problems: string[] = [];
 
   for (const m of municipalities) {
-    const comarca = comarques.find((c) => sameComarca(c.heading, m.comarca));
+    let comarca = comarques.find((c) => sameComarca(c.heading, m.comarca));
     if (!comarca) {
       problems.push(`${m.name}: comarca "${m.comarca}" not in the order`);
       continue;
     }
-    let located;
+    let located: Located | null;
     try {
       located = locate(comarca, m.dogcName);
     } catch (error) {
       problems.push(error instanceof Error ? error.message : String(error));
       continue;
+    }
+    if (!located) {
+      const elsewhere = locateAnywhere(comarques, m.dogcName);
+      if (elsewhere) ({ comarca, located } = elsewhere);
     }
     if (!located) {
       problems.push(`${m.name}: "${m.dogcName}" not found under ${comarca.heading}`);

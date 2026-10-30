@@ -266,20 +266,20 @@ export function aboutParagraphs(locale: Locale): string[] {
   if (locale === "ca") {
     return [
       "La data d'avui es calcula al teu navegador amb l'hora de Catalunya, de manera que les respostes canvien a mitjanit encara que la pàgina no s'hagi tornat a publicar.",
-      `Els festius surten del calendari oficial de la Generalitat i de l'ordre de festes locals de ${year}, per als ${towns} municipis més poblats; la pàgina de cada municipi té el calendari sencer. Les vagues surten de la nostra llista de convocatòries, revisada ${asOf} a les webs dels convocants i dels operadors.`,
+      `Els festius surten del calendari oficial de la Generalitat i de l'ordre de festes locals de ${year}, per als ${towns} municipis que en tenen; la pàgina de cada municipi té el calendari sencer. Les vagues surten de la nostra llista de convocatòries, revisada ${asOf} a les webs dels convocants i dels operadors.`,
       "Els avisos de Rodalies, l'aigua dels embassaments i els preus del carburant es llegeixen a la font oficial quan obres la pàgina, amb una memòria cau de minuts. Quan una font no respon, la pàgina ho diu i l'enllaça: mai no mostra dades antigues com si fossin d'avui.",
     ];
   }
   if (locale === "es") {
     return [
       "La fecha de hoy se calcula en tu navegador con la hora de Cataluña, así que las respuestas cambian a medianoche aunque la página no se haya vuelto a publicar.",
-      `Los festivos salen del calendario oficial de la Generalitat y de la orden de fiestas locales de ${year}, para los ${towns} municipios más poblados; la página de cada municipio tiene el calendario completo. Las huelgas salen de nuestra lista de convocatorias, revisada ${asOf} en las webs de los convocantes y de los operadores.`,
+      `Los festivos salen del calendario oficial de la Generalitat y de la orden de fiestas locales de ${year}, para los ${towns} municipios que las tienen; la página de cada municipio tiene el calendario completo. Las huelgas salen de nuestra lista de convocatorias, revisada ${asOf} en las webs de los convocantes y de los operadores.`,
       "Los avisos de Rodalies, el agua de los embalses y los precios del carburante se leen en la fuente oficial al abrir la página, con una caché de minutos. Cuando una fuente no responde, la página lo dice y la enlaza: nunca muestra datos antiguos como si fueran de hoy.",
     ];
   }
   return [
     "Today's date is worked out in your browser on Catalan time, so the answers change at midnight even if the page has not been republished.",
-    `Holidays come from the Generalitat's official calendar and the ${year} local holiday order, for the ${towns} most populous municipalities; each town's page in Catalan and Spanish has its whole calendar. Strikes come from our list of calls, checked ${asOf} on the organisers' and operators' websites.`,
+    `Holidays come from the Generalitat's official calendar and the ${year} local holiday order, for the ${towns} municipalities that have local holidays; each town's page in Catalan and Spanish has its whole calendar. Strikes come from our list of calls, checked ${asOf} on the organisers' and operators' websites.`,
     "Rodalies notices, reservoir water and fuel prices are read from the official source when you open the page, cached for minutes. When a source does not answer, the page says so and links it: it never shows old data as today's.",
   ];
 }

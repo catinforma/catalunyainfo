@@ -72,6 +72,16 @@ test("every holiday municipality page and hub carries a Dataset from the General
     }
     const hub = holidays.holidayHubDataset(locale);
     assertDataset(hub, { path: `/${locale}/${locale === "ca" ? "festius" : "festivos"}/`, name: holidayCopy.hubCopy(locale).h1, description: holidayCopy.hubCopy(locale).description, creator: holidays.HOLIDAY_DATA_CREATOR, license: GENCAT_OPEN_DATA_LICENCE });
+    // Tranche 3: the comarca tables carry the same data.
+    for (const g of holidayData.byComarca()) {
+      assertDataset(holidays.comarcaDataset(g, locale), {
+        path: `/${locale}/${locale === "ca" ? "festius" : "festivos"}/comarca/${g.slug}/`,
+        name: holidayCopy.comarcaH1(g, locale),
+        description: holidayCopy.comarcaDescription(g, locale),
+        creator: holidays.HOLIDAY_DATA_CREATOR,
+        license: GENCAT_OPEN_DATA_LICENCE,
+      });
+    }
   }
   const girona = holidays.municipalityDataset(holidayData.municipalityBySlug("girona")!, "es")!;
   assert.deepEqual(girona.isBasedOn, [holidayData.SNAPSHOT.sources.localOpenData.url, holidayData.SNAPSHOT.sources.localOrder.url]);

@@ -54,7 +54,7 @@ export interface HolidayData {
   local: Record<string, LocalPlace[]>;
   /** Last day for which local holidays are published. */
   localThrough: string;
-  /** How many municipalities the local list covers (the most populous). */
+  /** How many municipalities the local list covers (every one with local holidays). */
   towns: number;
   /** Dates with a page of their own ("Is 7 December a holiday?"): link and places in all of Catalonia. */
   datePages: Record<string, { href: string; places: number }>;

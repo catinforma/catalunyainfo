@@ -2,6 +2,7 @@ import { ARAN_SUBSTITUTIONS, HOLIDAYS_BY_YEAR } from "@/lib/content/holidays/cal
 import { ARAN_REPLACEMENT } from "@/lib/content/holidays/payload";
 
 import nextYearJson from "./local-2027.json" with { type: "json" };
+import { slugify } from "./slug";
 import snapshotJson from "./snapshot.json" with { type: "json" };
 import type { DayInfo } from "./status";
 import type { HolidaySnapshot, NextYearLocal, NucleusDays, SnapshotMunicipality } from "./types";
@@ -40,7 +41,8 @@ const fold = (name: string) => name.normalize("NFD").replace(/[̀-ͯ]/g, "").toL
  * is the five-digit INE code plus a three-digit nucleus code: a nucleus maps to
  * the municipality it belongs to, whose page lists the nucleus's days. A place
  * added from a DOGC correction carries `dogc:<name>` and is matched by name.
- * Null when the place has no page (the family covers the 300 largest).
+ * Null when the place has no page (since tranche 3 every municipality has
+ * one, except the councils the order lists with "proposta no formulada").
  */
 export function municipalityForCode(code: string): SnapshotMunicipality | null {
   if (/^\d{8}$/.test(code)) return BY_INE.get(code.slice(0, 5)) ?? null;
@@ -167,13 +169,66 @@ export function localThrough(): string {
 /* Grouping                                                                   */
 /* -------------------------------------------------------------------------- */
 
-/** Comarques with at least one listed municipality, alphabetical; municipalities by population. */
-export function byComarca(): { comarca: string; municipalities: SnapshotMunicipality[] }[] {
+export type ExcludedMunicipality = HolidaySnapshot["excluded"][number];
+
+export interface ComarcaGroup {
+  comarca: string;
+  /** URL segment of the comarca page: "alt-emporda". */
+  slug: string;
+  /** Its municipalities with a page, by population. */
+  municipalities: SnapshotMunicipality[];
+  /** Its councils with "proposta no formulada" in the order, by population. */
+  excluded: ExcludedMunicipality[];
+}
+
+const GROUPS: ComarcaGroup[] = (() => {
   const groups = new Map<string, SnapshotMunicipality[]>();
   for (const m of SNAPSHOT.municipalities) groups.set(m.comarca, [...(groups.get(m.comarca) ?? []), m]);
   return [...groups.entries()]
     .sort(([a], [b]) => a.localeCompare(b, "ca"))
-    .map(([comarca, list]) => ({ comarca, municipalities: list.sort((a, b) => a.rank - b.rank) }));
+    .map(([comarca, list]) => ({
+      comarca,
+      slug: slugify(comarca),
+      municipalities: [...list].sort((a, b) => a.rank - b.rank),
+      excluded: SNAPSHOT.excluded.filter((e) => e.comarca === comarca).sort((a, b) => b.population - a.population),
+    }));
+})();
+const GROUP_BY_SLUG = new Map(GROUPS.map((g) => [g.slug, g]));
+
+/** Comarques with at least one listed municipality, alphabetical; municipalities by population. */
+export function byComarca(): ComarcaGroup[] {
+  return GROUPS;
+}
+
+export function comarcaBySlug(slug: string): ComarcaGroup | null {
+  return GROUP_BY_SLUG.get(slug) ?? null;
+}
+
+export function comarcaOf(m: Pick<SnapshotMunicipality, "comarca">): ComarcaGroup {
+  return GROUPS.find((g) => g.comarca === m.comarca)!;
+}
+
+/**
+ * Local dates most municipalities of a comarca share, with how many: "25 May,
+ * 12 towns". A nucleus's day counts for its municipality once. Ties by date.
+ */
+export function sharedDates(group: ComarcaGroup, min = 2): { date: string; towns: SnapshotMunicipality[] }[] {
+  const byDate = new Map<string, SnapshotMunicipality[]>();
+  for (const m of group.municipalities) {
+    for (const date of new Set([...m.local, ...m.nuclei.flatMap((n) => n.dates)])) byDate.set(date, [...(byDate.get(date) ?? []), m]);
+  }
+  return [...byDate.entries()]
+    .filter(([, towns]) => towns.length >= min)
+    .sort(([a, x], [b, y]) => y.length - x.length || a.localeCompare(b))
+    .map(([date, towns]) => ({ date, towns }));
+}
+
+/** The comarca pages built at deploy: the four most populous comarques; the rest render on first request. */
+export function prerenderComarques(count = 4): string[] {
+  return [...GROUPS]
+    .sort((a, b) => b.municipalities.reduce((n, m) => n + m.population, 0) - a.municipalities.reduce((n, m) => n + m.population, 0))
+    .slice(0, count)
+    .map((g) => g.slug);
 }
 
 const byPopulationDistance = (m: SnapshotMunicipality) => (a: SnapshotMunicipality, b: SnapshotMunicipality) =>
@@ -181,20 +236,29 @@ const byPopulationDistance = (m: SnapshotMunicipality) => (a: SnapshotMunicipali
 
 /**
  * Links to other municipalities: its comarca first, then the nearest in
- * population, so every page links to at least `min` siblings. Since tranche 2
- * a comarca can hold 29 listed towns (Baix Llobregat): past `max`, a page
- * links the comarca's three largest towns and the towns closest to it in
- * population, and the hub's comarca section lists the rest (`comarcaTotal`
- * says how many there are).
+ * population, so every page links to at least `min` siblings. Since tranche 3
+ * a comarca can hold 68 towns (Alt Empordà): past `max`, a page links the
+ * comarca's three largest towns and its neighbours in the comarca's
+ * population order, and the comarca page lists them all with their days
+ * (`comarcaTotal` says how many there are). Neighbours by position, not by
+ * global rank: a town far smaller than the rest of its comarca is still
+ * linked from the next one up.
  */
 export function siblings(
   m: SnapshotMunicipality,
   min = 6,
   max = 12,
 ): { sameComarca: SnapshotMunicipality[]; others: SnapshotMunicipality[]; comarcaTotal: number } {
-  const all = SNAPSHOT.municipalities.filter((o) => o.comarca === m.comarca && o.slug !== m.slug).sort((a, b) => a.rank - b.rank);
+  const ordered = comarcaOf(m).municipalities;
+  const position = new Map(ordered.map((o, i) => [o.slug, i]));
+  const here = position.get(m.slug) ?? 0;
+  const distance = (o: SnapshotMunicipality) => Math.abs((position.get(o.slug) ?? 0) - here);
+  const all = ordered.filter((o) => o.slug !== m.slug);
   const largest = all.slice(0, 3);
-  const nearest = all.filter((o) => !largest.includes(o)).sort(byPopulationDistance(m)).slice(0, Math.max(0, max - largest.length));
+  const nearest = all
+    .filter((o) => !largest.includes(o))
+    .sort((a, b) => distance(a) - distance(b) || a.rank - b.rank)
+    .slice(0, Math.max(0, max - largest.length));
   const sameComarca = [...largest, ...nearest].sort((a, b) => a.rank - b.rank);
   const need = Math.max(0, min - sameComarca.length);
   const others = SNAPSHOT.municipalities

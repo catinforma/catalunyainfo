@@ -1,7 +1,7 @@
-import { NEXT, SNAPSHOT, YEAR, isAran, regionalDays } from "./data";
+import { NEXT, SNAPSHOT, YEAR, isAran, regionalDays, sharedDates, type ComarcaGroup } from "./data";
 import { LOCAL_DATE_PAGES } from "./dates";
-import { dayMonth, dayMonthYear, weekdayDayMonth, type DateLocale } from "./format";
-import { caA, caDe, caStart, esName, joinList } from "./names";
+import { caDayArticle, dayMonth, dayMonthYear, weekdayDayMonth, type DateLocale } from "./format";
+import { caA, caComarca, caDe, caStart, esName, joinList } from "./names";
 import { datePath, type MuniLocale } from "./paths";
 import type { SnapshotMunicipality } from "./types";
 
@@ -36,6 +36,8 @@ export function displayName(m: Pick<SnapshotMunicipality, "name">, locale: MuniL
  */
 export function municipalityTitle(m: SnapshotMunicipality, locale: MuniLocale): string {
   const name = displayName(m, locale);
+  // The last form is for the one name too long for both years (Cruïlles,
+  // Monells i Sant Sadurní de l'Heura, 43 characters).
   return locale === "ca"
     ? fit(
         [
@@ -43,6 +45,7 @@ export function municipalityTitle(m: SnapshotMunicipality, locale: MuniLocale): 
           `Festius ${name} ${YEAR} i ${NEXT}: avui és festiu?`,
           `Festius locals ${name} ${YEAR} i ${NEXT}`,
           `Festius ${name} ${YEAR} i ${NEXT}`,
+          `Festius ${name} ${YEAR}`,
         ],
         TITLE_MAX,
       )
@@ -52,6 +55,7 @@ export function municipalityTitle(m: SnapshotMunicipality, locale: MuniLocale): 
           `Festivos ${name} ${YEAR} y ${NEXT}: ¿hoy es festivo?`,
           `Festivos locales ${name} ${YEAR} y ${NEXT}`,
           `Festivos ${name} ${YEAR} y ${NEXT}`,
+          `Festivos ${name} ${YEAR}`,
         ],
         TITLE_MAX,
       );
@@ -107,11 +111,62 @@ function wdList(dates: string[], locale: MuniLocale): string {
   return joinList(dates.map((d) => `${art} ${weekdayDayMonth(d, locale)}`), locale);
 }
 
+/** "el 25 de maig i el 7 de setembre", "l'11 de novembre", "el 25 de mayo y el 7 de septiembre". */
+function artList(dates: string[], locale: MuniLocale): string {
+  return joinList(dates.map((d) => `${locale === "ca" ? caDayArticle(d) : "el "}${dayMonth(d, locale)}`), locale);
+}
+
+/**
+ * Where the open data disagrees with the DOGC. Three shapes: other days, no
+ * days at all, or days for the whole municipality where the order sets them
+ * nucleus by nucleus (Avinyonet del Penedès).
+ */
+function correctionText(m: SnapshotMunicipality, locale: MuniLocale): string | null {
+  const c = m.correction;
+  if (!c) return null;
+  if (locale === "ca") {
+    const open = c.openData.length ? `Les dades obertes de la Generalitat encara diuen ${localList(c.openData, "ca")}` : "Les dades obertes de la Generalitat encara no en recullen cap dia";
+    const dogc = m.local.length ? `el text oficial del DOGC diu ${localList(m.local, "ca")}` : "el text oficial del DOGC no fixa dies per a tot el municipi, sinó per a cada nucli";
+    return `${open}; ${dogc}, i és el que fem servir.`;
+  }
+  const open = c.openData.length ? `Los datos abiertos de la Generalitat todavía dicen ${localList(c.openData, "es")}` : "Los datos abiertos de la Generalitat todavía no recogen ningún día";
+  const dogc = m.local.length ? `el texto oficial del DOGC dice ${localList(m.local, "es")}` : "el texto oficial del DOGC no fija días para todo el municipio, sino para cada núcleo";
+  return `${open}; ${dogc}, y es el que usamos.`;
+}
+
+/** Nuclei the open data gives days the order does not (Butsènit in Montgai): what each source says. */
+function unlistedText(m: SnapshotMunicipality, locale: MuniLocale): string | null {
+  const unlisted = m.unlisted ?? [];
+  if (unlisted.length === 0) return null;
+  const [first] = unlisted;
+  if (locale === "ca") {
+    const who =
+      unlisted.length === 1
+        ? `al nucli de ${first!.name} ${artList(first!.dates, "ca")}`
+        : `als nuclis de ${joinList(unlisted.map((n) => `${n.name} (${artList(n.dates, "ca")})`), "ca")}`;
+    return `Les dades obertes de la Generalitat donen ${who}, però l'ordre del DOGC no ${unlisted.length === 1 ? "l'esmenta" : "els esmenta"}: només fixa els dies del municipi, que són els d'aquesta pàgina.`;
+  }
+  const who =
+    unlisted.length === 1
+      ? `al núcleo de ${esName(first!.name)} ${artList(first!.dates, "es")}`
+      : `a los núcleos de ${joinList(unlisted.map((n) => `${esName(n.name)} (${artList(n.dates, "es")})`), "es")}`;
+  return `Los datos abiertos de la Generalitat dan ${who}, pero la orden del DOGC no ${unlisted.length === 1 ? "lo menciona" : "los menciona"}: solo fija los días del municipio, que son los de esta página.`;
+}
+
+/** The link from a town page to its comarca's table. */
+export function comarcaLinkLabel(comarca: string, towns: number, locale: MuniLocale): string {
+  return locale === "ca"
+    ? `Festius locals ${caDe(caComarca(comarca))}: els ${towns} municipis, en una taula`
+    : `Festivos locales ${comarca}: los ${towns} municipios, en una tabla`;
+}
+
 export interface MunicipalityCopy {
   breadcrumbHub: string;
   lead: string;
   source: string;
   correction: string | null;
+  /** Nuclei with days in the open data that the order does not name. */
+  unlisted: string | null;
   nucleiLead: string | null;
   statusTitle: string;
   tableTitle: string;
@@ -153,9 +208,8 @@ export function municipalityCopy(m: SnapshotMunicipality, locale: MuniLocale, ne
       breadcrumbHub: "Festius locals",
       lead,
       source: `Ho fixa ${LOCAL_ORDER.ca}${corrected ? `, ${AMENDMENT.ca}` : ""}.`,
-      correction: m.correction
-        ? `${m.correction.openData.length ? `Les dades obertes de la Generalitat encara diuen ${localList(m.correction.openData, "ca")}` : "Les dades obertes de la Generalitat encara no en recullen cap dia"}; el text oficial del DOGC diu ${localList(m.local, "ca")}, i és el que fem servir.`
-        : null,
+      correction: correctionText(m, "ca"),
+      unlisted: unlistedText(m, "ca"),
       nucleiLead:
         m.nuclei.length > 0 && m.local.length > 0
           ? `${m.nuclei.length === 1 ? "Un nucli del municipi té" : "Alguns nuclis del municipi tenen"} festius locals propis: ${joinList(m.nuclei.map((n) => `${n.name} (${localList(n.dates, "ca")})`), "ca")}.`
@@ -214,9 +268,8 @@ export function municipalityCopy(m: SnapshotMunicipality, locale: MuniLocale, ne
     breadcrumbHub: "Festivos locales",
     lead,
     source: `Lo fija ${LOCAL_ORDER.es}${corrected ? `, ${AMENDMENT.es}` : ""}.`,
-    correction: m.correction
-      ? `${m.correction.openData.length ? `Los datos abiertos de la Generalitat todavía dicen ${localList(m.correction.openData, "es")}` : "Los datos abiertos de la Generalitat todavía no recogen ningún día"}; el texto oficial del DOGC dice ${localList(m.local, "es")}, y es el que usamos.`
-      : null,
+    correction: correctionText(m, "es"),
+    unlisted: unlistedText(m, "es"),
     nucleiLead:
       m.nuclei.length > 0 && m.local.length > 0
         ? `${m.nuclei.length === 1 ? "Un núcleo del municipio tiene" : "Algunos núcleos del municipio tienen"} festivos locales propios: ${joinList(m.nuclei.map((n) => `${n.name} (${localList(n.dates, "es")})`), "es")}.`
@@ -379,42 +432,189 @@ export function sharedDayLead(date: string, others: number, locale: MuniLocale, 
 /* Hub                                                                        */
 /* -------------------------------------------------------------------------- */
 
+/** How many towns each comarca section of the hub shows with their days; the rest fold away by name. */
+export const HUB_VISIBLE = 6;
+
 export function hubCopy(locale: MuniLocale) {
   const count = SNAPSHOT.municipalities.length;
-  const excluded = SNAPSHOT.excluded.map((e) => (locale === "es" ? esName(e.name) : e.name));
+  const excluded = SNAPSHOT.excluded.length;
   if (locale === "ca") {
     return {
       title: fit([`Festius locals ${YEAR} i ${NEXT} per municipis de Catalunya`, `Festius locals ${YEAR} per municipi`], TITLE_MAX),
-      description: `Festius locals del ${YEAR} dels municipis més poblats de Catalunya, per comarques: els dos dies de cada ajuntament, si avui és festiu i el ${NEXT}.`,
+      description: `Festius locals del ${YEAR} de tots els municipis de Catalunya, per comarques: els dos dies de cada ajuntament, si avui és festiu i el ${NEXT}.`,
       h1: `Festius locals ${YEAR} per municipi`,
       breadcrumb: "Festius locals",
-      lead: `Cada municipi de Catalunya fixa dos festius locals, que se sumen als dotze de tot Catalunya. Aquí hi ha els del ${YEAR} dels ${count} municipis més poblats que en tenen al calendari oficial, per comarques, cadascun amb la seva pàgina: tots els festius de l'any, si avui és festiu, les botigues obertes i el ${NEXT}.`,
-      allMunicipalities: "Per a qualsevol altre municipi, la llista completa és a la pàgina de festius locals de tots els municipis.",
-      excludedNote: excluded.length
-        ? `${joinList(excluded, "ca")} ${excluded.length === 1 ? "no té" : "no tenen"} festius locals al calendari oficial del ${YEAR}: l'ordre hi diu «proposta no formulada» (l'ajuntament no va enviar la proposta a temps) i la modificació de gener no ho va canviar.`
-        : null,
+      lead: `Cada municipi de Catalunya fixa dos festius locals, que se sumen als dotze de tot Catalunya. Aquí hi ha els del ${YEAR} de tots els que en tenen al calendari oficial, ${count} municipis, per comarques. Cadascun té la seva pàgina, amb tots els festius de l'any, si avui és festiu, les botigues obertes i el ${NEXT}, i cada comarca, una taula amb els dies de tots els seus municipis.`,
+      excludedTitle: `Municipis sense festius locals el ${YEAR}`,
+      excludedLead: `L'ordre de festes locals del ${YEAR} no fixa cap dia per a aquests ${excluded} municipis: hi diu «proposta no formulada» (l'ajuntament no va enviar la proposta a temps), i la modificació de gener no ho va canviar.`,
       datesTitle: "És festiu…?",
       jump: "Per comarques:",
-      population: `Municipis per població a 1 de gener de ${SNAPSHOT.sources.population.year} (Idescat).`,
+      population: `Dins de cada comarca, els municipis van per població a 1 de gener de ${SNAPSHOT.sources.population.year} (Idescat).`,
       next: `Els festius locals del ${NEXT} encara no s'han publicat; l'ordre del ${YEAR} va sortir al DOGC el 17 de desembre de 2025.`,
+      towns: (n: number) => (n === 1 ? "1 municipi" : `${n} municipis`),
+      table: (comarca: string, n: number) => comarcaLinkLabel(comarca, n, "ca"),
+      more: (n: number) => (n === 1 ? "1 municipi més" : `${n} municipis més`),
+      byNucleus: "Dies diferents per nucli",
       guidesTitle: "Més sobre festius",
       sourcesTitle: "Fonts",
     };
   }
   return {
     title: fit([`Festivos locales ${YEAR} y ${NEXT} por municipios de Cataluña`, `Festivos locales ${YEAR} por municipio`], TITLE_MAX),
-    description: `Festivos locales de ${YEAR} de los municipios más poblados de Cataluña, por comarcas: los dos días de cada ayuntamiento, si hoy es festivo y ${NEXT}.`,
+    description: `Festivos locales de ${YEAR} de todos los municipios de Cataluña, por comarcas: los dos días de cada ayuntamiento, si hoy es festivo y ${NEXT}.`,
     h1: `Festivos locales ${YEAR} por municipio`,
     breadcrumb: "Festivos locales",
-    lead: `Cada municipio de Cataluña fija dos festivos locales, que se suman a los doce de toda Cataluña. Aquí están los de ${YEAR} de los ${count} municipios más poblados que los tienen en el calendario oficial, por comarcas, cada uno con su página: todos los festivos del año, si hoy es festivo, las tiendas abiertas y ${NEXT}.`,
-    allMunicipalities: "Para cualquier otro municipio, la lista completa está en la página de festivos locales de todos los municipios.",
-    excludedNote: excluded.length
-      ? `${joinList(excluded, "es")} no ${excluded.length === 1 ? "tiene" : "tienen"} festivos locales en el calendario oficial de ${YEAR}: la orden dice «proposta no formulada» (el ayuntamiento no envió la propuesta a tiempo) y la modificación de enero no lo cambió.`
-      : null,
+    lead: `Cada municipio de Cataluña fija dos festivos locales, que se suman a los doce de toda Cataluña. Aquí están los de ${YEAR} de todos los que los tienen en el calendario oficial, ${count} municipios, por comarcas. Cada uno tiene su página, con todos los festivos del año, si hoy es festivo, las tiendas abiertas y ${NEXT}, y cada comarca, una tabla con los días de todos sus municipios.`,
+    excludedTitle: `Municipios sin festivos locales en ${YEAR}`,
+    excludedLead: `La orden de fiestas locales de ${YEAR} no fija ningún día para estos ${excluded} municipios: dice «proposta no formulada» (el ayuntamiento no envió la propuesta a tiempo), y la modificación de enero no lo cambió.`,
     datesTitle: "¿Es festivo el…?",
     jump: "Por comarcas:",
-    population: `Municipios por población a 1 de enero de ${SNAPSHOT.sources.population.year} (Idescat).`,
+    population: `Dentro de cada comarca, los municipios van por población a 1 de enero de ${SNAPSHOT.sources.population.year} (Idescat).`,
     next: `Los festivos locales de ${NEXT} todavía no se han publicado; la orden de ${YEAR} salió en el DOGC el 17 de diciembre de 2025.`,
+    towns: (n: number) => (n === 1 ? "1 municipio" : `${n} municipios`),
+    table: (comarca: string, n: number) => comarcaLinkLabel(comarca, n, "es"),
+    more: (n: number) => (n === 1 ? "1 municipio más" : `${n} municipios más`),
+    byNucleus: "Días distintos por núcleo",
+    guidesTitle: "Más sobre festivos",
+    sourcesTitle: "Fuentes",
+  };
+}
+
+/* -------------------------------------------------------------------------- */
+/* Comarca pages                                                              */
+/* -------------------------------------------------------------------------- */
+
+/** "les Garrigues" in Catalan prose; the official name as it is in Spanish, where the article would need a gender we do not guess. */
+function comarcaLabel(comarca: string, locale: MuniLocale): string {
+  return locale === "ca" ? caComarca(comarca) : comarca;
+}
+
+export function comarcaTitle(g: ComarcaGroup, locale: MuniLocale): string {
+  const n = g.municipalities.length;
+  if (locale === "ca") {
+    const de = caDe(caComarca(g.comarca));
+    return fit([`Festius locals ${de} ${YEAR}: els ${n} municipis`, `Festius locals ${de} ${YEAR} per municipi`, `Festius locals ${g.comarca} ${YEAR}`], TITLE_MAX);
+  }
+  return fit([`Festivos locales ${g.comarca} ${YEAR}: los ${n} municipios`, `Festivos locales ${g.comarca} ${YEAR} por municipio`, `Festivos locales ${g.comarca} ${YEAR}`], TITLE_MAX);
+}
+
+export function comarcaH1(g: ComarcaGroup, locale: MuniLocale): string {
+  return locale === "ca" ? `Festius locals ${YEAR} ${caDe(caComarca(g.comarca))}` : `${g.comarca}: festivos locales ${YEAR} por municipio`;
+}
+
+/** The largest town's days, as the example in the description: "Figueres, 3 de maig i 29 de juny". */
+function exampleDays(g: ComarcaGroup, locale: MuniLocale): string | null {
+  const town = g.municipalities.find((m) => m.local.length > 0);
+  return town ? `${displayName(town, locale)}, ${localList(town.local, locale)}` : null;
+}
+
+export function comarcaDescription(g: ComarcaGroup, locale: MuniLocale): string {
+  const n = g.municipalities.length;
+  const example = exampleDays(g, locale);
+  if (locale === "ca") {
+    const head = `Festius locals del ${YEAR} ${n === 1 ? "del municipi" : `dels ${n} municipis`} ${caDe(caComarca(g.comarca))} en una taula, segons el DOGC.`;
+    return fit([...(example ? [`${head} ${example}. També els nuclis i les botigues.`, `${head} ${example}.`] : []), `${head} També els nuclis i les botigues.`, head], DESCRIPTION_MAX);
+  }
+  const head = `${g.comarca}: festivos locales de ${YEAR} de ${n === 1 ? "su municipio" : `sus ${n} municipios`} en una tabla, según el DOGC.`;
+  return fit([...(example ? [`${head} ${example}. También los núcleos y las tiendas.`, `${head} ${example}.`] : []), `${head} También los núcleos y las tiendas.`, head], DESCRIPTION_MAX);
+}
+
+export interface ComarcaCopy {
+  breadcrumb: string;
+  lead: string;
+  nucleiOnly: string | null;
+  excluded: string | null;
+  tableTitle: string;
+  tableCaption: string;
+  cols: { town: string; days: string; nuclei: string };
+  byNucleus: string;
+  moreNuclei: (n: number) => string;
+  sharedTitle: string;
+  sharedLead: string | null;
+  sharedItem: (date: string, towns: number) => string;
+  shopsTitle: string;
+  shops: string;
+  nextTitle: string;
+  next: string;
+  othersTitle: string;
+  hubLink: string;
+  datesTitle: string;
+  guidesTitle: string;
+  sourcesTitle: string;
+}
+
+export function comarcaCopy(g: ComarcaGroup, locale: MuniLocale): ComarcaCopy {
+  const n = g.municipalities.length;
+  const label = comarcaLabel(g.comarca, locale);
+  const nucleiOnly = g.municipalities.filter((m) => m.local.length === 0);
+  const withNuclei = g.municipalities.filter((m) => m.local.length > 0 && m.nuclei.length > 0).length;
+  const amended = g.municipalities.some((m) => m.correction?.by === "Ordre EMT/3/2026");
+  const shared = sharedDates(g);
+  const own = g.municipalities.filter((m) => m.shopsOwnList);
+  const excluded = g.excluded.map((e) => (locale === "es" ? esName(e.name) : e.name));
+  const names = (list: SnapshotMunicipality[]) => joinList(list.map((m) => displayName(m, locale)), locale);
+
+  if (locale === "ca") {
+    return {
+      breadcrumb: g.comarca,
+      lead:
+        `${caStart(caA(label))} ${n === 1 ? "hi ha 1 municipi" : `hi ha ${n} municipis`} amb festius locals al calendari oficial del ${YEAR}, que fixa ${LOCAL_ORDER.ca}${amended ? `, ${AMENDMENT.ca}` : ""}. ` +
+        `Cada ajuntament en proposa dos, que se sumen als dotze festius de tot Catalunya${withNuclei ? `; a ${withNuclei === 1 ? "un municipi" : `${withNuclei} municipis`}, alguns nuclis en tenen de propis` : ""}.`,
+      nucleiOnly: nucleiOnly.length
+        ? `${names(nucleiOnly)} no ${nucleiOnly.length === 1 ? "té" : "tenen"} dies per a tot el municipi: l'ordre els fixa nucli per nucli.`
+        : null,
+      excluded: excluded.length
+        ? `${joinList(excluded, "ca")} no ${excluded.length === 1 ? "té" : "tenen"} festius locals al calendari oficial del ${YEAR}: l'ordre hi diu «proposta no formulada».`
+        : null,
+      tableTitle: `Els festius locals de cada municipi`,
+      tableCaption: `Festius locals del ${YEAR} ${caDe(label)}, per població (Ordre EMT/208/2025)`,
+      cols: { town: "Municipi", days: `Festius locals ${YEAR}`, nuclei: "Nuclis amb dies propis" },
+      byNucleus: "Per nuclis:",
+      moreNuclei: (k) => `i ${k} ${k === 1 ? "nucli" : "nuclis"} més, a la pàgina del municipi`,
+      sharedTitle: "Els dies que més es repeteixen",
+      sharedLead: shared.length ? `Dies de festa local que comparteixen diversos municipis ${caDe(label)} (un nucli compta per al seu municipi):` : null,
+      sharedItem: (date, towns) => `${weekdayDayMonth(date, "ca")}: ${towns} municipis`,
+      shopsTitle: "Botigues obertes en festius",
+      shops: own.length
+        ? `${own.length === 1 ? "Un ajuntament" : `${own.length} ajuntaments`} ${caDe(label)} ${own.length === 1 ? "ha triat" : "han triat"} els seus dies d'obertura comercial del ${YEAR} (Resolució EMT/4342/2025): ${names(own)}. ${own.length === n ? "" : "A la resta s'hi apliquen els deu dies per defecte: els vuit del calendari general, l'11 de gener i el 8 de desembre (Ordre EMT/77/2025, articles 1 i 6)."} La pàgina de cada municipi té la seva llista.`.replace(/\s+/g, " ").trim()
+        : `Cap ajuntament ${caDe(label)} no consta a la Resolució EMT/4342/2025: a tots s'hi apliquen els deu dies d'obertura comercial per defecte, els vuit del calendari general, l'11 de gener i el 8 de desembre (Ordre EMT/77/2025, articles 1 i 6). La pàgina de cada municipi té la llista.`,
+      nextTitle: `I el ${NEXT}?`,
+      next: `Els festius locals del ${NEXT} encara no s'han publicat: els fixa una ordre del DOGC a proposta de cada ajuntament, i la del ${YEAR} va sortir el 17 de desembre de 2025. Els dotze de tot Catalunya del ${NEXT} ja són oficials (Ordre EMT/52/2026).`,
+      othersTitle: "Altres comarques",
+      hubLink: "Tots els municipis, per comarques",
+      datesTitle: "És festiu…?",
+      guidesTitle: "Més sobre festius",
+      sourcesTitle: "Fonts",
+    };
+  }
+  return {
+    breadcrumb: g.comarca,
+    lead:
+      `En esta comarca ${n === 1 ? "hay 1 municipio" : `hay ${n} municipios`} con festivos locales en el calendario oficial de ${YEAR}, que fija ${LOCAL_ORDER.es}${amended ? `, ${AMENDMENT.es}` : ""}. ` +
+      `Cada ayuntamiento propone dos, que se suman a los doce festivos de toda Cataluña${withNuclei ? `; en ${withNuclei === 1 ? "un municipio" : `${withNuclei} municipios`}, algunos núcleos tienen los suyos propios` : ""}.`,
+    nucleiOnly: nucleiOnly.length
+      ? `${names(nucleiOnly)} no ${nucleiOnly.length === 1 ? "tiene" : "tienen"} días para todo el municipio: la orden los fija núcleo por núcleo.`
+      : null,
+    excluded: excluded.length
+      ? `${joinList(excluded, "es")} no ${excluded.length === 1 ? "tiene" : "tienen"} festivos locales en el calendario oficial de ${YEAR}: la orden dice «proposta no formulada».`
+      : null,
+    tableTitle: "Los festivos locales de cada municipio",
+    tableCaption: `Festivos locales de ${YEAR}, ${label}, por población (Orden EMT/208/2025)`,
+    cols: { town: "Municipio", days: `Festivos locales ${YEAR}`, nuclei: "Núcleos con días propios" },
+    byNucleus: "Por núcleos:",
+    moreNuclei: (k) => `y ${k} ${k === 1 ? "núcleo" : "núcleos"} más, en la página del municipio`,
+    sharedTitle: "Los días que más se repiten",
+    sharedLead: shared.length ? "Días de fiesta local que comparten varios municipios de la comarca (un núcleo cuenta para su municipio):" : null,
+    sharedItem: (date, towns) => `${weekdayDayMonth(date, "es")}: ${towns} municipios`,
+    shopsTitle: "Tiendas abiertas en festivos",
+    shops: own.length
+      ? `${own.length === 1 ? "Un ayuntamiento" : `${own.length} ayuntamientos`} de la comarca ${own.length === 1 ? "ha elegido" : "han elegido"} sus días de apertura comercial de ${YEAR} (Resolución EMT/4342/2025): ${names(own)}. ${own.length === n ? "" : "En el resto se aplican los diez días por defecto: los ocho del calendario general, el 11 de enero y el 8 de diciembre (Orden EMT/77/2025, artículos 1 y 6)."} La página de cada municipio tiene su lista.`.replace(/\s+/g, " ").trim()
+      : `Ningún ayuntamiento de la comarca figura en la Resolución EMT/4342/2025: en todos se aplican los diez días de apertura comercial por defecto, los ocho del calendario general, el 11 de enero y el 8 de diciembre (Orden EMT/77/2025, artículos 1 y 6). La página de cada municipio tiene la lista.`,
+    nextTitle: `¿Y en ${NEXT}?`,
+    next: `Los festivos locales de ${NEXT} todavía no se han publicado: los fija una orden del DOGC a propuesta de cada ayuntamiento, y la de ${YEAR} salió el 17 de diciembre de 2025. Los doce de toda Cataluña de ${NEXT} ya son oficiales (Orden EMT/52/2026).`,
+    othersTitle: "Otras comarcas",
+    hubLink: "Todos los municipios, por comarcas",
+    datesTitle: "¿Es festivo el…?",
     guidesTitle: "Más sobre festivos",
     sourcesTitle: "Fuentes",
   };
