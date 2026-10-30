@@ -586,6 +586,22 @@ test("election night: provisional, no CERA, no forecasts, no invented site", () 
   assert.ok(ELECTION_NIGHT.sources.every((s) => !/resultados\.[a-z]/.test(s.url)), "no guessed results-site domain");
 });
 
+test("election night EN: the snippet and lead answer 'what time' with the polling hours (30 Oct)", () => {
+  const en = ELECTION_NIGHT.editions.en;
+  assert.ok(en.seoTitle.length <= 60 && en.seoDescription.length <= 155, en.seoTitle);
+  assert.match(en.seoTitle, /Spain general election results 2026/);
+  assert.match(en.seoDescription, /9:00-20:00/);
+  const text = bodyToPlainText(en.blocks);
+  assert.match(text.slice(0, 400), /20:00/);
+  assert.match(text.slice(0, 400), /9:00/);
+  assert.match(text, /not yet announced its results site/);
+  for (const locale of ["ca", "es", "en"] as const) {
+    const body = bodyToPlainText(ELECTION_NIGHT.editions[locale].blocks);
+    assert.match(body, /29 (de )?(novembre|noviembre|November), 9[.:]00/, `${locale}: polls-open row`);
+  }
+  assert.ok(ELECTION_NIGHT.sources.some((s) => s.url.includes("29neleccionesgenerales.es")));
+});
+
 /**
  * Parking: three errors found on 18 Oct 2026 against AREA's own pages
  * (research_notes/blog-batch-03/parking_area_verda_blava.md). The blue
