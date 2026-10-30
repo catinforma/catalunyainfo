@@ -53,6 +53,7 @@ import { DECEMBER_BRIDGE } from "@/lib/content/batch02/december-bridge";
 import { MARATO_GUIDE } from "@/lib/content/batch02/marato";
 import { STRIKES_GUIDE } from "@/lib/content/batch02/strikes";
 import { STRIKE_11N } from "@/lib/content/batch02/strike-11n";
+import { GROSSA } from "@/lib/content/batch02/grossa";
 import { publishHolidayTodayGuide } from "@/lib/content/holidays/today-publish";
 import { publishLocalHolidaysGuide } from "@/lib/content/holidays/local-publish";
 import { publishReservoirGuide } from "@/lib/content/reservoirs/publish";
@@ -185,6 +186,10 @@ export async function POST(request: Request) {
     // which links to it (one sentence) and carries the same minimum-services
     // status: every 11N update goes out on both at once.
     if (wants("strike-11n")) published.push(await publishB2Article(STRIKE_11N), await publishB2Article(STRIKES_GUIDE));
+    // La Grossa de Cap d'Any 2026: one page, on its own so the 31 December
+    // results go out in one fast call. The New Year's Eve guide gained one
+    // sentence linking to it; that goes out once with `nye`.
+    if (wants("grossa")) published.push(await publishB2Article(GROSSA));
     // Rodalies live status (/ca/rodalies/ and the line pages are code routes,
     // not articles): the four guides that gained one body link to them.
     if (wants("rodalies-links")) {
