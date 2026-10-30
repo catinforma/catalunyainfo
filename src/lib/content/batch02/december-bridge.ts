@@ -63,6 +63,13 @@ import {
  * same alt text and caption (media rows are keyed by file).
  */
 
+/**
+ * 30 Oct 2026 (top-3 push): ca/es descriptions now list December's holidays
+ * (8, 25, 26) with the Purísima name and the 43 towns where Monday 7 is a
+ * local holiday; a ca/es FAQ in the words of "puente de la purísima 2026".
+ * No new fact: every one is already verified above. Titles kept (an answer
+ * like "only the 8th" would be wrong in those 43 towns).
+ */
 export const BRIDGE_VERIFIED = "2026-10-26";
 
 /** The days the page is about. Weekdays are computed, never typed. */
@@ -253,7 +260,7 @@ export const DECEMBER_BRIDGE_META: Record<Locale, { path: string; title: string;
     title: "Pont de desembre 2026 a Catalunya: quins dies són festius, escoles i botigues",
     seoTitle: "Pont de desembre 2026 a Catalunya: quins dies són festius",
     seoDescription:
-      "El 2026 a Catalunya només és festiu el dimarts 8 de desembre: el 6 cau en diumenge i el dilluns 7 és feiner. Com fer pont, escoles i botigues.",
+      "Festius de desembre 2026 a Catalunya: dimarts 8 (la Immaculada), 25 i 26. El 6 cau en diumenge i el dilluns 7 és feiner, llevat de 43 municipis.",
     excerpt:
       "Quins dies són festius al desembre del 2026 a Catalunya, per què el 6 i el 7 no ho són, com fer pont, si hi ha escola i si obren les botigues.",
   },
@@ -262,7 +269,7 @@ export const DECEMBER_BRIDGE_META: Record<Locale, { path: string; title: string;
     title: "Puente de diciembre 2026 en Cataluña: qué días son festivos, colegios y tiendas",
     seoTitle: "Puente de diciembre 2026 en Cataluña: qué días son festivos",
     seoDescription:
-      "En 2026, en Cataluña solo es festivo el martes 8 de diciembre: el 6 cae en domingo y el lunes 7 es laborable. Cómo hacer puente, colegios y tiendas.",
+      "Festivos de diciembre 2026 en Cataluña: martes 8 (la Purísima), 25 y 26. El 6 cae en domingo y el lunes 7 es laborable, salvo en 43 municipios.",
     excerpt:
       "Qué días son festivos en diciembre de 2026 en Cataluña, por qué el 6 y el 7 no lo son, cómo hacer puente, si hay colegio y si abren las tiendas.",
   },
@@ -384,6 +391,7 @@ export function buildDecemberBridgeBody(locale: Locale): Block[] {
       ),
       faq([
         { question: "Hi ha pont al desembre del 2026 a Catalunya?", answer: `Només si demanes el dilluns 7. L'únic festiu és el dimarts 8; el diumenge 6 no és festiu a Catalunya. Amb el 7 lliure, el pont va ${runWords(bridge, "ca")}.` },
+        { question: "Quan és el pont de la Puríssima del 2026?", answer: `La Puríssima (la Immaculada, 8 de desembre) cau en dimarts el 2026 i és festiu a tot Catalunya. Per fer pont cal demanar el dilluns 7, que a Catalunya és feiner llevat de ${n} municipis: així el pont va ${runWords(bridge, "ca")}.` },
         { question: "El 7 de desembre de 2026 és festiu a Catalunya?", answer: `No a tot Catalunya: és dia feiner. És festa local a ${n} municipis, com ${examples}. En canvi, sí que és festiu a Madrid o a Andalusia, que han passat al dilluns el festiu del 6.` },
         { question: "El 6 de desembre de 2026 és festiu?", answer: "Cau en diumenge. A Catalunya no és festiu i no es passa al dilluns; en nou comunitats autònomes i a Melilla, sí: hi fan festa el dilluns 7." },
         { question: "Quins dies són festius al desembre del 2026 a Catalunya?", answer: "El dimarts 8 (la Immaculada), el divendres 25 (Nadal) i el dissabte 26 (Sant Esteve). A l'Aran, el 26 no és festiu." },
@@ -468,6 +476,7 @@ export function buildDecemberBridgeBody(locale: Locale): Block[] {
       ),
       faq([
         { question: "¿Hay puente en diciembre de 2026 en Cataluña?", answer: `Solo si pides el lunes 7. El único festivo es el martes 8; el domingo 6 no es festivo en Cataluña. Con el 7 libre, el puente va ${runWords(bridge, "es")}.` },
+        { question: "¿Cuándo es el puente de la Purísima de 2026?", answer: `La Purísima (la Inmaculada, 8 de diciembre) cae en martes en 2026 y es festivo en toda Cataluña. Para hacer puente hay que pedir el lunes 7, que en Cataluña es laborable salvo en ${n} municipios: así el puente va ${runWords(bridge, "es")}.` },
         { question: "¿El 7 de diciembre de 2026 es festivo en Cataluña?", answer: `No en toda Cataluña: es laborable. Es fiesta local en ${n} municipios, como ${examples}. En cambio, sí es festivo en Madrid o en Andalucía, que han pasado al lunes el festivo del 6.` },
         { question: "¿El 6 de diciembre de 2026 es festivo?", answer: "Cae en domingo. En Cataluña no es festivo y no se pasa al lunes; en nueve comunidades autónomas y en Melilla, sí: tienen fiesta el lunes 7." },
         { question: "¿Qué días son festivos en diciembre de 2026 en Cataluña?", answer: "El martes 8 (la Inmaculada), el viernes 25 (Navidad) y el sábado 26 (San Esteban). En Arán, el 26 no es festivo." },

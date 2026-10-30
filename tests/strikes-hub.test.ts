@@ -5,6 +5,7 @@ import { test } from "node:test";
 import { bodySchema, bodyToPlainText, wordCount, type Block } from "../src/lib/content/blocks.ts";
 import { TRANSPORT } from "../src/lib/content/batch02/barcelona-practical.ts";
 import { SIBLING_PATHS } from "../src/lib/content/batch02/december-bridge.ts";
+import { dateYear } from "../src/lib/content/batch02/festive.ts";
 import { HOURS } from "../src/lib/content/batch02/hours.ts";
 import { B2_PATHS, withReadNext } from "../src/lib/content/batch02/shared.ts";
 import {
@@ -14,7 +15,10 @@ import {
   STRIKES_META,
   STRIKES_VERIFIED,
   STRIKE_URLS,
+  SERVICE_KEYS,
   buildStrikesBody,
+  isOnDay,
+  isOpen,
   isUpcoming,
   lastDay,
   madridDate,
@@ -22,7 +26,9 @@ import {
   staleStrikes,
   strikeDays,
   strikesDescription,
+  unrecheckedOpenStrikes,
   upcomingStrikes,
+  whatRunsRows,
   type Strike,
 } from "../src/lib/content/batch02/strikes.ts";
 import { ARTICLE_PATHS } from "../src/lib/content/features/shared.ts";
@@ -49,6 +55,10 @@ const byId = (id: string) => {
   assert.ok(strike, id);
   return strike;
 };
+
+/** The list as it would be once every indefinite strike had been recorded as over (on 20 Nov 2026). */
+const allEnded = (strikes: Strike[] = STRIKES): Strike[] =>
+  strikes.map((s) => (s.indefinite && !s.indefinite.endedOn ? { ...s, indefinite: { endedOn: "2026-11-20" } } : s));
 
 const PUBLISHED = new Set([
   ...[...Object.values(B2_PATHS), ...Object.values(ARTICLE_PATHS), ...Object.values(SIBLING_PATHS)].flatMap((paths) =>
@@ -88,10 +98,16 @@ test("the paths collide with no other published path", () => {
 });
 
 test("titles fit in 60 characters in the searched words; descriptions fit in 155 and name the next strikes", () => {
+  // Top-3 push (30 Oct 2026): "hoy y mañana" for the "mañana hay huelga" queries; EN leads with "Barcelona strike today" and trains.
   const words: Record<Locale, RegExp> = {
-    ca: /^Vaga avui a Catalunya: què funciona/,
-    es: /^Huelga hoy en Cataluña: qué funciona/,
-    en: /^Strike in Barcelona and Catalonia today: what runs/,
+    ca: /^Vaga avui i demà a Catalunya: què funciona/,
+    es: /^Huelga hoy y mañana en Cataluña: qué funciona/,
+    en: /^Barcelona strike today: trains, metro and what runs$/,
+  };
+  const h1: Record<Locale, RegExp> = {
+    ca: /^Vaga avui i demà a Catalunya: què funciona/,
+    es: /^Huelga hoy y mañana en Cataluña: qué funciona/,
+    en: /^Barcelona and Catalonia strike today: trains, metro, what runs/,
   };
   for (const locale of LOCALES) {
     const { seoTitle, seoDescription, excerpt, title } = STRIKES_GUIDE.editions[locale];
@@ -99,7 +115,11 @@ test("titles fit in 60 characters in the searched words; descriptions fit in 155
     assert.ok(seoDescription.length > 60 && seoDescription.length <= 155, `${locale} description ${seoDescription.length}`);
     assert.ok(excerpt.length > 30 && excerpt.length <= 200);
     assert.match(seoTitle, words[locale]);
-    assert.match(title, words[locale]);
+    assert.match(title, h1[locale]);
+    // A strike in progress (the doctors' since 28 Oct) is named in the snippet too.
+    for (const open of upcomingStrikes(STRIKES_AS_OF).filter(isOpen)) {
+      assert.ok(seoDescription.includes(open.label[locale]), `${locale}: ${seoDescription} misses ${open.id}`);
+    }
     assert.equal(seoDescription, strikesDescription(locale));
     // The general strike is upcoming on STRIKES_AS_OF, so it must be named.
     const general = upcomingStrikes(STRIKES_AS_OF).find((s) => s.scope === "general");
@@ -121,8 +141,10 @@ test("the description stays within 155 characters on every day the list can be i
       assert.ok(description.length > 60 && description.length <= 155, `${day}/${locale}: ${description.length} ${description}`);
     }
   }
-  // With nothing upcoming it falls back to the evergreen line.
-  assert.doesNotMatch(strikesDescription("ca", "2030-01-01"), /Properes vagues/);
+  // With nothing upcoming (every indefinite strike recorded as over) it falls back to the evergreen line.
+  assert.match(strikesDescription("ca", "2030-01-01", allEnded()), /^Què funciona a Catalunya els dies de vaga/);
+  // An open indefinite strike is never dropped from the snippet as "past".
+  assert.match(strikesDescription("ca", "2030-01-01"), /metges des del 28 d'octubre/);
 });
 
 test("sources are https, untracked and cover every strike; the reader sees the check date", () => {
@@ -142,9 +164,9 @@ test("sources are https, untracked and cover every strike; the reader sees the c
   for (const url of [STRIKE_URLS.constitution, STRIKE_URLS.rdl17]) assert.match(url, /^https:\/\/www\.boe\.es\//);
   for (const url of [STRIKE_URLS.emt201, STRIKE_URLS.emt38, STRIKE_URLS.decret120]) assert.match(url, /^https:\/\/portaljuridic\.gencat\.cat\/eli\//);
   assert.equal(STRIKES_GUIDE.verifiedAt, STRIKES_VERIFIED);
-  const checked: Record<Locale, RegExp> = { ca: /27 d'octubre de 2026/, es: /27 de octubre de 2026/, en: /27 October 2026/ };
   for (const locale of LOCALES) {
-    assert.match(text(STRIKES_GUIDE.editions[locale].blocks), checked[locale], locale);
+    // The reader sees the day the list was last checked (STRIKES_AS_OF).
+    assert.ok(text(STRIKES_GUIDE.editions[locale].blocks).includes(dateYear(STRIKES_AS_OF, locale)), locale);
     assert.match(text(STRIKES_GUIDE.editions[locale].blocks), /verificaci|verified/i, locale);
   }
 });
@@ -231,6 +253,8 @@ test("upcoming and past are decided by the as-of date: on the last day it is upc
   const renfe = byId("vaga-renfe-2026-10-29");
   const ouigo = byId("vaga-ouigo-2026-10-30");
   const general = byId("vaga-general-2026-11-11");
+  const metges = byId("vaga-metges-2026-10-28");
+  const renfeNov = byId("vaga-renfe-2026-11-10");
   assert.equal(isUpcoming(renfe, "2026-10-28"), true);
   assert.equal(isUpcoming(renfe, "2026-10-29"), true);
   assert.equal(isUpcoming(renfe, "2026-10-30"), false);
@@ -240,9 +264,31 @@ test("upcoming and past are decided by the as-of date: on the last day it is upc
   assert.equal(isUpcoming(ouigo, "2026-11-03"), false);
   assert.equal(isUpcoming(general, "2026-11-11"), true);
   assert.equal(isUpcoming(general, "2026-11-12"), false);
-  assert.deepEqual(upcomingStrikes("2026-10-27").map((s) => s.id), ["vaga-renfe-2026-10-29", "vaga-ouigo-2026-10-30", "vaga-general-2026-11-11"]);
-  assert.deepEqual(upcomingStrikes("2026-10-30").map((s) => s.id), ["vaga-ouigo-2026-10-30", "vaga-general-2026-11-11"]);
-  assert.deepEqual(pastStrikes("2026-11-12").map((s) => s.id), ["vaga-general-2026-11-11", "vaga-ouigo-2026-10-30", "vaga-renfe-2026-10-29"]);
+  // Renfe in November: upcoming between its two days, past after the 12th.
+  assert.equal(isUpcoming(renfeNov, "2026-11-11"), true);
+  assert.equal(isUpcoming(renfeNov, "2026-11-13"), false);
+  // An open indefinite strike stays upcoming (in progress) whatever the date; once ended, it is past from the next day.
+  assert.equal(isUpcoming(metges, "2027-06-01"), true);
+  const ended: Strike = { ...metges, indefinite: { endedOn: "2026-11-20" } };
+  assert.equal(isUpcoming(ended, "2026-11-20"), true);
+  assert.equal(isUpcoming(ended, "2026-11-21"), false);
+  assert.equal(lastDay(ended), "2026-11-20");
+  // "On the day": one of its dates, or any day of an indefinite strike once begun.
+  assert.equal(isOnDay(metges, "2026-10-27"), false);
+  assert.equal(isOnDay(metges, "2026-10-30"), true);
+  assert.equal(isOnDay(ended, "2026-11-21"), false);
+  assert.equal(isOnDay(renfeNov, "2026-11-11"), false);
+  assert.equal(isOnDay(renfeNov, "2026-11-12"), true);
+  assert.deepEqual(upcomingStrikes("2026-10-27").map((s) => s.id), [
+    "vaga-metges-2026-10-28",
+    "vaga-renfe-2026-10-29",
+    "vaga-ouigo-2026-10-30",
+    "vaga-renfe-2026-11-10",
+    "vaga-general-2026-11-11",
+  ]);
+  assert.deepEqual(upcomingStrikes("2026-10-30").map((s) => s.id), ["vaga-metges-2026-10-28", "vaga-ouigo-2026-10-30", "vaga-renfe-2026-11-10", "vaga-general-2026-11-11"]);
+  assert.deepEqual(upcomingStrikes("2026-11-13").map((s) => s.id), ["vaga-metges-2026-10-28"]);
+  assert.deepEqual(pastStrikes("2026-11-13").map((s) => s.id), ["vaga-renfe-2026-11-10", "vaga-general-2026-11-11", "vaga-ouigo-2026-10-30", "vaga-renfe-2026-10-29"]);
   for (const day of ["2026-10-27", "2026-11-05", "2026-12-01"]) {
     assert.equal(upcomingStrikes(day).length + pastStrikes(day).length, STRIKES.length, day);
   }
@@ -265,6 +311,21 @@ test("staleness: a strike shown as upcoming is stale only from the day after its
   assert.deepEqual(staleStrikes("2026-11-03", "2026-10-27").map((s) => s.id), ["vaga-renfe-2026-10-29", "vaga-ouigo-2026-10-30"]);
   // Moving the as-of date clears it.
   assert.deepEqual(staleStrikes("2026-10-30", "2026-10-30").map((s) => s.id), []);
+  // An open indefinite strike is never stale by date: it is re-checked weekly instead (next test).
+  assert.ok(!staleStrikes("2027-01-01", "2026-10-30").some((s) => s.id === "vaga-metges-2026-10-28"));
+  assert.deepEqual(unrecheckedOpenStrikes("2026-11-06", "2026-10-30").map((s) => s.id), []);
+  assert.deepEqual(unrecheckedOpenStrikes("2026-11-07", "2026-10-30").map((s) => s.id), ["vaga-metges-2026-10-28"]);
+  assert.deepEqual(unrecheckedOpenStrikes("2026-11-07", "2026-10-30", allEnded()).map((s) => s.id), []);
+});
+
+test("an indefinite strike still listed as in progress was re-checked on its organiser within the last week (move STRIKES_AS_OF and republish ?only=strikes)", () => {
+  const today = madridDate(new Date());
+  const unchecked = unrecheckedOpenStrikes(today);
+  assert.deepEqual(
+    unchecked.map((s) => s.id),
+    [],
+    `On ${today} the page still lists ${unchecked.map((s) => s.id).join(", ")} as in progress, last checked on ${STRIKES_AS_OF}. Re-read the organiser: if it was called off, set indefinite.endedOn; either way move STRIKES_AS_OF in src/lib/content/batch02/strikes.ts and publish ?only=strikes.`,
+  );
 });
 
 test("no listed strike is shown as upcoming after its last day (move STRIKES_AS_OF and republish ?only=strikes)", () => {
@@ -323,15 +384,28 @@ test("upcoming strikes come first, answer first: the lead names each one and eac
 
 test("after the last strike the page renders every strike as past, with a 'none upcoming' lead", () => {
   for (const locale of LOCALES) {
-    const blocks = buildStrikesBody(locale, "2026-12-01");
+    const blocks = buildStrikesBody(locale, "2026-12-01", allEnded());
     assert.ok(bodySchema.safeParse(blocks).success, locale);
     assert.match(text(blocks.slice(0, 1)), /No hi ha cap vaga anunciada|No hay ninguna huelga anunciada|No strike affecting Catalonia/, locale);
     assert.ok(!blocks.some((b) => b.type === "keyFacts"), locale);
+    // No "what runs" table when nothing is announced.
+    assert.ok(!blocks.some((b) => b.type === "heading" && (b as { id?: string }).id === "que-funciona"), locale);
     const all = headings(blocks);
     const past = all.findIndex((h) => h.level === 2 && /Vagues anteriors|Huelgas anteriores|Past strikes/.test(h.text));
     assert.ok(past >= 0, locale);
     const pastIds = all.filter((h) => h.level === 3 && h.id).map((h) => h.id);
-    assert.deepEqual(pastIds, ["vaga-general-2026-11-11", "vaga-ouigo-2026-10-30", "vaga-renfe-2026-10-29"], locale);
+    assert.deepEqual(
+      pastIds,
+      ["vaga-metges-2026-10-28", "vaga-renfe-2026-11-10", "vaga-general-2026-11-11", "vaga-ouigo-2026-10-30", "vaga-renfe-2026-10-29"],
+      locale,
+    );
+    // An ended indefinite strike is dated from its first to its last day.
+    const endedDays: Record<Locale, string> = {
+      ca: "Des del dimecres 28 d'octubre fins al divendres 20 de novembre de 2026",
+      es: "Desde el miércoles 28 de octubre hasta el viernes 20 de noviembre de 2026",
+      en: "From Wednesday 28 October to Friday 20 November 2026",
+    };
+    assert.ok(all.some((h) => h.text.startsWith(endedDays[locale])), `${locale}: ${all.map((h) => h.text).join(" | ")}`);
     // Past strikes carry no advice for the day.
     assert.ok(!all.some((h) => /Què cal fer el|Qué hacer el|What to do on/.test(h.text)), locale);
   }
@@ -354,8 +428,11 @@ test("every weekday printed next to a date matches that date", () => {
   };
   let checked = 0;
   for (const locale of LOCALES) {
-    for (const asOf of [STRIKES_AS_OF, "2026-12-01"]) {
-      const body = text(buildStrikesBody(locale, asOf)).toLowerCase();
+    for (const [asOf, list] of [
+      [STRIKES_AS_OF, STRIKES],
+      ["2026-12-01", allEnded()],
+    ] as const) {
+      const body = text(buildStrikesBody(locale, asOf, [...list])).toLowerCase();
       const pattern = new RegExp(`(${weekdays[locale].join("|")}),? (\\d{1,2}) (?:d'|de )?(${months[locale].join("|")})`, "gu");
       for (const match of body.matchAll(pattern)) {
         const year = body.slice(match.index, match.index + 80).match(/\b(20\d{2})\b/)?.[1] ?? STRIKES_AS_OF.slice(0, 4);
@@ -402,6 +479,93 @@ test("known answers: the dates and the official figures read on 27 October 2026"
     assert.match(facts, /19 (d'octubre|de octubre|October) (de )?2026/, locale);
     assert.match(facts, /24 (hores|horas|hours)/, locale);
   }
+});
+
+test("known answers read on 30 October 2026: the doctors' indefinite strike (order of 22 Oct) and SEMAF's 10 and 12 November", () => {
+  const metges = byId("vaga-metges-2026-10-28");
+  const renfeNov = byId("vaga-renfe-2026-11-10");
+  // Metges de Catalunya: indefinite from 08:00 on Wednesday 28 Oct, registered 15 Sep; the Generalitat's order of 22 Oct.
+  assert.deepEqual(metges.dates, ["2026-10-28"]);
+  assert.equal(weekdayIndex("2026-10-28"), 3); // Wednesday
+  assert.ok(isOpen(metges), "the doctors' strike was still on when last checked");
+  assert.equal(metges.scope, "health");
+  assert.deepEqual(metges.affects, ["health"]);
+  assert.equal(metges.minimumServices.status, "published");
+  assert.match(STRIKE_URLS.ordreMetges, /^https:\/\/tauler\.seu-e\.cat\/detall\?idEns=1&idEdicte=654506$/);
+  assert.match(STRIKE_URLS.metgesStrike, /^https:\/\/metgesdecatalunya\.cat\//);
+  // SEMAF notice 2026-51: full stoppage Tuesday 10 Nov, partial stoppages Thursday 12 Nov, Grupo Renfe drivers.
+  assert.deepEqual(renfeNov.dates, ["2026-11-10", "2026-11-12"]);
+  assert.deepEqual(renfeNov.dates.map(weekdayIndex), [2, 4]); // Tuesday, Thursday
+  assert.deepEqual(renfeNov.affects, ["rodalies", "longDistance"]);
+  assert.equal(renfeNov.minimumServices.status, "pending");
+  assert.ok(renfeNov.sources.some((s) => s.url === STRIKE_URLS.semaf1012 && s.publisher === "SEMAF"));
+  for (const locale of LOCALES) {
+    const ms = metges.minimumServices.text[locale];
+    assert.ok(ms.includes(`](${STRIKE_URLS.ordreMetges})`), locale);
+    assert.match(ms, /22 (d'octubre|de octubre|October) (de )?2026/, locale);
+    assert.match(ms, /25%/, locale);
+    assert.match(ms, /un terç|un tercio|a third/, locale);
+    assert.match(ms, /50%/, locale);
+    const facts = metges.facts[locale].join(" ");
+    assert.match(facts, /8[.:]00/, locale);
+    assert.match(facts, /15 (de setembre|de septiembre|September) (de )?2026/, locale);
+    assert.match(facts, /SISCAT/, locale);
+    assert.ok(facts.includes("té data d'inici, però no de final"), `${locale}: MC's own words`);
+    const nov = renfeNov.facts[locale].join(" ");
+    assert.ok(nov.includes("paro total") && nov.includes("paros parciales a lo largo de la jornada"), `${locale}: SEMAF's own words`);
+    assert.match(nov, /29 (d'octubre|de octubre|October) (de )?2026/, locale);
+    assert.match(nov, /2026-51/, locale);
+    // The 29 October order is cited beside Rodalies' notice.
+    assert.ok(byId("vaga-renfe-2026-10-29").minimumServices.text[locale].includes(`](${STRIKE_URLS.ordreRenfe29})`), locale);
+  }
+});
+
+test("the lead answers 'is there a strike today' first, then what is coming and whether the metro, bus and FGC are touched", () => {
+  const now: Record<Locale, RegExp> = {
+    ca: /^Vagues en curs a Catalunya el divendres 30 d'octubre de 2026, segons les fonts oficials: vaga indefinida de metges/,
+    es: /^Huelgas en curso en Cataluña el viernes 30 de octubre de 2026, según las fuentes oficiales: huelga indefinida de médicos/,
+    en: /^Strikes under way in Barcelona and Catalonia on Friday 30 October 2026, according to the official sources: indefinite doctors' strike/,
+  };
+  const city: Record<Locale, RegExp> = {
+    ca: /Metro, bus i FGC: de totes aquestes vagues, només els afecta la vaga del dimecres 11 de novembre de 2026\./,
+    es: /Metro, bus y FGC: de todas estas huelgas, solo les afecta la huelga del miércoles 11 de noviembre de 2026\./,
+    en: /Metro, buses and FGC: of these strikes, only the strike on Wednesday 11 November 2026 affects them\./,
+  };
+  for (const locale of LOCALES) {
+    const leadText = text(STRIKES_GUIDE.editions[locale].blocks.slice(0, 1));
+    if (STRIKES_AS_OF === "2026-10-30") {
+      assert.match(leadText, now[locale], locale);
+      assert.match(leadText, city[locale], locale);
+    }
+    assert.match(leadText, /Properes vagues:|Próximas huelgas:|Coming up:/, locale);
+  }
+  // A day with nothing in progress says so before listing what is coming.
+  const quiet = text(buildStrikesBody("ca", "2026-11-05", STRIKES.filter((s) => !s.indefinite)).slice(0, 1));
+  assert.match(quiet, /^El dijous 5 de novembre de 2026 no hi havia cap vaga en curs/);
+  assert.match(quiet, /Properes vagues: dimarts 10 de novembre i dijous 12 de novembre de 2026/);
+  // After 11 November nothing listed touches the metro, bus or FGC.
+  assert.match(text(buildStrikesBody("ca", "2026-11-12").slice(0, 1)), /Metro, bus i FGC: cap d'aquestes vagues no els afecta\./);
+});
+
+test("the 'what runs' table has one row per service and lists exactly the strikes that touch it", () => {
+  for (const locale of LOCALES) {
+    const blocks = STRIKES_GUIDE.editions[locale].blocks;
+    const at = blocks.findIndex((b) => b.type === "heading" && (b as { id?: string }).id === "que-funciona");
+    assert.ok(at > 1, `${locale}: no "what runs" section`);
+    const tableBlock = blocks[at + 1] as { type: string; rows: string[][] };
+    assert.equal(tableBlock.type, "table", locale);
+    assert.deepEqual(tableBlock.rows, whatRunsRows(locale), locale);
+    assert.equal(tableBlock.rows.length, SERVICE_KEYS.length, locale);
+    // Before the dated sections.
+    const firstStrike = blocks.findIndex((b) => b.type === "heading" && (b as { id?: string }).id === upcomingStrikes(STRIKES_AS_OF)[0]?.id);
+    assert.ok(at < firstStrike, locale);
+  }
+  const rows = Object.fromEntries(SERVICE_KEYS.map((key, i) => [key, whatRunsRows("ca")[i]?.[1] ?? ""]));
+  assert.match(rows.health ?? "", /^Des del dimecres 28 d'octubre de 2026: vaga indefinida de metges/);
+  assert.match(rows.rodalies ?? "", /^Dimarts 10 de novembre i dijous 12 de novembre de 2026: vaga de maquinistes del Grup Renfe \(SEMAF\); Dimecres 11 de novembre de 2026: vaga general/);
+  assert.equal(rows.metroBus, "Dimecres 11 de novembre de 2026: vaga general de 24 hores");
+  assert.equal(whatRunsRows("ca", "2026-11-12")[1]?.[1], "Cap vaga anunciada");
+  for (const strike of STRIKES) assert.ok(strike.affects.length > 0 && strike.affects.every((k) => SERVICE_KEYS.includes(k)), strike.id);
 });
 
 test("minimum-services text matches its status: 'pending' says so, 'published' gives figures and the official link", () => {
@@ -512,6 +676,7 @@ test("a strike added by the lead renders without touching the template", () => {
     },
     advice: { ca: [], es: [], en: [] },
     sources: [{ name: "x", url: "https://example.org/", publisher: "x" }],
+    affects: ["schools"],
   };
   const list = [...STRIKES, extra];
   for (const locale of LOCALES) {

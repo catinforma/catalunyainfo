@@ -131,6 +131,19 @@ test("voting: English answers the registration question in the first lines", () 
   assert.ok(faqQuestions(VOTING, "en").includes("Do I need to register to vote in the 2026 Spanish general election?"));
   assert.ok(faqQuestions(VOTING, "es").includes("¿Dónde tengo que ir a votar el 29 de noviembre?"));
   assert.ok(faqQuestions(VOTING, "ca").includes("Quan són les properes eleccions a Catalunya?"));
+  // 30 Oct 2026: "dónde voto dni", "2026 spain general election dates", "what time the polls open".
+  assert.ok(faqQuestions(VOTING, "es").includes("¿Puedo saber dónde voto con el DNI?"));
+  assert.ok(faqQuestions(VOTING, "ca").includes("Puc saber on voto amb el DNI?"));
+  assert.ok(faqQuestions(VOTING, "en").includes("What are the key dates of the 2026 Spain general election?"));
+  assert.ok(faqQuestions(VOTING, "en").includes("What time do the polls open and close on 29 November?"));
+  // The finder is linked in the lead with what it asks for (read on 30 Oct 2026: no ID, Cl@ve or certificate).
+  const finder = "](https://sede.ine.gob.es/ce-mesas/?lang=es_ES)";
+  const noId: Record<"ca" | "es" | "en", RegExp> = { ca: /sense DNI ni Cl@ve/, es: /sin DNI ni Cl@ve/, en: /with no ID number or login/ };
+  for (const locale of ["ca", "es", "en"] as const) {
+    const leadBlock = JSON.stringify(VOTING.editions[locale].blocks[0]);
+    assert.ok(leadBlock.includes(finder), `${locale}: finder in the lead`);
+    assert.match(leadBlock, noId[locale], locale);
+  }
 });
 
 test("voting: one link to the per-municipality results hub in each language", () => {
@@ -162,10 +175,11 @@ test("titles and descriptions are exactly what main serves (measurement windows)
       es: ["Miembro de mesa electoral: qué hacer si te ha tocado, cuánto se cobra y cómo excusarte", "Mesa electoral 2026: se cobran 75 €, excusas y qué hacer", "Si te ha tocado ser miembro de mesa: plazos para excusarte, excusas aceptadas, la dieta de 75 €, permiso en el trabajo, qué pasa si no vas y horario del día."],
       en: ["Drawn for polling-station duty in Spain on 29 November: the €75 pay, excuses and what to do", "Polling-station duty in Spain 2026: €75 pay, excuses, time off", "Drawn to sit on a Spanish polling-station table (mesa electoral)? The deadlines to be excused, accepted reasons, the €75 allowance, time off work and the day."],
     },
+    // Changed in the 30 Oct 2026 top-3 push (owner lifted the freeze; logged in docs/SEO_EXPERIMENTS.md).
     voting: {
-      ca: ["Com votar el 29 de novembre a Catalunya: on, horari, vot per correu i terminis", "Properes eleccions a Catalunya: 29N, on i com votar", "Eleccions generals el diumenge 29 de novembre de 2026: on voto (cercador de l'INE), horari de 9 a 20 h, vot per correu fins al 19 de novembre i calendari."],
-      es: ["Cómo votar el 29 de noviembre en Cataluña: dónde, horario, voto por correo y plazos", "Próximas elecciones en Cataluña: 29N, dónde y cómo votar", "Elecciones generales el domingo 29 de noviembre de 2026: dónde voto (buscador del INE), horario de 9 a 20 h y voto por correo hasta el 19 de noviembre."],
-      en: ["How to vote in Spain's 29 November 2026 general election in Catalonia", "How to vote in Spain's 2026 general election (29 November)", "Spain votes on Sunday 29 November 2026 (Royal Decree 806/2026): no registration step, the polling-station finder, 9:00-20:00, postal vote by 19 November."],
+      ca: ["Properes eleccions a Catalunya: quan són i com votar el 29 de novembre (on, horari, vot per correu)", "Properes eleccions a Catalunya: quan són i on votar el 29N", "Són el diumenge 29 de novembre de 2026 (generals), de 9 a 20 h. On voto: cercador de l'INE, sense DNI ni Cl@ve. Vot per correu fins al 19 de novembre."],
+      es: ["Próximas elecciones en Cataluña: cuándo son y cómo votar el 29 de noviembre (dónde, horario, voto por correo)", "Próximas elecciones en Cataluña: cuándo son y dónde votar", "Son el domingo 29 de noviembre de 2026 (generales), de 9 a 20 h. Dónde voto: buscador del INE, sin DNI ni Cl@ve. Voto por correo hasta el 19 de noviembre."],
+      en: ["How to vote in Spain's 2026 general election on 29 November: registration, polling stations and dates", "Spain general election 2026: how to vote, register, dates", "Sunday 29 November 2026, polls 9:00-20:00. Spanish citizens are registered automatically; find your polling station online; postal vote by 19 November."],
     },
   };
   for (const locale of LOCALES) {

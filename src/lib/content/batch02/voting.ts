@@ -51,6 +51,17 @@ import {
  * the JEC will then lift the suspension for MiDNI only (not MiDGT). Re-check
  * the JEC's sessions and update the ID line when it does.
  *
+ * 30 Oct 2026 (top-3 push; titles and descriptions changed, logged in
+ * docs/SEO_EXPERIMENTS.md): titles in the words of "cuándo son las próximas
+ * elecciones" / "quan són les properes eleccions" / "2026 spain general
+ * election how to register / dates"; the INE finder linked in the lead with
+ * what it asks for (re-read that day: province, municipality and first-surname
+ * initial required, street optional, no ID, Cl@ve or certificate); FAQs for
+ * "dónde voto con el DNI" and, in English, the key dates and the polls' hours.
+ * Not re-checked that day (sites unreadable from here): the JEC's sessions
+ * after 22 Oct (MiDNI line stays dated 28 Oct) and the DOGC order on paid
+ * time off to vote (line stays dated 24 Oct).
+ *
  * The URL is evergreen on purpose: after 29 November the same page switches
  * its worked example to the municipal elections, whose date is fixed by law
  * (LOREG art. 42.3, fourth Sunday of May). Strictly procedural and
@@ -94,28 +105,28 @@ const a = (label: string, url: string) => `[${label}](${url})`;
 const META: Record<Locale, { path: string; title: string; seoTitle: string; seoDescription: string; excerpt: string }> = {
   ca: {
     path: "guies/com-votar-eleccions-catalunya",
-    title: "Com votar el 29 de novembre a Catalunya: on, horari, vot per correu i terminis",
-    seoTitle: "Properes eleccions a Catalunya: 29N, on i com votar",
+    title: "Properes eleccions a Catalunya: quan són i com votar el 29 de novembre (on, horari, vot per correu)",
+    seoTitle: "Properes eleccions a Catalunya: quan són i on votar el 29N",
     seoDescription:
-      "Eleccions generals el diumenge 29 de novembre de 2026: on voto (cercador de l'INE), horari de 9 a 20 h, vot per correu fins al 19 de novembre i calendari.",
+      "Són el diumenge 29 de novembre de 2026 (generals), de 9 a 20 h. On voto: cercador de l'INE, sense DNI ni Cl@ve. Vot per correu fins al 19 de novembre.",
     excerpt:
       "Les properes eleccions a Catalunya són les generals del 29 de novembre: on et toca votar, l'horari, el document, el vot per correu i el calendari oficial complet.",
   },
   es: {
     path: "guias/como-votar-elecciones-cataluna",
-    title: "Cómo votar el 29 de noviembre en Cataluña: dónde, horario, voto por correo y plazos",
-    seoTitle: "Próximas elecciones en Cataluña: 29N, dónde y cómo votar",
+    title: "Próximas elecciones en Cataluña: cuándo son y cómo votar el 29 de noviembre (dónde, horario, voto por correo)",
+    seoTitle: "Próximas elecciones en Cataluña: cuándo son y dónde votar",
     seoDescription:
-      "Elecciones generales el domingo 29 de noviembre de 2026: dónde voto (buscador del INE), horario de 9 a 20 h y voto por correo hasta el 19 de noviembre.",
+      "Son el domingo 29 de noviembre de 2026 (generales), de 9 a 20 h. Dónde voto: buscador del INE, sin DNI ni Cl@ve. Voto por correo hasta el 19 de noviembre.",
     excerpt:
       "Las próximas elecciones en Cataluña son las generales del 29 de noviembre: dónde te toca votar, el horario, el documento, el voto por correo y el calendario oficial completo.",
   },
   en: {
     path: "guides/how-to-vote-catalonia",
-    title: "How to vote in Spain's 29 November 2026 general election in Catalonia",
-    seoTitle: "How to vote in Spain's 2026 general election (29 November)",
+    title: "How to vote in Spain's 2026 general election on 29 November: registration, polling stations and dates",
+    seoTitle: "Spain general election 2026: how to vote, register, dates",
     seoDescription:
-      "Spain votes on Sunday 29 November 2026 (Royal Decree 806/2026): no registration step, the polling-station finder, 9:00-20:00, postal vote by 19 November.",
+      "Sunday 29 November 2026, polls 9:00-20:00. Spanish citizens are registered automatically; find your polling station online; postal vote by 19 November.",
     excerpt:
       "Everything you need to vote in Spain's 29 November general election in Catalonia: registration, where you vote, hours, ID, the postal vote and the full official calendar.",
   },
@@ -140,7 +151,7 @@ type T = {
 
 const COPY: Record<Locale, T> = {
   en: {
-    lead: "Spain holds a **general election on Sunday 29 November 2026** to elect the Congress of Deputies and the Senate, called by Royal Decree 806/2026 (BOE, 6 October 2026). **Spanish citizens do not register to vote:** the electoral roll is built automatically from the municipal register. Polling stations are open from **9:00 to 20:00**, and the INE's official finder tells you where you vote. Key dates: request a postal vote at Correos **by 19 November** and hand it in by 25 November; the voter card with your polling station arrives by post between 2 and 10 November.",
+    lead: `Spain holds a **general election on Sunday 29 November 2026** to elect the Congress of Deputies and the Senate, called by Royal Decree 806/2026 (BOE, 6 October 2026). **Spanish citizens do not register to vote:** the electoral roll is built automatically from the municipal register. Polling stations are open from **9:00 to 20:00**, and the ${a("INE's official finder", URL.mesas)} tells you where you vote from your province, town and the first letter of your first surname, with no ID number or login. Key dates: request a postal vote at Correos **by 19 November** and hand it in by 25 November; the voter card with your polling station arrives by post between 2 and 10 November.`,
     nextTitle: "Next elections in Catalonia",
     next: [
       `The next election is the **general election on Sunday 29 November 2026** (Congress and Senate). After that come the **municipal elections, expected on Sunday 23 May 2027**: the electoral law sets them on the fourth Sunday of May, and the decree calling them is issued 55 days before and published in the BOE the next day, on 29 and 30 March 2027 (${a("LOREG, article 42.3", URL.loreg)}). That decree has not been published yet. No election to the Parliament of Catalonia has been called.`,
@@ -226,7 +237,9 @@ const COPY: Record<Locale, T> = {
       { question: "How do I vote in the 2026 Spanish general election?", answer: "Go to your polling station on Sunday 29 November between 9:00 and 20:00 with your original DNI, passport or driving licence; the INE's finder and the voter card posted from 2 to 10 November tell you where. If you will be away, request a postal vote at Correos by 19 November. Spanish citizens living in Spain do not need to register." },
       { question: "Do I need to register to vote in the 2026 Spanish general election?", answer: "Not if you are a Spanish citizen living in Spain: the INE builds the electoral roll from the municipal register. The roll for 29 November closed on 1 August 2026. Spaniards abroad must be on their consulate's register; foreign residents cannot vote in a general election." },
       { question: "Where do I vote on 29 November?", answer: "The INE's polling-station finder shows your table and venue from your province, municipality, the first letter of your first surname and your street, with no login. The voter card that arrives by post between 2 and 10 November says the same, and the INE publishes the final list on 19 November." },
-      { question: "What are the voting hours?", answer: "From 9:00 to 20:00 on Sunday 29 November 2026. Anyone inside or at the door at 20:00 can still vote." },
+      { question: "What are the key dates of the 2026 Spain general election?", answer: "Voter cards are posted from 2 to 10 November; the campaign runs from 13 November (00:00) to 27 November (24:00); postal votes must be requested at Correos by 19 November and handed in by 25 November; Saturday 28 November is the day of reflection; polling day is Sunday 29 November, 9:00 to 20:00; the provincial boards hold the general count from 4 to 7 December, and the new Congress and Senate meet on 23 December." },
+      { question: "Do I need my DNI to find my polling station?", answer: "No. The INE's public finder only asks for your province, your municipality and the first letter of your first surname, plus your street if you want to narrow it down; it needs no ID number, Cl@ve or certificate. With Cl@ve you can also see your full entry on the electoral roll on the INE's website." },
+      { question: "What time do the polls open and close on 29 November?", answer: "From 9:00 to 20:00 on Sunday 29 November 2026. Anyone inside or at the door at 20:00 can still vote." },
       { question: "Until when can I request a postal vote?", answer: "Until 19 November 2026, in person at Correos with your original ID or online with an electronic DNI or digital certificate; the vote must be handed in by 25 November." },
       { question: "What ID do I need? Is the digital DNI on my phone valid?", answer: "Your original DNI, passport or driving licence with a photo; the DNI and passport are valid even if expired. The MiDNI app is suspended: on 22 October the Central Electoral Board said it will allow it again once every table has a reader for its QR code, and it had not done so on 28 October." },
       { question: "What is Royal Decree 806/2026?", answer: "The decree of 5 October 2026, published in the BOE on 6 October, that dissolved the Congress and the Senate and called the election for 29 November. It sets the campaign from 13 to 27 November and the first sitting of the new chambers on 23 December." },
@@ -237,7 +250,7 @@ const COPY: Record<Locale, T> = {
     warn: "If you will be away on 29 November, request the postal vote at Correos by 19 November, in person with your original ID, and hand it in by 25 November.",
   },
   es: {
-    lead: "Las próximas elecciones en Cataluña son las **generales del domingo 29 de noviembre de 2026**, para elegir el Congreso y el Senado, convocadas por el Real Decreto 806/2026 (BOE del 6 de octubre); las siguientes, las municipales, están previstas para el 23 de mayo de 2027. Se vota de **9:00 a 20:00** en la mesa que te indica el buscador oficial del INE. Plazos clave: el voto por correo se pide en Correos **hasta el 19 de noviembre** y se entrega hasta el 25, y la tarjeta censal con tu mesa llega por correo entre el 2 y el 10 de noviembre.",
+    lead: `Las próximas elecciones en Cataluña son las **generales del domingo 29 de noviembre de 2026**, para elegir el Congreso y el Senado, convocadas por el Real Decreto 806/2026 (BOE del 6 de octubre); las siguientes, las municipales, están previstas para el 23 de mayo de 2027. Se vota de **9:00 a 20:00** en la mesa que te indica el ${a("buscador oficial del INE", URL.mesas)}: solo pide la provincia, el municipio y la inicial del primer apellido, sin DNI ni Cl@ve. Plazos clave: el voto por correo se pide en Correos **hasta el 19 de noviembre** y se entrega hasta el 25, y la tarjeta censal con tu mesa llega por correo entre el 2 y el 10 de noviembre.`,
     nextTitle: "Próximas elecciones en Cataluña",
     next: [
       `Las próximas son las **elecciones generales del domingo 29 de noviembre de 2026** (Congreso y Senado). Después vienen las **municipales, previstas para el domingo 23 de mayo de 2027**: la ley las fija el cuarto domingo de mayo, y el decreto de convocatoria se expide 55 días antes y se publica al día siguiente en el BOE, el 29 y el 30 de marzo de 2027 (${a("LOREG, artículo 42.3", URL.loreg)}). Ese decreto todavía no se ha publicado. Elecciones al Parlament no hay ninguna convocada.`,
@@ -321,6 +334,7 @@ const COPY: Record<Locale, T> = {
     faq: [
       { question: "¿Cuándo son las próximas elecciones en Cataluña?", answer: "Las generales, el domingo 29 de noviembre de 2026 (Congreso y Senado). Después, las municipales, previstas para el 23 de mayo de 2027: la ley las fija el cuarto domingo de mayo y su decreto debe publicarse el 30 de marzo de 2027. Elecciones al Parlament no hay convocadas." },
       { question: "¿Dónde tengo que ir a votar el 29 de noviembre?", answer: "A tu mesa, en el local electoral que te indica la consulta de mesas y locales del INE con tu provincia, municipio, la inicial de tu primer apellido y tu calle, sin identificarte. Lo mismo dice la tarjeta censal que llega por correo entre el 2 y el 10 de noviembre, y el 19 de noviembre el INE publica la lista definitiva." },
+      { question: "¿Puedo saber dónde voto con el DNI?", answer: "No hace falta el DNI: el buscador público del INE solo pide la provincia, el municipio y la inicial del primer apellido, y si quieres afinar, la calle; no pide número de documento, Cl@ve ni certificado. Con Cl@ve también puedes ver tu inscripción completa en el censo en la sede del INE." },
       { question: "¿Qué horario hay para votar el domingo 29 de noviembre?", answer: "De 9:00 a 20:00. Quien está dentro o en la puerta a las 20:00 todavía puede votar." },
       { question: "¿Hasta cuándo se puede pedir el voto por correo?", answer: "Hasta el 19 de noviembre de 2026, en persona en Correos con el documento original o por internet con DNI electrónico o certificado digital; el voto se entrega hasta el 25 de noviembre." },
       { question: "¿Qué documento necesito para votar? ¿Vale el DNI del móvil?", answer: "DNI, pasaporte o carné de conducir originales con foto; el DNI y el pasaporte valen caducados. La app MiDNI está suspendida: el 22 de octubre la Junta Electoral Central dijo que la volverá a admitir cuando cada mesa tenga un lector de su código QR, y a 28 de octubre no lo había hecho." },
@@ -333,7 +347,7 @@ const COPY: Record<Locale, T> = {
     warn: "Si no estarás el 29 de noviembre, pide el voto por correo en Correos hasta el 19 de noviembre, en persona y con tu documento original, y entrégalo hasta el 25 de noviembre.",
   },
   ca: {
-    lead: "Les properes eleccions a Catalunya són les **generals del diumenge 29 de novembre de 2026**, per escollir el Congrés i el Senat, convocades pel Reial decret 806/2026 (BOE del 6 d'octubre); les següents, les municipals, estan previstes per al 23 de maig de 2027. Es vota de **9:00 a 20:00** a la mesa que t'indica el cercador oficial de l'INE. Terminis clau: el vot per correu es demana a Correus **fins al 19 de novembre** i es lliura fins al 25, i la targeta censal amb la teva mesa arriba per correu entre el 2 i el 10 de novembre.",
+    lead: `Les properes eleccions a Catalunya són les **generals del diumenge 29 de novembre de 2026**, per escollir el Congrés i el Senat, convocades pel Reial decret 806/2026 (BOE del 6 d'octubre); les següents, les municipals, estan previstes per al 23 de maig de 2027. Es vota de **9:00 a 20:00** a la mesa que t'indica el ${a("cercador oficial de l'INE", URL.mesas)}: només demana la província, el municipi i la inicial del primer cognom, sense DNI ni Cl@ve. Terminis clau: el vot per correu es demana a Correus **fins al 19 de novembre** i es lliura fins al 25, i la targeta censal amb la teva mesa arriba per correu entre el 2 i el 10 de novembre.`,
     nextTitle: "Properes eleccions a Catalunya",
     next: [
       `Les properes són les **eleccions generals del diumenge 29 de novembre de 2026** (Congrés i Senat). Després vénen les **municipals, previstes per al diumenge 23 de maig de 2027**: la llei les fixa el quart diumenge de maig, i el decret de convocatòria s'expedeix 55 dies abans i es publica l'endemà al BOE, el 29 i el 30 de març de 2027 (${a("LOREG, article 42.3", URL.loreg)}). Aquest decret encara no s'ha publicat. Eleccions al Parlament no n'hi ha cap de convocada.`,
@@ -417,6 +431,7 @@ const COPY: Record<Locale, T> = {
     faq: [
       { question: "Quan són les properes eleccions a Catalunya?", answer: "Les generals, el diumenge 29 de novembre de 2026 (Congrés i Senat). Després, les municipals, previstes per al 23 de maig de 2027: la llei les fixa el quart diumenge de maig i el seu decret s'ha de publicar el 30 de març de 2027. Eleccions al Parlament no n'hi ha de convocades." },
       { question: "On he d'anar a votar el 29 de novembre?", answer: "A la teva mesa, al local electoral que t'indica la consulta de meses i locals de l'INE amb la província, el municipi, la inicial del primer cognom i el carrer, sense identificar-te. El mateix diu la targeta censal que arriba per correu entre el 2 i el 10 de novembre, i el 19 de novembre l'INE publica la llista definitiva." },
+      { question: "Puc saber on voto amb el DNI?", answer: "No cal el DNI: el cercador públic de l'INE només demana la província, el municipi i la inicial del primer cognom, i si vols afinar, el carrer; no demana número de document, Cl@ve ni certificat. Amb Cl@ve també pots veure la inscripció completa al cens a la seu de l'INE." },
       { question: "Quin horari hi ha per votar el diumenge 29 de novembre?", answer: "De 9:00 a 20:00. Qui és a dins o a la porta a les 20:00 encara pot votar." },
       { question: "Fins quan es pot demanar el vot per correu?", answer: "Fins al 19 de novembre de 2026, en persona a Correus amb el document original o per internet amb DNI electrònic o certificat digital; el vot es lliura fins al 25 de novembre." },
       { question: "Quin document necessito per votar? Val el DNI del mòbil?", answer: "DNI, passaport o carnet de conduir originals amb foto; el DNI i el passaport valen caducats. L'app MiDNI està suspesa: el 22 d'octubre la Junta Electoral Central va dir que la tornarà a admetre quan cada mesa tingui un lector del seu codi QR, i a 28 d'octubre no ho havia fet." },

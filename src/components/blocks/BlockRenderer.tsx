@@ -345,10 +345,10 @@ function BlockView({ block, context }: { block: Block; context: BlockContext }) 
 
     case "calculator":
       // Arithmetic only, over rates supplied by the editorial package.
-      return <Calculator block={block} locale={context.locale} />;
+      return <Calculator block={block} locale={context.locale} copy={getMessages(context.locale).calculator} />;
 
     case "calendar":
-      return <CalendarBlock block={block} locale={context.locale} />;
+      return <CalendarBlock block={block} locale={context.locale} copy={getMessages(context.locale).calendar} />;
 
     case "conditionsMap":
       // Named areas and measured conditions. The schema has no coordinate
@@ -357,11 +357,11 @@ function BlockView({ block, context }: { block: Block; context: BlockContext }) 
 
     case "touristTax":
       // Rates come from the repository, never from the block.
-      return <TouristTaxCalculator locale={context.locale} />;
+      return <TouristTaxCalculator locale={context.locale} copy={getMessages(context.locale).touristTax} />;
 
     case "transportPasses":
       // Fares come from the repository, never from the block.
-      return <TransportPassSelector locale={context.locale} />;
+      return <TransportPassSelector locale={context.locale} copy={getMessages(context.locale).transportPasses} />;
 
     case "holidayToday":
       // Server-rendered on purpose: the answer has to be in the HTML, and the
@@ -414,7 +414,7 @@ function BlockView({ block, context }: { block: Block; context: BlockContext }) 
     case "contactForm":
       // The only interactive block. It carries no configuration from the
       // database, so where a message goes is decided in server code alone.
-      return <ContactForm locale={context.locale} />;
+      return <ContactForm locale={context.locale} copy={getMessages(context.locale).contactForm} />;
 
     default:
       return null;

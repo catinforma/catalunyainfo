@@ -20,6 +20,7 @@ import {
   type DatePage,
   type MuniLocale,
 } from "@/lib/programmatic/holidays/paths";
+import { holidayHubDataset, municipalityDataset } from "@/lib/programmatic/holidays/structured";
 import { breadcrumbSchema, faqSchema, graph } from "@/lib/seo/jsonld";
 import { buildMetadata } from "@/lib/seo/metadata";
 
@@ -48,7 +49,7 @@ export function HubRoute({ locale }: { locale: MuniLocale }) {
       <main id="main">
         <HubPage locale={locale} />
       </main>
-      <JsonLd json={graph([breadcrumbSchema(hubCrumbs(locale))])} />
+      <JsonLd json={graph([breadcrumbSchema(hubCrumbs(locale)), holidayHubDataset(locale)])} />
       <SiteFooter locale={locale} />
     </>
   );
@@ -81,6 +82,7 @@ export function MunicipalityRoute({ locale, slug }: { locale: MuniLocale; slug: 
       <JsonLd
         json={graph([
           breadcrumbSchema(municipalityCrumbs(m, locale)),
+          municipalityDataset(m, locale),
           // The same questions the page prints (copy.ts municipalityFaq), as FAQPage.
           faqSchema([
             {

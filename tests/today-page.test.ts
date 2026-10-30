@@ -551,6 +551,7 @@ test("homepage strip: the daily page leads the year-round tools in every edition
     assert.equal(toolsFor(locale, "2027-06-01")[0], "today", locale);
     assert.equal(`/${locale}/${TOOL_PATHS.today[locale]}/`, todayPath(locale));
   }
-  const llms = readFileSync(join(ROOT, "src/app/llms.txt/route.ts"), "utf8");
-  assert.match(llms, /todayPath\(locale\)/);
+  // llms.txt is built by lib/seo/llms.ts; the daily page is its first live tool.
+  const llms = readFileSync(join(ROOT, "src/lib/seo/llms.ts"), "utf8");
+  assert.match(llms, /todayPath\("ca"\)/);
 });
