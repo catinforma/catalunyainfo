@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
 import { headers } from "next/headers";
 
+import { PRODUCTION_ALLOW, PRODUCTION_DISALLOW } from "@/lib/seo/robots-rules";
 import { CANONICAL_HOST, absoluteUrl, indexingAllowed, siteOrigin } from "@/lib/site";
 
 // Dynamic so the host can be checked. robots.txt is requested rarely enough
@@ -46,17 +47,11 @@ export default async function robots(): Promise<MetadataRoute.Robots> {
         // rule below: every content image is served from it, and `/*?*` would
         // otherwise hide all of them from Googlebot. A more specific Allow
         // wins over a broader Disallow, which is what makes this work.
-        allow: ["/", "/_next/image"],
-        disallow: [
-          "/admin",
-          "/admin/",
-          "/api/",
-          "/ca/cerca/",
-          "/es/buscar/",
-          "/en/search/",
-          "/*/internal-search/",
-          "/*?*",
-        ],
+        // The same rule lets the renderer fetch the four data endpoints the
+        // live boxes read (lib/seo/robots-rules.ts says why); the rest of
+        // /api/ stays disallowed.
+        allow: [...PRODUCTION_ALLOW],
+        disallow: [...PRODUCTION_DISALLOW],
       },
       // Explicitly welcome the AdSense crawler so that, when ads are switched
       // on, it can read the same pages as Googlebot.

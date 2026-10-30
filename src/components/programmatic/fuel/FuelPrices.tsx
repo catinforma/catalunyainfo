@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 
 import type { LiveLabels } from "@/lib/programmatic/fuel/copy";
-import { FUELS, freshness, rank, type Freshness, type Fuel, type LivePayload, type StationFilter } from "@/lib/programmatic/fuel/live";
+import { FUELS, FUEL_ENDPOINT, freshness, rank, type Freshness, type Fuel, type LivePayload, type StationFilter } from "@/lib/programmatic/fuel/live";
 
 /**
  * Today's prices, in the browser.
@@ -59,7 +59,7 @@ export function FuelPrices({
     // One state update after mount: the server render stays price-free.
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setMounted(true);
-    fetch("/api/fuel/catalonia/")
+    fetch(FUEL_ENDPOINT)
       .then(async (response) => {
         if (!response.ok) throw new Error(String(response.status));
         const payload = (await response.json()) as LivePayload;
