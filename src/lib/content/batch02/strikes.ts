@@ -42,9 +42,26 @@ import {
  *    3, 4 and 10.2) and the DOGC (Ordres EMT/38/2024 and EMT/201/2024, which
  *    cite Decret 120/1995; the decree itself is a scanned PDF).
  *
+ * Added on 30 Oct 2026 (read that day on the organiser's or the Generalitat's
+ * own page):
+ *  - Doctors' indefinite strike: the Departament d'Empresa i Treball's order
+ *    of 22 Oct (e-Tauler notice 654506: Metges de Catalunya, from 08:00 on
+ *    28 Oct, indefinite; minimum services) and Metges de Catalunya's notices
+ *    of 10 Sep and 28 Oct.
+ *  - Renfe drivers on 10 and 12 Nov: SEMAF's notice nº 2026-51 of 29 Oct
+ *    ("paro total" on the 10th, "paros parciales a lo largo de la jornada" on
+ *    the 12th; no hours, no minimum services yet).
+ *  - 29 Oct: the order itself (e-Tauler notice 654526, signed 22 Oct: 33% off
+ *    peak, 66% at peak), beside Rodalies' notice.
+ *  e-Tauler withdraws its notices after about four weeks (these two on 19 Nov
+ *  2026): once the DOGC prints the order with its number, swap the link.
+ *
  * Left out on purpose (press only, not confirmed by an organiser or an
  * operator): the 11N demonstration's place and time, Rodalies' peak-hour
- * bands, further Ouigo dates, any 11N percentage.
+ * bands, further Ouigo dates (6 and 9 Nov, 4 and 8 Dec: Ouigo's website
+ * cannot be read from here and SEMAF has published no Ouigo notice), the
+ * TMB bus stoppages of October (an order was signed on 2 Oct; whether they
+ * were called off is only in the press), any 11N percentage.
  *
  * HOW TO UPDATE (the lead):
  *  - New strike: add an entry to STRIKES (dates, title, facts, minimum
@@ -61,6 +78,12 @@ import {
  *    "no listed strike is shown as upcoming after its last day" fails until
  *    you do), so it is rendered under "past strikes". A past strike may not
  *    stay "pending": record what was published, or set "none" and say why.
+ *  - Indefinite strike (`indefinite`): it stays "in progress" until you set
+ *    `indefinite.endedOn` to the day it was called off or ended. Re-check
+ *    the organiser at least weekly: a test fails seven days after
+ *    STRIKES_AS_OF while one is still open.
+ *  - `affects` drives the "what runs" table at the top: list every service a
+ *    traveller, patient or family would notice.
  */
 
 /**
@@ -92,12 +115,24 @@ export interface StrikeSource {
   publisher: string;
 }
 
+/** The services a traveller, patient or family would notice; one row each in the "what runs" table. */
+export type ServiceKey = "rodalies" | "longDistance" | "metroBus" | "fgcTram" | "health" | "schools";
+
+export const SERVICE_KEYS: ServiceKey[] = ["rodalies", "metroBus", "fgcTram", "longDistance", "health", "schools"];
+
 export interface Strike {
   /** Stable anchor for the dated section, e.g. "vaga-general-2026-11-11". */
   id: string;
-  /** Every day of strike action (ISO, Catalan civil date), ascending. */
+  /** Every day of strike action (ISO, Catalan civil date), ascending. An indefinite strike lists its first day only. */
   dates: string[];
+  /**
+   * An indefinite strike: it began on `dates[0]` and has no last day. It is in
+   * progress until `endedOn` is set to the day it was called off or ended.
+   */
+  indefinite?: { endedOn?: string };
   scope: StrikeScope;
+  /** What it touches, for the "what runs" table. */
+  affects: ServiceKey[];
   /** What it is, after the date in the heading. Tense-neutral. */
   title: Record<Locale, string>;
   /** One phrase for the lead and the key facts. */
@@ -129,6 +164,12 @@ export const STRIKE_URLS = {
   fgc: "https://www.fgc.cat/",
   aena: "https://www.aena.es/es/infovuelos.html",
   semaf29: "https://www.semaf.org/informaciones/huelga-grupo-renfe-29-octubre/",
+  semaf1012: "https://www.semaf.org/informaciones/semaf-continua-convocando-huelgas-10-12-noviembre/",
+  ordreRenfe29: "https://tauler.seu-e.cat/detall?idEns=1&idEdicte=654526",
+  ordreMetges: "https://tauler.seu-e.cat/detall?idEns=1&idEdicte=654506",
+  metgesStrike: "https://metgesdecatalunya.cat/ca/actualitat/noticies/mc-prou-dexcuses-salut-pot-negociar-si-vol-i-fins-ara-no-ha-volgut",
+  metgesCall: "https://metgesdecatalunya.cat/ca/actualitat/noticies/els-sindicats-medics-acorden-iniciar-la-vaga-indefinida-de-facultatius-el-proper-28-doctubre",
+  treballMs: "https://treball.gencat.cat/ca/ambits/relacions_laborals/vagues/serveis-minims/",
   ccooRegistered: "https://www.ccoo.es/noticia:770401",
   ccooCall: "https://www.ccoo.es/noticia:769574--Convocamos_huelga_general_para_el_11_de_noviembre",
   ugt: "https://www.ugt.es/huelga-general-11-noviembre",
@@ -156,6 +197,7 @@ export const STRIKES: Strike[] = [
     id: "vaga-renfe-2026-10-29",
     dates: ["2026-10-29"],
     scope: "rail",
+    affects: ["rodalies", "longDistance"],
     title: {
       ca: "vaga de maquinistes del Grup Renfe (SEMAF)",
       es: "huelga de maquinistas del Grupo Renfe (SEMAF)",
@@ -192,9 +234,9 @@ export const STRIKES: Strike[] = [
         en: "Minimum services published: Rodalies runs 66% at peak times and 33% the rest of the day",
       },
       text: {
-        ca: `A **Rodalies de Catalunya**, incloses les línies regionals, el servei es fa amb els serveis mínims del Departament d'Empresa i Treball de la Generalitat: el **66% del servei habitual en hora punta** i el **33% la resta del dia**, segons ${link(U.rodalies29, "l'avís de Rodalies")} actualitzat el 26 d'octubre de 2026, que enllaça l'horari de serveis mínims de cada línia. Per als altres trens de Renfe (alta velocitat, llarga i mitjana distància), Renfe té un avís de serveis mínims a ${link(U.renfe, "renfe.com")}.`,
-        es: `En **Rodalies de Catalunya**, incluidas las líneas regionales, el servicio se presta con los servicios mínimos del Departament d'Empresa i Treball de la Generalitat: el **66% del servicio habitual en hora punta** y el **33% el resto del día**, según ${link(U.rodalies29, "el aviso de Rodalies")} actualizado el 26 de octubre de 2026, que enlaza el horario de servicios mínimos de cada línea. Para los demás trenes de Renfe (alta velocidad, larga y media distancia), Renfe tiene un aviso de servicios mínimos en ${link(U.renfe, "renfe.com")}.`,
-        en: `On **Rodalies de Catalunya**, regional lines included, trains run to the minimum services set by the Generalitat's Department of Business and Labour: **66% of the usual service at peak times** and **33% for the rest of the day**, according to ${link(U.rodalies29, "Rodalies' notice")} (updated 26 October 2026), which links a minimum-service timetable for every line. For Renfe's other trains (high-speed, long and medium distance), Renfe carries a minimum-services notice on ${link(U.renfe, "renfe.com")}.`,
+        ca: `A **Rodalies de Catalunya**, incloses les línies regionals, el servei es fa amb els serveis mínims que fixa ${link(U.ordreRenfe29, "l'ordre del Departament d'Empresa i Treball")} signada el 22 d'octubre de 2026: el **66% del servei habitual en hora punta** i el **33% la resta del dia**, segons també ${link(U.rodalies29, "l'avís de Rodalies")} actualitzat el 26 d'octubre de 2026, que enllaça l'horari de serveis mínims de cada línia. Per als altres trens de Renfe (alta velocitat, llarga i mitjana distància), Renfe té un avís de serveis mínims a ${link(U.renfe, "renfe.com")}.`,
+        es: `En **Rodalies de Catalunya**, incluidas las líneas regionales, el servicio se presta con los servicios mínimos que fija ${link(U.ordreRenfe29, "la orden del Departament d'Empresa i Treball")} firmada el 22 de octubre de 2026: el **66% del servicio habitual en hora punta** y el **33% el resto del día**, según también ${link(U.rodalies29, "el aviso de Rodalies")} actualizado el 26 de octubre de 2026, que enlaza el horario de servicios mínimos de cada línea. Para los demás trenes de Renfe (alta velocidad, larga y media distancia), Renfe tiene un aviso de servicios mínimos en ${link(U.renfe, "renfe.com")}.`,
+        en: `On **Rodalies de Catalunya**, regional lines included, trains run to the minimum services set by ${link(U.ordreRenfe29, "the order of the Generalitat's Department of Business and Labour")}, signed on 22 October 2026: **66% of the usual service at peak times** and **33% for the rest of the day**, as ${link(U.rodalies29, "Rodalies' notice")} (updated 26 October 2026) also says, which links a minimum-service timetable for every line. For Renfe's other trains (high-speed, long and medium distance), Renfe carries a minimum-services notice on ${link(U.renfe, "renfe.com")}.`,
       },
     },
     advice: {
@@ -214,13 +256,85 @@ export const STRIKES: Strike[] = [
     sources: [
       { name: "SEMAF convoca huelga en el Grupo Renfe para el 29 de octubre", url: U.semaf29, publisher: "SEMAF" },
       { name: "Convocatòria de vaga del dijous 29 d'octubre", url: U.rodalies29, publisher: "Rodalies de Catalunya" },
+      { name: "Ordre de 22 d'octubre de 2026: servei essencial de transport de viatgers per ferrocarril (rodalies i regionals) del Grupo Renfe (e-Tauler)", url: U.ordreRenfe29, publisher: "Departament d'Empresa i Treball" },
       { name: "Renfe: avisos de servicios mínimos", url: U.renfe, publisher: "Renfe" },
+    ],
+  },
+  {
+    id: "vaga-metges-2026-10-28",
+    dates: ["2026-10-28"],
+    indefinite: {},
+    scope: "health",
+    affects: ["health"],
+    title: {
+      ca: "vaga indefinida de metges (Metges de Catalunya)",
+      es: "huelga indefinida de médicos (Metges de Catalunya)",
+      en: "indefinite doctors' strike (Metges de Catalunya)",
+    },
+    short: {
+      ca: "vaga indefinida de metges a la sanitat pública i concertada, que continua: urgències i unitats especials funcionen",
+      es: "huelga indefinida de médicos en la sanidad pública y concertada, que continúa: urgencias y unidades especiales funcionan",
+      en: "indefinite doctors' strike in public and publicly funded healthcare, still on: A&E and special units keep running",
+    },
+    label: { ca: "metges des del 28 d'octubre", es: "médicos desde el 28 de octubre", en: "doctors since 28 October" },
+    facts: {
+      ca: [
+        "**Convocatòria:** el sindicat Metges de Catalunya (MC), que la va registrar el 15 de setembre de 2026. Els sindicats mèdics de tot l'Estat havien acordat començar una vaga indefinida el 28 d'octubre, i MC la fa a Catalunya.",
+        "**Des de quan:** des de les 8.00 h del dimecres 28 d'octubre de 2026, sense data de final. En paraules del secretari general de MC, Xavier Lleonart, «té data d'inici, però no de final».",
+        "**Qui hi està cridat:** el personal facultatiu (metges i altres facultatius, també els residents en formació) dels hospitals, els CAP i la resta de centres de la xarxa sanitària pública SISCAT i de les entitats adscrites al CatSalut o al Departament de Salut.",
+        `**Per què:** MC reclama un conveni propi per als metges i que el Departament de Salut negociï amb el sindicat; diu que només hi ha «dues sortides possibles» per a la vaga, una negociació «real i efectiva» amb MC o unes eleccions, segons ${link(U.metgesStrike, "el seu comunicat del 28 d'octubre")}.`,
+      ],
+      es: [
+        "**Convocatoria:** el sindicato Metges de Catalunya (MC), que la registró el 15 de septiembre de 2026. Los sindicatos médicos de toda España habían acordado empezar una huelga indefinida el 28 de octubre, y MC la hace en Cataluña.",
+        "**Desde cuándo:** desde las 8.00 h del miércoles 28 de octubre de 2026, sin fecha de final. En palabras del secretario general de MC, Xavier Lleonart, «té data d'inici, però no de final» (tiene fecha de inicio, pero no de final).",
+        "**A quién llama:** al personal facultativo (médicos y otros facultativos, también los residentes en formación) de los hospitales, los CAP y el resto de centros de la red sanitaria pública SISCAT y de las entidades adscritas al CatSalut o al Departament de Salut.",
+        `**Por qué:** MC reclama un convenio propio para los médicos y que el Departament de Salut negocie con el sindicato; dice que solo hay dos salidas posibles para la huelga, una negociación real y efectiva con MC o unas elecciones, según ${link(U.metgesStrike, "su comunicado del 28 de octubre")}.`,
+      ],
+      en: [
+        "**Called by:** the doctors' union Metges de Catalunya (MC), which registered it on 15 September 2026. Doctors' unions across Spain had agreed to start an indefinite strike on 28 October, and MC is holding it in Catalonia.",
+        "**Since when:** 08:00 on Wednesday 28 October 2026, with no end date. In the words of MC's general secretary, Xavier Lleonart, it \"té data d'inici, però no de final\" (has a start date but no end date).",
+        "**Who is called out:** doctors and other medical graduates (residents in training included) at hospitals, primary care centres (CAP) and the other centres of Catalonia's public health network SISCAT and the bodies attached to CatSalut or the Health Department.",
+        `**Why:** MC wants a collective agreement of doctors' own and for the Health Department to negotiate with the union; it says there are only two ways out of the strike, real and effective negotiation with MC or elections, according to ${link(U.metgesStrike, "its statement of 28 October")}.`,
+      ],
+    },
+    minimumServices: {
+      status: "published",
+      msShort: {
+        ca: "Serveis mínims publicats: urgències, UCI, parts, diàlisi i tractaments oncològics urgents, amb normalitat",
+        es: "Servicios mínimos publicados: urgencias, UCI, partos, diálisis y tratamientos oncológicos urgentes, con normalidad",
+        en: "Minimum services published: A&E, intensive care, maternity, dialysis and urgent cancer treatment run normally",
+      },
+      text: {
+        ca: `Els fixa ${link(U.ordreMetges, "l'ordre del Departament d'Empresa i Treball")} signada el 22 d'octubre de 2026. **Als hospitals**, funcionen amb normalitat les urgències i les unitats especials (cures intensives, unitats coronàries, hemodiàlisi, neonatologia, parts, radioteràpia i quimioteràpia), i s'ha de fer la cirurgia que no es pot ajornar. **Als CAP i als altres centres fora de l'hospital**, l'atenció urgent dels CUAP, els PAC i els PADES funciona amb normalitat, i la resta de serveis, amb el 25% de la plantilla el primer dia i un terç a partir del segon. Els altres serveis funcionen com un dia festiu, o amb el 50% de la plantilla on un festiu es treballa amb la mateixa plantilla que un dia feiner. Es mantenen el transport sanitari urgent, els serveis d'emergències mèdiques i els serveis farmacèutics dels centres, amb el personal dels torns de guàrdia i de nit, i les donacions del Banc de Sang i Teixits funcionen al 50%.`,
+        es: `Los fija ${link(U.ordreMetges, "la orden del Departament d'Empresa i Treball")} firmada el 22 de octubre de 2026. **En los hospitales**, funcionan con normalidad las urgencias y las unidades especiales (cuidados intensivos, unidades coronarias, hemodiálisis, neonatología, partos, radioterapia y quimioterapia), y debe hacerse la cirugía que no se puede aplazar. **En los CAP y los demás centros fuera del hospital**, la atención urgente de los CUAP, los PAC y los PADES funciona con normalidad, y el resto de servicios, con el 25% de la plantilla el primer día y un tercio a partir del segundo. Los demás servicios funcionan como un día festivo, o con el 50% de la plantilla donde un festivo se trabaja con la misma plantilla que un día laborable. Se mantienen el transporte sanitario urgente, los servicios de emergencias médicas y los servicios farmacéuticos de los centros, con el personal de los turnos de guardia y de noche, y las donaciones del Banc de Sang i Teixits funcionan al 50%.`,
+        en: `They are set by ${link(U.ordreMetges, "the order of the Generalitat's Department of Business and Labour")}, signed on 22 October 2026. **In hospitals**, A&E and the special units (intensive care, coronary units, haemodialysis, neonatal care, maternity, radiotherapy and chemotherapy) run normally, and surgery that cannot be postponed goes ahead. **At primary care and other centres outside hospitals**, urgent care at the CUAP, PAC and PADES runs normally, and other services with 25% of staff on the first day and a third from the second day on. All other services run as on a public holiday, or with 50% of staff where a holiday is normally staffed like a working day. Urgent patient transport, the medical emergency services and the centres' pharmacy services (with their on-call and night staff) are kept, and Blood and Tissue Bank donations run at 50%.`,
+      },
+    },
+    advice: {
+      ca: [
+        "Si tens una visita o una operació programada, pregunta al teu centre si es manté: fora de les urgències i de les unitats especials, l'ordre només garanteix una part de la plantilla.",
+        "Per a una urgència, les urgències dels hospitals, els CUAP i els PAC funcionen amb normalitat.",
+      ],
+      es: [
+        "Si tienes una visita o una operación programada, pregunta a tu centro si se mantiene: fuera de las urgencias y de las unidades especiales, la orden solo garantiza una parte de la plantilla.",
+        "Para una urgencia, las urgencias de los hospitales, los CUAP y los PAC funcionan con normalidad.",
+      ],
+      en: [
+        "If you have an appointment or an operation booked, ask your centre whether it goes ahead: outside A&E and the special units, the order only guarantees part of the staff.",
+        "For anything urgent, hospital A&E and the CUAP and PAC urgent-care centres run normally.",
+      ],
+    },
+    sources: [
+      { name: "Ordre de 22 d'octubre de 2026: servei essencial d'assistència sanitària dels centres del SISCAT (e-Tauler)", url: U.ordreMetges, publisher: "Departament d'Empresa i Treball" },
+      { name: "MC: «Prou d'excuses, Salut pot negociar si vol i fins ara no ha volgut» (28/10/2026)", url: U.metgesStrike, publisher: "Metges de Catalunya" },
+      { name: "Els sindicats mèdics acorden iniciar la vaga indefinida de facultatius el proper 28 d'octubre (10/09/2026)", url: U.metgesCall, publisher: "Metges de Catalunya" },
     ],
   },
   {
     id: "vaga-ouigo-2026-10-30",
     dates: ["2026-10-30", "2026-11-02"],
     scope: "rail",
+    affects: ["longDistance"],
     title: {
       ca: "vaga de maquinistes d'Ouigo (SEMAF)",
       es: "huelga de maquinistas de Ouigo (SEMAF)",
@@ -271,9 +385,82 @@ export const STRIKES: Strike[] = [
     sources: [{ name: "Trenes afectados por huelga de maquinistas", url: U.ouigoStrike, publisher: "OUIGO España" }],
   },
   {
+    id: "vaga-renfe-2026-11-10",
+    dates: ["2026-11-10", "2026-11-12"],
+    scope: "rail",
+    affects: ["rodalies", "longDistance"],
+    title: {
+      ca: "vaga de maquinistes del Grup Renfe (SEMAF)",
+      es: "huelga de maquinistas del Grupo Renfe (SEMAF)",
+      en: "Renfe train drivers' strike (SEMAF)",
+    },
+    short: {
+      ca: "vaga de maquinistes de Renfe, que afecta Rodalies: aturada total el 10 i aturades parcials el 12",
+      es: "huelga de maquinistas de Renfe, que afecta a Rodalies: paro total el 10 y paros parciales el 12",
+      en: "Renfe train drivers' strike, which affects Rodalies: a full stoppage on the 10th, partial stoppages on the 12th",
+    },
+    label: {
+      ca: "Renfe el 10 i el 12 de novembre",
+      es: "Renfe el 10 y el 12 de noviembre",
+      en: "Renfe on 10 and 12 November",
+    },
+    facts: {
+      ca: [
+        `**Convocatòria:** el sindicat de maquinistes SEMAF, que la va anunciar el 29 d'octubre de 2026, el dia de la vaga anterior, en ${link(U.semaf1012, "el seu comunicat núm. 2026-51")}.`,
+        "**Dies:** el dimarts 10 de novembre, «paro total» (aturada total); el dijous 12 de novembre, «paros parciales a lo largo de la jornada» (aturades parcials al llarg del dia). SEMAF no n'ha publicat les hores.",
+        "**Qui hi està cridat:** el personal de conducció del Grup Renfe, segons SEMAF. El metro, els autobusos, el tramvia i FGC no formen part de la convocatòria.",
+        "**Entre els dos dies**, el dimecres 11 de novembre, hi ha la vaga general.",
+      ],
+      es: [
+        `**Convocatoria:** el sindicato de maquinistas SEMAF, que la anunció el 29 de octubre de 2026, el día de la huelga anterior, en ${link(U.semaf1012, "su comunicado n.º 2026-51")}.`,
+        "**Días:** el martes 10 de noviembre, «paro total»; el jueves 12 de noviembre, «paros parciales a lo largo de la jornada». SEMAF no ha publicado las horas.",
+        "**A quién llama:** al personal de conducción del Grupo Renfe, según SEMAF. El metro, los autobuses, el tranvía y FGC no forman parte de la convocatoria.",
+        "**Entre los dos días**, el miércoles 11 de noviembre, está la huelga general.",
+      ],
+      en: [
+        `**Called by:** the train drivers' union SEMAF, which announced it on 29 October 2026, the day of its previous strike, in ${link(U.semaf1012, "its notice no. 2026-51")}.`,
+        "**Days:** Tuesday 10 November, a \"paro total\" (full stoppage); Thursday 12 November, \"paros parciales a lo largo de la jornada\" (partial stoppages during the day). SEMAF has not published the hours.",
+        "**Who is called out:** Renfe Group drivers, according to SEMAF. The metro, buses, tram and FGC are not part of it.",
+        "**In between**, on Wednesday 11 November, is the general strike.",
+      ],
+    },
+    minimumServices: {
+      status: "pending",
+      msShort: {
+        ca: "Serveis mínims encara no publicats",
+        es: "Servicios mínimos aún no publicados",
+        en: "Minimum services not published yet",
+      },
+      text: {
+        ca: `**Encara no s'han publicat** (consultat el 30 d'octubre de 2026 a la ${link(U.treballMs, "llista de vagues amb serveis mínims del Departament d'Empresa i Treball")} i a Rodalies). Per a Rodalies i els regionals els fixa el Departament d'Empresa i Treball per ordre: per a la vaga del 29 d'octubre, l'ordre es va signar el 22 d'octubre, una setmana abans, i Rodalies va publicar l'horari de cada línia. Per a l'alta velocitat i la llarga distància, el Govern espanyol. Els afegirem aquí quan surtin.`,
+        es: `**Aún no se han publicado** (consultado el 30 de octubre de 2026 en la ${link(U.treballMs, "lista de huelgas con servicios mínimos del Departament d'Empresa i Treball")} y en Rodalies). Para Rodalies y los regionales los fija el Departament d'Empresa i Treball por orden: para la huelga del 29 de octubre, la orden se firmó el 22 de octubre, una semana antes, y Rodalies publicó el horario de cada línea. Para la alta velocidad y la larga distancia, el Gobierno de España. Los añadiremos aquí en cuanto salgan.`,
+        en: `**Not published yet** (checked on 30 October 2026 on the ${link(U.treballMs, "Department of Business and Labour's list of strikes with minimum services")} and at Rodalies). For Rodalies and regional trains, the Department of Business and Labour sets them by order: for the 29 October strike the order was signed on 22 October, a week before, and Rodalies then published a timetable for each line. For high-speed and long-distance trains, the Spanish government sets them. We will add them here as soon as they are out.`,
+      },
+    },
+    advice: {
+      ca: [
+        `Si has d'agafar Rodalies o un tren de Renfe aquests dies, mira l'horari de serveis mínims de la teva línia quan es publiqui i, el mateix dia, ${link(U.rodaliesStatus, "l'estat del servei")}.`,
+        "El dia 12 són aturades parcials i SEMAF no n'ha dit les hores: compta que el servei pot canviar al llarg del dia.",
+      ],
+      es: [
+        `Si tienes que coger Rodalies o un tren de Renfe esos días, mira el horario de servicios mínimos de tu línea cuando se publique y, el mismo día, ${link(U.rodaliesStatus, "el estado del servicio")}.`,
+        "El día 12 son paros parciales y SEMAF no ha dicho las horas: cuenta con que el servicio puede cambiar a lo largo del día.",
+      ],
+      en: [
+        `If you need Rodalies or a Renfe train on those days, check your line's minimum-service timetable once it is out and, on the day, ${link(U.rodaliesStatus, "the live service status")}.`,
+        "The 12th brings partial stoppages and SEMAF has not given the hours: expect service to change during the day.",
+      ],
+    },
+    sources: [
+      { name: "SEMAF continúa convocando huelgas los días 10 y 12 de noviembre en el Grupo Renfe (nº 2026-51, 29/10/2026)", url: U.semaf1012, publisher: "SEMAF" },
+      { name: "Informació de vagues amb serveis mínims (e-Tauler)", url: U.treballMs, publisher: "Departament d'Empresa i Treball" },
+    ],
+  },
+  {
     id: "vaga-general-2026-11-11",
     dates: ["2026-11-11"],
     scope: "general",
+    affects: ["rodalies", "longDistance", "metroBus", "fgcTram", "health", "schools"],
     title: {
       ca: "vaga general de 24 hores",
       es: "huelga general de 24 horas",
@@ -322,9 +509,9 @@ export const STRIKES: Strike[] = [
         en: "Minimum services not published yet",
       },
       text: {
-        ca: `**Encara no s'han publicat** (consultat el 27 d'octubre de 2026). Els dels serveis que depenen de la Generalitat (Rodalies i regionals, metro, autobusos, tramvia, FGC, escoles, sanitat pública i la mateixa Administració) els fixarà el Departament d'Empresa i Treball amb una ordre que es publica al ${link(U.dogc, "DOGC")}; els dels serveis de l'Estat, com els trens d'alta velocitat i de llarga distància, el Govern espanyol. A les vagues generals del 2024, l'ordre es va signar dos o tres dies abans de la vaga. Els afegirem aquí quan surtin.`,
-        es: `**Aún no se han publicado** (consultado el 27 de octubre de 2026). Los de los servicios que dependen de la Generalitat (Rodalies y regionales, metro, autobuses, tranvía, FGC, escuelas, sanidad pública y la propia Administración) los fijará el Departament d'Empresa i Treball con una orden que se publica en el ${link(U.dogc, "DOGC")}; los de los servicios del Estado, como los trenes de alta velocidad y de larga distancia, el Gobierno de España. En las huelgas generales de 2024, la orden se firmó dos o tres días antes de la huelga. Los añadiremos aquí en cuanto salgan.`,
-        en: `**Not published yet** (checked on 27 October 2026). For services that answer to the Generalitat (Rodalies and regional trains, metro, buses, tram, FGC, schools, public healthcare and the Catalan administration itself), the Department of Business and Labour will set them in an order published in the ${link(U.dogc, "DOGC")}, the Catalan official gazette; for State services such as high-speed and long-distance trains, the Spanish government sets them. In the 2024 general strikes the order was signed two or three days before the strike. We will add them here as soon as they are out.`,
+        ca: `**Encara no s'han publicat** (consultat el 30 d'octubre de 2026). Els dels serveis que depenen de la Generalitat (Rodalies i regionals, metro, autobusos, tramvia, FGC, escoles, sanitat pública i la mateixa Administració) els fixarà el Departament d'Empresa i Treball amb una ordre que es publica al ${link(U.dogc, "DOGC")}; els dels serveis de l'Estat, com els trens d'alta velocitat i de llarga distància, el Govern espanyol. A les vagues generals del 2024, l'ordre es va signar dos o tres dies abans de la vaga. Els afegirem aquí quan surtin.`,
+        es: `**Aún no se han publicado** (consultado el 30 de octubre de 2026). Los de los servicios que dependen de la Generalitat (Rodalies y regionales, metro, autobuses, tranvía, FGC, escuelas, sanidad pública y la propia Administración) los fijará el Departament d'Empresa i Treball con una orden que se publica en el ${link(U.dogc, "DOGC")}; los de los servicios del Estado, como los trenes de alta velocidad y de larga distancia, el Gobierno de España. En las huelgas generales de 2024, la orden se firmó dos o tres días antes de la huelga. Los añadiremos aquí en cuanto salgan.`,
+        en: `**Not published yet** (checked on 30 October 2026). For services that answer to the Generalitat (Rodalies and regional trains, metro, buses, tram, FGC, schools, public healthcare and the Catalan administration itself), the Department of Business and Labour will set them in an order published in the ${link(U.dogc, "DOGC")}, the Catalan official gazette; for State services such as high-speed and long-distance trains, the Spanish government sets them. In the 2024 general strikes the order was signed two or three days before the strike. We will add them here as soon as they are out.`,
       },
     },
     advice: {
@@ -358,13 +545,38 @@ export const STRIKES: Strike[] = [
 /* Date logic (deterministic: only STRIKES_AS_OF decides upcoming vs past)    */
 /* -------------------------------------------------------------------------- */
 
-export function lastDay(strike: Strike): string {
-  return strike.dates[strike.dates.length - 1] ?? "";
+/** An indefinite strike nobody has recorded as over. */
+export function isOpen(strike: Strike): boolean {
+  return Boolean(strike.indefinite) && !strike.indefinite?.endedOn;
 }
 
-/** Upcoming or under way on `asOf`; past from the day after its last day. */
+/** The last day of action; for an indefinite strike, the day it ended (or its first day while it is open). */
+export function lastDay(strike: Strike): string {
+  return strike.indefinite?.endedOn ?? strike.dates[strike.dates.length - 1] ?? "";
+}
+
+/** Upcoming or under way on `asOf`; past from the day after its last day. An open indefinite strike is never past. */
 export function isUpcoming(strike: Strike, asOf: string): boolean {
-  return lastDay(strike) >= asOf;
+  return isOpen(strike) || lastDay(strike) >= asOf;
+}
+
+/** Whether `asOf` is a day of action: one of its dates, or any day of an indefinite strike once it has begun. */
+export function isOnDay(strike: Strike, asOf: string): boolean {
+  if (strike.indefinite) return (strike.dates[0] ?? "") <= asOf && (isOpen(strike) || asOf <= lastDay(strike));
+  return strike.dates.includes(asOf);
+}
+
+/** Days between two ISO dates (b - a). */
+function daysBetween(a: string, b: string): number {
+  return Math.round((Date.parse(`${b}T12:00:00Z`) - Date.parse(`${a}T12:00:00Z`)) / 86_400_000);
+}
+
+/** An open indefinite strike must be re-checked on the organiser at least this often. */
+export const OPEN_STRIKE_RECHECK_DAYS = 7;
+
+/** Open indefinite strikes the page has not re-checked for more than a week on `today`. */
+export function unrecheckedOpenStrikes(today: string, asOf: string = STRIKES_AS_OF, strikes: Strike[] = STRIKES): Strike[] {
+  return strikes.filter((strike) => isOpen(strike) && daysBetween(asOf, today) > OPEN_STRIKE_RECHECK_DAYS);
 }
 
 export function upcomingStrikes(asOf: string, strikes: Strike[] = STRIKES): Strike[] {
@@ -385,15 +597,41 @@ export function madridDate(instant: Date): string {
  * before `today`: the module was not brought up to date after them.
  */
 export function staleStrikes(today: string, asOf: string = STRIKES_AS_OF, strikes: Strike[] = STRIKES): Strike[] {
-  return upcomingStrikes(asOf, strikes).filter((strike) => lastDay(strike) < today);
+  return upcomingStrikes(asOf, strikes).filter((strike) => !isOpen(strike) && lastDay(strike) < today);
 }
 
 const AND: Record<Locale, string> = { ca: " i ", es: " y ", en: " and " };
+const FROM: Record<Locale, string> = { ca: "des del ", es: "desde el ", en: "from " };
+const TO: Record<Locale, string> = { ca: " fins al ", es: " hasta el ", en: " to " };
 
-/** "dijous 29 d'octubre de 2026" / "divendres 30 d'octubre i dilluns 2 de novembre de 2026". */
+/**
+ * "dijous 29 d'octubre de 2026" / "divendres 30 d'octubre i dilluns 2 de
+ * novembre de 2026"; an indefinite strike: "des del dimecres 28 d'octubre de
+ * 2026", or "des del ... fins al ..." once it has ended.
+ */
 export function strikeDays(strike: Strike, locale: Locale): string {
+  if (strike.indefinite) {
+    const first = strike.dates[0] ?? "";
+    const end = strike.indefinite.endedOn;
+    if (!end) return `${FROM[locale]}${dayDate(first, locale)}`;
+    return `${FROM[locale]}${dayDate(first, locale, first.slice(0, 4) !== end.slice(0, 4))}${TO[locale]}${dayDate(end, locale)}`;
+  }
   const last = strike.dates.length - 1;
   return strike.dates.map((iso, index) => dayDate(iso, locale, index === last)).join(AND[locale]);
+}
+
+/** "del dimarts 10 ..." / "de la vaga indefinida ..." : after "Serveis mínims". */
+function strikeRef(strike: Strike, locale: Locale): string {
+  const days = strikeDays(strike, locale);
+  if (strike.indefinite) return { ca: `de la ${strike.title.ca}`, es: `de la ${strike.title.es}`, en: `for the ${strike.title.en}` }[locale];
+  return { ca: `del ${days}`, es: `del ${days}`, en: `on ${days}` }[locale];
+}
+
+/** "el dimarts 10 ..." / "durant la vaga indefinida ...": after "Què cal fer". */
+function strikeWhen(strike: Strike, locale: Locale): string {
+  const days = strikeDays(strike, locale);
+  if (strike.indefinite) return { ca: `durant la ${strike.title.ca}`, es: `durante la ${strike.title.es}`, en: `during the ${strike.title.en}` }[locale];
+  return { ca: `el ${days}`, es: `el ${days}`, en: `on ${days}` }[locale];
 }
 
 const cap = (text: string) => text.charAt(0).toUpperCase() + text.slice(1);
@@ -406,32 +644,40 @@ const DESCRIPTION_LIMIT = 155;
 
 const DESCRIPTION: Record<Locale, { prefix: string; base: string; fallback: string }> = {
   ca: {
-    prefix: "Properes vagues: ",
-    base: "Què funciona a Catalunya i on es publiquen els serveis mínims oficials.",
+    prefix: "Vagues: ",
+    base: "Què funciona i serveis mínims oficials.",
     fallback: "Què funciona a Catalunya els dies de vaga: Rodalies, metro, bus, escoles i salut, qui fixa els serveis mínims i on es publiquen.",
   },
   es: {
-    prefix: "Próximas huelgas: ",
-    base: "Qué funciona en Cataluña y dónde se publican los servicios mínimos oficiales.",
+    prefix: "Huelgas: ",
+    base: "Qué funciona y servicios mínimos oficiales.",
     fallback: "Qué funciona en Cataluña los días de huelga: Rodalies, metro, bus, escuelas y salud, quién fija los servicios mínimos y dónde se publican.",
   },
   en: {
-    prefix: "Next strikes: ",
-    base: "What runs in Barcelona and Catalonia, and where minimum services are published.",
+    prefix: "Strikes: ",
+    base: "What runs in Barcelona and official minimum services.",
     fallback: "What runs in Barcelona and Catalonia on strike days: Rodalies, metro, buses, schools and health, and where official minimum services are published.",
   },
 };
 
+/** General strikes first, then strikes in progress, then those touching more services, then by date. */
+function descriptionRank(strike: Strike): number[] {
+  return [strike.scope === "general" ? 0 : 1, isOpen(strike) ? 0 : 1, -strike.affects.length];
+}
+
 /**
- * The meta description names the next strikes, general strikes first, as many
- * as fit in 155 characters, printed in date order. With none upcoming it falls
- * back to the evergreen line.
+ * The meta description names the strikes in progress and the next ones,
+ * general strikes first, as many as fit in 155 characters, printed in date
+ * order. With none upcoming it falls back to the evergreen line.
  */
 export function strikesDescription(locale: Locale, asOf: string = STRIKES_AS_OF, strikes: Strike[] = STRIKES): string {
   const { prefix, base, fallback } = DESCRIPTION[locale];
-  const ranked = [...upcomingStrikes(asOf, strikes)].sort(
-    (a, b) => Number(b.scope === "general") - Number(a.scope === "general") || (a.dates[0] ?? "").localeCompare(b.dates[0] ?? ""),
-  );
+  const ranked = [...upcomingStrikes(asOf, strikes)].sort((a, b) => {
+    const ra = descriptionRank(a);
+    const rb = descriptionRank(b);
+    for (let i = 0; i < ra.length; i += 1) if (ra[i] !== rb[i]) return (ra[i] ?? 0) - (rb[i] ?? 0);
+    return (a.dates[0] ?? "").localeCompare(b.dates[0] ?? "");
+  });
   const chosen: Strike[] = [];
   const compose = (picked: Strike[]) =>
     `${prefix}${[...picked].sort((a, b) => (a.dates[0] ?? "").localeCompare(b.dates[0] ?? "")).map((s) => s.label[locale]).join(", ")}. ${base}`;
@@ -444,24 +690,24 @@ export function strikesDescription(locale: Locale, asOf: string = STRIKES_AS_OF,
 export const STRIKES_META: Record<Locale, { path: string; title: string; seoTitle: string; excerpt: string }> = {
   ca: {
     path: "guies/vaga-avui-catalunya",
-    title: "Vaga avui a Catalunya: què funciona, serveis mínims i properes vagues",
-    seoTitle: "Vaga avui a Catalunya: què funciona i serveis mínims",
+    title: "Vaga avui i demà a Catalunya: què funciona, serveis mínims i calendari de vagues",
+    seoTitle: "Vaga avui i demà a Catalunya: què funciona i serveis mínims",
     excerpt:
-      "Les properes vagues que afecten Catalunya, què funciona cada dia i els serveis mínims oficials: qui els fixa, quan es publiquen i on consultar-los.",
+      "Les vagues en curs i les properes que afecten Catalunya, què funciona cada dia (Rodalies, metro, bus, sanitat, escoles) i els serveis mínims oficials.",
   },
   es: {
     path: "guias/huelga-hoy-cataluna",
-    title: "Huelga hoy en Cataluña: qué funciona, servicios mínimos y próximas huelgas",
-    seoTitle: "Huelga hoy en Cataluña: qué funciona y servicios mínimos",
+    title: "Huelga hoy y mañana en Cataluña: qué funciona, servicios mínimos y calendario de huelgas",
+    seoTitle: "Huelga hoy y mañana en Cataluña: qué funciona y calendario",
     excerpt:
-      "Las próximas huelgas que afectan a Cataluña, qué funciona cada día y los servicios mínimos oficiales: quién los fija, cuándo se publican y dónde consultarlos.",
+      "Las huelgas en curso y las próximas que afectan a Cataluña, qué funciona cada día (Rodalies, metro, bus, sanidad, colegios) y los servicios mínimos oficiales.",
   },
   en: {
     path: "guides/strike-barcelona-catalonia-today",
-    title: "Strike in Barcelona and Catalonia today: what runs, minimum services and the next strikes",
-    seoTitle: "Strike in Barcelona and Catalonia today: what runs",
+    title: "Barcelona and Catalonia strike today: trains, metro, what runs and the next strikes",
+    seoTitle: "Barcelona strike today: trains, metro and what runs",
     excerpt:
-      "The next strikes affecting Barcelona and Catalonia, what runs on each day and the official minimum services: who sets them, when they come out and where to check.",
+      "Strikes under way and coming up in Barcelona and Catalonia, what runs on each day (trains, metro, buses, health, schools) and the official minimum services.",
   },
 };
 
@@ -470,14 +716,29 @@ export const STRIKES_META: Record<Locale, { path: string; title: string; seoTitl
 /* -------------------------------------------------------------------------- */
 
 type Copy = {
-  leadUpcoming: (items: string, date: string) => string;
+  /** Strikes under way on the as-of day. */
+  leadNow: (items: string, date: string) => string;
+  leadNoneNow: (date: string) => string;
+  /** Strikes that start after the as-of day. */
+  leadNext: (items: string) => string;
   leadNone: (date: string) => string;
-  pending: (days: string) => string;
+  /** `refs`: "del dimarts 10 ... i del dimecres 11 ...". */
+  pending: (refs: string) => string;
+  /** "Metro, bus and FGC": `refs` of the strikes that touch them, or none. */
+  cityTransport: (refs: string[]) => string;
+  runsHeading: string;
+  runsCaption: string;
+  runsHeaders: [string, string];
+  services: Record<ServiceKey, string>;
+  noStrike: string;
+  runsNote: (date: string) => string;
   keyFactsTitle: string;
   dataTitle: string;
   data: string;
-  msHeading: (days: string) => string;
-  adviceHeading: (days: string) => string;
+  /** `ref`: "del dimarts 10 ..." / "de la vaga indefinida ...". */
+  msHeading: (ref: string) => string;
+  /** `when`: "el dimarts 10 ..." / "durant la vaga indefinida ...". */
+  adviceHeading: (when: string) => string;
   pastHeading: string;
   pastIntro: string;
   msLabel: string;
@@ -501,20 +762,39 @@ type Copy = {
   faqToday: (items: string, date: string) => string;
   faqTodayNone: (date: string) => string;
   faqTodayQ: string;
-  faqMsQ: (days: string) => string;
+  faqMsQ: (when: string) => string;
   faqStatic: { question: string; answer: string }[];
 };
 
 const COPY: Record<Locale, Copy> = {
   ca: {
-    leadUpcoming: (items, date) => `**Properes vagues que afecten Catalunya, segons les fonts oficials consultades el ${date}:** ${items}.`,
+    leadNow: (items, date) => `**Vagues en curs a Catalunya el ${date}, segons les fonts oficials:** ${items}.`,
+    leadNoneNow: (date) => `**El ${date} no hi havia cap vaga en curs a Catalunya a les fonts oficials.**`,
+    leadNext: (items) => `**Properes vagues:** ${items}.`,
     leadNone: (date) => `**No hi ha cap vaga anunciada que afecti Catalunya a les fonts oficials consultades el ${date}.** Quan se'n convoqui una, l'afegirem aquí amb els serveis mínims oficials.`,
-    pending: (days) => `Els serveis mínims del ${days} encara no s'han publicat: es fixen per ordre o resolució pocs dies abans.`,
-    keyFactsTitle: "Properes vagues, d'un cop d'ull",
+    pending: (refs) => `Els serveis mínims ${refs} encara no s'han publicat: es fixen per ordre o resolució pocs dies abans.`,
+    cityTransport: (refs) =>
+      refs.length === 0
+        ? "**Metro, bus i FGC:** cap d'aquestes vagues no els afecta."
+        : `**Metro, bus i FGC:** de totes aquestes vagues, només els ${refs.length === 1 ? "afecta la" : "afecten les"} ${refs.join(" i ")}.`,
+    runsHeading: "Què funciona: les vagues anunciades, servei per servei",
+    runsCaption: "Quines vagues anunciades afecten cada servei",
+    runsHeaders: ["Servei", "Vagues anunciades que l'afecten"],
+    services: {
+      rodalies: "Rodalies i regionals",
+      metroBus: "Metro i autobusos de TMB",
+      fgcTram: "FGC i tramvia",
+      longDistance: "Alta velocitat i llarga distància (Renfe, Ouigo)",
+      health: "Hospitals, CAP i urgències",
+      schools: "Escoles i llars d'infants",
+    },
+    noStrike: "Cap vaga anunciada",
+    runsNote: (date) => `Consultat el ${date}. Els serveis mínims de cada vaga són a la seva secció, més avall.`,
+    keyFactsTitle: "Les vagues, d'un cop d'ull",
     dataTitle: verifiedLine("ca", STRIKES_VERIFIED),
     data: "Només hi posem el que publiquen els sindicats convocants, els operadors i el DOGC o el BOE, i no el que avança la premsa. Cada vaga té la seva secció, amb data, i quan passa queda a la llista de vagues anteriors.",
-    msHeading: (days) => `Serveis mínims del ${days}`,
-    adviceHeading: (days) => `Què cal fer el ${days}`,
+    msHeading: (ref) => `Serveis mínims ${ref}`,
+    adviceHeading: (when) => `Què cal fer ${when}`,
     pastHeading: "Vagues anteriors",
     pastIntro: "El que s'havia anunciat i publicat abans de cada vaga, tal com era a les fonts oficials.",
     msLabel: "Serveis mínims",
@@ -561,9 +841,9 @@ const COPY: Record<Locale, Copy> = {
       "El menjador i el transport escolar també hi tenen serveis mínims: el 2024, el 50% del personal de menjador i activitats complementàries, i el transport escolar mantingut cap a les escoles d'infantil i primària sense transport públic alternatiu.",
     ],
     faqTodayQ: "Hi ha vaga avui a Catalunya?",
-    faqToday: (items, date) => `Aquesta pàgina es va actualitzar el ${date}. Les properes vagues anunciades que afecten Catalunya són: ${items}.`,
+    faqToday: (items, date) => `Aquesta pàgina es va actualitzar el ${date}. Les vagues anunciades que afecten Catalunya, en curs i properes, són: ${items}.`,
     faqTodayNone: (date) => `Aquesta pàgina es va actualitzar el ${date} i en aquell moment no hi havia cap vaga anunciada que afectés Catalunya a les fonts oficials que seguim.`,
-    faqMsQ: (days) => `Quins serveis mínims hi ha el ${days}?`,
+    faqMsQ: (when) => `Quins serveis mínims hi ha ${when}?`,
     faqStatic: [
       { question: "Qui fixa els serveis mínims a Catalunya?", answer: "El Departament d'Empresa i Treball de la Generalitat, per ordre publicada al DOGC, en els serveis de competència de la Generalitat: Rodalies, metro, autobusos, FGC, escoles, sanitat pública i la mateixa Administració. Els serveis de l'Estat, com l'alta velocitat i la llarga distància, els fixa el Govern espanyol." },
       { question: "Quan es publiquen els serveis mínims?", answer: "Pocs dies abans de la vaga. A les vagues generals del 2024, l'ordre es va signar dos o tres dies abans i el DOGC la va publicar entre dos dies abans i el mateix dia de la vaga." },
@@ -572,14 +852,33 @@ const COPY: Record<Locale, Copy> = {
     ],
   },
   es: {
-    leadUpcoming: (items, date) => `**Próximas huelgas que afectan a Cataluña, según las fuentes oficiales consultadas el ${date}:** ${items}.`,
+    leadNow: (items, date) => `**Huelgas en curso en Cataluña el ${date}, según las fuentes oficiales:** ${items}.`,
+    leadNoneNow: (date) => `**El ${date} no había ninguna huelga en curso en Cataluña en las fuentes oficiales.**`,
+    leadNext: (items) => `**Próximas huelgas:** ${items}.`,
     leadNone: (date) => `**No hay ninguna huelga anunciada que afecte a Cataluña en las fuentes oficiales consultadas el ${date}.** Cuando se convoque una, la añadiremos aquí con los servicios mínimos oficiales.`,
-    pending: (days) => `Los servicios mínimos del ${days} aún no se han publicado: se fijan por orden o resolución pocos días antes.`,
-    keyFactsTitle: "Próximas huelgas, de un vistazo",
+    pending: (refs) => `Los servicios mínimos ${refs} aún no se han publicado: se fijan por orden o resolución pocos días antes.`,
+    cityTransport: (refs) =>
+      refs.length === 0
+        ? "**Metro, bus y FGC:** no les afecta ninguna de estas huelgas."
+        : `**Metro, bus y FGC:** de todas estas huelgas, solo les ${refs.length === 1 ? "afecta la" : "afectan las"} ${refs.join(" y ")}.`,
+    runsHeading: "Qué funciona: las huelgas anunciadas, servicio por servicio",
+    runsCaption: "Qué huelgas anunciadas afectan a cada servicio",
+    runsHeaders: ["Servicio", "Huelgas anunciadas que le afectan"],
+    services: {
+      rodalies: "Rodalies y regionales",
+      metroBus: "Metro y autobuses de TMB",
+      fgcTram: "FGC y tranvía",
+      longDistance: "Alta velocidad y larga distancia (Renfe, Ouigo)",
+      health: "Hospitales, CAP y urgencias",
+      schools: "Colegios y guarderías",
+    },
+    noStrike: "Ninguna huelga anunciada",
+    runsNote: (date) => `Consultado el ${date}. Los servicios mínimos de cada huelga están en su sección, más abajo.`,
+    keyFactsTitle: "Las huelgas, de un vistazo",
     dataTitle: verifiedLine("es", STRIKES_VERIFIED),
     data: "Solo ponemos lo que publican los sindicatos convocantes, los operadores y el DOGC o el BOE, no lo que adelanta la prensa. Cada huelga tiene su sección, con fecha, y cuando pasa queda en la lista de huelgas anteriores.",
-    msHeading: (days) => `Servicios mínimos del ${days}`,
-    adviceHeading: (days) => `Qué hacer el ${days}`,
+    msHeading: (ref) => `Servicios mínimos ${ref}`,
+    adviceHeading: (when) => `Qué hacer ${when}`,
     pastHeading: "Huelgas anteriores",
     pastIntro: "Lo que se había anunciado y publicado antes de cada huelga, tal como estaba en las fuentes oficiales.",
     msLabel: "Servicios mínimos",
@@ -626,9 +925,9 @@ const COPY: Record<Locale, Copy> = {
       "El comedor y el transporte escolar también tienen servicios mínimos: en 2024, el 50% del personal de comedor y actividades complementarias, y el transporte escolar mantenido hacia las escuelas de infantil y primaria sin transporte público alternativo.",
     ],
     faqTodayQ: "¿Hay huelga hoy en Cataluña?",
-    faqToday: (items, date) => `Esta página se actualizó el ${date}. Las próximas huelgas anunciadas que afectan a Cataluña son: ${items}.`,
+    faqToday: (items, date) => `Esta página se actualizó el ${date}. Las huelgas anunciadas que afectan a Cataluña, en curso y próximas, son: ${items}.`,
     faqTodayNone: (date) => `Esta página se actualizó el ${date} y en ese momento no había ninguna huelga anunciada que afectara a Cataluña en las fuentes oficiales que seguimos.`,
-    faqMsQ: (days) => `¿Qué servicios mínimos hay el ${days}?`,
+    faqMsQ: (when) => `¿Qué servicios mínimos hay ${when}?`,
     faqStatic: [
       { question: "¿Quién fija los servicios mínimos en Cataluña?", answer: "El Departament d'Empresa i Treball de la Generalitat, por orden publicada en el DOGC, en los servicios de competencia de la Generalitat: Rodalies, metro, autobuses, FGC, escuelas, sanidad pública y la propia Administración. Los servicios del Estado, como la alta velocidad y la larga distancia, los fija el Gobierno de España." },
       { question: "¿Cuándo se publican los servicios mínimos?", answer: "Pocos días antes de la huelga. En las huelgas generales de 2024, la orden se firmó dos o tres días antes y el DOGC la publicó entre dos días antes y el mismo día de la huelga." },
@@ -637,14 +936,33 @@ const COPY: Record<Locale, Copy> = {
     ],
   },
   en: {
-    leadUpcoming: (items, date) => `**The next strikes affecting Barcelona and Catalonia, from the official sources checked on ${date}:** ${items}.`,
+    leadNow: (items, date) => `**Strikes under way in Barcelona and Catalonia on ${date}, according to the official sources:** ${items}.`,
+    leadNoneNow: (date) => `**On ${date} no strike was under way in Catalonia, according to the official sources.**`,
+    leadNext: (items) => `**Coming up:** ${items}.`,
     leadNone: (date) => `**No strike affecting Catalonia had been announced in the official sources checked on ${date}.** When one is called, we will add it here with the official minimum services.`,
-    pending: (days) => `Minimum services for ${days} have not been published yet: they are set by an order or resolution a few days before.`,
-    keyFactsTitle: "The next strikes at a glance",
+    pending: (refs) => `Minimum services ${refs} have not been published yet: they are set by an order or resolution a few days before.`,
+    cityTransport: (refs) =>
+      refs.length === 0
+        ? "**Metro, buses and FGC:** none of these strikes affects them."
+        : `**Metro, buses and FGC:** of these strikes, only the ${refs.join(" and the ")} ${refs.length === 1 ? "affects" : "affect"} them.`,
+    runsHeading: "What runs: the announced strikes, service by service",
+    runsCaption: "Which announced strikes affect each service",
+    runsHeaders: ["Service", "Announced strikes that affect it"],
+    services: {
+      rodalies: "Rodalies and regional trains",
+      metroBus: "TMB metro and buses",
+      fgcTram: "FGC and tram",
+      longDistance: "High-speed and long-distance trains (Renfe, Ouigo)",
+      health: "Hospitals, health centres and A&E",
+      schools: "Schools and nurseries",
+    },
+    noStrike: "No strike announced",
+    runsNote: (date) => `Checked on ${date}. Each strike's minimum services are in its own section below.`,
+    keyFactsTitle: "The strikes at a glance",
     dataTitle: verifiedLine("en", STRIKES_VERIFIED),
     data: "We only print what the unions calling a strike, the operators and the official gazettes (DOGC, BOE) publish, never what the press reports ahead of them. Each strike has its own dated section, which moves to the list of past strikes once it is over.",
-    msHeading: (days) => `Minimum services on ${days}`,
-    adviceHeading: (days) => `What to do on ${days}`,
+    msHeading: (ref) => `Minimum services ${ref}`,
+    adviceHeading: (when) => `What to do ${when}`,
     pastHeading: "Past strikes",
     pastIntro: "What had been announced and published before each strike, as it stood in the official sources.",
     msLabel: "Minimum services",
@@ -691,9 +1009,9 @@ const COPY: Record<Locale, Copy> = {
       "School meals and school buses also get minimum services: in 2024, 50% of lunchtime and after-school staff, and school transport kept running to nursery and primary schools with no public transport alternative.",
     ],
     faqTodayQ: "Is there a strike in Barcelona or Catalonia today?",
-    faqToday: (items, date) => `This page was last updated on ${date}. The next strikes announced that affect Catalonia are: ${items}.`,
+    faqToday: (items, date) => `This page was last updated on ${date}. The strikes announced that affect Catalonia, under way or coming up, are: ${items}.`,
     faqTodayNone: (date) => `This page was last updated on ${date}, when no strike affecting Catalonia had been announced in the official sources we follow.`,
-    faqMsQ: (days) => `What minimum services are there on ${days}?`,
+    faqMsQ: (when) => `What minimum services are there ${when}?`,
     faqStatic: [
       { question: "Who sets minimum services in Catalonia?", answer: "The Generalitat's Department of Business and Labour, by an order published in the DOGC, for services within the Generalitat's powers: Rodalies, metro, buses, FGC, schools, public healthcare and the Catalan administration. State services such as high-speed and long-distance trains get theirs from the Spanish government." },
       { question: "When are minimum services published?", answer: "A few days before the strike. In the 2024 general strikes the order was signed two or three days before, and the DOGC published it between two days before and the day of the strike itself." },
@@ -715,18 +1033,43 @@ function heading(level: 2 | 3, text: string, id?: string): Block {
   return { type: "heading", level, text, ...(id ? { id } : {}) } as Block;
 }
 
+/** "vaga del dimecres 11 ..." / the title of an indefinite strike: for the metro, bus and FGC line. */
+function strikeName(strike: Strike, locale: Locale): string {
+  if (strike.indefinite) return strike.title[locale];
+  const days = strikeDays(strike, locale);
+  return { ca: `vaga del ${days}`, es: `huelga del ${days}`, en: `strike on ${days}` }[locale];
+}
+
+/** One row per service: the upcoming strikes that touch it, in date order, or "none". */
+export function whatRunsRows(locale: Locale, asOf: string = STRIKES_AS_OF, strikes: Strike[] = STRIKES): string[][] {
+  const t = COPY[locale];
+  const upcoming = upcomingStrikes(asOf, strikes);
+  return SERVICE_KEYS.map((key) => {
+    const touching = upcoming.filter((strike) => strike.affects.includes(key));
+    return [t.services[key], touching.length > 0 ? touching.map((strike) => `${cap(strikeDays(strike, locale))}: ${strike.title[locale]}`).join("; ") : t.noStrike];
+  });
+}
+
 export function buildStrikesBody(locale: Locale, asOf: string = STRIKES_AS_OF, strikes: Strike[] = STRIKES): Block[] {
   const t = COPY[locale];
   const upcoming = upcomingStrikes(asOf, strikes);
   const past = pastStrikes(asOf, strikes);
-  const checked = dateYear(asOf, locale);
+  const checked = dayDate(asOf, locale);
+  const checkedShort = dateYear(asOf, locale);
   const items = upcoming.map((strike) => `${strikeDays(strike, locale)}, ${strike.short[locale]}`).join("; ");
   const pending = upcoming.filter((strike) => strike.minimumServices.status === "pending");
+  const city = upcoming.filter((strike) => strike.affects.includes("metroBus") || strike.affects.includes("fgcTram"));
 
   const blocks: Block[] = [];
 
   if (upcoming.length > 0) {
-    blocks.push(lead(`${t.leadUpcoming(items, checked)} ${pending.map((strike) => t.pending(strikeDays(strike, locale))).join(" ")}`.trim()));
+    const pendingLine = pending.length > 0 ? t.pending(pending.map((strike) => strikeRef(strike, locale)).join(AND[locale])) : "";
+    const now = upcoming.filter((strike) => isOnDay(strike, asOf));
+    const next = upcoming.filter((strike) => !isOnDay(strike, asOf));
+    const nowLine =
+      now.length > 0 ? t.leadNow(now.map((strike) => `${strike.title[locale]}, ${strikeDays(strike, locale)}`).join("; "), checked) : t.leadNoneNow(checked);
+    const nextLine = next.length > 0 ? t.leadNext(next.map((strike) => `${strikeDays(strike, locale)}, ${strike.short[locale]}`).join("; ")) : "";
+    blocks.push(lead([nowLine, nextLine, t.cityTransport(city.map((strike) => strikeName(strike, locale))), pendingLine].filter(Boolean).join(" ")));
     blocks.push(
       keyFacts(
         t.keyFactsTitle,
@@ -737,18 +1080,23 @@ export function buildStrikesBody(locale: Locale, asOf: string = STRIKES_AS_OF, s
       ),
     );
   } else {
-    blocks.push(lead(t.leadNone(checked)));
+    blocks.push(lead(t.leadNone(checkedShort)));
   }
 
   blocks.push(callout("official", t.dataTitle, t.data));
+
+  if (upcoming.length > 0) {
+    blocks.push(heading(2, t.runsHeading, "que-funciona"));
+    blocks.push(table(t.runsCaption, [...t.runsHeaders], whatRunsRows(locale, asOf, strikes), t.runsNote(checkedShort)));
+  }
 
   for (const strike of upcoming) {
     const days = strikeDays(strike, locale);
     blocks.push(heading(2, `${cap(days)}: ${strike.title[locale]}`, strike.id));
     blocks.push(list(...strike.facts[locale]));
-    blocks.push(...h3(t.msHeading(days), strike.minimumServices.text[locale]));
+    blocks.push(...h3(t.msHeading(strikeRef(strike, locale)), strike.minimumServices.text[locale]));
     if (strike.advice[locale].length > 0) {
-      blocks.push(heading(3, t.adviceHeading(days)));
+      blocks.push(heading(3, t.adviceHeading(strikeWhen(strike, locale))));
       blocks.push(list(...strike.advice[locale]));
     }
   }
@@ -774,10 +1122,10 @@ export function buildStrikesBody(locale: Locale, asOf: string = STRIKES_AS_OF, s
 
   const faqItems = [
     upcoming.length > 0
-      ? { question: t.faqTodayQ, answer: strip(t.faqToday(items, checked)) }
-      : { question: t.faqTodayQ, answer: strip(t.faqTodayNone(checked)) },
+      ? { question: t.faqTodayQ, answer: strip(t.faqToday(items, checkedShort)) }
+      : { question: t.faqTodayQ, answer: strip(t.faqTodayNone(checkedShort)) },
     ...upcoming.map((strike) => ({
-      question: t.faqMsQ(strikeDays(strike, locale)),
+      question: t.faqMsQ(strikeWhen(strike, locale)),
       answer: strip(strike.minimumServices.text[locale]),
     })),
     ...t.faqStatic,

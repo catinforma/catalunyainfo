@@ -3,6 +3,7 @@ import type { Locale } from "@/lib/i18n/config";
 
 import {
   ANNOUNCED_2026,
+  ANNOUNCEMENTS_CHECKED,
   DAYS,
   FESTIVE_VERIFIED,
   LIGHTS_PLAN_2026,
@@ -76,8 +77,8 @@ const SOURCES: B2Source[] = [
 export const CHRISTMAS_BARCELONA_META: Record<Locale, { path: string; title: string; seoTitle: string; seoDescription: string; excerpt: string }> = {
   ca: {
     path: "guies/nadal-a-barcelona",
-    title: "Nadal a Barcelona 2026: llums, pessebre de Sant Jaume i què obre",
-    seoTitle: "Nadal a Barcelona 2026: encesa de llums i què obre",
+    title: "Encesa de llums de Nadal a Barcelona 2026: data, pessebre de Sant Jaume i què obre",
+    seoTitle: "Encesa de llums de Nadal Barcelona 2026: quan és i què obre",
     seoDescription:
       "L'encesa dels llums de Nadal de Barcelona 2026, els carrers il·luminats, el pessebre de Sant Jaume i què obre el 25 i 26 de desembre i l'1 i 6 de gener.",
     excerpt:
@@ -85,8 +86,8 @@ export const CHRISTMAS_BARCELONA_META: Record<Locale, { path: string; title: str
   },
   es: {
     path: "guias/navidad-en-barcelona",
-    title: "Navidad en Barcelona 2026: luces, belén de Sant Jaume y qué abre",
-    seoTitle: "Navidad en Barcelona 2026: encendido de luces y qué abre",
+    title: "Encendido de luces de Navidad en Barcelona 2026: fecha, belén de Sant Jaume y qué abre",
+    seoTitle: "Luces de Navidad Barcelona 2026: cuándo es el encendido",
     seoDescription:
       "Encendido de las luces de Navidad de Barcelona 2026, calles iluminadas, el belén de Sant Jaume y qué abre el 25 y 26 de diciembre y el 1 y 6 de enero.",
     excerpt:
@@ -94,14 +95,38 @@ export const CHRISTMAS_BARCELONA_META: Record<Locale, { path: string; title: str
   },
   en: {
     path: "guides/christmas-in-barcelona",
-    title: "Christmas in Barcelona 2026: lights, nativity scene and what's open",
-    seoTitle: "Christmas in Barcelona 2026: lights and what's open",
+    title: "Christmas in Barcelona 2026: lights switch-on, nativity scene and what's open",
+    seoTitle: "Barcelona Christmas lights 2026: switch-on date, what's open",
     seoDescription:
       "Barcelona Christmas lights 2026: switch-on date and streets, the Plaça Sant Jaume nativity scene, and what is open on 25-26 December and 1 and 6 January.",
     excerpt:
       "Christmas in Barcelona in 2026: the lights switch-on and the lit streets, the nativity scene, what is open on the holidays, the metro and the traditions.",
   },
 };
+
+/**
+ * The snippet answers "when are the lights switched on": the official date
+ * once ANNOUNCED_2026 has it, otherwise "no official date yet" with last
+ * year's day (top-3 push, 30 Oct 2026: 2,600 impressions a week ask "cuándo
+ * encienden las luces" and the old snippet did not say).
+ */
+export function christmasBarcelonaDescription(locale: Locale, facts: Announcements = ANNOUNCED_2026): string {
+  const a = facts.lightsSwitchOn;
+  if (a) {
+    const day = dayDate(a.date, locale);
+    return {
+      ca: `Encesa de llums de Nadal de Barcelona 2026: el ${day}. Carrers il·luminats, pessebre de Sant Jaume i què obre per Nadal.`,
+      es: `Encendido de luces de Navidad de Barcelona 2026: el ${day}. Calles iluminadas, belén de Sant Jaume y qué abre en Navidad.`,
+      en: `Barcelona Christmas lights 2026: switch-on on ${day}. Lit streets, the Plaça Sant Jaume nativity scene and what's open.`,
+    }[locale];
+  }
+  const last = dayDate(PAST.lights2025.switchOn, locale, false);
+  return {
+    ca: `Encesa de llums de Nadal de Barcelona 2026: encara sense data oficial (el 2025, ${last}). Carrers il·luminats, pessebre i què obre.`,
+    es: `Encendido de luces de Navidad de Barcelona 2026: aún sin fecha oficial (en 2025, ${last}). Calles iluminadas, belén y qué abre en Navidad.`,
+    en: `Barcelona Christmas lights 2026: switch-on date not announced yet (2025: ${last}). Lit streets, the nativity scene and what's open.`,
+  }[locale];
+}
 
 /* -------------------------------------------------------------------------- */
 /* Sentences that change when a date is announced                             */
@@ -114,9 +139,9 @@ export function when(item: Announcement, locale: Locale): string {
 }
 
 export const CHECKED: Record<Locale, string> = {
-  ca: `comprovat el ${dateYear(FESTIVE_VERIFIED, "ca")}`,
-  es: `comprobado el ${dateYear(FESTIVE_VERIFIED, "es")}`,
-  en: `checked on ${dateYear(FESTIVE_VERIFIED, "en")}`,
+  ca: `comprovat el ${dateYear(ANNOUNCEMENTS_CHECKED, "ca")}`,
+  es: `comprobado el ${dateYear(ANNOUNCEMENTS_CHECKED, "es")}`,
+  en: `checked on ${dateYear(ANNOUNCEMENTS_CHECKED, "en")}`,
 };
 
 export function lightsLead(locale: Locale, facts: Announcements = ANNOUNCED_2026): string {
@@ -162,9 +187,9 @@ function switchOnSection(locale: Locale, facts: Announcements): string {
     }[locale];
   }
   return {
-    ca: `Encara no. L'Ajuntament fixa la data i l'anuncia a la seva sala de premsa: el ${dateYear(p24.announced, "ca")} va anunciar l'encesa del ${dateYear(p24.switchOn, "ca")}, i el ${dateYear(p25.announced, "ca")}, la del ${dayDate(p25.switchOn, "ca")}, amb un espectacle al passeig de Gràcia. A ${dateYear(FESTIVE_VERIFIED, "ca")} no ha publicat cap data per a enguany.`,
-    es: `Todavía no. El Ayuntamiento fija la fecha y la anuncia en su sala de prensa: el ${dateYear(p24.announced, "es")} anunció el encendido del ${dateYear(p24.switchOn, "es")}, y el ${dateYear(p25.announced, "es")}, el del ${dayDate(p25.switchOn, "es")}, con un espectáculo en el paseo de Gràcia. A ${dateYear(FESTIVE_VERIFIED, "es")} no ha publicado ninguna fecha para este año.`,
-    en: `Not yet. The City Council sets the date and announces it in its press room: on ${dateYear(p24.announced, "en")} it announced a switch-on on ${dateYear(p24.switchOn, "en")}, and on ${dateYear(p25.announced, "en")} one on ${dayDate(p25.switchOn, "en")}, with a show on Passeig de Gràcia. As of ${dateYear(FESTIVE_VERIFIED, "en")} it has published no date for this year.`,
+    ca: `Encara no. L'Ajuntament fixa la data i l'anuncia a la seva sala de premsa: el ${dateYear(p24.announced, "ca")} va anunciar l'encesa del ${dateYear(p24.switchOn, "ca")}, i el ${dateYear(p25.announced, "ca")}, la del ${dayDate(p25.switchOn, "ca")}, amb un espectacle al passeig de Gràcia. A ${dateYear(ANNOUNCEMENTS_CHECKED, "ca")} no ha publicat cap data per a enguany.`,
+    es: `Todavía no. El Ayuntamiento fija la fecha y la anuncia en su sala de prensa: el ${dateYear(p24.announced, "es")} anunció el encendido del ${dateYear(p24.switchOn, "es")}, y el ${dateYear(p25.announced, "es")}, el del ${dayDate(p25.switchOn, "es")}, con un espectáculo en el paseo de Gràcia. A ${dateYear(ANNOUNCEMENTS_CHECKED, "es")} no ha publicado ninguna fecha para este año.`,
+    en: `Not yet. The City Council sets the date and announces it in its press room: on ${dateYear(p24.announced, "en")} it announced a switch-on on ${dateYear(p24.switchOn, "en")}, and on ${dateYear(p25.announced, "en")} one on ${dayDate(p25.switchOn, "en")}, with a show on Passeig de Gràcia. As of ${dateYear(ANNOUNCEMENTS_CHECKED, "en")} it has published no date for this year.`,
   }[locale];
 }
 
@@ -633,7 +658,7 @@ export const CHRISTMAS_BARCELONA: B2Article = {
   editions: Object.fromEntries(
     (["ca", "es", "en"] as Locale[]).map((locale) => [
       locale,
-      { ...CHRISTMAS_BARCELONA_META[locale], blocks: buildChristmasBarcelonaBody(locale) },
+      { ...CHRISTMAS_BARCELONA_META[locale], seoDescription: christmasBarcelonaDescription(locale), blocks: buildChristmasBarcelonaBody(locale) },
     ]),
   ) as B2Article["editions"],
 };

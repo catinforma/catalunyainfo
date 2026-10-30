@@ -59,6 +59,12 @@ import {
  * Not published on 26 Oct 2026, so not printed: the programme's start time
  * and running order, the donation phone number, the 2026 total.
  *
+ * 30 Oct 2026 (top-3 push): the CA page had 657 impressions and 4 clicks in a
+ * week at position 6, so the CA and ES titles now carry the answer (the date,
+ * 13 December) instead of "quan és". Re-read that day: the 2026 hub (13 Dec,
+ * 35th edition, no start time) and the donation page (Bizum 33333, no phone
+ * number); nothing new to add.
+ *
  * No new photograph: the hero is the shops guide's lead picture (Christmas
  * lights), with the same alt text and caption.
  */
@@ -98,7 +104,7 @@ export const MARATO_META: Record<Locale, { path: string; title: string; seoTitle
   ca: {
     path: "guies/la-marato-tv3-3cat",
     title: "La Marató de 3Cat 2026: quan és, a què es dedica i com fer un donatiu",
-    seoTitle: "La Marató de TV3 2026: quan és, causa i com fer un donatiu",
+    seoTitle: "La Marató de TV3 2026: 13 de desembre, causa i donatius",
     seoDescription:
       "La Marató de 3Cat 2026 és el diumenge 13 de desembre i es dedica a les malalties neurodegeneratives i neuromusculars. Com veure-la i fer un donatiu.",
     excerpt:
@@ -107,7 +113,7 @@ export const MARATO_META: Record<Locale, { path: string; title: string; seoTitle
   es: {
     path: "guias/la-marato-tv3-3cat",
     title: "La Marató de 3Cat 2026: cuándo es, a qué se dedica y cómo donar",
-    seoTitle: "La Marató de TV3 2026: cuándo es, causa y cómo donar",
+    seoTitle: "La Marató de TV3 2026: 13 de diciembre, causa y cómo donar",
     seoDescription:
       "La Marató de 3Cat 2026 es el domingo 13 de diciembre y se dedica a las enfermedades neurodegenerativas y neuromusculares. Cómo verla y cómo donar.",
     excerpt:

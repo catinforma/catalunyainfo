@@ -168,8 +168,26 @@ test("sources are official https pages and the reader sees the verification date
     assert.match(source.url, /^https:\/\/(www\.)?(boe\.es|ine\.es|juntaelectoralcentral\.es|29neleccionesgenerales\.es)\//, source.url);
     assert.doesNotMatch(source.url, /aerobusbcn|[?&]utm_/);
   }
-  assert.equal(CANDIDATES.verifiedAt, "2026-10-25");
+  assert.equal(CANDIDATES.verifiedAt, "2026-10-30");
   for (const locale of LOCALES) assert.match(text(locale), /verificaci|verified/i, locale);
+});
+
+test("the lead says the filed lists are out, linking the BOE of 28 Oct 2026 (BOE-A-2026-22607, read 30 Oct)", () => {
+  const presented = "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2026-22607";
+  assert.ok(CANDIDATES.sources.some((s) => s.url === presented));
+  const said = { ca: /Les presentades ja hi són/, es: /Las presentadas ya están publicadas/, en: /The lists as filed are already out/ };
+  const asked = {
+    ca: "Qui es presenta a les eleccions generals del 29 de novembre a Catalunya?",
+    es: "¿Cuáles son los candidatos de las elecciones generales del 29 de noviembre en Cataluña?",
+    en: "Who is standing in Catalonia in Spain's 29 November 2026 general election?",
+  };
+  for (const locale of LOCALES) {
+    const leadBlock = JSON.stringify(CANDIDATES.editions[locale].blocks[0]);
+    assert.ok(leadBlock.includes(`](${presented})`), locale);
+    assert.match(leadBlock, said[locale], locale);
+    const faqBlock = CANDIDATES.editions[locale].blocks.find((b) => b.type === "faq") as { items: { question: string }[] };
+    assert.equal(faqBlock.items[0]?.question, asked[locale], locale);
+  }
 });
 
 test("the lead photo is the how-to-vote guide's second file, with that file's own wording", () => {

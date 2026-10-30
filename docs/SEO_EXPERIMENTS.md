@@ -950,6 +950,105 @@ queries above, with `scripts/rank-inventory.py`; check the last-crawl date
 first. Demand peaks to read separately: 7 Dec bridge, 22 Dec school break,
 the DOGC local-holiday order for 2027 (mid-December).
 
+## 2026-10-30 — Top-3 push, news cycle: strikes, elections, Christmas (owner lifted the freezes)
+
+Why: the owner's 28 Oct decision ("every page in the top 3"). These pages peak
+in the next four weeks (11N, 29N, the lights switch-on, Santa Llúcia, the
+December bridge). Positions below are the 7-day GSC positions in
+`research_notes/x10/top3-inventory-30oct.json`. Every new fact was read on
+30 Oct 2026 on the organiser's or the official page; nothing press-only.
+
+**Strikes hub** (`strikes`, republished by `strike-11n`). 7,029 impr. ES at 5.9.
+- Titles: ca "Vaga avui a Catalunya: què funciona i serveis mínims" → "Vaga
+  avui i demà a Catalunya: què funciona i serveis mínims"; es "Huelga hoy en
+  Cataluña: qué funciona y servicios mínimos" → "Huelga hoy y mañana en
+  Cataluña: qué funciona y calendario"; en "Strike in Barcelona and Catalonia
+  today: what runs" → "Barcelona strike today: trains, metro and what runs".
+  Descriptions now name the strike in progress first ("Huelgas: médicos desde
+  el 28 de octubre, Renfe el 10 y el 12 de noviembre, huelga general el 11…").
+- Body: lead answers "is there a strike today" (strikes under way on the as-of
+  day), then "coming up", then whether metro, bus and FGC are touched; new
+  "what runs" table, one row per service. New entries: Metges de Catalunya's
+  indefinite doctors' strike since 28 Oct (Treball order of 22 Oct, e-Tauler
+  654506) and SEMAF's Renfe drivers' strike on 10 (full) and 12 Nov (partial),
+  SEMAF notice 2026-51. 29 Oct now cites the order itself (e-Tauler 654526).
+  Left out: Ouigo 6/9 Nov and 4/8 Dec (no readable official source).
+- Target queries and positions now: huelga hoy 8.4, hoy hay huelga 5.8,
+  mañana hay huelga 7.8, huelga mañana 9.1, vaga hoy 6.4, hay vaga mañana en
+  cataluña 2.6, huelga cataluña 6.6, train strike barcelona 8.8, strike
+  barcelona today 2.5, vaga avui 6.0, vaga renfe catalunya 9.5. Dated queries
+  (vaga 29 octubre 8.9) are left to fade.
+
+**11N page** (`strike-11n`): as of 30 Oct; SEMAF's 10 and 12 Nov strikes in
+the lead, key facts, Rodalies/long-distance sections and FAQ; the doctors'
+strike in the health section. Titles unchanged. Targets: huelga general 11
+noviembre barcelona (6.7 on the hub), serveis mínims vaga 11 novembre (2.2 on
+the hub).
+
+**How to vote** (`voting`). ES 3,291 impr. at 5.5, EN 1,936 at 5.4 (1.4% CTR).
+- Titles: ca "Properes eleccions a Catalunya: 29N, on i com votar" → "Properes
+  eleccions a Catalunya: quan són i on votar el 29N"; es "Próximas elecciones
+  en Cataluña: 29N, dónde y cómo votar" → "Próximas elecciones en Cataluña:
+  cuándo son y dónde votar"; en "How to vote in Spain's 2026 general election
+  (29 November)" → "Spain general election 2026: how to vote, register,
+  dates". Descriptions state the date, hours and "sin DNI ni Cl@ve".
+- Body: INE finder linked in the lead with what it asks for; FAQs "dónde voto
+  con el DNI" (ca/es/en), EN key dates and polls' hours.
+- Targets: próximas elecciones en cataluña 2026 4.0, cuando son las elecciones
+  en cataluña 6.4, cuándo son las próximas elecciones en cataluña 6.3, donde
+  tengo que ir a votar 2026 6.4, donde voto el 29 de noviembre 8.3, donde voto
+  dni 2026 7.8, quan son les proximes eleccions a catalunya 10.2, 2026 spain
+  general election how to register to vote 6.2, 2026 spain general election
+  dates 8.2.
+
+**Candidates** (`candidates`). ES 2,419 impr. at 4.8 (18% CTR: ES and EN titles
+kept). ca "Candidats eleccions generals 2026 a Barcelona i Catalunya" →
+"Candidats i llistes electorals 2026 a Barcelona i Catalunya". Lead links the
+BOE of 28 Oct (BOE-A-2026-22607, filed lists); first FAQ "qui es presenta /
+cuáles son los candidatos". Targets: llistes electorals 2026 5.7,
+candidatures eleccions generals 2026 5.8, qui es presenta a les eleccions
+generals 4.3, cuales son los candidatos para las elecciones 2026 7.2.
+
+**Christmas in Barcelona** (`christmas-bcn`; `nye` too, its "not announced"
+line now carries 30 Oct). ES 2,189 impr., 38 clicks at 5.9.
+- Titles: ca "Nadal a Barcelona 2026: encesa de llums i què obre" → "Encesa
+  de llums de Nadal Barcelona 2026: quan és i què obre"; es "Navidad en
+  Barcelona 2026: encendido de luces y qué abre" → "Luces de Navidad Barcelona
+  2026: cuándo es el encendido"; en "Christmas in Barcelona 2026: lights and
+  what's open" → "Barcelona Christmas lights 2026: switch-on date, what's
+  open". Description built from ANNOUNCED_2026 ("aún sin fecha oficial (en
+  2025, sábado 22 de noviembre)" until the date is out).
+- Nothing announced on 30 Oct (press room, barcelona.cat/nadal); the leads now
+  say "comprobado el 30 de octubre".
+- Targets: encendido luces navidad barcelona 2026 6.2, cuando encienden las
+  luces de navidad en barcelona 2026 5.5, encesa llums nadal barcelona 2026
+  6.3 (ES page) / 8.0 (CA page), encesa de llums barcelona 2026 6.3, luces
+  navidad barcelona 2026 9.6.
+
+**Christmas markets** (`christmas`): ca "Mercats de Nadal Catalunya 2026:
+Santa Llúcia i dates" → "Fires i mercats de Nadal Catalunya 2026: dates i
+llocs"; es "Mercados de Navidad Cataluña 2026: Santa Llúcia y fechas" →
+"Mercados navideños Cataluña 2026: fechas y Santa Llúcia". Santa Llúcia line
+dated 30 Oct (organiser still shows 2025). Targets: fires de nadal catalunya
+2026 6.4, mercados navideños cataluña 2026 6.2, fires nadal catalunya 2026 7.8
+(ES page, a CA query: the CA title now carries "fires").
+
+**La Marató** (`marato`): CA 657 impr., 4 clicks at 6.1. ca "La Marató de TV3
+2026: quan és, causa i com fer un donatiu" → "La Marató de TV3 2026: 13 de
+desembre, causa i donatius"; es "La Marató de TV3 2026: cuándo es, causa y
+cómo donar" → "La Marató de TV3 2026: 13 de diciembre, causa y cómo donar".
+Targets: marató tv3 2026 7.8, marato tv3 2026 7.7, marató tv3 2026 data 4.4.
+
+**December bridge** (`pont-desembre`): titles kept ("only the 8th" would be
+wrong in the 43 towns where Monday 7 is a local holiday); ca/es descriptions
+list 8, 25 and 26 December, Purísima named; FAQ "¿Cuándo es el puente de la
+Purísima de 2026?". Targets: puente de la purisima 2026 5.2, festivos
+diciembre 2026 5.3, cuando es el puente de diciembre 7.3, pont de desembre
+2026 5.7.
+
+**Measure** on 30 Nov 2026 (position, CTR and clicks per target query and
+language; for the strikes pages also the week of 9-13 Nov).
+
 **Outcome:** _pending_
 
 ## Candidates not yet run
