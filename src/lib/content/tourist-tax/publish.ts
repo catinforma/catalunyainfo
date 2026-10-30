@@ -17,9 +17,12 @@ import {
   EXEMPT_AGE_AT_OR_BELOW,
   LAST_VERIFIED,
   MAX_STAY_UNITS,
+  MUNICIPAL_COLUMNS,
+  MUNICIPAL_SURCHARGES,
   MUNICIPAL_SURCHARGE_FROM,
   RATE_PERIODS,
   SOURCES,
+  SPECIAL_RATE,
   calculateTax,
   periodFor,
   round,
@@ -75,8 +78,79 @@ function periodAt(scope: Scope, from: string): RatePeriod {
 }
 
 const BCN_NOW = periodAt("barcelona", "2026-04-01");
+const BCN_2027 = periodAt("barcelona", "2027-04-01");
 const REST_NOW = periodAt("rest-of-catalonia", "2026-04-01");
 const REST_2027 = periodAt("rest-of-catalonia", "2027-04-01");
+
+/* -------------------------------------------------------------------------- */
+/* Figures for the prose and the search snippet                               */
+/* -------------------------------------------------------------------------- */
+
+/** Barcelona's total per person per night now, by accommodation type. */
+function bcnTotal(type: AccommodationType): number {
+  return round(BCN_NOW.regional[type] + (BCN_NOW.surcharge ?? 0));
+}
+
+const BCN_TOTALS = ACCOMMODATION_ORDER.map(bcnTotal);
+
+/** "6" for a whole number, "8,40"/"8.40" otherwise: the search title's form. */
+function plain(value: number, locale: Locale): string {
+  return Number.isInteger(value) ? String(value) : value.toLocaleString(locale, { minimumFractionDigits: 2 });
+}
+
+const HOSPITALET = MUNICIPAL_SURCHARGES.find((m) => m.municipality === "L'Hospitalet de Llobregat");
+
+/**
+ * Fills every `{placeholder}` the copy may carry (see copy.ts) from the rate
+ * table, so no euro amount is ever typed in the prose, the FAQ or the
+ * search title.
+ */
+export function fillFigures(text: string, locale: Locale): string {
+  const hosp4 = HOSPITALET?.amounts["hotel-4"] ?? 0;
+  const values: Record<string, string> = {
+    bcnMin: money(Math.min(...BCN_TOTALS), locale),
+    bcnMax: money(Math.max(...BCN_TOTALS), locale),
+    bcnSur: money(BCN_NOW.surcharge ?? 0, locale),
+    bcn4: money(bcnTotal("hotel-4"), locale),
+    bcn5: money(bcnTotal("hotel-5"), locale),
+    bcnFlat: money(bcnTotal("tourist-dwelling"), locale),
+    bcnHostel: money(bcnTotal("hostel"), locale),
+    rest4: money(REST_NOW.regional["hotel-4"], locale),
+    rest5: money(REST_NOW.regional["hotel-5"], locale),
+    restHostel: money(REST_NOW.regional.hostel, locale),
+    rest4next: money(REST_2027.regional["hotel-4"], locale),
+    s0: money(BCN_NOW.surcharge ?? 0, locale),
+    s1: money(BCN_2027.surcharge ?? 0, locale),
+    hosp4: money(hosp4, locale),
+    hosp4total: money(round(hosp4 + REST_NOW.regional["hotel-4"]), locale),
+    te1: money(SPECIAL_RATE["hotel-5"], locale),
+    te2: money(SPECIAL_RATE["hotel-4"], locale),
+    te3: money(SPECIAL_RATE.other, locale),
+    minInt: plain(Math.min(...BCN_TOTALS), locale),
+    maxInt: plain(Math.max(...BCN_TOTALS), locale),
+    surInt: plain(BCN_NOW.surcharge ?? 0, locale),
+    age: String(EXEMPT_AGE_AT_OR_BELOW),
+    max: String(MAX_STAY_UNITS),
+  };
+  return text.replace(/\{(\w+)\}/g, (whole, key: string) => values[key] ?? whole);
+}
+
+/** The search title and description with their figures filled in. */
+export function seoFor(locale: Locale): { seoTitle: string; seoDescription: string } {
+  const copy = COPY[locale];
+  return { seoTitle: fillFigures(copy.seoTitle, locale), seoDescription: fillFigures(copy.seoDescription, locale) };
+}
+
+/** One row per municipality with a surcharge; "—" where the ATC lists none. */
+function municipalRows(locale: Locale): string[][] {
+  return MUNICIPAL_SURCHARGES.map((m) => [
+    m.municipality,
+    ...MUNICIPAL_COLUMNS.map((type) => {
+      const amount = m.amounts[type];
+      return amount === null || amount === undefined ? "—" : money(amount, locale);
+    }),
+  ]);
+}
 
 /* -------------------------------------------------------------------------- */
 /* Tables                                                                     */
@@ -193,7 +267,7 @@ export function buildBody(locale: Locale, inlineMediaId?: string): Block[] {
   const blocks: Block[] = [];
 
   copy.lead.forEach((text, index) => {
-    blocks.push({ type: "paragraph", text, ...(index === 0 ? { lead: true } : {}) });
+    blocks.push({ type: "paragraph", text: fillFigures(text, locale), ...(index === 0 ? { lead: true } : {}) });
   });
 
   blocks.push({
@@ -255,6 +329,26 @@ export function buildBody(locale: Locale, inlineMediaId?: string): Block[] {
     stickyColumn: 0,
   });
 
+  /* ---- The seven municipal surcharges (ATC) -------------------------------- */
+  blocks.push({ type: "heading", level: 2, text: copy.muniTitle });
+  for (const text of copy.muni) blocks.push({ type: "paragraph", text: fillFigures(text, locale) });
+  blocks.push({
+    type: "table",
+    caption: copy.muniCaption,
+    headers: [
+      copy.muniHeaders.municipality,
+      copy.muniHeaders.hotel5,
+      copy.muniHeaders.hotel4,
+      copy.muniHeaders.flat,
+      copy.muniHeaders.hostel,
+      copy.muniHeaders.other,
+    ],
+    rows: municipalRows(locale),
+    note: copy.muniNote,
+    stickyColumn: 0,
+  });
+  blocks.push({ type: "paragraph", text: fillFigures(copy.special, locale) });
+
   /* ---- 1 April 2027 -------------------------------------------------------- */
   blocks.push({ type: "heading", level: 2, text: copy.futureTitle });
   for (const text of copy.future) blocks.push({ type: "paragraph", text });
@@ -301,6 +395,13 @@ export function buildBody(locale: Locale, inlineMediaId?: string): Block[] {
 
   blocks.push({ type: "heading", level: 2, text: copy.whyTitle });
   for (const text of copy.why) blocks.push({ type: "paragraph", text });
+
+  /* ---- The questions in the searchers' words ---------------------------------- */
+  blocks.push({
+    type: "faq",
+    title: copy.faqTitle,
+    items: copy.faq.map((item) => ({ question: item.question, answer: fillFigures(item.answer, locale) })),
+  });
 
   /* ---- Closing --------------------------------------------------------------- */
   blocks.push({ type: "heading", level: 2, text: copy.closingTitle });
@@ -398,8 +499,7 @@ export async function publishTouristTaxGuide(): Promise<PublishResult> {
         path: copy.path,
         title: copy.title,
         excerpt: copy.excerpt,
-        seoTitle: copy.seoTitle,
-        seoDescription: copy.seoDescription,
+        ...seoFor(locale),
         body: buildBody(locale, secondMediaId),
       };
     }),
