@@ -14,11 +14,11 @@ import { B2_TITLES, b2href, type B2Key } from "@/lib/content/batch02/shared";
 import { shortDate } from "@/lib/content/holidays/calendar";
 import { INTL_LOCALE, type Locale } from "@/lib/i18n/config";
 
-import { electionPath, hubPath, inCa, ofCa, PAGES_PER_LOCALE, placeName, siblings } from "./pages";
-import { councilSize, municipalView, regionalView, turnout, type RegionalView } from "./results";
+import { electionPath, hubPath, inCa, latestDataDate, ofCa, PAGES_PER_LOCALE, placeName, siblings } from "./pages";
+import { councilSize, generalView, municipalView, regionalView, turnout, type GeneralView, type RegionalView } from "./results";
 import { SNAPSHOT } from "./snapshot";
 import type { DayLines } from "./today";
-import type { ElectionsSnapshot, Municipality } from "./types";
+import type { ElectionsSnapshot, General2026, Municipality, RegionalVotes } from "./types";
 
 /** Interior's results download area, where the per-municipality files appear. */
 export const INTERIOR_DOWNLOADS: Record<Locale, string> = {
@@ -61,16 +61,30 @@ export interface Link {
   label: string;
 }
 
+/**
+ * The 29N results in the slot, once the Interior Ministry's file is imported
+ * (`scripts/elections-29n.ts`; the steps for the day are in its header).
+ * Plain text: names are printed exactly as the file writes them.
+ */
+export interface SlotResults {
+  summary: string;
+  table: Table;
+}
+
 export interface ElectionPageModel {
   locale: Locale;
   h1: string;
   standfirst: string;
+  /** ISO date of the newest data on the page: the read date, or the 29N import if later. */
+  dataDate: string;
   readLine: string;
   facts: { label: string; value: string }[];
   slot: {
     title: string;
     lines: DayLines;
     md: string[];
+    /** Null until the official file is imported: the slot then says when results will appear. */
+    results: SlotResults | null;
   };
   municipal: { title: string; summary: string; table: Table; mayor: string | null; mayorRule: string };
   seats: { title: string; md: string[] };
@@ -134,6 +148,13 @@ const ORDINAL_EN = (n: number) => {
 
 const RELATED: B2Key[] = ["electionNight", "voting", "candidates", "municipalResults", "congressResults", "parliamentResults"];
 
+/** The town's 29N results, when the official file has been imported and covers it. */
+export function generalOf(m: Municipality, snapshot: ElectionsSnapshot = SNAPSHOT): { meta: General2026; counts: RegionalVotes; view: GeneralView } | null {
+  if (!snapshot.general2026 || !m.g2026) return null;
+  return { meta: snapshot.general2026, counts: m.g2026, view: generalView(m.g2026, snapshot.general2026) };
+}
+
+
 export function buildElectionPage(m: Municipality, locale: Locale, snapshot: ElectionsSnapshot = SNAPSHOT): ElectionPageModel {
   const f = formats(locale);
   const place = placeName(m, locale);
@@ -143,11 +164,13 @@ export function buildElectionPage(m: Municipality, locale: Locale, snapshot: Ele
   const parliament = regionalView(m.parliament, snapshot.catalonia.parliament, snapshot.elections.parliament.lists ?? {});
   const cataloniaMunicipalTurnout = turnout(snapshot.catalonia.municipal);
   const top = mv.rows[0]!;
+  const general = generalOf(m, snapshot);
+  const dataDate = latestDataDate(snapshot);
   const dates = {
     municipal: f.date(snapshot.elections.municipal.date),
     congress: f.date(snapshot.elections.congress.date),
     parliament: f.date(snapshot.elections.parliament.date),
-    read: f.date(snapshot.readAt),
+    read: f.date(dataDate),
   };
   const { sameComarca, sameProvince } = siblings(m, locale);
   const link = (x: Municipality): Link => ({ href: electionPath(locale, x.slug), label: placeName(x, locale) });
@@ -171,6 +194,7 @@ export function buildElectionPage(m: Municipality, locale: Locale, snapshot: Ele
     note,
   });
   const sources = [
+    ...(general ? [{ name: general.meta.source.name, publisher: general.meta.source.publisher, url: INTERIOR_DOWNLOADS[locale], updated: general.meta.source.fileDate }] : []),
     snapshot.sources.votes,
     snapshot.sources.turnout,
     snapshot.sources.elections,
@@ -178,6 +202,16 @@ export function buildElectionPage(m: Municipality, locale: Locale, snapshot: Ele
     snapshot.sources.entities,
     snapshot.sources.mayors,
   ].map((s) => ({ name: s.name, publisher: s.publisher, url: s.url, updated: f.date(s.updated) }));
+  // The 29N table: same columns as the 2023 Congress table, every candidacy on the town's ballot.
+  const g = general?.view;
+  const generalTable = (caption: string, headers: string[], blankLabel: string, note: string): Table => ({
+    caption,
+    headers,
+    rows: (g?.rows ?? []).map((row) => [`${row.short}\n${row.name}`, f.n(row.votes), f.p(row.share), f.p(row.cataloniaShare), String(row.cataloniaSeats)]),
+    footRows: g ? [[blankLabel, f.n(g.blank.votes), f.p(g.blank.share), f.p(g.blank.cataloniaShare), ""]] : [],
+    note,
+  });
+  const leaders = (and: string) => (g?.leaders ?? []).map((row) => row.short).join(and);
   const related = RELATED.map((key) => ({ href: b2href(key, locale), label: B2_TITLES[key][locale] }));
   const hub = { href: hubPath(locale), label: "" };
 
@@ -187,7 +221,10 @@ export function buildElectionPage(m: Municipality, locale: Locale, snapshot: Ele
     return {
       locale,
       h1: `Resultats de les eleccions ${a}`,
-      standfirst: `Les municipals del 2023 amb els vots i els regidors de cada llista, i com es va votar ${a} a les generals del 2023 i a les eleccions al Parlament del 2024, al costat del conjunt de Catalunya. Amb dades oficials i un espai per als resultats del 29 de novembre.`,
+      standfirst: general
+        ? `Els resultats de les eleccions generals del 29 de novembre de 2026 ${a}, del fitxer oficial del Ministeri de l'Interior, al costat del conjunt de Catalunya. I les municipals del 2023 amb els vots i els regidors de cada llista, les generals del 2023 i les eleccions al Parlament del 2024.`
+        : `Les municipals del 2023 amb els vots i els regidors de cada llista, i com es va votar ${a} a les generals del 2023 i a les eleccions al Parlament del 2024, al costat del conjunt de Catalunya. Amb dades oficials i un espai per als resultats del 29 de novembre.`,
+      dataDate,
       readLine: `Dades llegides el ${dates.read}`,
       facts: [
         { label: "Població", value: `${f.n(m.population)} habitants (1 de gener de ${snapshot.sources.population.period.slice(0, 4)}, Idescat)` },
@@ -205,13 +242,36 @@ export function buildElectionPage(m: Municipality, locale: Locale, snapshot: Ele
           today: "Avui, diumenge 29 de novembre de 2026, és el dia de la votació.",
           after: "La votació va ser el diumenge 29 de novembre de 2026.",
         },
-        md: [
-          `**Els resultats ${de} apareixeran aquí quan el Ministeri de l'Interior publiqui el fitxer oficial de resultats per municipis** a la seva [àrea de descàrregues](${INTERIOR_DOWNLOADS.ca}).`,
-          ELECTION_NIGHT_RESULTS_URL
-            ? `Resultats provisionals de la nit electoral: [web oficial del Ministeri de l'Interior](${ELECTION_NIGHT_RESULTS_URL}).`
-            : `Resultats provisionals de la nit electoral: Interior encara no ha anunciat el web on els publicarà (comprovat el ${f.date(INTERIOR_CHECKED)}). Quan ho faci, n'hi posarem l'enllaç oficial. Com funciona l'escrutini: [${B2_TITLES.electionNight.ca}](${b2href("electionNight", "ca")}).`,
-          `Si has de votar: [com votar a Catalunya](${b2href("voting", "ca")}) i [les llistes de candidats del 29N](${b2href("candidates", "ca")}).`,
-        ],
+        md: general
+          ? [
+              `**Resultats oficials del Ministeri de l'Interior**, del fitxer de resultats per municipis de la seva [àrea de descàrregues](${INTERIOR_DOWNLOADS.ca}).`,
+              `Més sobre aquestes eleccions: [${B2_TITLES.candidates.ca}](${b2href("candidates", "ca")}) i [${B2_TITLES.congressResults.ca}](${b2href("congressResults", "ca")}).`,
+            ]
+          : [
+              `**Els resultats ${de} apareixeran aquí quan el Ministeri de l'Interior publiqui el fitxer oficial de resultats per municipis** a la seva [àrea de descàrregues](${INTERIOR_DOWNLOADS.ca}).`,
+              ELECTION_NIGHT_RESULTS_URL
+                ? `Resultats provisionals de la nit electoral: [web oficial del Ministeri de l'Interior](${ELECTION_NIGHT_RESULTS_URL}).`
+                : `Resultats provisionals de la nit electoral: Interior encara no ha anunciat el web on els publicarà (comprovat el ${f.date(INTERIOR_CHECKED)}). Quan ho faci, n'hi posarem l'enllaç oficial. Com funciona l'escrutini: [${B2_TITLES.electionNight.ca}](${b2href("electionNight", "ca")}).`,
+              `Si has de votar: [com votar a Catalunya](${b2href("voting", "ca")}) i [les llistes de candidats del 29N](${b2href("candidates", "ca")}).`,
+            ],
+        results:
+          general && g
+            ? {
+                summary: `${a.charAt(0).toUpperCase()}${a.slice(1)} van votar ${f.n(general.counts.voters)} persones d'un cens de ${f.n(general.counts.electorate)}: una participació ${caDelPct(f.p(g.turnout))}, davant ${caDelPct(f.p(g.cataloniaTurnout))} de Catalunya.${
+                  g.leaders.length === 1
+                    ? ` La candidatura més votada va ser ${g.leaders[0]!.short}, amb ${f.n(g.leaders[0]!.votes)} vots (${caElPct(f.p(g.leaders[0]!.share))} dels vots vàlids; ${f.p(g.leaders[0]!.cataloniaShare)} a Catalunya).`
+                    : g.leaders.length > 1
+                      ? ` Les candidatures més votades van ser ${leaders(" i ")}, empatades amb ${f.n(g.leaders[0]!.votes)} vots cadascuna (${caElPct(f.p(g.leaders[0]!.share))} dels vots vàlids).`
+                      : ""
+                }`,
+                table: generalTable(
+                  `Vots al Congrés el 29 de novembre de 2026 ${a} i a Catalunya`,
+                  ["Candidatura", "Vots", `% ${Place}`, "% Catalunya", "Diputats"],
+                  "Vots en blanc",
+                  `Font: Ministeri de l'Interior, fitxer oficial de resultats per municipis ${general.meta.source.file}, ${caDel(general.meta.source.fileDate)}. Vots vàlids: ${f.n(general.counts.validVotes)}, amb els vots en blanc; vots nuls: ${f.n(general.counts.nullVotes)}, que no compten en els percentatges. Percentatges calculats a partir dels recomptes oficials. Catalunya: la suma dels seus municipis, sense el vot dels residents a l'estranger (CERA); amb aquest vot, la participació oficial va ser ${caDelPct(f.p(g.cataloniaTurnoutWithAbroad))}. Els escons es reparteixen per províncies: l'última columna és el total de Catalunya (${g.cataloniaSeats} diputats).`,
+                ),
+              }
+            : null,
       },
       municipal: {
         title: `Eleccions municipals del ${dates.municipal}`,
@@ -265,9 +325,10 @@ export function buildElectionPage(m: Municipality, locale: Locale, snapshot: Ele
       turnout: {
         title: `Participació ${a} i a Catalunya`,
         table: {
-          caption: `Participació a les tres últimes eleccions ${a}`,
+          caption: `Participació a les ${g ? "quatre" : "tres"} últimes eleccions ${a}`,
           headers: ["Eleccions", Place, "Catalunya"],
           rows: [
+            ...(g && general ? [[`Generals, ${f.date(general.meta.date)}`, f.p(g.turnout), f.p(g.cataloniaTurnout)]] : []),
             [`Municipals, ${dates.municipal}`, f.p(mv.turnout), f.p(cataloniaMunicipalTurnout)],
             [`Generals, ${dates.congress}`, f.p(congress.turnout), f.p(congress.cataloniaTurnout)],
             [`Parlament, ${dates.parliament}`, f.p(parliament.turnout), f.p(parliament.cataloniaTurnout)],
@@ -301,10 +362,15 @@ export function buildElectionPage(m: Municipality, locale: Locale, snapshot: Ele
           question: `Quants regidors té l'Ajuntament ${de}?`,
           answer: `${m.municipal.seats}, segons l'escala de l'article 179 de la llei electoral aplicada a la població del municipi.`,
         },
-        {
-          question: `Quan es podran consultar els resultats del 29N ${a}?`,
-          answer: "Quan el Ministeri de l'Interior publiqui el fitxer oficial de resultats per municipis, que apareixerà en aquesta pàgina. La nit electoral, l'escrutini provisional el publica Interior.",
-        },
+        g && general && g.leaders.length
+          ? {
+              question: `Quina candidatura va tenir més vots el 29N ${a}?`,
+              answer: `${g.leaders.map((row) => `${row.short} (${row.name})`).join(" i ")}, amb ${f.n(g.leaders[0]!.votes)} vots${g.leaders.length > 1 ? " cadascuna" : ""}, ${caElPct(f.p(g.leaders[0]!.share))} dels vàlids. La participació va ser ${caDelPct(f.p(g.turnout))}. Dades oficials del Ministeri de l'Interior.`,
+            }
+          : {
+              question: `Quan es podran consultar els resultats del 29N ${a}?`,
+              answer: "Quan el Ministeri de l'Interior publiqui el fitxer oficial de resultats per municipis, que apareixerà en aquesta pàgina. La nit electoral, l'escrutini provisional el publica Interior.",
+            },
       ],
       siblings: {
         title: "Resultats en altres municipis",
@@ -327,7 +393,10 @@ export function buildElectionPage(m: Municipality, locale: Locale, snapshot: Ele
     return {
       locale,
       h1: `Resultados de las elecciones en ${place}`,
-      standfirst: `Las municipales de 2023 con los votos y los concejales de cada lista, y cómo se votó en ${place} en las generales de 2023 y en las elecciones al Parlament de 2024, junto al conjunto de Cataluña. Con datos oficiales y un espacio para los resultados del 29 de noviembre.`,
+      standfirst: general
+        ? `Los resultados de las elecciones generales del 29 de noviembre de 2026 en ${place}, del fichero oficial del Ministerio del Interior, junto al conjunto de Cataluña. Y las municipales de 2023 con los votos y los concejales de cada lista, las generales de 2023 y las elecciones al Parlament de 2024.`
+        : `Las municipales de 2023 con los votos y los concejales de cada lista, y cómo se votó en ${place} en las generales de 2023 y en las elecciones al Parlament de 2024, junto al conjunto de Cataluña. Con datos oficiales y un espacio para los resultados del 29 de noviembre.`,
+      dataDate,
       readLine: `Datos leídos el ${dates.read}`,
       facts: [
         { label: "Población", value: `${f.n(m.population)} habitantes (1 de enero de ${snapshot.sources.population.period.slice(0, 4)}, Idescat)` },
@@ -345,13 +414,36 @@ export function buildElectionPage(m: Municipality, locale: Locale, snapshot: Ele
           today: "Hoy, domingo 29 de noviembre de 2026, es el día de la votación.",
           after: "La votación fue el domingo 29 de noviembre de 2026.",
         },
-        md: [
-          `**Los resultados de ${place} aparecerán aquí cuando el Ministerio del Interior publique el fichero oficial de resultados por municipios** en su [área de descargas](${INTERIOR_DOWNLOADS.es}).`,
-          ELECTION_NIGHT_RESULTS_URL
-            ? `Resultados provisionales de la noche electoral: [web oficial del Ministerio del Interior](${ELECTION_NIGHT_RESULTS_URL}).`
-            : `Resultados provisionales de la noche electoral: Interior aún no ha anunciado la web donde los publicará (comprobado el ${f.date(INTERIOR_CHECKED)}). Cuando lo haga, pondremos aquí el enlace oficial. Cómo funciona el escrutinio: [${B2_TITLES.electionNight.es}](${b2href("electionNight", "es")}).`,
-          `Si tienes que votar: [cómo votar en Cataluña](${b2href("voting", "es")}) y [las listas de candidatos del 29N](${b2href("candidates", "es")}).`,
-        ],
+        md: general
+          ? [
+              `**Resultados oficiales del Ministerio del Interior**, del fichero de resultados por municipios de su [área de descargas](${INTERIOR_DOWNLOADS.es}).`,
+              `Más sobre estas elecciones: [${B2_TITLES.candidates.es}](${b2href("candidates", "es")}) y [${B2_TITLES.congressResults.es}](${b2href("congressResults", "es")}).`,
+            ]
+          : [
+              `**Los resultados de ${place} aparecerán aquí cuando el Ministerio del Interior publique el fichero oficial de resultados por municipios** en su [área de descargas](${INTERIOR_DOWNLOADS.es}).`,
+              ELECTION_NIGHT_RESULTS_URL
+                ? `Resultados provisionales de la noche electoral: [web oficial del Ministerio del Interior](${ELECTION_NIGHT_RESULTS_URL}).`
+                : `Resultados provisionales de la noche electoral: Interior aún no ha anunciado la web donde los publicará (comprobado el ${f.date(INTERIOR_CHECKED)}). Cuando lo haga, pondremos aquí el enlace oficial. Cómo funciona el escrutinio: [${B2_TITLES.electionNight.es}](${b2href("electionNight", "es")}).`,
+              `Si tienes que votar: [cómo votar en Cataluña](${b2href("voting", "es")}) y [las listas de candidatos del 29N](${b2href("candidates", "es")}).`,
+            ],
+        results:
+          general && g
+            ? {
+                summary: `En ${place} votaron ${f.n(general.counts.voters)} personas de un censo de ${f.n(general.counts.electorate)}: una participación del ${f.p(g.turnout)}, frente al ${f.p(g.cataloniaTurnout)} de Cataluña.${
+                  g.leaders.length === 1
+                    ? ` La candidatura más votada fue ${g.leaders[0]!.short}, con ${f.n(g.leaders[0]!.votes)} votos (el ${f.p(g.leaders[0]!.share)} de los votos válidos; ${f.p(g.leaders[0]!.cataloniaShare)} en Cataluña).`
+                    : g.leaders.length > 1
+                      ? ` Las candidaturas más votadas fueron ${leaders(" y ")}, empatadas con ${f.n(g.leaders[0]!.votes)} votos cada una (el ${f.p(g.leaders[0]!.share)} de los votos válidos).`
+                      : ""
+                }`,
+                table: generalTable(
+                  `Votos al Congreso el 29 de noviembre de 2026 en ${place} y en Cataluña`,
+                  ["Candidatura", "Votos", `% ${place}`, "% Cataluña", "Diputados"],
+                  "Votos en blanco",
+                  `Fuente: Ministerio del Interior, fichero oficial de resultados por municipios ${general.meta.source.file}, del ${f.date(general.meta.source.fileDate)}. Votos válidos: ${f.n(general.counts.validVotes)}, con los votos en blanco; votos nulos: ${f.n(general.counts.nullVotes)}, que no cuentan en los porcentajes. Porcentajes calculados a partir de los recuentos oficiales. Cataluña: la suma de sus municipios, sin el voto de los residentes en el extranjero (CERA); con ese voto, la participación oficial fue del ${f.p(g.cataloniaTurnoutWithAbroad)}. Los escaños se reparten por provincias: la última columna es el total de Cataluña (${g.cataloniaSeats} diputados).`,
+                ),
+              }
+            : null,
       },
       municipal: {
         title: `Elecciones municipales del ${dates.municipal}`,
@@ -405,9 +497,10 @@ export function buildElectionPage(m: Municipality, locale: Locale, snapshot: Ele
       turnout: {
         title: `Participación en ${place} y en Cataluña`,
         table: {
-          caption: `Participación en las tres últimas elecciones en ${place}`,
+          caption: `Participación en las ${g ? "cuatro" : "tres"} últimas elecciones en ${place}`,
           headers: ["Elecciones", place, "Cataluña"],
           rows: [
+            ...(g && general ? [[`Generales, ${f.date(general.meta.date)}`, f.p(g.turnout), f.p(g.cataloniaTurnout)]] : []),
             [`Municipales, ${dates.municipal}`, f.p(mv.turnout), f.p(cataloniaMunicipalTurnout)],
             [`Generales, ${dates.congress}`, f.p(congress.turnout), f.p(congress.cataloniaTurnout)],
             [`Parlament, ${dates.parliament}`, f.p(parliament.turnout), f.p(parliament.cataloniaTurnout)],
@@ -441,10 +534,15 @@ export function buildElectionPage(m: Municipality, locale: Locale, snapshot: Ele
           question: `¿Cuántos concejales tiene el Ayuntamiento de ${place}?`,
           answer: `${m.municipal.seats}, según la escala del artículo 179 de la ley electoral aplicada a la población del municipio.`,
         },
-        {
-          question: `¿Cuándo se podrán consultar los resultados del 29N en ${place}?`,
-          answer: "Cuando el Ministerio del Interior publique el fichero oficial de resultados por municipios, que aparecerá en esta página. En la noche electoral, el escrutinio provisional lo publica Interior.",
-        },
+        g && general && g.leaders.length
+          ? {
+              question: `¿Qué candidatura tuvo más votos el 29N en ${place}?`,
+              answer: `${g.leaders.map((row) => `${row.short} (${row.name})`).join(" y ")}, con ${f.n(g.leaders[0]!.votes)} votos${g.leaders.length > 1 ? " cada una" : ""}, el ${f.p(g.leaders[0]!.share)} de los válidos. La participación fue del ${f.p(g.turnout)}. Datos oficiales del Ministerio del Interior.`,
+            }
+          : {
+              question: `¿Cuándo se podrán consultar los resultados del 29N en ${place}?`,
+              answer: "Cuando el Ministerio del Interior publique el fichero oficial de resultados por municipios, que aparecerá en esta página. En la noche electoral, el escrutinio provisional lo publica Interior.",
+            },
       ],
       siblings: {
         title: "Resultados en otros municipios",
@@ -466,7 +564,10 @@ export function buildElectionPage(m: Municipality, locale: Locale, snapshot: Ele
   return {
     locale,
     h1: `Election results in ${place}`,
-    standfirst: `The 2023 local election with every list's votes and councillors, and how ${place} voted in the 2023 general election and the 2024 Catalan election, beside Catalonia as a whole. From official data, with space for the results of 29 November.`,
+    standfirst: general
+      ? `Results of the general election of 29 November 2026 in ${place}, from the Spanish Interior Ministry's official file, beside Catalonia as a whole. And the 2023 local election with every list's votes and councillors, the 2023 general election and the 2024 Catalan election.`
+      : `The 2023 local election with every list's votes and councillors, and how ${place} voted in the 2023 general election and the 2024 Catalan election, beside Catalonia as a whole. From official data, with space for the results of 29 November.`,
+    dataDate,
     readLine: `Data read on ${dates.read}`,
     facts: [
       { label: "Population", value: `${f.n(m.population)} (1 January ${snapshot.sources.population.period.slice(0, 4)}, Idescat)` },
@@ -484,13 +585,36 @@ export function buildElectionPage(m: Municipality, locale: Locale, snapshot: Ele
         today: "Today, Sunday 29 November 2026, is polling day.",
         after: "Polling day was Sunday 29 November 2026.",
       },
-      md: [
-        `**Results for ${place} will appear here when the Spanish Ministry of the Interior publishes the official results file by municipality** in its [download area](${INTERIOR_DOWNLOADS.en}).`,
-        ELECTION_NIGHT_RESULTS_URL
-          ? `Provisional results on election night: [the Interior Ministry's official site](${ELECTION_NIGHT_RESULTS_URL}).`
-          : `Provisional results on election night: the ministry has not yet announced the website where it will publish them (checked on ${f.date(INTERIOR_CHECKED)}). When it does, we will add the official link here. How the count works: [${B2_TITLES.electionNight.en}](${b2href("electionNight", "en")}).`,
-        `If you are voting: [how to vote in Catalonia](${b2href("voting", "en")}) and [the 29 November candidate lists](${b2href("candidates", "en")}).`,
-      ],
+      md: general
+        ? [
+            `**Official results from the Spanish Ministry of the Interior**, from the results file by municipality in its [download area](${INTERIOR_DOWNLOADS.en}).`,
+            `More on this election: [${B2_TITLES.candidates.en}](${b2href("candidates", "en")}) and [${B2_TITLES.congressResults.en}](${b2href("congressResults", "en")}).`,
+          ]
+        : [
+            `**Results for ${place} will appear here when the Spanish Ministry of the Interior publishes the official results file by municipality** in its [download area](${INTERIOR_DOWNLOADS.en}).`,
+            ELECTION_NIGHT_RESULTS_URL
+              ? `Provisional results on election night: [the Interior Ministry's official site](${ELECTION_NIGHT_RESULTS_URL}).`
+              : `Provisional results on election night: the ministry has not yet announced the website where it will publish them (checked on ${f.date(INTERIOR_CHECKED)}). When it does, we will add the official link here. How the count works: [${B2_TITLES.electionNight.en}](${b2href("electionNight", "en")}).`,
+            `If you are voting: [how to vote in Catalonia](${b2href("voting", "en")}) and [the 29 November candidate lists](${b2href("candidates", "en")}).`,
+          ],
+      results:
+        general && g
+          ? {
+              summary: `In ${place}, ${f.n(general.counts.voters)} people voted out of an electorate of ${f.n(general.counts.electorate)}: turnout of ${f.p(g.turnout)}, against ${f.p(g.cataloniaTurnout)} in Catalonia.${
+                g.leaders.length === 1
+                  ? ` The list with most votes was ${g.leaders[0]!.short}, with ${f.n(g.leaders[0]!.votes)} votes (${f.p(g.leaders[0]!.share)} of valid votes; ${f.p(g.leaders[0]!.cataloniaShare)} in Catalonia).`
+                  : g.leaders.length > 1
+                    ? ` The lists with most votes were ${leaders(" and ")}, tied on ${f.n(g.leaders[0]!.votes)} votes each (${f.p(g.leaders[0]!.share)} of valid votes).`
+                    : ""
+              }`,
+              table: generalTable(
+                `Votes for Congress on 29 November 2026 in ${place} and in Catalonia`,
+                ["List", "Votes", `% ${place}`, "% Catalonia", "Seats"],
+                "Blank votes",
+                `Source: Spanish Ministry of the Interior, official results file by municipality ${general.meta.source.file}, dated ${f.date(general.meta.source.fileDate)}. Valid votes: ${f.n(general.counts.validVotes)}, including blank votes; spoilt (null) votes: ${f.n(general.counts.nullVotes)}, not counted in the percentages. Percentages computed from the official counts. Catalonia: the sum of its municipalities, without votes from residents abroad (CERA); with them, official turnout was ${f.p(g.cataloniaTurnoutWithAbroad)}. Seats are allocated by province: the last column is Catalonia's total (${g.cataloniaSeats} members of Congress).`,
+              ),
+            }
+          : null,
     },
     municipal: {
       title: `Local election of ${dates.municipal}`,
@@ -544,9 +668,10 @@ export function buildElectionPage(m: Municipality, locale: Locale, snapshot: Ele
     turnout: {
       title: `Turnout in ${place} and in Catalonia`,
       table: {
-        caption: `Turnout in the last three elections in ${place}`,
+        caption: `Turnout in the last ${g ? "four" : "three"} elections in ${place}`,
         headers: ["Election", place, "Catalonia"],
         rows: [
+          ...(g && general ? [[`General, ${f.date(general.meta.date)}`, f.p(g.turnout), f.p(g.cataloniaTurnout)]] : []),
           [`Local, ${dates.municipal}`, f.p(mv.turnout), f.p(cataloniaMunicipalTurnout)],
           [`General, ${dates.congress}`, f.p(congress.turnout), f.p(congress.cataloniaTurnout)],
           [`Catalan Parliament, ${dates.parliament}`, f.p(parliament.turnout), f.p(parliament.cataloniaTurnout)],
@@ -580,10 +705,15 @@ export function buildElectionPage(m: Municipality, locale: Locale, snapshot: Ele
         question: `How many councillors does ${place} have?`,
         answer: `${m.municipal.seats}, under the scale in article 179 of the electoral law applied to the municipality's population.`,
       },
-      {
-        question: `When will the 29 November results for ${place} be available?`,
-        answer: "When the Interior Ministry publishes the official results file by municipality; they will appear on this page. On election night, the provisional count is published by the ministry.",
-      },
+      g && general && g.leaders.length
+        ? {
+            question: `Which list won most votes on 29 November in ${place}?`,
+            answer: `${g.leaders.map((row) => `${row.short} (${row.name})`).join(" and ")}, with ${f.n(g.leaders[0]!.votes)} votes${g.leaders.length > 1 ? " each" : ""}, ${f.p(g.leaders[0]!.share)} of valid votes. Turnout was ${f.p(g.turnout)}. Official data from the Interior Ministry.`,
+          }
+        : {
+            question: `When will the 29 November results for ${place} be available?`,
+            answer: "When the Interior Ministry publishes the official results file by municipality; they will appear on this page. On election night, the provisional count is published by the ministry.",
+          },
     ],
     siblings: {
       title: "Results in other towns",

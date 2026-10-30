@@ -107,6 +107,51 @@ export interface Municipality {
   municipal: MunicipalResult;
   congress: RegionalVotes;
   parliament: RegionalVotes;
+  /**
+   * Congress, 29 Nov 2026, from the Interior Ministry's official file by
+   * municipality (`npm run elections:29n -- import`). Votes by the file's own
+   * candidacy code. Absent until that file is published and imported.
+   */
+  g2026?: RegionalVotes;
+}
+
+/** A candidacy as the Interior Ministry's file 03 writes it (names verbatim). */
+export interface InteriorList extends ListLabel {
+  /**
+   * "Código de la candidatura cabecera de acumulación a nivel autonómico":
+   * the code under which the file adds up a party's provincial candidacies
+   * across Catalonia (PP stood as 000048 in Barcelona and 000056 elsewhere in 2023).
+   */
+  regional: string;
+}
+
+/** The imported 29N file: where it came from and Catalonia's totals. */
+export interface General2026 {
+  /** Polling date as file 02 gives it, ISO. */
+  date: string;
+  source: {
+    name: string;
+    publisher: string;
+    /** The archive's official name, built from its own members: "02202611_MUNI.zip". */
+    file: string;
+    /** Latest modification date of the archive's data files, ISO: the file's date. */
+    fileDate: string;
+    /** SHA-256 of the archive as imported. */
+    sha256: string;
+    /** Madrid date of the import, ISO. */
+    importedAt: string;
+  };
+  /** Every candidacy in Catalonia's rows, by code. */
+  lists: Record<string, InteriorList>;
+  /**
+   * Catalonia without the vote from abroad: the sum of its municipalities, by
+   * regional code. Same basis as the 2023 and 2024 comparisons on the page.
+   */
+  catalonia: RegionalVotes;
+  /** The file's own Catalonia row (vote from abroad included), by regional code. */
+  cataloniaTotal: RegionalVotes;
+  /** Seats won in Catalonia, by regional code (file 08's Catalonia row). */
+  cataloniaSeats: Record<string, number>;
 }
 
 export interface SourceRef {
@@ -136,4 +181,6 @@ export interface ElectionsSnapshot {
   };
   /** Sorted by population, largest first. */
   municipalities: Municipality[];
+  /** The 29 Nov 2026 general election, once the Interior Ministry's file is imported. */
+  general2026?: General2026;
 }

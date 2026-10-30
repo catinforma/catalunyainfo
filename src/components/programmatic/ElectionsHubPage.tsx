@@ -8,8 +8,7 @@ import { renderInline } from "@/lib/content/inline";
 import { getMessages } from "@/lib/i18n";
 import { INTL_LOCALE, type Locale } from "@/lib/i18n/config";
 import { hubCopy } from "@/lib/programmatic/elections/hub";
-import { byComarca, comarcaAnchor, electionPath, hubMeta, hubPath, hubTranslations, placeName } from "@/lib/programmatic/elections/pages";
-import { SNAPSHOT } from "@/lib/programmatic/elections/snapshot";
+import { byComarca, comarcaAnchor, electionPath, hubMeta, hubPath, hubTranslations, latestDataDate, placeName } from "@/lib/programmatic/elections/pages";
 import { electionHubDataset } from "@/lib/programmatic/elections/structured";
 import { breadcrumbSchema, graph } from "@/lib/seo/jsonld";
 
@@ -37,7 +36,7 @@ export function ElectionsHubPage({ locale }: { locale: Locale }) {
             <div className="mt-5 flex flex-wrap items-center gap-x-5 gap-y-2 text-xs text-[var(--color-muted)]">
               <span className="ci-verified">
                 <span className="ci-verified-dot" aria-hidden="true" />
-                <time dateTime={SNAPSHOT.readAt}>{copy.readLine}</time>
+                <time dateTime={latestDataDate()}>{copy.readLine}</time>
               </span>
             </div>
           </div>

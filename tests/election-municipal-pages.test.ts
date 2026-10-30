@@ -34,6 +34,7 @@ import {
   electionsSitemapPaths,
   electionsStaticParams,
   hubMeta,
+  latestDataDate,
   hubPath,
   inCa,
   municipalitiesFor,
@@ -632,7 +633,8 @@ test("sitemap: 633 URLs with the snapshot date and their language alternates", (
   assert.equal(new Set(entries.map((e) => e.path)).size, entries.length);
   for (const entry of entries) {
     assert.match(entry.path, /^\/(ca\/eleccions|es\/elecciones|en\/elections)\/([a-z0-9-]+\/)?$/);
-    assert.equal(entry.lastModified, SNAPSHOT.readAt);
+    // The read date, or the 29N import date once the Interior file is in.
+    assert.equal(entry.lastModified, latestDataDate());
     assert.ok(Object.values(entry.translations).includes(entry.path), `${entry.path} lists itself`);
   }
   const santCugat = entries.find((e) => e.path === "/es/elecciones/sant-cugat-del-valles/");
@@ -652,7 +654,7 @@ const pageText = (m: Municipality, locale: Locale) => JSON.stringify(buildElecti
 
 /** The page minus every name copied from the source (a mayor called Maria Victoria is not a claim of victory). */
 const ownText = (m: Municipality, locale: Locale) => {
-  const labels = [SNAPSHOT.elections.congress.lists, SNAPSHOT.elections.parliament.lists].flatMap((l) => Object.values(l ?? {}));
+  const labels = [SNAPSHOT.elections.congress.lists, SNAPSHOT.elections.parliament.lists, SNAPSHOT.general2026?.lists].flatMap((l) => Object.values(l ?? {}));
   const names = [m.mayor?.name ?? "", ...m.municipal.lists.flatMap((l) => [l.name, l.short]), ...labels.flatMap((l) => [l.name, l.short])]
     .filter(Boolean)
     .sort((a, b) => b.length - a.length);
@@ -673,8 +675,13 @@ test("neutral: no polls, forecasts or winners; no guessed results site; no templ
   assert.equal(ELECTION_NIGHT_RESULTS_URL, null, "no results-night link until Interior announces it");
   // Re-checked 29 Oct 2026: Interior's 21 Oct note is a media-only repository, not a public site.
   assert.equal(INTERIOR_CHECKED, "2026-10-29");
-  assert.match(buildElectionPage(bySlug("salou"), "ca").slot.md[1]!, /comprovat el 29 d'octubre de 2026/);
-  assert.match(buildElectionPage(bySlug("salou"), "en").slot.md[1]!, /checked on 29 October 2026/);
+  if (SNAPSHOT.general2026) {
+    // Once the official file is in, the slot shows it and nothing about provisional results.
+    for (const locale of LOCALES) assert.doesNotMatch(JSON.stringify(buildElectionPage(bySlug("salou"), locale).slot), /provisional/i, locale);
+  } else {
+    assert.match(buildElectionPage(bySlug("salou"), "ca").slot.md[1]!, /comprovat el 29 d'octubre de 2026/);
+    assert.match(buildElectionPage(bySlug("salou"), "en").slot.md[1]!, /checked on 29 October 2026/);
+  }
 });
 
 test("each page carries its own data and the original guidance blocks", () => {

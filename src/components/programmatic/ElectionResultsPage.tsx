@@ -11,7 +11,6 @@ import { getMessages } from "@/lib/i18n";
 import type { Locale } from "@/lib/i18n/config";
 import { buildElectionPage, type Table } from "@/lib/programmatic/elections/model";
 import { electionPath, electionTranslations, hubMeta, hubPath, placeName } from "@/lib/programmatic/elections/pages";
-import { SNAPSHOT } from "@/lib/programmatic/elections/snapshot";
 import { electionDataset } from "@/lib/programmatic/elections/structured";
 import type { Municipality } from "@/lib/programmatic/elections/types";
 import { breadcrumbSchema, faqSchema, graph } from "@/lib/seo/jsonld";
@@ -61,7 +60,7 @@ export function ElectionResultsPage({ locale, municipality }: { locale: Locale; 
               <div className="mt-5 flex flex-wrap items-center gap-x-5 gap-y-2 text-xs text-[var(--color-muted)]">
                 <span className="ci-verified">
                   <span className="ci-verified-dot" aria-hidden="true" />
-                  <time dateTime={SNAPSHOT.readAt}>{model.readLine}</time>
+                  <time dateTime={model.dataDate}>{model.readLine}</time>
                 </span>
               </div>
             </div>
@@ -81,19 +80,31 @@ export function ElectionResultsPage({ locale, municipality }: { locale: Locale; 
                   </dl>
                 </section>
 
-                <section id="29n" aria-labelledby={id(model.slot.title)} className="ci-callout ci-callout-info">
-                  <h2 id={id(model.slot.title)} className="!mt-0 font-sans text-base font-semibold">
-                    {model.slot.title}
-                  </h2>
-                  <p className="mt-1">
-                    <ElectionDayStatus lines={model.slot.lines} />
-                  </p>
-                  {model.slot.md.map((text) => (
-                    <p key={text} className="mt-2">
-                      {renderInline(text)}
+                {model.slot.results ? (
+                  // The official 29N file is imported: the slot becomes the page's first results section.
+                  <section id="29n" aria-labelledby={id(model.slot.title)}>
+                    <h2 id={id(model.slot.title)}>{model.slot.title}</h2>
+                    <p>{model.slot.results.summary}</p>
+                    <ResultsTable table={model.slot.results.table} />
+                    {model.slot.md.map((text) => (
+                      <p key={text}>{renderInline(text)}</p>
+                    ))}
+                  </section>
+                ) : (
+                  <section id="29n" aria-labelledby={id(model.slot.title)} className="ci-callout ci-callout-info">
+                    <h2 id={id(model.slot.title)} className="!mt-0 font-sans text-base font-semibold">
+                      {model.slot.title}
+                    </h2>
+                    <p className="mt-1">
+                      <ElectionDayStatus lines={model.slot.lines} />
                     </p>
-                  ))}
-                </section>
+                    {model.slot.md.map((text) => (
+                      <p key={text} className="mt-2">
+                        {renderInline(text)}
+                      </p>
+                    ))}
+                  </section>
+                )}
 
                 <h2 id={id(model.municipal.title)}>{model.municipal.title}</h2>
                 <p>{model.municipal.summary}</p>

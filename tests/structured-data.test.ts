@@ -132,9 +132,11 @@ test("every election page carries a Dataset spanning the three elections it tabu
       const node = elections.electionDataset(m, locale, `H1 ${m.name}`);
       assert.ok(node, `${locale} ${m.slug}`);
       assert.equal(node.description, electionPages.electionDescription(locale, m));
-      assert.equal(node.temporalCoverage, "2023-05-28/2024-05-12");
+      // Up to the 2024 Parliament election; to 29 Nov 2026 once the Interior file is imported.
+      assert.equal(node.temporalCoverage, `2023-05-28/${["2024-05-12", SNAPSHOT.general2026?.date ?? ""].sort().at(-1)}`);
       assert.equal((node.creator as Json).name, SNAPSHOT.sources.votes.publisher);
-      assert.equal(node.dateModified, SNAPSHOT.readAt);
+      assert.equal(node.dateModified, electionPages.latestDataDate());
+      assert.equal(electionPages.latestDataDate() >= SNAPSHOT.readAt, true);
     }
     assert.ok(elections.electionHubDataset(locale));
   }
