@@ -675,7 +675,7 @@ export const DATE_UI: Record<DateLocale, {
     municipalityLink: "Festivos locales por municipio",
   },
   en: {
-    breadcrumbParent: "Is today a holiday in Catalonia?",
+    breadcrumbParent: "Public holidays",
     yes: "Yes",
     no: "No",
     localTitle: "Local holidays that day",
@@ -685,6 +685,6 @@ export const DATE_UI: Record<DateLocale, {
     otherDates: "Other dates",
     guidesTitle: "More on holidays",
     sourcesTitle: "Sources",
-    municipalityLink: "Local holidays by town (Catalan and Spanish)",
+    municipalityLink: "Catalonia's bank holidays and local holidays, town by town",
   },
 };

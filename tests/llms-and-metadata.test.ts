@@ -21,6 +21,8 @@ const { PATHS: TOOL_PATHS } = await import("../src/lib/content/home-tools.ts");
 // Titles and descriptions of every programmatic page.
 const holidayCopy = await import("../src/lib/programmatic/holidays/copy.ts");
 const holidayData = await import("../src/lib/programmatic/holidays/data.ts");
+const holidayEnglish = await import("../src/lib/programmatic/holidays/english-copy.ts");
+const holidayEnglishTowns = await import("../src/lib/programmatic/holidays/english.ts");
 const { DATE_PAGES } = await import("../src/lib/programmatic/holidays/paths.ts");
 const { dateContent } = await import("../src/lib/programmatic/holidays/dates.ts");
 const fuelCopy = await import("../src/lib/programmatic/fuel/copy.ts");
@@ -43,7 +45,7 @@ const ORIGIN = "https://www.catalunyainfo.com";
 test("llms.txt lists every live tool and hub, each with a one-line description", () => {
   const text = buildLlmsTxt(ORIGIN, "CatalunyaInfo", {});
   const hubs = [
-    "/ca/festius/", "/es/festivos/",
+    "/ca/festius/", "/es/festivos/", "/en/holidays/",
     "/ca/benzineres/", "/es/gasolineras/",
     "/ca/rodalies/", "/es/rodalies/", "/en/rodalies/",
     "/ca/embassaments/", "/es/embalses/", "/en/reservoirs/",
@@ -125,6 +127,11 @@ function allProgrammaticMeta(): Meta[] {
     for (const zone of shippedZones()) {
       out.push({ path: `weekend-${locale}-${zone.id}`, title: weekendCopy.zoneTitle(zone, locale, window), description: weekendCopy.zoneDescription(zone, locale, window) });
     }
+  }
+  const englishHub = holidayEnglish.englishHubCopy();
+  out.push({ path: "holidays-hub-en", title: englishHub.title, description: englishHub.description });
+  for (const m of holidayEnglishTowns.englishTowns()) {
+    out.push({ path: `holidays-en-${m.slug}`, title: holidayEnglish.englishTownTitle(m), description: holidayEnglish.englishTownDescription(m) });
   }
   for (const locale of LOCALES) {
     for (const iso of DATE_PAGES) {

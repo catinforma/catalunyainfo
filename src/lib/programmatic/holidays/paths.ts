@@ -4,6 +4,7 @@ import { absoluteUrl } from "@/lib/site";
 
 import { MONTHS, type DateLocale } from "./format";
 import { NEXT_YEAR, SNAPSHOT, byComarca } from "./data";
+import { englishTowns, hasEnglishPage } from "./english";
 import { slugify } from "./slug";
 
 /**
@@ -14,7 +15,9 @@ import { slugify } from "./slug";
  *       /ca/festius/comarca/alt-emporda/   one comarca: its towns and their days, in a table
  *       /ca/festius/dia/8-desembre-2026/   "És festiu el 8 de desembre?"
  *   es  /es/festivos/ …  /es/festivos/comarca/alt-emporda/ …  /es/festivos/dia/8-diciembre-2026/
- *   en  /en/holidays/day/8-december-2026/  (date pages only)
+ *   en  /en/holidays/                      hub: Catalonia-wide days and the English towns' local days
+ *       /en/holidays/sitges/               one town, for the English selection only (english.ts)
+ *       /en/holidays/day/8-december-2026/  "Is 8 December 2026 a public holiday in Catalonia?"
  *
  * Each route folder serves one locale and 404s for the others, so the
  * site-wide `[...slug]` catch-all never sees these paths.
@@ -54,7 +57,7 @@ export function isDatePage(iso: string): iso is DatePage {
   return (DATE_PAGES as readonly string[]).includes(iso);
 }
 
-export function hubPath(locale: MuniLocale): string {
+export function hubPath(locale: DateLocale): string {
   return `/${locale}/${ROUTE[locale].root}/`;
 }
 
@@ -63,7 +66,8 @@ export function comarcaAnchor(comarca: string): string {
   return `c-${slugify(comarca)}`;
 }
 
-export function municipalityPath(locale: MuniLocale, slug: string): string {
+/** "/ca/festius/sitges/", "/es/festivos/sitges/", "/en/holidays/sitges/" (English: the selected towns only). */
+export function municipalityPath(locale: DateLocale, slug: string): string {
   return `/${locale}/${ROUTE[locale].root}/${slug}/`;
 }
 
@@ -95,12 +99,17 @@ export function datePath(locale: DateLocale, iso: string): string {
   return `/${locale}/${ROUTE[locale].root}/${ROUTE[locale].day}/${dateSlug(iso, locale)}/`;
 }
 
-export function municipalityTranslations(slug: string): Record<MuniLocale, string> {
-  return { ca: municipalityPath("ca", slug), es: municipalityPath("es", slug) };
+/** Catalan and Spanish for every town; English too for the towns of the English selection. */
+export function municipalityTranslations(slug: string): Partial<Record<DateLocale, string>> {
+  return {
+    ca: municipalityPath("ca", slug),
+    es: municipalityPath("es", slug),
+    ...(hasEnglishPage(slug) ? { en: municipalityPath("en", slug) } : {}),
+  };
 }
 
-export function hubTranslations(): Record<MuniLocale, string> {
-  return { ca: hubPath("ca"), es: hubPath("es") };
+export function hubTranslations(): Record<DateLocale, string> {
+  return { ca: hubPath("ca"), es: hubPath("es"), en: hubPath("en") };
 }
 
 export function dateTranslations(iso: string): Record<DateLocale, string> {
@@ -126,6 +135,11 @@ export function holidayFamilyPaths(): FamilyPath[] {
     for (const m of SNAPSHOT.municipalities) {
       out.push({ path: municipalityPath(locale, m.slug), lastModified: localDate, translations: municipalityTranslations(m.slug) });
     }
+  }
+  // English: the hub and the towns of the English selection (no comarca pages).
+  out.push({ path: hubPath("en"), lastModified: localDate, translations: hubTranslations() });
+  for (const m of englishTowns()) {
+    out.push({ path: municipalityPath("en", m.slug), lastModified: localDate, translations: municipalityTranslations(m.slug) });
   }
   for (const locale of DATE_LOCALES) {
     for (const iso of DATE_PAGES) {

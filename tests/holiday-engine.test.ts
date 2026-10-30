@@ -853,6 +853,8 @@ test("route files: one per locale folder, revalidate=false, calling the resolver
     ["festius/dia/[dia]/page.tsx", "ca", /resolveDatePage\("ca"/],
     ["festivos/dia/[dia]/page.tsx", "es", /resolveDatePage\("es"/],
     ["holidays/day/[dia]/page.tsx", "en", /resolveDatePage\("en"/],
+    ["holidays/page.tsx", "en", /hubAllowed\("en"/],
+    ["holidays/[municipi]/page.tsx", "en", /resolveMunicipality\("en"/],
   ];
   for (const [file, , resolver] of files) {
     const source = readFileSync(join(app, file), "utf8");
@@ -1022,10 +1024,10 @@ test("a town whose days belong to its nuclei says which nuclei are off", () => {
 /* Sitemap                                                                    */
 /* -------------------------------------------------------------------------- */
 
-test("sitemap: 1,955 URLs, unique, dated with the dataset, with hreflang", () => {
+test("sitemap: 1,985 URLs, unique, dated with the dataset, with hreflang", () => {
   const entries = holidaySitemapEntries();
-  // 2 hubs, 43 comarques x 2, 917 towns x 2 locales, 11 dates x 3 locales.
-  assert.equal(entries.length, 2 + 86 + 1834 + 33);
+  // 2 hubs, 43 comarques x 2, 917 towns x 2 locales, the English hub and 29 English towns, 11 dates x 3 locales.
+  assert.equal(entries.length, 2 + 86 + 1834 + 1 + 29 + 33);
   for (const m of SNAPSHOT.municipalities) {
     for (const locale of MUNI_LOCALES) assert.ok(entries.some((e) => e.url.endsWith(municipalityPath(locale, m.slug))), m.slug);
   }
@@ -1171,6 +1173,7 @@ test("links go to the published guides", () => {
 test("the local-holidays guide links to the hub, one sentence per locale", () => {
   assert.match(LOCAL_COPY.ca.related, /\]\(\/ca\/festius\/\)/);
   assert.match(LOCAL_COPY.es.related, /\]\(\/es\/festivos\/\)/);
+  assert.match(LOCAL_COPY.en.related, /\]\(\/en\/holidays\/\)/);
 });
 
 test("server output carries no clock: no argument-less new Date() outside the browser component", () => {
@@ -1181,6 +1184,10 @@ test("server output carries no clock: no argument-less new Date() outside the br
     "src/lib/programmatic/holidays/format.ts",
     "src/lib/programmatic/holidays/paths.ts",
     "src/lib/programmatic/holidays/routing.ts",
+    "src/lib/programmatic/holidays/english.ts",
+    "src/lib/programmatic/holidays/english-copy.ts",
+    "src/components/programmatic/holidays/EnglishTownPage.tsx",
+    "src/components/programmatic/holidays/EnglishHubPage.tsx",
     "src/components/programmatic/holidays/MunicipalityPage.tsx",
     "src/components/programmatic/holidays/HubPage.tsx",
     "src/components/programmatic/holidays/ComarcaPage.tsx",

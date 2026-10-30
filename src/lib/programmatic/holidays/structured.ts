@@ -12,6 +12,7 @@ import { GENCAT_OPEN_DATA_LICENCE, datasetSchema } from "@/lib/seo/jsonld";
 
 import { comarcaDescription, comarcaH1, displayName, hubCopy, municipalityDescription, municipalityH1 } from "./copy";
 import { NEXT, SNAPSHOT, YEAR, nextYearFor, type ComarcaGroup } from "./data";
+import { enName, englishHubCopy, englishTownDescription, englishTownH1 } from "./english-copy";
 import { comarcaPath, hubPath, municipalityPath, type MuniLocale } from "./paths";
 import type { SnapshotMunicipality } from "./types";
 
@@ -55,6 +56,39 @@ export function comarcaDataset(g: ComarcaGroup, locale: MuniLocale) {
     license: GENCAT_OPEN_DATA_LICENCE,
     isBasedOn: basedOn(),
     spatialCoverage: `${g.comarca}, ${CATALONIA[locale]}`,
+    temporalCoverage: String(YEAR),
+    dateModified: SNAPSHOT.readOn,
+  });
+}
+
+/* English: the selected towns and the hub (30 Oct 2026). Same dataset, same fields. */
+
+export function englishTownDataset(m: SnapshotMunicipality) {
+  return datasetSchema({
+    path: municipalityPath("en", m.slug),
+    name: englishTownH1(m),
+    description: englishTownDescription(m),
+    locale: "en",
+    creator: HOLIDAY_DATA_CREATOR,
+    license: GENCAT_OPEN_DATA_LICENCE,
+    isBasedOn: basedOn(),
+    spatialCoverage: `${enName(m)}, Catalonia`,
+    temporalCoverage: coverage(m.slug),
+    dateModified: SNAPSHOT.readOn,
+  });
+}
+
+export function englishHubDataset() {
+  const t = englishHubCopy();
+  return datasetSchema({
+    path: hubPath("en"),
+    name: t.h1,
+    description: t.description,
+    locale: "en",
+    creator: HOLIDAY_DATA_CREATOR,
+    license: GENCAT_OPEN_DATA_LICENCE,
+    isBasedOn: basedOn(),
+    spatialCoverage: "Catalonia",
     temporalCoverage: String(YEAR),
     dateModified: SNAPSHOT.readOn,
   });
