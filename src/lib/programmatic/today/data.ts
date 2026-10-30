@@ -7,7 +7,7 @@
  *
  * What each item reads:
  *   holidays   the holiday engine's snapshot (Catalonia-wide calendar of the
- *              Generalitat's orders + the 300 largest towns' local days)
+ *              Generalitat's orders + every town's local days)
  *   strikes    STRIKES in lib/content/batch02/strikes.ts (as of STRIKES_AS_OF)
  *   Rodalies   /api/rodalies/alerts/ in the browser (line names from the snapshot)
  *   reservoirs /api/reservoirs/levels/ in the browser, the snapshot's dated
@@ -77,7 +77,7 @@ function addPlaces(
   for (const nucleus of nuclei) for (const date of nucleus.dates) if (!local.includes(date)) push(date, { n: nucleus.name, h: href, p: m.name });
 }
 
-/** Local holidays of the 300 largest towns from DATA_FROM, by date, largest first. */
+/** Local holidays of every town with a page from DATA_FROM, by date, largest first. */
 export function localByDate(locale: Locale): Record<string, LocalPlace[]> {
   const byDate = new Map<string, LocalPlace[]>();
   const towns = [...HOLIDAYS.municipalities].sort((a, b) => a.rank - b.rank);

@@ -3,16 +3,17 @@ import type { MetadataRoute } from "next";
 import { absoluteUrl } from "@/lib/site";
 
 import { MONTHS, type DateLocale } from "./format";
-import { NEXT_YEAR, SNAPSHOT } from "./data";
+import { NEXT_YEAR, SNAPSHOT, byComarca } from "./data";
 import { slugify } from "./slug";
 
 /**
  * URLs of the holiday family.
  *
- *   ca  /ca/festius/                       hub, the 300 municipalities by comarca
+ *   ca  /ca/festius/                       hub, every municipality by comarca
  *       /ca/festius/<slug>/                one municipality
+ *       /ca/festius/comarca/alt-emporda/   one comarca: its towns and their days, in a table
  *       /ca/festius/dia/8-desembre-2026/   "És festiu el 8 de desembre?"
- *   es  /es/festivos/ …  /es/festivos/dia/8-diciembre-2026/
+ *   es  /es/festivos/ …  /es/festivos/comarca/alt-emporda/ …  /es/festivos/dia/8-diciembre-2026/
  *   en  /en/holidays/day/8-december-2026/  (date pages only)
  *
  * Each route folder serves one locale and 404s for the others, so the
@@ -24,10 +25,10 @@ export const MUNI_LOCALES: readonly MuniLocale[] = ["ca", "es"];
 export const DATE_LOCALES: readonly DateLocale[] = ["ca", "es", "en"];
 
 export const ROUTE = {
-  ca: { root: "festius", day: "dia" },
-  es: { root: "festivos", day: "dia" },
-  en: { root: "holidays", day: "day" },
-} as const satisfies Record<DateLocale, { root: string; day: string }>;
+  ca: { root: "festius", day: "dia", comarca: "comarca" },
+  es: { root: "festivos", day: "dia", comarca: "comarca" },
+  en: { root: "holidays", day: "day", comarca: null },
+} as const satisfies Record<DateLocale, { root: string; day: string; comarca: string | null }>;
 
 /**
  * The date pages, in calendar order. Tranche 1 (27 Oct 2026): 7, 8, 25 and 26
@@ -64,6 +65,15 @@ export function comarcaAnchor(comarca: string): string {
 
 export function municipalityPath(locale: MuniLocale, slug: string): string {
   return `/${locale}/${ROUTE[locale].root}/${slug}/`;
+}
+
+/** "/ca/festius/comarca/alt-emporda/": the comarca's towns and their two days, in a table. */
+export function comarcaPath(locale: MuniLocale, slug: string): string {
+  return `/${locale}/${ROUTE[locale].root}/${ROUTE[locale].comarca}/${slug}/`;
+}
+
+export function comarcaTranslations(slug: string): Record<MuniLocale, string> {
+  return { ca: comarcaPath("ca", slug), es: comarcaPath("es", slug) };
 }
 
 function asciiMonth(index: number, locale: DateLocale): string {
@@ -110,6 +120,9 @@ export function holidayFamilyPaths(): FamilyPath[] {
   const out: FamilyPath[] = [];
   for (const locale of MUNI_LOCALES) {
     out.push({ path: hubPath(locale), lastModified: localDate, translations: hubTranslations() });
+    for (const group of byComarca()) {
+      out.push({ path: comarcaPath(locale, group.slug), lastModified: localDate, translations: comarcaTranslations(group.slug) });
+    }
     for (const m of SNAPSHOT.municipalities) {
       out.push({ path: municipalityPath(locale, m.slug), lastModified: localDate, translations: municipalityTranslations(m.slug) });
     }

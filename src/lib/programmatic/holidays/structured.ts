@@ -10,9 +10,9 @@
 
 import { GENCAT_OPEN_DATA_LICENCE, datasetSchema } from "@/lib/seo/jsonld";
 
-import { displayName, hubCopy, municipalityDescription, municipalityH1 } from "./copy";
-import { NEXT, SNAPSHOT, YEAR, nextYearFor } from "./data";
-import { hubPath, municipalityPath, type MuniLocale } from "./paths";
+import { comarcaDescription, comarcaH1, displayName, hubCopy, municipalityDescription, municipalityH1 } from "./copy";
+import { NEXT, SNAPSHOT, YEAR, nextYearFor, type ComarcaGroup } from "./data";
+import { comarcaPath, hubPath, municipalityPath, type MuniLocale } from "./paths";
 import type { SnapshotMunicipality } from "./types";
 
 export const HOLIDAY_DATA_CREATOR = "Generalitat de Catalunya. Departament d'Empresa i Treball";
@@ -40,6 +40,22 @@ export function municipalityDataset(m: SnapshotMunicipality, locale: MuniLocale)
     isBasedOn: basedOn(),
     spatialCoverage: `${displayName(m, locale)}, ${CATALONIA[locale]}`,
     temporalCoverage: coverage(m.slug),
+    dateModified: SNAPSHOT.readOn,
+  });
+}
+
+/** A comarca page: its towns' days, in a table (tranche 3). */
+export function comarcaDataset(g: ComarcaGroup, locale: MuniLocale) {
+  return datasetSchema({
+    path: comarcaPath(locale, g.slug),
+    name: comarcaH1(g, locale),
+    description: comarcaDescription(g, locale),
+    locale,
+    creator: HOLIDAY_DATA_CREATOR,
+    license: GENCAT_OPEN_DATA_LICENCE,
+    isBasedOn: basedOn(),
+    spatialCoverage: `${g.comarca}, ${CATALONIA[locale]}`,
+    temporalCoverage: String(YEAR),
     dateModified: SNAPSHOT.readOn,
   });
 }
