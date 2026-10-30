@@ -4,8 +4,8 @@ import { Breadcrumbs, type Crumb } from "@/components/Breadcrumbs";
 import { getMessages } from "@/lib/i18n";
 import { DATE_UI, dateQuestion } from "@/lib/programmatic/holidays/copy";
 import { dateContent } from "@/lib/programmatic/holidays/dates";
+import { hasEnglishPage } from "@/lib/programmatic/holidays/english";
 import { longDate, type DateLocale } from "@/lib/programmatic/holidays/format";
-import { GUIDES } from "@/lib/programmatic/holidays/links";
 import { esName } from "@/lib/programmatic/holidays/names";
 import { DATE_PAGES, datePath, hubPath, municipalityPath, type DatePage as DatePageIso } from "@/lib/programmatic/holidays/paths";
 
@@ -13,12 +13,18 @@ import { GuideLinks, Sources, type SourceKey } from "./parts";
 
 export function dateCrumbs(iso: DatePageIso, locale: DateLocale): Crumb[] {
   const ui = DATE_UI[locale];
-  const parent = locale === "en" ? GUIDES.holidayToday.en : hubPath(locale);
   return [
     { label: getMessages(locale).common.home, href: `/${locale}/` },
-    { label: ui.breadcrumbParent, href: parent },
+    { label: ui.breadcrumbParent, href: hubPath(locale) },
     { label: dateQuestion(iso, locale), href: datePath(locale, iso) },
   ];
+}
+
+/** The town page a place on the list links to: every town in ca/es, the English selection in English. */
+function placeHref(slug: string | null, locale: DateLocale): string | null {
+  if (!slug) return null;
+  if (locale === "en") return hasEnglishPage(slug) ? municipalityPath("en", slug) : null;
+  return municipalityPath(locale, slug);
 }
 
 export function DatePageView({ iso, locale }: { iso: DatePageIso; locale: DateLocale }) {
@@ -77,8 +83,9 @@ export function DatePageView({ iso, locale }: { iso: DatePageIso; locale: DateLo
               {content.local.places.map((p) => {
                 const label = locale === "es" ? esName(p.name) : p.name;
                 const parent = p.parent ? (locale === "es" ? esName(p.parent) : p.parent) : null;
-                // Every town has a page (tranche 3); a nucleus links its town's, which lists the nucleus's days.
-                const href = p.slug && locale !== "en" ? municipalityPath(locale, p.slug) : null;
+                // Every town has a page in ca/es (tranche 3), the English selection in English;
+                // a nucleus links its town's, which lists the nucleus's days.
+                const href = placeHref(p.slug, locale);
                 return (
                   <li key={`${p.name}-${p.parent ?? ""}`}>
                     {href && !parent ? <Link href={href}>{label}</Link> : label}
@@ -113,11 +120,9 @@ export function DatePageView({ iso, locale }: { iso: DatePageIso; locale: DateLo
                 <Link href={datePath(locale, d)}>{dateQuestion(d, locale)}</Link>
               </li>
             ))}
-            {locale !== "en" ? (
-              <li>
-                <Link href={hubPath(locale)}>{ui.municipalityLink}</Link>
-              </li>
-            ) : null}
+            <li>
+              <Link href={hubPath(locale)}>{ui.municipalityLink}</Link>
+            </li>
           </ul>
         </section>
 

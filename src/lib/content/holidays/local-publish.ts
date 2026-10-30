@@ -142,7 +142,7 @@ const COPY: Record<Locale, Copy> = {
       "The local holiday that applies at work is the one of the municipality where your workplace is, not where you live. Someone living in Badalona and working in Barcelona takes Barcelona's local holidays.",
     ],
     related:
-      "For the twelve Catalonia-wide days, see the [public holiday guide](/en/guides/catalonia-public-holidays/); to check today, see [is today a holiday](/en/guides/is-today-a-holiday-in-catalonia/). For the days schools are closed, see the [school calendar](/en/guides/catalonia-school-calendar/).",
+      "For the twelve Catalonia-wide days, see the [public holiday guide](/en/guides/catalonia-public-holidays/); to check today, see [is today a holiday](/en/guides/is-today-a-holiday-in-catalonia/). For the days schools are closed, see the [school calendar](/en/guides/catalonia-school-calendar/). The largest cities and the main resorts also have a page each, with every holiday of the year and whether today is one there: [public holidays town by town](/en/holidays/).",
     heroAlt: "Giant figures parading through a crowded street during a festa major in Catalonia",
     heroCaption: "Many local holidays fall on the town's festa major.",
   },

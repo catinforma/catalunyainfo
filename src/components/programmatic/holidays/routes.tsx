@@ -7,6 +7,8 @@ import { todayInCatalonia } from "@/lib/content/holidays/calendar";
 import { comarcaDescription, comarcaTitle, dateQuestion, hubCopy, municipalityDescription, municipalityFaq, municipalityTitle } from "@/lib/programmatic/holidays/copy";
 import { comarcaBySlug, municipalityBySlug, nextYearFor } from "@/lib/programmatic/holidays/data";
 import { dateContent } from "@/lib/programmatic/holidays/dates";
+import { englishTownBySlug } from "@/lib/programmatic/holidays/english";
+import { englishHubCopy, englishTownDescription, englishTownFaq, englishTownTitle } from "@/lib/programmatic/holidays/english-copy";
 import type { DateLocale } from "@/lib/programmatic/holidays/format";
 import {
   comarcaPath,
@@ -20,12 +22,20 @@ import {
   type DatePage,
   type MuniLocale,
 } from "@/lib/programmatic/holidays/paths";
-import { comarcaDataset, holidayHubDataset, municipalityDataset } from "@/lib/programmatic/holidays/structured";
+import {
+  comarcaDataset,
+  englishHubDataset,
+  englishTownDataset,
+  holidayHubDataset,
+  municipalityDataset,
+} from "@/lib/programmatic/holidays/structured";
 import { breadcrumbSchema, faqSchema, graph } from "@/lib/seo/jsonld";
 import { buildMetadata } from "@/lib/seo/metadata";
 
 import { ComarcaPage, comarcaCrumbs } from "./ComarcaPage";
 import { DatePageView, dateCrumbs } from "./DatePage";
+import { EnglishHubPage, englishHubCrumbs } from "./EnglishHubPage";
+import { EnglishTownPage, englishTownCrumbs } from "./EnglishTownPage";
 import { HubPage, hubCrumbs } from "./HubPage";
 import { MunicipalityPage, municipalityCrumbs } from "./MunicipalityPage";
 
@@ -93,6 +103,61 @@ export function MunicipalityRoute({ locale, slug }: { locale: MuniLocale; slug: 
         ])}
       />
       <SiteFooter locale={locale} />
+    </>
+  );
+}
+
+/* ------------------------------------------------- English: town, hub --- */
+
+export function englishTownMetadata(slug: string): Metadata {
+  const m = englishTownBySlug(slug);
+  if (!m) return { robots: { index: false, follow: false } };
+  return buildMetadata({
+    locale: "en",
+    path: municipalityPath("en", m.slug),
+    title: englishTownTitle(m),
+    description: englishTownDescription(m),
+    translations: municipalityTranslations(m.slug),
+  });
+}
+
+/** Null when the slug is not one of the English towns (the page then 404s). */
+export function EnglishTownRoute({ slug }: { slug: string }) {
+  const m = englishTownBySlug(slug);
+  if (!m) return null;
+  return (
+    <>
+      <SiteHeader locale="en" translations={municipalityTranslations(m.slug)} />
+      <main id="main">
+        <EnglishTownPage m={m} />
+      </main>
+      <JsonLd
+        json={graph([
+          breadcrumbSchema(englishTownCrumbs(m)),
+          englishTownDataset(m),
+          // The questions the page prints (english-copy.ts englishTownFaq), as FAQPage.
+          faqSchema([{ type: "faq", items: englishTownFaq(m, nextYearFor(m.slug)) }]),
+        ])}
+      />
+      <SiteFooter locale="en" />
+    </>
+  );
+}
+
+export function englishHubMetadata(): Metadata {
+  const t = englishHubCopy();
+  return buildMetadata({ locale: "en", path: hubPath("en"), title: t.title, description: t.description, translations: hubTranslations() });
+}
+
+export function EnglishHubRoute() {
+  return (
+    <>
+      <SiteHeader locale="en" translations={hubTranslations()} />
+      <main id="main">
+        <EnglishHubPage />
+      </main>
+      <JsonLd json={graph([breadcrumbSchema(englishHubCrumbs()), englishHubDataset()])} />
+      <SiteFooter locale="en" />
     </>
   );
 }

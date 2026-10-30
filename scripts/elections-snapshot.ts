@@ -405,7 +405,7 @@ async function main() {
 }
 
 /**
- * How the English resorts (`EN_RESORTS` in `pages.ts`) were chosen: places in the
+ * How the English resorts (`EN_RESORTS` in `elections/english.ts`) were chosen: places in the
  * Registre de Turisme de Catalunya (`t2h3-cgys`: hotels, campsites, rural
  * tourism, tourist flats and homes), summed per municipality. Printed only:
  * the register changes every day and URLs must not follow it.

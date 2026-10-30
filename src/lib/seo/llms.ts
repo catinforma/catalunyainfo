@@ -20,6 +20,7 @@ import { hubPath as electionsHub, PAGES_PER_LOCALE } from "@/lib/programmatic/el
 import { STATIONS, selectPages } from "@/lib/programmatic/fuel/data";
 import { fuelHubPath } from "@/lib/programmatic/fuel/paths";
 import { SNAPSHOT as HOLIDAYS, YEAR } from "@/lib/programmatic/holidays/data";
+import { englishTowns } from "@/lib/programmatic/holidays/english";
 import { GUIDES } from "@/lib/programmatic/holidays/links";
 import { DATE_PAGES, datePath, hubPath as holidaysHub } from "@/lib/programmatic/holidays/paths";
 import { RESERVOIR_DATA } from "@/lib/programmatic/reservoirs/data";
@@ -65,8 +66,8 @@ export function liveTools(): LiveTool[] {
     },
     {
       name: "Public holidays by town",
-      hubs: { ca: holidaysHub("ca"), es: holidaysHub("es") },
-      description: `the ${YEAR} local holidays of the ${HOLIDAYS.municipalities.length} most populous municipalities of Catalonia, one page per town, with the Catalonia-wide days, whether today is a holiday and the Sundays shops may open (DOGC order and Generalitat open data).`,
+      hubs: { ca: holidaysHub("ca"), es: holidaysHub("es"), en: holidaysHub("en") },
+      description: `the ${YEAR} local holidays of the ${HOLIDAYS.municipalities.length} municipalities of Catalonia that have them, one page per town (${englishTowns().length} in English: the largest cities and the main resorts), with the Catalonia-wide days, whether today is a holiday and the Sundays shops may open (DOGC order and Generalitat open data).`,
     },
     {
       name: "Is it a public holiday on…?",

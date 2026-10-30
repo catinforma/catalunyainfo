@@ -1,4 +1,5 @@
 import { comarcaBySlug, municipalityBySlug, prerenderComarques, prerenderSlugs, type ComarcaGroup } from "./data";
+import { englishTownBySlug, englishTowns } from "./english";
 import type { DateLocale } from "./format";
 import { DATE_PAGES, dateFromSlug, dateSlug, type DatePage, type MuniLocale } from "./paths";
 import type { SnapshotMunicipality } from "./types";
@@ -7,16 +8,17 @@ import type { SnapshotMunicipality } from "./types";
  * Which request each holiday route answers. Every route folder serves one
  * locale only (`festius` = ca, `festivos` = es, `holidays` = en): any other
  * `[locale]` value, or a slug that is not in the snapshot, resolves to null
- * and the page calls `notFound()`.
+ * and the page calls `notFound()`. English town pages exist only for the
+ * English selection (`english.ts`); every other town is a 404 there.
  */
 
-export function hubAllowed(route: MuniLocale, locale: string): boolean {
+export function hubAllowed(route: DateLocale, locale: string): boolean {
   return route === locale;
 }
 
-export function resolveMunicipality(route: MuniLocale, locale: string, slug: string): SnapshotMunicipality | null {
+export function resolveMunicipality(route: DateLocale, locale: string, slug: string): SnapshotMunicipality | null {
   if (route !== locale) return null;
-  return municipalityBySlug(slug);
+  return route === "en" ? englishTownBySlug(slug) : municipalityBySlug(slug);
 }
 
 export function resolveComarca(route: MuniLocale, locale: string, slug: string): ComarcaGroup | null {
@@ -46,6 +48,11 @@ export function resolveDatePage(route: DateLocale, locale: string, slug: string)
  */
 export function municipalityStaticParams(route: MuniLocale): { locale: MuniLocale; municipi: string }[] {
   return prerenderSlugs(20).map((municipi) => ({ locale: route, municipi }));
+}
+
+/** English: every town of the selection is built at deploy (29), and the route allows no others. */
+export function englishTownStaticParams(): { locale: "en"; municipi: string }[] {
+  return englishTowns().map((m) => ({ locale: "en" as const, municipi: m.slug }));
 }
 
 /** Built at deploy: the four most populous comarques (as the fuel family does); the rest on first request. */
