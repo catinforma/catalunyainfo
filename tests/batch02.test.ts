@@ -690,6 +690,10 @@ test("parking: per-rate limits, Trinitat Vella zone 36, the AREA map and a day-b
   }
   assert.match(PARKING.editions.ca.seoTitle, /^Preu zona blava i verda Barcelona: 1,15-4,25 €\/h/);
   assert.match(PARKING.editions.es.seoTitle, /^Zona azul y verde Barcelona: cómo funciona, horario y precio$/);
+  // EN, 30 Oct (CTR sweep: 186 impressions at 6.0, 0.5 %): the zone words of
+  // its queries in the title, the visitor answer in the description.
+  assert.match(PARKING.editions.en.seoTitle, /^Barcelona blue and green zone parking/);
+  assert.match(PARKING.editions.en.seoDescription, /9:00–20:00.*visitors may park 1–2 h/);
   assert.equal(PARKING.verifiedAt, "2026-10-30");
   assert.ok(PARKING.sources.some((s) => s.url === "https://areaverda.cat/es/plano"));
 });
