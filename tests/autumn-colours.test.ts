@@ -214,11 +214,11 @@ test("the EN snippet promises where to go in November and the status is dated 30
   assert.match(en.seoTitle, /November/);
   for (const place of ["Salenques", "Bonabé", "Sant Joan", "Fageda", "Montseny"]) {
     assert.ok(en.seoDescription.includes(place), `description lacks ${place}`);
-    assert.ok(en.intro[0].includes(place), `lead lacks ${place}`);
+    assert.ok(en.intro[0]?.includes(place), `lead lacks ${place}`);
   }
   const updated = { ca: /30 d'octubre de 2026/, es: /30 de octubre de 2026/, en: /30 October 2026/ };
   for (const locale of LOCALES) {
-    assert.match(COPY[locale].status[0], updated[locale]);
+    assert.match(COPY[locale].status[0] ?? "", updated[locale]);
     assert.ok(COPY[locale].faq.length >= 3, `${locale}: FAQ`);
   }
 });

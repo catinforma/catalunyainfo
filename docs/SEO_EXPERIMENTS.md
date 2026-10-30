@@ -1051,6 +1051,48 @@ language; for the strikes pages also the week of 9-13 Nov).
 
 **Outcome:** _pending_
 
+## 2026-10-30 — CTR sweep: pages whose CTR is under half the site's own curve (wave 3)
+
+Input: `research_notes/x10/ctr-sweep-30oct.json`, the site's CTR by position
+over 28 days (4: 7.3 %, 5: 7.3 %, 6: 3.0 %, 7: 1.7 %, 8: 1.8 %, 9: 0.8 %)
+and the pages under half of it, plus `top3-inventory-30oct.json`. The lever
+is the snippet: title and description state the specific answer, then the
+lead. Owner decision of 28 Oct: freezes lifted (mesa ca/es was frozen to
+14 Nov). Positions are 28-day (7-day where marked). Every new fact was read
+on the official source on 30 Oct 2026.
+
+| Page (publish group) | Old title → new title | Target queries, position now | What changed |
+| --- | --- | --- | --- |
+| `/en/nature/fall-colors-catalonia/` (`autumn`) | "Catalonia fall colors 2026: best places and timing" → "Catalonia fall colors 2026: where to see them in November" | page 4.1, 406 impr., 3.4 % vs 7.3 % expected; queries anonymised ("when does foliage start", "now?", "esta semana" at 1) | Description and first line name the windows still open (Salenques late Oct-early Nov, Val d'Aran tourism board; Bonabé and Sant Joan to the first half of Nov, Alt Pirineu park, both re-read) and the late forests near Barcelona. Status block (ca/es/en) re-dated 30 Oct, framed "late Oct + first half of Nov"; XEMA minimums re-read (latest day 24 Oct). FAQ (ca/es/en): when foliage starts, near Barcelona, "are they out now" |
+| `/en/guides/spain-election-night-results/` (`election-night`) | "Spain election results 29 November: times and the count" → "Spain general election results 2026: what time, where" | page 5.0, 281 impr., 2.1 %; 2026 spain general election results 5.2, spain elections 2026 results 5, spain election results 2026 4.6, "at what time the polls open … 29th november" 5.8, when is the spain election 4 | Polls 9:00-20:00 in the description, lead, timeline (ca/es/en) and FAQ (29neleccionesgenerales.es "voto presencial"). Interior still announces no results site or time (29-N page and 29neleccionesgenerales.es checked 30 Oct): the page says so, no link added |
+| `/ca/guies/temps-barcelona-mes-a-mes/` (`climate`) | "Temps i clima a Barcelona mes a mes: temperatures i pluja" → "Temps a Barcelona mes a mes: temperatures mitjanes i pluja" | page 4.6, 176 impr., 1.1 %; temps a barcelona 6, temps barcelona ahir 8.5, temperatures barcelona 12 (live-weather intent) | Description opens with November (17,3/8,6 °C) and December (14,3/5,7 °C); lead opens with the Jan-Aug range and links the Meteocat municipal forecast for "el temps d'avui" |
+| `/es/guias/tiempo-barcelona-mes-a-mes/` (`climate`) | title kept ("Clima y tiempo en Barcelona por meses: temperatura y lluvia") | page 8.6, 183 impr., 0 clicks; temperatura barcelona 4.5, cual es el mes mas frio 11, cuando comienza el invierno 11, en que mes llueve mas 7 | Same description and lead pattern, AEMET municipal forecast linked |
+| `/es/guias/festivos-locales-cataluna/` (`local-holidays`; ca/en body too) | "Festivos locales de Cataluña por municipio" → "Festivos locales Cataluña 2026 por municipio: busca el tuyo" (CA "Festius locals Catalunya 2026 per municipi: busca el teu") | ES page 5.7, 359 impr. since 25 Oct, 0.8 %; queries anonymised; CA 5.2 | Lead links /es/festivos/ and the six largest towns' pages; a paragraph gives the busiest local days left in 2026 (11 Nov: 50 places, 30 Nov: 38, 7 Dec: 45, from the DOGC snapshot the date pages use) with links to each date page; 2027 order said to be pending |
+| `/en/day-trips/portaventura-from-barcelona/` (`portaventura`) | "PortAventura from Barcelona: opening times, tickets, train" → "PortAventura opening dates 2026-27 and train from Barcelona" | page 7.6 (7 d 9.4), 527 impr.; ouverture portaventura 2027 1, when is portaventura open 1, horario portaventura octubre 2026 1, how to get to portaventura from barcelona 7.7, "are they open in january" 4 | Description lists the season (daily to 6 Jan; closed 7 Jan-19 Feb; weekends from 20 Feb; daily from 18 Mar). Park feed re-read Oct 2026-Apr 2027, unchanged; FAQ "Is PortAventura open in January 2027?" |
+| `/en/guides/parking-in-barcelona-blue-green-zones/` (`parking`) | "Barcelona street parking prices: €1.15 to €4.25 an hour" → "Barcelona blue and green zone parking: hours, prices, rules" | page 6.0, 186 impr., 0.5 %; green zone parking barcelona 5, barcelona parking zones 42 | Description: blue Mon-Fri 9:00-20:00, visitors 1-2 h in green, Sundays free away from the beach (AREA facts re-read by the parking push the same day) |
+| `/en/guides/barcelona-catalonia-tourist-tax/` (`tourist-tax`) | "Barcelona tourist tax (city tax): rates and calculator" → "Barcelona tourist tax 2026: €6 to €12 per person per night" | page 6.5, 215 impr., 1.4 %; barcelona tourist tax calculator 4 | Range, €5 city surcharge, 7-night cap and age exemption in the description, computed from the rate table |
+| `/es/naturaleza/setas-cataluna-condiciones/`, `/ca/natura/bolets-catalunya-condicions/` (`mushrooms`) | ES/EN titles kept; CA "Bolets a Catalunya: mapa de condicions aquesta setmana" → "Mapa bolets Catalunya 2026: on trobar-ne aquesta setmana" | ES 4.7 (donde hay setas ahora en cataluña 2026 1.4, 168 clicks; mapa bolets catalunya 2026 7.9, a CA query on the ES page, 232 impr.); CA 6.2 (on trobar bolets aquesta setmana 2026 8.1, mapa bolets catalunya 2026 9.1, previsio bolets catalunya 8.3) | Description now live per refresh: reading date + wettest zones (`liveDescription`, ≤ 155); the lead is that dated answer. ES intro links the CA page. Data pipeline untouched |
+| `/en/guides/polling-station-duty-spain/`, `/ca/guies/membre-mesa-electoral/`, `/es/guias/miembro-mesa-electoral/` (`mesa`) | ca "…2026: es cobren 75 €, excuses i què fer" → "Membre de mesa electoral 2026: 75 €, sorteig i excuses"; es "…: se cobran 75 €, excusas y qué hacer" → "Mesa electoral 2026: se cobran 75 €, sorteo y excusas"; EN title kept | EN 3.5 (7 d), 389 impr., 1 %: its queries are Spanish ("cuanto pagan" 3, "cuanto se cobra por mesa electoral" 3); CA 5.1, ES 8.3 | Descriptions lead with the draw (31 Oct-4 Nov), 3-day notice, 7 days to object (JEC calendar re-read), €75 tax-free. The draw starts on 31 Oct |
+| `/en/guides/la-boqueria-barcelona-markets/` (`family-markets`) | "La Boqueria opening hours and Barcelona market times" → "La Boqueria opening hours 2026: Mon–Sat 8:00–20:30" | 7 d 9.2, 264 impr., 0 clicks; la boqueria barcelona opening hours 10.6, is la boqueria open on sundays 6, what time does la boqueria close 9.8 | Description answers Sundays/holidays (Ajuntament market page re-read) |
+| EN Christmas markets (`christmas`), December bridge (`pont-desembre`), La Marató (`marato`) | "Barcelona Christmas markets 2026: Santa Llúcia, Catalonia" → "Barcelona Christmas markets 2026: dates, Santa Llúcia fair"; "December 2026 public holidays in Catalonia: 6, 7 and 8 Dec" → "…: 8, 25 and 26 Dec"; "La Marató 2026 (TV3 telethon): date, cause, how to donate" → "La Marató 2026: TV3 telethon on 13 December, how to donate" | EN titles the news-cycle push left unchanged | Descriptions state the answer like the ca/es ones (Santa Llúcia not out, 2025 dates; Monday 7 a working day except in 43 towns) |
+
+**Not done on purpose.** Live (render-time) descriptions for the climate
+pages: they are not day-dependent pages the cron revalidates; the static
+description names November and December and should be revisited in January.
+"Quants dies després de ploure surten els bolets" (CA, 21.7): no official
+source could be read today, so no answer was added. EN candidates (5.2,
+2.5 %): its impressions are `site:boe.es` operator queries, not readers.
+
+**Prediction.** Fall colors EN and election night EN back to the curve
+(≥ 7 % at 4-5); CA climate and ES local holidays ≥ 3 %; PortAventura EN,
+parking EN, tourist tax EN, Boqueria EN ≥ 2 % at 6-9; "mapa bolets
+catalunya 2026" moves from the ES to the CA page.
+
+**Measure on 30 Nov 2026** (28 days): position, CTR and clicks per page and
+per target query; for the mushroom pages, which page the CA queries land on.
+
+**Outcome:** _pending_
+
 ## Candidates not yet run
 
 Recorded so they are not lost, and so they are not all started at once.
