@@ -74,6 +74,19 @@ export function fairsInWindow(fairs: readonly SnapshotFair[], window: { from: st
   return fairs.filter((f) => f.start <= window.to && f.end >= window.from);
 }
 
+/** How many upcoming fairs the hub and a zone page list after this weekend's. */
+export const HUB_NEXT_FAIRS = 12;
+export const ZONE_NEXT_FAIRS = 8;
+
+/**
+ * The fairs a page lists: this weekend's, then the next ones (hub: zone null).
+ * Shared by the pages and their Event markup, so the two cannot disagree.
+ */
+export function listedFairs(zone: ZoneDef | null, window: { from: string; to: string }): { now: SnapshotFair[]; next: SnapshotFair[] } {
+  const all = fairsIn(zone);
+  return { now: fairsInWindow(all, window), next: fairsAfter(all, window, zone ? ZONE_NEXT_FAIRS : HUB_NEXT_FAIRS) };
+}
+
 /** The next fairs that start after the window, earliest first. */
 export function fairsAfter(fairs: readonly SnapshotFair[], window: { to: string }, limit: number): SnapshotFair[] {
   return fairs.filter((f) => f.start > window.to).slice(0, limit);

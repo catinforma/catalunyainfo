@@ -6,6 +6,7 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { fuelDescription, fuelTitle, hubMeta } from "@/lib/programmatic/fuel/copy";
 import type { Place } from "@/lib/programmatic/fuel/data";
 import { fuelHubPath, fuelHubTranslations, fuelPath, fuelTranslations, type FuelLocale } from "@/lib/programmatic/fuel/paths";
+import { fuelHubDataset, fuelPlaceDataset } from "@/lib/programmatic/fuel/structured";
 import { breadcrumbSchema, graph } from "@/lib/seo/jsonld";
 import { buildMetadata } from "@/lib/seo/metadata";
 
@@ -32,7 +33,7 @@ export function FuelHubRoute({ locale }: { locale: FuelLocale }) {
       <main id="main">
         <FuelHubPage locale={locale} />
       </main>
-      <JsonLd json={graph([breadcrumbSchema(hubCrumbs(locale))])} />
+      <JsonLd json={graph([breadcrumbSchema(hubCrumbs(locale)), fuelHubDataset(locale)])} />
       <SiteFooter locale={locale} />
     </>
   );
@@ -55,7 +56,7 @@ export function FuelPlaceRoute({ locale, place }: { locale: FuelLocale; place: P
       <main id="main">
         <FuelPlacePage place={place} locale={locale} />
       </main>
-      <JsonLd json={graph([breadcrumbSchema(placeCrumbs(place, locale))])} />
+      <JsonLd json={graph([breadcrumbSchema(placeCrumbs(place, locale)), fuelPlaceDataset(place, locale)])} />
       <SiteFooter locale={locale} />
     </>
   );
