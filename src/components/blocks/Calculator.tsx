@@ -4,7 +4,7 @@ import { useMemo, useState } from "react";
 
 import type { Block } from "@/lib/content/blocks";
 import { renderInline } from "@/lib/content/inline";
-import { getMessages } from "@/lib/i18n";
+import type { Messages } from "@/lib/i18n";
 import type { Locale } from "@/lib/i18n/config";
 
 /**
@@ -30,8 +30,11 @@ function clamp(value: number, min?: number, max?: number): number {
   return out;
 }
 
-export function Calculator({ block, locale }: { block: CalculatorBlock; locale: Locale }) {
-  const t = getMessages(locale);
+// The strings arrive as a prop from the server-rendered BlockRenderer:
+// calling getMessages here shipped all three dictionaries (~57 KB) to every
+// article page, because every client block shares one chunk.
+export function Calculator({ block, locale, copy }: { block: CalculatorBlock; locale: Locale; copy: Messages["calculator"] }) {
+  const t = { calculator: copy };
 
   const [state, setState] = useState<Record<string, string>>(() => {
     const initial: Record<string, string> = {};

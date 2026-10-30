@@ -2,7 +2,7 @@
 
 import type { Block } from "@/lib/content/blocks";
 import { renderInline } from "@/lib/content/inline";
-import { getMessages } from "@/lib/i18n";
+import type { Messages } from "@/lib/i18n";
 import type { Locale } from "@/lib/i18n/config";
 
 /**
@@ -88,11 +88,14 @@ function dateLabel(iso: string, locale: Locale, sameYear: boolean): string {
 export function CalendarBlock({
   block,
   locale,
+  copy,
 }: {
   block: CalendarBlockType;
   locale: Locale;
+  /** From the server: getMessages here shipped all three dictionaries. */
+  copy: Messages["calendar"];
 }) {
-  const t = getMessages(locale);
+  const t = { calendar: copy };
   const years = new Set(block.events.map((event) => event.date.slice(0, 4)));
   const sameYear = years.size === 1;
 
