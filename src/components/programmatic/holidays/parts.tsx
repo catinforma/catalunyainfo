@@ -1,17 +1,25 @@
 import Link from "next/link";
 
+import { todayInCatalonia } from "@/lib/content/holidays/calendar";
+import { SCHOOL_YEARS } from "@/lib/content/school/calendar";
+import { YEAR as PLANNER_YEAR } from "@/lib/content/holidays/payload";
 import { SNAPSHOT, type HolidayRow } from "@/lib/programmatic/holidays/data";
 import { dayMonth, dayMonthYear, weekdayName, type DateLocale } from "@/lib/programmatic/holidays/format";
 import { GUIDES, OFFICIAL, type GuideKey } from "@/lib/programmatic/holidays/links";
 
 /** Shared pieces of the holiday pages, all server-rendered. */
 
+// The anchors say what the guides answer, with the year people search
+// ("calendari laboral 2027", "calendario escolar 2026-2027"): these pages are
+// the most-crawled links into both guides.
+const SCHOOL_LABEL = (SCHOOL_YEARS.find((y) => todayInCatalonia() <= y.end) ?? SCHOOL_YEARS[SCHOOL_YEARS.length - 1]!).label;
+
 const GUIDE_LABEL: Record<GuideKey, Record<DateLocale, string>> = {
-  workCalendar: { ca: "Calendari laboral i festius de Catalunya", es: "Calendario laboral y festivos de Cataluña", en: "Public holidays in Catalonia" },
+  workCalendar: { ca: `Calendari laboral ${PLANNER_YEAR} de Catalunya`, es: `Calendario laboral ${PLANNER_YEAR} de Cataluña`, en: `Catalonia public holidays ${PLANNER_YEAR}` },
   holidayToday: { ca: "És festiu avui a Catalunya?", es: "¿Es festivo hoy en Cataluña?", en: "Is today a public holiday in Catalonia?" },
   localHolidays: { ca: "Festius locals de tots els municipis", es: "Festivos locales de todos los municipios", en: "Local holidays in every town" },
   shops: { ca: "Botigues obertes en diumenges i festius", es: "Tiendas abiertas en domingos y festivos", en: "Shops open on Sundays and holidays" },
-  school: { ca: "Calendari escolar", es: "Calendario escolar", en: "School calendar" },
+  school: { ca: `Calendari escolar ${SCHOOL_LABEL}`, es: `Calendario escolar ${SCHOOL_LABEL}`, en: `Catalonia school calendar ${SCHOOL_LABEL}` },
   decemberBridge: { ca: "El pont de desembre del 2026", es: "El puente de diciembre de 2026", en: "The December 2026 long weekend" },
   metroHours: { ca: "Horaris del metro de Barcelona", es: "Horarios del metro de Barcelona", en: "Barcelona metro hours" },
   christmasTraditions: { ca: "Tradicions de Nadal a Catalunya", es: "Tradiciones de Navidad en Cataluña", en: "Catalan Christmas traditions" },

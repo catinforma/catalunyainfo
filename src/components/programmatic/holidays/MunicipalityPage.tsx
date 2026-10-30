@@ -2,7 +2,10 @@ import Link from "next/link";
 
 import { Breadcrumbs, type Crumb } from "@/components/Breadcrumbs";
 import { getMessages } from "@/lib/i18n";
-import { municipalityCopy, displayName, municipalityH1, sharedDayLead } from "@/lib/programmatic/holidays/copy";
+import { todayInCatalonia } from "@/lib/content/holidays/calendar";
+import { SCHOOL_YEARS } from "@/lib/content/school/calendar";
+import { municipalityCopy, displayName, municipalityFaq, municipalityH1, sharedDayLead } from "@/lib/programmatic/holidays/copy";
+import { GUIDES } from "@/lib/programmatic/holidays/links";
 import {
   NEXT,
   YEAR,
@@ -87,6 +90,8 @@ export function MunicipalityPage({ m, locale }: { m: SnapshotMunicipality; local
   const { sameComarca, others, comarcaTotal } = siblings(m);
   const crumbs = municipalityCrumbs(m, locale);
   const shared = municipalityDatePages(m);
+  // Static page: "today" is the build date; each question names its date.
+  const faq = municipalityFaq(m, locale, next, todayInCatalonia());
 
   return (
     <article>
@@ -190,7 +195,29 @@ export function MunicipalityPage({ m, locale }: { m: SnapshotMunicipality; local
           {[t.work, t.school, t.shopsMeaning].map((block) => (
             <p key={block.title}>
               <strong>{block.title}.</strong> {block.text}
+              {block === t.school ? (
+                <>
+                  {" "}
+                  <Link href={GUIDES.school[locale]}>{schoolLinkLabel(locale)}</Link>
+                </>
+              ) : null}
             </p>
+          ))}
+
+          <h2 id="preguntes">{locale === "ca" ? "Preguntes freqüents" : "Preguntas frecuentes"}</h2>
+          {faq.map((item) => (
+            <div key={item.question}>
+              <h3>{item.question}</h3>
+              <p>
+                {item.answer}
+                {item.link ? (
+                  <>
+                    {" "}
+                    <Link href={item.link.href}>{item.link.label}</Link>
+                  </>
+                ) : null}
+              </p>
+            </div>
           ))}
         </div>
 
@@ -247,6 +274,13 @@ export function MunicipalityPage({ m, locale }: { m: SnapshotMunicipality; local
       </div>
     </article>
   );
+}
+
+/** "Calendari escolar 2026-2027": the school year in progress (or the next one in summer). */
+function schoolLinkLabel(locale: MuniLocale): string {
+  const today = todayInCatalonia();
+  const year = SCHOOL_YEARS.find((y) => today <= y.end) ?? SCHOOL_YEARS[SCHOOL_YEARS.length - 1]!;
+  return locale === "ca" ? `Calendari escolar ${year.label} a Catalunya.` : `Calendario escolar ${year.label} en Cataluña.`;
 }
 
 function TownList({ towns, locale }: { towns: SnapshotMunicipality[]; locale: MuniLocale }) {
