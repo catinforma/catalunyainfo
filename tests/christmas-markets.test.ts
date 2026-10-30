@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import { test } from "node:test";
 
 import { CHRISTMAS } from "../src/lib/content/batch02/christmas.ts";
+import { FAIRS, townBySlug } from "../src/lib/programmatic/christmas-fairs/data.ts";
 import { bodyToPlainText } from "../src/lib/content/blocks.ts";
 import { IMAGE_BY_KEY } from "../src/lib/content/images.ts";
 import { LOCALES } from "../src/lib/i18n/config.ts";
@@ -61,4 +62,36 @@ test("the EN guide answers 'barcelona christmas market' first and every edition 
     for (const page of pages) assert.match(json, page, `${locale}: links ${page}`);
     assert.match(bodyToPlainText(CHRISTMAS.editions[locale].blocks), /Cubelles/, `${locale}: Cubelles 2026`);
   }
+});
+
+/**
+ * Manresa, 30 Oct 2026: the council's page still shows 2025; the Generalitat
+ * fairs calendar gives 12-13 Dec 2026. The guide gives those dates attributed
+ * to the calendar, the same dates as the Christmas fairs family's Manresa page.
+ */
+test("Manresa: 12-13 Dec 2026, attributed to the Generalitat fairs calendar, as the fairs family shows it", () => {
+  const fair = FAIRS.find((f) => f.id === "vm32:24032442");
+  assert.ok(fair, "Manresa's Santa Llúcia is in the fairs family");
+  assert.equal(fair.start, "2026-12-12");
+  assert.equal(fair.end, "2026-12-13");
+  assert.equal(fair.checked, null, "no organiser page gives other dates");
+  assert.ok(townBySlug("manresa"), "Manresa has a fairs page");
+
+  const expected = {
+    ca: [/12 i 13 de desembre de 2026, segons el calendari de fires de la Generalitat/, /Segons el calendari de fires de la Generalitat, el 2026 es fa el 12 i el 13 de desembre/],
+    es: [/12 y 13 de diciembre de 2026, según el calendario de ferias de la Generalitat/, /Según el calendario de ferias de la Generalitat, en 2026 se celebra el 12 y el 13 de diciembre/],
+    en: [/12 and 13 December 2026, according to the Catalan government's fairs calendar/, /According to the Catalan government's fairs calendar, the 2026 fair is on 12 and 13 December/],
+  } as const;
+  for (const locale of LOCALES) {
+    const text = bodyToPlainText(CHRISTMAS.editions[locale].blocks);
+    for (const re of expected[locale]) assert.match(text, re, `${locale}: ${re}`);
+    const rows = (CHRISTMAS.editions[locale].blocks as { type: string; rows?: string[][] }[]).filter((b) => b.type === "table").flatMap((b) => b.rows ?? []);
+    const manresa = rows.find((r) => r[1] === "Manresa");
+    assert.ok(manresa, `${locale}: Manresa row`);
+    assert.doesNotMatch(manresa[3]!, /Pendent|Pendiente|Not yet published/, `${locale}: Manresa no longer pending`);
+    assert.doesNotMatch(manresa[2]!, /2025/, `${locale}: the place is the 2026 one`);
+  }
+  assert.match(JSON.stringify(CHRISTMAS.editions.ca.blocks), /\/ca\/fires-de-nadal\/manresa\//);
+  assert.match(JSON.stringify(CHRISTMAS.editions.es.blocks), /\/es\/mercados-navidad\/manresa\//);
+  assert.ok(CHRISTMAS.sources.some((s) => s.url === "https://analisi.transparenciacatalunya.cat/d/vm32-przc"));
 });

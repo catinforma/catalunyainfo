@@ -1,5 +1,5 @@
 import type { Locale } from "@/lib/i18n/config";
-import { fairsHubPath } from "@/lib/programmatic/christmas-fairs/paths";
+import { fairsHubPath, townPath as fairsTownPath } from "@/lib/programmatic/christmas-fairs/paths";
 import { weekendHubPath } from "@/lib/programmatic/weekend/paths";
 
 import {
@@ -25,6 +25,13 @@ import {
  * have not (Santa Llúcia, Sagrada Família, Girona, Lleida, Manresa,
  * Granollers) the page gives last year's dates only where an official page
  * states them, and always labelled "2025" - never as this year's.
+ *
+ * Manresa, 30 Oct 2026: web.manresa.cat/web/menu/9216-fira-de-santa-llucia is
+ * still headed "SANTA LLÚCIA 2025"; the Generalitat fairs calendar
+ * (vm32-przc, row 24032442, updated 25 Sep 2026, re-queried 30 Oct) gives
+ * 12-13 Dec 2026, "Plaça Major i Baixada de la Seu", organiser Ajuntament de
+ * Manresa, dates not "to be confirmed". The page gives those dates attributed
+ * to the calendar, as the Christmas fairs family does (its Manresa page).
  *
  * Verified 2025 facts: Santa Llúcia ran 28 Nov - 23 Dec 2025 with 215 stalls
  * (organiser's "Calendari - 2025" page); Manresa 13-14 Dec 2025; Granollers'
@@ -75,6 +82,7 @@ const SOURCES: B2Source[] = [
   { name: "Convocatòria Mercat de Nadal 2026 (27 de novembre - 24 de desembre)", url: "https://www.figueres.cat/tramits/convocatories/mercatnadal26", publisher: "Ajuntament de Figueres" },
   { name: "Mercat de Nadal", url: "https://comercmercatsconsum.paeria.cat/comerc-i-mercats/mercats-ambulants/mercat-de-nadal", publisher: "Paeria de Lleida" },
   { name: "Fira de Santa Llúcia", url: "https://web.manresa.cat/web/menu/9216-fira-de-santa-llucia", publisher: "Ajuntament de Manresa" },
+  { name: "Calendari fires de Catalunya (fires i fires mercat)", url: "https://analisi.transparenciacatalunya.cat/d/vm32-przc", publisher: "Departament d'Empresa i Treball, Generalitat de Catalunya" },
   { name: "Fires de Nadal", url: "https://www.granollers.cat/nadal/fires-de-nadal", publisher: "Ajuntament de Granollers" },
   { name: "45a Fira de l'Avet 2026", url: "https://espinelves.cat/%f0%9f%8c%b2fira-de-lavet-2025-sollicituds-i-reglament-de-participacio/", publisher: "Ajuntament d'Espinelves" },
   { name: "La Fira de Santa Llúcia", url: "https://www.canyelles.cat/promocio-economica-i-turisme/la-fira-de-santa-llucia", publisher: "Ajuntament de Canyelles" },
@@ -133,7 +141,7 @@ const MARKETS: Record<Locale, Row[]> = {
     ["Mercat de Nadal", "Girona", "Plaça de la Independència", "Pendent. El 2025: del 28 de novembre de 2025 al 5 de gener de 2026"],
     ["Mercat de Nadal", "Figueres", "La Rambla", "Del 27 de novembre al 24 de desembre de 2026"],
     ["Mercat de Nadal", "Lleida", "Plaça de la Catedral i voltants", "Pendent"],
-    ["Fira de Santa Llúcia", "Manresa", "Baixada de la Seu i plaça Major (2025)", "Pendent. El 2025: 13 i 14 de desembre"],
+    ["Fira de Santa Llúcia", "Manresa", "Plaça Major i Baixada de la Seu", "12 i 13 de desembre de 2026, segons el calendari de fires de la Generalitat (l'Ajuntament encara mostra el 2025)"],
     ["Fires de Nadal", "Granollers", "Porxada, Corona i Barangé (2025)", "Pendent. El 2025: des del 21 de novembre"],
   ],
   es: [
@@ -143,7 +151,7 @@ const MARKETS: Record<Locale, Row[]> = {
     ["Mercat de Nadal", "Girona", "Plaza de la Independència", "Pendiente. En 2025: del 28 de noviembre de 2025 al 5 de enero de 2026"],
     ["Mercat de Nadal", "Figueres", "La Rambla", "Del 27 de noviembre al 24 de diciembre de 2026"],
     ["Mercat de Nadal", "Lleida", "Plaza de la Catedral y alrededores", "Pendiente"],
-    ["Fira de Santa Llúcia", "Manresa", "Baixada de la Seu y plaza Major (2025)", "Pendiente. En 2025: 13 y 14 de diciembre"],
+    ["Fira de Santa Llúcia", "Manresa", "Plaza Major y Baixada de la Seu", "12 y 13 de diciembre de 2026, según el calendario de ferias de la Generalitat (el Ayuntamiento aún muestra 2025)"],
     ["Ferias de Navidad", "Granollers", "Porxada, Corona y Barangé (2025)", "Pendiente. En 2025: desde el 21 de noviembre"],
   ],
   en: [
@@ -153,7 +161,7 @@ const MARKETS: Record<Locale, Row[]> = {
     ["Christmas market", "Girona", "Plaça de la Independència", "Not yet published. In 2025: 28 November 2025 to 5 January 2026"],
     ["Christmas market", "Figueres", "La Rambla", "27 November to 24 December 2026"],
     ["Christmas market", "Lleida", "Plaça de la Catedral and around", "Not yet published"],
-    ["Fira de Santa Llúcia", "Manresa", "Baixada de la Seu and Plaça Major (2025)", "Not yet published. In 2025: 13 and 14 December"],
+    ["Fira de Santa Llúcia", "Manresa", "Plaça Major and Baixada de la Seu", "12 and 13 December 2026, according to the Catalan government's fairs calendar (the council's page still shows 2025)"],
     ["Christmas fairs", "Granollers", "Porxada, Corona and Barangé squares (2025)", "Not yet published. In 2025: from 21 November"],
   ],
 };
@@ -171,9 +179,9 @@ function marketTable(locale: Locale) {
     en: "The main Christmas markets in Catalonia and their dates",
   };
   const note: Record<Locale, string> = {
-    ca: "«Pendent» vol dir que l'organitzador encara no ha publicat les dates del 2026; les del 2025 surten de la seva pàgina oficial i poden canviar. «On» només quan una pàgina oficial ho diu. Comprovat el 28 d'octubre de 2026.",
-    es: "«Pendiente» significa que el organizador aún no ha publicado las fechas de 2026; las de 2025 salen de su página oficial y pueden cambiar. «Dónde» solo cuando una página oficial lo dice. Comprobado el 28 de octubre de 2026.",
-    en: "\"Not yet published\" means the organiser has not announced its 2026 dates; the 2025 dates come from its official page and may change. \"Where\" only when an official page says so. Checked on 28 October 2026.",
+    ca: "«Pendent» vol dir que l'organitzador encara no ha publicat les dates del 2026; les del 2025 surten de la seva pàgina oficial i poden canviar. «On» només quan una pàgina oficial ho diu. Comprovat el 28 d'octubre de 2026; Manresa, el 30 d'octubre, al calendari oficial de fires de la Generalitat.",
+    es: "«Pendiente» significa que el organizador aún no ha publicado las fechas de 2026; las de 2025 salen de su página oficial y pueden cambiar. «Dónde» solo cuando una página oficial lo dice. Comprobado el 28 de octubre de 2026; Manresa, el 30 de octubre, en el calendario oficial de ferias de la Generalitat.",
+    en: "\"Not yet published\" means the organiser has not announced its 2026 dates; the 2025 dates come from its official page and may change. \"Where\" only when an official page says so. Checked on 28 October 2026; Manresa on 30 October, in the Catalan government's official fairs calendar.",
   };
   return table(caption[locale], HEADERS[locale], MARKETS[locale], note[locale]);
 }
@@ -251,7 +259,7 @@ function body(locale: Locale) {
       ),
       ...h2(
         "Manresa i Granollers",
-        "**Manresa** fa la Fira de Santa Llúcia, on l'Ajuntament diu que es troben «els elements imprescindibles per preparar Nadal». El 2025 es va fer el dissabte 13 de desembre a la Baixada de la Seu i el diumenge 14 a la plaça Major.",
+        `**Manresa** fa la Fira de Santa Llúcia, on l'Ajuntament diu que es troben «els elements imprescindibles per preparar Nadal». Segons el calendari de fires de la Generalitat, el 2026 es fa el 12 i el 13 de desembre a la plaça Major i la Baixada de la Seu; la pàgina de l'Ajuntament encara és la del 2025, quan es va fer el dissabte 13 de desembre a la Baixada de la Seu i el diumenge 14 a la plaça Major. Més detalls a [fires de Nadal de Manresa](${fairsTownPath("ca", "manresa")}).`,
         "**Granollers** en fa diverses: el 2025 hi va haver la parada de plantes i arbres de Nadal des del 21 de novembre, la fira de pessebres i ornamentació a la plaça de la Porxada, la fira d'artesania a la plaça Barangé i dos mercats de cap de setmana.",
       ),
       ...h2(
@@ -324,7 +332,7 @@ function body(locale: Locale) {
       ),
       ...h2(
         "Manresa y Granollers",
-        "**Manresa** celebra la Fira de Santa Llúcia, donde el Ayuntamiento dice que se encuentra lo imprescindible para preparar la Navidad. En 2025 se hizo el sábado 13 de diciembre en la Baixada de la Seu y el domingo 14 en la plaza Major.",
+        `**Manresa** celebra la Fira de Santa Llúcia, donde el Ayuntamiento dice que se encuentra lo imprescindible para preparar la Navidad. Según el calendario de ferias de la Generalitat, en 2026 se celebra el 12 y el 13 de diciembre en la plaza Major y la Baixada de la Seu; la página del Ayuntamiento aún es la de 2025, cuando se hizo el sábado 13 de diciembre en la Baixada de la Seu y el domingo 14 en la plaza Major. Más detalles en [ferias de Navidad de Manresa](${fairsTownPath("es", "manresa")}).`,
         "**Granollers** organiza varias: en 2025 hubo el puesto de plantas y árboles de Navidad desde el 21 de noviembre, la feria de belenes y ornamentación en la plaza de la Porxada, la feria de artesanía en la plaza Barangé y dos mercados de fin de semana.",
       ),
       ...h2(
@@ -396,7 +404,7 @@ function body(locale: Locale) {
     ),
     ...h2(
       "Manresa and Granollers",
-      "**Manresa** holds a Fira de Santa Llúcia, which the council describes as the place to find what you need to prepare for Christmas. In 2025 it was held on Saturday 13 December on the Baixada de la Seu and on Sunday 14 December on Plaça Major.",
+      "**Manresa** holds a Fira de Santa Llúcia, which the council describes as the place to find what you need to prepare for Christmas. According to the Catalan government's fairs calendar, the 2026 fair is on 12 and 13 December on Plaça Major and the Baixada de la Seu; the council's own page still shows 2025, when it was held on Saturday 13 December on the Baixada de la Seu and on Sunday 14 December on Plaça Major.",
       "**Granollers** runs several: in 2025 there was a Christmas tree and plant stall from 21 November, a nativity and decorations fair on Plaça de la Porxada, a craft fair on Plaça Barangé and two weekend markets.",
     ),
     ...h2(
