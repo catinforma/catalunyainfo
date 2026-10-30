@@ -485,7 +485,8 @@ test("the metro-hours and transport-passes guides gain exactly one body link eac
   // hours ca/es freeze was lifted by the owner on 28 Oct 2026 (page-1 push).
   assert.equal(HOURS.editions.ca.seoTitle, "Horari metro Barcelona avui: a quina hora obre i tanca");
   assert.equal(HOURS.editions.es.seoTitle, "Horario metro Barcelona hoy: a qué hora abre y cierra");
-  assert.equal(HOURS.editions.en.seoTitle, "Barcelona metro hours: 5:00 to midnight, Fridays until 2:00");
+  // EN retitled in the 30 Oct top-3 push (the Saturday all-night answer was missing).
+  assert.equal(HOURS.editions.en.seoTitle, "Barcelona metro hours: closes 12am, 2am Fri, all night Sat");
   assert.equal(TRANSPORT.editions.en.seoTitle, "Barcelona transport pass for 1 to 5 days: 2026 prices");
 });
 
