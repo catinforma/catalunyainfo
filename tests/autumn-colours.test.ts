@@ -75,8 +75,8 @@ test("the status block does not send readers to 'this weekend'", () => {
 test("no exact peak date is promised", () => {
   // A day-and-month pair is only allowed where it names a published event
   // (Aigüestortes on 17 Oct, Viladrau on 18 and 31 Oct), a Meteocat reading
-  // (the 18 Oct frost, the rain window to 25 Oct) or the update date itself
-  // (26 Oct).
+  // (the 18 Oct frost, the latest published day 24 Oct, the rain window to
+  // 25 Oct) or the update date itself (30 Oct).
   const dayMonth =
     /\b\d{1,2}\s+(?:d'|de\s+)?(gener|febrer|març|abril|maig|juny|juliol|agost|setembre|octubre|novembre|desembre|enero|marzo|mayo|junio|julio|agosto|septiembre|octubre|noviembre|diciembre)\b/gi;
   for (const locale of LOCALES) {
@@ -84,7 +84,7 @@ test("no exact peak date is promised", () => {
     for (const hit of text.match(dayMonth) ?? []) {
       assert.match(
         hit,
-        /\b((?:17|18|25|26|31) d'octubre|(?:17|18|25|26|31) de octubre)\b/i,
+        /\b((?:17|18|24|25|30|31) d'octubre|(?:17|18|24|25|30|31) de octubre)\b/i,
         `${locale} states an unsourced date: ${hit}`,
       );
     }
@@ -201,5 +201,24 @@ test("no tracking parameters leak into the prose", () => {
   for (const locale of LOCALES) {
     const text = JSON.stringify(buildBody(locale));
     assert.doesNotMatch(text, /utm_source|chatgpt\.com/, `${locale} carries a tracking parameter`);
+  }
+});
+
+test("the EN snippet promises where to go in November and the status is dated 30 Oct", () => {
+  // 30 Oct top-3 push: 406 impressions at 4.1 with half the CTR of the site's
+  // curve; the snippet now names the places whose windows are still open.
+  const en = COPY.en;
+  assert.ok(en.seoTitle.length <= 60, en.seoTitle);
+  assert.ok(en.seoDescription.length <= 155, en.seoDescription);
+  assert.match(en.seoTitle, /fall colors/i);
+  assert.match(en.seoTitle, /November/);
+  for (const place of ["Salenques", "Bonabé", "Sant Joan", "Fageda", "Montseny"]) {
+    assert.ok(en.seoDescription.includes(place), `description lacks ${place}`);
+    assert.ok(en.intro[0].includes(place), `lead lacks ${place}`);
+  }
+  const updated = { ca: /30 d'octubre de 2026/, es: /30 de octubre de 2026/, en: /30 October 2026/ };
+  for (const locale of LOCALES) {
+    assert.match(COPY[locale].status[0], updated[locale]);
+    assert.ok(COPY[locale].faq.length >= 3, `${locale}: FAQ`);
   }
 });
