@@ -718,6 +718,31 @@ test("climate: 1981-2010 table with the year row, city-centre table, a section p
 });
 
 /**
+ * Climate EN, 30 Oct 2026 (top-3 push): the AEMET 0076 table re-read, humidity
+ * (column H) added in every locale, °F beside °C in English, and the snippet
+ * names the coldest and warmest months with their figures.
+ */
+test("climate: humidity column from AEMET, °F in English, the answer in the EN snippet and lead", () => {
+  for (const locale of ["ca", "es", "en"] as const) {
+    const blocks = CLIMATE.editions[locale].blocks as { type: string; headers?: string[]; rows?: string[][] }[];
+    const airport = blocks.find((b) => b.type === "table");
+    assert.equal(airport?.headers?.length, 8, `${locale}: humidity column`);
+    assert.equal(airport?.rows?.[9]?.[6], "73 %", `${locale}: October humidity 73 %`);
+    assert.equal(airport?.rows?.[12]?.[6], "69 %", `${locale}: annual humidity 69 %`);
+  }
+  const en = CLIMATE.editions.en;
+  const airport = (en.blocks as { type: string; rows?: string[][] }[]).find((b) => b.type === "table");
+  assert.equal(airport?.rows?.[0]?.[2], "13.6 (56)", "January high in °C (°F)");
+  assert.equal(airport?.rows?.[7]?.[2], "28.5 (83)", "August high in °C (°F)");
+  assert.ok(en.seoTitle.length <= 60 && en.seoDescription.length <= 155);
+  assert.match(en.seoTitle, /weather and temperature by month/);
+  assert.match(en.seoDescription, /January.*13\.6 °C \(56 °F\).*August.*28\.5 °C \(83 °F\).*October.*91 mm/);
+  const first = bodyToPlainText(en.blocks).slice(0, 220);
+  assert.match(first, /January.*coldest.*13\.6 °C \(56 °F\)/, "answer in the first lines");
+  assert.equal(CLIMATE.verifiedAt, "2026-10-30");
+});
+
+/**
  * Monuments, 28 Oct 2026: sagradafamilia.org prices grid and April-September
  * hours; parkguell.barcelona prices-and-times and how-to-get-there; Casa
  * Batlló's ticket office closes at 21:00. The night-visit price ("until
