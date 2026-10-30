@@ -62,9 +62,9 @@ const META: Record<Locale, { path: string; title: string; seoTitle: string; seoD
   ca: {
     path: "guies/temps-barcelona-mes-a-mes",
     title: "El temps a Barcelona mes a mes: temperatures, pluja i sol",
-    seoTitle: "Temps i clima a Barcelona mes a mes: temperatures i pluja",
+    seoTitle: "Temps a Barcelona mes a mes: temperatures mitjanes i pluja",
     seoDescription:
-      "Gener, el mes més fred a Barcelona (13,6 °C de màxima, 4,7 °C de mínima); octubre, el més plujós (91 mm). Mitjanes AEMET, el centre i rècords de cada mes.",
+      "Novembre: màximes de 17,3 °C i mínimes de 8,6 °C; desembre: 14,3 i 5,7 °C. El gener és el més fred i l'octubre el més plujós (91 mm). Mitjanes AEMET.",
     excerpt:
       "Quin temps fa a Barcelona cada mes, amb les mitjanes oficials de l'AEMET, les del centre de la ciutat segons el Meteocat i els rècords de cada mes.",
   },
@@ -73,7 +73,7 @@ const META: Record<Locale, { path: string; title: string; seoTitle: string; seoD
     title: "El tiempo en Barcelona mes a mes: clima, temperaturas y lluvia",
     seoTitle: "Clima y tiempo en Barcelona por meses: temperatura y lluvia",
     seoDescription:
-      "Enero, el mes más frío en Barcelona (13,6 °C de máxima, 4,7 °C de mínima); octubre, el más lluvioso (91 mm). Medias AEMET, el centro y récords de cada mes.",
+      "Noviembre: máximas de 17,3 °C y mínimas de 8,6 °C; diciembre: 14,3 y 5,7 °C. Enero es el mes más frío y octubre el más lluvioso (91 mm). Medias AEMET.",
     excerpt:
       "Qué tiempo hace en Barcelona cada mes, con las medias oficiales de la AEMET, las del centro de la ciudad según el Meteocat y los récords de cada mes.",
   },
@@ -241,7 +241,7 @@ const RAINY_LINK: Record<Locale, string> = {
 
 const COPY: Record<Locale, T> = {
   ca: {
-    lead: "Barcelona té un clima mediterrani suau: hiverns amb màximes al voltant dels 14 °C i estius amb màximes de 28 °C. L'**agost** és el mes més calorós, el **gener** el més fred (màxima mitjana de 13,6 °C i mínima de 4,7 °C a l'aeroport) i l'**octubre** el més plujós, amb 91 mm. Aquí tens les mitjanes oficials de cada mes segons l'AEMET, les del centre de la ciutat segons el Meteocat i els rècords de cada mes.",
+    lead: "Les temperatures mitjanes a Barcelona van d'una màxima de **13,6 °C al gener**, el mes més fred (mínima de 4,7 °C), a **28,5 °C a l'agost**, el més calorós; l'**octubre** és el més plujós, amb 91 mm. Al **novembre**, màximes de 17,3 °C i mínimes de 8,6 °C, i al **desembre**, de 14,3 i 5,7 °C (AEMET, aeroport). És un clima mediterrani suau, i aquí tens les mitjanes oficials de cada mes segons l'AEMET, les del centre de la ciutat segons el Meteocat i els rècords de cada mes. Per al temps d'avui i dels pròxims dies, la [predicció del Meteocat per a Barcelona](https://www.meteo.cat/prediccio/municipal/080193).",
     note: "Les mitjanes mensuals són les de l'estació de l'AEMET a l'aeroport del Prat per al període 1981-2010: és el període de referència que l'AEMET publica al seu web, que no té cap taula 1991-2020 per a l'estació, i el Meteocat encara elabora les seves climatologies 1991-2020. Per al centre, l'estació del Meteocat al Raval (2010-2025).",
     tableTitle: "Clima de Barcelona per mesos",
     tableCaption: "Clima de Barcelona per mesos (AEMET, Barcelona Aeroport, 1981-2010)",
@@ -292,7 +292,7 @@ const COPY: Record<Locale, T> = {
     ],
   },
   es: {
-    lead: "Barcelona tiene un clima mediterráneo suave: inviernos con máximas en torno a los 14 °C y veranos con máximas de 28 °C. **Agosto** es el mes más caluroso, **enero** el más frío (máxima media de 13,6 °C y mínima de 4,7 °C en el aeropuerto) y **octubre** el más lluvioso, con 91 mm. Aquí tienes las medias oficiales de cada mes según la AEMET, las del centro de la ciudad según el Meteocat y los récords de cada mes.",
+    lead: "Las temperaturas medias en Barcelona van de una máxima de **13,6 °C en enero**, el mes más frío (mínima de 4,7 °C), a **28,5 °C en agosto**, el más caluroso; **octubre** es el más lluvioso, con 91 mm. En **noviembre**, máximas de 17,3 °C y mínimas de 8,6 °C, y en **diciembre**, de 14,3 y 5,7 °C (AEMET, aeropuerto). Es un clima mediterráneo suave, y aquí tienes las medias oficiales de cada mes según la AEMET, las del centro de la ciudad según el Meteocat y los récords de cada mes. Para el tiempo de hoy y de los próximos días, la [predicción de la AEMET para Barcelona](https://www.aemet.es/es/eltiempo/prediccion/municipios/barcelona-id08019).",
     note: "Las medias mensuales son las de la estación de la AEMET en el aeropuerto de El Prat para el periodo 1981-2010: es el periodo de referencia que la AEMET publica en su web, que no tiene tabla 1991-2020 para la estación, y el Meteocat aún elabora sus climatologías 1991-2020. Para el centro, la estación del Meteocat en el Raval (2010-2025).",
     tableTitle: "Clima de Barcelona por meses",
     tableCaption: "Clima de Barcelona por meses (AEMET, Barcelona Aeropuerto, 1981-2010)",

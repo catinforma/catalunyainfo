@@ -586,6 +586,22 @@ test("election night: provisional, no CERA, no forecasts, no invented site", () 
   assert.ok(ELECTION_NIGHT.sources.every((s) => !/resultados\.[a-z]/.test(s.url)), "no guessed results-site domain");
 });
 
+test("election night EN: the snippet and lead answer 'what time' with the polling hours (30 Oct)", () => {
+  const en = ELECTION_NIGHT.editions.en;
+  assert.ok(en.seoTitle.length <= 60 && en.seoDescription.length <= 155, en.seoTitle);
+  assert.match(en.seoTitle, /Spain general election results 2026/);
+  assert.match(en.seoDescription, /9:00-20:00/);
+  const text = bodyToPlainText(en.blocks);
+  assert.match(text.slice(0, 400), /20:00/);
+  assert.match(text.slice(0, 400), /9:00/);
+  assert.match(text, /not yet announced its results site/);
+  for (const locale of ["ca", "es", "en"] as const) {
+    const body = bodyToPlainText(ELECTION_NIGHT.editions[locale].blocks);
+    assert.match(body, /29 (de )?(novembre|noviembre|November), 9[.:]00/, `${locale}: polls-open row`);
+  }
+  assert.ok(ELECTION_NIGHT.sources.some((s) => s.url.includes("29neleccionesgenerales.es")));
+});
+
 /**
  * Parking: three errors found on 18 Oct 2026 against AREA's own pages
  * (research_notes/blog-batch-03/parking_area_verda_blava.md). The blue
@@ -674,6 +690,10 @@ test("parking: per-rate limits, Trinitat Vella zone 36, the AREA map and a day-b
   }
   assert.match(PARKING.editions.ca.seoTitle, /^Preu zona blava i verda Barcelona: 1,15-4,25 €\/h/);
   assert.match(PARKING.editions.es.seoTitle, /^Zona azul y verde Barcelona: cómo funciona, horario y precio$/);
+  // EN, 30 Oct (CTR sweep: 186 impressions at 6.0, 0.5 %): the zone words of
+  // its queries in the title, the visitor answer in the description.
+  assert.match(PARKING.editions.en.seoTitle, /^Barcelona blue and green zone parking/);
+  assert.match(PARKING.editions.en.seoDescription, /9:00–20:00.*visitors may park 1–2 h/);
   assert.equal(PARKING.verifiedAt, "2026-10-30");
   assert.ok(PARKING.sources.some((s) => s.url === "https://areaverda.cat/es/plano"));
 });
@@ -868,6 +888,26 @@ test("climate: humidity column from AEMET, °F in English, the answer in the EN 
 });
 
 /**
+ * Climate CA/ES, 30 Oct 2026 (CTR far below the site's curve at 4.6 and 8.6):
+ * the snippet gives November and December, the months people are about to
+ * live, then the coldest and wettest; the lead opens with the range and
+ * points "el temps d'avui" searchers at the official forecast.
+ */
+test("climate CA/ES: November and December in the snippet and lead, official forecast linked", () => {
+  const forecast = { ca: "https://www.meteo.cat/prediccio/municipal/080193", es: "https://www.aemet.es/es/eltiempo/prediccion/municipios/barcelona-id08019" };
+  for (const locale of ["ca", "es"] as const) {
+    const edition = CLIMATE.editions[locale];
+    assert.ok(edition.seoTitle.length <= 60 && edition.seoDescription.length <= 155, edition.seoDescription);
+    assert.match(edition.seoDescription, /^(Novembre|Noviembre): (màximes|máximas) de 17,3 °C.*8,6 °C.*14,3 (i|y) 5,7 °C/);
+    const first = bodyToPlainText(edition.blocks).slice(0, 320);
+    assert.match(first, /13,6 °C.*28,5 °C.*91 mm/, `${locale}: range in the first lines`);
+    assert.match(first, /17,3 °C/, `${locale}: November in the lead`);
+    assert.ok(JSON.stringify(edition.blocks).includes(forecast[locale]), `${locale}: official forecast link`);
+  }
+  assert.match(CLIMATE.editions.ca.seoTitle, /^Temps a Barcelona mes a mes/);
+});
+
+/**
  * Monuments, 28 Oct 2026: sagradafamilia.org prices grid and April-September
  * hours; parkguell.barcelona prices-and-times and how-to-get-there; Casa
  * Batlló's ticket office closes at 21:00. The night-visit price ("until
@@ -939,6 +979,11 @@ test("markets: hours answered first, Sunday question answered, no unverified gro
     assert.match(text, /8:30/, `${locale}: Sunday book market hours`);
     assert.doesNotMatch(text, /\b20 (people|personas|persones)\b/);
   }
+  // EN, 30 Oct (CTR sweep: 264 impressions at 9.2, no clicks): the hours in
+  // the title, the Sunday answer in the description (Ajuntament page re-read).
+  const en = MARKETS.editions.en;
+  assert.match(en.seoTitle, /^La Boqueria opening hours 2026: Mon–Sat 8:00–20:30$/);
+  assert.ok(en.seoDescription.length <= 155 && /Sundays/.test(en.seoDescription), en.seoDescription);
 });
 
 test("ski: opening in the title, official snow-report links, FGC early birds, child prices; snow guide in the query's words", () => {
@@ -1018,6 +1063,14 @@ test("portaventura: the standard price leads, the Halloween price is labelled, t
     assert.match(bodyToPlainText(edition.blocks), walk[locale], `${locale}: walk from the station`);
     assert.ok(edition.seoTitle.length <= 60, `${locale}: title budget`);
   }
+});
+
+test("portaventura EN: the snippet leads with the 2026-27 opening dates (feed re-read 30 Oct)", () => {
+  const en = PORTAVENTURA.editions.en;
+  assert.match(en.seoTitle, /^PortAventura opening dates 2026-27/);
+  assert.ok(en.seoDescription.length <= 155, en.seoDescription);
+  assert.match(en.seoDescription, /6 Jan.*7 Jan-19 Feb 2027.*20 Feb.*18 Mar/);
+  assert.match(JSON.stringify(en.blocks), /Is PortAventura open in January 2027\?/);
 });
 
 test("ripolles: the comarca in Idescat's figures and a villages table; setcases answers what to do", () => {

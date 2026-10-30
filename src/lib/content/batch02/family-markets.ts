@@ -399,9 +399,9 @@ const MARKETS_META: Record<Locale, Meta> = {
   en: {
     path: "guides/la-boqueria-barcelona-markets",
     title: "La Boqueria and Barcelona's food markets: opening hours and visiting rules",
-    seoTitle: "La Boqueria opening hours and Barcelona market times",
+    seoTitle: "La Boqueria opening hours 2026: Mon–Sat 8:00–20:30",
     seoDescription:
-      "La Boqueria is open Monday to Saturday, 8:00 to 20:30, and closed on Sundays. Opening times for Sant Antoni, Santa Caterina, Ninot and other city markets.",
+      "Closed on Sundays and holidays except the dates it announces (Christmas 2025-26: 6, 21, 28 Dec, 4 Jan). Sant Antoni, Santa Caterina, Ninot hours too.",
     excerpt: "When La Boqueria and Barcelona's other big markets open, the rules for visitor groups, and what the renovation will change.",
   },
 };

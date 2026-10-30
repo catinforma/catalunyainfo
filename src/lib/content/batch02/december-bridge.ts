@@ -276,9 +276,9 @@ export const DECEMBER_BRIDGE_META: Record<Locale, { path: string; title: string;
   en: {
     path: "guides/december-long-weekend-catalonia",
     title: "December 2026 long weekend in Catalonia: which days are public holidays",
-    seoTitle: "December 2026 public holidays in Catalonia: 6, 7 and 8 Dec",
+    seoTitle: "December 2026 public holidays in Catalonia: 8, 25 and 26 Dec",
     seoDescription:
-      "In 2026 Catalonia's only holiday that week is Tuesday 8 December: the 6th is a Sunday and Monday the 7th is a working day. Long weekends, schools, shops.",
+      "Holidays only on Tuesday 8, Friday 25 and Saturday 26 December 2026; the 6th is a Sunday and Monday 7 is a working day, except in 43 towns. Schools, shops.",
     excerpt:
       "Which days are public holidays in Catalonia in December 2026, why the 6th and 7th are not, how to make a long weekend, schools and shops.",
   },

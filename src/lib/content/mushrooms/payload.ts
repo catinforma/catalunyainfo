@@ -425,8 +425,8 @@ export interface Copy {
 export const COPY: Record<Locale, Copy> = {
   ca: {
     path: "natura/bolets-catalunya-condicions",
-    title: "Temporada de bolets 2026: on hi ha millors condicions aquesta setmana?",
-    seoTitle: "Bolets a Catalunya: mapa de condicions aquesta setmana",
+    title: "Mapa de bolets a Catalunya 2026: on trobar-ne aquesta setmana?",
+    seoTitle: "Mapa bolets Catalunya 2026: on trobar-ne aquesta setmana",
     seoDescription:
       "Analitzem pluja, temperatura i humitat per saber quines zones de Catalunya tenen millors condicions per als bolets aquesta setmana.",
     excerpt:
@@ -511,7 +511,7 @@ export const COPY: Record<Locale, Copy> = {
     intro: [
       "Este informe se renueva cada semana con la lluvia medida por las estaciones automáticas de Meteocat. Tras un verano récord de calor y muy seco, las lluvias de octubre han cambiado la temporada.",
       "Los datos actuales sitúan a la **Garrotxa, el Montseny y el Ripollès** a la cabeza. En cambio, el Pirineo central y occidental y Poniente han quedado casi al margen de la lluvia.",
-      "Esta guía no es un mapa de setas encontradas. Analiza **condiciones meteorológicas favorables para la fructificación**. No existe ninguna garantía de que haya setas en un bosque concreto.",
+      "Esta guía no es un mapa de setas encontradas. Analiza **condiciones meteorológicas favorables para la fructificación**. No existe ninguna garantía de que haya setas en un bosque concreto. Este parte también se publica en catalán: [mapa de bolets de Catalunya](/ca/natura/bolets-catalunya-condicions/).",
     ],
     directAnswerTitle: "En resumen",
     directAnswer:

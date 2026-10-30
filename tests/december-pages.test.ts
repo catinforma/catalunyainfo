@@ -85,8 +85,9 @@ test("the sibling paths the bridge page links to are the ones those guides publi
 
 test("titles fit in 60 characters, descriptions in 155, name the year and use the searched words", () => {
   const words: Record<string, Record<Locale, RegExp>> = {
-    decemberBridge: { ca: /^Pont de desembre 2026/, es: /^Puente de diciembre 2026 en Cataluña: qué días son festivos$/, en: /December 2026 public holidays in Catalonia/ },
-    marato: { ca: /^La Marató/, es: /^La Marató/, en: /^La Marató 2026/ },
+    // EN titles of both retitled 30 Oct (CTR sweep): the holiday dates and the Marató date.
+    decemberBridge: { ca: /^Pont de desembre 2026/, es: /^Puente de diciembre 2026 en Cataluña: qué días son festivos$/, en: /^December 2026 public holidays in Catalonia: 8, 25 and 26 Dec$/ },
+    marato: { ca: /^La Marató/, es: /^La Marató/, en: /^La Marató 2026: TV3 telethon on 13 December/ },
   };
   for (const article of ARTICLES) {
     for (const locale of LOCALES) {

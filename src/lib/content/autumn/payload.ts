@@ -514,9 +514,14 @@ export const SOURCES = [
     publisher: "Diputació de Barcelona",
   },
   {
-    // Status block, 26 Oct: daily minimums at Bonaigua (Z1) and Bonabé (YT),
-    // variable 1002, read 26 Oct 2026. Pyrenees rainfall from the same
-    // network via `mushrooms/conditions.ts` (read 25 Oct).
+    // Status block: daily minimums at Bonaigua (Z1) and Bonabé (YT),
+    // variable 1002, re-read 30 Oct 2026 (latest published day 24 Oct:
+    // Z1 -2.2 on the 23rd, -2.4 on the 24th; YT 1.2 and 0.9). Pyrenees
+    // rainfall from the same network via `mushrooms/conditions.ts` (read 25 Oct).
+    // Park windows re-read 30 Oct: Alt Pirineu colors-tardor page (Bonabé
+    // "2ª quinzena de octubre a 1ª de noviembre", Sant Joan to the 1st half
+    // of November) and visitvaldaran.com (Salenques "finals d'octubre i
+    // principis de novembre").
     name: {
       ca: "Dades meteorològiques diàries de la XEMA",
       es: "Datos meteorológicos diarios de la XEMA",
@@ -562,6 +567,9 @@ export interface Copy {
   year: string[];
   quickHeading: string;
   quick: string[];
+  /** Questions in the words people search with; answers never name a peak day. */
+  faqTitle: string;
+  faq: { question: string; answer: string }[];
   relatedLine: string;
 }
 
@@ -582,10 +590,9 @@ export const COPY: Record<Locale, Copy> = {
     ],
     statusTitle: "Com està la tardor ara?",
     status: [
-      "**Actualitzat el 26 d'octubre de 2026.** Cap organisme oficial publica com estan ara mateix els boscos, així que no et direm que el color «ja hi és»: et diem què toca segons el calendari dels parcs i què ha fet el temps.",
-      "**Pel calendari, som a l'última setmana d'octubre.** És la finestra que Torisme Val d'Aran dona per a la Vall de Salenques (finals d'octubre i principis de novembre), i continuen les del Parc Natural de l'Alt Pirineu per a la Vall de Bonabé i la Vall de Sant Joan, que arriben fins a la primera quinzena de novembre. També és el moment de vigilar la Fageda d'en Jordà i el Montseny. Al Bosc de Virós, la finestra oficial de la fageda (primera quinzena d'octubre) ja ha passat.",
-      "**Pel temps:** a l'alta muntanya ja glaça. Segons les dades diàries del Meteocat, la Bonaigua (2.262 m) va baixar de zero el 18 d'octubre i cada dia del 20 al 23 (−2,8 °C el 22), i Bonabé (1.691 m) el 21 i el 22 (−0,3 °C). La pluja de mitjan octubre sí que ha arribat al Pirineu: 55,1 mm de mitjana a les 24 estacions del Meteocat de la Cerdanya, l'Alt Urgell, el Pallars i l'Aran en els 15 dies fins al 25 d'octubre.",
-      "Una sortida guiada amb data: el **31 d'octubre**, el Parc Natural del Montseny fa «Tardor, castanyes i castanyers» a Viladrau, amb reserva prèvia.",
+      "**Actualitzat el 30 d'octubre de 2026.** Cap organisme oficial publica com estan ara mateix els boscos, així que no et direm que el color «ja hi és»: et diem què toca segons el calendari dels parcs i què ha fet el temps.",
+      "**Pel calendari, finals d'octubre i la primera quinzena de novembre són l'últim tram de la temporada.** Torisme Val d'Aran dona finals d'octubre i principis de novembre per a la Vall de Salenques, i les finestres del Parc Natural de l'Alt Pirineu per a la Vall de Bonabé i la Vall de Sant Joan arriben fins a la primera quinzena de novembre. A prop de Barcelona, és el moment de vigilar la Fageda d'en Jordà i el Montseny. Les finestres oficials del Bosc de Virós (primera quinzena d'octubre) i d'Esterri de Cardós (segona quinzena d'octubre) ja han passat o s'acaben.",
+      "**Pel temps:** a l'alta muntanya ja glaça. Segons les dades diàries del Meteocat (últim dia publicat: 24 d'octubre), la Bonaigua (2.262 m) va baixar de zero el 18 d'octubre i cada dia del 20 al 24 (−2,8 °C el 22), i Bonabé (1.691 m) el 21 i el 22 (−0,3 °C). La pluja de mitjan octubre sí que ha arribat al Pirineu: 55,1 mm de mitjana a les 24 estacions del Meteocat de la Cerdanya, l'Alt Urgell, el Pallars i l'Aran en els 15 dies fins al 25 d'octubre.",
     ],
     directAnswerTitle: "En resum",
     directAnswer:
@@ -597,7 +604,7 @@ export const COPY: Record<Locale, Copy> = {
       { label: "Zones tardanes", value: "Cotes mitjanes i baixes fins a novembre" },
       { label: "Any", value: "2026, després de l'estiu més càlid registrat" },
       { label: "Important", value: "Les dates són orientatives i depenen del temps" },
-      { label: "Actualitzat", value: "26 d'octubre de 2026" },
+      { label: "Actualitzat", value: "30 d'octubre de 2026" },
     ],
     tableCaption: "Calendari orientatiu per zones",
     tableHeaders: ["Zona", "Millor finestra orientativa", "Què hi destaca"],
@@ -651,6 +658,24 @@ export const COPY: Record<Locale, Copy> = {
       "**Garrotxa, Montseny i alguns boscos més baixos:** finals d'octubre i novembre.",
       "I sobretot: comprova sempre l'estat real del bosc abans de fer un viatge llarg només pels colors.",
     ],
+    faqTitle: "Preguntes freqüents",
+    faq: [
+      {
+        question: "Quan canvien de color els boscos a Catalunya?",
+        answer:
+          "A l'alta muntanya del Pirineu, a partir de la segona meitat de setembre. Després el color baixa durant l'octubre, i els boscos de cota baixa (la Garrotxa, el Montseny) són els últims, de finals d'octubre al novembre. La finestra oficial més tardana del Parc Natural de l'Alt Pirineu, la de la Vall de Sant Joan, arriba fins a la primera quinzena de novembre.",
+      },
+      {
+        question: "On es poden veure colors de tardor a prop de Barcelona?",
+        answer:
+          "Al Montseny, un dels grans boscos de tardor més fàcils d'abastar des de Barcelona, i a la Fageda d'en Jordà, a la Garrotxa. Cap dels dos publica una finestra oficial; finals d'octubre i novembre són el període a vigilar.",
+      },
+      {
+        question: "Els colors de tardor ja hi són?",
+        answer:
+          "Ningú oficial informa cada dia de com està el bosc, així que no anunciem cap màxim. Pel calendari dels parcs, principis de novembre és l'última finestra per a Salenques, Bonabé i la Vall de Sant Joan, i el moment de vigilar la Fageda d'en Jordà i el Montseny; la del Bosc de Virós (primera quinzena d'octubre) ja ha passat.",
+      },
+    ],
     relatedLine:
       "Si l'escapada de tardor també inclou bosc i cistella, tenim el [part setmanal de condicions per als bolets](/ca/natura/bolets-catalunya-condicions/), amb pluja acumulada i zones per comarca. Amb l'horari d'hivern es fa fosc una hora abans: per a una sortida de colors, la llum de la tarda s'acaba abans. Mira [quan canvia l'hora](/ca/guies/canvi-hora-catalunya/).",
   },
@@ -670,10 +695,9 @@ export const COPY: Record<Locale, Copy> = {
     ],
     statusTitle: "¿Cómo está el otoño ahora mismo?",
     status: [
-      "**Actualizado el 26 de octubre de 2026.** Ningún organismo oficial publica cómo están ahora mismo los bosques, así que no te diremos que el color «ya está»: te decimos qué toca según el calendario de los parques y qué ha hecho el tiempo.",
-      "**Por calendario, estamos en la última semana de octubre.** Es la ventana que Torisme Val d'Aran da para el valle de Salenques (finales de octubre y principios de noviembre), y siguen las del Parc Natural de l'Alt Pirineu para la Vall de Bonabé y la Vall de Sant Joan, que llegan hasta la primera quincena de noviembre. También es el momento de vigilar la Fageda d'en Jordà y el Montseny. En el Bosc de Virós, la ventana oficial del hayedo (primera quincena de octubre) ya ha pasado.",
-      "**Por el tiempo:** en alta montaña ya hiela. Según los datos diarios de Meteocat, la Bonaigua (2.262 m) bajó de cero el 18 de octubre y cada día del 20 al 23 (−2,8 °C el 22), y Bonabé (1.691 m) el 21 y el 22 (−0,3 °C). La lluvia de mediados de octubre sí ha llegado al Pirineo: 55,1 mm de media en las 24 estaciones de Meteocat de la Cerdanya, el Alt Urgell, el Pallars y el Aran en los 15 días hasta el 25 de octubre.",
-      "Una salida guiada con fecha: el **31 de octubre**, el Parc Natural del Montseny organiza «Tardor, castanyes i castanyers» en Viladrau, con reserva previa.",
+      "**Actualizado el 30 de octubre de 2026.** Ningún organismo oficial publica cómo están ahora mismo los bosques, así que no te diremos que el color «ya está»: te decimos qué toca según el calendario de los parques y qué ha hecho el tiempo.",
+      "**Por calendario, finales de octubre y la primera quincena de noviembre son el último tramo de la temporada.** Torisme Val d'Aran da finales de octubre y principios de noviembre para el valle de Salenques, y las ventanas del Parc Natural de l'Alt Pirineu para la Vall de Bonabé y la Vall de Sant Joan llegan hasta la primera quincena de noviembre. Cerca de Barcelona, es el momento de vigilar la Fageda d'en Jordà y el Montseny. Las ventanas oficiales del Bosc de Virós (primera quincena de octubre) y de Esterri de Cardós (segunda quincena de octubre) ya han pasado o se acaban.",
+      "**Por el tiempo:** en alta montaña ya hiela. Según los datos diarios de Meteocat (último día publicado: 24 de octubre), la Bonaigua (2.262 m) bajó de cero el 18 de octubre y cada día del 20 al 24 (−2,8 °C el 22), y Bonabé (1.691 m) el 21 y el 22 (−0,3 °C). La lluvia de mediados de octubre sí ha llegado al Pirineo: 55,1 mm de media en las 24 estaciones de Meteocat de la Cerdanya, el Alt Urgell, el Pallars y el Aran en los 15 días hasta el 25 de octubre.",
     ],
     directAnswerTitle: "En resumen",
     directAnswer:
@@ -685,7 +709,7 @@ export const COPY: Record<Locale, Copy> = {
       { label: "Zonas tardías", value: "Cotas medias y bajas hasta noviembre" },
       { label: "Año", value: "2026, después del verano más cálido registrado" },
       { label: "Importante", value: "Las fechas son orientativas y dependen del tiempo" },
-      { label: "Actualizado", value: "26 de octubre de 2026" },
+      { label: "Actualizado", value: "30 de octubre de 2026" },
     ],
     tableCaption: "Calendario orientativo por zonas",
     tableHeaders: ["Zona", "Mejor ventana orientativa", "Qué destaca"],
@@ -739,29 +763,46 @@ export const COPY: Record<Locale, Copy> = {
       "**Garrotxa, Montseny y algunos bosques más bajos:** finales de octubre y noviembre.",
       "Y sobre todo: comprueba siempre el estado real del bosque antes de hacer un viaje largo solo por los colores.",
     ],
+    faqTitle: "Preguntas frecuentes",
+    faq: [
+      {
+        question: "¿Cuándo empieza el otoño en los bosques de Cataluña?",
+        answer:
+          "En la alta montaña del Pirineo, a partir de la segunda mitad de septiembre. Después el color baja durante octubre, y los bosques de cota baja (la Garrotxa, el Montseny) son los últimos, de finales de octubre a noviembre. La ventana oficial más tardía del Parc Natural de l'Alt Pirineu, la de la Vall de Sant Joan, llega hasta la primera quincena de noviembre.",
+      },
+      {
+        question: "¿Dónde ver los colores de otoño cerca de Barcelona?",
+        answer:
+          "En el Montseny, uno de los grandes bosques de otoño más fáciles de alcanzar desde Barcelona, y en la Fageda d'en Jordà, en la Garrotxa. Ninguno de los dos publica una ventana oficial; finales de octubre y noviembre son el periodo a vigilar.",
+      },
+      {
+        question: "¿Ya están los colores de otoño?",
+        answer:
+          "Nadie oficial informa cada día de cómo está el bosque, así que no anunciamos ningún máximo. Por el calendario de los parques, principios de noviembre es la última ventana para Salenques, Bonabé y la Vall de Sant Joan, y el momento de vigilar la Fageda d'en Jordà y el Montseny; la del Bosc de Virós (primera quincena de octubre) ya ha pasado.",
+      },
+    ],
     relatedLine:
       "Si la escapada de otoño también incluye bosque y cesta, tenemos el [parte semanal de condiciones para las setas](/es/naturaleza/setas-cataluna-condiciones/), con lluvia acumulada y zonas por comarca. Con el horario de invierno anochece una hora antes: para una salida de colores, la luz de la tarde se acaba antes. Consulta [cuándo cambia la hora](/es/guias/cambio-hora-espana/).",
   },
   en: {
     path: "nature/fall-colors-catalonia",
     title: "Catalonia fall colors 2026: where and when to see them at their best",
-    seoTitle: "Catalonia fall colors 2026: best places and timing",
+    seoTitle: "Catalonia fall colors 2026: where to see them in November",
     seoDescription:
-      "A 2026 guide to fall colors in Catalonia, with the best forests and expected timing from the Pyrenees to La Garrotxa and Montseny.",
+      "Where to go now: Salenques, Bonabé and Sant Joan valleys (to mid-Nov), then La Fageda d'en Jordà and Montseny near Barcelona. Updated 30 Oct.",
     excerpt:
       "When autumn colour reaches each part of Catalonia. Timing windows from the Pyrenees to La Garrotxa and Montseny, using the dates the natural parks publish.",
     intro: [
-      "Autumn does not arrive everywhere in Catalonia at the same time.",
-      "Higher parts of the Pyrenees can begin changing during the second half of September, while famous lower forests such as La Fageda d'en Jordà or parts of Montseny may need several more weeks before reaching their strongest gold, copper and red tones.",
+      "**Where to see fall colors in Catalonia now:** the last official windows of 2026 are the Salenques valley (late October to early November, says the Val d'Aran tourism board) and the Bonabé and Sant Joan valleys of the Alt Pirineu Natural Park (into the first half of November). Near Barcelona, La Fageda d'en Jordà and Montseny turn last, through November.",
+      "Foliage starts in the high Pyrenees in the second half of September and works downhill for weeks, so autumn does not arrive everywhere in Catalonia at the same time. Famous lower forests such as La Fageda d'en Jordà or parts of Montseny need several more weeks than the high valleys before reaching their strongest gold, copper and red tones.",
       "If your goal is to see **Catalonia's best fall colours**, timing can be almost as important as choosing the destination.",
       "2026 also has an important complication: Catalonia's meteorological service has confirmed that summer 2026 was the hottest on record and dry across most of the region. That could make this year's progression unusually uneven.",
     ],
     statusTitle: "What do the forests look like right now?",
     status: [
-      "**Updated 26 October 2026.** No official body publishes what the forests look like right now, so we won't tell you the colour is already there: we tell you what the parks' calendar says and what the weather has done.",
-      "**By the calendar, this is the last week of October.** It is the window the Val d'Aran tourism board gives for the Salenques valley (late October and early November), and the Alt Pirineu Natural Park's windows for the Bonabé and Sant Joan valleys run on into the first half of November. It is also the time to watch La Fageda d'en Jordà and Montseny. At Bosc de Virós, the official beech window (first half of October) has passed.",
-      "**By the weather:** it is already freezing at altitude. Meteocat's daily data show Bonaigua (2,262 m) below zero on 18 October and every day from 20 to 23 October (−2.8 °C on the 22nd), and Bonabé (1,691 m) on 21 and 22 October (−0.3 °C). Mid-October's rain did reach the Pyrenees: a 55.1 mm average across Meteocat's 24 stations in Cerdanya, Alt Urgell, Pallars and Aran in the 15 days to 25 October.",
-      "A guided outing with a date: on **31 October**, Montseny Natural Park runs «Tardor, castanyes i castanyers» in Viladrau, booking required.",
+      "**Updated 30 October 2026.** No official body publishes what the forests look like right now, so we won't tell you the colour is already there: we tell you what the parks' calendar says and what the weather has done.",
+      "**By the calendar, late October and the first half of November are the last stretch of the season.** The Val d'Aran tourism board gives late October and early November for the Salenques valley, and the Alt Pirineu Natural Park's windows for the Bonabé and Sant Joan valleys run into the first half of November. Near Barcelona, this is the time to watch La Fageda d'en Jordà and Montseny. The official windows for Bosc de Virós (first half of October) and Esterri de Cardós (second half of October) are over or ending.",
+      "**By the weather:** it is already freezing at altitude. Meteocat's daily data (latest published day: 24 October) show Bonaigua (2,262 m) below zero on 18 October and every day from 20 to 24 October (−2.8 °C on the 22nd), and Bonabé (1,691 m) on 21 and 22 October (−0.3 °C). Mid-October's rain did reach the Pyrenees: a 55.1 mm average across Meteocat's 24 stations in Cerdanya, Alt Urgell, Pallars and Aran in the 15 days to 25 October.",
     ],
     directAnswerTitle: "In short",
     directAnswer:
@@ -773,7 +814,7 @@ export const COPY: Record<Locale, Copy> = {
       { label: "Later areas", value: "Medium and lower elevations into November" },
       { label: "2026 context", value: "Following Catalonia's hottest summer on record" },
       { label: "Important", value: "Timing is approximate and weather-dependent" },
-      { label: "Updated", value: "26 October 2026" },
+      { label: "Updated", value: "30 October 2026" },
     ],
     tableCaption: "Approximate timing by area",
     tableHeaders: ["Area", "Best approximate window", "What stands out"],
@@ -826,6 +867,24 @@ export const COPY: Record<Locale, Copy> = {
       "**Pyrenean valleys and mid-elevation forest:** second half of October.",
       "**La Garrotxa, Montseny and lower forests:** late October and November.",
       "And above all: check the real state of the forest before making a long trip for the colours alone.",
+    ],
+    faqTitle: "Frequently asked questions",
+    faq: [
+      {
+        question: "When does fall foliage start in Catalonia?",
+        answer:
+          "In the high Pyrenees, from the second half of September. The colour then works downhill through October, and the lower forests (La Garrotxa, Montseny) turn last, from late October into November. The Alt Pirineu Natural Park's latest official window, the Sant Joan valley, runs into the first half of November.",
+      },
+      {
+        question: "Where can I see fall colors near Barcelona?",
+        answer:
+          "In Montseny, one of the easiest big autumn forests to reach from Barcelona, and at La Fageda d'en Jordà in La Garrotxa. Neither publishes an official window; late October and November are the period to watch.",
+      },
+      {
+        question: "Are the fall colors out now?",
+        answer:
+          "Nobody official reports the state of the forests day by day, so we do not announce a peak. By the parks' calendars, early November is the last window for Salenques, Bonabé and the Sant Joan valley, and the time to watch La Fageda d'en Jordà and Montseny; Bosc de Virós's window (first half of October) has passed.",
+      },
     ],
     relatedLine:
       "If the autumn trip also involves a basket, we publish a [weekly report on mushroom conditions](/en/nature/mushroom-season-catalonia/) with recent rainfall by area. Once the clocks go back to winter time it gets dark an hour earlier, so the afternoon light for a colour trip ends sooner. Check [when the clocks change](/en/guides/clock-change-spain/).",

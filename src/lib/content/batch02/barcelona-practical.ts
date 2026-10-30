@@ -1468,9 +1468,9 @@ export const PARKING: B2Article = {
     en: {
       path: "guides/parking-in-barcelona-blue-green-zones",
       title: "Parking in Barcelona: blue zones, green zones, prices and visitor rules",
-      seoTitle: "Barcelona street parking prices: €1.15 to €4.25 an hour",
+      seoTitle: "Barcelona blue and green zone parking: hours, prices, rules",
       seoDescription:
-        "Blue zone €1.15–3.75/h and green zone €1.40–4.25/h, depending on your car's environmental label. Full rate table, time limits and how to pay.",
+        "Blue: Mon–Fri 9:00–20:00, €1.15–3.75/h. Green: visitors may park 1–2 h at €1.40–4.25/h. Sundays free away from the beach. Pay at the meter or SMOU.",
       excerpt:
         "Regulated parking is priced by zone and by your car's environmental label. The full 2026 table.",
       blocks: parkingBody("en"),

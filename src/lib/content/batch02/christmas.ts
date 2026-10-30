@@ -110,9 +110,9 @@ const META: Record<Locale, { path: string; title: string; seoTitle: string; seoD
   en: {
     path: "traditions/christmas-markets-catalonia",
     title: "Christmas markets in Barcelona and Catalonia 2026: dates and places",
-    seoTitle: "Barcelona Christmas markets 2026: Santa Llúcia, Catalonia",
+    seoTitle: "Barcelona Christmas markets 2026: dates, Santa Llúcia fair",
     seoDescription:
-      "Fira de Santa Llúcia 2026, the Sagrada Família fair, Espinelves and more: which 2026 dates are official, what the 2025 dates were and where each market is.",
+      "Fira de Santa Llúcia 2026 dates not published yet (2025: 28 Nov–23 Dec, by the Cathedral). Confirmed: Espinelves fir fair, 28 Nov–8 Dec. All the markets.",
     excerpt:
       "Christmas markets in Barcelona and Catalonia in 2026: the dates organisers have confirmed, last year's dates for the rest, and where each one is held.",
   },
