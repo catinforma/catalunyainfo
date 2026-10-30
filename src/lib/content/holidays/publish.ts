@@ -168,6 +168,34 @@ function localSection(copy: HolidayCopy, locale: Locale): Block[] {
 }
 
 const DEC7_2026 = "2026-12-07";
+const NOV1_2026 = "2026-11-01";
+
+/**
+ * Working days in the year for a Monday-to-Friday week: weekdays minus the
+ * Catalonia-wide holidays that fall on one. "Días laborables 2027" is what
+ * the calendar sites lead with; here it is counted from the same twelve
+ * dates the table prints.
+ */
+export function workingDays(year: number = YEAR): { weekdays: number; working: number } {
+  let weekdays = 0;
+  let working = 0;
+  for (let iso = `${year}-01-01`; iso.startsWith(String(year)); iso = addDays(iso, 1)) {
+    const wd = new Date(`${iso}T12:00:00Z`).getUTCDay();
+    if (wd === 0 || wd === 6) continue;
+    weekdays++;
+    if (!CATALONIA_HOLIDAYS.some((h) => h.date === iso)) working++;
+  }
+  return { weekdays, working };
+}
+
+function workingDaysFact(locale: Locale): { label: string; value: string } {
+  const { working } = workingDays();
+  return {
+    ca: { label: `Dies feiners ${YEAR}`, value: `${working} (${working - 2} amb les 2 festes locals)` },
+    es: { label: `Días laborables ${YEAR}`, value: `${working} (${working - 2} con las 2 fiestas locales)` },
+    en: { label: `Working days ${YEAR}`, value: `${working} (${working - 2} with 2 local holidays)` },
+  }[locale];
+}
 
 /**
  * The current year's calendar (Ordre EMT/66/2025), for searches that still ask
@@ -220,7 +248,8 @@ export function buildBody(locale: Locale, inlineMediaId?: string): Block[] {
   blocks.push({
     type: "keyFacts",
     title: copy.keyFactsTitle,
-    items: copy.keyFacts.map((fact) => ({ label: fact.label, value: fact.value })),
+    // The working-day count goes before the verification date, which stays last.
+    items: [...copy.keyFacts.slice(0, -1), workingDaysFact(locale), ...copy.keyFacts.slice(-1)].map((fact) => ({ label: fact.label, value: fact.value })),
   });
 
   /* ---- The twelve dates ------------------------------------------------- */
@@ -469,6 +498,8 @@ function faqBlock(locale: Locale): Block {
   const oneDay =
     oneDayItems.length <= 1 ? oneDayItems.join("") : `${oneDayItems.slice(0, -1).join(", ")}${or}${oneDayItems.at(-1)}`;
   const dec7 = datePath(locale, DEC7_2026);
+  const nov1 = datePath(locale, NOV1_2026);
+  const work = workingDays();
   const bcnDays = joinList(
     BARCELONA_LOCAL.map((h) => {
       const day = formatDay(h.date, copy, locale);
@@ -483,7 +514,8 @@ function faqBlock(locale: Locale): Block {
       { question: `Quan és Divendres Sant el ${YEAR}?`, answer: `${cap(goodFriday)}. És festiu a tot Catalunya.` },
       { question: `Quan és Pasqua Florida el ${YEAR}?`, answer: `El Dilluns de Pasqua Florida és ${easterMonday}, festiu a tot Catalunya excepte a l'Aran, on el substitueix la Festa d'Aran.` },
       { question: "El Dijous Sant és festiu a Catalunya?", answer: `No. El ${YEAR} cau el 25 de març i és festiu a la majoria de comunitats, però no a Catalunya, on el festiu és el Divendres Sant.` },
-      { question: "El 30 d'octubre és festiu a Catalunya?", answer: `No a tot Catalunya: el divendres 30 d'octubre de 2026 no és al calendari oficial. Sí que és festa local en alguns municipis, com Salou, Ulldecona, Vilada o Riudellots de la Selva (vegeu les [festes locals](${path.local})), i el Consell d'Educació Municipal de Barcelona proposa que les escoles de la ciutat no facin classe aquell dia; cada centre decideix. L'1 de novembre de 2026 cau en diumenge i el dilluns 2 no és festiu.` },
+      { question: "El dilluns 2 de novembre és festiu a Catalunya?", answer: `No. Tots Sants, l'1 de novembre de 2026, cau en diumenge i no és al calendari oficial de Catalunya, i el dilluns 2 tampoc: és feiner, tret dels pocs municipis que el tenen com a festa local (tots a [és festiu l'1 de novembre?](${nov1})). En altres comunitats, com Madrid o Andalusia, el dilluns 2 sí que és festiu.` },
+      { question: `Quants dies feiners té el ${YEAR} a Catalunya?`, answer: `${work.working}: el ${YEAR} té ${work.weekdays} dies de dilluns a divendres, i ${work.weekdays - work.working} dels dotze festius hi cauen. Amb les dues festes locals del municipi, si cauen en dia feiner, en queden ${work.working - 2}.` },
       { question: `Quins ponts hi ha el ${YEAR} a Catalunya?`, answer: `Sense gastar vacances: ${free}. Amb un sol dia de vacances, demanant ${oneDay}. Tot plegat, per a una setmana de dilluns a divendres.` },
       { question: `Quants festius té Barcelona el ${YEAR}?`, answer: `Catorze: els ${count} de tot Catalunya i les dues festes locals de la ciutat, ${bcnDays}. Dia a dia, a [festius de Barcelona](/ca/festius/barcelona/).` },
       { question: `Quan es publiquen les festes locals del ${YEAR}?`, answer: `Encara no s'han publicat: la Generalitat les fixa en una ordre del DOGC a proposta dels ajuntaments, i les del 2026 van sortir el 17 de desembre de 2025. Mentrestant, les del 2026 de cada municipi són a [festius locals per municipi](/ca/festius/).` },
@@ -495,7 +527,8 @@ function faqBlock(locale: Locale): Block {
       { question: `¿Cuándo es Viernes Santo en ${YEAR}?`, answer: `${cap(goodFriday)}. Es festivo en toda Cataluña.` },
       { question: `¿Cuándo es el Lunes de Pascua en ${YEAR}?`, answer: `${cap(easterMonday)}. Es festivo en toda Cataluña excepto en Arán, donde lo sustituye la Festa d'Aran.` },
       { question: "¿El Jueves Santo es festivo en Cataluña?", answer: `No. En ${YEAR} cae el 25 de marzo y es festivo en la mayoría de comunidades, pero no en Cataluña, donde el festivo es el Viernes Santo.` },
-      { question: "¿El 30 de octubre es festivo en Cataluña?", answer: `No en toda Cataluña: el viernes 30 de octubre de 2026 no está en el calendario oficial. Sí es fiesta local en algunos municipios, como Salou, Ulldecona, Vilada o Riudellots de la Selva (consulta los [festivos locales](${path.local})), y el Consell d'Educació Municipal de Barcelona propone que las escuelas de la ciudad no tengan clase ese día; cada centro decide. El 1 de noviembre de 2026 cae en domingo y el lunes 2 no es festivo.` },
+      { question: "¿El lunes 2 de noviembre es festivo en Cataluña?", answer: `No. Todos los Santos, el 1 de noviembre de 2026, cae en domingo y no está en el calendario oficial de Cataluña, y el lunes 2 tampoco: es laborable, salvo en los pocos municipios que lo tienen como fiesta local (todos en [¿es festivo el 1 de noviembre?](${nov1})). En otras comunidades, como Madrid o Andalucía, el lunes 2 sí es festivo.` },
+      { question: `¿Cuántos días laborables tiene ${YEAR} en Cataluña?`, answer: `${work.working}: ${YEAR} tiene ${work.weekdays} días de lunes a viernes, y ${work.weekdays - work.working} de los doce festivos caen en ellos. Con las dos fiestas locales del municipio, si caen en día laborable, quedan ${work.working - 2}.` },
       { question: `¿Qué puentes hay en ${YEAR} en Cataluña?`, answer: `Sin gastar vacaciones: ${free}. Con un solo día de vacaciones, pidiendo ${oneDay}. Todo ello, para una semana de lunes a viernes.` },
       { question: `¿Cuántos festivos tiene Barcelona en ${YEAR}?`, answer: `Catorce: los ${count} de toda Cataluña y las dos fiestas locales de la ciudad, ${bcnDays}. Día a día, en [festivos de Barcelona](/es/festivos/barcelona/).` },
       { question: `¿Cuándo se publican los festivos locales de ${YEAR}?`, answer: `Todavía no se han publicado: la Generalitat los fija en una orden del DOGC a propuesta de los ayuntamientos, y los de 2026 salieron el 17 de diciembre de 2025. Mientras tanto, los de 2026 de cada municipio están en [festivos locales por municipio](/es/festivos/).` },
@@ -510,6 +543,7 @@ function faqBlock(locale: Locale): Block {
       { question: `How many public holidays does Barcelona have in ${YEAR}?`, answer: `Fourteen: the ${count} Catalonia-wide days plus the city's two local holidays, ${bcnDays}.` },
       { question: `What long weekends are there in ${YEAR}?`, answer: `Without using any leave: ${free}. With a single day of leave, take ${oneDay}. All of this assumes a Monday-to-Friday week.` },
       { question: `When are the ${YEAR} local holidays published?`, answer: `Not yet: the Catalan government sets them in a DOGC order on the town councils' proposals, and the 2026 ones appeared on 17 December 2025. Until then, each town's 2026 dates are in [local holidays in Catalonia](${path.local}).` },
+      { question: `How many working days are there in ${YEAR} in Catalonia?`, answer: `${work.working}: ${YEAR} has ${work.weekdays} weekdays, and ${work.weekdays - work.working} of the twelve holidays fall on them. With a town's two local holidays, if both fall on weekdays, that leaves ${work.working - 2}.` },
       { question: "Is 7 December 2026 a public holiday in Catalonia?", answer: `No. It is a working day in Catalonia, except in the towns that keep it as a local holiday, all listed in [is 7 December a holiday?](${dec7}).` },
       { question: "Is today a public holiday?", answer: `We answer that every day at [is today a public holiday in Catalonia?](${path.today}), with the next one.` },
     ],

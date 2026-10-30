@@ -246,4 +246,5 @@ export const SOURCES = [
 // which repeats Order EMT/52/2026 and the Aran swap for Catalonia; and on
 // 28 Oct 2026 against the Generalitat's 2026 and 2027 calendar pages and
 // Barcelona's own calendar (17 May and 24 Sep 2027; 25 May and 24 Sep 2026).
-export const LAST_VERIFIED = "2026-10-28";
+// All three re-read on 30 Oct 2026: unchanged.
+export const LAST_VERIFIED = "2026-10-30";
