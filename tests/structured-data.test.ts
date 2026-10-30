@@ -84,7 +84,15 @@ test("every holiday municipality page and hub carries a Dataset from the General
     }
   }
   const girona = holidays.municipalityDataset(holidayData.municipalityBySlug("girona")!, "es")!;
-  assert.deepEqual(girona.isBasedOn, [holidayData.SNAPSHOT.sources.localOpenData.url, holidayData.SNAPSHOT.sources.localOrder.url]);
+  // Girona's page also gives the 2027 days its council approved (council-2027.ts): its page is a source too.
+  const gironaCouncil = holidayData.councilApproved2027("girona");
+  assert.deepEqual(girona.isBasedOn, [
+    holidayData.SNAPSHOT.sources.localOpenData.url,
+    holidayData.SNAPSHOT.sources.localOrder.url,
+    ...(gironaCouncil ? [gironaCouncil.source.url] : []),
+  ]);
+  const tarragona = holidays.municipalityDataset(holidayData.municipalityBySlug("tarragona")!, "es")!;
+  assert.deepEqual(tarragona.isBasedOn, [holidayData.SNAPSHOT.sources.localOpenData.url, holidayData.SNAPSHOT.sources.localOrder.url]);
   assert.equal(girona.dateModified, holidayData.SNAPSHOT.readOn);
   assert.match(String(girona.temporalCoverage), /^\d{4}(\/\d{4})?$/);
 });

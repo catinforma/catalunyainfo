@@ -1,6 +1,7 @@
 import { ARAN_SUBSTITUTIONS, HOLIDAYS_BY_YEAR } from "@/lib/content/holidays/calendar";
 import { ARAN_REPLACEMENT } from "@/lib/content/holidays/payload";
 
+import { COUNCIL_2027, type CouncilApproved } from "./council-2027";
 import nextYearJson from "./local-2027.json" with { type: "json" };
 import { slugify } from "./slug";
 import snapshotJson from "./snapshot.json" with { type: "json" };
@@ -60,6 +61,20 @@ export function nextYearPublished(): boolean {
 
 export function nextYearFor(slug: string): { local: string[]; nuclei: NucleusDays[] } | null {
   return nextYearPublished() ? (NEXT_YEAR.municipalities[slug] ?? null) : null;
+}
+
+/**
+ * Next year's days as the council itself approved them (`council-2027.ts`),
+ * only while the DOGC order is not parsed: once it is (`published`), the
+ * order wins for every town, whether it lists the town or not.
+ */
+export function councilApproved2027(slug: string, published = nextYearPublished()): CouncilApproved | null {
+  return published ? null : (COUNCIL_2027[slug] ?? null);
+}
+
+/** The towns with a page whose council has approved next year's days, by population; none once the order is out. */
+export function councilApprovedTowns(): SnapshotMunicipality[] {
+  return SNAPSHOT.municipalities.filter((m) => councilApproved2027(m.slug)).sort((a, b) => a.rank - b.rank);
 }
 
 /* -------------------------------------------------------------------------- */
@@ -123,6 +138,8 @@ export interface HolidayRow {
   name: string;
   /** For a nuclei-only municipality: the nuclei that have the day off. */
   where?: string[];
+  /** Approved by the council, not yet in the DOGC order (`council-2027.ts`). */
+  pending?: true;
 }
 
 /** Local days of the municipality itself, or of its nuclei when it has none of its own. */
@@ -137,15 +154,33 @@ function localRows(local: string[], nuclei: NucleusDays[], lang: Lang): HolidayR
   }));
 }
 
-/** Every holiday of a year in this municipality, Catalonia-wide and local, by date. */
-export function yearRows(m: SnapshotMunicipality, year: number, lang: Lang): HolidayRow[] {
+/**
+ * The council's own days for next year, marked pending. Catalan prints the
+ * name the council gives a day; Spanish and English keep the plain label
+ * rather than translate a local name.
+ */
+function councilRows(c: CouncilApproved, lang: Lang): HolidayRow[] {
+  return c.local.map((date, i) => {
+    const own = lang === "ca" ? c.names?.[i] : null;
+    return { date, kind: "local" as const, name: own ? own.charAt(0).toUpperCase() + own.slice(1) : LOCAL_LABEL[lang], pending: true as const };
+  });
+}
+
+/**
+ * Every holiday of a year in this municipality, Catalonia-wide and local, by
+ * date. For next year, before the DOGC order, `council` adds the days the
+ * council has approved, marked `pending` (the status box leaves them out).
+ */
+export function yearRows(m: SnapshotMunicipality, year: number, lang: Lang, { council = false }: { council?: boolean } = {}): HolidayRow[] {
   const regional = regionalDays(year, isAran(m)).map((d) => ({
     date: d.date,
     kind: d.aranOnly ? ("aran" as const) : ("catalonia" as const),
     name: d.name[lang],
   }));
   const next = year === NEXT ? nextYearFor(m.slug) : null;
-  const local = year === YEAR ? localRows(m.local, m.nuclei, lang) : next ? localRows(next.local, next.nuclei, lang) : [];
+  const approved = year === NEXT && council && !next ? councilApproved2027(m.slug) : null;
+  const local =
+    year === YEAR ? localRows(m.local, m.nuclei, lang) : next ? localRows(next.local, next.nuclei, lang) : approved ? councilRows(approved, lang) : [];
   return [...regional, ...local].sort((a, b) => a.date.localeCompare(b.date) || a.kind.localeCompare(b.kind));
 }
 

@@ -10,6 +10,7 @@ import {
   NEXT,
   YEAR,
   comarcaOf,
+  councilApproved2027,
   isAran,
   localThrough,
   nextYearFor,
@@ -28,7 +29,7 @@ import { dateQuestion } from "@/lib/programmatic/holidays/copy";
 import type { SnapshotMunicipality } from "@/lib/programmatic/holidays/types";
 
 import { HolidayStatus, type StatusLabels } from "./HolidayStatus";
-import { DateList, GuideLinks, HolidayTable, Sources } from "./parts";
+import { CouncilSourceLine, DateList, GuideLinks, HolidayTable, Sources } from "./parts";
 
 const STATUS_LABELS: Record<MuniLocale, StatusLabels> = {
   ca: {
@@ -89,7 +90,9 @@ export function MunicipalityPage({ m, locale }: { m: SnapshotMunicipality; local
   const t = municipalityCopy(m, locale, next, comarcaLabel);
   const name = displayName(m, locale);
   const rows = yearRows(m, YEAR, locale);
-  const rows2027 = yearRows(m, NEXT, locale);
+  // Before the DOGC order: the council's own days, if it has approved them, marked pending.
+  const rows2027 = yearRows(m, NEXT, locale, { council: true });
+  const council = next ? null : councilApproved2027(m.slug);
   const { sameComarca, others, comarcaTotal } = siblings(m);
   const crumbs = municipalityCrumbs(m, locale);
   const shared = municipalityDatePages(m);
@@ -111,6 +114,11 @@ export function MunicipalityPage({ m, locale }: { m: SnapshotMunicipality; local
           <p className="ci-lead">
             {t.lead} {t.source}
           </p>
+          {t.nextLead ? (
+            <p className="ci-callout ci-callout-official">
+              {t.nextLead} <a href="#festius-2027">{locale === "ca" ? `Calendari del ${NEXT}` : `Calendario de ${NEXT}`}</a>
+            </p>
+          ) : null}
           {t.nucleiLead ? <p>{t.nucleiLead}</p> : null}
           {t.correction ? <p className="ci-callout ci-callout-official">{t.correction}</p> : null}
           {t.unlisted ? <p className="ci-callout ci-callout-official">{t.unlisted}</p> : null}
@@ -166,9 +174,14 @@ export function MunicipalityPage({ m, locale }: { m: SnapshotMunicipality; local
             </>
           ) : (
             <>
-              {t.nextPending.map((p) => (
+              {/* The answer first (the council's two days, labelled), then the 2027 calendar. */}
+              {(t.nextCouncil ?? t.nextPending).map((p) => (
                 <p key={p}>{p}</p>
               ))}
+              {t.councilSource ? <CouncilSourceLine source={t.councilSource} /> : null}
+              {t.nextCouncil ? (
+                <HolidayTable rows={rows2027} locale={locale} caption={`${t.tableCaption.replace(String(YEAR), String(NEXT))}`} />
+              ) : null}
               <p>
                 <a href={OFFICIAL.treballCalendar} rel="noopener" target="_blank">
                   {locale === "ca" ? "Calendari laboral al web del Departament d'Empresa i Treball" : "Calendario laboral en la web del Departament d'Empresa i Treball"}
@@ -180,7 +193,7 @@ export function MunicipalityPage({ m, locale }: { m: SnapshotMunicipality; local
               </p>
             </>
           )}
-          {t.nextPublished ? null : (
+          {t.nextPublished || t.nextCouncil ? null : (
             <>
               <p>{t.nextRegionalLead}</p>
               <DateList dates={regionalDays(NEXT, isAran(m)).map((d) => d.date)} locale={locale} />
@@ -272,6 +285,7 @@ export function MunicipalityPage({ m, locale }: { m: SnapshotMunicipality; local
           keys={["localOrder", "amendment", "openData", "regional2026", "regional2027", "shops", "shopsOrder", "school", "retailLaw", "population"]}
           locale={locale}
           title={t.sourcesTitle}
+          extra={council ? [council.source] : []}
         />
       </div>
     </article>

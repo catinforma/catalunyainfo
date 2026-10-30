@@ -1,6 +1,7 @@
-import { NEXT, SNAPSHOT, YEAR, isAran, regionalDays, sharedDates, type ComarcaGroup } from "./data";
+import type { CouncilApproved } from "./council-2027";
+import { NEXT, SNAPSHOT, YEAR, councilApproved2027, councilApprovedTowns, isAran, regionalDays, sharedDates, type ComarcaGroup } from "./data";
 import { LOCAL_DATE_PAGES } from "./dates";
-import { caDayArticle, dayMonth, dayMonthYear, weekdayDayMonth, type DateLocale } from "./format";
+import { caDayArticle, dayMonth, dayMonthYear, dayPair, weekdayDayMonth, type DateLocale } from "./format";
 import { caA, caComarca, caDe, caStart, esName, joinList } from "./names";
 import { datePath, type MuniLocale } from "./paths";
 import type { SnapshotMunicipality } from "./types";
@@ -24,6 +25,91 @@ export function displayName(m: Pick<SnapshotMunicipality, "name">, locale: MuniL
 }
 
 /* -------------------------------------------------------------------------- */
+/* Next year's days as the council approved them (council-2027.ts)            */
+/* -------------------------------------------------------------------------- */
+
+/** "del 21 de juliol de 2026", "de l'1 de juny de 2026", "del 21 de julio de 2026", "of 21 July 2026". */
+function ofDate(iso: string, locale: DateLocale): string {
+  if (locale === "ca") return `${caDayArticle(iso) === "l'" ? "de l'" : "del "}${dayMonthYear(iso, "ca")}`;
+  return locale === "es" ? `del ${dayMonthYear(iso, "es")}` : `of ${dayMonthYear(iso, "en")}`;
+}
+
+/**
+ * How the days were fixed, for the label the pages print with them:
+ * "aprovats per l'Ajuntament (ple del 21 de juliol de 2026), pendents de
+ * l'ordre del DOGC". A council page that gives the days without naming the
+ * act says only that the council set them.
+ */
+export function councilLabel(c: CouncilApproved, locale: DateLocale): string {
+  const { kind, date } = c.act;
+  if (locale === "ca") {
+    const by =
+      kind === "web"
+        ? "fixats per l'Ajuntament, segons el seu web"
+        : kind === "ple" && !date
+          ? "aprovats pel Ple de l'Ajuntament"
+          : `aprovats per l'Ajuntament (${kind === "ple" ? "ple" : kind === "decret" ? "decret d'alcaldia" : "Junta de Govern Local"}${date ? ` ${ofDate(date, "ca")}` : ""})`;
+    return `${by}, pendents de l'ordre del DOGC`;
+  }
+  if (locale === "es") {
+    const by =
+      kind === "web"
+        ? "fijados por el Ayuntamiento, según su web"
+        : kind === "ple" && !date
+          ? "aprobados por el pleno del Ayuntamiento"
+          : `aprobados por el Ayuntamiento (${kind === "ple" ? "pleno" : kind === "decret" ? "decreto de alcaldía" : "Junta de Gobierno Local"}${date ? ` ${ofDate(date, "es")}` : ""})`;
+    return `${by}, pendientes de la orden del DOGC`;
+  }
+  const by =
+    kind === "web"
+      ? "set by the council, according to its website"
+      : kind === "ple" && !date
+        ? "approved by the full council"
+        : `approved by the council (${kind === "ple" ? "full council meeting" : kind === "decret" ? "mayoral decree" : "local government board"}${date ? ` ${ofDate(date, "en")}` : ""})`;
+  return `${by}, pending the DOGC order`;
+}
+
+/** The two days with the name the council gives each, in Catalan only: "el dilluns 17 de maig (Segona Pasqua)". */
+function councilDays(c: CouncilApproved, locale: MuniLocale): string {
+  return joinList(
+    c.local.map((d, i) => {
+      const name = locale === "ca" ? c.names?.[i] : null;
+      return `el ${weekdayDayMonth(d, locale)}${name ? ` (${name})` : ""}`;
+    }),
+    locale,
+  );
+}
+
+/** "Raimat (27 d'abril i 23 de juliol) i Sucs (14 de maig i 13 d'agost)". */
+function councilNuclei(c: CouncilApproved, locale: DateLocale): string | null {
+  const nuclei = c.nuclei ?? [];
+  if (nuclei.length === 0) return null;
+  return joinList(
+    nuclei.map((n) => `${locale === "ca" ? n.name : esName(n.name)} (${dayPair(n.dates[0]!, n.dates[1]!, locale)})`),
+    locale,
+  );
+}
+
+/** Where the council's days were read, for the line under them. */
+export interface CouncilSource {
+  lead: string;
+  name: string;
+  ref: string;
+  url: string;
+  read: string;
+}
+
+export function councilSource(c: CouncilApproved, locale: DateLocale): CouncilSource {
+  const read = dayMonthYear(c.readOn, locale);
+  const words = {
+    ca: { lead: "Font:", read: `Consultada el ${read}.` },
+    es: { lead: "Fuente:", read: `Consultada el ${read}.` },
+    en: { lead: "Source:", read: `Read on ${read}.` },
+  }[locale];
+  return { lead: words.lead, name: c.source.name, ref: c.source.ref, url: c.source.url, read: words.read };
+}
+
+/* -------------------------------------------------------------------------- */
 /* Municipality page: metadata                                                */
 /* -------------------------------------------------------------------------- */
 
@@ -33,14 +119,27 @@ export function displayName(m: Pick<SnapshotMunicipality, "name">, locale: MuniL
  * festivo en girona" / "mañana es festivo en girona". The title carries both:
  * the town and the years first, then the question the status block answers.
  * The old tail ("qué días son festivo") promised nothing.
+ *
+ * Where the council has already approved next year's days (council-2027.ts),
+ * the title gives them instead, in the searchers' words ("festivos tarragona
+ * 2027"): "Festivos Granollers 2026 y 2027: 7 de mayo y 27 de agosto". If
+ * that does not fit, the title stays as it was and the description carries
+ * the dates.
  */
-export function municipalityTitle(m: SnapshotMunicipality, locale: MuniLocale): string {
+export function municipalityTitle(m: SnapshotMunicipality, locale: MuniLocale, council: CouncilApproved | null = councilApproved2027(m.slug)): string {
   const name = displayName(m, locale);
+  const days = council ? dayPair(council.local[0], council.local[1], locale) : null;
+  const withDays = days
+    ? locale === "ca"
+      ? [`Festius locals ${name} ${YEAR} i ${NEXT}: ${days}`, `Festius ${name} ${YEAR} i ${NEXT}: ${days}`, `Festius ${name} ${YEAR}-${NEXT}: ${days}`]
+      : [`Festivos locales ${name} ${YEAR} y ${NEXT}: ${days}`, `Festivos ${name} ${YEAR} y ${NEXT}: ${days}`, `Festivos ${name} ${YEAR}-${NEXT}: ${days}`]
+    : [];
   // The last form is for the one name too long for both years (Cruïlles,
   // Monells i Sant Sadurní de l'Heura, 43 characters).
   return locale === "ca"
     ? fit(
         [
+          ...withDays,
           `Festius locals ${name} ${YEAR} i ${NEXT}: avui és festiu?`,
           `Festius ${name} ${YEAR} i ${NEXT}: avui és festiu?`,
           `Festius locals ${name} ${YEAR} i ${NEXT}`,
@@ -51,6 +150,7 @@ export function municipalityTitle(m: SnapshotMunicipality, locale: MuniLocale): 
       )
     : fit(
         [
+          ...withDays,
           `Festivos locales ${name} ${YEAR} y ${NEXT}: ¿hoy es festivo?`,
           `Festivos ${name} ${YEAR} y ${NEXT}: ¿hoy es festivo?`,
           `Festivos locales ${name} ${YEAR} y ${NEXT}`,
@@ -69,13 +169,37 @@ function localList(dates: string[], locale: DateLocale): string {
   return joinList(dates.map((d) => dayMonth(d, locale)), locale === "en" ? "en" : locale);
 }
 
-export function municipalityDescription(m: SnapshotMunicipality, locale: MuniLocale): string {
+export function municipalityDescription(m: SnapshotMunicipality, locale: MuniLocale, council: CouncilApproved | null = councilApproved2027(m.slug)): string {
   const name = displayName(m, locale);
   const own = m.local.length > 0;
   // Nuclei only: with two nuclei their days fit ("Bigues, 20 de gener i 29 de
   // juny; Riells del Fai, …"); with more, or if that is too long, "by nucleus".
   const byNucleus = (lang: MuniLocale) =>
     m.nuclei.length <= 2 ? m.nuclei.map((n) => `${lang === "es" ? esName(n.name) : n.name}, ${localList(n.dates, lang)}`).join("; ") : null;
+  // Next year's days approved by the council lead: "festius X 2027" is the
+  // query rising to its December peak. This year's follow, while they fit.
+  if (council && own) {
+    const next = dayPair(council.local[0], council.local[1], locale);
+    const now = m.local.length === 2 ? dayPair(m.local[0]!, m.local[1]!, locale) : localList(m.local, locale);
+    // A council page that names no act "set" the days; a plenary, decree or board "approved" them.
+    const set = council.act.kind === "web";
+    const candidates =
+      locale === "ca"
+        ? [
+            `Festius locals ${caDe(m.name)} el ${NEXT}: ${next}, ${set ? "fixats" : "aprovats"} per l'Ajuntament i pendents del DOGC. El ${YEAR}: ${now}. Si avui o demà és festiu.`,
+            `Festius locals ${caDe(m.name)} el ${NEXT}: ${next}, ${set ? "fixats" : "aprovats"} per l'Ajuntament i pendents del DOGC. El ${YEAR}: ${now}.`,
+            `Festius locals ${caDe(m.name)} el ${NEXT}: ${next}, ${set ? "fixats" : "aprovats"} per l'Ajuntament. El ${YEAR}: ${now}.`,
+            `Festius ${caDe(m.name)} el ${NEXT}: ${next}, ja ${set ? "fixats" : "aprovats"}. El ${YEAR}: ${now}.`,
+          ]
+        : [
+            `Festivos locales de ${name} en ${NEXT}: ${next}, ${set ? "fijados" : "aprobados"} por el Ayuntamiento y pendientes del DOGC. En ${YEAR}: ${now}. Si hoy o mañana es festivo.`,
+            `Festivos locales de ${name} en ${NEXT}: ${next}, ${set ? "fijados" : "aprobados"} por el Ayuntamiento y pendientes del DOGC. En ${YEAR}: ${now}.`,
+            `Festivos locales de ${name} en ${NEXT}: ${next}, ${set ? "fijados" : "aprobados"} por el Ayuntamiento. En ${YEAR}: ${now}.`,
+            `Festivos de ${name} en ${NEXT}: ${next}, ya ${set ? "fijados" : "aprobados"}. En ${YEAR}: ${now}.`,
+          ];
+    const chosen = candidates.find((c) => c.length <= DESCRIPTION_MAX);
+    if (chosen) return chosen;
+  }
   // The answer (the two dates) first, then the 2027 calendar and today/tomorrow.
   if (locale === "ca") {
     const candidates = (days: string) => [
@@ -177,6 +301,11 @@ export interface MunicipalityCopy {
   nextTitle: string;
   nextPending: string[];
   nextPublished: string | null;
+  /** Under the lead: next year's days as the council approved them, before the DOGC order. */
+  nextLead: string | null;
+  /** The 2027 section's paragraphs when the council has approved the days (before the table). */
+  nextCouncil: string[] | null;
+  councilSource: CouncilSource | null;
   nextRegionalLead: string;
   shopsTitle: string;
   shopsLead: string;
@@ -192,10 +321,20 @@ export interface MunicipalityCopy {
   sourcesTitle: string;
 }
 
-export function municipalityCopy(m: SnapshotMunicipality, locale: MuniLocale, next: { local: string[] } | null, comarcaLabel: string): MunicipalityCopy {
+export function municipalityCopy(
+  m: SnapshotMunicipality,
+  locale: MuniLocale,
+  next: { local: string[] } | null,
+  comarcaLabel: string,
+  approved: CouncilApproved | null = councilApproved2027(m.slug),
+): MunicipalityCopy {
   const name = displayName(m, locale);
   const corrected = m.correction?.by === "Ordre EMT/3/2026";
   const shopsOnLocal = (d: string) => m.shops.includes(d);
+  // The DOGC order, once parsed, always wins over the council's own word.
+  const council = next ? null : approved;
+  const nuclei = council ? councilNuclei(council, locale) : null;
+  const councilSourceLine = council ? councilSource(council, locale) : null;
 
   if (locale === "ca") {
     const lead =
@@ -226,6 +365,14 @@ export function municipalityCopy(m: SnapshotMunicipality, locale: MuniLocale, ne
         `Quan es publiqui l'ordre del ${NEXT}, n'afegirem els dos dies aquí. Mentrestant, no els dones per repetits: els ajuntaments canvien de dia més sovint del que sembla.`,
       ],
       nextPublished: next ? `Els festius locals ${caDe(m.name)} el ${NEXT} són ${wdList(next.local, "ca")}.` : null,
+      nextLead: council ? `Festius locals del ${NEXT}: ${dayPair(council.local[0], council.local[1], "ca")}, ${councilLabel(council, "ca")}.` : null,
+      nextCouncil: council
+        ? [
+            `Els festius locals ${caDe(m.name)} el ${NEXT} seran ${councilDays(council, "ca")}: ${councilLabel(council, "ca")}.${nuclei ? ` ${council.nuclei!.length === 1 ? "Un nucli en té de propis" : "Alguns nuclis en tenen de propis"}: ${nuclei}.` : ""}`,
+            `L'ordre del Departament d'Empresa i Treball que els fa oficials, a proposta de cada ajuntament, encara no ha sortit; la del ${YEAR} va sortir al DOGC el 17 de desembre de 2025. Quan es publiqui, aquesta pàgina en donarà els dies.`,
+          ]
+        : null,
+      councilSource: councilSourceLine,
       nextRegionalLead: `Els dotze festius de tot Catalunya del ${NEXT} ja són oficials (Ordre EMT/52/2026):`,
       shopsTitle: `Botigues obertes en festius ${caA(m.name)} el ${YEAR}`,
       shopsLead: m.shopsOwnList
@@ -286,6 +433,14 @@ export function municipalityCopy(m: SnapshotMunicipality, locale: MuniLocale, ne
       `Cuando se publique la orden de ${NEXT}, añadiremos aquí los dos días. Mientras tanto, no los des por repetidos: los ayuntamientos cambian de día más a menudo de lo que parece.`,
     ],
     nextPublished: next ? `Los festivos locales de ${name} en ${NEXT} son ${wdList(next.local, "es")}.` : null,
+    nextLead: council ? `Festivos locales de ${NEXT}: ${dayPair(council.local[0], council.local[1], "es")}, ${councilLabel(council, "es")}.` : null,
+    nextCouncil: council
+      ? [
+          `Los festivos locales de ${name} en ${NEXT} serán ${councilDays(council, "es")}: ${councilLabel(council, "es")}.${nuclei ? ` ${council.nuclei!.length === 1 ? "Un núcleo tiene los suyos propios" : "Algunos núcleos tienen los suyos propios"}: ${nuclei}.` : ""}`,
+          `La orden del Departament d'Empresa i Treball que los hace oficiales, a propuesta de cada ayuntamiento, todavía no ha salido; la de ${YEAR} salió en el DOGC el 17 de diciembre de 2025. Cuando se publique, esta página dará sus días.`,
+        ]
+      : null,
+    councilSource: councilSourceLine,
     nextRegionalLead: `Los doce festivos de toda Cataluña de ${NEXT} ya son oficiales (Orden EMT/52/2026):`,
     shopsTitle: `Tiendas abiertas en festivos en ${name} en ${YEAR}`,
     shopsLead: m.shopsOwnList
@@ -337,8 +492,15 @@ export interface MunicipalityFaqItem {
  * with a date page, from `today` (the build date: the pages are static, and
  * each question names its date, so a past one stays true).
  */
-export function municipalityFaq(m: SnapshotMunicipality, locale: MuniLocale, next: { local: string[] } | null, today: string): MunicipalityFaqItem[] {
+export function municipalityFaq(
+  m: SnapshotMunicipality,
+  locale: MuniLocale,
+  next: { local: string[] } | null,
+  today: string,
+  approved: CouncilApproved | null = councilApproved2027(m.slug),
+): MunicipalityFaqItem[] {
   const name = displayName(m, locale);
+  const council = next ? null : approved;
   const own = m.local.length > 0;
   const aran = isAran(m);
   const regionalNext = joinList(regionalDays(NEXT, aran).map((d) => dayMonth(d.date, locale)), locale);
@@ -384,7 +546,9 @@ export function municipalityFaq(m: SnapshotMunicipality, locale: MuniLocale, nex
         question: `Quin és el calendari laboral ${NEXT} ${caDe(m.name)}?`,
         answer: next
           ? `Els festius locals ${caDe(m.name)} el ${NEXT} són ${wdList(next.local, "ca")}, i se sumen als dotze de tot Catalunya: ${regionalNext}.`
-          : `Els dotze festius ${aran ? "de l'Aran" : "de tot Catalunya"} del ${NEXT} ja són oficials (Ordre EMT/52/2026): ${regionalNext}. Els dos festius locals ${caDe(m.name)} del ${NEXT} encara no s'han publicat: els fixa una ordre del DOGC a proposta de l'ajuntament, i la del ${YEAR} va sortir el 17 de desembre de 2025.`,
+          : council
+            ? `Els festius locals ${caDe(m.name)} el ${NEXT} seran ${wdList(council.local, "ca")}, ${councilLabel(council, "ca")}. Se sumen als dotze ${aran ? "de l'Aran" : "de tot Catalunya"}, que ja són oficials (Ordre EMT/52/2026): ${regionalNext}.`
+            : `Els dotze festius ${aran ? "de l'Aran" : "de tot Catalunya"} del ${NEXT} ja són oficials (Ordre EMT/52/2026): ${regionalNext}. Els dos festius locals ${caDe(m.name)} del ${NEXT} encara no s'han publicat: els fixa una ordre del DOGC a proposta de l'ajuntament, i la del ${YEAR} va sortir el 17 de desembre de 2025.`,
       },
       ...asked.map(dateItem),
     ];
@@ -403,7 +567,9 @@ export function municipalityFaq(m: SnapshotMunicipality, locale: MuniLocale, nex
       question: `¿Cuál es el calendario laboral ${NEXT} de ${name}?`,
       answer: next
         ? `Los festivos locales de ${name} en ${NEXT} son ${wdList(next.local, "es")}, y se suman a los doce de toda Cataluña: ${regionalNext}.`
-        : `Los doce festivos ${aran ? "de Arán" : "de toda Cataluña"} de ${NEXT} ya son oficiales (Orden EMT/52/2026): ${regionalNext}. Los dos festivos locales de ${name} para ${NEXT} todavía no se han publicado: los fija una orden del DOGC a propuesta del ayuntamiento, y la de ${YEAR} salió el 17 de diciembre de 2025.`,
+        : council
+          ? `Los festivos locales de ${name} en ${NEXT} serán ${wdList(council.local, "es")}, ${councilLabel(council, "es")}. Se suman a los doce ${aran ? "de Arán" : "de toda Cataluña"}, que ya son oficiales (Orden EMT/52/2026): ${regionalNext}.`
+          : `Los doce festivos ${aran ? "de Arán" : "de toda Cataluña"} de ${NEXT} ya son oficiales (Orden EMT/52/2026): ${regionalNext}. Los dos festivos locales de ${name} para ${NEXT} todavía no se han publicado: los fija una orden del DOGC a propuesta del ayuntamiento, y la de ${YEAR} salió el 17 de diciembre de 2025.`,
     },
     ...asked.map(dateItem),
   ];
@@ -435,6 +601,23 @@ export function sharedDayLead(date: string, others: number, locale: MuniLocale, 
 /** How many towns each comarca section of the hub shows with their days; the rest fold away by name. */
 export const HUB_VISIBLE = 6;
 
+/**
+ * "48 ajuntaments ja han aprovat els seus, …": how many councils with a page
+ * have approved next year's days (council-2027.ts), before the DOGC order.
+ */
+function councilCountLine(locale: MuniLocale): string {
+  const n = councilApprovedTowns().length;
+  if (n === 0) return "";
+  if (locale === "ca") {
+    return n === 1
+      ? " Un ajuntament ja ha aprovat els seus, pendents de l'ordre: els dona la pàgina del municipi."
+      : ` ${n} ajuntaments ja han aprovat els seus, pendents de l'ordre: els dona la pàgina de cada municipi.`;
+  }
+  return n === 1
+    ? " Un ayuntamiento ya ha aprobado los suyos, pendientes de la orden: los da la página del municipio."
+    : ` ${n} ayuntamientos ya han aprobado los suyos, pendientes de la orden: los da la página de cada municipio.`;
+}
+
 export function hubCopy(locale: MuniLocale) {
   const count = SNAPSHOT.municipalities.length;
   const excluded = SNAPSHOT.excluded.length;
@@ -450,7 +633,7 @@ export function hubCopy(locale: MuniLocale) {
       datesTitle: "És festiu…?",
       jump: "Per comarques:",
       population: `Dins de cada comarca, els municipis van per població a 1 de gener de ${SNAPSHOT.sources.population.year} (Idescat).`,
-      next: `Els festius locals del ${NEXT} encara no s'han publicat; l'ordre del ${YEAR} va sortir al DOGC el 17 de desembre de 2025.`,
+      next: `Els festius locals del ${NEXT} encara no s'han publicat; l'ordre del ${YEAR} va sortir al DOGC el 17 de desembre de 2025.${councilCountLine("ca")}`,
       towns: (n: number) => (n === 1 ? "1 municipi" : `${n} municipis`),
       table: (comarca: string, n: number) => comarcaLinkLabel(comarca, n, "ca"),
       more: (n: number) => (n === 1 ? "1 municipi més" : `${n} municipis més`),
@@ -470,7 +653,7 @@ export function hubCopy(locale: MuniLocale) {
     datesTitle: "¿Es festivo el…?",
     jump: "Por comarcas:",
     population: `Dentro de cada comarca, los municipios van por población a 1 de enero de ${SNAPSHOT.sources.population.year} (Idescat).`,
-    next: `Los festivos locales de ${NEXT} todavía no se han publicado; la orden de ${YEAR} salió en el DOGC el 17 de diciembre de 2025.`,
+    next: `Los festivos locales de ${NEXT} todavía no se han publicado; la orden de ${YEAR} salió en el DOGC el 17 de diciembre de 2025.${councilCountLine("es")}`,
     towns: (n: number) => (n === 1 ? "1 municipio" : `${n} municipios`),
     table: (comarca: string, n: number) => comarcaLinkLabel(comarca, n, "es"),
     more: (n: number) => (n === 1 ? "1 municipio más" : `${n} municipios más`),
@@ -553,6 +736,16 @@ export function comarcaCopy(g: ComarcaGroup, locale: MuniLocale): ComarcaCopy {
   const own = g.municipalities.filter((m) => m.shopsOwnList);
   const excluded = g.excluded.map((e) => (locale === "es" ? esName(e.name) : e.name));
   const names = (list: SnapshotMunicipality[]) => joinList(list.map((m) => displayName(m, locale)), locale);
+  // Towns of the comarca whose council has approved next year's days (before the order).
+  const approved = g.municipalities.flatMap((m) => {
+    const c = councilApproved2027(m.slug);
+    return c ? [`${displayName(m, locale)} (${dayPair(c.local[0], c.local[1], locale)})`] : [];
+  });
+  const approvedLine = approved.length
+    ? locale === "ca"
+      ? ` ${approved.length === 1 ? "Un ajuntament ja ha aprovat els seus" : `${approved.length} ajuntaments ja han aprovat els seus`}, pendents de l'ordre del DOGC: ${joinList(approved, "ca")}.`
+      : ` ${approved.length === 1 ? "Un ayuntamiento ya ha aprobado los suyos" : `${approved.length} ayuntamientos ya han aprobado los suyos`}, pendientes de la orden del DOGC: ${joinList(approved, "es")}.`
+    : "";
 
   if (locale === "ca") {
     return {
@@ -579,7 +772,7 @@ export function comarcaCopy(g: ComarcaGroup, locale: MuniLocale): ComarcaCopy {
         ? `${own.length === 1 ? "Un ajuntament" : `${own.length} ajuntaments`} ${caDe(label)} ${own.length === 1 ? "ha triat" : "han triat"} els seus dies d'obertura comercial del ${YEAR} (Resolució EMT/4342/2025): ${names(own)}. ${own.length === n ? "" : "A la resta s'hi apliquen els deu dies per defecte: els vuit del calendari general, l'11 de gener i el 8 de desembre (Ordre EMT/77/2025, articles 1 i 6)."} La pàgina de cada municipi té la seva llista.`.replace(/\s+/g, " ").trim()
         : `Cap ajuntament ${caDe(label)} no consta a la Resolució EMT/4342/2025: a tots s'hi apliquen els deu dies d'obertura comercial per defecte, els vuit del calendari general, l'11 de gener i el 8 de desembre (Ordre EMT/77/2025, articles 1 i 6). La pàgina de cada municipi té la llista.`,
       nextTitle: `I el ${NEXT}?`,
-      next: `Els festius locals del ${NEXT} encara no s'han publicat: els fixa una ordre del DOGC a proposta de cada ajuntament, i la del ${YEAR} va sortir el 17 de desembre de 2025. Els dotze de tot Catalunya del ${NEXT} ja són oficials (Ordre EMT/52/2026).`,
+      next: `Els festius locals del ${NEXT} encara no s'han publicat: els fixa una ordre del DOGC a proposta de cada ajuntament, i la del ${YEAR} va sortir el 17 de desembre de 2025. Els dotze de tot Catalunya del ${NEXT} ja són oficials (Ordre EMT/52/2026).${approvedLine}`,
       othersTitle: "Altres comarques",
       hubLink: "Tots els municipis, per comarques",
       datesTitle: "És festiu…?",
@@ -611,7 +804,7 @@ export function comarcaCopy(g: ComarcaGroup, locale: MuniLocale): ComarcaCopy {
       ? `${own.length === 1 ? "Un ayuntamiento" : `${own.length} ayuntamientos`} de la comarca ${own.length === 1 ? "ha elegido" : "han elegido"} sus días de apertura comercial de ${YEAR} (Resolución EMT/4342/2025): ${names(own)}. ${own.length === n ? "" : "En el resto se aplican los diez días por defecto: los ocho del calendario general, el 11 de enero y el 8 de diciembre (Orden EMT/77/2025, artículos 1 y 6)."} La página de cada municipio tiene su lista.`.replace(/\s+/g, " ").trim()
       : `Ningún ayuntamiento de la comarca figura en la Resolución EMT/4342/2025: en todos se aplican los diez días de apertura comercial por defecto, los ocho del calendario general, el 11 de enero y el 8 de diciembre (Orden EMT/77/2025, artículos 1 y 6). La página de cada municipio tiene la lista.`,
     nextTitle: `¿Y en ${NEXT}?`,
-    next: `Los festivos locales de ${NEXT} todavía no se han publicado: los fija una orden del DOGC a propuesta de cada ayuntamiento, y la de ${YEAR} salió el 17 de diciembre de 2025. Los doce de toda Cataluña de ${NEXT} ya son oficiales (Orden EMT/52/2026).`,
+    next: `Los festivos locales de ${NEXT} todavía no se han publicado: los fija una orden del DOGC a propuesta de cada ayuntamiento, y la de ${YEAR} salió el 17 de diciembre de 2025. Los doce de toda Cataluña de ${NEXT} ya son oficiales (Orden EMT/52/2026).${approvedLine}`,
     othersTitle: "Otras comarcas",
     hubLink: "Todos los municipios, por comarcas",
     datesTitle: "¿Es festivo el…?",

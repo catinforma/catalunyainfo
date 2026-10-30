@@ -9,7 +9,7 @@ process.env.NEXT_PUBLIC_ALLOW_INDEXING = "true";
 const { buildMetadata } = await import("../src/lib/seo/metadata.ts");
 const { municipalitiesFor } = await import("../src/lib/programmatic/elections/pages.ts");
 const { EN_LARGEST, EN_RESORTS } = await import("../src/lib/programmatic/elections/english.ts");
-const { NEXT, SNAPSHOT, YEAR } = await import("../src/lib/programmatic/holidays/data.ts");
+const { NEXT, SNAPSHOT, YEAR, councilApproved2027 } = await import("../src/lib/programmatic/holidays/data.ts");
 const { englishSelectionSlugs, englishTownBySlug, englishTowns, englishWithoutDays, hasEnglishPage, isLargestTown } = await import(
   "../src/lib/programmatic/holidays/english.ts"
 );
@@ -169,7 +169,9 @@ test("metadata: titles <= 60 with the town and both years, descriptions <= 155 w
   }
   assert.equal(titles.size, 29, "unique titles");
   assert.equal(englishTownTitle(town("sitges")), "Sitges public holidays 2026 and 2027: local dates");
-  assert.equal(englishTownTitle(town("barcelona")), "Barcelona public holidays 2026 and 2027: local dates");
+  // Barcelona's council has fixed its 2027 days (council-2027.ts): they replace "local dates".
+  assert.equal(englishTownTitle(town("barcelona"), null), "Barcelona public holidays 2026 and 2027: local dates");
+  assert.equal(englishTownTitle(town("barcelona")), "Barcelona holidays 2026 and 2027: 17 May and 24 September");
   // The longest name drops "public" rather than a year.
   assert.equal(englishTownTitle(town("castell-d-aro-platja-d-aro-i-s-agaro")), "Castell d'Aro, Platja d'Aro i s'Agaró holidays 2026 and 2027");
   assert.equal(englishTownH1(town("l-escala")), "Public holidays in L'Escala 2026 and 2027");
@@ -264,7 +266,8 @@ test("JSON-LD: Dataset like the Catalan and Spanish town pages, FAQ in the searc
     assert.equal(dataset.inLanguage, "en");
     assert.equal(dataset.name, englishTownH1(m));
     assert.equal(dataset.description, englishTownDescription(m));
-    assert.equal(dataset.temporalCoverage, String(YEAR));
+    // Next year too where the page gives the council's 2027 days (council-2027.ts).
+    assert.equal(dataset.temporalCoverage, councilApproved2027(m.slug) ? `${YEAR}/${NEXT}` : String(YEAR));
     assert.equal(dataset.dateModified, SNAPSHOT.readOn);
     assert.deepEqual((dataset.spatialCoverage as { name: string }).name, `${enName(m)}, Catalonia`);
 
