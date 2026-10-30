@@ -8,7 +8,7 @@ import { relatedBlocks } from "@/lib/content/features/shared";
 import { withReadNext } from "@/lib/content/batch02/shared";
 import { zoneHref, zonesFor } from "@/lib/content/mushroom-zones/registry";
 import { LEVEL_RULE, READ_AT, SOURCE, WINDOW_DAYS, ZONE_READINGS } from "./conditions";
-import { liveSummary, readDate } from "./live-summary";
+import { liveDescription, liveSummary, readDate } from "./live-summary";
 import { COPY, HERO, LIVE_COPY, SOURCES, ZONES } from "./payload";
 
 /**
@@ -111,10 +111,13 @@ export function buildBody(locale: Locale, heroMediaId?: string): Block[] {
   const live = liveSummary(locale);
   const blocks: Block[] = [];
 
-  // The second intro paragraph named this week's leaders; it is now written
-  // from the latest reading so it cannot contradict the live map below.
+  // The answer first: this week's wettest zones and the date they were read,
+  // written from the latest reading so it cannot contradict the live map
+  // below (it replaces the hand-written second intro paragraph). Then the
+  // weekly-report line and the "conditions, not mushrooms" caveat.
+  blocks.push({ type: "paragraph", text: live.intro, lead: true });
   copy.intro.forEach((text, index) => {
-    blocks.push({ type: "paragraph", text: index === 1 ? live.intro : text, ...(index === 0 ? { lead: true } : {}) });
+    if (index !== 1) blocks.push({ type: "paragraph", text });
   });
 
   blocks.push({
@@ -267,7 +270,9 @@ export async function publishMushroomReport(): Promise<PublishResult> {
       title: copy.title,
       excerpt: copy.excerpt.replace(/(verificades el|verificados el|verified on) [^.]+\.$/, (_, verb: string) => `${verb} ${readDate(locale)}.`),
       seoTitle: copy.seoTitle,
-      seoDescription: copy.seoDescription,
+      // Rebuilt from the reading on every weekly refresh: the date and the
+      // wettest zones (`copy.seoDescription` is the fallback text it replaced).
+      seoDescription: liveDescription(locale),
       body: buildBody(locale, heroMediaId),
     };
   });

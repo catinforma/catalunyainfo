@@ -77,10 +77,18 @@ export function DatePageView({ iso, locale }: { iso: DatePageIso; locale: DateLo
               {content.local.places.map((p) => {
                 const label = locale === "es" ? esName(p.name) : p.name;
                 const parent = p.parent ? (locale === "es" ? esName(p.parent) : p.parent) : null;
+                // Every town has a page (tranche 3); a nucleus links its town's, which lists the nucleus's days.
+                const href = p.slug && locale !== "en" ? municipalityPath(locale, p.slug) : null;
                 return (
                   <li key={`${p.name}-${p.parent ?? ""}`}>
-                    {p.slug && locale !== "en" ? <Link href={municipalityPath(locale, p.slug)}>{label}</Link> : label}
-                    {parent ? <span className="text-[var(--color-muted)]"> ({parent})</span> : null}
+                    {href && !parent ? <Link href={href}>{label}</Link> : label}
+                    {parent ? (
+                      <span className="text-[var(--color-muted)]">
+                        {" ("}
+                        {href ? <Link href={href}>{parent}</Link> : parent}
+                        {")"}
+                      </span>
+                    ) : null}
                   </li>
                 );
               })}

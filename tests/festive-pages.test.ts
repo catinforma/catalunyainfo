@@ -22,6 +22,7 @@ import {
 import { NEW_YEAR, buildNewYearBody, newYearLead } from "../src/lib/content/batch02/new-year.ts";
 import { B2_PATHS, withReadNext, type B2Article } from "../src/lib/content/batch02/shared.ts";
 import { ARTICLE_PATHS } from "../src/lib/content/features/shared.ts";
+import { christmasFairsPaths } from "../src/lib/programmatic/christmas-fairs/sitemap.ts";
 import { holidayOn, shortDate, weekdayIndex } from "../src/lib/content/holidays/calendar.ts";
 import { IMAGE_BY_KEY } from "../src/lib/content/images.ts";
 import { metroDay } from "../src/lib/content/metro/tonight.ts";
@@ -98,9 +99,11 @@ test("sources are https, untracked, and the reader sees the check date", () => {
 });
 
 test("internal links stay in their language, end in a slash and point at a published path", () => {
-  const published = new Set(
-    [...Object.values(B2_PATHS), ...Object.values(ARTICLE_PATHS)].flatMap((paths) => LOCALES.map((locale) => `/${locale}/${paths[locale]}/`)),
-  );
+  const published = new Set([
+    ...[...Object.values(B2_PATHS), ...Object.values(ARTICLE_PATHS)].flatMap((paths) => LOCALES.map((locale) => `/${locale}/${paths[locale]}/`)),
+    // Programmatic family pages, as their own module lists what it publishes.
+    ...christmasFairsPaths().map((p) => p.path),
+  ]);
   for (const article of ARTICLES) {
     for (const locale of LOCALES) {
       const json = JSON.stringify(article.editions[locale].blocks);

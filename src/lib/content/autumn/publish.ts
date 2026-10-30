@@ -19,7 +19,7 @@ import { COPY, IMAGES, SOURCES, ZONES } from "./payload";
 export const ENTRY_KEY = "autumn-colours-catalunya";
 
 const PUBLISHED = new Date("2026-09-15T08:00:00+02:00");
-const LAST_VERIFIED = new Date("2026-10-26T12:00:00+01:00");
+const LAST_VERIFIED = new Date("2026-10-30T12:00:00+01:00");
 
 export function buildBody(
   locale: Locale,
@@ -110,6 +110,8 @@ export function buildBody(
 
   blocks.push({ type: "heading", level: 2, text: copy.quickHeading });
   blocks.push({ type: "list", ordered: false, items: copy.quick });
+
+  blocks.push({ type: "faq", title: copy.faqTitle, items: copy.faq });
 
   blocks.push({ type: "paragraph", text: copy.relatedLine });
 

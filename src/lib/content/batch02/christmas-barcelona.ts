@@ -1,5 +1,6 @@
 import { SHOPS } from "./shops";
 import type { Locale } from "@/lib/i18n/config";
+import { fairsHubPath } from "@/lib/programmatic/christmas-fairs/paths";
 
 import {
   ANNOUNCED_2026,
@@ -354,6 +355,7 @@ export function buildChristmasBarcelonaBody(locale: Locale, facts: Announcements
       ...h2(
         "Mercats de Nadal: Fira de Santa Llúcia i Sagrada Família",
         `Les dues grans fires de Nadal de Barcelona són la de Santa Llúcia, davant de la Catedral, i la de la Sagrada Família. Les dates, el que s'hi ven i la resta de mercats de Catalunya són a ${b2link("christmas", "ca", "la guia de mercats de Nadal")}, que actualitzem quan els organitzadors les publiquen.`,
+        `Les fires de Nadal amb data oficial de la resta de Catalunya, poble a poble, són a [fires de Nadal per municipi](${fairsHubPath("ca")}).`,
       ),
       ...h2(
         "Més activitats de Nadal a la ciutat",
@@ -465,6 +467,7 @@ export function buildChristmasBarcelonaBody(locale: Locale, facts: Announcements
       ...h2(
         "Mercados de Navidad: Fira de Santa Llúcia y Sagrada Família",
         `Las dos grandes ferias de Navidad de Barcelona son la de Santa Llúcia, frente a la Catedral, y la de la Sagrada Família. Las fechas, lo que se vende y el resto de mercados de Cataluña están en ${b2link("christmas", "es", "la guía de mercados de Navidad")}, que actualizamos cuando los organizadores las publican.`,
+        `Las ferias de Navidad con fecha oficial del resto de Cataluña, pueblo a pueblo, están en [ferias de Navidad por municipio](${fairsHubPath("es")}).`,
       ),
       ...h2(
         "Más actos de Navidad en la ciudad",
@@ -575,6 +578,7 @@ export function buildChristmasBarcelonaBody(locale: Locale, facts: Announcements
     ...h2(
       "Christmas markets: Fira de Santa Llúcia and Sagrada Família",
       `Barcelona's two big Christmas fairs are the Fira de Santa Llúcia, in front of the Cathedral, and the Sagrada Família fair. Their dates, what they sell and the other markets in Catalonia are in ${b2link("christmas", "en", "our Christmas markets guide")}, which we update as the organisers publish them.`,
+      `The Christmas markets elsewhere in Catalonia with official dates, town by town, are in [Christmas markets by town](${fairsHubPath("en")}).`,
     ),
     ...h2(
       "More Christmas events in the city",

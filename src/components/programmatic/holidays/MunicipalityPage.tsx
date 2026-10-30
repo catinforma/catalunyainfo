@@ -4,11 +4,12 @@ import { Breadcrumbs, type Crumb } from "@/components/Breadcrumbs";
 import { getMessages } from "@/lib/i18n";
 import { todayInCatalonia } from "@/lib/content/holidays/calendar";
 import { SCHOOL_YEARS } from "@/lib/content/school/calendar";
-import { municipalityCopy, displayName, municipalityFaq, municipalityH1, sharedDayLead } from "@/lib/programmatic/holidays/copy";
+import { comarcaLinkLabel, municipalityCopy, displayName, municipalityFaq, municipalityH1, sharedDayLead } from "@/lib/programmatic/holidays/copy";
 import { GUIDES } from "@/lib/programmatic/holidays/links";
 import {
   NEXT,
   YEAR,
+  comarcaOf,
   isAran,
   localThrough,
   nextYearFor,
@@ -21,8 +22,8 @@ import {
 import { municipalityDatePages } from "@/lib/programmatic/holidays/dates";
 import { dayMonth, weekdayDayMonth } from "@/lib/programmatic/holidays/format";
 import { OFFICIAL } from "@/lib/programmatic/holidays/links";
-import { caComarca, caDe, joinList } from "@/lib/programmatic/holidays/names";
-import { DATE_PAGES, comarcaAnchor, datePath, hubPath, municipalityPath, type MuniLocale } from "@/lib/programmatic/holidays/paths";
+import { caComarca, joinList } from "@/lib/programmatic/holidays/names";
+import { DATE_PAGES, comarcaPath, datePath, hubPath, municipalityPath, type MuniLocale } from "@/lib/programmatic/holidays/paths";
 import { dateQuestion } from "@/lib/programmatic/holidays/copy";
 import type { SnapshotMunicipality } from "@/lib/programmatic/holidays/types";
 
@@ -70,12 +71,14 @@ const STATUS_LABELS: Record<MuniLocale, StatusLabels> = {
   },
 };
 
+/** Home > Festius locals > the comarca's table > the town. */
 export function municipalityCrumbs(m: SnapshotMunicipality, locale: MuniLocale): Crumb[] {
   const home = getMessages(locale).common.home;
   const hub = locale === "ca" ? "Festius locals" : "Festivos locales";
   return [
     { label: home, href: `/${locale}/` },
     { label: hub, href: hubPath(locale) },
+    { label: m.comarca, href: comarcaPath(locale, comarcaOf(m).slug) },
     { label: displayName(m, locale), href: municipalityPath(locale, m.slug) },
   ];
 }
@@ -110,6 +113,7 @@ export function MunicipalityPage({ m, locale }: { m: SnapshotMunicipality; local
           </p>
           {t.nucleiLead ? <p>{t.nucleiLead}</p> : null}
           {t.correction ? <p className="ci-callout ci-callout-official">{t.correction}</p> : null}
+          {t.unlisted ? <p className="ci-callout ci-callout-official">{t.unlisted}</p> : null}
 
           <h2 id="avui">{t.statusTitle}</h2>
           <HolidayStatus
@@ -240,16 +244,9 @@ export function MunicipalityPage({ m, locale }: { m: SnapshotMunicipality; local
             </>
           ) : null}
           <p className="mt-4 text-sm">
-            {comarcaTotal - 1 > sameComarca.length ? (
-              <>
-                <Link href={`${hubPath(locale)}#${comarcaAnchor(m.comarca)}`}>
-                  {locale === "ca"
-                    ? `Els ${comarcaTotal} municipis ${caDe(comarcaLabel)} d'aquest recull`
-                    : `Los ${comarcaTotal} municipios de la comarca (${m.comarca}) en esta guía`}
-                </Link>
-                {" · "}
-              </>
-            ) : null}
+            {/* The comarca's table: every town of the comarca with its two days, past the sibling cap. */}
+            <Link href={comarcaPath(locale, comarcaOf(m).slug)}>{comarcaLinkLabel(m.comarca, comarcaTotal, locale)}</Link>
+            {" · "}
             <Link href={hubPath(locale)}>{locale === "ca" ? "Tots els municipis, per comarques" : "Todos los municipios, por comarcas"}</Link>
           </p>
         </section>

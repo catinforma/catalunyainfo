@@ -13,6 +13,9 @@
 
 import { LOCALES, type Locale } from "@/lib/i18n/config";
 import { PATHS as TOOL_PATHS } from "@/lib/content/home-tools";
+import { SEASON_YEAR } from "@/lib/programmatic/christmas-fairs/classify";
+import { FAIRS as CHRISTMAS_FAIRS, englishTowns as christmasEnglishTowns, towns as christmasTowns } from "@/lib/programmatic/christmas-fairs/data";
+import { fairsHubPath } from "@/lib/programmatic/christmas-fairs/paths";
 import { hubPath as electionsHub, PAGES_PER_LOCALE } from "@/lib/programmatic/elections/paths";
 import { STATIONS, selectPages } from "@/lib/programmatic/fuel/data";
 import { fuelHubPath } from "@/lib/programmatic/fuel/paths";
@@ -99,6 +102,11 @@ export function liveTools(): LiveTool[] {
       name: "What to do this weekend",
       hubs: { ca: weekendHubPath("ca"), es: weekendHubPath("es") },
       description: `this weekend's fairs and cultural agenda across Catalonia and in ${shippedZones().length} zones (cities, provinces and coasts), from the Generalitat's official agenda and fairs calendar.`,
+    },
+    {
+      name: "Christmas markets by town",
+      hubs: { ca: fairsHubPath("ca"), es: fairsHubPath("es"), en: fairsHubPath("en") },
+      description: `the ${CHRISTMAS_FAIRS.length} Christmas fairs and markets of the ${SEASON_YEAR} season with official dates, one page per town (${christmasTowns().length} towns in Catalan and Spanish, ${christmasEnglishTowns().length} in English), from the Generalitat's fairs calendar and the organisers' own announcements.`,
     },
     {
       name: "This weekend in Catalonia (guide)",

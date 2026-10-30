@@ -398,9 +398,9 @@ export const COPY: Record<Locale, TaxCopy> = {
   en: {
     path: "guides/barcelona-catalonia-tourist-tax",
     title: "Barcelona tourist tax: what you'll actually pay",
-    seoTitle: "Barcelona tourist tax (city tax): rates and calculator",
+    seoTitle: "Barcelona tourist tax 2026: €{minInt} to €{maxInt} per person per night",
     seoDescription:
-      "How much is the Barcelona city tax in 2026-2027? The regional rate plus the municipal surcharge, by accommodation and night. With a calculator.",
+      "Barcelona city tax: €{minInt} to €{maxInt} per person per night (Catalan rate + €{surInt} city surcharge). Max {max} nights; {age} or younger free. Calculator.",
     excerpt:
       "What the tourist tax really costs, by where you stay, how many guests are liable and how many nights. With a calculator and verified official rates.",
 

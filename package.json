@@ -36,7 +36,8 @@
     "rodalies:snapshot": "node --experimental-strip-types --import ./tests/register-alias.mjs scripts/rodalies-snapshot.ts",
     "reservoirs:snapshot": "node --experimental-strip-types --import ./tests/register-alias.mjs scripts/reservoirs-snapshot.ts",
     "weekend:snapshot": "node --experimental-strip-types --import ./tests/register-alias.mjs scripts/weekend-snapshot.ts",
-    "elections:29n": "node --experimental-strip-types --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --import ./tests/register-alias.mjs scripts/elections-29n.ts"
+    "elections:29n": "node --experimental-strip-types --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --import ./tests/register-alias.mjs scripts/elections-29n.ts",
+    "christmasfairs:snapshot": "node --experimental-strip-types --import ./tests/register-alias.mjs scripts/christmas-fairs-snapshot.ts"
   },
   "dependencies": {
     "@eslint/eslintrc": "^3.3.7",

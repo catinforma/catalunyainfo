@@ -5,6 +5,10 @@ import { IMAGES } from "@/lib/content/images";
 import { publishArticle, type ArticleSpec, type PublishResult } from "@/lib/content/publish-article";
 import { LOCALES, type Locale } from "@/lib/i18n/config";
 
+import { NEXT_YEAR, SNAPSHOT } from "@/lib/programmatic/holidays/data";
+import { datePath } from "@/lib/programmatic/holidays/paths";
+import { largestTownLinks, townPageCount } from "@/lib/programmatic/holidays/towns";
+
 import { HOLIDAY_SOURCE } from "./calendar";
 import { LOCAL_SOURCE } from "./local";
 
@@ -31,7 +35,12 @@ interface Copy {
   seoTitle: string;
   seoDescription: string;
   excerpt: string;
+  /** `{count}` is the number of town pages, `{towns}` links to the largest ones. */
   lead: string;
+  /** The rest of the year's busiest local-holiday days; `{n:<iso>}` is the count of places, `{p:<iso>}` the date page. */
+  upcoming: string;
+  /** Said while the next year's local order is not out. */
+  nextYear: string;
   howTitle: string;
   how: string[];
   nucleiTitle: string;
@@ -47,12 +56,16 @@ const COPY: Record<Locale, Copy> = {
   ca: {
     path: "guies/festius-locals-catalunya",
     title: "Festius locals de Catalunya: el calendari de tots els municipis",
-    seoTitle: "Festius locals de Catalunya per municipi",
+    seoTitle: "Festius locals Catalunya 2026 per municipi: busca el teu",
     seoDescription:
-      "Quan és festiu local al teu municipi: els dos dies de festa local de cada ajuntament de Catalunya, amb cercador i dades oficials.",
+      "Busca els dos festius locals del teu municipi de Catalunya: cada municipi té la seva pàgina. Propers: 11 i 30 de novembre i 7 de desembre.",
     excerpt:
       "Els dos dies de festa local de cada municipi de Catalunya, en una sola taula amb cercador i dades oficials de la Generalitat.",
-    lead: "A banda dels dotze festius de tot Catalunya, **cada municipi en fixa dos de propis**. Aquí hi ha els de tots, amb un cercador.",
+    lead: "A banda dels dotze festius de tot Catalunya, **cada municipi en fixa dos de propis**. Busca el teu a la taula, amb tots els municipis; els {count} que tenen festius oficials tenen, a més, la seva pàgina amb l'any sencer i si avui és festiu: **[festius locals per municipi](/ca/festius/)** ({towns}…).",
+    upcoming:
+      "Els dies amb més festius locals del que queda del 2026: l'**11 de novembre**, Sant Martí, en {n:2026-11-11} llocs (municipis o nuclis); el **30 de novembre**, Sant Andreu, en {n:2026-11-30}, i el **7 de desembre**, el dilluns del pont, en {n:2026-12-07}. Cada dia té la seva pàgina amb la llista: [11 de novembre]({p:2026-11-11}), [30 de novembre]({p:2026-11-30}) i [7 de desembre]({p:2026-12-07}).",
+    nextYear:
+      "Els festius locals del 2027 encara no s'han publicat: els fixa cada any una ordre del Departament d'Empresa i Treball al DOGC (la del 2026 va sortir el 17 de desembre del 2025). Els afegirem quan surti.",
     howTitle: "Com funcionen els festius locals",
     how: [
       "Cada ajuntament tria dos dies de festa local l'any, normalment vinculats a la festa major o al patró del poble. Són retribuïts i no recuperables, igual que els festius de Catalunya.",
@@ -67,19 +80,23 @@ const COPY: Record<Locale, Copy> = {
       "El festiu local que t'afecta a la feina és el del municipi on és el centre de treball, no el d'on vius. Una persona que viu a Badalona i treballa a Barcelona fa els festius locals de Barcelona.",
     ],
     related:
-      "Per als dotze festius de tot Catalunya, mira el [calendari laboral](/ca/guies/calendari-laboral-catalunya/); per saber si avui és festiu, la pàgina [és festiu avui](/ca/guies/es-festiu-avui-catalunya/). Per saber quins dies no hi ha classe, mira el [calendari escolar](/ca/guies/calendari-escolar-catalunya/). Els municipis més poblats tenen cadascun la seva pàgina, amb tots els festius de l'any i si avui és festiu: [festius locals per municipi](/ca/festius/).",
+      "Per als dotze festius de tot Catalunya, mira el [calendari laboral](/ca/guies/calendari-laboral-catalunya/); per saber si avui és festiu, la pàgina [és festiu avui](/ca/guies/es-festiu-avui-catalunya/). Per saber quins dies no hi ha classe, mira el [calendari escolar](/ca/guies/calendari-escolar-catalunya/). Cada municipi té, a més, la seva pàgina, amb tots els festius de l'any i si avui és festiu: [festius locals per municipi](/ca/festius/).",
     heroAlt: "Gegants desfilant per un carrer ple de gent durant una festa major a Catalunya",
     heroCaption: "Molts festius locals coincideixen amb la festa major del poble.",
   },
   es: {
     path: "guias/festivos-locales-cataluna",
     title: "Festivos locales de Cataluña: el calendario de todos los municipios",
-    seoTitle: "Festivos locales de Cataluña por municipio",
+    seoTitle: "Festivos locales Cataluña 2026 por municipio: busca el tuyo",
     seoDescription:
-      "Cuándo es festivo local en tu municipio: los dos días de fiesta local de cada ayuntamiento de Cataluña, con buscador y datos oficiales.",
+      "Busca los dos festivos locales de tu municipio en Cataluña: cada municipio tiene su página. Próximos: 11 y 30 de noviembre y 7 de diciembre.",
     excerpt:
       "Los dos días de fiesta local de cada municipio de Cataluña, en una sola tabla con buscador y datos oficiales de la Generalitat.",
-    lead: "Además de los doce festivos de toda Cataluña, **cada municipio fija dos propios**. Aquí están los de todos, con un buscador.",
+    lead: "Además de los doce festivos de toda Cataluña, **cada municipio fija dos propios**. Busca el tuyo en la tabla, con todos los municipios; los {count} que tienen festivos oficiales tienen, además, su página con el año entero y si hoy es festivo: **[festivos locales por municipio](/es/festivos/)** ({towns}…).",
+    upcoming:
+      "Los días con más festivos locales en lo que queda de 2026: el **11 de noviembre**, San Martín, en {n:2026-11-11} lugares (municipios o núcleos); el **30 de noviembre**, San Andrés, en {n:2026-11-30}, y el **7 de diciembre**, el lunes del puente, en {n:2026-12-07}. Cada día tiene su página con la lista: [11 de noviembre]({p:2026-11-11}), [30 de noviembre]({p:2026-11-30}) y [7 de diciembre]({p:2026-12-07}).",
+    nextYear:
+      "Los festivos locales de 2027 aún no se han publicado: los fija cada año una orden del Departament d'Empresa i Treball en el DOGC (la de 2026 salió el 17 de diciembre de 2025). Los añadiremos cuando salga.",
     howTitle: "Cómo funcionan los festivos locales",
     how: [
       "Cada ayuntamiento elige dos días de fiesta local al año, normalmente ligados a la fiesta mayor o al patrón. Son retribuidos y no recuperables, igual que los festivos de Cataluña.",
@@ -94,7 +111,7 @@ const COPY: Record<Locale, Copy> = {
       "El festivo local que te afecta en el trabajo es el del municipio donde está el centro de trabajo, no el de donde vives. Una persona que vive en Badalona y trabaja en Barcelona hace los festivos locales de Barcelona.",
     ],
     related:
-      "Para los doce festivos de toda Cataluña, mira el [calendario laboral](/es/guias/calendario-laboral-cataluna/); para saber si hoy es festivo, la página [es festivo hoy](/es/guias/es-festivo-hoy-cataluna/). Para saber qué días no hay clase, mira el [calendario escolar](/es/guias/calendario-escolar-cataluna/). Los municipios más poblados tienen cada uno su página, con todos los festivos del año y si hoy es festivo: [festivos locales por municipio](/es/festivos/).",
+      "Para los doce festivos de toda Cataluña, mira el [calendario laboral](/es/guias/calendario-laboral-cataluna/); para saber si hoy es festivo, la página [es festivo hoy](/es/guias/es-festivo-hoy-cataluna/). Para saber qué días no hay clase, mira el [calendario escolar](/es/guias/calendario-escolar-cataluna/). Cada municipio tiene, además, su página, con todos los festivos del año y si hoy es festivo: [festivos locales por municipio](/es/festivos/).",
     heroAlt: "Gigantes desfilando por una calle llena de gente durante una fiesta mayor en Cataluña",
     heroCaption: "Muchos festivos locales coinciden con la fiesta mayor del pueblo.",
   },
@@ -107,6 +124,10 @@ const COPY: Record<Locale, Copy> = {
     excerpt:
       "The two local holidays of every municipality in Catalonia, in one searchable table from the Catalan government's open data.",
     lead: "On top of Catalonia's twelve public holidays, **every municipality sets two of its own**. Here are all of them, with a search box.",
+    upcoming:
+      "The busiest local-holiday days left in 2026: **11 November**, Saint Martin's Day, in {n:2026-11-11} places (municipalities or villages within them); **30 November**, Saint Andrew's Day, in {n:2026-11-30}; and **7 December**, the Monday of the bridge, in {n:2026-12-07}. Each day has its own page with the list: [11 November]({p:2026-11-11}), [30 November]({p:2026-11-30}) and [7 December]({p:2026-12-07}).",
+    nextYear:
+      "The 2027 local holidays are not out yet: an order of the Catalan Department of Business and Labour sets them every year in the official gazette, the DOGC (the 2026 order came out on 17 December 2025). We will add them when it is published.",
     howTitle: "How local holidays work",
     how: [
       "Each council picks two local holidays a year, usually tied to the town's festa major or patron saint. They are paid and cannot be made up later, exactly like the Catalonia-wide days.",
@@ -127,9 +148,27 @@ const COPY: Record<Locale, Copy> = {
   },
 };
 
+/** Fills `{n:<iso>}` (places with a local holiday that day) and `{p:<iso>}` (its date page). */
+function fillDates(text: string, locale: Locale): string {
+  return text
+    .replace(/\{n:(\d{4}-\d{2}-\d{2})\}/g, (_, iso: string) => String(SNAPSHOT.localByDate[iso]?.length ?? 0))
+    .replace(/\{p:(\d{4}-\d{2}-\d{2})\}/g, (_, iso: string) => datePath(locale, iso));
+}
+
+/** Town pages exist in Catalan and Spanish only; the English lead has no placeholders. */
+function fillLead(text: string, locale: Locale): string {
+  if (locale === "en") return text;
+  return text.replace("{count}", String(townPageCount())).replace("{towns}", largestTownLinks(locale, 6).join(", "));
+}
+
 export function buildBody(locale: Locale): Block[] {
   const copy = COPY[locale];
-  const blocks: Block[] = [{ type: "paragraph", lead: true, text: copy.lead }];
+  const blocks: Block[] = [{ type: "paragraph", lead: true, text: fillLead(copy.lead, locale) }];
+  // The rest of the year's busiest days, from the same DOGC snapshot as the
+  // town and date pages, so every count on the site agrees. Only while the
+  // snapshot is this year's: a new year's snapshot makes these dates past.
+  if (SNAPSHOT.year === 2026) blocks.push({ type: "paragraph", text: fillDates(copy.upcoming, locale) });
+  if (!NEXT_YEAR.order) blocks.push({ type: "paragraph", text: copy.nextYear });
 
   // The table first: somebody who searched for their town's holiday wants the
   // date, then the explanation.

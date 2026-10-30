@@ -44,7 +44,7 @@ import {
 } from "../src/lib/programmatic/holidays/dogc.ts";
 import { applyAmendments, locate, nucleiAfter, sameComarca } from "../src/lib/programmatic/holidays/match.ts";
 import { slugify } from "../src/lib/programmatic/holidays/slug.ts";
-import type { DatePlace, HolidaySnapshot, NextYearLocal, SnapshotMunicipality } from "../src/lib/programmatic/holidays/types.ts";
+import type { DatePlace, HolidaySnapshot, NextYearLocal, NucleusDays, SnapshotMunicipality } from "../src/lib/programmatic/holidays/types.ts";
 
 const ROOT = resolve(import.meta.dirname, "..");
 const SNAPSHOT = join(ROOT, "src/lib/programmatic/holidays/snapshot.json");
@@ -52,8 +52,13 @@ const LOCAL_2027 = join(ROOT, "src/lib/programmatic/holidays/local-2027.json");
 const FIXTURES = join(ROOT, "tests/fixtures/holidays");
 
 const YEAR = 2026;
-/** Tranche 1 (27 Oct 2026): 100. Tranche 2 (29 Oct 2026): 300. */
-const TOP = 300;
+/**
+ * Tranche 1 (27 Oct 2026): 100. Tranche 2 (29 Oct 2026): 300. Tranche 3
+ * (30 Oct 2026): every municipality the order gives days to, its own or its
+ * nuclei's; the councils with "proposta no formulada" and no nuclei are
+ * listed in `excluded`.
+ */
+const TOP = Number.POSITIVE_INFINITY;
 /**
  * Dates the date pages (and the bridge/Christmas guides) talk about. 2 Nov is
  * here for the 1 November page: Tots Sants falls on a Sunday in 2026 and the
@@ -89,6 +94,23 @@ const DOGC_NAME_ALIASES: Record<string, string> = {
   // Bigues, 20 de gener i 29 de juny. Riells del Fai, 22 de gener i 7 d'agost."
   "08023": "Bigues i Riells",
 };
+
+/**
+ * Nuclei the open data gives days of their own that the order does not name
+ * at all. The order fixes the municipality's days only; those are the ones
+ * the page uses, and it says what the open data has. Key: "<INE>:<nucleus as
+ * the open data writes it>". Checked by hand against Ordre EMT/208/2025 and
+ * dataset b4eh-r8up on 30 Oct 2026; any other case stops the build.
+ */
+const NUCLEI_NOT_IN_ORDER = new Set([
+  // Montgai (Noguera): "Montgai, 25 de maig i 7 de desembre." Butsènit is not
+  // named anywhere in the order; the open data gives it 25 May and 7 September.
+  "25138:Butsènit",
+  // la Baronia de Rialb (Noguera): "Baronia de Rialb, la, 17 de febrer i 17
+  // d'agost." The open data gives its nucleus Vilaplana 20 January and 15 May,
+  // the days the order gives the municipality of Vilaplana (Baix Camp).
+  "25042:Vilaplana",
+]);
 
 /* -------------------------------------------------------------------------- */
 
@@ -208,20 +230,38 @@ async function build(): Promise<void> {
   const municipalities: SnapshotMunicipality[] = [];
   const excluded: HolidaySnapshot["excluded"] = [];
   const report: string[] = [];
+  /** Cases a person must decide; the build lists them all, then stops. */
+  const unresolved: string[] = [];
+  const usedNotInOrder = new Set<string>();
 
   for (const [ine, pop] of ranked) {
     if (municipalities.length >= TOP) break;
-    const comarca = comarcaOf(ine);
+    let comarca = comarcaOf(ine);
     const own = [...places.values()].find((p) => p.ine === ine && !p.nucleus);
     const nucleiOpen = [...places.values()].filter((p) => p.ine === ine && p.nucleus).sort((a, b) => a.name.localeCompare(b.name, "ca"));
 
     const candidates = [DOGC_NAME_ALIASES[ine], pop.name, own?.name].filter((n): n is string => !!n);
-    let located = null;
+    let located: ReturnType<typeof locate> = null;
     let dogcName = pop.name;
     for (const candidate of candidates) {
       located = locate(comarca, candidate);
       if (located) {
         dogcName = candidate;
+        break;
+      }
+    }
+    if (!located) {
+      // Idescat and the order can file a municipality under different
+      // comarques (Torà: Solsonès / Segarra; Aiguafreda: Osona / Vallès
+      // Oriental). Accept a unique exact match of the name anywhere in the
+      // order; the page keeps Idescat's comarca.
+      for (const candidate of candidates) {
+        const elsewhere = comarques.flatMap((c) => c.entries.flatMap((e, index) => (nameKey(e.name) === nameKey(candidate) ? [{ c, e, index }] : [])));
+        if (elsewhere.length !== 1) continue;
+        comarca = elsewhere[0]!.c;
+        located = { entry: elsewhere[0]!.e, index: elsewhere[0]!.index, shape: "own" };
+        dogcName = candidate;
+        report.push(`Found under another comarca in the order: ${pop.name} (Idescat ${comarcaByIne.get(ine)}, order ${comarca.heading})`);
         break;
       }
     }
@@ -233,14 +273,25 @@ async function build(): Promise<void> {
       : { found: new Map(), missing: [] as string[] };
     // A nucleus the open data lists but the order does not name keeps the
     // municipality's days (Jesús, els Reguers and Vinallop in Tortosa: same
-    // dates in the open data as Tortosa's own). Anything else stops the build.
+    // dates in the open data as Tortosa's own). With other days it must be on
+    // the hand-checked list (NUCLEI_NOT_IN_ORDER); anything else stops the build.
     const ownDates = located.shape === "own" ? [...located.entry.dates].sort().join(",") : "";
+    const unlisted: NucleusDays[] = [];
+    let folded = 0;
     for (const missing of nuclei.missing) {
       const open = nucleiOpen.find((n) => n.name === missing);
-      if (!open || open.dates.join(",") !== ownDates) {
-        throw new Error(`${pop.name}: nucleus "${missing}" is in the open data with other days but not in the order`);
+      if (open && open.dates.join(",") === ownDates) {
+        folded += 1;
+        report.push(`Nucleus not named in the order, same days as the municipality (folded in): ${pop.name} / ${missing}`);
+        continue;
       }
-      report.push(`Nucleus not named in the order, same days as the municipality (folded in): ${pop.name} / ${missing}`);
+      if (open && ownDates && NUCLEI_NOT_IN_ORDER.has(`${ine}:${missing}`)) {
+        usedNotInOrder.add(`${ine}:${missing}`);
+        unlisted.push({ name: articleFirst(missing), dates: open.dates });
+        report.push(`Nucleus not named in the order, other days in the open data (checked by hand; the order's municipal days apply): ${pop.name} / ${missing} [${open.dates.join(", ")}]`);
+        continue;
+      }
+      unresolved.push(`${pop.name} (${ine}): nucleus "${missing}" [${open?.dates.join(", ")}] is in the open data with other days than the municipality's [${ownDates}] but not in the order`);
     }
     nucleiOpen.splice(0, nucleiOpen.length, ...nucleiOpen.filter((n) => !nuclei.missing.includes(n.name)));
 
@@ -249,7 +300,10 @@ async function build(): Promise<void> {
       continue;
     }
 
-    const openDates = own?.dates ?? [];
+    // The open data can list a municipality by its nuclei only, all with the
+    // municipality's days (la Baronia de Rialb, Rupit i Pruit): that is not a
+    // disagreement with the order.
+    const openDates = own?.dates ?? (folded > 0 ? local : []);
     const correction = openDates.join(",") === local.join(",") ? null : { openData: openDates, by: amendedBy(comarca.heading, dogcName) };
     if (correction) report.push(`DOGC wins: ${pop.name} open data [${openDates.join(", ")}] -> DOGC [${local.join(", ")}] (${correction.by})`);
 
@@ -276,8 +330,12 @@ async function build(): Promise<void> {
       correction,
       shops: shopEntry ? shopEntry.dates : shops.defaults,
       shopsOwnList: !!shopEntry,
+      ...(unlisted.length ? { unlisted } : {}),
     });
   }
+
+  for (const key of NUCLEI_NOT_IN_ORDER) if (!usedNotInOrder.has(key)) unresolved.push(`NUCLEI_NOT_IN_ORDER: "${key}" no longer occurs, remove it`);
+  if (unresolved.length) throw new Error(`fix by hand first:\n${unresolved.join("\n")}`);
 
   function amendedBy(heading: string, name: string): string {
     return amended.applied.some((a) => sameComarca(heading, a.comarca) && nameKey(a.name) === nameKey(name))
@@ -289,6 +347,7 @@ async function build(): Promise<void> {
   // corrected by the DOGC where the two disagree, plus DOGC entries that are
   // municipalities missing from the open data altogether.
   const bySlugIne = new Map(municipalities.map((m) => [m.ine, m.slug]));
+  const nameByIne = new Map(municipalities.map((m) => [m.ine, m.name]));
   const merged: { name: string; parent: string | null; ine: string; dates: string[] }[] = [];
   const matchedEntries = new Set<object>();
   const safeLocate = (comarca: OrderComarca, name: string, who: string) => {
@@ -347,6 +406,9 @@ async function build(): Promise<void> {
         // not a place of its own (Baltarga, Bor and Pi in Bellver de Cerdanya).
         const parentRow = [...places.values()].find((p) => p.ine === place.ine && !p.nucleus);
         if ((parentRow?.dates ?? []).join(",") === place.dates.join(",")) continue;
+        // Checked by hand: the order fixes only the municipality's days, which
+        // its own entry already carries (Butsènit in Montgai).
+        if (NUCLEI_NOT_IN_ORDER.has(`${place.ine}:${place.name}`)) continue;
         // The open data lists only the nuclei, the order the municipality
         // itself with the same days (Rupit i Pruit, Boadella i les Escaules):
         // the place is the municipality, as the DOGC names it.
@@ -387,7 +449,10 @@ async function build(): Promise<void> {
   for (const date of DATES_OF_INTEREST) {
     localByDate[date] = merged
       .filter((p) => p.dates.includes(date))
-      .map((p) => ({ name: p.name, parent: p.parent, slug: p.parent ? null : (bySlugIne.get(p.ine) ?? null) }))
+      // A nucleus links to its municipality's page, which lists the nucleus's days.
+      // A municipality takes its official name, as on its page (the open data
+      // still says "Calonge" for Calonge i Sant Antoni).
+      .map((p) => ({ name: p.parent ? p.name : (nameByIne.get(p.ine) ?? p.name), parent: p.parent, slug: bySlugIne.get(p.ine) ?? null }))
       .sort((a, b) => a.name.localeCompare(b.name, "ca"));
   }
 
