@@ -6,7 +6,9 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { todayInCatalonia } from "@/lib/content/holidays/calendar";
 import { weekendWindow, type WeekendWindow } from "@/lib/content/weekend/agenda";
 import { hubMeta, zoneDescription, zoneTitle } from "@/lib/programmatic/weekend/copy";
+import { listedFairs } from "@/lib/programmatic/weekend/data";
 import { hubTranslations, weekendHubPath, zonePath, zoneTranslations } from "@/lib/programmatic/weekend/paths";
+import { fairEvents } from "@/lib/programmatic/weekend/structured";
 import type { WeekendLocale, ZoneDef } from "@/lib/programmatic/weekend/zones";
 import { breadcrumbSchema, graph } from "@/lib/seo/jsonld";
 import { buildMetadata } from "@/lib/seo/metadata";
@@ -47,7 +49,8 @@ export function HubRoute({ locale }: { locale: WeekendLocale }) {
       <main id="main">
         <HubPage locale={locale} window={window} />
       </main>
-      <JsonLd json={graph([breadcrumbSchema(hubCrumbs(locale))])} />
+      {/* The fairs the page lists for this weekend: the same call HubPage makes. */}
+      <JsonLd json={graph([breadcrumbSchema(hubCrumbs(locale)), ...fairEvents(listedFairs(null, window), weekendHubPath(locale), locale)])} />
       <SiteFooter locale={locale} />
     </>
   );
@@ -71,7 +74,8 @@ export function ZoneRoute({ locale, zone }: { locale: WeekendLocale; zone: ZoneD
       <main id="main">
         <ZonePage zone={zone} locale={locale} window={window} />
       </main>
-      <JsonLd json={graph([breadcrumbSchema(zoneCrumbs(zone, locale))])} />
+      {/* The fairs the page lists for this weekend: the same call ZonePage makes. */}
+      <JsonLd json={graph([breadcrumbSchema(zoneCrumbs(zone, locale)), ...fairEvents(listedFairs(zone, window), zonePath(locale, zone), locale)])} />
       <SiteFooter locale={locale} />
     </>
   );

@@ -10,6 +10,7 @@ import { INTL_LOCALE, type Locale } from "@/lib/i18n/config";
 import { hubCopy } from "@/lib/programmatic/elections/hub";
 import { byComarca, comarcaAnchor, electionPath, hubMeta, hubPath, hubTranslations, placeName } from "@/lib/programmatic/elections/pages";
 import { SNAPSHOT } from "@/lib/programmatic/elections/snapshot";
+import { electionHubDataset } from "@/lib/programmatic/elections/structured";
 import { breadcrumbSchema, graph } from "@/lib/seo/jsonld";
 
 /** The family's index: every municipality page in this language, by comarca. */
@@ -92,7 +93,7 @@ export function ElectionsHubPage({ locale }: { locale: Locale }) {
           </div>
         </div>
       </main>
-      <JsonLd json={graph([breadcrumbSchema(crumbs)])} />
+      <JsonLd json={graph([breadcrumbSchema(crumbs), electionHubDataset(locale)])} />
       <SiteFooter locale={locale} />
     </>
   );
