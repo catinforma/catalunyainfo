@@ -1,4 +1,6 @@
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
 import { test } from "node:test";
 
 import { bodySchema, bodyToPlainText, wordCount } from "../src/lib/content/blocks.ts";
@@ -27,7 +29,8 @@ import { BEACHES_GUIDE } from "../src/lib/content/batch02/beaches.ts";
 import { MESA } from "../src/lib/content/batch02/mesa.ts";
 import { MUNICIPAL_RESULTS } from "../src/lib/content/batch02/municipal-results.ts";
 import { CLIMATE } from "../src/lib/content/batch02/climate.ts";
-import { SHOPS } from "../src/lib/content/batch02/shops.ts";
+import { SHOPS, TOWNS_NOV_DEC } from "../src/lib/content/batch02/shops.ts";
+import { parseShopResolution } from "../src/lib/programmatic/holidays/dogc.ts";
 import { ELECTION_NIGHT } from "../src/lib/content/batch02/election-night.ts";
 import { CONGRESS_RESULTS, PARLIAMENT_RESULTS } from "../src/lib/content/batch02/election-results.ts";
 import { B2_PATHS, type B2Article } from "../src/lib/content/batch02/shared.ts";
@@ -490,11 +493,53 @@ test("shops: the DOGC dates are all there and nothing the orders do not say", ()
     const text = bodyToPlainText(SHOPS.editions[locale].blocks);
     const days2026 = locale === "en" ? ["29 November", "6 December", "8 December", "13 December", "20 December", "27 December"] : locale === "es" ? ["29 de noviembre", "6 de diciembre", "8 de diciembre", "13 de diciembre", "20 de diciembre", "27 de diciembre"] : ["29 de novembre", "6 de desembre", "8 de desembre", "13 de desembre", "20 de desembre", "27 de desembre"];
     for (const day of days2026) assert.ok(text.includes(day), `${locale}: ${day}`);
-    const table2027 = SHOPS.editions[locale].blocks.filter((b) => b.type === "table")[1] as { rows: string[][] };
+    // 30 Oct 2026: the towns table now sits between the 2026 and 2027 tables.
+    const table2027 = SHOPS.editions[locale].blocks.filter((b) => b.type === "table" && /2027/.test((b as { caption?: string }).caption ?? ""))[0] as { rows: string[][] };
     assert.equal(table2027.rows.length, 10, `${locale}: 8 general + 2 default municipal days in 2027`);
     assert.doesNotMatch(text, /black friday/i);
     assert.doesNotMatch(text, /(rebaixes|rebajas|sales)[^.]*3 (de )?(gener|enero|January)/i);
   }
+});
+
+/**
+ * Shops, 30 Oct 2026 (top-3 push): the towns whose November-December days
+ * differ from the default are transcribed by hand in TOWNS_NOV_DEC. They must
+ * be exactly what the holiday engine's parser reads from the same DOGC
+ * resolution (tests/fixtures/holidays/resolucio-emt-4342-2025.txt), so a
+ * transcription slip cannot reach the page. The 300 m² exemptions (art.
+ * 37.1.j/k, restored by Llei 3/2023) are on the "always open" list.
+ */
+test("shops: the November-December towns table is the DOGC resolution's, town by town", () => {
+  const raw = readFileSync(join(import.meta.dirname, "fixtures/holidays/resolucio-emt-4342-2025.txt"), "utf8");
+  const resolution = parseShopResolution(raw);
+  const restOfYear = (dates: string[]) => dates.filter((d) => d >= "2026-11-01");
+  const defaults = restOfYear(resolution.defaults);
+  const expected = resolution.councils
+    .map((c) => ({ town: c.name, closed: defaults.filter((d) => !c.dates.includes(d)), extra: restOfYear(c.dates).filter((d) => !defaults.includes(d)) }))
+    .filter((c) => c.closed.length > 0 || c.extra.length > 0);
+  const key = (name: string) => name.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
+  assert.deepEqual(
+    TOWNS_NOV_DEC.map((t) => ({ ...t, town: key(t.town) })).sort((a, b) => a.town.localeCompare(b.town)),
+    expected.map((t) => ({ ...t, town: key(t.town) })).sort((a, b) => a.town.localeCompare(b.town)),
+  );
+  for (const locale of ["ca", "es", "en"] as const) {
+    const text = bodyToPlainText(SHOPS.editions[locale].blocks);
+    assert.match(text, /300 m²/, `${locale}: art. 37.1.j/k exemptions`);
+    assert.match(text, /3\/2023/, `${locale}: Llei 3/2023`);
+    const towns = SHOPS.editions[locale].blocks.filter((b) => b.type === "table")[1] as { rows: string[][] };
+    assert.equal(towns.rows.length, TOWNS_NOV_DEC.length, `${locale}: towns table`);
+    assert.ok(SHOPS.editions[locale].seoDescription.length <= 155, `${locale}: description budget`);
+    assert.ok(SHOPS.editions[locale].seoTitle.length <= 60, `${locale}: title budget`);
+  }
+  // The leads count the towns that do not open on 8 December in words.
+  const no8 = TOWNS_NOV_DEC.filter((t) => t.closed.includes("2026-12-08")).length;
+  for (const locale of ["ca", "es", "en"] as const) {
+    const first = SHOPS.editions[locale].blocks.find((b) => b.type === "paragraph") as { text: string };
+    assert.ok(first.text.includes(` ${no8} `), `${locale}: lead says ${no8} towns`);
+    assert.ok(SHOPS.editions[locale].seoDescription.includes(` ${TOWNS_NOV_DEC.length} `), `${locale}: description count`);
+  }
+  assert.equal(SHOPS.editions.es.seoTitle, "Domingos y festivos de apertura 2026 en Cataluña y Barcelona");
+  assert.equal(SHOPS.verifiedAt, "2026-10-30");
 });
 
 /**
@@ -569,7 +614,8 @@ test("parking: zone summary table and a blue-vs-green answer that matches the ra
   for (const locale of ["ca", "es", "en"] as const) {
     const blocks = PARKING.editions[locale].blocks as { type: string; rows?: string[][]; text?: string }[];
     const tables = blocks.filter((b) => b.type === "table");
-    assert.equal(tables.length, 3, `${locale}: summary + blue + green tables`);
+    // 30 Oct 2026: a day-by-day table joined the summary, blue and green ones.
+    assert.equal(tables.length, 4, `${locale}: summary + days + blue + green tables`);
     assert.equal(tables[0]?.rows?.length, 5, `${locale}: five kinds of space in the summary`);
     const lead = blocks.find((b) => b.type === "paragraph")?.text ?? "";
     assert.match(lead, /1[,.]40/, `${locale}: the lead gives the green non-resident price`);
@@ -600,6 +646,36 @@ test("parking: August answered from AREA, Rate A areas, four steps, no invented 
     assert.doesNotMatch(text, /(gratis|gratuïta|free)[^.]*(agost|agosto|August)/i, `${locale}: no August exemption`);
     assert.doesNotMatch(text, /l[ií]neas? (azul|verde)|línies (blav|verd)|(blue|green) lines/i, `${locale}: no unverified markings`);
   }
+});
+
+/**
+ * Parking, 30 Oct 2026 (top-3 push): AREA's blue tables carry their own
+ * limits ("Tarifa A (màx. 1h o 2h)", "Tarifa B (màx. 2h)"); Zone 36 in
+ * Trinitat Vella goes live on 9 Nov 2026 with 632 green spaces and a 2-hour
+ * limit for non-residents (AREA news, 22.9.2026); AREA's indicative map is
+ * linked in the first step; a day-by-day table answers "horario". The
+ * search title states the price range in CA and the query words in ES.
+ */
+test("parking: per-rate limits, Trinitat Vella zone 36, the AREA map and a day-by-day table", () => {
+  const limits = { ca: /1 o 2 hores a la tarifa A i 2 hores a la tarifa B/, es: /1 o 2 horas en tarifa A y 2 horas en tarifa B/, en: /1 or 2 hours on Rate A and 2 hours on Rate B/ };
+  const map = { ca: "https://areaverda.cat/ca/planol", es: "https://areaverda.cat/es/plano", en: "https://areaverda.cat/es/plano" };
+  for (const locale of ["ca", "es", "en"] as const) {
+    const blocks = PARKING.editions[locale].blocks as { type: string; rows?: string[][]; items?: { text: string }[] }[];
+    const text = bodyToPlainText(PARKING.editions[locale].blocks);
+    assert.match(text, limits[locale], `${locale}: per-rate limits`);
+    assert.match(text, /632/, `${locale}: zone 36 spaces`);
+    assert.match(text, /9 (de )?(novembre|noviembre|November) (de )?2026/, `${locale}: zone 36 start`);
+    assert.ok(JSON.stringify(blocks).includes(map[locale]), `${locale}: AREA map link`);
+    const days = blocks.filter((b) => b.type === "table")[1];
+    assert.equal(days?.rows?.length, 3, `${locale}: weekdays, Saturday, Sunday`);
+    const edition = PARKING.editions[locale];
+    assert.ok(edition.seoTitle.length <= 60, `${locale}: title budget`);
+    assert.ok(edition.seoDescription.length <= 155, `${locale}: description budget`);
+  }
+  assert.match(PARKING.editions.ca.seoTitle, /^Preu zona blava i verda Barcelona: 1,15-4,25 €\/h/);
+  assert.match(PARKING.editions.es.seoTitle, /^Zona azul y verde Barcelona: cómo funciona, horario y precio$/);
+  assert.equal(PARKING.verifiedAt, "2026-10-30");
+  assert.ok(PARKING.sources.some((s) => s.url === "https://areaverda.cat/es/plano"));
 });
 
 /**
