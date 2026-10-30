@@ -573,6 +573,11 @@ test("shops: the November-December towns table is the DOGC resolution's, town by
     assert.ok(SHOPS.editions[locale].seoDescription.includes(` ${TOWNS_NOV_DEC.length} `), `${locale}: description count`);
   }
   assert.equal(SHOPS.editions.es.seoTitle, "Domingos y festivos de apertura 2026 en Cataluña y Barcelona");
+  // 30 Oct 2026, CTR sweep wave 4: the CA title in the same words as the ES one.
+  assert.equal(SHOPS.editions.ca.seoTitle, "Festius i diumenges d'obertura 2026 a Catalunya i Barcelona");
+  const caFaq = SHOPS.editions.ca.blocks.find((b) => b.type === "faq") as { items: { question: string; answer: string }[] } | undefined;
+  assert.equal(caFaq?.items[0]?.question, "Quins festius d'obertura comercial queden el 2026?");
+  assert.ok(caFaq?.items[0]?.answer.includes(` ${TOWNS_NOV_DEC.length} municipis`), "ca: FAQ counts the towns from the table");
   assert.equal(SHOPS.verifiedAt, "2026-10-30");
 });
 
