@@ -979,6 +979,11 @@ test("markets: hours answered first, Sunday question answered, no unverified gro
     assert.match(text, /8:30/, `${locale}: Sunday book market hours`);
     assert.doesNotMatch(text, /\b20 (people|personas|persones)\b/);
   }
+  // EN, 30 Oct (CTR sweep: 264 impressions at 9.2, no clicks): the hours in
+  // the title, the Sunday answer in the description (Ajuntament page re-read).
+  const en = MARKETS.editions.en;
+  assert.match(en.seoTitle, /^La Boqueria opening hours 2026: Mon–Sat 8:00–20:30$/);
+  assert.ok(en.seoDescription.length <= 155 && /Sundays/.test(en.seoDescription), en.seoDescription);
 });
 
 test("ski: opening in the title, official snow-report links, FGC early birds, child prices; snow guide in the query's words", () => {
