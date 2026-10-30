@@ -1,51 +1,33 @@
 import { listEntries } from "@/lib/content/repository";
-import { LOCALES } from "@/lib/i18n/config";
+import { LOCALES, type Locale } from "@/lib/i18n/config";
 import { SITE } from "@/lib/site";
+import { buildLlmsTxt, type LlmsEntry } from "@/lib/seo/llms";
 
 /**
  * llms.txt: a plain map of the site for language-model assistants.
  *
  * GA4 already reports an "AI Assistant" channel sending real visits, and the
  * pages those assistants cite are the ones with a direct answer and an
- * official source. This file lists every published guide with its one-line
- * summary, in each language, so an assistant can find the right page without
- * crawling navigation. Built from the database, so it cannot list a page that
- * does not exist or miss one that does.
- *
- * Format follows the llms.txt proposal: a title, a short description, then
- * sections of markdown links.
+ * official source. The file opens with the live tools and data hubs (holidays
+ * per town, strikes, Rodalies, fuel, reservoirs, elections, weekend), each
+ * with a one-line description, then lists every published guide with its
+ * one-line summary, in each language. The text is built by `lib/seo/llms.ts`
+ * from the modules that render those pages and from the database, sorted, so
+ * it cannot list a page that does not exist and the same content always gives
+ * the same file.
  */
 export const revalidate = 3600;
 
-const HEADINGS: Record<string, string> = {
-  ca: "Guies en català",
-  es: "Guías en castellano",
-  en: "Guides in English",
-};
-
 export async function GET() {
-  const origin = SITE.productionOrigin;
-  const parts: string[] = [
-    `# ${SITE.name}`,
-    "",
-    "> Practical, verified information about Catalonia in Catalan, Spanish and English: transport, public holidays, taxes, weekend agenda, nature conditions and day trips. Every figure is checked against an official source, linked on each page.",
-    "",
-  ];
-
+  const guides: Partial<Record<Locale, LlmsEntry[]>> = {};
   for (const locale of LOCALES) {
     // listEntries rethrows DB errors (so pages keep their last good version);
     // llms.txt is auxiliary, so a failing locale is skipped instead.
     const entries = await listEntries(locale, { types: ["article", "guide"], limit: 200 }).catch(() => []);
-    if (entries.length === 0) continue;
-    parts.push(`## ${HEADINGS[locale] ?? locale}`, "");
-    for (const entry of entries) {
-      const summary = (entry.excerpt ?? "").replace(/\s+/g, " ").trim();
-      parts.push(`- [${entry.title}](${origin}${entry.href})${summary ? `: ${summary}` : ""}`);
-    }
-    parts.push("");
+    guides[locale] = entries.map((entry) => ({ title: entry.title, href: entry.href, excerpt: entry.excerpt ?? null }));
   }
 
-  return new Response(parts.join("\n"), {
+  return new Response(buildLlmsTxt(SITE.productionOrigin, SITE.name, guides), {
     headers: { "content-type": "text/plain; charset=utf-8" },
   });
 }
