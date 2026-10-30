@@ -45,6 +45,7 @@ const en: Messages = {
       holidayYes: "Today: {name}",
       holidayNext: "Next holiday: {name}, {date} (in {n} days)",
       mushroomsRead: "Rainfall read on {date}",
+      today: { title: "Today in Catalonia", desc: "Holidays, strikes, Rodalies notices, reservoir levels and fuel prices for today, on one page." },
       holiday: { title: "Is today a holiday?", desc: "Catalonia-wide holidays, and where today and tomorrow are local holidays." },
       weekend: { title: "Things to do this weekend", desc: "The official cultural agenda, filtered to the coming weekend, free events first." },
       localHolidays: { title: "Local holidays by town", desc: "Every municipality's two local holidays, in one searchable table." },

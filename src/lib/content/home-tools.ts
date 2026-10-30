@@ -6,9 +6,11 @@ import type { Locale } from "@/lib/i18n/config";
  * publisher that owns it; a renamed slug must not leave a dead homepage link.
  */
 
-export type ToolKey = "holiday" | "weekend" | "localHolidays" | "transport" | "tax" | "mushrooms" | "reservoirs" | "school" | "airport" | "museums" | "monuments" | "cards" | "voting" | "barcelonaHub" | "clockChange" | "beaches" | "castanyada" | "shops" | "christmas" | "autumn" | "ski" | "snowNow";
+export type ToolKey = "today" | "holiday" | "weekend" | "localHolidays" | "transport" | "tax" | "mushrooms" | "reservoirs" | "school" | "airport" | "museums" | "monuments" | "cards" | "voting" | "barcelonaHub" | "clockChange" | "beaches" | "castanyada" | "shops" | "christmas" | "autumn" | "ski" | "snowNow";
 
 export const PATHS: Record<ToolKey, Record<Locale, string>> = {
+  // The daily page (src/lib/programmatic/today/paths.ts owns the segment).
+  today: { ca: "avui", es: "hoy", en: "today" },
   holiday: {
     ca: "guies/es-festiu-avui-catalunya",
     es: "guias/es-festivo-hoy-cataluna",
@@ -127,9 +129,9 @@ export const PATHS: Record<ToolKey, Record<Locale, string>> = {
  * live here. Same tools, ordered by who is asking.
  */
 export const ORDER: Record<Locale, ToolKey[]> = {
-  ca: ["voting", "clockChange", "holiday", "school", "weekend", "localHolidays", "mushrooms", "reservoirs", "museums", "transport", "airport", "monuments", "cards", "barcelonaHub", "beaches", "tax"],
-  es: ["voting", "clockChange", "holiday", "school", "weekend", "localHolidays", "mushrooms", "reservoirs", "museums", "transport", "airport", "monuments", "cards", "barcelonaHub", "beaches", "tax"],
-  en: ["barcelonaHub", "airport", "beaches", "monuments", "transport", "cards", "museums", "tax", "weekend", "holiday", "localHolidays", "school", "clockChange", "voting", "reservoirs", "mushrooms"],
+  ca: ["today", "voting", "clockChange", "holiday", "school", "weekend", "localHolidays", "mushrooms", "reservoirs", "museums", "transport", "airport", "monuments", "cards", "barcelonaHub", "beaches", "tax"],
+  es: ["today", "voting", "clockChange", "holiday", "school", "weekend", "localHolidays", "mushrooms", "reservoirs", "museums", "transport", "airport", "monuments", "cards", "barcelonaHub", "beaches", "tax"],
+  en: ["today", "barcelonaHub", "airport", "beaches", "monuments", "transport", "cards", "museums", "tax", "weekend", "holiday", "localHolidays", "school", "clockChange", "voting", "reservoirs", "mushrooms"],
 };
 
 /*
