@@ -626,6 +626,28 @@ test("zoo: Ciutadella-only entrance, winter zoo hours table, aquarium calendar",
 });
 
 /**
+ * Zoo EN, 30 Oct 2026 (top-3 push): both venues' prices re-read; the title
+ * names both tickets, the description and the first line give the adult,
+ * child and family-pack prices, and the "family ticket" and "cheaper online"
+ * questions have answers. The Aquarium's companion rule (65 %) is new.
+ */
+test("zoo EN: both prices in the snippet and the first line, family pack and online questions", () => {
+  const en = ZOO_AQUARIUM.editions.en;
+  assert.ok(en.seoTitle.length <= 60 && en.seoDescription.length <= 155, `${en.seoTitle.length}/${en.seoDescription.length}`);
+  assert.match(en.seoTitle, /Zoo & Aquarium tickets 2026: Zoo €23, Aquarium €30/);
+  assert.match(en.seoDescription, /€13\.90.*€30.*€23.*€88/);
+  const text = bodyToPlainText(en.blocks);
+  assert.match(text.slice(0, 260), /Zoo tickets cost €23.*€13\.90.*Aquarium tickets cost €30.*€23.*€88/, "answer first");
+  assert.doesNotMatch(text.slice(0, 700), /until 1 November/, "the lead no longer leads with hours that end on 1 November");
+  assert.match(text, /Is there a family ticket for the Barcelona Aquarium\?/);
+  assert.match(text, /Is it cheaper to buy Barcelona Zoo tickets online\?/);
+  for (const locale of ["ca", "es", "en"] as const) {
+    assert.match(bodyToPlainText(ZOO_AQUARIUM.editions[locale].blocks), /65 %|65%/, `${locale}: Aquarium companion rule`);
+  }
+  assert.equal(ZOO_AQUARIUM.verifiedAt, "2026-10-30");
+});
+
+/**
  * Zoo, Aquarium and markets, 28 Oct 2026: the Aquarium's online Flexiticket
  * (90 days) and the Zoo Club are on the official price pages; the Zoo itself
  * says only "closed in the afternoon" on Christmas Day, so the 14:00 is
