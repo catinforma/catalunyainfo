@@ -45,6 +45,7 @@ const es: Messages = {
       holidayYes: "Hoy: {name}",
       holidayNext: "Próximo festivo: {name}, {date} (dentro de {n} días)",
       mushroomsRead: "Lluvia leída el {date}",
+      today: { title: "Hoy en Cataluña", desc: "Si es festivo, huelgas, avisos de Rodalies, embalses y precio del carburante de hoy, en una página." },
       holiday: { title: "¿Es festivo hoy?", desc: "Festivos de toda Cataluña y dónde es fiesta local hoy y mañana." },
       weekend: { title: "Qué hacer este fin de semana", desc: "La agenda cultural oficial, filtrada para el próximo fin de semana, gratis primero." },
       localHolidays: { title: "Festivos locales de cada municipio", desc: "Los dos días de fiesta local de todos los municipios, en una sola tabla con buscador." },

@@ -44,6 +44,7 @@ const ca = {
       holidayYes: "Avui: {name}",
       holidayNext: "Proper festiu: {name}, {date} (d'aquí a {n} dies)",
       mushroomsRead: "Pluja llegida el {date}",
+      today: { title: "Avui a Catalunya", desc: "Si és festiu, vagues, avisos de Rodalies, embassaments i preu del carburant d'avui, en una pàgina." },
       holiday: { title: "És festiu avui?", desc: "Festius de tot Catalunya i on és festa local avui i demà." },
       weekend: { title: "Què fer aquest cap de setmana", desc: "L'agenda cultural oficial, filtrada per al proper cap de setmana, gratuïtes primer." },
       localHolidays: { title: "Festius locals de cada municipi", desc: "Els dos dies de festa local de tots els municipis, en una sola taula cercable." },

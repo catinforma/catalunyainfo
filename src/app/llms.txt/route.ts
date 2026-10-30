@@ -1,5 +1,6 @@
 import { listEntries } from "@/lib/content/repository";
 import { LOCALES } from "@/lib/i18n/config";
+import { TODAY_NAME, todayPath } from "@/lib/programmatic/today/paths";
 import { SITE } from "@/lib/site";
 
 /**
@@ -23,12 +24,23 @@ const HEADINGS: Record<string, string> = {
   en: "Guides in English",
 };
 
+const TODAY_SUMMARY: Record<string, string> = {
+  ca: "si avui és festiu i on hi ha festa local, vagues, avisos de Rodalies, embassaments i preu del carburant, cada dia",
+  es: "si hoy es festivo y dónde hay fiesta local, huelgas, avisos de Rodalies, embalses y precio del carburante, cada día",
+  en: "whether today is a public or local holiday, strikes, Rodalies notices, reservoir levels and fuel prices, every day",
+};
+
 export async function GET() {
   const origin = SITE.productionOrigin;
   const parts: string[] = [
     `# ${SITE.name}`,
     "",
     "> Practical, verified information about Catalonia in Catalan, Spanish and English: transport, public holidays, taxes, weekend agenda, nature conditions and day trips. Every figure is checked against an official source, linked on each page.",
+    "",
+    // The daily page: one place for "what is on today" (holidays, strikes, trains, prices).
+    "## Today in Catalonia",
+    "",
+    ...LOCALES.map((locale) => `- [${TODAY_NAME[locale]}](${origin}${todayPath(locale)}): ${TODAY_SUMMARY[locale]}`),
     "",
   ];
 

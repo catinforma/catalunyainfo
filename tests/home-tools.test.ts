@@ -21,9 +21,11 @@ import { COPY as SCHOOL_COPY } from "../src/lib/content/school/publish.ts";
 import { COPY as TAX_COPY } from "../src/lib/content/tourist-tax/copy.ts";
 import { EVERGREEN } from "../src/lib/content/weekend/evergreen.ts";
 import { LOCALES } from "../src/lib/i18n/config.ts";
+import { TODAY_SEGMENT } from "../src/lib/programmatic/today/paths.ts";
 
 // The homepage links are hand-written; the pages' own publishers own the slugs.
 const OWNER: Record<ToolKey, (locale: (typeof LOCALES)[number]) => string> = {
+  today: (l) => TODAY_SEGMENT[l],
   holiday: (l) => TODAY_COPY[l].path,
   weekend: (l) => EVERGREEN[l].path,
   localHolidays: (l) => LOCAL_COPY[l].path,
