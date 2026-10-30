@@ -5,6 +5,7 @@ import { weekendWindow, type WeekendWindow } from "@/lib/content/weekend/agenda"
 import { EVERGREEN } from "@/lib/content/weekend/evergreen";
 import { todayInCatalonia } from "@/lib/content/holidays/calendar";
 import { liveSchoolDescription, liveSchoolTitle } from "@/lib/content/school/snippet";
+import { liveTodayDescription, liveTodayTitle } from "@/lib/content/holidays/today-snippet";
 
 /**
  * A page title computed at render time, for pages whose answer is a live
@@ -25,18 +26,24 @@ export async function liveEntryTitle(body: Body, locale: Locale): Promise<string
   if (body.some((block) => block.type === "schoolCalendar")) {
     return liveSchoolTitle(locale, todayInCatalonia());
   }
+  if (body.some((block) => block.type === "holidayToday")) {
+    return liveTodayTitle(locale, todayInCatalonia());
+  }
   return null;
 }
 
 /**
  * A search description computed at render time, for the same reason as the
- * title: the school calendar's snippet names the next day without school,
- * which a stored description cannot do for more than a few weeks. Null means
- * "use the stored seoDescription".
+ * title: the school calendar's snippet names the next day without school and
+ * "is today a holiday" the next holiday, which a stored description cannot do
+ * for more than a few weeks. Null means "use the stored seoDescription".
  */
 export function liveEntryDescription(body: Body, locale: Locale): string | null {
   if (body.some((block) => block.type === "schoolCalendar")) {
     return liveSchoolDescription(locale, todayInCatalonia());
+  }
+  if (body.some((block) => block.type === "holidayToday")) {
+    return liveTodayDescription(locale, todayInCatalonia());
   }
   return null;
 }
