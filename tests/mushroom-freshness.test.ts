@@ -102,4 +102,29 @@ for (const locale of LOCALES) {
       "the page does not tell the reader where the thresholds are",
     );
   });
+
+  /**
+   * 30 Oct 2026 (top-3 push): the snippet carries the week's reading date and
+   * the wettest zones, rebuilt by every `mushrooms:refresh`, and the lead is
+   * that dated answer. Nothing in it may claim mushrooms are there.
+   */
+  test(`${locale}: the description and the lead carry the reading date and the wettest zone`, async () => {
+    const { liveDescription, ranked, readDay } = await import("../src/lib/content/mushrooms/live-summary.ts");
+    const description = liveDescription(locale);
+    assert.ok(description.length <= 155, `${description.length}: ${description}`);
+    assert.ok(description.includes(readDay(locale)), "no reading date in the description");
+    const first = ZONES.find((zone) => zone.id === ranked()[0]!.id)!.name[locale].split(" / ")[0]!;
+    assert.ok(description.includes(first), `the wettest zone (${first}) is not named`);
+    assert.doesNotMatch(description, /hi ha bolets|hay setas|there are mushrooms/i);
+    const lead = buildBody(locale)[0] as { type: string; lead?: boolean; text?: string };
+    assert.equal(lead.lead, true);
+    assert.ok(lead.text?.includes(readDay(locale)), "the lead does not carry the reading date");
+  });
 }
+
+test("CA takes the Catalan queries: 'mapa bolets' title, and the ES page links the CA page", async () => {
+  const { COPY } = await import("../src/lib/content/mushrooms/payload.ts");
+  assert.match(COPY.ca.seoTitle, /^Mapa bolets Catalunya 2026: on trobar-ne aquesta setmana$/);
+  assert.ok(COPY.ca.seoTitle.length <= 60);
+  assert.ok(JSON.stringify(buildBody("es")).includes("(/ca/natura/bolets-catalunya-condicions/)"));
+});
