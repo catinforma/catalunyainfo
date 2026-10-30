@@ -884,6 +884,26 @@ test("climate: humidity column from AEMET, °F in English, the answer in the EN 
 });
 
 /**
+ * Climate CA/ES, 30 Oct 2026 (CTR far below the site's curve at 4.6 and 8.6):
+ * the snippet gives November and December, the months people are about to
+ * live, then the coldest and wettest; the lead opens with the range and
+ * points "el temps d'avui" searchers at the official forecast.
+ */
+test("climate CA/ES: November and December in the snippet and lead, official forecast linked", () => {
+  const forecast = { ca: "https://www.meteo.cat/prediccio/municipal/080193", es: "https://www.aemet.es/es/eltiempo/prediccion/municipios/barcelona-id08019" };
+  for (const locale of ["ca", "es"] as const) {
+    const edition = CLIMATE.editions[locale];
+    assert.ok(edition.seoTitle.length <= 60 && edition.seoDescription.length <= 155, edition.seoDescription);
+    assert.match(edition.seoDescription, /^(Novembre|Noviembre): (màximes|máximas) de 17,3 °C.*8,6 °C.*14,3 (i|y) 5,7 °C/);
+    const first = bodyToPlainText(edition.blocks).slice(0, 320);
+    assert.match(first, /13,6 °C.*28,5 °C.*91 mm/, `${locale}: range in the first lines`);
+    assert.match(first, /17,3 °C/, `${locale}: November in the lead`);
+    assert.ok(JSON.stringify(edition.blocks).includes(forecast[locale]), `${locale}: official forecast link`);
+  }
+  assert.match(CLIMATE.editions.ca.seoTitle, /^Temps a Barcelona mes a mes/);
+});
+
+/**
  * Monuments, 28 Oct 2026: sagradafamilia.org prices grid and April-September
  * hours; parkguell.barcelona prices-and-times and how-to-get-there; Casa
  * Batlló's ticket office closes at 21:00. The night-visit price ("until
