@@ -219,6 +219,7 @@ export function buildNewYearBody(locale: Locale, facts: Announcements = ANNOUNCE
         "**La Cursa dels Nassos.** Barcelona fa des del 1999 aquesta cursa de Sant Silvestre, el darrer dia de l'any, en què és habitual córrer disfressat.",
         "**El primer bany de l'any.** L'1 de gener, cap al migdia, els més valents es capbussen al Mediterrani, i hi ha brou calent per a tothom qui s'hi banya, segons l'Ajuntament.",
         `**La Grossa de Cap d'Any**, la loteria de la Generalitat, se sorteja el mateix 31 de desembre: l'hora, els premis i els números premiats són a ${b2link("grossa", "ca", "la guia de La Grossa de Cap d'Any")}.`,
+        `**La loteria de Nadal**, la de l'Estat, se sorteja abans, el 22 de desembre: com es cobra i on ha tocat a Catalunya, a ${b2link("loteriaNadal", "ca", "la guia de la loteria de Nadal")}.`,
       ),
       ...h2(
         "Què obre l'1 de gener a Barcelona?",
@@ -301,6 +302,7 @@ export function buildNewYearBody(locale: Locale, facts: Announcements = ANNOUNCE
         "**La Cursa dels Nassos.** Barcelona celebra desde 1999 esta carrera de San Silvestre, el último día del año, en la que es habitual correr disfrazado.",
         "**El primer baño del año.** El 1 de enero, hacia el mediodía, los más valientes se zambullen en el Mediterráneo, y hay caldo caliente para todos los que se bañan, según el Ayuntamiento.",
         `**La Grossa de Cap d'Any**, la lotería de la Generalitat, se sortea el mismo 31 de diciembre: la hora, los premios y los números premiados están en ${b2link("grossa", "es", "la guía de La Grossa de Cap d'Any")}.`,
+        `**La Lotería de Navidad**, la del Estado, se sortea antes, el 22 de diciembre: cómo se cobra y dónde ha tocado en Cataluña, en ${b2link("loteriaNadal", "es", "la guía de la Lotería de Navidad")}.`,
       ),
       ...h2(
         "¿Qué abre el 1 de enero en Barcelona?",
@@ -382,6 +384,7 @@ export function buildNewYearBody(locale: Locale, facts: Announcements = ANNOUNCE
       "**Cursa dels Nassos.** Barcelona has run this Sant Silvestre race on the last day of the year since 1999, and running in fancy dress is the norm.",
       "**First swim of the year.** On 1 January, around midday, the bravest take a group dip in the Mediterranean, with hot broth for everyone who goes in, according to the City Council.",
       `**La Grossa de Cap d'Any**, the Catalan government's lottery, is drawn on 31 December itself: the time, the prizes and the winning numbers are in ${b2link("grossa", "en", "our La Grossa de Cap d'Any guide")}.`,
+      `**The Spanish Christmas Lottery** (El Gordo), the state's, is drawn earlier, on 22 December: how to claim and where it fell in Catalonia are in ${b2link("loteriaNadal", "en", "our Spanish Christmas Lottery guide")}.`,
     ),
     ...h2(
       "What is open on 1 January in Barcelona?",

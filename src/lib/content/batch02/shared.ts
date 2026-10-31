@@ -76,7 +76,9 @@ export type B2Key =
   // 31 Oct 2026: Easter 2027 (holidays, school break, shops, long weekends).
   | "easter2027"
   // 31 Oct 2026: every 2027 bridge and long weekend, computed from the order.
-  | "bridges2027";
+  | "bridges2027"
+  // 31 Oct 2026: the Spanish Christmas lottery 2026 (draw and results, 22 Dec).
+  | "loteriaNadal";
 
 /** Path after the locale prefix, no leading or trailing slash. */
 export const B2_PATHS: Record<B2Key, Record<Locale, string>> = {
@@ -363,6 +365,11 @@ export const B2_PATHS: Record<B2Key, Record<Locale, string>> = {
     ca: "guies/ponts-2027-catalunya",
     es: "guias/puentes-2027-cataluna",
     en: "guides/long-weekends-2027-catalonia",
+  },
+  loteriaNadal: {
+    ca: "guies/loteria-de-nadal",
+    es: "guias/loteria-de-navidad",
+    en: "guides/spanish-christmas-lottery",
   },
 };
 
@@ -658,6 +665,11 @@ export const B2_TITLES: Record<B2Key, Record<Locale, string>> = {
     ca: "Ponts 2027 a Catalunya: quins dies demanar",
     es: "Puentes 2027 en Cataluña: qué días pedir",
     en: "Long weekends 2027 in Catalonia: days to book",
+  },
+  loteriaNadal: {
+    ca: "Loteria de Nadal 2026: premis i on ha tocat a Catalunya",
+    es: "Lotería de Navidad 2026: premios y dónde ha tocado en Cataluña",
+    en: "Spanish Christmas Lottery 2026: prizes and results",
   },
 };
 
