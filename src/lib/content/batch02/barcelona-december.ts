@@ -85,6 +85,10 @@ import {
  * No new photograph: the hero is the Christmas markets guide's lead picture
  * (the Fira de Santa Llúcia at night), with its exact alt text and caption,
  * because media rows are keyed by file.
+ *
+ * 31 Oct 2026: the "Tradicions" paragraph links the Three Kings parade page
+ * (group `reis-2027-links`). Not the "still to be announced" item: that one
+ * disappears once the parade is announced, and the link would go with it.
  */
 
 /** The day the page was last brought up to date. Every "checked" line reads this, never the clock. */
@@ -862,7 +866,7 @@ export function buildBarcelonaDecemberBody(
         `**Llums.** ${lightsNews} Per al 2026 preveu ${LIGHTS_PLAN_2026.km} km de carrers il·luminats, i el 2026 Barcelona és capital europea del Nadal. La data, l'hora i el lloc de l'encesa, quan surtin, a ${b2link("christmasBarcelona", "ca", "l'encesa de llums de Nadal a Barcelona")}.`,
         `**Fires.** La Fira de Santa Llúcia, davant de la Catedral, i la de la Sagrada Família encara no han publicat les dates del 2026. A la resta de Catalunya, ${FAMILY.fairs} fires de Nadal ja tenen data oficial: són a [fires de Nadal per municipi](${fairsHubPath("ca")}) i a ${b2link("christmas", "ca", "la guia de mercats de Nadal")}.`,
         `**Pessebres.** A la ciutat, el 33è Pessebre Vivent de la Torre del Suro, al Guinardó, és el ${torre} a les ${TORRE_DEL_SURO_2026.time}, amb entrada lliure, segons els organitzadors. La resta de pessebres vivents de Catalunya, a ${b2link("pessebres", "ca", "la guia de pessebres vivents")}.`,
-        `**Tradicions.** El tió es comença a alimentar per la Immaculada, el 8 de desembre, i el 26, Sant Esteve, és festiu. ${pastoretsSentence("ca")} Com es fa cagar el tió i què es menja per Nadal, a ${b2link("christmasTraditions", "ca", "les tradicions de Nadal a Catalunya")}.`,
+        `**Tradicions.** El tió es comença a alimentar per la Immaculada, el 8 de desembre, i el 26, Sant Esteve, és festiu. ${pastoretsSentence("ca")} Com es fa cagar el tió i què es menja per Nadal, a ${b2link("christmasTraditions", "ca", "les tradicions de Nadal a Catalunya")}. I per acabar les festes, l'horari i el recorregut dels Reis, a ${b2link("reis", "ca", "la Cavalcada de Reis 2027")}.`,
       ),
       ...h2(
         "Novetats del 2026: concerts i espectacles amb data",
@@ -946,7 +950,7 @@ export function buildBarcelonaDecemberBody(
         `**Luces.** ${lightsNews} Para 2026 prevé ${LIGHTS_PLAN_2026.km} km de calles iluminadas, y en 2026 Barcelona es capital europea de la Navidad. La fecha, la hora y el lugar del encendido, cuando salgan, en ${b2link("christmasBarcelona", "es", "el encendido de luces de Navidad en Barcelona")}.`,
         `**Ferias.** La Fira de Santa Llúcia, frente a la Catedral, y la de la Sagrada Família aún no han publicado sus fechas de 2026. En el resto de Cataluña, ${FAMILY.fairs} ferias de Navidad ya tienen fecha oficial: están en [ferias de Navidad por municipio](${fairsHubPath("es")}) y en ${b2link("christmas", "es", "la guía de mercados de Navidad")}.`,
         `**Belenes.** En la ciudad, el 33.º Pessebre Vivent de la Torre del Suro, en el Guinardó, es el ${torre} a las ${TORRE_DEL_SURO_2026.time}, con entrada libre, según los organizadores. El resto de belenes vivientes de Cataluña, en ${b2link("pessebres", "es", "la guía de belenes vivientes")}.`,
-        `**Tradiciones.** Al tió se le empieza a alimentar por la Inmaculada, el 8 de diciembre, y el 26, San Esteban, es festivo. ${pastoretsSentence("es")} Cómo se hace cagar el tió y qué se come en Navidad, en ${b2link("christmasTraditions", "es", "las tradiciones de Navidad en Cataluña")}.`,
+        `**Tradiciones.** Al tió se le empieza a alimentar por la Inmaculada, el 8 de diciembre, y el 26, San Esteban, es festivo. ${pastoretsSentence("es")} Cómo se hace cagar el tió y qué se come en Navidad, en ${b2link("christmasTraditions", "es", "las tradiciones de Navidad en Cataluña")}. Y para cerrar las fiestas, el horario y el recorrido de los Reyes, en ${b2link("reis", "es", "la Cabalgata de Reyes 2027")}.`,
       ),
       ...h2(
         "Novedades de 2026: conciertos y espectáculos con fecha",
@@ -1029,7 +1033,7 @@ export function buildBarcelonaDecemberBody(
       `**Lights.** ${lightsNews} For 2026 it plans ${LIGHTS_PLAN_2026.km} km of lit streets, and 2026 is the year Barcelona is European Capital of Christmas. The date, time and place of the switch-on, once out, are in ${b2link("christmasBarcelona", "en", "the Barcelona Christmas lights switch-on")}.`,
       `**Markets.** The Fira de Santa Llúcia, in front of the Cathedral, and the Sagrada Família fair have not published their 2026 dates yet. Elsewhere in Catalonia, ${FAMILY.fairs} Christmas fairs already have an official date: see [Christmas markets by town](${fairsHubPath("en")}) and ${b2link("christmas", "en", "our Christmas markets guide")}.`,
       `**Nativity scenes.** In the city, the 33rd Torre del Suro living nativity, in el Guinardó, is on ${torre} at ${TORRE_DEL_SURO_2026.time}, free, according to its organisers. Catalonia's other living nativities are in ${b2link("pessebres", "en", "our living nativity scenes guide")}.`,
-      `**Traditions.** Children start "feeding" the tió log on 8 December, the Immaculada, and the 26th, Sant Esteve, is a public holiday. ${pastoretsSentence("en")} How to make the tió poo and what Catalans eat at Christmas: ${b2link("christmasTraditions", "en", "Catalan Christmas traditions")}.`,
+      `**Traditions.** Children start "feeding" the tió log on 8 December, the Immaculada, and the 26th, Sant Esteve, is a public holiday. ${pastoretsSentence("en")} How to make the tió poo and what Catalans eat at Christmas: ${b2link("christmasTraditions", "en", "Catalan Christmas traditions")}. And to close the season, the Kings' times and route: ${b2link("reis", "en", "the 2027 Three Kings parade")}.`,
     ),
     ...h2(
       "New for 2026: concerts and shows with a date",

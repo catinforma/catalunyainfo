@@ -42,6 +42,10 @@ import {
  * "nadal-tradicions" group (and, for Santa Llúcia, "barcelona-december", whose
  * day-by-day table picks it up). The "not announced yet" lines switch on their own.
  *
+ * 31 Oct 2026: the "Cap d'Any i Reis" section no longer promises the
+ * parade's times on the New Year's Eve guide; it links the Three Kings parade
+ * page, which carries them (group `reis-2027-links`).
+ *
  * No new photograph: the hero is the nativity-figures picture already in the
  * manifest (the Christmas markets guide's second image), with that file's own
  * alt and caption, because media rows are keyed by file.
@@ -358,7 +362,7 @@ function bodyCa(facts: TraditionAnnouncements) {
     ),
     ...h2(
       "Cap d'Any i Reis",
-      `La nit del 31 de desembre, amb el raïm i la festa de la ciutat, té la seva pròpia guia: ${b2link("newYear", "ca", "Cap d'Any a Barcelona")}. Els Reis arriben el vespre del 5 de gener, i el ${dayDate(D.reis, "ca")} és festiu a Catalunya (Ordre EMT/52/2026); l'horari i el recorregut de la cavalcada de Barcelona, quan es publiquin, els afegim a la mateixa guia.`,
+      `La nit del 31 de desembre, amb el raïm i la festa de la ciutat, té la seva pròpia guia: ${b2link("newYear", "ca", "Cap d'Any a Barcelona")}. Els Reis arriben el vespre del 5 de gener, i el ${dayDate(D.reis, "ca")} és festiu a Catalunya (Ordre EMT/52/2026); l'horari i el recorregut de la cavalcada de Barcelona i de les d'altres ciutats són a ${b2link("reis", "ca", "la Cavalcada de Reis 2027")}.`,
     ),
     ...h2("On veure-ho i on comprar-ho el 2026"),
     list(
@@ -457,7 +461,7 @@ function bodyEs(facts: TraditionAnnouncements) {
     ),
     ...h2(
       "Nochevieja y Reyes",
-      `La noche del 31 de diciembre, con las uvas y la fiesta de la ciudad, tiene su propia guía: ${b2link("newYear", "es", "Nochevieja en Barcelona")}. Los Reyes llegan la tarde-noche del 5 de enero, y el ${dayDate(D.reis, "es")} es festivo en Cataluña (Orden EMT/52/2026); el horario y el recorrido de la cabalgata de Barcelona, cuando se publiquen, los añadimos a esa misma guía.`,
+      `La noche del 31 de diciembre, con las uvas y la fiesta de la ciudad, tiene su propia guía: ${b2link("newYear", "es", "Nochevieja en Barcelona")}. Los Reyes llegan la tarde-noche del 5 de enero, y el ${dayDate(D.reis, "es")} es festivo en Cataluña (Orden EMT/52/2026); el horario y el recorrido de la cabalgata de Barcelona y de las de otras ciudades están en ${b2link("reis", "es", "la Cabalgata de Reyes 2027")}.`,
     ),
     ...h2("Dónde verlo y comprarlo en 2026"),
     list(
@@ -556,7 +560,7 @@ function bodyEn(facts: TraditionAnnouncements) {
     ),
     ...h2(
       "New Year's Eve and the Three Kings",
-      `New Year's Eve, with the twelve grapes and the city's celebration, has its own guide: ${b2link("newYear", "en", "New Year's Eve in Barcelona")}. The Three Kings arrive on the evening of 5 January, and ${dayDate(D.reis, "en")} is a public holiday in Catalonia (Ordre EMT/52/2026); the times and route of Barcelona's parade will be added to that same guide once they are published.`,
+      `New Year's Eve, with the twelve grapes and the city's celebration, has its own guide: ${b2link("newYear", "en", "New Year's Eve in Barcelona")}. The Three Kings arrive on the evening of 5 January, and ${dayDate(D.reis, "en")} is a public holiday in Catalonia (Ordre EMT/52/2026); the times and route of Barcelona's parade, and of other towns' parades, are in ${b2link("reis", "en", "the 2027 Three Kings parade")}.`,
     ),
     ...h2("Where to see it and buy it in 2026"),
     list(

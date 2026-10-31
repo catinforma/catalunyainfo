@@ -59,6 +59,10 @@ import {
  * 31 Oct 2026: one sentence in "More Christmas events in the city" links the
  * new "Barcelona in December" hub (group `barcelona-december-links`).
  *
+ * 31 Oct 2026: the cavalcada sentence (shared with the New Year's Eve page)
+ * ends with a link to the new Three Kings parade page, which carries the
+ * route, the passing times and the other towns (group `reis-2027-links`).
+ *
  * The markets are not repeated here: the Christmas markets guide carries them.
  * No new photograph: the hero is the Christmas-lights picture already in the
  * manifest (the shops guide's lead image), because the publisher refuses an
@@ -404,6 +408,15 @@ function santJaumeSentence(locale: Locale, facts: Announcements): string {
   }[locale];
 }
 
+/** The link to the Three Kings parade page that ends the cavalcada sentence. */
+function reisLink(locale: Locale): string {
+  return {
+    ca: ` L'horari, el recorregut i les cavalcades d'altres ciutats, a ${b2link("reis", "ca", "la Cavalcada de Reis 2027")}.`,
+    es: ` El horario, el recorrido y las cabalgatas de otras ciudades, en ${b2link("reis", "es", "la Cabalgata de Reyes 2027")}.`,
+    en: ` Times, route and the parades in other towns: ${b2link("reis", "en", "the 2027 Three Kings parade")}.`,
+  }[locale];
+}
+
 export function cavalcadaSentence(locale: Locale, facts: Announcements): string {
   const a = facts.cavalcada;
   if (a) {
@@ -411,7 +424,7 @@ export function cavalcadaSentence(locale: Locale, facts: Announcements): string 
       ca: `La **Cavalcada de Reis** del 2027 és ${when(a, "ca")}, segons l'[Ajuntament](${a.url}).`,
       es: `La **Cabalgata de Reyes** de 2027 es ${when(a, "es")}, según el [Ayuntamiento](${a.url}).`,
       en: `The 2027 **Three Kings parade** (Cavalcada de Reis) is on ${when(a, "en")}, according to the [City Council](${a.url}).`,
-    }[locale];
+    }[locale] + reisLink(locale);
   }
   const p = PAST.programme2025.published;
   const r = PAST.cavalcada2026.route;
@@ -419,7 +432,7 @@ export function cavalcadaSentence(locale: Locale, facts: Announcements): string 
     ca: `La **Cavalcada de Reis** és el vespre del 5 de gener, vigília del festiu del 6; l'Ajuntament en publica l'horari i el recorregut les setmanes abans (per a la del 2026, el programa el ${dateYear(p, "ca")} i el recorregut complet el ${dateYear(r, "ca")}).`,
     es: `La **Cabalgata de Reyes** es la tarde-noche del 5 de enero, víspera del festivo del 6; el Ayuntamiento publica su horario y su recorrido las semanas antes (para la de 2026, el programa el ${dateYear(p, "es")} y el recorrido completo el ${dateYear(r, "es")}).`,
     en: `The **Three Kings parade** (Cavalcada de Reis) is on the evening of 5 January, the eve of the 6 January holiday; the City Council publishes its times and route in the weeks before (for the 2026 parade, the programme on ${dateYear(p, "en")} and the full route on ${dateYear(r, "en")}).`,
-  }[locale];
+  }[locale] + reisLink(locale);
 }
 
 function switchOnAnswer(locale: Locale, facts: Announcements): string {

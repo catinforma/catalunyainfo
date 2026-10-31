@@ -58,6 +58,7 @@ import { EASTER_2027 } from "@/lib/content/batch02/easter-2027";
 import { BRIDGES_2027 } from "@/lib/content/batch02/bridges-2027";
 import { LOTERIA_NADAL } from "@/lib/content/batch02/loteria-nadal";
 import { BARCELONA_DECEMBER } from "@/lib/content/batch02/barcelona-december";
+import { REIS } from "@/lib/content/batch02/reis";
 import { publishHolidayTodayGuide } from "@/lib/content/holidays/today-publish";
 import { publishLocalHolidaysGuide } from "@/lib/content/holidays/local-publish";
 import { publishReservoirGuide } from "@/lib/content/reservoirs/publish";
@@ -254,6 +255,21 @@ export async function POST(request: Request) {
     if (wants("girona")) published.push(...(await publishBatch02(2, 3)));
     if (wants("batch02-b")) published.push(...(await publishBatch02(3, 6)));
     if (wants("batch02-c")) published.push(...(await publishBatch02(6, 9)));
+    // Cavalcada de Reis 2027 (Barcelona and the larger towns): one page, on
+    // its own so each council's programme (Barcelona's arrival and start in
+    // November, its route around 2 January) republishes only it. The four
+    // pages that gained one sentence linking to it (Christmas in Barcelona and
+    // New Year's Eve through the shared cavalcada sentence, Christmas
+    // traditions, Barcelona in December) go out once, with `reis-2027-links`.
+    if (wants("reis-2027")) published.push(await publishB2Article(REIS));
+    if (wants("reis-2027-links")) {
+      published.push(
+        await publishB2Article(CHRISTMAS_BARCELONA),
+        await publishB2Article(NEW_YEAR),
+        await publishB2Article(CHRISTMAS_TRADITIONS),
+        await publishB2Article(BARCELONA_DECEMBER),
+      );
+    }
 
     const surfaces = [
       ...published.flatMap((article) =>
