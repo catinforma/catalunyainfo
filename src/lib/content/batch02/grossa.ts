@@ -634,6 +634,7 @@ const COPY: Record<Locale, Copy> = {
     about: [
       "És el sorteig de final d'any de Loteries de Catalunya, la societat pública que gestiona la loteria de la Generalitat (al DOGC, els seus anuncis surten dins del Departament d'Economia i Finances). El 2024 se'n va fer la dotzena edició i el 2025, la tretzena, que va repartir 14.087.610 € en premis i va premiar 273.242 bitllets.",
       "Segons Loteries de Catalunya, els ingressos de la loteria són de la Generalitat i es destinen a programes socials: ha transferit més de 307 milions d'euros al Departament de Drets Socials i Inclusió per a la infància vulnerable, la gent gran i les persones amb discapacitat.",
+      `No s'ha de confondre amb la loteria de Nadal de l'Estat, que se sorteja el 22 de desembre a Madrid: els premis i on toquen a Catalunya són a ${b2link("loteriaNadal", "ca", "la guia de la loteria de Nadal")}.`,
     ],
     responsibleTitle: "Joc responsable",
     responsible: "Com recomana Loteries de Catalunya: juga només si ets major d'edat, fixa't un pressupost abans i practica altres activitats d'oci. Loteries de Catalunya té un servei d'atenció a la ciutadania al 93 707 60 01.",
@@ -822,6 +823,7 @@ const COPY: Record<Locale, Copy> = {
     about: [
       "Es el sorteo de fin de año de Loteries de Catalunya, la sociedad pública que gestiona la lotería de la Generalitat (en el DOGC, sus anuncios salen dentro del Departament d'Economia i Finances). En 2024 se celebró la duodécima edición y en 2025, la decimotercera, que repartió 14.087.610 € en premios y premió 273.242 billetes.",
       "Según Loteries de Catalunya, los ingresos de la lotería son de la Generalitat y se destinan a programas sociales: ha transferido más de 307 millones de euros al Departament de Drets Socials i Inclusió para la infancia vulnerable, las personas mayores y las personas con discapacidad.",
+      `No hay que confundirla con la Lotería de Navidad del Estado, que se sortea el 22 de diciembre en Madrid: los premios y dónde tocan en Cataluña están en ${b2link("loteriaNadal", "es", "la guía de la Lotería de Navidad")}.`,
     ],
     responsibleTitle: "Juego responsable",
     responsible: "Como recomienda Loteries de Catalunya: juega solo si eres mayor de edad, fíjate un presupuesto antes y practica otras actividades de ocio. Loteries de Catalunya tiene un servicio de atención a la ciudadanía en el 93 707 60 01.",
@@ -1010,6 +1012,7 @@ const COPY: Record<Locale, Copy> = {
     about: [
       "It is the year-end draw of Loteries de Catalunya, the public company that runs the Catalan government's lottery (the DOGC lists its notices under the Department of the Economy and Finance). The 2024 draw was the twelfth and the 2025 draw the thirteenth, which paid out €14,087,610 in prizes on 273,242 winning tickets.",
       "According to Loteries de Catalunya, lottery income belongs to the Generalitat and funds social programmes: it has transferred more than €307 million to the Department of Social Rights and Inclusion for vulnerable children, older people and people with disabilities.",
+      `It is not the Spanish state's Christmas Lottery (El Gordo), drawn in Madrid on 22 December: its prizes and where they fall in Catalonia are in ${b2link("loteriaNadal", "en", "our Spanish Christmas Lottery guide")}.`,
     ],
     responsibleTitle: "Play responsibly",
     responsible: "As Loteries de Catalunya advises: only play if you are over 18, set yourself a budget beforehand and make time for other pastimes. Loteries de Catalunya's public helpline is 93 707 60 01 (Catalan and Spanish).",

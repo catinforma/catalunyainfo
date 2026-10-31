@@ -72,7 +72,9 @@ export type B2Key =
   // 29 Oct 2026: the dedicated page for the 11 November 2026 general strike.
   | "strike11n"
   // 30 Oct 2026: La Grossa de Cap d'Any 2026 (draw and results, 31 Dec).
-  | "grossa";
+  | "grossa"
+  // 31 Oct 2026: the Spanish Christmas lottery 2026 (draw and results, 22 Dec).
+  | "loteriaNadal";
 
 /** Path after the locale prefix, no leading or trailing slash. */
 export const B2_PATHS: Record<B2Key, Record<Locale, string>> = {
@@ -345,6 +347,11 @@ export const B2_PATHS: Record<B2Key, Record<Locale, string>> = {
     ca: "guies/la-grossa-cap-d-any",
     es: "guias/la-grossa-fin-de-ano",
     en: "guides/la-grossa-new-years-eve-lottery",
+  },
+  loteriaNadal: {
+    ca: "guies/loteria-de-nadal",
+    es: "guias/loteria-de-navidad",
+    en: "guides/spanish-christmas-lottery",
   },
 };
 
@@ -630,6 +637,11 @@ export const B2_TITLES: Record<B2Key, Record<Locale, string>> = {
     ca: "La Grossa de Cap d'Any 2026: resultats i premis",
     es: "La Grossa de Cap d'Any 2026: resultados y premios",
     en: "La Grossa de Cap d'Any 2026: results and prizes",
+  },
+  loteriaNadal: {
+    ca: "Loteria de Nadal 2026: premis i on ha tocat a Catalunya",
+    es: "Lotería de Navidad 2026: premios y dónde ha tocado en Cataluña",
+    en: "Spanish Christmas Lottery 2026: prizes and results",
   },
 };
 

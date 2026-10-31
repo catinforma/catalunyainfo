@@ -54,6 +54,7 @@ import { MARATO_GUIDE } from "@/lib/content/batch02/marato";
 import { STRIKES_GUIDE } from "@/lib/content/batch02/strikes";
 import { STRIKE_11N } from "@/lib/content/batch02/strike-11n";
 import { GROSSA } from "@/lib/content/batch02/grossa";
+import { LOTERIA_NADAL } from "@/lib/content/batch02/loteria-nadal";
 import { publishHolidayTodayGuide } from "@/lib/content/holidays/today-publish";
 import { publishLocalHolidaysGuide } from "@/lib/content/holidays/local-publish";
 import { publishReservoirGuide } from "@/lib/content/reservoirs/publish";
@@ -190,6 +191,15 @@ export async function POST(request: Request) {
     // results go out in one fast call. The New Year's Eve guide gained one
     // sentence linking to it; that goes out once with `nye`.
     if (wants("grossa")) published.push(await publishB2Article(GROSSA));
+    // The Spanish Christmas lottery 2026: one page, on its own so the 22
+    // December results and Catalan points of sale go out in one fast call.
+    // The three pages that gained one sentence linking to it (La Grossa, New
+    // Year's Eve, Christmas in Barcelona) go out once, after it, with
+    // `loteria-nadal-links`.
+    if (wants("loteria-nadal")) published.push(await publishB2Article(LOTERIA_NADAL));
+    if (wants("loteria-nadal-links")) {
+      published.push(await publishB2Article(GROSSA), await publishB2Article(NEW_YEAR), await publishB2Article(CHRISTMAS_BARCELONA));
+    }
     // Rodalies live status (/ca/rodalies/ and the line pages are code routes,
     // not articles): the four guides that gained one body link to them.
     if (wants("rodalies-links")) {
