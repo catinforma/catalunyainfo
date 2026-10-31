@@ -89,6 +89,11 @@ const VERIFIED_2026: Record<string, string | null> = {
   "49è Pessebre Vivent parlat de les Gunyoles": "20, 25, 26 i 27 de desembre de 2026 i 1, 2 i 3 de gener de 2027, a les 18, 18.45 i 19.30 h",
   "Pessebre Vivent de l'Espluga de Francolí": "27, 28 i 29 de desembre de 2026 (es fa cada dos anys); entrades només anticipades, des del 22 de novembre a les 9 h",
   "33è Pessebre Vivent de la Torre del Suro": "21 de desembre de 2026 a les 18 h; entrada lliure, sense inscripció",
+  // Read on 31 Oct 2026 on pessebreviventsantfost.cat ("13, 19, 20, 25, 26 i 27 DE DESEMBRE '26",
+  // "1, 3, 6 i 10 DE GENER '27") and masiacastello.cat ("Els dies 5, 6, 12 i 13 de desembre",
+  // "Entrades Pessebre 2026"; 12 Dec is a Saturday in 2026, as the page says).
+  "Pessebre Vivent de Sant Fost de Campsentelles": "13, 19, 20, 25, 26 i 27 de desembre de 2026 i 1, 3, 6 i 10 de gener de 2027; uns 60 minuts; entrades només per internet (adults, 10 €)",
+  "Pessebre dels Estels": "5, 6, 12 i 13 de desembre de 2026, des de les 16.30 h, amb entrada per franges de mitja hora; entrades per internet (15 €; de 4 a 9 anys, 10 €)",
   "El Pessebre de Bàscara": null,
   "Pessebre Vivent dels Prats de Rei": null,
   "Pessebre Vivent de la Vila de Rupit": null,

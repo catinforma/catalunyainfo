@@ -54,6 +54,8 @@ export interface HolidayCopy {
   easterStatus: { maundy: string; holiday: string; exceptAran: string; sunday: string; barcelona: string };
   /** `{from}`, `{to}`: the school Easter holidays (Ordre EDF/66/2026). */
   easterSchool: string;
+  /** Printed only when Easter Sunday is also the March clock change (2027: 28 March). */
+  easterClockChange: string;
 
   /** Local holidays of other towns: when next year's appear, where this year's are. `{towns}`, `{count}` (how many towns have a page). */
   localTitle: string;
@@ -179,6 +181,8 @@ export const COPY: Record<Locale, HolidayCopy> = {
     },
     easterSchool:
       "Les vacances escolars de Setmana Santa van del {from} al {to}, tots dos inclosos (Ordre EDF/66/2026): tot el curs és al [calendari escolar 2026-2027](/ca/guies/calendari-escolar-catalunya/).",
+    easterClockChange:
+      "La matinada del Diumenge de Pasqua també hi ha el [canvi d'hora](/ca/guies/canvi-hora-catalunya/): a les 2 seran les 3, i es dorm una hora menys enmig del pont.",
 
     localTitle: "Festes locals del 2027: quan es publiquen",
     local: [
@@ -300,6 +304,8 @@ export const COPY: Record<Locale, HolidayCopy> = {
     },
     easterSchool:
       "Las vacaciones escolares de Semana Santa van del {from} al {to}, ambos incluidos (Orden EDF/66/2026): el curso entero está en el [calendario escolar 2026-2027](/es/guias/calendario-escolar-cataluna/).",
+    easterClockChange:
+      "La madrugada del Domingo de Pascua también es el [cambio de hora](/es/guias/cambio-hora-espana/): a las 2 serán las 3, y se duerme una hora menos en pleno puente.",
 
     localTitle: "Fiestas locales 2027: cuándo se publican",
     local: [
@@ -421,6 +427,8 @@ export const COPY: Record<Locale, HolidayCopy> = {
     },
     easterSchool:
       "School Easter holidays run from {from} to {to}, both included (Order EDF/66/2026): the whole year is in the [Catalonia school calendar 2026-2027](/en/guides/catalonia-school-calendar/).",
+    easterClockChange:
+      "Easter Sunday is also the night the [clocks change in Spain](/en/guides/clock-change-spain/): at 02:00 they go forward to 03:00, so you lose an hour in the middle of the long weekend.",
 
     localTitle: "Local holidays in 2027: when they are published",
     local: [
