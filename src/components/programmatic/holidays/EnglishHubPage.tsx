@@ -9,6 +9,7 @@ import { englishTowns, isLargestTown } from "@/lib/programmatic/holidays/english
 import { enName, englishHubCopy } from "@/lib/programmatic/holidays/english-copy";
 import { weekdayDayMonth } from "@/lib/programmatic/holidays/format";
 import { joinList } from "@/lib/programmatic/holidays/names";
+import { GUIDES } from "@/lib/programmatic/holidays/links";
 import { DATE_PAGES, datePath, hubPath, municipalityPath } from "@/lib/programmatic/holidays/paths";
 import type { SnapshotMunicipality } from "@/lib/programmatic/holidays/types";
 
@@ -84,6 +85,11 @@ export function EnglishHubPage() {
           <h2 id="catalonia-2027">{t.regionalTitle(NEXT)}</h2>
           <HolidayTable rows={regionalRows(NEXT)} locale="en" caption={t.regionalCaption(NEXT)} />
           {t.aran ? <p>{t.aran}</p> : null}
+          <p>
+            {t.bridges.before}
+            <Link href={GUIDES.bridges2027.en}>{t.bridges.label}</Link>
+            {t.bridges.after}
+          </p>
 
           <h2 id="towns">{t.townsTitle}</h2>
           <p>{t.townsLead}</p>

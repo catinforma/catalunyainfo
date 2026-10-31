@@ -72,7 +72,9 @@ export type B2Key =
   // 29 Oct 2026: the dedicated page for the 11 November 2026 general strike.
   | "strike11n"
   // 30 Oct 2026: La Grossa de Cap d'Any 2026 (draw and results, 31 Dec).
-  | "grossa";
+  | "grossa"
+  // 31 Oct 2026: every 2027 bridge and long weekend, computed from the order.
+  | "bridges2027";
 
 /** Path after the locale prefix, no leading or trailing slash. */
 export const B2_PATHS: Record<B2Key, Record<Locale, string>> = {
@@ -345,6 +347,13 @@ export const B2_PATHS: Record<B2Key, Record<Locale, string>> = {
     ca: "guies/la-grossa-cap-d-any",
     es: "guias/la-grossa-fin-de-ano",
     en: "guides/la-grossa-new-years-eve-lottery",
+  },
+  // Year in the path on purpose: "ponts 2027" is the search, and the 2028
+  // bridges will be a page of their own.
+  bridges2027: {
+    ca: "guies/ponts-2027-catalunya",
+    es: "guias/puentes-2027-cataluna",
+    en: "guides/long-weekends-2027-catalonia",
   },
 };
 
@@ -630,6 +639,11 @@ export const B2_TITLES: Record<B2Key, Record<Locale, string>> = {
     ca: "La Grossa de Cap d'Any 2026: resultats i premis",
     es: "La Grossa de Cap d'Any 2026: resultados y premios",
     en: "La Grossa de Cap d'Any 2026: results and prizes",
+  },
+  bridges2027: {
+    ca: "Ponts 2027 a Catalunya: quins dies demanar",
+    es: "Puentes 2027 en Cataluña: qué días pedir",
+    en: "Long weekends 2027 in Catalonia: days to book",
   },
 };
 

@@ -141,6 +141,7 @@ export const COPY: Record<Locale, HolidayCopy> = {
     bridgesIntro: [
       "Tot el que ve a continuació pressuposa una setmana laboral habitual de dilluns a divendres. No és una regla universal: torns, convenis i calendaris d'empresa poden canviar-ho del tot.",
       "Si el que busques és el pont d'enguany, el 2026 a Catalunya només és festiu el dimarts 8 de desembre: ho expliquem a [pont de desembre 2026](/ca/guies/pont-desembre-catalunya/).",
+      "Tots els ponts del 2027 en una sola taula, amb els dies de vacances que cal demanar i els ponts de les festes locals de les grans ciutats, són a [ponts 2027 a Catalunya](/ca/guies/ponts-2027-catalunya/).",
     ],
 
     efficiencyTitle: "Quins dies val més la pena demanar?",
@@ -262,6 +263,7 @@ export const COPY: Record<Locale, HolidayCopy> = {
     bridgesIntro: [
       "Todo lo que sigue presupone una semana laboral habitual de lunes a viernes. No es una regla universal: turnos, convenios y calendarios de empresa pueden cambiarlo por completo.",
       "Si lo que buscas es el puente de este año, en 2026 en Cataluña solo es festivo el martes 8 de diciembre: lo explicamos en [puente de diciembre 2026](/es/guias/puente-diciembre-cataluna/).",
+      "Todos los puentes de 2027 en una sola tabla, con los días de vacaciones que hay que pedir y los puentes de las fiestas locales de las grandes ciudades, están en [puentes 2027 en Cataluña](/es/guias/puentes-2027-cataluna/).",
     ],
 
     efficiencyTitle: "Qué días sale más a cuenta pedir",
@@ -383,6 +385,7 @@ export const COPY: Record<Locale, HolidayCopy> = {
     bridgesIntro: [
       "Everything below assumes a conventional Monday-to-Friday working week. It is not a universal rule: shifts, collective agreements and company calendars can change it entirely.",
       "If it is this year's December bridge you are after, in 2026 Catalonia's only holiday that week is Tuesday 8 December, as explained in [December 2026 public holidays in Catalonia](/en/guides/december-long-weekend-catalonia/).",
+      "Every 2027 long weekend in one table, with the days of leave to book and the long weekends the largest towns' local holidays add, is in [long weekends 2027 in Catalonia](/en/guides/long-weekends-2027-catalonia/).",
     ],
 
     efficiencyTitle: "Which days of leave go furthest",
