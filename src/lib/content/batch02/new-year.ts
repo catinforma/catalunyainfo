@@ -43,6 +43,10 @@ import {
  * the Anella Olímpica cite no official source, so no 2026 venue is printed
  * (research_notes/rank-all/review-4-bcn-sights.md).
  *
+ * 31 Oct 2026: the Reis section's cavalcada sentence (christmas-barcelona.ts)
+ * now ends with a link to the Three Kings parade page; this page goes out
+ * with `reis-2027-links`.
+ *
  * No new photograph: the hero is the Magic Fountain picture already in the
  * manifest (the Montjuïc guide's lead image), because the publisher refuses
  * an article without one.

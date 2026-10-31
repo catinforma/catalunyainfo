@@ -4,7 +4,11 @@ import { join } from "node:path";
 import { mock, test } from "node:test";
 
 import { bodySchema, bodyToPlainText, wordCount, type Block } from "../src/lib/content/blocks.ts";
+import { BARCELONA_DECEMBER } from "../src/lib/content/batch02/barcelona-december.ts";
+import { CHRISTMAS_BARCELONA } from "../src/lib/content/batch02/christmas-barcelona.ts";
+import { CHRISTMAS_TRADITIONS } from "../src/lib/content/batch02/christmas-traditions.ts";
 import { ANNOUNCED_2026, DAYS, PAST, dateYear, dayDate } from "../src/lib/content/batch02/festive.ts";
+import { NEW_YEAR } from "../src/lib/content/batch02/new-year.ts";
 import {
   ANNOUNCED_2027,
   BARCELONA_2026,
@@ -509,6 +513,16 @@ test("the server HTML does not depend on the clock: no clock read, same body on 
 /* -------------------------------------------------------------------------- */
 /* Links into the page and the publish route                                  */
 /* -------------------------------------------------------------------------- */
+
+test("Christmas in Barcelona, New Year's Eve, Christmas traditions and Barcelona in December each link here exactly once", () => {
+  for (const locale of LOCALES) {
+    const here = `](/${locale}/${B2_PATHS.reis[locale]}/)`;
+    for (const article of [CHRISTMAS_BARCELONA, NEW_YEAR, CHRISTMAS_TRADITIONS, BARCELONA_DECEMBER]) {
+      const count = JSON.stringify(article.editions[locale].blocks).split(here).length - 1;
+      assert.equal(count, 1, `${article.key}/${locale} -> reis: ${count} links`);
+    }
+  }
+});
 
 test("the publish route has the page's group and the links group, after the last batch02 group", () => {
   const route = readFileSync(new URL("../src/app/api/admin/publish/route.ts", import.meta.url), "utf8");
