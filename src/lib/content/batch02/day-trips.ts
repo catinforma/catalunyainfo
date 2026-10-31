@@ -1043,7 +1043,7 @@ export const CERDANYA: B2Article = {
           { question: "Hi ha bus a les pistes des de Puigcerdà?", answer: "La temporada 2025-26, el Bus Blanc va unir la Cerdanya amb la Molina i Masella els caps de setmana i festius escolars, a 2 €. El de 2026-27 encara no s'ha publicat." },
         ]),
         ...paras(verifiedLine("ca", CERDANYA_VERIFIED)),
-        ...b2Related(["nuria", "ski", "ripolles", "snow", "girona"], "ca"),
+        ...b2Related(["nuria", "ski", "andorra", "ripolles", "snow", "girona"], "ca"),
       ],
     },
 
@@ -1099,7 +1099,7 @@ export const CERDANYA: B2Article = {
           { question: "¿Hay autobús a las pistas desde Puigcerdà?", answer: "En la temporada 2025-26, el Bus Blanc unió la Cerdanya con La Molina y Masella los fines de semana y festivos escolares, a 2 €. El de 2026-27 aún no se ha publicado." },
         ]),
         ...paras(verifiedLine("es", CERDANYA_VERIFIED)),
-        ...b2Related(["nuria", "ski", "ripolles", "snow", "girona"], "es"),
+        ...b2Related(["nuria", "ski", "andorra", "ripolles", "snow", "girona"], "es"),
       ],
     },
 
@@ -1155,7 +1155,7 @@ export const CERDANYA: B2Article = {
           { question: "Is there a bus to the slopes from Puigcerdà?", answer: "In 2025-26 the Bus Blanc linked Cerdanya with La Molina and Masella at weekends and in school holidays, for €2. The 2026-27 service has not been published yet." },
         ]),
         ...paras(verifiedLine("en", CERDANYA_VERIFIED)),
-        ...b2Related(["nuria", "ski", "ripolles", "snow", "girona"], "en"),
+        ...b2Related(["nuria", "ski", "andorra", "ripolles", "snow", "girona"], "en"),
       ],
     },
   },

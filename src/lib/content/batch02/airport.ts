@@ -484,7 +484,7 @@ function body(locale: Locale): ReturnType<typeof paras> {
     ...h2(t.pickTitle),
     list(...t.pick),
     faq(t.faq),
-    ...b2Related(["barcelonaHub", "transport", "touristTax", "cruiseport", "hours"], locale),
+    ...b2Related(["barcelonaHub", "transport", "touristTax", "cruiseport", "hours", "andorra"], locale),
   ];
 }
 

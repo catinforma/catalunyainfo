@@ -489,9 +489,9 @@ export const B2_TITLES: Record<B2Key, Record<Locale, string>> = {
     en: "Tibidabo: amusement park and how to get there",
   },
   andorra: {
-    ca: "Andorra des de Barcelona en autobús",
-    es: "Andorra desde Barcelona en autobús",
-    en: "Andorra from Barcelona by bus",
+    ca: "Autobús de Barcelona a Andorra: horaris i preus",
+    es: "Autobús de Barcelona a Andorra: horarios y precios",
+    en: "Barcelona to Andorra bus: timetable and fares",
   },
   figueres: {
     ca: "Figueres i el Museu Dalí des de Barcelona",
