@@ -1,6 +1,6 @@
 import { EN_LARGEST, EN_RESORTS, TOURISM_REGISTER } from "@/lib/programmatic/elections/english";
 
-import { councilLabel, councilSource, type CouncilSource } from "./copy";
+import { bridgesLine, councilLabel, councilSource, type CouncilSource } from "./copy";
 import type { CouncilApproved } from "./council-2027";
 import { NEXT, SNAPSHOT, YEAR, aranSwap, councilApproved2027, isAran, regionalDays } from "./data";
 import { dateContent } from "./dates";
@@ -446,6 +446,7 @@ export function englishHubCopy() {
     editions: `The Catalan and Spanish editions cover all ${SNAPSHOT.municipalities.length} towns with local holidays in ${YEAR}, with a table for each comarca:`,
     next: `The local holidays for ${NEXT} have not been published yet; the order for ${YEAR} appeared in the DOGC on 17 December 2025.${councilLine(towns)}`,
     easter: `Which days are public holidays over Easter 2027, the school Easter break and the local holidays next to it: [Easter 2027 in Catalonia](${GUIDES.easter2027.en}).`,
+    bridges: bridgesLine("en"),
     datesTitle: "Is it a public holiday on…?",
     guidesTitle: "More on public holidays",
     sourcesTitle: "Sources",

@@ -18,6 +18,7 @@ export const GUIDES = {
   castanyada: { ca: "/ca/tradicions/castanyada-catalunya/", es: "/es/tradiciones/castanyada-cataluna/", en: "/en/traditions/castanyada-catalonia/" },
   strikes: { ca: "/ca/guies/vaga-avui-catalunya/", es: "/es/guias/huelga-hoy-cataluna/", en: "/en/guides/strike-barcelona-catalonia-today/" },
   easter2027: { ca: "/ca/guies/setmana-santa-2027-catalunya/", es: "/es/guias/semana-santa-2027-cataluna/", en: "/en/guides/easter-2027-catalonia/" },
+  bridges2027: { ca: "/ca/guies/ponts-2027-catalunya/", es: "/es/guias/puentes-2027-cataluna/", en: "/en/guides/long-weekends-2027-catalonia/" },
 } as const satisfies Record<string, Record<DateLocale, string>>;
 
 export type GuideKey = keyof typeof GUIDES;

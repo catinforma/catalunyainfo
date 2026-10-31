@@ -55,6 +55,7 @@ import { STRIKES_GUIDE } from "@/lib/content/batch02/strikes";
 import { STRIKE_11N } from "@/lib/content/batch02/strike-11n";
 import { GROSSA } from "@/lib/content/batch02/grossa";
 import { EASTER_2027 } from "@/lib/content/batch02/easter-2027";
+import { BRIDGES_2027 } from "@/lib/content/batch02/bridges-2027";
 import { publishHolidayTodayGuide } from "@/lib/content/holidays/today-publish";
 import { publishLocalHolidaysGuide } from "@/lib/content/holidays/local-publish";
 import { publishReservoirGuide } from "@/lib/content/reservoirs/publish";
@@ -196,6 +197,16 @@ export async function POST(request: Request) {
     // it. The work calendar and school calendar guides gained one sentence
     // linking to it; they go out once with `holidays` and `school-calendar`.
     if (wants("setmana-santa-2027")) published.push(await publishB2Article(EASTER_2027));
+    // Ponts / puentes 2027: every bridge computed from Ordre EMT/52/2026, and
+    // the local bridges of the largest towns. On its own so the day the DOGC
+    // local order is parsed (local-2027.json), a deploy plus this group
+    // switches its town table from the councils' days to the order's.
+    if (wants("ponts-2027")) published.push(await publishB2Article(BRIDGES_2027));
+    // The two existing pages that gained one sentence linking to it (the
+    // December bridge and the work calendar); goes out once, on its own, so a
+    // refresh of the 2027 page never republishes them. The holidays hubs are
+    // code routes: their sentence ships with the deploy.
+    if (wants("ponts-2027-links")) published.push(await publishB2Article(DECEMBER_BRIDGE), await publishHolidayGuide());
     // Rodalies live status (/ca/rodalies/ and the line pages are code routes,
     // not articles): the four guides that gained one body link to them.
     if (wants("rodalies-links")) {

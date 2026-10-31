@@ -1,5 +1,6 @@
 import type { Block } from "@/lib/content/blocks";
-import { addDays, daysBetween, holidayOn, weekdayIndex } from "@/lib/content/holidays/calendar";
+import { plansFor } from "@/lib/content/holidays/bridges";
+import { HOLIDAYS_BY_YEAR, addDays, daysBetween, holidayOn, shortDate, weekdayIndex } from "@/lib/content/holidays/calendar";
 import type { Locale } from "@/lib/i18n/config";
 import { fairsHubPath } from "@/lib/programmatic/christmas-fairs/paths";
 
@@ -221,6 +222,38 @@ function joinList(items: readonly string[], locale: Locale, or = false): string 
   return items.length <= 1 ? items.join("") : `${items.slice(0, -1).join(", ")}${and}${items[items.length - 1]}`;
 }
 
+/**
+ * December 2027, in the one sentence that sends readers on to the 2027
+ * bridges page (31 Oct 2026). Computed from Ordre EMT/52/2026 by
+ * `holidays/bridges.ts`. No weekday is printed next to a day number: the
+ * weekday check below reads every such pair on this page as December 2026.
+ */
+export function nextDecemberLine(locale: Locale): string {
+  const year = HOLIDAYS_BY_YEAR[2027] ?? [];
+  const best = plansFor(year.map((h) => h.date))
+    .filter((p) => p.date.startsWith("2027-12") && p.plan && p.plan.take.length > 0)
+    .map((p) => p.plan!)
+    .sort((a, b) => a.take.length - b.take.length || b.days - a.days)[0];
+  if (!best) return "";
+  const weekdays = year.map((h) => h.date).filter((d) => d >= best.from && d <= best.to && weekdayIndex(d) !== 0 && weekdayIndex(d) !== 6);
+  const wd = (iso: string) => WEEKDAYS[locale][weekdayIndex(iso)] ?? "";
+  // "el 7" / "l'11" / "el 7" / "the 7th".
+  const the = (iso: string) => {
+    const n = Number(iso.slice(8, 10));
+    if (locale === "en") return `the ${n}${n % 10 === 1 && n !== 11 ? "st" : n % 10 === 2 && n !== 12 ? "nd" : n % 10 === 3 && n !== 13 ? "rd" : "th"}`;
+    return `${locale === "ca" && (n === 1 || n === 11) ? "l'" : "el "}${n}`;
+  };
+  const falls = weekdays.map((d, i) => {
+    if (i > 0) return locale === "en" ? `${the(d)} on a ${wd(d)}` : `${the(d)}, en ${wd(d)}`;
+    return { ca: `${shortDate(d, "ca").match(/^(1|11) /) ? "l'" : "el "}${shortDate(d, "ca")} cau en ${wd(d)}`, es: `el ${shortDate(d, "es")} cae en ${wd(d)}`, en: `${shortDate(d, "en")} falls on a ${wd(d)}` }[locale];
+  });
+  const take = joinList(best.take.map(the), locale);
+  const link = b2link("bridges2027", locale, { ca: "ponts 2027 a Catalunya", es: "puentes 2027 en Cataluña", en: "long weekends 2027 in Catalonia" }[locale]);
+  if (locale === "ca") return `El 2027 el pont torna: ${joinList(falls, "ca")}, de manera que demanant ${take} tindràs ${best.days} dies seguits; tots els ponts de l'any són a ${link}.`;
+  if (locale === "es") return `En 2027 el puente vuelve: ${joinList(falls, "es")}, así que pidiendo ${take} tendrás ${best.days} días seguidos; todos los puentes del año están en ${link}.`;
+  return `In 2027 the bridge is back: ${joinList(falls, "en")}, so taking ${take} off gives ${best.days} days in a row; every long weekend of the year is in ${link}.`;
+}
+
 /* -------------------------------------------------------------------------- */
 /* Paths that are not in the batch-02 registry                                */
 /* -------------------------------------------------------------------------- */
@@ -363,6 +396,7 @@ export function buildDecemberBridgeBody(locale: Locale): Block[] {
       optionTable("ca"),
       ...paras(
         "Sense demanar cap dia, el dimarts 8 queda sol entre dos dies feiners. Per Nadal no cal demanar res per tenir tres dies: el 25 és divendres i el 26, dissabte.",
+        nextDecemberLine("ca"),
       ),
       ...h2(
         "I a la resta d'Espanya? On el dilluns 7 sí que és festiu",
@@ -448,6 +482,7 @@ export function buildDecemberBridgeBody(locale: Locale): Block[] {
       optionTable("es"),
       ...paras(
         "Sin pedir ningún día, el martes 8 queda suelto entre dos laborables. En Navidad no hace falta pedir nada para tener tres días: el 25 es viernes y el 26, sábado.",
+        nextDecemberLine("es"),
       ),
       ...h2(
         "¿Y en el resto de España? Dónde el lunes 7 sí es festivo",
@@ -532,6 +567,7 @@ export function buildDecemberBridgeBody(locale: Locale): Block[] {
     optionTable("en"),
     ...paras(
       "Without booking anything, Tuesday the 8th is a single day off between two working days. At Christmas you get three days without booking any: the 25th is a Friday and the 26th a Saturday.",
+      nextDecemberLine("en"),
     ),
     ...h2(
       "What about the rest of Spain? Where Monday the 7th is a holiday",

@@ -7,6 +7,7 @@ import { HUB_VISIBLE, dateQuestion, displayName, hubCopy } from "@/lib/programma
 import { SNAPSHOT, byComarca } from "@/lib/programmatic/holidays/data";
 import { dayMonth } from "@/lib/programmatic/holidays/format";
 import { esName, joinList } from "@/lib/programmatic/holidays/names";
+import { GUIDES } from "@/lib/programmatic/holidays/links";
 import { DATE_PAGES, comarcaAnchor, comarcaPath, datePath, hubPath, municipalityPath, type MuniLocale } from "@/lib/programmatic/holidays/paths";
 
 import { GuideLinks, Sources } from "./parts";
@@ -44,6 +45,9 @@ export function HubPage({ locale }: { locale: MuniLocale }) {
         <div className="ci-prose">
           <p>
             {t.population} {t.next}
+            {t.bridges.before}
+            <Link href={GUIDES.bridges2027[locale]}>{t.bridges.label}</Link>
+            {t.bridges.after}
           </p>
           <p>{renderInline(t.easter)}</p>
         </div>

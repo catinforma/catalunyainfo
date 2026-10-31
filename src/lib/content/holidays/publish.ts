@@ -30,6 +30,7 @@ import { datePath, isDatePage } from "@/lib/programmatic/holidays/paths";
 import { largestTownLinks, townPageCount } from "@/lib/programmatic/holidays/towns";
 import { COPY, type HolidayCopy } from "./copy";
 import { HOLIDAYS_BY_YEAR, addDays, longDate } from "./calendar";
+import { DIADA_IMAGE, SANT_JOAN_IMAGE } from "./images";
 
 /**
  * The public holiday guide.
@@ -45,8 +46,8 @@ import { HOLIDAYS_BY_YEAR, addDays, longDate } from "./calendar";
 
 export const ENTRY_KEY = "guide-public-holidays-catalonia";
 
-const HERO_KEY = "calendari-laboral-catalunya-diada";
-const SECOND_KEY = "calendari-laboral-catalunya-sant-joan";
+const HERO_KEY = DIADA_IMAGE.key;
+const SECOND_KEY = SANT_JOAN_IMAGE.key;
 
 const IMAGE_BY_KEY = new Map(IMAGES.map((image) => [image.key, image]));
 
@@ -374,29 +375,12 @@ export function buildBody(locale: Locale, inlineMediaId?: string): Block[] {
 /* Images                                                                     */
 /* -------------------------------------------------------------------------- */
 
-const HERO_ALT: Record<Locale, string> = {
-  ca: "Ofrena floral durant la Diada Nacional de Catalunya, amb rams de colors al peu del monument",
-  es: "Ofrenda floral durante la Diada Nacional de Cataluña, con ramos de colores al pie del monumento",
-  en: "Flowers laid at a monument during the Diada, Catalonia's national day",
-};
-
-const HERO_CAPTION: Record<Locale, string> = {
-  ca: "L'11 de setembre, la Diada, és un dels dotze festius de tot Catalunya.",
-  es: "El 11 de septiembre, la Diada, es uno de los doce festivos de toda Cataluña.",
-  en: "11 September, the Diada, is one of the twelve holidays kept across Catalonia.",
-};
-
-const SECOND_ALT: Record<Locale, string> = {
-  ca: "Foguera i focs de la revetlla de Sant Joan en un carrer de Barcelona, de nit",
-  es: "Hoguera y fuegos de la verbena de Sant Joan en una calle de Barcelona, de noche",
-  en: "A Sant Joan bonfire and fireworks in a Barcelona street at night",
-};
-
-const SECOND_CAPTION: Record<Locale, string> = {
-  ca: "La revetlla es fa la nit del 23, però el festiu és el 24 de juny.",
-  es: "La verbena es la noche del 23, pero el festivo es el 24 de junio.",
-  en: "The party is the night of the 23rd; the public holiday is 24 June.",
-};
+// Alt text and captions live in `./images`, shared with the 2027 bridges page
+// (media rows are keyed by file, so both pages must send the same words).
+const HERO_ALT = DIADA_IMAGE.alt;
+const HERO_CAPTION = DIADA_IMAGE.caption;
+const SECOND_ALT = SANT_JOAN_IMAGE.alt;
+const SECOND_CAPTION = SANT_JOAN_IMAGE.caption;
 
 function imageSpecs(): ImageSpec[] {
   const specs: ImageSpec[] = [];

@@ -1,3 +1,6 @@
+import { bridgeCount } from "@/lib/content/holidays/bridges";
+import { CATALONIA_HOLIDAYS, YEAR as PLANNER_YEAR } from "@/lib/content/holidays/payload";
+
 import type { CouncilApproved } from "./council-2027";
 import { NEXT, SNAPSHOT, YEAR, councilApproved2027, councilApprovedTowns, isAran, regionalDays, sharedDates, type ComarcaGroup } from "./data";
 import { LOCAL_DATE_PAGES } from "./dates";
@@ -619,6 +622,18 @@ function councilCountLine(locale: MuniLocale): string {
     : ` ${n} ayuntamientos ya han aprobado los suyos, pendientes de la orden: los da la página de cada municipio.`;
 }
 
+/**
+ * One sentence to the 2027 bridges page, with the number of bridges it
+ * counts (computed from the same twelve dates). The link itself is
+ * `GUIDES.bridges2027`; the hub renders `before`, the link, `after`.
+ */
+export function bridgesLine(locale: DateLocale): { before: string; label: string; after: string } {
+  const n = bridgeCount(CATALONIA_HOLIDAYS.map((h) => h.date));
+  if (locale === "ca") return { before: ` Els festius de tot Catalunya del ${PLANNER_YEAR} deixen ${n} ponts: els tens tots, amb els dies de vacances que cal demanar, a `, label: `ponts ${PLANNER_YEAR} a Catalunya`, after: "." };
+  if (locale === "es") return { before: ` Los festivos de toda Cataluña de ${PLANNER_YEAR} dejan ${n} puentes: los tienes todos, con los días de vacaciones que hay que pedir, en `, label: `puentes ${PLANNER_YEAR} en Cataluña`, after: "." };
+  return { before: `The ${PLANNER_YEAR} Catalonia-wide holidays make ${n} long weekends: all of them, with the days of leave to book, are in `, label: `long weekends ${PLANNER_YEAR} in Catalonia`, after: "." };
+}
+
 export function hubCopy(locale: MuniLocale) {
   const count = SNAPSHOT.municipalities.length;
   const excluded = SNAPSHOT.excluded.length;
@@ -636,6 +651,7 @@ export function hubCopy(locale: MuniLocale) {
       population: `Dins de cada comarca, els municipis van per població a 1 de gener de ${SNAPSHOT.sources.population.year} (Idescat).`,
       next: `Els festius locals del ${NEXT} encara no s'han publicat; l'ordre del ${YEAR} va sortir al DOGC el 17 de desembre de 2025.${councilCountLine("ca")}`,
       easter: `Quins dies són festius per Setmana Santa del 2027, les vacances escolars i les festes locals que hi toquen: [Setmana Santa 2027 a Catalunya](${GUIDES.easter2027.ca}).`,
+      bridges: bridgesLine("ca"),
       towns: (n: number) => (n === 1 ? "1 municipi" : `${n} municipis`),
       table: (comarca: string, n: number) => comarcaLinkLabel(comarca, n, "ca"),
       more: (n: number) => (n === 1 ? "1 municipi més" : `${n} municipis més`),
@@ -657,6 +673,7 @@ export function hubCopy(locale: MuniLocale) {
     population: `Dentro de cada comarca, los municipios van por población a 1 de enero de ${SNAPSHOT.sources.population.year} (Idescat).`,
     next: `Los festivos locales de ${NEXT} todavía no se han publicado; la orden de ${YEAR} salió en el DOGC el 17 de diciembre de 2025.${councilCountLine("es")}`,
     easter: `Qué días son festivos en Semana Santa de 2027, las vacaciones escolares y las fiestas locales que caen junto a ella: [Semana Santa 2027 en Cataluña](${GUIDES.easter2027.es}).`,
+    bridges: bridgesLine("es"),
     towns: (n: number) => (n === 1 ? "1 municipio" : `${n} municipios`),
     table: (comarca: string, n: number) => comarcaLinkLabel(comarca, n, "es"),
     more: (n: number) => (n === 1 ? "1 municipio más" : `${n} municipios más`),
