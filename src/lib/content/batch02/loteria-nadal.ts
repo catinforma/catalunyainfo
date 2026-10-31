@@ -371,6 +371,7 @@ const U = {
   nowOn: "https://www.loteriasyapuestas.es/es/apostar-online",
   collect: "https://www.loteriasyapuestas.es/es/centro-de-ayuda/informacion-sobre/como-cobrar-premios-red-presencial",
   online: "https://www.loteriasyapuestas.es/es/centro-de-ayuda/premios/que-tengo-que-hacer-si-tengo-premio",
+  notify: "https://www.loteriasyapuestas.es/es/centro-de-ayuda/premios/como-se-si-tengo-premio",
   tax: "https://www.loteriasyapuestas.es/es/centro-de-ayuda/premios/como-tributan-los-premios-de-selae",
   minors: "https://www.selae.es/es/web-corporativa/responsabilidad-social/gestion-responsable-del-juego/primera-regla-del-juego-18-anos/primera-regla-del-juego-18-anos",
   dossier2025: "https://www.selae.es/f/loterias/documentos/Loter%C3%ADa%20Nacional/Dossier%20de%20prensa/DOSSIER%20NAVIDAD%202025.pdf",
@@ -396,6 +397,7 @@ const BASE_SOURCES: B2Source[] = [
   { name: "Ahora en juego", url: U.nowOn, publisher: "SELAE" },
   { name: "¿Cómo cobro los premios de resguardos comprados en la Red Comercial?", url: U.collect, publisher: "SELAE" },
   { name: "¿Qué tengo que hacer si tengo premio de una apuesta comprada en el canal online?", url: U.online, publisher: "SELAE" },
+  { name: "¿Cómo sé si tengo premio?", url: U.notify, publisher: "SELAE" },
   { name: "¿Cómo tributan los premios de SELAE?", url: U.tax, publisher: "SELAE" },
   { name: "Primera regla del juego: +18 años", url: U.minors, publisher: "SELAE" },
   { name: "Dossier de prensa del Sorteo Extraordinario de Navidad 2025", url: U.dossier2025, publisher: "SELAE" },
@@ -710,14 +712,14 @@ const COPY: Record<Locale, Copy> = {
     check: [
       `**Al web de SELAE:** la ${link(U.lnac, "pàgina de la Loteria Nacional")} té un comprovador de números.`,
       `**A la llista oficial de premis:** és l'única que val per cobrar, i el 2025 SELAE la va penjar al seu web la mateixa tarda del sorteig. Hi surten la pedrea, les aproximacions (marcades amb una a), les centenes (c) i les terminacions (t).`,
-      `**Si l'has comprat per internet,** SELAE t'avisa per correu electrònic i SMS, i els premis de menys de 2.000 € s'ingressen sols al moneder del teu compte (${link(U.online, "SELAE")}).`,
+      `**Si l'has comprat per internet,** SELAE t'avisa per correu electrònic i SMS, i els premis de menys de 2.000 € s'ingressen sols al moneder del teu compte (${link(U.notify, "SELAE")}).`,
     ],
     claimHeading: "On es cobren els premis de la loteria de Nadal",
     claim: [
       "**Menys de 2.000 € per dècim:** a qualsevol punt de venda de SELAE. El 2025 es podien cobrar en efectiu o per Bizum.",
       "**2.000 € o més:** només a les oficines de BBVA i de CaixaBank. No cal ser-ne client, no es paga comissió i cal el document d'identitat original i vigent; SELAE recomana demanar cita prèvia.",
       "**Dècim compartit:** per cobrar 2.000 € o més hi han d'anar tots els titulars a identificar-se, o un representant amb poders atorgats davant notari.",
-      "**Comprat per internet:** menys de 2.000 €, al moneder automàticament (si passa del saldo màxim de 400 €, al teu compte bancari); 2.000 € o més, per transferència, després de verificar el compte.",
+      `**Comprat per internet:** menys de 2.000 €, al moneder automàticament (si passa del saldo màxim de 400 €, al teu compte bancari); 2.000 € o més, per transferència, després de verificar el compte (${link(U.online, "SELAE")}).`,
     ],
     claimAfter: [
       `**Quan:** el 2025, SELAE va començar a pagar la tarda del mateix 22 de desembre, en acabar les verificacions. **Termini:** el dret a cobrar caduca als tres mesos comptats des de l'endemà del sorteig, segons la ${link(U.list2025, "llista oficial")}; per al sorteig del 2025, l'últim dia va ser el 23 de març de 2026.`,
@@ -915,14 +917,14 @@ const COPY: Record<Locale, Copy> = {
     check: [
       `**En la web de SELAE:** la ${link(U.lnac, "página de la Lotería Nacional")} tiene un comprobador de números.`,
       "**En la lista oficial de premios:** es la única que vale para cobrar, y en 2025 SELAE la colgó en su web la misma tarde del sorteo. Ahí están la pedrea, las aproximaciones (marcadas con una a), las centenas (c) y las terminaciones (t).",
-      `**Si lo compraste por internet,** SELAE te avisa por correo electrónico y SMS, y los premios de menos de 2.000 € se ingresan solos en el monedero de tu cuenta (${link(U.online, "SELAE")}).`,
+      `**Si lo compraste por internet,** SELAE te avisa por correo electrónico y SMS, y los premios de menos de 2.000 € se ingresan solos en el monedero de tu cuenta (${link(U.notify, "SELAE")}).`,
     ],
     claimHeading: "Dónde se cobran los premios de la Lotería de Navidad",
     claim: [
       "**Menos de 2.000 € por décimo:** en cualquier punto de venta de SELAE. En 2025 se podían cobrar en efectivo o por Bizum.",
       "**2.000 € o más:** solo en las oficinas de BBVA y de CaixaBank. No hace falta ser cliente, no se paga comisión y hay que llevar el documento de identidad original y en vigor; SELAE recomienda pedir cita previa.",
       "**Décimo compartido:** para cobrar 2.000 € o más tienen que ir todos los titulares a identificarse, o un representante con poderes otorgados ante notario.",
-      "**Comprado por internet:** menos de 2.000 €, en el monedero automáticamente (si supera el saldo máximo de 400 €, en tu cuenta bancaria); 2.000 € o más, por transferencia, tras verificar la cuenta.",
+      `**Comprado por internet:** menos de 2.000 €, en el monedero automáticamente (si supera el saldo máximo de 400 €, en tu cuenta bancaria); 2.000 € o más, por transferencia, tras verificar la cuenta (${link(U.online, "SELAE")}).`,
     ],
     claimAfter: [
       `**Cuándo:** en 2025, SELAE empezó a pagar la tarde del mismo 22 de diciembre, al terminar las verificaciones. **Plazo:** el derecho a cobrar caduca a los tres meses contados desde el día siguiente al sorteo, según la ${link(U.list2025, "lista oficial")}; para el sorteo de 2025, el último día fue el 23 de marzo de 2026.`,
@@ -1120,14 +1122,14 @@ const COPY: Record<Locale, Copy> = {
     check: [
       `**On SELAE's website:** the ${link(U.lnac, "Lotería Nacional page")} has a number checker.`,
       "**On the official prize list:** the only one that counts for payment; in 2025 SELAE posted it on its website on the afternoon of the draw. It includes the pedrea, the numbers next to the big prizes (marked a), the hundreds (c) and the endings (t).",
-      `**If you bought online,** SELAE tells you by email and SMS, and prizes under €2,000 are paid into your account's wallet automatically (${link(U.online, "SELAE")}).`,
+      `**If you bought online,** SELAE tells you by email and SMS, and prizes under €2,000 are paid into your account's wallet automatically (${link(U.notify, "SELAE")}).`,
     ],
     claimHeading: "Where to collect a Christmas Lottery prize",
     claim: [
       "**Under €2,000 per décimo:** at any SELAE outlet. In 2025 they could be paid in cash or by Bizum.",
       "**€2,000 or more:** only at BBVA and CaixaBank branches. You do not need to be a customer, there is no fee, and you must bring a valid original ID; SELAE recommends booking an appointment.",
       "**Shared décimo:** to collect €2,000 or more, every holder must go to identify themselves, or appoint a representative with powers granted before a notary.",
-      "**Bought online:** under €2,000, into your wallet automatically (anything above the €400 maximum balance goes to your bank account); €2,000 or more, by bank transfer once the account is verified.",
+      `**Bought online:** under €2,000, into your wallet automatically (anything above the €400 maximum balance goes to your bank account); €2,000 or more, by bank transfer once the account is verified (${link(U.online, "SELAE")}).`,
     ],
     claimAfter: [
       `**When:** in 2025 SELAE began paying on the afternoon of 22 December itself, once the checks were complete. **Deadline:** the right to collect expires three months after the day following the draw, according to the ${link(U.list2025, "official list")}; for the 2025 draw, the last day was 23 March 2026.`,

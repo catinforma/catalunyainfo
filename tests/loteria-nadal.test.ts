@@ -358,7 +358,7 @@ test("known answers: where to buy, check and collect, from SELAE's pages", () =>
   for (const locale of LOCALES) {
     const all = body(locale);
     for (const pattern of claims[locale]) assert.match(all, pattern, `${locale}: ${pattern}`);
-    for (const url of [NADAL_URLS.collect, NADAL_URLS.online, NADAL_URLS.play, NADAL_URLS.minors, NADAL_URLS.list2025]) {
+    for (const url of [NADAL_URLS.collect, NADAL_URLS.online, NADAL_URLS.notify, NADAL_URLS.play, NADAL_URLS.minors, NADAL_URLS.list2025]) {
       assert.ok(json(locale).includes(`](${url})`), `${locale}: no link to ${url}`);
     }
   }
