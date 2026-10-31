@@ -49,6 +49,17 @@ import {
  * (tests/living-nativities-guide.test.ts). Re-check the pending four in
  * November, and replace the whole table for the 2027-28 season.
  *
+ * 31 Oct 2026 (striking-distance push): two more added from their own sites,
+ * Sant Fost de Campsentelles (dates with '26/'27, 60 minutes, online only,
+ * adults 10 EUR; no edition printed, the page gives none) and the Pessebre
+ * dels Estels at the Masia de Castelló (5, 6, 12, 13 Dec, "Entrades Pessebre
+ * 2026", access from 16.30, half-hour slots, 15/10 EUR). Castelló links to its
+ * tickets page: its home page carried an unrelated betting promotion. The
+ * pending four still showed 2025-26 (els Prats de Rei's "54a" and "Feliç
+ * 2026" are last season's). Castell d'Aro's site did not load; Navata and
+ * Celrà had nothing for 2026-27. The open-data agenda had no living nativity
+ * for 2026-27 yet and the federation no 2026-27 list.
+ *
  * The lead image reuses the Christmas markets guide's photograph of nativity
  * figures, with the same alt text and caption: the publisher requires a lead
  * photo, the media row is keyed by file, and identical wording keeps the
@@ -171,6 +182,30 @@ export const KNOWN: Known[] = [
     publisher: "Pessebre Vivent de la Torre del Suro",
   },
   {
+    name: "Pessebre Vivent de Sant Fost de Campsentelles",
+    place: "Sant Fost de Campsentelles (Vallès Oriental)",
+    dates: {
+      ca: "13, 19, 20, 25, 26 i 27 de desembre de 2026 i 1, 3, 6 i 10 de gener de 2027; uns 60 minuts; entrades només per internet (adults, 10 €)",
+      es: "13, 19, 20, 25, 26 y 27 de diciembre de 2026 y 1, 3, 6 y 10 de enero de 2027; unos 60 minutos; entradas solo por internet (adultos, 10 €)",
+      en: "13, 19, 20, 25, 26 and 27 December 2026 and 1, 3, 6 and 10 January 2027; about 60 minutes; tickets online only (adults €10)",
+    },
+    url: "https://www.pessebreviventsantfost.cat/",
+    label: "pessebreviventsantfost.cat",
+    publisher: "Pessebre Vivent de Sant Fost de Campsentelles",
+  },
+  {
+    name: "Pessebre dels Estels",
+    place: "Masia de Castelló, Vandellòs i l'Hospitalet de l'Infant (Baix Camp)",
+    dates: {
+      ca: "5, 6, 12 i 13 de desembre de 2026, des de les 16.30 h, amb entrada per franges de mitja hora; entrades per internet (15 €; de 4 a 9 anys, 10 €)",
+      es: "5, 6, 12 y 13 de diciembre de 2026, desde las 16.30 h, con entrada por franjas de media hora; entradas por internet (15 €; de 4 a 9 años, 10 €)",
+      en: "5, 6, 12 and 13 December 2026, from 16:30, entry in half-hour slots; tickets online (€15; ages 4 to 9, €10)",
+    },
+    url: "https://www.masiacastello.cat/entrades-del-pessebre/",
+    label: "masiacastello.cat",
+    publisher: "Masia de Castelló",
+  },
+  {
     name: "El Pessebre de Bàscara",
     place: "Bàscara (Alt Empordà)",
     dates: null,
@@ -222,9 +257,9 @@ function knownTable(locale: Locale): Block {
     en: ["Living nativity", "Where", "2026-27 season", "Official website"],
   };
   const note: Record<Locale, string> = {
-    ca: "Dates del web oficial de cada organitzador o ajuntament, comprovades el 25 d'octubre de 2026. «Pendent» vol dir que encara no han publicat les de la temporada 2026-27: no hi posem les de l'any passat.",
-    es: "Fechas de la web oficial de cada organizador o ayuntamiento, comprobadas el 25 de octubre de 2026. «Pendiente» significa que aún no han publicado las de la temporada 2026-27: no ponemos las del año pasado.",
-    en: "Dates from each organiser's or town council's official website, checked on 25 October 2026. \"Not yet published\" means the 2026-27 dates are not out yet: we do not repeat last year's.",
+    ca: "Dates del web oficial de cada organitzador o ajuntament, comprovades el 25 d'octubre de 2026 (Sant Fost, el Pessebre dels Estels i els pendents, el 31 d'octubre). «Pendent» vol dir que encara no han publicat les de la temporada 2026-27: no hi posem les de l'any passat.",
+    es: "Fechas de la web oficial de cada organizador o ayuntamiento, comprobadas el 25 de octubre de 2026 (Sant Fost, el Pessebre dels Estels y los pendientes, el 31 de octubre). «Pendiente» significa que aún no han publicado las de la temporada 2026-27: no ponemos las del año pasado.",
+    en: "Dates from each organiser's or town council's official website, checked on 25 October 2026 (Sant Fost, the Pessebre dels Estels and the pending ones on 31 October). \"Not yet published\" means the 2026-27 dates are not out yet: we do not repeat last year's.",
   };
   const rows = KNOWN.map((item) => [item.name, item.place, item.dates?.[locale] ?? PENDING[locale], `[${item.label}](${item.url})`]);
   return table(caption[locale], headers[locale], rows, note[locale]);
@@ -270,7 +305,7 @@ function body(locale: Locale): Block[] {
   if (locale === "ca") {
     return [
       lead(
-        "Els **pessebres vivents 2026** de Catalunya apareixen al calendari d'aquí sota a mesura que els organitzadors els publiquen a l'Agenda Cultural de la Generalitat, que es llegeix cada dia: només hi surten els que encara no han acabat, amb poble, comarca, dates i l'enllaç a la fitxa oficial. Dels més coneguts, el de Corbera de Llobregat comença el 28 de novembre, i Tona, les Torres de Fals, Sant Guim de la Plana, les Gunyoles i l'Espluga de Francolí ja han publicat els seus dies (taula de sota).",
+        "**Els primers pessebres vivents 2026 a Catalunya** són el de Corbera de Llobregat, que comença el 28 de novembre, i el Pessebre dels Estels de la Masia de Castelló (Vandellòs), el 5, 6, 12 i 13 de desembre. Sant Fost de Campsentelles, Tona, les Torres de Fals, Sant Guim de la Plana, les Gunyoles, l'Espluga de Francolí i la Torre del Suro, a Barcelona, també han publicat els seus dies (taula de sota). El calendari d'aquí sota afegeix cada pessebre vivent quan l'organitzador el publica a l'Agenda Cultural de la Generalitat, que es llegeix cada dia: només hi surten els que encara no han acabat, amb poble, comarca, dates i l'enllaç a la fitxa oficial.",
       ),
       LIVE,
       callout(
@@ -301,7 +336,7 @@ function body(locale: Locale): Block[] {
       ...h2(
         "Cal entrada per veure un pessebre vivent?",
         "Gairebé sempre. Dels 44 pessebres vivents de la temporada 2025-26 a l'agenda, només 3 eren gratuïts (Celrà, la Seu d'Urgell i Fornells de la Selva) i 3 més demanaven un donatiu; la resta cobraven entrada, i 22 tenien un enllaç de venda d'entrades a la fitxa.",
-        "Cada organitzador ho fa a la seva manera. Aquesta temporada, Corbera de Llobregat i Sant Guim de la Plana venen les entrades només per internet; l'Espluga de Francolí, només anticipades i a partir del 22 de novembre; Tona, només a taquilla, i el de la Torre del Suro, a Barcelona, és d'entrada lliure. Els preus i les condicions són al web de cada un: mira-ho abans d'anar-hi.",
+        "Cada organitzador ho fa a la seva manera. Aquesta temporada, Corbera de Llobregat, Sant Guim de la Plana i Sant Fost de Campsentelles venen les entrades només per internet; l'Espluga de Francolí, només anticipades i a partir del 22 de novembre; Tona, només a taquilla, i el de la Torre del Suro, a Barcelona, és d'entrada lliure. Els preus i les condicions són al web de cada un: mira-ho abans d'anar-hi.",
         "La temporada passada, gairebé tots es feien a la tarda o al vespre, molts per passis amb hora fixa. Si vas amb canalla o amb cotxet, pregunta quant dura el recorregut i si és accessible: el de Sant Guim de la Plana, per exemple, avisa que no ho és ni amb cadira de rodes ni amb cotxet.",
       ),
       ...h2(
@@ -313,6 +348,11 @@ function body(locale: Locale): Block[] {
           question: "Quan són els pessebres vivents 2026?",
           answer:
             "Cada organitzador fixa els seus dies i els publica a l'Agenda Cultural de la Generalitat, la temporada passada entre el 19 de novembre i mitjan desembre. El calendari d'aquesta pàgina els afegeix a mesura que surten. La temporada 2025-26, la majoria es van fer entre el 20 de desembre i Reis.",
+        },
+        {
+          question: "Quin és el primer pessebre vivent del 2026?",
+          answer:
+            "El de Corbera de Llobregat, que comença el 28 de novembre de 2026. El segueix el Pessebre dels Estels de la Masia de Castelló, a Vandellòs, el 5, 6, 12 i 13 de desembre, amb entrades per internet. Tots dos ho diuen al seu web.",
         },
         {
           question: "Cal pagar per veure un pessebre vivent?",
@@ -327,7 +367,7 @@ function body(locale: Locale): Block[] {
         {
           question: "On hi ha pessebres vivents a prop de Barcelona?",
           answer:
-            "La temporada passada n'hi va haver, entre d'altres, al Baix Llobregat (Corbera de Llobregat, Viladecans, Sant Feliu de Llobregat), al Vallès Oriental, al Vallès Occidental, al Maresme (Premià de Dalt) i al Garraf (Canyelles, Sant Pere de Ribes). El calendari de dalt els agrupa per comarques.",
+            "Aquesta temporada ja tenen dates el de Corbera de Llobregat (Baix Llobregat), des del 28 de novembre, i el de Sant Fost de Campsentelles (Vallès Oriental), del 13 de desembre al 10 de gener. La temporada passada n'hi va haver, entre d'altres, al Baix Llobregat (Corbera de Llobregat, Viladecans, Sant Feliu de Llobregat), al Vallès Oriental, al Vallès Occidental, al Maresme (Premià de Dalt) i al Garraf (Canyelles, Sant Pere de Ribes). El calendari de dalt els agrupa per comarques.",
         },
         {
           question: "Quin és el pessebre vivent més antic de Catalunya?",
@@ -348,7 +388,7 @@ function body(locale: Locale): Block[] {
   if (locale === "es") {
     return [
       lead(
-        "Los **belenes vivientes 2026** de Cataluña («pessebres vivents») aparecen en el calendario de abajo a medida que los organizadores los publican en la Agenda Cultural de la Generalitat, que se lee cada día: solo salen los que aún no han terminado, con pueblo, comarca, fechas y el enlace a la ficha oficial. De los más conocidos, el de Corbera de Llobregat empieza el 28 de noviembre, y Tona, les Torres de Fals, Sant Guim de la Plana, les Gunyoles y l'Espluga de Francolí ya han publicado sus días (tabla de abajo).",
+        "**Los primeros belenes vivientes 2026 en Cataluña** («pessebres vivents») son el de Corbera de Llobregat, que empieza el 28 de noviembre, y el Pessebre dels Estels de la Masia de Castelló (Vandellòs), el 5, 6, 12 y 13 de diciembre. Sant Fost de Campsentelles, Tona, les Torres de Fals, Sant Guim de la Plana, les Gunyoles, l'Espluga de Francolí y la Torre del Suro, en Barcelona, también han publicado sus días (tabla de abajo). El calendario de abajo añade cada belén viviente cuando el organizador lo publica en la Agenda Cultural de la Generalitat, que se lee cada día: solo salen los que aún no han terminado, con pueblo, comarca, fechas y el enlace a la ficha oficial.",
       ),
       LIVE,
       callout(
@@ -379,7 +419,7 @@ function body(locale: Locale): Block[] {
       ...h2(
         "¿Hace falta entrada para ver un belén viviente?",
         "Casi siempre. De los 44 belenes vivientes de la temporada 2025-26 en la agenda, solo 3 eran gratuitos (Celrà, la Seu d'Urgell y Fornells de la Selva) y otros 3 pedían un donativo; el resto cobraban entrada, y 22 tenían un enlace de venta de entradas en la ficha.",
-        "Cada organizador lo hace a su manera. Esta temporada, Corbera de Llobregat y Sant Guim de la Plana venden las entradas solo por internet; l'Espluga de Francolí, solo anticipadas y a partir del 22 de noviembre; Tona, solo en taquilla, y el de la Torre del Suro, en Barcelona, es de entrada libre. Los precios y las condiciones están en la web de cada uno: míralo antes de ir.",
+        "Cada organizador lo hace a su manera. Esta temporada, Corbera de Llobregat, Sant Guim de la Plana y Sant Fost de Campsentelles venden las entradas solo por internet; l'Espluga de Francolí, solo anticipadas y a partir del 22 de noviembre; Tona, solo en taquilla, y el de la Torre del Suro, en Barcelona, es de entrada libre. Los precios y las condiciones están en la web de cada uno: míralo antes de ir.",
         "La temporada pasada, casi todos se hacían por la tarde o al anochecer, muchos en pases con hora fija. Si vas con niños o con carrito, pregunta cuánto dura el recorrido y si es accesible: el de Sant Guim de la Plana, por ejemplo, avisa de que no lo es ni en silla de ruedas ni con carrito.",
       ),
       ...h2(
@@ -391,6 +431,11 @@ function body(locale: Locale): Block[] {
           question: "¿Cuándo son los belenes vivientes 2026 en Cataluña?",
           answer:
             "Cada organizador fija sus días y los publica en la Agenda Cultural de la Generalitat, la temporada pasada entre el 19 de noviembre y mediados de diciembre. El calendario de esta página los añade a medida que salen. En la temporada 2025-26, la mayoría se hicieron entre el 20 de diciembre y Reyes.",
+        },
+        {
+          question: "¿Cuál es el primer belén viviente de 2026?",
+          answer:
+            "El de Corbera de Llobregat, que empieza el 28 de noviembre de 2026. Le sigue el Pessebre dels Estels de la Masia de Castelló, en Vandellòs, el 5, 6, 12 y 13 de diciembre, con entradas por internet. Los dos lo indican en su web.",
         },
         {
           question: "¿Hay que pagar para ver un belén viviente?",
@@ -405,7 +450,7 @@ function body(locale: Locale): Block[] {
         {
           question: "¿Dónde hay belenes vivientes cerca de Barcelona?",
           answer:
-            "La temporada pasada los hubo, entre otros, en el Baix Llobregat (Corbera de Llobregat, Viladecans, Sant Feliu de Llobregat), el Vallès Oriental, el Vallès Occidental, el Maresme (Premià de Dalt) y el Garraf (Canyelles, Sant Pere de Ribes). El calendario de arriba los agrupa por comarcas.",
+            "Esta temporada ya tienen fechas el de Corbera de Llobregat (Baix Llobregat), desde el 28 de noviembre, y el de Sant Fost de Campsentelles (Vallès Oriental), del 13 de diciembre al 10 de enero. La temporada pasada los hubo, entre otros, en el Baix Llobregat (Corbera de Llobregat, Viladecans, Sant Feliu de Llobregat), el Vallès Oriental, el Vallès Occidental, el Maresme (Premià de Dalt) y el Garraf (Canyelles, Sant Pere de Ribes). El calendario de arriba los agrupa por comarcas.",
         },
         {
           question: "¿Cuál es el belén viviente más antiguo de Cataluña?",
@@ -425,7 +470,7 @@ function body(locale: Locale): Block[] {
 
   return [
     lead(
-      "Catalonia's **living nativity scenes for Christmas 2026** (\"pessebres vivents\") appear in the calendar below as organisers post them in the Generalitat's cultural agenda, which is read every day: only those that have not finished are shown, with town, comarca (county), dates and a link to the official listing. Of the best known, Corbera de Llobregat's opens on 28 November, and Tona, les Torres de Fals, Sant Guim de la Plana, les Gunyoles and l'Espluga de Francolí have already published their days (table below).",
+      "**The first living nativity scenes of Christmas 2026 in Catalonia** (\"pessebres vivents\") are Corbera de Llobregat's, which opens on 28 November, and the Pessebre dels Estels at the Masia de Castelló (Vandellòs), on 5, 6, 12 and 13 December. Sant Fost de Campsentelles, Tona, les Torres de Fals, Sant Guim de la Plana, les Gunyoles, l'Espluga de Francolí and the Torre del Suro in Barcelona have also published their days (table below). The calendar below adds each living nativity as its organiser posts it in the Generalitat's cultural agenda, which is read every day: only those that have not finished are shown, with town, comarca (county), dates and a link to the official listing.",
     ),
     LIVE,
     callout(
@@ -456,7 +501,7 @@ function body(locale: Locale): Block[] {
     ...h2(
       "Do you need a ticket for a living nativity?",
       "Almost always. Of the 44 living nativities in the agenda in 2025-26, only 3 were free (Celrà, la Seu d'Urgell and Fornells de la Selva) and 3 more asked for a donation; the rest charged for entry, and 22 had an online ticket link on their listing.",
-      "Each organiser does it differently. This season Corbera de Llobregat and Sant Guim de la Plana sell tickets online only; l'Espluga de Francolí sells advance tickets only, from 22 November; Tona sells them only at the box office; and the Torre del Suro nativity in Barcelona is free. Prices and conditions are on each website, so check before you go.",
+      "Each organiser does it differently. This season Corbera de Llobregat, Sant Guim de la Plana and Sant Fost de Campsentelles sell tickets online only; l'Espluga de Francolí sells advance tickets only, from 22 November; Tona sells them only at the box office; and the Torre del Suro nativity in Barcelona is free. Prices and conditions are on each website, so check before you go.",
       "Last season nearly all of them took place in the late afternoon or evening, many in timed sessions. If you are going with children or a pushchair, ask how long the route takes and whether it is accessible: Sant Guim de la Plana, for example, warns that its route is not suitable for wheelchairs or pushchairs.",
     ),
     ...h2(
@@ -470,6 +515,11 @@ function body(locale: Locale): Block[] {
           "Each organiser sets its own days and posts them in the Generalitat's cultural agenda; last season that happened between 19 November and mid-December. The calendar on this page adds each one as it appears. In 2025-26 most ran between 20 December and 6 January.",
       },
       {
+        question: "Which is the first living nativity of 2026?",
+        answer:
+          "Corbera de Llobregat's, which opens on 28 November 2026. Next comes the Pessebre dels Estels at the Masia de Castelló in Vandellòs, on 5, 6, 12 and 13 December, with tickets online. Both say so on their websites.",
+      },
+      {
         question: "Is there a living nativity scene in Barcelona?",
         answer:
           "Yes. The 33rd Torre del Suro living nativity, in the Guinardó district, is on 21 December 2026 at 18:00, free and with no booking needed, according to its website.",
@@ -477,7 +527,7 @@ function body(locale: Locale): Block[] {
       {
         question: "Are there living nativity scenes near Barcelona?",
         answer:
-          "Last season there were, among others, in the Baix Llobregat (Corbera de Llobregat, Viladecans, Sant Feliu de Llobregat), the Vallès Oriental, the Vallès Occidental, the Maresme (Premià de Dalt) and the Garraf (Canyelles, Sant Pere de Ribes). The calendar above groups them by comarca.",
+          "This season Corbera de Llobregat (Baix Llobregat), from 28 November, and Sant Fost de Campsentelles (Vallès Oriental), from 13 December to 10 January, have already published their dates. Last season there were, among others, in the Baix Llobregat (Corbera de Llobregat, Viladecans, Sant Feliu de Llobregat), the Vallès Oriental, the Vallès Occidental, the Maresme (Premià de Dalt) and the Garraf (Canyelles, Sant Pere de Ribes). The calendar above groups them by comarca.",
       },
       {
         question: "What is the oldest living nativity in Catalonia?",
