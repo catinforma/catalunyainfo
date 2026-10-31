@@ -275,8 +275,8 @@ const TIBIDABO_SOURCES: B2Source[] = [
 const TIBIDABO_META: Record<Locale, Meta> = {
   ca: {
     path: "guies/tibidabo-parc-atraccions-com-arribar",
-    title: "Tibidabo: parc d'atraccions, Sagrat Cor i com arribar-hi",
-    seoTitle: "Tibidabo: entrades, calendari i com pujar-hi en funicular",
+    title: "Tibidabo: preus de l'entrada, horaris del parc, funicular i com arribar-hi",
+    seoTitle: "Tibidabo 2026: preus de l'entrada, horaris i com arribar-hi",
     seoDescription:
       "El parc del Tibidabo obre els caps de setmana a la tardor (39 €). Com pujar-hi: FGC, bus 196 i la Cuca de Llum; el Tramvia Blau és tancat per obres.",
     excerpt: "Quan obre el parc del Tibidabo, quant costa, com s'hi puja ara que el Tramvia Blau és tancat i què hi ha al Sagrat Cor, amb dades oficials.",
