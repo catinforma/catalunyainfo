@@ -382,8 +382,8 @@ const MARKETS_SOURCES: B2Source[] = [
 const MARKETS_META: Record<Locale, Meta> = {
   ca: {
     path: "guies/mercat-boqueria-mercats-barcelona",
-    title: "La Boqueria i els mercats de Barcelona: horaris i normes per visitar-los",
-    seoTitle: "La Boqueria i els mercats de Barcelona: horaris i normes",
+    title: "Horari del Mercat de la Boqueria i dels mercats de Barcelona: dies, festius i normes per visitar-los",
+    seoTitle: "Mercat de la Boqueria: horari (dl–ds 8:00–20:30) i normes",
     seoDescription:
       "La Boqueria obre de dilluns a dissabte de 8:00 a 20:30 i tanca els diumenges. Horaris de Santa Caterina, Sant Antoni i la resta, i la norma dels grups.",
     excerpt: "Quan obren la Boqueria i els altres grans mercats de Barcelona, les normes per als grups de visitants i què canviarà amb la reforma.",
@@ -501,7 +501,7 @@ const MARKETS_COPY: Record<Locale, MKT> = {
     note: "Los horarios de los mercados cambian por fiestas y obras: consulta las páginas de mercados del Ayuntamiento.",
   },
   ca: {
-    lead: "**La Boqueria obre de dilluns a dissabte de 8:00 a 20:30**; els diumenges i festius només obre els dies que anuncia el mercat, normalment uns quants per Nadal. Cada parada fixa el seu horari dins d'aquesta franja. Sant Antoni té el mateix horari, mentre que Santa Caterina, la Concepció, la Llibertat i el Ninot tanquen abans alguns dies (taula més avall). Són abans de res mercats de barri: l'Ajuntament els gestiona per a qui hi compra.",
+    lead: "**El Mercat de la Boqueria obre de dilluns a dissabte de 8:00 a 20:30**; els diumenges i festius només obre els dies que anuncia el mercat, normalment uns quants per Nadal. Cada parada fixa el seu horari dins d'aquesta franja. Sant Antoni té el mateix horari, mentre que Santa Caterina, la Concepció, la Llibertat i el Ninot tanquen abans alguns dies (taula més avall). Són abans de res mercats de barri: l'Ajuntament els gestiona per a qui hi compra.",
     boqTitle: "Horari de la Boqueria: diumenges i festius",
     boq: [
       "El Mercat de Sant Josep, la Boqueria, és a la Rambla, 91, i obre de dilluns a dissabte de 8:00 a 20:30; el metro més proper és Liceu (L3). Telèfon: 93 413 23 03.",

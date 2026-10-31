@@ -85,8 +85,8 @@ const META: Record<Locale, { path: string; title: string; seoTitle: string; seoD
   },
   en: {
     path: "guides/barcelona-card-vs-hola-barcelona",
-    title: "Barcelona Card or Hola Barcelona: which card is worth it",
-    seoTitle: "Barcelona Card vs Hola Barcelona: prices, which is worth it",
+    title: "Hola Barcelona Travel Card or Barcelona Card: 2026 prices and which is worth it",
+    seoTitle: "Hola Barcelona Travel Card 2026: prices, is it worth it?",
     seoDescription:
       "Hola Barcelona Travel Card from €12.50 (24 h) and Barcelona Card from €39 (48 h): official 2026 prices, what each covers, and when the Card pays off.",
     excerpt:

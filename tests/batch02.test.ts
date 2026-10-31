@@ -875,6 +875,28 @@ test("cards: Hola online price and collection, Barcelona Card days rule, museum 
 });
 
 /**
+ * Language mismatch, 31 Oct 2026 (GSC 3-31 Oct, query x page x country):
+ * English "hola barcelona travel card" queries landed on the Spanish pages,
+ * and Catalan "preus tibidabo" / "tibidabo horaris" and "mercat de la
+ * boqueria" queries on the Spanish and English pages. The right-language
+ * edition now carries the searchers' words; the Spanish titles are the
+ * 28 Oct ones and stay as they are.
+ */
+test("language mismatch: EN cards, CA Tibidabo and CA Boqueria titles in their searchers' words", () => {
+  const titles = [CARDS.editions.en.seoTitle, TIBIDABO.editions.ca.seoTitle, MARKETS.editions.ca.seoTitle];
+  for (const t of titles) assert.ok(t.length <= 60, `${t}: ${t.length}`);
+  assert.match(CARDS.editions.en.seoTitle, /^Hola Barcelona Travel Card 2026: .*worth it/);
+  assert.match(CARDS.editions.en.title, /^Hola Barcelona Travel Card or Barcelona Card/);
+  assert.match(TIBIDABO.editions.ca.seoTitle, /^Tibidabo 2026: preus .*horaris/);
+  assert.match(TIBIDABO.editions.es.seoTitle, /^Tibidabo 2026: precio de la entrada, horario/);
+  assert.match(MARKETS.editions.ca.seoTitle, /^Mercat de la Boqueria: horari \(dl–ds 8:00–20:30\)/);
+  assert.match(bodyToPlainText(MARKETS.editions.ca.blocks).slice(0, 120), /^El Mercat de la Boqueria obre de dilluns a dissabte de 8:00 a 20:30/);
+  // The hours in the title are the ones in the market's own table.
+  const table = (MARKETS.editions.ca.blocks as { type: string; rows?: string[][] }[]).find((b) => b.type === "table");
+  assert.deepEqual(table?.rows?.find((r) => r[0] === "La Boqueria"), ["La Boqueria", "De dilluns a dissabte 8:00–20:30"]);
+});
+
+/**
  * Climate, 28 Oct 2026: AEMET's normals page still says "Periodo: 1981-2010"
  * and its help page names 1981-2010 as the reference period; Meteocat says its
  * 1991-2020 climatologies are still in preparation. Monthly records read one

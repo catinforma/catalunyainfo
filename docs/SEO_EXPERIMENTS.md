@@ -1387,6 +1387,128 @@ last crawl date first), and again for the clock change in the week of 21 March
 
 **Outcome:** _pending_
 
+## 2026-10-31 — Language-mismatch fixes
+
+**Question.** English is a much larger share of impressions than of clicks.
+Is part of that an English searcher being shown our Spanish or Catalan page
+(or a Spanish searcher the Catalan one, or the reverse)?
+
+**Method.** Search Console, 3-31 Oct 2026, `dataState: all`, query × page ×
+country. Each query was classified by word lists (en/es/ca function words
+and the site's topic words: when/open/holiday/strike, cuándo/festivo/huelga,
+quan/festiu/vaga…), orthography (ñ, -ción; l·l, ç, l', ny) and the country
+only to break ties. Proper nouns carry no language (Barcelona, Tibidabo, TV3,
+Marató, party names). A mismatch is EN query → /es/ or /ca/ page, ES → /ca/,
+CA → /es/. Scripts are in the session scratchpad, not the repo.
+
+**Read this first: the coverage.** Query rows cover 35,380 of the 125,606
+page impressions (28 %). Page × country is no better: once a second dimension
+is added, Search Console returns only the rows with a query, the same 35,380.
+The other 72 % cannot be split by language or country.
+
+**What the data says.**
+- Query language: ES 15,571 impressions / 371 clicks, CA 11,027 / 158,
+  EN 4,715 / 21, unclassified 3,910 / 37, other languages 157 / 0.
+- **English queries already land on English pages:** 4,660 of 4,715
+  impressions (98.8 %). EN → /es/ or /ca/ is 55 impressions and 0 clicks in
+  four weeks.
+- All mismatches: 2,158 impressions / 56 clicks on 111 pages. CA → ES
+  1,835 / 55, ES → CA 268 / 1, EN → ES 47 / 0, EN → CA 8 / 0.
+- **CA → ES is not a click leak.** Catalan queries shown the Spanish page
+  click at 3.0 %, more than Catalan queries shown the Catalan page (1.1 %).
+- The English gap is real but has another cause. EN pages are 19.0 % of
+  impressions and 8.4 % of clicks (CTR 1.30 %, against 3.72 % ES and 2.59 %
+  CA). At page positions 4-10, EN converts 1.4 %, CA 2.6 % and ES 4.2 %. The
+  biggest EN pages show it: clock change 3,095 / 2 at 8.5, weather by month
+  1,849 / 3 at 6.6, metro hours 1,655 / 4 at 6.2. These are English queries
+  on English pages, so the cause is intent and the SERP, not language. All
+  three were retitled on 28-31 Oct.
+- 417 EN-page impressions (1 click) come from operator and AI fan-out
+  queries: `site.boe.es "806/2026" "elecciones"`, and Malay or Portuguese
+  "pilihan raya umum sepanyol 2026". They inflate the EN election pages'
+  impressions.
+
+**Top mismatched pages and why most were left alone.** Of the top 30, 24 had
+been retitled on 28-31 Oct, either the page itself or its edition in the
+query's language, and Google has not seen those titles yet. They are:
+- strikes, Christmas in Barcelona and Christmas markets;
+- school calendars, parking and tourist tax;
+- metro, T-casual, clock change, PortAventura, Núria and the airport;
+- the town holiday template, the free museums and Dalí;
+- the CA work calendar, whose 28 Oct title starts with the Catalan query
+  word for word ("calendari laboral 2027 catalunya", 63 impressions on the ES
+  page);
+- the CA mushroom page, retitled "Mapa bolets Catalunya 2026" on 30 Oct for
+  exactly the query ("mapa bolets catalunya 2026", 253 impressions on the ES
+  page).
+
+Tibidabo (rank 22) is fixed below on its CA side. The other two pages fixed
+below sit just outside the top 30; they are the next ones with a coherent
+query pattern and no edit inside the window.
+
+Others were left alone for these reasons:
+- **Castanyada** ES (560 / 17, "castanyada 2026") and CA (77 / 0, "cuando es
+  la castañada"): ranks 1 and 6. The festival is 31 Oct-1 Nov, so a fix that
+  ships on 1 Nov would serve nobody until October 2027.
+- **December bridge:** the CA page already wins its query ("pont de desembre
+  2026": CA 78 impressions at 5.1, ES 11 at 8.3).
+- **Sitges** CA/EN and **Zoo** ES already carry their searchers' words.
+- **/es/elecciones/abrera/** ("aliança catalana abrera") is a party name,
+  not a language signal.
+- **The home page** is a brand experiment.
+
+**Changed (title, H1 and, for Boqueria, the first words of the lead; nothing
+else):**
+
+| Page (publish group) | Old → new search title | Baseline 3-31 Oct |
+| --- | --- | --- |
+| `/en/guides/barcelona-card-vs-hola-barcelona/` (`cards`) | "Barcelona Card vs Hola Barcelona: prices, which is worth it" → "Hola Barcelona Travel Card 2026: prices, is it worth it?"; H1 now starts "Hola Barcelona Travel Card or Barcelona Card" (the ES wording of 28 Oct) | EN page 88 impr., 0 clicks, 8.9; "hola barcelona travel card worth it" 4 at 26, "is the hola barcelona card worth it" 2 at 10; 9 EN "hola (barcelona) (travel) card" / "bcn travel card" impressions landed on the ES cards (5) and T-casual (4) pages |
+| `/ca/guies/tibidabo-parc-atraccions-com-arribar/` (`hills`) | "Tibidabo: entrades, calendari i com pujar-hi en funicular" → "Tibidabo 2026: preus de l'entrada, horaris i com arribar-hi" (the ES title of 28 Oct, in Catalan); H1 to match | CA page 33 impr., 0 clicks, 7.7; 10 CA impressions ("preus tibidabo", "tibidabo horaris", "horari tibidabo 2026", "tibidabo calendari", "t2a tibidabo") on the ES page |
+| `/ca/guies/mercat-boqueria-mercats-barcelona/` (`family-markets`) | "La Boqueria i els mercats de Barcelona: horaris i normes" → "Mercat de la Boqueria: horari (dl–ds 8:00–20:30) i normes"; H1 "Horari del Mercat de la Boqueria i dels mercats de Barcelona…"; lead "El Mercat de la Boqueria obre…" | CA page 34 impr., 0 clicks, 7.6; 10 CA "mercat de (la) boqueria" impressions on the EN (7) and ES (3) pages; the CA page had none of them |
+
+The hours in the Boqueria title are already in the page's own table, which
+the market institute checked on 28 Oct. No new facts. `tests/batch02.test.ts`
+pins the three titles.
+
+**hreflang / sitemap check: no defect found.**
+- Live sitemap (1,762 URLs, deployed 30 Oct): every alternate is listed,
+  every cluster is reciprocal and self-referencing, and x-default is
+  consistent.
+- Live HTML of `/es/elecciones/abrera/`, `/es/festivos/vic/` and
+  `/ca/guies/pont-desembre-catalunya/` agrees with the sitemap, and each
+  alternate links back.
+- The 4,333 programmatic sitemap entries on main, including the undeployed
+  EN holiday towns, elections tranche 3 and Christmas fairs, are clean. New
+  test `tests/hreflang-clusters.test.ts` checks them across families.
+
+**Programmatic families without an English edition (deferred: no expansion
+this week, ISR-write budget).** Counts are on main. The demand figures are
+query rows on the live ca/es-only pages, 3-31 Oct.
+
+| Family | ca/es URLs without EN | EN pages | Measured EN demand on the ca/es pages |
+| --- | --- | --- | --- |
+| Holidays (towns + comarques) | 931 + 931 | 41 (29 towns, hub, date pages) | 602 live URLs: 12,726 impr. / 270 clicks; EN-language query impressions 0; from outside Spain 24 |
+| Elections (towns + comarques) | 960 + 960 | 31 (30 towns + hub) | 540 live URLs: 2,401 / 127; EN-language 2 ("primary in gava"); outside Spain 0 |
+| Fuel | 75 + 75 | 0 | live since 28 Oct, 0 impressions |
+| Christmas fairs | 39 + 39 | 3 | not deployed |
+| Rodalies lines | 19 + 19 | hub only | 38 live URLs: 14 impr.; EN-language 0 |
+| Weekend by zone | 12 + 12 | 0 | live since 28 Oct, 0 impressions |
+
+Nothing measured asks for more English town pages yet. Re-check the 29 EN
+holiday towns (live from 1 Nov) before adding any.
+
+**Prediction.** For the queries above, the right-language URL takes most of
+the impressions: CA Tibidabo and CA Boqueria for the Catalan queries, EN
+cards for "hola barcelona travel card". Clicks stay in single figures, since
+these are small queries. The site-wide EN CTR gap will not move from this.
+That needs the EN-page intent work already shipped on 28-31 Oct.
+
+**Measure on 28 Nov 2026**: per query, impressions by page language
+(wrong-language share against the baseline above), position and clicks. Use
+the same classifier.
+
+**Outcome:** _pending_
+
 ## Candidates not yet run
 
 Recorded so they are not lost, and so they are not all started at once.
