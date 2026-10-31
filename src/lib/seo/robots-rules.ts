@@ -36,3 +36,28 @@ export const PRODUCTION_DISALLOW: readonly string[] = [
   "/*/internal-search/",
   "/*?*",
 ];
+
+/**
+ * Commercial SEO and data crawlers that bring no readers and are refused the
+ * whole site. Every page they request that is not in the CDN yet is rendered
+ * and written to the ISR cache, and ISR writes are the Hobby plan's tightest
+ * limit (187K of 200K on 31 Oct 2026, after the per-town families went out).
+ * Search engines, AI assistants (they send readers) and AhrefsBot (the owner
+ * uses Ahrefs Webmaster Tools) are not on the list.
+ */
+export const REFUSED_CRAWLERS: readonly string[] = [
+  "SemrushBot",
+  "MJ12bot",
+  "DotBot",
+  "PetalBot",
+  "Bytespider",
+  "BLEXBot",
+  "DataForSeoBot",
+  "Barkrowler",
+  "serpstatbot",
+  "SeznamBot",
+  "AwarioBot",
+  "MegaIndex.ru",
+  "ImagesiftBot",
+  "Timpibot",
+];

@@ -1,7 +1,7 @@
 import type { MetadataRoute } from "next";
 import { headers } from "next/headers";
 
-import { PRODUCTION_ALLOW, PRODUCTION_DISALLOW } from "@/lib/seo/robots-rules";
+import { PRODUCTION_ALLOW, PRODUCTION_DISALLOW, REFUSED_CRAWLERS } from "@/lib/seo/robots-rules";
 import { CANONICAL_HOST, absoluteUrl, indexingAllowed, siteOrigin } from "@/lib/site";
 
 // Dynamic so the host can be checked. robots.txt is requested rarely enough
@@ -57,6 +57,8 @@ export default async function robots(): Promise<MetadataRoute.Robots> {
       // on, it can read the same pages as Googlebot.
       { userAgent: "Mediapartners-Google", allow: "/" },
       { userAgent: "Google-Extended", allow: "/" },
+      // Crawlers that cost ISR writes and bring no readers (robots-rules.ts).
+      { userAgent: [...REFUSED_CRAWLERS], disallow: "/" },
     ],
     sitemap: absoluteUrl("/sitemap.xml"),
     host: siteOrigin(),

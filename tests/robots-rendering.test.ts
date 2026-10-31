@@ -3,7 +3,7 @@ import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { test } from "node:test";
 
-import { PRODUCTION_ALLOW, PRODUCTION_DISALLOW, RENDERING_DATA_ENDPOINTS } from "../src/lib/seo/robots-rules.ts";
+import { PRODUCTION_ALLOW, PRODUCTION_DISALLOW, REFUSED_CRAWLERS, RENDERING_DATA_ENDPOINTS } from "../src/lib/seo/robots-rules.ts";
 import { FUEL_ENDPOINT } from "../src/lib/programmatic/fuel/live.ts";
 import { ALERTS_ENDPOINT } from "../src/lib/programmatic/rodalies/live.ts";
 import { LEVELS_ENDPOINT } from "../src/lib/programmatic/reservoirs/live.ts";
@@ -60,4 +60,14 @@ test("robots.txt is built from these rules and the live components fetch these c
   assert.match(robots, /allow: \[\.\.\.PRODUCTION_ALLOW\]/);
   assert.match(robots, /disallow: \[\.\.\.PRODUCTION_DISALLOW\]/);
   assert.match(readFileSync(join(src, "components/programmatic/fuel/FuelPrices.tsx"), "utf8"), /fetch\(FUEL_ENDPOINT\)/);
+});
+
+test("only reader-less crawlers are refused; search engines, AI assistants and AhrefsBot keep access", () => {
+  const robots = readFileSync(join(import.meta.dirname, "..", "src", "app", "robots.ts"), "utf8");
+  assert.match(robots, /\{ userAgent: \[\.\.\.REFUSED_CRAWLERS\], disallow: "\/" \}/);
+  const refused = REFUSED_CRAWLERS.map((ua) => ua.toLowerCase());
+  for (const kept of ["googlebot", "bingbot", "applebot", "duckduckbot", "yandexbot", "gptbot", "oai-searchbot", "chatgpt-user", "claudebot", "perplexitybot", "ahrefsbot", "mediapartners-google", "google-extended"]) {
+    assert.ok(!refused.some((ua) => kept.includes(ua) || ua.includes(kept)), kept);
+  }
+  assert.equal(new Set(refused).size, refused.length);
 });
