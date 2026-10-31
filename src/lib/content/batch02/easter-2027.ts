@@ -76,6 +76,15 @@ import { OPENING_2027 } from "./shops";
  *
  * Hero: no new photograph. The Montserrat guide's monastery picture, with the
  * same alt text and caption (media rows are keyed by file).
+ *
+ * HOW TO UPDATE (republish the `setmana-santa-2027` group after each):
+ *  - DOGC local-holiday order for 2027 (the 2026 one came out on 17 Dec
+ *    2025): once `prepare2027` writes local-2027.json, the local section
+ *    switches to the order's days and drops the "pending" wording by itself.
+ *  - 2027 municipal shop days (councils had until 1 Nov 2026; the 2026 list
+ *    was in the DOGC on 27 Nov 2025): say which towns open on Good Friday.
+ *  - Re-read both Passió pages before February 2027, and add the Verges and
+ *    Tarragona times when the councils publish them.
  */
 export const EASTER_VERIFIED = "2026-10-31";
 
@@ -524,6 +533,8 @@ export function buildEasterBody(locale: Locale): Block[] {
   const weekBeforeRun = optionRun(EASTER_OPTIONS.find((o) => o.id === "weekBefore")!);
   const locals = localItems(locale);
   const localSum = localSummary(locale);
+  // Council-approved days until the DOGC order is parsed (local-2027.json); the order's afterwards.
+  const pending = localDaysAroundEaster().some((day) => day.council !== null);
   const regions = joinList(EASTER_MONDAY_REGIONS[locale], locale);
   const general = dateList(OPENING_2027.general, locale);
   const municipalDefault = dateList(OPENING_2027.municipalDefault, locale);
@@ -559,7 +570,7 @@ export function buildEasterBody(locale: Locale): Block[] {
         { label: "Dilluns de Pasqua", value: `${cap(d(E.easterMonday, "ca"))}: festiu, excepte a l'Aran` },
         { label: "Vacances escolars", value: `${cap(runWords({ from: E.schoolFrom, to: E.schoolTo, days: 0 }, "ca"))}; es torna el ${d(school.back, "ca")}` },
         { label: "Pont amb un dia", value: `Demanant el ${thursday}: ${thursdayRun.days} dies, ${runWords(thursdayRun, "ca")}` },
-        ...(localSum ? [{ label: "Festes locals a tocar", value: `${cap(localSum)}, pendents del DOGC` }] : []),
+        ...(localSum ? [{ label: "Festes locals a tocar", value: `${cap(localSum)}${pending ? ", pendents del DOGC" : ""}` }] : []),
       ]),
       callout(
         "official",
@@ -595,7 +606,9 @@ export function buildEasterBody(locale: Locale): Block[] {
         ? [
             ...h2(
               "Festes locals al voltant de Setmana Santa",
-              `Les festes locals del 2027 encara no són al DOGC: l'ordre del 2026 va sortir el 17 de desembre de 2025. Alguns ajuntaments ja han aprovat les seves, i en aquests una cau a tocar de la Setmana Santa:`,
+              pending
+                ? "Les festes locals del 2027 encara no són al DOGC: l'ordre del 2026 va sortir el 17 de desembre de 2025. Alguns ajuntaments ja han aprovat les seves, i en aquests una cau a tocar de la Setmana Santa:"
+                : "Segons l'ordre de festes locals del 2027, en aquests municipis una cau a tocar de la Setmana Santa:",
             ),
             list(...locals),
             ...paras(`Per a la resta de municipis, mira'n la pàgina a [festius locals per municipi](/ca/festius/), o la llista sencera a ${localLink("festius locals de tots els municipis")}.`),
@@ -667,7 +680,7 @@ export function buildEasterBody(locale: Locale): Block[] {
         { label: "Lunes de Pascua", value: `${cap(d(E.easterMonday, "es"))}: festivo, salvo en Arán` },
         { label: "Vacaciones escolares", value: `${cap(runWords({ from: E.schoolFrom, to: E.schoolTo, days: 0 }, "es"))}; se vuelve el ${d(school.back, "es")}` },
         { label: "Puente con un día", value: `Pidiendo el ${thursday}: ${thursdayRun.days} días, ${runWords(thursdayRun, "es")}` },
-        ...(localSum ? [{ label: "Fiestas locales junto a Semana Santa", value: `${cap(localSum)}, pendientes del DOGC` }] : []),
+        ...(localSum ? [{ label: "Fiestas locales junto a Semana Santa", value: `${cap(localSum)}${pending ? ", pendientes del DOGC" : ""}` }] : []),
       ]),
       callout(
         "official",
@@ -703,7 +716,9 @@ export function buildEasterBody(locale: Locale): Block[] {
         ? [
             ...h2(
               "Fiestas locales alrededor de Semana Santa",
-              "Las fiestas locales de 2027 todavía no están en el DOGC: la orden de 2026 salió el 17 de diciembre de 2025. Algunos ayuntamientos ya han aprobado las suyas, y en estos una cae junto a la Semana Santa:",
+              pending
+                ? "Las fiestas locales de 2027 todavía no están en el DOGC: la orden de 2026 salió el 17 de diciembre de 2025. Algunos ayuntamientos ya han aprobado las suyas, y en estos una cae junto a la Semana Santa:"
+                : "Según la orden de fiestas locales de 2027, en estos municipios una cae junto a la Semana Santa:",
             ),
             list(...locals),
             ...paras(`Para el resto de municipios, mira su página en [festivos locales por municipio](/es/festivos/), o la lista entera en ${localLink("festivos locales de todos los municipios")}.`),
@@ -774,7 +789,7 @@ export function buildEasterBody(locale: Locale): Block[] {
       { label: "Easter Monday", value: `${d(E.easterMonday, "en")}: public holiday, except in Aran` },
       { label: "School Easter holidays", value: `${cap(runWords({ from: E.schoolFrom, to: E.schoolTo, days: 0 }, "en"))}; back on ${d(school.back, "en")}` },
       { label: "Long weekend with one day off", value: `Take ${thursday} off: ${thursdayRun.days} days, ${runWords(thursdayRun, "en")}` },
-      ...(localSum ? [{ label: "Local holidays next to it", value: `${cap(localSum)}, pending the DOGC order` }] : []),
+      ...(localSum ? [{ label: "Local holidays next to it", value: `${cap(localSum)}${pending ? ", pending the DOGC order" : ""}` }] : []),
     ]),
     callout(
       "official",
@@ -810,7 +825,9 @@ export function buildEasterBody(locale: Locale): Block[] {
       ? [
           ...h2(
             "Local holidays around Easter",
-            "The 2027 local holidays are not in the DOGC yet: the 2026 order came out on 17 December 2025. Some councils have already approved theirs, and in these one falls right next to Easter:",
+            pending
+              ? "The 2027 local holidays are not in the DOGC yet: the 2026 order came out on 17 December 2025. Some councils have already approved theirs, and in these one falls right next to Easter:"
+              : "According to the 2027 local-holiday order, in these towns one falls right next to Easter:",
           ),
           list(...locals),
           ...paras(`For every other town, see ${localLink("local holidays in Catalonia")}.`),

@@ -303,7 +303,7 @@ test("the regions are the BOE's: Holy Thursday off everywhere but Catalonia and 
 });
 
 test("local days next to Easter are the councils' own, labelled pending, with their town pages", () => {
-  assert.equal(nextYearPublished(), false, "the DOGC order is out: update the labels and this test");
+  assert.equal(nextYearPublished(), false, "the DOGC order is out: re-read the local section, adapt this test and republish setmana-santa-2027");
   // Computed here from COUNCIL_2027 directly, not through the page's function.
   const expected = municipalities()
     .flatMap((m) => (COUNCIL_2027[m.slug]?.local ?? []).filter((d) => d >= LOCAL_WINDOW.from && d <= LOCAL_WINDOW.to).map((date) => `${m.slug} ${date}`))
