@@ -288,6 +288,18 @@ test("Easter 2027: the table marks only Good Friday and Easter Monday as Catalon
   }
 });
 
+// Easter Sunday 2027 (28 March) is also the March clock change (C/2026/1660):
+// the Easter section says so and links the clock-change guide.
+test("Easter 2027: the section links the clock change that falls on Easter Sunday", () => {
+  const clockPath = { ca: "/ca/guies/canvi-hora-catalunya/", es: "/es/guias/cambio-hora-espana/", en: "/en/guides/clock-change-spain/" };
+  for (const locale of LOCALES) {
+    const blocks = buildBody(locale);
+    const at = blocks.findIndex((b) => b.type === "heading" && b.text === COPY[locale].easterTitle);
+    const intro = blocks[at + 1];
+    assert.ok(intro?.type === "paragraph" && intro.text.includes(`](${clockPath[locale]})`), `${locale}: clock-change link`);
+  }
+});
+
 test("the 2026 calendar is Ordre EMT/66/2025's twelve days, with the December date pages linked", () => {
   const titles = { ca: COPY.ca.year2026Title, es: COPY.es.year2026Title, en: COPY.en.year2026Title };
   const dayPath = { ca: "/ca/festius/dia/8-desembre-2026/", es: "/es/festivos/dia/8-diciembre-2026/", en: "/en/holidays/day/8-december-2026/" };

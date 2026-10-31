@@ -253,7 +253,7 @@ const COPY: Record<Locale, T> = {
     monthsIntro: "Mes per mes, les mitjanes de l'aeroport (AEMET, 1981-2010), les del centre (Meteocat, el Raval, 2010-2025) i els rècords del mes a l'aeroport des del 1924 (AEMET, actualitzats el 30 de setembre de 2026).",
     seasonsTitle: "Què esperar cada estació",
     seasons: [
-      "**Hivern (desembre-febrer):** màximes mitjanes de 14 °C i mínimes de 5 °C a l'aeroport. Les glaçades hi són rares: unes quatre l'any, i la neu, menys d'un dia l'any de mitjana. L'hivern astronòmic 2026-27 comença el 21 de desembre de 2026 a les 21:50 (hora oficial peninsular), segons l'Institut Geogràfic Nacional.",
+      "**Hivern (desembre-febrer):** màximes mitjanes de 14 °C i mínimes de 5 °C a l'aeroport. Les glaçades hi són rares: unes quatre l'any, i la neu, menys d'un dia l'any de mitjana. L'hivern astronòmic 2026-27 comença el 21 de desembre de 2026 a les 21:50 (hora oficial peninsular), segons l'Institut Geogràfic Nacional. Amb l'horari d'hivern, de l'últim diumenge d'octubre a l'últim de març, es fa fosc una hora abans: mira [quan és el canvi d'hora](/ca/guies/canvi-hora-catalunya/).",
       "**Primavera (març-maig):** les màximes pugen de 16 a 21 °C, amb unes cinc jornades de pluja al mes.",
       "**Estiu (juny-agost):** màximes de 25 a 28,5 °C i el juliol és el mes més sec (21 mm) i el més assolellat (305 hores de sol). L'agost ja porta tempestes: 62 mm de pluja de mitjana.",
       `**Tardor (setembre-novembre):** és l'època més plujosa. L'octubre suma 91 mm i el setembre, 81, en uns sis dies de pluja. Per veure com estan els pantans, consulta [l'estat dels embassaments avui](/ca/${TOOL_PATHS.reservoirs.ca}/), amb la dada diària de l'ACA. ${RAINY_LINK.ca}`,
@@ -304,7 +304,7 @@ const COPY: Record<Locale, T> = {
     monthsIntro: "Mes a mes, las medias del aeropuerto (AEMET, 1981-2010), las del centro (Meteocat, el Raval, 2010-2025) y los récords del mes en el aeropuerto desde 1924 (AEMET, actualizados el 30 de septiembre de 2026).",
     seasonsTitle: "Qué esperar cada estación",
     seasons: [
-      "**Invierno (diciembre-febrero):** máximas medias de 14 °C y mínimas de 5 °C en el aeropuerto. Las heladas son raras: unas cuatro al año, y la nieve, menos de un día al año de media. El invierno astronómico 2026-27 empieza el 21 de diciembre de 2026 a las 21:50 (hora oficial peninsular), según el Instituto Geográfico Nacional.",
+      "**Invierno (diciembre-febrero):** máximas medias de 14 °C y mínimas de 5 °C en el aeropuerto. Las heladas son raras: unas cuatro al año, y la nieve, menos de un día al año de media. El invierno astronómico 2026-27 empieza el 21 de diciembre de 2026 a las 21:50 (hora oficial peninsular), según el Instituto Geográfico Nacional. Con el horario de invierno, del último domingo de octubre al último de marzo, anochece una hora antes: mira [cuándo es el cambio de hora](/es/guias/cambio-hora-espana/).",
       "**Primavera (marzo-mayo):** las máximas suben de 16 a 21 °C, con unas cinco jornadas de lluvia al mes.",
       "**Verano (junio-agosto):** máximas de 25 a 28,5 °C y julio es el mes más seco (21 mm) y el más soleado (305 horas de sol). Agosto ya trae tormentas: 62 mm de lluvia de media.",
       `**Otoño (septiembre-noviembre):** es la época más lluviosa. Octubre suma 91 mm y septiembre, 81, en unos seis días de lluvia. Para ver cómo están los pantanos, consulta [el nivel de los embalses hoy](/es/${TOOL_PATHS.reservoirs.es}/), con el dato diario de la ACA. ${RAINY_LINK.es}`,
@@ -355,7 +355,7 @@ const COPY: Record<Locale, T> = {
     monthsIntro: "Month by month: the airport averages (AEMET, 1981-2010), the city-centre ones (Meteocat, el Raval, 2010-2025) and each month's records at the airport since 1924 (AEMET, updated 30 September 2026).",
     seasonsTitle: "Barcelona weather in winter, spring, summer and autumn",
     seasons: [
-      "**Winter (December-February):** average highs of 14 °C and lows of 5 °C at the airport. Frost is rare, about four days a year, and snow less than one day a year on average. Astronomical winter 2026-27 begins on 21 December 2026 at 21:50 (Spanish mainland time), according to Spain's National Geographic Institute.",
+      "**Winter (December-February):** average highs of 14 °C and lows of 5 °C at the airport. Frost is rare, about four days a year, and snow less than one day a year on average. Astronomical winter 2026-27 begins on 21 December 2026 at 21:50 (Spanish mainland time), according to Spain's National Geographic Institute. On winter time, from the last Sunday of October to the last Sunday of March, it gets dark an hour earlier: see [when the clocks change in Spain](/en/guides/clock-change-spain/).",
       "**Spring (March-May):** highs climb from 16 to 21 °C, with about five rainy days a month.",
       "**Summer (June-August):** highs of 25 to 28.5 °C; July is the driest month (21 mm) and the sunniest (305 hours). August brings storms: 62 mm of rain on average.",
       `**Autumn (September-November):** the wettest season. October averages 91 mm and September 81, over about six rainy days. To see how the reservoirs stand, check [Catalonia's reservoir levels today](/en/${TOOL_PATHS.reservoirs.en}/), from the water agency's daily data. ${RAINY_LINK.en}`,

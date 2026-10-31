@@ -23,6 +23,7 @@ import {
   type Holiday,
 } from "./payload";
 import { SCHOOL_YEARS } from "@/lib/content/school/calendar";
+import { lastSunday } from "@/lib/content/clock/rule";
 import { municipalityBySlug } from "@/lib/programmatic/holidays/data";
 import { joinList } from "@/lib/programmatic/holidays/names";
 import { datePath, isDatePage } from "@/lib/programmatic/holidays/paths";
@@ -139,9 +140,11 @@ function easterSection(copy: HolidayCopy, locale: Locale): Block[] {
   ];
   const school = SCHOOL_YEARS.find((y) => y.easter[0].startsWith(String(YEAR)));
   if (!school) throw new Error(`holiday guide: no school Easter in ${YEAR}`);
+  // In 2027 Easter Sunday is also the March clock change (both 28 March).
+  const clockOnEaster = addDays(easterMonday.date, -1) === lastSunday(YEAR, 3);
   return [
     { type: "heading", level: 2, text: copy.easterTitle },
-    { type: "paragraph", text: copy.easterIntro },
+    { type: "paragraph", text: clockOnEaster ? `${copy.easterIntro} ${copy.easterClockChange}` : copy.easterIntro },
     {
       type: "table",
       caption: copy.easterTitle,
