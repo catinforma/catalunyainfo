@@ -4,12 +4,14 @@ import { PATHS as TOOL_PATHS } from "@/lib/content/home-tools";
 
 import {
   b2Related,
+  b2link,
   callout,
   faq,
   h2,
   h3,
   lead,
   list,
+  paras,
   table,
   verifiedLine,
   type B2Article,
@@ -152,6 +154,24 @@ const RECORDS: [number, Day, number, Day][] = [
   [27.0, [31, 12, 1925], -8.0, [27, 12, 1962]],
 ];
 
+/** The day the figures above were last re-read, for pages that quote them. */
+export const CLIMATE_VERIFIED = VERIFIED;
+
+/**
+ * One month's figures from the three tables above (index 0 = January), for a
+ * page that quotes a single month (the "Barcelona in December" hub), so the
+ * numbers are never typed twice.
+ */
+export function climateMonth(index: number) {
+  const [mean, high, low, rain, rainDays, sun] = NORMALS[index]!;
+  const [cityHigh, cityLow, cityRain] = RAVAL[index]!;
+  const [recordHigh, recordHighDay, recordLow, recordLowDay] = RECORDS[index]!;
+  return { mean, high, low, rain, rainDays, sun, humidity: HUMIDITY[index]!, cityHigh, cityLow, cityRain, recordHigh, recordHighDay, recordLow, recordLowDay };
+}
+
+/** Astronomical winter 2026-27, peninsular official time (IGN, read 28 Oct 2026). */
+export const WINTER_START = { date: "2026-12-21", time: "21:50" } as const;
+
 const MONTHS: Record<Locale, string[]> = {
   ca: ["Gener", "Febrer", "Març", "Abril", "Maig", "Juny", "Juliol", "Agost", "Setembre", "Octubre", "Novembre", "Desembre"],
   es: ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"],
@@ -231,6 +251,13 @@ type T = {
   seaTitle: string;
   sea: string;
   faq: { question: string; answer: string }[];
+};
+
+/** 31 Oct 2026: one sentence under December links the month's hub (group `barcelona-december-links`). */
+const DECEMBER_LINK: Record<Locale, string> = {
+  ca: `Què fer aquest mes, els festius i què obre, dia a dia: ${b2link("barcelonaDecember", "ca", "Barcelona al desembre")}.`,
+  es: `Qué hacer este mes, los festivos y qué abre, día a día: ${b2link("barcelonaDecember", "es", "Barcelona en diciembre")}.`,
+  en: `What's on that month, the public holidays and what's open, day by day: ${b2link("barcelonaDecember", "en", "Barcelona in December")}.`,
 };
 
 const RAINY_LINK: Record<Locale, string> = {
@@ -429,7 +456,7 @@ function body(locale: Locale) {
     ...h2(t.cityTitle, ...t.city),
     table(t.cityCaption, t.cityHeaders, cityRows, t.cityNote),
     ...h2(t.monthsTitle, t.monthsIntro),
-    ...MONTHS[locale].flatMap((_, i) => h3(monthHeading(locale, i), monthText(locale, i))),
+    ...MONTHS[locale].flatMap((_, i) => [...h3(monthHeading(locale, i), monthText(locale, i)), ...(i === 11 ? paras(DECEMBER_LINK[locale]) : [])]),
     ...h2(t.seasonsTitle),
     list(...t.seasons),
     ...h2(t.recordsTitle, ...t.records),

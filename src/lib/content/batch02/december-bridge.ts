@@ -75,6 +75,9 @@ import {
  * 30 Oct 2026 (seasonal top-3 push): the "Christmas markets" item links the
  * Christmas fairs hub, and the link to the Christmas page reads "encesa de
  * llums" / "encendido de luces", the words its searchers use.
+ *
+ * 31 Oct 2026: one sentence after La Marató links the new "Barcelona in
+ * December" hub (group `barcelona-december-links`). No new fact.
  */
 export const BRIDGE_VERIFIED = "2026-10-26";
 
@@ -427,6 +430,7 @@ export function buildDecemberBridgeBody(locale: Locale): Block[] {
       ),
       ...paras(
         `I el diumenge següent, 13 de desembre, és ${b2link("marato", "ca", "La Marató de 3Cat")}, dedicada enguany a les malalties neurodegeneratives i neuromusculars.`,
+        `Tot el mes a la ciutat, dia a dia (concerts, botigues obertes, metro i temps), és a ${b2link("barcelonaDecember", "ca", "què fer a Barcelona al desembre")}.`,
       ),
       faq([
         { question: "Hi ha pont al desembre del 2026 a Catalunya?", answer: `Només si demanes el dilluns 7. L'únic festiu és el dimarts 8; el diumenge 6 no és festiu a Catalunya. Amb el 7 lliure, el pont va ${runWords(bridge, "ca")}.` },
@@ -513,6 +517,7 @@ export function buildDecemberBridgeBody(locale: Locale): Block[] {
       ),
       ...paras(
         `Y el domingo siguiente, 13 de diciembre, es ${b2link("marato", "es", "La Marató de 3Cat")}, dedicada este año a las enfermedades neurodegenerativas y neuromusculares.`,
+        `Todo el mes en la ciudad, día a día (conciertos, tiendas abiertas, metro y tiempo), está en ${b2link("barcelonaDecember", "es", "qué hacer en Barcelona en diciembre")}.`,
       ),
       faq([
         { question: "¿Hay puente en diciembre de 2026 en Cataluña?", answer: `Solo si pides el lunes 7. El único festivo es el martes 8; el domingo 6 no es festivo en Cataluña. Con el 7 libre, el puente va ${runWords(bridge, "es")}.` },
@@ -598,6 +603,7 @@ export function buildDecemberBridgeBody(locale: Locale): Block[] {
     ),
     ...paras(
       `And the following Sunday, 13 December, is ${b2link("marato", "en", "La Marató de 3Cat")}, the TV3 telethon, this year for neurodegenerative and neuromuscular diseases.`,
+      `The whole month in the city, day by day (concerts, shop opening days, the metro and the weather), is in ${b2link("barcelonaDecember", "en", "Barcelona in December")}.`,
     ),
     faq([
       { question: "Is there a long weekend in December 2026 in Catalonia?", answer: `Only if you take Monday the 7th off. The only holiday is Tuesday the 8th; Sunday the 6th is not a holiday in Catalonia. With the 7th off, the break runs ${runWords(bridge, "en")}.` },

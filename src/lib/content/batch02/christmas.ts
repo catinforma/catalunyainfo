@@ -99,6 +99,17 @@ export const FAMILY = {
   maratoWeekend: openBetween("2026-12-12", "2026-12-13"),
 } as const;
 
+/**
+ * Last year's Fira de Santa Llúcia, from the organiser's "Calendari - 2025"
+ * page (the market table below prints the same days). Always shown with its
+ * year; the 2026 dates go in ANNOUNCED_TRADITIONS when they are published.
+ */
+export const SANTA_LLUCIA_2025 = {
+  from: "2025-11-28",
+  to: "2025-12-23",
+  url: "https://firadesantallucia.cat/calendari.php",
+} as const;
+
 const SOURCES: B2Source[] = [
   { name: "Fira de Santa Llúcia", url: "https://www.barcelona.cat/culturapopular/ca/festes-i-tradicions/fires/fira-de-santa-llucia", publisher: "Ajuntament de Barcelona" },
   { name: "Fira de Nadal de la Sagrada Família", url: "https://www.barcelona.cat/culturapopular/ca/festes-i-tradicions/fires/fira-de-nadal-de-la-sagrada-familia", publisher: "Ajuntament de Barcelona" },

@@ -18,7 +18,8 @@ import type { Locale } from "@/lib/i18n/config";
  * HOW TO UPDATE: when one of those dates is published, fill the matching field
  * of ANNOUNCED_2026 (ISO date, optional end date, time and place, and the
  * official URL), set FESTIVE_VERIFIED to the check date, run the tests and
- * republish the "christmas-bcn" and "nye" groups. The leads switch from "not
+ * republish the "christmas-bcn", "nye" and "barcelona-december" groups (the
+ * December hub moves the date into its day-by-day table). The leads switch from "not
  * announced yet" to the date on their own. Last year's dates stay labelled
  * with their year and are never shown as this year's.
  */

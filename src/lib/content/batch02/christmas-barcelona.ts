@@ -56,6 +56,9 @@ import {
  * ca/es titles promise date, time and place, as the pages above us do. The
  * title, like the description, switches to the official date by itself.
  *
+ * 31 Oct 2026: one sentence in "More Christmas events in the city" links the
+ * new "Barcelona in December" hub (group `barcelona-december-links`).
+ *
  * The markets are not repeated here: the Christmas markets guide carries them.
  * No new photograph: the hero is the Christmas-lights picture already in the
  * manifest (the shops guide's lead image), because the publisher refuses an
@@ -532,6 +535,7 @@ export function buildChristmasBarcelonaBody(locale: Locale, facts: Announcements
         "Més activitats de Nadal a la ciutat",
         `El programa del 2025, publicat el ${dateYear(PAST.programme2025.published, "ca")}, incloïa el Barcelona Festival de Nadal (${PAST.festival2025.shows} funcions d'arts de carrer a la plaça de Catalunya, ${span(PAST.festival2025.from, PAST.festival2025.to, "ca")} de 2025) i el Concert de Nadal de l'Orfeó Català al pla de la Seu (${dateYear(PAST.concert2025, "ca")}). El programa del 2026 encara no s'ha publicat.`,
         `A mitjan desembre també hi ha ${b2link("marato", "ca", "La Marató de 3Cat")}, el programa solidari de TV3, que el 2026 es dedica a les malalties neurodegeneratives i neuromusculars; és el diumenge després del ${b2link("decemberBridge", "ca", "pont de desembre")}.`,
+        `Tot el que passa a la ciutat aquest mes, dia a dia (concerts, festius, botigues i metro), és a ${b2link("barcelonaDecember", "ca", "què fer a Barcelona al desembre")}.`,
       ),
       ...h2(
         "Què obre a Barcelona el dia de Nadal?",
@@ -648,6 +652,7 @@ export function buildChristmasBarcelonaBody(locale: Locale, facts: Announcements
         "Más actos de Navidad en la ciudad",
         `El programa de 2025, publicado el ${dateYear(PAST.programme2025.published, "es")}, incluía el Barcelona Festival de Nadal (${PAST.festival2025.shows} funciones de artes de calle en la plaza de Catalunya, ${span(PAST.festival2025.from, PAST.festival2025.to, "es")} de 2025) y el Concierto de Navidad del Orfeó Català en el pla de la Seu (${dateYear(PAST.concert2025, "es")}). El programa de 2026 aún no se ha publicado.`,
         `A mediados de diciembre también está ${b2link("marato", "es", "La Marató de 3Cat")}, el programa solidario de TV3, que en 2026 se dedica a las enfermedades neurodegenerativas y neuromusculares; es el domingo después del ${b2link("decemberBridge", "es", "puente de diciembre")}.`,
+        `Todo lo que pasa en la ciudad este mes, día a día (conciertos, festivos, tiendas y metro), está en ${b2link("barcelonaDecember", "es", "qué hacer en Barcelona en diciembre")}.`,
       ),
       ...h2(
         "¿Qué abre en Barcelona el día de Navidad?",
@@ -763,6 +768,7 @@ export function buildChristmasBarcelonaBody(locale: Locale, facts: Announcements
       "More Christmas events in the city",
       `The 2025 programme, published on ${dateYear(PAST.programme2025.published, "en")}, included the Barcelona Festival de Nadal (${PAST.festival2025.shows} street-arts performances of theatre, dance, circus and music on Plaça de Catalunya, ${span(PAST.festival2025.from, PAST.festival2025.to, "en")} 2025) and the city's Christmas concert by the Orfeó Català on the Pla de la Seu (${dateYear(PAST.concert2025, "en")}). The 2026 programme has not been published yet.`,
       `Mid-December also brings ${b2link("marato", "en", "La Marató de 3Cat")}, TV3's charity telethon, which in 2026 is for neurodegenerative and neuromuscular diseases; it is on the Sunday after the ${b2link("decemberBridge", "en", "December long weekend")}.`,
+      `Everything else on in the city that month, day by day (concerts, holidays, shops and the metro), is in ${b2link("barcelonaDecember", "en", "Barcelona in December")}.`,
     ),
     ...h2(
       "Is Barcelona open on Christmas Day?",

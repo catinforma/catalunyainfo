@@ -57,6 +57,7 @@ import { GROSSA } from "@/lib/content/batch02/grossa";
 import { EASTER_2027 } from "@/lib/content/batch02/easter-2027";
 import { BRIDGES_2027 } from "@/lib/content/batch02/bridges-2027";
 import { LOTERIA_NADAL } from "@/lib/content/batch02/loteria-nadal";
+import { BARCELONA_DECEMBER } from "@/lib/content/batch02/barcelona-december";
 import { publishHolidayTodayGuide } from "@/lib/content/holidays/today-publish";
 import { publishLocalHolidaysGuide } from "@/lib/content/holidays/local-publish";
 import { publishReservoirGuide } from "@/lib/content/reservoirs/publish";
@@ -216,6 +217,18 @@ export async function POST(request: Request) {
     if (wants("loteria-nadal")) published.push(await publishB2Article(LOTERIA_NADAL));
     if (wants("loteria-nadal-links")) {
       published.push(await publishB2Article(GROSSA), await publishB2Article(NEW_YEAR), await publishB2Article(CHRISTMAS_BARCELONA));
+    }
+    // Barcelona in December 2026: the dated hub for the month, on its own so a
+    // newly announced date (lights, Santa Llúcia, the New Year's Eve show, La
+    // Grossa's time) republishes only this page. The three pages that gained
+    // one sentence linking to it go out once, with `barcelona-december-links`.
+    if (wants("barcelona-december")) published.push(await publishB2Article(BARCELONA_DECEMBER));
+    if (wants("barcelona-december-links")) {
+      published.push(
+        await publishB2Article(CHRISTMAS_BARCELONA),
+        await publishB2Article(CLIMATE),
+        await publishB2Article(DECEMBER_BRIDGE),
+      );
     }
     // Rodalies live status (/ca/rodalies/ and the line pages are code routes,
     // not articles): the four guides that gained one body link to them.
