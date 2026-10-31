@@ -80,7 +80,9 @@ export type B2Key =
   // 31 Oct 2026: the Spanish Christmas lottery 2026 (draw and results, 22 Dec).
   | "loteriaNadal"
   // 31 Oct 2026: Barcelona in December, the dated hub for the month.
-  | "barcelonaDecember";
+  | "barcelonaDecember"
+  // 31 Oct 2026: the Three Kings parade (Cavalcada de Reis), Barcelona and other towns.
+  | "reis";
 
 /** Path after the locale prefix, no leading or trailing slash. */
 export const B2_PATHS: Record<B2Key, Record<Locale, string>> = {
@@ -378,6 +380,12 @@ export const B2_PATHS: Record<B2Key, Record<Locale, string>> = {
     ca: "guies/barcelona-al-desembre",
     es: "guias/barcelona-en-diciembre",
     en: "guides/barcelona-in-december",
+  },
+  // No year in the path: the same URLs serve every January.
+  reis: {
+    ca: "guies/cavalcada-de-reis-barcelona",
+    es: "guias/cabalgata-de-reyes-barcelona",
+    en: "guides/three-kings-parade-barcelona",
   },
 };
 
@@ -683,6 +691,11 @@ export const B2_TITLES: Record<B2Key, Record<Locale, string>> = {
     ca: "Què fer a Barcelona al desembre 2026",
     es: "Qué hacer en Barcelona en diciembre 2026",
     en: "Barcelona in December 2026: what's on and what's open",
+  },
+  reis: {
+    ca: "Cavalcada de Reis 2027 a Barcelona: horari i recorregut",
+    es: "Cabalgata de Reyes 2027 en Barcelona: horario y recorrido",
+    en: "Three Kings Parade 2027 in Barcelona: times and route",
   },
 };
 

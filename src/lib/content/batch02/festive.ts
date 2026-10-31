@@ -75,7 +75,11 @@ export interface Announcements {
   santJaume: Announcement | null;
   /** The New Year's Eve show; `date` is 31 December, `time` the start. */
   newYearShow: Announcement | null;
-  /** The Three Kings parade; `time` the start of the parade. */
+  /**
+   * The Three Kings parade; `time` the start of the parade. Fill it together
+   * with ANNOUNCED_2027.barcelona in reis.ts (same date, time and URL): a test
+   * holds the two together.
+   */
   cavalcada: Announcement | null;
 }
 
