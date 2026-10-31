@@ -1314,6 +1314,79 @@ After the order, check the `COUNCIL DIFFERS` lines `prepare2027` prints.
 
 **Outcome:** _pending_
 
+## 2026-10-31 — Striking-distance push (positions 8–20)
+
+Owner's ask: "puja les pàgines que estan abaix de posició". Below position 8 the
+problem is relevance and depth, not the title, so the lever here is substance:
+what the top three results answer and we did not.
+
+**Shortlist.** Search Console, `dataState: all`, 28 days (3-31 Oct) and 7 days
+(25-31 Oct), page and page × query. Pages with ≥ 60 impressions and an average
+position of 8-20, ranked by impressions × (expected CTR at position 3 − CTR).
+The site's own page-level curve puts position 3 at 4.0 % on 2,554 impressions,
+under position 4 (7.4 %), so 3-4 are pooled: 6.5 %. Full list with a reason per
+page: `research_notes/x10/striking-31oct.json`.
+
+**42 pages qualify; 41 are not touched.** 32 were rewritten on 28 or 30 Oct
+(entries above, not yet deployed, so the data measures the old pages; the mesa
+page is also in the election cluster). The ES ZBE page was rewritten in commit
+9146e3b on 30 Oct for exactly its "autorización diaria ZBE" queries, though no
+entry logs it. Of the rest: the home page, two programmatic pages
+(`/es/festivos/`, Barcelona town page), two election-results pages (other
+agents) and three seasonal pages past their date (Castanyada EN, both Sitges
+festival guides). For every rewritten page the 28-day queries were read
+against the pending rewrite; none shows an intent the rewrite missed. The ones
+that look low are dragged by queries no page can win ("festividades" 85.6,
+"calendario laboral" 59.8, the expired "30 octubre festivo").
+
+The one untouched page with the highest score is the clock-change guide, so its
+three editions were worked. Two more pages sit in the band but under 60
+impressions, with rising or head-term demand. Neither is in the 28/30 Oct
+entries, so they were added as an extension.
+
+| Page (publish group) | Baseline 28 d: impr. / clicks / CTR / position (7 d position) | What changed |
+| --- | --- | --- |
+| `/en/guides/clock-change-spain/` (`clock-change`) | 3,095 / 2 / 0.06 % / 8.5 (8.4). "when do the clocks change in spain" 231 at 9.9, "when do clocks change in spain" 160 at 9.7, "do the clocks go back in barcelona" 42 at 8.7 | Title "Spain clock change: clocks go forward on Sunday 28 March 2027" (61) → **"When do the clocks change in Spain? Next: 28 March 2027"** (55). H1 → "When do the clocks change in Spain? Dates to 2031 and what happens". Description names Easter Sunday and CET. The lead opens with the next change, the last one and the one after. New section and table, **time difference with the UK, the Canary Islands and the US**: the UK and the Canaries are an hour behind all year; the US gap shrinks by an hour from 14 to 28 March and from 31 Oct to 7 Nov 2027. CET/CEST named. FAQs: "Do the clocks go back in Barcelona?", "What time zone is Barcelona in?", "Is the March 2027 clock change on Easter Sunday?". Links out to the weather-by-month page and the 2027 holidays guide |
+| `/ca/guies/canvi-hora-catalunya/` (`clock-change`) | 7,856 / 23 / 0.29 % / 7.0 (7.1); "canvi d'hora" 2,227 at 7.5, 385 impressions of named queries at 8-20 | Title trimmed (62 → 54): "Canvi d'hora 2027: diumenge 28 de març, una hora menys". H1 "Canvi d'hora: quan canvien l'hora, dates fins al 2031 i si s'acabarà". The same lead, section and FAQs (Setmana Santa, "Quina hora té Catalunya?") |
+| `/es/guias/cambio-hora-espana/` (`clock-change`) | 289 / 1 / 0.35 % / 26.3 (33.6), outside the band | Title kept. H1 "Cambio de hora: cuándo se cambia la hora, fechas hasta 2031 y si se acabará". The same lead, section and FAQs |
+| `/en/day-trips/andorra-from-barcelona-by-bus/` (`andorra`; ca/es too) | 48 / 0 / 0 % / 8.6 (8.2); "barcelona to andorra bus" 6 at 20.7 (ES 25 at 5.1, CA 6 at 5.7) | Title kept (already the query). H1 "Barcelona to Andorra bus: timetables, fares, from the airport, customs". The lead names both operators, the frequencies and the fare. Direct Bus's airport departures (T1 ground floor, bays 7-12; T2 between B and C) are in the table. New H2s **"Barcelona airport to Andorra by bus"** and **"Where the bus arrives in Andorra"** (Estació Nacional d'Autobusos; Direct Bus's Sant Julià stop). Andbus's €33/€56 is now labelled as the airport fare, because its fare table is headed that way. Holiday-timetable caveat (24, 25, 31 Dec, 1 Jan). Two FAQs. ALSA and FlixBus are still out: neither site gave route data |
+| `/ca/tradicions/pessebres-vivents-catalunya/` (`pessebres`; es/en too) | 46 / 1 / 2.2 % / 13.4, all in its first week (ES 77 at 5.6, EN 13 at 3.3) | Answer-first lead: the first two of the season (Corbera from 28 Nov, the Pessebre dels Estels at the Masia de Castelló on 5, 6, 12 and 13 Dec) and every one with dates. Two nativities added to the table from their own sites: **Sant Fost de Campsentelles** (13 Dec to 10 Jan, online, adults €10) and the **Pessebre dels Estels** (from 16:30, half-hour slots, €15/€10). FAQ "Quin és el primer pessebre vivent del 2026?". The "near Barcelona" FAQ now gives this season's dates. The four "not yet published" were re-read and are still last season's |
+
+**Internal links added to these pages.**
+- Work calendar, Easter 2027 section (ca/es/en, `holidays`): one sentence linking the clock change ("canvi d'hora" / "cambio de hora" / "clocks change in Spain"). It is printed only while Easter Sunday is also the March change: computed, and tested.
+- Weather by month, winter paragraph (ca/es/en, `climate`): "quan és el canvi d'hora" / "cuándo es el cambio de hora" / "when the clocks change in Spain".
+- Airport to city centre related rail (`airport`) and Cerdanya without a car related rail (`batch02-c`): the Andorra guide. Its rail label is now "Barcelona to Andorra bus: timetable and fares" (ca/es alike).
+- The nativity guide was already linked from four Christmas pages, so none were added.
+
+**Facts, read on 31 Oct 2026** (pack in `research_notes/striking-31oct-facts.md`):
+- RD 236/2002 arts. 2-3 (Canary Islands at 01:00/02:00 local).
+- C/2026/1660 (28 March and 31 October 2027, 01:00 UTC).
+- EP procedure 2018/0332(COD): "Awaiting Council's 1st reading position".
+- GOV.UK clock change dates.
+- NIST US DST rule (2027 dates computed and tested).
+- Generalitat 2027 calendar (26 and 29 March).
+- Andbus and Direct Bus timetables.
+- Govern d'Andorra on the Estació Nacional d'Autobusos.
+- Agencia Tributaria (updated 23 Sep 2026; its Andorra section names no age limit, its third-country section says under-17s get no allowance, and the page keeps the stricter rule).
+- Grandvalira ("Open from 4 December").
+- pessebreviventsantfost.cat and masiacastello.cat.
+
+**Not done on purpose.**
+- Calçotada de Valls (CA 43 impressions at 14.1): published 27 Oct and still settling (ES already 4.8), and it already answers the 2027 date.
+- The clock-change page's 26 Oct title experiment is overlapped: its EN and CA titles change again inside 28 days, under the owner's 28 Oct lifting of the windows. Read the 23 Nov measurement as a combined one.
+
+**Prediction.**
+- EN clock-change page from 8.5 into the top 5 for "when do the clocks change in spain" and "do the clocks go back in barcelona" by the March peak. Demand is near zero until then, so judge position, not clicks.
+- CA "canvi d'hora" from 7.5 to ≤ 5.
+- "barcelona to andorra bus" from 20.7 onto page 1.
+- The CA nativity page from 13.4 into the top 10 as December demand arrives.
+
+**Measure on 28 Nov 2026** (position per page and per query above; check the
+last crawl date first), and again for the clock change in the week of 21 March
+2027.
+
+**Outcome:** _pending_
+
 ## Candidates not yet run
 
 Recorded so they are not lost, and so they are not all started at once.
