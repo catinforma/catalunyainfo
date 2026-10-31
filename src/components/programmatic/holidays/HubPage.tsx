@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import { Breadcrumbs, type Crumb } from "@/components/Breadcrumbs";
+import { renderInline } from "@/lib/content/inline";
 import { getMessages } from "@/lib/i18n";
 import { HUB_VISIBLE, dateQuestion, displayName, hubCopy } from "@/lib/programmatic/holidays/copy";
 import { SNAPSHOT, byComarca } from "@/lib/programmatic/holidays/data";
@@ -44,6 +45,7 @@ export function HubPage({ locale }: { locale: MuniLocale }) {
           <p>
             {t.population} {t.next}
           </p>
+          <p>{renderInline(t.easter)}</p>
         </div>
 
         {/* The dated questions first: with every town below, they would sit a long scroll away. */}

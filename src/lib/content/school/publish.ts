@@ -357,6 +357,16 @@ function daysOff(year: SchoolYear, locale: Locale): Block[] {
   const afterEaster = day(addDays(year.easter[1], 1), locale);
   const complete = isCovered(year.end);
   const aran = aranSwapInTerm(year);
+  const easterYear = year.easter[0].slice(0, 4);
+  const easterPage = EASTER_PAGE[easterYear]?.[locale];
+  const easterLine = easterPage
+    ? L(
+        locale,
+        `Els festius, les festes locals que toquen a les vacances i els ponts de Setmana Santa són a [Setmana Santa ${easterYear} a Catalunya](${easterPage}).`,
+        `Los festivos, las fiestas locales que tocan a las vacaciones y los puentes de Semana Santa están en [Semana Santa ${easterYear} en Cataluña](${easterPage}).`,
+        `Public holidays, the local holidays next to the break and the Easter long weekends are in [Easter ${easterYear} in Catalonia](${easterPage}).`,
+      )
+    : null;
 
   const p: string[] = [];
   if (locale === "ca") {
@@ -372,6 +382,7 @@ function daysOff(year: SchoolYear, locale: Locale): Block[] {
     if (aran) p.push(`In Aran, the ${day(aran.replaces, locale)} holiday is replaced by the ${aran.name.en} on **${day(aran.date, locale)}**, a school day everywhere else in Catalonia.`);
     p.push("Add each town's two local holidays, listed in [local holidays in Catalonia](/en/guides/local-holidays-catalonia/), and the four free-choice days each school sets.");
   }
+  if (easterLine) p.push(easterLine);
 
   return [
     { type: "heading", level: 2, text: DAYS_OFF_TITLE[locale].replace("{y}", year.label) },
@@ -511,6 +522,15 @@ function barcelona(year: SchoolYear, locale: Locale): Block[] {
     ...paragraphs.slice(1).map((text) => ({ type: "paragraph", text }) as Block),
   ];
 }
+
+/** The Easter guide for a given year, where there is one (the year of the school break's start). */
+const EASTER_PAGE: Record<string, Record<Locale, string>> = {
+  "2027": {
+    ca: "/ca/guies/setmana-santa-2027-catalunya/",
+    es: "/es/guias/semana-santa-2027-cataluna/",
+    en: "/en/guides/easter-2027-catalonia/",
+  },
+};
 
 const BRIDGE_PAGE: Record<Locale, string> = {
   ca: "/ca/guies/pont-desembre-catalunya/",

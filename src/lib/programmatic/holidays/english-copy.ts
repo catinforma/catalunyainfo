@@ -6,6 +6,7 @@ import { NEXT, SNAPSHOT, YEAR, aranSwap, councilApproved2027, isAran, regionalDa
 import { dateContent } from "./dates";
 import { englishTowns, englishWithoutDays } from "./english";
 import { dayMonth, dayPair, weekdayDayMonth, weekdayName } from "./format";
+import { GUIDES } from "./links";
 import { joinList } from "./names";
 import { DATE_PAGES, type DatePage } from "./paths";
 import type { SnapshotMunicipality } from "./types";
@@ -444,6 +445,7 @@ export function englishHubCopy() {
     },
     editions: `The Catalan and Spanish editions cover all ${SNAPSHOT.municipalities.length} towns with local holidays in ${YEAR}, with a table for each comarca:`,
     next: `The local holidays for ${NEXT} have not been published yet; the order for ${YEAR} appeared in the DOGC on 17 December 2025.${councilLine(towns)}`,
+    easter: `Which days are public holidays over Easter 2027, the school Easter break and the local holidays next to it: [Easter 2027 in Catalonia](${GUIDES.easter2027.en}).`,
     datesTitle: "Is it a public holiday on…?",
     guidesTitle: "More on public holidays",
     sourcesTitle: "Sources",

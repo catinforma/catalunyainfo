@@ -72,7 +72,9 @@ export type B2Key =
   // 29 Oct 2026: the dedicated page for the 11 November 2026 general strike.
   | "strike11n"
   // 30 Oct 2026: La Grossa de Cap d'Any 2026 (draw and results, 31 Dec).
-  | "grossa";
+  | "grossa"
+  // 31 Oct 2026: Easter 2027 (holidays, school break, shops, long weekends).
+  | "easter2027";
 
 /** Path after the locale prefix, no leading or trailing slash. */
 export const B2_PATHS: Record<B2Key, Record<Locale, string>> = {
@@ -345,6 +347,13 @@ export const B2_PATHS: Record<B2Key, Record<Locale, string>> = {
     ca: "guies/la-grossa-cap-d-any",
     es: "guias/la-grossa-fin-de-ano",
     en: "guides/la-grossa-new-years-eve-lottery",
+  },
+  // Dated on purpose: the page is about Easter 2027 and is indexed months
+  // before the January-March searches for it.
+  easter2027: {
+    ca: "guies/setmana-santa-2027-catalunya",
+    es: "guias/semana-santa-2027-cataluna",
+    en: "guides/easter-2027-catalonia",
   },
 };
 
@@ -630,6 +639,11 @@ export const B2_TITLES: Record<B2Key, Record<Locale, string>> = {
     ca: "La Grossa de Cap d'Any 2026: resultats i premis",
     es: "La Grossa de Cap d'Any 2026: resultados y premios",
     en: "La Grossa de Cap d'Any 2026: results and prizes",
+  },
+  easter2027: {
+    ca: "Setmana Santa 2027 a Catalunya: festius i vacances escolars",
+    es: "Semana Santa 2027 en Cataluña: festivos y vacaciones escolares",
+    en: "Easter 2027 in Catalonia: public and school holidays",
   },
 };
 
