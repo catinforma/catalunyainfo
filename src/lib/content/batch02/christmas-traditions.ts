@@ -39,7 +39,8 @@ import {
  * Pastorets publishes its 2026-27 dates, fill the field in
  * ANNOUNCED_TRADITIONS (ISO dates and the organiser's own page), set
  * TRADITIONS_VERIFIED to the check date, run the tests and republish the
- * "nadal-tradicions" group. The "not announced yet" lines switch on their own.
+ * "nadal-tradicions" group (and, for Santa Llúcia, "barcelona-december", whose
+ * day-by-day table picks it up). The "not announced yet" lines switch on their own.
  *
  * No new photograph: the hero is the nativity-figures picture already in the
  * manifest (the Christmas markets guide's second image), with that file's own

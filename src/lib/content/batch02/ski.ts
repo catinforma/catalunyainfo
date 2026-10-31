@@ -280,6 +280,14 @@ function resortRows(locale: Locale): string[][] {
  * practical-information page, read 30 and 31 Oct 2026 (the first day marked open and
  * the last). Rows without a date say so: nothing is estimated.
  */
+/** The same planned first days as ISO dates, for pages that quote them (the December hub). */
+export const SKI_OPENING_2026 = {
+  baqueira: "2026-11-28",
+  /** La Molina, Vallter, Port Ainé and Boí Taüll. */
+  fgc: "2026-12-04",
+  espot: "2026-12-05",
+} as const;
+
 const OPENING: Record<Locale, string[][]> = {
   ca: [
     ["Baqueira Beret", "Dissabte 28 de novembre de 2026", "4 d'abril de 2027"],

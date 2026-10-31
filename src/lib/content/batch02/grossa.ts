@@ -67,7 +67,8 @@ import { SHOPS } from "./shops";
  *  - Draw time announced (in 2024 Loteries de Catalunya announced it on 19
  *    Dec): set DRAW_TIME_2026 = { time: "13:00", source: { name, url,
  *    publisher } } with the official page, move GROSSA_AS_OF to that day, run
- *    the tests, deploy, publish `?only=grossa`.
+ *    the tests, deploy, publish `?only=grossa` (and `?only=barcelona-december`,
+ *    whose 31 December row prints the time).
  *  - 31 Dec, once Loteries de Catalunya publishes the numbers: fill
  *    RESULTS_2026 (template in its comment), set GROSSA_AS_OF = "2026-12-31",
  *    run `npm test` (resultsProblems refuses typos, repeats, last year's
