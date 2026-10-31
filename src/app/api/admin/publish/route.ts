@@ -54,6 +54,7 @@ import { MARATO_GUIDE } from "@/lib/content/batch02/marato";
 import { STRIKES_GUIDE } from "@/lib/content/batch02/strikes";
 import { STRIKE_11N } from "@/lib/content/batch02/strike-11n";
 import { GROSSA } from "@/lib/content/batch02/grossa";
+import { EASTER_2027 } from "@/lib/content/batch02/easter-2027";
 import { publishHolidayTodayGuide } from "@/lib/content/holidays/today-publish";
 import { publishLocalHolidaysGuide } from "@/lib/content/holidays/local-publish";
 import { publishReservoirGuide } from "@/lib/content/reservoirs/publish";
@@ -190,6 +191,11 @@ export async function POST(request: Request) {
     // results go out in one fast call. The New Year's Eve guide gained one
     // sentence linking to it; that goes out once with `nye`.
     if (wants("grossa")) published.push(await publishB2Article(GROSSA));
+    // Easter 2027: one page, on its own so the updates it is waiting for (the
+    // DOGC local-holiday order, the 2027 municipal shop days) republish only
+    // it. The work calendar and school calendar guides gained one sentence
+    // linking to it; they go out once with `holidays` and `school-calendar`.
+    if (wants("setmana-santa-2027")) published.push(await publishB2Article(EASTER_2027));
     // Rodalies live status (/ca/rodalies/ and the line pages are code routes,
     // not articles): the four guides that gained one body link to them.
     if (wants("rodalies-links")) {

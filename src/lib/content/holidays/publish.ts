@@ -155,6 +155,7 @@ function easterSection(copy: HolidayCopy, locale: Locale): Block[] {
         .replace("{from}", formatDay(school.easter[0], copy, locale))
         .replace("{to}", formatDay(school.easter[1], copy, locale)),
     },
+    { type: "paragraph", text: copy.easterGuide },
   ];
 }
 

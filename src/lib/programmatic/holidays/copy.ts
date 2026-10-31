@@ -1,6 +1,7 @@
 import type { CouncilApproved } from "./council-2027";
 import { NEXT, SNAPSHOT, YEAR, councilApproved2027, councilApprovedTowns, isAran, regionalDays, sharedDates, type ComarcaGroup } from "./data";
 import { LOCAL_DATE_PAGES } from "./dates";
+import { GUIDES } from "./links";
 import { caDayArticle, dayMonth, dayMonthYear, dayPair, weekdayDayMonth, type DateLocale } from "./format";
 import { caA, caComarca, caDe, caStart, esName, joinList } from "./names";
 import { datePath, type MuniLocale } from "./paths";
@@ -634,6 +635,7 @@ export function hubCopy(locale: MuniLocale) {
       jump: "Per comarques:",
       population: `Dins de cada comarca, els municipis van per població a 1 de gener de ${SNAPSHOT.sources.population.year} (Idescat).`,
       next: `Els festius locals del ${NEXT} encara no s'han publicat; l'ordre del ${YEAR} va sortir al DOGC el 17 de desembre de 2025.${councilCountLine("ca")}`,
+      easter: `Quins dies són festius per Setmana Santa del 2027, les vacances escolars i les festes locals que hi toquen: [Setmana Santa 2027 a Catalunya](${GUIDES.easter2027.ca}).`,
       towns: (n: number) => (n === 1 ? "1 municipi" : `${n} municipis`),
       table: (comarca: string, n: number) => comarcaLinkLabel(comarca, n, "ca"),
       more: (n: number) => (n === 1 ? "1 municipi més" : `${n} municipis més`),
@@ -654,6 +656,7 @@ export function hubCopy(locale: MuniLocale) {
     jump: "Por comarcas:",
     population: `Dentro de cada comarca, los municipios van por población a 1 de enero de ${SNAPSHOT.sources.population.year} (Idescat).`,
     next: `Los festivos locales de ${NEXT} todavía no se han publicado; la orden de ${YEAR} salió en el DOGC el 17 de diciembre de 2025.${councilCountLine("es")}`,
+    easter: `Qué días son festivos en Semana Santa de 2027, las vacaciones escolares y las fiestas locales que caen junto a ella: [Semana Santa 2027 en Cataluña](${GUIDES.easter2027.es}).`,
     towns: (n: number) => (n === 1 ? "1 municipio" : `${n} municipios`),
     table: (comarca: string, n: number) => comarcaLinkLabel(comarca, n, "es"),
     more: (n: number) => (n === 1 ? "1 municipio más" : `${n} municipios más`),

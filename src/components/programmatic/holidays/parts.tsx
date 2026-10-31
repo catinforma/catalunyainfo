@@ -28,6 +28,7 @@ const GUIDE_LABEL: Record<GuideKey, Record<DateLocale, string>> = {
   newYear: { ca: "Cap d'Any a Barcelona", es: "Nochevieja en Barcelona", en: "New Year's Eve in Barcelona" },
   castanyada: { ca: "La Castanyada i Tots Sants", es: "La Castañada y Todos los Santos", en: "The Castanyada and All Saints" },
   strikes: { ca: "Vaga avui a Catalunya: què funciona", es: "Huelga hoy en Cataluña: qué funciona", en: "Strike in Catalonia today: what runs" },
+  easter2027: { ca: "Setmana Santa 2027 a Catalunya", es: "Semana Santa 2027 en Cataluña", en: "Easter 2027 in Catalonia" },
 };
 
 export function GuideLinks({ keys, locale, title }: { keys: readonly GuideKey[]; locale: DateLocale; title: string }) {

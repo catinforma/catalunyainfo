@@ -132,6 +132,16 @@ const DAYS_2027: Row[] = [
 ];
 
 /**
+ * The same 2027 days as dates, for the pages that reason about them (the
+ * Easter 2027 guide): Ordre EMT/89/2026, art. 1 (general) and art. 5 (the
+ * default municipal pair). A test holds them to the table above.
+ */
+export const OPENING_2027 = {
+  general: ["2027-01-03", "2027-06-27", "2027-11-01", "2027-11-28", "2027-12-06", "2027-12-08", "2027-12-12", "2027-12-19"],
+  municipalDefault: ["2027-01-10", "2027-12-05"],
+} as const;
+
+/**
  * Every municipality in Resolució EMT/4342/2025 whose shop opening days from
  * 1 November to 31 December 2026 differ from the default (29 Nov; 6, 8, 13,
  * 20 and 27 Dec): `closed` = default days it does not open, `extra` = days it

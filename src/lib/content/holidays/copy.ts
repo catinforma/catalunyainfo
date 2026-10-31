@@ -54,6 +54,8 @@ export interface HolidayCopy {
   easterStatus: { maundy: string; holiday: string; exceptAran: string; sunday: string; barcelona: string };
   /** `{from}`, `{to}`: the school Easter holidays (Ordre EDF/66/2026). */
   easterSchool: string;
+  /** One sentence linking the Easter 2027 guide. */
+  easterGuide: string;
 
   /** Local holidays of other towns: when next year's appear, where this year's are. `{towns}`, `{count}` (how many towns have a page). */
   localTitle: string;
@@ -179,6 +181,8 @@ export const COPY: Record<Locale, HolidayCopy> = {
     },
     easterSchool:
       "Les vacances escolars de Setmana Santa van del {from} al {to}, tots dos inclosos (Ordre EDF/66/2026): tot el curs és al [calendari escolar 2026-2027](/ca/guies/calendari-escolar-catalunya/).",
+    easterGuide:
+      "Les botigues, el metro, les festes locals que hi toquen i els ponts de Setmana Santa són a [Setmana Santa 2027 a Catalunya](/ca/guies/setmana-santa-2027-catalunya/).",
 
     localTitle: "Festes locals del 2027: quan es publiquen",
     local: [
@@ -300,6 +304,8 @@ export const COPY: Record<Locale, HolidayCopy> = {
     },
     easterSchool:
       "Las vacaciones escolares de Semana Santa van del {from} al {to}, ambos incluidos (Orden EDF/66/2026): el curso entero está en el [calendario escolar 2026-2027](/es/guias/calendario-escolar-cataluna/).",
+    easterGuide:
+      "Las tiendas, el metro, las fiestas locales que caen junto a ella y los puentes de Semana Santa están en [Semana Santa 2027 en Cataluña](/es/guias/semana-santa-2027-cataluna/).",
 
     localTitle: "Fiestas locales 2027: cuándo se publican",
     local: [
@@ -421,6 +427,8 @@ export const COPY: Record<Locale, HolidayCopy> = {
     },
     easterSchool:
       "School Easter holidays run from {from} to {to}, both included (Order EDF/66/2026): the whole year is in the [Catalonia school calendar 2026-2027](/en/guides/catalonia-school-calendar/).",
+    easterGuide:
+      "Shops, the metro, the local holidays next to Easter and the long weekends are in [Easter 2027 in Catalonia](/en/guides/easter-2027-catalonia/).",
 
     localTitle: "Local holidays in 2027: when they are published",
     local: [

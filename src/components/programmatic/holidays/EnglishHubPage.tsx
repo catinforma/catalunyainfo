@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import { Breadcrumbs, type Crumb } from "@/components/Breadcrumbs";
+import { renderInline } from "@/lib/content/inline";
 import { getMessages } from "@/lib/i18n";
 import { hubPath as electionsHubPath } from "@/lib/programmatic/elections/paths";
 import { dateQuestion } from "@/lib/programmatic/holidays/copy";
@@ -111,6 +112,7 @@ export function EnglishHubPage() {
             </Link>
             . {t.next}
           </p>
+          <p>{renderInline(t.easter)}</p>
         </div>
 
         <section className="mt-12" aria-labelledby="ci-hol-dates">
