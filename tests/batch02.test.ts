@@ -1042,6 +1042,55 @@ test("ski: opening in the title, official snow-report links, FGC early birds, ch
   }
 });
 
+test("ski: opening dates answered first, from Baqueira's news and the FGC calendars (read 30-31 Oct 2026)", () => {
+  const firstOpening = { ca: /28 de novembre/, es: /28 de noviembre/, en: /28 November/ } as const;
+  const fgc = { ca: /4 de desembre/, es: /4 de diciembre/, en: /4 December/ } as const;
+  const fgcEspot = { ca: /5 de desembre/, es: /5 de diciembre/, en: /5 December/ } as const;
+  const resortFaq = { ca: /^Quan obre (Baqueira|la Molina|Masella)/, es: /^¿Cuándo abre (Baqueira|La Molina|Masella)/, en: /^When does (Baqueira|La Molina|Masella)/ } as const;
+  const alpEarly = { ca: /950 € fins al 22 de novembre/, es: /950 € hasta el 22 de noviembre/, en: /€950 until 22 November/ } as const;
+  const nordic = { ca: /131 € fins al 15 de novembre; 175 € després/, es: /131 € hasta el 15 de noviembre; 175 € después/, en: /€131 until 15 November; €175 after/ } as const;
+  for (const locale of LOCALES) {
+    const edition = SKI.editions[locale];
+    const blocks = edition.blocks as { type: string; lead?: boolean; text?: string; rows?: string[][]; items?: { question: string }[] }[];
+    // The first sentence of the lead gives the earliest planned opening.
+    const lead = blocks.find((b) => b.type === "paragraph" && b.lead)?.text ?? "";
+    const firstSentence = lead.split(/(?<=\.)\s/)[0] ?? "";
+    assert.match(firstSentence, /Baqueira/, `${locale}: lead opens with the first resort to open`);
+    assert.match(firstSentence, firstOpening[locale], `${locale}: lead opens with its date`);
+    assert.match(lead, fgc[locale], `${locale}: FGC calendar date in the lead`);
+    // The opening table comes before the comparison table and covers all ten resorts.
+    const tables = blocks.filter((b) => b.type === "table");
+    const opening = tables[0]?.rows ?? [];
+    assert.equal(opening.length, 10, `${locale}: ten resorts in the opening table`);
+    assert.match(JSON.stringify(opening.find((r) => r[0] === "Baqueira Beret")), firstOpening[locale]);
+    for (const name of ["La Molina", "Vallter", "Port Ainé", "Boí Taüll"]) {
+      assert.match(JSON.stringify(opening.find((r) => r[0] === name)), fgc[locale], `${locale}: ${name} from its calendar`);
+    }
+    assert.match(JSON.stringify(opening.find((r) => r[0] === "Espot")), fgcEspot[locale], `${locale}: Espot opens a day later`);
+    for (const name of ["Masella", "Vall de Núria", "Port del Comte", "Tavascan"]) {
+      const row = opening.find((r) => r[0] === name) ?? [];
+      assert.match(row[1] ?? "", /^(Sense data anunciada|Sin fecha anunciada|Not announced)/, `${locale}: ${name} has no announced date`);
+      assert.equal(row[2], "—", `${locale}: ${name} has no last day`);
+    }
+    // FAQ per resort for the most-searched resorts.
+    const faqItems = blocks.find((b) => b.type === "faq")?.items ?? [];
+    assert.ok(faqItems.filter((q) => resortFaq[locale].test(q.question)).length >= 3, `${locale}: resort opening FAQs`);
+    // Season passes updated to the 2026-27 terms read on 30-31 Oct.
+    const text = bodyToPlainText(edition.blocks);
+    assert.match(text, alpEarly[locale], `${locale}: Alp2500 early price ends 22 Nov`);
+    assert.match(text, nordic[locale], `${locale}: Tot Nòrdic 131 € before 15 Nov, 175 € after`);
+    assert.match(text, /436/, `${locale}: Pallars early price`);
+    // Description with the official dates, inside the snippet budget.
+    assert.ok(edition.seoDescription.length <= 155, `${locale}: description ${edition.seoDescription.length}`);
+    assert.match(edition.seoDescription, firstOpening[locale], `${locale}: description gives the date`);
+    // The snow guide and Setcases no longer say FGC has no date.
+    const snowText = bodyToPlainText(SNOW.editions[locale].blocks);
+    assert.match(snowText, fgc[locale], `${locale}: snow guide FAQ has the FGC date`);
+    assert.doesNotMatch(snowText, /175 €, preus amb|175 €, precios con|€175, prices that include/, `${locale}: 175 € is the full Tot Nòrdic price`);
+    assert.match(bodyToPlainText(SETCASES.editions[locale].blocks), fgc[locale], `${locale}: Setcases has Vallter's opening`);
+  }
+});
+
 test("sitges and tarragona: corrected first pattern train, T-casual zones, last train back, open days not free days", () => {
   const back = { ca: /Horaris del tren de Sitges a Barcelona/, es: /Horarios del tren de Sitges a Barcelona/, en: /Sitges to Barcelona train times/ } as const;
   for (const locale of LOCALES) {
