@@ -1,0 +1,30 @@
+# The Vercel CLI uploads every file not listed here: unlike git, it does not
+# read .gitignore (only its own short default list: node_modules, .next, .git,
+# .env.local...). Without this file a CLI deploy also sent the agents' git
+# worktrees (.claude/worktrees, ~34,000 files, over the 15,000-file limit),
+# local secrets and database dumps. Keep it in step with .gitignore.
+
+# Agent worktrees and local tooling
+.claude/
+.idea/
+
+# Secrets and local environment files (Vercel has its own project env)
+.cron-secret
+.env*
+*.pem
+
+# Personal data and working material that never belongs in a deployment
+backups/
+research_notes/
+reports/
+incoming/
+audit-report.json
+/coverage/
+
+# Build output and caches
+node_modules/
+.next/
+/out/
+/build/
+*.tsbuildinfo
+next-env.d.ts
