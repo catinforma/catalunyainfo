@@ -35,8 +35,9 @@ export function DatePageView({ iso, locale }: { iso: DatePageIso; locale: DateLo
     year === "2026"
       ? [
           "regional2026",
-          // 31 December: the answer names 1 January 2027 (Ordre EMT/52/2026).
-          ...(iso === "2026-12-31" ? (["regional2027"] as const) : []),
+          // 31 December: the answer names 1 January 2027; 1 November: the notice
+          // names 1 November 2027 (both Ordre EMT/52/2026).
+          ...(iso === "2026-12-31" || iso === "2026-11-01" ? (["regional2027"] as const) : []),
           "localOrder",
           "amendment",
           "boe2026",

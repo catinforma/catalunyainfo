@@ -263,6 +263,7 @@ const COPY: Record<Locale, T> = {
     bcn: [
       "Barcelona fa servir el 2026 els mateixos deu dies que la llista general (4 i 11 de gener, 15 d'agost, 12 d'octubre, 29 de novembre i 6, 8, 13, 20 i 27 de desembre), i encara no ha publicat els seus dos dies del 2027.",
       "A més, a la **zona turística** (ZGAT), les botigues poden obrir els diumenges i festius **del 15 de maig al 15 de setembre, de 12 a 20 hores**. La zona inclou tots els barris de Ciutat Vella i de l'Eixample, i parts de Sants-Montjuïc, les Corts, Sarrià-Sant Gervasi, Gràcia, Horta-Guinardó i Sant Martí (Poblenou, Vila Olímpica i Diagonal Mar). Aquesta excepció no s'aplica entre el 16 de setembre i el 14 de maig: al novembre i al desembre, a la zona turística valen els mateixos dies que a la resta de la ciutat.",
+      `Què obre a la ciutat cada festiu del desembre, amb els museus i el metro, i l'agenda del mes són a ${b2link("barcelonaDecember", "ca", "què fer a Barcelona al desembre")}.`,
     ],
     salesTitle: "I les rebaixes?",
     sales: [
@@ -326,6 +327,7 @@ const COPY: Record<Locale, T> = {
     bcn: [
       "Barcelona usa en 2026 los mismos diez días que la lista general (4 y 11 de enero, 15 de agosto, 12 de octubre, 29 de noviembre y 6, 8, 13, 20 y 27 de diciembre), y aún no ha publicado sus dos días de 2027.",
       "Además, en la **zona turística** (ZGAT), las tiendas pueden abrir los domingos y festivos **del 15 de mayo al 15 de septiembre, de 12 a 20 horas**. La zona incluye todos los barrios de Ciutat Vella y del Eixample, y partes de Sants-Montjuïc, Les Corts, Sarrià-Sant Gervasi, Gràcia, Horta-Guinardó y Sant Martí (Poblenou, Vila Olímpica y Diagonal Mar). Esta excepción no se aplica entre el 16 de septiembre y el 14 de mayo: en noviembre y diciembre, en la zona turística valen los mismos días que en el resto de la ciudad.",
+      `Qué abre en la ciudad cada festivo de diciembre, con los museos y el metro, y la agenda del mes están en ${b2link("barcelonaDecember", "es", "qué hacer en Barcelona en diciembre")}.`,
     ],
     salesTitle: "¿Y las rebajas?",
     sales: [
@@ -388,6 +390,7 @@ const COPY: Record<Locale, T> = {
     bcn: [
       "In 2026 Barcelona uses the same ten days as the general list (4 and 11 January, 15 August, 12 October, 29 November and 6, 8, 13, 20 and 27 December), and has not yet published its two days for 2027.",
       "On top of that, in the **tourist zone** (ZGAT), shops may open on Sundays and holidays **from 15 May to 15 September, 12:00 to 20:00**. The zone covers every neighbourhood of Ciutat Vella and the Eixample, and parts of Sants-Montjuïc, Les Corts, Sarrià-Sant Gervasi, Gràcia, Horta-Guinardó and Sant Martí (Poblenou, Vila Olímpica and Diagonal Mar). The exception does not apply from 16 September to 14 May: in November and December the tourist zone follows the same days as the rest of the city.",
+      `What's open in the city on each December holiday, museums and the metro included, and the month's events are in ${b2link("barcelonaDecember", "en", "Barcelona in December")}.`,
     ],
     salesTitle: "What about the sales?",
     sales: [

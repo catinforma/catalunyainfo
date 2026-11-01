@@ -19,6 +19,10 @@ export const GUIDES = {
   strikes: { ca: "/ca/guies/vaga-avui-catalunya/", es: "/es/guias/huelga-hoy-cataluna/", en: "/en/guides/strike-barcelona-catalonia-today/" },
   easter2027: { ca: "/ca/guies/setmana-santa-2027-catalunya/", es: "/es/guias/semana-santa-2027-cataluna/", en: "/en/guides/easter-2027-catalonia/" },
   bridges2027: { ca: "/ca/guies/ponts-2027-catalunya/", es: "/es/guias/puentes-2027-cataluna/", en: "/en/guides/long-weekends-2027-catalonia/" },
+  // 1 Nov 2026: targets of the date pages' one-sentence notices.
+  barcelonaDecember: { ca: "/ca/guies/barcelona-al-desembre/", es: "/es/guias/barcelona-en-diciembre/", en: "/en/guides/barcelona-in-december/" },
+  grossa: { ca: "/ca/guies/la-grossa-cap-d-any/", es: "/es/guias/la-grossa-fin-de-ano/", en: "/en/guides/la-grossa-new-years-eve-lottery/" },
+  reis: { ca: "/ca/guies/cavalcada-de-reis-barcelona/", es: "/es/guias/cabalgata-de-reyes-barcelona/", en: "/en/guides/three-kings-parade-barcelona/" },
 } as const satisfies Record<string, Record<DateLocale, string>>;
 
 export type GuideKey = keyof typeof GUIDES;

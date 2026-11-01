@@ -367,6 +367,18 @@ function daysOff(year: SchoolYear, locale: Locale): Block[] {
         `Public holidays, the local holidays next to the break and the Easter long weekends are in [Easter ${easterYear} in Catalonia](${easterPage}).`,
       )
     : null;
+  // The parade is on the evening of 5 January; only when that falls inside the break.
+  const reisYear = year.christmas[1].slice(0, 4);
+  const reisEve = `${reisYear}-01-05`;
+  const reisPage = reisEve >= year.christmas[0] && reisEve <= year.christmas[1] ? REIS_PAGE[reisYear]?.[locale] : undefined;
+  const reisLine = reisPage
+    ? L(
+        locale,
+        `La Cavalcada de Reis, el vespre del ${day(reisEve, locale)}, cau dins de les vacances de Nadal: l'horari i el recorregut de la de Barcelona i de les d'altres ciutats són a [la Cavalcada de Reis ${reisYear}](${reisPage}).`,
+        `La Cabalgata de Reyes, la tarde del ${day(reisEve, locale)}, cae dentro de las vacaciones de Navidad: el horario y el recorrido de la de Barcelona y de las de otras ciudades están en [la Cabalgata de Reyes ${reisYear}](${reisPage}).`,
+        `The Three Kings parade, on the evening of ${day(reisEve, locale)}, falls inside the Christmas holidays: times and routes in Barcelona and other towns are in [the ${reisYear} Three Kings parade](${reisPage}).`,
+      )
+    : null;
 
   const p: string[] = [];
   if (locale === "ca") {
@@ -382,6 +394,7 @@ function daysOff(year: SchoolYear, locale: Locale): Block[] {
     if (aran) p.push(`In Aran, the ${day(aran.replaces, locale)} holiday is replaced by the ${aran.name.en} on **${day(aran.date, locale)}**, a school day everywhere else in Catalonia.`);
     p.push("Add each town's two local holidays, listed in [local holidays in Catalonia](/en/guides/local-holidays-catalonia/), and the four free-choice days each school sets.");
   }
+  if (reisLine) p.push(reisLine);
   if (easterLine) p.push(easterLine);
 
   return [
@@ -529,6 +542,19 @@ const EASTER_PAGE: Record<string, Record<Locale, string>> = {
     ca: "/ca/guies/setmana-santa-2027-catalunya/",
     es: "/es/guias/semana-santa-2027-cataluna/",
     en: "/en/guides/easter-2027-catalonia/",
+  },
+};
+
+/**
+ * The Three Kings parade guide for a given January, where there is one (the
+ * year the Christmas break ends). Its URLs carry no year, but its content is
+ * about one parade, so it is keyed like the Easter guide.
+ */
+const REIS_PAGE: Record<string, Record<Locale, string>> = {
+  "2027": {
+    ca: "/ca/guies/cavalcada-de-reis-barcelona/",
+    es: "/es/guias/cabalgata-de-reyes-barcelona/",
+    en: "/en/guides/three-kings-parade-barcelona/",
   },
 };
 

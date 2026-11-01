@@ -30,6 +30,9 @@ const GUIDE_LABEL: Record<GuideKey, Record<DateLocale, string>> = {
   strikes: { ca: "Vaga avui a Catalunya: què funciona", es: "Huelga hoy en Cataluña: qué funciona", en: "Strike in Catalonia today: what runs" },
   easter2027: { ca: "Setmana Santa 2027 a Catalunya", es: "Semana Santa 2027 en Cataluña", en: "Easter 2027 in Catalonia" },
   bridges2027: { ca: `Ponts ${PLANNER_YEAR} a Catalunya`, es: `Puentes ${PLANNER_YEAR} en Cataluña`, en: `Long weekends ${PLANNER_YEAR} in Catalonia` },
+  barcelonaDecember: { ca: "Què fer a Barcelona al desembre", es: "Qué hacer en Barcelona en diciembre", en: "Barcelona in December" },
+  grossa: { ca: "La Grossa de Cap d'Any", es: "La Grossa de Cap d'Any", en: "La Grossa de Cap d'Any" },
+  reis: { ca: "Cavalcada de Reis a Barcelona", es: "Cabalgata de Reyes en Barcelona", en: "Three Kings parade in Barcelona" },
 };
 
 export function GuideLinks({ keys, locale, title }: { keys: readonly GuideKey[]; locale: DateLocale; title: string }) {

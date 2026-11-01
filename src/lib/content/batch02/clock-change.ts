@@ -4,6 +4,7 @@ import type { Locale } from "@/lib/i18n/config";
 
 import {
   b2Related,
+  b2link,
   callout,
   faq,
   h2,
@@ -136,7 +137,7 @@ const COPY: Record<Locale, T> = {
     whatTitle: "Què passa exactament",
     what: [
       "**A l'octubre**, a les 03:00 de la matinada els rellotges tornen a marcar les 02:00. Aquell diumenge té 25 hores: dormim una hora més i a la tarda es fa fosc abans. A Barcelona comença el tram més fosc de l'any: el desembre és el mes amb menys hores de sol, com es veu al [temps a Barcelona mes a mes](/ca/guies/temps-barcelona-mes-a-mes/).",
-      "**Al març**, a les 02:00 els rellotges passen directament a les 03:00. El dia té 23 hores: dormim una hora menys i es fa fosc més tard.",
+      `**Al març**, a les 02:00 els rellotges passen directament a les 03:00. El dia té 23 hores: dormim una hora menys i es fa fosc més tard. El 2027, aquest canvi cau el diumenge de Pasqua, enmig dels quatre dies de festa de Setmana Santa: els festius, les vacances escolars i els ponts són a ${b2link("easter2027", "ca", "Setmana Santa 2027 a Catalunya")}.`,
       "Catalunya segueix l'hora peninsular, la central europea: UTC+1 a l'hivern (CET) i UTC+2 a l'estiu (CEST). A les Canàries el canvi es fa una hora abans en el rellotge local (de les 02:00 a la 01:00 a l'octubre), perquè tota la UE canvia en el mateix instant.",
     ],
     diffTitle: "Diferència horària amb el Regne Unit, les Canàries i els Estats Units",
@@ -185,7 +186,7 @@ const COPY: Record<Locale, T> = {
     whatTitle: "Qué pasa exactamente",
     what: [
       "**En octubre**, a las 03:00 de la madrugada los relojes vuelven a marcar las 02:00. Ese domingo tiene 25 horas: dormimos una hora más y por la tarde anochece antes. En Barcelona empieza el tramo más oscuro del año: diciembre es el mes con menos horas de sol, como se ve en [el tiempo en Barcelona mes a mes](/es/guias/tiempo-barcelona-mes-a-mes/).",
-      "**En marzo**, a las 02:00 los relojes pasan directamente a las 03:00. El día tiene 23 horas: dormimos una hora menos y anochece más tarde.",
+      `**En marzo**, a las 02:00 los relojes pasan directamente a las 03:00. El día tiene 23 horas: dormimos una hora menos y anochece más tarde. En 2027, este cambio cae en domingo de Pascua, en medio de los cuatro días de fiesta de Semana Santa: los festivos, las vacaciones escolares y los puentes están en ${b2link("easter2027", "es", "Semana Santa 2027 en Cataluña")}.`,
       "La península y Baleares tienen la hora central europea: UTC+1 en invierno (CET) y UTC+2 en verano (CEST). En Canarias el cambio se hace una hora antes en el reloj local (de las 02:00 a la 01:00 en octubre), porque toda la UE cambia en el mismo instante.",
     ],
     diffTitle: "Diferencia horaria con Reino Unido, Canarias y Estados Unidos",
@@ -234,7 +235,7 @@ const COPY: Record<Locale, T> = {
     whatTitle: "What exactly happens",
     what: [
       "**In October**, at 03:00 the clocks go back to 02:00. That Sunday has 25 hours: you get an extra hour in bed, and it gets dark earlier in the afternoon. In Barcelona it starts the darkest stretch of the year: December has the fewest hours of sunshine, as the [Barcelona weather by month](/en/guides/barcelona-weather-by-month/) guide shows.",
-      "**In March**, at 02:00 the clocks jump straight to 03:00. The day has 23 hours: you lose an hour, and it gets dark later.",
+      `**In March**, at 02:00 the clocks jump straight to 03:00. The day has 23 hours: you lose an hour, and it gets dark later. In 2027 that night falls on Easter Sunday, in the middle of Catalonia's four-day Easter weekend: the public and school holidays and the long weekends are in ${b2link("easter2027", "en", "Easter 2027 in Catalonia")}.`,
       "Barcelona and the rest of mainland Spain are on Central European Time: UTC+1 in winter (CET) and UTC+2 in summer (CEST). In the Canary Islands the change comes an hour earlier on the local clock (02:00 back to 01:00 in October), because the whole EU changes at the same instant.",
     ],
     diffTitle: "Time difference with the UK, the Canary Islands and the US",

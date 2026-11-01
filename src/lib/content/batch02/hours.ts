@@ -133,7 +133,7 @@ const COPY: Record<Locale, T> = {
     fridayTitle: "What time does the metro close on Fridays?",
     friday: "At **2:00** in the early hours of Saturday. The same 2:00 closing applies on the night before a public holiday that falls Monday to Friday.",
     sundayTitle: "Metro hours on Sundays and public holidays",
-    sunday: `On Sunday the metro does not open at 5:00, because it has been running non-stop since Saturday night; it closes at **midnight**. A public holiday from Monday to Thursday also runs from 5:00 to midnight, and the night before it the metro closes at 2:00; the dates are in ${b2link("workCalendar", "en", "the Catalonia public holiday calendar")}.`,
+    sunday: `On Sunday the metro does not open at 5:00, because it has been running non-stop since Saturday night; it closes at **midnight**. A public holiday from Monday to Thursday also runs from 5:00 to midnight, and the night before it the metro closes at 2:00. Barcelona's holidays, its two local ones included, are on [Barcelona public holidays](/en/holidays/barcelona/), and the Catalonia-wide dates in ${b2link("workCalendar", "en", "the Catalonia public holiday calendar")}.`,
     closeTitle: "What time is the last metro in Barcelona?",
     close: "The last trains leave the terminal stations at **midnight** from Sunday to Thursday and at **2:00** on Fridays and the nights before midweek holidays; on Saturday nights there is no last train. TMB's closing time is when the last train leaves the terminal station at each end of the line, so a station in the middle sees its last train later than that. If you are cutting it fine, aim for the earlier end of the line.",
     specialTitle: "Does the Barcelona metro run 24 hours?",
