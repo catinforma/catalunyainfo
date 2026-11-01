@@ -22,18 +22,34 @@ export const SITE = {
 } as const;
 
 /**
- * Deployment environment as reported by Vercel, normalised.
+ * Deployment environment, normalised.
  * - "production"  -> the real site on the custom domain
  * - "preview"     -> a Vercel preview deployment (MUST be noindex)
  * - "development" -> local `next dev`
+ *
+ * On Vercel, VERCEL_ENV is set on every build and request and is the only
+ * input. Off Vercel (the self-hosted server in ops/vps) it is absent: SITE_ENV
+ * then states the environment, and without it a production build
+ * (NODE_ENV=production) counts as production, as it always has.
+ *
+ * This is the one definition of "production" for indexing: next.config.ts
+ * (the static X-Robots-Tag rules), the proxy and robots.txt all go through it,
+ * so a server cannot invite crawlers in robots.txt while its headers say
+ * noindex, or the other way round.
  */
 export type DeployEnv = "production" | "preview" | "development";
+
+const DEPLOY_ENVS: readonly string[] = ["production", "preview", "development"];
 
 export function deployEnv(): DeployEnv {
   const v = process.env.VERCEL_ENV;
   if (v === "production") return "production";
   if (v === "preview") return "preview";
-  if (process.env.NODE_ENV === "production" && !v) return "production";
+  if (!v) {
+    const site = process.env.SITE_ENV;
+    if (site && DEPLOY_ENVS.includes(site)) return site as DeployEnv;
+    if (process.env.NODE_ENV === "production") return "production";
+  }
   return "development";
 }
 

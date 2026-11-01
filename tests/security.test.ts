@@ -91,7 +91,13 @@ test("indexing is gated on the request host, not only on the environment", () =>
   // add noindex on any host other than the canonical one.
   const config = readFileSync(join(SRC, "..", "next.config.ts"), "utf8");
   assert.match(config, /missing: \[\{ type: "host"[^\]]*value: CANONICAL_HOST/);
-  assert.match(config, /INDEXING_ALLOWED\s*=\s*process\.env\.VERCEL_ENV === "production"/);
+  // The environment half of the gate is the shared definition in lib/site.ts
+  // (VERCEL_ENV on Vercel, SITE_ENV / NODE_ENV self-hosted), never a second
+  // copy that could disagree with robots.txt. Behaviour: the matrix tests below.
+  assert.match(config, /import \{ deployEnv \} from "\.\/src\/lib\/site";/);
+  assert.match(config, /INDEXING_ALLOWED\s*=\s*deployEnv\(\) === "production" && process\.env\.NEXT_PUBLIC_ALLOW_INDEXING === "true"/);
+  assert.match(proxy, /if \(deployEnv\(\) !== "production"\) return false;/);
+  assert.doesNotMatch(proxy, /process\.env\.VERCEL_ENV/);
 
   const robots = readFileSync(join(SRC, "app", "robots.ts"), "utf8");
   assert.match(robots, /onCanonicalHost/);
@@ -99,21 +105,38 @@ test("indexing is gated on the request host, not only on the environment", () =>
 
 type HeaderRule = { source: string; missing?: { type: string; value: string }[]; headers: { key: string; value: string }[] };
 
-async function headerRules(env: Record<string, string | undefined>): Promise<HeaderRule[]> {
-  const saved = { VERCEL_ENV: process.env.VERCEL_ENV, NEXT_PUBLIC_ALLOW_INDEXING: process.env.NEXT_PUBLIC_ALLOW_INDEXING };
+/** Every variable the environment half of the indexing gate reads. */
+const GATE_ENV_KEYS = ["VERCEL_ENV", "SITE_ENV", "NODE_ENV", "NEXT_PUBLIC_ALLOW_INDEXING"] as const;
+
+async function withEnv<T>(env: Record<string, string | undefined>, run: () => Promise<T> | T): Promise<T> {
+  const keys = new Set<string>([...GATE_ENV_KEYS, ...Object.keys(env)]);
+  const saved = Object.fromEntries([...keys].map((key) => [key, process.env[key]]));
   Object.assign(process.env, env);
   for (const [key, value] of Object.entries(env)) if (value === undefined) delete process.env[key];
   try {
-    // A fresh module instance per call: INDEXING_ALLOWED is read at load time.
-    const url = `${new URL("../next.config.ts", import.meta.url).href}?env=${encodeURIComponent(JSON.stringify(env))}`;
-    const { default: config } = await import(url);
-    return (await config.headers()) as HeaderRule[];
+    return await run();
   } finally {
     for (const [key, value] of Object.entries(saved)) {
       if (value === undefined) delete process.env[key];
       else process.env[key] = value;
     }
   }
+}
+
+async function headerRules(env: Record<string, string | undefined>): Promise<HeaderRule[]> {
+  return withEnv(env, async () => {
+    // A fresh module instance per call: INDEXING_ALLOWED is read at load time.
+    const url = `${new URL("../next.config.ts", import.meta.url).href}?env=${encodeURIComponent(JSON.stringify(env))}`;
+    const { default: config } = await import(url);
+    return (await config.headers()) as HeaderRule[];
+  });
+}
+
+/** The generic X-Robots-Tag rule: exempts the canonical host, or noindexes everything. */
+async function canonicalHostExempt(env: Record<string, string | undefined>): Promise<boolean> {
+  const generic = robotsRules(await headerRules(env)).filter((rule) => rule.source === "/:path*");
+  assert.equal(generic.length, 1, JSON.stringify(env));
+  return generic[0]!.missing !== undefined;
 }
 
 const robotsRules = (rules: HeaderRule[]) => rules.filter((rule) => rule.headers.some((h) => h.key === "X-Robots-Tag"));
@@ -137,6 +160,48 @@ test("X-Robots-Tag rules: canonical host indexable only on production with the s
   const { ALWAYS_NOINDEX_SOURCES } = await import("../src/lib/security-headers.ts");
   for (const source of ALWAYS_NOINDEX_SOURCES) {
     assert.ok(on.some((rule) => rule.source === source && !rule.missing), `${source} always noindex`);
+  }
+});
+
+/**
+ * The environment matrix of the indexing gate. Vercel always sets VERCEL_ENV
+ * (production / preview / development), and it always wins. The self-hosted
+ * server (ops/vps) has no VERCEL_ENV: SITE_ENV decides, and a production
+ * build without it (`next build` sets NODE_ENV=production) is production, as
+ * deployEnv() has always treated it.
+ */
+const GATE_MATRIX: { name: string; env: Record<string, string | undefined>; expected: string; indexable: boolean }[] = [
+  { name: "vercel production + switch", env: { VERCEL_ENV: "production", NEXT_PUBLIC_ALLOW_INDEXING: "true" }, expected: "production", indexable: true },
+  { name: "vercel production, switch off", env: { VERCEL_ENV: "production", NEXT_PUBLIC_ALLOW_INDEXING: undefined }, expected: "production", indexable: false },
+  { name: "vercel preview + switch", env: { VERCEL_ENV: "preview", NEXT_PUBLIC_ALLOW_INDEXING: "true" }, expected: "preview", indexable: false },
+  { name: "vercel preview ignores SITE_ENV", env: { VERCEL_ENV: "preview", SITE_ENV: "production", NEXT_PUBLIC_ALLOW_INDEXING: "true" }, expected: "preview", indexable: false },
+  { name: "vercel development ignores SITE_ENV", env: { VERCEL_ENV: "development", SITE_ENV: "production", NODE_ENV: "production", NEXT_PUBLIC_ALLOW_INDEXING: "true" }, expected: "development", indexable: false },
+  { name: "self-hosted SITE_ENV=production + switch", env: { VERCEL_ENV: undefined, SITE_ENV: "production", NEXT_PUBLIC_ALLOW_INDEXING: "true" }, expected: "production", indexable: true },
+  { name: "self-hosted SITE_ENV=production, switch off", env: { VERCEL_ENV: undefined, SITE_ENV: "production", NEXT_PUBLIC_ALLOW_INDEXING: "false" }, expected: "production", indexable: false },
+  { name: "self-hosted SITE_ENV=preview beats NODE_ENV", env: { VERCEL_ENV: undefined, SITE_ENV: "preview", NODE_ENV: "production", NEXT_PUBLIC_ALLOW_INDEXING: "true" }, expected: "preview", indexable: false },
+  { name: "self-hosted production build without SITE_ENV", env: { VERCEL_ENV: undefined, SITE_ENV: undefined, NODE_ENV: "production", NEXT_PUBLIC_ALLOW_INDEXING: "true" }, expected: "production", indexable: true },
+  { name: "self-hosted unknown SITE_ENV falls back to NODE_ENV", env: { VERCEL_ENV: undefined, SITE_ENV: "staging", NODE_ENV: "development", NEXT_PUBLIC_ALLOW_INDEXING: "true" }, expected: "development", indexable: false },
+  { name: "local dev", env: { VERCEL_ENV: undefined, SITE_ENV: undefined, NODE_ENV: "development", NEXT_PUBLIC_ALLOW_INDEXING: "true" }, expected: "development", indexable: false },
+];
+
+test("indexing gate: deployEnv() across Vercel and self-hosted environments", async () => {
+  const { deployEnv } = await import("../src/lib/site.ts");
+  for (const { name, env, expected } of GATE_MATRIX) {
+    assert.equal(await withEnv(env, () => deployEnv()), expected, name);
+  }
+});
+
+/**
+ * robots.txt (indexingAllowed) and the static X-Robots-Tag rules
+ * (next.config.ts) must agree in every environment. Before the shared
+ * definition, a server without VERCEL_ENV got an inviting robots.txt and a
+ * noindex header on every page.
+ */
+test("indexing gate: robots.txt and the X-Robots-Tag rules agree in every environment", async () => {
+  const { indexingAllowed } = await import("../src/lib/site.ts");
+  for (const { name, env, indexable } of GATE_MATRIX) {
+    assert.equal(await withEnv(env, () => indexingAllowed()), indexable, `robots.txt: ${name}`);
+    assert.equal(await canonicalHostExempt(env), indexable, `X-Robots-Tag: ${name}`);
   }
 });
 

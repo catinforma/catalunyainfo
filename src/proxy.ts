@@ -3,6 +3,7 @@ import { NextResponse, type NextRequest } from "next/server";
 import { DEFAULT_LOCALE, isLocale, type Locale } from "@/lib/i18n/config";
 import { LEGACY_GONE } from "@/lib/migration/legacy-redirects";
 import { contentSecurityPolicy, NOINDEX_VALUE, SECURITY_HEADERS } from "@/lib/security-headers";
+import { deployEnv } from "@/lib/site";
 
 /**
  * Edge proxy (the Next 16 replacement for the middleware file convention). Responsibilities, in order:
@@ -64,9 +65,12 @@ const CANONICAL_HOST = "www.catalunyainfo.com";
  * flipping the indexing switch would make those aliases indexable too, and the
  * site would be competing with a duplicate of itself on a host we do not
  * control.
+ *
+ * The environment comes from `deployEnv()`, the same definition robots.txt
+ * uses: VERCEL_ENV on Vercel, SITE_ENV / NODE_ENV on the self-hosted server.
  */
 function isIndexableRequest(request: NextRequest): boolean {
-  if (process.env.VERCEL_ENV !== "production") return false;
+  if (deployEnv() !== "production") return false;
   if (process.env.NEXT_PUBLIC_ALLOW_INDEXING !== "true") return false;
 
   const host = (request.headers.get("host") ?? "").split(":")[0]?.toLowerCase();

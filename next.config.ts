@@ -7,6 +7,7 @@ import {
   NOINDEX_VALUE,
   SECURITY_HEADERS,
 } from "./src/lib/security-headers";
+import { deployEnv } from "./src/lib/site";
 
 /**
  * Host policy.
@@ -30,13 +31,27 @@ const CANONICAL_HOST = "www.catalunyainfo.com";
  * condition below. A production build is also served on its *.vercel.app
  * alias with VERCEL_ENV=production; the host condition keeps that duplicate
  * out of the index.
+ *
+ * `deployEnv()` is VERCEL_ENV whenever Vercel sets it, so this is unchanged
+ * there. On the self-hosted server (ops/vps), where VERCEL_ENV does not exist,
+ * comparing VERCEL_ENV directly sent noindex on every page; deployEnv() falls
+ * back to SITE_ENV / NODE_ENV exactly as robots.txt and the sitemaps do.
  */
 const INDEXING_ALLOWED =
   process.env.VERCEL_ENV === "production" && process.env.NEXT_PUBLIC_ALLOW_INDEXING === "true";
 
+/**
+ * Self-hosted build (ops/vps/deploy.sh sets NEXT_OUTPUT=standalone; Vercel
+ * never does, so its build is unchanged). Standalone emits a minimal
+ * `server.js` with only the traced dependencies. Compression is left to Caddy
+ * in front (zstd/gzip), which Next would otherwise pre-empt with its own gzip.
+ */
+const SELF_HOSTED_STANDALONE = process.env.NEXT_OUTPUT === "standalone";
+
 const nextConfig: NextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
+  ...(SELF_HOSTED_STANDALONE ? { output: "standalone" as const, compress: false } : {}),
 
   /**
    * Every public URL ends in a slash. One spelling per URL means no duplicate
