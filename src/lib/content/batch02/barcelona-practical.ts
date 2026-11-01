@@ -1083,7 +1083,7 @@ const PARKING_SOURCES = [
   { name: "AREA resident-only spaces", url: "https://areaverda.cat/en/information/places/exclusives-residents", publisher: "Barcelona de Serveis Municipals" },
   { name: "Using the parking meters: FAQs", url: "https://areaverda.cat/en/information/using-parking-meters/faqs", publisher: "Barcelona de Serveis Municipals" },
   { name: "AREA procedures: cancelling a parking notice", url: "https://areaverda.cat/en/procedures", publisher: "Barcelona de Serveis Municipals" },
-  { name: "SMOU: parking FAQs", url: "https://www.smou.cat/en/faqs/parking-meter", publisher: "Ajuntament de Barcelona" },
+  { name: "SMOU: parking FAQs (pay by the minute, 15-minute warning)", url: "https://www.smou.cat/en/faqs/parking-meter", publisher: "Ajuntament de Barcelona" },
   { name: "Regulated parking in the beach zone ends its 2026 season (14.9.2026)", url: "https://areaverda.cat/en/news/regulated-parking-beach-zone-ends-its-2026-season", publisher: "Barcelona de Serveis Municipals" },
   { name: "New Zone 36 regulated parking area in Sant Andreu (22.9.2026)", url: "https://areaverda.cat/en/news/new-zone-36-regulated-parking-area-in-the-sant-andreu-district", publisher: "Barcelona de Serveis Municipals" },
   { name: "AREA Motos", url: "https://areaverda.cat/en/motorcycles", publisher: "Barcelona de Serveis Municipals" },
@@ -1092,7 +1092,6 @@ const PARKING_SOURCES = [
   { name: "Tipos de plazas: Área Verde", url: "https://www.areaverda.cat/es/informacion/tipos-de-plazas/area-verde", publisher: "Barcelona de Serveis Municipals" },
   { name: "Tipos de plazas: Área Azul", url: "https://www.areaverda.cat/es/informacion/tipos-de-plazas/area-azul", publisher: "Barcelona de Serveis Municipals" },
   { name: "Plano AREA (orientativo): plazas azules, verdes y exclusivas para residentes", url: "https://areaverda.cat/es/plano", publisher: "Barcelona de Serveis Municipals" },
-  { name: "SMOU: preguntes freqüents (pagament per minuts, avís de 15 minuts)", url: "https://www.smou.cat/en/faqs/parking-meter", publisher: "Ajuntament de Barcelona" },
 ];
 
 // Re-checked 30 Oct 2026 against areaverda.cat (ES/CA blue and green "tipos
