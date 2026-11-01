@@ -37,6 +37,7 @@ import { weekdayIndex } from "../src/lib/content/holidays/calendar.ts";
 import { IMAGE_BY_KEY } from "../src/lib/content/images.ts";
 import { LOCALES, type Locale } from "../src/lib/i18n/config.ts";
 import { hubPath as rodaliesHubPath } from "../src/lib/programmatic/rodalies/paths.ts";
+import { TODAY_NAME, todayPath } from "../src/lib/programmatic/today/paths.ts";
 
 /**
  * The strikes hub (27 Oct 2026): one evergreen page per language, a dated
@@ -66,6 +67,8 @@ const PUBLISHED = new Set([
   ),
   // The Rodalies hub is a code route (app/(public)/[locale]/rodalies), served in all three languages.
   ...LOCALES.map((locale) => rodaliesHubPath(locale)),
+  // So is the daily page (app/(public)/[locale]/avui, hoy, today), one folder per language.
+  ...LOCALES.map((locale) => todayPath(locale)),
 ]);
 
 /* -------------------------------------------------------------------------- */
@@ -185,6 +188,19 @@ test("internal links stay in their language, end in a slash and point at a publi
     }
     assert.ok(internal >= 6, `${locale}: only ${internal} internal links`);
     for (const match of body.matchAll(/\]\((https?:[^)]*)\)/g)) assert.match(match[1] ?? "", /^https:\/\//);
+  }
+});
+
+test("the daily page is linked once, by its name, right under the answer and before the sources note", () => {
+  for (const locale of LOCALES) {
+    const blocks = STRIKES_GUIDE.editions[locale].blocks;
+    const link = `[${TODAY_NAME[locale]}](${todayPath(locale)})`;
+    assert.equal(JSON.stringify(blocks).split(link).length - 1, 1, locale);
+    const at = blocks.findIndex((b) => b.type === "paragraph" && (b as { text: string }).text.includes(link));
+    const official = blocks.findIndex((b) => b.type === "callout" && (b as { tone?: string }).tone === "official");
+    assert.ok(at > 0 && at === official - 1, `${locale}: at ${at}, official callout at ${official}`);
+    // Also with nothing announced.
+    assert.ok(JSON.stringify(buildStrikesBody(locale, "2026-12-09", allEnded())).includes(link), locale);
   }
 });
 

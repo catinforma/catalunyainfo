@@ -2,6 +2,7 @@ import type { Block } from "@/lib/content/blocks";
 import { TRAINS } from "@/lib/content/features/trains";
 import type { Locale } from "@/lib/i18n/config";
 import { hubPath as rodaliesHub } from "@/lib/programmatic/rodalies/paths";
+import { TODAY_NAME, todayPath } from "@/lib/programmatic/today/paths";
 
 import { dateYear, dayDate } from "./festive";
 import {
@@ -914,6 +915,8 @@ type Copy = {
   noStrike: string;
   runsNote: (date: string) => string;
   keyFactsTitle: string;
+  /** One sentence under the answer: the daily page, which works out today's strikes, holiday and Rodalies notices. */
+  today: string;
   dataTitle: string;
   data: string;
   /** `ref`: "del dimarts 10 ..." / "de la vaga indefinida ...". */
@@ -972,6 +975,7 @@ const COPY: Record<Locale, Copy> = {
     noStrike: "Cap vaga anunciada",
     runsNote: (date) => `Consultat el ${date}. Els serveis mínims de cada vaga són a la seva secció, més avall.`,
     keyFactsTitle: "Les vagues, d'un cop d'ull",
+    today: `Si només vols saber què passa avui, [${TODAY_NAME.ca}](${todayPath("ca")}) diu en una sola pàgina si hi ha vaga, si és festiu i quins avisos té Rodalies.`,
     dataTitle: verifiedLine("ca", STRIKES_VERIFIED),
     data: "Només hi posem el que publiquen els sindicats convocants, els operadors i el DOGC o el BOE, i no el que avança la premsa. Cada vaga té la seva secció, amb data, i quan passa queda a la llista de vagues anteriors.",
     msHeading: (ref) => `Serveis mínims ${ref}`,
@@ -1056,6 +1060,7 @@ const COPY: Record<Locale, Copy> = {
     noStrike: "Ninguna huelga anunciada",
     runsNote: (date) => `Consultado el ${date}. Los servicios mínimos de cada huelga están en su sección, más abajo.`,
     keyFactsTitle: "Las huelgas, de un vistazo",
+    today: `Si solo quieres saber qué pasa hoy, [${TODAY_NAME.es}](${todayPath("es")}) dice en una sola página si hay huelga, si es festivo y qué avisos tiene Rodalies.`,
     dataTitle: verifiedLine("es", STRIKES_VERIFIED),
     data: "Solo ponemos lo que publican los sindicatos convocantes, los operadores y el DOGC o el BOE, no lo que adelanta la prensa. Cada huelga tiene su sección, con fecha, y cuando pasa queda en la lista de huelgas anteriores.",
     msHeading: (ref) => `Servicios mínimos ${ref}`,
@@ -1140,6 +1145,7 @@ const COPY: Record<Locale, Copy> = {
     noStrike: "No strike announced",
     runsNote: (date) => `Checked on ${date}. Each strike's minimum services are in its own section below.`,
     keyFactsTitle: "The strikes at a glance",
+    today: `If you only need today, [${TODAY_NAME.en}](${todayPath("en")}) shows on one page whether there is a strike, whether it is a public holiday and what Rodalies is warning about.`,
     dataTitle: verifiedLine("en", STRIKES_VERIFIED),
     data: "We only print what the unions calling a strike, the operators and the official gazettes (DOGC, BOE) publish, never what the press reports ahead of them. Each strike has its own dated section, which moves to the list of past strikes once it is over.",
     msHeading: (ref) => `Minimum services ${ref}`,
@@ -1264,6 +1270,10 @@ export function buildStrikesBody(locale: Locale, asOf: string = STRIKES_AS_OF, s
     blocks.push(lead(t.leadNone(checkedShort)));
   }
 
+  // 1 Nov 2026: the next step for "huelga hoy" readers is the daily page, which
+  // answers for today's date from the same strike list. Under the answer, not in
+  // the travel list below the fold.
+  blocks.push(...paras(t.today));
   blocks.push(callout("official", t.dataTitle, t.data));
 
   if (upcoming.length > 0) {
