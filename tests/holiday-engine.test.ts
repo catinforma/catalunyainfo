@@ -5,6 +5,7 @@ import { test } from "node:test";
 
 import { HOLIDAYS_BY_YEAR, longDate as calendarLongDate } from "../src/lib/content/holidays/calendar.ts";
 import { COPY as LOCAL_COPY } from "../src/lib/content/holidays/local-publish.ts";
+import { GROSSA_DRAW_DATE } from "../src/lib/content/batch02/grossa.ts";
 import { B2_PATHS } from "../src/lib/content/batch02/shared.ts";
 import { ARTICLE_PATHS } from "../src/lib/content/features/shared.ts";
 import { buildMetadata } from "../src/lib/seo/metadata.ts";
@@ -713,7 +714,8 @@ test("11 and 30 November, 24 and 31 December 2026: working days with the order's
     assert.equal(sentence.split(/[.!?](\s|$)/).filter((s) => s && s.trim()).length, 1, sentence);
     assert.ok(!JSON.stringify(dateContent("2026-11-11", locale).sections).match(/vaga|huelga|strike/i), "the strike is not repeated");
   }
-  for (const iso of ["2026-11-01", "2026-11-30", "2026-12-07", "2026-12-24", "2026-12-31"] as const) assert.equal(dateContent(iso, "ca").notice, undefined, iso);
+  // The other dates' notices point elsewhere (next test); 30 November has none.
+  assert.equal(dateContent("2026-11-30", "ca").notice, undefined);
 
   const nov30 = dateContent("2026-11-30", "ca");
   assert.match(nov30.answer, /El dilluns 30 de novembre de 2026, Sant Andreu, és un dia feiner a Catalunya.*24 municipis i 14 nuclis/);
@@ -737,6 +739,44 @@ test("11 and 30 November, 24 and 31 December 2026: working days with the order's
     assert.ok(!dateContent("2026-12-24", locale).guides.includes("strikes"));
     assert.equal(dateContent("2026-11-30", locale).local.places.length, 38);
   }
+});
+
+test("date-page notices (1 Nov 2026): one sentence, one link, to the page each date's reader needs next", () => {
+  const target: Partial<Record<(typeof DATE_PAGES)[number], keyof typeof GUIDES>> = {
+    "2026-11-01": "bridges2027",
+    "2026-11-11": "strikes",
+    "2026-12-07": "barcelonaDecember",
+    "2026-12-08": "barcelonaDecember",
+    "2026-12-24": "barcelonaDecember",
+    "2026-12-25": "barcelonaDecember",
+    "2026-12-26": "barcelonaDecember",
+    "2026-12-31": "grossa",
+    "2027-01-01": "reis",
+    "2027-01-06": "reis",
+  };
+  for (const iso of DATE_PAGES) {
+    for (const locale of DATE_LOCALES) {
+      const notice = dateContent(iso, locale).notice;
+      const key = target[iso];
+      if (!key) {
+        assert.equal(notice, undefined, `${iso}/${locale}`);
+        continue;
+      }
+      assert.ok(notice, `${iso}/${locale}: no notice`);
+      assert.equal(notice.href, GUIDES[key][locale], `${iso}/${locale}`);
+      const sentence = `${notice.before}${notice.label}${notice.after}`;
+      assert.equal(sentence.split(/[.!?](\s|$)/).filter((s) => s && s.trim()).length, 1, sentence);
+      // Plain text: the page renders the one link itself.
+      assert.doesNotMatch(sentence, /\]\(|https?:|\*\*/, sentence);
+    }
+  }
+  // What the notices state, from the data they rest on.
+  assert.ok(regionalDays(2027).some((d) => d.date === "2027-11-01"), "1 November 2027 is in Ordre EMT/52/2026");
+  assert.match(dateContent("2026-11-01", "ca").notice!.before, /el 2027 cau en dilluns \(Ordre EMT\/52\/2026\)/);
+  assert.match(dateContent("2026-11-01", "en").notice!.before, /in 2027 it falls on a Monday \(Order EMT\/52\/2026\)/);
+  assert.equal(GROSSA_DRAW_DATE, "2026-12-31", "the 31 December notice says La Grossa is drawn that day");
+  assert.match(dateContent("2027-01-06", "es").notice!.before, /la tarde del martes 5 de enero/);
+  assert.match(dateContent("2027-01-01", "ca").notice!.before, /el dimecres 6 de gener, Reis també és festiu/);
 });
 
 test("tranche 2 date pages: slugs, titles and 404s", () => {
@@ -1171,6 +1211,11 @@ test("links go to the published guides", () => {
     assert.equal(GUIDES.localHolidays[locale], `/${locale}/${LOCAL_COPY[locale].path}/`);
     assert.equal(GUIDES.strikes[locale], b2("strikes", locale));
     assert.equal(GUIDES.castanyada[locale], `/${locale}/${ARTICLE_PATHS.castanyada[locale]}/`);
+    assert.equal(GUIDES.easter2027[locale], b2("easter2027", locale));
+    assert.equal(GUIDES.bridges2027[locale], b2("bridges2027", locale));
+    assert.equal(GUIDES.barcelonaDecember[locale], b2("barcelonaDecember", locale));
+    assert.equal(GUIDES.grossa[locale], b2("grossa", locale));
+    assert.equal(GUIDES.reis[locale], b2("reis", locale));
   }
   const school = readFileSync(join(ROOT, "src/lib/content/school/publish.ts"), "utf8");
   for (const locale of ["ca", "es", "en"] as const) assert.ok(school.includes(`path: "${GUIDES.school[locale].slice(4, -1)}"`), locale);

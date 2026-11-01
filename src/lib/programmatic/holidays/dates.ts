@@ -57,7 +57,7 @@ export interface DateContent {
   holiday: boolean;
   answer: string;
   answerNote: string[];
-  /** One sentence with one link, after the answer (11 November: the general strike). */
+  /** One sentence with one link, after the answer (11 November: the general strike; the others: `noticeFor`). */
   notice?: { before: string; label: string; href: string; after: string };
   description: string;
   /** Places with a local holiday that day (or on the eve, when the day itself is Catalonia-wide). */
@@ -150,6 +150,120 @@ function shopsOpenOn(iso: string): DatePlace[] {
   return SNAPSHOT.shopsByDate[iso] ?? [];
 }
 
+const NOV1_2027 = "2027-11-01";
+const JAN6_2027 = "2027-01-06";
+
+/**
+ * The one-sentence notice under the answer, for the dates whose reader has an
+ * obvious next step on another page (1 Nov 2026: links into the newest pages
+ * from the date pages that already rank). 11 November keeps its strike notice
+ * (set in `dateContent`); 30 November has none.
+ *
+ *  - 1 November: next year it is a holiday, on a Monday (Ordre EMT/52/2026), so
+ *    the 2027 long weekends;
+ *  - 7, 8, 24, 25 and 26 December: Barcelona in December, whose tables give each
+ *    of these days' shops, the big sights' holiday hours (24-26) and the metro (24-26);
+ *  - 31 December: La Grossa de Cap d'Any is drawn that day (GROSSA_DRAW_DATE);
+ *  - 1 and 6 January: the Three Kings parade, on the evening of the 5th.
+ */
+function noticeFor(iso: DatePage, locale: DateLocale): DateContent["notice"] {
+  const L = (ca: string, es: string, en: string) => (locale === "ca" ? ca : locale === "es" ? es : en);
+  const december = (before: string) => ({
+    before,
+    label: L("què fer a Barcelona al desembre", "qué hacer en Barcelona en diciembre", "Barcelona in December"),
+    href: GUIDES.barcelonaDecember[locale],
+    after: ".",
+  });
+  const reis = (before: string) => ({
+    before,
+    label: L("la Cavalcada de Reis 2027", "la Cabalgata de Reyes 2027", "the 2027 Three Kings parade"),
+    href: GUIDES.reis[locale],
+    after: ".",
+  });
+  const christmasSights = (when: string) =>
+    december(
+      L(
+        `Quins grans museus i monuments de Barcelona obren ${when}, i l'horari del metro aquests dies, són a `,
+        `Qué grandes museos y monumentos de Barcelona abren ${when}, y el horario del metro esos días, están en `,
+        `Which of Barcelona's big museums and sights open ${when}, and the metro's hours those days, are in `,
+      ),
+    );
+
+  switch (iso) {
+    case NOV1: {
+      if (!regionalName(NOV1_2027, locale)) return undefined;
+      const wd = weekdayName(NOV1_2027, locale);
+      return {
+        before: L(
+          `L'any que ve, l'1 de novembre sí que serà festiu a tot Catalunya: el 2027 cau en ${wd} (Ordre EMT/52/2026), i aquest pont i tots els altres de l'any són a `,
+          `El año que viene, el 1 de noviembre sí será festivo en toda Cataluña: en 2027 cae en ${wd} (Orden EMT/52/2026), y ese puente y todos los demás del año están en `,
+          `Next year 1 November will be a holiday across Catalonia: in 2027 it falls on a ${wd} (Order EMT/52/2026), and that long weekend and every other one of the year are in `,
+        ),
+        label: L("ponts 2027 a Catalunya", "puentes 2027 en Cataluña", "long weekends 2027 in Catalonia"),
+        href: GUIDES.bridges2027[locale],
+        after: ".",
+      };
+    }
+    case DEC7:
+      return december(
+        L(
+          "Si fas pont a Barcelona, l'agenda del mes i quines botigues hi poden obrir cada dia del pont són a ",
+          "Si haces puente en Barcelona, la agenda del mes y qué tiendas pueden abrir cada día del puente están en ",
+          "If you are making a long weekend of it in Barcelona, the month's events and which shops may open on each day are in ",
+        ),
+      );
+    case "2026-12-08":
+      return december(
+        L(
+          "Si passes el festiu a Barcelona, l'agenda del mes i els dies que hi poden obrir les botigues són a ",
+          "Si pasas el festivo en Barcelona, la agenda del mes y los días que pueden abrir las tiendas están en ",
+          "If you are spending the holiday in Barcelona, the month's events and the days shops may open are in ",
+        ),
+      );
+    case DEC24:
+      return christmasSights(L("per Nadal", "en Navidad", "over Christmas"));
+    case "2026-12-25":
+      return christmasSights(L("el dia de Nadal", "el día de Navidad", "on Christmas Day"));
+    case "2026-12-26":
+      return christmasSights(L("per Sant Esteve", "por San Esteban", "on Saint Stephen's Day"));
+    case DEC31:
+      return {
+        before: L(
+          "Aquell dia se sorteja La Grossa de Cap d'Any, la loteria de la Generalitat: els premis i els números premiats són a ",
+          "Ese día se sortea La Grossa de Cap d'Any, la lotería de la Generalitat: los premios y los números premiados están en ",
+          "La Grossa de Cap d'Any, the Catalan government's New Year's Eve lottery, is drawn that day: prizes and winning numbers are in ",
+        ),
+        label: L("la guia de La Grossa de Cap d'Any", "la guía de La Grossa de Cap d'Any", "our La Grossa guide"),
+        href: GUIDES.grossa[locale],
+        after: ".",
+      };
+    case "2027-01-01": {
+      const name = regionalName(JAN6_2027, locale);
+      if (!name) return undefined;
+      const day = weekdayDayMonth(JAN6_2027, locale);
+      return reis(
+        L(
+          `Cinc dies després, el ${day}, ${name} també és festiu, i la cavalcada és la vigília al vespre: l'horari i el recorregut de la de Barcelona i de les d'altres ciutats són a `,
+          `Cinco días después, el ${day}, ${name} también es festivo, y la cabalgata es la víspera por la tarde: el horario y el recorrido de la de Barcelona y de las de otras ciudades están en `,
+          `Five days later, on ${day}, ${name} is a holiday too, and the Kings' parade is the evening before: times and routes in Barcelona and other towns are in `,
+        ),
+      );
+    }
+    case JAN6_2027: {
+      const eve = weekdayDayMonth("2027-01-05", locale);
+      return reis(
+        L(
+          `La cavalcada és la vigília, el vespre del ${eve}: l'horari i el recorregut de la de Barcelona i de les d'altres ciutats són a `,
+          `La cabalgata es la víspera, la tarde del ${eve}: el horario y el recorrido de la de Barcelona y de las de otras ciudades están en `,
+          `The parade is the evening before, ${eve}: times and routes in Barcelona and other towns are in `,
+        ),
+      );
+    }
+    default:
+      return undefined;
+  }
+}
+
 export function dateContent(iso: DatePage, locale: DateLocale): DateContent {
   const name = regionalName(iso, locale);
   const local = SNAPSHOT.localByDate[iso] ?? [];
@@ -219,6 +333,7 @@ export function dateContent(iso: DatePage, locale: DateLocale): DateContent {
           `Elsewhere in Spain Monday 2 November is a holiday: the BOE lists it as the day after All Saints in ${joinList(MONDAY_NOV2_REGIONS.en, "en")}, but not in Catalonia.`,
         ),
       ],
+      notice: noticeFor(iso, locale),
       description: L(
         "No: l'1 de novembre de 2026 cau en diumenge i no és festiu oficial a Catalunya, ni ho és el dilluns 2. Botigues, escoles i festes locals.",
         "No: el 1 de noviembre de 2026 cae en domingo y no es festivo oficial en Cataluña, ni lo es el lunes 2. Tiendas, escuelas y fiestas locales.",
@@ -391,7 +506,7 @@ export function dateContent(iso: DatePage, locale: DateLocale): DateContent {
               href: GUIDES.strikes[locale],
               after: ".",
             }
-          : undefined,
+          : noticeFor(iso, locale),
       description: descriptions[iso]![locale],
       local: {
         text: L(
@@ -423,6 +538,7 @@ export function dateContent(iso: DatePage, locale: DateLocale): DateContent {
           `It is a holiday elsewhere in Spain: the BOE lists it as the Monday after Constitution Day in ${joinList(MONDAY_7_REGIONS.en, "en")}, but not in Catalonia.`,
         ),
       ],
+      notice: noticeFor(iso, locale),
       description: L(
         `No: el 7 de desembre de 2026 és feiner a Catalunya. És festa local a ${n}: la llista, botigues, escoles i el pont del 8.`,
         `No: el 7 de diciembre de 2026 es laborable en Cataluña. Es fiesta local en ${n}: la lista, tiendas, escuelas y el puente del 8.`,
@@ -489,6 +605,7 @@ export function dateContent(iso: DatePage, locale: DateLocale): DateContent {
           `The day before, Monday 7 December, is a working day in Catalonia except in the ${placesPhrase(eve, "en")} with a local holiday.`,
         ),
       ],
+      notice: noticeFor(iso, locale),
       description: L(
         `Sí: el dimarts 8 de desembre de 2026, la Immaculada, és festiu a tot Catalunya. Quines botigues poden obrir, escoles i el dilluns 7.`,
         `Sí: el martes 8 de diciembre de 2026, la Inmaculada, es festivo en toda Cataluña. Qué tiendas pueden abrir, escuelas y el lunes 7.`,
@@ -572,6 +689,7 @@ export function dateContent(iso: DatePage, locale: DateLocale): DateContent {
               "It is not a holiday across Spain: in the BOE's 2026 table, 26 December is a holiday only in Catalonia and the Balearic Islands.",
             ),
           ],
+      notice: noticeFor(iso, locale),
       description: isXmas
         ? L(
             "Sí: el divendres 25 de desembre de 2026, Nadal, és festiu a tot Catalunya. Botigues tancades, quan tornen a obrir, la Nit de Nadal i escoles.",
@@ -633,6 +751,7 @@ export function dateContent(iso: DatePage, locale: DateLocale): DateContent {
           ),
         ]
       : [],
+    notice: noticeFor(iso, locale),
     description: isNewYear
       ? L(
           "Sí: el divendres 1 de gener de 2027, Cap d'Any, és festiu a tot Catalunya. Botigues, la vigília del 31, escoles i els festius locals del 2027.",
