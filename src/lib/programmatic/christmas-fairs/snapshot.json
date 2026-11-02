@@ -1,5 +1,5 @@
 {
- "readOn": "2026-10-30",
+ "readOn": "2026-11-02",
  "season": {
   "from": "2026-11-01",
   "to": "2027-01-07"
@@ -17,13 +17,13 @@
    "publisher": "Departament de Cultura, Generalitat de Catalunya",
    "url": "https://analisi.transparenciacatalunya.cat/d/rhpv-yr4f",
    "api": "https://analisi.transparenciacatalunya.cat/resource/rhpv-yr4f.json",
-   "updated": "2026-10-30"
+   "updated": "2026-11-02"
   }
  },
  "measured": {
   "fairRows": 430,
   "fairChristmas": 34,
-  "agendaRows": 1115,
+  "agendaRows": 1161,
   "agendaChristmas": 0
  },
  "fairs": [
