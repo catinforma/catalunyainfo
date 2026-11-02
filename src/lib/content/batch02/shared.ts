@@ -772,7 +772,7 @@ export function steps(title: string, items: { title: string; text: string }[]): 
   return { type: "steps", title, items } as Block;
 }
 
-export function faq(items: { question: string; answer: string }[]): Block {
+export function faq(items: { question: string; answer: string; id?: string }[]): Block {
   return { type: "faq", items } as Block;
 }
 
