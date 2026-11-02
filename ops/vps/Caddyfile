@@ -100,12 +100,12 @@ catalunyainfo.com {
 
 # --- Preview hostname for testing before the DNS cutover (optional) -----------
 # 1. At the DNS provider add:  A  vps  <VPS IPv4>  (DNS only / grey cloud).
-# 2. Uncomment, then: sudo systemctl reload caddy
+# 2. Enabled on 2 Nov 2026 for the Contabo cutover tests.
 # 3. Browse https://vps.catalunyainfo.com/ca/
 # Every response there is noindex (X-Robots-Tag) and robots.txt disallows all,
 # because the host is not www.catalunyainfo.com. Links and canonicals point to
 # www. Comment it out again (and delete the record) after the cutover.
 #
-# vps.catalunyainfo.com {
-# 	import next_app
-# }
+vps.catalunyainfo.com {
+	import next_app
+}
