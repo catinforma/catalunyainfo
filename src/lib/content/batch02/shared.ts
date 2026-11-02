@@ -397,6 +397,29 @@ export function b2link(key: B2Key, locale: Locale, label: string): string {
   return `[${label}](${b2href(key, locale)})`;
 }
 
+/**
+ * "En castellà: … · In English: …": the same article in the other two
+ * languages, for a paragraph near the top of the page.
+ *
+ * Search Console, 26 Oct-2 Nov 2026: Catalan queries ("vaga 11 novembre",
+ * "vaga general 11 novembre") landed on the Spanish 11N page as often as on
+ * the Catalan one, both at position 9-10, because hreflang follows the
+ * reader's interface language and many Catalan speakers use Google in
+ * Spanish. The header switcher is easy to miss; this line is not. Each label
+ * is in the language of the page it opens, as a reader of that language
+ * would look for it.
+ */
+const LANGUAGE_LABEL: Record<Locale, string> = {
+  ca: "En català",
+  es: "En castellano",
+  en: "In English",
+};
+
+export function languageLinks(key: B2Key, locale: Locale, titles: Record<Locale, string> = B2_TITLES[key]): string {
+  const others = (["ca", "es", "en"] as Locale[]).filter((other) => other !== locale);
+  return others.map((other) => `**${LANGUAGE_LABEL[other]}:** ${b2link(key, other, titles[other])}`).join(" · ");
+}
+
 /** Titles for the related rail at the foot of each article. */
 export const B2_TITLES: Record<B2Key, Record<Locale, string>> = {
   transport: {
