@@ -68,6 +68,17 @@
 	# Next sets poweredByHeader: false; do not advertise the proxy either.
 	header -Server
 
+	# The CMS is not public (owner's decision, 2 Nov 2026): /admin and the
+	# usual guesses get a joke image instead. It stays reachable through an SSH
+	# tunnel to 127.0.0.1:3000 (README "CMS access").
+	@cms path /admin /admin/* /administrador /administrador/*
+	redir @cms https://i.pinimg.com/564x/2f/dc/3e/2fdc3e8077a2024240236b53fd21e36c.jpg 302
+
+	# Internal endpoints answer only on the server itself: the daily timer
+	# calls 127.0.0.1:3000 and publishing runs over SSH (ops/vps/publish.sh).
+	@internal path /api/admin /api/admin/* /api/cron /api/cron/*
+	respond @internal 404
+
 	reverse_proxy 127.0.0.1:3000 {
 		# While Next restarts (a deploy takes 1-3 s), keep retrying the dial
 		# for up to 20 s instead of answering 502. Only failed dials are

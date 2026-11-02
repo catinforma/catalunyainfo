@@ -618,3 +618,14 @@ behind `NEXT_OUTPUT=standalone`), `src/proxy.ts` (`deployEnv()`),
 the X-Robots-Tag rules agree in every Vercel and self-hosted environment, and
 that the standalone switch is off unless requested), and `.gitattributes`
 (`ops/vps/**` stays LF, so a Windows checkout cannot break the scripts).
+
+## CMS access and publishing (since 2 Nov 2026)
+
+`/admin` (and `/administrador`) is not public: Caddy redirects it to a joke
+image, and `/api/admin/*` and `/api/cron/*` answer 404 from the internet.
+
+- **CMS:** open a tunnel and browse locally:
+  `ssh -L 3000:127.0.0.1:3000 marti@<server>` then `http://localhost:3000/admin/`.
+- **Publishing content groups:**
+  `ssh deploy@<server> 'bash /srv/catalunyainfo/current/ops/vps/publish.sh strikes voting'`.
+- **Daily job:** the timer already calls `http://127.0.0.1:3000/api/cron/publish-scheduled/`.
