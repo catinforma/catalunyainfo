@@ -55,6 +55,15 @@ import { STRIKE_URLS } from "./strikes";
  * number (Ordre EMT/209/2026), and Ouigo's minimum services by the Ministry's
  * own resolution of 27 Oct.
  *
+ * Re-checked on the evening of 2 Nov 2026: still no 11N order in the DOGC
+ * (núm. 9785, 2 Nov) or on Treball's list (newest entry 2 Nov, a hospital
+ * A&E strike at Parc de Salut Mar), no 11N resolution on the Ministry of
+ * Transport's rail or air lists, no notice at Rodalies, TMB or FGC; 11n.cat,
+ * ugt.cat and cgtcatalunya.cat give no demonstration time or place (CGT's
+ * central rally of 30 Oct was a pre-strike event). SEMAF's notice nº 2026-52
+ * of 2 Nov keeps the Renfe strikes of 10 and 12 Nov, still without hours.
+ * Metges de Catalunya has announced no end to the doctors' strike.
+ *
  * Left out on purpose: the demonstrations' times and places (no organiser had
  * published them), any minimum-service figure for 11N, anything about taxis
  * beyond what the 2024 orders say (nothing), and health or school advice that
@@ -83,7 +92,7 @@ export const STRIKE_11N_DATE = "2026-11-11";
  * on or after the day) is decided against this date, never the clock: the
  * HTML is the same whichever day it is rendered.
  */
-export const STRIKE_11N_AS_OF = "2026-10-30";
+export const STRIKE_11N_AS_OF = "2026-11-02";
 
 /** The facts were re-read on the sources on the as-of day: one constant to move. */
 export const STRIKE_11N_VERIFIED = STRIKE_11N_AS_OF;

@@ -553,6 +553,8 @@ test("known answers read on 30 October 2026: the doctors' indefinite strike (ord
   assert.deepEqual(renfeNov.affects, ["rodalies", "longDistance"]);
   assert.equal(renfeNov.minimumServices.status, "pending");
   assert.ok(renfeNov.sources.some((s) => s.url === STRIKE_URLS.semaf1012 && s.publisher === "SEMAF"));
+  // SEMAF nº 2026-52 (read 2 Nov 2026) keeps both days; still no hours, still no minimum services.
+  assert.ok(renfeNov.sources.some((s) => s.url === STRIKE_URLS.semaf52 && s.publisher === "SEMAF"));
   for (const locale of LOCALES) {
     const ms = metges.minimumServices.text[locale];
     assert.ok(ms.includes(`](${STRIKE_URLS.ordreMetges})`), locale);
@@ -591,7 +593,10 @@ test("known answers read on the evening of 30 October 2026: Ouigo's resolution, 
   assert.equal(weekdayIndex("2026-11-26"), 4); // Thursday
   assert.deepEqual(schools.affects, ["schools"]);
   assert.equal(schools.minimumServices.status, "pending");
-  assert.deepEqual(schools.sources.map((s) => s.publisher).sort(), ["CGT Ensenyament", "USTEC·STEs"]);
+  // Re-checked 2 Nov 2026: the joint press release of 28 Oct (PDF on cgtensenyament.cat) lists the 26 November strike too.
+  assert.deepEqual(schools.sources.map((s) => s.publisher).sort(), ["CGT Ensenyament", "CGT Ensenyament", "USTEC·STEs"]);
+  assert.ok(schools.sources.some((s) => s.url === STRIKE_URLS.edu26Joint));
+  assert.match(STRIKE_URLS.edu26Joint, /^https:\/\/www\.cgtensenyament\.cat\/.+\.pdf$/);
   assert.ok(isOpen(metges), "the doctors' strike was still on when last checked");
   for (const locale of LOCALES) {
     assert.match(ouigoPartial.facts[locale].join(" "), /6[.:]00[^.]*12[.:]00[^.]*18[.:]00[^.]*23[.:]59/, locale);
@@ -599,7 +604,9 @@ test("known answers read on the evening of 30 October 2026: Ouigo's resolution, 
     assert.ok(ouigoPartial.minimumServices.text[locale].includes(`](${STRIKE_URLS.ouigoResolution})`), locale);
     assert.ok(schools.facts[locale].join(" ").includes("El 26N, vaga educativa"), `${locale}: USTEC's own words`);
     assert.match(schools.minimumServices.text[locale], /8 (de setembre|de septiembre|September) (de )?2026/, locale);
-    assert.match(metges.facts[locale].join(" "), /30 (d'octubre|de octubre|October) (de )?2026/, `${locale}: the day the doctors' strike was last seen still on`);
+    assert.match(metges.facts[locale].join(" "), /(?<!\d)2 (de novembre|de noviembre|November) (de )?2026/, `${locale}: the day the doctors' strike was last seen still on`);
+    assert.ok(schools.facts[locale].join(" ").includes("vaga de les treballadores de l'educació"), `${locale}: the joint release's own words`);
+    assert.ok(schools.facts[locale].join(" ").includes(`](${STRIKE_URLS.edu26Joint})`), locale);
     // Groundforce (Ministry of Transport, 28 Sep 2026): printed in the airports paragraph with its validity, not as a dated strike.
     const body = text(STRIKES_GUIDE.editions[locale].blocks);
     const groundforce = body.split(/\n|(?<=[.!?])\s+(?=[A-ZÀ-Ú])/).find((p) => p.includes("Groundforce")) ?? "";
@@ -623,12 +630,19 @@ test("the lead answers 'is there a strike today' first, then what is coming and 
   };
   for (const locale of LOCALES) {
     const leadText = text(STRIKES_GUIDE.editions[locale].blocks.slice(0, 1));
-    if (STRIKES_AS_OF === "2026-10-30") {
-      assert.match(leadText, now[locale], locale);
-      assert.match(leadText, city[locale], locale);
-    }
+    // Known answer for Friday 30 October, whatever the as-of date.
+    const oct30 = text(buildStrikesBody(locale, "2026-10-30").slice(0, 1));
+    assert.match(oct30, now[locale], locale);
+    assert.match(oct30, city[locale], locale);
+    // Up to the general strike, only it touches the metro, bus and FGC.
+    if (STRIKES_AS_OF <= "2026-11-11") assert.match(leadText, city[locale], locale);
     assert.match(leadText, /Properes vagues:|Próximas huelgas:|Coming up:/, locale);
   }
+  // Monday 2 November (checked that evening): the doctors' strike and Ouigo's second all-day strike are both under way.
+  assert.match(
+    text(buildStrikesBody("ca", "2026-11-02").slice(0, 1)),
+    /^Vagues en curs a Catalunya el dilluns 2 de novembre de 2026, segons les fonts oficials: vaga indefinida de metges[^;]*; vaga de maquinistes d'Ouigo \(SEMAF\), divendres 30 d'octubre i dilluns 2 de novembre de 2026\./,
+  );
   // A day with nothing in progress says so before listing what is coming.
   const quiet = text(buildStrikesBody("ca", "2026-11-05", STRIKES.filter((s) => !s.indefinite)).slice(0, 1));
   assert.match(quiet, /^El dijous 5 de novembre de 2026 no hi havia cap vaga en curs/);
