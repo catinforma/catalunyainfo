@@ -37,15 +37,15 @@ export function hasLegalIdentity(): boolean {
 /**
  * Third parties that process data on our behalf, or that receive it because of
  * how the site is built. Every one of these is verifiable from the repository
- * and the Vercel configuration; nothing here is aspirational.
+ * and the server configuration (ops/vps); nothing here is aspirational.
  */
 export const PROCESSORS = [
   {
-    name: "Vercel Inc.",
-    role: { ca: "Allotjament del web", es: "Alojamiento del sitio", en: "Website hosting" },
-    url: "https://vercel.com/legal/privacy-policy",
-    /** Serverless functions are pinned to cdg1 in vercel.json. */
-    region: { ca: "París (UE) i CDN global", es: "París (UE) y CDN global", en: "Paris (EU) and global CDN" },
+    /** Our own server (Contabo Cloud VPS, EU region) since 2 Nov 2026; Vercel before. */
+    name: "Contabo GmbH",
+    role: { ca: "Allotjament del web (servidor propi)", es: "Alojamiento del sitio (servidor propio)", en: "Website hosting (our own server)" },
+    url: "https://contabo.com/en/legal/privacy/",
+    region: { ca: "Unió Europea", es: "Unión Europea", en: "European Union" },
   },
   {
     /** Processor named in supabase.com/legal/dpa; project in eu-west-1 (Ireland) since 26 Oct 2026. */

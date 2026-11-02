@@ -176,7 +176,7 @@ function identityFacts(locale: Locale): Block {
   if (OPERATOR.address) items.push({ label: label.addr, value: OPERATOR.address });
   if (OPERATOR.registry) items.push({ label: label.reg, value: OPERATOR.registry });
   items.push({ label: label.email, value: OPERATOR.email });
-  items.push({ label: label.host, value: "Vercel Inc." });
+  items.push({ label: label.host, value: "Contabo GmbH (UE)" });
 
   return {
     type: "keyFacts",
