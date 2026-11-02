@@ -8,12 +8,16 @@
  * so the markup says nothing the page does not.
  */
 
-import { GENCAT_OPEN_DATA_LICENCE, datasetSchema } from "@/lib/seo/jsonld";
+import { GENCAT_OPEN_DATA_LICENCE, datasetSchema, faqSchema } from "@/lib/seo/jsonld";
 
+import { BOE_2027 } from "./boe-2027";
 import { comarcaDescription, comarcaH1, displayName, hubCopy, municipalityDescription, municipalityH1 } from "./copy";
 import { NEXT, SNAPSHOT, YEAR, councilApproved2027, nextYearFor, type ComarcaGroup } from "./data";
+import { dateContent } from "./dates";
 import { enName, englishHubCopy, englishTownDescription, englishTownH1 } from "./english-copy";
-import { comarcaPath, hubPath, municipalityPath, type MuniLocale } from "./paths";
+import type { DateLocale } from "./format";
+import { comarcaPath, datePath, hubPath, municipalityPath, type DatePage, type MuniLocale } from "./paths";
+import { dateQuestion } from "./question";
 import type { SnapshotMunicipality } from "./types";
 
 export const HOLIDAY_DATA_CREATOR = "Generalitat de Catalunya. Departament d'Empresa i Treball";
@@ -94,6 +98,35 @@ export function englishHubDataset() {
     temporalCoverage: String(YEAR),
     dateModified: SNAPSHOT.readOn,
   });
+}
+
+/**
+ * A 2027 date page (tranche 4): the H1 and the meta description, based on the
+ * texts the answer comes from (Ordre EMT/52/2026, the BOE's 2027 list, the
+ * shop and school orders, and each council or the DOGC local order). Null for
+ * the earlier date pages, which carry breadcrumbs only.
+ */
+export function dateDataset(iso: DatePage, locale: DateLocale) {
+  const content = dateContent(iso, locale);
+  if (!content.basedOn?.length) return null;
+  return datasetSchema({
+    path: datePath(locale, iso),
+    name: dateQuestion(iso, locale),
+    description: content.description,
+    locale,
+    creator: HOLIDAY_DATA_CREATOR,
+    license: GENCAT_OPEN_DATA_LICENCE,
+    isBasedOn: content.basedOn,
+    spatialCoverage: { ca: "Catalunya", es: "Cataluña", en: "Catalonia" }[locale],
+    temporalCoverage: iso,
+    dateModified: [SNAPSHOT.readOn, BOE_2027.readOn].sort().at(-1),
+  });
+}
+
+/** The page's questions and the answers it prints (tranche 4), as FAQPage; null for the earlier date pages. */
+export function dateFaq(iso: DatePage, locale: DateLocale) {
+  const items = dateContent(iso, locale).faq;
+  return items?.length ? faqSchema([{ type: "faq", items }]) : null;
 }
 
 export function holidayHubDataset(locale: MuniLocale) {

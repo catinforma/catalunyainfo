@@ -7,9 +7,9 @@ import { byComarca, sharedDates, type ComarcaGroup } from "@/lib/programmatic/ho
 import { LOCAL_DATE_PAGES } from "@/lib/programmatic/holidays/dates";
 import { dayMonth, weekdayDayMonth } from "@/lib/programmatic/holidays/format";
 import { esName, joinList } from "@/lib/programmatic/holidays/names";
-import { DATE_PAGES, comarcaPath, datePath, hubPath, municipalityPath, type MuniLocale } from "@/lib/programmatic/holidays/paths";
+import { comarcaPath, datePath, hubPath, municipalityPath, type MuniLocale } from "@/lib/programmatic/holidays/paths";
 
-import { GuideLinks, Sources } from "./parts";
+import { DateQuestions, GuideLinks, Sources } from "./parts";
 
 /** Nuclei named per row of the table; a town with more sends the reader to its own page. */
 const NUCLEI_PER_ROW = 3;
@@ -141,13 +141,7 @@ export function ComarcaPage({ g, locale }: { g: ComarcaGroup; locale: MuniLocale
 
         <section className="mt-12" aria-labelledby="ci-hol-dates">
           <h2 id="ci-hol-dates">{t.datesTitle}</h2>
-          <ul className="mt-4 grid list-none gap-2 p-0 sm:grid-cols-2">
-            {DATE_PAGES.map((d) => (
-              <li key={d}>
-                <Link href={datePath(locale, d)}>{dateQuestion(d, locale)}</Link>
-              </li>
-            ))}
-          </ul>
+          <DateQuestions locale={locale} />
         </section>
 
         <GuideLinks keys={["holidayToday", "workCalendar", "localHolidays", "shops", "school", "decemberBridge"]} locale={locale} title={t.guidesTitle} />

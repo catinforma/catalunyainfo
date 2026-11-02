@@ -24,12 +24,12 @@ import { municipalityDatePages } from "@/lib/programmatic/holidays/dates";
 import { dayMonth, weekdayDayMonth } from "@/lib/programmatic/holidays/format";
 import { OFFICIAL } from "@/lib/programmatic/holidays/links";
 import { caComarca, joinList } from "@/lib/programmatic/holidays/names";
-import { DATE_PAGES, comarcaPath, datePath, hubPath, municipalityPath, type MuniLocale } from "@/lib/programmatic/holidays/paths";
+import { comarcaPath, datePath, hubPath, municipalityPath, type MuniLocale } from "@/lib/programmatic/holidays/paths";
 import { dateQuestion } from "@/lib/programmatic/holidays/copy";
 import type { SnapshotMunicipality } from "@/lib/programmatic/holidays/types";
 
 import { HolidayStatus, type StatusLabels } from "./HolidayStatus";
-import { CouncilSourceLine, DateList, GuideLinks, HolidayTable, Sources } from "./parts";
+import { CouncilSourceLine, DateList, DateQuestions, GuideLinks, HolidayTable, Sources } from "./parts";
 
 const STATUS_LABELS: Record<MuniLocale, StatusLabels> = {
   ca: {
@@ -266,13 +266,7 @@ export function MunicipalityPage({ m, locale }: { m: SnapshotMunicipality; local
 
         <section className="mt-12" aria-labelledby="ci-hol-dates">
           <h2 id="ci-hol-dates">{locale === "ca" ? "És festiu…?" : "¿Es festivo…?"}</h2>
-          <ul className="mt-4 grid list-none gap-2 p-0 sm:grid-cols-2">
-            {DATE_PAGES.map((d) => (
-              <li key={d}>
-                <Link href={datePath(locale, d)}>{dateQuestion(d, locale)}</Link>
-              </li>
-            ))}
-          </ul>
+          <DateQuestions locale={locale} />
         </section>
 
         <GuideLinks

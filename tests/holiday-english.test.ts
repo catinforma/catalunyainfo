@@ -238,20 +238,34 @@ test("known answers: 'is <date> a holiday in <town>?' per town, from the snapsho
   assert.equal(answer("sitges", "2026-11-30").answer, "No: a working day in Sitges.");
   assert.equal(answer("barcelona", "2026-12-24").state, "no");
   assert.match(answer("barcelona", "2026-11-01").answer, /^No: a Sunday/);
-  // 11 November: the general strike the date page announces.
+  // 11 November: the general strike the date page announces. No other date: the other pages'
+  // notices point to other guides (Barcelona in December, La Grossa, Reis, the 2027 guides).
   assert.ok(answer("barcelona", "2026-11-11").strike);
   assert.ok(!answer("barcelona", "2026-11-30").strike);
+  for (const m of englishTowns()) {
+    assert.deepEqual(townDateAnswers(m).filter((a) => a.strike).map((a) => a.iso), ["2026-11-11"], m.slug);
+  }
   // Shops: 8 December is one of Sitges's default opening days, not one of Badalona's own (Resolució EMT/4342/2025).
   assert.match(answer("sitges", "2026-12-08").shops, /^May open/);
   assert.match(answer("badalona", "2026-12-08").shops, /^Stay closed/);
   assert.equal(answer("sitges", "2026-12-24").shops, "Usual hours");
-  // 1 and 6 January 2027: compulsory closing days whatever the town (Llei 18/2017, art. 36.2.d).
+  // 2027: the law's closing days (Llei 18/2017, art. 36.2.d: 1 and 6 January, Easter Sunday and Monday,
+  // 1 May, 24 June, 11 September, 25 and 26 December) close shops whatever the town; the eight general
+  // days of Ordre EMT/89/2026 open them everywhere.
+  const closing2027 = ["2027-01-01", "2027-01-06", "2027-03-29", "2027-05-01", "2027-06-24", "2027-09-11", "2027-12-25", "2027-12-26"];
   for (const m of englishTowns()) {
     for (const a of townDateAnswers(m)) {
-      if (a.iso.startsWith("2027-")) assert.match(a.shops, /^Stay closed/, `${m.slug} ${a.iso}`);
+      if (closing2027.includes(a.iso)) assert.match(a.shops, /^Stay closed/, `${m.slug} ${a.iso}`);
+      if (["2027-11-01", "2027-12-06", "2027-12-08"].includes(a.iso)) assert.match(a.shops, /^May open: one of the eight general/, `${m.slug} ${a.iso}`);
       assert.ok(!/undefined|NaN|\$\{/.test(a.answer + a.shops), `${m.slug} ${a.iso}`);
     }
   }
+  // 2027 local days: the council's own (pending the DOGC order) where it has approved them, else not yet known.
+  assert.equal(answer("barcelona", "2027-05-17").state, "yes");
+  assert.match(answer("barcelona", "2027-05-17").answer, /^Yes: one of Barcelona's local holidays \(approved by the council, pending the DOGC order\)\.$/);
+  assert.match(answer("barcelona", "2027-04-23").answer, /^No: a working day in Barcelona, going by the council's own 2027 days/);
+  assert.equal(answer("salou", "2027-04-23").answer, "Not across Catalonia; Salou's 2027 local holidays are not published yet.");
+  assert.equal(answer("salou", "2027-12-26").answer, "No: a Sunday, and not one of Catalonia's 2027 holidays.");
 });
 
 /* -------------------------------------------------------------------------- */

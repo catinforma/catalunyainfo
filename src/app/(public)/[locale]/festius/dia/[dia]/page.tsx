@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import { DateRoute, dateMetadata } from "@/components/programmatic/holidays/routes";
 import { dateStaticParams, resolveDatePage } from "@/lib/programmatic/holidays/routing";
 
-/** /ca/festius/dia/8-desembre-2026/ — "És festiu el 8 de desembre de 2026 a Catalunya?" All eleven are built at deploy. */
+/** /ca/festius/dia/8-desembre-2026/ — "És festiu el 8 de desembre de 2026 a Catalunya?" Every date page (DATE_PAGES, 34 since 2 Nov 2026) is built at deploy. */
 export const revalidate = false;
 export const dynamicParams = false;
 

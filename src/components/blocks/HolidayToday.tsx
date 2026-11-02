@@ -100,7 +100,9 @@ export async function HolidayToday({ locale, now }: { locale: Locale; now?: Date
   const weekend = weekdayIndex(today) === 0 || weekdayIndex(today) === 6;
 
   const upcoming = allHolidays().filter((holiday) => holiday.date >= today);
-  const datePages = DATE_PAGES.filter((iso) => iso >= today);
+  // The next twelve dated questions: with the 2027 pages (2 Nov 2026) the full list runs to 34, and
+  // this block is about today; the holiday hubs list them all.
+  const datePages = DATE_PAGES.filter((iso) => iso >= today).slice(0, 12);
 
   return (
     <section className="ci-today" aria-label={t.title}>

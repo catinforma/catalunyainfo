@@ -1509,6 +1509,91 @@ the same classifier.
 
 **Outcome:** _pending_
 
+## 2026-11-02 — Holiday date pages for 2027
+
+**URLs:** 69 new, 23 dates x ca/es/en: `/ca/festius/dia/<d>-2027/`,
+`/es/festivos/dia/<d>-2027/`, `/en/holidays/day/<d>-2027/` (code routes, built
+at deploy; ship with the deploy). The 34 date pages are now linked from the
+three hubs, every town and comarca page, the sitemap (102 date URLs, hreflang
+ca/es/en + x-default) and `llms.txt`, all through `DATE_PAGES`.
+
+**Observation** (Search Console, 6 Oct - 1 Nov 2026). `/es/festivos/dia/...`
+took 9,331 impressions and 278 clicks across 8 pages, about 1,170 impressions
+a page against about 114 for a town page. Queries shaped "es festivo el X",
+"és festiu el X" and "is X a holiday" total 6,179 impressions. Each date page
+peaks in the days before its date. The 2027 searches are next: Easter, the
+"puentes", and the days people expect to be holidays and are not.
+
+**Change.** Tranche 4 of the date engine (`dates-2027.ts`), one template for
+all 23 dates, answer first in the H1's own terms:
+
+- **Every Catalonia-wide day of 2027**, read from `regionalDays(2027)`
+  (Ordre EMT/52/2026), not retyped: 26 and 29 Mar, 1 May, 24 Jun, 11 Sep,
+  12 Oct, 1 Nov, 6 and 8 Dec, 25 Dec (1 and 6 Jan already had pages). The
+  three Saturdays (1 May, 11 Sep, 25 Dec) answer "Sí, però cau en dissabte"
+  and say the order moves none of them to Monday.
+- **Working days people ask about:** 5 Jan, 19 Mar (Sant Josep), 25 Mar
+  (Dijous Sant), 23 Apr (Sant Jordi), 15 Aug (a Sunday), 2 Nov, 7 Dec,
+  24 Dec, 26 Dec (Sant Esteve: a Sunday, and not in the 2027 order, unlike
+  2026), 31 Dec.
+- **Local days several of the largest towns share** (council-approved,
+  pending the DOGC order): 17 May (17 towns and 5 villages, Barcelona,
+  L'Hospitalet, Badalona, Mataró…), 29 Jun (Reus, Rubí, Figueres, Premià de
+  Dalt), 24 Sep (Barcelona, L'Hospitalet, Montcada, Sant Joan Despí). The box
+  reads "Festa local". When `local-2027.json` is written the pages switch to
+  the order (`nextYearPlacesOn`, the town pages' `councilApproved2027`), drop
+  "pendent"/"almenys" and cite the order.
+
+Each page: the answer naming the order; Catalonia against the rest of Spain
+from the BOE's 2027 list (BOE-A-2026-21254, transcribed in `boe-2027.ts`,
+table kept as a test fixture: e.g. 25 Mar is a holiday everywhere except
+Catalonia and the Valencian Community; 19 Mar in Galicia, Madrid, Murcia,
+Navarre and the Valencian Community; 16 Aug in six communities); the days
+around it; one sentence with one link, to the Easter 2027 guide (19-29 Mar),
+the Reis parade (5 Jan) or Ponts 2027 (the rest), with the long weekend the
+day makes computed by `holidays/bridges.ts`; the towns with a local holiday,
+each linked; shops (Llei 18/2017 art. 36.2.d closing days by date, so 26 Dec
+2027 is closed though not a holiday; Ordre EMT/89/2026's eight general days);
+schools (Ordre EDF/66/2026). FAQPage (the H1 and the three section
+questions, as printed) and Dataset JSON-LD, plus the breadcrumbs. The 2026
+pages keep their title, markup and copy.
+
+Title: the H1 question plus the day's name when it fits 60 characters:
+
+```
+¿Es festivo el 23 de abril de 2027 en Cataluña? Sant Jordi
+¿Es festivo el 25 de marzo de 2027 en Cataluña? Jueves Santo
+És festiu el 26 de desembre de 2027 a Catalunya? Sant Esteve
+Is 26 March 2027 a public holiday in Catalonia? Good Friday
+```
+
+Linking in: the Ponts 2027 table links each holiday's day to its page, one
+link per row, and its Barcelona list links 17 May and 24 Sep (publish group
+`ponts-2027`); the Easter 2027 day table links 25, 26 and 29 Mar and its
+Pasqua Granada paragraph gains one sentence linking 17 May (publish group
+`setmana-santa-2027`). Code pages (deploy only): hubs, town and comarca pages
+list the date questions by year; the "es festivo hoy" block shows the next
+12 instead of all of them; the English town table answers the 2027 dates
+from the council data (or says they are not published yet) and no longer
+flags a strike on every date with a notice (only 11 Nov 2026 has one).
+
+**Baseline.** 0 impressions for every 2027 date URL (new). Reference: the
+2026 date pages, about 1,170 impressions a page over 27 days.
+
+**Prediction.** Each 2027 page gets little before January, then rises in the
+weeks before its date, as the 2026 pages did. The first to show: 19 and
+25 Mar (Easter searches start in February), then 23 Apr and 17 May. The
+Saturday holidays and 26 Dec (Sant Esteve) take the "no/sí, però" queries the
+guides do not answer in their titles. The guides keep their own queries; the
+date pages should not take "puentes 2027" or "semana santa 2027".
+
+**Measure on 1 Feb 2027** (first window with Easter demand) and on 1 Apr
+2027: per date page, impressions, clicks, position, against the 2026 pages'
+curve; the Easter and Ponts guides' own queries before and after, for
+cannibalisation.
+
+**Outcome:** _pending_
+
 ## Candidates not yet run
 
 Recorded so they are not lost, and so they are not all started at once.

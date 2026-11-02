@@ -8,6 +8,7 @@ import { GUIDES } from "./links";
 import { caDayArticle, dayMonth, dayMonthYear, dayPair, weekdayDayMonth, type DateLocale } from "./format";
 import { caA, caComarca, caDe, caStart, esName, joinList } from "./names";
 import { datePath, type MuniLocale } from "./paths";
+import { dateQuestion } from "./question";
 import type { SnapshotMunicipality } from "./types";
 
 /**
@@ -837,16 +838,8 @@ export function comarcaCopy(g: ComarcaGroup, locale: MuniLocale): ComarcaCopy {
 /* Date pages                                                                 */
 /* -------------------------------------------------------------------------- */
 
-/** "És festiu el 8 de desembre de 2026 a Catalunya?" */
-export function dateQuestion(iso: string, locale: DateLocale): string {
-  if (locale === "ca") {
-    const day = Number(iso.slice(8, 10));
-    const art = day === 1 || day === 11 ? "l'" : "el ";
-    return `És festiu ${art}${dayMonthYear(iso, "ca")} a Catalunya?`;
-  }
-  if (locale === "es") return `¿Es festivo el ${dayMonthYear(iso, "es")} en Cataluña?`;
-  return `Is ${dayMonthYear(iso, "en")} a public holiday in Catalonia?`;
-}
+/** "És festiu el 8 de desembre de 2026 a Catalunya?" (`question.ts`, re-exported for the pages that import it from here). */
+export { dateQuestion };
 
 export const DATE_UI: Record<DateLocale, {
   breadcrumbParent: string;

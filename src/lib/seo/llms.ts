@@ -22,7 +22,7 @@ import { fuelHubPath } from "@/lib/programmatic/fuel/paths";
 import { SNAPSHOT as HOLIDAYS, YEAR } from "@/lib/programmatic/holidays/data";
 import { englishTowns } from "@/lib/programmatic/holidays/english";
 import { GUIDES } from "@/lib/programmatic/holidays/links";
-import { DATE_PAGES, datePath, hubPath as holidaysHub } from "@/lib/programmatic/holidays/paths";
+import { DATE_PAGES, DATE_PAGE_RANGE, datePath, hubPath as holidaysHub } from "@/lib/programmatic/holidays/paths";
 import { RESERVOIR_DATA } from "@/lib/programmatic/reservoirs/data";
 import { reservoirHubPath } from "@/lib/programmatic/reservoirs/paths";
 import { lineIds } from "@/lib/programmatic/rodalies/pages";
@@ -71,8 +71,8 @@ export function liveTools(): LiveTool[] {
     },
     {
       name: "Is it a public holiday on…?",
-      hubs: { ca: datePath("ca", DATE_PAGES[0]), es: datePath("es", DATE_PAGES[0]), en: datePath("en", DATE_PAGES[0]) },
-      description: `one page per date (${DATE_PAGES.length} dates from ${DATE_PAGES[0]} to ${DATE_PAGES[DATE_PAGES.length - 1]}): whether the day is a holiday across Catalonia, which towns have a local holiday, shops and schools.`,
+      hubs: { ca: datePath("ca", DATE_PAGE_RANGE.first), es: datePath("es", DATE_PAGE_RANGE.first), en: datePath("en", DATE_PAGE_RANGE.first) },
+      description: `one page per date (${DATE_PAGES.length} dates from ${DATE_PAGE_RANGE.first} to ${DATE_PAGE_RANGE.last}): whether the day is a holiday across Catalonia and in the rest of Spain, which towns have a local holiday, shops and schools.`,
     },
     {
       name: "Strikes in Catalonia today",

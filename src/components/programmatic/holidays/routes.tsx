@@ -4,9 +4,9 @@ import { JsonLd } from "@/components/JsonLd";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
 import { todayInCatalonia } from "@/lib/content/holidays/calendar";
-import { comarcaDescription, comarcaTitle, dateQuestion, hubCopy, municipalityDescription, municipalityFaq, municipalityTitle } from "@/lib/programmatic/holidays/copy";
+import { comarcaDescription, comarcaTitle, hubCopy, municipalityDescription, municipalityFaq, municipalityTitle } from "@/lib/programmatic/holidays/copy";
 import { comarcaBySlug, municipalityBySlug, nextYearFor } from "@/lib/programmatic/holidays/data";
-import { dateContent } from "@/lib/programmatic/holidays/dates";
+import { dateContent, dateTitle } from "@/lib/programmatic/holidays/dates";
 import { englishTownBySlug } from "@/lib/programmatic/holidays/english";
 import { englishHubCopy, englishTownDescription, englishTownFaq, englishTownTitle } from "@/lib/programmatic/holidays/english-copy";
 import type { DateLocale } from "@/lib/programmatic/holidays/format";
@@ -24,6 +24,8 @@ import {
 } from "@/lib/programmatic/holidays/paths";
 import {
   comarcaDataset,
+  dateDataset,
+  dateFaq,
   englishHubDataset,
   englishTownDataset,
   holidayHubDataset,
@@ -198,7 +200,7 @@ export function dateMetadata(locale: DateLocale, iso: DatePage): Metadata {
   return buildMetadata({
     locale,
     path: datePath(locale, iso),
-    title: dateQuestion(iso, locale),
+    title: dateTitle(iso, locale),
     description: dateContent(iso, locale).description,
     translations: dateTranslations(iso),
   });
@@ -211,7 +213,8 @@ export function DateRoute({ locale, iso }: { locale: DateLocale; iso: DatePage }
       <main id="main">
         <DatePageView iso={iso} locale={locale} />
       </main>
-      <JsonLd json={graph([breadcrumbSchema(dateCrumbs(iso, locale))])} />
+      {/* The 2027 pages add their questions (FAQPage) and their sources (Dataset); the others carry breadcrumbs only. */}
+      <JsonLd json={graph([breadcrumbSchema(dateCrumbs(iso, locale)), dateDataset(iso, locale), dateFaq(iso, locale)])} />
       <SiteFooter locale={locale} />
     </>
   );

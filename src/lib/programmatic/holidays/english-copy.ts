@@ -1,9 +1,11 @@
+import { OPENING_2027 } from "@/lib/content/batch02/shops";
 import { EN_LARGEST, EN_RESORTS, TOURISM_REGISTER } from "@/lib/programmatic/elections/english";
 
 import { bridgesLine, councilLabel, councilSource, type CouncilSource } from "./copy";
 import type { CouncilApproved } from "./council-2027";
-import { NEXT, SNAPSHOT, YEAR, aranSwap, councilApproved2027, isAran, regionalDays } from "./data";
+import { NEXT, SNAPSHOT, YEAR, aranSwap, councilApproved2027, isAran, nextYearFor, regionalDays } from "./data";
 import { dateContent } from "./dates";
+import { CLOSING_2027 } from "./dates-2027";
 import { englishTowns, englishWithoutDays } from "./english";
 import { dayMonth, dayPair, weekdayDayMonth, weekdayName } from "./format";
 import { GUIDES } from "./links";
@@ -281,35 +283,53 @@ const NOV2 = "2026-11-02";
 const COMPULSORY_CLOSING = new Set(["01-01", "01-06", "05-01", "06-24", "09-11", "12-25", "12-26"]);
 
 /**
- * The eleven date pages, answered for one town from the snapshot: a
- * Catalonia-wide holiday, the town's own local day, a village's, or a working
- * day; and whether shops on the general timetable may open, from the town's
- * own ten opening days (Resolució EMT/4342/2025 or the defaults). The
- * snapshot's opening days are the current year's: a later date is answered
- * only when the law closes shops on it whatever the town (1 and 6 January).
+ * Every date page, answered for one town: a Catalonia-wide holiday, the
+ * town's own local day, a village's, or a working day; and whether shops on
+ * the general timetable may open. This year from the snapshot (the town's own
+ * ten opening days, Resolució EMT/4342/2025 or the defaults). Next year (the
+ * 2027 pages, 2 Nov 2026): local days from the DOGC order once it is parsed,
+ * else from the council's own act, marked pending, else "not published yet";
+ * shops only where the answer holds in every town (the law's closing days,
+ * Ordre EMT/89/2026's eight general days, and working days), since each
+ * town's own two 2027 days are not published.
  */
 export function townDateAnswers(m: SnapshotMunicipality): TownDateAnswer[] {
   const name = enName(m);
   return DATE_PAGES.map((iso) => {
-    const regional = regionalDays(Number(iso.slice(0, 4)), isAran(m)).find((d) => d.date === iso);
-    const villages = m.nuclei.filter((n) => n.dates.includes(iso)).map((n) => n.name);
-    const sunday = weekdayName(iso, "en") === "Sunday";
-    const strike = Boolean(dateContent(iso, "en").notice);
-    const opening = Number(iso.slice(0, 4)) === YEAR && m.shops.includes(iso);
-    const known = Number(iso.slice(0, 4)) === YEAR || COMPULSORY_CLOSING.has(iso.slice(5));
+    const year = Number(iso.slice(0, 4));
+    const regional = regionalDays(year, isAran(m)).find((d) => d.date === iso);
+    const swap = aranSwap(year);
+    // Local days: the snapshot's this year; next year the DOGC order's, or the council's own until it is out.
+    const dogc = year === NEXT ? nextYearFor(m.slug) : null;
+    const council = year === NEXT && !dogc ? councilApproved2027(m.slug) : null;
+    const days = year === YEAR ? { local: m.local, nuclei: m.nuclei } : (dogc ?? (council ? { local: [...council.local], nuclei: council.nuclei ?? [] } : null));
+    const pending = council ? " (approved by the council, pending the DOGC order)" : "";
+    const villages = (days?.nuclei ?? []).filter((n) => n.dates.includes(iso)).map((n) => n.name);
+    const weekday = weekdayName(iso, "en");
+    const weekend = weekday === "Sunday" || weekday === "Saturday";
+    // The date page's notice is a strike only on 11 November 2026; the others point to other guides.
+    const strike = dateContent(iso, "en").notice?.href === GUIDES.strikes.en;
+    const opening = year === YEAR && m.shops.includes(iso);
+    const generalDay = year === NEXT && (OPENING_2027.general as readonly string[]).includes(iso);
+    const known = year === YEAR || (year === NEXT ? CLOSING_2027.has(iso) : COMPULSORY_CLOSING.has(iso.slice(5)));
     const closedShops = opening
       ? "May open: one of its ten opening days"
-      : known
-        ? "Stay closed, except exempt shops"
-        : `Opening days for ${iso.slice(0, 4)} not covered here`;
+      : generalDay
+        ? "May open: one of the eight general opening days"
+        : known
+          ? "Stay closed, except exempt shops"
+          : `Opening days for ${year} not covered here`;
 
     if (regional) return { iso, state: "yes", answer: `Yes: ${regional.name.en}, across Catalonia.`, shops: closedShops, strike };
-    if (m.local.includes(iso)) return { iso, state: "yes", answer: `Yes: one of ${name}'s local holidays.`, shops: closedShops, strike };
+    if (isAran(m) && swap?.replaces === iso) {
+      return { iso, state: "no", answer: `No: in Aran, the ${swap.name.en} on ${dayMonth(swap.date, "en")} replaces it.`, shops: closedShops, strike };
+    }
+    if (days?.local.includes(iso)) return { iso, state: "yes", answer: `Yes: one of ${name}'s local holidays${pending}.`, shops: closedShops, strike };
     if (villages.length > 0) {
       return {
         iso,
         state: "partly",
-        answer: `Only in ${joinList(villages, "en")}, where it is a local holiday; a working day in the rest of ${name}.`,
+        answer: `Only in ${joinList(villages, "en")}, where it is a local holiday${pending}; a working day in the rest of ${name}.`,
         shops: opening ? "May open: one of its ten opening days" : `Usual hours outside ${joinList(villages, "en")}`,
         strike,
       };
@@ -318,7 +338,13 @@ export function townDateAnswers(m: SnapshotMunicipality): TownDateAnswer[] {
       const monday = m.local.includes(NOV2) ? ` Monday 2 November is a local holiday in ${name}.` : " Nor is Monday 2 November.";
       return { iso, state: "no", answer: `No: a Sunday, and not one of Catalonia's official holidays this year.${monday}`, shops: closedShops, strike };
     }
-    return { iso, state: "no", answer: `No: a working day in ${name}.`, shops: sunday ? closedShops : "Usual hours", strike };
+    // 15 August and 26 December 2027: Sundays the order leaves out.
+    if (weekend) return { iso, state: "no", answer: `No: a ${weekday}, and not one of Catalonia's ${year} holidays.`, shops: closedShops, strike };
+    if (!days) {
+      return { iso, state: "no", answer: `Not across Catalonia; ${name}'s ${year} local holidays are not published yet.`, shops: "Usual hours unless it is a local holiday", strike };
+    }
+    const going = council ? ", going by the council's own 2027 days (the DOGC order is pending)" : "";
+    return { iso, state: "no", answer: `No: a working day in ${name}${going}.`, shops: "Usual hours", strike };
   });
 }
 

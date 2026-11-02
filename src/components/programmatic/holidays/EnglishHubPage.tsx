@@ -4,17 +4,16 @@ import { Breadcrumbs, type Crumb } from "@/components/Breadcrumbs";
 import { renderInline } from "@/lib/content/inline";
 import { getMessages } from "@/lib/i18n";
 import { hubPath as electionsHubPath } from "@/lib/programmatic/elections/paths";
-import { dateQuestion } from "@/lib/programmatic/holidays/copy";
 import { NEXT, YEAR, regionalDays, type HolidayRow } from "@/lib/programmatic/holidays/data";
 import { englishTowns, isLargestTown } from "@/lib/programmatic/holidays/english";
 import { enName, englishHubCopy } from "@/lib/programmatic/holidays/english-copy";
 import { weekdayDayMonth } from "@/lib/programmatic/holidays/format";
 import { joinList } from "@/lib/programmatic/holidays/names";
 import { GUIDES } from "@/lib/programmatic/holidays/links";
-import { DATE_PAGES, datePath, hubPath, municipalityPath } from "@/lib/programmatic/holidays/paths";
+import { hubPath, municipalityPath } from "@/lib/programmatic/holidays/paths";
 import type { SnapshotMunicipality } from "@/lib/programmatic/holidays/types";
 
-import { GuideLinks, HolidayTable, Sources } from "./parts";
+import { DateQuestions, GuideLinks, HolidayTable, Sources } from "./parts";
 
 /**
  * `/en/holidays/`: Catalonia's bank holidays for this year and next, and the
@@ -123,13 +122,7 @@ export function EnglishHubPage() {
 
         <section className="mt-12" aria-labelledby="ci-hol-dates">
           <h2 id="ci-hol-dates">{t.datesTitle}</h2>
-          <ul className="mt-4 grid list-none gap-2 p-0 sm:grid-cols-2">
-            {DATE_PAGES.map((d) => (
-              <li key={d}>
-                <Link href={datePath("en", d)}>{dateQuestion(d, "en")}</Link>
-              </li>
-            ))}
-          </ul>
+          <DateQuestions locale="en" />
         </section>
 
         <GuideLinks keys={["holidayToday", "workCalendar", "localHolidays", "shops", "metroHours", "strikes", "decemberBridge", "school"]} locale="en" title={t.guidesTitle} />

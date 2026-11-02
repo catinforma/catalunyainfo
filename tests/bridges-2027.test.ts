@@ -42,7 +42,7 @@ import { COUNCIL_2027 } from "../src/lib/programmatic/holidays/council-2027.ts";
 import { councilApproved2027, municipalityBySlug, nextYearPublished, regionalDays } from "../src/lib/programmatic/holidays/data.ts";
 import { englishHubCopy } from "../src/lib/programmatic/holidays/english-copy.ts";
 import { GUIDES } from "../src/lib/programmatic/holidays/links.ts";
-import { holidayFamilyPaths } from "../src/lib/programmatic/holidays/paths.ts";
+import { datePath, holidayFamilyPaths } from "../src/lib/programmatic/holidays/paths.ts";
 
 /**
  * Ponts / puentes / long weekends 2027 (31 Oct 2026).
@@ -406,11 +406,20 @@ test("the lead answers: the count, the leave-free long weekends, the lost Saturd
 
 test("the answer table prints each holiday's weekday, type, leave and run from the plans", () => {
   const ca = holidayRows("ca");
-  assert.deepEqual(ca[1], ["Reis", "Dimecres 6 de gener", "Pont de dimecres", "Dilluns 4 i dimarts 5 de gener", "6 dies: del divendres 1 al dimecres 6 de gener (també és festiu: Cap d'Any)"]);
-  assert.deepEqual(ca[10], ["La Immaculada", "Dimecres 8 de desembre", "Pont de dimecres", "Dimarts 7 de desembre", "5 dies: del dissabte 4 al dimecres 8 de desembre (també és festiu: Dia de la Constitució)"]);
-  assert.deepEqual(ca[4], ["Festa del Treball", "Dissabte 1 de maig", "Perdut: cau en dissabte", "—", "—"]);
-  assert.deepEqual(holidayRows("en")[5], ["Sant Joan (St John's Day)", "Thursday 24 June", "One-day bridge", "Friday 25 June", "4 days: Thursday 24 to Sunday 27 June"]);
-  assert.deepEqual(holidayRows("es")[7], ["Fiesta Nacional de España", "Martes 12 de octubre", "Puente de un día", "Lunes 11 de octubre", "4 días: del sábado 9 al martes 12 de octubre"]);
+  // Each day links to its "is it a holiday?" page (tranche 4 of the date pages, 2 Nov 2026).
+  assert.deepEqual(ca[1], ["Reis", "[Dimecres 6 de gener](/ca/festius/dia/6-gener-2027/)", "Pont de dimecres", "Dilluns 4 i dimarts 5 de gener", "6 dies: del divendres 1 al dimecres 6 de gener (també és festiu: Cap d'Any)"]);
+  assert.deepEqual(ca[10], ["La Immaculada", "[Dimecres 8 de desembre](/ca/festius/dia/8-desembre-2027/)", "Pont de dimecres", "Dimarts 7 de desembre", "5 dies: del dissabte 4 al dimecres 8 de desembre (també és festiu: Dia de la Constitució)"]);
+  assert.deepEqual(ca[4], ["Festa del Treball", "[Dissabte 1 de maig](/ca/festius/dia/1-maig-2027/)", "Perdut: cau en dissabte", "—", "—"]);
+  assert.deepEqual(holidayRows("en")[5], ["Sant Joan (St John's Day)", "[Thursday 24 June](/en/holidays/day/24-june-2027/)", "One-day bridge", "Friday 25 June", "4 days: Thursday 24 to Sunday 27 June"]);
+  assert.deepEqual(holidayRows("es")[7], ["Fiesta Nacional de España", "[Martes 12 de octubre](/es/festivos/dia/12-octubre-2027/)", "Puente de un día", "Lunes 11 de octubre", "4 días: del sábado 9 al martes 12 de octubre"]);
+  // One link per row, to the row's own date.
+  for (const locale of ["ca", "es", "en"] as const) {
+    holidayRows(locale).forEach((row, i) => {
+      const iso = REGIONAL_DATES[i]!;
+      assert.equal(row.join(" ").match(/\]\(/g)?.length, 1, `${locale} row ${i}`);
+      assert.ok(row[1]!.endsWith(`](${datePath(locale, iso)})`), `${locale} ${iso}: ${row[1]}`);
+    });
+  }
 });
 
 test("every weekday printed with a full date matches the 2027 calendar", () => {

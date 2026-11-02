@@ -11,7 +11,7 @@ import { hasEnglishPage } from "@/lib/programmatic/holidays/english";
 import { enName } from "@/lib/programmatic/holidays/english-copy";
 import { caDayArticle, dayMonthYear } from "@/lib/programmatic/holidays/format";
 import { joinList } from "@/lib/programmatic/holidays/names";
-import { hubPath, municipalityPath } from "@/lib/programmatic/holidays/paths";
+import { datePath, hubPath, isDatePage, municipalityPath } from "@/lib/programmatic/holidays/paths";
 import type { SnapshotMunicipality, SourceRef } from "@/lib/programmatic/holidays/types";
 
 import { SIBLING_PATHS, runWords } from "./december-bridge";
@@ -292,11 +292,17 @@ function kindLabel(p: DayPlan, locale: Locale): string {
   return KIND[locale][p.kind];
 }
 
-/** The twelve rows of the answer table. */
+/** "[Dimecres 6 de gener](/ca/festius/dia/6-gener-2027/)": the day, linked to its date page where it has one. */
+function dayLink(iso: string, locale: Locale): string {
+  const day = cap(dayDate(iso, locale, false));
+  return isDatePage(iso) ? `[${day}](${datePath(locale, iso)})` : day;
+}
+
+/** The twelve rows of the answer table; each day links to its "is it a holiday?" page (one link per row). */
 export function holidayRows(locale: Locale): string[][] {
   return HOLIDAY_PLANS.map((p) => {
     const name = holidayName(p.date, locale, true);
-    const day = cap(dayDate(p.date, locale, false));
+    const day = dayLink(p.date, locale);
     if (!p.plan) return [name, day, kindLabel(p, locale), "—", "—"];
     const leave = p.plan.take.length === 0 ? L(locale, { ca: "Cap", es: "Ninguno", en: "None" }) : cap(dayList(p.plan.take, locale));
     const result = `${daysWord(p.plan.days, locale)}: ${runWords(p.plan, locale)}${alsoNote(p.plan, [p.date], locale)}`;
@@ -515,8 +521,10 @@ function bodyParts(locale: Locale) {
   const bcnAllFree = BARCELONA_PLANS.every((p) => p.plan && p.plan.take.length === 0);
   const bcnItems = BARCELONA_PLANS.map((p) => {
     const name = (BARCELONA_LOCAL.find((h) => h.date === p.date)?.name[locale] ?? "").replace(/ \(.*\)$/, "");
-    const day = cap(dayDate(p.date, locale, false));
-    return `**${day}** (${name}): ${p.plan ? planPhrase(p.plan, BARCELONA_LOCAL.map((h) => h.date), locale) : weekendWords(p.date, locale)}`;
+    // 17 May and 24 September have date pages (tranche 4): the day links to the list of every town off that day.
+    // Not inside ** **: the inline renderer does not parse a link within bold.
+    const day = isDatePage(p.date) ? dayLink(p.date, locale) : `**${cap(dayDate(p.date, locale, false))}**`;
+    return `${day} (${name}): ${p.plan ? planPhrase(p.plan, BARCELONA_LOCAL.map((h) => h.date), locale) : weekendWords(p.date, locale)}`;
   });
   const bcnHref = locale === "en" ? (hasEnglishPage("barcelona") ? municipalityPath("en", "barcelona") : hubPath("en")) : municipalityPath(locale, "barcelona");
   const bcnFaq = joinList(

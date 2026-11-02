@@ -1,0 +1,59 @@
+BOE-A-2026-21254 — Resolución de 8 de octubre de 2026, de la Dirección General de Trabajo, por la que se publica la relación de fiestas laborales para el año 2027 (BOE 13.10.2026).
+Source: https://www.boe.es/diario_boe/txt.php?id=BOE-A-2026-21254 — table read on 2026-11-02, one row per line, cells separated by |.
+
+Fecha de las fiestas | Comunidades autónomas
+Andalucía | Aragón | Asturias | Illes Balears | Canarias (1) | Cantabria | Castilla-La Mancha | Castilla y León | Cataluña (2) | Extremadura | Galicia | Com. de Madrid | Región Murcia | C. Foral Navarra | País Vasco | La Rioja | Comunitat Valenciana | Ciudad de Ceuta | Ciudad de Melilla
+Enero |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+1 Año Nuevo. | * | * | * | * | * | * | * | * | * | * | * | * | * | * | * | * | * | * | *
+6 Epifanía del Señor. | ** | ** | ** | ** | ** | ** | ** | ** | ** | ** | ** | ** | ** | ** | ** | ** | ** | ** | **
+Marzo |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+1 Día de Andalucía. | *** |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+1 Día de les Illes Balears. |  |  |  | *** |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+10 Fiesta del Eid Fitr. |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | ***
+19 San José. |  |  |  |  |  |  |  |  |  |  | ** | ** | ** | ** |  |  | ** |  | 
+25 Jueves Santo. | ** | ** | ** | ** | ** | ** | ** | ** |  | ** | ** | ** | ** | ** | ** | ** |  | ** | **
+26 Viernes Santo. | * | * | * | * | * | * | * | * | * | * | * | * | * | * | * | * | * | * | *
+29 Lunes de Pascua. |  |  |  | *** |  |  |  |  | *** |  |  |  |  | *** | *** | *** | *** |  | 
+Abril |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+23 San Jorge/Día de Aragón. |  | *** |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+23 Fiesta de Castilla y León. |  |  |  |  |  |  |  | *** |  |  |  |  |  |  |  |  |  |  | 
+Mayo |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+1 Fiesta del Trabajo. | * | * | * | * | * | * | * | * | * | * | * | * | * | * | * | * | * | * | *
+17 Día de las Letras Gallegas. |  |  |  |  |  |  |  |  |  |  | *** |  |  |  |  |  |  |  | 
+17 Eidul Adha-Fiesta Sacrificio. |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | *** | 
+17 Fiesta Sacrificio-Aid Al Adha. |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | ***
+27 Corpus Christi. |  |  |  |  |  |  | *** |  |  |  |  |  |  |  |  |  |  |  | 
+31 Día de Castilla-La Mancha. |  |  |  |  |  |  | *** |  |  |  |  |  |  |  |  |  |  |  | 
+Junio |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+9 Día de la Región de Murcia. |  |  |  |  |  |  |  |  |  |  |  |  | *** |  |  |  |  |  | 
+9 Día de La Rioja. |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | *** |  |  | 
+24 Día de San Juan. |  |  |  |  |  |  |  |  | *** |  |  |  |  |  |  |  |  |  | 
+Julio |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+28 Día de las Instituciones de Cantabria. |  |  |  |  |  | *** |  |  |  |  |  |  |  |  |  |  |  |  | 
+Agosto |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+5 Nuestra Señora de África. |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | *** | 
+16 Lunes siguiente a asunción de la Virgen. | ** | ** | ** |  | ** |  |  | ** |  |  |  | ** |  |  |  |  |  |  | 
+Septiembre |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+8 Día de Asturias. |  |  | *** |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+8 Día de Extremadura. |  |  |  |  |  |  |  |  |  | *** |  |  |  |  |  |  |  |  | 
+11 Fiesta Nacional de Cataluña. |  |  |  |  |  |  |  |  | *** |  |  |  |  |  |  |  |  |  | 
+15 La Bien Aparecida. |  |  |  |  |  | *** |  |  |  |  |  |  |  |  |  |  |  |  | 
+Octubre |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+7 Aniversario 1er Gobierno Euskadi. |  |  |  |  |  |  |  |  |  |  |  |  |  |  | *** |  |  |  | 
+9 Día de la Comunitat Valenciana. |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | *** |  | 
+11 Sustitución 15 de agosto. |  |  |  |  |  |  |  |  |  | *** |  |  |  |  |  |  |  |  | 
+12 Fiesta Nacional de España. | * | * | * | * | * | * | * | * | * | * | * | * | * | * | * | * | * | * | *
+Noviembre |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+1 Todos los Santos. | * | * | * | * | * | * | * | * | * | * | * | * | * | * | * | * | * | * | *
+Diciembre |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+6 Día de la Constitución Española. | * | * | * | * | * | * | * | * | * | * | * | * | * | * | * | * | * | * | *
+8 Inmaculada Concepción. | * | * | * | * | * | * | * | * | * | * | * | * | * | * | * | * | * | * | *
+25 Natividad del Señor. | * | * | * | * | * | * | * | * | * | * | * | * | * | * | * | * | * | * | *
+
+Códigos de las fiestas:
+Fiesta Nacional no sustituible (*).
+Fiesta Nacional respecto de la que no se ha ejercido la facultad de sustitución (**).
+Fiesta de Comunidad Autónoma (***).
+Notas aclaratorias:
+1. En la Comunidad Autónoma de Canarias, el Decreto 115/2026, de 29 de junio, por el que se determina el calendario de fiestas laborales de la Comunidad Autónoma de Canarias para el año 2027 (BOC de 3 de julio de 2026) dispone que: «En las islas de El Hierro, Fuerteventura, Gran Canaria, La Gomera, La Palma, Lanzarote y La Graciosa, y Tenerife, las fiestas laborales serán, además, las siguientes: en El Hierro: el 24 de septiembre, festividad de Nuestra Señora de los Reyes; en Fuerteventura: el 17 de septiembre, festividad de Nuestra Señora de la Peña; en Gran Canaria: el 8 de septiembre, festividad de Nuestra Señora del Pino; en La Gomera: el 4 de octubre, festividad de Nuestra Señora de Guadalupe; en La Palma: el 5 de agosto, festividad de Nuestra Señora de Las Nieves; en Lanzarote y La Graciosa: el 15 de septiembre, festividad de Nuestra Señora de los Volcanes; en Tenerife: el 2 de febrero, festividad de la Virgen de la Candelaria».
+2. En la Comunidad Autónoma de Cataluña, la Orden EMT/52/2026, de 25 de marzo, por la que se establece el calendario oficial de fiestas laborales en Cataluña para el año 2027 (DOGC de 1 de abril de 2026) dispone que: «En el territorio de Arán, la fiesta del día 29 de marzo (Pasqua Florida) queda sustituida por la de 17 de junio (Fiesta de Arán), jueves».
