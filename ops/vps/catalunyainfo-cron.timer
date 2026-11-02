@@ -1,0 +1,23 @@
+# /etc/systemd/system/catalunyainfo-cron.timer (installed by provision.sh)
+#
+# Vercel cron schedules are always UTC: "5 23 * * *" is 23:05 UTC, which is
+# 00:05 in Madrid in winter (CET) and 01:05 in summer (CEST): "just after
+# midnight in Madrid", as api/cron/publish-scheduled expects. The server's
+# timezone is Europe/Madrid, so the UTC suffix below is what keeps the job on
+# the same UTC time as Vercel all year round.
+#
+# Check:  systemctl list-timers catalunyainfo-cron.timer
+#         systemd-analyze calendar '*-*-* 23:05:00 UTC'
+
+[Unit]
+Description=Daily 23:05 UTC: CatalunyaInfo housekeeping (was the Vercel cron)
+
+[Timer]
+OnCalendar=*-*-* 23:05:00 UTC
+# Missed while the server was down? Run once at the next boot.
+Persistent=true
+AccuracySec=30s
+Unit=catalunyainfo-cron.service
+
+[Install]
+WantedBy=timers.target

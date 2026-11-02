@@ -38,7 +38,7 @@ const CANONICAL_HOST = "www.catalunyainfo.com";
  * back to SITE_ENV / NODE_ENV exactly as robots.txt and the sitemaps do.
  */
 const INDEXING_ALLOWED =
-  process.env.VERCEL_ENV === "production" && process.env.NEXT_PUBLIC_ALLOW_INDEXING === "true";
+  deployEnv() === "production" && process.env.NEXT_PUBLIC_ALLOW_INDEXING === "true";
 
 /**
  * Self-hosted build (ops/vps/deploy.sh sets NEXT_OUTPUT=standalone; Vercel

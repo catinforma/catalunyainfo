@@ -1,0 +1,87 @@
+# /etc/systemd/system/catalunyainfo.service (installed by provision.sh)
+#
+# The Next.js standalone server for www.catalunyainfo.com, behind Caddy.
+# `current` is a symlink to the active release; deploy.sh switches it
+# atomically and then runs `sudo systemctl restart catalunyainfo`.
+#
+# Logs:  journalctl -u catalunyainfo -f
+# Tune:  sudo systemctl edit catalunyainfo   (drop-in; survives re-provisioning)
+
+[Unit]
+Description=CatalunyaInfo (Next.js standalone server)
+Documentation=file:///srv/catalunyainfo/current/ops/vps/README.md
+After=network-online.target
+Wants=network-online.target
+# Give up after 5 failed starts in 2 minutes instead of looping forever.
+StartLimitIntervalSec=120
+StartLimitBurst=5
+
+[Service]
+Type=simple
+User=deploy
+Group=deploy
+
+# Resolved when the service starts, so a running process keeps its release
+# even after `current` is switched; the restart picks up the new one.
+WorkingDirectory=/srv/catalunyainfo/current/.next/standalone
+ExecStart=/usr/bin/node /srv/catalunyainfo/current/.next/standalone/server.js
+
+# Secrets and settings. Read by systemd (as root) before dropping to `deploy`,
+# so the file stays root:root 600. Values here OVERRIDE the Environment= lines
+# below, which is why the env file must not set NODE_ENV, PORT or HOSTNAME.
+EnvironmentFile=/srv/catalunyainfo/shared/.env.production
+
+Environment=NODE_ENV=production
+Environment=PORT=3000
+# Loopback only: Caddy is the sole way in (ufw also keeps 3000 closed).
+Environment=HOSTNAME=127.0.0.1
+Environment=NEXT_TELEMETRY_DISABLED=1
+# V8 heap cap, under MemoryHigh so the GC works before the cgroup throttles.
+Environment=NODE_OPTIONS=--max-old-space-size=2048
+# sharp (the image optimiser) fragments glibc's malloc in a long-running
+# process; jemalloc (package libjemalloc2) avoids that. If the library is
+# missing the loader prints a warning and carries on.
+Environment=LD_PRELOAD=libjemalloc.so.2
+
+Restart=on-failure
+RestartSec=3
+# SIGTERM lets Next finish in-flight requests and pending after() callbacks.
+KillSignal=SIGTERM
+TimeoutStopSec=30
+
+# Memory, sized for the 8 GB Contabo VPS 4 (leaves room for a build running
+# next to the server). On a 4 GB server use MemoryHigh=1200M, MemoryMax=1600M
+# and --max-old-space-size=1024 in a drop-in.
+MemoryHigh=2560M
+MemoryMax=3G
+TasksMax=512
+LimitNOFILE=65536
+
+# Hardening. Not MemoryDenyWriteExecute: V8's JIT needs W+X pages.
+NoNewPrivileges=yes
+PrivateTmp=yes
+PrivateDevices=yes
+ProtectSystem=strict
+# The ISR cache is written inside the release (.next/standalone/.next/server
+# and .next/cache) and to shared/cache/images through a symlink.
+ReadWritePaths=/srv/catalunyainfo
+ProtectHome=yes
+ProtectKernelTunables=yes
+ProtectKernelModules=yes
+ProtectKernelLogs=yes
+ProtectControlGroups=yes
+ProtectClock=yes
+ProtectHostname=yes
+RestrictSUIDSGID=yes
+RestrictRealtime=yes
+RestrictNamespaces=yes
+LockPersonality=yes
+# AF_NETLINK: os.networkInterfaces() (getifaddrs), which Next can call at start.
+RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX AF_NETLINK
+SystemCallArchitectures=native
+CapabilityBoundingSet=
+AmbientCapabilities=
+UMask=0022
+
+[Install]
+WantedBy=multi-user.target

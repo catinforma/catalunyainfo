@@ -132,6 +132,33 @@ async function headerRules(env: Record<string, string | undefined>): Promise<Hea
   });
 }
 
+/**
+ * The self-hosted build switch (ops/vps/deploy.sh sets NEXT_OUTPUT=standalone)
+ * must leave every other build, Vercel's included, exactly as it was: no
+ * `output`, and Next's own compression untouched.
+ */
+test("next.config: standalone output and compress:false only when NEXT_OUTPUT=standalone", async () => {
+  const load = (env: Record<string, string | undefined>) =>
+    withEnv(env, async () => {
+      const url = `${new URL("../next.config.ts", import.meta.url).href}?build=${encodeURIComponent(JSON.stringify(env))}`;
+      return (await import(url)).default as { output?: string; compress?: boolean };
+    });
+
+  for (const env of [
+    { NEXT_OUTPUT: undefined, VERCEL_ENV: "production" },
+    { NEXT_OUTPUT: undefined, VERCEL_ENV: "preview" },
+    { NEXT_OUTPUT: "export", VERCEL_ENV: undefined },
+  ]) {
+    const config = await load(env);
+    assert.equal(config.output, undefined, JSON.stringify(env));
+    assert.equal("compress" in config, false, JSON.stringify(env));
+  }
+
+  const vps = await load({ NEXT_OUTPUT: "standalone", VERCEL_ENV: undefined });
+  assert.equal(vps.output, "standalone");
+  assert.equal(vps.compress, false, "Caddy compresses (zstd/gzip) in front of the standalone server");
+});
+
 /** The generic X-Robots-Tag rule: exempts the canonical host, or noindexes everything. */
 async function canonicalHostExempt(env: Record<string, string | undefined>): Promise<boolean> {
   const generic = robotsRules(await headerRules(env)).filter((rule) => rule.source === "/:path*");

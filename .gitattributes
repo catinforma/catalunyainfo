@@ -1,2 +1,6 @@
 # Byte-exact cuts of official files (Interior Ministry .DAT, ANSI, LF): never convert line endings.
 tests/fixtures/interior/** -text
+
+# Server files are copied from a Windows checkout to Linux (ops/vps/README.md):
+# bash scripts and systemd units break on CRLF, so keep them LF everywhere.
+ops/vps/** text eol=lf
