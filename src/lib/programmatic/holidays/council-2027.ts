@@ -358,6 +358,8 @@ export const COUNCIL_2027: Readonly<Record<string, CouncilApproved>> = {
   // establir els dos dies festius locals per a l'any vinent: el dia de l'Aplec del Vilar, que al
   // 2027 serà el 30 de març, i la Festivitat de Santa Anna del 26 de juliol, que coincidirà amb un
   // dilluns."
+  // The page refused connections on 31 Oct; re-read on 2 Nov 2026 ("Data de realització:
+  // 06/26/2026"), word for word the same, so the days and readOn stand.
   blanes: {
     local: ["2027-03-30", "2027-07-26"],
     names: ["Aplec del Vilar", "Santa Anna"],
