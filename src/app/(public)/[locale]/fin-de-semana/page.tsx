@@ -10,7 +10,10 @@ import { hubAllowed } from "@/lib/programmatic/weekend/routing";
  * (see src/lib/programmatic/weekend/refresh.ts); the agenda is read in the browser.
  */
 export const revalidate = false;
-export const dynamicParams = false;
+// true: regenerated nightly by the cron (revalidatePath); self-hosted, a
+// dynamicParams = false route then answers 404 (NoFallbackError). Unknown
+// locales still 404 through notFound() below.
+export const dynamicParams = true;
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   const { locale } = await params;
