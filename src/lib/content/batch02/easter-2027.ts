@@ -11,7 +11,7 @@ import { aranSwap, councilApproved2027, municipalities, nextYearFor, nextYearPub
 import { hasEnglishPage } from "@/lib/programmatic/holidays/english";
 import { dayPair } from "@/lib/programmatic/holidays/format";
 import { joinList } from "@/lib/programmatic/holidays/names";
-import { municipalityPath } from "@/lib/programmatic/holidays/paths";
+import { datePath, isDatePage, municipalityPath } from "@/lib/programmatic/holidays/paths";
 import type { SnapshotMunicipality } from "@/lib/programmatic/holidays/types";
 
 import { MONTSERRAT_FREE } from "./day-trips";
@@ -421,7 +421,9 @@ export function dayRows(locale: Locale): string[][] {
     } else {
       status = { ca: "Feiner a Catalunya (festiu a la majoria de comunitats)", es: "Laborable en Cataluña (festivo en la mayoría de comunidades)", en: "Working day in Catalonia (a holiday in most of Spain)" }[locale];
     }
-    return [cap(d(iso, locale)), DAY_NAMES[locale][iso] ?? "", status];
+    // Days with an "is it a holiday?" page link to it: one link per row (Holy Thursday, Good Friday, Easter Monday).
+    const day = cap(d(iso, locale));
+    return [isDatePage(iso) ? `[${day}](${datePath(locale, iso)})` : day, DAY_NAMES[locale][iso] ?? "", status];
   });
 }
 
@@ -552,6 +554,14 @@ export function buildEasterBody(locale: Locale): Block[] {
   const schoolLink = (label: string) => `[${label}](/${locale}/${SIBLING_PATHS.school[locale]}/)`;
   const localLink = (label: string) => `[${label}](/${locale}/${SIBLING_PATHS.local[locale]}/)`;
   const montserrat = b2link("montserratFree", locale, B2_LABELS.montserrat[locale]);
+  // Pasqua Granada has its own date page (2 Nov 2026), with every town that takes it off: one sentence, one link.
+  const whitPage = isDatePage(E.whitMonday)
+    ? {
+        ca: ` La llista de municipis que hi fan festa és a [festius del ${dm(E.whitMonday, "ca")} de ${EASTER_YEAR}](${datePath("ca", E.whitMonday)}).`,
+        es: ` La lista de municipios que hacen fiesta ese día está en [festivos del ${dm(E.whitMonday, "es")} de ${EASTER_YEAR}](${datePath("es", E.whitMonday)}).`,
+        en: ` The towns that take the day off are listed on [is ${dm(E.whitMonday, "en")} ${EASTER_YEAR} a holiday?](${datePath("en", E.whitMonday)}).`,
+      }[locale]
+    : "";
   // Both true in 2027; the sentences that rely on them are left out in a year they are not.
   const schoolOnMonday = E.schoolFrom <= E.easterMonday && E.schoolTo >= E.easterMonday;
   const matchesSchool = weekBeforeRun.from === E.schoolFrom && weekBeforeRun.to === E.schoolTo;
@@ -594,7 +604,7 @@ export function buildEasterBody(locale: Locale): Block[] {
       ...h2(
         "El Dilluns de Pasqua del 2027",
         `És el ${d(E.easterMonday, "ca")}, festiu a tot Catalunya excepte a l'Aran, on el canvia la Festa d'Aran (${d(E.aranDay, "ca")}). És el dia de la mona.${schoolOnMonday ? " Les escoles, també les de l'Aran, encara són de vacances aquell dia." : ""}`,
-        `La Pasqua Granada, set setmanes després (${d(E.whitMonday, "ca")}), no és festiu a tot Catalunya: és festa local a Barcelona i als municipis que la trien. Tots els festius de la ciutat són a [festius de Barcelona](${municipalityPath("ca", "barcelona")}).`,
+        `La Pasqua Granada, set setmanes després (${d(E.whitMonday, "ca")}), no és festiu a tot Catalunya: és festa local a Barcelona i als municipis que la trien. Tots els festius de la ciutat són a [festius de Barcelona](${municipalityPath("ca", "barcelona")}).${whitPage}`,
       ),
       ...h2(
         "Vacances de Setmana Santa 2027 a les escoles",
@@ -704,7 +714,7 @@ export function buildEasterBody(locale: Locale): Block[] {
       ...h2(
         "El Lunes de Pascua de 2027",
         `Es el ${d(E.easterMonday, "es")}, festivo en toda Cataluña salvo en Arán, donde lo cambia la Fiesta de Arán (${d(E.aranDay, "es")}). Es el día de la mona.${schoolOnMonday ? " Los colegios, también los de Arán, siguen de vacaciones ese día." : ""}`,
-        `La Pascua Granada, siete semanas después (${d(E.whitMonday, "es")}), no es festivo en toda Cataluña: es fiesta local en Barcelona y en los municipios que la eligen. Todos los festivos de la ciudad están en [festivos de Barcelona](${municipalityPath("es", "barcelona")}).`,
+        `La Pascua Granada, siete semanas después (${d(E.whitMonday, "es")}), no es festivo en toda Cataluña: es fiesta local en Barcelona y en los municipios que la eligen. Todos los festivos de la ciudad están en [festivos de Barcelona](${municipalityPath("es", "barcelona")}).${whitPage}`,
       ),
       ...h2(
         "Vacaciones de Semana Santa 2027 en los colegios",
@@ -813,7 +823,7 @@ export function buildEasterBody(locale: Locale): Block[] {
     ...h2(
       "Easter Monday 2027",
       `It is ${d(E.easterMonday, "en")}, a public holiday across Catalonia except in Aran, which swaps it for the Festa d'Aran (${d(E.aranDay, "en")}). It is the day of the mona, the Easter cake.${schoolOnMonday ? " Schools, Aran's included, are still on holiday that day." : ""}`,
-      `Whit Monday (Pasqua Granada), seven weeks later on ${d(E.whitMonday, "en")}, is not a Catalonia-wide holiday: it is a local holiday in Barcelona and the towns that choose it.${hasEnglishPage("barcelona") ? ` Every Barcelona holiday is on [Barcelona public holidays](${municipalityPath("en", "barcelona")}).` : ""}`,
+      `Whit Monday (Pasqua Granada), seven weeks later on ${d(E.whitMonday, "en")}, is not a Catalonia-wide holiday: it is a local holiday in Barcelona and the towns that choose it.${hasEnglishPage("barcelona") ? ` Every Barcelona holiday is on [Barcelona public holidays](${municipalityPath("en", "barcelona")}).` : ""}${whitPage}`,
     ),
     ...h2(
       "School Easter holidays 2027 in Catalonia",

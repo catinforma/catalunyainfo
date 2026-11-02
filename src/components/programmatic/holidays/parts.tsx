@@ -3,7 +3,10 @@ import Link from "next/link";
 import { todayInCatalonia } from "@/lib/content/holidays/calendar";
 import { SCHOOL_YEARS } from "@/lib/content/school/calendar";
 import { YEAR as PLANNER_YEAR } from "@/lib/content/holidays/payload";
+import { BOE_2027 } from "@/lib/programmatic/holidays/boe-2027";
 import type { CouncilSource } from "@/lib/programmatic/holidays/copy";
+import { DATE_PAGES, datePath } from "@/lib/programmatic/holidays/paths";
+import { dateQuestion } from "@/lib/programmatic/holidays/question";
 import { SNAPSHOT, type HolidayRow } from "@/lib/programmatic/holidays/data";
 import { dayMonth, dayMonthYear, weekdayName, type DateLocale } from "@/lib/programmatic/holidays/format";
 import { GUIDES, OFFICIAL, type GuideKey } from "@/lib/programmatic/holidays/links";
@@ -34,6 +37,31 @@ const GUIDE_LABEL: Record<GuideKey, Record<DateLocale, string>> = {
   grossa: { ca: "La Grossa de Cap d'Any", es: "La Grossa de Cap d'Any", en: "La Grossa de Cap d'Any" },
   reis: { ca: "Cavalcada de Reis a Barcelona", es: "Cabalgata de Reyes en Barcelona", en: "Three Kings parade in Barcelona" },
 };
+
+/**
+ * Every date page, "És festiu el …?", grouped by year: since the 2027 pages
+ * (2 Nov 2026) there are 34, too many for one undivided list. `first` puts a
+ * year first (a date page's own); `exclude` leaves a page out (itself).
+ */
+export function DateQuestions({ locale, first, exclude }: { locale: DateLocale; first?: string; exclude?: string }) {
+  const years = [...(first ? [first] : []), ...DATE_PAGES.map((d) => d.slice(0, 4))].filter((y, i, all) => all.indexOf(y) === i);
+  return (
+    <>
+      {years.map((y) => (
+        <div key={y}>
+          <h3 className="mt-6 font-sans text-base font-semibold">{y}</h3>
+          <ul className="mt-2 grid list-none gap-2 p-0 sm:grid-cols-2">
+            {DATE_PAGES.filter((d) => d !== exclude && d.startsWith(y)).map((d) => (
+              <li key={d}>
+                <Link href={datePath(locale, d)}>{dateQuestion(d, locale)}</Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))}
+    </>
+  );
+}
 
 export function GuideLinks({ keys, locale, title }: { keys: readonly GuideKey[]; locale: DateLocale; title: string }) {
   return (
@@ -124,11 +152,26 @@ export function DateList({ dates, locale }: { dates: string[]; locale: DateLocal
   );
 }
 
-type SourceKey = "localOrder" | "amendment" | "openData" | "regional2026" | "regional2027" | "shops" | "shopsOrder" | "school" | "retailLaw" | "boe2026" | "population";
+type SourceKey =
+  | "localOrder"
+  | "amendment"
+  | "openData"
+  | "regional2026"
+  | "regional2027"
+  | "shops"
+  | "shopsOrder"
+  | "shopsOrder2027"
+  | "school"
+  | "retailLaw"
+  | "boe2026"
+  | "boe2027"
+  | "population";
 
 const SCHOOL = { name: "Ordre EDF/66/2026, de 22 d'abril, calendari escolar dels cursos 2026-2027, 2027-2028 i 2028-2029", ref: "DOGC núm. 9653, de 27.4.2026", url: OFFICIAL.schoolOrder };
 const RETAIL = { name: "Llei 18/2017, de l'1 d'agost, de comerç, serveis i fires (text consolidat)", ref: "BOE-A-2017-11320", url: OFFICIAL.llei18_2017 };
 const BOE = { name: "Resolución de 17 de octubre de 2025, relación de fiestas laborales para el año 2026", ref: "BOE-A-2025-21667", url: OFFICIAL.boe2026 };
+const BOE27 = { name: BOE_2027.name, ref: BOE_2027.ref, url: BOE_2027.url };
+const SHOPS27 = { name: "Ordre EMT/89/2026, calendari d'obertura comercial en diumenges i festius per al 2027", ref: "DOGC de 28.5.2026", url: OFFICIAL.shopsOrder2027 };
 
 function source(key: SourceKey) {
   const s = SNAPSHOT.sources;
@@ -147,12 +190,16 @@ function source(key: SourceKey) {
       return s.shops;
     case "shopsOrder":
       return s.shopsOrder;
+    case "shopsOrder2027":
+      return SHOPS27;
     case "school":
       return SCHOOL;
     case "retailLaw":
       return RETAIL;
     case "boe2026":
       return BOE;
+    case "boe2027":
+      return BOE27;
     case "population":
       return s.population;
   }
@@ -179,14 +226,17 @@ export function Sources({
   locale,
   title,
   extra = [],
+  readOn = SNAPSHOT.readOn,
 }: {
   keys: readonly SourceKey[];
   locale: DateLocale;
   title: string;
   /** Sources outside the snapshot, listed last: the council's page for next year's days. */
   extra?: readonly { name: string; ref: string; url: string }[];
+  /** When the newest of these sources was read; the snapshot's date unless a page reads one after it (the 2027 BOE list). */
+  readOn?: string;
 }) {
-  const read = dayMonthYear(SNAPSHOT.readOn, locale);
+  const read = dayMonthYear(readOn, locale);
   const readLine = { ca: `Dades llegides el ${read} de les fonts oficials.`, es: `Datos leídos el ${read} de las fuentes oficiales.`, en: `Data read on ${read} from the official sources.` }[locale];
   return (
     <section className="ci-measure mt-12" aria-labelledby="ci-hol-sources">
@@ -194,7 +244,7 @@ export function Sources({
         {title}
       </h2>
       <p className="mt-1 text-xs text-[var(--color-muted)]">
-        <time dateTime={SNAPSHOT.readOn}>{readLine}</time>
+        <time dateTime={readOn}>{readLine}</time>
       </p>
       <ol className="ci-sources mt-3">
         {[...keys.map((key) => ({ key, item: source(key) })), ...extra.map((item) => ({ key: item.url, item }))].map(({ key, item }) => {

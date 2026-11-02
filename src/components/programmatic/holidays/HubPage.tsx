@@ -3,14 +3,14 @@ import Link from "next/link";
 import { Breadcrumbs, type Crumb } from "@/components/Breadcrumbs";
 import { renderInline } from "@/lib/content/inline";
 import { getMessages } from "@/lib/i18n";
-import { HUB_VISIBLE, dateQuestion, displayName, hubCopy } from "@/lib/programmatic/holidays/copy";
+import { HUB_VISIBLE, displayName, hubCopy } from "@/lib/programmatic/holidays/copy";
 import { SNAPSHOT, byComarca } from "@/lib/programmatic/holidays/data";
 import { dayMonth } from "@/lib/programmatic/holidays/format";
 import { esName, joinList } from "@/lib/programmatic/holidays/names";
 import { GUIDES } from "@/lib/programmatic/holidays/links";
-import { DATE_PAGES, comarcaAnchor, comarcaPath, datePath, hubPath, municipalityPath, type MuniLocale } from "@/lib/programmatic/holidays/paths";
+import { comarcaAnchor, comarcaPath, hubPath, municipalityPath, type MuniLocale } from "@/lib/programmatic/holidays/paths";
 
-import { GuideLinks, Sources } from "./parts";
+import { DateQuestions, GuideLinks, Sources } from "./parts";
 
 export function hubCrumbs(locale: MuniLocale): Crumb[] {
   const t = hubCopy(locale);
@@ -55,13 +55,7 @@ export function HubPage({ locale }: { locale: MuniLocale }) {
         {/* The dated questions first: with every town below, they would sit a long scroll away. */}
         <section className="mt-10" aria-labelledby="ci-hol-dates">
           <h2 id="ci-hol-dates">{t.datesTitle}</h2>
-          <ul className="mt-4 grid list-none gap-2 p-0 sm:grid-cols-2">
-            {DATE_PAGES.map((d) => (
-              <li key={d}>
-                <Link href={datePath(locale, d)}>{dateQuestion(d, locale)}</Link>
-              </li>
-            ))}
-          </ul>
+          <DateQuestions locale={locale} />
         </section>
 
         {/* A jump list to each comarca's section. */}

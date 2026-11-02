@@ -25,7 +25,7 @@ import {
   sharedDayLead,
 } from "../src/lib/programmatic/holidays/copy.ts";
 import { NEXT, SNAPSHOT, YEAR, byComarca, comarcaBySlug, regionalDays, sharedDates, siblings, statusDays, yearRows } from "../src/lib/programmatic/holidays/data.ts";
-import { LOCAL_DATE_PAGES, dateContent, municipalityDatePages } from "../src/lib/programmatic/holidays/dates.ts";
+import { LOCAL_DATE_PAGES, dateContent, dateTitle, municipalityDatePages } from "../src/lib/programmatic/holidays/dates.ts";
 import {
   articleFirst,
   nameKey,
@@ -39,9 +39,12 @@ import { GUIDES } from "../src/lib/programmatic/holidays/links.ts";
 import { applyAmendments } from "../src/lib/programmatic/holidays/match.ts";
 import { caA, caComarca, caDe, esName, knownComarca } from "../src/lib/programmatic/holidays/names.ts";
 import {
+  ASKED_2027,
   DATE_LOCALES,
   DATE_PAGES,
+  LOCAL_2027,
   MUNI_LOCALES,
+  TRANCHE_4,
   comarcaPath,
   dateFromSlug,
   datePath,
@@ -754,7 +757,8 @@ test("date-page notices (1 Nov 2026): one sentence, one link, to the page each d
     "2027-01-01": "reis",
     "2027-01-06": "reis",
   };
-  for (const iso of DATE_PAGES) {
+  // The tranche 1 and 2 pages; tranche 4 (2027) has its own notices, tested in holiday-dates-2027.test.ts.
+  for (const iso of DATE_PAGES.filter((d) => !TRANCHE_4.includes(d))) {
     for (const locale of DATE_LOCALES) {
       const notice = dateContent(iso, locale).notice;
       const key = target[iso];
@@ -792,8 +796,10 @@ test("tranche 2 date pages: slugs, titles and 404s", () => {
   assert.equal(resolveDatePage("en", "en", "11-november-2026"), "2026-11-11");
   assert.equal(resolveDatePage("es", "es", "30-noviembre-2026"), "2026-11-30");
   // Not pages: the Monday after Tots Sants, other days, other locales' slugs, other routes' locales.
+  // (1 November 2027 has been a page since tranche 4, 2 Nov 2026; 3 November 2027 is not one.)
   assert.equal(resolveDatePage("ca", "ca", "2-novembre-2026"), null);
-  assert.equal(resolveDatePage("ca", "ca", "1-novembre-2027"), null);
+  assert.equal(resolveDatePage("ca", "ca", "3-novembre-2027"), null);
+  assert.equal(resolveDatePage("ca", "ca", "1-novembre-2027"), "2027-11-01");
   assert.equal(resolveDatePage("es", "es", "1-novembre-2026"), null);
   assert.equal(resolveDatePage("en", "ca", "1-november-2026"), null);
   assert.equal(resolveDatePage("es", "en", "24-diciembre-2026"), null);
@@ -860,7 +866,7 @@ test("routes: each folder answers its own locale only; anything else is a 404", 
   assert.equal(resolveDatePage("ca", "ca", "2026-12-08"), null);
 });
 
-test("routes: static params - 20 towns and all eleven dates, always complete and in the route's own locale", () => {
+test("routes: static params - 20 towns and all 34 dates, always complete and in the route's own locale", () => {
   for (const locale of MUNI_LOCALES) {
     const params = municipalityStaticParams(locale);
     assert.equal(params.length, 20);
@@ -870,7 +876,9 @@ test("routes: static params - 20 towns and all eleven dates, always complete and
   }
   for (const locale of DATE_LOCALES) {
     const params = dateStaticParams(locale);
-    assert.equal(params.length, 11);
+    // 11 (tranches 1 and 2) + 23 (tranche 4, 2027).
+    assert.equal(params.length, 34);
+    assert.equal(params.length, DATE_PAGES.length);
     assert.ok(params.every((p) => p.locale === locale && resolveDatePage(locale, p.locale, p.dia)));
   }
   // Comarca pages: the four most populous comarques at deploy, the rest on first request.
@@ -992,6 +1000,8 @@ test("metadata: every title <= 60 and description <= 155, in the searched words 
       const title = dateQuestion(iso, locale);
       const description = dateContent(iso, locale).description;
       assert.ok(title.length <= 60, title);
+      // The <title> (tranche 4 adds the day's name when it fits) is the question, then at most the name.
+      assert.ok(dateTitle(iso, locale).length <= 60 && dateTitle(iso, locale).startsWith(title), dateTitle(iso, locale));
       assert.ok(description.length <= 155, `${description} (${description.length})`);
     }
   }
@@ -1070,10 +1080,10 @@ test("a town whose days belong to its nuclei says which nuclei are off", () => {
 /* Sitemap                                                                    */
 /* -------------------------------------------------------------------------- */
 
-test("sitemap: 1,985 URLs, unique, dated with the dataset, with hreflang", () => {
+test("sitemap: 2,054 URLs, unique, dated with the dataset, with hreflang", () => {
   const entries = holidaySitemapEntries();
-  // 2 hubs, 43 comarques x 2, 917 towns x 2 locales, the English hub and 29 English towns, 11 dates x 3 locales.
-  assert.equal(entries.length, 2 + 86 + 1834 + 1 + 29 + 33);
+  // 2 hubs, 43 comarques x 2, 917 towns x 2 locales, the English hub and 29 English towns, 34 dates x 3 locales.
+  assert.equal(entries.length, 2 + 86 + 1834 + 1 + 29 + 102);
   for (const m of SNAPSHOT.municipalities) {
     for (const locale of MUNI_LOCALES) assert.ok(entries.some((e) => e.url.endsWith(municipalityPath(locale, m.slug))), m.slug);
   }
@@ -1143,7 +1153,8 @@ test("page copy: the answer comes first and names the official order", () => {
 });
 
 test("date pages: 1, 11 and 30 Nov and 7, 24 and 31 Dec are not holidays; nothing unfilled", () => {
-  const working = new Set(["2026-11-01", "2026-11-11", "2026-11-30", "2026-12-07", "2026-12-24", "2026-12-31"]);
+  // 2026, and the 2027 days asked about and the 2027 local days (tranche 4).
+  const working = new Set(["2026-11-01", "2026-11-11", "2026-11-30", "2026-12-07", "2026-12-24", "2026-12-31", ...ASKED_2027, ...LOCAL_2027]);
   for (const locale of DATE_LOCALES) {
     for (const iso of DATE_PAGES) {
       const content = dateContent(iso, locale);
@@ -1232,6 +1243,11 @@ test("server output carries no clock: no argument-less new Date() outside the br
     "src/lib/programmatic/holidays/copy.ts",
     "src/lib/programmatic/holidays/data.ts",
     "src/lib/programmatic/holidays/dates.ts",
+    "src/lib/programmatic/holidays/dates-2027.ts",
+    "src/lib/programmatic/holidays/boe-2027.ts",
+    "src/lib/programmatic/holidays/places.ts",
+    "src/lib/programmatic/holidays/question.ts",
+    "src/lib/programmatic/holidays/structured.ts",
     "src/lib/programmatic/holidays/format.ts",
     "src/lib/programmatic/holidays/paths.ts",
     "src/lib/programmatic/holidays/routing.ts",

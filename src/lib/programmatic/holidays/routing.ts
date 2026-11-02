@@ -60,7 +60,7 @@ export function comarcaStaticParams(route: MuniLocale): { locale: MuniLocale; co
   return prerenderComarques(4).map((comarca) => ({ locale: route, comarca }));
 }
 
-/** All eleven date pages are built at deploy (DATE_PAGES). */
+/** Every date page is built at deploy (DATE_PAGES: 34 since tranche 4, 2 Nov 2026). */
 export function dateStaticParams(route: DateLocale): { locale: DateLocale; dia: string }[] {
   return DATE_PAGES.map((iso) => ({ locale: route, dia: dateSlug(iso, route) }));
 }

@@ -6,7 +6,7 @@ import nextYearJson from "./local-2027.json" with { type: "json" };
 import { slugify } from "./slug";
 import snapshotJson from "./snapshot.json" with { type: "json" };
 import type { DayInfo } from "./status";
-import type { HolidaySnapshot, NextYearLocal, NucleusDays, SnapshotMunicipality } from "./types";
+import type { DatePlace, HolidaySnapshot, NextYearLocal, NucleusDays, SnapshotMunicipality } from "./types";
 
 /**
  * The holiday engine's data, read from the committed snapshot. Nothing here
@@ -75,6 +75,43 @@ export function councilApproved2027(slug: string, published = nextYearPublished(
 /** The towns with a page whose council has approved next year's days, by population; none once the order is out. */
 export function councilApprovedTowns(): SnapshotMunicipality[] {
   return SNAPSHOT.municipalities.filter((m) => councilApproved2027(m.slug)).sort((a, b) => a.rank - b.rank);
+}
+
+export interface NextYearPlaces {
+  /** "dogc" once the order is parsed (`local-2027.json`); "council" before, from `council-2027.ts`. */
+  status: "dogc" | "council";
+  /** The places with a local holiday on the date, largest municipality first, each nucleus after its own. */
+  places: DatePlace[];
+  /** How many towns with a page the source gives next year's days for (every listed town once the order is out). */
+  known: number;
+  /** The councils whose own act puts a place on the list (`council` only), by population. */
+  councils: CouncilApproved[];
+}
+
+/**
+ * Who has a local holiday on a date of next year, read the way the town pages
+ * read it: the DOGC order (`nextYearFor`'s data) once it is parsed, and until
+ * then the days each council has approved (`councilApproved2027`, which
+ * returns nothing once the order is out). `next` is the order's file, a
+ * parameter so a test can hand it a parsed order.
+ */
+export function nextYearPlacesOn(iso: string, next: NextYearLocal = NEXT_YEAR): NextYearPlaces {
+  const published = next.order !== null;
+  const places: DatePlace[] = [];
+  const councils: CouncilApproved[] = [];
+  let known = 0;
+  for (const m of [...SNAPSHOT.municipalities].sort((a, b) => a.rank - b.rank)) {
+    const council = councilApproved2027(m.slug, published);
+    const days: { local: readonly string[]; nuclei?: NucleusDays[] } | null = published ? (next.municipalities[m.slug] ?? null) : council;
+    if (!days) continue;
+    known += 1;
+    const own = days.local.includes(iso);
+    const nuclei = (days.nuclei ?? []).filter((n) => n.dates.includes(iso));
+    if (own) places.push({ name: m.name, parent: null, slug: m.slug });
+    for (const n of nuclei) places.push({ name: n.name, parent: m.name, slug: m.slug });
+    if (council && (own || nuclei.length > 0)) councils.push(council);
+  }
+  return { status: published ? "dogc" : "council", places, known, councils };
 }
 
 /* -------------------------------------------------------------------------- */

@@ -25,7 +25,7 @@ const holidayData = await import("../src/lib/programmatic/holidays/data.ts");
 const holidayEnglish = await import("../src/lib/programmatic/holidays/english-copy.ts");
 const holidayEnglishTowns = await import("../src/lib/programmatic/holidays/english.ts");
 const { DATE_PAGES } = await import("../src/lib/programmatic/holidays/paths.ts");
-const { dateContent } = await import("../src/lib/programmatic/holidays/dates.ts");
+const { dateContent, dateTitle } = await import("../src/lib/programmatic/holidays/dates.ts");
 const fuelCopy = await import("../src/lib/programmatic/fuel/copy.ts");
 const fuelData = await import("../src/lib/programmatic/fuel/data.ts");
 const rodalies = await import("../src/lib/programmatic/rodalies/pages.ts");
@@ -138,7 +138,8 @@ function allProgrammaticMeta(): Meta[] {
   }
   for (const locale of LOCALES) {
     for (const iso of DATE_PAGES) {
-      out.push({ path: `date-${locale}-${iso}`, title: holidayCopy.dateQuestion(iso, locale), description: dateContent(iso, locale).description });
+      // The page's own <title> (the 2027 pages add the day's name to the question).
+      out.push({ path: `date-${locale}-${iso}`, title: dateTitle(iso, locale), description: dateContent(iso, locale).description });
     }
     const rh = rodalies.hubMeta(locale);
     out.push({ path: `rodalies-hub-${locale}`, title: rh.title, description: rh.description });

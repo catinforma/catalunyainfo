@@ -1,9 +1,12 @@
 import { SNAPSHOT, regionalDays, aranSwap, municipalities } from "./data";
+import { dateContent2027, isTranche4 } from "./dates-2027";
 import { caDayArticle, capitalize, dayMonth, weekdayDayMonth, weekdayName, type DateLocale } from "./format";
 import { GUIDES, type GuideKey } from "./links";
 import { esName, joinList } from "./names";
 import type { DatePage } from "./paths";
-import type { DatePlace, SnapshotMunicipality } from "./types";
+import { placeNames, placesPhrase } from "./places";
+import { dateQuestion } from "./question";
+import type { DatePlace, SnapshotMunicipality, SourceRef } from "./types";
 
 /**
  * Content of the "És festiu el …?" pages. Every statement is either computed
@@ -61,25 +64,30 @@ export interface DateContent {
   notice?: { before: string; label: string; href: string; after: string };
   description: string;
   /** Places with a local holiday that day (or on the eve, when the day itself is Catalonia-wide). */
-  local: { text: string; places: DatePlace[] };
+  local: {
+    text: string;
+    places: DatePlace[];
+    /** Under the list (2027 pages): where the list comes from and what is still to come. */
+    note?: string;
+    /** The section's heading, when the page asks it as a question (2027 pages). */
+    title?: string;
+  };
   sections: DateSection[];
   guides: GuideKey[];
-}
-
-function count(places: DatePlace[]) {
-  return { municipalities: places.filter((p) => !p.parent).length, nuclei: places.filter((p) => p.parent).length };
-}
-
-function placesPhrase(places: DatePlace[], locale: DateLocale): string {
-  const { municipalities: m, nuclei: n } = count(places);
-  if (locale === "ca") return `${m} ${m === 1 ? "municipi" : "municipis"}${n ? ` i ${n} ${n === 1 ? "nucli" : "nuclis"}` : ""}`;
-  if (locale === "es") return `${m} ${m === 1 ? "municipio" : "municipios"}${n ? ` y ${n} ${n === 1 ? "núcleo" : "núcleos"}` : ""}`;
-  return `${m} ${m === 1 ? "town" : "towns"}${n ? ` and ${n} ${n === 1 ? "village" : "villages"}` : ""}`;
-}
-
-function placeNames(places: DatePlace[], locale: DateLocale): string {
-  const shown = (name: string) => (locale === "es" ? esName(name) : name);
-  return joinList(places.map((p) => (p.parent ? `${shown(p.name)} (${shown(p.parent)})` : shown(p.name))), locale);
+  /*
+   * Tranche 4 (2027 pages, `dates-2027.ts`) only. The 2026 pages and 1 and 6
+   * January 2027 keep their title, box, sources and markup as they were.
+   */
+  /** `<title>`: the H1's question plus the day's name, when that fits in 60 characters. */
+  title?: string;
+  /** The box's one-word answer, when "Yes"/"No" would mislead (a local holiday only). */
+  verdict?: string;
+  /** The questions the page answers, in the page's own words, for FAQPage. */
+  faq?: { question: string; answer: string }[];
+  /** URLs of the texts behind the answer, for the Dataset markup. */
+  basedOn?: string[];
+  /** Sources beyond the fixed ones: each council whose days are listed, or the DOGC order once it is out. */
+  extraSources?: SourceRef[];
 }
 
 /** Listed municipalities (the ones with a page) whose shop days for 2026 leave this date out. */
@@ -264,7 +272,14 @@ function noticeFor(iso: DatePage, locale: DateLocale): DateContent["notice"] {
   }
 }
 
+/** The page's `<title>`: the H1's question, or for the 2027 pages the question with the day's name when it fits. */
+export function dateTitle(iso: DatePage, locale: DateLocale): string {
+  return dateContent(iso, locale).title ?? dateQuestion(iso, locale);
+}
+
 export function dateContent(iso: DatePage, locale: DateLocale): DateContent {
+  // Tranche 4 (2 Nov 2026): the 2027 pages, written from the data rather than date by date.
+  if (isTranche4(iso)) return dateContent2027(iso, locale);
   const name = regionalName(iso, locale);
   const local = SNAPSHOT.localByDate[iso] ?? [];
   // "dimarts 8 de desembre de 2026": the article in front belongs to the weekday.
