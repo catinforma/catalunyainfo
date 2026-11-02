@@ -7,6 +7,7 @@ import { BRIDGES_2027 } from "../src/lib/content/batch02/bridges-2027.ts";
 import { EASTER_2027, EASTER_MONDAY_REGIONS, dayRows as easterDayRows } from "../src/lib/content/batch02/easter-2027.ts";
 import { OPENING_2027 } from "../src/lib/content/batch02/shops.ts";
 import { CATALONIA_HOLIDAYS } from "../src/lib/content/holidays/payload.ts";
+import { SATURDAY_SOURCES, saturdayAnswer, saturdayNote, saturdayQuestion } from "../src/lib/content/holidays/saturday.ts";
 import { COUNCIL_2027 } from "../src/lib/programmatic/holidays/council-2027.ts";
 import { BOE_2027, BOE_2027_ROWS, REGIONS, REGION_NAME, boeDatesFor, boeRegionsOn, spainScope, type BoeCode, type Region } from "../src/lib/programmatic/holidays/boe-2027.ts";
 import { NEXT_YEAR, SNAPSHOT, aranSwap, councilApproved2027, nextYearPlacesOn, regionalDays } from "../src/lib/programmatic/holidays/data.ts";
@@ -474,6 +475,54 @@ test("sitemap and llms.txt pick the 2027 pages up through the existing functions
   }
   const tool = liveTools().find((t) => t.name === "Is it a public holiday on…?")!;
   assert.match(tool.description, /34 dates from 2026-11-01 to 2027-12-31/);
+});
+
+test("Saturday holidays: only 1 May, 11 September and 25 December carry the compensation note, question and sources", () => {
+  const cendoj = SATURDAY_SOURCES.map((s) => s.url);
+  let saturdays = 0;
+  for (const iso of TRANCHE_4) {
+    // Computed without Date: a Catalonia-wide holiday on a Saturday.
+    const saturdayHoliday = REGIONAL_2027.includes(iso) && weekday(iso) === 6;
+    for (const locale of DATE_LOCALES) {
+      const c = dateContent(iso, locale);
+      const question = saturdayQuestion(locale);
+      const section = c.sections.find((s) => s.title === question);
+      const inFaq = (c.faq ?? []).find((f) => f.question === question);
+      const based = (dateDataset(iso, locale) as { isBasedOn: string[] }).isBasedOn;
+      const printed = texts(iso, locale).join(" ");
+      if (saturdayHoliday) {
+        // The plain sentence right after the answer, the question as a heading, the same words in FAQPage.
+        assert.equal(c.answerNote[0], saturdayNote(locale, "one"), `${iso} ${locale}`);
+        assert.deepEqual(section?.paragraphs, [saturdayAnswer(locale)], `${iso} ${locale}`);
+        assert.equal(inFaq?.answer, saturdayAnswer(locale), `${iso} ${locale}`);
+        // Shops and school keep their places; the question comes after them.
+        assert.ok(c.sections.indexOf(section!) >= 2, `${iso} ${locale}`);
+        // Listed and in the Dataset's isBasedOn: CENDOJ and the BOE commentary.
+        for (const url of cendoj) {
+          assert.ok(c.extraSources?.some((s) => s.url === url), `${iso} ${locale}: ${url} not listed`);
+          assert.ok(based.includes(url), `${iso} ${locale}: ${url} not in isBasedOn`);
+        }
+        assert.match(printed, /Audiencia Nacional|National High Court/, `${iso} ${locale}`);
+        if (locale === "ca") saturdays += 1;
+      } else {
+        assert.equal(section, undefined, `${iso} ${locale}`);
+        assert.equal(inFaq, undefined, `${iso} ${locale}`);
+        assert.ok(!c.answerNote.includes(saturdayNote(locale, "one")), `${iso} ${locale}`);
+        for (const url of cendoj) {
+          assert.ok(!c.extraSources?.some((s) => s.url === url), `${iso} ${locale}: ${url} listed`);
+          assert.ok(!based.includes(url), `${iso} ${locale}: ${url} in isBasedOn`);
+        }
+        assert.doesNotMatch(printed, /Audiencia Nacional|National High Court|contact.cent/, `${iso} ${locale}`);
+      }
+    }
+  }
+  assert.equal(saturdays, 3);
+  // Sundays that are not holidays (15 August, 26 December 2027) get nothing.
+  for (const iso of ["2027-08-15", "2027-12-26"]) assert.equal(weekday(iso), 0, iso);
+  // The 2026 pages and 1 and 6 January 2027 keep their content as it was.
+  for (const iso of DATE_PAGES.filter((d) => !isTranche4(d))) {
+    for (const locale of DATE_LOCALES) assert.doesNotMatch(JSON.stringify(dateContent(iso, locale)), /Audiencia Nacional|National High Court/, `${iso} ${locale}`);
+  }
 });
 
 test("linking: the long weekends table and the Easter guide send each day to its page, one link per row or sentence", () => {

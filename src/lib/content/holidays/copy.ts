@@ -139,6 +139,7 @@ export const COPY: Record<Locale, HolidayCopy> = {
     saturday: [
       "El 2027 hi ha tres dels dotze festius generals que cauen en dissabte: l'1 de maig, l'11 de setembre i el 25 de desembre.",
       "Per a una persona amb jornada ordinària de dilluns a divendres, aquestes dates no generen per si soles un dia laborable addicional de descans. La situació concreta pot variar segons el calendari laboral, els torns i el conveni aplicable.",
+      "Si te'ls han de compensar amb un altre dia, i què n'ha dit l'Audiencia Nacional, ho expliquem a [festius en dissabte: et compensen?](/ca/guies/ponts-2027-catalunya/#compensacio-festiu-dissabte).",
     ],
 
     bridgesTitle: "Els millors ponts del 2027",
@@ -265,6 +266,7 @@ export const COPY: Record<Locale, HolidayCopy> = {
     saturday: [
       "Tres de los doce festivos generales caen en sábado: el 1 de mayo, el 11 de septiembre y el 25 de diciembre.",
       "Para una persona con horario habitual de lunes a viernes, estas fechas no generan por sí solas otro día laborable libre. El resultado concreto puede variar según jornada, turnos, calendario de empresa o convenio.",
+      "Si te los tienen que compensar con otro día, y qué ha dicho la Audiencia Nacional, lo explicamos en [festivos en sábado: ¿se compensan?](/es/guias/puentes-2027-cataluna/#compensacion-festivo-sabado).",
     ],
 
     bridgesTitle: "Los mejores puentes de 2027",
@@ -391,6 +393,7 @@ export const COPY: Record<Locale, HolidayCopy> = {
     saturday: [
       "Three of the twelve fall on a Saturday in 2027: 1 May, 11 September and 25 December.",
       "For someone on a conventional Monday-to-Friday schedule, these do not by themselves add another weekday off. Actual working calendars differ depending on shifts, collective agreements and employer arrangements.",
+      "Whether you should get another day off for them, and what Spain's National High Court has said, is explained in [Saturday holidays: are they made up for?](/en/guides/long-weekends-2027-catalonia/#saturday-holiday-compensation).",
     ],
 
     bridgesTitle: "The best long weekends in 2027",

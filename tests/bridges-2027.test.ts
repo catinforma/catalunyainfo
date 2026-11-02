@@ -18,6 +18,7 @@ import {
   LOCAL_ORDERS,
   LOCAL_STATUS,
   LOST,
+  LOST_SATURDAYS,
   REGIONAL_DATES,
   RUNS,
   buildBridgesBody,
@@ -33,6 +34,16 @@ import { HOLIDAYS_BY_YEAR, weekdayIndex } from "../src/lib/content/holidays/cale
 import { SANT_JOAN_IMAGE } from "../src/lib/content/holidays/images.ts";
 import { BARCELONA_LOCAL, BRIDGES, CATALONIA_HOLIDAYS, SOURCES as HOLIDAY_SOURCES } from "../src/lib/content/holidays/payload.ts";
 import { buildBody as buildHolidayBody } from "../src/lib/content/holidays/publish.ts";
+import {
+  SATURDAY_COMMENTARY_URL,
+  SATURDAY_FAQ_ID,
+  SATURDAY_RULING,
+  SATURDAY_RULING_READ,
+  SATURDAY_SOURCES,
+  saturdayAnswer,
+  saturdayNote,
+  saturdayQuestion,
+} from "../src/lib/content/holidays/saturday.ts";
 import { IMAGE_BY_KEY } from "../src/lib/content/images.ts";
 import { SCHOOL_YEARS } from "../src/lib/content/school/calendar.ts";
 import { LOCALES, type Locale } from "../src/lib/i18n/config.ts";
@@ -485,11 +496,75 @@ test("Easter is brief and links to the Easter 2027 page", () => {
 });
 
 /* -------------------------------------------------------------------------- */
+/* Holidays on a Saturday: are they made up for?                              */
+/* -------------------------------------------------------------------------- */
+
+test("Saturday holidays: the compensation note under the table, the question after the Saturday one, with an anchor the work calendar links to", () => {
+  assert.deepEqual(LOST_SATURDAYS.map((p) => p.date), ["2027-05-01", "2027-09-11", "2027-12-25"]);
+  const facts: Record<Locale, RegExp[]> = {
+    ca: [/19 de maig de 2026/, /contact center/, /dilluns a divendres/, /14 dies/, /Tribunal Suprem no ha fixat cap regla per a tothom/, /conveni/, /sindicat o a un assessor laboral/],
+    es: [/19 de mayo de 2026/, /contact center/, /lunes a viernes/, /14 días/, /Tribunal Supremo no ha fijado una regla para todos/, /convenio/, /sindicato o a un asesor laboral/],
+    en: [/19 May 2026/, /contact-centre/, /Monday-to-Friday/, /14 days/, /Supreme Court has set no rule for everyone/, /collective agreement/, /union or a labour adviser/],
+  };
+  for (const locale of LOCALES) {
+    const blocks = BRIDGES_2027.editions[locale].blocks;
+    // The plain sentence comes right after the answer table, whose rows say "lost: falls on a Saturday".
+    const table = blocks.findIndex((b) => b.type === "table");
+    assert.deepEqual(blocks[table + 1], { type: "paragraph", text: saturdayNote(locale, "many") }, locale);
+    assert.match(saturdayNote(locale, "many"), /Audiencia Nacional|National High Court/, locale);
+    assert.match(saturdayNote(locale, "many"), /2026/, locale);
+    // The question follows the one listing the Saturday holidays, with its anchor.
+    const faqBlock = blocks.find((b) => b.type === "faq") as { items: { question: string; answer: string; id?: string }[] };
+    const at = faqBlock.items.findIndex((i) => i.id === SATURDAY_FAQ_ID[locale]);
+    assert.ok(at > 0, `${locale}: no question with the anchor`);
+    assert.match(faqBlock.items[at - 1]!.question, /dissabte|sábado|Saturday/, locale);
+    assert.equal(faqBlock.items[at]!.question, saturdayQuestion(locale));
+    assert.equal(faqBlock.items[at]!.answer, saturdayAnswer(locale));
+    for (const pattern of facts[locale]) assert.match(saturdayAnswer(locale), pattern, `${locale}: ${pattern}`);
+    // Only that question carries an id, and only once.
+    assert.equal(faqBlock.items.filter((i) => i.id).length, 1, locale);
+    // The work calendar guide links to that anchor, in its Saturday section, besides its one link to the page itself.
+    const guide = JSON.stringify(buildHolidayBody(locale));
+    assert.equal(guide.split(`](${b2href("bridges2027", locale)}#${SATURDAY_FAQ_ID[locale]})`).length - 1, 1, `${locale}: work calendar -> the Saturday question`);
+  }
+  // The anchor reaches the HTML: FAQ items keep an optional id, safe as an attribute, and the renderer prints it.
+  const faqWith = (id: string) => bodySchema.safeParse([{ type: "faq", items: [{ question: "Q?", answer: "A.", id }] }]).success;
+  assert.ok(faqWith("saturday-holiday-compensation"));
+  assert.ok(!faqWith("Not An Id") && !faqWith('x" onclick="y'));
+  assert.match(read("src/components/blocks/BlockRenderer.tsx"), /<div key=\{i\} id=\{item\.id\}/);
+  // The question as the brief words it, the way people search it.
+  assert.equal(saturdayQuestion("ca"), "Si treballes de dilluns a divendres, et compensen el festiu que cau en dissabte?");
+  assert.equal(saturdayQuestion("es"), "¿Se compensa el festivo que cae en sábado?");
+  assert.equal(saturdayQuestion("en"), "Is a Saturday holiday made up for?");
+});
+
+test("Saturday holidays: the judgment on CENDOJ and its BOE commentary are sources, with CENDOJ's ECLI", () => {
+  const urls = BRIDGES_2027.sources.map((s) => s.url);
+  assert.ok(urls.includes(SATURDAY_RULING.url), "CENDOJ");
+  assert.ok(urls.includes(SATURDAY_COMMENTARY_URL), "BOE commentary");
+  assert.match(SATURDAY_RULING.url, /^https:\/\/www\.poderjudicial\.es\/search\/AN\/openDocument\//);
+  assert.match(SATURDAY_COMMENTARY_URL, /^https:\/\/www\.boe\.es\/biblioteca_juridica\/.*ANU-L-2026-00000003480$/);
+  // CENDOJ's identifiers. The BOE commentary prints "ECLI:ES:AN:2026:191", which CENDOJ gives to another case.
+  assert.equal(SATURDAY_RULING.ecli, "ECLI:ES:AN:2026:1912");
+  assert.equal(SATURDAY_RULING.roj, "SAN 1912/2026");
+  assert.equal(SATURDAY_RULING.number, "88/2026");
+  assert.equal(SATURDAY_RULING.date, "2026-05-19");
+  for (const s of SATURDAY_SOURCES) {
+    assert.ok(s.name.length <= 240, `${s.name.length}: sources.name is varchar(240)`);
+    assert.ok(s.publisher.length <= 240, s.publisher);
+    assert.doesNotMatch(s.name, /AN:2026:191(?!\d)/, s.name);
+  }
+  // Read on the day the copy was written; the page's own verified date stays the oldest of its data.
+  assert.equal(SATURDAY_RULING_READ, "2026-11-02");
+  assert.ok(BRIDGES_VERIFIED <= SATURDAY_RULING_READ);
+});
+
+/* -------------------------------------------------------------------------- */
 /* No clock                                                                   */
 /* -------------------------------------------------------------------------- */
 
 test("no clock: the modules never read the date, the body is the same on every build, and only static blocks are used", () => {
-  for (const path of ["src/lib/content/batch02/bridges-2027.ts", "src/lib/content/holidays/bridges.ts"]) {
+  for (const path of ["src/lib/content/batch02/bridges-2027.ts", "src/lib/content/holidays/bridges.ts", "src/lib/content/holidays/saturday.ts"]) {
     const source = read(path);
     assert.doesNotMatch(source, /new Date\(\s*\)|Date\.now\(|todayInCatalonia|madridDate/, `${path} reads the clock`);
   }

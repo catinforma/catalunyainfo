@@ -117,6 +117,12 @@ export const faqBlock = z.object({
       z.object({
         question: z.string().min(1).max(300),
         answer: inlineText,
+        /** Stable anchor id, so another page can link to this one question. */
+        id: z
+          .string()
+          .max(120)
+          .regex(/^[a-z0-9-]+$/)
+          .optional(),
       }),
     )
     .min(1)

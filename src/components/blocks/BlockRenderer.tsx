@@ -296,7 +296,7 @@ function BlockView({ block, context }: { block: Block; context: BlockContext }) 
           {block.title ? <h2>{block.title}</h2> : null}
           <dl className="m-0">
             {block.items.map((item, i) => (
-              <div key={i} className="border-b border-[var(--color-rule)] py-4 last:border-b-0">
+              <div key={i} id={item.id} className="border-b border-[var(--color-rule)] py-4 last:border-b-0">
                 <dt className="font-semibold">{item.question}</dt>
                 <dd className="m-0 mt-1 text-[var(--color-ink-soft)]">
                   {renderInline(item.answer)}
