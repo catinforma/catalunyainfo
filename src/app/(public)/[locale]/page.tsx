@@ -7,7 +7,10 @@ import { HomeTools } from "@/components/HomeTools";
 import { SearchBox } from "@/components/SearchBox";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
-import { getHomeData } from "@/lib/content/repository";
+import { B2_PATHS } from "@/lib/content/batch02/shared";
+import { todayInCatalonia } from "@/lib/content/holidays/calendar";
+import { homeLeadKey, rotationIndex } from "@/lib/content/home-lead";
+import { getHomeData, resolvePath } from "@/lib/content/repository";
 import type { EntrySummary } from "@/lib/content/types";
 import { getMessages } from "@/lib/i18n";
 import { LOCALES, isLocale, type Locale } from "@/lib/i18n/config";
@@ -73,7 +76,20 @@ export default async function HomePage({
   ];
 
   const populated = sections.filter((s) => s.items.length > 0);
-  const lead = data.featured[0] ?? data.guides[0] ?? data.destinations[0] ?? null;
+  const today = todayInCatalonia();
+  const seasonal = homeLeadKey(today);
+  const seasonalEntry = seasonal ? await resolvePath(locale, B2_PATHS[seasonal][locale]) : null;
+  let lead: EntrySummary | null = null;
+  if (seasonalEntry) {
+    // Only the card's fields: the body would otherwise travel in the payload.
+    const { body: _body, ...summary } = seasonalEntry;
+    lead = summary;
+  }
+  lead ??=
+    (data.featured.length > 0 ? data.featured[rotationIndex(today, data.featured.length)] : null) ??
+    data.guides[0] ??
+    data.destinations[0] ??
+    null;
 
   return (
     <>
