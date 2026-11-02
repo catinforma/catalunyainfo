@@ -1,6 +1,7 @@
 import { planFor, runAround, type Span } from "@/lib/content/holidays/bridges";
 import { OPENING_2027 } from "@/lib/content/batch02/shops";
 import { BARCELONA_LOCAL } from "@/lib/content/holidays/payload";
+import { SATURDAY_SOURCES, saturdayAnswer, saturdayNote, saturdayQuestion } from "@/lib/content/holidays/saturday";
 import { SCHOOL_YEARS, schoolStatusOn } from "@/lib/content/school/calendar";
 
 import { BOE_2027, regionList, spainScope, type SpainScope } from "./boe-2027";
@@ -30,7 +31,11 @@ import type { DatePlace, NextYearLocal, SourceRef } from "./types";
  *    from the shops guide: the eight general days and the two defaults);
  *  - schools: Ordre EDF/66/2026 (`SCHOOL_YEARS`, `schoolStatusOn`);
  *  - long weekends: `planFor` / `runAround` (`holidays/bridges.ts`), the
- *    rules the 2027 long weekends guide uses.
+ *    rules the 2027 long weekends guide uses;
+ *  - a Catalonia-wide holiday on a Saturday (1 May, 11 September, 25
+ *    December 2027): whether it is made up for, from `holidays/saturday.ts`
+ *    (the Audiencia Nacional's judgment of 19 May 2026 on CENDOJ, and its BOE
+ *    commentary), in the same words as the long weekends guide.
  *
  * The answer comes first, in the H1's own terms; then the rest of Spain, the
  * days around it, one link to the Easter or long weekends guide, the towns,
@@ -85,6 +90,10 @@ export type DayKind2027 =
 function isWeekend(iso: string): boolean {
   const wd = new Date(`${iso}T12:00:00Z`).getUTCDay();
   return wd === 0 || wd === 6;
+}
+
+function isSaturday(iso: string): boolean {
+  return new Date(`${iso}T12:00:00Z`).getUTCDay() === 6;
 }
 
 export function dayKind2027(iso: string, places: readonly DatePlace[] = []): DayKind2027 {
@@ -920,8 +929,16 @@ export function dateContent2027(iso: string, locale: DateLocale, next: NextYearL
   const kind = dayKind2027(iso, local.places);
   const answer = answerFor(iso, kind, local, locale);
   const monday = mondayLocalNote(iso, kind, next, locale);
-  // The answer, then the Monday after a Sunday, the rest of Spain, and the days around it.
-  const answerNote = [...(monday ? [monday] : []), spainSentence(iso, kind, locale), ...neighbourNotes(iso, kind, locale)];
+  // A Catalonia-wide holiday on a Saturday: whether a Monday-to-Friday worker gets another day for it.
+  const saturday = kind === "weekend-holiday" && isSaturday(iso);
+  const compensation = saturday ? { question: saturdayQuestion(locale), answer: saturdayAnswer(locale) } : null;
+  // The answer, then the Saturday note or the Monday after a Sunday, the rest of Spain, and the days around it.
+  const answerNote = [
+    ...(saturday ? [saturdayNote(locale, "one")] : []),
+    ...(monday ? [monday] : []),
+    spainSentence(iso, kind, locale),
+    ...neighbourNotes(iso, kind, locale),
+  ];
   const localPart = localSection(iso, kind, local, next, locale);
   const notice = noticeFor2027(iso, kind, locale);
   // The notice works out a long weekend everywhere but on the eve of Reis, which sends readers to the parade.
@@ -936,6 +953,7 @@ export function dateContent2027(iso: string, locale: DateLocale, next: NextYearL
   const sections: DateSection[] = [
     { title: shopsTitle, paragraphs: shops },
     { title: schoolTitle, paragraphs: [school] },
+    ...(compensation ? [{ title: compensation.question, paragraphs: [compensation.answer] }] : []),
     ...(transport ? [{ title: L("Transport", "Transporte", "Getting around"), paragraphs: [transport] }] : []),
   ];
 
@@ -948,7 +966,9 @@ export function dateContent2027(iso: string, locale: DateLocale, next: NextYearL
 
   // Each council whose days are on the list, or the DOGC order once it is out.
   const councilSources = local.councils.map((c) => c.source);
-  const extraSources: SourceRef[] = local.status === "dogc" ? (next.order ? [next.order] : []) : [...new Map(councilSources.map((s) => [s.url, s])).values()];
+  const localSources: SourceRef[] = local.status === "dogc" ? (next.order ? [next.order] : []) : [...new Map(councilSources.map((s) => [s.url, s])).values()];
+  // On a Saturday holiday, the judgment (CENDOJ) and its BOE commentary, after the local ones.
+  const extraSources: SourceRef[] = [...localSources, ...(compensation ? SATURDAY_SOURCES.map(({ name, ref, url }) => ({ name, ref, url })) : [])];
   const regionalSource = SNAPSHOT.sources.regional[String(YEAR)];
 
   const localAnswer = [localPart.text, localPart.places.length ? `${placeNames(localPart.places, locale)}.` : "", localPart.note ?? ""].filter(Boolean).join(" ");
@@ -957,6 +977,7 @@ export function dateContent2027(iso: string, locale: DateLocale, next: NextYearL
     { question: localPart.title ?? "", answer: localAnswer },
     { question: shopsTitle, answer: shops.join(" ") },
     { question: schoolTitle, answer: school },
+    ...(compensation ? [compensation] : []),
   ];
 
   return {

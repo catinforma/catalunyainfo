@@ -3,6 +3,7 @@ import { bestUse, distinctRuns, guideBridge, plansFor, type BestUse, type DayPla
 import { WEEKDAY_NAMES, addDays, holidayOn, shortDate, weekdayIndex } from "@/lib/content/holidays/calendar";
 import { SANT_JOAN_IMAGE } from "@/lib/content/holidays/images";
 import { BARCELONA_LOCAL, LAST_VERIFIED, SOURCES as HOLIDAY_SOURCES, YEAR } from "@/lib/content/holidays/payload";
+import { SATURDAY_FAQ_ID, SATURDAY_RULING_READ, SATURDAY_SOURCES, saturdayAnswer, saturdayNote, saturdayQuestion } from "@/lib/content/holidays/saturday";
 import { SCHOOL_VERIFIED_AT, SCHOOL_YEARS, schoolStatusOn } from "@/lib/content/school/calendar";
 import type { Locale } from "@/lib/i18n/config";
 import { displayName } from "@/lib/programmatic/holidays/copy";
@@ -37,7 +38,12 @@ import { B2_PATHS, b2Related, b2link, callout, faq, h2, keyFacts, lead, list, pa
  *    council's own channel, `council-2027.ts`), printed as pending the DOGC
  *    order. The same functions switch every town page, so a republish after
  *    the order lands switches this page too;
- *  - the school dates are `SCHOOL_YEARS` (Ordre EDF/66/2026).
+ *  - the school dates are `SCHOOL_YEARS` (Ordre EDF/66/2026);
+ *  - whether a holiday on a Saturday is made up for (2 Nov 2026, after a
+ *    reader asked) is `holidays/saturday.ts`: the Audiencia Nacional's
+ *    judgment of 19 May 2026 for the contact-centre sector, hedged, with
+ *    CENDOJ and the BOE's commentary as sources. It shows only while some
+ *    Catalonia-wide holiday falls on a Saturday.
  *
  * The one fact read for this page: when the local order usually appears.
  * The Treball "normativa" page (read 31 Oct 2026) lists Ordre EMT/262/2024 in
@@ -87,6 +93,8 @@ export const RUNS: Plan[] = distinctRuns(HOLIDAY_PLANS.map((p) => p.plan));
 export const FREE_RUNS = RUNS.filter((r) => r.take.length === 0);
 export const LEAVE_RUNS = RUNS.filter((r) => r.take.length > 0);
 export const LOST = HOLIDAY_PLANS.filter((p) => !p.plan);
+/** The holidays lost on a Saturday: the ones the compensation note and question are about. */
+export const LOST_SATURDAYS = LOST.filter((p) => weekdayIndex(p.date) === 6);
 export const BRIDGE_COUNT = RUNS.length;
 
 /** The longest run each budget of leave buys, from no leave up. */
@@ -174,7 +182,13 @@ export const ARAN_PLANS: DayPlan[] = (() => {
 })();
 
 /** The oldest date any of the page's data was last read on. */
-export const BRIDGES_VERIFIED: string = [LAST_VERIFIED, SCHOOL_VERIFIED_AT, LOCAL_ORDERS_READ, ...TOWNS.map((t) => t.readOn ?? LAST_VERIFIED)].sort()[0]!;
+export const BRIDGES_VERIFIED: string = [
+  LAST_VERIFIED,
+  SCHOOL_VERIFIED_AT,
+  LOCAL_ORDERS_READ,
+  ...(LOST_SATURDAYS.length > 0 ? [SATURDAY_RULING_READ] : []),
+  ...TOWNS.map((t) => t.readOn ?? LAST_VERIFIED),
+].sort()[0]!;
 
 /* -------------------------------------------------------------------------- */
 /* Words                                                                      */
@@ -360,12 +374,17 @@ export function townRows(locale: Locale): string[][] {
 /* Sources                                                                    */
 /* -------------------------------------------------------------------------- */
 
-/** The holiday guide's sources this page uses, the school order, and each listed town's own. */
+/**
+ * The holiday guide's sources this page uses, the school order, each listed
+ * town's own, and, while a holiday falls on a Saturday, the judgment on
+ * compensating it (CENDOJ) and its BOE commentary.
+ */
 export function bridgesSources(): B2Source[] {
   const regional = HOLIDAY_SOURCES.filter((s) => !s.name.startsWith("Ordre EMT/66/2025") && !s.url.includes("analisi.transparenciacatalunya.cat"));
   const towns = TOWNS.flatMap((t) => (t.source ? [{ name: t.source.name, url: t.source.url, publisher: t.source.ref }] : []));
+  const saturday = LOST_SATURDAYS.length > 0 ? SATURDAY_SOURCES.map(({ name, url, publisher }) => ({ name, url, publisher })) : [];
   const seen = new Set<string>();
-  return [...regional, ...towns].filter((s) => (seen.has(s.url) ? false : (seen.add(s.url), true)));
+  return [...regional, ...towns, ...saturday].filter((s) => (seen.has(s.url) ? false : (seen.add(s.url), true)));
 }
 
 /* -------------------------------------------------------------------------- */
@@ -563,7 +582,11 @@ function bodyParts(locale: Locale) {
   const decemberOn = december.filter((p) => p.plan);
   const decemberBest = [...decemberOn].map((p) => p.plan!).filter((p) => p.take.length > 0).sort((a, b) => a.take.length - b.take.length || b.days - a.days)[0];
 
-  return { n, free, paid, best, jump, jumpRun, allSaturdays, lostList, leaveCounts, freeList, paidList, towns, bcnAllFree, bcnItems, bcnFaq, bcnHref, aranItems, current, next, easterMatch, inChristmas, inSummer, inTerm, goodFriday, easterMonday, easterRun, maundy, maundyWorking, midweekOne, decemberOn, decemberBest };
+  // Next to the lost-on-Saturday rows, and a question under the one that lists them.
+  const saturdayLine = allSaturdays && LOST_SATURDAYS.length > 0 ? saturdayNote(locale, LOST_SATURDAYS.length === 1 ? "one" : "many") : "";
+  const saturdayFaq = LOST_SATURDAYS.length > 0 ? [{ question: saturdayQuestion(locale), answer: saturdayAnswer(locale), id: SATURDAY_FAQ_ID[locale] }] : [];
+
+  return { n, free, paid, best, jump, jumpRun, allSaturdays, lostList, saturdayLine, saturdayFaq, leaveCounts, freeList, paidList, towns, bcnAllFree, bcnItems, bcnFaq, bcnHref, aranItems, current, next, easterMatch, inChristmas, inSummer, inTerm, goodFriday, easterMonday, easterRun, maundy, maundyWorking, midweekOne, decemberOn, decemberBest };
 }
 
 export function buildBridgesBody(locale: Locale): Block[] {
@@ -729,6 +752,7 @@ export function buildBridgesBody(locale: Locale): Block[] {
       ),
       ...h2(`Tots els festius del ${YEAR} i el pont que fa cadascun`, `Els ${count} festius de tot Catalunya, el dia de la setmana en què cauen, què permeten i quants dies de vacances cal demanar per allargar-los:`),
       answerTable("ca"),
+      ...(x.saturdayLine ? paras(x.saturdayLine) : []),
       ...h2(
         "Amb quants dies de vacances, quants dies seguits de festa",
         `El màxim de dies seguits sense treballar que dona el ${YEAR} per a cada nombre de dies de vacances, amb els festius de tot Catalunya, i totes les maneres d'aconseguir-lo:`,
@@ -767,6 +791,7 @@ export function buildBridgesBody(locale: Locale): Block[] {
         { question: `Quants ponts hi ha el ${YEAR} a Catalunya?`, answer: `${x.n}. Sense vacances, ${x.free} caps de setmana llargs: ${x.freeList}. Amb vacances, ${x.paid} ponts: ${x.paidList}. ${LOST.length} festius més cauen ${weekendWord}.` },
         ...(x.best ? [{ question: `Quin és el millor pont del ${YEAR}?`, answer: `Si només pots demanar un dia, ${dayList(x.best.take, "ca", true)}: ${x.best.days} dies seguits, ${runWords(x.best, "ca")}.${jumpLine ? ` ${jumpLine}` : ""}` }] : []),
         { question: `Quins festius del ${YEAR} cauen ${weekendWord}?`, answer: `${cap(x.lostList)}. Per a qui treballa de dilluns a divendres no sumen cap dia lliure, i el calendari oficial no els passa a cap altre dia.` },
+        ...x.saturdayFaq,
         ...(x.decemberOn.length > 0 ? [{ question: `Hi ha pont al desembre del ${YEAR}?`, answer: `Sí: ${x.decemberOn.length === 1 ? "és festiu" : "són festius"} ${decemberHolidays}.${decemberLine}` }] : []),
         { question: `Quan es publiquen les festes locals del ${YEAR}?`, answer: localFaq },
         { question: `Quins ponts té Barcelona el ${YEAR}?`, answer: `Els de tot Catalunya i ${BARCELONA_PLANS.filter((p) => p.plan).length} més amb les festes locals: ${x.bcnFaq}.` },
@@ -798,6 +823,7 @@ export function buildBridgesBody(locale: Locale): Block[] {
       ),
       ...h2(`Todos los festivos de ${YEAR} y el puente que hace cada uno`, `Los ${count} festivos de toda Cataluña, el día de la semana en que caen, qué permiten y cuántos días de vacaciones hay que pedir para alargarlos:`),
       answerTable("es"),
+      ...(x.saturdayLine ? paras(x.saturdayLine) : []),
       ...h2(
         "Con cuántos días de vacaciones, cuántos días seguidos de fiesta",
         `El máximo de días seguidos sin trabajar que da ${YEAR} para cada número de días de vacaciones, con los festivos de toda Cataluña, y todas las maneras de conseguirlo:`,
@@ -836,6 +862,7 @@ export function buildBridgesBody(locale: Locale): Block[] {
         { question: `¿Cuántos puentes hay en ${YEAR} en Cataluña?`, answer: `${x.n}. Sin vacaciones, ${x.free} fines de semana largos: ${x.freeList}. Con vacaciones, ${x.paid} puentes: ${x.paidList}. ${LOST.length} festivos más caen ${weekendWord}.` },
         ...(x.best ? [{ question: `¿Cuál es el mejor puente de ${YEAR}?`, answer: `Si solo puedes pedir un día, ${dayList(x.best.take, "es", true)}: ${x.best.days} días seguidos, ${runWords(x.best, "es")}.${jumpLine ? ` ${jumpLine}` : ""}` }] : []),
         { question: `¿Qué festivos de ${YEAR} caen ${weekendWord}?`, answer: `${cap(x.lostList)}. Para quien trabaja de lunes a viernes no suman ningún día libre, y el calendario oficial no los pasa a ningún otro día.` },
+        ...x.saturdayFaq,
         ...(x.decemberOn.length > 0 ? [{ question: `¿Hay puente en diciembre de ${YEAR}?`, answer: `Sí: ${x.decemberOn.length === 1 ? "es festivo" : "son festivos"} ${decemberHolidays}.${decemberLine}` }] : []),
         { question: `¿Cuándo se publican las fiestas locales de ${YEAR}?`, answer: localFaq },
         { question: `¿Qué puentes tiene Barcelona en ${YEAR}?`, answer: `Los de toda Cataluña y ${BARCELONA_PLANS.filter((p) => p.plan).length} más con las fiestas locales: ${x.bcnFaq}.` },
@@ -866,6 +893,7 @@ export function buildBridgesBody(locale: Locale): Block[] {
     ),
     ...h2(`Every ${YEAR} public holiday and the long weekend it makes`, `Catalonia's ${count} public holidays, the day of the week each falls on, what it gives and how much leave it takes to stretch it:`),
     answerTable("en"),
+    ...(x.saturdayLine ? paras(x.saturdayLine) : []),
     ...h2(
       "How many days of leave, how many days off in a row",
       `The most days off in a row that ${YEAR} gives for each number of days of leave, with the Catalonia-wide holidays, and every way to get them:`,
@@ -904,6 +932,7 @@ export function buildBridgesBody(locale: Locale): Block[] {
       { question: `How many long weekends are there in ${YEAR} in Catalonia?`, answer: `${x.n}. With no leave, ${x.free} long weekends: ${x.freeList}. With leave, ${x.paid} bridges: ${x.paidList}. ${LOST.length} more holidays fall ${weekendWord}.` },
       ...(x.best ? [{ question: `What is the best long weekend of ${YEAR}?`, answer: `If you can take only one day, make it ${dayList(x.best.take, "en")}: ${x.best.days} days in a row, ${runWords(x.best, "en")}.${jumpLine ? ` ${jumpLine}` : ""}` }] : []),
       { question: `Which ${YEAR} holidays fall ${weekendWord}?`, answer: `${cap(x.lostList)}. For a Monday-to-Friday worker they add no day off, and the official calendar does not move them to another day.` },
+      ...x.saturdayFaq,
       ...(x.decemberOn.length > 0 ? [{ question: `Is there a long weekend in December ${YEAR}?`, answer: `Yes: ${decemberHolidays} ${x.decemberOn.length === 1 ? "is a public holiday" : "are public holidays"}.${decemberLine}` }] : []),
       { question: `When are the ${YEAR} local holidays published?`, answer: localFaq },
       { question: `What long weekends does Barcelona have in ${YEAR}?`, answer: `The Catalonia-wide ones and ${BARCELONA_PLANS.filter((p) => p.plan).length} more from its local holidays: ${x.bcnFaq}.` },
