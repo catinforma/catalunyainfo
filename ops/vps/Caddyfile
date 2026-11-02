@@ -1,0 +1,111 @@
+# /etc/caddy/Caddyfile: CatalunyaInfo (installed by provision.sh)
+#
+# Caddy terminates TLS (Let's Encrypt, automatic issue and renewal), redirects
+# HTTP to HTTPS (308), compresses, and proxies to the Next.js standalone server
+# on 127.0.0.1:3000.
+#
+# Validate: caddy validate --adapter caddyfile --config /etc/caddy/Caddyfile
+# Apply:    sudo systemctl reload caddy
+#
+# Headers Next.js needs from the proxy, all sent by reverse_proxy by default:
+#   Host               passed through unchanged. robots.txt, the proxy and the
+#                      X-Robots-Tag rules decide indexability by Host.
+#   X-Forwarded-Proto  https. Next builds absolute redirect URLs from it.
+#   X-Forwarded-Host   the public host. The Server Actions CSRF check (the
+#                      CMS) compares it with the browser's Origin.
+#   X-Forwarded-For    the client IP. Caddy REPLACES spoofed values from
+#                      untrusted clients rather than appending to them.
+#   Accept             forwarded, as the image optimiser (AVIF/WebP) needs.
+{
+	# No `email`: Let's Encrypt stopped sending expiry e-mails in 2025, and
+	# Caddy renews by itself.
+	servers {
+		timeouts {
+			# Slow-client protection, the job Next's self-hosting guide gives
+			# the reverse proxy.
+			read_header 10s
+			read_body 30s
+			# Longer than the slowest legitimate response: a full
+			# /api/admin/publish run (no 60 s function limit here).
+			write 330s
+			idle 2m
+		}
+
+		# --- Cloudflare: uncomment when the DNS records are proxied (orange
+		# cloud), see README "Cloudflare". Without it, logs and X-Forwarded-For
+		# show Cloudflare's edge IPs instead of visitors'. Check the ranges
+		# against https://www.cloudflare.com/ips/ before enabling. --------------
+		# trusted_proxies static 173.245.48.0/20 103.21.244.0/22 103.22.200.0/22 103.31.4.0/22 141.101.64.0/18 108.162.192.0/18 190.93.240.0/20 188.114.96.0/20 197.234.240.0/22 198.41.128.0/17 162.158.0.0/15 104.16.0.0/13 104.24.0.0/14 172.64.0.0/13 131.0.72.0/22 2400:cb00::/32 2606:4700::/32 2803:f800::/32 2405:b500::/32 2405:8100::/32 2a06:98c0::/29 2c0f:f248::/32
+		# client_ip_headers CF-Connecting-IP X-Forwarded-For
+	}
+}
+
+# Access log: JSON, rotated at 50 MiB, kept 14 days (it holds IP addresses).
+(access_log) {
+	log {
+		output file /var/log/caddy/catalunyainfo.access.log {
+			roll_size 50MiB
+			roll_keep 10
+			roll_keep_for 336h
+		}
+		format json
+	}
+}
+
+(next_app) {
+	import access_log
+
+	request_body {
+		max_size 25MB
+	}
+
+	# Next's own gzip is off in the standalone build (next.config.ts,
+	# NEXT_OUTPUT=standalone), so Caddy compresses: zstd where the client
+	# accepts it, gzip otherwise. Images and other incompressible types are
+	# skipped by default.
+	encode zstd gzip
+
+	# Next sets poweredByHeader: false; do not advertise the proxy either.
+	header -Server
+
+	reverse_proxy 127.0.0.1:3000 {
+		# While Next restarts (a deploy takes 1-3 s), keep retrying the dial
+		# for up to 20 s instead of answering 502. Only failed dials are
+		# retried, so a request is never sent twice.
+		lb_try_duration 20s
+		lb_try_interval 250ms
+
+		transport http {
+			dial_timeout 2s
+			# Uncached renders and the publish endpoint can be slow to send
+			# headers.
+			response_header_timeout 300s
+		}
+	}
+}
+
+# Canonical host.
+www.catalunyainfo.com {
+	import next_app
+}
+
+# Apex -> www, permanently, path and query kept: the same 308 Vercel's domain
+# redirect sends today (with the same HSTS header). http:// on either host
+# gets Caddy's automatic 308 to https first, as on Vercel.
+catalunyainfo.com {
+	import access_log
+	header Strict-Transport-Security "max-age=63072000"
+	redir https://www.catalunyainfo.com{uri} 308
+}
+
+# --- Preview hostname for testing before the DNS cutover (optional) -----------
+# 1. At the DNS provider add:  A  vps  <VPS IPv4>  (DNS only / grey cloud).
+# 2. Uncomment, then: sudo systemctl reload caddy
+# 3. Browse https://vps.catalunyainfo.com/ca/
+# Every response there is noindex (X-Robots-Tag) and robots.txt disallows all,
+# because the host is not www.catalunyainfo.com. Links and canonicals point to
+# www. Comment it out again (and delete the record) after the cutover.
+#
+# vps.catalunyainfo.com {
+# 	import next_app
+# }

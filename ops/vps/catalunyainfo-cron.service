@@ -1,0 +1,39 @@
+# /etc/systemd/system/catalunyainfo-cron.service (installed by provision.sh)
+#
+# Replaces the Vercel cron in vercel.json:
+#   { "path": "/api/cron/publish-scheduled", "schedule": "5 23 * * *" }
+# Started daily by catalunyainfo-cron.timer. Publishes scheduled pages, flags
+# overdue ones, revalidates the day-dependent pages and prunes sessions. The
+# endpoint is idempotent: a double run (VPS timer + Vercel cron while both
+# exist) changes nothing.
+#
+# Run by hand:  sudo systemctl start catalunyainfo-cron.service
+# Logs:         journalctl -u catalunyainfo-cron
+
+[Unit]
+Description=CatalunyaInfo daily housekeeping (GET /api/cron/publish-scheduled/)
+After=network-online.target catalunyainfo.service
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+# Read by systemd as root; the script only ever sees CRON_SECRET in its
+# environment and sends it to curl on stdin, never on a command line.
+EnvironmentFile=/srv/catalunyainfo/shared/.env.production
+# Straight to the Node server, not through Caddy. The trailing slash matters:
+# trailingSlash: true answers the bare path with a 308.
+Environment=CRON_URL=http://127.0.0.1:3000/api/cron/publish-scheduled/
+ExecStart=/usr/local/bin/catalunyainfo-cron
+DynamicUser=yes
+TimeoutStartSec=10min
+
+NoNewPrivileges=yes
+PrivateTmp=yes
+PrivateDevices=yes
+ProtectSystem=strict
+ProtectHome=yes
+ProtectKernelTunables=yes
+ProtectKernelModules=yes
+ProtectControlGroups=yes
+RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX
+CapabilityBoundingSet=
