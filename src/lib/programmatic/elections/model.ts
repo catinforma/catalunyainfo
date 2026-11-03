@@ -31,6 +31,7 @@ import {
   type MunicipalView,
   type RegionalView,
 } from "./results";
+import { buildPolling, type PollingModel } from "./polling";
 import { SNAPSHOT } from "./snapshot";
 import type { DayLines } from "./today";
 import type { ElectionsSnapshot, General2026, Municipality, RegionalVotes } from "./types";
@@ -87,6 +88,8 @@ export interface SlotResults {
 }
 
 export interface ElectionPageModel {
+  /** The polling places of 29N, from the BOP lists (`polling.ts`). */
+  polling: PollingModel;
   locale: Locale;
   h1: string;
   standfirst: string;
@@ -449,6 +452,16 @@ export function generalOf(m: Municipality, snapshot: ElectionsSnapshot = SNAPSHO
 
 
 export function buildElectionPage(m: Municipality, locale: Locale, snapshot: ElectionsSnapshot = SNAPSHOT): ElectionPageModel {
+  const base = buildResults(m, locale, snapshot);
+  const polling = buildPolling(m, locale, (iso) => longDate(iso, locale));
+  const fact = polling.fact ? [{ label: POLLING_FACT_LABEL[locale], value: polling.fact }] : [];
+  // The polling facts go after the town's size facts; the polling FAQ item closes the questions.
+  return { ...base, facts: [...base.facts, ...fact], faq: [...base.faq, polling.faq], polling };
+}
+
+const POLLING_FACT_LABEL: Record<Locale, string> = { ca: "Locals electorals del 29N", es: "Locales electorales del 29N", en: "29 Nov polling places" };
+
+function buildResults(m: Municipality, locale: Locale, snapshot: ElectionsSnapshot): Omit<ElectionPageModel, "polling"> {
   const f = formats(locale);
   const place = placeName(m, locale);
   const Place = place.charAt(0).toLocaleUpperCase(locale) + place.slice(1);
