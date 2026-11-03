@@ -189,7 +189,7 @@ function onOfficialDomain(slug: string, url: string): boolean {
 
 test("council data: every entry is a town with a page, two distinct valid 2027 days, an official https source and a read date", () => {
   const regional2027 = new Set(CATALONIA_HOLIDAYS.map((h) => h.date));
-  assert.ok(councilSlugs().length >= 40, `${councilSlugs().length} towns`);
+  assert.ok(councilSlugs().length >= 115, `${councilSlugs().length} towns`);
   for (const [slug, c] of Object.entries(COUNCIL_2027)) {
     town(slug);
     assert.equal(c.local.length, 2, slug);
