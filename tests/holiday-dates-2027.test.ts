@@ -263,7 +263,7 @@ test("local days: the shared local dates are council-approved days of at least t
   assert.deepEqual(nextYearPlacesOn("2027-06-29").places.map((p) => p.name), ["Reus", "Sant Cugat del Vallès", "Rubí", "Figueres", "el Masnou", "Canet de Mar", "Abrera", "Premià de Dalt", "Sant Pere de Torelló"]);
   // Labelled pending, with "at least", and each council's act among the sources.
   const may = dateContent("2027-05-17", "ca");
-  assert.match(may.answer, /almenys a 36 municipis i 6 nuclis, entre els quals Barcelona, l'Hospitalet de Llobregat i Badalona, segons els ajuntaments \(pendent de l'ordre del DOGC\)/);
+  assert.match(may.answer, /almenys a 37 municipis i 6 nuclis, entre els quals Barcelona, l'Hospitalet de Llobregat i Badalona, segons els ajuntaments \(pendent de l'ordre del DOGC\)/);
   assert.match(may.local.note ?? "", /encara no són oficials/);
   assert.ok(may.extraSources?.some((s) => s.url === COUNCIL_2027.barcelona!.source.url));
   assert.match(dateContent("2027-03-19", "en").answer, /local holiday in at least 2 towns: Castellar del Vallès and la Llagosta, as approved by their councils \(pending the DOGC order\)/);

@@ -1420,6 +1420,98 @@ export const COUNCIL_2027: Readonly<Record<string, CouncilApproved>> = {
     act: { kind: "ple", date: "2026-06-25" },
     readOn: "2026-11-03",
   },
+  // Ple of 13 July 2026: "2.2.- PROPOSTA D'ACORD D'APROVACIÓ DELS DIES FESTIUS LOCALS DE VILANOVA
+  // DEL CAMÍ CORRESPONENTS A L'ANY 2027. [...] Primer.- PROPOSAR al Departament d'Empresa i Treball
+  // que es fixin com a festes locals de Vilanova del Camí per a l'any 2027; - Dimarts 30 de març de
+  // 2027, Sant Crist d'Igualada - Dilluns 6 de setembre de 2027, Festa Major de Vilanova del Camí
+  // Segon.- COMUNICAR aquest acord al Departament d'Empresa i Treball, de la Generalitat de
+  // Catalunya i al departament de Secretaria. Sotmès l'assumpte a votació, l'acord s'aprova amb 15
+  // vots favorables dels grups municipals (PSC, IMPULSEM VILANOVA, V365 i FEM VILANOVA)."
+  "vilanova-del-cami": {
+    local: ["2027-03-30", "2027-09-06"],
+    names: ["Sant Crist d’Igualada", "Festa Major de Vilanova del Camí"],
+    source: {
+      name: "Acta Ple Ordinari 13 de juliol de 2026",
+      ref: "Ajuntament de Vilanova del Camí",
+      url: "https://www.vilanovadelcami.cat/media/repository/import/imatges/plens/plens_2026/Actes/ACTA_PLE_ORDINARI_No._5_DEL_13-07-2026.pdf",
+    },
+    act: { kind: "ple", date: "2026-07-13" },
+    readOn: "2026-11-03",
+  },
+  // Ple of 28 April 2026: "Publicat el 28/04/2026 Aquest dimarts 28 d'abril s'ha celebrat a la sala
+  // de sessions de l'Ajuntament de Roquetes el Ple ordinari número 5/2026, corresponent al mes
+  // d'abril. [...] Aprovar, si s'escau, l'assenyalament de les dues festes locals de Roquetes per a
+  // l'any 2027, el 14 d'abril i 5 de juliol. APROVAT PER UNANIMITAT"
+  roquetes: {
+    local: ["2027-04-14", "2027-07-05"],
+    source: {
+      name: "Ple ordinari de l’Ajuntament de Roquetes del mes d’abril de 2026",
+      ref: "Ajuntament de Roquetes, 28 d'abril de 2026",
+      url: "https://roquetes.cat/web/ple-ordinari-de-lajuntament-de-roquetes-del-mes-dabril-de-2026/",
+    },
+    act: { kind: "ple", date: "2026-04-28" },
+    readOn: "2026-11-03",
+  },
+  // Ple of 20 July 2026: "La sessió ordinària d'aquest mes de juliol del Ple Municipal de
+  // l'Ajuntament de Begues ha servit per aprovar la designació dels dos festius locals de l'any
+  // 2027, que seran el dimecres 20 de gener i el dilluns 26 de juliol. El punt va ser aprovat per
+  // unanimitat."
+  begues: {
+    local: ["2027-01-20", "2027-07-26"],
+    source: {
+      name: "Acords de la sessió de juliol del Ple Municipal",
+      ref: "Ajuntament de Begues, 21 de juliol de 2026",
+      url: "https://www.begues.cat/actualitat/noticies/acords-de-la-sessio-de-juliol-del-ple-municipal.html",
+    },
+    act: { kind: "ple", date: "2026-07-20" },
+    readOn: "2026-11-03",
+  },
+  // Ple of 25 June 2026: "Setè.- PRP2026/795 PROPOSTA AL PLE D'APROVACIÓ, SI ESCAU, FESTES LOCALS DE
+  // L'ANY 2027. ... Primer.- Aprovar com a festes locals per a l'any 2027 les dates següents:
+  // Divendres 22 de gener de 2027, dia de Sant Vicenç Dilluns 17 de maig de 2027, 2a. Pasqua. ...
+  // Per tant, el Ple acorda, per unanimitat, aprovar la proposta transcrita en tots els seus
+  // extrems."
+  "sant-vicenc-de-montalt": {
+    local: ["2027-01-22", "2027-05-17"],
+    names: ["Sant Vicenç", "2a. Pasqua"],
+    source: {
+      name: "Acta Ple ordinari 25 de juny de 2026",
+      ref: "Ajuntament de Sant Vicenç de Montalt",
+      url: "https://www.svmontalt.cat/ARXIUS/2026/PLE/DOCUMENTS/PLE2026_6.pdf",
+    },
+    act: { kind: "ple", date: "2026-06-25" },
+    readOn: "2026-11-03",
+  },
+  // "ANY 2027 Festius locals Dimecres 20 de gener (Sant Sebastià). Dilluns 12 de juliol (Dilluns de
+  // Festa Major)."
+  suria: {
+    local: ["2027-01-20", "2027-07-12"],
+    names: ["Sant Sebastià", "Dilluns de Festa Major"],
+    source: { name: "Calendari de festius", ref: "Ajuntament de Súria", url: "https://www.suria.cat/calendaridefestius" },
+    act: { kind: "web", date: null },
+    readOn: "2026-11-03",
+  },
+  // Ple of 2 July 2026: "1. Aprovar que les dues festes locals que corresponen a la població de Sant
+  // Joan de Vilatorrada per l'any 2027 siguin les següents: - Dilluns 22 de febrer de 2027: Festa de
+  // la Llum. Divendres 25 de juny de 2027: Festa Major de Sant Joan de Vilatorrada 2. Aprovar que
+  // les dues festes locals que corresponen a l'Entitat Municipal Descentralitzada de Sant Martí de
+  // Torroella, per l'any 2027, siguin les següents: - Divendres 25 de juny de 2027: Festa Major de
+  // Sant Joan de Vilatorrada. - Dijous 11 de novembre de 2027: Festa de Sant Martí de Torroella. ...
+  // Resultat: Aprovat per majoria absoluta del nombre legal de membres de la corporació"
+  "sant-joan-de-vilatorrada": {
+    local: ["2027-02-22", "2027-06-25"],
+    names: ["Festa de la Llum", "Festa Major de Sant Joan de Vilatorrada"],
+    nuclei: [
+      { name: "Sant Martí de Torroella", dates: ["2027-06-25", "2027-11-11"] },
+    ],
+    source: {
+      name: "Acta de la sessió del Ple de la Corporació, 2 de juliol de 2026 (punt 8, Aprovació del calendari de festius locals per l'any 2027)",
+      ref: "Ajuntament de Sant Joan de Vilatorrada",
+      url: "https://www.santjoanvilatorrada.cat/ca/recursos/acords-i-decrets/acta-ple-2-juliol.pdf",
+    },
+    act: { kind: "ple", date: "2026-07-02" },
+    readOn: "2026-11-03",
+  },
 };
 
 /** The slugs with council data, in no particular order. */

@@ -154,6 +154,12 @@ const COUNCIL_DOMAIN: Record<string, string> = {
   "sant-vicenc-de-castellet": "svc.cat",
   constanti: "constanti.cat",
   "santa-cristina-d-aro": "santacristina.cat",
+  "vilanova-del-cami": "vilanovadelcami.cat",
+  roquetes: "roquetes.cat",
+  begues: "begues.cat",
+  "sant-vicenc-de-montalt": "svmontalt.cat",
+  suria: "suria.cat",
+  "sant-joan-de-vilatorrada": "santjoanvilatorrada.cat",
 };
 const BULLETINS = ["bop.diba.cat", "ddgi.cat", "dipta.cat", "diputaciolleida.cat"];
 
