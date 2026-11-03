@@ -1345,6 +1345,81 @@ export const COUNCIL_2027: Readonly<Record<string, CouncilApproved>> = {
     act: { kind: "ple", date: "2026-06-12" },
     readOn: "2026-11-03",
   },
+  // Ple of 1 July 2026: "S'ACORDA: PRIMER.- Proposar com a festes locals del municipi de Sant Vicenç
+  // de Castellet, per a l'any 2027, els dies següents: - 22 de gener, divendres (Festa Major
+  // d'Hivern) - 12 de juliol, dilluns (Festa Major d'Estiu) SEGON.- Comunicar el contingut d'aquest
+  // dictamen al Departament d'Empresa i Treball de la Generalitat de Catalunya als efectes
+  // corresponents. ... Passat aquest punt es Aprovat per Unanimitat dels assistents"
+  "sant-vicenc-de-castellet": {
+    local: ["2027-01-22", "2027-07-12"],
+    names: ["Festa Major d’Hivern", "Festa Major d’Estiu"],
+    source: {
+      name: "Acta anonimitzada de la sessió del Ple de l’Ajuntament del dia 1 de juliol de 2026 (punt 3.2, Expedient X2026003085, Dies festius locals de Sant Vicenç de Castellet per a l’any 2027)",
+      ref: "Ajuntament de Sant Vicenç de Castellet",
+      url: "https://www.svc.cat/media/uploaded_files/normativa/ACTA_LOPD_PLE06-2026_1_JULIOL.pdf",
+    },
+    act: { kind: "ple", date: "2026-07-01" },
+    readOn: "2026-11-03",
+  },
+  // Ple of 12 February 2026: "El Ple de l'Ajuntament de Constantí ha celebrat aquest dijous 12 de
+  // febrer una nova sessió ordinària. ... Aprovació de les festes locals de l'any 2027 Un altre dels
+  // punts aprovats pel Ple van ser les festes de caire local corresponents a l'any 2027: seran els
+  // dies 20 de gener (dimecres) i 2 d'agost (dilluns)"
+  constanti: {
+    local: ["2027-01-20", "2027-08-02"],
+    source: {
+      name: "El Ple aprova la condició de FuneCamp com a mitjà propi per a realitzar en un futur l’activitat de cementiri",
+      ref: "Ajuntament de Constantí, 13 de febrer de 2026",
+      url: "https://web.constanti.cat/2026/02/13/el-ple-aprova-la-condicio-de-funecamp-com-a-mitja-propi-per-a-realitzar-en-un-futur-lactivitat-de-cementiri/",
+    },
+    act: { kind: "ple", date: "2026-02-12" },
+    readOn: "2026-11-03",
+  },
+  // Ple of 30 June 2026: "FESTES LOCALS 2027 El Ple de l'Ajuntament, en sessió ordinària celebrada
+  // el 30 de juny de 2026, va aprovar per unanimitat la p roposta d'aprovació de la fixació dels
+  // dies de festa local per a l'any 2027, per la seva posterior aprovació per part del Departament
+  // d'Empresa i Treball de la Generalitat de Catalunya. Segons la seva resolució, els dies festius
+  // locals de Santa Cristina d'Aro proposats per a l'any 2026 són: – Dilluns 8 de febrer (Carnaval)
+  // – Dissabte 24 de juliol (Dia de Santa Cristina – Festa Major)" The list's "any 2026" is a
+  // leftover: the page is headed 2027 and its weekdays match 2027 (8 February was a Sunday in 2026).
+  "santa-cristina-d-aro": {
+    local: ["2027-02-08", "2027-07-24"],
+    names: ["Carnaval", "Dia de Santa Cristina – Festa Major"],
+    source: { name: "FESTES LOCALS 2027", ref: "Ajuntament de Santa Cristina d'Aro", url: "https://santacristina.cat/festes-locals-2027/" },
+    act: { kind: "ple", date: "2026-06-30" },
+    readOn: "2026-11-03",
+  },
+  // Ple of 27 April 2026: "Aprovació de les festes locals de Sant Pere de Torelló per a l'any 2027
+  // En data 27 d'abril de 2026, el Ple de la Corporació reunit en sessió ordinària va aprovar per
+  // unanimitat l'acord següent: 'Primer.- Proposar com a Festes Locals del municipi de Sant Pere de
+  // Torelló per a l'any 2027 el dimarts 29 de juny (Sant Pere) i el dilluns 27de setembre (dilluns
+  // de Festa Major)."
+  "sant-pere-de-torello": {
+    local: ["2027-06-29", "2027-09-27"],
+    names: ["Sant Pere", "dilluns de Festa Major"],
+    source: {
+      name: "Aprovació de les festes locals per a l'any 2027 (anunci, Exp. X2026000559)",
+      ref: "BOPB, 4 de maig de 2026",
+      url: "https://bop.diba.cat/anuncio/descargar-pdf/3935276",
+    },
+    act: { kind: "ple", date: "2026-04-27" },
+    readOn: "2026-11-03",
+  },
+  // Ple of 25 June 2026: "En compliment de l'acord adoptat a la sessió plenària ordinària de data 25
+  // de juny de 2026 [...] Primer.- FIXAR com a festes locals del municipi de Pallejà per a l'any
+  // 2027 els dies següents: Divendres, 12 de febrer de 2027 (Festa Major de Santa Eulàlia). Dilluns,
+  // 12 de juliol de 2027 (Festa Major d'Estiu)."
+  palleja: {
+    local: ["2027-02-12", "2027-07-12"],
+    names: ["Festa Major de Santa Eulàlia", "Festa Major d'Estiu"],
+    source: {
+      name: "Edicte. Acord de fixació de les festes locals del municipi per a l'any 2027",
+      ref: "BOPB, 27 de juliol de 2026 (CVE 202610124254)",
+      url: "https://bop.diba.cat/anunci/descarrega-pdf/3973273",
+    },
+    act: { kind: "ple", date: "2026-06-25" },
+    readOn: "2026-11-03",
+  },
 };
 
 /** The slugs with council data, in no particular order. */

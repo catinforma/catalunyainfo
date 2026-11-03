@@ -151,6 +151,9 @@ const COUNCIL_DOMAIN: Record<string, string> = {
   cervello: "cervello.cat",
   llagostera: "llagostera.cat",
   "el-papiol": "elpapiol.cat",
+  "sant-vicenc-de-castellet": "svc.cat",
+  constanti: "constanti.cat",
+  "santa-cristina-d-aro": "santacristina.cat",
 };
 const BULLETINS = ["bop.diba.cat", "ddgi.cat", "dipta.cat", "diputaciolleida.cat"];
 
