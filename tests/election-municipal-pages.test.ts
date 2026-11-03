@@ -55,6 +55,7 @@ import {
   siblings,
 } from "../src/lib/programmatic/elections/pages.ts";
 import { ALL_MUNICIPALITIES, COMARCA_SEGMENT } from "../src/lib/programmatic/elections/paths.ts";
+import { pollingFor } from "../src/lib/programmatic/elections/polling.ts";
 import {
   councilSize,
   councilSystem,
@@ -915,8 +916,8 @@ test("titles fit 60 characters with the place and the year; descriptions fit 155
     assert.ok(hub.description.length <= DESCRIPTION_LIMIT, `${locale} hub description ${hub.description.length}`);
   }
   // The brief's own wording, where it fits.
-  assert.equal(electionTitle("ca", bySlug("vic")), "Resultats eleccions Vic: municipals 2023, generals i 29N");
-  assert.equal(electionTitle("es", bySlug("sabadell")), "Resultados elecciones Sabadell: municipales 2023 y 29N");
+  assert.equal(electionTitle("ca", bySlug("vic")), "Eleccions Vic: on votar el 29N i resultats 2023");
+  assert.equal(electionTitle("es", bySlug("sabadell")), "Elecciones Sabadell: dónde votar el 29N y resultados 2023");
   // The two longest names (37 and 36 characters) fall back to the short forms.
   const platja = bySlug("castell-d-aro-platja-d-aro-i-s-agaro");
   assert.equal(electionTitle("ca", platja), "Eleccions Castell d'Aro, Platja d'Aro i s'Agaró: 2023 i 29N");
@@ -1047,7 +1048,9 @@ const pageText = (m: Municipality, locale: Locale) => JSON.stringify(buildElecti
 /** The page minus every name copied from the source (a mayor called Maria Victoria is not a claim of victory). */
 const ownText = (m: Municipality, locale: Locale) => {
   const labels = [SNAPSHOT.elections.congress.lists, SNAPSHOT.elections.parliament.lists, SNAPSHOT.general2026?.lists].flatMap((l) => Object.values(l ?? {}));
-  const names = [m.mayor?.name ?? "", ...m.municipal.lists.flatMap((l) => [l.name, l.short]), ...labels.flatMap((l) => [l.name, l.short])]
+  // Polling places are printed as the BOP writes them (street names such as "Victòria" are not our copy).
+  const polled = (pollingFor(m.code)?.places ?? []).flatMap((p) => [p.name, p.address]);
+  const names = [m.mayor?.name ?? "", ...polled, ...m.municipal.lists.flatMap((l) => [l.name, l.short]), ...labels.flatMap((l) => [l.name, l.short])]
     .filter(Boolean)
     .sort((a, b) => b.length - a.length);
   return names.reduce((text, name) => text.split(JSON.stringify(name).slice(1, -1)).join(""), pageText(m, locale));

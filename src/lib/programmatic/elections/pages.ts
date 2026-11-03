@@ -128,11 +128,12 @@ export function placeName(m: Municipality, locale: Locale): string {
 /* -------------------------------------------------------------------------- */
 
 const TITLES: Record<Locale, ((place: string) => string)[]> = {
+  // Polling places first ("mesa electoral 29n <town>" is what readers search), the 2023 results after.
   ca: [
-    (p) => `Resultats eleccions ${p}: municipals 2023, generals i 29N`,
-    (p) => `Resultats eleccions ${p}: municipals 2023 i 29N`,
-    (p) => `Eleccions ${p}: municipals 2023, generals i 29N`,
-    (p) => `Eleccions ${p}: municipals 2023 i 29N`,
+    (p) => `Eleccions ${p}: on votar el 29N i resultats 2023`,
+    (p) => `Eleccions ${p}: on votar 29N i resultats 2023`,
+    (p) => `Eleccions ${p}: on votar el 29N i 2023`,
+    (p) => `Eleccions ${p}: on votar 29N i 2023`,
     (p) => `Eleccions ${p}: resultats 2023`,
     // Names of 36-37 characters (Castell d'Aro, Platja d'Aro i s'Agaró).
     (p) => `Eleccions ${p}: 2023 i 29N`,
@@ -140,18 +141,18 @@ const TITLES: Record<Locale, ((place: string) => string)[]> = {
     (p) => `${p}: eleccions 2023`,
   ],
   es: [
-    (p) => `Resultados elecciones ${p}: municipales 2023, generales y 29N`,
-    (p) => `Resultados elecciones ${p}: municipales 2023 y 29N`,
-    (p) => `Elecciones ${p}: municipales 2023, generales y 29N`,
-    (p) => `Elecciones ${p}: municipales 2023 y 29N`,
+    (p) => `Elecciones ${p}: dónde votar el 29N y resultados 2023`,
+    (p) => `Elecciones ${p}: dónde votar 29N y resultados 2023`,
+    (p) => `Elecciones ${p}: dónde votar el 29N y 2023`,
+    (p) => `Elecciones ${p}: dónde votar 29N y 2023`,
     (p) => `Elecciones ${p}: resultados 2023`,
     (p) => `Elecciones ${p}: 2023 y 29N`,
     (p) => `${p}: elecciones 2023`,
   ],
   en: [
-    (p) => `${p} election results: 2023 local, general and 29 Nov`,
-    (p) => `${p} election results: 2023 local and 29 Nov`,
-    (p) => `${p} election results: 2023 and 29 Nov`,
+    (p) => `${p} elections: where to vote 29 Nov and 2023 results`,
+    (p) => `${p} elections: where to vote 29 Nov, 2023 results`,
+    (p) => `${p} elections: where to vote 29 Nov and 2023`,
     (p) => `${p} elections: 2023 local results and 29 Nov`,
     (p) => `${p} elections: 2023 results`,
     (p) => `${p}: 2023 election results`,
@@ -179,34 +180,37 @@ export function electionDescription(locale: Locale, m: Municipality): string {
   const options: string[] = council
     ? locale === "ca"
       ? [
-          `Municipals 2023 ${inCa(place)}: consell obert, amb elecció directa de l'alcaldia i participació del ${t} %. Generals 2023 i Parlament 2024 davant de Catalunya, i el 29N.`,
-          `Municipals 2023 ${inCa(place)}: consell obert, elecció directa de l'alcaldia, participació del ${t} %. Generals, Parlament i 29N.`,
+          `On votar el 29N ${inCa(place)}: locals electorals i meses segons el BOP. Municipals 2023 en consell obert (participació del ${t} %), generals i Parlament.`,
+          `On votar el 29N ${inCa(place)}: locals electorals i meses segons el BOP. Municipals 2023 en consell obert, generals i Parlament.`,
+          `On votar el 29N ${inCa(place)}: locals electorals i meses. Resultats de les municipals 2023 en consell obert.`,
         ]
       : locale === "es"
         ? [
-            `Municipales 2023 en ${place}: concejo abierto, con elección directa de la alcaldía y participación del ${t} %. Generales 2023 y Parlament 2024 frente a Cataluña, y el 29N.`,
-            `Municipales 2023 en ${place}: concejo abierto, elección directa de la alcaldía, participación del ${t} %. Generales, Parlament y 29N.`,
+            `Dónde votar el 29N en ${place}: locales electorales y mesas según el BOP. Municipales 2023 en concejo abierto (participación del ${t} %), generales y Parlament.`,
+            `Dónde votar el 29N en ${place}: locales electorales y mesas según el BOP. Municipales 2023 en concejo abierto, generales y Parlament.`,
+            `Dónde votar el 29N en ${place}: locales electorales y mesas. Resultados de las municipales 2023 en concejo abierto.`,
           ]
         : [
-            `${place} local election 2023: open council, the mayor elected directly, ${t}% turnout; the 2023 general and 2024 Catalan elections, and 29 Nov.`,
-            `${place} local election 2023: open council, mayor elected directly, ${t}% turnout; general, Catalan and 29 Nov elections.`,
+            `Where to vote on 29 Nov in ${place}: polling places and tables from the BOP. 2023 local election in open council (${t}% turnout), general and Catalan results.`,
+            `Where to vote on 29 Nov in ${place}: polling places and tables from the BOP. 2023 open-council election, general and Catalan results.`,
+            `Where to vote on 29 Nov in ${place}: polling places and tables. 2023 open-council election results.`,
           ]
     : locale === "ca"
       ? [
-          `Municipals 2023 ${inCa(place)}: ${seats} regidors i participació del ${t} %. Vots de cada llista, generals 2023 i Parlament 2024 davant de Catalunya, i el 29N.`,
-          `Municipals 2023 ${inCa(place)}: ${seats} regidors, participació del ${t} %. Vots per llista, generals, Parlament i 29N.`,
-          `Municipals 2023 ${inCa(place)}: ${seats} regidors i vots per llista. Generals, Parlament i 29N.`,
+          `On votar el 29N ${inCa(place)}: locals electorals i meses segons el BOP. Municipals 2023 (${seats} regidors, participació del ${t} %), generals i Parlament.`,
+          `On votar el 29N ${inCa(place)}: locals electorals i meses segons el BOP. Municipals 2023 (${seats} regidors), generals i Parlament.`,
+          `On votar el 29N ${inCa(place)}: locals electorals i meses. Resultats de les municipals 2023.`,
         ]
       : locale === "es"
         ? [
-            `Municipales 2023 en ${place}: ${seats} concejales y participación del ${t} %. Votos de cada lista, generales 2023 y Parlament 2024 frente a Cataluña, y el 29N.`,
-            `Municipales 2023 en ${place}: ${seats} concejales, participación del ${t} %. Votos por lista, generales, Parlament y 29N.`,
-            `Municipales 2023 en ${place}: ${seats} concejales y votos por lista. Generales, Parlament y 29N.`,
+            `Dónde votar el 29N en ${place}: locales electorales y mesas según el BOP. Municipales 2023 (${seats} concejales, participación del ${t} %), generales y Parlament.`,
+            `Dónde votar el 29N en ${place}: locales electorales y mesas según el BOP. Municipales 2023 (${seats} concejales), generales y Parlament.`,
+            `Dónde votar el 29N en ${place}: locales electorales y mesas. Resultados de las municipales 2023.`,
           ]
         : [
-            `${place} local election 2023: ${seats} councillors, ${t}% turnout, votes for every list; the 2023 general and 2024 Catalan elections against Catalonia, and 29 Nov.`,
-            `${place} local election 2023: ${seats} councillors, ${t}% turnout and votes by list; general, Catalan and 29 Nov elections.`,
-            `${place} local election 2023: ${seats} councillors and votes by list; general and 29 Nov elections.`,
+            `Where to vote on 29 Nov in ${place}: polling places and tables from the BOP. 2023 local election (${seats} councillors, ${t}% turnout), general and Catalan results.`,
+            `Where to vote on 29 Nov in ${place}: polling places and tables from the BOP. 2023 local election (${seats} councillors), general and Catalan results.`,
+            `Where to vote on 29 Nov in ${place}: polling places and tables. 2023 local election results.`,
           ];
   return options.find((text) => text.length <= DESCRIPTION_LIMIT) ?? options[options.length - 1]!;
 }

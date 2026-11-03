@@ -4,6 +4,7 @@ import { Breadcrumbs, type Crumb } from "@/components/Breadcrumbs";
 import { JsonLd } from "@/components/JsonLd";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
+import { PollingSection } from "@/components/programmatic/ElectionPollingSection";
 import { ElectionDayStatus } from "@/components/programmatic/ElectionDayStatus";
 import { slugifyAnchor, type Block } from "@/lib/content/blocks";
 import { renderInline } from "@/lib/content/inline";
@@ -39,6 +40,7 @@ export function ElectionResultsPage({ locale, municipality }: { locale: Locale; 
 
   const sections = [
     model.slot.title,
+    model.polling.title,
     model.municipal.title,
     model.seats.title,
     model.congress.title,
@@ -108,6 +110,8 @@ export function ElectionResultsPage({ locale, municipality }: { locale: Locale; 
                     ))}
                   </section>
                 )}
+
+                <PollingSection polling={model.polling} headingId={id(model.polling.title)} />
 
                 <h2 id={id(model.municipal.title)}>{model.municipal.title}</h2>
                 <p>{model.municipal.summary}</p>
