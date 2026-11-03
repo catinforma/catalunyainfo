@@ -100,6 +100,36 @@ const COUNCIL_DOMAIN: Record<string, string> = {
   "la-llacuna": "lallacuna.cat",
   riudarenes: "ajuntamentderiudarenes.cat",
   pau: "pau.cat",
+  "sant-cugat-del-valles": "santcugat.cat",
+  "vilanova-i-la-geltru": "vilanova.cat",
+  castelldefels: "castelldefels.org",
+  "el-prat-de-llobregat": "elprat.cat",
+  vic: "vic.cat",
+  "el-vendrell": "elvendrell.net",
+  "olesa-de-montserrat": "olesademontserrat.cat",
+  "el-masnou": "elmasnou.cat",
+  "sant-feliu-de-guixols": "seu-e.cat/ca/web/santfeliudeguixols/",
+  "vilassar-de-mar": "vilassardemar.cat",
+  tarrega: "tarrega.cat",
+  cardedeu: "cardedeu.cat",
+  // Tordera's own documents folder on the AOC e-seu (the signed acta of its Ple of 25 June 2026).
+  tordera: "seu-e.cat/documents/1437609/",
+  "sant-celoni": "santceloni.cat",
+  balaguer: "balaguer.cat",
+  cubelles: "cubelles.cat",
+  canovelles: "canovelles.cat",
+  berga: "ajberga.cat",
+  "arenys-de-mar": "arenysdemar.cat",
+  vallirana: "vallirana.cat",
+  "la-rapita": "larapita.cat",
+  "palau-solita-i-plegamans": "palauplegamans.cat",
+  "canet-de-mar": "canetdemar.cat",
+  abrera: "ajuntamentabrera.cat",
+  santpedor: "santpedor.cat",
+  riudoms: "riudoms.cat",
+  navarcles: "navarcles.cat",
+  "sant-hilari-sacalm": "santhilari.cat",
+  "sant-pol-de-mar": "santpol.cat",
 };
 const BULLETINS = ["bop.diba.cat", "ddgi.cat", "dipta.cat", "diputaciolleida.cat"];
 
@@ -146,7 +176,7 @@ test("council data: every entry is a town with a page, two distinct valid 2027 d
     assert.ok(onOfficialDomain(slug, c.source.url), `${slug}: ${c.source.url} is not on the council's own domain or a provincial bulletin`);
     assert.ok(c.source.name.length > 3 && c.source.ref.length > 3, slug);
     assert.ok(["ple", "decret", "junta", "web"].includes(c.act.kind), slug);
-    assert.ok(valid(c.readOn) && c.readOn >= "2026-10-30" && c.readOn <= "2026-10-31", `${slug}: read on ${c.readOn}`);
+    assert.ok(valid(c.readOn) && c.readOn >= "2026-10-30" && c.readOn <= "2026-11-03", `${slug}: read on ${c.readOn}`);
     if (c.act.date) assert.ok(valid(c.act.date) && c.act.date.startsWith(`${YEAR}-`) && c.act.date < c.readOn, `${slug}: act of ${c.act.date}`);
   }
 });
