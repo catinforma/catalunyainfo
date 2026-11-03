@@ -880,11 +880,16 @@ export interface SitemapRow {
   dayDependent: boolean;
 }
 
-export async function allIndexablePaths(): Promise<SitemapRow[]> {
+export async function allIndexablePaths({ strict = false }: { strict?: boolean } = {}): Promise<SitemapRow[]> {
   const db = getDb();
   if (!db) return [];
 
-  return safeRead("allIndexablePaths", [], async () => {
+  // strict: the sitemap would rather fail (and keep its cached copy) than drop
+  // every article on a dropped connection; the build keeps the soft fallback.
+  const read = strict
+    ? <T,>(label: string, _fallback: T, run: () => Promise<T>) => criticalRead(label, run)
+    : safeRead;
+  return read("allIndexablePaths", [] as SitemapRow[], async () => {
     const rows = await db
       .select({
         locale: entryTranslations.locale,

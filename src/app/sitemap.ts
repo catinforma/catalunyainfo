@@ -15,13 +15,15 @@ import { todaySitemapEntries } from "@/lib/programmatic/today/page";
 import { christmasFairsSitemapEntries } from "@/lib/programmatic/christmas-fairs/sitemap";
 
 /**
- * Rendered on request, not through ISR. The cached copy depended on ISR
- * writes, and on 20 Oct it was 30 hours old and missing six live pages while
- * the Hobby write quota was near its limit (DECISION_LOG, 18-20 Oct). Crawlers
- * fetch it a few times a day; one indexed query per fetch is cheaper than a
- * sitemap that silently stops listing new pages.
+ * Cached for an hour (ISR) and refreshed at once by every publish, and by the
+ * nightly cron when scheduled entries go live (revalidatePath("/sitemap.xml")). On Vercel it had to be
+ * rendered on every request because the ISR-write quota left the cached copy
+ * 30 hours old (DECISION_LOG, 18-20 Oct); on the VPS ISR writes are free, and
+ * the on-request render took 2.5-9 s for 2.5 MB. If the database read fails
+ * the regeneration throws and Next keeps serving the last good sitemap,
+ * instead of one without the articles.
  */
-export const dynamic = "force-dynamic";
+export const revalidate = 3600;
 
 /**
  * The sitemap.
@@ -47,7 +49,7 @@ export const dynamic = "force-dynamic";
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   if (!indexingAllowed()) return [];
 
-  const rows = await allIndexablePaths();
+  const rows = await allIndexablePaths({ strict: true });
 
   // Group content paths by entry so that each URL can list its siblings.
   const byEntry = new Map<string, Partial<Record<Locale, string>>>();
