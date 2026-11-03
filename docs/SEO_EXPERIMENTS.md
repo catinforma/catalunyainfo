@@ -1864,6 +1864,58 @@ target query; check the last crawl date of each URL first.
 
 **Outcome:** _pending_
 
+## 2026-11-03 — Holidays head pages: 2027 leads the work calendar; "is today a holiday" answers with dates (groups `holidays`, `holiday-today`; owner lifted the freezes)
+
+Why: the two head pages of the holidays cluster sit at 12-13 with CTR under
+1 % while their queries grow, and the owner's goal is 1M impressions by 15 Nov
+with maximum CTR. The 28-day rule for the 28/30 Oct changes on these pages is
+lifted by that priority. Titles, descriptions and first screens change
+together (against the "one thing" rule, knowingly): attribution is per page.
+Baselines are `scripts/snapshot.py page <substr> 28|14`, to 3 Nov 2026
+(3 Nov partial).
+
+Facts re-read on 3 Nov 2026: the Generalitat's 2027 calendar page (the twelve
+dates and weekdays; Aran swaps 29 Mar for 17 Jun), Portal Jurídic (Ordre
+EMT/52/2026, DOGC 9637, 1 Apr 2026), the BOE list BOE-A-2026-21254 (the same
+twelve for Cataluña; Jueves Santo not marked), the Generalitat's 2026 page
+(8, 25 and 26 Dec still to come; Aran keeps 17 Jun instead of 26 Dec) and
+Barcelona's calendar (17 May and 24 Sep 2027). All unchanged; `LAST_VERIFIED`
+and `CALENDAR_VERIFIED_AT` moved to 2026-11-03. Open data b4eh-r8up: 0 rows
+for 2027 local days on 3 Nov, so "not published yet" stays.
+
+| Page (publish group) | Old title → new title | Baseline | Target queries now | What changed |
+| --- | --- | --- | --- | --- |
+| `/es/guias/calendario-laboral-cataluna/` (`holidays`) | "Calendario laboral 2027 Cataluña: 12 festivos y puentes" → "Calendario laboral 2027 Cataluña y Barcelona: festivos"; description → "Los 12 festivos 2027 en Cataluña: 1 y 6 ene, … 6, 8 y 25 dic. Barcelona: 17 may y 24 sep. Y los de 2026." | 28 d: 3,996 impr., CTR 0.8 %, pos 12.7; 14 d: 2,814 impr., 21 clicks (0.75 %) | calendari laboral 2027 catalunya 65 at 8.7 (CA query, 4.6 %), festivos catalunya 2027 43 at 9.2, calendario laboral cataluña 2027 42 at 1.0 (0 clicks), calendario laboral 2027 catalunya 36 at 9.5, festivos 2027 catalunya 28 at 10.2, calendario 2027 catalunya con festivos 19 at 8.8, calendario laboral barcelona 2027 12 at 23.0 | Barcelona in the title for the rising "calendario laboral 2027 barcelona"; "puentes" dropped from the title (the bridges page owns those queries). First screen: the lead sentence, then the 2027 table (date linked to its `/es/festivos/dia/…-2027/` page, weekday, name; Barcelona's two days under it, linked to `/es/festivos/barcelona/`), then "Los últimos festivos de 2026" (martes 8, viernes 25, sábado 26 dic, each linked to its date page; lunes 7 not a holiday; link to the full 2026 table, which stays lower down). Bridges, key facts and the rest follow. The one-day bridge is now dated "7 de diciembre de 2027" so it cannot be read as this year's |
+| `/ca/guies/calendari-laboral-catalunya/` (`holidays`) | title kept ("Calendari laboral 2027 Catalunya: festius, ponts i Pasqua": already front-loaded, and the Pasqua rule stays for "divendres sant 2027" / "pasqua florida 2027"); description → "Els 12 festius 2027 a Catalunya: 1 i 6 gen, 26 i 29 març (Pasqua), … 6, 8 i 25 des. Últims del 2026: 8, 25 i 26 des." | 28 d: 1,617 impr., 10 clicks (0.6 %); 14 d: 674 impr., 6 clicks (0.9 %), pos 8-13 | calendari laboral 2027 catalunya 18 at 9.6, calendari laboral catalunya 2027 13 at 9.7, divendres sant 2027 13 at 10.2, pasqua florida 2027 11 at 7.3, festius catalunya 2027 7 at 15.6, ponts 2027 7 at 9.3 | Same first screen as es (`/ca/festius/dia/…-2027/`, `/ca/festius/barcelona/`) |
+| `/en/guides/catalonia-public-holidays/` (`holidays`) | title kept ("Barcelona & Catalonia public holidays 2027: all dates"); description → "Catalonia's 12 public holidays in 2027: 1 & 6 Jan, … 6, 8 & 25 Dec. Barcelona adds 17 May and 24 Sep." | ~9 impr./day, 0 clicks | public holidays barcelona 2027 (1) | Same first screen (`/en/holidays/day/…-2027/`, `/en/holidays/barcelona/`) |
+| `/es/guias/es-festivo-hoy-cataluna/` (`holiday-today` + deploy) | live "¿Hoy es festivo en Cataluña? Próximo festivo: 8 de diciembre" → live "¿Es festivo hoy en Cataluña? Próximo festivo: 8 de diciembre" (the H1's and the owner's word order); live description now names the next three: "Próximo festivo en toda Cataluña: martes 8 de diciembre (la Inmaculada). Después, 25 y 26 de diciembre. Si hoy o mañana es festivo y dónde es fiesta local." ("toda" dropped on a day Aran does not keep). Stored fallback "¿Hoy es festivo en Cataluña? Hoy, mañana y en tu municipio" → "¿Es festivo hoy en Cataluña? Hoy, mañana y próximos festivos" | 28 d: 1,417 impr., CTR 0.3 %, pos 12.8; 14 d: 1,419 impr., 4 clicks | hoy es festivo en cataluña 162 at 8.2, es festivo hoy en cataluña 49 at 8.8, hoy es festivo 36 at 16.3, festivos hoy 24 at 10.1, es fiesta hoy en cataluña 19 at 10.8, mañana es festivo 57 at 53.6 (all 0 clicks) | The live block is now the first thing on the page (the lead moved under it). Its first screen is dated, so the static HTML stays true between rebuilds: "No: hoy, martes 3 de noviembre, no es festivo en Cataluña."; "¿Mañana es festivo? No — miércoles 4 de noviembre"; "Próximos festivos": martes 8 dic, viernes 25 dic, sábado 26 dic (excepto en Arán), each linked to its date page; no "dentro de N días" (a count goes stale at midnight, a date does not). A year with no published order gets neither yes nor no. Link to the 2027 work calendar right under it. Aran's 2027 swap (29 Mar) now flagged in the upcoming table too |
+| `/ca/guies/es-festiu-avui-catalunya/` (`holiday-today` + deploy) | live title kept ("Avui és festiu a Catalunya? Pròxim festiu: 8 de desembre": already the CA searchers' order, "avui es festiu a catalunya"); live description names the next three ("… Després, 25 i 26 de desembre. Si avui o demà és festiu i on és festa local avui."); stored fallback "…Avui, demà i al teu municipi" → "Avui és festiu a Catalunya? Avui, demà i pròxims festius" | 14 d: 212 impr., 0 clicks, pos 4-6 | avui es festiu a catalunya 15 at 4.7, avui es festiu? 15 at 4.5, quina festa es avui 7 at 6.4, dema es festiu a catalunya 3 at 5.7 | Same block |
+| `/en/guides/is-today-a-holiday-in-catalonia/` (`holiday-today` + deploy) | live title kept ("Is today a holiday in Barcelona and Catalonia? Next: 8 Dec"); live description names the next three | ~1 impr./day | is today a holiday in catalonia 4 at 8.8 | Same block |
+
+**How "true between rebuilds" works.** The page is cached for a day
+(`revalidate = 86400`) and the nightly cron (`5 23 * * *` UTC: 00:05 in Madrid
+in winter, 01:05 in summer) revalidates every page with a `holidayToday` block;
+the next visit regenerates it. Between midnight and that visit an old copy can
+be served, so every first-screen sentence names its date
+(`src/lib/content/holidays/today-answer.ts`, tested for every day of 2026 and
+2027) and the live title and description only name holidays, never "today is
+not one". The cron schedule was not touched.
+
+**Prediction.** ES work calendar from 0.8 % to ≥ 2 % at 10-12 and into the top
+10 for "calendario laboral 2027 barcelona" (now 23); CA work calendar ≥ 2 % on
+"calendari laboral 2027 catalunya" / "divendres sant 2027"; ES "is today a
+holiday" ≥ 2 % on "hoy es festivo en cataluña" / "es festivo hoy en cataluña"
+at 8-9, with a spike around 8 Dec. The 2027 date pages gain clicks from the
+two pages' new links in the first screen.
+
+**Measure on 15 Nov 2026** (owner's goal date) **and on 1 Dec 2026**: per page,
+impressions, CTR and position for the queries above (`scripts/snapshot.py page
+calendario-laboral 14`, `calendari-laboral`, `es-festivo-hoy`, `es-festiu-avui`),
+and clicks on `/es/festivos/dia/*-2027/` referred from these pages; check the
+last crawl date of each URL first.
+
+**Outcome:** _pending_
+
 ## Candidates not yet run
 
 Recorded so they are not lost, and so they are not all started at once.

@@ -400,8 +400,8 @@ function BlockView({ block, context }: { block: Block; context: BlockContext }) 
       return <TransportPassSelector locale={context.locale} copy={getMessages(context.locale).transportPasses} />;
 
     case "holidayToday":
-      // Server-rendered on purpose: the answer has to be in the HTML, and the
-      // route revalidates every five minutes so it is never stale.
+      // Server-rendered on purpose: the answer has to be in the HTML. The
+      // nightly cron rebuilds it, and every sentence carries its own date.
       return <HolidayToday locale={context.locale} />;
 
     case "metroTonight":

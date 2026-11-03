@@ -111,13 +111,13 @@ const COPY: Record<Locale, TodayCopy> = {
   ca: {
     path: "guies/es-festiu-avui-catalunya",
     title: "És festiu avui a Catalunya?",
-    seoTitle: "Avui és festiu a Catalunya? Avui, demà i al teu municipi",
+    seoTitle: "Avui és festiu a Catalunya? Avui, demà i pròxims festius",
     seoDescription:
-      "Si avui i demà és festiu a Catalunya, el pròxim festiu i on és festa local avui, amb el calendari de cada municipi. Dades de la Generalitat.",
+      "Si avui i demà són festius a Catalunya, amb la data, els tres pròxims festius i on és festa local avui, municipi a municipi. Dades de la Generalitat.",
     excerpt:
       "La resposta d'avui, la de demà, el pròxim festiu i on és festa local avui, amb el calendari oficial de la Generalitat.",
     lead: [
-      "Aquesta pàgina respon cada dia una pregunta: **si avui és festiu a Catalunya**. També diu si ho és demà, quan cau el pròxim festiu i a quins municipis és avui festa local.",
+      "El requadre es renova cada nit, passada la mitjanit, amb el calendari oficial de la Generalitat: diu **si avui és festiu a Catalunya**, si ho és demà, quins són els tres pròxims festius i a quins municipis és avui festa local. Cada resposta porta la seva data.",
     ],
     howTitle: "Com funcionen els festius a Catalunya",
     how: [
@@ -143,13 +143,13 @@ const COPY: Record<Locale, TodayCopy> = {
   es: {
     path: "guias/es-festivo-hoy-cataluna",
     title: "¿Es festivo hoy en Cataluña?",
-    seoTitle: "¿Hoy es festivo en Cataluña? Hoy, mañana y en tu municipio",
+    seoTitle: "¿Es festivo hoy en Cataluña? Hoy, mañana y próximos festivos",
     seoDescription:
-      "Si hoy y mañana es festivo en Cataluña, el próximo festivo y dónde es fiesta local hoy, con el calendario de cada municipio. Datos de la Generalitat.",
+      "Si hoy y mañana son festivos en Cataluña, con la fecha, los tres próximos festivos y dónde es fiesta local hoy, municipio a municipio. Datos oficiales.",
     excerpt:
       "La respuesta de hoy, la de mañana, el próximo festivo y dónde es fiesta local hoy, con el calendario oficial de la Generalitat.",
     lead: [
-      "Esta página responde cada día a una pregunta: **si hoy es festivo en Cataluña**. También dice si lo es mañana, cuándo cae el próximo festivo y en qué municipios es hoy fiesta local.",
+      "El recuadro se renueva cada noche, pasada la medianoche, con el calendario oficial de la Generalitat: dice **si hoy es festivo en Cataluña**, si lo es mañana, cuáles son los tres próximos festivos y en qué municipios es hoy fiesta local. Cada respuesta lleva su fecha.",
     ],
     howTitle: "Cómo funcionan los festivos en Cataluña",
     how: [
@@ -177,11 +177,11 @@ const COPY: Record<Locale, TodayCopy> = {
     title: "Is today a public holiday in Catalonia?",
     seoTitle: "Is today a holiday in Barcelona and Catalonia? Live answer",
     seoDescription:
-      "Whether today and tomorrow are public holidays in Barcelona and the rest of Catalonia, the next holiday, and which towns have a local holiday today.",
+      "Whether today and tomorrow are public holidays in Barcelona and Catalonia, with the date, the next three holidays and the towns with a local holiday today.",
     excerpt:
       "Today's answer, tomorrow's, the next holiday and where it is a local holiday today, from the Catalan government's official calendar.",
     lead: [
-      "This page answers one question every day: **whether today is a public holiday in Catalonia**. It also says whether tomorrow is, when the next one falls, and which towns have a local holiday today.",
+      "The box is renewed every night, just after midnight, from the Catalan government's official calendar: it says **whether today is a public holiday in Catalonia**, whether tomorrow is, the next three holidays and which towns have a local holiday today. Every answer carries its date.",
     ],
     howTitle: "How public holidays work in Catalonia",
     how: [
@@ -209,13 +209,12 @@ export function buildBody(locale: Locale): Block[] {
   const copy = COPY[locale];
   const blocks: Block[] = [];
 
-  copy.lead.forEach((text, index) => {
-    blocks.push({ type: "paragraph", text, ...(index === 0 ? { lead: true } : {}) });
-  });
-
-  // The answer comes before any prose. Somebody who typed "is it a holiday
-  // today" should not have to read an introduction to find out.
+  // The answer is the first thing on the page, before any prose: somebody who
+  // typed "is it a holiday today" should not have to read an introduction to
+  // find out (3 Nov 2026: the lead used to come first). The lead follows it
+  // and says how the box works.
   blocks.push({ type: "holidayToday" });
+  for (const text of copy.lead) blocks.push({ type: "paragraph", text });
 
   const section = (heading: string, paragraphs: string[]) => {
     blocks.push({ type: "heading", level: 2, text: heading });

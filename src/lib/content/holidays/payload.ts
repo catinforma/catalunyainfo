@@ -246,5 +246,9 @@ export const SOURCES = [
 // which repeats Order EMT/52/2026 and the Aran swap for Catalonia; and on
 // 28 Oct 2026 against the Generalitat's 2026 and 2027 calendar pages and
 // Barcelona's own calendar (17 May and 24 Sep 2027; 25 May and 24 Sep 2026).
-// All three re-read on 30 Oct 2026: unchanged.
-export const LAST_VERIFIED = "2026-10-30";
+// All three re-read on 30 Oct 2026: unchanged. Re-read again on 3 Nov 2026:
+// the Generalitat's 2027 page (same twelve dates and weekdays, Aran 29 Mar ->
+// 17 Jun), Portal Jurídic (Ordre EMT/52/2026, DOGC 9637, 1 Apr 2026), the BOE
+// list (BOE-A-2026-21254: the same twelve for Cataluña, Jueves Santo not
+// marked) and Barcelona's calendar (17 May and 24 Sep 2027): unchanged.
+export const LAST_VERIFIED = "2026-11-03";

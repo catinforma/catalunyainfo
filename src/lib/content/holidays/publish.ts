@@ -1,6 +1,6 @@
 import "server-only";
 
-import type { Block } from "@/lib/content/blocks";
+import { slugifyAnchor, type Block } from "@/lib/content/blocks";
 import { LOCALES, type Locale } from "@/lib/i18n/config";
 import {
   publishArticle,
@@ -26,10 +26,11 @@ import { SCHOOL_YEARS } from "@/lib/content/school/calendar";
 import { lastSunday } from "@/lib/content/clock/rule";
 import { municipalityBySlug } from "@/lib/programmatic/holidays/data";
 import { joinList } from "@/lib/programmatic/holidays/names";
-import { datePath, isDatePage } from "@/lib/programmatic/holidays/paths";
+import { hasEnglishPage } from "@/lib/programmatic/holidays/english";
+import { datePath, isDatePage, municipalityPath } from "@/lib/programmatic/holidays/paths";
 import { largestTownLinks, townPageCount } from "@/lib/programmatic/holidays/towns";
 import { COPY, type HolidayCopy } from "./copy";
-import { HOLIDAYS_BY_YEAR, addDays, longDate } from "./calendar";
+import { ARAN_SUBSTITUTIONS, HOLIDAYS_BY_YEAR, addDays, longDate } from "./calendar";
 import { DIADA_IMAGE, SANT_JOAN_IMAGE } from "./images";
 
 /**
@@ -80,12 +81,61 @@ export function runLength(from: string, to: string): number {
   return Math.round(ms / 86_400_000) + 1;
 }
 
+/** The date as a link to its own page ("¿es festivo el 26 de marzo de 2027?") when it has one. */
+function linkedDay(iso: string, text: string, locale: Locale): string {
+  return isDatePage(iso) ? `[${text}](${datePath(locale, iso)})` : text;
+}
+
 function holidayRows(holidays: Holiday[], copy: HolidayCopy, locale: Locale): string[][] {
   return holidays.map((holiday) => [
-    formatDay(holiday.date, copy, locale),
+    linkedDay(holiday.date, formatDay(holiday.date, copy, locale), locale),
     weekdayOf(holiday.date, copy),
     holiday.name[locale],
   ]);
+}
+
+/** "[Barcelona](/es/festivos/barcelona/), el 17 de mayo y el 24 de septiembre", from the payload. */
+function barcelonaLocalLine(copy: HolidayCopy, locale: Locale): string {
+  const days = joinList(
+    BARCELONA_LOCAL.map((h) => {
+      const day = formatDay(h.date, copy, locale);
+      return `${dayArticle(day, locale)}${day}`;
+    }),
+    locale,
+  );
+  const town = locale !== "en" || hasEnglishPage("barcelona") ? `[Barcelona](${municipalityPath(locale, "barcelona")})` : "Barcelona";
+  return `${town}, ${days}`;
+}
+
+/**
+ * The last Catalonia-wide days of 2026, right under the 2027 table: people
+ * still search "festivos 2026" until December (3 Nov 2026). Each day links to
+ * its date page, and the full 2026 table stays further down.
+ */
+function last2026Callout(copy: HolidayCopy, locale: Locale): Block {
+  const year = HOLIDAYS_BY_YEAR[2026] ?? [];
+  const december = year.filter((h) => h.date.slice(5, 7) === "12");
+  if (december.length !== 3) throw new Error("holiday guide: expected three December holidays in 2026");
+  const day = (iso: string) => formatDay(iso, copy, locale);
+  // Sant Esteve 2026 is not a holiday in Aran, which had the Festa d'Aran on 17 June instead.
+  const exceptAran = { ca: ", excepte a l'Aran", es: ", excepto en Arán", en: ", except in Aran" }[locale];
+  const items = december.map((h) => {
+    const aran = ARAN_SUBSTITUTIONS.some((s) => s.replaces === h.date) ? exceptAran : "";
+    return `${weekdayOf(h.date, copy)} ${linkedDay(h.date, day(h.date), locale)} (${h.name[locale]}${aran})`;
+  });
+  const days = joinList(items, locale);
+  const dec7 = `${weekdayOf(DEC7_2026, copy)} ${linkedDay(DEC7_2026, day(DEC7_2026), locale)}`;
+  const link = `/${locale}/${copy.path}/#${slugifyAnchor(copy.year2026Title)}`;
+  const cap = (text: string) => text.charAt(0).toUpperCase() + text.slice(1);
+  return {
+    type: "callout",
+    tone: "info",
+    title: copy.last2026Title,
+    text: copy.last2026
+      .replace("{days}", cap(days))
+      .replace("{dec7}", locale === "en" ? cap(dec7) : dec7)
+      .replace("{link}", link),
+  };
 }
 
 function bridgeSection(bridge: Bridge, copy: HolidayCopy, locale: Locale): Block[] {
@@ -211,7 +261,7 @@ function currentYearSection(copy: HolidayCopy, locale: Locale): Block[] {
   const year = HOLIDAYS_BY_YEAR[2026] ?? [];
   if (year.length !== 12) throw new Error("holiday guide: the 2026 calendar is incomplete");
   const day = (iso: string) => formatDay(iso, copy, locale);
-  const linked = (iso: string, text: string) => (isDatePage(iso) ? `[${text}](${datePath(locale, iso)})` : text);
+  const linked = (iso: string, text: string) => linkedDay(iso, text, locale);
   const last = joinList(
     year.filter((h) => h.date.slice(5, 7) === "12").map((h) => linked(h.date, `${weekdayOf(h.date, copy)} ${day(h.date)}`)),
     locale,
@@ -238,10 +288,31 @@ function currentYearSection(copy: HolidayCopy, locale: Locale): Block[] {
 export function buildBody(locale: Locale, inlineMediaId?: string): Block[] {
   const copy = COPY[locale];
   const blocks: Block[] = [];
+  const [opening, ...restOfLead] = copy.lead;
 
-  copy.lead.forEach((text, index) => {
-    blocks.push({ type: "paragraph", text, ...(index === 0 ? { lead: true } : {}) });
+  /*
+   * First screen (3 Nov 2026): the 2027 list, then the last days of 2026.
+   * "Calendario laboral 2027 cataluña", "festivos catalunya 2027" and
+   * "divendres sant 2027" are the rising queries, and 2026 has three holidays
+   * left; the planning (bridges, key facts) follows them.
+   */
+  if (opening) blocks.push({ type: "paragraph", text: opening, lead: true });
+
+  /* ---- The twelve dates ------------------------------------------------- */
+  blocks.push({ type: "heading", level: 2, text: copy.tableTitle });
+  blocks.push({
+    type: "table",
+    caption: copy.tableCaption,
+    headers: copy.tableHeaders,
+    rows: holidayRows(CATALONIA_HOLIDAYS, copy, locale),
+    note: copy.tableNote.replace("{bcn}", barcelonaLocalLine(copy, locale)),
+    stickyColumn: 0,
   });
+
+  /* ---- What is left of this year ----------------------------------------- */
+  blocks.push(last2026Callout(copy, locale));
+
+  for (const text of restOfLead) blocks.push({ type: "paragraph", text });
 
   blocks.push({
     type: "callout",
@@ -255,18 +326,6 @@ export function buildBody(locale: Locale, inlineMediaId?: string): Block[] {
     title: copy.keyFactsTitle,
     // The working-day count goes before the verification date, which stays last.
     items: [...copy.keyFacts.slice(0, -1), workingDaysFact(locale), ...copy.keyFacts.slice(-1)].map((fact) => ({ label: fact.label, value: fact.value })),
-  });
-
-  /* ---- The twelve dates ------------------------------------------------- */
-  blocks.push({ type: "heading", level: 2, text: copy.tableTitle });
-  for (const text of copy.tableIntro) blocks.push({ type: "paragraph", text });
-  blocks.push({
-    type: "table",
-    caption: copy.tableCaption,
-    headers: copy.tableHeaders,
-    rows: holidayRows(CATALONIA_HOLIDAYS, copy, locale),
-    note: copy.tableNote,
-    stickyColumn: 0,
   });
 
   /* ---- National or Catalan ------------------------------------------------ */

@@ -2,14 +2,8 @@ import {
   CALENDAR_VERIFIED_AT,
   COVERED_YEARS,
   HOLIDAY_SOURCE,
-  addDays,
   allHolidays,
-  aranSubstitutionFor,
-  daysBetween,
-  holidayOn,
   isCovered,
-  nextHolidayAfter,
-  longDate,
   shortDate,
   todayInCatalonia,
   weekdayIndex,
@@ -18,10 +12,11 @@ import {
 import Link from "next/link";
 
 import { LOCAL_SOURCE, loadLocalCalendar, placesWithHolidayOn, type LocalHolidayPlace } from "@/lib/content/holidays/local";
+import { todayAnswer } from "@/lib/content/holidays/today-answer";
 import { getMessages } from "@/lib/i18n";
 import type { Locale } from "@/lib/i18n/config";
 import { dateQuestion } from "@/lib/programmatic/holidays/copy";
-import { municipalities, municipalityForCode } from "@/lib/programmatic/holidays/data";
+import { aranSwap, municipalities, municipalityForCode } from "@/lib/programmatic/holidays/data";
 import { GUIDES } from "@/lib/programmatic/holidays/links";
 import { DATE_PAGES, datePath, hubPath, isDatePage, municipalityPath } from "@/lib/programmatic/holidays/paths";
 
@@ -61,8 +56,11 @@ function PlaceList({ places, locale, limit }: { places: LocalHolidayPlace[]; loc
  * The answer has to be in the HTML. Search Console shows 166 distinct queries
  * of the shape *is the 30th a holiday* / *is Monday a holiday* / *is it a
  * holiday today* in a single week, and a page that renders the answer in the
- * browser gives Google an empty box. The route revalidates every five minutes,
- * so the server-rendered answer is never stale by more than that.
+ * browser gives Google an empty box. The page is cached for a day and the
+ * nightly cron revalidates it just after midnight (`holidayToday` is in
+ * DAY_DEPENDENT_BLOCKS), so every sentence of the first screen carries its own
+ * date (`today-answer.ts`): a copy served before that rebuild is still true,
+ * only visibly about yesterday.
  *
  * ## Why the timezone is explicit
  *
@@ -85,7 +83,8 @@ export async function HolidayToday({ locale, now }: { locale: Locale; now?: Date
   const t = getMessages(locale).holidayToday;
 
   const today = todayInCatalonia(now);
-  const tomorrow = addDays(today, 1);
+  const answer = todayAnswer(locale, today);
+  const tomorrow = answer.tomorrow;
 
   // Local days come from the Generalitat's open data, one row per council or
   // nucleus. Read for the current year only: next year's local days are set
@@ -94,9 +93,6 @@ export async function HolidayToday({ locale, now }: { locale: Locale; now?: Date
   const localToday = placesWithHolidayOn(local, today);
   const localTomorrow = placesWithHolidayOn(local, tomorrow);
 
-  const todayHoliday = holidayOn(today);
-  const tomorrowHoliday = holidayOn(tomorrow);
-  const next = nextHolidayAfter(today);
   const weekend = weekdayIndex(today) === 0 || weekdayIndex(today) === 6;
 
   const upcoming = allHolidays().filter((holiday) => holiday.date >= today);
@@ -106,40 +102,39 @@ export async function HolidayToday({ locale, now }: { locale: Locale; now?: Date
 
   return (
     <section className="ci-today" aria-label={t.title}>
-      {/* The answer, as a sentence, before anything else on the page. */}
-      <p className={`ci-today-answer ${todayHoliday ? "is-holiday" : "is-not"}`}>
-        {todayHoliday ? t.yes : t.no}
-      </p>
-      <p className="ci-today-date">
-        {longDate(today, locale)}
-        {todayHoliday ? ` — ${todayHoliday.name[locale]}` : ""}
-      </p>
+      {/* The answer, as a dated sentence, before anything else on the page. */}
+      <p className={`ci-today-answer ${answer.isHoliday ? "is-holiday" : "is-not"}`}>{answer.answer}</p>
 
-      {!todayHoliday && weekend ? <p className="ci-today-note">{t.weekendNote}</p> : null}
+      {!answer.isHoliday && weekend && isCovered(today) ? <p className="ci-today-note">{t.weekendNote}</p> : null}
 
       <dl className="ci-today-facts">
         <div>
           <dt>{t.tomorrow}</dt>
-          <dd>
-            {tomorrowHoliday
-              ? `${t.yesShort} — ${tomorrowHoliday.name[locale]}, ${shortDate(tomorrow, locale)}`
-              : isCovered(tomorrow)
-                ? t.noShort
-                : t.unknownShort}
-          </dd>
+          <dd>{answer.tomorrowValue}</dd>
         </div>
         <div>
-          <dt>{t.nextHoliday}</dt>
+          <dt>{answer.nextLabel}</dt>
           <dd>
-            {next
-              ? `${next.name[locale]} — ${longDate(next.date, locale)} (${t.inDays.replace(
-                  "{n}",
-                  String(daysBetween(today, next.date)),
-                )})`
-              : t.unknownShort}
+            {answer.next.length > 0 ? (
+              <ul className="ci-today-next">
+                {answer.next.map((holiday) => (
+                  <li key={holiday.date}>
+                    {holiday.href ? <Link href={holiday.href}>{holiday.when}</Link> : holiday.when} — {holiday.name}
+                    {holiday.aran ? <span className="ci-today-aran"> ({holiday.aran})</span> : null}
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              answer.nextUnknown
+            )}
           </dd>
         </div>
       </dl>
+
+      {/* The year planner, for whoever came to plan rather than to check today. */}
+      <p className="ci-today-find">
+        {t.plannerLead} <Link href={GUIDES.workCalendar[locale]}>{t.plannerLink}</Link>.
+      </p>
 
       {local.error ? null : (
         <div className="ci-today-local">
@@ -176,7 +171,7 @@ export async function HolidayToday({ locale, now }: { locale: Locale; now?: Date
         .
       </p>
 
-      <h3 className="ci-today-subtitle">{t.upcomingTitle}</h3>
+      <h3 className="ci-today-subtitle">{t.upcomingTitle.replace("{year}", String(COVERED_YEARS.at(-1)))}</h3>
       <table className="ci-table" role="table">
         <thead>
           <tr role="row">
@@ -187,7 +182,9 @@ export async function HolidayToday({ locale, now }: { locale: Locale; now?: Date
         </thead>
         <tbody>
           {upcoming.map((holiday) => {
-            const aran = aranSubstitutionFor(holiday.date);
+            // Both years' swaps (2026: 26 Dec, 2027: 29 Mar), from the holiday engine's copy of the orders.
+            const swap = aranSwap(Number(holiday.date.slice(0, 4)));
+            const aran = swap?.replaces === holiday.date ? swap : null;
             return (
               <tr key={holiday.date} role="row" aria-current={holiday.date === today ? "date" : undefined}>
                 <td data-label={t.colDate}>

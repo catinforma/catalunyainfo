@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
 import { test } from "node:test";
 
 import { bodySchema, bodyToPlainText, wordCount } from "../src/lib/content/blocks.ts";
@@ -16,7 +17,9 @@ import {
   shortDate,
   todayInCatalonia,
   weekdayIndex,
+  WEEKDAY_NAMES,
 } from "../src/lib/content/holidays/calendar.ts";
+import { todayAnswer, weekdayDate } from "../src/lib/content/holidays/today-answer.ts";
 import { COPY, buildBody } from "../src/lib/content/holidays/today-publish.ts";
 import {
   TODAY_DESCRIPTION_MAX,
@@ -28,6 +31,7 @@ import {
 import { COPY as PLANNER_COPY } from "../src/lib/content/holidays/copy.ts";
 import { LOCALES } from "../src/lib/i18n/config.ts";
 import { municipalityForCode } from "../src/lib/programmatic/holidays/data.ts";
+import { datePath, isDatePage } from "../src/lib/programmatic/holidays/paths.ts";
 
 /**
  * This page tells somebody whether they have to go to work. Being wrong by one
@@ -280,7 +284,8 @@ test("live title and description fit every covered day and name the next holiday
       assert.ok(!/hoy no es|avui no és|today is not/i.test(description!), `${iso} ${locale}`);
     }
   }
-  assert.equal(liveTodayTitle("es", "2026-10-30"), "¿Hoy es festivo en Cataluña? Próximo festivo: 8 de diciembre");
+  // 3 Nov 2026: the searchers' word order, as in the H1 ("¿Es festivo hoy en Cataluña?").
+  assert.equal(liveTodayTitle("es", "2026-10-30"), "¿Es festivo hoy en Cataluña? Próximo festivo: 8 de diciembre");
   assert.equal(liveTodayTitle("ca", "2026-12-08"), "Avui és festiu a Catalunya? Pròxim festiu: 8 de desembre");
   assert.match(liveTodayTitle("es", "2026-12-09")!, /25 de diciembre$/);
   assert.match(liveTodayDescription("es", "2026-10-30")!, /^Próximo festivo en toda Cataluña: martes 8 de diciembre \(la Inmaculada\)\./);
@@ -304,5 +309,103 @@ test("the FAQ asks in the searchers' words and links the coming local-holiday da
       const dec7 = { ca: "/ca/festius/dia/7-desembre-2026/", es: "/es/festivos/dia/7-diciembre-2026/", en: "/en/holidays/day/7-december-2026/" }[locale];
       assert.ok(text.includes(dec7), `${locale}: 7 Dec date page`);
     }
+  }
+});
+
+/* -------------------------------------------------------------------------- */
+/* First screen, 3 Nov 2026: dated answers and the next three holidays        */
+/* -------------------------------------------------------------------------- */
+
+test("the answer, tomorrow and the next three carry their own dates on every covered day", () => {
+  // The page is static HTML rebuilt by the nightly cron: a copy served before
+  // that rebuild must still be true, so no sentence may say "today" without
+  // naming the date, and none may count days.
+  for (let iso = "2026-01-01"; isCovered(iso); iso = addDays(iso, 1)) {
+    for (const locale of LOCALES) {
+      const a = todayAnswer(locale, iso);
+      const next = addDays(iso, 1);
+      assert.ok(a.answer.includes(weekdayDate(iso, locale)), `${iso} ${locale}: ${a.answer}`);
+      assert.equal(a.isHoliday, holidayOn(iso) !== null, `${iso} ${locale}`);
+      assert.match(a.answer, a.isHoliday ? /^(Sí|Yes):/ : /^No:/, `${iso} ${locale}`);
+      assert.ok(a.tomorrowValue.includes(weekdayDate(next, locale, next.slice(0, 4) !== iso.slice(0, 4))), `${iso} ${locale}: ${a.tomorrowValue}`);
+      assert.doesNotMatch(`${a.answer} ${a.tomorrowValue}`, /\d+ (dies|días|days)\b|d'aquí a|dentro de|\bin \d/, `${iso} ${locale}`);
+
+      // The next three: strictly after today, in order, each a Catalonia-wide
+      // holiday printed with the weekday that belongs to its date.
+      const expected = allHolidays().filter((h) => h.date > iso).slice(0, 3);
+      assert.deepEqual(a.next.map((n) => n.date), expected.map((h) => h.date), `${iso} ${locale}`);
+      for (const n of a.next) {
+        assert.ok(n.when.startsWith(WEEKDAY_NAMES[locale][weekdayIndex(n.date)]!), `${n.date} ${locale}: ${n.when}`);
+        assert.ok(n.when.includes(shortDate(n.date, locale)), `${n.date} ${locale}: ${n.when}`);
+        assert.equal(n.name, holidayOn(n.date)!.name[locale]);
+      }
+    }
+  }
+});
+
+test("today's answer, 3 Nov 2026, in each language", () => {
+  assert.equal(todayAnswer("es", "2026-11-03").answer, "No: hoy, martes 3 de noviembre, no es festivo en Cataluña.");
+  assert.equal(todayAnswer("ca", "2026-11-03").answer, "No: avui, dimarts 3 de novembre, no és festiu a Catalunya.");
+  assert.equal(todayAnswer("en", "2026-11-03").answer, "No: today, Tuesday 3 November, is not a public holiday in Catalonia.");
+  assert.equal(todayAnswer("es", "2026-11-03").tomorrowValue, "No — miércoles 4 de noviembre");
+  assert.deepEqual(
+    todayAnswer("es", "2026-11-03").next.map((n) => `${n.when} — ${n.name}`),
+    ["martes 8 de diciembre — la Inmaculada", "viernes 25 de diciembre — Navidad", "sábado 26 de diciembre — San Esteban"],
+  );
+  assert.equal(todayAnswer("es", "2026-12-08").answer, "Sí: hoy, martes 8 de diciembre, es festivo en Cataluña (la Inmaculada).");
+  // Across the year boundary the year is printed.
+  assert.equal(todayAnswer("es", "2026-12-26").next[0]?.when, "viernes 1 de enero de 2027");
+});
+
+test("Aran's swaps are flagged on the day, tomorrow and in the list (26 Dec 2026, 29 Mar 2027)", () => {
+  assert.match(todayAnswer("es", "2026-12-26").answer, /\(San Esteban; excepto en Arán\)\.$/);
+  assert.match(todayAnswer("ca", "2027-03-28").tomorrowValue, /\(excepte a l'Aran\)$/);
+  const list = todayAnswer("en", "2026-11-03").next;
+  assert.equal(list.find((n) => n.date === "2026-12-26")?.aran, "except in Aran");
+  assert.equal(list.find((n) => n.date === "2026-12-08")?.aran, null);
+});
+
+test("the next three link to their date pages, 2027 included", () => {
+  for (const locale of LOCALES) {
+    for (const n of todayAnswer(locale, "2026-11-03").next) assert.equal(n.href, datePath(locale, n.date), `${locale} ${n.date}`);
+    for (const n of todayAnswer(locale, "2027-01-02").next) {
+      assert.ok(isDatePage(n.date) && n.href?.endsWith("-2027/"), `${locale} ${n.date}: ${n.href}`);
+    }
+  }
+});
+
+test("a year with no published order gets neither yes nor no", () => {
+  for (const locale of LOCALES) {
+    const a = todayAnswer(locale, "2028-03-01");
+    assert.doesNotMatch(a.answer, /^(No|Sí|Yes):/, locale);
+    assert.equal(a.next.length, 0);
+    assert.ok(a.nextUnknown.length > 10);
+  }
+});
+
+test("the block is the first thing in the body, before the lead", () => {
+  for (const locale of LOCALES) assert.equal(buildBody(locale)[0]?.type, "holidayToday", locale);
+});
+
+test("the block takes its first screen from today-answer, links the year planner and counts no days", () => {
+  const source = readFileSync(new URL("../src/components/blocks/HolidayToday.tsx", import.meta.url), "utf8");
+  assert.match(source, /todayAnswer\(locale, today\)/);
+  assert.match(source, /GUIDES\.workCalendar\[locale\]/);
+  assert.doesNotMatch(source, /daysBetween|inDays/);
+});
+
+test("the live description names the next three holidays, the next one first", () => {
+  assert.equal(
+    liveTodayDescription("es", "2026-11-03"),
+    "Próximo festivo en toda Cataluña: martes 8 de diciembre (la Inmaculada). Después, 25 y 26 de diciembre. Si hoy o mañana es festivo y dónde es fiesta local.",
+  );
+  assert.match(liveTodayDescription("ca", "2026-11-03")!, /Després, 25 i 26 de desembre\./);
+  assert.match(liveTodayDescription("en", "2026-11-03")!, /Then 25 and 26 December\./);
+  assert.match(liveTodayDescription("es", "2026-12-25")!, /Después, 26 de diciembre y 1 de enero\./);
+  // Not "toda Cataluña" on a day Aran does not keep.
+  assert.match(liveTodayDescription("es", "2026-12-26")!, /^Próximo festivo en Cataluña: sábado 26 de diciembre/);
+  assert.match(liveTodayDescription("es", "2027-03-29")!, /^Próximo festivo en Cataluña: lunes 29 de marzo/);
+  for (const locale of LOCALES) {
+    assert.match(liveTodayTitle(locale, "2026-11-03")!, /^(Avui és festiu a Catalunya\?|¿Es festivo hoy en Cataluña\?|Is today a holiday in)/, locale);
   }
 });
