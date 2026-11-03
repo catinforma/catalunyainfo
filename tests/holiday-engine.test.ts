@@ -21,10 +21,26 @@ import {
   municipalityDescription,
   municipalityFaq,
   municipalityH1,
+  municipalityNextLine,
   municipalityTitle,
   sharedDayLead,
 } from "../src/lib/programmatic/holidays/copy.ts";
-import { NEXT, SNAPSHOT, YEAR, byComarca, comarcaBySlug, regionalDays, sharedDates, siblings, statusDays, yearRows } from "../src/lib/programmatic/holidays/data.ts";
+import {
+  NEXT,
+  SNAPSHOT,
+  YEAR,
+  byComarca,
+  comarcaBySlug,
+  councilApproved2027,
+  holidayRefreshDue,
+  nextHoliday,
+  nextYearFor,
+  regionalDays,
+  sharedDates,
+  siblings,
+  statusDays,
+  yearRows,
+} from "../src/lib/programmatic/holidays/data.ts";
 import { LOCAL_DATE_PAGES, dateContent, dateTitle, municipalityDatePages } from "../src/lib/programmatic/holidays/dates.ts";
 import {
   articleFirst,
@@ -34,7 +50,7 @@ import {
   parseRegionalOrder,
   parseShopResolution,
 } from "../src/lib/programmatic/holidays/dogc.ts";
-import { addDays, longDate } from "../src/lib/programmatic/holidays/format.ts";
+import { addDays, dayMonth, longDate } from "../src/lib/programmatic/holidays/format.ts";
 import { GUIDES } from "../src/lib/programmatic/holidays/links.ts";
 import { applyAmendments } from "../src/lib/programmatic/holidays/match.ts";
 import { caA, caComarca, caDe, esName, knownComarca } from "../src/lib/programmatic/holidays/names.ts";
@@ -63,6 +79,7 @@ import {
   resolveComarca,
   resolveDatePage,
   resolveMunicipality,
+  holidayRefreshPaths,
 } from "../src/lib/programmatic/holidays/routing.ts";
 import { SLUG_PATTERN, slugify } from "../src/lib/programmatic/holidays/slug.ts";
 import { statusFor, todayInMadrid } from "../src/lib/programmatic/holidays/status.ts";
@@ -947,26 +964,52 @@ test("slugs: ASCII, stable, and the date slugs round-trip", () => {
 /* -------------------------------------------------------------------------- */
 
 test("metadata: every title <= 60 and description <= 155, in the searched words with the year", () => {
-  // All 917 towns x 2 locales (tranche 3).
-  const bothYears: string[] = [];
+  // All 917 towns x 2 locales (tranche 3). CTR sweep, 3 Nov 2026: the question searchers type
+  // first ("hoy es festivo en lleida"), and next year only where the page has the town's 2027 days.
+  const plain: string[] = [];
   for (const m of SNAPSHOT.municipalities) {
+    const has2027 = Boolean(nextYearFor(m.slug) || councilApproved2027(m.slug));
     for (const locale of MUNI_LOCALES) {
       const title = municipalityTitle(m, locale);
-      const description = municipalityDescription(m, locale);
       const name = locale === "es" ? esName(m.name) : m.name;
+      const inQuestion = locale === "ca" ? caA(m.name) : `en ${name}`;
       assert.ok(title.length <= 60, `${title} (${title.length})`);
-      assert.ok(description.length <= 155, `${description} (${description.length})`);
-      assert.match(title, locale === "ca" ? /^Festius (locals )?/ : /^Festivos (locales )?/);
       assert.ok(title.includes(String(YEAR)), title);
-      // Both years whenever the shortest two-year form fits.
-      if (`Festivos ${name} ${YEAR} y ${NEXT}`.length <= 60) assert.ok(title.includes(String(NEXT)), title);
-      else bothYears.push(title);
-      assert.ok(title.includes(name), title);
-      assert.ok(description.includes(String(YEAR)));
-      assert.ok(description.includes(name), description);
+      assert.ok(title.includes(name) || title.includes(inQuestion), title);
+      const shortestQuestion = locale === "ca" ? `Avui és festiu ${caA(m.name)}? Festius ${YEAR}` : `¿Hoy es festivo en ${name}? Festivos ${YEAR}`;
+      if (shortestQuestion.length <= 60) assert.match(title, locale === "ca" ? /^Avui (o demà )?és festiu (a|al|als) .+\? Festius / : /^¿Hoy (o mañana )?es festivo en .+\? Festivos /, title);
+      else {
+        assert.match(title, locale === "ca" ? /^Festius / : /^Festivos /, title);
+        plain.push(title);
+      }
+      // 2027 in the title, H1 and description only with the town's 2027 days; then in the title whenever a two-year question fits.
+      if (!has2027) {
+        assert.ok(!title.includes(String(NEXT)), title);
+        assert.ok(!municipalityH1(m, locale).includes(String(NEXT)), municipalityH1(m, locale));
+      } else {
+        const twoYears = locale === "ca" ? `Avui és festiu ${caA(m.name)}? Festius ${YEAR}-${NEXT}` : `¿Hoy es festivo en ${name}? Festivos ${YEAR}-${NEXT}`;
+        if (twoYears.length <= 60) assert.ok(title.includes(String(NEXT)), title);
+        assert.ok(municipalityH1(m, locale).includes(String(NEXT)), municipalityH1(m, locale));
+      }
+      for (const today of [null, "2026-11-03", "2026-11-30", "2026-12-26"]) {
+        const description = municipalityDescription(m, locale, undefined, today);
+        assert.ok(description.length <= 155, `${description} (${description.length})`);
+        assert.ok(description.includes(String(YEAR)));
+        assert.ok(description.includes(name), description);
+        if (!has2027) assert.ok(!description.includes(String(NEXT)), description);
+        // The next holiday, when named, is dated and not before the render date.
+        const named = /(Próximo festivo|Pròxim festiu): (.+?)\./.exec(description);
+        if (named) {
+          assert.ok(today, description);
+          const next = nextHoliday(m, locale, today!)!;
+          assert.ok(next.row.date >= today! && !next.mayBeEarlier, description);
+          assert.ok(named[2]!.includes(dayMonth(next.row.date, locale)), description);
+        }
+      }
     }
   }
-  assert.deepEqual(bothYears, ["Festius Cruïlles, Monells i Sant Sadurní de l'Heura 2026", "Festivos Cruïlles, Monells i Sant Sadurní de l'Heura 2026"]);
+  assert.ok(plain.length < 20, plain.join("\n"));
+  assert.ok(plain.includes("Festius Cruïlles, Monells i Sant Sadurní de l'Heura 2026"), plain.join("\n"));
   // Comarca pages, 43 x 2.
   for (const g of byComarca()) {
     for (const locale of MUNI_LOCALES) {
@@ -978,19 +1021,22 @@ test("metadata: every title <= 60 and description <= 155, in the searched words 
       assert.ok(description.includes(g.comarca) && description.includes(String(YEAR)), description);
     }
   }
-  // Top-3 push, 30 Oct 2026: the tail asks the "hoy es festivo en …" question the status block answers.
-  // Girona's council has since approved its 2027 days (council-2027.ts), so its title gives them;
-  // without council data it is the question, as for Tarragona.
+  // CTR sweep, 3 Nov 2026: the question first. Girona's council has approved its 2027 days
+  // (council-2027.ts), so its title names both years; without them it names 2026 only, as Tarragona's.
   const girona = SNAPSHOT.municipalities.find((m) => m.slug === "girona")!;
-  assert.equal(municipalityTitle(girona, "ca", null), "Festius locals Girona 2026 i 2027: avui és festiu?");
-  assert.equal(municipalityTitle(girona, "es", null), "Festivos locales Girona 2026 y 2027: ¿hoy es festivo?");
-  assert.equal(municipalityTitle(SNAPSHOT.municipalities.find((m) => m.slug === "tarragona")!, "es"), "Festivos locales Tarragona 2026 y 2027: ¿hoy es festivo?");
-  assert.equal(municipalityTitle(girona, "ca"), "Festius Girona 2026 i 2027: 26 de juliol i 29 d'octubre");
-  assert.equal(municipalityTitle(girona, "es"), "Festivos Girona 2026 y 2027: 26 de julio y 29 de octubre");
-  assert.match(
-    municipalityDescription(SNAPSHOT.municipalities.find((m) => m.slug === "tarragona")!, "es"),
-    /^Festivos locales de Tarragona en 2026: 19 de agosto y 23 de septiembre\. Calendario laboral 2027/,
+  const tarragona = SNAPSHOT.municipalities.find((m) => m.slug === "tarragona")!;
+  assert.equal(municipalityTitle(girona, "ca", null), "Avui o demà és festiu a Girona? Festius locals 2026");
+  assert.equal(municipalityTitle(girona, "es", null), "¿Hoy o mañana es festivo en Girona? Festivos locales 2026");
+  assert.equal(municipalityTitle(tarragona, "es"), "¿Hoy o mañana es festivo en Tarragona? Festivos locales 2026");
+  assert.equal(municipalityTitle(girona, "ca"), "Avui o demà és festiu a Girona? Festius 2026 i 2027");
+  assert.equal(municipalityTitle(girona, "es"), "¿Hoy o mañana es festivo en Girona? Festivos 2026 y 2027");
+  assert.equal(municipalityH1(tarragona, "es"), "Festivos locales de Tarragona 2026");
+  assert.equal(
+    municipalityDescription(tarragona, "es", undefined, "2026-11-03"),
+    "Festivos locales de Tarragona en 2026: 19 de agosto y 23 de septiembre. Próximo festivo: martes 8 de diciembre (la Inmaculada). Si hoy o mañana es festivo.",
   );
+  // Without a render date (the Dataset): no next holiday, and still no 2027.
+  assert.equal(municipalityDescription(tarragona, "es"), "Festivos locales de Tarragona en 2026: 19 de agosto y 23 de septiembre. Si hoy o mañana es festivo y tiendas abiertas.");
   for (const locale of MUNI_LOCALES) {
     const hub = hubCopy(locale);
     assert.ok(hub.title.length <= 60 && hub.description.length <= 155, hub.title);
@@ -1007,6 +1053,58 @@ test("metadata: every title <= 60 and description <= 155, in the searched words 
   }
   assert.equal(dateQuestion("2026-12-08", "es"), "¿Es festivo el 8 de diciembre de 2026 en Cataluña?");
   assert.equal(dateQuestion("2027-01-01", "ca"), "És festiu l'1 de gener de 2027 a Catalunya?");
+});
+
+test("town page: the next holiday in the static HTML, rebuilt by the cron the night after each holiday", () => {
+  const town = (slug: string) => SNAPSHOT.municipalities.find((m) => m.slug === slug)!;
+  const terrassa = town("terrassa");
+  assert.deepEqual(municipalityNextLine(terrassa, "es", "2026-11-03"), {
+    lead: "Próximo festivo en Terrassa:",
+    date: "martes 8 de diciembre de 2026",
+    rest: "(la Inmaculada, en toda Cataluña).",
+  });
+  assert.deepEqual(municipalityNextLine(terrassa, "ca", "2026-11-03"), {
+    lead: "Pròxim festiu a Terrassa:",
+    date: "dimarts 8 de desembre de 2026",
+    rest: "(la Immaculada, a tot Catalunya).",
+  });
+  // On the holiday itself it names that day (the status box calls it today's); the day after, the next one.
+  assert.equal(municipalityNextLine(terrassa, "es", "2026-12-08")!.date, "martes 8 de diciembre de 2026");
+  assert.equal(municipalityNextLine(terrassa, "es", "2026-12-09")!.date, "viernes 25 de diciembre de 2026");
+  // Beyond the published local days: said, and kept out of the description.
+  const january = municipalityNextLine(terrassa, "ca", "2026-12-27")!;
+  assert.equal(january.date, "divendres 1 de gener de 2027");
+  assert.match(january.rest, /Els festius locals del 2027 encara no s'han publicat/);
+  assert.doesNotMatch(municipalityDescription(terrassa, "ca", undefined, "2026-12-27"), /Pròxim festiu/);
+  // A local day, and a nucleus's day named with its nucleus, as the status box names them.
+  assert.equal(municipalityNextLine(town("sant-boi-de-llobregat"), "es", "2026-11-03")!.rest, "(fiesta local).");
+  assert.equal(municipalityNextLine(town("sant-boi-de-llobregat"), "es", "2026-11-03")!.date, "lunes 7 de diciembre de 2026");
+  assert.equal(municipalityNextLine(town("naut-aran"), "ca", "2026-11-03")!.rest, "(festa local a Salardú).");
+
+  // The cron: every town the day after a Catalonia-wide holiday, ca and es, no trailing slash.
+  const all = holidayRefreshPaths("2026-12-09");
+  assert.equal(all.length, SNAPSHOT.municipalities.length * 2);
+  assert.ok(all.includes("/es/festivos/terrassa") && all.includes("/ca/festius/terrassa"));
+  assert.ok(all.every((p) => !p.endsWith("/")));
+  // Only Sant Boi and the other towns off on 7 Dec are rebuilt on the 8th (8 Dec itself is still "next").
+  const eighth = holidayRefreshPaths("2026-12-08");
+  assert.ok(eighth.includes("/es/festivos/sant-boi-de-llobregat") && !eighth.includes("/es/festivos/terrassa"));
+  // Whenever a town's next holiday moves on, that night is a refresh night for it (Nov 2026 - Jan 2027).
+  for (const m of SNAPSHOT.municipalities.filter((_, i) => i % 7 === 0)) {
+    for (let day = "2026-11-01"; day <= "2027-01-31"; day = addDays(day, 1)) {
+      const moved = nextHoliday(m, "es", addDays(day, -1))?.row.date !== nextHoliday(m, "es", day)?.row.date;
+      assert.equal(holidayRefreshDue(m, day), moved, `${m.slug} ${day}`);
+    }
+  }
+  const cron = readFileSync(join(ROOT, "src/app/api/cron/publish-scheduled/route.ts"), "utf8");
+  assert.match(cron, /holidayRefreshPaths\(todayInCatalonia\(\)\)/);
+  assert.ok(cron.indexOf("holidayRefreshPaths(") < cron.indexOf("getDb()"), "before the database step");
+  // The page prints it first, and the browser-computed answer stays out of search snippets.
+  const page = readFileSync(join(ROOT, "src/components/programmatic/holidays/MunicipalityPage.tsx"), "utf8");
+  assert.ok(page.indexOf("upcoming.lead") < page.indexOf("<HolidayStatus"), "the next holiday before the live box");
+  assert.ok(page.indexOf("<HolidayStatus") < page.indexOf("t.nextLead ?"), "the live box before the notes");
+  const status = readFileSync(join(ROOT, "src/components/programmatic/holidays/HolidayStatus.tsx"), "utf8");
+  assert.equal(status.match(/className="ci-today"[^>]*data-nosnippet/g)?.length, 2);
 });
 
 test("metadata: canonical and hreflang between the editions that exist, x-default as elsewhere", () => {

@@ -42,6 +42,13 @@ import {
  * special hours for 5 January; none are printed. "Every 20 minutes on every
  * line" became "on most lines": AMB's airport lines N17 and N18 run every 15
  * minutes (see the airport guide).
+ *
+ * 3 Nov 2026 (CTR sweep): EN 1,628 impressions, 3 clicks in two weeks at
+ * position 6.1; the largest query group is "is barcelona metro 24 hours" /
+ * "does the metro run all night". The EN description now opens with that
+ * question and answers it with TMB's all-night list (Saturdays, 23 June,
+ * 23 September, 31 December); the title, already answer-first since 30 Oct,
+ * is kept. No new facts.
  */
 
 const VERIFIED = "2026-10-30";
@@ -78,7 +85,7 @@ const META: Record<Locale, { path: string; title: string; seoTitle: string; seoD
     title: "Barcelona metro hours: what time it closes tonight, and when it runs all night",
     seoTitle: "Barcelona metro hours: closes 12am, 2am Fri, all night Sat",
     seoDescription:
-      "Last metro at midnight Sunday to Thursday and 2:00 on Fridays; on Saturdays it runs all night. Opens at 5:00. Closing time tonight, special nights, NitBus.",
+      "Is the Barcelona metro 24 hours? Not every night: last metro midnight Sun-Thu, 2:00 Fridays; Saturdays it runs all night, as on 23 June, 23 Sept, 31 Dec.",
     excerpt:
       "When the Barcelona metro opens and closes each day, the nights it runs non-stop, and how to get around once it shuts: NitBus, tram and funicular.",
   },

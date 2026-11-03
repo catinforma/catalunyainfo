@@ -40,6 +40,15 @@ export const FESTIVE_VERIFIED = "2026-10-25";
  * room home (latest items 29-30 Oct, none about Christmas), the "nadal-2026"
  * tag (latest 9 Jul 2026) and barcelona.cat/nadal: still nothing. In 2023,
  * 2024 and 2025 the date was out by 23, 14 and 16 October.
+ *
+ * Read again on 3 Nov 2026 (CTR sweep): press room search for "llums nadal"
+ * and the "nadal-2026" tag (latest Christmas items 8-9 Jul 2026; the 3 Nov
+ * items are about other things), barcelona.cat/nadal (still "es tornarà a
+ * actualitzar al voltant del mes de novembre del 2026") and
+ * firadesantallucia.cat (still the 2025 fair, "© ... 2025"): no 2026-27
+ * date for any of them. The printed date stays 30 Oct: a November 2026 date
+ * in these pages would read as a switch-on date, and festive-pages.test.ts
+ * refuses any (the 30 Oct check is still true).
  */
 export const ANNOUNCEMENTS_CHECKED = "2026-10-30";
 

@@ -228,6 +228,10 @@ export function liveSchoolTitle(locale: Locale, today: string): string {
       [`starts ${dayMonth(year.start, "en")}`, `starts ${enShort(year.start)}`],
     );
   } else if (today <= c1) {
+    // CTR sweep, 3 Nov 2026 (ca): the searchers' words, "vacances de nadal 2026"
+    // and "calendari escolar 2026 2027 catalunya", with the full school year.
+    const searched = `Calendari escolar ${year.label}: vacances de Nadal ${dm(c0)}-${dm(c1)}`;
+    if (locale === "ca" && searched.length <= SCHOOL_TITLE_MAX) return searched;
     tails = L(
       locale,
       [`Nadal del ${dm(c0)} al ${dm(c1)}`, `Nadal ${dm(c0)}-${dm(c1)}`],

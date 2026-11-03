@@ -1594,6 +1594,175 @@ cannibalisation.
 
 **Outcome:** _pending_
 
+## 2026-11-03 — CTR sweep: pages far below the site's CTR-by-position curve
+
+**Why now.** Owner priority: 1M impressions 30 Oct–15 Nov with the highest CTR
+possible. For this sweep the owner lifted the 28-day title freeze, so pages
+changed on 30–31 Oct are changed again here. That means two changes overlap in
+one window, which is accepted. Several things change together on some pages.
+Read the outcome per page, and treat it as a sweep, not a clean A/B.
+
+**Baseline.** Search Console, 21 Oct–3 Nov 2026 (`snapshot.py page … 14`):
+impressions, CTR, position, against the curve from `snapshot.py ctr` (pos 5 ≈
+6.0 %, pos 6 ≈ 3.2 %, pos 7 ≈ 1.2 %, pos 8 ≈ 0.6 %).
+
+### Holiday town pages (`/es/festivos/<town>/`, `/ca/festius/<town>/`, ~1,830 pages; deploy, no group)
+
+Baseline: 30.6k impressions a week, CTR 1.7 % at pos 6–8. Lleida 1,781 at
+0.2 %, Girona 1,686 at 0.2 %, Terrassa 1,251 at 0.4 %, Badalona 960 at 0.5 %,
+Sant Boi 552 at 0 %. Most impressions come from "hoy / mañana es festivo en
+<town>" (pos 8–10), then "festivos <town> 2027" and "calendario laboral <town>
+2027". The title asked the question last, or, in council towns, listed the
+2027 days as if they were both years'.
+
+- **Title:** the question first, in the searchers' words, then the years.
+  2027 appears only where the page has the town's 2027 days (council-2027.ts
+  or the DOGC order). The H1 follows the same rule.
+  - Lleida: "Festivos Lleida 2026 y 2027: 11 de mayo y 29 de septiembre" →
+    "¿Hoy o mañana es festivo en Lleida? Festivos 2026 y 2027"
+  - Terrassa: "Festivos locales Terrassa 2026 y 2027: ¿hoy es festivo?" →
+    "¿Hoy o mañana es festivo en Terrassa? Festivos locales 2026"
+  - Girona (ca): "Festius Girona 2026 i 2027: 26 de juliol i 29 d'octubre" →
+    "Avui o demà és festiu a Girona? Festius 2026 i 2027"
+- **Description:** the town's days (2027's first where they exist), then the
+  next holiday, dated.
+  - Terrassa: "…2 de abril y 6 de julio. Calendario laboral 2027, si hoy o
+    mañana es festivo y tiendas abiertas." → "…2 de abril y 6 de julio.
+    Próximo festivo: martes 8 de diciembre (la Inmaculada). Si hoy o mañana
+    es festivo."
+  - Badalona: "…En 2026: 11 y 25 de mayo." → "Festivos locales de Badalona
+    en 2027: 11 y 17 de mayo, aprobados por el Ayuntamiento. En 2026: 11 y 25
+    de mayo. Próximo festivo: 8 de diciembre."
+- **First screen:** a static first line, "Próximo festivo en Terrassa: martes
+  8 de diciembre de 2026 (la Inmaculada, en toda Cataluña)". The live
+  today/tomorrow box moves up, above the 2027, nuclei and correction notes.
+  The box gets `data-nosnippet`, so a crawl-day "Sí: hoy es festivo" is never
+  quoted on another day.
+- **Staying true:** the nightly cron now revalidates every town page the
+  night after each of its holidays (`holidayRefreshPaths`, same pattern as
+  the weekend pages), so "next holiday" never names a past day.
+
+### Holiday date page `/es/festivos/dia/7-diciembre-2026/` (deploy)
+
+Baseline: 791 impressions, 3.5 % at pos 5.1 (curve 6 %). "donde es festivo
+el 7 de diciembre de 2026" got 26 impressions at 6.0 and no clicks. The
+title is kept (date-page rule: the question, then at most the day's name).
+
+- Description: "No: … laborable en Cataluña. Es fiesta local en 43 municipios
+  y 2 núcleos: la lista, tiendas, escuelas y el puente del 8." → "No: …
+  laborable en Cataluña. Dónde es festivo: en 43 municipios y 2 núcleos, como
+  Sant Boi de Llobregat. La lista y el puente."
+
+### Christmas in Barcelona, ca/es/en (group `christmas-bcn`)
+
+Baseline: ES 4,980 impressions at 1.1 %, pos 6.2. CA 1,141 at 0.9 %. EN 258
+at 4.7 %. Top queries: "cuando encienden las luces de navidad en barcelona
+2026" (610, pos 6.1), "encendido luces navidad barcelona 2026" (439), "encesa
+llums nadal barcelona 2026" (332, pos 8.1).
+
+Re-checked 3 Nov: no 2026 date. The press room search and the `nadal-2026`
+tag show only the 9 Jul lighting plan. barcelona.cat/nadal still says it will
+be updated "al voltant del mes de novembre del 2026". The printed check date
+stays 30 Oct, because the test refuses any November 2026 date on these pages.
+
+The pending titles promised "data, hora i lloc" / "fecha, hora y lugar", a
+2026 date the page cannot give.
+
+- **Titles**
+  - es: "Encendido luces Navidad Barcelona 2026: fecha, hora y lugar" →
+    "Encendido luces Navidad Barcelona 2026: fecha por confirmar"
+  - ca: "…: data, hora i lloc" → "…: data per confirmar"
+  - en: "Barcelona Christmas lights 2026: switch-on date, what's open" →
+    "Barcelona Christmas lights 2026: streets, switch-on date TBC"
+- **Descriptions**
+  - es: → "¿Cuándo encienden las luces de Navidad en Barcelona 2026? Aún sin
+    fecha (2025: sábado 22 de noviembre, 18:00). Previstos 130 km de calles
+    con luces."
+  - ca: → "Encesa de llums de Nadal Barcelona 2026: encara sense data oficial
+    (el 2025, dissabte 22 de novembre, 18:00). Previstos 130 km de carrers amb
+    llums."
+  - en: → "When are Barcelona's Christmas lights switched on in 2026? No
+    official date yet (2025: Saturday 22 November, 18:00). 130 km of lit
+    streets planned."
+- **H1 (ca/es):** "…: data / fecha, pessebre…" → "…: quan / cuándo, pessebre…".
+  The lead already says that no date is announced.
+- When `ANNOUNCED_2026.lightsSwitchOn` is filled, the title and description
+  switch to the date by themselves.
+
+### School calendar, Catalan (live title; deploy)
+
+Baseline: 4,073 impressions at 1.1 %, pos 4.9 (curve 6 %). About 95 % of
+queries are anonymous. The visible ones are "vacances (escolars) de nadal
+2026" (pos 8–9.5) and "calendari escolar 2026 2027 catalunya" (9.2). CTR was
+already rising after 30 Oct, from 0.9 % to 1.6–1.8 %, so only the
+Christmas-phase wording changes.
+
+- Title: "Calendari escolar 2026-27 Catalunya: Nadal del 22/12 al 7/1" →
+  "Calendari escolar 2026-2027: vacances de Nadal 22/12-7/1"
+- The description and the lead are kept. The lead already gives the start,
+  end, Christmas and Easter dates.
+
+### Other guides (one line each; exact strings are in each file's header comment)
+
+- **`/ca/guies/la-marato-tv3-3cat/`** (group `marato`). Baseline 1,672 at
+  0.4 %, pos 6.3.
+  - Title: "…: 13 de desembre, causa i donatius" → "…: 13 de desembre,
+    voluntaris i donatius".
+  - The description now gives the volunteer pre-registration deadline (10
+    Nov, 3cat.cat). The key facts gain a line for it.
+  - **Replace that sentence after 10 Nov.**
+- **`/ca/guies/botigues-obertes-festius-catalunya/`** (group `shops`).
+  Baseline 1,013 at 2.4 %, pos 4.9.
+  - The description now opens with "Botigues obertes diumenges i festius
+    2026: a Barcelona queden…".
+  - The title is kept.
+- **`/en/guides/barcelona-metro-hours/`** (group `hours`). Baseline 1,628 at
+  0.2 %, pos 6.1.
+  - The description now opens with "Is the Barcelona metro 24 hours? Not
+    every night…".
+  - The title is kept.
+- **`/es/guias/aparcar-barcelona-zona-azul-verde/`** (group `parking`).
+  Baseline 5,268 at 0.2 %, pos 8.1.
+  - Title: "Zona azul y verde Barcelona: cómo funciona, horario y precio" →
+    "Horario zona azul y verde Barcelona: cuándo se paga y precio".
+  - The description and lead now open with the hours.
+  - The CA description is aligned (CA baseline 1,438 at 1.0 %).
+- **`/es/guias/semana-santa-2027-cataluna/` and its CA edition** (group
+  `setmana-santa-2027`). Baseline ES 646 at 3.3 %, CA 362 at 1.7 %.
+  - The description and the first sentence now name the week, "del 21 al 28
+    de marzo".
+  - Titles are kept.
+- **`/ca/guies/pont-desembre-catalunya/`** (group `pont-desembre`). Baseline
+  469 at 3.0 %, pos 4.6.
+  - Title: "Pont de desembre 2026 a Catalunya: quins dies són festius" →
+    "Pont de desembre 2026 a Catalunya: festiu el dimarts 8".
+
+**Skipped, because a snippet can't fix them.**
+
+- `/en/guides/barcelona-weather-by-month/`: queries sit at pos ~8.9, and it
+  gets 0 clicks even at pos 3–4. The answer is shown in the SERP.
+- `/en/guides/clock-change-spain/`: demand ended with the 25 Oct change, and
+  queries were at pos 10–11.
+- `/es/guias/tasa-turistica-barcelona-cataluna/` and
+  `/es/guias/tarjetas-transporte-barcelona/`: the titles already answer, and
+  the main queries rank 7–12.
+- `/es/guias/festivos-locales-cataluna/`: the 30 Oct title took CTR from about
+  1.0 % to 2.6 %. Left alone to measure.
+- `/en/guides/catalonia-school-calendar/`: its queries are one-word noise
+  ("si", "en barcelona", "??").
+
+**Prediction.** Town pages: CTR moves toward the curve at pos 6–8 (≥ 1.5 % on
+the "hoy/mañana es festivo en <town>" queries, from ≈ 0). Christmas ES: CTR ≥
+2 % on the switch-on queries while no date is out. Parking ES and metro EN:
+the only measurable change will be at the positions where they already rank.
+
+**Measure on 15 Nov 2026 (interim) and 1 Dec 2026.** For each page above:
+impressions, clicks, CTR and position, over the window since this deploy and
+publish, against this baseline. For the town family, use the five towns
+listed in the baseline plus the family total from `snapshot.py families`.
+
+**Outcome:** _pending_
+
 ## Candidates not yet run
 
 Recorded so they are not lost, and so they are not all started at once.

@@ -73,6 +73,17 @@ import {
  * tv3 2026"), and the FAQ answers "a quina hora", "on es veu" and "com ser
  * voluntari" as well as "quan és". Links: the Christmas fairs hub.
  *
+ * 3 Nov 2026 (CTR sweep): the CA page had 1,672 impressions and 7 clicks in
+ * two weeks at position 6.3, and "marató tv3 2026 data" took 0 clicks at
+ * position 4.3: the date alone is answered on the results page. The CA
+ * title swaps "causa" for "voluntaris" ("voluntaris marato tv3 2026" and
+ * variants) and the description names the cause and the volunteer
+ * deadline; a "Voluntaris" line joins the key facts. The volunteering page
+ * was re-read that day: pre-registration at marato.voluntariat.org from
+ * 10:00 on 20 Oct to 10:00 on 10 Nov, places drawn by lot, Sunday 13
+ * December, no start time. After 10 November the description's deadline
+ * is past and should be replaced.
+ *
  * No new photograph: the hero is the shops guide's lead picture (Christmas
  * lights), with the same alt text and caption.
  */
@@ -112,9 +123,9 @@ export const MARATO_META: Record<Locale, { path: string; title: string; seoTitle
   ca: {
     path: "guies/la-marato-tv3-3cat",
     title: "La Marató de TV3 2026: diumenge 13 de desembre, a què es dedica i com fer un donatiu",
-    seoTitle: "La Marató de TV3 2026: 13 de desembre, causa i donatius",
+    seoTitle: "La Marató de TV3 2026: 13 de desembre, voluntaris i donatius",
     seoDescription:
-      "La Marató de TV3 2026 és el diumenge 13 de desembre i es dedica a les malalties neurodegeneratives i neuromusculars. Com veure-la i fer un donatiu.",
+      "La Marató de TV3 és el diumenge 13 de desembre, per a les malalties neurodegeneratives i neuromusculars. Voluntaris: preinscripció fins al 10 de novembre.",
     excerpt:
       "La Marató 2026, la 35a: quan és, a quines malalties es dedica, qui la presenta, com veure-la i com col·laborar-hi per canals oficials.",
   },
@@ -159,6 +170,7 @@ export function buildMaratoBody(locale: Locale): Block[] {
         { label: "On es veu", value: "TV3 i Catalunya Ràdio, i en directe a 3cat.cat" },
         { label: "Presentadors", value: "Raquel Sans i Miki Núñez (TV3); Roger Escapa (Catalunya Ràdio)" },
         { label: "Donatius", value: `Per internet, per Bizum (codi ${MARATO.bizum}) o per transferència, des de la pàgina oficial` },
+        { label: "Voluntaris", value: "Preinscripció a marato.voluntariat.org fins a les 10 h del 10 de novembre de 2026; les places se sortegen" },
         { label: "Horari del programa", value: "Encara no s'ha publicat" },
       ]),
       callout(

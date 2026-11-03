@@ -299,7 +299,7 @@ export const DECEMBER_BRIDGE_META: Record<Locale, { path: string; title: string;
   ca: {
     path: "guies/pont-desembre-catalunya",
     title: "Pont de desembre 2026 a Catalunya: quins dies són festius, escoles i botigues",
-    seoTitle: "Pont de desembre 2026 a Catalunya: quins dies són festius",
+    seoTitle: "Pont de desembre 2026 a Catalunya: festiu el dimarts 8",
     seoDescription:
       "Festius de desembre 2026 a Catalunya: dimarts 8 (la Immaculada), 25 i 26. El 6 cau en diumenge i el dilluns 7 és feiner, llevat de 43 municipis.",
     excerpt:

@@ -76,7 +76,8 @@ export function municipalityMetadata(locale: MuniLocale, slug: string): Metadata
     locale,
     path: municipalityPath(locale, m.slug),
     title: municipalityTitle(m, locale),
-    description: municipalityDescription(m, locale),
+    // Names the next holiday as of the render date; the cron rebuilds the page after each holiday.
+    description: municipalityDescription(m, locale, undefined, todayInCatalonia()),
     translations: municipalityTranslations(m.slug),
   });
 }

@@ -240,12 +240,13 @@ test("an announced date replaces the 'not announced' line, with the right weekda
 test("the Christmas snippet answers 'when are the lights switched on' and the leads carry the announcements check date (30 Oct 2026)", () => {
   assert.equal(ANNOUNCEMENTS_CHECKED, "2026-10-30");
   assert.ok(ANNOUNCEMENTS_CHECKED >= FESTIVE_VERIFIED);
-  // Seasonal top-3 push (30 Oct, afternoon): last year's time and place, from
-  // the City Council's note of that week, follow last year's day.
+  // Seasonal top-3 push (30 Oct, afternoon): last year's time, from the City
+  // Council's note of that week, follows last year's day. CTR sweep (3 Nov):
+  // the searchers' words first, and the 2026 plan only as planned.
   const notYet: Record<Locale, RegExp> = {
-    ca: /^Encesa de llums de Nadal de Barcelona 2026: encara sense data oficial \(el 2025, dissabte 22 de novembre, a les 18:00 al passeig de Gràcia\)/,
-    es: /^Encendido de luces de Navidad de Barcelona 2026: aún sin fecha oficial \(en 2025, sábado 22 de noviembre, a las 18:00 en el paseo de Gràcia\)/,
-    en: /^Barcelona Christmas lights 2026: switch-on date not announced yet \(2025: Saturday 22 November, 18:00, Passeig de Gràcia\)/,
+    ca: /^Encesa de llums de Nadal Barcelona 2026: encara sense data oficial \(el 2025, dissabte 22 de novembre, 18:00\)\. Previstos 130 km de carrers amb llums\.$/,
+    es: /^¿Cuándo encienden las luces de Navidad en Barcelona 2026\? Aún sin fecha \(2025: sábado 22 de noviembre, 18:00\)\. Previstos 130 km de calles con luces\.$/,
+    en: /^When are Barcelona's Christmas lights switched on in 2026\? No official date yet \(2025: Saturday 22 November, 18:00\)\. 130 km of lit streets planned\.$/,
   };
   const checked: Record<Locale, RegExp> = { ca: /comprovat el 30 d'octubre de 2026/, es: /comprobado el 30 de octubre de 2026/, en: /checked on 30 October 2026/ };
   for (const locale of LOCALES) {
@@ -318,14 +319,17 @@ test("the 2023 switch-on, added on 30 Oct 2026, is printed with 2023 and never w
 /* Seasonal top-3 push (30 Oct 2026): title, pattern of past switch-ons, FAQ  */
 /* -------------------------------------------------------------------------- */
 
-test("the lights title promises date, time and place until the date is out, then gives the date, always within 60", () => {
+test("the lights title says the date is to be confirmed until it is out, then gives the date, always within 60", () => {
+  // CTR sweep, 3 Nov 2026: the pending title said "data, hora i lloc", a 2026
+  // date the page cannot give; it now says the date is still to be confirmed.
   const pending: Record<Locale, string> = {
-    ca: "Encesa de llums de Nadal Barcelona 2026: data, hora i lloc",
-    es: "Encendido luces Navidad Barcelona 2026: fecha, hora y lugar",
-    en: "Barcelona Christmas lights 2026: switch-on date, what's open",
+    ca: "Encesa de llums de Nadal Barcelona 2026: data per confirmar",
+    es: "Encendido luces Navidad Barcelona 2026: fecha por confirmar",
+    en: "Barcelona Christmas lights 2026: streets, switch-on date TBC",
   };
   for (const locale of LOCALES) {
     assert.equal(christmasBarcelonaTitle(locale, NONE), pending[locale], locale);
+    assert.match(christmasBarcelonaTitle(locale, NONE), /per confirmar|por confirmar|TBC/, locale);
     assert.equal(CHRISTMAS_BARCELONA.editions[locale].seoTitle, christmasBarcelonaTitle(locale), locale);
   }
   // Every possible switch-on day of the season, with and without a time.
