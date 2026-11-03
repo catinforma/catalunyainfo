@@ -168,8 +168,23 @@ test("sources are official https pages and the reader sees the verification date
     assert.match(source.url, /^https:\/\/(www\.)?(boe\.es|ine\.es|juntaelectoralcentral\.es|29neleccionesgenerales\.es)\//, source.url);
     assert.doesNotMatch(source.url, /aerobusbcn|[?&]utm_/);
   }
-  assert.equal(CANDIDATES.verifiedAt, "2026-10-30");
+  assert.equal(CANDIDATES.verifiedAt, "2026-11-03");
   for (const locale of LOCALES) assert.match(text(locale), /verificaci|verified/i, locale);
+});
+
+test("the lead says the proclaimed lists are out, linking the BOE of 3 Nov 2026 (BOE-A-2026-23103, read 3 Nov)", () => {
+  const proclaimed = "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2026-23103";
+  assert.ok(CANDIDATES.sources.some((s) => s.url === proclaimed));
+  const said = { ca: /les proclamades, també/, es: /las proclamadas, también/, en: /So are the final, proclaimed lists/ };
+  const snippet = { ca: /proclamades al BOE del 3 de novembre/, es: /proclamadas \(BOE del 3 de noviembre\)/, en: /proclaimed in the BOE on 3 Nov/ };
+  for (const locale of LOCALES) {
+    const leadBlock = JSON.stringify(CANDIDATES.editions[locale].blocks[0]);
+    assert.ok(leadBlock.includes(`](${proclaimed})`), locale);
+    assert.match(leadBlock, said[locale], locale);
+    assert.match(CANDIDATES.editions[locale].seoDescription, snippet[locale], `${locale}: description`);
+    // The FAQ no longer speaks of 3 November as a future date.
+    assert.doesNotMatch(text(locale), /surten al BOE el 3 de novembre|salen en el BOE el 3 de noviembre|appear in the BOE on 3 November/, locale);
+  }
 });
 
 test("the lead says the filed lists are out, linking the BOE of 28 Oct 2026 (BOE-A-2026-22607, read 30 Oct)", () => {

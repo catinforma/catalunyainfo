@@ -76,7 +76,42 @@ test("mesa: no payment date or method is invented, and the amount is sourced", (
   const urls = MESA.sources.map((s) => s.url);
   assert.ok(urls.includes("https://www.boe.es/buscar/act.php?id=BOE-A-2026-13948"), "Orden INT/650/2026");
   assert.ok(urls.includes("https://29neleccionesgenerales.es/pdf/miembros_mesas/MMM_G2026_castellano_para_web.pdf"), "29N manual");
-  assert.equal(MESA.verifiedAt, "2026-10-28");
+  assert.equal(MESA.verifiedAt, "2026-11-03");
+});
+
+/* -------------------------------------------------------------------------- */
+/* Mesa electoral, 3 Nov 2026: today's questions on the first screen          */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * The draw ends on 4 Nov and notices run to 7 Nov (Interior's 29N mesa page,
+ * JEC calendar; LOREG 27.2-27.4 and 143, re-read 3 Nov 2026). Right under the
+ * lead, a key-facts block answers: have I been drawn, what now, the excuse
+ * deadline and where to file it (paper or the Cl@ve platform Interior links,
+ * JEC Instrucción 2/2023), the pay, time off and the penalty. Nothing in it
+ * may invent a payment date or an online "were you drawn" lookup.
+ */
+test("mesa: a key-facts block right after the lead answers today's questions", () => {
+  const app = "https://www.mesaselectorales.es/web-excusas-form/#/login";
+  const words: Record<Locale, RegExp[]> = {
+    ca: [/notificació/, /7 de novembre/, /7 dies des de la notificació/, /Junta Electoral de Zona/, /Cl@ve/, /75 €/, /dilluns 30 de novembre/, /delicte/, /65 anys/],
+    es: [/notificación/, /7 de noviembre/, /7 días desde la notificación/, /Junta Electoral de Zona/, /Cl@ve/, /75 €/, /lunes 30 de noviembre/, /delito/, /65 años/],
+    en: [/notification/, /7 November/, /7 days from the notification/, /Junta Electoral de Zona/, /Cl@ve/, /€75/, /Monday 30 November/, /criminal offence/, /65/],
+  };
+  for (const locale of LOCALES) {
+    const all = MESA.editions[locale].blocks as unknown as { type: string; items?: { label: string; value: string }[] }[];
+    assert.equal(all[0]?.type, "paragraph", `${locale}: lead first`);
+    assert.equal(all[1]?.type, "keyFacts", `${locale}: key facts second`);
+    const facts = (all[1]?.items ?? []).map((item) => `${item.label} ${item.value}`).join(" ");
+    for (const pattern of words[locale]) assert.match(facts, pattern, `${locale}: ${pattern}`);
+    assert.ok(facts.includes(`](${app})`), `${locale}: the excuse platform Interior links to`);
+    assert.doesNotMatch(facts, /transfer|transferencia|transferència|bizum|cheque|\bxec\b/i, `${locale}: payment method`);
+    // The lead names the notice deadline and the 7 days in the first screen.
+    assert.match(leadOf(MESA, locale), /7 (de )?(novembre|noviembre|November)/, `${locale}: notice deadline in the lead`);
+  }
+  const urls = MESA.sources.map((s) => s.url);
+  assert.ok(urls.includes("https://www.boe.es/diario_boe/txt.php?id=BOE-A-2023-9416"), "JEC Instrucción 2/2023");
+  assert.ok(urls.includes("https://29neleccionesgenerales.es/informacion-mesas/informacion-general/recurso-contra-la-designacion-impedimentos-y-excusas/"), "Interior's excuses page");
 });
 
 /* -------------------------------------------------------------------------- */
@@ -177,7 +212,8 @@ test("voting: MiDNI stays suspended; the JEC's 22 Oct condition is cited, not re
   for (const locale of LOCALES) {
     const text = bodyToPlainText(VOTING.editions[locale].blocks);
     assert.match(text, /(Acuerdo|Acord) 295\/2026/, `${locale}: Acuerdo 295/2026`);
-    assert.match(text, /28 (d'|de )?(octubre|October)/, `${locale}: dated`);
+    // Dated: re-checked on 3 Nov 2026 against the JEC's sessions to 29 Oct.
+    assert.match(text, /a 3 de (novembre|noviembre) (encara no|aún no)|not done so by 3 November/, `${locale}: dated`);
     assert.doesNotMatch(text, /MiDNI[^.]*(és vàlid|es válid|is valid|is accepted|s'accepta|se acepta|ja serveix|ya sirve)/i, `${locale}: MiDNI presented as valid`);
   }
   assert.ok(VOTING.sources.some((s) => s.url.includes("idacuerdoinstruccion=154752")), "Acuerdo 295/2026 in sources");
@@ -189,19 +225,22 @@ test("voting: MiDNI stays suspended; the JEC's 22 Oct condition is cited, not re
 
 test("titles and descriptions are exactly what main serves (measurement windows)", () => {
   const frozen = {
-    // Changed in the 30 Oct 2026 CTR sweep (owner lifted the 14 Nov freeze;
-    // logged in docs/SEO_EXPERIMENTS.md): the draw window leads the snippet.
+    // Changed on 3 Nov 2026 (owner's "right now" push lifted the freezes;
+    // logged in docs/SEO_EXPERIMENTS.md, measured 15 Nov and 1 Dec): the
+    // snippet answers "have I been drawn" (notice by 7 Nov), the 7 days to
+    // object and where, the €75 and Monday's five hours.
     mesa: {
-      ca: ["Membre de mesa electoral: què fer si t'ha tocat, quant es cobra i com excusar-te", "Membre de mesa electoral 2026: 75 €, sorteig i excuses", "Sorteig del 31 d'octubre al 4 de novembre; t'ho notifiquen en 3 dies i en tens 7 per excusar-te. Es cobren 75 € sense IRPF. Què fer si et toca."],
-      es: ["Miembro de mesa electoral: qué hacer si te ha tocado, cuánto se cobra y cómo excusarte", "Mesa electoral 2026: se cobran 75 €, sorteo y excusas", "Sorteo del 31 de octubre al 4 de noviembre; te lo notifican en 3 días y tienes 7 para excusarte. Se cobran 75 € sin IRPF. Qué hacer si te toca."],
-      en: ["Drawn for polling-station duty in Spain on 29 November: the €75 pay, excuses and what to do", "Polling-station duty in Spain 2026: €75 pay, excuses, time off", "Draw from 31 Oct to 4 Nov; you are notified within 3 days and have 7 to ask to be excused. The €75 allowance is tax-free. What to do if drawn."],
+      ca: ["Membre de mesa electoral: com saber si t'ha tocat, què fer, quant es cobra i com excusar-te", "Membre de mesa electoral 2026: si t'ha tocat, excusa i 75 €", "T'ho notifiquen fins al 7 de novembre; tens 7 dies per excusar-te a la Junta Electoral de Zona, també en línia. Dieta de 75 € i 5 h menys el dilluns 30."],
+      es: ["Mesa electoral: cómo saber si te ha tocado, qué hacer, cuánto se cobra y cómo excusarte", "Mesa electoral 2026: si te ha tocado, plazo de excusa y 75 €", "Notificación hasta el 7 de noviembre; luego, 7 días para excusarte ante la Junta Electoral de Zona, también en línea. Dieta de 75 € y 5 h menos el lunes."],
+      en: ["Drawn for polling-station duty (mesa electoral) in Spain on 29 November: what to do, excuses and the €75 pay", "Polling-station duty in Spain (mesa electoral): €75, excuses", "Notified by 7 Nov? You have 7 days to ask the Junta Electoral de Zona to excuse you, online with Cl@ve too. €75 tax-free, 5 hours off on Monday 30 Nov."],
     },
-    // Changed in the 30 Oct 2026 top-3 push (owner lifted the freeze; logged in docs/SEO_EXPERIMENTS.md).
+    // Changed on 3 Nov 2026 (same push): ca in the words of "quan són les
+    // properes eleccions", es with "29N" back, en front-loads "2026 spain
+    // general election"; descriptions give the dates, the finder and 19 Nov.
     voting: {
-      ca: ["Properes eleccions a Catalunya: quan són i com votar el 29 de novembre (on, horari, vot per correu)", "Properes eleccions a Catalunya: quan són i on votar el 29N", "Són el diumenge 29 de novembre de 2026 (generals), de 9 a 20 h. On voto: cercador de l'INE, sense DNI ni Cl@ve. Vot per correu fins al 19 de novembre."],
-      es: ["Próximas elecciones en Cataluña: cuándo son y cómo votar el 29 de noviembre (dónde, horario, voto por correo)", "Próximas elecciones en Cataluña: cuándo son y dónde votar", "Son el domingo 29 de noviembre de 2026 (generales), de 9 a 20 h. Dónde voto: buscador del INE, sin DNI ni Cl@ve. Voto por correo hasta el 19 de noviembre."],
-      // EN title and description changed again in the 30 Oct 2026 CTR sweep wave 4 (before deploy): the date back in the title, who can vote in the description.
-      en: ["How to vote in Spain's 2026 general election on 29 November: registration, polling stations and dates", "Spain general election 29 Nov 2026: how to vote, register", "Sunday 29 November, polls 9:00-20:00. Only Spanish citizens can vote; no sign-up, the roll is automatic. Find your polling station; postal vote by 19 Nov."],
+      ca: ["Quan són les properes eleccions a Catalunya i com votar el 29 de novembre (on, horari, vot per correu)", "Quan són les properes eleccions a Catalunya? 29N i on votar", "Generals: diumenge 29 de novembre, 9-20 h. Municipals previstes: 23 de maig de 2027. Mira on votes sense DNI. Vot per correu fins al 19 de novembre."],
+      es: ["Próximas elecciones en Cataluña: cuándo son y cómo votar el 29 de noviembre (dónde, horario, voto por correo)", "Próximas elecciones en Cataluña: 29N, cuándo y dónde votar", "Generales: domingo 29 de noviembre, 9-20 h. Municipales previstas: 23 de mayo de 2027. Mira dónde votas sin DNI. Voto por correo hasta el 19 de noviembre."],
+      en: ["How to vote in Spain's 2026 general election on 29 November: registration, polling stations and dates", "2026 Spain general election (29 Nov): how to vote, register", "Sunday 29 Nov, 9:00-20:00. Only Spanish citizens can vote; the roll is automatic. Find your polling station, ID rules; postal vote request by 19 Nov."],
     },
   };
   for (const locale of LOCALES) {
