@@ -29,7 +29,7 @@ import { BEACHES_GUIDE } from "../src/lib/content/batch02/beaches.ts";
 import { MESA } from "../src/lib/content/batch02/mesa.ts";
 import { MUNICIPAL_RESULTS } from "../src/lib/content/batch02/municipal-results.ts";
 import { CLIMATE } from "../src/lib/content/batch02/climate.ts";
-import { SHOPS, TOWNS_NOV_DEC } from "../src/lib/content/batch02/shops.ts";
+import { SHOPS, TOWNS_NOV_DEC, closedOn } from "../src/lib/content/batch02/shops.ts";
 import { parseShopResolution } from "../src/lib/programmatic/holidays/dogc.ts";
 import { ELECTION_NIGHT } from "../src/lib/content/batch02/election-night.ts";
 import { CONGRESS_RESULTS, PARLIAMENT_RESULTS } from "../src/lib/content/batch02/election-results.ts";
@@ -572,13 +572,60 @@ test("shops: the November-December towns table is the DOGC resolution's, town by
     assert.ok(first.text.includes(` ${no8} `), `${locale}: lead says ${no8} towns`);
     assert.ok(SHOPS.editions[locale].seoDescription.includes(` ${TOWNS_NOV_DEC.length} `), `${locale}: description count`);
   }
-  assert.equal(SHOPS.editions.es.seoTitle, "Domingos y festivos de apertura 2026 en Cataluña y Barcelona");
-  // 30 Oct 2026, CTR sweep wave 4: the CA title in the same words as the ES one.
-  assert.equal(SHOPS.editions.ca.seoTitle, "Festius i diumenges d'obertura 2026 a Catalunya i Barcelona");
+  // 3 Nov 2026 (29N push, owner request; was "Domingos y festivos de apertura
+  // 2026 en Cataluña y Barcelona" from 30 Oct): the searchers' words and the
+  // next opening day. The CA title follows the ES one, as on 30 Oct.
+  assert.equal(SHOPS.editions.es.seoTitle, "Tiendas abiertas en Barcelona: domingo 29 nov y diciembre");
+  assert.equal(SHOPS.editions.ca.seoTitle, "Botigues obertes a Barcelona: diumenge 29 nov i desembre");
   const caFaq = SHOPS.editions.ca.blocks.find((b) => b.type === "faq") as { items: { question: string; answer: string }[] } | undefined;
   assert.equal(caFaq?.items[0]?.question, "Quins festius d'obertura comercial queden el 2026?");
   assert.ok(caFaq?.items[0]?.answer.includes(` ${TOWNS_NOV_DEC.length} municipis`), "ca: FAQ counts the towns from the table");
-  assert.equal(SHOPS.verifiedAt, "2026-10-30");
+  assert.equal(SHOPS.verifiedAt, "2026-11-03");
+});
+
+/**
+ * Shops, 3 Nov 2026 (29N and Christmas push): the first table answers the
+ * dated questions of the next weeks. The closing days of Llei 18/2017 art.
+ * 36.2.d (25 and 26 Dec, 1 and 6 Jan) are "No" in both columns and cite the
+ * article; polling day (29 Nov) is "Yes" in Barcelona and names exactly the
+ * towns of the DOGC resolution that swapped it; every town the table names
+ * as an exception is in the towns table; and Barcelona's 2027 days, not
+ * published on 3 Nov, are never given as dates.
+ */
+test("shops: the date table answers 29N, Christmas and Reis from the DOGC and the retail law", () => {
+  const towns = new Set(TOWNS_NOV_DEC.map((t) => t.town));
+  for (const locale of ["ca", "es", "en"] as const) {
+    const blocks = SHOPS.editions[locale].blocks;
+    const dates = blocks.filter((b) => b.type === "table")[0] as { headers: string[]; rows: string[][]; caption: string };
+    assert.equal(dates.headers.length, 4, `${locale}: date, Catalonia, Barcelona, basis`);
+    const row = (re: RegExp) => {
+      const found = dates.rows.find((r) => re.test(r[0]!));
+      assert.ok(found, `${locale}: no row for ${re}`);
+      return found!;
+    };
+    for (const re of [/^(Divendres|Viernes|Friday) 25 /, /^(Divendres|Viernes|Friday) 1 /, /^(Dimecres|Miércoles|Wednesday) 6 /]) {
+      const r = row(re);
+      assert.match(r[1]!, /^\*\*No\*\*/, `${locale}: ${r[0]} Catalonia`);
+      assert.equal(r[2], "**No**", `${locale}: ${r[0]} Barcelona`);
+      assert.match(r[3]!, /18\/2017, art\. 36\.2\.d/, `${locale}: ${r[0]} basis`);
+    }
+    const poll = row(/29 (de novembre|de noviembre|November)/);
+    assert.match(poll[0]!, /eleccions|elecciones|election/, `${locale}: polling day named`);
+    assert.match(poll[2]!, /^\*\*(Sí|Yes)\*\*$/, `${locale}: Barcelona opens on 29 Nov`);
+    for (const town of closedOn("2026-11-29")) assert.ok(poll[1]!.includes(town), `${locale}: ${town} on 29 Nov`);
+    // The exceptions name towns of the resolution.
+    const named = dates.rows.flatMap((r) => [...towns].filter((name) => r[1]!.includes(name)));
+    assert.ok(named.length > 0 && named.every((name) => towns.has(name)), `${locale}: exceptions from the towns table`);
+    // Barcelona's 2027 municipal days are not published: the default day is not given as Barcelona's.
+    const tenJan = row(/^(Diumenge|Domingo|Sunday) 10 /);
+    assert.doesNotMatch(tenJan[2]!, /^\*\*(Sí|Yes)\*\*/, `${locale}: Barcelona 10 Jan 2027 is pending`);
+    assert.match(tenJan[2]!, /Pendent|Pendiente|Pending/, `${locale}: Barcelona 10 Jan 2027 is pending`);
+    const lead = blocks.find((b) => b.type === "paragraph") as { text: string };
+    assert.match(lead.text, /29 (de novembre|de noviembre|November)/, `${locale}: lead answers 29 Nov`);
+    assert.match(lead.text, /eleccions|elecciones|election/, `${locale}: lead names the election`);
+    assert.match(lead.text, /3 (de gener|de enero|January)/, `${locale}: lead gives the first 2027 day`);
+    assert.match(bodyToPlainText(blocks), /605\/1999/, `${locale}: paid hours to vote cited`);
+  }
 });
 
 /**
