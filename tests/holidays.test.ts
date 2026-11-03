@@ -1,7 +1,9 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
 
-import { bodySchema, bodyToPlainText, wordCount } from "../src/lib/content/blocks.ts";
+import { bodySchema, bodyToPlainText, slugifyAnchor, wordCount } from "../src/lib/content/blocks.ts";
+import { HOLIDAYS_BY_YEAR } from "../src/lib/content/holidays/calendar.ts";
+import { datePath } from "../src/lib/programmatic/holidays/paths.ts";
 import {
   ARAN_REPLACEMENT,
   BARCELONA_LOCAL,
@@ -381,5 +383,81 @@ test("the 30 October question is gone; 2 November points to the 1 November date 
     assert.ok(!/30 d'octubre és festiu|30 de octubre es festivo/.test(text), locale);
     assert.match(text, /2 de novembre és festiu|2 de noviembre es festivo/, locale);
     assert.ok(text.includes(nov1[locale]), `${locale}: ${nov1[locale]}`);
+  }
+});
+
+/* -------------------------------------------------------------------------- */
+/* 2027 leads, 3 Nov 2026                                                     */
+/* -------------------------------------------------------------------------- */
+
+test("first screen: the opening sentence, the 2027 table, then the last days of 2026, before any planning", () => {
+  for (const locale of LOCALES) {
+    const copy = COPY[locale];
+    const body = buildBody(locale);
+    assert.ok(body[0]?.type === "paragraph" && body[0].lead, `${locale}: lead first`);
+    assert.ok(body[1]?.type === "heading" && body[1].text === copy.tableTitle, `${locale}: 2027 heading second`);
+    const table = body[2];
+    assert.ok(table?.type === "table", `${locale}: 2027 table third`);
+    assert.equal(table.rows.length, 12, locale);
+    // Each row: the date linked to its own 2027 page, the weekday computed from it, the name.
+    CATALONIA_HOLIDAYS.forEach((holiday, i) => {
+      const row = table.rows[i]!;
+      assert.equal(row[0], `[${formatDay(holiday.date, copy, locale)}](${datePath(locale, holiday.date)})`, `${locale} ${holiday.date}`);
+      assert.ok(row[0]!.endsWith("-2027/)"), `${locale} ${holiday.date}`);
+      assert.equal(row[1], weekdayOf(holiday.date, copy));
+      assert.equal(row[2], holiday.name[locale]);
+    });
+    // Barcelona's two local days under the table, from the payload, linked to the town page.
+    const root = { ca: "/ca/festius/", es: "/es/festivos/", en: "/en/holidays/" }[locale];
+    assert.ok(table.note?.includes(`[Barcelona](${root}barcelona/)`), `${locale}: ${table.note}`);
+    for (const h of BARCELONA_LOCAL) assert.ok(table.note?.includes(formatDay(h.date, copy, locale)), `${locale}: ${h.date}`);
+    assert.ok(!table.note?.includes("{bcn}"), locale);
+
+    const last = body[3];
+    assert.ok(last?.type === "callout" && last.title === copy.last2026Title, `${locale}: 2026 callout fourth`);
+    // 8, 25 and 26 December 2026, each linked to its date page with its weekday; 7 December said not to be one.
+    for (const iso of ["2026-12-08", "2026-12-25", "2026-12-26", "2026-12-07"]) {
+      assert.ok(last.text.includes(`[${formatDay(iso, copy, locale)}](${datePath(locale, iso)})`), `${locale}: ${iso}`);
+      assert.ok(last.text.toLowerCase().includes(`${weekdayOf(iso, copy).toLowerCase()} [`), `${locale}: weekday of ${iso}`);
+    }
+    // ...and it sends readers to the full 2026 table further down, by its real anchor.
+    assert.ok(last.text.includes(`(/${locale}/${copy.path}/#${slugifyAnchor(copy.year2026Title)})`), `${locale}: 2026 anchor`);
+    assert.ok(!/\{(days|dec7|link)\}/.test(last.text), locale);
+    // The bridges and key facts come after the dates.
+    const facts = body.findIndex((b) => b.type === "keyFacts");
+    assert.ok(facts > 3, `${locale}: key facts after the dates`);
+  }
+});
+
+test("search titles front-load the 2027 work calendar, and the descriptions carry the dates", () => {
+  assert.match(COPY.ca.seoTitle, /^Calendari laboral 2027 Catalunya: festius/);
+  assert.equal(COPY.es.seoTitle, "Calendario laboral 2027 Cataluña y Barcelona: festivos");
+  assert.match(COPY.en.seoTitle, /public holidays 2027/);
+  const month = {
+    ca: ["gen", "febr", "març", "abr", "maig", "juny", "jul", "ag", "set", "oct", "nov", "des"],
+    es: ["ene", "feb", "mar", "abr", "may", "jun", "jul", "ago", "sep", "oct", "nov", "dic"],
+    en: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+  };
+  const short = (iso: string, locale: (typeof LOCALES)[number]) => `${Number(iso.slice(8, 10))} ${month[locale][Number(iso.slice(5, 7)) - 1]}`;
+  // Barcelona's two local days, as the payload has them, in the ES and EN descriptions.
+  for (const locale of ["es", "en"] as const) {
+    for (const h of BARCELONA_LOCAL) assert.ok(COPY[locale].seoDescription.includes(short(h.date, locale)), `${locale}: ${h.date}`);
+  }
+  // The single-month runs ("26 y 29 mar") check the months too, not only the day numbers.
+  assert.match(COPY.es.seoDescription, /1 y 6 ene, 26 y 29 mar, 1 may, 24 jun, 11 sep, 12 oct, 1 nov, 6, 8 y 25 dic\./);
+  assert.match(COPY.ca.seoDescription, /1 i 6 gen, 26 i 29 març \(Pasqua\), 1 maig, 24 juny, 11 set, 12 oct, 1 nov, 6, 8 i 25 des\./);
+  assert.match(COPY.en.seoDescription, /1 & 6 Jan, 26 & 29 Mar, 1 May, 24 Jun, 11 Sep, 12 Oct, 1 Nov, 6, 8 & 25 Dec\./);
+  // The CA one ends with the last three days of 2026, from Ordre EMT/66/2025.
+  assert.deepEqual(
+    (HOLIDAYS_BY_YEAR[2026] ?? []).filter((h) => h.date.slice(5, 7) === "12").map((h) => Number(h.date.slice(8, 10))),
+    [8, 25, 26],
+  );
+  assert.match(COPY.ca.seoDescription, /Últims del 2026: 8, 25 i 26 des\.$/);
+});
+
+test("the one-day bridge is dated 2027, so it cannot be read as 7 December 2026", () => {
+  for (const locale of LOCALES) {
+    assert.match(COPY[locale].directAnswer, /7 (de desembre de|de diciembre de|December) 2027/, locale);
+    assert.ok(COPY[locale].keyFacts.some((f) => /7 (de desembre de|de diciembre de|December) 2027/.test(f.value)), locale);
   }
 });

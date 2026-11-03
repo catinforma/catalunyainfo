@@ -34,7 +34,9 @@ export const HOLIDAY_SOURCE = {
 // Both years re-read on 28 Oct and again on 30 Oct 2026 on the Generalitat's
 // calendar pages (calendari-festes-2026, calendari-festes-2027): same dates,
 // same Aran swaps. Open data b4eh-r8up still had no 2027 local rows on 30 Oct.
-export const CALENDAR_VERIFIED_AT = "2026-10-30";
+// Both pages re-read on 3 Nov 2026 (2026: 8, 25 and 26 Dec still to come;
+// 2027 unchanged); b4eh-r8up still had 0 rows for 2027 that day.
+export const CALENDAR_VERIFIED_AT = "2026-11-03";
 
 /** Years this page can answer for. Extend when the next order is published. */
 export const COVERED_YEARS = [2026, 2027] as const;

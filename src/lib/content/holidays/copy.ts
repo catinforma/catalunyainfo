@@ -17,10 +17,19 @@ export interface HolidayCopy {
   keyFacts: { label: string; value: string }[];
 
   tableTitle: string;
-  tableIntro: string[];
   tableCaption: string;
   tableHeaders: string[];
+  /** `{bcn}`: Barcelona's two local days, linked to its town page (rendered from the payload). */
   tableNote: string;
+
+  /**
+   * The last Catalonia-wide days of 2026, on the first screen under the 2027
+   * table (3 Nov 2026). "Last of 2026" rather than "left in 2026", so it stays
+   * true after 8 December. `{days}`, `{dec7}` (both linked to their date
+   * pages), `{link}` (the 2026 section below).
+   */
+  last2026Title: string;
+  last2026: string;
 
   /** Which of the twelve are national, and which only Catalan (BOE list). */
   nationalTitle: string;
@@ -97,7 +106,7 @@ export const COPY: Record<Locale, HolidayCopy> = {
     title: "Calendari laboral 2027 a Catalunya: tots els festius, ponts i dies per demanar vacances",
     seoTitle: "Calendari laboral 2027 Catalunya: festius, ponts i Pasqua",
     seoDescription:
-      "Els 12 festius 2027 a Catalunya: 1 i 6 de gener, 26 i 29 de març, 1 de maig, 24 de juny, 11 de set., 12 d'oct., 1 de nov., 6, 8 i 25 de des. I els ponts.",
+      "Els 12 festius 2027 a Catalunya: 1 i 6 gen, 26 i 29 març (Pasqua), 1 maig, 24 juny, 11 set, 12 oct, 1 nov, 6, 8 i 25 des. Últims del 2026: 8, 25 i 26 des.",
     excerpt:
       "Els 12 festius oficials del 2027, els ponts que deixa el calendari i quins dies de vacances rendeixen més. Amb descàrrega per al teu calendari.",
 
@@ -107,26 +116,27 @@ export const COPY: Record<Locale, HolidayCopy> = {
     ],
     directAnswerTitle: "En resum",
     directAnswer:
-      "Per a una persona que treballi habitualment de dilluns a divendres, un dels millors moviments del 2027 serà demanar el **7 de desembre**: un sol dia de vacances permet encadenar cinc dies lliures, del 4 al 8 de desembre.",
+      "Per a una persona que treballi habitualment de dilluns a divendres, un dels millors moviments del 2027 serà demanar el **dimarts 7 de desembre de 2027**: un sol dia de vacances permet encadenar cinc dies lliures, del 4 al 8 de desembre.",
 
     keyFactsTitle: "Dades clau",
     keyFacts: [
       { label: "Any", value: "2027" },
       { label: "Festius a tot Catalunya", value: "12" },
       { label: "Festes locals", value: "2 per municipi" },
-      { label: "Millor pont d'un dia", value: "7 de desembre" },
+      { label: "Millor pont d'un dia", value: "7 de desembre de 2027" },
       { label: "Excepció d'Aran", value: "Sí, el 29 de març se substitueix" },
-      { label: "Última verificació", value: "30 d'octubre de 2026" },
+      { label: "Última verificació", value: "3 de novembre de 2026" },
     ],
 
     tableTitle: "Tots els festius laborals de Catalunya el 2027",
-    tableIntro: [
-      "El calendari oficial fixa aquestes dotze dates:",
-    ],
     tableCaption: "Festius laborals a Catalunya, 2027",
     tableHeaders: ["Data", "Dia", "Festiu"],
     tableNote:
-      "Font: Ordre EMT/52/2026, de 25 de març (DOGC de l'1 d'abril de 2026), publicada també al BOE del 13 d'octubre de 2026. A aquests dies cal afegir-hi dues festes locals que determina cada ajuntament.",
+      "Font: Ordre EMT/52/2026, de 25 de març (DOGC de l'1 d'abril de 2026), publicada també al BOE del 13 d'octubre de 2026. A aquests dies cal afegir-hi dues festes locals que determina cada ajuntament: a {bcn}.",
+
+    last2026Title: "Els últims festius del 2026",
+    last2026:
+      "{days}. El {dec7} no és festiu a Catalunya: només és festa local en alguns municipis. Els dotze dies de l'any són més avall, al [calendari laboral 2026]({link}).",
 
     nationalTitle: "Quins festius són estatals i quins només de Catalunya?",
     national: [
@@ -192,7 +202,7 @@ export const COPY: Record<Locale, HolidayCopy> = {
 
     localTitle: "Festes locals del 2027: quan es publiquen",
     local: [
-      "A més dels dotze festius, cada municipi en té dos de locals, que fixa una ordre del Departament d'Empresa i Treball a proposta dels ajuntaments. Les del 2027 encara no s'han publicat: a 30 d'octubre de 2026, les dades obertes de la Generalitat no en tenen cap. Les del 2026 van sortir al DOGC el 17 de desembre de 2025 (Ordre EMT/208/2025).",
+      "A més dels dotze festius, cada municipi en té dos de locals, que fixa una ordre del Departament d'Empresa i Treball a proposta dels ajuntaments. Les del 2027 encara no s'han publicat: a 3 de novembre de 2026, les dades obertes de la Generalitat no en tenen cap. Les del 2026 van sortir al DOGC el 17 de desembre de 2025 (Ordre EMT/208/2025).",
       "Mentrestant, les festes locals del 2026 són a [festius locals per municipi](/ca/festius/), amb una pàgina per a cadascun dels {count} municipis que en tenen ({towns}), i en una sola llista amb cercador a [festius locals de tots els municipis](/ca/guies/festius-locals-catalunya/). Hi afegirem les del 2027 quan surti l'ordre.",
     ],
 
@@ -210,7 +220,7 @@ export const COPY: Record<Locale, HolidayCopy> = {
       "El fitxer conté només els **dotze festius oficials de Catalunya**. No inclou ni les festes locals ni els dies de vacances suggerits: aquests són recomanacions editorials, no festius.",
     calendarDownload: "Descarrega els festius (.ics)",
     calendarFilename: "festius-catalunya-2027",
-    calendarNote: "Dates transcrites de l'Ordre EMT/52/2026, comprovades amb el BOE del 13 d'octubre i, el 30 d'octubre de 2026, amb el calendari del Departament d'Empresa i Treball.",
+    calendarNote: "Dates transcrites de l'Ordre EMT/52/2026, comprovades amb el BOE del 13 d'octubre i, el 3 de novembre de 2026, amb el calendari del Departament d'Empresa i Treball.",
 
     closingTitle: "Guarda aquesta guia",
     closing: [
@@ -224,9 +234,9 @@ export const COPY: Record<Locale, HolidayCopy> = {
   es: {
     path: "guias/calendario-laboral-cataluna",
     title: "Calendario laboral 2027 en Cataluña: festivos, puentes y mejores días para pedir vacaciones",
-    seoTitle: "Calendario laboral 2027 Cataluña: 12 festivos y puentes",
+    seoTitle: "Calendario laboral 2027 Cataluña y Barcelona: festivos",
     seoDescription:
-      "Los 12 festivos 2027 en Cataluña: 1 y 6 de enero, 26 y 29 de marzo, 1 de mayo, 24 de junio, 11 sept., 12 oct., 1 nov., 6, 8 y 25 dic. Y los puentes.",
+      "Los 12 festivos 2027 en Cataluña: 1 y 6 ene, 26 y 29 mar, 1 may, 24 jun, 11 sep, 12 oct, 1 nov, 6, 8 y 25 dic. Barcelona: 17 may y 24 sep. Y los de 2026.",
     excerpt:
       "Los 12 festivos oficiales de 2027, los puentes que deja el calendario y qué días de vacaciones rinden más. Con descarga para tu calendario.",
 
@@ -236,24 +246,27 @@ export const COPY: Record<Locale, HolidayCopy> = {
     ],
     directAnswerTitle: "En resumen",
     directAnswer:
-      "La combinación más eficiente: pedir libre el **7 de diciembre** permite enlazar cinco días consecutivos, del 4 al 8 de diciembre, utilizando un único día de vacaciones.",
+      "La combinación más eficiente: pedir libre el **martes 7 de diciembre de 2027** permite enlazar cinco días consecutivos, del 4 al 8 de diciembre, utilizando un único día de vacaciones.",
 
     keyFactsTitle: "Datos clave",
     keyFacts: [
       { label: "Año", value: "2027" },
       { label: "Festivos en toda Cataluña", value: "12" },
       { label: "Fiestas locales", value: "2 por municipio" },
-      { label: "Mejor puente de un día", value: "7 de diciembre" },
+      { label: "Mejor puente de un día", value: "7 de diciembre de 2027" },
       { label: "Excepción de Arán", value: "Sí, el 29 de marzo se sustituye" },
-      { label: "Última verificación", value: "30 de octubre de 2026" },
+      { label: "Última verificación", value: "3 de noviembre de 2026" },
     ],
 
     tableTitle: "Festivos oficiales en Cataluña en 2027",
-    tableIntro: ["La Generalitat establece estas doce fechas:"],
     tableCaption: "Festivos laborales en Cataluña, 2027",
     tableHeaders: ["Fecha", "Día", "Festivo"],
     tableNote:
-      "Fuente: Orden EMT/52/2026, de 25 de marzo (DOGC del 1 de abril de 2026), recogida también en el BOE del 13 de octubre de 2026. A estas fechas se suman dos festivos locales determinados por cada ayuntamiento.",
+      "Fuente: Orden EMT/52/2026, de 25 de marzo (DOGC del 1 de abril de 2026), recogida también en el BOE del 13 de octubre de 2026. A estas fechas se suman dos festivos locales determinados por cada ayuntamiento: en {bcn}.",
+
+    last2026Title: "Los últimos festivos de 2026",
+    last2026:
+      "{days}. El {dec7} no es festivo en Cataluña: solo es fiesta local en algunos municipios. Los doce días del año están más abajo, en el [calendario laboral 2026]({link}).",
 
     nationalTitle: "¿Qué festivos son nacionales y cuáles solo de Cataluña?",
     national: [
@@ -319,7 +332,7 @@ export const COPY: Record<Locale, HolidayCopy> = {
 
     localTitle: "Fiestas locales 2027: cuándo se publican",
     local: [
-      "Además de los doce festivos, cada municipio tiene dos fiestas locales, que fija una orden del Departament d'Empresa i Treball a propuesta de los ayuntamientos. Las de 2027 todavía no se han publicado: a 30 de octubre de 2026, los datos abiertos de la Generalitat no tienen ninguna. Las de 2026 salieron en el DOGC el 17 de diciembre de 2025 (Orden EMT/208/2025).",
+      "Además de los doce festivos, cada municipio tiene dos fiestas locales, que fija una orden del Departament d'Empresa i Treball a propuesta de los ayuntamientos. Las de 2027 todavía no se han publicado: a 3 de noviembre de 2026, los datos abiertos de la Generalitat no tienen ninguna. Las de 2026 salieron en el DOGC el 17 de diciembre de 2025 (Orden EMT/208/2025).",
       "Mientras tanto, las fiestas locales de 2026 están en [festivos locales por municipio](/es/festivos/), con una página para cada uno de los {count} municipios que las tienen ({towns}), y en una sola lista con buscador en [festivos locales de todos los municipios](/es/guias/festivos-locales-cataluna/). Añadiremos las de 2027 cuando salga la orden.",
     ],
 
@@ -337,7 +350,7 @@ export const COPY: Record<Locale, HolidayCopy> = {
       "El archivo contiene únicamente los **doce festivos oficiales de Cataluña**. No incluye fiestas locales ni los días de vacaciones sugeridos: eso son recomendaciones editoriales, no festivos.",
     calendarDownload: "Descargar los festivos (.ics)",
     calendarFilename: "festivos-cataluna-2027",
-    calendarNote: "Fechas transcritas de la Orden EMT/52/2026, comprobadas con el BOE del 13 de octubre y, el 30 de octubre de 2026, con el calendario del Departament d'Empresa i Treball.",
+    calendarNote: "Fechas transcritas de la Orden EMT/52/2026, comprobadas con el BOE del 13 de octubre y, el 3 de noviembre de 2026, con el calendario del Departament d'Empresa i Treball.",
 
     closingTitle: "Guarda esta guía",
     closing: [
@@ -353,7 +366,7 @@ export const COPY: Record<Locale, HolidayCopy> = {
     title: "Catalonia and Barcelona public holidays 2027: official dates, long weekends and days to take off",
     seoTitle: "Barcelona & Catalonia public holidays 2027: all dates",
     seoDescription:
-      "All 12 Catalonia public holidays for 2027 (DOGC and BOE), Barcelona's two local days, the Easter dates, long weekends and the holidays left in 2026.",
+      "Catalonia's 12 public holidays in 2027: 1 & 6 Jan, 26 & 29 Mar, 1 May, 24 Jun, 11 Sep, 12 Oct, 1 Nov, 6, 8 & 25 Dec. Barcelona adds 17 May and 24 Sep.",
     excerpt:
       "The 12 official 2027 holidays, the long weekends the calendar creates, and which days of leave go furthest. With a calendar file to download.",
 
@@ -363,24 +376,27 @@ export const COPY: Record<Locale, HolidayCopy> = {
     ],
     directAnswerTitle: "In short",
     directAnswer:
-      "The best-value day to take off is Tuesday **7 December**. It connects the weekend with the public holidays on 6 and 8 December, creating five consecutive days off from one day of leave.",
+      "The best-value day to take off is Tuesday **7 December 2027**. It connects the weekend with the public holidays on 6 and 8 December, creating five consecutive days off from one day of leave.",
 
     keyFactsTitle: "Key facts",
     keyFacts: [
       { label: "Year", value: "2027" },
       { label: "Catalonia-wide holidays", value: "12" },
       { label: "Local holidays", value: "2 per municipality" },
-      { label: "Best one-day bridge", value: "7 December" },
+      { label: "Best one-day bridge", value: "7 December 2027" },
       { label: "Aran exception", value: "Yes — 29 March is replaced" },
-      { label: "Last verified", value: "30 October 2026" },
+      { label: "Last verified", value: "3 November 2026" },
     ],
 
     tableTitle: "Official Catalonia public holidays in 2027",
-    tableIntro: ["The official calendar lists these twelve dates:"],
     tableCaption: "Public holidays in Catalonia, 2027",
     tableHeaders: ["Date", "Day", "Holiday"],
     tableNote:
-      "Source: Order EMT/52/2026 of 25 March (DOGC, 1 April 2026), also listed in the BOE of 13 October 2026. Each municipality adds two local holidays on top of these.",
+      "Source: Order EMT/52/2026 of 25 March (DOGC, 1 April 2026), also listed in the BOE of 13 October 2026. Each municipality adds two local holidays on top of these: in {bcn}.",
+
+    last2026Title: "The last public holidays of 2026",
+    last2026:
+      "{days}. {dec7} is not a public holiday in Catalonia, only a local holiday in some towns. All twelve days of the year are further down, in [Catalonia public holidays 2026]({link}).",
 
     nationalTitle: "Which holidays are national and which only Catalan?",
     national: [
@@ -446,7 +462,7 @@ export const COPY: Record<Locale, HolidayCopy> = {
 
     localTitle: "Local holidays in 2027: when they are published",
     local: [
-      "On top of the twelve, each town has two local holidays, set by an order of the Catalan labour department on the town councils' proposals. The 2027 ones are not out yet: on 30 October 2026 the Catalan government's open data had none. The 2026 ones were published in the DOGC on 17 December 2025 (Order EMT/208/2025).",
+      "On top of the twelve, each town has two local holidays, set by an order of the Catalan labour department on the town councils' proposals. The 2027 ones are not out yet: on 3 November 2026 the Catalan government's open data had none. The 2026 ones were published in the DOGC on 17 December 2025 (Order EMT/208/2025).",
       "Until then, each town's 2026 local holidays are in [local holidays in Catalonia](/en/guides/local-holidays-catalonia/). We will add the 2027 ones when the order appears.",
     ],
 
@@ -464,7 +480,7 @@ export const COPY: Record<Locale, HolidayCopy> = {
       "The file contains only the **twelve official Catalonia-wide holidays**. It does not include local holidays or the suggested days of leave: those are editorial recommendations, not public holidays.",
     calendarDownload: "Download the holidays (.ics)",
     calendarFilename: "catalonia-public-holidays-2027",
-    calendarNote: "Dates transcribed from Order EMT/52/2026, checked against the BOE of 13 October and, on 30 October 2026, against the Catalan labour department's calendar.",
+    calendarNote: "Dates transcribed from Order EMT/52/2026, checked against the BOE of 13 October and, on 3 November 2026, against the Catalan labour department's calendar.",
 
     closingTitle: "Save this guide",
     closing: [

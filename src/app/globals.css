@@ -1593,6 +1593,8 @@
 .ci-today-local-list { margin: 0.35rem 0 0; font-size: 0.9rem; color: var(--color-ink-soft); }
 .ci-today-local .ci-today-subtitle { margin-top: 0; }
 .ci-today-find { margin: 0.9rem 0 0; font-size: 0.9rem; }
+.ci-today-next { margin: 0; padding: 0; list-style: none; }
+.ci-today-next li { margin: 0.15rem 0; }
 .ci-today-dates { margin: 0; padding-left: 1.1rem; font-size: 0.9rem; }
 .ci-today-dates li { margin: 0.2rem 0; }
 
