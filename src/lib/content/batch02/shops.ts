@@ -1,5 +1,6 @@
 import type { Locale } from "@/lib/i18n/config";
 import { weekdayDayMonth } from "@/lib/programmatic/holidays/format";
+import { joinList } from "@/lib/programmatic/holidays/names";
 
 import {
   b2Related,
@@ -65,9 +66,31 @@ import {
  * barcelona"), words the title dropped. The title is kept (inside its
  * window); the CA description now opens with "Botigues obertes diumenges i
  * festius 2026" and the Barcelona days left. Same dates, same count.
+ *
+ * 3 Nov 2026 (29N and Christmas push, owner request; logged in
+ * docs/SEO_EXPERIMENTS.md): the first screen answers the dated questions of
+ * the next weeks. Read again on 3 Nov, all on the official text: Ordre
+ * EMT/77/2025 art. 1 and 6; Resolució EMT/4342/2025 (defaults, Barcelona,
+ * Gironella, Martorell, Salt); Ordre EMT/89/2026 arts. 1-6; Llei 18/2017
+ * arts. 36.2.a/c/d and 37.1 (BOE consolidated text, last update 31.12.2025);
+ * Ordre EMT/66/2025 and Ordre EMT/52/2026 (24 and 31 Dec 2026 and 5 Jan 2027
+ * are not public holidays); RD 605/1999 art. 13.1 (up to four paid hours to
+ * vote); Barcelona's commerce page and its 2026 sheet (no 2027 days, ZGAT
+ * 15 May-15 Sep only) and its holiday calendar (local days 25 May and
+ * 24 Sep 2026, 17 May and 24 Sep 2027). Not published on 3 Nov: the DOGC
+ * list of 2027 municipal days and swaps (every DOGC title from 14 Oct to
+ * 3 Nov scanned), the art. 6.3 list of food retailers' swaps, Barcelona's
+ * 2027 days.
+ * - Sunday 29 November is polling day of the general election (RD 806/2026)
+ *   and an opening day in the general calendar; no rule makes polling day a
+ *   closing day (art. 36.2.d lists the closing days). Three towns swapped it.
+ * - The "date -> can shops open?" table (NEXT_WEEKS) replaces the "days left
+ *   in 2026" table; its exceptions are computed from TOWNS_NOV_DEC.
+ * - Friday 27 November is an ordinary working day; the page does not name
+ *   the retail promotion of that week (the Black Friday rule in the tests).
  */
 
-const VERIFIED = "2026-10-30";
+const VERIFIED = "2026-11-03";
 
 const SOURCES: B2Source[] = [
   { name: "Ordre EMT/77/2025, calendari d'obertura comercial en diumenges i festius per al 2026", url: "https://portaldogc.gencat.cat/utilsEADOP/AppJava/PdfProviderServlet?documentId=1015009&type=01&language=ca_ES", publisher: "DOGC" },
@@ -75,7 +98,11 @@ const SOURCES: B2Source[] = [
   { name: "Ordre EMT/89/2026, calendari d'obertura comercial en diumenges i festius per al 2027", url: "https://portaldogc.gencat.cat/utilsEADOP/AppJava/PdfProviderServlet?documentId=1045357&type=01&language=ca_ES", publisher: "DOGC" },
   { name: "Llei 18/2017, de comerç, serveis i fires (text consolidat, articles 36 i 37)", url: "https://www.boe.es/buscar/act.php?id=BOE-A-2017-11320", publisher: "BOE" },
   { name: "Llei 3/2023, de mesures fiscals, financeres, administratives i del sector públic per al 2023 (article 83: lletres j i k de l'article 37.1 de la Llei 18/2017)", url: "https://www.boe.es/buscar/doc.php?id=BOE-A-2023-10344", publisher: "BOE" },
+  { name: "Ordre EMT/66/2025, calendari oficial de festes laborals a Catalunya per a l'any 2026", url: "https://portaldogc.gencat.cat/utilsEADOP/AppJava/PdfProviderServlet?documentId=1013204&type=01&language=ca_ES", publisher: "DOGC" },
+  { name: "Ordre EMT/52/2026, calendari oficial de festes laborals a Catalunya per a l'any 2027", url: "https://portaldogc.gencat.cat/utilsEADOP/AppJava/PdfProviderServlet?documentId=1040896&type=01&language=ca_ES", publisher: "DOGC" },
+  { name: "Real Decreto 605/1999, de regulación complementaria de los procesos electorales (artículo 13: horas para votar)", url: "https://www.boe.es/buscar/act.php?id=BOE-A-1999-8583", publisher: "BOE" },
   { name: "Horaris comercials", url: "https://ajuntament.barcelona.cat/comerc/ca/el-comerc-barcelona/horaris-comercials", publisher: "Ajuntament de Barcelona" },
+  { name: "Calendari de festius (festes locals 2026 i 2027)", url: "https://ajuntament.barcelona.cat/calendarifestius/ca/", publisher: "Ajuntament de Barcelona" },
   { name: "Horaris comercials 2026", url: "https://ajuntament.barcelona.cat/comerc/sites/default/files/2026-01/Horaris%20Comercial%202026.pdf", publisher: "Ajuntament de Barcelona" },
   { name: "Rebaixes", url: "https://consum.gencat.cat/ca/els-meus-drets/rebaixes/", publisher: "Agència Catalana del Consum" },
 ];
@@ -84,27 +111,27 @@ const META: Record<Locale, { path: string; title: string; seoTitle: string; seoD
   ca: {
     path: "guies/botigues-obertes-festius-catalunya",
     title: "Botigues obertes en diumenges i festius a Catalunya: calendari 2026 i 2027",
-    seoTitle: "Festius i diumenges d'obertura 2026 a Catalunya i Barcelona",
+    seoTitle: "Botigues obertes a Barcelona: diumenge 29 nov i desembre",
     seoDescription:
-      "Botigues obertes diumenges i festius 2026: a Barcelona queden el 29 de novembre i 6, 8, 13, 20 i 27 de desembre. Els 30 municipis que canvien, i el 2027.",
+      "Diumenge 29 de novembre, dia d'eleccions: sí que poden obrir a Barcelona i Catalunya. Al desembre, 6, 8, 13, 20 i 27; 25 i 26, no. 30 municipis canvien.",
     excerpt:
       "Els diumenges i festius en què les botigues poden obrir a Catalunya, segons el DOGC: el que queda del 2026, el calendari del 2027 i les botigues que poden obrir sempre.",
   },
   es: {
     path: "guias/tiendas-abiertas-festivos-cataluna",
     title: "Tiendas abiertas en domingos y festivos en Cataluña: calendario 2026 y 2027",
-    seoTitle: "Domingos y festivos de apertura 2026 en Cataluña y Barcelona",
+    seoTitle: "Tiendas abiertas en Barcelona: domingo 29 nov y diciembre",
     seoDescription:
-      "Festivos de apertura que quedan en 2026: 29 de noviembre y 6, 8, 13, 20 y 27 de diciembre. Los 30 municipios que cambian alguno, y el calendario 2027.",
+      "Domingo 29 de noviembre, día de elecciones: sí pueden abrir en Barcelona y Cataluña. En diciembre, 6, 8, 13, 20 y 27; 25 y 26, no. 30 municipios cambian.",
     excerpt:
       "Los domingos y festivos en que las tiendas pueden abrir en Cataluña, según el DOGC: lo que queda de 2026, el calendario de 2027 y las tiendas que pueden abrir siempre.",
   },
   en: {
     path: "guides/shops-open-sundays-holidays-catalonia",
     title: "Shops open on Sundays and holidays in Catalonia: 2026 and 2027 dates",
-    seoTitle: "Shops open on Sundays in Barcelona & Catalonia: 2026-27",
+    seoTitle: "Are shops open on Sunday in Barcelona? 29 Nov and December",
     seoDescription:
-      "Shop opening days left in 2026: 29 November and 6, 8, 13, 20 and 27 December. The 30 towns that change one of them, and the 2027 calendar.",
+      "Sunday 29 November, election day: yes, shops may open in Barcelona and Catalonia. In December: 6, 8, 13, 20 and 27, not 25-26. The 30 towns that differ.",
     excerpt:
       "The Sundays and holidays when shops may open in Catalonia, from the official gazette: what is left of 2026, the 2027 calendar and the shops that may always open.",
   },
@@ -113,17 +140,6 @@ const META: Record<Locale, { path: string; title: string; seoTitle: string; seoD
 type Row = [Record<Locale, string>, Record<Locale, string>];
 
 const D = (ca: string, es: string, en: string) => ({ ca, es, en });
-
-/** Barcelona and every municipality without its own list (Resolució EMT/4342/2025). */
-const DAYS_2026_LEFT: Row[] = [
-  [D("Diumenge 1 de novembre (Tots Sants)", "Domingo 1 de noviembre (Todos los Santos)", "Sunday 1 November (All Saints)"), D("No és dia d'obertura, excepte a l'Ametlla del Vallès i Mollet del Vallès", "No es día de apertura, salvo en l'Ametlla del Vallès y Mollet del Vallès", "Not an opening day, except in l'Ametlla del Vallès and Mollet del Vallès")],
-  [D("Diumenge 29 de novembre", "Domingo 29 de noviembre", "Sunday 29 November"), D("Calendari general", "Calendario general", "General calendar")],
-  [D("Diumenge 6 de desembre", "Domingo 6 de diciembre", "Sunday 6 December"), D("Calendari general", "Calendario general", "General calendar")],
-  [D("Dimarts 8 de desembre", "Martes 8 de diciembre", "Tuesday 8 December"), D("Dia municipal (Barcelona i per defecte)", "Día municipal (Barcelona y por defecto)", "Municipal day (Barcelona and default)")],
-  [D("Diumenge 13 de desembre", "Domingo 13 de diciembre", "Sunday 13 December"), D("Calendari general", "Calendario general", "General calendar")],
-  [D("Diumenge 20 de desembre", "Domingo 20 de diciembre", "Sunday 20 December"), D("Calendari general", "Calendario general", "General calendar")],
-  [D("Diumenge 27 de desembre", "Domingo 27 de diciembre", "Sunday 27 December"), D("Calendari general", "Calendario general", "General calendar")],
-];
 
 /** Ordre EMT/89/2026, article 1, and the article 5 default municipal days. */
 const DAYS_2027: Row[] = [
@@ -188,16 +204,163 @@ export const TOWNS_NOV_DEC: { town: string; closed: string[]; extra: string[] }[
   { town: "Ulldecona", closed: ["2026-12-08"], extra: [] },
 ];
 
+/** The towns of TOWNS_NOV_DEC that do not open on a default day. */
+export const closedOn = (iso: string): string[] => TOWNS_NOV_DEC.filter((t) => t.closed.includes(iso)).map((t) => t.town);
+
+/** The towns of TOWNS_NOV_DEC that add a day which is not an opening day elsewhere. */
+const extraOn = (iso: string): string[] => TOWNS_NOV_DEC.filter((t) => t.extra.includes(iso)).map((t) => t.town);
+
 /** The towns that do not open on Tuesday 8 December, for the lead and the FAQ. */
-const NO_8_DEC = TOWNS_NOV_DEC.filter((t) => t.closed.includes("2026-12-08")).map((t) => t.town);
+const NO_8_DEC = closedOn("2026-12-08");
+
+/** The towns that do not open on Sunday 29 November, polling day of the general election (RD 806/2026). */
+const NO_29_NOV = closedOn("2026-11-29");
+
+/** Examples of NO_8_DEC named in the lead, the table and the FAQ. */
+const NO_8_DEC_EXAMPLES = ["Badalona", "Manresa", "Santa Coloma de Gramenet"];
+
+const YES: Record<Locale, string> = { ca: "**Sí**", es: "**Sí**", en: "**Yes**" };
+const NO: Record<Locale, string> = { ca: "**No**", es: "**No**", en: "**No**" };
+
+/**
+ * A short list of towns after "excepte a" / "salvo en" / "except in". Catalan
+ * repeats the preposition for a pair, so "Riells i Viabrea i a Terrassa"
+ * does not read as one name.
+ */
+function townList(towns: string[], locale: Locale): string {
+  return locale === "ca" && towns.length === 2 ? `${towns[0]} i a ${towns[1]}` : joinList(towns, locale);
+}
+
+/** "**Sí**, excepte a Gironella, Martorell i Salt", from the towns table. */
+function yesExcept(iso: string, locale: Locale): string {
+  const towns = closedOn(iso);
+  if (!towns.length) return YES[locale];
+  const except = { ca: "excepte a", es: "salvo en", en: "except in" }[locale];
+  if (towns.length <= 3) return `${YES[locale]}, ${except} ${townList(towns, locale)}`;
+  const word = { ca: "municipis, com", es: "municipios, como", en: "towns, such as" }[locale];
+  const or = { ca: "o", es: "o", en: "and" }[locale];
+  const shown = towns.filter((t) => NO_8_DEC_EXAMPLES.includes(t));
+  return `${YES[locale]}, ${except} ${towns.length} ${word} ${shown.slice(0, -1).join(", ")} ${or} ${shown.at(-1)}`;
+}
+
+/** "**No**: no són dies d'obertura", naming any town that adds one of the days. */
+function noUnless(isos: string[], locale: Locale, why: Record<Locale, string>): string {
+  const towns = [...new Set(isos.flatMap(extraOn))];
+  const unless = { ca: "excepte a", es: "salvo en", en: "except in" }[locale];
+  return towns.length ? `${NO[locale]}: ${why[locale]}, ${unless} ${townList(towns, locale)}` : `${NO[locale]}: ${why[locale]}`;
+}
+
+const NOT_OPENING = D("no són dies d'obertura", "no son días de apertura", "not opening days");
+const CLOSING = D("tancament obligatori", "cierre obligatorio", "closed by law");
+const WORKING = D("Laborable: horari habitual de cada botiga", "Laborable: horario habitual de cada tienda", "Working day: each shop's usual hours");
+const GENERAL_2026 = D("Ordre EMT/77/2025, art. 1", "Orden EMT/77/2025, art. 1", "Ordre EMT/77/2025, art. 1");
+const ART_36_2_D = D("Llei 18/2017, art. 36.2.d", "Ley 18/2017, art. 36.2.d", "Llei 18/2017, art. 36.2.d");
+
+/**
+ * The first-screen table (3 Nov 2026): every date of the next weeks people
+ * ask about, with the answer for Catalonia and for Barcelona and the text it
+ * comes from. Catalonia-wide exceptions are computed from TOWNS_NOV_DEC.
+ * Weekdays: Ordre EMT/66/2025 (2026) and Ordre EMT/52/2026 (2027).
+ */
+type NextRow = { day: Record<Locale, string>; cat: (l: Locale) => string; bcn: (l: Locale) => string; basis: Record<Locale, string> };
+
+const NEXT_WEEKS: NextRow[] = [
+  {
+    day: D("Diumenges 8, 15 i 22 de novembre", "Domingos 8, 15 y 22 de noviembre", "Sundays 8, 15 and 22 November"),
+    cat: (l) => noUnless(["2026-11-08", "2026-11-15", "2026-11-22"], l, NOT_OPENING),
+    bcn: (l) => NO[l],
+    basis: D("Ordre EMT/77/2025 (no hi consten)", "Orden EMT/77/2025 (no figuran)", "Ordre EMT/77/2025 (not listed)"),
+  },
+  {
+    day: D("Diumenge 29 de novembre (eleccions generals)", "Domingo 29 de noviembre (elecciones generales)", "Sunday 29 November (general election)"),
+    cat: (l) => yesExcept("2026-11-29", l),
+    bcn: (l) => YES[l],
+    basis: GENERAL_2026,
+  },
+  {
+    day: D("Diumenge 6 de desembre (Constitució)", "Domingo 6 de diciembre (Constitución)", "Sunday 6 December (Constitution Day)"),
+    cat: (l) => yesExcept("2026-12-06", l),
+    bcn: (l) => YES[l],
+    basis: GENERAL_2026,
+  },
+  {
+    day: D("Dimarts 8 de desembre (la Immaculada)", "Martes 8 de diciembre (la Inmaculada)", "Tuesday 8 December (Immaculate Conception)"),
+    cat: (l) => yesExcept("2026-12-08", l),
+    bcn: (l) => `${YES[l]} ${{ ca: "(dia municipal de Barcelona)", es: "(día municipal de Barcelona)", en: "(Barcelona's municipal day)" }[l]}`,
+    basis: D("Resolució EMT/4342/2025; Ordre EMT/77/2025, art. 6", "Resolución EMT/4342/2025; Orden EMT/77/2025, art. 6", "Resolució EMT/4342/2025; Ordre EMT/77/2025, art. 6"),
+  },
+  {
+    day: D("Diumenge 13 de desembre", "Domingo 13 de diciembre", "Sunday 13 December"),
+    cat: (l) => yesExcept("2026-12-13", l),
+    bcn: (l) => YES[l],
+    basis: GENERAL_2026,
+  },
+  {
+    day: D("Diumenge 20 de desembre", "Domingo 20 de diciembre", "Sunday 20 December"),
+    cat: (l) => yesExcept("2026-12-20", l),
+    bcn: (l) => YES[l],
+    basis: GENERAL_2026,
+  },
+  {
+    day: D("Dijous 24 i dijous 31 de desembre", "Jueves 24 y jueves 31 de diciembre", "Thursday 24 and Thursday 31 December"),
+    cat: (l) => WORKING[l],
+    bcn: (l) => WORKING[l],
+    basis: D("Ordre EMT/66/2025 (no són festius)", "Orden EMT/66/2025 (no son festivos)", "Ordre EMT/66/2025 (not public holidays)"),
+  },
+  {
+    day: D("Divendres 25 i dissabte 26 de desembre (Nadal i Sant Esteve)", "Viernes 25 y sábado 26 de diciembre (Navidad y San Esteban)", "Friday 25 and Saturday 26 December (Christmas and St Stephen's Day)"),
+    cat: (l) => `${NO[l]}: ${CLOSING[l]}`,
+    bcn: (l) => NO[l],
+    basis: ART_36_2_D,
+  },
+  {
+    day: D("Diumenge 27 de desembre", "Domingo 27 de diciembre", "Sunday 27 December"),
+    cat: (l) => yesExcept("2026-12-27", l),
+    bcn: (l) => YES[l],
+    basis: GENERAL_2026,
+  },
+  {
+    day: D("Divendres 1 de gener de 2027 (Cap d'Any)", "Viernes 1 de enero de 2027 (Año Nuevo)", "Friday 1 January 2027 (New Year's Day)"),
+    cat: (l) => `${NO[l]}: ${CLOSING[l]}`,
+    bcn: (l) => NO[l],
+    basis: ART_36_2_D,
+  },
+  {
+    day: D("Diumenge 3 de gener de 2027", "Domingo 3 de enero de 2027", "Sunday 3 January 2027"),
+    cat: (l) => `${YES[l]}: ${{ ca: "calendari general del 2027 (els canvis de cada municipi encara no s'han publicat)", es: "calendario general de 2027 (los cambios de cada municipio aún no se han publicado)", en: "2027 general calendar (each town's changes are not published yet)" }[l]}`,
+    bcn: (l) => `${YES[l]}, ${{ ca: "si l'Ajuntament no l'ha canviat (encara no ho ha publicat)", es: "si el Ayuntamiento no lo ha cambiado (aún no lo ha publicado)", en: "unless the council has swapped it (not published yet)" }[l]}`,
+    basis: D("Ordre EMT/89/2026, art. 1", "Orden EMT/89/2026, art. 1", "Ordre EMT/89/2026, art. 1"),
+  },
+  {
+    day: D("Dimarts 5 de gener de 2027 (vigília de Reis)", "Martes 5 de enero de 2027 (víspera de Reyes)", "Tuesday 5 January 2027 (eve of Epiphany)"),
+    cat: (l) => WORKING[l],
+    bcn: (l) => WORKING[l],
+    basis: D("Ordre EMT/52/2026 (no és festiu)", "Orden EMT/52/2026 (no es festivo)", "Ordre EMT/52/2026 (not a public holiday)"),
+  },
+  {
+    day: D("Dimecres 6 de gener de 2027 (Reis)", "Miércoles 6 de enero de 2027 (Reyes)", "Wednesday 6 January 2027 (Epiphany)"),
+    cat: (l) => `${NO[l]}: ${CLOSING[l]}`,
+    bcn: (l) => NO[l],
+    basis: ART_36_2_D,
+  },
+  {
+    day: D("Diumenge 10 de gener de 2027", "Domingo 10 de enero de 2027", "Sunday 10 January 2027"),
+    cat: (l) => ({ ca: "Dia per defecte: s'aplica als municipis que no van comunicar els seus dos dies. La llista encara no és al DOGC", es: "Día por defecto: se aplica en los municipios que no comunicaron sus dos días. La lista aún no está en el DOGC", en: "Default day: applies in towns that did not report their two days. The list is not in the DOGC yet" })[l],
+    bcn: (l) => ({ ca: "Pendent: Barcelona encara no ha publicat els seus dies del 2027", es: "Pendiente: Barcelona aún no ha publicado sus días de 2027", en: "Pending: Barcelona has not published its 2027 days yet" })[l],
+    basis: D("Ordre EMT/89/2026, art. 5", "Orden EMT/89/2026, art. 5", "Ordre EMT/89/2026, art. 5"),
+  },
+];
 
 type T = {
   lead: string;
   note: string;
-  leftTitle: string;
-  leftCaption: string;
-  leftHeaders: string[];
-  leftNote: string;
+  weeksTitle: string;
+  weeksCaption: string;
+  weeksHeaders: string[];
+  weeksNote: string;
+  weeksAfter: string;
+  electionTitle: string;
+  election: string[];
   townsTitle: string;
   townsLead: string;
   townsCaption: string;
@@ -226,12 +389,19 @@ type T = {
 
 const COPY: Record<Locale, T> = {
   ca: {
-    lead: "Els diumenges i festius d'obertura comercial que queden el 2026 a Barcelona i a la majoria de municipis són el **29 de novembre i el 6, 8, 13, 20 i 27 de desembre**. **L'1 de novembre no ho és**, excepte a l'Ametlla del Vallès i Mollet del Vallès, i 21 municipis, com Badalona, Manresa o Santa Coloma de Gramenet, no obren el 8 de desembre. A Catalunya les botigues poden obrir deu diumenges o festius l'any: vuit els fixa la Generalitat i dos més cada ajuntament. Les botigues d'alimentació de fins a 300 m², les fleques o les de conveniència, entre d'altres, no tenen aquest límit.",
+    lead: `**Sí: el diumenge 29 de novembre, dia de les eleccions generals, les botigues poden obrir** a Barcelona i a gairebé tota Catalunya, perquè és un dels dies d'obertura del calendari del 2026. Després queden el **6, 8, 13, 20 i 27 de desembre**. El **25 i el 26 de desembre i l'1 i el 6 de gener** són dies de tancament obligatori, i el primer dia d'obertura del calendari general del 2027 és el **diumenge 3 de gener**. ${joinList(NO_29_NOV, "ca")} no obren el 29 de novembre, i ${NO_8_DEC.length} municipis, com ${NO_8_DEC_EXAMPLES.slice(0, -1).join(", ")} o ${NO_8_DEC_EXAMPLES.at(-1)}, no obren el 8 de desembre. A Catalunya les botigues poden obrir deu diumenges o festius l'any: vuit els fixa la Generalitat i dos més cada ajuntament. Les botigues d'alimentació de fins a 300 m², les fleques o les de conveniència, entre d'altres, no tenen aquest límit.`,
     note: "Obrir aquests dies és una opció, no una obligació: cada botiga decideix si obre. Els dos dies municipals canvien d'un poble a un altre.",
-    leftTitle: "Quins diumenges obren les botigues el 2026",
-    leftCaption: "Diumenges i festius amb obertura comercial, novembre i desembre del 2026",
-    leftHeaders: ["Dia", "Per què"],
-    leftNote: "Vàlid a Barcelona i a tots els municipis que no tenen llista pròpia (Resolució EMT/4342/2025). El calendari del 2026 acaba el 27 de desembre.",
+    weeksTitle: "Poden obrir les botigues? Del 8 de novembre al 10 de gener, dia per dia",
+    weeksCaption: "Diumenges, festius i dies assenyalats del novembre al gener: poden obrir les botigues?",
+    weeksHeaders: ["Dia", "Catalunya", "Barcelona", "Base oficial"],
+    weeksNote: "«Sí» vol dir que les botigues hi poden obrir, no que hagin d'obrir. D'octubre a maig, cap botiga amb horari general no pot obrir entre les 21.00 i les 6.00 (Llei 18/2017, art. 36.2.a). Un dia laborable pot ser festa local en algun municipi, i llavors compta com a festiu.",
+    weeksAfter: "Els dies de «No», hi poden obrir igualment les botigues exemptes de l'horari general: fleques, pastisseries, floristeries, premsa, botigues de conveniència, farmàcies i botigues d'alimentació o de pimes de fins a 300 m², entre d'altres (la llista és més avall). A Barcelona, la zona turística (ZGAT) només amplia l'obertura del 15 de maig al 15 de setembre: del novembre al gener hi valen els mateixos dies que a la resta de la ciutat.",
+    electionTitle: "Diumenge 29 de novembre, dia d'eleccions: quines botigues obren",
+    election: [
+      "El 29 de novembre és alhora la jornada de les eleccions generals i un dels vuit diumenges d'obertura del calendari comercial del 2026 (Ordre EMT/77/2025, article 1). Les eleccions no el converteixen en dia de tancament: la llei de comerç només obliga a tancar l'1 i el 6 de gener, el diumenge i el dilluns de Pasqua, l'1 de maig, el 24 de juny, l'11 de setembre i el 25 i el 26 de desembre (Llei 18/2017, article 36.2.d).",
+      `Hi poden obrir totes les botigues, també les grans superfícies i els centres comercials, a Barcelona i a tots els municipis excepte ${joinList(NO_29_NOV, "ca")}, que l'han canviat per un altre dia (Resolució EMT/4342/2025). Poder obrir no vol dir que obrin totes: cada botiga decideix si obre i amb quin horari, sempre entre les 6.00 i les 21.00.`,
+      `Qui treballi aquell dia té dret a fins a quatre hores retribuïdes per anar a votar, proporcionals si fa jornada reduïda (Reial decret 605/1999, article 13). Per a la resta de la jornada, mira ${b2link("voting", "ca", "com votar el 29 de novembre, també per correu")}.`,
+    ],
     townsTitle: "Botigues obertes el 8 de desembre i els diumenges de desembre: municipis que canvien",
     townsLead: "Aquests 30 municipis tenen, del novembre al desembre del 2026, algun dia diferent de la llista general. La resta d'ajuntaments de la resolució, i tots els que no hi consten, obren el 29 de novembre i el 6, 8, 13, 20 i 27 de desembre.",
     townsCaption: "Municipis amb dies d'obertura diferents al novembre i al desembre del 2026",
@@ -257,8 +427,8 @@ const COPY: Record<Locale, T> = {
     nextHeaders: ["Dia", "Per què"],
     nextNote: "Ordre EMT/89/2026 (DOGC 28.5.2026). Els dies municipals per defecte s'apliquen on l'ajuntament no n'hagi triat d'altres.",
     next: [
-      "Els vuit dies generals del 2027 ja són oficials. Els dos de cada municipi, encara no: els ajuntaments els havien de comunicar abans de l'1 de novembre del 2026, i l'any passat la llista es va publicar al DOGC el 27 de novembre. Si un ajuntament no en tria cap, s'apliquen el 10 de gener i el 5 de desembre.",
-      "Dues novetats de l'ordre del 2027: els ajuntaments han de fixar l'obertura en un festiu quan coincideixin dos o més festius seguits, i les empreses de botigues d'alimentació i compra diària poden canviar fins a tres dates del calendari general. Ni els ajuntaments ni aquestes empreses poden moure l'1 de novembre ni el 6 de desembre.",
+      "Els vuit dies generals del 2027 ja són oficials. Els dos de cada municipi, i els dies que hagin canviat els ajuntaments, encara no: s'havien de comunicar abans de l'1 de novembre del 2026 i, a 3 de novembre, el DOGC encara no n'ha publicat la llista. L'any passat va sortir el 27 de novembre (Resolució EMT/4342/2025). Barcelona tampoc no ha publicat encara els seus. Si un ajuntament no en va triar cap, s'apliquen el 10 de gener i el 5 de desembre.",
+      "Dues novetats de l'ordre del 2027: els ajuntaments han de fixar l'obertura en un festiu quan coincideixin dos o més festius seguits, i les empreses de botigues d'alimentació i compra diària poden canviar fins a tres dates del calendari general. Ni els ajuntaments ni aquestes empreses poden moure l'1 de novembre ni el 6 de desembre. La llista d'empreses i de dates canviades també s'ha de publicar al DOGC, i encara no hi és.",
     ],
     rulesTitle: "Horaris comercials a Catalunya: les normes",
     rules: [
@@ -269,7 +439,7 @@ const COPY: Record<Locale, T> = {
     calendar: "Per als festius en què no es treballa, consulta el [calendari laboral](/ca/guies/calendari-laboral-catalunya/) i els [festius locals de cada municipi](/ca/guies/festius-locals-catalunya/).",
     bcnTitle: "A Barcelona",
     bcn: [
-      "Barcelona fa servir el 2026 els mateixos deu dies que la llista general (4 i 11 de gener, 15 d'agost, 12 d'octubre, 29 de novembre i 6, 8, 13, 20 i 27 de desembre), i encara no ha publicat els seus dos dies del 2027.",
+      "Barcelona fa servir el 2026 els mateixos deu dies que la llista general (4 i 11 de gener, 15 d'agost, 12 d'octubre, 29 de novembre i 6, 8, 13, 20 i 27 de desembre). A 3 de novembre encara no ha publicat els seus dos dies del 2027, ni a la seva pàgina d'horaris comercials ni al DOGC.",
       "A més, a la **zona turística** (ZGAT), les botigues poden obrir els diumenges i festius **del 15 de maig al 15 de setembre, de 12 a 20 hores**. La zona inclou tots els barris de Ciutat Vella i de l'Eixample, i parts de Sants-Montjuïc, les Corts, Sarrià-Sant Gervasi, Gràcia, Horta-Guinardó i Sant Martí (Poblenou, Vila Olímpica i Diagonal Mar). Aquesta excepció no s'aplica entre el 16 de setembre i el 14 de maig: al novembre i al desembre, a la zona turística valen els mateixos dies que a la resta de la ciutat.",
       `Què obre a la ciutat cada festiu del desembre, amb els museus i el metro, i l'agenda del mes són a ${b2link("barcelonaDecember", "ca", "què fer a Barcelona al desembre")}.`,
     ],
@@ -278,24 +448,33 @@ const COPY: Record<Locale, T> = {
       "No hi ha cap data obligatòria: cada botiga decideix si fa rebaixes, i les ha d'anunciar amb aquest nom i amb el període que duren. El Consell Assessor de la Generalitat en matèria de comerç proposa cada any unes dates recomanades. El preu de referència ha de ser el més baix dels trenta dies anteriors, segons l'Agència Catalana del Consum.",
     ],
     faq: [
-      { question: "Quins festius d'obertura comercial queden el 2026?", answer: `A Barcelona i a la majoria de municipis, el diumenge 29 de novembre i el 6, 8, 13, 20 i 27 de desembre. Són dies en què les botigues poden obrir, no dies en què hagin d'obrir. ${TOWNS_NOV_DEC.length} municipis en canvien algun (són a la taula de dalt), i l'1 de novembre només és dia d'obertura a l'Ametlla del Vallès i Mollet del Vallès.` },
-      { question: "Obren les botigues l'1 de novembre de 2026?", answer: "En general no: el diumenge 1 de novembre no és dia d'obertura comercial a Barcelona ni a la majoria de municipis. Només l'han triat l'Ametlla del Vallès i Mollet del Vallès. Sí que poden obrir els establiments exclosos de l'horari general, com fleques, botigues de conveniència o farmàcies." },
+      { question: "Quins festius d'obertura comercial queden el 2026?", answer: `A Barcelona i a la majoria de municipis, el diumenge 29 de novembre, dia d'eleccions, i el 6, 8, 13, 20 i 27 de desembre. Són dies en què les botigues poden obrir, no dies en què hagin d'obrir. ${TOWNS_NOV_DEC.length} municipis en canvien algun (són a la taula de dalt).` },
+      { question: "Obren les botigues el 29 de novembre, dia d'eleccions?", answer: `Sí. El diumenge 29 de novembre és dia d'obertura comercial a Barcelona i a tots els municipis excepte ${joinList(NO_29_NOV, "ca")}, i les eleccions no el converteixen en dia de tancament. Hi poden obrir també els centres comercials. Qui hi treballi té dret a fins a quatre hores retribuïdes per anar a votar.` },
       { question: "Quins diumenges obren les botigues el desembre del 2026?", answer: "A Barcelona i a la majoria de municipis, els diumenges 6, 13, 20 i 27 de desembre, i també el dimarts 8 de desembre. Alguns municipis, com Terrassa, Manresa, Olot o Badalona, en canvien algun." },
-      { question: "Obren les botigues el dia de Nadal o Sant Esteve?", answer: "Les botigues amb horari general, no: el 25 i el 26 de desembre són dies de tancament, igual que l'1 i el 6 de gener. Els establiments exclosos de l'horari general (fleques, conveniència, farmàcies...) sí que poden obrir." },
-      { question: "Quins festius obren les botigues el 2027?", answer: "Els dies generals són el 3 de gener, el 27 de juny, l'1 i el 28 de novembre i el 6, el 8, el 12 i el 19 de desembre. Cada municipi n'hi afegeix dos; si no en tria cap, el 10 de gener i el 5 de desembre." },
-      { question: "Quan comencen les rebaixes de gener?", answer: "No hi ha una data obligatòria: cada botiga decideix i ha d'indicar l'inici i el final. La Generalitat només en publica unes dates recomanades." },
       { question: "Obren les botigues el 8 de desembre de 2026?", answer: `A Barcelona i a la majoria de municipis, sí: el dimarts 8 de desembre és dia d'obertura. No ho és a ${NO_8_DEC.length} municipis que l'han canviat per un altre dia, entre els quals ${["Badalona", "Manresa", "Santa Coloma de Gramenet", "Mollet del Vallès", "Gavà", "Montcada i Reixac"].join(", ")}: la llista sencera és a la taula de dalt.` },
+      { question: "Obren les botigues el 24 i el 31 de desembre?", answer: "Sí, amb l'horari de cada botiga: el 24 i el 31 de desembre són dies laborables a Catalunya, no festius. Les botigues amb horari general no poden obrir entre les 21.00 i les 6.00, ni aquests dies ni cap altre de l'octubre al maig." },
+      { question: "Obren les botigues el dia de Nadal o Sant Esteve?", answer: "Les botigues amb horari general, no: el 25 i el 26 de desembre són dies de tancament, igual que l'1 i el 6 de gener del 2027. Els establiments exclosos de l'horari general (fleques, conveniència, farmàcies...) sí que poden obrir." },
+      { question: "Quins festius obren les botigues el 2027?", answer: "El primer dia general és el diumenge 3 de gener. Els vuit dies generals són el 3 de gener, el 27 de juny, l'1 i el 28 de novembre i el 6, el 8, el 12 i el 19 de desembre. Cada municipi n'hi afegeix dos; si no en va triar cap, el 10 de gener i el 5 de desembre. La llista de cada municipi encara no és al DOGC (l'any passat va sortir el 27 de novembre)." },
       { question: "Quins supermercats obren els festius?", answer: "Els de fins a 300 m² de superfície de venda dedicats sobretot a l'alimentació de compra diària, i els de petites i mitjanes empreses de fins a 300 m², poden obrir qualsevol diumenge o festiu (article 37 de la llei de comerç). Els altres, només els dies d'obertura autoritzats del seu municipi." },
       { question: "Obren els centres comercials els diumenges de desembre?", answer: "Hi poden obrir els mateixos dies que la resta de botigues del municipi: a Barcelona i a la majoria de municipis, els diumenges 6, 13, 20 i 27 de desembre i el dimarts 8." },
+      { question: "Quan comencen les rebaixes de gener?", answer: "No hi ha una data obligatòria: cada botiga decideix i ha d'indicar l'inici i el final. La Generalitat només en publica unes dates recomanades." },
+      { question: "Obren les botigues l'1 de novembre?", answer: "El 2026 no va ser dia d'obertura comercial a Barcelona ni a la majoria de municipis: només l'havien triat l'Ametlla del Vallès i Mollet del Vallès. El 2027, en canvi, el dilluns 1 de novembre és un dels vuit dies generals d'obertura, i els ajuntaments no el poden canviar." },
     ],
   },
   es: {
-    lead: "Los domingos y festivos de apertura comercial que quedan en 2026 en Barcelona y en la mayoría de municipios son el **29 de noviembre y el 6, 8, 13, 20 y 27 de diciembre**. **El 1 de noviembre no lo es**, salvo en l'Ametlla del Vallès y Mollet del Vallès, y 21 municipios, como Badalona, Manresa o Santa Coloma de Gramenet, no abren el 8 de diciembre. En Cataluña las tiendas pueden abrir diez domingos o festivos al año: ocho los fija la Generalitat y dos más cada ayuntamiento. Las tiendas de alimentación de hasta 300 m², las panaderías o las de conveniencia, entre otras, no tienen ese límite.",
+    lead: `**Sí: el domingo 29 de noviembre, día de las elecciones generales, las tiendas pueden abrir** en Barcelona y en casi toda Cataluña, porque es uno de los días de apertura del calendario de 2026. Después quedan el **6, 8, 13, 20 y 27 de diciembre**. El **25 y el 26 de diciembre y el 1 y el 6 de enero** son días de cierre obligatorio, y el primer día de apertura del calendario general de 2027 es el **domingo 3 de enero**. ${joinList(NO_29_NOV, "es")} no abren el 29 de noviembre, y ${NO_8_DEC.length} municipios, como ${NO_8_DEC_EXAMPLES.slice(0, -1).join(", ")} o ${NO_8_DEC_EXAMPLES.at(-1)}, no abren el 8 de diciembre. En Cataluña las tiendas pueden abrir diez domingos o festivos al año: ocho los fija la Generalitat y dos más cada ayuntamiento. Las tiendas de alimentación de hasta 300 m², las panaderías o las de conveniencia, entre otras, no tienen ese límite.`,
     note: "Abrir esos días es una opción, no una obligación: cada tienda decide si abre. Los dos días municipales cambian de un pueblo a otro.",
-    leftTitle: "Qué domingos abren las tiendas en 2026",
-    leftCaption: "Domingos y festivos con apertura comercial, noviembre y diciembre de 2026",
-    leftHeaders: ["Día", "Por qué"],
-    leftNote: "Válido en Barcelona y en todos los municipios sin lista propia (Resolución EMT/4342/2025). El calendario de 2026 termina el 27 de diciembre.",
+    weeksTitle: "¿Pueden abrir las tiendas? Del 8 de noviembre al 10 de enero, día a día",
+    weeksCaption: "Domingos, festivos y días señalados de noviembre a enero: ¿pueden abrir las tiendas?",
+    weeksHeaders: ["Día", "Cataluña", "Barcelona", "Base oficial"],
+    weeksNote: "«Sí» quiere decir que las tiendas pueden abrir, no que deban hacerlo. De octubre a mayo, ninguna tienda con horario general puede abrir entre las 21.00 y las 6.00 (Ley 18/2017, art. 36.2.a). Un día laborable puede ser fiesta local en algún municipio, y entonces cuenta como festivo.",
+    weeksAfter: "Los días de «No» pueden abrir igualmente las tiendas exentas del horario general: panaderías, pastelerías, floristerías, prensa, tiendas de conveniencia, farmacias y tiendas de alimentación o de pymes de hasta 300 m², entre otras (la lista está más abajo). En Barcelona, la zona turística (ZGAT) solo amplía la apertura del 15 de mayo al 15 de septiembre: de noviembre a enero valen los mismos días que en el resto de la ciudad.",
+    electionTitle: "Domingo 29 de noviembre, día de elecciones: qué tiendas abren",
+    election: [
+      "El 29 de noviembre es a la vez la jornada de las elecciones generales y uno de los ocho domingos de apertura del calendario comercial de 2026 (Orden EMT/77/2025, artículo 1). Las elecciones no lo convierten en día de cierre: la ley de comercio catalana solo obliga a cerrar el 1 y el 6 de enero, el domingo y el lunes de Pascua, el 1 de mayo, el 24 de junio, el 11 de septiembre y el 25 y el 26 de diciembre (Ley 18/2017, artículo 36.2.d).",
+      `Pueden abrir todas las tiendas, también las grandes superficies y los centros comerciales, en Barcelona y en todos los municipios salvo ${joinList(NO_29_NOV, "es")}, que lo han cambiado por otro día (Resolución EMT/4342/2025). Poder abrir no quiere decir que abran todas: cada tienda decide si abre y con qué horario, siempre entre las 6.00 y las 21.00.`,
+      `Quien trabaje ese día tiene derecho a hasta cuatro horas retribuidas para ir a votar, proporcionales si hace jornada reducida (Real Decreto 605/1999, artículo 13). Para el resto de la jornada, mira ${b2link("voting", "es", "cómo votar el 29 de noviembre, también por correo")}.`,
+    ],
     townsTitle: "Tiendas abiertas el 8 de diciembre y los domingos de diciembre: municipios que cambian",
     townsLead: "Estos 30 municipios tienen, de noviembre a diciembre de 2026, algún día distinto de la lista general. El resto de ayuntamientos de la resolución, y todos los que no figuran en ella, abren el 29 de noviembre y el 6, 8, 13, 20 y 27 de diciembre.",
     townsCaption: "Municipios con días de apertura distintos en noviembre y diciembre de 2026",
@@ -321,8 +500,8 @@ const COPY: Record<Locale, T> = {
     nextHeaders: ["Día", "Por qué"],
     nextNote: "Orden EMT/89/2026 (DOGC 28.5.2026). Los días municipales por defecto se aplican donde el ayuntamiento no haya elegido otros.",
     next: [
-      "Los ocho días generales de 2027 ya son oficiales. Los dos de cada municipio, todavía no: los ayuntamientos debían comunicarlos antes del 1 de noviembre de 2026, y el año pasado la lista se publicó en el DOGC el 27 de noviembre. Si un ayuntamiento no elige ninguno, se aplican el 10 de enero y el 5 de diciembre.",
-      "Dos novedades de la orden de 2027: los ayuntamientos deben fijar la apertura en un festivo cuando coincidan dos o más festivos seguidos, y las empresas de tiendas de alimentación y compra diaria pueden cambiar hasta tres fechas del calendario general. Ni los ayuntamientos ni esas empresas pueden mover el 1 de noviembre ni el 6 de diciembre.",
+      "Los ocho días generales de 2027 ya son oficiales. Los dos de cada municipio, y los días que hayan cambiado los ayuntamientos, todavía no: debían comunicarse antes del 1 de noviembre de 2026 y, a 3 de noviembre, el DOGC aún no ha publicado la lista. El año pasado salió el 27 de noviembre (Resolución EMT/4342/2025). Barcelona tampoco ha publicado todavía los suyos. Si un ayuntamiento no eligió ninguno, se aplican el 10 de enero y el 5 de diciembre.",
+      "Dos novedades de la orden de 2027: los ayuntamientos deben fijar la apertura en un festivo cuando coincidan dos o más festivos seguidos, y las empresas de tiendas de alimentación y compra diaria pueden cambiar hasta tres fechas del calendario general. Ni los ayuntamientos ni esas empresas pueden mover el 1 de noviembre ni el 6 de diciembre. La lista de empresas y de fechas cambiadas también debe publicarse en el DOGC, y aún no está.",
     ],
     rulesTitle: "Horarios comerciales en Cataluña: las normas",
     rules: [
@@ -333,7 +512,7 @@ const COPY: Record<Locale, T> = {
     calendar: "Para los festivos en que no se trabaja, consulta el [calendario laboral](/es/guias/calendario-laboral-cataluna/) y los [festivos locales de cada municipio](/es/guias/festivos-locales-cataluna/).",
     bcnTitle: "En Barcelona",
     bcn: [
-      "Barcelona usa en 2026 los mismos diez días que la lista general (4 y 11 de enero, 15 de agosto, 12 de octubre, 29 de noviembre y 6, 8, 13, 20 y 27 de diciembre), y aún no ha publicado sus dos días de 2027.",
+      "Barcelona usa en 2026 los mismos diez días que la lista general (4 y 11 de enero, 15 de agosto, 12 de octubre, 29 de noviembre y 6, 8, 13, 20 y 27 de diciembre). A 3 de noviembre aún no ha publicado sus dos días de 2027, ni en su página de horarios comerciales ni en el DOGC.",
       "Además, en la **zona turística** (ZGAT), las tiendas pueden abrir los domingos y festivos **del 15 de mayo al 15 de septiembre, de 12 a 20 horas**. La zona incluye todos los barrios de Ciutat Vella y del Eixample, y partes de Sants-Montjuïc, Les Corts, Sarrià-Sant Gervasi, Gràcia, Horta-Guinardó y Sant Martí (Poblenou, Vila Olímpica y Diagonal Mar). Esta excepción no se aplica entre el 16 de septiembre y el 14 de mayo: en noviembre y diciembre, en la zona turística valen los mismos días que en el resto de la ciudad.",
       `Qué abre en la ciudad cada festivo de diciembre, con los museos y el metro, y la agenda del mes están en ${b2link("barcelonaDecember", "es", "qué hacer en Barcelona en diciembre")}.`,
     ],
@@ -342,23 +521,32 @@ const COPY: Record<Locale, T> = {
       "No hay ninguna fecha obligatoria: cada tienda decide si hace rebajas, y debe anunciarlas con ese nombre y con el periodo que duran. El Consell Assessor de la Generalitat en materia de comercio propone cada año unas fechas recomendadas. El precio de referencia debe ser el más bajo de los treinta días anteriores, según la Agència Catalana del Consum.",
     ],
     faq: [
-      { question: "¿Abren las tiendas el 1 de noviembre de 2026 en Cataluña?", answer: "En general no: el domingo 1 de noviembre no es día de apertura comercial en Barcelona ni en la mayoría de municipios. Solo lo han elegido l'Ametlla del Vallès y Mollet del Vallès. Sí pueden abrir los establecimientos excluidos del horario general, como panaderías, tiendas de conveniencia o farmacias." },
+      { question: "¿Abren las tiendas el domingo 29 de noviembre, día de elecciones?", answer: `Sí. El domingo 29 de noviembre es día de apertura comercial en Barcelona y en todos los municipios salvo ${joinList(NO_29_NOV, "es")}, y las elecciones no lo convierten en día de cierre. También pueden abrir los centros comerciales. Quien trabaje ese día tiene derecho a hasta cuatro horas retribuidas para ir a votar.` },
       { question: "¿Qué domingos abren las tiendas en diciembre de 2026 en Cataluña?", answer: "En Barcelona y en la mayoría de municipios, los domingos 6, 13, 20 y 27 de diciembre, y también el martes 8 de diciembre. Algunos municipios, como Terrassa, Manresa, Olot o Badalona, cambian alguno." },
-      { question: "¿Abren las tiendas el día de Navidad o San Esteban?", answer: "Las tiendas con horario general, no: el 25 y el 26 de diciembre son días de cierre, igual que el 1 y el 6 de enero. Los establecimientos excluidos del horario general (panaderías, conveniencia, farmacias...) sí pueden abrir." },
-      { question: "¿Qué festivos abren las tiendas en 2027?", answer: "Los días generales son el 3 de enero, el 27 de junio, el 1 y el 28 de noviembre y el 6, el 8, el 12 y el 19 de diciembre. Cada municipio añade dos; si no elige ninguno, el 10 de enero y el 5 de diciembre." },
-      { question: "¿Cuándo empiezan las rebajas de enero?", answer: "No hay una fecha obligatoria: cada tienda decide y debe indicar el inicio y el final. La Generalitat solo publica unas fechas recomendadas." },
       { question: "¿Abren las tiendas el 8 de diciembre de 2026?", answer: `En Barcelona y en la mayoría de municipios, sí: el martes 8 de diciembre es día de apertura. No lo es en ${NO_8_DEC.length} municipios que lo han cambiado por otro día, entre ellos ${["Badalona", "Manresa", "Santa Coloma de Gramenet", "Mollet del Vallès", "Gavà", "Montcada i Reixac"].join(", ")}: la lista completa está en la tabla de arriba.` },
+      { question: "¿Abren las tiendas el 24 y el 31 de diciembre?", answer: "Sí, con el horario de cada tienda: el 24 y el 31 de diciembre son días laborables en Cataluña, no festivos. Las tiendas con horario general no pueden abrir entre las 21.00 y las 6.00, ni esos días ni ningún otro de octubre a mayo." },
+      { question: "¿Abren las tiendas el día de Navidad o San Esteban?", answer: "Las tiendas con horario general, no: el 25 y el 26 de diciembre son días de cierre, igual que el 1 y el 6 de enero de 2027. Los establecimientos excluidos del horario general (panaderías, conveniencia, farmacias...) sí pueden abrir." },
+      { question: "¿Qué festivos abren las tiendas en 2027?", answer: "El primer día general es el domingo 3 de enero. Los ocho días generales son el 3 de enero, el 27 de junio, el 1 y el 28 de noviembre y el 6, el 8, el 12 y el 19 de diciembre. Cada municipio añade dos; si no eligió ninguno, el 10 de enero y el 5 de diciembre. La lista de cada municipio aún no está en el DOGC (el año pasado salió el 27 de noviembre)." },
       { question: "¿Qué supermercados abren en festivo?", answer: "Los de hasta 300 m² de superficie de venta dedicados sobre todo a la alimentación de compra diaria, y los de pequeñas y medianas empresas de hasta 300 m², pueden abrir cualquier domingo o festivo (artículo 37 de la ley de comercio). Los demás, solo los días de apertura autorizados de su municipio." },
       { question: "¿Abren los centros comerciales los domingos de diciembre?", answer: "Pueden abrir los mismos días que el resto de tiendas del municipio: en Barcelona y en la mayoría de municipios, los domingos 6, 13, 20 y 27 de diciembre y el martes 8." },
+      { question: "¿Cuándo empiezan las rebajas de enero?", answer: "No hay una fecha obligatoria: cada tienda decide y debe indicar el inicio y el final. La Generalitat solo publica unas fechas recomendadas." },
+      { question: "¿Abren las tiendas el 1 de noviembre en Cataluña?", answer: "En 2026 no fue día de apertura comercial en Barcelona ni en la mayoría de municipios: solo lo habían elegido l'Ametlla del Vallès y Mollet del Vallès. En 2027, en cambio, el lunes 1 de noviembre es uno de los ocho días generales de apertura, y los ayuntamientos no pueden cambiarlo." },
     ],
   },
   en: {
-    lead: "The Sundays and holidays left in 2026 when shops may open in Barcelona and most of Catalonia are **29 November and 6, 8, 13, 20 and 27 December**. **1 November is not one of them**, except in l'Ametlla del Vallès and Mollet del Vallès, and 21 towns, such as Badalona, Manresa and Santa Coloma de Gramenet, do not open on 8 December. Shops in Catalonia may open on ten Sundays or public holidays a year: eight set by the Generalitat and two chosen by each town council. Food shops of up to 300 m², bakeries and convenience stores, among others, are not bound by that limit.",
+    lead: `**Yes: on Sunday 29 November, general election day, shops may open** in Barcelona and almost all of Catalonia, because it is one of the opening days in the 2026 calendar. After that come **6, 8, 13, 20 and 27 December**. **25 and 26 December and 1 and 6 January** are compulsory closing days, and the first opening day in the 2027 general calendar is **Sunday 3 January**. ${joinList(NO_29_NOV, "en")} do not open on 29 November, and ${NO_8_DEC.length} towns, such as ${NO_8_DEC_EXAMPLES.slice(0, -1).join(", ")} and ${NO_8_DEC_EXAMPLES.at(-1)}, do not open on 8 December. Shops in Catalonia may open on ten Sundays or public holidays a year: eight set by the Generalitat and two chosen by each town council. Food shops of up to 300 m², bakeries and convenience stores, among others, are not bound by that limit.`,
     note: "Opening on these days is optional: each shop decides. The two municipal days vary from town to town.",
-    leftTitle: "Which Sundays are shops open in 2026",
-    leftCaption: "Sundays and holidays when shops may open, November and December 2026",
-    leftHeaders: ["Date", "Why"],
-    leftNote: "Applies in Barcelona and every municipality without its own list (Resolució EMT/4342/2025). The 2026 calendar ends on 27 December.",
+    weeksTitle: "Can shops open? 8 November to 10 January, date by date",
+    weeksCaption: "Sundays, holidays and key dates from November to January: can shops open?",
+    weeksHeaders: ["Date", "Catalonia", "Barcelona", "Official basis"],
+    weeksNote: "\"Yes\" means shops may open, not that they must. From October to May no shop on the general timetable may open between 21:00 and 6:00 (Llei 18/2017, art. 36.2.a). A working day can be a local holiday in some towns, and then it counts as a holiday.",
+    weeksAfter: "On the \"No\" days, shops outside the general timetable may still open: bakeries, cake shops, florists, newsagents, convenience stores, pharmacies, and food or small-business shops of up to 300 m², among others (the list is further down). In Barcelona the tourist zone (ZGAT) only extends opening from 15 May to 15 September: from November to January it follows the same days as the rest of the city.",
+    electionTitle: "Sunday 29 November, election day: which shops open",
+    election: [
+      "29 November is both general election day and one of the eight opening Sundays in the 2026 retail calendar (Ordre EMT/77/2025, article 1). The election does not make it a closing day: Catalonia's retail law only requires shops to close on 1 and 6 January, Easter Sunday and Monday, 1 May, 24 June, 11 September, and 25 and 26 December (Llei 18/2017, article 36.2.d).",
+      `Every shop may open, large stores and shopping centres included, in Barcelona and in every town except ${joinList(NO_29_NOV, "en")}, which swapped it for another day (Resolució EMT/4342/2025). Being allowed to open does not mean every shop will: each shop decides whether to open and its hours, always between 6:00 and 21:00.`,
+      `Anyone working that day is entitled to up to four paid hours off to vote, reduced pro rata for part-time work (Real Decreto 605/1999, article 13). For the rest of the day, see ${b2link("voting", "en", "how to vote on 29 November, including by post")}.`,
+    ],
     townsTitle: "Shops open on 8 December and December Sundays: towns that differ",
     townsLead: "These 30 towns have at least one different day between November and December 2026. Every other council in the resolution, and every town not listed in it, opens on 29 November and 6, 8, 13, 20 and 27 December.",
     townsCaption: "Towns with different shop opening days in November and December 2026",
@@ -384,8 +572,8 @@ const COPY: Record<Locale, T> = {
     nextHeaders: ["Date", "Why"],
     nextNote: "Ordre EMT/89/2026 (DOGC 28 May 2026). The default municipal days apply where the council has chosen none.",
     next: [
-      "The eight general days for 2027 are official. Each town's two extra days are not out yet: councils had to report them before 1 November 2026, and last year the list appeared in the DOGC on 27 November. A council that chooses none gets 10 January and 5 December.",
-      "Two changes in the 2027 order: councils must set an opening day when two or more public holidays fall in a row, and companies running everyday food shops may swap up to three dates of the general calendar. Neither councils nor those companies may move 1 November or 6 December.",
+      "The eight general days for 2027 are official. Each town's two extra days, and the days councils have swapped, are not out yet: they had to be reported before 1 November 2026 and, as of 3 November, the DOGC has not published the list. Last year it came out on 27 November (Resolució EMT/4342/2025). Barcelona has not published its days either. A council that chose none gets 10 January and 5 December.",
+      "Two changes in the 2027 order: councils must set an opening day when two or more public holidays fall in a row, and companies running everyday food shops may swap up to three dates of the general calendar. Neither councils nor those companies may move 1 November or 6 December. The list of those companies and their swapped dates must also appear in the DOGC, and it has not yet.",
     ],
     rulesTitle: "Shop opening hours in Catalonia: the rules",
     rules: [
@@ -396,7 +584,7 @@ const COPY: Record<Locale, T> = {
     calendar: "For the days off work, see the [Catalonia public holidays calendar](/en/guides/catalonia-public-holidays/) and the [local holidays in each town](/en/guides/local-holidays-catalonia/).",
     bcnTitle: "In Barcelona",
     bcn: [
-      "In 2026 Barcelona uses the same ten days as the general list (4 and 11 January, 15 August, 12 October, 29 November and 6, 8, 13, 20 and 27 December), and has not yet published its two days for 2027.",
+      "In 2026 Barcelona uses the same ten days as the general list (4 and 11 January, 15 August, 12 October, 29 November and 6, 8, 13, 20 and 27 December). As of 3 November it has not published its two days for 2027, on its retail hours page or in the DOGC.",
       "On top of that, in the **tourist zone** (ZGAT), shops may open on Sundays and holidays **from 15 May to 15 September, 12:00 to 20:00**. The zone covers every neighbourhood of Ciutat Vella and the Eixample, and parts of Sants-Montjuïc, Les Corts, Sarrià-Sant Gervasi, Gràcia, Horta-Guinardó and Sant Martí (Poblenou, Vila Olímpica and Diagonal Mar). The exception does not apply from 16 September to 14 May: in November and December the tourist zone follows the same days as the rest of the city.",
       `What's open in the city on each December holiday, museums and the metro included, and the month's events are in ${b2link("barcelonaDecember", "en", "Barcelona in December")}.`,
     ],
@@ -405,14 +593,16 @@ const COPY: Record<Locale, T> = {
       "There is no compulsory date: each shop decides whether to hold sales and must announce them as such, with the period they cover. The Generalitat's retail advisory council proposes recommended dates every year. The reference price must be the lowest of the previous thirty days, according to the Catalan Consumer Agency.",
     ],
     faq: [
-      { question: "Are shops open on 1 November 2026 in Barcelona?", answer: "Mostly not: Sunday 1 November is not a shop opening day in Barcelona or most of Catalonia. Only l'Ametlla del Vallès and Mollet del Vallès chose it. Businesses outside the general timetable, such as bakeries, convenience stores and pharmacies, may open." },
+      { question: "Are shops open on Sunday 29 November, election day?", answer: `Yes. Sunday 29 November is a shop opening day in Barcelona and every town except ${joinList(NO_29_NOV, "en")}, and the election does not make it a closing day. Shopping centres may open too. Anyone working that day is entitled to up to four paid hours off to vote.` },
       { question: "Are shops open on Sundays in Barcelona in December 2026?", answer: "Yes, on Sundays 6, 13, 20 and 27 December, and on Tuesday 8 December, in Barcelona and most towns. A few towns, such as Terrassa, Manresa, Olot or Badalona, change one of them." },
-      { question: "Are shops open on Christmas Day or 26 December in Catalonia?", answer: "Shops on the general timetable are not: 25 and 26 December are closing days, as are 1 and 6 January. Businesses outside the general timetable (bakeries, convenience stores, pharmacies...) may open." },
-      { question: "Which holidays can shops open in 2027?", answer: "The general days are 3 January, 27 June, 1 and 28 November, and 6, 8, 12 and 19 December. Each town adds two; if it chooses none, 10 January and 5 December." },
-      { question: "When do the January sales start?", answer: "There is no fixed date: each shop decides and must state when its sale starts and ends. The Generalitat only publishes recommended dates." },
       { question: "Are shops open on 8 December 2026?", answer: `In Barcelona and most towns, yes: Tuesday 8 December is an opening day. It is not in ${NO_8_DEC.length} towns that swapped it for another day, including ${["Badalona", "Manresa", "Santa Coloma de Gramenet", "Mollet del Vallès", "Gavà", "Montcada i Reixac"].join(", ")}: the full list is in the table above.` },
+      { question: "Are shops open on 24 and 31 December?", answer: "Yes, with each shop's own hours: 24 and 31 December are working days in Catalonia, not public holidays. Shops on the general timetable may not open between 21:00 and 6:00, on those days or any other from October to May." },
+      { question: "Are shops open on Christmas Day or 26 December in Catalonia?", answer: "Shops on the general timetable are not: 25 and 26 December are closing days, as are 1 and 6 January 2027. Businesses outside the general timetable (bakeries, convenience stores, pharmacies...) may open." },
+      { question: "Which holidays can shops open in 2027?", answer: "The first general day is Sunday 3 January. The eight general days are 3 January, 27 June, 1 and 28 November, and 6, 8, 12 and 19 December. Each town adds two; if it chose none, 10 January and 5 December. Each town's list is not in the DOGC yet (last year it came out on 27 November)." },
       { question: "Which supermarkets are open on public holidays?", answer: "Those with up to 300 m² of sales floor selling mainly everyday food, and those of up to 300 m² run by small and medium-sized businesses, may open on any Sunday or holiday (article 37 of the retail law). Others only on their town's authorised opening days." },
       { question: "Are shopping centres open on Sundays in December?", answer: "They may open on the same days as every other shop in their town: in Barcelona and most towns, Sundays 6, 13, 20 and 27 December and Tuesday 8 December." },
+      { question: "When do the January sales start?", answer: "There is no fixed date: each shop decides and must state when its sale starts and ends. The Generalitat only publishes recommended dates." },
+      { question: "Are shops open on 1 November in Barcelona?", answer: "In 2026 it was not a shop opening day in Barcelona or most of Catalonia: only l'Ametlla del Vallès and Mollet del Vallès had chosen it. In 2027, by contrast, Monday 1 November is one of the eight general opening days, and councils may not swap it." },
     ],
   },
 };
@@ -430,8 +620,10 @@ function body(locale: Locale) {
   return [
     lead(t.lead),
     callout("official", verifiedLine(locale, VERIFIED), t.note),
-    ...h2(t.leftTitle),
-    table(t.leftCaption, t.leftHeaders, DAYS_2026_LEFT.map(([day, why]) => [day[locale], why[locale]]), t.leftNote),
+    ...h2(t.weeksTitle),
+    table(t.weeksCaption, t.weeksHeaders, NEXT_WEEKS.map((row) => [row.day[locale], row.cat(locale), row.bcn(locale), row.basis[locale]]), t.weeksNote),
+    ...paras(t.weeksAfter),
+    ...h2(t.electionTitle, ...t.election),
     ...h2(t.townsTitle, t.townsLead),
     table(t.townsCaption, t.townsHeaders, TOWNS_NOV_DEC.map((row) => [row.town, days(row.closed), days(row.extra)]), t.townsNote),
     ...paras(t.townsSame),

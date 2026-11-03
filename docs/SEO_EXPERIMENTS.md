@@ -1864,6 +1864,95 @@ target query; check the last crawl date of each URL first.
 
 **Outcome:** _pending_
 
+---
+
+## 2026-11-03 — Shops open on Sundays and holidays: 29N and Christmas on the first screen (group `shops`, owner request)
+
+Why: the ES edition is one of the strongest pages (4,145 impressions on
+31 Oct-2 Nov, pos ~5) and its demand comes in waves around the dates people
+ask about. The 1 Nov wave is over; the next are Sunday 29 November (general
+election day), the December Sundays, 8 December, Christmas and Reis. The
+owner asked for those dates on the first screen and in the snippet. This is
+inside the 28-day window of the 30 Oct titles (ES top-3 push, CA wave 4) and
+of today's CA description from the CTR sweep, and title and description
+change together: knowingly against both rules, by the owner's priority.
+Measure the page against the baseline below, not field by field.
+
+Baseline, `scripts/snapshot.py page <substr> 14`, 21 Oct-3 Nov (impressions
+start on 25 Oct for ES; 3 Nov partial):
+
+| Edition | Impressions | Clicks | CTR | Position | Visible queries |
+| --- | --- | --- | --- | --- | --- |
+| ES `/es/guias/tiendas-abiertas-festivos-cataluna/` | 5,699 | 272 | 4.8 % | ~5 | tiendas abiertas hoy en barcelona 2026 83 at 6.4 (1.2 %); tiendas abiertas 1 noviembre barcelona 45 at 4.2; domingo 1 de noviembre abren las tiendas 44 at 4.2; apertura festivos 35 at 5.9; festivos apertura cataluña 2026 29 at 6.3; tiendas abiertas mañana en barcelona 2026 24 at 5.4; centros comerciales abiertos hoy 17 at 3.1; tiendas abiertas domingo barcelona 2026 14 at 6.3 |
+| CA `/ca/guies/botigues-obertes-festius-catalunya/` | 1,013 | 24 | 2.4 % | ~4.5 | botigues obertes avui a barcelona 2026 22 at 6.1; diumenges botigues obertes 2026 17 at 7.2; festius oberts catalunya 2026 7; botigues obertes diumenge barcelona (2026) 6+6 at 6-7 |
+| EN `/en/guides/shops-open-sundays-holidays-catalonia/` | 293 | 2 | 0.7 % | ~5.5 | barcelona shops open on sunday 3 at 8.3; are shops open in barcelona on sunday / today 1 each; the rest are fragments |
+
+Titles and descriptions (old → new):
+
+- ES: "Domingos y festivos de apertura 2026 en Cataluña y Barcelona" →
+  **"Tiendas abiertas en Barcelona: domingo 29 nov y diciembre"**.
+  Description: "Festivos de apertura que quedan en 2026: 29 de noviembre y 6,
+  8, 13, 20 y 27 de diciembre. Los 30 municipios…" → "Domingo 29 de
+  noviembre, día de elecciones: sí pueden abrir en Barcelona y Cataluña. En
+  diciembre, 6, 8, 13, 20 y 27; 25 y 26, no. 30 municipios cambian."
+- CA: "Festius i diumenges d'obertura 2026 a Catalunya i Barcelona" →
+  **"Botigues obertes a Barcelona: diumenge 29 nov i desembre"**.
+  Description: "Botigues obertes diumenges i festius 2026: a Barcelona queden
+  el 29 de novembre…" (today's sweep) → "Diumenge 29 de novembre, dia
+  d'eleccions: sí que poden obrir a Barcelona i Catalunya. Al desembre, 6, 8,
+  13, 20 i 27; 25 i 26, no. 30 municipis canvien."
+- EN: "Shops open on Sundays in Barcelona & Catalonia: 2026-27" →
+  **"Are shops open on Sunday in Barcelona? 29 Nov and December"**.
+  Description: "Shop opening days left in 2026: 29 November and…" → "Sunday
+  29 November, election day: yes, shops may open in Barcelona and Catalonia.
+  In December: 6, 8, 13, 20 and 27, not 25-26. The 30 towns that differ."
+
+What changed on the page (all three editions; facts and URLs in the header
+comment of `src/lib/content/batch02/shops.ts`, every one read on 3 Nov):
+
+- Lead answers 29N first ("Sí: el domingo 29 de noviembre, día de las
+  elecciones generales, las tiendas pueden abrir…"), then the December days,
+  the closing days (25-26 Dec, 1 and 6 Jan) and the first 2027 day (3 Jan).
+- New first table "date → can shops open? (Catalonia / Barcelona / official
+  basis)" from Sundays 8-22 Nov to 10 Jan 2027, replacing the "days left in
+  2026" table. Exceptions are computed from `TOWNS_NOV_DEC` (Gironella,
+  Martorell and Salt on 29 Nov; Riells i Viabrea and Terrassa on 6 Dec; 21
+  towns on 8 Dec; Olot on 13 Dec; Gironella on 27 Dec). 24 and 31 Dec and
+  5 Jan are working days (Ordre EMT/66/2025, Ordre EMT/52/2026); 25-26 Dec
+  and 1 and 6 Jan are closed by Llei 18/2017 art. 36.2.d; 3 Jan 2027 is a
+  general day (Ordre EMT/89/2026); 10 Jan 2027 is the default day, pending
+  for Barcelona.
+- New section "29 de noviembre, día de elecciones: qué tiendas abren": the
+  election is not a closing day (art. 36.2.d lists them), large stores and
+  shopping centres included, up to four paid hours to vote (RD 605/1999 art.
+  13), link to the how-to-vote guide.
+- 2027: the DOGC list of municipal days and swaps is not out (every DOGC
+  title from 14 Oct to 3 Nov scanned); precedent 27 Nov 2025 (Resolució
+  EMT/4342/2025). Barcelona's 2027 days are not on its commerce page or in
+  the DOGC. The food retailers' swap list (Ordre EMT/89/2026 art. 6.3) is not
+  out either.
+- FAQ: 29N first in ES/EN (second in CA, whose first FAQ is pinned by a
+  test), new "24 and 31 December", the 1 November FAQ now in the past tense
+  plus the 2027 rule (1 Nov 2027 is a general day councils may not swap).
+- Not done: the retail promotion of Friday 27 November is not named (the
+  tests forbid it; 27 Nov is an ordinary working day and adds nothing to the
+  table).
+
+**Prediction.** ES CTR ≥ 6 % at the same position (~5) in the week before
+29 Nov, with "tiendas abiertas … barcelona" queries above 3 %; CA ≥ 4 %; EN
+≥ 2 % if its impressions pass ~150 a week. Impressions should rise in the
+29 Nov week and again from 4 Dec; a CTR drop on "domingos y festivos de
+apertura 2026" (the old title's words) would be the cost to watch.
+
+**Measure on 15 Nov 2026 and on 1 Dec 2026**: per edition and per query
+(ES `tiendas-abiertas`, CA `botigues-obertes`, EN `shops-open`); check the
+last crawl date first. **Revisit after 29 Nov**: the title names a past
+date from 30 Nov (next: the December Sundays and 8 Dec), and after the DOGC
+publishes the 2027 municipal list (add Barcelona's 2027 days, the 10 Jan
+row and the 2027 table).
+
+**Outcome:** _pending_
+
 ## Candidates not yet run
 
 Recorded so they are not lost, and so they are not all started at once.
