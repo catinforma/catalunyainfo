@@ -1,6 +1,7 @@
 import type { Locale } from "@/lib/i18n/config";
 import { hubPath as rodaliesHub } from "@/lib/programmatic/rodalies/paths";
 
+import { l2ClosureMention } from "./l2-closure";
 import {
   b2Related,
   b2link,
@@ -330,9 +331,11 @@ function body(locale: Locale) {
     ...paras(t.tram),
     ...h2(t.funicularTitle, t.funicular),
     ...h2(t.tipsTitle),
-    list(...t.tips),
+    // 3 Nov 2026: one sentence on the L2 La Pau-Gorg closure, read from
+    // l2-closure.ts so it says "back since" once L2_REOPENED is filled.
+    list(...t.tips, l2ClosureMention(locale, "hours")),
     faq(t.faq),
-    ...b2Related(["transport", "airport", "cards"], locale),
+    ...b2Related(["transport", "airport", "cards", "l2Closure"], locale),
   ];
 }
 

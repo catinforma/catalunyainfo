@@ -1,5 +1,6 @@
 import type { Locale } from "@/lib/i18n/config";
 
+import { l2ClosureMention } from "./l2-closure";
 import {
   b2link,
   b2Related,
@@ -288,7 +289,9 @@ function body(locale: Locale) {
     lead(t.lead),
     table(t.tableCaption, t.headers, t.rows, t.tableNote),
     callout("official", verifiedLine(locale, VERIFIED), t.note),
-    ...h2(t.holaTitle, ...t.hola),
+    // 3 Nov 2026: the L2 La Pau-Gorg closure's shuttle needs no validation;
+    // the sentence comes from l2-closure.ts and follows its dated state.
+    ...h2(t.holaTitle, ...t.hola, l2ClosureMention(locale, "tickets")),
     ...h2(t.cardTitle, ...t.card),
     ...h2(t.sumTitle, ...t.sum),
     ...h2(t.notTitle),

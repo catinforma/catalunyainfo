@@ -82,7 +82,9 @@ export type B2Key =
   // 31 Oct 2026: Barcelona in December, the dated hub for the month.
   | "barcelonaDecember"
   // 31 Oct 2026: the Three Kings parade (Cavalcada de Reis), Barcelona and other towns.
-  | "reis";
+  | "reis"
+  // 3 Nov 2026: metro L2 closed between La Pau and Gorg for works (TMB).
+  | "l2Closure";
 
 /** Path after the locale prefix, no leading or trailing slash. */
 export const B2_PATHS: Record<B2Key, Record<Locale, string>> = {
@@ -386,6 +388,13 @@ export const B2_PATHS: Record<B2Key, Record<Locale, string>> = {
     ca: "guies/cavalcada-de-reis-barcelona",
     es: "guias/cabalgata-de-reyes-barcelona",
     en: "guides/three-kings-parade-barcelona",
+  },
+  // No year in the path: the same URLs record the closure once it is over
+  // and serve the next L2 closure on that stretch, if TMB announces one.
+  l2Closure: {
+    ca: "guies/l2-metro-tall-la-pau-gorg",
+    es: "guias/l2-metro-cortada-la-pau-gorg",
+    en: "guides/barcelona-metro-l2-closure",
   },
 };
 
@@ -696,6 +705,12 @@ export const B2_TITLES: Record<B2Key, Record<Locale, string>> = {
     ca: "Cavalcada de Reis 2027 a Barcelona: horari i recorregut",
     es: "Cabalgata de Reyes 2027 en Barcelona: horario y recorrido",
     en: "Three Kings Parade 2027 in Barcelona: times and route",
+  },
+  // A noun, not "is closed": the rail label stays true after the reopening.
+  l2Closure: {
+    ca: "Tall de l'L2 entre La Pau i Gorg: bus llançadora i alternatives",
+    es: "Corte de la L2 entre La Pau y Gorg: bus lanzadera y alternativas",
+    en: "L2 metro closure between La Pau and Gorg: shuttle bus and alternatives",
   },
 };
 

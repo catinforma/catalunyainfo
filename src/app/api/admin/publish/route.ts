@@ -59,6 +59,7 @@ import { BRIDGES_2027 } from "@/lib/content/batch02/bridges-2027";
 import { LOTERIA_NADAL } from "@/lib/content/batch02/loteria-nadal";
 import { BARCELONA_DECEMBER } from "@/lib/content/batch02/barcelona-december";
 import { REIS } from "@/lib/content/batch02/reis";
+import { L2_CLOSURE_GUIDE } from "@/lib/content/batch02/l2-closure";
 import { publishHolidayTodayGuide } from "@/lib/content/holidays/today-publish";
 import { publishLocalHolidaysGuide } from "@/lib/content/holidays/local-publish";
 import { publishReservoirGuide } from "@/lib/content/reservoirs/publish";
@@ -270,6 +271,12 @@ export async function POST(request: Request) {
         await publishB2Article(BARCELONA_DECEMBER),
       );
     }
+    // Metro L2 closed between La Pau and Gorg (TMB, 2 Nov - 3 Dec 2026): one
+    // page, on its own so a change of dates or the reopening republishes only
+    // it. The metro hours and transport cards guides gained one sentence each
+    // (read from l2-closure.ts) and go out with their own groups, `hours` and
+    // `cards`, after this one and again after the reopening.
+    if (wants("l2-closure")) published.push(await publishB2Article(L2_CLOSURE_GUIDE));
 
     const surfaces = [
       ...published.flatMap((article) =>
