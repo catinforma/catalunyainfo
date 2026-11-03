@@ -983,6 +983,252 @@ export const COUNCIL_2027: Readonly<Record<string, CouncilApproved>> = {
     act: { kind: "web", date: null },
     readOn: "2026-11-03",
   },
+  // Ple of 23 July 2026: "3.- Aprovació de les Festes locals per a l'any 2027 El Ple va aprovar com
+  // a festes locals del municipi de Lliçà d'Amunt per a l'any 2027 els dies 7 de gener i 10 de
+  // setembre. UNANIMITAT"
+  "llica-d-amunt": {
+    local: ["2027-01-07", "2027-09-10"],
+    source: {
+      name: "Crònica del Ple ordinari de dijous 23 de juliol de 2026",
+      ref: "Ajuntament de Lliçà d'Amunt, vídeo-actes del Ple (sessió PLE2026/6)",
+      url: "https://plemunicipal.llicamunt.cat/session/downloadItem/8a8180899fa13582019fb7b6aba90328",
+    },
+    act: { kind: "ple", date: "2026-07-23" },
+    readOn: "2026-11-03",
+  },
+  // Ple of 23 July 2026: "El Ple ordinari de l'Ajuntament de Cunit, celebrat aquest dijous 23 de
+  // juliol, ha aprovat diversos punts de l'ordre del dia relacionats amb la gestió econòmica,
+  // l'organització municipal, així com diferents mocions presentades pels grups municipals. Entre
+  // els principals acords adoptats destaca l'aprovació de l'acta del ple de data 28 de maig, la
+  // designació com a festes locals de 2027, els dies 20 de gener i 12 de juliol." The names are the
+  // council's calendar page's (cunit.cat/calendari-laboral): "20 de gener (Sant Sebastià, segon
+  // patró de Cunit) | 12 de juliol (Sant Cristòfol, patró de Cunit)".
+  cunit: {
+    local: ["2027-01-20", "2027-07-12"],
+    names: ["Sant Sebastià", "Sant Cristòfol"],
+    source: {
+      name: "Informació del Ple ordinari de 23 de juliol",
+      ref: "Ajuntament de Cunit, 23 de juliol de 2026",
+      url: "https://www.cunit.cat/informacio-del-ple-ordinari-de-23-de-juliol/",
+    },
+    act: { kind: "ple", date: "2026-07-23" },
+    readOn: "2026-11-03",
+  },
+  // Ple of 27 July 2026: "Calendari laboral i festes locals. Any 2027 [...] 22 de gener, divendres
+  // (Sant Vicenç)* [...] 20 d'agost, divendres (Festa Major de l'Aigua i la Llum)* [...] * Festius
+  // locals a Castellbisbal, acordats per unanimitat a la sessió plenària del passat 27 de juliol de
+  // 2026."
+  castellbisbal: {
+    local: ["2027-01-22", "2027-08-20"],
+    names: ["Sant Vicenç", "Festa Major de l'Aigua i la Llum"],
+    source: {
+      name: "Calendari de dies festius",
+      ref: "Ajuntament de Castellbisbal",
+      url: "https://www.castellbisbal.cat/guia-del-municipi/calendari-de-dies-festius",
+    },
+    act: { kind: "ple", date: "2026-07-27" },
+    readOn: "2026-11-03",
+  },
+  // Ple of 25 June 2026: "CERTIFICAT EXPEDIENT NÚM. ÒRGAN COL·LEGIAT DATA DE LA SESSIÓ 2614/2026 El
+  // ple 25/06/2026 EN QUALITAT DE SECRETÀRIA d'AQUEST ÒRGAN, CERTIFICO: Que en la sessió celebrada
+  // en la data a dalt indicada es va adoptar el següent acord: PROPOSAR AL DEPARTAMENT D'EMPRESA I
+  // TREBALL DE LA GENERALITAT DE CATALUNYA QUE ES DECLARIN EN AQUEST MUNICIPI ELS DIES 14 D'ABRIL I
+  // 17 DE MAIG, COM A FESTES LOCALS DURANT L'ANY 2027 (EXPEDIENT 2614/2026) Favorable Tipus de
+  // votació: Unanimitat/Assentiment"
+  "badia-del-valles": {
+    local: ["2027-04-14", "2027-05-17"],
+    source: {
+      name: "Certificat d'acord festius locals 2027",
+      ref: "Ajuntament de Badia del Vallès",
+      url: "https://www.badiadelvalles.cat/ARXIUS/2026/CalendariLaboral/Certificat_d_acord.pdf",
+    },
+    act: { kind: "ple", date: "2026-06-25" },
+    readOn: "2026-11-03",
+  },
+  // Ple of 30 June 2026: "Publicació 30.06.2026 Resum del ple municipal de juny S'aprova el 8 de
+  // setembre (dimecres) i 29 de novembre (dilluns) com a festes locals del 2027 [...] En un altre
+  // ordre de qüestions, el ple va aprovar els dies 8 de setembre, amb motiu de les Fires i Festes, i
+  // 29 de novembre, coincidint amb la Festa Major, com a festes locals del calendari de 2027."
+  "sant-sadurni-d-anoia": {
+    local: ["2027-09-08", "2027-11-29"],
+    names: ["Fires i Festes", "Festa Major"],
+    source: {
+      name: "Resum del ple municipal de juny",
+      ref: "Ajuntament de Sant Sadurní d'Anoia, 30 de juny de 2026",
+      url: "https://santsadurni.cat/document.php?id=23682",
+    },
+    act: { kind: "ple", date: "2026-06-30" },
+    readOn: "2026-11-03",
+  },
+  // "2027 Les festes locals de l'any 2027, aprovades pel Ple Municipal i l'EMD són les següents:
+  // Torroella de Montgrí: 25 d'agost de 2027, i 30 de novembre de 2027 L'Estartit: 26 de juliol de
+  // 2027 i 13 de desembre de 2027."
+  "torroella-de-montgri": {
+    local: ["2027-08-25", "2027-11-30"],
+    nuclei: [
+      { name: "l'Estartit", dates: ["2027-07-26", "2027-12-13"] },
+    ],
+    source: { name: "Festius locals", ref: "Ajuntament de Torroella de Montgrí", url: "https://www.torroella-estartit.cat/ca/festes-locals-any.html" },
+    act: { kind: "ple", date: null },
+    readOn: "2026-11-03",
+  },
+  // Ple of 28 April 2026: "PUBLICAT 04.05.2026 Festes locals de l'any 2027 Aprovat pel ple municipal
+  // de 28 d'abril de 2026. Les dues festes locals per a l'any 2027 aprovades per l'Ajuntament de
+  // Llavaneres seran els dies: - 19 de juliol (dilluns) Festa Major de La Minerva - 30 de novembre
+  // (dimarts), Sant Andreu"
+  "sant-andreu-de-llavaneres": {
+    local: ["2027-07-19", "2027-11-30"],
+    names: ["Festa Major de La Minerva", "Sant Andreu"],
+    source: { name: "Festes locals de l'any 2027", ref: "Ajuntament de Sant Andreu de Llavaneres, 4 de maig de 2026", url: "https://ajllavaneres.cat/25105" },
+    act: { kind: "ple", date: "2026-04-28" },
+    readOn: "2026-11-03",
+  },
+  // Ple of 30 June 2026: "Que, en la sessió del Ple de data 30 de juny de 2026 , es van adoptar,
+  // entre d'altres, i per unanimitat dels seus membres, els següents acords: APROVACIÓ DELS DIES
+  // FESTIUS LOCALS PER A L'ANY 2027 DEL MUNICIPI DE LA BISBAL D'EMPORDÀ. [...] Primer.- PROPOSAR als
+  // Serveis Territorials a Girona del Departament d 'Empresa i Treball de la Generalitat de
+  // Catalunya les següents festes locals del municipi de la Bisbal d'Empordà per a l'any 2027: 1a
+  // festa local: 17 de maig de 2027 2a festa local: 16 d´agost de 2027"
+  "la-bisbal-d-emporda": {
+    local: ["2027-05-17", "2027-08-16"],
+    source: {
+      name: "Certificat Ple aprovació dels dies festius locals per a l'any 2027",
+      ref: "Ajuntament de la Bisbal d'Empordà",
+      url: "https://labisbal.cat/wp-content/uploads/2026/08/CERT_PLE-APROVACIO-FESTES-LOCALS-2027.pdf",
+    },
+    act: { kind: "ple", date: "2026-06-30" },
+    readOn: "2026-11-03",
+  },
+  // Ple of 30 June 2026: "El Ple també va aprovar, en aquest cas per unanimitat, proposar al
+  // Departament d'Empresa i Treball de la Generalitat de Catalunya, com a festes locals de Ripoll
+  // per a l'any 2025, els dies 11 i 12 de maig de 2027, coincidint amb la Festa Major de Sant
+  // Eudald." The "any 2025" is a slip: the dates carry 2027 and the Ple met in June 2026.
+  ripoll: {
+    local: ["2027-05-11", "2027-05-12"],
+    names: ["Festa Major de Sant Eudald", "Festa Major de Sant Eudald"],
+    source: {
+      name: "Ple ordinari del mes de juny del 2026",
+      ref: "Ajuntament de Ripoll (Memòria de plens)",
+      url: "https://ripoll.cat/ple-ordinari-del-mes-de-juny-del-2026/",
+    },
+    act: { kind: "ple", date: "2026-06-30" },
+    readOn: "2026-11-03",
+  },
+  // Ple of 25 June 2026: "5.- Aprovació de les fests locals per a l'any 2027. El Ple aprova, per
+  // unanimitat de tots els grups, les festes locals per a l'any 2027: 29 d'abril de 2027 – Festa
+  // Major dels Sants Màrtirs 17 de maig de 2027 – Pasqua Granada"
+  "vilassar-de-dalt": {
+    local: ["2027-04-29", "2027-05-17"],
+    names: ["Festa Major dels Sants Màrtirs", "Pasqua Granada"],
+    source: {
+      name: "Ple ordinari del juny 2026 (Aprovació de punts)",
+      ref: "Ajuntament de Vilassar de Dalt",
+      url: "https://vilassardedalt.cat/353-ajuntament/ajuntament/ple-municipal/ple-ordinari-del-juny-2026",
+    },
+    act: { kind: "ple", date: "2026-06-25" },
+    readOn: "2026-11-03",
+  },
+  // Ple of 15 July 2026: "EXPEDIENT 2266/2026. DETERMINACIÓ DE LES FESTES LOCALS ANY 2027. Favorable
+  // Tipus de votació: Unanimitat/Assentiment ... Primer. Proposar al Departament d'Empresa i Treball
+  // de la Generalitat de Catalunya, els dies que s'indiquen tot seguit com a festius locals,
+  // retribuïts i no recuperables al municipi de Sant Fruitós de Bages per a l'any 2027: Dijous, 21
+  // de gener de 2027 Dilluns, 5 de juliol de 2027"
+  "sant-fruitos-de-bages": {
+    local: ["2027-01-21", "2027-07-05"],
+    names: ["festivitat de Sant Fruitós", "festa major d'estiu"],
+    source: {
+      name: "Certificat d'acord del Ple - Determinació de les festes locals any 2027 (Calendari Festes Locals 2027)",
+      ref: "Seu electrònica de l'Ajuntament de Sant Fruitós de Bages",
+      url: "https://www.santfruitos.cat/seu-electronica/informacio-oficial/certificat-dacord-ple_-festes-locals-2027.pdf",
+    },
+    act: { kind: "ple", date: "2026-07-15" },
+    readOn: "2026-11-03",
+  },
+  // Ple of 30 July 2026: "El Ple també va donar llum verda a les dues festes locals de Viladecavalls
+  // per al 2027, que se celebraran el 12 de juliol, coincidint amb el dilluns de Festa Major, i l'11
+  // de novembre, festivitat de Sant Martí, patró del municipi."
+  viladecavalls: {
+    local: ["2027-07-12", "2027-11-11"],
+    names: ["dilluns de Festa Major", "Sant Martí"],
+    source: {
+      name: "Nous recursos per al Punt Jove de Can Trias",
+      ref: "Ajuntament de Viladecavalls, 31 de juliol de 2026",
+      url: "https://www.viladecavalls.cat/actualitat/noticies/nous-recursos-per-al-punt-jove-de-can-trias",
+    },
+    act: { kind: "ple", date: "2026-07-30" },
+    readOn: "2026-11-03",
+  },
+  // "Festes locals FESTES LOCALS 2027: Segona Pasqua: 17 de maig, dilluns Festa Major: 8 de
+  // setembre, dimecres FESTES APROVADES PER CATALUNYA 2027:"
+  guissona: {
+    local: ["2027-05-17", "2027-09-08"],
+    names: ["Segona Pasqua", "Festa Major"],
+    source: {
+      name: "Calendari festes locals Guissona",
+      ref: "Ajuntament de Guissona",
+      url: "https://www.guissona.cat/serveis-de-guissona/festes/festes-locals-guissona-2024/",
+    },
+    act: { kind: "web", date: null },
+    readOn: "2026-11-03",
+  },
+  // Ple of 25 June 2026: "4. DESIGNACIÓ DE LES FESTES LOCALS DE L'ANY 2027. EXP. 536/26. ...
+  // Primer.- Proposar com a festes locals del municipi de Taradell per a l'any 2027 els dies
+  // següents: -Dimecres, 20 de gener -Dimecres, 25 d'agost. ... Es sotmet a votació la proposta
+  // d'acord i s´aprova per unanimitat." The acta names the days: "el dia 20 de gener (Sant Sebastià)
+  // i el dia 25 d'agost (Sant Genís)".
+  taradell: {
+    local: ["2027-01-20", "2027-08-25"],
+    names: ["Sant Sebastià", "Sant Genís"],
+    source: {
+      name: "Acta de sessió ordinària del Ple de l'Ajuntament, núm. 06/2026, de 25/06/2026",
+      ref: "Ajuntament de Taradell",
+      url: "https://www.taradell.cat/documents/ple-de-juny-de-2026-27072026-101231.pdf",
+    },
+    act: { kind: "ple", date: "2026-06-25" },
+    readOn: "2026-11-03",
+  },
+  // Ple of 30 April 2026: "Festes Locals 2027. S'ha aprovat la proposta de les dates per a les
+  // festes locals de l'any 2027 que seran a Puig-reig el dilluns 17 de maig (Festa Major) i l'11 de
+  // novembre (Sant Martí); i a l'Ametlla de Merola serà el 17 de maig (Festa Major de Puig-reig) i
+  // el 20 de setembre (Festa Major de l'Ametlla de Merola). S'ha aprovat per unanimitat."
+  "puig-reig": {
+    local: ["2027-05-17", "2027-11-11"],
+    names: ["Festa Major", "Sant Martí"],
+    nuclei: [
+      { name: "l'Ametlla de Merola", dates: ["2027-05-17", "2027-09-20"] },
+    ],
+    source: {
+      name: "Resum del ple ordinari d’abril",
+      ref: "Ajuntament de Puig-reig, 4 de maig de 2026",
+      url: "https://puig-reig.cat/arxiu/resum-del-ple-ordinari-dabril-3/",
+    },
+    act: { kind: "ple", date: "2026-04-30" },
+    readOn: "2026-11-03",
+  },
+  // Ple of 14 July 2026: "ANY 2027 ... També seran inhàbils els dies declarats com a festius locals
+  // al Pont de Vilomara i Rocafort ( acord de Ple de data 14 de juliol de 2026 ). ... Festes locals
+  // durant l'any 2027 15 de març (dilluns), Festa del Contribuent. 26 de juliol (dilluns), Festa
+  // Major."
+  "el-pont-de-vilomara-i-rocafort": {
+    local: ["2027-03-15", "2027-07-26"],
+    names: ["Festa del Contribuent", "Festa Major"],
+    source: {
+      name: "Calendari de dies inhàbils",
+      ref: "Seu electrònica de l'Ajuntament del Pont de Vilomara i Rocafort",
+      url: "https://www.elpont.cat/ajuntament/calendari-de-dies-inhabils",
+    },
+    act: { kind: "ple", date: "2026-07-14" },
+    readOn: "2026-11-03",
+  },
+  // "Calendari de festes locals 2026 25 de maig - Segona Pasqua 30 de novembre - Sant Andreu
+  // Calendari de festes locals 2027 17 de maig - Segona Pasqua 30 de novembre - Sant Andreu"
+  gurb: {
+    local: ["2027-05-17", "2027-11-30"],
+    names: ["Segona Pasqua", "Sant Andreu"],
+    source: { name: "Festes Locals", ref: "Ajuntament de Gurb", url: "https://www.gurb.cat/el-municipi/festes-locals" },
+    act: { kind: "web", date: null },
+    readOn: "2026-11-03",
+  },
 };
 
 /** The slugs with council data, in no particular order. */

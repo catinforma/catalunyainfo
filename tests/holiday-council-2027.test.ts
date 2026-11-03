@@ -130,6 +130,23 @@ const COUNCIL_DOMAIN: Record<string, string> = {
   navarcles: "navarcles.cat",
   "sant-hilari-sacalm": "santhilari.cat",
   "sant-pol-de-mar": "santpol.cat",
+  "llica-d-amunt": "llicamunt.cat",
+  cunit: "cunit.cat",
+  castellbisbal: "castellbisbal.cat",
+  "badia-del-valles": "badiadelvalles.cat",
+  "sant-sadurni-d-anoia": "santsadurni.cat",
+  "torroella-de-montgri": "torroella-estartit.cat",
+  "sant-andreu-de-llavaneres": "ajllavaneres.cat",
+  "la-bisbal-d-emporda": "labisbal.cat",
+  ripoll: "ripoll.cat",
+  "vilassar-de-dalt": "vilassardedalt.cat",
+  "sant-fruitos-de-bages": "santfruitos.cat",
+  viladecavalls: "viladecavalls.cat",
+  guissona: "guissona.cat",
+  taradell: "taradell.cat",
+  "puig-reig": "puig-reig.cat",
+  "el-pont-de-vilomara-i-rocafort": "elpont.cat",
+  gurb: "gurb.cat",
 };
 const BULLETINS = ["bop.diba.cat", "ddgi.cat", "dipta.cat", "diputaciolleida.cat"];
 
