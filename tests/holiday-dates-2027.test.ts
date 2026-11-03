@@ -259,16 +259,16 @@ test("local days: the shared local dates are council-approved days of at least t
       assert.ok(p.parent ? c.nuclei?.some((n) => n.name === p.name && n.dates.includes(iso)) : c.local.includes(iso), `${iso} ${p.name}`);
     }
   }
-  assert.deepEqual(nextYearPlacesOn("2027-09-24").places.map((p) => p.name), ["Barcelona", "l'Hospitalet de Llobregat", "Montcada i Reixac", "Sant Joan Despí"]);
-  assert.deepEqual(nextYearPlacesOn("2027-06-29").places.map((p) => p.name), ["Reus", "Rubí", "Figueres", "Premià de Dalt"]);
+  assert.deepEqual(nextYearPlacesOn("2027-09-24").places.map((p) => p.name), ["Barcelona", "l'Hospitalet de Llobregat", "Montcada i Reixac", "Sant Joan Despí", "Sils"]);
+  assert.deepEqual(nextYearPlacesOn("2027-06-29").places.map((p) => p.name), ["Reus", "Sant Cugat del Vallès", "Rubí", "Figueres", "el Masnou", "Canet de Mar", "Abrera", "Premià de Dalt", "Sant Pere de Torelló"]);
   // Labelled pending, with "at least", and each council's act among the sources.
   const may = dateContent("2027-05-17", "ca");
-  assert.match(may.answer, /almenys a 17 municipis i 5 nuclis, entre els quals Barcelona, l'Hospitalet de Llobregat i Badalona, segons els ajuntaments \(pendent de l'ordre del DOGC\)/);
+  assert.match(may.answer, /almenys a 38 municipis i 6 nuclis, entre els quals Barcelona, l'Hospitalet de Llobregat i Badalona, segons els ajuntaments \(pendent de l'ordre del DOGC\)/);
   assert.match(may.local.note ?? "", /encara no són oficials/);
   assert.ok(may.extraSources?.some((s) => s.url === COUNCIL_2027.barcelona!.source.url));
-  assert.match(dateContent("2027-03-19", "en").answer, /local holiday in at least 1 town: la Llagosta, as approved by its council \(pending the DOGC order\)/);
+  assert.match(dateContent("2027-03-19", "en").answer, /local holiday in at least 2 towns: Castellar del Vallès and la Llagosta, as approved by their councils \(pending the DOGC order\)/);
   // 15 August is a Sunday: the Monday's council-approved local days are named.
-  assert.match(dateContent("2027-08-15", "ca").answerNote[0]!, /^El dilluns 16 d'agost és festa local a Banyoles, Capellades i Castellbell i el Vilar/);
+  assert.match(dateContent("2027-08-15", "ca").answerNote[0]!, /^El dilluns 16 d'agost és festa local a Banyoles, Cubelles, Arenys de Mar, la Bisbal d'Empordà, Capellades i Castellbell i el Vilar/);
 });
 
 test("local days: once local-2027.json holds the DOGC order, it replaces the councils' days on every date page", () => {
