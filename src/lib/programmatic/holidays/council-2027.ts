@@ -1512,6 +1512,96 @@ export const COUNCIL_2027: Readonly<Record<string, CouncilApproved>> = {
     act: { kind: "ple", date: "2026-07-02" },
     readOn: "2026-11-03",
   },
+  // Ple of 25 May 2026: "El ple ordinari del mes de maig, celebrat ahir, va aprovar [...] També es
+  // van aprovar les festes locals per a l'any vinent, que continuaran sent el 16 de juliol i el 2 de
+  // setembre." "L'any vinent" in news of 26 May 2026 is 2027; both are weekdays in 2027.
+  "l-escala": {
+    local: ["2027-07-16", "2027-09-02"],
+    source: {
+      name: "Comença el tràmit per aconseguir l'adscripció de la Casa del Mar",
+      ref: "Ajuntament de l'Escala, 26 de maig de 2026",
+      url: "https://www.lescala.cat/ca/actualitat-noticies/x/_id:3249/",
+    },
+    act: { kind: "ple", date: "2026-05-25" },
+    readOn: "2026-11-03",
+  },
+  // Ple of 28 July 2026: "El Ple ordinari de l'Ajuntament de Caldes de Malavella celebrat aquest
+  // dimarts, 28 de juliol, ... Entre els punts destacats, el Ple ha aprovat per unanimitat
+  // l'establiment de les festes locals per a l'any 2027. Les dates acordades són el 2 d'agost ,
+  // coincidint amb el dilluns de Festa Major, i el 22 de setembre , festivitat de Sant Maurici ,
+  // patró del municipi."
+  "caldes-de-malavella": {
+    local: ["2027-08-02", "2027-09-22"],
+    names: ["Festa Major", "Sant Maurici"],
+    source: {
+      name: "Caldes defensa per unanimitat un model de transició energètica respectuós amb el territori",
+      ref: "Ajuntament de Caldes de Malavella, 28 de juliol de 2026",
+      url: "https://www.caldesdemalavella.cat/index.php/ca/historico-noticias/5029-ple-3",
+    },
+    act: { kind: "ple", date: "2026-07-28" },
+    readOn: "2026-11-03",
+  },
+  // Ple of 25 June 2026: "2. EXPEDIENT 2603/2026. DICTAMEN PER A L'APROVACIÓ DEL CALENDARI DE FESTES
+  // LOCALS PER A L'ANY 2027 [...] Primer.- Proposar com a festes locals d'aquest municipi per a
+  // l'any 2027 els següents dies: 17 de maig (dilluns) – Segona pasqua 17 de setembre (divendres) –
+  // Festa major Segon.- Comunicar la següent proposta al Departament d'Empresa i Treball de la
+  // Generalitat per tal de què acordi la seva fixació.' La proposta s'aprova per unanimitat"
+  "sant-feliu-de-codines": {
+    local: ["2027-05-17", "2027-09-17"],
+    names: ["Segona pasqua", "Festa major"],
+    source: {
+      name: "Acta de la sessió ordinària del ple de 25 de juny de 2026 (Acta del Ple núm. 2026-0009)",
+      ref: "Ajuntament de Sant Feliu de Codines, actes de Ple (seu electrònica)",
+      url: "https://media.seu-e.cat/acteca/821070005/2026/9cef2717-e662-4e52-8ead-d2b1023941ff/Acta%20de%20la%20sessi%f3%20ordin%e0ria%20del%20ple%20de%2025%20de%20juny%20de%202026.pdf",
+    },
+    act: { kind: "ple", date: "2026-06-25" },
+    readOn: "2026-11-03",
+  },
+  // "Agenda anual Festius locals del 2026 : 13 de juliol i 25 de setembre de 2026. Festius locals
+  // del 2027 : 12 de juliol i 24 de setembre de 2027. Calendari acadèmic Sils 2026-2027 ."
+  sils: {
+    local: ["2027-07-12", "2027-09-24"],
+    source: { name: "Agenda anual", ref: "Ajuntament de Sils", url: "https://sils.cat/parentpage/agenda-anual/" },
+    act: { kind: "web", date: null },
+    readOn: "2026-11-03",
+  },
+  // "La relació de dies festius a Catalunya i les festes locals de l'Ametlla del Vallès per al 2027
+  // són els següents (festes locals*) [...] 8 de febrer (Carnaval)* [...] 25 d'agost (Festa Major)*"
+  // Carnival Monday moves to 8 February in 2027 (16 February in 2026), so the list was redone for
+  // 2027, although its Catalonia-wide lines still carry two 2026 days.
+  "l-ametlla-del-valles": {
+    local: ["2027-02-08", "2027-08-25"],
+    names: ["Carnaval", "Festa Major"],
+    source: {
+      name: "Calendari de dies festius",
+      ref: "Ajuntament de l'Ametlla del Vallès",
+      url: "https://www.ametlla.cat/ajuntament/informacio-oficial/calendaris/calendari-de-dies-festius",
+    },
+    act: { kind: "web", date: null },
+    readOn: "2026-11-03",
+  },
+  // Ple of 8 July 2026: "Proposta al Departament d'Empresa i Treball de la Generalitat de Catalunya
+  // de les dues festes locals per l'any 2027 Aquest punt proposa les dues festes locals del municipi
+  // per traslladar a la Generalitat per al calendari de 2027. El regidor de Cultura i Festes, Diego
+  // Miranda , ha exposat la proposta, que inclou el dijous d'Enramades, 27 de maig de 2027, i el
+  // dilluns de Festa Major, 13 de setembre de 2027. En el cas de Cabrianes, seria el mateix dilluns
+  // de Festa Major de Sallent i el dilluns de Festes d'Estiu de Cabrianes, el 20 de setembre.
+  // Aprovat per unanimitat." (The page's intro repeats an older session's date; the title and the
+  // item are the Ple of 8 July 2026.)
+  sallent: {
+    local: ["2027-05-27", "2027-09-13"],
+    names: ["Dijous d'Enramades", "Dilluns de Festa Major"],
+    nuclei: [
+      { name: "Cabrianes", dates: ["2027-09-13", "2027-09-20"] },
+    ],
+    source: {
+      name: "Resum del Ple ordinari del 8 de juliol de 2026 a l'Ajuntament de Sallent",
+      ref: "Ajuntament de Sallent, 8 de juliol de 2026",
+      url: "https://www.sallent.cat/tinformem/noticies/resum-del-ple-ordinari-del-8-de-juliol-de-2026-a-lajuntament-de-sallent",
+    },
+    act: { kind: "ple", date: "2026-07-08" },
+    readOn: "2026-11-03",
+  },
 };
 
 /** The slugs with council data, in no particular order. */

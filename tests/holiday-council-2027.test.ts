@@ -160,6 +160,13 @@ const COUNCIL_DOMAIN: Record<string, string> = {
   "sant-vicenc-de-montalt": "svmontalt.cat",
   suria: "suria.cat",
   "sant-joan-de-vilatorrada": "santjoanvilatorrada.cat",
+  "l-escala": "lescala.cat",
+  "caldes-de-malavella": "caldesdemalavella.cat",
+  // The council's own actes folder on the AOC e-seu (entity 821070005, the code its Actes de Ple page uses).
+  "sant-feliu-de-codines": "media.seu-e.cat/acteca/821070005/",
+  sils: "sils.cat",
+  "l-ametlla-del-valles": "ametlla.cat",
+  sallent: "sallent.cat",
 };
 const BULLETINS = ["bop.diba.cat", "ddgi.cat", "dipta.cat", "diputaciolleida.cat"];
 
