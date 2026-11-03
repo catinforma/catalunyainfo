@@ -40,13 +40,15 @@ function escapeHtml(value: string): string {
 }
 
 export async function notifyEditorial(payload: ContactPayload): Promise<boolean> {
-  const apiKey = process.env.RESEND_API_KEY;
+  const apiKey = process.env.RESEND_API_KEY?.trim();
   if (!apiKey) return false;
 
   // Must be a verified sender at the provider. Resend's shared onboarding
   // sender works before a domain is verified, which is why it is the default.
-  const from = process.env.CONTACT_FROM ?? "CatalunyaInfo <onboarding@resend.dev>";
-  const to = process.env.CONTACT_TO ?? SITE.contactEmail;
+  // `||`, not `??`: the VPS env file lists both variables with empty values,
+  // and an empty sender or recipient makes Resend reject every message.
+  const from = process.env.CONTACT_FROM?.trim() || "CatalunyaInfo <onboarding@resend.dev>";
+  const to = process.env.CONTACT_TO?.trim() || SITE.contactEmail;
 
   const subject = `[${payload.topic}] ${headerSafe(payload.name)} · ${payload.locale}`;
   const lines = [
