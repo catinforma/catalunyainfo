@@ -2039,3 +2039,8 @@ Recorded so they are not lost, and so they are not all started at once.
 - **`/ca/agenda/que-fer-aquest-cap-de-setmana-catalunya/`** — ranks 16–47 for
   several "cap de setmana" variants. That is a ranking problem, not a CTR one;
   a title change would not fix it.
+
+### 2026-11-03 (main session) — ES December bridge title gives the answer
+
+- /es/guias/puente-diciembre-cataluna/: "Puente de diciembre 2026 en Cataluña: qué días son festivos" → "Puente de diciembre 2026 en Cataluña: festivo el martes 8" (same pattern as CA since 3 Nov). Description unchanged. GSC 21 Oct–3 Nov: "festivos diciembre 2026" 97 impr pos 5.2 0 clicks, "festivos de diciembre 2026" 33 pos 5.6 0 clicks; page CTR 2.3% at pos 5.6. Measure 15 Nov and 1 Dec (`snapshot.py page puente-diciembre 14`). Publish group: pont-desembre.
+

@@ -308,7 +308,7 @@ export const DECEMBER_BRIDGE_META: Record<Locale, { path: string; title: string;
   es: {
     path: "guias/puente-diciembre-cataluna",
     title: "Puente de diciembre 2026 en Cataluña: qué días son festivos, colegios y tiendas",
-    seoTitle: "Puente de diciembre 2026 en Cataluña: qué días son festivos",
+    seoTitle: "Puente de diciembre 2026 en Cataluña: festivo el martes 8",
     seoDescription:
       "Festivos de diciembre 2026 en Cataluña: martes 8 (la Purísima), 25 y 26. El 6 cae en domingo y el lunes 7 es laborable, salvo en 43 municipios.",
     excerpt:
