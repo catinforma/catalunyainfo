@@ -1,8 +1,8 @@
-import { CHRISTMAS } from "./christmas";
+import { CHRISTMAS, SANTA_LLUCIA_2026, hoursText } from "./christmas";
 import { WEEKDAY_NAMES, aranSubstitutionFor, weekdayIndex } from "@/lib/content/holidays/calendar";
 import type { Locale } from "@/lib/i18n/config";
 
-import { dateYear, dayDate, span } from "./festive";
+import { dateYear, dayDate, range } from "./festive";
 import {
   b2Related,
   b2link,
@@ -42,6 +42,14 @@ import {
  * "nadal-tradicions" group (and, for Santa Llúcia, "barcelona-december", whose
  * day-by-day table picks it up). The "not announced yet" lines switch on their own.
  *
+ * 3 Nov 2026: Santa Llúcia filled (27 Nov - 23 Dec 2026, 10:00-21:00) from
+ * the Generalitat's Agenda Cultural de Catalunya, attributed to it (the
+ * organiser's site still shows 2025); see ANNOUNCED_TRADITIONS. The Pastorets
+ * season was re-checked the same day (pastoretsdecatalunya.cat, latest note 9
+ * Feb 2026): not presented. The "On veure-ho" list now links Barcelona in
+ * December. TRADITIONS_VERIFIED stays 26 Oct: the rest of the page was not
+ * re-read. Republish "nadal-tradicions" and "barcelona-december".
+ *
  * 31 Oct 2026: the "Cap d'Any i Reis" section no longer promises the
  * parade's times on the New Year's Eve guide; it links the Three Kings parade
  * page, which carries them (group `reis-2027-links`).
@@ -75,20 +83,41 @@ export interface SeasonSpan {
   from: string;
   /** Last day, ISO. */
   to: string;
-  /** The organiser's own page that published the dates. */
+  /** The official page that published the dates: the organiser's own, unless `via` says otherwise. */
   url: string;
+  /**
+   * "agenda": published in the Generalitat's Agenda Cultural de Catalunya
+   * (agenda.cultura.gencat.cat, open data rhpv-yr4f), whose entry names the
+   * organiser, while the organiser's own site has not caught up. The pages
+   * then attribute the dates to the agenda, never to "the organisers".
+   */
+  via?: "agenda";
+  /** Daily opening hours, as the source gives them ("10:00", "21:00"). */
+  hours?: { open: string; close: string };
+  /** The day the source was read, ISO. */
+  read?: string;
 }
 
 export interface TraditionAnnouncements {
-  /** Fira de Santa Llúcia 2026, from firadesantallucia.cat or barcelona.cat. */
+  /** Fira de Santa Llúcia 2026: firadesantallucia.cat, barcelona.cat or the Generalitat's cultural agenda. */
   santaLlucia: SeasonSpan | null;
   /** The Coordinadora de Pastorets de Catalunya's 2026-27 season. */
   pastorets: SeasonSpan | null;
 }
 
-/** `null` = not published yet, at TRADITIONS_VERIFIED. */
+/**
+ * `null` = not published yet, at TRADITIONS_VERIFIED.
+ *
+ * Santa Llúcia, 3 Nov 2026: the Generalitat's Agenda Cultural de Catalunya
+ * published the fair that morning (activity 2026110300020, created 3 Nov
+ * 10:57, "Darrera actualització: 3/11/2026"): 27 Nov - 23 Dec 2026, "de 10 a
+ * 21 h", Avinguda de la Catedral, organiser "Associació Fira de Santa
+ * Llúcia". firadesantallucia.cat still showed its 2025 calendar the same day.
+ * The value is SANTA_LLUCIA_2026 in christmas.ts, which the markets guide
+ * prints too (one source for both pages; no import cycle).
+ */
 export const ANNOUNCED_TRADITIONS: TraditionAnnouncements = {
-  santaLlucia: null,
+  santaLlucia: SANTA_LLUCIA_2026,
   pastorets: null,
 };
 
@@ -108,6 +137,13 @@ export function seasonSpanProblems(item: SeasonSpan): string[] {
   }
   if (valid(item.from) && valid(item.to) && item.to < item.from) problems.push(`${item.to} is before ${item.from}`);
   if (!/^https:\/\/[a-z0-9.-]+\.[a-z]{2,}\//.test(item.url)) problems.push(`${item.url} is not an https page`);
+  if (item.via === "agenda" && !item.url.startsWith("https://agenda.cultura.gencat.cat/")) problems.push(`${item.url} is not a page of the Agenda Cultural de Catalunya`);
+  if (item.hours) {
+    const hhmm = /^([01]\d|2[0-3]):[0-5]\d$/;
+    if (!hhmm.test(item.hours.open) || !hhmm.test(item.hours.close)) problems.push(`hours ${item.hours.open}-${item.hours.close} are not HH:MM`);
+    else if (item.hours.close <= item.hours.open) problems.push(`hours ${item.hours.open}-${item.hours.close} close before they open`);
+  }
+  if (item.read !== undefined && !valid(item.read)) problems.push(`read ${item.read} is not an ISO date`);
   if (/[?&]utm_/.test(item.url)) problems.push(`${item.url} carries tracking`);
   if (/aerobusbcn/i.test(item.url)) problems.push(`${item.url} is not allowed`);
   return problems;
@@ -137,19 +173,8 @@ function cap(text: string): string {
   return text.charAt(0).toUpperCase() + text.slice(1);
 }
 
-/**
- * "del 28 de novembre al 23 de desembre de 2026", or with both years when the
- * range crosses New Year: "del 13 de desembre de 2025 a l'1 de febrer de 2026".
- * English has no leading "from", so the sentence supplies it.
- */
-export function range(from: string, to: string, locale: Locale): string {
-  const sameYear = from.slice(0, 4) === to.slice(0, 4);
-  if (sameYear) return locale === "en" ? `${span(from, to, "en")} ${from.slice(0, 4)}` : `${span(from, to, locale)} de ${from.slice(0, 4)}`;
-  if (locale === "en") return `${dateYear(from, "en")} to ${dateYear(to, "en")}`;
-  if (locale === "es") return `del ${dateYear(from, "es")} al ${dateYear(to, "es")}`;
-  const vowel = (iso: string) => ["01", "11"].includes(iso.slice(8, 10));
-  return `${vowel(from) ? "de l'" : "del "}${dateYear(from, "ca")} ${vowel(to) ? "a l'" : "al "}${dateYear(to, "ca")}`;
-}
+/** The date-range wording lives in festive.ts (the markets guide uses it too); re-exported here for the callers and tests. */
+export { range };
 
 const CHECKED: Record<Locale, string> = {
   ca: `comprovat el ${dateYear(TRADITIONS_VERIFIED, "ca")}`,
@@ -157,13 +182,30 @@ const CHECKED: Record<Locale, string> = {
   en: `checked on ${dateYear(TRADITIONS_VERIFIED, "en")}`,
 };
 
+/**
+ * Who says so, as a Markdown link: the organisers, or the Generalitat's
+ * cultural agenda (with the organiser it names and the day it was read).
+ */
+export function santaLluciaSource(a: SeasonSpan, locale: Locale): string {
+  if (a.via === "agenda") {
+    const read = a.read ? { ca: `, consultada el ${dateYear(a.read, "ca")}`, es: `, consultada el ${dateYear(a.read, "es")}`, en: `, read on ${dateYear(a.read, "en")}` }[locale] : "";
+    return {
+      ca: `l'[Agenda Cultural de la Generalitat](${a.url})${read}, que en dona com a organitzadora l'Associació Fira de Santa Llúcia`,
+      es: `la [Agenda Cultural de la Generalitat](${a.url})${read}, que da como organizadora a la Associació Fira de Santa Llúcia`,
+      en: `the [Catalan government's cultural agenda](${a.url})${read}, which names the Associació Fira de Santa Llúcia as the organiser`,
+    }[locale];
+  }
+  return { ca: `[l'organització](${a.url})`, es: `[la organización](${a.url})`, en: `[the organisers](${a.url})` }[locale];
+}
+
 export function santaLluciaSentence(locale: Locale, facts: TraditionAnnouncements = ANNOUNCED_TRADITIONS): string {
   const a = facts.santaLlucia;
   if (a) {
+    const hours = a.hours ? `, ${hoursText(a.hours, locale)}` : "";
     return {
-      ca: `La del 2026 es fa ${range(a.from, a.to, "ca")}, segons [l'organització](${a.url}).`,
-      es: `La de 2026 se celebra ${range(a.from, a.to, "es")}, según [la organización](${a.url}).`,
-      en: `The 2026 fair runs from ${range(a.from, a.to, "en")}, according to [the organisers](${a.url}).`,
+      ca: `La del 2026 es fa ${range(a.from, a.to, "ca")}${hours}, segons ${santaLluciaSource(a, "ca")}.`,
+      es: `La de 2026 se celebra ${range(a.from, a.to, "es")}${hours}, según ${santaLluciaSource(a, "es")}.`,
+      en: `The 2026 fair runs from ${range(a.from, a.to, "en")}${hours}, according to ${santaLluciaSource(a, "en")}.`,
     }[locale];
   }
   return {
@@ -175,7 +217,10 @@ export function santaLluciaSentence(locale: Locale, facts: TraditionAnnouncement
 
 function santaLluciaFact(locale: Locale, facts: TraditionAnnouncements): string {
   const a = facts.santaLlucia;
-  if (a) return locale === "en" ? cap(range(a.from, a.to, "en")) : cap(range(a.from, a.to, locale).replace(/^de?l /, ""));
+  if (a) {
+    const when = locale === "en" ? cap(range(a.from, a.to, "en")) : cap(range(a.from, a.to, locale).replace(/^de?l /, ""));
+    return a.hours ? `${when}, ${hoursText(a.hours, locale)}` : when;
+  }
   return { ca: `Dates del 2026 encara no anunciades (${CHECKED.ca})`, es: `Fechas de 2026 aún no anunciadas (${CHECKED.es})`, en: `2026 dates not announced yet (${CHECKED.en})` }[locale];
 }
 
@@ -249,6 +294,11 @@ const SOURCES: B2Source[] = [
   { name: "Presentació de la temporada de Pastorets 2025-2026", url: PASTORETS_2025.url, publisher: "Coordinadora de Pastorets de Catalunya" },
   { name: "Cercador de Pastorets", url: PASTORETS_FINDER, publisher: "Coordinadora de Pastorets de Catalunya" },
 ];
+// A Santa Llúcia date taken from the Generalitat's cultural agenda cites that page too.
+const SANTA_LLUCIA_SOURCE = ANNOUNCED_TRADITIONS.santaLlucia;
+if (SANTA_LLUCIA_SOURCE?.via === "agenda" && !SOURCES.some((s) => s.url === SANTA_LLUCIA_SOURCE.url)) {
+  SOURCES.push({ name: "Agenda Cultural de Catalunya: Fira de Santa Llúcia a l'Avinguda de la Catedral de Barcelona (2026)", url: SANTA_LLUCIA_SOURCE.url, publisher: "Departament de Cultura, Generalitat de Catalunya" });
+}
 
 export const CHRISTMAS_TRADITIONS_META: Record<Locale, { path: string; title: string; seoTitle: string; seoDescription: string; excerpt: string }> = {
   ca: {
@@ -369,6 +419,7 @@ function bodyCa(facts: TraditionAnnouncements) {
       `**Fira de Santa Llúcia**, davant de la Catedral de Barcelona, on es fa des del 1786: té un sector de pessebres i figures, caganers inclosos, i un altre de verd, amb molsa, suro i tions. ${santaLluciaSentence("ca", facts)} Les dates i la resta de fires són a ${b2link("christmas", "ca", "la guia de mercats de Nadal")}.`,
       `**El pessebre de la plaça de Sant Jaume**, a ${b2link("christmasBarcelona", "ca", "Nadal a Barcelona")}.`,
       `**Pessebres vivents** de tot Catalunya, amb les dates que ja són oficials, a ${b2link("pessebres", "ca", "la guia de pessebres vivents")}.`,
+      `**Tot el desembre a Barcelona, dia a dia** (la fira, els llums, La Marató, Cap d'Any), a ${b2link("barcelonaDecember", "ca", "Barcelona al desembre del 2026")}.`,
       `**Pastorets**: el [cercador de Pastorets](${PASTORETS_FINDER}) de la Coordinadora de Pastorets de Catalunya.`,
     ),
     faq([
@@ -468,6 +519,7 @@ function bodyEs(facts: TraditionAnnouncements) {
       `**Fira de Santa Llúcia**, frente a la catedral de Barcelona, donde se celebra desde 1786: tiene un sector de belenes y figuras, caganers incluidos, y otro de verde, con musgo, corcho y tions. ${santaLluciaSentence("es", facts)} Las fechas y el resto de ferias están en ${b2link("christmas", "es", "la guía de mercados de Navidad")}.`,
       `**El belén de la plaza de Sant Jaume**, en ${b2link("christmasBarcelona", "es", "Navidad en Barcelona")}.`,
       `**Belenes vivientes** de toda Cataluña, con las fechas que ya son oficiales, en ${b2link("pessebres", "es", "la guía de belenes vivientes")}.`,
+      `**Todo diciembre en Barcelona, día a día** (la feria, las luces, La Marató, Nochevieja), en ${b2link("barcelonaDecember", "es", "Barcelona en diciembre de 2026")}.`,
       `**Pastorets**: el [buscador de Pastorets](${PASTORETS_FINDER}) de la Coordinadora de Pastorets de Catalunya.`,
     ),
     faq([
@@ -567,6 +619,7 @@ function bodyEn(facts: TraditionAnnouncements) {
       `**Fira de Santa Llúcia**, in front of Barcelona Cathedral, where it has been held since 1786: it has a section for nativity scenes and figures, caganers included, and a greenery section with moss, cork and tió logs. ${santaLluciaSentence("en", facts)} Dates and the other fairs are in ${b2link("christmas", "en", "our Christmas markets guide")}.`,
       `**The Plaça de Sant Jaume nativity scene**: see ${b2link("christmasBarcelona", "en", "Christmas in Barcelona")}.`,
       `**Living nativity scenes** across Catalonia, with the dates already official: ${b2link("pessebres", "en", "our living nativity scenes guide")}.`,
+      `**All of December in Barcelona, day by day** (the fair, the lights, La Marató, New Year's Eve): ${b2link("barcelonaDecember", "en", "Barcelona in December 2026")}.`,
       `**Pastorets**: the Coordinadora de Pastorets de Catalunya's [Pastorets finder](${PASTORETS_FINDER}).`,
     ),
     faq([

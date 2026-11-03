@@ -60,6 +60,15 @@ import {
  * Celrà had nothing for 2026-27. The open-data agenda had no living nativity
  * for 2026-27 yet and the federation no 2026-27 list.
  *
+ * 3 Nov 2026 (Christmas cluster refresh): the pending four re-read (Bàscara:
+ * no dates; els Prats de Rei: "Feliç 2026" message of last season; Rupit:
+ * 2025-26 edition, last updated 27 Dec 2025; Peralada: nothing for 2026-27),
+ * so they stay "not yet published". The open-data agenda (rhpv-yr4f) still
+ * had no living nativity for 2026-27. Descriptions now name the dated ones
+ * instead of promising a calendar that is still empty; a paragraph links
+ * Barcelona in December, Christmas in Barcelona, the traditions and the
+ * Three Kings parade.
+ *
  * The lead image reuses the Christmas markets guide's photograph of nativity
  * figures, with the same alt text and caption: the publisher requires a lead
  * photo, the media row is keyed by file, and identical wording keeps the
@@ -257,9 +266,9 @@ function knownTable(locale: Locale): Block {
     en: ["Living nativity", "Where", "2026-27 season", "Official website"],
   };
   const note: Record<Locale, string> = {
-    ca: "Dates del web oficial de cada organitzador o ajuntament, comprovades el 25 d'octubre de 2026 (Sant Fost, el Pessebre dels Estels i els pendents, el 31 d'octubre). «Pendent» vol dir que encara no han publicat les de la temporada 2026-27: no hi posem les de l'any passat.",
-    es: "Fechas de la web oficial de cada organizador o ayuntamiento, comprobadas el 25 de octubre de 2026 (Sant Fost, el Pessebre dels Estels y los pendientes, el 31 de octubre). «Pendiente» significa que aún no han publicado las de la temporada 2026-27: no ponemos las del año pasado.",
-    en: "Dates from each organiser's or town council's official website, checked on 25 October 2026 (Sant Fost, the Pessebre dels Estels and the pending ones on 31 October). \"Not yet published\" means the 2026-27 dates are not out yet: we do not repeat last year's.",
+    ca: "Dates del web oficial de cada organitzador o ajuntament, comprovades el 25 d'octubre de 2026 (Sant Fost i el Pessebre dels Estels, el 31 d'octubre; els pendents, el 3 de novembre). «Pendent» vol dir que encara no han publicat les de la temporada 2026-27: no hi posem les de l'any passat.",
+    es: "Fechas de la web oficial de cada organizador o ayuntamiento, comprobadas el 25 de octubre de 2026 (Sant Fost y el Pessebre dels Estels, el 31 de octubre; los pendientes, el 3 de noviembre). «Pendiente» significa que aún no han publicado las de la temporada 2026-27: no ponemos las del año pasado.",
+    en: "Dates from each organiser's or town council's official website, checked on 25 October 2026 (Sant Fost and the Pessebre dels Estels on 31 October; the pending ones on 3 November). \"Not yet published\" means the 2026-27 dates are not out yet: we do not repeat last year's.",
   };
   const rows = KNOWN.map((item) => [item.name, item.place, item.dates?.[locale] ?? PENDING[locale], `[${item.label}](${item.url})`]);
   return table(caption[locale], headers[locale], rows, note[locale]);
@@ -275,7 +284,7 @@ const META: Record<Locale, { path: string; title: string; seoTitle: string; seoD
     title: "Pessebres vivents 2026 a Catalunya: calendari, dates i on veure'ls",
     seoTitle: "Pessebres vivents 2026 a Catalunya: calendari i dates",
     seoDescription:
-      "Calendari dels pessebres vivents de Catalunya 2026, llegit cada dia de l'agenda de la Generalitat: dates, poble i comarca, i com saber si cal entrada.",
+      "Pessebres vivents 2026-27 amb data oficial: Corbera (des del 28 de novembre), Tona, les Torres de Fals, l'Espluga, la Torre del Suro… i el calendari diari.",
     excerpt:
       "Els pessebres vivents d'aquest Nadal a Catalunya, llegits cada dia de l'agenda oficial: on es fan, quins dies i com saber si cal comprar entrada.",
   },
@@ -284,7 +293,7 @@ const META: Record<Locale, { path: string; title: string; seoTitle: string; seoD
     title: "Belenes vivientes en Cataluña 2026: calendario, fechas y dónde verlos",
     seoTitle: "Belenes vivientes Cataluña 2026: calendario y fechas",
     seoDescription:
-      "Calendario de belenes vivientes en Cataluña 2026, leído a diario de la agenda de la Generalitat: fechas, pueblo y comarca, y cómo saber si hay que pagar.",
+      "Belenes vivientes en Cataluña 2026-27 con fecha oficial: Corbera (desde el 28 de noviembre), Tona, les Torres de Fals, l'Espluga… y el calendario diario.",
     excerpt:
       "Los belenes vivientes de esta Navidad en Cataluña, leídos cada día de la agenda oficial: dónde son, qué días y cómo saber si hace falta entrada.",
   },
@@ -293,7 +302,7 @@ const META: Record<Locale, { path: string; title: string; seoTitle: string; seoD
     title: "Living nativity scenes in Catalonia 2026: calendar and where to see them",
     seoTitle: "Living nativity scenes in Catalonia 2026 (near Barcelona)",
     seoDescription:
-      "Living nativity scenes in Catalonia this Christmas, read daily from the Generalitat's events agenda: dates, towns near Barcelona and how to check tickets.",
+      "Living nativity scenes in Catalonia 2026-27 with official dates: Corbera from 28 November, Tona, Barcelona's Torre del Suro on 21 December, and more.",
     excerpt:
       "This Christmas's living nativity scenes in Catalonia, read daily from the official agenda: where they are, which days, and whether you need a ticket.",
   },
@@ -342,6 +351,7 @@ function body(locale: Locale): Block[] {
       ...h2(
         "Com combinar-ho amb altres plans de Nadal",
         `Si vols combinar-ho amb una fira, mira ${b2link("christmas", "ca", "els mercats i fires de Nadal de Catalunya")} i les seves dates. Si vols aprofitar per comprar, ${b2link("shops", "ca", "quins diumenges i festius obren les botigues")}; per als ponts, ${b2link("workCalendar", "ca", "el calendari de festius")}, i per a la resta de plans del cap de setmana, [l'agenda d'aquest cap de setmana](/ca/${WEEKEND.ca.path}/).`,
+        `Si ets a Barcelona, tot el mes dia a dia és a ${b2link("barcelonaDecember", "ca", "Barcelona al desembre del 2026")}, i el pessebre de la plaça de Sant Jaume i els llums, a ${b2link("christmasBarcelona", "ca", "Nadal a Barcelona")}. El tió, el caganer i com es fa el pessebre a casa, a ${b2link("christmasTraditions", "ca", "les tradicions de Nadal a Catalunya")}, i per tancar les festes, ${b2link("reis", "ca", "la Cavalcada de Reis 2027")}.`,
       ),
       faq([
         {
@@ -425,6 +435,7 @@ function body(locale: Locale): Block[] {
       ...h2(
         "Cómo combinarlo con otros planes de Navidad",
         `Si quieres combinarlo con una feria, mira ${b2link("christmas", "es", "los mercados y ferias de Navidad de Cataluña")} y sus fechas. Si quieres aprovechar para comprar, ${b2link("shops", "es", "qué domingos y festivos abren las tiendas")}; para los puentes, ${b2link("workCalendar", "es", "el calendario de festivos")}, y para el resto de planes, [la agenda de este fin de semana](/es/${WEEKEND.es.path}/).`,
+        `Si estás en Barcelona, todo el mes día a día está en ${b2link("barcelonaDecember", "es", "Barcelona en diciembre de 2026")}, y el belén de la plaza de Sant Jaume y las luces, en ${b2link("christmasBarcelona", "es", "Navidad en Barcelona")}. El tió, el caganer y cómo se monta el belén en casa, en ${b2link("christmasTraditions", "es", "las tradiciones de Navidad en Cataluña")}, y para cerrar las fiestas, ${b2link("reis", "es", "la Cabalgata de Reyes 2027")}.`,
       ),
       faq([
         {
@@ -507,6 +518,7 @@ function body(locale: Locale): Block[] {
     ...h2(
       "Combining it with other Christmas plans",
       `To combine it with a fair, see ${b2link("christmas", "en", "Christmas markets in Barcelona and Catalonia")} and their dates. If you want to shop too, see ${b2link("shops", "en", "which Sundays and holidays shops may open")}; for long weekends, ${b2link("workCalendar", "en", "the public holiday calendar")}; and for everything else, [things to do this weekend](/en/${WEEKEND.en.path}/).`,
+      `In Barcelona, the whole month day by day is in ${b2link("barcelonaDecember", "en", "Barcelona in December 2026")}, and the Plaça de Sant Jaume nativity scene and the lights in ${b2link("christmasBarcelona", "en", "Christmas in Barcelona")}. The tió, the caganer and how Catalans build a nativity scene at home: ${b2link("christmasTraditions", "en", "Catalan Christmas traditions")}; and to close the season, ${b2link("reis", "en", "the 2027 Three Kings parade")}.`,
     ),
     faq([
       {

@@ -13,6 +13,7 @@ import {
   hubMeta,
   statusLabels,
   stripOrdinal,
+  stripVenue,
   townDescription,
   townH1,
   townTitle,
@@ -28,6 +29,7 @@ import {
   linesFor,
   mergeFairs,
   nearbyTowns,
+  pendingFor,
   pendingMarkets,
   qualifies,
   shippedTowns,
@@ -38,7 +40,7 @@ import {
 import { onDate, rangeText, shortRange, untilDate } from "../src/lib/programmatic/christmas-fairs/format.ts";
 import { holidaySentences, regionalHolidaysIn, trainLines, weekendSentence } from "../src/lib/programmatic/christmas-fairs/guide.ts";
 import { ORGANISER_FAIRS, PENDING_MARKETS } from "../src/lib/programmatic/christmas-fairs/organisers.ts";
-import { EN_TOWNS, FAIRS_LOCALES, FAIRS_ROUTE, fairsHubPath, hubTranslations, townPath, townTranslations } from "../src/lib/programmatic/christmas-fairs/paths.ts";
+import { EN_TOWNS, FAIRS_LOCALES, FAIRS_ROUTE, agendaActivityUrl, fairsHubPath, hubTranslations, townPath, townTranslations } from "../src/lib/programmatic/christmas-fairs/paths.ts";
 import { PRERENDER, hubAllowed, resolveTown, townStaticParams } from "../src/lib/programmatic/christmas-fairs/routing.ts";
 import { WEB_REPLACEMENTS, agendaFairs, fairFromRow, organiserWeb } from "../src/lib/programmatic/christmas-fairs/rows.ts";
 import { christmasFairsPaths, christmasFairsSitemapEntries } from "../src/lib/programmatic/christmas-fairs/sitemap.ts";
@@ -238,9 +240,60 @@ test("merge: Canyelles takes the council's dates over the calendar's, and says s
   const figueres = FAIRS.find((f) => f.id === "org:figueres-mercat-de-nadal")!;
   assert.equal(figueres.source, "organiser");
   assert.equal(`${figueres.start}..${figueres.end}`, "2026-11-27..2026-12-24");
-  // Every snapshot row and every organiser-only entry is on the merged list, once.
-  assert.equal(FAIRS.length, SNAPSHOT.fairs.length + ORGANISER_FAIRS.filter((o) => !o.replaces).length);
+  // Every snapshot row and every organiser-only entry is on the merged list, once;
+  // the rows an organiser entry names in `alsoReplaces` (the same fair, listed again) are not.
+  const folded = new Set(ORGANISER_FAIRS.flatMap((o) => o.alsoReplaces ?? []));
+  for (const id of folded) assert.ok(SNAPSHOT.fairs.some((f) => f.id === id), `${id} is a snapshot row`);
+  assert.equal(FAIRS.length, SNAPSHOT.fairs.length - folded.size + ORGANISER_FAIRS.filter((o) => !o.replaces).length);
   assert.equal(new Set(FAIRS.map((f) => f.id)).size, FAIRS.length);
+  for (const id of folded) assert.ok(!FAIRS.some((f) => f.id === id), `${id} folded`);
+});
+
+/**
+ * 3 Nov 2026: the cultural agenda listed Canyelles and Vic again (with the
+ * councils' dates). `alsoReplaces` folds each into its council entry: one
+ * fair per town, and only rows with the same town and overlapping dates.
+ */
+test("merge: a fair listed by both the agenda and its council is shown once", () => {
+  for (const o of ORGANISER_FAIRS) {
+    for (const id of o.alsoReplaces ?? []) {
+      const row = SNAPSHOT.fairs.find((f) => f.id === id)!;
+      assert.equal(row.ine, o.ine, `${id}: same town as ${o.id}`);
+      assert.ok(row.start <= o.end && row.end >= o.start, `${id}: overlaps ${o.id}`);
+    }
+  }
+  for (const slug of ["canyelles", "vic"]) {
+    const town = townBySlug(slug)!;
+    assert.equal(town.fairs.length, 1, `${slug}: ${town.fairs.map((f) => f.id).join(", ")}`);
+  }
+  // Without the fold the duplicates would be back.
+  const unfolded = mergeFairs(SNAPSHOT, ORGANISER_FAIRS.map(({ alsoReplaces: _drop, ...o }) => o));
+  assert.ok(unfolded.filter((f) => f.ine === "08298").length > 1);
+});
+
+/**
+ * 3 Nov 2026: Santa Llúcia 2026 is in the Generalitat's cultural agenda
+ * (27 Nov - 23 Dec), so Barcelona has a page (and an English one), from the
+ * agenda row; it is no longer a pending market. The Sagrada Família is.
+ */
+test("Barcelona: Santa Llúcia from the cultural agenda gives the town its pages; the Sagrada Família is still pending", () => {
+  const bcn = townBySlug("barcelona");
+  assert.ok(bcn, "Barcelona has a page");
+  const fair = bcn.fairs.find((f) => /Santa Llúcia/.test(f.name))!;
+  assert.equal(fair.source, "agenda");
+  assert.equal(`${fair.start}..${fair.end}`, "2026-11-27..2026-12-23");
+  assert.equal(agendaActivityUrl(fair.id), "https://agenda.cultura.gencat.cat/ca/activitat.html/2026110300020");
+  assert.ok(!PENDING_MARKETS.some((p) => /Santa Llúcia/.test(p.name)), "Santa Llúcia left the pending list");
+  assert.deepEqual(pendingFor("08019").map((p) => p.id), ["pending:barcelona-sagrada-familia"]);
+  assert.equal(fairShortName(fair, "ca"), "Fira de Santa Llúcia");
+  assert.equal(fairShortName(fair, "es"), "Feria de Santa Llúcia");
+  assert.equal(townTitle(bcn, "ca"), "Fira de Santa Llúcia de Barcelona 2026: dates i lloc");
+  assert.equal(townTitle(bcn, "es"), "Feria de Santa Llúcia de Barcelona 2026: fechas y lugar");
+  assert.equal(townTitle(bcn, "en"), "Barcelona Christmas market 2026: dates and place");
+  // Only a street-type word after " a " is cut.
+  assert.equal(stripVenue("Fira d'Artesans i de Nadal d'Aiguafreda"), "Fira d'Artesans i de Nadal d'Aiguafreda");
+  assert.equal(stripVenue("Mercat de Nadal a la Plaça Major de Vic"), "Mercat de Nadal");
+  assert.equal(agendaActivityUrl("vm32:24032442"), null);
 });
 
 /* -------------------------------------------------------------------------- */
@@ -255,8 +308,9 @@ test("guardrail: a town has a page only with at least one dated fair of the seas
     assert.match(t.slug, SLUG_PATTERN);
     assert.equal(townBySlug(t.slug)?.ine, t.ine);
   }
-  // Barcelona, Girona and Tarragona have no dated fair yet (Santa Llúcia unpublished): no page.
-  for (const slug of ["barcelona", "girona", "tarragona", "sitges", "igualada", "vilafranca-del-penedes"]) assert.equal(townBySlug(slug), null, slug);
+  // Girona and Tarragona have no dated fair yet: no page. (Barcelona got its page on
+  // 3 Nov 2026, when Santa Llúcia was published in the cultural agenda.)
+  for (const slug of ["girona", "tarragona", "sitges", "igualada", "vilafranca-del-penedes"]) assert.equal(townBySlug(slug), null, slug);
   // A fair whose dates are still to be confirmed does not give its town a page on its own.
   const pending: ChristmasSnapshot = {
     ...SNAPSHOT,
@@ -276,7 +330,7 @@ test("guardrail: English pages only for the visitor towns, and only with a dated
     assert.ok(EN_TOWNS.includes(t.ine));
     assert.ok(t.fairs.some(qualifies));
   }
-  assert.deepEqual(englishTowns().map((t) => t.slug).sort(), ["figueres", "vic"]);
+  assert.deepEqual(englishTowns().map((t) => t.slug).sort(), ["barcelona", "figueres", "vic"]);
 });
 
 /* -------------------------------------------------------------------------- */
@@ -303,7 +357,8 @@ test("routing: each route answers its own locale only; anything else is a 404", 
   assert.equal(resolveTown("en", "en", "olot"), null, "Olot has no English edition");
   assert.equal(resolveTown("en", "en", "vic")?.ine, "08298");
   assert.equal(resolveTown("en", "ca", "vic"), null);
-  assert.equal(resolveTown("ca", "ca", "barcelona"), null);
+  assert.equal(resolveTown("ca", "ca", "girona"), null, "no dated fair, no page");
+  assert.equal(resolveTown("en", "en", "barcelona")?.ine, "08019");
   assert.equal(resolveTown("ca", "ca", "Olot"), null);
   assert.equal(resolveTown("ca", "ca", "no-such-town"), null);
   for (const locale of FAIRS_LOCALES) {
@@ -311,7 +366,7 @@ test("routing: each route answers its own locale only; anything else is a 404", 
     assert.ok(params.length <= PRERENDER && params.length > 0);
     assert.ok(params.every((p) => p.locale === locale && resolveTown(locale, locale, p.municipi)));
   }
-  assert.equal(townStaticParams("ca")[0]?.municipi, "manresa", "largest first");
+  assert.equal(townStaticParams("ca")[0]?.municipi, "barcelona", "largest first (Barcelona since 3 Nov 2026)");
 });
 
 test("route files: one per locale folder, static, 404 for other locales", () => {
@@ -546,6 +601,14 @@ test("links (30 Oct 2026): the hub's guides include the December bridge and La M
   assert.match(hub, /const guides = \(\[[^\]]*"christmasBarcelona"[^\]]*"decemberBridge"[^\]]*"marato"[^\]]*\] as const\)/);
   const town = readFileSync(join(ROOT, "src/components/programmatic/christmas-fairs/TownPage.tsx"), "utf8");
   assert.match(town, /const GUIDES = \[[^\]]*"christmasBarcelona"[^\]]*"decemberBridge"[^\]]*\] as const;/);
+});
+
+test("links (3 Nov 2026): hub and town pages link the Three Kings parade; the hub and Barcelona's page, Barcelona in December", () => {
+  const hub = readFileSync(join(ROOT, "src/components/programmatic/christmas-fairs/HubPage.tsx"), "utf8");
+  assert.match(hub, /const guides = \(\[[^\]]*"barcelonaDecember"[^\]]*"reis"[^\]]*\] as const\)/);
+  const town = readFileSync(join(ROOT, "src/components/programmatic/christmas-fairs/TownPage.tsx"), "utf8");
+  assert.match(town, /const GUIDES = \[[^\]]*"reis"[^\]]*\] as const;/);
+  assert.match(town, /town\.ine === BARCELONA_INE \? \(\["barcelonaDecember", \.\.\.GUIDES\]/);
 });
 
 test("deterministic: no clock in the server code of the family", () => {

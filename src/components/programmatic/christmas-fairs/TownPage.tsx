@@ -36,7 +36,9 @@ export function townCrumbs(town: Town, locale: FairsLocale): Crumb[] {
   ];
 }
 
-const GUIDES = ["christmas", "christmasBarcelona", "decemberBridge", "pessebres", "christmasTraditions", "shops"] as const;
+const GUIDES = ["christmas", "christmasBarcelona", "decemberBridge", "pessebres", "reis", "christmasTraditions", "shops"] as const;
+/** Barcelona's page also links the month's dated hub. */
+const BARCELONA_INE = "08019";
 
 /** One town's Christmas fairs, with how to get there, holidays and shops on those days, and what is nearby. */
 export function TownPage({ town, locale }: { town: Town; locale: FairsLocale }) {
@@ -70,7 +72,8 @@ export function TownPage({ town, locale }: { town: Town; locale: FairsLocale }) 
       href: townPath(locale, n.slug),
       note: `${n.fairs[0]!.name} · ${shortRange(n.fairs[0]!.start, n.fairs[0]!.end, locale)}`,
     }));
-  const guides = GUIDES.map((key) => ({ label: B2_TITLES[key][locale], href: b2href(key, locale) }));
+  const guideKeys = town.ine === BARCELONA_INE ? (["barcelonaDecember", ...GUIDES] as const) : GUIDES;
+  const guides = guideKeys.map((key) => ({ label: B2_TITLES[key][locale], href: b2href(key, locale) }));
 
   return (
     <article>

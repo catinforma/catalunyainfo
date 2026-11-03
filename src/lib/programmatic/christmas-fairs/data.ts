@@ -34,7 +34,8 @@ const byDate = (a: Fair, b: Fair) => a.start.localeCompare(b.start) || a.end.loc
  */
 export function mergeFairs(snapshot: ChristmasSnapshot, organisers: readonly OrganiserFair[]): Fair[] {
   const corrections = new Map(organisers.filter((o) => o.replaces).map((o) => [o.replaces!, o]));
-  const out: Fair[] = snapshot.fairs.map((f) => {
+  const duplicates = new Set(organisers.flatMap((o) => o.alsoReplaces ?? []));
+  const out: Fair[] = snapshot.fairs.filter((f) => !duplicates.has(f.id)).map((f) => {
     const o = corrections.get(f.id);
     const base: Fair = { ...f, checked: null, datasetDates: null };
     if (!o) return base;

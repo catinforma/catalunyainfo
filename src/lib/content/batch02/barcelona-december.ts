@@ -3,12 +3,13 @@ import { WEEKDAY_NAMES, daysBetween, holidayOn, isAranOnly, shortDate, weekdayIn
 import { metroDay } from "@/lib/content/metro/tonight";
 import { agendaPageUrl } from "@/lib/content/pessebres/agenda";
 import type { Locale } from "@/lib/i18n/config";
-import { fairsHubPath } from "@/lib/programmatic/christmas-fairs/paths";
+import { townBySlug } from "@/lib/programmatic/christmas-fairs/data";
+import { fairsHubPath, townPath as fairsTownPath } from "@/lib/programmatic/christmas-fairs/paths";
 import { municipalityBySlug } from "@/lib/programmatic/holidays/data";
 
-import { CHRISTMAS, FAMILY, SANTA_LLUCIA_2025 } from "./christmas";
+import { CHRISTMAS, FAMILY, SANTA_LLUCIA_2025, hoursText } from "./christmas";
 import { metroTable, when } from "./christmas-barcelona";
-import { ANNOUNCED_TRADITIONS, pastoretsSentence, range, type TraditionAnnouncements } from "./christmas-traditions";
+import { ANNOUNCED_TRADITIONS, pastoretsSentence, range, santaLluciaSource, type TraditionAnnouncements } from "./christmas-traditions";
 import { CLIMATE, climateMonth, WINTER_START } from "./climate";
 import { BRIDGE_DAYS, LOCAL_MONDAY_7, runWords } from "./december-bridge";
 import {
@@ -86,13 +87,26 @@ import {
  * (the Fira de Santa Llúcia at night), with its exact alt text and caption,
  * because media rows are keyed by file.
  *
+ * 3 Nov 2026 (Christmas cluster refresh): Santa Llúcia is announced in the
+ * Generalitat's cultural agenda (27 Nov - 23 Dec 2026, 10:00-21:00; see
+ * christmas.ts SANTA_LLUCIA_2026), so it leaves "still to be announced" for
+ * the day-by-day table, the key facts and the FAQ by itself, credited to the
+ * agenda; the "Fires" paragraph (fairsParagraph) gives the dates and links
+ * the fairs family's new Barcelona page. Re-read the same day: the press room
+ * (home, "nadal-2026" and "reis" tags, searches for "llums nadal",
+ * "cavalcada" and "cap d'any": latest Christmas items 8-9 Jul 2026),
+ * barcelona.cat/nadal (still "es tornarà a actualitzar al voltant del mes de
+ * novembre del 2026"), the Reis page (still 2026) and the seven agenda rows
+ * in AGENDA_DECEMBER (same dates). So the lights, nativity scene, New Year's
+ * Eve and parade stay "not announced yet", now "checked on 3 November".
+ *
  * 31 Oct 2026: the "Tradicions" paragraph links the Three Kings parade page
  * (group `reis-2027-links`). Not the "still to be announced" item: that one
  * disappears once the parade is announced, and the link would go with it.
  */
 
 /** The day the page was last brought up to date. Every "checked" line reads this, never the clock. */
-export const BARCELONA_DECEMBER_AS_OF = "2026-10-31";
+export const BARCELONA_DECEMBER_AS_OF = "2026-11-03";
 
 /** Barcelona (INE 08019) in the holiday engine's snapshot. */
 const BCN = municipalityBySlug("barcelona");
@@ -343,6 +357,9 @@ const SOURCES: B2Source[] = [
   { name: "La Marató 2026", url: MARATO.hub2026.ca, publisher: "Fundació La Marató de 3Cat" },
   { name: "La Grossa de Cap d'Any: el joc, els premis i el sorteig", url: GROSSA_URLS.game, publisher: "Loteries de Catalunya" },
   { name: "Agenda cultural de Catalunya (dades obertes)", url: "https://analisi.transparenciacatalunya.cat/d/rhpv-yr4f", publisher: "Departament de Cultura, Generalitat de Catalunya" },
+  ...(ANNOUNCED_TRADITIONS.santaLlucia?.via === "agenda"
+    ? [{ name: "Agenda Cultural de Catalunya: Fira de Santa Llúcia a l'Avinguda de la Catedral de Barcelona (2026)", url: ANNOUNCED_TRADITIONS.santaLlucia.url, publisher: "Departament de Cultura, Generalitat de Catalunya" }]
+    : []),
   { name: "Carilló del Palau de la Generalitat", url: "https://presidencia.gencat.cat/ca/ambits_d_actuacio/palau-de-la-generalitat/carillo-del-palau/", publisher: "Generalitat de Catalunya" },
   { name: "33è Pessebre Vivent de la Torre del Suro", url: TORRE_DEL_SURO_2026.url, publisher: TORRE_DEL_SURO.publisher },
   ...[skiSource("baqueira-beret-activa-el-invierno"), skiSource("lamolina/estacio/informacio-tecnica")].filter((s): s is B2Source => Boolean(s)),
@@ -409,6 +426,49 @@ function councilSource(url: string, locale: Locale): string {
   return `[${{ ca: "Ajuntament de Barcelona", es: "Ayuntamiento de Barcelona", en: "Barcelona City Council" }[locale]}](${url})`;
 }
 
+/** The "how we handle dates" callout's last sentence: what is still undated, from the slots. */
+function stillUndated(locale: Locale, facts: Announcements, traditions: TraditionAnnouncements): string {
+  const names = {
+    ca: [!facts.lightsSwitchOn && "els llums", !traditions.santaLlucia && "la Fira de Santa Llúcia", !facts.newYearShow && "la festa de Cap d'Any"],
+    es: [!facts.lightsSwitchOn && "las luces", !traditions.santaLlucia && "la Fira de Santa Llúcia", !facts.newYearShow && "la fiesta de Nochevieja"],
+    en: [!facts.lightsSwitchOn && "the lights", !traditions.santaLlucia && "the Fira de Santa Llúcia", !facts.newYearShow && "the New Year's Eve show"],
+  }[locale].filter((n): n is string => Boolean(n));
+  if (names.length === 0) return { ca: "Tot el que ja és oficial és a la taula.", es: "Todo lo que ya es oficial está en la tabla.", en: "Everything already official is in the table." }[locale];
+  const list = names.length === 1 ? names[0]! : `${names.slice(0, -1).join(", ")}${{ ca: " i ", es: " y ", en: " and " }[locale]}${names.at(-1)}`;
+  const subject = `${list.charAt(0).toUpperCase()}${list.slice(1)}`;
+  const one = names.length === 1;
+  return {
+    ca: `${subject} encara no ${one ? "té data" : "tenen data"} (${AS_OF.ca}): ${one ? "l'afegim el dia que sigui oficial" : "les afegim el dia que siguin oficials"}.`,
+    es: `${subject} aún no ${one ? "tiene fecha" : "tienen fecha"} (${AS_OF.es}): ${one ? "la añadimos el día que sea oficial" : "las añadimos el día que sean oficiales"}.`,
+    en: `${subject} ${one ? "has" : "have"} no date yet (${AS_OF.en}): we add each one the day it becomes official.`,
+  }[locale];
+}
+
+/** The fairs family's Barcelona page, linked only while it exists (Barcelona has a dated fair in the snapshot). */
+function bcnFairsPage(locale: Locale, label: string): string {
+  return townBySlug("barcelona") ? `[${label}](${fairsTownPath(locale, "barcelona")})` : label;
+}
+
+/** The "Fires" paragraph: Santa Llúcia's dates once announced, the Sagrada Família, and the rest of Catalonia. */
+export function fairsParagraph(locale: Locale, traditions: TraditionAnnouncements = ANNOUNCED_TRADITIONS): string {
+  const s = traditions.santaLlucia;
+  const hub = { ca: `[fires de Nadal per municipi](${fairsHubPath("ca")})`, es: `[ferias de Navidad por municipio](${fairsHubPath("es")})`, en: `[Christmas markets by town](${fairsHubPath("en")})` }[locale];
+  const guide = { ca: b2link("christmas", "ca", "la guia de mercats de Nadal"), es: b2link("christmas", "es", "la guía de mercados de Navidad"), en: b2link("christmas", "en", "our Christmas markets guide") }[locale];
+  if (s) {
+    const hours = s.hours ? `, ${hoursText(s.hours, locale)}` : "";
+    return {
+      ca: `**Fires.** La Fira de Santa Llúcia es fa ${range(s.from, s.to, "ca")}${hours}, davant de la Catedral, segons ${santaLluciaSource(s, "ca")}; com arribar-hi i què és festiu aquells dies, a ${bcnFairsPage("ca", "fires de Nadal a Barcelona")}. La de la Sagrada Família encara no ha publicat les dates del 2026. A tot Catalunya, ${FAMILY.fairs} fires de Nadal ja tenen data oficial: són a ${hub} i a ${guide}.`,
+      es: `**Ferias.** La Fira de Santa Llúcia se celebra ${range(s.from, s.to, "es")}${hours}, frente a la Catedral, según ${santaLluciaSource(s, "es")}; cómo llegar y qué es festivo esos días, en ${bcnFairsPage("es", "ferias de Navidad en Barcelona")}. La de la Sagrada Família aún no ha publicado sus fechas de 2026. En toda Cataluña, ${FAMILY.fairs} ferias de Navidad ya tienen fecha oficial: están en ${hub} y en ${guide}.`,
+      en: `**Markets.** The Fira de Santa Llúcia runs from ${range(s.from, s.to, "en")}${hours}, in front of the Cathedral, according to ${santaLluciaSource(s, "en")}; getting there and the holidays on those days: ${bcnFairsPage("en", "Christmas markets in Barcelona")}. The Sagrada Família fair has not published its 2026 dates yet. Across Catalonia, ${FAMILY.fairs} Christmas fairs already have an official date: see ${hub} and ${guide}.`,
+    }[locale];
+  }
+  return {
+    ca: `**Fires.** La Fira de Santa Llúcia, davant de la Catedral, i la de la Sagrada Família encara no han publicat les dates del 2026. A la resta de Catalunya, ${FAMILY.fairs} fires de Nadal ja tenen data oficial: són a ${hub} i a ${guide}.`,
+    es: `**Ferias.** La Fira de Santa Llúcia, frente a la Catedral, y la de la Sagrada Família aún no han publicado sus fechas de 2026. En el resto de Cataluña, ${FAMILY.fairs} ferias de Navidad ya tienen fecha oficial: están en ${hub} y en ${guide}.`,
+    en: `**Markets.** The Fira de Santa Llúcia, in front of the Cathedral, and the Sagrada Família fair have not published their 2026 dates yet. Elsewhere in Catalonia, ${FAMILY.fairs} Christmas fairs already have an official date: see ${hub} and ${guide}.`,
+  }[locale];
+}
+
 function agendaText(item: AgendaItem, locale: Locale): string {
   // "Concert de carilló al Palau de la Generalitat" already says where.
   const venue = item.name.includes(item.venue) ? "" : `, ${item.venue}`;
@@ -430,8 +490,11 @@ function announcedEntries(locale: Locale, facts: Announcements, traditions: Trad
     out.push({
       from: s.from,
       to: s.to,
-      text: { ca: "**Fira de Santa Llúcia**, davant de la Catedral.", es: "**Fira de Santa Llúcia**, frente a la Catedral.", en: "**Fira de Santa Llúcia** Christmas market, in front of the Cathedral." }[locale],
-      source: `[${{ ca: "Organització", es: "Organización", en: "Organisers" }[locale]}](${s.url})`,
+      text: `${{ ca: "**Fira de Santa Llúcia**, davant de la Catedral", es: "**Fira de Santa Llúcia**, frente a la Catedral", en: "**Fira de Santa Llúcia** Christmas market, in front of the Cathedral" }[locale]}${s.hours ? `, ${hoursText(s.hours, locale)}` : ""}.`,
+      source:
+        s.via === "agenda"
+          ? `[${{ ca: "Agenda Cultural de la Generalitat", es: "Agenda Cultural de la Generalitat", en: "Catalan government's cultural agenda" }[locale]}](${s.url})`
+          : `[${{ ca: "Organització", es: "Organización", en: "Organisers" }[locale]}](${s.url})`,
     });
   }
   return out;
@@ -725,7 +788,10 @@ function lightsFact(locale: Locale, facts: Announcements): string {
 
 function santaLluciaFact(locale: Locale, traditions: TraditionAnnouncements): string {
   const s = traditions.santaLlucia;
-  if (s) return cap(range(s.from, s.to, locale).replace(/^de?l /, ""));
+  if (s) {
+    const when = cap(range(s.from, s.to, locale).replace(/^de?l /, ""));
+    return s.hours ? `${when}, ${hoursText(s.hours, locale)}` : when;
+  }
   return { ca: `Dates del 2026 encara no anunciades (${AS_OF.ca})`, es: `Fechas de 2026 aún no anunciadas (${AS_OF.es})`, en: `2026 dates not announced yet (${AS_OF.en})` }[locale];
 }
 
@@ -826,7 +892,7 @@ export function buildBarcelonaDecemberBody(
       callout(
         "official",
         "Com tractem les dates",
-        `Només hi posem una data del 2026 quan l'ha publicada l'organitzador o l'administració; les dels anys anteriors sempre porten l'any al costat. Els llums, la Fira de Santa Llúcia i la festa de Cap d'Any encara no tenen data (${AS_OF.ca}): les afegim el dia que siguin oficials.`,
+        `Només hi posem una data del 2026 quan l'ha publicada l'organitzador o l'administració; les dels anys anteriors sempre porten l'any al costat. ${stillUndated("ca", facts, traditions)}`,
       ),
       ...h2(
         "Què fer a Barcelona al desembre del 2026: les dates clau",
@@ -864,7 +930,7 @@ export function buildBarcelonaDecemberBody(
       ...h2(
         "Nadal a Barcelona: llums, fires i pessebres",
         `**Llums.** ${lightsNews} Per al 2026 preveu ${LIGHTS_PLAN_2026.km} km de carrers il·luminats, i el 2026 Barcelona és capital europea del Nadal. La data, l'hora i el lloc de l'encesa, quan surtin, a ${b2link("christmasBarcelona", "ca", "l'encesa de llums de Nadal a Barcelona")}.`,
-        `**Fires.** La Fira de Santa Llúcia, davant de la Catedral, i la de la Sagrada Família encara no han publicat les dates del 2026. A la resta de Catalunya, ${FAMILY.fairs} fires de Nadal ja tenen data oficial: són a [fires de Nadal per municipi](${fairsHubPath("ca")}) i a ${b2link("christmas", "ca", "la guia de mercats de Nadal")}.`,
+        fairsParagraph("ca", traditions),
         `**Pessebres.** A la ciutat, el 33è Pessebre Vivent de la Torre del Suro, al Guinardó, és el ${torre} a les ${TORRE_DEL_SURO_2026.time}, amb entrada lliure, segons els organitzadors. La resta de pessebres vivents de Catalunya, a ${b2link("pessebres", "ca", "la guia de pessebres vivents")}.`,
         `**Tradicions.** El tió es comença a alimentar per la Immaculada, el 8 de desembre, i el 26, Sant Esteve, és festiu. ${pastoretsSentence("ca")} Com es fa cagar el tió i què es menja per Nadal, a ${b2link("christmasTraditions", "ca", "les tradicions de Nadal a Catalunya")}. I per acabar les festes, l'horari i el recorregut dels Reis, a ${b2link("reis", "ca", "la Cavalcada de Reis 2027")}.`,
       ),
@@ -910,7 +976,7 @@ export function buildBarcelonaDecemberBody(
       callout(
         "official",
         "Cómo tratamos las fechas",
-        `Solo ponemos una fecha de 2026 cuando la ha publicado el organizador o la administración; las de años anteriores siempre llevan el año al lado. Las luces, la Fira de Santa Llúcia y la fiesta de Nochevieja aún no tienen fecha (${AS_OF.es}): las añadimos el día que sean oficiales.`,
+        `Solo ponemos una fecha de 2026 cuando la ha publicado el organizador o la administración; las de años anteriores siempre llevan el año al lado. ${stillUndated("es", facts, traditions)}`,
       ),
       ...h2(
         "Qué hacer en Barcelona en diciembre de 2026: las fechas clave",
@@ -948,7 +1014,7 @@ export function buildBarcelonaDecemberBody(
       ...h2(
         "Navidad en Barcelona: luces, ferias y belenes",
         `**Luces.** ${lightsNews} Para 2026 prevé ${LIGHTS_PLAN_2026.km} km de calles iluminadas, y en 2026 Barcelona es capital europea de la Navidad. La fecha, la hora y el lugar del encendido, cuando salgan, en ${b2link("christmasBarcelona", "es", "el encendido de luces de Navidad en Barcelona")}.`,
-        `**Ferias.** La Fira de Santa Llúcia, frente a la Catedral, y la de la Sagrada Família aún no han publicado sus fechas de 2026. En el resto de Cataluña, ${FAMILY.fairs} ferias de Navidad ya tienen fecha oficial: están en [ferias de Navidad por municipio](${fairsHubPath("es")}) y en ${b2link("christmas", "es", "la guía de mercados de Navidad")}.`,
+        fairsParagraph("es", traditions),
         `**Belenes.** En la ciudad, el 33.º Pessebre Vivent de la Torre del Suro, en el Guinardó, es el ${torre} a las ${TORRE_DEL_SURO_2026.time}, con entrada libre, según los organizadores. El resto de belenes vivientes de Cataluña, en ${b2link("pessebres", "es", "la guía de belenes vivientes")}.`,
         `**Tradiciones.** Al tió se le empieza a alimentar por la Inmaculada, el 8 de diciembre, y el 26, San Esteban, es festivo. ${pastoretsSentence("es")} Cómo se hace cagar el tió y qué se come en Navidad, en ${b2link("christmasTraditions", "es", "las tradiciones de Navidad en Cataluña")}. Y para cerrar las fiestas, el horario y el recorrido de los Reyes, en ${b2link("reis", "es", "la Cabalgata de Reyes 2027")}.`,
       ),
@@ -993,7 +1059,7 @@ export function buildBarcelonaDecemberBody(
     callout(
       "official",
       "How we handle dates",
-      `We give a 2026 date only once the organiser or an official body has published it; dates from earlier years always carry their year. The lights, the Fira de Santa Llúcia and the New Year's Eve show have no date yet (${AS_OF.en}): we add each one the day it becomes official.`,
+      `We give a 2026 date only once the organiser or an official body has published it; dates from earlier years always carry their year. ${stillUndated("en", facts, traditions)}`,
     ),
     ...h2(
       "Things to do in Barcelona in December 2026: the key dates",
@@ -1031,7 +1097,7 @@ export function buildBarcelonaDecemberBody(
     ...h2(
       "Christmas in Barcelona: lights, markets and nativity scenes",
       `**Lights.** ${lightsNews} For 2026 it plans ${LIGHTS_PLAN_2026.km} km of lit streets, and 2026 is the year Barcelona is European Capital of Christmas. The date, time and place of the switch-on, once out, are in ${b2link("christmasBarcelona", "en", "the Barcelona Christmas lights switch-on")}.`,
-      `**Markets.** The Fira de Santa Llúcia, in front of the Cathedral, and the Sagrada Família fair have not published their 2026 dates yet. Elsewhere in Catalonia, ${FAMILY.fairs} Christmas fairs already have an official date: see [Christmas markets by town](${fairsHubPath("en")}) and ${b2link("christmas", "en", "our Christmas markets guide")}.`,
+      fairsParagraph("en", traditions),
       `**Nativity scenes.** In the city, the 33rd Torre del Suro living nativity, in el Guinardó, is on ${torre} at ${TORRE_DEL_SURO_2026.time}, free, according to its organisers. Catalonia's other living nativities are in ${b2link("pessebres", "en", "our living nativity scenes guide")}.`,
       `**Traditions.** Children start "feeding" the tió log on 8 December, the Immaculada, and the 26th, Sant Esteve, is a public holiday. ${pastoretsSentence("en")} How to make the tió poo and what Catalans eat at Christmas: ${b2link("christmasTraditions", "en", "Catalan Christmas traditions")}. And to close the season, the Kings' times and route: ${b2link("reis", "en", "the 2027 Three Kings parade")}.`,
     ),

@@ -95,6 +95,13 @@ export interface OrganiserFair {
   quote: string;
   /** The calendar's fair this announcement corrects (its snapshot id), when the dates differ. */
   replaces?: string;
+  /**
+   * Other snapshot rows that are this same fair (typically the cultural
+   * agenda's listing of it, which the script's overlap check cannot match
+   * against an organiser's corrected dates): dropped from the list, so the
+   * fair is shown once.
+   */
+  alsoReplaces?: readonly string[];
 }
 
 /** A market people search for whose dates for this season are not published yet. */
