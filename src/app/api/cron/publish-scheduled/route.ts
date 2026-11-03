@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { NextResponse, after } from "next/server";
 import { revalidatePath } from "next/cache";
 import { and, eq, isNotNull, lte, sql } from "drizzle-orm";
 import { timingSafeEqual } from "node:crypto";
@@ -9,6 +9,7 @@ import { DAY_DEPENDENT_PATTERN } from "@/lib/content/day-dependent";
 import { todayInCatalonia } from "@/lib/content/holidays/calendar";
 import { holidayRefreshPaths } from "@/lib/programmatic/holidays/routing";
 import { weekendRefreshPaths } from "@/lib/programmatic/weekend/routing";
+import { purgeCdnPaths, type PurgeResult } from "@/lib/cdn/purge";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -33,19 +34,30 @@ export async function GET(request: Request) {
     return NextResponse.json({ ok: false }, { status: 401 });
   }
 
+  // Every path revalidated here is purged at Cloudflare too (it caches HTML,
+  // ops/vps/README.md section 10, and does not hear revalidatePath).
+  const revalidated = new Set<string>();
+  const revalidate = (path: string) => {
+    revalidatePath(path);
+    revalidated.add(path);
+  };
+
   // The weekend zone pages (/ca/cap-de-setmana/, /es/fin-de-semana/) are
   // static code routes with the weekend's dates in their titles: rebuilt on
   // the night the weekend window changes and the night after, before the
   // database step so an outage there cannot leave a past weekend in a title.
   const weekendPaths = weekendRefreshPaths(todayInCatalonia());
-  for (const path of weekendPaths) revalidatePath(path);
+  for (const path of weekendPaths) revalidate(path);
   // The town holiday pages (/ca/festius/<municipi>/, /es/festivos/<municipio>/)
   // name their next holiday: rebuilt the night after each of their holidays.
   const holidayPaths = holidayRefreshPaths(todayInCatalonia());
-  for (const path of holidayPaths) revalidatePath(path);
+  for (const path of holidayPaths) revalidate(path);
 
   const db = getDb();
-  if (!db) return NextResponse.json({ ok: false, reason: "no-database" }, { status: 503 });
+  if (!db) {
+    const cdnPurge = await purgeCdn(revalidated);
+    return NextResponse.json({ ok: false, reason: "no-database", cdnPurge }, { status: 503 });
+  }
 
   const due = await db
     .update(entryTranslations)
@@ -72,10 +84,10 @@ export async function GET(request: Request) {
     .returning({ id: entryTranslations.id });
 
   for (const row of due) {
-    revalidatePath(`/${row.locale}`);
-    revalidatePath(`/${row.locale}/${row.path}`);
+    revalidate(`/${row.locale}`);
+    revalidate(`/${row.locale}/${row.path}`);
   }
-  if (due.length > 0) revalidatePath("/sitemap.xml");
+  if (due.length > 0) revalidate("/sitemap.xml");
 
   // Content pages are cached for a day. The ones whose answer depends on
   // today's date are refreshed here, once, just after midnight in Madrid.
@@ -85,10 +97,12 @@ export async function GET(request: Request) {
     .select({ locale: entryTranslations.locale, path: entryTranslations.path })
     .from(entryTranslations)
     .where(and(eq(entryTranslations.status, "published"), sql`${entryTranslations.body}::text ~ ${pattern}`));
-  for (const row of dayDependent) revalidatePath(`/${row.locale}/${row.path}`);
-  for (const locale of ["ca", "es", "en"]) revalidatePath(`/${locale}`);
+  for (const row of dayDependent) revalidate(`/${row.locale}/${row.path}`);
+  for (const locale of ["ca", "es", "en"]) revalidate(`/${locale}`);
 
   const sessionsPruned = await pruneExpiredSessions();
+
+  const cdnPurge = await purgeCdn(revalidated);
 
   return NextResponse.json({
     ok: true,
@@ -98,7 +112,25 @@ export async function GET(request: Request) {
     holidayPagesRefreshed: holidayPaths.length,
     flaggedForUpdate: stale.length,
     sessionsPruned,
+    cdnPurge,
   });
+}
+
+/**
+ * Purges the revalidated paths now (the result goes in the response) and once
+ * more after the response: revalidatePath takes effect only when the handler
+ * returns, so Cloudflare could re-cache an old page in between. No-op without
+ * a token. After a Catalonia-wide holiday the town pages alone are ~1,900
+ * URLs, which purge.ts turns into one purge-everything call.
+ */
+async function purgeCdn(paths: Set<string>): Promise<PurgeResult> {
+  const result = await purgeCdnPaths(paths, { label: "cron" });
+  if (!result.skipped) {
+    after(async () => {
+      await purgeCdnPaths(paths, { label: "cron (after revalidation)" });
+    });
+  }
+  return result;
 }
 
 function authorised(request: Request): boolean {

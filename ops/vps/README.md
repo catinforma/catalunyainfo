@@ -148,6 +148,7 @@ that matter:
 | `SITE_ENV` | `production` |
 | `DATABASE_POOL_MAX` | `5` |
 | `RESEND_API_KEY`, `CONTACT_*`, `ADSENSE_PUBLISHER_ID` | Optional, as on Vercel today (production's `/ads.txt` is a 404 now). |
+| `CLOUDFLARE_ZONE_ID`, `CLOUDFLARE_API_TOKEN` | Optional: the Cloudflare cache purge (section 10). The token is a Cache Purge-only token for this zone. |
 
 How the file is read:
 
@@ -474,37 +475,118 @@ Zone settings, set **before** the proxy is on:
 | Web Analytics automatic injection | **Off** | It injects a beacon the CSP blocks and the privacy policy does not mention. |
 | HTTP/3, Brotli/zstd to visitors | On (defaults) | |
 
-**Cache rules** (Caching → Cache Rules). Next sets the Cache-Control headers and
-Cloudflare should respect them. Cloudflare applies cache rules in order, and a
-later matching rule overrides an earlier one, so the bypass goes **last**:
+**Cache rules** (Caching → Cache Rules), created in this order. Cloudflare
+applies every matching rule in order and, for conflicting settings, the last
+matching rule wins, so the bypass goes **last**:
 
 1. **Next static assets:** `starts_with(http.request.uri.path, "/_next/static/")`
    → Eligible for cache. Edge TTL: use the origin's Cache-Control (Next sends
    `public, max-age=31536000, immutable` on hashed files). Browser TTL: respect
    origin.
-2. *(Optional, later)* **ISR pages:** hostname `www.catalunyainfo.com` → Eligible
-   for cache. Edge TTL: "Use cache-control header if present, bypass cache if
-   not". Next sends `s-maxage=<revalidate>, stale-while-revalidate=…` on
-   ISR/static pages and `private, no-store` on dynamic ones, so this caches
-   exactly what Next says is shareable. **But** Cloudflare does not hear
-   `revalidatePath`: after a publish, it keeps serving the old HTML until
-   `s-maxage` runs out (1 h for the home pages, 1 day for content). Turn this on
-   only together with a purge-by-URL call (Cloudflare API, Cache Purge token)
-   after each publish, which is not built yet. Leave the query string in the
-   cache key (the default): `_rsc` is what separates RSC payloads from HTML,
-   because Cloudflare ignores `Vary: rsc`.
-3. **Bypass:** `http.request.uri.path eq "/"` or
-   `starts_with(http.request.uri.path, "/admin")` or
-   `starts_with(http.request.uri.path, "/api/")` or
-   `starts_with(http.request.uri.path, "/_next/image")` or
-   `http.cookie contains "ci_session"` → **Bypass cache**. `/` is a
-   per-language redirect (`Vary: Accept-Language, Cookie`, which Cloudflare
-   ignores). `/_next/image` negotiates AVIF/WebP on `Accept` (`Vary: Accept`,
-   ignored on the free plan), so a cached AVIF could reach a WebP-only client.
-   The image optimiser's disk cache on the origin makes this cheap anyway.
+2. **Pages (HTML), only once the purge token is set** (below):
+   ```
+   (http.host eq "www.catalunyainfo.com" and http.request.uri.query eq "")
+   ```
+   → Eligible for cache. Edge TTL: **"Use cache-control header if present,
+   bypass cache if not"**. Browser TTL: respect origin. Leave the cache key at
+   its defaults (a custom key would stop purge-by-URL from matching) and add no
+   request-method condition (Cloudflare evaluates cache rules during a purge
+   with the method `PURGE`). Next sends `s-maxage=<revalidate>,
+   stale-while-revalidate=…` on ISR/static pages and `private, no-store` on
+   dynamic ones, so this caches exactly what Next says is shareable: 1 h for the
+   home pages, a day for content (Cloudflare does not serve stale past
+   `s-maxage`). Cloudflare does not hear `revalidatePath`; the purge does that
+   job (below). **Only requests without a query string**: a `?utm_source=…` or
+   `?fbclid=…` copy would be a separate cache entry that no purge-by-URL
+   reaches; this way the bare URL is the only copy there is, and links with
+   tracking parameters are served by the origin (from Next's ISR cache).
+3. **Bypass:**
+   ```
+   (http.request.uri.path eq "/")
+   or starts_with(http.request.uri.path, "/admin")
+   or starts_with(http.request.uri.path, "/api/")
+   or starts_with(http.request.uri.path, "/_next/image")
+   or http.cookie contains "ci_session"
+   or any(http.request.uri.args.names[*] eq "_rsc")
+   or any(lower(http.request.headers.names[*])[*] eq "rsc")
+   ```
+   → **Bypass cache**. `/` is a per-language redirect (`Vary: Accept-Language,
+   Cookie`, which Cloudflare ignores). `/_next/image` negotiates AVIF/WebP on
+   `Accept` (`Vary: Accept`, ignored on the free plan), so a cached AVIF could
+   reach a WebP-only client; the image optimiser's disk cache on the origin
+   makes this cheap anyway. **The last two lines are the RSC bypass.** Client
+   navigations and prefetches fetch an RSC payload from the *same path*, marked
+   by an `rsc: 1` header and `?_rsc=<hash>`, where the hash covers the client's
+   router headers (`next-router-state-tree`, `next-router-prefetch`, …), so its
+   values cannot be enumerated and therefore cannot be purged by URL. Cloudflare
+   ignores `Vary: rsc, next-router-*`, so these variants are simply never
+   stored. The `rsc` header test also covers a request that sends the header
+   without `_rsc`, which would otherwise be cached under the page's own key (an
+   RSC payload served as the HTML). Client-side navigations therefore always
+   reach the origin, which answers them from its ISR cache.
 
 Without rule 2, Cloudflare caches only static files by extension and never
-HTML, which is the safe starting point.
+HTML, which is the safe starting point. **Rule 2 is safe once
+`CLOUDFLARE_API_TOKEN` is set and a publish has shown `cdnPurge.ok: true`.** If
+the token is ever removed, revoked or expires, turn rule 2 off first: pages
+would otherwise stay stale for up to a day after each publish.
+
+### Cloudflare purge (`src/lib/cdn/purge.ts`, `deploy.sh`)
+
+Off by default: without `CLOUDFLARE_API_TOKEN` every purge is a no-op that
+reports `{"skipped": true, "reason": "no-token"}` and `deploy.sh` behaves as
+before.
+
+**The token.** Cloudflare → My Profile → API Tokens → Create Token → Custom
+token:
+- Permissions: **Zone · Cache Purge · Purge**, and nothing else;
+- Zone Resources: **Include · Specific zone · catalunyainfo.com**;
+- optional, recommended: Client IP Address Filtering = the VPS's IP (the only
+  place it is used), and an expiry date you will remember.
+
+Put it in the env file with the zone id (`sudoedit
+/srv/catalunyainfo/shared/.env.production`): `CLOUDFLARE_ZONE_ID=52705f5d3f9f9e7ca73726b78b245459`
+and `CLOUDFLARE_API_TOKEN=<token>`, then `sudo systemctl restart catalunyainfo`.
+`deploy.sh` reads the same file through its existing sudo rule (`sudo -n
+/usr/bin/cat` of that file); no new sudoers rule is needed. The token reaches
+`curl` on stdin and is never printed or logged.
+
+**What is purged** (always `https://www.catalunyainfo.com/...` with the trailing
+slash; files such as `/sitemap.xml` without it; the apex and `http://` are Caddy
+redirects that are never cached):
+
+| Trigger | Purged |
+| --- | --- |
+| `POST /api/admin/publish/?only=<group>` (`publish.sh`) | every URL it revalidates: each edition, its locale home, its section hub, `/sitemap.xml`. The JSON answer carries `cdnPurge`; `publish.sh` prints it |
+| Nightly job (`/api/cron/publish-scheduled/`) | the weekend pages and holiday town pages it rebuilds, newly published entries with their homes and the sitemap, the day-dependent pages and the three homes. `cdnPurge` in the JSON |
+| CMS save or status change, redirect saved | the same paths it revalidates, after the response |
+| `catalunyainfo-deploy` (also `--rollback`, and the automatic rollback) | **everything**, once the release passes its health checks: a release changes every page's build id and chunk names |
+
+Details: batches of 30 URLs (Cloudflare's table now allows 100 per call on
+Free, at 800 URLs/s; 30 works under either), three calls in flight, 8 s timeout
+each. Above 600 URLs (the town pages after a Catalonia-wide holiday are ~1,900)
+one purge-everything replaces the batches (that kind of purge is limited to 5
+per minute on Free, bursts of 25). `revalidatePath` in a route handler only
+takes effect once the handler returns, so a visitor reaching Cloudflare in that
+gap could re-cache the old page; the routes therefore purge again right after
+the response (`after()`). A failed purge never fails the publish: it is logged
+as `[cdn-purge] … failed` (`journalctl -u catalunyainfo | grep cdn-purge`) and
+reported in the JSON. Re-run the publish, or purge by hand (Caching →
+Configuration → Purge Cache).
+
+Purge by prefix, hostname and tag are now listed for the Free plan too
+(Cloudflare docs, Sep 2026), but are not used: a prefix such as `/ca/<section>/`
+would also purge every article under it, and with the RSC variants never
+cached, exact URLs are enough.
+
+**Turning it on, in order:** (1) deploy this commit and run `provision.sh
+--files-only` (it installs the new `deploy.sh`); (2) token and zone id in the
+env file, restart; (3) publish one small group and check `cdnPurge` shows
+`"ok": true`; (4) create rule 2 and the extended rule 3 above; (5) check: two
+`curl -sI https://www.catalunyainfo.com/ca/ | grep -i cf-cache-status` in a row
+give `MISS` then `HIT`; after a publish of a page, the next request for it is a
+`MISS`; `curl -sI -H 'rsc: 1' https://www.catalunyainfo.com/ca/` and any URL
+with `?_rsc=x` answer `BYPASS` (or `DYNAMIC`), never `HIT`.
 
 Optional hardening once proxied: restrict ufw's 80/443 to Cloudflare's ranges.
 The cost is that turning the proxy off then needs those ports reopened first.
@@ -566,7 +648,8 @@ file-system cache is consistent with no extra configuration. Caveats:
    unit) would need a shared cache handler, because invalidations would not
    reach it.
 3. A CDN that caches HTML (Cloudflare rule 2) is not purged by
-   `revalidatePath`; see section 10.
+   `revalidatePath`. Every caller of `revalidatePath` also purges the same URLs
+   at Cloudflare once `CLOUDFLARE_API_TOKEN` is set; see section 10.
 
 Revalidation writes cost nothing here, so the one-day revalidate in
 `[...slug]/page.tsx` could be shortened later if fresher pages help. That is a
@@ -582,6 +665,7 @@ separate decision, not part of the move.
 | Database migrations | as today, `POST /api/admin/migrate/` with the bearer token (it reads `drizzle/*.sql`, which is in the bundle) |
 | Change `ops/vps` files | commit, deploy, then `sudo bash /srv/catalunyainfo/current/ops/vps/provision.sh --files-only` (deploy.sh warns when the installed copies differ) |
 | Change a secret | `sudoedit …/.env.production`, then restart (run-time) or redeploy (build-time); section 3 |
+| Purge Cloudflare's cache | automatic with `CLOUDFLARE_API_TOKEN` (publishes, nightly job, deploys; section 10); by hand: Cloudflare → Caching → Configuration → Purge Cache |
 | Rotate `CRON_SECRET` | new value in the env file, restart, then update your `.cron-secret` (and Vercel's, while it is the rollback) |
 | OS packages | security updates are automatic. Monthly: `sudo apt update && sudo apt full-upgrade`, which also brings Node 24.x patches and Caddy, then `sudo systemctl restart catalunyainfo`; reboot if `/var/run/reboot-required` exists |
 | Next Node LTS | change `NODE_MAJOR` in `provision.sh`, re-run it, then redeploy |

@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { headers } from "next/headers";
+import { after } from "next/server";
 import { and, eq } from "drizzle-orm";
 
 import { requireDb, schema } from "@/lib/db/client";
@@ -28,6 +29,7 @@ import {
 } from "./schemas";
 import type { Locale } from "@/lib/i18n/config";
 import { slugify } from "@/lib/format";
+import { purgeCdnPaths } from "@/lib/cdn/purge";
 import { z } from "zod";
 
 const createDraftSchema = z.object({
@@ -319,6 +321,7 @@ export async function saveTranslation(input: unknown): Promise<ActionResult> {
         })
         .onConflictDoNothing();
       revalidatePath(`/${data.locale}/${existing.path}`);
+      purgeCdnAfterResponse([`/${data.locale}/${existing.path}`]);
     }
 
     revalidateForTranslation(data.locale, data.path);
@@ -597,6 +600,7 @@ export async function saveRedirect(input: unknown): Promise<ActionResult> {
 
     await audit(user.id, "redirect.save", "redirect", data.fromPath);
     revalidatePath(data.fromPath);
+    purgeCdnAfterResponse([data.fromPath]);
     return { ok: true };
   } catch (error) {
     return handle(error);
@@ -660,12 +664,24 @@ export async function deleteContactMessage(input: unknown): Promise<ActionResult
 
 /** Invalidates every cached surface a publish can appear on. */
 function revalidateForTranslation(locale: Locale, path: string) {
-  revalidatePath(`/${locale}`);
-  revalidatePath(`/${locale}/${path}`);
-  revalidatePath("/sitemap.xml");
+  const paths = [`/${locale}`, `/${locale}/${path}`, "/sitemap.xml"];
   // Hub pages list the entry, so the first segment is invalidated too.
   const first = path.split("/")[0];
-  if (first) revalidatePath(`/${locale}/${first}`);
+  if (first) paths.push(`/${locale}/${first}`);
+  for (const p of paths) revalidatePath(p);
+  purgeCdnAfterResponse(paths);
+}
+
+/**
+ * Cloudflare may cache HTML (ops/vps/README.md section 10) and does not hear
+ * revalidatePath, so the same paths are purged there, after the response: a
+ * Server Function applies its revalidations before responding, and the editor
+ * does not wait on Cloudflare. No-op without CLOUDFLARE_API_TOKEN; never throws.
+ */
+function purgeCdnAfterResponse(paths: string[]) {
+  after(async () => {
+    await purgeCdnPaths(paths, { label: "cms" });
+  });
 }
 
 function handle(error: unknown): ActionResult {
