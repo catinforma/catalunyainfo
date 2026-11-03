@@ -183,6 +183,15 @@ export const relatedLinksBlock = z.object({
 
 export const dividerBlock = z.object({ type: z.literal("divider") });
 
+/**
+ * "En català · En castellano · In English": the same entry in each language,
+ * as a visible line in the body (the header switcher is easy to miss).
+ * Configuration-free: the renderer draws it from the entry's published
+ * translations, the ones hreflang lists, so it cannot point at an edition
+ * that does not exist, and each link carries `hreflang` and `lang`.
+ */
+export const languageLinksBlock = z.object({ type: z.literal("languageLinks") });
+
 /** Placeholder rendered where an ad unit may live later. Renders nothing. */
 export const adSlotBlock = z.object({
   type: z.literal("adSlot"),
@@ -515,6 +524,7 @@ export const blockSchema = z.discriminatedUnion("type", [
   embedBlock,
   relatedLinksBlock,
   dividerBlock,
+  languageLinksBlock,
   adSlotBlock,
   contactFormBlock,
   calculatorBlock,

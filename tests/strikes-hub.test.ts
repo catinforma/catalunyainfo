@@ -204,6 +204,19 @@ test("the daily page is linked once, by its name, right under the answer and bef
   }
 });
 
+test("a language line (En català · En castellano · In English) sits right under the answer in every edition", () => {
+  // 3 Nov 2026: Catalan "vaga" queries land on the Spanish edition because hreflang follows the Google
+  // interface language; a visible line, not just the header switcher, takes the reader to theirs.
+  for (const locale of LOCALES) {
+    const blocks = STRIKES_GUIDE.editions[locale].blocks;
+    assert.equal(blocks.filter((b) => b.type === "languageLinks").length, 1, locale);
+    assert.equal(blocks[2]?.type, "languageLinks", `${locale}: after the lead and the key facts`);
+    // With nothing announced (no key facts), right under the lead.
+    const quiet = buildStrikesBody(locale, "2026-12-09", allEnded());
+    assert.equal(quiet[1]?.type, "languageLinks", locale);
+  }
+});
+
 test("the read-next box only repeats links from the related rail", () => {
   for (const locale of LOCALES) {
     const before = STRIKES_GUIDE.editions[locale].blocks;
@@ -604,7 +617,13 @@ test("known answers read on the evening of 30 October 2026: Ouigo's resolution, 
     assert.ok(ouigoPartial.minimumServices.text[locale].includes(`](${STRIKE_URLS.ouigoResolution})`), locale);
     assert.ok(schools.facts[locale].join(" ").includes("El 26N, vaga educativa"), `${locale}: USTEC's own words`);
     assert.match(schools.minimumServices.text[locale], /8 (de setembre|de septiembre|September) (de )?2026/, locale);
-    assert.match(metges.facts[locale].join(" "), /(?<!\d)2 (de novembre|de noviembre|November) (de )?2026/, `${locale}: the day the doctors' strike was last seen still on`);
+    // The day the doctors' strike was last seen still on is the as-of day (re-read 3 Nov 2026): moving
+    // STRIKES_AS_OF means re-reading Metges de Catalunya and saying so in the entry.
+    assert.match(
+      metges.facts[locale].join(" "),
+      new RegExp(`(?<!\\d)${dateYear(STRIKES_AS_OF, locale)}`),
+      `${locale}: the day the doctors' strike was last seen still on (${dateYear(STRIKES_AS_OF, locale)})`,
+    );
     assert.ok(schools.facts[locale].join(" ").includes("vaga de les treballadores de l'educació"), `${locale}: the joint release's own words`);
     assert.ok(schools.facts[locale].join(" ").includes(`](${STRIKE_URLS.edu26Joint})`), locale);
     // Groundforce (Ministry of Transport, 28 Sep 2026): printed in the airports paragraph with its validity, not as a dated strike.

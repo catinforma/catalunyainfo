@@ -397,6 +397,30 @@ export function b2link(key: B2Key, locale: Locale, label: string): string {
   return `[${label}](${b2href(key, locale)})`;
 }
 
+/**
+ * "En català · En castellano · In English": the same article in the three
+ * languages, as a visible line near the top of the page (a `languageLinks`
+ * block, drawn by the renderer from the entry's published translations).
+ *
+ * Search Console, 21 Oct-3 Nov 2026: the Catalan queries "vaga 11 novembre"
+ * and "vaga general 11 novembre" landed on the Spanish 11N page about twice as
+ * often as on the Catalan one (341 and 259 impressions against 180 and 118),
+ * all at position 9-10, because hreflang follows the reader's interface
+ * language and many Catalan speakers use Google in Spanish. The header
+ * switcher is easy to miss; this line is not.
+ *
+ * Reviewed from the unreviewed WIP of 2 Nov (b9bd695), which returned a
+ * Markdown paragraph of links. A block instead, because: the links cross
+ * languages, which the content tests forbid in body text (a reader of one
+ * edition is never sent to another by a prose link); each label must carry
+ * its own `lang` and each link its `hreflang`, which Markdown cannot say; and
+ * the hrefs come from the translations actually published (the ones hreflang
+ * lists), so the line cannot point at an edition that does not exist.
+ */
+export function languageLinks(): Block {
+  return { type: "languageLinks" } as Block;
+}
+
 /** Titles for the related rail at the foot of each article. */
 export const B2_TITLES: Record<B2Key, Record<Locale, string>> = {
   transport: {

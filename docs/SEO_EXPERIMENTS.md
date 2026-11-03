@@ -1761,6 +1761,54 @@ impressions, clicks, CTR and position, over the window since this deploy and
 publish, against this baseline. For the town family, use the five towns
 listed in the baseline plus the family total from `snapshot.py families`.
 
+## 2026-11-03 — 11N and strikes hub: Catalan query wording, language line, answer-first snippets (groups `strikes`, `strike-11n`)
+
+Why: Search Console, 21 Oct-3 Nov 2026 (`scripts/snapshot.py page …`). The
+Catalan queries on the 11N page sit at position ~10 and land more on the
+Spanish edition than on the Catalan one, because hreflang follows the Google
+interface language: "vaga 11 novembre" 341 impr. at 10.1 on ES vs 180 at 9.4
+on CA; "vaga general 11 novembre" 259 at 10.5 on ES vs 118 at 9.9 on CA;
+"vaga 11 novembre 2026" 79 at 7.0 on CA. ES page's own leaders: "servicios
+minimos huelga 11 de noviembre" 202 at 5.5 (7.9% CTR), "huelga general 11
+noviembre barcelona" 130 at 4.1, "huelga general 11 noviembre horario" 44 at
+8.4, "manifestacion 11 de noviembre 2026" 26 at 7.6 and "manifestacion 11
+noviembre barcelona" 23 at 9.4 (no click: the page had no time or place).
+Hub: "huelga hoy" 170 at 7.5, "hoy hay huelga" 68, "vaga hoy" 67, "mañana
+hay huelga" 54, "huelga general 11 noviembre barcelona" 93 at 7.3.
+
+Changes:
+- 11N CA title: "Vaga general 11 de novembre: serveis mínims i què funciona"
+  → "Vaga general 11 novembre 2026: serveis mínims i què funciona" (60): the
+  searched words and the year, as the ES title already has. H1 unchanged
+  (grammatical "de l'11 de novembre").
+- 11N descriptions (pending state) name the services instead of "who sets
+  them, when": ca "…Serveis mínims encara no publicats: Rodalies, metro, bus,
+  escoles i sanitat." (150); es "…Servicios mínimos aún no publicados: metro,
+  Rodalies, bus, colegios y sanidad." (155); en "…Minimum services not out
+  yet: Barcelona metro, Rodalies, buses, schools, hospitals." (150).
+- Hub descriptions: the closing line says "today" ("Què funciona avui i
+  serveis mínims oficials." / "Qué funciona hoy y servicios mínimos." /
+  "What runs in Barcelona today and official minimum services."); Ouigo's
+  2 Nov strike is past, so the names are doctors, Renfe 10/12 Nov, 11N.
+- Both pages, three editions: a visible "En català · En castellano · In
+  English" line right under the key facts (new `languageLinks` block, drawn
+  from the published translations with `hreflang`/`lang`; the WIP helper of
+  2 Nov, b9bd695, reviewed and reworked from Markdown links into the block).
+- 11N first screen: the lead names the services whose minimum services are
+  pending; key facts reordered (day, hours, minimum services, schools, the
+  Barcelona march, 10/12 Nov, who calls it, who is called out); new key fact
+  and FAQ "where and when is the demonstration": 17.30 h, Jardinets de
+  Gràcia, from the Sindicat de Llogateres de Catalunya's own notice (20 Oct),
+  printed as theirs; CCOO and UGT still give no time or place.
+
+**Prediction.** CA page above the ES page for "vaga 11 novembre" / "vaga
+general 11 novembre" (from ~10 to top 5) and more Catalan clicks reaching the
+CA edition via the line; ES "manifestacion 11 noviembre barcelona" starts
+clicking; hub CTR on "huelga hoy" up a point at the same position.
+
+**Measure** with the 29 Oct entry (18 Nov and 26 Nov): per edition, position
+and clicks for the queries above, and the CA/ES split of the Catalan queries.
+
 **Outcome:** _pending_
 
 ## Candidates not yet run
