@@ -294,20 +294,27 @@ export async function countEntries(
   const db = getDb();
   if (!db) return 0;
 
-  return safeRead("countEntries", 0, async () => {
-    const conditions = [visibilityWhere(locale, options.preview ?? false)];
-    const scope = sectionScope(options.types, options.categoryKeys);
-    if (scope) conditions.push(scope);
+  return safeRead("countEntries", 0, () => countEntriesQuery(db, locale, options));
+}
 
-    const rows = await db
-      .select({ count: sql<number>`count(*)::int` })
-      .from(entryTranslations)
-      .innerJoin(entries, eq(entries.id, entryTranslations.entryId))
-      .leftJoin(categories, eq(categories.id, entries.primaryCategoryId))
-      .where(and(...conditions));
+/** The count itself; throws on a database error (callers decide the fallback). */
+async function countEntriesQuery(
+  db: NonNullable<ReturnType<typeof getDb>>,
+  locale: Locale,
+  options: Pick<ListOptions, "types" | "categoryKey" | "categoryKeys" | "preview">,
+): Promise<number> {
+  const conditions = [visibilityWhere(locale, options.preview ?? false)];
+  const scope = sectionScope(options.types, options.categoryKeys);
+  if (scope) conditions.push(scope);
 
-    return rows[0]?.count ?? 0;
-  });
+  const rows = await db
+    .select({ count: sql<number>`count(*)::int` })
+    .from(entryTranslations)
+    .innerJoin(entries, eq(entries.id, entryTranslations.entryId))
+    .leftJoin(categories, eq(categories.id, entries.primaryCategoryId))
+    .where(and(...conditions));
+
+  return rows[0]?.count ?? 0;
 }
 
 /** `entry.type IN (…) OR entry.primary_category IN (…)`. */
@@ -356,11 +363,38 @@ export async function nonEmptySections(
   locale: Locale,
   sections: readonly string[],
 ): Promise<Set<string>> {
-  const counts = await Promise.all(
-    sections.map(async (section) => [section, await countBySection(locale, section)] as const),
-  );
-  return new Set(counts.filter(([, count]) => count > 0).map(([section]) => section));
+  const db = getDb();
+  if (!db) return new Set();
+
+  const key = `${locale}|${sections.join(",")}`;
+  try {
+    const counts = await Promise.all(
+      sections.map(async (section) => {
+        const types = SECTION_ENTRY_TYPES[section];
+        const categoryKeys = SECTION_CATEGORY_KEYS[section];
+        if (!types && !categoryKeys) return [section, 0] as const;
+        return [section, await countEntriesQuery(db, locale, { types, categoryKeys })] as const;
+      }),
+    );
+    const filled = new Set(counts.filter(([, count]) => count > 0).map(([section]) => section));
+    lastNonEmptySections.set(key, filled);
+    return filled;
+  } catch (error) {
+    // On the VPS a dropped connection to the pooler used to turn one or two
+    // counts into 0 and cache a header with half its menu for a day. Use the
+    // last answer this process got; with none yet, an empty set makes the
+    // header show every section (SiteHeader), as before.
+    const known = lastNonEmptySections.get(key);
+    console.error(
+      `[content] nonEmptySections failed; ${known ? "using the last known sections" : "showing every section"}:`,
+      error instanceof Error ? error.message : error,
+    );
+    return known ?? new Set();
+  }
 }
+
+/** Last successful `nonEmptySections` answer per locale and section list, for this process. */
+const lastNonEmptySections = new Map<string, Set<string>>();
 
 /** Upcoming events, ordered by start date rather than publication date. */
 export async function listUpcomingEvents(

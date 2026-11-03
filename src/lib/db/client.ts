@@ -56,7 +56,11 @@ export function getDb(): Database | null {
   // connection limit; use a pooled connection string (pgBouncer) in Vercel.
   const options = {
     max: Number(process.env.DATABASE_POOL_MAX ?? 1),
-    idle_timeout: 20,
+    // Serverless (Vercel) frees connections quickly. On the VPS one process
+    // lives for days and its network to the pooler drops SYNs now and then
+    // (Contabo, Nov 2026: 1-7 s connects, CONNECT_TIMEOUT in the logs), so
+    // keep the pool warm instead of reconnecting after 20 s of quiet.
+    idle_timeout: Number(process.env.DATABASE_IDLE_TIMEOUT ?? (process.env.VERCEL ? 20 : 300)),
     connect_timeout: 10,
     prepare: false,
     // One query at a time per connection. postgres.js otherwise pipelines
