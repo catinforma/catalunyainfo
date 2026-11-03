@@ -111,7 +111,8 @@ test("the paths collide with no other published path", () => {
 
 test("titles fit in 60 characters in the searched words; descriptions fit in 155 and answer first", () => {
   const seo: Record<Locale, RegExp> = {
-    ca: /^Vaga general 11 de novembre: serveis mínims i què funciona$/,
+    // 3 Nov 2026: the searched words ("vaga general 11 novembre", "vaga 11 novembre 2026"); the H1 keeps "de l'11 de".
+    ca: /^Vaga general 11 novembre 2026: serveis mínims i què funciona$/,
     es: /^Huelga general 11 de noviembre 2026: servicios mínimos$/,
     en: /^General strike 11 November 2026 in Spain: what runs$/,
   };
@@ -401,15 +402,61 @@ test("no 11 November percentage nobody has published: every % is 2024's or a uni
   }
 });
 
-test("press-only and unpublished claims are never printed", () => {
+test("press-only and unpublished claims are never printed; the Barcelona march only as the tenants' union announced it", () => {
   for (const locale of LOCALES) {
     for (const plain of [body(locale), text(buildStrike11nBody(locale, "2026-11-12", filled()))]) {
-      // No organiser had published a demonstration place or time on 29 Oct 2026.
-      assert.doesNotMatch(plain, /Jardinets|Passeig de Gràcia|17[.:]30|18[.:]00 h/i, locale);
+      // On 29 Oct the press gave a time and place that no organiser page we read gave. Re-checked
+      // 3 Nov 2026: the Sindicat de Llogateres de Catalunya, one of the organisers, gives 17.30 h at
+      // the Jardinets de Gràcia on its own site (20 Oct); CCOO de Catalunya and UGT de Catalunya still
+      // give none. So the time and place may only appear in a sentence that says whose they are,
+      // and nothing else about the march (another place, another hour) may appear at all.
+      for (const piece of sentences(plain)) {
+        if (/Jardinets|17[.:]30/i.test(piece)) {
+          assert.match(piece, /Sindicat de Llogateres/, `${locale}: "${piece}" gives the march's time or place without saying whose announcement it is`);
+        }
+      }
+      assert.doesNotMatch(plain, /Passeig de Gràcia|18[.:]00 h|Plaça de Catalunya|Plaza de Cataluña/i, locale);
       assert.doesNotMatch(plain, /desconvocad|called off|cancel·lada la vaga|huelga cancelada/i, locale);
       // CCOO's housing figure was not in the page text as read.
       assert.doesNotMatch(plain, /1[.,]5 (milions|millones|million)/i, locale);
     }
+  }
+});
+
+test("known answers read on 3 November 2026: the central Barcelona march, from the tenants' union's own notice", () => {
+  const notice = "https://sindicatdellogateres.org/el-moviment-per-lhabitatge-i-els-sindicats-de-la-taula-laboral-presenten-el-pla-de-lluita-per-la-vaga-de-l11n/";
+  assert.equal(STRIKE_11N_URLS.llogateres, notice);
+  assert.ok(STRIKE_11N.sources.some((s) => s.url === notice && s.publisher === "Sindicat de Llogateres de Catalunya"));
+  const faq: Record<Locale, string> = {
+    ca: "On i a quina hora és la manifestació de l'11N a Barcelona?",
+    es: "¿Dónde y a qué hora es la manifestación del 11 de noviembre en Barcelona?",
+    en: "Where and when is the 11 November demonstration in Barcelona?",
+  };
+  for (const locale of LOCALES) {
+    const blocks = STRIKE_11N.editions[locale].blocks;
+    // Linked once in the body, in the "who calls it" section.
+    assert.equal(json(locale).split(`](${notice})`).length - 1, 1, locale);
+    // On the first screen: in the key facts, with the hour, the place and whose announcement it is.
+    const facts = text(blocks.slice(1, 2));
+    assert.match(facts, /17[.:]30[^.]*Jardinets de Gràcia[^.]*Sindicat de Llogateres/, locale);
+    // CCOO's own line stays: it has published no time or place.
+    assert.match(body(locale), /principals capitals de província/, locale);
+    const item = (blocks.find((b) => b.type === "faq") as { items: { question: string; answer: string }[] }).items.find((i) => i.question === faq[locale]);
+    assert.ok(item, `${locale}: no FAQ for the march`);
+    assert.match(item.answer, /17[.:]30[^.]*Jardinets de Gràcia[^.]*Sindicat de Llogateres/, locale);
+    // Announced with the joint campaign Viure Ens Costa la Vida and the Taula Sindical de Catalunya.
+    assert.match(body(locale), /Viure Ens Costa la Vida/, locale);
+  }
+});
+
+test("a language line (En català · En castellano · In English) sits right under the key facts in every edition", () => {
+  // 3 Nov 2026: Catalan queries ("vaga 11 novembre") land on the Spanish edition because hreflang
+  // follows the Google interface language; a visible line takes the reader to theirs.
+  for (const locale of LOCALES) {
+    const blocks = STRIKE_11N.editions[locale].blocks;
+    assert.equal(blocks.filter((b) => b.type === "languageLinks").length, 1, locale);
+    assert.equal(blocks[2]?.type, "languageLinks", locale);
+    assert.equal(buildStrike11nBody(locale, "2026-11-12", filled())[2]?.type, "languageLinks", locale);
   }
 });
 

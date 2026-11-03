@@ -23,7 +23,7 @@ import type { Block, Body } from "@/lib/content/blocks";
 import { headingId } from "@/lib/content/blocks";
 import { renderInline, safeHref } from "@/lib/content/inline";
 import type { EntrySummary, MediaView, SourceView } from "@/lib/content/types";
-import type { Locale } from "@/lib/i18n/config";
+import { HTML_LANG, LOCALES, type Locale } from "@/lib/i18n/config";
 import { getMessages } from "@/lib/i18n";
 
 /**
@@ -35,7 +35,16 @@ export interface BlockContext {
   media: Map<string, MediaView>;
   related: Map<string, EntrySummary>;
   sources: Map<string, SourceView>;
+  /** Published sibling translations (site-relative hrefs), for the `languageLinks` line. */
+  translations?: Partial<Record<Locale, string>>;
 }
+
+/** The `languageLinks` line: each label in its own language. */
+const LANGUAGE_LINE_LABEL: Record<Locale, string> = {
+  ca: "En català",
+  es: "En castellano",
+  en: "In English",
+};
 
 export function BlockRenderer({ body, context }: { body: Body; context: BlockContext }) {
   return (
@@ -337,6 +346,33 @@ function BlockView({ block, context }: { block: Block; context: BlockContext }) 
 
     case "divider":
       return <hr className="my-8" />;
+
+    case "languageLinks": {
+      // The same entry in each language, from the translations hreflang
+      // lists; the current one is named but not linked. Each label is in the
+      // language of the page it opens, as its readers would look for it.
+      const translations = context.translations ?? {};
+      if (!LOCALES.some((l) => l !== context.locale && translations[l])) return null;
+      const shown = LOCALES.filter((l) => l === context.locale || translations[l]);
+      return (
+        <p className="text-sm text-[var(--color-muted)]">
+          {shown.map((l, i) => (
+            <span key={l}>
+              {i > 0 ? <span aria-hidden="true"> · </span> : null}
+              {l === context.locale ? (
+                <span lang={HTML_LANG[l]} aria-current="page" className="font-semibold text-[var(--color-ink)]">
+                  {LANGUAGE_LINE_LABEL[l]}
+                </span>
+              ) : (
+                <a href={translations[l]} hrefLang={HTML_LANG[l]} lang={HTML_LANG[l]}>
+                  {LANGUAGE_LINE_LABEL[l]}
+                </a>
+              )}
+            </span>
+          ))}
+        </p>
+      );
+    }
 
     case "adSlot":
       // Placeholder only. No ad code is loaded anywhere in this build; see

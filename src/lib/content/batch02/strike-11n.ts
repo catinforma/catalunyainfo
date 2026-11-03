@@ -14,6 +14,7 @@ import {
   h2,
   h3,
   keyFacts,
+  languageLinks,
   lead,
   list,
   paras,
@@ -64,10 +65,30 @@ import { STRIKE_URLS } from "./strikes";
  * of 2 Nov keeps the Renfe strikes of 10 and 12 Nov, still without hours.
  * Metges de Catalunya has announced no end to the doctors' strike.
  *
- * Left out on purpose: the demonstrations' times and places (no organiser had
- * published them), any minimum-service figure for 11N, anything about taxis
- * beyond what the 2024 orders say (nothing), and health or school advice that
- * no official body has published.
+ * Re-checked on the afternoon of 3 Nov 2026 (research_notes/x10/strikes-hub-factpack-2026-11-03.md):
+ * still no 11N order in the DOGC (núm. 9786, 3 Nov: only Ordre EMT/215/2026,
+ * Parc de Salut Mar) or on Treball's list (newest entry 2 Nov), no 11N
+ * resolution on the Ministry of Transport's rail or air lists, no notice at
+ * Rodalies, TMB or FGC; SEMAF's newest notice is still nº 2026-52 (2 Nov).
+ * 11n.cat, ugt.cat, ccoo.cat and cgtcatalunya.cat give no demonstration time
+ * or place. Added: the central Barcelona demonstration, 17.30 h from the
+ * Jardinets de Gràcia, from the Sindicat de Llogateres de Catalunya's own
+ * notice of 20 Oct (announced with the unitary campaign Viure Ens Costa la
+ * Vida and the Taula Sindical de Catalunya). The tenants' union is one of
+ * the organisers: the Sindicato de Inquilinas presented the strike with CCOO
+ * and UGT (CCOO, 19 Oct), and the Sindicat de Llogateres' spokesperson spoke
+ * at the unitary 11N assembly in Cornellà with CCOO and UGT (CCOO, 2 Nov).
+ * It is printed as theirs, beside CCOO's and UGT's own lines, which still
+ * name no time or place. The CA title now carries the searched words
+ * ("vaga general 11 novembre", "vaga 11 novembre 2026"); the descriptions
+ * name the services; a language line follows the key facts.
+ *
+ * Left out on purpose: any demonstration time or place that only the press
+ * gives (CCOO's or UGT's joining the Jardinets march, other towns), any
+ * minimum-service figure for 11N, anything about taxis beyond what the 2024
+ * orders say (nothing), press reports of TMB, FGC or bus works councils
+ * backing the strike, and health or school advice that no official body has
+ * published.
  *
  * HOW TO UPDATE (the lead):
  *  - Minimum services out (DOGC order, Treball's list, or an operator's
@@ -92,7 +113,7 @@ export const STRIKE_11N_DATE = "2026-11-11";
  * on or after the day) is decided against this date, never the clock: the
  * HTML is the same whichever day it is rendered.
  */
-export const STRIKE_11N_AS_OF = "2026-11-02";
+export const STRIKE_11N_AS_OF = "2026-11-03";
 
 /** The facts were re-read on the sources on the as-of day: one constant to move. */
 export const STRIKE_11N_VERIFIED = STRIKE_11N_AS_OF;
@@ -179,6 +200,8 @@ const U = {
   treballMs: "https://treball.gencat.cat/ca/ambits/relacions_laborals/vagues/serveis-minims/",
   treballFaq: "https://treball.gencat.cat/ca/ambits/relacions_laborals/acces_directe/preguntes_mes_frequents/vagues/",
   schoolOrder: SCHOOL_SOURCE.url,
+  // Sindicat de Llogateres de Catalunya, 20 Oct 2026: the central Barcelona demonstration, 17.30 h, Jardinets de Gràcia.
+  llogateres: "https://sindicatdellogateres.org/el-moviment-per-lhabitatge-i-els-sindicats-de-la-taula-laboral-presenten-el-pla-de-lluita-per-la-vaga-de-l11n/",
 } as const;
 
 export const STRIKE_11N_URLS = U;
@@ -194,6 +217,11 @@ const BASE_SOURCES: B2Source[] = [
   { name: "L'11-N: vaga general per uns salaris dignes, un habitatge assequible i una vida millor (13/10/2026)", url: U.ugtCatalunyaCall, publisher: "UGT de Catalunya" },
   { name: "11N: CGT convoca Vaga General per l'habitatge i els salaris dignes (09/10/2026)", url: U.cgtCatalunya, publisher: "CGT Catalunya" },
   { name: "Ratifiquem la vaga general de l'11 de novembre (09/10/2026)", url: U.ustec, publisher: "USTEC·STEs" },
+  {
+    name: "El moviment per l'habitatge i els sindicats de la taula laboral presenten el pla de lluita per la vaga de l'11N (20/10/2026)",
+    url: U.llogateres,
+    publisher: "Sindicat de Llogateres de Catalunya",
+  },
   { name: "Constitución Española, artículo 28.2", url: U.constitution, publisher: "BOE" },
   { name: "Real Decreto-ley 17/1977, de 4 de marzo, sobre relaciones de trabajo (artículos 3, 4, 6 y 10)", url: U.rdl17, publisher: "BOE" },
   { name: "Informació de vagues amb serveis mínims (e-Tauler)", url: U.treballMs, publisher: "Departament d'Empresa i Treball" },
@@ -237,7 +265,9 @@ export const STRIKE_11N_META: Record<Locale, Meta> = {
   ca: {
     path: "guies/vaga-general-11-novembre",
     title: "Vaga general de l'11 de novembre de 2026: serveis mínims i què funciona a Catalunya",
-    seoTitle: "Vaga general 11 de novembre: serveis mínims i què funciona",
+    // 3 Nov 2026: the searched words ("vaga general 11 novembre", 377 impr.;
+    // "vaga 11 novembre 2026"), not the written date; the H1 keeps "de l'11 de".
+    seoTitle: "Vaga general 11 novembre 2026: serveis mínims i què funciona",
     excerpt:
       "La vaga general de l'11 de novembre de 2026 a Catalunya: horari, qui la convoca i per què, serveis mínims de transport, escoles i sanitat, i els drets de qui fa vaga.",
   },
@@ -259,17 +289,17 @@ export const STRIKE_11N_META: Record<Locale, Meta> = {
 
 const DESCRIPTION: Record<Locale, { pending: string; published: string; past: string }> = {
   ca: {
-    pending: "Vaga general el dimecres 11 de novembre de 2026, 24 hores des de les 0 h. Serveis mínims encara no publicats: qui els fixa, quan surten i què funciona.",
+    pending: "Vaga general el dimecres 11 de novembre de 2026, 24 hores des de les 0 h. Serveis mínims encara no publicats: Rodalies, metro, bus, escoles i sanitat.",
     published: "Vaga general el dimecres 11 de novembre de 2026, 24 hores des de les 0 h. Serveis mínims publicats: Rodalies, metro, bus, escoles i sanitat.",
     past: "La vaga general de l'11 de novembre de 2026: qui la va convocar, els serveis mínims de Rodalies, metro, bus, escoles i sanitat, i què diu la llei.",
   },
   es: {
-    pending: "Huelga general el miércoles 11 de noviembre de 2026, 24 horas desde las 0 h. Servicios mínimos aún no publicados: quién los fija, cuándo y qué funciona.",
+    pending: "Huelga general el miércoles 11 de noviembre de 2026, 24 horas desde las 0 h. Servicios mínimos aún no publicados: metro, Rodalies, bus, colegios y sanidad.",
     published: "Huelga general el miércoles 11 de noviembre de 2026, 24 horas desde las 0 h. Servicios mínimos publicados: Rodalies, metro, bus, colegios y sanidad.",
     past: "La huelga general del 11 de noviembre de 2026: quién la convocó, los servicios mínimos de Rodalies, metro, bus, colegios y sanidad, y qué dice la ley.",
   },
   en: {
-    pending: "24-hour general strike across Spain on Wednesday 11 November 2026. Minimum services not out yet: who sets them, when, and what runs in Barcelona.",
+    pending: "24-hour general strike across Spain on Wednesday 11 November 2026. Minimum services not out yet: Barcelona metro, Rodalies, buses, schools, hospitals.",
     published: "24-hour general strike across Spain on Wednesday 11 November 2026. Minimum services are out: Rodalies, metro, buses, schools and hospitals in Catalonia.",
     past: "The 11 November 2026 general strike in Spain: who called it, the minimum services set for Barcelona and Catalonia, and what the law says.",
   },
@@ -379,7 +409,7 @@ const COPY: Record<Locale, Copy> = {
           ? `**Avui, ${c.day}, hi ha vaga general de 24 hores a tot l'Estat, també a Catalunya:** ha començat a les 0 h i ${who}.`
           : `**El ${c.day} hi ha vaga general de 24 hores a tot l'Estat, també a Catalunya:** comença a les 0 h i ${who}.`;
       const ms = {
-        pending: ` **Els serveis mínims encara no s'han publicat** (consultat el ${c.checked}): la Generalitat els fixa per ordre al DOGC pocs dies abans, i els posarem aquí, sector per sector, tan bon punt surtin.`,
+        pending: ` **Els serveis mínims de Rodalies, metro, autobusos, escoles i sanitat encara no s'han publicat** (consultat el ${c.checked}): la Generalitat els fixa per ordre al DOGC pocs dies abans, i els posarem aquí, sector per sector, tan bon punt surtin.`,
         partial: ` **Una part dels serveis mínims ja s'ha publicat** i la resta encara no (consultat el ${c.checked}): la taula de més avall diu quins.`,
         published: " **Els serveis mínims ja s'han publicat:** els tens a la taula de més avall, sector per sector, amb l'enllaç a l'ordre o a l'avís oficial.",
       }[c.state];
@@ -389,18 +419,19 @@ const COPY: Record<Locale, Copy> = {
     keyFacts: (c) => [
       { label: "Dia", value: cap(c.day) },
       { label: "Horari", value: "24 hores des de les 0 h. On es treballa per torns, des del primer torn fins a l'últim" },
-      { label: "Convocatòria", value: "CCOO i UGT, amb CGT, CNT i altres organitzacions. A Catalunya, CCOO de Catalunya, UGT de Catalunya i CGT Catalunya; a l'educació, també USTEC·STEs" },
-      { label: "Qui hi està cridat", value: "Totes les persones treballadores, assalariades o per compte propi, del sector públic i del privat" },
       {
         label: "Serveis mínims",
         value: {
-          pending: `Encara no publicats (consultat el ${c.checked}). Els fixa la Generalitat per ordre al DOGC; els trens de llarga distància, el Govern espanyol`,
+          pending: `Encara no publicats per a Rodalies, metro, autobusos, FGC, escoles ni sanitat (consultat el ${c.checked}). Els fixa la Generalitat per ordre al DOGC; els trens de llarga distància, el Govern espanyol`,
           partial: `Publicats en part (consultat el ${c.checked}): mira la taula per sectors`,
           published: "Publicats: mira la taula per sectors",
         }[c.state],
       },
       { label: "Escoles", value: "És dia lectiu: les escoles obren amb el personal mínim que fixi l'ordre de serveis mínims" },
+      { label: "Manifestació a Barcelona", value: `A les 17.30 h, des dels Jardinets de Gràcia, segons el Sindicat de Llogateres. CCOO i UGT no n'havien publicat hora ni lloc el ${c.checked}` },
       { label: "10 i 12 de novembre", value: "Vaga de maquinistes del Grup Renfe (SEMAF), que afecta Rodalies: aturada total el 10 i aturades parcials el 12" },
+      { label: "Convocatòria", value: "CCOO i UGT, amb CGT, CNT i altres organitzacions. A Catalunya, CCOO de Catalunya, UGT de Catalunya i CGT Catalunya; a l'educació, també USTEC·STEs" },
+      { label: "Qui hi està cridat", value: "Totes les persones treballadores, assalariades o per compte propi, del sector públic i del privat" },
     ],
     data: (c) =>
       `Només hi posem el que publiquen els sindicats convocants, el BOE, el DOGC, el Departament d'Empresa i Treball i els operadors de transport, i no el que avança la premsa.${c.state === "published" ? "" : " Quan surtin els serveis mínims, els afegirem a la taula, sector per sector, amb l'enllaç a l'ordre."}`,
@@ -523,7 +554,8 @@ const COPY: Record<Locale, Copy> = {
       `**USTEC·STEs** (${link(U.ustec, "9 d'octubre")}): ha ratificat la vaga a l'educació amb el lema «sense casa, no hi ha educació».`,
     ],
     callAfter: (c) => [
-      `**Manifestacions:** CCOO de Catalunya anuncia manifestacions l'11 de novembre «en les principals capitals de província» i diu que les anirà anunciant als seus canals; la UGT de Catalunya resumeix el pla així: «L'11N al matí buidarem les empreses, a la tarda omplirem els carrers». El ${c.checked} cap dels convocants no n'havia publicat l'hora ni el lloc.`,
+      `**Manifestació a Barcelona:** la manifestació central ${c.phase === "past" ? "es va convocar" : "està convocada"} a les 17.30 h als Jardinets de Gràcia, segons ${link(U.llogateres, "el Sindicat de Llogateres de Catalunya")}, que la va anunciar el 20 d'octubre amb la campanya unitària Viure Ens Costa la Vida i la Taula Sindical de Catalunya.`,
+      `**Les altres manifestacions:** CCOO de Catalunya anuncia manifestacions l'11 de novembre «en les principals capitals de província» i diu que les anirà anunciant als seus canals; la UGT de Catalunya resumeix el pla així: «L'11N al matí buidarem les empreses, a la tarda omplirem els carrers». El ${c.checked} ni CCOO de Catalunya ni la UGT de Catalunya no n'havien publicat l'hora ni el lloc.`,
     ],
     hoursHeading: "Horari: a quina hora comença i acaba",
     hours: [
@@ -569,6 +601,10 @@ const COPY: Record<Locale, Copy> = {
           answer: "A les 0 h de l'11 de novembre, i dura 24 hores. On es treballa per torns, comença amb el primer torn encara que comenci abans de mitjanit i acaba amb l'últim encara que acabi després, segons CCOO de Catalunya.",
         },
         {
+          question: "On i a quina hora és la manifestació de l'11N a Barcelona?",
+          answer: `La manifestació central surt a les 17.30 h dels Jardinets de Gràcia, segons el Sindicat de Llogateres de Catalunya, que la va anunciar el 20 d'octubre amb la campanya Viure Ens Costa la Vida i la Taula Sindical de Catalunya. CCOO de Catalunya diu que hi haurà manifestacions a les principals capitals de província i que n'anunciarà els detalls als seus canals; el ${c.checked} encara no n'havia publicat l'hora ni el lloc.`,
+        },
+        {
           question: "He d'avisar l'empresa si faig vaga?",
           answer: "No. Segons el Departament d'Empresa i Treball, la normativa no obliga la persona treballadora a avisar abans. Si l'empresa et designa formalment per als serveis mínims, sí que has d'anar a treballar.",
         },
@@ -597,7 +633,7 @@ const COPY: Record<Locale, Copy> = {
           ? `**Hoy, ${c.day}, hay huelga general de 24 horas en toda España, también en Cataluña:** ha empezado a las 0 h y ${who}.`
           : `**El ${c.day} hay huelga general de 24 horas en toda España, también en Cataluña:** empieza a las 0 h y ${who}.`;
       const ms = {
-        pending: ` **Los servicios mínimos aún no se han publicado** (consultado el ${c.checked}): la Generalitat los fija por orden en el DOGC pocos días antes, y los pondremos aquí, sector por sector, en cuanto salgan.`,
+        pending: ` **Los servicios mínimos de Rodalies, metro, autobuses, colegios y sanidad aún no se han publicado** (consultado el ${c.checked}): la Generalitat los fija por orden en el DOGC pocos días antes, y los pondremos aquí, sector por sector, en cuanto salgan.`,
         partial: ` **Una parte de los servicios mínimos ya se ha publicado** y el resto aún no (consultado el ${c.checked}): la tabla de más abajo dice cuáles.`,
         published: " **Los servicios mínimos ya se han publicado:** los tienes en la tabla de más abajo, sector por sector, con el enlace a la orden o al aviso oficial.",
       }[c.state];
@@ -607,18 +643,19 @@ const COPY: Record<Locale, Copy> = {
     keyFacts: (c) => [
       { label: "Día", value: cap(c.day) },
       { label: "Horario", value: "24 horas desde las 0 h. Donde se trabaja por turnos, desde el primer turno hasta el último" },
-      { label: "Convocatoria", value: "CCOO y UGT, con CGT, CNT y otras organizaciones. En Cataluña, CCOO de Catalunya, UGT de Catalunya y CGT Catalunya; en educación, también USTEC·STEs" },
-      { label: "A quién llama", value: "A todas las personas trabajadoras, asalariadas o por cuenta propia, del sector público y del privado" },
       {
         label: "Servicios mínimos",
         value: {
-          pending: `Aún no publicados (consultado el ${c.checked}). Los fija la Generalitat por orden en el DOGC; los trenes de larga distancia, el Gobierno de España`,
+          pending: `Aún no publicados para Rodalies, metro, autobuses, FGC, colegios ni sanidad (consultado el ${c.checked}). Los fija la Generalitat por orden en el DOGC; los trenes de larga distancia, el Gobierno de España`,
           partial: `Publicados en parte (consultado el ${c.checked}): mira la tabla por sectores`,
           published: "Publicados: mira la tabla por sectores",
         }[c.state],
       },
       { label: "Colegios", value: "Es día lectivo: los colegios abren con el personal mínimo que fije la orden de servicios mínimos" },
+      { label: "Manifestación en Barcelona", value: `A las 17.30 h, desde los Jardinets de Gràcia, según el Sindicat de Llogateres. CCOO y UGT no habían publicado hora ni lugar el ${c.checked}` },
       { label: "10 y 12 de noviembre", value: "Huelga de maquinistas del Grupo Renfe (SEMAF), que afecta a Rodalies: paro total el 10 y paros parciales el 12" },
+      { label: "Convocatoria", value: "CCOO y UGT, con CGT, CNT y otras organizaciones. En Cataluña, CCOO de Catalunya, UGT de Catalunya y CGT Catalunya; en educación, también USTEC·STEs" },
+      { label: "A quién llama", value: "A todas las personas trabajadoras, asalariadas o por cuenta propia, del sector público y del privado" },
     ],
     data: (c) =>
       `Solo ponemos lo que publican los sindicatos convocantes, el BOE, el DOGC, el Departament d'Empresa i Treball y los operadores de transporte, no lo que adelanta la prensa.${c.state === "published" ? "" : " Cuando salgan los servicios mínimos, los añadiremos a la tabla, sector por sector, con el enlace a la orden."}`,
@@ -741,7 +778,8 @@ const COPY: Record<Locale, Copy> = {
       `**USTEC·STEs** (${link(U.ustec, "9 de octubre")}): ha ratificado la huelga en la educación con el lema «sense casa, no hi ha educació» (sin casa no hay educación).`,
     ],
     callAfter: (c) => [
-      `**Manifestaciones:** CCOO de Catalunya anuncia manifestaciones el 11 de noviembre «en les principals capitals de província» (en las principales capitales de provincia) y dice que las irá anunciando en sus canales; la UGT de Catalunya resume el plan así: por la mañana, vaciar las empresas, y por la tarde, llenar las calles. El ${c.checked} ninguno de los convocantes había publicado la hora ni el lugar.`,
+      `**Manifestación en Barcelona:** la manifestación central ${c.phase === "past" ? "se convocó" : "está convocada"} a las 17.30 h en los Jardinets de Gràcia, según ${link(U.llogateres, "el Sindicat de Llogateres de Catalunya")} (el sindicato de inquilinas de Cataluña), que la anunció el 20 de octubre con la campaña unitaria Viure Ens Costa la Vida y la Taula Sindical de Catalunya.`,
+      `**Las demás manifestaciones:** CCOO de Catalunya anuncia manifestaciones el 11 de noviembre «en les principals capitals de província» (en las principales capitales de provincia) y dice que las irá anunciando en sus canales; la UGT de Catalunya resume el plan así: por la mañana, vaciar las empresas, y por la tarde, llenar las calles. El ${c.checked} ni CCOO de Catalunya ni la UGT de Catalunya habían publicado la hora ni el lugar.`,
     ],
     hoursHeading: "Horario: a qué hora empieza y acaba",
     hours: [
@@ -787,6 +825,10 @@ const COPY: Record<Locale, Copy> = {
           answer: "A las 0 h del 11 de noviembre, y dura 24 horas. Donde se trabaja por turnos, empieza con el primer turno aunque comience antes de medianoche y acaba con el último aunque termine después, según CCOO de Catalunya.",
         },
         {
+          question: "¿Dónde y a qué hora es la manifestación del 11 de noviembre en Barcelona?",
+          answer: `La manifestación central sale a las 17.30 h de los Jardinets de Gràcia, según el Sindicat de Llogateres de Catalunya, que la anunció el 20 de octubre con la campaña Viure Ens Costa la Vida y la Taula Sindical de Catalunya. CCOO de Catalunya dice que habrá manifestaciones en las principales capitales de provincia y que anunciará los detalles en sus canales; el ${c.checked} aún no había publicado la hora ni el lugar.`,
+        },
+        {
           question: "¿Tengo que avisar a la empresa si hago huelga?",
           answer: "No. Según el Departament d'Empresa i Treball, la normativa no obliga a la persona trabajadora a avisar antes. Si la empresa te designa formalmente para los servicios mínimos, sí tienes que ir a trabajar.",
         },
@@ -815,7 +857,7 @@ const COPY: Record<Locale, Copy> = {
           ? `**Today, ${c.day}, there is a 24-hour general strike across Spain, Barcelona and Catalonia included:** it began at midnight; ${who}.`
           : `**On ${c.day} there is a 24-hour general strike across Spain, Barcelona and Catalonia included:** it starts at midnight (00:00); ${who}.`;
       const ms = {
-        pending: ` **Minimum services have not been published yet** (checked on ${c.checked}): the Generalitat sets them in an order in the DOGC, its official gazette, a few days before, and we will add them here, sector by sector, as soon as they are out.`,
+        pending: ` **Minimum services for Rodalies, the metro, buses, schools and health have not been published yet** (checked on ${c.checked}): the Generalitat sets them in an order in the DOGC, its official gazette, a few days before, and we will add them here, sector by sector, as soon as they are out.`,
         partial: ` **Some minimum services have been published and others not yet** (checked on ${c.checked}): the table below shows which.`,
         published: " **Minimum services have been published:** they are in the table below, sector by sector, with a link to the official order or notice.",
       }[c.state];
@@ -825,18 +867,19 @@ const COPY: Record<Locale, Copy> = {
     keyFacts: (c) => [
       { label: "Day", value: c.day },
       { label: "Hours", value: "24 hours from 00:00. Where people work shifts, from the first shift to the last" },
-      { label: "Called by", value: "CCOO and UGT, with CGT, CNT and other organisations. In Catalonia, CCOO de Catalunya, UGT de Catalunya and CGT Catalunya; in education, the teachers' union USTEC·STEs too" },
-      { label: "Who is called out", value: "All workers, employed or self-employed, public and private" },
       {
         label: "Minimum services",
         value: {
-          pending: `Not published yet (checked on ${c.checked}). The Generalitat sets them in the DOGC; the Spanish government for long-distance trains`,
+          pending: `Not published yet for Rodalies, the metro, buses, FGC, schools or health (checked on ${c.checked}). The Generalitat sets them in the DOGC; the Spanish government for long-distance trains`,
           partial: `Partly published (checked on ${c.checked}): see the table by sector`,
           published: "Published: see the table by sector",
         }[c.state],
       },
       { label: "Schools", value: "A school day: schools open with the minimum staff the minimum-services order sets" },
+      { label: "Barcelona demonstration", value: `17:30, from the Jardinets de Gràcia, according to the tenants' union Sindicat de Llogateres. CCOO and UGT had published no time or place by ${c.checked}` },
       { label: "10 and 12 November", value: "Renfe Group train drivers' strike (SEMAF), which affects Rodalies: a full stoppage on the 10th, partial stoppages on the 12th" },
+      { label: "Called by", value: "CCOO and UGT, with CGT, CNT and other organisations. In Catalonia, CCOO de Catalunya, UGT de Catalunya and CGT Catalunya; in education, the teachers' union USTEC·STEs too" },
+      { label: "Who is called out", value: "All workers, employed or self-employed, public and private" },
     ],
     data: (c) =>
       `We only print what the unions calling the strike, the BOE and DOGC gazettes, the Generalitat's Department of Business and Labour and the transport operators publish, never what the press reports ahead of them.${c.state === "published" ? "" : " When minimum services come out, we will add them to the table, sector by sector, with a link to the order."}`,
@@ -959,7 +1002,8 @@ const COPY: Record<Locale, Copy> = {
       `**USTEC·STEs** (${link(U.ustec, "9 October")}): ratified the strike in education under the slogan "sense casa, no hi ha educació" (no home, no education).`,
     ],
     callAfter: (c) => [
-      `**Demonstrations:** CCOO de Catalunya says there will be demonstrations on 11 November "en les principals capitals de província" (in the main provincial capitals) and that it will announce them on its channels; UGT de Catalunya sums up the plan as emptying workplaces in the morning and filling the streets in the afternoon. On ${c.checked} none of the organisers had published times or places.`,
+      `**Barcelona demonstration:** the central march ${c.phase === "past" ? "was called" : "is called"} for 17:30 at the Jardinets de Gràcia, according to ${link(U.llogateres, "the Catalan tenants' union Sindicat de Llogateres")}, which announced it on 20 October with the joint campaign Viure Ens Costa la Vida and the Taula Sindical de Catalunya.`,
+      `**Other demonstrations:** CCOO de Catalunya says there will be demonstrations on 11 November "en les principals capitals de província" (in the main provincial capitals) and that it will announce them on its channels; UGT de Catalunya sums up the plan as emptying workplaces in the morning and filling the streets in the afternoon. On ${c.checked} neither CCOO de Catalunya nor UGT de Catalunya had published a time or place.`,
     ],
     hoursHeading: "Hours: when it starts and ends",
     hours: [
@@ -1003,6 +1047,10 @@ const COPY: Record<Locale, Copy> = {
         {
           question: "What time does the general strike start?",
           answer: "At 00:00 on 11 November, for 24 hours. Where people work shifts, it starts with the first shift even if that begins before midnight, and ends with the last one even if that ends after, according to CCOO de Catalunya.",
+        },
+        {
+          question: "Where and when is the 11 November demonstration in Barcelona?",
+          answer: `The central march sets off at 17:30 from the Jardinets de Gràcia, according to the Catalan tenants' union Sindicat de Llogateres, which announced it on 20 October with the joint campaign Viure Ens Costa la Vida and the Taula Sindical de Catalunya. CCOO de Catalunya says there will be demonstrations in the main provincial capitals and that it will announce the details on its channels; on ${c.checked} it had not yet published a time or place.`,
         },
         {
           question: "Do I have to tell my employer if I strike?",
@@ -1054,6 +1102,10 @@ export function buildStrike11nBody(
   const blocks: Block[] = [];
   blocks.push(lead(t.lead(c)));
   blocks.push(keyFacts(t.keyFactsTitle, t.keyFacts(c)));
+  // 3 Nov 2026: "En català · En castellano · In English", under the answer.
+  // Catalan queries land on the Spanish edition (hreflang follows the Google
+  // interface language); this line takes the reader to theirs.
+  blocks.push(languageLinks());
   blocks.push(callout("official", verifiedLine(locale, asOf), t.data(c)));
 
   // Minimum services: the answer most readers came for, first.

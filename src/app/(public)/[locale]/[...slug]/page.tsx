@@ -510,7 +510,7 @@ export default async function CatchAllPage({
         <EntryArticle
           entry={entry}
           crumbs={crumbs}
-          context={{ locale, media: mediaMap, related: relatedMap, sources: sourceMap }}
+          context={{ locale, media: mediaMap, related: relatedMap, sources: sourceMap, translations: entry.translations }}
         />
       </main>
       <JsonLd json={structured} />
