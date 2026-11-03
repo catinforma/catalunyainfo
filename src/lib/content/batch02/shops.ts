@@ -57,6 +57,14 @@ import {
  * oberts", "diumenges oberts 2026"), like the ES one, and a first FAQ for
  * "quins festius d'obertura queden". No new facts: the dates and the count
  * are the ones above.
+ *
+ * 3 Nov 2026 (CTR sweep): CTR rose from 1.8 % to about 3.3 % after the
+ * 30 Oct title, still below the curve at position 4.4. The visible queries
+ * say "botigues obertes" ("botigues obertes avui a barcelona 2026",
+ * "diumenges botigues obertes 2026", "botigues obertes diumenge
+ * barcelona"), words the title dropped. The title is kept (inside its
+ * window); the CA description now opens with "Botigues obertes diumenges i
+ * festius 2026" and the Barcelona days left. Same dates, same count.
  */
 
 const VERIFIED = "2026-10-30";
@@ -78,7 +86,7 @@ const META: Record<Locale, { path: string; title: string; seoTitle: string; seoD
     title: "Botigues obertes en diumenges i festius a Catalunya: calendari 2026 i 2027",
     seoTitle: "Festius i diumenges d'obertura 2026 a Catalunya i Barcelona",
     seoDescription:
-      "Festius d'obertura que queden el 2026: 29 de novembre i 6, 8, 13, 20 i 27 de desembre. Els 30 municipis que en canvien algun, i el calendari 2027.",
+      "Botigues obertes diumenges i festius 2026: a Barcelona queden el 29 de novembre i 6, 8, 13, 20 i 27 de desembre. Els 30 municipis que canvien, i el 2027.",
     excerpt:
       "Els diumenges i festius en què les botigues poden obrir a Catalunya, segons el DOGC: el que queda del 2026, el calendari del 2027 i les botigues que poden obrir sempre.",
   },

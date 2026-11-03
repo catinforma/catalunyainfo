@@ -7,6 +7,7 @@ import { getDb, schema } from "@/lib/db/client";
 import { pruneExpiredSessions } from "@/lib/auth/session";
 import { DAY_DEPENDENT_PATTERN } from "@/lib/content/day-dependent";
 import { todayInCatalonia } from "@/lib/content/holidays/calendar";
+import { holidayRefreshPaths } from "@/lib/programmatic/holidays/routing";
 import { weekendRefreshPaths } from "@/lib/programmatic/weekend/routing";
 
 export const runtime = "nodejs";
@@ -38,6 +39,10 @@ export async function GET(request: Request) {
   // database step so an outage there cannot leave a past weekend in a title.
   const weekendPaths = weekendRefreshPaths(todayInCatalonia());
   for (const path of weekendPaths) revalidatePath(path);
+  // The town holiday pages (/ca/festius/<municipi>/, /es/festivos/<municipio>/)
+  // name their next holiday: rebuilt the night after each of their holidays.
+  const holidayPaths = holidayRefreshPaths(todayInCatalonia());
+  for (const path of holidayPaths) revalidatePath(path);
 
   const db = getDb();
   if (!db) return NextResponse.json({ ok: false, reason: "no-database" }, { status: 503 });
@@ -90,6 +95,7 @@ export async function GET(request: Request) {
     published: due.length,
     refreshedForToday: dayDependent.length,
     weekendPagesRefreshed: weekendPaths.length,
+    holidayPagesRefreshed: holidayPaths.length,
     flaggedForUpdate: stale.length,
     sessionsPruned,
   });

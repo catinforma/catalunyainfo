@@ -13,6 +13,10 @@ import { statusFor, todayInMadrid, type Coverage, type DayAnswer, type DayInfo, 
  * first render (server and no-JS) shows the fallback text; once mounted, the
  * component reads the clock in Europe/Madrid and fills in today, tomorrow and
  * the next holiday from the dates embedded in the page.
+ *
+ * `data-nosnippet`: a crawler that runs the script sees the answer for the
+ * day it crawled ("Sí: hoy es festivo…"), which a search snippet would then
+ * repeat on other days. The static lines around the box carry the dated facts.
  */
 
 export interface StatusLabels {
@@ -85,7 +89,7 @@ export function HolidayStatus({
      * a reader without JavaScript sees) is laid over it.
      */
     return (
-      <div className="ci-today" aria-live="polite">
+      <div className="ci-today" aria-live="polite" data-nosnippet="">
         <div className="ci-live-pending">
           <div className="ci-live-skeleton" aria-hidden="true">
             <p className="ci-today-answer is-not">
@@ -139,7 +143,7 @@ export function HolidayStatus({
 
   const next = value.next;
   return (
-    <div className="ci-today" aria-live="polite">
+    <div className="ci-today" aria-live="polite" data-nosnippet="">
       <p className={`ci-today-answer ${value.today.state === "holiday" ? "is-holiday" : "is-not"}`}>{answerText}</p>
       <p className="ci-today-date">{longDate(today, locale)}</p>
       <dl className="ci-today-facts">

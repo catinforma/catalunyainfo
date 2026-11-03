@@ -1329,7 +1329,7 @@ const PARKING_COPY: Record<"ca" | "es" | "en", ParkingCopy> = {
     ],
   },
   es: {
-    lead: "Aparcar en la calle en zona regulada de Barcelona cuesta **de 1,15 a 4,25 € la hora**. La **zona azul** es para estancias cortas de cualquier conductor: de lunes a viernes de 9:00 a 20:00, de 1,15 a 3,75 € la hora y normalmente 1 o 2 horas como máximo. La **zona verde** es para los vecinos, pero los no residentes también pueden aparcar pagando de 1,40 a 4,25 € la hora, normalmente 1 o 2 horas. El precio exacto depende de la tarifa de la zona (A en los barrios de más demanda, B en el resto) y del distintivo ambiental del coche. El domingo, fuera de la playa, no se paga ni la azul ni la verde.",
+    lead: "**Horario:** la **zona azul** se paga de lunes a viernes de 9:00 a 20:00 (en el centro, también los sábados) y la **zona verde**, de lunes a viernes o de lunes a sábado, de 8:00 a 20:00 o hasta las 22:00 según la zona. **El domingo, fuera de la playa, no se paga ni la azul ni la verde.** **Precio:** de 1,15 a 4,25 € la hora. La zona azul es para estancias cortas de cualquier conductor: de 1,15 a 3,75 € la hora y normalmente 1 o 2 horas como máximo. La zona verde es para los vecinos, pero los no residentes también pueden aparcar pagando de 1,40 a 4,25 € la hora, normalmente 1 o 2 horas. El precio exacto depende de la tarifa de la zona (A en los barrios de más demanda, B en el resto) y del distintivo ambiental del coche.",
     summaryTitle: "Zona azul y zona verde: precio, horario y tiempo máximo",
     summaryCaption: "Las zonas de aparcamiento regulado de Barcelona en 2026",
     summaryHeaders: ["Zona", "Quién puede aparcar", "Horario habitual", "Tiempo máximo", "Precio"],
@@ -1573,7 +1573,7 @@ export const PARKING: B2Article = {
         "Preu de la zona blava i la zona verda de Barcelona el 2026: horari i com funcionen",
       seoTitle: "Preu zona blava i verda Barcelona: 1,15-4,25 €/h i horari",
       seoDescription:
-        "Zona blava: dl-dv 9-20 h, 1,15-3,75 €/h, màx. 1-2 h. Zona verda per a no residents: 1,40-4,25 €/h. Diumenge gratis fora de la platja. Mapa i com pagar.",
+        "Zona blava: dl-dv 9-20 h (i dissabte al centre), 1,15-3,75 €/h. Zona verda, no residents: 1,40-4,25 €/h, 8-20 o 8-22 h. Diumenge gratis fora de la platja.",
       excerpt:
         "Els preus de l'aparcament regulat depenen de la zona i del distintiu ambiental del vehicle. Taula completa de 2026.",
       blocks: parkingBody("ca"),
@@ -1582,9 +1582,9 @@ export const PARKING: B2Article = {
     es: {
       path: "guias/aparcar-barcelona-zona-azul-verde",
       title: "Cómo funciona la zona verde y la zona azul en Barcelona: horario y precio 2026",
-      seoTitle: "Zona azul y verde Barcelona: cómo funciona, horario y precio",
+      seoTitle: "Horario zona azul y verde Barcelona: cuándo se paga y precio",
       seoDescription:
-        "Zona azul: lun-vie 9-20 h, 1,15-3,75 €/h, máx. 1-2 h. Zona verde: no residentes 1,40-4,25 €/h. Domingo gratis fuera de la playa. Mapa y cómo pagar.",
+        "Zona azul: lun-vie 9-20 h (y sábado en el centro), 1,15-3,75 €/h. Zona verde: 8-20 u 8-22 h, no residentes 1,40-4,25 €/h. Domingo gratis fuera de la playa.",
       excerpt:
         "Las tarifas del aparcamiento regulado dependen de la zona y del distintivo ambiental. Tabla completa de 2026.",
       blocks: parkingBody("es"),

@@ -113,6 +113,9 @@ test("titles fit in 60 characters and descriptions in 155, both carrying the dat
     }
     assert.ok(seoDescription.includes(day(EASTER.schoolFrom)) && seoDescription.includes(day(EASTER.schoolTo)), `${locale}: school dates`);
   }
+  // 3 Nov (CTR sweep): "setmana santa 2027" / "quan és setmana santa 2027" get the week first, Palm Sunday to Easter Sunday.
+  assert.match(EASTER_2027.editions.ca.seoDescription, new RegExp(`^Setmana Santa 2027: del ${day(EASTER.palmSunday)} al ${day(EASTER.easterSunday)} de març\\. Festius: Divendres Sant ${day(EASTER.goodFriday)} `));
+  assert.match(EASTER_2027.editions.es.seoDescription, new RegExp(`^Semana Santa 2027: del ${day(EASTER.palmSunday)} al ${day(EASTER.easterSunday)} de marzo\\. Festivos: Viernes Santo ${day(EASTER.goodFriday)} `));
   assert.match(EASTER_2027.editions.ca.seoTitle, /^Setmana Santa 2027 a Catalunya/);
   assert.match(EASTER_2027.editions.es.seoTitle, /^Semana Santa 2027 en Cataluña/);
   assert.match(EASTER_2027.editions.en.seoTitle, /^Easter 2027 in Catalonia and Barcelona/);

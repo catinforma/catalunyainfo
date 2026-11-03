@@ -2,10 +2,23 @@ import { bridgeCount } from "@/lib/content/holidays/bridges";
 import { CATALONIA_HOLIDAYS, YEAR as PLANNER_YEAR } from "@/lib/content/holidays/payload";
 
 import type { CouncilApproved } from "./council-2027";
-import { NEXT, SNAPSHOT, YEAR, councilApproved2027, councilApprovedTowns, isAran, regionalDays, sharedDates, type ComarcaGroup } from "./data";
+import {
+  NEXT,
+  SNAPSHOT,
+  YEAR,
+  councilApproved2027,
+  councilApprovedTowns,
+  isAran,
+  nextHoliday,
+  nextYearFor,
+  regionalDays,
+  sharedDates,
+  type ComarcaGroup,
+  type HolidayRow,
+} from "./data";
 import { LOCAL_DATE_PAGES } from "./dates";
 import { GUIDES } from "./links";
-import { caDayArticle, dayMonth, dayMonthYear, dayPair, weekdayDayMonth, type DateLocale } from "./format";
+import { caDayArticle, dayMonth, dayMonthYear, dayPair, weekdayDayMonth, weekdayName, type DateLocale } from "./format";
 import { caA, caComarca, caDe, caStart, esName, joinList } from "./names";
 import { datePath, type MuniLocale } from "./paths";
 import { dateQuestion } from "./question";
@@ -119,85 +132,168 @@ export function councilSource(c: CouncilApproved, locale: DateLocale): CouncilSo
 /* -------------------------------------------------------------------------- */
 
 /**
- * Two query families land on these pages (Search Console, 30 Oct 2026):
- * "festivos tarragona 2027" / "calendario laboral reus 2027" and "hoy es
- * festivo en girona" / "mañana es festivo en girona". The title carries both:
- * the town and the years first, then the question the status block answers.
- * The old tail ("qué días son festivo") promised nothing.
+ * The question searchers ask leads (Search Console, 21 Oct - 3 Nov 2026):
+ * "hoy es festivo en lleida", "mañana es festivo en terrassa", "avui és
+ * festiu a barcelona" bring most of these pages' impressions, ahead of
+ * "festivos badalona 2027" / "calendario laboral tarragona 2027". The title
+ * asks it first, in their words, then names the years the page has the
+ * town's local days for: next year only where the DOGC order
+ * (local-2027.json) or the council (council-2027.ts) has given them. The
+ * 2027 dates themselves lead the description.
  *
- * Where the council has already approved next year's days (council-2027.ts),
- * the title gives them instead, in the searchers' words ("festivos tarragona
- * 2027"): "Festivos Granollers 2026 y 2027: 7 de mayo y 27 de agosto". If
- * that does not fit, the title stays as it was and the description carries
- * the dates.
+ * Before (30 Oct): "Festivos locales Tarragona 2026 y 2027: ¿hoy es
+ * festivo?", or the council's days ("Festivos Girona 2026 y 2027: 26 de
+ * julio y 29 de octubre"), which read as both years' dates.
  */
-export function municipalityTitle(m: SnapshotMunicipality, locale: MuniLocale, council: CouncilApproved | null = councilApproved2027(m.slug)): string {
+export function municipalityTitle(
+  m: SnapshotMunicipality,
+  locale: MuniLocale,
+  council: CouncilApproved | null = councilApproved2027(m.slug),
+  next: { local: string[] } | null = nextYearFor(m.slug),
+): string {
   const name = displayName(m, locale);
-  const days = council ? dayPair(council.local[0], council.local[1], locale) : null;
-  const withDays = days
-    ? locale === "ca"
-      ? [`Festius locals ${name} ${YEAR} i ${NEXT}: ${days}`, `Festius ${name} ${YEAR} i ${NEXT}: ${days}`, `Festius ${name} ${YEAR}-${NEXT}: ${days}`]
-      : [`Festivos locales ${name} ${YEAR} y ${NEXT}: ${days}`, `Festivos ${name} ${YEAR} y ${NEXT}: ${days}`, `Festivos ${name} ${YEAR}-${NEXT}: ${days}`]
-    : [];
-  // The last form is for the one name too long for both years (Cruïlles,
-  // Monells i Sant Sadurní de l'Heura, 43 characters).
-  return locale === "ca"
-    ? fit(
-        [
-          ...withDays,
-          `Festius locals ${name} ${YEAR} i ${NEXT}: avui és festiu?`,
-          `Festius ${name} ${YEAR} i ${NEXT}: avui és festiu?`,
-          `Festius locals ${name} ${YEAR} i ${NEXT}`,
-          `Festius ${name} ${YEAR} i ${NEXT}`,
-          `Festius ${name} ${YEAR}`,
-        ],
-        TITLE_MAX,
-      )
-    : fit(
-        [
-          ...withDays,
-          `Festivos locales ${name} ${YEAR} y ${NEXT}: ¿hoy es festivo?`,
-          `Festivos ${name} ${YEAR} y ${NEXT}: ¿hoy es festivo?`,
-          `Festivos locales ${name} ${YEAR} y ${NEXT}`,
-          `Festivos ${name} ${YEAR} y ${NEXT}`,
-          `Festivos ${name} ${YEAR}`,
-        ],
-        TITLE_MAX,
-      );
+  const both = Boolean(next || council);
+  const ca = locale === "ca";
+  const ask = ca ? [`Avui o demà és festiu ${caA(m.name)}?`, `Avui és festiu ${caA(m.name)}?`] : [`¿Hoy o mañana es festivo en ${name}?`, `¿Hoy es festivo en ${name}?`];
+  const word = ca ? "Festius" : "Festivos";
+  // Next year is kept before "o demà / o mañana" is; this year alone comes last.
+  const years = both
+    ? [[`${word} ${YEAR} ${ca ? "i" : "y"} ${NEXT}`, `${word} ${YEAR}-${NEXT}`], [`${word} ${YEAR}`]]
+    : [[`${word} ${ca ? "locals" : "locales"} ${YEAR}`, `${word} ${YEAR}`]];
+  // The plain forms close the list for the names too long for the question
+  // (Cruïlles, Monells i Sant Sadurní de l'Heura, 43 characters).
+  return fit(
+    [
+      ...years.flatMap((tier) => ask.flatMap((q) => tier.map((y) => `${q} ${y}`))),
+      ...(both ? [`${word} ${name} ${YEAR} ${ca ? "i" : "y"} ${NEXT}`] : []),
+      `${word} ${name} ${YEAR}`,
+    ],
+    TITLE_MAX,
+  );
 }
 
-export function municipalityH1(m: SnapshotMunicipality, locale: MuniLocale): string {
-  return locale === "ca" ? `Festius locals ${caDe(m.name)} ${YEAR} i ${NEXT}` : `Festivos locales de ${esName(m.name)} ${YEAR} y ${NEXT}`;
+/** Next year in the H1 only where the page has the town's own days for it, as in the title. */
+export function municipalityH1(
+  m: SnapshotMunicipality,
+  locale: MuniLocale,
+  council: CouncilApproved | null = councilApproved2027(m.slug),
+  next: { local: string[] } | null = nextYearFor(m.slug),
+): string {
+  const years = next || council ? (locale === "ca" ? `${YEAR} i ${NEXT}` : `${YEAR} y ${NEXT}`) : String(YEAR);
+  return locale === "ca" ? `Festius locals ${caDe(m.name)} ${years}` : `Festivos locales de ${esName(m.name)} ${years}`;
+}
+
+/** What the holiday is: "la Inmaculada", "fiesta local", "festa local a Ordal". */
+function holidayLabel(row: HolidayRow, locale: MuniLocale): string {
+  if (row.kind !== "local") return row.name;
+  const where = row.where?.length ? joinList(row.where.map((n) => (locale === "es" ? esName(n) : n)), locale) : null;
+  if (locale === "ca") return where ? `festa local a ${where}` : "festa local";
+  return where ? `fiesta local en ${where}` : "fiesta local";
+}
+
+/**
+ * The next holiday as the description gives it, dated so that it reads true
+ * whenever it is shown: "martes 8 de diciembre (la Inmaculada)". Null without
+ * a render date, after the last published date, or when an unpublished local
+ * day could come first.
+ */
+function nextForDescription(m: SnapshotMunicipality, locale: MuniLocale, today: string | null): { long: string; short: string } | null {
+  if (!today) return null;
+  const next = nextHoliday(m, locale, today);
+  if (!next || next.mayBeEarlier) return null;
+  return { long: `${weekdayDayMonth(next.row.date, locale)} (${holidayLabel(next.row, locale)})`, short: dayMonth(next.row.date, locale) };
+}
+
+/**
+ * The page's first line, in the static HTML: the next holiday with weekday,
+ * date and year, so "hoy / mañana es festivo en …" is answered on the first
+ * screen without JavaScript. `today` is the date the page is rendered on;
+ * the nightly cron rebuilds each town page the day after each of its
+ * holidays (`holidayRefreshPaths`), so the day named is never in the past.
+ * On the holiday itself it names that day, which the status box below calls
+ * today's.
+ */
+export function municipalityNextLine(m: SnapshotMunicipality, locale: MuniLocale, today: string): { lead: string; date: string; rest: string } | null {
+  const next = nextHoliday(m, locale, today);
+  if (!next) return null;
+  const { row } = next;
+  const date = `${weekdayName(row.date, locale)} ${dayMonthYear(row.date, locale)}`;
+  const label = holidayLabel(row, locale);
+  const year = row.date.slice(0, 4);
+  if (locale === "ca") {
+    const scope = row.kind === "catalonia" ? ", a tot Catalunya" : "";
+    const caveat = next.mayBeEarlier ? ` Els festius locals del ${year} encara no s'han publicat: pot ser que n'hi hagi algun abans.` : "";
+    return { lead: `Pròxim festiu ${caA(m.name)}:`, date, rest: `(${label}${scope}).${caveat}` };
+  }
+  const scope = row.kind === "catalonia" ? ", en toda Cataluña" : "";
+  const caveat = next.mayBeEarlier ? ` Los festivos locales de ${year} todavía no se han publicado: puede que haya alguno antes.` : "";
+  return { lead: `Próximo festivo en ${displayName(m, locale)}:`, date, rest: `(${label}${scope}).${caveat}` };
 }
 
 function localList(dates: string[], locale: DateLocale): string {
   return joinList(dates.map((d) => dayMonth(d, locale)), locale === "en" ? "en" : locale);
 }
 
-export function municipalityDescription(m: SnapshotMunicipality, locale: MuniLocale, council: CouncilApproved | null = councilApproved2027(m.slug)): string {
+/**
+ * The days first, in the searchers' words: next year's where the page has
+ * them ("festivos badalona 2027", rising to its December peak), then this
+ * year's, then the next holiday, dated ("Próximo festivo: martes 8 de
+ * diciembre (la Inmaculada)"), the answer to "hoy / mañana es festivo en …"
+ * that a static snippet can give. `today` is the render date (the route
+ * passes it; the nightly cron rebuilds the page after each of its
+ * holidays); without it the next holiday is left out. Next year is not
+ * mentioned where the town's 2027 days are not on the page.
+ */
+export function municipalityDescription(
+  m: SnapshotMunicipality,
+  locale: MuniLocale,
+  council: CouncilApproved | null = councilApproved2027(m.slug),
+  today: string | null = null,
+  dogc: { local: string[] } | null = nextYearFor(m.slug),
+): string {
   const name = displayName(m, locale);
   const own = m.local.length > 0;
+  const upcoming = nextForDescription(m, locale, today);
+  const nextCa = upcoming ? ` Pròxim festiu: ${upcoming.long}.` : "";
+  const nextEs = upcoming ? ` Próximo festivo: ${upcoming.long}.` : "";
+  // "8 de diciembre": the short form, for the council towns' longer lead.
+  const shortCa = upcoming ? ` Pròxim festiu: ${upcoming.short}.` : "";
+  const shortEs = upcoming ? ` Próximo festivo: ${upcoming.short}.` : "";
+  const list = (dates: string[]) => (dates.length === 2 ? dayPair(dates[0]!, dates[1]!, locale) : localList(dates, locale));
   // Nuclei only: with two nuclei their days fit ("Bigues, 20 de gener i 29 de
   // juny; Riells del Fai, …"); with more, or if that is too long, "by nucleus".
   const byNucleus = (lang: MuniLocale) =>
     m.nuclei.length <= 2 ? m.nuclei.map((n) => `${lang === "es" ? esName(n.name) : n.name}, ${localList(n.dates, lang)}`).join("; ") : null;
-  // Next year's days approved by the council lead: "festius X 2027" is the
-  // query rising to its December peak. This year's follow, while they fit.
-  if (council && own) {
-    const next = dayPair(council.local[0], council.local[1], locale);
-    const now = m.local.length === 2 ? dayPair(m.local[0]!, m.local[1]!, locale) : localList(m.local, locale);
+  // Next year's days lead: from the DOGC order once it is out, else as the council approved them.
+  const days27 = dogc && dogc.local.length > 0 ? dogc.local : !dogc && council ? council.local : null;
+  if (days27 && own) {
+    const next = list(days27);
+    const now = list(m.local);
     // A council page that names no act "set" the days; a plenary, decree or board "approved" them.
-    const set = council.act.kind === "web";
-    const candidates =
-      locale === "ca"
+    const set = council?.act.kind === "web";
+    const candidates = dogc
+      ? locale === "ca"
         ? [
-            `Festius locals ${caDe(m.name)} el ${NEXT}: ${next}, ${set ? "fixats" : "aprovats"} per l'Ajuntament i pendents del DOGC. El ${YEAR}: ${now}. Si avui o demà és festiu.`,
+            `Festius locals ${caDe(m.name)} el ${NEXT}: ${next}. El ${YEAR}: ${now}.${nextCa}`,
+            `Festius locals ${caDe(m.name)} el ${NEXT}: ${next}. El ${YEAR}: ${now}.`,
+          ]
+        : [
+            `Festivos locales de ${name} en ${NEXT}: ${next}. En ${YEAR}: ${now}.${nextEs}`,
+            `Festivos locales de ${name} en ${NEXT}: ${next}. En ${YEAR}: ${now}.`,
+          ]
+      : locale === "ca"
+        ? [
+            `Festius locals ${caDe(m.name)} el ${NEXT}: ${next}, ${set ? "fixats" : "aprovats"} per l'Ajuntament i pendents del DOGC. El ${YEAR}: ${now}.${nextCa}`,
+            `Festius locals ${caDe(m.name)} el ${NEXT}: ${next}, ${set ? "fixats" : "aprovats"} per l'Ajuntament i pendents del DOGC. El ${YEAR}: ${now}.${shortCa}`,
+            `Festius locals ${caDe(m.name)} el ${NEXT}: ${next}, ${set ? "fixats" : "aprovats"} per l'Ajuntament. El ${YEAR}: ${now}.${shortCa}`,
             `Festius locals ${caDe(m.name)} el ${NEXT}: ${next}, ${set ? "fixats" : "aprovats"} per l'Ajuntament i pendents del DOGC. El ${YEAR}: ${now}.`,
             `Festius locals ${caDe(m.name)} el ${NEXT}: ${next}, ${set ? "fixats" : "aprovats"} per l'Ajuntament. El ${YEAR}: ${now}.`,
             `Festius ${caDe(m.name)} el ${NEXT}: ${next}, ja ${set ? "fixats" : "aprovats"}. El ${YEAR}: ${now}.`,
           ]
         : [
-            `Festivos locales de ${name} en ${NEXT}: ${next}, ${set ? "fijados" : "aprobados"} por el Ayuntamiento y pendientes del DOGC. En ${YEAR}: ${now}. Si hoy o mañana es festivo.`,
+            `Festivos locales de ${name} en ${NEXT}: ${next}, ${set ? "fijados" : "aprobados"} por el Ayuntamiento y pendientes del DOGC. En ${YEAR}: ${now}.${nextEs}`,
+            `Festivos locales de ${name} en ${NEXT}: ${next}, ${set ? "fijados" : "aprobados"} por el Ayuntamiento y pendientes del DOGC. En ${YEAR}: ${now}.${shortEs}`,
+            `Festivos locales de ${name} en ${NEXT}: ${next}, ${set ? "fijados" : "aprobados"} por el Ayuntamiento. En ${YEAR}: ${now}.${shortEs}`,
             `Festivos locales de ${name} en ${NEXT}: ${next}, ${set ? "fijados" : "aprobados"} por el Ayuntamiento y pendientes del DOGC. En ${YEAR}: ${now}.`,
             `Festivos locales de ${name} en ${NEXT}: ${next}, ${set ? "fijados" : "aprobados"} por el Ayuntamiento. En ${YEAR}: ${now}.`,
             `Festivos de ${name} en ${NEXT}: ${next}, ya ${set ? "fijados" : "aprobados"}. En ${YEAR}: ${now}.`,
@@ -205,11 +301,13 @@ export function municipalityDescription(m: SnapshotMunicipality, locale: MuniLoc
     const chosen = candidates.find((c) => c.length <= DESCRIPTION_MAX);
     if (chosen) return chosen;
   }
-  // The answer (the two dates) first, then the 2027 calendar and today/tomorrow.
+  // This year's days (the answer) first, then the next holiday and the live today/tomorrow box.
   if (locale === "ca") {
     const candidates = (days: string) => [
-      `Festius locals ${caDe(m.name)} el ${YEAR}: ${days}. Calendari laboral ${NEXT}, si avui o demà és festiu i botigues obertes.`,
-      `Festius locals ${caDe(m.name)} el ${YEAR}: ${days}. Calendari laboral ${NEXT} i si avui o demà és festiu.`,
+      `Festius locals ${caDe(m.name)} el ${YEAR}: ${days}.${nextCa} Si avui o demà és festiu i botigues obertes.`,
+      `Festius locals ${caDe(m.name)} el ${YEAR}: ${days}.${nextCa} Si avui o demà és festiu.`,
+      `Festius locals ${caDe(m.name)} el ${YEAR}: ${days}.${nextCa}`,
+      `Festius locals ${caDe(m.name)} el ${YEAR}: ${days}.${shortCa}`,
       `Festius locals ${caDe(m.name)} el ${YEAR}: ${days}. Si avui o demà és festiu.`,
       `Festius locals ${caDe(m.name)} el ${YEAR}: ${days}.`,
     ];
@@ -218,8 +316,10 @@ export function municipalityDescription(m: SnapshotMunicipality, locale: MuniLoc
     return fit(candidates(days), DESCRIPTION_MAX);
   }
   const candidates = (days: string) => [
-    `Festivos locales de ${name} en ${YEAR}: ${days}. Calendario laboral ${NEXT}, si hoy o mañana es festivo y tiendas abiertas.`,
-    `Festivos locales de ${name} en ${YEAR}: ${days}. Calendario laboral ${NEXT} y si hoy o mañana es festivo.`,
+    `Festivos locales de ${name} en ${YEAR}: ${days}.${nextEs} Si hoy o mañana es festivo y tiendas abiertas.`,
+    `Festivos locales de ${name} en ${YEAR}: ${days}.${nextEs} Si hoy o mañana es festivo.`,
+    `Festivos locales de ${name} en ${YEAR}: ${days}.${nextEs}`,
+    `Festivos locales de ${name} en ${YEAR}: ${days}.${shortEs}`,
     `Festivos locales de ${name} en ${YEAR}: ${days}. Si hoy o mañana es festivo.`,
     `Festivos locales de ${name} en ${YEAR}: ${days}.`,
   ];

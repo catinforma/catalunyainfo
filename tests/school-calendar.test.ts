@@ -155,7 +155,9 @@ test("the live title and description fit every day the order covers, in every la
 });
 
 test("the title follows the breaks: Christmas until 7 Jan, then Easter, then the last day, then the next start", () => {
-  assert.equal(liveSchoolTitle("ca", "2026-10-30"), "Calendari escolar 2026-27 Catalunya: Nadal del 22/12 al 7/1");
+  // CTR sweep, 3 Nov 2026: the Catalan Christmas title in the searchers' words.
+  assert.equal(liveSchoolTitle("ca", "2026-10-30"), "Calendari escolar 2026-2027: vacances de Nadal 22/12-7/1");
+  assert.equal(liveSchoolTitle("ca", "2027-12-01"), "Calendari escolar 2027-2028: vacances de Nadal 22/12-9/1");
   assert.equal(liveSchoolTitle("es", "2026-10-30"), "Calendario escolar 2026-27 Cataluña: Navidad 22/12-7/1");
   assert.match(liveSchoolTitle("en", "2026-10-30"), /Christmas 22 Dec–7 Jan/);
   assert.match(liveSchoolTitle("ca", "2027-01-08"), /Setmana Santa 20-29\/3/);

@@ -1,7 +1,7 @@
-import { comarcaBySlug, municipalityBySlug, prerenderComarques, prerenderSlugs, type ComarcaGroup } from "./data";
+import { comarcaBySlug, holidayRefreshDue, municipalities, municipalityBySlug, prerenderComarques, prerenderSlugs, type ComarcaGroup } from "./data";
 import { englishTownBySlug, englishTowns } from "./english";
 import type { DateLocale } from "./format";
-import { DATE_PAGES, dateFromSlug, dateSlug, type DatePage, type MuniLocale } from "./paths";
+import { DATE_PAGES, MUNI_LOCALES, dateFromSlug, dateSlug, municipalityPath, type DatePage, type MuniLocale } from "./paths";
 import type { SnapshotMunicipality } from "./types";
 
 /**
@@ -58,6 +58,20 @@ export function englishTownStaticParams(): { locale: "en"; municipi: string }[] 
 /** Built at deploy: the four most populous comarques (as the fuel family does); the rest on first request. */
 export function comarcaStaticParams(route: MuniLocale): { locale: MuniLocale; comarca: string }[] {
   return prerenderComarques(4).map((comarca) => ({ locale: route, comarca }));
+}
+
+/**
+ * Paths for `revalidatePath`, run by the nightly cron: the ca/es town pages
+ * whose next holiday moved on today, i.e. those that had a holiday
+ * yesterday (every town after a Catalonia-wide one). Their first line and
+ * description name that next holiday (copy.ts `municipalityNextLine`), so
+ * without this a page rendered before the holiday would keep naming it.
+ * Empty on the other nights. `today` is the Madrid date the cron runs on.
+ */
+export function holidayRefreshPaths(today: string): string[] {
+  return municipalities()
+    .filter((m) => holidayRefreshDue(m, today))
+    .flatMap((m) => MUNI_LOCALES.map((locale) => municipalityPath(locale, m.slug).replace(/\/$/, "")));
 }
 
 /** Every date page is built at deploy (DATE_PAGES: 34 since tranche 4, 2 Nov 2026). */

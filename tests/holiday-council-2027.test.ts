@@ -225,14 +225,19 @@ test("titles <= 60 and descriptions <= 155 in all three languages, with the 2027
     const c = COUNCIL_2027[slug]!;
     for (const locale of ["ca", "es"] as const) {
       const title = municipalityTitle(m, locale);
-      const description = municipalityDescription(m, locale);
-      assert.ok(title.length <= TITLE_MAX, `${title} (${title.length})`);
-      assert.ok(description.length <= DESCRIPTION_MAX, `${description} (${description.length})`);
       const pair = dayPair(c.local[0], c.local[1], locale);
-      assert.ok(description.includes(pair), `${slug} ${locale}: ${description}`);
-      assert.ok(description.includes(String(NEXT)) && description.includes(String(YEAR)), description);
-      // Dates in the title whenever the dated form fits.
-      if (title.includes(":") && !/festiu\?|festivo\?/.test(title)) assert.ok(title.endsWith(pair), title);
+      assert.ok(title.length <= TITLE_MAX, `${title} (${title.length})`);
+      // The 2027 days lead the description, with and without the render date's next holiday.
+      for (const today of [null, "2026-11-03", "2026-12-09"]) {
+        const description = municipalityDescription(m, locale, undefined, today);
+        assert.ok(description.length <= DESCRIPTION_MAX, `${description} (${description.length})`);
+        assert.ok(description.includes(pair), `${slug} ${locale}: ${description}`);
+        assert.ok(description.includes(String(NEXT)) && description.includes(String(YEAR)), description);
+      }
+      // Both years in the title whenever a two-year form of the question fits (CTR sweep, 3 Nov 2026).
+      const name = locale === "ca" ? m.name : m.name.charAt(0).toUpperCase() + m.name.slice(1);
+      const shortest = locale === "ca" ? `Avui és festiu a ${m.name}? Festius ${YEAR}-${NEXT}` : `¿Hoy es festivo en ${name}? Festivos ${YEAR}-${NEXT}`;
+      if (shortest.length <= TITLE_MAX) assert.ok(title.includes(String(NEXT)), title);
     }
     if (hasEnglishPage(slug)) {
       const title = englishTownTitle(m);
@@ -243,12 +248,17 @@ test("titles <= 60 and descriptions <= 155 in all three languages, with the 2027
       for (const d of m.local) assert.ok(description.includes(dayMonth(d, "en")), description);
     }
   }
-  assert.equal(municipalityTitle(town("granollers"), "es"), "Festivos Granollers 2026 y 2027: 7 de mayo y 27 de agosto");
-  assert.equal(municipalityTitle(town("barcelona"), "ca"), "Festius Barcelona 2026 i 2027: 17 de maig i 24 de setembre");
-  assert.equal(municipalityTitle(town("barcelona"), "es"), "Festivos Barcelona 2026-2027: 17 de mayo y 24 de septiembre");
+  // The question first, in the searchers' words; the 2027 dates lead the description.
+  assert.equal(municipalityTitle(town("granollers"), "es"), "¿Hoy o mañana es festivo en Granollers? Festivos 2026 y 2027");
+  assert.equal(municipalityTitle(town("barcelona"), "ca"), "Avui o demà és festiu a Barcelona? Festius 2026 i 2027");
+  assert.equal(municipalityTitle(town("barcelona"), "es"), "¿Hoy o mañana es festivo en Barcelona? Festivos 2026 y 2027");
+  assert.equal(
+    municipalityDescription(town("badalona"), "es", undefined, "2026-11-03"),
+    "Festivos locales de Badalona en 2027: 11 y 17 de mayo, aprobados por el Ayuntamiento. En 2026: 11 y 25 de mayo. Próximo festivo: 8 de diciembre.",
+  );
   assert.equal(englishTownTitle(town("blanes")), "Blanes public holidays 2026 and 2027: 30 March and 26 July");
-  // Too long for the dates: the title stays as it was, the description carries them.
-  assert.equal(municipalityTitle(town("l-hospitalet-de-llobregat"), "es"), "Festivos locales L'Hospitalet de Llobregat 2026 y 2027");
+  // Too long for the question with both years: the question stays, the description carries the 2027 dates.
+  assert.equal(municipalityTitle(town("l-hospitalet-de-llobregat"), "es"), "¿Hoy es festivo en L'Hospitalet de Llobregat? Festivos 2026");
   assert.match(municipalityDescription(town("l-hospitalet-de-llobregat"), "es"), /2027: 17 de mayo y 24 de septiembre/);
 });
 

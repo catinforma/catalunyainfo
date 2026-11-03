@@ -2,6 +2,7 @@ import { ARAN_SUBSTITUTIONS, HOLIDAYS_BY_YEAR } from "@/lib/content/holidays/cal
 import { ARAN_REPLACEMENT } from "@/lib/content/holidays/payload";
 
 import { COUNCIL_2027, type CouncilApproved } from "./council-2027";
+import { addDays } from "./format";
 import nextYearJson from "./local-2027.json" with { type: "json" };
 import { slugify } from "./slug";
 import snapshotJson from "./snapshot.json" with { type: "json" };
@@ -235,6 +236,27 @@ export function statusDays(m: SnapshotMunicipality, lang: Lang): DayInfo[] {
 
 export function localThrough(): string {
   return nextYearPublished() ? `${NEXT}-12-31` : `${YEAR}-12-31`;
+}
+
+/**
+ * The first holiday on or after `today` in this municipality, from the same
+ * rows as the status box (this year and next, DOGC local days only, never the
+ * council's pending ones). `mayBeEarlier` when it lies beyond the published
+ * local days, so an unpublished local holiday could come first. Null after
+ * the last published date.
+ *
+ * Printed in the static page and its description, so the page must be
+ * rebuilt the day after each of its holidays: `holidayRefreshDue`.
+ */
+export function nextHoliday(m: SnapshotMunicipality, lang: Lang, today: string): { row: HolidayRow; mayBeEarlier: boolean } | null {
+  const row = [YEAR, NEXT].flatMap((year) => yearRows(m, year, lang)).find((r) => r.date >= today);
+  return row ? { row, mayBeEarlier: row.date > localThrough() } : null;
+}
+
+/** True on the day after one of the municipality's holidays: the night its "next holiday" moves on. */
+export function holidayRefreshDue(m: SnapshotMunicipality, today: string): boolean {
+  const yesterday = addDays(today, -1);
+  return [YEAR, NEXT].some((year) => yearRows(m, year, "ca").some((r) => r.date === yesterday));
 }
 
 /* -------------------------------------------------------------------------- */

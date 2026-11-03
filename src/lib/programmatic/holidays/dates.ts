@@ -539,6 +539,13 @@ export function dateContent(iso: DatePage, locale: DateLocale): DateContent {
   if (iso === DEC7) {
     const n = placesPhrase(local, locale);
     const sb = municipalities().filter((m) => m.local.includes(iso) && m.shops.includes(iso)).map((m) => m.name);
+    // The two most populous towns whose own local day it is (the snapshot's rank), for the description.
+    const biggest = municipalities()
+      .filter((m) => m.local.includes(iso))
+      .sort((a, b) => a.rank - b.rank)
+      .map((m) => m.name);
+    const pick = (ca: string[], es: string[], en: string[]) => (locale === "ca" ? ca : locale === "es" ? es : en);
+    const fitDescription = (options: string[]) => options.find((o) => o.length <= 155) ?? options.at(-1)!;
     return {
       holiday: false,
       answer: L(
@@ -554,10 +561,25 @@ export function dateContent(iso: DatePage, locale: DateLocale): DateContent {
         ),
       ],
       notice: noticeFor(iso, locale),
-      description: L(
-        `No: el 7 de desembre de 2026 és feiner a Catalunya. És festa local a ${n}: la llista, botigues, escoles i el pont del 8.`,
-        `No: el 7 de diciembre de 2026 es laborable en Cataluña. Es fiesta local en ${n}: la lista, tiendas, escuelas y el puente del 8.`,
-        `No: 7 December 2026 is a working day in Catalonia, but a local holiday in ${n}. The list, shops, schools and the 8 December holiday.`,
+      // CTR sweep, 3 Nov 2026: "donde es festivo el 7 de diciembre de 2026" (26 impressions at
+      // 6.0, no click) gets its answer in the snippet, with the largest towns that have the day.
+      description: fitDescription(
+        pick(
+          [
+            `No: el 7 de desembre de 2026 és feiner a Catalunya. On és festiu: a ${n}, com ${joinList(biggest.slice(0, 2), "ca")}. La llista i el pont del 8.`,
+            `No: el 7 de desembre de 2026 és feiner a Catalunya. On és festiu: a ${n}, com ${biggest[0]}. La llista i el pont del 8.`,
+            `No: el 7 de desembre de 2026 és feiner a Catalunya. És festa local a ${n}: la llista, botigues, escoles i el pont del 8.`,
+          ],
+          [
+            `No: el 7 de diciembre de 2026 es laborable en Cataluña. Dónde es festivo: en ${n}, como ${joinList(biggest.slice(0, 2).map(esName), "es")}. La lista y el puente.`,
+            `No: el 7 de diciembre de 2026 es laborable en Cataluña. Dónde es festivo: en ${n}, como ${esName(biggest[0] ?? "")}. La lista y el puente.`,
+            `No: el 7 de diciembre de 2026 es laborable en Cataluña. Es fiesta local en ${n}: la lista, tiendas, escuelas y el puente del 8.`,
+          ],
+          [
+            `No: 7 December 2026 is a working day in Catalonia. Where it is a holiday: ${n}, such as ${joinList(biggest.slice(0, 2), "en")}. The full list.`,
+            `No: 7 December 2026 is a working day in Catalonia, but a local holiday in ${n}. The list, shops, schools and the 8 December holiday.`,
+          ],
+        ),
       ),
       local: {
         text: L(

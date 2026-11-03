@@ -4,7 +4,7 @@ import { Breadcrumbs, type Crumb } from "@/components/Breadcrumbs";
 import { getMessages } from "@/lib/i18n";
 import { todayInCatalonia } from "@/lib/content/holidays/calendar";
 import { SCHOOL_YEARS } from "@/lib/content/school/calendar";
-import { comarcaLinkLabel, municipalityCopy, displayName, municipalityFaq, municipalityH1, sharedDayLead } from "@/lib/programmatic/holidays/copy";
+import { comarcaLinkLabel, municipalityCopy, displayName, municipalityFaq, municipalityH1, municipalityNextLine, sharedDayLead } from "@/lib/programmatic/holidays/copy";
 import { GUIDES } from "@/lib/programmatic/holidays/links";
 import {
   NEXT,
@@ -98,6 +98,8 @@ export function MunicipalityPage({ m, locale }: { m: SnapshotMunicipality; local
   const shared = municipalityDatePages(m);
   // Static page: "today" is the build date; each question names its date.
   const faq = municipalityFaq(m, locale, next, todayInCatalonia());
+  // Static too: the cron rebuilds the page the day after each of its holidays (holidayRefreshPaths).
+  const upcoming = municipalityNextLine(m, locale, todayInCatalonia());
 
   return (
     <article>
@@ -111,17 +113,19 @@ export function MunicipalityPage({ m, locale }: { m: SnapshotMunicipality; local
 
       <div className="ci-shell py-10">
         <div className="ci-prose">
+          {/* First screen (CTR sweep, 3 Nov 2026): the next holiday, the year's local days,
+              then the live today/tomorrow box, before the notes that qualify them. */}
           <p className="ci-lead">
+            {upcoming ? (
+              <>
+                <strong>
+                  {upcoming.lead} {upcoming.date}
+                </strong>{" "}
+                {upcoming.rest}{" "}
+              </>
+            ) : null}
             {t.lead} {t.source}
           </p>
-          {t.nextLead ? (
-            <p className="ci-callout ci-callout-official">
-              {t.nextLead} <a href="#festius-2027">{locale === "ca" ? `Calendari del ${NEXT}` : `Calendario de ${NEXT}`}</a>
-            </p>
-          ) : null}
-          {t.nucleiLead ? <p>{t.nucleiLead}</p> : null}
-          {t.correction ? <p className="ci-callout ci-callout-official">{t.correction}</p> : null}
-          {t.unlisted ? <p className="ci-callout ci-callout-official">{t.unlisted}</p> : null}
 
           <h2 id="avui">{t.statusTitle}</h2>
           <HolidayStatus
@@ -131,6 +135,15 @@ export function MunicipalityPage({ m, locale }: { m: SnapshotMunicipality; local
             locale={locale}
             labels={STATUS_LABELS[locale]}
           />
+
+          {t.nextLead ? (
+            <p className="ci-callout ci-callout-official">
+              {t.nextLead} <a href="#festius-2027">{locale === "ca" ? `Calendari del ${NEXT}` : `Calendario de ${NEXT}`}</a>
+            </p>
+          ) : null}
+          {t.nucleiLead ? <p>{t.nucleiLead}</p> : null}
+          {t.correction ? <p className="ci-callout ci-callout-official">{t.correction}</p> : null}
+          {t.unlisted ? <p className="ci-callout ci-callout-official">{t.unlisted}</p> : null}
 
           <h2 id="festius-2026">{t.tableTitle}</h2>
           <HolidayTable rows={rows} locale={locale} caption={t.tableCaption} />

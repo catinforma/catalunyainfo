@@ -63,6 +63,13 @@ import {
  * ends with a link to the new Three Kings parade page, which carries the
  * route, the passing times and the other towns (group `reis-2027-links`).
  *
+ * 3 Nov 2026, CTR sweep: still no date (press room and barcelona.cat/nadal
+ * re-read). The pending titles said "data, hora i lloc" / "fecha, hora y
+ * lugar", a 2026 date the page cannot give: they now say it is still to be
+ * confirmed, and the descriptions open with the searchers' question ("cuándo
+ * encienden las luces de navidad en barcelona 2026", "encesa llums nadal
+ * barcelona 2026"), last year's day and the 130 km planned on 9 July.
+ *
  * The markets are not repeated here: the Christmas markets guide carries them.
  * No new photograph: the hero is the Christmas-lights picture already in the
  * manifest (the shops guide's lead image), because the publisher refuses an
@@ -104,8 +111,8 @@ const SOURCES: B2Source[] = [
 export const CHRISTMAS_BARCELONA_META: Record<Locale, { path: string; title: string; seoTitle: string; seoDescription: string; excerpt: string }> = {
   ca: {
     path: "guies/nadal-a-barcelona",
-    title: "Encesa de llums de Nadal a Barcelona 2026: data, pessebre de Sant Jaume i què obre",
-    seoTitle: "Encesa de llums de Nadal Barcelona 2026: data, hora i lloc",
+    title: "Encesa de llums de Nadal a Barcelona 2026: quan, pessebre de Sant Jaume i què obre",
+    seoTitle: "Encesa de llums de Nadal Barcelona 2026: data per confirmar",
     seoDescription:
       "L'encesa dels llums de Nadal de Barcelona 2026, els carrers il·luminats, el pessebre de Sant Jaume i què obre el 25 i 26 de desembre i l'1 i 6 de gener.",
     excerpt:
@@ -113,8 +120,8 @@ export const CHRISTMAS_BARCELONA_META: Record<Locale, { path: string; title: str
   },
   es: {
     path: "guias/navidad-en-barcelona",
-    title: "Encendido de luces de Navidad en Barcelona 2026: fecha, belén de Sant Jaume y qué abre",
-    seoTitle: "Encendido luces Navidad Barcelona 2026: fecha, hora y lugar",
+    title: "Encendido de luces de Navidad en Barcelona 2026: cuándo, belén de Sant Jaume y qué abre",
+    seoTitle: "Encendido luces Navidad Barcelona 2026: fecha por confirmar",
     seoDescription:
       "Encendido de las luces de Navidad de Barcelona 2026, calles iluminadas, el belén de Sant Jaume y qué abre el 25 y 26 de diciembre y el 1 y 6 de enero.",
     excerpt:
@@ -123,7 +130,7 @@ export const CHRISTMAS_BARCELONA_META: Record<Locale, { path: string; title: str
   en: {
     path: "guides/christmas-in-barcelona",
     title: "Christmas in Barcelona 2026: lights switch-on, nativity scene and what's open",
-    seoTitle: "Barcelona Christmas lights 2026: switch-on date, what's open",
+    seoTitle: "Barcelona Christmas lights 2026: streets, switch-on date TBC",
     seoDescription:
       "Barcelona Christmas lights 2026: switch-on date and streets, the Plaça Sant Jaume nativity scene, and what is open on 25-26 December and 1 and 6 January.",
     excerpt:
@@ -182,12 +189,29 @@ export function christmasBarcelonaDescription(locale: Locale, facts: Announcemen
     };
     return fit(options[locale], DESCRIPTION_LIMIT);
   }
+  // CTR sweep, 3 Nov 2026: the searchers' question first ("cuando encienden las
+  // luces de navidad en barcelona 2026", 610 impressions in two weeks), then
+  // the honest answer, last year's day and the 2026 plan the lead states.
   const last = dayDate(PAST.lights2025.switchOn, locale, false);
-  return {
-    ca: `Encesa de llums de Nadal de Barcelona 2026: encara sense data oficial (el 2025, ${last}, a les 18:00 al passeig de Gràcia). Què obre.`,
-    es: `Encendido de luces de Navidad de Barcelona 2026: aún sin fecha oficial (en 2025, ${last}, a las 18:00 en el paseo de Gràcia). Qué abre.`,
-    en: `Barcelona Christmas lights 2026: switch-on date not announced yet (2025: ${last}, 18:00, Passeig de Gràcia). Lit streets, what's open.`,
-  }[locale];
+  const km = LIGHTS_PLAN_2026.km;
+  const options: Record<Locale, string[]> = {
+    // Catalan searchers type "encesa llums nadal barcelona 2026": their words lead.
+    ca: [
+      `Encesa de llums de Nadal Barcelona 2026: encara sense data oficial (el 2025, ${last}, 18:00). Previstos ${km} km de carrers amb llums.`,
+      `Encesa de llums de Nadal Barcelona 2026: encara sense data oficial (2025: ${last}, 18:00). Previstos ${km} km de carrers amb llums.`,
+      `Encesa de llums de Nadal de Barcelona 2026: encara sense data oficial (el 2025, ${last}, a les 18:00 al passeig de Gràcia). Què obre.`,
+    ],
+    es: [
+      `¿Cuándo encienden las luces de Navidad en Barcelona 2026? Aún sin fecha oficial (en 2025, ${last}, 18:00). Previstos ${km} km de calles con luces.`,
+      `¿Cuándo encienden las luces de Navidad en Barcelona 2026? Aún sin fecha (2025: ${last}, 18:00). Previstos ${km} km de calles con luces.`,
+      `Encendido de luces de Navidad de Barcelona 2026: aún sin fecha oficial (en 2025, ${last}, a las 18:00 en el paseo de Gràcia). Qué abre.`,
+    ],
+    en: [
+      `When are Barcelona's Christmas lights switched on in 2026? No official date yet (2025: ${last}, 18:00). ${km} km of lit streets planned.`,
+      `Barcelona Christmas lights 2026: switch-on date not announced yet (2025: ${last}, 18:00, Passeig de Gràcia). Lit streets, what's open.`,
+    ],
+  };
+  return fit(options[locale], DESCRIPTION_LIMIT);
 }
 
 /* -------------------------------------------------------------------------- */
