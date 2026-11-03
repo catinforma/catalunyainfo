@@ -1594,6 +1594,61 @@ cannibalisation.
 
 **Outcome:** _pending_
 
+## 2026-11-03 — Election pages: "right now" answers in the snippet and first screen (owner lifted the freezes)
+
+Why: election pages are the second traffic source, the owner's goal is 1M
+impressions by 15 Nov with maximum CTR, and demand has moved to questions
+about today: the mesa draw ends on 4 Nov and notices run to 7 Nov; the
+postal-vote request closes on 19 Nov; the proclaimed candidate lists came out
+in today's BOE. The freezes logged above (mesa ca/es to 14 Nov, the 28-day
+rule for the 30 Oct changes) are lifted for these pages by the owner's
+priority. Titles and descriptions change together (against the "one thing"
+rule, knowingly): attribution is per page, not per field. Baselines are
+`scripts/snapshot.py page <substr> 14`, 21 Oct-3 Nov 2026 (3 Nov partial).
+Every new fact was read on 3 Nov 2026 on the BOE, the JEC, Interior's 29N
+site and guide note, the INE, Correos or the DOGC; the facts and URLs are in
+the header comments of `mesa.ts`, `voting.ts`, `candidates.ts` and
+`election-night.ts`.
+
+| Page (publish group) | Old title → new title | Baseline, 14 d | Target queries now | What changed |
+| --- | --- | --- | --- | --- |
+| `/en/guides/polling-station-duty-spain/` (`mesa`) | "Polling-station duty in Spain 2026: €75 pay, excuses, time off" → "Polling-station duty in Spain (mesa electoral): €75, excuses" | 1,327 impr., 10 clicks, pos 3.2, 0.8 % | Spanish follow-up fragments (cuanto pagan? 7 at 4.1, te pagan? 5, como se cobra 2 at 3.0, cuando se sabe si te ha tocado mesa electoral 1 at 2) | "mesa electoral" in the title for those Spanish fragments; description: notice by 7 Nov, 7 days to object to the Junta Electoral de Zona, online with Cl@ve, €75, 5 h off on Mon 30 Nov |
+| `/es/guias/miembro-mesa-electoral/` (`mesa`) | "Mesa electoral 2026: se cobran 75 €, sorteo y excusas" → "Mesa electoral 2026: si te ha tocado, plazo de excusa y 75 €" | 630 impr., 27 clicks, pos ~8, 4.3 % | orden int/650/2026 12 at 6.6, mesa electoral catalunya 6 at 11, miembro de mesa 4 at 44, que tengo que hacer si soy miembro de mesa 1 at 8, excusas mesa electoral 1 at 14 | Description: "Notificación hasta el 7 de noviembre; luego, 7 días para excusarte ante la Junta Electoral de Zona, también en línea. Dieta de 75 € y 5 h menos el lunes." |
+| `/ca/guies/membre-mesa-electoral/` (`mesa`) | "Membre de mesa electoral 2026: 75 €, sorteig i excuses" → "Membre de mesa electoral 2026: si t'ha tocat, excusa i 75 €" | 1,135 impr., 45 clicks, pos ~6, 4.0 % | sorteo mesa electoral girona 4 at 7.8, mesa electoral barcelona 2026 3 at 9, sorteig mesa electoral catalunya 3 at 7 | Description as es |
+| `/en/guides/how-to-vote-catalonia/` (`voting`) | "Spain general election 29 Nov 2026: how to vote, register" → "2026 Spain general election (29 Nov): how to vote, register" | 4,668 impr., 62 clicks, pos 5.4, 1.3 % | 2026 spain general election how to register to vote 240 at 7.1, how to vote 2026 spain general election 224 at 4.3, 2026 spain general election dates 140 at 8.7, where to vote 52 at 5.7, spain election date 30 at 9.0, 2026 spain general election polling stations 24 at 3.8 | Title opens with the queries' own "2026 spain general election", keeps the date; description "Sunday 29 Nov, 9:00-20:00. Only Spanish citizens can vote; the roll is automatic. Find your polling station, ID rules; postal vote request by 19 Nov." |
+| `/es/guias/como-votar-elecciones-cataluna/` (`voting`) | "Próximas elecciones en Cataluña: cuándo son y dónde votar" → "Próximas elecciones en Cataluña: 29N, cuándo y dónde votar" | 7,919 impr., 414 clicks, pos ~5.7, 5.2 % (daily CTR 7-11 % on 21-28 Oct, 1.3-4 % on 30 Oct-2 Nov while impressions doubled; whether the 30 Oct title or the new "cuándo son" demand caused it is not known) | próximas elecciones en cataluña 2026 210 at 3.2, cuando son las elecciones en cataluña 198 at 6.8, proximas elecciones cataluña 121 at 5.9, cuándo son las elecciones en cataluña 105 at 6.5, donde tengo que ir a votar 2026 26 at 6.5 | "29N" back in the title (the pre-30 Oct title had it); description gives the general (29 Nov, 9-20 h) and expected municipal (23 May 2027) dates, the finder without DNI and 19 Nov |
+| `/ca/guies/com-votar-eleccions-catalunya/` (`voting`) | "Properes eleccions a Catalunya: quan són i on votar el 29N" → "Quan són les properes eleccions a Catalunya? 29N i on votar" | 1,086 impr., 21 clicks, pos ~7, 1.9 % | quan son les proximes eleccions a catalunya 13 at 10.4, quan son les properes eleccions a catalunya 9 at 8.2, eleccions catalunya quan son 4 at 8 | Title is the query; H1 follows; description as es |
+| `/en/guides/spain-general-election-candidates-catalonia/` (`candidates`) | "Spain general election 2026: candidates in Barcelona" → "Spain general election 2026 candidates: Barcelona, Catalonia" | 409 impr., 10 clicks, pos ~5, 2.4 %; almost nothing since 29 Oct; queries are `site:boe.es` operators | 2026 spain general election dates 6 at 7.5, next catalan election 3 at 5.3 | Description: final lists proclaimed in the BOE on 3 Nov, every Congress and Senate candidate, appeals by 12 Nov. ca/es titles kept (es converts at 10-22 %); ca/es descriptions now say "proclamades/proclamadas (BOE del 3 de novembre/noviembre)" |
+| `/en/guides/spain-election-night-results/` (`election-night`) | "Spain general election results 2026: what time, where" → "Spain general election results 2026: what time on 29 Nov" | 1,040 impr., 28 clicks, pos 4.9, 2.7 % | election results 43 at 8.3, 2026 spain general election results 33 at 5.6, spain elections 2026 results 13 at 5.4, when do election results come out 5 at 3.6 | Description: polls 9:00-20:00, Canaries 21:00, 2023 count from 21:00, official count 4-7 Dec. ca/es titles kept, descriptions now give the times (20:00, 21:00 in 2023, 4-7 Dec) instead of listing the topics |
+
+**Body, same day.** Mesa (ca/es/en): the lead answers "have I been drawn"
+(only by the notice, due by 7 Nov), the 7 days to object to the Junta
+Electoral de Zona (paper or Interior's Cl@ve platform, JEC Instrucción
+2/2023), the €75 and its unknown payment date, Monday's five hours and the
+offence; a key-facts block under it ("Si te ha tocado: lo que tienes que saber
+hoy") repeats them one line each; new: over-65s can decline in the same 7
+days, a late notice is still valid, only the Junta can relieve you, night
+shifts; FAQs "¿Qué tengo que hacer si me ha tocado mesa electoral?" and
+"¿Puedo presentar la excusa por internet?". Voting (ca/es/en): postal vote
+with LOREG art. 72 (tenth day before, 19 Nov), Correos opening hours for the
+25 Nov hand-in, Correos' new e-mail confirmation; MiDNI still suspended at
+3 Nov (JEC sessions of 26 and 29 Oct read); DOGC voter-leave order still not
+out (in 2023 it came 16 days before the vote); FAQ on paid hours to vote.
+Candidates: lead and FAQ say the proclaimed lists are out (BOE-A-2026-23103),
+and the live block's parser reads all four provinces from that item.
+Election night: still no results site (checked 3 Nov), no link added.
+
+**Prediction.** EN how-to-vote to ≥ 3 % at 5-6 by 15 Nov; EN mesa ≥ 2 % (its
+Spanish fragments are AI-mode follow-ups and may stay near zero); ES/CA mesa
+≥ 6 % while notices and excuses run (to 14 Nov); ES how-to-vote back to ≥ 5 %
+at the same position; EN election night ≥ 4 % in the last week.
+
+**Measure on 15 Nov 2026** (owner's goal date; 12 days after deploy) **and on
+1 Dec 2026** (after polling day): position, CTR and clicks per page and per
+target query; check the last crawl date of each URL first.
+
+**Outcome:** _pending_
+
 ## Candidates not yet run
 
 Recorded so they are not lost, and so they are not all started at once.

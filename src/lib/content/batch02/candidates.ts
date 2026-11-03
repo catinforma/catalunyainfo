@@ -51,13 +51,27 @@ import { VOTING } from "./voting";
  * a first FAQ in the words of "qui es presenta / cuáles son los candidatos";
  * CA title in the words of "llistes electorals 2026" (ES and EN titles kept:
  * ES converts at 18%).
+ *
+ * 3 Nov 2026: the proclaimed lists are in today's BOE, BOE-A-2026-23103
+ * "Candidaturas proclamadas para las elecciones al Congreso de los Diputados
+ * y al Senado, convocadas por Real Decreto 806/2026" (BOE open-data summary
+ * of 3 Nov; item XML read the same day). The live block's own parser, run on
+ * that XML, finds all four provinces (Barcelona 11 Congress lists of 13 and
+ * 7 Senate of 8, Girona 10 and 5 of 6, Lleida 10 and 6 of 7, Tarragona 13
+ * and 7; the rest "no proclamada"), and `classify` tags the item as the
+ * proclaimed stage, so the block switches from the filed lists at the next
+ * daily revalidation. Lead and FAQ now say the final lists are out; ca/es
+ * descriptions and the EN title/description say so too (logged in
+ * docs/SEO_EXPERIMENTS.md). Appeals 4-5 Nov and resolution by 12 Nov
+ * re-read in the JEC calendar PDF.
  */
 
-const VERIFIED = "2026-10-30";
+const VERIFIED = "2026-11-03";
 
 const URL = {
   rd: "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2026-20742",
   presented: "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2026-22607",
+  proclaimed: "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2026-23103",
   loreg: "https://www.boe.es/buscar/act.php?id=BOE-A-1985-11672",
   jec: "https://www.juntaelectoralcentral.es/cs/jec/documentos/eg2026_calendario.pdf",
   interior:
@@ -71,6 +85,7 @@ const URL = {
 };
 
 const SOURCES: B2Source[] = [
+  { name: "Candidaturas proclamadas para las elecciones al Congreso de los Diputados y al Senado, convocadas por Real Decreto 806/2026 (BOE de 3 de noviembre de 2026)", url: URL.proclaimed, publisher: "Boletín Oficial del Estado" },
   { name: "Candidaturas presentadas para las elecciones al Congreso de los Diputados y al Senado, convocadas por Real Decreto 806/2026 (BOE de 28 de octubre de 2026)", url: URL.presented, publisher: "Boletín Oficial del Estado" },
   { name: "Real Decreto 806/2026, de 5 de octubre, de disolución del Congreso de los Diputados y del Senado y de convocatoria de elecciones", url: URL.rd, publisher: "Boletín Oficial del Estado" },
   { name: "Ley Orgánica 5/1985, del Régimen Electoral General (texto consolidado)", url: URL.loreg, publisher: "Boletín Oficial del Estado" },
@@ -92,7 +107,7 @@ const META: Record<Locale, { path: string; title: string; seoTitle: string; seoD
     title: "Candidats i llistes electorals de les eleccions generals del 29N a Barcelona, Girona, Lleida i Tarragona",
     seoTitle: "Candidats i llistes electorals 2026 a Barcelona i Catalunya",
     seoDescription:
-      "Llistes 29N de candidats al Congrés i al Senat per Barcelona, Girona, Lleida i Tarragona, llegides del BOE: presentades el 28/10 i proclamades el 3/11.",
+      "Llistes proclamades al BOE del 3 de novembre: candidats al Congrés i al Senat per Barcelona, Girona, Lleida i Tarragona el 29N, província per província.",
     excerpt:
       "Qui es presenta el 29 de novembre a cada província catalana: les llistes oficials del BOE, com es vota al Congrés i al Senat i el calendari de les candidatures.",
   },
@@ -101,16 +116,16 @@ const META: Record<Locale, { path: string; title: string; seoTitle: string; seoD
     title: "Candidatos a las elecciones generales del 29N en Barcelona, Girona, Lleida y Tarragona",
     seoTitle: "Candidatos elecciones generales 2026: Barcelona y Cataluña",
     seoDescription:
-      "Listas del 29N: candidatos al Congreso y al Senado por Barcelona, Girona, Lleida y Tarragona, leídos del BOE. Presentadas el 28/10, proclamadas el 3/11.",
+      "Listas proclamadas (BOE del 3 de noviembre): candidatos al Congreso y al Senado por Barcelona, Girona, Lleida y Tarragona el 29N, provincia a provincia.",
     excerpt:
       "Quién se presenta el 29 de noviembre en cada provincia catalana: las listas oficiales del BOE, cómo se vota al Congreso y al Senado y el calendario de las candidaturas.",
   },
   en: {
     path: "guides/spain-general-election-candidates-catalonia",
     title: "Candidates in Catalonia for Spain's 29 November 2026 general election",
-    seoTitle: "Spain general election 2026: candidates in Barcelona",
+    seoTitle: "Spain general election 2026 candidates: Barcelona, Catalonia",
     seoDescription:
-      "Who is standing for Congress and the Senate in Barcelona, Girona, Lleida and Tarragona on 29 November 2026: the official lists, read from the BOE.",
+      "Final lists proclaimed in the BOE on 3 Nov: every Congress and Senate candidate in Barcelona, Girona, Lleida and Tarragona for 29 Nov. Appeals by 12 Nov.",
     excerpt:
       "Who is standing on 29 November in each Catalan province: the official lists from the BOE, how the Congress and Senate votes work, and when the lists come out.",
   },
@@ -210,7 +225,7 @@ function body(locale: Locale): Block[] {
   if (locale === "ca") {
     return [
       lead(
-        `Els candidats de les **eleccions generals del 29 de novembre de 2026** a Barcelona, Girona, Lleida i Tarragona són els de les llistes que les juntes electorals provincials publiquen al BOE: les **presentades, el 28 d'octubre**, i les **proclamades, el 3 de novembre**. Les presentades ja hi són: ${a("BOE del 28 d'octubre de 2026", URL.presented)}. Les candidatures apareixen aquí sota, província per província, llegides directament del BOE a mesura que s'hi publiquen. Al Congrés es vota una llista tancada i al Senat es poden marcar fins a tres noms.`,
+        `Els candidats de les **eleccions generals del 29 de novembre de 2026** a Barcelona, Girona, Lleida i Tarragona són els de les llistes que les juntes electorals provincials publiquen al BOE: les **presentades, el 28 d'octubre**, i les **proclamades, el 3 de novembre**. Les presentades ja hi són: ${a("BOE del 28 d'octubre de 2026", URL.presented)}. I les definitives, les proclamades, també: ${a("BOE del 3 de novembre de 2026", URL.proclaimed)}; es poden recórrer el 4 i el 5 de novembre. Les candidatures apareixen aquí sota, província per província, llegides directament del BOE a mesura que s'hi publiquen. Al Congrés es vota una llista tancada i al Senat es poden marcar fins a tres noms.`,
       ),
       LIVE,
       callout(
@@ -261,7 +276,7 @@ function body(locale: Locale): Block[] {
         {
           question: "Qui es presenta a les eleccions generals del 29 de novembre a Catalunya?",
           answer:
-            "Les candidatures presentades a Barcelona, Girona, Lleida i Tarragona, al Congrés i al Senat, són al BOE del 28 d'octubre de 2026, i aquesta pàgina les mostra més amunt, província per província. Les definitives, les proclamades per les juntes electorals, surten al BOE el 3 de novembre.",
+            "Les candidatures presentades a Barcelona, Girona, Lleida i Tarragona, al Congrés i al Senat, són al BOE del 28 d'octubre de 2026, i aquesta pàgina les mostra més amunt, província per província. Les definitives, les proclamades per les juntes electorals, es van publicar al BOE el 3 de novembre de 2026.",
         },
         {
           question: "On puc veure les llistes de candidats de les eleccions generals 2026 a Barcelona?",
@@ -271,7 +286,7 @@ function body(locale: Locale): Block[] {
         {
           question: "Quan es publiquen les llistes definitives del 29N?",
           answer:
-            "Les juntes electorals proclamen les candidatures el 2 de novembre i el BOE les publica el 3 de novembre. Es poden recórrer el 4 i el 5 de novembre, i els recursos s'han de resoldre com a molt tard el 12 de novembre.",
+            "Les juntes electorals van proclamar les candidatures el 2 de novembre i el BOE les va publicar el 3 de novembre. Es poden recórrer el 4 i el 5 de novembre, i els recursos s'han de resoldre com a molt tard el 12 de novembre.",
         },
         {
           question: "Quants candidats al Senat puc votar a Barcelona?",
@@ -307,7 +322,7 @@ function body(locale: Locale): Block[] {
   if (locale === "es") {
     return [
       lead(
-        `Los candidatos de las **elecciones generales del 29 de noviembre de 2026** en Barcelona, Girona, Lleida y Tarragona son los de las listas que las juntas electorales provinciales publican en el BOE: las **presentadas, el 28 de octubre**, y las **proclamadas, el 3 de noviembre**. Las presentadas ya están publicadas: ${a("BOE del 28 de octubre de 2026", URL.presented)}. Las candidaturas aparecen aquí abajo, provincia por provincia, leídas directamente del BOE a medida que se publican. Al Congreso se vota una lista cerrada y en el Senado se puede marcar hasta a tres candidatos.`,
+        `Los candidatos de las **elecciones generales del 29 de noviembre de 2026** en Barcelona, Girona, Lleida y Tarragona son los de las listas que las juntas electorales provinciales publican en el BOE: las **presentadas, el 28 de octubre**, y las **proclamadas, el 3 de noviembre**. Las presentadas ya están publicadas: ${a("BOE del 28 de octubre de 2026", URL.presented)}. Y las definitivas, las proclamadas, también: ${a("BOE del 3 de noviembre de 2026", URL.proclaimed)}; se pueden recurrir el 4 y el 5 de noviembre. Las candidaturas aparecen aquí abajo, provincia por provincia, leídas directamente del BOE a medida que se publican. Al Congreso se vota una lista cerrada y en el Senado se puede marcar hasta a tres candidatos.`,
       ),
       LIVE,
       callout(
@@ -358,7 +373,7 @@ function body(locale: Locale): Block[] {
         {
           question: "¿Cuáles son los candidatos de las elecciones generales del 29 de noviembre en Cataluña?",
           answer:
-            "Las candidaturas presentadas en Barcelona, Girona, Lleida y Tarragona, al Congreso y al Senado, están en el BOE del 28 de octubre de 2026, y esta página las muestra más arriba, provincia por provincia. Las definitivas, las proclamadas por las juntas electorales, salen en el BOE el 3 de noviembre.",
+            "Las candidaturas presentadas en Barcelona, Girona, Lleida y Tarragona, al Congreso y al Senado, están en el BOE del 28 de octubre de 2026, y esta página las muestra más arriba, provincia por provincia. Las definitivas, las proclamadas por las juntas electorales, se publicaron en el BOE el 3 de noviembre de 2026.",
         },
         {
           question: "¿Dónde puedo ver las listas de candidatos de las elecciones generales 2026 en Barcelona?",
@@ -368,7 +383,7 @@ function body(locale: Locale): Block[] {
         {
           question: "¿Cuándo se publican las listas definitivas del 29N?",
           answer:
-            "Las juntas electorales proclaman las candidaturas el 2 de noviembre y el BOE las publica el 3 de noviembre. Se pueden recurrir el 4 y el 5 de noviembre, y los recursos deben resolverse como muy tarde el 12 de noviembre.",
+            "Las juntas electorales proclamaron las candidaturas el 2 de noviembre y el BOE las publicó el 3 de noviembre. Se pueden recurrir el 4 y el 5 de noviembre, y los recursos deben resolverse como muy tarde el 12 de noviembre.",
         },
         {
           question: "¿Cuántos candidatos al Senado puedo votar en Barcelona?",
@@ -403,7 +418,7 @@ function body(locale: Locale): Block[] {
 
   return [
     lead(
-      `The candidates in **Spain's general election of 29 November 2026** in Barcelona, Girona, Lleida and Tarragona are those on the lists that the provincial electoral boards publish in the BOE, Spain's official gazette: the lists **as filed on 28 October** and the **proclaimed lists on 3 November**. The lists as filed are already out: ${a("BOE of 28 October 2026", URL.presented)}. The lists appear below, province by province, read straight from the BOE as they are published. For Congress you vote for one closed list; for the Senate you can mark up to three names.`,
+      `The candidates in **Spain's general election of 29 November 2026** in Barcelona, Girona, Lleida and Tarragona are those on the lists that the provincial electoral boards publish in the BOE, Spain's official gazette: the lists **as filed on 28 October** and the **proclaimed lists on 3 November**. The lists as filed are already out: ${a("BOE of 28 October 2026", URL.presented)}. So are the final, proclaimed lists: ${a("BOE of 3 November 2026", URL.proclaimed)}; they can be appealed on 4 and 5 November. The lists appear below, province by province, read straight from the BOE as they are published. For Congress you vote for one closed list; for the Senate you can mark up to three names.`,
     ),
     LIVE,
     callout(
@@ -454,7 +469,7 @@ function body(locale: Locale): Block[] {
       {
         question: "Who is standing in Catalonia in Spain's 29 November 2026 general election?",
         answer:
-          "The lists filed for Congress and the Senate in Barcelona, Girona, Lleida and Tarragona were published in the BOE on 28 October 2026, and this page shows them above, province by province. The final lists, as proclaimed by the electoral boards, appear in the BOE on 3 November.",
+          "The lists filed for Congress and the Senate in Barcelona, Girona, Lleida and Tarragona were published in the BOE on 28 October 2026, and this page shows them above, province by province. The final lists, as proclaimed by the electoral boards, were published in the BOE on 3 November 2026.",
       },
       {
         question: "Where can I see the candidates for Spain's 2026 general election in Barcelona?",
@@ -464,7 +479,7 @@ function body(locale: Locale): Block[] {
       {
         question: "When are the final candidate lists for 29 November published?",
         answer:
-          "The electoral boards proclaim the candidates on 2 November and the BOE publishes them on 3 November. They can be appealed on 4 and 5 November, and appeals must be settled by 12 November at the latest.",
+          "The electoral boards proclaimed the candidates on 2 November and the BOE published them on 3 November. They can be appealed on 4 and 5 November, and appeals must be settled by 12 November at the latest.",
       },
       {
         question: "How many Senate candidates can I vote for in Barcelona?",
