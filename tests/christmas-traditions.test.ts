@@ -231,6 +231,31 @@ test("a well-formed organiser announcement is accepted, a bad one refused", () =
   assert.ok(seasonSpanProblems({ ...GOOD_FAIR, url: "https://firadesantallucia.cat/?utm_source=x" }).length > 0, "tracking");
 });
 
+test("a date taken from the Generalitat's cultural agenda is credited to the agenda, with its hours, and checked", () => {
+  const AGENDA: SeasonSpan = { from: "2026-11-27", to: "2026-12-23", url: "https://agenda.cultura.gencat.cat/ca/activitat.html/2026110300020", via: "agenda", hours: { open: "10:00", close: "21:00" }, read: "2026-11-03" };
+  assert.deepEqual(seasonSpanProblems(AGENDA), []);
+  assert.ok(seasonSpanProblems({ ...AGENDA, url: "https://firadesantallucia.cat/calendari.php" }).length > 0, "via agenda needs the agenda's host");
+  assert.ok(seasonSpanProblems({ ...AGENDA, hours: { open: "10", close: "21:00" } }).length > 0, "hours not HH:MM");
+  assert.ok(seasonSpanProblems({ ...AGENDA, hours: { open: "21:00", close: "10:00" } }).length > 0, "closes before it opens");
+  assert.ok(seasonSpanProblems({ ...AGENDA, read: "2026-11-31" }).length > 0, "read is not a date");
+  const facts: TraditionAnnouncements = { santaLlucia: AGENDA, pastorets: null };
+  const credit: Record<Locale, RegExp> = { ca: /Agenda Cultural de la Generalitat/, es: /Agenda Cultural de la Generalitat/, en: /cultural agenda/ };
+  const hours: Record<Locale, string> = { ca: "de 10 a 21 h", es: "de 10 a 21 h", en: "10:00 to 21:00" };
+  for (const locale of LOCALES) {
+    const sentence = santaLluciaSentence(locale, facts);
+    assert.match(sentence, credit[locale], locale);
+    assert.ok(sentence.includes(range(AGENDA.from, AGENDA.to, locale)), locale);
+    assert.ok(sentence.includes(hours[locale]), locale);
+    assert.ok(sentence.includes(`](${AGENDA.url})`), locale);
+    assert.doesNotMatch(sentence, /l'organització\]|la organización\]|the organisers\]/, `${locale}: not credited to the organisers`);
+    // Without `via`, the organisers' own page is credited as before.
+    assert.match(santaLluciaSentence(locale, { santaLlucia: GOOD_FAIR, pastorets: null }), /organització|organización|organisers/, locale);
+  }
+  // The published page, once Santa Llúcia comes from the agenda, cites that page among its sources.
+  const s = ANNOUNCED_TRADITIONS.santaLlucia;
+  if (s?.via === "agenda") assert.ok(A.sources.some((source) => source.url === s.url));
+});
+
 test("every filled field of ANNOUNCED_TRADITIONS passes the checks", () => {
   for (const [key, value] of Object.entries(ANNOUNCED_TRADITIONS)) {
     if (value) assert.deepEqual(seasonSpanProblems(value), [], key);

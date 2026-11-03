@@ -45,6 +45,12 @@ export function townTranslations(town: { slug: string; ine: string }): Partial<R
   return out;
 }
 
+/** The Agenda Cultural de Catalunya's own page for a fair that came from it ("agenda:<codi>"), or null. */
+export function agendaActivityUrl(fairId: string): string | null {
+  const match = /^agenda:(\d{8,16})$/.exec(fairId);
+  return match ? `https://agenda.cultura.gencat.cat/ca/activitat.html/${match[1]}` : null;
+}
+
 export function isFairsLocale(value: string): value is FairsLocale {
   return (FAIRS_LOCALES as readonly string[]).includes(value);
 }

@@ -23,6 +23,15 @@ import type { OrganiserFair, PendingMarket } from "./types";
  *     the Rambla from 27 November to 24 December, while its standing page
  *     still says "Dates a determinar per 2026": the call is the newer page;
  *   - Vic's agenda lists the Fira d'Artesania de Nadal 2026 (5 Dec - 4 Jan).
+ *
+ * Re-read on 3 Nov 2026: every organiser page below still carries its quote;
+ * the pending pages still show no 2026 date (Sitges answered with a login
+ * form, so it keeps its 30 Oct reading). The Generalitat's cultural agenda
+ * published three of these fairs that morning and the snapshot picked them
+ * up: Santa Llúcia in Barcelona (27 Nov - 23 Dec, so it leaves
+ * PENDING_MARKETS; its town page comes from the agenda row, since
+ * firadesantallucia.cat still shows 2025), and Canyelles and Vic, which
+ * `alsoReplaces` folds into their council entries so each is listed once.
  */
 export const ORGANISER_FAIRS: readonly OrganiserFair[] = [
   {
@@ -34,9 +43,11 @@ export const ORGANISER_FAIRS: readonly OrganiserFair[] = [
     place: null,
     url: "https://www.canyelles.cat/promocio-economica-i-turisme/la-fira-de-santa-llucia",
     publisher: "Ajuntament de Canyelles",
-    readOn: "2026-10-30",
+    readOn: "2026-11-03",
     quote: "La 24a edició de la Fira de Santa Llúcia se celebra el 21 i 22 de novembre de 2026.",
     replaces: "vm32:24033377",
+    // The cultural agenda's listing (3 Nov 2026), with the council's dates.
+    alsoReplaces: ["agenda:2026110300050"],
   },
   {
     id: "org:sant-antoni-de-vilamajor-un-nadal-com-cal",
@@ -47,7 +58,7 @@ export const ORGANISER_FAIRS: readonly OrganiserFair[] = [
     place: "Plaça de la Vila",
     url: "https://www.santantonidevilamajor.cat/actualitat/noticies/busquem-artesanses-i-creadorses-per-omplir-de-magia-la-1a-fira-un-nadal-com-cal-de-sant-antoni-de-vilamajor.html",
     publisher: "Ajuntament de Sant Antoni de Vilamajor",
-    readOn: "2026-10-30",
+    readOn: "2026-11-03",
     quote: "Dates: dissabte 28 i diumenge 29 de novembre de 2026.",
   },
   {
@@ -59,7 +70,7 @@ export const ORGANISER_FAIRS: readonly OrganiserFair[] = [
     place: "La Rambla",
     url: "https://www.figueres.cat/tramits/convocatories/mercatnadal26",
     publisher: "Ajuntament de Figueres",
-    readOn: "2026-10-30",
+    readOn: "2026-11-03",
     quote: "L’Ajuntament de Figueres organitza el Mercat de Nadal, que es celebrarà a la Rambla de la ciutat del 27 de novembre al 24 de desembre.",
   },
   {
@@ -71,8 +82,10 @@ export const ORGANISER_FAIRS: readonly OrganiserFair[] = [
     place: "Plaça Major",
     url: "https://www.vic.cat/ciutat/agenda/fira-d-artesania-de-nadal-2026",
     publisher: "Ajuntament de Vic",
-    readOn: "2026-10-30",
+    readOn: "2026-11-03",
     quote: "FIRA D'ARTESANIA DE NADAL 2026 … On? Plaça Major Quan? 05/12/2026 a 00:00 fins a 04/01/2027 a 00:00",
+    // The cultural agenda's listing (3 Nov 2026): same dates and place.
+    alsoReplaces: ["agenda:2026110300029"],
   },
   {
     id: "org:garriguella-mercat-de-nadal",
@@ -83,7 +96,7 @@ export const ORGANISER_FAIRS: readonly OrganiserFair[] = [
     place: "Plaça de l'Església",
     url: "https://garriguella.cat/obertes-les-inscripcions-per-participar-en-el-6e-mercat-de-nadal-de-garriguella/",
     publisher: "Ajuntament de Garriguella",
-    readOn: "2026-10-30",
+    readOn: "2026-11-03",
     quote: "L’Ajuntament de Garriguella obre el termini d’inscripcions per participar al 6è Mercat de Nadal de Garriguella, que se celebrarà dimarts 8 de desembre, de 9.00 h a 14.00 h, a la Plaça de l’Església.",
   },
   {
@@ -95,7 +108,7 @@ export const ORGANISER_FAIRS: readonly OrganiserFair[] = [
     place: "Places de l'Església i del Pou",
     url: "https://altafulla.cat/noticies/l-ajuntament-d-altafulla-obre-les-inscripcions-per-participar-en-la-fira-de-nadal-2026_1589",
     publisher: "Ajuntament d'Altafulla",
-    readOn: "2026-10-30",
+    readOn: "2026-11-03",
     quote: "L’Ajuntament d’Altafulla ha obert el període d’inscripcions per participar com a expositor a la Fira de Nadal 2026, que se celebrarà els dies 11, 12 i 13 de desembre a les places de l’Església i del Pou.",
   },
   {
@@ -107,7 +120,7 @@ export const ORGANISER_FAIRS: readonly OrganiserFair[] = [
     place: "Parc de la Rectoria",
     url: "https://www.vilamajor.cat/actualitat/noticies/ja-es-poden-sollicitar-parades-per-a-la-4a-fira-de-nadal-vila-claus-2026.html",
     publisher: "Ajuntament de Sant Pere de Vilamajor",
-    readOn: "2026-10-30",
+    readOn: "2026-11-03",
     quote:
       "Ja es poden presentar les sol·licituds per participar amb una parada a la 4a Fira de Nadal Vila Claus de Sant Pere de Vilamajor, que aquest any se celebrarà durant dos dies, el dissabte 12 i el diumenge 13 de desembre de 2026, al parc de la Rectoria.",
   },
@@ -120,7 +133,7 @@ export const ORGANISER_FAIRS: readonly OrganiserFair[] = [
     place: "Passeig Ramon Bosch i Rosell i Plaça dels Països Catalans",
     url: "https://roquetes.cat/web/obertes-les-inscripcions-per-participar-a-la-32a-fira-de-nadal-de-roquetes-%F0%9F%8E%84/",
     publisher: "Ajuntament de Roquetes",
-    readOn: "2026-10-30",
+    readOn: "2026-11-03",
     quote: "La fira se celebrarà els dies 12 i 13 de desembre de 2026, al Passeig Ramon Bosch i Rosell i la Plaça dels Països Catalans.",
   },
   {
@@ -132,7 +145,7 @@ export const ORGANISER_FAIRS: readonly OrganiserFair[] = [
     place: null,
     url: "https://www.cubelles.cat/cubelles-facil/promocio-economica/cubelles-recupera-la-fira-de-nadal-amb-un-format-renovat-inspirat-en-els-mercats-nadalencs-tradicionals.html",
     publisher: "Ajuntament de Cubelles",
-    readOn: "2026-10-30",
+    readOn: "2026-11-03",
     quote: "La fira se celebrarà del 18 al 20 de desembre i incorporarà les tradicionals casetes nadalenques, amb una oferta centrada en l'artesania, el comerç de proximitat i les activitats familiars.",
   },
   {
@@ -144,7 +157,7 @@ export const ORGANISER_FAIRS: readonly OrganiserFair[] = [
     place: null,
     url: "https://www.lesmasiesdevoltrega.cat/actualitat/noticies/obertes-les-inscripcions-per-participar-en-el-mercat-de-nadal-de-les-masies-de-voltrega.html",
     publisher: "Ajuntament de les Masies de Voltregà",
-    readOn: "2026-10-30",
+    readOn: "2026-11-03",
     quote:
       "L’Ajuntament de les Masies de Voltregà obre les inscripcions per a les persones artesanes, comerços, projectes i iniciatives que vulguin participar com a expositors al Mercat de Nadal de les Masies de Voltregà, que se celebrarà els dies 18, 19 i 20 de desembre de 2026.",
   },
@@ -158,25 +171,12 @@ export const ORGANISER_FAIRS: readonly OrganiserFair[] = [
  */
 export const PENDING_MARKETS: readonly PendingMarket[] = [
   {
-    id: "pending:barcelona-santa-llucia",
-    ine: "08019",
-    name: "Fira de Santa Llúcia",
-    url: "https://firadesantallucia.cat/",
-    publisher: "Associació Fira de Santa Llúcia",
-    readOn: "2026-10-30",
-    shows: {
-      ca: "El web de l'organització encara mostra l'edició del 2025 (del 28 de novembre al 23 de desembre, amb el peu «© 2025»).",
-      es: "La web de la organización aún muestra la edición de 2025 (del 28 de noviembre al 23 de diciembre, con el pie «© 2025»).",
-      en: "The organiser's website still shows the 2025 edition (28 November to 23 December, footer \"© 2025\").",
-    },
-  },
-  {
     id: "pending:barcelona-sagrada-familia",
     ine: "08019",
     name: "Fira de Nadal de la Sagrada Família",
     url: "https://www.barcelona.cat/culturapopular/ca/festes-i-tradicions/fires/fira-de-nadal-de-la-sagrada-familia",
     publisher: "Ajuntament de Barcelona",
-    readOn: "2026-10-30",
+    readOn: "2026-11-03",
     shows: {
       ca: "L'Ajuntament només diu que comença a la darreria de novembre o principi de desembre, a la plaça de la Sagrada Família.",
       es: "El Ayuntamiento solo dice que empieza a finales de noviembre o principios de diciembre, en la plaza de la Sagrada Família.",
@@ -189,7 +189,7 @@ export const PENDING_MARKETS: readonly PendingMarket[] = [
     name: "Mercat de Nadal",
     url: "https://web.girona.cat/comerc/firesimercatsalcarrer",
     publisher: "Ajuntament de Girona",
-    readOn: "2026-10-30",
+    readOn: "2026-11-03",
     shows: {
       ca: "L'Ajuntament dona la norma, sense any: «De l'últim cap de setmana de novembre al 5 de gener», a la plaça de la Independència.",
       es: "El Ayuntamiento da la norma, sin año: «De l'últim cap de setmana de novembre al 5 de gener» (del último fin de semana de noviembre al 5 de enero), en la plaza de la Independència.",
@@ -202,7 +202,7 @@ export const PENDING_MARKETS: readonly PendingMarket[] = [
     name: "Mercat de Nadal",
     url: "https://comercmercatsconsum.paeria.cat/comerc-i-mercats/mercats-ambulants/mercat-de-nadal",
     publisher: "Paeria de Lleida",
-    readOn: "2026-10-30",
+    readOn: "2026-11-03",
     shows: {
       ca: "La Paeria només enllaça el calendari dels mercats de Nadal 2025-2026, a la plaça de la Catedral i voltants.",
       es: "La Paeria solo enlaza el calendario de los mercados de Navidad 2025-2026, en la plaza de la Catedral y alrededores.",
@@ -215,7 +215,7 @@ export const PENDING_MARKETS: readonly PendingMarket[] = [
     name: "Fires de Nadal i d'Artesania",
     url: "https://www.tarragona.cat/la-ciutat/nadal-a-tarragona/",
     publisher: "Ajuntament de Tarragona",
-    readOn: "2026-10-30",
+    readOn: "2026-11-03",
     shows: {
       ca: "La pàgina de Nadal de l'Ajuntament encara no dona dates per a les fires del 2026.",
       es: "La página de Navidad del Ayuntamiento aún no da fechas para las ferias de 2026.",
@@ -228,6 +228,7 @@ export const PENDING_MARKETS: readonly PendingMarket[] = [
     name: "Nadal a Sitges",
     url: "https://www.sitges.cat/serveis/nadal-a-sitges",
     publisher: "Ajuntament de Sitges",
+    // 3 Nov 2026: the page answered with a login form, so this stays the 30 Oct reading.
     readOn: "2026-10-30",
     shows: {
       ca: "La pàgina de Nadal de l'Ajuntament encara no anuncia cap fira ni mercat del 2026.",
@@ -241,7 +242,7 @@ export const PENDING_MARKETS: readonly PendingMarket[] = [
     name: "Fires de Nadal",
     url: "https://www.granollers.cat/nadal/fires-de-nadal",
     publisher: "Ajuntament de Granollers",
-    readOn: "2026-10-30",
+    readOn: "2026-11-03",
     shows: {
       ca: "La pàgina de l'Ajuntament encara és la de l'edició 2025-2026.",
       es: "La página del Ayuntamiento aún es la de la edición 2025-2026.",

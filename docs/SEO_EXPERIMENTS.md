@@ -1864,6 +1864,61 @@ target query; check the last crawl date of each URL first.
 
 **Outcome:** _pending_
 
+## 2026-11-03 — Christmas cluster: Santa Llúcia 2026 is out, titles and snippets give it (groups `christmas`, `nadal-tradicions`, `barcelona-december`, `pessebres`, `reis-2027`; fairs family by deploy)
+
+Why: the Generalitat's Agenda Cultural de Catalunya published the Fira de
+Santa Llúcia that morning (activity 2026110300020, open data rhpv-yr4f):
+**27 Nov – 23 Dec 2026, 10–21 h**, Avinguda de la Catedral, organiser
+Associació Fira de Santa Llúcia. firadesantallucia.cat still showed 2025, so
+every page credits the agenda, not "the organisers". The descriptions said
+"Santa Llúcia, encara sense dates", which became false. The CA and EN titles
+were last changed on 30 Oct; the owner's lifted freeze (see the CTR sweep
+above) is used again here, so those two overlap the 30 Oct window. Titles and
+descriptions change together: read it per page.
+
+Baseline, `snapshot.py page mercat 28` (CA markets guide; 7–14 Oct ≈ 0, so
+effectively 21 Oct–2 Nov): ~890 impr., 37 clicks, 4.2 %, pos 5–8. Top
+queries: fires de nadal catalunya 2026 104 / 6 clicks / 6.8; mercats de nadal
+a catalunya 2026 35 / 5.2; fires nadal catalunya 2026 34 / 0 / 5.7; mercats
+nadal catalunya 2026 33 / 5 clicks / 5.4; fira santa llúcia barcelona 2026
+(+ variants) ~15 at 8–11. ES (`mercados-navidad`, guide + hub): mercados
+navideños cataluña 2026 78 / 2 / 7.7; mercadillos navideños cataluña 2026 16
+/ 8.2. EN guide: barcelona christmas market 5 at 80. Pessebres: ~10–20 impr.
+per edition (belen viviente cataluña 7 at 6.0, belenes vivientes 2026 6 at
+7.7, pessebres vivents catalunya 2026 3–4 at 6–8).
+
+| Page (group) | Old → new | What the snippet now promises |
+| --- | --- | --- |
+| `/ca/tradicions/mercats-de-nadal-catalunya/` (`christmas`) | title "Fires i mercats de Nadal Catalunya 2026: dates i llocs" → "Fires i mercats de Nadal Catalunya 2026: dates, Santa Llúcia"; description "…43… com l'Avet d'Espinelves (28 de novembre-8 de desembre). Santa Llúcia, encara sense dates." → "Fires de Nadal Catalunya 2026: 43 amb data oficial. Santa Llúcia (Barcelona): del 27 de novembre al 23 de desembre de 2026, de 10 a 21 h." | the count and Santa Llúcia's dates and hours |
+| `/es/tradiciones/mercados-navidad-cataluna/` (`christmas`) | title kept ("Mercados navideños Cataluña 2026: fechas y Santa Llúcia"); description "…como el Avet de Espinelves… Santa Llúcia, aún sin fechas." → "Mercados navideños Cataluña 2026: 43 con fecha oficial. Santa Llúcia (Barcelona): del 27 de noviembre al 23 de diciembre de 2026, de 10 a 21 h." | as ca |
+| `/en/traditions/christmas-markets-catalonia/` (`christmas`) | title "Barcelona Christmas markets 2026: dates, Santa Llúcia fair" → "Barcelona Christmas markets 2026: Santa Llúcia from 27 Nov"; description "Fira de Santa Llúcia 2026 dates not published yet (2025: 28 Nov–23 Dec…)" → "Fira de Santa Llúcia 2026: 27 Nov–23 Dec, 10:00–21:00, by Barcelona Cathedral. Sagrada Família fair: dates not out yet. Every Catalan market with dates." | the 2026 dates and hours |
+| `/ca/tradicions/pessebres-vivents-catalunya/` (`pessebres`; es/en) | titles kept; descriptions "Calendari … llegit cada dia de l'agenda…" (the agenda still lists no 2026-27 nativity) → "Pessebres vivents 2026-27 amb data oficial: Corbera (des del 28 de novembre), Tona, les Torres de Fals, l'Espluga, la Torre del Suro… i el calendari diari." (es/en alike) | the nine dated nativities instead of an empty calendar |
+| `/ca/fires-de-nadal/barcelona/` (+ es, en; new, deploy) | — → "Fira de Santa Llúcia de Barcelona 2026: dates i lloc" / "Feria de Santa Llúcia de Barcelona 2026: fechas y lugar" / "Barcelona Christmas market 2026: dates and place" | new town page from the agenda row; long agenda names lose their street ("… a l'Avinguda de la Catedral…") in headings so the town fits in 60 |
+
+Unchanged titles, checked against their queries: Barcelona in December
+("festius desembre 2026", "eventos barcelona diciembre 2026": already
+answered), Christmas traditions, Reis (Barcelona's 2027 programme is not out),
+La Marató and Christmas in Barcelona (changed today by other work). Body,
+same day: Santa Llúcia's dates, hours and source in the markets guide (lead,
+table, section, two FAQs), the traditions page and the December hub (table,
+key facts, fairs paragraph; "still undated" now lists only the lights and New
+Year's Eve). Links added: markets → Barcelona in December, Reis, fairs
+Barcelona page; traditions → Barcelona in December; pessebres → traditions,
+Christmas in Barcelona, Barcelona in December, Reis; Reis → markets,
+pessebres; December hub → fairs Barcelona page; fairs hub and town pages →
+Reis (and Barcelona in December on the hub and Barcelona's page).
+
+**Prediction.** CA markets guide ≥ 5 % CTR at ≤ 6 by 15 Nov with "fira santa
+llúcia 2026" variants entering the top 5; EN guide starts to show for
+"santa llucia christmas market 2026"; the new Barcelona fairs page indexed and
+ranking for "fira de santa llúcia 2026" by 20 Nov.
+
+**Measure on 17 Nov 2026** (14 days) **and 1 Dec 2026**, per page and per
+query; check the last crawl first. If firadesantallucia.cat publishes other
+dates, the agenda-sourced dates go and this entry records it.
+
+**Outcome:** _pending_
+
 ## Candidates not yet run
 
 Recorded so they are not lost, and so they are not all started at once.

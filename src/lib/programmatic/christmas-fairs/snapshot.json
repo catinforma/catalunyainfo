@@ -1,5 +1,5 @@
 {
- "readOn": "2026-11-02",
+ "readOn": "2026-11-03",
  "season": {
   "from": "2026-11-01",
   "to": "2027-01-07"
@@ -17,16 +17,61 @@
    "publisher": "Departament de Cultura, Generalitat de Catalunya",
    "url": "https://analisi.transparenciacatalunya.cat/d/rhpv-yr4f",
    "api": "https://analisi.transparenciacatalunya.cat/resource/rhpv-yr4f.json",
-   "updated": "2026-11-02"
+   "updated": "2026-11-03"
   }
  },
  "measured": {
   "fairRows": 430,
   "fairChristmas": 34,
-  "agendaRows": 1161,
-  "agendaChristmas": 0
+  "agendaRows": 1210,
+  "agendaChristmas": 6
  },
  "fairs": [
+  {
+   "id": "agenda:2026110300050",
+   "source": "agenda",
+   "name": "24a Fira de Santa Llúcia de Canyelles",
+   "nameEs": null,
+   "ine": "08043",
+   "start": "2026-11-21",
+   "end": "2026-11-22",
+   "place": "Diferents espais",
+   "web": null,
+   "webReplaced": false,
+   "organiser": null,
+   "since": null,
+   "toConfirm": false
+  },
+  {
+   "id": "agenda:2026110300020",
+   "source": "agenda",
+   "name": "Fira de Santa Llúcia a l'Avinguda de la Catedral de Barcelona",
+   "nameEs": null,
+   "ine": "08019",
+   "start": "2026-11-27",
+   "end": "2026-12-23",
+   "place": "Avinguda de la Catedral",
+   "web": null,
+   "webReplaced": false,
+   "organiser": null,
+   "since": null,
+   "toConfirm": false
+  },
+  {
+   "id": "agenda:2026110300047",
+   "source": "agenda",
+   "name": "Fira d’Artesans i de Nadal d’Aiguafreda",
+   "nameEs": null,
+   "ine": "08014",
+   "start": "2026-11-28",
+   "end": "2026-11-28",
+   "place": "Diferents espais",
+   "web": null,
+   "webReplaced": false,
+   "organiser": null,
+   "since": null,
+   "toConfirm": false
+  },
   {
    "id": "vm32:24033607",
    "source": "fairs",
@@ -265,6 +310,21 @@
    "webReplaced": false,
    "organiser": "Ajuntament de Caldes de Montbui",
    "since": 1987,
+   "toConfirm": false
+  },
+  {
+   "id": "agenda:2026110300029",
+   "source": "agenda",
+   "name": "Fira d'Artesania de Nadal de Vic",
+   "nameEs": null,
+   "ine": "08298",
+   "start": "2026-12-05",
+   "end": "2027-01-04",
+   "place": "Plaça Major",
+   "web": null,
+   "webReplaced": false,
+   "organiser": null,
+   "since": null,
    "toConfirm": false
   },
   {

@@ -25,7 +25,7 @@ import { CHRISTMAS_BARCELONA } from "../src/lib/content/batch02/christmas-barcel
 import { ANNOUNCED_TRADITIONS, seasonSpanProblems, type TraditionAnnouncements } from "../src/lib/content/batch02/christmas-traditions.ts";
 import { CLIMATE, climateMonth, WINTER_START } from "../src/lib/content/batch02/climate.ts";
 import { BRIDGE_DAYS, DECEMBER_BRIDGE, SIBLING_PATHS } from "../src/lib/content/batch02/december-bridge.ts";
-import { ANNOUNCED_2026, DAYS, PAST, SWITCH_ON_HISTORY, announcementProblems, dayDate, type Announcements } from "../src/lib/content/batch02/festive.ts";
+import { ANNOUNCED_2026, DAYS, PAST, SWITCH_ON_HISTORY, announcementProblems, dateYear, dayDate, type Announcements } from "../src/lib/content/batch02/festive.ts";
 import { GROSSA_DRAW_DATE } from "../src/lib/content/batch02/grossa.ts";
 import { MARATO } from "../src/lib/content/batch02/marato.ts";
 import { KNOWN } from "../src/lib/content/batch02/pessebres.ts";
@@ -128,7 +128,8 @@ test("sources are https and untracked, never aerobusbcn, and the reader sees the
   }
   assert.equal(BARCELONA_DECEMBER.verifiedAt, BARCELONA_DECEMBER_AS_OF);
   for (const locale of LOCALES) {
-    assert.match(body(locale), /31 (d'octubre|de octubre|October) (de )?2026/, locale);
+    // The check date the reader sees is the as-of day (moved to 3 Nov 2026 with the cluster refresh).
+    assert.ok(body(locale).includes(dateYear(BARCELONA_DECEMBER_AS_OF, locale)), locale);
     assert.ok(!/aerobusbcn/i.test(json(locale)));
   }
 });
@@ -306,14 +307,50 @@ test("while the lights and Santa Llúcia are unannounced, the page says so and g
 
 test("past dates are never printed as 2026's", () => {
   const past = [PAST.lights2023.switchOn, PAST.lights2024.switchOn, PAST.lights2025.switchOn, SANTA_LLUCIA_2025.from, SANTA_LLUCIA_2025.to, PAST.pessebre2025.from];
+  // A day that an official 2026 announcement also gives is not a reprint: the
+  // 2026 Santa Llúcia closes on 23 December, as the 2025 one did. Only that
+  // exact announced day is exempt, and only on the published page.
+  const announced = new Set([ANNOUNCED_TRADITIONS.santaLlucia?.from, ANNOUNCED_TRADITIONS.santaLlucia?.to, ANNOUNCED_2026.lightsSwitchOn?.date, ANNOUNCED_2026.pessebre?.date].filter((d): d is string => Boolean(d)));
   for (const locale of LOCALES) {
-    const b = body(locale) + " " + text(buildBarcelonaDecemberBody(locale, NONE, NO_TRADITIONS, null));
+    const published = body(locale);
+    const unannounced = text(buildBarcelonaDecemberBody(locale, NONE, NO_TRADITIONS, null));
     for (const iso of past) {
       assert.notEqual(iso.slice(0, 4), "2026");
-      assert.ok(!new RegExp(`\\b${shortDate(iso, locale)},? (de )?2026`).test(b), `${locale}: ${iso} printed as 2026`);
+      const reprint = new RegExp(`\\b${shortDate(iso, locale)},? (de )?2026`);
+      assert.ok(!reprint.test(unannounced), `${locale}: ${iso} printed as 2026 with nothing announced`);
+      if (!announced.has(`2026${iso.slice(4)}`)) assert.ok(!reprint.test(published), `${locale}: ${iso} printed as 2026`);
     }
-    // No 2026 Santa Llúcia or switch-on date is invented.
-    assert.doesNotMatch(b, /Santa Llúcia[^.]*(fins al|hasta el|until) 23 (de desembre|de diciembre|December) (de )?2026/, locale);
+    // No 2026 Santa Llúcia or switch-on date is invented while none is announced.
+    assert.doesNotMatch(unannounced, /Santa Llúcia[^.]*(fins al|hasta el|until) 23 (de desembre|de diciembre|December) (de )?2026/, locale);
+    if (!ANNOUNCED_TRADITIONS.santaLlucia) assert.doesNotMatch(published, /Santa Llúcia[^.]*(fins al|hasta el|until) 23 (de desembre|de diciembre|December) (de )?2026/, locale);
+  }
+});
+
+/**
+ * 3 Nov 2026: Santa Llúcia was published in the Generalitat's cultural agenda
+ * (the organiser's site still showed 2025). The page gives the dates and
+ * hours credited to the agenda, never to "the organisers", links the fairs
+ * family's Barcelona page, and no longer lists the fair as pending.
+ */
+test("Santa Llúcia 2026, once announced, is in the table, the key facts and the fairs paragraph, credited to its source", () => {
+  const s = ANNOUNCED_TRADITIONS.santaLlucia;
+  if (!s) return;
+  const credit: Record<Locale, RegExp> = s.via === "agenda"
+    ? { ca: /Agenda Cultural de la Generalitat/, es: /Agenda Cultural de la Generalitat/, en: /Catalan government's cultural agenda/ }
+    : { ca: /Organització/, es: /Organización/, en: /Organisers/ };
+  for (const locale of LOCALES) {
+    const rows = keyDateRows(locale);
+    const row = rows.find((r) => /Santa Llúcia/.test(r[1]!));
+    assert.ok(row, `${locale}: Santa Llúcia row`);
+    assert.equal(row[0], dayLabel(s.from, s.to, locale));
+    assert.match(row[2]!, credit[locale], locale);
+    assert.ok(row[2]!.includes(`](${s.url})`), `${locale}: the row links the source`);
+    if (s.via === "agenda") assert.doesNotMatch(row[2]!, /Organització|Organización|Organisers/, `${locale}: not credited to the organisers`);
+    assert.ok(!pendingItems(locale).some((i) => /Santa Llúcia/.test(i)), `${locale}: no longer pending`);
+    const b = body(locale);
+    assert.doesNotMatch(b, /Santa Llúcia[^.]*(encara no|aún no|not (yet )?(been )?(published|announced))/i, `${locale}: no "not announced" next to Santa Llúcia`);
+    assert.ok(json(locale).includes(`](/${locale}/${{ ca: "fires-de-nadal", es: "mercados-navidad", en: "christmas-markets" }[locale]}/barcelona/)`), `${locale}: links the fairs family's Barcelona page`);
+    if (s.hours) assert.ok(b.includes(locale === "en" ? `${s.hours.open} to ${s.hours.close}` : "de 10 a 21 h"), `${locale}: the hours`);
   }
 });
 

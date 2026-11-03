@@ -38,12 +38,24 @@ export function stripOrdinal(name: string): string {
 
 const contains = (text: string, town: string) => fold(text).includes(fold(town.replace(/^(el|la|les|els) |^l'/i, "")));
 
+/**
+ * "Fira de Santa Llúcia a l'Avinguda de la Catedral de Barcelona" -> "Fira de
+ * Santa Llúcia": the agenda sometimes puts the street in the name, which
+ * would push the town out of a 60-character title. Only a street-type word
+ * after " a " is cut, so names like "Fira d'Artesans i de Nadal" stay whole.
+ */
+export function stripVenue(name: string): string {
+  const cut = name.replace(/\s+a\s+(?:l'|l’|la\s+|les\s+|el\s+|els\s+)?(?:avinguda|plaça|rambla|passeig|carrer|pla)(?=\s|$).*$/iu, "").trim();
+  return cut.length >= 8 ? cut : name;
+}
+
 /** The fair's name as a heading uses it, in the page's language. */
 export function fairShortName(f: Pick<Fair, "name" | "nameEs">, locale: FairsLocale): string {
-  const ca = stripOrdinal(shortFairName(f.name));
+  const ca = stripVenue(stripOrdinal(shortFairName(f.name)));
   if (locale !== "es") return ca;
-  if (f.nameEs) return stripOrdinal(shortFairName(f.nameEs));
-  // No Spanish name in the calendar (an organiser's own announcement): a plain description.
+  if (f.nameEs) return stripVenue(stripOrdinal(shortFairName(f.nameEs)));
+  // No Spanish name in the calendar (an organiser's own announcement or an agenda row).
+  if (/^fira de santa llúcia$/i.test(ca)) return "Feria de Santa Llúcia";
   return /^mercat/i.test(ca) ? "Mercado de Navidad" : "Feria de Navidad";
 }
 
@@ -101,7 +113,7 @@ export function townDescription(town: TownLike, locale: FairsLocale): string {
         : locale === "es"
           ? ["Fechas oficiales, cómo llegar y qué abre esos días.", "Fechas oficiales y cómo llegar.", ""]
           : ["Official dates, how to get there and what is open.", "Official dates and how to get there.", ""];
-    const lead = locale === "en" ? `${h} ${SEASON_YEAR}: ${f.name}, ${when}` : `${h}: ${when}`;
+    const lead = locale === "en" ? `${h} ${SEASON_YEAR}: ${fairShortName(f, "en")}, ${when}` : `${h}: ${when}`;
     const options = tail.flatMap((t) => [`${lead}${placeNote(f.place)}. ${t}`.trim(), `${lead}. ${t}`.trim()]);
     return first(options, DESCRIPTION_LIMIT);
   }

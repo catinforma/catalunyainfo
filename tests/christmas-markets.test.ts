@@ -1,7 +1,9 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
 
-import { CHRISTMAS, FAMILY } from "../src/lib/content/batch02/christmas.ts";
+import { CHRISTMAS, FAMILY, SANTA_LLUCIA_2026 } from "../src/lib/content/batch02/christmas.ts";
+import { ANNOUNCED_TRADITIONS, seasonSpanProblems } from "../src/lib/content/batch02/christmas-traditions.ts";
+import { range } from "../src/lib/content/batch02/festive.ts";
 import { LOCAL_MONDAY_7 } from "../src/lib/content/batch02/december-bridge.ts";
 import { B2_PATHS } from "../src/lib/content/batch02/shared.ts";
 import { FAIRS, familyLastChecked, townBySlug, towns } from "../src/lib/programmatic/christmas-fairs/data.ts";
@@ -32,11 +34,56 @@ test("no 2025 market dates are reprinted as this year's", () => {
     /22 de novembre/i,
     /22 de noviembre/i,
     /22 November/i,
-    /10[:.]00\s*(a|to|-|–)\s*21[:.]00/,
   ];
+  // The 2025 opening hours (10:00-21:00, "Calendari - 2025"). From 3 Nov 2026
+  // the cultural agenda gives the same hours for 2026; they may then appear
+  // only in a sentence that carries the 2026 dates, never on their own.
+  const hours2025 = /10[:.]00\s*(a|to|-|–)\s*21[:.]00/;
+  const sentences = (value: string) => value.split(/(?<=[.!?])\s+/u);
   for (const locale of LOCALES) {
     const text = bodyToPlainText(CHRISTMAS.editions[locale].blocks);
     for (const pattern of stale) assert.ok(!pattern.test(text), `${locale}: ${pattern} looks like a 2025 date`);
+    const withHours = sentences(text).filter((s) => hours2025.test(s));
+    if (!SANTA_LLUCIA_2026.hours) assert.equal(withHours.length, 0, `${locale}: ${withHours[0]}`);
+    for (const s of withHours) assert.ok(s.includes(range(SANTA_LLUCIA_2026.from, SANTA_LLUCIA_2026.to, locale)) || /\b2026\b/.test(s), `${locale}: hours without the 2026 dates: "${s}"`);
+  }
+});
+
+/**
+ * 3 Nov 2026: the Generalitat's Agenda Cultural de Catalunya published the
+ * 2026 fair (27 Nov - 23 Dec, 10-21 h); the organiser's site still showed
+ * 2025. Every edition gives those dates, credits the agenda (never "the
+ * organisers"), lists the page among its sources, and is the same object the
+ * traditions page and the December hub read.
+ */
+test("Santa Llúcia 2026: the agenda's dates and hours, credited to the agenda, the same object as ANNOUNCED_TRADITIONS", () => {
+  assert.equal(ANNOUNCED_TRADITIONS.santaLlucia, SANTA_LLUCIA_2026);
+  assert.deepEqual(seasonSpanProblems(SANTA_LLUCIA_2026), []);
+  assert.equal(SANTA_LLUCIA_2026.from.slice(0, 4), "2026");
+  assert.ok(CHRISTMAS.sources.some((s) => s.url === SANTA_LLUCIA_2026.url), "the agenda page is a source");
+  const credit: Record<(typeof LOCALES)[number], RegExp> = { ca: /Agenda Cultural de la Generalitat/, es: /Agenda Cultural de la Generalitat/, en: /cultural agenda/ };
+  for (const locale of LOCALES) {
+    const edition = CHRISTMAS.editions[locale];
+    const text = bodyToPlainText(edition.blocks);
+    const when = range(SANTA_LLUCIA_2026.from, SANTA_LLUCIA_2026.to, locale);
+    const leadBlock = edition.blocks.find((b) => b.type === "paragraph" && (b as { lead?: boolean }).lead) as { text: string };
+    assert.ok(bodyToPlainText([leadBlock as never]).includes(when), `${locale}: the lead gives ${when}`);
+    assert.match(leadBlock.text, credit[locale], `${locale}: the lead credits the agenda`);
+    assert.ok(leadBlock.text.includes(`](${SANTA_LLUCIA_2026.url})`), `${locale}: the lead links the agenda page`);
+    assert.doesNotMatch(text, /Santa Llúcia[^.]*(segons l'organització|según la organización|according to the organisers)/i, `${locale}: not credited to the organisers`);
+    const rows = (edition.blocks as { type: string; rows?: string[][] }[]).filter((b) => b.type === "table").flatMap((b) => b.rows ?? []);
+    const row = rows.find((r) => r[0] === "Fira de Santa Llúcia" && r[1] === "Barcelona");
+    assert.ok(row, `${locale}: Santa Llúcia row`);
+    assert.ok(row[3]!.toLowerCase().includes(when.toLowerCase()), `${locale}: ${row[3]}`);
+    assert.match(row[3]!, credit[locale], locale);
+    assert.doesNotMatch(row[3]!, /Pendent|Pendiente|Not yet published/, locale);
+    // Last year's run is still told, with its year, phrased so it cannot read as a 2026 range.
+    assert.match(text, /2025[^.]*28 (de )?(novembre|noviembre|November)/, `${locale}: the 2025 run with its year`);
+    const faqBlock = edition.blocks.find((b) => b.type === "faq") as { items: { question: string; answer: string }[] };
+    const when26 = faqBlock.items.find((i) => /Santa Llúcia 2026/.test(i.question))!;
+    assert.ok(when26.answer.toLowerCase().includes(when.toLowerCase()), `${locale}: FAQ answer`);
+    // The Sagrada Família fair is still said to be undated.
+    assert.match(text, /Sagrada Família[^.]*(encara no|aún no|not (been )?(announced|published)|has not announced)/i, `${locale}: Sagrada Família pending`);
   }
 });
 
@@ -49,17 +96,27 @@ test("the EN guide answers 'barcelona christmas market' first and every edition 
   assert.ok(en.seoTitle.startsWith("Barcelona Christmas markets 2026"), en.seoTitle);
   assert.ok(en.seoTitle.length <= 60);
   // 30 Oct CTR sweep: the EN snippet states the answer, as the ca/es ones do.
-  assert.match(en.seoDescription, /^Fira de Santa Llúcia 2026 dates not published yet \(2025: 28 Nov–23 Dec/);
+  // 3 Nov 2026: the answer is now the 2026 dates (cultural agenda), title and snippet.
+  assert.match(en.seoTitle, /Santa Llúcia from 27 Nov/);
+  assert.match(en.seoDescription, /^Fira de Santa Llúcia 2026: 27 Nov–23 Dec, 10:00–21:00/);
   assert.ok(en.seoDescription.length <= 155);
+  for (const locale of ["ca", "es"] as const) {
+    const when = range(SANTA_LLUCIA_2026.from, SANTA_LLUCIA_2026.to, locale);
+    assert.ok(CHRISTMAS.editions[locale].seoDescription.includes(when), `${locale}: the snippet gives ${when}`);
+    assert.match(CHRISTMAS.editions[locale].seoTitle, /Santa Llúcia/, locale);
+  }
   const blocks = en.blocks as { type: string; lead?: boolean; text?: string }[];
   const lead = blocks.find((b) => b.type === "paragraph" && b.lead)?.text ?? "";
   assert.match(lead, /Fira de Santa Llúcia/);
-  assert.match(lead, /2026 dates have not been published yet/);
+  assert.ok(lead.includes(range(SANTA_LLUCIA_2026.from, SANTA_LLUCIA_2026.to, "en")), lead);
   const pages = [
     /nadal-a-barcelona|navidad-en-barcelona|christmas-in-barcelona/,
     /tradicions-de-nadal|tradiciones-navidad|catalan-christmas-traditions/,
     /pessebres-vivents|belenes-vivientes|living-nativity/,
     /cap-d-any|nochevieja|new-years-eve/,
+    // 3 Nov 2026 (cluster links): Barcelona in December and the Three Kings parade.
+    /barcelona-al-desembre|barcelona-en-diciembre|barcelona-in-december/,
+    /cavalcada-de-reis|cabalgata-de-reyes|three-kings-parade/,
   ];
   for (const locale of LOCALES) {
     const json = JSON.stringify(CHRISTMAS.editions[locale].blocks);

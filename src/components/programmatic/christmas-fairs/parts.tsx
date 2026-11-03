@@ -4,7 +4,7 @@ import { renderInline } from "@/lib/content/inline";
 import { attribution, fairShortName, guidance, labels, townName } from "@/lib/programmatic/christmas-fairs/copy";
 import { comarcaOf, hasEnglish, SNAPSHOT, townByIne } from "@/lib/programmatic/christmas-fairs/data";
 import { capitalize, fullDate, rangeText, shortRange } from "@/lib/programmatic/christmas-fairs/format";
-import { townPath, type FairsLocale } from "@/lib/programmatic/christmas-fairs/paths";
+import { agendaActivityUrl, townPath, type FairsLocale } from "@/lib/programmatic/christmas-fairs/paths";
 import type { DatedFair } from "@/lib/programmatic/christmas-fairs/today";
 import type { Fair, PendingMarket } from "@/lib/programmatic/christmas-fairs/types";
 import { municipality } from "@/lib/programmatic/weekend/data";
@@ -25,6 +25,8 @@ export function FairCard({ fair, locale }: { fair: Fair; locale: FairsLocale }) 
       : fair.source === "agenda"
         ? t.fromAgenda
         : t.fromCalendar;
+  // An agenda row links its own page on the Agenda Cultural (dates, hours, organiser).
+  const agendaUrl = fair.source === "agenda" && !fair.checked ? agendaActivityUrl(fair.id) : null;
   return (
     <section className="ci-agenda mt-6" aria-label={fair.name}>
       <h3 className="ci-agenda-heading">{fair.name}</h3>
@@ -57,7 +59,13 @@ export function FairCard({ fair, locale }: { fair: Fair; locale: FairsLocale }) 
         ) : null}
       </ul>
       <p className="ci-agenda-meta">
-        {source}
+        {agendaUrl ? (
+          <a href={agendaUrl} rel="noopener" target="_blank">
+            {source}
+          </a>
+        ) : (
+          source
+        )}
         {fair.datasetDates ? ` ${t.corrected(rangeText(fair.datasetDates.start, fair.datasetDates.end, locale, { weekdays: false }))}` : ""}
         {fair.toConfirm ? ` ${t.toConfirm}` : ""}
       </p>

@@ -310,6 +310,22 @@ export function span(from: string, to: string, locale: Locale): string {
   return `${vowel(from) ? "de l'" : "del "}${a} ${vowel(to) ? "a l'" : "al "}${b}`;
 }
 
+/**
+ * "del 28 de novembre al 23 de desembre de 2026", or with both years when the
+ * range crosses New Year: "del 13 de desembre de 2025 a l'1 de febrer de 2026".
+ * English has no leading "from", so the sentence supplies it. (Lives here, not
+ * in christmas-traditions.ts, so the markets guide can use it without an
+ * import cycle; christmas-traditions.ts re-exports it.)
+ */
+export function range(from: string, to: string, locale: Locale): string {
+  const sameYear = from.slice(0, 4) === to.slice(0, 4);
+  if (sameYear) return locale === "en" ? `${span(from, to, "en")} ${from.slice(0, 4)}` : `${span(from, to, locale)} de ${from.slice(0, 4)}`;
+  if (locale === "en") return `${dateYear(from, "en")} to ${dateYear(to, "en")}`;
+  if (locale === "es") return `del ${dateYear(from, "es")} al ${dateYear(to, "es")}`;
+  const vowel = (iso: string) => ["01", "11"].includes(iso.slice(8, 10));
+  return `${vowel(from) ? "de l'" : "del "}${dateYear(from, "ca")} ${vowel(to) ? "a l'" : "al "}${dateYear(to, "ca")}`;
+}
+
 /* -------------------------------------------------------------------------- */
 /* Metro over the holidays                                                    */
 /* -------------------------------------------------------------------------- */
