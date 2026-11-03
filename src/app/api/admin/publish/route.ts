@@ -1,7 +1,8 @@
-import { NextResponse } from "next/server";
+import { NextResponse, after } from "next/server";
 import { revalidatePath } from "next/cache";
 
 import { pingIndexNow } from "@/lib/seo/indexnow";
+import { purgeCdnPaths } from "@/lib/cdn/purge";
 import { allIndexablePaths } from "@/lib/content/repository";
 
 import { seedTaxonomy } from "@/lib/content/seed-taxonomy";
@@ -285,18 +286,35 @@ export async function POST(request: Request) {
       ...pages.pages.map((page) => ({ locale: page.locale, path: page.path })),
     ];
 
+    const revalidated = new Set<string>();
+    const revalidate = (path: string) => {
+      revalidatePath(path);
+      revalidated.add(path);
+    };
     for (const surface of surfaces) {
-      revalidatePath(`/${surface.locale}`);
-      revalidatePath(`/${surface.locale}/${surface.path}`);
+      revalidate(`/${surface.locale}`);
+      revalidate(`/${surface.locale}/${surface.path}`);
       const section = surface.path.split("/")[0];
-      if (section) revalidatePath(`/${surface.locale}/${section}`);
+      if (section) revalidate(`/${surface.locale}/${section}`);
     }
-    revalidatePath("/sitemap.xml");
+    revalidate("/sitemap.xml");
+
+    // Cloudflare may cache HTML (ops/vps/README.md section 10), and it does not
+    // hear revalidatePath: purge the same URLs there. A no-op without a token.
+    const cdnPurge = await purgeCdnPaths(revalidated, { label: `publish ${only}` });
+    // revalidatePath only takes effect once this handler returns, so a request
+    // that reached Cloudflare in between could have cached the old page again.
+    // A second purge after the response closes that window.
+    if (!cdnPurge.skipped) {
+      after(async () => {
+        await purgeCdnPaths(revalidated, { label: `publish ${only} (after revalidation)` });
+      });
+    }
 
     // Bing and ChatGPT search find the change in minutes, not days.
     const indexNow = await pingIndexNow(surfaces.map((surface) => `/${surface.locale}/${surface.path}`));
 
-    return NextResponse.json({ ok: true, seed, published, pages: pages.pages.length, indexNow });
+    return NextResponse.json({ ok: true, seed, published, pages: pages.pages.length, indexNow, cdnPurge });
   } catch (error) {
     return NextResponse.json({ ok: false, error: describeError(error) }, { status: 500 });
   }

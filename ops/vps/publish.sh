@@ -14,5 +14,7 @@ for group in "$@"; do
       --max-time 300 --request POST --header @- \
       --header 'Host: www.catalunyainfo.com' --header 'X-Forwarded-Proto: https' \
       "http://127.0.0.1:3000/api/admin/publish/?only=$group")
-  echo "$group -> $code"
+  # The Cloudflare purge result (skipped until CLOUDFLARE_API_TOKEN is set).
+  purge=$(jq -c '.cdnPurge // empty' /tmp/publish-"$group".json 2>/dev/null || true)
+  echo "$group -> $code${purge:+  cdnPurge=$purge}"
 done

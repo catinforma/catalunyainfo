@@ -160,6 +160,13 @@ of value.
   the indexing switch and the site-verification token — all of which are public
   by nature.
 - **Never set `NEXT_PUBLIC_ALLOW_INDEXING` in Preview.**
+- `CLOUDFLARE_API_TOKEN` (optional, run-time, in the VPS env file) may only
+  purge this zone's cache: one permission, Zone · Cache Purge, scoped to
+  catalunyainfo.com, ideally IP-restricted to the VPS. Its worst case in other
+  hands is a purged cache (more origin load), never a content or DNS change.
+  `src/lib/cdn/purge.ts` never logs it (error text is redacted, and a test
+  checks every log line), and `deploy.sh` hands it to `curl` on stdin, never on
+  a command line. `CLOUDFLARE_ZONE_ID` is not a secret.
 
 ## Personal data
 

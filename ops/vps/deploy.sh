@@ -16,6 +16,8 @@
 # keep the newest 3 releases.
 #
 # Environment overrides: REPO_URL, KEEP_RELEASES, ALLOW_BUILD_WITHOUT_DB=1.
+# With CLOUDFLARE_API_TOKEN in the env file, Cloudflare's cache is purged
+# after every release that passes its checks (README section 10).
 # =============================================================================
 set -Eeuo pipefail
 umask 022
@@ -140,6 +142,36 @@ health_check() {
 }
 
 # ---------------------------------------------------------------------------
+# Cloudflare purge. Cloudflare may cache HTML (README section 10, rule 2), and
+# a new release changes every page (build id, chunk names), so the whole zone
+# is purged once the release answers its checks. Off until the env file has
+# CLOUDFLARE_API_TOKEN (load_env exported it): nothing runs and nothing is
+# printed. The token goes to curl on stdin, never on a command line, and is
+# never printed. A failed purge warns and never fails the deploy.
+# ---------------------------------------------------------------------------
+purge_cdn() {
+  [[ -n ${CLOUDFLARE_API_TOKEN:-} ]] || return 0
+  local zone=${CLOUDFLARE_ZONE_ID:-} out code detail
+  if [[ ! $zone =~ ^[0-9a-f]{32}$ ]]; then
+    warn "CLOUDFLARE_API_TOKEN is set but CLOUDFLARE_ZONE_ID is missing or malformed: Cloudflare cache NOT purged (dashboard: Caching > Configuration > Purge Everything)"
+    return 0
+  fi
+  out=$(printf 'Authorization: Bearer %s\n' "$CLOUDFLARE_API_TOKEN" |
+    curl --silent --show-error --max-time 8 --retry 2 --retry-delay 3 \
+      --header @- --header 'Content-Type: application/json' \
+      --data '{"purge_everything":true}' --write-out '\n%{http_code}' \
+      "https://api.cloudflare.com/client/v4/zones/$zone/purge_cache" 2>&1) || true
+  code=${out##*$'\n'}
+  if [[ $code == 200 ]] && grep -q '"success":[[:space:]]*true' <<<"$out"; then
+    ok "Cloudflare cache purged (everything)"
+  else
+    # Cloudflare's error messages, or curl's own (neither contains the token).
+    detail=$(grep -oE '"message":"[^"]*"|^curl: .*' <<<"$out" | head -2 | tr '\n' ' ' || true)
+    warn "Cloudflare purge failed (HTTP ${code:-none} ${detail}). Purge by hand: dashboard > Caching > Configuration > Purge Everything"
+  fi
+}
+
+# ---------------------------------------------------------------------------
 # --list / --rollback
 # ---------------------------------------------------------------------------
 case "${1:-}" in
@@ -160,7 +192,7 @@ case "${1:-}" in
     load_env
     switch_to "$target"
     restart
-    if health_check; then log "Rolled back to $(basename "$target")"; exit 0; fi
+    if health_check; then log "Rolled back to $(basename "$target")"; purge_cdn; exit 0; fi
     die "rolled back, but the health checks fail too: journalctl -u catalunyainfo -n 100"
     ;;
   -h|--help) sed -n '2,20p' "$0"; exit 0 ;;
@@ -255,6 +287,7 @@ restart
 log "Health checks"
 if health_check; then
   log "Live: $NAME (previous: ${PREVIOUS:+$(basename "$PREVIOUS")}${PREVIOUS:-none}) in $(( $(date +%s) - START ))s"
+  purge_cdn
 else
   warn "health checks failed for $NAME"
   journalctl -u "$SERVICE" -n 60 --no-pager 2>/dev/null || true
@@ -264,6 +297,9 @@ else
     restart
     mv "$DIR" "$DIR.failed" || true
     if health_check; then
+      # The failed release served visitors during its checks: drop what
+      # Cloudflare cached from it.
+      purge_cdn
       die "deploy of $SHA failed and was rolled back to $(basename "$PREVIOUS"); the failed release is $NAME.failed"
     fi
     die "deploy failed AND the rollback fails its checks: journalctl -u catalunyainfo -n 200"
