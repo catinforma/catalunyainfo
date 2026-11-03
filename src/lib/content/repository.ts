@@ -93,13 +93,51 @@ function visibilityWhere(locale: Locale, preview: boolean) {
  */
 async function safeRead<T>(label: string, fallback: T, run: () => Promise<T>): Promise<T> {
   try {
-    return await run();
+    return await withConnectRetry(run);
   } catch (error) {
     console.error(
       `[content] ${label} failed, serving empty:`,
       error instanceof Error ? error.message : error,
     );
     return fallback;
+  }
+}
+
+/** Connection-level failures worth a second try; query errors are not retried. */
+const TRANSIENT_CODES = new Set([
+  "CONNECT_TIMEOUT",
+  "CONNECTION_CLOSED",
+  "CONNECTION_ENDED",
+  "CONNECTION_DESTROYED",
+  "ECONNRESET",
+  "ECONNREFUSED",
+  "ETIMEDOUT",
+  "EPIPE",
+]);
+
+function isTransient(error: unknown): boolean {
+  for (let e: unknown = error, depth = 0; e && depth < 4; depth++) {
+    const code = (e as { code?: unknown }).code;
+    if (typeof code === "string" && TRANSIENT_CODES.has(code)) return true;
+    e = (e as { cause?: unknown }).cause;
+  }
+  return false;
+}
+
+/**
+ * Retries a read up to twice when the connection itself failed. The VPS's
+ * network to the Supabase pooler drops SYNs now and then (Contabo, Nov 2026),
+ * so a new connection can time out once and succeed a second later; without
+ * this one lost packet failed a whole build (sitemap prerender, 3 Nov).
+ */
+async function withConnectRetry<T>(run: () => Promise<T>): Promise<T> {
+  for (let attempt = 0; ; attempt++) {
+    try {
+      return await run();
+    } catch (error) {
+      if (attempt >= 2 || !isTransient(error)) throw error;
+      await new Promise((resolve) => setTimeout(resolve, 750 * (attempt + 1)));
+    }
   }
 }
 
@@ -113,7 +151,7 @@ async function safeRead<T>(label: string, fallback: T, run: () => Promise<T>): P
  */
 async function criticalRead<T>(label: string, run: () => Promise<T>): Promise<T> {
   try {
-    return await run();
+    return await withConnectRetry(run);
   } catch (error) {
     console.error(`[content] ${label} failed; keeping the cached page:`, error instanceof Error ? error.message : error);
     throw error;

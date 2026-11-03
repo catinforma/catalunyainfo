@@ -49,7 +49,9 @@ export const revalidate = 3600;
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   if (!indexingAllowed()) return [];
 
-  const rows = await allIndexablePaths({ strict: true });
+  // Strict at run time (a failed regeneration keeps the last good sitemap);
+  // soft while building, where a throw would fail the whole deploy.
+  const rows = await allIndexablePaths({ strict: process.env.NEXT_PHASE !== "phase-production-build" });
 
   // Group content paths by entry so that each URL can list its siblings.
   const byEntry = new Map<string, Partial<Record<Locale, string>>>();
