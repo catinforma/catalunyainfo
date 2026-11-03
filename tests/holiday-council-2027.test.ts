@@ -147,6 +147,10 @@ const COUNCIL_DOMAIN: Record<string, string> = {
   "puig-reig": "puig-reig.cat",
   "el-pont-de-vilomara-i-rocafort": "elpont.cat",
   gurb: "gurb.cat",
+  "llinars-del-valles": "llinarsdelvalles.cat",
+  cervello: "cervello.cat",
+  llagostera: "llagostera.cat",
+  "el-papiol": "elpapiol.cat",
 };
 const BULLETINS = ["bop.diba.cat", "ddgi.cat", "dipta.cat", "diputaciolleida.cat"];
 

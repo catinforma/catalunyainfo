@@ -1229,6 +1229,122 @@ export const COUNCIL_2027: Readonly<Record<string, CouncilApproved>> = {
     act: { kind: "web", date: null },
     readOn: "2026-11-03",
   },
+  // Ple of 27 July 2026: "4. Expedient 5833/2026. Aprovació de les festes locals per a l'any 2027
+  // Favorable Tipus de votació: Nominal Tipus de majoria: Simple A favor: 13, En contra: 0,
+  // Abstencions: 3, Absents: 0 [...] PRIMER.- Proposar al Departament d' Empresa i Treball de la
+  // Generalitat de Catalunya per a que siguin fixades com a festes locals d'aquest municipi per al
+  // proper any 2027, els dies 6 i 8 de setembre."
+  "llinars-del-valles": {
+    local: ["2027-09-06", "2027-09-08"],
+    source: {
+      name: "Acta del Ple ordinari de 27 de juliol de 2026",
+      ref: "Ajuntament de Llinars del Vallès",
+      url: "https://www.llinarsdelvalles.cat/media/repository/documents/actes/2026/5_23-07-2026/5_Acta_Ple_ordinari_27_de_juliol_de_2026.pdf",
+    },
+    act: { kind: "ple", date: "2026-07-27" },
+    readOn: "2026-11-03",
+  },
+  // Ple of 13 July 2026: "Ple ordinari del mes de juliol Dimarts, 14 de juliol de 2026 El ple
+  // ordinari ha tingut lloc el dilluns 13 de juliol [...] Al Ple es van aprovar les festes locals de
+  // 2027 que seran el 17 de maig (en substitució del 19 de setembre que serà festiu) i el 3
+  // d'agost." 19 September, the usual day, falls on a Sunday in 2027.
+  cervello: {
+    local: ["2027-05-17", "2027-08-03"],
+    source: {
+      name: "Ple ordinari del mes de juliol",
+      ref: "Ajuntament de Cervelló, 14 de juliol de 2026",
+      url: "https://www.cervello.cat/actualitat/noticies/ple-ordinari-del-mes-de-juliol.html",
+    },
+    act: { kind: "ple", date: "2026-07-13" },
+    readOn: "2026-11-03",
+  },
+  // Ple of 28 May 2026: "Crònica Llagostera del 28 de maig de 2026 29 Maig 2026 En el Ple ordinari
+  // del mes de maig es va aprovar l'assignació del nom Conxita Pijuan Casadevall a un espai públic.
+  // Es va aprovar els dies 17 i 18 de maig com a festes locals de l'any 2027."
+  llagostera: {
+    local: ["2027-05-17", "2027-05-18"],
+    source: {
+      name: "Crònica Llagostera del 28 de maig de 2026",
+      ref: "Ajuntament de Llagostera, 29 de maig de 2026",
+      url: "https://www.llagostera.cat/noticies/2869/cronica-llagostera-del-28-de-maig-de-2026",
+    },
+    act: { kind: "ple", date: "2026-05-28" },
+    readOn: "2026-11-03",
+  },
+  // Ple of 4 June 2026: "04 0404P26 EXP.E:2026_1678: FESTES LOCALS PER A L'ANY 2027. CALENDARI
+  // LABORAL DEL PAPIOL. ... ES RESOL Primer.- Determinar que les festes locals oficials del Papiol
+  // que es proposen pel proper any 2027 són les següents: Dia 17/05/2027 (Pasqua Granada). Dia
+  // 23/07/2027 (Festa Major). ... Quart.- Adoptar les anteriors decisions per unanimitat dels
+  // membres que assisteixen a la present sessió."
+  "el-papiol": {
+    local: ["2027-05-17", "2027-07-23"],
+    names: ["Pasqua Granada", "Festa Major"],
+    source: {
+      name: "Acta del Ple 04 de 2026 de data 4 de juny de 2026",
+      ref: "Ajuntament del Papiol",
+      url: "https://www.elpapiol.cat/media/repository/ajuntament/organitzacio_ajuntament/consistori/plemunicipal/2026/ACTA04PLE20260604_sig.pdf",
+    },
+    act: { kind: "ple", date: "2026-06-04" },
+    readOn: "2026-11-03",
+  },
+  // Ple of 30 July 2026: "El Ple de la Corporació, en sessió ordinària celebrada en data 30 de
+  // juliol de 2026 [...] PRIMER.- FIXAR com a festes locals, retribuïdes i no recuperables, del
+  // Municipi de Sant Climent de Llobregat per a l'any 2027, les que s'assenyalen a continuació: Dia
+  // 10 d'agost, dimarts (Festivitat de Sant Llorenç). Dia: 23 de novembre, dimarts (Festivitat de
+  // Sant Climent)."
+  "sant-climent-de-llobregat": {
+    local: ["2027-08-10", "2027-11-23"],
+    names: ["Festivitat de Sant Llorenç", "Festivitat de Sant Climent"],
+    source: {
+      name: "Edicte de fixació de les festes locals a Sant Climent de Llobregat per a l'any 2027",
+      ref: "BOPB, 11 d'agost de 2026 (CVE 202610132423)",
+      url: "https://bop.diba.cat/anunci/descarrega-pdf/3981617",
+    },
+    act: { kind: "ple", date: "2026-07-30" },
+    readOn: "2026-11-03",
+  },
+  // Ple of 1 June 2026: "El Ple de l'Ajuntament de Cabrera d'Anoia, en sessió celebrada en data 1 de
+  // juny de 2026, va acordar fixar les festes locals del municipi per a l'any 2027 [...] Les festes
+  // locals de Cabrera d'Anoia per a l'any 2027 seran les següents: Dilluns, 18 de gener de 2027.
+  // Dilluns, 9 d'agost de 2027."
+  "cabrera-d-anoia": {
+    local: ["2027-01-18", "2027-08-09"],
+    source: {
+      name: "Anunci sobre l'aprovació de les festes locals per a l'any 2027",
+      ref: "BOPB, 8 de juny de 2026 (CVE 202610103935)",
+      url: "https://bop.diba.cat/anunci/descarrega-pdf/3954590",
+    },
+    act: { kind: "ple", date: "2026-06-01" },
+    readOn: "2026-11-03",
+  },
+  // Ple of 9 July 2026: "El Ple de l'Ajuntament de Sant Martí de Tous, reunit en sessió ordinària
+  // celebrada el 9 de juliol de 2026, va adoptar el següent acord [...] PRIMER.- APROVAR com a
+  // festes locals del municipi de Sant Martí de Tous per a l'any 2027, els dies 30 de març i 12 de
+  // novembre."
+  "sant-marti-de-tous": {
+    local: ["2027-03-30", "2027-11-12"],
+    source: {
+      name: "Edicte d'aprovació de festes locals per a l'any 2027",
+      ref: "BOPB, 17 de juliol de 2026 (CVE 202610119974)",
+      url: "https://bop.diba.cat/anunci/descarrega-pdf/3968915",
+    },
+    act: { kind: "ple", date: "2026-07-09" },
+    readOn: "2026-11-03",
+  },
+  // Ple of 12 June 2026: "Que el Ple de l'Ajuntament de Sora, en sessió ordinària celebrada el 12 de
+  // juny de 2026, va acordar proposar al Departament d'Empresa i Treball de la Generalitat de
+  // Catalunya [...] com a festes locals del municipi de Sora per a l'any 2027, retribuïdes i no
+  // recuperables, els dies següents: 17 de maig de 2027, dilluns. 25 de juny de 2027, divendres."
+  sora: {
+    local: ["2027-05-17", "2027-06-25"],
+    source: {
+      name: "Edicte. Festes locals de Sora per a l'any 2027",
+      ref: "BOPB, 29 d'octubre de 2026 (CVE 202610157926)",
+      url: "https://bop.diba.cat/anunci/descarrega-pdf/4005859",
+    },
+    act: { kind: "ple", date: "2026-06-12" },
+    readOn: "2026-11-03",
+  },
 };
 
 /** The slugs with council data, in no particular order. */
