@@ -22,6 +22,12 @@ import type { Locale } from "@/lib/i18n/config";
  * December hub moves the date into its day-by-day table). The leads switch from "not
  * announced yet" to the date on their own. Last year's dates stay labelled
  * with their year and are never shown as this year's.
+ *
+ * For the lights switch-on also fill `who`, `until` (the last night the lights
+ * are on) and `hours` when the announcement gives them, move
+ * LIGHTS_SWITCH_ON_CHECKED, and republish "llums-nadal" too: the lights page
+ * (christmas-lights.ts) switches its title, description, lead, key facts and
+ * FAQ to the date by itself.
  */
 
 export const FESTIVE_VERIFIED = "2026-10-25";
@@ -49,8 +55,25 @@ export const FESTIVE_VERIFIED = "2026-10-25";
  * date for any of them. The printed date stays 30 Oct: a November 2026 date
  * in these pages would read as a switch-on date, and festive-pages.test.ts
  * refuses any (the 30 Oct check is still true).
+ *
+ * Read again on the morning of 4 Nov 2026 (new lights page): press room home
+ * (latest items 3-4 Nov, none about Christmas), press-room searches for
+ * "llums nadal" and "encesa" (newest 2026 results: 8 and 9 Jul 2026, the
+ * lighting plan), the "nadal-2026" tag, and barcelona.cat/nadal/ca (still
+ * "Nadal 2025", "Aquest web es tornarà a actualitzar al voltant del mes de
+ * novembre del 2026"): no switch-on date. The lights page prints that check
+ * as LIGHTS_SWITCH_ON_CHECKED; this date stays for the reason above.
  */
 export const ANNOUNCEMENTS_CHECKED = "2026-10-30";
+
+/**
+ * The day the City Council's press room and barcelona.cat/nadal were last read
+ * for the lights switch-on alone. Printed by the lights page
+ * (christmas-lights.ts), whose town table carries November 2026 dates anyway,
+ * next to its "not announced yet". The Christmas hub and the New Year's Eve
+ * page keep ANNOUNCEMENTS_CHECKED. Move it on every re-read.
+ */
+export const LIGHTS_SWITCH_ON_CHECKED = "2026-11-04";
 
 /** The pages to watch for the 2026-27 dates. */
 export const WATCH = {
@@ -71,6 +94,12 @@ export interface Announcement {
   place?: Record<Locale, string>;
   /** Who switches the lights on (or presides), as the source names them, in each language. */
   who?: Record<Locale, string>;
+  /**
+   * Lights switch-on only: the nightly lighting hours, as the announcement
+   * gives them, in each language ("de 17:30 a 1:00 de diumenge a dijous...").
+   * `until` is then the last night the lights are on.
+   */
+  hours?: Record<Locale, string>;
   /** The official page that announced it. */
   url: string;
 }
@@ -155,6 +184,20 @@ export const PAST = {
     switchOn: "2025-11-22",
     until: "2026-01-06",
     km: 126,
+    /**
+     * Nightly lighting hours from the switch-on to `until`, as the note of
+     * 16 Oct 2025 gives them (re-read 4 Nov 2026): "de 17.30 hores fins a la 1
+     * de la matinada de diumenge a dijous; els divendres i dissabtes de les
+     * 17.30 hores fins a les 2.00 hores, i els dies extraordinaris de 17.30
+     * hores a 2.00 hores, que són els dies 24, 25 i 31 de desembre i 5 de
+     * gener". The same hours as 2024, the note says.
+     */
+    hours: {
+      on: "17:30",
+      offSundayToThursday: "1:00",
+      offFridaySaturday: "2:00",
+      lateDays: ["2025-12-24", "2025-12-25", "2025-12-31", "2026-01-05"],
+    },
     url: "https://ajuntament.barcelona.cat/premsa/2025/10/16/barcelona-encendra-els-llums-de-nadal-el-dissabte-22-de-novembre-i-busca-idees-ja-per-lenllumenat-de-2026/",
   },
   /** The 2025 Christmas programme: Sant Jaume, the nativity, the festival, New Year's Eve, the parade. */
@@ -324,6 +367,48 @@ export function range(from: string, to: string, locale: Locale): string {
   if (locale === "es") return `del ${dateYear(from, "es")} al ${dateYear(to, "es")}`;
   const vowel = (iso: string) => ["01", "11"].includes(iso.slice(8, 10));
   return `${vowel(from) ? "de l'" : "del "}${dateYear(from, "ca")} ${vowel(to) ? "a l'" : "al "}${dateYear(to, "ca")}`;
+}
+
+/** "a, b i c" / "a, b y c" / "a, b and c". */
+function joinList(items: readonly string[], locale: Locale): string {
+  const and = { ca: " i ", es: " y ", en: " and " }[locale];
+  return items.length < 2 ? (items[0] ?? "") : `${items.slice(0, -1).join(", ")}${and}${items[items.length - 1]}`;
+}
+
+/**
+ * "24, 25 i 31 de desembre i 5 de gener" / "24, 25 y 31 de diciembre y 5 de
+ * enero" / "24, 25 and 31 December and 5 January": the month said once,
+ * after its last day.
+ */
+export function dayList(days: readonly string[], locale: Locale): string {
+  const months: string[][] = [];
+  for (const day of days) {
+    const last = months[months.length - 1];
+    if (last && last[0]!.slice(0, 7) === day.slice(0, 7)) last.push(day);
+    else months.push([day]);
+  }
+  return joinList(
+    months.map((group) => {
+      const month = shortDate(group[group.length - 1]!, locale).replace(/^\d+ /, "");
+      return `${joinList(group.map((day) => String(Number(day.slice(8, 10)))), locale)} ${month}`;
+    }),
+    locale,
+  );
+}
+
+/**
+ * The 2025 nightly lighting hours (PAST.lights2025.hours) in words: "de les
+ * 17:30 a la 1:00 de diumenge a dijous, i de les 17:30 a les 2:00 els
+ * divendres, els dissabtes i els dies 24, 25 i 31 de desembre i 5 de gener".
+ */
+export function lightingHours2025(locale: Locale): string {
+  const h = PAST.lights2025.hours;
+  const late = dayList(h.lateDays, locale);
+  return {
+    ca: `de les ${h.on} a la ${h.offSundayToThursday} de diumenge a dijous, i de les ${h.on} a les ${h.offFridaySaturday} els divendres, els dissabtes i els dies ${late}`,
+    es: `de ${h.on} a ${h.offSundayToThursday} de domingo a jueves, y de ${h.on} a ${h.offFridaySaturday} los viernes, los sábados y los días ${late}`,
+    en: `${h.on} to ${h.offSundayToThursday} from Sunday to Thursday, and ${h.on} to ${h.offFridaySaturday} on Fridays, Saturdays and on ${late}`,
+  }[locale];
 }
 
 /* -------------------------------------------------------------------------- */

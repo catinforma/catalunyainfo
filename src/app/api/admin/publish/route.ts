@@ -61,6 +61,7 @@ import { LOTERIA_NADAL } from "@/lib/content/batch02/loteria-nadal";
 import { BARCELONA_DECEMBER } from "@/lib/content/batch02/barcelona-december";
 import { REIS } from "@/lib/content/batch02/reis";
 import { L2_CLOSURE_GUIDE } from "@/lib/content/batch02/l2-closure";
+import { CHRISTMAS_LIGHTS } from "@/lib/content/batch02/christmas-lights";
 import { publishHolidayTodayGuide } from "@/lib/content/holidays/today-publish";
 import { publishLocalHolidaysGuide } from "@/lib/content/holidays/local-publish";
 import { publishReservoirGuide } from "@/lib/content/reservoirs/publish";
@@ -278,6 +279,14 @@ export async function POST(request: Request) {
     // (read from l2-closure.ts) and go out with their own groups, `hours` and
     // `cards`, after this one and again after the reopening.
     if (wants("l2-closure")) published.push(await publishB2Article(L2_CLOSURE_GUIDE));
+    // Christmas lights switch-on 2026 (Barcelona and 25 towns): one page, on
+    // its own so Barcelona's date (festive.ts ANNOUNCED_2026.lightsSwitchOn)
+    // or a town's (christmas-lights-towns.ts) republishes only it. The two
+    // pages that gained one body sentence linking to it (Christmas in
+    // Barcelona, the Christmas markets guide) go out once, with
+    // `llums-nadal-links`; their titles are inside the 3 Nov window.
+    if (wants("llums-nadal")) published.push(await publishB2Article(CHRISTMAS_LIGHTS));
+    if (wants("llums-nadal-links")) published.push(await publishB2Article(CHRISTMAS_BARCELONA), await publishB2Article(CHRISTMAS));
 
     const surfaces = [
       ...published.flatMap((article) =>

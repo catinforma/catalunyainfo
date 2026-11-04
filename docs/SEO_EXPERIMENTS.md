@@ -2159,4 +2159,114 @@ window) **and on 17 Nov** (after it): `snapshot.py page /eleccions/ 14`,
 matadepera, santa-coloma-de-gramenet, l-hospitalet-de-llobregat first. A test
 fails from 1 Dec 2026 to force the section's removal after polling day.
 
+
+## 2026-11-04 — New page: Christmas lights switch-on 2026, Barcelona and 25 towns (groups `llums-nadal`, `llums-nadal-links`; deploy first)
+
+**URLs (new, year-free):** `/ca/guies/encesa-llums-nadal-barcelona/`,
+`/es/guias/encendido-luces-navidad-barcelona/`,
+`/en/guides/barcelona-christmas-lights/`.
+
+**Why.** Lights queries are the fastest-rising family on the site, and the
+only pages answering them are the general Christmas pages, whose titles are
+inside the 3 Nov window. Search Console, 22 Oct–4 Nov (`snapshot.py page … 14`):
+
+- CA `/ca/guies/nadal-a-barcelona/`: "encesa llums nadal barcelona 2026" 378
+  impr / 3 clicks / 0.8 % / pos 8.2; "encesa de llums barcelona 2026" 290 / 1 /
+  pos 8.0; "encesa llums barcelona 2026" 68 / 0 / 6.8; "encesa llums nadal
+  2026" 31 / 0 / 6.8.
+- ES `/es/guias/navidad-en-barcelona/`: "cuando encienden las luces de navidad
+  en barcelona 2026" 703 / 2 / pos 6.3; "encendido luces barcelona 2026" 502 /
+  1 / 5.9; "encendido luces navidad barcelona 2026" 482 / 2 / 6.9; "encendido
+  de luces barcelona 2026" 265 / 1 / 6.1; "luces navidad barcelona 2026" 118 /
+  1 / 9.3; plus the Catalan query again, 98 / 2 / 6.8.
+- Brief's 7-day view: "encesa llums nadal barcelona 2026" 311 at 8.3, "encesa
+  de llums barcelona 2026" 206 at 8.7, "luces navidad barcelona 2026" 69 at
+  9.1; about 3,000 impressions of lights queries a week at 0.5 % CTR.
+- `rising 7` (28 Oct–3 Nov vs the 7 days before): "encendido luces barcelona
+  2026" +455, "cuando encienden las luces…" +365, "encesa llums nadal barcelona
+  2026" +306, "encesa de llums barcelona 2026" +198.
+- Town-level lights queries ("encesa llums nadal <town> 2026", "encendido luces
+  navidad <town>"): 0 impressions, because no page of ours has them. In 2025
+  the councils announced between 12 and 25 November, so these peak mid–late
+  November.
+
+**Facts checked today (official pages only).** Barcelona: still no 2026 date.
+Checked the press room home, its searches for "llums nadal" and "encesa" (newest
+2026 items 8–9 Jul), the `nadal-2026` tag, and barcelona.cat/nadal (still the
+2025 edition, "s'actualitzarà al voltant del mes de novembre"). So
+`ANNOUNCED_2026.lightsSwitchOn` stays null. The new `LIGHTS_SWITCH_ON_CHECKED`
+in festive.ts is 4 Nov. Towns: none of the 25 councils had published 2026. 22
+have their 2025 date on their own site, and Sant Cugat only its 2024 date. Vic
+and Rubí have none (Rubí's site blocks every automated request). Fact pack:
+`research_notes/llums-nadal-2026.md`; each row's URL and quote are in
+`christmas-lights-towns.ts`.
+
+**What the page does.**
+
+- **Title**, Barcelona and the searched words first, 53–58 characters.
+  - ca: "Encesa de llums de Nadal 2026 a Barcelona i Catalunya"
+  - es: "Encendido de luces de Navidad 2026 en Barcelona y Cataluña"
+  - en: "Barcelona Christmas lights switch-on 2026 and other towns"
+  - ": dates" / ": fechas" is added on its own once a town has a 2026 date. It is
+    left out today, because no 2026 date exists.
+  - Once Barcelona announces, the title becomes the date, e.g. "Encesa de llums
+    de Nadal 2026 a Barcelona: 21 de novembre".
+- **Description**, answer first. "L'encesa de llums de Barcelona 2026 encara no
+  té data (2025: 22 de novembre, 18:00, passeig de Gràcia). També Girona,
+  Tarragona, Lleida i 22 municipis més." Once towns publish, it switches to
+  "Ja tenen data Girona, …".
+- **Body.** The lead gives Barcelona's answer, then a line on the towns. Key
+  facts cover day, time, place, who, streets (130 km), nightly hours (2025) and
+  until when (2025). Below that:
+  - the language line;
+  - the last three switch-ons table and the 2025 road closure;
+  - the 2026 streets from the 9 Jul plan;
+  - a town table of 26 rows (Barcelona first), with a 2026 column ("per
+    confirmar") and a 2025 column labelled with its year, plus a council link
+    on each row;
+  - day-trip links (Girona, Figueres, Sitges, Tarragona);
+  - a section linking the markets guide (Santa Llúcia 27 Nov–23 Dec 2026), Nadal
+    a Barcelona, the living nativities, Barcelona in December and Reis;
+  - an FAQ of 9 questions, including Girona, Tarragona and Lleida.
+- **Barcelona's facts all come from festive.ts.** The 2025 nightly hours were
+  added there as `PAST.lights2025.hours`, from the note of 16 Oct 2025.
+
+**Links in (body only; titles and descriptions untouched, test-locked).**
+
+- Christmas in Barcelona (ca/es/en): one sentence in the lights section. The
+  2025 hours line there now comes from festive.ts. It said "les vigílies de
+  festiu"; the City Council's note lists 24, 25 and 31 December and 5 January.
+- Christmas markets guide (ca/es/en): one sentence in "I la resta de ciutats?".
+- Both go out with `llums-nadal-links`. This is a body change on two pages
+  inside the 3 Nov window: read their CTR with that in mind.
+
+**Risk.** The new page competes with Christmas in Barcelona for the same
+Barcelona queries. Read the outcome as the two URLs added together on the
+lights queries, not the new page alone. If by 20 Nov the impressions are split
+with no gain in combined clicks, the hub's lights wording is the thing to move
+once its window closes (17 Nov).
+
+**Prediction.**
+
+- By 15 Nov the new page is indexed and in the top 10 for "encesa llums nadal
+  barcelona 2026" and "encendido luces navidad barcelona 2026".
+- Combined CTR of the two URLs on the lights queries goes from ~0.5 % to
+  ≥ 1.5 %.
+- The new page collects ≥ 1,500 impressions in its first 10 days, including its
+  first town-level queries once councils announce (around 15–25 Nov).
+- The big step comes the day Barcelona publishes, when the title and snippet
+  switch to the date.
+
+**Measure** on 17 Nov and 1 Dec 2026: `snapshot.py page encesa-llums 14`,
+`page encendido-luces 14`, `page barcelona-christmas-lights 14`, plus the lights
+queries on `page nadal-a-barcelona 14` / `page navidad-en-barcelona 14`. Check
+the last crawl first.
+
+**Follow-up.** When Barcelona publishes, fill `ANNOUNCED_2026.lightsSwitchOn`
+and move `LIGHTS_SWITCH_ON_CHECKED`, then publish `llums-nadal` (plus
+`christmas-bcn`, `nye` and `barcelona-december`). Re-read each town's `watch`
+page around 15–25 Nov, fill `y2026`, move `LIGHTS_TOWNS_AS_OF`, then deploy and
+publish `llums-nadal`. Girona's press room (web.girona.cat) returned 502 all day
+on 4 Nov, so re-check it.
+
 **Outcome:** _pending_

@@ -3,6 +3,8 @@ import { FAIRS, familyLastChecked, townBySlug, towns } from "@/lib/programmatic/
 import { fairsHubPath, townPath as fairsTownPath } from "@/lib/programmatic/christmas-fairs/paths";
 import { weekendHubPath } from "@/lib/programmatic/weekend/paths";
 
+import { LIGHTS_TOWNS } from "./christmas-lights-towns";
+
 import type { SeasonSpan } from "./christmas-traditions";
 import { LOCAL_MONDAY_7 } from "./december-bridge";
 import { dateYear, range } from "./festive";
@@ -98,6 +100,10 @@ import {
 // (login wall, bot challenge); no official 2026 page found for either. Links
 // added: Barcelona in December, the Three Kings parade and the fairs family's
 // new Barcelona page.
+//
+// 4 Nov 2026: "I la resta de ciutats?" gains one sentence linking the new
+// Christmas lights page (Barcelona and 25 towns; group `llums-nadal-links`).
+// No date in it; titles and descriptions untouched (3 Nov window).
 const VERIFIED = "2026-11-03";
 
 /** Fairs open on at least one day between `from` and `to`. */
@@ -386,6 +392,7 @@ function body(locale: Locale) {
       ...h2(
         "I la resta de ciutats?",
         `A **Tarragona**, el 2025 la Fira de Nadal va ser del 4 al 24 de desembre a la Rambla Nova, i a **Reus** el Mercat de Nadal, del 30 de novembre al 23 de desembre a la plaça del Mercadal; cap de les dues ciutats no ha publicat encara les dates del 2026. Sabadell, Terrassa, Tortosa i molts altres municipis també munten fires a l'Advent, però no n'hem trobat cap pàgina oficial amb dates del 2026; les webs d'agenda es contradiuen entre elles. Consulta l'agenda de l'ajuntament abans d'anar-hi. Si vas a Tarragona en tren, ${b2link("tarragona", "ca", "Tarragona des de Barcelona")}.`,
+        `Quan i on s'encenen els llums de Nadal a Barcelona i a ${LIGHTS_TOWNS.length} municipis més, de Girona a Tortosa, amb la data del 2026 de cada ajuntament quan ja l'ha publicada, ho trobaràs a ${b2link("christmasLights", "ca", "l'encesa de llums de Nadal 2026")}.`,
       ),
       ...h2(
         "Abans d'anar-hi",
@@ -467,6 +474,7 @@ function body(locale: Locale) {
       ...h2(
         "¿Y el resto de ciudades?",
         `En **Tarragona**, en 2025 la Fira de Nadal fue del 4 al 24 de diciembre en la Rambla Nova, y en **Reus** el Mercat de Nadal, del 30 de noviembre al 23 de diciembre en la plaza del Mercadal; ninguna de las dos ciudades ha publicado aún las fechas de 2026. Sabadell, Terrassa, Tortosa y muchos otros municipios también montan ferias en Adviento, pero no hemos encontrado ninguna página oficial con fechas de 2026; las webs de agenda se contradicen entre sí. Consulta la agenda del ayuntamiento antes de ir. Si vas a Tarragona en tren, ${b2link("tarragona", "es", "Tarragona desde Barcelona")}.`,
+        `Cuándo y dónde se encienden las luces de Navidad en Barcelona y en ${LIGHTS_TOWNS.length} municipios más, de Girona a Tortosa, con la fecha de 2026 de cada ayuntamiento cuando ya la ha publicado, lo encontrarás en ${b2link("christmasLights", "es", "el encendido de luces de Navidad 2026")}.`,
       ),
       ...h2(
         "Antes de ir",
@@ -547,6 +555,7 @@ function body(locale: Locale) {
     ...h2(
       "What about other towns?",
       `In **Tarragona** the 2025 Christmas fair ran from 4 to 24 December on the Rambla Nova, and in **Reus** the Christmas market from 30 November to 23 December on Plaça del Mercadal; neither city has published its 2026 dates yet. Sabadell, Terrassa, Tortosa and many other towns also hold Advent fairs, but we have found no official page with 2026 dates, and listing sites contradict each other. Check the council's events page before you go. By train to Tarragona, see ${b2link("tarragona", "en", "Tarragona from Barcelona")}.`,
+      `When and where the Christmas lights are switched on in Barcelona and ${LIGHTS_TOWNS.length} other towns, from Girona to Tortosa, with each council's 2026 date once it is published, is in ${b2link("christmasLights", "en", "our Christmas lights switch-on guide")}.`,
     ),
     ...h2(
       "Before you go",

@@ -3,6 +3,8 @@ import { shortDate } from "@/lib/content/holidays/calendar";
 import type { Locale } from "@/lib/i18n/config";
 import { fairsHubPath } from "@/lib/programmatic/christmas-fairs/paths";
 
+import { LIGHTS_TOWNS } from "./christmas-lights-towns";
+
 import {
   ANNOUNCED_2026,
   ANNOUNCEMENTS_CHECKED,
@@ -17,6 +19,7 @@ import {
   WATCH,
   dateYear,
   dayDate,
+  lightingHours2025,
   metroRows,
   sightRows,
   span,
@@ -69,6 +72,12 @@ import {
  * confirmed, and the descriptions open with the searchers' question ("cuándo
  * encienden las luces de navidad en barcelona 2026", "encesa llums nadal
  * barcelona 2026"), last year's day and the 130 km planned on 9 July.
+ *
+ * 4 Nov 2026: the lights section links the new lights page (Barcelona and 25
+ * towns, group `llums-nadal-links`), and the 2025 nightly hours now come from
+ * festive.ts (the City Council's note lists the late days, 24, 25 and 31
+ * December and 5 January; the old line said "the nights before holidays").
+ * Titles and descriptions untouched: they are inside the 3 Nov window.
  *
  * The markets are not repeated here: the Christmas markets guide carries them.
  * No new photograph: the hero is the Christmas-lights picture already in the
@@ -432,6 +441,20 @@ function santJaumeSentence(locale: Locale, facts: Announcements): string {
   }[locale];
 }
 
+/**
+ * The link to the lights page (4 Nov 2026, group `llums-nadal-links`): the
+ * switch-on in Barcelona and the towns, with each council's 2026 date. Body
+ * only; no date in it, so the guards on this page are untouched.
+ */
+export function lightsPageSentence(locale: Locale): string {
+  const n = LIGHTS_TOWNS.length;
+  return {
+    ca: `L'encesa de llums de Nadal de ${n} municipis més, com Girona, Tarragona, Lleida, Reus o Sabadell, amb la data del 2026 quan l'ajuntament ja l'ha publicada, és a ${b2link("christmasLights", "ca", "l'encesa de llums de Nadal 2026 a Barcelona i Catalunya")}.`,
+    es: `El encendido de luces de Navidad de ${n} municipios más, como Girona, Tarragona, Lleida, Reus o Sabadell, con la fecha de 2026 cuando el ayuntamiento ya la ha publicado, está en ${b2link("christmasLights", "es", "el encendido de luces de Navidad 2026 en Barcelona y Cataluña")}.`,
+    en: `The Christmas lights switch-on in ${n} other Catalan towns, such as Girona, Tarragona, Lleida, Reus and Sabadell, with each council's 2026 date once it is published, is in ${b2link("christmasLights", "en", "our guide to the 2026 Christmas lights switch-on")}.`,
+  }[locale];
+}
+
 /** The link to the Three Kings parade page that ends the cavalcada sentence. */
 function reisLink(locale: Locale): string {
   return {
@@ -541,7 +564,8 @@ export function buildChristmasBarcelonaBody(locale: Locale, facts: Announcements
       ...h2("Quan és l'encesa dels llums de Nadal de Barcelona 2026?", switchOnSection("ca", facts)),
       historyTable("ca"),
       ...paras(
-        "El 2025 els llums van estar encesos fins al 6 de gener de 2026, de 17:30 a 1:00 de diumenge a dijous i fins a les 2:00 els divendres, els dissabtes i les vigílies de festiu.",
+        `El 2025 els llums van estar encesos fins al ${dateYear(PAST.lights2025.until, "ca")}, ${lightingHours2025("ca")}.`,
+        lightsPageSentence("ca"),
       ),
       ...h2(
         "Llums de Nadal de Barcelona 2026: quins carrers",
@@ -658,7 +682,8 @@ export function buildChristmasBarcelonaBody(locale: Locale, facts: Announcements
       ...h2("¿Cuándo es el encendido de las luces de Navidad de Barcelona 2026?", switchOnSection("es", facts)),
       historyTable("es"),
       ...paras(
-        "En 2025 las luces estuvieron encendidas hasta el 6 de enero de 2026, de 17:30 a 1:00 de domingo a jueves y hasta las 2:00 los viernes, los sábados y las vísperas de festivo.",
+        `En 2025 las luces estuvieron encendidas hasta el ${dateYear(PAST.lights2025.until, "es")}, ${lightingHours2025("es")}.`,
+        lightsPageSentence("es"),
       ),
       ...h2(
         "Luces de Navidad de Barcelona 2026: qué calles",
@@ -774,7 +799,8 @@ export function buildChristmasBarcelonaBody(locale: Locale, facts: Announcements
     ...h2("When are the Barcelona Christmas lights switched on in 2026?", switchOnSection("en", facts)),
     historyTable("en"),
     ...paras(
-      "In 2025 the lights stayed on until 6 January 2026, from 17:30 to 1:00 from Sunday to Thursday and until 2:00 on Fridays, Saturdays and the evenings before public holidays.",
+      `In 2025 the lights stayed on until ${dateYear(PAST.lights2025.until, "en")}, ${lightingHours2025("en")}.`,
+      lightsPageSentence("en"),
     ),
     ...h2(
       "Barcelona Christmas lights 2026: which streets",

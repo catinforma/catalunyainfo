@@ -84,7 +84,9 @@ export type B2Key =
   // 31 Oct 2026: the Three Kings parade (Cavalcada de Reis), Barcelona and other towns.
   | "reis"
   // 3 Nov 2026: metro L2 closed between La Pau and Gorg for works (TMB).
-  | "l2Closure";
+  | "l2Closure"
+  // 4 Nov 2026: the Christmas lights switch-on, Barcelona and 25 towns.
+  | "christmasLights";
 
 /** Path after the locale prefix, no leading or trailing slash. */
 export const B2_PATHS: Record<B2Key, Record<Locale, string>> = {
@@ -395,6 +397,12 @@ export const B2_PATHS: Record<B2Key, Record<Locale, string>> = {
     ca: "guies/l2-metro-tall-la-pau-gorg",
     es: "guias/l2-metro-cortada-la-pau-gorg",
     en: "guides/barcelona-metro-l2-closure",
+  },
+  // No year in the path: the same URLs serve every November.
+  christmasLights: {
+    ca: "guies/encesa-llums-nadal-barcelona",
+    es: "guias/encendido-luces-navidad-barcelona",
+    en: "guides/barcelona-christmas-lights",
   },
 };
 
@@ -735,6 +743,11 @@ export const B2_TITLES: Record<B2Key, Record<Locale, string>> = {
     ca: "Tall de l'L2 entre La Pau i Gorg: bus llançadora i alternatives",
     es: "Corte de la L2 entre La Pau y Gorg: bus lanzadera y alternativas",
     en: "L2 metro closure between La Pau and Gorg: shuttle bus and alternatives",
+  },
+  christmasLights: {
+    ca: "Encesa de llums de Nadal 2026: Barcelona i 25 municipis",
+    es: "Encendido de luces de Navidad 2026: Barcelona y 25 municipios",
+    en: "Christmas lights switch-on 2026: Barcelona and 25 towns",
   },
 };
 
