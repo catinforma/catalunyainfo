@@ -10,6 +10,9 @@ const config = [
     ignores: [
       ".next/**",
       "node_modules/**",
+      // Agent worktrees hold full repo copies (with node_modules symlinks):
+      // linting them from the main checkout takes 10+ minutes of CPU.
+      ".claude/**",
       "drizzle/**",
       "next-env.d.ts",
       "src/lib/migration/legacy-redirects.ts",
