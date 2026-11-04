@@ -44,3 +44,10 @@ Newest first. Format: date · decision · why (evidence) · how it is measured �
 - 2026-10-17 · Content routes revalidate 86400 s, home 3600 s, nightly cron refreshes day-dependent pages. · ISR writes reached 90 % of the Hobby allowance at revalidate=300. · Vercel usage dashboard (owner). · b6a5b42
 - 2026-10-17 · `updatedAt` follows the verification date, not the republish time. · Republishing to add a layout box stamped ~110 pages "updated today". · dateModified in JSON-LD vs VERIFIED constants. · see git log 17 Oct
 - 2026-10-17 · IndexNow on every publish (Bing; Google does not use IndexNow). · Bing ~14 % and ChatGPT ~7 % of GA4 sessions. · Bing sessions in GA4; Bing Webmaster Tools once the owner sets it up. · 3a5147b
+
+## 2026-11-04 — Release 7480bf7: mesa per town, Christmas lights, strike guides
+- Live 10:35 (deploy 328 s). Groups published 14:55: `llums-nadal`, `llums-nadal-links`, `strikes`, `strike-11n`, `strike-renfe`, `strike-educacio`; IndexNow 2,013 election URLs.
+- Election town pages (947 ca/es + 30 en): "Mesa electoral a <town>" with the town's Junta Electoral de Zona (LOREG art. 8: 1979 districts, so 200 towns go to a JEZ outside today's district). Source: Generalitat open data vevv-8fvw + JEC directory. Self-expiring test from 1 Dec.
+- New: Christmas lights switch-on 2026 (Barcelona + 25 towns, all "per confirmar" with 2025 dates); Renfe/Rodalies 10 and 12 Nov and education 26N guides, rendered from strikes.ts.
+- eslint now ignores `.claude/**` (worktrees made `eslint .` run 10+ min at load 8.5).
+- Strike watch 14:55: nothing new (Treball newest Renfe item is the 23 Oct order; Transportes newest Ouigo 27 Oct; SEMAF newest 2026-52; Metges indefinite strike already covered).
