@@ -2350,6 +2350,79 @@ again on 27 Nov. Wrong if the Renfe guide is under 1,500 impressions by
 vaga-educacio 14`, `page huelga-educacion 14`, `page teachers-strike 14`,
 and the hub pages for cannibalisation.
 
+## 2026-11-04 — Sitewide alert strip: every page links the 11N and Renfe strike pages (then 29N), in its own language (deploy only, no publish group)
+
+What changed (code only; no title, description or body of any page):
+
+- A strip under the header of every public page (`components/NewsAlerts.tsx`,
+  rendered by `SiteHeader`, outside the sticky header): one line per active
+  alert, in the page's language, linking that language's edition. Data and
+  rules in `src/lib/alerts/news-alerts.ts`; tests in `tests/news-alerts.test.ts`.
+  - 4 Nov 00:00 → 12 Nov 00:00 (Madrid): **"Vaga general el dimecres 11 de
+    novembre: què funciona i serveis mínims"** / "Huelga general el miércoles
+    11 de noviembre: qué funciona y servicios mínimos" / "General strike on
+    Wednesday 11 November: what runs and minimum services" → the 11N page.
+  - 4 Nov 00:00 → 13 Nov 00:00: **"Vaga de Renfe el dimarts 10 i el dijous 12
+    de novembre: Rodalies i serveis mínims"** (es/en alike) → the Renfe guide.
+  - 13 Nov 00:00 → 30 Nov 00:00: **"Eleccions generals el diumenge 29 de
+    novembre: on i com votar"** / "Elecciones generales el domingo 29 de
+    noviembre: dónde y cómo votar" / "General election on Sunday 29 November:
+    how and where to vote" → the how-to-vote guide (`voting`).
+- Days and ends come from `strikes.ts` (the entries' `dates`; a day called off
+  moves the end and the wording, a removed entry drops its line) and from
+  `GENERAL_ELECTION_DAY`. The copy names the day and never says "today".
+- No line on the page it links to (compared with the page's own path).
+- Expiry on static pages: the server renders only the lines active at render
+  time; an inline script at the top of `<body>` (root layout, no client
+  bundle) hides any line past its end before the strip is parsed, and the
+  whole strip when none is left, also after client-side navigation. The
+  29N line appears on static pages built from 13 Nov (next deploy) and on
+  content pages within a day (ISR).
+
+Why: the 11N pages are the site's biggest traffic driver, but for the Catalan
+head queries both sit outside the top 8 (table). The ~2,000 election, holiday
+and fair town pages and the guides that Google crawls every day had no link
+to them; the strip gives each page one link per alert, with the searched
+words in the anchor ("vaga general … 11 de novembre", "vaga de Renfe …
+novembre"), and sends readers there in the week of the strikes.
+
+Baseline, `scripts/snapshot.py page <substr> 14`, 22 Oct-4 Nov (4 Nov
+partial; the pages began on 30 Oct):
+
+| Page | Impressions | Clicks | CTR | Position (daily) |
+| --- | --- | --- | --- | --- |
+| ES 11N `/es/guias/huelga-general-11-noviembre/` | 20,202 | 1,955 | 9.7 % | 4.9-6.1 |
+| CA 11N `/ca/guies/vaga-general-11-novembre/` | 7,708 | 705 | 9.1 % | 4.3-6.2 |
+| EN 11N `/en/guides/general-strike-11-november-spain/` | 2,981 | 181 | 6.1 % | 3.9-5.2 |
+
+2-3 Nov alone: ES 16,697 impressions / 1,637 clicks; CA 6,966 / 618.
+
+| Query (14 days) | CA page: impr. / pos. | ES page: impr. / pos. |
+| --- | --- | --- |
+| vaga general 11 novembre | 2,304 / 8.4 (CTR 1.2 %) | 708 / 9.9 |
+| vaga 11 novembre | 286 / 9.4 | 818 / 9.9 |
+| vaga 11 novembre 2026 | 123 / 6.9 | — |
+| vaga general 11 de novembre | 7 / 10.7 | 25 / 9.4 |
+
+Prediction: from the first deploy with the strip, Google recrawls the town
+pages within 2-4 days. By 10 Nov the CA 11N page averages position 6.0 or
+better for "vaga general 11 novembre" (from 8.4) and 7.0 or better for "vaga
+11 novembre" (from 9.4), and its share of the impressions of those two
+queries against the ES page rises (it takes over "vaga 11 novembre", where
+the ES page has 74 % of impressions today). CTR on those queries rises from
+1.2 % to 4 % or more with the better position. The ES page holds position
+5-6 overall. Totals will rise anyway with the 9-11 Nov peak, so the test is
+the per-query position, not the totals. Wrong if, on 8-10 Nov, the CA page
+is still at 8.0 or worse for "vaga general 11 novembre". Measure on 8, 11
+and 15 Nov: `snapshot.py page vaga-general-11 7`, `page huelga-general-11
+7`, `page general-strike-11 7` and the Renfe guide (`page renfe-rodalies 7`,
+prediction in the section above). Confounders: the 3 Nov change to both 11N
+pages (Catalan query wording, language line, snippets; section of that day)
+and the 4 Nov strike guides are in the same window.
+
+Rollback: remove `<NewsAlerts …/>` from `SiteHeader` and deploy (the expiry
+script alone renders nothing visible).
+
 ## 2026-11-04 — New page: Gran Recapte d'Aliments 2026, 13-14 November (groups `gran-recapte`, `gran-recapte-links`; deploy first)
 
 What was added: one guide in three languages on year-free URLs,

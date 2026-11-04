@@ -5,6 +5,7 @@ import { sectionPath, type SectionKey } from "@/lib/i18n/routes";
 import type { Locale } from "@/lib/i18n/config";
 import { nonEmptySections } from "@/lib/content/repository";
 import { LanguageSwitcher } from "./LanguageSwitcher";
+import { NewsAlerts } from "./NewsAlerts";
 import { SearchBox } from "./SearchBox";
 import { Wordmark } from "@/components/Wordmark";
 
@@ -39,58 +40,63 @@ export async function SiteHeader({
   const sections = filled.size > 0 ? PRIMARY.filter((key) => filled.has(key)) : PRIMARY;
 
   return (
-    <header className="ci-header">
-      <div className="ci-shell flex items-center gap-4 py-3">
-        <Wordmark href={`/${locale}/`} />
+    <>
+      <header className="ci-header">
+        <div className="ci-shell flex items-center gap-4 py-3">
+          <Wordmark href={`/${locale}/`} />
 
+          <nav
+            aria-label={t.common.menu}
+            className="ml-auto hidden items-center gap-5 md:flex"
+          >
+            {sections.map((key) => (
+              <Link
+                key={key}
+                href={sectionPath(key, locale)}
+                className="ci-nav-link"
+                aria-current={activeSection === key ? "page" : undefined}
+              >
+                {t.nav[key]}
+              </Link>
+            ))}
+          </nav>
+
+          <div className="ml-auto flex items-center gap-3 md:ml-0">
+            {showSearch ? (
+              <div className="hidden lg:block">
+                <SearchBox locale={locale} />
+              </div>
+            ) : null}
+            <LanguageSwitcher
+              locale={locale}
+              translations={translations}
+              label={t.common.changeLanguage}
+            />
+          </div>
+        </div>
+
+        {/* Small screens get the full section list as a scrollable rail rather
+            than a hamburger: five links fit, and a visible nav beats a hidden
+            one for both discovery and crawling. */}
         <nav
           aria-label={t.common.menu}
-          className="ml-auto hidden items-center gap-5 md:flex"
+          className="ci-shell flex gap-4 overflow-x-auto border-t border-[var(--color-rule)] py-2 md:hidden"
         >
           {sections.map((key) => (
             <Link
               key={key}
               href={sectionPath(key, locale)}
-              className="ci-nav-link"
+              className="ci-nav-link whitespace-nowrap"
               aria-current={activeSection === key ? "page" : undefined}
             >
               {t.nav[key]}
             </Link>
           ))}
         </nav>
-
-        <div className="ml-auto flex items-center gap-3 md:ml-0">
-          {showSearch ? (
-            <div className="hidden lg:block">
-              <SearchBox locale={locale} />
-            </div>
-          ) : null}
-          <LanguageSwitcher
-            locale={locale}
-            translations={translations}
-            label={t.common.changeLanguage}
-          />
-        </div>
-      </div>
-
-      {/* Small screens get the full section list as a scrollable rail rather
-          than a hamburger: five links fit, and a visible nav beats a hidden
-          one for both discovery and crawling. */}
-      <nav
-        aria-label={t.common.menu}
-        className="ci-shell flex gap-4 overflow-x-auto border-t border-[var(--color-rule)] py-2 md:hidden"
-      >
-        {sections.map((key) => (
-          <Link
-            key={key}
-            href={sectionPath(key, locale)}
-            className="ci-nav-link whitespace-nowrap"
-            aria-current={activeSection === key ? "page" : undefined}
-          >
-            {t.nav[key]}
-          </Link>
-        ))}
-      </nav>
-    </header>
+      </header>
+      {/* The news of the moment, in this page's language (lib/alerts/news-alerts.ts).
+          Outside the sticky header, so it scrolls away with the page. */}
+      <NewsAlerts locale={locale} currentPath={translations[locale]} />
+    </>
   );
 }

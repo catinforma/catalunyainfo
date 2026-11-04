@@ -1301,6 +1301,38 @@
     border-bottom-color: var(--color-sea);
   }
 
+  /* --- Alert strip (components/NewsAlerts.tsx) ---------------------------
+     The band itself has no padding or border, only its lines do: when the
+     expiry script hides every line, an empty strip has no height even where
+     `:has` (which also hides the band) is unsupported. Sea-deep on sea-wash:
+     10.5:1 light, 8.3:1 dark. */
+  .ci-alerts {
+    background: var(--color-sea-wash);
+    color: var(--color-ink);
+    font-size: var(--text-sm);
+    line-height: 1.4;
+  }
+  .ci-alerts li {
+    padding-block: 0.45rem;
+  }
+  .ci-alerts li + li {
+    border-top: 1px solid var(--color-rule);
+  }
+  .ci-alerts a {
+    color: var(--color-sea-deep);
+    font-weight: 500;
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.18em;
+  }
+  .ci-alerts a:hover {
+    text-decoration-thickness: 2px;
+  }
+  .ci-alerts a:focus-visible {
+    outline: 2px solid var(--color-sea);
+    outline-offset: 2px;
+  }
+
   /* --- Footer ----------------------------------------------------------- */
   .ci-footer {
     border-top: 1px solid var(--color-rule);
