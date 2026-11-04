@@ -5,6 +5,7 @@ import "../../globals.css";
 
 import { ConsentGate } from "@/components/ConsentGate";
 import { JsonLd } from "@/components/JsonLd";
+import { NewsAlertsExpiry } from "@/components/NewsAlerts";
 import { ScrollReset } from "@/components/ScrollReset";
 import { fontClassNames } from "@/lib/fonts";
 import { getMessages } from "@/lib/i18n";
@@ -93,6 +94,9 @@ export default async function LocaleLayout({
   return (
     <html lang={HTML_LANG[typed]} className={fontClassNames} suppressHydrationWarning>
       <body>
+        {/* Before any page content: hides alert-strip lines past their end on
+            pages rendered earlier (static pages are built once per deploy). */}
+        <NewsAlertsExpiry />
         <a className="ci-skip" href="#main">
           {t.common.skipToContent}
         </a>
