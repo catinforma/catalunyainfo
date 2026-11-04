@@ -19,6 +19,7 @@ import {
   buildEasterBody,
   dayRows,
   easterSources,
+  holyWeekLocal,
   localDaysAroundEaster,
   metroRows,
   optionRun,
@@ -37,7 +38,7 @@ import { metroDay } from "../src/lib/content/metro/tonight.ts";
 import { SCHOOL_YEARS } from "../src/lib/content/school/calendar.ts";
 import { buildBody as buildSchoolBody } from "../src/lib/content/school/publish.ts";
 import { LOCALES, type Locale } from "../src/lib/i18n/config.ts";
-import { hubCopy } from "../src/lib/programmatic/holidays/copy.ts";
+import { displayName, hubCopy } from "../src/lib/programmatic/holidays/copy.ts";
 import { COUNCIL_2027 } from "../src/lib/programmatic/holidays/council-2027.ts";
 import { municipalities, nextYearPublished } from "../src/lib/programmatic/holidays/data.ts";
 import { englishHubCopy } from "../src/lib/programmatic/holidays/english-copy.ts";
@@ -316,7 +317,20 @@ test("local days next to Easter are the councils' own, labelled pending, with th
   assert.ok(days.length > 0, "no council day near Easter: the section disappears, check the copy");
   for (const day of days) {
     assert.ok(day.council, day.town.slug);
-    assert.ok(day.date < EASTER.palmSunday || day.date > EASTER.easterMonday, `${day.town.slug}: a local day inside Holy Week needs its own wording`);
+    // A local day on a working day of Holy Week (Manlleu keeps Holy Thursday, Granera the Wednesday) is
+    // named in the day table's row for that date when the table has one and, for Holy Thursday, in the key
+    // facts, next to "working day in Catalonia". The list item gives it either way.
+    if (day.date >= EASTER.palmSunday && day.date <= EASTER.easterMonday) {
+      assert.ok(!holidayOn(day.date) && weekdayIndex(day.date) % 6 !== 0, `${day.town.slug}: ${day.date} needs its own wording`);
+      const row = (TABLE_DAYS as readonly string[]).indexOf(day.date);
+      for (const locale of LOCALES) {
+        const name = locale === "en" ? day.town.name.charAt(0).toUpperCase() + day.town.name.slice(1) : displayName(day.town, locale);
+        const local = holyWeekLocal(day.date, locale)!;
+        assert.ok(local.includes(name), `${locale}: ${local}`);
+        if (row >= 0) assert.ok(dayRows(locale)[row]![2]!.endsWith(`; ${local}`), `${locale}: day table row for ${day.date}`);
+        if (day.date === EASTER.holyThursday) assert.ok(body(locale).includes(`(${local})`), `${locale}: Holy Thursday key fact`);
+      }
+    }
     for (const locale of ["ca", "es"] as const) assert.ok(json(locale).includes(`](${municipalityPath(locale, day.town.slug)})`), `${locale}: ${day.town.slug} page`);
     assert.equal(json("en").includes(`](${municipalityPath("en", day.town.slug)})`), hasEnglishPage(day.town.slug), `en: ${day.town.slug}`);
     // A day next to the break stretches it; the page says where classes restart.

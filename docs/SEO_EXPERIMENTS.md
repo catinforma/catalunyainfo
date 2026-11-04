@@ -2479,3 +2479,125 @@ impressions by 15 Nov or is not indexed by 9 Nov. Measure on 9, 12, 15 and
 20 Nov: `snapshot.py page gran-recapte 14` (all three editions; the EN slug
 contains it too) and `page la-marato 14` (the sentence must not move
 La Marató's position).
+
+
+## 2026-11-04 — Council-approved 2027 local holidays: 302 more towns (118 → 420), titles and descriptions held
+
+**URLs:** `/ca/festius/<town>/` and `/es/festivos/<town>/` for 302 more towns,
+plus `/en/holidays/<town>/` for the seven of them with an English page
+(Sabadell, Salou, Lloret de Mar, Sitges, Castell-Platja d'Aro, Calonge i Sant
+Antoni, l'Ametlla de Mar). These are static pages that ship with the deploy.
+The new data also changes other pages:
+- the three hubs and the comarca pages (the count and the towns);
+- the 2027 date pages' local lists (17 May now reads "almenys a 83 municipis i 13 nuclis");
+- Ponts 2027, because Sabadell enters its 12-town table (publish group
+  `ponts-2027`);
+- Setmana Santa 2027, because more local days now fall in the Easter window
+  (publish group `setmana-santa-2027`).
+
+**Why.** "calendario laboral <town> 2027" and "festius locals 2027 <town>" are
+growing. Town holiday pages are about 10 % of the site's impressions. In the
+14 days to 3 Nov the 799 towns with no 2027 data took 12,760 impressions on
+their ES/CA pages, Tarragona 2,458 of them. Their 2027 queries sat at
+position 7.3, against 6.3 for the 118 towns that already had council data.
+The work went down that list, biggest first.
+
+**Method.** Every source is official: the council's own site, or its own
+folder on the AOC e-seu.
+- **AOC index of plenary minutes.** The AOC publishes an open-data index of
+  plenary minutes (`dadesobertes.seu-e.cat/csv/agn-ag-actes-de-ple.csv`,
+  143k rows). Each acta sits in the council's own folder,
+  `media.seu-e.cat/acteca/<entity>/`. The entity code is the INE code plus a
+  check digit, and it was checked against the town every time.
+- **Where most came from.** That index gave 266 of the 302 towns. The
+  other 36 came from council pages, plenary news and certificates (a
+  "web" act where the page names none).
+- **Bulletins.** The BOPB keyword search, a crawl of the 2026 BOP Girona issue
+  lists and the BOPT search found nothing new (only la Bisbal, already in).
+  The Generalitat's 2027 local order is not out.
+- **Checking.** Every source was re-fetched on 4 Nov and checked by script:
+  both dates, "2027" and a local-holiday keyword in one window, the town's
+  name, and the plenary date. The flagged ones, and the ones whose dates sit
+  in an image, were read by hand.
+- **Left out.**
+  - Towns whose days exist only per nucleus, as in the 2026 order: les
+    Franqueses del Vallès, Avinyonet del Penedès, Naut Aran, les Avellanes i
+    Santa Linya, Gimenells i el Pla de la Font, Ribera d'Urgellet, Josa i
+    Tuixén, Fígols i Alinyà, Montellà i Martinet, la Vansa i Fórnols.
+  - Partial or contradictory acts: Tavertet's "1 d'abril, Dijous Sant",
+    weekday mismatches in Garriguella and la Vilella Alta, three days in
+    Cabrera de Mar, "de 2026" in Balsareny and Aiguaviva, a Sunday in la Vall
+    de Boí, unclear session dates in Bell-lloc and Santa Bàrbara, Arbolí's
+    decree-or-plenary wording, and Teia's vote with no dates published.
+  - Wrong-town files in the index: les Piles, Castellserà, Pujalt,
+    l'Espunyola.
+  - Pages unreachable or scanned with no text: Darnius, la Palma de Cervelló,
+    el Lloar.
+
+**Titles held.** The town pages' 3 Nov retitle is still in its measurement
+window. For these towns the title, the H1 and the meta description therefore
+stay byte for byte what they were (`COUNCIL_2027_METADATA_HELD` in
+`council-2027.ts`, `councilForMetadata` in `data.ts`; a test compares each
+with the no-council form). Only the body changes:
+- the line under the lead;
+- the 2027 section, and the table with the two days marked pending;
+- the FAQ answer;
+- the Dataset (coverage 2026/2027, the council's act in `isBasedOn`).
+
+The 118 earlier towns keep their dated titles. Emptying the set after the
+window puts 2027 in the new towns' titles too.
+
+**Easter guide wording.** A local day on a working day of Holy Week was a
+test failure ("needs its own wording"). Several councils now keep Holy
+Thursday (Manlleu, Vacarisses, Talamanca…) and Granera keeps Holy Wednesday.
+The day table's Holy Thursday row and the key fact now say "Feiner a
+Catalunya…; festa local a …, pendent del DOGC" in ca/es/en. The list item
+gives the dates either way (`holyWeekLocal` in `easter-2027.ts`).
+
+**Baseline** (Search Console, ES+CA town pages, 21 Oct–3 Nov 2026,
+`dataState: all`):
+
+| Group | Towns | Page impr. | Clicks | 2027-query impr. | 2027-query pos. |
+| --- | --- | --- | --- | --- | --- |
+| Added today | 302 | 5,450 | 236 | 87 | 5.3 |
+| Still without data (control) | 497 | 7,310 | 222 | 246 | 7.5 |
+| Council data before today | 118 | 26,012 | 457 | 929 | 6.3 |
+
+Largest added by impressions:
+- Salou 1,063 at 5.3;
+- Viladecans 384;
+- Gavà 338;
+- Sant Feliu de Llobregat 335 ("festivos sant feliu de llobregat 2027" at
+  2.0);
+- Martorell 293 (2027 queries 27 impr. at 4.2);
+- Lloret de Mar 288;
+- Sitges 281 (13 at 4.1);
+- Salt 227;
+- Valls 203;
+- Castell-Platja d'Aro 174.
+
+Largest by population: Sabadell, whose CA page took 100 impressions at 7.6,
+its "festes locals sabadell 2027" at 9.0.
+
+Still without official data: Tarragona (the 19 June 2026 Ple had "Proposar…
+les festes locals… per a l'any 2027" on its agenda, but no acta or dates are
+published), Terrassa, Igualada, Cambrils, Santa Coloma de Gramenet (its site
+answers 403), Calella, Pineda de Mar, Sant Quirze del
+Vallès, Mollerussa, Esparreguera, la Seu d'Urgell, Calafell and Sant Pere de
+Ribes.
+
+**Prediction.** The titles do not change, so any CTR change comes from
+position.
+- The added towns' 2027 queries gain one to two positions by 30 Nov, as
+  their pages now answer them in the body, the FAQ and the Dataset. The
+  still-uncovered towns do not.
+- The added towns' 2027-query impressions grow faster than the control
+  group's as December demand builds.
+- "Hoy / mañana es festivo en <town>" does not move.
+
+**Measure on 30 Nov 2026** (`snapshot.py`, the three groups above), and
+again after the DOGC order (`prepare2027` prints COUNCIL DIFFERS). From
+1 Dec, once the retitle window closes, empty `COUNCIL_2027_METADATA_HELD` and
+measure that change on its own.
+
+**Outcome:** _pending_

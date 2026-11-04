@@ -1,7 +1,7 @@
 import { ARAN_SUBSTITUTIONS, HOLIDAYS_BY_YEAR } from "@/lib/content/holidays/calendar";
 import { ARAN_REPLACEMENT } from "@/lib/content/holidays/payload";
 
-import { COUNCIL_2027, type CouncilApproved } from "./council-2027";
+import { COUNCIL_2027, COUNCIL_2027_METADATA_HELD, type CouncilApproved } from "./council-2027";
 import { addDays } from "./format";
 import nextYearJson from "./local-2027.json" with { type: "json" };
 import { slugify } from "./slug";
@@ -71,6 +71,15 @@ export function nextYearFor(slug: string): { local: string[]; nuclei: NucleusDay
  */
 export function councilApproved2027(slug: string, published = nextYearPublished()): CouncilApproved | null {
   return published ? null : (COUNCIL_2027[slug] ?? null);
+}
+
+/**
+ * The council's days as the title, H1 and meta description may use them:
+ * none for the towns whose metadata is held (`COUNCIL_2027_METADATA_HELD`),
+ * whose pages print the days in the body only.
+ */
+export function councilForMetadata(slug: string, published = nextYearPublished()): CouncilApproved | null {
+  return COUNCIL_2027_METADATA_HELD.has(slug) ? null : councilApproved2027(slug, published);
 }
 
 /** The towns with a page whose council has approved next year's days, by population; none once the order is out. */

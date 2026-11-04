@@ -419,6 +419,25 @@ const DAY_NAMES: Record<Locale, Record<string, string>> = {
 };
 
 /** Whether each day is a holiday in Catalonia, from the calendar. */
+/**
+ * The towns whose own local day falls on a working day of Holy Week, in the
+ * words of the rows that call that day a working day in Catalonia: "festa
+ * local a Manlleu, pendent del DOGC" (Manlleu's council kept Holy Thursday
+ * for 2027). Null outside Holy Week or where no town has the day.
+ */
+export function holyWeekLocal(iso: string, locale: Locale): string | null {
+  if (iso < EASTER.palmSunday || iso > EASTER.easterMonday) return null;
+  const days = localDaysAroundEaster().filter((day) => day.date === iso);
+  if (days.length === 0) return null;
+  const towns = joinList(days.map((day) => (locale === "en" ? cap(day.town.name) : displayName(day.town, locale))), locale);
+  const pending = days.some((day) => day.council !== null);
+  return {
+    ca: `festa local a ${towns}${pending ? ", pendent del DOGC" : ""}`,
+    es: `fiesta local en ${towns}${pending ? ", pendiente del DOGC" : ""}`,
+    en: `a local holiday in ${towns}${pending ? ", pending the DOGC order" : ""}`,
+  }[locale];
+}
+
 export function dayRows(locale: Locale): string[][] {
   return TABLE_DAYS.map((iso) => {
     const weekday = weekdayIndex(iso);
@@ -436,6 +455,8 @@ export function dayRows(locale: Locale): string[][] {
       status = { ca: "Dissabte (no és festiu)", es: "Sábado (no es festivo)", en: "Saturday (not a holiday)" }[locale];
     } else {
       status = { ca: "Feiner a Catalunya (festiu a la majoria de comunitats)", es: "Laborable en Cataluña (festivo en la mayoría de comunidades)", en: "Working day in Catalonia (a holiday in most of Spain)" }[locale];
+      const local = holyWeekLocal(iso, locale);
+      if (local) status += `; ${local}`;
     }
     // Days with an "is it a holiday?" page link to it: one link per row (Holy Thursday, Good Friday, Easter Monday).
     const day = cap(d(iso, locale));
@@ -581,6 +602,11 @@ export function buildEasterBody(locale: Locale): Block[] {
   // Both true in 2027; the sentences that rely on them are left out in a year they are not.
   const schoolOnMonday = E.schoolFrom <= E.easterMonday && E.schoolTo >= E.easterMonday;
   const matchesSchool = weekBeforeRun.from === E.schoolFrom && weekBeforeRun.to === E.schoolTo;
+  // " (festa local a Manlleu, pendent del DOGC)": the towns that keep Holy Thursday as a local day.
+  const thursdayLocal = (lang: Locale) => {
+    const local = holyWeekLocal(E.holyThursday, lang);
+    return local ? ` (${local})` : "";
+  };
   const thursday = locale === "en" ? `Thursday the ${ordinal(Number(E.holyThursday.slice(8)))}` : `${{ ca: "dijous", es: "jueves" }[locale]} ${Number(E.holyThursday.slice(8))}`;
 
   if (locale === "ca") {
@@ -590,7 +616,7 @@ export function buildEasterBody(locale: Locale): Block[] {
       ),
       keyFacts("La Setmana Santa del 2027, d'un cop d'ull", [
         { label: "Diumenge de Rams", value: cap(d(E.palmSunday, "ca")) },
-        { label: "Dijous Sant", value: `${cap(d(E.holyThursday, "ca"))}: feiner a Catalunya` },
+        { label: "Dijous Sant", value: `${cap(d(E.holyThursday, "ca"))}: feiner a Catalunya${thursdayLocal("ca")}` },
         { label: "Divendres Sant", value: `${cap(d(E.goodFriday, "ca"))}: festiu a tot Catalunya` },
         { label: "Diumenge de Pasqua", value: cap(d(E.easterSunday, "ca")) },
         { label: "Dilluns de Pasqua", value: `${cap(d(E.easterMonday, "ca"))}: festiu, excepte a l'Aran` },
@@ -700,7 +726,7 @@ export function buildEasterBody(locale: Locale): Block[] {
       ),
       keyFacts("La Semana Santa de 2027, de un vistazo", [
         { label: "Domingo de Ramos", value: cap(d(E.palmSunday, "es")) },
-        { label: "Jueves Santo", value: `${cap(d(E.holyThursday, "es"))}: laborable en Cataluña` },
+        { label: "Jueves Santo", value: `${cap(d(E.holyThursday, "es"))}: laborable en Cataluña${thursdayLocal("es")}` },
         { label: "Viernes Santo", value: `${cap(d(E.goodFriday, "es"))}: festivo en toda Cataluña` },
         { label: "Domingo de Pascua", value: cap(d(E.easterSunday, "es")) },
         { label: "Lunes de Pascua", value: `${cap(d(E.easterMonday, "es"))}: festivo, salvo en Arán` },
@@ -809,7 +835,7 @@ export function buildEasterBody(locale: Locale): Block[] {
     ),
     keyFacts("Easter 2027 at a glance", [
       { label: "Palm Sunday", value: d(E.palmSunday, "en") },
-      { label: "Maundy Thursday", value: `${d(E.holyThursday, "en")}: a working day in Catalonia` },
+      { label: "Maundy Thursday", value: `${d(E.holyThursday, "en")}: a working day in Catalonia${thursdayLocal("en")}` },
       { label: "Good Friday", value: `${d(E.goodFriday, "en")}: public holiday across Catalonia` },
       { label: "Easter Sunday", value: d(E.easterSunday, "en") },
       { label: "Easter Monday", value: `${d(E.easterMonday, "en")}: public holiday, except in Aran` },

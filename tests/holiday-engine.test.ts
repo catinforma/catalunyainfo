@@ -31,7 +31,7 @@ import {
   YEAR,
   byComarca,
   comarcaBySlug,
-  councilApproved2027,
+  councilForMetadata,
   holidayRefreshDue,
   nextHoliday,
   nextYearFor,
@@ -968,7 +968,8 @@ test("metadata: every title <= 60 and description <= 155, in the searched words 
   // first ("hoy es festivo en lleida"), and next year only where the page has the town's 2027 days.
   const plain: string[] = [];
   for (const m of SNAPSHOT.municipalities) {
-    const has2027 = Boolean(nextYearFor(m.slug) || councilApproved2027(m.slug));
+    // The metadata's own view: the towns held out of it (council-2027.ts, 4 Nov) keep their 2026-only title.
+    const has2027 = Boolean(nextYearFor(m.slug) || councilForMetadata(m.slug));
     for (const locale of MUNI_LOCALES) {
       const title = municipalityTitle(m, locale);
       const name = locale === "es" ? esName(m.name) : m.name;
