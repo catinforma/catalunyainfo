@@ -85,6 +85,35 @@ const VERIFIED = "2026-11-03";
 
 const EXCUSE_APP = "https://www.mesaselectorales.es/web-excusas-form/#/login";
 
+/**
+ * The 29N facts this guide prints, as data, for the town election pages
+ * (`src/lib/programmatic/elections/mesa-duty.ts`): they import these instead
+ * of repeating them, and a test holds this guide's copy to the same values.
+ * Re-read on 4 Nov 2026 for the town pages (Interior's 29N mesa pages: draws
+ * "entre los días 31 de octubre y 4 de noviembre", notice "entre el 31 de
+ * octubre y el 7 de noviembre", "siete días desde la notificación para alegar
+ * ante la Junta Electoral de Zona", "Si dispone del sistema cl@ve" linking
+ * EXCUSE_APP, "cobrarán una dieta de 75 €", "reducción de su jornada de
+ * trabajo de cinco horas el día inmediatamente posterior"; LOREG arts. 27-28).
+ * Exporting them changes nothing this guide renders: no publish needed.
+ */
+export const MESA_29N = {
+  drawFrom: "2026-10-31",
+  drawTo: "2026-11-04",
+  /** Three days after the last draw; a later notice is still valid. */
+  noticeBy: "2026-11-07",
+  excuseDays: 7,
+  /** The last day to file for someone notified on `noticeBy`. */
+  lastExcuseDay: "2026-11-14",
+  /** Age from which a member may simply decline, within the same seven days. */
+  declineFrom: 65,
+  allowanceEur: 75,
+  /** Monday after polling day: five hours less work for every mesa member. */
+  dayAfter: "2026-11-30",
+  dayAfterHoursOff: 5,
+  excuseApp: EXCUSE_APP,
+} as const;
+
 const SOURCES: B2Source[] = [
   { name: "Ley Orgánica 5/1985, del Régimen Electoral General (texto consolidado)", url: "https://www.boe.es/buscar/act.php?id=BOE-A-1985-11672", publisher: "BOE" },
   { name: "Real Decreto 806/2026, de convocatoria de elecciones generales", url: "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2026-20742", publisher: "BOE" },
@@ -567,4 +596,4 @@ export const MESA: B2Article = {
   ) as B2Article["editions"],
 };
 
-export { META as MESA_META };
+export { META as MESA_META, SOURCES as MESA_SOURCES };
