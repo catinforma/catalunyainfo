@@ -54,6 +54,7 @@ import { DECEMBER_BRIDGE } from "@/lib/content/batch02/december-bridge";
 import { MARATO_GUIDE } from "@/lib/content/batch02/marato";
 import { STRIKES_GUIDE } from "@/lib/content/batch02/strikes";
 import { STRIKE_11N } from "@/lib/content/batch02/strike-11n";
+import { STRIKE_EDUCATION_GUIDE, STRIKE_RENFE_GUIDE } from "@/lib/content/batch02/strike-guides";
 import { GROSSA } from "@/lib/content/batch02/grossa";
 import { EASTER_2027 } from "@/lib/content/batch02/easter-2027";
 import { BRIDGES_2027 } from "@/lib/content/batch02/bridges-2027";
@@ -187,7 +188,19 @@ export async function POST(request: Request) {
     // minimum services are added. The metro-hours and transport-passes guides
     // gained one body link to it; they go out once, on their own group, so a
     // strike update never republishes two pages under a title experiment.
-    if (wants("strikes")) published.push(await publishB2Article(STRIKES_GUIDE));
+    // 4 Nov 2026: the strike guides (Renfe 10/12 Nov, education 26 Nov) are
+    // rendered from the same entries in strikes.ts, so the group the strike
+    // watch runs after every update republishes them with the hub. One group
+    // each too, for a guide on its own.
+    if (wants("strikes")) {
+      published.push(
+        await publishB2Article(STRIKES_GUIDE),
+        await publishB2Article(STRIKE_RENFE_GUIDE),
+        await publishB2Article(STRIKE_EDUCATION_GUIDE),
+      );
+    }
+    if (wants("strike-renfe")) published.push(await publishB2Article(STRIKE_RENFE_GUIDE));
+    if (wants("strike-educacio")) published.push(await publishB2Article(STRIKE_EDUCATION_GUIDE));
     if (wants("strikes-links")) published.push(await publishB2Article(HOURS), await publishB2Article(TRANSPORT));
     // The 11 November 2026 general strike's own page, with the strikes hub,
     // which links to it (one sentence) and carries the same minimum-services

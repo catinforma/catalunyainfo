@@ -793,7 +793,8 @@ test("the metro-hours and transport-passes guides gain exactly one body link eac
 
 test("the publish route has a strikes group and a one-off group for the two linking pages", () => {
   const route = readFileSync(new URL("../src/app/api/admin/publish/route.ts", import.meta.url), "utf8");
-  assert.match(route, /wants\("strikes"\)\) published\.push\(await publishB2Article\(STRIKES_GUIDE\)\)/);
+  // 4 Nov 2026: the strikes group also republishes the strike guides built from the same entries (tests/strike-guides.test.ts).
+  assert.match(route, /wants\("strikes"\)\) \{\s*published\.push\(\s*await publishB2Article\(STRIKES_GUIDE\),/);
   assert.match(route, /wants\("strikes-links"\)\) published\.push\(await publishB2Article\(HOURS\), await publishB2Article\(TRANSPORT\)\)/);
 });
 

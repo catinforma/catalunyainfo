@@ -19,7 +19,9 @@ import {
   paras,
   table,
   verifiedLine,
+  B2_TITLES,
   type B2Article,
+  type B2Key,
   type B2Source,
 } from "./shared";
 
@@ -171,6 +173,13 @@ import {
  *    STRIKES_AS_OF while one is still open.
  *  - `affects` drives the "what runs" table at the top: list every service a
  *    traveller, patient or family would notice.
+ *  - Strike guides (4 Nov 2026): an entry with `guide` also has a page of its
+ *    own (strike-guides.ts: Renfe 10/12 Nov, education 26 Nov), built from this
+ *    entry only, titles and dates included. Edit the entry, never the guide;
+ *    `?only=strikes` republishes the hub and every guide. If a day is called
+ *    off, remove it from `dates` (the guide's title follows); if the whole
+ *    strike is called off, say so in `facts` and set `minimumServices` to
+ *    "none" once its day has passed, as for any other strike.
  */
 
 /**
@@ -238,6 +247,12 @@ export interface Strike {
   /** Advice printed only while the strike is upcoming. */
   advice: Record<Locale, string[]>;
   sources: StrikeSource[];
+  /**
+   * The strike's own guide (strike-guides.ts), rendered from this entry. The
+   * hub's section links to it; editing the entry updates both pages, and
+   * `?only=strikes` republishes both.
+   */
+  guide?: B2Key;
 }
 
 export const STRIKE_URLS = {
@@ -635,6 +650,7 @@ export const STRIKES: Strike[] = [
       { name: "Informació de vagues amb serveis mínims (e-Tauler)", url: U.treballMs, publisher: "Departament d'Empresa i Treball" },
       { name: "Resoluciones de servicios mínimos ferroviarios", url: U.ministryRail, publisher: "Ministerio de Transportes y Movilidad Sostenible" },
     ],
+    guide: "strikeRenfe",
   },
   {
     id: "vaga-general-2026-11-11",
@@ -778,6 +794,7 @@ export const STRIKES: Strike[] = [
       { name: "Al novembre, tornem al carrer: el conflicte educatiu segueix viu! (28/10/2026)", url: U.cgtEns26, publisher: "CGT Ensenyament" },
       { name: "Nota de premsa conjunta: nou calendari de mobilitzacions aprovat a la 9a Assemblea Educativa de Catalunya (28/10/2026, PDF)", url: U.edu26Joint, publisher: "CGT Ensenyament" },
     ],
+    guide: "strikeEducation",
   },
 ];
 
@@ -861,7 +878,7 @@ export function strikeDays(strike: Strike, locale: Locale): string {
 }
 
 /** "A i B"; from three items on, "A, B i C". */
-function andList(items: string[], locale: Locale): string {
+export function andList(items: string[], locale: Locale): string {
   return items.length <= 2 ? items.join(AND[locale]) : `${items.slice(0, -1).join(", ")}${AND[locale]}${items[items.length - 1]}`;
 }
 
@@ -993,6 +1010,8 @@ type Copy = {
   pastHeading: string;
   pastIntro: string;
   msLabel: string;
+  /** Label of the last item of a strike's facts when it has a guide of its own. */
+  guideLabel: string;
   howHeading: string;
   how: string[];
   whenHeading: string;
@@ -1050,6 +1069,7 @@ const COPY: Record<Locale, Copy> = {
     pastHeading: "Vagues anteriors",
     pastIntro: "El que s'havia anunciat i publicat abans de cada vaga, tal com era a les fonts oficials.",
     msLabel: "Serveis mínims",
+    guideLabel: "Tot sobre aquesta vaga",
     howHeading: "Com funcionen els serveis mínims a Catalunya",
     how: [
       `El dret de vaga el reconeix ${link(U.constitution, "l'article 28.2 de la Constitució")}, que també demana que la llei garanteixi «el mantenimiento de los servicios esenciales de la comunidad». El ${link(U.rdl17, "Reial decret llei 17/1977")} hi afegeix dues regles: una vaga s'ha de comunicar a l'empresa i a l'autoritat laboral amb cinc dies naturals d'antelació, o deu si afecta serveis públics (articles 3 i 4), i l'autoritat governativa pot acordar les mesures necessàries per assegurar el funcionament dels serveis (article 10.2). Per això una vaga que afecta serveis públics, com el transport, s'anuncia com a mínim deu dies abans.`,
@@ -1135,6 +1155,7 @@ const COPY: Record<Locale, Copy> = {
     pastHeading: "Huelgas anteriores",
     pastIntro: "Lo que se había anunciado y publicado antes de cada huelga, tal como estaba en las fuentes oficiales.",
     msLabel: "Servicios mínimos",
+    guideLabel: "Todo sobre esta huelga",
     howHeading: "Cómo funcionan los servicios mínimos en Cataluña",
     how: [
       `El derecho de huelga lo reconoce ${link(U.constitution, "el artículo 28.2 de la Constitución")}, que también pide que la ley garantice «el mantenimiento de los servicios esenciales de la comunidad». El ${link(U.rdl17, "Real Decreto-ley 17/1977")} añade dos reglas: una huelga debe comunicarse a la empresa y a la autoridad laboral con cinco días naturales de antelación, o diez si afecta a servicios públicos (artículos 3 y 4), y la autoridad gubernativa puede acordar las medidas necesarias para asegurar el funcionamiento de los servicios (artículo 10.2). Por eso una huelga que afecta a servicios públicos, como el transporte, se anuncia como mínimo diez días antes.`,
@@ -1220,6 +1241,7 @@ const COPY: Record<Locale, Copy> = {
     pastHeading: "Past strikes",
     pastIntro: "What had been announced and published before each strike, as it stood in the official sources.",
     msLabel: "Minimum services",
+    guideLabel: "Everything about this strike",
     howHeading: "How minimum services work in Catalonia",
     how: [
       `The right to strike is recognised by ${link(U.constitution, "Article 28.2 of the Spanish Constitution")}, which also requires the law to guarantee "el mantenimiento de los servicios esenciales de la comunidad" (that the community's essential services keep running). ${link(U.rdl17, "Royal Decree-Law 17/1977")} adds two rules: a strike must be notified to the employer and the labour authority five calendar days ahead, or ten if it affects public services (Articles 3 and 4), and the government authority may take the measures needed to keep services running (Article 10.2). That is why a strike affecting public services, such as transport, is announced at least ten days in advance.`,
@@ -1353,10 +1375,15 @@ export function buildStrikesBody(locale: Locale, asOf: string = STRIKES_AS_OF, s
     blocks.push(table(t.runsCaption, [...t.runsHeaders], whatRunsRows(locale, asOf, strikes), t.runsNote(checkedShort)));
   }
 
+  // 4 Nov 2026: a strike with a guide of its own links to it from its card,
+  // as the card's last fact (the 11N entry links its page from its facts).
+  const guideItem = (strike: Strike): string[] =>
+    strike.guide ? [`**${t.guideLabel}:** ${b2link(strike.guide, locale, B2_TITLES[strike.guide][locale])}.`] : [];
+
   for (const strike of upcoming) {
     const days = strikeDays(strike, locale);
     blocks.push(heading(2, `${cap(days)}: ${strike.title[locale]}`, strike.id));
-    blocks.push(list(...strike.facts[locale]));
+    blocks.push(list(...strike.facts[locale], ...guideItem(strike)));
     blocks.push(...h3(t.msHeading(strikeRef(strike, locale)), strike.minimumServices.text[locale]));
     if (strike.advice[locale].length > 0) {
       blocks.push(heading(3, t.adviceHeading(strikeWhen(strike, locale))));
@@ -1369,7 +1396,7 @@ export function buildStrikesBody(locale: Locale, asOf: string = STRIKES_AS_OF, s
     for (const strike of past) {
       const days = strikeDays(strike, locale);
       blocks.push(heading(3, `${cap(days)}: ${strike.title[locale]}`, strike.id));
-      blocks.push(list(...strike.facts[locale], `**${t.msLabel}:** ${strike.minimumServices.text[locale]}`));
+      blocks.push(list(...strike.facts[locale], `**${t.msLabel}:** ${strike.minimumServices.text[locale]}`, ...guideItem(strike)));
     }
   }
 

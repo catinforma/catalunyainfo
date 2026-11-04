@@ -84,7 +84,11 @@ export type B2Key =
   // 31 Oct 2026: the Three Kings parade (Cavalcada de Reis), Barcelona and other towns.
   | "reis"
   // 3 Nov 2026: metro L2 closed between La Pau and Gorg for works (TMB).
-  | "l2Closure";
+  | "l2Closure"
+  // 4 Nov 2026: one guide per called strike that people search by name,
+  // rendered from its entry in strikes.ts (strike-guides.ts).
+  | "strikeRenfe"
+  | "strikeEducation";
 
 /** Path after the locale prefix, no leading or trailing slash. */
 export const B2_PATHS: Record<B2Key, Record<Locale, string>> = {
@@ -395,6 +399,19 @@ export const B2_PATHS: Record<B2Key, Record<Locale, string>> = {
     ca: "guies/l2-metro-tall-la-pau-gorg",
     es: "guias/l2-metro-cortada-la-pau-gorg",
     en: "guides/barcelona-metro-l2-closure",
+  },
+  // No day in the path: the days live in strikes.ts and may change (a day
+  // called off, another added); the month is in the searched words
+  // ("huelga rodalies noviembre", "vaga educacio novembre").
+  strikeRenfe: {
+    ca: "guies/vaga-renfe-rodalies-novembre",
+    es: "guias/huelga-renfe-rodalies-noviembre",
+    en: "guides/renfe-rodalies-strike-november",
+  },
+  strikeEducation: {
+    ca: "guies/vaga-educacio-novembre",
+    es: "guias/huelga-educacion-noviembre",
+    en: "guides/catalonia-teachers-strike-november",
   },
 };
 
@@ -735,6 +752,17 @@ export const B2_TITLES: Record<B2Key, Record<Locale, string>> = {
     ca: "Tall de l'L2 entre La Pau i Gorg: bus llançadora i alternatives",
     es: "Corte de la L2 entre La Pau y Gorg: bus lanzadera y alternativas",
     en: "L2 metro closure between La Pau and Gorg: shuttle bus and alternatives",
+  },
+  // Only days the strike's entry in strikes.ts lists (a test keeps them in step).
+  strikeRenfe: {
+    ca: "Vaga de Renfe al novembre: Rodalies i serveis mínims",
+    es: "Huelga de Renfe en noviembre: Rodalies y servicios mínimos",
+    en: "Renfe strike in November: Rodalies and what runs",
+  },
+  strikeEducation: {
+    ca: "Vaga a l'educació del 26 de novembre: hi ha escola?",
+    es: "Huelga en la educación del 26 de noviembre: ¿hay colegio?",
+    en: "Catalonia teachers' strike on 26 November: is there school?",
   },
 };
 
