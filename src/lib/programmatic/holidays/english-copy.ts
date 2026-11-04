@@ -3,7 +3,7 @@ import { EN_LARGEST, EN_RESORTS, TOURISM_REGISTER } from "@/lib/programmatic/ele
 
 import { bridgesLine, councilLabel, councilSource, type CouncilSource } from "./copy";
 import type { CouncilApproved } from "./council-2027";
-import { NEXT, SNAPSHOT, YEAR, aranSwap, councilApproved2027, isAran, nextYearFor, regionalDays } from "./data";
+import { NEXT, SNAPSHOT, YEAR, aranSwap, councilApproved2027, councilForMetadata, isAran, nextYearFor, regionalDays } from "./data";
 import { dateContent } from "./dates";
 import { CLOSING_2027 } from "./dates-2027";
 import { englishTowns, englishWithoutDays } from "./english";
@@ -55,7 +55,7 @@ function regionalCount(year: number): number {
  * 2026"), then both years. Where the council has already approved next
  * year's days (council-2027.ts), they replace "local dates" when they fit.
  */
-export function englishTownTitle(m: SnapshotMunicipality, council: CouncilApproved | null = councilApproved2027(m.slug)): string {
+export function englishTownTitle(m: SnapshotMunicipality, council: CouncilApproved | null = councilForMetadata(m.slug)): string {
   const name = enName(m);
   const days = council ? dayPair(council.local[0], council.local[1], "en") : null;
   return fit(
@@ -85,7 +85,7 @@ function localPhrase(m: SnapshotMunicipality): string {
  * Both local dates first, then what else the page answers. With next year's
  * days approved by the council, those lead and this year's follow.
  */
-export function englishTownDescription(m: SnapshotMunicipality, council: CouncilApproved | null = councilApproved2027(m.slug)): string {
+export function englishTownDescription(m: SnapshotMunicipality, council: CouncilApproved | null = councilForMetadata(m.slug)): string {
   const name = enName(m);
   if (council && m.local.length > 0) {
     const next = dayPair(council.local[0], council.local[1], "en");

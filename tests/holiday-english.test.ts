@@ -264,7 +264,9 @@ test("known answers: 'is <date> a holiday in <town>?' per town, from the snapsho
   assert.equal(answer("barcelona", "2027-05-17").state, "yes");
   assert.match(answer("barcelona", "2027-05-17").answer, /^Yes: one of Barcelona's local holidays \(approved by the council, pending the DOGC order\)\.$/);
   assert.match(answer("barcelona", "2027-04-23").answer, /^No: a working day in Barcelona, going by the council's own 2027 days/);
-  assert.equal(answer("salou", "2027-04-23").answer, "Not across Catalonia; Salou's 2027 local holidays are not published yet.");
+  // Terrassa: no council data yet (Salou's council approved its 2027 days, read 4 Nov 2026).
+  assert.equal(answer("terrassa", "2027-04-23").answer, "Not across Catalonia; Terrassa's 2027 local holidays are not published yet.");
+  assert.match(answer("salou", "2027-04-23").answer, /^No: a working day in Salou, going by the council's own 2027 days/);
   assert.equal(answer("salou", "2027-12-26").answer, "No: a Sunday, and not one of Catalonia's 2027 holidays.");
 });
 

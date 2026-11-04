@@ -8,6 +8,7 @@ import {
   YEAR,
   councilApproved2027,
   councilApprovedTowns,
+  councilForMetadata,
   isAran,
   nextHoliday,
   nextYearFor,
@@ -148,7 +149,7 @@ export function councilSource(c: CouncilApproved, locale: DateLocale): CouncilSo
 export function municipalityTitle(
   m: SnapshotMunicipality,
   locale: MuniLocale,
-  council: CouncilApproved | null = councilApproved2027(m.slug),
+  council: CouncilApproved | null = councilForMetadata(m.slug),
   next: { local: string[] } | null = nextYearFor(m.slug),
 ): string {
   const name = displayName(m, locale);
@@ -176,7 +177,7 @@ export function municipalityTitle(
 export function municipalityH1(
   m: SnapshotMunicipality,
   locale: MuniLocale,
-  council: CouncilApproved | null = councilApproved2027(m.slug),
+  council: CouncilApproved | null = councilForMetadata(m.slug),
   next: { local: string[] } | null = nextYearFor(m.slug),
 ): string {
   const years = next || council ? (locale === "ca" ? `${YEAR} i ${NEXT}` : `${YEAR} y ${NEXT}`) : String(YEAR);
@@ -247,7 +248,7 @@ function localList(dates: string[], locale: DateLocale): string {
 export function municipalityDescription(
   m: SnapshotMunicipality,
   locale: MuniLocale,
-  council: CouncilApproved | null = councilApproved2027(m.slug),
+  council: CouncilApproved | null = councilForMetadata(m.slug),
   today: string | null = null,
   dogc: { local: string[] } | null = nextYearFor(m.slug),
 ): string {
