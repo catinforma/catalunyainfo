@@ -86,7 +86,11 @@ export type B2Key =
   // 3 Nov 2026: metro L2 closed between La Pau and Gorg for works (TMB).
   | "l2Closure"
   // 4 Nov 2026: the Christmas lights switch-on, Barcelona and 25 towns.
-  | "christmasLights";
+  | "christmasLights"
+  // 4 Nov 2026: one guide per called strike that people search by name,
+  // rendered from its entry in strikes.ts (strike-guides.ts).
+  | "strikeRenfe"
+  | "strikeEducation";
 
 /** Path after the locale prefix, no leading or trailing slash. */
 export const B2_PATHS: Record<B2Key, Record<Locale, string>> = {
@@ -403,6 +407,19 @@ export const B2_PATHS: Record<B2Key, Record<Locale, string>> = {
     ca: "guies/encesa-llums-nadal-barcelona",
     es: "guias/encendido-luces-navidad-barcelona",
     en: "guides/barcelona-christmas-lights",
+  },
+  // No day in the path: the days live in strikes.ts and may change (a day
+  // called off, another added); the month is in the searched words
+  // ("huelga rodalies noviembre", "vaga educacio novembre").
+  strikeRenfe: {
+    ca: "guies/vaga-renfe-rodalies-novembre",
+    es: "guias/huelga-renfe-rodalies-noviembre",
+    en: "guides/renfe-rodalies-strike-november",
+  },
+  strikeEducation: {
+    ca: "guies/vaga-educacio-novembre",
+    es: "guias/huelga-educacion-noviembre",
+    en: "guides/catalonia-teachers-strike-november",
   },
 };
 
@@ -748,6 +765,17 @@ export const B2_TITLES: Record<B2Key, Record<Locale, string>> = {
     ca: "Encesa de llums de Nadal 2026: Barcelona i 25 municipis",
     es: "Encendido de luces de Navidad 2026: Barcelona y 25 municipios",
     en: "Christmas lights switch-on 2026: Barcelona and 25 towns",
+  },
+  // Only days the strike's entry in strikes.ts lists (a test keeps them in step).
+  strikeRenfe: {
+    ca: "Vaga de Renfe al novembre: Rodalies i serveis mínims",
+    es: "Huelga de Renfe en noviembre: Rodalies y servicios mínimos",
+    en: "Renfe strike in November: Rodalies and what runs",
+  },
+  strikeEducation: {
+    ca: "Vaga a l'educació del 26 de novembre: hi ha escola?",
+    es: "Huelga en la educación del 26 de noviembre: ¿hay colegio?",
+    en: "Catalonia teachers' strike on 26 November: is there school?",
   },
 };
 

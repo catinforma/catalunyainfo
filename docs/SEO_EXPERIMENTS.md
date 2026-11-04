@@ -2270,3 +2270,82 @@ publish `llums-nadal`. Girona's press room (web.girona.cat) returned 502 all day
 on 4 Nov, so re-check it.
 
 **Outcome:** _pending_
+
+## 2026-11-04 — Strike guides: Renfe 10/12 Nov and education 26 Nov get pages of their own (groups `strikes`, `strike-11n`)
+
+Why: date-named strike queries land on the generic hub around position 9
+and are not clicked: "vaga 29 octubre" gave the ES hub 169 impressions at
+8.9 with 0 clicks, "vaga 29 octubre 2026" 35 at 8.5, "vaga rodalies
+29 octubre" 20 at 8.8 (CA hub). The 11N page shows what a page titled in the
+searched words does: 19,076 impressions on ES in five days at 9.7 % CTR, against
+4.6 % for the hub. The next two called strikes people search by name get the
+same treatment before their peaks (Renfe: 9-10 Nov; education: 24-26 Nov).
+Early signals: "proximas huelgas de renfe" 26 at 7.2 (ES hub), "vaga educacio
+novembre" 25 at 3.8 (CA 11N page).
+
+What changed:
+
+- **New pages**, rendered from their entries in `strikes.ts` (field `guide`;
+  module `strike-guides.ts`), so the strike watch's edits reach them with
+  `?only=strikes`; titles and descriptions are built from the entry's dates
+  and minimum-services status (a day called off or minimum services out
+  rewrite them; tests/strike-guides.test.ts):
+  - Renfe/Rodalies 10 and 12 Nov: `/ca/guies/vaga-renfe-rodalies-novembre/`
+    **"Vaga Renfe 10 i 12 novembre 2026: Rodalies i serveis mínims"**;
+    `/es/guias/huelga-renfe-rodalies-noviembre/` **"Huelga Renfe 10 y 12
+    noviembre: Rodalies y servicios mínimos"**;
+    `/en/guides/renfe-rodalies-strike-november/` **"Renfe strike 10 and 12
+    November 2026: Rodalies and what runs"**.
+  - Education 26 Nov: `/ca/guies/vaga-educacio-novembre/` **"Vaga educació
+    26 novembre 2026: escoles i serveis mínims"**;
+    `/es/guias/huelga-educacion-noviembre/` **"Huelga educación Cataluña 26 de
+    noviembre: servicios mínimos"**;
+    `/en/guides/catalonia-teachers-strike-november/` **"Catalonia teachers'
+    strike 26 November: are schools open?"**.
+  - Answer first: lead (days, what it is, what it touches, minimum-services
+    status and who sets them), key facts (who calls it, days and hours,
+    affects / not affected, minimum services), then minimum services with
+    who sets them and where they appear (Treball's list and the DOGC; the
+    Ministry of Transport's rail list for long distance), a service-by-service
+    table, the 19 Rodalies lines' live pages (Renfe) or the school day (26N),
+    what to do, other strikes those days, FAQ.
+- **Hub** (body only; titles and descriptions frozen since 3 Nov): each of the
+  two cards ends with a link to its guide.
+- **11N page** (body only; titles frozen): the Rodalies paragraph links the
+  Renfe guide and now reads whether Renfe's minimum services are out from
+  `strikes.ts`; the schools section names the 26 Nov strike from its entry and
+  links its guide; both guides join the related rail.
+- **Publish groups**: `strikes` now republishes the hub and both guides;
+  `strike-renfe` and `strike-educacio` publish one guide each. Go-live:
+  deploy, then `strikes strike-11n`.
+
+Facts re-verified on 4 Nov 09:33-10:10 (SEMAF feed and notices 2026-51/52,
+Treball's list, DOGC 9787 via its summary API, the Ministry's rail list,
+Rodalies, USTEC·STEs, CGT Ensenyament): nothing new, so no fact and not
+STRIKES_AS_OF changed. Minimum services pending for both strikes. The 26 Nov
+strike is called in the unions' own communiqués of 28 Oct; no registered
+call, hours or staff are public yet, and the page says so.
+
+Baseline, `scripts/snapshot.py page <substr> 14`, 22 Oct-4 Nov (4 Nov
+empty, 3 Nov partial); the new URLs start at 0:
+
+| Page | Impressions | Clicks | CTR | Position |
+| --- | --- | --- | --- | --- |
+| ES hub `/es/guias/huelga-hoy-cataluna/` | 19,375 | 897 | 4.6 % | 5.4-5.9 |
+| CA hub `/ca/guies/vaga-avui-catalunya/` | 2,988 | 127 | 4.3 % | 4.9-6.4 |
+| ES 11N `/es/guias/huelga-general-11-noviembre/` | 19,076 | 1,858 | 9.7 % | 4.9-6.1 |
+| CA 11N `/ca/guies/vaga-general-11-novembre/` | 7,172 | 654 | 9.1 % | 4.3-6.3 |
+| EN 11N `/en/guides/general-strike-11-november-spain/` | 2,829 | 177 | 6.3 % | 3.9-5.0 |
+
+Prediction: by 15 Nov the Renfe guide (three editions) collects 4,000-8,000
+impressions, most on 9-10 Nov, at position 6 or better and CTR 8 % or more
+(the 11N analogue), and Renfe date queries ("huelga renfe 10 noviembre",
+"vaga renfe 10 novembre", "huelga rodalies noviembre") rank it rather than
+the hub; the hub keeps "huelga hoy" and its total does not fall more than
+10 % on 9-12 Nov against 28-30 Oct. The education guide collects 300-1,000
+impressions by 15 Nov (its peak falls after the goal window) and is measured
+again on 27 Nov. Wrong if the Renfe guide is under 1,500 impressions by
+15 Nov or its CTR is below the hub's. Measure on 11, 15 and 27 Nov:
+`snapshot.py page renfe-rodalies 14` (all three Renfe editions), `page
+vaga-educacio 14`, `page huelga-educacion 14`, `page teachers-strike 14`,
+and the hub pages for cannibalisation.
