@@ -90,7 +90,9 @@ export type B2Key =
   // 4 Nov 2026: one guide per called strike that people search by name,
   // rendered from its entry in strikes.ts (strike-guides.ts).
   | "strikeRenfe"
-  | "strikeEducation";
+  | "strikeEducation"
+  // 4 Nov 2026: the Gran Recapte food-bank collection (13-14 Nov 2026).
+  | "granRecapte";
 
 /** Path after the locale prefix, no leading or trailing slash. */
 export const B2_PATHS: Record<B2Key, Record<Locale, string>> = {
@@ -420,6 +422,12 @@ export const B2_PATHS: Record<B2Key, Record<Locale, string>> = {
     ca: "guies/vaga-educacio-novembre",
     es: "guias/huelga-educacion-noviembre",
     en: "guides/catalonia-teachers-strike-november",
+  },
+  // No year in the path: the campaign comes back every November.
+  granRecapte: {
+    ca: "guies/gran-recapte-aliments",
+    es: "guias/gran-recapte-alimentos",
+    en: "guides/gran-recapte-food-drive-catalonia",
   },
 };
 
@@ -776,6 +784,11 @@ export const B2_TITLES: Record<B2Key, Record<Locale, string>> = {
     ca: "Vaga a l'educació del 26 de novembre: hi ha escola?",
     es: "Huelga en la educación del 26 de noviembre: ¿hay colegio?",
     en: "Catalonia teachers' strike on 26 November: is there school?",
+  },
+  granRecapte: {
+    ca: "Gran Recapte 2026: dies, voluntariat i on donar",
+    es: "Gran Recapte 2026: días, voluntariado y dónde donar",
+    en: "Gran Recapte 2026 food drive: dates and how to help",
   },
 };
 

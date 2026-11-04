@@ -63,6 +63,7 @@ import { BARCELONA_DECEMBER } from "@/lib/content/batch02/barcelona-december";
 import { REIS } from "@/lib/content/batch02/reis";
 import { L2_CLOSURE_GUIDE } from "@/lib/content/batch02/l2-closure";
 import { CHRISTMAS_LIGHTS } from "@/lib/content/batch02/christmas-lights";
+import { GRAN_RECAPTE_GUIDE } from "@/lib/content/batch02/gran-recapte";
 import { publishHolidayTodayGuide } from "@/lib/content/holidays/today-publish";
 import { publishLocalHolidaysGuide } from "@/lib/content/holidays/local-publish";
 import { publishReservoirGuide } from "@/lib/content/reservoirs/publish";
@@ -300,6 +301,12 @@ export async function POST(request: Request) {
     // `llums-nadal-links`; their titles are inside the 3 Nov window.
     if (wants("llums-nadal")) published.push(await publishB2Article(CHRISTMAS_LIGHTS));
     if (wants("llums-nadal-links")) published.push(await publishB2Article(CHRISTMAS_BARCELONA), await publishB2Article(CHRISTMAS));
+    // Gran Recapte d'Aliments 2026 (13-14 Nov): one page, on its own so the
+    // 2026 results, once the organisers publish them, republish only it. The
+    // two pages that gained one body sentence linking to it (La Marató, the
+    // Barcelona markets guide) go out once, with `gran-recapte-links`.
+    if (wants("gran-recapte")) published.push(await publishB2Article(GRAN_RECAPTE_GUIDE));
+    if (wants("gran-recapte-links")) published.push(await publishB2Article(MARATO_GUIDE), await publishB2Article(MARKETS));
 
     const surfaces = [
       ...published.flatMap((article) =>

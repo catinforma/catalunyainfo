@@ -1,5 +1,6 @@
 import type { Locale } from "@/lib/i18n/config";
 
+import { granRecapteMention } from "./gran-recapte";
 import {
   b2Related,
   callout,
@@ -554,7 +555,9 @@ function marketsBody(locale: Locale) {
     ...h2(t.rulesTitle, ...t.rules),
     ...h2(t.bookTitle, t.book),
     ...h2(t.tipsTitle),
-    list(...t.tips),
+    // 4 Nov 2026: six of these markets have a Gran Recapte donation point on
+    // 13-14 Nov; one tip, read from gran-recapte.ts (titles untouched).
+    list(...t.tips, granRecapteMention(locale, "markets")),
     faq(t.faq),
     ...b2Related(["museums", "monuments", "hours"], locale),
   ];

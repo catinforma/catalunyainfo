@@ -2349,3 +2349,60 @@ again on 27 Nov. Wrong if the Renfe guide is under 1,500 impressions by
 `snapshot.py page renfe-rodalies 14` (all three Renfe editions), `page
 vaga-educacio 14`, `page huelga-educacion 14`, `page teachers-strike 14`,
 and the hub pages for cannibalisation.
+
+## 2026-11-04 — New page: Gran Recapte d'Aliments 2026, 13-14 November (groups `gran-recapte`, `gran-recapte-links`; deploy first)
+
+What was added: one guide in three languages on year-free URLs,
+`/ca/guies/gran-recapte-aliments/`, `/es/guias/gran-recapte-alimentos/`,
+`/en/guides/gran-recapte-food-drive-catalonia/` (module
+`src/lib/content/batch02/gran-recapte.ts`, AS_OF 2026-11-04, sources in its
+header). Answer first: the title carries both days ("Gran Recapte 2026: 13 i
+14 de novembre, com fer-te voluntari" / "13 y 14 de noviembre, cómo ser
+voluntario" / "13–14 November food drive, how to help", all ≤ 60), the
+description gives the weekdays (Friday 13, Saturday 14) plus Bizum 33596;
+the lead and key facts answer when, where, what to give, how to volunteer,
+the Bizum code and the Mercadona / El Corte Inglés / Consum money-only rule.
+Sections for the participating chains (31 named from the organisers' logos,
+the shop list PDF), Barcelona's six municipal markets, foods (the Tarragona
+food bank's list), volunteering (shift, coordinator, group, app, no published
+deadline), money donations (online, Bizum, phone, transfer without copying
+the IBAN, tax relief), what it is, and 2025 results (5.2 M€ equivalent,
+17,500 volunteers). Nine-question FAQ. Hero reused (Santa Caterina market
+roof, CC BY 2.0, the markets guide's exact alt and caption).
+
+Links in (body only; titles and descriptions untouched): one sentence at the
+end of La Marató's volunteering section and one tip in the Barcelona markets
+guide, both from `granRecapteMention()`. Go-live: deploy, then publish
+`gran-recapte`, then `gran-recapte-links` (La Marató and the markets guide).
+
+Why: the Gran Recapte is Catalonia's biggest food collection (18th edition,
+more than 2,000 collection points) and its searches ("gran recapte 2026",
+"gran recapte voluntari", "gran recapte supermercats", "gran recapte bizum")
+peak in the campaign week, 9-14 Nov, inside the 15 Nov goal window. No page
+of ours answered them. The organisers' own site does not put the days, the
+chains and the Bizum code on one screen, and their facts are spread over five
+sites; that one-screen answer is what this page offers.
+
+Facts: only the organisers' pages (granrecapte.org, acatbal.org, the four
+food banks), read on 4 Nov 2026. Left out because the sources disagree or say
+nothing: the volunteer target (15,000 vs 17,000), the 2025 tonnage (1,556 t
+vs 1,341,766 kg), any collection hours, a volunteer deadline. A test fails
+from 20 Nov (GRAN_RECAPTE_REFRESH_BY) until the page is re-read after the
+campaign for the 2026 results.
+
+Baseline, `scripts/snapshot.py page recapte 28` (28 days to 4 Nov): 0 impressions
+on any URL; no "gran recapte" query in `gaps 28`. Linking pages, 22 Oct-4
+Nov: La Marató (`page la-marato 14`) about 2,600 impressions at position
+5.5-6.8; the Boqueria and markets guide (`page boqueria 14`) 636 impressions.
+
+Prediction: by 15 Nov the three editions collect 1,500-5,000 impressions,
+two thirds on ES and CA, most on 10-14 Nov, with "gran recapte 2026" at
+position 8-15 (the organisers and the press hold the top) and the long tail
+("gran recapte supermercats", "gran recapte mercadona", "gran recapte bizum",
+"gran recapte voluntari") at position 8 or better, CTR 2-5 %. After 14 Nov
+impressions fall by more than 70 % within a week, then return with "gran
+recapte 2027" next autumn on the same URLs. Wrong if the page has under 500
+impressions by 15 Nov or is not indexed by 9 Nov. Measure on 9, 12, 15 and
+20 Nov: `snapshot.py page gran-recapte 14` (all three editions; the EN slug
+contains it too) and `page la-marato 14` (the sentence must not move
+La Marató's position).

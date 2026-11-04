@@ -3,6 +3,7 @@ import type { Locale } from "@/lib/i18n/config";
 import { fairsHubPath } from "@/lib/programmatic/christmas-fairs/paths";
 
 import { dayDate } from "./festive";
+import { granRecapteMention } from "./gran-recapte";
 import { SHOPS } from "./shops";
 import {
   b2Related,
@@ -83,6 +84,11 @@ import {
  * 10:00 on 20 Oct to 10:00 on 10 Nov, places drawn by lot, Sunday 13
  * December, no start time. After 10 November the description's deadline
  * is past and should be replaced.
+ *
+ * 4 Nov 2026: one body sentence at the end of the volunteering section links
+ * the new Gran Recapte 2026 guide (13-14 Nov), from gran-recapte.ts
+ * granRecapteMention(); titles and description untouched. Goes out with
+ * `gran-recapte-links`.
  *
  * No new photograph: the hero is the shops guide's lead picture (Christmas
  * lights), with the same alt text and caption.
@@ -210,6 +216,8 @@ export function buildMaratoBody(locale: Locale): Block[] {
         "Com participar-hi: voluntariat i activitats populars",
         `**Voluntariat.** Qui vulgui atendre trucades a les seus telefòniques del 13 de desembre es pot preinscriure a ${link(MARATO.volunteer, "marato.voluntariat.org")} des de les 10 h del 20 d'octubre fins a les 10 h del 10 de novembre de 2026; les places se sortegen entre totes les persones preinscrites. El voluntariat el coordina la Direcció General d'Acció Comunitària i Innovació Social, del Departament de Drets Socials i Inclusió.`,
         `**Activitats populars.** Segons la Fundació, cada any s'organitzen més de 3.500 activitats per recaptar diners: concerts, competicions esportives, caminades, dinars... Les entitats que en vulguin fer una la poden inscriure des de la ${link(MARATO.activities, "pàgina d'activitats populars")}, que també té un mapa per comarques amb les ja inscrites.`,
+        // 4 Nov 2026: one sentence on the Gran Recapte (13-14 Nov), read from gran-recapte.ts.
+        granRecapteMention("ca", "marato"),
       ),
       ...h2(
         "La Marató a les escoles i instituts",
@@ -293,6 +301,7 @@ export function buildMaratoBody(locale: Locale): Block[] {
         "Cómo participar: voluntariado y actividades populares",
         `**Voluntariado.** Quien quiera atender llamadas en los centros telefónicos del 13 de diciembre puede preinscribirse en ${link(MARATO.volunteer, "marato.voluntariat.org")} desde las 10 h del 20 de octubre hasta las 10 h del 10 de noviembre de 2026; las plazas se sortean entre todas las personas preinscritas. Lo coordina la Direcció General d'Acció Comunitària i Innovació Social, del Departament de Drets Socials i Inclusió.`,
         `**Actividades populares.** Según la Fundació, cada año se organizan más de 3.500 actividades para recaudar dinero: conciertos, competiciones deportivas, caminatas, comidas... Las entidades que quieran hacer una pueden inscribirla desde la ${link(MARATO.activities, "página de actividades populares")}, que también tiene un mapa por comarcas con las ya inscritas.`,
+        granRecapteMention("es", "marato"),
       ),
       ...h2(
         "La Marató en los colegios e institutos",
@@ -375,6 +384,7 @@ export function buildMaratoBody(locale: Locale): Block[] {
       "How to take part: volunteering and local events",
       `**Volunteering.** Anyone who wants to answer calls at the phone centres on 13 December can pre-register at ${link(MARATO.volunteer, "marato.voluntariat.org")} until 10:00 on 10 November 2026 (registration opened at 10:00 on 20 October); places are drawn by lot among everyone who signs up. Volunteering is coordinated by the Generalitat's Directorate-General for Community Action and Social Innovation (Department of Social Rights and Inclusion).`,
       `**Local events.** According to the Fundació, more than 3,500 fundraising events are organised every year: concerts, sports competitions, walks, lunches and more. Groups that want to run one can register it on the ${link(MARATO.activities, "popular activities page")}, which also has a map of those already registered, by comarca.`,
+      granRecapteMention("en", "marato"),
     ),
     ...h2(
       "La Marató in schools",
