@@ -4,6 +4,7 @@ import { Breadcrumbs, type Crumb } from "@/components/Breadcrumbs";
 import { JsonLd } from "@/components/JsonLd";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
+import { MesaSection } from "@/components/programmatic/ElectionMesaSection";
 import { PollingSection } from "@/components/programmatic/ElectionPollingSection";
 import { ElectionDayStatus } from "@/components/programmatic/ElectionDayStatus";
 import { slugifyAnchor, type Block } from "@/lib/content/blocks";
@@ -40,6 +41,7 @@ export function ElectionResultsPage({ locale, municipality }: { locale: Locale; 
 
   const sections = [
     model.slot.title,
+    ...(model.mesa ? [model.mesa.title] : []),
     model.polling.title,
     model.municipal.title,
     model.seats.title,
@@ -110,6 +112,9 @@ export function ElectionResultsPage({ locale, municipality }: { locale: Locale; 
                     ))}
                   </section>
                 )}
+
+                {/* Time-bound and compact (excuses are due within 7 days of the notice): before the polling places. */}
+                {model.mesa ? <MesaSection mesa={model.mesa} headingId={id(model.mesa.title)} /> : null}
 
                 <PollingSection polling={model.polling} headingId={id(model.polling.title)} />
 

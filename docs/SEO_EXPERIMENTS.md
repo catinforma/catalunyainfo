@@ -2097,3 +2097,66 @@ Recorded so they are not lost, and so they are not all started at once.
 
 - /es/guias/puente-diciembre-cataluna/: "Puente de diciembre 2026 en Cataluña: qué días son festivos" → "Puente de diciembre 2026 en Cataluña: festivo el martes 8" (same pattern as CA since 3 Nov). Description unchanged. GSC 21 Oct–3 Nov: "festivos diciembre 2026" 97 impr pos 5.2 0 clicks, "festivos de diciembre 2026" 33 pos 5.6 0 clicks; page CTR 2.3% at pos 5.6. Measure 15 Nov and 1 Dec (`snapshot.py page puente-diciembre 14`). Publish group: pont-desembre.
 
+## 2026-11-04 — Election town pages: "Mesa electoral a/en <town>" with the town's Junta Electoral de Zona (body only; deploy, no publish group)
+
+**What changed.** Every election town page (`/ca/eleccions/<town>/`,
+`/es/elecciones/<town>/`, 947 each, and the 30 `/en/elections/<town>/`) gets a
+compact section before the polling places: H2 "Mesa electoral a <town>" /
+"Mesa electoral en <town>" / "Polling-station duty (mesa electoral) in
+<town>"; a lead (draw closed 4 Nov, notice by 7 Nov, 7 days to file an excuse
+with the named JEZ); rows for notice, excuse (Cl@ve platform, to 14 Nov if
+notified on the 7th, 65+ may decline), €75 and 5 hours off on Monday 30 Nov;
+the town's **Junta Electoral de Zona** with the JEC directory's address and
+tap-to-call phones, and a line on its judicial district; a link to the mesa
+guide. Also a facts row ("Excuses de mesa (29N)") and a FAQ item ("Si m'ha
+tocat mesa el 29N a <town>, on presento l'excusa?"), which also lands in the
+page's FAQPage JSON-LD. Titles and descriptions untouched (3 Nov change,
+commit 6b827d9, still measuring). Code: `src/lib/programmatic/elections/mesa-duty.ts`,
+`jez.json` (19.8 KB, one line, built by `scripts/elections-jez.py`),
+`ElectionMesaSection.tsx`; facts imported from `MESA_29N` in `mesa.ts`
+(guide output byte-identical, so no `mesa` publish).
+
+**A correction to the brief, from the law.** The JEZ is not simply "the
+partit judicial's head town": LOREG art. 8.3 seats each JEZ in the head town
+of the districts of art. 8.6, "los de las Elecciones Locales de 1979".
+Catalonia has 49 judicial districts but 31 JEZ, and 200 towns file elsewhere
+than their current district: Sant Boi, el Prat → l'Hospitalet; Santa Coloma
+de Gramenet → Barcelona; Mollet → Granollers. The page names the JEZ and
+explains the difference. Mapping: Generalitat register vevv-8fvw
+(PARTIT_ELECTORAL), 947/947 equal to the JEC's own per-municipality pages
+and, for the district, to Justícia's 772x-hgsh.
+
+**Why.** "mesa electoral (29n) <town>" is the fastest-rising election query
+family since the draw (31 Oct–4 Nov) and lands on these pages, which had no
+answer for someone who has been drawn. Baseline, `scripts/snapshot.py page
+/eleccions/ 14` and `page /elecciones/ 14` (GSC, 3 Nov partial):
+
+| Family | 2 Nov | 3 Nov |
+| --- | --- | --- |
+| /ca/eleccions/ | 7,248 impr., 273 clicks, 3.8 %, pos 5.4 | 5,751 impr., 274 clicks, 4.8 %, pos 4.7 |
+| /es/elecciones/ | 6,964 impr., 461 clicks, 6.6 %, pos 4.2 | 8,240 impr., 718 clicks, 8.7 %, pos 3.9 |
+
+Mesa queries in the two top-30 lists (22 Oct–4 Nov): 1,843 impr., 69 clicks,
+**3.7 %**. ES: santa coloma de gramenet 261 at 2.3 (8.4 %), hospitalet 200 at
+7.9 (0.5 %), matadepera 111 at 4.7, sant boi 98 at 3.7, el prat 87 at 3.3,
+mollet 78 at 2.7, martorell 57 at 2.2 (12.3 %), salou 37 at 1.4 (13.5 %). CA:
+matadepera 239 at 6.1 (**0.4 %**), vacarisses 43 at 5.0 (0), santa coloma 36,
+cardedeu 27, figueres 22 (all ≈ 0). `rising` (28 Oct–3 Nov vs the 7 days
+before): mesa electoral matadepera +357, santa coloma +225, hospitalet +205.
+
+**Prediction.** Demand peaks while notices arrive (to ~7 Nov) and fades after
+the last excuse day (14 Nov). With the answer and the JEZ in the body (and in
+the snippet Google builds for these queries): mesa-query CTR on the two
+families from 3.7 % to **≥ 6 %**, average position from ~4.5 to **≤ 3.5**, CA
+mesa queries off ~0 % to ≥ 2 % (their title still says "on votar", so the
+ceiling is lower); hospitalet (pos 7.9) into the top 5. Risk: the section sits
+above the polling places, so "on votar" queries could lose a little CTR;
+watch "on votar"/"dónde votar" + town at equal position.
+
+**Measure on 11 Nov 2026** (a week after deploy, still inside the excuse
+window) **and on 17 Nov** (after it): `snapshot.py page /eleccions/ 14`,
+`page /elecciones/ 14`, filter "mesa electoral"; check the last crawl of
+matadepera, santa-coloma-de-gramenet, l-hospitalet-de-llobregat first. A test
+fails from 1 Dec 2026 to force the section's removal after polling day.
+
+**Outcome:** _pending_
