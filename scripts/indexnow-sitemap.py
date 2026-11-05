@@ -10,12 +10,14 @@ KEY = "1b9cd1c5da114656a9bd9c3cc29740c6"  # public by design: served at /<key>.t
 prefixes = sys.argv[1:]
 if not prefixes:
     sys.exit("usage: indexnow-sitemap.py <path prefix> [...]")
-sitemap = urllib.request.urlopen(f"https://{HOST}/sitemap.xml", timeout=60).read().decode()
+# Cloudflare (since 5 Nov 2026) answers 403 to the default "Python-urllib" User-Agent: name ourselves.
+UA = {"User-Agent": "catalunyainfo-indexnow/1.0 (+https://www.catalunyainfo.com/)"}
+sitemap = urllib.request.urlopen(urllib.request.Request(f"https://{HOST}/sitemap.xml", headers=UA), timeout=60).read().decode()
 urls = [u for u in re.findall(r"<loc>([^<]+)</loc>", sitemap) if any(u.startswith(f"https://{HOST}{p}") for p in prefixes)]
 if not urls:
     sys.exit("no sitemap URL matches those prefixes")
 body = json.dumps({"host": HOST, "key": KEY, "keyLocation": f"https://{HOST}/{KEY}.txt", "urlList": urls[:10000]}).encode()
-req = urllib.request.Request("https://api.indexnow.org/indexnow", data=body, headers={"content-type": "application/json; charset=utf-8"})
+req = urllib.request.Request("https://api.indexnow.org/indexnow", data=body, headers={"content-type": "application/json; charset=utf-8", **UA})
 try:
     status = urllib.request.urlopen(req, timeout=30).status
 except urllib.error.HTTPError as e:
