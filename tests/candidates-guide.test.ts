@@ -11,6 +11,7 @@ import { ELECTORS, PROVINCES, SEATS } from "../src/lib/content/candidates/boe.ts
 import { IMAGE_BY_KEY } from "../src/lib/content/images.ts";
 import { EVERGREEN } from "../src/lib/content/weekend/evergreen.ts";
 import { LOCALES } from "../src/lib/i18n/config.ts";
+import { pollsPath } from "../src/lib/programmatic/polls/paths.ts";
 
 /**
  * The 29N candidates guide. Same structural checks as the batch-02 suite (it
@@ -22,9 +23,24 @@ import { LOCALES } from "../src/lib/i18n/config.ts";
 const PUBLISHED = new Set([
   ...Object.values(B2_PATHS).flatMap((paths) => LOCALES.map((locale) => `/${locale}/${paths[locale]}/`)),
   ...LOCALES.map((locale) => `/${locale}/${EVERGREEN[locale].path}/`),
+  // The 29N official-polls page (code-rendered route, not a DB entry).
+  ...LOCALES.map((locale) => pollsPath(locale)),
 ]);
 
 const text = (locale: (typeof LOCALES)[number]) => bodyToPlainText(CANDIDATES.editions[locale].blocks);
+
+/**
+ * The body without its one sanctioned pointer to the official-polls page
+ * (5 Nov 2026): the guide itself stays strictly procedural, with no poll
+ * content; the link sends readers to the page that carries the CIS/CEO
+ * figures, their technical sheets and the LOREG 69.7 blackout.
+ */
+const textWithoutPollsLink = (locale: (typeof LOCALES)[number]) => {
+  const blocks = CANDIDATES.editions[locale].blocks;
+  const pointer = blocks.filter((block) => JSON.stringify(block).includes(`](${pollsPath(locale)})`));
+  assert.equal(pointer.length, 1, `${locale}: exactly one block links the polls page`);
+  return bodyToPlainText(blocks.filter((block) => !pointer.includes(block)));
+};
 
 test("three editions that validate, are substantial and sit on the registry paths", () => {
   for (const locale of LOCALES) {
@@ -115,7 +131,7 @@ test("Congress closed lists, Senate up to three, and where the lists are publish
 
 test("no names, polls, rankings or court case: strictly procedural", () => {
   for (const locale of LOCALES) {
-    const body = text(locale);
+    const body = textWithoutPollsLink(locale);
     // Not one name from last election's lists, and no party.
     for (const name of ["Batet", "Iceta", "PSC", "ERC", "JUNTS", "Junts", "VOX", "Vox", "PP)", "SUMAR", "Sumar", "CUP"]) {
       assert.ok(!body.includes(name), `${locale}: ${name}`);

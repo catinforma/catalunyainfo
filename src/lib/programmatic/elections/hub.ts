@@ -2,6 +2,7 @@
 
 import { b2href } from "@/lib/content/batch02/shared";
 import type { Locale } from "@/lib/i18n/config";
+import { pollsPath } from "@/lib/programmatic/polls/paths";
 
 import { EN_LARGEST, EN_RESORTS, TOURISM_REGISTER } from "./english";
 import { INTERIOR_DOWNLOADS, longDate, LOREG_URL } from "./model";
@@ -60,6 +61,7 @@ export function hubCopy(locale: Locale): HubCopy {
       intro: [
         `Cada pàgina té els vots i els regidors de cada llista a les municipals del 2023, com es van elegir els regidors, i el vot del municipi a les generals i al Parlament al costat del de Catalunya. Cada comarca té també la seva pàgina, amb el resultat de les municipals de tots els seus municipis en una taula.`,
         `Per a totes les municipals des del 1979, fes servir el [cercador de resultats municipals](${b2href("municipalResults", "ca")}).`,
+        `Les estimacions de vot i escons del CIS i del CEO per al 29N a Catalunya, amb la fitxa tècnica de cada estudi, són a [enquestes oficials de les eleccions generals](${pollsPath("ca")}).`,
       ],
       listTitle: "Municipis per comarques",
       jumpLabel: "Ves a la comarca",
@@ -87,6 +89,7 @@ export function hubCopy(locale: Locale): HubCopy {
       intro: [
         `Cada página tiene los votos y los concejales de cada lista en las municipales de 2023, cómo se eligieron los concejales, y el voto del municipio en las generales y en el Parlament junto al de Cataluña. Cada comarca tiene también su página, con el resultado de las municipales de todos sus municipios en una tabla.`,
         `Para todas las municipales desde 1979, usa el [buscador de resultados municipales](${b2href("municipalResults", "es")}).`,
+        `Las estimaciones de voto y escaños del CIS y del CEO para el 29N en Cataluña, con la ficha técnica de cada estudio, están en [encuestas oficiales de las elecciones generales](${pollsPath("es")}).`,
       ],
       listTitle: "Municipios por comarcas",
       jumpLabel: "Ir a la comarca",
@@ -113,6 +116,7 @@ export function hubCopy(locale: Locale): HubCopy {
     intro: [
       `Each page has every list's votes, percentage and councillors in the 2023 local election, how the seats were allocated, and the town's vote in the general and Catalan elections beside Catalonia's. The towns are the ${EN_LARGEST} largest by population on 1 January ${year} (Idescat), the four provincial capitals among them, and the ${EN_RESORTS.length} with the most places in the Generalitat's register of tourist accommodation (hotels, campsites, rural tourism, tourist flats and homes).`,
       `The Catalan and Spanish editions cover all ${PAGES_PER_LOCALE.ca} municipalities in Catalonia: [in Catalan](${hubPath("ca")}), [in Spanish](${hubPath("es")}). For every local election since 1979, use the [local results lookup](${b2href("municipalResults", "en")}).`,
+      `The CIS and CEO vote and seat estimates for Catalonia for 29 November, with each study's technical sheet, are on [official general election polls](${pollsPath("en")}).`,
     ],
     listTitle: "Towns by comarca",
     jumpLabel: "Go to a comarca",

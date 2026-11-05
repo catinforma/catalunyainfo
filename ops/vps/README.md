@@ -509,6 +509,10 @@ matching rule wins, so the bypass goes **last**:
    or http.cookie contains "ci_session"
    or any(http.request.uri.args.names[*] eq "_rsc")
    or any(lower(http.request.headers.names[*])[*] eq "rsc")
+   or starts_with(http.request.uri.path, "/ca/guies/enquestes-eleccions-generals-catalunya")
+   or starts_with(http.request.uri.path, "/es/guias/encuestas-elecciones-generales-cataluna")
+   or starts_with(http.request.uri.path, "/en/guides/spain-general-election-polls-catalonia")
+   or http.request.uri.path contains "/internal-polls"
    ```
    → **Bypass cache**. `/` is a per-language redirect (`Vary: Accept-Language,
    Cookie`, which Cloudflare ignores). `/_next/image` negotiates AVIF/WebP on
@@ -523,7 +527,15 @@ matching rule wins, so the bypass goes **last**:
    stored. The `rsc` header test also covers a request that sends the header
    without `_rsc`, which would otherwise be cached under the page's own key (an
    RSC payload served as the HTML). Client-side navigations therefore always
-   reach the origin, which answers them from its ISR cache.
+   reach the origin, which answers them from its ISR cache. **The last four
+   lines are the 29N polls page** (CIS, CEO; `src/lib/programmatic/polls/`; the guide URLs rewrite to `/<locale>/internal-polls/`):
+   electoral law bans showing poll figures from 24 Nov 2026 00:00 to 29 Nov
+   21:00 Madrid (LOREG art. 69.7; the Canaries close at 21:00), and the page decides per request. The origin
+   already sends `Cache-Control: private, no-store` plus `CDN-Cache-Control`
+   and `Cloudflare-CDN-Cache-Control: no-store` on it, which rule 2 respects;
+   the explicit bypass keeps it uncached even if rule 2 is ever switched to
+   "ignore cache-control". Check: `curl -sI <url> | grep -i cf-cache-status`
+   must never say `HIT`.
 
 Without rule 2, Cloudflare caches only static files by extension and never
 HTML, which is the safe starting point. **Rule 2 is safe once
