@@ -18,7 +18,7 @@ import type {
   SourceView,
   TagView,
 } from "./types";
-import { SECTION_CATEGORY_KEYS, SECTION_ENTRY_TYPES } from "./types";
+import { BYLINE_ENTRY_TYPES, SECTION_CATEGORY_KEYS, SECTION_ENTRY_TYPES } from "./types";
 import { DAY_DEPENDENT_PATTERN } from "./day-dependent";
 import { relatedTerms } from "./related-terms";
 
@@ -502,6 +502,7 @@ export async function resolvePath(
         seoDescription: entryTranslations.seoDescription,
         ogMediaId: entryTranslations.ogMediaId,
         authorId: entries.authorId,
+        entryKey: entries.key,
         isDemo: entries.isDemo,
         parentId: entries.parentId,
         categoryDescription: categoryTranslations.description,
@@ -714,6 +715,7 @@ export async function resolvePath(
 
     return {
       ...summary,
+      key: row.entryKey ?? null,
       status: row.status,
       body: parseBody(row.body),
       noindex: row.noindex,
@@ -951,6 +953,93 @@ export async function allIndexablePaths({ strict = false }: { strict?: boolean }
       .orderBy(desc(entryTranslations.publishedAt));
 
     return rows as SitemapRow[];
+  });
+}
+
+/* -------------------------------------------------------------------------- */
+/* Feeds (RSS, Google News sitemap)                                           */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * The newest written pieces in one language, most recently modified first:
+ * the RSS feed and the author page's list. `updated_at` is the verification
+ * date the publisher stamps (publish-article.ts), not the time of a re-send,
+ * so the order is real freshness. Indexable entries only.
+ *
+ * strict: a feed would rather keep its cached copy than go out empty on a
+ * dropped connection; the build keeps the soft fallback (as the sitemap does).
+ */
+export async function listFeedEntries(
+  locale: Locale,
+  { limit = 50, strict = false }: { limit?: number; strict?: boolean } = {},
+): Promise<EntrySummary[]> {
+  const db = getDb();
+  if (!db) return [];
+  const read = strict
+    ? <T,>(label: string, _fallback: T, run: () => Promise<T>) => criticalRead(label, run)
+    : safeRead;
+  return read("listFeedEntries", [] as EntrySummary[], async () => {
+    const rows = await summaryQuery(db, locale)
+      .where(
+        and(
+          publishedWhere(locale),
+          eq(entryTranslations.noindex, false),
+          inArray(entries.type, [...BYLINE_ENTRY_TYPES]),
+        ),
+      )
+      .orderBy(desc(entryTranslations.updatedAt), desc(entryTranslations.publishedAt))
+      .limit(Math.min(limit, 100));
+    return rows.map((row) => mapSummary(row as SummaryRow, locale));
+  });
+}
+
+export interface RecentEntryRow {
+  locale: Locale;
+  path: string;
+  title: string;
+  publishedAt: Date;
+  updatedAt: Date;
+}
+
+/**
+ * Written pieces, every language, published or modified at or after `since`:
+ * the Google News sitemap (which may list only the last two days). At most
+ * 1,000 rows, the sitemap's limit.
+ */
+export async function listRecentlyModified(
+  since: Date,
+  { strict = false }: { strict?: boolean } = {},
+): Promise<RecentEntryRow[]> {
+  const db = getDb();
+  if (!db) return [];
+  const read = strict
+    ? <T,>(label: string, _fallback: T, run: () => Promise<T>) => criticalRead(label, run)
+    : safeRead;
+  return read("listRecentlyModified", [] as RecentEntryRow[], async () => {
+    const rows = await db
+      .select({
+        locale: entryTranslations.locale,
+        path: entryTranslations.path,
+        title: entryTranslations.title,
+        publishedAt: entryTranslations.publishedAt,
+        updatedAt: entryTranslations.updatedAt,
+      })
+      .from(entryTranslations)
+      .innerJoin(entries, eq(entries.id, entryTranslations.entryId))
+      .where(
+        and(
+          eq(entryTranslations.status, "published"),
+          eq(entryTranslations.noindex, false),
+          isNotNull(entryTranslations.publishedAt),
+          lte(entryTranslations.publishedAt, sql`now()`),
+          eq(entries.isDemo, false),
+          inArray(entries.type, [...BYLINE_ENTRY_TYPES]),
+          or(gte(entryTranslations.updatedAt, since), gte(entryTranslations.publishedAt, since)),
+        ),
+      )
+      .orderBy(desc(entryTranslations.updatedAt))
+      .limit(1000);
+    return rows.filter((row): row is RecentEntryRow => row.publishedAt !== null) as RecentEntryRow[];
   });
 }
 

@@ -9,7 +9,16 @@ import { SHORTCUTS_HEADING, hubShortcuts } from "@/lib/content/hub-shortcuts";
 import { JsonLd } from "@/components/JsonLd";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
+import { AuthorProfile } from "@/components/pages/AuthorProfile";
 import { EntryArticle } from "@/components/pages/EntryArticle";
+import {
+  SITE_AUTHOR_SLUG,
+  SITE_AUTHOR_SUMMARY,
+  siteAuthor,
+  siteAuthorPath,
+  withByline,
+} from "@/lib/content/author";
+import { OWNER } from "@/lib/content/pages/institutional";
 import {
   allIndexablePaths,
   findRedirect,
@@ -18,6 +27,7 @@ import {
   hrefFor,
   listAuthors,
   listBySection,
+  listFeedEntries,
   mediaIdsInBody,
   relatedIdsInBody,
   resolvePath,
@@ -42,7 +52,9 @@ import {
   graph,
   howToSchema,
   placeSchema,
+  siteAuthorProfileSchema,
 } from "@/lib/seo/jsonld";
+import { cropsForUrl } from "@/lib/seo/discover-images";
 import { buildMetadata } from "@/lib/seo/metadata";
 import { isProduction } from "@/lib/site";
 
@@ -96,6 +108,8 @@ export async function generateStaticParams() {
       slug: sectionPath(key, locale).split("/").filter(Boolean).slice(1),
     })),
     { locale, slug: sectionPath("authors", locale).split("/").filter(Boolean).slice(1) },
+    // The founder's author page, where every byline links (lib/content/author.ts).
+    { locale, slug: siteAuthorPath(locale).split("/").filter(Boolean).slice(1) },
     { locale, slug: sectionPath("topics", locale).split("/").filter(Boolean).slice(1) },
   ]);
 
@@ -134,7 +148,9 @@ async function resolve(locale: Locale, slug: string[]): Promise<Resolution> {
   // any other content and can be edited in the CMS.
   const path = slug.join("/");
   const entry = await resolvePath(locale, path);
-  if (entry && !(entry.isDemo && isProduction())) return { kind: "entry", entry };
+  // Guides and articles carry the founder's byline unless the CMS names an
+  // author: the page, its metadata and its Article markup all read it here.
+  if (entry && !(entry.isDemo && isProduction())) return { kind: "entry", entry: withByline(entry) };
 
   return { kind: "none" };
 }
@@ -171,8 +187,8 @@ export async function generateMetadata({
         locale,
         path: sectionPath("authors", locale),
         title: t.nav.authors,
-        // An empty index is a thin page; keep it out of the index until an
-        // author is published.
+        // With only the founder listed, the index is a thin copy of his own
+        // (indexable) page; keep it out until the CMS publishes an author.
         noindex: (await listAuthors(locale)).length === 0,
         translations: Object.fromEntries(
           LOCALES.map((l) => [l, sectionPath("authors", l)]),
@@ -192,6 +208,15 @@ export async function generateMetadata({
       });
 
     case "author": {
+      if (resolution.slug === SITE_AUTHOR_SLUG) {
+        return buildMetadata({
+          locale,
+          path: siteAuthorPath(locale),
+          title: OWNER.name,
+          description: SITE_AUTHOR_SUMMARY[locale],
+          translations: Object.fromEntries(LOCALES.map((l) => [l, siteAuthorPath(l)])) as Partial<Record<Locale, string>>,
+        });
+      }
       const found = await getAuthorBySlug(locale, resolution.slug);
       if (!found) return { robots: { index: false, follow: false } };
       return buildMetadata({
@@ -208,6 +233,9 @@ export async function generateMetadata({
     case "entry": {
       const entry = resolution.entry;
       const image = entry.og ?? entry.hero;
+      // A licensed photograph is shared as its 16:9 crop (the Article markup
+      // lists all three ratios): the shape Discover and link previews use.
+      const wide = image ? cropsForUrl(image.url).find((crop) => crop.ratio === "16x9") : undefined;
       return buildMetadata({
         locale,
         path: entry.href,
@@ -225,14 +253,19 @@ export async function generateMetadata({
         publishedTime: entry.publishedAt,
         modifiedTime: entry.updatedAt,
         authors: entry.author ? [entry.author.name] : undefined,
-        image: image
-          ? {
-              url: image.url,
-              width: image.width,
-              height: image.height,
-              alt: image.alt || entry.title,
-            }
+        authorLink: entry.author
+          ? { name: entry.author.name, path: `${sectionPath("authors", locale)}${entry.author.slug}/` }
           : null,
+        image: wide
+          ? { url: wide.url, width: wide.width, height: wide.height, alt: image?.alt || entry.title }
+          : image
+            ? {
+                url: image.url,
+                width: image.width,
+                height: image.height,
+                alt: image.alt || entry.title,
+              }
+            : null,
       });
     }
 
@@ -330,7 +363,11 @@ export default async function CatchAllPage({
   }
 
   if (resolution.kind === "authors") {
-    const authors = await listAuthors(locale);
+    // The founder first (code, lib/content/author.ts), then any CMS author.
+    const authors = [
+      siteAuthor(locale),
+      ...(await listAuthors(locale)).filter((author) => author.slug !== SITE_AUTHOR_SLUG),
+    ];
     const crumbs: Crumb[] = [
       { label: t.common.home, href: `/${locale}/` },
       { label: t.nav.authors, href: sectionPath("authors", locale) },
@@ -386,6 +423,25 @@ export default async function CatchAllPage({
             <EmptyState locale={locale} />
           </div>
         </main>
+        <SiteFooter locale={locale} />
+      </>
+    );
+  }
+
+  if (resolution.kind === "author" && resolution.slug === SITE_AUTHOR_SLUG) {
+    const crumbs: Crumb[] = [
+      { label: t.common.home, href: `/${locale}/` },
+      { label: t.nav.authors, href: sectionPath("authors", locale) },
+      { label: OWNER.name, href: siteAuthorPath(locale) },
+    ];
+    // Every guide and article carries his byline: the twelve most recently
+    // updated. Soft read: the text above stands without the list.
+    const latest = await listFeedEntries(locale, { limit: 12 });
+    return (
+      <>
+        {header}
+        <AuthorProfile locale={locale} crumbs={crumbs} latest={latest} />
+        <JsonLd json={graph([breadcrumbSchema(crumbs), siteAuthorProfileSchema(locale)])} />
         <SiteFooter locale={locale} />
       </>
     );
@@ -530,8 +586,14 @@ function translationsFor(
       return Object.fromEntries(
         LOCALES.map((l) => [l, sectionPath(resolution.section, l)]),
       ) as Partial<Record<Locale, string>>;
-    case "authors":
     case "author":
+      if (resolution.slug === SITE_AUTHOR_SLUG) {
+        return Object.fromEntries(LOCALES.map((l) => [l, siteAuthorPath(l)])) as Partial<Record<Locale, string>>;
+      }
+      return Object.fromEntries(
+        LOCALES.map((l) => [l, sectionPath("authors", l)]),
+      ) as Partial<Record<Locale, string>>;
+    case "authors":
       return Object.fromEntries(
         LOCALES.map((l) => [l, sectionPath("authors", l)]),
       ) as Partial<Record<Locale, string>>;

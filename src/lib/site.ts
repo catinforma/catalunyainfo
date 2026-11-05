@@ -19,6 +19,14 @@ export const SITE = {
   contactEmail: "catalunyatinforma@gmail.com",
   /** Twitter/X handle, without the @. Empty string = not published yet. */
   twitter: "",
+  /**
+   * The publication's own public profiles (X, Threads, WhatsApp channel,
+   * Telegram, Google News publication page...), listed as the Organization's
+   * `sameAs`. None exists yet (5 Nov 2026): add each URL once the owner has
+   * created the profile. Never the founder's personal profiles, which belong
+   * to his Person node (lib/content/author.ts).
+   */
+  sameAs: [] as readonly string[],
 } as const;
 
 /**

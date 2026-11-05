@@ -30,136 +30,190 @@ const OWNER_LINKS = `[martiaguilera.vercel.app](${OWNER.links.portfolio}) · [Gi
 /* About                                                                      */
 /* -------------------------------------------------------------------------- */
 
-function aboutBlocks(locale: Locale): Block[] {
+export interface AboutSection {
+  heading: string;
+  paragraphs: string[];
+}
+
+/**
+ * The about page's copy, by section. Exported so the author page
+ * (lib/content/author.ts) reuses these exact words instead of restating them:
+ * it must say nothing about the founder or the method that this page does not.
+ */
+export interface AboutCopy {
+  lead: string;
+  /** The founder, in the owner's own words (5 Nov 2026), and his links. */
+  who: AboutSection;
+  what: AboutSection;
+  /** The editorial method, linking the editorial policy and sources pages. */
+  how: AboutSection;
+  ai: AboutSection;
+  funding: AboutSection;
+  help: AboutSection;
+}
+
+export function aboutCopy(locale: Locale): AboutCopy {
   const editorial = legalPath("editorial-policy", locale);
   const sources = legalPath("sources", locale);
   const corrections = legalPath("corrections", locale);
   const contact = sectionPath("contact", locale);
 
-  const copy: Record<Locale, Block[]> = {
-    ca: [
-      {
-        type: "paragraph",
-        lead: true,
-        text: "CatalunyaInfo és un projecte editorial independent que respon una pregunta concreta: què necessites saber abans d'anar a un lloc de Catalunya.",
-      } as Block,
-      ...section(
-        "Qui hi ha al darrere",
-        `CatalunyaInfo és un projecte de **${OWNER.name}**. Estudia el Grau Superior de Desenvolupament d'Aplicacions Multiplataforma (DAM), després d'haver acabat el Grau Mitjà de Sistemes Microinformàtics i Xarxes (SMX), i vol continuar amb Enginyeria Informàtica per aprofundir en la informàtica i la programació.`,
-        "És fundador i CEO de NuviaDev, una empresa que crea webs totalment personalitzades per a negocis locals i emprenedors, perquè destaquin a internet amb dissenys moderns, funcionals i fidels a la seva identitat.",
-        "Li apassiona la tecnologia: aprendre contínuament i aplicar el que aprèn a projectes que tinguin un impacte real.",
-        OWNER_LINKS,
-      ),
-      ...section(
-        "Què fem",
-        "Publiquem informació pràctica i verificada: com arribar-hi, quan val la pena anar-hi, què cal tenir en compte i on consultar la font oficial. Tot en català, castellà i anglès, amb la mateixa informació als tres idiomes i no una traducció automàtica de mig contingut.",
-        "No som una administració pública ni una oficina de turisme. Tampoc som un agregador: cada pàgina la escrivim nosaltres, citant d'on surt cada dada.",
-      ),
-      ...section(
-        "Com treballem",
-        "Tres regles ordenen tota la resta.",
-        "**Si no ho podem verificar, no ho publiquem.** Preferim dir que no ho sabem abans que omplir un buit amb una suposició ben escrita.",
-        "**La font oficial mana.** Enllacem sempre l'original, i quan una font diu una cosa i una altra en diu una altra, ho expliquem en comptes de triar en silenci.",
-        "**Les dates caduquen.** Cada pàgina porta la data en què es va verificar, a la vista, perquè puguis jutjar tu mateix si encara és fiable.",
-        `Els criteris complets són a la [política editorial](${editorial}) i a la pàgina de [fonts](${sources}).`,
-      ),
-      ...section(
-        "Intel·ligència artificial, dit clar",
-        "Fem servir eines d'IA com a suport de redacció i per generar algunes il·lustracions. Cap contingut es publica automàticament: tot passa per revisió humana, i la responsabilitat editorial és sempre humana.",
-        "Les imatges generades s'identifiquen sempre al peu de la imatge, i mai no les presentem com si fossin fotografies reals d'un lloc concret.",
-      ),
-      ...section(
-        "Com ens financem",
-        "Ara mateix el web no té publicitat, ni enllaços d'afiliació, ni continguts patrocinats. Si algun dia n'hi ha, es marcarà clarament abans del contingut afectat i no canviarà què recomanem.",
-      ),
-      ...section(
-        "Ajuda'ns a fer-ho millor",
-        `Si trobes un error, [avisa'ns](${corrections}): és la manera més ràpida d'arreglar-ho. Si vols proposar-nos alguna cosa o simplement dir-nos què hi trobes a faltar, el [formulari de contacte](${contact}) va directe a la redacció.`,
-      ),
-    ],
-    es: [
-      {
-        type: "paragraph",
-        lead: true,
-        text: "CatalunyaInfo es un proyecto editorial independiente que responde a una pregunta concreta: qué necesitas saber antes de ir a un lugar de Cataluña.",
-      } as Block,
-      ...section(
-        "Quién está detrás",
-        `CatalunyaInfo es un proyecto de **${OWNER.name}**. Estudia el Grado Superior en Desarrollo de Aplicaciones Multiplataforma (DAM), tras completar el Grado Medio en Sistemas Microinformáticos y Redes (SMX), y quiere cursar Ingeniería Informática para profundizar en la informática y la programación.`,
-        "Es fundador y CEO de NuviaDev, una empresa que crea sitios web totalmente personalizados para negocios locales y emprendedores, para ayudarles a destacar en internet con diseños modernos, funcionales y alineados con su identidad.",
-        "Le apasiona la tecnología: aprender siempre y aplicar lo que aprende en proyectos que marquen una diferencia en el mundo real.",
-        OWNER_LINKS,
-      ),
-      ...section(
-        "Qué hacemos",
-        "Publicamos información práctica y verificada: cómo llegar, cuándo merece la pena ir, qué conviene tener en cuenta y dónde consultar la fuente oficial. Todo en catalán, castellano e inglés, con la misma información en los tres idiomas y no una traducción automática de medio contenido.",
-        "No somos una administración pública ni una oficina de turismo. Tampoco un agregador: cada página la escribimos nosotros, citando de dónde sale cada dato.",
-      ),
-      ...section(
-        "Cómo trabajamos",
-        "Tres reglas ordenan todo lo demás.",
-        "**Si no podemos verificarlo, no lo publicamos.** Preferimos decir que no lo sabemos antes que rellenar un hueco con una suposición bien escrita.",
-        "**La fuente oficial manda.** Enlazamos siempre el original, y cuando una fuente dice una cosa y otra dice otra, lo explicamos en lugar de elegir en silencio.",
-        "**Los datos caducan.** Cada página lleva a la vista la fecha en que se verificó, para que puedas juzgar por ti mismo si sigue siendo fiable.",
-        `Los criterios completos están en la [política editorial](${editorial}) y en la página de [fuentes](${sources}).`,
-      ),
-      ...section(
-        "Inteligencia artificial, dicho claro",
-        "Usamos herramientas de IA como apoyo de redacción y para generar algunas ilustraciones. Ningún contenido se publica automáticamente: todo pasa por revisión humana, y la responsabilidad editorial es siempre humana.",
-        "Las imágenes generadas se identifican siempre al pie de la imagen, y nunca las presentamos como fotografías reales de un lugar concreto.",
-      ),
-      ...section(
-        "Cómo nos financiamos",
-        "Ahora mismo el sitio no tiene publicidad, ni enlaces de afiliación, ni contenidos patrocinados. Si algún día los hay, se marcarán claramente antes del contenido afectado y no cambiarán lo que recomendamos.",
-      ),
-      ...section(
-        "Ayúdanos a hacerlo mejor",
-        `Si encuentras un error, [avísanos](${corrections}): es la forma más rápida de arreglarlo. Si quieres proponernos algo o simplemente decirnos qué echas en falta, el [formulario de contacto](${contact}) va directo a la redacción.`,
-      ),
-    ],
-    en: [
-      {
-        type: "paragraph",
-        lead: true,
-        text: "CatalunyaInfo is an independent editorial project answering one question: what you need to know before going somewhere in Catalonia.",
-      } as Block,
-      ...section(
-        "Who is behind it",
-        `CatalunyaInfo is a project by **${OWNER.name}**. Martí is studying for the Higher Vocational Diploma in Multiplatform Application Development (DAM), having completed the Intermediate Diploma in Microcomputer Systems and Networks (SMX), and plans to go on to a degree in Computer Engineering.`,
-        "Martí is the founder and CEO of NuviaDev, a company that builds fully custom websites for local businesses and entrepreneurs, helping them stand out online with modern, functional designs true to their identity.",
-        "Passionate about technology, Martí is always looking for new things to learn and for projects that make a real-world difference.",
-        OWNER_LINKS,
-      ),
-      ...section(
-        "What we do",
-        "We publish practical, verified information: how to get there, when it is worth going, what to bear in mind, and where to check the official source. All of it in Catalan, Spanish and English, with the same information in each language rather than a machine translation of half the content.",
-        "We are not a public authority or a tourist board, and we are not an aggregator: every page is written here, citing where each fact came from.",
-      ),
-      ...section(
-        "How we work",
-        "Three rules order everything else.",
-        "**If we cannot verify it, we do not publish it.** Saying we don't know beats filling a gap with a well-written guess.",
-        "**The official source prevails.** We always link the original, and where two sources disagree we explain the discrepancy instead of quietly picking one.",
-        "**Facts go stale.** Every page carries its verification date in plain sight, so you can judge for yourself whether it still holds.",
-        `The full criteria are in our [editorial policy](${editorial}) and on the [sources page](${sources}).`,
-      ),
-      ...section(
-        "Artificial intelligence, plainly",
-        "We use AI tools to support drafting and to generate some illustrations. Nothing is published automatically: everything goes through human review, and editorial responsibility is always human.",
-        "Generated images are always labelled in the caption, and we never present them as real photographs of a specific place.",
-      ),
-      ...section(
-        "How we are funded",
-        "The site currently carries no advertising, no affiliate links and no sponsored content. If that ever changes, it will be marked clearly before the content concerned, and it will not change what we recommend.",
-      ),
-      ...section(
-        "Help us do it better",
-        `Found an error? [Tell us](${corrections}) — it is the fastest way to get it fixed. To suggest something, or simply say what is missing, the [contact form](${contact}) goes straight to the desk.`,
-      ),
-    ],
+  const copy: Record<Locale, AboutCopy> = {
+    ca: {
+      lead: "CatalunyaInfo és un projecte editorial independent que respon una pregunta concreta: què necessites saber abans d'anar a un lloc de Catalunya.",
+      who: {
+        heading: "Qui hi ha al darrere",
+        paragraphs: [
+          `CatalunyaInfo és un projecte de **${OWNER.name}**. Estudia el Grau Superior de Desenvolupament d'Aplicacions Multiplataforma (DAM), després d'haver acabat el Grau Mitjà de Sistemes Microinformàtics i Xarxes (SMX), i vol continuar amb Enginyeria Informàtica per aprofundir en la informàtica i la programació.`,
+          "És fundador i CEO de NuviaDev, una empresa que crea webs totalment personalitzades per a negocis locals i emprenedors, perquè destaquin a internet amb dissenys moderns, funcionals i fidels a la seva identitat.",
+          "Li apassiona la tecnologia: aprendre contínuament i aplicar el que aprèn a projectes que tinguin un impacte real.",
+          OWNER_LINKS,
+        ],
+      },
+      what: {
+        heading: "Què fem",
+        paragraphs: [
+          "Publiquem informació pràctica i verificada: com arribar-hi, quan val la pena anar-hi, què cal tenir en compte i on consultar la font oficial. Tot en català, castellà i anglès, amb la mateixa informació als tres idiomes i no una traducció automàtica de mig contingut.",
+          "No som una administració pública ni una oficina de turisme. Tampoc som un agregador: cada pàgina la escrivim nosaltres, citant d'on surt cada dada.",
+        ],
+      },
+      how: {
+        heading: "Com treballem",
+        paragraphs: [
+          "Tres regles ordenen tota la resta.",
+          "**Si no ho podem verificar, no ho publiquem.** Preferim dir que no ho sabem abans que omplir un buit amb una suposició ben escrita.",
+          "**La font oficial mana.** Enllacem sempre l'original, i quan una font diu una cosa i una altra en diu una altra, ho expliquem en comptes de triar en silenci.",
+          "**Les dates caduquen.** Cada pàgina porta la data en què es va verificar, a la vista, perquè puguis jutjar tu mateix si encara és fiable.",
+          `Els criteris complets són a la [política editorial](${editorial}) i a la pàgina de [fonts](${sources}).`,
+        ],
+      },
+      ai: {
+        heading: "Intel·ligència artificial, dit clar",
+        paragraphs: [
+          "Fem servir eines d'IA com a suport de redacció i per generar algunes il·lustracions. Cap contingut es publica automàticament: tot passa per revisió humana, i la responsabilitat editorial és sempre humana.",
+          "Les imatges generades s'identifiquen sempre al peu de la imatge, i mai no les presentem com si fossin fotografies reals d'un lloc concret.",
+        ],
+      },
+      funding: {
+        heading: "Com ens financem",
+        paragraphs: [
+          "Ara mateix el web no té publicitat, ni enllaços d'afiliació, ni continguts patrocinats. Si algun dia n'hi ha, es marcarà clarament abans del contingut afectat i no canviarà què recomanem.",
+        ],
+      },
+      help: {
+        heading: "Ajuda'ns a fer-ho millor",
+        paragraphs: [
+          `Si trobes un error, [avisa'ns](${corrections}): és la manera més ràpida d'arreglar-ho. Si vols proposar-nos alguna cosa o simplement dir-nos què hi trobes a faltar, el [formulari de contacte](${contact}) va directe a la redacció.`,
+        ],
+      },
+    },
+    es: {
+      lead: "CatalunyaInfo es un proyecto editorial independiente que responde a una pregunta concreta: qué necesitas saber antes de ir a un lugar de Cataluña.",
+      who: {
+        heading: "Quién está detrás",
+        paragraphs: [
+          `CatalunyaInfo es un proyecto de **${OWNER.name}**. Estudia el Grado Superior en Desarrollo de Aplicaciones Multiplataforma (DAM), tras completar el Grado Medio en Sistemas Microinformáticos y Redes (SMX), y quiere cursar Ingeniería Informática para profundizar en la informática y la programación.`,
+          "Es fundador y CEO de NuviaDev, una empresa que crea sitios web totalmente personalizados para negocios locales y emprendedores, para ayudarles a destacar en internet con diseños modernos, funcionales y alineados con su identidad.",
+          "Le apasiona la tecnología: aprender siempre y aplicar lo que aprende en proyectos que marquen una diferencia en el mundo real.",
+          OWNER_LINKS,
+        ],
+      },
+      what: {
+        heading: "Qué hacemos",
+        paragraphs: [
+          "Publicamos información práctica y verificada: cómo llegar, cuándo merece la pena ir, qué conviene tener en cuenta y dónde consultar la fuente oficial. Todo en catalán, castellano e inglés, con la misma información en los tres idiomas y no una traducción automática de medio contenido.",
+          "No somos una administración pública ni una oficina de turismo. Tampoco un agregador: cada página la escribimos nosotros, citando de dónde sale cada dato.",
+        ],
+      },
+      how: {
+        heading: "Cómo trabajamos",
+        paragraphs: [
+          "Tres reglas ordenan todo lo demás.",
+          "**Si no podemos verificarlo, no lo publicamos.** Preferimos decir que no lo sabemos antes que rellenar un hueco con una suposición bien escrita.",
+          "**La fuente oficial manda.** Enlazamos siempre el original, y cuando una fuente dice una cosa y otra dice otra, lo explicamos en lugar de elegir en silencio.",
+          "**Los datos caducan.** Cada página lleva a la vista la fecha en que se verificó, para que puedas juzgar por ti mismo si sigue siendo fiable.",
+          `Los criterios completos están en la [política editorial](${editorial}) y en la página de [fuentes](${sources}).`,
+        ],
+      },
+      ai: {
+        heading: "Inteligencia artificial, dicho claro",
+        paragraphs: [
+          "Usamos herramientas de IA como apoyo de redacción y para generar algunas ilustraciones. Ningún contenido se publica automáticamente: todo pasa por revisión humana, y la responsabilidad editorial es siempre humana.",
+          "Las imágenes generadas se identifican siempre al pie de la imagen, y nunca las presentamos como fotografías reales de un lugar concreto.",
+        ],
+      },
+      funding: {
+        heading: "Cómo nos financiamos",
+        paragraphs: [
+          "Ahora mismo el sitio no tiene publicidad, ni enlaces de afiliación, ni contenidos patrocinados. Si algún día los hay, se marcarán claramente antes del contenido afectado y no cambiarán lo que recomendamos.",
+        ],
+      },
+      help: {
+        heading: "Ayúdanos a hacerlo mejor",
+        paragraphs: [
+          `Si encuentras un error, [avísanos](${corrections}): es la forma más rápida de arreglarlo. Si quieres proponernos algo o simplemente decirnos qué echas en falta, el [formulario de contacto](${contact}) va directo a la redacción.`,
+        ],
+      },
+    },
+    en: {
+      lead: "CatalunyaInfo is an independent editorial project answering one question: what you need to know before going somewhere in Catalonia.",
+      who: {
+        heading: "Who is behind it",
+        paragraphs: [
+          `CatalunyaInfo is a project by **${OWNER.name}**. Martí is studying for the Higher Vocational Diploma in Multiplatform Application Development (DAM), having completed the Intermediate Diploma in Microcomputer Systems and Networks (SMX), and plans to go on to a degree in Computer Engineering.`,
+          "Martí is the founder and CEO of NuviaDev, a company that builds fully custom websites for local businesses and entrepreneurs, helping them stand out online with modern, functional designs true to their identity.",
+          "Passionate about technology, Martí is always looking for new things to learn and for projects that make a real-world difference.",
+          OWNER_LINKS,
+        ],
+      },
+      what: {
+        heading: "What we do",
+        paragraphs: [
+          "We publish practical, verified information: how to get there, when it is worth going, what to bear in mind, and where to check the official source. All of it in Catalan, Spanish and English, with the same information in each language rather than a machine translation of half the content.",
+          "We are not a public authority or a tourist board, and we are not an aggregator: every page is written here, citing where each fact came from.",
+        ],
+      },
+      how: {
+        heading: "How we work",
+        paragraphs: [
+          "Three rules order everything else.",
+          "**If we cannot verify it, we do not publish it.** Saying we don't know beats filling a gap with a well-written guess.",
+          "**The official source prevails.** We always link the original, and where two sources disagree we explain the discrepancy instead of quietly picking one.",
+          "**Facts go stale.** Every page carries its verification date in plain sight, so you can judge for yourself whether it still holds.",
+          `The full criteria are in our [editorial policy](${editorial}) and on the [sources page](${sources}).`,
+        ],
+      },
+      ai: {
+        heading: "Artificial intelligence, plainly",
+        paragraphs: [
+          "We use AI tools to support drafting and to generate some illustrations. Nothing is published automatically: everything goes through human review, and editorial responsibility is always human.",
+          "Generated images are always labelled in the caption, and we never present them as real photographs of a specific place.",
+        ],
+      },
+      funding: {
+        heading: "How we are funded",
+        paragraphs: [
+          "The site currently carries no advertising, no affiliate links and no sponsored content. If that ever changes, it will be marked clearly before the content concerned, and it will not change what we recommend.",
+        ],
+      },
+      help: {
+        heading: "Help us do it better",
+        paragraphs: [
+          `Found an error? [Tell us](${corrections}) — it is the fastest way to get it fixed. To suggest something, or simply say what is missing, the [contact form](${contact}) goes straight to the desk.`,
+        ],
+      },
+    },
   };
 
   return copy[locale];
+}
+
+function aboutBlocks(locale: Locale): Block[] {
+  const c = aboutCopy(locale);
+  return [
+    { type: "paragraph", lead: true, text: c.lead } as Block,
+    ...[c.who, c.what, c.how, c.ai, c.funding, c.help].flatMap((s) => section(s.heading, ...s.paragraphs)),
+  ];
 }
 
 const ABOUT_COPY: Record<Locale, Omit<PageCopy, "blocks">> = {
