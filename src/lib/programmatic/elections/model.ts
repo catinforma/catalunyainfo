@@ -591,7 +591,7 @@ function buildResults(m: Municipality, locale: Locale, snapshot: ElectionsSnapsh
               ELECTION_NIGHT_RESULTS_URL
                 ? `Resultats provisionals de la nit electoral: [web oficial del Ministeri de l'Interior](${ELECTION_NIGHT_RESULTS_URL}).`
                 : `Resultats provisionals de la nit electoral: Interior encara no ha anunciat el web on els publicarà (comprovat el ${f.date(INTERIOR_CHECKED)}). Quan ho faci, n'hi posarem l'enllaç oficial. Com funciona l'escrutini: [${B2_TITLES.electionNight.ca}](${b2href("electionNight", "ca")}).`,
-              `Si has de votar: [com votar a Catalunya](${b2href("voting", "ca")}) i [les llistes de candidats del 29N](${b2href("candidates", "ca")}).`,
+              `Si has de votar: [com votar a Catalunya](${b2href("voting", "ca")}), [el vot per correu](${b2href("postalVote", "ca")}) i [les llistes de candidats del 29N](${b2href("candidates", "ca")}).`,
             ],
         results:
           general && g
@@ -780,7 +780,7 @@ function buildResults(m: Municipality, locale: Locale, snapshot: ElectionsSnapsh
               ELECTION_NIGHT_RESULTS_URL
                 ? `Resultados provisionales de la noche electoral: [web oficial del Ministerio del Interior](${ELECTION_NIGHT_RESULTS_URL}).`
                 : `Resultados provisionales de la noche electoral: Interior aún no ha anunciado la web donde los publicará (comprobado el ${f.date(INTERIOR_CHECKED)}). Cuando lo haga, pondremos aquí el enlace oficial. Cómo funciona el escrutinio: [${B2_TITLES.electionNight.es}](${b2href("electionNight", "es")}).`,
-              `Si tienes que votar: [cómo votar en Cataluña](${b2href("voting", "es")}) y [las listas de candidatos del 29N](${b2href("candidates", "es")}).`,
+              `Si tienes que votar: [cómo votar en Cataluña](${b2href("voting", "es")}), [el voto por correo](${b2href("postalVote", "es")}) y [las listas de candidatos del 29N](${b2href("candidates", "es")}).`,
             ],
         results:
           general && g
@@ -968,7 +968,7 @@ function buildResults(m: Municipality, locale: Locale, snapshot: ElectionsSnapsh
             ELECTION_NIGHT_RESULTS_URL
               ? `Provisional results on election night: [the Interior Ministry's official site](${ELECTION_NIGHT_RESULTS_URL}).`
               : `Provisional results on election night: the ministry has not yet announced the website where it will publish them (checked on ${f.date(INTERIOR_CHECKED)}). When it does, we will add the official link here. How the count works: [${B2_TITLES.electionNight.en}](${b2href("electionNight", "en")}).`,
-            `If you are voting: [how to vote in Catalonia](${b2href("voting", "en")}) and [the 29 November candidate lists](${b2href("candidates", "en")}).`,
+            `If you are voting: [how to vote in Catalonia](${b2href("voting", "en")}), [the postal vote](${b2href("postalVote", "en")}) and [the 29 November candidate lists](${b2href("candidates", "en")}).`,
           ],
       results:
         general && g

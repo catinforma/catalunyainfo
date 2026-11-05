@@ -97,7 +97,9 @@ export type B2Key =
   // New Year and Reis 2026-27 (christmas-transport.ts).
   | "christmasTransport"
   // 5 Nov 2026: school free days 2026-2027 town by town (is there school on 7 December?).
-  | "schoolFreeDays";
+  | "schoolFreeDays"
+  // 5 Nov 2026: the postal vote (29N requests close on 19 Nov).
+  | "postalVote";
 
 /** Path after the locale prefix, no leading or trailing slash. */
 export const B2_PATHS: Record<B2Key, Record<Locale, string>> = {
@@ -445,6 +447,12 @@ export const B2_PATHS: Record<B2Key, Record<Locale, string>> = {
     ca: "guies/dies-lliure-disposicio-escoles",
     es: "guias/dias-libre-disposicion-colegios",
     en: "guides/catalonia-school-free-days",
+  },
+  // No year or election in the path: the next election reuses it.
+  postalVote: {
+    ca: "guies/vot-per-correu",
+    es: "guias/voto-por-correo",
+    en: "guides/postal-vote-spain",
   },
 };
 
@@ -816,6 +824,12 @@ export const B2_TITLES: Record<B2Key, Record<Locale, string>> = {
     ca: "Dies de lliure disposició 2026-2027 per municipi",
     es: "Días de libre disposición 2026-2027 por municipio",
     en: "School free days 2026-2027 by town",
+  },
+  // No date: the rail is stored in other pages' bodies until they are republished.
+  postalVote: {
+    ca: "Vot per correu el 29N: terminis i com fer-ho",
+    es: "Voto por correo el 29N: plazos y cómo hacerlo",
+    en: "Postal vote for 29 November: deadlines and how to apply",
   },
 };
 

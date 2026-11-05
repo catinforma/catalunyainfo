@@ -66,6 +66,7 @@ import { CHRISTMAS_LIGHTS } from "@/lib/content/batch02/christmas-lights";
 import { GRAN_RECAPTE_GUIDE } from "@/lib/content/batch02/gran-recapte";
 import { CHRISTMAS_TRANSPORT } from "@/lib/content/batch02/christmas-transport";
 import { SCHOOL_FREE_DAYS } from "@/lib/content/batch02/school-free-days";
+import { POSTAL_VOTE } from "@/lib/content/batch02/postal-vote";
 import { publishHolidayTodayGuide } from "@/lib/content/holidays/today-publish";
 import { publishLocalHolidaysGuide } from "@/lib/content/holidays/local-publish";
 import { publishReservoirGuide } from "@/lib/content/reservoirs/publish";
@@ -329,6 +330,11 @@ export async function POST(request: Request) {
     // it ships with the deploy.
     if (wants("lliure-disposicio")) published.push(await publishB2Article(SCHOOL_FREE_DAYS));
     if (wants("lliure-disposicio-links")) published.push(await publishB2Article(DECEMBER_BRIDGE));
+    // Postal vote (29N requests close 19 Nov): one page, on its own so the
+    // phase changes (POSTAL_AS_OF past 19 Nov, then past 29 Nov) republish
+    // only it. The how-to-vote guide, whose section now links here, goes out
+    // with `voting`; the hub and town election pages are code routes.
+    if (wants("vot-correu")) published.push(await publishB2Article(POSTAL_VOTE));
 
     const surfaces = [
       ...published.flatMap((article) =>
