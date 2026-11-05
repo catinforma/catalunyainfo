@@ -2601,3 +2601,44 @@ again after the DOGC order (`prepare2027` prints COUNCIL DIFFERS). From
 measure that change on its own.
 
 **Outcome:** _pending_
+
+## 2026-11-05 — New page: postal vote for 29N (`vot-correu`), and the mesa guides answer "me ha tocado mesa" first (`mesa`, `voting`; deploy first)
+
+**Why.** Two election demands with a deadline inside the next fortnight.
+
+1. *Postal vote.* Requests close on Thursday 19 November (LOREG 72.a; JEC calendar; Correos; Interior; INE). The how-to-vote guide's "Voto por correo" section showed in Google as a sitelink (`#voto-por-correo`): 637 impressions, 0 clicks, position 6.4, 23 Oct–4 Nov. The queries behind it are "cuándo son las elecciones en cataluña" and the like, so it is a sitelink, not postal-vote demand. Postal-vote queries themselves barely reach the site: "postal vote spain" 3 impressions at 8.3, "vot per correu eleccions generals 2026" 1 at 9, "votar por correo" 1 at 3. We had no page that could rank for "voto por correo 29N".
+2. *Mesa.* The draw ended on 4 November and notices run to 7 November. "mesa electoral 29n <town>" now brings thousands of impressions to town election pages (Santa Coloma 234 at 2.0, L'Hospitalet 282 at 7.8, Sant Boi 158 at 3.9, Matadepera 282 at 6.3). The guides get the generic questions: "orden int/650/2026" 17 at 6.5 with no click, "donde presentar alegaciones mesa electoral" 3 at 9.7, "suplente mesa electoral cobran", "si te toca en la mesa electoral al día siguiente tienes fiesta", "sorteo mesa electoral girona/barcelona".
+
+**Change.**
+- New page on year-free URLs, ca/es/en: `/ca/guies/vot-per-correu/`, `/es/guias/voto-por-correo/`, `/en/guides/postal-vote-spain/` (`postal-vote.ts`, group `vot-correu`).
+  - Answer first: the lead gives the deadline (19 Nov), where (Correos, in person with original ID, or online with a certificate or electronic DNI), when the papers arrive (9–22 Nov), the hand-in deadline (25 Nov) and "you can no longer vote in person". Then a five-step block.
+  - Sections: can I still vote in person (no; the census "C" from the official mesa manual), applying in person, online (Cl@ve is listed by none of Correos, Interior or the INE), when the papers arrive and what if you are out, how to vote and hand it in, calendar, who can, abroad (ERTA closed 31 Oct; CERA by 24 Nov or 21–26 Nov at the consulate). Nine FAQs.
+  - Every fact was read on 5 Nov in LOREG 72–73 (BOE API), the JEC calendar PDF, Correos, Interior's 29N page, INE cid=1700, JEC Instrucción 5/2023, RD 806/2026 and the 29N mesa manual.
+  - The copy changes with the date. `POSTAL_AS_OF` picks "open" (to 19 Nov), "closed" (20–29 Nov: hand it in by 25 Nov) or "over" (from 30 Nov). Titles, descriptions, lead, first step and the deadline FAQ change with it. `tests/postal-vote.test.ts` fails from 20 Nov, and again from 30 Nov, until `POSTAL_AS_OF` is moved and the page republished.
+- How-to-vote guide (body only; titles and descriptions untouched): the "Voto por correo" heading stays, so the sitelink anchor stays. The section is now one paragraph with a link to the new page. The warning callout near the top and the related rail (first item, so also the read-next box) link there too.
+- The election hub, until the 29N results are in, and the town pages' "Si has de votar" line link to the new page. Both are code routes: deploy only.
+- Mesa guides ca/es/en (body only; titles frozen since 3 Nov):
+  - The lead, first key fact and draw FAQ now say the draw is over (31 Oct–4 Nov).
+  - New key fact and FAQ on what to bring (the notification and the manual, which asks to be brought; 8:00, substitutes too, attendance slip).
+  - The excuse key fact says "al·legació / alegación".
+  - New FAQs: where to file the alegaciones, whether substitutes are paid, what Orden INT/650/2026 says.
+  - `VERIFIED` moves to 5 Nov.
+
+**Baseline** (GSC, 23 Oct–4 Nov 2026):
+- Postal-vote queries: under 10 impressions in total, 0 clicks.
+- The how-to-vote guide's postal sitelink: 637 impressions, 0 clicks.
+- `/es/guias/miembro-mesa-electoral/`: 928 impressions, 38 clicks (4.1%), position ~7.7.
+- `/ca/guies/membre-mesa-electoral/`: 1,772 impressions, 73 clicks (4.1%), position ~6.1.
+
+**Prediction.**
+- The postal page is indexed within three days of publishing. Between publishing and 19 Nov it takes at least 1,500 impressions and 60 clicks across ca/es/en, mostly Spanish "voto por correo 29N / elecciones generales / plazo" queries, at position 10 or better.
+- After 19 Nov its demand falls to the "can I still / where do I hand it in" questions; the "closed" copy should keep CTR at or above 3%.
+- Mesa guides: CTR moves from 4.1% to at least 5% at a similar position. "orden int/650/2026" gets its first clicks. The questions the new FAQs answer gain one to two positions.
+- Caveat: the titles changed on 3 Nov, so the mesa effect cannot be separated from that title change. The 3 Nov entry's measure dates (15 Nov, 1 Dec) cover both.
+
+**Measure** with `snapshot.py page voto-por-correo 7`, `page vot-per-correu 7`, `page postal-vote 7` and `page mesa-electoral 14`:
+- 12 Nov (first read);
+- 20 Nov (after the deadline; move `POSTAL_AS_OF` that day);
+- 1 Dec (final, with the mesa title test).
+
+**Outcome:** _pending_

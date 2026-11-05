@@ -60,6 +60,8 @@ export function hubCopy(locale: Locale): HubCopy {
       intro: [
         `Cada pàgina té els vots i els regidors de cada llista a les municipals del 2023, com es van elegir els regidors, i el vot del municipi a les generals i al Parlament al costat del de Catalunya. Cada comarca té també la seva pàgina, amb el resultat de les municipals de tots els seus municipis en una taula.`,
         `Per a totes les municipals des del 1979, fes servir el [cercador de resultats municipals](${b2href("municipalResults", "ca")}).`,
+        // Until the 29N results are in: the two guides voters need first.
+        ...(g ? [] : [`Si has de votar el 29 de novembre: [com votar a Catalunya](${b2href("voting", "ca")}) i [el vot per correu, pas a pas](${b2href("postalVote", "ca")}).`]),
       ],
       listTitle: "Municipis per comarques",
       jumpLabel: "Ves a la comarca",
@@ -87,6 +89,8 @@ export function hubCopy(locale: Locale): HubCopy {
       intro: [
         `Cada página tiene los votos y los concejales de cada lista en las municipales de 2023, cómo se eligieron los concejales, y el voto del municipio en las generales y en el Parlament junto al de Cataluña. Cada comarca tiene también su página, con el resultado de las municipales de todos sus municipios en una tabla.`,
         `Para todas las municipales desde 1979, usa el [buscador de resultados municipales](${b2href("municipalResults", "es")}).`,
+        // Until the 29N results are in: the two guides voters need first.
+        ...(g ? [] : [`Si tienes que votar el 29 de noviembre: [cómo votar en Cataluña](${b2href("voting", "es")}) y [el voto por correo, paso a paso](${b2href("postalVote", "es")}).`]),
       ],
       listTitle: "Municipios por comarcas",
       jumpLabel: "Ir a la comarca",
@@ -113,6 +117,8 @@ export function hubCopy(locale: Locale): HubCopy {
     intro: [
       `Each page has every list's votes, percentage and councillors in the 2023 local election, how the seats were allocated, and the town's vote in the general and Catalan elections beside Catalonia's. The towns are the ${EN_LARGEST} largest by population on 1 January ${year} (Idescat), the four provincial capitals among them, and the ${EN_RESORTS.length} with the most places in the Generalitat's register of tourist accommodation (hotels, campsites, rural tourism, tourist flats and homes).`,
       `The Catalan and Spanish editions cover all ${PAGES_PER_LOCALE.ca} municipalities in Catalonia: [in Catalan](${hubPath("ca")}), [in Spanish](${hubPath("es")}). For every local election since 1979, use the [local results lookup](${b2href("municipalResults", "en")}).`,
+      // Until the 29N results are in: the two guides voters need first.
+      ...(g ? [] : [`Voting on 29 November? [How to vote in Catalonia](${b2href("voting", "en")}) and [the postal vote, step by step](${b2href("postalVote", "en")}).`]),
     ],
     listTitle: "Towns by comarca",
     jumpLabel: "Go to a comarca",

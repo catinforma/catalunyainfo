@@ -64,6 +64,7 @@ import { REIS } from "@/lib/content/batch02/reis";
 import { L2_CLOSURE_GUIDE } from "@/lib/content/batch02/l2-closure";
 import { CHRISTMAS_LIGHTS } from "@/lib/content/batch02/christmas-lights";
 import { GRAN_RECAPTE_GUIDE } from "@/lib/content/batch02/gran-recapte";
+import { POSTAL_VOTE } from "@/lib/content/batch02/postal-vote";
 import { publishHolidayTodayGuide } from "@/lib/content/holidays/today-publish";
 import { publishLocalHolidaysGuide } from "@/lib/content/holidays/local-publish";
 import { publishReservoirGuide } from "@/lib/content/reservoirs/publish";
@@ -311,6 +312,11 @@ export async function POST(request: Request) {
     // Barcelona markets guide) go out once, with `gran-recapte-links`.
     if (wants("gran-recapte")) published.push(await publishB2Article(GRAN_RECAPTE_GUIDE));
     if (wants("gran-recapte-links")) published.push(await publishB2Article(MARATO_GUIDE), await publishB2Article(MARKETS));
+    // Postal vote (29N requests close 19 Nov): one page, on its own so the
+    // phase changes (POSTAL_AS_OF past 19 Nov, then past 29 Nov) republish
+    // only it. The how-to-vote guide, whose section now links here, goes out
+    // with `voting`; the hub and town election pages are code routes.
+    if (wants("vot-correu")) published.push(await publishB2Article(POSTAL_VOTE));
 
     const surfaces = [
       ...published.flatMap((article) =>

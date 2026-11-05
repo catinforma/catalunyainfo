@@ -122,6 +122,16 @@ import {
  * order, EMT/178/2023, was published on 7 Jul 2023, 16 days before the vote,
  * and its tiers were re-read in that PDF); RD 806/2026 arts. 2, 4 and 5.
  *
+ * 5 Nov 2026 (body only; titles and descriptions untouched, logged in
+ * docs/SEO_EXPERIMENTS.md): the postal vote has its own page now
+ * (postal-vote.ts, group `vot-correu`). The "Postal vote" section keeps its
+ * heading (Google shows its #voto-por-correo anchor as a sitelink) and says
+ * the essentials in one paragraph with a link there; the warning callout near
+ * the top and the related rail link there too. Every date in the paragraph
+ * was re-read that day for the new page (LOREG 72-73, JEC calendar, Correos,
+ * Interior, INE cid=1700); VERIFIED stays 3 Nov because the rest of the page
+ * was not re-read.
+ *
  * The URL is evergreen on purpose: after 29 November the same page switches
  * its worked example to the municipal elections, whose date is fixed by law
  * (LOREG art. 42.3, fourth Sunday of May). Strictly procedural and
@@ -274,8 +284,7 @@ const COPY: Record<Locale, T> = {
     ],
     postTitle: "Postal vote",
     post: [
-      `Anyone who will be away on polling day, or who cannot go in person because of illness or disability, can vote by post. Request it **by 19 November**, the tenth day before polling day (electoral law, art. 72), at any Correos post office, in person, showing your ID (a photocopy is not accepted), or online on the ${a("Correos website", URL.correos)} with an electronic DNI or a digital certificate. If you are ill, a person with a notarised authorisation can request it for you, with an official medical certificate.`,
-      `The documents are sent from 9 November and you sign for them in person. Hand your vote in at Correos **by 25 November**, during the offices' normal opening hours, by free registered post; if you cannot go, someone else can take it with an authorisation signed by you and a photocopy of your DNI. Do not put any ID inside the envelope. You can ${a("track the documents", URL.tracking)} online. Once your request is accepted, you can no longer vote in person. New this time: Correos can e-mail you when your vote reaches your polling table on polling day, if you give an address when you hand it in.`,
+      `If you will be away on polling day or cannot go in person, request a postal vote at any Correos post office **by Thursday 19 November**, with your original ID (never a photocopy), or online on the ${a("Correos website", URL.correos)} with a digital certificate or electronic DNI. The papers come by registered post between 9 and 22 November, and you hand your vote in at Correos **by 25 November**, free. Once your request is accepted, you can no longer vote in person. Step by step, and what to do if you are out when the papers come: ${b2link("postalVote", "en", "the postal vote guide")}.`,
     ],
     dayTitle: "Voting hours and what ID to bring",
     day: [
@@ -315,7 +324,7 @@ const COPY: Record<Locale, T> = {
     ],
     note: "Electoral deadlines are fixed by law, the Central Electoral Board and the INE; check the official calendar if a date seems to have changed.",
     warnTitle: "Postal vote: request it by 19 November",
-    warn: "If you will be away on 29 November, request the postal vote at Correos by 19 November, in person with your original ID, and hand it in by 25 November.",
+    warn: `If you will be away on 29 November, request the postal vote at Correos by 19 November, in person with your original ID or online with a digital certificate, and hand it in by 25 November. ${b2link("postalVote", "en", "How to do it, step by step")}.`,
   },
   es: {
     lead: `Las próximas elecciones en Cataluña son las **generales del domingo 29 de noviembre de 2026**, para elegir el Congreso y el Senado, convocadas por el Real Decreto 806/2026 (BOE del 6 de octubre); las siguientes, las municipales, están previstas para el 23 de mayo de 2027. Se vota de **9:00 a 20:00** en la mesa que te indica el ${a("buscador oficial del INE", URL.mesas)}: solo pide la provincia, el municipio y la inicial del primer apellido, sin DNI ni Cl@ve. Plazos clave: el voto por correo se pide en Correos **hasta el 19 de noviembre** y se entrega hasta el 25, y la tarjeta censal con tu mesa llega por correo entre el 2 y el 10 de noviembre.`,
@@ -376,8 +385,7 @@ const COPY: Record<Locale, T> = {
     ],
     postTitle: "Voto por correo",
     post: [
-      `Puede votar por correo quien no vaya a estar en su localidad el día de la votación, o no pueda ir en persona por enfermedad o discapacidad. Hay que pedirlo **hasta el 19 de noviembre**, el décimo día antes de la votación (LOREG, art. 72), en cualquier oficina de Correos, en persona y enseñando el documento de identidad (no se acepta fotocopia), o por internet en la ${a("web de Correos", URL.correos)} con DNI electrónico o certificado digital. Si estás enfermo, puede pedirlo por ti una persona con autorización notarial, con certificado médico oficial.`,
-      `La documentación se envía a partir del 9 de noviembre y la recibes firmando en persona. El voto se entrega en Correos **hasta el 25 de noviembre**, en el horario habitual de las oficinas, por correo certificado gratuito; si no puedes ir, puede llevarlo otra persona con una autorización firmada por ti y una fotocopia de tu DNI. No metas ningún documento de identidad en el sobre. Puedes ${a("seguir el envío", URL.tracking)} por internet. Si tu solicitud se acepta, ya no puedes votar en persona. Como novedad, Correos puede avisarte por correo electrónico cuando tu voto llega a la mesa el día de la votación, si das tu dirección al entregarlo.`,
+      `Si no vas a estar el día de la votación o no puedes ir en persona, pide el voto por correo en cualquier oficina de Correos **hasta el jueves 19 de noviembre**, con el documento de identidad original (nunca una fotocopia), o por internet en la ${a("web de Correos", URL.correos)} con certificado digital o DNI electrónico. La documentación llega por correo certificado entre el 9 y el 22 de noviembre, y el voto se entrega en Correos **hasta el 25 de noviembre**, gratis. Si tu solicitud se acepta, ya no puedes votar en persona. Paso a paso, y qué hacer si no estás en casa cuando llega: ${b2link("postalVote", "es", "la guía del voto por correo")}.`,
     ],
     dayTitle: "Horario para votar y qué documento llevar",
     day: [
@@ -413,7 +421,7 @@ const COPY: Record<Locale, T> = {
     ],
     note: "Los plazos electorales los fijan la ley, la Junta Electoral Central y el INE: consulta el calendario oficial si una fecha parece haber cambiado.",
     warnTitle: "Voto por correo: pídelo hasta el 19 de noviembre",
-    warn: "Si no estarás el 29 de noviembre, pide el voto por correo en Correos hasta el 19 de noviembre, en persona y con tu documento original, y entrégalo hasta el 25 de noviembre.",
+    warn: `Si no estarás el 29 de noviembre, pide el voto por correo en Correos hasta el 19 de noviembre, en persona con tu documento original o por internet con certificado digital, y entrégalo hasta el 25 de noviembre. ${b2link("postalVote", "es", "Cómo hacerlo, paso a paso")}.`,
   },
   ca: {
     lead: `Les properes eleccions a Catalunya són les **generals del diumenge 29 de novembre de 2026**, per escollir el Congrés i el Senat, convocades pel Reial decret 806/2026 (BOE del 6 d'octubre); les següents, les municipals, estan previstes per al 23 de maig de 2027. Es vota de **9:00 a 20:00** a la mesa que t'indica el ${a("cercador oficial de l'INE", URL.mesas)}: només demana la província, el municipi i la inicial del primer cognom, sense DNI ni Cl@ve. Terminis clau: el vot per correu es demana a Correus **fins al 19 de novembre** i es lliura fins al 25, i la targeta censal amb la teva mesa arriba per correu entre el 2 i el 10 de novembre.`,
@@ -474,8 +482,7 @@ const COPY: Record<Locale, T> = {
     ],
     postTitle: "Vot per correu",
     post: [
-      `Pot votar per correu qui no serà a la seva localitat el dia de la votació, o no hi pot anar en persona per malaltia o discapacitat. Cal demanar-lo **fins al 19 de novembre**, el desè dia abans de la votació (LOREG, art. 72), a qualsevol oficina de Correus, en persona i ensenyant el document d'identitat (no s'accepta fotocòpia), o per internet al ${a("web de Correus", URL.correos)} amb DNI electrònic o certificat digital. Si estàs malalt, el pot demanar per tu una persona amb autorització notarial, amb certificat mèdic oficial.`,
-      `La documentació s'envia a partir del 9 de novembre i la reps signant en persona. El vot es lliura a Correus **fins al 25 de novembre**, en l'horari habitual de les oficines, per correu certificat gratuït; si no hi pots anar, el pot portar una altra persona amb una autorització signada per tu i una fotocòpia del teu DNI. No posis cap document d'identitat dins del sobre. Pots ${a("seguir l'enviament", URL.tracking)} per internet. Si la sol·licitud s'accepta, ja no pots votar en persona. Com a novetat, Correus et pot avisar per correu electrònic quan el teu vot arriba a la mesa el dia de la votació, si hi dones la teva adreça en lliurar-lo.`,
+      `Si no hi seràs el dia de la votació o no hi pots anar en persona, demana el vot per correu a qualsevol oficina de Correus **fins al dijous 19 de novembre**, amb el document d'identitat original (mai una fotocòpia), o per internet al ${a("web de Correus", URL.correos)} amb certificat digital o DNI electrònic. Les paperetes arriben per correu certificat entre el 9 i el 22 de novembre, i el vot es lliura a Correus **fins al 25 de novembre**, gratis. Si la sol·licitud s'accepta, ja no pots votar en persona. Pas a pas, i què fer si no ets a casa quan arriben: ${b2link("postalVote", "ca", "la guia del vot per correu")}.`,
     ],
     dayTitle: "Horari per votar i quin document portar",
     day: [
@@ -511,7 +518,7 @@ const COPY: Record<Locale, T> = {
     ],
     note: "Els terminis electorals els fixen la llei, la Junta Electoral Central i l'INE: consulta el calendari oficial si una data sembla haver canviat.",
     warnTitle: "Vot per correu: demana'l fins al 19 de novembre",
-    warn: "Si no hi seràs el 29 de novembre, demana el vot per correu a Correus fins al 19 de novembre, en persona i amb el document original, i entrega'l fins al 25 de novembre.",
+    warn: `Si no hi seràs el 29 de novembre, demana el vot per correu a Correus fins al 19 de novembre, en persona amb el document original o per internet amb certificat digital, i entrega'l fins al 25 de novembre. ${b2link("postalVote", "ca", "Com fer-ho, pas a pas")}.`,
   },
 };
 
@@ -572,7 +579,7 @@ function body(locale: Locale) {
     ),
     ...h2(t.muniTitle, ...t.muni),
     faq(t.faq),
-    ...b2Related(["mesa", "electionNight", "congressResults", "parliamentResults", "municipalResults"], locale),
+    ...b2Related(["postalVote", "mesa", "electionNight", "congressResults", "parliamentResults", "municipalResults"], locale),
   ];
 }
 
