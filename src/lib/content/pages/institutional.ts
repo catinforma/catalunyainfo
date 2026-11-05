@@ -8,11 +8,23 @@ import { section, sectionEntryPath, type PageCopy, type PageSpec } from "./types
 /**
  * About and contact.
  *
- * The about page names no staff and claims no size: those are facts about real
- * people that this repository does not hold, and an invented masthead is the
- * exact kind of thing that makes a site look manufactured. It describes the
- * project and the method instead, both of which are true and checkable.
+ * The about page claims no size and invents no masthead. It names the one
+ * person behind the project (the owner's own text and links, given on
+ * 5 Nov 2026: OWNER below) and otherwise describes the project and the method,
+ * both of which are true and checkable.
  */
+
+/** The site's founder, as the owner described themself (5 Nov 2026). */
+export const OWNER = {
+  name: "Martí Aguilera",
+  links: {
+    portfolio: "https://martiaguilera.vercel.app/",
+    github: "https://github.com/martiaaguilera",
+    linkedin: "https://www.linkedin.com/in/martiaaguilera/",
+  },
+} as const;
+
+const OWNER_LINKS = `[martiaguilera.vercel.app](${OWNER.links.portfolio}) · [GitHub](${OWNER.links.github}) · [LinkedIn](${OWNER.links.linkedin})`;
 
 /* -------------------------------------------------------------------------- */
 /* About                                                                      */
@@ -31,6 +43,13 @@ function aboutBlocks(locale: Locale): Block[] {
         lead: true,
         text: "CatalunyaInfo és un projecte editorial independent que respon una pregunta concreta: què necessites saber abans d'anar a un lloc de Catalunya.",
       } as Block,
+      ...section(
+        "Qui hi ha al darrere",
+        `CatalunyaInfo és un projecte de **${OWNER.name}**. Estudia el Grau Superior de Desenvolupament d'Aplicacions Multiplataforma (DAM), després d'haver acabat el Grau Mitjà de Sistemes Microinformàtics i Xarxes (SMX), i vol continuar amb Enginyeria Informàtica per aprofundir en la informàtica i la programació.`,
+        "És fundador i CEO de NuviaDev, una empresa que crea webs totalment personalitzades per a negocis locals i emprenedors, perquè destaquin a internet amb dissenys moderns, funcionals i fidels a la seva identitat.",
+        "Li apassiona la tecnologia: aprendre contínuament i aplicar el que aprèn a projectes que tinguin un impacte real.",
+        OWNER_LINKS,
+      ),
       ...section(
         "Què fem",
         "Publiquem informació pràctica i verificada: com arribar-hi, quan val la pena anar-hi, què cal tenir en compte i on consultar la font oficial. Tot en català, castellà i anglès, amb la mateixa informació als tres idiomes i no una traducció automàtica de mig contingut.",
@@ -65,6 +84,13 @@ function aboutBlocks(locale: Locale): Block[] {
         text: "CatalunyaInfo es un proyecto editorial independiente que responde a una pregunta concreta: qué necesitas saber antes de ir a un lugar de Cataluña.",
       } as Block,
       ...section(
+        "Quién está detrás",
+        `CatalunyaInfo es un proyecto de **${OWNER.name}**. Estudia el Grado Superior en Desarrollo de Aplicaciones Multiplataforma (DAM), tras completar el Grado Medio en Sistemas Microinformáticos y Redes (SMX), y quiere cursar Ingeniería Informática para profundizar en la informática y la programación.`,
+        "Es fundador y CEO de NuviaDev, una empresa que crea sitios web totalmente personalizados para negocios locales y emprendedores, para ayudarles a destacar en internet con diseños modernos, funcionales y alineados con su identidad.",
+        "Le apasiona la tecnología: aprender siempre y aplicar lo que aprende en proyectos que marquen una diferencia en el mundo real.",
+        OWNER_LINKS,
+      ),
+      ...section(
         "Qué hacemos",
         "Publicamos información práctica y verificada: cómo llegar, cuándo merece la pena ir, qué conviene tener en cuenta y dónde consultar la fuente oficial. Todo en catalán, castellano e inglés, con la misma información en los tres idiomas y no una traducción automática de medio contenido.",
         "No somos una administración pública ni una oficina de turismo. Tampoco un agregador: cada página la escribimos nosotros, citando de dónde sale cada dato.",
@@ -97,6 +123,13 @@ function aboutBlocks(locale: Locale): Block[] {
         lead: true,
         text: "CatalunyaInfo is an independent editorial project answering one question: what you need to know before going somewhere in Catalonia.",
       } as Block,
+      ...section(
+        "Who is behind it",
+        `CatalunyaInfo is a project by **${OWNER.name}**. Martí is studying for the Higher Vocational Diploma in Multiplatform Application Development (DAM), having completed the Intermediate Diploma in Microcomputer Systems and Networks (SMX), and plans to go on to a degree in Computer Engineering.`,
+        "Martí is the founder and CEO of NuviaDev, a company that builds fully custom websites for local businesses and entrepreneurs, helping them stand out online with modern, functional designs true to their identity.",
+        "Passionate about technology, Martí is always looking for new things to learn and for projects that make a real-world difference.",
+        OWNER_LINKS,
+      ),
       ...section(
         "What we do",
         "We publish practical, verified information: how to get there, when it is worth going, what to bear in mind, and where to check the official source. All of it in Catalan, Spanish and English, with the same information in each language rather than a machine translation of half the content.",

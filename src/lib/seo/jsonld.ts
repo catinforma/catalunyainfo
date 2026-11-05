@@ -3,6 +3,7 @@ import { HTML_LANG, type Locale } from "@/lib/i18n/config";
 import { sectionPath } from "@/lib/i18n/routes";
 import type { Block } from "@/lib/content/blocks";
 import type { EntryDetail } from "@/lib/content/types";
+import { OWNER } from "@/lib/content/pages/institutional";
 
 /**
  * Structured data.
@@ -32,6 +33,12 @@ export function organizationSchema(): Json {
       height: 512,
     },
     ...(SITE.contactEmail ? { email: SITE.contactEmail } : {}),
+    founder: {
+      "@type": "Person",
+      name: OWNER.name,
+      url: OWNER.links.portfolio,
+      sameAs: [OWNER.links.github, OWNER.links.linkedin],
+    },
   };
 }
 

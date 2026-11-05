@@ -46,13 +46,14 @@ export interface PagesResult {
   pages: { key: string; locale: Locale; path: string; action: "created" | "updated" }[];
 }
 
-export async function publishInstitutionalPages(): Promise<PagesResult> {
+/** `keys` limits the run to those entries (e.g. only the about page), so other pages' CMS edits are not overwritten. */
+export async function publishInstitutionalPages(keys?: readonly string[]): Promise<PagesResult> {
   const db = requireDb();
   const now = new Date();
   const publishedAt = PUBLISHED > now ? now : PUBLISHED;
   const result: PagesResult = { pages: [] };
 
-  for (const spec of PAGES) {
+  for (const spec of keys ? PAGES.filter((p) => keys.includes(p.key)) : PAGES) {
     /* ---- Entry ---------------------------------------------------------- */
     const entryRows = await db
       .select({ id: schema.entries.id })
