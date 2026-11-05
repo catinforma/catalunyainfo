@@ -6,7 +6,9 @@ import { SCHOOL_SOURCE, SCHOOL_YEARS } from "@/lib/content/school/calendar";
 import type { Locale } from "@/lib/i18n/config";
 
 import { DAYS, PAST, dateYear, dayDate } from "./festive";
+import { REIS_TOWNS, REIS_TOWNS_AS_OF, REIS_TOWNS_LEFT_OUT, type ReisTown } from "./reis-towns";
 import {
+  B2_TITLES,
   b2Related,
   b2link,
   callout,
@@ -83,6 +85,22 @@ import { OPENING_2027, SHOPS } from "./shops";
  * REIS_AS_OF stays. The traditions paragraph now links the Christmas markets
  * guide and the living nativities.
  *
+ * 5 Nov 2026 (towns 8 -> 21): thirteen more councils' 2026 parades from
+ * their own sites, in reis-towns.ts (Terrassa, Sant Cugat, Rubí, Granollers,
+ * Mollet, L'Hospitalet, Cornellà, Sant Boi, El Prat, Castelldefels, Manresa,
+ * Vic, Figueres); Santa Coloma, Viladecans and Vilanova i la Geltrú are named
+ * as left out, with the reason. The towns table and sections list all of them
+ * in alphabetical order; 2027 is "per confirmar" with a link to where each
+ * council will publish. Why one page and not a hub: reis-towns.ts header.
+ * Barcelona, Badalona, Girona, Lleida, Tarragona, Reus, Sabadell, Mataró and
+ * Igualada re-read the same day: no 2027 time or route anywhere; Barcelona
+ * has opened sign-ups for people taking part in the 2027 parade
+ * (BARCELONA_NEWS_2027), so REIS_AS_OF moves to 5 Nov. Title and description
+ * untouched (the ES edition ranks at ~5 for the generic 2027 queries). A test
+ * fails from 22 Dec 2026, and again from 2 Jan 2027, until the councils are
+ * re-read (reis-towns.ts REIS_REREAD_BY). The 5-6 January transport line now
+ * links the Christmas transport page.
+ *
  * No new photograph: the hero is the shops guide's lead picture (Christmas
  * lights on a Barcelona shopping street), also the Christmas in Barcelona
  * hero, with its exact alt text and caption, because media rows are keyed by
@@ -90,7 +108,7 @@ import { OPENING_2027, SHOPS } from "./shops";
  */
 
 /** The day the page was last brought up to date. Every "checked" line reads this, never the clock. */
-export const REIS_AS_OF = "2026-10-31";
+export const REIS_AS_OF = "2026-11-05";
 
 /* -------------------------------------------------------------------------- */
 /* The days, from the shared modules                                          */
@@ -240,6 +258,21 @@ export const SEASON_2027 = { from: "2027-01-02", to: REIS_DAY } as const;
 export const BARCELONA_HOSTS = /(^|\.)(barcelona\.cat|dtibcn\.cat)$/;
 
 /** Where to watch for each 2027 programme. */
+/**
+ * Something official about Barcelona's 2027 parade before its programme: the
+ * City Council's sign-up form for people taking part (read 5 Nov 2026):
+ * "Inscripcions a la Cavalcada Reis 2027 ... El període d'inscripció començarà
+ * el 19 d'octubre de 2026, a les 12:00 h, i finalitzarà el 23 de novembre de
+ * 2026, a les 23:59 h." Linked from barcelona.cat/barcelonacultura. Not a time
+ * or a route; drop it once ANNOUNCED_2027.barcelona is filled.
+ */
+export const BARCELONA_NEWS_2027 = {
+  opens: "2026-10-19",
+  closes: "2026-11-23",
+  url: "https://inscripcions-ajuntament.barcelona.cat/index.php/469371?lang=ca",
+  read: "2026-11-05",
+} as const;
+
 export const REIS_WATCH = {
   barcelonaPage: "https://www.barcelona.cat/nadal/ca/els-reis-dorient/la-cavalcada-de-reis",
   barcelonaPress: "https://ajuntament.barcelona.cat/premsa/tag/reis/",
@@ -672,23 +705,40 @@ const BASE_SOURCES: B2Source[] = [
   { name: "Tradicions de Reis", url: U.bcnTraditions, publisher: "Ajuntament de Barcelona" },
   { name: "Cavalcada de Reis", url: U.bcnCulturaPopular, publisher: "Ajuntament de Barcelona, Cultura Popular" },
   { name: "Servei de Premsa: Reis", url: REIS_WATCH.barcelonaPress, publisher: "Ajuntament de Barcelona" },
+  { name: "Inscripcions a la Cavalcada de Reis 2027", url: BARCELONA_NEWS_2027.url, publisher: "Ajuntament de Barcelona" },
   { name: "Transport públic per a la Cavalcada de Reis de Barcelona 2026 (5/1/2026)", url: U.tmb2026, publisher: "TMB" },
   ...HOLIDAY_SOURCES_2027.slice(0, 1).map((s) => ({ name: s.name, url: s.url, publisher: s.publisher })),
   { name: SCHOOL_SOURCE.name, url: SCHOOL_SOURCE.url, publisher: SCHOOL_SOURCE.publisher },
   ...[shopsSource("EMT/89/2026"), shopsSource("Llei 18/2017")].filter((s): s is B2Source => Boolean(s)),
 ];
 
+/** "Ajuntament de Terrassa", "Ajuntament d'Igualada", "Ajuntament de l'Hospitalet de Llobregat", "Ajuntament del Prat de Llobregat". */
+export function councilName(town: string): string {
+  if (/^El /.test(town)) return `Ajuntament del ${town.slice(3)}`;
+  if (/^L'/.test(town)) return `Ajuntament de l'${town.slice(2)}`;
+  if (/^[AEIOUÀÈÉÍÒÓÚ]/i.test(town)) return `Ajuntament d'${town}`;
+  return `Ajuntament de ${town}`;
+}
+
 /** Every source the page cites, the 2027 slots' pages first, each once. */
-export function reisSources(announced: Announced2027 = ANNOUNCED_2027): B2Source[] {
+export function reisSources(announced: Announced2027 = ANNOUNCED_2027, moreTowns: readonly ReisTown[] = REIS_TOWNS): B2Source[] {
   const filled: B2Source[] = [];
   if (announced.barcelona) filled.push({ name: "Cavalcada de Reis 2027", url: announced.barcelona.url, publisher: "Ajuntament de Barcelona" });
   for (const town of TOWNS) {
     const slot = announced.towns[town.key];
     if (slot) filled.push({ name: `Cavalcada de Reis 2027 (${town.name})`, url: slot.url, publisher: town.past.sources[0]?.publisher ?? town.name });
   }
+  for (const town of moreTowns) {
+    if (town.y2027) filled.push({ name: `Cavalcada de Reis 2027 (${town.name})`, url: town.y2027.url, publisher: councilName(town.name) });
+  }
+  const more: B2Source[] = moreTowns.flatMap((town) => [
+    { name: `Cavalcada de Reis 2026 (${town.name})`, url: town.y2026.url, publisher: councilName(town.name) },
+    ...(town.y2026.alsoUrl ? [{ name: `Cavalcada de Reis 2026 (${town.name})`, url: town.y2026.alsoUrl, publisher: councilName(town.name) }] : []),
+    ...(town.news2027 ? [{ name: `Cavalcada de Reis 2027 (${town.name})`, url: town.news2027.url, publisher: councilName(town.name) }] : []),
+  ]);
   const seen = new Set<string>();
   const out: B2Source[] = [];
-  for (const source of [...filled, ...BASE_SOURCES, ...TOWNS.flatMap((t) => t.past.sources)]) {
+  for (const source of [...filled, ...BASE_SOURCES, ...TOWNS.flatMap((t) => t.past.sources), ...more]) {
     if (seen.has(source.url)) continue;
     seen.add(source.url);
     out.push(source);
@@ -701,6 +751,7 @@ export function reisSources(announced: Announced2027 = ANNOUNCED_2027): B2Source
 /* -------------------------------------------------------------------------- */
 
 const cap = (text: string) => text.charAt(0).toUpperCase() + text.slice(1);
+const lower = (text: string) => text.charAt(0).toLowerCase() + text.slice(1);
 
 function joinList(items: readonly string[], locale: Locale): string {
   const and = { ca: "i", es: "y", en: "and" }[locale];
@@ -748,9 +799,14 @@ const AS_OF: Record<Locale, string> = {
 
 const COUNCIL: Record<Locale, string> = { ca: "Ajuntament", es: "Ayuntamiento", en: "City Council" };
 
-/** The towns the page covers, in order: "Girona, Lleida, ... i Igualada". */
+/** The towns the page covers: "Girona, Lleida, Tarragona, Sabadell, Terrassa i 19 ciutats més". */
 export function townNames(locale: Locale): string {
-  return joinList(TOWNS.map((t) => t.name), locale);
+  const all = [...TOWNS.map((t) => t.name), ...REIS_TOWNS.map((t) => t.name)];
+  const first = ["Girona", "Lleida", "Tarragona", "Sabadell", "Terrassa"].filter((name) => all.includes(name));
+  const rest = all.length - first.length;
+  if (rest <= 0) return joinList(first, locale);
+  const more = { ca: `${rest} ciutats més`, es: `${rest} ciudades más`, en: `${rest} more towns` }[locale];
+  return joinList([...first, more], locale);
 }
 
 /* -------------------------------------------------------------------------- */
@@ -880,7 +936,56 @@ export function stopsTable(locale: Locale, barcelona: Parade | null = ANNOUNCED_
 /* The towns                                                                  */
 /* -------------------------------------------------------------------------- */
 
-function townStatus(town: Town, slot: Parade | null, locale: Locale): string {
+/**
+ * One view over both kinds of town: the eight first covered (`TOWNS`, with
+ * long notes) and the ones added on 5 Nov 2026 (`REIS_TOWNS`, compact rows
+ * from reis-towns.ts). The table and the sections list them together, in
+ * alphabetical order without the article ("El Prat" under P).
+ */
+export interface TownView {
+  name: string;
+  hosts: RegExp;
+  watch: string;
+  slot: Parade | null;
+  news2027?: { published: string; url: string; text: Record<Locale, string>; confirmsDate?: true };
+  /** True for the first eight towns, whose notes are a full account of 2026. */
+  full: boolean;
+  past: Parade;
+  arrivalText?: Record<Locale, string>;
+  startText?: Record<Locale, string>;
+  notes?: Record<Locale, string>;
+  announcedRoute?: true;
+  guide?: B2Key;
+}
+
+const sortName = (name: string) => name.replace(/^(L'|El |La |Les |Els )/, "");
+
+export function allTowns(announced: Announced2027 = ANNOUNCED_2027, more: readonly ReisTown[] = REIS_TOWNS): TownView[] {
+  const views: TownView[] = [
+    ...TOWNS.map((t) => ({
+      name: t.name,
+      hosts: t.hosts,
+      watch: t.watch,
+      slot: announced.towns[t.key],
+      // Both towns with 2027 news here (Mataró, Badalona) confirmed the date in it.
+      news2027: t.news2027 ? { ...t.news2027, confirmsDate: true as const } : undefined,
+      past: t.past,
+      arrivalText: t.past.arrivalText,
+      startText: t.past.startText,
+      notes: t.past.notes,
+      announcedRoute: t.past.announcedRoute,
+      guide: t.guide,
+      full: true,
+    })),
+    ...more.map((t) => ({ name: t.name, hosts: t.hosts, watch: t.watch, slot: t.y2027, news2027: t.news2027, past: t.y2026, startText: t.startText, arrivalText: t.arrivalText, notes: t.notes, announcedRoute: t.announcedRoute, guide: t.guide, full: false })),
+  ];
+  return views.sort((a, b) => sortName(a.name).localeCompare(sortName(b.name), "ca"));
+}
+
+const PENDING: Record<Locale, string> = { ca: "per confirmar", es: "por confirmar", en: "to be confirmed" };
+
+function townStatus(town: TownView, locale: Locale): string {
+  const slot = town.slot;
   if (slot) {
     const arrival = slot.arrival ? { ca: `Arribada dels Reis: ${slot.arrival.place}${slot.arrival.time ? ` (${slot.arrival.time})` : ""}. `, es: `Llegada de los Reyes: ${slot.arrival.place}${slot.arrival.time ? ` (${slot.arrival.time})` : ""}. `, en: `The Kings arrive: ${slot.arrival.place}${slot.arrival.time ? ` (${slot.arrival.time})` : ""}. ` }[locale] : "";
     return {
@@ -891,20 +996,52 @@ function townStatus(town: Town, slot: Parade | null, locale: Locale): string {
   }
   const news = town.news2027 ? ` ${town.news2027.text[locale]}` : "";
   return {
-    ca: `**2027:** l'Ajuntament encara no n'ha publicat l'horari (${AS_OF.ca}).${news}`,
-    es: `**2027:** el Ayuntamiento aún no ha publicado el horario (${AS_OF.es}).${news}`,
-    en: `**2027:** the council has not published the times yet (${AS_OF.en}).${news}`,
+    ca: `**2027:** ${PENDING.ca}. L'Ajuntament encara no n'ha publicat l'horari (${TOWNS_AS_OF.ca}); el publicarà a [la seva web](${town.watch}).${news}`,
+    es: `**2027:** ${PENDING.es}. El Ayuntamiento aún no ha publicado el horario (${TOWNS_AS_OF.es}); lo publicará en [su web](${town.watch}).${news}`,
+    en: `**2027:** ${PENDING.en}. The council has not published the times yet (${TOWNS_AS_OF.en}); it will post them on [its website](${town.watch}).${news}`,
   }[locale];
 }
 
-function townPast(town: Town, locale: Locale): string[] {
+/**
+ * "Sortida a les 18:35 (avinguda del Maresme); final cap a les 21:50 (plaça de
+ * Sant Ildefons). Els Reis havien arribat a les 18:00 (avinguda de la Fama)."
+ * from the row itself. Place names go in brackets, as the council writes
+ * them, so no article has to be guessed in front of them.
+ */
+function pastSummary(p: Parade, locale: Locale, startText?: Record<Locale, string>): string {
+  const place = (name: string) => ` (${localPlace(name, locale)})`;
+  const start = startText
+    ? { ca: `Sortida: ${lower(startText.ca)}`, es: `Salida: ${lower(startText.es)}`, en: `Start: ${lower(startText.en)}` }[locale]
+    : { ca: `Sortida ${at(p.time, "ca")}`, es: `Salida ${at(p.time, "es")}`, en: `Start ${at(p.time, "en")}` }[locale] + (p.start && !startText ? place(p.start) : "");
+  const endWord = { ca: "final", es: "final", en: "end" }[locale];
+  const endAt = p.endTime ? { ca: ` cap a les ${p.endTime}`, es: ` hacia las ${p.endTime}`, en: ` at about ${p.endTime}` }[locale] : "";
+  const end = p.endTime && (p.end || !startText)
+    ? `; ${endWord}${endAt}${p.end ? place(p.end) : ""}`
+    : p.end
+      ? `; ${endWord}: ${localPlace(p.end, locale)}`
+      : "";
+  const arrival = p.arrival
+    ? ` ${{ ca: "Els Reis havien arribat", es: "Los Reyes habían llegado", en: "The Kings had arrived" }[locale]}${p.arrival.time ? ` ${at(p.arrival.time, locale)}` : ""}${place(p.arrival.place)}.`
+    : "";
+  return `${start}${end}.${arrival}`;
+}
+
+const SOURCE_LINK: Record<Locale, (url: string) => string> = {
+  ca: (url) => `Font: [web de l'Ajuntament](${url}).`,
+  es: (url) => `Fuente: [web del Ayuntamiento](${url}).`,
+  en: (url) => `Source: [council website](${url}).`,
+};
+
+function townPast(town: TownView, locale: Locale): string[] {
   const p = town.past;
   const route = routeLine(p, locale);
-  const routeLabel = p.announcedRoute
+  const routeLabel = town.announcedRoute
     ? { ca: "Recorregut del 2026, tal com el va anunciar l'Ajuntament", es: "Recorrido de 2026, tal como lo anunció el Ayuntamiento", en: "The 2026 route as the council announced it" }[locale]
     : { ca: "Recorregut del 2026", es: "Recorrido de 2026", en: "The 2026 route" }[locale];
   const how = { ca: "Com va ser el 2026", es: "Cómo fue en 2026", en: "How 2026 went" }[locale];
-  const out = [`**${how}:** ${p.notes[locale]}`];
+  // The first eight towns carry a full account; the others a summary built from the row.
+  const account = town.full && town.notes ? town.notes[locale] : [pastSummary(p, locale, town.startText), town.notes?.[locale]].filter(Boolean).join(" ");
+  const out = [`**${how}:** ${account} ${SOURCE_LINK[locale](p.url)}`];
   if (route && p.route?.length) out.push(`**${routeLabel}:** ${route}`);
   return out;
 }
@@ -912,65 +1049,75 @@ function townPast(town: Town, locale: Locale): string[] {
 const GUIDE_LINE: Partial<Record<B2Key, Record<Locale, string>>> = {
   girona: { ca: "Si hi vas des de Barcelona", es: "Si vas desde Barcelona", en: "Going from Barcelona" },
   tarragona: { ca: "Si hi vas des de Barcelona", es: "Si vas desde Barcelona", en: "Going from Barcelona" },
+  figueres: { ca: "Si hi vas des de Barcelona", es: "Si vas desde Barcelona", en: "Going from Barcelona" },
 };
 
 function townBlocks(locale: Locale, announced: Announced2027): Block[] {
   const blocks: Block[] = [];
-  for (const town of TOWNS) {
-    const texts = [townStatus(town, announced.towns[town.key], locale), ...townPast(town, locale)];
+  for (const town of allTowns(announced)) {
+    const texts = [townStatus(town, locale), ...townPast(town, locale)];
     if (town.guide) {
       const label = GUIDE_LINE[town.guide]?.[locale] ?? "";
-      const title = { ca: `${town.name} des de Barcelona en tren`, es: `${town.name} desde Barcelona en tren`, en: `${town.name} from Barcelona by train` }[locale];
-      texts.push(`${label}: ${b2link(town.guide, locale, title)}.`);
+      texts.push(`${label}: ${b2link(town.guide, locale, B2_TITLES[town.guide][locale])}.`);
     }
     blocks.push(...h3(town.name, ...texts));
   }
   return blocks;
 }
 
+const NOT_GIVEN: Record<Locale, string> = { ca: "La web no la detalla", es: "La web no la detalla", en: "Not given on the council's page" };
+
 /** The towns at a glance: 2026 arrival and start, and where 2027 stands. */
-export function townRows(locale: Locale, announced: Announced2027 = ANNOUNCED_2027): string[][] {
-  return TOWNS.map((town) => {
+export function townRows(locale: Locale, announced: Announced2027 = ANNOUNCED_2027, more: readonly ReisTown[] = REIS_TOWNS): string[][] {
+  return allTowns(announced, more).map((town) => {
     const p = town.past;
-    const slot = announced.towns[town.key];
-    const start = p.startText?.[locale] ?? `${p.time}, ${localPlace(p.start ?? "", locale)}`;
-    const pending = town.news2027
-      ? { ca: "Data confirmada (5 de gener); horari pendent", es: "Fecha confirmada (5 de enero); horario pendiente", en: "Date confirmed (5 January); times to come" }[locale]
-      : { ca: "Encara no publicat", es: "Aún no publicado", en: "Not published yet" }[locale];
-    const now = slot ? `${cap(dayDate(slot.date, locale, false))}, ${slot.time}` : pending;
-    return [town.name, p.arrivalText[locale], start, now];
+    const start = town.startText?.[locale] ?? `${p.time}, ${localPlace(p.start ?? "", locale)}`;
+    const arrival = town.arrivalText?.[locale] ?? (p.arrival ? `${p.arrival.time ? `${p.arrival.time}, ` : ""}${localPlace(p.arrival.place, locale)}` : NOT_GIVEN[locale]);
+    const pending = town.news2027?.confirmsDate
+      ? { ca: "Per confirmar (dia confirmat, 5 de gener)", es: "Por confirmar (día confirmado, 5 de enero)", en: "To be confirmed (date confirmed, 5 January)" }[locale]
+      : cap(PENDING[locale]);
+    const now = town.slot ? `${cap(dayDate(town.slot.date, locale, false))}, ${town.slot.time}` : pending;
+    return [town.name, arrival, start, now];
   });
 }
 
+const TOWNS_AS_OF: Record<Locale, string> = {
+  ca: `comprovat el ${dateYear(REIS_TOWNS_AS_OF, "ca")}`,
+  es: `comprobado el ${dateYear(REIS_TOWNS_AS_OF, "es")}`,
+  en: `checked on ${dateYear(REIS_TOWNS_AS_OF, "en")}`,
+};
+
 function townTable(locale: Locale, announced: Announced2027): Block {
-  const caption = { ca: "Cavalcades de Reis a les grans ciutats: el 2026 i el 2027", es: "Cabalgatas de Reyes en las grandes ciudades: 2026 y 2027", en: "Three Kings parades in the larger towns: 2026 and 2027" }[locale];
+  const n = allTowns(announced).length;
+  const caption = { ca: `Cavalcades de Reis a ${n} ciutats de Catalunya: el 2026 i el 2027`, es: `Cabalgatas de Reyes en ${n} ciudades de Cataluña: 2026 y 2027`, en: `Three Kings parades in ${n} Catalan towns: 2026 and 2027` }[locale];
   const headers = {
     ca: ["Ciutat", "Arribada dels Reis (2026)", "Cavalcada (2026)", "2027"],
     es: ["Ciudad", "Llegada de los Reyes (2026)", "Cabalgata (2026)", "2027"],
     en: ["Town", "Kings arrive (2026)", "Parade starts (2026)", "2027"],
   }[locale];
   const note = {
-    ca: `De la web de cada ajuntament, ${AS_OF.ca}. Les dades del 2026 són de l'any passat: l'horari del 2027 pot canviar.`,
-    es: `De la web de cada ayuntamiento, ${AS_OF.es}. Los datos de 2026 son del año pasado: el horario de 2027 puede cambiar.`,
-    en: `From each council's website, ${AS_OF.en}. The 2026 details are last year's: 2027 times may change.`,
+    ca: `De la web de cada ajuntament, ${TOWNS_AS_OF.ca}. Les dades del 2026 són de l'última edició: l'horari del 2027 pot canviar.`,
+    es: `De la web de cada ayuntamiento, ${TOWNS_AS_OF.es}. Los datos de 2026 son de la última edición: el horario de 2027 puede cambiar.`,
+    en: `From each council's website, ${TOWNS_AS_OF.en}. The 2026 details are from the last edition: 2027 times may change.`,
   }[locale];
   return table(caption, headers, townRows(locale, announced), note);
 }
 
 /** Where the towns stand: who has published 2027, who has confirmed the date, who is left out. */
 export function townsIntro(locale: Locale, announced: Announced2027 = ANNOUNCED_2027): string {
-  const published = TOWNS.filter((t) => announced.towns[t.key]).map((t) => t.name);
-  const dated = TOWNS.filter((t) => !announced.towns[t.key] && t.news2027).map((t) => t.name);
+  const towns = allTowns(announced);
+  const published = towns.filter((t) => t.slot).map((t) => t.name);
+  const dated = towns.filter((t) => !t.slot && t.news2027?.confirmsDate).map((t) => t.name);
   const status = published.length
     ? {
-        ca: `Ja han publicat l'horari del 2027: ${joinList(published, "ca")}. La resta, encara no (${AS_OF.ca}).`,
-        es: `Ya han publicado el horario de 2027: ${joinList(published, "es")}. El resto, aún no (${AS_OF.es}).`,
-        en: `Already published for 2027: ${joinList(published, "en")}. The rest, not yet (${AS_OF.en}).`,
+        ca: `Ja han publicat l'horari del 2027: ${joinList(published, "ca")}. La resta, encara no (${TOWNS_AS_OF.ca}).`,
+        es: `Ya han publicado el horario de 2027: ${joinList(published, "es")}. El resto, aún no (${TOWNS_AS_OF.es}).`,
+        en: `Already published for 2027: ${joinList(published, "en")}. The rest, not yet (${TOWNS_AS_OF.en}).`,
       }[locale]
     : {
-        ca: `Cap ajuntament no ha publicat encara l'horari del 2027 (${AS_OF.ca}).`,
-        es: `Ningún ayuntamiento ha publicado aún el horario de 2027 (${AS_OF.es}).`,
-        en: `No council has published its 2027 times yet (${AS_OF.en}).`,
+        ca: `Cap ajuntament no ha publicat encara l'horari del 2027 (${TOWNS_AS_OF.ca}): fins que ho facin, és ${PENDING.ca}.`,
+        es: `Ningún ayuntamiento ha publicado aún el horario de 2027 (${TOWNS_AS_OF.es}): hasta que lo hagan, está ${PENDING.es}.`,
+        en: `No council has published its 2027 times yet (${TOWNS_AS_OF.en}): until they do, they are ${PENDING.en}.`,
       }[locale];
   const confirmed = dated.length
     ? {
@@ -979,10 +1126,16 @@ export function townsIntro(locale: Locale, announced: Announced2027 = ANNOUNCED_
         en: ` ${joinList(dated, "en")} ${dated.length > 1 ? "have" : "has"} confirmed the date, 5 January.`,
       }[locale]
     : "";
+  const when = {
+    ca: " Els ajuntaments solen publicar el recorregut a la segona quinzena de desembre: el 2025, Reus el va presentar el 15 de desembre i Mataró el va publicar el 22.",
+    es: " Los ayuntamientos suelen publicar el recorrido en la segunda quincena de diciembre: en 2025, Reus lo presentó el 15 de diciembre y Mataró lo publicó el 22.",
+    en: " Councils usually publish the route in the second half of December: in 2025 Reus presented it on 15 December and Mataró published it on the 22nd.",
+  }[locale];
+  const leftOut = REIS_TOWNS_LEFT_OUT.length ? ` ${REIS_TOWNS_LEFT_OUT.map((t) => t.reason[locale]).join(" ")}` : "";
   return {
-    ca: `${status}${confirmed} Així van ser les del 2026, segons la web de cada ajuntament. Terrassa no hi és perquè la seva web no s'ha pogut consultar.`,
-    es: `${status}${confirmed} Así fueron las de 2026, según la web de cada ayuntamiento. Terrassa no está porque su web no se ha podido consultar.`,
-    en: `${status}${confirmed} This is how the 2026 parades went, from each council's website. Terrassa is missing because its website could not be read.`,
+    ca: `${status}${confirmed}${when} A la taula i a sota, com van ser les del 2026, segons la web de cada ajuntament.${leftOut}`,
+    es: `${status}${confirmed}${when} En la tabla y debajo, cómo fueron las de 2026, según la web de cada ayuntamiento.${leftOut}`,
+    en: `${status}${confirmed}${when} The table and the sections below show how the 2026 parades went, from each council's website.${leftOut}`,
   }[locale];
 }
 
@@ -1030,9 +1183,9 @@ function daysParas(locale: Locale): string[] {
     }[locale],
     shops,
     {
-      ca: `**Metro i bus a Barcelona.** TMB publica les mesures el mateix dia. El ${published} va anunciar que el metro funcionaria fins a les ${T.metroUntil}, per ser vigília de festiu, amb més trens a partir de les ${T.reinforcedFrom}, i que la majoria de línies de bus serien limitades o desviades entre les ${T.busFrom} i les ${T.busTo}, aproximadament; va reforçar el personal d'estacions com ${stations}. Per al 2027 encara no ha publicat res. Els horaris de cada nit, a ${b2link("hours", "ca", "l'horari del metro de Barcelona")}.`,
-      es: `**Metro y bus en Barcelona.** TMB publica las medidas el mismo día. El ${published} anunció que el metro funcionaría hasta las ${T.metroUntil}, por ser víspera de festivo, con más trenes a partir de las ${T.reinforcedFrom}, y que la mayoría de líneas de bus serían limitadas o desviadas entre las ${T.busFrom} y las ${T.busTo}, aproximadamente; reforzó el personal de estaciones como ${stations}. Para 2027 aún no ha publicado nada. Los horarios de cada noche, en ${b2link("hours", "es", "el horario del metro de Barcelona")}.`,
-      en: `**Metro and buses in Barcelona.** TMB announces its arrangements on the day itself. On ${published} it said the metro would run until ${T.metroUntil}, as it was the eve of a holiday, with extra trains from ${T.reinforcedFrom}, and that most bus lines would be cut short or diverted between about ${T.busFrom} and ${T.busTo}; it added staff at stations such as ${stations}. Nothing has been published for 2027 yet. Each night's hours are in ${b2link("hours", "en", "Barcelona metro hours")}.`,
+      ca: `**Metro i bus a Barcelona.** TMB publica les mesures el mateix dia. El ${published} va anunciar que el metro funcionaria fins a les ${T.metroUntil}, per ser vigília de festiu, amb més trens a partir de les ${T.reinforcedFrom}, i que la majoria de línies de bus serien limitades o desviades entre les ${T.busFrom} i les ${T.busTo}, aproximadament; va reforçar el personal d'estacions com ${stations}. Per al 2027 encara no ha publicat res. Els horaris de cada nit, a ${b2link("hours", "ca", "l'horari del metro de Barcelona")}, i els de bus, Rodalies, FGC i tram el 5 i el 6, a ${b2link("christmasTransport", "ca", "transport per Nadal i Cap d'Any")}.`,
+      es: `**Metro y bus en Barcelona.** TMB publica las medidas el mismo día. El ${published} anunció que el metro funcionaría hasta las ${T.metroUntil}, por ser víspera de festivo, con más trenes a partir de las ${T.reinforcedFrom}, y que la mayoría de líneas de bus serían limitadas o desviadas entre las ${T.busFrom} y las ${T.busTo}, aproximadamente; reforzó el personal de estaciones como ${stations}. Para 2027 aún no ha publicado nada. Los horarios de cada noche, en ${b2link("hours", "es", "el horario del metro de Barcelona")}, y los de bus, Rodalies, FGC y tranvía el 5 y el 6, en ${b2link("christmasTransport", "es", "transporte en Navidad y Nochevieja")}.`,
+      en: `**Metro and buses in Barcelona.** TMB announces its arrangements on the day itself. On ${published} it said the metro would run until ${T.metroUntil}, as it was the eve of a holiday, with extra trains from ${T.reinforcedFrom}, and that most bus lines would be cut short or diverted between about ${T.busFrom} and ${T.busTo}; it added staff at stations such as ${stations}. Nothing has been published for 2027 yet. Each night's hours are in ${b2link("hours", "en", "Barcelona metro hours")}, and buses, Rodalies, FGC and the tram on the 5th and 6th in ${b2link("christmasTransport", "en", "public transport at Christmas and New Year")}.`,
     }[locale],
     {
       ca: `**Pont.** El 6 cau en dimecres: si vols fer pont, mira ${b2link("bridges2027", "ca", "els ponts del 2027")}.`,
@@ -1067,7 +1220,7 @@ function keyFactItems(locale: Locale, barcelona: Parade | null): { label: string
     { label: L({ ca: "Recorregut", es: "Recorrido", en: "Route" }), value: route },
     ...(holiday ? [{ label: L({ ca: "Dia de Reis", es: "Día de Reyes", en: "Three Kings' Day" }), value: L({ ca: `${cap(dayDate(REIS_DAY, "ca"))}, festiu a tot Catalunya`, es: `${cap(dayDate(REIS_DAY, "es"))}, festivo en toda Cataluña`, en: `${dayDate(REIS_DAY, "en")}, public holiday across Catalonia` }) }] : []),
     { label: L({ ca: "Vacances escolars", es: "Vacaciones escolares", en: "School holidays" }), value: L({ ca: `Fins al ${dayDate(SCHOOL_CHRISTMAS.to, "ca")}`, es: `Hasta el ${dayDate(SCHOOL_CHRISTMAS.to, "es")}`, en: `Until ${dayDate(SCHOOL_CHRISTMAS.to, "en")}` }) },
-    { label: L({ ca: "Altres ciutats", es: "Otras ciudades", en: "Other towns" }), value: townNames(locale) },
+    { label: L({ ca: "Altres ciutats", es: "Otras ciudades", en: "Other towns" }), value: L({ ca: `${townNames("ca")}, a la taula de sota`, es: `${townNames("es")}, en la tabla de abajo`, en: `${townNames("en")}, in the table below` }) },
   ];
 }
 
@@ -1093,6 +1246,11 @@ export function buildReisBody(locale: Locale, announced: Announced2027 = ANNOUNC
           ca: `Encara no s'ha anunciat (${AS_OF.ca}). La cavalcada és sempre el vespre del 5 de gener, la vigília de Reis, i el 2027 cau en ${dayDate(PARADE_DAY, "ca", false).split(" ")[0]}. L'Ajuntament en publica l'horari en dues fases: per a la del 2026, el ${programme} va anunciar l'arribada dels Reis i l'hora de sortida, i el ${routeDay} el recorregut complet amb l'horari de pas.`,
           es: `Aún no se ha anunciado (${AS_OF.es}). La cabalgata es siempre la tarde del 5 de enero, la víspera de Reyes, y en 2027 cae en ${dayDate(PARADE_DAY, "es", false).split(" ")[0]}. El Ayuntamiento publica el horario en dos fases: para la de 2026, el ${programme} anunció la llegada de los Reyes y la hora de salida, y el ${routeDay} el recorrido completo con el horario de paso.`,
           en: `Not announced yet (${AS_OF.en}). The parade is always on the evening of 5 January, the eve of Three Kings' Day, which in 2027 is a ${dayDate(PARADE_DAY, "en", false).split(" ")[0]}. The City Council publishes the times in two stages: for the 2026 parade, it announced the Kings' arrival and the start time on ${programme}, and the full route with passing times on ${routeDay}.`,
+        }),
+        L({
+          ca: `Ja s'hi està treballant: l'Ajuntament ha obert les [inscripcions per participar a la Cavalcada de Reis 2027](${BARCELONA_NEWS_2027.url}) del ${dateYear(BARCELONA_NEWS_2027.opens, "ca")} al ${dateYear(BARCELONA_NEWS_2027.closes, "ca")}, per a majors de 8 anys.`,
+          es: `Ya se está preparando: el Ayuntamiento ha abierto las [inscripciones para participar en la Cabalgata de Reyes 2027](${BARCELONA_NEWS_2027.url}) del ${dateYear(BARCELONA_NEWS_2027.opens, "es")} al ${dateYear(BARCELONA_NEWS_2027.closes, "es")}, para mayores de 8 años.`,
+          en: `Preparations have started: the City Council has opened [sign-ups to take part in the 2027 parade](${BARCELONA_NEWS_2027.url}) from ${dateYear(BARCELONA_NEWS_2027.opens, "en")} to ${dateYear(BARCELONA_NEWS_2027.closes, "en")}, for anyone aged 8 or over.`,
         }),
         L({
           ca: `Com a referència, el 2026 els Reis van arribar al Portal de la Pau a les ${B_ARRIVAL} i la cavalcada va sortir a les ${B.time}; l'horari previst la feia arribar al final, l'avinguda de Francesc Ferrer i Guàrdia, a les ${B.endTime}. ${B.notes.ca}`,
@@ -1151,7 +1309,7 @@ export function buildReisBody(locale: Locale, announced: Announced2027 = ANNOUNC
       }),
     ),
     ...h2(
-      L({ ca: "Cavalcades de Reis 2027 a Girona, Lleida, Tarragona i altres ciutats", es: "Cabalgatas de Reyes 2027 en Girona, Lleida, Tarragona y otras ciudades", en: "Three Kings parades 2027 in Girona, Lleida, Tarragona and other towns" }),
+      L({ ca: `Cavalcades de Reis 2027 a ${townNames("ca")}`, es: `Cabalgatas de Reyes 2027 en ${townNames("es")}`, en: `Three Kings parades 2027 in ${townNames("en")}` }),
       townsIntro(locale, announced),
     ),
     townTable(locale, announced),

@@ -1,6 +1,7 @@
 import type { Locale } from "@/lib/i18n/config";
 import { hubPath as rodaliesHub } from "@/lib/programmatic/rodalies/paths";
 
+import { christmasTransportMention } from "./christmas-transport";
 import { l2ClosureMention } from "./l2-closure";
 import {
   b2Related,
@@ -50,6 +51,10 @@ import {
  * question and answers it with TMB's all-night list (Saturdays, 23 June,
  * 23 September, 31 December); the title, already answer-first since 30 Oct,
  * is kept. No new facts.
+ *
+ * 5 Nov 2026: the "Christmas and New Year" line now ends with one sentence
+ * linking the new Christmas transport page (christmasTransportMention);
+ * title and descriptions untouched. Goes out with `transport-nadal-links`.
  */
 
 const VERIFIED = "2026-10-30";
@@ -172,7 +177,7 @@ const COPY: Record<Locale, T> = {
     tips: [
       "**Friday after midnight:** you have until about 2:00 on the metro; after that, NitBus.",
       "**Arriving late at the airport:** the airport metro follows the same hours; after it closes, use the NitBus.",
-      "**Christmas and New Year:** TMB announces the exact hours in December; New Year's Eve has run all night in recent years.",
+      `**Christmas and New Year:** TMB announces the exact hours in December; New Year's Eve has run all night in recent years. ${christmasTransportMention("en")}`,
       `**Strike days:** if a strike covers TMB, the metro runs the minimum service the Generalitat sets; see ${b2link("strikes", "en", "what runs on strike days")}.`,
       `**Rodalies:** if your trip continues by train, check [Rodalies disruptions today](${rodaliesHub("en")}) first.`,
     ],
@@ -237,7 +242,7 @@ const COPY: Record<Locale, T> = {
     tips: [
       "**Viernes después de medianoche:** tienes metro hasta las 2:00 aproximadamente; después, NitBus.",
       "**Llegada tarde al aeropuerto:** el metro del aeropuerto sigue el mismo horario; cuando cierra, queda el NitBus.",
-      "**Navidad y Fin de Año:** TMB anuncia el horario exacto en diciembre; los últimos años la Nochevieja ha funcionado toda la noche.",
+      `**Navidad y Fin de Año:** TMB anuncia el horario exacto en diciembre; los últimos años la Nochevieja ha funcionado toda la noche. ${christmasTransportMention("es")}`,
       `**Días de huelga:** si la huelga afecta a TMB, el metro funciona con los servicios mínimos que fija la Generalitat; mira ${b2link("strikes", "es", "qué funciona los días de huelga")}.`,
       `**Rodalies:** si sigues el viaje en tren, mira antes [las incidencias de Rodalies hoy](${rodaliesHub("es")}).`,
     ],
@@ -302,7 +307,7 @@ const COPY: Record<Locale, T> = {
     tips: [
       "**Divendres després de mitjanit:** tens metro fins a les 2:00 aproximadament; després, NitBus.",
       "**Arribada tard a l'aeroport:** el metro de l'aeroport segueix el mateix horari; quan tanca, queda el NitBus.",
-      "**Nadal i Cap d'Any:** TMB anuncia l'horari exacte al desembre; els últims anys la nit de Cap d'Any ha funcionat tota la nit.",
+      `**Nadal i Cap d'Any:** TMB anuncia l'horari exacte al desembre; els últims anys la nit de Cap d'Any ha funcionat tota la nit. ${christmasTransportMention("ca")}`,
       `**Dies de vaga:** si la vaga afecta TMB, el metro funciona amb els serveis mínims que fixa la Generalitat; mira ${b2link("strikes", "ca", "què funciona els dies de vaga")}.`,
       `**Rodalies:** si continues el viatge en tren, mira abans [les incidències de Rodalies avui](${rodaliesHub("ca")}).`,
     ],

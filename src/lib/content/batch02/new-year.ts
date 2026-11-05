@@ -2,6 +2,7 @@ import { MONTJUIC } from "./hills";
 import type { Locale } from "@/lib/i18n/config";
 
 import { CHECKED, cavalcadaSentence, metroTable, when } from "./christmas-barcelona";
+import { christmasTransportMention } from "./christmas-transport";
 import {
   ANNOUNCED_2026,
   DAYS,
@@ -46,6 +47,10 @@ import {
  * 31 Oct 2026: the Reis section's cavalcada sentence (christmas-barcelona.ts)
  * now ends with a link to the Three Kings parade page; this page goes out
  * with `reis-2027-links`.
+ *
+ * 5 Nov 2026: one body sentence after the metro table links the new
+ * Christmas transport page (christmas-transport.ts, christmasTransportMention);
+ * titles and descriptions untouched. Goes out with `transport-nadal-links`.
  *
  * No new photograph: the hero is the Magic Fountain picture already in the
  * manifest (the Montjuïc guide's lead image), because the publisher refuses
@@ -216,6 +221,7 @@ export function buildNewYearBody(locale: Locale, facts: Announcements = ANNOUNCE
         "Aquesta taula aplica l'horari general de TMB a la nit de Cap d'Any i als dies de Reis. L'1 de gener de 2027 és divendres, i els divendres l'horari general arriba fins a les 2:00; TMB ho confirmarà al desembre:",
       ),
       metroTable("ca", NYE_METRO_DAYS),
+      ...paras(christmasTransportMention("ca")),
       ...h2(
         "Els dotze grans de raïm i altres tradicions",
         "**Les campanades.** A mitjanit, les dotze darreres campanades de l'any marquen el compte enrere i a cada una es menja un gra de raïm i es demana un desig. Segons la pàgina de tradicions de l'Ajuntament, el costum no és gaire antic: el situa en l'excedent de raïm de l'any 1909. Després venen els brindis amb cava, els petons i les abraçades.",
@@ -299,6 +305,7 @@ export function buildNewYearBody(locale: Locale, facts: Announcements = ANNOUNCE
         "Esta tabla aplica el horario general de TMB a la Nochevieja y a los días de Reyes. El 1 de enero de 2027 es viernes, y los viernes el horario general llega hasta las 2:00; TMB lo confirmará en diciembre:",
       ),
       metroTable("es", NYE_METRO_DAYS),
+      ...paras(christmasTransportMention("es")),
       ...h2(
         "Las 12 uvas y otras tradiciones",
         "**Las campanadas.** A medianoche, las doce últimas campanadas del año marcan la cuenta atrás y con cada una se come una uva y se pide un deseo. Según la página de tradiciones del Ayuntamiento de Barcelona, la costumbre no es muy antigua: la sitúa en el excedente de uva de 1909. Después llegan los brindis con cava, los besos y los abrazos.",
@@ -381,6 +388,7 @@ export function buildNewYearBody(locale: Locale, facts: Announcements = ANNOUNCE
       "This table applies TMB's standing timetable to New Year's Eve and the Three Kings days. 1 January 2027 is a Friday, and on Fridays the standing timetable runs to 2:00; TMB will confirm in December:",
     ),
     metroTable("en", NYE_METRO_DAYS),
+    ...paras(christmasTransportMention("en")),
     ...h2(
       "The 12 grapes and other New Year traditions",
       "**The chimes.** At midnight the last twelve chimes of the year count down, and with each one you eat a grape and make a wish. Barcelona City Council's traditions page says the custom is fairly recent and traces it to a grape surplus in 1909. Then come the toasts with cava, the kisses and the hugs.",
