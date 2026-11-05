@@ -87,7 +87,7 @@ export default async function LocaleLayout({
   const t = getMessages(typed);
 
   const siteGraph = graph([
-    organizationSchema(),
+    organizationSchema(typed),
     websiteSchema(typed),
   ]);
 

@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
 
+import { siteAuthorPath } from "@/lib/content/author";
 import { allIndexablePaths, countBySection } from "@/lib/content/repository";
 import { HTML_LANG, LOCALES, X_DEFAULT_LOCALE, type Locale } from "@/lib/i18n/config";
 import { allSystemPaths, sectionPath } from "@/lib/i18n/routes";
@@ -124,6 +125,19 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         },
       });
     }
+  }
+
+  // The founder's author page, where every byline links (lib/content/author.ts).
+  // It lists the most recently updated guides, so it changes when they do.
+  const authorPages = Object.fromEntries(LOCALES.map((l) => [l, siteAuthorPath(l)])) as Partial<Record<Locale, string>>;
+  for (const locale of LOCALES) {
+    systemEntries.push({
+      url: absoluteUrl(siteAuthorPath(locale)),
+      lastModified: listingModified,
+      changeFrequency: "weekly",
+      priority: 0.4,
+      alternates: { languages: languageMap(authorPages) },
+    });
   }
 
   return [

@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
 import { headers } from "next/headers";
 
+import { NEWS_SITEMAP_PATH } from "@/lib/seo/feed-paths";
 import { PRODUCTION_ALLOW, PRODUCTION_DISALLOW, REFUSED_CRAWLERS } from "@/lib/seo/robots-rules";
 import { CANONICAL_HOST, absoluteUrl, indexingAllowed, siteOrigin } from "@/lib/site";
 
@@ -60,7 +61,8 @@ export default async function robots(): Promise<MetadataRoute.Robots> {
       // Crawlers that cost ISR writes and bring no readers (robots-rules.ts).
       { userAgent: [...REFUSED_CRAWLERS], disallow: "/" },
     ],
-    sitemap: absoluteUrl("/sitemap.xml"),
+    // The Google News sitemap (last 48 hours only) next to the main one.
+    sitemap: [absoluteUrl("/sitemap.xml"), absoluteUrl(NEWS_SITEMAP_PATH)],
     host: siteOrigin(),
   };
 }

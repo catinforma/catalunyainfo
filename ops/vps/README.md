@@ -537,6 +537,14 @@ matching rule wins, so the bypass goes **last**:
    "ignore cache-control". Check: `curl -sI <url> | grep -i cf-cache-status`
    must never say `HIT`.
 
+Feeds and image crops (Nov 2026): `/ca|es|en/feed.xml` (RSS) and
+`/news-sitemap.xml` send `public, s-maxage=3600` / `s-maxage=900`
+(next.config.ts) and have no query string, so rule 2 caches them like a page and
+every publish purges them (`FEED_PATHS`, lib/seo/feed-paths.ts).
+`/img/<16x9|4x3|1x1>/<key>.jpg` (the Discover/Article crops,
+app/img/[ratio]/[file]/route.ts) is cached by extension even without rule 2
+(`s-maxage=2592000`); no rule may bypass `/img/`.
+
 Without rule 2, Cloudflare caches only static files by extension and never
 HTML, which is the safe starting point. **Rule 2 is safe once
 `CLOUDFLARE_API_TOKEN` is set and a publish has shown `cdnPurge.ok: true`.** If
@@ -569,8 +577,8 @@ redirects that are never cached):
 
 | Trigger | Purged |
 | --- | --- |
-| `POST /api/admin/publish/?only=<group>` (`publish.sh`) | every URL it revalidates: each edition, its locale home, its section hub, `/sitemap.xml`. The JSON answer carries `cdnPurge`; `publish.sh` prints it |
-| Nightly job (`/api/cron/publish-scheduled/`) | the weekend pages and holiday town pages it rebuilds, newly published entries with their homes and the sitemap, the day-dependent pages and the three homes. `cdnPurge` in the JSON |
+| `POST /api/admin/publish/?only=<group>` (`publish.sh`) | every URL it revalidates: each edition, its locale home, its section hub, `/sitemap.xml`, the three RSS feeds and `/news-sitemap.xml`. The JSON answer carries `cdnPurge`; `publish.sh` prints it |
+| Nightly job (`/api/cron/publish-scheduled/`) | the weekend pages and holiday town pages it rebuilds, newly published entries with their homes, the sitemap and the feeds, the day-dependent pages and the three homes. `cdnPurge` in the JSON |
 | CMS save or status change, redirect saved | the same paths it revalidates, after the response |
 | `catalunyainfo-deploy` (also `--rollback`, and the automatic rollback) | **everything**, once the release passes its health checks: a release changes every page's build id and chunk names |
 

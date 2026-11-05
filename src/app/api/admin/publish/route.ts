@@ -72,6 +72,7 @@ import { publishLocalHolidaysGuide } from "@/lib/content/holidays/local-publish"
 import { publishReservoirGuide } from "@/lib/content/reservoirs/publish";
 import { publishSchoolCalendarGuide } from "@/lib/content/school/publish";
 import { authoriseDeployRequest, describeError } from "@/lib/admin/deploy-auth";
+import { FEED_PATHS } from "@/lib/seo/feed-paths";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -355,6 +356,8 @@ export async function POST(request: Request) {
       if (section) revalidate(`/${surface.locale}/${section}`);
     }
     revalidate("/sitemap.xml");
+    // The RSS feeds and the Google News sitemap list the same pieces.
+    for (const feed of FEED_PATHS) revalidate(feed);
 
     // Cloudflare may cache HTML (ops/vps/README.md section 10), and it does not
     // hear revalidatePath: purge the same URLs there. A no-op without a token.

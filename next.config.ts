@@ -137,6 +137,30 @@ const nextConfig: NextConfig = {
         ],
       },
       {
+        // RSS feeds (app/(public)/[locale]/feed.xml): shareable like the
+        // sitemap, so Cloudflare can hold them for the hour their ISR lasts
+        // (every publish revalidates and purges them, lib/seo/feeds.ts).
+        source: "/:locale(ca|es|en)/feed.xml",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, max-age=0, s-maxage=3600, stale-while-revalidate=86400",
+          },
+        ],
+      },
+      {
+        // The Google News sitemap lists the last 48 hours only: a shorter
+        // shared lifetime, matching its 15-minute ISR. After the rule above,
+        // whose pattern may also match it, so this one wins.
+        source: "/news-sitemap.xml",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, max-age=0, s-maxage=900, stale-while-revalidate=3600",
+          },
+        ],
+      },
+      {
         // The full security header set, statically: none of it varies per
         // request, so the proxy no longer has to run on every page for it.
         source: "/:path*",
