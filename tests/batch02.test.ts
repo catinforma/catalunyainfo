@@ -631,10 +631,11 @@ test("shops: the date table answers 29N, Christmas and Reis from the DOGC and th
 /**
  * How to vote: the calendar is the one in RD 806/2026, the JEC and the INE
  * (checked 24 Oct 2026). The JEC suspended the MiDNI app on 26 Mar 2026
- * (Acuerdo 94/2026), so the page must never present it as valid ID again,
- * and the braille phone number had no 2026 source.
+ * (Acuerdo 94/2026) and lifted that suspension for MiDNI only on 5 Nov 2026
+ * (Acuerdo 334/2026, checked 6 Nov): the page cites both and never says the
+ * MiDGT app is valid. The braille phone number had no 2026 source.
  */
-test("voting: dated calendar from the decree, MiDNI not presented as valid", () => {
+test("voting: dated calendar from the decree, MiDNI suspension and its lifting cited, MiDGT not valid", () => {
   const dates: Record<string, string[]> = {
     ca: ["31 d'octubre", "2 de novembre", "19 de novembre", "25 de novembre", "4–7 de desembre", "23 de desembre"],
     es: ["31 de octubre", "2 de noviembre", "19 de noviembre", "25 de noviembre", "4–7 de diciembre", "23 de diciembre"],
@@ -645,7 +646,8 @@ test("voting: dated calendar from the decree, MiDNI not presented as valid", () 
     assert.match(text, /806\/2026/, `${locale}: decree`);
     for (const day of dates[locale]!) assert.ok(text.includes(day), `${locale}: ${day}`);
     assert.match(text, /Acuerdo 94\/2026|Acord 94\/2026/, `${locale}: MiDNI suspension cited`);
-    assert.doesNotMatch(text, /MiDNI[^.]*(también es válido|també és vàlid|is valid too)/i, `${locale}: MiDNI valid`);
+    assert.match(text, /Acuerdo 334\/2026|Acord 334\/2026/, `${locale}: lifting of the suspension cited`);
+    assert.doesNotMatch(text, /MiDGT,? (app )?(vale|val|també val|también vale|is accepted|is valid)\b/i, `${locale}: MiDGT valid`);
     assert.doesNotMatch(text, /900 150 000/, `${locale}: unsourced braille phone`);
   }
 });

@@ -208,15 +208,35 @@ test("voting: one link to the per-municipality results hub in each language", ()
   }
 });
 
-test("voting: MiDNI stays suspended; the JEC's 22 Oct condition is cited, not read as a green light", () => {
+/**
+ * 6 Nov 2026: the JEC lifted the MiDNI suspension in its session of 5 Nov
+ * (Acuerdo 334/2026: every table gets a device to check the app's temporary
+ * QR code, opened in front of the table; MiDGT stays suspended), and
+ * Interior's 29N "voto presencial" page lists MiDNI as valid. The copy says
+ * so, cites the agreement and its link, and never extends it to MiDGT.
+ */
+test("voting: MiDNI valid since the JEC's Acuerdo 334/2026 of 5 Nov; MiDGT still not", () => {
+  const valid: Record<Locale, RegExp> = {
+    ca: /MiDNI\)?:?\*?\*? val\b|MiDNI també val/,
+    es: /MiDNI\)?:?\*?\*? vale\b|MiDNI también vale/,
+    en: /MiDNI app\)?:?\*?\*? accepted|MiDNI app is accepted too/,
+  };
+  const midgt: Record<Locale, RegExp> = {
+    ca: /MiDGT,? (continua sense valer|no val)/,
+    es: /MiDGT,? (sigue sin valer|no vale)/,
+    en: /MiDGT,? is (still not accepted|not)/,
+  };
   for (const locale of LOCALES) {
+    const raw = JSON.stringify(VOTING.editions[locale].blocks);
     const text = bodyToPlainText(VOTING.editions[locale].blocks);
-    assert.match(text, /(Acuerdo|Acord) 295\/2026/, `${locale}: Acuerdo 295/2026`);
-    // Dated: re-checked on 3 Nov 2026 against the JEC's sessions to 29 Oct.
-    assert.match(text, /a 3 de (novembre|noviembre) (encara no|aún no)|not done so by 3 November/, `${locale}: dated`);
-    assert.doesNotMatch(text, /MiDNI[^.]*(és vàlid|es válid|is valid|is accepted|s'accepta|se acepta|ja serveix|ya sirve)/i, `${locale}: MiDNI presented as valid`);
+    assert.match(raw, valid[locale], `${locale}: MiDNI valid`);
+    assert.match(text, /(Acuerdo|Acord) 334\/2026/, `${locale}: Acuerdo 334/2026`);
+    assert.match(text, /5 (de )?(novembre|noviembre|November)/, `${locale}: dated 5 Nov`);
+    assert.match(text, midgt[locale], `${locale}: MiDGT still suspended`);
+    assert.ok(raw.includes("idacuerdoinstruccion=155594"), `${locale}: links the agreement`);
+    assert.doesNotMatch(text, /MiDNI[^.]*(no sirve|no serveix|not accepted for now|està suspesa|está suspendida|is suspended)/i, `${locale}: stale suspension copy`);
   }
-  assert.ok(VOTING.sources.some((s) => s.url.includes("idacuerdoinstruccion=154752")), "Acuerdo 295/2026 in sources");
+  assert.ok(VOTING.sources.some((s) => s.url.includes("idacuerdoinstruccion=155594")), "Acuerdo 334/2026 in sources");
 });
 
 /* -------------------------------------------------------------------------- */
@@ -231,7 +251,9 @@ test("titles and descriptions are exactly what main serves (measurement windows)
     // object and where, the €75 and Monday's five hours.
     mesa: {
       ca: ["Membre de mesa electoral: com saber si t'ha tocat, què fer, quant es cobra i com excusar-te", "Membre de mesa electoral 2026: si t'ha tocat, excusa i 75 €", "T'ho notifiquen fins al 7 de novembre; tens 7 dies per excusar-te a la Junta Electoral de Zona, també en línia. Dieta de 75 € i 5 h menys el dilluns 30."],
-      es: ["Mesa electoral: cómo saber si te ha tocado, qué hacer, cuánto se cobra y cómo excusarte", "Mesa electoral 2026: si te ha tocado, plazo de excusa y 75 €", "Notificación hasta el 7 de noviembre; luego, 7 días para excusarte ante la Junta Electoral de Zona, también en línea. Dieta de 75 € y 5 h menos el lunes."],
+      // es changed on 6 Nov 2026 (national scope: "mesa electoral 29N",
+      // elecciones generales, pay and excuses; logged in docs/SEO_EXPERIMENTS.md).
+      es: ["Mesa electoral en las elecciones generales del 29 de noviembre: cuánto se cobra, excusas válidas y qué pasa si no vas", "Mesa electoral 29N: cuánto se cobra (75 €), excusas y plazos", "Elecciones generales 29N, en toda España: 75 € de dieta, 7 días desde la notificación para excusarte ante la Junta Electoral de Zona y 5 h menos el lunes."],
       en: ["Drawn for polling-station duty (mesa electoral) in Spain on 29 November: what to do, excuses and the €75 pay", "Polling-station duty in Spain (mesa electoral): €75, excuses", "Notified by 7 Nov? You have 7 days to ask the Junta Electoral de Zona to excuse you, online with Cl@ve too. €75 tax-free, 5 hours off on Monday 30 Nov."],
     },
     // Changed on 3 Nov 2026 (same push): ca in the words of "quan són les
@@ -239,7 +261,10 @@ test("titles and descriptions are exactly what main serves (measurement windows)
     // general election"; descriptions give the dates, the finder and 19 Nov.
     voting: {
       ca: ["Quan són les properes eleccions a Catalunya i com votar el 29 de novembre (on, horari, vot per correu)", "Quan són les properes eleccions a Catalunya? 29N i on votar", "Generals: diumenge 29 de novembre, 9-20 h. Municipals previstes: 23 de maig de 2027. Mira on votes sense DNI. Vot per correu fins al 19 de novembre."],
-      es: ["Próximas elecciones en Cataluña: cuándo son y cómo votar el 29 de noviembre (dónde, horario, voto por correo)", "Próximas elecciones en Cataluña: 29N, cuándo y dónde votar", "Generales: domingo 29 de noviembre, 9-20 h. Municipales previstas: 23 de mayo de 2027. Mira dónde votas sin DNI. Voto por correo hasta el 19 de noviembre."],
+      // es changed on 6 Nov 2026 (national scope first, "Cataluña" kept for
+      // the "cuándo son las elecciones en Cataluña" queries; revert rule in
+      // docs/SEO_EXPERIMENTS.md).
+      es: ["Elecciones generales del 29 de noviembre: dónde votar, horario y qué documento llevar (y próximas elecciones en Cataluña)", "Elecciones 29 de noviembre: dónde votar y horario | Cataluña", "Domingo 29 de noviembre, de 9 a 20 h, en toda España. Mira dónde votas sin DNI; vale el DNI caducado y también MiDNI. Voto por correo hasta el 19."],
       en: ["How to vote in Spain's 2026 general election on 29 November: registration, polling stations and dates", "2026 Spain general election (29 Nov): how to vote, register", "Sunday 29 Nov, 9:00-20:00. Only Spanish citizens can vote; the roll is automatic. Find your polling station, ID rules; postal vote request by 19 Nov."],
     },
   };

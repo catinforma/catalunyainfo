@@ -3047,3 +3047,31 @@ enquestes-eleccions 14`, `page election-polls 14`). On 24 Nov 00:05 and 29 Nov
 `cf-cache-status: HIT`.
 
 **Outcome:** _pending_
+
+## 2026-11-06 — Spanish election guides speak for all of Spain (groups `mesa`, `voting`; rails and town pages follow) and MiDNI is valid again
+
+**Why.** The 29N general election is Spain-wide and national election demand is several times Catalonia's, but the ES guides were framed for Catalonia. GSC (28 days to 5 Nov) shows national queries reaching them only at the edge of page 1:
+
+- `/es/guias/miembro-mesa-electoral/` (every rule on it is national: LOREG 26–28 and 143, Orden INT/650/2026, RD 605/1999): "cuándo se cobra por estar en una mesa electoral 2026" 75 impressions at 9.1; about ten "cuánto cobra(n) … mesa electoral (2026)" variants at 8–13; "excusas mesa electoral" at 12; "donde presentar alegaciones mesa electoral" at 9.7; "suplente mesa electoral cobran" at 59.5; "miembro de mesa" at 53. Baseline 14 d (24 Oct–6 Nov): 988 impressions, 41 clicks.
+- `/es/guias/como-votar-elecciones-cataluna/`: national "dónde votar / dónde voto el 29 de noviembre" (18 at 7.5, 15 at 8.3), "dónde tengo que votar 2026" 27 at 6.9, "dónde voto dni 2026" 12 at 7.8, "horario votaciones 29 noviembre" 7 at 8.0, "horario para votar este domingo 2026" 10 at 5.9. But 3,388 of its 3,783 visible query impressions are Catalan ("cuándo son las elecciones en Cataluña", "próximas elecciones cataluña", at 6.0). Baseline 14 d: 10,172 impressions, 374 clicks; Catalan bucket 3,229 at 6.1; where/hours/29N buckets 149 at ~8.
+- `/es/guias/voto-por-correo/` is national already and was published on 5 Nov (no data): untouched.
+
+**Change.**
+
+| Page (group) | Old title → new title | What else |
+| --- | --- | --- |
+| `/es/guias/miembro-mesa-electoral/` (`mesa`) | "Mesa electoral 2026: si te ha tocado, plazo de excusa y 75 €" → "Mesa electoral 29N: cuánto se cobra (75 €), excusas y plazos" | H1 "Mesa electoral en las elecciones generales del 29 de noviembre: cuánto se cobra, excusas válidas y qué pasa si no vas"; description "Elecciones generales 29N, en toda España: 75 € de dieta, 7 días desde la notificación para excusarte ante la Junta Electoral de Zona y 5 h menos el lunes."; lead opens with "las reglas son las mismas en toda España"; headings "Excusas válidas para no ir a la mesa electoral y cómo presentarlas", "Qué pasa si no te presentas a la mesa electoral"; new section "Si te ha tocado mesa en Cataluña" (31 JEZ from jez.json and LOREG art. 8, link to the town pages; the DOGC voter-leave detail moved there); the voters' four paid hours cited to RD 605/1999 art. 13 (BOE, re-read 6 Nov). |
+| `/es/guias/como-votar-elecciones-cataluna/` (`voting`) | "Próximas elecciones en Cataluña: 29N, cuándo y dónde votar" → "Elecciones 29 de noviembre: dónde votar y horario \| Cataluña" | H1 "Elecciones generales del 29 de noviembre: dónde votar, horario y qué documento llevar (y próximas elecciones en Cataluña)"; description "Domingo 29 de noviembre, de 9 a 20 h, en toda España. Mira dónde votas sin DNI; vale el DNI caducado y también MiDNI. Voto por correo hasta el 19."; lead national first (LOREG 84.1 hours, 85.1 ID, re-read 6 Nov), "próximas elecciones en Cataluña" kept in the lead, the first section, the FAQ and the town pages' anchor "cómo votar en Cataluña"; ID heading names "DNI caducado, MiDNI"; new FAQ "¿Se puede votar con el DNI caducado?". |
+| ES rail anchor for the mesa guide (`B2_TITLES.mesa.es`) | "Miembro de mesa electoral: qué hacer" → "Mesa electoral 29N: cuánto se cobra, excusas y plazos" | On the 947 ES town pages (deploy) and the rails of `voting`, `candidates`, `election-night`, `vot-correu`, `municipal-results` (republish to refresh). |
+
+**MiDNI (all three editions of `voting`, body only).** The JEC lifted the MiDNI suspension in its session of 5 Nov 2026 (Acuerdo 334/2026, repeated in 342/2026: every table gets a device to check the app's temporary QR code, opened in front of the table; MiDGT stays suspended), and Interior's 29N "voto presencial" page lists MiDNI as valid. That is the JEC text the 22 Oct note waited for, so the copy says MiDNI is valid, with the agreement linked. Nothing changes on the postal-vote page (Acuerdo 94/2026 also covered MiDNI at Correos; 334/2026 does not mention it).
+
+**Not done.** No separate pages for "cuánto cobra un miembro de mesa", "excusas válidas" or "qué pasa si no te presentas": the mesa guide answers each in a section and an FAQ and is the page Google ranks for those queries, so a new page would split it. No national "cómo votar" page: it would repeat the how-to-vote guide.
+
+**Prediction.** Mesa ES: national pay/excuse queries from 8–13 to top 6 and the page from ~70 to 150+ impressions a day by 15 Nov. How-to-vote ES: the where/hours/29N buckets from ~8 to ≤ 6 by 15 Nov and up sharply in the last week; the Catalan bucket holds within one position (6.1 ± 1).
+
+**Revert rule.** On 12 Nov and 15 Nov, `snapshot.py page como-votar-elecciones-cataluna 7` split by intent: if the Catalan bucket ("cuándo son / próximas elecciones … Cataluña") has lost more than two positions and the national buckets have not gained, restore the 3 Nov ES title and H1 (description and lead may stay).
+
+**Measure** on 12 Nov, 15 Nov and 1 Dec 2026 (`snapshot.py page miembro-mesa-electoral 7`, `page como-votar-elecciones-cataluna 7`, and the intent split used above).
+
+**Outcome:** _pending_
