@@ -24,7 +24,7 @@ import {
 } from "./payload";
 import { SCHOOL_YEARS } from "@/lib/content/school/calendar";
 import { lastSunday } from "@/lib/content/clock/rule";
-import { municipalityBySlug } from "@/lib/programmatic/holidays/data";
+import { aranSwap, municipalityBySlug } from "@/lib/programmatic/holidays/data";
 import { joinList } from "@/lib/programmatic/holidays/names";
 import { hasEnglishPage } from "@/lib/programmatic/holidays/english";
 import { datePath, isDatePage, municipalityPath } from "@/lib/programmatic/holidays/paths";
@@ -253,6 +253,80 @@ function workingDaysFact(locale: Locale): { label: string; value: string } {
 }
 
 /**
+ * Working days per month: Monday to Friday minus the Catalonia-wide holidays
+ * that fall on one. Counted from the same twelve dates as the table; the twelve
+ * months add up to `workingDays().working`.
+ */
+export function workingDaysByMonth(year: number = YEAR): number[] {
+  const months = Array.from({ length: 12 }, () => 0);
+  for (let iso = `${year}-01-01`; iso.startsWith(String(year)); iso = addDays(iso, 1)) {
+    const wd = new Date(`${iso}T12:00:00Z`).getUTCDay();
+    if (wd === 0 || wd === 6) continue;
+    if (CATALONIA_HOLIDAYS.some((h) => h.date === iso)) continue;
+    months[Number(iso.slice(5, 7)) - 1]!++;
+  }
+  return months;
+}
+
+/**
+ * "Calendario 2027 Cataluña con festivos" (25 impr. at 8.8), "calendario 2027
+ * con festivos catalunya" (16 at 9.8), "festivos 2027 catalunya" (14 at 10.1),
+ * 22 Oct-4 Nov 2026: the searcher wants the year laid out by month, which the
+ * page only had as a list of twelve dates. One row per month: the holidays
+ * (each linked to its date page) and the working days left.
+ */
+function monthByMonthSection(copy: HolidayCopy, locale: Locale): Block[] {
+  const working = workingDaysByMonth();
+  const cap = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
+  const none = { ca: "Cap festiu", es: "Ningún festivo", en: "No public holiday" }[locale];
+  const rows = copy.months.map((month, index) => {
+    const mm = String(index + 1).padStart(2, "0");
+    const days = CATALONIA_HOLIDAYS.filter((h) => h.date.slice(5, 7) === mm).map((h) => {
+      const day = String(Number(h.date.slice(8, 10)));
+      const text = locale === "en" ? `${weekdayOf(h.date, copy)} ${day} (${h.name.en})` : `${weekdayOf(h.date, copy)} ${day} (${h.name[locale]})`;
+      return linkedDay(h.date, text, locale);
+    });
+    return [cap(month), days.length ? joinList(days, locale) : none, String(working[index])];
+  });
+  const total = working.reduce((a, b) => a + b, 0);
+  const swap = aranSwap(YEAR);
+  if (!swap || swap.date !== ARAN_REPLACEMENT.date) throw new Error("holiday guide: Aran's swap for the month table is missing");
+  const aranIn = formatDay(swap.replaces, copy, locale);
+  const aranOut = formatDay(swap.date, copy, locale);
+  const bcn = BARCELONA_LOCAL.map((h) => formatDay(h.date, copy, locale));
+  // The months in which Barcelona's local days take a working day away.
+  const bcnMonths = joinList(
+    [...new Set(BARCELONA_LOCAL.filter((h) => ![0, 6].includes(new Date(`${h.date}T12:00:00Z`).getUTCDay())).map((h) => copy.months[Number(h.date.slice(5, 7)) - 1] ?? ""))].map((m) => (locale === "en" ? cap(m) : m)),
+    locale,
+  );
+  const t = {
+    ca: {
+      title: `Calendari ${YEAR} mes a mes: festius i dies feiners`,
+      intro: `Els dotze festius de ${YEAR} a Catalunya, mes per mes, amb els dies feiners de dilluns a divendres que queden a cada mes: ${total} en tot l'any.`,
+      headers: ["Mes", "Festius a tot Catalunya", "Dies feiners"],
+      note: `Dies feiners: de dilluns a divendres, sense els festius de tot Catalunya. Cal restar-hi les dues festes locals de cada municipi (a Barcelona, el ${bcn.join(" i el ")}: un dia feiner menys al ${bcnMonths}). A l'Aran, el ${aranIn} és feiner i el ${aranOut} és festiu.`,
+    },
+    es: {
+      title: `Calendario ${YEAR} mes a mes: festivos y días laborables`,
+      intro: `Los doce festivos de ${YEAR} en Cataluña, mes por mes, con los días laborables de lunes a viernes que quedan en cada mes: ${total} en todo el año.`,
+      headers: ["Mes", "Festivos en toda Cataluña", "Días laborables"],
+      note: `Días laborables: de lunes a viernes, sin los festivos de toda Cataluña. Hay que restar las dos fiestas locales de cada municipio (en Barcelona, el ${bcn.join(" y el ")}: un laborable menos en ${bcnMonths}). En Arán, el ${aranIn} es laborable y el ${aranOut} es festivo.`,
+    },
+    en: {
+      title: `${YEAR} month by month: public holidays and working days`,
+      intro: `Catalonia's twelve public holidays in ${YEAR}, month by month, with the Monday-to-Friday working days left in each month: ${total} in the whole year.`,
+      headers: ["Month", "Catalonia-wide holidays", "Working days"],
+      note: `Working days: Monday to Friday, without the Catalonia-wide holidays. Take off each town's two local holidays (in Barcelona, ${bcn.join(" and ")}: one working day fewer in ${bcnMonths}). In Aran, ${aranIn} is a working day and ${aranOut} a holiday.`,
+    },
+  }[locale];
+  return [
+    { type: "heading", level: 2, text: t.title },
+    { type: "paragraph", text: t.intro },
+    { type: "table", caption: t.title, headers: t.headers, rows, note: t.note, stickyColumn: 0 },
+  ];
+}
+
+/**
  * The current year's calendar (Ordre EMT/66/2025), for searches that still ask
  * about 2026. Dates with a page of their own ("is 8 December a holiday?") link
  * to it, so the December questions land on the page that answers them.
@@ -327,6 +401,9 @@ export function buildBody(locale: Locale, inlineMediaId?: string): Block[] {
     // The working-day count goes before the verification date, which stays last.
     items: [...copy.keyFacts.slice(0, -1), workingDaysFact(locale), ...copy.keyFacts.slice(-1)].map((fact) => ({ label: fact.label, value: fact.value })),
   });
+
+  /* ---- Month by month (5 Nov 2026) --------------------------------------- */
+  blocks.push(...monthByMonthSection(copy, locale));
 
   /* ---- National or Catalan ------------------------------------------------ */
   blocks.push({ type: "heading", level: 2, text: copy.nationalTitle });

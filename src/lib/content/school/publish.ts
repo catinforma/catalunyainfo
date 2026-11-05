@@ -319,7 +319,9 @@ function christmasCallout(year: SchoolYear, locale: Locale): Block {
   return {
     type: "callout",
     tone: "info",
-    title: L(locale, `Vacances de Nadal ${years}`, `Vacaciones de Navidad ${years}`, `Christmas school holidays ${years}`),
+    // es (5 Nov 2026): in the searchers' words, "vacaciones de Navidad 2026
+    // colegios Cataluña"; ca and en keep theirs (the ca title is under test).
+    title: L(locale, `Vacances de Nadal ${years}`, `Vacaciones de Navidad ${years} en los colegios de Cataluña`, `Christmas school holidays ${years}`),
     text: L(
       locale,
       `Del **${day(from, locale)}** al **${day(to, locale)}**, tots dos inclosos. Es torna a classe el **${back}**.`,

@@ -146,7 +146,11 @@ export const SEASONAL: { key: ToolKey; from: string; to: string }[] = [
   { key: "castanyada", from: "10-10", to: "11-01" },
   { key: "christmas", from: "11-02", to: "01-06" },
   { key: "shops", from: "10-20", to: "01-06" },
-  { key: "ski", from: "11-15", to: "04-15" },
+  // 5 Nov 2026: from 1 Nov, not 15 Nov. The ski guide ranked ~60 for
+  // "estaciones de esquí cataluña" with its last crawl on 12 Oct, and the
+  // opening dates (28 Nov, 4 Dec) and early-bird passes (to 22 Nov, 8 Dec)
+  // are November searches; the homepage is the strongest link it can get.
+  { key: "ski", from: "11-01", to: "04-15" },
   // Wider than the ski season at both ends: the page says so honestly when
   // no station has snow, and early and late snow is what people search for.
   { key: "snowNow", from: "10-25", to: "05-15" },

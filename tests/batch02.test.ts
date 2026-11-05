@@ -1135,11 +1135,12 @@ test("ski: opening dates answered first, from Baqueira's news and the FGC calend
     const opening = tables[0]?.rows ?? [];
     assert.equal(opening.length, 10, `${locale}: ten resorts in the opening table`);
     assert.match(JSON.stringify(opening.find((r) => r[0] === "Baqueira Beret")), firstOpening[locale]);
-    for (const name of ["La Molina", "Vallter", "Port Ainé", "Boí Taüll"]) {
+    // Vall de Núria's 2026-27 calendar appeared between 31 Oct and 5 Nov 2026.
+    for (const name of ["La Molina", "Vallter", "Port Ainé", "Boí Taüll", "Vall de Núria"]) {
       assert.match(JSON.stringify(opening.find((r) => r[0] === name)), fgc[locale], `${locale}: ${name} from its calendar`);
     }
     assert.match(JSON.stringify(opening.find((r) => r[0] === "Espot")), fgcEspot[locale], `${locale}: Espot opens a day later`);
-    for (const name of ["Masella", "Vall de Núria", "Port del Comte", "Tavascan"]) {
+    for (const name of ["Masella", "Port del Comte", "Tavascan"]) {
       const row = opening.find((r) => r[0] === name) ?? [];
       assert.match(row[1] ?? "", /^(Sense data anunciada|Sin fecha anunciada|Not announced)/, `${locale}: ${name} has no announced date`);
       assert.equal(row[2], "—", `${locale}: ${name} has no last day`);
