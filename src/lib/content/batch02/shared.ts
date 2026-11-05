@@ -92,7 +92,9 @@ export type B2Key =
   | "strikeRenfe"
   | "strikeEducation"
   // 4 Nov 2026: the Gran Recapte food-bank collection (13-14 Nov 2026).
-  | "granRecapte";
+  | "granRecapte"
+  // 5 Nov 2026: school free days 2026-2027 town by town (is there school on 7 December?).
+  | "schoolFreeDays";
 
 /** Path after the locale prefix, no leading or trailing slash. */
 export const B2_PATHS: Record<B2Key, Record<Locale, string>> = {
@@ -428,6 +430,12 @@ export const B2_PATHS: Record<B2Key, Record<Locale, string>> = {
     ca: "guies/gran-recapte-aliments",
     es: "guias/gran-recapte-alimentos",
     en: "guides/gran-recapte-food-drive-catalonia",
+  },
+  // No year in the path: the next course's days go on the same URLs.
+  schoolFreeDays: {
+    ca: "guies/dies-lliure-disposicio-escoles",
+    es: "guias/dias-libre-disposicion-colegios",
+    en: "guides/catalonia-school-free-days",
   },
 };
 
@@ -789,6 +797,11 @@ export const B2_TITLES: Record<B2Key, Record<Locale, string>> = {
     ca: "Gran Recapte 2026: dies, voluntariat i on donar",
     es: "Gran Recapte 2026: días, voluntariado y dónde donar",
     en: "Gran Recapte 2026 food drive: dates and how to help",
+  },
+  schoolFreeDays: {
+    ca: "Dies de lliure disposició 2026-2027 per municipi",
+    es: "Días de libre disposición 2026-2027 por municipio",
+    en: "School free days 2026-2027 by town",
   },
 };
 

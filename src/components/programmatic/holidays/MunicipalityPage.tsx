@@ -4,6 +4,7 @@ import { Breadcrumbs, type Crumb } from "@/components/Breadcrumbs";
 import { getMessages } from "@/lib/i18n";
 import { todayInCatalonia } from "@/lib/content/holidays/calendar";
 import { SCHOOL_YEARS } from "@/lib/content/school/calendar";
+import { SchoolFreeDays } from "@/components/programmatic/holidays/SchoolFreeDays";
 import { comarcaLinkLabel, municipalityCopy, displayName, municipalityFaq, municipalityH1, municipalityNextLine, sharedDayLead } from "@/lib/programmatic/holidays/copy";
 import { GUIDES } from "@/lib/programmatic/holidays/links";
 import {
@@ -178,6 +179,7 @@ export function MunicipalityPage({ m, locale }: { m: SnapshotMunicipality; local
               {sharedDayLead(s.date, s.others, locale, s.nuclei)} <Link href={datePath(locale, s.page)}>{dateQuestion(s.page, locale)}</Link>
             </p>
           ))}
+          <SchoolFreeDays slug={m.slug} locale={locale} />
 
           <h2 id="festius-2027">{t.nextTitle}</h2>
           {t.nextPublished ? (

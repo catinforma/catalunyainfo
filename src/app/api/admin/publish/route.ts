@@ -64,6 +64,7 @@ import { REIS } from "@/lib/content/batch02/reis";
 import { L2_CLOSURE_GUIDE } from "@/lib/content/batch02/l2-closure";
 import { CHRISTMAS_LIGHTS } from "@/lib/content/batch02/christmas-lights";
 import { GRAN_RECAPTE_GUIDE } from "@/lib/content/batch02/gran-recapte";
+import { SCHOOL_FREE_DAYS } from "@/lib/content/batch02/school-free-days";
 import { publishHolidayTodayGuide } from "@/lib/content/holidays/today-publish";
 import { publishLocalHolidaysGuide } from "@/lib/content/holidays/local-publish";
 import { publishReservoirGuide } from "@/lib/content/reservoirs/publish";
@@ -307,6 +308,14 @@ export async function POST(request: Request) {
     // Barcelona markets guide) go out once, with `gran-recapte-links`.
     if (wants("gran-recapte")) published.push(await publishB2Article(GRAN_RECAPTE_GUIDE));
     if (wants("gran-recapte-links")) published.push(await publishB2Article(MARATO_GUIDE), await publishB2Article(MARKETS));
+    // School free days 2026-2027 town by town (is there school on Monday
+    // 7 December?): one page, on its own so a council's new or changed days
+    // (school-free-days-towns.ts) republish only it. The December bridge
+    // guide, which gained one body sentence linking to it, goes out once with
+    // `lliure-disposicio-links`. The town holiday pages' section is static:
+    // it ships with the deploy.
+    if (wants("lliure-disposicio")) published.push(await publishB2Article(SCHOOL_FREE_DAYS));
+    if (wants("lliure-disposicio-links")) published.push(await publishB2Article(DECEMBER_BRIDGE));
 
     const surfaces = [
       ...published.flatMap((article) =>
