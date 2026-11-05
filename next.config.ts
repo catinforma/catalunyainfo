@@ -8,6 +8,7 @@ import {
   SECURITY_HEADERS,
 } from "./src/lib/security-headers";
 import { deployEnv } from "./src/lib/site";
+import { POLLS_CACHE_HEADERS, pollsHeaderSources, pollsRewrites } from "./src/lib/programmatic/polls/paths";
 
 /**
  * Host policy.
@@ -115,6 +116,10 @@ const nextConfig: NextConfig = {
       { source: "/ca/cerca/", destination: "/ca/internal-search/" },
       { source: "/es/buscar/", destination: "/es/internal-search/" },
       { source: "/en/search/", destination: "/en/internal-search/" },
+      // The 29N polls page (CIS, CEO): its guide URLs, served by the
+      // force-dynamic `internal-polls` route rather than the ISR catch-all
+      // (LOREG 69.7 blackout, see src/lib/programmatic/polls/).
+      ...pollsRewrites(),
     ];
   },
 
@@ -162,6 +167,11 @@ const nextConfig: NextConfig = {
           { key: "Cache-Control", value: "public, max-age=31536000, immutable" },
         ],
       },
+      // The 29N polls page (CIS, CEO): never stored by any shared cache, so no
+      // copy with figures can outlive the LOREG 69.7 blackout start (24 Nov
+      // 2026 00:00). Next keeps a Cache-Control that is already set on a
+      // dynamic route. See src/lib/programmatic/polls/paths.ts.
+      ...pollsHeaderSources().map((source) => ({ source, headers: POLLS_CACHE_HEADERS })),
     ];
   },
 };

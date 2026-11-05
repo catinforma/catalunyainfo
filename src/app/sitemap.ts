@@ -13,6 +13,7 @@ import { reservoirSitemapEntries } from "@/lib/programmatic/reservoirs/pages";
 import { weekendSitemapEntries } from "@/lib/programmatic/weekend/sitemap";
 import { todaySitemapEntries } from "@/lib/programmatic/today/page";
 import { christmasFairsSitemapEntries } from "@/lib/programmatic/christmas-fairs/sitemap";
+import { pollsSitemapEntries } from "@/lib/programmatic/polls/page";
 
 /**
  * Cached for an hour (ISR) and refreshed at once by every publish, and by the
@@ -136,6 +137,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...weekendSitemapEntries(),
     ...todaySitemapEntries(),
     ...christmasFairsSitemapEntries(),
+    // URLs only: no title or snippet, so nothing here can carry a poll figure.
+    ...pollsSitemapEntries(),
   ];
 }
 

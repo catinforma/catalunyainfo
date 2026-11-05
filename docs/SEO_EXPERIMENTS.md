@@ -2985,3 +2985,65 @@ Carnaval (4–9 Feb 2027).
 - 1 Dec (final, with the mesa title test).
 
 **Outcome:** _pending_
+
+## 2026-11-05 — New page: official 29N polls (CIS, CEO) for Catalonia, with a server-side LOREG 69.7 blackout (group `candidates` for the link; deploy first)
+
+**What.** `/ca/guies/enquestes-eleccions-generals-catalunya/`,
+`/es/guias/encuestas-elecciones-generales-cataluna/`,
+`/en/guides/spain-general-election-polls-catalonia/`: the vote and seat
+estimates for Catalonia from the two public pollsters only, each with its
+LOREG art. 69.1 technical sheet (who ran and commissioned it with address,
+universe, sample, margin, sampling, mode, fieldwork, the question and its
+non-response) and links to the official report, questionnaire, sheet and
+microdata. In on 5 Nov: CEO BOP 2a onada 2026 (REO 1169, 14 Oct), Congrés,
+Catalonia total (the CEO publishes no provinces). Pending slots: CIS
+pre-electoral 3584 (in fieldwork, no date; 2023's had seats per province) and
+the CEO's third wave. Fact pack: research_notes/x10/enquestes-29n.md.
+
+**Not a DB guide.** Published guides are static/ISR (revalidate 86400), so a
+cached copy could carry figures into the blackout. The page is a code route
+(`app/(public)/[locale]/internal-polls/`, `force-dynamic`; the guide URLs rewrite to
+it as internal search does, so no route folder shadows `guies/`), and the figures pass through one gate, `pollsPageData(now)`
+(src/lib/programmatic/polls/data.ts), read after `await connection()`. From 24
+Nov 00:00 to 29 Nov 21:00 Madrid the gate returns no poll at all: the HTML
+and RSC payload have no figure, no report link, no technical sheet; the page
+keeps the law, when figures return and the official results links.
+Title, description, OG, JSON-LD and the sitemap never carry figures, at any
+date. `Cache-Control: private, no-cache, no-store` + `CDN-Cache-Control` and
+`Cloudflare-CDN-Cache-Control: no-store` on every response (next.config.ts),
+plus a Cloudflare bypass line in ops/vps/README.md section 10. A client island
+reloads open tabs at 24 Nov 00:00. tests/polls-blackout.test.ts: the brief's
+five timestamps plus 20:59/21:00, structural emptiness, only data.ts imports
+figures.ts, headers, route config, staleness (fails 18 Nov unless re-read).
+The end is 21:00, not the brief's 20:00: Canary polls close at 21:00
+peninsular and the JEC bars estimates there before then (Acuerdos 458/1999,
+99/2005).
+
+**Titles** (no figures): ca "Enquestes eleccions generals 2026 a Catalunya:
+CIS i CEO", es "Encuestas elecciones generales 2026 en Cataluña: CIS y CEO",
+en "Spain election polls 2026 in Catalonia: CIS and CEO".
+
+**Links in (body only; election page titles of 3 Nov untouched):** one
+paragraph in the candidates guide after the onward links (group
+`candidates`), one intro paragraph on the election hubs `/ca/eleccions/`,
+`/es/elecciones/`, `/en/elections/` (deploy). The candidates guide stays
+procedural: its neutrality test now skips exactly that one pointer block.
+
+**Baseline.** No poll queries in the candidates guide's 14-day queries (5 Nov:
+"elecciones cataluña 2026" 75 impressions at 6.5, "candidatos elecciones
+cataluña" 24 at 4.1, no "encuesta"). The ES candidates guide: 5.8k
+impressions, 833 clicks in 14 days at 5.2 (brief).
+
+**Prediction.** Indexed by 14 Nov. When the CIS pre-electoral is out (before
+24 Nov), top 10 for "encuesta cis cataluña", "cis escaños barcelona",
+"enquesta ceo congrés" and ≥ 1,500 impressions across the three editions by
+23 Nov at CTR ≥ 3 %. Near zero 24–29 Nov by design; a second, smaller peak on
+29–30 Nov ("encuesta vs resultados").
+
+**Measure on 14 Nov** (`inspect_url_enhanced` on the three URLs), **23 Nov**
+and **2 Dec 2026** (`snapshot.py page encuestas-elecciones 14`, `page
+enquestes-eleccions 14`, `page election-polls 14`). On 24 Nov 00:05 and 29 Nov
+21:05: curl the three URLs and check no figure in the HTML and no
+`cf-cache-status: HIT`.
+
+**Outcome:** _pending_
