@@ -10,13 +10,14 @@ import {
 } from "@/lib/content/publish-article";
 import { LOCALES, type Locale } from "@/lib/i18n/config";
 
-import { SNAPSHOT, municipalityBySlug } from "@/lib/programmatic/holidays/data";
+import { SNAPSHOT, aranSwap, municipalityBySlug } from "@/lib/programmatic/holidays/data";
 import { LOCAL_DATE_PAGES } from "@/lib/programmatic/holidays/dates";
 import { joinList } from "@/lib/programmatic/holidays/names";
 import { datePath } from "@/lib/programmatic/holidays/paths";
 import { largestTownLinks, townPageCount } from "@/lib/programmatic/holidays/towns";
 
-import { CALENDAR_VERIFIED_AT, HOLIDAY_SOURCE, shortDate, todayInCatalonia } from "./calendar";
+import { CALENDAR_VERIFIED_AT, HOLIDAY_SOURCE, addDays, allHolidays, shortDate, todayInCatalonia } from "./calendar";
+import { weekdayDate } from "./today-answer";
 import { COPY as CALENDAR_COPY } from "./copy";
 import { LOCAL_SOURCE } from "./local";
 import { BARCELONA_LOCAL } from "./payload";
@@ -236,6 +237,12 @@ export function buildBody(locale: Locale): Block[] {
       .replace("{bcn}", bcn),
   );
 
+  // "Mañana es festivo" (5 Nov 2026): 36 impressions at 52 for this page,
+  // spread over six town pages and the work calendar (73). The box answers it
+  // only inside a <dt>, and the FAQ answer pointed at the box. A heading in the
+  // query's words, with the dated eves, answers it in the body.
+  blocks.push(...tomorrowSection(locale));
+
   // How it works first for the reader who wants the rule; the local section
   // right after, because "is it a holiday in my town" is the next question.
   section(copy.localTitle, local);
@@ -246,6 +253,89 @@ export function buildBody(locale: Locale): Block[] {
   blocks.push({ type: "paragraph", text: copy.plannerLine });
 
   return blocks;
+}
+
+const TOMORROW_TITLE: Record<Locale, string> = {
+  ca: "Demà és festiu a Catalunya?",
+  es: "¿Mañana es festivo en Cataluña?",
+  en: "Is tomorrow a holiday in Catalonia?",
+};
+
+/** "la Inmaculada" / "Navidad" after "víspera de", with Catalan elision ("vigília de l'Assumpció"). */
+function holidayAfterOf(name: string, locale: Locale): string {
+  const lower = name.replace(/^La /, "la ").replace(/^L'/, "l'");
+  if (locale === "en") return `the eve of ${name}`;
+  if (locale === "es") return `víspera de ${lower}`;
+  return /^[aeiouàèéíòóú]/i.test(lower) ? `vigília d'${lower}` : `vigília de ${lower}`;
+}
+
+/**
+ * The next days on which "tomorrow" is a Catalonia-wide holiday, from `today`
+ * (the publish day). Each item names its own date and year, so a stored copy
+ * stays true after the date has passed.
+ */
+export function tomorrowEves(locale: Locale, today: string, style: "body" | "faq" = "body", count = 4): string[] {
+  return allHolidays()
+    .filter((holiday) => addDays(holiday.date, -1) >= today)
+    .slice(0, count)
+    .map((holiday) => {
+      const eve = weekdayDate(addDays(holiday.date, -1), locale, true);
+      const aran = aranSwap(Number(holiday.date.slice(0, 4)))?.replaces === holiday.date;
+      const exceptAran = aran ? { ca: ", excepte a l'Aran", es: ", excepto en Arán", en: ", except in Aran" }[locale] : "";
+      const of = holidayAfterOf(holiday.name[locale], locale);
+      return style === "body"
+        ? `**${eve}**: ${of} (${weekdayDate(holiday.date, locale)}${exceptAran})`
+        : `${locale === "en" ? "" : "el "}${eve} (${of}${exceptAran})`;
+    });
+}
+
+/** The next Catalonia-wide holidays from `today`, dated with their year: the FAQ's answer to "is today a holiday?". */
+function nextHolidaysLine(locale: Locale, today: string, count = 3): string {
+  return joinList(
+    allHolidays()
+      .filter((holiday) => holiday.date >= today)
+      .slice(0, count)
+      .map((holiday) => {
+        const aran = aranSwap(Number(holiday.date.slice(0, 4)))?.replaces === holiday.date;
+        const exceptAran = aran ? { ca: ", excepte a l'Aran", es: ", excepto en Arán", en: ", except in Aran" }[locale] : "";
+        return `${locale === "en" ? "" : "el "}${weekdayDate(holiday.date, locale, true)} (${holiday.name[locale]}${exceptAran})`;
+      }),
+    locale,
+  );
+}
+
+/** Heading in the query's words, the rule, the dated eves as a list, then where the local days are. */
+function tomorrowSection(locale: Locale): Block[] {
+  const hub = { ca: "/ca/festius/", es: "/es/festivos/", en: "/en/holidays/" }[locale];
+  const [intro, after] = {
+    ca: [
+      "Demà és festiu a tot Catalunya només la vigília d'un dels dotze festius del calendari de la Generalitat. Les pròximes vigílies:",
+      `Cada municipi hi afegeix dues festes locals. El requadre de dalt diu cada dia si demà és festiu i a quins municipis és demà festa local; l'any sencer de cada municipi és a [festius locals per municipi](${hub}).`,
+    ],
+    es: [
+      "Mañana es festivo en toda Cataluña solo la víspera de uno de los doce festivos del calendario de la Generalitat. Las próximas vísperas:",
+      `Cada municipio añade dos fiestas locales. El recuadro de arriba dice cada día si mañana es festivo y en qué municipios es mañana fiesta local; el año entero de cada municipio está en [festivos locales por municipio](${hub}).`,
+    ],
+    en: [
+      "Tomorrow is a holiday across Catalonia only on the eve of one of the twelve days in the Catalan government's calendar. The next eves:",
+      `Each town adds two local holidays. The box at the top says every day whether tomorrow is a holiday and where tomorrow is a local holiday; each town's whole year is in [public holidays town by town](${hub}).`,
+    ],
+  }[locale] as [string, string];
+  const eves = tomorrowEves(locale, todayInCatalonia());
+  // Past the last published calendar there is nothing to list: keep the rule only.
+  if (eves.length === 0) {
+    return [
+      { type: "heading", level: 2, text: TOMORROW_TITLE[locale] },
+      { type: "paragraph", text: `${intro.replace(/\s*[^.]*:$/, "")}` },
+      { type: "paragraph", text: after },
+    ];
+  }
+  return [
+    { type: "heading", level: 2, text: TOMORROW_TITLE[locale] },
+    { type: "paragraph", text: intro },
+    { type: "list", ordered: false, items: eves },
+    { type: "paragraph", text: after },
+  ];
 }
 
 /**
@@ -280,20 +370,20 @@ function faqBlock(locale: Locale): Block {
 
   const items: Record<Locale, { question: string; answer: string }[]> = {
     ca: [
-      { question: "Avui és festiu a Catalunya?", answer: "El requadre del principi ho respon cada dia amb el calendari oficial de la Generalitat: si avui és un dels dotze festius de tot Catalunya i a quins municipis és avui festa local. Si no n'hi surt cap, avui és feiner a tot Catalunya." },
-      { question: "Demà és festiu a Catalunya?", answer: "Ho diu la línia «Demà és festiu?» del requadre, i a sota hi ha els municipis on demà és festa local. Un dia només és festiu a tot Catalunya si és un dels dotze del calendari de la Generalitat (Ordre EMT/66/2025 per al 2026 i Ordre EMT/52/2026 per al 2027)." },
+      { question: "Avui és festiu a Catalunya?", answer: `Només si avui és un dels dotze festius de tot Catalunya. Els pròxims: ${nextHolidaysLine("ca", today)}. Si avui no és cap d'aquests, pot ser festa local al teu municipi: el requadre del principi ho diu cada dia, amb el calendari oficial de la Generalitat.` },
+      { question: "Demà és festiu a Catalunya?", answer: `Només si avui és la vigília d'un dels dotze festius de tot Catalunya (Ordre EMT/66/2025 per al 2026 i Ordre EMT/52/2026 per al 2027). Les pròximes vigílies: ${joinList(tomorrowEves("ca", today, "faq"), "ca")}. El requadre del principi ho diu cada dia i afegeix on és demà festa local.` },
       { question: "On és festiu avui a Catalunya?", answer: `On avui és festa local: cada municipi en fixa dues l'any (Ordre EMT/208/2025, modificada per l'Ordre EMT/3/2026), i el requadre en dona la llista del dia.${dates ? ` Els dies amb més festes locals que vénen són ${dates}.` : ""}` },
       { question: "Avui és festiu a Barcelona?", answer: `Barcelona fa els dotze festius de tot Catalunya i dues festes locals: el ${YEAR_2026} van ser ${bcnList(bcn2026, "ca")}, i el 2027 són ${bcnList(BARCELONA_LOCAL.map((h) => h.date), "ca")}. Tot l'any, a [festius de Barcelona](/ca/festius/barcelona/).` },
     ],
     es: [
-      { question: "¿Hoy es festivo en Cataluña?", answer: "El recuadro del principio lo responde cada día con el calendario oficial de la Generalitat: si hoy es uno de los doce festivos de toda Cataluña y en qué municipios es hoy fiesta local. Si no aparece ninguno, hoy es laborable en toda Cataluña." },
-      { question: "¿Mañana es festivo en Cataluña?", answer: "Lo dice la línea «¿Mañana es festivo?» del recuadro, y debajo están los municipios donde mañana es fiesta local. Un día solo es festivo en toda Cataluña si es uno de los doce del calendario de la Generalitat (Orden EMT/66/2025 para 2026 y Orden EMT/52/2026 para 2027)." },
+      { question: "¿Hoy es festivo en Cataluña?", answer: `Solo si hoy es uno de los doce festivos de toda Cataluña. Los próximos: ${nextHolidaysLine("es", today)}. Si hoy no es uno de ellos, puede ser fiesta local en tu municipio: el recuadro del principio lo dice cada día, con el calendario oficial de la Generalitat.` },
+      { question: "¿Mañana es festivo en Cataluña?", answer: `Solo si hoy es la víspera de uno de los doce festivos de toda Cataluña (Orden EMT/66/2025 para 2026 y Orden EMT/52/2026 para 2027). Las próximas vísperas: ${joinList(tomorrowEves("es", today, "faq"), "es")}. El recuadro del principio lo dice cada día y añade dónde es mañana fiesta local.` },
       { question: "¿Dónde es festivo hoy en Cataluña?", answer: `Donde hoy es fiesta local: cada municipio fija dos al año (Orden EMT/208/2025, modificada por la Orden EMT/3/2026), y el recuadro da la lista del día.${dates ? ` Los días con más fiestas locales que vienen son ${dates}.` : ""}` },
       { question: "¿Hoy es festivo en Barcelona?", answer: `Barcelona tiene los doce festivos de toda Cataluña y dos fiestas locales: en ${YEAR_2026} fueron ${bcnList(bcn2026, "es")}, y en 2027 son ${bcnList(BARCELONA_LOCAL.map((h) => h.date), "es")}. Todo el año, en [festivos de Barcelona](/es/festivos/barcelona/).` },
     ],
     en: [
-      { question: "Is today a public holiday in Catalonia?", answer: "The box at the top answers that every day from the Catalan government's official calendar: whether today is one of the twelve Catalonia-wide holidays and which towns have a local holiday today. If none is listed, today is a working day everywhere in Catalonia." },
-      { question: "Is tomorrow a holiday in Catalonia?", answer: "The \"Is tomorrow a holiday?\" line in the box says so, with the towns where tomorrow is a local holiday listed below it. A day is a holiday across Catalonia only if it is one of the twelve in the Catalan government's calendar (Order EMT/66/2025 for 2026, Order EMT/52/2026 for 2027)." },
+      { question: "Is today a public holiday in Catalonia?", answer: `Only if today is one of the twelve Catalonia-wide holidays. The next ones: ${nextHolidaysLine("en", today)}. If today is not one of them, it may be a local holiday in your town: the box at the top says so every day, from the Catalan government's official calendar.` },
+      { question: "Is tomorrow a holiday in Catalonia?", answer: `Only if today is the eve of one of the twelve Catalonia-wide holidays (Order EMT/66/2025 for 2026, Order EMT/52/2026 for 2027). The next eves: ${joinList(tomorrowEves("en", today, "faq"), "en")}. The box at the top says so every day, with the towns where tomorrow is a local holiday.` },
       { question: "Is today a holiday in Barcelona?", answer: `Barcelona keeps the twelve Catalonia-wide holidays plus two local ones: in ${YEAR_2026} they were ${bcnList(bcn2026, "en")}, and in 2027 they are ${bcnList(BARCELONA_LOCAL.map((h) => h.date), "en")}.` },
       { question: "Where is it a holiday today in Catalonia?", answer: `Wherever today is a local holiday: each town sets two a year (Order EMT/208/2025, amended by Order EMT/3/2026), and the box lists today's.${dates ? ` The coming days with the most local holidays are ${dates}.` : ""}` },
     ],

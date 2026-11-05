@@ -2601,3 +2601,124 @@ again after the DOGC order (`prepare2027` prints COUNCIL DIFFERS). From
 measure that change on its own.
 
 **Outcome:** _pending_
+
+---
+
+## 2026-11-05 — Ranking push before the Nov–Jan peaks: work calendar, school calendar (es), ski, "is today a holiday" (body only; deploy, then groups `holidays`, `holiday-today`, `school-calendar`, `ski`, `snow-now`)
+
+A ranking problem, not CTR: four pages with real demand sit at 12–24. No
+title, description or H1 changed (the work calendar and holiday-today pages
+were retitled on 3 Nov; the ski and ES school titles are not the cause, see
+below). Data: GSC 22 Oct–4 Nov 2026 (`dataState: all`), query × page over the
+whole property, URL Inspection on 5 Nov, Caddy access log 3–5 Nov.
+
+Common finding: Googlebot spent 7,305 hits in ~2 days on the election and
+holiday programmatic pages and 48 on all guides together. The guides are
+recrawled rarely, so body changes reach the index late; last crawls: ES school
+9 Oct, ski (es) 12 Oct, work calendar (es) 26 Oct, holiday-today (es) 28 Oct.
+Canonicals are self, hreflang ca/es/en/x-default reciprocal on all four
+(every alternate is printed twice, sitewide: harmless, logged as a follow-up).
+
+### Work calendar `/es/guias/calendario-laboral-cataluna/` (+ ca, en; group `holidays`)
+
+- **Baseline**: 3,251 impr., 23 clicks, pos 12.2 (ca 665 at 9.5).
+- **Diagnosis**: no cannibalisation. It is the only URL of ours for the
+  Catalonia-wide 2027 queries (186 impr. at 8.7: "calendario 2027 catalunya
+  con festivos" 25 at 8.8, "calendario laboral 2027 catalunya" 22 at 9.7,
+  "calendario 2027 con festivos catalunya" 16 at 9.8, "festivos 2027
+  catalunya" 14 at 10.1); town pages own "calendario laboral <town> 2027".
+  The 12.2 is dragged by Spain-wide queries ("calendario laboral" 70,
+  "calendario laboral 2027" 47, "festividades" 65) and "30 de octubre es
+  festivo" date questions (7.3). Content gap: "calendario 2027 … con festivos"
+  asks for the year laid out by month; the page had a list of twelve dates.
+- **Change**: new H2 "Calendario 2027 mes a mes: festivos y días laborables"
+  (ca/en equivalents) right after the key facts: one row per month with its
+  holidays (weekday, day, name; each linked to its `/festivos/dia/…-2027/`
+  page) and the Monday–Friday working days left (19, 20, 21, 22, 21, 21, 22,
+  22, 22, 20, 21, 21 = 252, computed from the same twelve dates; test). Note:
+  Barcelona's 17 May and 24 Sep each take one more working day; in Aran 29 Mar
+  is a working day and 17 Jun a holiday (from `aranSwap`).
+- **Prediction**: the 2027 Catalonia queries from 8.7 to 5–7 by 1 Dec; ≥ 1 %
+  CTR on them.
+- **Measure 1 Dec 2026 and 8 Jan 2027**: `snapshot.py page calendario-laboral 14`,
+  the cat2027 bucket above (queries matching cataluñ/catal + 2027).
+
+### School calendar `/es/guias/calendario-escolar-cataluna/` (group `school-calendar`)
+
+- **Baseline**: 830 impr., 0 clicks, pos 24.3 (ca 4,582 at 4.9).
+- **Diagnosis**: not technically broken (indexed, self-canonical, hreflang
+  reciprocal, ca/es copy at parity, linked from the ES home, town pages, date
+  pages, work calendar, "es festivo hoy", 11N strike). Two causes:
+  1. Google's copy is from **9 Oct** (URL Inspection, 5 Nov; only referrer
+     known to Google: the ca edition), so none of the 23–30 Oct answer-first
+     work is indexed. The ca page was crawled on 5 Nov.
+  2. The 24.3 vs 4.9 is a query-mix artefact: 255 of the 337 named ES
+     impressions are Spain-wide generic queries at 47 ("calendario escolar"
+     30, "año escolar" 64, "ciclo lectivo" 46, "calendario escolar 2025" 48)
+     where a Catalonia page cannot rank; the Catalonia ones are 82 at 30
+     ("calendario escolar cataluña" 28, "calendario escolar 2026 cataluña"
+     36, but "hoy hay cole en cataluña" 7.5). The ca 4.9 comes from Catalan
+     Christmas queries with weak competition. No URL of ours competes.
+- **Change**: the first-screen Christmas callout says "Vacaciones de Navidad
+  2026-2027 en los colegios de Cataluña" (es only; ca's title is under the
+  3 Nov test). The live title stays: Google has not seen it yet, so it cannot
+  be the cause. The lever that matters is a recrawl: **owner to request
+  indexing for this URL in GSC** (no API for it).
+- **Prediction**: once recrawled, "calendario escolar cataluña 2026-2027"
+  variants into the top 10 and "vacaciones de navidad 2026 cataluña" visible;
+  the page average stays > 15 because of the generic queries.
+- **Measure 28 Nov 2026** (and 23 Dec): last crawl date first, then the
+  Catalonia bucket (`pq.py`-style: queries with catal/cataluñ/barcelona/cole).
+
+### Ski resorts `/es/guias/estaciones-esqui-cataluna/` (+ ca, en; groups `ski`, `snow-now`; homepage by deploy)
+
+- **Baseline**: es 257 impr., 5 clicks, pos 23.7; ca 81 at 9.8; en 143 at 5.6.
+- **Diagnosis**: the ES page is not worse than ca/en. The head queries sit at
+  55–62 in all three languages ("estaciones de esquí de cataluña" 60, "pistas
+  de esqui cataluña" 60, "esquí catalunya" 59; ca "pistes esqui catalunya" 80;
+  en "catalonia ski resorts" 8.8 on 6 impr.); ca and en averages come from
+  anonymous long-tail rows, es simply has the visible head demand. A 3-week-old
+  page, last crawled 12 Oct, not linked from the homepage before 15 Nov.
+  Snow guides, Núria, the December pages link it 2–4 times each.
+- **Change** (facts re-read 5 Nov on each operator's site,
+  `research_notes/ski-opening-5nov.md`): Vall de Núria's ski calendar on
+  PIRINEU365 now shows 2026-27 — opens Fri 4 Dec 2026 (4–8 Dec, 12–13 Dec,
+  daily from 19 Dec), last day 4 Apr 2027 — in the table, lead, FAQ (new
+  question per language) and the Pyrenees snow guide's FAQ. Baqueira (28 Nov),
+  the other FGC calendars unchanged; Masella, Port del Comte and Tavascan
+  still "sin fecha anunciada". Baqueira's 1.300 € early season pass ended on
+  1 Nov: 1.400 €. `VERIFIED` 2026-11-05. Homepage strip: ski from 1 Nov
+  instead of 15 Nov (`home-tools.ts`).
+- **Prediction**: head queries from ~60 into the top 30 by 10 Dec as the
+  season opens (demand peaks 28 Nov–8 Dec); the opening-date queries
+  ("cuándo abre baqueira/la molina/vall de núria") top 10.
+- **Measure 10 Dec 2026**: `snapshot.py page esqui 14` and the head bucket
+  (esqu|pista|ski) per language; re-read Masella / Núria / FGC notes ~20 Nov.
+
+### "Is today a holiday" `/es/guias/es-festivo-hoy-cataluna/` (+ ca, en; group `holiday-today`)
+
+- **Baseline**: 1,450 impr., 4 clicks, pos 12.5.
+- **Diagnosis**: the Catalonia queries rank 7.8 (309 impr.: "hoy es festivo
+  en cataluña" 108 at 7.5). The average is dragged by "festividades" (52 at 75)
+  and "mañana es festivo" (36 at 52). Cannibalisation: "es festivo hoy en
+  cataluña" took 139 impr. on `/es/festivos/dia/1-noviembre-2026/` (9.1) vs 36
+  here (7.4), around 1 Nov — right on the day, left alone; "mañana es festivo"
+  is spread over this page (52), Tarragona (28), Lleida (7.2), Reus (8.6),
+  Girona (5.6), Barcelona (35) and the work calendar (73). This page answered
+  "mañana" only in a `<dt>` of the live box, and its FAQ answers for "¿hoy…?"
+  and "¿mañana…?" just pointed at the box (also in the FAQPage JSON-LD).
+- **Change**: first H2 of the body is now "¿Mañana es festivo en Cataluña?"
+  (ca "Demà és festiu a Catalunya?", en "Is tomorrow a holiday in
+  Catalonia?"): the rule, then the next four eves as a list, each with its
+  year ("**lunes 7 de diciembre de 2026**: víspera de la Inmaculada (martes
+  8 de diciembre)", … 24, 25 — San Esteban "excepto en Arán" — and 31 Dec),
+  then the local-days pointer to `/es/festivos/`. FAQ: "¿Hoy es festivo…?"
+  now names the next three holidays with their dates; "¿Mañana es festivo…?"
+  names the next four eves. Dated with the year, so the stored copy stays
+  true after each date passes (test walks every week of 2026–2027).
+- **Prediction**: "mañana es festivo (en cataluña)" from 52 to ≤ 15 for this
+  page by 9 Dec, with a spike on 7 Dec; "hoy es festivo en cataluña" holds 7–8.
+- **Measure 9 Dec 2026** (after the 7 Dec eve) and **8 Jan 2027** (after
+  24/31 Dec and 5 Jan): queries containing "mañana" for this URL vs town pages.
+
+**Outcome:** _pending_
