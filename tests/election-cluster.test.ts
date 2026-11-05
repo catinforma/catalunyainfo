@@ -76,7 +76,7 @@ test("mesa: no payment date or method is invented, and the amount is sourced", (
   const urls = MESA.sources.map((s) => s.url);
   assert.ok(urls.includes("https://www.boe.es/buscar/act.php?id=BOE-A-2026-13948"), "Orden INT/650/2026");
   assert.ok(urls.includes("https://29neleccionesgenerales.es/pdf/miembros_mesas/MMM_G2026_castellano_para_web.pdf"), "29N manual");
-  assert.equal(MESA.verifiedAt, "2026-11-03");
+  assert.equal(MESA.verifiedAt, "2026-11-05");
 });
 
 /* -------------------------------------------------------------------------- */
