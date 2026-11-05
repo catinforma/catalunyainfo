@@ -438,6 +438,15 @@ export const localHolidaysBlock = z.object({
 });
 
 /**
+ * Every municipality's shop opening days over Christmas 2026, with a filter
+ * box (5 Nov 2026). Configuration-free: the days live in code
+ * (`batch02/shops-christmas.ts`), checked against the DOGC resolution.
+ */
+export const shopsChristmasBlock = z.object({
+  type: z.literal("shopsChristmas"),
+});
+
+/**
  * Today's reservoir levels, read from the water agency's open data.
  * Configuration-free: the reading date comes from the data, so the block
  * cannot be left showing a day that has passed.
@@ -536,6 +545,7 @@ export const blockSchema = z.discriminatedUnion("type", [
   metroTonightBlock,
   weekendAgendaBlock,
   localHolidaysBlock,
+  shopsChristmasBlock,
   reservoirLevelsBlock,
   schoolCalendarBlock,
   electionHistoryBlock,

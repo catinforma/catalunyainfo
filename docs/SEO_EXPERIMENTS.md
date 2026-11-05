@@ -2721,4 +2721,75 @@ Canonicals are self, hreflang ca/es/en/x-default reciprocal on all four
 - **Measure 9 Dec 2026** (after the 7 Dec eve) and **8 Jan 2027** (after
   24/31 Dec and 5 Jan): queries containing "mañana" for this URL vs town pages.
 
+## 2026-11-05 — Shops at Christmas: December-first shops guide with a 947-town table, and "Obertura comercial a Nadal" on the town holiday pages (group `shops`; deploy first)
+
+**Why.** Strike traffic ends on 12 Nov. The shops cluster is the next seasonal
+demand: "tiendas abiertas domingo <town>", "botigues obertes 8 de desembre",
+"supermercados abiertos 26 diciembre". Until now the guide's first screen
+answered 29N and the November Sundays. The town pages listed the year's ten
+opening days (most of them already past) and said nothing about Christmas.
+Official data covers every town: Resolució EMT/4342/2025 lists 77 councils by
+name, and its preamble sets the ten days of the other 870 (Ordre EMT/77/2025,
+arts. 1 and 6). Re-read on 5 Nov, with no 2027 municipal list in the DOGC up to
+núm. 9788 (research_notes/x10/obertura-comercial-nadal-2026.md).
+
+**Change (titles, descriptions and H1s unchanged).**
+- Shops guide (ca/es/en): the lead answers December first (6, 8, 13, 20, 27;
+  25-26 and 1/6 Jan closed), with 29N kept in it. The date table runs from 29N
+  (row kept) to 10 Jan. Every row names its sources, each with a check date.
+  The November Sundays become one sentence. A paragraph on Saturday 26 Dec:
+  a holiday in Catalonia (not Aran) and the Balearic Islands only, per
+  BOE-A-2025-21667, and a closing day by law. The brief's "Catalonia-only"
+  was wrong for 2026. New section "Botigues obertes per Nadal al teu
+  municipi": block `shopsChristmas`, a filterable, server-rendered table of
+  all 947 municipalities with their 29 Nov-31 Dec days. FAQ: 6 December and
+  supermarkets on 26 December. Groups: `shops` (after the deploy, so the new
+  block type exists).
+- Town pages /ca/festius/<town>/ and /es/festivos/<town>/ (917 towns × 2):
+  a section "Obertura comercial a Nadal a <town>" / "Apertura comercial en
+  Navidad en <town>" after the shops section. One row per Sunday and holiday
+  from 6 Dec to 6 Jan, plus the town's December local holidays and extra days:
+  open, swapped by the council, local holiday that is not an opening day,
+  closed by law, or 3 Jan pending. It also covers 24/31 Dec and the art. 37
+  exemptions, a tourist-municipality caveat (Barcelona: ZGAT 15 May-15 Sep
+  only) and the source with its check date. Deploy only. The section hides
+  itself on builds after 6 Jan 2027.
+
+**Baseline (GSC, `snapshot.py`).**
+
+| Page / family | Window | Clicks | Impr. | CTR | Pos. |
+| --- | --- | ---: | ---: | ---: | ---: |
+| /es/guias/tiendas-abiertas-festivos-cataluna/ | 23 Oct-4 Nov | 279 | 6,217 | 4.5% | ~5.1 |
+| same, after the 1 Nov peak | 2-4 Nov | 19 | 988 | 1.9% | 5.5-5.9 |
+| /ca/guies/botigues-obertes-festius-catalunya/ | 23 Oct-4 Nov | 25 | 1,044 | 2.4% | ~4.9 |
+| /es/festivos/ (family) | 30 Oct-5 Nov | 575 | 31,223 | 1.84% | |
+| /ca/festius/ (family) | 30 Oct-5 Nov | 374 | 8,908 | 4.20% | |
+
+December queries have almost no impressions yet. Only one, "26 de desembre",
+shows on the CA guide. The ES guide's top queries are "hoy" and 1 Nov ones.
+
+**Prediction.**
+- Shops guide ES: 5-8 Dec (bridge weekend) takes at least 4,000 impressions at
+  position ≤ 5.5, more than the 31 Oct-1 Nov peak (3,729). CTR on the
+  "8 diciembre" and "domingo 6 diciembre" queries is ≥ 4%.
+- Town-name shop queries ("tiendas abiertas domingo sabadell", "botigues
+  obertes terrassa") reach the guide: at least 30 distinct town names in its
+  queries by 15 Dec (there are about 2 today).
+- Town pages: at least 50 /es/festivos/<town>/ pages get a shop query
+  ("tiendas", "abiertas", "botigues", "obertes") by 15 Dec. The family's CTR
+  does not fall below 1.8%.
+- "supermercados abiertos 26 diciembre" and "botigues obertes 26 de
+  desembre" give the ES and CA guides impressions from 20 Dec.
+
+**Measure.** `snapshot.py page tiendas-abiertas-festivos-cataluna 14`, the same
+for `botigues-obertes-festius-catalunya`, `snapshot.py families 7`, and the
+GSC query filter on /es/festivos/ for tiendas|abiertas|botigues|obertes.
+Measure on 20 Nov (indexing), 10 Dec (after the bridge) and 28 Dec (after
+Sant Esteve).
+
+**Follow-ups.** The DOGC 2027 municipal list (expected ~16-30 Nov 2026; check
+weekly) fills 3 and 10 Jan per town and Barcelona's 2027 days. Its staleness
+test (tests/shops-christmas.test.ts) fails on 1 Jan 2027. Tourist-municipality
+declarations (BOP, art. 38) are not covered.
+
 **Outcome:** _pending_
