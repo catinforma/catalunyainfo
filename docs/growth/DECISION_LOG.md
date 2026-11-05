@@ -51,3 +51,11 @@ Newest first. Format: date · decision · why (evidence) · how it is measured �
 - New: Christmas lights switch-on 2026 (Barcelona + 25 towns, all "per confirmar" with 2025 dates); Renfe/Rodalies 10 and 12 Nov and education 26N guides, rendered from strikes.ts.
 - eslint now ignores `.claude/**` (worktrees made `eslint .` run 10+ min at load 8.5).
 - Strike watch 14:55: nothing new (Treball newest Renfe item is the 23 Oct order; Transportes newest Ouigo 27 Oct; SEMAF newest 2026-52; Metges indefinite strike already covered).
+
+## 2026-11-05 — Owner delegates: "fes tot el que creguis millorable"
+
+- Education strike 26 Nov: page stays "anunciada" (union communiqués 28 Oct, no registered call). A public-service strike needs 10 days' notice, so the call must be registered by 16 Nov: re-check Treball/unions on 16–17 Nov; if not registered, say so on the page and drop it from the alert strip.
+- 29N polls page (CIS pre-electoral + CEO, seats per province): go, with a server-side blackout 24 Nov 00:00 – 29 Nov 20:00 Madrid (LOREG art. 69.7: no publication or diffusion of polls in the five days before the vote). Numbers must not be in the HTML during the blackout, not just hidden by CSS.
+- Postal vote: dedicated page (request deadline 19 Nov) — the "voto por correo" section of the how-to-vote guide already shows as a sitelink (636 impressions, 0 clicks in 14 days).
+- Media accreditation for the 29N results repository: request drafted for the owner to send (research_notes/x10/acreditacio-29n-email.md); the official deadline (28 Oct) has passed. datos.gob.es lists a "resultado-electoral-2026-provisional" Interior dataset with no items today — re-check 30 Nov.
+- Wave running (4 agents): school free days per town, Reis 2027 per town + festive transport, shop opening at Christmas per town, ES pages that rank badly (work calendar, school calendar, ski, "es festivo hoy").
