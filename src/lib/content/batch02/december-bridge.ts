@@ -5,6 +5,7 @@ import type { Locale } from "@/lib/i18n/config";
 import { fairsHubPath } from "@/lib/programmatic/christmas-fairs/paths";
 
 import { dayDate, span } from "./festive";
+import { FREE_DAYS_TOWNS, monday7 } from "./school-free-days-towns";
 import { SHOPS } from "./shops";
 import {
   b2Related,
@@ -271,6 +272,26 @@ function sibling(key: "school" | "local", locale: Locale, label: string): string
   return `[${label}](/${locale}/${SIBLING_PATHS[key][locale]}/)`;
 }
 
+/**
+ * The link to the school free days page (5 Nov 2026, group
+ * `lliure-disposicio-links`), with its count, in the 7 December paragraph.
+ * Body only: the title and description stay as they are.
+ */
+function schoolFreeDaysLine(locale: Locale): string {
+  const n = FREE_DAYS_TOWNS.length;
+  const free = FREE_DAYS_TOWNS.filter((t) => monday7(t) === "free").length;
+  const count = {
+    ca: free === n ? `Als ${n} municipis` : `A ${free} dels ${n} municipis`,
+    es: free === n ? `En los ${n} municipios` : `En ${free} de los ${n} municipios`,
+    en: free === n ? `In all ${n} towns` : `In ${free} of the ${n} towns`,
+  };
+  return {
+    ca: `${count.ca} que han publicat els seus dies de lliure disposició, el 7 tampoc no hi ha classe: la llista, amb els dies de cada un, és a ${b2link("schoolFreeDays", "ca", "dies de lliure disposició 2026-2027 per municipi")}. Si el teu no hi és, pregunta-ho a l'escola o a l'ajuntament.`,
+    es: `${count.es} que han publicado sus días de libre disposición, el 7 tampoco hay clase: la lista, con los días de cada uno, está en ${b2link("schoolFreeDays", "es", "días de libre disposición 2026-2027 por municipio")}. Si el tuyo no está, pregúntalo en el colegio o en el ayuntamiento.`,
+    en: `${count.en} that have published their free days, there is no school on the 7th either: the list, with each town's days, is in ${b2link("schoolFreeDays", "en", "school free days 2026-2027 by town")}. If yours is not there, ask the school or the town council.`,
+  }[locale];
+}
+
 /* -------------------------------------------------------------------------- */
 /* Sources                                                                    */
 /* -------------------------------------------------------------------------- */
@@ -409,7 +430,7 @@ export function buildDecemberBridgeBody(locale: Locale): Block[] {
       ...h2(
         "Hi ha escola el 7 i el 8 de desembre?",
         "**El dimarts 8, no.** L'Ordre EDF/66/2026, que fixa el calendari escolar, diu que són festius els dies que determina el calendari laboral del Departament d'Empresa i Treball i els dos dies de festa local del municipi. On el 7 és festa local, tampoc no hi ha classe.",
-        "**El dilluns 7, depèn de l'escola.** L'ordre no el fa festiu, però cada centre pot «establir quatre dies festius de lliure disposició», repartits entre els tres trimestres, i els consells escolars municipals han de fixar els que convindria que fessin tots els centres del municipi. A **Barcelona**, el Consell d'Educació Municipal proposa el dilluns 7 de desembre de 2026, «pont del 8 de desembre», en la proposta aprovada el 10 de juny de 2026. És una proposta de ciutat: cada escola decideix. Fora de Barcelona, pregunta-ho a l'escola o a l'ajuntament.",
+        `**El dilluns 7, depèn de l'escola.** L'ordre no el fa festiu, però cada centre pot «establir quatre dies festius de lliure disposició», repartits entre els tres trimestres, i els consells escolars municipals han de fixar els que convindria que fessin tots els centres del municipi. A **Barcelona**, el Consell d'Educació Municipal proposa el dilluns 7 de desembre de 2026, «pont del 8 de desembre», en la proposta aprovada el 10 de juny de 2026. És una proposta de ciutat: cada escola decideix. ${schoolFreeDaysLine("ca")}`,
         `Les vacances de Nadal del curs 2026-2027 van del 22 de desembre de 2026 al 7 de gener de 2027, tots dos inclosos. Tot el curs, al ${sibling("school", "ca", "calendari escolar 2026-2027")}.`,
       ),
       ...h2(
@@ -496,7 +517,7 @@ export function buildDecemberBridgeBody(locale: Locale): Block[] {
       ...h2(
         "¿Hay colegio el 7 y el 8 de diciembre?",
         "**El martes 8, no.** La Orden EDF/66/2026, que fija el calendario escolar, establece que son festivos los días que determina el calendario laboral del Departament d'Empresa i Treball y los dos días de fiesta local del municipio. Donde el 7 es fiesta local, tampoco hay clase.",
-        "**El lunes 7, depende del centro.** La orden no lo hace festivo, pero cada centro puede fijar «quatre dies festius de lliure disposició» (cuatro días festivos de libre disposición), repartidos entre los tres trimestres, y los consejos escolares municipales deben fijar los que convendría que hicieran todos los centros del municipio. En **Barcelona**, el Consell d'Educació Municipal propone el lunes 7 de diciembre de 2026, «pont del 8 de desembre», en la propuesta aprobada el 10 de junio de 2026. Es una propuesta de ciudad: cada colegio decide. Fuera de Barcelona, pregúntalo en el colegio o en el ayuntamiento.",
+        `**El lunes 7, depende del centro.** La orden no lo hace festivo, pero cada centro puede fijar «quatre dies festius de lliure disposició» (cuatro días festivos de libre disposición), repartidos entre los tres trimestres, y los consejos escolares municipales deben fijar los que convendría que hicieran todos los centros del municipio. En **Barcelona**, el Consell d'Educació Municipal propone el lunes 7 de diciembre de 2026, «pont del 8 de desembre», en la propuesta aprobada el 10 de junio de 2026. Es una propuesta de ciudad: cada colegio decide. ${schoolFreeDaysLine("es")}`,
         `Las vacaciones de Navidad del curso 2026-2027 van del 22 de diciembre de 2026 al 7 de enero de 2027, ambos incluidos. Todo el curso, en ${sibling("school", "es", "el calendario escolar 2026-2027")}.`,
       ),
       ...h2(
@@ -582,7 +603,7 @@ export function buildDecemberBridgeBody(locale: Locale): Block[] {
     ...h2(
       "Is there school on 7 and 8 December?",
       "**Not on Tuesday the 8th.** Order EDF/66/2026, which sets the school calendar, says the school holidays are the days in the Department of Business and Labour's holiday calendar plus the town's two local holidays. Where the 7th is a local holiday, there is no school either.",
-      "**On Monday the 7th, it depends on the school.** The order does not make it a holiday, but each school may set \"quatre dies festius de lliure disposició\" (four free-choice days off), spread over the three terms, and each town's school council proposes the days all its schools should ideally share. In **Barcelona**, the municipal education council (Consell d'Educació Municipal) proposes Monday 7 December 2026, \"pont del 8 de desembre\", in the proposal it approved on 10 June 2026. It is a city-wide recommendation and each school decides. Outside Barcelona, ask the school or the town council.",
+      `**On Monday the 7th, it depends on the school.** The order does not make it a holiday, but each school may set "quatre dies festius de lliure disposició" (four free-choice days off), spread over the three terms, and each town's school council proposes the days all its schools should ideally share. In **Barcelona**, the municipal education council (Consell d'Educació Municipal) proposes Monday 7 December 2026, "pont del 8 de desembre", in the proposal it approved on 10 June 2026. It is a city-wide recommendation and each school decides. ${schoolFreeDaysLine("en")}`,
       `Christmas holidays in the 2026-2027 school year run from 22 December 2026 to 7 January 2027 inclusive. The whole year is in ${sibling("school", "en", "the 2026-2027 school calendar")}.`,
     ),
     ...h2(

@@ -95,7 +95,9 @@ export type B2Key =
   | "granRecapte"
   // 5 Nov 2026: metro, bus, Rodalies, FGC, tram and NitBus over Christmas,
   // New Year and Reis 2026-27 (christmas-transport.ts).
-  | "christmasTransport";
+  | "christmasTransport"
+  // 5 Nov 2026: school free days 2026-2027 town by town (is there school on 7 December?).
+  | "schoolFreeDays";
 
 /** Path after the locale prefix, no leading or trailing slash. */
 export const B2_PATHS: Record<B2Key, Record<Locale, string>> = {
@@ -437,6 +439,12 @@ export const B2_PATHS: Record<B2Key, Record<Locale, string>> = {
     ca: "guies/transport-nadal-cap-d-any-barcelona",
     es: "guias/transporte-navidad-nochevieja-barcelona",
     en: "guides/barcelona-public-transport-christmas-new-year",
+  },
+  // No year in the path: the next course's days go on the same URLs.
+  schoolFreeDays: {
+    ca: "guies/dies-lliure-disposicio-escoles",
+    es: "guias/dias-libre-disposicion-colegios",
+    en: "guides/catalonia-school-free-days",
   },
 };
 
@@ -803,6 +811,11 @@ export const B2_TITLES: Record<B2Key, Record<Locale, string>> = {
     ca: "Metro, bus i Rodalies per Nadal i Cap d'Any 2026-27",
     es: "Metro, bus y Rodalies en Navidad y Nochevieja 2026-27",
     en: "Barcelona public transport at Christmas and New Year 2026-27",
+  },
+  schoolFreeDays: {
+    ca: "Dies de lliure disposició 2026-2027 per municipi",
+    es: "Días de libre disposición 2026-2027 por municipio",
+    en: "School free days 2026-2027 by town",
   },
 };
 

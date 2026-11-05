@@ -65,6 +65,7 @@ import { L2_CLOSURE_GUIDE } from "@/lib/content/batch02/l2-closure";
 import { CHRISTMAS_LIGHTS } from "@/lib/content/batch02/christmas-lights";
 import { GRAN_RECAPTE_GUIDE } from "@/lib/content/batch02/gran-recapte";
 import { CHRISTMAS_TRANSPORT } from "@/lib/content/batch02/christmas-transport";
+import { SCHOOL_FREE_DAYS } from "@/lib/content/batch02/school-free-days";
 import { publishHolidayTodayGuide } from "@/lib/content/holidays/today-publish";
 import { publishLocalHolidaysGuide } from "@/lib/content/holidays/local-publish";
 import { publishReservoirGuide } from "@/lib/content/reservoirs/publish";
@@ -320,6 +321,14 @@ export async function POST(request: Request) {
     // 3 Nov window) go out once, with `transport-nadal-links`.
     if (wants("transport-nadal")) published.push(await publishB2Article(CHRISTMAS_TRANSPORT));
     if (wants("transport-nadal-links")) published.push(await publishB2Article(NEW_YEAR), await publishB2Article(HOURS));
+    // School free days 2026-2027 town by town (is there school on Monday
+    // 7 December?): one page, on its own so a council's new or changed days
+    // (school-free-days-towns.ts) republish only it. The December bridge
+    // guide, which gained one body sentence linking to it, goes out once with
+    // `lliure-disposicio-links`. The town holiday pages' section is static:
+    // it ships with the deploy.
+    if (wants("lliure-disposicio")) published.push(await publishB2Article(SCHOOL_FREE_DAYS));
+    if (wants("lliure-disposicio-links")) published.push(await publishB2Article(DECEMBER_BRIDGE));
 
     const surfaces = [
       ...published.flatMap((article) =>
