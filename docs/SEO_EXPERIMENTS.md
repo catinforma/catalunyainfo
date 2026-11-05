@@ -2634,9 +2634,9 @@ councils put a school free day on Monday the 7th, and parents search for it.
 section 2.4 b-e (four days per course over three terms; the municipal school
 council sets the days "que convindria que adoptessin tots els centres del
 mateix municipi"; a local holiday on a non-school day may be added). Towns:
-the 100 most populous were searched. 32 have a published set: Barcelona,
+the 100 most populous were searched. 36 have a published set: Barcelona,
 Lleida, Tarragona, Mataró, Girona, Vilanova i la Geltrú, el Prat, Granollers,
-Mollet, Vic and 22 more. All 32 put a free day on Monday 7 December. Another 54
+Mollet, Vic and 26 more. All 36 put a free day on Monday 7 December. Another 64
 had published nothing on any council page. The page lists them as "not
 published" with the council's link. In Sant Boi, Castelldefels and Amposta,
 7 December is a local holiday anyway. Big gaps: l'Hospitalet, Terrassa,
@@ -2658,7 +2658,7 @@ town-page families above; free-day queries ~25 impressions, 1 click.
   week of 30 Nov.
 - The bridge page's CTR does not fall (the link is in the body; its title is
   unchanged).
-- Town pages with the section (32 towns) gain free-day and "7 de
+- Town pages with the section (36 towns) gain free-day and "7 de
   diciembre" queries that the towns without it do not; the families' CTR moves
   little before December.
 

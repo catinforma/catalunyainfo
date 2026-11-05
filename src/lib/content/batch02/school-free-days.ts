@@ -298,8 +298,8 @@ function townTable(locale: Locale, towns: readonly FreeDaysTown[]): Block {
   }[locale];
   const checked = readDate(FREE_DAYS_AS_OF, locale);
   const note = {
-    ca: `De la web de cada ajuntament, del seu servei d'educació o del seu consell escolar municipal; comprovades el ${checked}. «Proposta»: el consell escolar municipal la recomana a totes les escoles. «Acord»: el consell escolar municipal els ha acordat. «Calendari municipal»: l'ajuntament els publica com a calendari del municipi. «Festa local»: Ordre EMT/208/2025.`,
-    es: `De la web de cada ayuntamiento, de su servicio de educación o de su consejo escolar municipal; comprobadas el ${checked}. «Propuesta»: el consejo escolar municipal la recomienda a todos los colegios. «Acuerdo»: el consejo escolar municipal los ha acordado. «Calendario municipal»: el ayuntamiento los publica como calendario del municipio. «Fiesta local»: Ordre EMT/208/2025.`,
+    ca: `De la web de cada ajuntament, del seu servei d'educació o del seu consell escolar municipal; comprovades el ${checked}. «Proposta»: el consell escolar municipal els recomana a totes les escoles. «Acord»: el consell escolar municipal els ha acordat. «Calendari municipal»: l'ajuntament els publica com a calendari del municipi. «Festa local»: Ordre EMT/208/2025.`,
+    es: `De la web de cada ayuntamiento, de su servicio de educación o de su consejo escolar municipal; comprobadas el ${checked}. «Propuesta»: el consejo escolar municipal los recomienda a todos los colegios. «Acuerdo»: el consejo escolar municipal los ha acordado. «Calendario municipal»: el ayuntamiento los publica como calendario del municipio. «Fiesta local»: Ordre EMT/208/2025.`,
     en: `From each town council's website, its education service or its municipal school council; checked on ${checked}. "Proposal": the municipal school council recommends them to every school. "Agreement": the municipal school council agreed them. "Town calendar": the council publishes them as the town's calendar. "Local holiday": Order EMT/208/2025.`,
   }[locale];
   return table(caption, headers, townRows(locale, towns), note);
@@ -488,17 +488,17 @@ export function buildSchoolFreeDaysBody(
     ca: {
       method: ["Com tractem les dades", `Només hi posem els dies d'un municipi quan l'ajuntament, el seu servei d'educació o el seu consell escolar municipal els ha publicat; mai de la web d'una escola, d'una AFA o d'un diari. Si no els trobem, ho diem i enllacem l'ajuntament. Última revisió: ${checked}.`],
       tableHeading: "Dies de lliure disposició 2026-2027, municipi per municipi",
-      tableIntro: "Els dies que el consell escolar municipal proposa a totes les escoles del municipi. Cada escola fixa els seus a la programació del curs, i en pot triar d'altres.",
+      tableIntro: "Els dies comuns de cada municipi, tal com els publica l'ajuntament o el consell escolar municipal. Cada escola fixa els seus a la programació del curs, i en pot triar d'altres.",
     },
     es: {
       method: ["Cómo tratamos los datos", `Solo ponemos los días de un municipio cuando el ayuntamiento, su servicio de educación o su consejo escolar municipal los ha publicado; nunca de la web de un colegio, de un AMPA o de un periódico. Si no los encontramos, lo decimos y enlazamos el ayuntamiento. Última revisión: ${checked}.`],
       tableHeading: "Días de libre disposición 2026-2027, municipio por municipio",
-      tableIntro: "Los días que el consejo escolar municipal propone a todos los colegios del municipio. Cada colegio fija los suyos en la programación del curso, y puede elegir otros.",
+      tableIntro: "Los días comunes de cada municipio, tal como los publica el ayuntamiento o el consejo escolar municipal. Cada colegio fija los suyos en la programación del curso, y puede elegir otros.",
     },
     en: {
       method: ["How we handle the data", `We only list a town's days once the town council, its education service or its municipal school council has published them; never from a school's, a parents' association's or a newspaper's website. When we cannot find them, we say so and link the council. Last checked on ${checked}.`],
       tableHeading: "School free days 2026-2027, town by town",
-      tableIntro: "The days each municipal school council proposes to every school in the town. Each school sets its own in its annual plan, and may choose others.",
+      tableIntro: "Each town's common days, as the town council or its municipal school council publishes them. Each school sets its own in its annual plan, and may choose others.",
     },
   }[locale];
   return [
