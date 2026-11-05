@@ -135,8 +135,8 @@ test("titles fit in 60 characters in the searched words; descriptions fit in 155
     assert.match(title, h1[locale]);
     assert.match(seoDescription, answer[locale]);
     assert.equal(seoDescription, strike11nDescription(locale));
-    // Pending on the as-of day: the description says so.
-    assert.match(seoDescription, /no publicats|no publicados|not out yet/, locale);
+    // 5 Nov 2026: the Generalitat's order is out (long distance and flights still pending): the description says so.
+    assert.match(seoDescription, /publicats|publicados|published|out/, locale);
   }
 });
 
@@ -236,9 +236,9 @@ test("known answers: the date, the hours, who calls it and who is called out", (
   assert.equal(STRIKE_11N_DATE, "2026-11-11");
   assert.equal(weekdayIndex(STRIKE_11N_DATE), 3); // Wednesday
   const leadWords: Record<Locale, RegExp[]> = {
-    ca: [/^El dimecres 11 de novembre de 2026 hi ha vaga general de 24 hores/, /0 h/, /encara no s'han publicat/],
-    es: [/^El miércoles 11 de noviembre de 2026 hay huelga general de 24 horas/, /0 h/, /aún no se han publicado/],
-    en: [/^On Wednesday 11 November 2026 there is a 24-hour general strike/, /00:00/, /not been published yet/],
+    ca: [/^El dimecres 11 de novembre de 2026 hi ha vaga general de 24 hores/, /0 h/, /al 25% de 6\.30 a 9\.30 h i de 16\.30 a 21 h/],
+    es: [/^El miércoles 11 de noviembre de 2026 hay huelga general de 24 horas/, /0 h/, /al 25% de 6\.30 a 9\.30 h y de 16\.30 a 21 h/],
+    en: [/^On Wednesday 11 November 2026 there is a 24-hour general strike/, /00:00/, /at 25% from 06:30 to 09:30 and from 16:30 to 21:00/],
   };
   for (const locale of LOCALES) {
     const blocks = STRIKE_11N.editions[locale].blocks;
@@ -270,16 +270,19 @@ test("known answers: who sets minimum services, when they came out in 2024, wher
   };
   for (const locale of LOCALES) {
     const all = body(locale);
-    for (const pattern of precedents[locale]) assert.match(all, pattern, locale);
+    // 5 Nov 2026: with the order out, the 2024 precedents give way to the order itself.
+    void precedents;
+    assert.ok(json(locale).includes("](https://tauler.seu-e.cat/detall?idEns=1&idEdicte=657102)"), `${locale}: no link to the 5 Nov order`);
     assert.match(all, /Departament d'Empresa i Treball|Department of Business and Labour/, locale);
     assert.match(all, /Ministeri de Transports|Ministerio de Transportes|Ministry of Transport/, locale);
     assert.match(all, /Lleida-Alguaire/, locale);
     const blocks = json(locale);
-    for (const url of [STRIKE_11N_URLS.dogc, STRIKE_11N_URLS.treballMs, STRIKE_11N_URLS.rodaliesStatus, STRIKE_11N_URLS.tmb, STRIKE_11N_URLS.fgc, STRIKE_11N_URLS.renfe, STRIKE_11N_URLS.aena]) {
+    // 5 Nov 2026: the order is linked from e-Tauler until the DOGC prints it; no bare DOGC link needed meanwhile.
+    for (const url of [STRIKE_11N_URLS.rodaliesStatus, STRIKE_11N_URLS.tmb, STRIKE_11N_URLS.fgc, STRIKE_11N_URLS.renfe, STRIKE_11N_URLS.aena]) {
       assert.ok(blocks.includes(`](${url})`), `${locale}: no link to ${url}`);
     }
-    // The "this page will list them" line while the order is pending.
-    assert.match(all, /Aquesta pàgina els hi posarà quan surtin|Esta página los pondrá en cuanto salgan|This page will list them as soon as they are out/, locale);
+    // The "this page will list them" callout only while nothing is out.
+    assert.doesNotMatch(all, /Aquesta pàgina els hi posarà quan surtin|Esta página los pondrá en cuanto salgan|This page will list them as soon as they are out/, locale);
   }
 });
 
@@ -387,18 +390,24 @@ test("every weekday printed next to a date matches that date", () => {
 /* What must never be printed                                                 */
 /* -------------------------------------------------------------------------- */
 
-test("no 11 November percentage nobody has published: every % is 2024's or a union's minimum-wage demand", () => {
+test("no 11 November percentage nobody has published: every % is the 5 Nov order's, 2024's, another strike's order or a union's minimum-wage demand", () => {
+  // The Generalitat's order of 5 Nov 2026 (e-Tauler notice 657102): 25% transport 06:30-09:30 and
+  // 16:30-21:00, airport bus 50%, primary care 25%, special education 50%, nurseries and lunch 33%.
+  // The Renfe order of the same day (10 and 12 Nov): 66% at peak, 33% off peak.
+  const ORDER = /25%|50%|33%|66%/;
   for (const locale of LOCALES) {
     for (const piece of sentences(body(locale))) {
       if (!/\d+\s?%/.test(piece)) continue;
-      assert.match(piece, /2024|SMI|salari mínim|salario mínimo|minimum wage/, `${locale}: "${piece}"`);
+      assert.ok(ORDER.test(piece) || /2024|SMI|salari mínim|salario mínimo|minimum wage/.test(piece), `${locale}: "${piece}"`);
+      for (const pct of piece.match(/\d+(?:,\d+)?\s?%/g) ?? []) {
+        assert.ok(["25%", "50%", "33%", "66%", "85%", "75%", "70%", "60%", "80%"].includes(pct.replace(/\s/, "")) || /2024|SMI|salari mínim|salario mínimo|minimum wage/.test(piece), `${locale}: ${pct} in "${piece}"`);
+      }
     }
-    // The minimum-services column of the table says "not published" for every sector.
+    // The minimum-services column: the Generalitat's sectors carry the order; long distance and flights are still pending.
     const tableBlock = STRIKE_11N.editions[locale].blocks.find((b) => b.type === "table") as { rows: string[][] };
     assert.equal(tableBlock.rows.length, ALL_SECTORS.length, locale);
-    for (const row of tableBlock.rows) {
-      assert.match(row[2] ?? "", /^(Encara no publicats|Aún no publicados|Not published yet)$/, `${locale}: ${row[0]}`);
-    }
+    const pending = tableBlock.rows.filter((row) => /^(Encara no publicats|Aún no publicados|Not published yet)$/.test(row[2] ?? ""));
+    assert.equal(pending.length, 2, locale);
   }
 });
 
@@ -507,7 +516,7 @@ test("filling the slots changes the page without touching the template", () => {
     // The order joins the sources.
     assert.ok(strike11nSources(all).some((s) => s.url === "https://example.org/ordre-rodalies"));
     // Partly published: the lead says which state it is in.
-    assert.match(text(buildStrike11nBody(locale, "2026-11-09", filled(["longDistance"])).slice(0, 1)), /Una part|Una parte|Some minimum services/, locale);
+    assert.match(text(buildStrike11nBody(locale, "2026-11-09", filled(["longDistance"])).slice(0, 1)), /Serveis mínims de la Generalitat ja publicats|Servicios mínimos de la Generalitat ya publicados|The Generalitat.s minimum services are out/, locale);
   }
 });
 

@@ -90,6 +90,16 @@ import { STRIKES, STRIKE_URLS, isUpcoming } from "./strikes";
  * backing the strike, and health or school advice that no official body has
  * published.
  *
+ * Updated 5 Nov 2026 (evening): the Generalitat's order is out, signed and
+ * posted on e-Tauler on 5 Nov (notice 657102, not yet in the DOGC): public
+ * transport 25% from 06:30 to 09:30 and 16:30 to 21:00 (Rodalies and
+ * regionals, metro, TMB buses, FGC, tram, all other urban and interurban),
+ * the airport bus 50%; schools one management member per school plus one
+ * teacher per 6 classes in infant/primary (nurseries 33%); health A&E and
+ * special units normal, primary care 25%, duty pharmacies open. Long distance
+ * and airports (State, Aena) still pending. Swap the e-Tauler link for the
+ * DOGC/ELI one once the order has its number.
+ *
  * HOW TO UPDATE (the lead):
  *  - Minimum services out (DOGC order, Treball's list, or an operator's
  *    notice): for each sector in MINIMUM_SERVICES_11N set `status:
@@ -113,7 +123,7 @@ export const STRIKE_11N_DATE = "2026-11-11";
  * on or after the day) is decided against this date, never the clock: the
  * HTML is the same whichever day it is rendered.
  */
-export const STRIKE_11N_AS_OF = "2026-11-03";
+export const STRIKE_11N_AS_OF = "2026-11-05";
 
 /** The facts were re-read on the sources on the as-of day: one constant to move. */
 export const STRIKE_11N_VERIFIED = STRIKE_11N_AS_OF;
@@ -153,14 +163,42 @@ export interface SectorMinimumServices {
  * Rodalies to health: the Generalitat's order in the DOGC. Long distance: the
  * Spanish government. Airports: Aena and the airlines.
  */
+/** The Generalitat's order of 5 Nov 2026 (e-Tauler notice; swap for the DOGC/ELI link once numbered). */
+const ORDRE_11N = "https://tauler.seu-e.cat/detall?idEns=1&idEdicte=657102";
+
 export const MINIMUM_SERVICES_11N: SectorMinimumServices[] = [
-  { key: "rodalies", status: "pending", text: null, source: null },
-  { key: "tmb", status: "pending", text: null, source: null },
-  { key: "fgcTram", status: "pending", text: null, source: null },
+  {
+    key: "rodalies",
+    status: "published",
+    text: { ca: `El 25% del servei habitual de 6.30 a 9.30 h i de 16.30 a 21 h, segons [l'ordre del Departament d'Empresa i Treball del 5 de novembre](${ORDRE_11N}). Fora d'aquestes franges l'ordre no hi garanteix servei.`, es: `El 25% del servicio habitual de 6.30 a 9.30 h y de 16.30 a 21 h, según [la orden del Departament d'Empresa i Treball del 5 de noviembre](${ORDRE_11N}). Fuera de esas franjas la orden no garantiza servicio.`, en: `25% of the usual service from 06:30 to 09:30 and from 16:30 to 21:00, according to [the Department of Business and Labour's order of 5 November](${ORDRE_11N}). Outside those slots the order guarantees no service.` },
+    source: { name: "Ordre EMT/ /2026, de 5 de novembre, serveis essencials durant la vaga general de l'11 de novembre de 2026 (e-Tauler; al DOGC quan es publiqui)", url: ORDRE_11N, publisher: "Departament d'Empresa i Treball" },
+  },
+  {
+    key: "tmb",
+    status: "published",
+    text: { ca: `Metro i autobusos de TMB: el 25% del servei habitual de 6.30 a 9.30 h i de 16.30 a 21 h, segons [l'ordre del Departament d'Empresa i Treball del 5 de novembre](${ORDRE_11N}). L'autobús entre Barcelona i l'aeroport, el 50%.`, es: `Metro y autobuses de TMB: el 25% del servicio habitual de 6.30 a 9.30 h y de 16.30 a 21 h, según [la orden del Departament d'Empresa i Treball del 5 de noviembre](${ORDRE_11N}). El autobús entre Barcelona y el aeropuerto, el 50%.`, en: `Metro and TMB buses: 25% of the usual service from 06:30 to 09:30 and from 16:30 to 21:00, according to [the Department of Business and Labour's order of 5 November](${ORDRE_11N}). The bus between Barcelona and the airport, 50%.` },
+    source: { name: "Ordre EMT/ /2026, de 5 de novembre, serveis essencials durant la vaga general de l'11 de novembre de 2026 (e-Tauler; al DOGC quan es publiqui)", url: ORDRE_11N, publisher: "Departament d'Empresa i Treball" },
+  },
+  {
+    key: "fgcTram",
+    status: "published",
+    text: { ca: `FGC i tramvia: el 25% del servei habitual de 6.30 a 9.30 h i de 16.30 a 21 h, segons [l'ordre del Departament d'Empresa i Treball del 5 de novembre](${ORDRE_11N}).`, es: `FGC y tranvía: el 25% del servicio habitual de 6.30 a 9.30 h y de 16.30 a 21 h, según [la orden del Departament d'Empresa i Treball del 5 de noviembre](${ORDRE_11N}).`, en: `FGC and tram: 25% of the usual service from 06:30 to 09:30 and from 16:30 to 21:00, according to [the Department of Business and Labour's order of 5 November](${ORDRE_11N}).` },
+    source: { name: "Ordre EMT/ /2026, de 5 de novembre, serveis essencials durant la vaga general de l'11 de novembre de 2026 (e-Tauler; al DOGC quan es publiqui)", url: ORDRE_11N, publisher: "Departament d'Empresa i Treball" },
+  },
   { key: "longDistance", status: "pending", text: null, source: null },
   { key: "airports", status: "pending", text: null, source: null },
-  { key: "schools", status: "pending", text: null, source: null },
-  { key: "health", status: "pending", text: null, source: null },
+  {
+    key: "schools",
+    status: "published",
+    text: { ca: `Una persona de l'equip directiu per centre i, a infantil i primària, un docent per cada 6 grups; a educació especial, el 50% de la plantilla; a les llars d'infants i al menjador, el 33%, segons [l'ordre del Departament d'Empresa i Treball del 5 de novembre](${ORDRE_11N}).`, es: `Una persona del equipo directivo por centro y, en infantil y primaria, un docente por cada 6 grupos; en educación especial, el 50% de la plantilla; en las guarderías y el comedor, el 33%, según [la orden del Departament d'Empresa i Treball del 5 de noviembre](${ORDRE_11N}).`, en: `One member of the management team per school and, in infant and primary, one teacher for every 6 classes; special education 50% of staff; nurseries and school lunch 33%, according to [the Department of Business and Labour's order of 5 November](${ORDRE_11N}).` },
+    source: { name: "Ordre EMT/ /2026, de 5 de novembre, serveis essencials durant la vaga general de l'11 de novembre de 2026 (e-Tauler; al DOGC quan es publiqui)", url: ORDRE_11N, publisher: "Departament d'Empresa i Treball" },
+  },
+  {
+    key: "health",
+    status: "published",
+    text: { ca: `Urgències i unitats especials amb normalitat; atenció primària amb el 25% de la plantilla (els CUAP i les urgències d'atenció primària, amb normalitat); farmàcies de guàrdia obertes, segons [l'ordre del Departament d'Empresa i Treball del 5 de novembre](${ORDRE_11N}).`, es: `Urgencias y unidades especiales con normalidad; atención primaria con el 25% de la plantilla (los CUAP y las urgencias de atención primaria, con normalidad); farmacias de guardia abiertas, según [la orden del Departament d'Empresa i Treball del 5 de noviembre](${ORDRE_11N}).`, en: `A&E and special units as normal; primary care with 25% of staff (urgent primary care centres, CUAP, as normal); duty pharmacies open, according to [the Department of Business and Labour's order of 5 November](${ORDRE_11N}).` },
+    source: { name: "Ordre EMT/ /2026, de 5 de novembre, serveis essencials durant la vaga general de l'11 de novembre de 2026 (e-Tauler; al DOGC quan es publiqui)", url: ORDRE_11N, publisher: "Departament d'Empresa i Treball" },
+  },
 ];
 
 /** Who sets each sector's minimum services. */
@@ -447,7 +485,7 @@ const COPY: Record<Locale, Copy> = {
           : `**El ${c.day} hi ha vaga general de 24 hores a tot l'Estat, també a Catalunya:** comença a les 0 h i ${who}.`;
       const ms = {
         pending: ` **Els serveis mínims de Rodalies, metro, autobusos, escoles i sanitat encara no s'han publicat** (consultat el ${c.checked}): la Generalitat els fixa per ordre al DOGC pocs dies abans, i els posarem aquí, sector per sector, tan bon punt surtin.`,
-        partial: ` **Una part dels serveis mínims ja s'ha publicat** i la resta encara no (consultat el ${c.checked}): la taula de més avall diu quins.`,
+        partial: ` **Serveis mínims de la Generalitat ja publicats:** Rodalies i regionals, metro, autobusos, FGC i tramvia funcionen al 25% de 6.30 a 9.30 h i de 16.30 a 21 h; escoles i sanitat, a la taula de més avall. Els trens d'alta velocitat i llarga distància i els vols encara no en tenen (consultat el ${c.checked}).`,
         published: " **Els serveis mínims ja s'han publicat:** els tens a la taula de més avall, sector per sector, amb l'enllaç a l'ordre o a l'avís oficial.",
       }[c.state];
       return `${first}${ms} **Compte també amb el 10 i el 12 de novembre:** el sindicat de maquinistes SEMAF hi ha convocat vaga al Grup Renfe (aturada total el 10, aturades parcials el 12), que afecta Rodalies.`;
@@ -471,7 +509,7 @@ const COPY: Record<Locale, Copy> = {
       { label: "Qui hi està cridat", value: "Totes les persones treballadores, assalariades o per compte propi, del sector públic i del privat" },
     ],
     data: (c) =>
-      `Només hi posem el que publiquen els sindicats convocants, el BOE, el DOGC, el Departament d'Empresa i Treball i els operadors de transport, i no el que avança la premsa.${c.state === "published" ? "" : " Quan surtin els serveis mínims, els afegirem a la taula, sector per sector, amb l'enllaç a l'ordre."}`,
+      `Només hi posem el que publiquen els sindicats convocants, el BOE, el DOGC, el Departament d'Empresa i Treball i els operadors de transport, i no el que avança la premsa.${c.state === "published" ? "" : c.state === "partial" ? " Els serveis mínims que encara falten, els afegirem a la taula quan surtin, amb l'enllaç a la font." : " Quan surtin els serveis mínims, els afegirem a la taula, sector per sector, amb l'enllaç a l'ordre."}`,
     msHeading: "Serveis mínims de l'11 de novembre: què funciona",
     msIntro: (c) =>
       c.state === "pending"
@@ -672,7 +710,7 @@ const COPY: Record<Locale, Copy> = {
           : `**El ${c.day} hay huelga general de 24 horas en toda España, también en Cataluña:** empieza a las 0 h y ${who}.`;
       const ms = {
         pending: ` **Los servicios mínimos de Rodalies, metro, autobuses, colegios y sanidad aún no se han publicado** (consultado el ${c.checked}): la Generalitat los fija por orden en el DOGC pocos días antes, y los pondremos aquí, sector por sector, en cuanto salgan.`,
-        partial: ` **Una parte de los servicios mínimos ya se ha publicado** y el resto aún no (consultado el ${c.checked}): la tabla de más abajo dice cuáles.`,
+        partial: ` **Servicios mínimos de la Generalitat ya publicados:** Rodalies y regionales, metro, autobuses, FGC y tranvía funcionan al 25% de 6.30 a 9.30 h y de 16.30 a 21 h; escuelas y sanidad, en la tabla de más abajo. Los trenes de alta velocidad y larga distancia y los vuelos aún no los tienen (consultado el ${c.checked}).`,
         published: " **Los servicios mínimos ya se han publicado:** los tienes en la tabla de más abajo, sector por sector, con el enlace a la orden o al aviso oficial.",
       }[c.state];
       return `${first}${ms} **Ojo también al 10 y al 12 de noviembre:** el sindicato de maquinistas SEMAF ha convocado huelga en el Grupo Renfe (paro total el 10, paros parciales el 12), que afecta a Rodalies.`;
@@ -696,7 +734,7 @@ const COPY: Record<Locale, Copy> = {
       { label: "A quién llama", value: "A todas las personas trabajadoras, asalariadas o por cuenta propia, del sector público y del privado" },
     ],
     data: (c) =>
-      `Solo ponemos lo que publican los sindicatos convocantes, el BOE, el DOGC, el Departament d'Empresa i Treball y los operadores de transporte, no lo que adelanta la prensa.${c.state === "published" ? "" : " Cuando salgan los servicios mínimos, los añadiremos a la tabla, sector por sector, con el enlace a la orden."}`,
+      `Solo ponemos lo que publican los sindicatos convocantes, el BOE, el DOGC, el Departament d'Empresa i Treball y los operadores de transporte, no lo que adelanta la prensa.${c.state === "published" ? "" : c.state === "partial" ? " Los servicios mínimos que aún faltan, los añadiremos a la tabla cuando salgan, con el enlace a la fuente." : " Cuando salgan los servicios mínimos, los añadiremos a la tabla, sector por sector, con el enlace a la orden."}`,
     msHeading: "Servicios mínimos del 11 de noviembre: qué funciona",
     msIntro: (c) =>
       c.state === "pending"
@@ -897,7 +935,7 @@ const COPY: Record<Locale, Copy> = {
           : `**On ${c.day} there is a 24-hour general strike across Spain, Barcelona and Catalonia included:** it starts at midnight (00:00); ${who}.`;
       const ms = {
         pending: ` **Minimum services for Rodalies, the metro, buses, schools and health have not been published yet** (checked on ${c.checked}): the Generalitat sets them in an order in the DOGC, its official gazette, a few days before, and we will add them here, sector by sector, as soon as they are out.`,
-        partial: ` **Some minimum services have been published and others not yet** (checked on ${c.checked}): the table below shows which.`,
+        partial: ` **The Generalitat's minimum services are out:** Rodalies and regional trains, metro, buses, FGC and tram run at 25% from 06:30 to 09:30 and from 16:30 to 21:00; schools and health are in the table below. High-speed and long-distance trains and flights have none yet (checked on ${c.checked}).`,
         published: " **Minimum services have been published:** they are in the table below, sector by sector, with a link to the official order or notice.",
       }[c.state];
       return `${first}${ms} **Watch 10 and 12 November too:** the train drivers' union SEMAF has called strikes at the Renfe Group (a full stoppage on the 10th, partial stoppages on the 12th), which affect Rodalies.`;
@@ -921,7 +959,7 @@ const COPY: Record<Locale, Copy> = {
       { label: "Who is called out", value: "All workers, employed or self-employed, public and private" },
     ],
     data: (c) =>
-      `We only print what the unions calling the strike, the BOE and DOGC gazettes, the Generalitat's Department of Business and Labour and the transport operators publish, never what the press reports ahead of them.${c.state === "published" ? "" : " When minimum services come out, we will add them to the table, sector by sector, with a link to the order."}`,
+      `We only print what the unions calling the strike, the BOE and DOGC gazettes, the Generalitat's Department of Business and Labour and the transport operators publish, never what the press reports ahead of them.${c.state === "published" ? "" : c.state === "partial" ? " The minimum services still missing will be added to the table when they are out, with a link to the source." : " When minimum services come out, we will add them to the table, sector by sector, with a link to the order."}`,
     msHeading: "Minimum services on 11 November: what runs",
     msIntro: (c) =>
       c.state === "pending"
@@ -1152,7 +1190,7 @@ export function buildStrike11nBody(
   // Minimum services: the answer most readers came for, first.
   blocks.push(heading(2, t.msHeading, "serveis-minims"));
   blocks.push(...paras(...t.msIntro(c)));
-  if (c.state !== "published") blocks.push(callout("info", t.willListTitle, t.willList));
+  if (c.state === "pending") blocks.push(callout("info", t.willListTitle, t.willList));
   blocks.push(
     table(
       t.tableCaption,
@@ -1182,7 +1220,8 @@ export function buildStrike11nBody(
   blocks.push(...paras(...t.schools(c)));
   // The 2024 reference is dropped once this year's figures are in.
   const health = t.health(c);
-  blocks.push(...h2(t.healthHeading, ...(slot(slots, "health").status === "published" ? health.slice(0, 1) : health)));
+  // Published: the order replaces the 2024 reference (second paragraph); the doctors' own strike line stays.
+  blocks.push(...h2(t.healthHeading, ...(slot(slots, "health").status === "published" ? [...health.slice(0, 1), ...health.slice(2)] : health)));
 
   blocks.push(...h2(t.callHeading, t.callIntro));
   blocks.push(list(...t.demands));

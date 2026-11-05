@@ -187,7 +187,7 @@ import {
  * against this date, never against the clock: the HTML must be the same
  * whichever day it is rendered.
  */
-export const STRIKES_AS_OF = "2026-11-03";
+export const STRIKES_AS_OF = "2026-11-05";
 
 /**
  * The day the facts on the page were last read on the sources. Bringing the
@@ -271,6 +271,11 @@ export const STRIKE_URLS = {
   semaf52: "https://www.semaf.org/informaciones/cumplimiento-inmediato-compromisos-seguridad/",
   // Ordres EMT/210/2026 and EMT/209/2026 (DOGC núm. 9780, 26 Oct 2026), by their ELI.
   ordreRenfe29: "https://portaljuridic.gencat.cat/eli/es-ct/o/2026/10/22/emt210/dof/cat/html",
+  // 5 Nov 2026: the two orders signed that day, on e-Tauler until the DOGC prints them with a number (then swap to the ELI link).
+  ordreRenfe1012: "https://tauler.seu-e.cat/detall?idEns=1&idEdicte=657097",
+  ordre11n: "https://tauler.seu-e.cat/detall?idEns=1&idEdicte=657102",
+  semafCuerpo: "https://www.semaf.org/informaciones/encuentro-con-el-ministro-carlos-cuerpo-ni-una-tragedia-mas/",
+  semafOuigo: "https://www.semaf.org/informaciones/ouigo-firma-todas-reivindicaciones/",
   ordreMetges: "https://portaljuridic.gencat.cat/eli/es-ct/o/2026/10/22/emt209/dof/cat/html",
   ministryRail: "https://www.transportes.gob.es/transporte-terrestre/resoluciones-de-servicios-minimos-ferroviarios",
   ouigoResolution: "https://cdn.transportes.gob.es/portal-web-transportes/transporte-terrestre/servicios-minimos/resolucion-20261027-ssmm_ouigo.pdf",
@@ -398,21 +403,21 @@ export const STRIKES: Strike[] = [
       ca: [
         "**Convocatòria:** el sindicat Metges de Catalunya (MC), que la va registrar el 15 de setembre de 2026. Els sindicats mèdics de tot l'Estat havien acordat començar una vaga indefinida el 28 d'octubre, i MC la fa a Catalunya.",
         "**Des de quan:** des de les 8.00 h del dimecres 28 d'octubre de 2026, sense data de final. En paraules del secretari general de MC, Xavier Lleonart, «té data d'inici, però no de final».",
-        `**On és:** el 3 de novembre de 2026 la vaga continuava. Metges de Catalunya no havia anunciat cap acord amb el Departament de Salut ni cap data de final a ${link(U.metgesNews, "les seves notícies")}.`,
+        `**On és:** el 5 de novembre de 2026 la vaga continuava. Metges de Catalunya no havia anunciat cap acord amb el Departament de Salut ni cap data de final a ${link(U.metgesNews, "les seves notícies")}.`,
         "**Qui hi està cridat:** el personal facultatiu (metges i altres facultatius, també els residents en formació) dels hospitals, els CAP i la resta de centres de la xarxa sanitària pública SISCAT i de les entitats adscrites al CatSalut o al Departament de Salut.",
         `**Per què:** MC reclama un conveni propi per als metges i que el Departament de Salut negociï amb el sindicat; diu que només hi ha «dues sortides possibles» per a la vaga, una negociació «real i efectiva» amb MC o unes eleccions, segons ${link(U.metgesStrike, "el seu comunicat del 28 d'octubre")}.`,
       ],
       es: [
         "**Convocatoria:** el sindicato Metges de Catalunya (MC), que la registró el 15 de septiembre de 2026. Los sindicatos médicos de toda España habían acordado empezar una huelga indefinida el 28 de octubre, y MC la hace en Cataluña.",
         "**Desde cuándo:** desde las 8.00 h del miércoles 28 de octubre de 2026, sin fecha de final. En palabras del secretario general de MC, Xavier Lleonart, «té data d'inici, però no de final» (tiene fecha de inicio, pero no de final).",
-        `**Cómo está:** el 3 de noviembre de 2026 la huelga seguía. Metges de Catalunya no había anunciado ningún acuerdo con el Departament de Salut ni ninguna fecha de final en ${link(U.metgesNews, "sus noticias")}.`,
+        `**Cómo está:** el 5 de noviembre de 2026 la huelga seguía. Metges de Catalunya no había anunciado ningún acuerdo con el Departament de Salut ni ninguna fecha de final en ${link(U.metgesNews, "sus noticias")}.`,
         "**A quién llama:** al personal facultativo (médicos y otros facultativos, también los residentes en formación) de los hospitales, los CAP y el resto de centros de la red sanitaria pública SISCAT y de las entidades adscritas al CatSalut o al Departament de Salut.",
         `**Por qué:** MC reclama un convenio propio para los médicos y que el Departament de Salut negocie con el sindicato; dice que solo hay dos salidas posibles para la huelga, una negociación real y efectiva con MC o unas elecciones, según ${link(U.metgesStrike, "su comunicado del 28 de octubre")}.`,
       ],
       en: [
         "**Called by:** the doctors' union Metges de Catalunya (MC), which registered it on 15 September 2026. Doctors' unions across Spain had agreed to start an indefinite strike on 28 October, and MC is holding it in Catalonia.",
         "**Since when:** 08:00 on Wednesday 28 October 2026, with no end date. In the words of MC's general secretary, Xavier Lleonart, it \"té data d'inici, però no de final\" (has a start date but no end date).",
-        `**Where it stands:** on 3 November 2026 the strike was still on. Metges de Catalunya had announced no agreement with the Health Department and no end date in ${link(U.metgesNews, "its news")}.`,
+        `**Where it stands:** on 5 November 2026 the strike was still on. Metges de Catalunya had announced no agreement with the Health Department and no end date in ${link(U.metgesNews, "its news")}.`,
         "**Who is called out:** doctors and other medical graduates (residents in training included) at hospitals, primary care centres (CAP) and the other centres of Catalonia's public health network SISCAT and the bodies attached to CatSalut or the Health Department.",
         `**Why:** MC wants a collective agreement of doctors' own and for the Health Department to negotiate with the union; it says there are only two ways out of the strike, real and effective negotiation with MC or elections, according to ${link(U.metgesStrike, "its statement of 28 October")}.`,
       ],
@@ -475,17 +480,17 @@ export const STRIKES: Strike[] = [
       ca: [
         "**Convocatòria:** el sindicat de maquinistes SEMAF, per a tots els maquinistes d'Ouigo, l'operador d'alta velocitat que uneix Barcelona amb Madrid.",
         "**Dies i hores:** tot el dia el divendres 30 d'octubre i el dilluns 2 de novembre de 2026, de les 00.00 a les 23.59 h, segons la resolució de serveis mínims del Ministeri de Transports.",
-        "**I després:** la mateixa convocatòria inclou aturades parcials el divendres 6 i el dilluns 9 de novembre i el divendres 4 i el dimarts 8 de desembre de 2026.",
+        `**Aturades desconvocades:** SEMAF va desconvocar el 5 de novembre de 2026 les aturades parcials d'Ouigo de la mateixa convocatòria (6 i 9 de novembre, 4 i 8 de desembre), quan la direcció de l'empresa va signar l'acord amb les seves reivindicacions, segons ${link(U.semafOuigo, "el comunicat de SEMAF")}.`,
       ],
       es: [
         "**Convocatoria:** el sindicato de maquinistas SEMAF, para todos los maquinistas de Ouigo, el operador de alta velocidad que une Barcelona con Madrid.",
         "**Días y horas:** todo el día el viernes 30 de octubre y el lunes 2 de noviembre de 2026, de 00.00 a 23.59 h, según la resolución de servicios mínimos del Ministerio de Transportes.",
-        "**Y después:** la misma convocatoria incluye paros parciales el viernes 6 y el lunes 9 de noviembre y el viernes 4 y el martes 8 de diciembre de 2026.",
+        `**Paros desconvocados:** SEMAF desconvocó el 5 de noviembre de 2026 los paros parciales de Ouigo de la misma convocatoria (6 y 9 de noviembre, 4 y 8 de diciembre), cuando la dirección de la empresa firmó el acuerdo con sus reivindicaciones, según ${link(U.semafOuigo, "el comunicado de SEMAF")}.`,
       ],
       en: [
         "**Called by:** the train drivers' union SEMAF, for all drivers at Ouigo, the high-speed operator that links Barcelona and Madrid.",
         "**Days and hours:** all day on Friday 30 October and Monday 2 November 2026, 00:00 to 23:59, according to the Ministry of Transport's minimum-services resolution.",
-        "**And then:** the same call includes partial stoppages on Friday 6 and Monday 9 November and on Friday 4 and Tuesday 8 December 2026.",
+        `**Stoppages called off:** SEMAF called off Ouigo's partial stoppages in the same call (6 and 9 November, 4 and 8 December) on 5 November 2026, when the company's management signed the agreement meeting its demands, according to ${link(U.semafOuigo, "SEMAF's notice")}.`,
       ],
     },
     minimumServices: {
@@ -518,64 +523,8 @@ export const STRIKES: Strike[] = [
     sources: [
       { name: OUIGO_RESOLUTION_NAME, url: U.ouigoResolution, publisher: "Ministerio de Transportes y Movilidad Sostenible" },
       { name: "Trenes afectados por huelga de maquinistas", url: U.ouigoStrike, publisher: "OUIGO España" },
+      { name: "Ouigo firma todas las reivindicaciones tras dos días sin circular ningún tren (05/11/2026)", url: U.semafOuigo, publisher: "SEMAF" },
     ],
-  },
-  {
-    id: "vaga-ouigo-2026-11-06",
-    dates: ["2026-11-06", "2026-11-09", "2026-12-04", "2026-12-08"],
-    scope: "rail",
-    affects: ["longDistance"],
-    title: {
-      ca: "aturades parcials de maquinistes d'Ouigo (SEMAF)",
-      es: "paros parciales de maquinistas de Ouigo (SEMAF)",
-      en: "Ouigo train drivers' partial stoppages (SEMAF)",
-    },
-    short: {
-      ca: "aturades parcials de maquinistes d'Ouigo, de 6.00 a 12.00 h i de 18.00 a 23.59 h",
-      es: "paros parciales de maquinistas de Ouigo, de 6.00 a 12.00 h y de 18.00 a 23.59 h",
-      en: "Ouigo train drivers' partial stoppages, 06:00 to 12:00 and 18:00 to 23:59",
-    },
-    label: {
-      ca: "aturades d'Ouigo fins al 8 de desembre",
-      es: "paros de Ouigo hasta el 8 de diciembre",
-      en: "Ouigo stoppages to 8 December",
-    },
-    facts: {
-      ca: [
-        "**Convocatòria:** el sindicat de maquinistes SEMAF, per a tots els maquinistes d'Ouigo, dins la mateixa convocatòria que les vagues de tot el dia del 30 d'octubre i el 2 de novembre.",
-        "**Hores:** de les 6.00 a les 12.00 h i de les 18.00 a les 23.59 h de cada dia d'aturada, segons la resolució de serveis mínims del Ministeri de Transports del 27 d'octubre de 2026.",
-        "**Qui ho nota:** els viatgers d'Ouigo. Rodalies, els altres trens de Renfe, el metro i FGC no formen part d'aquesta vaga.",
-      ],
-      es: [
-        "**Convocatoria:** el sindicato de maquinistas SEMAF, para todos los maquinistas de Ouigo, dentro de la misma convocatoria que las huelgas de todo el día del 30 de octubre y el 2 de noviembre.",
-        "**Horas:** de 6.00 a 12.00 h y de 18.00 a 23.59 h de cada día de paro, según la resolución de servicios mínimos del Ministerio de Transportes del 27 de octubre de 2026.",
-        "**A quién afecta:** a los viajeros de Ouigo. Rodalies, los demás trenes de Renfe, el metro y FGC no forman parte de esta huelga.",
-      ],
-      en: [
-        "**Called by:** the train drivers' union SEMAF, for all drivers at Ouigo, in the same call as the all-day strikes of 30 October and 2 November.",
-        "**Hours:** 06:00 to 12:00 and 18:00 to 23:59 on each day, according to the Ministry of Transport's minimum-services resolution of 27 October 2026.",
-        "**Who notices:** Ouigo passengers. Rodalies, Renfe's other trains, the metro and FGC are not part of this strike.",
-      ],
-    },
-    minimumServices: {
-      status: "published",
-      msShort: {
-        ca: "Serveis mínims del Ministeri de Transports: el 72,41% dels trens",
-        es: "Servicios mínimos del Ministerio de Transportes: el 72,41% de los trenes",
-        en: "Minimum service set by the Ministry of Transport: 72.41% of trains",
-      },
-      text: {
-        ca: `Els fixa ${link(U.ouigoResolution, "la resolució del Ministeri de Transports del 27 d'octubre de 2026")}, la mateixa de les vagues de tot el dia: el **72,41% de les circulacions** previstes durant els dies i les hores de la vaga, amb la llista de trens a l'annex.`,
-        es: `Los fija ${link(U.ouigoResolution, "la resolución del Ministerio de Transportes del 27 de octubre de 2026")}, la misma de las huelgas de todo el día: el **72,41% de las circulaciones** previstas durante los días y las horas de la huelga, con la lista de trenes en el anexo.`,
-        en: `They are set by ${link(U.ouigoResolution, "the Ministry of Transport's resolution of 27 October 2026")}, the same one as for the all-day strikes: **72.41% of scheduled trains** on the days and at the hours of the strike, with the list of trains in its annex.`,
-      },
-    },
-    advice: {
-      ca: [`Si tens un tren d'Ouigo aquests dies entre les 6.00 i les 12.00 h o a partir de les 18.00 h, comprova'l a ${link(U.ouigo, "la web d'Ouigo")} abans de sortir.`],
-      es: [`Si tienes un tren de Ouigo esos días entre las 6.00 y las 12.00 h o a partir de las 18.00 h, compruébalo en ${link(U.ouigo, "la web de Ouigo")} antes de salir.`],
-      en: [`If you have an Ouigo train on those days between 06:00 and 12:00 or from 18:00, check it on ${link(U.ouigo, "Ouigo's website")} before you set off.`],
-    },
-    sources: [{ name: OUIGO_RESOLUTION_NAME, url: U.ouigoResolution, publisher: "Ministerio de Transportes y Movilidad Sostenible" }],
   },
   {
     id: "vaga-renfe-2026-11-10",
@@ -600,54 +549,61 @@ export const STRIKES: Strike[] = [
     facts: {
       ca: [
         `**Convocatòria:** el sindicat de maquinistes SEMAF, que la va anunciar el 29 d'octubre de 2026, el dia de la vaga anterior, en ${link(U.semaf1012, "el seu comunicat núm. 2026-51")}, i que el 2 de novembre la mantenia en ${link(U.semaf52, "el comunicat núm. 2026-52")}.`,
-        "**Dies:** el dimarts 10 de novembre, «paro total» (aturada total); el dijous 12 de novembre, «paros parciales a lo largo de la jornada» (aturades parcials al llarg del dia). SEMAF no n'ha publicat les hores.",
+        `**Dies:** el dimarts 10 de novembre, «paro total» (aturada total), de 0.01 a 23.59 h; el dijous 12 de novembre, «paros parciales a lo largo de la jornada» (aturades parcials), de 6.20 a 9.20 h, de 14.20 a 17.20 h i de 21.20 a 23.20 h, segons ${link(U.ordreRenfe1012, "l'ordre de serveis mínims del 5 de novembre")}.`,
+        `**També ALFERRO:** aquest sindicat ha convocat vaga els mateixos dos dies, de 0.00 a 24.00 h, per a tot el personal de les empreses del Grup Renfe (la mateixa ordre la recull).`,
+        `**Negociació:** SEMAF es va reunir el 5 de novembre amb el ministre de Transports, Carlos Cuerpo, sense acord, i el Ministeri l'ha tornat a convocar el divendres 6, segons ${link(U.semafCuerpo, "el comunicat de SEMAF")}.`,
         "**Qui hi està cridat:** el personal de conducció del Grup Renfe, segons SEMAF. El metro, els autobusos, el tramvia i FGC no formen part de la convocatòria.",
         "**Entre els dos dies**, el dimecres 11 de novembre, hi ha la vaga general.",
       ],
       es: [
         `**Convocatoria:** el sindicato de maquinistas SEMAF, que la anunció el 29 de octubre de 2026, el día de la huelga anterior, en ${link(U.semaf1012, "su comunicado n.º 2026-51")}, y que el 2 de noviembre la mantenía en ${link(U.semaf52, "el comunicado n.º 2026-52")}.`,
-        "**Días:** el martes 10 de noviembre, «paro total»; el jueves 12 de noviembre, «paros parciales a lo largo de la jornada». SEMAF no ha publicado las horas.",
+        `**Días:** el martes 10 de noviembre, «paro total», de 0.01 a 23.59 h; el jueves 12 de noviembre, «paros parciales a lo largo de la jornada», de 6.20 a 9.20 h, de 14.20 a 17.20 h y de 21.20 a 23.20 h, según ${link(U.ordreRenfe1012, "la orden de servicios mínimos del 5 de noviembre")}.`,
+        `**También ALFERRO:** este sindicato ha convocado huelga los mismos dos días, de 0.00 a 24.00 h, para todo el personal de las empresas del Grupo Renfe (la misma orden la recoge).`,
+        `**Negociación:** SEMAF se reunió el 5 de noviembre con el ministro de Transportes, Carlos Cuerpo, sin acuerdo, y el Ministerio lo ha vuelto a convocar el viernes 6, según ${link(U.semafCuerpo, "el comunicado de SEMAF")}.`,
         "**A quién llama:** al personal de conducción del Grupo Renfe, según SEMAF. El metro, los autobuses, el tranvía y FGC no forman parte de la convocatoria.",
         "**Entre los dos días**, el miércoles 11 de noviembre, está la huelga general.",
       ],
       en: [
         `**Called by:** the train drivers' union SEMAF, which announced it on 29 October 2026, the day of its previous strike, in ${link(U.semaf1012, "its notice no. 2026-51")}, and was still holding to it on 2 November in ${link(U.semaf52, "notice no. 2026-52")}.`,
-        "**Days:** Tuesday 10 November, a \"paro total\" (full stoppage); Thursday 12 November, \"paros parciales a lo largo de la jornada\" (partial stoppages during the day). SEMAF has not published the hours.",
+        `**Days:** Tuesday 10 November, a "paro total" (full stoppage), 00:01 to 23:59; Thursday 12 November, "paros parciales a lo largo de la jornada" (partial stoppages), 06:20 to 09:20, 14:20 to 17:20 and 21:20 to 23:20, according to ${link(U.ordreRenfe1012, "the minimum-services order of 5 November")}.`,
+        `**ALFERRO too:** this union has called a strike on the same two days, 00:00 to 24:00, for all staff at Renfe Group companies (the same order covers it).`,
+        `**Talks:** SEMAF met the Minister of Transport, Carlos Cuerpo, on 5 November without agreement, and the Ministry has called it back for Friday 6, according to ${link(U.semafCuerpo, "SEMAF's notice")}.`,
         "**Who is called out:** Renfe Group drivers, according to SEMAF. The metro, buses, tram and FGC are not part of it.",
         "**In between**, on Wednesday 11 November, is the general strike.",
       ],
     },
     minimumServices: {
-      status: "pending",
+      status: "published",
       msShort: {
-        ca: "Serveis mínims encara no publicats",
-        es: "Servicios mínimos aún no publicados",
-        en: "Minimum services not published yet",
+        ca: "Rodalies: 66% del servei en hora punta i 33% la resta del dia",
+        es: "Rodalies: 66% del servicio en hora punta y 33% el resto del día",
+        en: "Rodalies: 66% of service at peak times, 33% the rest of the day",
       },
       text: {
-        ca: `**Encara no s'han publicat** (consultat el 3 de novembre de 2026 a la ${link(U.treballMs, "llista de vagues amb serveis mínims del Departament d'Empresa i Treball")}, al DOGC, a la ${link(U.ministryRail, "llista de resolucions del Ministeri de Transports")} i a Rodalies). Per a Rodalies i els regionals els fixa el Departament d'Empresa i Treball per ordre: per a la vaga del 29 d'octubre, l'ordre es va signar el 22 d'octubre, una setmana abans, i Rodalies va publicar l'horari de cada línia. Per als altres trens de Renfe (alta velocitat, llarga distància i els regionals que surten de Catalunya), els fixa el Ministeri de Transports per resolució: per a la vaga del 29 d'octubre, la va signar el 23 d'octubre, sis dies abans. Els afegirem aquí quan surtin.`,
-        es: `**Aún no se han publicado** (consultado el 3 de noviembre de 2026 en la ${link(U.treballMs, "lista de huelgas con servicios mínimos del Departament d'Empresa i Treball")}, en el DOGC, en la ${link(U.ministryRail, "lista de resoluciones del Ministerio de Transportes")} y en Rodalies). Para Rodalies y los regionales los fija el Departament d'Empresa i Treball por orden: para la huelga del 29 de octubre, la orden se firmó el 22 de octubre, una semana antes, y Rodalies publicó el horario de cada línea. Para los demás trenes de Renfe (alta velocidad, larga distancia y los regionales que salen de Cataluña), los fija el Ministerio de Transportes por resolución: para la huelga del 29 de octubre, la firmó el 23 de octubre, seis días antes. Los añadiremos aquí en cuanto salgan.`,
-        en: `**Not published yet** (checked on 3 November 2026 on the ${link(U.treballMs, "Department of Business and Labour's list of strikes with minimum services")}, in the DOGC, on the ${link(U.ministryRail, "Ministry of Transport's list of rail resolutions")} and at Rodalies). For Rodalies and regional trains, the Department of Business and Labour sets them by order: for the 29 October strike the order was signed on 22 October, a week before, and Rodalies then published a timetable for each line. For Renfe's other trains (high-speed, long-distance and regional trains that leave Catalonia), Spain's Ministry of Transport sets them by resolution: for the 29 October strike it signed it on 23 October, six days before. We will add them here as soon as they are out.`,
+        ca: `A **Rodalies de Catalunya i els regionals**, ${link(U.ordreRenfe1012, "l'ordre del Departament d'Empresa i Treball del 5 de novembre de 2026")} fixa, els dos dies, el **66% del servei habitual en hora punta** (de 6.00 a 9.30 h i de 17.00 a 20.30 h) i el **33% la resta del dia**. Rodalies sol publicar l'horari de serveis mínims de cada línia uns dies abans. Per als altres trens de Renfe (alta velocitat, llarga distància i els regionals que surten de Catalunya), els serveis mínims els fixa el Ministeri de Transports per resolució, que encara no ha publicat (consultat el 5 de novembre de 2026 a la ${link(U.ministryRail, "seva llista de resolucions")}).`,
+        es: `En **Rodalies de Catalunya y los regionales**, ${link(U.ordreRenfe1012, "la orden del Departament d'Empresa i Treball del 5 de noviembre de 2026")} fija, los dos días, el **66% del servicio habitual en hora punta** (de 6.00 a 9.30 h y de 17.00 a 20.30 h) y el **33% el resto del día**. Rodalies suele publicar el horario de servicios mínimos de cada línea unos días antes. Para los demás trenes de Renfe (alta velocidad, larga distancia y los regionales que salen de Cataluña), los servicios mínimos los fija el Ministerio de Transportes por resolución, que aún no ha publicado (consultado el 5 de noviembre de 2026 en su ${link(U.ministryRail, "lista de resoluciones")}).`,
+        en: `On **Rodalies de Catalunya and regional trains**, ${link(U.ordreRenfe1012, "the Department of Business and Labour's order of 5 November 2026")} sets, on both days, **66% of the usual service at peak times** (06:00 to 09:30 and 17:00 to 20:30) and **33% for the rest of the day**. Rodalies usually publishes each line's minimum-service timetable a few days before. For Renfe's other trains (high-speed, long-distance and regional trains that leave Catalonia), the Ministry of Transport sets them by resolution, which it has not published yet (checked on 5 November 2026 on its ${link(U.ministryRail, "list of resolutions")}).`,
       },
     },
     advice: {
       ca: [
         `Si has d'agafar Rodalies o un tren de Renfe aquests dies, mira l'horari de serveis mínims de la teva línia quan es publiqui i, el mateix dia, ${link(U.rodaliesStatus, "l'estat del servei")}.`,
-        "El dia 12 són aturades parcials i SEMAF no n'ha dit les hores: compta que el servei pot canviar al llarg del dia.",
+        "El dia 12 la vaga de SEMAF és a trams (6.20-9.20, 14.20-17.20 i 21.20-23.20 h), però la d'ALFERRO dura tot el dia: compta que el servei pot canviar al llarg de la jornada.",
       ],
       es: [
         `Si tienes que coger Rodalies o un tren de Renfe esos días, mira el horario de servicios mínimos de tu línea cuando se publique y, el mismo día, ${link(U.rodaliesStatus, "el estado del servicio")}.`,
-        "El día 12 son paros parciales y SEMAF no ha dicho las horas: cuenta con que el servicio puede cambiar a lo largo del día.",
+        "El día 12 la huelga de SEMAF es por tramos (6.20-9.20, 14.20-17.20 y 21.20-23.20 h), pero la de ALFERRO dura todo el día: cuenta con que el servicio puede cambiar a lo largo de la jornada.",
       ],
       en: [
         `If you need Rodalies or a Renfe train on those days, check your line's minimum-service timetable once it is out and, on the day, ${link(U.rodaliesStatus, "the live service status")}.`,
-        "The 12th brings partial stoppages and SEMAF has not given the hours: expect service to change during the day.",
+        "On the 12th SEMAF strikes in slots (06:20-09:20, 14:20-17:20 and 21:20-23:20), but ALFERRO's strike lasts all day: expect service to change during the day.",
       ],
     },
     sources: [
       { name: "SEMAF continúa convocando huelgas los días 10 y 12 de noviembre en el Grupo Renfe (nº 2026-51, 29/10/2026)", url: U.semaf1012, publisher: "SEMAF" },
       { name: "Por el cumplimiento inmediato de los compromisos en seguridad ferroviaria (nº 2026-52, 02/11/2026)", url: U.semaf52, publisher: "SEMAF" },
-      { name: "Informació de vagues amb serveis mínims (e-Tauler)", url: U.treballMs, publisher: "Departament d'Empresa i Treball" },
+      { name: "Encuentro con el ministro Carlos Cuerpo: Ni una tragedia más (05/11/2026)", url: U.semafCuerpo, publisher: "SEMAF" },
+      { name: "Ordre EMT/ /2026, de 5 de novembre, per la qual es garanteix el servei essencial de transport de viatgers per ferrocarril a Catalunya (serveis de rodalies i regionals) que presta l'empresa Grupo Renfe (e-Tauler, 5/11/2026; al DOGC quan es publiqui)", url: U.treballMs, publisher: "Departament d'Empresa i Treball" },
       { name: "Resoluciones de servicios mínimos ferroviarios", url: U.ministryRail, publisher: "Ministerio de Transportes y Movilidad Sostenible" },
     ],
     guide: "strikeRenfe",
@@ -698,33 +654,34 @@ export const STRIKES: Strike[] = [
       ],
     },
     minimumServices: {
-      status: "pending",
+      status: "published",
       msShort: {
-        ca: "Serveis mínims encara no publicats",
-        es: "Servicios mínimos aún no publicados",
-        en: "Minimum services not published yet",
+        ca: "Serveis mínims publicats: transport públic al 25% de 6.30 a 9.30 h i de 16.30 a 21 h",
+        es: "Servicios mínimos publicados: transporte público al 25% de 6.30 a 9.30 h y de 16.30 a 21 h",
+        en: "Minimum services published: public transport at 25% from 06:30 to 09:30 and 16:30 to 21:00",
       },
       text: {
-        ca: `**Encara no s'han publicat** (consultat el 3 de novembre de 2026). Els dels serveis que depenen de la Generalitat (Rodalies i regionals, metro, autobusos, tramvia, FGC, escoles, sanitat pública i la mateixa Administració) els fixarà el Departament d'Empresa i Treball amb una ordre que es publica al ${link(U.dogc, "DOGC")}; els dels serveis de l'Estat, com els trens d'alta velocitat i de llarga distància, el Govern espanyol. A les vagues generals del 2024, l'ordre es va signar dos o tres dies abans de la vaga. Els afegirem aquí quan surtin.`,
-        es: `**Aún no se han publicado** (consultado el 3 de noviembre de 2026). Los de los servicios que dependen de la Generalitat (Rodalies y regionales, metro, autobuses, tranvía, FGC, escuelas, sanidad pública y la propia Administración) los fijará el Departament d'Empresa i Treball con una orden que se publica en el ${link(U.dogc, "DOGC")}; los de los servicios del Estado, como los trenes de alta velocidad y de larga distancia, el Gobierno de España. En las huelgas generales de 2024, la orden se firmó dos o tres días antes de la huelga. Los añadiremos aquí en cuanto salgan.`,
-        en: `**Not published yet** (checked on 3 November 2026). For services that answer to the Generalitat (Rodalies and regional trains, metro, buses, tram, FGC, schools, public healthcare and the Catalan administration itself), the Department of Business and Labour will set them in an order published in the ${link(U.dogc, "DOGC")}, the Catalan official gazette; for State services such as high-speed and long-distance trains, the Spanish government sets them. In the 2024 general strikes the order was signed two or three days before the strike. We will add them here as soon as they are out.`,
+        ca: `${link(U.ordre11n, "L'ordre del Departament d'Empresa i Treball del 5 de novembre de 2026")} fixa per a Catalunya: **Rodalies i regionals, metro, autobusos de TMB, FGC, tramvia i la resta de transport urbà i interurbà**, el **25% del servei habitual de 6.30 a 9.30 h i de 16.30 a 21 h** (fora d'aquestes franges l'ordre no hi garanteix servei); l'autobús entre Barcelona i l'aeroport, el 50%; el transport de persones amb discapacitat i el transport escolar sense alternativa, el servei habitual. **Escoles:** una persona de l'equip directiu per centre i, a infantil i primària, un docent per cada 6 grups (a les llars d'infants, el 33% de la plantilla). **Sanitat:** urgències i unitats especials amb normalitat, atenció primària amb el 25% de la plantilla i farmàcies de guàrdia obertes. Els trens d'alta velocitat i de llarga distància i els aeroports depenen del Govern espanyol, que encara no ha publicat els seus serveis mínims (consultat el 5 de novembre de 2026).`,
+        es: `${link(U.ordre11n, "La orden del Departament d'Empresa i Treball del 5 de noviembre de 2026")} fija para Cataluña: **Rodalies y regionales, metro, autobuses de TMB, FGC, tranvía y el resto del transporte urbano e interurbano**, el **25% del servicio habitual de 6.30 a 9.30 h y de 16.30 a 21 h** (fuera de esas franjas la orden no garantiza servicio); el autobús entre Barcelona y el aeropuerto, el 50%; el transporte de personas con discapacidad y el transporte escolar sin alternativa, el servicio habitual. **Escuelas:** una persona del equipo directivo por centro y, en infantil y primaria, un docente por cada 6 grupos (en las guarderías, el 33% de la plantilla). **Sanidad:** urgencias y unidades especiales con normalidad, atención primaria con el 25% de la plantilla y farmacias de guardia abiertas. Los trenes de alta velocidad y de larga distancia y los aeropuertos dependen del Gobierno de España, que aún no ha publicado sus servicios mínimos (consultado el 5 de noviembre de 2026).`,
+        en: `${link(U.ordre11n, "The Department of Business and Labour's order of 5 November 2026")} sets for Catalonia: **Rodalies and regional trains, metro, TMB buses, FGC, tram and all other urban and interurban transport** run **25% of the usual service from 06:30 to 09:30 and from 16:30 to 21:00** (outside those slots the order guarantees no service); the bus between Barcelona and the airport, 50%; transport for people with disabilities and school transport with no alternative, the usual service. **Schools:** one member of the management team per school and, in infant and primary, one teacher for every 6 classes (nurseries, 33% of staff). **Healthcare:** A&E and special units as normal, primary care with 25% of staff, and duty pharmacies open. High-speed and long-distance trains and the airports answer to the Spanish government, which has not published its minimum services yet (checked on 5 November 2026).`,
       },
     },
     advice: {
       ca: [
-        "Torna a aquesta pàgina els dies abans de l'11: quan el Departament d'Empresa i Treball publiqui l'ordre, hi posarem el que fixi per a Rodalies, el metro, els autobusos, FGC, les escoles i la sanitat. Els horaris de cada operador, als webs de la taula de més avall.",
+        "Si t'has de moure l'11, fes-ho entre les 6.30 i les 9.30 h o entre les 16.30 i les 21 h, les franges amb serveis mínims (el 25% del servei): fora d'aquestes hores pot no haver-hi trens ni autobusos. Els horaris de cada operador, als webs de la taula de més avall.",
         "Famílies: USTEC·STEs crida tot el personal educatiu a la vaga. L'escola us dirà què pot garantir aquell dia.",
       ],
       es: [
-        "Vuelve a esta página los días antes del 11: cuando el Departament d'Empresa i Treball publique la orden, pondremos lo que fije para Rodalies, el metro, los autobuses, FGC, las escuelas y la sanidad. Los horarios de cada operador, en las webs de la tabla de más abajo.",
+        "Si tienes que moverte el 11, hazlo entre las 6.30 y las 9.30 h o entre las 16.30 y las 21 h, las franjas con servicios mínimos (el 25% del servicio): fuera de esas horas puede no haber trenes ni autobuses. Los horarios de cada operador, en las webs de la tabla de más abajo.",
         "Familias: USTEC·STEs llama a todo el personal educativo a la huelga. La escuela os dirá qué puede garantizar ese día.",
       ],
       en: [
-        "Come back in the days before the 11th: once the Department of Business and Labour publishes its order, we will add what it sets for Rodalies, the metro, buses, FGC, schools and healthcare. Each operator's timetables will be on the websites in the table below.",
+        "If you need to travel on the 11th, do it between 06:30 and 09:30 or between 16:30 and 21:00, the slots with minimum services (25% of service): outside those hours there may be no trains or buses. Each operator's timetables are on the websites in the table below.",
         "Parents: USTEC·STEs is calling all education staff out. Your school will tell you what it can provide that day.",
       ],
     },
     sources: [
+      { name: "Ordre EMT/ /2026, de 5 de novembre, per la qual es garanteixen els serveis essencials que s'han de prestar a Catalunya durant les convocatòries de vaga general previstes per al dia 11 de novembre de 2026 (e-Tauler, 5/11/2026; al DOGC quan es publiqui)", url: U.treballMs, publisher: "Departament d'Empresa i Treball" },
       { name: "Registro de la huelga general del 11N", url: U.ccooRegistered, publisher: "CCOO" },
       { name: "Convocamos huelga general para el 11 de noviembre", url: U.ccooCall, publisher: "CCOO" },
       { name: "Huelga general de 24 horas este 11 de noviembre", url: U.ugt, publisher: "UGT" },
@@ -779,9 +736,9 @@ export const STRIKES: Strike[] = [
         en: "Minimum services not published yet",
       },
       text: {
-        ca: `**Encara no s'han publicat** (consultat el 3 de novembre de 2026 a la ${link(U.treballMs, "llista de vagues amb serveis mínims del Departament d'Empresa i Treball")}). A les escoles i els instituts públics els fixa el Departament d'Empresa i Treball per ordre: per a la vaga a l'educació del 8 de setembre de 2026, l'ordre es va signar el 3 de setembre, cinc dies abans. Els afegirem aquí quan surtin.`,
-        es: `**Aún no se han publicado** (consultado el 3 de noviembre de 2026 en la ${link(U.treballMs, "lista de huelgas con servicios mínimos del Departament d'Empresa i Treball")}). En las escuelas e institutos públicos los fija el Departament d'Empresa i Treball por orden: para la huelga en la educación del 8 de septiembre de 2026, la orden se firmó el 3 de septiembre, cinco días antes. Los añadiremos aquí en cuanto salgan.`,
-        en: `**Not published yet** (checked on 3 November 2026 on the ${link(U.treballMs, "Department of Business and Labour's list of strikes with minimum services")}). For state schools, the Department of Business and Labour sets them by order: for the education strike of 8 September 2026, the order was signed on 3 September, five days before. We will add them here as soon as they are out.`,
+        ca: `**Encara no s'han publicat** (consultat el 5 de novembre de 2026 a la ${link(U.treballMs, "llista de vagues amb serveis mínims del Departament d'Empresa i Treball")}). A les escoles i els instituts públics els fixa el Departament d'Empresa i Treball per ordre: per a la vaga a l'educació del 8 de setembre de 2026, l'ordre es va signar el 3 de setembre, cinc dies abans. Els afegirem aquí quan surtin.`,
+        es: `**Aún no se han publicado** (consultado el 5 de noviembre de 2026 en la ${link(U.treballMs, "lista de huelgas con servicios mínimos del Departament d'Empresa i Treball")}). En las escuelas e institutos públicos los fija el Departament d'Empresa i Treball por orden: para la huelga en la educación del 8 de septiembre de 2026, la orden se firmó el 3 de septiembre, cinco días antes. Los añadiremos aquí en cuanto salgan.`,
+        en: `**Not published yet** (checked on 5 November 2026 on the ${link(U.treballMs, "Department of Business and Labour's list of strikes with minimum services")}). For state schools, the Department of Business and Labour sets them by order: for the education strike of 8 September 2026, the order was signed on 3 September, five days before. We will add them here as soon as they are out.`,
       },
     },
     advice: {

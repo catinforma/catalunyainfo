@@ -60,3 +60,11 @@ Newest first. Format: date · decision · why (evidence) · how it is measured �
 - Media accreditation for the 29N results repository: request drafted for the owner to send (research_notes/x10/acreditacio-29n-email.md); the official deadline (28 Oct) has passed. datos.gob.es lists a "resultado-electoral-2026-provisional" Interior dataset with no items today — re-check 30 Nov.
 - Wave running (4 agents): school free days per town, Reis 2027 per town + festive transport, shop opening at Christmas per town, ES pages that rank badly (work calendar, school calendar, ski, "es festivo hoy").
 - 2026-11-05 — 29N polls page (CIS, CEO): code route, not a DB guide, `force-dynamic`, figures only through `pollsPageData(now)` after `connection()`; blackout 24 Nov 00:00 – **29 Nov 21:00** Madrid (not 20:00: Canary polls close at 21:00 peninsular, JEC Acuerdos 458/1999 and 99/2005); inside it the page renders no poll at all, `private, no-store` + CDN/Cloudflare `no-store` always, Cloudflare bypass in README §10; tests/polls-blackout.test.ts guards it and fails on 18 Nov until CIS 3584 / CEO are re-read.
+
+## 2026-11-05 (evening) — 11N and Renfe 10/12 Nov minimum services out; Ouigo partial stoppages called off
+
+- Generalitat orders signed 5 Nov, on e-Tauler (657102 general strike, 657097 Renfe; DOGC pending — swap links to ELI when numbered):
+  - 11N: Rodalies/regionals, metro, TMB bus, FGC, tram, other urban/interurban 25% from 06:30–09:30 and 16:30–21:00; airport bus 50%; schools one management member + 1 teacher per 6 classes (infant/primary), special ed 50%, nurseries/lunch 33%; health A&E normal, primary care 25%, duty pharmacies. Long distance/airports (State) still pending.
+  - Renfe 10/12 Nov (SEMAF + ALFERRO): Rodalies/regionals 66% at peak (06:00–09:30, 17:00–20:30), 33% off peak. SEMAF hours: 10 Nov 00:01–23:59; 12 Nov 06:20–09:20, 14:20–17:20, 21:20–23:20. ALFERRO 0–24 h both days. SEMAF met minister Carlos Cuerpo 5 Nov, no deal; new meeting 6 Nov.
+- SEMAF notice 5 Nov: Ouigo signed the agreement; partial stoppages 6/9 Nov and 4/8 Dec called off → entry removed, said in the all-day entry.
+- Pages: strikes hub, Renfe guide, 11N page (lead now gives the 25% windows). Tests updated from "pending" to the orders. Groups `strikes strike-11n`.

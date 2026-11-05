@@ -284,8 +284,9 @@ test("upcoming and past are decided by the as-of date: on the last day it is upc
   const general = byId("vaga-general-2026-11-11");
   const metges = byId("vaga-metges-2026-10-28");
   const renfeNov = byId("vaga-renfe-2026-11-10");
-  const ouigoPartial = byId("vaga-ouigo-2026-11-06");
   const schools = byId("vaga-educacio-2026-11-26");
+  // 5 Nov 2026: SEMAF called off Ouigo's partial stoppages (6 and 9 Nov, 4 and 8 Dec): that entry is gone.
+  assert.equal(STRIKES.find((s) => s.id === "vaga-ouigo-2026-11-06"), undefined);
   assert.equal(isUpcoming(renfe, "2026-10-28"), true);
   assert.equal(isUpcoming(renfe, "2026-10-29"), true);
   assert.equal(isUpcoming(renfe, "2026-10-30"), false);
@@ -293,12 +294,6 @@ test("upcoming and past are decided by the as-of date: on the last day it is upc
   assert.equal(isUpcoming(ouigo, "2026-10-31"), true);
   assert.equal(isUpcoming(ouigo, "2026-11-02"), true);
   assert.equal(isUpcoming(ouigo, "2026-11-03"), false);
-  // Ouigo's partial stoppages (same call) stay upcoming until their last day, 8 December.
-  assert.equal(isUpcoming(ouigoPartial, "2026-11-03"), true);
-  assert.equal(isUpcoming(ouigoPartial, "2026-12-08"), true);
-  assert.equal(isUpcoming(ouigoPartial, "2026-12-09"), false);
-  assert.equal(isOnDay(ouigoPartial, "2026-11-07"), false);
-  assert.equal(isOnDay(ouigoPartial, "2026-11-09"), true);
   assert.equal(isUpcoming(schools, "2026-11-26"), true);
   assert.equal(isUpcoming(schools, "2026-11-27"), false);
   assert.equal(isUpcoming(general, "2026-11-11"), true);
@@ -322,7 +317,6 @@ test("upcoming and past are decided by the as-of date: on the last day it is upc
     "vaga-metges-2026-10-28",
     "vaga-renfe-2026-10-29",
     "vaga-ouigo-2026-10-30",
-    "vaga-ouigo-2026-11-06",
     "vaga-renfe-2026-11-10",
     "vaga-general-2026-11-11",
     "vaga-educacio-2026-11-26",
@@ -330,15 +324,14 @@ test("upcoming and past are decided by the as-of date: on the last day it is upc
   assert.deepEqual(upcomingStrikes("2026-10-30").map((s) => s.id), [
     "vaga-metges-2026-10-28",
     "vaga-ouigo-2026-10-30",
-    "vaga-ouigo-2026-11-06",
     "vaga-renfe-2026-11-10",
     "vaga-general-2026-11-11",
     "vaga-educacio-2026-11-26",
   ]);
   // Saturday 31 Oct to Monday 2 Nov: the all-day Ouigo strike is still to come (2 Nov); from the 3rd it is past.
-  assert.deepEqual(upcomingStrikes("2026-11-02").map((s) => s.id).slice(0, 3), ["vaga-metges-2026-10-28", "vaga-ouigo-2026-10-30", "vaga-ouigo-2026-11-06"]);
+  assert.deepEqual(upcomingStrikes("2026-11-02").map((s) => s.id).slice(0, 3), ["vaga-metges-2026-10-28", "vaga-ouigo-2026-10-30", "vaga-renfe-2026-11-10"]);
   assert.deepEqual(pastStrikes("2026-11-03").map((s) => s.id), ["vaga-ouigo-2026-10-30", "vaga-renfe-2026-10-29"]);
-  assert.deepEqual(upcomingStrikes("2026-11-13").map((s) => s.id), ["vaga-metges-2026-10-28", "vaga-ouigo-2026-11-06", "vaga-educacio-2026-11-26"]);
+  assert.deepEqual(upcomingStrikes("2026-11-13").map((s) => s.id), ["vaga-metges-2026-10-28", "vaga-educacio-2026-11-26"]);
   assert.deepEqual(pastStrikes("2026-11-13").map((s) => s.id), ["vaga-renfe-2026-11-10", "vaga-general-2026-11-11", "vaga-ouigo-2026-10-30", "vaga-renfe-2026-10-29"]);
   for (const day of ["2026-10-27", "2026-11-05", "2026-12-01", "2026-12-09"]) {
     assert.equal(upcomingStrikes(day).length + pastStrikes(day).length, STRIKES.length, day);
@@ -449,7 +442,6 @@ test("after the last strike the page renders every strike as past, with a 'none 
     assert.deepEqual(
       pastIds,
       [
-        "vaga-ouigo-2026-11-06",
         "vaga-educacio-2026-11-26",
         "vaga-metges-2026-10-28",
         "vaga-renfe-2026-11-10",
@@ -564,7 +556,8 @@ test("known answers read on 30 October 2026: the doctors' indefinite strike (ord
   assert.deepEqual(renfeNov.dates, ["2026-11-10", "2026-11-12"]);
   assert.deepEqual(renfeNov.dates.map(weekdayIndex), [2, 4]); // Tuesday, Thursday
   assert.deepEqual(renfeNov.affects, ["rodalies", "longDistance"]);
-  assert.equal(renfeNov.minimumServices.status, "pending");
+  // 5 Nov 2026: Ordre del Departament d'Empresa i Treball (e-Tauler 657097): Rodalies 66% at peak (06:00-09:30, 17:00-20:30), 33% off peak.
+  assert.equal(renfeNov.minimumServices.status, "published");
   assert.ok(renfeNov.sources.some((s) => s.url === STRIKE_URLS.semaf1012 && s.publisher === "SEMAF"));
   // SEMAF nº 2026-52 (read 2 Nov 2026) keeps both days; still no hours, still no minimum services.
   assert.ok(renfeNov.sources.some((s) => s.url === STRIKE_URLS.semaf52 && s.publisher === "SEMAF"));
@@ -591,15 +584,14 @@ test("known answers read on 30 October 2026: the doctors' indefinite strike (ord
 });
 
 test("known answers read on the evening of 30 October 2026: Ouigo's resolution, the 26 November education strike, Groundforce at El Prat", () => {
-  const ouigoPartial = byId("vaga-ouigo-2026-11-06");
+  const ouigo = byId("vaga-ouigo-2026-10-30");
   const schools = byId("vaga-educacio-2026-11-26");
   const metges = byId("vaga-metges-2026-10-28");
-  // Ministry of Transport, resolution of 27 Oct 2026: partial stoppages on Fri 6, Mon 9 Nov, Fri 4, Tue 8 Dec, 06:00-12:00 and 18:00-23:59; 72.41%.
-  assert.deepEqual(ouigoPartial.dates, ["2026-11-06", "2026-11-09", "2026-12-04", "2026-12-08"]);
-  assert.deepEqual(ouigoPartial.dates.map(weekdayIndex), [5, 1, 5, 2]);
-  assert.deepEqual(ouigoPartial.affects, ["longDistance"]);
-  assert.equal(ouigoPartial.minimumServices.status, "published");
-  assert.ok(ouigoPartial.sources.some((s) => s.url === STRIKE_URLS.ouigoResolution && /Ministerio de Transportes/.test(s.publisher)));
+  // Ministry of Transport, resolution of 27 Oct 2026 (72.41%), still cited for the all-day strikes. SEMAF called off the
+  // partial stoppages (6 and 9 Nov, 4 and 8 Dec) on 5 Nov 2026 after Ouigo signed the agreement: said in the all-day entry.
+  assert.ok(ouigo.sources.some((s) => s.url === STRIKE_URLS.ouigoResolution && /Ministerio de Transportes/.test(s.publisher)));
+  assert.ok(ouigo.sources.some((s) => s.url === STRIKE_URLS.semafOuigo && s.publisher === "SEMAF"));
+  for (const locale of LOCALES) assert.match(ouigo.facts[locale].join(" "), /desconvoca|called off/, locale);
   assert.match(STRIKE_URLS.ouigoResolution, /^https:\/\/cdn\.transportes\.gob\.es\/.+ouigo\.pdf$/);
   // USTEC·STEs and CGT Ensenyament (28 Oct): education strike on Thursday 26 Nov; no order yet.
   assert.deepEqual(schools.dates, ["2026-11-26"]);
@@ -612,9 +604,8 @@ test("known answers read on the evening of 30 October 2026: Ouigo's resolution, 
   assert.match(STRIKE_URLS.edu26Joint, /^https:\/\/www\.cgtensenyament\.cat\/.+\.pdf$/);
   assert.ok(isOpen(metges), "the doctors' strike was still on when last checked");
   for (const locale of LOCALES) {
-    assert.match(ouigoPartial.facts[locale].join(" "), /6[.:]00[^.]*12[.:]00[^.]*18[.:]00[^.]*23[.:]59/, locale);
-    assert.match(ouigoPartial.minimumServices.text[locale], /72[,.]41%/, locale);
-    assert.ok(ouigoPartial.minimumServices.text[locale].includes(`](${STRIKE_URLS.ouigoResolution})`), locale);
+    assert.match(ouigo.minimumServices.text[locale], /72[,.]41%/, locale);
+    assert.ok(ouigo.minimumServices.text[locale].includes(`](${STRIKE_URLS.ouigoResolution})`), locale);
     assert.ok(schools.facts[locale].join(" ").includes("El 26N, vaga educativa"), `${locale}: USTEC's own words`);
     assert.match(schools.minimumServices.text[locale], /8 (de setembre|de septiembre|September) (de )?2026/, locale);
     // The day the doctors' strike was last seen still on is the as-of day (re-read 3 Nov 2026): moving
@@ -665,11 +656,9 @@ test("the lead answers 'is there a strike today' first, then what is coming and 
   // A day with nothing in progress says so before listing what is coming.
   const quiet = text(buildStrikesBody("ca", "2026-11-05", STRIKES.filter((s) => !s.indefinite)).slice(0, 1));
   assert.match(quiet, /^El dijous 5 de novembre de 2026 no hi havia cap vaga en curs/);
-  // Ouigo's all-day strikes are past by then; its partial stoppages come first, then Renfe's two days.
-  assert.match(
-    quiet,
-    /Properes vagues: divendres 6 de novembre, dilluns 9 de novembre, divendres 4 de desembre i dimarts 8 de desembre de 2026, aturades parcials de maquinistes d'Ouigo[^;]*; dimarts 10 de novembre i dijous 12 de novembre de 2026/,
-  );
+  // Ouigo's all-day strikes are past by then and its partial stoppages were called off (5 Nov): Renfe's two days come first.
+  assert.match(quiet, /Properes vagues: dimarts 10 de novembre i dijous 12 de novembre de 2026/);
+  assert.doesNotMatch(quiet, /aturades parcials de maquinistes d'Ouigo/);
   assert.doesNotMatch(quiet, /divendres 30 d'octubre/);
   // After 11 November nothing listed touches the metro, bus or FGC.
   assert.match(text(buildStrikesBody("ca", "2026-11-12").slice(0, 1)), /Metro, bus i FGC: cap d'aquestes vagues no els afecta\./);
@@ -722,11 +711,14 @@ test("the page never prints press-only claims or an 11 November percentage nobod
       const body = text(buildStrikesBody(locale, asOf));
       // Demonstration place and time were reported by the press only.
       assert.doesNotMatch(body, /Jardinets|17[.:]30/i, locale);
-      // Rodalies' peak-hour bands were reported by the press only.
-      assert.doesNotMatch(body, /6[.:]00 (a|to) 9[.:]30|17[.:]00 (a|to) 20[.:]30/, locale);
+      // Rodalies' peak-hour bands were press only until the Renfe order of 5 Nov 2026 defined them: only next to that order.
+      for (const piece of body.split(/\n|(?<=[.!?])\s+/)) {
+        if (/6[.:]00 (a|to) 9[.:]30|17[.:]00 (a|to) 20[.:]30/.test(piece)) assert.match(piece, /66%/, `${locale}: "${piece}"`);
+      }
       // 6 and 9 November were press only until the Ministry's Ouigo resolution of 27 Oct listed
       // them: they may appear only about Ouigo, in its entries, which cite that resolution.
-      const ouigoDays = strikeDays(byId("vaga-ouigo-2026-11-06"), locale).toLowerCase();
+      // The partial stoppages (6 and 9 Nov) were called off on 5 Nov 2026: those days may appear only in Ouigo's entry.
+      const ouigoDays = strikeDays(byId("vaga-ouigo-2026-10-30"), locale).toLowerCase();
       for (const piece of body.split(/\n|(?<=[.!?])\s+/)) {
         if (/\b(6|9) (de )?(novembre|noviembre|November)\b|(divendres|viernes|Friday) 6 (i|y|and)\b/.test(piece)) {
           assert.ok(
@@ -744,7 +736,10 @@ test("the page never prints press-only claims or an 11 November percentage nobod
         }
       }
       assert.ok(about11 >= 5, `${locale}/${asOf}: only ${about11} sentences about 11 November checked`);
-      assert.doesNotMatch(body, /desconvocad|called off|cancel·lada la vaga|huelga cancelada/i, locale);
+      // "Called off" only as SEMAF said it of Ouigo's partial stoppages (notice of 5 Nov 2026), never as a press report.
+      for (const piece of body.split(/\n|(?<=[.!?])\s+/)) {
+        if (/desconvoca|called (them )?off|cancel·lada la vaga|huelga cancelada/i.test(piece)) assert.match(piece, /SEMAF|Ouigo/, `${locale}: "${piece}"`);
+      }
     }
   }
 });

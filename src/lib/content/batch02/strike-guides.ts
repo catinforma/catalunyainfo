@@ -977,6 +977,8 @@ export function strikeGuideDescription(key: StrikeGuideKey, locale: Locale, asOf
 const KNOWN_SOURCES: B2Source[] = [
   { name: "Diari Oficial de la Generalitat de Catalunya", url: U.dogc, publisher: "DOGC" },
   { name: "Informació de vagues amb serveis mínims (e-Tauler)", url: U.treballMs, publisher: "Departament d'Empresa i Treball" },
+  { name: "Ordre EMT/ /2026, de 5 de novembre: serveis mínims de Rodalies i regionals, 10 i 12 de novembre (e-Tauler)", url: U.ordreRenfe1012, publisher: "Departament d'Empresa i Treball" },
+  { name: "Ordre EMT/ /2026, de 5 de novembre: serveis essencials de la vaga general de l'11 de novembre (e-Tauler)", url: U.ordre11n, publisher: "Departament d'Empresa i Treball" },
   { name: "Resoluciones de servicios mínimos ferroviarios", url: U.ministryRail, publisher: "Ministerio de Transportes y Movilidad Sostenible" },
   { name: "Alteracions del servei", url: U.rodaliesStatus, publisher: "Rodalies de Catalunya" },
   { name: "Renfe", url: U.renfe, publisher: "Renfe" },
