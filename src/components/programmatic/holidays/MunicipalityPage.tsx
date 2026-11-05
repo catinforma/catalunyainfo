@@ -28,6 +28,7 @@ import { comarcaPath, datePath, hubPath, municipalityPath, type MuniLocale } fro
 import { dateQuestion } from "@/lib/programmatic/holidays/copy";
 import type { SnapshotMunicipality } from "@/lib/programmatic/holidays/types";
 
+import { ChristmasShops } from "./ChristmasShops";
 import { HolidayStatus, type StatusLabels } from "./HolidayStatus";
 import { CouncilSourceLine, DateList, DateQuestions, GuideLinks, HolidayTable, Sources } from "./parts";
 
@@ -225,6 +226,7 @@ export function MunicipalityPage({ m, locale }: { m: SnapshotMunicipality; local
               {locale === "ca" ? `Diumenges i festius d'obertura ${YEAR} a tot Catalunya.` : `Domingos y festivos de apertura ${YEAR} en toda Cataluña.`}
             </Link>
           </p>
+          <ChristmasShops m={m} locale={locale} />
 
           <h2 id="que-vol-dir">{t.meaningTitle}</h2>
           {[t.work, t.school, t.shopsMeaning].map((block) => (
