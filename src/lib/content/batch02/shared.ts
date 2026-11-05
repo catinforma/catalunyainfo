@@ -92,7 +92,10 @@ export type B2Key =
   | "strikeRenfe"
   | "strikeEducation"
   // 4 Nov 2026: the Gran Recapte food-bank collection (13-14 Nov 2026).
-  | "granRecapte";
+  | "granRecapte"
+  // 5 Nov 2026: metro, bus, Rodalies, FGC, tram and NitBus over Christmas,
+  // New Year and Reis 2026-27 (christmas-transport.ts).
+  | "christmasTransport";
 
 /** Path after the locale prefix, no leading or trailing slash. */
 export const B2_PATHS: Record<B2Key, Record<Locale, string>> = {
@@ -428,6 +431,12 @@ export const B2_PATHS: Record<B2Key, Record<Locale, string>> = {
     ca: "guies/gran-recapte-aliments",
     es: "guias/gran-recapte-alimentos",
     en: "guides/gran-recapte-food-drive-catalonia",
+  },
+  // No year in the path: the same URLs serve every Christmas.
+  christmasTransport: {
+    ca: "guies/transport-nadal-cap-d-any-barcelona",
+    es: "guias/transporte-navidad-nochevieja-barcelona",
+    en: "guides/barcelona-public-transport-christmas-new-year",
   },
 };
 
@@ -789,6 +798,11 @@ export const B2_TITLES: Record<B2Key, Record<Locale, string>> = {
     ca: "Gran Recapte 2026: dies, voluntariat i on donar",
     es: "Gran Recapte 2026: días, voluntariado y dónde donar",
     en: "Gran Recapte 2026 food drive: dates and how to help",
+  },
+  christmasTransport: {
+    ca: "Metro, bus i Rodalies per Nadal i Cap d'Any 2026-27",
+    es: "Metro, bus y Rodalies en Navidad y Nochevieja 2026-27",
+    en: "Barcelona public transport at Christmas and New Year 2026-27",
   },
 };
 

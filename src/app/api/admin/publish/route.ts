@@ -64,6 +64,7 @@ import { REIS } from "@/lib/content/batch02/reis";
 import { L2_CLOSURE_GUIDE } from "@/lib/content/batch02/l2-closure";
 import { CHRISTMAS_LIGHTS } from "@/lib/content/batch02/christmas-lights";
 import { GRAN_RECAPTE_GUIDE } from "@/lib/content/batch02/gran-recapte";
+import { CHRISTMAS_TRANSPORT } from "@/lib/content/batch02/christmas-transport";
 import { publishHolidayTodayGuide } from "@/lib/content/holidays/today-publish";
 import { publishLocalHolidaysGuide } from "@/lib/content/holidays/local-publish";
 import { publishReservoirGuide } from "@/lib/content/reservoirs/publish";
@@ -307,6 +308,14 @@ export async function POST(request: Request) {
     // Barcelona markets guide) go out once, with `gran-recapte-links`.
     if (wants("gran-recapte")) published.push(await publishB2Article(GRAN_RECAPTE_GUIDE));
     if (wants("gran-recapte-links")) published.push(await publishB2Article(MARATO_GUIDE), await publishB2Article(MARKETS));
+    // Transport over Christmas, New Year and Reis 2026-27 (metro, bus,
+    // NitBus, Rodalies, FGC, tram): one page, on its own so each operator's
+    // 2026-27 notice (christmas-transport.ts) republishes only it. The two
+    // pages that gained one body sentence linking to it (New Year's Eve, the
+    // metro hours guide; titles untouched, the EN hours description is in the
+    // 3 Nov window) go out once, with `transport-nadal-links`.
+    if (wants("transport-nadal")) published.push(await publishB2Article(CHRISTMAS_TRANSPORT));
+    if (wants("transport-nadal-links")) published.push(await publishB2Article(NEW_YEAR), await publishB2Article(HOURS));
 
     const surfaces = [
       ...published.flatMap((article) =>

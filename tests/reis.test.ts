@@ -39,7 +39,9 @@ import {
   townsIntro,
   type Announced2027,
   type Parade,
+  allTowns,
 } from "../src/lib/content/batch02/reis.ts";
+import { REIS_REREAD_BY, REIS_TOWNS, REIS_TOWNS_AS_OF, REIS_TOWNS_LEFT_OUT, rereadDue, townRowProblems } from "../src/lib/content/batch02/reis-towns.ts";
 import { B2_PATHS, withReadNext } from "../src/lib/content/batch02/shared.ts";
 import { OPENING_2027, SHOPS } from "../src/lib/content/batch02/shops.ts";
 import { madridDate } from "../src/lib/content/batch02/strikes.ts";
@@ -177,10 +179,16 @@ test("sources are https, untracked, official and listed once; the reader sees th
     assert.ok(!urls.has(source.url), `duplicate source ${source.url}`);
     urls.add(source.url);
     const host = new URL(source.url).host;
-    assert.match(host, /(^|\.)(barcelona\.cat|dtibcn\.cat|tmb\.cat|gencat\.cat|boe\.es|girona\.cat|paeria\.cat|tarragona\.cat|reus\.cat|sabadell\.cat|mataro\.cat|badalona\.cat|igualada\.cat)$/, `${host} is not an official source`);
+    const councilHost = [...TOWNS, ...REIS_TOWNS].some((town) => town.hosts.test(host));
+    assert.ok(councilHost || /(^|\.)(barcelona\.cat|dtibcn\.cat|tmb\.cat|gencat\.cat|boe\.es)$/.test(host), `${host} is not an official source`);
   }
   for (const town of TOWNS) {
     assert.ok(urls.has(town.past.url), `${town.name}: its 2026 page is a source`);
+    if (town.news2027) assert.ok(urls.has(town.news2027.url), `${town.name}: its 2027 news is a source`);
+  }
+  for (const town of REIS_TOWNS) {
+    assert.ok(urls.has(town.y2026.url), `${town.name}: its 2026 page is a source`);
+    if (town.y2026.alsoUrl) assert.ok(urls.has(town.y2026.alsoUrl), `${town.name}: its second 2026 page is a source`);
     if (town.news2027) assert.ok(urls.has(town.news2027.url), `${town.name}: its 2027 news is a source`);
   }
   for (const url of [BARCELONA_2026.url, PAST.programme2025.url, TRANSPORT_2026.url, IGUALADA_DECLARATION.url]) assert.ok(urls.has(url), url);
@@ -324,8 +332,82 @@ test("each town is the 5 January 2026 parade from its council's own site; Terras
     }
     for (const locale of LOCALES) assert.ok(body(locale).includes(town.name), `${locale}: ${town.name}`);
   }
-  for (const locale of LOCALES) assert.match(body(locale), /Terrassa/, `${locale}: says why Terrassa is missing`);
+  // Terrassa (bot-walled on 31 Oct) is either a row of reis-towns.ts or named as left out, with the reason.
+  const terrassaRow = REIS_TOWNS.some((t) => t.name === "Terrassa");
+  assert.ok(terrassaRow !== REIS_TOWNS_LEFT_OUT.some((t) => t.name === "Terrassa"), "Terrassa is a row or left out, not both");
+  for (const locale of LOCALES) assert.match(body(locale), /Terrassa/, `${locale}: Terrassa or why it is missing`);
   assert.ok(!TOWNS.some((t) => t.key === ("terrassa" as never)));
+});
+
+/* -------------------------------------------------------------------------- */
+/* The towns added on 5 Nov 2026 (reis-towns.ts)                              */
+/* -------------------------------------------------------------------------- */
+
+const BIG_TOWNS = ["L'Hospitalet de Llobregat", "Badalona", "Terrassa", "Sabadell", "Mataró", "Santa Coloma de Gramenet", "Reus", "Girona", "Tarragona", "Lleida", "Cornellà de Llobregat", "Sant Boi de Llobregat", "Sant Cugat del Vallès", "Granollers", "Manresa", "Rubí", "Vilanova i la Geltrú", "Castelldefels", "Viladecans", "El Prat de Llobregat", "Mollet del Vallès", "Vic", "Figueres", "Igualada"];
+
+test("Barcelona and about 25 municipalities: every big town is a row or named as left out, never both, never twice", () => {
+  const rows = allTowns().map((t) => t.name);
+  assert.equal(new Set(rows).size, rows.length, "a town twice");
+  assert.ok(rows.length >= 20, `only ${rows.length} towns`);
+  for (const name of BIG_TOWNS) {
+    const row = rows.includes(name);
+    const left = REIS_TOWNS_LEFT_OUT.some((t) => t.name === name);
+    assert.ok(row !== left, `${name}: ${row ? "a row and left out" : "neither a row nor left out"}`);
+  }
+  for (const t of REIS_TOWNS_LEFT_OUT) for (const locale of LOCALES) assert.ok(body(locale).includes(t.reason[locale]), `${locale}: why ${t.name} is missing`);
+});
+
+test("every added row is the 5 January 2026 parade, from the council's own site, with its time, start and source on the page", () => {
+  for (const town of REIS_TOWNS) {
+    assert.deepEqual(townRowProblems(town), [], town.name);
+    assert.equal(town.y2026.date, "2026-01-05");
+    assert.ok(town.y2026.read <= REIS_TOWNS_AS_OF, `${town.name}: read after REIS_TOWNS_AS_OF`);
+    if (town.y2027) assert.deepEqual(paradeProblems(town.y2027, town.hosts), [], `${town.name} 2027`);
+    for (const locale of LOCALES) {
+      const j = json(locale);
+      assert.ok(j.includes(`](${town.y2026.url})`), `${locale}: ${town.name}'s source is linked`);
+      assert.ok(j.includes(`](${town.watch})`), `${locale}: where ${town.name} will publish is linked`);
+      const row = townRows(locale).find((r) => r[0] === town.name);
+      assert.ok(row, `${locale}: ${town.name} in the table`);
+      assert.ok(row![2]!.includes(town.y2026.time), `${locale}: ${town.name}'s 2026 start time in the table`);
+      if (!town.y2027) assert.ok(!row![3]!.includes(":"), `${locale}: ${town.name} has a 2027 time without a slot`);
+    }
+  }
+  // The validator refuses a press cutting, a typo and another council's page.
+  const sample = REIS_TOWNS[0];
+  if (sample) {
+    assert.ok(townRowProblems({ ...sample, y2026: { ...sample.y2026, url: "https://www.elperiodico.com/cavalcada-reis.html" } }).length > 0, "press");
+    assert.ok(townRowProblems({ ...sample, y2026: { ...sample.y2026, time: "6 pm" } }).length > 0, "time format");
+    assert.ok(townRowProblems({ ...sample, y2026: { ...sample.y2026, date: "2025-01-05" } }).length > 0, "another year");
+    assert.ok(townRowProblems({ ...sample, y2026: { ...sample.y2026, read: "2099-01-01" } }).length > 0, "read in the future");
+    assert.ok(townRowProblems({ ...sample, watch: "https://www.escapadaambnens.com/cavalcades" }).length > 0, "aggregator as the watch page");
+  }
+});
+
+test("the towns table says 'per confirmar' for 2027 until a council publishes, and the check date is printed", () => {
+  const pending: Record<Locale, RegExp> = { ca: /per confirmar/i, es: /por confirmar/i, en: /to be confirmed/i };
+  for (const locale of LOCALES) {
+    for (const row of townRows(locale)) {
+      const view = allTowns().find((t) => t.name === row[0])!;
+      if (!view.slot) assert.match(row[3]!, pending[locale], `${locale}: ${row[0]}`);
+    }
+    assert.ok(body(locale).includes(dateYear(REIS_TOWNS_AS_OF, locale)), `${locale}: the towns' check date`);
+  }
+});
+
+test("re-read the councils: from 22 December 2026 (and again from 2 January 2027) REIS_TOWNS_AS_OF and REIS_AS_OF must have moved", () => {
+  assert.equal(REIS_REREAD_BY[0], "2026-12-22");
+  assert.equal(rereadDue("2026-12-21"), null);
+  assert.equal(rereadDue("2026-12-22"), "2026-12-22");
+  assert.equal(rereadDue("2027-01-03"), "2027-01-02");
+  const today = madridDate(new Date());
+  assert.ok(REIS_TOWNS_AS_OF <= today, `REIS_TOWNS_AS_OF (${REIS_TOWNS_AS_OF}) is in the future`);
+  const due = rereadDue(today);
+  if (due) {
+    const hint = `re-read every council's watch page in src/lib/content/batch02/reis-towns.ts and reis.ts (TOWNS, ANNOUNCED_2027, Barcelona), fill the 2027 slots that are out, move REIS_TOWNS_AS_OF and REIS_AS_OF, publish ?only=reis-2027`;
+    assert.ok(REIS_TOWNS_AS_OF >= due, `On ${today} REIS_TOWNS_AS_OF is ${REIS_TOWNS_AS_OF}, before ${due}: ${hint}`);
+    assert.ok(REIS_AS_OF >= due, `On ${today} REIS_AS_OF is ${REIS_AS_OF}, before ${due}: ${hint}`);
+  }
 });
 
 test("Igualada's declaration is the DOGC's Acord GOV/166/2016 and the page names it", () => {
@@ -336,15 +418,16 @@ test("Igualada's declaration is the DOGC's Acord GOV/166/2016 and the page names
 
 test("towns table: last year's facts labelled 2026, and 2027 'not published' until a slot is filled", () => {
   for (const locale of LOCALES) {
-    const rows = townRows(locale, NONE);
+    const rows = townRows(locale, NONE, []);
     assert.equal(rows.length, TOWNS.length);
-    for (const [i, row] of rows.entries()) {
-      const town = TOWNS[i]!;
-      assert.equal(row[0], town.name);
-      assert.ok(!row[3]!.includes(":"), `${locale}: ${town.name} has a 2027 time without a slot`);
+    for (const town of TOWNS) {
+      const row = rows.find((r) => r[0] === town.name);
+      assert.ok(row, `${locale}: ${town.name}`);
+      assert.ok(!row![3]!.includes(":"), `${locale}: ${town.name} has a 2027 time without a slot`);
     }
+    assert.equal(townRows(locale).length, TOWNS.length + REIS_TOWNS.length);
     const filled = townRows(locale, { barcelona: null, towns: { ...EMPTY_TOWNS, girona: GIRONA_2027 } });
-    assert.ok(filled[0]![3]!.includes(GIRONA_2027.time), `${locale}: Girona's 2027 time`);
+    assert.ok(filled.find((r) => r[0] === "Girona")![3]!.includes(GIRONA_2027.time), `${locale}: Girona's 2027 time`);
     assert.ok(townsIntro(locale, { barcelona: null, towns: { ...EMPTY_TOWNS, girona: GIRONA_2027 } }).includes("Girona"));
     const built = buildReisBody(locale, { barcelona: null, towns: { ...EMPTY_TOWNS, girona: GIRONA_2027 } });
     assert.ok(JSON.stringify(built).includes(`](${GIRONA_2027.url})`), `${locale}: Girona's 2027 source is linked`);

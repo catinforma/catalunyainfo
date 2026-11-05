@@ -2601,3 +2601,92 @@ again after the DOGC order (`prepare2027` prints COUNCIL DIFFERS). From
 measure that change on its own.
 
 **Outcome:** _pending_
+
+## 2026-11-05 — Reis 2027 in 21 towns (body only) and a new page: transport over Christmas, New Year and Reis 2026-27 (groups `reis-2027`, `transport-nadal`, `transport-nadal-links`; deploy first)
+
+**Why now.** Both families peak from 20 December to 6 January. Google needs the
+URLs and sections indexed and ranked before then; the strike traffic ends on
+12 November.
+
+### Reis: the existing page grows from 8 towns to 21 (no new URL, title and description untouched)
+
+**Baseline** (Search Console, 22 Oct–4 Nov, from the brief and `snapshot.py page
+… 14`): `/es/guias/cabalgata-de-reyes-barcelona/` 365 impressions at pos 5.2,
+CTR 5.6–7.3 % on 3–4 Nov; its queries are mostly generic ("cuando es la
+cabalgata de reyes 2027" 13 at 4.9, "cabalgata reyes magos 2027" 10 / 2 clicks
+at 5.6, "cabalgata de reyes 2027" 9 at 5.2, "cavalcada de reis 2027" 9 at 4.8),
+then Barcelona's ("cabalgata de reyes barcelona 2027" 8 at 5.0). CA
+`/ca/guies/cavalcada-de-reis-barcelona/` 69, EN
+`/en/guides/three-kings-parade-barcelona/` 6. Per-town queries ("cabalgata
+reyes 2027 <town> horario recorrido"): 0 impressions so far; they spike on 2–5
+January and councils publish routes in late December.
+
+**Decision: extend, not a hub.** The ES page already ranks at ~5 for the
+generic 2027 queries and its H1 already says "y Cataluña". A second
+"Cabalgatas de Reyes 2027 en Cataluña" page would compete for the same head
+terms and split links. So the towns go on the same URL: a table of 21 towns
+(alphabetical) and one H3 section per town, each with the 2026 start time and
+place, route, end, Kings' arrival, the council's page linked, 2027 "per
+confirmar" and a link to where that council will publish. If a town's own
+demand proves large in January, split it off then.
+
+**Added (5 Nov, council sites only):** Terrassa, Sant Cugat, Rubí, Granollers,
+Mollet, L'Hospitalet, Cornellà, Sant Boi (time only), El Prat, Castelldefels
+(2027 date confirmed), Manresa, Vic, Figueres. Left out, with the reason on the
+page: Santa Coloma (its site keeps no 2026 times), Viladecans (bot wall),
+Vilanova i la Geltrú (only an undated page). The first eight towns and
+Barcelona were re-read: nothing 2027 beyond Barcelona's participant sign-ups
+(19 Oct–23 Nov), now in the Barcelona section. `REIS_AS_OF` → 5 Nov. Tests fail
+from 22 Dec 2026 and again from 2 Jan 2027 until the councils are re-read.
+
+**Prediction.** ES page holds pos ≤ 6 on the generic queries (no cannibal
+page). From 20 Dec, town queries appear for at least 10 of the 21 towns, at
+pos ≤ 15 by 2 Jan; page impressions 2–5 Jan ≥ 3× the 22 Oct–4 Nov fortnight.
+
+### New page: transport over Christmas, New Year and Reis 2026-27
+
+**URLs (new, year-free):** `/ca/guies/transport-nadal-cap-d-any-barcelona/`,
+`/es/guias/transporte-navidad-nochevieja-barcelona/`,
+`/en/guides/barcelona-public-transport-christmas-new-year/`.
+
+**Titles:** "Horaris metro, bus i Rodalies per Nadal i Cap d'Any 2026" / "Horarios
+metro, bus y Rodalies en Navidad y Nochevieja 2026" / "Barcelona metro and train
+hours: Christmas & New Year 2026". Descriptions answer first (Christmas Eve:
+metro to 23:00, Rodalies and FGC to ~23:00 in 2025; New Year's Eve: metro, FGC
+and tram all night).
+
+**Baseline.** `/es/guias/horarios-metro-barcelona/` 1.2k impressions at pos
+10.5, 0 clicks; `/en/guides/barcelona-metro-hours/` 1.75k at 0.2 %;
+`/es/guias/nochevieja-barcelona/` 359 ("fin de año 2026 barcelona" 11 at 5.5,
+"nochevieja barcelona 2026" 11 at 7.9), `/ca/guies/cap-d-any-barcelona/` 199.
+Holiday transport queries ("metro 24 diciembre barcelona", "metro nochevieja",
+"rodalies nochevieja", "fgc cap d'any"): 0 so far; this property has no
+December 2025 data to size them.
+
+**What it says.** Metro and tram: each operator's standing timetable applied to
+the 2026-27 days by code (26 Dec 2026 is a Saturday: metro all night).
+TMB bus, NitBus, Rodalies, FGC, TRAM: last season's official notices (TMB 23 and
+30 Dec 2025, 5 Jan 2026; ATM 5 Dec 2025; FGC via govern.cat 18 Dec 2025;
+Rodalies 16 Dec 2025), each with its year and "per confirmar" until the
+operator publishes 2026-27's (`ANNOUNCED_2026_27`). A test fails from 18 Dec
+2026 until the page is re-read.
+
+**Links in (body only; titles and descriptions untouched):** one sentence each
+in the New Year's Eve guide (after the metro table) and the metro-hours guide
+("Christmas and New Year" line; its EN description is in the 3 Nov window), out
+with `transport-nadal-links`; one clause in the Reis page's 5–6 January
+transport paragraph, out with `reis-2027`.
+
+**Prediction.** Indexed by 20 Nov. From 18 Dec, ranking ≤ 10 for "metro
+nochevieja barcelona", "horario metro 24 diciembre barcelona" and "fgc cap d'any"
+variants; ≥ 2,000 impressions 20 Dec–6 Jan across the three editions at CTR ≥ 3 %.
+The metro-hours and NYE pages keep their positions (the new page targets the
+day-specific queries, not "horario metro barcelona").
+
+**Measure on 20 Nov 2026** (indexing: `inspect_url_enhanced` on the three new
+URLs), **28 Dec 2026** and **8 Jan 2027** (`snapshot.py page
+transport-nadal 14`, `page transporte-navidad 14`, `page
+barcelona-public-transport 14`, `page cabalgata-de-reyes 14`, `page
+cavalcada-de-reis 14`; town queries with `gaps 14 40`).
+
+**Outcome:** _pending_
