@@ -621,7 +621,7 @@ export function dateContent(iso: DatePage, locale: DateLocale): DateContent {
           ],
         },
       ],
-      guides: ["decemberBridge", "shops", "school", "metroHours", "localHolidays", "workCalendar"],
+      guides: ["schoolFreeDays", "decemberBridge", "shops", "school", "metroHours", "localHolidays", "workCalendar"],
     };
   }
 
@@ -684,7 +684,7 @@ export function dateContent(iso: DatePage, locale: DateLocale): DateContent {
         },
         { title: L("Transport", "Transporte", "Getting around"), paragraphs: [metroPointer] },
       ],
-      guides: ["decemberBridge", "shops", "metroHours", "holidayToday", "workCalendar"],
+      guides: ["decemberBridge", "schoolFreeDays", "shops", "metroHours", "holidayToday", "workCalendar"],
     };
   }
 

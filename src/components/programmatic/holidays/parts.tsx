@@ -36,6 +36,7 @@ const GUIDE_LABEL: Record<GuideKey, Record<DateLocale, string>> = {
   barcelonaDecember: { ca: "Què fer a Barcelona al desembre", es: "Qué hacer en Barcelona en diciembre", en: "Barcelona in December" },
   grossa: { ca: "La Grossa de Cap d'Any", es: "La Grossa de Cap d'Any", en: "La Grossa de Cap d'Any" },
   reis: { ca: "Cavalcada de Reis a Barcelona", es: "Cabalgata de Reyes en Barcelona", en: "Three Kings parade in Barcelona" },
+  schoolFreeDays: { ca: "Hi ha escola el 7 de desembre? Dies de lliure disposició", es: "¿Hay colegio el 7 de diciembre? Días de libre disposición", en: "School free days 2026-27: is there school on 7 December?" },
 };
 
 /**

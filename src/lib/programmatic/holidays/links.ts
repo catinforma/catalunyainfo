@@ -23,6 +23,8 @@ export const GUIDES = {
   barcelonaDecember: { ca: "/ca/guies/barcelona-al-desembre/", es: "/es/guias/barcelona-en-diciembre/", en: "/en/guides/barcelona-in-december/" },
   grossa: { ca: "/ca/guies/la-grossa-cap-d-any/", es: "/es/guias/la-grossa-fin-de-ano/", en: "/en/guides/la-grossa-new-years-eve-lottery/" },
   reis: { ca: "/ca/guies/cavalcada-de-reis-barcelona/", es: "/es/guias/cabalgata-de-reyes-barcelona/", en: "/en/guides/three-kings-parade-barcelona/" },
+  // 5 Nov 2026: school free days 2026-27 per town (is there school on Monday 7 December?).
+  schoolFreeDays: { ca: "/ca/guies/dies-lliure-disposicio-escoles/", es: "/es/guias/dias-libre-disposicion-colegios/", en: "/en/guides/catalonia-school-free-days/" },
 } as const satisfies Record<string, Record<DateLocale, string>>;
 
 export type GuideKey = keyof typeof GUIDES;
