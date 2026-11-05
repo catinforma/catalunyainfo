@@ -272,7 +272,8 @@ export const COPY: Record<Locale, HolidayCopy> = {
     national: [
       "Nueve de los doce festivos son comunes a toda España en 2027: 1 y 6 de enero, Viernes Santo (26 de marzo), 1 de mayo, 12 de octubre, 1 de noviembre y 6, 8 y 25 de diciembre. Los otros tres son propios de Cataluña: el Lunes de Pascua (29 de marzo), San Juan (24 de junio) y la Diada (11 de septiembre).",
       "El **Jueves Santo** (25 de marzo de 2027) es festivo en la mayoría de comunidades, pero **no en Cataluña**. El 15 de agosto y el 26 de diciembre, que en 2026 son festivos aquí, en 2027 caen en domingo y no forman parte del calendario catalán.",
-      "Fuente: Resolución de 8 de octubre de 2026 de la Dirección General de Trabajo, por la que se publica la relación de fiestas laborales para 2027 (BOE del 13 de octubre de 2026).",
+      "Los festivos de 2027 de cada una de las demás comunidades, con sus puentes, están en el [calendario laboral 2027 en España por comunidad autónoma](/es/festivos/2027/).",
+      "Fuente: Resolución de 8 de octubre de 2026 de la Dirección General de Trabajo, por la que se publica relación de fiestas laborales para el año 2027 (BOE del 13 de octubre de 2026).",
     ],
 
     saturdayTitle: "Festivos que caen en sábado",

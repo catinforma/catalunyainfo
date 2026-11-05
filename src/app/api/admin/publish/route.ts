@@ -71,6 +71,7 @@ import { publishHolidayTodayGuide } from "@/lib/content/holidays/today-publish";
 import { publishLocalHolidaysGuide } from "@/lib/content/holidays/local-publish";
 import { publishReservoirGuide } from "@/lib/content/reservoirs/publish";
 import { publishSchoolCalendarGuide } from "@/lib/content/school/publish";
+import { spainPaths } from "@/lib/programmatic/spain-2027/paths";
 import { authoriseDeployRequest, describeError } from "@/lib/admin/deploy-auth";
 
 export const runtime = "nodejs";
@@ -335,6 +336,17 @@ export async function POST(request: Request) {
     // only it. The how-to-vote guide, whose section now links here, goes out
     // with `voting`; the hub and town election pages are code routes.
     if (wants("vot-correu")) published.push(await publishB2Article(POSTAL_VOTE));
+    // Calendario laboral 2027 en España (/es/festivos/2027/, 19 communities
+    // and cities, the hub, the bridges page): code routes built from the BOE
+    // table, not articles, so the deploy ships them. This group revalidates
+    // exactly those paths (each route keeps dynamicParams = true, so this
+    // cannot 404 them; never their parent /es/festivos, which is false),
+    // purges them at the CDN and sends them to IndexNow. Re-run it after a
+    // deploy that changes sources.ts (a community's local list published).
+    const codePaths = wants("calendario-2027-espana") ? spainPaths() : [];
+    // The Catalan work calendar guide gained one sentence linking to the
+    // Spain hub (Spanish edition); it goes out once, on its own.
+    if (wants("calendario-2027-espana-links")) published.push(await publishHolidayGuide());
 
     const surfaces = [
       ...published.flatMap((article) =>
@@ -354,6 +366,8 @@ export async function POST(request: Request) {
       const section = surface.path.split("/")[0];
       if (section) revalidate(`/${surface.locale}/${section}`);
     }
+    // Exact paths only: no section or locale-home revalidation for code routes.
+    for (const path of codePaths) revalidate(path.replace(/\/$/, ""));
     revalidate("/sitemap.xml");
 
     // Cloudflare may cache HTML (ops/vps/README.md section 10), and it does not
@@ -369,7 +383,7 @@ export async function POST(request: Request) {
     }
 
     // Bing and ChatGPT search find the change in minutes, not days.
-    const indexNow = await pingIndexNow(surfaces.map((surface) => `/${surface.locale}/${surface.path}`));
+    const indexNow = await pingIndexNow([...surfaces.map((surface) => `/${surface.locale}/${surface.path}`), ...codePaths]);
 
     return NextResponse.json({ ok: true, seed, published, pages: pages.pages.length, indexNow, cdnPurge });
   } catch (error) {

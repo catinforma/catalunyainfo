@@ -9,6 +9,7 @@ import { dayMonth } from "@/lib/programmatic/holidays/format";
 import { esName, joinList } from "@/lib/programmatic/holidays/names";
 import { GUIDES } from "@/lib/programmatic/holidays/links";
 import { comarcaAnchor, comarcaPath, hubPath, municipalityPath, type MuniLocale } from "@/lib/programmatic/holidays/paths";
+import { spainHubPath } from "@/lib/programmatic/spain-2027/paths";
 
 import { DateQuestions, GuideLinks, Sources } from "./parts";
 
@@ -50,6 +51,12 @@ export function HubPage({ locale }: { locale: MuniLocale }) {
             {t.bridges.after}
           </p>
           <p>{renderInline(t.easter)}</p>
+          {locale === "es" ? (
+            <p>
+              ¿Fuera de Cataluña? <Link href={spainHubPath()}>Calendario laboral 2027 en España: festivos por comunidad autónoma</Link>, con los
+              puentes de cada una.
+            </p>
+          ) : null}
         </div>
 
         {/* The dated questions first: with every town below, they would sit a long scroll away. */}
