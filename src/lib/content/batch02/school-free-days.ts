@@ -125,8 +125,11 @@ export function monday7Groups(towns: readonly FreeDaysTown[] = FREE_DAYS_TOWNS) 
   };
 }
 
-/** "4 de 6", "4 of 6". */
-const of = (a: number, b: number, locale: Locale) => `${a} ${locale === "en" ? "of" : "de"} ${b}`;
+/** "als 23 municipis" / "a 20 dels 23 municipis"; "en los 23 municipios" / "en 20 de los 23 municipios"; "in all 23 towns" / "in 20 of the 23 towns". */
+export function inTowns(a: number, n: number, locale: Locale): string {
+  if (a === n) return { ca: `als ${n} municipis`, es: `en los ${n} municipios`, en: `in all ${n} towns` }[locale];
+  return { ca: `a ${a} dels ${n} municipis`, es: `en ${a} de los ${n} municipios`, en: `in ${a} of the ${n} towns` }[locale];
+}
 
 /** The first `k` names, then "i N més" / "y N más" / "and N more". */
 function someNames(towns: readonly FreeDaysTown[], k: number, locale: Locale): string {
@@ -162,11 +165,19 @@ export function freeDaysDescription(locale: Locale, towns: readonly FreeDaysTown
   const { free } = monday7Groups(towns);
   const n = towns.length;
   const options = [4, 3, 2, 1].map((k) => {
-    const names = joinNames(free.slice(0, k).map((t) => nameIn(t.name, locale)), locale);
+    const shown = free.slice(0, k).map((t) => nameIn(t.name, locale));
+    const more = free.length > k;
+    const names = more ? `${shown.join(", ")}${{ ca: " i més", es: " y más", en: " and more" }[locale]}` : joinNames(shown, locale);
+    const all = free.length === n;
+    const count = {
+      ca: all ? `els ${n} municipis` : `${free.length} dels ${n} municipis`,
+      es: all ? `los ${n} municipios` : `${free.length} de los ${n} municipios`,
+      en: all ? `all ${n} towns` : `${free.length} of the ${n} towns`,
+    }[locale];
     return {
-      ca: `Dilluns 7 de desembre sense classe a ${names}${free.length > k ? " i més" : ""} (${of(free.length, n, "ca")} municipis). Els dies de lliure disposició 2026-2027 de cada ajuntament.`,
-      es: `Lunes 7 de diciembre sin clase en ${names}${free.length > k ? " y más" : ""} (${of(free.length, n, "es")} municipios). Los días de libre disposición 2026-2027 de cada ayuntamiento.`,
-      en: `No school on Monday 7 December in ${names}${free.length > k ? " and more" : ""} (${of(free.length, n, "en")} towns). Each council's 2026-2027 school free days.`,
+      ca: `Dilluns 7 de desembre sense classe a ${names}: ${count} amb dies publicats. Dies de lliure disposició 2026-27 de cada un.`,
+      es: `Lunes 7 de diciembre sin clase en ${names}: ${count} con días publicados. Días de libre disposición 2026-27 de cada uno.`,
+      en: `No school on Monday 7 December in ${names}: ${count} with published days. Each town's 2026-27 school free days.`,
     }[locale];
   });
   return fit(options, DESCRIPTION_LIMIT);
@@ -194,9 +205,9 @@ export function monday7Lead(locale: Locale, towns: readonly FreeDaysTown[] = FRE
       }[locale]
     : "";
   return {
-    ca: `**Dilluns 7 de desembre de 2026: no hi ha classe a ${of(free.length, n, "ca")} municipis** que han publicat els dies de lliure disposició del curs 2026-2027, com ${someNames(free, 5, "ca")}: és un dels seus dies de lliure disposició, que fa pont amb el dimarts 8, festiu a tot Catalunya.${localLine}${schoolLine} Cada escola pot triar altres dies: confirma-ho amb el centre.`,
-    es: `**Lunes 7 de diciembre de 2026: no hay clase en ${of(free.length, n, "es")} municipios** que han publicado los días de libre disposición del curso 2026-2027, como ${someNames(free, 5, "es")}: es uno de sus días de libre disposición, que hace puente con el martes 8, festivo en toda Cataluña.${localLine}${schoolLine} Cada colegio puede elegir otros días: confírmalo con el centro.`,
-    en: `**Monday 7 December 2026: no school in ${of(free.length, n, "en")} towns** that have published their free days for the 2026-2027 school year, such as ${someNames(free, 5, "en")}: it is one of their free days, bridging to Tuesday the 8th, a public holiday across Catalonia.${localLine}${schoolLine} Each school may choose other days: check with yours.`,
+    ca: `**Dilluns 7 de desembre de 2026: no hi ha classe ${inTowns(free.length, n, "ca")}** que han publicat els dies de lliure disposició del curs 2026-2027, com ${someNames(free, 5, "ca")}: és un dels seus dies de lliure disposició, que fa pont amb el dimarts 8, festiu a tot Catalunya.${localLine}${schoolLine} Cada escola pot triar altres dies: confirma-ho amb el centre.`,
+    es: `**Lunes 7 de diciembre de 2026: no hay clase ${inTowns(free.length, n, "es")}** que han publicado los días de libre disposición del curso 2026-2027, como ${someNames(free, 5, "es")}: es uno de sus días de libre disposición, que hace puente con el martes 8, festivo en toda Cataluña.${localLine}${schoolLine} Cada colegio puede elegir otros días: confírmalo con el centro.`,
+    en: `**Monday 7 December 2026: no school ${inTowns(free.length, n, "en")}** that have published their free days for the 2026-2027 school year, such as ${someNames(free, 5, "en")}: it is one of their free days, bridging to Tuesday the 8th, a public holiday across Catalonia.${localLine}${schoolLine} Each school may choose other days: check with yours.`,
   }[locale];
 }
 
@@ -212,7 +223,7 @@ function keyFactsBlock(locale: Locale, towns: readonly FreeDaysTown[], pending: 
     ca: {
       title: "Dies de lliure disposició 2026-2027",
       items: [
-        { label: "Dilluns 7 de desembre", value: `Sense classe a ${of(free.length, n, "ca")} municipis amb dies publicats` },
+        { label: "Dilluns 7 de desembre", value: `Sense classe ${inTowns(free.length, n, "ca")} amb dies publicats` },
         { label: "Dimarts 8 de desembre", value: "Festiu a tot Catalunya (la Immaculada)" },
         { label: "Quants dies", value: "Quatre per curs, repartits en els tres trimestres" },
         { label: "Qui els tria", value: "Cada escola, amb la proposta del consell escolar municipal" },
@@ -223,7 +234,7 @@ function keyFactsBlock(locale: Locale, towns: readonly FreeDaysTown[], pending: 
     es: {
       title: "Días de libre disposición 2026-2027",
       items: [
-        { label: "Lunes 7 de diciembre", value: `Sin clase en ${of(free.length, n, "es")} municipios con días publicados` },
+        { label: "Lunes 7 de diciembre", value: `Sin clase ${inTowns(free.length, n, "es")} con días publicados` },
         { label: "Martes 8 de diciembre", value: "Festivo en toda Cataluña (la Purísima)" },
         { label: "Cuántos días", value: "Cuatro por curso, repartidos en los tres trimestres" },
         { label: "Quién los elige", value: "Cada colegio, con la propuesta del consejo escolar municipal" },
@@ -234,7 +245,7 @@ function keyFactsBlock(locale: Locale, towns: readonly FreeDaysTown[], pending: 
     en: {
       title: "School free days 2026-2027",
       items: [
-        { label: "Monday 7 December", value: `No school in ${of(free.length, n, "en")} towns with published days` },
+        { label: "Monday 7 December", value: `No school ${inTowns(free.length, n, "en")} with published days` },
         { label: "Tuesday 8 December", value: "Public holiday across Catalonia (Immaculate Conception)" },
         { label: "How many days", value: "Four per school year, spread over the three terms" },
         { label: "Who picks them", value: "Each school, on the municipal school council's proposal" },
@@ -393,9 +404,9 @@ function restSection(locale: Locale, towns: readonly FreeDaysTown[]): Block[] {
   const school = `[${{ ca: "calendari escolar 2026-2027", es: "calendario escolar 2026-2027", en: "2026-2027 school calendar" }[locale]}](/${locale}/${SIBLING_PATHS.school[locale]}/)`;
   const carnavalLine = carnaval
     ? {
-        ca: ` El pròxim bloc és el de Carnaval: el dia més triat és el ${freeDay(carnaval.day, "ca")} (${of(carnaval.count, n, "ca")} municipis de la taula).`,
-        es: ` El próximo bloque es el de Carnaval: el día más elegido es el ${freeDay(carnaval.day, "es")} (${of(carnaval.count, n, "es")} municipios de la tabla).`,
-        en: ` The next block is Carnival: the most common day is ${freeDay(carnaval.day, "en")} (${of(carnaval.count, n, "en")} towns in the table).`,
+        ca: ` El pròxim bloc és el de Carnaval: el dia més triat és el ${freeDay(carnaval.day, "ca")} (${carnaval.count === n ? "tots els municipis de la taula" : `${carnaval.count} dels ${n} municipis de la taula`}).`,
+        es: ` El próximo bloque es el de Carnaval: el día más elegido es el ${freeDay(carnaval.day, "es")} (${carnaval.count === n ? "todos los municipios de la tabla" : `${carnaval.count} de los ${n} municipios de la tabla`}).`,
+        en: ` The next block is Carnival: the most common day is ${freeDay(carnaval.day, "en")} (${carnaval.count === n ? "every town in the table" : `${carnaval.count} of the ${n} towns in the table`}).`,
       }[locale]
     : "";
   const copy = {
@@ -437,21 +448,21 @@ function faqItems(locale: Locale, towns: readonly FreeDaysTown[]): { question: s
   const schoolAnswer = school.length ? { ca: ` A ${someNames(school, 3, "ca")}, sí que n'hi ha.`, es: ` En ${someNames(school, 3, "es")}, sí que hay.`, en: ` In ${someNames(school, 3, "en")}, there is.` }[locale] : "";
   const copy = {
     ca: [
-      { question: "Hi ha escola el 7 de desembre de 2026?", answer: `Depèn del municipi i de l'escola. No és festiu a tot Catalunya, però a ${of(free.length, n, "ca")} municipis que han publicat els dies de lliure disposició, com ${someNames(free, 3, "ca")}, és un dels seus dies de lliure disposició.${localAnswer}${schoolAnswer}` },
+      { question: "Hi ha escola el 7 de desembre de 2026?", answer: `Depèn del municipi i de l'escola. No és festiu a tot Catalunya, però ${inTowns(free.length, n, "ca")} que han publicat els dies de lliure disposició, com ${someNames(free, 3, "ca")}, és un dels seus dies de lliure disposició.${localAnswer}${schoolAnswer}` },
       ...(bcn ? [{ question: "Hi ha escola el 7 de desembre a Barcelona?", answer: `No, si l'escola segueix la proposta del Consell d'Educació Municipal de Barcelona, que hi posa un dia de lliure disposició. Els quatre dies que proposa per al curs 2026-2027 són ${joinNames(bcnDays, "ca")}. Cada escola decideix.` }] : []),
       { question: "I el 8 de desembre?", answer: "No hi ha classe: el dimarts 8 de desembre (la Immaculada) és festiu a tot Catalunya." },
       { question: "Quants dies de lliure disposició hi ha el curs 2026-2027?", answer: "Quatre, repartits entre els tres trimestres, que no poden coincidir amb el primer ni l'últim dia de curs ni amb les vacances de Nadal o Setmana Santa (Ordre EDF/66/2026). Si una festa local cau en un dia sense classe, l'escola la pot afegir." },
       { question: "Qui decideix els dies de lliure disposició?", answer: "Cada escola, a la seva programació general. El consell escolar municipal proposa els dies que convindria que fessin totes les escoles del municipi, però cada escola pot triar-ne d'altres." },
     ],
     es: [
-      { question: "¿Hay colegio el 7 de diciembre de 2026?", answer: `Depende del municipio y del colegio. No es festivo en toda Cataluña, pero en ${of(free.length, n, "es")} municipios que han publicado los días de libre disposición, como ${someNames(free, 3, "es")}, es uno de sus días de libre disposición.${localAnswer}${schoolAnswer}` },
+      { question: "¿Hay colegio el 7 de diciembre de 2026?", answer: `Depende del municipio y del colegio. No es festivo en toda Cataluña, pero ${inTowns(free.length, n, "es")} que han publicado los días de libre disposición, como ${someNames(free, 3, "es")}, es uno de sus días de libre disposición.${localAnswer}${schoolAnswer}` },
       ...(bcn ? [{ question: "¿Hay colegio el 7 de diciembre en Barcelona?", answer: `No, si el colegio sigue la propuesta del Consell d'Educació Municipal de Barcelona, que pone ahí un día de libre disposición. Los cuatro días que propone para el curso 2026-2027 son ${joinNames(bcnDays, "es")}. Cada colegio decide.` }] : []),
       { question: "¿Y el 8 de diciembre?", answer: "No hay clase: el martes 8 de diciembre (la Purísima) es festivo en toda Cataluña." },
       { question: "¿Cuántos días de libre disposición hay en el curso 2026-2027?", answer: "Cuatro, repartidos entre los tres trimestres, que no pueden coincidir con el primer ni el último día de curso ni con las vacaciones de Navidad o Semana Santa (Ordre EDF/66/2026). Si una fiesta local cae en un día sin clase, el colegio puede añadirla." },
       { question: "¿Quién decide los días de libre disposición?", answer: "Cada colegio, en su programación general. El consejo escolar municipal propone los días que convendría que hicieran todos los colegios del municipio, pero cada colegio puede elegir otros." },
     ],
     en: [
-      { question: "Is there school on 7 December 2026?", answer: `It depends on the town and the school. It is not a holiday across Catalonia, but in ${of(free.length, n, "en")} towns that have published their free days, such as ${someNames(free, 3, "en")}, it is one of their free days.${localAnswer}${schoolAnswer}` },
+      { question: "Is there school on 7 December 2026?", answer: `It depends on the town and the school. It is not a holiday across Catalonia, but ${inTowns(free.length, n, "en")} that have published their free days, such as ${someNames(free, 3, "en")}, it is one of their free days.${localAnswer}${schoolAnswer}` },
       ...(bcn ? [{ question: "Is there school on 7 December in Barcelona?", answer: `No, if the school follows the proposal of Barcelona's municipal education council, which puts a free day there. The four days it proposes for 2026-2027 are ${joinNames(bcnDays, "en")}. Each school decides.` }] : []),
       { question: "And on 8 December?", answer: "No school: Tuesday 8 December (Immaculate Conception) is a public holiday across Catalonia." },
       { question: "How many free days are there in 2026-2027?", answer: "Four, spread over the three terms, never on the first or last day of the year or in the Christmas or Easter holidays (Order EDF/66/2026). When a local holiday falls on a day without school, the school may add it." },

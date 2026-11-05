@@ -2601,3 +2601,71 @@ again after the DOGC order (`prepare2027` prints COUNCIL DIFFERS). From
 measure that change on its own.
 
 **Outcome:** _pending_
+
+## 2026-11-05 — New page: school free days 2026-2027 town by town, "is there school on 7 December?" (groups `lliure-disposicio`, `lliure-disposicio-links`; deploy first)
+
+**URLs (new, year-free):** `/ca/guies/dies-lliure-disposicio-escoles/`,
+`/es/guias/dias-libre-disposicion-colegios/`,
+`/en/guides/catalonia-school-free-days/`. Plus a short body section
+"Dies de lliure disposició escolar 2026-27" / "Días de libre disposición
+escolar 2026-27" on the CA/ES holiday pages of the towns with data
+(`/ca/festius/<town>/`, `/es/festivos/<town>/`), and one body sentence in the
+December bridge guide linking the page.
+
+**Why.** Strike traffic (about 60% of impressions) ends after 12 Nov; this is a
+source for late November and early December. 8 Dec 2026 is a Tuesday, so most
+councils put a school free day on Monday the 7th, and parents search for it.
+- `/es/guias/puente-diciembre-cataluna/`: 5.6k impressions in 14 days and
+  rising (22 Oct–4 Nov: 79 → 1,214 a day; CTR 1.1–2.7%, position 5–6). Its
+  queries include "el 7 de diciembre es festivo en cataluña" (49 at 1.5),
+  "7 y 8 de diciembre es festivo" (26), "el 7 de diciembre es festivo en
+  barcelona" (14). The page could only say "it depends on the school;
+  Barcelona proposes it".
+- Free-day queries today: about 25 impressions in 14 days ("proposta de dies
+  festius de lliure disposició pel curs 2026 2027" 7 at 5.4, "dia lliure
+  disposicio escoles" 4 at 9.8). No page of ours answered them.
+- Town holiday pages, 30 Oct–5 Nov (`snapshot.py families 7`): `/es/festivos/`
+  31,222 impressions at 1.84% CTR (570 pages); `/ca/festius/` 8,907 at 4.20%.
+  The section adds the query family "días de libre disposición 2026-2027
+  <town>" / "hay cole el 7 de diciembre <town>" without touching titles,
+  descriptions or H1s (still inside the 4 Nov window).
+
+**Facts (official sources only, read 5 Nov 2026).** Rules: Ordre EDF/66/2026,
+section 2.4 b-e (four days per course over three terms; the municipal school
+council sets the days "que convindria que adoptessin tots els centres del
+mateix municipi"; a local holiday on a non-school day may be added). Towns:
+the 100 most populous were searched. 32 have a published set: Barcelona,
+Lleida, Tarragona, Mataró, Girona, Vilanova i la Geltrú, el Prat, Granollers,
+Mollet, Vic and 22 more. All 32 put a free day on Monday 7 December. Another 54
+had published nothing on any council page. The page lists them as "not
+published" with the council's link. In Sant Boi, Castelldefels and Amposta,
+7 December is a local holiday anyway. Big gaps: l'Hospitalet, Terrassa,
+Badalona, Sabadell, Santa Coloma, Reus, Sant Cugat, Cornellà and Manresa.
+Terrassa, Santa Coloma and Sabadell block scripts, so check them in a browser.
+Every row's quote was re-checked by script against the text at its URL. Some
+calendars carry their dates only as coloured cells, so I read them visually:
+Montcada, Cambrils, Salt, Tarragona, Granollers, Vilanova, Sant Quirze,
+Lliçà d'Amunt and Parets, plus Tàrrega's JPEG. Fact pack:
+`research_notes/x10/lliure-disposicio-2026-27.md`.
+
+**Baseline** (GSC, 22 Oct–4 Nov unless stated): the bridge page above; the
+town-page families above; free-day queries ~25 impressions, 1 click.
+
+**Prediction.**
+- The new ES page reaches top 5 for "hay cole el 7 de diciembre", "días de
+  libre disposición 2026-2027" and "<town> días de libre disposición" by
+  25 Nov, and takes 3–8k impressions between 20 Nov and 9 Dec, peaking in the
+  week of 30 Nov.
+- The bridge page's CTR does not fall (the link is in the body; its title is
+  unchanged).
+- Town pages with the section (32 towns) gain free-day and "7 de
+  diciembre" queries that the towns without it do not; the families' CTR moves
+  little before December.
+
+**Measure on 26 Nov and 10 Dec 2026** (`snapshot.py page dias-libre-disposicion
+14`, `page dies-lliure-disposicio 14`, `page puente-diciembre-cataluna 14`, and
+the town families split by towns with/without data). Re-read the councils by
+1 Dec (`FREE_DAYS_REREAD_BY`; a test fails from that day) and again before
+Carnaval (4–9 Feb 2027).
+
+**Outcome:** _pending_

@@ -280,10 +280,15 @@ function sibling(key: "school" | "local", locale: Locale, label: string): string
 function schoolFreeDaysLine(locale: Locale): string {
   const n = FREE_DAYS_TOWNS.length;
   const free = FREE_DAYS_TOWNS.filter((t) => monday7(t) === "free").length;
+  const count = {
+    ca: free === n ? `Als ${n} municipis` : `A ${free} dels ${n} municipis`,
+    es: free === n ? `En los ${n} municipios` : `En ${free} de los ${n} municipios`,
+    en: free === n ? `In all ${n} towns` : `In ${free} of the ${n} towns`,
+  };
   return {
-    ca: `A ${free} dels ${n} municipis que han publicat els seus dies de lliure disposició, el 7 tampoc no hi ha classe: la llista, amb els dies de cada un, és a ${b2link("schoolFreeDays", "ca", "dies de lliure disposició 2026-2027 per municipi")}. Si el teu no hi és, pregunta-ho a l'escola o a l'ajuntament.`,
-    es: `En ${free} de los ${n} municipios que han publicado sus días de libre disposición, el 7 tampoco hay clase: la lista, con los días de cada uno, está en ${b2link("schoolFreeDays", "es", "días de libre disposición 2026-2027 por municipio")}. Si el tuyo no está, pregúntalo en el colegio o en el ayuntamiento.`,
-    en: `In ${free} of the ${n} towns that have published their free days, there is no school on the 7th either: the list, with each town's days, is in ${b2link("schoolFreeDays", "en", "school free days 2026-2027 by town")}. If yours is not there, ask the school or the town council.`,
+    ca: `${count.ca} que han publicat els seus dies de lliure disposició, el 7 tampoc no hi ha classe: la llista, amb els dies de cada un, és a ${b2link("schoolFreeDays", "ca", "dies de lliure disposició 2026-2027 per municipi")}. Si el teu no hi és, pregunta-ho a l'escola o a l'ajuntament.`,
+    es: `${count.es} que han publicado sus días de libre disposición, el 7 tampoco hay clase: la lista, con los días de cada uno, está en ${b2link("schoolFreeDays", "es", "días de libre disposición 2026-2027 por municipio")}. Si el tuyo no está, pregúntalo en el colegio o en el ayuntamiento.`,
+    en: `${count.en} that have published their free days, there is no school on the 7th either: the list, with each town's days, is in ${b2link("schoolFreeDays", "en", "school free days 2026-2027 by town")}. If yours is not there, ask the school or the town council.`,
   }[locale];
 }
 

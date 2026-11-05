@@ -11,6 +11,7 @@ import {
   freeDaysDescription,
   freeDaysSources,
   freeDaysTitle,
+  inTowns,
   monday7Groups,
   townRows,
 } from "../src/lib/content/batch02/school-free-days.ts";
@@ -182,10 +183,12 @@ test("each table row names the town, its 7 December status, its days and its sou
 test("the counts in the lead, the key facts and the description add up", () => {
   const groups = monday7Groups();
   assert.equal(groups.free.length + groups.local.length + groups.school.length, FREE_DAYS_TOWNS.length);
+  assert.equal(inTowns(3, 3, "ca"), "als 3 municipis");
+  assert.equal(inTowns(2, 3, "es"), "en 2 de los 3 municipios");
   for (const locale of LOCALES) {
     const lead = text(SCHOOL_FREE_DAYS.editions[locale].blocks.slice(0, 1));
-    const of = locale === "en" ? "of" : "de";
-    assert.ok(lead.includes(`${groups.free.length} ${of} ${FREE_DAYS_TOWNS.length}`), `${locale}: ${lead.slice(0, 120)}`);
+    assert.ok(lead.includes(inTowns(groups.free.length, FREE_DAYS_TOWNS.length, locale)), `${locale}: ${lead.slice(0, 120)}`);
+    assert.ok(freeDaysDescription(locale).includes(String(FREE_DAYS_TOWNS.length)), locale);
   }
 });
 
