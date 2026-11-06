@@ -79,6 +79,10 @@ import {
  *
  * 31 Oct 2026: one sentence after La Marató links the new "Barcelona in
  * December" hub (group `barcelona-december-links`). No new fact.
+ *
+ * 6 Nov 2026: the "rest of Spain" section ends with a link to the Spain-wide
+ * page, every community's table (december-bridge-spain.ts; group
+ * `puente-diciembre-espana-links`). No new fact.
  */
 export const BRIDGE_VERIFIED = "2026-10-26";
 
@@ -425,7 +429,7 @@ export function buildDecemberBridgeBody(locale: Locale): Block[] {
       ...h2(
         "I a la resta d'Espanya? On el dilluns 7 sí que és festiu",
         `Segons la relació de festes laborals del 2026 que va publicar el BOE el 28 d'octubre de 2025, el dilluns 7 de desembre és festiu a ${regions}. A Catalunya no, i tampoc a les Illes Balears, les Canàries, Castella-la Manxa, Galícia, Navarra, el País Basc, la Comunitat Valenciana ni Ceuta. El dimarts 8 és festiu a tot Espanya.`,
-        "Per això, en aquelles comunitats el pont del dissabte 5 al dimarts 8 surt sense demanar cap dia, i a Catalunya no. Si viatges o tens família en una altra comunitat, compta amb el seu calendari, no amb el català.",
+        `Per això, en aquelles comunitats el pont del dissabte 5 al dimarts 8 surt sense demanar cap dia, i a Catalunya no. Si viatges o tens família en una altra comunitat, compta amb el seu calendari, no amb el català: la taula de totes les comunitats, amb Nadal i Reis, és a ${b2link("decemberBridgeSpain", "ca", "el pont de desembre a Espanya, comunitat per comunitat")}.`,
       ),
       ...h2(
         "Hi ha escola el 7 i el 8 de desembre?",
@@ -512,7 +516,7 @@ export function buildDecemberBridgeBody(locale: Locale): Block[] {
       ...h2(
         "¿Y en el resto de España? Dónde el lunes 7 sí es festivo",
         `Según la relación de fiestas laborales de 2026 que publicó el BOE el 28 de octubre de 2025, el lunes 7 de diciembre es festivo en ${regions}. En Cataluña no, y tampoco en Baleares, Canarias, Castilla-La Mancha, Galicia, Navarra, el País Vasco, la Comunidad Valenciana ni Ceuta. El martes 8 es festivo en toda España.`,
-        "Por eso, en esas comunidades el puente del sábado 5 al martes 8 sale sin pedir ningún día, y en Cataluña no. Si viajas o tienes familia en otra comunidad, cuenta con su calendario, no con el catalán.",
+        `Por eso, en esas comunidades el puente del sábado 5 al martes 8 sale sin pedir ningún día, y en Cataluña no. Si viajas o tienes familia en otra comunidad, cuenta con su calendario, no con el catalán: la tabla de todas las comunidades, con Navidad y Reyes, está en ${b2link("decemberBridgeSpain", "es", "el puente de diciembre en España, comunidad por comunidad")}.`,
       ),
       ...h2(
         "¿Hay colegio el 7 y el 8 de diciembre?",
@@ -598,7 +602,7 @@ export function buildDecemberBridgeBody(locale: Locale): Block[] {
     ...h2(
       "What about the rest of Spain? Where Monday the 7th is a holiday",
       `According to the national list of 2026 public holidays published in the BOE (Spain's official state gazette) on 28 October 2025, Monday 7 December is a holiday in ${regions}. Not in Catalonia, nor in the Balearic Islands, the Canary Islands, Castilla-La Mancha, Galicia, Navarre, the Basque Country, the Valencian Community or Ceuta. Tuesday the 8th is a holiday everywhere in Spain.`,
-      "That is why in those regions the Saturday 5 to Tuesday 8 break comes without booking a day, and in Catalonia it does not. If you are travelling to or have family in another region, go by its calendar, not Catalonia's.",
+      `That is why in those regions the Saturday 5 to Tuesday 8 break comes without booking a day, and in Catalonia it does not. If you are travelling to or have family in another region, go by its calendar, not Catalonia's: every region's table, with Christmas and Epiphany, is in ${b2link("decemberBridgeSpain", "en", "December holidays in Spain, region by region")}.`,
     ),
     ...h2(
       "Is there school on 7 and 8 December?",

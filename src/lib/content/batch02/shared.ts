@@ -99,7 +99,9 @@ export type B2Key =
   // 5 Nov 2026: school free days 2026-2027 town by town (is there school on 7 December?).
   | "schoolFreeDays"
   // 5 Nov 2026: the postal vote (29N requests close on 19 Nov).
-  | "postalVote";
+  | "postalVote"
+  // 6 Nov 2026: the December bridge, Christmas and Reyes in every community of Spain.
+  | "decemberBridgeSpain";
 
 /** Path after the locale prefix, no leading or trailing slash. */
 export const B2_PATHS: Record<B2Key, Record<Locale, string>> = {
@@ -453,6 +455,14 @@ export const B2_PATHS: Record<B2Key, Record<Locale, string>> = {
     ca: "guies/vot-per-correu",
     es: "guias/voto-por-correo",
     en: "guides/postal-vote-spain",
+  },
+  // No year in the path: the Catalan sibling (decemberBridge) has none, and
+  // December 2027's bridge goes on the same URLs (a test fails after
+  // 9 Jan 2027 until the page is rewritten or retired).
+  decemberBridgeSpain: {
+    ca: "guies/pont-desembre-espanya",
+    es: "guias/puente-diciembre-espana",
+    en: "guides/december-holidays-spain",
   },
 };
 
@@ -832,6 +842,11 @@ export const B2_TITLES: Record<B2Key, Record<Locale, string>> = {
     ca: "Vot per correu el 29N: terminis i com fer-ho",
     es: "Voto por correo el 29N: plazos y cómo hacerlo",
     en: "Postal vote for 29 November: deadlines and how to apply",
+  },
+  decemberBridgeSpain: {
+    ca: "Pont de desembre 2026 a Espanya: on és festiu el dilluns 7",
+    es: "Puente de diciembre 2026 en España: dónde es festivo el lunes 7",
+    en: "Is 7 December a holiday in Spain? Region by region",
   },
 };
 
