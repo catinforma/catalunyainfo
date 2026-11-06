@@ -51,6 +51,7 @@ import { CANDIDATES } from "@/lib/content/batch02/candidates";
 import { CALCOTS } from "@/lib/content/batch02/calcots";
 import { CHRISTMAS_TRADITIONS } from "@/lib/content/batch02/christmas-traditions";
 import { DECEMBER_BRIDGE } from "@/lib/content/batch02/december-bridge";
+import { DECEMBER_BRIDGE_SPAIN } from "@/lib/content/batch02/december-bridge-spain";
 import { MARATO_GUIDE } from "@/lib/content/batch02/marato";
 import { STRIKES_GUIDE } from "@/lib/content/batch02/strikes";
 import { STRIKE_11N } from "@/lib/content/batch02/strike-11n";
@@ -352,6 +353,13 @@ export async function POST(request: Request) {
     // only it. The how-to-vote guide, whose section now links here, goes out
     // with `voting`; the hub and town election pages are code routes.
     if (wants("vot-correu")) published.push(await publishB2Article(POSTAL_VOTE));
+    // The December bridge, Christmas and Reyes in every community of Spain
+    // (6 Nov 2026): one page, on its own so a regional change or the December
+    // 2027 rewrite republishes only it. The Catalan December bridge page,
+    // which gained one sentence linking to it, goes out once with
+    // `puente-diciembre-espana-links`.
+    if (wants("puente-diciembre-espana")) published.push(await publishB2Article(DECEMBER_BRIDGE_SPAIN));
+    if (wants("puente-diciembre-espana-links")) published.push(await publishB2Article(DECEMBER_BRIDGE));
     // Calendario laboral 2027 en España (/es/festivos/2027/, 19 communities
     // and cities, the hub, the bridges page): code routes built from the BOE
     // table, not articles, so the deploy ships them. This group revalidates
