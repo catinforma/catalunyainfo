@@ -165,7 +165,8 @@ function languageMap(group: Partial<Record<Locale, string>>): Record<string, str
     const href = group[locale];
     if (href) languages[HTML_LANG[locale]] = absoluteUrl(href);
   }
-  const fallback = isHomeCluster(group) ? "/" : (group[X_DEFAULT_LOCALE] ?? group.ca);
+  // An entry published only in Spanish (the school calendars of other communities) is its own x-default, as its HTML says.
+  const fallback = isHomeCluster(group) ? "/" : (group[X_DEFAULT_LOCALE] ?? group.ca ?? group.es);
   if (fallback) languages["x-default"] = absoluteUrl(fallback);
   return languages;
 }

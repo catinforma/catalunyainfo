@@ -11,9 +11,11 @@ import {
   nextBreak,
   nextSchoolDay,
   schoolDayIn,
+  variesByProvince,
   weekdayDay,
 } from "@/lib/content/school-spain/logic";
-import { hubRegions, regionBySlug, regionPath } from "@/lib/content/school-spain/regions";
+import { orderWhere } from "@/lib/content/school-spain/body";
+import { hubRegions, pendingRegions, regionBySlug, regionPath } from "@/lib/content/school-spain/regions";
 import type { Period, RegionCalendar } from "@/lib/content/school-spain/types";
 
 /**
@@ -47,6 +49,7 @@ function shortSpan(period: Period): string {
 
 function dayLine(region: RegionCalendar, iso: string, which: "Hoy" | "Mañana"): string {
   const when = `${which}, ${weekdayDay(iso)}`;
+  if (variesByProvince(region, iso)) return `${when}: depende de la provincia; mira la tabla por provincias.`;
   const day = schoolDayIn(region, iso);
   switch (day.kind) {
     case "before":
@@ -71,35 +74,39 @@ function dayLine(region: RegionCalendar, iso: string, which: "Hoy" | "Mañana"):
 
 function Region({ region, today }: { region: RegionCalendar; today: string }) {
   const { start, end } = mainLevels(region);
+  const main = region.levels[0]!;
   const next = nextBreak(region, today);
   let nextLine: string | null = null;
   if (next && next.kind !== "summer") {
-    const name = next.kind === "christmas" ? "Navidad" : next.kind === "easter" ? "Semana Santa" : next.period.name;
-    nextLine = `Próximas vacaciones: ${name}, ${longSpan(next.period)} (dentro de ${daysBetween(today, next.period.from)} días).`;
+    const name = next.kind === "break" ? next.period.name : next.kind === "christmas" ? "Navidad" : "Semana Santa";
+    const minimum = next.kind !== "break" && next.period.minimum ? ", como mínimo" : "";
+    nextLine = `Próximas vacaciones: ${name}, ${longSpan(next.period)}${minimum} (dentro de ${daysBetween(today, next.period.from)} días).`;
   } else if (next?.kind === "summer" && today >= start) {
-    nextLine = `Último día de clase: ${fullDate(end)} (dentro de ${daysBetween(today, end)} días).`;
+    nextLine = main.endText
+      ? `Último día de clase: ${main.endText}.`
+      : `Último día de clase: ${fullDate(end)} (dentro de ${daysBetween(today, end)} días).`;
   }
   // The next weekday off for everyone in the community before that break.
   const limit = next ? (next.kind === "summer" ? next.from : next.period.from) : today;
   const offDays = [
     ...holidaysInTerm(region).map((h) => ({ date: h.date, why: h.name })),
-    ...region.nonTeaching.filter((d) => !d.notPrimary).map((d) => ({ date: d.date, why: d.reason })),
+    ...region.nonTeaching.filter((d) => !d.partial).map((d) => ({ date: d.date, why: d.reason })),
   ]
     .filter((d) => d.date > addDays(today, 1) && d.date < limit)
     .sort((a, b) => a.date.localeCompare(b.date));
   const nextOff = offDays[0];
 
   const rows: [string, string][] = [
-    [`Inicio de curso (${region.levels[0]!.levels})`, fullDate(start)],
-    ["Vacaciones de Navidad", longSpan(region.christmas)],
+    [`Inicio de curso (${main.levels})`, main.startText ?? fullDate(start)],
+    [`Vacaciones de Navidad${region.christmas.minimum ? " (mínimo)" : ""}`, region.christmas.label ?? longSpan(region.christmas)],
     ...region.otherBreaks
       .filter((b) => b.from < region.easter.from)
       .map((b) => [b.name, longSpan(b)] as [string, string]),
-    ["Vacaciones de Semana Santa", longSpan(region.easter)],
+    [`Vacaciones de Semana Santa${region.easter.minimum ? " (mínimo)" : ""}`, region.easter.label ?? longSpan(region.easter)],
     ...region.otherBreaks
       .filter((b) => b.from > region.easter.from)
       .map((b) => [b.name, longSpan(b)] as [string, string]),
-    [`Fin de curso (${region.levels[0]!.levels})`, fullDate(end)],
+    [`Fin de curso (${main.levels})`, main.endText ?? fullDate(end)],
   ];
 
   return (
@@ -114,8 +121,9 @@ function Region({ region, today }: { region: RegionCalendar; today: string }) {
         ) : null}
         {nextLine ? <p>{nextLine}</p> : null}
         <p className="ci-calc-note">
-          Calendario general de la comunidad. No cuenta las fiestas locales de cada municipio ni los días que puedan fijar
-          el ayuntamiento o el propio centro.
+          {region.flexible
+            ? "Límites y mínimos que fija la comunidad: cada centro aprueba su propio calendario dentro de ellos, con sus fiestas locales y sus días no lectivos."
+            : "Calendario general de la comunidad. No cuenta las fiestas locales de cada municipio ni los días que puedan fijar el ayuntamiento o el propio centro."}
         </p>
       </div>
 
@@ -144,8 +152,7 @@ function Region({ region, today }: { region: RegionCalendar; today: string }) {
         <a href={region.order.url} rel="noopener" target="_blank">
           {region.order.short}
         </a>{" "}
-        ({region.order.bulletin}
-        {region.order.number ? ` núm. ${region.order.number}` : ""}, {fullDate(region.order.date).replace(/^\S+ /, "")}).
+        ({orderWhere(region.order)}).
       </p>
     </section>
   );
@@ -153,6 +160,7 @@ function Region({ region, today }: { region: RegionCalendar; today: string }) {
 
 function Hub({ today }: { today: string }) {
   const regions = hubRegions();
+  const pending = pendingRegions();
   // The next Christmas or Easter break to start, and where it starts first.
   const upcoming = regions
     .flatMap((r) => [
@@ -203,27 +211,34 @@ function Hub({ today }: { today: string }) {
           <tbody>
             {regions.map((r) => {
               const { start, end } = mainLevels(r);
+              const main = r.levels[0]!;
               return (
                 <tr key={r.slug}>
                   <th scope="row">
                     <Link href={`/es/${regionPath(r.slug)}/`}>{r.short}</Link>
                     {r.provinces?.length ? " (por provincias)" : ""}
                   </th>
-                  <td>{short(start)}</td>
-                  <td>{shortSpan(r.christmas)}</td>
-                  <td>{r.otherBreaks.length ? r.otherBreaks.map((b) => `${b.name}: ${shortSpan(b)}`).join("; ") : "—"}</td>
-                  <td>{shortSpan(r.easter)}</td>
-                  <td>{short(end)}</td>
+                  <td>{main.startLatest ? `${short(start)} – ${short(main.startLatest)}*` : main.startText ? `desde ${short(start)}*` : short(start)}</td>
+                  <td>{r.christmas.labelShort ?? shortSpan(r.christmas)}{r.christmas.minimum ? "*" : ""}</td>
+                  <td>{r.otherBreaks.length ? r.otherBreaks.map((b) => `${b.name}: ${shortSpan(b)}`).join("; ") : (r.hubOther ?? "—")}</td>
+                  <td>{r.easter.labelShort ?? shortSpan(r.easter)}{r.easter.minimum ? "*" : ""}</td>
+                  <td>{main.endEarliest ? `${short(main.endEarliest)} – ${short(end)}*` : main.endText ? `hasta ${short(end)}*` : short(end)}</td>
                 </tr>
               );
             })}
+            {pending.map((p) => (
+              <tr key={p.slug}>
+                <th scope="row">{p.short}</th>
+                <td colSpan={5}>por confirmar</td>
+              </tr>
+            ))}
           </tbody>
         </table>
       </div>
       <p className="ci-calc-note">
         Fechas de Infantil y Primaria, del primer al último día sin clase en cada periodo de vacaciones, según la orden o
         resolución de cada comunidad para el curso {SPAIN_SCHOOL_YEAR}; ESO, Bachillerato y FP pueden empezar o terminar otro
-        día: está en la página de cada comunidad.
+        día: está en la página de cada comunidad. * Navarra y País Vasco: márgenes y mínimos; cada centro fija sus días.
       </p>
     </section>
   );

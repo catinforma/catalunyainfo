@@ -1,20 +1,25 @@
 import { SCHOOL_SOURCE, SCHOOL_VERIFIED_AT, SCHOOL_YEARS } from "@/lib/content/school/calendar";
+import { REGIONS, type Region } from "@/lib/programmatic/holidays/boe-2027";
+import { names } from "@/lib/programmatic/spain-2027/communities";
 
+import { REGION_DATA, type RegionData } from "./data";
 import type { RegionCalendar } from "./types";
 
 /**
- * The 2026-2027 school calendars of the Spanish communities and of Ceuta and
- * Melilla, one record per official order or resolution.
+ * The communities with a page: every record in `data.ts`, named and slugged
+ * like the 2027 work calendar's pages (/es/festivos/2027/<slug>/), so the two
+ * families share their words ("baleares", "comunidad-valenciana").
  *
- * Transcribed on 6 Nov 2026 from each text in its bulletin (or the
- * education department's own page where the text lives there). The sentence
- * behind every date is quoted in research_notes/x10/calendario-escolar-espana-2026-27.md.
- * A community whose 2026-2027 text could not be read is not here, and no page
- * is published for it: never fill one from memory or from another year.
- *
- * Order: alphabetical by the Spanish name, as the hub's table lists them.
+ * A community whose 2026-2027 text could not be read has no record, no page
+ * and a "por confirmar" row in the hub: never fill one from memory or from
+ * another year.
  */
-export const SPAIN_REGIONS: readonly RegionCalendar[] = [];
+function define(data: RegionData): RegionCalendar {
+  const n = names(data.boe);
+  return { ...data, slug: n.slug, name: n.Full, short: n.short, inName: n.en, deName: n.de };
+}
+
+export const SPAIN_REGIONS: readonly RegionCalendar[] = REGION_DATA.map(define).sort((a, b) => a.short.localeCompare(b.short, "es"));
 
 const Y = SCHOOL_YEARS[0]!;
 
@@ -23,12 +28,8 @@ const Y = SCHOOL_YEARS[0]!;
  * (/es/guias/calendario-escolar-cataluna/, `school/publish.ts`), from the same
  * order these dates come from, so it gets no second page here.
  */
-export const CATALONIA: RegionCalendar = {
-  slug: "cataluna",
+export const CATALONIA: RegionCalendar = define({
   boe: "CT",
-  name: "Cataluña",
-  short: "Cataluña",
-  inName: "en Cataluña",
   order: {
     short: "Orden EDF/66/2026, de 22 de abril",
     title: SCHOOL_SOURCE.name,
@@ -50,11 +51,19 @@ export const CATALONIA: RegionCalendar = {
   localDays: "Cada centro fija cuatro días de libre disposición, y no hay clase en las dos fiestas locales del municipio.",
   notes: [],
   verifiedAt: SCHOOL_VERIFIED_AT,
-};
+});
 
 /** Every community in the hub's table, Catalonia included, alphabetically. */
 export function hubRegions(): RegionCalendar[] {
   return [...SPAIN_REGIONS, CATALONIA].sort((a, b) => a.short.localeCompare(b.short, "es"));
+}
+
+/** Communities (and cities) whose 2026-2027 text is not transcribed yet: "por confirmar" in the hub. */
+export function pendingRegions(): { region: Region; short: string; slug: string }[] {
+  const done = new Set(hubRegions().map((r) => r.boe));
+  return REGIONS.filter((r) => !done.has(r))
+    .map((r) => ({ region: r, short: names(r).short, slug: names(r).slug }))
+    .sort((a, b) => a.short.localeCompare(b.short, "es"));
 }
 
 export function regionBySlug(slug: string): RegionCalendar | undefined {
@@ -67,3 +76,11 @@ export function regionPath(slug: string): string {
 }
 
 export const HUB_PATH = "guias/calendario-escolar-espana";
+
+/**
+ * A community page of this family (not the hub, not Catalonia's own page):
+ * the home page shows the hub instead of up to six of them in a row.
+ */
+export function isRegionSchoolPage(path: string): boolean {
+  return SPAIN_REGIONS.some((r) => regionPath(r.slug) === path.replace(/^\/?(es\/)?|\/$/g, ""));
+}
