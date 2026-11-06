@@ -408,8 +408,9 @@ test("titles and descriptions: the question in the searchers' words, the day's n
   assert.equal(dateTitle("2027-12-26", "ca"), "És festiu el 26 de desembre de 2027 a Catalunya? Sant Esteve");
   assert.equal(dateTitle("2027-03-29", "es"), "¿Es festivo el 29 de marzo de 2027 en Cataluña? Pascua");
   assert.equal(dateTitle("2027-10-12", "es"), "¿Es festivo el 12 de octubre de 2027 en Cataluña? Hispanidad");
-  // The earlier pages keep their question as the title.
-  assert.equal(dateTitle("2026-12-08", "es"), "¿Es festivo el 8 de diciembre de 2026 en Cataluña?");
+  // The earlier pages keep their question as the title (7 and 8 December 2026
+  // add a short promise since the 6 Nov CTR sweep; holiday-engine.test.ts).
+  assert.equal(dateTitle("2026-12-25", "es"), "¿Es festivo el 25 de diciembre de 2026 en Cataluña?");
   assert.match(dateContent("2027-03-25", "es").description, /pero sí en casi todo el resto de España/);
 });
 

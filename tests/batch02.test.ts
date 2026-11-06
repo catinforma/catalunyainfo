@@ -776,7 +776,9 @@ test("parking: per-rate limits, Trinitat Vella zone 36, the AREA map and a day-b
     assert.ok(edition.seoTitle.length <= 60, `${locale}: title budget`);
     assert.ok(edition.seoDescription.length <= 155, `${locale}: description budget`);
   }
-  assert.match(PARKING.editions.ca.seoTitle, /^Preu zona blava i verda Barcelona: 1,15-4,25 €\/h/);
+  // CA, 6 Nov (CTR sweep): hours and Saturday first; the prices are in the description.
+  assert.equal(PARKING.editions.ca.seoTitle, "Zona blava i verda Barcelona 2026: horari, dissabte i preu");
+  assert.match(PARKING.editions.ca.seoDescription, /1,15-3,75 €\/h/);
   // ES, 3 Nov (CTR sweep): "horario zona azul barcelona" is the page's top
   // visible query; the title leads with it and the lead answers it first.
   assert.match(PARKING.editions.es.seoTitle, /^Horario zona azul y verde Barcelona: cuándo se paga y precio$/);

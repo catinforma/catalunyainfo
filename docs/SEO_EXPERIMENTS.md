@@ -3075,3 +3075,90 @@ enquestes-eleccions 14`, `page election-polls 14`). On 24 Nov 00:05 and 29 Nov
 **Measure** on 12 Nov, 15 Nov and 1 Dec 2026 (`snapshot.py page miembro-mesa-electoral 7`, `page como-votar-elecciones-cataluna 7`, and the intent split used above).
 
 **Outcome:** _pending_
+
+## 2026-11-06 — CTR sweep on durable pages: titles that promise what the snippet cannot list (deploy; groups `lliure-disposicio-links`, `parking`, `hours`, `tourist-tax`)
+
+**Why.** The owner wants a durable base, not only event spikes. Site curve
+(GSC 29 Oct–4 Nov): position 1–2 14.5 %, 3–4 6.8 %, 5–7 4.0 %, 8–10 0.6 %.
+The 3 Nov sweep put the answer in some titles ("festivo el martes 8",
+"vacances de Nadal 22/12-7/1"). Measured on 6 Nov, those pages lost clicks
+at the same position: ES December bridge 2.3 % → 1.4 % at 5.7 (4,656 →
+1,789 impressions); CA school calendar 1.1 % → 0.2 % at 5.1 (4,072 → 495).
+Pages whose titles carry the whole answer sit far below the curve: EN metro
+hours 0.3 %, CA parking 0.8 %. Pages whose titles ask the question do well:
+11 Nov date page 11 % at 3.0. Hypothesis: a title gets clicks when it
+promises the per-town or per-date detail, or "today's" answer, that a
+snippet cannot hold. The concrete answer moves to (or stays in) the
+description.
+
+**How the pages were picked.** `snapshot.py ctr 14 300`, `ctr 7 150`, `pages
+7 60`, and a click gap of impressions × (curve − CTR). Pages at 1–7 only.
+Each page was split into before and after 4 Nov (`page … 14`).
+
+**Excluded:**
+- the 11N strike pages and city pages (another agent);
+- election guides: mesa, how-to-vote, vot-correu and polls;
+- `/es/festivos/2027/`;
+- the EN transport passes (frozen to 16 Nov);
+- pages changed 5 Nov: shops, "is today a holiday", work calendar ES;
+- the town holiday template: it is working since 3 Nov (Tarragona 0.9 →
+  4.1 %, Mataró 2.5 → 8.0 %, Reus 2.1 → 7.3 %);
+- La Marató CA (improving, 0.5 → 1.1 %);
+- Christmas BCN CA (improving).
+
+**Skipped, with reasons:**
+- Christmas BCN ES: CTR fell, 1.0 → 0.4 %, but so did position, 6.4 → 7.7,
+  and the dedicated lights page (4 Nov) now takes these queries. Nothing
+  true can be promised until the council gives a date.
+- Easter 2027: ES is at 3.0 %, near the curve. The test keeps the holiday
+  days in the title on purpose.
+- Tourist tax ES: neither the "calculadora" title (before 30 Oct) nor the
+  range title moved it; its queries sit at 9–11.
+- EN weather by month: Google's weather box answers it.
+- Calendario laboral ES, festivos Barcelona, aparcar ES, tarjetas ES,
+  horarios metro ES: position 8+, so a ranking problem, not a CTR one.
+
+Baseline is Search Console, 24 Oct–6 Nov (14 days; `snapshot.py page …
+14`).
+
+| Page (group) | Before → after | Baseline and query evidence |
+| --- | --- | --- |
+| `/es/guias/puente-diciembre-cataluna/` (`lliure-disposicio-links`; or `pont-desembre`, which also republishes the holiday guide) | T: "Puente de diciembre 2026 en Cataluña: festivo el martes 8" → "Puente de diciembre 2026 Cataluña: festivos y qué días pedir". D: "…El 6 cae en domingo y el lunes 7 es laborable, salvo en 43 municipios." → "Festivos de diciembre 2026 en Cataluña: martes 8 (la Purísima), 25 y 26. El lunes 7 es laborable salvo en 43 municipios: qué días pedir y si hay colegio." | 6,445 impr., 132 clicks (2.0 %), pos 5.7. After 3 Nov: 1.4 %. Queries: festivos diciembre 2026 (223, pos 5.1, 0 clicks); puente de diciembre 2026 (233, 6.3, 3.4 %); festivos de/en diciembre 2026 (116, 5.5, 0) |
+| `/ca/guies/pont-desembre-catalunya/` (same) | T: "Pont de desembre 2026 a Catalunya: festiu el dimarts 8" → "Pont de desembre 2026 a Catalunya: festius i dies a demanar". D: → "Festius de desembre 2026 a Catalunya: dimarts 8 (la Immaculada), 25 i 26. Dilluns 7, feiner llevat de 43 municipis: quins dies demanar i si hi ha escola." | 666 impr., 2.6 %, pos 4.8. After 3 Nov: 1.8 %. Queries: pont de desembre 2026 (119, 6.7, 0) |
+| `/ca/guies/calendari-escolar-catalunya/` (live title, deploy) | Title before Christmas: "Calendari escolar 2026-2027: vacances de Nadal 22/12-7/1" → "Calendari escolar 2026-2027: festius i lliure disposició". The live description already opens "Pròxim festiu escolar: dimarts 8 de desembre. Nadal: del 22 de desembre al 7 de gener." | 4,567 impr., 1.0 %, pos 4.9. After 3 Nov: 0.2 %. 95 % of queries hidden. Visible: vacances (escolars) nadal 2026 (pos 7.5–8.2, 0 clicks); festius escolars catalunya 2026 (8.9, 0) |
+| `/es/festivos/dia/7-diciembre-2026/`, `/ca/festius/dia/7-desembre-2026/` (deploy) | "¿Es festivo el 7 de diciembre de 2026 en Cataluña?" → "… Dónde sí"; CA "… On sí ho és". The 45 places are listed on the page | ES 1,204 impr., 2.7 %, pos 5.2. Queries: donde es festivo el 7 de diciembre de 2026 (36, 6.2, 0); el 7 de diciembre de 2026 es festivo (51, 5.6, 0). CA 74 impr. at 4.1 |
+| `/es/festivos/dia/8-diciembre-2026/`, `/ca/festius/dia/8-desembre-2026/` (deploy) | "¿Es festivo el 8 de diciembre de 2026 en Cataluña?" → "… Qué abre"; CA "… Què obre". The shops section lists the towns where shops may not open | ES 217 impr., 2.8 %, pos 4.3. CA 70 impr., 0 clicks, 5.8 |
+| `/ca/guies/aparcar-barcelona-zona-blava-verda/` (`parking`) | "Preu zona blava i verda Barcelona: 1,15-4,25 €/h i horari" → "Zona blava i verda Barcelona 2026: horari, dissabte i preu". Description kept (3 Nov, prices and hours) | 1,743 impr., 0.8 %, pos 5.6. Queries: horari zona blava barcelona (20, 7.2, 0); preu zona verda barcelona no residents (14, 6.6, 0). The only clicks: zona blava barcelona dissabte / diumenge (1 click each from 7 and 6 impr.) |
+| `/en/guides/barcelona-metro-hours/` (`hours`) | "Barcelona metro hours: closes 12am, 2am Fri, all night Sat" → "Barcelona metro hours today: last train and night buses". Description kept (3 Nov, the three closing times). The page's metroTonight block gives tonight's answer | 1,593 impr., 0.3 %, pos 6.1. Queries: is barcelona metro 24 hours (15, 7.1, 0); today metro closing time (12, 9.2, 0); nitbus barcelona (9, 8.9, 0) |
+| `/en/guides/barcelona-catalonia-tourist-tax/` (`tourist-tax`) | "Barcelona tourist tax 2026: €6 to €12 per person per night" → "Barcelona city tax 2026: €6-€12 a night, with calculator" (range still computed from rates.ts). Description kept | 559 impr., 0.9 %, pos 5.4. Queries: barcelona city tax (29, 7.3, 0); city tax barcelona (26, 5.1, 1 click) |
+
+The lead's first sentence repeats none of these titles, so leads are
+unchanged. No fact changed. Every date and count in the new strings was
+already on the page with its source: Ordre EMT/66/2025, EMT/208/2025,
+EDF/66/2026, AREA, TMB and rates.ts.
+
+**Expected gain**, at today's demand: about +125–250 clicks a week.
+
+| Page | Impressions a week | CTR now → target | Clicks a week |
+| --- | --- | --- | --- |
+| ES bridge | ~3,200 | 1.4–2.0 % → 3–4 % | +40–70 |
+| CA school | ~2,300 | 0.2–1.0 % → 2.5–4 % | +35–80 |
+| CA parking | ~870 | 0.8 % → 2.5 % | +15 |
+| EN metro | ~800 | 0.3 % → 2 % | +14 |
+| ES 7 Dec | ~600 | 2.7 % → 4 % | +8 |
+| EN city tax | ~280 | 0.9 % → 3 % | +6 |
+| CA bridge, 8 Dec pages | small | — | +5 |
+
+The 7 and 8 December pages count most in the week before those days. In
+2026, the 1 November page had 9.6k impressions in its last week.
+
+**Revert rule.** Check on day 7 after the deploy and publish. Use
+`snapshot.py page <path> 7` against the 14-day baseline above. Revert a page
+to its old title (and description, where changed) in either case:
+- its clicks fell at equal or higher impressions;
+- its position dropped more than 1.5 with no CTR gain.
+
+Read the 7/8 December pages at equal distance from the date, against the
+1 November curve, not against the baseline. Then measure again on 1 Dec.
+
+**Outcome:** _pending_

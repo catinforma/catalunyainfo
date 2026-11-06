@@ -1571,7 +1571,9 @@ export const PARKING: B2Article = {
       path: "guies/aparcar-barcelona-zona-blava-verda",
       title:
         "Preu de la zona blava i la zona verda de Barcelona el 2026: horari i com funcionen",
-      seoTitle: "Preu zona blava i verda Barcelona: 1,15-4,25 €/h i horari",
+      // CTR sweep, 6 Nov 2026: the price range in the title left nothing to
+      // click for (0.5-0.8 % at 5.6); the clicks came on "dissabte/diumenge".
+      seoTitle: "Zona blava i verda Barcelona 2026: horari, dissabte i preu",
       seoDescription:
         "Zona blava: dl-dv 9-20 h (i dissabte al centre), 1,15-3,75 €/h. Zona verda, no residents: 1,40-4,25 €/h, 8-20 o 8-22 h. Diumenge gratis fora de la platja.",
       excerpt:

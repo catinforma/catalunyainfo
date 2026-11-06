@@ -89,7 +89,9 @@ const META: Record<Locale, { path: string; title: string; seoTitle: string; seoD
   en: {
     path: "guides/barcelona-metro-hours",
     title: "Barcelona metro hours: what time it closes tonight, and when it runs all night",
-    seoTitle: "Barcelona metro hours: closes 12am, 2am Fri, all night Sat",
+    // CTR sweep, 6 Nov 2026: the full timetable in the title got 0.1-0.7 % at
+    // position 6; "today" is what the metroTonight block answers.
+    seoTitle: "Barcelona metro hours today: last train and night buses",
     seoDescription:
       "Is the Barcelona metro 24 hours? Not every night: last metro midnight Sun-Thu, 2:00 Fridays; Saturdays it runs all night, as on 23 June, 23 Sept, 31 Dec.",
     excerpt:
