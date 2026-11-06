@@ -10,6 +10,7 @@ import { todayInCatalonia } from "@/lib/content/holidays/calendar";
 import { holidayRefreshPaths } from "@/lib/programmatic/holidays/routing";
 import { weekendRefreshPaths } from "@/lib/programmatic/weekend/routing";
 import { purgeCdnPaths, type PurgeResult } from "@/lib/cdn/purge";
+import { FEED_PATHS } from "@/lib/seo/feed-paths";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -87,7 +88,11 @@ export async function GET(request: Request) {
     revalidate(`/${row.locale}`);
     revalidate(`/${row.locale}/${row.path}`);
   }
-  if (due.length > 0) revalidate("/sitemap.xml");
+  if (due.length > 0) {
+    revalidate("/sitemap.xml");
+    // The RSS feeds and the Google News sitemap list the same pieces.
+    for (const feed of FEED_PATHS) revalidate(feed);
+  }
 
   // Content pages are cached for a day. The ones whose answer depends on
   // today's date are refreshed here, once, just after midnight in Madrid.

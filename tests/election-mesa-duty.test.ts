@@ -3,7 +3,7 @@ import { readFileSync, readdirSync, statSync } from "node:fs";
 import { join } from "node:path";
 import { test } from "node:test";
 
-import { MESA, MESA_29N } from "../src/lib/content/batch02/mesa.ts";
+import { CATALONIA_JEZ, MESA, MESA_29N } from "../src/lib/content/batch02/mesa.ts";
 import { b2href } from "../src/lib/content/batch02/shared.ts";
 import { bodyToPlainText } from "../src/lib/content/blocks.ts";
 import { shortDate } from "../src/lib/content/holidays/calendar.ts";
@@ -177,4 +177,37 @@ test("the section is about 29N: rewrite or remove it once polling day is over", 
     today <= MESA_DUTY_UNTIL,
     `Today is ${today}: the "Mesa electoral a <town>" section (src/lib/programmatic/elections/mesa-duty.ts) is past polling day. Remove it from the town pages or rewrite it for the next election.`,
   );
+});
+
+/**
+ * 6 Nov 2026: the Spanish mesa guide speaks for all of Spain, and what only
+ * applies in Catalonia (the 31 Juntas Electorales de Zona, the DOGC voter
+ * leave) sits in a section of its own. Its counts come from `jez.json`.
+ */
+test("es mesa guide: national lead, a Catalonia section whose JEZ counts match the snapshot", () => {
+  const perProvince = { barcelona: "08", girona: "17", lleida: "25", tarragona: "43" } as const;
+  assert.equal(CATALONIA_JEZ.boards, JEZ.boards.length);
+  for (const [name, prefix] of Object.entries(perProvince)) {
+    assert.equal(CATALONIA_JEZ[name as keyof typeof perProvince], JEZ.boards.filter((b) => b.seat.startsWith(prefix)).length, name);
+  }
+  assert.equal(CATALONIA_JEZ.districts, JEZ.districts.length);
+  const elsewhere = Object.values(JEZ.towns).filter(([b, d]) => JEZ.boards[b]!.seat !== JEZ.districts[d]).length;
+  assert.equal(CATALONIA_JEZ.elsewhere, elsewhere);
+
+  const es = MESA.editions.es;
+  assert.match(es.seoTitle, /^Mesa electoral 29N/);
+  assert.match(es.title, /elecciones generales del 29 de noviembre/);
+  const blocks = es.blocks as unknown as { type: string; text?: string; level?: number; items?: string[] }[];
+  assert.match(blocks[0]?.text ?? "", /mismas en toda España/);
+  const at = blocks.findIndex((b) => b.type === "heading" && b.text === "Si te ha tocado mesa en Cataluña");
+  assert.ok(at > 0, "Catalonia section");
+  const items = (blocks[at + 1]?.items ?? []).join(" ");
+  assert.match(items, /DOGC/);
+  assert.ok(items.includes(`hay ${JEZ.boards.length} (`), "JEZ count");
+  assert.ok(items.includes("](/es/elecciones/)"), "links the town pages");
+  // The national work bullet no longer carries the Catalan detail.
+  assert.doesNotMatch(bodyToPlainText(blocks.slice(0, at) as never), /DOGC|EMT\/178\/2023/);
+  for (const locale of ["ca", "en"] as const) {
+    assert.ok(!JSON.stringify(MESA.editions[locale].blocks).includes("Si te ha tocado mesa en Cataluña"), locale);
+  }
 });
