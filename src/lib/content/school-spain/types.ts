@@ -10,10 +10,16 @@ import type { Region } from "@/lib/programmatic/holidays/boe-2027";
  * another community: a field the order does not fix is left out.
  */
 
-/** Both days inclusive: the first and the last calendar day without class. */
+/**
+ * Both days inclusive: the first day without class and the day before
+ * classes resume (a Sunday when they resume on a Monday). When the order's
+ * own holiday dates are narrower (non-teaching days glued to them, as in
+ * Madrid), `note` says what the text calls the holidays.
+ */
 export interface Period {
   from: string;
   to: string;
+  note?: string;
 }
 
 /** The official text: an order or resolution in the region's bulletin. */
@@ -56,6 +62,10 @@ export interface SchoolBreak {
 export interface NonTeachingDay {
   date: string;
   reason: string;
+  /** Who it applies to, when not every level. */
+  levels?: string;
+  /** True when infant and primary still have class that day. */
+  notPrimary?: boolean;
 }
 
 /** A province (or island) with its own resolution inside a regional framework. */

@@ -136,10 +136,14 @@ function levelsSection(region: RegionCalendar): Block[] {
 export function daysOffRows(region: RegionCalendar): { date: string; what: string }[] {
   const byDate = new Map<string, string>();
   for (const h of holidaysInTerm(region)) byDate.set(h.date, `Festivo: ${h.name}`);
+  const { start, end } = mainLevels(region);
+  const inBreak = (iso: string) =>
+    [region.christmas, region.easter, ...region.otherBreaks].some((p) => iso >= p.from && iso <= p.to);
   for (const d of region.nonTeaching) {
     const wd = weekdayIndex(d.date);
-    if (wd === 0 || wd === 6) continue;
-    byDate.set(d.date, byDate.has(d.date) ? `${byDate.get(d.date)} (${d.reason})` : `Día no lectivo: ${d.reason}`);
+    if (wd === 0 || wd === 6 || inBreak(d.date) || d.date < start || d.date > end) continue;
+    const what = `${d.reason}${d.levels ? ` (solo ${d.levels})` : ""}`;
+    byDate.set(d.date, byDate.has(d.date) ? `${byDate.get(d.date)}; ${what}` : `Día no lectivo: ${what}`);
   }
   return [...byDate.entries()].sort(([a], [b]) => a.localeCompare(b)).map(([date, what]) => ({ date, what }));
 }

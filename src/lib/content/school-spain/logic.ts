@@ -108,7 +108,7 @@ export function schoolDayIn(region: RegionCalendar, iso: string): SpainSchoolDay
   if (wd === 0 || wd === 6) return { kind: "weekend" };
   const holiday = publicHolidaysFor(region.boe, iso, iso)[0];
   if (holiday) return { kind: "holiday", name: holiday.name };
-  const off = region.nonTeaching.find((d) => d.date === iso);
+  const off = region.nonTeaching.find((d) => d.date === iso && !d.notPrimary);
   if (off) return { kind: "nonTeaching", reason: off.reason };
   return { kind: "school" };
 }

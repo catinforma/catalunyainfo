@@ -83,7 +83,7 @@ function Region({ region, today }: { region: RegionCalendar; today: string }) {
   const limit = next ? (next.kind === "summer" ? next.from : next.period.from) : today;
   const offDays = [
     ...holidaysInTerm(region).map((h) => ({ date: h.date, why: h.name })),
-    ...region.nonTeaching.map((d) => ({ date: d.date, why: d.reason })),
+    ...region.nonTeaching.filter((d) => !d.notPrimary).map((d) => ({ date: d.date, why: d.reason })),
   ]
     .filter((d) => d.date > addDays(today, 1) && d.date < limit)
     .sort((a, b) => a.date.localeCompare(b.date));
