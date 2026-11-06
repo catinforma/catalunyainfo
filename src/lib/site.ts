@@ -97,3 +97,14 @@ export function indexingAllowed(): boolean {
   // editorial content we do not want it crawled or reviewed by AdSense.
   return process.env.NEXT_PUBLIC_ALLOW_INDEXING === "true";
 }
+
+/**
+ * The AdSense publisher ID (`pub-` + digits) from ADSENSE_PUBLISHER_ID, or null.
+ * It feeds /ads.txt and the `google-adsense-account` verification meta tag.
+ * The meta tag loads no script: no ad is served until the ad code, a
+ * Google-certified CMP and a CSP revision ship (docs/ADSENSE_READINESS.md).
+ */
+export function adsensePublisherId(): string | null {
+  const id = process.env.ADSENSE_PUBLISHER_ID?.trim();
+  return id && /^pub-\d{10,20}$/.test(id) ? id : null;
+}
