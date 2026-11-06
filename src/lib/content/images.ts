@@ -340,6 +340,16 @@ export const IMAGES: readonly ImportedImage[] = [
     "license": "CC BY-SA 4.0"
   },
   {
+    "key": "calendario-escolar-espana-ceip-ayora",
+    "url": "/images/calendario-escolar-espana-ceip-ayora.webp",
+    "width": 1920,
+    "height": 1131,
+    "blurDataUrl": "data:image/webp;base64,UklGRlwAAABXRUJQVlA4IFAAAAAQAgCdASoQAAkAA4BaJYwAD5GwX89Tq/hAAPy0+QcGRy86ThXko9rQz4KsGmXnBjfvONniNbT+nlzlH5TVNMjTgOM/+PvzDwCpo2noAsAAAA==",
+    "credit": "Dorieo",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Colegio_P%C3%BAblico_de_Educaci%C3%B3n_Infantil_y_Educaci%C3%B3n_Primaria_Isidro_Girant_de_Ayora.jpg",
+    "license": "CC BY-SA 4.0"
+  },
+  {
     "key": "campnou-dia-de-partit",
     "url": "/images/campnou-dia-de-partit.webp",
     "width": 1920,

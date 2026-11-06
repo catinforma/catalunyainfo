@@ -517,6 +517,17 @@ export const candidateListsBlock = z.object({
   type: z.literal("candidateLists"),
 });
 
+/**
+ * The 2026-2027 school calendar of one Spanish community (`region`, its URL
+ * slug) or, with `region: "espana"`, all of them side by side. Dates live in
+ * code (`school-spain/regions.ts`), transcribed from each community's order;
+ * "today" is computed in Europe/Madrid and rebuilt by the nightly cron.
+ */
+export const spainSchoolCalendarBlock = z.object({
+  type: z.literal("spainSchoolCalendar"),
+  region: z.string().regex(/^[a-z-]+$/).max(40),
+});
+
 export const blockSchema = z.discriminatedUnion("type", [
   headingBlock,
   paragraphBlock,
@@ -554,6 +565,7 @@ export const blockSchema = z.discriminatedUnion("type", [
   livingNativitiesBlock,
   snowDepthBlock,
   candidateListsBlock,
+  spainSchoolCalendarBlock,
 ]);
 
 export const bodySchema = z.array(blockSchema).max(500);

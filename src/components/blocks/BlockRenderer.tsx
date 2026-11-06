@@ -20,6 +20,7 @@ import { TouristTaxCalculator } from "@/components/blocks/TouristTaxCalculator";
 import { LivingNativities } from "@/components/blocks/LivingNativities";
 import { SnowDepth } from "@/components/blocks/SnowDepth";
 import { CandidateLists } from "@/components/blocks/CandidateLists";
+import { SpainSchoolCalendar } from "@/components/blocks/SpainSchoolCalendar";
 import type { Block, Body } from "@/lib/content/blocks";
 import { headingId } from "@/lib/content/blocks";
 import { renderInline, safeHref } from "@/lib/content/inline";
@@ -451,6 +452,10 @@ function BlockView({ block, context }: { block: Block; context: BlockContext }) 
     case "candidateLists":
       // Async server component: the 29N candidate lists, read from the BOE.
       return <CandidateLists locale={context.locale} />;
+
+    case "spainSchoolCalendar":
+      // Dates from each community's order (school-spain/regions.ts); "today" in Europe/Madrid.
+      return <SpainSchoolCalendar region={block.region} />;
 
     case "contactForm":
       // The only interactive block. It carries no configuration from the
