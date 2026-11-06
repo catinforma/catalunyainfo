@@ -73,6 +73,7 @@ import { publishHolidayTodayGuide } from "@/lib/content/holidays/today-publish";
 import { publishLocalHolidaysGuide } from "@/lib/content/holidays/local-publish";
 import { publishReservoirGuide } from "@/lib/content/reservoirs/publish";
 import { publishSchoolCalendarGuide } from "@/lib/content/school/publish";
+import { publishSpainSchoolCalendars } from "@/lib/content/school-spain/publish";
 import { spainPaths } from "@/lib/programmatic/spain-2027/paths";
 import { authoriseDeployRequest, describeError } from "@/lib/admin/deploy-auth";
 import { FEED_PATHS } from "@/lib/seo/feed-paths";
@@ -371,6 +372,16 @@ export async function POST(request: Request) {
     // The Catalan work calendar guide gained one sentence linking to the
     // Spain hub (Spanish edition); it goes out once, on its own.
     if (wants("calendario-2027-espana-links")) published.push(await publishHolidayGuide());
+    // Calendario escolar 2026-2027 por comunidades (Spanish only): the hub
+    // /es/guias/calendario-escolar-espana/ and one guide per community whose
+    // order is transcribed in school-spain/data.ts, all articles on the
+    // catch-all route (dynamicParams = true, so revalidating them is safe).
+    // The live part (today, next break, title) renders from code: a
+    // corrected date needs a deploy and then this group. The Catalan school
+    // calendar guide, whose Spanish edition gained one sentence linking the
+    // hub, goes out once with `calendario-escolar-espana-links`.
+    if (wants("calendario-escolar-espana")) published.push(...(await publishSpainSchoolCalendars()));
+    if (wants("calendario-escolar-espana-links")) published.push(await publishSchoolCalendarGuide());
 
     const surfaces = [
       ...published.flatMap((article) =>

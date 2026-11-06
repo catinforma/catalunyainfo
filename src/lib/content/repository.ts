@@ -21,6 +21,7 @@ import type {
 import { BYLINE_ENTRY_TYPES, SECTION_CATEGORY_KEYS, SECTION_ENTRY_TYPES } from "./types";
 import { DAY_DEPENDENT_PATTERN } from "./day-dependent";
 import { relatedTerms } from "./related-terms";
+import { isRegionSchoolPage } from "./school-spain/regions";
 
 const {
   authors,
@@ -1212,7 +1213,8 @@ export async function getHomeData(locale: Locale, preview = false): Promise<Home
           .orderBy(desc(entryTranslations.publishedAt))
           .limit(5),
         listEntries(locale, { types: ["news"], limit: 6, preview }),
-        listEntries(locale, { types: ["article", "guide"], limit: 6, preview }),
+        // The community school calendars (Spanish, ~18 at once) would fill the strip: the hub stands for them.
+        listEntries(locale, { types: ["article", "guide"], limit: 30, preview }).then((rows) => rows.filter((row) => !isRegionSchoolPage(row.path)).slice(0, 6)),
         listEntries(locale, { types: ["destination", "place"], limit: 6, preview }),
         listUpcomingEvents(locale, 6, preview),
         listEntries(locale, { types: ["route"], limit: 4, preview }),

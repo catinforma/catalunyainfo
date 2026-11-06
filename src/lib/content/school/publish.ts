@@ -143,7 +143,7 @@ export const COPY: Record<Locale, Copy> = {
       "El curso 2025-2026 ya ha terminado. Empezó el 8 de septiembre de 2025 (el 12 para bachillerato y FP de grado medio y superior), terminó el 19 de junio de 2026 y tuvo vacaciones de Navidad del 20 de diciembre de 2025 al 7 de enero de 2026 y de Semana Santa del 28 de marzo al 6 de abril de 2026, según la Ordre EDF/72/2025 recogida por el Consorci d'Educació de Barcelona.",
     ],
     related:
-      "Para planificar puentes y vacaciones con los festivos laborales, mira el [calendario laboral 2027](/es/guias/calendario-laboral-cataluna/) y la página [es festivo hoy](/es/guias/es-festivo-hoy-cataluna/).",
+      "Para planificar puentes y vacaciones con los festivos laborales, mira el [calendario laboral 2027](/es/guias/calendario-laboral-cataluna/) y la página [es festivo hoy](/es/guias/es-festivo-hoy-cataluna/). Las fechas de las demás comunidades están en el [calendario escolar 2026-2027 por comunidades](/es/guias/calendario-escolar-espana/).",
     heroAlt: "Fachada de la Escola Jaume Balmes de Vic con el patio embaldosado delante",
     heroCaption: "La Escola Jaume Balmes, en Vic.",
     secondAlt: "Edificio del Grup Escolar Ramon Llull de Barcelona entre palmeras y árboles",

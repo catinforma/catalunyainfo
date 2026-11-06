@@ -6,6 +6,7 @@ import { EVERGREEN } from "@/lib/content/weekend/evergreen";
 import { todayInCatalonia } from "@/lib/content/holidays/calendar";
 import { liveSchoolDescription, liveSchoolTitle } from "@/lib/content/school/snippet";
 import { liveTodayDescription, liveTodayTitle } from "@/lib/content/holidays/today-snippet";
+import { liveSpainSchoolDescription, liveSpainSchoolTitle, spainSchoolRegionOf } from "@/lib/content/school-spain/live";
 
 /**
  * A page title computed at render time, for pages whose answer is a live
@@ -29,6 +30,8 @@ export async function liveEntryTitle(body: Body, locale: Locale): Promise<string
   if (body.some((block) => block.type === "holidayToday")) {
     return liveTodayTitle(locale, todayInCatalonia());
   }
+  const spain = spainSchoolRegionOf(body);
+  if (spain) return liveSpainSchoolTitle(spain, todayInCatalonia());
   return null;
 }
 
@@ -45,6 +48,8 @@ export function liveEntryDescription(body: Body, locale: Locale): string | null 
   if (body.some((block) => block.type === "holidayToday")) {
     return liveTodayDescription(locale, todayInCatalonia());
   }
+  const spain = spainSchoolRegionOf(body);
+  if (spain) return liveSpainSchoolDescription(spain, todayInCatalonia());
   return null;
 }
 
