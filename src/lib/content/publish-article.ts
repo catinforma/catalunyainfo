@@ -4,6 +4,7 @@ import { and, eq } from "drizzle-orm";
 
 import { requireDb, schema } from "@/lib/db/client";
 import { bodyToPlainText, type Block } from "@/lib/content/blocks";
+import { fitColumn } from "@/lib/content/fit-column";
 import type { Locale } from "@/lib/i18n/config";
 import type { EntryType } from "@/lib/db/schema";
 
@@ -170,9 +171,9 @@ export async function publishArticle(spec: ArticleSpec): Promise<PublishResult> 
     const inserted = await db
       .insert(schema.sources)
       .values({
-        name: source.name,
+        name: fitColumn(source.name),
         url: source.url,
-        publisher: source.publisher ?? null,
+        publisher: source.publisher ? fitColumn(source.publisher) : null,
         type: source.type ?? "official",
       })
       .returning({ id: schema.sources.id });

@@ -16,6 +16,7 @@ import {
   PLANS,
 } from "./payload";
 import { IMAGE_BY_KEY } from "@/lib/content/images";
+import { fitColumn } from "@/lib/content/fit-column";
 
 /**
  * Publishes the weekend guide in all three languages.
@@ -165,9 +166,9 @@ export async function publishWeekendGuide(): Promise<PublishSummary> {
     const inserted = await db
       .insert(schema.sources)
       .values({
-        name: source.name,
+        name: fitColumn(source.name),
         url: source.url,
-        publisher: source.publisher ?? null,
+        publisher: source.publisher ? fitColumn(source.publisher) : null,
         type: "official",
       })
       .returning({ id: schema.sources.id });
