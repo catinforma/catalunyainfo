@@ -164,7 +164,7 @@ export function CommunityPage({ c }: { c: CommunityNames }) {
 
           <h2 id="festivos">Los {days.length} festivos de {YEAR} {c.en}</h2>
           <div className="ci-table-scroll mt-4">
-            <table className="ci-local-table">
+            <table className="ci-local-table ci-stack-table">
               <caption className="pb-2 text-left text-sm text-[var(--color-muted)]">
                 Fiestas laborales de {YEAR} {c.en}, como las publica el BOE ({BOE_REF.id}).
               </caption>
@@ -182,12 +182,12 @@ export function CommunityPage({ c }: { c: CommunityNames }) {
                     <th scope="row" className="font-normal">
                       <time dateTime={d.date}>{weekdayDate(d.date)}</time>
                     </th>
-                    <td>
+                    <td data-label="Festividad">
                       {dayName(d)}
                       {moved.has(d.date) ? ` (traslado del ${weekdayDate(moved.get(d.date)!)}, según el decreto de ${c.city ? "la ciudad" : "la comunidad"})` : ""}
                     </td>
-                    <td>{KIND_LABEL[d.code]}</td>
-                    <td>{whereElse(d)}</td>
+                    <td data-label="Tipo (BOE)">{KIND_LABEL[d.code]}</td>
+                    <td data-label="¿Dónde más?">{whereElse(d)}</td>
                   </tr>
                 ))}
               </tbody>
@@ -387,7 +387,7 @@ export function SpainHubPage() {
         <div className="ci-prose">
           <h2 id="comunidades">Festivos {YEAR} por comunidad autónoma</h2>
           <div className="ci-table-scroll mt-4">
-            <table className="ci-local-table">
+            <table className="ci-local-table ci-stack-table">
               <caption className="pb-2 text-left text-sm text-[var(--color-muted)]">
                 Días que cada comunidad y ciudad añade a los {COMMON_DATES.length} comunes, según el BOE.
               </caption>
@@ -407,12 +407,12 @@ export function SpainHubPage() {
                       <th scope="row" className="font-normal">
                         <Link href={communityPath(c)}>{c.short}</Link>
                       </th>
-                      <td>
+                      <td data-label="Festivos">
                         {dayCount(c.region)}
                         {s.subRegional ? ` + 1 ${s.subRegional.unit}` : ""}
                       </td>
-                      <td>{ownDays(c.region).map((d) => `${d.replaces ? "traslado de la Asunción" : d.name} (${compactDates([d.date])})`).join("; ")}</td>
-                      <td>{s.local.status === "published" ? "Publicados" : s.local.status === "partial" ? "En parte" : "Pendientes"}</td>
+                      <td data-label="Propios">{ownDays(c.region).map((d) => `${d.replaces ? "traslado de la Asunción" : d.name} (${compactDates([d.date])})`).join("; ")}</td>
+                      <td data-label={`Locales ${YEAR}`}>{s.local.status === "published" ? "Publicados" : s.local.status === "partial" ? "En parte" : "Pendientes"}</td>
                     </tr>
                   );
                 })}
@@ -493,7 +493,7 @@ export function SpainBridgesPage() {
 
           <h2 id="todos">Todos los puentes de {YEAR}, y dónde</h2>
           <div className="ci-table-scroll mt-4">
-            <table className="ci-local-table">
+            <table className="ci-local-table ci-stack-table">
               <caption className="pb-2 text-left text-sm text-[var(--color-muted)]">
                 Fines de semana largos y puentes de {YEAR} calculados con los festivos del BOE de cada comunidad.
               </caption>
@@ -512,10 +512,10 @@ export function SpainBridgesPage() {
                     <th scope="row" className="font-normal">
                       {rangeWords(r.from, r.to).replace(/^del /, "")}
                     </th>
-                    <td>{r.days}</td>
-                    <td>{r.take.length === 0 ? "Ninguna" : r.take.map((t) => weekdayDate(t)).join(", ")}</td>
-                    <td>{r.holidays.map((h) => h.name).join(", ")}</td>
-                    <td>
+                    <td data-label="Días seguidos">{r.days}</td>
+                    <td data-label="Vacaciones">{r.take.length === 0 ? "Ninguna" : r.take.map((t) => weekdayDate(t)).join(", ")}</td>
+                    <td data-label="Festivo">{r.holidays.map((h) => h.name).join(", ")}</td>
+                    <td data-label="Dónde">
                       {r.regions.length === REGIONS.length ? (
                         "Toda España"
                       ) : r.regions.length >= 15 ? (
