@@ -264,8 +264,8 @@ test("the town page renderer gains one line and its titles, descriptions and H1s
 
 test("the December bridge links the hub once, in the body, and keeps its title and description", () => {
   const titles: Record<Locale, string> = {
-    ca: "Pont de desembre 2026 a Catalunya: festiu el dimarts 8",
-    es: "Puente de diciembre 2026 en Cataluña: festivo el martes 8",
+    ca: "Pont de desembre 2026 a Catalunya: festius i dies a demanar",
+    es: "Puente de diciembre 2026 Cataluña: festivos y qué días pedir",
     en: "December 2026 public holidays in Catalonia: 8, 25 and 26 Dec",
   };
   for (const locale of LOCALES) {

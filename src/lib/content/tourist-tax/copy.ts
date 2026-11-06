@@ -398,7 +398,9 @@ export const COPY: Record<Locale, TaxCopy> = {
   en: {
     path: "guides/barcelona-catalonia-tourist-tax",
     title: "Barcelona tourist tax: what you'll actually pay",
-    seoTitle: "Barcelona tourist tax 2026: €{minInt} to €{maxInt} per person per night",
+    // CTR sweep, 6 Nov 2026: searchers say "city tax" ("barcelona city tax",
+    // "city tax barcelona"); the range stays, the calculator is the promise.
+    seoTitle: "Barcelona city tax 2026: €{minInt}-€{maxInt} a night, with calculator",
     seoDescription:
       "Barcelona city tax: €{minInt} to €{maxInt} per person per night (Catalan rate + €{surInt} city surcharge). Max {max} nights; {age} or younger free. Calculator.",
     excerpt:

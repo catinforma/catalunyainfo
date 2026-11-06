@@ -1053,6 +1053,11 @@ test("metadata: every title <= 60 and description <= 155, in the searched words 
     }
   }
   assert.equal(dateQuestion("2026-12-08", "es"), "¿Es festivo el 8 de diciembre de 2026 en Cataluña?");
+  // CTR sweep, 6 Nov 2026: 7 and 8 December add what the snippet cannot list.
+  assert.equal(dateTitle("2026-12-07", "es"), "¿Es festivo el 7 de diciembre de 2026 en Cataluña? Dónde sí");
+  assert.equal(dateTitle("2026-12-07", "ca"), "És festiu el 7 de desembre de 2026 a Catalunya? On sí ho és");
+  assert.equal(dateTitle("2026-12-08", "es"), "¿Es festivo el 8 de diciembre de 2026 en Cataluña? Qué abre");
+  assert.equal(dateTitle("2026-12-07", "en"), dateQuestion("2026-12-07", "en"));
   assert.equal(dateQuestion("2027-01-01", "ca"), "És festiu l'1 de gener de 2027 a Catalunya?");
 });
 

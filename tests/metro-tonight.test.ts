@@ -88,7 +88,9 @@ test("metro hours: the EN snippet and every lead give the last-metro answer firs
   const en = HOURS.editions.en;
   assert.ok(en.seoTitle.length <= 60, en.seoTitle);
   assert.ok(en.seoDescription.length <= 155, String(en.seoDescription.length));
-  assert.match(en.seoTitle, /all night Sat/);
+  // 6 Nov 2026 (CTR sweep): the timetable left the title (0.1-0.7 % at 6) and
+  // stays in the description; the title asks for today's answer.
+  assert.match(en.seoTitle, /^Barcelona metro hours today/);
   assert.match(en.seoDescription, /midnight.*2:00.*Saturdays it runs all night/);
   assert.match(bodyToPlainText(en.blocks).slice(0, 120), /last Barcelona metro leaves at midnight/);
   const lastTrain = { ca: "A quina hora passa l'últim metro?", es: "¿A qué hora pasa el último metro?", en: "What time is the last metro in Barcelona?" };

@@ -79,6 +79,12 @@ import {
  *
  * 31 Oct 2026: one sentence after La Marató links the new "Barcelona in
  * December" hub (group `barcelona-december-links`). No new fact.
+ *
+ * 6 Nov 2026 (CTR sweep, docs/SEO_EXPERIMENTS.md): the 3 Nov answer titles
+ * ("festiu el dimarts 8" / "festivo el martes 8") lost clicks at the same
+ * position (ES 2.3 % -> 1.4 % at 5.7), so ca/es titles now promise what the
+ * snippet cannot hold, the leave table and the school answer; the
+ * descriptions keep the dates. EN unchanged.
  */
 export const BRIDGE_VERIFIED = "2026-10-26";
 
@@ -320,18 +326,18 @@ export const DECEMBER_BRIDGE_META: Record<Locale, { path: string; title: string;
   ca: {
     path: "guies/pont-desembre-catalunya",
     title: "Pont de desembre 2026 a Catalunya: quins dies són festius, escoles i botigues",
-    seoTitle: "Pont de desembre 2026 a Catalunya: festiu el dimarts 8",
+    seoTitle: "Pont de desembre 2026 a Catalunya: festius i dies a demanar",
     seoDescription:
-      "Festius de desembre 2026 a Catalunya: dimarts 8 (la Immaculada), 25 i 26. El 6 cau en diumenge i el dilluns 7 és feiner, llevat de 43 municipis.",
+      "Festius de desembre 2026 a Catalunya: dimarts 8 (la Immaculada), 25 i 26. Dilluns 7, feiner llevat de 43 municipis: quins dies demanar i si hi ha escola.",
     excerpt:
       "Quins dies són festius al desembre del 2026 a Catalunya, per què el 6 i el 7 no ho són, com fer pont, si hi ha escola i si obren les botigues.",
   },
   es: {
     path: "guias/puente-diciembre-cataluna",
     title: "Puente de diciembre 2026 en Cataluña: qué días son festivos, colegios y tiendas",
-    seoTitle: "Puente de diciembre 2026 en Cataluña: festivo el martes 8",
+    seoTitle: "Puente de diciembre 2026 Cataluña: festivos y qué días pedir",
     seoDescription:
-      "Festivos de diciembre 2026 en Cataluña: martes 8 (la Purísima), 25 y 26. El 6 cae en domingo y el lunes 7 es laborable, salvo en 43 municipios.",
+      "Festivos de diciembre 2026 en Cataluña: martes 8 (la Purísima), 25 y 26. El lunes 7 es laborable salvo en 43 municipios: qué días pedir y si hay colegio.",
     excerpt:
       "Qué días son festivos en diciembre de 2026 en Cataluña, por qué el 6 y el 7 no lo son, cómo hacer puente, si hay colegio y si abren las tiendas.",
   },
