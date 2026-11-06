@@ -676,7 +676,7 @@
        the caption onto one word per line. */
     .ci-table caption {
       display: block;
-      padding: 0 0 0.75rem;
+      padding: 0.75rem 0.9rem;
     }
     .ci-table thead {
       /* Hidden visually; the labels move into each cell. */
@@ -706,11 +706,13 @@
     .ci-table tbody th[scope="row"]::before {
       content: none;
     }
+    /* The label hangs in a fixed left gutter and the value flows beside it.
+       A grid here made every text run and link a separate grid item: a link
+       landed in the label column, widened it to the link's full length and
+       squeezed the value to one letter per line (11N strike table, 6 Nov). */
     .ci-table tbody td {
-      display: grid;
-      grid-template-columns: minmax(5.5rem, max-content) minmax(0, 1fr);
-      gap: 0.75rem;
-      padding: 0.15rem 0;
+      display: flow-root;
+      padding: 0.2rem 0 0.2rem 6.5rem;
       border-bottom: 0;
     }
     .ci-table tbody td:empty {
@@ -719,6 +721,9 @@
     .ci-table tbody td::before {
       content: attr(data-label);
       color: var(--color-muted);
+      float: left;
+      width: 5.75rem;
+      margin-left: -6.5rem;
     }
   }
 
