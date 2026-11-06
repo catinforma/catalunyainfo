@@ -338,12 +338,14 @@ export async function POST(request: Request) {
     // with `voting`; the hub and town election pages are code routes.
     if (wants("vot-correu")) published.push(await publishB2Article(POSTAL_VOTE));
     // Calendario laboral 2027 en España (/es/festivos/2027/, 19 communities
-    // and cities, the hub, the bridges page): code routes built from the BOE
-    // table, not articles, so the deploy ships them. This group revalidates
-    // exactly those paths (each route keeps dynamicParams = true, so this
-    // cannot 404 them; never their parent /es/festivos, which is false),
-    // purges them at the CDN and sends them to IndexNow. Re-run it after a
-    // deploy that changes sources.ts (a community's local list published).
+    // and cities, the hub, the bridges page, and one page per large city,
+    // /es/festivos/2027/<comunidad>/<ciudad>/): code routes built from the BOE
+    // table and the bulletins, not articles, so the deploy ships them. This
+    // group revalidates exactly those paths (each route keeps dynamicParams =
+    // true, so this cannot 404 them; never their parent /es/festivos, which
+    // is false), purges them at the CDN and sends them to IndexNow. Re-run it
+    // after a deploy that changes sources.ts or cities-data.ts (a community's
+    // local list published).
     const codePaths = wants("calendario-2027-espana") ? spainPaths() : [];
     // The Catalan work calendar guide gained one sentence linking to the
     // Spain hub (Spanish edition); it goes out once, on its own.
