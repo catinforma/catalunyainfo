@@ -956,6 +956,13 @@ export interface B2Article {
   editions: Record<Locale, B2Edition>;
 }
 
+/**
+ * A page published in Spanish only (6 Nov 2026: the 11N city pages, for
+ * searches from the rest of Spain). It has no registry key, since `B2_PATHS`
+ * holds three paths per key; its path lives with the page.
+ */
+export type B2SpanishArticle = Omit<B2Article, "key" | "editions"> & { editions: { es: B2Edition } };
+
 /** "Última verificació" line, printed where a reader will actually see it. */
 export function verifiedLine(locale: Locale, isoDate: string): string {
   const label: Record<Locale, string> = {

@@ -5,6 +5,7 @@ import { test } from "node:test";
 import { bodySchema, bodyToPlainText, wordCount, type Block } from "../src/lib/content/blocks.ts";
 import { SIBLING_PATHS } from "../src/lib/content/batch02/december-bridge.ts";
 import { B2_PATHS, withReadNext } from "../src/lib/content/batch02/shared.ts";
+import { STRIKE_11N_CITY_REFS, strike11nCityHref } from "../src/lib/content/batch02/strike-11n-city-paths.ts";
 import {
   MINIMUM_SERVICES_11N,
   SET_BY,
@@ -56,6 +57,8 @@ const PUBLISHED = new Set([
   ),
   // The Rodalies hub is a code route (app/(public)/[locale]/rodalies), served in all three languages.
   ...LOCALES.map((locale) => rodaliesHubPath(locale)),
+  // 6 Nov 2026: the Spanish-only 11N city pages (strike-11n-cities.ts), linked from the Spanish edition.
+  ...STRIKE_11N_CITY_REFS.map((ref) => strike11nCityHref(ref.key)),
 ]);
 
 const ALL_SECTORS: SectorKey[] = ["rodalies", "tmb", "fgcTram", "longDistance", "airports", "schools", "health"];

@@ -24,6 +24,7 @@ import {
   type B2Key,
   type B2Source,
 } from "./shared";
+import { strike11nCityLinks } from "./strike-11n-city-paths";
 
 /**
  * "Vaga avui a Catalunya: què funciona" — one evergreen URL per language, one
@@ -1341,6 +1342,11 @@ export function buildStrikesBody(locale: Locale, asOf: string = STRIKES_AS_OF, s
     const days = strikeDays(strike, locale);
     blocks.push(heading(2, `${cap(days)}: ${strike.title[locale]}`, strike.id));
     blocks.push(list(...strike.facts[locale], ...guideItem(strike)));
+    // 6 Nov 2026: the general strike's pages for the rest of Spain (Spanish
+    // only, strike-11n-cities.ts), linked from the Spanish edition's 11N card.
+    if (locale === "es" && strike.id === "vaga-general-2026-11-11") {
+      blocks.push(...paras(`**Fuera de Cataluña:** servicios mínimos y qué funciona el 11 de noviembre en ${strike11nCityLinks()}.`));
+    }
     blocks.push(...h3(t.msHeading(strikeRef(strike, locale)), strike.minimumServices.text[locale]));
     if (strike.advice[locale].length > 0) {
       blocks.push(heading(3, t.adviceHeading(strikeWhen(strike, locale))));

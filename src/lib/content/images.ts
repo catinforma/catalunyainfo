@@ -713,6 +713,16 @@ export const IMAGES: readonly ImportedImage[] = [
     "license": "CC BY-SA 3.0"
   },
   {
+    "key": "huelga-general-madrid-14n-emt",
+    "url": "/images/huelga-general-madrid-14n-emt.webp",
+    "width": 1920,
+    "height": 1440,
+    "blurDataUrl": "data:image/webp;base64,UklGRmYAAABXRUJQVlA4IFoAAADQAQCdASoQAAwAA4BaJYwAAvulu+g4kAD+8W+knXV0fWwzUcUxT3Hm03QF+628nbzx7SqcAsKbWQYe8sF8RyQQQHApU+DDFnqUQmVs4Qn/dMsCVkjeTC8GAAA=",
+    "credit": "Israel Hergón",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Huelga_general_del_14_de_noviembre_de_2012_en_Madrid_(3).jpg",
+    "license": "CC BY-SA 2.0"
+  },
+  {
     "key": "medieval-hero",
     "url": "/images/medieval-hero.webp",
     "width": 1920,

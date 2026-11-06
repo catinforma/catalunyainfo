@@ -14,7 +14,7 @@ import { LOCALES, type Locale } from "@/lib/i18n/config";
 import { PARKING, TRANSPORT, ZBE } from "./barcelona-practical";
 import { CERDANYA, GIRONA, MONTSERRAT_FREE } from "./day-trips";
 import { RIPOLLES, SETCASES, SNOW } from "./pyrenees";
-import { withReadNext, type B2Article } from "./shared";
+import { withReadNext, type B2Article, type B2Edition, type B2SpanishArticle } from "./shared";
 
 /**
  * Publisher for editorial batch 02.
@@ -43,7 +43,10 @@ export const BATCH_02: B2Article[] = [
   SNOW,
 ];
 
-function imagesFor(article: B2Article): ImageSpec[] {
+/** What the publisher reads from an article besides its editions. */
+type B2ArticleBase = Omit<B2Article, "key" | "editions">;
+
+function imagesFor(article: B2ArticleBase): ImageSpec[] {
   const specs: ImageSpec[] = [];
 
   const add = (
@@ -76,6 +79,19 @@ function imagesFor(article: B2Article): ImageSpec[] {
 }
 
 export async function publishB2Article(article: B2Article): Promise<PublishResult> {
+  return publishEditions(article, LOCALES.map((locale): [Locale, B2Edition] => [locale, article.editions[locale]]));
+}
+
+/**
+ * A page published in Spanish only (6 Nov 2026: the 11N city pages): the same
+ * publisher, with the one edition. No Catalan or English translation row is
+ * written, so hreflang lists the Spanish URL alone.
+ */
+export async function publishB2SpanishArticle(article: B2SpanishArticle): Promise<PublishResult> {
+  return publishEditions(article, [["es", article.editions.es]]);
+}
+
+async function publishEditions(article: B2ArticleBase, editions: [Locale, B2Edition][]): Promise<PublishResult> {
   const images = imagesFor(article);
   const mediaIds = images.length > 0 ? await upsertImages(images) : new Map<string, string>();
   // The template already renders the hero in the article header. Putting the
@@ -98,8 +114,7 @@ export async function publishB2Article(article: B2Article): Promise<PublishResul
     })),
     publishedAt: new Date(article.publishedAt),
     lastVerifiedAt: new Date(`${article.verifiedAt}T12:00:00+02:00`),
-    editions: LOCALES.map((locale) => {
-      const edition = article.editions[locale];
+    editions: editions.map(([locale, edition]) => {
       const body: Block[] = withReadNext([...edition.blocks], locale);
 
       if (inlineMediaId) {
