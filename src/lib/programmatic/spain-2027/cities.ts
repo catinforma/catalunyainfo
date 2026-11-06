@@ -51,6 +51,18 @@ export function localDays(c: City): LocalDay[] {
   return [...(local2027(c)?.days ?? [])].sort((a, b) => a.date.localeCompare(b.date));
 }
 
+/**
+ * A 2027 local day already fixed for the whole community, known before the
+ * municipality's own list: Navarra's 3 December (Resolución 232/2026,
+ * `SOURCES.NC.local.days`). Empty once the city's 2027 list is in (it then
+ * carries the day itself) and everywhere else.
+ */
+export function commonLocalDays(c: City): LocalDay[] {
+  const local = SOURCES[c.region].local;
+  if (local2027(c) || local.daysScope !== "common" || !local.days) return [];
+  return local.days.map((d) => ({ date: d.date, name: d.name, note: `común a toda ${c.community.short}` }));
+}
+
 /** Canarias: the island's own day (Decreto 115/2026, `SOURCES.CN.subRegional`). */
 export function islandDay(c: City): { date: string; name: string; place: string } | null {
   if (!c.island) return null;
@@ -74,7 +86,7 @@ export interface CityDay {
 export function cityCalendar(c: City): CityDay[] {
   const regional: CityDay[] = communityDays(c.region).map((d: CommunityDay) => ({ date: d.date, name: d.name, kind: d.kind, replaces: d.replaces }));
   const island = islandDay(c);
-  const local: CityDay[] = localDays(c).map((d) => ({ date: d.date, name: d.name, kind: "local" as const, ...(d.note ? { note: d.note } : {}) }));
+  const local: CityDay[] = [...localDays(c), ...commonLocalDays(c)].map((d) => ({ date: d.date, name: d.name, kind: "local" as const, ...(d.note ? { note: d.note } : {}) }));
   return [...regional, ...(island ? [{ date: island.date, name: island.name, kind: "island" as const }] : []), ...local].sort(
     (a, b) => a.date.localeCompare(b.date) || a.kind.localeCompare(b.kind),
   );
@@ -113,7 +125,7 @@ export function localOnRegional(c: City): LocalDay[] {
  * listed once.
  */
 export function cityRuns(c: City): Plan[] {
-  const all = [...new Set([...nonLocalDates(c), ...localDays(c).map((d) => d.date)])];
+  const all = [...new Set([...nonLocalDates(c), ...[...localDays(c), ...commonLocalDays(c)].map((d) => d.date)])];
   return distinctRuns(plansFor(all).map((p) => p.plan));
 }
 

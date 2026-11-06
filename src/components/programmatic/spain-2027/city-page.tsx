@@ -8,6 +8,7 @@ import {
   citiesOf,
   cityCalendar,
   cityRuns,
+  commonLocalDays,
   holidayCount,
   isZoned,
   islandDay,
@@ -20,7 +21,7 @@ import {
   type CityDayKind,
 } from "@/lib/programmatic/spain-2027/cities";
 import { cityFaq, cityH1, cityLead, cityListLine, localName, planWords, population } from "@/lib/programmatic/spain-2027/city-copy";
-import { KIND_LABEL, dayName, runLine, weekdayDate } from "@/lib/programmatic/spain-2027/copy";
+import { KIND_LABEL, compactDates, dayName, runLine, weekdayDate } from "@/lib/programmatic/spain-2027/copy";
 import { cityPath, communityPath, spainBridgesPath, spainHubPath } from "@/lib/programmatic/spain-2027/paths";
 import { BOE_REF, SOURCES } from "@/lib/programmatic/spain-2027/sources";
 
@@ -83,6 +84,7 @@ export function CityPage({ c }: { c: City }) {
   const s = SOURCES[c.region];
   const neighbours = citiesOf(c.region).filter((x) => x.slug !== c.slug);
   const weekend = weekendLocalDays(c);
+  const common = commonLocalDays(c);
 
   return (
     <article>
@@ -92,9 +94,9 @@ export function CityPage({ c }: { c: City }) {
         <div className="ci-prose">
           <dl className="ci-facts">
             <dt>Fiestas locales {YEAR}</dt>
-            <dd>{list ? cityListLine(c) : "Aún sin publicar"}</dd>
+            <dd>{list ? cityListLine(c) : common.length ? `${compactDates(common.map((d) => d.date))} (común); la otra, sin publicar` : "Aún sin publicar"}</dd>
             <dt>Festivos {YEAR} en total</dt>
-            <dd>{list ? holidayCount(c) : `${holidayCount(c)} + 2 locales pendientes`}</dd>
+            <dd>{list ? holidayCount(c) : `${holidayCount(c)} + ${2 - common.length} ${common.length === 1 ? "local pendiente" : "locales pendientes"}`}</dd>
             <dt>Comunidad</dt>
             <dd>
               <Link href={communityPath(c.community)}>{c.community.short}</Link>
@@ -192,7 +194,7 @@ export function CityPage({ c }: { c: City }) {
               <caption className="pb-2 text-left text-sm text-[var(--color-muted)]">
                 Festivos de {YEAR} en {c.name}: los nacionales y autonómicos del BOE ({BOE_REF.id})
                 {island ? `, la fiesta insular de ${island.place}` : ""}
-                {list ? " y las fiestas locales" : ""}.
+                {list ? " y las fiestas locales" : common.length ? " y la fiesta local común a toda la comunidad" : ""}.
               </caption>
               <thead>
                 <tr>
@@ -214,13 +216,17 @@ export function CityPage({ c }: { c: City }) {
               </tbody>
             </table>
           </div>
-          {!list ? <p>Faltan las 2 fiestas locales de {YEAR}, que se añadirán cuando se publiquen.</p> : null}
+          {!list ? (
+            <p>
+              {common.length ? `Falta la fiesta local propia de ${c.name} en ${YEAR}` : `Faltan las 2 fiestas locales de ${c.name} en ${YEAR}`}, que se añadirá{common.length ? "" : "n"} cuando se publique{common.length ? "" : "n"}.
+            </p>
+          ) : null}
 
           <h2 id="puentes">Puentes de {YEAR} en {c.name}</h2>
           <p>
             {list
               ? `Contando las fiestas locales, ${runs.filter((r) => r.take.length === 0).length} fines de semana largos sin vacaciones y ${runs.filter((r) => r.take.length > 0).length} puentes que piden días de vacaciones. Los que dependen de las fiestas locales van marcados.`
-              : `Con los festivos ya oficiales (sin las fiestas locales), ${runs.filter((r) => r.take.length === 0).length} fines de semana largos sin vacaciones y ${runs.filter((r) => r.take.length > 0).length} puentes que piden días de vacaciones.`}
+              : `Con los festivos ya oficiales (sin las fiestas locales pendientes), ${runs.filter((r) => r.take.length === 0).length} fines de semana largos sin vacaciones y ${runs.filter((r) => r.take.length > 0).length} puentes que piden días de vacaciones.`}
           </p>
           <ul>
             {runs.map((r) => (

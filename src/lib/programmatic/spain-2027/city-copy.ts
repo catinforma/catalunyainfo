@@ -7,6 +7,7 @@ import { CITIES_AS_OF, INE_POPULATION, type LocalDay, type LocalList } from "./c
 import {
   expectedMonth,
   holidayCount,
+  commonLocalDays,
   isZoned,
   islandDay,
   local2027,
@@ -110,8 +111,17 @@ export function cityDescription(c: City): string {
   }
   const regional = dayCount(c.region) + (islandDay(c) ? 1 : 0);
   const last = c.local2026 ? ` En 2026 fueron el ${dayPair(c.local2026.days[0]!.date, c.local2026.days[1]!.date, "es")}.` : "";
-  const full = `Calendario laboral ${YEAR} de ${c.name}: los ${regional} festivos ${c.community.de} y el estado de sus 2 fiestas locales, aún sin publicar.${last}`;
-  return full.length <= DESCRIPTION_LIMIT ? full : `Calendario laboral ${YEAR} de ${c.name}: los ${regional} festivos ${c.community.de}; sus fiestas locales, aún sin publicar.`;
+  const candidates = [
+    `Calendario laboral ${YEAR} de ${c.name}: los ${regional} festivos ${c.community.de} y sus 2 fiestas locales, aún sin publicar.${last}`,
+    `Calendario laboral ${YEAR} de ${c.name}: los ${regional} festivos ${c.community.de} y sus fiestas locales, aún sin publicar.${last}`,
+    `Calendario laboral ${YEAR} de ${c.name}: los ${regional} festivos ${c.community.de}; sus fiestas locales, aún sin publicar.`,
+  ];
+  return candidates.find((t) => t.length <= DESCRIPTION_LIMIT) ?? candidates[2]!;
+}
+
+/** How many of the 2 local days of 2027 are still unknown. */
+function missingLocal(c: City): number {
+  return local2027(c) ? 0 : 2 - commonLocalDays(c).length;
 }
 
 /* ---------------------------------------------------------------- Intro --- */
@@ -189,8 +199,12 @@ export function pendingLine(c: City): string {
     c.status2027 === "missing"
       ? `Las fiestas locales de ${YEAR} de ${c.name} aún no se han publicado. ${c.note ?? ""}`.trim()
       : `Las fiestas locales de ${YEAR} de ${c.name} aún no se han publicado; se esperan en ${when ?? "las próximas semanas"} en ${bulletin}.`;
+  const common = commonLocalDays(c);
+  const decree = SOURCES[c.region].decree;
+  const fixedBy = decree.status === "published" ? ` (${decree.text.ref})` : "";
+  const known = common.length ? ` Uno de los dos ya se conoce: el ${weekdayDate(common[0]!.date)} (${common[0]!.name}), ${common[0]!.note ?? ""}${fixedBy}.` : "";
   const last = c.local2026 ? ` En 2026 fueron ${joinList(c.local2026.days.map((d) => `el ${dayMonth(d.date, "es")}${d.name ? ` (${d.name})` : ""}`), "es")}.` : "";
-  return `${status}${last}`;
+  return `${status}${known}${last}`;
 }
 
 /* ------------------------------------------------------------------ FAQ --- */
@@ -236,7 +250,10 @@ export function cityFaq(c: City): Faq[] {
     { question: `¿Se conocen ya los festivos locales de ${YEAR} de ${c.name}?`, answer: `No. ${pendingLine(c)}` },
     {
       question: `¿Cuántos festivos tiene ${c.name} en ${YEAR}?`,
-      answer: `${regional + (island ? 1 : 0)} ya son oficiales: los ${regional} ${c.community.de} que publica el BOE${islandWords}. A ellos se sumarán las 2 fiestas locales cuando se publiquen.`,
+      answer:
+        commonLocalDays(c).length > 0
+          ? `${total} ya son oficiales: los ${regional} festivos ${c.community.de} que publica el BOE${islandWords} y la fiesta local común a toda la comunidad (${joinList(commonLocalDays(c).map((d) => dayMonth(d.date, "es")), "es")}). Falta la fiesta local propia del municipio.`
+          : `${total} ya son oficiales: los ${regional} festivos ${c.community.de} que publica el BOE${islandWords}. A ellos se sumarán las ${missingLocal(c)} fiestas locales cuando se publiquen.`,
     },
     ...(c.local2026
       ? [

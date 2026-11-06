@@ -142,8 +142,8 @@ function CityList({ c }: { c: CommunityNames }) {
     <>
       <h2 id="ciudades">Festivos locales {YEAR} por ciudad</h2>
       <p>
-        Las {cities.length === 1 ? "fiestas locales de la capital" : `2 fiestas locales de las ${cities.length} ciudades principales`} {c.de}, con la
-        fuente de cada una:
+        Las fiestas locales de {cities.length === 1 ? "la capital" : `las ${cities.length} ciudades principales`} {c.de}: las de {YEAR} donde ya se han
+        publicado y, si no, las de 2026 como referencia. Cada página cita el boletín oficial del que salen.
       </p>
       <div className="ci-table-scroll mt-4">
         <table className="ci-local-table">
@@ -179,9 +179,9 @@ function HubCityList() {
     <>
       <h2 id="ciudades">Festivos locales {YEAR} de las principales ciudades</h2>
       <p>
-        Las 2 fiestas locales de {YEAR} de las capitales de provincia y las ciudades de más de 50.000 habitantes, con la fuente de cada una. Las
-        ciudades de Cataluña están en sus <Link href={`${communityPath("cataluna")}#ciudades`}>páginas de municipio</Link>; Ceuta y Melilla, en la
-        suya.
+        Las 2 fiestas locales de {YEAR} de las capitales de provincia y las ciudades de más de 50.000 habitantes (padrón de 2025), cada una con su
+        boletín oficial; donde la lista de {YEAR} aún no ha salido, «pendiente» y las de 2026 como referencia. Las ciudades de Cataluña están en sus{" "}
+        <Link href={`${communityPath("cataluna")}#ciudades`}>páginas de municipio</Link>; Ceuta y Melilla, en la suya.
       </p>
       {groups.map(({ c, cities }) => (
         <p key={c.slug}>

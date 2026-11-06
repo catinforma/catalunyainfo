@@ -12,7 +12,7 @@ const { communityDays } = await import("../src/lib/programmatic/spain-2027/calen
 const { AUTONOMOUS_CITIES, CATALAN_CITIES, CITIES_AS_OF, CITIES_RECHECK_DAYS, CITY_ROWS, INE_POPULATION, NOT_YET, ineTableUrl } = await import(
   "../src/lib/programmatic/spain-2027/cities-data.ts"
 );
-const { CITIES, CITIES_RECHECK_BY, cityCalendar, cityRuns, holidayCount, islandDay, localDays, localOnRegional, localRuns } = await import(
+const { CITIES, CITIES_RECHECK_BY, cityCalendar, cityRuns, commonLocalDays, holidayCount, islandDay, localDays, localOnRegional, localRuns } = await import(
   "../src/lib/programmatic/spain-2027/cities.ts"
 );
 const { cityDescription, cityFaq, cityH1, cityLead, cityTitle, pendingLine } = await import("../src/lib/programmatic/spain-2027/city-copy.ts");
@@ -128,7 +128,10 @@ test("rows: published cities carry two 2027 days from their community's official
       assert.ok(c.local2026, `${c.slug}: a city with no 2027 days needs its 2026 ones, or no page`);
       assert.equal(c.local2026.year, 2026);
       if (c.status2027 === "missing") assert.ok(c.note && s.status === "published", `${c.slug}: say what the list does with the city`);
-      if (c.status2027 === "pending") assert.equal(s.status, "pending", c.slug);
+      if (c.status2027 === "pending") {
+        assert.equal(s.status, "pending", c.slug);
+        assert.equal(c.local2026.source.url, s.y2026?.url, `${c.slug}: the community's 2026 list`);
+      }
     }
     const lists = [c.local2027, c.local2026].filter((l) => l !== null);
     for (const list of lists) {
@@ -159,6 +162,18 @@ test("rows: a sample transcribed by hand from each bulletin", () => {
   // Bizkaia and Gipuzkoa share 31 July, a Saturday in 2027.
   for (const slug of ["bilbao", "barakaldo", "getxo", "san-sebastian", "irun"]) assert.ok(days(slug).some(([d]) => d === "2027-07-31"), slug);
   assert.equal(sakamoto("2027-07-31"), 6);
+  // Pending communities: the 2026 days, from the 2026 lists.
+  const days26 = (slug: string) => CITIES.find((c) => c.slug === slug)!.local2026!.days.map((d) => d.date);
+  assert.deepEqual(days26("madrid"), ["2026-05-15", "2026-11-09"]);
+  assert.deepEqual(days26("valencia"), ["2026-01-22", "2026-04-13"]);
+  assert.deepEqual(days26("zaragoza"), ["2026-01-29", "2026-03-05"]);
+  assert.deepEqual(days26("santander"), ["2026-05-25", "2026-07-25"]);
+  assert.deepEqual(days26("toledo"), ["2026-01-23", "2026-11-26"]);
+  assert.deepEqual(days26("pamplona"), ["2026-11-30", "2026-12-03"]);
+  // Navarra's 3 December 2027 is already fixed for every municipality: Pamplona's page counts it.
+  const pamplona = CITIES.find((c) => c.slug === "pamplona")!;
+  assert.deepEqual(commonLocalDays(pamplona).map((d) => d.date), ["2027-12-03"]);
+  assert.equal(holidayCount(pamplona), 13);
   // Burgos and Valladolid: the 2027 provincial lists leave the capital out.
   for (const slug of ["burgos", "valladolid"]) {
     const c = CITIES.find((x) => x.slug === slug)!;
@@ -174,8 +189,8 @@ test("calendar: local days add to the BOE days, never fall on one, and Canarias 
     const island = islandDay(c);
     if (c.region === "CN") assert.ok(island, `${c.slug}: island day`);
     else assert.equal(island, null);
-    assert.equal(holidayCount(c), regional + (island ? 1 : 0) + localDays(c).length, c.slug);
-    assert.equal(cityCalendar(c).filter((d) => d.kind === "local").length, localDays(c).length);
+    assert.equal(holidayCount(c), regional + (island ? 1 : 0) + localDays(c).length + commonLocalDays(c).length, c.slug);
+    assert.equal(cityCalendar(c).filter((d) => d.kind === "local").length, localDays(c).length + commonLocalDays(c).length);
     // Runs are the holiday engine's; a local run always contains a local day.
     for (const r of localRuns(c)) assert.ok(localDays(c).some((d) => d.date >= r.from && d.date <= r.to), `${c.slug}: ${r.from}`);
     assert.ok(cityRuns(c).length >= localRuns(c).length);
