@@ -2,8 +2,19 @@ import { SITE, absoluteUrl } from "@/lib/site";
 import { HTML_LANG, type Locale } from "@/lib/i18n/config";
 import { sectionPath } from "@/lib/i18n/routes";
 import type { Block } from "@/lib/content/blocks";
-import type { EntryDetail } from "@/lib/content/types";
+import type { AuthorView, EntryDetail } from "@/lib/content/types";
 import { OWNER } from "@/lib/content/pages/institutional";
+import {
+  SITE_AUTHOR_PROFILES,
+  SITE_AUTHOR_ROLE,
+  SITE_AUTHOR_SLUG,
+  SITE_AUTHOR_SUMMARY,
+  bylineAuthor,
+  isSiteAuthor,
+  siteAuthorPath,
+} from "@/lib/content/author";
+import { cropsForUrl, licenceUrl, manifestImage } from "@/lib/seo/discover-images";
+import { isNewsArticle } from "@/lib/seo/news-cycle";
 
 /**
  * Structured data.
@@ -18,8 +29,10 @@ type Json = Record<string, unknown>;
 
 export const ORGANIZATION_ID = `${SITE.productionOrigin}/#organization`;
 export const WEBSITE_ID = `${SITE.productionOrigin}/#website`;
+/** One id for the founder wherever he appears: Organization, Article author, author page. */
+export const SITE_AUTHOR_NODE_ID = `${SITE.productionOrigin}/#${SITE_AUTHOR_SLUG}`;
 
-export function organizationSchema(): Json {
+export function organizationSchema(locale: Locale = "ca"): Json {
   return {
     "@type": "Organization",
     "@id": ORGANIZATION_ID,
@@ -33,11 +46,58 @@ export function organizationSchema(): Json {
       height: 512,
     },
     ...(SITE.contactEmail ? { email: SITE.contactEmail } : {}),
-    founder: {
-      "@type": "Person",
-      name: OWNER.name,
-      url: OWNER.links.portfolio,
-      sameAs: [OWNER.links.github, OWNER.links.linkedin],
+    // The publication's own profiles only; none exists yet (site.ts).
+    ...(SITE.sameAs.length > 0 ? { sameAs: [...SITE.sameAs] } : {}),
+    founder: sitePersonNode(locale),
+  };
+}
+
+/**
+ * The founder as a Person: his author page on this site as `url`, the about
+ * page's three links (portfolio, GitHub, LinkedIn) as `sameAs`.
+ */
+export function sitePersonNode(locale: Locale): Json {
+  return {
+    "@type": "Person",
+    "@id": SITE_AUTHOR_NODE_ID,
+    name: OWNER.name,
+    url: absoluteUrl(siteAuthorPath(locale)),
+    jobTitle: SITE_AUTHOR_ROLE[locale],
+    sameAs: [...SITE_AUTHOR_PROFILES],
+  };
+}
+
+/** A piece's author: the founder's node, or a CMS author with their own page. */
+export function personNode(author: AuthorView, locale: Locale): Json {
+  if (isSiteAuthor(author)) return sitePersonNode(locale);
+  const links = Object.values(author.links).filter(Boolean);
+  return {
+    "@type": "Person",
+    name: author.name,
+    url: absoluteUrl(`${sectionPath("authors", locale)}${author.slug}/`),
+    ...(author.jobTitle ? { jobTitle: author.jobTitle } : {}),
+    ...(links.length > 0 ? { sameAs: links } : {}),
+  };
+}
+
+/**
+ * The author page (`/ca/autors/marti-aguilera/`): Google's ProfilePage, whose
+ * main entity is the same Person the articles name as author. No dates: the
+ * page has no publication date of its own to state.
+ */
+export function siteAuthorProfileSchema(locale: Locale): Json {
+  const url = absoluteUrl(siteAuthorPath(locale));
+  return {
+    "@type": "ProfilePage",
+    "@id": `${url}#profile`,
+    url,
+    name: OWNER.name,
+    inLanguage: HTML_LANG[locale],
+    isPartOf: { "@id": WEBSITE_ID },
+    mainEntity: {
+      ...sitePersonNode(locale),
+      description: SITE_AUTHOR_SUMMARY[locale],
+      worksFor: publisherNode(),
     },
   };
 }
@@ -98,14 +158,28 @@ function citations(entry: EntryDetail): Json[] | undefined {
   }));
 }
 
-function authorNode(entry: EntryDetail): Json | undefined {
-  if (!entry.author) return undefined;
-  return {
-    "@type": "Person",
-    name: entry.author.name,
-    url: absoluteUrl(`${sectionPath("authors", entry.locale)}${entry.author.slug}/`),
-    ...(entry.author.jobTitle ? { jobTitle: entry.author.jobTitle } : {}),
-  };
+/**
+ * The Article's images. A licensed manifest photograph is declared as its
+ * crops (16:9, 4:3, 1:1, each at least 1,200 px wide; discover-images.ts) with
+ * its credit, licence deed and Commons page; anything else (an AI
+ * illustration, a CMS upload) keeps the one ImageObject it had.
+ */
+export function articleImage(entry: EntryDetail): Json | Json[] | undefined {
+  const hero = entry.og ?? entry.hero;
+  if (!hero) return undefined;
+  const crops = cropsForUrl(hero.url);
+  const source = manifestImage(hero.url);
+  if (crops.length === 0 || !source) return imageObject(entry);
+  const licence = licenceUrl(source.license);
+  return crops.map((crop) => ({
+    "@type": "ImageObject",
+    url: absoluteUrl(crop.url),
+    width: crop.width,
+    height: crop.height,
+    ...(source.credit ? { creditText: source.credit } : {}),
+    ...(licence ? { license: licence } : {}),
+    ...(source.creditUrl ? { acquireLicensePage: source.creditUrl } : {}),
+  }));
 }
 
 function publisherNode(): Json {
@@ -118,26 +192,37 @@ function publisherNode(): Json {
   };
 }
 
-/** NewsArticle for `news`, Article for guides and long-form. */
+/**
+ * NewsArticle for `news` entries and the guides that report a dated event
+ * (news-cycle.ts), Article for every other guide and long-form piece.
+ *
+ * Dates are the ones the page shows: datePublished is the publication date,
+ * dateModified the date its facts were last verified or changed (the
+ * publisher stamps `updated_at` from each spec's as-of date, never the time of
+ * a re-send), and never earlier than the publication date.
+ */
 export function articleSchema(entry: EntryDetail): Json {
-  const isNews = entry.type === "news";
+  const author = bylineAuthor(entry);
+  const image = articleImage(entry);
+  const modified =
+    entry.publishedAt && entry.updatedAt.getTime() < entry.publishedAt.getTime() ? entry.publishedAt : entry.updatedAt;
   return {
-    "@type": isNews ? "NewsArticle" : "Article",
+    "@type": isNewsArticle(entry) ? "NewsArticle" : "Article",
     "@id": `${absoluteUrl(entry.href)}#article`,
     headline: entry.title,
     ...(entry.excerpt ? { description: entry.excerpt } : {}),
     inLanguage: HTML_LANG[entry.locale],
     mainEntityOfPage: { "@type": "WebPage", "@id": absoluteUrl(entry.href) },
     ...(entry.publishedAt ? { datePublished: entry.publishedAt.toISOString() } : {}),
-    dateModified: entry.updatedAt.toISOString(),
+    dateModified: modified.toISOString(),
     // Inline rather than a bare @id: the Organization lives in another
     // script block, and a reference that does not resolve leaves Article
     // without a publisher for parsers that read one graph at a time.
     publisher: publisherNode(),
-    // No named author is published yet; Google accepts an Organization
-    // author, which beats none (165 articles had no author at all).
-    author: authorNode(entry) ?? publisherNode(),
-    ...(imageObject(entry) ? { image: imageObject(entry) } : {}),
+    // The byline the page shows (lib/content/author.ts). Only a piece with
+    // no byline at all falls back to the Organization.
+    author: author ? personNode(author, entry.locale) : publisherNode(),
+    ...(image ? { image } : {}),
     ...(citations(entry) ? { citation: citations(entry) } : {}),
     ...(entry.tags.length > 0 ? { keywords: entry.tags.map((t) => t.name).join(", ") } : {}),
   };

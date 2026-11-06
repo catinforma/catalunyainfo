@@ -1,4 +1,5 @@
 import type { Locale } from "@/lib/i18n/config";
+import { hubPath } from "@/lib/programmatic/elections/paths";
 
 import {
   b2Related,
@@ -98,6 +99,28 @@ import {
  * usted el día de la votación"; all at the venue at 8:00; unused substitutes
  * get "un justificante de asistencia"). The DOGC voter-leave line keeps its
  * own date (3 Nov): it was not re-read.
+ *
+ * 6 Nov 2026 (national scope, Spanish edition only; title, H1, description
+ * and lead changed, logged in docs/SEO_EXPERIMENTS.md): every rule on this
+ * page is national (LOREG, Orden INT/650/2026, RD 605/1999), but national
+ * queries barely reached it: "cuándo se cobra por estar en una mesa electoral
+ * 2026" 75 impressions at 9.1, "cuánto cobra(n) ... mesa electoral (2026)"
+ * around ten variants at 8-13, "excusas mesa electoral" at 12, "suplente mesa
+ * electoral cobran" at 59.5, "miembro de mesa" at 53 (GSC, 28 days to 5 Nov).
+ * The ES title and H1 now say "mesa electoral 29N / elecciones generales del
+ * 29 de noviembre" with the pay and the excuses; the lead says the rules are
+ * the same across Spain; the excuse heading and the penalty box use the
+ * searched wording ("excusas válidas", "si no te presentas"). Catalonia-only
+ * facts moved to a section of their own: the 31 Juntas Electorales de Zona
+ * (jez.json, LOREG art. 8) with a link to the town pages that list each one,
+ * and the DOGC voter-leave detail (still dated 3 Nov). The voters' four paid
+ * hours are cited to RD 605/1999 art. 13.1, re-read that day on the BOE
+ * open-data API ("hasta cuatro horas libres ... que serán retribuidas ...
+ * reducción proporcional"), and Orden INT/650/2026 arts. 1-3 and DA 1ª were
+ * re-read on the BOE (75,00 euros; substitutes only once they sit; paid in
+ * full). No separate pages for "cuánto cobra", "excusas" or "qué pasa si no
+ * vas": this guide already answers each in a section and an FAQ and is the
+ * page Google ranks for them, so a new page would split it. ca/en untouched.
  */
 
 const VERIFIED = "2026-11-05";
@@ -167,12 +190,12 @@ const META: Record<Locale, { path: string; title: string; seoTitle: string; seoD
   },
   es: {
     path: "guias/miembro-mesa-electoral",
-    title: "Mesa electoral: cómo saber si te ha tocado, qué hacer, cuánto se cobra y cómo excusarte",
-    seoTitle: "Mesa electoral 2026: si te ha tocado, plazo de excusa y 75 €",
+    title: "Mesa electoral en las elecciones generales del 29 de noviembre: cuánto se cobra, excusas válidas y qué pasa si no vas",
+    seoTitle: "Mesa electoral 29N: cuánto se cobra (75 €), excusas y plazos",
     seoDescription:
-      "Notificación hasta el 7 de noviembre; luego, 7 días para excusarte ante la Junta Electoral de Zona, también en línea. Dieta de 75 € y 5 h menos el lunes.",
+      "Elecciones generales 29N, en toda España: 75 € de dieta, 7 días desde la notificación para excusarte ante la Junta Electoral de Zona y 5 h menos el lunes.",
     excerpt:
-      "Si te ha tocado mesa el 29N: cómo lo sabes, el plazo para excusarte y dónde, la dieta de 75 €, el permiso en el trabajo y qué pasa si no vas, según la LOREG.",
+      "Si te ha tocado mesa en las elecciones generales del 29N, en cualquier punto de España: cuánto se cobra, las excusas válidas y dónde presentarlas, el permiso en el trabajo y qué pasa si no vas, según la LOREG.",
   },
   en: {
     path: "guides/polling-station-duty-spain",
@@ -223,8 +246,24 @@ type T = {
   dayNote: string;
   checkTitle: string;
   check: string[];
+  /**
+   * Spanish edition only (6 Nov 2026): the page answers for all of Spain, so
+   * what applies only in Catalonia sits in a section of its own.
+   */
+  catalonia?: { title: string; items: string[] };
   faq: { question: string; answer: string }[];
 };
+
+/**
+ * Catalonia's Juntas Electorales de Zona, counted in `jez.json`
+ * (src/lib/programmatic/elections/mesa-duty.ts, JEC directory read on 4 Nov
+ * 2026): 31 boards (Barcelona 14, Girona 6, Lleida 6, Tarragona 5) for 49
+ * current judicial districts, and 200 of the 947 municipalities answer to a
+ * board seated somewhere other than their district's seat, because LOREG art.
+ * 8.6 keeps the 1979 districts. Hard-coded here because mesa-duty.ts imports
+ * this module; tests/election-mesa-duty.test.ts holds them to the snapshot.
+ */
+export const CATALONIA_JEZ = { boards: 31, barcelona: 14, girona: 6, lleida: 6, tarragona: 5, districts: 49, elsewhere: 200 } as const;
 
 const COPY: Record<Locale, T> = {
   ca: {
@@ -341,7 +380,7 @@ const COPY: Record<Locale, T> = {
     ],
   },
   es: {
-    lead: "Si te ha tocado mesa electoral para el **29 de noviembre de 2026**, solo lo sabrás por la **notificación** del ayuntamiento: el sorteo se hizo entre el 31 de octubre y el **4 de noviembre** y te la deben entregar en los tres días siguientes, hasta el **7 de noviembre**. Desde que la recibes tienes **7 días** para presentar una excusa documentada ante la **Junta Electoral de Zona**, en papel o en línea con Cl@ve. Si vas, cobras **75 €** sin IRPF, la misma dieta para el presidente y los vocales (Orden INT/650/2026). **Cuándo se cobra:** ninguna norma oficial fija el día ni la forma de pago; la orden solo dice que estos pagos aún se hacen mayoritariamente en efectivo. Tienes permiso retribuido si ese día trabajas y **cinco horas menos** de jornada el lunes 30, y no presentarte sin causa es un delito.",
+    lead: "Si te ha tocado mesa electoral en las **elecciones generales del 29 de noviembre de 2026**, las reglas son las mismas en toda España (LOREG, artículos 26 a 28 y 143). Solo lo sabrás por la **notificación** del ayuntamiento: el sorteo se hizo entre el 31 de octubre y el **4 de noviembre** y te la deben entregar en los tres días siguientes, hasta el **7 de noviembre**. Desde que la recibes tienes **7 días** para presentar una excusa documentada ante la **Junta Electoral de Zona**, en papel o en línea con Cl@ve. Si vas, cobras **75 €** sin IRPF, la misma dieta para el presidente y los vocales (Orden INT/650/2026). **Cuándo se cobra:** ninguna norma oficial fija el día ni la forma de pago; la orden solo dice que estos pagos aún se hacen mayoritariamente en efectivo. Tienes permiso retribuido si ese día trabajas y **cinco horas menos** de jornada el lunes 30, y no presentarte sin causa es un delito.",
     nowTitle: "Si te ha tocado: lo que tienes que saber hoy",
     now: [
       { label: "¿Cómo sé si me ha tocado?", value: "Solo por la **notificación** personal del ayuntamiento, que llega con el manual de instrucciones. El sorteo ya se ha hecho (la ley lo fija entre el 31 de octubre y el 4 de noviembre) y la notificación debe entregarse en los tres días siguientes, es decir, hasta el **7 de noviembre**; si llega más tarde, el nombramiento sigue siendo válido. No hay ninguna lista pública ni consulta en línea." },
@@ -369,7 +408,7 @@ const COPY: Record<Locale, T> = {
       ["Avisar de un impedimento sobrevenido", "72 horas antes de las 8.00 del día de la votación", "Jueves 26 de noviembre a las 8.00"],
     ],
     datesNote: "Calendario del Ministerio del Interior (convocatoria publicada el 6 de octubre de 2026). Cada Ayuntamiento hace el sorteo un día dentro del periodo; la Junta Electoral de Zona puede autorizarle a adelantarlo.",
-    excuseTitle: "Cómo excusarte",
+    excuseTitle: "Excusas válidas para no ir a la mesa electoral y cómo presentarlas",
     excuse: [
       "Tienes **7 días desde la notificación** para presentar a la **Junta Electoral de Zona** una causa «justificada y documentada». La Junta responde en 5 días, y si la deniega debe motivarlo. Contra la decisión no cabe recurso electoral, solo el contencioso-administrativo. Los datos de contacto de la Junta salen en la notificación.",
       `**Cómo presentarla:** en papel, ante la Junta Electoral de Zona, o en línea si tienes Cl@ve, en la [plataforma de excusas](${EXCUSE_APP}) del Ministerio del Interior, que la Junta Electoral Central habilitó con su Instrucción 2/2023 y que enlaza la web oficial del 29N. En los dos casos hay que aportar el documento que justifica la causa. Si tienes 65 años o más, puedes renunciar al cargo en esos mismos siete días. Solo la Junta puede relevarte: hasta que acepta la excusa, sigues designado.`,
@@ -389,7 +428,7 @@ const COPY: Record<Locale, T> = {
       "Otras causas se valoran caso por caso: una enfermedad que lo haga especialmente difícil, una operación inaplazable, un acontecimiento familiar muy relevante ese día, ser familia monoparental con hijos menores de 14 años, o trabajos de servicio esencial ese día (sanitarios, bomberos, protección civil) con informe del jefe. **Trabajar o estar de vacaciones no es una excusa automática.**",
     lateTitle: "Si te surge un impedimento más tarde",
     late: "Si después del plazo de siete días ocurre algo que te impide ir, debes comunicarlo a la Junta Electoral de Zona **al menos 72 horas antes** de las 8.00 del día de la votación, con justificantes. Si ocurre aún más tarde, avisa **de inmediato**, y siempre antes de que se constituya la mesa.",
-    penaltyTitle: "Qué pasa si no vas",
+    penaltyTitle: "Qué pasa si no te presentas a la mesa electoral",
     penalty: "No presentarte, abandonar el puesto sin causa legítima o no hacer la excusa o el aviso que exige la ley es un **delito** (artículo 143 de la LOREG): prisión de **tres meses a un año o multa de seis a veinticuatro meses**. También se aplica a los suplentes.",
     payTitle: "Cuánto pagan por estar en una mesa electoral en 2026",
     payCaption: "Dieta por estar en la mesa electoral el 29 de noviembre",
@@ -415,7 +454,7 @@ const COPY: Record<Locale, T> = {
     work: [
       "**Miembros de mesa:** si el día de la votación es laborable para ti, tienes permiso retribuido de jornada completa, y **en todos los casos** una reducción de **cinco horas** de la jornada al día siguiente. Para el 29N, que es domingo, eso significa el **lunes 30 de noviembre**. Los suplentes que acaban en la mesa tienen los mismos derechos. El justificante te lo da la Junta Electoral de Zona.",
       "**Turno de noche:** según el Ministerio del Interior, el turno de noche que empieza el 29 de noviembre cuenta como jornada del día electoral, y la reducción de cinco horas se puede aplicar al turno de noche siguiente si empieza el día 30. Debes cumplir en la mesa aunque hayas trabajado la jornada anterior.",
-      "**Votantes que trabajan ese día:** tienen derecho a **hasta cuatro horas retribuidas** para ir a votar, proporcionales si hacen jornada reducida. En Cataluña la Generalitat fija el detalle para cada elección: en 2023 eran dos horas si el horario coincidía más de dos y menos de cuatro con el de votación, y cuatro si coincidía cuatro o más, y la empresa decidía en qué momento. La orden para el 29N aún no está en el DOGC (consultado el 3 de noviembre); la de 2023 (Ordre EMT/178/2023) salió el 7 de julio, 16 días antes de votar.",
+      "**Votantes que trabajan ese día:** en toda España tienen derecho a **hasta cuatro horas retribuidas** para ir a votar, proporcionales si hacen jornada reducida (Real Decreto 605/1999, artículo 13). El Estado o la comunidad autónoma con competencias laborales concreta cómo se reparten; en Cataluña, más abajo.",
       "**Seguridad Social:** titulares y suplentes están cubiertos ese día; cualquier lesión, también yendo o volviendo, se considera accidente de trabajo.",
     ],
     dayTitle: "Cómo es el día",
@@ -434,6 +473,13 @@ const COPY: Record<Locale, T> = {
       "**Tu colegio y tu mesa:** en el servicio de consulta del INE, sin identificarte. Las tarjetas censales se envían a partir del 2 de noviembre.",
       "**Si te ha tocado ser miembro de mesa:** no hay ninguna consulta oficial en línea. Solo lo sabes por la notificación, que debe hacerse entre el 31 de octubre y el 7 de noviembre; según el Ministerio del Interior, si llega más tarde el nombramiento no deja de ser válido. Si tienes dudas, pregunta al Ayuntamiento o a la Junta Electoral de Zona.",
     ],
+    catalonia: {
+      title: "Si te ha tocado mesa en Cataluña",
+      items: [
+        `**Tu Junta Electoral de Zona:** en Cataluña hay ${CATALONIA_JEZ.boards} (${CATALONIA_JEZ.barcelona} en la provincia de Barcelona, ${CATALONIA_JEZ.girona} en la de Girona, ${CATALONIA_JEZ.lleida} en la de Lleida y ${CATALONIA_JEZ.tarragona} en la de Tarragona), menos que partidos judiciales (${CATALONIA_JEZ.districts}), porque la LOREG las sitúa en las cabeceras de los partidos judiciales de las elecciones locales de 1979 (artículo 8). Por eso, en ${CATALONIA_JEZ.elsewhere} municipios la sede de la Junta no es la cabecera de su partido judicial actual. La dirección y el teléfono de la tuya, tal como los publica la Junta Electoral Central, están en la página de tu municipio: búscalo en [las elecciones en Cataluña por municipio](${hubPath("es")}).`,
+        "**Permiso para votar si trabajas el 29:** en Cataluña el reparto de las cuatro horas lo fija una orden de la Generalitat en el DOGC. En 2023 eran dos horas si el horario coincidía más de dos y menos de cuatro con el de votación, y cuatro si coincidía cuatro o más, y la empresa decidía en qué momento. La orden para el 29N aún no está en el DOGC (consultado el 3 de noviembre); la de 2023 (Ordre EMT/178/2023) salió el 7 de julio, 16 días antes de votar.",
+      ],
+    },
     faq: [
       { question: "¿Qué tengo que hacer si me ha tocado mesa electoral?", answer: "Lee el manual que llega con la notificación y preséntate a las 8:00 del domingo 29 de noviembre en el local que indica. Si no puedes ir, tienes siete días desde la notificación para presentar una excusa documentada ante la Junta Electoral de Zona; a partir de los 65 años, puedes renunciar en el mismo plazo." },
       { question: "¿Puedo presentar la excusa por internet?", answer: "Sí, si tienes Cl@ve: en la plataforma de excusas del Ministerio del Interior, que enlaza la web oficial del 29N y que la Junta Electoral Central habilitó con la Instrucción 2/2023. También puedes presentarla en papel ante la Junta Electoral de Zona. En los dos casos, dentro de los siete días desde la notificación y con el documento que justifica la causa." },
@@ -591,6 +637,7 @@ function body(locale: Locale) {
     table(t.dayCaption, t.dayHeaders, t.dayRows, t.dayNote),
     ...h2(t.checkTitle),
     list(...t.check),
+    ...(t.catalonia ? [...h2(t.catalonia.title), list(...t.catalonia.items)] : []),
     faq(t.faq),
     ...b2Related(["voting", "candidates", "electionNight", "congressResults", "parliamentResults"], locale),
   ];

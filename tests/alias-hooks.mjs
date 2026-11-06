@@ -1,5 +1,5 @@
 import { fileURLToPath, pathToFileURL } from "node:url";
-import { existsSync } from "node:fs";
+import { existsSync, statSync } from "node:fs";
 import { dirname, isAbsolute, join, resolve as resolvePath } from "node:path";
 
 /**
@@ -26,7 +26,9 @@ function firstExisting(base) {
     ...EXTENSIONS.map((ext) => base + ext),
     ...EXTENSIONS.map((ext) => join(base, `index${ext}`)),
   ];
-  return candidates.find((candidate) => existsSync(candidate) && !candidate.endsWith("\\"));
+  // Files only: `@/lib/i18n` is a directory with an index.ts, and resolving it
+  // to the directory itself fails with ERR_UNSUPPORTED_DIR_IMPORT.
+  return candidates.find((candidate) => existsSync(candidate) && statSync(candidate).isFile() && !candidate.endsWith("\\"));
 }
 
 export async function resolve(specifier, context, nextResolve) {

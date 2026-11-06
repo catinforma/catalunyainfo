@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 
 import { SITE, absoluteUrl, indexingAllowed, siteOrigin } from "@/lib/site";
+import { feedPath, feedTitle } from "@/lib/seo/feed-paths";
 import {
   HTML_LANG,
   LOCALES,
@@ -77,6 +78,11 @@ export interface PageMetadataInput {
   publishedTime?: Date | null;
   modifiedTime?: Date | null;
   authors?: string[];
+  /**
+   * The byline, as `<meta name="author">` and `<link rel="author">` to the
+   * author page; replaces the layout's site-wide author for this page.
+   */
+  authorLink?: { name: string; path: string } | null;
   /** Force noindex regardless of environment (search pages, previews, demo). */
   noindex?: boolean;
   canonicalOverride?: string | null;
@@ -125,6 +131,13 @@ export function composeTitle(
   return { absolute: title };
 }
 
+/** Snippet and preview limits for indexable pages: none, and large images. */
+export const PREVIEW_DIRECTIVES = {
+  "max-image-preview": "large",
+  "max-snippet": -1,
+  "max-video-preview": -1,
+} as const;
+
 export function buildMetadata(input: PageMetadataInput): Metadata {
   const {
     locale,
@@ -137,6 +150,7 @@ export function buildMetadata(input: PageMetadataInput): Metadata {
     publishedTime,
     modifiedTime,
     authors,
+    authorLink,
     noindex = false,
     canonicalOverride,
   } = input;
@@ -160,21 +174,31 @@ export function buildMetadata(input: PageMetadataInput): Metadata {
     metadataBase: new URL(siteOrigin()),
     title: composeTitle(title, path),
     description: desc,
-    alternates: buildAlternates({
-      path,
-      translations: effectiveTranslations,
-      canonicalOverride: canonicalOverride ?? null,
-    }),
+    ...(authorLink ? { authors: [{ name: authorLink.name, url: absoluteUrl(authorLink.path) }] } : {}),
+    alternates: {
+      ...buildAlternates({
+        path,
+        translations: effectiveTranslations,
+        canonicalOverride: canonicalOverride ?? null,
+      }),
+      // Feed autodiscovery: this language's RSS (lib/seo/feeds.ts). Set here
+      // because a page's `alternates` replaces the layout's whole object.
+      types: {
+        "application/rss+xml": [{ url: absoluteUrl(feedPath(locale)), title: feedTitle(SITE.name, locale) }],
+      },
+    },
+    // Large image previews in the generic robots meta as well as googlebot's:
+    // Discover shows a large image only when max-image-preview:large is set,
+    // and Bing and other engines read only `robots`.
     robots: robotsIndexable
       ? {
           index: true,
           follow: true,
+          ...PREVIEW_DIRECTIVES,
           googleBot: {
             index: true,
             follow: true,
-            "max-image-preview": "large",
-            "max-snippet": -1,
-            "max-video-preview": -1,
+            ...PREVIEW_DIRECTIVES,
           },
         }
       : { index: false, follow: false, nocache: true },

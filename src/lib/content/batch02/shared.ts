@@ -565,9 +565,11 @@ export const B2_TITLES: Record<B2Key, Record<Locale, string>> = {
     es: "Resultados de las elecciones municipales",
     en: "Local election results in Catalonia",
   },
+  // es, 6 Nov 2026: the guide went national ("mesa electoral 29N", pay,
+  // excuses); the anchor on the 947 town pages and the rails says so too.
   mesa: {
     ca: "Membre de mesa electoral: què fer",
-    es: "Miembro de mesa electoral: qué hacer",
+    es: "Mesa electoral 29N: cuánto se cobra, excusas y plazos",
     en: "Polling-station duty in Spain",
   },
   beaches: {

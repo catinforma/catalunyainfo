@@ -112,6 +112,8 @@ export interface EntrySummary {
 }
 
 export interface EntryDetail extends EntrySummary {
+  /** Stable `entries.key` ("guide-postal-vote"); null for CMS-created entries. */
+  key?: string | null;
   status: EntryStatus;
   body: Body;
   noindex: boolean;
@@ -132,6 +134,13 @@ export interface EntryDetail extends EntrySummary {
   isDemo: boolean;
   breadcrumbs: { label: string; href: string }[];
 }
+
+/**
+ * Written pieces: what carries a byline (lib/content/author.ts) and what the
+ * RSS feeds and the Google News sitemap list. Pages, places, events and routes
+ * are reference material, not articles.
+ */
+export const BYLINE_ENTRY_TYPES: readonly EntryType[] = ["news", "article", "guide"];
 
 export const SECTION_ENTRY_TYPES: Record<string, EntryType[]> = {
   news: ["news"],

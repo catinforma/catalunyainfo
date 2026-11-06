@@ -17,7 +17,7 @@ import { joinList } from "./names";
  */
 
 export const BOE_2027 = {
-  name: "Resolución de 8 de octubre de 2026, de la Dirección General de Trabajo, por la que se publica la relación de fiestas laborales para el año 2027",
+  name: "Resolución de 8 de octubre de 2026, de la Dirección General de Trabajo, por la que se publica relación de fiestas laborales para el año 2027",
   ref: "BOE-A-2026-21254, BOE de 13.10.2026",
   url: "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2026-21254",
   readOn: "2026-11-02",

@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
 
+import { siteAuthorPath } from "@/lib/content/author";
 import { allIndexablePaths, countBySection } from "@/lib/content/repository";
 import { HTML_LANG, LOCALES, X_DEFAULT_LOCALE, type Locale } from "@/lib/i18n/config";
 import { allSystemPaths, sectionPath } from "@/lib/i18n/routes";
@@ -14,6 +15,7 @@ import { weekendSitemapEntries } from "@/lib/programmatic/weekend/sitemap";
 import { todaySitemapEntries } from "@/lib/programmatic/today/page";
 import { christmasFairsSitemapEntries } from "@/lib/programmatic/christmas-fairs/sitemap";
 import { pollsSitemapEntries } from "@/lib/programmatic/polls/page";
+import { spainSitemapEntries } from "@/lib/programmatic/spain-2027/paths";
 
 /**
  * Cached for an hour (ISR) and refreshed at once by every publish, and by the
@@ -126,11 +128,26 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }
   }
 
+  // The founder's author page, where every byline links (lib/content/author.ts).
+  // It lists the most recently updated guides, so it changes when they do.
+  const authorPages = Object.fromEntries(LOCALES.map((l) => [l, siteAuthorPath(l)])) as Partial<Record<Locale, string>>;
+  for (const locale of LOCALES) {
+    systemEntries.push({
+      url: absoluteUrl(siteAuthorPath(locale)),
+      lastModified: listingModified,
+      changeFrequency: "weekly",
+      priority: 0.4,
+      alternates: { languages: languageMap(authorPages) },
+    });
+  }
+
   return [
     ...systemEntries,
     ...entries,
     ...electionsSitemap(),
     ...holidaySitemapEntries(),
+    // Calendario laboral 2027 en España: hub, bridges and the 19 communities (Spanish only).
+    ...spainSitemapEntries(),
     ...fuelSitemapEntries(),
     ...rodaliesSitemap(),
     ...reservoirSitemapEntries(),
