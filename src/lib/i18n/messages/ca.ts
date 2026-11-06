@@ -263,8 +263,8 @@ const ca = {
     body: "L'adreça que has obert no existeix o s'ha mogut.",
   },
   consent: {
-    title: "Privadesa i galetes",
-    body: "Fem servir galetes pròpies imprescindibles i, amb el teu consentiment, galetes de mesura per entendre com es fa servir el web.",
+    title: "Ens ajudes a millorar el web?",
+    body: "Fem servir galetes pròpies imprescindibles i, si hi estàs d'acord, galetes d'estadística per saber quines pàgines són útils i millorar-les. Ho pots canviar quan vulguis.",
     accept: "Accepta-ho tot",
     reject: "Només les imprescindibles",
     manage: "Configura",

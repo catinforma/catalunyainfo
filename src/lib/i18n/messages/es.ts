@@ -264,8 +264,8 @@ const es: Messages = {
     body: "La dirección que has abierto no existe o se ha movido.",
   },
   consent: {
-    title: "Privacidad y cookies",
-    body: "Usamos cookies propias imprescindibles y, con tu consentimiento, cookies de medición para entender cómo se usa la web.",
+    title: "¿Nos ayudas a mejorar la web?",
+    body: "Usamos cookies propias imprescindibles y, si nos das permiso, cookies de estadística para saber qué páginas son útiles y mejorarlas. Puedes cambiarlo cuando quieras.",
     accept: "Aceptar todo",
     reject: "Solo las imprescindibles",
     manage: "Configurar",
