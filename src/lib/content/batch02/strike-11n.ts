@@ -23,6 +23,7 @@ import {
   type B2Article,
   type B2Source,
 } from "./shared";
+import { strike11nCityLinks } from "./strike-11n-city-paths";
 import { STRIKES, STRIKE_URLS, isUpcoming } from "./strikes";
 
 /**
@@ -1155,6 +1156,13 @@ const COPY: Record<Locale, Copy> = {
 /* -------------------------------------------------------------------------- */
 
 const RELATED = ["strikes", "hours", "airport", "transport", "strikeRenfe", "strikeEducation"] as const;
+
+/** The Spanish edition's link line to the city pages (strike-11n-cities.ts), Spanish only. */
+export const OTHER_CITIES_TITLE = "En otras ciudades";
+
+export function otherCitiesLine(): string {
+  return `¿Estás fuera de Cataluña? Servicios mínimos y qué funciona el 11 de noviembre en ${strike11nCityLinks()}.`;
+}
 const SECTOR_ORDER: SectorKey[] = ["rodalies", "tmb", "fgcTram", "longDistance", "airports", "schools", "health"];
 const TRANSPORT: ("rodalies" | "tmb" | "fgcTram" | "longDistance" | "airports")[] = ["rodalies", "tmb", "fgcTram", "longDistance", "airports"];
 
@@ -1186,6 +1194,10 @@ export function buildStrike11nBody(
   // interface language); this line takes the reader to theirs.
   blocks.push(languageLinks());
   blocks.push(callout("official", verifiedLine(locale, asOf), t.data(c)));
+  // 6 Nov 2026: Spanish readers from the rest of Spain (about five times the
+  // demand for Catalonia) get their city's page under the answer. The title
+  // and the lead stay as they are: this page is the winner of the 11N cluster.
+  if (locale === "es") blocks.push(callout("info", OTHER_CITIES_TITLE, otherCitiesLine()));
 
   // Minimum services: the answer most readers came for, first.
   blocks.push(heading(2, t.msHeading, "serveis-minims"));

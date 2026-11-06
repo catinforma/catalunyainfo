@@ -8,6 +8,7 @@ import { SIBLING_PATHS } from "../src/lib/content/batch02/december-bridge.ts";
 import { dateYear } from "../src/lib/content/batch02/festive.ts";
 import { HOURS } from "../src/lib/content/batch02/hours.ts";
 import { B2_PATHS, withReadNext } from "../src/lib/content/batch02/shared.ts";
+import { STRIKE_11N_CITY_REFS, strike11nCityHref } from "../src/lib/content/batch02/strike-11n-city-paths.ts";
 import {
   STRIKES,
   STRIKES_AS_OF,
@@ -69,6 +70,8 @@ const PUBLISHED = new Set([
   ...LOCALES.map((locale) => rodaliesHubPath(locale)),
   // So is the daily page (app/(public)/[locale]/avui, hoy, today), one folder per language.
   ...LOCALES.map((locale) => todayPath(locale)),
+  // 6 Nov 2026: the Spanish-only 11N city pages (strike-11n-cities.ts), linked from the Spanish edition.
+  ...STRIKE_11N_CITY_REFS.map((ref) => strike11nCityHref(ref.key)),
 ]);
 
 /* -------------------------------------------------------------------------- */

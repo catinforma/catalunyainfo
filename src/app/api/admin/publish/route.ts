@@ -14,7 +14,7 @@ import { publishFeatures } from "@/lib/content/features/publish";
 import { publishHolidayGuide } from "@/lib/content/holidays/publish";
 import { publishTouristTaxGuide } from "@/lib/content/tourist-tax/publish";
 import { publishMushroomZones } from "@/lib/content/mushroom-zones/publish";
-import { publishB2Article, publishBatch02 } from "@/lib/content/batch02/publish";
+import { publishB2Article, publishB2SpanishArticle, publishBatch02 } from "@/lib/content/batch02/publish";
 import { AIRPORT } from "@/lib/content/batch02/airport";
 import { MONUMENTS } from "@/lib/content/batch02/monuments";
 import { SKI } from "@/lib/content/batch02/ski";
@@ -55,6 +55,7 @@ import { MARATO_GUIDE } from "@/lib/content/batch02/marato";
 import { STRIKES_GUIDE } from "@/lib/content/batch02/strikes";
 import { STRIKE_11N } from "@/lib/content/batch02/strike-11n";
 import { STRIKE_EDUCATION_GUIDE, STRIKE_RENFE_GUIDE } from "@/lib/content/batch02/strike-guides";
+import { STRIKE_11N_CITY_ARTICLES } from "@/lib/content/batch02/strike-11n-cities";
 import { GROSSA } from "@/lib/content/batch02/grossa";
 import { EASTER_2027 } from "@/lib/content/batch02/easter-2027";
 import { BRIDGES_2027 } from "@/lib/content/batch02/bridges-2027";
@@ -215,6 +216,20 @@ export async function POST(request: Request) {
     // which links to it (one sentence) and carries the same minimum-services
     // status: every 11N update goes out on both at once.
     if (wants("strike-11n")) published.push(await publishB2Article(STRIKE_11N), await publishB2Article(STRIKES_GUIDE));
+    // 6 Nov 2026: the 11N general strike city by city (Madrid, Valencia,
+    // Sevilla…), Spanish only, rendered from strike-11n-cities-data.ts. On its
+    // own so a regional order or a demonstration republishes only these pages;
+    // the 11N page and the strikes hub, which link to every one of them, go out
+    // with `strike-11n`. The halves `-a` and `-b` are for a retry after a timeout.
+    if (wants("strike-11n-cities")) {
+      for (const article of STRIKE_11N_CITY_ARTICLES) published.push(await publishB2SpanishArticle(article));
+    }
+    if (wants("strike-11n-cities-a")) {
+      for (const article of STRIKE_11N_CITY_ARTICLES.slice(0, 7)) published.push(await publishB2SpanishArticle(article));
+    }
+    if (wants("strike-11n-cities-b")) {
+      for (const article of STRIKE_11N_CITY_ARTICLES.slice(7)) published.push(await publishB2SpanishArticle(article));
+    }
     // La Grossa de Cap d'Any 2026: one page, on its own so the 31 December
     // results go out in one fast call. The New Year's Eve guide gained one
     // sentence linking to it; that goes out once with `nye`.
