@@ -27,7 +27,7 @@ import { STRIKE_URLS } from "./strikes";
  */
 
 /** The day the city pages were last checked against the sources. What the lead says is decided against it, never the clock. */
-export const STRIKE_11N_CITIES_AS_OF = "2026-11-06";
+export const STRIKE_11N_CITIES_AS_OF = "2026-11-07";
 
 /** The facts were re-read on the as-of day: one constant to move. */
 export const STRIKE_11N_CITIES_VERIFIED = STRIKE_11N_CITIES_AS_OF;
@@ -93,6 +93,9 @@ function pending(
 /* -------------------------------------------------------------------------- */
 
 const BOCM = "https://www.bocm.es/";
+const UGT_MAD_DEMOS = "https://www.ugtlimpiezamadrid.es/2026/11/iel-11-de-noviembre-movilizate.html";
+const MLG_DEMOS = "https://inquilinatomalaga.org/2026/11/05/el-comite-de-huelga-llama-a-la-movilizacion-en-malaga-para-el-11n/";
+const CCOO_PV_DEMOS = "https://www.pv.ccoo.es/noticia:770384";
 const MAD_ACUERDO = "https://www.bocm.es/bocm-20261106-36";
 const MAD_SOURCE = {
   name: "Acuerdo de 4 de noviembre de 2026, del Consejo de Gobierno, por el que se fijan los servicios mínimos con ocasión de la huelga convocada para el día 11 de noviembre de 2026 (BOCM núm. 267, 6 de noviembre)",
@@ -179,11 +182,15 @@ function madrid(): Strike11nCity {
     ],
     school: `**Sí, es día lectivo.** En el calendario escolar 2026-2027 de la Comunidad de Madrid (${link("https://www.bocm.es/bocm-20260604-13", "Orden 2034/2026")}), las clases de infantil, primaria y educación especial van del 7 de septiembre de 2026 al 18 de junio de 2027, y en noviembre solo es festivo el día 2, además de las fiestas locales. Las de la ciudad de Madrid en 2026 son el 15 de mayo y el 9 de noviembre (${link("https://www.bocm.es/bocm-20251212-34", "BOCM del 12 de diciembre de 2025")}): el lunes 9 no hay clase; el miércoles 11, sí.`,
     schoolShort: "Es día lectivo. Los colegios abren con el director, el jefe de estudios y los mínimos que fija la Comunidad de Madrid",
-    demos: [],
-    demoShort: null,
+    demos: [
+      `**UGT:** concentración a las 12.00 h en Cibeles y manifestación a las 18.00 h de Atocha a la plaza de España, según ${link(UGT_MAD_DEMOS, "UGT (sector de limpieza de Madrid)")}.`,
+      `Atentos a ${link("https://madrid.ccoo.es/huelgageneral11m", "CCOO de Madrid")} y ${link("https://madridugt.org/", "UGT Madrid")} por si convocan otras marchas.`,
+    ],
+    demoShort: "UGT: concentración a las 12.00 h en Cibeles; manifestación a las 18.00 h de Atocha a la plaza de España",
     demoWhere: `Atentos a las webs de ${link("https://madrid.ccoo.es/huelgageneral11m", "CCOO de Madrid")} y ${link("https://madridugt.org/", "UGT Madrid")}: en cuanto publiquen la hora y el lugar, los pondremos aquí.`,
     callNotes: [],
     sources: [
+      { name: "UGT Limpieza Madrid: el 11 de noviembre, movilízate", url: UGT_MAD_DEMOS, publisher: "UGT" },
       MAD_SOURCE,
       { name: "BOCM: Boletín Oficial de la Comunidad de Madrid", url: BOCM, publisher: "Comunidad de Madrid" },
       { name: "Metro de Madrid", url: "https://www.metromadrid.es/es", publisher: "Metro de Madrid" },
@@ -226,7 +233,6 @@ const GVA_MS_NOTES = [
 ];
 const gvaSchool = (city: string, holidays: string) =>
   `**En el calendario, sí es día lectivo.** La ${link(GVA_SCHOOL, "resolución del calendario escolar 2026-2027")} fija las clases del 9 de septiembre de 2026 al 18 de junio de 2027 y, en otoño, solo el 9 y el 12 de octubre y el 8 de diciembre como festivos no lectivos; las fiestas locales de ${city} en 2026 son ${holidays} (${link(GVA_HOLIDAYS, "DOGV del 14 de noviembre de 2025")}). Pero cada ayuntamiento podía proponer «hasta un máximo de tres días no lectivos de carácter local a efectos escolares»: confirma con el colegio.`;
-const GVA_DEMO_WHERE = `CCOO del País Valencià ha dicho que habrá manifestaciones «por todo el País Valencià a las 18:00 horas, el 11 de noviembre» (${link(CCOO_PV, "CCOO PV")}), pero aún no ha publicado el lugar de cada ciudad. Lo pondremos aquí en cuanto salga.`;
 
 function valencia(): Strike11nCity {
   return {
@@ -248,11 +254,14 @@ function valencia(): Strike11nCity {
     railNotes: [],
     school: gvaSchool("València", "el 22 de enero y el 13 de abril"),
     schoolShort: "Día lectivo en el calendario de la Comunitat; confirma con el colegio sus días no lectivos locales",
-    demos: [],
-    demoShort: null,
-    demoWhere: GVA_DEMO_WHERE,
+    demos: [
+      `**CCOO PV:** manifestación a las 18.00 h con salida de la calle de Xàtiva («València. C/ Xàtiva»), según ${link(CCOO_PV_DEMOS, "CCOO del País Valencià")}, que ${link(CCOO_PV, "llama a parar el 11N")}.`,
+    ],
+    demoShort: "CCOO PV, a las 18.00 h, desde la calle de Xàtiva",
+    demoWhere: `Atentos a ${link(CCOO_PV_DEMOS, "CCOO PV")} por si cambia la hora o el lugar.`,
     callNotes: [],
     sources: [
+      { name: "CCOO PV: l'11 de novembre, a la vaga general (lugares de las manifestaciones)", url: CCOO_PV_DEMOS, publisher: "CCOO del País Valencià" },
       ...GVA_SOURCES,
       { name: "Metrovalencia", url: "https://www.metrovalencia.es/", publisher: "Ferrocarrils de la Generalitat Valenciana" },
       { name: "EMT València", url: "https://www.emtvalencia.es/", publisher: "EMT València" },
@@ -280,11 +289,13 @@ function alicante(): Strike11nCity {
     railNotes: [],
     school: gvaSchool("Alicante", "el 16 de abril (Santa Faz) y el 23 de junio (Fogueres de Sant Joan)"),
     schoolShort: "Día lectivo en el calendario de la Comunitat; confirma con el colegio sus días no lectivos locales",
-    demos: [],
-    demoShort: null,
-    demoWhere: GVA_DEMO_WHERE,
+    demos: [
+      `**CCOO PV:** concentración a las 18.00 h en las Escales Jorge Juan («Alacant. Escales Jorge Juan»), según ${link(CCOO_PV_DEMOS, "CCOO del País Valencià")}, que ${link(CCOO_PV, "llama a parar el 11N")}.`,
+    ],
+    demoShort: "CCOO PV, a las 18.00 h, en las Escales Jorge Juan",
+    demoWhere: `Atentos a ${link(CCOO_PV_DEMOS, "CCOO PV")} por si cambia la hora o el lugar.`,
     callNotes: [],
-    sources: [...GVA_SOURCES, { name: "TRAM d'Alacant", url: "https://www.tramalacant.es/", publisher: "Ferrocarrils de la Generalitat Valenciana" }],
+    sources: [{ name: "CCOO PV: l'11 de novembre, a la vaga general (lugares de las manifestaciones)", url: CCOO_PV_DEMOS, publisher: "CCOO del País Valencià" }, ...GVA_SOURCES, { name: "TRAM d'Alacant", url: "https://www.tramalacant.es/", publisher: "Ferrocarrils de la Generalitat Valenciana" }],
   };
 }
 
@@ -376,11 +387,15 @@ function malaga(): Strike11nCity {
     railNotes: [],
     school: `**Sí, es día lectivo.** La ${link(school, "resolución del calendario escolar 2026-2027 de la provincia de Málaga")} no tiene el 11 de noviembre entre los días no lectivos, y las fiestas locales de Málaga en 2026 son el 19 de agosto y el 8 de septiembre (${link(AND_HOLIDAYS, "BOJA del 14 de octubre de 2025")}).`,
     schoolShort: "Sí, es día lectivo",
-    demos: [],
-    demoShort: null,
+    demos: [
+      `**Comité de Huelga de Málaga:** manifestación a las 18.00 h con salida desde la plaza del General Torrijos, junto a la Fuente de las Tres Gracias, según el ${link(MLG_DEMOS, "Sindicato de Inquilinas de Málaga")}.`,
+      `Atentos a ${link(CCOO_A, "CCOO de Andalucía")} y a la ${link("https://huelga.ccoo.es/", "web de la huelga de CCOO")} por si se convocan otras marchas.`,
+    ],
+    demoShort: "A las 18.00 h, desde la plaza del General Torrijos (Fuente de las Tres Gracias)",
     demoWhere: AND_DEMO_WHERE,
     callNotes: AND_CALL,
     sources: [
+      { name: "El Comité de Huelga llama a la movilización en Málaga para el 11N (5/11/2026)", url: MLG_DEMOS, publisher: "Sindicato de Inquilinas de Málaga" },
       ...AND_SOURCES,
       { name: "Resolución de 20 de mayo de 2026 de la Delegación Territorial de Educación en Málaga: calendario escolar 2026-2027", url: school, publisher: "Junta de Andalucía" },
       { name: "Notas de prensa", url: "https://metromalaga.es/notas-de-prensa/", publisher: "Metro de Málaga" },
