@@ -115,8 +115,8 @@ test("the paths collide with no other published path", () => {
 test("titles fit in 60 characters in the searched words; descriptions fit in 155 and answer first", () => {
   const seo: Record<Locale, RegExp> = {
     // 3 Nov 2026: the searched words ("vaga general 11 novembre", "vaga 11 novembre 2026"); the H1 keeps "de l'11 de".
-    ca: /^Vaga general 11 novembre 2026: serveis mínims i què funciona$/,
-    es: /^Huelga general 11 de noviembre 2026: servicios mínimos$/,
+    ca: /^Vaga general 11 novembre: serveis mínims i manifestació$/,
+    es: /^Huelga 11 noviembre: servicios mínimos y manifestación$/,
     en: /^General strike 11 November 2026 in Spain: what runs$/,
   };
   const h1: Record<Locale, RegExp> = {
@@ -125,9 +125,9 @@ test("titles fit in 60 characters in the searched words; descriptions fit in 155
     en: /^General strike on 11 November 2026 in Spain: what runs/,
   };
   const answer: Record<Locale, RegExp> = {
-    ca: /dimecres 11 de novembre de 2026, 24 hores des de les 0 h/,
-    es: /miércoles 11 de noviembre de 2026, 24 horas desde las 0 h/,
-    en: /24-hour general strike across Spain on Wednesday 11 November 2026/,
+    ca: /[Dd]imecres 11 de novembre(?: de 2026)?, 24 h(?:ores)? des de les 0 h/,
+    es: /[Mm]iércoles 11 de noviembre(?: de 2026)?, 24 h(?:oras)? desde las 0 h/,
+    en: /24-hour general strike (?:across|in) Spain on Wednesday 11 November/,
   };
   for (const locale of LOCALES) {
     const { seoTitle, seoDescription, excerpt, title } = STRIKE_11N.editions[locale];
@@ -158,7 +158,7 @@ test("the description stays within 155 characters in every state the page can be
   }
   // Only the Generalitat's order flips the description to "published".
   assert.match(strike11nDescription("ca", "2026-11-09", filled(["longDistance"])), /no publicats/);
-  assert.match(strike11nDescription("ca", "2026-11-09", filled()), /Serveis mínims publicats/);
+  assert.match(strike11nDescription("ca", "2026-11-09", filled()), /Manifestació a Barcelona: 17\.30 h/);
   assert.match(strike11nDescription("en", "2026-11-12", filled()), /^The 11 November 2026 general strike/);
 });
 

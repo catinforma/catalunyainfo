@@ -370,7 +370,7 @@ test("the pages are deterministic: no clock in the modules, same output on every
 
 test("the Spanish 11N page links every city page once, under the answer; its title and lead are untouched; ca and en have no city links", () => {
   const es = STRIKE_11N.editions.es;
-  assert.equal(es.seoTitle, "Huelga general 11 de noviembre 2026: servicios mínimos");
+  assert.equal(es.seoTitle, "Huelga 11 noviembre: servicios mínimos y manifestación");
   assert.equal(es.title, STRIKE_11N_META.es.title);
   assert.equal(es.blocks[0]?.type, "paragraph");
   assert.doesNotMatch(text(es.blocks.slice(0, 1)), /Madrid|otras ciudades/, "the lead changed");

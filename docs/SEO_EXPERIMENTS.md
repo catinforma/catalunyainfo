@@ -3162,3 +3162,9 @@ Read the 7/8 December pages at equal distance from the date, against the
 1 November curve, not against the baseline. Then measure again on 1 Dec.
 
 **Outcome:** _pending_
+
+## 8 Nov 2026 — 11N guide: title and description announce the Barcelona march
+
+- Evidence (GSC 3–8 Nov): ES page /es/guias/huelga-general-11-noviembre/ fell from ~900 clicks/day (pos 5.7) to 219 on 6 Nov and 64 on 7 Nov (pos 7.6, impressions −70 %), as national media ramped up before the strike. Top query it still shows for: "manifestacion 11 noviembre barcelona", 3,564 impr., pos 6.6, CTR 1.6 %; the body already had the march (17.30 h, Jardinets de Gràcia, Sindicat de Llogateres) but neither title nor description said so.
+- Change: seoTitle ca "Vaga general 11 novembre: serveis mínims i manifestació", es "Huelga 11 noviembre: servicios mínimos y manifestación" (en unchanged); "published" descriptions in ca/es/en now lead with the day and the Barcelona march, then the published minimum services.
+- Check 12–13 Nov with `snapshot.py page /es/guias/huelga-general-11-noviembre/ 7`: CTR on the march queries and on "huelga general 11 noviembre". Revert the title if total clicks per impression fell.
