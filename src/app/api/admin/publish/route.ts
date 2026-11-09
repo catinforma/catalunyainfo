@@ -59,6 +59,7 @@ import { STRIKE_EDUCATION_GUIDE, STRIKE_RENFE_GUIDE } from "@/lib/content/batch0
 import { STRIKE_11N_CITY_ARTICLES } from "@/lib/content/batch02/strike-11n-cities";
 import { STRIKE_11N_SPAIN } from "@/lib/content/batch02/strike-11n-spain";
 import { PAY_DATES } from "@/lib/content/batch02/pay-dates";
+import { SHOPS_SPAIN_DECEMBER } from "@/lib/content/batch02/shops-spain-december";
 import { GROSSA } from "@/lib/content/batch02/grossa";
 import { EASTER_2027 } from "@/lib/content/batch02/easter-2027";
 import { BRIDGES_2027 } from "@/lib/content/batch02/bridges-2027";
@@ -240,6 +241,8 @@ export async function POST(request: Request) {
     }
     // 9 Nov 2026: when the dole and pensions are paid (SEPE, Social Security), Spanish only.
     if (wants("pagos")) published.push(await publishB2SpanishArticle(PAY_DATES));
+    // 9 Nov 2026: shops open on 6, 7 and 8 December by community (Ministry calendar), Spanish only.
+    if (wants("tiendas-espana")) published.push(await publishB2SpanishArticle(SHOPS_SPAIN_DECEMBER));
     // La Grossa de Cap d'Any 2026: one page, on its own so the 31 December
     // results go out in one fast call. The New Year's Eve guide gained one
     // sentence linking to it; that goes out once with `nye`.
