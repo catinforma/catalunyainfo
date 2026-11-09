@@ -140,6 +140,17 @@ export const PAY_DATES: B2SpanishArticle = {
   entryKey: "guide-payment-dates-unemployment-pensions-spain",
   categoryKey: "public-services",
   sources: SOURCES,
+  heroKey: "pagos-oficina-sepe-malaga",
+  heroAlt: {
+    ca: "Entrada d'una oficina del SEPE a Màlaga",
+    es: "Entrada de una oficina del SEPE en Málaga",
+    en: "Entrance to a SEPE public employment office in Málaga",
+  },
+  heroCaption: {
+    ca: "Oficina del SEPE a Màlaga.",
+    es: "Oficina del SEPE en Málaga.",
+    en: "A SEPE office in Málaga.",
+  },
   verifiedAt: PAY_DATES_AS_OF,
   publishedAt: "2026-11-09T18:00:00+01:00",
   editions: {
