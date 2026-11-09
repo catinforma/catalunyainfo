@@ -57,6 +57,7 @@ import { STRIKES_GUIDE } from "@/lib/content/batch02/strikes";
 import { STRIKE_11N } from "@/lib/content/batch02/strike-11n";
 import { STRIKE_EDUCATION_GUIDE, STRIKE_RENFE_GUIDE } from "@/lib/content/batch02/strike-guides";
 import { STRIKE_11N_CITY_ARTICLES } from "@/lib/content/batch02/strike-11n-cities";
+import { STRIKE_11N_SPAIN } from "@/lib/content/batch02/strike-11n-spain";
 import { GROSSA } from "@/lib/content/batch02/grossa";
 import { EASTER_2027 } from "@/lib/content/batch02/easter-2027";
 import { BRIDGES_2027 } from "@/lib/content/batch02/bridges-2027";
@@ -227,6 +228,8 @@ export async function POST(request: Request) {
     // with `strike-11n`. The halves `-a` and `-b` are for a retry after a timeout.
     if (wants("strike-11n-cities")) {
       for (const article of STRIKE_11N_CITY_ARTICLES) published.push(await publishB2SpanishArticle(article));
+      // 9 Nov 2026: the Spain-wide page, built from the same registry.
+      published.push(await publishB2SpanishArticle(STRIKE_11N_SPAIN));
     }
     if (wants("strike-11n-cities-a")) {
       for (const article of STRIKE_11N_CITY_ARTICLES.slice(0, 7)) published.push(await publishB2SpanishArticle(article));
