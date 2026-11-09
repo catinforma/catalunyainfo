@@ -186,7 +186,12 @@ export const MINIMUM_SERVICES_11N: SectorMinimumServices[] = [
     text: { ca: `FGC i tramvia: el 25% del servei habitual de 6.30 a 9.30 h i de 16.30 a 21 h, segons [l'ordre del Departament d'Empresa i Treball del 5 de novembre](${ORDRE_11N}).`, es: `FGC y tranvía: el 25% del servicio habitual de 6.30 a 9.30 h y de 16.30 a 21 h, según [la orden del Departament d'Empresa i Treball del 5 de noviembre](${ORDRE_11N}).`, en: `FGC and tram: 25% of the usual service from 06:30 to 09:30 and from 16:30 to 21:00, according to [the Department of Business and Labour's order of 5 November](${ORDRE_11N}).` },
     source: { name: "Ordre EMT/ /2026, de 5 de novembre, serveis essencials durant la vaga general de l'11 de novembre de 2026 (e-Tauler; al DOGC quan es publiqui)", url: ORDRE_11N, publisher: "Departament d'Empresa i Treball" },
   },
-  { key: "longDistance", status: "pending", text: null, source: null },
+  {
+    key: "longDistance",
+    status: "published",
+    text: { ca: `Alta velocitat i llarga distància de Renfe: el 73% dels serveis habituals; Mitja Distància, una mitjana del 65%, segons els serveis mínims que ha fixat el Ministeri de Transports ([comunicat de Renfe del 9 de novembre](https://grupo.renfe.com/es/es/sala-de-prensa/noticias/2026/11/establecidos-los-servicios-minimos-para-la-huelga-general-convocada-el-11n)).`, es: `Alta velocidad y larga distancia de Renfe: el 73% de los servicios habituales; Media Distancia, una media del 65%, según los servicios mínimos que ha fijado el Ministerio de Transportes ([comunicado de Renfe del 9 de noviembre](https://grupo.renfe.com/es/es/sala-de-prensa/noticias/2026/11/establecidos-los-servicios-minimos-para-la-huelga-general-convocada-el-11n)).`, en: `Renfe high-speed and long-distance trains: 73% of the usual services; Media Distancia, 65% on average, under the minimum services set by the Ministry of Transport ([Renfe's notice of 9 November](https://grupo.renfe.com/es/es/sala-de-prensa/noticias/2026/11/establecidos-los-servicios-minimos-para-la-huelga-general-convocada-el-11n)).` },
+    source: { name: "Establecidos los servicios mínimos para la huelga general convocada el 11N (09/11/2026)", url: "https://grupo.renfe.com/es/es/sala-de-prensa/noticias/2026/11/establecidos-los-servicios-minimos-para-la-huelga-general-convocada-el-11n", publisher: "Renfe" },
+  },
   { key: "airports", status: "pending", text: null, source: null },
   {
     key: "schools",

@@ -279,6 +279,7 @@ export const STRIKE_URLS = {
   semafOuigo: "https://www.semaf.org/informaciones/ouigo-firma-todas-reivindicaciones/",
   alferro80: "https://www.alferro.org/comunicado/comunicado-80-2026-modificacion-de-las-fechas-de-huelga-de-noviembre-de-2026/",
   scfAdif: "https://www.scf.es/com33/",
+  renfeSemaf1012: "https://grupo.renfe.com/es/es/sala-de-prensa/noticias/2026/11/establecidos-los-servicios-minimos-para-la-huelga-convocada-por-semaf",
   ordreMetges: "https://portaljuridic.gencat.cat/eli/es-ct/o/2026/10/22/emt209/dof/cat/html",
   ministryRail: "https://www.transportes.gob.es/transporte-terrestre/resoluciones-de-servicios-minimos-ferroviarios",
   ouigoResolution: "https://cdn.transportes.gob.es/portal-web-transportes/transporte-terrestre/servicios-minimos/resolucion-20261027-ssmm_ouigo.pdf",
@@ -583,9 +584,9 @@ export const STRIKES: Strike[] = [
         en: "Rodalies: 66% of service at peak times, 33% the rest of the day",
       },
       text: {
-        ca: `A **Rodalies de Catalunya i els regionals**, ${link(U.ordreRenfe1012, "l'ordre del Departament d'Empresa i Treball del 5 de novembre de 2026")} fixa, els dos dies, el **66% del servei habitual en hora punta** (de 6.00 a 9.30 h i de 17.00 a 20.30 h) i el **33% la resta del dia**. Rodalies sol publicar l'horari de serveis mínims de cada línia uns dies abans. Per als altres trens de Renfe (alta velocitat, llarga distància i els regionals que surten de Catalunya), els serveis mínims els fixa el Ministeri de Transports per resolució, que encara no ha publicat (consultat el 5 de novembre de 2026 a la ${link(U.ministryRail, "seva llista de resolucions")}).`,
-        es: `En **Rodalies de Catalunya y los regionales**, ${link(U.ordreRenfe1012, "la orden del Departament d'Empresa i Treball del 5 de noviembre de 2026")} fija, los dos días, el **66% del servicio habitual en hora punta** (de 6.00 a 9.30 h y de 17.00 a 20.30 h) y el **33% el resto del día**. Rodalies suele publicar el horario de servicios mínimos de cada línea unos días antes. Para los demás trenes de Renfe (alta velocidad, larga distancia y los regionales que salen de Cataluña), los servicios mínimos los fija el Ministerio de Transportes por resolución, que aún no ha publicado (consultado el 5 de noviembre de 2026 en su ${link(U.ministryRail, "lista de resoluciones")}).`,
-        en: `On **Rodalies de Catalunya and regional trains**, ${link(U.ordreRenfe1012, "the Department of Business and Labour's order of 5 November 2026")} sets, on both days, **66% of the usual service at peak times** (06:00 to 09:30 and 17:00 to 20:30) and **33% for the rest of the day**. Rodalies usually publishes each line's minimum-service timetable a few days before. For Renfe's other trains (high-speed, long-distance and regional trains that leave Catalonia), the Ministry of Transport sets them by resolution, which it has not published yet (checked on 5 November 2026 on its ${link(U.ministryRail, "list of resolutions")}).`,
+        ca: `A **Rodalies de Catalunya i els regionals**, ${link(U.ordreRenfe1012, "l'ordre del Departament d'Empresa i Treball del 5 de novembre de 2026")} fixa, els dos dies, el **66% del servei habitual en hora punta** (de 6.00 a 9.30 h i de 17.00 a 20.30 h) i el **33% la resta del dia**. Rodalies sol publicar l'horari de serveis mínims de cada línia uns dies abans. Per als altres trens de Renfe, el Ministeri de Transports ha fixat el **72% a l'alta velocitat i la llarga distància** i una mitjana del **65% a Mitja Distància**, segons ${link(U.renfeSemaf1012, "el comunicat de Renfe")}.`,
+        es: `En **Rodalies de Catalunya y los regionales**, ${link(U.ordreRenfe1012, "la orden del Departament d'Empresa i Treball del 5 de noviembre de 2026")} fija, los dos días, el **66% del servicio habitual en hora punta** (de 6.00 a 9.30 h y de 17.00 a 20.30 h) y el **33% el resto del día**. Rodalies suele publicar el horario de servicios mínimos de cada línea unos días antes. Para los demás trenes de Renfe, el Ministerio de Transportes ha fijado el **72% en alta velocidad y larga distancia** y una media del **65% en Media Distancia**, según ${link(U.renfeSemaf1012, "el comunicado de Renfe")}.`,
+        en: `On **Rodalies de Catalunya and regional trains**, ${link(U.ordreRenfe1012, "the Department of Business and Labour's order of 5 November 2026")} sets, on both days, **66% of the usual service at peak times** (06:00 to 09:30 and 17:00 to 20:30) and **33% for the rest of the day**. Rodalies usually publishes each line's minimum-service timetable a few days before. For Renfe's other trains, the Ministry of Transport has set **72% on high-speed and long-distance** and **65% on average on Media Distancia**, according to ${link(U.renfeSemaf1012, "Renfe's notice")}.`,
       },
     },
     advice: {
@@ -609,6 +610,7 @@ export const STRIKES: Strike[] = [
       { name: "Ordre EMT/ /2026, de 5 de novembre, per la qual es garanteix el servei essencial de transport de viatgers per ferrocarril a Catalunya (serveis de rodalies i regionals) que presta l'empresa Grupo Renfe (e-Tauler, 5/11/2026; al DOGC quan es publiqui)", url: U.treballMs, publisher: "Departament d'Empresa i Treball" },
       { name: "Resoluciones de servicios mínimos ferroviarios", url: U.ministryRail, publisher: "Ministerio de Transportes y Movilidad Sostenible" },
       { name: "Comunicado 80/2026: modificación de las fechas de huelga de noviembre de 2026 (04/11/2026)", url: U.alferro80, publisher: "ALFERRO" },
+      { name: "Establecidos los servicios mínimos para la huelga convocada por SEMAF (06/11/2026)", url: U.renfeSemaf1012, publisher: "Renfe" },
     ],
     guide: "strikeRenfe",
   },

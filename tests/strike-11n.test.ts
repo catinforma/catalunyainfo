@@ -397,20 +397,21 @@ test("no 11 November percentage nobody has published: every % is the 5 Nov order
   // The Generalitat's order of 5 Nov 2026 (e-Tauler notice 657102): 25% transport 06:30-09:30 and
   // 16:30-21:00, airport bus 50%, primary care 25%, special education 50%, nurseries and lunch 33%.
   // The Renfe order of the same day (10 and 12 Nov): 66% at peak, 33% off peak.
-  const ORDER = /25%|50%|33%|66%/;
+  // The Ministry of Transport's 11N figures, published by Renfe on 9 Nov 2026: long distance 73%, Media Distancia 65%.
+  const ORDER = /25%|50%|33%|66%|73%|65%/;
   for (const locale of LOCALES) {
     for (const piece of sentences(body(locale))) {
       if (!/\d+\s?%/.test(piece)) continue;
       assert.ok(ORDER.test(piece) || /2024|SMI|salari mínim|salario mínimo|minimum wage/.test(piece), `${locale}: "${piece}"`);
       for (const pct of piece.match(/\d+(?:,\d+)?\s?%/g) ?? []) {
-        assert.ok(["25%", "50%", "33%", "66%", "85%", "75%", "70%", "60%", "80%"].includes(pct.replace(/\s/, "")) || /2024|SMI|salari mínim|salario mínimo|minimum wage/.test(piece), `${locale}: ${pct} in "${piece}"`);
+        assert.ok(["25%", "50%", "33%", "66%", "85%", "75%", "70%", "60%", "80%", "73%", "65%"].includes(pct.replace(/\s/, "")) || /2024|SMI|salari mínim|salario mínimo|minimum wage/.test(piece), `${locale}: ${pct} in "${piece}"`);
       }
     }
-    // The minimum-services column: the Generalitat's sectors carry the order; long distance and flights are still pending.
+    // The minimum-services column: the Generalitat's sectors carry the order; long distance since 9 Nov (Renfe); flights still pending.
     const tableBlock = STRIKE_11N.editions[locale].blocks.find((b) => b.type === "table") as { rows: string[][] };
     assert.equal(tableBlock.rows.length, ALL_SECTORS.length, locale);
     const pending = tableBlock.rows.filter((row) => /^(Encara no publicats|Aún no publicados|Not published yet)$/.test(row[2] ?? ""));
-    assert.equal(pending.length, 2, locale);
+    assert.equal(pending.length, 1, locale);
   }
 });
 

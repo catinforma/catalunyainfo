@@ -59,9 +59,9 @@ export const CITY_STATE_URLS = {
 export const STATE_SERVICES: Record<"rail" | "air", StateService> = {
   rail: {
     key: "rail",
-    status: "pending",
-    text: null,
-    source: null,
+    status: "published",
+    text: `Renfe: Cercanías, el 75% del servicio habitual en hora punta (de 6.00 a 9.00, de 13.30 a 15.30 y de 18.30 a 20.30 h) y el 50% el resto del día; Media Distancia, una media del 65%; Alta Velocidad y Larga Distancia, el 73%, según los servicios mínimos fijados por el Ministerio de Transportes (${link("https://grupo.renfe.com/es/es/sala-de-prensa/noticias/2026/11/establecidos-los-servicios-minimos-para-la-huelga-general-convocada-el-11n", "comunicado de Renfe del 9 de noviembre")}).`,
+    source: { name: "Establecidos los servicios mínimos para la huelga general convocada el 11N (09/11/2026)", url: "https://grupo.renfe.com/es/es/sala-de-prensa/noticias/2026/11/establecidos-los-servicios-minimos-para-la-huelga-general-convocada-el-11n", publisher: "Renfe" },
     setBy: "Ministerio de Transportes",
     pending: `Los fija el Ministerio de Transportes por resolución, que publica en su ${link(U.ministryRail, "lista de resoluciones de servicios mínimos ferroviarios")}; Renfe publica después los trenes que circulan.`,
   },
