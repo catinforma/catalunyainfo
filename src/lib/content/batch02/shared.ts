@@ -101,7 +101,11 @@ export type B2Key =
   // 5 Nov 2026: the postal vote (29N requests close on 19 Nov).
   | "postalVote"
   // 6 Nov 2026: the December bridge, Christmas and Reyes in every community of Spain.
-  | "decemberBridgeSpain";
+  | "decemberBridgeSpain"
+  // 9 Nov 2026 (ca and en editions, 10 Nov): when the dole and pensions are paid, Spain-wide.
+  | "payDates"
+  // 9 Nov 2026 (ca and en editions, 10 Nov): shops open in December 2026, community by community.
+  | "shopsSpainDecember";
 
 /** Path after the locale prefix, no leading or trailing slash. */
 export const B2_PATHS: Record<B2Key, Record<Locale, string>> = {
@@ -463,6 +467,18 @@ export const B2_PATHS: Record<B2Key, Record<Locale, string>> = {
     ca: "guies/pont-desembre-espanya",
     es: "guias/puente-diciembre-espana",
     en: "guides/december-holidays-spain",
+  },
+  // No year in the path: the calendar rolls forward on the same URLs.
+  payDates: {
+    ca: "guies/quan-es-cobra-atur-pensio",
+    es: "guias/cuando-se-cobra-paro-pension",
+    en: "guides/unemployment-benefit-pension-payment-dates-spain",
+  },
+  // No year in the path: next December's calendar goes on the same URLs.
+  shopsSpainDecember: {
+    ca: "guies/botigues-obertes-desembre-espanya",
+    es: "guias/tiendas-abiertas-diciembre-espana",
+    en: "guides/shops-open-december-spain",
   },
 };
 
@@ -847,6 +863,16 @@ export const B2_TITLES: Record<B2Key, Record<Locale, string>> = {
     ca: "Pont de desembre 2026 a Espanya: on és festiu el dilluns 7",
     es: "Puente de diciembre 2026 en España: dónde es festivo el lunes 7",
     en: "Is 7 December a holiday in Spain? Region by region",
+  },
+  payDates: {
+    ca: "Quan es cobra l'atur i la pensió: calendari de pagaments",
+    es: "Cuándo se cobra el paro y la pensión: calendario de pagos",
+    en: "When unemployment benefit and pensions are paid in Spain",
+  },
+  shopsSpainDecember: {
+    ca: "Botigues obertes el 6, 7 i 8 de desembre de 2026, per comunitat",
+    es: "Tiendas abiertas el 6, 7 y 8 de diciembre de 2026, por comunidad",
+    en: "Shops open on 6, 7 and 8 December 2026 in Spain, by region",
   },
 };
 
