@@ -45,6 +45,8 @@ import {
 import { communityPath, spainBridgesPath, spainHubPath } from "@/lib/programmatic/spain-2027/paths";
 import { BOE_REF, SOURCES, SOURCES_READ_ON, type OfficialText } from "@/lib/programmatic/spain-2027/sources";
 
+import { DayDateLink, SpainDayIndex } from "./days";
+
 /** The Spain-wide 2027 pages (Spanish only), all server-rendered from the BOE table and `sources.ts`. */
 
 const COMPUTED_NOTE =
@@ -180,7 +182,9 @@ export function CommunityPage({ c }: { c: CommunityNames }) {
                 {days.map((d) => (
                   <tr key={`${d.date}-${d.name}`}>
                     <th scope="row" className="font-normal">
-                      <time dateTime={d.date}>{weekdayDate(d.date)}</time>
+                      <DayDateLink iso={d.date}>
+                        <time dateTime={d.date}>{weekdayDate(d.date)}</time>
+                      </DayDateLink>
                     </th>
                     <td data-label="Festividad">
                       {dayName(d)}
@@ -440,6 +444,8 @@ export function SpainHubPage() {
           <p>
             Tipos de fiesta según el BOE: {Object.entries(BOE_LEGEND).map(([code, label]) => `${code} ${label}`).join("; ")}.
           </p>
+
+          <SpainDayIndex />
 
           <h2 id="puentes">Puentes de {YEAR} en toda España</h2>
           <p>

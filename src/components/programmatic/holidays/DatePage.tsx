@@ -11,6 +11,9 @@ import { hasEnglishPage } from "@/lib/programmatic/holidays/english";
 import { longDate, type DateLocale } from "@/lib/programmatic/holidays/format";
 import { esName } from "@/lib/programmatic/holidays/names";
 import { datePath, hubPath, municipalityPath, type DatePage as DatePageIso } from "@/lib/programmatic/holidays/paths";
+import { restOfSpainLabel } from "@/lib/programmatic/spain-2027/day-copy";
+import { hasDayPage } from "@/lib/programmatic/spain-2027/days";
+import { spainDayPath } from "@/lib/programmatic/spain-2027/paths";
 
 import { DateQuestions, GuideLinks, Sources, type SourceKey } from "./parts";
 
@@ -81,6 +84,12 @@ export function DatePageView({ iso, locale }: { iso: DatePageIso; locale: DateLo
               {content.notice.before}
               <Link href={content.notice.href}>{content.notice.label}</Link>
               {content.notice.after}
+            </p>
+          ) : null}
+          {/* Spanish only: the Spain-wide day page is Spanish, and body links stay in their language. */}
+          {locale === "es" && hasDayPage(iso) ? (
+            <p>
+              <strong>¿Y en el resto de España?</strong> <Link href={spainDayPath(iso)}>{restOfSpainLabel(iso)}</Link>.
             </p>
           ) : null}
 
