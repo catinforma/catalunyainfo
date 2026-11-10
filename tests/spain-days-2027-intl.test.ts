@@ -106,9 +106,10 @@ test("URLs: /ca/festius/2027/dia/<d>-<mes>/ and /en/holidays/2027/day/<d>-<month
   assert.equal(resolveSpainDay("en", "en", "6-december-2027"), null);
   // The static `2027` folder sits beside `[municipi]` in both: no town may be called that.
   assert.ok(!municipalities().some((m) => m.slug === "2027" || m.slug === "dia" || m.slug === "day"));
-  assert.deepEqual(readdirSync(join(APP, "festius", "2027")), ["dia"]);
+  // Since 10 Nov 2026 the calendar's own ca/en editions sit beside the day pages.
+  assert.deepEqual(readdirSync(join(APP, "festius", "2027")).sort(), ["[comunitat]", "dia", "page.tsx", "ponts"]);
   assert.deepEqual(readdirSync(join(APP, "festius", "2027", "dia")), ["[fecha]"]);
-  assert.deepEqual(readdirSync(join(APP, "holidays", "2027")), ["day"]);
+  assert.deepEqual(readdirSync(join(APP, "holidays", "2027")).sort(), ["[community]", "day", "long-weekends", "page.tsx"]);
   assert.deepEqual(readdirSync(join(APP, "holidays", "2027", "day")), ["[fecha]"]);
 });
 

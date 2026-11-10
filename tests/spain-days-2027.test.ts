@@ -412,7 +412,7 @@ test("sitemap and publish: three editions per date, hreflang across them, and ca
   const sitemap = readFileSync(join(ROOT, "src/app/sitemap.ts"), "utf8");
   assert.match(sitemap, /\.\.\.spainDaySitemapEntries\(\)/);
   const publish = readFileSync(join(ROOT, "src/app/api/admin/publish/route.ts"), "utf8");
-  assert.match(publish, /wants\("calendario-2027-espana"\) \? \[\.\.\.spainPaths\(\), \.\.\.spainDayPaths\(\)\] : \[\]/);
+  assert.match(publish, /wants\("calendario-2027-espana"\) \? \[\.\.\.spainPaths\(\), \.\.\.spainDayPaths\(\), \.\.\.editionPaths\(\)\] : \[\]/);
 });
 
 test("links in: the hub lists every date, the community tables link theirs, and the Catalan date pages ask '¿Y en el resto de España?' in each language", () => {

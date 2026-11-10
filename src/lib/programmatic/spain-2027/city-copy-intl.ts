@@ -345,7 +345,7 @@ export function cityLeadIntl(c: City, locale: Edition): string {
         `${parts.join(". ")}. Amb ${base}, fan ${total} dies festius a cada zona.`
       );
     }
-    return `${pendingLineIntl(c, "ca")} ${cap(base)} ja són oficials (BOE del 13 d'octubre de 2026); ${Name} té ${pop} habitants i és ${place}.`;
+    return `${pendingLineIntl(c, "ca")} ${cap(base)} ja són oficials (BOE del 13 d'octubre de 2026); ${name} té ${pop} habitants i és ${place}.`;
   }
   const who = `${Name} (population ${pop}, ${place})`;
   const base = island
@@ -402,7 +402,7 @@ export function cityFaqIntl(c: City, locale: Edition): FaqIntl[] {
           };
         }),
         {
-          question: `Quants festius té ${Name} el ${YEAR}?`,
+          question: `Quants festius té ${name} el ${YEAR}?`,
           answer: `${total}: els ${regional} festius ${r.of} que publica el BOE${islandWords} i les 2 festes locals.${weekend ? ` ${weekend === 1 ? "Una cau" : "Totes dues cauen"} en cap de setmana.` : ""}`,
         },
         {
@@ -418,7 +418,7 @@ export function cityFaqIntl(c: City, locale: Edition): FaqIntl[] {
     return [
       { question: `Ja se saben els festius locals del ${YEAR} ${caOf(name)}?`, answer: `No. ${pendingLineIntl(c, "ca")}` },
       {
-        question: `Quants festius té ${Name} el ${YEAR}?`,
+        question: `Quants festius té ${name} el ${YEAR}?`,
         answer:
           commonLocalDays(c).length > 0
             ? `${total} ja són oficials: els ${regional} festius ${r.of} que publica el BOE${islandWords} i la festa local comuna a tota la comunitat (${joinList(commonLocalDays(c).map((d) => dayMonth(d.date, "ca")), "ca")}). Falta la festa local pròpia del municipi.`

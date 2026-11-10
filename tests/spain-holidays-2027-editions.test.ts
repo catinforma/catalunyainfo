@@ -203,7 +203,7 @@ test("sitemap, publish group and the Spanish pages carry the editions", () => {
   const sitemap = readFileSync(join(ROOT, "src/app/sitemap.ts"), "utf8");
   assert.match(sitemap, /\.\.\.editionSitemapEntries\(\)/);
   const publish = readFileSync(join(ROOT, "src/app/api/admin/publish/route.ts"), "utf8");
-  assert.match(publish, /wants\("calendario-2027-espana"\) \? \[\.\.\.spainPaths\(\), \.\.\.editionPaths\(\)\] : \[\]/);
+  assert.match(publish, /wants\("calendario-2027-espana"\) \? \[\.\.\.spainPaths\(\), \.\.\.spainDayPaths\(\), \.\.\.editionPaths\(\)\] : \[\]/);
   const routes = readFileSync(join(ROOT, "src/components/programmatic/spain-2027/routes.tsx"), "utf8");
   assert.match(routes, /editionsOf\(path\)/, "the Spanish pages list their ca and en editions");
   for (const e of spainSitemapEntries()) assert.ok(e.alternates?.languages?.ca && e.alternates.languages.en, e.url);
