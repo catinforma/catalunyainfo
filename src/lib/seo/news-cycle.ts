@@ -23,6 +23,7 @@ export const NEWS_CYCLE_ENTRY_KEYS: ReadonlySet<string> = new Set([
   "guide-general-strike-11-november-2026",
   "guide-strike-renfe-november-2026",
   "guide-strike-education-november-2026",
+  "guide-strikes-spain",
   // General election, 29 November 2026.
   "guide-how-to-vote-catalonia",
   "guide-postal-vote",

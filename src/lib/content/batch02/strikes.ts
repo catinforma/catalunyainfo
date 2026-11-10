@@ -924,6 +924,13 @@ function strikeWhen(strike: Strike, locale: Locale): string {
 
 const cap = (text: string) => text.charAt(0).toUpperCase() + text.slice(1);
 
+/** The line to the Spain-wide strikes calendar (strikes-spain.ts), in the reader's own language. */
+export const SPAIN_HUB_LINE: Record<Locale, string> = {
+  ca: `Les vagues de tot Espanya, amb la data, qui les convoca i els serveis mínims, són al ${b2link("strikesSpain", "ca", "calendari de vagues a Espanya")}.`,
+  es: `Las huelgas de toda España, con su fecha, quién las convoca y sus servicios mínimos, están en el ${b2link("strikesSpain", "es", "calendario de huelgas en España")}.`,
+  en: `Strikes across the whole of Spain, with their dates, who calls them and their minimum services, are in the ${b2link("strikesSpain", "en", "Spain strikes calendar")}.`,
+};
+
 /* -------------------------------------------------------------------------- */
 /* Metadata                                                                   */
 /* -------------------------------------------------------------------------- */
@@ -1393,7 +1400,10 @@ export function buildStrikesBody(locale: Locale, asOf: string = STRIKES_AS_OF, s
   // 1 Nov 2026: the next step for "huelga hoy" readers is the daily page, which
   // answers for today's date from the same strike list. Under the answer, not in
   // the travel list below the fold.
-  blocks.push(...paras(t.today));
+  // 10 Nov 2026: every edition also sends readers from the rest of Spain
+  // (about five times Catalonia's strike demand) to the Spain-wide calendar
+  // (strikes-spain.ts, three languages), in the same paragraph.
+  blocks.push(...paras(`${t.today} ${SPAIN_HUB_LINE[locale]}`));
   blocks.push(callout("official", t.dataTitle, t.data));
 
   if (upcoming.length > 0) {

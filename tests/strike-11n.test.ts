@@ -596,5 +596,6 @@ test("the strikes hub links here once per language and agrees on whether the ord
 test("the publish route has a strike-11n group that also republishes the hub", () => {
   const route = readFileSync(new URL("../src/app/api/admin/publish/route.ts", import.meta.url), "utf8");
   assert.match(route, /import \{ STRIKE_11N \} from "@\/lib\/content\/batch02\/strike-11n";/);
-  assert.match(route, /wants\("strike-11n"\)\) published\.push\(await publishB2Article\(STRIKE_11N\), await publishB2Article\(STRIKES_GUIDE\)\)/);
+  // 6 Nov 2026: and the Spain-wide calendar, which reads the 11N minimum services from the same modules.
+  assert.match(route, /wants\("strike-11n"\)\) published\.push\(await publishB2Article\(STRIKE_11N\), await publishB2Article\(STRIKES_GUIDE\), await publishB2Article\(STRIKES_SPAIN_GUIDE\)\)/);
 });
