@@ -1,12 +1,14 @@
 import { addDays, longDate, weekdayIndex } from "@/lib/content/holidays/calendar";
+import type { Locale } from "@/lib/i18n/config";
 
 import { publicHolidaysFor, type TermHoliday } from "./holidays";
+import { holidayName, lang } from "./i18n";
 import type { Period, RegionCalendar, SchoolBreak } from "./types";
 
 /**
  * Pure answers from one community's 2026-2027 order: what kind of day a date
- * is, the next break, and the title and search description built from them.
- * Spanish only: these pages exist only in Spanish.
+ * is, the next break, and the title and search description built from them,
+ * in the language of the record (`localizeRegion`): Spanish, Catalan or English.
  *
  * "Today" is resolved by the caller (Europe/Madrid); the nightly cron rebuilds
  * the pages (`spainSchoolCalendar` is in DAY_DEPENDENT_BLOCKS), so a title
@@ -28,49 +30,104 @@ export const SPAIN_DESCRIPTION_MAX = 158;
 /* Words                                                                      */
 /* -------------------------------------------------------------------------- */
 
-/** "miércoles, 23 de diciembre de 2026" -> "miércoles 23 de diciembre de 2026". */
-export function fullDate(iso: string): string {
-  return longDate(iso, "es").replace(", ", " ");
+/** "miércoles 23 de diciembre de 2026", "dimecres 23 de desembre de 2026", "Wednesday 23 December 2026". */
+export function fullDate(iso: string, locale: Locale = "es"): string {
+  return longDate(iso, locale).replace(", ", " ");
 }
 
 /** "miércoles 23 de diciembre". */
-export function weekdayDay(iso: string): string {
-  return fullDate(iso).replace(/ de \d{4}$/, "");
+export function weekdayDay(iso: string, locale: Locale = "es"): string {
+  return fullDate(iso, locale).replace(locale === "en" ? / \d{4}$/ : / de \d{4}$/, "");
 }
 
 /** "23 de diciembre". */
-export function dayMonth(iso: string): string {
-  return weekdayDay(iso).replace(/^\S+ /, "");
+export function dayMonth(iso: string, locale: Locale = "es"): string {
+  return weekdayDay(iso, locale).replace(/^\S+ /, "");
 }
 
-/** "del 23 de diciembre al 7 de enero", "del 22 al 29 de marzo". */
-export function span(period: Period): string {
-  if (period.from === period.to) return `el ${dayMonth(period.from)}`;
+/** Catalan: a day 1 or 11 takes an elided article ("l'1 de març", "de l'11"). */
+const elides = (text: string) => /^(1|11)(\D|$)/.test(text);
+
+/** Catalan "el 23 de desembre" / "l'1 de març". */
+export function caEl(text: string): string {
+  return elides(text) ? `l'${text}` : `el ${text}`;
+}
+
+/** Catalan "del 23" / "de l'1". */
+export function caDel(text: string): string {
+  return elides(text) ? `de l'${text}` : `del ${text}`;
+}
+
+/** Catalan "al 7 de gener" / "a l'1 de març". */
+export function caAl(text: string): string {
+  return elides(text) ? `a l'${text}` : `al ${text}`;
+}
+
+/**
+ * "del 23 de diciembre al 7 de enero", "del 22 al 29 de marzo";
+ * "del 23 de desembre al 7 de gener"; "23 December to 7 January", "22 to 29 March".
+ */
+export function span(period: Period, locale: Locale = "es"): string {
   const sameMonth = period.from.slice(0, 7) === period.to.slice(0, 7);
-  const from = sameMonth ? String(Number(period.from.slice(8, 10))) : dayMonth(period.from);
+  const from = sameMonth ? String(Number(period.from.slice(8, 10))) : dayMonth(period.from, locale);
+  if (locale === "ca") {
+    if (period.from === period.to) return caEl(dayMonth(period.from, locale));
+    return `${caDel(from)} ${caAl(dayMonth(period.to, locale))}`;
+  }
+  if (locale === "en") {
+    if (period.from === period.to) return dayMonth(period.from, locale);
+    return `${from} to ${dayMonth(period.to, locale)}`;
+  }
+  if (period.from === period.to) return `el ${dayMonth(period.from)}`;
   return `del ${from} al ${dayMonth(period.to)}`;
 }
 
-/** "del miércoles 23 de diciembre de 2026 al jueves 7 de enero de 2027". */
-export function longSpan(period: Period): string {
+/** "del miércoles 23 de diciembre de 2026 al jueves 7 de enero de 2027"; English without "from": "Wednesday 23 December 2026 to Thursday 7 January 2027". */
+export function longSpan(period: Period, locale: Locale = "es"): string {
+  const from = period.from.slice(0, 4) === period.to.slice(0, 4) ? weekdayDay(period.from, locale) : fullDate(period.from, locale);
+  if (locale === "ca") {
+    if (period.from === period.to) return `el ${fullDate(period.from, locale)}`;
+    return `del ${from} al ${fullDate(period.to, locale)}`;
+  }
+  if (locale === "en") {
+    if (period.from === period.to) return fullDate(period.from, locale);
+    return `${from} to ${fullDate(period.to, locale)}`;
+  }
   if (period.from === period.to) return `el ${fullDate(period.from)}`;
-  const from = period.from.slice(0, 4) === period.to.slice(0, 4) ? weekdayDay(period.from) : fullDate(period.from);
   return `del ${from} al ${fullDate(period.to)}`;
 }
 
 /** "la Orden 2034/2026...", "el calendario escolar...": the text's name with its article. */
-export function theOrder(short: string): string {
+export function theOrder(short: string, locale: Locale = "es"): string {
+  if (locale === "ca") {
+    if (/^Ordre/.test(short)) return `l'${short}`;
+    if (/^(Resolució|Llei|Instrucció)/.test(short)) return `la ${short}`;
+    return /^Decret/.test(short) ? `el ${short}` : `el ${short.charAt(0).toLowerCase()}${short.slice(1)}`;
+  }
+  if (locale === "en") return /^(Order|Resolution|Decree) (no\. )?[A-Z0-9]/.test(short) ? short : `the ${short}`;
   if (/^(Orden|Resolución|Ley|Instrucción)/.test(short)) return `la ${short}`;
   return /^Decreto/.test(short) ? `el ${short}` : `el ${short.charAt(0).toLowerCase()}${short.slice(1)}`;
 }
 
 /** "carnaval", "vacaciones de otoño": a break's name inside a sentence. */
-export function breakName(name: string): string {
-  return /^(Entroido|Día de)/.test(name) ? name : `${name.charAt(0).toLowerCase()}${name.slice(1)}`;
+export function breakName(name: string, locale: Locale = "es"): string {
+  const keep = locale === "ca" ? /^(Entroido|Dia de|Setmana)/ : locale === "en" ? /^(?!(Autumn|Winter|Spring|Discretionary|Unified) )/ : /^(Entroido|Día de)/;
+  return keep.test(name) ? name : `${name.charAt(0).toLowerCase()}${name.slice(1)}`;
 }
 
-export function joinList(items: string[]): string {
-  return items.length <= 1 ? items.join("") : `${items.slice(0, -1).join(", ")} y ${items.at(-1)}`;
+export function joinList(items: string[], locale: Locale = "es"): string {
+  const and = locale === "ca" ? "i" : locale === "en" ? "and" : "y";
+  return items.length <= 1 ? items.join("") : `${items.slice(0, -1).join(", ")} ${and} ${items.at(-1)}`;
+}
+
+/** First letter up: "A la Comunitat de Madrid", "In Andalusia". */
+export function cap(text: string): string {
+  return `${text.charAt(0).toUpperCase()}${text.slice(1)}`;
+}
+
+/** A window in words without its year: "entre el 18 y el 22 de junio", "between 18 and 22 June". */
+export function withoutYear(text: string, locale: Locale = "es"): string {
+  return text.replace(locale === "en" ? / \d{4}.*$/ : / de \d{4}.*$/, "");
 }
 
 /* -------------------------------------------------------------------------- */
@@ -119,7 +176,7 @@ export function schoolDayIn(region: RegionCalendar, iso: string): SpainSchoolDay
   const wd = weekdayIndex(iso);
   if (wd === 0 || wd === 6) return { kind: "weekend" };
   const holiday = publicHolidaysFor(region.boe, iso, iso)[0];
-  if (holiday) return { kind: "holiday", name: holiday.name };
+  if (holiday) return { kind: "holiday", name: holidayName(holiday.name, lang(region)) };
   const off = region.nonTeaching.find((d) => d.date === iso && !d.partial);
   if (off) return { kind: "nonTeaching", reason: off.reason };
   return { kind: "school" };
@@ -187,12 +244,13 @@ export function nextBreak(region: RegionCalendar, today: string): NextBreak | nu
 /* Title and description                                                      */
 /* -------------------------------------------------------------------------- */
 
-function fit(candidates: string[], max: number): string {
+export function fit(candidates: string[], max: number): string {
   return candidates.find((c) => c.length <= max) ?? candidates.at(-1)!;
 }
 
-/** "23/12" */
-function dm(iso: string): string {
+/** "23/12"; English "23 Dec". */
+export function dm(iso: string, locale: Locale = "es"): string {
+  if (locale === "en") return `${Number(iso.slice(8, 10))} ${EN_MONTHS[Number(iso.slice(5, 7)) - 1]}`;
   return `${Number(iso.slice(8, 10))}/${Number(iso.slice(5, 7))}`;
 }
 
@@ -200,7 +258,7 @@ function dm(iso: string): string {
  * Answer-first, in the searchers' words: the Christmas holidays with their
  * dates until they are over, then Easter, then the last day of term.
  */
-export function liveRegionTitle(region: RegionCalendar, today: string): string {
+function esRegionTitle(region: RegionCalendar, today: string): string {
   const { end } = mainLevels(region);
   const c = region.christmas;
   const e = region.easter;
@@ -295,7 +353,7 @@ export function liveRegionTitle(region: RegionCalendar, today: string): string {
 }
 
 /** Sentences in the order a parent asks them, added while they fit. */
-export function liveRegionDescription(region: RegionCalendar, today: string): string {
+function esRegionDescription(region: RegionCalendar, today: string): string {
   const { start, end } = mainLevels(region);
   const main = region.levels[0]!;
   const christmas = `Navidad: ${region.christmas.label ?? span(region.christmas)}${region.christmas.minimum ? " como mínimo" : ""}.`;
@@ -319,7 +377,7 @@ export function liveRegionDescription(region: RegionCalendar, today: string): st
 }
 
 /** The hub: the break everyone is searching for right now. */
-export function liveHubTitle(regions: readonly RegionCalendar[], today: string): string {
+function esHubTitle(regions: readonly RegionCalendar[], today: string): string {
   const christmasOver = regions.every((r) => today > r.christmas.to);
   const easterOver = regions.every((r) => today > r.easter.to);
   const christmasYear = regions[0]?.christmas.from.slice(0, 4) ?? "2026";
@@ -339,8 +397,263 @@ export function liveHubTitle(regions: readonly RegionCalendar[], today: string):
   return `Fin de curso ${easterYear}: último día de clase por comunidades`;
 }
 
-export function liveHubDescription(regions: readonly RegionCalendar[], today: string): string {
+function esHubDescription(regions: readonly RegionCalendar[], today: string): string {
   const n = regions.length;
   const what = regions.every((r) => today > r.christmas.to) ? "Semana Santa, fin de curso" : "Navidad, Semana Santa, fin de curso";
   return `Calendario escolar ${SPAIN_SCHOOL_YEAR} en ${n} comunidades y ciudades autónomas, con la orden oficial de cada una: inicio, ${what} y otros días sin clase.`;
+}
+
+const EN_MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+/** What the title needs from a region, computed once for the three languages. */
+function titleFacts(region: RegionCalendar, today: string) {
+  const c = region.christmas;
+  const e = region.easter;
+  const cBack = nextSchoolDay(region, c.to);
+  const eBack = nextSchoolDay(region, e.to);
+  const provinces = provinceCalendars(region).map((p) => p.calendar);
+  const firstOff = provinces.map((p) => p.christmas.from).sort()[0] ?? c.from;
+  const lastBack = provinces.map((p) => nextSchoolDay(p, p.christmas.to)).sort().at(-1) ?? cBack;
+  const easterBackDiffers = new Set(provinces.map((p) => nextSchoolDay(p, p.easter.to))).size > 1;
+  const phase =
+    c.label && today < lastBack
+      ? today >= firstOff
+        ? "christmasProvincesDuring"
+        : "christmasProvincesBefore"
+      : today < cBack
+        ? today >= c.from
+          ? "christmasDuring"
+          : "christmasBefore"
+        : today < eBack
+          ? today >= e.from
+            ? "easterDuring"
+            : "easterBefore"
+          : "end";
+  return { c, e, cBack, eBack, easterBackDiffers, phase, end: mainLevels(region).end, endText: region.levels[0]?.endText };
+}
+
+function caRegionTitle(region: RegionCalendar, today: string): string {
+  const L = "ca";
+  const { c, e, cBack, eBack, easterBackDiffers, phase, end, endText } = titleFacts(region, today);
+  const name = region.short;
+  const inS = region.inShort ?? region.inName;
+  const fins = (text: string) => `fins ${caAl(text)}`;
+  const cy = c.from.slice(0, 4);
+  const ey = e.from.slice(0, 4);
+  const y = end.slice(0, 4);
+  switch (phase) {
+    case "christmasProvincesDuring":
+      return `Vacances de Nadal ${inS}: tornada a l'escola segons la província`;
+    case "christmasProvincesBefore":
+      return fit([`Vacances de Nadal ${cy} ${inS}: dates de cada província`, `Nadal ${cy} ${inS}: dates per província`], SPAIN_TITLE_MAX);
+    case "christmasDuring":
+      if (c.minimum) return fit([`Vacances de Nadal ${inS}: com a mínim ${fins(dayMonth(c.to, L))}`, `Nadal ${inS}: mínim ${fins(dm(c.to, L))}`], SPAIN_TITLE_MAX);
+      return fit(
+        [
+          `Vacances de Nadal ${inS}: es torna a l'escola ${caEl(weekdayDay(cBack, L))}`,
+          `Vacances de Nadal ${inS}: tornada a l'escola ${caEl(dayMonth(cBack, L))}`,
+          `Nadal ${inS}: tornada a l'escola ${caEl(dayMonth(cBack, L))}`,
+          `Nadal ${inS}: tornada a l'escola ${caEl(dm(cBack, L))}`,
+        ],
+        SPAIN_TITLE_MAX,
+      );
+    case "christmasBefore":
+      return fit(
+        [
+          `Vacances de Nadal ${cy} ${inS}: ${c.minimum ? "com a mínim " : ""}${span(c, L)}`,
+          `Vacances de Nadal ${cy} ${name}: ${c.minimum ? "mínim " : ""}${span(c, L)}`,
+          `Nadal ${cy} ${inS}: ${c.minimum ? "mínim " : ""}${span(c, L)}`,
+          `Nadal ${cy} ${name}: ${caDel(dm(c.from, L))} ${caAl(dm(c.to, L))}`,
+        ],
+        SPAIN_TITLE_MAX,
+      );
+    case "easterDuring":
+      if (e.minimum) return fit([`Setmana Santa ${inS}: vacances com a mínim ${fins(dayMonth(e.to, L))}`, `Setmana Santa ${inS}: mínim ${fins(dm(e.to, L))}`], SPAIN_TITLE_MAX);
+      if (easterBackDiffers) return `Setmana Santa ${inS}: tornada a l'escola segons la província`;
+      return fit(
+        [
+          `Setmana Santa ${inS}: es torna a l'escola ${caEl(weekdayDay(eBack, L))}`,
+          `Setmana Santa ${inS}: tornada a l'escola ${caEl(dayMonth(eBack, L))}`,
+          `Setmana Santa ${inS}: tornada a l'escola ${caEl(dm(eBack, L))}`,
+        ],
+        SPAIN_TITLE_MAX,
+      );
+    case "easterBefore":
+      return fit(
+        [
+          `Vacances de Setmana Santa ${ey} ${inS}: ${e.minimum ? "com a mínim " : ""}${span(e, L)}`,
+          `Setmana Santa ${ey} a les escoles ${region.deShort ?? region.deName}: ${e.minimum ? "mínim " : ""}${span(e, L)}`,
+          `Setmana Santa ${ey} ${inS}: ${e.minimum ? "mínim " : ""}${span(e, L)}`,
+          `Setmana Santa ${ey} ${name}: ${caDel(dm(e.from, L))} ${caAl(dm(e.to, L))}`,
+        ],
+        SPAIN_TITLE_MAX,
+      );
+  }
+  if (endText) {
+    return fit(
+      [`Final de curs ${y} ${inS}: últim dia de classe ${withoutYear(endText, L)}`, `Final de curs ${y} ${inS}: últim dia ${withoutYear(endText, L)}`, `Final de curs ${y} ${inS}`],
+      SPAIN_TITLE_MAX,
+    );
+  }
+  const verb = today > end ? "va ser" : "és";
+  return fit(
+    [
+      `Final de curs ${y} ${inS}: l'últim dia de classe ${verb} ${caEl(weekdayDay(end, L))}`,
+      `Final de curs ${y} ${inS}: últim dia de classe ${caEl(dayMonth(end, L))}`,
+      `Final de curs ${y} ${inS}: últim dia ${caEl(dayMonth(end, L))}`,
+      `Final de curs ${y} ${inS}: últim dia ${caEl(dm(end, L))}`,
+    ],
+    SPAIN_TITLE_MAX,
+  );
+}
+
+function enRegionTitle(region: RegionCalendar, today: string): string {
+  const L = "en";
+  const { c, e, cBack, eBack, easterBackDiffers, phase, end, endText } = titleFacts(region, today);
+  const name = region.short;
+  const inS = region.inShort ?? region.inName;
+  const cy = c.from.slice(0, 4);
+  const ey = e.from.slice(0, 4);
+  const y = end.slice(0, 4);
+  switch (phase) {
+    case "christmasProvincesDuring":
+      return `Christmas holidays ${inS}: back to school depends on the province`;
+    case "christmasProvincesBefore":
+      return fit([`Christmas ${cy} school holidays ${inS}: dates by province`, `Christmas ${cy} ${inS}: dates by province`], SPAIN_TITLE_MAX);
+    case "christmasDuring":
+      if (c.minimum) return fit([`Christmas holidays ${inS}: at least until ${dayMonth(c.to, L)}`, `Christmas ${inS}: at least until ${dm(c.to, L)}`], SPAIN_TITLE_MAX);
+      return fit(
+        [
+          `Christmas holidays ${inS}: back to school on ${weekdayDay(cBack, L)}`,
+          `Christmas holidays ${inS}: back to school on ${dayMonth(cBack, L)}`,
+          `Christmas ${inS}: back to school on ${dayMonth(cBack, L)}`,
+          `Christmas ${inS}: back to school ${dm(cBack, L)}`,
+        ],
+        SPAIN_TITLE_MAX,
+      );
+    case "christmasBefore":
+      return fit(
+        [
+          `Christmas ${cy} school holidays ${inS}: ${c.minimum ? "at least " : ""}${span(c, L)}`,
+          `Christmas ${cy} holidays ${inS}: ${c.minimum ? "at least " : ""}${span(c, L)}`,
+          `Christmas ${cy} ${inS}: ${c.minimum ? "at least " : ""}${span(c, L)}`,
+          `Christmas ${cy} ${name}: ${dm(c.from, L)} – ${dm(c.to, L)}`,
+        ],
+        SPAIN_TITLE_MAX,
+      );
+    case "easterDuring":
+      if (e.minimum) return fit([`Easter holidays ${inS}: at least until ${dayMonth(e.to, L)}`, `Easter ${inS}: at least until ${dm(e.to, L)}`], SPAIN_TITLE_MAX);
+      if (easterBackDiffers) return `Easter ${inS}: back to school depends on the province`;
+      return fit(
+        [
+          `Easter holidays ${inS}: back to school on ${weekdayDay(eBack, L)}`,
+          `Easter holidays ${inS}: back to school on ${dayMonth(eBack, L)}`,
+          `Easter ${inS}: back to school ${dm(eBack, L)}`,
+        ],
+        SPAIN_TITLE_MAX,
+      );
+    case "easterBefore":
+      return fit(
+        [
+          `Easter ${ey} school holidays ${inS}: ${e.minimum ? "at least " : ""}${span(e, L)}`,
+          `Easter ${ey} holidays ${inS}: ${e.minimum ? "at least " : ""}${span(e, L)}`,
+          `Easter ${ey} ${inS}: ${e.minimum ? "at least " : ""}${span(e, L)}`,
+          `Easter ${ey} ${name}: ${dm(e.from, L)} – ${dm(e.to, L)}`,
+        ],
+        SPAIN_TITLE_MAX,
+      );
+  }
+  if (endText) {
+    return fit(
+      [`End of term ${y} ${inS}: last day of class ${withoutYear(endText, L)}`, `End of term ${y} ${inS}: last day ${withoutYear(endText, L)}`, `End of term ${y} ${inS}`],
+      SPAIN_TITLE_MAX,
+    );
+  }
+  const verb = today > end ? "was" : "is";
+  return fit(
+    [
+      `End of term ${y} ${inS}: the last day of class ${verb} ${weekdayDay(end, L)}`,
+      `End of term ${y} ${inS}: last day of class ${dayMonth(end, L)}`,
+      `End of term ${y} ${inS}: last day ${dayMonth(end, L)}`,
+      `End of term ${y} ${inS}: last day ${dm(end, L)}`,
+    ],
+    SPAIN_TITLE_MAX,
+  );
+}
+
+/**
+ * Answer-first, in the searchers' words: the Christmas holidays with their
+ * dates until they are over, then Easter, then the last day of term. In the
+ * record's language.
+ */
+export function liveRegionTitle(region: RegionCalendar, today: string): string {
+  const L = lang(region);
+  return L === "ca" ? caRegionTitle(region, today) : L === "en" ? enRegionTitle(region, today) : esRegionTitle(region, today);
+}
+
+function addWhileFits(parts: string[]): string {
+  let out = "";
+  for (const part of parts) {
+    const candidate = out ? `${out} ${part}` : part;
+    if (candidate.length <= SPAIN_DESCRIPTION_MAX) out = candidate;
+  }
+  return out;
+}
+
+/** Sentences in the order a parent asks them, added while they fit. */
+export function liveRegionDescription(region: RegionCalendar, today: string): string {
+  const L = lang(region);
+  if (L === "es") return esRegionDescription(region, today);
+  const { start, end } = mainLevels(region);
+  const main = region.levels[0]!;
+  const c = region.christmas;
+  const e = region.easter;
+  const ca = L === "ca";
+  const christmas = ca
+    ? `Nadal: ${c.label ?? span(c, L)}${c.minimum ? " com a mínim" : ""}.`
+    : `Christmas: ${c.minimum ? "at least " : ""}${c.label ?? span(c, L)}.`;
+  const easter = ca ? `Setmana Santa: ${span(e, L)}${e.minimum ? " com a mínim" : ""}.` : `Easter: ${e.minimum ? "at least " : ""}${span(e, L)}.`;
+  const lastDay = main.endText ? main.endText.replace(ca ? / de \d{4}/ : / \d{4}/, "") : weekdayDay(end, L);
+  const last = ca ? `Últim dia: ${lastDay}.` : `Last day: ${lastDay}.`;
+  const first = ca ? `Comença ${caEl(weekdayDay(start, L))}.` : `Starts ${weekdayDay(start, L)}.`;
+  const short = ca ? region.order.short.replace(/, de .*$/, "") : region.order.short.replace(/(\d) of \d.*$/, "$1");
+  const source = `${short} (${region.order.bulletin}).`;
+  const parts: string[] = [ca ? `Calendari escolar ${SPAIN_SCHOOL_YEAR} ${region.inName}.` : `School calendar ${SPAIN_SCHOOL_YEAR} ${region.inName}.`];
+  if (today < start) parts.push(first, christmas, easter, last);
+  else if (today <= c.to) parts.push(christmas, easter, last);
+  else if (today <= e.to) parts.push(easter, last);
+  else parts.push(last);
+  parts.push(source);
+  return addWhileFits(parts);
+}
+
+/** The hub: the break everyone is searching for right now. */
+export function liveHubTitle(regions: readonly RegionCalendar[], today: string): string {
+  const L = regions[0] ? lang(regions[0]) : "es";
+  if (L === "es") return esHubTitle(regions, today);
+  const christmasOver = regions.every((r) => today > r.christmas.to);
+  const easterOver = regions.every((r) => today > r.easter.to);
+  const cy = regions[0]?.christmas.from.slice(0, 4) ?? "2026";
+  const ey = regions[0]?.easter.from.slice(0, 4) ?? "2027";
+  if (L === "ca") {
+    if (!christmasOver) return fit([`Vacances de Nadal ${cy} a les escoles: dates per comunitats`, `Vacances de Nadal ${cy} per comunitats`], SPAIN_TITLE_MAX);
+    if (!easterOver) return fit([`Setmana Santa ${ey} a les escoles: dates per comunitats`, `Vacances de Setmana Santa ${ey} per comunitats`], SPAIN_TITLE_MAX);
+    return `Final de curs ${ey}: últim dia de classe per comunitats`;
+  }
+  if (!christmasOver) return fit([`Christmas ${cy} school holidays in Spain: dates by region`, `Christmas ${cy} school holidays by region`], SPAIN_TITLE_MAX);
+  if (!easterOver) return fit([`Easter ${ey} school holidays in Spain: dates by region`, `Easter ${ey} school holidays by region`], SPAIN_TITLE_MAX);
+  return `End of term ${ey} in Spain: last day of class by region`;
+}
+
+export function liveHubDescription(regions: readonly RegionCalendar[], today: string): string {
+  const L = regions[0] ? lang(regions[0]) : "es";
+  if (L === "es") return esHubDescription(regions, today);
+  const n = regions.length;
+  const christmasOver = regions.every((r) => today > r.christmas.to);
+  if (L === "ca") {
+    const what = christmasOver ? "Setmana Santa, final de curs" : "Nadal, Setmana Santa, final de curs";
+    return `Calendari escolar ${SPAIN_SCHOOL_YEAR} de ${n} comunitats i ciutats autònomes, amb el text oficial: inici, ${what} i altres dies sense classe.`;
+  }
+  const what = christmasOver ? "Easter, end of term" : "Christmas, Easter, end of term";
+  return `School calendar ${SPAIN_SCHOOL_YEAR} for ${n} Spanish regions and cities, each with its official text: start, ${what} and other days off.`;
 }
