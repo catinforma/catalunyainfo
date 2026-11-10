@@ -3168,3 +3168,22 @@ Read the 7/8 December pages at equal distance from the date, against the
 - Evidence (GSC 3–8 Nov): ES page /es/guias/huelga-general-11-noviembre/ fell from ~900 clicks/day (pos 5.7) to 219 on 6 Nov and 64 on 7 Nov (pos 7.6, impressions −70 %), as national media ramped up before the strike. Top query it still shows for: "manifestacion 11 noviembre barcelona", 3,564 impr., pos 6.6, CTR 1.6 %; the body already had the march (17.30 h, Jardinets de Gràcia, Sindicat de Llogateres) but neither title nor description said so.
 - Change: seoTitle ca "Vaga general 11 novembre: serveis mínims i manifestació", es "Huelga 11 noviembre: servicios mínimos y manifestación" (en unchanged); "published" descriptions in ca/es/en now lead with the day and the Barcelona march, then the published minimum services.
 - Check 12–13 Nov with `snapshot.py page /es/guias/huelga-general-11-noviembre/ 7`: CTR on the march queries and on "huelga general 11 noviembre". Revert the title if total clicks per impression fell.
+
+## 10 Nov 2026 — Christmas family CTR check: no retitle (data below)
+
+`snapshot.py ctr 14 100` and `pages 14 400`, 28 Oct–10 Nov. Christmas pages
+below the CTR curve, and why none is retitled today:
+- `/es/guias/navidad-en-barcelona/` 0.7 % at 6.8 (5,272 impr): its queries
+  are all "cuándo se encienden las luces"; the lights page (4 Nov) takes them,
+  and nothing true can be promised until the council gives a 2026 date (same
+  reason as on 6 Nov). Retitle with the date once `ANNOUNCED_2026` has it.
+- La Marató CA 0.8 % at 6.5: the title already has date, volunteering and
+  donations, and the queries are about "voluntariat" and "tema" at 8–9, so this
+  is a ranking problem. It was also in the 6 Nov sweep, whose day-7 check is 13 Nov.
+- Fair pages (Espinelves 0.8 % at 8.2, Canyelles, Cardedeu): the title is
+  already the fair's own name ("Feria del Abeto de Espinelves 2026: fechas y
+  lugar") and they rank at 8–10, so again a ranking problem.
+- Lottery CA 5.6 %, Christmas markets CA 4.1 %, fairs hub CA 5.1 %: on or
+  near the curve.
+
+Next look: 13 Nov (the 6 Nov sweep's day-7 check), then the lights date.

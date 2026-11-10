@@ -59,7 +59,7 @@ const PUBLISHED = new Set([
   ...ALL_PATHS.flatMap((paths) => LOCALES.map((locale) => `/${locale}/${paths[locale]}/`)),
   ...christmasFairsPaths().map((p) => p.path),
 ]);
-const OFFICIAL = /(^|\.)(tmb\.cat|barcelona\.cat|atm\.cat|govern\.cat|gencat\.cat|fgc\.cat|tram\.cat|renfe\.com|amb\.cat|ambmobilitat\.cat)$/;
+const OFFICIAL = /(^|\.)(tmb\.cat|barcelona\.cat|atm\.cat|govern\.cat|gencat\.cat|fgc\.cat|tram\.cat|renfe\.com|amb\.cat|ambmobilitat\.cat|dgt\.es)$/; // dgt.es: the Christmas road operation (10 Nov 2026)
 const NONE: Record<OperatorKey, Announced | null> = { metro: null, tmbBus: null, nitbus: null, rodalies: null, fgc: null, tram: null };
 /** A plausible Rodalies 2026-27 notice (never real data). */
 const RODALIES_2027: Announced = {

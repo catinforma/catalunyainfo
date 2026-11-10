@@ -248,9 +248,23 @@ cd "$DIR"
 unset NODE_ENV                       # npm ci must install devDependencies
 export NEXT_TELEMETRY_DISABLED=1
 export NEXT_OUTPUT=standalone        # next.config.ts: output standalone, compress off
+export SKIP_BUILD_TYPECHECK=1        # the gate runs tsc --noEmit before every push
 
-log "npm ci"
-nice -n 10 npm ci --include=dev --no-audit --no-fund --loglevel=error || fail_build "npm ci failed"
+# 10 Nov 2026: when package-lock.json is the same as the live release's,
+# reuse its node_modules as hard links (seconds instead of a full npm ci).
+# The build writes to .next, not node_modules; the .cache folder is dropped so
+# nothing written there is shared with the release we would roll back to.
+# REUSE_NODE_MODULES=0 forces npm ci.
+if [[ ${REUSE_NODE_MODULES:-1} == 1 && -n $PREVIOUS && -d $PREVIOUS/node_modules && -f $PREVIOUS/package-lock.json ]] \
+  && cmp -s "$PREVIOUS/package-lock.json" package-lock.json \
+  && cp -al "$PREVIOUS/node_modules" node_modules; then
+  rm -rf node_modules/.cache
+  ok "package-lock.json unchanged: node_modules reused from $(basename "$PREVIOUS")"
+else
+  rm -rf node_modules
+  log "npm ci"
+  nice -n 10 npm ci --include=dev --no-audit --no-fund --loglevel=error || fail_build "npm ci failed"
+fi
 
 log "npm run build (standalone)"
 BUILD_START=$(date +%s)

@@ -61,7 +61,9 @@ const nextConfig: NextConfig = {
    */
   trailingSlash: true,
 
-  typescript: { ignoreBuildErrors: false },
+  // ops/vps/deploy.sh sets SKIP_BUILD_TYPECHECK=1: the gate (tsc --noEmit)
+  // has already typechecked the commit, so the server build skips it.
+  typescript: { ignoreBuildErrors: process.env.SKIP_BUILD_TYPECHECK === "1" },
 
   images: {
     // AVIF first, WebP as the fallback: both are handled by Vercel's image

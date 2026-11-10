@@ -9,6 +9,7 @@ import { communityPath, spainBridgesPath, spainHubPath } from "@/lib/programmati
 
 import { LOCAL_MONDAY_7, runWords, type Run } from "./december-bridge";
 import { SHOPS } from "./shops";
+import { trafficBlocks, trafficSources } from "./traffic-dec-2026";
 import { b2Related, b2link, callout, faq, h2, keyFacts, lead, paras, table, verifiedLine, type B2Article, type B2Source } from "./shared";
 
 /**
@@ -505,6 +506,7 @@ function bodyEs(): Block[] {
       `En Cataluña el lunes 7 es laborable, salvo en los ${local} municipios que lo tienen como fiesta local, y el único festivo del puente es el martes 8. A cambio, el sábado 26, Sant Esteve, sí es festivo. Lo explicamos con detalle, con colegios y tiendas, en ${b2link("decemberBridge", L, "el puente de diciembre en Cataluña")}.`,
       `Y si ya estás mirando el año que viene, los festivos de 2027 de cada comunidad, con sus puentes, están en [el calendario laboral 2027 por comunidades](${spainHubPath()}).`,
     ),
+    ...trafficBlocks("spain", "es"),
     ...h2(
       "Las fiestas locales también cuentan",
       `A los festivos de la comunidad, cada municipio suma hasta dos fiestas locales, y algunos ponen una el lunes 7: en Cataluña, por ejemplo, lo hacen ${local} municipios aunque la comunidad no lo tenga. Las fiestas locales se publican en el boletín oficial de cada comunidad o en el de la provincia. Si tu ayuntamiento eligió el 7, en tu municipio también hay puente sin pedir días.`,
@@ -578,6 +580,7 @@ function bodyCa(): Block[] {
       `A Navarra, el ${weekdayDate(SPAIN_DAYS.navarra, L)}, Sant Francesc Xavier, és festiu a tota la comunitat (festa local comuna a tots els municipis, Resolución 390/2025): demanant el divendres 4 i el dilluns 7, surten ${navarra.run.days} dies, ${runWords(navarra.run, L)}.`,
       `Per Reis, el 6 de gener de 2027 cau en dimecres i és festiu a tot Espanya: demanant el dilluns 4 i el dimarts 5 surten ${reyes.run.days} dies seguits, ${runWords(reyes.run, L)}.`,
     ),
+    ...trafficBlocks("spain", "ca"),
     ...h2(
       "I a Catalunya?",
       `Aquí el pont només surt demanant el dilluns 7: l'únic festiu és el dimarts 8, i el dissabte 26, Sant Esteve, també és festiu (a l'Aran, no). Tot el detall, amb escoles i botigues, és a ${b2link("decemberBridge", L, "el pont de desembre a Catalunya")}.`,
@@ -648,6 +651,7 @@ function bodyEn(): Block[] {
       `Christmas Day is a Friday and a holiday everywhere, so Christmas weekend is ${christmas.run.days} days, ${runWords(christmas.run, L)}. **26 December** (St Stephen's Day) is a holiday only in ${proseList(stStephen, L)} (not in Aran), and as it falls on a Saturday it is not moved to the Monday. Christmas Eve and New Year's Eve are not public holidays anywhere in Spain.`,
       `New Year's Day 2027 is a Friday and a holiday everywhere: ${newYear.run.days} days, ${runWords(newYear.run, L)}. **Epiphany (6 January 2027)** is a Wednesday and a holiday in every region: no region swapped it, according to the 2027 list. Taking Monday 4 and Tuesday 5 off gives ${reyes.run.days} days in a row, ${runWords(reyes.run, L)}; taking Thursday 7 and Friday 8 off gives ${reyesWeekend.run.days} days, ${runWords(reyesWeekend.run, L)}.`,
     ),
+    ...trafficBlocks("spain", "en"),
     ...h2(
       "Living in Catalonia?",
       `Monday the 7th is a working day in Catalonia, except in ${local} towns that have it as a local holiday, and the only bridge holiday is Tuesday the 8th; 26 December (Sant Esteve) is a holiday there. Schools and shops are covered in ${b2link("decemberBridge", L, "December 2026 public holidays in Catalonia")}.`,
@@ -675,7 +679,7 @@ export const DECEMBER_BRIDGE_SPAIN: B2Article = {
   key: "decemberBridgeSpain",
   entryKey: "guide-december-bridge-spain",
   categoryKey: "calendar",
-  sources: SOURCES,
+  sources: [...SOURCES, ...trafficSources("spain")],
   // The Catalan December bridge page's photo (the shops guide's second
   // picture), same alt and caption: media rows are keyed by file.
   heroKey: SHOPS.secondaryKey,

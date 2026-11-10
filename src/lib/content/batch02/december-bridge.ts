@@ -7,6 +7,7 @@ import { fairsHubPath } from "@/lib/programmatic/christmas-fairs/paths";
 import { dayDate, span } from "./festive";
 import { FREE_DAYS_TOWNS, monday7 } from "./school-free-days-towns";
 import { SHOPS } from "./shops";
+import { trafficBlocks, trafficSources } from "./traffic-dec-2026";
 import {
   b2Related,
   b2link,
@@ -447,6 +448,7 @@ export function buildDecemberBridgeBody(locale: Locale): Block[] {
         `A Barcelona poden obrir els dos dies. El diumenge 6 és un dels vuit dies d'obertura del calendari comercial general del 2026 (Ordre EMT/77/2025), i el dimarts 8 és un dels dos que hi afegeix Barcelona (Resolució EMT/4342/2025). Als municipis que no van comunicar dies propis, el 8 de desembre també és dia d'obertura per defecte. Alguns ajuntaments n'han canviat alguna data: el detall, municipi per municipi, és a ${b2link("shops", "ca", "la guia de botigues obertes en diumenges i festius")}.`,
         "Poder obrir no vol dir que obrin: cada botiga decideix. Les que la llei de comerç exclou de l'horari general (forns i pastisseries, botigues de conveniència, farmàcies...) poden obrir igualment.",
       ),
+      ...trafficBlocks("bridge", "ca"),
       ...h2(
         "Què fer el pont de desembre del 2026",
         "Algunes idees amb data oficial i les guies on les seguim:",
@@ -534,6 +536,7 @@ export function buildDecemberBridgeBody(locale: Locale): Block[] {
         `En Barcelona pueden abrir los dos días. El domingo 6 es uno de los ocho días de apertura del calendario comercial general de 2026 (Orden EMT/77/2025), y el martes 8 es uno de los dos que añade Barcelona (Resolución EMT/4342/2025). En los municipios que no comunicaron días propios, el 8 de diciembre también es día de apertura por defecto. Algunos ayuntamientos han cambiado alguna fecha: el detalle, municipio por municipio, está en ${b2link("shops", "es", "la guía de tiendas abiertas en domingos y festivos")}.`,
         "Poder abrir no quiere decir que abran: cada tienda decide. Las que la ley de comercio excluye del horario general (panaderías y pastelerías, tiendas de conveniencia, farmacias...) pueden abrir igualmente.",
       ),
+      ...trafficBlocks("bridge", "es"),
       ...h2(
         "Qué hacer en el puente de diciembre de 2026",
         "Algunas ideas con fecha oficial y las guías donde las seguimos:",
@@ -620,6 +623,7 @@ export function buildDecemberBridgeBody(locale: Locale): Block[] {
       `In Barcelona they may open on both days. Sunday the 6th is one of the eight opening days in the general 2026 shopping calendar (Order EMT/77/2025), and Tuesday the 8th is one of the two Barcelona adds (Resolution EMT/4342/2025). In towns that did not send in their own days, 8 December is also an opening day by default. Some councils swapped a date: town-by-town details are in ${b2link("shops", "en", "our guide to shops open on Sundays and holidays")}.`,
       "Being allowed to open does not mean every shop will: each decides. Shops the retail law exempts from the general hours (bakeries and cake shops, convenience stores, pharmacies...) can open anyway.",
     ),
+    ...trafficBlocks("bridge", "en"),
     ...h2(
       "Things to do over the December 2026 bridge",
       "A few ideas with official dates, and the guides where we follow them:",
@@ -652,7 +656,7 @@ export const DECEMBER_BRIDGE: B2Article = {
   key: "decemberBridge",
   entryKey: "guide-december-bridge-catalonia",
   categoryKey: "calendar",
-  sources: SOURCES,
+  sources: [...SOURCES, ...trafficSources("bridge")],
   // Reused from the manifest (no new photographs this round). Same alt and
   // caption as SHOPS's second image: media rows are keyed by file.
   heroKey: SHOPS.secondaryKey,
