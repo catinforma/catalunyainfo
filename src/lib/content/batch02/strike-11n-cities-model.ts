@@ -109,3 +109,57 @@ export interface Strike11nCity extends Strike11nCityRef {
   /** Fixed sources the page cites: bulletin, government pages, operators, unions. */
   sources: B2Source[];
 }
+
+/* -------------------------------------------------------------------------- */
+/* Catalan and English editions (10 Nov 2026)                                 */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * One service's words in Catalan or English. The status and the source stay
+ * in the Spanish data (`strike-11n-cities-data.ts`), the one file of facts;
+ * `text` is the published order's sentence in this language and must carry the
+ * same links and the same figures as the Spanish one (a test compares them).
+ */
+export interface CityServiceTr {
+  name: string;
+  setBy: string;
+  pending: string;
+  where: string;
+  /** Only when the Spanish slot is published; null otherwise. */
+  text: string | null;
+  question?: string;
+  notes?: string[];
+}
+
+/**
+ * A city's words in Catalan or English (`strike-11n-cities-i18n/<key>.ts`):
+ * every text field of Strike11nCity, same links, same figures, same order of
+ * list items. Services are keyed by their Spanish `id`.
+ */
+export interface CityTr {
+  titleTransport: string;
+  transportShort: string;
+  authority: string;
+  authorityShort: string;
+  bulletin: string;
+  cercanias: string | null;
+  airport: string;
+  airNotes?: string[];
+  msSummary: string | null;
+  msNotes: string[];
+  railNotes: string[];
+  school: string | null;
+  schoolShort: string;
+  demos: string[];
+  demoShort: string | null;
+  demoWhere: string;
+  callNotes: string[];
+  services: Record<string, CityServiceTr>;
+}
+
+/** A State slot's words in Catalan or English. */
+export interface StateServiceTr {
+  text: string | null;
+  pending: string;
+  setBy: string;
+}

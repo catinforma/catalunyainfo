@@ -1032,6 +1032,14 @@ export interface B2Article {
  */
 export type B2SpanishArticle = Omit<B2Article, "key" | "editions"> & { editions: { es: B2Edition } };
 
+/**
+ * A page with no registry key in Spanish and, when written, Catalan and
+ * English (10 Nov 2026: the 11N city pages and the Spain-wide 11N page). Its
+ * paths live with the page; the three editions share one entry, so hreflang
+ * links them.
+ */
+export type B2UnkeyedArticle = Omit<B2Article, "key" | "editions"> & { editions: { es: B2Edition } & Partial<Record<"ca" | "en", B2Edition>> };
+
 /** "Última verificació" line, printed where a reader will actually see it. */
 export function verifiedLine(locale: Locale, isoDate: string): string {
   const label: Record<Locale, string> = {
