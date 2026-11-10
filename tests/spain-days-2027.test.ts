@@ -30,7 +30,7 @@ const {
   hubDayWords,
   restOfSpainLabel,
 } = await import("../src/lib/programmatic/spain-2027/day-copy.ts");
-const { SPAIN_BRIDGES_SLUG, SPAIN_DAY_SLUG, resolveCommunity, resolveSpainDay, spainDayPath, spainDaySlug, spainDayStaticParams, spainPaths, spainSitemapEntries } =
+const { SPAIN_BRIDGES_SLUG, SPAIN_DAY_SLUG, resolveCommunity, resolveSpainDay, spainDayPath, spainDayPaths, spainDaySitemapEntries, spainDaySlug, spainDayStaticParams, spainDayTranslations, spainPaths } =
   await import("../src/lib/programmatic/spain-2027/paths.ts");
 const { B2_PATHS } = await import("../src/lib/content/batch02/shared.ts");
 
@@ -307,8 +307,9 @@ test("FAQPage: the H1's question and each section's, as printed; nothing unfille
     const all = [dayTitle(iso, d), dayDescription(d), dayH1(iso), dayVerdict(d), ...faq.flatMap((f) => [f.question, f.answer])].join(" ");
     assert.doesNotMatch(all, /undefined|null|NaN|\[object|\s{2}|\s[,.]/, iso);
   }
-  assert.match(COMPONENT, /faqSchema\(\[\{ type: "faq", items: dayFaq\(day\) \}\]\)/);
-  assert.match(COMPONENT, /breadcrumbSchema\(dayCrumbs\(iso\)\)/);
+  assert.match(COMPONENT, /faqSchema\(\[\{ type: "faq", items: w\.faq\(day\) \}\]\)/);
+  assert.match(COMPONENT, /const ES_WORDS: DayWords = \{[^}]*faq: dayFaq,/);
+  assert.match(COMPONENT, /breadcrumbSchema\(dayCrumbs\(iso, locale\)\)/);
 });
 
 test("prev and next: every page links its neighbours; 6 January sends December 2026 to the Spain bridge guide", () => {
@@ -320,10 +321,10 @@ test("prev and next: every page links its neighbours; 6 January sends December 2
   assert.equal(neighbours("2027-01-01").prev, null);
   assert.equal(neighbours("2027-12-25").next, null);
   assert.equal(B2_PATHS.decemberBridgeSpain.es, "guias/puente-diciembre-espana");
-  assert.match(COMPONENT, /const DECEMBER_2026 = b2href\("decemberBridgeSpain", "es"\)/);
+  assert.match(COMPONENT, /const december = b2href\("decemberBridgeSpain", locale\)/);
   assert.match(COMPONENT, /iso === "2027-01-06" \? \(/);
   // Before 1 January the chain goes to the December guide; after 25 December, to the hub.
-  assert.match(COMPONENT, /prev \? <Link href=\{spainDayPath\(prev\)\}>.*: <Link href=\{DECEMBER_2026\}>/);
+  assert.match(COMPONENT, /prev \? <Link href=\{spainDayPath\(prev, locale\)\}>.*: <Link href=\{december\}>/);
   // No page for December 2026: the guide has it.
   assert.ok(DAY_PAGES.every((iso) => iso.startsWith("2027-")));
 });
@@ -349,16 +350,16 @@ test("URLs: /es/festivos/2027/dia/<d>-<mes>/, no collision with [comunidad], pue
   assert.equal(spainDayPath("2027-03-19"), "/es/festivos/2027/dia/19-marzo/");
   assert.equal(spainDayPath("2027-01-01"), "/es/festivos/2027/dia/1-enero/");
   assert.equal(spainDayPath("2027-09-08"), "/es/festivos/2027/dia/8-septiembre/");
-  const slugs = DAY_PAGES.map(spainDaySlug);
+  const slugs = DAY_PAGES.map((iso) => spainDaySlug(iso));
   assert.equal(new Set(slugs).size, DAY_PAGES.length);
   for (const s of slugs) assert.match(s, /^\d{1,2}-(enero|febrero|marzo|abril|mayo|junio|julio|agosto|septiembre|octubre|noviembre|diciembre)$/, s);
-  for (const iso of DAY_PAGES) assert.equal(resolveSpainDay("es", spainDaySlug(iso)), iso);
-  assert.equal(resolveSpainDay("ca", "19-marzo"), null);
-  assert.equal(resolveSpainDay("en", "19-marzo"), null);
-  assert.equal(resolveSpainDay("es", "10-marzo"), null, "folded dates have no page");
-  assert.equal(resolveSpainDay("es", "19-marzo-2027"), null);
-  assert.deepEqual(spainDayStaticParams().map((p) => p.fecha), slugs);
-  assert.ok(spainDayStaticParams().every((p) => p.locale === "es"));
+  for (const iso of DAY_PAGES) assert.equal(resolveSpainDay("es", "es", spainDaySlug(iso)), iso);
+  assert.equal(resolveSpainDay("es", "ca", "19-marzo"), null);
+  assert.equal(resolveSpainDay("es", "en", "19-marzo"), null);
+  assert.equal(resolveSpainDay("es", "es", "10-marzo"), null, "folded dates have no page");
+  assert.equal(resolveSpainDay("es", "es", "19-marzo-2027"), null);
+  assert.deepEqual(spainDayStaticParams("es").map((p) => p.fecha), slugs);
+  assert.ok(spainDayStaticParams("es").every((p) => p.locale === "es"));
   // `dia` is a static folder beside `[comunidad]` and `puentes`: no community may take that slug.
   assert.equal(SPAIN_DAY_SLUG, "dia");
   assert.notEqual(SPAIN_DAY_SLUG, SPAIN_BRIDGES_SLUG);
@@ -384,27 +385,45 @@ test("route: revalidated by the publish group, so dynamicParams = true; notFound
   assert.match(source, /^export const revalidate = false;$/m);
   assert.match(source, /notFound\(\)/);
   assert.match(source, /generateStaticParams/);
-  assert.match(source, /resolveSpainDay\(locale, fecha\)/);
+  assert.match(source, /resolveSpainDay\("es", locale, fecha\)/);
 });
 
-test("sitemap and publish: spainPaths() carries every day page, so calendario-2027-espana revalidates them", () => {
-  const paths = spainPaths();
-  for (const iso of DAY_PAGES) assert.ok(paths.includes(spainDayPath(iso)), iso);
+test("sitemap and publish: three editions per date, hreflang across them, and calendario-2027-espana revalidates them", () => {
+  const paths = spainDayPaths();
+  assert.equal(paths.length, 3 * DAY_PAGES.length);
   assert.equal(new Set(paths).size, paths.length);
-  const entries = spainSitemapEntries();
-  for (const iso of DAY_PAGES) assert.ok(entries.some((e) => e.url.endsWith(spainDayPath(iso))), iso);
+  // The Spanish-only family list stays as it was: the day pages have their own entries.
+  for (const p of paths) assert.ok(!spainPaths().includes(p), p);
+  const entries = spainDaySitemapEntries();
+  assert.equal(entries.length, paths.length);
+  for (const iso of DAY_PAGES) {
+    const t = spainDayTranslations(iso);
+    for (const locale of ["ca", "es", "en"] as const) {
+      const entry = entries.find((e) => e.url === `https://www.catalunyainfo.com${t[locale]}`);
+      assert.ok(entry, `${iso} ${locale}`);
+      assert.deepEqual(entry.alternates?.languages, {
+        ca: `https://www.catalunyainfo.com${t.ca}`,
+        es: `https://www.catalunyainfo.com${t.es}`,
+        en: `https://www.catalunyainfo.com${t.en}`,
+        "x-default": `https://www.catalunyainfo.com${t.en}`,
+      });
+    }
+  }
+  const sitemap = readFileSync(join(ROOT, "src/app/sitemap.ts"), "utf8");
+  assert.match(sitemap, /\.\.\.spainDaySitemapEntries\(\)/);
   const publish = readFileSync(join(ROOT, "src/app/api/admin/publish/route.ts"), "utf8");
-  assert.match(publish, /wants\("calendario-2027-espana"\) \? spainPaths\(\) : \[\]/);
+  assert.match(publish, /wants\("calendario-2027-espana"\) \? \[\.\.\.spainPaths\(\), \.\.\.spainDayPaths\(\)\] : \[\]/);
 });
 
-test("links in: the hub lists every date, the community tables link theirs, and the Catalan date pages (es) ask '¿Y en el resto de España?'", () => {
+test("links in: the hub lists every date, the community tables link theirs, and the Catalan date pages ask '¿Y en el resto de España?' in each language", () => {
   const pages = readFileSync(join(ROOT, "src/components/programmatic/spain-2027/pages.tsx"), "utf8");
   assert.match(pages, /<SpainDayIndex \/>/);
   assert.match(pages, /<DayDateLink iso=\{d\.date\}>/);
   assert.match(COMPONENT, /SPAIN_DAYS\.map\(\(d\) =>/);
   const catalan = readFileSync(join(ROOT, "src/components/programmatic/holidays/DatePage.tsx"), "utf8");
-  assert.match(catalan, /locale === "es" && hasDayPage\(iso\) \? \(/);
-  assert.match(catalan, /<strong>¿Y en el resto de España\?<\/strong> <Link href=\{spainDayPath\(iso\)\}>\{restOfSpainLabel\(iso\)\}<\/Link>/);
+  assert.match(catalan, /\{hasDayPage\(iso\) \? \(/);
+  assert.match(catalan, /<Link href=\{spainDayPath\(iso, locale\)\}>\{locale === "es" \? restOfSpainLabel\(iso\) : restOfSpainLabelIntl\(iso, locale\)\}<\/Link>/);
+  assert.match(catalan, /es: "¿Y en el resto de España\?"/);
   // The Catalan date pages that get the line: the ones with a Spain day page. 11 September is folded: no line.
   const linked = DATE_PAGES.filter((iso) => hasDayPage(iso));
   assert.deepEqual(linked, [
@@ -429,6 +448,6 @@ test("links in: the hub lists every date, the community tables link theirs, and 
   assert.equal(restOfSpainLabel("2027-03-19"), "Dónde es festivo el 19 de marzo de 2027, comunidad por comunidad");
   // And back: the Spain page links the Catalan page (Spanish edition) where it exists.
   assert.match(COMPONENT, /isDatePage\(iso\) \? \(/);
-  assert.match(COMPONENT, /<Link href=\{datePath\("es", iso\)\}>/);
+  assert.match(COMPONENT, /<Link href=\{datePath\(locale, iso\)\}>/);
   assert.equal(datePath("es", "2027-03-19"), "/es/festivos/dia/19-marzo-2027/");
 });

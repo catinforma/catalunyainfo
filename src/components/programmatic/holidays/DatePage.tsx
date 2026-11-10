@@ -12,10 +12,14 @@ import { longDate, type DateLocale } from "@/lib/programmatic/holidays/format";
 import { esName } from "@/lib/programmatic/holidays/names";
 import { datePath, hubPath, municipalityPath, type DatePage as DatePageIso } from "@/lib/programmatic/holidays/paths";
 import { restOfSpainLabel } from "@/lib/programmatic/spain-2027/day-copy";
+import { restOfSpainLabelIntl } from "@/lib/programmatic/spain-2027/day-copy-intl";
 import { hasDayPage } from "@/lib/programmatic/spain-2027/days";
 import { spainDayPath } from "@/lib/programmatic/spain-2027/paths";
 
 import { DateQuestions, GuideLinks, Sources, type SourceKey } from "./parts";
+
+/** The question before the link to the Spain-wide day page. */
+const REST_OF_SPAIN: Record<DateLocale, string> = { ca: "I a la resta d'Espanya?", es: "¿Y en el resto de España?", en: "And in the rest of Spain?" };
 
 export function dateCrumbs(iso: DatePageIso, locale: DateLocale): Crumb[] {
   const ui = DATE_UI[locale];
@@ -86,10 +90,11 @@ export function DatePageView({ iso, locale }: { iso: DatePageIso; locale: DateLo
               {content.notice.after}
             </p>
           ) : null}
-          {/* Spanish only: the Spain-wide day page is Spanish, and body links stay in their language. */}
-          {locale === "es" && hasDayPage(iso) ? (
+          {/* The Spain-wide day page, in this page's own language (body links stay in their language). */}
+          {hasDayPage(iso) ? (
             <p>
-              <strong>¿Y en el resto de España?</strong> <Link href={spainDayPath(iso)}>{restOfSpainLabel(iso)}</Link>.
+              <strong>{REST_OF_SPAIN[locale]}</strong>{" "}
+              <Link href={spainDayPath(iso, locale)}>{locale === "es" ? restOfSpainLabel(iso) : restOfSpainLabelIntl(iso, locale)}</Link>.
             </p>
           ) : null}
 

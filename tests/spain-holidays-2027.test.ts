@@ -47,7 +47,7 @@ const { SPAIN_BRIDGES_SLUG, communityPath, communityStaticParams, resolveCommuni
   "../src/lib/programmatic/spain-2027/paths.ts"
 );
 const { BOE_REF, SOURCES, SOURCES_READ_ON, STATUS_RECHECK_BY } = await import("../src/lib/programmatic/spain-2027/sources.ts");
-const { DAY_PAGES } = await import("../src/lib/programmatic/spain-2027/days.ts");
+const { CITIES } = await import("../src/lib/programmatic/spain-2027/cities.ts");
 
 type Region = (typeof REGIONS)[number];
 
@@ -372,9 +372,9 @@ test("URLs: /es/festivos/2027/<comunidad>/, no collision with the Catalan town s
   for (const s of slugs) assert.match(s, /^[a-z]+(-[a-z]+)*$/, s);
   // The static `2027` folder sits beside `[municipi]`: no town may be called that.
   assert.ok(!municipalities().some((m) => m.slug === "2027" || m.slug === "comarca" || m.slug === "dia"));
-  // 21 calendar pages and the day pages (tests/spain-days-2027.test.ts).
-  assert.equal(spainPaths().length, 21 + DAY_PAGES.length);
-  assert.equal(new Set(spainPaths()).size, 21 + DAY_PAGES.length);
+  // 21 community-level pages, then one per city (cities.ts; tests/spain-cities-2027.test.ts).
+  assert.equal(spainPaths().length, 21 + CITIES.length);
+  assert.equal(new Set(spainPaths()).size, 21 + CITIES.length);
   assert.deepEqual(communityStaticParams().map((p) => p.comunidad), slugs);
   assert.ok(communityStaticParams().every((p) => p.locale === "es"));
   assert.equal(resolveCommunity("es", "madrid")?.region, "MD");
@@ -396,9 +396,9 @@ test("routes: revalidated by the publish group, so dynamicParams = true, notFoun
   }
 });
 
-test("sitemap and publish group: the 21 URLs and the day pages are listed, and the group revalidates only them", () => {
+test("sitemap and publish group: the 21 URLs and the city pages are listed, and the group revalidates only them", () => {
   const entries = spainSitemapEntries();
-  assert.equal(entries.length, 21 + DAY_PAGES.length);
+  assert.equal(entries.length, 21 + CITIES.length);
   for (const e of entries) {
     assert.ok(e.url.startsWith("https://www.catalunyainfo.com/es/festivos/2027/"), e.url);
     assert.equal(e.alternates?.languages?.es, e.url);
@@ -406,7 +406,8 @@ test("sitemap and publish group: the 21 URLs and the day pages are listed, and t
   const sitemap = readFileSync(join(ROOT, "src/app/sitemap.ts"), "utf8");
   assert.match(sitemap, /\.\.\.spainSitemapEntries\(\)/);
   const publish = readFileSync(join(ROOT, "src/app/api/admin/publish/route.ts"), "utf8");
-  assert.match(publish, /wants\("calendario-2027-espana"\) \? spainPaths\(\) : \[\]/);
+  // The day pages ride the same group (tests/spain-days-2027.test.ts).
+  assert.match(publish, /wants\("calendario-2027-espana"\) \? \[\.\.\.spainPaths\(\), \.\.\.spainDayPaths\(\)\] : \[\]/);
   assert.match(publish, /for \(const path of codePaths\) revalidate\(path\.replace/);
   assert.match(publish, /\.\.\.codePaths\]\)/, "IndexNow gets them too");
   // The guide that links to the hub goes out on its own group.

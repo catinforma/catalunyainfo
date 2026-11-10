@@ -5,11 +5,14 @@ import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
 import { communityBySlug, type CommunityNames } from "@/lib/programmatic/spain-2027/communities";
 import { BRIDGES, HUB, bridgesDescription, communityDescription, communityFaq, communityH1, communityTitle, hubDescription } from "@/lib/programmatic/spain-2027/copy";
-import { communityPath, spainBridgesPath, spainHubPath } from "@/lib/programmatic/spain-2027/paths";
+import type { City } from "@/lib/programmatic/spain-2027/cities";
+import { cityDescription, cityFaq, cityTitle } from "@/lib/programmatic/spain-2027/city-copy";
+import { cityPath, communityPath, spainBridgesPath, spainHubPath } from "@/lib/programmatic/spain-2027/paths";
 import { BOE_REF, SOURCES, SOURCES_READ_ON } from "@/lib/programmatic/spain-2027/sources";
 import { breadcrumbSchema, datasetSchema, faqSchema, graph } from "@/lib/seo/jsonld";
 import { buildMetadata } from "@/lib/seo/metadata";
 
+import { CityPage, cityCrumbs } from "./city-page";
 import { CommunityPage, SpainBridgesPage, SpainHubPage, bridgesCrumbs, communityCrumbs, hubCrumbs } from "./pages";
 
 /**
@@ -84,6 +87,26 @@ export function CommunityRoute({ c }: { c: CommunityNames }) {
           faqSchema([{ type: "faq", items: communityFaq(c) }]),
         ])}
       />
+      <SiteFooter locale="es" />
+    </>
+  );
+}
+
+/* ----------------------------------------------------------------- City --- */
+
+export function cityMetadata(city: City): Metadata {
+  return buildMetadata({ locale: "es", path: cityPath(city), title: cityTitle(city), description: cityDescription(city), translations: only(cityPath(city)) });
+}
+
+/** No Dataset node here: the local lists come from regional bulletins whose reuse terms differ from the BOE's. */
+export function CityRoute({ city }: { city: City }) {
+  return (
+    <>
+      <SiteHeader locale="es" translations={only(cityPath(city))} />
+      <main id="main">
+        <CityPage c={city} />
+      </main>
+      <JsonLd json={graph([breadcrumbSchema(cityCrumbs(city)), faqSchema([{ type: "faq", items: cityFaq(city) }])])} />
       <SiteFooter locale="es" />
     </>
   );

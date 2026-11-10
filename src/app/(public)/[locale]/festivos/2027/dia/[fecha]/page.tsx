@@ -5,30 +5,31 @@ import { SpainDayRoute, spainDayMetadata } from "@/components/programmatic/spain
 import { resolveSpainDay, spainDayStaticParams } from "@/lib/programmatic/spain-2027/paths";
 
 /**
- * /es/festivos/2027/dia/19-marzo/ — "¿Es festivo el 19 de marzo de 2027?" for
- * all Spain, from the BOE's 2027 table (days.ts). The static `dia` folder
- * wins over `[comunidad]` beside it, and no community is called that.
+ * /es/festivos/2027/dia/19-marzo/ — "¿Es festivo el 19 de marzo de 2027?" for all
+ * Spain, from the BOE's 2027 table (days.ts). The static `2027` folder wins
+ * over `[municipi]` beside it (no town slug is a year); the static `dia` folder wins over `[comunidad]` beside it, and no community is called that.
  */
 export const revalidate = false;
-// true: revalidated by the publish group `calendario-2027-espana` (see ../../page.tsx).
+// true: revalidated by the publish group `calendario-2027-espana`; self-hosted, a
+// regenerated route with dynamicParams = false answers 404 (ops/vps/README.md).
 // Unknown slugs, folded dates and other locales still 404 through notFound() below.
 export const dynamicParams = true;
 
 type Params = Promise<{ locale: string; fecha: string }>;
 
 export function generateStaticParams() {
-  return spainDayStaticParams();
+  return spainDayStaticParams("es");
 }
 
 export async function generateMetadata({ params }: { params: Params }): Promise<Metadata> {
   const { locale, fecha } = await params;
-  const iso = resolveSpainDay(locale, fecha);
-  return iso ? spainDayMetadata(iso) : { robots: { index: false, follow: false } };
+  const iso = resolveSpainDay("es", locale, fecha);
+  return iso ? spainDayMetadata(iso, "es") : { robots: { index: false, follow: false } };
 }
 
 export default async function Page({ params }: { params: Params }) {
   const { locale, fecha } = await params;
-  const iso = resolveSpainDay(locale, fecha);
+  const iso = resolveSpainDay("es", locale, fecha);
   if (!iso) notFound();
-  return <SpainDayRoute iso={iso} />;
+  return <SpainDayRoute iso={iso} locale="es" />;
 }

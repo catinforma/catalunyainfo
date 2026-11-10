@@ -101,7 +101,15 @@ export type B2Key =
   // 5 Nov 2026: the postal vote (29N requests close on 19 Nov).
   | "postalVote"
   // 6 Nov 2026: the December bridge, Christmas and Reyes in every community of Spain.
-  | "decemberBridgeSpain";
+  | "decemberBridgeSpain"
+  // 10 Nov 2026: foreign residents' vote in the local elections of 23 May 2027.
+  | "foreignVote"
+  // 9 Nov 2026 (ca and en editions, 10 Nov): when the dole and pensions are paid, Spain-wide.
+  | "payDates"
+  // 9 Nov 2026 (ca and en editions, 10 Nov): shops open in December 2026, community by community.
+  | "shopsSpainDecember"
+  // 10 Nov 2026: the Spain-wide strikes calendar (strikes-spain.ts), in three languages.
+  | "strikesSpain";
 
 /** Path after the locale prefix, no leading or trailing slash. */
 export const B2_PATHS: Record<B2Key, Record<Locale, string>> = {
@@ -432,6 +440,12 @@ export const B2_PATHS: Record<B2Key, Record<Locale, string>> = {
     es: "guias/huelga-educacion-noviembre",
     en: "guides/catalonia-teachers-strike-november",
   },
+  // No month in the path: one evergreen URL per language, re-dated in place.
+  strikesSpain: {
+    ca: "guies/vagues-espanya",
+    es: "guias/huelgas-espana",
+    en: "guides/strikes-spain",
+  },
   // No year in the path: the campaign comes back every November.
   granRecapte: {
     ca: "guies/gran-recapte-aliments",
@@ -463,6 +477,24 @@ export const B2_PATHS: Record<B2Key, Record<Locale, string>> = {
     ca: "guies/pont-desembre-espanya",
     es: "guias/puente-diciembre-espana",
     en: "guides/december-holidays-spain",
+  },
+  // No year in the path: the next local elections (2031) reuse it.
+  foreignVote: {
+    ca: "guies/vot-estrangers-eleccions-municipals",
+    es: "guias/voto-extranjeros-elecciones-municipales",
+    en: "guides/can-foreigners-vote-spain-local-elections",
+  },
+  // No year in the path: the calendar rolls forward on the same URLs.
+  payDates: {
+    ca: "guies/quan-es-cobra-atur-pensio",
+    es: "guias/cuando-se-cobra-paro-pension",
+    en: "guides/unemployment-benefit-pension-payment-dates-spain",
+  },
+  // No year in the path: next December's calendar goes on the same URLs.
+  shopsSpainDecember: {
+    ca: "guies/botigues-obertes-desembre-espanya",
+    es: "guias/tiendas-abiertas-diciembre-espana",
+    en: "guides/shops-open-december-spain",
   },
 };
 
@@ -822,6 +854,12 @@ export const B2_TITLES: Record<B2Key, Record<Locale, string>> = {
     es: "Huelga en la educación del 26 de noviembre: ¿hay colegio?",
     en: "Catalonia teachers' strike on 26 November: is there school?",
   },
+  // Evergreen link label: no month and no week (the page's own title carries them).
+  strikesSpain: {
+    ca: "Vagues a Espanya: calendari i serveis mínims",
+    es: "Huelgas en España: calendario y servicios mínimos",
+    en: "Strikes in Spain: dates and minimum services",
+  },
   granRecapte: {
     ca: "Gran Recapte 2026: dies, voluntariat i on donar",
     es: "Gran Recapte 2026: días, voluntariado y dónde donar",
@@ -847,6 +885,22 @@ export const B2_TITLES: Record<B2Key, Record<Locale, string>> = {
     ca: "Pont de desembre 2026 a Espanya: on és festiu el dilluns 7",
     es: "Puente de diciembre 2026 en España: dónde es festivo el lunes 7",
     en: "Is 7 December a holiday in Spain? Region by region",
+  },
+  // No deadline: the rail is stored in other pages' bodies until they are republished.
+  foreignVote: {
+    ca: "Vot dels estrangers a les municipals del 2027: qui pot votar i com",
+    es: "Voto de los extranjeros en las municipales de 2027: quién puede votar y cómo",
+    en: "Can foreigners vote in Spain's 2027 local elections? Who and how",
+  },
+  payDates: {
+    ca: "Quan es cobra l'atur i la pensió: calendari de pagaments",
+    es: "Cuándo se cobra el paro y la pensión: calendario de pagos",
+    en: "When unemployment benefit and pensions are paid in Spain",
+  },
+  shopsSpainDecember: {
+    ca: "Botigues obertes el 6, 7 i 8 de desembre de 2026, per comunitat",
+    es: "Tiendas abiertas el 6, 7 y 8 de diciembre de 2026, por comunidad",
+    en: "Shops open on 6, 7 and 8 December 2026 in Spain, by region",
   },
 };
 

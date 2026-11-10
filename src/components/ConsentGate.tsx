@@ -1,7 +1,7 @@
 "use client";
 
 import Script from "next/script";
-import { useCallback, useEffect, useState, useSyncExternalStore } from "react";
+import { useCallback, useEffect, useRef, useState, useSyncExternalStore } from "react";
 
 import { CONSENT_VERSION, type ConsentState } from "@/lib/analytics/consent";
 import {
@@ -52,14 +52,15 @@ export function ConsentGate({ locale, t }: { locale: Locale; t: ConsentCopy }) {
   const state = snapshotToState(snapshot);
   const [expanded, setExpanded] = useState(false);
 
-  // The banner is fixed to the bottom of the viewport, so while it is up it
-  // covers the last couple of hundred pixels of the document - which on a phone
-  // is where a form's submit button ends up. Reserve the space for as long as
-  // the banner is there.
+  // While the card is up the page behind it must not scroll under the scrim
+  // (body.ci-consent-open in globals.css).
   const showingBanner = state === null;
+  const dialogRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     if (!showingBanner) return;
     document.body.classList.add("ci-consent-open");
+    // A modal dialog takes focus, so keyboard and screen-reader users land in it.
+    dialogRef.current?.focus({ preventScroll: true });
     return () => document.body.classList.remove("ci-consent-open");
   }, [showingBanner]);
 
@@ -106,19 +107,26 @@ export function ConsentGate({ locale, t }: { locale: Locale; t: ConsentCopy }) {
       ) : null}
 
       {state === null ? (
+        /* A centred card over a dimmed page, on phones and desktops alike (owner,
+           6 Nov 2026: the bottom bar was easy to scroll past, and an unanswered
+           banner counts as "no"). Legal: accept and reject keep the same weight
+           and are one click each (AEPD cookie guide); the scrim does not answer
+           for the visitor, only the buttons do; a consent dialog is exempt from
+           Google's intrusive-interstitial rule. */
+        <div className="ci-consent-scrim" role="presentation">
         <div
           role="dialog"
-          aria-modal="false"
+          aria-modal="true"
           aria-labelledby="ci-consent-title"
-          className="fixed inset-x-0 bottom-0 z-50 border-t border-[var(--color-rule-strong)] bg-[var(--color-surface)] shadow-[var(--shadow-pop)]"
+          className="ci-consent-card"
+          tabIndex={-1}
+          ref={dialogRef}
         >
-          <div className="ci-shell py-2 sm:py-4">
-            {/* On phones the heading is for screen readers only (it still
-                labels the dialog); the body sentence says the same thing. */}
-            <h2 id="ci-consent-title" className="sr-only font-sans font-semibold sm:not-sr-only sm:text-base">
+          <div>
+            <h2 id="ci-consent-title" className="font-sans text-lg font-semibold">
               {t.consent.title}
             </h2>
-            <p className="ci-measure text-xs text-[var(--color-muted)] sm:mt-1 sm:text-sm">
+            <p className="mt-2 text-sm text-[var(--color-muted)]">
               {t.consent.body}{" "}
               <a href={legalPath("cookies", locale)}>{t.legalLabel}</a>
             </p>
@@ -134,11 +142,7 @@ export function ConsentGate({ locale, t }: { locale: Locale; t: ConsentCopy }) {
               </dl>
             ) : null}
 
-            {/* Phones: accept and reject side by side (same weight, as the
-                AEPD requires), "manage" as a short line under them, so the
-                banner stays near 150 px instead of covering a third of the
-                screen. */}
-            <div className="mt-2 grid grid-cols-2 gap-2 sm:mt-4 sm:flex sm:flex-wrap">
+            <div className="mt-4 grid grid-cols-2 gap-2">
               <button
                 type="button"
                 className="ci-btn ci-btn-primary"
@@ -157,7 +161,7 @@ export function ConsentGate({ locale, t }: { locale: Locale; t: ConsentCopy }) {
               </button>
               <button
                 type="button"
-                className="ci-btn ci-btn-quiet col-span-2 justify-self-start max-sm:px-1 max-sm:py-1 max-sm:text-xs max-sm:underline sm:col-span-1"
+                className="ci-btn ci-btn-quiet col-span-2 justify-self-center px-1 py-1 text-sm underline"
                 aria-expanded={expanded}
                 onClick={() => setExpanded((v) => !v)}
               >
@@ -165,6 +169,7 @@ export function ConsentGate({ locale, t }: { locale: Locale; t: ConsentCopy }) {
               </button>
             </div>
           </div>
+        </div>
         </div>
       ) : null}
     </>

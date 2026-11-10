@@ -5,7 +5,10 @@ import { STRIKE_URLS } from "./strikes";
 /**
  * The facts of the 11N city pages (`strike-11n-cities.ts`): the one file the
  * strike watch edits. Read on 5-6 Nov 2026 on the official sources (fact
- * pack: research_notes/x10/strike-11n-cities-factpack.md).
+ * pack: research_notes/x10/strike-11n-cities-factpack.md); the orders that
+ * came out afterwards (flights, Galicia, Andalucía's health order, Comunitat
+ * Valenciana, Illes Balears, Palma, Aragón, Zaragoza's tram, Canarias and
+ * Guaguas) were read on 10 Nov 2026 in each bulletin.
  *
  * HOW TO UPDATE, when an order or notice comes out:
  *  - Regional or local service: in its city's `services`, set `status:
@@ -27,7 +30,7 @@ import { STRIKE_URLS } from "./strikes";
  */
 
 /** The day the city pages were last checked against the sources. What the lead says is decided against it, never the clock. */
-export const STRIKE_11N_CITIES_AS_OF = "2026-11-06";
+export const STRIKE_11N_CITIES_AS_OF = "2026-11-10";
 
 /** The facts were re-read on the as-of day: one constant to move. */
 export const STRIKE_11N_CITIES_VERIFIED = STRIKE_11N_CITIES_AS_OF;
@@ -38,8 +41,10 @@ const ref = strike11nCityRef;
 
 /** The State-level sources these pages add to STRIKE_URLS. */
 export const CITY_STATE_URLS = {
-  // Ministry of Transport, air minimum-services resolutions (none for 11N on 6 Nov 2026).
+  // Ministry of Transport, air minimum-services resolutions.
   ministryAir: "https://www.transportes.gob.es/aviacion-civil/informacion-util-al-pasajero/huelga-servicios-minimos",
+  // The 11N one: signed on 6 Nov 2026 by the Secretario de Estado de Transportes y Movilidad Sostenible (52 pp., read 10 Nov).
+  airOrder: "https://www.transportes.gob.es/recursos_mfom/paginabasica/recursos/53_26-11-11-resolucion_huelga_general_vi.pdf",
   // Real Decreto 1479/1988 (State offices during a strike), in force, read on the BOE on 6 Nov 2026.
   rd1479: "https://www.boe.es/eli/es/rd/1988/12/09/1479",
   // BOE-A-2026-23157 (BOE núm. 274, 4 Nov 2026): private security on 11N, 90% in public transport.
@@ -59,21 +64,55 @@ export const CITY_STATE_URLS = {
 export const STATE_SERVICES: Record<"rail" | "air", StateService> = {
   rail: {
     key: "rail",
-    status: "pending",
-    text: null,
-    source: null,
+    status: "published",
+    text: `Renfe: Cercanías, el 75% del servicio habitual en hora punta (de 6.00 a 9.00, de 13.30 a 15.30 y de 18.30 a 20.30 h) y el 50% el resto del día; Media Distancia, una media del 65%; Alta Velocidad y Larga Distancia, el 73%, según los servicios mínimos fijados por el Ministerio de Transportes (${link("https://grupo.renfe.com/es/es/sala-de-prensa/noticias/2026/11/establecidos-los-servicios-minimos-para-la-huelga-general-convocada-el-11n", "comunicado de Renfe del 9 de noviembre")}).`,
+    source: { name: "Establecidos los servicios mínimos para la huelga general convocada el 11N (09/11/2026)", url: "https://grupo.renfe.com/es/es/sala-de-prensa/noticias/2026/11/establecidos-los-servicios-minimos-para-la-huelga-general-convocada-el-11n", publisher: "Renfe" },
     setBy: "Ministerio de Transportes",
     pending: `Los fija el Ministerio de Transportes por resolución, que publica en su ${link(U.ministryRail, "lista de resoluciones de servicios mínimos ferroviarios")}; Renfe publica después los trenes que circulan.`,
   },
   air: {
     key: "air",
-    status: "pending",
-    text: null,
-    source: null,
+    status: "published",
+    text: `Un porcentaje de los vuelos comerciales programados en cada aeropuerto, para cada ruta y compañía, según el tipo de ruta, y el 100% de los vuelos de emergencia y de Estado, según la ${link(CITY_STATE_URLS.airOrder, "resolución del Ministerio de Transportes firmada el 6 de noviembre")}.`,
+    source: { name: "Resolución del secretario de Estado de Transportes y Movilidad Sostenible: servicios mínimos del transporte aéreo en la huelga general del 11 de noviembre de 2026 (firmada el 6 de noviembre de 2026)", url: CITY_STATE_URLS.airOrder, publisher: "Ministerio de Transportes y Movilidad Sostenible" },
     setBy: "Ministerio de Transportes",
     pending: `Los fija el Ministerio de Transportes por resolución, que publica en su ${link(CITY_STATE_URLS.ministryAir, "página de servicios mínimos del transporte aéreo")}.`,
   },
 };
+
+/**
+ * One airport's protected flights in the Ministry's 11N resolution (RESUELVO
+ * Primero): `islands` is its letter d (domestic routes to or from the
+ * non-peninsular territories and every public-service-obligation route),
+ * `long` its letter e (peninsular routes whose public-transport alternative
+ * takes 5 hours or more, and every international route) and `short` its
+ * letter f (peninsular routes with an alternative under 5 hours; the island
+ * airports have none).
+ */
+function airNotes(airport: string, islands: number, long: number, short: number | null): string[] {
+  const order = link(CITY_STATE_URLS.airOrder, "resolución del Ministerio de Transportes");
+  return [
+    short === null
+      ? `En el aeropuerto de ${airport}, el ${islands}% de los vuelos nacionales y el ${long}% de los internacionales, para cada ruta y compañía, según la ${order}.`
+      : `En el aeropuerto de ${airport}, el ${islands}% de los vuelos con Baleares, Canarias, Ceuta y Melilla y de las rutas con obligación de servicio público; el ${long}% de los internacionales y de los peninsulares cuya alternativa en transporte público tarda 5 horas o más, y el ${short}% de los peninsulares con alternativa de menos de 5 horas, para cada ruta y compañía, según la ${order}.`,
+    "Si el vuelo une dos aeropuertos españoles con porcentajes distintos, se aplica el mayor, y el resultado se redondea al alza.",
+  ];
+}
+
+/** A service whose minimum services are out: `text` has the order's own figure and the link. */
+function out(
+  id: string,
+  group: CityService["group"],
+  name: string,
+  setBy: string,
+  text: string,
+  source: NonNullable<CityService["source"]>,
+  pendingText: string,
+  where: string,
+  extra: { question?: string; notes?: string[] } = {},
+): CityService {
+  return { id, group, name, setBy, status: "published", text, source, pending: pendingText, where, ...extra };
+}
 
 /** A service whose minimum services are not out yet. */
 function pending(
@@ -93,6 +132,9 @@ function pending(
 /* -------------------------------------------------------------------------- */
 
 const BOCM = "https://www.bocm.es/";
+const UGT_MAD_DEMOS = "https://www.ugtlimpiezamadrid.es/2026/11/iel-11-de-noviembre-movilizate.html";
+const MLG_DEMOS = "https://inquilinatomalaga.org/2026/11/05/el-comite-de-huelga-llama-a-la-movilizacion-en-malaga-para-el-11n/";
+const CCOO_PV_DEMOS = "https://www.pv.ccoo.es/noticia:770384";
 const MAD_ACUERDO = "https://www.bocm.es/bocm-20261106-36";
 const MAD_SOURCE = {
   name: "Acuerdo de 4 de noviembre de 2026, del Consejo de Gobierno, por el que se fijan los servicios mínimos con ocasión de la huelga convocada para el día 11 de noviembre de 2026 (BOCM núm. 267, 6 de noviembre)",
@@ -124,6 +166,7 @@ function madrid(): Strike11nCity {
     bulletin: "el BOCM",
     cercanias: "Cercanías Madrid",
     airport: "Adolfo Suárez Madrid-Barajas",
+    airNotes: airNotes("Adolfo Suárez Madrid-Barajas", 78, 57, 32),
     msSummary: `metro al 80% en hora punta y al 50% el resto del día; EMT, al 50% (40% en las líneas que coinciden con el metro); autobuses interurbanos, al 50% hasta las 9.30 h y al 45% después, según ${madAcuerdo("el acuerdo de la Comunidad publicado el 6 de noviembre")}`,
     services: [
       published(
@@ -179,11 +222,15 @@ function madrid(): Strike11nCity {
     ],
     school: `**Sí, es día lectivo.** En el calendario escolar 2026-2027 de la Comunidad de Madrid (${link("https://www.bocm.es/bocm-20260604-13", "Orden 2034/2026")}), las clases de infantil, primaria y educación especial van del 7 de septiembre de 2026 al 18 de junio de 2027, y en noviembre solo es festivo el día 2, además de las fiestas locales. Las de la ciudad de Madrid en 2026 son el 15 de mayo y el 9 de noviembre (${link("https://www.bocm.es/bocm-20251212-34", "BOCM del 12 de diciembre de 2025")}): el lunes 9 no hay clase; el miércoles 11, sí.`,
     schoolShort: "Es día lectivo. Los colegios abren con el director, el jefe de estudios y los mínimos que fija la Comunidad de Madrid",
-    demos: [],
-    demoShort: null,
+    demos: [
+      `**UGT:** concentración a las 12.00 h en Cibeles y manifestación a las 18.00 h de Atocha a la plaza de España, según ${link(UGT_MAD_DEMOS, "UGT (sector de limpieza de Madrid)")}.`,
+      `Atentos a ${link("https://madrid.ccoo.es/huelgageneral11m", "CCOO de Madrid")} y ${link("https://madridugt.org/", "UGT Madrid")} por si convocan otras marchas.`,
+    ],
+    demoShort: "UGT: concentración a las 12.00 h en Cibeles; manifestación a las 18.00 h de Atocha a la plaza de España",
     demoWhere: `Atentos a las webs de ${link("https://madrid.ccoo.es/huelgageneral11m", "CCOO de Madrid")} y ${link("https://madridugt.org/", "UGT Madrid")}: en cuanto publiquen la hora y el lugar, los pondremos aquí.`,
     callNotes: [],
     sources: [
+      { name: "UGT Limpieza Madrid: el 11 de noviembre, movilízate", url: UGT_MAD_DEMOS, publisher: "UGT" },
       MAD_SOURCE,
       { name: "BOCM: Boletín Oficial de la Comunidad de Madrid", url: BOCM, publisher: "Comunidad de Madrid" },
       { name: "Metro de Madrid", url: "https://www.metromadrid.es/es", publisher: "Metro de Madrid" },
@@ -204,55 +251,104 @@ function madrid(): Strike11nCity {
 /* -------------------------------------------------------------------------- */
 
 const GVA_LIST = "https://habitatge.gva.es/es/web/dg-trabajo/vagues-serveis-minims";
-const DOGV = "https://dogv.gva.es/es/inici";
+const GVA_ORDER = "https://habitatge.gva.es/documents/21189/165429228/RESOL_HUELGA+GRAL+11nov26+firmado.pdf/e8132fe4-1128-4d8d-8545-0a5baac22c6b?t=1793978491151";
+const gvaOrder = (label = "la resolución de la Generalitat Valenciana") => link(GVA_ORDER, label);
+const GVA_SOURCE = {
+  name: "Resolución de la vicepresidenta primera y consellera de Vivienda, Empleo, Juventud e Igualdad por la que se establecen los servicios mínimos de la huelga general del 11 de noviembre de 2026",
+  url: GVA_ORDER,
+  publisher: "Generalitat Valenciana",
+};
 const GVA_PENDING = `Los fija la Generalitat Valenciana (Conselleria de Vivienda, Empleo, Juventud e Igualdad) por resolución, que publica en su ${link(GVA_LIST, "lista de huelgas y servicios mínimos")}.`;
 const GVA_SCHOOL = "https://dogv.gva.es/datos/2026/06/18/pdf/2026_20810_es.pdf";
 const GVA_HOLIDAYS = "https://dogv.gva.es/datos/2025/11/14/pdf/2025_46326_es.pdf";
 const CCOO_PV = "https://www.pv.ccoo.es/noticia:771136";
 const GVA_SOURCES = [
+  GVA_SOURCE,
   { name: "Huelgas: servicios mínimos (resoluciones de la Conselleria de Vivienda, Empleo, Juventud e Igualdad)", url: GVA_LIST, publisher: "Generalitat Valenciana" },
-  { name: "DOGV: Diari Oficial de la Generalitat Valenciana", url: DOGV, publisher: "Generalitat Valenciana" },
   { name: "Resolución de 15 de junio de 2026: calendario escolar 2026-2027 en la Comunitat Valenciana (DOGV, 18 de junio de 2026)", url: GVA_SCHOOL, publisher: "Generalitat Valenciana" },
   { name: "Resolución de 12 de noviembre de 2025: fiestas locales de 2026 en la Comunitat Valenciana (DOGV, 14 de noviembre de 2025)", url: GVA_HOLIDAYS, publisher: "Generalitat Valenciana" },
   { name: "CCOO PV llama a parar el 11N (27/10/2026)", url: CCOO_PV, publisher: "CCOO del País Valencià" },
 ];
-const GVA_SERVICES = (city: string): CityService[] => [
-  pending("salud", "health", "Hospitales y centros de salud públicos", "Generalitat Valenciana", GVA_PENDING, `Para tu cita, tu hospital o centro de salud; la resolución, en la ${link(GVA_LIST, "lista de la Generalitat")}`),
-  pending("colegios", "schools", "Colegios e institutos públicos", "Generalitat Valenciana", GVA_PENDING, `El colegio informa a las familias; la resolución, en la ${link(GVA_LIST, "lista de la Generalitat")}`),
-  pending("administracion", "administration", "Administración de la Generalitat", "Generalitat Valenciana", GVA_PENDING, `La resolución, en el ${link(DOGV, "DOGV")} y en la ${link(GVA_LIST, "lista de la Generalitat")}`, { notes: [] }),
-].map((service) => ({ ...service, id: `${service.id}`, name: service.name.replace("{city}", city) }));
+const GVA_INTERURBAN = out(
+  "interurbanos",
+  "transport",
+  "Autobuses interurbanos",
+  "Generalitat Valenciana",
+  `El 55% de los servicios en hora punta (de 6.00 a 9.00 y de 17.00 a 19.00 h) y el 40% el resto del día; el 80% de los que van a aeropuertos, puertos y estaciones de tren en zonas turísticas, y el 50% del transporte escolar y del transporte a centros de trabajo, según ${gvaOrder()}.`,
+  GVA_SOURCE,
+  GVA_PENDING,
+  `La resolución, en la ${link(GVA_LIST, "lista de la Generalitat")}; tu línea, en la web de su operador`,
+);
+const GVA_SERVICES: CityService[] = [
+  out(
+    "salud",
+    "health",
+    "Hospitales y centros de salud públicos",
+    "Generalitat Valenciana",
+    `En los hospitales, los servicios de un domingo en plantas, urgencias y quirófanos de urgencias, y los de un día laborable normal en diálisis, radioterapia, UCI, trasplantes, hospital de día y oncología, con el 25% de las consultas externas preferentes; en los centros de salud y consultorios, los servicios de un sábado, y los puntos de atención continuada, con su servicio normal, según ${gvaOrder()}.`,
+    GVA_SOURCE,
+    GVA_PENDING,
+    `Para tu cita, tu hospital o centro de salud; la resolución, en la ${link(GVA_LIST, "lista de la Generalitat")}`,
+  ),
+  out(
+    "colegios",
+    "schools",
+    "Colegios e institutos públicos",
+    "Generalitat Valenciana",
+    `Una persona del equipo directivo en cada centro; en infantil y primaria, además, un docente por etapa y como mínimo uno por cada cuatro unidades; en secundaria, bachillerato y FP, uno por etapa y como mínimo uno por cada diez unidades; en los comedores escolares, el 60% del personal, según ${gvaOrder()}.`,
+    GVA_SOURCE,
+    GVA_PENDING,
+    `El colegio informa a las familias; la resolución, en la ${link(GVA_LIST, "lista de la Generalitat")}`,
+  ),
+  out(
+    "administracion",
+    "administration",
+    "Administración de la Generalitat",
+    "Generalitat Valenciana",
+    `Una persona en cada servicio de registro general, según ${gvaOrder()}.`,
+    GVA_SOURCE,
+    GVA_PENDING,
+    `La resolución, en la ${link(GVA_LIST, "lista de la Generalitat")}`,
+  ),
+];
 const GVA_MS_NOTES = [
-  `**Dónde saldrán:** la Generalitat publica las resoluciones de servicios mínimos de cada huelga en su ${link(GVA_LIST, "lista de huelgas y servicios mínimos")}; el 6 de noviembre la más reciente era la de la huelga de médicos que empezó el 28 de octubre, y no había ninguna del 11 de noviembre. Las de 2026 para el personal de conducción de FGV (metro y TRAM) también las firmó la Conselleria de Vivienda, Empleo, Juventud e Igualdad.`,
+  `**Publicados el 6 de noviembre.** La ${gvaOrder("resolución de la consellera de Vivienda, Empleo, Juventud e Igualdad")}, que la Generalitat tiene en su ${link(GVA_LIST, "lista de huelgas y servicios mínimos")}, fija en un solo texto los de FGV (metro, tranvía y TRAM), los autobuses metropolitanos e interurbanos, la sanidad, los colegios públicos y la administración de la Generalitat.`,
+  `**No cubre los autobuses urbanos municipales:** los de la EMT de València y los del autobús urbano de Alicante no estaban publicados el 10 de noviembre.`,
 ];
 const gvaSchool = (city: string, holidays: string) =>
   `**En el calendario, sí es día lectivo.** La ${link(GVA_SCHOOL, "resolución del calendario escolar 2026-2027")} fija las clases del 9 de septiembre de 2026 al 18 de junio de 2027 y, en otoño, solo el 9 y el 12 de octubre y el 8 de diciembre como festivos no lectivos; las fiestas locales de ${city} en 2026 son ${holidays} (${link(GVA_HOLIDAYS, "DOGV del 14 de noviembre de 2025")}). Pero cada ayuntamiento podía proponer «hasta un máximo de tres días no lectivos de carácter local a efectos escolares»: confirma con el colegio.`;
-const GVA_DEMO_WHERE = `CCOO del País Valencià ha dicho que habrá manifestaciones «por todo el País Valencià a las 18:00 horas, el 11 de noviembre» (${link(CCOO_PV, "CCOO PV")}), pero aún no ha publicado el lugar de cada ciudad. Lo pondremos aquí en cuanto salga.`;
 
 function valencia(): Strike11nCity {
   return {
     ...ref("valencia"),
     titleTransport: "metro y EMT",
     transportShort: "metro, tranvía y EMT",
-    authority: `la Generalitat Valenciana, por resoluciones que publica en su ${link(GVA_LIST, "lista de servicios mínimos")}`,
+    authority: `la Generalitat Valenciana, en una resolución que tiene en su ${link(GVA_LIST, "lista de servicios mínimos")}`,
     authorityShort: "la Generalitat Valenciana",
     bulletin: "el DOGV",
     cercanias: "Cercanías Valencia",
     airport: "Valencia",
-    msSummary: null,
+    airNotes: airNotes("Valencia", 75, 59, 32),
+    msSummary: `Metrovalencia (metro y tranvía), al 80% del servicio programado; autobuses metropolitanos de la ATMV, al 70% y, en hora punta, al 80%; en los hospitales, los servicios de un domingo, y en los centros de salud, los de un sábado, según ${gvaOrder("la resolución de la Generalitat Valenciana del 6 de noviembre")}`,
     services: [
-      pending("metrovalencia", "transport", "Metrovalencia (metro y tranvía, FGV)", "Generalitat Valenciana", GVA_PENDING, `Los avisos, en ${link("https://www.metrovalencia.es/", "metrovalencia.es")}`, { question: "¿Hay metro en Valencia el 11 de noviembre?" }),
+      out("metrovalencia", "transport", "Metrovalencia (metro y tranvía, FGV)", "Generalitat Valenciana", `El 80% del servicio programado de trenes y tranvías, según ${gvaOrder()}.`, GVA_SOURCE, GVA_PENDING, `Los avisos, en ${link("https://www.metrovalencia.es/", "metrovalencia.es")}`, { question: "¿Hay metro en Valencia el 11 de noviembre?" }),
+      out("atmv", "transport", "Autobuses metropolitanos (ATMV)", "Generalitat Valenciana", `El 70% de los servicios y, en hora punta (de 6.30 a 9.00, de 13.30 a 15.30 y de 18.30 a 21.00 h), el 80%, según ${gvaOrder()}.`, GVA_SOURCE, GVA_PENDING, `La resolución, en la ${link(GVA_LIST, "lista de la Generalitat")}`),
       pending("emt", "transport", "Autobuses de la EMT de València", "Por confirmar", `Aún no los ha publicado nadie: ni la ${link(GVA_LIST, "lista de servicios mínimos de la Generalitat")} ni la ${link("https://www.emtvalencia.es/", "EMT de València")}.`, `Las alteraciones del servicio, en ${link("https://www.emtvalencia.es/", "emtvalencia.es")}`, { question: "¿Hay autobuses de la EMT en Valencia el 11 de noviembre?" }),
-      ...GVA_SERVICES("Valencia"),
+      GVA_INTERURBAN,
+      ...GVA_SERVICES,
     ],
     msNotes: GVA_MS_NOTES,
     railNotes: [],
     school: gvaSchool("València", "el 22 de enero y el 13 de abril"),
     schoolShort: "Día lectivo en el calendario de la Comunitat; confirma con el colegio sus días no lectivos locales",
-    demos: [],
-    demoShort: null,
-    demoWhere: GVA_DEMO_WHERE,
+    demos: [
+      `**CCOO PV:** manifestación a las 18.00 h con salida de la calle de Xàtiva («València. C/ Xàtiva»), según ${link(CCOO_PV_DEMOS, "CCOO del País Valencià")}, que ${link(CCOO_PV, "llama a parar el 11N")}.`,
+    ],
+    demoShort: "CCOO PV, a las 18.00 h, desde la calle de Xàtiva",
+    demoWhere: `Atentos a ${link(CCOO_PV_DEMOS, "CCOO PV")} por si cambia la hora o el lugar.`,
     callNotes: [],
     sources: [
+      { name: "CCOO PV: l'11 de novembre, a la vaga general (lugares de las manifestaciones)", url: CCOO_PV_DEMOS, publisher: "CCOO del País Valencià" },
       ...GVA_SOURCES,
       { name: "Metrovalencia", url: "https://www.metrovalencia.es/", publisher: "Ferrocarrils de la Generalitat Valenciana" },
       { name: "EMT València", url: "https://www.emtvalencia.es/", publisher: "EMT València" },
@@ -265,26 +361,30 @@ function alicante(): Strike11nCity {
     ...ref("alicante"),
     titleTransport: "TRAM y bus",
     transportShort: "TRAM y autobuses",
-    authority: `la Generalitat Valenciana, por resoluciones que publica en su ${link(GVA_LIST, "lista de servicios mínimos")}`,
+    authority: `la Generalitat Valenciana, en una resolución que tiene en su ${link(GVA_LIST, "lista de servicios mínimos")}`,
     authorityShort: "la Generalitat Valenciana",
     bulletin: "el DOGV",
     cercanias: "Cercanías Murcia/Alicante",
     airport: "Alicante-Elche Miguel Hernández",
-    msSummary: null,
+    airNotes: airNotes("Alicante-Elche Miguel Hernández", 74, 54, 31),
+    msSummary: `TRAM d'Alacant, al 80% del servicio programado; autobuses interurbanos, al 55% en hora punta y al 40% el resto del día; en los hospitales, los servicios de un domingo, y en los centros de salud, los de un sábado, según ${gvaOrder("la resolución de la Generalitat Valenciana del 6 de noviembre")}`,
     services: [
-      pending("tram", "transport", "TRAM d'Alacant (FGV)", "Generalitat Valenciana", GVA_PENDING, `Los avisos, en ${link("https://www.tramalacant.es/", "tramalacant.es")}`, { question: "¿Hay TRAM en Alicante el 11 de noviembre?" }),
+      out("tram", "transport", "TRAM d'Alacant (FGV)", "Generalitat Valenciana", `El 80% del servicio programado de trenes y tranvías, según ${gvaOrder()}.`, GVA_SOURCE, GVA_PENDING, `Los avisos, en ${link("https://www.tramalacant.es/", "tramalacant.es")}`, { question: "¿Hay TRAM en Alicante el 11 de noviembre?" }),
       pending("bus", "transport", "Autobús urbano de Alicante", "Por confirmar", `Aún no los ha publicado nadie en la ${link(GVA_LIST, "lista de servicios mínimos de la Generalitat")}.`, `La resolución, cuando salga, en la ${link(GVA_LIST, "lista de la Generalitat")}`),
-      ...GVA_SERVICES("Alicante"),
+      GVA_INTERURBAN,
+      ...GVA_SERVICES,
     ],
     msNotes: GVA_MS_NOTES,
     railNotes: [],
     school: gvaSchool("Alicante", "el 16 de abril (Santa Faz) y el 23 de junio (Fogueres de Sant Joan)"),
     schoolShort: "Día lectivo en el calendario de la Comunitat; confirma con el colegio sus días no lectivos locales",
-    demos: [],
-    demoShort: null,
-    demoWhere: GVA_DEMO_WHERE,
+    demos: [
+      `**CCOO PV:** concentración a las 18.00 h en las Escales Jorge Juan («Alacant. Escales Jorge Juan»), según ${link(CCOO_PV_DEMOS, "CCOO del País Valencià")}, que ${link(CCOO_PV, "llama a parar el 11N")}.`,
+    ],
+    demoShort: "CCOO PV, a las 18.00 h, en las Escales Jorge Juan",
+    demoWhere: `Atentos a ${link(CCOO_PV_DEMOS, "CCOO PV")} por si cambia la hora o el lugar.`,
     callNotes: [],
-    sources: [...GVA_SOURCES, { name: "TRAM d'Alacant", url: "https://www.tramalacant.es/", publisher: "Ferrocarrils de la Generalitat Valenciana" }],
+    sources: [{ name: "CCOO PV: l'11 de novembre, a la vaga general (lugares de las manifestaciones)", url: CCOO_PV_DEMOS, publisher: "CCOO del País Valencià" }, ...GVA_SOURCES, { name: "TRAM d'Alacant", url: "https://www.tramalacant.es/", publisher: "Ferrocarrils de la Generalitat Valenciana" }],
   };
 }
 
@@ -296,8 +396,15 @@ const BOJA = "https://www.juntadeandalucia.es/eboja.html";
 const AND_2025 = "https://www.juntadeandalucia.es/eboja/2025/197/BOJA25-197-00011-13546-01_00327143.pdf";
 const AND_HOLIDAYS = "https://www.juntadeandalucia.es/boja/2025/197/BOJA25-197-00016-13517-01_00327114.pdf";
 const CCOO_A = "https://andalucia.ccoo.es/noticia:770740--CCOO_de_Andalucia_hace_un_llamamiento_a_la_clase_trabajadora_y_a_la_ciudadania_a_que_se_sume_a_la_huelga_y_a_las_movilizaciones_convocadas_el_11N&opc_id=3b47924008abebb0a1b9cb703fffef0c";
+const AND_HEALTH = "https://www.juntadeandalucia.es/boja/2026/216/31";
+const AND_HEALTH_SOURCE = {
+  name: "Orden de 3 de noviembre de 2026, por la que se garantiza el funcionamiento del servicio público que prestan los trabajadores del sector sanitario público y privado, mediante el establecimiento de servicios mínimos (BOJA núm. 216, 9 de noviembre de 2026)",
+  url: AND_HEALTH,
+  publisher: "Junta de Andalucía",
+};
 const AND_PENDING = `Los fija la Junta de Andalucía: en la última huelga general, con una ${link(AND_2025, "resolución de la Dirección General de Trabajo")} que cubría también el transporte urbano. Saldrán en el ${link(BOJA, "BOJA")}.`;
 const AND_SOURCES = [
+  AND_HEALTH_SOURCE,
   { name: "BOJA: Boletín Oficial de la Junta de Andalucía", url: BOJA, publisher: "Junta de Andalucía" },
   { name: "Resolución de 8 de octubre de 2025 de la Dirección General de Trabajo, Seguridad y Salud Laboral: servicios mínimos de la huelga del 15 de octubre de 2025 (BOJA núm. 197, 14 de octubre de 2025)", url: AND_2025, publisher: "Junta de Andalucía" },
   { name: "Resolución de 6 de octubre de 2025: fiestas locales de 2026 en Andalucía (BOJA núm. 197, 14 de octubre de 2025)", url: AND_HOLIDAYS, publisher: "Junta de Andalucía" },
@@ -305,11 +412,22 @@ const AND_SOURCES = [
   { name: "Huelga general 11N", url: "https://huelga.ccoo.es/", publisher: "CCOO" },
 ];
 const AND_SERVICES: CityService[] = [
-  pending("salud", "health", "Hospitales y centros de salud (SAS)", "Junta de Andalucía", `Los fija la Junta de Andalucía por orden de su consejería de Sanidad, que se publica en el ${link(BOJA, "BOJA")}.`, `Para tu cita, tu hospital o centro de salud; la orden, en el ${link(BOJA, "BOJA")}`),
+  out(
+    "salud",
+    "health",
+    "Hospitales y centros de salud (SAS)",
+    "Junta de Andalucía",
+    `En los hospitales, el 100% de la actividad de un domingo o festivo, con las urgencias como un fin de semana, y garantizadas la radioterapia, la quimioterapia, la cirugía oncológica y la diálisis; en los centros de salud, solo la atención urgente: con un médico en los que no tienen servicio de urgencias (SUAP) y, en los que lo tienen, en el SUAP, como un fin de semana, según la ${link(AND_HEALTH, "Orden de 3 de noviembre de 2026 de la Junta de Andalucía")}.`,
+    AND_HEALTH_SOURCE,
+    `Los fija la Junta de Andalucía por orden de su consejería de Sanidad, que se publica en el ${link(BOJA, "BOJA")}.`,
+    `Para tu cita, tu hospital o centro de salud; la orden, en el ${link(BOJA, "BOJA")}`,
+  ),
   pending("colegios", "schools", "Colegios e institutos", "Junta de Andalucía", `Los fija la Junta de Andalucía por resolución y órdenes que se publican en el ${link(BOJA, "BOJA")}.`, `El colegio informa a las familias; la resolución, en el ${link(BOJA, "BOJA")}`),
   pending("administracion", "administration", "Administración de la Junta de Andalucía", "Junta de Andalucía", `Los fija cada consejería de la Junta por orden, que se publica en el ${link(BOJA, "BOJA")}.`, `Las órdenes, en el ${link(BOJA, "BOJA")}`),
 ];
+const AND_SUMMARY = `en los hospitales, la actividad de un domingo o festivo, y en los centros de salud, solo la atención urgente, según la ${link(AND_HEALTH, "orden de la Junta de Andalucía publicada en el BOJA del 9 de noviembre")}`;
 const AND_MS_NOTES = [
+  `**La de la sanidad, publicada el 9 de noviembre.** El BOJA núm. 216 trae la ${link(AND_HEALTH, "Orden de 3 de noviembre de 2026")}, con los servicios mínimos de la sanidad pública y privada. Ni ese boletín ni el del 10 de noviembre traen los del transporte urbano ni los de los colegios.`,
   `En la huelga general del 15 de octubre de 2025, la Junta fijó los servicios mínimos con una ${link(AND_2025, "resolución de la Dirección General de Trabajo")} que cubría, entre otros, el transporte urbano de viajeros y los colegios e institutos, firmada el 8 de octubre y publicada en el BOJA del 14, la víspera; la orden de la sanidad pública y las de cada consejería salieron el mismo día de la huelga.`,
   `**Ojo: rigen desde la firma.** Aquella resolución decía que «entrará en vigor el día de su firma, sin perjuicio de su posterior publicación en el Boletín Oficial de la Junta de Andalucía»: los servicios mínimos pueden aplicarse antes de salir en el ${link(BOJA, "BOJA")}.`,
 ];
@@ -329,7 +447,8 @@ function sevilla(): Strike11nCity {
     bulletin: "el BOJA",
     cercanias: "Cercanías Sevilla",
     airport: "Sevilla",
-    msSummary: null,
+    airNotes: airNotes("Sevilla", 76, 57, 35),
+    msSummary: AND_SUMMARY,
     services: [
       pending("metro", "transport", "Metro de Sevilla", "Junta de Andalucía", AND_PENDING, `Los avisos, en ${link("https://www.metro-sevilla.es/", "metro-sevilla.es")}`, { question: "¿Hay metro en Sevilla el 11 de noviembre?" }),
       pending("tussam", "transport", "Tussam (autobuses y tranvía Metrocentro)", "Junta de Andalucía", AND_PENDING, `Los avisos, en ${link("https://www.tussam.es/", "tussam.es")}`, { question: "¿Hay autobuses de Tussam el 11 de noviembre?" }),
@@ -365,7 +484,8 @@ function malaga(): Strike11nCity {
     bulletin: "el BOJA",
     cercanias: "Cercanías Málaga",
     airport: "Málaga-Costa del Sol",
-    msSummary: null,
+    airNotes: airNotes("Málaga-Costa del Sol", 75, 57, 32),
+    msSummary: AND_SUMMARY,
     services: [
       pending("metro", "transport", "Metro de Málaga", "Junta de Andalucía", AND_PENDING, `Las ${link("https://metromalaga.es/notas-de-prensa/", "notas de Metro de Málaga")}`, { question: "¿Hay metro en Málaga el 11 de noviembre?" }),
       pending("emt", "transport", "Autobuses de la EMT de Málaga", "Junta de Andalucía", AND_PENDING, `Las ${link("https://www.emtmalaga.es/noticias", "noticias de la EMT")}`, { question: "¿Hay autobuses de la EMT en Málaga el 11 de noviembre?" }),
@@ -376,11 +496,15 @@ function malaga(): Strike11nCity {
     railNotes: [],
     school: `**Sí, es día lectivo.** La ${link(school, "resolución del calendario escolar 2026-2027 de la provincia de Málaga")} no tiene el 11 de noviembre entre los días no lectivos, y las fiestas locales de Málaga en 2026 son el 19 de agosto y el 8 de septiembre (${link(AND_HOLIDAYS, "BOJA del 14 de octubre de 2025")}).`,
     schoolShort: "Sí, es día lectivo",
-    demos: [],
-    demoShort: null,
+    demos: [
+      `**Comité de Huelga de Málaga:** manifestación a las 18.00 h con salida desde la plaza del General Torrijos, junto a la Fuente de las Tres Gracias, según el ${link(MLG_DEMOS, "Sindicato de Inquilinas de Málaga")}.`,
+      `Atentos a ${link(CCOO_A, "CCOO de Andalucía")} y a la ${link("https://huelga.ccoo.es/", "web de la huelga de CCOO")} por si se convocan otras marchas.`,
+    ],
+    demoShort: "A las 18.00 h, desde la plaza del General Torrijos (Fuente de las Tres Gracias)",
     demoWhere: AND_DEMO_WHERE,
     callNotes: AND_CALL,
     sources: [
+      { name: "El Comité de Huelga llama a la movilización en Málaga para el 11N (5/11/2026)", url: MLG_DEMOS, publisher: "Sindicato de Inquilinas de Málaga" },
       ...AND_SOURCES,
       { name: "Resolución de 20 de mayo de 2026 de la Delegación Territorial de Educación en Málaga: calendario escolar 2026-2027", url: school, publisher: "Junta de Andalucía" },
       { name: "Notas de prensa", url: "https://metromalaga.es/notas-de-prensa/", publisher: "Metro de Málaga" },
@@ -396,37 +520,82 @@ function malaga(): Strike11nCity {
 
 function zaragoza(): Strike11nCity {
   const BOA = "https://www.boa.aragon.es/";
-  const BOA_2025 = "https://www.boa.aragon.es/cgi-bin/EBOA/BRSCGI?CMD=VEROBJ&MLKOB=1415189721010";
   const NEWS = "https://www.zaragoza.es/sede/servicio/noticia/";
   const DECREE_2021 = "https://www.zaragoza.es/sede/servicio/noticia/301261";
   const TRAM = "https://www.tranviasdezaragoza.es/informacion-de-servicio-paros-parciales-y-servicios-minimos/";
+  // The 11N notice of Tranvías de Zaragoza and the orders of BOA núm. 217 (10 Nov 2026), read on 10 Nov.
+  const TRAM_11N = "https://www.tranviasdezaragoza.es/servicios-minimos-del-tranvia-de-zaragoza-para-la-huelga-general-del-11-de-noviembre/";
+  const boaOrder = (id: string) => `https://www.boa.aragon.es/cgi-bin/EBOA/BRSCGI?CMD=VEROBJ&MLKOB=${id}&type=pdf`;
+  const HAP = { name: "Orden HAP/1621/2026, de 6 de noviembre: servicios mínimos del personal de la Administración General de Aragón en la huelga general del 11 de noviembre de 2026 (BOA núm. 217, 10 de noviembre de 2026)", url: boaOrder("1474131840505"), publisher: "Gobierno de Aragón" };
+  const ECE = { name: "Orden ECE/1627/2026, de 9 de noviembre: servicios mínimos en actividades gestionadas por empresas privadas en la huelga general del 11 de noviembre de 2026 (BOA núm. 217, 10 de noviembre de 2026)", url: boaOrder("1474145980606"), publisher: "Gobierno de Aragón" };
+  const SAN = { name: "Orden SAN/1629/2026, de 5 de noviembre: servicios mínimos de los centros del Servicio Aragonés de Salud en la huelga general del 11 de noviembre de 2026 (BOA núm. 217, 10 de noviembre de 2026)", url: boaOrder("1474149020606"), publisher: "Gobierno de Aragón" };
+  const ECU = { name: "Orden ECU/1631/2026, de 5 de noviembre: servicios mínimos en los centros docentes públicos en la huelga general del 11 de noviembre de 2026 (BOA núm. 217, 10 de noviembre de 2026)", url: boaOrder("1474153060606"), publisher: "Gobierno de Aragón" };
+  const TRAM_SOURCE = { name: "Servicios mínimos del Tranvía de Zaragoza para la huelga general del 11 de noviembre", url: TRAM_11N, publisher: "Tranvías de Zaragoza" };
   const city = `Los fija el Ayuntamiento de Zaragoza por decreto: así lo hizo en la ${link(DECREE_2021, "huelga general del 8 de marzo de 2021")}, y lo anunció en sus ${link(NEWS, "noticias")}.`;
   const aragon = (dept: string) => `Los fija el Gobierno de Aragón (${dept}) por orden, que se publica en el ${link(BOA, "BOA")}.`;
   return {
     ...ref("zaragoza"),
     titleTransport: "tranvía y bus",
     transportShort: "tranvía y autobuses urbanos y metropolitanos",
-    authority: `el Gobierno de Aragón, por órdenes que se publican en el ${link(BOA, "BOA")}, salvo los del autobús urbano y el tranvía, que fija el Ayuntamiento de Zaragoza por decreto`,
+    authority: `el Gobierno de Aragón, en órdenes publicadas en el ${link(BOA, "BOA")} del 10 de noviembre, salvo los del autobús urbano y el tranvía, que fija el Ayuntamiento de Zaragoza por decreto`,
     authorityShort: "el Gobierno de Aragón (BOA) y, para el bus urbano y el tranvía, el Ayuntamiento",
     bulletin: "el BOA",
     cercanias: "Cercanías Zaragoza",
     airport: "Zaragoza",
-    msSummary: null,
+    airNotes: airNotes("Zaragoza", 75, 58, 32),
+    msSummary: `tranvía, entre el 50% y el 80% del servicio según la hora; en los colegios públicos, una persona del equipo directivo y el 25% del profesorado, y el transporte escolar, al 100%, según ${link(TRAM_11N, "Tranvías de Zaragoza")} y las órdenes del Gobierno de Aragón publicadas en el ${link(BOA, "BOA")} del 10 de noviembre`,
     services: [
       pending("bus", "transport", "Autobús urbano (Avanza Zaragoza)", "Ayuntamiento de Zaragoza", city, `Las ${link("https://zaragoza.avanzagrupo.com/alteraciones-del-servicio/", "alteraciones del servicio de Avanza")}`, { question: "¿Hay autobuses en Zaragoza el 11 de noviembre?" }),
-      pending("tranvia", "transport", "Tranvía de Zaragoza", "Ayuntamiento de Zaragoza", city, `Las ${link("https://www.tranviasdezaragoza.es/noticias/", "noticias de Tranvías de Zaragoza")}`, {
+      out("tranvia", "transport", "Tranvía de Zaragoza", "Ayuntamiento de Zaragoza", `En la línea 1, el 60% del servicio de 5.00 a 7.20 h; el 80% de 7.20 a 9.30 h; el 70% de 9.30 a 13.40 h; el 80% de 13.40 a 15.15 h; el 70% de 15.15 a 22.00 h, y el 50% de 22.00 a 0.00 h: son los que ha decretado el Ayuntamiento de Zaragoza, según ${link(TRAM_11N, "Tranvías de Zaragoza")}.`, TRAM_SOURCE, city, `Las ${link("https://www.tranviasdezaragoza.es/noticias/", "noticias de Tranvías de Zaragoza")}`, {
         question: "¿Hay tranvía en Zaragoza el 11 de noviembre?",
         notes: [
           `**Ojo: el tranvía tiene además paros parciales propios.** En su ${link(TRAM, "calendario de paros parciales de la línea 1")}, Tranvías de Zaragoza anuncia para el 11 de noviembre un paro de 13.00 a 15.00 h con servicios mínimos del 90%. Es un calendario de paros del propio tranvía que empezó el 19 de octubre, no los servicios mínimos de la huelga general.`,
         ],
       }),
-      pending("ctaz", "transport", "Autobuses metropolitanos (CTAZ)", "Gobierno de Aragón", aragon("empleo"), `Las ${link("https://www.ctaz.es/noticias-ctaz/", "noticias del Consorcio de Transportes del Área de Zaragoza")}`),
-      pending("salud", "health", "Hospitales y centros de salud (Salud)", "Gobierno de Aragón (Sanidad)", aragon("Departamento de Sanidad"), `Para tu cita, tu hospital o centro de salud; la orden, en el ${link(BOA, "BOA")}`),
-      pending("colegios", "schools", "Colegios e institutos públicos", "Gobierno de Aragón (Educación)", aragon("Departamento de Educación"), `El colegio informa a las familias; la orden, en el ${link(BOA, "BOA")}`),
-      pending("administracion", "administration", "Administración del Gobierno de Aragón", "Gobierno de Aragón", aragon("cada departamento"), `Las órdenes, en el ${link(BOA, "BOA")}`),
+      out(
+        "ctaz",
+        "transport",
+        "Autobuses interurbanos y metropolitanos (líneas del Gobierno de Aragón)",
+        "Gobierno de Aragón",
+        `En las líneas regulares del Gobierno de Aragón, una expedición completa (ida y vuelta) en las rutas que tienen hasta 3; 2 en las que tienen de 4 a 6, y el 40% de las expediciones en las que tienen 7 o más, según la ${link(ECE.url, "Orden ECE/1627/2026")}.`,
+        ECE,
+        aragon("empleo"),
+        `Las ${link("https://www.ctaz.es/noticias-ctaz/", "noticias del Consorcio de Transportes del Área de Zaragoza")}`,
+      ),
+      out(
+        "salud",
+        "health",
+        "Hospitales y centros de salud (Salud)",
+        "Gobierno de Aragón (Sanidad)",
+        `El personal que fija, centro por centro, el anexo de la ${link(SAN.url, "Orden SAN/1629/2026")}, para garantizar «la atención urgente y no demorable»; la orden no da un porcentaje general.`,
+        SAN,
+        aragon("Departamento de Sanidad"),
+        `Para tu cita, tu hospital o centro de salud; la orden, en el ${link(BOA, "BOA")}`,
+      ),
+      out(
+        "colegios",
+        "schools",
+        "Colegios e institutos públicos",
+        "Gobierno de Aragón (Educación)",
+        `En cada centro, una persona del equipo directivo y el 25% del personal docente, y una persona de cocina donde hay comedor, según la ${link(ECU.url, "Orden ECU/1631/2026")}; el transporte escolar, al 100% en las rutas de entrada entre las 7.00 y las 10.00 h y en las de salida de 13.30 a 19.00 h, según la ${link(ECE.url, "Orden ECE/1627/2026")}.`,
+        ECU,
+        aragon("Departamento de Educación"),
+        `El colegio informa a las familias; la orden, en el ${link(BOA, "BOA")}`,
+      ),
+      out(
+        "administracion",
+        "administration",
+        "Administración del Gobierno de Aragón",
+        "Gobierno de Aragón",
+        `El personal que fija, departamento por departamento, la ${link(HAP.url, "Orden HAP/1621/2026")}, con una persona en los registros.`,
+        HAP,
+        aragon("cada departamento"),
+        `Las órdenes, en el ${link(BOA, "BOA")}`,
+      ),
     ],
     msNotes: [
-      `En la huelga general del 15 de octubre de 2025, el Gobierno de Aragón firmó sus órdenes el 9 de octubre, una por ámbito (empresas privadas, colegios públicos y centros del Servicio Aragonés de Salud, entre otros), y el ${link(BOA_2025, "BOA las publicó el 14")}, la víspera de la huelga. El 6 de noviembre, el BOA aún no tenía ninguna para el 11N.`,
+      `**Publicados el 10 de noviembre.** El BOA núm. 217 trae las órdenes del Gobierno de Aragón para el 11N: la ${link(ECE.url, "ECE/1627/2026")} (empresas privadas, con los autobuses interurbanos y el transporte escolar), la ${link(ECU.url, "ECU/1631/2026")} (colegios públicos), la ${link(SAN.url, "SAN/1629/2026")} (centros del Servicio Aragonés de Salud) y la ${link(HAP.url, "HAP/1621/2026")} (administración).`,
+      `**Tranvía y autobús urbano:** los del tranvía los ha decretado el Ayuntamiento de Zaragoza, según ${link(TRAM_11N, "Tranvías de Zaragoza")}; los del autobús urbano no los habíamos encontrado publicados el 10 de noviembre.`,
     ],
     railNotes: [],
     school: `**Sí, es día lectivo.** El calendario escolar de Aragón para 2026-2027 (${link("https://www.boa.aragon.es/cgi-bin/EBOA/BRSCGI?CMD=VEROBJ&MLKOB=1392479120808", "Resolución de 29 de abril de 2025")}) fija el inicio de las clases el martes 8 de septiembre de 2026 y el final el 18 de junio de 2027, y el 11 de noviembre no es día no lectivo. Las fiestas locales de Zaragoza en 2026 son el 29 de enero y el 5 de marzo (${link("https://www.boa.aragon.es/cgi-bin/EBOA/BRSCGI?CMD=VEROBJ&MLKOB=1421874360606", "BOA del 20 de noviembre de 2025")}).`,
@@ -437,12 +606,16 @@ function zaragoza(): Strike11nCity {
     callNotes: [],
     sources: [
       { name: "BOA: Boletín Oficial de Aragón", url: BOA, publisher: "Gobierno de Aragón" },
-      { name: "Orden PEJ/1316/2025, de 9 de octubre: servicios esenciales en la huelga general del 15 de octubre de 2025 (BOA núm. 198, 14 de octubre de 2025)", url: BOA_2025, publisher: "Gobierno de Aragón" },
       { name: "Servicios mínimos en el transporte público para la huelga del 8-M (05/03/2021)", url: DECREE_2021, publisher: "Ayuntamiento de Zaragoza" },
       { name: "Noticias", url: NEWS, publisher: "Ayuntamiento de Zaragoza" },
       { name: "Alteraciones del servicio", url: "https://zaragoza.avanzagrupo.com/alteraciones-del-servicio/", publisher: "Avanza Zaragoza" },
       { name: "Noticias", url: "https://www.tranviasdezaragoza.es/noticias/", publisher: "Tranvías de Zaragoza" },
       { name: "Información de servicio: paros parciales y servicios mínimos", url: TRAM, publisher: "Tranvías de Zaragoza" },
+      TRAM_SOURCE,
+      ECE,
+      ECU,
+      SAN,
+      HAP,
       { name: "Noticias", url: "https://www.ctaz.es/noticias-ctaz/", publisher: "Consorcio de Transportes del Área de Zaragoza" },
       { name: "Resolución de 29 de abril de 2025: calendarios escolares 2025-2026 y 2026-2027 (BOA núm. 88, 12 de mayo de 2025)", url: "https://www.boa.aragon.es/cgi-bin/EBOA/BRSCGI?CMD=VEROBJ&MLKOB=1392479120808", publisher: "Gobierno de Aragón" },
       { name: "Fiestas locales de 2026 en Aragón (BOA núm. 225, 20 de noviembre de 2025)", url: "https://www.boa.aragon.es/cgi-bin/EBOA/BRSCGI?CMD=VEROBJ&MLKOB=1421874360606", publisher: "Gobierno de Aragón" },
@@ -496,6 +669,7 @@ function bilbao(): Strike11nCity {
     // Cercanías Bilbao is the Basque Government's since 1 Jan 2025: it is one of this page's services.
     cercanias: null,
     airport: "Bilbao",
+    airNotes: airNotes("Bilbao", 80, 56, 32),
     msSummary: `metro, Bilbobus, Bizkaibus, Euskotren y Cercanías, al 30% de los servicios programados; en los hospitales, el personal de un festivo, y en los centros de salud, el de un sábado, según ${order("la orden del Gobierno Vasco del 6 de noviembre")}`,
     services: [
       transport("metro", "Metro Bilbao", `Los ${link("https://www.metrobilbao.eus/es/avisos", "avisos de Metro Bilbao")}`, { question: "¿Hay metro en Bilbao el 11 de noviembre?" }),
@@ -583,28 +757,40 @@ function bilbao(): Strike11nCity {
 
 function palma(): Strike11nCity {
   const BOIB = "https://www.caib.es/eboibfront/es";
-  const PREV = "https://www.caib.es/eboibfront/es/2025/12171/707013/acuerdo-del-consejo-de-gobierno-de-10-de-octubre-d";
+  // Read on 10 Nov 2026: the Govern's agreement (BOIB núm. 142, 7 Nov) and Palma's decision for the EMT (BOIB núm. 144 ext., 10 Nov).
+  const GOVERN = {
+    name: "Acuerdo del Consejo de Gobierno de 6 de noviembre de 2026 por el que se aprueban las medidas para garantizar los servicios mínimos en la huelga del 11 de noviembre de 2026 (BOIB núm. 142, 7 de noviembre de 2026)",
+    url: "https://www.caib.es/eboibfront/es/2026/12356/721966/acuerdo-del-consejo-de-gobierno-de-6-de-noviembre-",
+    publisher: "Govern de les Illes Balears",
+  };
+  const EMT = {
+    name: "Determinación de los servicios mínimos para la convocatoria de huelga general del 11 de noviembre de 2026 (BOIB núm. 144 extraordinario, 10 de noviembre de 2026)",
+    url: "https://www.caib.es/eboibfront/es/2026/12360/722067/determinacion-de-los-servicios-minimos-para-la-con",
+    publisher: "Ayuntamiento de Palma",
+  };
+  const govern = (label = "el acuerdo del Govern balear") => link(GOVERN.url, label);
   const PEND = `Los fija el Govern de les Illes Balears por acuerdo del Consell de Govern, que se publica en el ${link(BOIB, "BOIB")}.`;
   return {
     ...ref("palma"),
     titleTransport: "EMT, metro y tren",
     transportShort: "EMT, metro, tren y autobuses TIB",
-    authority: `el Govern de les Illes Balears, por acuerdo del Consell de Govern que se publica en el ${link(BOIB, "BOIB")}`,
-    authorityShort: "el Govern balear (BOIB)",
+    authority: `el Govern de les Illes Balears, en un acuerdo del Consell de Govern publicado en el ${link(BOIB, "BOIB")}, salvo los de la EMT, que fija el Ayuntamiento de Palma`,
+    authorityShort: "el Govern balear (BOIB) y, para la EMT, el Ayuntamiento de Palma",
     bulletin: "el BOIB",
     cercanias: null,
     airport: "Palma de Mallorca",
-    msSummary: null,
+    airNotes: airNotes("Palma de Mallorca", 75, 53, null),
+    msSummary: `EMT, al 30% en la mayoría de las líneas, al 40% en seis y al 100% en las del Hospital Son Llàtzer; metro y tren, al 80%, con menos servicio de 10.00 a 12.00 y de 17.00 a 19.00 h; autobuses TIB, como un domingo o festivo, según ${govern("el acuerdo del Govern balear del 6 de noviembre")} y la ${link(EMT.url, "resolución del Ayuntamiento de Palma")}`,
     services: [
-      pending("emt", "transport", "Autobuses de la EMT de Palma", "Por confirmar", `Aún no los ha publicado nadie: ni el ${link(BOIB, "BOIB")} ni la ${link("https://www.emtpalma.cat/es", "EMT de Palma")}.`, `Los avisos, en ${link("https://www.emtpalma.cat/es", "emtpalma.cat")}`, { question: "¿Hay autobuses de la EMT en Palma el 11 de noviembre?" }),
-      pending("sfm", "transport", "Metro y tren de Mallorca (SFM)", "Govern de les Illes Balears", PEND, `Las ${link("https://www.trensfm.com/es/comunicacion/noticias", "noticias de SFM")}`, { question: "¿Hay metro y tren en Mallorca el 11 de noviembre?" }),
-      pending("tib", "transport", "Autobuses interurbanos TIB", "Govern de les Illes Balears", PEND, `Los ${link("https://www.tib.org/es/avisos", "avisos del TIB")}`),
-      pending("salud", "health", "Hospitales y centros de salud (IB-Salut)", "Govern de les Illes Balears", PEND, `Para tu cita, tu hospital o centro de salud; el acuerdo, en el ${link(BOIB, "BOIB")}`),
-      pending("colegios", "schools", "Colegios e institutos", "Govern de les Illes Balears", PEND, `El colegio informa a las familias; el acuerdo, en el ${link(BOIB, "BOIB")}`),
-      pending("administracion", "administration", "Administración del Govern balear", "Govern de les Illes Balears", PEND, `El acuerdo, en el ${link(BOIB, "BOIB")}`),
+      out("emt", "transport", "Autobuses de la EMT de Palma", "Ayuntamiento de Palma", `Líneas 27 y 28 (Hospital Son Llàtzer), el 100%; línea 33 (Son Espases), 8 de los 15 servicios programados; líneas 6, 20, 29, 34, 36 y 39, el 40%; el resto de las líneas, el 30%, según la ${link(EMT.url, "resolución del Ayuntamiento de Palma publicada en el BOIB del 10 de noviembre")}.`, EMT, `Los fija el Ayuntamiento de Palma, que los publica en el ${link(BOIB, "BOIB")}.`, `Los avisos, en ${link("https://www.emtpalma.cat/es", "emtpalma.cat")}`, { question: "¿Hay autobuses de la EMT en Palma el 11 de noviembre?" }),
+      out("sfm", "transport", "Metro y tren de Mallorca (SFM)", "Govern de les Illes Balears", `Metro: el 50% de los servicios de un día laborable de 10.00 a 12.00 y de 17.00 a 19.00 h, y el 80% en las demás franjas. Tren (Palma-Inca-Manacor-Sa Pobla): los servicios de un fin de semana o festivo de 10.00 a 12.00 y de 17.00 a 19.00 h, y el 80% el resto del día, según ${govern()}.`, GOVERN, PEND, `Las ${link("https://www.trensfm.com/es/comunicacion/noticias", "noticias de SFM")}`, { question: "¿Hay metro y tren en Mallorca el 11 de noviembre?" }),
+      out("tib", "transport", "Autobuses interurbanos TIB", "Govern de les Illes Balears", `Los servicios de un domingo o festivo; el transporte escolar, al 100%, según ${govern()}.`, GOVERN, PEND, `Los ${link("https://www.tib.org/es/avisos", "avisos del TIB")}`),
+      out("salud", "health", "Hospitales y centros de salud (IB-Salut)", "Govern de les Illes Balears", `Urgencias, con normalidad; el 100% en oncología, diálisis, hospital de día, farmacia hospitalaria y trasplantes; los centros de salud, abiertos con dos médicos, un pediatra y dos enfermeras de 8.00 a 15.00 h, y con un médico y una enfermera de 15.00 a 20.00 h, según ${govern()}.`, GOVERN, PEND, `Para tu cita, tu hospital o centro de salud; el acuerdo, en el ${link(BOIB, "BOIB")}`),
+      out("colegios", "schools", "Colegios e institutos", "Govern de les Illes Balears", `Los centros abren todo el horario escolar, con el director y el secretario, un docente por cada 3 unidades de segundo ciclo de infantil y uno por cada 4 unidades de primaria, según ${govern()}.`, GOVERN, PEND, `El colegio informa a las familias; el acuerdo, en el ${link(BOIB, "BOIB")}`),
+      out("administracion", "administration", "Administración del Govern balear", "Govern de les Illes Balears", `Un funcionario en el registro general de cada consejería, según ${govern()}.`, GOVERN, PEND, `El acuerdo, en el ${link(BOIB, "BOIB")}`),
     ],
     msNotes: [
-      `En la huelga general del 15 de octubre de 2025, el Consell de Govern aprobó los servicios mínimos el 10 de octubre en un solo ${link(PREV, "acuerdo")}, que el BOIB publicó al día siguiente y que cubría, entre otros, los colegios, la sanidad, los autobuses interurbanos, el metro y los trenes de SFM. El 6 de noviembre aún no había acuerdo para el 11N.`,
+      `**Publicados el 7 y el 10 de noviembre.** El ${govern("Acuerdo del Consejo de Gobierno de 6 de noviembre de 2026")} (BOIB núm. 142, del 7 de noviembre) fija en un solo texto los del metro y los trenes de SFM, los autobuses interurbanos, la sanidad, los colegios y la administración del Govern. Los de la EMT los fijó el Ayuntamiento de Palma en una ${link(EMT.url, "resolución")} que salió en el BOIB extraordinario núm. 144, el 10 de noviembre.`,
     ],
     railNotes: [],
     school: null,
@@ -616,8 +802,9 @@ function palma(): Strike11nCity {
       `**En Baleares**, UGT Illes Balears informó el 29 de octubre de que registró la convocatoria en la Conselleria de Presidencia junto con CCOO, STEI, CGT, CNT, SATI, el Sindicat de Llogateres y la Plataforma de Afectados por la Hipoteca (${link("https://www.ugtbalears.com/", "UGT Illes Balears")}).`,
     ],
     sources: [
+      GOVERN,
+      EMT,
       { name: "BOIB: Butlletí Oficial de les Illes Balears", url: BOIB, publisher: "Govern de les Illes Balears" },
-      { name: "Acuerdo del Consejo de Gobierno de 10 de octubre de 2025: servicios mínimos de la huelga del 15 de octubre de 2025 (BOIB núm. 135, 11 de octubre de 2025)", url: PREV, publisher: "Govern de les Illes Balears" },
       { name: "EMT Palma", url: "https://www.emtpalma.cat/es", publisher: "EMT Palma" },
       { name: "Noticias", url: "https://www.trensfm.com/es/comunicacion/noticias", publisher: "Serveis Ferroviaris de Mallorca" },
       { name: "Avisos", url: "https://www.tib.org/es/avisos", publisher: "TIB" },
@@ -631,26 +818,35 @@ function lasPalmas(): Strike11nCity {
   const AUTGC_2024 = "https://www.laspalmasgc.es/es/ayuntamiento/prensa-y-comunicacion/notas-de-prensa/nota-de-prensa/Guaguas-Municipales-despliega-este-jueves-28-y-viernes-29-los-servicios-minimos-decretados-para-la-huelga-nacional-de-transportes/";
   const SCHOOL = "https://www.gobiernodecanarias.org/boc/2026/061/1025.html";
   const AUTGC = `Los fija la Autoridad Única del Transporte de Gran Canaria por resolución, como en la ${link(AUTGC_2024, "huelga del transporte de noviembre de 2024")}.`;
+  // Read on 10 Nov 2026: Guaguas Municipales' own notice and the orders of BOC núm. 224 (10 Nov).
+  const BOC_224 = "https://www.gobiernodecanarias.org/boc/2026/224/";
+  const GG = { name: "Estado del servicio durante la huelga general del 11N: servicios mínimos", url: "https://www.guaguas.com/huelga", publisher: "Guaguas Municipales" };
+  const HEALTH = { name: "Orden de 6 de noviembre de 2026: servicios mínimos del personal del Servicio Canario de la Salud en la huelga general del 11 de noviembre de 2026 (BOC núm. 224, 10 de noviembre de 2026)", url: `${BOC_224}3879.html`, publisher: "Gobierno de Canarias" };
+  const EDU = { name: "Orden de 5 de noviembre de 2026: servicios mínimos del personal docente y no docente de la Consejería de Educación en la huelga del 11 de noviembre de 2026 (BOC núm. 224, 10 de noviembre de 2026)", url: `${BOC_224}3869.html`, publisher: "Gobierno de Canarias" };
+  const BUS = { name: "Orden de 5 de noviembre de 2026: servicios mínimos en el transporte escolar en la huelga general del 11 de noviembre de 2026 (BOC núm. 224, 10 de noviembre de 2026)", url: `${BOC_224}3870.html`, publisher: "Gobierno de Canarias" };
+  const BOC_SOURCE = { name: "BOC núm. 224, de 10 de noviembre de 2026: órdenes de servicios mínimos de cada consejería para la huelga general del 11 de noviembre", url: BOC_224, publisher: "Gobierno de Canarias" };
   const CANARIAS = `Los fija el Gobierno de Canarias por orden, que se publica en el ${link(BOC, "BOC")}.`;
   return {
     ...ref("lasPalmas"),
     titleTransport: "guaguas",
     transportShort: "guaguas urbanas e interurbanas",
-    authority: `el Gobierno de Canarias, por órdenes que se publican en el ${link(BOC, "BOC")}, salvo los de las guaguas, que fija la Autoridad Única del Transporte de Gran Canaria`,
+    authority: `el Gobierno de Canarias, en órdenes publicadas en el ${link(BOC, "BOC")} del 10 de noviembre, salvo los de las guaguas, que fija la Autoridad Única del Transporte de Gran Canaria`,
     authorityShort: "el Gobierno de Canarias (BOC) y, para las guaguas, la Autoridad Única del Transporte de Gran Canaria",
     bulletin: "el BOC",
     cercanias: null,
     airport: "Gran Canaria",
-    msSummary: null,
+    airNotes: airNotes("Gran Canaria", 72, 56, null),
+    msSummary: `Guaguas Municipales, con el servicio de un día festivo y todas las líneas activas; en los hospitales, los servicios de un domingo o festivo, y el transporte escolar, al 100%, según ${link(GG.url, "Guaguas Municipales")} y las órdenes del Gobierno de Canarias publicadas en el ${link(BOC_224, "BOC del 10 de noviembre")}`,
     services: [
-      pending("guaguas", "transport", "Guaguas Municipales", "Autoridad Única del Transporte de Gran Canaria", AUTGC, `Guaguas Municipales publica sus horarios de servicios mínimos en ${link("https://www.guaguas.com/", "guaguas.com")}`, { question: "¿Hay guaguas en Las Palmas de Gran Canaria el 11 de noviembre?" }),
+      out("guaguas", "transport", "Guaguas Municipales", "Autoridad Única del Transporte de Gran Canaria", `El servicio de un día festivo: siguen activas todas las líneas habituales, también las tres nocturnas, por resolución de la Autoridad Única del Transporte de Gran Canaria, según ${link(GG.url, "Guaguas Municipales")}, que publica el horario de cada línea.`, GG, AUTGC, `El horario de cada línea, en la ${link(GG.url, "página de servicios mínimos de Guaguas Municipales")}`, { question: "¿Hay guaguas en Las Palmas de Gran Canaria el 11 de noviembre?" }),
       pending("global", "transport", "Guaguas interurbanas (Global)", "Autoridad Única del Transporte de Gran Canaria", AUTGC, `La resolución, cuando salga, la anunciará el ${link("https://www.laspalmasgc.es/es/ayuntamiento/prensa-y-comunicacion/notas-de-prensa/", "Ayuntamiento")} con las de Guaguas Municipales`),
-      pending("salud", "health", "Hospitales y centros de salud (Servicio Canario de la Salud)", "Gobierno de Canarias", CANARIAS, `Para tu cita, tu hospital o centro de salud; la orden, en el ${link(BOC, "BOC")}`),
-      pending("colegios", "schools", "Colegios e institutos", "Gobierno de Canarias", CANARIAS, `El colegio informa a las familias; la orden, en el ${link(BOC, "BOC")}`),
-      pending("administracion", "administration", "Administración del Gobierno de Canarias", "Gobierno de Canarias", CANARIAS, `La orden, en el ${link(BOC, "BOC")}`),
+      out("salud", "health", "Hospitales y centros de salud (Servicio Canario de la Salud)", "Gobierno de Canarias", `El 100% de la asistencia urgente; en los hospitales, en general, los servicios de un domingo o festivo, y el 100% en oncología, radioterapia, diálisis, hospital de día y farmacia hospitalaria; en los centros de salud, un profesional de cada categoría, que atiende sobre todo las urgencias, y las urgencias extrahospitalarias, al 100%, según la ${link(HEALTH.url, "Orden de 6 de noviembre de 2026")}.`, HEALTH, CANARIAS, `Para tu cita, tu hospital o centro de salud; la orden, en el ${link(BOC, "BOC")}`),
+      out("colegios", "schools", "Colegios e institutos", "Gobierno de Canarias", `En los colegios de infantil y primaria, un cargo directivo y un docente por cada 8 grupos (uno en los de hasta 8 grupos); en los institutos, un cargo directivo y un docente por cada 10 grupos, según la ${link(EDU.url, "orden de la Consejería de Educación")}; el transporte escolar, al 100%, según la ${link(BUS.url, "orden del transporte escolar")}.`, EDU, CANARIAS, `El colegio informa a las familias; la orden, en el ${link(BOC, "BOC")}`),
+      out("administracion", "administration", "Administración del Gobierno de Canarias", "Gobierno de Canarias", `Los de cada consejería, en su propia orden: están en el ${link(BOC_224, "BOC núm. 224, del 10 de noviembre")}.`, BOC_SOURCE, CANARIAS, `Las órdenes, en el ${link(BOC, "BOC")}`),
     ],
     msNotes: [
-      `En la huelga del transporte de noviembre de 2024, la Autoridad Única del Transporte de Gran Canaria fijó los servicios mínimos de las guaguas por resolución y Guaguas Municipales los publicó en su web, según el ${link(AUTGC_2024, "Ayuntamiento de Las Palmas de Gran Canaria")}. El 6 de noviembre no había ninguna resolución para el 11N.`,
+      `**Publicados el 10 de noviembre.** El ${link(BOC_224, "BOC núm. 224")} trae las órdenes del Gobierno de Canarias para el 11N, una por consejería: entre ellas, las del Servicio Canario de la Salud, el personal de los centros educativos y el transporte escolar.`,
+      `**Guaguas:** la Autoridad Única del Transporte de Gran Canaria ha decretado para las guaguas municipales el servicio de un día festivo, según ${link(GG.url, "Guaguas Municipales")}. De las guaguas interurbanas de Global no habíamos encontrado nada publicado el 10 de noviembre.`,
     ],
     railNotes: [],
     school: `**No es festivo, y es día lectivo salvo que tu colegio lo haya elegido como día de libre disposición.** El ${link(SCHOOL, "calendario escolar 2026-2027 de Canarias")} solo tiene en noviembre el festivo del día 2, pero los consejos escolares de cada centro podían fijar «hasta un máximo de cuatro días no lectivos»: confírmalo con el colegio.`,
@@ -660,10 +856,14 @@ function lasPalmas(): Strike11nCity {
     demoWhere: `Atentos a la web de ${link("https://canarias.ccoo.es/", "CCOO Canarias")}: en cuanto los convocantes publiquen la hora y el lugar, los pondremos aquí.`,
     callNotes: [],
     sources: [
+      GG,
+      HEALTH,
+      EDU,
+      BUS,
+      BOC_SOURCE,
       { name: "BOC: Boletín Oficial de Canarias", url: BOC, publisher: "Gobierno de Canarias" },
       { name: "Guaguas Municipales despliega los servicios mínimos decretados para la huelga nacional de transportes (27/11/2024)", url: AUTGC_2024, publisher: "Ayuntamiento de Las Palmas de Gran Canaria" },
       { name: "Notas de prensa", url: "https://www.laspalmasgc.es/es/ayuntamiento/prensa-y-comunicacion/notas-de-prensa/", publisher: "Ayuntamiento de Las Palmas de Gran Canaria" },
-      { name: "Guaguas Municipales", url: "https://www.guaguas.com/", publisher: "Guaguas Municipales" },
       { name: "Resolución de 17 de marzo de 2026: calendario escolar 2026-2027 de Canarias (BOC núm. 61, 30 de marzo de 2026)", url: SCHOOL, publisher: "Gobierno de Canarias" },
       { name: "CCOO Canarias", url: "https://canarias.ccoo.es/", publisher: "CCOO Canarias" },
     ],
@@ -690,6 +890,7 @@ function murcia(): Strike11nCity {
     bulletin: "el BORM",
     cercanias: "Cercanías Murcia/Alicante",
     airport: "Región de Murcia",
+    airNotes: airNotes("Región de Murcia", 72, 49, 32),
     msSummary: null,
     services: [
       pending("bus", "transport", "Autobús urbano de Murcia", "Ayuntamiento de Murcia", `Los fija el Ayuntamiento de Murcia, como en la ${link(BUS_2024, "huelga de autobuses de 2024")}, y los anuncia en su ${link("https://centromedios.murcia.es/", "centro de medios")}.`, `El estado de las líneas, en ${link("https://web.murcia.es/al-instante-autobuses", "Al Instante")}`, { question: "¿Hay autobuses en Murcia el 11 de noviembre?" }),
@@ -741,6 +942,7 @@ function valladolid(): Strike11nCity {
     bulletin: "el BOCYL",
     cercanias: null,
     airport: "Valladolid",
+    airNotes: airNotes("Valladolid", 57, 64, 32),
     msSummary: `autobuses metropolitanos de la Junta, al 50% de las expediciones de 7 a 10, de 13.30 a 16.00 y de 18 a 21 h; en colegios y centros de salud, los mínimos de los acuerdos de la Junta publicados el 6 de noviembre (${link(A155, "transporte")} y ${link(A154, "Administración")}). Los de AUVASA, aún no`,
     services: [
       pending("auvasa", "transport", "Autobuses urbanos (AUVASA)", "Ayuntamiento de Valladolid", `El acuerdo de transporte de la Junta solo cubre los autobuses de titularidad autonómica. En la ${link(AUVASA_2024, "huelga del sector de 2024")} los fijó el Ayuntamiento de Valladolid; para el 11N, ni el Ayuntamiento ni AUVASA los habían publicado.`, `Los ${link("https://www.auvasa.es/avisos", "avisos de AUVASA")}`, { question: "¿Hay autobuses de AUVASA el 11 de noviembre?" }),
@@ -817,16 +1019,30 @@ function valladolid(): Strike11nCity {
 /* -------------------------------------------------------------------------- */
 
 const DOG = "https://www.xunta.gal/diario-oficial-galicia";
-const XUNTA_2025 = "https://www.xunta.gal/dog/Publicados/2025/20251014/AnuncioG0759-091025-0005_gl.pdf";
 const GAL_SCHOOL = "https://www.xunta.gal/dog/Publicados/2026/20260615/AnuncioG0761-050626-0001_gl.pdf";
 const GAL_HOLIDAYS = "https://www.xunta.gal/dog/Publicados/2025/20251030/AnuncioG0767-221025-0001_gl.pdf";
 const UGT_GAL = "https://www.ugtgalicia.org/sites/www.ugtgalicia.org/files/Dise%C3%B1o%20sin%20t%C3%ADtulo%20%281%29.pdf";
 const CIG_DEMOS = "https://www.cig.gal/nova/a-cig-convoca-17-mobilizacions-para-a-folga-xeral-do-11-de-novembro.html";
 const CIG_CALL = "https://www.cig.gal/nova/a-cig-rexistra-a-convocatoria-de-folga-xeral-en-galiza-para-o-11-de-novembro-para-frear-a-deterioracion-das-condicions-de-vida.html";
+// Read on 10 Nov 2026: the general order (DOG núm. 214, 9 Nov) and the health one (DOG núm. 215, 10 Nov).
+const GAL_ORDER = {
+  name: "Orde do 6 de novembro de 2026 pola que se establecen os servizos mínimos na folga do 11 de novembro de 2026 (Consellería de Presidencia, Xustiza e Deportes; DOG núm. 214, 9 de novembro de 2026)",
+  url: "https://www.xunta.gal/dog/Publicados/2026/20261109/AnuncioG0759-051126-0001_gl.html",
+  publisher: "Xunta de Galicia",
+};
+const GAL_HEALTH = {
+  name: "Orde do 6 de novembro de 2026 pola que se determinan os servizos mínimos no ámbito da asistencia sanitaria na folga do 11 de novembro de 2026 (Consellería de Sanidade; DOG núm. 215, 10 de novembro de 2026)",
+  url: "https://www.xunta.gal/dog/Publicados/2026/20261110/AnuncioC3K1-061126-0002_gl.html",
+  publisher: "Xunta de Galicia",
+};
+const BUS_GAL = "https://www.bus.gal/gl/descargas/servizos_minimos";
+const galOrder = (label = "la orden de la Xunta del 6 de noviembre") => link(GAL_ORDER.url, label);
 const XUNTA = (dept: string) => `Los fija la Xunta de Galicia (${dept}) por orden, que se publica en el ${link(DOG, "DOG")}.`;
 const GAL_SOURCES = [
+  GAL_ORDER,
+  GAL_HEALTH,
+  { name: "Servizos mínimos (descargas)", url: BUS_GAL, publisher: "Xunta de Galicia (bus.gal)" },
   { name: "DOG: Diario Oficial de Galicia", url: DOG, publisher: "Xunta de Galicia" },
-  { name: "Orde do 13 de outubro de 2025: servizos mínimos da folga do 15 de outubro de 2025 (DOG núm. 198, 14 de outubro de 2025)", url: XUNTA_2025, publisher: "Xunta de Galicia" },
   { name: "Orde do 4 de xuño de 2026: calendario escolar 2026/27 (DOG núm. 110, 15 de xuño de 2026)", url: GAL_SCHOOL, publisher: "Xunta de Galicia" },
   { name: "Resolución do 21 de outubro de 2025: festas locais de 2026 (DOG núm. 210, 30 de outubro de 2025)", url: GAL_HOLIDAYS, publisher: "Xunta de Galicia" },
   { name: "Mobilizacións do 11N en Galicia (UGT e CCOO)", url: UGT_GAL, publisher: "UGT Galicia" },
@@ -834,14 +1050,42 @@ const GAL_SOURCES = [
   { name: "A CIG rexistra a convocatoria de folga xeral en Galiza para o 11 de novembro (13/10/2026)", url: CIG_CALL, publisher: "CIG" },
   { name: "Avisos", url: "https://www.bus.gal/gl/avisos", publisher: "Xunta de Galicia (bus.gal)" },
 ];
-const GAL_SERVICES: CityService[] = [
-  pending("interurbanos", "transport", "Autobuses interurbanos de la Xunta", "Xunta de Galicia", XUNTA("Consellería de Presidencia"), `Los ${link("https://www.bus.gal/gl/avisos", "avisos de bus.gal")}`),
-  pending("salud", "health", "Hospitales y centros de salud (Sergas)", "Xunta de Galicia (Sanidade)", XUNTA("Consellería de Sanidade"), `Para tu cita, tu hospital o centro de salud; la orden, en el ${link(DOG, "DOG")}`),
-  pending("colegios", "schools", "Colegios e institutos públicos", "Xunta de Galicia", XUNTA("Consellería de Presidencia"), `El colegio informa a las familias; la orden, en el ${link(DOG, "DOG")}`),
-  pending("administracion", "administration", "Administración de la Xunta", "Xunta de Galicia", XUNTA("Consellería de Presidencia"), `La orden, en el ${link(DOG, "DOG")}`),
+const GAL_SERVICES = (office: string): CityService[] => [
+  out(
+    "interurbanos",
+    "transport",
+    "Autobuses interurbanos de la Xunta",
+    "Xunta de Galicia",
+    `Los que la Xunta publica, línea por línea, en ${link(BUS_GAL, "bus.gal")}; el transporte escolar, en la entrada de 7.30 a 10.30 h y en la salida de 13.30 a 19.00 h, en los itinerarios de enseñanza obligatoria de más de 4 km, según ${galOrder()}.`,
+    GAL_ORDER,
+    XUNTA("Consellería de Presidencia"),
+    `Los ${link("https://www.bus.gal/gl/avisos", "avisos de bus.gal")}`,
+  ),
+  out(
+    "salud",
+    "health",
+    "Hospitales y centros de salud (Sergas)",
+    "Xunta de Galicia (Sanidade)",
+    `El 100% de las urgencias, el 061 y los puntos de atención continuada (PAC), y de la UCI, la diálisis, los tratamientos oncológicos y los trasplantes; en las consultas, solo lo urgente y lo preferente; en los centros de salud, solo la atención urgente o que no se pueda aplazar, con entre uno y cuatro médicos según el tamaño del centro y un pediatra, según la ${link(GAL_HEALTH.url, "orden de la Consellería de Sanidade del 6 de noviembre")}.`,
+    GAL_HEALTH,
+    XUNTA("Consellería de Sanidade"),
+    `Para tu cita, tu hospital o centro de salud; la orden, en el ${link(DOG, "DOG")}`,
+  ),
+  out(
+    "colegios",
+    "schools",
+    "Colegios e institutos públicos",
+    "Xunta de Galicia",
+    `Los centros abren en su horario habitual, con el director o un miembro del equipo directivo y un subalterno, y una persona de cocina donde el comedor es de gestión directa; los mismos, en los centros privados y concertados, según ${galOrder()}.`,
+    GAL_ORDER,
+    XUNTA("Consellería de Presidencia"),
+    `El colegio informa a las familias; la orden, en el ${link(DOG, "DOG")}`,
+  ),
+  out("administracion", "administration", "Administración de la Xunta", "Xunta de Galicia", `${office}, según ${galOrder()}.`, GAL_ORDER, XUNTA("Consellería de Presidencia"), `La orden, en el ${link(DOG, "DOG")}`),
 ];
+const GAL_SUMMARY = `autobuses interurbanos, con los servicios mínimos que la Xunta publica en ${link(BUS_GAL, "bus.gal")}; en los hospitales, el 100% de las urgencias, y en los centros de salud, solo la atención urgente; los colegios abren, con un directivo y un subalterno, según las ${galOrder("órdenes de la Xunta")} publicadas en el DOG el 9 y el 10 de noviembre`;
 const GAL_MS_NOTES = [
-  `En la huelga general del 15 de octubre de 2025, la Xunta publicó en el DOG del 14 de octubre, la víspera, dos órdenes: la ${link(XUNTA_2025, "general de la Consellería de Presidencia")} (personal de la Xunta, colegios públicos y autobuses interurbanos, entre otros) y la de la Consellería de Sanidade. El 6 de noviembre, el DOG aún no tenía ninguna para el 11N.`,
+  `**Publicados el 9 y el 10 de noviembre.** La ${galOrder("Orde do 6 de novembro de 2026")} de la Consellería de Presidencia, Xustiza e Deportes (DOG núm. 214, del 9 de noviembre) fija los del personal de la Xunta, los colegios y los autobuses interurbanos, entre otros, y la ${link(GAL_HEALTH.url, "orden de la Consellería de Sanidade")} (DOG núm. 215, del 10 de noviembre), los de la sanidad. Ninguna de las dos cubre el autobús urbano.`,
 ];
 const GAL_CALL = [
   `**En Galicia, la CIG convoca su propia huelga general** el mismo día: «A CIG rexistrou esta mañá a convocatoria de folga xeral en toda Galiza para o vindeiro 11 de novembro» (${link(CIG_CALL, "CIG")}).`,
@@ -855,15 +1099,16 @@ function vigo(): Strike11nCity {
     ...ref("vigo"),
     titleTransport: "Vitrasa",
     transportShort: "Vitrasa y autobuses interurbanos",
-    authority: `la Xunta de Galicia, por órdenes que se publican en el ${link(DOG, "DOG")}, salvo los de Vitrasa, que fija el Concello de Vigo por decreto de Alcaldía`,
+    authority: `la Xunta de Galicia, en dos órdenes publicadas en el ${link(DOG, "DOG")} el 9 y el 10 de noviembre, salvo los de Vitrasa, que fija el Concello de Vigo por decreto de Alcaldía`,
     authorityShort: "la Xunta de Galicia (DOG) y, para Vitrasa, el Concello de Vigo",
     bulletin: "el DOG",
     cercanias: null,
     airport: "Vigo",
-    msSummary: null,
+    airNotes: airNotes("Vigo", 80, 57, 32),
+    msSummary: GAL_SUMMARY,
     services: [
-      pending("vitrasa", "transport", "Vitrasa (autobús urbano)", "Concello de Vigo", `Los fija el Concello de Vigo por decreto de Alcaldía, como en la huelga de Vitrasa de noviembre de 2021, según el ${link(TSXG, "Tribunal Superior de Xustiza de Galicia")}; el 6 de noviembre aún no había decreto para el 11N.`, `Los ${link("https://www.vitrasa.es/avisos", "avisos de Vitrasa")}`, { question: "¿Hay Vitrasa el 11 de noviembre?" }),
-      ...GAL_SERVICES,
+      pending("vitrasa", "transport", "Vitrasa (autobús urbano)", "Concello de Vigo", `Los fija el Concello de Vigo por decreto de Alcaldía, como en la huelga de Vitrasa de noviembre de 2021, según el ${link(TSXG, "Tribunal Superior de Xustiza de Galicia")}; el 10 de noviembre no habíamos encontrado ningún decreto para el 11N.`, `Los ${link("https://www.vitrasa.es/avisos", "avisos de Vitrasa")}`, { question: "¿Hay Vitrasa el 11 de noviembre?" }),
+      ...GAL_SERVICES("En Vigo, un funcionario en la Oficina de Rexistro e Información por la mañana y otro por la tarde"),
     ],
     msNotes: GAL_MS_NOTES,
     railNotes: [],
@@ -890,15 +1135,16 @@ function coruna(): Strike11nCity {
     ...ref("coruna"),
     titleTransport: "autobuses",
     transportShort: "autobús urbano e interurbanos",
-    authority: `la Xunta de Galicia, por órdenes que se publican en el ${link(DOG, "DOG")}; los del autobús urbano, por confirmar`,
+    authority: `la Xunta de Galicia, en dos órdenes publicadas en el ${link(DOG, "DOG")} el 9 y el 10 de noviembre; los del autobús urbano, por confirmar`,
     authorityShort: "la Xunta de Galicia (DOG)",
     bulletin: "el DOG",
     cercanias: null,
     airport: "A Coruña",
-    msSummary: null,
+    airNotes: airNotes("A Coruña", 81, 57, 32),
+    msSummary: GAL_SUMMARY,
     services: [
-      pending("bus", "transport", "Autobús urbano (Compañía de Tranvías)", "Por confirmar", `No hemos encontrado quién los fija ni ningún decreto: ni el ${link("https://www.coruna.gal/web/es/actualidad", "Concello")} ni la ${link("https://tranviascoruna.com/noticias/", "Compañía de Tranvías")} los habían publicado el 6 de noviembre.`, `Las ${link("https://tranviascoruna.com/noticias/", "noticias de la Compañía de Tranvías")}`, { question: "¿Hay autobuses en A Coruña el 11 de noviembre?" }),
-      ...GAL_SERVICES,
+      pending("bus", "transport", "Autobús urbano (Compañía de Tranvías)", "Por confirmar", `No hemos encontrado quién los fija ni ningún decreto: ni el ${link("https://www.coruna.gal/web/es/actualidad", "Concello")} ni la ${link("https://tranviascoruna.com/noticias/", "Compañía de Tranvías")} los habían publicado el 10 de noviembre.`, `Las ${link("https://tranviascoruna.com/noticias/", "noticias de la Compañía de Tranvías")}`, { question: "¿Hay autobuses en A Coruña el 11 de noviembre?" }),
+      ...GAL_SERVICES("En A Coruña, dos funcionarios por la mañana y uno por la tarde en la Oficina de Rexistro e Atención á Cidadanía del Edificio Administrativo"),
     ],
     msNotes: GAL_MS_NOTES,
     railNotes: [],

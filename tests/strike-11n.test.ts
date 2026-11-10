@@ -115,8 +115,8 @@ test("the paths collide with no other published path", () => {
 test("titles fit in 60 characters in the searched words; descriptions fit in 155 and answer first", () => {
   const seo: Record<Locale, RegExp> = {
     // 3 Nov 2026: the searched words ("vaga general 11 novembre", "vaga 11 novembre 2026"); the H1 keeps "de l'11 de".
-    ca: /^Vaga general 11 novembre 2026: serveis mínims i què funciona$/,
-    es: /^Huelga general 11 de noviembre 2026: servicios mínimos$/,
+    ca: /^Vaga general 11 novembre: serveis mínims i manifestació$/,
+    es: /^Huelga 11 noviembre: servicios mínimos y manifestación$/,
     en: /^General strike 11 November 2026 in Spain: what runs$/,
   };
   const h1: Record<Locale, RegExp> = {
@@ -125,9 +125,9 @@ test("titles fit in 60 characters in the searched words; descriptions fit in 155
     en: /^General strike on 11 November 2026 in Spain: what runs/,
   };
   const answer: Record<Locale, RegExp> = {
-    ca: /dimecres 11 de novembre de 2026, 24 hores des de les 0 h/,
-    es: /miércoles 11 de noviembre de 2026, 24 horas desde las 0 h/,
-    en: /24-hour general strike across Spain on Wednesday 11 November 2026/,
+    ca: /[Dd]imecres 11 de novembre(?: de 2026)?, 24 h(?:ores)? des de les 0 h/,
+    es: /[Mm]iércoles 11 de noviembre(?: de 2026)?, 24 h(?:oras)? desde las 0 h/,
+    en: /24-hour general strike (?:across|in) Spain on Wednesday 11 November/,
   };
   for (const locale of LOCALES) {
     const { seoTitle, seoDescription, excerpt, title } = STRIKE_11N.editions[locale];
@@ -158,7 +158,7 @@ test("the description stays within 155 characters in every state the page can be
   }
   // Only the Generalitat's order flips the description to "published".
   assert.match(strike11nDescription("ca", "2026-11-09", filled(["longDistance"])), /no publicats/);
-  assert.match(strike11nDescription("ca", "2026-11-09", filled()), /Serveis mínims publicats/);
+  assert.match(strike11nDescription("ca", "2026-11-09", filled()), /Manifestació a Barcelona: 17\.30 h/);
   assert.match(strike11nDescription("en", "2026-11-12", filled()), /^The 11 November 2026 general strike/);
 });
 
@@ -397,20 +397,21 @@ test("no 11 November percentage nobody has published: every % is the 5 Nov order
   // The Generalitat's order of 5 Nov 2026 (e-Tauler notice 657102): 25% transport 06:30-09:30 and
   // 16:30-21:00, airport bus 50%, primary care 25%, special education 50%, nurseries and lunch 33%.
   // The Renfe order of the same day (10 and 12 Nov): 66% at peak, 33% off peak.
-  const ORDER = /25%|50%|33%|66%/;
+  // The Ministry of Transport's 11N figures, published by Renfe on 9 Nov 2026: long distance 73%, Media Distancia 65%.
+  const ORDER = /25%|50%|33%|66%|73%|65%|79%|56%|34%|71%|47%|32%|42%/;
   for (const locale of LOCALES) {
     for (const piece of sentences(body(locale))) {
       if (!/\d+\s?%/.test(piece)) continue;
       assert.ok(ORDER.test(piece) || /2024|SMI|salari mínim|salario mínimo|minimum wage/.test(piece), `${locale}: "${piece}"`);
       for (const pct of piece.match(/\d+(?:,\d+)?\s?%/g) ?? []) {
-        assert.ok(["25%", "50%", "33%", "66%", "85%", "75%", "70%", "60%", "80%"].includes(pct.replace(/\s/, "")) || /2024|SMI|salari mínim|salario mínimo|minimum wage/.test(piece), `${locale}: ${pct} in "${piece}"`);
+        assert.ok(["25%", "50%", "33%", "66%", "85%", "75%", "70%", "60%", "80%", "73%", "65%", "79%", "56%", "34%", "71%", "47%", "32%", "42%"].includes(pct.replace(/\s/, "")) || /2024|SMI|salari mínim|salario mínimo|minimum wage/.test(piece), `${locale}: ${pct} in "${piece}"`);
       }
     }
-    // The minimum-services column: the Generalitat's sectors carry the order; long distance and flights are still pending.
+    // The minimum-services column: the Generalitat's sectors carry the order; long distance since 9 Nov (Renfe); flights since 10 Nov (the Ministry of Transport's resolution of 6 Nov).
     const tableBlock = STRIKE_11N.editions[locale].blocks.find((b) => b.type === "table") as { rows: string[][] };
     assert.equal(tableBlock.rows.length, ALL_SECTORS.length, locale);
     const pending = tableBlock.rows.filter((row) => /^(Encara no publicats|Aún no publicados|Not published yet)$/.test(row[2] ?? ""));
-    assert.equal(pending.length, 2, locale);
+    assert.equal(pending.length, 0, locale);
   }
 });
 
@@ -595,5 +596,6 @@ test("the strikes hub links here once per language and agrees on whether the ord
 test("the publish route has a strike-11n group that also republishes the hub", () => {
   const route = readFileSync(new URL("../src/app/api/admin/publish/route.ts", import.meta.url), "utf8");
   assert.match(route, /import \{ STRIKE_11N \} from "@\/lib\/content\/batch02\/strike-11n";/);
-  assert.match(route, /wants\("strike-11n"\)\) published\.push\(await publishB2Article\(STRIKE_11N\), await publishB2Article\(STRIKES_GUIDE\)\)/);
+  // 6 Nov 2026: and the Spain-wide calendar, which reads the 11N minimum services from the same modules.
+  assert.match(route, /wants\("strike-11n"\)\) published\.push\(await publishB2Article\(STRIKE_11N\), await publishB2Article\(STRIKES_GUIDE\), await publishB2Article\(STRIKES_SPAIN_GUIDE\)\)/);
 });

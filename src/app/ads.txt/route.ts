@@ -6,16 +6,18 @@
  * true to write, so the route answers 404 rather than publishing a placeholder
  * that a crawler would read as a declaration.
  *
- * To switch it on: set `ADSENSE_PUBLISHER_ID=pub-XXXXXXXXXXXXXXXX` in the
- * Vercel production environment and redeploy. `f08c47fec0942fa0` is Google's
+ * To switch it on: set `ADSENSE_PUBLISHER_ID=pub-XXXXXXXXXXXXXXXX` in
+ * /srv/catalunyainfo/shared/.env.production and redeploy (set 6 Nov 2026). `f08c47fec0942fa0` is Google's
  * own certification-authority ID, the same for every AdSense publisher.
  */
+import { adsensePublisherId } from "@/lib/site";
+
 export const dynamic = "force-static";
 export const revalidate = 3600;
 
 export function GET() {
-  const id = process.env.ADSENSE_PUBLISHER_ID?.trim();
-  if (!id || !/^pub-\d{10,20}$/.test(id)) {
+  const id = adsensePublisherId();
+  if (!id) {
     return new Response("Not found", { status: 404 });
   }
   return new Response(`google.com, ${id}, DIRECT, f08c47fec0942fa0\n`, {

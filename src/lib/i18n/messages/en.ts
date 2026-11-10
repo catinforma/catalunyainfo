@@ -264,8 +264,8 @@ const en: Messages = {
     body: "The address you opened does not exist or has moved.",
   },
   consent: {
-    title: "Privacy and cookies",
-    body: "We use strictly necessary first-party cookies and, with your consent, measurement cookies to understand how the site is used.",
+    title: "Help us improve the site?",
+    body: "We use strictly necessary first-party cookies and, with your consent, statistics cookies to learn which pages are useful and improve them. You can change this at any time.",
     accept: "Accept all",
     reject: "Necessary only",
     manage: "Manage",

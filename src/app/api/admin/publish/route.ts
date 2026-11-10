@@ -57,6 +57,10 @@ import { STRIKES_GUIDE } from "@/lib/content/batch02/strikes";
 import { STRIKE_11N } from "@/lib/content/batch02/strike-11n";
 import { STRIKE_EDUCATION_GUIDE, STRIKE_RENFE_GUIDE } from "@/lib/content/batch02/strike-guides";
 import { STRIKE_11N_CITY_ARTICLES } from "@/lib/content/batch02/strike-11n-cities";
+import { STRIKES_SPAIN_GUIDE } from "@/lib/content/batch02/strikes-spain";
+import { STRIKE_11N_SPAIN } from "@/lib/content/batch02/strike-11n-spain";
+import { PAY_DATES } from "@/lib/content/batch02/pay-dates";
+import { SHOPS_SPAIN_DECEMBER } from "@/lib/content/batch02/shops-spain-december";
 import { GROSSA } from "@/lib/content/batch02/grossa";
 import { EASTER_2027 } from "@/lib/content/batch02/easter-2027";
 import { BRIDGES_2027 } from "@/lib/content/batch02/bridges-2027";
@@ -69,12 +73,13 @@ import { GRAN_RECAPTE_GUIDE } from "@/lib/content/batch02/gran-recapte";
 import { CHRISTMAS_TRANSPORT } from "@/lib/content/batch02/christmas-transport";
 import { SCHOOL_FREE_DAYS } from "@/lib/content/batch02/school-free-days";
 import { POSTAL_VOTE } from "@/lib/content/batch02/postal-vote";
+import { FOREIGN_VOTE } from "@/lib/content/batch02/foreign-vote";
 import { publishHolidayTodayGuide } from "@/lib/content/holidays/today-publish";
 import { publishLocalHolidaysGuide } from "@/lib/content/holidays/local-publish";
 import { publishReservoirGuide } from "@/lib/content/reservoirs/publish";
 import { publishSchoolCalendarGuide } from "@/lib/content/school/publish";
 import { publishSpainSchoolCalendars } from "@/lib/content/school-spain/publish";
-import { spainPaths } from "@/lib/programmatic/spain-2027/paths";
+import { spainDayPaths, spainPaths } from "@/lib/programmatic/spain-2027/paths";
 import { authoriseDeployRequest, describeError } from "@/lib/admin/deploy-auth";
 import { FEED_PATHS } from "@/lib/seo/feed-paths";
 
@@ -206,11 +211,15 @@ export async function POST(request: Request) {
     // rendered from the same entries in strikes.ts, so the group the strike
     // watch runs after every update republishes them with the hub. One group
     // each too, for a guide on its own.
+    // 6 Nov 2026: the Spain-wide calendar (huelgas-espana) reads the Catalan
+    // strikes and the 11N minimum services from the same modules, so it goes
+    // out with `strikes` and `strike-11n` too and never lags behind them.
     if (wants("strikes")) {
       published.push(
         await publishB2Article(STRIKES_GUIDE),
         await publishB2Article(STRIKE_RENFE_GUIDE),
         await publishB2Article(STRIKE_EDUCATION_GUIDE),
+        await publishB2Article(STRIKES_SPAIN_GUIDE),
       );
     }
     if (wants("strike-renfe")) published.push(await publishB2Article(STRIKE_RENFE_GUIDE));
@@ -219,7 +228,16 @@ export async function POST(request: Request) {
     // The 11 November 2026 general strike's own page, with the strikes hub,
     // which links to it (one sentence) and carries the same minimum-services
     // status: every 11N update goes out on both at once.
-    if (wants("strike-11n")) published.push(await publishB2Article(STRIKE_11N), await publishB2Article(STRIKES_GUIDE));
+    if (wants("strike-11n")) published.push(await publishB2Article(STRIKE_11N), await publishB2Article(STRIKES_GUIDE), await publishB2Article(STRIKES_SPAIN_GUIDE));
+    // 10 Nov 2026: "Huelgas en España", the Spain-wide strikes calendar, in
+    // three languages (/es/guias/huelgas-espana/, /ca/guies/vagues-espanya/,
+    // /en/guides/strikes-spain/; facts in strikes-spain-data.ts). On its own
+    // so a state-wide call or a Ministry resolution republishes only it. The
+    // Catalan strikes hub (one sentence linking to it, in each language) and
+    // the 11N page (one sentence in its Spanish callout) go out once with
+    // `huelgas-espana-links`.
+    if (wants("huelgas-espana")) published.push(await publishB2Article(STRIKES_SPAIN_GUIDE));
+    if (wants("huelgas-espana-links")) published.push(await publishB2Article(STRIKES_GUIDE), await publishB2Article(STRIKE_11N));
     // 6 Nov 2026: the 11N general strike city by city (Madrid, Valencia,
     // Sevilla…), Spanish only, rendered from strike-11n-cities-data.ts. On its
     // own so a regional order or a demonstration republishes only these pages;
@@ -227,6 +245,8 @@ export async function POST(request: Request) {
     // with `strike-11n`. The halves `-a` and `-b` are for a retry after a timeout.
     if (wants("strike-11n-cities")) {
       for (const article of STRIKE_11N_CITY_ARTICLES) published.push(await publishB2SpanishArticle(article));
+      // 9 Nov 2026: the Spain-wide page, built from the same registry.
+      published.push(await publishB2SpanishArticle(STRIKE_11N_SPAIN));
     }
     if (wants("strike-11n-cities-a")) {
       for (const article of STRIKE_11N_CITY_ARTICLES.slice(0, 7)) published.push(await publishB2SpanishArticle(article));
@@ -234,6 +254,10 @@ export async function POST(request: Request) {
     if (wants("strike-11n-cities-b")) {
       for (const article of STRIKE_11N_CITY_ARTICLES.slice(7)) published.push(await publishB2SpanishArticle(article));
     }
+    // 9 Nov 2026: when the dole and pensions are paid (SEPE, Social Security); ca, es and en since 10 Nov.
+    if (wants("pagos")) published.push(await publishB2Article(PAY_DATES));
+    // 9 Nov 2026: shops open on 6, 7 and 8 December by community (Ministry calendar); ca, es and en since 10 Nov.
+    if (wants("tiendas-espana")) published.push(await publishB2Article(SHOPS_SPAIN_DECEMBER));
     // La Grossa de Cap d'Any 2026: one page, on its own so the 31 December
     // results go out in one fast call. The New Year's Eve guide gained one
     // sentence linking to it; that goes out once with `nye`.
@@ -361,14 +385,27 @@ export async function POST(request: Request) {
     // `puente-diciembre-espana-links`.
     if (wants("puente-diciembre-espana")) published.push(await publishB2Article(DECEMBER_BRIDGE_SPAIN));
     if (wants("puente-diciembre-espana-links")) published.push(await publishB2Article(DECEMBER_BRIDGE));
+    // Foreign residents and the local elections of 23 May 2027 (10 Nov 2026):
+    // one page, on its own so its phase changes (FOREIGN_VOTE_AS_OF past
+    // 1 Dec, 30 Dec 2026 and 15 Jan 2027, then the March decree) republish
+    // only it. The how-to-vote guide and the 2023 municipal results page,
+    // which each gained one sentence linking to it, go out once with
+    // `voto-extranjeros-2027-links`.
+    if (wants("voto-extranjeros-2027")) published.push(await publishB2Article(FOREIGN_VOTE));
+    if (wants("voto-extranjeros-2027-links")) published.push(await publishB2Article(VOTING), await publishB2Article(MUNICIPAL_RESULTS));
     // Calendario laboral 2027 en España (/es/festivos/2027/, 19 communities
-    // and cities, the hub, the bridges page): code routes built from the BOE
-    // table, not articles, so the deploy ships them. This group revalidates
-    // exactly those paths (each route keeps dynamicParams = true, so this
-    // cannot 404 them; never their parent /es/festivos, which is false),
-    // purges them at the CDN and sends them to IndexNow. Re-run it after a
-    // deploy that changes sources.ts (a community's local list published).
-    const codePaths = wants("calendario-2027-espana") ? spainPaths() : [];
+    // and cities, the hub, the bridges page, and one page per large city,
+    // /es/festivos/2027/<comunidad>/<ciudad>/): code routes built from the BOE
+    // table and the bulletins, not articles, so the deploy ships them. This
+    // group revalidates exactly those paths (each route keeps dynamicParams =
+    // true, so this cannot 404 them; never their parent /es/festivos, which
+    // is false), purges them at the CDN and sends them to IndexNow. Re-run it
+    // after a deploy that changes sources.ts or cities-data.ts (a community's
+    // local list published).
+    // The same group carries the day pages ("¿Es festivo el 6 de diciembre de
+    // 2027?", /es/festivos/2027/dia/…, /ca/festius/2027/dia/…,
+    // /en/holidays/2027/day/…), the three editions of each date.
+    const codePaths = wants("calendario-2027-espana") ? [...spainPaths(), ...spainDayPaths()] : [];
     // The Catalan work calendar guide gained one sentence linking to the
     // Spain hub (Spanish edition); it goes out once, on its own.
     if (wants("calendario-2027-espana-links")) published.push(await publishHolidayGuide());

@@ -933,6 +933,16 @@ export const IMAGES: readonly ImportedImage[] = [
     "license": "CC BY-SA 4.0"
   },
   {
+    "key": "pagos-oficina-sepe-malaga",
+    "url": "/images/pagos-oficina-sepe-malaga.webp",
+    "width": 1920,
+    "height": 2560,
+    "blurDataUrl": "data:image/webp;base64,UklGRoAAAABXRUJQVlA4IHQAAACwAwCdASoQABUAPu1iqU2ppaOiMAgBMB2JZQC7ABK5wN8CxK0G0AD9+zV0HVmz63wMcRUSx9y/ew5/6/yKkYhEDudWAwaKkZpvPJ5mfLwgbc/kG5bU4qtLRHlYB2FQ0bRhc1N3cl5lB+XvvgrzrTIy/MAAAA==",
+    "credit": "Tyk",
+    "creditUrl": "https://commons.wikimedia.org/wiki/File:Oficinas_SEPE_M%C3%A1laga_20240720_111247.jpg",
+    "license": "CC BY-SA 4.0"
+  },
+  {
     "key": "parlament-palau-ciutadella",
     "url": "/images/parlament-palau-ciutadella.webp",
     "width": 1920,

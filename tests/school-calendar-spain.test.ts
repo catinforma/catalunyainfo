@@ -63,6 +63,7 @@ const PINS: Record<string, { start: string; christmasFrom: string; christmasBack
   murcia: { start: "2026-09-08", christmasFrom: "2026-12-23", christmasBack: "2027-01-07", easterFrom: "2027-03-22" },
   navarra: { start: "2026-09-04", christmasFrom: "2026-12-23", christmasBack: "2027-01-11", easterFrom: "2027-03-25" },
   "pais-vasco": { start: "2026-09-07", christmasFrom: "2026-12-24", christmasBack: "2027-01-07", easterFrom: "2027-03-25" },
+  "la-rioja": { start: "2026-09-09", christmasFrom: "2026-12-23", christmasBack: "2027-01-07", easterFrom: "2027-03-25" },
 };
 
 test("each community keeps the dates its order gives (pinned)", () => {
@@ -78,10 +79,9 @@ test("each community keeps the dates its order gives (pinned)", () => {
 
 test("no community is invented: the ones without a readable 2026-2027 text are 'por confirmar'", () => {
   const pending = pendingRegions().map((p) => p.slug);
-  assert.deepEqual(pending, ["la-rioja"], "La Rioja: BOR núm. 71 (16.4.2026) could not be opened from the official site on 6 Nov 2026");
-  assert.ok(!regionBySlug("la-rioja"));
-  const hub = JSON.stringify(buildHubBody());
-  assert.match(hub, /La Rioja: por confirmar/);
+  // La Rioja added 8 Nov 2026 (BOR núm. 71, read via ChatGPT dossier + the full BOR copy of 6 Nov; dates agree).
+  assert.deepEqual(pending, []);
+  assert.ok(regionBySlug("la-rioja"));
   assert.deepEqual(regionBySlug("andalucia")?.pendingProvinces, ["Jaén"]);
   assert.match(JSON.stringify(buildRegionBody(regionBySlug("andalucia")!)), /Jaén","por confirmar"/);
 });
@@ -90,6 +90,7 @@ test("no community is invented: the ones without a readable 2026-2027 text are '
 const OFFICIAL_HOSTS = [
   "juntadeandalucia.es",
   "boa.aragon.es",
+  "larioja.org",
   "asturias.es",
   "caib.es",
   "gobiernodecanarias.org",

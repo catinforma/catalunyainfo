@@ -186,7 +186,7 @@ export function dayLead(day: SpainDay): string {
   switch (dayShape(day)) {
     case "national":
       return saturday
-        ? `Sí, ${when} es festivo en toda España, aunque, al caer en ${weekdayName(day.date, "es")}, no añade un día libre de lunes a viernes: la relación del BOE no lo pasa a otro día en ninguna comunidad.`
+        ? `Sí, ${when} es festivo en toda España, aunque cae en ${weekdayName(day.date, "es")} y no añade un día libre de lunes a viernes: la relación del BOE no lo pasa a otro día en ninguna comunidad.`
         : `Sí, ${when} es festivo en toda España: en las 17 comunidades autónomas y en Ceuta y Melilla.`;
     case "moved":
       return (

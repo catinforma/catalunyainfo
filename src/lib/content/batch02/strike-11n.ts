@@ -97,8 +97,10 @@ import { STRIKES, STRIKE_URLS, isUpcoming } from "./strikes";
  * regionals, metro, TMB buses, FGC, tram, all other urban and interurban),
  * the airport bus 50%; schools one management member per school plus one
  * teacher per 6 classes in infant/primary (nurseries 33%); health A&E and
- * special units normal, primary care 25%, duty pharmacies open. Long distance
- * and airports (State, Aena) still pending. Swap the e-Tauler link for the
+ * special units normal, primary care 25%, duty pharmacies open. Long distance:
+ * Renfe's notice of 9 Nov. Flights: the Ministry of Transport's resolution of
+ * 6 Nov (read on 10 Nov), one percentage per airport and kind of route.
+ * Swap the e-Tauler link for the
  * DOGC/ELI one once the order has its number.
  *
  * HOW TO UPDATE (the lead):
@@ -124,7 +126,7 @@ export const STRIKE_11N_DATE = "2026-11-11";
  * on or after the day) is decided against this date, never the clock: the
  * HTML is the same whichever day it is rendered.
  */
-export const STRIKE_11N_AS_OF = "2026-11-05";
+export const STRIKE_11N_AS_OF = "2026-11-10";
 
 /** The facts were re-read on the sources on the as-of day: one constant to move. */
 export const STRIKE_11N_VERIFIED = STRIKE_11N_AS_OF;
@@ -162,10 +164,13 @@ export interface SectorMinimumServices {
 /**
  * Fill these in when the order or the notices come out (see HOW TO UPDATE).
  * Rodalies to health: the Generalitat's order in the DOGC. Long distance: the
- * Spanish government. Airports: Aena and the airlines.
+ * Spanish government. Airports: the Ministry of Transport's resolution.
  */
 /** The Generalitat's order of 5 Nov 2026 (e-Tauler notice; swap for the DOGC/ELI link once numbered). */
 const ORDRE_11N = "https://tauler.seu-e.cat/detall?idEns=1&idEdicte=657102";
+
+/** The Ministry of Transport's resolution of 6 Nov 2026 on air transport (PDF). */
+const ORDRE_VOLS_11N = "https://www.transportes.gob.es/recursos_mfom/paginabasica/recursos/53_26-11-11-resolucion_huelga_general_vi.pdf";
 
 export const MINIMUM_SERVICES_11N: SectorMinimumServices[] = [
   {
@@ -186,8 +191,22 @@ export const MINIMUM_SERVICES_11N: SectorMinimumServices[] = [
     text: { ca: `FGC i tramvia: el 25% del servei habitual de 6.30 a 9.30 h i de 16.30 a 21 h, segons [l'ordre del Departament d'Empresa i Treball del 5 de novembre](${ORDRE_11N}).`, es: `FGC y tranvía: el 25% del servicio habitual de 6.30 a 9.30 h y de 16.30 a 21 h, según [la orden del Departament d'Empresa i Treball del 5 de noviembre](${ORDRE_11N}).`, en: `FGC and tram: 25% of the usual service from 06:30 to 09:30 and from 16:30 to 21:00, according to [the Department of Business and Labour's order of 5 November](${ORDRE_11N}).` },
     source: { name: "Ordre EMT/ /2026, de 5 de novembre, serveis essencials durant la vaga general de l'11 de novembre de 2026 (e-Tauler; al DOGC quan es publiqui)", url: ORDRE_11N, publisher: "Departament d'Empresa i Treball" },
   },
-  { key: "longDistance", status: "pending", text: null, source: null },
-  { key: "airports", status: "pending", text: null, source: null },
+  {
+    key: "longDistance",
+    status: "published",
+    text: { ca: `Alta velocitat i llarga distància de Renfe: el 73% dels serveis habituals; Mitja Distància, una mitjana del 65%, segons els serveis mínims que ha fixat el Ministeri de Transports ([comunicat de Renfe del 9 de novembre](https://grupo.renfe.com/es/es/sala-de-prensa/noticias/2026/11/establecidos-los-servicios-minimos-para-la-huelga-general-convocada-el-11n)).`, es: `Alta velocidad y larga distancia de Renfe: el 73% de los servicios habituales; Media Distancia, una media del 65%, según los servicios mínimos que ha fijado el Ministerio de Transportes ([comunicado de Renfe del 9 de noviembre](https://grupo.renfe.com/es/es/sala-de-prensa/noticias/2026/11/establecidos-los-servicios-minimos-para-la-huelga-general-convocada-el-11n)).`, en: `Renfe high-speed and long-distance trains: 73% of the usual services; Media Distancia, 65% on average, under the minimum services set by the Ministry of Transport ([Renfe's notice of 9 November](https://grupo.renfe.com/es/es/sala-de-prensa/noticias/2026/11/establecidos-los-servicios-minimos-para-la-huelga-general-convocada-el-11n)).` },
+    source: { name: "Establecidos los servicios mínimos para la huelga general convocada el 11N (09/11/2026)", url: "https://grupo.renfe.com/es/es/sala-de-prensa/noticias/2026/11/establecidos-los-servicios-minimos-para-la-huelga-general-convocada-el-11n", publisher: "Renfe" },
+  },
+  {
+    key: "airports",
+    status: "published",
+    text: {
+      ca: `Al Prat, el 79% dels vols amb les Balears, les Canàries, Ceuta i Melilla i de les rutes amb obligació de servei públic; el 56% dels internacionals i dels peninsulars amb una alternativa en transport públic de 5 hores o més, i el 34% dels peninsulars amb una alternativa de menys de 5 hores. A Girona, el 71%, el 47% i el 32%; a Reus, el 71%, el 42% i el 32%. Són percentatges per a cada ruta i companyia, segons [la resolució del Ministeri de Transports del 6 de novembre](${ORDRE_VOLS_11N}).`,
+      es: `En El Prat, el 79% de los vuelos con Baleares, Canarias, Ceuta y Melilla y de las rutas con obligación de servicio público; el 56% de los internacionales y de los peninsulares cuya alternativa en transporte público tarda 5 horas o más, y el 34% de los peninsulares con alternativa de menos de 5 horas. En Girona, el 71%, el 47% y el 32%; en Reus, el 71%, el 42% y el 32%. Son porcentajes para cada ruta y compañía, según [la resolución del Ministerio de Transportes del 6 de noviembre](${ORDRE_VOLS_11N}).`,
+      en: `At Barcelona-El Prat, 79% of flights to and from the Balearics, the Canaries, Ceuta and Melilla and on public service obligation routes; 56% of international flights and of mainland flights whose public transport alternative takes 5 hours or more; and 34% of mainland flights with an alternative under 5 hours. At Girona, 71%, 47% and 32%; at Reus, 71%, 42% and 32%. The percentages apply to each route and airline, under [the Ministry of Transport's resolution of 6 November](${ORDRE_VOLS_11N}).`,
+    },
+    source: { name: "Resolución del secretario de Estado de Transportes y Movilidad Sostenible: servicios mínimos del transporte aéreo en la huelga general del 11 de noviembre de 2026 (firmada el 6 de noviembre de 2026)", url: ORDRE_VOLS_11N, publisher: "Ministerio de Transportes y Movilidad Sostenible" },
+  },
   {
     key: "schools",
     status: "published",
@@ -203,12 +222,12 @@ export const MINIMUM_SERVICES_11N: SectorMinimumServices[] = [
 ];
 
 /** Who sets each sector's minimum services. */
-export const SET_BY: Record<SectorKey, "generalitat" | "state" | "aena"> = {
+export const SET_BY: Record<SectorKey, "generalitat" | "state"> = {
   rodalies: "generalitat",
   tmb: "generalitat",
   fgcTram: "generalitat",
   longDistance: "state",
-  airports: "aena",
+  airports: "state",
   schools: "generalitat",
   health: "generalitat",
 };
@@ -316,14 +335,17 @@ export const STRIKE_11N_META: Record<Locale, Meta> = {
     title: "Vaga general de l'11 de novembre de 2026: serveis mínims i què funciona a Catalunya",
     // 3 Nov 2026: the searched words ("vaga general 11 novembre", 377 impr.;
     // "vaga 11 novembre 2026"), not the written date; the H1 keeps "de l'11 de".
-    seoTitle: "Vaga general 11 novembre 2026: serveis mínims i què funciona",
+    // 8 Nov 2026: "manifestació 11 novembre barcelona" is the top query the
+    // page shows for (3.5k impr. ES at pos 6.6, CTR 1.6 %); the title now says
+    // the page has it. Revert if clicks fall by 15 Nov (docs/SEO_EXPERIMENTS.md).
+    seoTitle: "Vaga general 11 novembre: serveis mínims i manifestació",
     excerpt:
       "La vaga general de l'11 de novembre de 2026 a Catalunya: horari, qui la convoca i per què, serveis mínims de transport, escoles i sanitat, i els drets de qui fa vaga.",
   },
   es: {
     path: "guias/huelga-general-11-noviembre",
     title: "Huelga general del 11 de noviembre de 2026: servicios mínimos y qué funciona en Cataluña",
-    seoTitle: "Huelga general 11 de noviembre 2026: servicios mínimos",
+    seoTitle: "Huelga 11 noviembre: servicios mínimos y manifestación",
     excerpt:
       "La huelga general del 11 de noviembre de 2026 en Cataluña: horario, quién la convoca y por qué, servicios mínimos de transporte, colegios y sanidad, y los derechos de quien hace huelga.",
   },
@@ -339,17 +361,17 @@ export const STRIKE_11N_META: Record<Locale, Meta> = {
 const DESCRIPTION: Record<Locale, { pending: string; published: string; past: string }> = {
   ca: {
     pending: "Vaga general el dimecres 11 de novembre de 2026, 24 hores des de les 0 h. Serveis mínims encara no publicats: Rodalies, metro, bus, escoles i sanitat.",
-    published: "Vaga general el dimecres 11 de novembre de 2026, 24 hores des de les 0 h. Serveis mínims publicats: Rodalies, metro, bus, escoles i sanitat.",
+    published: "Dimecres 11 de novembre, 24 h des de les 0 h. Manifestació a Barcelona: 17.30 h, Jardinets de Gràcia. Serveis mínims publicats: Rodalies, metro i bus.",
     past: "La vaga general de l'11 de novembre de 2026: qui la va convocar, els serveis mínims de Rodalies, metro, bus, escoles i sanitat, i què diu la llei.",
   },
   es: {
     pending: "Huelga general el miércoles 11 de noviembre de 2026, 24 horas desde las 0 h. Servicios mínimos aún no publicados: metro, Rodalies, bus, colegios y sanidad.",
-    published: "Huelga general el miércoles 11 de noviembre de 2026, 24 horas desde las 0 h. Servicios mínimos publicados: Rodalies, metro, bus, colegios y sanidad.",
+    published: "Miércoles 11 de noviembre, 24 h desde las 0 h. Manifestación en Barcelona: 17.30 h, Jardinets de Gràcia. Mínimos publicados: Rodalies, metro y bus.",
     past: "La huelga general del 11 de noviembre de 2026: quién la convocó, los servicios mínimos de Rodalies, metro, bus, colegios y sanidad, y qué dice la ley.",
   },
   en: {
     pending: "24-hour general strike across Spain on Wednesday 11 November 2026. Minimum services not out yet: Barcelona metro, Rodalies, buses, schools, hospitals.",
-    published: "24-hour general strike across Spain on Wednesday 11 November 2026. Minimum services are out: Rodalies, metro, buses, schools and hospitals in Catalonia.",
+    published: "24-hour general strike in Spain on Wednesday 11 November. Barcelona march: 5.30pm, Jardinets de Gràcia. Minimum services out: Rodalies, metro, buses.",
     past: "The 11 November 2026 general strike in Spain: who called it, the minimum services set for Barcelona and Catalonia, and what the law says.",
   },
 };
@@ -487,7 +509,7 @@ const COPY: Record<Locale, Copy> = {
       const ms = {
         pending: ` **Els serveis mínims de Rodalies, metro, autobusos, escoles i sanitat encara no s'han publicat** (consultat el ${c.checked}): la Generalitat els fixa per ordre al DOGC pocs dies abans, i els posarem aquí, sector per sector, tan bon punt surtin.`,
         partial: ` **Serveis mínims de la Generalitat ja publicats:** Rodalies i regionals, metro, autobusos, FGC i tramvia funcionen al 25% de 6.30 a 9.30 h i de 16.30 a 21 h; escoles i sanitat, a la taula de més avall. Els trens d'alta velocitat i llarga distància i els vols encara no en tenen (consultat el ${c.checked}).`,
-        published: " **Els serveis mínims ja s'han publicat:** els tens a la taula de més avall, sector per sector, amb l'enllaç a l'ordre o a l'avís oficial.",
+        published: " **Els serveis mínims ja s'han publicat:** Rodalies i regionals, metro, autobusos, FGC i tramvia funcionen al 25% de 6.30 a 9.30 h i de 16.30 a 21 h. Els trens de llarga distància, els vols, les escoles i la sanitat són a la taula de més avall, sector per sector, amb l'enllaç a l'ordre o a l'avís oficial.",
       }[c.state];
       return `${first}${ms} **Compte també amb el 10 i el 12 de novembre:** el sindicat de maquinistes SEMAF hi ha convocat vaga al Grup Renfe (aturada total el 10, aturades parcials el 12), que afecta Rodalies.`;
     },
@@ -559,8 +581,8 @@ const COPY: Record<Locale, Copy> = {
       },
       airports: {
         name: "Vols del Prat, Girona i Reus",
-        setBy: "No la Generalitat: l'operativa d'Aena no és a les seves ordres",
-        setter: "Dels vols n'informen Aena i les companyies aèries.",
+        setBy: "Govern espanyol (Ministeri de Transports)",
+        setter: "Els fixa el Ministeri de Transports, no la Generalitat.",
         where: `${link(U.aena, "Infovuelos d'Aena")} i la teva companyia aèria`,
       },
       schools: {
@@ -589,7 +611,7 @@ const COPY: Record<Locale, Copy> = {
       tmb: `TMB els publica als seus ${link(U.tmb, "avisos de servei")}. L'horari d'un dia normal és a ${b2link("hours", "ca", "l'horari del metro i del NitBus")}.`,
       fgcTram: `FGC informa de l'estat del servei a ${link(U.fgc, "fgc.cat")}. Les ordres de les vagues generals del 2024 també hi incloïen el tramvia i la resta d'autobusos urbans i interurbans.`,
       longDistance: `Els trens d'alta velocitat i de llarga distància són serveis de l'Estat, i per això no són a l'ordre de la Generalitat: per a la vaga d'Ouigo d'aquesta tardor, els serveis mínims els va fixar el Ministeri de Transports, amb ${link(U.ouigoResolution, "una resolució del 27 d'octubre")}. Si tens bitllet per a l'11, mira ${link(U.renfe, "renfe.com")} o el web del teu operador; la vaga de maquinistes de SEMAF del 10 i el 12 de novembre també afecta els trens de Renfe.`,
-      airports: `Les ordres de la Generalitat només fixen l'operativa dels aeroports que gestiona ella, Lleida-Alguaire i Andorra-la Seu d'Urgell. Per als vols del Prat, Girona i Reus, que són d'Aena, mira l'estat del vol a la teva companyia o a ${link(U.aena, "Infovuelos d'Aena")}, i les maneres d'arribar-hi a ${b2link("airport", "ca", "la guia de l'aeroport al centre de Barcelona")}.`,
+      airports: `Els vols del Prat, Girona i Reus, que són aeroports d'Aena, tenen els serveis mínims que fixa el Ministeri de Transports; les ordres de la Generalitat només fixen l'operativa dels aeroports que gestiona ella, Lleida-Alguaire i Andorra-la Seu d'Urgell. Abans d'anar a l'aeroport, mira l'estat del vol a la teva companyia o a ${link(U.aena, "Infovuelos d'Aena")}, i les maneres d'arribar-hi a ${b2link("airport", "ca", "la guia de l'aeroport al centre de Barcelona")}.`,
     },
     taxiHeading: "Taxi",
     taxi: "Les ordres de serveis mínims de les vagues generals del 2024 (EMT/38/2024 i EMT/201/2024) no esmentaven el taxi.",
@@ -712,7 +734,7 @@ const COPY: Record<Locale, Copy> = {
       const ms = {
         pending: ` **Los servicios mínimos de Rodalies, metro, autobuses, colegios y sanidad aún no se han publicado** (consultado el ${c.checked}): la Generalitat los fija por orden en el DOGC pocos días antes, y los pondremos aquí, sector por sector, en cuanto salgan.`,
         partial: ` **Servicios mínimos de la Generalitat ya publicados:** Rodalies y regionales, metro, autobuses, FGC y tranvía funcionan al 25% de 6.30 a 9.30 h y de 16.30 a 21 h; escuelas y sanidad, en la tabla de más abajo. Los trenes de alta velocidad y larga distancia y los vuelos aún no los tienen (consultado el ${c.checked}).`,
-        published: " **Los servicios mínimos ya se han publicado:** los tienes en la tabla de más abajo, sector por sector, con el enlace a la orden o al aviso oficial.",
+        published: " **Los servicios mínimos ya se han publicado:** Rodalies y regionales, metro, autobuses, FGC y tranvía funcionan al 25% de 6.30 a 9.30 h y de 16.30 a 21 h. Los trenes de larga distancia, los vuelos, las escuelas y la sanidad están en la tabla de más abajo, sector por sector, con el enlace a la orden o al aviso oficial.",
       }[c.state];
       return `${first}${ms} **Ojo también al 10 y al 12 de noviembre:** el sindicato de maquinistas SEMAF ha convocado huelga en el Grupo Renfe (paro total el 10, paros parciales el 12), que afecta a Rodalies.`;
     },
@@ -784,8 +806,8 @@ const COPY: Record<Locale, Copy> = {
       },
       airports: {
         name: "Vuelos de El Prat, Girona y Reus",
-        setBy: "No la Generalitat: la operativa de Aena no está en sus órdenes",
-        setter: "De los vuelos informan Aena y las compañías aéreas.",
+        setBy: "Gobierno de España (Ministerio de Transportes)",
+        setter: "Los fija el Ministerio de Transportes, no la Generalitat.",
         where: `${link(U.aena, "Infovuelos de Aena")} y tu compañía aérea`,
       },
       schools: {
@@ -814,7 +836,7 @@ const COPY: Record<Locale, Copy> = {
       tmb: `TMB los publica en sus ${link(U.tmb, "avisos de servicio")}. El horario de un día normal está en ${b2link("hours", "es", "el horario del metro y del NitBus")}.`,
       fgcTram: `FGC informa del estado del servicio en ${link(U.fgc, "fgc.cat")}. Las órdenes de las huelgas generales de 2024 también incluían el tranvía y el resto de autobuses urbanos e interurbanos.`,
       longDistance: `Los trenes de alta velocidad y de larga distancia son servicios del Estado, y por eso no están en la orden de la Generalitat: para la huelga de Ouigo de este otoño, los servicios mínimos los fijó el Ministerio de Transportes, con ${link(U.ouigoResolution, "una resolución del 27 de octubre")}. Si tienes billete para el 11, mira ${link(U.renfe, "renfe.com")} o la web de tu operador; la huelga de maquinistas de SEMAF del 10 y el 12 de noviembre también afecta a los trenes de Renfe.`,
-      airports: `Las órdenes de la Generalitat solo fijan la operativa de los aeropuertos que gestiona ella, Lleida-Alguaire y Andorra-La Seu d'Urgell. Para los vuelos de El Prat, Girona y Reus, que son de Aena, mira el estado del vuelo en tu compañía o en ${link(U.aena, "Infovuelos de Aena")}, y las formas de llegar en ${b2link("airport", "es", "la guía del aeropuerto al centro de Barcelona")}.`,
+      airports: `Los vuelos de El Prat, Girona y Reus, que son aeropuertos de Aena, tienen los servicios mínimos que fija el Ministerio de Transportes; las órdenes de la Generalitat solo fijan la operativa de los aeropuertos que gestiona ella, Lleida-Alguaire y Andorra-La Seu d'Urgell. Antes de ir al aeropuerto, mira el estado del vuelo en tu compañía o en ${link(U.aena, "Infovuelos de Aena")}, y las formas de llegar en ${b2link("airport", "es", "la guía del aeropuerto al centro de Barcelona")}.`,
     },
     taxiHeading: "Taxi",
     taxi: "Las órdenes de servicios mínimos de las huelgas generales de 2024 (EMT/38/2024 y EMT/201/2024) no mencionaban el taxi.",
@@ -937,7 +959,7 @@ const COPY: Record<Locale, Copy> = {
       const ms = {
         pending: ` **Minimum services for Rodalies, the metro, buses, schools and health have not been published yet** (checked on ${c.checked}): the Generalitat sets them in an order in the DOGC, its official gazette, a few days before, and we will add them here, sector by sector, as soon as they are out.`,
         partial: ` **The Generalitat's minimum services are out:** Rodalies and regional trains, metro, buses, FGC and tram run at 25% from 06:30 to 09:30 and from 16:30 to 21:00; schools and health are in the table below. High-speed and long-distance trains and flights have none yet (checked on ${c.checked}).`,
-        published: " **Minimum services have been published:** they are in the table below, sector by sector, with a link to the official order or notice.",
+        published: " **Minimum services have been published:** Rodalies and regional trains, metro, buses, FGC and tram run at 25% from 06:30 to 09:30 and from 16:30 to 21:00. Long-distance trains, flights, schools and health are in the table below, sector by sector, with a link to the official order or notice.",
       }[c.state];
       return `${first}${ms} **Watch 10 and 12 November too:** the train drivers' union SEMAF has called strikes at the Renfe Group (a full stoppage on the 10th, partial stoppages on the 12th), which affect Rodalies.`;
     },
@@ -1009,8 +1031,8 @@ const COPY: Record<Locale, Copy> = {
       },
       airports: {
         name: "Flights at Barcelona-El Prat, Girona and Reus",
-        setBy: "Not the Generalitat: Aena's operations are not in its orders",
-        setter: "Aena and the airlines inform passengers about flights.",
+        setBy: "Spanish government (Ministry of Transport)",
+        setter: "The Spanish Ministry of Transport sets them, not the Generalitat.",
         where: `${link(U.aena, "Aena's Infovuelos")} and your airline`,
       },
       schools: {
@@ -1039,7 +1061,7 @@ const COPY: Record<Locale, Copy> = {
       tmb: `TMB publishes them in its ${link(U.tmb, "service notices")}. Normal-day hours are in ${b2link("hours", "en", "Barcelona metro and night bus hours")}.`,
       fgcTram: `FGC posts its service status on ${link(U.fgc, "fgc.cat")}. The 2024 general-strike orders also covered the tram and all other urban and interurban buses.`,
       longDistance: `High-speed and long-distance trains are State services, so they are not in the Generalitat's order: for Ouigo's strike this autumn, the Ministry of Transport set the minimum services in ${link(U.ouigoResolution, "a resolution of 27 October")}. If you have a ticket for the 11th, check ${link(U.renfe, "renfe.com")} or your operator's website; SEMAF's drivers' strike on 10 and 12 November also affects Renfe trains.`,
-      airports: `The Generalitat's orders only set the operations of the two airports it runs, Lleida-Alguaire and Andorra-La Seu d'Urgell. For flights at Barcelona-El Prat, Girona and Reus, which Aena runs, check your flight with your airline or on ${link(U.aena, "Aena's Infovuelos")}, and the ways to get there in ${b2link("airport", "en", "our airport to city centre guide")}.`,
+      airports: `Flights at Barcelona-El Prat, Girona and Reus, which are Aena airports, have the minimum services set by the Spanish Ministry of Transport; the Generalitat's orders only set the operations of the two airports it runs, Lleida-Alguaire and Andorra-La Seu d'Urgell. Before you leave for the airport, check your flight with your airline or on ${link(U.aena, "Aena's Infovuelos")}, and the ways to get there in ${b2link("airport", "en", "our airport to city centre guide")}.`,
     },
     taxiHeading: "Taxis",
     taxi: "The minimum-services orders for the 2024 general strikes (EMT/38/2024 and EMT/201/2024) did not mention taxis.",
@@ -1161,7 +1183,7 @@ const RELATED = ["strikes", "hours", "airport", "transport", "strikeRenfe", "str
 export const OTHER_CITIES_TITLE = "En otras ciudades";
 
 export function otherCitiesLine(): string {
-  return `¿Estás fuera de Cataluña? Servicios mínimos y qué funciona el 11 de noviembre en ${strike11nCityLinks()}.`;
+  return `¿Estás fuera de Cataluña? Servicios mínimos y qué funciona el 11 de noviembre en ${strike11nCityLinks()}. Las demás huelgas convocadas en España, por fecha, en el ${b2link("strikesSpain", "es", "calendario de huelgas en España")}.`;
 }
 const SECTOR_ORDER: SectorKey[] = ["rodalies", "tmb", "fgcTram", "longDistance", "airports", "schools", "health"];
 const TRANSPORT: ("rodalies" | "tmb" | "fgcTram" | "longDistance" | "airports")[] = ["rodalies", "tmb", "fgcTram", "longDistance", "airports"];

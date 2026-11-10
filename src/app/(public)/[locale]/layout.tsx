@@ -11,7 +11,7 @@ import { fontClassNames } from "@/lib/fonts";
 import { getMessages } from "@/lib/i18n";
 import { HTML_LANG, LOCALES, isLocale, type Locale } from "@/lib/i18n/config";
 import { graph, organizationSchema, websiteSchema } from "@/lib/seo/jsonld";
-import { SITE } from "@/lib/site";
+import { SITE, adsensePublisherId } from "@/lib/site";
 
 /**
  * This is a root layout: it owns `<html>` and `<body>`.
@@ -53,6 +53,7 @@ export async function generateMetadata({
   const { locale } = await params;
   if (!isLocale(locale)) return {};
   const t = getMessages(locale);
+  const adsense = adsensePublisherId();
 
   return {
     title: {
@@ -71,6 +72,7 @@ export async function generateMetadata({
       apple: { url: "/apple-touch-icon.png", sizes: "180x180" },
     },
     manifest: "/site.webmanifest",
+    ...(adsense ? { other: { "google-adsense-account": `ca-${adsense}` } } : {}),
   };
 }
 
