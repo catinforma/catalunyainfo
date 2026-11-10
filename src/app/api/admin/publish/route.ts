@@ -79,6 +79,7 @@ import { publishLocalHolidaysGuide } from "@/lib/content/holidays/local-publish"
 import { publishReservoirGuide } from "@/lib/content/reservoirs/publish";
 import { publishSchoolCalendarGuide } from "@/lib/content/school/publish";
 import { publishSpainSchoolCalendars } from "@/lib/content/school-spain/publish";
+import { editionPaths } from "@/lib/programmatic/spain-2027/editions";
 import { spainDayPaths, spainPaths } from "@/lib/programmatic/spain-2027/paths";
 import { authoriseDeployRequest, describeError } from "@/lib/admin/deploy-auth";
 import { FEED_PATHS } from "@/lib/seo/feed-paths";
@@ -407,8 +408,10 @@ export async function POST(request: Request) {
     // local list published).
     // The same group carries the day pages ("¿Es festivo el 6 de diciembre de
     // 2027?", /es/festivos/2027/dia/…, /ca/festius/2027/dia/…,
-    // /en/holidays/2027/day/…), the three editions of each date.
-    const codePaths = wants("calendario-2027-espana") ? [...spainPaths(), ...spainDayPaths()] : [];
+    // /en/holidays/2027/day/…), the three editions of each date, and since
+    // 10 Nov 2026 the Catalan and English editions of the calendar itself
+    // (/ca/festius/2027/..., /en/holidays/2027/..., editions.ts).
+    const codePaths = wants("calendario-2027-espana") ? [...spainPaths(), ...spainDayPaths(), ...editionPaths()] : [];
     // The Catalan work calendar guide gained one sentence linking to the
     // Spain hub (Spanish edition); it goes out once, on its own.
     if (wants("calendario-2027-espana-links")) published.push(await publishHolidayGuide());

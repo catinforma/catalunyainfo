@@ -15,6 +15,7 @@ import { weekendSitemapEntries } from "@/lib/programmatic/weekend/sitemap";
 import { todaySitemapEntries } from "@/lib/programmatic/today/page";
 import { christmasFairsSitemapEntries } from "@/lib/programmatic/christmas-fairs/sitemap";
 import { pollsSitemapEntries } from "@/lib/programmatic/polls/page";
+import { editionSitemapEntries } from "@/lib/programmatic/spain-2027/editions";
 import { spainDaySitemapEntries, spainSitemapEntries } from "@/lib/programmatic/spain-2027/paths";
 
 /**
@@ -150,6 +151,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...spainSitemapEntries(),
     // "¿Es festivo el … de 2027?" for all Spain: one page per date, in ca, es and en.
     ...spainDaySitemapEntries(),
+    // Its Catalan and English editions (/ca/festius/2027/, /en/holidays/2027/), same pages.
+    ...editionSitemapEntries(),
     ...fuelSitemapEntries(),
     ...rodaliesSitemap(),
     ...reservoirSitemapEntries(),

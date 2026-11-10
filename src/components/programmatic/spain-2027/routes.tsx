@@ -7,6 +7,7 @@ import { communityBySlug, type CommunityNames } from "@/lib/programmatic/spain-2
 import { BRIDGES, HUB, bridgesDescription, communityDescription, communityFaq, communityH1, communityTitle, hubDescription } from "@/lib/programmatic/spain-2027/copy";
 import type { City } from "@/lib/programmatic/spain-2027/cities";
 import { cityDescription, cityFaq, cityTitle } from "@/lib/programmatic/spain-2027/city-copy";
+import { editionsOf } from "@/lib/programmatic/spain-2027/editions";
 import { cityPath, communityPath, spainBridgesPath, spainHubPath } from "@/lib/programmatic/spain-2027/paths";
 import { BOE_REF, SOURCES, SOURCES_READ_ON } from "@/lib/programmatic/spain-2027/sources";
 import { breadcrumbSchema, datasetSchema, faqSchema, graph } from "@/lib/seo/jsonld";
@@ -16,8 +17,9 @@ import { CityPage, cityCrumbs } from "./city-page";
 import { CommunityPage, SpainBridgesPage, SpainHubPage, bridgesCrumbs, communityCrumbs, hubCrumbs } from "./pages";
 
 /**
- * Route bodies for /es/festivos/2027/. Spanish only: each page lists itself
- * as its only edition, so no hreflang points at a page that does not exist.
+ * Route bodies for /es/festivos/2027/. Each page lists its Catalan and
+ * English editions (editions.ts, /ca/festius/2027/ and /en/holidays/2027/)
+ * for hreflang and the language switcher.
  */
 
 export const NOT_FOUND_METADATA: Metadata = { robots: { index: false, follow: false } };
@@ -26,8 +28,9 @@ export const NOT_FOUND_METADATA: Metadata = { robots: { index: false, follow: fa
 const BOE_REUSE = "https://www.boe.es/informacion/aviso_legal/index.php#reutilizacion";
 const CREATOR = "Ministerio de Trabajo y Economía Social. Dirección General de Trabajo";
 
+/** The page's three editions (the name is older than the Catalan and English ones). */
 function only(path: string) {
-  return { es: path };
+  return editionsOf(path) ?? { es: path };
 }
 
 function dataset(path: string, name: string, description: string, spatial: string, extra: string[] = []) {
