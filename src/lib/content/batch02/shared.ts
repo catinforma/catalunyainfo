@@ -101,7 +101,9 @@ export type B2Key =
   // 5 Nov 2026: the postal vote (29N requests close on 19 Nov).
   | "postalVote"
   // 6 Nov 2026: the December bridge, Christmas and Reyes in every community of Spain.
-  | "decemberBridgeSpain";
+  | "decemberBridgeSpain"
+  // 10 Nov 2026: foreign residents' vote in the local elections of 23 May 2027.
+  | "foreignVote";
 
 /** Path after the locale prefix, no leading or trailing slash. */
 export const B2_PATHS: Record<B2Key, Record<Locale, string>> = {
@@ -463,6 +465,12 @@ export const B2_PATHS: Record<B2Key, Record<Locale, string>> = {
     ca: "guies/pont-desembre-espanya",
     es: "guias/puente-diciembre-espana",
     en: "guides/december-holidays-spain",
+  },
+  // No year in the path: the next local elections (2031) reuse it.
+  foreignVote: {
+    ca: "guies/vot-estrangers-eleccions-municipals",
+    es: "guias/voto-extranjeros-elecciones-municipales",
+    en: "guides/can-foreigners-vote-spain-local-elections",
   },
 };
 
@@ -847,6 +855,12 @@ export const B2_TITLES: Record<B2Key, Record<Locale, string>> = {
     ca: "Pont de desembre 2026 a Espanya: on és festiu el dilluns 7",
     es: "Puente de diciembre 2026 en España: dónde es festivo el lunes 7",
     en: "Is 7 December a holiday in Spain? Region by region",
+  },
+  // No deadline: the rail is stored in other pages' bodies until they are republished.
+  foreignVote: {
+    ca: "Vot dels estrangers a les municipals del 2027: qui pot votar i com",
+    es: "Voto de los extranjeros en las municipales de 2027: quién puede votar y cómo",
+    en: "Can foreigners vote in Spain's 2027 local elections? Who and how",
   },
 };
 
