@@ -218,6 +218,7 @@ function allowedFigures(city: Strike11nCity, state: Record<string, StateService>
     ...city.callNotes,
     ...city.msNotes,
     ...city.railNotes,
+    ...(city.airNotes ?? []),
     ...city.services.flatMap((service) => service.notes ?? []),
   ]
     .map((t) => text([{ type: "paragraph", text: t } as Block]))
