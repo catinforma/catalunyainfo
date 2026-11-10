@@ -14,7 +14,7 @@ import { LOCALES, type Locale } from "@/lib/i18n/config";
 import { PARKING, TRANSPORT, ZBE } from "./barcelona-practical";
 import { CERDANYA, GIRONA, MONTSERRAT_FREE } from "./day-trips";
 import { RIPOLLES, SETCASES, SNOW } from "./pyrenees";
-import { withReadNext, type B2Article, type B2Edition, type B2SpanishArticle } from "./shared";
+import { withReadNext, type B2Article, type B2Edition, type B2SpanishArticle, type B2UnkeyedArticle } from "./shared";
 
 /**
  * Publisher for editorial batch 02.
@@ -89,6 +89,19 @@ export async function publishB2Article(article: B2Article): Promise<PublishResul
  */
 export async function publishB2SpanishArticle(article: B2SpanishArticle): Promise<PublishResult> {
   return publishEditions(article, [["es", article.editions.es]]);
+}
+
+/**
+ * A page with no registry key (10 Nov 2026: the 11N city pages and the
+ * Spain-wide 11N page): every edition it has, ca, es and en, in one entry, so
+ * hreflang lists the three URLs.
+ */
+export async function publishB2UnkeyedArticle(article: B2UnkeyedArticle): Promise<PublishResult> {
+  const editions = LOCALES.flatMap((locale): [Locale, B2Edition][] => {
+    const edition = article.editions[locale];
+    return edition ? [[locale, edition]] : [];
+  });
+  return publishEditions(article, editions);
 }
 
 async function publishEditions(article: B2ArticleBase, editions: [Locale, B2Edition][]): Promise<PublishResult> {
