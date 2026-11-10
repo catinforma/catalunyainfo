@@ -336,7 +336,7 @@ function msTable(c: Ctx): Block {
     [
       `Vuelos (aeropuerto de ${city.airport})`,
       c.air.setBy,
-      c.air.status === "published" && c.air.text ? c.air.text : NOT_PUBLISHED,
+      c.air.status === "published" && c.air.text ? (city.airNotes?.[0] ?? c.air.text) : NOT_PUBLISHED,
       `La resolución, en la ${link(U.ministryAir, "lista del Ministerio")}; tu vuelo, en ${link(U.aena, "Infovuelos de Aena")} y en tu compañía aérea`,
     ],
   ];
@@ -381,6 +381,7 @@ function railParagraphs(c: Ctx): string[] {
 function airParagraphs(c: Ctx): string[] {
   return [
     msLine(c, c.air),
+    ...(c.air.status === "published" ? (c.city.airNotes ?? []) : []),
     `En los aeropuertos y las compañías aéreas los fija el Ministerio de Transportes, que publica sus resoluciones en su ${link(U.ministryAir, "página de servicios mínimos del transporte aéreo")}. El estado de tu vuelo, en ${link(U.aena, "Infovuelos de Aena")} y en tu compañía aérea.`,
     `**Vigilantes de seguridad:** el Ministerio del Interior ya ha fijado los de la seguridad privada. En los «transportes públicos (puertos, aeropuertos, ferrocarriles, etc.)», el 90% del personal de seguridad, según ${link(U.securityOrder, "la resolución de la Secretaría de Estado de Seguridad del 30 de octubre")}, publicada en el BOE el 4 de noviembre.`,
   ];

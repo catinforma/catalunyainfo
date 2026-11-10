@@ -73,6 +73,12 @@ export interface Strike11nCity extends Strike11nCityRef {
   cercanias: string | null;
   /** The airport, as Aena names it: "Adolfo Suárez Madrid-Barajas". */
   airport: string;
+  /**
+   * Once the Ministry's air resolution is out: this airport's own figures in
+   * it, with the link (Markdown, full sentences). The first one is the answer
+   * of the flights row and of the flights section.
+   */
+  airNotes?: string[];
   services: CityService[];
   /**
    * Once the regional order is out: the lead's one-line answer, with its
