@@ -2,10 +2,15 @@ import Link from "next/link";
 
 import { Breadcrumbs, type Crumb } from "@/components/Breadcrumbs";
 import { getMessages } from "@/lib/i18n";
+import { municipalities } from "@/lib/programmatic/holidays/data";
 import { GUIDES } from "@/lib/programmatic/holidays/links";
-import { hubPath } from "@/lib/programmatic/holidays/paths";
+import { esName } from "@/lib/programmatic/holidays/names";
+import { hubPath, municipalityPath } from "@/lib/programmatic/holidays/paths";
 import { dayMonthYear } from "@/lib/programmatic/holidays/format";
 import { REGIONS } from "@/lib/programmatic/holidays/boe-2027";
+import { citiesOf } from "@/lib/programmatic/spain-2027/cities";
+import { CATALAN_CITIES } from "@/lib/programmatic/spain-2027/cities-data";
+import { cityListLine } from "@/lib/programmatic/spain-2027/city-copy";
 import {
   COMMON_DATES,
   YEAR,
@@ -42,7 +47,7 @@ import {
   weekendLine,
   whereElse,
 } from "@/lib/programmatic/spain-2027/copy";
-import { communityPath, spainBridgesPath, spainHubPath } from "@/lib/programmatic/spain-2027/paths";
+import { cityPath, communityPath, spainBridgesPath, spainHubPath } from "@/lib/programmatic/spain-2027/paths";
 import { BOE_REF, SOURCES, SOURCES_READ_ON, type OfficialText } from "@/lib/programmatic/spain-2027/sources";
 
 /** The Spain-wide 2027 pages (Spanish only), all server-rendered from the BOE table and `sources.ts`. */
@@ -65,7 +70,7 @@ export function bridgesCrumbs(): Crumb[] {
   return [...hubCrumbs(), { label: BRIDGES.breadcrumb, href: spainBridgesPath() }];
 }
 
-function Header({ crumbs, h1, lead }: { crumbs: Crumb[]; h1: string; lead?: string }) {
+export function Header({ crumbs, h1, lead }: { crumbs: Crumb[]; h1: string; lead?: string }) {
   return (
     <header className="border-b border-[var(--color-rule)] bg-[var(--color-surface)]">
       <div className="ci-shell py-5 md:py-8 lg:py-12">
@@ -77,8 +82,8 @@ function Header({ crumbs, h1, lead }: { crumbs: Crumb[]; h1: string; lead?: stri
   );
 }
 
-function SourceList({ items, title = "Fuentes oficiales" }: { items: (OfficialText | null | undefined)[]; title?: string }) {
-  const shown = items.filter((i): i is OfficialText => Boolean(i));
+export function SourceList({ items, title = "Fuentes oficiales" }: { items: (OfficialText | null | undefined)[]; title?: string }) {
+  const shown = items.filter((i): i is OfficialText => Boolean(i)).filter((item, i, all) => all.findIndex((x) => x.url === item.url) === i);
   return (
     <section className="ci-measure mt-12" aria-labelledby="ci-es27-sources">
       <h2 id="ci-es27-sources" className="font-sans text-base font-semibold">
@@ -100,6 +105,98 @@ function SourceList({ items, title = "Fuentes oficiales" }: { items: (OfficialTe
         ))}
       </ol>
     </section>
+  );
+}
+
+/** The Catalan cities in scope, by population, with their town page (no page of their own under /2027/). */
+function catalanCities() {
+  return CATALAN_CITIES.map((row) => ({ row, town: municipalities().find((m) => m.ine === row.ine) ?? null }))
+    .filter((x): x is { row: (typeof CATALAN_CITIES)[number]; town: NonNullable<ReturnType<typeof municipalities>[number]> } => x.town !== null)
+    .sort((a, b) => b.row.population - a.row.population);
+}
+
+/** The community's city pages with their two days (or what is known), most populous first. */
+function CityList({ c }: { c: CommunityNames }) {
+  if (c.region === "CT") {
+    const towns = catalanCities();
+    return (
+      <>
+        <h2 id="ciudades">Festivos locales de las ciudades de Cataluña</h2>
+        <p>
+          Cada municipio catalán tiene su página con sus 2 fiestas locales, las de {YEAR} en cuanto las aprueba el ayuntamiento o las publica el DOGC.
+          Las capitales y las ciudades de más de 50.000 habitantes:
+        </p>
+        <ul className="grid list-none gap-1 p-0 sm:grid-cols-2">
+          {towns.map(({ town }) => (
+            <li key={town.ine}>
+              <Link href={municipalityPath("es", town.slug)}>Festivos de {esName(town.name)}</Link>
+            </li>
+          ))}
+        </ul>
+      </>
+    );
+  }
+  const cities = citiesOf(c.region);
+  if (cities.length === 0) return null;
+  return (
+    <>
+      <h2 id="ciudades">Festivos locales {YEAR} por ciudad</h2>
+      <p>
+        Las fiestas locales de {cities.length === 1 ? "la capital" : `las ${cities.length} ciudades principales`} {c.de}: las de {YEAR} donde ya se han
+        publicado y, si no, las de 2026 como referencia. Cada página cita el boletín oficial del que salen.
+      </p>
+      <div className="ci-table-scroll mt-4">
+        <table className="ci-local-table">
+          <caption className="pb-2 text-left text-sm text-[var(--color-muted)]">
+            Capitales de provincia y municipios de más de 50.000 habitantes (INE, 1 de enero de 2025).
+          </caption>
+          <thead>
+            <tr>
+              <th scope="col">Ciudad</th>
+              <th scope="col">Fiestas locales {YEAR}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {cities.map((city) => (
+              <tr key={city.slug}>
+                <th scope="row" className="font-normal">
+                  <Link href={cityPath(city)}>{city.name}</Link>
+                </th>
+                <td>{cityListLine(city)}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </>
+  );
+}
+
+/** The hub's index of every city page, by community. */
+function HubCityList() {
+  const groups = COMMUNITIES_AZ.map((c) => ({ c, cities: citiesOf(c.region) })).filter((g) => g.cities.length > 0);
+  return (
+    <>
+      <h2 id="ciudades">Festivos locales {YEAR} de las principales ciudades</h2>
+      <p>
+        Las 2 fiestas locales de {YEAR} de las capitales de provincia y las ciudades de más de 50.000 habitantes (padrón de 2025), cada una con su
+        boletín oficial; donde la lista de {YEAR} aún no ha salido, «pendiente» y las de 2026 como referencia. Las ciudades de Cataluña están en sus{" "}
+        <Link href={`${communityPath("cataluna")}#ciudades`}>páginas de municipio</Link>; Ceuta y Melilla, en la suya.
+      </p>
+      {groups.map(({ c, cities }) => (
+        <p key={c.slug}>
+          <strong>
+            <Link href={communityPath(c)}>{c.short}</Link>:
+          </strong>{" "}
+          {cities.map((city, i) => (
+            <span key={city.slug}>
+              {i > 0 ? " · " : ""}
+              <Link href={cityPath(city)}>{city.name}</Link> <small className="text-[var(--color-muted)]">({cityListLine(city)})</small>
+            </span>
+          ))}
+        </p>
+      ))}
+    </>
   );
 }
 
@@ -333,6 +430,8 @@ export function CommunityPage({ c }: { c: CommunityNames }) {
             </p>
           ) : null}
 
+          <CityList c={c} />
+
           <h2 id="fuente">Fuente y comprobación</h2>
           <p>
             La lista es la del BOE: {BOE_REF.title} ({BOE_REF.ref}), que reúne los calendarios que las 17 comunidades y Ceuta y Melilla enviaron
@@ -464,6 +563,8 @@ export function SpainHubPage() {
               );
             })}
           </ul>
+
+          <HubCityList />
         </div>
 
         <CommunityLinks />

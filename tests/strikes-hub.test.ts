@@ -325,6 +325,7 @@ test("upcoming and past are decided by the as-of date: on the last day it is upc
     "vaga-ouigo-2026-10-30",
     "vaga-renfe-2026-11-10",
     "vaga-general-2026-11-11",
+    "vaga-ferroviaria-2026-11-17",
     "vaga-educacio-2026-11-26",
   ]);
   assert.deepEqual(upcomingStrikes("2026-10-30").map((s) => s.id), [
@@ -332,12 +333,13 @@ test("upcoming and past are decided by the as-of date: on the last day it is upc
     "vaga-ouigo-2026-10-30",
     "vaga-renfe-2026-11-10",
     "vaga-general-2026-11-11",
+    "vaga-ferroviaria-2026-11-17",
     "vaga-educacio-2026-11-26",
   ]);
   // Saturday 31 Oct to Monday 2 Nov: the all-day Ouigo strike is still to come (2 Nov); from the 3rd it is past.
   assert.deepEqual(upcomingStrikes("2026-11-02").map((s) => s.id).slice(0, 3), ["vaga-metges-2026-10-28", "vaga-ouigo-2026-10-30", "vaga-renfe-2026-11-10"]);
   assert.deepEqual(pastStrikes("2026-11-03").map((s) => s.id), ["vaga-ouigo-2026-10-30", "vaga-renfe-2026-10-29"]);
-  assert.deepEqual(upcomingStrikes("2026-11-13").map((s) => s.id), ["vaga-metges-2026-10-28", "vaga-educacio-2026-11-26"]);
+  assert.deepEqual(upcomingStrikes("2026-11-13").map((s) => s.id), ["vaga-metges-2026-10-28", "vaga-ferroviaria-2026-11-17", "vaga-educacio-2026-11-26"]);
   assert.deepEqual(pastStrikes("2026-11-13").map((s) => s.id), ["vaga-renfe-2026-11-10", "vaga-general-2026-11-11", "vaga-ouigo-2026-10-30", "vaga-renfe-2026-10-29"]);
   for (const day of ["2026-10-27", "2026-11-05", "2026-12-01", "2026-12-09"]) {
     assert.equal(upcomingStrikes(day).length + pastStrikes(day).length, STRIKES.length, day);
@@ -450,6 +452,7 @@ test("after the last strike the page renders every strike as past, with a 'none 
       [
         "vaga-educacio-2026-11-26",
         "vaga-metges-2026-10-28",
+        "vaga-ferroviaria-2026-11-17",
         "vaga-renfe-2026-11-10",
         "vaga-general-2026-11-11",
         "vaga-ouigo-2026-10-30",

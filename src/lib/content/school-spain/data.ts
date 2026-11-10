@@ -1014,4 +1014,35 @@ export const REGION_DATA: readonly RegionData[] = [
     schoolDays: 175,
     verifiedAt: "2026-11-06",
   },
+  /* ---------------------------------------------------------------- La Rioja */
+  {
+    boe: "RI",
+    order: {
+      short: "Resolución 34/2026, de 14 de abril",
+      title: "Resolución 34/2026, de 14 de abril, de la Consejería de Educación y Empleo, por la que se establece el calendario escolar del curso académico 2026/2027, para los centros docentes no universitarios de la Comunidad Autónoma de La Rioja con excepción de las escuelas infantiles y centros privados de primer ciclo de Educación Infantil",
+      issuer: "Consejería de Educación y Empleo del Gobierno de La Rioja",
+      bulletin: "BOR",
+      number: "71",
+      date: "2026-04-16",
+      url: "https://web.larioja.org/bor-portada/boranuncio?n=anu-576591",
+      departmentUrl: "https://www.larioja.org/edu-orden-academica/es/accesos-directos/calendario-escolar",
+    },
+    levels: [
+      { levels: "Infantil, Primaria, ESO y Bachillerato", start: "2026-09-09", end: "2027-06-22", note: "en Bachillerato cada centro concreta el calendario de mayo y junio según las evaluaciones" },
+      { levels: "Formación Profesional", start: "2026-09-09", end: "2027-06-22" },
+      { levels: "Formación Profesional a distancia", start: "2026-09-28", end: "2027-06-22" },
+    ],
+    christmas: { from: "2026-12-23", to: "2027-01-06" },
+    easter: { from: "2027-03-25", to: "2027-04-04" },
+    otherBreaks: [],
+    nonTeaching: [
+      { date: "2027-02-26", reason: "Día de la Comunidad Educativa" },
+      { date: "2027-06-09", reason: "Día de La Rioja" },
+    ],
+    localDays:
+      "Cada localidad puede tener hasta siete días no lectivos propios: sus dos fiestas locales y otros cinco que se fijan por el procedimiento educativo municipal. El calendario de cada localidad está en la web de Ordenación Educativa del Gobierno de La Rioja.",
+    // Dates checked again on 8 Nov 2026 against the BOR text (ChatGPT dossier, quotes per date).
+    notes: ["El calendario general no se aplica a las escuelas infantiles ni a los centros privados de primer ciclo de Educación Infantil (0-3 años)."],
+    verifiedAt: "2026-11-06",
+  },
 ];

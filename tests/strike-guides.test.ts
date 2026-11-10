@@ -474,8 +474,8 @@ test("the 11N page links both guides in its body and follows the Renfe entry's s
     assert.match(text(blocks), /dijous 26 de novembre de 2026|jueves 26 de noviembre de 2026|Thursday 26 November 2026/, locale);
     assert.doesNotMatch(text(buildStrike11nBody(locale, "2026-11-27")), /dijous 26 de novembre de 2026|jueves 26 de noviembre de 2026|Thursday 26 November 2026/, locale);
   }
-  assert.equal(STRIKE_11N.editions.ca.seoTitle, "Vaga general 11 novembre 2026: serveis mínims i què funciona");
-  assert.equal(STRIKE_11N.editions.es.seoTitle, "Huelga general 11 de noviembre 2026: servicios mínimos");
+  assert.equal(STRIKE_11N.editions.ca.seoTitle, "Vaga general 11 novembre: serveis mínims i manifestació");
+  assert.equal(STRIKE_11N.editions.es.seoTitle, "Huelga 11 noviembre: servicios mínimos y manifestación");
   assert.equal(STRIKE_11N.editions.en.seoTitle, "General strike 11 November 2026 in Spain: what runs");
 });
 

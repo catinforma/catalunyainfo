@@ -125,7 +125,7 @@ export const STRIKE_11N_DATE = "2026-11-11";
  * on or after the day) is decided against this date, never the clock: the
  * HTML is the same whichever day it is rendered.
  */
-export const STRIKE_11N_AS_OF = "2026-11-05";
+export const STRIKE_11N_AS_OF = "2026-11-09";
 
 /** The facts were re-read on the sources on the as-of day: one constant to move. */
 export const STRIKE_11N_VERIFIED = STRIKE_11N_AS_OF;
@@ -187,7 +187,12 @@ export const MINIMUM_SERVICES_11N: SectorMinimumServices[] = [
     text: { ca: `FGC i tramvia: el 25% del servei habitual de 6.30 a 9.30 h i de 16.30 a 21 h, segons [l'ordre del Departament d'Empresa i Treball del 5 de novembre](${ORDRE_11N}).`, es: `FGC y tranvía: el 25% del servicio habitual de 6.30 a 9.30 h y de 16.30 a 21 h, según [la orden del Departament d'Empresa i Treball del 5 de noviembre](${ORDRE_11N}).`, en: `FGC and tram: 25% of the usual service from 06:30 to 09:30 and from 16:30 to 21:00, according to [the Department of Business and Labour's order of 5 November](${ORDRE_11N}).` },
     source: { name: "Ordre EMT/ /2026, de 5 de novembre, serveis essencials durant la vaga general de l'11 de novembre de 2026 (e-Tauler; al DOGC quan es publiqui)", url: ORDRE_11N, publisher: "Departament d'Empresa i Treball" },
   },
-  { key: "longDistance", status: "pending", text: null, source: null },
+  {
+    key: "longDistance",
+    status: "published",
+    text: { ca: `Alta velocitat i llarga distància de Renfe: el 73% dels serveis habituals; Mitja Distància, una mitjana del 65%, segons els serveis mínims que ha fixat el Ministeri de Transports ([comunicat de Renfe del 9 de novembre](https://grupo.renfe.com/es/es/sala-de-prensa/noticias/2026/11/establecidos-los-servicios-minimos-para-la-huelga-general-convocada-el-11n)).`, es: `Alta velocidad y larga distancia de Renfe: el 73% de los servicios habituales; Media Distancia, una media del 65%, según los servicios mínimos que ha fijado el Ministerio de Transportes ([comunicado de Renfe del 9 de noviembre](https://grupo.renfe.com/es/es/sala-de-prensa/noticias/2026/11/establecidos-los-servicios-minimos-para-la-huelga-general-convocada-el-11n)).`, en: `Renfe high-speed and long-distance trains: 73% of the usual services; Media Distancia, 65% on average, under the minimum services set by the Ministry of Transport ([Renfe's notice of 9 November](https://grupo.renfe.com/es/es/sala-de-prensa/noticias/2026/11/establecidos-los-servicios-minimos-para-la-huelga-general-convocada-el-11n)).` },
+    source: { name: "Establecidos los servicios mínimos para la huelga general convocada el 11N (09/11/2026)", url: "https://grupo.renfe.com/es/es/sala-de-prensa/noticias/2026/11/establecidos-los-servicios-minimos-para-la-huelga-general-convocada-el-11n", publisher: "Renfe" },
+  },
   { key: "airports", status: "pending", text: null, source: null },
   {
     key: "schools",
@@ -317,14 +322,17 @@ export const STRIKE_11N_META: Record<Locale, Meta> = {
     title: "Vaga general de l'11 de novembre de 2026: serveis mínims i què funciona a Catalunya",
     // 3 Nov 2026: the searched words ("vaga general 11 novembre", 377 impr.;
     // "vaga 11 novembre 2026"), not the written date; the H1 keeps "de l'11 de".
-    seoTitle: "Vaga general 11 novembre 2026: serveis mínims i què funciona",
+    // 8 Nov 2026: "manifestació 11 novembre barcelona" is the top query the
+    // page shows for (3.5k impr. ES at pos 6.6, CTR 1.6 %); the title now says
+    // the page has it. Revert if clicks fall by 15 Nov (docs/SEO_EXPERIMENTS.md).
+    seoTitle: "Vaga general 11 novembre: serveis mínims i manifestació",
     excerpt:
       "La vaga general de l'11 de novembre de 2026 a Catalunya: horari, qui la convoca i per què, serveis mínims de transport, escoles i sanitat, i els drets de qui fa vaga.",
   },
   es: {
     path: "guias/huelga-general-11-noviembre",
     title: "Huelga general del 11 de noviembre de 2026: servicios mínimos y qué funciona en Cataluña",
-    seoTitle: "Huelga general 11 de noviembre 2026: servicios mínimos",
+    seoTitle: "Huelga 11 noviembre: servicios mínimos y manifestación",
     excerpt:
       "La huelga general del 11 de noviembre de 2026 en Cataluña: horario, quién la convoca y por qué, servicios mínimos de transporte, colegios y sanidad, y los derechos de quien hace huelga.",
   },
@@ -340,17 +348,17 @@ export const STRIKE_11N_META: Record<Locale, Meta> = {
 const DESCRIPTION: Record<Locale, { pending: string; published: string; past: string }> = {
   ca: {
     pending: "Vaga general el dimecres 11 de novembre de 2026, 24 hores des de les 0 h. Serveis mínims encara no publicats: Rodalies, metro, bus, escoles i sanitat.",
-    published: "Vaga general el dimecres 11 de novembre de 2026, 24 hores des de les 0 h. Serveis mínims publicats: Rodalies, metro, bus, escoles i sanitat.",
+    published: "Dimecres 11 de novembre, 24 h des de les 0 h. Manifestació a Barcelona: 17.30 h, Jardinets de Gràcia. Serveis mínims publicats: Rodalies, metro i bus.",
     past: "La vaga general de l'11 de novembre de 2026: qui la va convocar, els serveis mínims de Rodalies, metro, bus, escoles i sanitat, i què diu la llei.",
   },
   es: {
     pending: "Huelga general el miércoles 11 de noviembre de 2026, 24 horas desde las 0 h. Servicios mínimos aún no publicados: metro, Rodalies, bus, colegios y sanidad.",
-    published: "Huelga general el miércoles 11 de noviembre de 2026, 24 horas desde las 0 h. Servicios mínimos publicados: Rodalies, metro, bus, colegios y sanidad.",
+    published: "Miércoles 11 de noviembre, 24 h desde las 0 h. Manifestación en Barcelona: 17.30 h, Jardinets de Gràcia. Mínimos publicados: Rodalies, metro y bus.",
     past: "La huelga general del 11 de noviembre de 2026: quién la convocó, los servicios mínimos de Rodalies, metro, bus, colegios y sanidad, y qué dice la ley.",
   },
   en: {
     pending: "24-hour general strike across Spain on Wednesday 11 November 2026. Minimum services not out yet: Barcelona metro, Rodalies, buses, schools, hospitals.",
-    published: "24-hour general strike across Spain on Wednesday 11 November 2026. Minimum services are out: Rodalies, metro, buses, schools and hospitals in Catalonia.",
+    published: "24-hour general strike in Spain on Wednesday 11 November. Barcelona march: 5.30pm, Jardinets de Gràcia. Minimum services out: Rodalies, metro, buses.",
     past: "The 11 November 2026 general strike in Spain: who called it, the minimum services set for Barcelona and Catalonia, and what the law says.",
   },
 };
