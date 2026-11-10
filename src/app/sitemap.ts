@@ -15,6 +15,7 @@ import { weekendSitemapEntries } from "@/lib/programmatic/weekend/sitemap";
 import { todaySitemapEntries } from "@/lib/programmatic/today/page";
 import { christmasFairsSitemapEntries } from "@/lib/programmatic/christmas-fairs/sitemap";
 import { pollsSitemapEntries } from "@/lib/programmatic/polls/page";
+import { editionSitemapEntries } from "@/lib/programmatic/spain-2027/editions";
 import { spainSitemapEntries } from "@/lib/programmatic/spain-2027/paths";
 
 /**
@@ -148,6 +149,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...holidaySitemapEntries(),
     // Calendario laboral 2027 en España: hub, bridges and the 19 communities (Spanish only).
     ...spainSitemapEntries(),
+    // Its Catalan and English editions (/ca/festius/2027/, /en/holidays/2027/), same pages.
+    ...editionSitemapEntries(),
     ...fuelSitemapEntries(),
     ...rodaliesSitemap(),
     ...reservoirSitemapEntries(),

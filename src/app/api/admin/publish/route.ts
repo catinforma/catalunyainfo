@@ -79,6 +79,7 @@ import { publishLocalHolidaysGuide } from "@/lib/content/holidays/local-publish"
 import { publishReservoirGuide } from "@/lib/content/reservoirs/publish";
 import { publishSchoolCalendarGuide } from "@/lib/content/school/publish";
 import { publishSpainSchoolCalendars } from "@/lib/content/school-spain/publish";
+import { editionPaths } from "@/lib/programmatic/spain-2027/editions";
 import { spainPaths } from "@/lib/programmatic/spain-2027/paths";
 import { authoriseDeployRequest, describeError } from "@/lib/admin/deploy-auth";
 import { FEED_PATHS } from "@/lib/seo/feed-paths";
@@ -402,7 +403,9 @@ export async function POST(request: Request) {
     // is false), purges them at the CDN and sends them to IndexNow. Re-run it
     // after a deploy that changes sources.ts or cities-data.ts (a community's
     // local list published).
-    const codePaths = wants("calendario-2027-espana") ? spainPaths() : [];
+    // Since 10 Nov 2026 the same group also carries the Catalan and English
+    // editions (/ca/festius/2027/..., /en/holidays/2027/..., editions.ts).
+    const codePaths = wants("calendario-2027-espana") ? [...spainPaths(), ...editionPaths()] : [];
     // The Catalan work calendar guide gained one sentence linking to the
     // Spain hub (Spanish edition); it goes out once, on its own.
     if (wants("calendario-2027-espana-links")) published.push(await publishHolidayGuide());

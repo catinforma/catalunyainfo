@@ -5,6 +5,7 @@ import { absoluteUrl } from "@/lib/site";
 import { CITIES, cityBySlug, type City } from "./cities";
 import { CITIES_AS_OF } from "./cities-data";
 import { COMMUNITIES, communityBySlug, type CommunityNames } from "./communities";
+import { editionLanguages, editionsOf } from "./editions";
 import { SOURCES_READ_ON } from "./sources";
 
 /**
@@ -82,7 +83,7 @@ export function spainPaths(): string[] {
   return [spainHubPath(), spainBridgesPath(), ...COMMUNITIES.map((c) => communityPath(c)), ...CITIES.map((c) => cityPath(c))];
 }
 
-/** Sitemap entries: Spanish only, so `x-default` is the page itself. */
+/** Sitemap entries of the Spanish edition, each with its ca and en editions (editions.ts); x-default is the English one. */
 export function spainSitemapEntries(): MetadataRoute.Sitemap {
   const read = SOURCES_READ_ON > CITIES_AS_OF ? SOURCES_READ_ON : CITIES_AS_OF;
   const lastModified = new Date(`${read}T00:00:00Z`);
@@ -92,6 +93,6 @@ export function spainSitemapEntries(): MetadataRoute.Sitemap {
     lastModified,
     changeFrequency: "weekly" as const,
     priority: path === spainHubPath() ? 0.7 : cities.has(path) ? 0.5 : 0.6,
-    alternates: { languages: { es: absoluteUrl(path), "x-default": absoluteUrl(path) } },
+    alternates: { languages: editionLanguages(editionsOf(path)!) },
   }));
 }

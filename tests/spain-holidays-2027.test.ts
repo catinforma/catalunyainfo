@@ -406,7 +406,7 @@ test("sitemap and publish group: the 21 URLs and the city pages are listed, and 
   const sitemap = readFileSync(join(ROOT, "src/app/sitemap.ts"), "utf8");
   assert.match(sitemap, /\.\.\.spainSitemapEntries\(\)/);
   const publish = readFileSync(join(ROOT, "src/app/api/admin/publish/route.ts"), "utf8");
-  assert.match(publish, /wants\("calendario-2027-espana"\) \? spainPaths\(\) : \[\]/);
+  assert.match(publish, /wants\("calendario-2027-espana"\) \? \[\.\.\.spainPaths\(\), \.\.\.editionPaths\(\)\] : \[\]/);
   assert.match(publish, /for \(const path of codePaths\) revalidate\(path\.replace/);
   assert.match(publish, /\.\.\.codePaths\]\)/, "IndexNow gets them too");
   // The guide that links to the hub goes out on its own group.
