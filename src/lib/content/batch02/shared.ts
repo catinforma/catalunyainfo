@@ -101,7 +101,9 @@ export type B2Key =
   // 5 Nov 2026: the postal vote (29N requests close on 19 Nov).
   | "postalVote"
   // 6 Nov 2026: the December bridge, Christmas and Reyes in every community of Spain.
-  | "decemberBridgeSpain";
+  | "decemberBridgeSpain"
+  // 10 Nov 2026: the Spain-wide strikes calendar (strikes-spain.ts), in three languages.
+  | "strikesSpain";
 
 /** Path after the locale prefix, no leading or trailing slash. */
 export const B2_PATHS: Record<B2Key, Record<Locale, string>> = {
@@ -431,6 +433,12 @@ export const B2_PATHS: Record<B2Key, Record<Locale, string>> = {
     ca: "guies/vaga-educacio-novembre",
     es: "guias/huelga-educacion-noviembre",
     en: "guides/catalonia-teachers-strike-november",
+  },
+  // No month in the path: one evergreen URL per language, re-dated in place.
+  strikesSpain: {
+    ca: "guies/vagues-espanya",
+    es: "guias/huelgas-espana",
+    en: "guides/strikes-spain",
   },
   // No year in the path: the campaign comes back every November.
   granRecapte: {
@@ -821,6 +829,12 @@ export const B2_TITLES: Record<B2Key, Record<Locale, string>> = {
     ca: "Vaga a l'educació del 26 de novembre: hi ha escola?",
     es: "Huelga en la educación del 26 de noviembre: ¿hay colegio?",
     en: "Catalonia teachers' strike on 26 November: is there school?",
+  },
+  // Evergreen link label: no month and no week (the page's own title carries them).
+  strikesSpain: {
+    ca: "Vagues a Espanya: calendari i serveis mínims",
+    es: "Huelgas en España: calendario y servicios mínimos",
+    en: "Strikes in Spain: dates and minimum services",
   },
   granRecapte: {
     ca: "Gran Recapte 2026: dies, voluntariat i on donar",

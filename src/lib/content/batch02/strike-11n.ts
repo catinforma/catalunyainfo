@@ -24,7 +24,6 @@ import {
   type B2Source,
 } from "./shared";
 import { strike11nCityLinks } from "./strike-11n-city-paths";
-import { STRIKES_SPAIN_HREF, STRIKES_SPAIN_NAME } from "./strikes-spain-path";
 import { STRIKES, STRIKE_URLS, isUpcoming } from "./strikes";
 
 /**
@@ -1170,7 +1169,7 @@ const RELATED = ["strikes", "hours", "airport", "transport", "strikeRenfe", "str
 export const OTHER_CITIES_TITLE = "En otras ciudades";
 
 export function otherCitiesLine(): string {
-  return `¿Estás fuera de Cataluña? Servicios mínimos y qué funciona el 11 de noviembre en ${strike11nCityLinks()}. Las demás huelgas convocadas en España, por fecha, en el [${STRIKES_SPAIN_NAME}](${STRIKES_SPAIN_HREF}).`;
+  return `¿Estás fuera de Cataluña? Servicios mínimos y qué funciona el 11 de noviembre en ${strike11nCityLinks()}. Las demás huelgas convocadas en España, por fecha, en el ${b2link("strikesSpain", "es", "calendario de huelgas en España")}.`;
 }
 const SECTOR_ORDER: SectorKey[] = ["rodalies", "tmb", "fgcTram", "longDistance", "airports", "schools", "health"];
 const TRANSPORT: ("rodalies" | "tmb" | "fgcTram" | "longDistance" | "airports")[] = ["rodalies", "tmb", "fgcTram", "longDistance", "airports"];

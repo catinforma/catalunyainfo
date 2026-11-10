@@ -1,95 +1,97 @@
-import type { B2Source } from "./shared";
+import type { Locale } from "@/lib/i18n/config";
+
+import type { B2Key, B2Source } from "./shared";
 
 /**
  * The data model of the Spain-wide strikes hub (`strikes-spain.ts`), in a
  * module of its own so that the facts (`strikes-spain-data.ts`), which the
  * strike watch edits, and the page builder share it without importing each
- * other. Spanish only: every text field is Spanish Markdown.
+ * other. Three languages: every text field is written natively in Catalan,
+ * Spanish and English (Markdown), never machine-mirrored.
+ *
+ * `{checked}` inside a text is replaced by the builder with the as-of date in
+ * that language ("10 de noviembre de 2026"), so "not published as of ..."
+ * lines move with STRIKES_SPAIN_AS_OF and are never typed by hand.
  */
 
-export type SpainStrikeSector = "general" | "rail" | "air" | "health" | "education" | "justice" | "postal" | "road";
+export type L = Record<Locale, string>;
 
-/**
- * convocada: the organiser's own notice says the strike is called (registered
- * or formally notified).
- * anunciada: the organiser has announced it in its own statement, but no
- * source says it has been registered; the page prints "anunciada, sin
- * convocatoria registrada" beside it.
- */
-export type SpainCallStatus = "convocada" | "anunciada";
+export type SpainStrikeSector = "general" | "rail" | "air" | "industry" | "education";
 
 /**
- * published: every order or resolution the strike needs is out.
- * partial: some are out (one region, or the Generalitat's but not the Ministry's).
- * pending: none is out yet (only while the strike is upcoming).
- * none: nothing to publish: the strike passed or was called off with none, or
- * none apply (a students' strike); `text` says which.
+ * official: a registered call or an official minimum-services order or
+ * resolution exists and is linked. Only these are printed as "confirmed".
+ * called: the organiser's own notice calls it, and no official order for it
+ * was found on the as-of day. Never printed as "confirmed".
  */
-export type SpainMsStatus = "published" | "partial" | "pending" | "none";
+export type SpainCallStatus = "official" | "called";
+
+/**
+ * published: an order or resolution is out and linked.
+ * pending: one is due (the strike touches essential services) and is not out.
+ * none: the strike touches no essential public service, or it is not a labour
+ * strike; `text` says which.
+ */
+export type SpainMsStatus = "published" | "pending" | "none";
 
 export interface SpainMinimumServices {
   status: SpainMsStatus;
-  /** One plain line (no links) for the calendar table and the key facts: "Publicados en Cataluña; pendientes los del Ministerio". */
-  short: string;
-  /** What is set and by whom, with every order or resolution linked (Markdown). While pending: who sets them and where they will appear. */
-  text: string;
+  /** One plain line (no links) for the tables. */
+  short: L;
+  /** What is set and by whom, every order linked. While pending: who sets them and where they will appear. */
+  text: L;
 }
 
 export interface SpainStrike {
   /** Stable anchor for the dated section, e.g. "huelga-general-2026-11-11". */
   id: string;
-  /** Every day of action (ISO, civil date in Madrid), ascending. An indefinite strike lists its first day only. */
+  /** Every day of action (ISO, civil date in Madrid), ascending. */
   dates: string[];
-  /** An indefinite strike: in progress from `dates[0]` until `endedOn` is set. */
-  indefinite?: { endedOn?: string };
   sector: SpainStrikeSector;
-  call: SpainCallStatus;
-  /** After the date in the heading, lower case, tense-neutral: "huelga de maquinistas del Grupo Renfe (SEMAF)". */
-  title: string;
-  /** Shortest name, for the meta description and the lead: "Renfe (SEMAF)". */
-  label: string;
-  /** Where it applies, plain: "toda España", "Grupo Renfe, en toda España". */
-  scope: string;
-  /** Hours as the organiser or the order published them; say so when none are published. Markdown. */
-  hours: string;
-  /** Who calls it, with the organiser's own notice linked (Markdown). */
-  calledBy: string;
-  /** Who is called out (Markdown). */
-  who: string;
-  /** Other facts read on the organiser's or an official page: talks, a day called off (Markdown). */
-  notes: string[];
-  /**
-   * The general strike's minimum services are a slot per region and service
-   * in `strike-11n-cities-data.ts` and `strikes.ts`: "strike11n" makes the
-   * page read them from there, so the two never disagree.
-   */
-  minimumServices: SpainMinimumServices | "strike11n";
-  /**
-   * The last day the cited minimum-services resolution is in force, when it
-   * says so (the Ministry's air resolutions run month by month): a test fails
-   * once STRIKES_SPAIN_AS_OF passes it, until a new one is cited or the
-   * strike is recorded as over.
-   */
-  msValidUntil?: string;
-  /** Our own pages about this strike, Spanish only (Markdown links). */
-  guides: string[];
+  status: SpainCallStatus;
+  /** After the date in the heading, lower case, tense-neutral. */
+  title: L;
+  /** Shortest name, for the day-by-day table and the meta description. */
+  label: L;
+  /** Where it applies. */
+  scope: L;
+  /** Hours as the organiser or the order published them. Omitted for past strikes. */
+  hours?: L;
+  /** Who calls it, with the organiser's own notice linked. */
+  calledBy: L;
+  /** Why it has the status it has: the registered call or official order, or only the organiser's notice. */
+  basis: L;
+  minimumServices: SpainMinimumServices;
+  /** Our own trilingual guides about this strike, linked in the reader's language. */
+  guides?: B2Key[];
   sources: B2Source[];
   /** The id of the same strike in the Catalan hub (`strikes.ts`), when it is there too: a test keeps the dates in step. */
   catalanEntry?: string;
 }
 
 /**
- * Where a sector stands when it has no dated strike of its own, or one that
- * was postponed (the doctors' state-wide strike, 7 Oct 2026): printed in the
- * "Médicos, educación, justicia y Correos" section and in that sector's FAQ
- * answer. Only what an organiser or an official page says, with the day it
- * was checked.
+ * A long-running strike with no last day (airports): it has no row of its own
+ * in the day-by-day table, since it applies every day (or on fixed weekdays)
+ * while its minimum-services resolution is in force.
  */
-export interface SpainSectorStatus {
-  sector: SpainStrikeSector;
-  /** The section's H3: "Médicos y sanidad". */
-  heading: string;
-  /** Markdown paragraphs, each with its source linked. The first one also answers the sector's FAQ when no dated strike does. */
-  text: string[];
+export interface SpainOpenStrike {
+  id: string;
+  title: L;
+  /** Where, who called it, and on which days, as the Ministry's list words it. */
+  text: L;
+  /**
+   * The last day the cited resolution is in force: a test fails once
+   * STRIKES_SPAIN_AS_OF passes it, until a new resolution is cited or the
+   * strike is removed.
+   */
+  msValidUntil: string;
+  sources: B2Source[];
+}
+
+/** A strike people search for that is not happening: postponed, called off, moved or never registered. */
+export interface SpainNotHappening {
+  id: string;
+  title: L;
+  text: L;
   sources: B2Source[];
 }
