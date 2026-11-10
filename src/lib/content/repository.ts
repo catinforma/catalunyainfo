@@ -104,6 +104,32 @@ async function safeRead<T>(label: string, fallback: T, run: () => Promise<T>): P
   }
 }
 
+/**
+ * Navigation answers (is a section filled? any tags? any authors?) shared by
+ * every page this process renders.
+ *
+ * 10 Nov 2026: the header and footer of every page asked them again, about a
+ * dozen counts per page. During a build that is the same answers 1,400 times
+ * over a lossy link to the pooler, most of the 13.5 minutes of "Generating
+ * static pages". They only change when a section gets its first entry, so a
+ * build keeps them for its whole run and the server for 10 minutes. Only
+ * answers are kept: a failed read is dropped at once and asked again next time.
+ */
+const NAV_TTL_MS = 10 * 60_000;
+const navMemo = new Map<string, { at: number; value: Promise<unknown> }>();
+
+function navCached<T>(key: string, run: () => Promise<T>): Promise<T> {
+  const building = process.env.NEXT_PHASE === "phase-production-build";
+  const hit = navMemo.get(key);
+  if (hit && (building || Date.now() - hit.at < NAV_TTL_MS)) return hit.value as Promise<T>;
+  const value = run();
+  navMemo.set(key, { at: Date.now(), value });
+  value.catch(() => {
+    if (navMemo.get(key)?.value === value) navMemo.delete(key);
+  });
+  return value;
+}
+
 /** Connection-level failures worth a second try; query errors are not retried. */
 const TRANSIENT_CODES = new Set([
   "CONNECT_TIMEOUT",
@@ -412,7 +438,10 @@ export async function nonEmptySections(
         const types = SECTION_ENTRY_TYPES[section];
         const categoryKeys = SECTION_CATEGORY_KEYS[section];
         if (!types && !categoryKeys) return [section, 0] as const;
-        return [section, await countEntriesQuery(db, locale, { types, categoryKeys })] as const;
+        const count = await navCached(`count|${locale}|${section}`, () =>
+          withConnectRetry(() => countEntriesQuery(db, locale, { types, categoryKeys })),
+        );
+        return [section, count] as const;
       }),
     );
     const filled = new Set(counts.filter(([, count]) => count > 0).map(([section]) => section));
@@ -1292,22 +1321,26 @@ export function relatedIdsInBody(body: ReturnType<typeof parseBody>): string[] {
 export async function hasAnyTags(locale: Locale): Promise<boolean> {
   const db = getDb();
   if (!db) return false;
-  return safeRead("hasAnyTags", false, async () => {
-    const rows = await db
-      .select({ count: sql<number>`count(*)::int` })
-      .from(entryTags)
-      .innerJoin(entryTranslations, eq(entryTranslations.entryId, entryTags.entryId))
-      .innerJoin(entries, eq(entries.id, entryTranslations.entryId))
-      .where(publishedWhere(locale));
-    return (rows[0]?.count ?? 0) > 0;
-  });
+  return safeRead("hasAnyTags", false, () =>
+    navCached(`tags|${locale}`, async () => {
+      const rows = await db
+        .select({ count: sql<number>`count(*)::int` })
+        .from(entryTags)
+        .innerJoin(entryTranslations, eq(entryTranslations.entryId, entryTags.entryId))
+        .innerJoin(entries, eq(entries.id, entryTranslations.entryId))
+        .where(publishedWhere(locale));
+      return (rows[0]?.count ?? 0) > 0;
+    }),
+  );
 }
 
 export async function hasAnyAuthors(): Promise<boolean> {
   const db = getDb();
   if (!db) return false;
-  return safeRead("hasAnyAuthors", false, async () => {
-    const rows = await db.select({ count: sql<number>`count(*)::int` }).from(authors);
-    return (rows[0]?.count ?? 0) > 0;
-  });
+  return safeRead("hasAnyAuthors", false, () =>
+    navCached("authors", async () => {
+      const rows = await db.select({ count: sql<number>`count(*)::int` }).from(authors);
+      return (rows[0]?.count ?? 0) > 0;
+    }),
+  );
 }

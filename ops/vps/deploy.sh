@@ -266,6 +266,22 @@ else
   nice -n 10 npm ci --include=dev --no-audit --no-fund --loglevel=error || fail_build "npm ci failed"
 fi
 
+# 10 Nov 2026: Turbopack's build cache (.next/cache/turbopack, on by default
+# since Next 16.3) only helps when it is there before the build, and every
+# release starts from an empty folder. Copy the live release's (a copy, not
+# links: the build rewrites it). Only the compiler's cache: prerendered pages
+# and the fetch cache are never carried over (README section 11).
+# REUSE_BUILD_CACHE=0 builds cold.
+if [[ ${REUSE_BUILD_CACHE:-1} == 1 && -n $PREVIOUS && -d $PREVIOUS/.next/cache/turbopack ]]; then
+  mkdir -p .next/cache
+  if cp -a "$PREVIOUS/.next/cache/turbopack" .next/cache/turbopack; then
+    ok "Turbopack build cache reused from $(basename "$PREVIOUS") ($(du -sh .next/cache/turbopack | cut -f1))"
+  else
+    rm -rf .next/cache/turbopack
+    warn "could not copy the Turbopack build cache: building cold"
+  fi
+fi
+
 log "npm run build (standalone)"
 BUILD_START=$(date +%s)
 nice -n 10 ionice -c 2 -n 7 npm run build || fail_build "next build failed"
