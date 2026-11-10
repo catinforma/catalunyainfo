@@ -21,7 +21,8 @@ import { STRIKE_URLS } from "./strikes";
  *  - Demonstrations: only when the organisers publish the time AND the place;
  *    write it as theirs, with the link, in `demos` and `demoShort`.
  *  - Move STRIKE_11N_CITIES_AS_OF to the day you checked, run the tests,
- *    deploy and publish `?only=strike-11n-cities`.
+ *    deploy and publish `?only=strike-11n-cities`, then `?only=huelgas-espana`
+ *    (the Spain-wide calendar reads its 11N minimum services from this file).
  *  - 12 Nov: move the date past the strike (the lead switches to the past)
  *    and record what was set; a test fails from 13 Nov until you do.
  */

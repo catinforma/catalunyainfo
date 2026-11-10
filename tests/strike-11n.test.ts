@@ -6,6 +6,7 @@ import { bodySchema, bodyToPlainText, wordCount, type Block } from "../src/lib/c
 import { SIBLING_PATHS } from "../src/lib/content/batch02/december-bridge.ts";
 import { B2_PATHS, withReadNext } from "../src/lib/content/batch02/shared.ts";
 import { STRIKE_11N_CITY_REFS, strike11nCityHref } from "../src/lib/content/batch02/strike-11n-city-paths.ts";
+import { STRIKES_SPAIN_HREF } from "../src/lib/content/batch02/strikes-spain-path.ts";
 import {
   MINIMUM_SERVICES_11N,
   SET_BY,
@@ -59,6 +60,8 @@ const PUBLISHED = new Set([
   ...LOCALES.map((locale) => rodaliesHubPath(locale)),
   // 6 Nov 2026: the Spanish-only 11N city pages (strike-11n-cities.ts), linked from the Spanish edition.
   ...STRIKE_11N_CITY_REFS.map((ref) => strike11nCityHref(ref.key)),
+  // 6 Nov 2026: the Spanish-only Spain-wide strikes calendar (strikes-spain.ts), linked from the Spanish edition.
+  STRIKES_SPAIN_HREF,
 ]);
 
 const ALL_SECTORS: SectorKey[] = ["rodalies", "tmb", "fgcTram", "longDistance", "airports", "schools", "health"];
@@ -595,5 +598,6 @@ test("the strikes hub links here once per language and agrees on whether the ord
 test("the publish route has a strike-11n group that also republishes the hub", () => {
   const route = readFileSync(new URL("../src/app/api/admin/publish/route.ts", import.meta.url), "utf8");
   assert.match(route, /import \{ STRIKE_11N \} from "@\/lib\/content\/batch02\/strike-11n";/);
-  assert.match(route, /wants\("strike-11n"\)\) published\.push\(await publishB2Article\(STRIKE_11N\), await publishB2Article\(STRIKES_GUIDE\)\)/);
+  // 6 Nov 2026: and the Spain-wide calendar, which reads the 11N minimum services from the same modules.
+  assert.match(route, /wants\("strike-11n"\)\) published\.push\(await publishB2Article\(STRIKE_11N\), await publishB2Article\(STRIKES_GUIDE\), await publishB2SpanishArticle\(STRIKES_SPAIN_GUIDE\)\)/);
 });
