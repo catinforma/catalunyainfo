@@ -23,7 +23,7 @@ export interface ZoneReading {
 export const WINDOW_DAYS = 15;
 
 /** ISO date the data was read. This is what the page shows as last verified. */
-export const READ_AT = "2026-10-30";
+export const READ_AT = "2026-11-10";
 
 export const SOURCE = {
   name: "Dades meteorològiques de la XEMA",
@@ -63,90 +63,90 @@ export const LEVEL_RULE = [
 export const ZONE_READINGS: readonly ZoneReading[] = [
   {
     "id": "ripolles",
-    "mm": 101.8,
+    "mm": 2.6,
     "stations": 5,
-    "daysSinceRain": 10,
-    "level": "favourable",
+    "daysSinceRain": 1,
+    "level": "low",
     "wettest": {
-      "name": "Ulldeter (2.413 m)",
-      "mm": 137.4
+      "name": "Núria (1.971 m)",
+      "mm": 5.1
     }
   },
   {
     "id": "bergueda",
-    "mm": 88.9,
+    "mm": 12.9,
     "stations": 5,
-    "daysSinceRain": 11,
-    "level": "interesting",
+    "daysSinceRain": 1,
+    "level": "patchy",
     "wettest": {
-      "name": "Gisclareny",
-      "mm": 130.8
+      "name": "Santuari de Queralt",
+      "mm": 21.6
     }
   },
   {
     "id": "garrotxa",
-    "mm": 84.4,
+    "mm": 1.2,
     "stations": 2,
-    "daysSinceRain": 10,
-    "level": "favourable",
+    "daysSinceRain": 7,
+    "level": "low",
     "wettest": {
       "name": "la Vall d'en Bas",
-      "mm": 84.7
+      "mm": 1.2
     }
   },
   {
     "id": "osona",
-    "mm": 59.2,
+    "mm": 2.3,
     "stations": 7,
-    "daysSinceRain": 7,
-    "level": "favourable",
+    "daysSinceRain": 1,
+    "level": "low",
     "wettest": {
-      "name": "Montesquiu",
-      "mm": 105.7
+      "name": "Viladrau",
+      "mm": 5.9
     }
   },
   {
     "id": "pirineu",
-    "mm": 55.9,
+    "mm": 8.5,
     "stations": 24,
-    "daysSinceRain": 5,
-    "level": "favourable",
+    "daysSinceRain": 1,
+    "level": "patchy",
     "wettest": {
-      "name": "Cadí Nord (2.145 m) - Prat d'Aguiló",
-      "mm": 114.7
+      "name": "Boí (2.537 m)",
+      "mm": 20.7
     }
   },
   {
     "id": "montseny",
-    "mm": 42.4,
+    "mm": 5.2,
     "stations": 9,
-    "daysSinceRain": 7,
-    "level": "favourable",
+    "daysSinceRain": 1,
+    "level": "low",
     "wettest": {
-      "name": "Caldes de Montbui",
-      "mm": 87.9
+      "name": "Tagamanent - PN del Montseny",
+      "mm": 10.2
     }
   },
   {
     "id": "ports",
-    "mm": 55.5,
+    "mm": 20.2,
     "stations": 19,
-    "daysSinceRain": 0,
-    "level": "favourable",
+    "daysSinceRain": 2,
+    "level": "interesting",
     "wettest": {
-      "name": "Tivissa",
-      "mm": 95.4
+      "name": "Illa de Buda",
+      "mm": 57.7
     }
   },
   {
     "id": "ponent",
-    "mm": 53.8,
+    "mm": 15.8,
     "stations": 31,
-    "daysSinceRain": 11,
-    "level": "interesting",
+    "daysSinceRain": 1,
+    "level": "patchy",
     "wettest": {
-      "name": "els Alamús",
-      "mm": 73.8
+      "name": "el Canós",
+      "mm": 27.5
     }
   }
 ];
