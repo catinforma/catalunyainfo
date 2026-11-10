@@ -3,25 +3,21 @@ import "server-only";
 import { IMAGES } from "@/lib/content/images";
 import { publishArticle, type ArticleSpec, type ImageSpec, type PublishResult, type SourceSpec } from "@/lib/content/publish-article";
 
+import { LOCALES } from "@/lib/i18n/config";
+
 import { BOE_2026, BOE_2027 } from "./holidays";
-import {
-  HUB_SEO_TITLE,
-  HUB_TITLE,
-  buildHubBody,
-  buildRegionBody,
-  hubExcerpt,
-  regionExcerpt,
-  regionSeoTitle,
-  regionTitle,
-} from "./body";
-import { HUB_PATH, SPAIN_REGIONS, hubRegions, regionPath } from "./regions";
+import { buildHubBody, buildRegionBody, hubExcerpt, hubSeoTitle, hubTitle, regionExcerpt, regionSeoTitle, regionTitle } from "./body";
+import { localizeRegion } from "./i18n";
+import { HUB_PATHS, SPAIN_REGIONS, hubRegions, regionPath } from "./regions";
 import type { RegionCalendar } from "./types";
 
 /**
  * "Calendario escolar 2026-2027" for every Spanish community with a
- * transcribed order, and the hub that compares them. Spanish only: one
- * edition per entry, no ca/en (the searches are Spanish, and the pages answer
- * for other communities, not Catalonia).
+ * transcribed order, and the hub that compares them, each in Catalan, Spanish
+ * and English: one entry with three editions, so every page lists the other
+ * two as its hreflang alternates. The entry keys are those of the Spanish
+ * pages first published on 6 November; the Catalan and English editions join
+ * those entries as their translations.
  *
  * Publish group `calendario-escolar-espana` (api/admin/publish). Bodies are
  * built from `data.ts`; the live part (today, the next break, the title) is
@@ -46,8 +42,16 @@ function hero(): ImageSpec {
     credit: file.credit ?? "CatalunyaInfo",
     creditUrl: file.creditUrl ?? null,
     license: file.license ?? null,
-    alt: { es: "Fachada del colegio público de Infantil y Primaria Isidro Girant, en Ayora, con árboles en el patio" },
-    caption: { es: "Colegio público de Infantil y Primaria Isidro Girant, en Ayora (Valencia)." },
+    alt: {
+      ca: "Façana de l'escola pública d'Infantil i Primària Isidro Girant, a Ayora, amb arbres al pati",
+      es: "Fachada del colegio público de Infantil y Primaria Isidro Girant, en Ayora, con árboles en el patio",
+      en: "Front of the Isidro Girant state infant and primary school in Ayora, with trees in the playground",
+    },
+    caption: {
+      ca: "Escola pública d'Infantil i Primària Isidro Girant, a Ayora (València).",
+      es: "Colegio público de Infantil y Primaria Isidro Girant, en Ayora (Valencia).",
+      en: "Isidro Girant state infant and primary school, Ayora (Valencia).",
+    },
   };
 }
 
@@ -78,17 +82,18 @@ export function regionSpec(region: RegionCalendar): ArticleSpec {
     sources: sourcesFor(region),
     publishedAt: PUBLISHED,
     lastVerifiedAt: new Date(`${region.verifiedAt}T12:00:00+01:00`),
-    editions: [
-      {
-        locale: "es",
-        path: regionPath(region.slug),
-        title: regionTitle(region),
-        excerpt: regionExcerpt(region),
-        seoTitle: regionSeoTitle(region),
-        seoDescription: regionExcerpt(region).slice(0, 160),
-        body: buildRegionBody(region),
-      },
-    ],
+    editions: LOCALES.map((locale) => {
+      const r = localizeRegion(region, locale);
+      return {
+        locale,
+        path: regionPath(region.slug, locale),
+        title: regionTitle(r),
+        excerpt: regionExcerpt(r),
+        seoTitle: regionSeoTitle(r),
+        seoDescription: regionExcerpt(r).slice(0, 160),
+        body: buildRegionBody(r),
+      };
+    }),
   };
 }
 
@@ -109,17 +114,15 @@ export function hubSpec(): ArticleSpec {
     ],
     publishedAt: PUBLISHED,
     lastVerifiedAt: new Date(`${verified}T12:00:00+01:00`),
-    editions: [
-      {
-        locale: "es",
-        path: HUB_PATH,
-        title: HUB_TITLE,
-        excerpt: hubExcerpt(),
-        seoTitle: HUB_SEO_TITLE,
-        seoDescription: hubExcerpt().slice(0, 160),
-        body: buildHubBody(),
-      },
-    ],
+    editions: LOCALES.map((locale) => ({
+      locale,
+      path: HUB_PATHS[locale],
+      title: hubTitle(locale),
+      excerpt: hubExcerpt(locale),
+      seoTitle: hubSeoTitle(locale),
+      seoDescription: hubExcerpt(locale).slice(0, 160),
+      body: buildHubBody(locale),
+    })),
   };
 }
 

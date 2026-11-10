@@ -455,7 +455,7 @@ function BlockView({ block, context }: { block: Block; context: BlockContext }) 
 
     case "spainSchoolCalendar":
       // Dates from each community's order (school-spain/regions.ts); "today" in Europe/Madrid.
-      return <SpainSchoolCalendar region={block.region} />;
+      return <SpainSchoolCalendar region={block.region} locale={context.locale} />;
 
     case "contactForm":
       // The only interactive block. It carries no configuration from the

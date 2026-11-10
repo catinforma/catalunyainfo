@@ -31,7 +31,7 @@ export async function liveEntryTitle(body: Body, locale: Locale): Promise<string
     return liveTodayTitle(locale, todayInCatalonia());
   }
   const spain = spainSchoolRegionOf(body);
-  if (spain) return liveSpainSchoolTitle(spain, todayInCatalonia());
+  if (spain) return liveSpainSchoolTitle(spain, todayInCatalonia(), locale);
   return null;
 }
 
@@ -49,7 +49,7 @@ export function liveEntryDescription(body: Body, locale: Locale): string | null 
     return liveTodayDescription(locale, todayInCatalonia());
   }
   const spain = spainSchoolRegionOf(body);
-  if (spain) return liveSpainSchoolDescription(spain, todayInCatalonia());
+  if (spain) return liveSpainSchoolDescription(spain, todayInCatalonia(), locale);
   return null;
 }
 

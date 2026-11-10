@@ -383,14 +383,16 @@ export async function POST(request: Request) {
     // The Catalan work calendar guide gained one sentence linking to the
     // Spain hub (Spanish edition); it goes out once, on its own.
     if (wants("calendario-2027-espana-links")) published.push(await publishHolidayGuide());
-    // Calendario escolar 2026-2027 por comunidades (Spanish only): the hub
-    // /es/guias/calendario-escolar-espana/ and one guide per community whose
+    // Calendario escolar 2026-2027 por comunidades, in Catalan, Spanish and
+    // English (one entry, three editions each): the hub
+    // /es/guias/calendario-escolar-espana/ (/ca/guies/calendari-escolar-espanya/,
+    // /en/guides/spain-school-calendar/) and one guide per community whose
     // order is transcribed in school-spain/data.ts, all articles on the
     // catch-all route (dynamicParams = true, so revalidating them is safe).
     // The live part (today, next break, title) renders from code: a
     // corrected date needs a deploy and then this group. The Catalan school
-    // calendar guide, whose Spanish edition gained one sentence linking the
-    // hub, goes out once with `calendario-escolar-espana-links`.
+    // calendar guide, whose three editions each link the hub in their own
+    // language, goes out with `calendario-escolar-espana-links`.
     if (wants("calendario-escolar-espana")) published.push(...(await publishSpainSchoolCalendars()));
     if (wants("calendario-escolar-espana-links")) published.push(await publishSchoolCalendarGuide());
 
