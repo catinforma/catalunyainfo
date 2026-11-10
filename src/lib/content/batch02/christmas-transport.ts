@@ -5,6 +5,7 @@ import type { Locale } from "@/lib/i18n/config";
 
 import { DAYS, PAST, dateYear, dayDate, metroRows } from "./festive";
 import { TRANSPORT_2026, allTowns } from "./reis";
+import { trafficBlocks, trafficSources } from "./traffic-dec-2026";
 import {
   b2Related,
   b2link,
@@ -821,6 +822,7 @@ export function buildTransportBody(locale: Locale, announced: Record<OperatorKey
       metroNote,
     ),
     ...daySections,
+    ...trafficBlocks("christmas", locale),
     ...h2(
       L({ ca: "Quan es publiquen els horaris del 2026-27?", es: "¿Cuándo se publican los horarios de 2026-27?", en: "When do the 2026-27 hours come out?" }),
       L({
@@ -945,7 +947,7 @@ export const CHRISTMAS_TRANSPORT: B2Article = {
   key: "christmasTransport",
   entryKey: "guide-barcelona-transport-christmas-new-year",
   categoryKey: "public-services",
-  sources: transportSources(),
+  sources: [...transportSources(), ...trafficSources("christmas")],
   heroKey: HOURS_HERO.key,
   heroAlt: { ...HOURS_HERO.alt },
   heroCaption: { ...HOURS_HERO.caption },

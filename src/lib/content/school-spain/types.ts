@@ -1,3 +1,4 @@
+import type { Locale } from "@/lib/i18n/config";
 import type { Region } from "@/lib/programmatic/holidays/boe-2027";
 
 /**
@@ -116,7 +117,13 @@ export interface ProvinceCalendar {
 }
 
 export interface RegionCalendar {
-  /** URL suffix: /es/guias/calendario-escolar-<slug>/ */
+  /**
+   * The language of this record's words. Absent on the records of `data.ts`,
+   * which are Spanish, as transcribed; `localizeRegion` (i18n.ts) sets it on
+   * the Catalan and English copies, whose dates are the same.
+   */
+  locale?: Locale;
+  /** The community's identifier and its Spanish URL suffix: /es/guias/calendario-escolar-<slug>/ */
   slug: string;
   /** Column in the BOE's national holiday table. */
   boe: Region;
@@ -128,6 +135,10 @@ export interface RegionCalendar {
   inName: string;
   /** "de la Comunidad de Madrid", "del País Vasco". */
   deName: string;
+  /** Catalan and English copies: the short name after "a"/"in" ("al País Basc", "in the Basque Country"). */
+  inShort?: string;
+  /** ...and after "de"/"of" ("del País Basc"). */
+  deShort?: string;
   /** The order that sets the calendar (for a provincial region, the framework or the portal). */
   order: SchoolOrder;
   /** The first row is always infant and primary: the dates the titles name. */

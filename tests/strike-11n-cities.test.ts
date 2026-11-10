@@ -17,8 +17,12 @@ import {
   citySeoTitle,
   citySources,
   isCityPagesStale,
+  localizeCity,
+  localizeState,
 } from "../src/lib/content/batch02/strike-11n-cities.ts";
 import { STRIKE_11N_CITY_REFS, strike11nCityHref } from "../src/lib/content/batch02/strike-11n-city-paths.ts";
+import { CITY_TR, STATE_TR } from "../src/lib/content/batch02/strike-11n-cities-i18n/index.ts";
+import { STRIKE_11N_SPAIN, STRIKE_11N_SPAIN_PATHS } from "../src/lib/content/batch02/strike-11n-spain.ts";
 import { STRIKES_GUIDE, madridDate } from "../src/lib/content/batch02/strikes.ts";
 import { ARTICLE_PATHS } from "../src/lib/content/features/shared.ts";
 import { weekdayIndex } from "../src/lib/content/holidays/calendar.ts";
@@ -30,7 +34,7 @@ import { LOCALES } from "../src/lib/i18n/config.ts";
  * The 11N general strike city by city (6 Nov 2026): one Spanish-only page per
  * large city outside Catalonia, rendered from strike-11n-cities-data.ts.
  *
- * Pins the structure (Spanish only, registry paths, titles in the searched
+ * Pins the structure (ca, es and en since 10 Nov 2026, registry paths, titles in the searched
  * words), the sourcing discipline (every external link a listed source, no
  * percentage, hour or place that no order or organiser published), how the
  * pages change as the strike watch fills the slots, and fails once the strike
@@ -83,7 +87,7 @@ function filledState(): Record<string, StateService> {
 /* Structure, SEO, links, photo                                               */
 /* -------------------------------------------------------------------------- */
 
-test("one Spanish-only page per city in the registry, valid and substantial", () => {
+test("one page per city in the registry, in ca, es and en, valid and substantial", () => {
   assert.deepEqual(
     CITIES.map((city) => city.key).sort(),
     STRIKE_11N_CITY_REFS.map((ref) => ref.key).sort(),
@@ -98,7 +102,7 @@ test("one Spanish-only page per city in the registry, valid and substantial", ()
     assert.equal(city.name, ref.name);
     assert.equal(city.path, ref.path);
     const article = articleFor(city);
-    assert.deepEqual(Object.keys(article.editions), ["es"], `${city.key}: Spanish only`);
+    assert.deepEqual(Object.keys(article.editions).sort(), ["ca", "en", "es"], `${city.key}: ca, es and en`);
     const edition = article.editions.es;
     const parsed = bodySchema.safeParse(edition.blocks);
     assert.ok(parsed.success, `${city.key}: ${JSON.stringify(parsed.error?.issues?.slice(0, 2))}`);
@@ -113,9 +117,15 @@ test("the paths collide with no other published path and with each other", () =>
   const others = [...Object.values(B2_PATHS), ...Object.values(ARTICLE_PATHS), ...Object.values(SIBLING_PATHS), ...Object.values(TOOL_PATHS)].flatMap((paths) =>
     LOCALES.map((locale) => paths[locale]),
   );
-  const mine = STRIKE_11N_CITY_REFS.map((ref) => ref.path);
+  const mine = [...STRIKE_11N_CITY_REFS.flatMap((ref) => LOCALES.map((locale) => ref.paths[locale])), ...LOCALES.map((locale) => STRIKE_11N_SPAIN_PATHS[locale])];
   assert.equal(new Set(mine).size, mine.length);
   for (const path of mine) assert.ok(!others.includes(path), `${path} is already published`);
+  for (const ref of STRIKE_11N_CITY_REFS) {
+    assert.equal(ref.paths.es, ref.path, ref.key);
+    assert.equal(ref.names.es, ref.name, ref.key);
+    assert.match(ref.paths.ca, /^guies\/vaga-general-11-novembre-[a-z-]+$/, ref.key);
+    assert.match(ref.paths.en, /^guides\/general-strike-11-november-[a-z-]+$/, ref.key);
+  }
 });
 
 test("titles fit in 60 characters in the searched words; descriptions fit in 155 and answer first, in every state", () => {
@@ -395,13 +405,245 @@ test("the Spanish strikes hub lists every city page in the 11N card; ca and en d
   }
 });
 
-test("the publish route has a strike-11n-cities group (and two halves for a retry) that publishes the Spanish editions only", () => {
+test("the publish route has a strike-11n-cities group (and two halves for a retry) that publishes every edition, ca, es and en, with the Spain page", () => {
   const route = readFileSync(new URL("../src/app/api/admin/publish/route.ts", import.meta.url), "utf8");
   assert.match(route, /import \{ STRIKE_11N_CITY_ARTICLES \} from "@\/lib\/content\/batch02\/strike-11n-cities";/);
-  assert.match(route, /wants\("strike-11n-cities"\)\) \{\s+for \(const article of STRIKE_11N_CITY_ARTICLES\) published\.push\(await publishB2SpanishArticle\(article\)\);/);
+  assert.match(route, /wants\("strike-11n-cities"\)\) \{\s+for \(const article of STRIKE_11N_CITY_ARTICLES\) published\.push\(await publishB2UnkeyedArticle\(article\)\);[^}]*publishB2UnkeyedArticle\(STRIKE_11N_SPAIN\)/);
   assert.match(route, /wants\("strike-11n-cities-a"\)/);
   assert.match(route, /wants\("strike-11n-cities-b"\)/);
+  assert.doesNotMatch(route, /publishB2SpanishArticle\((article|STRIKE_11N_SPAIN)\)/, "a city or the Spain page would go out in Spanish only");
   const publisher = readFileSync(new URL("../src/lib/content/batch02/publish.ts", import.meta.url), "utf8");
-  assert.match(publisher, /export async function publishB2SpanishArticle\(article: B2SpanishArticle\)/);
-  assert.match(publisher, /return publishEditions\(article, \[\["es", article\.editions\.es\]\]\);/);
+  assert.match(publisher, /export async function publishB2UnkeyedArticle\(article: B2UnkeyedArticle\)/);
+  assert.match(publisher, /const edition = article\.editions\[locale\];\s+return edition \? \[\[locale, edition\]\] : \[\];/);
+  assert.deepEqual(Object.keys(STRIKE_11N_SPAIN.editions).sort(), ["ca", "en", "es"]);
+});
+
+/* -------------------------------------------------------------------------- */
+/* Catalan and English editions (10 Nov 2026)                                 */
+/* -------------------------------------------------------------------------- */
+
+const TR_LOCALES = ["ca", "en"] as const;
+type TrLoc = (typeof TR_LOCALES)[number];
+const editionOf = (city: Strike11nCity, locale: TrLoc) => {
+  const edition = articleFor(city).editions[locale];
+  assert.ok(edition, `${city.key}: no ${locale} edition`);
+  return edition;
+};
+const trJson = (city: Strike11nCity, locale: TrLoc) => JSON.stringify(editionOf(city, locale).blocks);
+const trBody = (city: Strike11nCity, locale: TrLoc) => text(editionOf(city, locale).blocks);
+
+const urlsOf = (s: string) => [...s.matchAll(/\]\((https?:[^)]+|\/[^)]*)\)/g)].map((m) => m[1]).sort();
+const digitsOf = (s: string) => (s.match(/\d+/g) ?? []).sort();
+
+/** Walks the Spanish words and the translated ones side by side: same shape, same links, same figures in every string. */
+function sameFacts(es: unknown, tr: unknown, path: string, problems: string[]): void {
+  if (es == null || tr == null) {
+    if ((es == null) !== (tr == null)) problems.push(`${path}: ${es == null ? "the Spanish is empty" : "no translation"}`);
+    return;
+  }
+  if (typeof es === "string") {
+    if (typeof tr !== "string") return void problems.push(`${path}: not a string`);
+    if (JSON.stringify(urlsOf(es)) !== JSON.stringify(urlsOf(tr))) problems.push(`${path}: links differ from the Spanish`);
+    if (JSON.stringify(digitsOf(es)) !== JSON.stringify(digitsOf(tr))) problems.push(`${path}: figures differ from the Spanish (${digitsOf(es)} / ${digitsOf(tr)})`);
+    return;
+  }
+  if (Array.isArray(es)) {
+    if (!Array.isArray(tr) || tr.length !== es.length) return void problems.push(`${path}: ${es.length} items in Spanish`);
+    es.forEach((item, i) => sameFacts(item, tr[i], `${path}[${i}]`, problems));
+    return;
+  }
+  if (typeof es === "object") {
+    for (const key of new Set([...Object.keys(es as object), ...Object.keys(tr as object)])) {
+      sameFacts((es as Record<string, unknown>)[key], (tr as Record<string, unknown>)[key], `${path}.${key}`, problems);
+    }
+  }
+}
+
+/** The text fields of a city as the translation files hold them. */
+function cityWords(city: Strike11nCity) {
+  return {
+    titleTransport: city.titleTransport,
+    transportShort: city.transportShort,
+    authority: city.authority,
+    authorityShort: city.authorityShort,
+    bulletin: city.bulletin,
+    cercanias: city.cercanias,
+    airport: city.airport,
+    ...(city.airNotes ? { airNotes: city.airNotes } : {}),
+    msSummary: city.msSummary,
+    msNotes: city.msNotes,
+    railNotes: city.railNotes,
+    school: city.school,
+    schoolShort: city.schoolShort,
+    demos: city.demos,
+    demoShort: city.demoShort,
+    demoWhere: city.demoWhere,
+    callNotes: city.callNotes,
+    services: Object.fromEntries(
+      city.services.map((s) => [
+        s.id,
+        { name: s.name, setBy: s.setBy, pending: s.pending, where: s.where, text: s.status === "published" ? s.text : null, ...(s.question ? { question: s.question } : {}), ...(s.notes ? { notes: s.notes } : {}) },
+      ]),
+    ),
+  };
+}
+
+test("the Catalan and English words match the Spanish facts: same fields, same links, same figures (strike-11n-cities-i18n/)", () => {
+  const problems: string[] = [];
+  for (const city of CITIES) {
+    const tr = CITY_TR[city.key];
+    if (!tr) {
+      problems.push(`${city.key}: no strike-11n-cities-i18n/${city.key}.ts`);
+      continue;
+    }
+    for (const locale of TR_LOCALES) sameFacts(cityWords(city), tr[locale], `${city.key}/${locale}`, problems);
+  }
+  for (const locale of TR_LOCALES) {
+    for (const [key, slot] of Object.entries(STATE_SERVICES)) {
+      const t = STATE_TR[locale][key as "rail" | "air"];
+      sameFacts({ text: slot.status === "published" ? slot.text : null, pending: slot.pending, setBy: slot.setBy }, t, `state/${key}/${locale}`, problems);
+    }
+  }
+  assert.deepEqual(problems, [], "write the Spanish sentence in Catalan and English, with the same links and figures");
+});
+
+test("ca and en: valid, substantial, in the page's language, titles ≤60 and descriptions ≤155 in every state", () => {
+  const title = { ca: /^Vaga (11N|11 novembre|11 de novembre a) .*serveis mínims/, en: /(strike 11 November|General strike 11 November in|11N strike in).*minimum services/ };
+  for (const city of CITIES) {
+    for (const locale of TR_LOCALES) {
+      const edition = editionOf(city, locale);
+      const ref = STRIKE_11N_CITY_REFS.find((r) => r.key === city.key)!;
+      assert.equal(edition.path, ref.paths[locale]);
+      const parsed = bodySchema.safeParse(edition.blocks);
+      assert.ok(parsed.success, `${city.key}/${locale}: ${JSON.stringify(parsed.error?.issues?.slice(0, 2))}`);
+      assert.ok(wordCount(trBody(city, locale)) > 900, `${city.key}/${locale} is thin (${wordCount(trBody(city, locale))} words)`);
+      assert.ok(edition.seoTitle.length <= 60, `${city.key}/${locale}: title ${edition.seoTitle.length} "${edition.seoTitle}"`);
+      assert.match(edition.seoTitle, title[locale], `${city.key}/${locale}: ${edition.seoTitle}`);
+      assert.ok(edition.seoTitle.includes(ref.names[locale]), edition.seoTitle);
+      assert.ok(edition.excerpt.length > 30 && edition.excerpt.length <= 200, `${city.key}/${locale}: excerpt ${edition.excerpt.length}`);
+      assert.ok(edition.seoDescription.length > 60 && edition.seoDescription.length <= 155, `${city.key}/${locale}: ${edition.seoDescription}`);
+      const lc = localizeCity(city, locale);
+      for (const [asOf, c] of [
+        ["2026-11-09", localizeCity(filledCity(city), locale)],
+        ["2026-11-11", lc],
+        ["2026-11-12", lc],
+      ] as const) {
+        const description = cityDescription(c, asOf, STATE_SERVICES, locale);
+        assert.ok(description.length > 60 && description.length <= 155, `${city.key}/${locale}/${asOf}: ${description.length} ${description}`);
+      }
+      // No Spanish template words left in the page.
+      assert.doesNotMatch(trBody(city, locale), /Servicios mínimos:|Aún no publicados|Sigue leyendo|Quién los fija/, `${city.key}/${locale}`);
+    }
+  }
+});
+
+test("ca and en: internal links stay in the page's language, point at a published path, and reach every other city, the 11N page and the strikes hub", () => {
+  for (const locale of TR_LOCALES) {
+    const published = new Set([
+      ...[...Object.values(B2_PATHS), ...Object.values(ARTICLE_PATHS), ...Object.values(SIBLING_PATHS), ...Object.values(TOOL_PATHS)].map((paths) => `/${locale}/${paths[locale]}/`),
+      ...STRIKE_11N_CITY_REFS.map((ref) => strike11nCityHref(ref.key, locale)),
+    ]);
+    for (const city of CITIES) {
+      const hrefs = [...trJson(city, locale).matchAll(/\]\((\/[^)]*)\)/g)].map((m) => m[1] ?? "");
+      for (const href of hrefs) {
+        assert.ok(href.startsWith(`/${locale}/`), `${city.key}/${locale} links to ${href}`);
+        assert.ok(published.has(href), `${city.key}/${locale}: ${href} is not a published path`);
+      }
+      assert.ok(hrefs.includes(`/${locale}/${B2_PATHS.strike11n[locale]}/`), `${city.key}/${locale}: no link to the 11N page`);
+      assert.ok(hrefs.includes(`/${locale}/${B2_PATHS.strikes[locale]}/`), `${city.key}/${locale}: no link to the strikes hub`);
+      for (const ref of STRIKE_11N_CITY_REFS) {
+        const other = strike11nCityHref(ref.key, locale);
+        if (ref.key === city.key) assert.ok(!hrefs.includes(other), `${city.key}/${locale} links to itself`);
+        else assert.ok(hrefs.includes(other), `${city.key}/${locale}: no link to ${other}`);
+      }
+    }
+    // The Spain page: every city in this language, nothing in another.
+    const spain = JSON.stringify(STRIKE_11N_SPAIN.editions[locale]!.blocks);
+    for (const href of [...spain.matchAll(/\]\((\/[^)]*)\)/g)].map((m) => m[1] ?? "")) assert.ok(href.startsWith(`/${locale}/`) && published.has(href), `Spain/${locale}: ${href}`);
+    for (const ref of STRIKE_11N_CITY_REFS) assert.ok(spain.includes(`](${strike11nCityHref(ref.key, locale)})`), `Spain/${locale}: no ${ref.key}`);
+  }
+});
+
+test("ca and en: every external link is a listed source, and every listed city source is linked", () => {
+  for (const city of CITIES) {
+    const urls = articleFor(city).sources.map((s) => s.url);
+    for (const locale of TR_LOCALES) {
+      for (const match of trJson(city, locale).matchAll(/\]\((https?:[^)]*)\)/g)) assert.ok(urls.includes(match[1] ?? ""), `${city.key}/${locale}: ${match[1]} is linked but not in the sources`);
+      for (const source of city.sources) assert.ok(trJson(city, locale).includes(`](${source.url})`), `${city.key}/${locale}: ${source.url} is never linked`);
+    }
+  }
+});
+
+test("ca and en: no percentage or hour that nobody published", () => {
+  const security = { ca: /seguretat privada|personal de seguretat/, en: /security staff|private security/ };
+  const clock = {
+    ca: /\b\d{1,2}[.:]\d{2}\b|\ba les (?:[1-9]|1\d|2[0-3])\b|\b(?:[1-9]|1\d|2[0-3]) h\b/,
+    en: /\b\d{1,2}[.:]\d{2}\b|\bat (?:[1-9]|1\d|2[0-3])\b|\b(?:[1-9]|1\d|2[0-3]) ?(?:h|am|pm)\b/,
+  };
+  for (const city of CITIES) {
+    for (const locale of TR_LOCALES) {
+      let plain = trBody(city, locale);
+      for (const allowed of allowedFigures(localizeCity(city, locale), localizeState(STATE_SERVICES, locale))) plain = plain.split(allowed).join(" ");
+      for (const piece of sentences(plain)) {
+        for (const pct of piece.match(/\d+(?:[.,]\d+)?\s?%/g) ?? []) {
+          const ok = (pct.replace(/\s/, "") === "90%" && security[locale].test(piece)) || (pct === "7%" && /SMI/.test(piece));
+          assert.ok(ok, `${city.key}/${locale}: ${pct} in "${piece}"`);
+        }
+        assert.doesNotMatch(piece, clock[locale], `${city.key}/${locale}: "${piece}"`);
+      }
+    }
+  }
+});
+
+test("ca and en: the lead and the minimum-services status follow the slots and the as-of date", () => {
+  const re = {
+    ca: { before: /^El dimecres 11 de novembre de 2026 hi ha vaga general de 24 hores a tot Espanya, també a /, today: /^Avui, dimecres 11 de novembre/, past: /hi va haver vaga general/, full: /ja s'han publicat/, partial: /encara no s'han publicat/, pending: /encara no publicats/, noDemo: /Encara sense convocatòria amb hora i lloc a / },
+    en: { before: /^On Wednesday 11 November 2026 there is a 24-hour general strike across Spain, including /, today: /^Today, Wednesday 11 November/, past: /there was a 24-hour general strike/, full: /have been published/, partial: /have not been published yet/, pending: /not published yet/, noDemo: /No demonstration with a time and place in / },
+  };
+  const pendingState = Object.fromEntries(Object.entries(STATE_SERVICES).map(([k, s]) => [k, { ...s, status: "pending" as const, text: null, source: null }]));
+  for (const city of CITIES) {
+    for (const locale of TR_LOCALES) {
+      const r = re[locale];
+      const lead0 = (blocks: Block[]) => text(blocks.slice(0, 1));
+      assert.match(lead0(buildCityBody(city, "2026-11-06", STATE_SERVICES, locale)), r.before, city.key);
+      assert.match(lead0(buildCityBody(filledCity(city), "2026-11-11", filledState(), locale)), r.today, city.key);
+      const after = buildCityBody(filledCity(city), "2026-11-12", filledState(), locale);
+      assert.ok(bodySchema.safeParse(after).success, city.key);
+      assert.match(lead0(after), r.past, city.key);
+      assert.match(lead0(buildCityBody(filledCity(city), "2026-11-09", filledState(), locale)), r.full, `${city.key}/${locale}`);
+      assert.match(lead0(buildCityBody(noneCity(city), "2026-11-09", filledState(), locale)), r.partial, `${city.key}/${locale}`);
+      const allPending = buildCityBody(noneCity(city), "2026-11-09", pendingState, locale);
+      assert.ok(bodySchema.safeParse(allPending).success, city.key);
+      assert.match(lead0(allPending), r.pending, `${city.key}/${locale}`);
+      if (city.demos.length === 0) assert.match(trBody(city, locale), r.noDemo, `${city.key}/${locale}`);
+      assert.equal(JSON.stringify(buildCityBody(city, STRIKE_11N_CITIES_AS_OF, STATE_SERVICES, locale)), trJson(city, locale), `${city.key}/${locale}: not deterministic`);
+    }
+  }
+});
+
+test("ca and en: every weekday printed next to a date matches that date", () => {
+  const weekdays = {
+    ca: ["diumenge", "dilluns", "dimarts", "dimecres", "dijous", "divendres", "dissabte"],
+    en: ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"],
+  };
+  const months = {
+    ca: ["gener", "febrer", "març", "abril", "maig", "juny", "juliol", "agost", "setembre", "octubre", "novembre", "desembre"],
+    en: ["january", "february", "march", "april", "may", "june", "july", "august", "september", "october", "november", "december"],
+  };
+  let checked = 0;
+  for (const locale of TR_LOCALES) {
+    const pattern =
+      locale === "ca"
+        ? new RegExp(`(${weekdays.ca.join("|")}),? (\\d{1,2}) (?:de |d')(${months.ca.join("|")})`, "gu")
+        : new RegExp(`(${weekdays.en.join("|")}),? (\\d{1,2}) (${months.en.join("|")})`, "gu");
+    for (const city of CITIES) {
+      const all = `${trBody(city, locale)} ${editionOf(city, locale).seoDescription}`.toLowerCase();
+      for (const match of all.matchAll(pattern)) {
+        const iso = `2026-${String(months[locale].indexOf(match[3]!) + 1).padStart(2, "0")}-${match[2]!.padStart(2, "0")}`;
+        assert.equal(weekdays[locale][weekdayIndex(iso)], match[1], `${city.key}/${locale}: "${match[0]}"`);
+        checked += 1;
+      }
+    }
+  }
+  assert.ok(checked >= CITIES.length * 2, `only ${checked} weekday mentions checked`);
 });

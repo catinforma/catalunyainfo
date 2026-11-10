@@ -102,7 +102,7 @@ export const COPY: Record<Locale, Copy> = {
       "El curs 2025-2026 ja s'ha acabat. Va començar el 8 de setembre de 2025 (el 12 per a batxillerat i FP de grau mitjà i superior), va acabar el 19 de juny de 2026 i tenia vacances de Nadal del 20 de desembre de 2025 al 7 de gener de 2026 i de Setmana Santa del 28 de març al 6 d'abril de 2026, segons l'Ordre EDF/72/2025 recollida pel Consorci d'Educació de Barcelona.",
     ],
     related:
-      "Per planificar ponts i vacances amb els festius laborals, mira el [calendari laboral 2027](/ca/guies/calendari-laboral-catalunya/) i la pàgina [és festiu avui](/ca/guies/es-festiu-avui-catalunya/).",
+      "Per planificar ponts i vacances amb els festius laborals, mira el [calendari laboral 2027](/ca/guies/calendari-laboral-catalunya/) i la pàgina [és festiu avui](/ca/guies/es-festiu-avui-catalunya/). Les dates de les altres comunitats són al [calendari escolar 2026-2027 per comunitats](/ca/guies/calendari-escolar-espanya/).",
     heroAlt: "Façana de l'Escola Jaume Balmes de Vic amb el pati enrajolat al davant",
     heroCaption: "L'Escola Jaume Balmes, a Vic.",
     secondAlt: "Edifici del Grup Escolar Ramon Llull de Barcelona entre palmeres i arbres",
@@ -184,7 +184,7 @@ export const COPY: Record<Locale, Copy> = {
       "The 2025-2026 school year is over. It started on 8 September 2025 (12 September for batxillerat and intermediate and higher vocational training), ended on 19 June 2026, and had Christmas holidays from 20 December 2025 to 7 January 2026 and Easter holidays from 28 March to 6 April 2026, under Order EDF/72/2025 as published by the Consorci d'Educació de Barcelona.",
     ],
     related:
-      "To plan long weekends around public holidays, see the [public holiday guide](/en/guides/catalonia-public-holidays/) and [is today a holiday](/en/guides/is-today-a-holiday-in-catalonia/).",
+      "To plan long weekends around public holidays, see the [public holiday guide](/en/guides/catalonia-public-holidays/) and [is today a holiday](/en/guides/is-today-a-holiday-in-catalonia/). The dates for the rest of Spain are in the [2026-2027 school calendar by region](/en/guides/spain-school-calendar/).",
     heroAlt: "Front of the Jaume Balmes school in Vic with its paved playground",
     heroCaption: "Jaume Balmes school, Vic.",
     secondAlt: "The Ramon Llull school building in Barcelona among palm trees",

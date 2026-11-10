@@ -310,8 +310,11 @@ test("local holidays on the 7th, school and shops are stated as the orders state
     assert.ok(body.includes(String(LOCAL_MONDAY_7.municipalities)), `${locale}: local count`);
     for (const town of LOCAL_MONDAY_7.examples) assert.ok(body.includes(town), `${locale}: ${town}`);
     assert.match(body, /EMT\/208\/2025/, `${locale}: local holiday order`);
-    // No traffic operation was published by the SCT; none is described.
-    assert.doesNotMatch(body, /operació sortida|operación salida|traffic operation|Servei Català de Trànsit/i, locale);
+    // 10 Nov 2026: the SCT's and the DGT's 2026 calendars have the 4-8 Dec
+    // special operation (no hours): it is described from them, with no
+    // "operació sortida" times, which neither publishes.
+    assert.match(body, /Servei Català de Trànsit/, locale);
+    assert.doesNotMatch(body, /operació sortida|operación salida/i, locale);
   }
 });
 

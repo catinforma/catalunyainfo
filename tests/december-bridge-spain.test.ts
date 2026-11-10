@@ -239,7 +239,7 @@ test("sources are https and official, and the reader sees the check date", () =>
   assert.ok(urls.includes("https://www.boe.es/diario_boe/txt.php?id=BOE-A-2025-21667"));
   assert.ok(urls.includes("https://www.boe.es/diario_boe/txt.php?id=BOE-A-2026-21254"));
   for (const url of urls) {
-    assert.match(url, /^https:\/\/(www\.boe\.es|bon\.navarra\.es|bomemelilla\.es|portaldogc\.gencat\.cat)\//, url);
+    assert.match(url, /^https:\/\/(www\.boe\.es|bon\.navarra\.es|bomemelilla\.es|portaldogc\.gencat\.cat|transit\.gencat\.cat|www\.dgt\.es)\//, url); // traffic operations (10 Nov 2026)
     assert.ok(!/[?&]utm_/.test(url), url);
   }
   for (const locale of LOCALES) assert.match(body(locale), /6 (de novembre|de noviembre|November) (de )?2026/, locale);

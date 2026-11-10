@@ -384,6 +384,8 @@ const U = {
   tv2025: "https://www.rtve.es/rtve/20251219/rtve-inicio-programacion-navidena-sorteo-loteria/16866332.shtml",
   irpf: GROSSA_URLS.irpf,
   aeatNonResidents: GROSSA_URLS.aeatNonResidents,
+  /** AEAT notice of 17 Dec 2024: shared prizes split the exemption; no other return to file. */
+  aeatPrizes: "https://sede.agenciatributaria.gob.es/Sede/todas-noticias/2024/diciembre/17/premios-sorteo-loteria-navidad.html",
 } as const;
 
 export const NADAL_URLS = U;
@@ -410,6 +412,7 @@ const BASE_SOURCES: B2Source[] = [
   { name: "RTVE da inicio a su programación navideña con el Sorteo de la Lotería (19/12/2025)", url: U.tv2025, publisher: "RTVE" },
   { name: "Ley 35/2006, del Impuesto sobre la Renta de las Personas Físicas, disposición adicional trigésima tercera", url: U.irpf, publisher: "BOE" },
   { name: "Gravamen especial sobre premios de loterías y apuestas (no residentes)", url: U.aeatNonResidents, publisher: "Agencia Tributaria" },
+  { name: "Premios del sorteo de la lotería de Navidad (17/12/2024)", url: U.aeatPrizes, publisher: "Agencia Tributaria" },
 ];
 
 /** Every source the page cites: the fixed ones plus the results, per-prize and time sources, once. */
@@ -582,6 +585,10 @@ const D = (key: PrizeKey, locale: Locale) => eur(perDecimo(key), locale);
 const B = (key: PrizeKey, locale: Locale) => eur(perBillete(key), locale);
 
 const NET_FIRST = perDecimo("first") - levy(perDecimo("first"));
+/** A second-prize décimo shared by two people in halves: each one's share, exemption and levy. */
+const HALF_SECOND = perDecimo("second") / 2;
+const HALF_EXEMPT = LEVY_EXEMPT / 2;
+const HALF_LEVY = levy(perDecimo("second")) / 2;
 const NET_SECOND = perDecimo("second") - levy(perDecimo("second"));
 const NET_THIRD = perDecimo("third") - levy(perDecimo("third"));
 
@@ -739,6 +746,8 @@ const COPY: Record<Locale, Copy> = {
     },
     taxAfter: [
       `El gravamen es calcula per dècim. Si un dècim és de diverses persones, els ${eur(LEVY_EXEMPT, "ca")} exempts es reparteixen segons la part de cadascuna. Les persones que no resideixen a Espanya tenen el mateix gravamen i la mateixa exempció, segons l'${link(U.aeatNonResidents, "Agència Tributària")}.`,
+      `**Exemple de dècim compartit:** si dues persones tenen a mitges un dècim del segon premi (${D("second", "ca")}), cadascuna en cobra ${eur(HALF_SECOND, "ca")}, en té ${eur(HALF_EXEMPT, "ca")} exempts i paga ${eur(HALF_LEVY, "ca")} de gravamen. Qui cobri el premi per a tots ha de poder demostrar a Hisenda com s'ha repartit, amb la identificació de cada guanyador i la seva part, segons l'${link(U.aeatPrizes, "Agència Tributària")}.`,
+      "**No es declara a la Renda:** el gravamen ja es reté en cobrar el premi, i qui ha patit aquesta retenció no ha de presentar cap altra autoliquidació per aquest premi, segons la mateixa nota de l'Agència Tributària.",
     ],
     grossaHeading: "Loteria de Nadal, La Grossa de Cap d'Any i el Nen",
     grossa: [
@@ -944,6 +953,8 @@ const COPY: Record<Locale, Copy> = {
     },
     taxAfter: [
       `El gravamen se calcula por décimo. Si un décimo es de varias personas, los ${eur(LEVY_EXEMPT, "es")} exentos se reparten según la parte de cada una. Las personas que no residen en España tienen el mismo gravamen y la misma exención, según la ${link(U.aeatNonResidents, "Agencia Tributaria")}.`,
+      `**Ejemplo de décimo compartido:** si dos personas llevan a medias un décimo del segundo premio (${D("second", "es")}), cada una cobra ${eur(HALF_SECOND, "es")}, tiene ${eur(HALF_EXEMPT, "es")} exentos y paga ${eur(HALF_LEVY, "es")} de gravamen. Quien cobre el premio para todos debe poder acreditar ante Hacienda cómo se ha repartido, con la identificación de cada ganador y su parte, según la ${link(U.aeatPrizes, "Agencia Tributaria")}.`,
+      "**No se declara en la Renta:** el gravamen ya se retiene al cobrar el premio, y quien ha soportado esa retención no tiene que presentar ninguna otra autoliquidación por ese premio, según la misma nota de la Agencia Tributaria.",
     ],
     grossaHeading: "Lotería de Navidad, La Grossa de Cap d'Any y El Niño",
     grossa: [
@@ -1149,6 +1160,8 @@ const COPY: Record<Locale, Copy> = {
     },
     taxAfter: [
       `The levy is worked out per décimo. If a décimo belongs to several people, the ${eur(LEVY_EXEMPT, "en")} exemption is split according to each one's share. People who are not resident in Spain pay the same levy with the same exemption, according to the ${link(U.aeatNonResidents, "Agencia Tributaria")} (Spain's tax agency).`,
+      `**Example of a shared décimo:** if two people share a second-prize décimo (${D("second", "en")}) half and half, each collects ${eur(HALF_SECOND, "en")}, has ${eur(HALF_EXEMPT, "en")} tax-free and pays ${eur(HALF_LEVY, "en")} in levy. Whoever collects the prize for everyone must be able to show the tax office how it was split, identifying each winner and their share, according to the ${link(U.aeatPrizes, "Agencia Tributaria")}.`,
+      "**It does not go on your income tax return:** the levy is withheld when the prize is paid, and anyone who has had it withheld does not have to file any other return for that prize, according to the same Agencia Tributaria notice.",
     ],
     grossaHeading: "Christmas Lottery, La Grossa de Cap d'Any and El Niño",
     grossa: [

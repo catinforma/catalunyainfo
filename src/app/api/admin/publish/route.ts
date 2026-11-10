@@ -14,7 +14,7 @@ import { publishFeatures } from "@/lib/content/features/publish";
 import { publishHolidayGuide } from "@/lib/content/holidays/publish";
 import { publishTouristTaxGuide } from "@/lib/content/tourist-tax/publish";
 import { publishMushroomZones } from "@/lib/content/mushroom-zones/publish";
-import { publishB2Article, publishB2SpanishArticle, publishBatch02 } from "@/lib/content/batch02/publish";
+import { publishB2Article, publishB2UnkeyedArticle, publishBatch02 } from "@/lib/content/batch02/publish";
 import { AIRPORT } from "@/lib/content/batch02/airport";
 import { MONUMENTS } from "@/lib/content/batch02/monuments";
 import { SKI } from "@/lib/content/batch02/ski";
@@ -239,20 +239,23 @@ export async function POST(request: Request) {
     if (wants("huelgas-espana")) published.push(await publishB2Article(STRIKES_SPAIN_GUIDE));
     if (wants("huelgas-espana-links")) published.push(await publishB2Article(STRIKES_GUIDE), await publishB2Article(STRIKE_11N));
     // 6 Nov 2026: the 11N general strike city by city (Madrid, Valencia,
-    // Sevilla…), Spanish only, rendered from strike-11n-cities-data.ts. On its
-    // own so a regional order or a demonstration republishes only these pages;
-    // the 11N page and the strikes hub, which link to every one of them, go out
-    // with `strike-11n`. The halves `-a` and `-b` are for a retry after a timeout.
+    // Sevilla…), rendered from strike-11n-cities-data.ts; in Catalan and
+    // English too since 10 Nov 2026 (strike-11n-cities-i18n/), every edition
+    // in one entry. On its own so a regional order or a demonstration
+    // republishes only these pages; the 11N page and the strikes hub, which
+    // link to every Spanish one, go out with `strike-11n`. The halves `-a`
+    // and `-b` are for a retry after a timeout.
     if (wants("strike-11n-cities")) {
-      for (const article of STRIKE_11N_CITY_ARTICLES) published.push(await publishB2SpanishArticle(article));
-      // 9 Nov 2026: the Spain-wide page, built from the same registry.
-      published.push(await publishB2SpanishArticle(STRIKE_11N_SPAIN));
+      for (const article of STRIKE_11N_CITY_ARTICLES) published.push(await publishB2UnkeyedArticle(article));
+      // 9 Nov 2026: the Spain-wide page, built from the same registry (ca, es and en since 10 Nov).
+      published.push(await publishB2UnkeyedArticle(STRIKE_11N_SPAIN));
     }
     if (wants("strike-11n-cities-a")) {
-      for (const article of STRIKE_11N_CITY_ARTICLES.slice(0, 7)) published.push(await publishB2SpanishArticle(article));
+      for (const article of STRIKE_11N_CITY_ARTICLES.slice(0, 7)) published.push(await publishB2UnkeyedArticle(article));
     }
     if (wants("strike-11n-cities-b")) {
-      for (const article of STRIKE_11N_CITY_ARTICLES.slice(7)) published.push(await publishB2SpanishArticle(article));
+      for (const article of STRIKE_11N_CITY_ARTICLES.slice(7)) published.push(await publishB2UnkeyedArticle(article));
+      published.push(await publishB2UnkeyedArticle(STRIKE_11N_SPAIN));
     }
     // 9 Nov 2026: when the dole and pensions are paid (SEPE, Social Security); ca, es and en since 10 Nov.
     if (wants("pagos")) published.push(await publishB2Article(PAY_DATES));
@@ -409,14 +412,16 @@ export async function POST(request: Request) {
     // The Catalan work calendar guide gained one sentence linking to the
     // Spain hub (Spanish edition); it goes out once, on its own.
     if (wants("calendario-2027-espana-links")) published.push(await publishHolidayGuide());
-    // Calendario escolar 2026-2027 por comunidades (Spanish only): the hub
-    // /es/guias/calendario-escolar-espana/ and one guide per community whose
+    // Calendario escolar 2026-2027 por comunidades, in Catalan, Spanish and
+    // English (one entry, three editions each): the hub
+    // /es/guias/calendario-escolar-espana/ (/ca/guies/calendari-escolar-espanya/,
+    // /en/guides/spain-school-calendar/) and one guide per community whose
     // order is transcribed in school-spain/data.ts, all articles on the
     // catch-all route (dynamicParams = true, so revalidating them is safe).
     // The live part (today, next break, title) renders from code: a
     // corrected date needs a deploy and then this group. The Catalan school
-    // calendar guide, whose Spanish edition gained one sentence linking the
-    // hub, goes out once with `calendario-escolar-espana-links`.
+    // calendar guide, whose three editions each link the hub in their own
+    // language, goes out with `calendario-escolar-espana-links`.
     if (wants("calendario-escolar-espana")) published.push(...(await publishSpainSchoolCalendars()));
     if (wants("calendario-escolar-espana-links")) published.push(await publishSchoolCalendarGuide());
 
