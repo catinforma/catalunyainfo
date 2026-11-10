@@ -72,6 +72,7 @@ import { GRAN_RECAPTE_GUIDE } from "@/lib/content/batch02/gran-recapte";
 import { CHRISTMAS_TRANSPORT } from "@/lib/content/batch02/christmas-transport";
 import { SCHOOL_FREE_DAYS } from "@/lib/content/batch02/school-free-days";
 import { POSTAL_VOTE } from "@/lib/content/batch02/postal-vote";
+import { FOREIGN_VOTE } from "@/lib/content/batch02/foreign-vote";
 import { publishHolidayTodayGuide } from "@/lib/content/holidays/today-publish";
 import { publishLocalHolidaysGuide } from "@/lib/content/holidays/local-publish";
 import { publishReservoirGuide } from "@/lib/content/reservoirs/publish";
@@ -370,6 +371,14 @@ export async function POST(request: Request) {
     // `puente-diciembre-espana-links`.
     if (wants("puente-diciembre-espana")) published.push(await publishB2Article(DECEMBER_BRIDGE_SPAIN));
     if (wants("puente-diciembre-espana-links")) published.push(await publishB2Article(DECEMBER_BRIDGE));
+    // Foreign residents and the local elections of 23 May 2027 (10 Nov 2026):
+    // one page, on its own so its phase changes (FOREIGN_VOTE_AS_OF past
+    // 1 Dec, 30 Dec 2026 and 15 Jan 2027, then the March decree) republish
+    // only it. The how-to-vote guide and the 2023 municipal results page,
+    // which each gained one sentence linking to it, go out once with
+    // `voto-extranjeros-2027-links`.
+    if (wants("voto-extranjeros-2027")) published.push(await publishB2Article(FOREIGN_VOTE));
+    if (wants("voto-extranjeros-2027-links")) published.push(await publishB2Article(VOTING), await publishB2Article(MUNICIPAL_RESULTS));
     // Calendario laboral 2027 en España (/es/festivos/2027/, 19 communities
     // and cities, the hub, the bridges page, and one page per large city,
     // /es/festivos/2027/<comunidad>/<ciudad>/): code routes built from the BOE

@@ -3,6 +3,7 @@ import type { Locale } from "@/lib/i18n/config";
 import { hubPath, PAGES_PER_LOCALE } from "@/lib/programmatic/elections/paths";
 
 import {
+  b2link,
   b2Related,
   callout,
   faq,
@@ -167,6 +168,13 @@ const TOWN_PAGES: Record<Locale, string> = {
   en: `${PAGES_PER_LOCALE.en} towns, the largest and the main resorts, also have a page each, with the 2023 local, general and Catalan elections beside Catalonia: [election results by town](${hubPath("en")}).`,
 };
 
+/** One sentence to the foreign residents' guide for 2027 (10 Nov 2026), same language. */
+const FOREIGN_VOTE_LINE: Record<Locale, string> = {
+  ca: `Els nacionals de 13 països de fora de la UE amb acord (el Regne Unit, Colòmbia o l'Equador, entre d'altres) també poden votar, si ho sol·liciten entre l'1 de desembre del 2026 i el 15 de gener del 2027: ${b2link("foreignVote", "ca", "qui pot votar i com inscriure-s'hi")}.`,
+  es: `Los nacionales de 13 países de fuera de la UE con acuerdo (Reino Unido, Colombia o Ecuador, entre ellos) también pueden votar, si lo solicitan entre el 1 de diciembre de 2026 y el 15 de enero de 2027: ${b2link("foreignVote", "es", "quién puede votar y cómo inscribirse")}.`,
+  en: `Nationals of 13 non-EU countries with an agreement (the UK, Norway or Colombia among them) can vote too, if they apply between 1 December 2026 and 15 January 2027: ${b2link("foreignVote", "en", "who can vote and how to register")}.`,
+};
+
 function body(locale: Locale): Block[] {
   const t = COPY[locale];
   return [
@@ -175,7 +183,7 @@ function body(locale: Locale): Block[] {
     { type: "municipalElections" } as Block,
     ...paras(TOWN_PAGES[locale]),
     ...h2(t.bcnTitle, ...t.bcn),
-    ...h2(t.nextTitle, ...t.next),
+    ...h2(t.nextTitle, ...t.next, FOREIGN_VOTE_LINE[locale]),
     ...h2(t.howTitle),
     list(...t.how),
     faq(t.faq),

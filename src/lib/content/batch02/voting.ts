@@ -339,7 +339,7 @@ const COPY: Record<Locale, T> = {
     muniTitle: "Next: municipal elections on 23 May 2027",
     muni: [
       "Local elections are held by law on the fourth Sunday of May, so the next ones are expected on **23 May 2027**. Only Spanish citizens vote in the general election, but **EU citizens** living in Spain can vote in the municipal ones if they are registered on the padró and have declared their wish to vote, **by 30 December 2026** for 2027.",
-      `EU citizens can make that declaration online on the ${a("INE's site", URL.eu)}, by post or at the town hall, and it stays valid for future elections. Some non-EU nationals with a reciprocity agreement can also vote, but they must apply each time; the 2027 list and window have not been published yet.`,
+      `EU citizens can make that declaration online on the ${a("INE's site", URL.eu)}, by post or at the town hall, and it stays valid for future elections. Some non-EU nationals with a reciprocity agreement can also vote, but they must apply each time: for 2027, between 1 December 2026 and 15 January 2027. The countries, the conditions and the forms are in ${b2link("foreignVote", "en", "our guide to the foreign residents' vote in 2027")}.`,
     ],
     faq: [
       { question: "When is the 2026 Spain general election?", answer: "On Sunday 29 November 2026, with polling stations open from 9:00 to 20:00. It was called by Royal Decree 806/2026, published in the BOE on 6 October; the campaign runs from 13 to 27 November, Saturday 28 November is the day of reflection, and the new Congress and Senate meet on 23 December." },
@@ -440,7 +440,7 @@ const COPY: Record<Locale, T> = {
     muniTitle: "Después: municipales del 23 de mayo de 2027",
     muni: [
       "Por ley, las elecciones locales se celebran el cuarto domingo de mayo, así que las próximas están previstas para el **23 de mayo de 2027**. En las generales solo votan los ciudadanos españoles, pero los **ciudadanos de la UE** residentes en España pueden votar en las municipales si están empadronados y han manifestado su voluntad de votar, **hasta el 30 de diciembre de 2026** para 2027.",
-      `Los ciudadanos de la UE pueden hacer esa declaración en línea en la ${a("sede del INE", URL.eu)}, por correo o en el ayuntamiento, y sirve para las elecciones siguientes. Algunos nacionales de fuera de la UE con convenio de reciprocidad también pueden votar, pero lo deben solicitar cada vez; la lista y el plazo de 2027 aún no se han publicado.`,
+      `Los ciudadanos de la UE pueden hacer esa declaración en línea en la ${a("sede del INE", URL.eu)}, por correo o en el ayuntamiento, y sirve para las elecciones siguientes. Algunos nacionales de fuera de la UE con convenio de reciprocidad también pueden votar, pero lo deben solicitar cada vez: para 2027, entre el 1 de diciembre de 2026 y el 15 de enero de 2027. Los países, las condiciones y los impresos están en ${b2link("foreignVote", "es", "la guía del voto de los extranjeros en las municipales de 2027")}.`,
     ],
     faq: [
       { question: "¿Cuándo son las próximas elecciones en Cataluña?", answer: "Las generales, el domingo 29 de noviembre de 2026 (Congreso y Senado). Después, las municipales, previstas para el 23 de mayo de 2027: la ley las fija el cuarto domingo de mayo y su decreto debe publicarse el 30 de marzo de 2027. Elecciones al Parlament no hay convocadas." },
@@ -538,7 +538,7 @@ const COPY: Record<Locale, T> = {
     muniTitle: "Després: municipals del 23 de maig de 2027",
     muni: [
       "Per llei, les eleccions locals se celebren el quart diumenge de maig, així que les properes estan previstes per al **23 de maig de 2027**. A les generals només hi voten els ciutadans espanyols, però els **ciutadans de la UE** residents a Espanya poden votar a les municipals si estan empadronats i han manifestat la voluntat de votar, **fins al 30 de desembre de 2026** per al 2027.",
-      `Els ciutadans de la UE poden fer aquesta declaració en línia a la ${a("seu de l'INE", URL.eu)}, per correu o a l'ajuntament, i serveix per a les eleccions següents. Alguns nacionals de fora de la UE amb conveni de reciprocitat també poden votar, però ho han de sol·licitar cada vegada; la llista i el termini del 2027 encara no s'han publicat.`,
+      `Els ciutadans de la UE poden fer aquesta declaració en línia a la ${a("seu de l'INE", URL.eu)}, per correu o a l'ajuntament, i serveix per a les eleccions següents. Alguns nacionals de fora de la UE amb conveni de reciprocitat també poden votar, però ho han de sol·licitar cada vegada: per al 2027, entre l'1 de desembre de 2026 i el 15 de gener de 2027. Els països, les condicions i els impresos són a ${b2link("foreignVote", "ca", "la guia del vot dels estrangers a les municipals del 2027")}.`,
     ],
     faq: [
       { question: "Quan són les properes eleccions a Catalunya?", answer: "Les generals, el diumenge 29 de novembre de 2026 (Congrés i Senat). Després, les municipals, previstes per al 23 de maig de 2027: la llei les fixa el quart diumenge de maig i el seu decret s'ha de publicar el 30 de març de 2027. Eleccions al Parlament no n'hi ha de convocades." },
