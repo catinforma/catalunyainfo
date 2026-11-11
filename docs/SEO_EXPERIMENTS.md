@@ -3463,3 +3463,21 @@ builders if the 11N pages' CTR falls more than 30 % against 12 Nov.
 Confounders: the 11N pages switch to "past" the same morning (timer, 12 Nov
 06:30); the 29N line on the strip moved a day earlier; the education strike
 may be registered and get minimum services before 18 Nov.
+
+## 11 Nov 2026 — ¿Dónde ha tocado el Gordo? Spain-wide Christmas lottery results hub, provinces and towns from SELAE (new; groups `gordo-navidad`, `gordo-navidad-links`)
+
+**What.** New code-route family, three editions: `/es/donde-ha-tocado-el-gordo/`,
+`/ca/on-ha-tocat-la-loteria-de-nadal/`, `/en/spanish-christmas-lottery-results/`.
+Before the draw it explains when and how the draw runs, how SELAE publishes the
+winners and the points of sale, how to check a décimo officially and where to
+collect (tax: one line plus a link to the lottery guide). On 22 Dec it becomes
+the results page, and `<provincia>/` and `<provincia>/<municipio>/` pages appear
+for every place SELAE lists, rendered on first request from the committed
+snapshot (`scripts/gordo-snapshot.py`, runbook `docs/GORDO_NAVIDAD_RUNBOOK.md`).
+No snapshot = hubs only, nothing else in the sitemap. The lottery guide gained
+one sentence linking the hub in each edition (`gordo-navidad-links`). Queries
+seen on the guide (28 d to 11 Nov): "loteria de nadal 2026" 48 imp, "la grossa
+de nadal 2026" 46 (pos 7.8) + variants ~40: the Catalan pages use SELAE's
+Catalan name ("loteria de Nadal") and say it is not La Grossa de Cap d'Any.
+**Measure** from 23 Dec with `snapshot.py page donde-ha-tocado 7` (and
+`on-ha-tocat`, `christmas-lottery-results`).

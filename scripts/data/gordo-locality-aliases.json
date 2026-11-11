@@ -1,0 +1,4 @@
+{
+  "_comment": "SELAE locality spellings that match no single INE municipality of their province, mapped to an INE municipality code. Add an entry only after checking in the INE Nomenclator (https://www.ine.es/nomen2/index.do) that the locality is a population entity of that municipality, and write where and when you checked it in 'source'. Read by scripts/gordo-snapshot.py. Shape: {\"province\": \"35\", \"selae\": \"LAS PALMAS GC\", \"ine\": \"35016\", \"source\": \"INE Nomenclator, checked 2026-12-22\"}",
+  "aliases": []
+}

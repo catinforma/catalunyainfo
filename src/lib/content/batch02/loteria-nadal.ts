@@ -1,5 +1,6 @@
 import type { Block } from "@/lib/content/blocks";
 import type { Locale } from "@/lib/i18n/config";
+import { gordoHubPath } from "@/lib/programmatic/gordo/paths";
 
 import { dateYear, dayDate } from "./festive";
 import { GROSSA_DRAW_DATE, GROSSA_URLS, PRIZES as GROSSA_PRIZES, TICKET_PRICE as GROSSA_TICKET, eur, levy, LEVY_EXEMPT } from "./grossa";
@@ -1224,6 +1225,13 @@ const COPY: Record<Locale, Copy> = {
 
 const RELATED = ["grossa", "christmasBarcelona", "newYear", "christmasTraditions", "decemberBridge", "holidayToday"] as const;
 
+/** One line to the Spain-wide results page (every province and municipality where SELAE lists a main prize). */
+const SPAIN_LINE: Record<Locale, string> = {
+  ca: `**A tot Espanya:** on ha tocat cada premi gros, província per província i municipi per municipi, és a ${link(gordoHubPath("ca"), "on ha tocat la loteria de Nadal")}.`,
+  es: `**En toda España:** dónde ha tocado cada premio principal, provincia por provincia y municipio por municipio, está en ${link(gordoHubPath("es"), "dónde ha tocado el Gordo")}.`,
+  en: `**Across Spain:** where each main prize was sold, province by province and town by town, is on ${link(gordoHubPath("en"), "our Christmas Lottery results page")}.`,
+};
+
 function heading(level: 2 | 3, text: string, id?: string): Block {
   return { type: "heading", level, text, ...(id ? { id } : {}) } as Block;
 }
@@ -1275,6 +1283,10 @@ export function buildNadalBody(
   } else {
     blocks.push(...paras(...t.resultsPending(c)));
   }
+
+  // The Spain-wide results, province by province and town by town, live on
+  // their own page (lib/programmatic/gordo), filled from SELAE on the day.
+  blocks.push(...paras(SPAIN_LINE[locale]));
 
   // Then the Catalan angle: "on ha tocat a Catalunya", by prize.
   blocks.push(heading(2, t.cataloniaHeading, "catalunya"));

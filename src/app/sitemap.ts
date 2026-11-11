@@ -15,6 +15,7 @@ import { reservoirSitemapEntries } from "@/lib/programmatic/reservoirs/pages";
 import { weekendSitemapEntries } from "@/lib/programmatic/weekend/sitemap";
 import { todaySitemapEntries } from "@/lib/programmatic/today/page";
 import { christmasFairsSitemapEntries } from "@/lib/programmatic/christmas-fairs/sitemap";
+import { gordoSitemapEntries } from "@/lib/programmatic/gordo/sitemap";
 import { pollsSitemapEntries } from "@/lib/programmatic/polls/page";
 import { editionSitemapEntries } from "@/lib/programmatic/spain-2027/editions";
 import { spainDaySitemapEntries, spainSitemapEntries } from "@/lib/programmatic/spain-2027/paths";
@@ -160,6 +161,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...weekendSitemapEntries(),
     ...todaySitemapEntries(),
     ...christmasFairsSitemapEntries(),
+    // The Christmas lottery hubs; provinces and towns only once the 22 December snapshot lists them.
+    ...gordoSitemapEntries(),
     // URLs only: no title or snippet, so nothing here can carry a poll figure.
     ...pollsSitemapEntries(),
   ];
