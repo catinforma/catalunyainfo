@@ -317,7 +317,7 @@ function body(locale: Locale): Block[] {
         },
       ]),
       ...paras(verifiedLine("ca", VERIFIED)),
-      ...b2Related(["voting", "mesa", "electionNight", "congressResults", "parliamentResults"], "ca"),
+      ...b2Related(["voting", "postalVote", "mesa", "electionNight", "congressResults", "parliamentResults"], "ca"),
     ];
   }
 
@@ -415,7 +415,7 @@ function body(locale: Locale): Block[] {
         },
       ]),
       ...paras(verifiedLine("es", VERIFIED)),
-      ...b2Related(["voting", "mesa", "electionNight", "congressResults", "parliamentResults"], "es"),
+      ...b2Related(["voting", "postalVote", "mesa", "electionNight", "congressResults", "parliamentResults"], "es"),
     ];
   }
 
@@ -512,7 +512,7 @@ function body(locale: Locale): Block[] {
       },
     ]),
     ...paras(verifiedLine("en", VERIFIED)),
-    ...b2Related(["voting", "mesa", "electionNight", "congressResults", "parliamentResults"], "en"),
+    ...b2Related(["voting", "postalVote", "mesa", "electionNight", "congressResults", "parliamentResults"], "en"),
   ];
 }
 

@@ -1,5 +1,6 @@
 import type { Locale } from "@/lib/i18n/config";
 import { hubPath, PAGES_PER_LOCALE } from "@/lib/programmatic/elections/paths";
+import { pollsPath } from "@/lib/programmatic/polls/paths";
 
 import {
   b2link,
@@ -44,6 +45,19 @@ import {
  * app), the JEC 29N calendar PDF (general count 4-7 Dec) and the JEC session
  * lists of 26 and 29 Oct (nothing on results). No link added.
  *
+ * 11 Nov 2026 (titles and descriptions in all three editions, logged in
+ * docs/SEO_EXPERIMENTS.md, "11 Nov 2026 — 29N election guides"): titles in
+ * the words of "when do election results come out" / "a qué hora salen los
+ * resultados" (GSC 29 Oct-11 Nov: "election results" 590 at 9.4, "2026 spain
+ * general election results" 149 at 5.9, "cuando salen los resultados de las
+ * elecciones" 40 at 7.0). Still no 29N results site: the official site's
+ * home (29neleccionesgenerales.es) and its "voto presencial" page, re-read on
+ * 11 Nov, have no results page or link (Infoelectoral answered 403 to
+ * scripts that day); the JEC session list has nothing after 5 Nov. The
+ * "checked on" dates move to 11 Nov; a link to the official polls page sits
+ * in the polls section; the postal-vote guide joins the rail (the candidates
+ * guide stays linked once, in the body, as its test wants).
+ *
  * 24 Oct 2026: JEC calendar re-read (general count 4-7 Dec; BOE publication
  * within 40 days of the proclamation of the elected). Interior's note of
  * 20 Oct names 29neleccionesgenerales.es as the official election website;
@@ -62,6 +76,7 @@ const SOURCES: B2Source[] = [
   { name: "Elecciones Generales 29-N", url: "https://infoelectoral.interior.gob.es/es/proceso-electoral/Elecciones-Generales-29-N/", publisher: "Ministerio del Interior" },
   { name: "Datos abiertos de resultados electorales", url: "https://infoelectoral.interior.gob.es/es/elecciones-celebradas/datos-abiertos/", publisher: "Ministerio del Interior" },
   { name: "Voting in person: polling hours, 9:00 to 20:00 (29neleccionesgenerales.es)", url: "https://29neleccionesgenerales.es/en/informacion-general/como-votar/voto-presencial", publisher: "Ministerio del Interior" },
+  { name: "Elecciones a las Cortes Generales 2026, web oficial (portada consultada el 11 de noviembre de 2026: todavía sin página ni enlace de resultados)", url: "https://29neleccionesgenerales.es/", publisher: "Ministerio del Interior" },
   { name: "Real Decreto 806/2026, de convocatoria de elecciones", url: "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2026-20742", publisher: "Boletín Oficial del Estado" },
 ];
 
@@ -69,27 +84,27 @@ const META: Record<Locale, { path: string; title: string; seoTitle: string; seoD
   ca: {
     path: "guies/nit-electoral-resultats-escrutini",
     title: "Resultats de les eleccions del 29 de novembre: a quina hora surten i com és l'escrutini",
-    seoTitle: "Resultats eleccions 29 de novembre: hora i escrutini",
+    seoTitle: "Resultats eleccions 29 de novembre: a quina hora surten",
     seoDescription:
-      "Els col·legis tanquen a les 20.00 (Canàries, 21.00 peninsular); el 2023 Interior va començar a publicar a les 21.00. Escrutini general: 4-7 de desembre.",
+      "Votació fins a les 20.00 (Canàries, 21.00 peninsular); l'escrutini provisional surt aquella nit, el 2023 des de les 21.00. Escrutini general: 4-7 de desembre.",
     excerpt:
       "Com funciona la nit electoral: quan tanquen els col·legis, d'on surten les xifres, per què no inclouen el vot de l'estranger i quan són oficials.",
   },
   es: {
     path: "guias/noche-electoral-resultados-escrutinio",
     title: "Resultados de las elecciones del 29 de noviembre: a qué hora salen y cómo es el escrutinio",
-    seoTitle: "Resultados elecciones 29 de noviembre: hora y escrutinio",
+    seoTitle: "Resultados elecciones 29 de noviembre: a qué hora salen",
     seoDescription:
-      "Los colegios cierran a las 20:00 (Canarias, 21:00 peninsular); en 2023 Interior empezó a publicar a las 21:00. Escrutinio general del 4 al 7 de diciembre.",
+      "Votación hasta las 20:00 (Canarias, 21:00 peninsular); el escrutinio provisional sale esa noche, en 2023 desde las 21:00. Escrutinio general: 4-7 de diciembre.",
     excerpt:
       "Cómo funciona la noche electoral: cuándo cierran los colegios, de dónde salen las cifras, por qué no incluyen el voto exterior y cuándo son oficiales.",
   },
   en: {
     path: "guides/spain-election-night-results",
     title: "Spain election results, 29 November 2026: when they come out and how the count works",
-    seoTitle: "Spain general election results 2026: what time on 29 Nov",
+    seoTitle: "Spain general election results 2026: when they come out",
     seoDescription:
-      "Sunday 29 Nov, polls 9:00-20:00 (Canaries 21:00 mainland time). In 2023 Interior's provisional count began at 21:00; the official count runs 4-7 Dec.",
+      "Polls 9:00-20:00 on Sun 29 Nov (Canaries 21:00 mainland time); the provisional count follows that night, from 21:00 in 2023. Official count: 4-7 Dec.",
     excerpt:
       "How election night works in Spain: when polls close, where the figures come from, why they leave out votes from abroad and when they become official.",
   },
@@ -139,7 +154,7 @@ const COPY: Record<Locale, T> = {
     clockNote: "Fonts: LOREG, calendari de la Junta Electoral Central i Ministeri de l'Interior. Interior encara no ha anunciat l'hora d'inici per al 29N.",
     whereTitle: "On seguir els resultats oficials",
     where: [
-      "Els dona el **Ministeri de l'Interior**, que en cada elecció obre un web de resultats propi i una aplicació. Per al 23J del 2023 ho va anunciar tres dies abans. Per al 29N encara no ho ha fet (consultat el 3 de novembre del 2026).",
+      "Els dona el **Ministeri de l'Interior**, que en cada elecció obre un web de resultats propi i una aplicació. Per al 23J del 2023 ho va anunciar tres dies abans. Per al 29N encara no ho ha fet (consultat l'11 de novembre del 2026).",
       "El 20 d'octubre, Interior va presentar **29neleccionesgenerales.es** com el web oficial d'aquestes eleccions, però no ha dit si hi publicarà els resultats. Fins que ho anunciï, la referència és aquest web i la pàgina del 29N a **Infoelectoral**, el portal electoral d'Interior. La Generalitat no publica un recompte propi de les eleccions generals: les seves dades obertes arriben més tard.",
     ],
     countTitle: "D'on surten les xifres",
@@ -167,6 +182,7 @@ const COPY: Record<Locale, T> = {
     pollsTitle: "Enquestes i jornada de reflexió",
     polls: [
       "Del **24 al 28 de novembre** és prohibit publicar, difondre o reproduir enquestes electorals per qualsevol mitjà. La campanya va del 13 al 27 de novembre, i el 28 és la jornada de reflexió.",
+      `Les estimacions dels dos organismes públics que fan enquestes, el CIS i el CEO, publicades abans de la veda i amb la fitxa tècnica de cada estudi, són a [enquestes oficials del 29N a Catalunya](${pollsPath("ca")}).`,
     ],
     warnTitle: "Compte amb els webs no oficials",
     warn: "Ja hi ha webs que anuncien «resultats en directe del 29N», i n'hi ha algun que mostra xifres del 2023 amb títols del 2026. Abans de creure't una xifra, comprova que surti d'Interior i que digui quin percentatge de meses s'ha escrutat.",
@@ -195,7 +211,7 @@ const COPY: Record<Locale, T> = {
     clockNote: "Fuentes: LOREG, calendario de la Junta Electoral Central y Ministerio del Interior. Interior aún no ha anunciado la hora de inicio para el 29N.",
     whereTitle: "Dónde seguir los resultados oficiales",
     where: [
-      "Los da el **Ministerio del Interior**, que en cada elección abre una web de resultados propia y una aplicación. Para el 23J de 2023 lo anunció tres días antes. Para el 29N todavía no lo ha hecho (consultado el 3 de noviembre de 2026).",
+      "Los da el **Ministerio del Interior**, que en cada elección abre una web de resultados propia y una aplicación. Para el 23J de 2023 lo anunció tres días antes. Para el 29N todavía no lo ha hecho (consultado el 11 de noviembre de 2026).",
       "El 20 de octubre, Interior presentó **29neleccionesgenerales.es** como la web oficial de estas elecciones, pero no ha dicho si publicará allí los resultados. Hasta que lo anuncie, la referencia es esa web y la página del 29N en **Infoelectoral**, el portal electoral de Interior. La Generalitat no publica un recuento propio de las elecciones generales: sus datos abiertos llegan más tarde.",
     ],
     countTitle: "De dónde salen las cifras",
@@ -223,6 +239,7 @@ const COPY: Record<Locale, T> = {
     pollsTitle: "Encuestas y jornada de reflexión",
     polls: [
       "Del **24 al 28 de noviembre** está prohibido publicar, difundir o reproducir sondeos electorales por cualquier medio. La campaña va del 13 al 27 de noviembre, y el 28 es la jornada de reflexión.",
+      `Las estimaciones de los dos organismos públicos que hacen encuestas, el CIS y el CEO, publicadas antes de la veda y con la ficha técnica de cada estudio, están en [encuestas oficiales del 29N en Cataluña](${pollsPath("es")}).`,
     ],
     warnTitle: "Cuidado con las webs no oficiales",
     warn: "Ya hay webs que anuncian «resultados en directo del 29N», y alguna muestra cifras de 2023 con títulos de 2026. Antes de creerte una cifra, comprueba que salga de Interior y que diga qué porcentaje de mesas se ha escrutado.",
@@ -234,7 +251,7 @@ const COPY: Record<Locale, T> = {
     ],
   },
   en: {
-    lead: "Results of Spain's 2026 general election, held on **Sunday 29 November**, start to come in after polls close at **20:00** (they open at 9:00; the Canary Islands close at 21:00 mainland time). In 2023 the Interior Ministry began publishing results at 21:00; for 29 November it has not yet announced its results site or start time (checked on 3 November 2026). Those first figures are the ministry's **provisional count**: they are for information, and the official result comes weeks later, in the official gazette (BOE).",
+    lead: "Results of Spain's 2026 general election, held on **Sunday 29 November**, start to come in after polls close at **20:00** (they open at 9:00; the Canary Islands close at 21:00 mainland time). In 2023 the Interior Ministry began publishing results at 21:00; for 29 November it has not yet announced its results site or start time (checked on 11 November 2026). Those first figures are the ministry's **provisional count**: they are for information, and the official result comes weeks later, in the official gazette (BOE).",
     note: "This page publishes no polls, projections or seat forecasts. When the Interior Ministry announces its 29 November results site, we will add the official link here.",
     clockTitle: "The timeline on the night and after",
     clockCaption: "What happens after the vote, general election of 29 November 2026",
@@ -251,7 +268,7 @@ const COPY: Record<Locale, T> = {
     clockNote: "Sources: the electoral law (LOREG), the Central Electoral Board calendar and the Interior Ministry. The ministry has not yet announced a start time for 29 November.",
     whereTitle: "Where to follow the official results",
     where: [
-      "They come from the **Spanish Ministry of the Interior**, which opens its own results website and app for each election. For the July 2023 election it announced them three days before. For 29 November it has not done so yet (checked on 3 November 2026).",
+      "They come from the **Spanish Ministry of the Interior**, which opens its own results website and app for each election. For the July 2023 election it announced them three days before. For 29 November it has not done so yet (checked on 11 November 2026).",
       "On 20 October the ministry presented **29neleccionesgenerales.es** as the official website of this election, but it has not said whether results will be published there. Until it does, the reference is that site and the 29-N page on **Infoelectoral**, the ministry's election portal. The Catalan government does not publish its own count for general elections; its open data comes later.",
     ],
     countTitle: "Where the figures come from",
@@ -279,11 +296,12 @@ const COPY: Record<Locale, T> = {
     pollsTitle: "Polls and the day of reflection",
     polls: [
       "From **24 to 28 November** it is illegal to publish, broadcast or reproduce election polls in any medium. The campaign runs from 13 to 27 November, and 28 November is the day of reflection.",
+      `Estimates from the two public bodies that run polls, the CIS and the CEO, published before the blackout and with each study's technical sheet, are on [official 29 November polls in Catalonia](${pollsPath("en")}).`,
     ],
     warnTitle: "Beware of unofficial sites",
     warn: "Some sites already advertise “29N live results”, and at least one shows 2023 figures under 2026 headings. Before trusting a figure, check that it comes from the Interior Ministry and that it states the share of polling tables counted.",
     faq: [
-      { question: "When are the 2026 Spain general election results?", answer: "On the night of Sunday 29 November, after polls close at 20:00 (21:00 mainland time in the Canary Islands). In 2023 the Interior Ministry started publishing results at 21:00. It has not announced the time or the results site for 29 November yet (checked on 3 November 2026)." },
+      { question: "When are the 2026 Spain general election results?", answer: "On the night of Sunday 29 November, after polls close at 20:00 (21:00 mainland time in the Canary Islands). In 2023 the Interior Ministry started publishing results at 21:00. It has not announced the time or the results site for 29 November yet (checked on 11 November 2026)." },
       { question: "What time do the polls open in the Spanish election on 29 November?", answer: "Voting runs from 9:00 to 20:00. Polling stations open earlier for the officers to set up, and anyone still inside at 20:00 may still vote. Where your polling station is, and what ID to bring, is in [how to vote in Spain's general election](/en/guides/how-to-vote-catalonia/)." },
       { question: "What is the provisional count (escrutinio)? Is it the official result?", answer: "No. It is the ministry's provisional count. The official result comes from the electoral boards' general count (4 to 7 December) and is published in the BOE." },
       { question: "Does it include votes from Spaniards living abroad?", answer: "Not on election night. CERA votes are counted in the general count a few days later." },
@@ -308,7 +326,7 @@ function body(locale: Locale) {
     ...h2(t.pollsTitle, ...t.polls),
     callout("warning", t.warnTitle, t.warn),
     faq(t.faq),
-    ...b2Related(["voting", "congressResults", "mesa", "parliamentResults"], locale),
+    ...b2Related(["voting", "postalVote", "mesa", "congressResults", "parliamentResults"], locale),
   ];
 }
 

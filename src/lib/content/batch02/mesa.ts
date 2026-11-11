@@ -125,6 +125,19 @@ import {
 
 const VERIFIED = "2026-11-05";
 
+/*
+ * 11 Nov 2026 (titles and descriptions in all three editions, logged in
+ * docs/SEO_EXPERIMENTS.md, "11 Nov 2026 — 29N election guides"). Notices
+ * ended on 7 Nov and the last excuses fall on 14 Nov, so the snippets move
+ * from "excuses" to the questions of the people already drawn ("me ha tocado
+ * mesa", "m'ha tocat", "cuánto se cobra", "polling station duty Spain"): be
+ * there at 8:00 with the notice, EUR 75, five hours off on Monday 30 Nov and
+ * the 7 days to seek an excuse (all already in the body). The EN page sat at
+ * 2.9 with 1.2 % CTR on Spanish fragments ("cuanto pagan", "se cobra?").
+ * Body: the DOGC voter-leave line re-dated (DOGC summary API, issues
+ * 9787-9792, read 11 Nov: no 29N order yet); the postal-vote guide joins the
+ * rail. VERIFIED stays 5 Nov.
+ */
 const EXCUSE_APP = "https://www.mesaselectorales.es/web-excusas-form/#/login";
 
 /**
@@ -182,27 +195,27 @@ const META: Record<Locale, { path: string; title: string; seoTitle: string; seoD
   ca: {
     path: "guies/membre-mesa-electoral",
     title: "Membre de mesa electoral: com saber si t'ha tocat, què fer, quant es cobra i com excusar-te",
-    seoTitle: "Membre de mesa electoral 2026: si t'ha tocat, excusa i 75 €",
+    seoTitle: "M'ha tocat mesa electoral el 29N: quant es cobra i què fer",
     seoDescription:
-      "T'ho notifiquen fins al 7 de novembre; tens 7 dies per excusar-te a la Junta Electoral de Zona, també en línia. Dieta de 75 € i 5 h menys el dilluns 30.",
+      "Si t'ha tocat mesa el 29N: presenta't a les 8.00 amb la notificació. Dieta de 75 €, 5 h menys el dilluns 30 i 7 dies des de la notificació per excusar-te.",
     excerpt:
       "Si t'ha tocat ser a la mesa el 29N: com ho saps, el termini per excusar-te i on, la dieta de 75 €, el permís a la feina i què passa si no hi vas, segons la LOREG.",
   },
   es: {
     path: "guias/miembro-mesa-electoral",
     title: "Mesa electoral en las elecciones generales del 29 de noviembre: cuánto se cobra, excusas válidas y qué pasa si no vas",
-    seoTitle: "Mesa electoral 29N: cuánto se cobra (75 €), excusas y plazos",
+    seoTitle: "Mesa electoral 29N: me ha tocado, cuánto se cobra y qué hacer",
     seoDescription:
-      "Elecciones generales 29N, en toda España: 75 € de dieta, 7 días desde la notificación para excusarte ante la Junta Electoral de Zona y 5 h menos el lunes.",
+      "Si te ha tocado mesa el 29N (toda España): ve a las 8:00 con la notificación. 75 € de dieta, 5 h menos el lunes 30 y 7 días desde la notificación para excusarte.",
     excerpt:
       "Si te ha tocado mesa en las elecciones generales del 29N, en cualquier punto de España: cuánto se cobra, las excusas válidas y dónde presentarlas, el permiso en el trabajo y qué pasa si no vas, según la LOREG.",
   },
   en: {
     path: "guides/polling-station-duty-spain",
     title: "Drawn for polling-station duty (mesa electoral) in Spain on 29 November: what to do, excuses and the €75 pay",
-    seoTitle: "Polling-station duty in Spain (mesa electoral): €75, excuses",
+    seoTitle: "Polling station duty in Spain, 29 Nov: €75, 8:00 start, time off",
     seoDescription:
-      "Notified by 7 Nov? You have 7 days to ask the Junta Electoral de Zona to excuse you, online with Cl@ve too. €75 tax-free, 5 hours off on Monday 30 Nov.",
+      "Drawn for a mesa electoral? Be at the polling station at 8:00 on Sun 29 Nov with your notice. €75 tax-free, 5 hours off on Mon 30 Nov; 7 days to seek an excuse.",
     excerpt:
       "Drawn to staff a polling table on 29 November: how you find out, the deadline and where to ask to be excused, the €75 allowance, time off work and the penalty for not turning up.",
   },
@@ -341,7 +354,7 @@ const COPY: Record<Locale, T> = {
     work: [
       "**Membres de mesa:** si el dia de la votació és laborable per a tu, tens permís retribuït de jornada completa, i **en tots els casos** una reducció de **cinc hores** de la jornada l'endemà. Per al 29N, que és diumenge, això vol dir el **dilluns 30 de novembre**. Els suplents que acaben a la mesa tenen els mateixos drets. El justificant te'l dona la Junta Electoral de Zona.",
       "**Torn de nit:** segons el Ministeri de l'Interior, el torn de nit que comença el 29 de novembre compta com a jornada del dia electoral, i la reducció de cinc hores es pot fer al torn de nit següent si comença el dia 30. Has de complir a la mesa encara que hagis treballat la jornada anterior.",
-      "**Votants que treballen aquell dia:** tenen dret a **fins a quatre hores retribuïdes** per anar a votar, proporcionals si fan jornada reduïda. A Catalunya la Generalitat fixa el detall per a cada elecció: el 2023 eren dues hores si l'horari coincidia més de dues i menys de quatre amb el de votació, i quatre si coincidia quatre o més, i l'empresa decidia en quin moment. L'ordre per al 29N encara no és al DOGC (consultat el 3 de novembre); la del 2023 (Ordre EMT/178/2023) va sortir el 7 de juliol, 16 dies abans de votar.",
+      "**Votants que treballen aquell dia:** tenen dret a **fins a quatre hores retribuïdes** per anar a votar, proporcionals si fan jornada reduïda. A Catalunya la Generalitat fixa el detall per a cada elecció: el 2023 eren dues hores si l'horari coincidia més de dues i menys de quatre amb el de votació, i quatre si coincidia quatre o més, i l'empresa decidia en quin moment. L'ordre per al 29N encara no és al DOGC (consultat l'11 de novembre, fins al número 9792); la del 2023 (Ordre EMT/178/2023) va sortir el 7 de juliol, 16 dies abans de votar.",
       "**Seguretat Social:** titulars i suplents estan coberts aquell dia; qualsevol lesió, també anant-hi o tornant, es considera accident de treball.",
     ],
     dayTitle: "Com és el dia",
@@ -477,7 +490,7 @@ const COPY: Record<Locale, T> = {
       title: "Si te ha tocado mesa en Cataluña",
       items: [
         `**Tu Junta Electoral de Zona:** en Cataluña hay ${CATALONIA_JEZ.boards} (${CATALONIA_JEZ.barcelona} en la provincia de Barcelona, ${CATALONIA_JEZ.girona} en la de Girona, ${CATALONIA_JEZ.lleida} en la de Lleida y ${CATALONIA_JEZ.tarragona} en la de Tarragona), menos que partidos judiciales (${CATALONIA_JEZ.districts}), porque la LOREG las sitúa en las cabeceras de los partidos judiciales de las elecciones locales de 1979 (artículo 8). Por eso, en ${CATALONIA_JEZ.elsewhere} municipios la sede de la Junta no es la cabecera de su partido judicial actual. La dirección y el teléfono de la tuya, tal como los publica la Junta Electoral Central, están en la página de tu municipio: búscalo en [las elecciones en Cataluña por municipio](${hubPath("es")}).`,
-        "**Permiso para votar si trabajas el 29:** en Cataluña el reparto de las cuatro horas lo fija una orden de la Generalitat en el DOGC. En 2023 eran dos horas si el horario coincidía más de dos y menos de cuatro con el de votación, y cuatro si coincidía cuatro o más, y la empresa decidía en qué momento. La orden para el 29N aún no está en el DOGC (consultado el 3 de noviembre); la de 2023 (Ordre EMT/178/2023) salió el 7 de julio, 16 días antes de votar.",
+        "**Permiso para votar si trabajas el 29:** en Cataluña el reparto de las cuatro horas lo fija una orden de la Generalitat en el DOGC. En 2023 eran dos horas si el horario coincidía más de dos y menos de cuatro con el de votación, y cuatro si coincidía cuatro o más, y la empresa decidía en qué momento. La orden para el 29N aún no está en el DOGC (consultado el 11 de noviembre, hasta el número 9792); la de 2023 (Ordre EMT/178/2023) salió el 7 de julio, 16 días antes de votar.",
       ],
     },
     faq: [
@@ -574,7 +587,7 @@ const COPY: Record<Locale, T> = {
     work: [
       "**Mesa members:** if polling day is a working day for you, you get the whole day off with pay, and **in every case** five fewer hours of work the next day. For 29 November, a Sunday, that is **Monday 30 November**. Substitutes who end up sitting get the same. The electoral board issues the certificate.",
       "**Night shifts:** according to the Interior Ministry, a night shift that starts on 29 November counts as polling-day work, and the five-hour reduction can be taken on your next night shift if it starts on the 30th. You must serve at the table even if you worked the day before.",
-      "**Voters working that day:** you are entitled to **up to four paid hours** to vote, pro rata for part-time work. In Catalonia the Generalitat sets the detail for each election: in 2023 it was two hours if your shift overlapped voting hours by more than two and less than four, and four if it overlapped by four or more, with the employer choosing when. The order for 29 November was not in the DOGC on 3 November; the 2023 one (Ordre EMT/178/2023) came out on 7 July, 16 days before the vote.",
+      "**Voters working that day:** you are entitled to **up to four paid hours** to vote, pro rata for part-time work. In Catalonia the Generalitat sets the detail for each election: in 2023 it was two hours if your shift overlapped voting hours by more than two and less than four, and four if it overlapped by four or more, with the employer choosing when. The order for 29 November was still not in the DOGC on 11 November (issues up to no. 9792 checked); the 2023 one (Ordre EMT/178/2023) came out on 7 July, 16 days before the vote.",
       "**Social Security:** chairs, members and substitutes are covered that day; any injury, including on the way there or back, counts as a work accident.",
     ],
     dayTitle: "How the day goes",
@@ -639,7 +652,7 @@ function body(locale: Locale) {
     list(...t.check),
     ...(t.catalonia ? [...h2(t.catalonia.title), list(...t.catalonia.items)] : []),
     faq(t.faq),
-    ...b2Related(["voting", "candidates", "electionNight", "congressResults", "parliamentResults"], locale),
+    ...b2Related(["voting", "postalVote", "candidates", "electionNight", "congressResults", "parliamentResults"], locale),
   ];
 }
 

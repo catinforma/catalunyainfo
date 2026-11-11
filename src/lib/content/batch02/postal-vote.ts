@@ -115,6 +115,22 @@ import { VOTING } from "./voting";
  * and caption, read from VOTING, because media rows are keyed by file).
  */
 
+/*
+ * 11 Nov 2026 (logged in docs/SEO_EXPERIMENTS.md, "11 Nov 2026 — 29N
+ * election guides"): CA "open" title in the words of "fins quan es pot
+ * demanar el vot per correu" (47 impressions at 8.2, no click, GSC 29 Oct-
+ * 11 Nov); es/en titles untouched. Re-read that day: Correos' postal-vote
+ * page (19 and 25 Nov unchanged; "Este representante deberá presentar para
+ * ello una autorización, una fotocopia del documento oficial acreditativo del
+ * elector y su propio documento oficial acreditativo", so the hand-in lines
+ * say the representative brings their own ID too), Interior's 29N postal page
+ * (same dates and authorisation), Interior's 29N "voto presencial" page
+ * (people working away from home: postal vote "y cuenten para ello con
+ * permiso de hasta cuatro horas libres para poder solicitarlo", a new line
+ * under "who can") and INE cid=1700 (6 Oct-19 Nov, papers 9-22 Nov).
+ * POSTAL_AS_OF stays 5 Nov: LOREG, the JEC calendar and the mesa manual were
+ * not re-read.
+ */
 export const POSTAL_AS_OF = "2026-11-05";
 
 export const POSTAL_29N = {
@@ -148,7 +164,8 @@ export const POSTAL_URL = {
 } as const;
 
 const SOURCES: B2Source[] = [
-  { name: "Voto por correo: solicitud hasta el 19 de noviembre de 2026 y depósito hasta el 25 de noviembre", url: POSTAL_URL.correos, publisher: "Correos" },
+  { name: "Voto por correo: solicitud hasta el 19 de noviembre de 2026 y depósito hasta el 25 de noviembre; si lo entrega otra persona, autorización, fotocopia del documento del elector y su propio documento (consultado el 11 de noviembre de 2026)", url: POSTAL_URL.correos, publisher: "Correos" },
+  { name: "Voto presencial: hasta cuatro horas libres retribuidas para votar y, si se trabaja lejos del domicilio, para solicitar el voto por correo (consultado el 11 de noviembre de 2026)", url: "https://29neleccionesgenerales.es/informacion-general/como-votar/voto-presencial", publisher: "Ministerio del Interior" },
   { name: "Voto por correo desde España, elecciones del 29 de noviembre de 2026", url: POSTAL_URL.interior, publisher: "Ministerio del Interior" },
   { name: "Elecciones Generales 29 de noviembre de 2026: voto por correo, voto de los residentes temporalmente en el extranjero y CERA, consulta del envío", url: POSTAL_URL.ine, publisher: "INE — Oficina del Censo Electoral" },
   { name: "Consulta del estado del voto por correo", url: POSTAL_URL.tracking, publisher: "INE — Oficina del Censo Electoral" },
@@ -208,7 +225,7 @@ const COPY: Record<Locale, Copy> = {
       "Vot per correu el 29N: fins quan es demana, com fer-ho a Correus o per internet, quan arriben les paperetes, fins quan es pot enviar el vot i si després pots votar en persona.",
     phases: {
       open: {
-        seoTitle: "Vot per correu 29N: demana'l fins al 19 de novembre",
+        seoTitle: "Vot per correu 29N: fins quan es pot demanar i com enviar-lo",
         seoDescription:
           "Demana'l a Correus fins al dijous 19 de novembre: en persona amb el DNI original o per internet amb certificat digital. Lliura el vot fins al 25.",
         lead: `**Demana el vot per correu fins al dijous 19 de novembre del 2026** a qualsevol oficina de Correus, en persona i amb el DNI, el passaport o el carnet de conduir originals, o per internet al ${a("web de Correus", POSTAL_URL.correos)} amb certificat digital o DNI electrònic. Les paperetes t'arriben per correu certificat entre el 9 i el 22 de novembre, i has de **lliurar el vot a Correus fins al dimecres 25 de novembre**, sense pagar res. Un cop acceptada la sol·licitud, **ja no pots votar en persona** el diumenge 29.`,
@@ -269,6 +286,7 @@ const COPY: Record<Locale, Copy> = {
     whoTitle: "Qui pot votar per correu",
     who: [
       "Qualsevol elector que el dia de la votació no serà a la localitat on li toca votar, o que no s'hi pot presentar, per exemple per malaltia o discapacitat (LOREG, article 72). També els espanyols inscrits com a residents a l'estranger (CERA) que són temporalment a Espanya: el poden demanar a Correus en el mateix termini.",
+      "**Si treballes lluny de casa el dia 29:** segons el Ministeri de l'Interior, les mesures per a qui treballa lluny del domicili han de permetre que voti per correu, amb un permís de fins a quatre hores lliures retribuïdes per demanar-lo.",
     ],
     officeTitle: "Com demanar-lo a Correus, en persona",
     office: [
@@ -294,7 +312,7 @@ const COPY: Record<Locale, Copy> = {
       "**Vota:** posa la papereta de la candidatura que triïs al **Congrés** dins del sobre de votació **blanc**. A la papereta del **Senat**, marca els candidats que triïs seguint les instruccions de la papereta i posa-la al sobre **sepia**.",
       "**Prepara l'enviament:** dins del sobre adreçat a la mesa hi van els sobres de votació i **el certificat d'inscripció al cens**. No te'l deixis: segons el manual oficial de les meses, un sobre sense el certificat es destrueix i no compta ni com a vot nul.",
       "**Lliura'l fins al dimecres 25 de novembre** en una oficina de Correus, en l'horari habitual, identificant-te. Va per correu certificat i **no cal pagar res**.",
-      "**Si no hi pots anar,** el pot portar una altra persona amb una autorització signada per tu i una fotocòpia del teu DNI, passaport o un altre document oficial. Correus té un model d'autorització.",
+      "**Si no hi pots anar,** el pot portar una altra persona amb una autorització signada per tu i una fotocòpia del teu DNI, passaport o un altre document oficial; aquesta persona hi porta també el seu propi document. Correus té un model d'autorització.",
       "**Avís per correu electrònic:** com a novetat, si dones una adreça electrònica en lliurar el vot, Correus t'avisa quan arriba a la mesa el dia de la votació.",
       "**El dia 29,** Correus porta els vots a les meses a les 9 del matí. A les 20 h, quan ha votat l'última persona, la mesa els obre d'un en un, comprova el certificat i posa els sobres a l'urna.",
     ],
@@ -328,7 +346,7 @@ const COPY: Record<Locale, Copy> = {
       { question: "Quan arriben les paperetes del vot per correu?", answer: "Entre el 9 i el 22 de novembre de 2026, per correu certificat a l'adreça que vas indicar. Les has de signar tu, identificant-te." },
       { question: "Què passa si no soc a casa quan arriba el carter?", answer: "Et deixa un avís i has d'anar a recollir les paperetes personalment a l'oficina de Correus que s'hi indica, amb el document d'identitat. Si estàs malalt, ho pot fer la persona que tingui la teva autorització notarial." },
       { question: "Fins quan puc enviar el vot per correu?", answer: "Fins al dimecres 25 de novembre de 2026, en una oficina de Correus i en l'horari habitual, identificant-te. Va per correu certificat i és gratuït." },
-      { question: "Pot portar el vot a Correus una altra persona?", answer: "Sí, amb una autorització signada per tu i una fotocòpia del teu DNI, passaport o un altre document oficial. Correus té un model d'autorització. Demanar el vot, en canvi, només ho pot fer una altra persona en cas de malaltia, amb autorització notarial i certificat mèdic oficial." },
+      { question: "Pot portar el vot a Correus una altra persona?", answer: "Sí, amb una autorització signada per tu i una fotocòpia del teu DNI, passaport o un altre document oficial; aquesta persona hi porta també el seu propi document. Correus té un model d'autorització. Demanar el vot, en canvi, només ho pot fer una altra persona en cas de malaltia, amb autorització notarial i certificat mèdic oficial." },
       { question: "Costa diners votar per correu?", answer: "No. El sobre adreçat a la mesa no necessita segell (LOREG, article 73): el Ministeri de l'Interior paga l'enviament." },
       { question: "Com sé si el meu vot per correu ha arribat a la mesa?", answer: "Com a novetat, si dones una adreça electrònica quan lliures el vot a Correus, et confirmen per correu electrònic que ha arribat a la mesa el dia de la votació. L'estat de l'enviament de les paperetes es consulta al web de l'INE." },
     ],
@@ -402,6 +420,7 @@ const COPY: Record<Locale, Copy> = {
     whoTitle: "Quién puede votar por correo",
     who: [
       "Cualquier elector que el día de la votación no vaya a estar en la localidad donde le toca votar, o que no pueda presentarse, por ejemplo por enfermedad o discapacidad (LOREG, artículo 72). También los españoles inscritos como residentes en el extranjero (CERA) que estén temporalmente en España: pueden pedirlo en Correos en el mismo plazo.",
+      "**Si trabajas lejos de casa el día 29:** según el Ministerio del Interior, las medidas para quien trabaja lejos de su domicilio deben permitirle votar por correo, con un permiso de hasta cuatro horas libres retribuidas para solicitarlo.",
     ],
     officeTitle: "Cómo pedirlo en Correos, en persona",
     office: [
@@ -427,7 +446,7 @@ const COPY: Record<Locale, Copy> = {
       "**Vota:** mete la papeleta de la candidatura que elijas al **Congreso** en el sobre de votación **blanco**. En la papeleta del **Senado**, marca los candidatos que elijas siguiendo las instrucciones de la papeleta y métela en el sobre **sepia**.",
       "**Prepara el envío:** dentro del sobre dirigido a la mesa van los sobres de votación y **el certificado de inscripción en el censo**. No lo olvides: según el manual oficial de las mesas, un sobre sin el certificado se destruye y no cuenta ni como voto nulo.",
       "**Entrégalo hasta el miércoles 25 de noviembre** en una oficina de Correos, en el horario habitual, identificándote. Va por correo certificado y **no hay que pagar nada**.",
-      "**Si no puedes ir,** puede llevarlo otra persona con una autorización firmada por ti y una fotocopia de tu DNI, pasaporte u otro documento oficial. Correos tiene un modelo de autorización.",
+      "**Si no puedes ir,** puede llevarlo otra persona con una autorización firmada por ti y una fotocopia de tu DNI, pasaporte u otro documento oficial; esa persona lleva también su propio documento. Correos tiene un modelo de autorización.",
       "**Aviso por correo electrónico:** como novedad, si das una dirección de correo electrónico al entregar el voto, Correos te avisa cuando llega a la mesa el día de la votación.",
       "**El día 29,** Correos lleva los votos a las mesas a las 9 de la mañana. A las 20 h, cuando ha votado la última persona, la mesa los abre de uno en uno, comprueba el certificado y mete los sobres en la urna.",
     ],
@@ -461,7 +480,7 @@ const COPY: Record<Locale, Copy> = {
       { question: "¿Cuándo llega la documentación del voto por correo?", answer: "Entre el 9 y el 22 de noviembre de 2026, por correo certificado a la dirección que indicaste. La tienes que firmar tú, identificándote." },
       { question: "¿Qué pasa si no estoy en casa cuando llega el cartero?", answer: "Te deja un aviso y tienes que ir a recoger la documentación personalmente a la oficina de Correos que indica, con el documento de identidad. Si estás enfermo, puede hacerlo la persona que tenga tu autorización notarial." },
       { question: "¿Hasta cuándo puedo enviar el voto por correo?", answer: "Hasta el miércoles 25 de noviembre de 2026, en una oficina de Correos y en el horario habitual, identificándote. Va por correo certificado y es gratuito." },
-      { question: "¿Puede llevar el voto a Correos otra persona?", answer: "Sí, con una autorización firmada por ti y una fotocopia de tu DNI, pasaporte u otro documento oficial. Correos tiene un modelo de autorización. Pedir el voto, en cambio, solo lo puede hacer otra persona en caso de enfermedad, con autorización notarial y certificado médico oficial." },
+      { question: "¿Puede llevar el voto a Correos otra persona?", answer: "Sí, con una autorización firmada por ti y una fotocopia de tu DNI, pasaporte u otro documento oficial; esa persona lleva también su propio documento. Correos tiene un modelo de autorización. Pedir el voto, en cambio, solo lo puede hacer otra persona en caso de enfermedad, con autorización notarial y certificado médico oficial." },
       { question: "¿Cuesta dinero votar por correo?", answer: "No. El sobre dirigido a la mesa no necesita franqueo (LOREG, artículo 73): el Ministerio del Interior paga el envío." },
       { question: "¿Cómo sé si mi voto por correo ha llegado a la mesa?", answer: "Como novedad, si das una dirección de correo electrónico al entregar el voto en Correos, te confirman por correo electrónico que ha llegado a la mesa el día de la votación. El estado del envío de la documentación se consulta en la web del INE." },
     ],
@@ -535,6 +554,7 @@ const COPY: Record<Locale, Copy> = {
     whoTitle: "Who can vote by post",
     who: [
       "Any voter who will not be in the town where they vote on polling day, or who cannot go in person, for example because of illness or disability (electoral law, article 72). Spaniards registered as living abroad (CERA) who are temporarily in Spain can also apply at Correos within the same deadline. Foreign residents, EU citizens included, cannot vote in a general election, by post or otherwise.",
+      "**If your job keeps you away from home on the 29th:** according to the Interior Ministry, the measures for people working away from home should let them vote by post, with up to four paid hours off to apply.",
     ],
     officeTitle: "How to apply in person at Correos",
     office: [
@@ -560,7 +580,7 @@ const COPY: Record<Locale, Copy> = {
       "**Vote:** put the ballot of the list you choose for **Congress** in the **white** voting envelope. On the **Senate** ballot, mark the candidates you choose, following the instructions printed on it, and put it in the **sepia** envelope.",
       "**Pack it:** the envelope addressed to the table holds the voting envelopes and **your census certificate**. Do not forget it: according to the official manual for polling tables, an envelope without the certificate is destroyed and does not even count as a spoilt vote.",
       "**Hand it in by Wednesday 25 November** at a Correos post office, during normal opening hours, showing ID. It goes by registered post and **costs nothing**.",
-      "**If you cannot go,** someone else can take it with an authorisation signed by you and a photocopy of your DNI, passport or other official ID. Correos has a model authorisation.",
+      "**If you cannot go,** someone else can take it with an authorisation signed by you and a photocopy of your DNI, passport or other official ID, plus their own ID. Correos has a model authorisation.",
       "**E-mail confirmation:** new this time, if you give an e-mail address when you hand in your vote, Correos tells you when it reaches the table on polling day.",
       "**On the 29th,** Correos takes the votes to the tables at 9:00. At 20:00, after the last voter, the table opens them one by one, checks the certificate and puts the envelopes in the ballot boxes.",
     ],
@@ -594,7 +614,7 @@ const COPY: Record<Locale, Copy> = {
       { question: "When do the postal-vote papers arrive?", answer: "Between 9 and 22 November 2026, by registered post to the address you gave. You must sign for them yourself, showing ID." },
       { question: "What if I am out when the postman comes?", answer: "You are left a notice and must collect the papers in person at the post office it names, with your ID. If you are ill, the person holding your notarised authorisation can collect them." },
       { question: "What is the last day to send my postal vote?", answer: "Wednesday 25 November 2026, at a Correos post office during normal opening hours, showing ID. It goes by registered post, free of charge." },
-      { question: "Can someone else hand in my postal vote?", answer: "Yes, with an authorisation signed by you and a photocopy of your DNI, passport or other official ID; Correos has a model form. Applying for the postal vote on someone else's behalf, by contrast, is only allowed in case of illness, with a notarised authorisation and an official medical certificate." },
+      { question: "Can someone else hand in my postal vote?", answer: "Yes, with an authorisation signed by you and a photocopy of your DNI, passport or other official ID, plus their own ID; Correos has a model form. Applying for the postal vote on someone else's behalf, by contrast, is only allowed in case of illness, with a notarised authorisation and an official medical certificate." },
       { question: "Does voting by post cost anything?", answer: "No. The envelope addressed to the polling table needs no stamp (electoral law, article 73): the Interior Ministry pays for the mailing." },
       { question: "Can foreigners vote by post in Spain's general election?", answer: "No. Only Spanish citizens aged 18 or over on the electoral roll vote in a general election (electoral law, article 2), by post or in person. EU citizens can vote in municipal elections if they have registered their wish to vote." },
     ],

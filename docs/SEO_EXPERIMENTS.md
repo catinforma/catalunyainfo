@@ -3187,3 +3187,103 @@ below the CTR curve, and why none is retitled today:
   near the curve.
 
 Next look: 13 Nov (the 6 Nov sweep's day-7 check), then the lights date.
+
+## 11 Nov 2026 — 29N election guides: snippets in the queries' own words for the last fortnight, facts re-dated, guides linked to each other (groups `voting`, `mesa`, `election-night`, `vot-correu`, `candidates`)
+
+**Why.** 29N is the next traffic peak (searches peak 2–3 days before and on
+the night). Three EN guides rank on page 1 with CTR far under the curve, and
+the ES how-to-vote guide loses most of its biggest query. The 3 Nov and 6 Nov
+titles (above) are inside their 28-day window: changed again knowingly, on
+the owner's priority, with a day-7 revert rule below. Titles and descriptions
+change together (attribution per page, not per field). Candidates titles are
+untouched (ES converts at 13–16 %).
+
+**Baseline** (`snapshot.py page <substr> 14`, 29 Oct–11 Nov 2026, 11 Nov
+partial; clicks, impressions, CTR, mean position):
+
+| Page | 14 d | Queries the snippet must match |
+| --- | --- | --- |
+| `/en/guides/how-to-vote-catalonia/` | 160 / 10,259 / 1.6 % / 5.7 | "2026 spain general election how to register to vote" 1,243 at 7.0 (0.1 %), "how to vote 2026 spain general election" 1,122 at 4.0 (0.4 %), "where to vote" 397 at 6.2, "2026 spain general election dates" 295 at 9.3 (0 clicks), "spain election date" 54 at 9.3 |
+| `/es/guias/como-votar-elecciones-cataluna/` | 320 / 14,315 / 2.2 % / 6.2 | the top 30 queries are all Catalan "when": "cuando son las elecciones en cataluña" 889 at 6.7 (0.3 %), "proximas elecciones cataluña" 547 at 6.3, "cuando hay elecciones en cataluña" 278 at 4.2, "cuándo son las próximas elecciones en cataluña" 242 at 6.6; national "dónde votar / horario" queries are under the top 30 |
+| `/ca/guies/com-votar-eleccions-catalunya/` | 36 / 1,530 / 2.4 % / 6.8 | "quan son les proximes eleccions a catalunya" 21 at 6.8, "quan son les eleccions autonomiques a catalunya" 7 at 5.6 |
+| `/en/guides/polling-station-duty-spain/` | 48 / 3,970 / 1.2 % / 2.9 | Spanish AI-mode fragments ("cuanto pagan" 31 at 3.2, "cuanto te pagan", "se cobra?", "que pasa si no me presento") |
+| `/es/guias/miembro-mesa-electoral/` | 53 / 1,366 / 3.9 % / 7.9 | "orden int/650/2026" 16 at 6.4, "los suplentes de mesa electoral cobran" 3 at 8.7 |
+| `/ca/guies/membre-mesa-electoral/` | 139 / 3,597 / 3.9 % / 6.3 | "com saber si m'ha tocat taula electoral" 6 at 9.8, "quan es cobra" 2 at 1.5 |
+| `/en/guides/spain-election-night-results/` | 94 / 4,338 / 2.2 % / 6.4 | "election results" 590 at 9.4, "2026 spain general election results" 149 at 5.9, "when do election results come out" 24 at 6.7 |
+| `/es/guias/noche-electoral-resultados-escrutinio/` | 14 / 457 / 3.1 % / 6.0 | "cuando salen los resultados de las elecciones" 40 at 7.0, "a que hora salen los resultados de las elecciones" 5 at 5.4 |
+| `/ca/guies/nit-electoral-resultats-escrutini/` | 2 / 155 / 1.3 % / 6.3 | "escrutini eleccions generals" 4 at 7.8 |
+| `/ca/guies/vot-per-correu/` | 21 / 768 / 2.7 % / 6.4 | "fins quan es pot demanar el vot per correu" 47 at 8.2 (0 clicks), "quan es pot demanar el vot per correu" 8 at 8.4 |
+
+**Change: titles** (old → new; descriptions in each module's META, every claim
+already in the body).
+
+| Page (group) | Old → new title |
+| --- | --- |
+| how-to-vote EN (`voting`) | "2026 Spain general election (29 Nov): how to vote, register" → "2026 Spain general election dates, how to vote and register" |
+| how-to-vote ES (`voting`) | "Elecciones 29 de noviembre: dónde votar y horario \| Cataluña" → "¿Cuándo son las elecciones en Cataluña? Generales 29N y próximas" (description: generals 29N 9–20 h, municipal 23 May 2027 expected, no Parlament election called, "dónde votar") |
+| how-to-vote CA (`voting`) | title kept ("Quan són les properes eleccions a Catalunya? 29N i on votar", already the query); description now answers it the same way as ES |
+| mesa EN (`mesa`) | "Polling-station duty in Spain (mesa electoral): €75, excuses" → "Polling station duty in Spain, 29 Nov: €75, 8:00 start, time off" |
+| mesa ES (`mesa`) | "Mesa electoral 29N: cuánto se cobra (75 €), excusas y plazos" → "Mesa electoral 29N: me ha tocado, cuánto se cobra y qué hacer" |
+| mesa CA (`mesa`) | "Membre de mesa electoral 2026: si t'ha tocat, excusa i 75 €" → "M'ha tocat mesa electoral el 29N: quant es cobra i què fer" |
+| election night EN (`election-night`) | "Spain general election results 2026: what time on 29 Nov" → "Spain general election results 2026: when they come out" |
+| election night ES (`election-night`) | "Resultados elecciones 29 de noviembre: hora y escrutinio" → "Resultados elecciones 29 de noviembre: a qué hora salen" |
+| election night CA (`election-night`) | "Resultats eleccions 29 de novembre: hora i escrutini" → "Resultats eleccions 29 de novembre: a quina hora surten" |
+| postal vote CA, "open" phase (`vot-correu`) | "Vot per correu 29N: demana'l fins al 19 de novembre" → "Vot per correu 29N: fins quan es pot demanar i com enviar-lo" (19 Nov stays in the description); ES/EN untouched |
+
+Mesa descriptions move from the excuse window (notices ended 7 Nov, last
+excuses 14 Nov) to what the people already drawn ask: 8:00 with the notice,
+€75, five hours off on Monday 30 Nov, and the 7-day excuse rule.
+
+**Change: body facts** (each read on 11 Nov 2026 on the primary source;
+quotes and URLs in the modules' header comments and source names):
+- Paid time off to vote, Catalonia: the Generalitat's 29N order is still not
+  in the DOGC (summary API, issues 9787–9792, 4–11 Nov). The "not yet" lines in
+  `voting` (ca/es/en body + FAQ) and `mesa` (ca/es/en) are re-dated to 11 Nov.
+- Interior's 29N "voto presencial" page: people whose work keeps them away
+  from home should be able to vote by post "y cuenten para ello con permiso de
+  hasta cuatro horas libres para poder solicitarlo". New line in `voting`
+  (working-that-day item) and `vot-correu` ("who can"), ca/es/en.
+- Correos' postal-vote page: whoever hands in a vote for someone else brings
+  the authorisation, a photocopy of the voter's ID "y su propio documento
+  oficial acreditativo". `vot-correu` hand-in item and FAQ, ca/es/en. Dates
+  19 Nov / 25 Nov unchanged (Correos, Interior, INE cid=1700 re-read).
+- Results site: still none announced (29neleccionesgenerales.es home and
+  "voto presencial" page, 11 Nov; the JEC's last published session is 5 Nov).
+  The "checked on" dates on `election-night` move to 11 Nov; the official
+  site's home is added as a source with that date. No link to a results site.
+- Not added, because no primary source says it: whether the voter card is
+  needed to vote, Correos' extended opening hours, a results start time.
+
+**Change: links** (rendered per language by `b2link`/`pollsPath`, so ca→ca,
+es→es, en→en; the "internal links stay inside their own language" test holds):
+how-to-vote → polls page (onward links); election night → polls page (polls
+section) and postal vote (rail); mesa → postal vote (rail); candidates →
+postal vote (rail). Candidates stays linked exactly once from how-to-vote and
+election night (its test). Every election guide now reaches how-to-vote,
+postal vote, mesa, election night and candidates in its own language.
+
+**Prediction** (by 18 Nov, day 7, and 30 Nov):
+- EN how-to-vote ≥ 3 % at a similar position; first clicks on "2026 spain
+  general election dates".
+- ES how-to-vote: "cuando son las elecciones en cataluña" from 0.3 % to ≥ 2 %
+  at ±1 position, page CTR ≥ 3.5 %.
+- EN mesa ≥ 2.5 % at ≤ 3.5; ES/CA mesa ≥ 4.5 % as the demand moves to the day
+  itself (27–29 Nov).
+- EN election night ≥ 3.5 % before 28 Nov; ES/CA rise mainly on 28–30 Nov.
+- CA postal: first clicks on "fins quan es pot demanar el vot per correu"
+  before 19 Nov.
+
+**Revert rule (day 7 = 18 Nov 2026).** For each retitled page, run
+`snapshot.py page <path> 7` (11–17 Nov) and compare with the 14-day baseline
+above at a similar mean position (±1): if clicks per 1,000 impressions fell,
+or the main target query lost more than two positions, restore that page's
+old title and description from the table (git history of this commit). For
+ES how-to-vote, also split by intent: if the national "dónde votar / horario
+29 noviembre" bucket lost more than two positions while the Catalan "cuándo
+son" bucket did not gain CTR, restore the 6 Nov title. Do not retitle any of
+these pages again before 30 Nov whatever the result, except by this rule.
+
+**Measure:** 18 Nov (day 7, revert rule), 28 Nov (pre-peak) and 2 Dec
+(after polling day), with `snapshot.py page <path> 7` for each URL above.
+
+**Outcome:** _pending_

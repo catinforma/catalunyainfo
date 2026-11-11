@@ -244,28 +244,31 @@ test("voting: MiDNI valid since the JEC's Acuerdo 334/2026 of 5 Nov; MiDGT still
 /* -------------------------------------------------------------------------- */
 
 test("titles and descriptions are exactly what main serves (measurement windows)", () => {
+  // 11 Nov 2026: all six snippets changed for the last fortnight before 29N
+  // (query wording from GSC 29 Oct-11 Nov; logged in docs/SEO_EXPERIMENTS.md,
+  // "11 Nov 2026 — 29N election guides", with its day-7 revert rule).
   const frozen = {
     // Changed on 3 Nov 2026 (owner's "right now" push lifted the freezes;
     // logged in docs/SEO_EXPERIMENTS.md, measured 15 Nov and 1 Dec): the
     // snippet answers "have I been drawn" (notice by 7 Nov), the 7 days to
     // object and where, the €75 and Monday's five hours.
     mesa: {
-      ca: ["Membre de mesa electoral: com saber si t'ha tocat, què fer, quant es cobra i com excusar-te", "Membre de mesa electoral 2026: si t'ha tocat, excusa i 75 €", "T'ho notifiquen fins al 7 de novembre; tens 7 dies per excusar-te a la Junta Electoral de Zona, també en línia. Dieta de 75 € i 5 h menys el dilluns 30."],
+      ca: ["Membre de mesa electoral: com saber si t'ha tocat, què fer, quant es cobra i com excusar-te", "M'ha tocat mesa electoral el 29N: quant es cobra i què fer", "Si t'ha tocat mesa el 29N: presenta't a les 8.00 amb la notificació. Dieta de 75 €, 5 h menys el dilluns 30 i 7 dies des de la notificació per excusar-te."],
       // es changed on 6 Nov 2026 (national scope: "mesa electoral 29N",
       // elecciones generales, pay and excuses; logged in docs/SEO_EXPERIMENTS.md).
-      es: ["Mesa electoral en las elecciones generales del 29 de noviembre: cuánto se cobra, excusas válidas y qué pasa si no vas", "Mesa electoral 29N: cuánto se cobra (75 €), excusas y plazos", "Elecciones generales 29N, en toda España: 75 € de dieta, 7 días desde la notificación para excusarte ante la Junta Electoral de Zona y 5 h menos el lunes."],
-      en: ["Drawn for polling-station duty (mesa electoral) in Spain on 29 November: what to do, excuses and the €75 pay", "Polling-station duty in Spain (mesa electoral): €75, excuses", "Notified by 7 Nov? You have 7 days to ask the Junta Electoral de Zona to excuse you, online with Cl@ve too. €75 tax-free, 5 hours off on Monday 30 Nov."],
+      es: ["Mesa electoral en las elecciones generales del 29 de noviembre: cuánto se cobra, excusas válidas y qué pasa si no vas", "Mesa electoral 29N: me ha tocado, cuánto se cobra y qué hacer", "Si te ha tocado mesa el 29N (toda España): ve a las 8:00 con la notificación. 75 € de dieta, 5 h menos el lunes 30 y 7 días desde la notificación para excusarte."],
+      en: ["Drawn for polling-station duty (mesa electoral) in Spain on 29 November: what to do, excuses and the €75 pay", "Polling station duty in Spain, 29 Nov: €75, 8:00 start, time off", "Drawn for a mesa electoral? Be at the polling station at 8:00 on Sun 29 Nov with your notice. €75 tax-free, 5 hours off on Mon 30 Nov; 7 days to seek an excuse."],
     },
     // Changed on 3 Nov 2026 (same push): ca in the words of "quan són les
     // properes eleccions", es with "29N" back, en front-loads "2026 spain
     // general election"; descriptions give the dates, the finder and 19 Nov.
     voting: {
-      ca: ["Quan són les properes eleccions a Catalunya i com votar el 29 de novembre (on, horari, vot per correu)", "Quan són les properes eleccions a Catalunya? 29N i on votar", "Generals: diumenge 29 de novembre, 9-20 h. Municipals previstes: 23 de maig de 2027. Mira on votes sense DNI. Vot per correu fins al 19 de novembre."],
+      ca: ["Quan són les properes eleccions a Catalunya i com votar el 29 de novembre (on, horari, vot per correu)", "Quan són les properes eleccions a Catalunya? 29N i on votar", "Les properes són les generals del diumenge 29 de novembre, de 9 a 20 h. Municipals previstes el 23 de maig de 2027; al Parlament no n'hi ha de convocades. On votar."],
       // es changed on 6 Nov 2026 (national scope first, "Cataluña" kept for
       // the "cuándo son las elecciones en Cataluña" queries; revert rule in
       // docs/SEO_EXPERIMENTS.md).
-      es: ["Elecciones generales del 29 de noviembre: dónde votar, horario y qué documento llevar (y próximas elecciones en Cataluña)", "Elecciones 29 de noviembre: dónde votar y horario | Cataluña", "Domingo 29 de noviembre, de 9 a 20 h, en toda España. Mira dónde votas sin DNI; vale el DNI caducado y también MiDNI. Voto por correo hasta el 19."],
-      en: ["How to vote in Spain's 2026 general election on 29 November: registration, polling stations and dates", "2026 Spain general election (29 Nov): how to vote, register", "Sunday 29 Nov, 9:00-20:00. Only Spanish citizens can vote; the roll is automatic. Find your polling station, ID rules; postal vote request by 19 Nov."],
+      es: ["Elecciones generales del 29 de noviembre: dónde votar, horario y qué documento llevar (y próximas elecciones en Cataluña)", "¿Cuándo son las elecciones en Cataluña? Generales 29N y próximas", "Las próximas son las generales del domingo 29 de noviembre, de 9 a 20 h. Municipales previstas el 23 de mayo de 2027; al Parlament no hay convocadas. Dónde votar."],
+      en: ["How to vote in Spain's 2026 general election on 29 November: registration, polling stations and dates", "2026 Spain general election dates, how to vote and register", "Sunday 29 Nov, 9:00-20:00. Only Spanish citizens can vote; residents in Spain need not register. Every key date, from voter cards to the 19 Nov postal vote."],
     },
   };
   for (const locale of LOCALES) {
