@@ -575,8 +575,11 @@ test("shops: the November-December towns table is the DOGC resolution's, town by
   // 3 Nov 2026 (29N push, owner request; was "Domingos y festivos de apertura
   // 2026 en Cataluña y Barcelona" from 30 Oct): the searchers' words and the
   // next opening day. The CA title follows the ES one, as on 30 Oct.
-  assert.equal(SHOPS.editions.es.seoTitle, "Tiendas abiertas en Barcelona: domingo 29 nov y diciembre");
-  assert.equal(SHOPS.editions.ca.seoTitle, "Botigues obertes a Barcelona: diumenge 29 nov i desembre");
+  // 11 Nov 2026 (CTR retitles): "tiendas abiertas domingo / hoy barcelona"
+  // and the date-by-date table; 29 November stays in the description.
+  assert.equal(SHOPS.editions.es.seoTitle, "Tiendas abiertas domingo y festivos Barcelona: fecha a fecha");
+  assert.equal(SHOPS.editions.ca.seoTitle, "Botigues obertes diumenges i festius a Barcelona, dia a dia");
+  for (const locale of ["ca", "es", "en"] as const) assert.match(SHOPS.editions[locale].seoDescription, /29 (de )?(novembre|noviembre|November)/, `${locale}: 29N in the snippet`);
   const caFaq = SHOPS.editions.ca.blocks.find((b) => b.type === "faq") as { items: { question: string; answer: string }[] } | undefined;
   assert.equal(caFaq?.items[0]?.question, "Quins festius d'obertura comercial queden el 2026?");
   assert.ok(caFaq?.items[0]?.answer.includes(` ${TOWNS_NOV_DEC.length} municipis`), "ca: FAQ counts the towns from the table");
@@ -995,8 +998,11 @@ test("climate: humidity column from AEMET, °F in English, the answer in the EN 
   assert.equal(airport?.rows?.[0]?.[2], "13.6 (56)", "January high in °C (°F)");
   assert.equal(airport?.rows?.[7]?.[2], "28.5 (83)", "August high in °C (°F)");
   assert.ok(en.seoTitle.length <= 60 && en.seoDescription.length <= 155);
-  assert.match(en.seoTitle, /weather and temperature by month/);
-  assert.match(en.seoDescription, /January.*13\.6 °C \(56 °F\).*August.*28\.5 °C \(83 °F\).*October.*91 mm/);
+  // 11 Nov 2026 (CTR retitles, docs/SEO_EXPERIMENTS.md): the answer-only
+  // snippet (coldest, warmest, wettest) took 0.2-0.5 % at 7-8; the title now
+  // carries "january" and the description promises the monthly table.
+  assert.match(en.seoTitle, /^Barcelona weather by month: temperature, January to December$/);
+  assert.match(en.seoDescription, /^Month by month: .*January highs of 13\.6 °C \(56 °F\), August 28\.5 °C \(83 °F\)/);
   const first = bodyToPlainText(en.blocks).slice(0, 220);
   assert.match(first, /January.*coldest.*13\.6 °C \(56 °F\)/, "answer in the first lines");
   assert.equal(CLIMATE.verifiedAt, "2026-10-30");

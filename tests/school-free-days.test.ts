@@ -263,10 +263,12 @@ test("the town page renderer gains one line and its titles, descriptions and H1s
 /* -------------------------------------------------------------------------- */
 
 test("the December bridge links the hub once, in the body, and keeps its title and description", () => {
+  // Retitled 11 Nov 2026 (CTR retitles, docs/SEO_EXPERIMENTS.md); the free
+  // days link stays a body-only change.
   const titles: Record<Locale, string> = {
-    ca: "Pont de desembre 2026 a Catalunya: festius i dies a demanar",
-    es: "Puente de diciembre 2026 Cataluña: festivos y qué días pedir",
-    en: "December 2026 public holidays in Catalonia: 8, 25 and 26 Dec",
+    ca: "Pont de desembre 2026 (Puríssima) a Catalunya, dia a dia",
+    es: "Puente de diciembre 2026 (Purísima) en Cataluña, día a día",
+    en: "December 2026 holidays in Catalonia: the bridge day by day",
   };
   for (const locale of LOCALES) {
     const edition = DECEMBER_BRIDGE.editions[locale];

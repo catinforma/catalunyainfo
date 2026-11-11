@@ -106,6 +106,13 @@ import { CHRISTMAS_SHOPS_CHECKED, type ChristmasSourceKey } from "./shops-christ
  *   of all 947 municipalities with their 29 Nov-31 Dec days. The resolution
  *   lists 77 councils by name; its preamble sets the days of every other one.
  * - FAQ: 6 December, supermarkets on 26 December.
+ *
+ * 11 Nov 2026 (CTR retitles, docs/SEO_EXPERIMENTS.md): from 7 Nov the ES
+ * page fell to 1.2 % at 6.4 (4.4 % at 5.1 before), on "tiendas abiertas
+ * hoy / mañana / domingo barcelona", words the 3 Nov title lacked. Titles now
+ * say "domingo(s) y festivos" and promise the date table; the descriptions
+ * keep 29 November and the December days, then the table and the 30 towns.
+ * Same dates, same count.
  */
 
 const VERIFIED = CHRISTMAS_SHOPS_CHECKED;
@@ -130,27 +137,27 @@ const META: Record<Locale, { path: string; title: string; seoTitle: string; seoD
   ca: {
     path: "guies/botigues-obertes-festius-catalunya",
     title: "Botigues obertes en diumenges i festius a Catalunya: calendari 2026 i 2027",
-    seoTitle: "Botigues obertes a Barcelona: diumenge 29 nov i desembre",
+    seoTitle: "Botigues obertes diumenges i festius a Barcelona, dia a dia",
     seoDescription:
-      "Diumenge 29 de novembre, dia d'eleccions: sí que poden obrir a Barcelona i Catalunya. Al desembre, 6, 8, 13, 20 i 27; 25 i 26, no. 30 municipis canvien.",
+      "Diumenge 29 de novembre (eleccions) i 6, 8, 13, 20 i 27 de desembre: poden obrir; 25 i 26, no. Taula dia a dia i els 30 municipis que canvien.",
     excerpt:
       "Els diumenges i festius en què les botigues poden obrir a Catalunya, segons el DOGC: el que queda del 2026, el calendari del 2027 i les botigues que poden obrir sempre.",
   },
   es: {
     path: "guias/tiendas-abiertas-festivos-cataluna",
     title: "Tiendas abiertas en domingos y festivos en Cataluña: calendario 2026 y 2027",
-    seoTitle: "Tiendas abiertas en Barcelona: domingo 29 nov y diciembre",
+    seoTitle: "Tiendas abiertas domingo y festivos Barcelona: fecha a fecha",
     seoDescription:
-      "Domingo 29 de noviembre, día de elecciones: sí pueden abrir en Barcelona y Cataluña. En diciembre, 6, 8, 13, 20 y 27; 25 y 26, no. 30 municipios cambian.",
+      "Domingo 29 de noviembre (elecciones) y 6, 8, 13, 20 y 27 de diciembre: pueden abrir; 25 y 26, no. Tabla fecha a fecha y los 30 municipios que cambian.",
     excerpt:
       "Los domingos y festivos en que las tiendas pueden abrir en Cataluña, según el DOGC: lo que queda de 2026, el calendario de 2027 y las tiendas que pueden abrir siempre.",
   },
   en: {
     path: "guides/shops-open-sundays-holidays-catalonia",
     title: "Shops open on Sundays and holidays in Catalonia: 2026 and 2027 dates",
-    seoTitle: "Are shops open on Sunday in Barcelona? 29 Nov and December",
+    seoTitle: "Are shops open on Sundays in Barcelona? Date-by-date table",
     seoDescription:
-      "Sunday 29 November, election day: yes, shops may open in Barcelona and Catalonia. In December: 6, 8, 13, 20 and 27, not 25-26. The 30 towns that differ.",
+      "Shops may open on Sunday 29 November (election day) and on 6, 8, 13, 20 and 27 December, not on 25-26. Date-by-date table and the 30 towns that differ.",
     excerpt:
       "The Sundays and holidays when shops may open in Catalonia, from the official gazette: what is left of 2026, the 2027 calendar and the shops that may always open.",
   },

@@ -371,13 +371,18 @@ function buildMeta(locale: Locale): EasterMeta {
   // "setmana santa 2027", "quan és setmana santa 2027" (Search Console,
   // 21 Oct-3 Nov 2026): the week itself first, Palm Sunday to Easter Sunday
   // as the key facts give them, then the two holidays by day number.
+  // 11 Nov 2026 (CTR retitles, docs/SEO_EXPERIMENTS.md): ES fell from about
+  // 2.8 % at 5.5 (1-5 Nov) to 0.7 % at 6.5 with the dates in the title and
+  // again in the description. The dates stay in the description; the title
+  // promises the day-by-day table (and the school break, bridges, shops and
+  // metro below it), which no snippet can hold.
   const week = span(EASTER.palmSunday, EASTER.easterSunday, locale);
   const n = (iso: string) => String(Number(iso.slice(8, 10)));
   if (locale === "ca") {
     return {
       path: "guies/setmana-santa-2027-catalunya",
       title: "Setmana Santa 2027 a Catalunya: festius, vacances escolars, botigues i ponts",
-      seoTitle: `Setmana Santa 2027 a Catalunya: festius ${holidays}`,
+      seoTitle: "Setmana Santa 2027 a Catalunya dia a dia: festius i escoles",
       seoDescription: fitDescription([
         `Setmana Santa 2027: ${week}. Festius: Divendres Sant ${n(EASTER.goodFriday)} i Dilluns de Pasqua ${n(EASTER.easterMonday)} (el Dijous Sant, no). Vacances escolars ${school}.`,
         `Setmana Santa 2027: ${week}. Festius: Divendres Sant ${n(EASTER.goodFriday)} i Dilluns de Pasqua ${n(EASTER.easterMonday)}. Vacances escolars ${school}.`,
@@ -389,7 +394,7 @@ function buildMeta(locale: Locale): EasterMeta {
     return {
       path: "guias/semana-santa-2027-cataluna",
       title: "Semana Santa 2027 en Cataluña: festivos, vacaciones escolares, tiendas y puentes",
-      seoTitle: `Semana Santa 2027 en Cataluña: festivos ${holidays}`,
+      seoTitle: "Semana Santa 2027 en Cataluña día a día: festivos y colegios",
       seoDescription: fitDescription([
         `Semana Santa 2027: ${week}. Festivos: Viernes Santo ${n(EASTER.goodFriday)} y Lunes de Pascua ${n(EASTER.easterMonday)} (el Jueves Santo, no). Vacaciones escolares ${school}.`,
         `Semana Santa 2027: ${week}. Festivos: Viernes Santo ${n(EASTER.goodFriday)} y Lunes de Pascua ${n(EASTER.easterMonday)} (el Jueves Santo, no). Colegios: ${school}.`,
@@ -400,7 +405,7 @@ function buildMeta(locale: Locale): EasterMeta {
   return {
     path: "guides/easter-2027-catalonia",
     title: "Easter 2027 in Catalonia and Barcelona: public holidays, school holidays, shops and long weekends",
-    seoTitle: `Easter 2027 in Catalonia and Barcelona: ${holidays}`,
+    seoTitle: "Easter 2027 in Catalonia and Barcelona, day by day",
     seoDescription: `Good Friday and Easter Monday, ${holidays}, are public holidays in Catalonia; Maundy Thursday is not. School holidays ${school}. Shops and metro.`,
     excerpt: "Which days are public holidays over Easter 2027 in Catalonia, the school Easter break, local holidays, whether shops open, the metro, long weekends and traditions.",
   };

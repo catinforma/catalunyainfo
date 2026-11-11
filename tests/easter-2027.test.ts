@@ -109,9 +109,10 @@ test("titles fit in 60 characters and descriptions in 155, both carrying the dat
     assert.ok(seoDescription.length > 60 && seoDescription.length <= 155, `${locale} description ${seoDescription.length}: ${seoDescription}`);
     assert.ok(excerpt.length > 30);
     for (const field of [seoTitle, title]) assert.match(field, new RegExp(String(EASTER_YEAR)));
-    for (const field of [seoTitle, seoDescription]) {
-      assert.ok(field.includes(day(EASTER.goodFriday)) && field.includes(day(EASTER.easterMonday)), `${locale}: ${field}`);
-    }
+    // 11 Nov 2026 (CTR retitles): the two holidays are in the description; the
+    // title promises the day-by-day table instead of giving the answer.
+    assert.ok(seoDescription.includes(day(EASTER.goodFriday)) && seoDescription.includes(day(EASTER.easterMonday)), `${locale}: ${seoDescription}`);
+    assert.match(seoTitle, /(dia a dia|día a día|day by day)/, `${locale}: ${seoTitle}`);
     assert.ok(seoDescription.includes(day(EASTER.schoolFrom)) && seoDescription.includes(day(EASTER.schoolTo)), `${locale}: school dates`);
   }
   // 3 Nov (CTR sweep): "setmana santa 2027" / "quan és setmana santa 2027" get the week first, Palm Sunday to Easter Sunday.
