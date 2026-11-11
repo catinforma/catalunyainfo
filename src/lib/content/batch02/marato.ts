@@ -98,11 +98,33 @@ import {
  * 49/2002 art. 19, both above); the descriptions add the presenters and
  * where to watch. EN title kept; its description follows. No new fact.
  *
+ * 11 Nov 2026 (after the volunteer deadline): the key facts, the
+ * volunteering paragraph and the FAQ answer in ca/es/en say pre-registration
+ * is closed and what the registration site says now (VOLUNTEER_CHECKED
+ * below). Two sources added. Group `marato`.
+ *
  * No new photograph: the hero is the shops guide's lead picture (Christmas
  * lights), with the same alt text and caption.
  */
 
 export const MARATO_VERIFIED = "2026-10-26";
+
+/**
+ * Volunteering after the deadline, read with curl on 11 Nov 2026 on the
+ * Generalitat's registration site (research_notes/marato-voluntariat-2026.md):
+ * home ("Tancat el període de preinscripcions."), the pre-registration page
+ * (assignment by the drawn number and preferences, 72 hours to accept, waiting
+ * list "activa fins el 8 de desembre", direct registration "a mitjans de
+ * novembre" only "en el cas que quedin places vacants", first for the waiting
+ * list, then for everyone; online training compulsory) and the draw result
+ * (cut-off numbers below). 3Cat's own volunteering page still shows
+ * "PREINSCRIPCIONS OBERTES!" with the 20 Oct-10 Nov window; the registration
+ * site, which runs the process, is followed.
+ */
+export const VOLUNTEER_CHECKED = "2026-11-11";
+const VOLUNTEER_CHECKED_TEXT = { ca: "l'11 de novembre de 2026", es: "el 11 de noviembre de 2026", en: "on 11 November 2026" } as const;
+/** "Núm. 654 per Barcelona, Núm. 65 per Girona, Núm. 173 per Lleida, Núm. 176 per Tarragona." */
+export const VOLUNTEER_CUTOFF = { barcelona: 654, girona: 65, lleida: 173, tarragona: 176 } as const;
 
 export const MARATO = {
   date: "2026-12-13",
@@ -125,6 +147,8 @@ const SOURCES: B2Source[] = [
   { name: "Raquel Sans i Miki Núñez presentaran La Marató a TV3 i Roger Escapa, a Catalunya Ràdio", url: "https://www.3cat.cat/3cat/raquel-sans-i-miki-nunez-presentaran-la-marato-a-tv3-i-roger-escapa-a-catalunya-radio/video/6428091/", publisher: "3Cat" },
   { name: "Fes el teu donatiu per a La Marató", url: MARATO.donate.ca, publisher: "Fundació La Marató de 3Cat" },
   { name: "Voluntariat: preinscripcions obertes", url: "https://www.3cat.cat/tv3/marato/voluntariat/2026/3950/", publisher: "Fundació La Marató de 3Cat" },
+  { name: "Preinscripcions per a La Marató de 3Cat", url: "https://marato.voluntariat.org/preinscripcions-la-marato-de-3cat", publisher: "Generalitat de Catalunya, Direcció General d'Acció Comunitària i Innovació Social" },
+  { name: "Resultat del sorteig del voluntariat per a La Marató de 3Cat 2026", url: "https://marato.voluntariat.org/resultat-del-sorteig-del-voluntariat-la-marato-de-3cat-2026", publisher: "Generalitat de Catalunya, Direcció General d'Acció Comunitària i Innovació Social" },
   { name: "Activitats populars", url: MARATO.activities, publisher: "Fundació La Marató de 3Cat" },
   { name: "Sessions divulgatives", url: MARATO.sessions, publisher: "Fundació La Marató de 3Cat" },
   { name: "La Marató sobre les malalties neurodegeneratives i neuromusculars arribarà a uns 225.000 joves", url: "https://www.3cat.cat/3catinfo/la-marato-sobre-les-malalties-neurodegeneratives-i-neuromusculars-arribara-a-uns-225000-joves/noticia/3435146/", publisher: "3Cat" },
@@ -184,7 +208,7 @@ export function buildMaratoBody(locale: Locale): Block[] {
         { label: "On es veu", value: "TV3 i Catalunya Ràdio, i en directe a 3cat.cat" },
         { label: "Presentadors", value: "Raquel Sans i Miki Núñez (TV3); Roger Escapa (Catalunya Ràdio)" },
         { label: "Donatius", value: `Per internet, per Bizum (codi ${MARATO.bizum}) o per transferència, des de la pàgina oficial` },
-        { label: "Voluntaris", value: "Preinscripció a marato.voluntariat.org fins a les 10 h del 10 de novembre de 2026; les places se sortegen" },
+        { label: "Voluntaris", value: "Preinscripció tancada el 10 de novembre; el sorteig ja s'ha fet i s'assignen les places. Llista d'espera fins al 8 de desembre" },
         { label: "Horari del programa", value: "Encara no s'ha publicat" },
       ]),
       callout(
@@ -222,7 +246,7 @@ export function buildMaratoBody(locale: Locale): Block[] {
       ),
       ...h2(
         "Com participar-hi: voluntariat i activitats populars",
-        `**Voluntariat.** Qui vulgui atendre trucades a les seus telefòniques del 13 de desembre es pot preinscriure a ${link(MARATO.volunteer, "marato.voluntariat.org")} des de les 10 h del 20 d'octubre fins a les 10 h del 10 de novembre de 2026; les places se sortegen entre totes les persones preinscrites. El voluntariat el coordina la Direcció General d'Acció Comunitària i Innovació Social, del Departament de Drets Socials i Inclusió.`,
+        `**Voluntariat.** La preinscripció per atendre trucades a les seus telefòniques del 13 de desembre es va tancar el 10 de novembre de 2026, i el sorteig ja s'ha fet: les places s'assignen a partir del número ${VOLUNTEER_CUTOFF.barcelona} a Barcelona, el ${VOLUNTEER_CUTOFF.girona} a Girona, el ${VOLUNTEER_CUTOFF.lleida} a Lleida i el ${VOLUNTEER_CUTOFF.tarragona} a Tarragona, per ordre i segons les preferències de cada persona preinscrita. Qui rep una plaça ho sap per correu electrònic, l'ha d'acceptar en 72 hores i ha de fer una formació en línia; qui no en té queda en una llista d'espera, activa fins al 8 de desembre. Només si queden places vacants s'obrirà, a mitjans de novembre, una inscripció directa: primer per a la llista d'espera i, si encara en sobren, per a tothom. Tot el procés és a ${link(MARATO.volunteer, "marato.voluntariat.org")} (consultat ${VOLUNTEER_CHECKED_TEXT.ca}). El voluntariat el coordina la Direcció General d'Acció Comunitària i Innovació Social, del Departament de Drets Socials i Inclusió.`,
         `**Activitats populars.** Segons la Fundació, cada any s'organitzen més de 3.500 activitats per recaptar diners: concerts, competicions esportives, caminades, dinars... Les entitats que en vulguin fer una la poden inscriure des de la ${link(MARATO.activities, "pàgina d'activitats populars")}, que també té un mapa per comarques amb les ja inscrites.`,
         // 4 Nov 2026: one sentence on the Gran Recapte (13-14 Nov), read from gran-recapte.ts.
         granRecapteMention("ca", "marato"),
@@ -250,7 +274,7 @@ export function buildMaratoBody(locale: Locale): Block[] {
         { question: "Qui presenta La Marató 2026?", answer: "Raquel Sans i Miki Núñez a TV3, i Roger Escapa a Catalunya Ràdio." },
         { question: "Com puc fer un donatiu a La Marató?", answer: `A la pàgina oficial de donatius de 3Cat: per internet, per Bizum amb el codi ${MARATO.bizum} (a «Donacions») o per transferència al compte que hi publica la Fundació.` },
         { question: "Quin és el telèfon de La Marató 2026?", answer: "El 30 d'octubre de 2026 encara no s'havia publicat. Les trucades del dia s'atenen a les seus de Barcelona, Girona, Tarragona i Lleida; fes servir només el número que publiqui 3Cat." },
-        { question: "Com puc ser voluntari de La Marató 2026?", answer: "Preinscrivint-te a marato.voluntariat.org fins a les 10 h del 10 de novembre de 2026; les places per atendre trucades a les seus telefòniques el dia de La Marató se sortegen entre totes les persones preinscrites." },
+        { question: "Com puc ser voluntari de La Marató 2026?", answer: "La preinscripció es va tancar el 10 de novembre de 2026 i el sorteig de places ja s'ha fet. Només si queden places vacants s'obrirà, a mitjans de novembre, una inscripció directa a marato.voluntariat.org, primer per a la llista d'espera i després per a tothom. També pots col·laborar amb un donatiu o amb una activitat popular." },
         { question: "Els donatius a La Marató desgraven?", answer: "Sí, per als contribuents de l'IRPF: la Llei 49/2002 permet deduir el 80% dels primers 250 € i el 40% de la resta (el 45% per a qui hi va donar el mateix o més els dos anys anteriors). El certificat s'ha de demanar a la Fundació abans del 31 de desembre." },
       ]),
       ...paras(verifiedLine("ca", MARATO_VERIFIED)),
@@ -307,7 +331,7 @@ export function buildMaratoBody(locale: Locale): Block[] {
       ),
       ...h2(
         "Cómo participar: voluntariado y actividades populares",
-        `**Voluntariado.** Quien quiera atender llamadas en los centros telefónicos del 13 de diciembre puede preinscribirse en ${link(MARATO.volunteer, "marato.voluntariat.org")} desde las 10 h del 20 de octubre hasta las 10 h del 10 de noviembre de 2026; las plazas se sortean entre todas las personas preinscritas. Lo coordina la Direcció General d'Acció Comunitària i Innovació Social, del Departament de Drets Socials i Inclusió.`,
+        `**Voluntariado.** La preinscripción para atender llamadas en los centros telefónicos del 13 de diciembre se cerró el 10 de noviembre de 2026, y el sorteo ya se ha hecho: las plazas se asignan a partir del número ${VOLUNTEER_CUTOFF.barcelona} en Barcelona, el ${VOLUNTEER_CUTOFF.girona} en Girona, el ${VOLUNTEER_CUTOFF.lleida} en Lleida y el ${VOLUNTEER_CUTOFF.tarragona} en Tarragona, por orden y según las preferencias de cada persona preinscrita. Quien recibe una plaza lo sabe por correo electrónico, debe aceptarla en 72 horas y hacer una formación en línea; quien no la tiene queda en una lista de espera, activa hasta el 8 de diciembre. Solo si quedan plazas vacantes se abrirá, a mediados de noviembre, una inscripción directa: primero para la lista de espera y, si aún sobran, para todo el mundo. Todo el proceso está en ${link(MARATO.volunteer, "marato.voluntariat.org")} (consultado ${VOLUNTEER_CHECKED_TEXT.es}). Lo coordina la Direcció General d'Acció Comunitària i Innovació Social, del Departament de Drets Socials i Inclusió.`,
         `**Actividades populares.** Según la Fundació, cada año se organizan más de 3.500 actividades para recaudar dinero: conciertos, competiciones deportivas, caminatas, comidas... Las entidades que quieran hacer una pueden inscribirla desde la ${link(MARATO.activities, "página de actividades populares")}, que también tiene un mapa por comarcas con las ya inscritas.`,
         granRecapteMention("es", "marato"),
       ),
@@ -334,7 +358,7 @@ export function buildMaratoBody(locale: Locale): Block[] {
         { question: "¿Quién presenta La Marató 2026?", answer: "Raquel Sans y Miki Núñez en TV3, y Roger Escapa en Catalunya Ràdio." },
         { question: "¿Cómo puedo hacer un donativo a La Marató?", answer: `En la página oficial de donativos de 3Cat: por internet, por Bizum con el código ${MARATO.bizum} (en el apartado de donaciones) o por transferencia a la cuenta que publica la Fundació.` },
         { question: "¿Cuál es el teléfono de La Marató 2026?", answer: "El 30 de octubre de 2026 aún no se había publicado. Las llamadas del día se atienden en los centros de Barcelona, Girona, Tarragona y Lleida; usa solo el número que publique 3Cat." },
-        { question: "¿Cómo puedo ser voluntario de La Marató 2026?", answer: "Preinscribiéndote en marato.voluntariat.org hasta las 10 h del 10 de noviembre de 2026; las plazas para atender llamadas en los centros telefónicos el día de La Marató se sortean entre todas las personas preinscritas." },
+        { question: "¿Cómo puedo ser voluntario de La Marató 2026?", answer: "La preinscripción se cerró el 10 de noviembre de 2026 y el sorteo de plazas ya se ha hecho. Solo si quedan plazas vacantes se abrirá, a mediados de noviembre, una inscripción directa en marato.voluntariat.org, primero para la lista de espera y después para todo el mundo. También puedes colaborar con un donativo o con una actividad popular." },
         { question: "¿Los donativos a La Marató desgravan?", answer: "Sí, para los contribuyentes del IRPF: la Ley 49/2002 permite deducir el 80% de los primeros 250 € y el 40% del resto (el 45% para quien donó lo mismo o más los dos años anteriores). El certificado se pide a la Fundació antes del 31 de diciembre." },
       ]),
       ...paras(verifiedLine("es", MARATO_VERIFIED)),
@@ -390,7 +414,7 @@ export function buildMaratoBody(locale: Locale): Block[] {
     ),
     ...h2(
       "How to take part: volunteering and local events",
-      `**Volunteering.** Anyone who wants to answer calls at the phone centres on 13 December can pre-register at ${link(MARATO.volunteer, "marato.voluntariat.org")} until 10:00 on 10 November 2026 (registration opened at 10:00 on 20 October); places are drawn by lot among everyone who signs up. Volunteering is coordinated by the Generalitat's Directorate-General for Community Action and Social Innovation (Department of Social Rights and Inclusion).`,
+      `**Volunteering.** Pre-registration to answer calls at the phone centres on 13 December closed on 10 November 2026, and the draw has been held: places are assigned from number ${VOLUNTEER_CUTOFF.barcelona} in Barcelona, ${VOLUNTEER_CUTOFF.girona} in Girona, ${VOLUNTEER_CUTOFF.lleida} in Lleida and ${VOLUNTEER_CUTOFF.tarragona} in Tarragona, in order and by each person's preferences. Anyone given a place is told by email, must accept it within 72 hours and then takes an online training course; everyone else goes on a waiting list that runs until 8 December. Only if places are left over will direct registration open in mid-November, first for the waiting list and then, if places remain, for everyone. The whole process is on ${link(MARATO.volunteer, "marato.voluntariat.org")} (checked ${VOLUNTEER_CHECKED_TEXT.en}). Volunteering is coordinated by the Generalitat's Directorate-General for Community Action and Social Innovation (Department of Social Rights and Inclusion).`,
       `**Local events.** According to the Fundació, more than 3,500 fundraising events are organised every year: concerts, sports competitions, walks, lunches and more. Groups that want to run one can register it on the ${link(MARATO.activities, "popular activities page")}, which also has a map of those already registered, by comarca.`,
       granRecapteMention("en", "marato"),
     ),
@@ -417,7 +441,7 @@ export function buildMaratoBody(locale: Locale): Block[] {
       { question: "Who presents La Marató 2026?", answer: "Raquel Sans and Miki Núñez on TV3, and Roger Escapa on Catalunya Ràdio." },
       { question: "How can I donate to La Marató?", answer: `On 3Cat's official donation page: online, by Bizum with code ${MARATO.bizum} (in the donations section) or by bank transfer to the account the Fundació publishes there.` },
       { question: "What is La Marató 2026's phone number?", answer: "It had not been published on 30 October 2026. Calls on the day are taken at centres in Barcelona, Girona, Tarragona and Lleida; only use the number 3Cat publishes." },
-      { question: "How can I volunteer for La Marató 2026?", answer: "Pre-register at marato.voluntariat.org before 10:00 on 10 November 2026; places answering calls at the phone centres on the day are drawn by lot among everyone who signs up." },
+      { question: "How can I volunteer for La Marató 2026?", answer: "Pre-registration closed on 10 November 2026 and the draw for places has been held. Only if places are left over will direct registration open in mid-November at marato.voluntariat.org, first for the waiting list and then for everyone. You can also help with a donation or a local fundraising event." },
       { question: "Are donations to La Marató tax-deductible?", answer: "Yes, for Spanish income tax (IRPF) payers: Law 49/2002 allows a deduction of 80% of the first €250 and 40% of the rest (45% for repeat donors who gave the same or more in the two previous years). Request the certificate from the Fundació before 31 December." },
     ]),
     ...paras(verifiedLine("en", MARATO_VERIFIED)),
