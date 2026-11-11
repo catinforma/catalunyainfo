@@ -14,14 +14,16 @@ import { SOURCE_PROSE } from "@/lib/programmatic/spain-2027/sources-intl";
 import { EMBED_ROBOTS_VALUE } from "@/lib/security-headers";
 import { SITE, absoluteUrl } from "@/lib/site";
 
-import { EMBED_YEAR, fullPagePath, placeName, type EmbedLocale, type EmbedPlace } from "./places";
+import { EMBED_YEAR, attributionPath, placeName, type EmbedLocale, type EmbedPlace } from "./places";
 
 /**
  * The widget itself: one self-contained HTML document per place and
  * language, built as a string by the route handlers in src/app/embed/. No
  * script, no cookie, no font or request to anyone: a table of the 2027
  * holidays, where each list comes from, when it was read, and the
- * attribution link back to the place's full page.
+ * attribution link back to the place's full page (or, when that page is kept
+ * out of the index, lib/seo/low-demand.ts, to the 2027 hub of the language:
+ * places.ts `attributionPath`).
  *
  * It says exactly what the full pages say, read from the same functions:
  *  - Catalan towns (holidays/data.ts `yearRows(…, { council: true })`): the
@@ -143,7 +145,7 @@ function townModel(lang: EmbedLocale, place: Extract<EmbedPlace, { kind: "town" 
     status,
     sources,
     readOn: latest(SNAPSHOT.readOn, next ? NEXT_YEAR.readOn : null, council?.readOn),
-    page: fullPagePath(lang, place),
+    page: attributionPath(lang, place),
   };
 }
 
@@ -235,7 +237,7 @@ function cityModel(lang: EmbedLocale, place: Extract<EmbedPlace, { kind: "city" 
     status,
     sources,
     readOn: latest(SOURCES_READ_ON, CITIES_AS_OF),
-    page: fullPagePath(lang, place),
+    page: attributionPath(lang, place),
   };
 }
 

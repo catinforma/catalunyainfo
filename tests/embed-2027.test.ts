@@ -8,6 +8,8 @@ import { widgetCopy } from "../src/lib/programmatic/embed-2027/copy.ts";
 import {
   EMBED_LOCALES,
   WIDGET_SLUG,
+  attributionPath,
+  indexableHubPath,
   embedCityPath,
   embedCityStaticParams,
   embedId,
@@ -33,6 +35,7 @@ import { COMMUNITIES } from "../src/lib/programmatic/spain-2027/communities.ts";
 import { editionCommunities, editionPaths, editionSitemapEntries } from "../src/lib/programmatic/spain-2027/editions.ts";
 import { spainDaySitemapEntries, spainPaths, spainSitemapEntries } from "../src/lib/programmatic/spain-2027/paths.ts";
 import { EMBED_SOURCE, NOT_EMBED_SOURCE } from "../src/lib/security-headers.ts";
+import { isLowDemandPath } from "../src/lib/seo/low-demand.ts";
 import { absoluteUrl } from "../src/lib/site.ts";
 
 /**
@@ -158,19 +161,44 @@ test("widget: noindex, no script, no tracking, no request to anyone", () => {
   }
 });
 
-test("widget: every place carries the attribution link, plain and followed, to its full page", () => {
-  const lead = { ca: "Font:", es: "Fuente:", en: "Source:" } as const;
+const LEAD = { ca: "Font:", es: "Fuente:", en: "Source:" } as const;
+const attribution = (locale: (typeof EMBED_LOCALES)[number], path: string) =>
+  `${LEAD[locale]} <a href="${esc(absoluteUrl(path))}" target="_blank" rel="noopener">CatalunyaInfo</a>`;
+const HUB_2027 = { ca: "/ca/festius/2027/", es: "/es/festivos/2027/", en: "/en/holidays/2027/" } as const;
+
+test("widget: every place carries the attribution link, plain and followed, to an indexed page", () => {
+  let toHub = 0;
   for (const locale of EMBED_LOCALES) {
     for (const place of places) {
       const html = renderEmbed(locale, place);
-      const href = absoluteUrl(fullPagePath(locale, place));
-      const anchor = `${lead[locale]} <a href="${esc(href)}" target="_blank" rel="noopener">CatalunyaInfo</a>`;
-      assert.ok(html.includes(anchor), `${locale} ${embedId(place)}`);
+      const full = fullPagePath(locale, place);
+      // The full page, unless it is kept out of the index: then the language's 2027 hub.
+      const expected = isLowDemandPath(full) ? HUB_2027[locale] : full;
+      if (expected !== full) toHub += 1;
+      assert.equal(attributionPath(locale, place), expected);
+      assert.ok(!isLowDemandPath(expected), `${locale} ${embedId(place)}: lands on an indexed page`);
+      assert.ok(html.includes(attribution(locale, expected)), `${locale} ${embedId(place)}`);
       // Official sources are nofollow, the attribution never is.
       const footer = html.slice(html.indexOf("<footer>"));
       assert.doesNotMatch(footer, /nofollow|sponsored|ugc/, `${locale} ${embedId(place)}`);
     }
   }
+  assert.ok(toHub > 0, "the low-demand fallback is exercised");
+});
+
+test("widget: a low-demand town links the 2027 hub, an indexable town its own page", () => {
+  const listed = municipalities().find((m) => isLowDemandPath(municipalityPath("ca", m.slug)) && isLowDemandPath(municipalityPath("es", m.slug)))!;
+  assert.ok(listed, "a town on the low-demand list");
+  for (const locale of ["ca", "es"] as const) {
+    const html = renderEmbed(locale, { kind: "town", m: listed });
+    assert.ok(html.includes(attribution(locale, HUB_2027[locale])), `${listed.slug} ${locale}`);
+    assert.ok(!html.includes(`href="${esc(absoluteUrl(municipalityPath(locale, listed.slug)))}"`), `${listed.slug} ${locale}: never its noindex page`);
+  }
+  const indexable = resolveEmbedTown("ca", "barcelona")!;
+  assert.ok(!isLowDemandPath("/ca/festius/barcelona/") && !isLowDemandPath("/es/festivos/barcelona/"));
+  assert.ok(renderEmbed("ca", indexable).includes(attribution("ca", "/ca/festius/barcelona/")));
+  assert.ok(renderEmbed("es", indexable).includes(attribution("es", "/es/festivos/barcelona/")));
+  for (const locale of EMBED_LOCALES) assert.equal(indexableHubPath(locale), HUB_2027[locale]);
 });
 
 test("widget: the full page it links to exists in that language (or the town's Catalan page)", () => {
@@ -350,11 +378,12 @@ test("widget page: the picker lists every town and city once, and the browser bu
     const groups = pickerGroups(locale);
     const seen = new Map<string, { embed: string; page: string }>();
     for (const g of groups) {
-      for (const [value, , alt] of g.items) {
+      for (const [value, , flag] of g.items) {
         assert.ok(!seen.has(value), `${locale} ${value} twice`);
         const slug = value.split("/").at(-1)!;
         // Exactly what EmbedBuilder.tsx computes.
-        seen.set(value, { embed: `${g.embedPrefix}${value}/`, page: `${alt && g.altPagePrefix ? g.altPagePrefix : g.pagePrefix}${slug}/` });
+        const page = flag === 2 ? g.hubPath : `${flag === 1 && g.altPagePrefix ? g.altPagePrefix : g.pagePrefix}${slug}/`;
+        seen.set(value, { embed: `${g.embedPrefix}${value}/`, page });
       }
     }
     assert.equal(seen.size, places.length, locale);
@@ -362,14 +391,16 @@ test("widget page: the picker lists every town and city once, and the browser bu
       const got = seen.get(embedId(place));
       assert.ok(got, `${locale} ${embedId(place)} missing`);
       assert.equal(got.embed, embedPath(locale, place));
-      assert.equal(got.page, fullPagePath(locale, place));
+      // The code's plain link goes where the widget's attribution goes: never to a noindex page.
+      assert.equal(got.page, attributionPath(locale, place));
+      assert.ok(!isLowDemandPath(got.page), `${locale} ${embedId(place)}`);
     }
     assert.ok(seen.has("barcelona"), "the server-rendered default");
   }
   const builder = read("src/components/programmatic/embed-2027/EmbedBuilder.tsx");
   assert.match(builder, /^"use client";/);
   assert.match(builder, /\$\{g\.embedPrefix\}\$\{value\}\//);
-  assert.match(builder, /\$\{alt && g\.altPagePrefix \? g\.altPagePrefix : g\.pagePrefix\}\$\{slug\}\//);
+  assert.match(builder, /flag === 2 \? g\.hubPath : `\$\{flag === 1 && g\.altPagePrefix \? g\.altPagePrefix : g\.pagePrefix\}\$\{slug\}\/`/);
   // The pasted code: the iframe, then a plain link to the full page (the one that earns the link), and the link-only alternative.
   assert.match(builder, /<iframe src=/);
   assert.match(builder, /<p><a href="\$\{attr\(origin \+ choice\.page\)\}">/);

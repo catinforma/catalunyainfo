@@ -39,9 +39,11 @@ function attr(text: string): string {
 function choicesOf(groups: PickerGroup[]): Map<string, Choice> {
   const out = new Map<string, Choice>();
   for (const g of groups) {
-    for (const [value, label, alt] of g.items) {
+    for (const [value, label, flag] of g.items) {
       const slug = value.split("/").at(-1) ?? value;
-      out.set(value, { value, label, embed: `${g.embedPrefix}${value}/`, page: `${alt && g.altPagePrefix ? g.altPagePrefix : g.pagePrefix}${slug}/` });
+      // places.ts PickerGroup: 1 = the page in another language, 2 = the indexable 2027 hub.
+      const page = flag === 2 ? g.hubPath : `${flag === 1 && g.altPagePrefix ? g.altPagePrefix : g.pagePrefix}${slug}/`;
+      out.set(value, { value, label, embed: `${g.embedPrefix}${value}/`, page });
     }
   }
   return out;

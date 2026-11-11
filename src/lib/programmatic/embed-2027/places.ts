@@ -9,8 +9,9 @@ import { ROUTE, municipalityPath } from "@/lib/programmatic/holidays/paths";
 import type { SnapshotMunicipality } from "@/lib/programmatic/holidays/types";
 import { CITIES, cityBySlug, type City } from "@/lib/programmatic/spain-2027/cities";
 import { COMMUNITIES, communityBySlug } from "@/lib/programmatic/spain-2027/communities";
-import { editionCityName, editionCityPath, editionNames } from "@/lib/programmatic/spain-2027/editions";
-import { cityPath } from "@/lib/programmatic/spain-2027/paths";
+import { editionCityName, editionCityPath, editionHubPath, editionNames } from "@/lib/programmatic/spain-2027/editions";
+import { cityPath, spainHubPath } from "@/lib/programmatic/spain-2027/paths";
+import { isLowDemandPath } from "@/lib/seo/low-demand";
 import { absoluteUrl } from "@/lib/site";
 
 /**
@@ -101,6 +102,22 @@ export function fullPagePath(locale: EmbedLocale, place: EmbedPlace): string {
   return locale === "es" ? cityPath(place.c) : editionCityPath(locale, place.c);
 }
 
+/** The 2027 calendar hub of each language: indexable, and the fallback for the attribution link. */
+export function indexableHubPath(locale: EmbedLocale): string {
+  return locale === "es" ? spainHubPath() : editionHubPath(locale);
+}
+
+/**
+ * Where the attribution link (and the code's plain link) points: the full
+ * page, unless it is kept out of the index (lib/seo/low-demand.ts), in which
+ * case the 2027 hub of the same language, so a link earned from another site
+ * lands on an indexed page.
+ */
+export function attributionPath(locale: EmbedLocale, place: EmbedPlace): string {
+  const full = fullPagePath(locale, place);
+  return isLowDemandPath(full) ? indexableHubPath(locale) : full;
+}
+
 export function placeName(locale: EmbedLocale, place: EmbedPlace): string {
   if (place.kind === "town") return locale === "en" ? enName(place.m) : displayName(place.m, locale);
   return locale === "es" ? place.c.name : editionCityName(place.c, locale);
@@ -147,13 +164,28 @@ export interface PickerGroup {
   /** Path of the widget for `items[i][0]`: `${embedPrefix}${value}/`. */
   embedPrefix: string;
   /**
-   * Path of the full page: `${pagePrefix}${slug}/`, or `${altPagePrefix}${slug}/` when the item's third
-   * field is 1, `slug` being the value's last segment ("sevilla" of "andalucia/sevilla").
+   * Where the code's link points (`attributionPath`): `${pagePrefix}${slug}/`, `slug` being the
+   * value's last segment ("sevilla" of "andalucia/sevilla"); `${altPagePrefix}${slug}/` when the
+   * item's third field is 1 (the town's page in another language); `hubPath` when it is 2 (the full
+   * page is kept out of the index, lib/seo/low-demand.ts).
    */
   pagePrefix: string;
   altPagePrefix?: string;
-  /** [picker value, label, 1 when the page is in another language]. */
-  items: [string, string, 1?][];
+  hubPath: string;
+  /** [picker value, label, 1 | 2 as above]. */
+  items: [string, string, (1 | 2)?][];
+}
+
+/** The item's third field, read back from `attributionPath` (a test holds the round trip). */
+function pageFlag(group: Pick<PickerGroup, "pagePrefix" | "altPagePrefix" | "hubPath">, slug: string, page: string): 1 | 2 | undefined {
+  if (page === `${group.pagePrefix}${slug}/`) return undefined;
+  if (group.altPagePrefix && page === `${group.altPagePrefix}${slug}/`) return 1;
+  if (page === group.hubPath) return 2;
+  throw new Error(`picker: no encoding for ${page}`);
+}
+
+function item(value: string, label: string, flag: 1 | 2 | undefined): [string, string, (1 | 2)?] {
+  return flag ? [value, label, flag] : [value, label];
 }
 
 const CATALONIA: Record<EmbedLocale, string> = { ca: "Catalunya", es: "Cataluña", en: "Catalonia" };
@@ -167,12 +199,17 @@ export function pickerGroups(locale: EmbedLocale): PickerGroup[] {
   const towns = [...municipalities()]
     .map((m) => ({ m, label: placeName(locale, { kind: "town", m }) }))
     .sort((a, b) => a.label.localeCompare(b.label, locale));
-  const catalonia: PickerGroup = {
-    label: CATALONIA[locale],
+  const hubPath = indexableHubPath(locale);
+  const base = {
     embedPrefix: `${EMBED_ROOT}/${locale}/${EMBED_YEAR}/`,
     pagePrefix: `/${locale}/${ROUTE[locale].root}/`,
     ...(locale === "en" ? { altPagePrefix: `/ca/${ROUTE.ca.root}/` } : {}),
-    items: towns.map(({ m, label }) => (locale === "en" && !hasEnglishPage(m.slug) ? [m.slug, label, 1] : [m.slug, label])),
+    hubPath,
+  };
+  const catalonia: PickerGroup = {
+    label: CATALONIA[locale],
+    ...base,
+    items: towns.map(({ m, label }) => item(m.slug, label, pageFlag(base, m.slug, attributionPath(locale, { kind: "town", m })))),
   };
   const communities = COMMUNITIES.map((community) => ({
     community,
@@ -184,14 +221,14 @@ export function pickerGroups(locale: EmbedLocale): PickerGroup[] {
   const spain = communities.map(({ community, label, cities }) => {
     const sample = cities[0]!;
     const page = fullPagePath(locale, { kind: "city", c: sample });
+    const group = { embedPrefix: `${EMBED_ROOT}/${locale}/${EMBED_YEAR}/`, pagePrefix: page.slice(0, page.length - sample.slug.length - 1), hubPath };
     return {
       label,
-      embedPrefix: `${EMBED_ROOT}/${locale}/${EMBED_YEAR}/`,
-      pagePrefix: page.slice(0, page.length - sample.slug.length - 1),
+      ...group,
       items: cities
         .map((c) => ({ c, label: placeName(locale, { kind: "city", c }) }))
         .sort((a, b) => a.label.localeCompare(b.label, locale))
-        .map(({ c, label: name }): [string, string] => [`${community.slug}/${c.slug}`, name]),
+        .map(({ c, label: name }) => item(`${community.slug}/${c.slug}`, name, pageFlag(group, c.slug, attributionPath(locale, { kind: "city", c })))),
     };
   });
   return [catalonia, ...spain];
