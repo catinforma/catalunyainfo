@@ -274,7 +274,7 @@ const ca = {
     analytics: "Mesura d'audiència",
     analyticsNote: "Ens ajuda a saber quines pàgines són útils. Dades agregades.",
     ads: "Publicitat",
-    adsNote: "Encara no servim publicitat. Quan ho fem, ho podràs decidir aquí.",
+    adsNote: "Encara no servim publicitat. Quan ho fem, t'ho preguntarem abans, amb un gestor de consentiment certificat per Google.",
   },
   contactForm: {
     legend: "Escriu-nos",

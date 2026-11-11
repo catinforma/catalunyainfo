@@ -57,10 +57,11 @@ export function aboutCopy(locale: Locale): AboutCopy {
   const sources = legalPath("sources", locale);
   const corrections = legalPath("corrections", locale);
   const contact = sectionPath("contact", locale);
+  const privacy = legalPath("privacy", locale);
 
   const copy: Record<Locale, AboutCopy> = {
     ca: {
-      lead: "CatalunyaInfo és un projecte editorial independent que respon una pregunta concreta: què necessites saber abans d'anar a un lloc de Catalunya.",
+      lead: "CatalunyaInfo és un projecte editorial independent que respon una pregunta concreta: què necessites saber abans d'anar a un lloc de Catalunya. També cobreix la resta d'Espanya quan afecta qui hi viu o hi viatja: festius, vagues, calendaris i eleccions.",
       who: {
         heading: "Qui hi ha al darrere",
         paragraphs: [
@@ -73,7 +74,7 @@ export function aboutCopy(locale: Locale): AboutCopy {
       what: {
         heading: "Què fem",
         paragraphs: [
-          "Publiquem informació pràctica i verificada: com arribar-hi, quan val la pena anar-hi, què cal tenir en compte i on consultar la font oficial. Tot en català, castellà i anglès, amb la mateixa informació als tres idiomes i no una traducció automàtica de mig contingut.",
+          "Publiquem informació pràctica i verificada, sobretot de Catalunya, i de la resta d'Espanya quan afecta qui hi viu o hi viatja (festius, vagues, calendaris laborals i escolars, eleccions): com arribar-hi, quan val la pena anar-hi, què cal tenir en compte i on consultar la font oficial. Tot en català, castellà i anglès, amb la mateixa informació als tres idiomes i no una traducció automàtica de mig contingut.",
           "No som una administració pública ni una oficina de turisme. Tampoc som un agregador: cada pàgina la escrivim nosaltres, citant d'on surt cada dada.",
         ],
       },
@@ -97,7 +98,8 @@ export function aboutCopy(locale: Locale): AboutCopy {
       funding: {
         heading: "Com ens financem",
         paragraphs: [
-          "Ara mateix el web no té publicitat, ni enllaços d'afiliació, ni continguts patrocinats. Si algun dia n'hi ha, es marcarà clarament abans del contingut afectat i no canviarà què recomanem.",
+          "Ara mateix el web no mostra cap anunci i no té enllaços d'afiliació ni continguts patrocinats.",
+          `Tenim previst finançar-lo amb anuncis servits per Google (AdSense). Aniran identificats com a publicitat i separats del text, els tria Google i no canviaran què publiquem ni què recomanem. Com funcionaran les galetes i el consentiment s'explica a la [política de privadesa](${privacy}).`,
         ],
       },
       help: {
@@ -108,7 +110,7 @@ export function aboutCopy(locale: Locale): AboutCopy {
       },
     },
     es: {
-      lead: "CatalunyaInfo es un proyecto editorial independiente que responde a una pregunta concreta: qué necesitas saber antes de ir a un lugar de Cataluña.",
+      lead: "CatalunyaInfo es un proyecto editorial independiente que responde a una pregunta concreta: qué necesitas saber antes de ir a un lugar de Cataluña. También cubre el resto de España cuando afecta a quien vive o viaja allí: festivos, huelgas, calendarios y elecciones.",
       who: {
         heading: "Quién está detrás",
         paragraphs: [
@@ -121,7 +123,7 @@ export function aboutCopy(locale: Locale): AboutCopy {
       what: {
         heading: "Qué hacemos",
         paragraphs: [
-          "Publicamos información práctica y verificada: cómo llegar, cuándo merece la pena ir, qué conviene tener en cuenta y dónde consultar la fuente oficial. Todo en catalán, castellano e inglés, con la misma información en los tres idiomas y no una traducción automática de medio contenido.",
+          "Publicamos información práctica y verificada, sobre todo de Cataluña, y del resto de España cuando afecta a quien vive o viaja allí (festivos, huelgas, calendarios laborales y escolares, elecciones): cómo llegar, cuándo merece la pena ir, qué conviene tener en cuenta y dónde consultar la fuente oficial. Todo en catalán, castellano e inglés, con la misma información en los tres idiomas y no una traducción automática de medio contenido.",
           "No somos una administración pública ni una oficina de turismo. Tampoco un agregador: cada página la escribimos nosotros, citando de dónde sale cada dato.",
         ],
       },
@@ -145,7 +147,8 @@ export function aboutCopy(locale: Locale): AboutCopy {
       funding: {
         heading: "Cómo nos financiamos",
         paragraphs: [
-          "Ahora mismo el sitio no tiene publicidad, ni enlaces de afiliación, ni contenidos patrocinados. Si algún día los hay, se marcarán claramente antes del contenido afectado y no cambiarán lo que recomendamos.",
+          "Ahora mismo el sitio no muestra ningún anuncio y no tiene enlaces de afiliación ni contenidos patrocinados.",
+          `Tenemos previsto financiarlo con anuncios servidos por Google (AdSense). Irán identificados como publicidad y separados del texto, los elige Google y no cambiarán lo que publicamos ni lo que recomendamos. Cómo funcionarán las cookies y el consentimiento se explica en la [política de privacidad](${privacy}).`,
         ],
       },
       help: {
@@ -156,7 +159,7 @@ export function aboutCopy(locale: Locale): AboutCopy {
       },
     },
     en: {
-      lead: "CatalunyaInfo is an independent editorial project answering one question: what you need to know before going somewhere in Catalonia.",
+      lead: "CatalunyaInfo is an independent editorial project answering one question: what you need to know before going somewhere in Catalonia. It also covers the rest of Spain where it affects people who live or travel there: holidays, strikes, calendars and elections.",
       who: {
         heading: "Who is behind it",
         paragraphs: [
@@ -169,7 +172,7 @@ export function aboutCopy(locale: Locale): AboutCopy {
       what: {
         heading: "What we do",
         paragraphs: [
-          "We publish practical, verified information: how to get there, when it is worth going, what to bear in mind, and where to check the official source. All of it in Catalan, Spanish and English, with the same information in each language rather than a machine translation of half the content.",
+          "We publish practical, verified information, mostly about Catalonia, and about the rest of Spain where it affects people who live or travel there (holidays, strikes, work and school calendars, elections): how to get there, when it is worth going, what to bear in mind, and where to check the official source. All of it in Catalan, Spanish and English, with the same information in each language rather than a machine translation of half the content.",
           "We are not a public authority or a tourist board, and we are not an aggregator: every page is written here, citing where each fact came from.",
         ],
       },
@@ -193,7 +196,8 @@ export function aboutCopy(locale: Locale): AboutCopy {
       funding: {
         heading: "How we are funded",
         paragraphs: [
-          "The site currently carries no advertising, no affiliate links and no sponsored content. If that ever changes, it will be marked clearly before the content concerned, and it will not change what we recommend.",
+          "The site currently shows no ads and carries no affiliate links and no sponsored content.",
+          `We plan to fund it with ads served by Google (AdSense). They will be labelled as advertising and kept apart from the text; Google chooses them, and they will not change what we publish or recommend. How the cookies and consent will work is explained in the [privacy policy](${privacy}).`,
         ],
       },
       help: {
@@ -221,28 +225,29 @@ const ABOUT_COPY: Record<Locale, Omit<PageCopy, "blocks">> = {
     title: "Qui som",
     seoTitle: "Qui som",
     seoDescription:
-      "CatalunyaInfo és un projecte editorial independent d'informació pràctica i verificada sobre Catalunya, en català, castellà i anglès.",
-    excerpt: "Un projecte editorial independent d'informació pràctica i verificada sobre Catalunya.",
+      "CatalunyaInfo: informació pràctica i verificada sobre Catalunya, i sobre la resta d'Espanya quan t'afecta, en català, castellà i anglès. Qui el fa i com treballem.",
+    excerpt: "Un projecte editorial independent d'informació pràctica i verificada sobre Catalunya, i sobre la resta d'Espanya quan afecta qui hi viu o hi viatja.",
   },
   es: {
     title: "Quiénes somos",
     seoTitle: "Quiénes somos",
     seoDescription:
-      "CatalunyaInfo es un proyecto editorial independiente de información práctica y verificada sobre Cataluña, en catalán, castellano e inglés.",
-    excerpt: "Un proyecto editorial independiente de información práctica y verificada sobre Cataluña.",
+      "CatalunyaInfo: información práctica y verificada sobre Cataluña, y sobre el resto de España cuando te afecta, en catalán, castellano e inglés. Quién lo hace y cómo.",
+    excerpt: "Un proyecto editorial independiente de información práctica y verificada sobre Cataluña, y sobre el resto de España cuando afecta a quien vive o viaja allí.",
   },
   en: {
     title: "About CatalunyaInfo",
     seoTitle: "About us",
     seoDescription:
-      "CatalunyaInfo is an independent editorial project publishing practical, verified information about Catalonia in Catalan, Spanish and English.",
-    excerpt: "An independent editorial project publishing practical, verified information about Catalonia.",
+      "CatalunyaInfo: practical, verified information about Catalonia, and the rest of Spain where it affects you, in Catalan, Spanish and English. Who makes it and how.",
+    excerpt: "An independent editorial project publishing practical, verified information about Catalonia, and the rest of Spain where it affects people who live or travel there.",
   },
 };
 
 export const ABOUT: PageSpec = {
   key: "page-about",
   path: sectionEntryPath("about"),
+  verifiedAt: "2026-11-11",
   copy: Object.fromEntries(
     LOCALES.map((locale) => [locale, { ...ABOUT_COPY[locale], blocks: aboutBlocks(locale) }]),
   ) as Record<Locale, PageCopy>,
@@ -252,6 +257,13 @@ export const ABOUT: PageSpec = {
 /* Contact                                                                    */
 /* -------------------------------------------------------------------------- */
 
+/**
+ * "What we cannot handle", checked 11 Nov 2026 (curl + grep): LOREG art. 27.3
+ * (www.boe.es/buscar/act.php?id=BOE-A-1985-11672): "Los designados Presidente
+ * y Vocal de las Mesas electorales disponen de un plazo de siete días para
+ * alegar ante la Junta Electoral de Zona causa justificada"; 112.gencat.cat
+ * ("112 emergències", the Generalitat's emergency number page).
+ */
 function contactBlocks(locale: Locale): Block[] {
   const corrections = legalPath("corrections", locale);
   const privacy = legalPath("privacy", locale);
@@ -284,6 +296,12 @@ function contactBlocks(locale: Locale): Block[] {
         "Què no cal que ens enviïs",
         "No ens enviïs dades personals de tercers, ni documentació sensible, ni contrasenyes. Per respondre't només necessitem el teu nom i el teu correu.",
         "Tampoc acceptem propostes de publicació de contingut patrocinat, intercanvis d'enllaços ni articles escrits per tercers amb enllaços inserits: no en publiquem.",
+        "Tampoc venem espais publicitaris directament: la publicitat prevista al web la servirà Google (AdSense), i els anuncis no els triem nosaltres.",
+      ),
+      ...section(
+        "Per a què no som el canal",
+        "No som una administració pública ni l'operador de cap servei. No podem tramitar sol·licituds, excuses de mesa electoral ni queixes sobre un tren, una escola o un hospital: les ha de rebre l'organisme responsable. Una excusa de mesa, per exemple, es presenta a la Junta Electoral de Zona en el termini de set dies (article 27.3 de la LOREG).",
+        "En una emergència, truca al **112**.",
       ),
       ...section(
         "Què fem amb el que ens escrius",
@@ -317,6 +335,12 @@ function contactBlocks(locale: Locale): Block[] {
         "Qué no hace falta que nos envíes",
         "No nos envíes datos personales de terceros, ni documentación sensible, ni contraseñas. Para responderte solo necesitamos tu nombre y tu correo.",
         "Tampoco aceptamos propuestas de contenido patrocinado, intercambios de enlaces ni artículos escritos por terceros con enlaces insertados: no los publicamos.",
+        "Tampoco vendemos espacios publicitarios directamente: la publicidad prevista en el sitio la servirá Google (AdSense), y los anuncios no los elegimos nosotros.",
+      ),
+      ...section(
+        "Para qué no somos el canal",
+        "No somos una administración pública ni el operador de ningún servicio. No podemos tramitar solicitudes, excusas de mesa electoral ni quejas sobre un tren, un colegio o un hospital: tiene que recibirlas el organismo responsable. Una excusa de mesa, por ejemplo, se presenta ante la Junta Electoral de Zona en el plazo de siete días (artículo 27.3 de la LOREG).",
+        "En una emergencia, llama al **112**.",
       ),
       ...section(
         "Qué hacemos con lo que nos escribes",
@@ -350,6 +374,12 @@ function contactBlocks(locale: Locale): Block[] {
         "What not to send",
         "Please do not send other people's personal data, sensitive documents, or passwords. To reply we only need your name and your email address.",
         "We also do not accept sponsored content, link exchanges, or third-party articles with links embedded: we do not publish them.",
+        "Nor do we sell ad space directly: the advertising planned for the site will be served by Google (AdSense), and we do not choose the ads.",
+      ),
+      ...section(
+        "What we cannot handle",
+        "We are not a public authority and we do not run any service. We cannot process applications, polling-station excuses, or complaints about a train, a school or a hospital: those must go to the body responsible. An excuse from polling-station duty, for example, goes to the local electoral board (Junta Electoral de Zona) within seven days (article 27.3 of Spain's electoral law, the LOREG).",
+        "In an emergency, call **112**.",
       ),
       ...section(
         "What we do with your message",
@@ -388,6 +418,7 @@ const CONTACT_COPY: Record<Locale, Omit<PageCopy, "blocks">> = {
 export const CONTACT: PageSpec = {
   key: "page-contact",
   path: sectionEntryPath("contact"),
+  verifiedAt: "2026-11-11",
   copy: Object.fromEntries(
     LOCALES.map((locale) => [locale, { ...CONTACT_COPY[locale], blocks: contactBlocks(locale) }]),
   ) as Record<Locale, PageCopy>,

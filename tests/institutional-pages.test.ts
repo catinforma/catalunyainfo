@@ -156,3 +156,42 @@ test("the cookie policy describes exactly the cookies the site sets", async () =
     }
   }
 });
+
+test("the privacy policy carries Google's required advertising disclosures, in every language", async () => {
+  const { AD_LINKS } = await import("../src/lib/content/pages/privacy.ts");
+  const privacy = PAGES.find((p) => p.key === "page-privacy");
+  const cookies = PAGES.find((p) => p.key === "page-cookies");
+  assert.ok(privacy && cookies);
+  for (const locale of LOCALES) {
+    const text = JSON.stringify(privacy.copy[locale].blocks);
+    // AdSense "Required content": opt-out via Ads Settings, aboutads.info as
+    // the alternative; Google's partner-sites page; the EU opt-out tool.
+    for (const url of [
+      AD_LINKS.adsSettings,
+      AD_LINKS.aboutAds,
+      AD_LINKS.partnerSites[locale],
+      AD_LINKS.yourOnlineChoices[locale],
+    ]) {
+      assert.ok(text.includes(`](${url})`), `${locale} privacy policy does not link ${url}`);
+    }
+    assert.match(text, /AdSense/);
+    assert.match(text, /TCF/, `${locale}: no certified-CMP / IAB TCF commitment`);
+    // The cookie policy has its advertising table: none today.
+    const cookieText = JSON.stringify(cookies.copy[locale].blocks);
+    assert.match(cookieText, /TCF/);
+    assert.match(cookieText, /AdSense/);
+  }
+  const en = JSON.stringify(privacy.copy.en.blocks);
+  assert.ok(en.includes("third-party vendors, including Google, use cookies to serve ads based on a user's prior visits to this website or other websites"));
+  assert.ok(en.includes("Google's use of advertising cookies enables it and its partners to serve ads to you based on your visits to this site and/or other sites on the Internet"));
+});
+
+test("no trust page claims the site will never carry advertising", () => {
+  // The legal notice says ads are planned; no other page may contradict it.
+  const contradiction = /no serveix publicitat|no sirve publicidad|serves no advertising|carries no advertising|no s'instal·len mai|no se instalan nunca|are never set/;
+  for (const page of PAGES) {
+    for (const locale of LOCALES) {
+      assert.doesNotMatch(JSON.stringify(page.copy[locale].blocks), contradiction, `${page.key}/${locale}`);
+    }
+  }
+});

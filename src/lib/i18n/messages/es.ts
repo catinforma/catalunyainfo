@@ -275,7 +275,7 @@ const es: Messages = {
     analytics: "Medición de audiencia",
     analyticsNote: "Nos ayuda a saber qué páginas son útiles. Datos agregados.",
     ads: "Publicidad",
-    adsNote: "Todavía no servimos publicidad. Cuando lo hagamos, podrás decidirlo aquí.",
+    adsNote: "Todavía no servimos publicidad. Cuando lo hagamos, te lo preguntaremos antes, con un gestor de consentimiento certificado por Google.",
   },
   contactForm: {
     legend: "Escríbenos",

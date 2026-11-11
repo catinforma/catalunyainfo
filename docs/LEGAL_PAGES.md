@@ -67,9 +67,23 @@ without changing them makes them false:
   belongs in the scheduled job.
 - **Accessibility: WCAG 2.2 AA, self-assessed.** The page says explicitly that
   there has been no external audit. Do not upgrade that claim without one.
-- **"No advertising, no affiliate links, no sponsored content"** appears on the
-  legal notice, the editorial policy and the about page. The day that changes,
-  all three change with it — and so does the legal notice's identity block.
+- **Advertising: planned, not live.** The legal notice, privacy policy,
+  cookie policy, editorial policy, about page, accessibility statement, legal
+  hub and contact page all say the same thing (11 Nov 2026): the site will be
+  funded by Google AdSense ads, none is shown yet, no advertising cookie is set,
+  and in the EEA/UK/Switzerland ads will run only through a Google-certified
+  IAB TCF consent platform. The privacy policy carries the disclosures AdSense
+  "Required content" asks for (quoted with the check date above `AD_LINKS`,
+  `src/lib/content/pages/privacy.ts`); a test holds the links and forbids any
+  page saying the site "never" carries ads. No affiliate links and no sponsored
+  content remain true. **The day ads go live**, the privacy and cookie pages,
+  `PROCESSORS` (Google as an advertising party) and the legal notice's identity
+  block (LSSI art. 10) change with them.
+- **Publish groups**: `ads-disclosure` republishes the eight pages that wording
+  touches; `privacy-cookies`, `legal-notice`, `editorial-policy`, `legal-hub`,
+  `accessibility-page`, `about-page` and `contact-page` publish one or two
+  pages each. `pages` republishes all ten and overwrites CMS edits on every one.
+  `verifiedAt` on a `PageSpec` sets the page's verification date.
 
 ## Corrections and right of reply
 

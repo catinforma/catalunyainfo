@@ -43,9 +43,9 @@ export const SITE_AUTHOR_ROLE: Record<Locale, string> = {
  * the Person's `description`.
  */
 export const SITE_AUTHOR_SUMMARY: Record<Locale, string> = {
-  ca: `${OWNER.name} és el fundador de CatalunyaInfo, un projecte editorial independent d'informació pràctica i verificada sobre Catalunya, en català, castellà i anglès.`,
-  es: `${OWNER.name} fundó CatalunyaInfo, un proyecto editorial independiente de información práctica y verificada sobre Cataluña, en catalán, castellano e inglés.`,
-  en: `${OWNER.name} founded CatalunyaInfo, an independent editorial project publishing practical, verified information about Catalonia in Catalan, Spanish and English.`,
+  ca: `${OWNER.name} va fundar CatalunyaInfo: informació pràctica i verificada sobre Catalunya, i sobre la resta d'Espanya quan t'afecta, en català, castellà i anglès.`,
+  es: `${OWNER.name} fundó CatalunyaInfo: información práctica y verificada sobre Cataluña, y sobre el resto de España cuando te afecta, en catalán, castellano e inglés.`,
+  en: `${OWNER.name} founded CatalunyaInfo: practical, verified information about Catalonia, and the rest of Spain where it affects you, in Catalan, Spanish and English.`,
 };
 
 /** Profiles that identify him: the about page's three links (schema.org sameAs). */

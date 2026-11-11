@@ -10,7 +10,10 @@ Because there is no editorial content yet. That is the expected state at the end
 of the platform phase, not a problem to solve in code.
 
 Run `npm run audit:readiness` for the live checklist, or open `/admin` — the
-dashboard shows the same report.
+dashboard shows the same report. The script needs the database: on the VPS,
+load `/srv/catalunyainfo/shared/.env.production` the way `ops/vps/deploy.sh`
+`load_env` does (never printing a value) before running it. The thin-pages
+line lists every page under 250 words with its path and entry key.
 
 ## The three states
 
@@ -34,7 +37,7 @@ warnings.
 | Database configured | yes | `DATABASE_URL` is set |
 | Published pages | yes | At least one page is published |
 | Legal and editorial pages | yes | Legal notice, privacy, cookies, editorial policy, corrections, sources, accessibility, about and contact — published **in all three languages** |
-| Identified authors | yes | At least one author has a real biography |
+| Identified authors | yes | At least one database author has a real biography, or the code-defined site author (`src/lib/content/author.ts`, who signs every byline without a CMS author) has one in all three languages |
 | Indexing enabled | yes | `NEXT_PUBLIC_ALLOW_INDEXING=true` on production |
 | Cited sources | no | ≥ 80% of entries cite at least one source |
 | Verification dates | no | ≥ 80% of published pages record `last_verified_at` |

@@ -26,6 +26,32 @@ import {
 
 const VERIFIED = "2026-10-12";
 
+/**
+ * The Parliament page's seat-allocation section and 2024 turnout, checked
+ * 11 Nov 2026 (curl + grep):
+ * - Estatut 1979 (BOE-A-1979-30178), disposició transitòria 4a.2: "El
+ *   Parlamento de Cataluña estará integrado por 135 Diputados [...] la
+ *   circunscripción de Barcelona elegirá [...] un máximo de 85 Diputados. Las
+ *   circunscripciones de Gerona, Lérida y Tarragona [...] 17, 15 y 18
+ *   Diputados, respectivamente." Opening line: "En tanto una Ley de Cataluña
+ *   no regule el procedimiento para las elecciones al Parlamento".
+ * - Estatut 2006 (BOE-A-2006-13087), DT 2a: the 1979 DT 3a, 4a and 6a
+ *   "mantienen, en lo que corresponda, la vigencia como regulación
+ *   transitoria"; art. 56.2: the electoral law needs "mayoría de dos terceras
+ *   partes"; art. 56.4: the President calls the election "quince días antes de
+ *   la finalización de la legislatura", held "entre cuarenta y sesenta días
+ *   después de la convocatoria".
+ * - eleccions.gencat.cat, "Repartiment d'escons: llindar electoral i Llei
+ *   d'Hondt": "En les eleccions al Parlament de Catalunya [...] és del 3% dels
+ *   vots vàlids emesos per a cadascuna de les circumscripcions"; its home page
+ *   lists only the 29N general election (no Parliament election called).
+ * - Open data irrv-2mfc, id_eleccio A20241: electorate 5,754,952, voters
+ *   3,183,137 (55.31%); seats by province 85/17/15/18 with electorates
+ *   4,279,067 / 553,338 / 318,856 / 603,691 (50,342 / 32,549 / 21,257 /
+ *   33,538 per seat, computed). A20211: 51.29%; A20171: 79.09%.
+ */
+const PARLIAMENT_VERIFIED = "2026-11-11";
+
 /** Where the 29 November 2026 count is explained (Congress page only). */
 const NIGHT: Record<Locale, string> = {
   ca: `Per als resultats del **29 de novembre de 2026**, la nit electoral, mira ${b2link("electionNight", "ca", "a quina hora surten i com és l'escrutini provisional")}.`,
@@ -48,15 +74,18 @@ type T = {
   next: string;
   faq: { question: string; answer: string }[];
   note: string;
+  /** Parliament only: how the seats are allocated (Statute + gencat). */
+  seats?: { title: string; text: string[] };
 };
 
 function body(kind: "congress" | "parliament", t: T, locale: Locale): Block[] {
   return [
     lead(t.lead),
     ...(kind === "congress" ? [{ type: "paragraph", text: NIGHT[locale] } as Block] : []),
-    callout("official", verifiedLine(locale, VERIFIED), t.note),
+    callout("official", verifiedLine(locale, kind === "parliament" ? PARLIAMENT_VERIFIED : VERIFIED), t.note),
     { type: "electionHistory", kind } as Block,
     ...h2(t.readTitle, ...t.read),
+    ...(t.seats ? h2(t.seats.title, ...t.seats.text) : []),
     ...h2(t.nextTitle, t.next),
     faq(t.faq),
     ...b2Related(kind === "congress" ? ["electionNight", "voting", "mesa", "parliamentResults", "municipalResults"] : ["voting", "mesa", "congressResults", "municipalResults"], locale),
@@ -224,10 +253,18 @@ const PARLIAMENT_COPY: Record<Locale, T> = {
       "The Parliament has 135 seats, elected in four constituencies, the provinces, so seats follow the vote province by province rather than across Catalonia as a whole.",
       "Turnout is voters over the electorate, and each list's share is its votes over the valid votes; both are computed from the counts.",
     ],
+    seats: {
+      title: "How the 135 seats are shared out",
+      text: [
+        "Barcelona elects 85 deputies, Tarragona 18, Girona 17 and Lleida 15. The split comes from the fourth transitional provision of the 1979 Statute, which applies until a law of Catalonia regulates elections to the Parliament; the 2006 Statute keeps it in force, and a Catalan electoral law would need a two-thirds majority of the chamber.",
+        "Within each province a list needs at least 3% of the valid votes to take part in the share-out, and seats are then allocated by the D'Hondt rule. Because seats are fixed per province, the electorate behind each seat differs: in 2024 it was about 50,300 voters per seat in Barcelona, 33,500 in Tarragona, 32,500 in Girona and 21,300 in Lleida (electorate divided by seats).",
+      ],
+    },
     nextTitle: "The next one",
-    next: "The last election was on 12 May 2024. A Parliament is elected for four years under the Statute of Autonomy, unless the President dissolves it early; no election has been called.",
+    next: "The last election was on 12 May 2024. A Parliament is elected for four years under the Statute of Autonomy, unless the President dissolves it early; at the end of a full term, the President calls the election fifteen days before the term ends and voting takes place 40 to 60 days after the call. No election has been called.",
     faq: [
-      { question: "How many seats does the Parliament of Catalonia have?", answer: "135, elected in the four provinces." },
+      { question: "How many seats does the Parliament of Catalonia have?", answer: "135, elected in the four provinces: Barcelona 85, Tarragona 18, Girona 17 and Lleida 15." },
+      { question: "What was the turnout at the 2024 Catalan election?", answer: "55.3%: 3,183,137 voters out of an electorate of 5,754,952, from the Generalitat's data. It was 51.3% in 2021 and 79.1% in 2017." },
       { question: "When was the last Catalan election?", answer: "On 12 May 2024." },
       { question: "When is the next Catalan election?", answer: "None has been called. The term is four years from May 2024 unless the President calls an early election." },
     ],
@@ -240,10 +277,18 @@ const PARLIAMENT_COPY: Record<Locale, T> = {
       "El Parlament tiene 135 escaños, elegidos en cuatro circunscripciones, las provincias, así que los escaños siguen el voto provincia a provincia y no en el conjunto de Cataluña.",
       "La participación es votantes sobre censo, y el porcentaje de cada candidatura, sus votos sobre los votos válidos; los dos se calculan a partir de los recuentos.",
     ],
+    seats: {
+      title: "Cómo se reparten los 135 escaños",
+      text: [
+        "Barcelona elige 85 diputados, Tarragona 18, Girona 17 y Lleida 15. El reparto viene de la disposición transitoria cuarta del Estatuto de 1979, que se aplica «en tanto una Ley de Cataluña no regule el procedimiento para las elecciones al Parlamento»; el Estatuto de 2006 la mantiene vigente, y una ley electoral catalana necesitaría una mayoría de dos tercios de la cámara.",
+        "En cada provincia, una candidatura necesita al menos el 3 % de los votos válidos para entrar en el reparto, y los escaños se asignan con la regla D'Hondt. Como los escaños están fijados por provincia, el censo que hay detrás de cada escaño cambia: en 2024 eran unos 50.300 electores por escaño en Barcelona, 33.500 en Tarragona, 32.500 en Girona y 21.300 en Lleida (censo dividido por escaños).",
+      ],
+    },
     nextTitle: "Las próximas",
-    next: "Las últimas elecciones fueron el 12 de mayo de 2024. Según el Estatuto de Autonomía, el Parlament se elige por cuatro años, salvo disolución anticipada por el presidente o la presidenta; no hay elecciones convocadas.",
+    next: "Las últimas elecciones fueron el 12 de mayo de 2024. Según el Estatuto de Autonomía, el Parlament se elige por cuatro años, salvo disolución anticipada por el presidente o la presidenta; si la legislatura se agota, el presidente convoca las elecciones quince días antes de que acabe y se vota entre 40 y 60 días después de la convocatoria. No hay elecciones convocadas.",
     faq: [
-      { question: "¿Cuántos escaños tiene el Parlament de Catalunya?", answer: "135, elegidos en las cuatro provincias." },
+      { question: "¿Cuántos escaños tiene el Parlament de Catalunya?", answer: "135, elegidos en las cuatro provincias: Barcelona 85, Tarragona 18, Girona 17 y Lleida 15." },
+      { question: "¿Qué participación hubo en las elecciones catalanas de 2024?", answer: "El 55,3 %: 3.183.137 votantes de un censo de 5.754.952, según los datos de la Generalitat. En 2021 fue el 51,3 % y en 2017, el 79,1 %." },
       { question: "¿Cuándo fueron las últimas elecciones catalanas?", answer: "El 12 de mayo de 2024." },
       { question: "¿Cuándo son las próximas elecciones catalanas?", answer: "No hay ninguna convocada. La legislatura dura cuatro años desde mayo de 2024, salvo adelanto electoral." },
     ],
@@ -256,10 +301,18 @@ const PARLIAMENT_COPY: Record<Locale, T> = {
       "El Parlament té 135 escons, escollits en quatre circumscripcions, les províncies, així que els escons segueixen el vot província a província i no al conjunt de Catalunya.",
       "La participació és votants sobre cens, i el percentatge de cada candidatura, els seus vots sobre els vots vàlids; tots dos es calculen a partir dels recomptes.",
     ],
+    seats: {
+      title: "Com es reparteixen els 135 escons",
+      text: [
+        "Barcelona escull 85 diputats, Tarragona 18, Girona 17 i Lleida 15. El repartiment ve de la disposició transitòria quarta de l'Estatut del 1979, que s'aplica mentre una llei de Catalunya no reguli el procediment per a les eleccions al Parlament; l'Estatut del 2006 la manté vigent, i una llei electoral catalana necessitaria una majoria de dos terços de la cambra.",
+        "A cada província, una candidatura necessita com a mínim el 3 % dels vots vàlids per entrar al repartiment, i els escons s'assignen amb la regla D'Hondt. Com que els escons estan fixats per província, el cens que hi ha darrere de cada escó canvia: el 2024 eren uns 50.300 electors per escó a Barcelona, 33.500 a Tarragona, 32.500 a Girona i 21.300 a Lleida (cens dividit per escons).",
+      ],
+    },
     nextTitle: "Les properes",
-    next: "Les últimes eleccions van ser el 12 de maig de 2024. Segons l'Estatut d'Autonomia, el Parlament s'escull per quatre anys, llevat de dissolució anticipada pel president o la presidenta; no hi ha eleccions convocades.",
+    next: "Les últimes eleccions van ser el 12 de maig de 2024. Segons l'Estatut d'Autonomia, el Parlament s'escull per quatre anys, llevat de dissolució anticipada pel president o la presidenta; si la legislatura s'esgota, el president convoca les eleccions quinze dies abans que acabi i es voten entre 40 i 60 dies després de la convocatòria. No hi ha eleccions convocades.",
     faq: [
-      { question: "Quants escons té el Parlament de Catalunya?", answer: "135, escollits a les quatre províncies." },
+      { question: "Quants escons té el Parlament de Catalunya?", answer: "135, escollits a les quatre províncies: Barcelona 85, Tarragona 18, Girona 17 i Lleida 15." },
+      { question: "Quina participació hi va haver a les eleccions catalanes del 2024?", answer: "El 55,3 %: 3.183.137 votants d'un cens de 5.754.952, segons les dades de la Generalitat. El 2021 va ser el 51,3 % i el 2017, el 79,1 %." },
       { question: "Quan van ser les últimes eleccions catalanes?", answer: "El 12 de maig de 2024." },
       { question: "Quan són les properes eleccions catalanes?", answer: "No n'hi ha cap de convocada. La legislatura dura quatre anys des del maig del 2024, llevat d'avançament electoral." },
     ],
@@ -273,7 +326,9 @@ export const PARLIAMENT_RESULTS: B2Article = {
   categoryKey: "public-services",
   sources: [
     ...DATA_SOURCES,
-    { name: "Estatut d'Autonomia de Catalunya (arts. 56 i 66)", url: "https://www.boe.es/buscar/act.php?id=BOE-A-2006-13087", publisher: "Boletín Oficial del Estado" },
+    { name: "Estatut d'Autonomia de Catalunya (arts. 56 i 66, disposició transitòria segona)", url: "https://www.boe.es/buscar/act.php?id=BOE-A-2006-13087", publisher: "Boletín Oficial del Estado" },
+    { name: "Estatut d'Autonomia de Catalunya de 1979 (disposició transitòria quarta)", url: "https://www.boe.es/buscar/act.php?id=BOE-A-1979-30178", publisher: "Boletín Oficial del Estado" },
+    { name: "Repartiment d'escons: llindar electoral i Llei d'Hondt", url: "https://eleccions.gencat.cat/ca/informacio-electoral/preguntes-frequents/el-repartiment-descons-llindar-electoral-i-llei-dhondt", publisher: "Generalitat de Catalunya" },
   ],
   heroKey: "parlament-sala-de-plens",
   heroAlt: {
@@ -297,7 +352,7 @@ export const PARLIAMENT_RESULTS: B2Article = {
     es: "El Palacio del Parlament, en el parque de la Ciutadella.",
     en: "The Parliament building in the Parc de la Ciutadella.",
   },
-  verifiedAt: VERIFIED,
+  verifiedAt: PARLIAMENT_VERIFIED,
   publishedAt: "2026-10-12T23:00:00+02:00",
   editions: Object.fromEntries(
     (["ca", "es", "en"] as Locale[]).map((locale) => [
