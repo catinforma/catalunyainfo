@@ -190,7 +190,7 @@ const WORDS: Record<Locale, Words> = {
     bulletin: (province) => `${province} provincial gazette (BOP)`,
     intro: (place, n, s, t, bulletin) =>
       `${place} has ${plural(n, "polling place", "polling places")} for the general election of 29 November 2026, with ${plural(s, "electoral section", "electoral sections")} and ${plural(t, "voting table (mesa)", "voting tables (mesas)")}, according to the official list the Spanish Statistics Institute's electoral census office published in the ${bulletin}. For each place the list shows the sections and tables that vote there.`,
-    find: `Your polling place and table are those of your section: they are on your census card (tarjeta censal) and in the [INE's official polling place and table lookup](${INE_MESA_URL}, in Spanish). If they differ from this list, go by the card and the INE: the census office can publish changes after this list.`,
+    find: `Your polling place and table are those of your section: they are on your census card (tarjeta censal) and in the [INE's official polling place and table lookup](${INE_MESA_URL}) (in Spanish). If they differ from this list, go by the card and the INE: the census office can publish changes after this list.`,
     district: (d) => `District ${d}`,
     sectionLine: (section, tables) => `section ${section}: ${tables}`,
     tableLine: (letter, from, to) => (letter === "U" ? `single table (surnames ${from}-${to})` : `table ${letter} (surnames ${from}-${to})`),

@@ -36,6 +36,13 @@ test("an article with no lead image is refused", () => {
   );
 });
 
+test("an article without a photo passes only with a written reason", () => {
+  assert.doesNotThrow(() => assertHasPhoto({ entryKey: "x", images: [], noPhotoReason: "no licensed photo of this city" }));
+  assert.throws(() => assertHasPhoto({ entryKey: "x", images: [], noPhotoReason: "  " }), /at least one photo/);
+  // A reason never excuses a hero key that points nowhere.
+  assert.throws(() => assertHasPhoto({ entryKey: "x", heroKey: "a", images: [], noPhotoReason: "r" }), /at least one photo/);
+});
+
 test("an article whose lead image is among its images is accepted", () => {
   assert.doesNotThrow(() => assertHasPhoto({ entryKey: "x", heroKey: "a", images: [image("a")] }));
 });

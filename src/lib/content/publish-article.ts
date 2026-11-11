@@ -63,6 +63,13 @@ export interface ArticleSpec {
   isFeatured?: boolean;
   /** Which image, by key, becomes the lead image. */
   heroKey?: string;
+  /**
+   * Why this article has no lead photograph, when no licensed file depicts its
+   * subject (11 Nov 2026: the 11N city pages outside Madrid, which showed a
+   * Madrid march). Its preview then falls back to the site's social card. The
+   * only way past the house rule: the reason has to be written down.
+   */
+  noPhotoReason?: string;
   images?: ImageSpec[];
   sources?: SourceSpec[];
   publishedAt: Date;
@@ -130,7 +137,8 @@ export async function upsertImages(images: ImageSpec[]): Promise<Map<string, str
  * hero key is missing from the image manifest used to publish silently without
  * one, which is exactly the failure this exists to stop.
  */
-export function assertHasPhoto(spec: Pick<ArticleSpec, "entryKey" | "heroKey" | "images">): void {
+export function assertHasPhoto(spec: Pick<ArticleSpec, "entryKey" | "heroKey" | "images" | "noPhotoReason">): void {
+  if (!spec.heroKey && spec.noPhotoReason?.trim()) return;
   const keys = new Set((spec.images ?? []).map((image) => image.key));
   if (!spec.heroKey || !keys.has(spec.heroKey)) {
     throw new Error(

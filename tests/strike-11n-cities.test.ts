@@ -10,6 +10,7 @@ import { CITIES, STATE_SERVICES, STRIKE_11N_CITIES_AS_OF } from "../src/lib/cont
 import type { StateService, Strike11nCity } from "../src/lib/content/batch02/strike-11n-cities-model.ts";
 import {
   CITY_HERO,
+  CITY_HERO_CITIES,
   STRIKE_11N_CITY_ARTICLES,
   buildCityBody,
   cityDescription,
@@ -204,9 +205,13 @@ test("photo: one Commons file for every city, in the manifest with its licence a
   assert.equal(image.credit, "Israel Hergón");
   assert.match(image.creditUrl ?? "", /^https:\/\/commons\.wikimedia\.org\/wiki\/File:/);
   for (const article of STRIKE_11N_CITY_ARTICLES) {
-    assert.equal(article.heroKey, CITY_HERO.key);
+    const madrid = article.entryKey.endsWith("-madrid");
+    // The Madrid photograph only on the Madrid page; elsewhere no photo (and a written reason), never a wrong city.
+    assert.equal(article.heroKey, madrid ? CITY_HERO.key : undefined, article.entryKey);
+    assert.equal(Boolean(article.noPhotoReason), !madrid, article.entryKey);
     assert.ok(!article.editions.es.blocks.some((b) => b.type === "image" || b.type === "gallery"));
   }
+  assert.deepEqual([...CITY_HERO_CITIES], ["madrid"]);
 });
 
 /* -------------------------------------------------------------------------- */

@@ -118,6 +118,7 @@ async function publishEditions(article: B2ArticleBase, editions: [Locale, B2Edit
     categoryKey: article.categoryKey,
     isFeatured: false,
     heroKey: images.length > 0 ? article.heroKey : undefined,
+    noPhotoReason: article.noPhotoReason,
     images,
     sources: article.sources.map((source) => ({
       name: source.name,
