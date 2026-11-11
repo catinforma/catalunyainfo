@@ -333,7 +333,9 @@ export const EXPIRED_STYLE_ID = "ci-alerts-expired";
  * every alert's end, decides against the reader's clock, and writes one
  * `<style>` in <head> that hides each ended line and, when no line is left,
  * the whole strip (`:has`; where it is unsupported the empty strip has no
- * height anyway). It runs before the strip is parsed, so nothing is painted
+ * height anyway). On phones (< 768 px) it also keeps only the first line that
+ * has not ended (12 Nov 2026: three lines took ~210 px above the title); the
+ * full list stays on wider screens, and without the script every line shows. It runs before the strip is parsed, so nothing is painted
  * and then removed; the style survives client-side navigation; and it re-runs
  * at the next end for a tab left open. A constant built from this module, no
  * stored content: CSP and tests/security.test.ts reasoning unchanged.
@@ -344,14 +346,14 @@ export function newsAlertsExpiryScript(alerts: readonly NewsAlert[] = NEWS_ALERT
     "(function(){",
     `var a=${schedule},d=document;`,
     "function run(){",
-    "var n=Date.now(),off=[],next=0;",
+    "var n=Date.now(),off=[],on=[],next=0;",
     "for(var i=0;i<a.length;i++){",
     "if(n>=a[i][1])off.push('[data-alert=\"'+a[i][0]+'\"]');",
-    "else if(!next||a[i][1]<next)next=a[i][1];",
+    "else{on.push('[data-alert=\"'+a[i][0]+'\"]');if(!next||a[i][1]<next)next=a[i][1];}",
     "}",
     `var s=d.getElementById("${EXPIRED_STYLE_ID}");`,
     `if(!s){s=d.createElement("style");s.id="${EXPIRED_STYLE_ID}";d.head.appendChild(s);}`,
-    "s.textContent=off.length?off.join(',')+'{display:none}.ci-alerts:not(:has(li'+off.map(function(x){return':not('+x+')';}).join('')+')){display:none}':'';",
+    "s.textContent=(off.length?off.join(',')+'{display:none}.ci-alerts:not(:has(li'+off.map(function(x){return':not('+x+')';}).join('')+')){display:none}':'')+(on.length?'@media (max-width:767.98px){.ci-alerts li:is('+on.join(',')+')~li{display:none}}':'');",
     "if(next&&next-n<2147483647)setTimeout(run,next-n+1000);",
     "}",
     "run();",

@@ -275,14 +275,20 @@ function runExpiry(instant: string) {
 
 test("the expiry script hides nothing before the first end and wakes up at it", () => {
   const { css, timers } = runExpiry("2026-11-05T12:00:00+01:00");
-  assert.equal(css, "");
+  // Nothing hidden; only the phone rule (first open line only) is written.
+  assert.equal((css ?? "").split("@media")[0], "");
+  assert.match(css ?? "", /^@media \(max-width:767\.98px\)\{\.ci-alerts li:is\(\[data-alert="/);
   assert.deepEqual(timers, [at("2026-11-11T00:00:00+01:00") - at("2026-11-05T12:00:00+01:00") + 1000]);
 });
 
 test("the expiry script hides ended lines, and the strip once none is left", () => {
   const after11 = runExpiry("2026-11-12T08:00:00+01:00");
   assert.match(after11.css ?? "", /^\[data-alert="strike-11n"\],\[data-alert="strike-renfe"\]\{display:none\}/);
-  assert.doesNotMatch(after11.css ?? "", /\[data-alert="strike-rail-17n"\]/);
+  const [hidden11 = "", phones11 = ""] = (after11.css ?? "").split("@media");
+  assert.doesNotMatch(hidden11, /\[data-alert="strike-rail-17n"\]/);
+  // On phones the first line still open (rail 17/19 Nov) is the one kept: ended lines are not in the rule.
+  assert.match(phones11, /\[data-alert="strike-rail-17n"\]/);
+  assert.doesNotMatch(phones11, /\[data-alert="strike-11n"\]/);
   assert.match(after11.css ?? "", /\.ci-alerts:not\(:has\(li:not\(\[data-alert="strike-11n"\]\):not\(\[data-alert="strike-renfe"\]\)\)\)\{display:none\}/);
   assert.equal(after11.timers.length, 1);
 
@@ -311,4 +317,9 @@ test("the strip is under every SiteHeader, the script runs before page content, 
   const component = read("../src/components/NewsAlerts.tsx");
   assert.doesNotMatch(component, /^["']use client["']/m);
   assert.doesNotMatch(read("../src/lib/alerts/news-alerts.ts"), /^["']use client["']/m);
+});
+
+test("expiry script: on phones only the first line that has not ended shows", () => {
+  const script = newsAlertsExpiryScript();
+  assert.match(script, /@media \(max-width:767\.98px\)\{\.ci-alerts li:is\('\+on\.join\(','\)\+'\)~li\{display:none\}\}/);
 });
