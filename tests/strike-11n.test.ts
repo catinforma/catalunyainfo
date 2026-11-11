@@ -289,11 +289,12 @@ test("known answers: who sets minimum services, when they came out in 2024, wher
   }
 });
 
-test("known answers read on 30 October 2026: SEMAF's Renfe strikes either side of 11N and the doctors' strike already on", () => {
+test("known answers read on 30 October and 11 November 2026: SEMAF's Renfe strikes around 11N (the 12th withdrawn) and the doctors' strike already on", () => {
+  // SEMAF, 10 Nov 2026: "sustituir el paro previsto para el día 12 de noviembre por una nueva convocatoria de huelga el día 23 de noviembre".
   const lead: Record<Locale, RegExp> = {
-    ca: /Compte també amb el 10 i el 12 de novembre: el sindicat de maquinistes SEMAF hi ha convocat vaga al Grup Renfe \(aturada total el 10, aturades parcials el 12\)/,
-    es: /Ojo también al 10 y al 12 de noviembre: el sindicato de maquinistas SEMAF ha convocado huelga en el Grupo Renfe \(paro total el 10, paros parciales el 12\)/,
-    en: /Watch 10 and 12 November too: the train drivers' union SEMAF has called strikes at the Renfe Group \(a full stoppage on the 10th, partial stoppages on the 12th\)/,
+    ca: /El dijous 12 de novembre no hi ha vaga a Renfe: el sindicat de maquinistes SEMAF va desconvocar les aturades parcials d'aquell dia i les ha substituïdes per una nova vaga el dilluns 23 de novembre/,
+    es: /El jueves 12 de noviembre no hay huelga en Renfe: el sindicato de maquinistas SEMAF desconvocó los paros parciales de ese día y los ha sustituido por una nueva huelga el lunes 23 de noviembre/,
+    en: /No Renfe strike on Thursday 12 November: the train drivers' union SEMAF withdrew that day's partial stoppages and replaced them with a new strike on Monday 23 November/,
   };
   const doctors: Record<Locale, RegExp> = {
     ca: /Metges de Catalunya fa des del 28 d'octubre de 2026 una vaga indefinida/,
@@ -302,8 +303,10 @@ test("known answers read on 30 October 2026: SEMAF's Renfe strikes either side o
   };
   assert.equal(weekdayIndex("2026-11-10"), 2); // Tuesday
   assert.equal(weekdayIndex("2026-11-12"), 4); // Thursday
+  assert.equal(weekdayIndex("2026-11-23"), 1); // Monday
   for (const locale of LOCALES) {
     assert.match(text(STRIKE_11N.editions[locale].blocks.slice(0, 1)), lead[locale], locale);
+    assert.ok(json(locale).includes(`](${STRIKE_11N_URLS.semaf23})`), `${locale}: no link to SEMAF's notice of 10 Nov`);
     const all = body(locale);
     assert.match(all, doctors[locale], locale);
     const blocks = json(locale);
@@ -314,7 +317,7 @@ test("known answers read on 30 October 2026: SEMAF's Renfe strikes either side o
   // Once the strike is past, the lead and the health section stop speaking of what is coming.
   for (const locale of LOCALES) {
     const after = text(buildStrike11nBody(locale, "2026-11-12", filled()));
-    assert.doesNotMatch(after, /Compte també|Ojo también|Watch 10 and 12 November/, locale);
+    assert.doesNotMatch(after, /Compte també|Ojo también|Watch 10 and 12 November|no hi ha vaga a Renfe|no hay huelga en Renfe|No Renfe strike/, locale);
     assert.doesNotMatch(after, /ja són en vaga|ya están en huelga|already on strike/, locale);
   }
   assert.ok(STRIKE_11N.sources.some((s) => new URL(s.url).host === "www.semaf.org"));

@@ -37,6 +37,14 @@ import { GENERAL_ELECTION_DAY } from "@/lib/programmatic/elections/today";
  * to `end`), so it names the day ("el dimecres 11 de novembre") and never
  * says "today" or "tomorrow"; short and calm, no exclamation marks.
  *
+ * 11 Nov 2026 (docs/SEO_EXPERIMENTS.md, "After 11N: next strikes"): from
+ * the day after the general strike the strip points at what comes next, each
+ * line until the end of its last day: the rail strike of 17 and 19 Nov, then
+ * SEMAF's of 23 Nov (both to the Renfe guide, which follows the next rail
+ * strike, so never two lines to it at once), the education strike of 26 Nov
+ * and the 29 Nov election. The same lines, as of a page's own date, make the
+ * "upcoming strikes and dates" block of the 11N pages (`nextDateLinks`).
+ *
  * HOW TO UPDATE:
  *  - A strike called off: remove its entry from STRIKES or set the alert's
  *    `end` by hand; a day called off: remove it from the entry's `dates`.
@@ -67,12 +75,18 @@ export interface AlertLine {
 /** The day the strip went live: the two strike lines show from then. */
 export const ALERTS_LIVE_FROM = "2026-11-04";
 
-/** The 29N line takes over the strike lines' place the day after the Renfe strike. */
-export const ELECTION_ALERT_FROM = "2026-11-13";
+/** The day after the general strike: the lines about what comes next start then. */
+export const NEXT_ALERTS_FROM = "2026-11-12";
+
+/** The 29N line is one of them (13 Nov until 11 Nov 2026). */
+export const ELECTION_ALERT_FROM = NEXT_ALERTS_FROM;
 
 /** The entries in strikes.ts the strike lines are built from. */
 export const STRIKE_11N_ID = "vaga-general-2026-11-11";
 export const STRIKE_RENFE_ID = "vaga-renfe-2026-11-10";
+export const STRIKE_RAIL_ID = "vaga-ferroviaria-2026-11-17";
+export const STRIKE_RENFE_23_ID = "vaga-renfe-2026-11-23";
+export const STRIKE_EDUCATION_ID = "vaga-educacio-2026-11-26";
 
 export const NEWS_ALERTS_LABEL: Record<Locale, string> = {
   ca: "Avisos d'actualitat",
@@ -158,6 +172,7 @@ function strikeAlert(
   alertId: string,
   target: B2Key,
   text: (days: Record<Locale, string>) => Record<Locale, string>,
+  from: string = madridMidnight(ALERTS_LIVE_FROM),
 ): NewsAlert[] {
   const strike = strikes.find((s) => s.id === id);
   if (!strike || strike.indefinite || strike.dates.length === 0) return [];
@@ -166,7 +181,27 @@ function strikeAlert(
     es: daysPhrase(strike.dates, "es"),
     en: daysPhrase(strike.dates, "en"),
   };
-  return [{ id: alertId, start: madridMidnight(ALERTS_LIVE_FROM), end: endOfMadridDay(lastDay(strike)), target, text: text(days) }];
+  const end = endOfMadridDay(lastDay(strike));
+  // A line that would end before it starts (its days already past) is dropped.
+  if (Date.parse(end) <= Date.parse(from)) return [];
+  return [{ id: alertId, start: from, end, target, text: text(days) }];
+}
+
+/** The later of two ISO instants. */
+const later = (a: string, b: string) => (Date.parse(a) >= Date.parse(b) ? a : b);
+
+/**
+ * Lines that link the same guide follow one another: each starts when the
+ * one before it ends, so the strip never carries two links to one page.
+ */
+function chained(lines: NewsAlert[]): NewsAlert[] {
+  const out: NewsAlert[] = [];
+  for (const line of lines) {
+    const before = out.filter((other) => other.target === line.target).at(-1);
+    const start = before ? later(line.start, before.end) : line.start;
+    if (Date.parse(start) < Date.parse(line.end)) out.push({ ...line, start });
+  }
+  return out;
 }
 
 /** Built from the source modules; the parameters are for the tests. */
@@ -174,7 +209,8 @@ export function buildNewsAlerts(
   strikes: readonly Strike[] = STRIKES,
   electionDay: string = GENERAL_ELECTION_DAY,
 ): NewsAlert[] {
-  return [
+  const next = madridMidnight(NEXT_ALERTS_FROM);
+  return chained([
     ...strikeAlert(strikes, STRIKE_11N_ID, "strike-11n", "strike11n", (d) => ({
       ca: `Vaga general ${d.ca}: què funciona i serveis mínims`,
       es: `Huelga general ${d.es}: qué funciona y servicios mínimos`,
@@ -185,6 +221,42 @@ export function buildNewsAlerts(
       es: `Huelga de Renfe ${d.es}: Rodalies y servicios mínimos`,
       en: `Renfe strike ${d.en}: Rodalies and minimum services`,
     })),
+    ...strikeAlert(
+      strikes,
+      STRIKE_RAIL_ID,
+      "strike-rail-17n",
+      "strikeRenfe",
+      (d) => ({
+        ca: `Vaga de trens ${d.ca}: Renfe, Adif i serveis mínims`,
+        es: `Huelga de trenes ${d.es}: Renfe, Adif y servicios mínimos`,
+        en: `Rail strike ${d.en}: Renfe, Adif and minimum services`,
+      }),
+      next,
+    ),
+    ...strikeAlert(
+      strikes,
+      STRIKE_RENFE_23_ID,
+      "strike-renfe-23n",
+      "strikeRenfe",
+      (d) => ({
+        ca: `Vaga de maquinistes ${d.ca}: Renfe, Rodalies i serveis mínims`,
+        es: `Huelga de maquinistas ${d.es}: Renfe, Rodalies y servicios mínimos`,
+        en: `Train drivers' strike ${d.en}: Renfe, Rodalies and minimum services`,
+      }),
+      next,
+    ),
+    ...strikeAlert(
+      strikes,
+      STRIKE_EDUCATION_ID,
+      "strike-education-26n",
+      "strikeEducation",
+      (d) => ({
+        ca: `Vaga a l'educació a Catalunya ${d.ca}: hi ha escola?`,
+        es: `Huelga educativa en Cataluña ${d.es}: ¿hay colegio?`,
+        en: `Catalonia education strike ${d.en}: is there school?`,
+      }),
+      next,
+    ),
     {
       id: "election-29n",
       start: madridMidnight(ELECTION_ALERT_FROM),
@@ -196,7 +268,28 @@ export function buildNewsAlerts(
         en: `General election ${daysPhrase([electionDay], "en")}: how and where to vote`,
       },
     },
-  ];
+  ]);
+}
+
+/** The lines about what comes after 11N, in the order they run. */
+export const NEXT_ALERT_IDS = ["strike-rail-17n", "strike-renfe-23n", "strike-education-26n", "election-29n"] as const;
+
+/**
+ * The "upcoming strikes and dates" links of the 11N pages (11 Nov 2026): the
+ * strip's lines about what comes next, as markdown links in the page's
+ * language, each while its last day is not past on the page's own as-of date
+ * (pages are deterministic: no clock), one per guide (the first still to come).
+ */
+export function nextDateLinks(locale: Locale, asOf: string, alerts: readonly NewsAlert[] = NEWS_ALERTS): string[] {
+  const from = Date.parse(madridMidnight(asOf));
+  const seen = new Set<B2Key>();
+  const links: string[] = [];
+  for (const alert of alerts) {
+    if (!(NEXT_ALERT_IDS as readonly string[]).includes(alert.id) || Date.parse(alert.end) <= from || seen.has(alert.target)) continue;
+    seen.add(alert.target);
+    links.push(`[${alert.text[locale]}](${alertHref(alert, locale)})`);
+  }
+  return links;
 }
 
 export const NEWS_ALERTS: readonly NewsAlert[] = buildNewsAlerts();

@@ -5,7 +5,7 @@ import { test } from "node:test";
 import { bodySchema, bodyToPlainText, wordCount, type Block } from "../src/lib/content/blocks.ts";
 import { SIBLING_PATHS } from "../src/lib/content/batch02/december-bridge.ts";
 import { B2_PATHS } from "../src/lib/content/batch02/shared.ts";
-import { STRIKE_11N, STRIKE_11N_META } from "../src/lib/content/batch02/strike-11n.ts";
+import { NEXT_DATES_HEADING, NEXT_DATES_ID, STRIKE_11N, STRIKE_11N_META, buildStrike11nBody } from "../src/lib/content/batch02/strike-11n.ts";
 import { CITIES, STATE_SERVICES, STRIKE_11N_CITIES_AS_OF } from "../src/lib/content/batch02/strike-11n-cities-data.ts";
 import type { StateService, Strike11nCity } from "../src/lib/content/batch02/strike-11n-cities-model.ts";
 import {
@@ -22,7 +22,7 @@ import {
 } from "../src/lib/content/batch02/strike-11n-cities.ts";
 import { STRIKE_11N_CITY_REFS, strike11nCityHref } from "../src/lib/content/batch02/strike-11n-city-paths.ts";
 import { CITY_TR, STATE_TR } from "../src/lib/content/batch02/strike-11n-cities-i18n/index.ts";
-import { STRIKE_11N_SPAIN, STRIKE_11N_SPAIN_PATHS } from "../src/lib/content/batch02/strike-11n-spain.ts";
+import { STRIKE_11N_SPAIN, STRIKE_11N_SPAIN_PATHS, buildSpainBody } from "../src/lib/content/batch02/strike-11n-spain.ts";
 import { STRIKES_GUIDE, madridDate } from "../src/lib/content/batch02/strikes.ts";
 import { ARTICLE_PATHS } from "../src/lib/content/features/shared.ts";
 import { weekdayIndex } from "../src/lib/content/holidays/calendar.ts";
@@ -646,4 +646,47 @@ test("ca and en: every weekday printed next to a date matches that date", () => 
     }
   }
   assert.ok(checked >= CITIES.length * 2, `only ${checked} weekday mentions checked`);
+});
+
+/* -------------------------------------------------------------------------- */
+/* What comes next (11 Nov 2026)                                              */
+/* -------------------------------------------------------------------------- */
+
+test("upcoming strikes and dates: the 11N page, every city and the Spain page link the next events once, in their own language, before, on and after the day", () => {
+  const block = (blocks: Block[], locale: (typeof LOCALES)[number]) => {
+    const at = blocks.findIndex((b) => b.type === "heading" && (b as { id?: string }).id === NEXT_DATES_ID[locale]);
+    assert.ok(at > 0, `${locale}: no upcoming block`);
+    assert.equal((blocks[at] as { text?: string }).text, NEXT_DATES_HEADING[locale]);
+    assert.equal(blocks.filter((b) => b.type === "heading" && (b as { id?: string }).id === NEXT_DATES_ID[locale]).length, 1, locale);
+    // Under the answer: before the first section about 11 November itself.
+    const firstH2 = blocks.findIndex((b) => b.type === "heading" && (b as { level?: number }).level === 2);
+    assert.equal(at, firstH2, `${locale}: the block is the first section`);
+    const list = blocks[at + 1] as { type: string; items: string[] };
+    assert.equal(list.type, "list", locale);
+    return list.items.join(" ");
+  };
+  const expectLinks = (items: string, locale: (typeof LOCALES)[number], hub: "strikes" | "strikesSpain", where: string) => {
+    for (const key of ["strikeRenfe", "strikeEducation", "voting", hub] as const) {
+      const target = `](/${locale}/${B2_PATHS[key][locale]}/)`;
+      assert.equal(items.split(target).length - 1, 1, `${where}/${locale}: ${key} once`);
+    }
+    // Every link in the block stays in the page's language.
+    for (const match of items.matchAll(/\]\((\/[^)]+)\)/g)) assert.ok(match[1]!.startsWith(`/${locale}/`), `${where}/${locale}: ${match[1]}`);
+    // The days, never "today" or "tomorrow": the same words in every state.
+    assert.doesNotMatch(items.replace(/\]\([^)]+\)/g, "]"), /\b(avui|demà|hoy|mañana|today|tomorrow)\b/i, `${where}/${locale}`);
+  };
+  for (const locale of LOCALES) {
+    const seen = new Set<string>();
+    for (const asOf of ["2026-11-10", "2026-11-11", "2026-11-12"]) {
+      const main = block(buildStrike11nBody(locale, asOf), locale);
+      expectLinks(main, locale, "strikes", `11N ${asOf}`);
+      seen.add(main);
+      expectLinks(block(buildSpainBody(asOf, locale), locale), locale, "strikesSpain", `spain ${asOf}`);
+      for (const city of CITIES) expectLinks(block(buildCityBody(city, asOf, STATE_SERVICES, locale), locale), locale, "strikesSpain", `${city.key} ${asOf}`);
+    }
+    assert.equal(seen.size, 1, `${locale}: the block reads the same in the upcoming, day and past states`);
+    // The published editions carry it too.
+    block(STRIKE_11N.editions[locale].blocks, locale);
+    block(STRIKE_11N_SPAIN.editions[locale]?.blocks ?? [], locale);
+  }
 });

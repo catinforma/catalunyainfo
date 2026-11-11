@@ -175,7 +175,7 @@ import { strike11nCityLinks } from "./strike-11n-city-paths";
  *  - `affects` drives the "what runs" table at the top: list every service a
  *    traveller, patient or family would notice.
  *  - Strike guides (4 Nov 2026): an entry with `guide` also has a page of its
- *    own (strike-guides.ts: Renfe 10/12 Nov, education 26 Nov), built from this
+ *    own (strike-guides.ts: Renfe, education 26 Nov), built from this
  *    entry only, titles and dates included. Edit the entry, never the guide;
  *    `?only=strikes` republishes the hub and every guide. If a day is called
  *    off, remove it from `dates` (the guide's title follows); if the whole
@@ -187,8 +187,18 @@ import { strike11nCityLinks } from "./strike-11n-city-paths";
  * The day the list was last brought up to date. Upcoming and past are decided
  * against this date, never against the clock: the HTML must be the same
  * whichever day it is rendered.
+ *
+ * 11 Nov 2026: re-read on the morning of the general strike: SEMAF (12 Nov
+ * called off, new strike on 23 Nov, 17 Nov kept), SCF (Adif 17 and 19 Nov),
+ * Renfe's service notices (12 Nov "programación habitual"), the Ministry of
+ * Transport's rail list (newest: the 6 Nov resolution for 10/12 Nov and the
+ * 11N ones; none for 17, 19 or 23 Nov), the Departament d'Empresa i Treball's
+ * list (newest entry 11 Nov, meat industry; nothing for the rail strikes or
+ * education on 26 Nov), USTEC·STEs (26N still announced, no registered call
+ * or minimum services) and Metges de Catalunya (indefinite strike still on,
+ * newest notice 10 Nov).
  */
-export const STRIKES_AS_OF = "2026-11-05";
+export const STRIKES_AS_OF = "2026-11-11";
 
 /**
  * The day the facts on the page were last read on the sources. Bringing the
@@ -276,6 +286,8 @@ export const STRIKE_URLS = {
   ordreRenfe1012: "https://tauler.seu-e.cat/detall?idEns=1&idEdicte=657097",
   ordre11n: "https://tauler.seu-e.cat/detall?idEns=1&idEdicte=657102",
   semafCuerpo: "https://www.semaf.org/informaciones/encuentro-con-el-ministro-carlos-cuerpo-ni-una-tragedia-mas/",
+  // SEMAF, 10 Nov 2026 (read 11 Nov): the 12 Nov stoppages replaced by a new strike on 23 Nov; 17 Nov kept "en todo el sector".
+  semaf23: "https://www.semaf.org/informaciones/primer-real-decreto-ley-aprobado-semaf-mueve-el-paro-del-12-al-23-de-noviembre-para-facilitar-la-negociacion-sin-levantar-la-presion/",
   semafOuigo: "https://www.semaf.org/informaciones/ouigo-firma-todas-reivindicaciones/",
   alferro80: "https://www.alferro.org/comunicado/comunicado-80-2026-modificacion-de-las-fechas-de-huelga-de-noviembre-de-2026/",
   scfAdif: "https://www.scf.es/com33/",
@@ -407,21 +419,21 @@ export const STRIKES: Strike[] = [
       ca: [
         "**Convocatòria:** el sindicat Metges de Catalunya (MC), que la va registrar el 15 de setembre de 2026. Els sindicats mèdics de tot l'Estat havien acordat començar una vaga indefinida el 28 d'octubre, i MC la fa a Catalunya.",
         "**Des de quan:** des de les 8.00 h del dimecres 28 d'octubre de 2026, sense data de final. En paraules del secretari general de MC, Xavier Lleonart, «té data d'inici, però no de final».",
-        `**On és:** el 5 de novembre de 2026 la vaga continuava. Metges de Catalunya no havia anunciat cap acord amb el Departament de Salut ni cap data de final a ${link(U.metgesNews, "les seves notícies")}.`,
+        `**On és:** l'11 de novembre de 2026 la vaga continuava. Metges de Catalunya no havia anunciat cap acord amb el Departament de Salut ni cap data de final a ${link(U.metgesNews, "les seves notícies")}.`,
         "**Qui hi està cridat:** el personal facultatiu (metges i altres facultatius, també els residents en formació) dels hospitals, els CAP i la resta de centres de la xarxa sanitària pública SISCAT i de les entitats adscrites al CatSalut o al Departament de Salut.",
         `**Per què:** MC reclama un conveni propi per als metges i que el Departament de Salut negociï amb el sindicat; diu que només hi ha «dues sortides possibles» per a la vaga, una negociació «real i efectiva» amb MC o unes eleccions, segons ${link(U.metgesStrike, "el seu comunicat del 28 d'octubre")}.`,
       ],
       es: [
         "**Convocatoria:** el sindicato Metges de Catalunya (MC), que la registró el 15 de septiembre de 2026. Los sindicatos médicos de toda España habían acordado empezar una huelga indefinida el 28 de octubre, y MC la hace en Cataluña.",
         "**Desde cuándo:** desde las 8.00 h del miércoles 28 de octubre de 2026, sin fecha de final. En palabras del secretario general de MC, Xavier Lleonart, «té data d'inici, però no de final» (tiene fecha de inicio, pero no de final).",
-        `**Cómo está:** el 5 de noviembre de 2026 la huelga seguía. Metges de Catalunya no había anunciado ningún acuerdo con el Departament de Salut ni ninguna fecha de final en ${link(U.metgesNews, "sus noticias")}.`,
+        `**Cómo está:** el 11 de noviembre de 2026 la huelga seguía. Metges de Catalunya no había anunciado ningún acuerdo con el Departament de Salut ni ninguna fecha de final en ${link(U.metgesNews, "sus noticias")}.`,
         "**A quién llama:** al personal facultativo (médicos y otros facultativos, también los residentes en formación) de los hospitales, los CAP y el resto de centros de la red sanitaria pública SISCAT y de las entidades adscritas al CatSalut o al Departament de Salut.",
         `**Por qué:** MC reclama un convenio propio para los médicos y que el Departament de Salut negocie con el sindicato; dice que solo hay dos salidas posibles para la huelga, una negociación real y efectiva con MC o unas elecciones, según ${link(U.metgesStrike, "su comunicado del 28 de octubre")}.`,
       ],
       en: [
         "**Called by:** the doctors' union Metges de Catalunya (MC), which registered it on 15 September 2026. Doctors' unions across Spain had agreed to start an indefinite strike on 28 October, and MC is holding it in Catalonia.",
         "**Since when:** 08:00 on Wednesday 28 October 2026, with no end date. In the words of MC's general secretary, Xavier Lleonart, it \"té data d'inici, però no de final\" (has a start date but no end date).",
-        `**Where it stands:** on 5 November 2026 the strike was still on. Metges de Catalunya had announced no agreement with the Health Department and no end date in ${link(U.metgesNews, "its news")}.`,
+        `**Where it stands:** on 11 November 2026 the strike was still on. Metges de Catalunya had announced no agreement with the Health Department and no end date in ${link(U.metgesNews, "its news")}.`,
         "**Who is called out:** doctors and other medical graduates (residents in training included) at hospitals, primary care centres (CAP) and the other centres of Catalonia's public health network SISCAT and the bodies attached to CatSalut or the Health Department.",
         `**Why:** MC wants a collective agreement of doctors' own and for the Health Department to negotiate with the union; it says there are only two ways out of the strike, real and effective negotiation with MC or elections, according to ${link(U.metgesStrike, "its statement of 28 October")}.`,
       ],
@@ -532,7 +544,8 @@ export const STRIKES: Strike[] = [
   },
   {
     id: "vaga-renfe-2026-11-10",
-    dates: ["2026-11-10", "2026-11-12"],
+    // 12 Nov called off by SEMAF on 10 Nov (semaf23): replaced by the 23 Nov entry below.
+    dates: ["2026-11-10"],
     scope: "rail",
     affects: ["rodalies", "longDistance"],
     title: {
@@ -541,39 +554,42 @@ export const STRIKES: Strike[] = [
       en: "Renfe train drivers' strike (SEMAF)",
     },
     short: {
-      ca: "vaga de maquinistes de Renfe, que afecta Rodalies: aturada total el 10 i aturades parcials el 12",
-      es: "huelga de maquinistas de Renfe, que afecta a Rodalies: paro total el 10 y paros parciales el 12",
-      en: "Renfe train drivers' strike, which affects Rodalies: a full stoppage on the 10th, partial stoppages on the 12th",
+      ca: "vaga de maquinistes de Renfe, que afecta Rodalies: aturada total el 10 (SEMAF va desconvocar les aturades del 12)",
+      es: "huelga de maquinistas de Renfe, que afecta a Rodalies: paro total el 10 (SEMAF desconvocó los paros del 12)",
+      en: "Renfe train drivers' strike, which affects Rodalies: a full stoppage on the 10th (SEMAF withdrew the 12th's stoppages)",
     },
     label: {
-      ca: "Renfe el 10 i el 12 de novembre",
-      es: "Renfe el 10 y el 12 de noviembre",
-      en: "Renfe on 10 and 12 November",
+      ca: "Renfe el 10 de novembre",
+      es: "Renfe el 10 de noviembre",
+      en: "Renfe on 10 November",
     },
     facts: {
       ca: [
         `**Convocatòria:** el sindicat de maquinistes SEMAF, que la va anunciar el 29 d'octubre de 2026, el dia de la vaga anterior, en ${link(U.semaf1012, "el seu comunicat núm. 2026-51")}, i que el 2 de novembre la mantenia en ${link(U.semaf52, "el comunicat núm. 2026-52")}.`,
-        `**Dies:** el dimarts 10 de novembre, «paro total» (aturada total), de 0.01 a 23.59 h; el dijous 12 de novembre, «paros parciales a lo largo de la jornada» (aturades parcials), de 6.20 a 9.20 h, de 14.20 a 17.20 h i de 21.20 a 23.20 h, segons ${link(U.ordreRenfe1012, "l'ordre de serveis mínims del 5 de novembre")}.`,
+        `**Dia:** el dimarts 10 de novembre, «paro total» (aturada total), de 0.01 a 23.59 h, segons ${link(U.ordreRenfe1012, "l'ordre de serveis mínims del 5 de novembre")}.`,
+        `**El 12, desconvocada:** el 10 de novembre SEMAF va decidir «sustituir el paro previsto para el día 12 de noviembre por una nueva convocatoria de huelga el día 23 de noviembre», segons ${link(U.semaf23, "el seu comunicat")}, i Renfe avisa que el 12 «el servicio ferroviario se prestará conforme a la programación habitual».`,
         `**ALFERRO ja no:** aquest sindicat havia convocat vaga els mateixos dos dies, però el 4 de novembre la va substituir per una sola jornada el 17 de novembre, segons ${link(U.alferro80, "el seu comunicat 80/2026")}.`,
         `**Negociació:** SEMAF es va reunir el 5 de novembre amb el ministre de Transports, Carlos Cuerpo, sense acord, i el Ministeri l'ha tornat a convocar el divendres 6, segons ${link(U.semafCuerpo, "el comunicat de SEMAF")}.`,
         "**Qui hi està cridat:** el personal de conducció del Grup Renfe, segons SEMAF. El metro, els autobusos, el tramvia i FGC no formen part de la convocatòria.",
-        "**Entre els dos dies**, el dimecres 11 de novembre, hi ha la vaga general.",
+        "**L'endemà**, el dimecres 11 de novembre, hi ha la vaga general.",
       ],
       es: [
         `**Convocatoria:** el sindicato de maquinistas SEMAF, que la anunció el 29 de octubre de 2026, el día de la huelga anterior, en ${link(U.semaf1012, "su comunicado n.º 2026-51")}, y que el 2 de noviembre la mantenía en ${link(U.semaf52, "el comunicado n.º 2026-52")}.`,
-        `**Días:** el martes 10 de noviembre, «paro total», de 0.01 a 23.59 h; el jueves 12 de noviembre, «paros parciales a lo largo de la jornada», de 6.20 a 9.20 h, de 14.20 a 17.20 h y de 21.20 a 23.20 h, según ${link(U.ordreRenfe1012, "la orden de servicios mínimos del 5 de noviembre")}.`,
+        `**Día:** el martes 10 de noviembre, «paro total», de 0.01 a 23.59 h, según ${link(U.ordreRenfe1012, "la orden de servicios mínimos del 5 de noviembre")}.`,
+        `**El 12, desconvocada:** el 10 de noviembre SEMAF decidió «sustituir el paro previsto para el día 12 de noviembre por una nueva convocatoria de huelga el día 23 de noviembre», según ${link(U.semaf23, "su comunicado")}, y Renfe avisa de que el 12 «el servicio ferroviario se prestará conforme a la programación habitual».`,
         `**ALFERRO ya no:** este sindicato había convocado huelga los mismos dos días, pero el 4 de noviembre la sustituyó por una sola jornada el 17 de noviembre, según ${link(U.alferro80, "su comunicado 80/2026")}.`,
         `**Negociación:** SEMAF se reunió el 5 de noviembre con el ministro de Transportes, Carlos Cuerpo, sin acuerdo, y el Ministerio lo ha vuelto a convocar el viernes 6, según ${link(U.semafCuerpo, "el comunicado de SEMAF")}.`,
         "**A quién llama:** al personal de conducción del Grupo Renfe, según SEMAF. El metro, los autobuses, el tranvía y FGC no forman parte de la convocatoria.",
-        "**Entre los dos días**, el miércoles 11 de noviembre, está la huelga general.",
+        "**Al día siguiente**, el miércoles 11 de noviembre, está la huelga general.",
       ],
       en: [
         `**Called by:** the train drivers' union SEMAF, which announced it on 29 October 2026, the day of its previous strike, in ${link(U.semaf1012, "its notice no. 2026-51")}, and was still holding to it on 2 November in ${link(U.semaf52, "notice no. 2026-52")}.`,
-        `**Days:** Tuesday 10 November, a "paro total" (full stoppage), 00:01 to 23:59; Thursday 12 November, "paros parciales a lo largo de la jornada" (partial stoppages), 06:20 to 09:20, 14:20 to 17:20 and 21:20 to 23:20, according to ${link(U.ordreRenfe1012, "the minimum-services order of 5 November")}.`,
+        `**Day:** Tuesday 10 November, a "paro total" (full stoppage), 00:01 to 23:59, according to ${link(U.ordreRenfe1012, "the minimum-services order of 5 November")}.`,
+        `**The 12th, withdrawn:** on 10 November SEMAF decided to "sustituir el paro previsto para el día 12 de noviembre por una nueva convocatoria de huelga el día 23 de noviembre" (replace the 12 November stoppage with a new strike call on 23 November), according to ${link(U.semaf23, "its notice")}, and Renfe says that on the 12th "el servicio ferroviario se prestará conforme a la programación habitual" (trains will run to the usual timetable).`,
         `**Not ALFERRO any more:** this union had called a strike on the same two days, but on 4 November replaced it with a single day on 17 November, according to ${link(U.alferro80, "its notice 80/2026")}.`,
         `**Talks:** SEMAF met the Minister of Transport, Carlos Cuerpo, on 5 November without agreement, and the Ministry has called it back for Friday 6, according to ${link(U.semafCuerpo, "SEMAF's notice")}.`,
         "**Who is called out:** Renfe Group drivers, according to SEMAF. The metro, buses, tram and FGC are not part of it.",
-        "**In between**, on Wednesday 11 November, is the general strike.",
+        "**The next day**, Wednesday 11 November, is the general strike.",
       ],
     },
     minimumServices: {
@@ -584,23 +600,20 @@ export const STRIKES: Strike[] = [
         en: "Rodalies: 66% of service at peak times, 33% the rest of the day",
       },
       text: {
-        ca: `A **Rodalies de Catalunya i els regionals**, ${link(U.ordreRenfe1012, "l'ordre del Departament d'Empresa i Treball del 5 de novembre de 2026")} fixa, els dos dies, el **66% del servei habitual en hora punta** (de 6.00 a 9.30 h i de 17.00 a 20.30 h) i el **33% la resta del dia**. Rodalies sol publicar l'horari de serveis mínims de cada línia uns dies abans. Per als altres trens de Renfe, el Ministeri de Transports ha fixat el **72% a l'alta velocitat i la llarga distància** i una mitjana del **65% a Mitja Distància**, segons ${link(U.renfeSemaf1012, "el comunicat de Renfe")}.`,
-        es: `En **Rodalies de Catalunya y los regionales**, ${link(U.ordreRenfe1012, "la orden del Departament d'Empresa i Treball del 5 de noviembre de 2026")} fija, los dos días, el **66% del servicio habitual en hora punta** (de 6.00 a 9.30 h y de 17.00 a 20.30 h) y el **33% el resto del día**. Rodalies suele publicar el horario de servicios mínimos de cada línea unos días antes. Para los demás trenes de Renfe, el Ministerio de Transportes ha fijado el **72% en alta velocidad y larga distancia** y una media del **65% en Media Distancia**, según ${link(U.renfeSemaf1012, "el comunicado de Renfe")}.`,
-        en: `On **Rodalies de Catalunya and regional trains**, ${link(U.ordreRenfe1012, "the Department of Business and Labour's order of 5 November 2026")} sets, on both days, **66% of the usual service at peak times** (06:00 to 09:30 and 17:00 to 20:30) and **33% for the rest of the day**. Rodalies usually publishes each line's minimum-service timetable a few days before. For Renfe's other trains, the Ministry of Transport has set **72% on high-speed and long-distance** and **65% on average on Media Distancia**, according to ${link(U.renfeSemaf1012, "Renfe's notice")}.`,
+        ca: `A **Rodalies de Catalunya i els regionals**, ${link(U.ordreRenfe1012, "l'ordre del Departament d'Empresa i Treball del 5 de novembre de 2026")} fixa per al 10 (i per al 12, dia que SEMAF va desconvocar) el **66% del servei habitual en hora punta** (de 6.00 a 9.30 h i de 17.00 a 20.30 h) i el **33% la resta del dia**. Rodalies sol publicar l'horari de serveis mínims de cada línia uns dies abans. Per als altres trens de Renfe, el Ministeri de Transports ha fixat el **72% a l'alta velocitat i la llarga distància** i una mitjana del **65% a Mitja Distància**, segons ${link(U.renfeSemaf1012, "el comunicat de Renfe")}.`,
+        es: `En **Rodalies de Catalunya y los regionales**, ${link(U.ordreRenfe1012, "la orden del Departament d'Empresa i Treball del 5 de noviembre de 2026")} fija para el 10 (y para el 12, que SEMAF desconvocó) el **66% del servicio habitual en hora punta** (de 6.00 a 9.30 h y de 17.00 a 20.30 h) y el **33% el resto del día**. Rodalies suele publicar el horario de servicios mínimos de cada línea unos días antes. Para los demás trenes de Renfe, el Ministerio de Transportes ha fijado el **72% en alta velocidad y larga distancia** y una media del **65% en Media Distancia**, según ${link(U.renfeSemaf1012, "el comunicado de Renfe")}.`,
+        en: `On **Rodalies de Catalunya and regional trains**, ${link(U.ordreRenfe1012, "the Department of Business and Labour's order of 5 November 2026")} sets for the 10th (and for the 12th, which SEMAF withdrew) **66% of the usual service at peak times** (06:00 to 09:30 and 17:00 to 20:30) and **33% for the rest of the day**. Rodalies usually publishes each line's minimum-service timetable a few days before. For Renfe's other trains, the Ministry of Transport has set **72% on high-speed and long-distance** and **65% on average on Media Distancia**, according to ${link(U.renfeSemaf1012, "Renfe's notice")}.`,
       },
     },
     advice: {
       ca: [
-        `Si has d'agafar Rodalies o un tren de Renfe aquests dies, mira l'horari de serveis mínims de la teva línia quan es publiqui i, el mateix dia, ${link(U.rodaliesStatus, "l'estat del servei")}.`,
-        "El dia 12 la vaga de SEMAF és a trams (6.20-9.20, 14.20-17.20 i 21.20-23.20 h): fora d'aquestes hores el servei es pot recuperar a poc a poc.",
+        `Si has d'agafar Rodalies o un tren de Renfe aquell dia, mira l'horari de serveis mínims de la teva línia quan es publiqui i, el mateix dia, ${link(U.rodaliesStatus, "l'estat del servei")}.`,
       ],
       es: [
-        `Si tienes que coger Rodalies o un tren de Renfe esos días, mira el horario de servicios mínimos de tu línea cuando se publique y, el mismo día, ${link(U.rodaliesStatus, "el estado del servicio")}.`,
-        "El día 12 la huelga de SEMAF es por tramos (6.20-9.20, 14.20-17.20 y 21.20-23.20 h): fuera de esas horas el servicio puede tardar en recuperarse.",
+        `Si tienes que coger Rodalies o un tren de Renfe ese día, mira el horario de servicios mínimos de tu línea cuando se publique y, el mismo día, ${link(U.rodaliesStatus, "el estado del servicio")}.`,
       ],
       en: [
-        `If you need Rodalies or a Renfe train on those days, check your line's minimum-service timetable once it is out and, on the day, ${link(U.rodaliesStatus, "the live service status")}.`,
-        "On the 12th SEMAF strikes in slots (06:20-09:20, 14:20-17:20 and 21:20-23:20): outside them, service may take time to recover.",
+        `If you need Rodalies or a Renfe train that day, check your line's minimum-service timetable once it is out and, on the day, ${link(U.rodaliesStatus, "the live service status")}.`,
       ],
     },
     sources: [
@@ -611,6 +624,7 @@ export const STRIKES: Strike[] = [
       { name: "Resoluciones de servicios mínimos ferroviarios", url: U.ministryRail, publisher: "Ministerio de Transportes y Movilidad Sostenible" },
       { name: "Comunicado 80/2026: modificación de las fechas de huelga de noviembre de 2026 (04/11/2026)", url: U.alferro80, publisher: "ALFERRO" },
       { name: "Establecidos los servicios mínimos para la huelga convocada por SEMAF (06/11/2026)", url: U.renfeSemaf1012, publisher: "Renfe" },
+      { name: "Primer Real Decreto-ley aprobado: SEMAF mueve el paro del 12 al 23 de noviembre (10/11/2026)", url: U.semaf23, publisher: "SEMAF" },
     ],
     guide: "strikeRenfe",
   },
@@ -720,32 +734,35 @@ export const STRIKES: Strike[] = [
     },
     facts: {
       ca: [
-        `**17 de novembre, Adif:** vaga de 0.00 a 23.59 h convocada pel Comitè General d'Empresa d'Adif, i el sindicat SCF també en convoca el 19, 24 hores, segons ${link(U.scfAdif, "el comunicat de l'SCF")}.`,
-        `**17 de novembre, maquinistes:** SEMAF crida els maquinistes de Renfe, Iryo, Ouigo, Transfesa, Continental Rail, Tracción Rail, Captrain i Medway, segons ${link(U.semafCuerpo, "el seu comunicat del 5 de novembre")}; i ALFERRO hi trasllada les vagues que tenia el 10 i el 12, segons ${link(U.alferro80, "el seu comunicat 80/2026")}.`,
+        `**Convocatòria:** el dia 17, el Comitè General d'Empresa d'Adif; SEMAF, que crida els maquinistes de Renfe, Iryo, Ouigo, Transfesa, Continental Rail, Tracción Rail, Captrain i Medway, segons ${link(U.semafCuerpo, "el seu comunicat del 5 de novembre")}; i ALFERRO, que hi trasllada les vagues que tenia el 10 i el 12, segons ${link(U.alferro80, "el seu comunicat 80/2026")}. El 17 i el 19, també el sindicat SCF a Adif, amb aturades de 24 hores, segons ${link(U.scfAdif, "el comunicat de l'SCF")}.`,
+        "**Dies:** dimarts 17 de novembre (a Adif, de 0.00 a 23.59 h) i dijous 19 de novembre (Adif, 24 hores).",
+        `**SEMAF la manté:** el 10 de novembre, quan va desconvocar les aturades del 12, va confirmar «la convocatoria de huelga de la próxima semana del día 17 de noviembre en todo el sector», segons ${link(U.semaf23, "el seu comunicat")}.`,
         "**Serveis mínims:** encara no publicats. A Rodalies els fixa el Departament d'Empresa i Treball; a l'alta velocitat i la llarga distància, el Ministeri de Transports.",
       ],
       es: [
-        `**17 de noviembre, Adif:** huelga de 0.00 a 23.59 h convocada por el Comité General de Empresa de Adif, y el sindicato SCF convoca también el 19, 24 horas, según ${link(U.scfAdif, "el comunicado del SCF")}.`,
-        `**17 de noviembre, maquinistas:** SEMAF llama a los maquinistas de Renfe, Iryo, Ouigo, Transfesa, Continental Rail, Tracción Rail, Captrain y Medway, según ${link(U.semafCuerpo, "su comunicado del 5 de noviembre")}; y ALFERRO traslada ahí las huelgas que tenía el 10 y el 12, según ${link(U.alferro80, "su comunicado 80/2026")}.`,
+        `**Convocatoria:** el día 17, el Comité General de Empresa de Adif; SEMAF, que llama a los maquinistas de Renfe, Iryo, Ouigo, Transfesa, Continental Rail, Tracción Rail, Captrain y Medway, según ${link(U.semafCuerpo, "su comunicado del 5 de noviembre")}; y ALFERRO, que traslada ahí las huelgas que tenía el 10 y el 12, según ${link(U.alferro80, "su comunicado 80/2026")}. El 17 y el 19, también el sindicato SCF en Adif, con paros de 24 horas, según ${link(U.scfAdif, "el comunicado del SCF")}.`,
+        "**Días:** martes 17 de noviembre (en Adif, de 0.00 a 23.59 h) y jueves 19 de noviembre (Adif, 24 horas).",
+        `**SEMAF la mantiene:** el 10 de noviembre, al desconvocar los paros del 12, confirmó «la convocatoria de huelga de la próxima semana del día 17 de noviembre en todo el sector», según ${link(U.semaf23, "su comunicado")}.`,
         "**Servicios mínimos:** aún no publicados. En Rodalies los fija el Departament d'Empresa i Treball; en alta velocidad y larga distancia, el Ministerio de Transportes.",
       ],
       en: [
-        `**17 November, Adif:** a strike from 00:00 to 23:59 called by Adif's company works council, and the SCF union also calls one on the 19th, 24 hours, according to ${link(U.scfAdif, "SCF's notice")}.`,
-        `**17 November, train drivers:** SEMAF calls out drivers at Renfe, Iryo, Ouigo, Transfesa, Continental Rail, Tracción Rail, Captrain and Medway, according to ${link(U.semafCuerpo, "its notice of 5 November")}; ALFERRO moves its 10 and 12 November strikes to this day, according to ${link(U.alferro80, "its notice 80/2026")}.`,
+        `**Called by:** on the 17th, Adif's company works council; SEMAF, which calls out drivers at Renfe, Iryo, Ouigo, Transfesa, Continental Rail, Tracción Rail, Captrain and Medway, according to ${link(U.semafCuerpo, "its notice of 5 November")}; and ALFERRO, which moves its 10 and 12 November strikes to this day, according to ${link(U.alferro80, "its notice 80/2026")}. On the 17th and the 19th, the SCF union at Adif too, with 24-hour stoppages, according to ${link(U.scfAdif, "SCF's notice")}.`,
+        "**Days:** Tuesday 17 November (at Adif, 00:00 to 23:59) and Thursday 19 November (Adif, 24 hours).",
+        `**SEMAF keeps it:** on 10 November, when it withdrew the 12th's stoppages, it confirmed "la convocatoria de huelga de la próxima semana del día 17 de noviembre en todo el sector" (next week's strike call on 17 November across the whole sector), according to ${link(U.semaf23, "its notice")}.`,
         "**Minimum services:** not published yet. The Catalan Department of Business and Labour sets them for Rodalies; the Ministry of Transport for high-speed and long-distance trains.",
       ],
     },
     minimumServices: {
       status: "pending",
       msShort: {
-        ca: "Encara no publicats",
-        es: "Aún no publicados",
-        en: "Not published yet",
+        ca: "Serveis mínims encara no publicats",
+        es: "Servicios mínimos aún no publicados",
+        en: "Minimum services not published yet",
       },
       text: {
-        ca: `Encara no s'han publicat. Els de Rodalies sortiran a la ${link(U.treballMs, "llista de serveis mínims del Departament d'Empresa i Treball")}; els de la resta de trens, a les ${link(U.ministryRail, "resolucions del Ministeri de Transports")}.`,
-        es: `Aún no se han publicado. Los de Rodalies saldrán en la ${link(U.treballMs, "lista de servicios mínimos del Departament d'Empresa i Treball")}; los del resto de trenes, en las ${link(U.ministryRail, "resoluciones del Ministerio de Transportes")}.`,
-        en: `Not published yet. Rodalies' will appear on the ${link(U.treballMs, "Department of Business and Labour's minimum-services list")}; other trains' in the ${link(U.ministryRail, "Ministry of Transport's resolutions")}.`,
+        ca: `**Encara no s'han publicat** (consultat l'11 de novembre de 2026). Els de Rodalies sortiran a la ${link(U.treballMs, "llista de serveis mínims del Departament d'Empresa i Treball")}; els de la resta de trens, a les ${link(U.ministryRail, "resolucions del Ministeri de Transports")}. Per a la vaga de Renfe del 10 de novembre van sortir quatre i cinc dies abans: la Generalitat va signar l'ordre de Rodalies el 5 de novembre i el Ministeri, la seva resolució el 6. Els afegirem aquí quan surtin.`,
+        es: `**Aún no se han publicado** (consultado el 11 de noviembre de 2026). Los de Rodalies saldrán en la ${link(U.treballMs, "lista de servicios mínimos del Departament d'Empresa i Treball")}; los del resto de trenes, en las ${link(U.ministryRail, "resoluciones del Ministerio de Transportes")}. Para la huelga de Renfe del 10 de noviembre salieron cuatro y cinco días antes: la Generalitat firmó la orden de Rodalies el 5 de noviembre y el Ministerio, su resolución el 6. Los añadiremos aquí en cuanto salgan.`,
+        en: `**Not published yet** (checked on 11 November 2026). Rodalies' will appear on the ${link(U.treballMs, "Department of Business and Labour's minimum-services list")}; other trains' in the ${link(U.ministryRail, "Ministry of Transport's resolutions")}. For the Renfe strike of 10 November they came out four and five days before: the Generalitat signed the Rodalies order on 5 November and the Ministry its resolution on the 6th. We will add them here as soon as they are out.`,
       },
     },
     advice: {
@@ -759,7 +776,72 @@ export const STRIKES: Strike[] = [
       { name: "Comunicado 80/2026: modificación de las fechas de huelga de noviembre de 2026 (04/11/2026)", url: U.alferro80, publisher: "ALFERRO" },
       { name: "Serveis mínims de vagues", url: U.treballMs, publisher: "Departament d'Empresa i Treball" },
       { name: "Resoluciones de servicios mínimos ferroviarios", url: U.ministryRail, publisher: "Ministerio de Transportes y Movilidad Sostenible" },
+      { name: "Primer Real Decreto-ley aprobado: SEMAF mueve el paro del 12 al 23 de noviembre (10/11/2026)", url: U.semaf23, publisher: "SEMAF" },
     ],
+    // 11 Nov 2026: the Renfe guide follows the next rail strike (guideEntry): this one once 10 Nov is past.
+    guide: "strikeRenfe",
+  },
+  {
+    id: "vaga-renfe-2026-11-23",
+    dates: ["2026-11-23"],
+    scope: "rail",
+    affects: ["rodalies", "longDistance"],
+    title: {
+      ca: "vaga de maquinistes (SEMAF)",
+      es: "huelga de maquinistas (SEMAF)",
+      en: "train drivers' strike (SEMAF)",
+    },
+    short: {
+      ca: "nova vaga de maquinistes de SEMAF, que substitueix les aturades del 12 al Grup Renfe",
+      es: "nueva huelga de maquinistas de SEMAF, que sustituye a los paros del 12 en el Grupo Renfe",
+      en: "a new SEMAF train drivers' strike, replacing the Renfe Group stoppages of the 12th",
+    },
+    label: {
+      ca: "Trens el 23 de novembre",
+      es: "Trenes el 23 de noviembre",
+      en: "Trains on 23 November",
+    },
+    facts: {
+      ca: [
+        `**Convocatòria:** el sindicat de maquinistes SEMAF, que el 10 de novembre de 2026 va decidir «sustituir el paro previsto para el día 12 de noviembre por una nueva convocatoria de huelga el día 23 de noviembre», segons ${link(U.semaf23, "el seu comunicat")}. Les aturades del 12 que substitueix eren al Grup Renfe, que opera Rodalies.`,
+        "**Dia:** dilluns 23 de novembre de 2026. SEMAF encara no n'ha publicat l'horari ni a quines empreses afecta.",
+        "**Serveis mínims:** encara no publicats. A Rodalies els fixa el Departament d'Empresa i Treball; a l'alta velocitat i la llarga distància, el Ministeri de Transports.",
+      ],
+      es: [
+        `**Convocatoria:** el sindicato de maquinistas SEMAF, que el 10 de noviembre de 2026 decidió «sustituir el paro previsto para el día 12 de noviembre por una nueva convocatoria de huelga el día 23 de noviembre», según ${link(U.semaf23, "su comunicado")}. Los paros del 12 que sustituye eran en el Grupo Renfe, que opera Rodalies.`,
+        "**Día:** lunes 23 de noviembre de 2026. SEMAF aún no ha publicado el horario ni a qué empresas afecta.",
+        "**Servicios mínimos:** aún no publicados. En Rodalies los fija el Departament d'Empresa i Treball; en alta velocidad y larga distancia, el Ministerio de Transportes.",
+      ],
+      en: [
+        `**Called by:** the train drivers' union SEMAF, which on 10 November 2026 decided to "sustituir el paro previsto para el día 12 de noviembre por una nueva convocatoria de huelga el día 23 de noviembre" (replace the 12 November stoppage with a new strike call on 23 November), according to ${link(U.semaf23, "its notice")}. The 12th's stoppages it replaces were at the Renfe Group, which runs Rodalies.`,
+        "**Day:** Monday 23 November 2026. SEMAF has not yet published the hours or which companies it covers.",
+        "**Minimum services:** not published yet. The Catalan Department of Business and Labour sets them for Rodalies; the Ministry of Transport for high-speed and long-distance trains.",
+      ],
+    },
+    minimumServices: {
+      status: "pending",
+      msShort: {
+        ca: "Serveis mínims encara no publicats",
+        es: "Servicios mínimos aún no publicados",
+        en: "Minimum services not published yet",
+      },
+      text: {
+        ca: `**Encara no s'han publicat** (consultat l'11 de novembre de 2026). Els de Rodalies sortiran a la ${link(U.treballMs, "llista de serveis mínims del Departament d'Empresa i Treball")}; els de la resta de trens, a les ${link(U.ministryRail, "resolucions del Ministeri de Transports")}. Per a la vaga de Renfe del 10 de novembre van sortir quatre i cinc dies abans.`,
+        es: `**Aún no se han publicado** (consultado el 11 de noviembre de 2026). Los de Rodalies saldrán en la ${link(U.treballMs, "lista de servicios mínimos del Departament d'Empresa i Treball")}; los del resto de trenes, en las ${link(U.ministryRail, "resoluciones del Ministerio de Transportes")}. Para la huelga de Renfe del 10 de noviembre salieron cuatro y cinco días antes.`,
+        en: `**Not published yet** (checked on 11 November 2026). Rodalies' will appear on the ${link(U.treballMs, "Department of Business and Labour's minimum-services list")}; other trains' in the ${link(U.ministryRail, "Ministry of Transport's resolutions")}. For the Renfe strike of 10 November they came out four and five days before.`,
+      },
+    },
+    advice: {
+      ca: [`Si has de viatjar en tren el 23, mira el dia abans l'horari de serveis mínims i, el mateix dia, ${link(U.rodaliesStatus, "l'estat del servei")}.`],
+      es: [`Si tienes que viajar en tren el 23, mira la víspera el horario de servicios mínimos y, el mismo día, ${link(U.rodaliesStatus, "el estado del servicio")}.`],
+      en: [`If you travel by train on the 23rd, check the minimum-service timetable the day before and, on the day, ${link(U.rodaliesStatus, "the live service status")}.`],
+    },
+    sources: [
+      { name: "Primer Real Decreto-ley aprobado: SEMAF mueve el paro del 12 al 23 de noviembre (10/11/2026)", url: U.semaf23, publisher: "SEMAF" },
+      { name: "Serveis mínims de vagues", url: U.treballMs, publisher: "Departament d'Empresa i Treball" },
+      { name: "Resoluciones de servicios mínimos ferroviarios", url: U.ministryRail, publisher: "Ministerio de Transportes y Movilidad Sostenible" },
+    ],
+    guide: "strikeRenfe",
   },
   {
     id: "vaga-educacio-2026-11-26",
@@ -805,9 +887,9 @@ export const STRIKES: Strike[] = [
         en: "Minimum services not published yet",
       },
       text: {
-        ca: `**Encara no s'han publicat** (consultat el 5 de novembre de 2026 a la ${link(U.treballMs, "llista de vagues amb serveis mínims del Departament d'Empresa i Treball")}). A les escoles i els instituts públics els fixa el Departament d'Empresa i Treball per ordre: per a la vaga a l'educació del 8 de setembre de 2026, l'ordre es va signar el 3 de setembre, cinc dies abans. Els afegirem aquí quan surtin.`,
-        es: `**Aún no se han publicado** (consultado el 5 de noviembre de 2026 en la ${link(U.treballMs, "lista de huelgas con servicios mínimos del Departament d'Empresa i Treball")}). En las escuelas e institutos públicos los fija el Departament d'Empresa i Treball por orden: para la huelga en la educación del 8 de septiembre de 2026, la orden se firmó el 3 de septiembre, cinco días antes. Los añadiremos aquí en cuanto salgan.`,
-        en: `**Not published yet** (checked on 5 November 2026 on the ${link(U.treballMs, "Department of Business and Labour's list of strikes with minimum services")}). For state schools, the Department of Business and Labour sets them by order: for the education strike of 8 September 2026, the order was signed on 3 September, five days before. We will add them here as soon as they are out.`,
+        ca: `**Encara no s'han publicat** (consultat l'11 de novembre de 2026 a la ${link(U.treballMs, "llista de vagues amb serveis mínims del Departament d'Empresa i Treball")}). A les escoles i els instituts públics els fixa el Departament d'Empresa i Treball per ordre: per a la vaga a l'educació del 8 de setembre de 2026, l'ordre es va signar el 3 de setembre, cinc dies abans. Els afegirem aquí quan surtin.`,
+        es: `**Aún no se han publicado** (consultado el 11 de noviembre de 2026 en la ${link(U.treballMs, "lista de huelgas con servicios mínimos del Departament d'Empresa i Treball")}). En las escuelas e institutos públicos los fija el Departament d'Empresa i Treball por orden: para la huelga en la educación del 8 de septiembre de 2026, la orden se firmó el 3 de septiembre, cinco días antes. Los añadiremos aquí en cuanto salgan.`,
+        en: `**Not published yet** (checked on 11 November 2026 on the ${link(U.treballMs, "Department of Business and Labour's list of strikes with minimum services")}). For state schools, the Department of Business and Labour sets them by order: for the education strike of 8 September 2026, the order was signed on 3 September, five days before. We will add them here as soon as they are out.`,
       },
     },
     advice: {
@@ -868,6 +950,22 @@ export function upcomingStrikes(asOf: string, strikes: Strike[] = STRIKES): Stri
 
 export function pastStrikes(asOf: string, strikes: Strike[] = STRIKES): Strike[] {
   return strikes.filter((strike) => !isUpcoming(strike, asOf)).sort((a, b) => lastDay(b).localeCompare(lastDay(a)));
+}
+
+/**
+ * The entry a guide covers on `asOf` (11 Nov 2026). Several entries may point
+ * at one guide (the Renfe guide's path has no day: it follows the next rail
+ * strike): of those, in date order, the first still to come, else the last.
+ * Only that entry's card links the guide, so the hub links it once.
+ */
+export function guideEntry(guide: B2Key, asOf: string = STRIKES_AS_OF, strikes: Strike[] = STRIKES): Strike | undefined {
+  const own = strikes.filter((strike) => strike.guide === guide).sort((a, b) => (a.dates[0] ?? "").localeCompare(b.dates[0] ?? ""));
+  return own.find((strike) => isUpcoming(strike, asOf)) ?? own[own.length - 1];
+}
+
+/** The guide this entry's card links: its own `guide`, while the guide covers it. */
+export function linkedGuide(strike: Strike, asOf: string = STRIKES_AS_OF, strikes: Strike[] = STRIKES): B2Key | undefined {
+  return strike.guide && guideEntry(strike.guide, asOf, strikes)?.id === strike.id ? strike.guide : undefined;
 }
 
 /** The civil date in Catalonia for an instant. Used by the staleness test only. */
@@ -1413,8 +1511,11 @@ export function buildStrikesBody(locale: Locale, asOf: string = STRIKES_AS_OF, s
 
   // 4 Nov 2026: a strike with a guide of its own links to it from its card,
   // as the card's last fact (the 11N entry links its page from its facts).
-  const guideItem = (strike: Strike): string[] =>
-    strike.guide ? [`**${t.guideLabel}:** ${b2link(strike.guide, locale, B2_TITLES[strike.guide][locale])}.`] : [];
+  // 11 Nov 2026: a guide shared by several entries (Renfe) is linked from the one it covers.
+  const guideItem = (strike: Strike): string[] => {
+    const guide = linkedGuide(strike, asOf, strikes);
+    return guide ? [`**${t.guideLabel}:** ${b2link(guide, locale, B2_TITLES[guide][locale])}.`] : [];
+  };
 
   for (const strike of upcoming) {
     const days = strikeDays(strike, locale);

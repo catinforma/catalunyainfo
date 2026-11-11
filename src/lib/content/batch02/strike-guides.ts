@@ -35,10 +35,12 @@ import {
   STRIKES_VERIFIED,
   STRIKE_URLS,
   andList,
+  guideEntry,
   isOnDay,
   isOpen,
   isUpcoming,
   lastDay,
+  linkedGuide,
   strikeDays,
   upcomingStrikes,
   type ServiceKey,
@@ -489,9 +491,10 @@ export function nearbyStrikes(strike: Strike, asOf: string = STRIKES_AS_OF, stri
   );
 }
 
-/** Where another strike is explained: its own guide, the 11N page, or the hub. */
-function strikeLink(other: Strike, locale: Locale): string {
-  if (other.guide) return b2link(other.guide, locale, B2_TITLES[other.guide][locale]);
+/** Where another strike is explained: its own guide (while the guide covers it), the 11N page, or the hub. */
+function strikeLink(other: Strike, locale: Locale, asOf: string, strikes: Strike[]): string {
+  const guide = linkedGuide(other, asOf, strikes);
+  if (guide) return b2link(guide, locale, B2_TITLES[guide][locale]);
   if (other.scope === "general" && other.dates.includes(STRIKE_11N_DATE)) return b2link("strike11n", locale, B2_TITLES.strike11n[locale]);
   return b2link("strikes", locale, B2_TITLES.strikes[locale]);
 }
@@ -529,9 +532,17 @@ interface SpecCopy {
   faq: (c: Ctx) => { question: string; answer: string }[];
 }
 
+/** Title words for one entry of a guide that follows several (the Renfe guide). */
+type TitleCopy = Pick<SpecCopy, "seoTitles" | "title" | "excerpt">;
+
 interface GuideSpec {
   key: StrikeGuideKey;
-  strikeId: string;
+  /**
+   * The entries are those in strikes.ts whose `guide` is this key; the guide
+   * covers one at a time (guideEntry: the first still to come on the as-of
+   * date, else the last), so its title, days and facts follow the next strike
+   * with no edit here (11 Nov 2026).
+   */
   entryKey: string;
   publishedAt: string;
   /** Services named as outside the strike, when the entry does not list them in `affects`. */
@@ -539,6 +550,10 @@ interface GuideSpec {
   related: B2Key[];
   hero: { key: string; alt: Record<Locale, string>; caption: Record<Locale, string> };
   copy: Record<Locale, SpecCopy>;
+  /** Title words for an entry the default copy does not fit, by entry id. */
+  titlesFor?: Record<string, Record<Locale, TitleCopy>>;
+  /** "The previous strike": a line for the entries of this guide already past. */
+  previous?: Record<Locale, (days: string, title: string, hub: string) => string>;
 }
 
 const lineName = (id: LineId) => (id === "R2N" ? "R2 Nord" : id === "R2S" ? "R2 Sud" : id);
@@ -560,7 +575,6 @@ const metroSameDay = (c: Ctx) => c.others.filter((o) => o.affects.includes("metr
 
 const RENFE: GuideSpec = {
   key: "strikeRenfe",
-  strikeId: "vaga-renfe-2026-11-10",
   entryKey: "guide-strike-renfe-november-2026",
   publishedAt: "2026-11-04T12:00:00+01:00",
   outside: ["metroBus", "fgcTram"],
@@ -691,6 +705,37 @@ const RENFE: GuideSpec = {
   },
 };
 
+/**
+ * 11 Nov 2026: the 17 and 19 Nov strike is Adif's as well as the drivers'
+ * (SEMAF, ALFERRO) at Renfe and other operators, so its titles say "Renfe i
+ * Adif"; they keep "Rodalies", which the guide's queries carry ("vaga rodalies
+ * novembre", "huelga rodalies"). Logged in docs/SEO_EXPERIMENTS.md (11 Nov).
+ */
+RENFE.titlesFor = {
+  "vaga-ferroviaria-2026-11-17": {
+    ca: {
+      seoTitles: (t) => [`Vaga Renfe i Adif ${t.bare}: Rodalies i mínims`, `Vaga Renfe i Adif ${t.bare}: serveis mínims`, `Vaga de trens ${t.bare}`],
+      title: (t) => `Vaga de trens el ${t.days} de ${t.year}: Renfe, Adif, Rodalies, serveis mínims i què fer`,
+      excerpt: (t) => `La vaga ferroviària del ${t.days} de ${t.year} (maquinistes de Renfe i d'altres operadores, i Adif): qui la convoca, què afecta, els serveis mínims de Rodalies i què pots fer.`,
+    },
+    es: {
+      seoTitles: (t) => [`Huelga Renfe y Adif ${t.bare}: Rodalies y mínimos`, `Huelga Renfe y Adif ${t.bare}: servicios mínimos`, `Huelga de trenes ${t.bare}`],
+      title: (t) => `Huelga de trenes el ${t.days} de ${t.year}: Renfe, Adif, Rodalies, servicios mínimos y qué hacer`,
+      excerpt: (t) => `La huelga ferroviaria del ${t.days} de ${t.year} (maquinistas de Renfe y de otras operadoras, y Adif): quién la convoca, a qué afecta, los servicios mínimos de Rodalies y qué hacer.`,
+    },
+    en: {
+      seoTitles: (t) => [`Renfe and Adif strike ${t.days} ${t.year}: what runs`, `Renfe and Adif strike ${t.days}: what runs`, `Rail strike ${t.days}`],
+      title: (t) => `Rail strike on ${t.days} ${t.year}: Renfe, Adif, Rodalies, minimum services and what to do`,
+      excerpt: (t) => `The rail strike on ${t.days} ${t.year} (drivers at Renfe and other operators, and Adif): who called it, what it affects, Rodalies minimum services and what you can do.`,
+    },
+  },
+};
+RENFE.previous = {
+  ca: (days, title, hub) => `**Ja ha passat la vaga anterior**, la ${title} del ${days}: què es va anunciar i els serveis mínims que es van fixar, a ${hub}.`,
+  es: (days, title, hub) => `**Ya ha pasado la huelga anterior**, la ${title} del ${days}: lo que se anunció y los servicios mínimos que se fijaron, en ${hub}.`,
+  en: (days, title, hub) => `**The previous strike is over**: the ${title} on ${days}. What was announced and the minimum services that were set are in ${hub}.`,
+};
+
 /** "El dijous 26 de novembre és dia lectiu al calendari escolar 2026-2027 (...)" when every strike day is a school day. */
 function schoolDayLine(c: Ctx, withLink: boolean): string | null {
   if (!c.strike.dates.every(schoolTerm)) return null;
@@ -708,7 +753,6 @@ function schoolDayLine(c: Ctx, withLink: boolean): string | null {
 
 const EDUCATION: GuideSpec = {
   key: "strikeEducation",
-  strikeId: "vaga-educacio-2026-11-26",
   entryKey: "guide-strike-education-november-2026",
   publishedAt: "2026-11-04T12:00:00+01:00",
   outside: [],
@@ -797,14 +841,27 @@ export const STRIKE_GUIDE_SPECS: GuideSpec[] = [RENFE, EDUCATION];
 /* Rendering                                                                  */
 /* -------------------------------------------------------------------------- */
 
-function strikeFor(spec: GuideSpec, strikes: Strike[]): Strike {
-  const strike = strikes.find((s) => s.id === spec.strikeId);
-  if (!strike) throw new Error(`strike-guides: no entry "${spec.strikeId}" in strikes.ts for ${spec.key}`);
+function strikeFor(spec: GuideSpec, strikes: Strike[], asOf: string): Strike {
+  const strike = guideEntry(spec.key, asOf, strikes);
+  if (!strike) throw new Error(`strike-guides: no entry in strikes.ts has guide "${spec.key}"`);
   return strike;
 }
 
+/** The id of the entry a guide covers on `asOf` (the tests and the 11N page read it). */
+export function guideStrikeId(key: StrikeGuideKey, asOf: string = STRIKES_AS_OF, strikes: Strike[] = STRIKES): string {
+  const spec = STRIKE_GUIDE_SPECS.find((s) => s.key === key);
+  if (!spec) throw new Error(`strike-guides: unknown guide ${key}`);
+  return strikeFor(spec, strikes, asOf).id;
+}
+
+/** The copy for the entry being covered: the spec's, with that entry's own title words if it has them. */
+function copyFor(spec: GuideSpec, strike: Strike, locale: Locale): SpecCopy {
+  const own = spec.titlesFor?.[strike.id]?.[locale];
+  return own ? { ...spec.copy[locale], ...own } : spec.copy[locale];
+}
+
 function context(spec: GuideSpec, locale: Locale, asOf: string, strikes: Strike[]): Ctx {
-  const strike = strikeFor(spec, strikes);
+  const strike = strikeFor(spec, strikes, asOf);
   const { who, when } = strikeWhoWhen(strike, locale);
   return {
     locale,
@@ -844,7 +901,7 @@ export function buildStrikeGuideBody(
   if (!spec) throw new Error(`strike-guides: unknown guide ${key}`);
   const c = context(spec, locale, asOf, strikes);
   const t = COMMON[locale];
-  const s = spec.copy[locale];
+  const s = copyFor(spec, c.strike, locale);
   const strike = c.strike;
   const hub = b2link("strikes", locale, t.hubLabel);
   const blocks: Block[] = [];
@@ -912,6 +969,14 @@ export function buildStrikeGuideBody(
   );
   blocks.push(...s.section(c));
 
+  // 11 Nov 2026: a guide that follows several strikes says the earlier ones are over.
+  const previous = spec.previous?.[locale];
+  if (previous) {
+    for (const earlier of strikes.filter((o) => o.guide === spec.key && o.id !== strike.id && !isUpcoming(o, asOf) && (o.dates[0] ?? "") < (strike.dates[0] ?? ""))) {
+      blocks.push(...paras(previous(strikeDays(earlier, locale), earlier.title[locale], hub)));
+    }
+  }
+
   // 5. What to do: only while the strike is still to come.
   if (c.upcoming) {
     blocks.push(heading(2, t.todoHeading, "que-fer"));
@@ -922,7 +987,7 @@ export function buildStrikeGuideBody(
   if (c.upcoming && c.others.length > 0) {
     blocks.push(heading(2, t.othersHeading, "altres-vagues"));
     blocks.push(...paras(t.othersIntro));
-    blocks.push(list(...c.others.map((o) => `**${cap(strikeDays(o, locale))}:** ${o.title[locale]}. ${strikeLink(o, locale)}`)));
+    blocks.push(list(...c.others.map((o) => `**${cap(strikeDays(o, locale))}:** ${o.title[locale]}. ${strikeLink(o, locale, c.asOf, strikes)}`)));
   }
 
   blocks.push(faq(s.faq(c).map((item) => ({ question: item.question, answer: strip(item.answer) }))));
@@ -935,11 +1000,17 @@ export function buildStrikeGuideBody(
 /* Metadata                                                                   */
 /* -------------------------------------------------------------------------- */
 
-export function strikeGuideMeta(key: StrikeGuideKey, locale: Locale, strikes: Strike[] = STRIKES): { title: string; seoTitle: string; excerpt: string } {
+export function strikeGuideMeta(
+  key: StrikeGuideKey,
+  locale: Locale,
+  strikes: Strike[] = STRIKES,
+  asOf: string = STRIKES_AS_OF,
+): { title: string; seoTitle: string; excerpt: string } {
   const spec = STRIKE_GUIDE_SPECS.find((s) => s.key === key);
   if (!spec) throw new Error(`strike-guides: unknown guide ${key}`);
-  const parts = titleParts(strikeFor(spec, strikes), locale);
-  const copy = spec.copy[locale];
+  const strike = strikeFor(spec, strikes, asOf);
+  const parts = titleParts(strike, locale);
+  const copy = copyFor(spec, strike, locale);
   return { title: copy.title(parts), seoTitle: firstFit(copy.seoTitles(parts), SEO_TITLE_LIMIT), excerpt: copy.excerpt(parts) };
 }
 
@@ -950,8 +1021,8 @@ export function strikeGuideMeta(key: StrikeGuideKey, locale: Locale, strikes: St
 export function strikeGuideDescription(key: StrikeGuideKey, locale: Locale, asOf: string = STRIKES_AS_OF, strikes: Strike[] = STRIKES): string {
   const spec = STRIKE_GUIDE_SPECS.find((s) => s.key === key);
   if (!spec) throw new Error(`strike-guides: unknown guide ${key}`);
-  const strike = strikeFor(spec, strikes);
-  const copy = spec.copy[locale];
+  const strike = strikeFor(spec, strikes, asOf);
+  const copy = copyFor(spec, strike, locale);
   const parts = titleParts(strike, locale);
   const withYear = locale === "en" ? `${parts.days} ${parts.year}` : `${parts.days} de ${parts.year}`;
   const title = strike.title[locale];
@@ -996,7 +1067,7 @@ const KNOWN_SOURCES: B2Source[] = [
 ];
 
 /** Every external page a guide links to, in any language: the entry's sources first, then the guide's own. */
-export function strikeGuideSources(key: StrikeGuideKey, editions: Block[][], strikes: Strike[] = STRIKES): B2Source[] {
+export function strikeGuideSources(key: StrikeGuideKey, editions: Block[][], strikes: Strike[] = STRIKES, asOf: string = STRIKES_AS_OF): B2Source[] {
   const spec = STRIKE_GUIDE_SPECS.find((s) => s.key === key);
   if (!spec) throw new Error(`strike-guides: unknown guide ${key}`);
   const linked = new Set(editions.flatMap((blocks) => [...JSON.stringify(blocks).matchAll(/\]\((https:[^)]+)\)/g)].map((m) => m[1] ?? "")));
@@ -1007,7 +1078,7 @@ export function strikeGuideSources(key: StrikeGuideKey, editions: Block[][], str
     seen.add(source.url);
     all.push({ name: source.name, url: source.url, publisher: source.publisher });
   };
-  for (const source of strikeFor(spec, strikes).sources) add(source);
+  for (const source of strikeFor(spec, strikes, asOf).sources) add(source);
   for (const source of KNOWN_SOURCES) if (linked.has(source.url)) add(source);
   // A link nobody named (a new URL in the entry's text): listed under its host, which the tests flag.
   for (const url of linked) add({ name: new URL(url).host, url, publisher: new URL(url).host });

@@ -3373,3 +3373,93 @@ share of the same queries. If the CA Marató page is reverted, do not restore
 its old description, because the volunteer deadline (10 Nov) is past.
 
 **Outcome:** _pending_
+
+## 11 Nov 2026 — After 11N: next strikes on the strip, an "upcoming" block on the 11N pages, and the Renfe guide follows the next rail strike (deploy; groups `strikes`, `strike-11n`, `strike-11n-cities`)
+
+Why: the 11N pages took ~150,000 impressions; from 12 Nov 06:30 they speak in
+the past and their readers have nowhere to go next. Facts read on 11 Nov on
+the official sources (headers of `strikes.ts`, `strike-guides.ts`): SEMAF
+withdrew the Renfe stoppages of Thu 12 Nov on 10 Nov and called a new strike
+on Mon 23 Nov, keeping 17 Nov "en todo el sector" (semaf.org notice of 10 Nov;
+Renfe's service notices: 12 Nov "conforme a la programación habitual"); no
+minimum services yet for 17, 19 or 23 Nov (Ministry of Transport rail list:
+newest the 6 Nov resolution for 10/12 Nov and the 11N ones; Departament
+d'Empresa i Treball list: newest entry 11 Nov, meat industry) nor for the
+26 Nov education strike (still "anunciada" by USTEC·STEs); for the 10 Nov
+strike they came out four (Ministry, 6 Nov) and five (Generalitat, 5 Nov)
+days before. `STRIKES_AS_OF` 2026-11-05 → 2026-11-11 (Metges de Catalunya
+re-read too: strike still on).
+
+What changed:
+
+1. **Sitewide strip** (`src/lib/alerts/news-alerts.ts`, entry of 4 Nov above),
+   date-driven, each line until midnight after its last day, never two lines
+   to one page: from 12 Nov "Vaga de trens el dimarts 17 i el dijous 19 de
+   novembre: Renfe, Adif i serveis mínims" (→ Renfe guide; until 19 Nov), then
+   "Vaga de maquinistes el dilluns 23 de novembre: Renfe, Rodalies i serveis
+   mínims" (→ Renfe guide; 20–23 Nov), "Vaga a l'educació a Catalunya el
+   dijous 26 de novembre: hi ha escola?" (→ education guide; 12–26 Nov) and
+   the 29N line, which now starts on 12 Nov instead of 13 Nov (es/en alike).
+   The Renfe line ends with 10 Nov (12 Nov withdrawn).
+2. **"Properes vagues i dates" / "Próximas huelgas y fechas" / "Upcoming
+   strikes and dates"** under the answer of the 11N pages (ca/es/en), the 13
+   city pages and the Spain page (ca/es/en): the same lines as the strip, as
+   of each page's own as-of date (identical in the upcoming, day and past
+   states), plus the strikes hub (Catalan hub on the 11N page, Spain calendar
+   on the city and Spain pages). Titles of those pages untouched.
+3. **Renfe guide titles** (`/ca/guies/vaga-renfe-rodalies-novembre/`,
+   `/es/guias/huelga-renfe-rodalies-noviembre/`,
+   `/en/guides/renfe-rodalies-strike-november/`): the URL has no day, so the
+   guide now follows the next rail strike (`guideEntry`: 10 Nov, then 17/19,
+   then 23 Nov). Old → new:
+   - ca "Vaga Renfe 10 i 12 novembre 2026: Rodalies i serveis mínims" →
+     "Vaga Renfe i Adif 17 i 19 novembre: Rodalies i mínims"
+   - es "Huelga Renfe 10 y 12 noviembre: Rodalies y servicios mínimos" →
+     "Huelga Renfe y Adif 17 y 19 noviembre: Rodalies y mínimos"
+   - en "Renfe strike 10 and 12 November 2026: Rodalies and what runs" →
+     "Renfe and Adif strike 17 and 19 November 2026: what runs"
+   Reason: the 10 Nov strike is over and the 12th was withdrawn; the guide's
+   head queries carry no day ("huelga renfe noviembre 2026" 694 impr. at 10.0,
+   CTR 0.4 %; "vaga renfe" 313 at 8.9; "huelga rodalies" 148 at 8.1; "vaga
+   rodalies novembre" 28 at 3.2), so they fit the next strike; "Adif" because
+   the 19th is Adif's only (SCF), "Rodalies" kept for the Rodalies queries.
+   From 20 Nov the default wording takes over ("Vaga Renfe 23 novembre 2026:
+   Rodalies i serveis mínims").
+   **Education guide: checked, no retitle.** It ranks 2–5 for its queries
+   ("vaga 26 novembre" 191 impr. at 4.7, 7.3 %; ES "vaga 26 de noviembre"
+   188 at 3.6, 11.7 %; "vaga educacio novembre" 96 at 6.9, 10.4 %), on the
+   CTR curve; the strip and the 11N block are its change.
+
+Baseline, `snapshot.py page <substr> 14`, 29 Oct–11 Nov (11 Nov partial;
+pages live from 4 Nov):
+
+| Page | 4–10 Nov impr. | Clicks | CTR | Position |
+| --- | --- | --- | --- | --- |
+| Renfe guide ca `vaga-renfe-rodalies` | 2,893 | 332 | 11.5 % | 3.4–7.9 |
+| Renfe guide es `huelga-renfe-rodalies` | 13,387 | 1,123 | 8.4 % | 5.1–8.0 |
+| Renfe guide en `renfe-rodalies-strike` | 1,026 | 67 | 6.5 % | 4.6–6.4 |
+| Education ca `vaga-educacio-novembre` (6–11 Nov) | 2,527 | 208 | 8.2 % | 3.8–4.5 |
+| Education es `huelga-educacion-noviembre` (6–11 Nov) | 2,718 | 215 | 7.9 % | 3.9–4.5 |
+
+Prediction: on 12–18 Nov (with the 17 Nov peak) the ES Renfe guide ranks 8
+or better for "huelga renfe noviembre 2026" (from 10.0) with CTR ≥ 3 %, and
+gets impressions for "huelga renfe 17 noviembre" / "huelga trenes 17
+noviembre" (none today: the hub has them at 6–11); the education guides keep
+position 3–5 and gain impressions after 12 Nov from the strip and the 11N
+pages; GA4 shows referrals from the 11N pages to the three targets. Wrong if
+the Renfe guide's 12–18 Nov impressions are below its 4–10 Nov ones despite
+the 17 Nov peak.
+
+**Day-7 revert rule (18 Nov):** run `snapshot.py page vaga-renfe-rodalies 7`,
+`page huelga-renfe-rodalies 7`, `page renfe-rodalies-strike 7`. For each
+edition whose 12–18 Nov CTR is below half its 4–10 Nov CTR (ca 11.5 %, es
+8.4 %, en 6.5 %) at a position no more than 2 places worse, revert that
+edition's wording: remove its language from `RENFE.titlesFor` in
+`strike-guides.ts` (the default template gives "Vaga Renfe 17 i 19 novembre:
+Rodalies i serveis mínims" and so on), then publish `strikes`. The strip and
+the 11N block stay (body links only); remove the block from the three
+builders if the 11N pages' CTR falls more than 30 % against 12 Nov.
+
+Confounders: the 11N pages switch to "past" the same morning (timer, 12 Nov
+06:30); the 29N line on the strip moved a day earlier; the education strike
+may be registered and get minimum services before 18 Nov.

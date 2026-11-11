@@ -8,6 +8,9 @@ import {
   NEWS_ALERTS,
   NEWS_ALERTS_LABEL,
   STRIKE_11N_ID,
+  STRIKE_EDUCATION_ID,
+  STRIKE_RAIL_ID,
+  STRIKE_RENFE_23_ID,
   STRIKE_RENFE_ID,
   activeNewsAlerts,
   alertHref,
@@ -16,11 +19,12 @@ import {
   endOfMadridDay,
   madridMidnight,
   newsAlertsExpiryScript,
+  nextDateLinks,
   type NewsAlert,
 } from "../src/lib/alerts/news-alerts.ts";
 import { B2_PATHS, type B2Article, type B2Key } from "../src/lib/content/batch02/shared.ts";
 import { STRIKE_11N } from "../src/lib/content/batch02/strike-11n.ts";
-import { STRIKE_RENFE_GUIDE } from "../src/lib/content/batch02/strike-guides.ts";
+import { STRIKE_EDUCATION_GUIDE, STRIKE_RENFE_GUIDE } from "../src/lib/content/batch02/strike-guides.ts";
 import { STRIKES, lastDay, type Strike } from "../src/lib/content/batch02/strikes.ts";
 import { VOTING } from "../src/lib/content/batch02/voting.ts";
 import { LOCALES } from "../src/lib/i18n/config.ts";
@@ -64,13 +68,18 @@ test("Madrid midnights carry the offset in force, across both clock changes", ()
   assert.equal(endOfMadridDay("2026-12-31"), "2027-01-01T00:00:00+01:00");
 });
 
-test("the three alerts and their windows, as of 4 Nov 2026", () => {
+test("the alerts and their windows, as of 11 Nov 2026: from the 12th, what comes after 11N", () => {
   assert.deepEqual(
     NEWS_ALERTS.map((a) => [a.id, a.target, a.start, a.end]),
     [
       ["strike-11n", "strike11n", "2026-11-04T00:00:00+01:00", "2026-11-12T00:00:00+01:00"],
-      ["strike-renfe", "strikeRenfe", "2026-11-04T00:00:00+01:00", "2026-11-13T00:00:00+01:00"],
-      ["election-29n", "voting", "2026-11-13T00:00:00+01:00", "2026-11-30T00:00:00+01:00"],
+      // SEMAF called off the 12th (notice of 10 Nov): the Renfe line ends with the 10th.
+      ["strike-renfe", "strikeRenfe", "2026-11-04T00:00:00+01:00", "2026-11-11T00:00:00+01:00"],
+      ["strike-rail-17n", "strikeRenfe", "2026-11-12T00:00:00+01:00", "2026-11-20T00:00:00+01:00"],
+      // Same guide as the 17/19 line: it starts when that one ends.
+      ["strike-renfe-23n", "strikeRenfe", "2026-11-20T00:00:00+01:00", "2026-11-24T00:00:00+01:00"],
+      ["strike-education-26n", "strikeEducation", "2026-11-12T00:00:00+01:00", "2026-11-27T00:00:00+01:00"],
+      ["election-29n", "voting", "2026-11-12T00:00:00+01:00", "2026-11-30T00:00:00+01:00"],
     ],
   );
   // The end of 11 Nov in Madrid is 23:00 UTC on the 11th.
@@ -80,18 +89,26 @@ test("the three alerts and their windows, as of 4 Nov 2026", () => {
 test("the ends are derived from the source modules, not typed in", () => {
   assert.equal(byId("strike-11n").end, endOfMadridDay(lastDay(strike(STRIKE_11N_ID))));
   assert.equal(byId("strike-renfe").end, endOfMadridDay(lastDay(strike(STRIKE_RENFE_ID))));
+  assert.equal(byId("strike-rail-17n").end, endOfMadridDay(lastDay(strike(STRIKE_RAIL_ID))));
+  assert.equal(byId("strike-renfe-23n").end, endOfMadridDay(lastDay(strike(STRIKE_RENFE_23_ID))));
+  assert.equal(byId("strike-education-26n").end, endOfMadridDay(lastDay(strike(STRIKE_EDUCATION_ID))));
   assert.equal(byId("election-29n").end, endOfMadridDay(GENERAL_ELECTION_DAY));
 });
 
 test("a day called off in strikes.ts moves the end and the wording; a strike removed drops its line", () => {
-  const edited: Strike[] = STRIKES.map((s) => (s.id === STRIKE_RENFE_ID ? { ...s, dates: ["2026-11-10"] } : s));
-  const renfe = byId("strike-renfe", buildNewsAlerts(edited));
-  assert.equal(renfe.end, "2026-11-11T00:00:00+01:00");
-  assert.equal(renfe.text.ca, "Vaga de Renfe el dimarts 10 de novembre: Rodalies i serveis mínims");
-  assert.doesNotMatch(renfe.text.es, /12/);
+  const edited: Strike[] = STRIKES.map((s) => (s.id === STRIKE_RAIL_ID ? { ...s, dates: ["2026-11-17"] } : s));
+  const rail = byId("strike-rail-17n", buildNewsAlerts(edited));
+  assert.equal(rail.end, "2026-11-18T00:00:00+01:00");
+  assert.equal(rail.text.ca, "Vaga de trens el dimarts 17 de novembre: Renfe, Adif i serveis mínims");
+  assert.doesNotMatch(rail.text.es, /19/);
+  // The next line to the same guide starts when it ends.
+  assert.equal(byId("strike-renfe-23n", buildNewsAlerts(edited)).start, "2026-11-18T00:00:00+01:00");
 
-  const without = buildNewsAlerts(STRIKES.filter((s) => s.id !== STRIKE_11N_ID));
-  assert.deepEqual(without.map((a) => a.id), ["strike-renfe", "election-29n"]);
+  const without = buildNewsAlerts(STRIKES.filter((s) => s.id !== STRIKE_11N_ID && s.id !== STRIKE_EDUCATION_ID));
+  assert.deepEqual(without.map((a) => a.id), ["strike-renfe", "strike-rail-17n", "strike-renfe-23n", "election-29n"]);
+  // A strike whose days are all before the line's start drops its line.
+  const early: Strike[] = STRIKES.map((s) => (s.id === STRIKE_EDUCATION_ID ? { ...s, dates: ["2026-11-11"] } : s));
+  assert.ok(!buildNewsAlerts(early).some((a) => a.id === "strike-education-26n"));
 
   const moved = byId("election-29n", buildNewsAlerts(STRIKES, "2026-12-06"));
   assert.equal(moved.end, "2026-12-07T00:00:00+01:00");
@@ -102,18 +119,52 @@ test("a day called off in strikes.ts moves the end and the wording; a strike rem
 /* Windows                                                                    */
 /* -------------------------------------------------------------------------- */
 
-test("each line is shown only inside its window, in Madrid time", () => {
+test("each line is shown only inside its window, in Madrid time; each disappears after its day", () => {
+  const next = ["strike-rail-17n", "strike-education-26n", "election-29n"];
   assert.deepEqual(ids("2026-11-03T23:59:59+01:00"), []);
   assert.deepEqual(ids("2026-11-04T00:00:00+01:00"), ["strike-11n", "strike-renfe"]);
-  assert.deepEqual(ids("2026-11-04T10:00:00+01:00"), ["strike-11n", "strike-renfe"]);
-  assert.deepEqual(ids("2026-11-11T23:59:59.999+01:00"), ["strike-11n", "strike-renfe"]);
+  assert.deepEqual(ids("2026-11-10T23:59:59+01:00"), ["strike-11n", "strike-renfe"]);
+  assert.deepEqual(ids("2026-11-11T00:00:00+01:00"), ["strike-11n"]);
+  assert.deepEqual(ids("2026-11-11T23:59:59.999+01:00"), ["strike-11n"]);
   // 23:30 UTC on the 11th is already the 12th in Madrid.
-  assert.deepEqual(ids("2026-11-11T23:30:00Z"), ["strike-renfe"]);
-  assert.deepEqual(ids("2026-11-12T00:00:00+01:00"), ["strike-renfe"]);
-  assert.deepEqual(ids("2026-11-12T23:59:59+01:00"), ["strike-renfe"]);
-  assert.deepEqual(ids("2026-11-13T00:00:00+01:00"), ["election-29n"]);
+  assert.deepEqual(ids("2026-11-11T23:30:00Z"), next);
+  assert.deepEqual(ids("2026-11-12T00:00:00+01:00"), next);
+  assert.deepEqual(ids("2026-11-19T23:59:59+01:00"), next);
+  assert.deepEqual(ids("2026-11-20T00:00:00+01:00"), ["strike-renfe-23n", "strike-education-26n", "election-29n"]);
+  assert.deepEqual(ids("2026-11-23T23:59:59+01:00"), ["strike-renfe-23n", "strike-education-26n", "election-29n"]);
+  assert.deepEqual(ids("2026-11-24T00:00:00+01:00"), ["strike-education-26n", "election-29n"]);
+  assert.deepEqual(ids("2026-11-27T00:00:00+01:00"), ["election-29n"]);
   assert.deepEqual(ids("2026-11-29T23:59:59+01:00"), ["election-29n"]);
   assert.deepEqual(ids("2026-11-30T00:00:00+01:00"), []);
+  // Never two lines to one page at once.
+  for (let day = 4; day <= 30; day++) {
+    const instant = at(`2026-11-${String(day).padStart(2, "0")}T12:00:00+01:00`);
+    const targets = NEWS_ALERTS.filter((a) => at(a.start) <= instant && instant < at(a.end)).map((a) => a.target);
+    assert.equal(new Set(targets).size, targets.length, `${day} Nov: ${targets.join(", ")}`);
+  }
+});
+
+test("the 11N pages' upcoming block: the strip's next lines, as of the page's date, one per guide", () => {
+  const ca = nextDateLinks("ca", "2026-11-11");
+  assert.deepEqual(ca, [
+    "[Vaga de trens el dimarts 17 i el dijous 19 de novembre: Renfe, Adif i serveis mínims](/ca/guies/vaga-renfe-rodalies-novembre/)",
+    "[Vaga a l'educació a Catalunya el dijous 26 de novembre: hi ha escola?](/ca/guies/vaga-educacio-novembre/)",
+    "[Eleccions generals el diumenge 29 de novembre: on i com votar](/ca/guies/com-votar-eleccions-catalunya/)",
+  ]);
+  // The same in the "upcoming", "day" and "past" states of the 11N pages.
+  assert.deepEqual(nextDateLinks("ca", "2026-11-10"), ca);
+  assert.deepEqual(nextDateLinks("ca", "2026-11-12"), ca);
+  for (const locale of LOCALES) {
+    const links = nextDateLinks(locale, "2026-11-12");
+    assert.equal(links.length, 3, locale);
+    for (const [i, key] of (["strikeRenfe", "strikeEducation", "voting"] as const).entries()) {
+      assert.ok(links[i]?.endsWith(`](/${locale}/${B2_PATHS[key][locale]}/)`), `${locale} ${key}: ${links[i]}`);
+    }
+  }
+  // After the 19th the Renfe guide's item is the 23 Nov strike; each item goes after its day.
+  assert.match(nextDateLinks("es", "2026-11-20")[0] ?? "", /^\[Huelga de maquinistas el lunes 23 de noviembre/);
+  assert.equal(nextDateLinks("en", "2026-11-27").length, 1);
+  assert.deepEqual(nextDateLinks("en", "2026-11-30"), []);
 });
 
 /* -------------------------------------------------------------------------- */
@@ -124,6 +175,7 @@ test("each line is shown only inside its window, in Madrid time", () => {
 const ARTICLES: Partial<Record<B2Key, { article: B2Article; constName: string }>> = {
   strike11n: { article: STRIKE_11N, constName: "STRIKE_11N" },
   strikeRenfe: { article: STRIKE_RENFE_GUIDE, constName: "STRIKE_RENFE_GUIDE" },
+  strikeEducation: { article: STRIKE_EDUCATION_GUIDE, constName: "STRIKE_EDUCATION_GUIDE" },
   voting: { article: VOTING, constName: "VOTING" },
 };
 
@@ -158,7 +210,8 @@ test("a line is not shown on the page it links to (with or without the trailing 
   assert.deepEqual(ids(t, "ca", "/ca/guies/vaga-renfe-rodalies-novembre"), ["strike-11n"]);
   // Another language's page is not this page.
   assert.deepEqual(ids(t, "ca", "/es/guias/huelga-general-11-noviembre/"), ["strike-11n", "strike-renfe"]);
-  assert.deepEqual(ids("2026-11-20T12:00:00+01:00", "en", "/en/guides/how-to-vote-catalonia/"), []);
+  assert.deepEqual(ids("2026-11-20T12:00:00+01:00", "en", "/en/guides/how-to-vote-catalonia/"), ["strike-renfe-23n", "strike-education-26n"]);
+  assert.deepEqual(ids("2026-11-13T12:00:00+01:00", "ca", "/ca/guies/vaga-educacio-novembre/"), ["strike-rail-17n", "election-29n"]);
 });
 
 /* -------------------------------------------------------------------------- */
@@ -169,9 +222,16 @@ test("the copy names the day, never 'today', and stays short and calm", () => {
   assert.equal(byId("strike-11n").text.ca, "Vaga general el dimecres 11 de novembre: què funciona i serveis mínims");
   assert.equal(byId("strike-11n").text.es, "Huelga general el miércoles 11 de noviembre: qué funciona y servicios mínimos");
   assert.equal(byId("strike-11n").text.en, "General strike on Wednesday 11 November: what runs and minimum services");
-  assert.equal(byId("strike-renfe").text.ca, "Vaga de Renfe el dimarts 10 i el dijous 12 de novembre: Rodalies i serveis mínims");
-  assert.equal(byId("strike-renfe").text.es, "Huelga de Renfe el martes 10 y el jueves 12 de noviembre: Rodalies y servicios mínimos");
-  assert.equal(byId("strike-renfe").text.en, "Renfe strike on Tuesday 10 and Thursday 12 November: Rodalies and minimum services");
+  assert.equal(byId("strike-renfe").text.ca, "Vaga de Renfe el dimarts 10 de novembre: Rodalies i serveis mínims");
+  assert.equal(byId("strike-renfe").text.es, "Huelga de Renfe el martes 10 de noviembre: Rodalies y servicios mínimos");
+  assert.equal(byId("strike-renfe").text.en, "Renfe strike on Tuesday 10 November: Rodalies and minimum services");
+  assert.equal(byId("strike-rail-17n").text.ca, "Vaga de trens el dimarts 17 i el dijous 19 de novembre: Renfe, Adif i serveis mínims");
+  assert.equal(byId("strike-rail-17n").text.es, "Huelga de trenes el martes 17 y el jueves 19 de noviembre: Renfe, Adif y servicios mínimos");
+  assert.equal(byId("strike-rail-17n").text.en, "Rail strike on Tuesday 17 and Thursday 19 November: Renfe, Adif and minimum services");
+  assert.equal(byId("strike-renfe-23n").text.ca, "Vaga de maquinistes el dilluns 23 de novembre: Renfe, Rodalies i serveis mínims");
+  assert.equal(byId("strike-education-26n").text.ca, "Vaga a l'educació a Catalunya el dijous 26 de novembre: hi ha escola?");
+  assert.equal(byId("strike-education-26n").text.es, "Huelga educativa en Cataluña el jueves 26 de noviembre: ¿hay colegio?");
+  assert.equal(byId("strike-education-26n").text.en, "Catalonia education strike on Thursday 26 November: is there school?");
   assert.equal(byId("election-29n").text.ca, "Eleccions generals el diumenge 29 de novembre: on i com votar");
   assert.equal(byId("election-29n").text.es, "Elecciones generales el domingo 29 de noviembre: dónde y cómo votar");
   assert.equal(byId("election-29n").text.en, "General election on Sunday 29 November: how and where to vote");
@@ -216,18 +276,18 @@ function runExpiry(instant: string) {
 test("the expiry script hides nothing before the first end and wakes up at it", () => {
   const { css, timers } = runExpiry("2026-11-05T12:00:00+01:00");
   assert.equal(css, "");
-  assert.deepEqual(timers, [at("2026-11-12T00:00:00+01:00") - at("2026-11-05T12:00:00+01:00") + 1000]);
+  assert.deepEqual(timers, [at("2026-11-11T00:00:00+01:00") - at("2026-11-05T12:00:00+01:00") + 1000]);
 });
 
 test("the expiry script hides ended lines, and the strip once none is left", () => {
   const after11 = runExpiry("2026-11-12T08:00:00+01:00");
-  assert.match(after11.css ?? "", /^\[data-alert="strike-11n"\]\{display:none\}/);
-  assert.doesNotMatch(after11.css ?? "", /\[data-alert="strike-renfe"\]\{/);
-  assert.match(after11.css ?? "", /\.ci-alerts:not\(:has\(li:not\(\[data-alert="strike-11n"\]\)\)\)\{display:none\}/);
+  assert.match(after11.css ?? "", /^\[data-alert="strike-11n"\],\[data-alert="strike-renfe"\]\{display:none\}/);
+  assert.doesNotMatch(after11.css ?? "", /\[data-alert="strike-rail-17n"\]/);
+  assert.match(after11.css ?? "", /\.ci-alerts:not\(:has\(li:not\(\[data-alert="strike-11n"\]\):not\(\[data-alert="strike-renfe"\]\)\)\)\{display:none\}/);
   assert.equal(after11.timers.length, 1);
 
   const afterAll = runExpiry("2026-11-30T00:00:00+01:00");
-  for (const id of ["strike-11n", "strike-renfe", "election-29n"]) assert.match(afterAll.css ?? "", new RegExp(`\\[data-alert="${id}"\\]`));
+  for (const alert of NEWS_ALERTS) assert.match(afterAll.css ?? "", new RegExp(`\\[data-alert="${alert.id}"\\]`));
   assert.deepEqual(afterAll.timers, []);
 });
 
