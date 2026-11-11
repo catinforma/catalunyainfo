@@ -2,12 +2,13 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { test } from "node:test";
 
+import { resolveElectionPage } from "../src/lib/programmatic/elections/pages.ts";
 import { comarcaBySlug, municipalityBySlug } from "../src/lib/programmatic/holidays/data.ts";
 import { LOW_DEMAND_AS_OF, LOW_DEMAND_PATHS, LOW_DEMAND_REVIEW_BY, isLowDemandPath } from "../src/lib/seo/low-demand.ts";
 
 const FAMILIES = [
   /^\/(ca\/festius|es\/festivos)\/(comarca\/)?[a-z0-9-]+\/$/,
-  /^\/(ca\/eleccions|es\/elecciones)\/comarca\/[a-z0-9-]+\/$/,
+  /^\/(ca\/eleccions|es\/elecciones)\/(comarca\/)?[a-z0-9-]+\/$/,
   /^\/(ca\/benzineres|es\/gasolineras)\/((comarca|provincia)\/)?[a-z0-9-]+\/$/,
 ];
 
@@ -15,7 +16,8 @@ test("low-demand list: unique paths, only the templated families, never a hub or
   assert.equal(new Set(LOW_DEMAND_PATHS).size, LOW_DEMAND_PATHS.length);
   for (const p of LOW_DEMAND_PATHS) {
     assert.ok(FAMILIES.some((re) => re.test(p)), `unexpected path ${p}`);
-    assert.doesNotMatch(p, /\/(2027|dia|ponts|puentes)\/$/, p);
+    // Ponts is also a town (Noguera): /ca/eleccions/ponts/ is fine; the 2027 bridges pages sit one level deeper.
+    assert.doesNotMatch(p, /\/(2027|dia|day)\/$/, p);
   }
 });
 
@@ -27,6 +29,18 @@ test("low-demand list: every holiday page names a real municipality or comarca",
     const found = m[1] ? comarcaBySlug(slug) : municipalityBySlug(slug);
     assert.ok(found, `no such ${m[1] ? "comarca" : "municipality"}: ${p}`);
   }
+});
+
+test("low-demand list: every election town page names a real municipality", () => {
+  let n = 0;
+  for (const p of LOW_DEMAND_PATHS) {
+    const m = p.match(/^\/(ca|es)\/(?:eleccions|elecciones)\/([a-z0-9-]+)\/$/);
+    if (!m) continue;
+    const locale = m[1] === "ca" ? "ca" : "es";
+    assert.ok(resolveElectionPage(locale, locale, m[2] ?? ""), `no such election page: ${p}`);
+    n++;
+  }
+  assert.ok(n > 900, `phase 2 election pages on the list (${n})`);
 });
 
 test("isLowDemandPath: paths and absolute URLs, with or without the trailing slash", () => {

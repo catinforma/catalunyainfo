@@ -4,7 +4,7 @@
 Reads the live sitemap and Search Console impressions per page over the last
 90 full days, and prints the paths of the phase-1 rule: holiday municipality
 and comarca pages and election comarca pages under 10 impressions, plus every
-fuel page below the hub. Run with the Python that has the Google libraries:
+fuel page below the hub, and (phase 2) election town pages under 10. Run with the Python that has the Google libraries:
 
   ~/.local/share/pipx/venvs/mcp-search-console/bin/python scripts/low-demand.py
 
@@ -33,6 +33,7 @@ for u in urls:
     fuel = re.match(r"^/(ca/benzineres|es/gasolineras)/((comarca|provincia)/)?[^/]+/$", p)
     muni = re.match(r"^/(ca/festius|es/festivos)/[^/]+/$", p) and not re.match(r".*/(2027|dia|ponts|puentes)/$", p)
     comarca = re.match(r"^/(ca/festius|es/festivos|ca/eleccions|es/elecciones)/comarca/[^/]+/$", p)
-    if fuel or ((muni or comarca) and i < 10):
+    election = re.match(r"^/(ca/eleccions|es/elecciones)/[^/]+/$", p)
+    if fuel or ((muni or comarca or election) and i < 10):
         print(p)
 print(f"# {start}..{end}", file=sys.stderr)
