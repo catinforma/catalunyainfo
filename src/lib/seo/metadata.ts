@@ -158,8 +158,10 @@ export function buildMetadata(input: PageMetadataInput): Metadata {
 
   const effectiveTranslations = translations ?? { [locale]: path };
   const desc = clampDescription(description);
-  // Templated pages with almost no search demand stay out of the index (lib/seo/low-demand.ts).
-  const robotsIndexable = indexingAllowed() && !noindex && !isLowDemandPath(path);
+  // Templated pages with almost no search demand stay out of the index but
+  // keep their links followed (lib/seo/low-demand.ts).
+  const lowDemand = isLowDemandPath(path);
+  const robotsIndexable = indexingAllowed() && !noindex && !lowDemand;
 
   const ogImages = image
     ? [
@@ -203,7 +205,9 @@ export function buildMetadata(input: PageMetadataInput): Metadata {
             ...PREVIEW_DIRECTIVES,
           },
         }
-      : { index: false, follow: false, nocache: true },
+      : lowDemand && indexingAllowed() && !noindex
+        ? { index: false, follow: true }
+        : { index: false, follow: false, nocache: true },
     openGraph: {
       type,
       siteName: SITE.name,

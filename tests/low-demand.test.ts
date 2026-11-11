@@ -41,7 +41,9 @@ test("isLowDemandPath: paths and absolute URLs, with or without the trailing sla
 });
 
 test("low-demand list is wired into the robots meta and the sitemap", () => {
-  assert.match(readFileSync("src/lib/seo/metadata.ts", "utf8"), /!isLowDemandPath\(path\)/);
+  const meta = readFileSync("src/lib/seo/metadata.ts", "utf8");
+  assert.match(meta, /const lowDemand = isLowDemandPath\(path\)/);
+  assert.match(meta, /lowDemand && indexingAllowed\(\) && !noindex\s*\? \{ index: false, follow: true \}/);
   assert.match(readFileSync("src/app/sitemap.ts", "utf8"), /filter\(\(entry\) => !isLowDemandPath\(entry\.url\)\)/);
 });
 
