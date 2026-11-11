@@ -27,6 +27,12 @@ export interface PageSpec {
   /** Path after the locale prefix, no leading or trailing slash. */
   path: Record<Locale, string>;
   copy: Record<Locale, PageCopy>;
+  /**
+   * YYYY-MM-DD the current wording was last checked, when that is later than
+   * the pages' common publication date (publish.ts). Move it whenever the
+   * wording changes materially: the privacy policy promises to.
+   */
+  verifiedAt?: string;
 }
 
 /** `legal/privacitat` — derived from the route map so it can never drift. */

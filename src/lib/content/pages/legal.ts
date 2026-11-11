@@ -3,6 +3,7 @@ import type { Locale } from "@/lib/i18n/config";
 import { LOCALES } from "@/lib/i18n/config";
 import { legalPath, sectionPath } from "@/lib/i18n/routes";
 import { SITE } from "@/lib/site";
+import { OWNER } from "./institutional";
 import { OPERATOR, hasLegalIdentity } from "./operator";
 import { legalEntryPath, paragraphs, section, type PageCopy, type PageSpec } from "./types";
 
@@ -98,6 +99,50 @@ function hubBlocks(locale: Locale): Block[] {
     ],
   };
 
+  // The commitments the pages below make, one line each. Every value restates
+  // a page of this hub; change the page and this line changes with it.
+  const summary: Record<Locale, { title: string; items: [string, string][] }> = {
+    ca: {
+      title: "El que hi trobaràs, en una línia",
+      items: [
+        ["Qui edita el web", `${OPERATOR.brand}, fundat per ${OWNER.name} (vegeu [qui som](${sectionPath("about", "ca")}))`],
+        ["Llegir el web", "Sense registre i sense donar cap dada"],
+        ["Galetes per defecte", "Només les necessàries; la mesura d'audiència, només si l'acceptes"],
+        ["Publicitat", "Encara cap anunci; prevista amb Google AdSense i, a Europa, amb consentiment previ"],
+        ["Contingut patrocinat i afiliació", "No n'hi ha"],
+        ["Fonts", "Oficials i primàries, citades a cada pàgina amb la data de verificació"],
+        ["Errors", "Es corregeixen a la mateixa pàgina; objectiu de resposta: 72 hores"],
+        ["Accessibilitat", "Objectiu WCAG 2.2 AA, autoavaluat"],
+      ],
+    },
+    es: {
+      title: "Lo que encontrarás, en una línea",
+      items: [
+        ["Quién edita el sitio", `${OPERATOR.brand}, fundado por ${OWNER.name} (ver [quiénes somos](${sectionPath("about", "es")}))`],
+        ["Leer el sitio", "Sin registro y sin dar ningún dato"],
+        ["Cookies por defecto", "Solo las necesarias; la medición de audiencia, solo si la aceptas"],
+        ["Publicidad", "Aún ningún anuncio; prevista con Google AdSense y, en Europa, con consentimiento previo"],
+        ["Contenido patrocinado y afiliación", "No hay"],
+        ["Fuentes", "Oficiales y primarias, citadas en cada página con la fecha de verificación"],
+        ["Errores", "Se corrigen en la misma página; objetivo de respuesta: 72 horas"],
+        ["Accesibilidad", "Objetivo WCAG 2.2 AA, autoevaluado"],
+      ],
+    },
+    en: {
+      title: "What you will find, one line each",
+      items: [
+        ["Who publishes the site", `${OPERATOR.brand}, founded by ${OWNER.name} (see the [about page](${sectionPath("about", "en")}))`],
+        ["Reading the site", "No sign-up and no data required"],
+        ["Default cookies", "Only the necessary ones; audience measurement only if you accept it"],
+        ["Advertising", "No ads yet; planned with Google AdSense and, in Europe, only after consent"],
+        ["Sponsored content and affiliate links", "None"],
+        ["Sources", "Official and primary, cited on every page with the date they were checked"],
+        ["Errors", "Corrected on the page itself; target response time: 72 hours"],
+        ["Accessibility", "WCAG 2.2 AA target, self-assessed"],
+      ],
+    },
+  };
+
   return [
     ...paragraphs(...(intro[locale] ?? [])),
     {
@@ -106,6 +151,11 @@ function hubBlocks(locale: Locale): Block[] {
       items: HUB_ITEMS.map(
         (item) => `[${item.label[locale]}](${legalPath(item.key, locale)}) — ${item.note[locale]}`,
       ),
+    } as Block,
+    {
+      type: "keyFacts",
+      title: summary[locale].title,
+      items: summary[locale].items.map(([label, value]) => ({ label, value })),
     } as Block,
     {
       type: "callout",
@@ -149,6 +199,7 @@ const HUB_COPY: Record<Locale, Omit<PageCopy, "blocks">> = {
 export const LEGAL_HUB: PageSpec = {
   key: "page-legal-hub",
   path: { ca: "legal", es: "legal", en: "legal" },
+  verifiedAt: "2026-11-11",
   copy: Object.fromEntries(
     LOCALES.map((locale) => [locale, { ...HUB_COPY[locale], blocks: hubBlocks(locale) }]),
   ) as Record<Locale, PageCopy>,
@@ -208,7 +259,7 @@ function legalNoticeBlocks(locale: Locale): Block[] {
       ...(hasLegalIdentity() ? [] : paragraphs(pendingIdentity.ca)),
       ...section(
         "Objecte del web",
-        "CatalunyaInfo publica informació pràctica i verificada sobre Catalunya, i sobre la resta d'Espanya quan afecta qui hi viu o hi viatja (festius, vagues, calendaris): on anar, com arribar-hi, què cal saber abans i on consultar la font oficial. És un mitjà informatiu independent, no una administració pública ni una oficina de turisme oficial.",
+        "CatalunyaInfo publica informació pràctica i verificada sobre Catalunya, i sobre la resta d'Espanya quan afecta qui hi viu o hi viatja (festius, vagues, calendaris, eleccions): on anar, com arribar-hi, què cal saber abans i on consultar la font oficial. És un mitjà informatiu independent, no una administració pública ni una oficina de turisme oficial.",
         `Com treballem i què no fem mai ho expliquem a la [política editorial](${editorial}).`,
       ),
       ...section(
@@ -238,7 +289,7 @@ function legalNoticeBlocks(locale: Locale): Block[] {
       ),
       ...section(
         "Dades personals i galetes",
-        `El tractament de dades s'explica a la [política de privadesa](${privacy}) i les galetes a la [política de galetes](${legalPath("cookies", locale)}).`,
+        `El tractament de dades s'explica a la [política de privadesa](${privacy}) i les galetes a la [política de galetes](${legalPath("cookies", locale)}). La publicitat prevista (Google AdSense), les galetes que farà servir i com s'hi demanarà el consentiment s'expliquen en totes dues.`,
       ),
       ...section(
         "Legislació i jurisdicció",
@@ -259,7 +310,7 @@ function legalNoticeBlocks(locale: Locale): Block[] {
       ...(hasLegalIdentity() ? [] : paragraphs(pendingIdentity.es)),
       ...section(
         "Objeto del sitio",
-        "CatalunyaInfo publica información práctica y verificada sobre Cataluña, y sobre el resto de España cuando afecta a quien vive o viaja allí (festivos, huelgas, calendarios): dónde ir, cómo llegar, qué conviene saber antes y dónde consultar la fuente oficial. Es un medio informativo independiente, no una administración pública ni una oficina de turismo oficial.",
+        "CatalunyaInfo publica información práctica y verificada sobre Cataluña, y sobre el resto de España cuando afecta a quien vive o viaja allí (festivos, huelgas, calendarios, elecciones): dónde ir, cómo llegar, qué conviene saber antes y dónde consultar la fuente oficial. Es un medio informativo independiente, no una administración pública ni una oficina de turismo oficial.",
         `Cómo trabajamos y qué no hacemos nunca se explica en la [política editorial](${editorial}).`,
       ),
       ...section(
@@ -289,7 +340,7 @@ function legalNoticeBlocks(locale: Locale): Block[] {
       ),
       ...section(
         "Datos personales y cookies",
-        `El tratamiento de datos se explica en la [política de privacidad](${privacy}) y las cookies en la [política de cookies](${legalPath("cookies", locale)}).`,
+        `El tratamiento de datos se explica en la [política de privacidad](${privacy}) y las cookies en la [política de cookies](${legalPath("cookies", locale)}). La publicidad prevista (Google AdSense), las cookies que usará y cómo se pedirá el consentimiento se explican en ambas.`,
       ),
       ...section(
         "Legislación y jurisdicción",
@@ -310,7 +361,7 @@ function legalNoticeBlocks(locale: Locale): Block[] {
       ...(hasLegalIdentity() ? [] : paragraphs(pendingIdentity.en)),
       ...section(
         "What this site is",
-        "CatalunyaInfo publishes practical, verified information about Catalonia, and about the rest of Spain where it affects people who live or travel there (holidays, strikes, calendars): where to go, how to get there, what to know beforehand and where to check the official source. It is an independent publication, not a public authority or an official tourist board.",
+        "CatalunyaInfo publishes practical, verified information about Catalonia, and about the rest of Spain where it affects people who live or travel there (holidays, strikes, calendars, elections): where to go, how to get there, what to know beforehand and where to check the official source. It is an independent publication, not a public authority or an official tourist board.",
         `How we work, and what we never do, is set out in our [editorial policy](${editorial}).`,
       ),
       ...section(
@@ -340,7 +391,7 @@ function legalNoticeBlocks(locale: Locale): Block[] {
       ),
       ...section(
         "Personal data and cookies",
-        `Data processing is described in the [privacy policy](${privacy}) and cookies in the [cookie policy](${legalPath("cookies", locale)}).`,
+        `Data processing is described in the [privacy policy](${privacy}) and cookies in the [cookie policy](${legalPath("cookies", locale)}). Both explain the planned advertising (Google AdSense), the cookies it will use and how consent will be asked for.`,
       ),
       ...section(
         "Governing law",
@@ -383,6 +434,7 @@ const LEGAL_NOTICE_COPY: Record<Locale, Omit<PageCopy, "blocks">> = {
 export const LEGAL_NOTICE: PageSpec = {
   key: "page-legal-notice",
   path: legalEntryPath("legal-notice"),
+  verifiedAt: "2026-11-11",
   copy: Object.fromEntries(
     LOCALES.map((locale) => [
       locale,
@@ -405,7 +457,7 @@ function editorialBlocks(locale: Locale): Block[] {
       {
         type: "paragraph",
         lead: true,
-        text: "CatalunyaInfo existeix per respondre bé una pregunta concreta: què necessites saber abans d'anar a un lloc de Catalunya. Aquesta pàgina explica com decidim què publiquem, com ho comprovem i què no farem mai.",
+        text: "CatalunyaInfo existeix per respondre bé una pregunta concreta: què necessites saber abans d'anar a un lloc de Catalunya, i què passa a la resta d'Espanya quan afecta qui hi viu o hi viatja (festius, vagues, calendaris, eleccions). Aquesta pàgina explica com decidim què publiquem, com ho comprovem i què no farem mai.",
       } as Block,
       ...section(
         "Què publiquem",
@@ -430,8 +482,9 @@ function editorialBlocks(locale: Locale): Block[] {
       ),
       ...section(
         "Independència i diners",
-        "Ara mateix el web no té publicitat, ni enllaços d'afiliació, ni continguts patrocinats. Ningú no ens paga per aparèixer-hi ni per aparèixer-hi millor.",
-        "Si algun dia n'hi ha, es marcarà de manera clara i visible abans del contingut afectat, mai amagat al final, i no canviarà què recomanem.",
+        "Ara mateix el web no mostra cap anunci i no té enllaços d'afiliació ni continguts patrocinats. Ningú no ens paga per aparèixer-hi ni per aparèixer-hi millor.",
+        `Tenim previst finançar-lo amb anuncis servits per Google (AdSense). Els anuncis els tria Google, no nosaltres; aniran identificats com a publicitat i separats del text, i no decidiran què publiquem ni què recomanem. Com funcionaran les galetes i el consentiment s'explica a la [política de privadesa](${legalPath("privacy", locale)}).`,
+        "No publiquem contingut patrocinat. Si algun dia hi hagués cap altra forma de contingut pagat, es marcaria de manera clara i visible abans del contingut afectat, mai amagada al final.",
       ),
       ...section(
         "Actualització i retirada",
@@ -447,7 +500,7 @@ function editorialBlocks(locale: Locale): Block[] {
       {
         type: "paragraph",
         lead: true,
-        text: "CatalunyaInfo existe para responder bien a una pregunta concreta: qué necesitas saber antes de ir a un lugar de Cataluña. Esta página explica cómo decidimos qué publicamos, cómo lo comprobamos y qué no haremos nunca.",
+        text: "CatalunyaInfo existe para responder bien a una pregunta concreta: qué necesitas saber antes de ir a un lugar de Cataluña, y qué pasa en el resto de España cuando afecta a quien vive o viaja allí (festivos, huelgas, calendarios, elecciones). Esta página explica cómo decidimos qué publicamos, cómo lo comprobamos y qué no haremos nunca.",
       } as Block,
       ...section(
         "Qué publicamos",
@@ -472,8 +525,9 @@ function editorialBlocks(locale: Locale): Block[] {
       ),
       ...section(
         "Independencia y dinero",
-        "Ahora mismo el sitio no tiene publicidad, ni enlaces de afiliación, ni contenidos patrocinados. Nadie nos paga por aparecer ni por aparecer mejor.",
-        "Si algún día los hay, se marcarán de forma clara y visible antes del contenido afectado, nunca escondido al final, y no cambiarán lo que recomendamos.",
+        "Ahora mismo el sitio no muestra ningún anuncio y no tiene enlaces de afiliación ni contenidos patrocinados. Nadie nos paga por aparecer ni por aparecer mejor.",
+        `Tenemos previsto financiarlo con anuncios servidos por Google (AdSense). Los anuncios los elige Google, no nosotros; irán identificados como publicidad y separados del texto, y no decidirán qué publicamos ni qué recomendamos. Cómo funcionarán las cookies y el consentimiento se explica en la [política de privacidad](${legalPath("privacy", locale)}).`,
+        "No publicamos contenido patrocinado. Si algún día hubiera otra forma de contenido pagado, se marcaría de forma clara y visible antes del contenido afectado, nunca escondida al final.",
       ),
       ...section(
         "Actualización y retirada",
@@ -486,7 +540,7 @@ function editorialBlocks(locale: Locale): Block[] {
       {
         type: "paragraph",
         lead: true,
-        text: "CatalunyaInfo exists to answer one question well: what you need to know before going somewhere in Catalonia. This page explains how we decide what to publish, how we check it, and what we will never do.",
+        text: "CatalunyaInfo exists to answer one question well: what you need to know before going somewhere in Catalonia, and what is happening in the rest of Spain where it affects people who live or travel there (holidays, strikes, calendars, elections). This page explains how we decide what to publish, how we check it, and what we will never do.",
       } as Block,
       ...section(
         "What we publish",
@@ -511,8 +565,9 @@ function editorialBlocks(locale: Locale): Block[] {
       ),
       ...section(
         "Independence and money",
-        "The site currently carries no advertising, no affiliate links and no sponsored content. Nobody pays to appear here, or to appear more favourably.",
-        "If that ever changes, it will be marked clearly and visibly before the content concerned — never buried at the end — and it will not change what we recommend.",
+        "The site currently shows no ads and carries no affiliate links and no sponsored content. Nobody pays to appear here, or to appear more favourably.",
+        `We plan to fund it with ads served by Google (AdSense). Google chooses the ads, not us; they will be labelled as advertising and kept apart from the text, and they will not decide what we publish or recommend. How the cookies and consent will work is explained in the [privacy policy](${legalPath("privacy", locale)}).`,
+        "We do not publish sponsored content. If any other form of paid content ever appeared, it would be marked clearly and visibly before the content concerned, never buried at the end.",
       ),
       ...section(
         "Updating and withdrawal",
@@ -553,6 +608,7 @@ const EDITORIAL_COPY: Record<Locale, Omit<PageCopy, "blocks">> = {
 export const EDITORIAL_POLICY: PageSpec = {
   key: "page-editorial-policy",
   path: legalEntryPath("editorial-policy"),
+  verifiedAt: "2026-11-11",
   copy: Object.fromEntries(
     LOCALES.map((locale) => [
       locale,
@@ -876,6 +932,11 @@ function accessibilityBlocks(locale: Locale): Block[] {
         "Encara no publiquem versions en lectura fàcil.",
       ),
       ...section(
+        "I quan hi hagi publicitat",
+        "Avui el web no mostra cap anunci. Quan se n'hi mostrin (Google AdSense), cada anunci anirà identificat com a publicitat i ocuparà un espai reservat d'entrada, perquè el text no salti mentre llegeixes. No farem servir anuncis que tapin el contingut ni finestres emergents a pantalla completa.",
+        "El contingut de cada anunci el serveix Google i el fa l'anunciant, de manera que la seva accessibilitat, com la dels mapes de tercers, no la controlem nosaltres. Si un anunci et bloqueja la lectura, digues-nos-ho.",
+      ),
+      ...section(
         "Avisa'ns si trobes una barrera",
         `Si alguna cosa no et funciona, escriu-nos pel [formulari de contacte](${contact}) o a [${SITE.contactEmail}](mailto:${SITE.contactEmail}) explicant la pàgina, el navegador i el producte de suport que fas servir.`,
         "Responem en un màxim de 15 dies hàbils i, si podem, arreglem la barrera abans.",
@@ -905,6 +966,11 @@ function accessibilityBlocks(locale: Locale): Block[] {
         "Todavía no publicamos versiones en lectura fácil.",
       ),
       ...section(
+        "Y cuando haya publicidad",
+        "Hoy el sitio no muestra ningún anuncio. Cuando se muestren (Google AdSense), cada anuncio irá identificado como publicidad y ocupará un espacio reservado de entrada, para que el texto no salte mientras lees. No usaremos anuncios que tapen el contenido ni ventanas emergentes a pantalla completa.",
+        "El contenido de cada anuncio lo sirve Google y lo hace el anunciante, así que su accesibilidad, como la de los mapas de terceros, no la controlamos nosotros. Si un anuncio te impide leer, dínoslo.",
+      ),
+      ...section(
         "Avísanos si encuentras una barrera",
         `Si algo no te funciona, escríbenos por el [formulario de contacto](${contact}) o a [${SITE.contactEmail}](mailto:${SITE.contactEmail}) indicando la página, el navegador y el producto de apoyo que utilizas.`,
         "Respondemos en un máximo de 15 días hábiles y, si podemos, arreglamos la barrera antes.",
@@ -932,6 +998,11 @@ function accessibilityBlocks(locale: Locale): Block[] {
         "There has been no external audit and no systematic testing with people who use assistive technology. We want to do both.",
         "Some decorative illustrations carry generic alternative text. Embedded third-party maps depend on the provider's accessibility, which we do not control.",
         "We do not yet publish easy-read versions.",
+      ),
+      ...section(
+        "And once there are ads",
+        "The site shows no ads today. When it does (Google AdSense), every ad will be labelled as advertising and sit in space reserved in advance, so the text does not jump while you read. We will not use ads that cover the content or full-screen pop-ups.",
+        "Each ad is served by Google and made by the advertiser, so its accessibility, like that of third-party maps, is not under our control. If an ad stops you reading, tell us.",
       ),
       ...section(
         "Tell us if you hit a barrier",
@@ -971,6 +1042,7 @@ const ACCESSIBILITY_COPY: Record<Locale, Omit<PageCopy, "blocks">> = {
 export const ACCESSIBILITY: PageSpec = {
   key: "page-accessibility",
   path: legalEntryPath("accessibility"),
+  verifiedAt: "2026-11-11",
   copy: Object.fromEntries(
     LOCALES.map((locale) => [
       locale,

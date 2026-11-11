@@ -275,7 +275,7 @@ const en: Messages = {
     analytics: "Audience measurement",
     analyticsNote: "Helps us learn which pages are useful. Aggregated data.",
     ads: "Advertising",
-    adsNote: "We do not serve ads yet. When we do, you will decide here.",
+    adsNote: "We do not serve ads yet. When we do, we will ask you first, through a consent tool certified by Google.",
   },
   contactForm: {
     legend: "Write to us",

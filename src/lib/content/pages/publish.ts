@@ -99,7 +99,7 @@ export async function publishInstitutionalPages(keys?: readonly string[]): Promi
         publishedAt,
         // Legal pages state their own verification date on the page furniture,
         // so this is the date the current wording was last checked.
-        lastVerifiedAt: publishedAt,
+        lastVerifiedAt: spec.verifiedAt ? new Date(`${spec.verifiedAt}T12:00:00+01:00`) : publishedAt,
         updatedAt: now,
       };
 

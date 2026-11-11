@@ -7,6 +7,7 @@ import { LOCALES, type Locale } from "@/lib/i18n/config";
 import { LEGAL_KEYS, legalPath, sectionPath } from "@/lib/i18n/routes";
 import { indexingAllowed } from "@/lib/site";
 import { wordCount } from "@/lib/content/blocks";
+import { SITE_AUTHOR_SLUG, siteAuthor, siteAuthorPath } from "@/lib/content/author";
 
 const { authors, authorTranslations, entries, entryTranslations, entrySources, media } =
   schema;
@@ -152,7 +153,7 @@ export async function buildReadinessReport(): Promise<ReadinessReport> {
 
   /* ---- Identified authors with real biographies ------------------------ */
   const authorRows = await db
-    .select({ id: authors.id, bio: authorTranslations.bio })
+    .select({ id: authors.id, slug: authors.slug, bio: authorTranslations.bio })
     .from(authors)
     .leftJoin(authorTranslations, eq(authorTranslations.authorId, authors.id))
     .where(eq(authors.isActive, true));
@@ -161,13 +162,31 @@ export async function buildReadinessReport(): Promise<ReadinessReport> {
     authorRows.filter((r) => (r.bio ?? "").trim().length > 60).map((r) => r.id),
   );
 
+  // Every guide and article without a CMS author is signed by the
+  // code-defined site author (lib/content/author.ts), whose public page is
+  // /ca/autors/marti-aguilera/. It counts only if its biography is real in
+  // every language, which is stricter than the any-translation rule above,
+  // and only once: a database row with the same slug is the same person.
+  const siteAuthors = LOCALES.map((locale) => siteAuthor(locale));
+  const siteAuthorCounts =
+    siteAuthors.every((a) => (a.bio ?? "").trim().length > 60) &&
+    !authorRows.some((r) => r.slug === SITE_AUTHOR_SLUG && authorsWithBio.has(r.id));
+  const identifiedAuthors = authorsWithBio.size + (siteAuthorCounts ? 1 : 0);
+
+  const authorParts = [`${authorsWithBio.size} database author profile(s) with a biography`];
+  if (siteAuthorCounts) {
+    authorParts.push(
+      `the site author ${siteAuthors[0]?.name} (code-defined, biography in ${LOCALES.join("/")}, ${siteAuthorPath("ca")}), who signs every guide and article with no CMS author`,
+    );
+  }
+
   checks.push({
     id: "authors",
     label: "Identified authors",
-    status: authorsWithBio.size > 0 ? "pass" : "fail",
+    status: identifiedAuthors > 0 ? "pass" : "fail",
     detail:
-      authorsWithBio.size > 0
-        ? `${authorsWithBio.size} author profile(s) with a biography.`
+      identifiedAuthors > 0
+        ? `${authorParts.join(", plus ")}.`
         : "No author has a biography. Content with no attributable human behind it is what a low-value review looks for.",
     blocking: true,
   });
@@ -220,12 +239,23 @@ export async function buildReadinessReport(): Promise<ReadinessReport> {
 
   /* ---- Thin pages ------------------------------------------------------ */
   const textRows = await db
-    .select({ searchText: entryTranslations.searchText })
+    .select({
+      locale: entryTranslations.locale,
+      path: entryTranslations.path,
+      key: entries.key,
+      type: entries.type,
+      noindex: entryTranslations.noindex,
+      searchText: entryTranslations.searchText,
+    })
     .from(entryTranslations)
     .innerJoin(entries, eq(entries.id, entryTranslations.entryId))
     .where(and(eq(entryTranslations.status, "published"), eq(entries.isDemo, false)));
 
-  stats.thinPages = textRows.filter((r) => wordCount(r.searchText) < 250).length;
+  const thin = textRows
+    .map((r) => ({ ...r, words: wordCount(r.searchText) }))
+    .filter((r) => r.words < 250)
+    .sort((a, b) => a.words - b.words);
+  stats.thinPages = thin.length;
 
   checks.push({
     id: "thin-pages",
@@ -234,7 +264,9 @@ export async function buildReadinessReport(): Promise<ReadinessReport> {
     detail:
       stats.thinPages === 0
         ? "No published page is under 250 words."
-        : `${stats.thinPages} published page(s) are under 250 words. Length is not a ranking factor, but a page that answers less than a search snippet is what gets flagged as low value.`,
+        : `${stats.thinPages} published page(s) are under 250 words. Length is not a ranking factor, but a page that answers less than a search snippet is what gets flagged as low value: ${thin
+            .map((r) => `/${r.locale}/${r.path}/ (${r.words} words, ${r.type}${r.key ? ` ${r.key}` : ""}${r.noindex ? ", noindex" : ""})`)
+            .join("; ")}.`,
     blocking: false,
   });
 

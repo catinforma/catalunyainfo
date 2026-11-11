@@ -99,6 +99,29 @@ export const maxDuration = 60;
  * surface the pages appear on so the change is live immediately rather than at
  * the next ISR window.
  */
+/** Keyed publish groups for the institutional pages (entries.key). */
+const INSTITUTIONAL_PAGE_GROUPS: Record<string, readonly string[]> = {
+  "about-page": ["page-about"],
+  "legal-notice": ["page-legal-notice"],
+  "privacy-cookies": ["page-privacy", "page-cookies"],
+  "editorial-policy": ["page-editorial-policy"],
+  "legal-hub": ["page-legal-hub"],
+  "accessibility-page": ["page-accessibility"],
+  "contact-page": ["page-contact"],
+  // The AdSense advertising disclosure (11 Nov 2026): every page whose wording
+  // it changed. Leaves corrections and sources alone.
+  "ads-disclosure": [
+    "page-privacy",
+    "page-cookies",
+    "page-legal-notice",
+    "page-editorial-policy",
+    "page-legal-hub",
+    "page-accessibility",
+    "page-about",
+    "page-contact",
+  ],
+};
+
 export async function POST(request: Request) {
   if (!authoriseDeployRequest(request)) {
     return NextResponse.json({ ok: false }, { status: 401 });
@@ -132,13 +155,14 @@ export async function POST(request: Request) {
     // On its own so a status update does not republish the guides that are
     // mid title-experiment along with it.
     if (only === "autumn") published.push(await publishAutumnColours());
+    // `pages` republishes all ten institutional pages and overwrites any CMS
+    // edit on them; a keyed group touches only the pages it names.
+    const pageKeys = Object.hasOwn(INSTITUTIONAL_PAGE_GROUPS, only) ? INSTITUTIONAL_PAGE_GROUPS[only] : undefined;
     const pages = wants("pages")
       ? await publishInstitutionalPages()
-      : wants("about-page")
-        ? await publishInstitutionalPages(["page-about"])
-        : wants("legal-notice")
-          ? await publishInstitutionalPages(["page-legal-notice"])
-          : { pages: [] };
+      : pageKeys
+        ? await publishInstitutionalPages(pageKeys)
+        : { pages: [] };
     if (wants("features")) published.push(...(await publishFeatures()));
     if (wants("features-a")) published.push(...(await publishFeatures(0, 5)));
     if (wants("features-b")) published.push(...(await publishFeatures(5, 10)));
