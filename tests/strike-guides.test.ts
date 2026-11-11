@@ -12,6 +12,7 @@ import {
   STRIKE_RENFE_GUIDE,
   buildStrikeGuideBody,
   compactDays,
+  guideStrikeId,
   nearbyStrikes,
   splitFact,
   strikeGuideDescription,
@@ -20,7 +21,7 @@ import {
   strikeWhoWhen,
   type StrikeGuideKey,
 } from "../src/lib/content/batch02/strike-guides.ts";
-import { STRIKES, STRIKES_AS_OF, STRIKES_GUIDE, STRIKES_VERIFIED, STRIKE_URLS, isUpcoming, type Strike } from "../src/lib/content/batch02/strikes.ts";
+import { STRIKES, STRIKES_AS_OF, STRIKES_GUIDE, STRIKES_VERIFIED, STRIKE_URLS, buildStrikesBody, guideEntry, isUpcoming, type Strike } from "../src/lib/content/batch02/strikes.ts";
 import { ARTICLE_PATHS } from "../src/lib/content/features/shared.ts";
 import { TRAINS } from "../src/lib/content/features/trains.ts";
 import { weekdayIndex } from "../src/lib/content/holidays/calendar.ts";
@@ -43,9 +44,11 @@ import { LINE_IDS } from "../src/lib/programmatic/rodalies/types.ts";
  * gave (hours, percentages, a "registered" call).
  */
 
+// 11 Nov 2026: the entry each guide covers is the one guideEntry picks on STRIKES_AS_OF
+// (the Renfe guide follows the next rail strike: 10 Nov, then 17 and 19, then 23).
 const GUIDES: { key: StrikeGuideKey; article: typeof STRIKE_RENFE_GUIDE; strikeId: string }[] = [
-  { key: "strikeRenfe", article: STRIKE_RENFE_GUIDE, strikeId: "vaga-renfe-2026-11-10" },
-  { key: "strikeEducation", article: STRIKE_EDUCATION_GUIDE, strikeId: "vaga-educacio-2026-11-26" },
+  { key: "strikeRenfe", article: STRIKE_RENFE_GUIDE, strikeId: guideStrikeId("strikeRenfe") },
+  { key: "strikeEducation", article: STRIKE_EDUCATION_GUIDE, strikeId: guideStrikeId("strikeEducation") },
 ];
 
 const text = (blocks: Block[]) => bodyToPlainText(blocks);
@@ -115,9 +118,10 @@ test("the paths collide with no other published path", () => {
 test("titles fit in 60 characters with the searched words first; descriptions fit in 155 and answer first", () => {
   const seo: Record<StrikeGuideKey, Record<Locale, string>> = {
     strikeRenfe: {
-      ca: "Vaga Renfe 10 i 12 novembre 2026: Rodalies i serveis mínims",
-      es: "Huelga Renfe 10 y 12 noviembre: Rodalies y servicios mínimos",
-      en: "Renfe strike 10 and 12 November 2026: Rodalies and what runs",
+      // 11 Nov 2026: 10 Nov is past (SEMAF withdrew the 12th), so the guide covers 17 and 19 Nov.
+      ca: "Vaga Renfe i Adif 17 i 19 novembre: Rodalies i mínims",
+      es: "Huelga Renfe y Adif 17 y 19 noviembre: Rodalies y mínimos",
+      en: "Renfe and Adif strike 17 and 19 November 2026: what runs",
     },
     strikeEducation: {
       ca: "Vaga educació 26 novembre 2026: escoles i serveis mínims",
@@ -158,9 +162,9 @@ test("titles and descriptions stay in sync with the entry's dates and status in 
   }
   // A day called off: the watch removes it from `dates` and every title follows.
   const tenOnly = withEntry("vaga-renfe-2026-11-10", (s) => ({ ...s, dates: ["2026-11-10"] }));
-  assert.equal(strikeGuideMeta("strikeRenfe", "ca", tenOnly).seoTitle, "Vaga Renfe 10 novembre 2026: Rodalies i serveis mínims");
-  assert.equal(strikeGuideMeta("strikeRenfe", "es", tenOnly).seoTitle, "Huelga Renfe 10 de noviembre: Rodalies y servicios mínimos");
-  assert.equal(strikeGuideMeta("strikeRenfe", "en", tenOnly).seoTitle, "Renfe strike 10 November 2026: Rodalies and what runs");
+  assert.equal(strikeGuideMeta("strikeRenfe", "ca", tenOnly, "2026-11-05").seoTitle, "Vaga Renfe 10 novembre 2026: Rodalies i serveis mínims");
+  assert.equal(strikeGuideMeta("strikeRenfe", "es", tenOnly, "2026-11-05").seoTitle, "Huelga Renfe 10 de noviembre: Rodalies y servicios mínimos");
+  assert.equal(strikeGuideMeta("strikeRenfe", "en", tenOnly, "2026-11-05").seoTitle, "Renfe strike 10 November 2026: Rodalies and what runs");
   // A strike moved to another day: the education titles follow too.
   const moved = withEntry("vaga-educacio-2026-11-26", (s) => ({ ...s, dates: ["2026-12-03"] }));
   assert.equal(strikeGuideMeta("strikeEducation", "ca", moved).seoTitle, "Vaga educació 3 desembre 2026: escoles i serveis mínims");
@@ -198,15 +202,65 @@ test("compact dates: same month, across months, bare and with weekdays", () => {
 /* One source of truth                                                        */
 /* -------------------------------------------------------------------------- */
 
-test("each guide belongs to one entry in strikes.ts, which points back at it", () => {
-  for (const spec of STRIKE_GUIDE_SPECS) assert.equal(entry(spec.strikeId).guide, spec.key, spec.key);
+test("each guide covers one entry at a time, of those in strikes.ts that point at it", () => {
+  for (const spec of STRIKE_GUIDE_SPECS) assert.equal(entry(guideStrikeId(spec.key)).guide, spec.key, spec.key);
   for (const strike of STRIKES.filter((s) => s.guide)) {
     assert.ok(
-      STRIKE_GUIDE_SPECS.some((spec) => spec.key === strike.guide && spec.strikeId === strike.id),
+      STRIKE_GUIDE_SPECS.some((spec) => spec.key === strike.guide),
       `${strike.id}: guide ${strike.guide} has no spec`,
     );
   }
   assert.deepEqual(GUIDES.map((g) => g.key).sort(), STRIKE_GUIDE_SPECS.map((s) => s.key).sort());
+});
+
+test("the Renfe guide follows the next rail strike: its days, titles and the hub's link move with the as-of date (11 Nov 2026)", () => {
+  // SEMAF called off the 12th (notice of 10 Nov): the 10 Nov entry has one day left.
+  assert.deepEqual(entry("vaga-renfe-2026-11-10").dates, ["2026-11-10"]);
+  const cover = (asOf: string) => guideStrikeId("strikeRenfe", asOf);
+  assert.equal(cover("2026-11-05"), "vaga-renfe-2026-11-10");
+  assert.equal(cover("2026-11-10"), "vaga-renfe-2026-11-10");
+  assert.equal(cover("2026-11-11"), "vaga-ferroviaria-2026-11-17");
+  assert.equal(cover("2026-11-19"), "vaga-ferroviaria-2026-11-17");
+  assert.equal(cover("2026-11-20"), "vaga-renfe-2026-11-23");
+  // After the last one, the guide stays on it (past wording).
+  assert.equal(cover("2026-12-31"), "vaga-renfe-2026-11-23");
+  assert.equal(guideEntry("strikeEducation", "2026-11-12")?.id, "vaga-educacio-2026-11-26");
+
+  const titles = (asOf: string) => LOCALES.map((locale) => strikeGuideMeta("strikeRenfe", locale, STRIKES, asOf).seoTitle);
+  assert.deepEqual(titles("2026-11-12"), [
+    "Vaga Renfe i Adif 17 i 19 novembre: Rodalies i mínims",
+    "Huelga Renfe y Adif 17 y 19 noviembre: Rodalies y mínimos",
+    "Renfe and Adif strike 17 and 19 November 2026: what runs",
+  ]);
+  assert.deepEqual(titles("2026-11-20"), [
+    "Vaga Renfe 23 novembre 2026: Rodalies i serveis mínims",
+    "Huelga Renfe 23 de noviembre: Rodalies y servicios mínimos",
+    "Renfe strike 23 November 2026: Rodalies and what runs",
+  ]);
+  for (const locale of LOCALES) {
+    for (const asOf of ["2026-11-12", "2026-11-20"]) {
+      const meta = strikeGuideMeta("strikeRenfe", locale, STRIKES, asOf);
+      assert.ok(meta.seoTitle.length <= 60 && meta.title.length <= 120 && meta.excerpt.length <= 200, `${locale} ${asOf}`);
+      const description = strikeGuideDescription("strikeRenfe", locale, asOf);
+      assert.ok(description.length > 60 && description.length <= 155, `${locale} ${asOf}: ${description}`);
+      assert.match(description, /^(\p{Lu}\p{Ll}+ )?\d{1,2}\b/u, `${locale} ${asOf}: ${description}`);
+    }
+    // Covering 17 and 19 Nov: the earlier strike is named as over, with the hub link; the entry's facts are on the page.
+    const blocks = buildStrikeGuideBody("strikeRenfe", locale, "2026-11-12");
+    assert.ok(bodySchema.safeParse(blocks).success, locale);
+    assert.match(text(blocks), /Ja ha passat la vaga anterior|Ya ha pasado la huelga anterior|The previous strike is over/, locale);
+    for (const fact of entry("vaga-ferroviaria-2026-11-17").facts[locale]) {
+      assert.ok(JSON.stringify(blocks).includes(JSON.stringify(splitFact(fact).value).slice(1, -1)), `${locale}: ${fact.slice(0, 50)}`);
+    }
+    // The hub links the guide once, from the card of the entry it covers.
+    const guideLink = `](/${locale}/${B2_PATHS.strikeRenfe[locale]}/)`;
+    for (const asOf of ["2026-11-05", "2026-11-12", "2026-11-20"]) {
+      const hub = buildStrikesBody(locale, asOf);
+      assert.equal(JSON.stringify(hub).split(guideLink).length - 1, 1, `hub/${locale} ${asOf}`);
+      const at = hub.findIndex((b) => b.type === "heading" && (b as { id?: string }).id === cover(asOf));
+      assert.ok(JSON.stringify(hub[at + 1]).includes(guideLink), `hub/${locale} ${asOf}: the link is on ${cover(asOf)}'s card`);
+    }
+  }
 });
 
 test("every fact on the page is the entry's: facts, minimum services and advice appear verbatim", () => {
@@ -311,7 +365,7 @@ test("minimum services: the section has the entry's text and says who sets them 
       // While pending, the entry's text says when the order came out last time (the precedent).
       if (strike.minimumServices.status === "pending") {
         assert.match(strike.minimumServices.text[locale], /Encara no s'han publicat|Aún no se han publicado|Not published yet/);
-        assert.match(strike.minimumServices.text[locale], /(setembre|septiembre|September|octubre|October)/, `${key}/${locale}: no precedent date`);
+        assert.match(strike.minimumServices.text[locale], /(setembre|septiembre|September|octubre|October|novembre|noviembre|November)/, `${key}/${locale}: no precedent date`);
       }
     }
   }
@@ -466,8 +520,9 @@ test("the 11N page links both guides in its body and follows the Renfe entry's s
     const body = JSON.stringify(blocks);
     for (const key of ["strikeRenfe", "strikeEducation"] as const) {
       const target = `](/${locale}/${B2_PATHS[key][locale]}/)`;
-      // Once in the text, once in the related rail.
-      assert.equal(body.split(target).length - 1, 2, `11N/${key}/${locale}`);
+      // Once in the text, once in the related rail, and (11 Nov 2026) once in the
+      // "upcoming strikes and dates" block, while the strike it covers is to come.
+      assert.equal(body.split(target).length - 1, 3, `11N/${key}/${locale}`);
     }
     assert.equal(text(blocks).includes(pending[locale]), renfe.minimumServices.status === "pending", locale);
     // The education strike is mentioned with the entry's day while it is still to come.
@@ -479,13 +534,14 @@ test("the 11N page links both guides in its body and follows the Renfe entry's s
   assert.equal(STRIKE_11N.editions.en.seoTitle, "General strike 11 November 2026 in Spain: what runs");
 });
 
-test("the Renfe guide lists the general strike between its two days and links its page", () => {
-  const others = nearbyStrikes(entry("vaga-renfe-2026-11-10")).map((s) => s.id);
+test("the Renfe guide lists the general strike the day after its 10 Nov strike and links its page", () => {
+  const others = nearbyStrikes(entry("vaga-renfe-2026-11-10"), "2026-11-05").map((s) => s.id);
   assert.ok(others.includes("vaga-general-2026-11-11"));
   assert.ok(!others.includes("vaga-renfe-2026-11-10"));
-  assert.ok(!others.includes("vaga-educacio-2026-11-26"), "26 Nov is not near 10-12 Nov");
+  assert.ok(!others.includes("vaga-educacio-2026-11-26"), "26 Nov is not near 10 Nov");
   for (const locale of LOCALES) {
-    const blocks = STRIKE_RENFE_GUIDE.editions[locale].blocks;
+    // As it read before the 10th (it now covers the next rail strike).
+    const blocks = buildStrikeGuideBody("strikeRenfe", locale, "2026-11-05");
     const at = blocks.findIndex((b) => b.type === "heading" && (b as { id?: string }).id === "altres-vagues");
     assert.ok(at > 0, locale);
     const list = blocks[at + 2] as { items: string[] };
@@ -559,10 +615,15 @@ test("nothing no official source gave: no hours, percentages or other operators 
     if (entry(strikeId).minimumServices.status !== "pending") continue;
     for (const locale of LOCALES) {
       const body = `${text(article.editions[locale].blocks)} ${article.editions[locale].seoDescription}`;
-      assert.doesNotMatch(body, /\d+\s?%/, `${key}/${locale}: a percentage while pending`);
-      assert.doesNotMatch(body, /\b\d{1,2}[.:]\d{2}\s?h?\b(?! de)/, `${key}/${locale}: a clock time`);
-      assert.doesNotMatch(body, /\bIryo\b|\bAVE\b|\bAvlo\b|\bAlvia\b/, `${key}/${locale}: names an operator or service no source gave`);
-      assert.doesNotMatch(body, /desconvocad|called off|cancel·lada|cancelada/i, `${key}/${locale}`);
+      // 11 Nov 2026: hours and operators the entry's own facts give (the unions' notices, linked there) are allowed.
+      const facts = entry(strikeId).facts[locale].join(" ");
+      const check = (pattern: RegExp, message: string) => {
+        if (!pattern.test(facts)) assert.doesNotMatch(body, pattern, `${key}/${locale}: ${message}`);
+      };
+      check(/\d+\s?%/, "a percentage while pending");
+      check(/\b\d{1,2}[.:]\d{2}\s?h?\b(?! de)/, "a clock time");
+      check(/\bIryo\b|\bAVE\b|\bAvlo\b|\bAlvia\b/, "names an operator or service no source gave");
+      check(/desconvocad|called off|cancel·lada|cancelada/i, "a call-off");
     }
   }
 });

@@ -1,3 +1,4 @@
+import { nextDateLinks } from "@/lib/alerts/news-alerts";
 import type { Block } from "@/lib/content/blocks";
 import { TRAINS } from "@/lib/content/features/trains";
 import { PATHS as TOOL_PATHS } from "@/lib/content/home-tools";
@@ -307,6 +308,7 @@ const BASE_SOURCES: B2Source[] = [
   { name: "Resolución de 27 de octubre de 2026: servicios mínimos durante la huelga convocada por SEMAF en OUIGO España", url: U.ouigoResolution, publisher: "Ministerio de Transportes y Movilidad Sostenible" },
   { name: "Infovuelos", url: U.aena, publisher: "Aena" },
   { name: "SEMAF continúa convocando huelgas los días 10 y 12 de noviembre en el Grupo Renfe (nº 2026-51, 29/10/2026)", url: U.semaf1012, publisher: "SEMAF" },
+  { name: "Primer Real Decreto-ley aprobado: SEMAF mueve el paro del 12 al 23 de noviembre (10/11/2026)", url: U.semaf23, publisher: "SEMAF" },
   { name: "Ordre EMT/209/2026, de 22 d'octubre: servei essencial d'assistència sanitària dels centres del SISCAT (vaga indefinida de Metges de Catalunya, DOGC núm. 9780)", url: U.ordreMetges, publisher: "DOGC" },
 ];
 
@@ -495,6 +497,78 @@ function andDays(dates: string[], locale: Locale): string {
   return items.length <= 2 ? items.join(and) : `${items.slice(0, -1).join(", ")}${and}${items[last]}`;
 }
 
+/**
+ * 11 Nov 2026: SEMAF called off the 12 Nov stoppages on 10 Nov (semaf23) and
+ * the entry in strikes.ts lost that day. The lead and the key facts follow the
+ * entry: the old wording while the 12th is in its dates, the new one after.
+ */
+const RENFE_12 = RENFE_NOV?.dates.includes("2026-11-12") ?? false;
+
+function renfeLeadLine(locale: Locale): string {
+  if (RENFE_12) {
+    return {
+      ca: " **Compte també amb el 10 i el 12 de novembre:** el sindicat de maquinistes SEMAF hi ha convocat vaga al Grup Renfe (aturada total el 10, aturades parcials el 12), que afecta Rodalies.",
+      es: " **Ojo también al 10 y al 12 de noviembre:** el sindicato de maquinistas SEMAF ha convocado huelga en el Grupo Renfe (paro total el 10, paros parciales el 12), que afecta a Rodalies.",
+      en: " **Watch 10 and 12 November too:** the train drivers' union SEMAF has called strikes at the Renfe Group (a full stoppage on the 10th, partial stoppages on the 12th), which affect Rodalies.",
+    }[locale];
+  }
+  return {
+    ca: " **El dijous 12 de novembre no hi ha vaga a Renfe:** el sindicat de maquinistes SEMAF va desconvocar les aturades parcials d'aquell dia i les ha substituïdes per una nova vaga el dilluns 23 de novembre.",
+    es: " **El jueves 12 de noviembre no hay huelga en Renfe:** el sindicato de maquinistas SEMAF desconvocó los paros parciales de ese día y los ha sustituido por una nueva huelga el lunes 23 de noviembre.",
+    en: " **No Renfe strike on Thursday 12 November:** the train drivers' union SEMAF withdrew that day's partial stoppages and replaced them with a new strike on Monday 23 November.",
+  }[locale];
+}
+
+function renfeKeyFact(locale: Locale): { label: string; value: string } {
+  if (RENFE_12) {
+    return {
+      ca: { label: "10 i 12 de novembre", value: "Vaga de maquinistes del Grup Renfe (SEMAF), que afecta Rodalies: aturada total el 10 i aturades parcials el 12" },
+      es: { label: "10 y 12 de noviembre", value: "Huelga de maquinistas del Grupo Renfe (SEMAF), que afecta a Rodalies: paro total el 10 y paros parciales el 12" },
+      en: { label: "10 and 12 November", value: "Renfe Group train drivers' strike (SEMAF), which affects Rodalies: a full stoppage on the 10th, partial stoppages on the 12th" },
+    }[locale];
+  }
+  return {
+    ca: { label: "Renfe (SEMAF)", value: "Aturada total el dimarts 10 de novembre, que afecta Rodalies. Les aturades del 12 es van desconvocar: SEMAF ha convocat una nova vaga el 23 de novembre" },
+    es: { label: "Renfe (SEMAF)", value: "Paro total el martes 10 de noviembre, que afecta a Rodalies. Los paros del 12 se desconvocaron: SEMAF ha convocado una nueva huelga el 23 de noviembre" },
+    en: { label: "Renfe (SEMAF)", value: "A full stoppage on Tuesday 10 November, which affects Rodalies. The 12th's stoppages were withdrawn: SEMAF has called a new strike on 23 November" },
+  }[locale];
+}
+
+/**
+ * 11 Nov 2026: "Properes vagues i dates", under the answer of the 11N pages
+ * (this one, the 13 city pages and the Spain page): the sitewide strip's lines
+ * about what comes after 11N (news-alerts.ts), each while its day is still to
+ * come on the page's own as-of date, then the strikes hub of the page's
+ * audience. Wording names the days, so it reads the same before, on and
+ * after 11 November. Logged in docs/SEO_EXPERIMENTS.md (11 Nov 2026).
+ */
+export const NEXT_DATES_HEADING: Record<Locale, string> = {
+  ca: "Properes vagues i dates",
+  es: "Próximas huelgas y fechas",
+  en: "Upcoming strikes and dates",
+};
+export const NEXT_DATES_ID: Record<Locale, string> = { ca: "properes-vagues", es: "proximas-huelgas", en: "upcoming-strikes" };
+
+const NEXT_DATES_HUB: Record<"strikes" | "strikesSpain", Record<Locale, string>> = {
+  strikes: {
+    ca: "Totes les vagues convocades a Catalunya, dia a dia",
+    es: "Todas las huelgas convocadas en Cataluña, día a día",
+    en: "Every strike called in Catalonia, day by day",
+  },
+  strikesSpain: {
+    ca: "Calendari de vagues a Espanya, dia a dia",
+    es: "Calendario de huelgas en España, día a día",
+    en: "Strike calendar for Spain, day by day",
+  },
+};
+
+export function nextDatesBlocks(locale: Locale, asOf: string, hub: "strikes" | "strikesSpain"): Block[] {
+  return [
+    heading(2, NEXT_DATES_HEADING[locale], NEXT_DATES_ID[locale]),
+    list(...nextDateLinks(locale, asOf), b2link(hub, locale, NEXT_DATES_HUB[hub][locale])),
+  ];
+}
+
 const COPY: Record<Locale, Copy> = {
   ca: {
     lead: (c) => {
@@ -511,7 +585,7 @@ const COPY: Record<Locale, Copy> = {
         partial: ` **Serveis mínims de la Generalitat ja publicats:** Rodalies i regionals, metro, autobusos, FGC i tramvia funcionen al 25% de 6.30 a 9.30 h i de 16.30 a 21 h; escoles i sanitat, a la taula de més avall. Els trens d'alta velocitat i llarga distància i els vols encara no en tenen (consultat el ${c.checked}).`,
         published: " **Els serveis mínims ja s'han publicat:** Rodalies i regionals, metro, autobusos, FGC i tramvia funcionen al 25% de 6.30 a 9.30 h i de 16.30 a 21 h. Els trens de llarga distància, els vols, les escoles i la sanitat són a la taula de més avall, sector per sector, amb l'enllaç a l'ordre o a l'avís oficial.",
       }[c.state];
-      return `${first}${ms} **Compte també amb el 10 i el 12 de novembre:** el sindicat de maquinistes SEMAF hi ha convocat vaga al Grup Renfe (aturada total el 10, aturades parcials el 12), que afecta Rodalies.`;
+      return `${first}${ms}${renfeLeadLine("ca")}`;
     },
     keyFactsTitle: "La vaga general de l'11 de novembre, d'un cop d'ull",
     keyFacts: (c) => [
@@ -527,7 +601,7 @@ const COPY: Record<Locale, Copy> = {
       },
       { label: "Escoles", value: "És dia lectiu: les escoles obren amb el personal mínim que fixi l'ordre de serveis mínims" },
       { label: "Manifestació a Barcelona", value: `A les 17.30 h, des dels Jardinets de Gràcia, segons el Sindicat de Llogateres. CCOO i UGT no n'havien publicat hora ni lloc el ${c.checked}` },
-      { label: "10 i 12 de novembre", value: "Vaga de maquinistes del Grup Renfe (SEMAF), que afecta Rodalies: aturada total el 10 i aturades parcials el 12" },
+      renfeKeyFact("ca"),
       { label: "Convocatòria", value: "CCOO i UGT, amb CGT, CNT i altres organitzacions. A Catalunya, CCOO de Catalunya, UGT de Catalunya i CGT Catalunya; a l'educació, també USTEC·STEs" },
       { label: "Qui hi està cridat", value: "Totes les persones treballadores, assalariades o per compte propi, del sector públic i del privat" },
     ],
@@ -607,10 +681,10 @@ const COPY: Record<Locale, Copy> = {
     transportHeading: "Transport: Rodalies, metro, bus, FGC, trens i avions",
     transportIntro: "Una vaga general pot afectar tots els operadors alhora, i cadascun publica els seus horaris de serveis mínims quan surt l'ordre. Mira'ls el vespre abans i el mateix matí: les ordres permeten repartir el percentatge de manera desigual al llarg del dia, així que no tots els trens o autobusos de la teva hora hi seran.",
     more: {
-      rodalies: `Rodalies publica l'horari de serveis mínims de cada línia al seu ${link(U.rodaliesStatus, "web d'alteracions del servei")}: per a la vaga de Renfe del 29 d'octubre de 2026, l'avís amb els percentatges ja era actualitzat el dia 26. El mateix dia de la vaga, mira [els avisos de la teva línia avui](${rodaliesHub("ca")}), llegits en directe de Rodalies de Catalunya. **El dia abans i el dia després també hi ha vaga a Renfe:** el sindicat de maquinistes SEMAF ha convocat una aturada total el dimarts 10 de novembre i aturades parcials al llarg del dijous 12, segons ${link(U.semaf1012, "el seu comunicat del 29 d'octubre")}, ${{ pending: "sense hores ni serveis mínims publicats encara", published: "amb serveis mínims ja publicats", none: "sense serveis mínims publicats" }[RENFE_NOV_MS]}. Tot el que se'n sap, a ${b2link("strikeRenfe", "ca", "la guia de la vaga de Renfe")}.`,
+      rodalies: `Rodalies publica l'horari de serveis mínims de cada línia al seu ${link(U.rodaliesStatus, "web d'alteracions del servei")}: per a la vaga de Renfe del 29 d'octubre de 2026, l'avís amb els percentatges ja era actualitzat el dia 26. El mateix dia de la vaga, mira [els avisos de la teva línia avui](${rodaliesHub("ca")}), llegits en directe de Rodalies de Catalunya. **El dia abans, vaga a Renfe:** el sindicat de maquinistes SEMAF va convocar una aturada total el dimarts 10 de novembre, segons ${link(U.semaf1012, "el seu comunicat del 29 d'octubre")}, ${{ pending: "sense hores ni serveis mínims publicats encara", published: "amb serveis mínims ja publicats", none: "sense serveis mínims publicats" }[RENFE_NOV_MS]}. Les aturades parcials que també havia convocat el dijous 12 les va desconvocar el 10 de novembre i les va substituir per una nova vaga el dilluns 23, segons ${link(U.semaf23, "un altre comunicat")}. Tot el que se'n sap, a ${b2link("strikeRenfe", "ca", "la guia de la vaga de Renfe")}.`,
       tmb: `TMB els publica als seus ${link(U.tmb, "avisos de servei")}. L'horari d'un dia normal és a ${b2link("hours", "ca", "l'horari del metro i del NitBus")}.`,
       fgcTram: `FGC informa de l'estat del servei a ${link(U.fgc, "fgc.cat")}. Les ordres de les vagues generals del 2024 també hi incloïen el tramvia i la resta d'autobusos urbans i interurbans.`,
-      longDistance: `Els trens d'alta velocitat i de llarga distància són serveis de l'Estat, i per això no són a l'ordre de la Generalitat: per a la vaga d'Ouigo d'aquesta tardor, els serveis mínims els va fixar el Ministeri de Transports, amb ${link(U.ouigoResolution, "una resolució del 27 d'octubre")}. Si tens bitllet per a l'11, mira ${link(U.renfe, "renfe.com")} o el web del teu operador; la vaga de maquinistes de SEMAF del 10 i el 12 de novembre també afecta els trens de Renfe.`,
+      longDistance: `Els trens d'alta velocitat i de llarga distància són serveis de l'Estat, i per això no són a l'ordre de la Generalitat: per a la vaga d'Ouigo d'aquesta tardor, els serveis mínims els va fixar el Ministeri de Transports, amb ${link(U.ouigoResolution, "una resolució del 27 d'octubre")}. Si tens bitllet per a l'11, mira ${link(U.renfe, "renfe.com")} o el web del teu operador; la vaga de maquinistes de SEMAF del 10 de novembre també afectava els trens de Renfe (la del 12 es va desconvocar).`,
       airports: `Els vols del Prat, Girona i Reus, que són aeroports d'Aena, tenen els serveis mínims que fixa el Ministeri de Transports; les ordres de la Generalitat només fixen l'operativa dels aeroports que gestiona ella, Lleida-Alguaire i Andorra-la Seu d'Urgell. Abans d'anar a l'aeroport, mira l'estat del vol a la teva companyia o a ${link(U.aena, "Infovuelos d'Aena")}, i les maneres d'arribar-hi a ${b2link("airport", "ca", "la guia de l'aeroport al centre de Barcelona")}.`,
     },
     taxiHeading: "Taxi",
@@ -736,7 +810,7 @@ const COPY: Record<Locale, Copy> = {
         partial: ` **Servicios mínimos de la Generalitat ya publicados:** Rodalies y regionales, metro, autobuses, FGC y tranvía funcionan al 25% de 6.30 a 9.30 h y de 16.30 a 21 h; escuelas y sanidad, en la tabla de más abajo. Los trenes de alta velocidad y larga distancia y los vuelos aún no los tienen (consultado el ${c.checked}).`,
         published: " **Los servicios mínimos ya se han publicado:** Rodalies y regionales, metro, autobuses, FGC y tranvía funcionan al 25% de 6.30 a 9.30 h y de 16.30 a 21 h. Los trenes de larga distancia, los vuelos, las escuelas y la sanidad están en la tabla de más abajo, sector por sector, con el enlace a la orden o al aviso oficial.",
       }[c.state];
-      return `${first}${ms} **Ojo también al 10 y al 12 de noviembre:** el sindicato de maquinistas SEMAF ha convocado huelga en el Grupo Renfe (paro total el 10, paros parciales el 12), que afecta a Rodalies.`;
+      return `${first}${ms}${renfeLeadLine("es")}`;
     },
     keyFactsTitle: "La huelga general del 11 de noviembre, de un vistazo",
     keyFacts: (c) => [
@@ -752,7 +826,7 @@ const COPY: Record<Locale, Copy> = {
       },
       { label: "Colegios", value: "Es día lectivo: los colegios abren con el personal mínimo que fije la orden de servicios mínimos" },
       { label: "Manifestación en Barcelona", value: `A las 17.30 h, desde los Jardinets de Gràcia, según el Sindicat de Llogateres. CCOO y UGT no habían publicado hora ni lugar el ${c.checked}` },
-      { label: "10 y 12 de noviembre", value: "Huelga de maquinistas del Grupo Renfe (SEMAF), que afecta a Rodalies: paro total el 10 y paros parciales el 12" },
+      renfeKeyFact("es"),
       { label: "Convocatoria", value: "CCOO y UGT, con CGT, CNT y otras organizaciones. En Cataluña, CCOO de Catalunya, UGT de Catalunya y CGT Catalunya; en educación, también USTEC·STEs" },
       { label: "A quién llama", value: "A todas las personas trabajadoras, asalariadas o por cuenta propia, del sector público y del privado" },
     ],
@@ -832,10 +906,10 @@ const COPY: Record<Locale, Copy> = {
     transportHeading: "Transporte: Rodalies, metro, bus, FGC, trenes y aviones",
     transportIntro: "Una huelga general puede afectar a todos los operadores a la vez, y cada uno publica sus horarios de servicios mínimos cuando sale la orden. Míralos la noche antes y la misma mañana: las órdenes permiten repartir el porcentaje de forma desigual a lo largo del día, así que no todos los trenes o autobuses de tu hora estarán.",
     more: {
-      rodalies: `Rodalies publica el horario de servicios mínimos de cada línea en su ${link(U.rodaliesStatus, "web de alteraciones del servicio")}: para la huelga de Renfe del 29 de octubre de 2026, el aviso con los porcentajes ya estaba actualizado el día 26. El mismo día de la huelga, mira [los avisos de tu línea hoy](${rodaliesHub("es")}), leídos en directo de Rodalies de Catalunya. **El día antes y el día después también hay huelga en Renfe:** el sindicato de maquinistas SEMAF ha convocado un paro total el martes 10 de noviembre y paros parciales a lo largo del jueves 12, según ${link(U.semaf1012, "su comunicado del 29 de octubre")}, ${{ pending: "sin horas ni servicios mínimos publicados todavía", published: "con servicios mínimos ya publicados", none: "sin servicios mínimos publicados" }[RENFE_NOV_MS]}. Todo lo que se sabe, en ${b2link("strikeRenfe", "es", "la guía de la huelga de Renfe")}.`,
+      rodalies: `Rodalies publica el horario de servicios mínimos de cada línea en su ${link(U.rodaliesStatus, "web de alteraciones del servicio")}: para la huelga de Renfe del 29 de octubre de 2026, el aviso con los porcentajes ya estaba actualizado el día 26. El mismo día de la huelga, mira [los avisos de tu línea hoy](${rodaliesHub("es")}), leídos en directo de Rodalies de Catalunya. **El día antes, huelga en Renfe:** el sindicato de maquinistas SEMAF convocó un paro total el martes 10 de noviembre, según ${link(U.semaf1012, "su comunicado del 29 de octubre")}, ${{ pending: "sin horas ni servicios mínimos publicados todavía", published: "con servicios mínimos ya publicados", none: "sin servicios mínimos publicados" }[RENFE_NOV_MS]}. Los paros parciales que también había convocado el jueves 12 los desconvocó el 10 de noviembre y los sustituyó por una nueva huelga el lunes 23, según ${link(U.semaf23, "otro comunicado")}. Todo lo que se sabe, en ${b2link("strikeRenfe", "es", "la guía de la huelga de Renfe")}.`,
       tmb: `TMB los publica en sus ${link(U.tmb, "avisos de servicio")}. El horario de un día normal está en ${b2link("hours", "es", "el horario del metro y del NitBus")}.`,
       fgcTram: `FGC informa del estado del servicio en ${link(U.fgc, "fgc.cat")}. Las órdenes de las huelgas generales de 2024 también incluían el tranvía y el resto de autobuses urbanos e interurbanos.`,
-      longDistance: `Los trenes de alta velocidad y de larga distancia son servicios del Estado, y por eso no están en la orden de la Generalitat: para la huelga de Ouigo de este otoño, los servicios mínimos los fijó el Ministerio de Transportes, con ${link(U.ouigoResolution, "una resolución del 27 de octubre")}. Si tienes billete para el 11, mira ${link(U.renfe, "renfe.com")} o la web de tu operador; la huelga de maquinistas de SEMAF del 10 y el 12 de noviembre también afecta a los trenes de Renfe.`,
+      longDistance: `Los trenes de alta velocidad y de larga distancia son servicios del Estado, y por eso no están en la orden de la Generalitat: para la huelga de Ouigo de este otoño, los servicios mínimos los fijó el Ministerio de Transportes, con ${link(U.ouigoResolution, "una resolución del 27 de octubre")}. Si tienes billete para el 11, mira ${link(U.renfe, "renfe.com")} o la web de tu operador; la huelga de maquinistas de SEMAF del 10 de noviembre también afectaba a los trenes de Renfe (la del 12 se desconvocó).`,
       airports: `Los vuelos de El Prat, Girona y Reus, que son aeropuertos de Aena, tienen los servicios mínimos que fija el Ministerio de Transportes; las órdenes de la Generalitat solo fijan la operativa de los aeropuertos que gestiona ella, Lleida-Alguaire y Andorra-La Seu d'Urgell. Antes de ir al aeropuerto, mira el estado del vuelo en tu compañía o en ${link(U.aena, "Infovuelos de Aena")}, y las formas de llegar en ${b2link("airport", "es", "la guía del aeropuerto al centro de Barcelona")}.`,
     },
     taxiHeading: "Taxi",
@@ -961,7 +1035,7 @@ const COPY: Record<Locale, Copy> = {
         partial: ` **The Generalitat's minimum services are out:** Rodalies and regional trains, metro, buses, FGC and tram run at 25% from 06:30 to 09:30 and from 16:30 to 21:00; schools and health are in the table below. High-speed and long-distance trains and flights have none yet (checked on ${c.checked}).`,
         published: " **Minimum services have been published:** Rodalies and regional trains, metro, buses, FGC and tram run at 25% from 06:30 to 09:30 and from 16:30 to 21:00. Long-distance trains, flights, schools and health are in the table below, sector by sector, with a link to the official order or notice.",
       }[c.state];
-      return `${first}${ms} **Watch 10 and 12 November too:** the train drivers' union SEMAF has called strikes at the Renfe Group (a full stoppage on the 10th, partial stoppages on the 12th), which affect Rodalies.`;
+      return `${first}${ms}${renfeLeadLine("en")}`;
     },
     keyFactsTitle: "The 11 November general strike at a glance",
     keyFacts: (c) => [
@@ -977,7 +1051,7 @@ const COPY: Record<Locale, Copy> = {
       },
       { label: "Schools", value: "A school day: schools open with the minimum staff the minimum-services order sets" },
       { label: "Barcelona demonstration", value: `17:30, from the Jardinets de Gràcia, according to the tenants' union Sindicat de Llogateres. CCOO and UGT had published no time or place by ${c.checked}` },
-      { label: "10 and 12 November", value: "Renfe Group train drivers' strike (SEMAF), which affects Rodalies: a full stoppage on the 10th, partial stoppages on the 12th" },
+      renfeKeyFact("en"),
       { label: "Called by", value: "CCOO and UGT, with CGT, CNT and other organisations. In Catalonia, CCOO de Catalunya, UGT de Catalunya and CGT Catalunya; in education, the teachers' union USTEC·STEs too" },
       { label: "Who is called out", value: "All workers, employed or self-employed, public and private" },
     ],
@@ -1057,10 +1131,10 @@ const COPY: Record<Locale, Copy> = {
     transportHeading: "Transport: Rodalies, metro, buses, FGC, trains and flights",
     transportIntro: "A general strike can hit every operator at once, and each publishes its minimum-service timetables once the order is out. Check them the evening before and that morning: the orders let operators spread the percentage unevenly over the day, so not every train or bus at your usual time will run.",
     more: {
-      rodalies: `Rodalies publishes a minimum-service timetable for every line on its ${link(U.rodaliesStatus, "service changes page")}: for the Renfe strike of 29 October 2026, the notice with the percentages had been updated by the 26th. On the strike day, check [today's notices for your line](${rodaliesHub("en")}), read live from Rodalies de Catalunya. **Renfe has strikes the day before and the day after too:** the train drivers' union SEMAF has called a full stoppage on Tuesday 10 November and partial stoppages during Thursday 12 November, according to ${link(U.semaf1012, "its notice of 29 October")}, ${{ pending: "with no hours or minimum services published yet", published: "and its minimum services are out", none: "with no minimum services published" }[RENFE_NOV_MS]}. Everything known about it is in ${b2link("strikeRenfe", "en", "our Renfe strike guide")}.`,
+      rodalies: `Rodalies publishes a minimum-service timetable for every line on its ${link(U.rodaliesStatus, "service changes page")}: for the Renfe strike of 29 October 2026, the notice with the percentages had been updated by the 26th. On the strike day, check [today's notices for your line](${rodaliesHub("en")}), read live from Rodalies de Catalunya. **A Renfe strike the day before:** the train drivers' union SEMAF called a full stoppage on Tuesday 10 November, according to ${link(U.semaf1012, "its notice of 29 October")}, ${{ pending: "with no hours or minimum services published yet", published: "and its minimum services are out", none: "with no minimum services published" }[RENFE_NOV_MS]}. The partial stoppages it had also called for Thursday 12 November were withdrawn on 10 November and replaced with a new strike on Monday 23 November, according to ${link(U.semaf23, "a later notice")}. Everything known about it is in ${b2link("strikeRenfe", "en", "our Renfe strike guide")}.`,
       tmb: `TMB publishes them in its ${link(U.tmb, "service notices")}. Normal-day hours are in ${b2link("hours", "en", "Barcelona metro and night bus hours")}.`,
       fgcTram: `FGC posts its service status on ${link(U.fgc, "fgc.cat")}. The 2024 general-strike orders also covered the tram and all other urban and interurban buses.`,
-      longDistance: `High-speed and long-distance trains are State services, so they are not in the Generalitat's order: for Ouigo's strike this autumn, the Ministry of Transport set the minimum services in ${link(U.ouigoResolution, "a resolution of 27 October")}. If you have a ticket for the 11th, check ${link(U.renfe, "renfe.com")} or your operator's website; SEMAF's drivers' strike on 10 and 12 November also affects Renfe trains.`,
+      longDistance: `High-speed and long-distance trains are State services, so they are not in the Generalitat's order: for Ouigo's strike this autumn, the Ministry of Transport set the minimum services in ${link(U.ouigoResolution, "a resolution of 27 October")}. If you have a ticket for the 11th, check ${link(U.renfe, "renfe.com")} or your operator's website; SEMAF's drivers' strike on 10 November also affected Renfe trains (the 12th's was withdrawn).`,
       airports: `Flights at Barcelona-El Prat, Girona and Reus, which are Aena airports, have the minimum services set by the Spanish Ministry of Transport; the Generalitat's orders only set the operations of the two airports it runs, Lleida-Alguaire and Andorra-La Seu d'Urgell. Before you leave for the airport, check your flight with your airline or on ${link(U.aena, "Aena's Infovuelos")}, and the ways to get there in ${b2link("airport", "en", "our airport to city centre guide")}.`,
     },
     taxiHeading: "Taxis",
@@ -1177,6 +1251,10 @@ const COPY: Record<Locale, Copy> = {
 /* Body                                                                       */
 /* -------------------------------------------------------------------------- */
 
+function heading(level: 2 | 3, text: string, id?: string): Block {
+  return { type: "heading", level, text, ...(id ? { id } : {}) } as Block;
+}
+
 const RELATED = ["strikes", "hours", "airport", "transport", "strikeRenfe", "strikeEducation"] as const;
 
 /** The Spanish edition's link line to the city pages (strike-11n-cities.ts), Spanish only. */
@@ -1187,10 +1265,6 @@ export function otherCitiesLine(): string {
 }
 const SECTOR_ORDER: SectorKey[] = ["rodalies", "tmb", "fgcTram", "longDistance", "airports", "schools", "health"];
 const TRANSPORT: ("rodalies" | "tmb" | "fgcTram" | "longDistance" | "airports")[] = ["rodalies", "tmb", "fgcTram", "longDistance", "airports"];
-
-function heading(level: 2 | 3, text: string, id?: string): Block {
-  return { type: "heading", level, text, ...(id ? { id } : {}) } as Block;
-}
 
 export function buildStrike11nBody(
   locale: Locale,
@@ -1220,6 +1294,8 @@ export function buildStrike11nBody(
   // demand for Catalonia) get their city's page under the answer. The title
   // and the lead stay as they are: this page is the winner of the 11N cluster.
   if (locale === "es") blocks.push(callout("info", OTHER_CITIES_TITLE, otherCitiesLine()));
+  // 11 Nov 2026: what comes next, for the readers who arrive after the day.
+  blocks.push(...nextDatesBlocks(locale, asOf, "strikes"));
 
   // Minimum services: the answer most readers came for, first.
   blocks.push(heading(2, t.msHeading, "serveis-minims"));

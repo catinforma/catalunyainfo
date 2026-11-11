@@ -18,7 +18,7 @@ import {
   type B2Source,
   type B2UnkeyedArticle,
 } from "./shared";
-import { STRIKE_11N_DATE, STRIKE_11N_URLS, strikePhase, type StrikePhase } from "./strike-11n";
+import { STRIKE_11N_DATE, STRIKE_11N_URLS, nextDatesBlocks, strikePhase, type StrikePhase } from "./strike-11n";
 import {
   CITIES,
   CITY_STATE_URLS,
@@ -139,6 +139,7 @@ export const NATIONAL_SOURCES: B2Source[] = [
   { name: "Renfe", url: U.renfe, publisher: "Renfe" },
   { name: "Infovuelos", url: U.aena, publisher: "Aena" },
   { name: "SEMAF continúa convocando huelgas los días 10 y 12 de noviembre en el Grupo Renfe (nº 2026-51, 29/10/2026)", url: U.semaf1012, publisher: "SEMAF" },
+  { name: "Primer Real Decreto-ley aprobado: SEMAF mueve el paro del 12 al 23 de noviembre (10/11/2026)", url: U.semaf23, publisher: "SEMAF" },
 ];
 
 /** Every source a city page cites, once: published orders first, then the city's own, then the national ones. */
@@ -420,6 +421,8 @@ const byGroup = (city: Strike11nCity, group: CityServiceGroup): CityService[] =>
 
 /** The SEMAF strike at Renfe either side of 11N, while it is still to come on the as-of date. */
 const RENFE_NOV = STRIKES.find((strike) => strike.id === "vaga-renfe-2026-11-10");
+/** 11 Nov 2026: SEMAF called off the 12th on 10 Nov; the wording follows the entry's days. */
+const RENFE_12 = RENFE_NOV?.dates.includes("2026-11-12") ?? false;
 
 function railName(city: Strike11nCity, locale: Locale = "es"): string {
   const trains = { es: "trenes de Renfe", ca: "trens de Renfe", en: "Renfe trains" }[locale];
@@ -527,11 +530,17 @@ function keyFactItems(c: Ctx): { label: string; value: string }[] {
         });
   const renfeStrike =
     RENFE_NOV && isUpcoming(RENFE_NOV, c.asOf)
-      ? T(c, {
-          es: ". Además, SEMAF convoca huelga de maquinistas en Renfe el 10 y el 12 de noviembre",
-          ca: ". A més, el SEMAF convoca vaga de maquinistes a Renfe el 10 i el 12 de novembre",
-          en: ". SEMAF has also called a train drivers' strike at Renfe on 10 and 12 November",
-        })
+      ? RENFE_12
+        ? T(c, {
+            es: ". Además, SEMAF convoca huelga de maquinistas en Renfe el 10 y el 12 de noviembre",
+            ca: ". A més, el SEMAF convoca vaga de maquinistes a Renfe el 10 i el 12 de novembre",
+            en: ". SEMAF has also called a train drivers' strike at Renfe on 10 and 12 November",
+          })
+        : T(c, {
+            es: ". Además, SEMAF convoca huelga de maquinistas en Renfe el 10 de noviembre (los paros del 12 se desconvocaron)",
+            ca: ". A més, el SEMAF convoca vaga de maquinistes a Renfe el 10 de novembre (les aturades del 12 es van desconvocar)",
+            en: ". SEMAF has also called a train drivers' strike at Renfe on 10 November (the 12th's stoppages were called off)",
+          })
       : "";
   const ms = regionalOrderPublished(city)
     ? city.msSummary
@@ -657,11 +666,17 @@ function railParagraphs(c: Ctx): string[] {
   const renfe =
     RENFE_NOV && isUpcoming(RENFE_NOV, c.asOf)
       ? [
-          T(c, {
-            es: `**El 10 y el 12 de noviembre también hay huelga en Renfe:** el sindicato de maquinistas SEMAF la ha convocado en el Grupo Renfe, con un paro total el martes 10 y paros parciales el jueves 12, según ${link(U.semaf1012, "su comunicado del 29 de octubre")}.`,
-            ca: `**El 10 i el 12 de novembre també hi ha vaga a Renfe:** el sindicat de maquinistes SEMAF l'ha convocada al Grup Renfe, amb una aturada total el dimarts 10 i aturades parcials el dijous 12, segons ${link(U.semaf1012, "el seu comunicat del 29 d'octubre")}.`,
-            en: `**There is also a strike at Renfe on 10 and 12 November:** the train drivers' union SEMAF has called it across the Renfe Group, with a full stoppage on Tuesday 10 and partial stoppages on Thursday 12, according to ${link(U.semaf1012, "its statement of 29 October")}.`,
-          }),
+          RENFE_12
+            ? T(c, {
+                es: `**El 10 y el 12 de noviembre también hay huelga en Renfe:** el sindicato de maquinistas SEMAF la ha convocado en el Grupo Renfe, con un paro total el martes 10 y paros parciales el jueves 12, según ${link(U.semaf1012, "su comunicado del 29 de octubre")}.`,
+                ca: `**El 10 i el 12 de novembre també hi ha vaga a Renfe:** el sindicat de maquinistes SEMAF l'ha convocada al Grup Renfe, amb una aturada total el dimarts 10 i aturades parcials el dijous 12, segons ${link(U.semaf1012, "el seu comunicat del 29 d'octubre")}.`,
+                en: `**There is also a strike at Renfe on 10 and 12 November:** the train drivers' union SEMAF has called it across the Renfe Group, with a full stoppage on Tuesday 10 and partial stoppages on Thursday 12, according to ${link(U.semaf1012, "its statement of 29 October")}.`,
+              })
+            : T(c, {
+                es: `**El 10 de noviembre también hay huelga en Renfe:** el sindicato de maquinistas SEMAF la ha convocado en el Grupo Renfe, con un paro total el martes 10, según ${link(U.semaf1012, "su comunicado del 29 de octubre")}. Los paros parciales del jueves 12 los desconvocó el 10 de noviembre y los sustituyó por una nueva huelga el lunes 23, según ${link(U.semaf23, "otro comunicado")}.`,
+                ca: `**El 10 de novembre també hi ha vaga a Renfe:** el sindicat de maquinistes SEMAF l'ha convocada al Grup Renfe, amb una aturada total el dimarts 10, segons ${link(U.semaf1012, "el seu comunicat del 29 d'octubre")}. Les aturades parcials del dijous 12 les va desconvocar el 10 de novembre i les va substituir per una nova vaga el dilluns 23, segons ${link(U.semaf23, "un altre comunicat")}.`,
+                en: `**There is also a strike at Renfe on 10 November:** the train drivers' union SEMAF has called it across the Renfe Group, with a full stoppage on Tuesday 10, according to ${link(U.semaf1012, "its statement of 29 October")}. It called off the partial stoppages of Thursday 12 on 10 November and replaced them with a new strike on Monday 23, according to ${link(U.semaf23, "a later statement")}.`,
+              }),
         ]
       : [];
   return [
@@ -979,6 +994,9 @@ export function buildCityBody(
       }),
     ),
   );
+
+  // 11 Nov 2026: what comes next (strike-11n.ts, nextDatesBlocks), for the readers who arrive after the day.
+  blocks.push(...nextDatesBlocks(locale, asOf, "strikesSpain"));
 
   // Minimum services: the answer most readers came for, first.
   blocks.push(

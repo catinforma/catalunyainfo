@@ -301,9 +301,9 @@ test("upcoming and past are decided by the as-of date: on the last day it is upc
   assert.equal(isUpcoming(schools, "2026-11-27"), false);
   assert.equal(isUpcoming(general, "2026-11-11"), true);
   assert.equal(isUpcoming(general, "2026-11-12"), false);
-  // Renfe in November: upcoming between its two days, past after the 12th.
-  assert.equal(isUpcoming(renfeNov, "2026-11-11"), true);
-  assert.equal(isUpcoming(renfeNov, "2026-11-13"), false);
+  // Renfe in November: SEMAF withdrew the 12th (10 Nov), so past from the 11th.
+  assert.equal(isUpcoming(renfeNov, "2026-11-10"), true);
+  assert.equal(isUpcoming(renfeNov, "2026-11-11"), false);
   // An open indefinite strike stays upcoming (in progress) whatever the date; once ended, it is past from the next day.
   assert.equal(isUpcoming(metges, "2027-06-01"), true);
   const ended: Strike = { ...metges, indefinite: { endedOn: "2026-11-20" } };
@@ -315,7 +315,8 @@ test("upcoming and past are decided by the as-of date: on the last day it is upc
   assert.equal(isOnDay(metges, "2026-10-30"), true);
   assert.equal(isOnDay(ended, "2026-11-21"), false);
   assert.equal(isOnDay(renfeNov, "2026-11-11"), false);
-  assert.equal(isOnDay(renfeNov, "2026-11-12"), true);
+  assert.equal(isOnDay(renfeNov, "2026-11-10"), true);
+  assert.equal(isOnDay(renfeNov, "2026-11-12"), false);
   assert.deepEqual(upcomingStrikes("2026-10-27").map((s) => s.id), [
     "vaga-metges-2026-10-28",
     "vaga-renfe-2026-10-29",
@@ -323,6 +324,7 @@ test("upcoming and past are decided by the as-of date: on the last day it is upc
     "vaga-renfe-2026-11-10",
     "vaga-general-2026-11-11",
     "vaga-ferroviaria-2026-11-17",
+    "vaga-renfe-2026-11-23",
     "vaga-educacio-2026-11-26",
   ]);
   assert.deepEqual(upcomingStrikes("2026-10-30").map((s) => s.id), [
@@ -331,13 +333,14 @@ test("upcoming and past are decided by the as-of date: on the last day it is upc
     "vaga-renfe-2026-11-10",
     "vaga-general-2026-11-11",
     "vaga-ferroviaria-2026-11-17",
+    "vaga-renfe-2026-11-23",
     "vaga-educacio-2026-11-26",
   ]);
   // Saturday 31 Oct to Monday 2 Nov: the all-day Ouigo strike is still to come (2 Nov); from the 3rd it is past.
   assert.deepEqual(upcomingStrikes("2026-11-02").map((s) => s.id).slice(0, 3), ["vaga-metges-2026-10-28", "vaga-ouigo-2026-10-30", "vaga-renfe-2026-11-10"]);
   assert.deepEqual(pastStrikes("2026-11-03").map((s) => s.id), ["vaga-ouigo-2026-10-30", "vaga-renfe-2026-10-29"]);
-  assert.deepEqual(upcomingStrikes("2026-11-13").map((s) => s.id), ["vaga-metges-2026-10-28", "vaga-ferroviaria-2026-11-17", "vaga-educacio-2026-11-26"]);
-  assert.deepEqual(pastStrikes("2026-11-13").map((s) => s.id), ["vaga-renfe-2026-11-10", "vaga-general-2026-11-11", "vaga-ouigo-2026-10-30", "vaga-renfe-2026-10-29"]);
+  assert.deepEqual(upcomingStrikes("2026-11-13").map((s) => s.id), ["vaga-metges-2026-10-28", "vaga-ferroviaria-2026-11-17", "vaga-renfe-2026-11-23", "vaga-educacio-2026-11-26"]);
+  assert.deepEqual(pastStrikes("2026-11-13").map((s) => s.id), ["vaga-general-2026-11-11", "vaga-renfe-2026-11-10", "vaga-ouigo-2026-10-30", "vaga-renfe-2026-10-29"]);
   for (const day of ["2026-10-27", "2026-11-05", "2026-12-01", "2026-12-09"]) {
     assert.equal(upcomingStrikes(day).length + pastStrikes(day).length, STRIKES.length, day);
   }
@@ -448,10 +451,11 @@ test("after the last strike the page renders every strike as past, with a 'none 
       pastIds,
       [
         "vaga-educacio-2026-11-26",
+        "vaga-renfe-2026-11-23",
         "vaga-metges-2026-10-28",
         "vaga-ferroviaria-2026-11-17",
-        "vaga-renfe-2026-11-10",
         "vaga-general-2026-11-11",
+        "vaga-renfe-2026-11-10",
         "vaga-ouigo-2026-10-30",
         "vaga-renfe-2026-10-29",
       ],
@@ -559,8 +563,12 @@ test("known answers read on 30 October 2026: the doctors' indefinite strike (ord
   for (const url of STRIKES_GUIDE.sources.map((s) => s.url)) assert.ok(!/tauler\.seu-e\.cat\/detall/.test(url), `${url}: an e-Tauler notice expires; cite the DOGC`);
   assert.match(STRIKE_URLS.metgesStrike, /^https:\/\/metgesdecatalunya\.cat\//);
   // SEMAF notice 2026-51: full stoppage Tuesday 10 Nov, partial stoppages Thursday 12 Nov, Grupo Renfe drivers.
-  assert.deepEqual(renfeNov.dates, ["2026-11-10", "2026-11-12"]);
-  assert.deepEqual(renfeNov.dates.map(weekdayIndex), [2, 4]); // Tuesday, Thursday
+  // SEMAF, 10 Nov 2026 (read 11 Nov): the 12th replaced by a new strike on Monday 23 Nov.
+  assert.deepEqual(renfeNov.dates, ["2026-11-10"]);
+  assert.deepEqual(renfeNov.dates.map(weekdayIndex), [2]); // Tuesday
+  assert.ok(renfeNov.sources.some((s) => s.url === STRIKE_URLS.semaf23 && s.publisher === "SEMAF"));
+  assert.deepEqual(byId("vaga-renfe-2026-11-23").dates, ["2026-11-23"]);
+  assert.equal(weekdayIndex("2026-11-23"), 1); // Monday
   assert.deepEqual(renfeNov.affects, ["rodalies", "longDistance"]);
   // 5 Nov 2026: Ordre del Departament d'Empresa i Treball (e-Tauler 657097): Rodalies 66% at peak (06:00-09:30, 17:00-20:30), 33% off peak.
   assert.equal(renfeNov.minimumServices.status, "published");
@@ -581,7 +589,8 @@ test("known answers read on 30 October 2026: the doctors' indefinite strike (ord
     assert.match(facts, /SISCAT/, locale);
     assert.ok(facts.includes("té data d'inici, però no de final"), `${locale}: MC's own words`);
     const nov = renfeNov.facts[locale].join(" ");
-    assert.ok(nov.includes("paro total") && nov.includes("paros parciales a lo largo de la jornada"), `${locale}: SEMAF's own words`);
+    // 11 Nov 2026: the 12th's "paros parciales" were withdrawn; SEMAF's own words for that are quoted instead.
+    assert.ok(nov.includes("paro total") && nov.includes("sustituir el paro previsto para el día 12 de noviembre"), `${locale}: SEMAF's own words`);
     assert.match(nov, /29 (d'octubre|de octubre|October) (de )?2026/, locale);
     assert.match(nov, /2026-51/, locale);
     // The 29 October order is cited beside Rodalies' notice.
@@ -662,8 +671,8 @@ test("the lead answers 'is there a strike today' first, then what is coming and 
   // A day with nothing in progress says so before listing what is coming.
   const quiet = text(buildStrikesBody("ca", "2026-11-05", STRIKES.filter((s) => !s.indefinite)).slice(0, 1));
   assert.match(quiet, /^El dijous 5 de novembre de 2026 no hi havia cap vaga en curs/);
-  // Ouigo's all-day strikes are past by then and its partial stoppages were called off (5 Nov): Renfe's two days come first.
-  assert.match(quiet, /Properes vagues: dimarts 10 de novembre i dijous 12 de novembre de 2026/);
+  // Ouigo's all-day strikes are past by then and its partial stoppages were called off (5 Nov): Renfe's 10 Nov comes first.
+  assert.match(quiet, /Properes vagues: dimarts 10 de novembre de 2026, vaga de maquinistes de Renfe/);
   assert.doesNotMatch(quiet, /aturades parcials de maquinistes d'Ouigo/);
   assert.doesNotMatch(quiet, /divendres 30 d'octubre/);
   // After 11 November nothing listed touches the metro, bus or FGC.
@@ -685,7 +694,7 @@ test("the 'what runs' table has one row per service and lists exactly the strike
   }
   const rows = Object.fromEntries(SERVICE_KEYS.map((key, i) => [key, whatRunsRows("ca")[i]?.[1] ?? ""]));
   assert.match(rows.health ?? "", /^Des del dimecres 28 d'octubre de 2026: vaga indefinida de metges/);
-  assert.match(rows.rodalies ?? "", /^Dimarts 10 de novembre i dijous 12 de novembre de 2026: vaga de maquinistes del Grup Renfe \(SEMAF\); Dimecres 11 de novembre de 2026: vaga general/);
+  assert.match(rows.rodalies ?? "", /^Dimecres 11 de novembre de 2026: vaga general de 24 hores; Dimarts 17 de novembre i dijous 19 de novembre de 2026: vaga ferroviària/);
   assert.equal(rows.metroBus, "Dimecres 11 de novembre de 2026: vaga general de 24 hores");
   assert.equal(whatRunsRows("ca", "2026-11-12")[1]?.[1], "Cap vaga anunciada");
   for (const strike of STRIKES) assert.ok(strike.affects.length > 0 && strike.affects.every((k) => SERVICE_KEYS.includes(k)), strike.id);

@@ -55,6 +55,8 @@ export const SPAIN_URLS = {
     "https://ferroviario.fsc.ccoo.es/noticia:771650--CCOO_anuncia_movilizaciones_los_dias_16_y_17_de_noviembre_para_exigir_un_cambio_de_modelo_ferroviario_y_garantizar_la_seguridad",
   alferro80: STRIKE_URLS.alferro80,
   semafCuerpo: STRIKE_URLS.semafCuerpo,
+  // Rail, 23 Nov (SEMAF, 10 Nov: replaces the 12th's stoppages).
+  semaf23: STRIKE_URLS.semaf23,
   scfAdif: STRIKE_URLS.scfAdif,
   treballMs: STRIKE_URLS.treballMs,
   // Meat industry, 9 to 13 Nov.
@@ -203,7 +205,8 @@ export const SPAIN_STRIKES: SpainStrike[] = [
   },
   {
     id: "huelga-renfe-2026-11-10",
-    dates: ["2026-11-10", "2026-11-12"],
+    // 12 Nov called off by SEMAF on 10 Nov: replaced by huelga-renfe-2026-11-23.
+    dates: ["2026-11-10"],
     sector: "rail",
     status: "official",
     catalanEntry: "vaga-renfe-2026-11-10",
@@ -220,9 +223,9 @@ export const SPAIN_STRIKES: SpainStrike[] = [
       en: "Train drivers across the Renfe group, all over Spain: Cercanías commuter trains, Media Distancia regional trains, AVE and long-distance trains, and freight.",
     },
     hours: {
-      ca: "El dia 10, aturada total; el dia 12, aturades parcials al llarg de la jornada, segons SEMAF.",
-      es: "El día 10, paro total; el día 12, paros parciales a lo largo de la jornada, según SEMAF.",
-      en: "A full stoppage on the 10th; partial stoppages through the day on the 12th, according to SEMAF.",
+      ca: `El dia 10, aturada total, segons SEMAF. Les aturades parcials del dia 12 es van desconvocar el 10 de novembre, segons ${link(U.semaf23, "SEMAF")}, que les va substituir per una nova vaga el 23.`,
+      es: `El día 10, paro total, según SEMAF. Los paros parciales del día 12 se desconvocaron el 10 de noviembre, según ${link(U.semaf23, "SEMAF")}, que los sustituyó por una nueva huelga el 23.`,
+      en: `A full stoppage on the 10th, according to SEMAF. The partial stoppages on the 12th were called off on 10 November, according to ${link(U.semaf23, "SEMAF")}, which replaced them with a new strike on the 23rd.`,
     },
     calledBy: {
       ca: `El sindicat de maquinistes SEMAF, a ${link(U.semaf1012, "el seu comunicat")}.`,
@@ -252,6 +255,7 @@ export const SPAIN_STRIKES: SpainStrike[] = [
       { name: "Resolución de 6 de noviembre de 2026: servicios mínimos de la huelga de SEMAF en el Grupo Renfe (10 y 12 de noviembre)", url: U.renfeSemafResolution, publisher: MINISTRY },
       { name: "Establecidos los servicios mínimos para la huelga convocada por Semaf para el 10 y 12 de noviembre", url: U.renfeSemafNotice, publisher: "Renfe" },
       SRC.ministryRail,
+      { name: "Primer Real Decreto-ley aprobado: SEMAF mueve el paro del 12 al 23 de noviembre (10/11/2026)", url: U.semaf23, publisher: "SEMAF" },
     ],
   },
   {
@@ -359,6 +363,49 @@ export const SPAIN_STRIKES: SpainStrike[] = [
       { name: "SCFCOM 33: SCF convoca huelga en Adif (6 de noviembre de 2026)", url: U.scfAdif, publisher: "Sindicato de Circulación Ferroviario (SCF)" },
       SRC.ministryRail,
       { name: "Serveis mínims en cas de vaga", url: U.treballMs, publisher: "Generalitat de Catalunya, Departament d'Empresa i Treball" },
+    ],
+  },
+  {
+    id: "huelga-renfe-2026-11-23",
+    dates: ["2026-11-23"],
+    sector: "rail",
+    status: "called",
+    catalanEntry: "vaga-renfe-2026-11-23",
+    guides: ["strikeRenfe"],
+    title: {
+      ca: "vaga de maquinistes (SEMAF)",
+      es: "huelga de maquinistas (SEMAF)",
+      en: "train drivers' strike (SEMAF)",
+    },
+    label: { ca: "maquinistes (SEMAF)", es: "maquinistas (SEMAF)", en: "train drivers (SEMAF)" },
+    scope: {
+      ca: "SEMAF encara no n'ha publicat l'abast. Substitueix les aturades parcials del 12 de novembre, que eren al Grup Renfe.",
+      es: "SEMAF aún no ha publicado su alcance. Sustituye a los paros parciales del 12 de noviembre, que eran en el Grupo Renfe.",
+      en: "SEMAF has not yet published its scope. It replaces the partial stoppages of 12 November, which were at the Renfe group.",
+    },
+    calledBy: {
+      ca: `El sindicat de maquinistes SEMAF, que el 10 de novembre va decidir «sustituir el paro previsto para el día 12 de noviembre por una nueva convocatoria de huelga el día 23 de noviembre», segons ${link(U.semaf23, "el seu comunicat")}.`,
+      es: `El sindicato de maquinistas SEMAF, que el 10 de noviembre decidió «sustituir el paro previsto para el día 12 de noviembre por una nueva convocatoria de huelga el día 23 de noviembre», según ${link(U.semaf23, "su comunicado")}.`,
+      en: `The train drivers' union SEMAF, which on 10 November decided to "sustituir el paro previsto para el día 12 de noviembre por una nueva convocatoria de huelga el día 23 de noviembre" (replace the 12 November stoppage with a new strike call on 23 November), according to ${link(U.semaf23, "its notice")}.`,
+    },
+    basis: {
+      ca: `Consta al comunicat del sindicat. El {checked} no hi havia cap resolució de serveis mínims per a aquest dia a ${link(U.ministryRail, "la llista del Ministeri de Transports")}.`,
+      es: `Consta en el comunicado del sindicato. El {checked} no había ninguna resolución de servicios mínimos para este día en ${link(U.ministryRail, "la lista del Ministerio de Transportes")}.`,
+      en: `It rests on the union's own notice. On {checked} there was no minimum-services resolution for this day on ${link(U.ministryRail, "the Ministry of Transport's list")}.`,
+    },
+    minimumServices: {
+      status: "pending",
+      short: { ca: "Per confirmar, encara no publicats", es: "Por confirmar, aún no publicados", en: "To be confirmed, not published yet" },
+      text: {
+        ca: `Per confirmar. Els fixa el Ministeri de Transports i sortiran a ${link(U.ministryRail, "la seva llista de resolucions ferroviàries")}; els de Rodalies de Catalunya, a ${link(U.treballMs, "la llista del Departament d'Empresa i Treball")}.`,
+        es: `Por confirmar. Los fija el Ministerio de Transportes y saldrán en ${link(U.ministryRail, "su lista de resoluciones ferroviarias")}; los de Rodalies de Catalunya, en ${link(U.treballMs, "la lista del Departament d'Empresa i Treball")}.`,
+        en: `To be confirmed. The Ministry of Transport sets them and they will appear on ${link(U.ministryRail, "its list of rail resolutions")}; those for Rodalies in Catalonia on ${link(U.treballMs, "the Catalan labour department's list")}.`,
+      },
+    },
+    sources: [
+      { name: "Primer Real Decreto-ley aprobado: SEMAF mueve el paro del 12 al 23 de noviembre (10/11/2026)", url: U.semaf23, publisher: "SEMAF" },
+      SRC.ministryRail,
+      { name: "Serveis mínims de vagues", url: U.treballMs, publisher: "Departament d'Empresa i Treball" },
     ],
   },
   {
@@ -506,6 +553,20 @@ export const SPAIN_NOT_HAPPENING: SpainNotHappening[] = [
       en: `SEMAF called these stoppages off after signing an agreement with the company, according to ${link(U.semafOuigo, "its notice")}.`,
     },
     sources: [{ name: "Ouigo firma todas las reivindicaciones: desconvocados los paros", url: U.semafOuigo, publisher: "SEMAF" }],
+  },
+  {
+    id: "semaf-renfe-12-noviembre-trasladada",
+    title: {
+      ca: "Maquinistes de Renfe (SEMAF), 12 de novembre: desconvocada, nova vaga el 23",
+      es: "Maquinistas de Renfe (SEMAF), 12 de noviembre: desconvocada, nueva huelga el 23",
+      en: "Renfe train drivers (SEMAF), 12 November: called off, new strike on the 23rd",
+    },
+    text: {
+      ca: `El 10 de novembre SEMAF va decidir «sustituir el paro previsto para el día 12 de noviembre por una nueva convocatoria de huelga el día 23 de noviembre», segons ${link(U.semaf23, "el seu comunicat")}, i Renfe avisa que el 12 «el servicio ferroviario se prestará conforme a la programación habitual».`,
+      es: `El 10 de noviembre SEMAF decidió «sustituir el paro previsto para el día 12 de noviembre por una nueva convocatoria de huelga el día 23 de noviembre», según ${link(U.semaf23, "su comunicado")}, y Renfe avisa de que el 12 «el servicio ferroviario se prestará conforme a la programación habitual».`,
+      en: `On 10 November SEMAF decided to "sustituir el paro previsto para el día 12 de noviembre por una nueva convocatoria de huelga el día 23 de noviembre" (replace the 12 November stoppage with a new strike call on 23 November), according to ${link(U.semaf23, "its notice")}, and Renfe says that on the 12th trains will run to the usual timetable.`,
+    },
+    sources: [{ name: "Primer Real Decreto-ley aprobado: SEMAF mueve el paro del 12 al 23 de noviembre (10/11/2026)", url: U.semaf23, publisher: "SEMAF" }],
   },
   {
     id: "alferro-trasladada",

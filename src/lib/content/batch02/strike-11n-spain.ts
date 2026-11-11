@@ -2,7 +2,7 @@ import type { Block } from "@/lib/content/blocks";
 import type { Locale } from "@/lib/i18n/config";
 
 import { b2href, faq, h2, lead, list, table, type B2Edition, type B2UnkeyedArticle } from "./shared";
-import { strikePhase } from "./strike-11n";
+import { nextDatesBlocks, strikePhase } from "./strike-11n";
 import { STRIKE_URLS } from "./strikes";
 import { CITY_HERO, NATIONAL_SOURCES, localizeCity } from "./strike-11n-cities";
 import { CITIES, STRIKE_11N_CITIES_AS_OF, STRIKE_11N_CITIES_VERIFIED } from "./strike-11n-cities-data";
@@ -153,6 +153,8 @@ export function buildSpainBody(asOf: string = STRIKE_11N_CITIES_AS_OF, locale: L
   return [
     lead(leadText(asOf, locale)),
     table(t.caption, [...t.headers], rows, t.note),
+    // 11 Nov 2026: what comes next (strike-11n.ts, nextDatesBlocks).
+    ...nextDatesBlocks(locale, asOf, "strikesSpain"),
     ...h2(t.stateHeading, t.state(STRIKE_URLS.ministryRail), t.cataloniaLine(catalonia)),
     ...h2(t.demosHeading),
     list(...demos, t.barcelonaItem(catalonia)),
