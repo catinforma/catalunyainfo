@@ -1137,15 +1137,29 @@ export function cityLocales(city: Strike11nCity): Locale[] {
   return CITY_TR[city.key] ? ["ca", "es", "en"] : ["es"];
 }
 
+/**
+ * The cities whose page carries CITY_HERO: only the city it was taken in. On
+ * the Sevilla or Vigo page a Madrid march read as a picture of the wrong city
+ * (11 Nov 2026), and no licensed file of ours shows a strike anywhere else, so
+ * those pages go without a photograph and their preview is the social card.
+ */
+export const CITY_HERO_CITIES: ReadonlySet<Strike11nCity["key"]> = new Set(["madrid"]);
+
+export const CITY_NO_PHOTO_REASON =
+  "No licensed photograph of a strike in this city; the only one (CITY_HERO) shows Madrid in 2012.";
+
+function cityPhoto(city: Strike11nCity): Pick<B2UnkeyedArticle, "heroKey" | "heroAlt" | "heroCaption" | "noPhotoReason"> {
+  if (!CITY_HERO_CITIES.has(city.key)) return { noPhotoReason: CITY_NO_PHOTO_REASON };
+  return { heroKey: CITY_HERO.key, heroAlt: { ...CITY_HERO.alt }, heroCaption: { ...CITY_HERO.caption } };
+}
+
 function cityArticle(city: Strike11nCity): B2UnkeyedArticle {
   const editions = Object.fromEntries(cityLocales(city).map((locale) => [locale, cityEdition(city, locale)])) as B2UnkeyedArticle["editions"];
   return {
     entryKey: `guide-general-strike-11-november-2026-${city.key.toLowerCase()}`,
     categoryKey: "public-services",
     sources: citySources(city),
-    heroKey: CITY_HERO.key,
-    heroAlt: { ...CITY_HERO.alt },
-    heroCaption: { ...CITY_HERO.caption },
+    ...cityPhoto(city),
     verifiedAt: STRIKE_11N_CITIES_VERIFIED,
     publishedAt: "2026-11-06T01:00:00+01:00",
     editions,

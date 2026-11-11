@@ -62,7 +62,10 @@ export function renderInline(input: string | undefined | null): ReactNode {
   return tokens.map((token, i) => {
     switch (token.kind) {
       case "bold":
-        return <strong key={i}>{token.value}</strong>;
+        // A link inside bold (`**[Blanes](/ca/festius/blanes/)**`) used to show
+        // its raw markdown: the bold text is formatted in turn. It cannot
+        // recurse for ever: the inner text has lost its own `**`.
+        return <strong key={i}>{renderInline(token.value)}</strong>;
       case "italic":
         return <em key={i}>{token.value}</em>;
       case "code":

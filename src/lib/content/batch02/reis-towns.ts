@@ -429,9 +429,9 @@ export const REIS_TOWNS: readonly ReisTown[] = [
       confirmsDate: true,
       url: "https://www.castelldefels.org/ca/actualitat/elcastell/noticies/vols-participar-en-la-cavalcada-de-reis-2027-ja-pots-inscriuret",
       text: {
-        ca: "L'Ajuntament ja ha confirmat que la cavalcada serà el 5 de gener de 2027: les inscripcions per participar-hi s'acaben el 9 de novembre i el sorteig és el 16.",
-        es: "El Ayuntamiento ya ha confirmado que la cabalgata será el 5 de enero de 2027: las inscripciones para participar terminan el 9 de noviembre y el sorteo es el 16.",
-        en: "The council has already confirmed the parade for 5 January 2027: applications to take part close on 9 November and the draw is on the 16th.",
+        ca: "L'Ajuntament ja ha confirmat que la cavalcada serà el 5 de gener de 2027: les inscripcions per participar-hi es van tancar el 9 de novembre i el sorteig és el 16.",
+        es: "El Ayuntamiento ya ha confirmado que la cabalgata será el 5 de enero de 2027: las inscripciones para participar se cerraron el 9 de noviembre y el sorteo es el 16.",
+        en: "The council has already confirmed the parade for 5 January 2027: applications to take part closed on 9 November and the draw is on the 16th.",
       },
     },
     notes: {

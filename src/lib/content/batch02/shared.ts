@@ -1008,6 +1008,8 @@ export interface B2Article {
   heroKey?: string;
   heroAlt?: Record<Locale, string>;
   heroCaption?: Record<Locale, string>;
+  /** Why there is no hero, when no licensed photograph shows the page's subject (see ArticleSpec). */
+  noPhotoReason?: string;
   /**
    * A second, different photograph for part-way down the article.
    *
