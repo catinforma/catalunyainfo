@@ -82,6 +82,7 @@ import { publishSpainSchoolCalendars } from "@/lib/content/school-spain/publish"
 import { editionHubPath, editionPaths } from "@/lib/programmatic/spain-2027/editions";
 import { spainDayPaths, spainHubPath, spainPaths } from "@/lib/programmatic/spain-2027/paths";
 import { widgetEditions } from "@/lib/programmatic/embed-2027/places";
+import { gordoPaths } from "@/lib/programmatic/gordo/sitemap";
 import { authoriseDeployRequest, describeError } from "@/lib/admin/deploy-auth";
 import { FEED_PATHS } from "@/lib/seo/feed-paths";
 
@@ -414,7 +415,19 @@ export async function POST(request: Request) {
     // /en/holidays/2027/day/…), the three editions of each date, and since
     // 10 Nov 2026 the Catalan and English editions of the calendar itself
     // (/ca/festius/2027/..., /en/holidays/2027/..., editions.ts).
-    const codePaths = wants("calendario-2027-espana") ? [...spainPaths(), ...spainDayPaths(), ...editionPaths()] : [];
+    // ¿Dónde ha tocado el Gordo? (/es/donde-ha-tocado-el-gordo/,
+    // /ca/on-ha-tocat-la-loteria-de-nadal/, /en/spanish-christmas-lottery-results/):
+    // code routes rendered from the committed snapshot
+    // (lib/programmatic/gordo/snapshot.json, written by
+    // scripts/gordo-snapshot.py), so a new snapshot needs a deploy; this group
+    // then revalidates the three hubs and every province and municipality page
+    // the snapshot lists (all dynamicParams = true), purges them at the CDN and
+    // sends them to IndexNow. Runbook: docs/GORDO_NAVIDAD_RUNBOOK.md. The
+    // Christmas lottery guide, which links the hub in its three editions, goes
+    // out with `gordo-navidad-links`.
+    const gordoCodePaths = wants("gordo-navidad") ? gordoPaths().map((entry) => entry.path) : [];
+    if (wants("gordo-navidad-links")) published.push(await publishB2Article(LOTERIA_NADAL));
+    const codePaths = [...(wants("calendario-2027-espana") ? [...spainPaths(), ...spainDayPaths(), ...editionPaths()] : []), ...gordoCodePaths];
     // "Posa el calendari laboral 2027 al teu web" (/ca/festius/2027/al-teu-web/,
     // /es/festivos/2027/en-tu-web/, /en/holidays/2027/for-your-website/) and the
     // three 2027 hubs that link it: code routes (dynamicParams = true), shipped

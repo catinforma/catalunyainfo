@@ -1,0 +1,7 @@
+TEST DATA - NOT REAL RESULTS.
+
+The files in this directory imitate the shape of SELAE's draw record and
+per-prize "puntos de venta" pages so that scripts/gordo-snapshot.py can be
+tested. The numbers and the addresses are invented ("DATOS DE PRUEBA"). The
+script refuses this directory unless it is run with --test-data, marks the
+result testData: true, and the site refuses to render a test-data snapshot.

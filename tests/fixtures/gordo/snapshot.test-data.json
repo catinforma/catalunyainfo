@@ -1,0 +1,175 @@
+{
+ "schema": 1,
+ "testData": true,
+ "year": 2026,
+ "drawDate": "2026-12-22",
+ "drawId": "1332409102",
+ "readAt": "2026-12-22T13:05:00+01:00",
+ "sources": {
+  "results": "https://www.loteriasyapuestas.es/es/loteria-nacional/resultados/loteria-nacional-premios-mayores-del-sorteo-del-22-de-diciembre-de-2026",
+  "officialList": null
+ },
+ "prizes": [
+  {
+   "key": "first",
+   "numbers": [
+    "12345"
+   ],
+   "perDecimo": 400000,
+   "page": "https://www.loteriasyapuestas.es/es/premios/primer-premio-de-loteria-nacional-del-sorteo-extraordinario-de-navidad-del-22-de-diciembre-de-2026",
+   "outlets": [
+    {
+     "id": "90001",
+     "channel": "outlet",
+     "address": "CALLE DE PRUEBA, 1 (DATOS DE PRUEBA)",
+     "locality": "TERRASSA",
+     "province": "08",
+     "viaWeb": false,
+     "municipality": {
+      "ine": "08279",
+      "name": "Terrassa",
+      "slug": "terrassa"
+     }
+    },
+    {
+     "id": "90002",
+     "channel": "outlet",
+     "address": "CALLE DE PRUEBA, 2 (DATOS DE PRUEBA)",
+     "locality": "POLA DE GORDÓN (LA)",
+     "province": "24",
+     "viaWeb": false,
+     "municipality": {
+      "ine": "24114",
+      "name": "La Pola de Gordón",
+      "slug": "la-pola-de-gordon"
+     }
+    },
+    {
+     "id": "105",
+     "channel": "web",
+     "address": null,
+     "locality": null,
+     "province": null,
+     "viaWeb": true,
+     "municipality": null
+    }
+   ]
+  },
+  {
+   "key": "second",
+   "numbers": [
+    "23456"
+   ],
+   "perDecimo": 125000,
+   "page": "https://www.loteriasyapuestas.es/es/premios/segundo-premio-de-loteria-nacional-del-sorteo-extraordinario-de-navidad-del-22-de-diciembre-de-2026",
+   "outlets": [
+    {
+     "id": "90003",
+     "channel": "outlet",
+     "address": "CALLE DE PRUEBA, 3 (DATOS DE PRUEBA)",
+     "locality": "EL PRAT DE LLOBREGAT",
+     "province": "08",
+     "viaWeb": true,
+     "municipality": {
+      "ine": "08169",
+      "name": "el Prat de Llobregat",
+      "slug": "el-prat-de-llobregat"
+     }
+    },
+    {
+     "id": "90004",
+     "channel": "outlet",
+     "address": "CALLE DE PRUEBA, 4 (DATOS DE PRUEBA)",
+     "locality": "NORIAS (LAS)",
+     "province": "04",
+     "viaWeb": false,
+     "municipality": null
+    }
+   ]
+  },
+  {
+   "key": "third",
+   "numbers": [
+    "34567"
+   ],
+   "perDecimo": 50000,
+   "page": "https://www.loteriasyapuestas.es/es/premios/tercer-premio-de-loteria-nacional-del-sorteo-extraordinario-de-navidad-del-22-de-diciembre-de-2026",
+   "outlets": [
+    {
+     "id": "90005",
+     "channel": "outlet",
+     "address": "CALLE DE PRUEBA, 5 (DATOS DE PRUEBA)",
+     "locality": "TERRASSA",
+     "province": "08",
+     "viaWeb": false,
+     "municipality": {
+      "ine": "08279",
+      "name": "Terrassa",
+      "slug": "terrassa"
+     }
+    },
+    {
+     "id": "90006",
+     "channel": "outlet",
+     "address": "CALLE DE PRUEBA, 6 (DATOS DE PRUEBA)",
+     "locality": "SANTA CRUZ DE TENERIFE",
+     "province": "38",
+     "viaWeb": false,
+     "municipality": {
+      "ine": "38038",
+      "name": "Santa Cruz de Tenerife",
+      "slug": "santa-cruz-de-tenerife"
+     }
+    }
+   ]
+  },
+  {
+   "key": "fourth",
+   "numbers": [
+    "45678",
+    "56789"
+   ],
+   "perDecimo": 20000,
+   "page": "https://www.loteriasyapuestas.es/es/premios/cuarto-premio-de-loteria-nacional-del-sorteo-extraordinario-de-navidad-del-22-de-diciembre-de-2026",
+   "outlets": [
+    {
+     "id": "90007",
+     "channel": "outlet",
+     "address": "CALLE DE PRUEBA, 7 (DATOS DE PRUEBA)",
+     "locality": "L' HOSPITALET DE LLOBREGAT",
+     "province": "08",
+     "viaWeb": false,
+     "municipality": {
+      "ine": "08101",
+      "name": "l'Hospitalet de Llobregat",
+      "slug": "l-hospitalet-de-llobregat"
+     }
+    },
+    {
+     "id": "90008",
+     "channel": "outlet",
+     "address": "CALLE DE PRUEBA, 8 (DATOS DE PRUEBA)",
+     "locality": "CORUÑA (A)",
+     "province": "15",
+     "viaWeb": false,
+     "municipality": {
+      "ine": "15030",
+      "name": "A Coruña",
+      "slug": "a-coruna"
+     }
+    }
+   ]
+  },
+  {
+   "key": "fifth",
+   "numbers": [
+    "67890",
+    "78901",
+    "89012"
+   ],
+   "perDecimo": 6000,
+   "page": null,
+   "outlets": null
+  }
+ ]
+}
