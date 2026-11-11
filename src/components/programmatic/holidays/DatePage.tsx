@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import { Breadcrumbs, type Crumb } from "@/components/Breadcrumbs";
+import { ShareBar, crumbPath } from "@/components/share/ShareBar";
 import { getMessages } from "@/lib/i18n";
 import { BOE_2027 } from "@/lib/programmatic/holidays/boe-2027";
 import { DATE_UI, dateQuestion } from "@/lib/programmatic/holidays/copy";
@@ -68,6 +69,7 @@ export function DatePageView({ iso, locale }: { iso: DatePageIso; locale: DateLo
         <div className="ci-shell py-5 md:py-8 lg:py-12">
           <Breadcrumbs items={dateCrumbs(iso, locale)} locale={locale} />
           <h1 className="ci-measure">{dateQuestion(iso, locale)}</h1>
+          <ShareBar locale={locale} path={crumbPath(dateCrumbs(iso, locale))} title={dateQuestion(iso, locale)} contentType="holidays_date" />
         </div>
       </header>
 
@@ -153,6 +155,7 @@ export function DatePageView({ iso, locale }: { iso: DatePageIso; locale: DateLo
           extra={content.extraSources ?? []}
           readOn={tranche4 ? [SNAPSHOT.readOn, BOE_2027.readOn].sort().at(-1) : undefined}
         />
+        <ShareBar locale={locale} path={crumbPath(dateCrumbs(iso, locale))} title={dateQuestion(iso, locale)} contentType="holidays_date" variant="full" />
       </div>
     </article>
   );

@@ -184,16 +184,10 @@
   html {
     -webkit-text-size-adjust: 100%;
     scroll-behavior: smooth;
-    /* Room for the sticky header when jumping to an anchor. The phone header is
-       two rows tall - wordmark plus the section rail - so it needs more than
-       the desktop one, or the heading lands underneath it. */
-    scroll-padding-top: 8.5rem;
-  }
-
-  @media (min-width: 48rem) {
-    html {
-      scroll-padding-top: 5.5rem;
-    }
+    /* Room for the sticky header when jumping to an anchor. The header is one
+       row at every width since the phone section rail became a menu button
+       (Nov 2026); before that phones needed 8.5rem. */
+    scroll-padding-top: 5.5rem;
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -1328,6 +1322,174 @@
   .ci-nav-link[aria-current="page"] {
     color: var(--color-ink);
     border-bottom-color: var(--color-sea);
+  }
+
+  /* --- Menus (components/nav/MenuDisclosure.tsx) ------------------------
+     Both menus are <details>: they open with no JavaScript, and the panel is
+     positioned out of flow, so opening one moves nothing on the page. */
+  .ci-menu > summary {
+    list-style: none;
+    cursor: pointer;
+  }
+  .ci-menu > summary::-webkit-details-marker {
+    display: none;
+  }
+  .ci-menu-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--color-rule-strong);
+    color: var(--color-ink);
+  }
+  .ci-menu-button:hover {
+    background: var(--color-surface-sunk);
+  }
+  .ci-menu .ci-menu-when-open,
+  .ci-menu[open] .ci-menu-when-closed {
+    display: none;
+  }
+  .ci-menu[open] .ci-menu-when-open {
+    display: inline;
+  }
+  /* The phone panel hangs from the sticky header (position: sticky makes it
+     the containing block) and scrolls on its own if it is taller than the
+     screen. */
+  .ci-menu-panel {
+    position: absolute;
+    inset-inline: 0;
+    top: 100%;
+    max-height: calc(100dvh - 4rem);
+    overflow-y: auto;
+    background: var(--color-paper);
+    border-bottom: 1px solid var(--color-rule-strong);
+    box-shadow: 0 12px 24px -12px rgb(0 0 0 / 0.25);
+  }
+  .ci-menu-list {
+    margin: 0;
+    padding: 0.5rem 0 1rem;
+    list-style: none;
+  }
+  .ci-menu-list a {
+    display: flex;
+    align-items: center;
+    min-height: 2.75rem;
+    padding-block: 0.25rem;
+    color: var(--color-ink);
+    text-decoration: none;
+    font-size: var(--text-base);
+  }
+  .ci-menu-list a[aria-current="page"] {
+    font-weight: 600;
+    box-shadow: inset 3px 0 0 var(--color-sea);
+    padding-inline-start: 0.75rem;
+  }
+  .ci-menu-list .ci-menu-sep {
+    border-top: 1px solid var(--color-rule);
+    margin-top: 0.5rem;
+    padding-top: 0.5rem;
+  }
+  /* Desktop "More": a small dropdown under its summary. */
+  .ci-menu-more {
+    position: relative;
+  }
+  .ci-menu-more > summary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.15rem;
+  }
+  .ci-menu-more[open] > summary .ci-icon {
+    transform: rotate(180deg);
+  }
+  .ci-menu-dropdown {
+    position: absolute;
+    inset-inline-end: 0;
+    top: calc(100% + 0.5rem);
+    min-width: 14rem;
+    padding: 0.25rem 0;
+    background: var(--color-surface);
+    border: 1px solid var(--color-rule-strong);
+    border-radius: var(--radius-sm);
+    box-shadow: 0 12px 24px -12px rgb(0 0 0 / 0.25);
+  }
+  .ci-menu-dropdown ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .ci-menu-dropdown a {
+    display: block;
+    padding: 0.55rem 1rem;
+    color: var(--color-ink);
+    text-decoration: none;
+    font-size: var(--text-sm);
+  }
+  .ci-menu-dropdown a:hover,
+  .ci-menu-dropdown a:focus-visible {
+    background: var(--color-surface-sunk);
+  }
+  .ci-menu-dropdown a[aria-current="page"] {
+    font-weight: 600;
+  }
+  .ci-icon {
+    flex: none;
+    width: 1.25rem;
+    height: 1.25rem;
+  }
+
+  /* --- Share bar (components/share/) -------------------------------------
+     One row of 44px targets in a box of fixed height: the native "Share"
+     button replacing the icons after hydration changes nothing around it. */
+  .ci-share {
+    position: relative;
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: 0.375rem;
+    min-height: 2.75rem;
+  }
+  .ci-share-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    min-width: 2.75rem;
+    height: 2.75rem;
+    padding: 0 0.6rem;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--color-rule-strong);
+    background: transparent;
+    color: var(--color-ink-soft);
+    font: inherit;
+    font-size: var(--text-sm);
+    font-weight: 500;
+    line-height: 1;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color 120ms ease, color 120ms ease;
+  }
+  .ci-share-btn:hover {
+    background: var(--color-surface-sunk);
+    color: var(--color-ink);
+  }
+  .ci-share-native {
+    padding-inline: 0.9rem;
+    color: var(--color-ink);
+  }
+  .ci-share-toast {
+    position: absolute;
+    inset-inline-start: 0;
+    top: calc(100% + 0.25rem);
+    z-index: 5;
+    padding: 0.3rem 0.6rem;
+    border-radius: var(--radius-sm);
+    background: var(--color-ink);
+    color: var(--color-paper);
+    font-size: var(--text-xs);
+    white-space: nowrap;
+    pointer-events: none;
   }
 
   /* --- Alert strip (components/NewsAlerts.tsx) ---------------------------

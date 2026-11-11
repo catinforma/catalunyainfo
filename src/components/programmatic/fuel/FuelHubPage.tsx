@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import { Breadcrumbs, type Crumb } from "@/components/Breadcrumbs";
+import { ShareBar, crumbPath } from "@/components/share/ShareBar";
 import { getMessages } from "@/lib/i18n";
 import { GEOPORTAL_HOME, hubLead, hubMeta, liveLabels, placeName, readLine, sectionTitles } from "@/lib/programmatic/fuel/copy";
 import { MUNICIPALITIES, STATIONS, chains, citiesIn, comarquesIn, provinces } from "@/lib/programmatic/fuel/data";
@@ -41,6 +42,7 @@ export function FuelHubPage({ locale }: { locale: FuelLocale }) {
               <time dateTime={STATIONS.readOn}>{readLine(STATIONS.readOn, locale)}</time>
             </span>
           </div>
+          <ShareBar locale={locale} path={crumbPath(hubCrumbs(locale))} title={meta.h1} contentType="fuel_hub" />
         </div>
       </header>
 
@@ -109,6 +111,7 @@ export function FuelHubPage({ locale }: { locale: FuelLocale }) {
 
         <DriverGuides locale={locale} />
         <Sources locale={locale} />
+        <ShareBar locale={locale} path={crumbPath(hubCrumbs(locale))} title={meta.h1} contentType="fuel_hub" variant="full" />
       </div>
     </article>
   );

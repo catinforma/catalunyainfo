@@ -3,6 +3,7 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 
 import { Breadcrumbs, type Crumb } from "@/components/Breadcrumbs";
+import { ShareBar, crumbPath } from "@/components/share/ShareBar";
 import { JsonLd } from "@/components/JsonLd";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
@@ -364,6 +365,7 @@ export function SpainDayPage({ iso, locale = "es" }: { iso: string; locale?: Dat
         <div className="ci-shell py-5 md:py-8 lg:py-12">
           <Breadcrumbs items={dayCrumbs(iso, locale)} locale={locale} />
           <h1 className="ci-measure">{w.h1(iso)}</h1>
+          <ShareBar locale={locale} path={crumbPath(dayCrumbs(iso, locale))} title={w.h1(iso)} contentType="holidays_2027_day" />
         </div>
       </header>
 
@@ -450,6 +452,7 @@ export function SpainDayPage({ iso, locale = "es" }: { iso: string; locale?: Dat
             ))}
           </ol>
         </section>
+        <ShareBar locale={locale} path={crumbPath(dayCrumbs(iso, locale))} title={w.h1(iso)} contentType="holidays_2027_day" variant="full" />
       </div>
     </article>
   );

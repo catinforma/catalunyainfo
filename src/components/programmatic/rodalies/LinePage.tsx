@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import { Breadcrumbs, type Crumb } from "@/components/Breadcrumbs";
+import { ShareBar, crumbPath } from "@/components/share/ShareBar";
 import { JsonLd } from "@/components/JsonLd";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
@@ -70,6 +71,7 @@ export function LinePage({ line, locale }: { line: SnapshotLine; locale: LineLoc
                   <time dateTime={SNAPSHOT.readOn}>{t.readLine}</time>
                 </span>
               </div>
+              <ShareBar locale={locale} path={crumbPath(crumbs)} title={t.h1} contentType="rodalies_line" />
             </div>
           </header>
 
@@ -187,6 +189,7 @@ export function LinePage({ line, locale }: { line: SnapshotLine; locale: LineLoc
                 </nav>
               </div>
             </div>
+            <ShareBar locale={locale} path={crumbPath(crumbs)} title={t.h1} contentType="rodalies_line" variant="full" />
           </div>
         </article>
       </main>

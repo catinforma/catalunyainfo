@@ -6,6 +6,7 @@ import { Breadcrumbs, type Crumb } from "@/components/Breadcrumbs";
 import { EntryCard } from "@/components/EntryCard";
 import { VerifiedStamp } from "@/components/VerifiedStamp";
 import { PageFeedback } from "@/components/PageFeedback";
+import { ShareBar } from "@/components/share/ShareBar";
 import { tableOfContents } from "@/lib/content/blocks";
 import type { EntryDetail } from "@/lib/content/types";
 import { formatDate, formatDistance, formatDuration, isoDate } from "@/lib/format";
@@ -92,6 +93,8 @@ export function EntryArticle({
               <VerifiedStamp date={entry.lastVerifiedAt} locale={locale} />
             ) : null}
           </div>
+
+          <ShareBar locale={locale} path={entry.href} title={entry.title} contentType={entry.type} />
         </div>
       </header>
 
@@ -224,6 +227,8 @@ export function EntryArticle({
                 </ul>
               </nav>
             ) : null}
+
+            <ShareBar locale={locale} path={entry.href} title={entry.title} contentType={entry.type} variant="full" />
 
             <div className="ci-measure mt-10">
               <PageFeedback locale={locale} path={entry.href} contentType={entry.type} copy={t.feedback} />

@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import { Breadcrumbs, type Crumb } from "@/components/Breadcrumbs";
+import { ShareBar, crumbPath } from "@/components/share/ShareBar";
 import { JsonLd } from "@/components/JsonLd";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
@@ -67,6 +68,7 @@ function Header({ crumbs, locale, kicker, h1, lead }: { crumbs: Crumb[]; locale:
             <time dateTime={SNAPSHOT.readOn}>{w.readLine}</time>
           </span>
         </div>
+        <ShareBar locale={locale} path={crumbPath(crumbs)} title={h1} contentType="reservoirs" />
       </div>
     </header>
   );
@@ -245,6 +247,7 @@ export function ReservoirPage({ reservoir: r, locale }: { reservoir: SnapshotRes
                 </nav>
               </div>
             </div>
+            <ShareBar locale={locale} path={crumbPath(crumbs)} title={reservoirH1(r, locale)} contentType="reservoirs" variant="full" />
           </div>
         </article>
       </main>
@@ -305,6 +308,7 @@ export function ReservoirHubPage({ locale }: { locale: Locale }) {
 
             <Sources title={w.sources} note={w.sourcesNote} items={sources(locale)} />
           </div>
+          <ShareBar locale={locale} path={crumbPath(crumbs)} title={t.h1} contentType="reservoirs" variant="full" />
         </div>
       </main>
       <JsonLd json={graph([breadcrumbSchema(crumbs), reservoirHubDataset(locale)])} />

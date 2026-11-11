@@ -1,5 +1,6 @@
 import Link from "next/link";
 
+import { ShareBar, crumbPath } from "@/components/share/ShareBar";
 import type { Crumb } from "@/components/Breadcrumbs";
 import { WidgetPlaceLink } from "@/components/programmatic/embed-2027/WidgetLink";
 import { dayMonthYear } from "@/lib/programmatic/holidays/format";
@@ -284,6 +285,7 @@ export function CityPage({ c }: { c: City }) {
         <p className="ci-measure mt-2 text-xs text-[var(--color-muted)]">
           <time dateTime={CITIES_AS_OF}>Fiestas locales leídas el {dayMonthYear(CITIES_AS_OF, "es")}.</time>
         </p>
+        <ShareBar locale="es" path={crumbPath(cityCrumbs(c))} title={cityH1(c)} contentType="holidays_2027" variant="full" />
       </div>
     </article>
   );

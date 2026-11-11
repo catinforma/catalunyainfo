@@ -27,7 +27,10 @@ export type AnalyticsEvent =
   | { name: "map_interaction"; params: { place_kind: string; locale: string } }
   | { name: "affiliate_click"; params: { partner: string; placement: string; locale: string } }
   | { name: "useful_feedback"; params: { is_useful: boolean; content_type: string; locale: string } }
-  | { name: "newsletter_signup"; params: { placement: string; locale: string } };
+  | { name: "newsletter_signup"; params: { placement: string; locale: string } }
+  // GA4's recommended `share` event. `item_id` is the shared page's path (no
+  // query string); `method` is the channel, the same value as `utm_medium`.
+  | { name: "share"; params: { method: string; content_type: string; item_id: string; locale: string } };
 
 export interface ContentParams {
   content_type: string;
@@ -52,6 +55,7 @@ export const ANALYTICS_EVENTS: AnalyticsEventName[] = [
   "affiliate_click",
   "useful_feedback",
   "newsletter_signup",
+  "share",
 ];
 
 declare global {

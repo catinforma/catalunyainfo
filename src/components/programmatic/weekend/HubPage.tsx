@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import { Breadcrumbs, type Crumb } from "@/components/Breadcrumbs";
+import { ShareBar, crumbPath } from "@/components/share/ShareBar";
 import { B2_TITLES, b2href } from "@/lib/content/batch02/shared";
 import { AGENDA_SOURCE, type WeekendWindow } from "@/lib/content/weekend/agenda";
 import { EVERGREEN } from "@/lib/content/weekend/evergreen";
@@ -57,6 +58,7 @@ export function HubPage({ locale, window }: { locale: WeekendLocale; window: Wee
           </p>
           <p className="ci-measure mt-3 text-lg text-[var(--color-ink-soft)]">{copy.lead}</p>
           {longNote ? <p className="ci-measure mt-3">{longNote}</p> : null}
+          <ShareBar locale={locale} path={crumbPath(hubCrumbs(locale))} title={meta.h1} contentType="weekend_hub" />
         </div>
       </header>
 
@@ -112,6 +114,7 @@ export function HubPage({ locale, window }: { locale: WeekendLocale; window: Wee
           ]}
         />
         <Sources locale={locale} />
+        <ShareBar locale={locale} path={crumbPath(hubCrumbs(locale))} title={meta.h1} contentType="weekend_hub" variant="full" />
       </div>
     </article>
   );

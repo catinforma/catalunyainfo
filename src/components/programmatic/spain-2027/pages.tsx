@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import { Breadcrumbs, type Crumb } from "@/components/Breadcrumbs";
+import { ShareBar, crumbPath } from "@/components/share/ShareBar";
 import { WidgetHubLink } from "@/components/programmatic/embed-2027/WidgetLink";
 import { getMessages } from "@/lib/i18n";
 import { municipalities } from "@/lib/programmatic/holidays/data";
@@ -80,6 +81,7 @@ export function Header({ crumbs, h1, lead }: { crumbs: Crumb[]; h1: string; lead
         <Breadcrumbs items={crumbs} locale="es" />
         <h1 className="ci-measure">{h1}</h1>
         {lead ? <p className="ci-measure mt-4 text-lg text-[var(--color-ink-soft)]">{lead}</p> : null}
+        <ShareBar locale="es" path={crumbPath(crumbs)} title={h1} contentType="holidays_2027" />
       </div>
     </header>
   );
@@ -473,6 +475,7 @@ export function CommunityPage({ c }: { c: CommunityNames }) {
             ...(s.extraSources ?? []),
           ]}
         />
+        <ShareBar locale="es" path={crumbPath(communityCrumbs(c))} title={communityH1(c)} contentType="holidays_2027" variant="full" />
       </div>
     </article>
   );
@@ -578,6 +581,7 @@ export function SpainHubPage() {
         <CommunityLinks />
 
         <SourceList items={[BOE_REF]} />
+        <ShareBar locale="es" path={crumbPath(hubCrumbs())} title={HUB.h1} contentType="holidays_2027" variant="full" />
       </div>
     </article>
   );
@@ -668,6 +672,7 @@ export function SpainBridgesPage() {
         <CommunityLinks />
 
         <SourceList items={[BOE_REF]} />
+        <ShareBar locale="es" path={crumbPath(bridgesCrumbs())} title={BRIDGES.h1} contentType="holidays_2027" variant="full" />
       </div>
     </article>
   );

@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import { Breadcrumbs, type Crumb } from "@/components/Breadcrumbs";
+import { ShareBar, crumbPath } from "@/components/share/ShareBar";
 import { LinkList } from "@/components/programmatic/weekend/parts";
 import { B2_TITLES, b2href } from "@/lib/content/batch02/shared";
 import { renderInline } from "@/lib/content/inline";
@@ -82,6 +83,7 @@ export function TownPage({ town, locale }: { town: Town; locale: FairsLocale }) 
           <Breadcrumbs items={townCrumbs(town, locale)} locale={locale} />
           <h1 className="ci-measure">{townH1(town, locale)}</h1>
           <p className="ci-measure mt-3 text-lg text-[var(--color-ink-soft)]">{townLead({ ...town, comarcaName: comarcaOf(town) }, locale, checked)}</p>
+          <ShareBar locale={locale} path={crumbPath(townCrumbs(town, locale))} title={townH1(town, locale)} contentType="christmas_fairs_town" />
         </div>
       </header>
 
@@ -133,6 +135,7 @@ export function TownPage({ town, locale }: { town: Town; locale: FairsLocale }) 
         </p>
         <LinkList title={t.guides} id="ci-xmas-guides" links={guides} />
         <Sources locale={locale} fairs={town.fairs} />
+        <ShareBar locale={locale} path={crumbPath(townCrumbs(town, locale))} title={townH1(town, locale)} contentType="christmas_fairs_town" variant="full" />
       </div>
     </article>
   );

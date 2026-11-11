@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import { Breadcrumbs, type Crumb } from "@/components/Breadcrumbs";
+import { ShareBar, crumbPath } from "@/components/share/ShareBar";
 import { JsonLd } from "@/components/JsonLd";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
@@ -43,6 +44,7 @@ export function HubPage({ locale }: { locale: Locale }) {
                 <time dateTime={SNAPSHOT.readOn}>{t.readLine}</time>
               </span>
             </div>
+            <ShareBar locale={locale} path={crumbPath(crumbs)} title={t.h1} contentType="rodalies_hub" />
           </div>
         </header>
 
@@ -110,6 +112,7 @@ export function HubPage({ locale }: { locale: Locale }) {
 
             <Sources title={t.sourcesTitle} note={t.sourcesNote} items={t.sources} />
           </div>
+          <ShareBar locale={locale} path={crumbPath(crumbs)} title={t.h1} contentType="rodalies_hub" variant="full" />
         </div>
       </main>
       <JsonLd json={graph([breadcrumbSchema(crumbs)])} />
