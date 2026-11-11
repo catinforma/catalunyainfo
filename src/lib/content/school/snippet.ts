@@ -233,8 +233,19 @@ export function liveSchoolTitle(locale: Locale, today: string): string {
     // CTR sweep, 6 Nov 2026 (ca): that title gave the whole answer and CTR fell
     // from 1.1 % to 0.2 % at position 5; the dates stay in the description and
     // the title promises what the snippet cannot list (docs/SEO_EXPERIMENTS.md).
-    const searched = `Calendari escolar ${year.label}: festius i lliure disposició`;
-    if (locale === "ca" && searched.length <= SCHOOL_TITLE_MAX) return searched;
+    // CTR retitles, 11 Nov 2026: that title held 1.0-1.1 % at 5.0, and the
+    // visible queries are "vacances (escolars) de nadal 2026" and "quan
+    // comencen les vacances de nadal". Every edition now leads with the
+    // Christmas holidays in those words, without the dates (they stay in the
+    // description), then the school calendar the page tables.
+    const xmas = c0.slice(0, 4);
+    const searched = L(
+      locale,
+      [`Vacances de Nadal ${xmas} i calendari escolar ${label} Catalunya`, `Vacances de Nadal ${xmas}: calendari escolar de Catalunya`],
+      [`Vacaciones de Navidad ${xmas}: calendario escolar de Cataluña`],
+      [`Christmas school holidays ${xmas}: Catalonia school calendar`],
+    ).find((t) => t.length <= SCHOOL_TITLE_MAX);
+    if (searched) return searched;
     tails = L(
       locale,
       [`Nadal del ${dm(c0)} al ${dm(c1)}`, `Nadal ${dm(c0)}-${dm(c1)}`],

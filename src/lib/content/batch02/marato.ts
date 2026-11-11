@@ -90,6 +90,14 @@ import {
  * granRecapteMention(); titles and description untouched. Goes out with
  * `gran-recapte-links`.
  *
+ * 11 Nov 2026 (CTR retitles, docs/SEO_EXPERIMENTS.md): volunteer
+ * pre-registration closed at 10:00 on 10 Nov, so the CA title and description
+ * drop it. CA 0.5 % at 6.5, ES 1.4 % at 6.8 (29 Oct-6 Nov), "marató tv3 2026
+ * data" 0.3 % at 5.6: the date alone is answered on the results page. CA/ES
+ * titles now promise the donation and tax-relief answers (Bizum 33333, Llei
+ * 49/2002 art. 19, both above); the descriptions add the presenters and
+ * where to watch. EN title kept; its description follows. No new fact.
+ *
  * No new photograph: the hero is the shops guide's lead picture (Christmas
  * lights), with the same alt text and caption.
  */
@@ -129,18 +137,18 @@ export const MARATO_META: Record<Locale, { path: string; title: string; seoTitle
   ca: {
     path: "guies/la-marato-tv3-3cat",
     title: "La Marató de TV3 2026: diumenge 13 de desembre, a què es dedica i com fer un donatiu",
-    seoTitle: "La Marató de TV3 2026: 13 de desembre, voluntaris i donatius",
+    seoTitle: "La Marató TV3 2026: 13 de desembre, com donar i desgravar",
     seoDescription:
-      "La Marató de TV3 és el diumenge 13 de desembre, per a les malalties neurodegeneratives i neuromusculars. Voluntaris: preinscripció fins al 10 de novembre.",
+      "Diumenge 13 de desembre a TV3, per a les malalties neurodegeneratives i neuromusculars. Qui la presenta, on veure-la, Bizum 33333 i quant desgrava donar.",
     excerpt:
       "La Marató 2026, la 35a: quan és, a quines malalties es dedica, qui la presenta, com veure-la i com col·laborar-hi per canals oficials.",
   },
   es: {
     path: "guias/la-marato-tv3-3cat",
     title: "La Marató de TV3 2026: domingo 13 de diciembre, a qué se dedica y cómo donar",
-    seoTitle: "La Marató de TV3 2026: 13 de diciembre, causa y cómo donar",
+    seoTitle: "La Marató TV3 2026: 13 de diciembre, cómo donar y desgravar",
     seoDescription:
-      "La Marató de TV3 2026 es el domingo 13 de diciembre y se dedica a las enfermedades neurodegenerativas y neuromusculares. Cómo verla y cómo donar.",
+      "Domingo 13 de diciembre en TV3, para las enfermedades neurodegenerativas y neuromusculares. Quién la presenta, dónde verla, Bizum 33333 y cuánto desgrava.",
     excerpt:
       "La Marató 2026, la 35ª: cuándo es, a qué enfermedades se dedica, quién la presenta, cómo verla y cómo colaborar por canales oficiales.",
   },
@@ -149,7 +157,7 @@ export const MARATO_META: Record<Locale, { path: string; title: string; seoTitle
     title: "La Marató 2026: Catalonia's TV3 telethon on Sunday 13 December, cause and how to donate",
     seoTitle: "La Marató 2026: TV3 telethon on 13 December, how to donate",
     seoDescription:
-      "La Marató de 3Cat 2026, Catalonia's TV3 telethon, is on Sunday 13 December, for neurodegenerative and neuromuscular diseases. How to watch and donate.",
+      "TV3 telethon on Sunday 13 December, for neurodegenerative and neuromuscular diseases. Who presents it, where to watch, Bizum code 33333 and the tax relief.",
     excerpt:
       "The 35th La Marató: when it is, which diseases it is for, who presents it, how to watch it and how to give through the official channels.",
   },

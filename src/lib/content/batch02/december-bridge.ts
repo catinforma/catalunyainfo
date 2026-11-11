@@ -89,6 +89,14 @@ import {
  * 6 Nov 2026: the "rest of Spain" section ends with a link to the Spain-wide
  * page, every community's table (december-bridge-spain.ts; group
  * `puente-diciembre-espana-links`). No new fact.
+ *
+ * 11 Nov 2026 (CTR retitles, docs/SEO_EXPERIMENTS.md): after 6 Nov the ES
+ * page fell to 1.7 % at 6.1 while the new Spain-wide page took the national
+ * queries; "puente de la purisima 2026" (277 impr., pos 4.5) and
+ * "festivos diciembre 2026" (235, 5.2) got no click. Titles now carry the
+ * Purísima / Puríssima wording and promise the day-by-day table; the
+ * descriptions keep the dates and add the table, leave, schools and the
+ * traffic section (all on the page). EN follows. No new fact.
  */
 export const BRIDGE_VERIFIED = "2026-10-26";
 
@@ -330,27 +338,27 @@ export const DECEMBER_BRIDGE_META: Record<Locale, { path: string; title: string;
   ca: {
     path: "guies/pont-desembre-catalunya",
     title: "Pont de desembre 2026 a Catalunya: quins dies són festius, escoles i botigues",
-    seoTitle: "Pont de desembre 2026 a Catalunya: festius i dies a demanar",
+    seoTitle: "Pont de desembre 2026 (Puríssima) a Catalunya, dia a dia",
     seoDescription:
-      "Festius de desembre 2026 a Catalunya: dimarts 8 (la Immaculada), 25 i 26. Dilluns 7, feiner llevat de 43 municipis: quins dies demanar i si hi ha escola.",
+      "Festius de desembre 2026 a Catalunya: dimarts 8 (la Immaculada), 25 i 26. Dilluns 7, només en 43 municipis: taula dia a dia, què demanar, escola i trànsit.",
     excerpt:
       "Quins dies són festius al desembre del 2026 a Catalunya, per què el 6 i el 7 no ho són, com fer pont, si hi ha escola i si obren les botigues.",
   },
   es: {
     path: "guias/puente-diciembre-cataluna",
     title: "Puente de diciembre 2026 en Cataluña: qué días son festivos, colegios y tiendas",
-    seoTitle: "Puente de diciembre 2026 Cataluña: festivos y qué días pedir",
+    seoTitle: "Puente de diciembre 2026 (Purísima) en Cataluña, día a día",
     seoDescription:
-      "Festivos de diciembre 2026 en Cataluña: martes 8 (la Purísima), 25 y 26. El lunes 7 es laborable salvo en 43 municipios: qué días pedir y si hay colegio.",
+      "Festivos de diciembre 2026 en Cataluña: martes 8 (la Purísima), 25 y 26. El lunes 7, solo en 43 municipios: tabla día a día, qué pedir, colegios y tráfico.",
     excerpt:
       "Qué días son festivos en diciembre de 2026 en Cataluña, por qué el 6 y el 7 no lo son, cómo hacer puente, si hay colegio y si abren las tiendas.",
   },
   en: {
     path: "guides/december-long-weekend-catalonia",
     title: "December 2026 long weekend in Catalonia: which days are public holidays",
-    seoTitle: "December 2026 public holidays in Catalonia: 8, 25 and 26 Dec",
+    seoTitle: "December 2026 holidays in Catalonia: the bridge day by day",
     seoDescription:
-      "Holidays only on Tuesday 8, Friday 25 and Saturday 26 December 2026; the 6th is a Sunday and Monday 7 is a working day, except in 43 towns. Schools, shops.",
+      "Holidays on Tuesday 8, Friday 25 and Saturday 26 December 2026; Monday 7 only in 43 towns. Day-by-day table, days to take off, schools, shops, traffic.",
     excerpt:
       "Which days are public holidays in Catalonia in December 2026, why the 6th and 7th are not, how to make a long weekend, schools and shops.",
   },

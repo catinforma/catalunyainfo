@@ -3187,3 +3187,91 @@ below the CTR curve, and why none is retitled today:
   near the curve.
 
 Next look: 13 Nov (the 6 Nov sweep's day-7 check), then the lights date.
+
+## 11 Nov 2026 — CTR retitles: pages at 3–8 far below the curve get titles in the query's words that promise the table (deploy; groups `puente-diciembre-espana-links`, `shops`, `climate`, `marato`, `setmana-santa-2027`)
+
+**Why.** `snapshot.py page … 14` (29 Oct–11 Nov), with each page split at
+6/7 Nov from the same API. Two causes, applied page by page. Either the
+snippet already gives the whole answer (dates or figures in the title *and*
+the description), or the title lacks the words people search ("purísima",
+"domingo", "january", "vacances de Nadal"). The 6 Nov hypothesis stands. The
+answer stays in the description. The title names what a snippet cannot hold:
+the day-by-day table, the date table, the monthly table, the donation and
+tax answers. No title gives the answer, and none promises anything the page
+lacks.
+
+**Excluded (hard rules or mid-experiment):** the 11N and strike pages, every
+election page, `aparcar-*`, metro hours, tourist tax, `lliure-disposicio` and
+the Christmas lights page.
+
+**Skipped, with reasons:**
+- Castanyada ca/es: the season is over.
+- `/es/guias/navidad-en-barcelona/` (+ ca, en): since 5 Nov it gets almost no
+  impressions (984 a day → 0–3). Its "encendido de luces" queries moved to
+  the lights page, which is off limits. Nothing to retitle.
+- ES school calendar `/es/guias/calendario-escolar-cataluna/`: it sits at
+  position 16–21, so this is a ranking problem. The large "vacaciones de
+  navidad 2026" numbers under `calendario-escolar` belong to the Spain-wide
+  pages of 6 Nov. Its live title changes anyway, because one function builds
+  the CA/ES/EN live title.
+- Weather CA/ES: 0–40 impressions in 14 days. Their snippets give the coming
+  months on purpose (30 Oct). Unchanged.
+- EN Marató title: it already says "how to donate". Only its description
+  changes.
+
+**Supersedes the 6 Nov entry for two pages.** The ES/CA December bridge and
+the CA school calendar were in the 6 Nov sweep (day-7 check 13 Nov), and
+neither gained. The ES bridge went from 2.1 % at 5.7 to 1.7 % at 6.1 (from
+7 Nov the new Spain-wide page took 12.9k national impressions). CA school
+went from 1.0 % to 1.1 % at 5.0–5.1. For these pages, this entry's check
+replaces the 13 Nov one.
+
+| Page (group) | Before → after | Baseline (29 Oct–11 Nov) and query evidence |
+| --- | --- | --- |
+| `/es/guias/puente-diciembre-cataluna/` (`puente-diciembre-espana-links`; or `lliure-disposicio-links` / `pont-desembre`, all three republish this page) | T: "Puente de diciembre 2026 Cataluña: festivos y qué días pedir" → "Puente de diciembre 2026 (Purísima) en Cataluña, día a día". D: "…El lunes 7 es laborable salvo en 43 municipios: qué días pedir y si hay colegio." → "Festivos de diciembre 2026 en Cataluña: martes 8 (la Purísima), 25 y 26. El lunes 7, solo en 43 municipios: tabla día a día, qué pedir, colegios y tráfico." | 266 clicks / 13,839 impr. (1.9 %), pos 5.9; 29 Oct–6 Nov 2.1 % at 5.7, 7–11 Nov 1.7 % at 6.1. Queries 7–11 Nov: puente de la purisima 2026 (277, 4.5, 0 clicks); festivos diciembre 2026 (235, 5.2, 0); puente de diciembre 2026 (776, 7.2, 1.2 %); cuando es el puente de diciembre (215, 6.9, 1.4 %) |
+| `/ca/guies/pont-desembre-catalunya/` (same) | T: "Pont de desembre 2026 a Catalunya: festius i dies a demanar" → "Pont de desembre 2026 (Puríssima) a Catalunya, dia a dia". D: "…Dilluns 7, feiner llevat de 43 municipis: quins dies demanar i si hi ha escola." → "…Dilluns 7, només en 43 municipis: taula dia a dia, què demanar, escola i trànsit." | 26 / 988 (2.6 %), pos 5.2. pont de desembre 2026 (159, 7.5, 0); pont (de la) purissima 2026 (~30, 5–7, 0) |
+| `/en/guides/december-long-weekend-catalonia/` (same) | T: "December 2026 public holidays in Catalonia: 8, 25 and 26 Dec" → "December 2026 holidays in Catalonia: the bridge day by day". D: → "Holidays on Tuesday 8, Friday 25 and Saturday 26 December 2026; Monday 7 only in 43 towns. Day-by-day table, days to take off, schools, shops, traffic." | ~20 impr.; follows ca/es (owner rule) |
+| `/es/guias/tiendas-abiertas-festivos-cataluna/` (`shops`) | T: "Tiendas abiertas en Barcelona: domingo 29 nov y diciembre" → "Tiendas abiertas domingo y festivos Barcelona: fecha a fecha". D: "Domingo 29 de noviembre, día de elecciones: sí pueden abrir… 30 municipios cambian." → "Domingo 29 de noviembre (elecciones) y 6, 8, 13, 20 y 27 de diciembre: pueden abrir; 25 y 26, no. Tabla fecha a fecha y los 30 municipios que cambian." | 360 / 13,030 (2.8 %), pos 5.7; 29 Oct–6 Nov 4.4 % at 5.1 (1 Nov peak), 7–11 Nov 1.2 % at 6.4. tiendas abiertas hoy en barcelona 2026 (143, 7.9, 0.7 %); tiendas abiertas domingo barcelona (70, 10.8, 1.4 %); tiendas abiertas mañana en barcelona 2026 (65, 6.0, 0); este domingo abren las tiendas en barcelona 2026 (28, 5.6, 0) |
+| `/ca/guies/botigues-obertes-festius-catalunya/` (same) | T: "Botigues obertes a Barcelona: diumenge 29 nov i desembre" → "Botigues obertes diumenges i festius a Barcelona, dia a dia". D: → "Diumenge 29 de novembre (eleccions) i 6, 8, 13, 20 i 27 de desembre: poden obrir; 25 i 26, no. Taula dia a dia i els 30 municipis que canvien." | 37 / 1,505 (2.5 %), pos 5.3. diumenges botigues obertes 2026 (31, 7.8, 1 click); botigues obertes avui a barcelona 2026 (24, 6.5, 0); botigues obertes diumenge (16, 6.0, 0) |
+| `/en/guides/shops-open-sundays-holidays-catalonia/` (same) | T: "Are shops open on Sunday in Barcelona? 29 Nov and December" → "Are shops open on Sundays in Barcelona? Date-by-date table". D: → "Shops may open on Sunday 29 November (election day) and on 6, 8, 13, 20 and 27 December, not on 25-26. Date-by-date table and the 30 towns that differ." | 9 / 505 (1.8 %), pos 6.1; "are shops open in barcelona on sunday" at 9–11 |
+| `/en/guides/barcelona-weather-by-month/` (`climate`) | T: "Barcelona weather and temperature by month (°C and °F)" → "Barcelona weather by month: temperature, January to December". D: "Coldest: January, highs of 13.6 °C… Wettest: October, 91 mm…" → "Month by month: highs, lows, rain days, sunshine and records, in °C and °F. January highs of 13.6 °C (56 °F), August 28.5 °C (83 °F). AEMET averages." | 21 / 6,246 (0.3 %), pos 7.3. barcelona weather january (763, 8.9, 0); barcelona weather august (565, 7.4, 0); barcelona weather by month (313, 8.7, 1 click); barcelona temperature by month (239, 9.2, 0) |
+| `/ca/guies/calendari-escolar-catalunya/` (live title: deploy only) | Live title until 7 Jan: "Calendari escolar 2026-2027: festius i lliure disposició" → "Vacances de Nadal 2026 i calendari escolar 2026-27 Catalunya". ES "Calendario escolar 2026-27 Cataluña: Navidad 22/12-7/1" → "Vacaciones de Navidad 2026: calendario escolar de Cataluña". EN "…: Christmas 22 Dec–7 Jan" → "Christmas school holidays 2026: Catalonia school calendar". The live description is unchanged (it gives the dates) | CA 40 / 3,877 (1.0 %), pos 5.0; 29 Oct–6 Nov 1.0 % at 5.0, 7–11 Nov 1.1 % at 5.1. 95 % of queries hidden. Visible: vacances escolars nadal 2026 (17, 8.1, 0); quan comencen les vacances de nadal (13, 2.6, 0); vacances de nadal 2026 (13, 7.4, 0). ES at 16–21 |
+| `/ca/guies/la-marato-tv3-3cat/` (`marato`) | T: "La Marató de TV3 2026: 13 de desembre, voluntaris i donatius" → "La Marató TV3 2026: 13 de desembre, com donar i desgravar". D: "…Voluntaris: preinscripció fins al 10 de novembre." (now past) → "Diumenge 13 de desembre a TV3, per a les malalties neurodegeneratives i neuromusculars. Qui la presenta, on veure-la, Bizum 33333 i quant desgrava donar." | 28 / 3,968 (0.7 %), pos 6.5. marató tv3 2026 (399, 8.6, 0); marato tv3 2026 (451, 8.9, 1 click); marató tv3 2026 data (384, 5.6, 1 click); la marato 2026 (376, 8.6, 0) |
+| `/es/guias/la-marato-tv3-3cat/` (same) | T: "La Marató de TV3 2026: 13 de diciembre, causa y cómo donar" → "La Marató TV3 2026: 13 de diciembre, cómo donar y desgravar". D: → "Domingo 13 de diciembre en TV3, para las enfermedades neurodegenerativas y neuromusculares. Quién la presenta, dónde verla, Bizum 33333 y cuánto desgrava." | 12 / 868 (1.4 %), pos 6.8, nearly all before 7 Nov (1 impression since): mostly ranking |
+| `/en/guides/la-marato-tv3-telethon/` (same) | Title kept. D: "La Marató de 3Cat 2026, Catalonia's TV3 telethon, is on Sunday 13 December… How to watch and donate." → "TV3 telethon on Sunday 13 December, for neurodegenerative and neuromuscular diseases. Who presents it, where to watch, Bizum code 33333 and the tax relief." | small |
+| `/es/guias/semana-santa-2027-cataluna/` (`setmana-santa-2027`) | T: "Semana Santa 2027 en Cataluña: festivos 26 y 29 de marzo" → "Semana Santa 2027 en Cataluña día a día: festivos y colegios". D unchanged (the week, 26 and 29, the school break) | 51 / 2,955 (1.7 %), pos 5.9; 1–5 Nov 2.7 % at 5.4, 6–11 Nov 0.5 % at 6.5. semana santa 2027 catalunya (740, 5.8, 0.7 %); semana santa 2027 cataluña (219, 5.2, 0.5 %); semana santa 2027 festivos cataluña (37, 6.2, 0) |
+| `/ca/guies/setmana-santa-2027-catalunya/` (same) | T: "Setmana Santa 2027 a Catalunya: festius 26 i 29 de març" → "Setmana Santa 2027 a Catalunya dia a dia: festius i escoles". D unchanged | 25 / 2,249 (1.1 %), pos 6.3. setmana santa 2027 (539, 8.3, 0); setmana santa 2027 catalunya (507, 5.5, 0.8 %); quan es setmana santa 2027 (162, 6.5, 0.6 %) |
+| `/en/guides/easter-2027-catalonia/` (same) | T: "Easter 2027 in Catalonia and Barcelona: 26 and 29 March" → "Easter 2027 in Catalonia and Barcelona, day by day". D unchanged | ~30 impr. |
+
+First paragraphs are unchanged: each lead already answers in the query's
+words. No fact changed. Every date and figure in the new strings was already
+on the page with its source:
+- the bridge's 43 towns: Ordre EMT/66/2025 and EMT/208/2025;
+- its traffic section: the SCT's 2026 operations calendar;
+- the shops' 30 towns: Ordre EMT/77/2025 and Resolució EMT/4342/2025;
+- weather: AEMET 0076 normals;
+- school: Ordre EDF/66/2026;
+- Marató: 3Cat's donation page and Ley 49/2002 art. 19;
+- Easter: Ordre EMT/52/2026.
+
+Tests that pinned the old strings now pin the new ones (`december-pages`,
+`batch02`, `school-calendar`, `easter-2027`). The Easter test now requires
+the two holidays in the description and "day by day" in the title.
+
+**Expected gain**, at today's demand: about +60–120 clicks a week. Most of it
+comes from the ES bridge (rising into December) and ES shops (29N and
+December).
+
+**Revert rule.** Check on day 7 after the deploy and publish (18 Nov if both
+go out on 11 Nov). Use `snapshot.py page <path> 7` against the 14-day
+baseline above. Revert a page to its old title (and description, where
+changed) in either case:
+- its clicks fell at equal or higher impressions;
+- its position dropped more than 1.5 with no CTR gain.
+
+Bridge, shops and school demand rises into December, so compare CTR at equal
+position, not raw clicks. Read the ES bridge against the Spain-wide page's
+share of the same queries. If the CA Marató page is reverted, do not restore
+its old description, because the volunteer deadline (10 Nov) is past.
+
+**Outcome:** _pending_

@@ -91,8 +91,9 @@ test("titles fit in 60 characters, descriptions in 155, name the year and use th
   const words: Record<string, Record<Locale, RegExp>> = {
     // EN titles of both retitled 30 Oct (CTR sweep): the holiday dates and the Marató date.
     // CA/ES retitled 3 Nov (CTR sweep) with the answer, then 6 Nov (CTR sweep:
-    // the answer titles lost clicks) with the promise of the leave table.
-    decemberBridge: { ca: /^Pont de desembre 2026 a Catalunya: festius i dies a demanar$/, es: /^Puente de diciembre 2026 Cataluña: festivos y qué días pedir$/, en: /^December 2026 public holidays in Catalonia: 8, 25 and 26 Dec$/ },
+    // the answer titles lost clicks) with the promise of the leave table;
+    // 11 Nov (CTR retitles) with the Purísima wording and the day-by-day table.
+    decemberBridge: { ca: /^Pont de desembre 2026 \(Puríssima\) a Catalunya, dia a dia$/, es: /^Puente de diciembre 2026 \(Purísima\) en Cataluña, día a día$/, en: /^December 2026 holidays in Catalonia: the bridge day by day$/ },
     marato: { ca: /^La Marató/, es: /^La Marató/, en: /^La Marató 2026: TV3 telethon on 13 December/ },
   };
   for (const article of ARTICLES) {

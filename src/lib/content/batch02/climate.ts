@@ -60,6 +60,10 @@ const SOURCES: B2Source[] = [
   { name: "Start of winter 2026-2027", url: "https://astronomia.ign.es/en/inicio-estaciones/invierno", publisher: "Instituto Geográfico Nacional — Observatorio Astronómico Nacional" },
 ];
 
+// 11 Nov 2026 (CTR retitles, docs/SEO_EXPERIMENTS.md): EN title in the
+// searchers' words ("barcelona weather january", "temperature by month") and a
+// description that promises the monthly table instead of only answering it.
+// Same AEMET figures. CA/ES unchanged (their snippets give the coming months).
 const META: Record<Locale, { path: string; title: string; seoTitle: string; seoDescription: string; excerpt: string }> = {
   ca: {
     path: "guies/temps-barcelona-mes-a-mes",
@@ -82,9 +86,9 @@ const META: Record<Locale, { path: string; title: string; seoTitle: string; seoD
   en: {
     path: "guides/barcelona-weather-by-month",
     title: "Barcelona weather and temperature by month (°C and °F)",
-    seoTitle: "Barcelona weather and temperature by month (°C and °F)",
+    seoTitle: "Barcelona weather by month: temperature, January to December",
     seoDescription:
-      "Coldest: January, highs of 13.6 °C (56 °F), lows of 4.7 °C (40 °F). Warmest: August, 28.5 °C (83 °F). Wettest: October, 91 mm. AEMET monthly averages.",
+      "Month by month: highs, lows, rain days, sunshine and records, in °C and °F. January highs of 13.6 °C (56 °F), August 28.5 °C (83 °F). AEMET averages.",
     excerpt:
       "What the weather is like in Barcelona each month, from AEMET's official averages and Meteocat's figures for the city centre.",
   },
