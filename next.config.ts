@@ -4,7 +4,11 @@ import { LEGACY_REDIRECTS } from "./src/lib/migration/legacy-redirects";
 import {
   ALWAYS_NOINDEX_SOURCES,
   contentSecurityPolicy,
+  EMBED_ROBOTS_VALUE,
+  EMBED_SOURCE,
+  embedContentSecurityPolicy,
   NOINDEX_VALUE,
+  NOT_EMBED_SOURCE,
   SECURITY_HEADERS,
 } from "./src/lib/security-headers";
 import { deployEnv } from "./src/lib/site";
@@ -165,12 +169,21 @@ const nextConfig: NextConfig = {
       {
         // The full security header set, statically: none of it varies per
         // request, so the proxy no longer has to run on every page for it.
+        // X-Frame-Options is in the next rule: every path but the widgets.
         source: "/:path*",
         headers: [
           { key: "Content-Security-Policy", value: contentSecurityPolicy(process.env.NODE_ENV !== "production") },
-          ...Object.entries(SECURITY_HEADERS).map(([key, value]) => ({ key, value })),
+          ...Object.entries(SECURITY_HEADERS)
+            .filter(([key]) => key !== "X-Frame-Options")
+            .map(([key, value]) => ({ key, value })),
           { key: "X-DNS-Prefetch-Control", value: "on" },
         ],
+      },
+      {
+        // Never framed, except the embeddable widgets under /embed/: a later
+        // rule cannot remove a header, so this one leaves them out.
+        source: NOT_EMBED_SOURCE,
+        headers: [{ key: "X-Frame-Options", value: SECURITY_HEADERS["X-Frame-Options"]! }],
       },
       // Not indexable: any non-production build, any build without the
       // switch, and on production any host other than the canonical one.
@@ -198,6 +211,16 @@ const nextConfig: NextConfig = {
       // 2026 00:00). Next keeps a Cache-Control that is already set on a
       // dynamic route. See src/lib/programmatic/polls/paths.ts.
       ...pollsHeaderSources().map((source) => ({ source, headers: POLLS_CACHE_HEADERS })),
+      // The embeddable widgets (src/app/embed/): any site may frame them,
+      // nothing else on the site may. Last, so its CSP and X-Robots-Tag win
+      // over the site-wide ones above (src/lib/security-headers.ts).
+      {
+        source: EMBED_SOURCE,
+        headers: [
+          { key: "Content-Security-Policy", value: embedContentSecurityPolicy() },
+          { key: "X-Robots-Tag", value: EMBED_ROBOTS_VALUE },
+        ],
+      },
     ];
   },
 };

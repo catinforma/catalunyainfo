@@ -79,8 +79,9 @@ import { publishLocalHolidaysGuide } from "@/lib/content/holidays/local-publish"
 import { publishReservoirGuide } from "@/lib/content/reservoirs/publish";
 import { publishSchoolCalendarGuide } from "@/lib/content/school/publish";
 import { publishSpainSchoolCalendars } from "@/lib/content/school-spain/publish";
-import { editionPaths } from "@/lib/programmatic/spain-2027/editions";
-import { spainDayPaths, spainPaths } from "@/lib/programmatic/spain-2027/paths";
+import { editionHubPath, editionPaths } from "@/lib/programmatic/spain-2027/editions";
+import { spainDayPaths, spainHubPath, spainPaths } from "@/lib/programmatic/spain-2027/paths";
+import { widgetEditions } from "@/lib/programmatic/embed-2027/places";
 import { authoriseDeployRequest, describeError } from "@/lib/admin/deploy-auth";
 import { FEED_PATHS } from "@/lib/seo/feed-paths";
 
@@ -414,6 +415,12 @@ export async function POST(request: Request) {
     // 10 Nov 2026 the Catalan and English editions of the calendar itself
     // (/ca/festius/2027/..., /en/holidays/2027/..., editions.ts).
     const codePaths = wants("calendario-2027-espana") ? [...spainPaths(), ...spainDayPaths(), ...editionPaths()] : [];
+    // "Posa el calendari laboral 2027 al teu web" (/ca/festius/2027/al-teu-web/,
+    // /es/festivos/2027/en-tu-web/, /en/holidays/2027/for-your-website/) and the
+    // three 2027 hubs that link it: code routes (dynamicParams = true), shipped
+    // by the deploy; this group revalidates, purges and IndexNow-pings them.
+    // Never the /embed/ widgets: noindex, and rebuilt by every deploy.
+    if (wants("calendari-2027-widget")) codePaths.push(...Object.values(widgetEditions()), spainHubPath(), editionHubPath("ca"), editionHubPath("en"));
     // The Catalan work calendar guide gained one sentence linking to the
     // Spain hub (Spanish edition); it goes out once, on its own.
     if (wants("calendario-2027-espana-links")) published.push(await publishHolidayGuide());

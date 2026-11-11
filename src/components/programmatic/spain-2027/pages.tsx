@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import { Breadcrumbs, type Crumb } from "@/components/Breadcrumbs";
+import { WidgetHubLink } from "@/components/programmatic/embed-2027/WidgetLink";
 import { getMessages } from "@/lib/i18n";
 import { municipalities } from "@/lib/programmatic/holidays/data";
 import { GUIDES } from "@/lib/programmatic/holidays/links";
@@ -571,6 +572,7 @@ export function SpainHubPage() {
           </ul>
 
           <HubCityList />
+          <WidgetHubLink locale="es" />
         </div>
 
         <CommunityLinks />

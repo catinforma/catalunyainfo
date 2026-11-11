@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import { Breadcrumbs, type Crumb } from "@/components/Breadcrumbs";
+import { WidgetPlaceLink } from "@/components/programmatic/embed-2027/WidgetLink";
 import { getMessages } from "@/lib/i18n";
 import { NEXT, YEAR, councilApproved2027, localThrough, nextYearFor, regionalThrough, statusDays, yearRows } from "@/lib/programmatic/holidays/data";
 import { englishTowns, isLargestTown } from "@/lib/programmatic/holidays/english";
@@ -145,6 +146,8 @@ export function EnglishTownPage({ m }: { m: SnapshotMunicipality }) {
               </a>
             </p>
           )}
+          {/* The embeddable 2027 calendar, with this town picked. */}
+          <WidgetPlaceLink locale="en" place={{ kind: "town", m }} />
 
           <h2 id="dates">{t.datesTitle}</h2>
           <p>{t.datesLead}</p>

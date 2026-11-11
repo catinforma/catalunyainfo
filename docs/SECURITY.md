@@ -117,13 +117,32 @@ is rendered, a third-party script is embedded in a page, or Next gains a way to
 emit its bootstrap without inline script. At that point the calculation changes
 and the policy should change with it.
 
+### The one framing exception: `/embed/`
+
+The embeddable 2027 work calendar (`src/app/embed/`, `src/lib/programmatic/embed-2027/`)
+is the only part of the site other origins may frame. On `/embed/:path*`
+next.config.ts sends, as its last rule:
+
+```
+default-src 'none'; base-uri 'none'; form-action 'none'; frame-ancestors *;
+style-src 'unsafe-inline'; img-src 'self' data:; upgrade-insecure-requests
+X-Robots-Tag: noindex, indexifembedded
+```
+
+and no `X-Frame-Options` (that header goes out on `/:path((?!embed(?:/|$)).*)`,
+every other path, because a later rule cannot remove a header). The widget is
+a plain HTML string with no script, no cookie and no third-party request, and
+every value from the data is escaped (`esc` in render.ts). Everything else keeps
+`frame-ancestors 'none'` and `X-Frame-Options: DENY`; `tests/embed-2027.test.ts`
+holds both with Next's own route matcher.
+
 ## Other headers
 
 | Header | Value | Why |
 | --- | --- | --- |
 | `Strict-Transport-Security` | `max-age=63072000; includeSubDomains; preload` | Two years, subdomains included |
 | `X-Content-Type-Options` | `nosniff` | No MIME sniffing |
-| `X-Frame-Options` | `DENY` | Plus `frame-ancestors 'none'` for modern browsers |
+| `X-Frame-Options` | `DENY` | Plus `frame-ancestors 'none'` for modern browsers; not on `/embed/` (above) |
 | `Referrer-Policy` | `strict-origin-when-cross-origin` | No paths leak to third parties |
 | `Permissions-Policy` | camera, microphone, payment, usb off; geolocation self; `interest-cohort` and `browsing-topics` off | Opts out of Topics/FLoC explicitly |
 | `Cross-Origin-Opener-Policy` | `same-origin` | Isolates the browsing context |

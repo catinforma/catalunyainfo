@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import type { Crumb } from "@/components/Breadcrumbs";
+import { WidgetPlaceLink } from "@/components/programmatic/embed-2027/WidgetLink";
 import { dayMonthYear } from "@/lib/programmatic/holidays/format";
 import { YEAR } from "@/lib/programmatic/spain-2027/calendar";
 import { CITIES_AS_OF, INE_POPULATION, ineTableUrl, type LocalDay } from "@/lib/programmatic/spain-2027/cities-data";
@@ -298,6 +299,7 @@ export function CityPageIntl({ c, locale }: { c: City; locale: Edition }) {
                   : `${Name}'s 2 local holidays for ${YEAR} are still missing; they will be added once they are published.`}
             </p>
           ) : null}
+          <WidgetPlaceLink locale={locale} place={{ kind: "city", c }} />
 
           <h2 id="puentes">{tr(locale, `Ponts del ${YEAR} ${caIn(name)}`, `Long weekends in ${Name} in ${YEAR}`)}</h2>
           <p>

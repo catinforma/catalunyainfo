@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import type { Crumb } from "@/components/Breadcrumbs";
+import { WidgetPlaceLink } from "@/components/programmatic/embed-2027/WidgetLink";
 import { dayMonthYear } from "@/lib/programmatic/holidays/format";
 import { YEAR } from "@/lib/programmatic/spain-2027/calendar";
 import { CITIES_AS_OF, INE_POPULATION, ineTableUrl, type LocalDay } from "@/lib/programmatic/spain-2027/cities-data";
@@ -221,6 +222,7 @@ export function CityPage({ c }: { c: City }) {
               {common.length ? `Falta la fiesta local propia de ${c.name} en ${YEAR}` : `Faltan las 2 fiestas locales de ${c.name} en ${YEAR}`}, que se añadirá{common.length ? "" : "n"} cuando se publique{common.length ? "" : "n"}.
             </p>
           ) : null}
+          <WidgetPlaceLink locale="es" place={{ kind: "city", c }} />
 
           <h2 id="puentes">Puentes de {YEAR} en {c.name}</h2>
           <p>

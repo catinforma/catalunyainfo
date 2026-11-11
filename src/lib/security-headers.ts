@@ -49,6 +49,44 @@ export const SECURITY_HEADERS: Record<string, string> = {
 
 export const NOINDEX_VALUE = "noindex, nofollow, noarchive";
 
+/*
+ * Embeddable widgets (src/app/embed/, lib/programmatic/embed-2027/): the one
+ * part of the site other websites may frame. Everything else keeps
+ * `frame-ancestors 'none'` and `X-Frame-Options: DENY`.
+ *
+ * next.config.ts sends X-Frame-Options only on `NOT_EMBED_SOURCE` (every path
+ * but /embed/...), because a later header rule cannot remove a header, and
+ * overrides the CSP and X-Robots-Tag on `EMBED_SOURCE` in its last rule. The
+ * widget is plain HTML with no script, no cookie and no third-party request,
+ * so its policy is tighter than the site's on everything but framing.
+ */
+
+/** Every path under /embed/ (and /embed itself). */
+export const EMBED_SOURCE = "/embed/:path*";
+
+/** Every path except /embed and /embed/... ("/embedded/" still matches). */
+export const NOT_EMBED_SOURCE = "/:path((?!embed(?:/|$)).*)";
+
+/** The widget's policy: any site may frame it; it loads nothing but its own inline style. */
+export function embedContentSecurityPolicy(): string {
+  return [
+    `default-src 'none'`,
+    `base-uri 'none'`,
+    `form-action 'none'`,
+    `frame-ancestors *`,
+    `style-src 'unsafe-inline'`,
+    `img-src 'self' data:`,
+    `upgrade-insecure-requests`,
+  ].join("; ");
+}
+
+/**
+ * The widget is never a search result of its own; Google may still index it
+ * as part of the page that embeds it (`indexifembedded`), attribution link
+ * included. No `nofollow`: the attribution link is a normal link.
+ */
+export const EMBED_ROBOTS_VALUE = "noindex, indexifembedded";
+
 /** Path prefixes that must never be indexed, on any deployment or host. */
 export const ALWAYS_NOINDEX_SOURCES = [
   "/admin",

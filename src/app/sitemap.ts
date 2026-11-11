@@ -18,6 +18,7 @@ import { christmasFairsSitemapEntries } from "@/lib/programmatic/christmas-fairs
 import { pollsSitemapEntries } from "@/lib/programmatic/polls/page";
 import { editionSitemapEntries } from "@/lib/programmatic/spain-2027/editions";
 import { spainDaySitemapEntries, spainSitemapEntries } from "@/lib/programmatic/spain-2027/paths";
+import { widgetSitemapEntries } from "@/lib/programmatic/embed-2027/places";
 
 /**
  * Cached for an hour (ISR) and refreshed at once by every publish, and by the
@@ -154,6 +155,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...spainDaySitemapEntries(),
     // Its Catalan and English editions (/ca/festius/2027/, /en/holidays/2027/), same pages.
     ...editionSitemapEntries(),
+    // "Posa el calendari laboral 2027 al teu web", in ca, es and en. Never the /embed/ widgets themselves (noindex).
+    ...widgetSitemapEntries(),
     ...fuelSitemapEntries(),
     ...rodaliesSitemap(),
     ...reservoirSitemapEntries(),
