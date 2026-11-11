@@ -6,6 +6,7 @@ import { HTML_LANG, LOCALES, X_DEFAULT_LOCALE, type Locale } from "@/lib/i18n/co
 import { allSystemPaths, sectionPath } from "@/lib/i18n/routes";
 import { absoluteUrl, indexingAllowed } from "@/lib/site";
 import { isHomeCluster } from "@/lib/seo/metadata";
+import { isLowDemandPath } from "@/lib/seo/low-demand";
 import { electionsSitemap } from "@/lib/programmatic/elections/pages";
 import { holidaySitemapEntries } from "@/lib/programmatic/holidays/paths";
 import { fuelSitemapEntries } from "@/lib/programmatic/fuel/sitemap";
@@ -142,7 +143,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     });
   }
 
-  return [
+  const all: MetadataRoute.Sitemap = [
     ...systemEntries,
     ...entries,
     ...electionsSitemap(),
@@ -162,6 +163,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // URLs only: no title or snippet, so nothing here can carry a poll figure.
     ...pollsSitemapEntries(),
   ];
+  // The pages kept out of the index (noindex) are left out here too (lib/seo/low-demand.ts).
+  return all.filter((entry) => !isLowDemandPath(entry.url));
 }
 
 function languageMap(group: Partial<Record<Locale, string>>): Record<string, string> {

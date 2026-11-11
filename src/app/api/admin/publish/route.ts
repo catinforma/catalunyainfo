@@ -134,7 +134,9 @@ export async function POST(request: Request) {
       ? await publishInstitutionalPages()
       : wants("about-page")
         ? await publishInstitutionalPages(["page-about"])
-        : { pages: [] };
+        : wants("legal-notice")
+          ? await publishInstitutionalPages(["page-legal-notice"])
+          : { pages: [] };
     if (wants("features")) published.push(...(await publishFeatures()));
     if (wants("features-a")) published.push(...(await publishFeatures(0, 5)));
     if (wants("features-b")) published.push(...(await publishFeatures(5, 10)));

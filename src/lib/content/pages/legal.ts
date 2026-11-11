@@ -192,9 +192,9 @@ function legalNoticeBlocks(locale: Locale): Block[] {
   const corrections = legalPath("corrections", locale);
 
   const pendingIdentity: Record<Locale, string> = {
-    ca: "CatalunyaInfo és, avui, un projecte editorial sense activitat comercial: no hi ha publicitat, ni enllaços d'afiliació, ni venda de cap producte o servei. Quan n'hi hagi, aquesta pàgina incorporarà les dades identificatives completes que exigeix l'article 10 de la Llei 34/2002 abans que s'activi cap forma d'ingrés.",
-    es: "CatalunyaInfo es hoy un proyecto editorial sin actividad comercial: no hay publicidad, ni enlaces de afiliación, ni venta de ningún producto o servicio. Cuando la haya, esta página incorporará los datos identificativos completos que exige el artículo 10 de la Ley 34/2002 antes de que se active ninguna forma de ingreso.",
-    en: "CatalunyaInfo is currently an editorial project with no commercial activity: no advertising, no affiliate links, nothing for sale. If that changes, this page will carry the full publisher details required by article 10 of Spain's Law 34/2002 before any form of revenue is switched on.",
+    ca: "CatalunyaInfo es finançarà amb publicitat (Google AdSense), sense enllaços d'afiliació ni venda de cap producte o servei. Avui encara no s'hi mostra cap anunci: abans que n'hi hagi, aquesta pàgina incorporarà les dades identificatives completes que exigeix l'article 10 de la Llei 34/2002.",
+    es: "CatalunyaInfo se financiará con publicidad (Google AdSense), sin enlaces de afiliación ni venta de ningún producto o servicio. Hoy todavía no se muestra ningún anuncio: antes de que lo haya, esta página incorporará los datos identificativos completos que exige el artículo 10 de la Ley 34/2002.",
+    en: "CatalunyaInfo will be funded by advertising (Google AdSense), with no affiliate links and nothing for sale. No ads are shown yet: before any are, this page will carry the full publisher details required by article 10 of Spain's Law 34/2002.",
   };
 
   const copy: Record<Locale, Block[]> = {
@@ -208,7 +208,7 @@ function legalNoticeBlocks(locale: Locale): Block[] {
       ...(hasLegalIdentity() ? [] : paragraphs(pendingIdentity.ca)),
       ...section(
         "Objecte del web",
-        "CatalunyaInfo publica informació pràctica i verificada sobre Catalunya: on anar, com arribar-hi, què cal saber abans i on consultar la font oficial. És un mitjà informatiu independent, no una administració pública ni una oficina de turisme oficial.",
+        "CatalunyaInfo publica informació pràctica i verificada sobre Catalunya, i sobre la resta d'Espanya quan afecta qui hi viu o hi viatja (festius, vagues, calendaris): on anar, com arribar-hi, què cal saber abans i on consultar la font oficial. És un mitjà informatiu independent, no una administració pública ni una oficina de turisme oficial.",
         `Com treballem i què no fem mai ho expliquem a la [política editorial](${editorial}).`,
       ),
       ...section(
@@ -259,7 +259,7 @@ function legalNoticeBlocks(locale: Locale): Block[] {
       ...(hasLegalIdentity() ? [] : paragraphs(pendingIdentity.es)),
       ...section(
         "Objeto del sitio",
-        "CatalunyaInfo publica información práctica y verificada sobre Cataluña: dónde ir, cómo llegar, qué conviene saber antes y dónde consultar la fuente oficial. Es un medio informativo independiente, no una administración pública ni una oficina de turismo oficial.",
+        "CatalunyaInfo publica información práctica y verificada sobre Cataluña, y sobre el resto de España cuando afecta a quien vive o viaja allí (festivos, huelgas, calendarios): dónde ir, cómo llegar, qué conviene saber antes y dónde consultar la fuente oficial. Es un medio informativo independiente, no una administración pública ni una oficina de turismo oficial.",
         `Cómo trabajamos y qué no hacemos nunca se explica en la [política editorial](${editorial}).`,
       ),
       ...section(
@@ -310,7 +310,7 @@ function legalNoticeBlocks(locale: Locale): Block[] {
       ...(hasLegalIdentity() ? [] : paragraphs(pendingIdentity.en)),
       ...section(
         "What this site is",
-        "CatalunyaInfo publishes practical, verified information about Catalonia: where to go, how to get there, what to know beforehand and where to check the official source. It is an independent publication, not a public authority or an official tourist board.",
+        "CatalunyaInfo publishes practical, verified information about Catalonia, and about the rest of Spain where it affects people who live or travel there (holidays, strikes, calendars): where to go, how to get there, what to know beforehand and where to check the official source. It is an independent publication, not a public authority or an official tourist board.",
         `How we work, and what we never do, is set out in our [editorial policy](${editorial}).`,
       ),
       ...section(

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 
 import { SITE, absoluteUrl, indexingAllowed, siteOrigin } from "@/lib/site";
 import { feedPath, feedTitle } from "@/lib/seo/feed-paths";
+import { isLowDemandPath } from "@/lib/seo/low-demand";
 import {
   HTML_LANG,
   LOCALES,
@@ -157,7 +158,8 @@ export function buildMetadata(input: PageMetadataInput): Metadata {
 
   const effectiveTranslations = translations ?? { [locale]: path };
   const desc = clampDescription(description);
-  const robotsIndexable = indexingAllowed() && !noindex;
+  // Templated pages with almost no search demand stay out of the index (lib/seo/low-demand.ts).
+  const robotsIndexable = indexingAllowed() && !noindex && !isLowDemandPath(path);
 
   const ogImages = image
     ? [
