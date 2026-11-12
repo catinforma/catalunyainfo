@@ -9,6 +9,7 @@ import { municipalityBySlug } from "@/lib/programmatic/holidays/data";
 
 import { CHRISTMAS, FAMILY, SANTA_LLUCIA_2025, hoursText } from "./christmas";
 import { metroTable, when } from "./christmas-barcelona";
+import { LIGHTS_TOWNS } from "./christmas-lights-towns";
 import { ANNOUNCED_TRADITIONS, pastoretsSentence, range, santaLluciaSource, type TraditionAnnouncements } from "./christmas-traditions";
 import { CLIMATE, climateMonth, WINTER_START } from "./climate";
 import { BRIDGE_DAYS, LOCAL_MONDAY_7, runWords } from "./december-bridge";
@@ -372,6 +373,16 @@ const SOURCES: B2Source[] = [
 type Meta = { path: string; title: string; seoTitle: string; seoDescription: string; excerpt: string };
 
 const W = climateMonth(11);
+
+/**
+ * "Hi haurà prop de 140 km de carrers il·luminats" once the switch-on note
+ * gives the length, else the 9 Jul plan's "Per al 2026 preveu 130 km".
+ */
+function lightsKm(locale: Locale, facts: Announcements): string {
+  const km = facts.lightsSwitchOn?.km;
+  if (km) return { ca: `Hi haurà prop de ${km} km de carrers il·luminats`, es: `Habrá cerca de ${km} km de calles iluminadas`, en: `There will be about ${km} km of lit streets` }[locale];
+  return { ca: `Per al 2026 preveu ${LIGHTS_PLAN_2026.km} km de carrers il·luminats`, es: `Para 2026 prevé ${LIGHTS_PLAN_2026.km} km de calles iluminadas`, en: `For 2026 it plans ${LIGHTS_PLAN_2026.km} km of lit streets` }[locale];
+}
 
 export const BARCELONA_DECEMBER_META: Record<Locale, Meta> = {
   ca: {
@@ -929,7 +940,9 @@ export function buildBarcelonaDecemberBody(
       ...h2("Quin temps fa a Barcelona al desembre?", ...weatherParas("ca")),
       ...h2(
         "Nadal a Barcelona: llums, fires i pessebres",
-        `**Llums.** ${lightsNews} Per al 2026 preveu ${LIGHTS_PLAN_2026.km} km de carrers il·luminats, i el 2026 Barcelona és capital europea del Nadal. La data, l'hora i el lloc de l'encesa, quan surtin, a ${b2link("christmasBarcelona", "ca", "l'encesa de llums de Nadal a Barcelona")}.`,
+        facts.lightsSwitchOn
+          ? `**Llums.** ${lightsNews} ${lightsKm("ca", facts)}, i el 2026 Barcelona és capital europea del Nadal. L'hora, el lloc, l'horari dels llums i les dates de ${LIGHTS_TOWNS.length} municipis més, a ${b2link("christmasLights", "ca", "l'encesa de llums de Nadal 2026 a Barcelona i Catalunya")}.`
+          : `**Llums.** ${lightsNews} Per al 2026 preveu ${LIGHTS_PLAN_2026.km} km de carrers il·luminats, i el 2026 Barcelona és capital europea del Nadal. La data, l'hora i el lloc de l'encesa, quan surtin, a ${b2link("christmasBarcelona", "ca", "l'encesa de llums de Nadal a Barcelona")}.`,
         fairsParagraph("ca", traditions),
         `**Pessebres.** A la ciutat, el 33è Pessebre Vivent de la Torre del Suro, al Guinardó, és el ${torre} a les ${TORRE_DEL_SURO_2026.time}, amb entrada lliure, segons els organitzadors. La resta de pessebres vivents de Catalunya, a ${b2link("pessebres", "ca", "la guia de pessebres vivents")}.`,
         `**Tradicions.** El tió es comença a alimentar per la Immaculada, el 8 de desembre, i el 26, Sant Esteve, és festiu. ${pastoretsSentence("ca")} Com es fa cagar el tió i què es menja per Nadal, a ${b2link("christmasTraditions", "ca", "les tradicions de Nadal a Catalunya")}. I per acabar les festes, l'horari i el recorregut dels Reis, a ${b2link("reis", "ca", "la Cavalcada de Reis 2027")}.`,
@@ -1013,7 +1026,9 @@ export function buildBarcelonaDecemberBody(
       ...h2("¿Qué tiempo hace en Barcelona en diciembre?", ...weatherParas("es")),
       ...h2(
         "Navidad en Barcelona: luces, ferias y belenes",
-        `**Luces.** ${lightsNews} Para 2026 prevé ${LIGHTS_PLAN_2026.km} km de calles iluminadas, y en 2026 Barcelona es capital europea de la Navidad. La fecha, la hora y el lugar del encendido, cuando salgan, en ${b2link("christmasBarcelona", "es", "el encendido de luces de Navidad en Barcelona")}.`,
+        facts.lightsSwitchOn
+          ? `**Luces.** ${lightsNews} ${lightsKm("es", facts)}, y en 2026 Barcelona es capital europea de la Navidad. La hora, el lugar, el horario de las luces y las fechas de ${LIGHTS_TOWNS.length} municipios más, en ${b2link("christmasLights", "es", "el encendido de luces de Navidad 2026 en Barcelona y Cataluña")}.`
+          : `**Luces.** ${lightsNews} Para 2026 prevé ${LIGHTS_PLAN_2026.km} km de calles iluminadas, y en 2026 Barcelona es capital europea de la Navidad. La fecha, la hora y el lugar del encendido, cuando salgan, en ${b2link("christmasBarcelona", "es", "el encendido de luces de Navidad en Barcelona")}.`,
         fairsParagraph("es", traditions),
         `**Belenes.** En la ciudad, el 33.º Pessebre Vivent de la Torre del Suro, en el Guinardó, es el ${torre} a las ${TORRE_DEL_SURO_2026.time}, con entrada libre, según los organizadores. El resto de belenes vivientes de Cataluña, en ${b2link("pessebres", "es", "la guía de belenes vivientes")}.`,
         `**Tradiciones.** Al tió se le empieza a alimentar por la Inmaculada, el 8 de diciembre, y el 26, San Esteban, es festivo. ${pastoretsSentence("es")} Cómo se hace cagar el tió y qué se come en Navidad, en ${b2link("christmasTraditions", "es", "las tradiciones de Navidad en Cataluña")}. Y para cerrar las fiestas, el horario y el recorrido de los Reyes, en ${b2link("reis", "es", "la Cabalgata de Reyes 2027")}.`,
@@ -1096,7 +1111,9 @@ export function buildBarcelonaDecemberBody(
     ...h2("What is the weather like in Barcelona in December?", ...weatherParas("en")),
     ...h2(
       "Christmas in Barcelona: lights, markets and nativity scenes",
-      `**Lights.** ${lightsNews} For 2026 it plans ${LIGHTS_PLAN_2026.km} km of lit streets, and 2026 is the year Barcelona is European Capital of Christmas. The date, time and place of the switch-on, once out, are in ${b2link("christmasBarcelona", "en", "the Barcelona Christmas lights switch-on")}.`,
+      facts.lightsSwitchOn
+        ? `**Lights.** ${lightsNews} ${lightsKm("en", facts)}, and 2026 is the year Barcelona is European Capital of Christmas. The time, the place, the nightly lighting hours and the dates in ${LIGHTS_TOWNS.length} other towns are in ${b2link("christmasLights", "en", "the 2026 Christmas lights switch-on in Barcelona and Catalonia")}.`
+        : `**Lights.** ${lightsNews} For 2026 it plans ${LIGHTS_PLAN_2026.km} km of lit streets, and 2026 is the year Barcelona is European Capital of Christmas. The date, time and place of the switch-on, once out, are in ${b2link("christmasBarcelona", "en", "the Barcelona Christmas lights switch-on")}.`,
       fairsParagraph("en", traditions),
       `**Nativity scenes.** In the city, the 33rd Torre del Suro living nativity, in el Guinardó, is on ${torre} at ${TORRE_DEL_SURO_2026.time}, free, according to its organisers. Catalonia's other living nativities are in ${b2link("pessebres", "en", "our living nativity scenes guide")}.`,
       `**Traditions.** Children start "feeding" the tió log on 8 December, the Immaculada, and the 26th, Sant Esteve, is a public holiday. ${pastoretsSentence("en")} How to make the tió poo and what Catalans eat at Christmas: ${b2link("christmasTraditions", "en", "Catalan Christmas traditions")}. And to close the season, the Kings' times and route: ${b2link("reis", "en", "the 2027 Three Kings parade")}.`,

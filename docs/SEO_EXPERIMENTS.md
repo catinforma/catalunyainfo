@@ -3678,8 +3678,12 @@ against this entry, not against the 3 Nov baseline.
     de noviembre", en "…: switch-on 26 November").
   - The description and lead give the date at 18:30.
   - The FAQ answers time (18:00 show, 18:30 lights), place and the end date.
-- **December hub:** its lights line gives the date (body only; its title and
-  description do not use it).
+- **December hub:** the lights line gives the date and about 140 km (body
+  only; its title and description do not use it). Its link now points to the
+  dedicated lights page, anchor "l'encesa de llums de Nadal 2026 a Barcelona i
+  Catalunya" (es/en alike). Before, it pointed to the Christmas hub, which
+  shared the lights queries with the lights page. This consolidates the
+  queries on the lights page.
 - New `Announcement` fields: `lightsOn`, `placeAt` and `km`. They are
   validated, and tests are in `tests/christmas-lights-2026.test.ts`.
 
