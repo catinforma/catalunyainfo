@@ -3,7 +3,9 @@
 #
 # Nightly backup of the local PostgreSQL database (moved here from Supabase on
 # 12 Nov 2026, when the Supabase free plan ran out of egress):
-#   1. pg_dump (custom format) to /srv/catalunyainfo/backups/db/, 30 days kept;
+#   1. pg_dump (custom format, zstd level 19: ~1.2 MB) to
+#      /srv/catalunyainfo/backups/db/; only the newest 7 are kept, so the
+#      folder never grows past ~10 MB;
 #   2. off-site copy: the same dump restored into the old Supabase project
 #      (public schema only), which stays a warm standby. Restoring there is
 #      ingress, which the free plan does not meter. Skipped when
@@ -13,19 +15,21 @@
 # Restore locally:  sudo -u postgres pg_restore --clean --if-exists --no-owner \
 #                     --role=catinfo -d catalunyainfo <file.dump>
 set -euo pipefail
+umask 077
 
 DIR=/srv/catalunyainfo/backups/db
-KEEP_DAYS=30
+KEEP=7
 PGBIN=/usr/lib/postgresql/17/bin
 install -d -m 700 -o postgres -g postgres "$DIR"
 
 stamp=$(date -u +%Y%m%dT%H%M%SZ)
 file="$DIR/catalunyainfo-$stamp.dump"
-runuser -u postgres -- "$PGBIN/pg_dump" -Fc --no-owner --no-acl -n public -d catalunyainfo -f "$file"
+runuser -u postgres -- "$PGBIN/pg_dump" -Fc -Z zstd:19 --no-owner --no-acl -n public -d catalunyainfo -f "$file"
 # A dump that pg_restore cannot list is not a backup.
 runuser -u postgres -- "$PGBIN/pg_restore" --list "$file" >/dev/null
 echo "local dump ok: $(basename "$file") $(stat -c %s "$file") bytes"
-find "$DIR" -name 'catalunyainfo-*.dump' -mtime +"$KEEP_DAYS" -delete
+# Keep the newest $KEEP dumps (by name = UTC timestamp), delete the rest.
+ls -1 "$DIR"/catalunyainfo-*.dump | sort -r | tail -n +$((KEEP + 1)) | xargs -r rm -f --
 
 if [ -n "${SUPABASE_DATABASE_URL:-}" ]; then
   # The transaction pooler (6543) refuses DDL; the session pooler (5432) takes it.

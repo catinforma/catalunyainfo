@@ -26,7 +26,7 @@ DNS moves.
 | `catalunyainfo-cron.service` / `.timer` | `/etc/systemd/system/` | the daily job that replaces the Vercel cron |
 | `cron-publish-scheduled.sh` | `/usr/local/bin/catalunyainfo-cron` | calls the cron endpoint with the bearer token |
 | `Caddyfile` | `/etc/caddy/Caddyfile` | TLS, redirects, compression, reverse proxy |
-| `db-backup.sh` | `/usr/local/bin/catalunyainfo-db-backup` | nightly dump (30 days) + off-site copy into the old Supabase project, locked |
+| `db-backup.sh` | `/usr/local/bin/catalunyainfo-db-backup` | nightly zstd dump (newest 7 kept, ~1.2 MB each) + off-site copy into the old Supabase project, locked |
 | `catalunyainfo-db-backup.service` / `.timer` | `/etc/systemd/system/` | runs it at 02:30 UTC |
 | `env.production.example` | `/srv/catalunyainfo/shared/.env.production` (first run only) | every variable the app reads, with placeholders |
 
