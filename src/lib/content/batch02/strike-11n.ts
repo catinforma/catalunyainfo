@@ -127,10 +127,10 @@ export const STRIKE_11N_DATE = "2026-11-11";
  * on or after the day) is decided against this date, never the clock: the
  * HTML is the same whichever day it is rendered.
  */
-export const STRIKE_11N_AS_OF = "2026-11-10";
+export const STRIKE_11N_AS_OF = "2026-11-12";
 
 /** The facts were re-read on the sources on the as-of day: one constant to move. */
-export const STRIKE_11N_VERIFIED = STRIKE_11N_AS_OF;
+export const STRIKE_11N_VERIFIED = "2026-11-10";
 
 export type StrikePhase = "upcoming" | "today" | "past";
 

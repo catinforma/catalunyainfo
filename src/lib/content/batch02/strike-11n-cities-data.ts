@@ -30,10 +30,10 @@ import { STRIKE_URLS } from "./strikes";
  */
 
 /** The day the city pages were last checked against the sources. What the lead says is decided against it, never the clock. */
-export const STRIKE_11N_CITIES_AS_OF = "2026-11-10";
+export const STRIKE_11N_CITIES_AS_OF = "2026-11-12";
 
 /** The facts were re-read on the as-of day: one constant to move. */
-export const STRIKE_11N_CITIES_VERIFIED = STRIKE_11N_CITIES_AS_OF;
+export const STRIKE_11N_CITIES_VERIFIED = "2026-11-10";
 
 const U = STRIKE_URLS;
 const link = (href: string, label: string) => `[${label}](${href})`;
