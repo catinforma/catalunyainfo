@@ -2,24 +2,15 @@ import Link from "next/link";
 
 import { daysBetween, holidayOn, isCovered, nextHolidayAfter, shortDate, todayInCatalonia } from "@/lib/content/holidays/calendar";
 import { READ_AT } from "@/lib/content/mushrooms/conditions";
-import { PATHS, TOP_TOOLS, toolsFor, type ToolKey } from "@/lib/content/home-tools";
+import { TOP_TOOLS, type ToolKey } from "@/lib/content/home-tools";
 import { MENU_LABELS, MENU_PATHS } from "@/lib/nav/menu";
-import { hrefFor } from "@/lib/content/repository";
 import { getMessages } from "@/lib/i18n";
 import type { Locale } from "@/lib/i18n/config";
 
 /**
- * The site's live utilities, straight under the hero.
- *
- * GA4 measured about 1.4 seconds of engagement per visit on the English
- * homepage: people arrived, saw a tagline and a grid of recent articles, and
- * left. The pages that hold readers (transport passes, tourist tax, the
- * weekend agenda, holidays, mushroom conditions) were all one search away and
- * none of them was on the page. These are the answers, so they come first.
- *
- * Each card carries one live line where we have a fact computed from verified
- * data at render time (the homepage revalidates every ten minutes), never a
- * placeholder.
+ * Live lines for the homepage top tiles. The "Útil ara mateix" card grid
+ * that sat between the hero and the articles was removed on 12 Nov 2026 at
+ * the owner's request: on a phone it pushed the articles a screen down.
  */
 
 function liveLine(key: ToolKey, locale: Locale): string | null {
@@ -63,31 +54,5 @@ export function HomeTopTools({ locale }: { locale: Locale }) {
         })}
       </ul>
     </nav>
-  );
-}
-
-export function HomeTools({ locale, exclude = [] }: { locale: Locale; exclude?: ToolKey[] }) {
-  const t = getMessages(locale).home.tools;
-
-  return (
-    <section className="ci-shell py-10" aria-labelledby="home-tools">
-      <div className="ci-section-head">
-        <h2 id="home-tools">{t.title}</h2>
-      </div>
-      <ul className="ci-tools">
-        {toolsFor(locale, todayInCatalonia()).filter((key) => !exclude.includes(key)).map((key) => {
-          const live = liveLine(key, locale);
-          return (
-            <li key={key}>
-              <Link href={hrefFor(locale, PATHS[key][locale])} className="ci-tool">
-                <span className="ci-tool-title">{t[key].title}</span>
-                <span className="ci-tool-desc">{t[key].desc}</span>
-                {live ? <span className="ci-tool-live">{live}</span> : null}
-              </Link>
-            </li>
-          );
-        })}
-      </ul>
-    </section>
   );
 }

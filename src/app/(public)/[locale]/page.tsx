@@ -3,14 +3,13 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { EntryCard } from "@/components/EntryCard";
-import { HomeTools, HomeTopTools } from "@/components/HomeTools";
+import { HomeTopTools } from "@/components/HomeTools";
 import { SearchBox } from "@/components/SearchBox";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
 import { B2_PATHS } from "@/lib/content/batch02/shared";
 import { todayInCatalonia } from "@/lib/content/holidays/calendar";
 import { homeLeadKey, rotationIndex } from "@/lib/content/home-lead";
-import { DUPLICATES_TOP } from "@/lib/content/home-tools";
 import { getHomeData, resolvePath } from "@/lib/content/repository";
 import type { EntrySummary } from "@/lib/content/types";
 import { getMessages } from "@/lib/i18n";
@@ -131,8 +130,9 @@ export default async function HomePage({
           </div>
         </section>
 
-        <HomeTools locale={locale} exclude={DUPLICATES_TOP} />
-
+        {/* 12 Nov 2026, owner: no "Útil ara mateix" card grid between the
+            hero and the articles; the four top tiles and the menu carry the
+            utilities. */}
         {populated.map(({ key, items }) => (
           <section key={key} className="ci-shell py-12">
             <div className="ci-section-head">
