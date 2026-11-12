@@ -73,7 +73,7 @@ export const ANNOUNCEMENTS_CHECKED = "2026-10-30";
  * next to its "not announced yet". The Christmas hub and the New Year's Eve
  * page keep ANNOUNCEMENTS_CHECKED. Move it on every re-read.
  */
-export const LIGHTS_SWITCH_ON_CHECKED = "2026-11-04";
+export const LIGHTS_SWITCH_ON_CHECKED = "2026-11-12";
 
 /** The pages to watch for the 2026-27 dates. */
 export const WATCH = {
@@ -90,8 +90,25 @@ export interface Announcement {
   until?: string;
   /** Start time as the source gives it, "18:30". */
   time?: string;
+  /**
+   * Lights switch-on only: the moment the lights come on, when the
+   * announcement gives it apart from the start of the ceremony (2026: the act
+   * starts at 18:00 and the lights come on at 18:30).
+   */
+  lightsOn?: string;
   /** Where, as the source states it, in each language. */
   place?: Record<Locale, string>;
+  /**
+   * The place with its preposition, for the middle of a sentence ("al passeig
+   * de Gràcia, ...", "en el paseo de Gràcia, ...", "on Passeig de Gràcia, ..."),
+   * when "a"/"en"/"at" + `place` would read wrong (Catalan "a el" → "al").
+   */
+  placeAt?: Record<Locale, string>;
+  /**
+   * Lights switch-on only: the kilometres of lit streets the announcement
+   * gives, approximately ("prop de 140 km"): always printed with "about".
+   */
+  km?: number;
   /** Who switches the lights on (or presides), as the source names them, in each language. */
   who?: Record<Locale, string>;
   /**
@@ -123,7 +140,43 @@ export interface Announcements {
 
 /** 2026-27 dates the City Council has published. `null` = not yet, at FESTIVE_VERIFIED. */
 export const ANNOUNCED_2026: Announcements = {
-  lightsSwitchOn: null,
+  /**
+   * City Council press note of 9 Nov 2026 (read 12 Nov 2026), "Barcelona Llums
+   * de Nadal arrenca amb l'encesa de l'enllumenat nadalenc el 26 de novembre":
+   * "Barcelona encendrà els llums de Nadal amb un acte festiu el proper 26 de
+   * novembre al passeig de Gràcia"; "l'escenari ocuparà la franja de passeig de
+   * Gràcia entre els carrers Rosselló i Diagonal"; "L'acte començarà a les 18
+   * hores i acabarà amb l'encesa dels llums, a les 18.30 hores"; "estarà encès
+   * a Barcelona des del 26 de novembre fins al 6 de gener [...] de diumenge a
+   * dijous, ambdós inclosos, des de les 17:30 hores fins a les 01:00 hores; els
+   * divendres i dissabtes de les 17:30 hores fins a les 02:00 hores, i els dies
+   * extraordinaris com el 24, 25 i 31 de desembre i 5 de gener, també de 17:30
+   * a 02:00 hores"; "La il·luminació nadalenca arriba a prop de 140 km de
+   * carrer". It does not say who switches them on: `who` stays empty.
+   */
+  lightsSwitchOn: {
+    date: "2026-11-26",
+    until: "2027-01-06",
+    time: "18:00",
+    lightsOn: "18:30",
+    place: {
+      ca: "passeig de Gràcia, entre el carrer de Rosselló i la Diagonal",
+      es: "paseo de Gràcia, entre la calle Rosselló y la Diagonal",
+      en: "Passeig de Gràcia, between Carrer de Rosselló and Diagonal",
+    },
+    placeAt: {
+      ca: "al passeig de Gràcia, entre el carrer de Rosselló i la Diagonal",
+      es: "en el paseo de Gràcia, entre la calle Rosselló y la Diagonal",
+      en: "on Passeig de Gràcia, between Carrer de Rosselló and Diagonal",
+    },
+    hours: {
+      ca: "de les 17:30 a la 1:00 de diumenge a dijous, i de les 17:30 a les 2:00 els divendres, els dissabtes i els dies 24, 25 i 31 de desembre i 5 de gener",
+      es: "de 17:30 a 1:00 de domingo a jueves, y de 17:30 a 2:00 los viernes, los sábados y los días 24, 25 y 31 de diciembre y 5 de enero",
+      en: "17:30 to 1:00 from Sunday to Thursday, and 17:30 to 2:00 on Fridays, Saturdays and on 24, 25 and 31 December and 5 January",
+    },
+    km: 140,
+    url: "https://ajuntament.barcelona.cat/premsa/2026/11/09/barcelona-llums-de-nadal-arrenca-amb-lencesa-de-lenllumenat-nadalenc-el-26-de-novembre/",
+  },
   pessebre: null,
   santJaume: null,
   newYearShow: null,
@@ -151,9 +204,21 @@ export function announcementProblems(item: Announcement): string[] {
     else if (item.until < item.date) problems.push(`until ${item.until} is before ${item.date}`);
   }
   if (item.time !== undefined && !/^([01]\d|2[0-3]):[0-5]\d$/.test(item.time)) problems.push(`time ${item.time} is not HH:MM`);
+  if (item.lightsOn !== undefined) {
+    if (!/^([01]\d|2[0-3]):[0-5]\d$/.test(item.lightsOn)) problems.push(`lightsOn ${item.lightsOn} is not HH:MM`);
+    else if (item.time !== undefined && item.lightsOn < item.time) problems.push(`lightsOn ${item.lightsOn} is before the start, ${item.time}`);
+  }
+  if (item.km !== undefined && !(Number.isInteger(item.km) && item.km > 0 && item.km < 1000)) problems.push(`km ${item.km} is not a plausible length`);
   if (!OFFICIAL_HOSTS.test(item.url)) problems.push(`${item.url} is not an official City Council, TMB or Generalitat page`);
   if (/[?&]utm_/.test(item.url)) problems.push(`${item.url} carries tracking`);
   return problems;
+}
+
+/** "al passeig de Gràcia, ..." / "en el paseo de Gràcia, ..." / "on Passeig de Gràcia, ...", or "" with no place. */
+export function placePhrase(item: Announcement, locale: Locale): string {
+  if (item.placeAt) return item.placeAt[locale];
+  if (!item.place) return "";
+  return { ca: `a ${item.place.ca}`, es: `en ${item.place.es}`, en: `at ${item.place.en}` }[locale];
 }
 
 /** The days the pages are about. */

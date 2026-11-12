@@ -4,7 +4,7 @@ import type { Locale } from "@/lib/i18n/config";
 import { fairsHubPath } from "@/lib/programmatic/christmas-fairs/paths";
 
 import { SANTA_LLUCIA_2026, hoursText } from "./christmas";
-import { LIGHTS_TOWNS, LIGHTS_TOWNS_AS_OF, announcedTowns, type LightsTown, type TownSwitchOn } from "./christmas-lights-towns";
+import { LIGHTS_TOWNS, LIGHTS_TOWNS_AS_OF, LIGHTS_TOWNS_NOT_REREAD, announcedTowns, type LightsTown, type TownSwitchOn } from "./christmas-lights-towns";
 import {
   ANNOUNCED_2026,
   LIGHTS_PLAN_2026,
@@ -17,6 +17,7 @@ import {
   dateYear,
   dayDate,
   lightingHours2025,
+  placePhrase,
   range,
   type Announcement,
   type Announcements,
@@ -161,7 +162,8 @@ export function lightsDescription(locale: Locale, facts: Announcements = ANNOUNC
   const a = facts.lightsSwitchOn;
   const dated = announcedTowns(towns);
   const n = towns.length;
-  const names = (k: number) => joinNames(dated.slice(0, k).map((t) => t.name), locale);
+  // "Badalona, Igualada i més", not "Badalona i Igualada i més", when the list is cut.
+  const names = (k: number) => (dated.length > k ? dated.slice(0, k).map((t) => t.name).join(", ") : joinNames(dated.slice(0, k).map((t) => t.name), locale));
   // Without a dated town, the biggest ones by name: town searches ("encesa llums <town>") read them.
   const big = ["girona", "tarragona", "lleida", "reus"].map((key) => towns.find((t) => t.key === key)?.name).filter((name): name is string => Boolean(name));
   const others = (k: number) => joinNames([...big.slice(0, k), { ca: `${n - Math.min(k, big.length)} municipis més`, es: `${n - Math.min(k, big.length)} municipios más`, en: `${n - Math.min(k, big.length)} more towns` }[locale]], locale);
@@ -173,11 +175,14 @@ export function lightsDescription(locale: Locale, facts: Announcements = ANNOUNC
   let head: Record<Locale, string>;
   if (a) {
     const day = dayDate(a.date, locale);
-    const at = a.time ? { ca: ` a les ${a.time}`, es: ` a las ${a.time}`, en: ` at ${a.time}` }[locale] : "";
+    // The moment the lights come on when the note gives it, with the start of the show after it.
+    const on = a.lightsOn ?? a.time;
+    const at = on ? { ca: ` a les ${on}`, es: ` a las ${on}`, en: ` at ${on}` }[locale] : "";
+    const show = a.lightsOn && a.time && a.time !== a.lightsOn ? { ca: ` (acte des de les ${a.time})`, es: ` (acto desde las ${a.time})`, en: ` (show from ${a.time})` }[locale] : "";
     head = {
-      ca: `Barcelona encén els llums de Nadal el ${day}${at}.`,
-      es: `Barcelona enciende las luces de Navidad el ${day}${at}.`,
-      en: `Barcelona switches on its Christmas lights on ${day}${at}.`,
+      ca: `Barcelona encén els llums de Nadal el ${day}${at}${show}.`,
+      es: `Barcelona enciende las luces de Navidad el ${day}${at}${show}.`,
+      en: `Barcelona switches on its Christmas lights on ${day}${at}${show}.`,
     };
   } else {
     const last = shortDate(LAST.date, locale);
@@ -213,11 +218,17 @@ function at(date: string, time: string | undefined, locale: Locale): string {
 export function barcelonaLead(locale: Locale, facts: Announcements = ANNOUNCED_2026): string {
   const a = facts.lightsSwitchOn;
   if (a) {
-    const place = a.place ? { ca: `, a ${a.place.ca}`, es: `, en ${a.place.es}`, en: `, at ${a.place.en}` }[locale] : "";
+    const where = placePhrase(a, locale);
+    const place = where ? `, ${where}` : "";
+    const on =
+      a.lightsOn && a.time && a.lightsOn !== a.time
+        ? { ca: ` L'acte comença a les ${a.time} i els llums s'encenen a les ${a.lightsOn}.`, es: ` El acto empieza a las ${a.time} y las luces se encienden a las ${a.lightsOn}.`, en: ` The show starts at ${a.time} and the lights come on at ${a.lightsOn}.` }[locale]
+        : "";
+    const who = a.who ? { ca: ` Els encendrà ${a.who.ca}.`, es: ` Las encenderá ${a.who.es}.`, en: ` They will be switched on by ${a.who.en}.` }[locale] : "";
     return {
-      ca: `**Barcelona encén els llums de Nadal ${at(a.date, a.time, "ca")}${place}**, segons l'[anunci de l'Ajuntament](${a.url}). Els tres últims anys l'encesa va ser al passeig de Gràcia a les 18:00.`,
-      es: `**Barcelona enciende las luces de Navidad ${at(a.date, a.time, "es")}${place}**, según el [anuncio del Ayuntamiento](${a.url}). Los tres últimos años el encendido fue en el paseo de Gràcia a las 18:00.`,
-      en: `**Barcelona switches on its Christmas lights on ${at(a.date, a.time, "en")}${place}**, according to the [City Council's announcement](${a.url}). For the last three years the switch-on was on Passeig de Gràcia at 18:00.`,
+      ca: `**Barcelona encén els llums de Nadal ${at(a.date, a.lightsOn ? undefined : a.time, "ca")}${place}**, segons l'[anunci de l'Ajuntament](${a.url}).${on}${who} Els tres últims anys l'encesa va ser al passeig de Gràcia a les 18:00.`,
+      es: `**Barcelona enciende las luces de Navidad ${at(a.date, a.lightsOn ? undefined : a.time, "es")}${place}**, según el [anuncio del Ayuntamiento](${a.url}).${on}${who} Los tres últimos años el encendido fue en el paseo de Gràcia a las 18:00.`,
+      en: `**Barcelona switches on its Christmas lights on ${at(a.date, a.lightsOn ? undefined : a.time, "en")}${place}**, according to the [City Council's announcement](${a.url}).${on}${who} For the last three years the switch-on was on Passeig de Gràcia at 18:00.`,
     }[locale];
   }
   return {
@@ -252,19 +263,28 @@ function keyFactsBlock(locale: Locale, facts: Announcements): Block {
   const date = a
     ? cap(at(a.date, undefined, locale).replace(/^el /, ""))
     : { ca: `${pending} (2025: ${dayDate(LAST.date, "ca")})`, es: `${pending} (2025: ${dayDate(LAST.date, "es")})`, en: `${pending} (2025: ${dayDate(LAST.date, "en")})` }[locale];
-  const time = a?.time ?? { ca: `${pending} (2023, 2024 i 2025: ${LAST.time})`, es: `${pending} (2023, 2024 y 2025: ${LAST.time})`, en: `${pending} (2023, 2024 and 2025: ${LAST.time})` }[locale];
-  const place = a?.place?.[locale] ?? { ca: `${pending} (2023, 2024 i 2025: ${PASSEIG.ca})`, es: `${pending} (2023, 2024 y 2025: ${PASSEIG.es})`, en: `${pending} (2023, 2024 and 2025: ${PASSEIG.en})` }[locale];
+  const time =
+    a?.time && a.lightsOn && a.lightsOn !== a.time
+      ? { ca: `${a.time} (acte); els llums, a les ${a.lightsOn}`, es: `${a.time} (acto); las luces, a las ${a.lightsOn}`, en: `${a.time} (show); lights on at ${a.lightsOn}` }[locale]
+      : a?.time ?? { ca: `${pending} (2023, 2024 i 2025: ${LAST.time})`, es: `${pending} (2023, 2024 y 2025: ${LAST.time})`, en: `${pending} (2023, 2024 and 2025: ${LAST.time})` }[locale];
+  const place = a?.place ? cap(a.place[locale]) : { ca: `${pending} (2023, 2024 i 2025: ${PASSEIG.ca})`, es: `${pending} (2023, 2024 y 2025: ${PASSEIG.es})`, en: `${pending} (2023, 2024 and 2025: ${PASSEIG.en})` }[locale];
   const lastWho = LAST.who[locale].replace(/,? (van prémer el polsador|pulsaron el botón|pressed the button)$/, "");
   const who = a?.who?.[locale] ?? `${pending} (2025: ${lastWho.charAt(0).toLowerCase()}${lastWho.slice(1)})`;
   const hours = a?.hours?.[locale] ?? { ca: `2025: ${lightingHours2025("ca")}`, es: `2025: ${lightingHours2025("es")}`, en: `2025: ${lightingHours2025("en")}` }[locale];
   const until = a?.until
-    ? dayDate(a.until, locale)
+    ? cap(dayDate(a.until, locale))
     : { ca: `2025: fins al ${dateYear(PAST.lights2025.until, "ca")}`, es: `2025: hasta el ${dateYear(PAST.lights2025.until, "es")}`, en: `2025: until ${dateYear(PAST.lights2025.until, "en")}` }[locale];
-  const streets = {
-    ca: `${LIGHTS_PLAN_2026.km} km previstos el 2026 (${PAST.lights2025.km} km el 2025)`,
-    es: `${LIGHTS_PLAN_2026.km} km previstos en 2026 (${PAST.lights2025.km} km en 2025)`,
-    en: `${LIGHTS_PLAN_2026.km} km planned for 2026 (${PAST.lights2025.km} km in 2025)`,
-  }[locale];
+  const streets = a?.km
+    ? {
+        ca: `Prop de ${a.km} km el 2026 (${PAST.lights2025.km} km el 2025)`,
+        es: `Cerca de ${a.km} km en 2026 (${PAST.lights2025.km} km en 2025)`,
+        en: `About ${a.km} km in 2026 (${PAST.lights2025.km} km in 2025)`,
+      }[locale]
+    : {
+        ca: `${LIGHTS_PLAN_2026.km} km previstos el 2026 (${PAST.lights2025.km} km el 2025)`,
+        es: `${LIGHTS_PLAN_2026.km} km previstos en 2026 (${PAST.lights2025.km} km en 2025)`,
+        en: `${LIGHTS_PLAN_2026.km} km planned for 2026 (${PAST.lights2025.km} km in 2025)`,
+      }[locale];
   const labels = {
     ca: { title: "Encesa de llums de Barcelona 2026", date: "Dia", time: "Hora", place: "Lloc", who: "Qui els encén", hours: "Horari dels llums", until: "Fins quan", streets: "Carrers il·luminats" },
     es: { title: "Encendido de luces de Barcelona 2026", date: "Día", time: "Hora", place: "Lugar", who: "Quién las enciende", hours: "Horario de las luces", until: "Hasta cuándo", streets: "Calles iluminadas" },
@@ -310,9 +330,9 @@ function switchOnSection(locale: Locale, facts: Announcements): string[] {
   if (a) {
     return [
       {
-        ca: `L'encesa és ${at(a.date, a.time, "ca")}${a.place ? `, a ${a.place.ca}` : ""}, segons l'[anunci de l'Ajuntament](${a.url}). Les tres anteriors van ser aquestes:`,
-        es: `El encendido es ${at(a.date, a.time, "es")}${a.place ? `, en ${a.place.es}` : ""}, según el [anuncio del Ayuntamiento](${a.url}). Los tres anteriores fueron estos:`,
-        en: `The switch-on is on ${at(a.date, a.time, "en")}${a.place ? `, at ${a.place.en}` : ""}, according to the [City Council's announcement](${a.url}). The three before were these:`,
+        ca: `L'encesa és ${at(a.date, a.time, "ca")}${placePhrase(a, "ca") ? `, ${placePhrase(a, "ca")}` : ""}, segons l'[anunci de l'Ajuntament](${a.url}). Les tres anteriors van ser aquestes:`,
+        es: `El encendido es ${at(a.date, a.time, "es")}${placePhrase(a, "es") ? `, ${placePhrase(a, "es")}` : ""}, según el [anuncio del Ayuntamiento](${a.url}). Los tres anteriores fueron estos:`,
+        en: `The switch-on is on ${at(a.date, a.time, "en")}${placePhrase(a, "en") ? `, ${placePhrase(a, "en")}` : ""}, according to the [City Council's announcement](${a.url}). The three before were these:`,
       }[locale],
     ];
   }
@@ -345,8 +365,8 @@ function hoursParagraph(locale: Locale, facts: Announcements): string {
   if (a?.hours) {
     const until = a.until ? { ca: ` fins al ${dateYear(a.until, "ca")}`, es: ` hasta el ${dateYear(a.until, "es")}`, en: ` until ${dateYear(a.until, "en")}` }[locale] : "";
     return {
-      ca: `El 2026 els llums estaran encesos${until} ${a.hours.ca}, segons l'Ajuntament.`,
-      es: `En 2026 las luces estarán encendidas${until} ${a.hours.es}, según el Ayuntamiento.`,
+      ca: `El 2026 els llums estaran encesos${until}, ${a.hours.ca}, segons l'Ajuntament.`,
+      es: `En 2026 las luces estarán encendidas${until}, ${a.hours.es}, según el Ayuntamiento.`,
       en: `In 2026 the lights are on${until}, ${a.hours.en}, according to the City Council.`,
     }[locale];
   }
@@ -357,12 +377,21 @@ function hoursParagraph(locale: Locale, facts: Announcements): string {
   }[locale];
 }
 
-function streetsSection(locale: Locale): Block[] {
+function streetsSection(locale: Locale, facts: Announcements = ANNOUNCED_2026): Block[] {
+  const a = facts.lightsSwitchOn;
+  // The switch-on note gives the final figure ("prop de 140 km"); the July plan said 130.
+  const update = a?.km
+    ? {
+        ca: ` A la [nota de l'encesa](${a.url}) l'Ajuntament parla de prop de ${a.km} km de carrers il·luminats.`,
+        es: ` En la [nota del encendido](${a.url}) el Ayuntamiento habla de cerca de ${a.km} km de calles iluminadas.`,
+        en: ` The City Council's [switch-on note](${a.url}) puts it at about ${a.km} km of lit streets.`,
+      }[locale]
+    : "";
   const plan = `[${{ ca: "pla de llums del 2026", es: "plan de luces de 2026", en: "2026 lighting plan" }[locale]}](${LIGHTS_PLAN_2026.url})`;
   const copy = {
     ca: {
       heading: "Quins carrers s'il·luminen a Barcelona el 2026",
-      intro: `Segons el ${plan}, presentat el ${dateYear(LIGHTS_PLAN_2026.presented, "ca")}, enguany hi haurà **${LIGHTS_PLAN_2026.km} quilòmetres de carrers i places amb llums** a tots els districtes, amb els eixos i les associacions de comerciants (${PAST.lights2025.km} km el 2025).`,
+      intro: `Segons el ${plan}, presentat el ${dateYear(LIGHTS_PLAN_2026.presented, "ca")}, enguany hi haurà **${LIGHTS_PLAN_2026.km} quilòmetres de carrers i places amb llums** a tots els districtes, amb els eixos i les associacions de comerciants (${PAST.lights2025.km} km el 2025).${update}`,
       items: [
         "**Llums d'autor:** repeteixen a la Via Laietana, la plaça de Catalunya, el carrer d'Aragó, la Gran Via de les Corts Catalanes i el passeig de Sant Joan, i s'estrenen a la Rambla de Prim (Sant Martí) i el passeig de Maragall.",
         "**Carrers que il·lumina l'Ajuntament:** la ronda de Sant Pere, el carrer de Balmes, la plaça d'Urquinaona, la Rambla i l'avinguda del Paral·lel, que per primer cop tindrà llums en tota la seva llargada.",
@@ -372,7 +401,7 @@ function streetsSection(locale: Locale): Block[] {
     },
     es: {
       heading: "Qué calles se iluminan en Barcelona en 2026",
-      intro: `Según el ${plan}, presentado el ${dateYear(LIGHTS_PLAN_2026.presented, "es")}, este año habrá **${LIGHTS_PLAN_2026.km} kilómetros de calles y plazas con luces** en todos los distritos, con los ejes y las asociaciones de comerciantes (${PAST.lights2025.km} km en 2025).`,
+      intro: `Según el ${plan}, presentado el ${dateYear(LIGHTS_PLAN_2026.presented, "es")}, este año habrá **${LIGHTS_PLAN_2026.km} kilómetros de calles y plazas con luces** en todos los distritos, con los ejes y las asociaciones de comerciantes (${PAST.lights2025.km} km en 2025).${update}`,
       items: [
         "**Luces de autor:** repiten en la Via Laietana, la plaza de Catalunya, la calle Aragó, la Gran Via de les Corts Catalanes y el paseo de Sant Joan, y se estrenan en la Rambla de Prim (Sant Martí) y el paseo de Maragall.",
         "**Calles que ilumina el Ayuntamiento:** la ronda de Sant Pere, la calle Balmes, la plaza de Urquinaona, la Rambla y la avenida del Paral·lel, que por primera vez tendrá luces en toda su longitud.",
@@ -382,7 +411,7 @@ function streetsSection(locale: Locale): Block[] {
     },
     en: {
       heading: "Which Barcelona streets are lit in 2026",
-      intro: `According to the ${plan}, presented on ${dateYear(LIGHTS_PLAN_2026.presented, "en")}, this year there will be **${LIGHTS_PLAN_2026.km} km of streets and squares with lights** in every district, with the local shopping associations (${PAST.lights2025.km} km in 2025).`,
+      intro: `According to the ${plan}, presented on ${dateYear(LIGHTS_PLAN_2026.presented, "en")}, this year there will be **${LIGHTS_PLAN_2026.km} km of streets and squares with lights** in every district, with the local shopping associations (${PAST.lights2025.km} km in 2025).${update}`,
       items: [
         "**Designer lights:** back on Via Laietana, Plaça de Catalunya, Carrer d'Aragó, Gran Via de les Corts Catalanes and Passeig de Sant Joan, and new on Rambla de Prim (Sant Martí) and Passeig de Maragall.",
         "**Streets lit by the City Council:** Ronda de Sant Pere, Carrer de Balmes, Plaça d'Urquinaona, La Rambla and Avinguda del Paral·lel, lit along its whole length for the first time.",
@@ -436,10 +465,23 @@ function townTable(locale: Locale, towns: readonly LightsTown[], facts: Announce
     en: ["Town", "2026 switch-on", "2025 switch-on", "Source"],
   }[locale];
   const checked = dateYear(LIGHTS_TOWNS_AS_OF, locale);
+  // Councils whose site did not answer on the last re-read keep their own (earlier) check date.
+  const unread = LIGHTS_TOWNS_NOT_REREAD.flatMap((u) => {
+    const town = towns.find((t) => t.key === u.key);
+    return town ? [{ name: town.name, read: u.read }] : [];
+  });
+  const byDate = [...new Set(unread.map((u) => u.read))].map((read) => ({ read, names: joinNames(unread.filter((u) => u.read === read).map((u) => u.name), locale) }));
+  const exceptions = byDate.length
+    ? {
+        ca: ` ${byDate.map((g) => `${g.names}: comprovat el ${dateYear(g.read, "ca")} (la web no ha respost després)`).join("; ")}.`,
+        es: ` ${byDate.map((g) => `${g.names}: comprobado el ${dateYear(g.read, "es")} (la web no ha respondido después)`).join("; ")}.`,
+        en: ` ${byDate.map((g) => `${g.names}: checked on ${dateYear(g.read, "en")} (the website has not answered since)`).join("; ")}.`,
+      }[locale]
+    : "";
   const note = {
-    ca: `De la web de cada ajuntament (notícies, sala de premsa o agenda municipal), comprovades el ${checked}. «Per confirmar»: l'ajuntament encara no ha publicat l'encesa del 2026. L'hora és la que dona l'ajuntament per a l'acte d'encesa.`,
-    es: `De la web de cada ayuntamiento (noticias, sala de prensa o agenda municipal), comprobadas el ${checked}. «Por confirmar»: el ayuntamiento aún no ha publicado el encendido de 2026. La hora es la que da el ayuntamiento para el acto de encendido.`,
-    en: `From each town council's website (news, press room or municipal events listing), checked on ${checked}. "To be confirmed": the council has not published its 2026 switch-on yet. Times are the ones the council gives for the switch-on event.`,
+    ca: `De la web de cada ajuntament (notícies, sala de premsa o agenda municipal), comprovades el ${checked}.${exceptions} «Per confirmar»: l'ajuntament encara no ha publicat l'encesa del 2026. L'hora és la que dona l'ajuntament per a l'acte d'encesa.`,
+    es: `De la web de cada ayuntamiento (noticias, sala de prensa o agenda municipal), comprobadas el ${checked}.${exceptions} «Por confirmar»: el ayuntamiento aún no ha publicado el encendido de 2026. La hora es la que da el ayuntamiento para el acto de encendido.`,
+    en: `From each town council's website (news, press room or municipal events listing), checked on ${checked}.${exceptions} "To be confirmed": the council has not published its 2026 switch-on yet. Times are the ones the council gives for the switch-on event.`,
   }[locale];
   return table(caption, headers, townRows(locale, towns, facts), note);
 }
@@ -505,7 +547,13 @@ function faqItems(locale: Locale, facts: Announcements, towns: readonly LightsTo
         en: `It has not been announced yet (${CHECKED.en}). In 2025 the City Council announced the date on ${dateYear(PAST.lights2025.announced, "en")} and switched the lights on on ${at(LAST.date, LAST.time, "en")} on Passeig de Gràcia; in 2024 on ${at(y24!.date, undefined, "en")} and in 2023 on ${at(y23!.date, undefined, "en")}, also at 18:00.`,
       }[locale];
 
-  const time = a?.time
+  const time = a?.time && a.lightsOn && a.lightsOn !== a.time
+    ? {
+        ca: `El 2026 l'acte comença a les ${a.time} i els llums s'encenen a les ${a.lightsOn}, segons l'Ajuntament. Els tres últims anys l'acte va començar a les 18:00.`,
+        es: `En 2026 el acto empieza a las ${a.time} y las luces se encienden a las ${a.lightsOn}, según el Ayuntamiento. Los tres últimos años el acto empezó a las 18:00.`,
+        en: `In 2026 the show starts at ${a.time} and the lights come on at ${a.lightsOn}, according to the City Council. For the last three years the ceremony started at 18:00.`,
+      }[locale]
+    : a?.time
     ? { ca: `El 2026, a les ${a.time}, segons l'Ajuntament. Els tres últims anys va començar a les 18:00.`, es: `En 2026, a las ${a.time}, según el Ayuntamiento. Los tres últimos años empezó a las 18:00.`, en: `In 2026 at ${a.time}, according to the City Council. For the last three years it started at 18:00.` }[locale]
     : {
         ca: `L'hora del 2026 encara no s'ha anunciat. El 2023, el 2024 i el 2025 l'acte va començar a les 18:00 (el primer anunci del 2023 i el del 2025 deien 18:30). Després de l'encesa, el 2025 els llums es van encendre cada dia a les ${HOURS_2025.on}.`,
@@ -514,7 +562,7 @@ function faqItems(locale: Locale, facts: Announcements, towns: readonly LightsTo
       }[locale];
 
   const place = a?.place
-    ? { ca: `El 2026, a ${a.place.ca}, segons l'Ajuntament. Els tres últims anys va ser al passeig de Gràcia.`, es: `En 2026, en ${a.place.es}, según el Ayuntamiento. Los tres últimos años fue en el paseo de Gràcia.`, en: `In 2026 at ${a.place.en}, according to the City Council. For the last three years it was on Passeig de Gràcia.` }[locale]
+    ? { ca: `El 2026, ${placePhrase(a, "ca")}, segons l'Ajuntament. Els tres últims anys va ser al passeig de Gràcia.`, es: `En 2026, ${placePhrase(a, "es")}, según el Ayuntamiento. Los tres últimos años fue en el paseo de Gràcia.`, en: `In 2026 ${placePhrase(a, "en")}, according to the City Council. For the last three years it was on Passeig de Gràcia.` }[locale]
     : {
         ca: "Els tres últims anys, al passeig de Gràcia: el 2024 i el 2025, al tram entre la ronda de Sant Pere i la Gran Via, amb un espectacle que acaba amb l'encesa de tota la ciutat alhora. Per al 2026 l'Ajuntament encara no ho ha confirmat.",
         es: "Los tres últimos años, en el paseo de Gràcia: en 2024 y 2025, en el tramo entre la ronda de Sant Pere y la Gran Via, con un espectáculo que acaba con el encendido de toda la ciudad a la vez. Para 2026 el Ayuntamiento aún no lo ha confirmado.",
@@ -534,9 +582,9 @@ function faqItems(locale: Locale, facts: Announcements, towns: readonly LightsTo
 
   const townsAnswer = dated.length
     ? {
-        ca: `A ${dateYear(LIGHTS_TOWNS_AS_OF, "ca")}, ${dated.length} dels ${towns.length} municipis d'aquesta guia: ${joinNames(dated.map((t) => `${t.name} (${shortDate(t.y2026!.date, "ca")})`), "ca")}. Els altres encara no l'han publicada a la seva web.`,
-        es: `A ${dateYear(LIGHTS_TOWNS_AS_OF, "es")}, ${dated.length} de los ${towns.length} municipios de esta guía: ${joinNames(dated.map((t) => `${t.name} (${shortDate(t.y2026!.date, "es")})`), "es")}. Los demás aún no lo han publicado en su web.`,
-        en: `As of ${dateYear(LIGHTS_TOWNS_AS_OF, "en")}, ${dated.length} of the ${towns.length} towns in this guide: ${joinNames(dated.map((t) => `${t.name} (${shortDate(t.y2026!.date, "en")})`), "en")}. The others have not published it on their websites yet.`,
+        ca: `A ${dateYear(LIGHTS_TOWNS_AS_OF, "ca")}, ${dated.length} dels ${towns.length} municipis d'aquesta guia ja tenen la data del 2026: ${joinNames(dated.map((t) => `${t.name} (${shortDate(t.y2026!.date, "ca")})`), "ca")}. Els altres encara no l'han publicada a la seva web.`,
+        es: `A ${dateYear(LIGHTS_TOWNS_AS_OF, "es")}, ${dated.length} de los ${towns.length} municipios de esta guía ya tienen la fecha de 2026: ${joinNames(dated.map((t) => `${t.name} (${shortDate(t.y2026!.date, "es")})`), "es")}. Los demás aún no lo han publicado en su web.`,
+        en: `As of ${dateYear(LIGHTS_TOWNS_AS_OF, "en")}, ${dated.length} of the ${towns.length} towns in this guide have published a date for 2026: ${joinNames(dated.map((t) => `${t.name} (${shortDate(t.y2026!.date, "en")})`), "en")}. The others have not published it on their websites yet.`,
       }[locale]
     : {
         ca: `A ${dateYear(LIGHTS_TOWNS_AS_OF, "ca")}, cap dels ${towns.length} municipis d'aquesta guia no l'ha publicada a la seva web.`,
@@ -653,7 +701,7 @@ export function buildChristmasLightsBody(locale: Locale, facts: Announcements = 
     ...h2(t.bcnHeading, ...switchOnSection(locale, facts)),
     historyTable(locale),
     ...paras(...showParagraphs(locale)),
-    ...streetsSection(locale),
+    ...streetsSection(locale, facts),
     ...h2(t.hoursHeading, hoursParagraph(locale, facts)),
     ...h2(t.townsHeading, t.townsIntro),
     townTable(locale, towns, facts),

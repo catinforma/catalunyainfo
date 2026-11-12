@@ -21,6 +21,7 @@ import {
   dayDate,
   lightingHours2025,
   metroRows,
+  placePhrase,
   sightRows,
   span,
   type Announcement,
@@ -181,7 +182,8 @@ export function christmasBarcelonaDescription(locale: Locale, facts: Announcemen
   const a = facts.lightsSwitchOn;
   if (a) {
     const day = dayDate(a.date, locale);
-    const at = a.time ? { ca: ` a les ${a.time}`, es: ` a las ${a.time}`, en: ` at ${a.time}` }[locale] : "";
+    const t = a.lightsOn ?? a.time;
+    const at = t ? { ca: ` a les ${t}`, es: ` a las ${t}`, en: ` at ${t}` }[locale] : "";
     const options: Record<Locale, string[]> = {
       ca: [
         `Encesa de llums de Nadal de Barcelona 2026: el ${day}${at}. Carrers il·luminats, pessebre de Sant Jaume i què obre per Nadal.`,
@@ -228,7 +230,9 @@ export function christmasBarcelonaDescription(locale: Locale, facts: Announcemen
 /* -------------------------------------------------------------------------- */
 
 export function when(item: Announcement, locale: Locale): string {
-  const time = item.time ? (locale === "en" ? ` at ${item.time}` : locale === "es" ? ` a las ${item.time}` : ` a les ${item.time}`) : "";
+  // Lights switch-on: the moment the lights come on when the note gives it apart from the show's start.
+  const t = item.lightsOn ?? item.time;
+  const time = t ? (locale === "en" ? ` at ${t}` : locale === "es" ? ` a las ${t}` : ` a les ${t}`) : "";
   const place = item.place ? ` (${item.place[locale]})` : "";
   return `${locale === "en" ? "" : "el "}${dayDate(item.date, locale)}${time}${place}`;
 }
@@ -246,6 +250,11 @@ export function lightsLead(locale: Locale, facts: Announcements = ANNOUNCED_2026
     es: `Para este año prevé ${LIGHTS_PLAN_2026.km} km de calles iluminadas, con las luces de autor de nuevo en cinco calles del centro y dos emplazamientos nuevos: la Rambla de Prim y el paseo de Maragall.`,
     en: `This year it plans ${LIGHTS_PLAN_2026.km} km of lit streets, with designer lights back on five central streets and in two new places, Rambla de Prim and Passeig de Maragall.`,
   };
+  if (a?.km) {
+    plan.ca = `Enguany hi haurà prop de ${a.km} km de carrers il·luminats, amb els llums d'autor de nou a cinc carrers del centre i dos emplaçaments nous: la Rambla de Prim i el passeig de Maragall.`;
+    plan.es = `Este año habrá cerca de ${a.km} km de calles iluminadas, con las luces de autor de nuevo en cinco calles del centro y dos emplazamientos nuevos: la Rambla de Prim y el paseo de Maragall.`;
+    plan.en = `This year there will be about ${a.km} km of lit streets, with designer lights back on five central streets and in two new places, Rambla de Prim and Passeig de Maragall.`;
+  }
   if (a) {
     const head: Record<Locale, string> = {
       ca: `**Barcelona encén els llums de Nadal ${when(a, "ca")}**, segons ha anunciat l'Ajuntament.`,
@@ -294,6 +303,13 @@ const lowerFirst = (value: string) => value.charAt(0).toLowerCase() + value.slic
 
 function timeAnswer(locale: Locale, facts: Announcements): string {
   const a = facts.lightsSwitchOn;
+  if (a?.time && a.lightsOn && a.lightsOn !== a.time) {
+    return {
+      ca: `El 2026 l'acte comença a les ${a.time} i els llums s'encenen a les ${a.lightsOn}, segons l'Ajuntament. Els tres últims anys l'acte va començar a les 18:00.`,
+      es: `En 2026 el acto empieza a las ${a.time} y las luces se encienden a las ${a.lightsOn}, según el Ayuntamiento. Los tres últimos años el acto empezó a las 18:00.`,
+      en: `In 2026 the show starts at ${a.time} and the lights come on at ${a.lightsOn}, according to the City Council. For the last three years the ceremony started at 18:00.`,
+    }[locale];
+  }
   if (a?.time) {
     return {
       ca: `L'Ajuntament l'ha convocada ${when(a, "ca")}. Els tres últims anys va començar a les 18:00.`,
@@ -317,9 +333,9 @@ function placeAnswer(locale: Locale, facts: Announcements): string {
   const a = facts.lightsSwitchOn;
   if (a?.place) {
     return {
-      ca: `Segons l'Ajuntament, el 2026 l'encesa és a ${a.place.ca}. Els tres últims anys es va fer al passeig de Gràcia.`,
-      es: `Según el Ayuntamiento, en 2026 el encendido es en ${a.place.es}. Los tres últimos años fue en el paseo de Gràcia.`,
-      en: `According to the City Council, the 2026 switch-on is at ${a.place.en}. For the last three years it was on Passeig de Gràcia.`,
+      ca: `Segons l'Ajuntament, el 2026 l'encesa és ${placePhrase(a, "ca")}. Els tres últims anys es va fer al passeig de Gràcia.`,
+      es: `Según el Ayuntamiento, en 2026 el encendido es ${placePhrase(a, "es")}. Los tres últimos años fue en el paseo de Gràcia.`,
+      en: `According to the City Council, the 2026 switch-on is ${placePhrase(a, "en")}. For the last three years it was on Passeig de Gràcia.`,
     }[locale];
   }
   return {
@@ -486,9 +502,9 @@ function switchOnAnswer(locale: Locale, facts: Announcements): string {
   const a = facts.lightsSwitchOn;
   if (a) {
     return {
-      ca: `L'Ajuntament ha anunciat l'encesa per al ${dayDate(a.date, "ca")}${a.time ? ` a les ${a.time}` : ""}. Els llums s'hi queden durant les festes; l'any passat, fins al 6 de gener.`,
-      es: `El Ayuntamiento ha anunciado el encendido para el ${dayDate(a.date, "es")}${a.time ? ` a las ${a.time}` : ""}. Las luces se quedan durante las fiestas; el año pasado, hasta el 6 de enero.`,
-      en: `The City Council has announced the switch-on for ${dayDate(a.date, "en")}${a.time ? ` at ${a.time}` : ""}. The lights stay up over the holidays; last year, until 6 January.`,
+      ca: `L'Ajuntament ha anunciat l'encesa per al ${dayDate(a.date, "ca")}${a.time ? ` a les ${a.time}` : ""}. ${a.until ? `Els llums estaran encesos fins al ${dateYear(a.until, "ca")}.` : "Els llums s'hi queden durant les festes; l'any passat, fins al 6 de gener."}`,
+      es: `El Ayuntamiento ha anunciado el encendido para el ${dayDate(a.date, "es")}${a.time ? ` a las ${a.time}` : ""}. ${a.until ? `Las luces estarán encendidas hasta el ${dateYear(a.until, "es")}.` : "Las luces se quedan durante las fiestas; el año pasado, hasta el 6 de enero."}`,
+      en: `The City Council has announced the switch-on for ${dayDate(a.date, "en")}${a.time ? ` at ${a.time}` : ""}. ${a.until ? `The lights stay on until ${dateYear(a.until, "en")}.` : "The lights stay up over the holidays; last year, until 6 January."}`,
     }[locale];
   }
   return {

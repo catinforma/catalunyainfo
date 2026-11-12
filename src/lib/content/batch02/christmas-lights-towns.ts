@@ -42,8 +42,25 @@ import type { B2Key } from "./shared";
  *  - `y2025` stays as it is: it is printed with its year, never as 2026's.
  */
 
-/** The day every row below was last read on the councils' own sites. */
-export const LIGHTS_TOWNS_AS_OF = "2026-11-04";
+/**
+ * Re-read on 12 Nov 2026: 23 of the 25 councils' news pages (items up to 9-12
+ * Nov 2026). Four had published 2026: Badalona (note of 10 Nov), Igualada
+ * (10 Nov), Terrassa (Christmas site iCal, event modified 11 Nov) and Rubí
+ * (20 Oct, missed on 4 Nov because rubi.cat refused automated requests then).
+ * Badalona, Castelldefels, Figueres and Vic answered a normal browser request
+ * this time; Girona's old agenda URL is 404 (its agenda and web.girona.cat/nadal
+ * have no 2026 switch-on). Santa Coloma (403) and Vilanova (no answer) could not
+ * be read: LIGHTS_TOWNS_NOT_REREAD, printed under the table with the 4 Nov date.
+ */
+
+/** The day the rows below were last read on the councils' own sites (all but LIGHTS_TOWNS_NOT_REREAD). */
+export const LIGHTS_TOWNS_AS_OF = "2026-11-12";
+
+/** Towns whose council site could not be read at LIGHTS_TOWNS_AS_OF, with the day they last were. */
+export const LIGHTS_TOWNS_NOT_REREAD: readonly { key: string; read: string }[] = [
+  { key: "santa-coloma", read: "2026-11-04" },
+  { key: "vilanova", read: "2026-11-04" },
+];
 
 export interface TownSwitchOn {
   /** ISO day of the switch-on. */
@@ -79,6 +96,7 @@ export interface LightsTown {
 }
 
 const READ = "2026-11-04";
+const READ_12NOV = "2026-11-12";
 
 export const LIGHTS_TOWNS: readonly LightsTown[] = [
   {
@@ -133,7 +151,8 @@ export const LIGHTS_TOWNS: readonly LightsTown[] = [
     name: "Terrassa",
     hosts: /(^|\.)terrassa\.cat$/,
     watch: "https://terrassanadal.terrassa.cat/",
-    y2026: null,
+    // Same Christmas site, event "Inauguració del Nadal a la Ciutat" (read 12 Nov 2026; the page shows the maintenance notice, its iCal export reads "DTSTART;TZID=Europe/Paris:20261128T180000", "SUMMARY:Inauguració del Nadal a la Ciutat", "DESCRIPTION:Encesa de llums", "LOCATION:Raval de Montserrat, Raval de Montserrat, 14, Terrassa", "LAST-MODIFIED:20261111T120409Z"). 28 Nov 2026 is a Saturday.
+    y2026: { date: "2026-11-28", time: "18:00", place: "Raval de Montserrat", url: "https://terrassanadal.terrassa.cat/esdeveniment/inauguracio-del-nadal-a-la-ciutat/", read: READ_12NOV },
     // The council's Christmas site, event "Acte d'encesa de llums" (organiser Ajuntament de Terrassa). The page shows a maintenance notice; its own iCal export (same URL + ?ical=1) reads "DTSTART;TZID=Europe/Paris:20251129T180000", "LOCATION:Raval de Montserrat, 14, Terrassa". www.terrassa.cat answers with a bot challenge.
     y2025: { date: "2025-11-29", time: "18:00", place: "Raval de Montserrat", url: "https://terrassanadal.terrassa.cat/esdeveniment/acte-dencesa-de-llums/", read: READ },
   },
@@ -150,9 +169,10 @@ export const LIGHTS_TOWNS: readonly LightsTown[] = [
     key: "rubi",
     name: "Rubí",
     hosts: /(^|\.)rubi\.cat$/,
-    watch: "https://www.rubi.cat/",
-    y2026: null,
-    // rubi.cat answers every automated request with a bot challenge (403), so no council page could be read for either year. Check it by hand.
+    watch: "https://www.rubi.cat/ca/actualitat/noticies",
+    // Council note of 20 Oct 2026 (read 12 Nov 2026; rubi.cat refused automated requests on 4 Nov): "Rubí prepara l'enllumenat de Nadal, que s'encendrà el 27 de novembre"; "tot estigui a punt per a l'encesa, prevista per al 27 de novembre". Second year of the 2025/2026-2026/2027 contract, so 2026. No time or place given.
+    y2026: { date: "2026-11-27", url: "https://www.rubi.cat/ca/actualitat/noticies/rubi-prepara-l2019enllumenat-de-nadal-que-s2019encendra-el-27-de-novembre", read: READ_12NOV },
+    // No council page gives the 2025 switch-on.
     y2025: null,
   },
   {
@@ -233,7 +253,8 @@ export const LIGHTS_TOWNS: readonly LightsTown[] = [
     name: "Badalona",
     hosts: /(^|\.)badalona\.cat$/,
     watch: "https://www.badalona.cat/ca/actualitat/noticies",
-    y2026: null,
+    // Council note of 10 Nov 2026 (read 12 Nov 2026): "L'encesa general de la il·luminació de Nadal a Badalona es farà el divendres 20 de novembre a les 18 hores." No place for it; the 40 m tree in plaça del President Tarradellas is lit on Saturday 21 November at 19 h.
+    y2026: { date: "2026-11-20", time: "18:00", url: "https://www.badalona.cat/ca/actualitat/noticies/badalona-aposta-per-continuar-essent-un-referent-del-nadal-amb-mes-il-luminacio-als-carrers-una-oferta-cultural-ampliada-i-una-inversio-de-prop-de-2-5-milions-deuros", read: READ_12NOV },
     // "Divendres 21 a les 18 hores s'encendrà l'arbre de Nadal de la plaça de la Vila i la il·luminació de tots els carrers" (20 Nov 2025). The 42 m tree in plaça del President Tarradellas was lit the next day.
     y2025: { date: "2025-11-21", time: "18:00", place: "plaça de la Vila", url: "https://www.badalona.cat/ca/actualitat/noticies/el-nadal-arriba-aquest-cap-de-setmana-a-badalona-amb-lencesa-del-gran-arbre-de-la-placa-del-president-tarradellas", read: READ },
   },
@@ -302,7 +323,8 @@ export const LIGHTS_TOWNS: readonly LightsTown[] = [
     name: "Igualada",
     hosts: /(^|\.)igualada\.cat$/,
     watch: "https://www.igualada.cat/ca/noticies",
-    y2026: null,
+    // Council note of 10 Nov 2026 (read 12 Nov 2026): "L'acte central d'encesa dels llums de Nadal tornarà al cor del nucli antic i es farà a la plaça de l'Ajuntament"; "L'encesa de llums serà el dia 27 de novembre." Its only time is 19.30 h for collecting the light element in other squares, not the start: left out.
+    y2026: { date: "2026-11-27", place: "plaça de l'Ajuntament", url: "https://www.igualada.cat/ca/noticies/igualada-viura-un-nadal-amb-mes-carrers-il-luminats-suport-al-comerc-local-i-un-espectacle-interactiu-d2019encesa-de-llums-des-de-la-placa-de-l2019ajuntament", read: READ_12NOV },
     // "El bosc màgic del Passeig Verdaguer tornarà a ser l'escenari de l'encesa de llums divendres vinent 28 de novembre" (24 Nov 2025). Time left out: that page says the show starts at 20 h, the council's 12 Nov page said "a partir de dos quarts de vuit del vespre".
     y2025: { date: "2025-11-28", place: "passeig de Verdaguer", url: "https://www.igualada.cat/ca/noticies/el-bosc-magic-del-passeig-verdaguer-escenari-de-l2019encesa-amb-l2019espectacle-interactiu-201ccolors-per-tornar-a-casa201d", read: READ },
   },

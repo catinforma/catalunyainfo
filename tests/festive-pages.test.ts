@@ -368,10 +368,18 @@ test("the last three switch-ons are on the weekdays printed, all on Passeig de G
   }
   for (const locale of LOCALES) {
     const leadText = text(CHRISTMAS_BARCELONA.editions[locale].blocks.slice(0, 1));
-    // One sentence after the "not announced" one gives the pattern: place, time, the three days.
     assert.match(leadText, /passeig de Gràcia|paseo de Gràcia|Passeig de Gràcia/, locale);
-    assert.match(leadText, /18:00/, locale);
-    for (const s of SWITCH_ON_HISTORY) assert.ok(leadText.includes(dayDate(s.date, locale)), `${locale}: ${s.date}`);
+    const announced = ANNOUNCED_2026.lightsSwitchOn;
+    if (announced) {
+      // Once announced (9 Nov 2026), the lead gives this year's day and the moment the lights come on;
+      // the pattern of the last three years stays in the history table below.
+      assert.ok(leadText.includes(dayDate(announced.date, locale)), `${locale}: ${leadText}`);
+      assert.ok(leadText.includes(announced.lightsOn ?? announced.time ?? ""), `${locale}: time`);
+    } else {
+      // One sentence after the "not announced" one gives the pattern: place, time, the three days.
+      assert.match(leadText, /18:00/, locale);
+      for (const s of SWITCH_ON_HISTORY) assert.ok(leadText.includes(dayDate(s.date, locale)), `${locale}: ${s.date}`);
+    }
     const rows = (CHRISTMAS_BARCELONA.editions[locale].blocks as { type: string; rows?: string[][] }[]).find((b) => b.type === "table" && b.rows?.[0]?.[0] === "2025")?.rows;
     assert.ok(rows, `${locale}: history table`);
     assert.deepEqual(rows.map((r) => r[0]), ["2025", "2024", "2023"], locale);

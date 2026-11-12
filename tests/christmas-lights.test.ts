@@ -169,8 +169,9 @@ test("the page is honest about the towns: 'dates' in the title only when a town 
 /* -------------------------------------------------------------------------- */
 
 test("with no 2026 date, the lead says so with the check date and gives 2025 and 2024 with their years", () => {
-  const checked: Record<Locale, string> = { ca: "comprovat el 4 de novembre de 2026", es: "comprobado el 4 de noviembre de 2026", en: "checked on 4 November 2026" };
-  assert.equal(LIGHTS_SWITCH_ON_CHECKED, "2026-11-04");
+  // 12 Nov 2026: the City Council's note of 9 Nov was read; the check date moved with it.
+  const checked: Record<Locale, string> = { ca: "comprovat el 12 de novembre de 2026", es: "comprobado el 12 de noviembre de 2026", en: "checked on 12 November 2026" };
+  assert.equal(LIGHTS_SWITCH_ON_CHECKED, "2026-11-12");
   for (const locale of LOCALES) {
     const first = (buildChristmasLightsBody(locale, NONE)[0] as { text: string }).text;
     assert.ok(first.includes(checked[locale]), `${locale}: ${first}`);
@@ -205,9 +206,12 @@ test("Barcelona's facts are festive.ts's: history, plan, hours, mobility, every 
   }
   for (const locale of LOCALES) {
     const b = body(locale);
-    for (const s of SWITCH_ON_HISTORY) assert.ok(b.includes(dayDate(s.date, locale)), `${locale}: ${s.date}`);
+    // The history table capitalises the day ("Dissabte 22 de novembre de 2025").
+    for (const s of SWITCH_ON_HISTORY) assert.ok(b.toLowerCase().includes(dayDate(s.date, locale).toLowerCase()), `${locale}: ${s.date}`);
     assert.ok(b.includes(`${LIGHTS_PLAN_2026.km}`) && b.includes(`${PAST.lights2025.km} km`), locale);
-    assert.ok(b.includes(lightingHours2025(locale)), `${locale}: the 2025 hours`);
+    // The 2025 hours until 2026's are announced; then 2026's, as the note gives them.
+    const hours = ANNOUNCED_2026.lightsSwitchOn?.hours?.[locale] ?? lightingHours2025(locale);
+    assert.ok(b.includes(hours), `${locale}: the lighting hours`);
   }
 });
 
@@ -245,7 +249,7 @@ test("the 25 towns the brief named, once each, every filled slot official and we
 
 test("4 Nov 2026: no council had published 2026; the 2025 dates the councils gave", () => {
   // The facts read that day (research_notes/llums-nadal-2026.md). A later re-read moves AS_OF and may fill y2026.
-  if (LIGHTS_TOWNS_AS_OF !== "2026-11-04") return;
+  if ((LIGHTS_TOWNS_AS_OF as string) !== "2026-11-04") return;
   assert.equal(announcedTowns().length, 0);
   const y25 = Object.fromEntries(LIGHTS_TOWNS.filter((t) => t.y2025).map((t) => [t.key, `${t.y2025!.date} ${t.y2025!.time ?? "-"}`]));
   assert.deepEqual(y25, {
@@ -313,6 +317,7 @@ test("no 2026 date is printed that no official page gave: only the towns' own, t
     PAST.lights2025.until,
     SANTA_LLUCIA_2026.from,
     SANTA_LLUCIA_2026.to,
+    ...(ANNOUNCED_2026.lightsSwitchOn ? [ANNOUNCED_2026.lightsSwitchOn.date] : []),
     ...LIGHTS_TOWNS.flatMap((t) => (t.y2026 ? [t.y2026.date] : [])),
   ]);
   const months: Record<Locale, string[]> = {
@@ -357,7 +362,8 @@ test("every Barcelona or town 2024/2025 date in the prose sits in a sentence tha
       for (const sentence of sentences(prose).filter((s) => new RegExp(`(^|\\D)${day}(?!\\d)`).test(s))) {
         // The same day can be an official 2026 date of this page (Santa Llúcia opens on 27 November 2026,
         // Reus switched on on 27 November 2025): such a sentence prints it with 2026, which is right.
-        if (official2026.has(iso.slice(5)) && new RegExp(`${day}[^.]*2026`).test(sentence)) continue;
+        // Or names 2026 before the list ("ja han publicat la data del 2026: ..., Terrassa (28 de novembre)").
+        if (official2026.has(iso.slice(5)) && (new RegExp(`${day}[^.]*2026`).test(sentence) || new RegExp(`2026( date)?:[^.]*${day}`).test(sentence))) continue;
         checked++;
         assert.match(sentence, /2024|2025/, `${locale}: "${sentence}" gives ${day} without its year`);
       }
