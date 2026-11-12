@@ -124,7 +124,13 @@ test("titles fit in 60 characters in the searched words; descriptions fit in 155
     es: /^Huelga general del 11 de noviembre de 2026: servicios mínimos y qué funciona/,
     en: /^General strike on 11 November 2026 in Spain: what runs/,
   };
-  const answer: Record<Locale, RegExp> = {
+  // 12 Nov 2026: after the strike the description says what it was, not when it is.
+  const PAST = strikePhase(STRIKE_11N_AS_OF) === "past";
+  const answer: Record<Locale, RegExp> = PAST ? {
+    ca: /^La vaga general de l'11 de novembre de 2026: qui la va convocar/,
+    es: /^La huelga general del 11 de noviembre de 2026: quién la convocó/,
+    en: /^The 11 November 2026 general strike in Spain: who called it/,
+  } : {
     ca: /[Dd]imecres 11 de novembre(?: de 2026)?, 24 h(?:ores)? des de les 0 h/,
     es: /[Mm]iércoles 11 de noviembre(?: de 2026)?, 24 h(?:oras)? desde las 0 h/,
     en: /24-hour general strike (?:across|in) Spain on Wednesday 11 November/,
@@ -139,7 +145,7 @@ test("titles fit in 60 characters in the searched words; descriptions fit in 155
     assert.match(seoDescription, answer[locale]);
     assert.equal(seoDescription, strike11nDescription(locale));
     // 5 Nov 2026: the Generalitat's order is out (long distance and flights still pending): the description says so.
-    assert.match(seoDescription, /publicats|publicados|published|out/, locale);
+    if (!PAST) assert.match(seoDescription, /publicats|publicados|published|out/, locale);
   }
 });
 
@@ -238,7 +244,11 @@ test("no new photograph: the hero is the trains feature's file with its exact al
 test("known answers: the date, the hours, who calls it and who is called out", () => {
   assert.equal(STRIKE_11N_DATE, "2026-11-11");
   assert.equal(weekdayIndex(STRIKE_11N_DATE), 3); // Wednesday
-  const leadWords: Record<Locale, RegExp[]> = {
+  const leadWords: Record<Locale, RegExp[]> = strikePhase(STRIKE_11N_AS_OF) === "past" ? {
+    ca: [/^El dimecres 11 de novembre de 2026 hi va haver vaga general de 24 hores/],
+    es: [/^El miércoles 11 de noviembre de 2026 hubo huelga general de 24 horas/],
+    en: [/^There was a 24-hour general strike across Spain, Catalonia included, on Wednesday 11 November 2026/],
+  } : {
     ca: [/^El dimecres 11 de novembre de 2026 hi ha vaga general de 24 hores/, /0 h/, /al 25% de 6\.30 a 9\.30 h i de 16\.30 a 21 h/],
     es: [/^El miércoles 11 de noviembre de 2026 hay huelga general de 24 horas/, /0 h/, /al 25% de 6\.30 a 9\.30 h y de 16\.30 a 21 h/],
     en: [/^On Wednesday 11 November 2026 there is a 24-hour general strike/, /00:00/, /at 25% from 06:30 to 09:30 and from 16:30 to 21:00/],
@@ -304,6 +314,11 @@ test("known answers read on 30 October and 11 November 2026: SEMAF's Renfe strik
   assert.equal(weekdayIndex("2026-11-10"), 2); // Tuesday
   assert.equal(weekdayIndex("2026-11-12"), 4); // Thursday
   assert.equal(weekdayIndex("2026-11-23"), 1); // Monday
+  // After the strike the lead says what happened; the next rail strikes are in the "what comes next" block.
+  if (strikePhase(STRIKE_11N_AS_OF) === "past") {
+    for (const locale of LOCALES) assert.ok(json(locale).includes(`](${STRIKE_11N_URLS.semaf23})`), `${locale}: no link to SEMAF's notice of 10 Nov`);
+    return;
+  }
   for (const locale of LOCALES) {
     assert.match(text(STRIKE_11N.editions[locale].blocks.slice(0, 1)), lead[locale], locale);
     assert.ok(json(locale).includes(`](${STRIKE_11N_URLS.semaf23})`), `${locale}: no link to SEMAF's notice of 10 Nov`);

@@ -6,7 +6,7 @@ import { bodySchema, bodyToPlainText, wordCount, type Block } from "../src/lib/c
 import { SIBLING_PATHS } from "../src/lib/content/batch02/december-bridge.ts";
 import { B2_PATHS } from "../src/lib/content/batch02/shared.ts";
 import { NEXT_DATES_HEADING, NEXT_DATES_ID, STRIKE_11N, STRIKE_11N_META, buildStrike11nBody } from "../src/lib/content/batch02/strike-11n.ts";
-import { CITIES, STATE_SERVICES, STRIKE_11N_CITIES_AS_OF } from "../src/lib/content/batch02/strike-11n-cities-data.ts";
+import { CITIES, STATE_SERVICES, STRIKE_11N_CITIES_AS_OF, STRIKE_11N_CITIES_VERIFIED } from "../src/lib/content/batch02/strike-11n-cities-data.ts";
 import type { StateService, Strike11nCity } from "../src/lib/content/batch02/strike-11n-cities-model.ts";
 import {
   CITY_HERO,
@@ -110,7 +110,7 @@ test("one page per city in the registry, in ca, es and en, valid and substantial
     assert.ok(wordCount(body(city)) > 900, `${city.key} is thin (${wordCount(body(city))} words)`);
     assert.match(edition.path, /^guias\/huelga-general-11-noviembre-[a-z-]+$/);
     assert.ok(!/\d{4}/.test(edition.path), `${edition.path} carries a year`);
-    assert.equal(article.verifiedAt, STRIKE_11N_CITIES_AS_OF);
+    assert.equal(article.verifiedAt, STRIKE_11N_CITIES_VERIFIED);
   }
 });
 
@@ -138,7 +138,7 @@ test("titles fit in 60 characters in the searched words; descriptions fit in 155
     assert.equal(title, `Huelga general del 11 de noviembre en ${city.name}: servicios mínimos y qué funciona`);
     assert.ok(excerpt.length > 30 && excerpt.length <= 200, `${city.key}: excerpt ${excerpt.length}`);
     assert.equal(seoDescription, cityDescription(city));
-    assert.match(seoDescription, /^Huelga general el miércoles 11 de noviembre de 2026 en /, city.key);
+    assert.match(seoDescription, STRIKE_11N_CITIES_AS_OF > "2026-11-11" ? /^La huelga general del 11 de noviembre de 2026 en / : /^Huelga general el miércoles 11 de noviembre de 2026 en /, city.key);
     for (const [asOf, c, state] of [
       [STRIKE_11N_CITIES_AS_OF, city, STATE_SERVICES],
       ["2026-11-09", filledCity(city), STATE_SERVICES],
@@ -263,7 +263,7 @@ test("demonstrations: only as the organisers published them, with the link; othe
     const plain = body(city);
     if (city.demos.length === 0) {
       assert.equal(city.demoShort, null, city.key);
-      assert.match(plain, /Aún sin convocatoria con hora y lugar en /, city.key);
+      assert.match(plain, STRIKE_11N_CITIES_AS_OF > "2026-11-11" ? /Sin convocatoria localizada con hora y lugar en / : /Aún sin convocatoria con hora y lugar en /, city.key);
       assert.match(plain, /Sin hora y lugar publicados por los convocantes/, city.key);
       assert.match(city.demoWhere, /\]\(https:\/\//, `${city.key}: say where the organisers will announce it`);
     } else {
@@ -367,8 +367,13 @@ test("the city pages are brought up to date after the strike (move STRIKE_11N_CI
     `On ${today} the 11 November strike is over but the city pages still speak from ${STRIKE_11N_CITIES_AS_OF}. Re-read every regional order, record what was set in src/lib/content/batch02/strike-11n-cities-data.ts, move STRIKE_11N_CITIES_AS_OF and publish ?only=strike-11n-cities.`,
   );
   if (STRIKE_11N_CITIES_AS_OF > "2026-11-11") {
-    const pending = [...CITIES.flatMap((c) => c.services.filter((s) => s.status === "pending").map((s) => `${c.key}/${s.id}`)), ...Object.values(STATE_SERVICES).filter((s) => s.status === "pending").map((s) => s.key)];
-    assert.deepEqual(pending, [], `the strike is past on ${STRIKE_11N_CITIES_AS_OF} but these are still 'pending': record what was published`);
+    // 12 Nov 2026: an order not found by the last check (STRIKE_11N_CITIES_VERIFIED) is said as such, with no promise to add it.
+    for (const city of CITIES) {
+      for (const locale of LOCALES) {
+        const t = JSON.stringify(buildCityBody(city, STRIKE_11N_CITIES_AS_OF, STATE_SERVICES, locale));
+        assert.doesNotMatch(t, /aún no (se han )?publicad|encara no (s'han )?publicat|not published yet|añadiremos|pondremos|afegirem|posarem|we will add/i, `${city.key}/${locale}`);
+      }
+    }
   }
 });
 
@@ -620,7 +625,8 @@ test("ca and en: the lead and the minimum-services status follow the slots and t
       const allPending = buildCityBody(noneCity(city), "2026-11-09", pendingState, locale);
       assert.ok(bodySchema.safeParse(allPending).success, city.key);
       assert.match(lead0(allPending), r.pending, `${city.key}/${locale}`);
-      if (city.demos.length === 0) assert.match(trBody(city, locale), r.noDemo, `${city.key}/${locale}`);
+      if (city.demos.length === 0 && STRIKE_11N_CITIES_AS_OF <= "2026-11-11") assert.match(trBody(city, locale), r.noDemo, `${city.key}/${locale}`);
+      if (city.demos.length === 0 && STRIKE_11N_CITIES_AS_OF > "2026-11-11") assert.match(trBody(city, locale), /Sense convocatòria localitzada amb hora i lloc a |No demonstration with a time and place found in /, `${city.key}/${locale}`);
       assert.equal(JSON.stringify(buildCityBody(city, STRIKE_11N_CITIES_AS_OF, STATE_SERVICES, locale)), trJson(city, locale), `${city.key}/${locale}: not deterministic`);
     }
   }

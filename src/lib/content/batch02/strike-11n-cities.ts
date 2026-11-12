@@ -387,6 +387,14 @@ interface Ctx {
 const T = (c: Ctx, texts: Record<Locale, string>): string => texts[c.locale];
 
 const NOT_PUBLISHED: Record<Locale, string> = { es: "Aún no publicados", ca: "Encara no publicats", en: "Not published yet" };
+/** After the strike: what was not found is said as such, with no promise to add it. */
+const NOT_FOUND: Record<Locale, string> = { es: "No localizamos la orden publicada", ca: "No vam localitzar l'ordre publicada", en: "We found no published order" };
+/** Where the organisers announce the march; after the strike, without the promise to add it here. */
+const demoWhereFor = (c: Ctx, text: string) =>
+  c.phase === "past"
+    ? text.replace(/(?:[:;,]\s*|\.\s+)(?:en cuanto|cuando|tan bon punt|quan|as soon as|once|when)\b[^.]*\.\s*$/i, ".")
+    : text;
+const notPublished = (c: Ctx) => (c.phase === "past" ? NOT_FOUND : NOT_PUBLISHED)[c.locale];
 
 /** The convening organisations, as CCOO listed them on 19 Oct 2026. */
 const CALLED_BY: Record<Locale, string> = {
@@ -396,21 +404,28 @@ const CALLED_BY: Record<Locale, string> = {
 };
 
 /** "consultado el 6 de noviembre de 2026" */
-const checkedNote = (c: Ctx) => T(c, { es: `consultado ${c.on}`, ca: `consultat ${c.on}`, en: `checked ${c.on}` });
+const checkedNote = (c: Ctx) =>
+  c.phase === "past"
+    ? T(c, { es: `última consulta ${c.on}`, ca: `última consulta ${c.on}`, en: `last checked ${c.on}` })
+    : T(c, { es: `consultado ${c.on}`, ca: `consultat ${c.on}`, en: `checked ${c.on}` });
 
 /** "**Servicios mínimos:** …", published or pending, for one slot. */
 function msLine(c: Ctx, slot: MsSlot & { pending: string }): string {
   const label = T(c, { es: "**Servicios mínimos:**", ca: "**Serveis mínims:**", en: "**Minimum services:**" });
   return slot.status === "published" && slot.text
     ? `${label} ${slot.text}`
-    : `${label} ${T(c, { es: "aún no publicados", ca: "encara no publicats", en: "not published yet" })} (${checkedNote(c)}). ${slot.pending}`;
+    : c.phase === "past"
+      ? `${label} ${notPublished(c).toLowerCase()} (${checkedNote(c)}). ${demoWhereFor(c, slot.pending)}`
+      : `${label} ${T(c, { es: "aún no publicados", ca: "encara no publicats", en: "not published yet" })} (${checkedNote(c)}). ${slot.pending}`;
 }
 
 /** The same answer as plain text, for the FAQ. */
 function slotAnswer(c: Ctx, slot: MsSlot & { pending: string }, yes: string): string {
   return slot.status === "published" && slot.text
     ? `${yes} ${strip(slot.text)}`
-    : `${yes} ${T(c, {
+    : c.phase === "past"
+      ? `${yes} ${notPublished(c)} (${checkedNote(c)}). ${strip(demoWhereFor(c, slot.pending))}`
+      : `${yes} ${T(c, {
         es: "Los servicios mínimos aún no se han publicado",
         ca: "Els serveis mínims encara no s'han publicat",
         en: "The minimum services have not been published yet",
@@ -550,7 +565,9 @@ function keyFactItems(c: Ctx): { label: string; value: string }[] {
           ca: `Publicats (${checkedNote(c)}): mira la taula per serveis`,
           en: `Published (${checkedNote(c)}): see the table by service`,
         })
-    : c.state === "pending"
+    : c.phase === "past"
+      ? `${notPublished(c)} (${checkedNote(c)})`
+      : c.state === "pending"
       ? T(c, {
           es: `Aún no publicados (${checkedNote(c)}). Los fija ${city.authorityShort}`,
           ca: `Encara no publicats (${checkedNote(c)}). Els fixa ${city.authorityShort}`,
@@ -590,7 +607,7 @@ function keyFactItems(c: Ctx): { label: string; value: string }[] {
 
 function msTable(c: Ctx): Block {
   const { city } = c;
-  const np = NOT_PUBLISHED[c.locale];
+  const np = notPublished(c);
   const rows = [
     ...city.services.map((service) => [service.name, service.setBy, service.status === "published" && service.text ? service.text : np, service.where]),
     [
@@ -626,7 +643,9 @@ function msTable(c: Ctx): Block {
       en: ["Service", "Set by", "Minimum services", "Where to check"],
     }[c.locale],
     rows,
-    T(c, {
+    c.phase === "past"
+      ? T(c, { es: `Última consulta el ${c.checked}.`, ca: `Última consulta ${c.on}.`, en: `Last checked on ${c.checked}.` })
+      : T(c, {
       es: `Consultado el ${c.checked}. Cuando salga cada orden, la añadiremos a esta tabla con su enlace.`,
       ca: `Consultat ${c.on}. Quan surti cada ordre, l'afegirem a aquesta taula amb el seu enllaç.`,
       en: `Checked on ${c.checked}. When each order comes out, we will add it to this table with its link.`,
@@ -644,9 +663,9 @@ function msIntro(c: Ctx): string[] {
   if (c.state === "pending") {
     return [
       T(c, {
-        es: `**Aún no se han publicado.** El ${c.checked} no había en ${city.bulletin} ninguna orden de servicios mínimos para el 11 de noviembre, ni ninguna resolución del Ministerio de Transportes. Los de ${city.transportShort}, la sanidad, los colegios y la administración autonómica los fija ${city.authority}; los de los trenes de Renfe y los vuelos, el Ministerio de Transportes.`,
-        ca: `**Encara no s'han publicat.** ${cap(c.on)} no hi havia a ${city.bulletin} cap ordre de serveis mínims per a l'11 de novembre, ni cap resolució del Ministeri de Transports. Els ${deCa(city.transportShort)}, la sanitat, les escoles i l'administració autonòmica els fixa ${city.authority}; els dels trens de Renfe i els vols, el Ministeri de Transports.`,
-        en: `**Not published yet.** ${cap(c.on)} there was no minimum-services order for 11 November in ${city.bulletin}, and no Ministry of Transport resolution. Those for ${city.transportShort}, healthcare, schools and the regional administration are set by ${city.authority}; those for Renfe trains and flights, by the Ministry of Transport.`,
+        es: `**${c.phase === "past" ? "No localizamos ninguna orden publicada." : "Aún no se han publicado."}** El ${c.checked} no había en ${city.bulletin} ninguna orden de servicios mínimos para el 11 de noviembre, ni ninguna resolución del Ministerio de Transportes. Los de ${city.transportShort}, la sanidad, los colegios y la administración autonómica los fija ${city.authority}; los de los trenes de Renfe y los vuelos, el Ministerio de Transportes.`,
+        ca: `**${c.phase === "past" ? "No vam localitzar cap ordre publicada." : "Encara no s'han publicat."}** ${cap(c.on)} no hi havia a ${city.bulletin} cap ordre de serveis mínims per a l'11 de novembre, ni cap resolució del Ministeri de Transports. Els ${deCa(city.transportShort)}, la sanitat, les escoles i l'administració autonòmica els fixa ${city.authority}; els dels trens de Renfe i els vols, el Ministeri de Transports.`,
+        en: `**${c.phase === "past" ? "We found no published order." : "Not published yet."}** ${cap(c.on)} there was no minimum-services order for 11 November in ${city.bulletin}, and no Ministry of Transport resolution. Those for ${city.transportShort}, healthcare, schools and the regional administration are set by ${city.authority}; those for Renfe trains and flights, by the Ministry of Transport.`,
       }),
       law,
     ];
@@ -788,11 +807,19 @@ function faqItems(c: Ctx): { question: string; answer: string }[] {
   const { city } = c;
   const n = city.name;
   const loc = c.locale;
-  const pendingCheck = T(c, {
-    es: `aún no se han publicado (consultado el ${c.checked})`,
-    ca: `encara no s'han publicat (${checkedNote(c)})`,
-    en: `have not been published yet (${checkedNote(c)})`,
-  });
+  const pendingCheck =
+    c.phase === "past"
+      ? T(c, {
+          es: `no los localizamos publicados (${checkedNote(c)})`,
+          ca: `no els vam localitzar publicats (${checkedNote(c)})`,
+          en: `were not found published (${checkedNote(c)})`,
+        })
+      : T(c, {
+          es: `aún no se han publicado (consultado el ${c.checked})`,
+          ca: `encara no s'han publicat (${checkedNote(c)})`,
+          en: `have not been published yet (${checkedNote(c)})`,
+        });
+  const willAdd = (text: string) => (c.phase === "past" ? "" : text);
   const asked = city.services.filter((service) => service.question);
   const schools = byGroup(city, "schools");
   const publishedNames = andJoin(
@@ -807,9 +834,9 @@ function faqItems(c: Ctx): { question: string; answer: string }[] {
       answer:
         c.state === "pending"
           ? T(c, {
-              es: `Los servicios esenciales, como el transporte público, la sanidad y los colegios, funcionan con los servicios mínimos que fije el gobierno del que dependen. Los de ${n} ${pendingCheck}: los de ${city.transportShort}, sanidad y colegios los fija ${strip(city.authority)}, y los de los trenes de Renfe y los vuelos, el Ministerio de Transportes. Los pondremos en esta página en cuanto salgan.`,
-              ca: `Els serveis essencials, com el transport públic, la sanitat i les escoles, funcionen amb els serveis mínims que fixi el govern del qual depenen. Els de ${n} ${pendingCheck}: els ${deCa(city.transportShort)}, sanitat i escoles els fixa ${strip(city.authority)}, i els dels trens de Renfe i els vols, el Ministeri de Transports. Els posarem en aquesta pàgina tan bon punt surtin.`,
-              en: `Essential services such as public transport, healthcare and schools run with the minimum services set by the government they depend on. ${n}'s ${pendingCheck}: those for ${city.transportShort}, healthcare and schools are set by ${strip(city.authority)}, and those for Renfe trains and flights by the Ministry of Transport. We will add them to this page as soon as they are out.`,
+              es: `Los servicios esenciales, como el transporte público, la sanidad y los colegios, funcionan con los servicios mínimos que fije el gobierno del que dependen. Los de ${n} ${pendingCheck}: los de ${city.transportShort}, sanidad y colegios los fija ${strip(city.authority)}, y los de los trenes de Renfe y los vuelos, el Ministerio de Transportes.${willAdd(" Los pondremos en esta página en cuanto salgan.")}`,
+              ca: `Els serveis essencials, com el transport públic, la sanitat i les escoles, funcionen amb els serveis mínims que fixi el govern del qual depenen. Els de ${n} ${pendingCheck}: els ${deCa(city.transportShort)}, sanitat i escoles els fixa ${strip(city.authority)}, i els dels trens de Renfe i els vols, el Ministeri de Transports.${willAdd(" Els posarem en aquesta pàgina tan bon punt surtin.")}`,
+              en: `Essential services such as public transport, healthcare and schools run with the minimum services set by the government they depend on. ${n}'s ${pendingCheck}: those for ${city.transportShort}, healthcare and schools are set by ${strip(city.authority)}, and those for Renfe trains and flights by the Ministry of Transport.${willAdd(" We will add them to this page as soon as they are out.")}`,
             })
           : T(c, {
               es: `Los servicios esenciales funcionan con servicios mínimos. Los que ya se han publicado están en la tabla de esta página, servicio por servicio, con el enlace a cada orden: ${publishedNames}.`,
@@ -867,9 +894,9 @@ function faqItems(c: Ctx): { question: string; answer: string }[] {
         city.demos.length > 0
           ? city.demos.map(strip).join(" ")
           : T(c, {
-              es: `El ${c.checked} los convocantes aún no habían publicado la hora ni el lugar de la manifestación en ${n}. ${strip(city.demoWhere)}`,
-              ca: `${cap(c.on)} els convocants encara no havien publicat l'hora ni el lloc de la manifestació a ${n}. ${strip(city.demoWhere)}`,
-              en: `${cap(c.on)} the organisers had not yet published the time or place of the demonstration in ${n}. ${strip(city.demoWhere)}`,
+              es: `El ${c.checked} los convocantes aún no habían publicado la hora ni el lugar de la manifestación en ${n}. ${strip(demoWhereFor(c, city.demoWhere))}`,
+              ca: `${cap(c.on)} els convocants encara no havien publicat l'hora ni el lloc de la manifestació a ${n}. ${strip(demoWhereFor(c, city.demoWhere))}`,
+              en: `${cap(c.on)} the organisers had not yet published the time or place of the demonstration in ${n}. ${strip(demoWhereFor(c, city.demoWhere))}`,
             }),
     },
     {
@@ -955,7 +982,9 @@ export function buildCityBody(
 ): Block[] {
   const lc = localized ? city : localizeCity(city, locale);
   const ls = localized ? state : localizeState(state, locale);
-  const checked = dateYear(asOf, locale);
+  // After the strike nobody re-read the orders: the date shown stays the last real check.
+  const checkedOn = strikePhase(asOf) === "past" && STRIKE_11N_CITIES_VERIFIED < asOf ? STRIKE_11N_CITIES_VERIFIED : asOf;
+  const checked = dateYear(checkedOn, locale);
   const c: Ctx = {
     city: lc,
     locale,
@@ -986,11 +1015,11 @@ export function buildCityBody(
   blocks.push(
     callout(
       "official",
-      verifiedLine(locale, asOf),
+      verifiedLine(locale, checkedOn),
       T(c, {
-        es: `Solo ponemos lo que publican el BOE, ${lc.bulletin}, los gobiernos, los operadores de transporte y los sindicatos convocantes, y no lo que adelanta la prensa.${c.state === "published" ? "" : " Cuando salgan los servicios mínimos que faltan, los añadiremos a la tabla con el enlace a la orden."}`,
-        ca: `Només hi posem el que publiquen el BOE, ${lc.bulletin}, els governs, els operadors de transport i els sindicats convocants, i no el que avança la premsa.${c.state === "published" ? "" : " Quan surtin els serveis mínims que falten, els afegirem a la taula amb l'enllaç a l'ordre."}`,
-        en: `We only include what the BOE, ${lc.bulletin}, the governments, the transport operators and the unions calling the strike publish, not what the press reports in advance.${c.state === "published" ? "" : " When the missing minimum services come out, we will add them to the table with a link to the order."}`,
+        es: `Solo ponemos lo que publican el BOE, ${lc.bulletin}, los gobiernos, los operadores de transporte y los sindicatos convocantes, y no lo que adelanta la prensa.${c.state === "published" || c.phase === "past" ? "" : " Cuando salgan los servicios mínimos que faltan, los añadiremos a la tabla con el enlace a la orden."}`,
+        ca: `Només hi posem el que publiquen el BOE, ${lc.bulletin}, els governs, els operadors de transport i els sindicats convocants, i no el que avança la premsa.${c.state === "published" || c.phase === "past" ? "" : " Quan surtin els serveis mínims que falten, els afegirem a la taula amb l'enllaç a l'ordre."}`,
+        en: `We only include what the BOE, ${lc.bulletin}, the governments, the transport operators and the unions calling the strike publish, not what the press reports in advance.${c.state === "published" || c.phase === "past" ? "" : " When the missing minimum services come out, we will add them to the table with a link to the order."}`,
       }),
     ),
   );
@@ -1042,9 +1071,9 @@ export function buildCityBody(
     blocks.push(
       ...paras(
         T(c, {
-          es: `**Aún sin convocatoria con hora y lugar en ${n}.** El ${c.checked}, los convocantes no habían publicado en sus webs la hora y el lugar de la manifestación en ${n}. ${lc.demoWhere}`,
-          ca: `**Encara sense convocatòria amb hora i lloc a ${n}.** ${cap(c.on)}, els convocants no havien publicat als seus webs l'hora i el lloc de la manifestació a ${n}. ${lc.demoWhere}`,
-          en: `**No demonstration with a time and place in ${n} yet.** ${cap(c.on)}, the organisers had not published the time and place of the demonstration in ${n} on their websites. ${lc.demoWhere}`,
+          es: `**${c.phase === "past" ? "Sin convocatoria localizada con hora y lugar en" : "Aún sin convocatoria con hora y lugar en"} ${n}.** El ${c.checked}, los convocantes no habían publicado en sus webs la hora y el lugar de la manifestación en ${n}. ${demoWhereFor(c, lc.demoWhere)}`,
+          ca: `**${c.phase === "past" ? "Sense convocatòria localitzada amb hora i lloc a" : "Encara sense convocatòria amb hora i lloc a"} ${n}.** ${cap(c.on)}, els convocants no havien publicat als seus webs l'hora i el lloc de la manifestació a ${n}. ${demoWhereFor(c, lc.demoWhere)}`,
+          en: `**${c.phase === "past" ? `No demonstration with a time and place found in ${n}.` : `No demonstration with a time and place in ${n} yet.`}** ${cap(c.on)}, the organisers had not published the time and place of the demonstration in ${n} on their websites. ${demoWhereFor(c, lc.demoWhere)}`,
         }),
       ),
     );
