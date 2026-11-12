@@ -25,6 +25,8 @@ export const GUIDES = {
   reis: { ca: "/ca/guies/cavalcada-de-reis-barcelona/", es: "/es/guias/cabalgata-de-reyes-barcelona/", en: "/en/guides/three-kings-parade-barcelona/" },
   // 5 Nov 2026: school free days 2026-27 per town (is there school on Monday 7 December?).
   schoolFreeDays: { ca: "/ca/guies/dies-lliure-disposicio-escoles/", es: "/es/guias/dias-libre-disposicion-colegios/", en: "/en/guides/catalonia-school-free-days/" },
+  // 12 Nov 2026: Spain-wide December bridge (where Monday 7 December is a holiday), for the date pages read outside Catalonia.
+  decemberBridgeSpain: { ca: "/ca/guies/pont-desembre-espanya/", es: "/es/guias/puente-diciembre-espana/", en: "/en/guides/december-holidays-spain/" },
 } as const satisfies Record<string, Record<DateLocale, string>>;
 
 export type GuideKey = keyof typeof GUIDES;

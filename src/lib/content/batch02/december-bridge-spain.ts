@@ -6,6 +6,7 @@ import { BOE_2027, REGIONS, REGION_NAME, boeRegionsOn, type Region } from "@/lib
 import { joinList } from "@/lib/programmatic/holidays/names";
 import { COMMUNITIES_AZ, names } from "@/lib/programmatic/spain-2027/communities";
 import { communityPath, spainBridgesPath, spainHubPath } from "@/lib/programmatic/spain-2027/paths";
+import { HUB_PATHS as SCHOOL_HUB_PATHS } from "@/lib/content/school-spain/regions";
 
 import { LOCAL_MONDAY_7, runWords, type Run } from "./december-bridge";
 import { SHOPS } from "./shops";
@@ -403,7 +404,13 @@ export const SPAIN_BRIDGE_META: Record<Locale, { path: string; title: string; se
   es: {
     path: "guias/puente-diciembre-espana",
     title: "Puente de diciembre 2026 en España: dónde es festivo el lunes 7, y Navidad y Reyes por comunidad",
-    seoTitle: `Puente de diciembre 2026: lunes 7 festivo en ${communities(MONDAY_7).length} comunidades`,
+    // 12 Nov 2026 (docs/SEO_EXPERIMENTS.md): the page's clicks come from the
+    // 7 December queries, and the yes/no ones sit at 6-10 with ~1 % CTR
+    // ("el 7 de diciembre de 2026 es festivo" 362 impressions at 6.5,
+    // "es festivo el 7 de diciembre de 2026" 300 at 6.7). The title now asks
+    // them in their own words, like the EN edition. Was:
+    // "Puente de diciembre 2026: lunes 7 festivo en 9 comunidades".
+    seoTitle: `¿Es festivo el 7 de diciembre de 2026? Sí, en ${communities(MONDAY_7).length} comunidades`,
     seoDescription: `El lunes 7 de diciembre de 2026 es festivo en ${monday7Short("es")}.`,
     excerpt: "Dónde es festivo el lunes 7 de diciembre de 2026, comunidad por comunidad, los festivos de Navidad y Reyes, y cuántos días hay que pedir para cada puente.",
   },
@@ -428,6 +435,21 @@ export const SPAIN_BRIDGE_META: Record<Locale, { path: string; title: string; se
 /* -------------------------------------------------------------------------- */
 
 const RELATED = ["loteriaNadal", "decemberBridge", "workCalendar", "bridges2027", "holidayToday"] as const;
+
+/**
+ * 12 Nov 2026: "vacaciones de Navidad 2026" queries (about 4,000 impressions
+ * in 14 days) land on the school calendar pages of each community at 6-9;
+ * this page gets ~2,000 impressions a day, so it links their hub. No date
+ * here: the school holidays are on the hub, each with its community's order.
+ */
+function schoolChristmasLine(locale: Locale): string {
+  const href = `/${locale}/${SCHOOL_HUB_PATHS[locale]}/`;
+  return {
+    es: `**¿Y las vacaciones escolares de Navidad?** No siguen estos festivos: las fija cada comunidad en su calendario escolar, y cambian de una a otra. Las de todas están en [el calendario escolar 2026-2027 por comunidades](${href}).`,
+    ca: `Les vacances escolars de Nadal no segueixen aquests festius: les fixa cada comunitat al seu calendari escolar i canvien d'una a una altra. Les de totes són a [el calendari escolar 2026-2027 per comunitats](${href}).`,
+    en: `**School Christmas holidays** do not follow these public holidays: each region sets them in its school calendar, and they differ from one to the next. All of them are in [Spain's 2026-27 school calendar by region](${href}).`,
+  }[locale];
+}
 
 /** The 2027 pages of every community, for the Spanish edition (code routes, Spanish only). */
 function communityLinks2027(): string {
@@ -494,6 +516,7 @@ function bodyEs(): Block[] {
       `El viernes 25 de diciembre es festivo en ${whereWords(SPAIN_DAYS.christmas, L)}, así que el fin de semana de Navidad tiene ${christmas.run.days} días, ${runWords(christmas.run, L)}, sin pedir nada.`,
       `**¿Es festivo el 26 de diciembre?** Solo en ${proseList(stStephen, L)}, por San Esteban (en el Valle de Arán, no: allí lo cambian por el 17 de junio). En 2026 cae en sábado, de modo que solo cambia algo para quien trabaja los sábados, y no pasa al lunes 28: ninguna comunidad lo ha trasladado.`,
       "**¿Y el 24 y el 31?** Nochebuena y Nochevieja no son festivos en ninguna comunidad: no están en la relación oficial de fiestas laborales. Si los tienes libres, es por tu convenio o por tu empresa.",
+      schoolChristmasLine(L),
     ),
     ...h2(
       "Año Nuevo y Reyes 2027: el 1 en viernes, el 6 en miércoles",
@@ -579,6 +602,7 @@ function bodyCa(): Block[] {
     ...paras(
       `A Navarra, el ${weekdayDate(SPAIN_DAYS.navarra, L)}, Sant Francesc Xavier, és festiu a tota la comunitat (festa local comuna a tots els municipis, Resolución 390/2025): demanant el divendres 4 i el dilluns 7, surten ${navarra.run.days} dies, ${runWords(navarra.run, L)}.`,
       `Per Reis, el 6 de gener de 2027 cau en dimecres i és festiu a tot Espanya: demanant el dilluns 4 i el dimarts 5 surten ${reyes.run.days} dies seguits, ${runWords(reyes.run, L)}.`,
+      schoolChristmasLine(L),
     ),
     ...trafficBlocks("spain", "ca"),
     ...h2(
@@ -650,6 +674,7 @@ function bodyEn(): Block[] {
       "Christmas, New Year and Epiphany",
       `Christmas Day is a Friday and a holiday everywhere, so Christmas weekend is ${christmas.run.days} days, ${runWords(christmas.run, L)}. **26 December** (St Stephen's Day) is a holiday only in ${proseList(stStephen, L)} (not in Aran), and as it falls on a Saturday it is not moved to the Monday. Christmas Eve and New Year's Eve are not public holidays anywhere in Spain.`,
       `New Year's Day 2027 is a Friday and a holiday everywhere: ${newYear.run.days} days, ${runWords(newYear.run, L)}. **Epiphany (6 January 2027)** is a Wednesday and a holiday in every region: no region swapped it, according to the 2027 list. Taking Monday 4 and Tuesday 5 off gives ${reyes.run.days} days in a row, ${runWords(reyes.run, L)}; taking Thursday 7 and Friday 8 off gives ${reyesWeekend.run.days} days, ${runWords(reyesWeekend.run, L)}.`,
+      schoolChristmasLine(L),
     ),
     ...trafficBlocks("spain", "en"),
     ...h2(

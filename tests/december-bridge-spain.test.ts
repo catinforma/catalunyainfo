@@ -4,7 +4,8 @@ import { join } from "node:path";
 import { test } from "node:test";
 
 import { bodySchema, bodyToPlainText, wordCount, type Block } from "../src/lib/content/blocks.ts";
-import { DECEMBER_BRIDGE, MONDAY_7_REGIONS, SIBLING_PATHS } from "../src/lib/content/batch02/december-bridge.ts";
+import { DECEMBER_BRIDGE, MONDAY_7_REGIONS, OUTSIDE_CATALONIA_TITLE, SIBLING_PATHS } from "../src/lib/content/batch02/december-bridge.ts";
+import { HUB_PATHS as SCHOOL_HUB_PATHS } from "../src/lib/content/school-spain/regions.ts";
 import {
   COLUMN_DAYS,
   DECEMBER_BRIDGE_SPAIN,
@@ -191,6 +192,8 @@ test("days off and leave are computed per community, and every leave day is a wo
 const PUBLISHED = new Set([
   ...[...Object.values(B2_PATHS), ...Object.values(ARTICLE_PATHS), ...Object.values(SIBLING_PATHS)].flatMap((paths) => LOCALES.map((locale) => `/${locale}/${paths[locale]}/`)),
   ...spainPaths(),
+  // 12 Nov 2026: the school Christmas line links the Spain-wide school calendar hub.
+  ...LOCALES.map((locale) => `/${locale}/${SCHOOL_HUB_PATHS[locale]}/`),
 ]);
 
 test("three valid editions on the registry paths, the Spanish one the fullest", () => {
@@ -213,7 +216,8 @@ test("three valid editions on the registry paths, the Spanish one the fullest", 
 
 test("titles: the year, the day and the answer in under 60 characters; descriptions list the ten", () => {
   const title: Record<Locale, RegExp> = {
-    es: /^Puente de diciembre 2026: lunes 7 festivo en 9 comunidades$/,
+    // 12 Nov 2026: the yes/no question in the queries' own words (docs/SEO_EXPERIMENTS.md).
+    es: /^¿Es festivo el 7 de diciembre de 2026\? Sí, en 9 comunidades$/,
     ca: /^Pont de desembre 2026: dilluns 7 festiu en 9 comunitats$/,
     en: /^Is 7 December 2026 a holiday in Spain\? Yes, in 9 regions$/,
   };
@@ -261,7 +265,16 @@ test("cross-links: the Spain page sends Catalan readers to the Catalan page (and
     const catalan = `](/${locale}/${B2_PATHS.decemberBridge[locale]}/)`;
     assert.ok(json(locale).includes(catalan), `spain -> catalan ${locale}`);
     const spain = `](/${locale}/${B2_PATHS.decemberBridgeSpain[locale]}/)`;
-    assert.equal(JSON.stringify(DECEMBER_BRIDGE.editions[locale].blocks).split(spain).length - 1, 1, `catalan -> spain ${locale}: exactly one link`);
+    // The box sits under the answer, before the first section, and names the ten from the BOE list.
+    const blocks = DECEMBER_BRIDGE.editions[locale].blocks;
+    const box = blocks.findIndex((b) => b.type === "callout" && b.title === OUTSIDE_CATALONIA_TITLE[locale]);
+    const firstHeading = blocks.findIndex((b) => b.type === "heading");
+    assert.ok(box > 0 && box < firstHeading, `${locale}: box at ${box}, first heading at ${firstHeading}`);
+    const boxText = JSON.stringify(blocks[box]);
+    assert.ok(boxText.includes(spain), `${locale}: the box links the Spain page`);
+    for (const name of MONDAY_7_REGIONS[locale]) assert.ok(boxText.includes(name), `${locale}: box misses ${name}`);
+    // Two since 12 Nov 2026: the "not in Catalonia?" box under the answer and the "rest of Spain" section.
+    assert.equal(JSON.stringify(DECEMBER_BRIDGE.editions[locale].blocks).split(spain).length - 1, 2, `catalan -> spain ${locale}: two links`);
   }
   assert.ok(json("es").includes("](/es/festivos/2027/)"), "es -> Spain 2027 hub");
   assert.ok(json("es").includes("](/es/festivos/2027/puentes/)"), "es -> Spain 2027 bridges");

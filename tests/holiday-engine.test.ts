@@ -1331,6 +1331,7 @@ test("links go to the published guides", () => {
     assert.equal(GUIDES.barcelonaDecember[locale], b2("barcelonaDecember", locale));
     assert.equal(GUIDES.grossa[locale], b2("grossa", locale));
     assert.equal(GUIDES.reis[locale], b2("reis", locale));
+    assert.equal(GUIDES.decemberBridgeSpain[locale], b2("decemberBridgeSpain", locale));
   }
   const school = readFileSync(join(ROOT, "src/lib/content/school/publish.ts"), "utf8");
   for (const locale of ["ca", "es", "en"] as const) assert.ok(school.includes(`path: "${GUIDES.school[locale].slice(4, -1)}"`), locale);
@@ -1424,4 +1425,12 @@ test("town pages link the work and school calendars with the year in the anchor"
   assert.match(page, /municipalityFaq\(/);
   const routes = readFileSync(join(ROOT, "src/components/programmatic/holidays/routes.tsx"), "utf8");
   assert.match(routes, /faqSchema\(/);
+});
+
+test("December date pages link the Spain-wide bridge page (12 Nov 2026: national queries land on them)", () => {
+  for (const locale of ["ca", "es", "en"] as const) {
+    for (const iso of ["2026-12-07", "2026-12-08", "2026-12-25", "2026-12-26"] as const) {
+      assert.ok(dateContent(iso, locale).guides.includes("decemberBridgeSpain"), `${iso} ${locale}`);
+    }
+  }
 });

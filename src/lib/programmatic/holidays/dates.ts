@@ -635,7 +635,7 @@ export function dateContent(iso: DatePage, locale: DateLocale): DateContent {
           ],
         },
       ],
-      guides: ["schoolFreeDays", "decemberBridge", "shops", "school", "metroHours", "localHolidays", "workCalendar"],
+      guides: ["schoolFreeDays", "decemberBridge", "decemberBridgeSpain", "shops", "school", "metroHours", "localHolidays", "workCalendar"],
     };
   }
 
@@ -698,7 +698,7 @@ export function dateContent(iso: DatePage, locale: DateLocale): DateContent {
         },
         { title: L("Transport", "Transporte", "Getting around"), paragraphs: [metroPointer] },
       ],
-      guides: ["decemberBridge", "schoolFreeDays", "shops", "metroHours", "holidayToday", "workCalendar"],
+      guides: ["decemberBridge", "decemberBridgeSpain", "schoolFreeDays", "shops", "metroHours", "holidayToday", "workCalendar"],
     };
   }
 
@@ -774,7 +774,7 @@ export function dateContent(iso: DatePage, locale: DateLocale): DateContent {
         { title: L("Escoles", "Escuelas", "Schools"), paragraphs: [schoolChristmas] },
         { title: L("Transport", "Transporte", "Getting around"), paragraphs: [metroPointer] },
       ],
-      guides: ["christmasTraditions", "christmasBarcelona", "shops", "metroHours", "workCalendar", "holidayToday"],
+      guides: ["christmasTraditions", "christmasBarcelona", "shops", "decemberBridgeSpain", "metroHours", "workCalendar", "holidayToday"],
     };
   }
 

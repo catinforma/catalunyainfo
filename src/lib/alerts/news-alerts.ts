@@ -268,8 +268,31 @@ export function buildNewsAlerts(
         en: `General election ${daysPhrase([electionDay], "en")}: how and where to vote`,
       },
     },
+    {
+      // 12 Nov 2026 (docs/SEO_EXPERIMENTS.md): after the election the strip
+      // points at the next date most people search, the December bridge, on
+      // the Spain-wide page (it sends Catalan readers on to the Catalan one).
+      id: "december-bridge",
+      start: endOfMadridDay(electionDay),
+      end: endOfMadridDay(DECEMBER_BRIDGE_LAST_DAY),
+      target: "decemberBridgeSpain",
+      text: {
+        ca: `Pont de desembre: on és festiu ${daysPhrase([DECEMBER_BRIDGE_MONDAY], "ca")}`,
+        es: `Puente de diciembre: dónde es festivo ${daysPhrase([DECEMBER_BRIDGE_MONDAY], "es")}`,
+        en: `December bridge: where it is a holiday ${daysPhrase([DECEMBER_BRIDGE_MONDAY], "en")}`,
+      },
+    },
   ]);
 }
+
+/**
+ * The December bridge line (12 Nov 2026): Monday 7 December 2026 is the day
+ * that differs between communities (BOE-A-2025-21667), and the line runs to
+ * the end of Tuesday 8, the Immaculate Conception. A test holds both to the
+ * Spain-wide page's own SPAIN_DAYS.
+ */
+export const DECEMBER_BRIDGE_MONDAY = "2026-12-07";
+export const DECEMBER_BRIDGE_LAST_DAY = "2026-12-08";
 
 /** The lines about what comes after 11N, in the order they run. */
 export const NEXT_ALERT_IDS = ["strike-rail-17n", "strike-renfe-23n", "strike-education-26n", "election-29n"] as const;

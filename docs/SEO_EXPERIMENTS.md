@@ -3550,3 +3550,82 @@ switch (empty the two arrays: a deploy, no republish).
 demand whatever the layout; the Renfe strike (17/19 Nov) and the education
 strike (26 Nov) rise in the same week; the header and homepage changes are
 sitewide, so they move the control family too.
+
+## 2026-11-12 — December bridge, Spain-wide: the 7 December yes/no title, the Catalan page hands national readers on, a strip line after 29N (deploy; groups `puente-diciembre-espana`, `puente-diciembre-espana-links`)
+
+**Why.** GSC 30 Oct–12 Nov (`snapshot.py page …`, a query→page breakdown):
+
+- Queries containing "7 de diciembre": 6,169 impressions, 266 clicks. 4,602 of
+  them land on the Spain-wide page `/es/guias/puente-diciembre-espana/` (5.0 %
+  at 6.3). Its clicks come from the "dónde / en qué comunidades" queries (at
+  2.6–4.3, CTR 10–37 %). The yes/no ones sit at 6–10 with about 1 %: "el 7 de
+  diciembre de 2026 es festivo" 362 at 6.5 (0.8 %), "es festivo el 7 de
+  diciembre de 2026" 300 at 6.7 (1.0 %), "el 7 de diciembre es festivo" 142
+  at 9.7, "7 de diciembre es festivo" 129 at 9.5 (0), "el lunes 7 de
+  diciembre es festivo" 124 at 8.5 (0), "lunes 7 de diciembre es festivo" 113
+  at 9.1 (0). About 2,100 impressions in 10 days, 3.5 weeks before the day.
+- Queries containing "puente": 7,538 impressions; 5,907 land on the *Catalan*
+  page `/es/guias/puente-diciembre-cataluna/` (1.5 % at 6.8) with national
+  wording: "puente de diciembre 2026" 1,018 at 6.8, "puente de la purisima
+  2026" 353 at 5.1 (0 clicks), "festivos diciembre 2026" 285 at 4.5 (0). The
+  Spain page gets 1,379 of them at 8.7 (0.4 %). The Catalan page linked the
+  Spain page once, in its sixth section.
+- 7 days to 12 Nov: Spain page ES 495 clicks / 13,473 impr. (3.7 %, 6.8);
+  Catalan page ES 146 / 8,285 (1.8 %, 6.1); `/es/festivos/dia/7-diciembre-2026/`
+  78 / 1,641 (4.8 %, 4.6); `/es/festivos/dia/8-diciembre-2026/` 1 / 488
+  (0.2 %, 6.3); EN Spain page 12 / 511; CA Spain page 6 / 101.
+
+**What changed.**
+
+1. **ES title of the Spain page** (`SPAIN_BRIDGE_META.es.seoTitle`, group
+   `puente-diciembre-espana`): "Puente de diciembre 2026: lunes 7 festivo en
+   9 comunidades" → "¿Es festivo el 7 de diciembre de 2026? Sí, en 9
+   comunidades" (59 characters), the question the yes/no queries ask, as the
+   EN edition already does ("Is 7 December 2026 a holiday in Spain? Yes, in 9
+   regions"). H1, description (the ten places) and body unchanged; the H1
+   still says "Puente de diciembre 2026". CA title kept (101 impressions).
+   Not in any title window (the page is new since 6 Nov and was not in the
+   6 or 11 Nov sweeps).
+2. **Spain page body, all three editions**: one sentence in the Christmas
+   section linking the Spain-wide school calendar hub ("vacaciones de Navidad
+   2026": ~4,000 impressions in 14 days on the community school pages at
+   6–9, CTR 0.1–0.6 %). No date in the sentence.
+3. **Catalan bridge page, ca/es/en** (`decemberBridge`, group
+   `puente-diciembre-espana-links`, or `pont-desembre` / `lliure-disposicio-links`):
+   an "¿No vives en Cataluña?" box right after the "De dónde salen estas
+   fechas" note: where Monday 7 is a holiday (the BOE's ten, same list as the
+   "rest of Spain" section) and a link to the Spain page. Title and
+   description untouched (11 Nov window, day 7 = 18 Nov).
+4. **Date pages** (deploy only): 7, 8, 25 and 26 December 2026 (ca/es/en)
+   list the Spain page among their guides ("Dónde es festivo el 7 de diciembre
+   en España, comunidad por comunidad").
+5. **Sitewide strip** (deploy only): a line "Puente de diciembre: dónde es
+   festivo el lunes 7 de diciembre" (ca/en alike) from 30 Nov 00:00 (the end
+   of election day) to the end of 8 Dec, linking the Spain page. Static pages
+   carry it only after a deploy on or after 30 Nov.
+
+**Facts.** No new fact: the ten places come from BOE-A-2025-21667 (already
+in `boe-2026.ts` and `MONDAY_7_REGIONS`, read 6 Nov and 27 Oct 2026); the
+school sentence names no date.
+
+**Confounders.** The Spain page and the Catalan page are both in the
+answer-first first group (12 Nov, review 19 Nov): leave the ES Spain page out
+of that review's CTR comparison, or read it against this entry. The Catalan
+ES page's 11 Nov retitle is still in its window: the new box is body only and
+the first paragraph is unchanged. Demand rises steeply into 4–8 Dec, so
+compare CTR at equal position, not clicks.
+
+**Prediction (day 7 = 19 Nov if deployed 12 Nov, then 2 Dec).** The ES Spain
+page's yes/no queries ("es festivo el 7 de diciembre…", "el 7 de diciembre
+de 2026 es festivo", "lunes 7 de diciembre es festivo") reach CTR ≥ 3 % at
+position ≤ 7 (from ~1 % at 6.5–9.7), while the "dónde / en qué comunidades"
+queries keep CTR ≥ 10 %. The Spain page's share of "puente de diciembre
+2026" impressions grows against the Catalan page's.
+
+**Revert rule (19 Nov).** `snapshot.py page /es/guias/puente-diciembre-espana/ 7`
+against the 7-day baseline above. Revert the ES title (restore the "Was:"
+string in the code comment and the test) if page CTR falls at equal or better
+position, or if the "dónde / en qué comunidades" queries drop below 6 % CTR.
+The box, the links and the strip line stay (body and links only).
+
+**Outcome:** _pending_
