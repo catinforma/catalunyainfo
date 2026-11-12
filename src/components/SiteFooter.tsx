@@ -7,6 +7,7 @@ import { LEGAL_KEYS, legalPath, sectionPath } from "@/lib/i18n/routes";
 import type { Locale } from "@/lib/i18n/config";
 import { SITE } from "@/lib/site";
 import { Wordmark } from "@/components/Wordmark";
+import { FollowChannelLink } from "@/components/share/FollowChannel";
 
 /** Sections the footer may list. Empty ones are dropped, like in the header. */
 const FOOTER_SECTIONS = ["destinations", "guides", "events", "routes", "news"] as const;
@@ -28,6 +29,9 @@ export async function SiteFooter({ locale }: { locale: Locale }) {
           <Wordmark href={`/${locale}/`} />
           <p className="ci-measure mt-3 text-sm text-[var(--color-muted)]">
             {t.footer.editorialNote}
+          </p>
+          <p className="mt-4 text-sm">
+            <FollowChannelLink locale={locale} />
           </p>
         </div>
 

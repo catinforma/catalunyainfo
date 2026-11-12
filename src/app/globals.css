@@ -605,6 +605,47 @@
     color: var(--color-ink-soft);
   }
 
+  /* WhatsApp channel: end-of-article box and footer link (FollowChannel.tsx). */
+  .ci-follow {
+    border: 1px solid var(--color-rule);
+    border-left: 4px solid #25d366;
+    border-radius: var(--radius-sm);
+    background: var(--color-surface);
+    padding: 1rem 1.25rem;
+  }
+  .ci-follow-title {
+    font-weight: 600;
+    margin: 0;
+  }
+  .ci-follow-text {
+    margin: 0.25rem 0 0.75rem;
+    font-size: 0.9rem;
+    color: var(--color-ink-soft);
+  }
+  .ci-follow-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    min-height: 2.75rem;
+    padding: 0.5rem 1rem;
+    border-radius: 999px;
+    background: #1a7f45;
+    color: #fff;
+    font-weight: 600;
+    text-decoration: none;
+  }
+  .ci-follow-button:hover,
+  .ci-follow-button:focus-visible {
+    background: #14683a;
+    color: #fff;
+  }
+  .ci-follow-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    min-height: 1.5rem;
+  }
+
   /* Homepage: the most-searched utilities under the title (HomeTopTools). */
   .ci-home-top {
     margin-top: 1rem;
