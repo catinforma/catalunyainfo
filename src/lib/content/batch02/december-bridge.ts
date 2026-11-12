@@ -392,6 +392,30 @@ function optionTable(locale: Locale): Block {
   return table(caption, headers, optionRows(locale), note);
 }
 
+/**
+ * 12 Nov 2026: the Spanish edition ranks 4-7 for Spain-wide queries with no
+ * place name ("puente de diciembre 2026" 1,018 impressions in 10 days at 6.8,
+ * "puente de la purisima 2026" 353 at 5.1, "festivos diciembre 2026" 285 at
+ * 4.5, almost no clicks), and its only link to the Spain-wide page sat in the
+ * sixth section. Readers outside Catalonia get that link right under the
+ * answer. Same facts as the "rest of Spain" section (BOE-A-2025-21667).
+ */
+export const OUTSIDE_CATALONIA_TITLE: Record<Locale, string> = {
+  ca: "No vius a Catalunya?",
+  es: "¿No vives en Cataluña?",
+  en: "Not in Catalonia?",
+};
+
+export function outsideCataloniaCallout(locale: Locale): Block {
+  const regions = joinList(MONDAY_7_REGIONS[locale], locale);
+  const text = {
+    ca: `A ${regions}, el dilluns 7 sí que és festiu i el pont del dissabte 5 al dimarts 8 surt sense demanar cap dia. Els festius de desembre, Nadal i Reis de cada comunitat són a ${b2link("decemberBridgeSpain", "ca", "el pont de desembre 2026 a Espanya")}.`,
+    es: `En ${regions}, el lunes 7 sí es festivo y el puente del sábado 5 al martes 8 sale sin pedir ningún día. Los festivos de diciembre, Navidad y Reyes de cada comunidad están en ${b2link("decemberBridgeSpain", "es", "el puente de diciembre 2026 en España")}.`,
+    en: `In ${regions}, Monday the 7th is a public holiday, so the Saturday 5 to Tuesday 8 break comes without booking a day. Every region's December, Christmas and Epiphany holidays are in ${b2link("decemberBridgeSpain", "en", "December 2026 holidays in Spain")}.`,
+  }[locale];
+  return callout("info", OUTSIDE_CATALONIA_TITLE[locale], text);
+}
+
 export function buildDecemberBridgeBody(locale: Locale): Block[] {
   const regions = joinList(MONDAY_7_REGIONS[locale], locale);
   const n = LOCAL_MONDAY_7.municipalities;
@@ -416,6 +440,7 @@ export function buildDecemberBridgeBody(locale: Locale): Block[] {
         "D'on surten aquestes dates",
         "Del calendari oficial de festes laborals del 2026, l'Ordre EMT/66/2025 (DOGC del 6 de maig de 2025), que fixa dotze festius a tot Catalunya; del desembre, només el 8, el 25 i el 26. L'hem tornat a llegir al DOGC el 26 d'octubre de 2026 i no ha estat modificada.",
       ),
+      outsideCataloniaCallout("ca"),
       ...h2(
         "Quins dies són festius al desembre del 2026 a Catalunya?",
         "Tres: el **dimarts 8** (la Immaculada), el **divendres 25** (Nadal) i el **dissabte 26** (Sant Esteve). A l'Aran, el 26 de desembre no és festiu: el substitueix la Festa d'Aran, el 17 de juny.",
@@ -504,6 +529,7 @@ export function buildDecemberBridgeBody(locale: Locale): Block[] {
         "De dónde salen estas fechas",
         "Del calendario oficial de fiestas laborales de 2026, la Orden EMT/66/2025 (DOGC del 6 de mayo de 2025), que fija doce festivos en toda Cataluña; de diciembre, solo el 8, el 25 y el 26. La hemos vuelto a leer en el DOGC el 26 de octubre de 2026 y no ha sido modificada.",
       ),
+      outsideCataloniaCallout("es"),
       ...h2(
         "¿Qué días son festivos en diciembre de 2026 en Cataluña?",
         "Tres: el **martes 8** (la Inmaculada), el **viernes 25** (Navidad) y el **sábado 26** (San Esteban). En Arán, el 26 de diciembre no es festivo: lo sustituye la Fiesta de Arán, el 17 de junio.",
@@ -591,6 +617,7 @@ export function buildDecemberBridgeBody(locale: Locale): Block[] {
       "Where these dates come from",
       "The official 2026 holiday calendar, Order EMT/66/2025 (DOGC, Catalonia's official gazette, 6 May 2025), which sets twelve holidays across Catalonia; in December, only the 8th, 25th and 26th. We re-read it in the DOGC on 26 October 2026; it has not been amended.",
     ),
+    outsideCataloniaCallout("en"),
     ...h2(
       "Which days are public holidays in Catalonia in December 2026?",
       "Three: **Tuesday 8** (Immaculate Conception), **Friday 25** (Christmas Day) and **Saturday 26** (Sant Esteve, St Stephen's Day). In Aran, 26 December is not a holiday: the Festa d'Aran on 17 June replaces it.",

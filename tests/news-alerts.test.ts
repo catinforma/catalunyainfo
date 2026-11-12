@@ -4,6 +4,8 @@ import { test } from "node:test";
 import { runInNewContext } from "node:vm";
 
 import {
+  DECEMBER_BRIDGE_LAST_DAY,
+  DECEMBER_BRIDGE_MONDAY,
   EXPIRED_STYLE_ID,
   NEWS_ALERTS,
   NEWS_ALERTS_LABEL,
@@ -22,6 +24,7 @@ import {
   nextDateLinks,
   type NewsAlert,
 } from "../src/lib/alerts/news-alerts.ts";
+import { DECEMBER_BRIDGE_SPAIN, SPAIN_DAYS } from "../src/lib/content/batch02/december-bridge-spain.ts";
 import { B2_PATHS, type B2Article, type B2Key } from "../src/lib/content/batch02/shared.ts";
 import { STRIKE_11N } from "../src/lib/content/batch02/strike-11n.ts";
 import { STRIKE_EDUCATION_GUIDE, STRIKE_RENFE_GUIDE } from "../src/lib/content/batch02/strike-guides.ts";
@@ -80,6 +83,8 @@ test("the alerts and their windows, as of 11 Nov 2026: from the 12th, what comes
       ["strike-renfe-23n", "strikeRenfe", "2026-11-20T00:00:00+01:00", "2026-11-24T00:00:00+01:00"],
       ["strike-education-26n", "strikeEducation", "2026-11-12T00:00:00+01:00", "2026-11-27T00:00:00+01:00"],
       ["election-29n", "voting", "2026-11-12T00:00:00+01:00", "2026-11-30T00:00:00+01:00"],
+      // 12 Nov 2026: the day after the election, the December bridge until the end of the 8th.
+      ["december-bridge", "decemberBridgeSpain", "2026-11-30T00:00:00+01:00", "2026-12-09T00:00:00+01:00"],
     ],
   );
   // The end of 11 Nov in Madrid is 23:00 UTC on the 11th.
@@ -93,6 +98,10 @@ test("the ends are derived from the source modules, not typed in", () => {
   assert.equal(byId("strike-renfe-23n").end, endOfMadridDay(lastDay(strike(STRIKE_RENFE_23_ID))));
   assert.equal(byId("strike-education-26n").end, endOfMadridDay(lastDay(strike(STRIKE_EDUCATION_ID))));
   assert.equal(byId("election-29n").end, endOfMadridDay(GENERAL_ELECTION_DAY));
+  assert.equal(byId("december-bridge").start, endOfMadridDay(GENERAL_ELECTION_DAY));
+  assert.equal(DECEMBER_BRIDGE_MONDAY, SPAIN_DAYS.monday);
+  assert.equal(DECEMBER_BRIDGE_LAST_DAY, SPAIN_DAYS.immaculada);
+  assert.equal(byId("december-bridge").end, endOfMadridDay(SPAIN_DAYS.immaculada));
 });
 
 test("a day called off in strikes.ts moves the end and the wording; a strike removed drops its line", () => {
@@ -105,7 +114,7 @@ test("a day called off in strikes.ts moves the end and the wording; a strike rem
   assert.equal(byId("strike-renfe-23n", buildNewsAlerts(edited)).start, "2026-11-18T00:00:00+01:00");
 
   const without = buildNewsAlerts(STRIKES.filter((s) => s.id !== STRIKE_11N_ID && s.id !== STRIKE_EDUCATION_ID));
-  assert.deepEqual(without.map((a) => a.id), ["strike-renfe", "strike-rail-17n", "strike-renfe-23n", "election-29n"]);
+  assert.deepEqual(without.map((a) => a.id), ["strike-renfe", "strike-rail-17n", "strike-renfe-23n", "election-29n", "december-bridge"]);
   // A strike whose days are all before the line's start drops its line.
   const early: Strike[] = STRIKES.map((s) => (s.id === STRIKE_EDUCATION_ID ? { ...s, dates: ["2026-11-11"] } : s));
   assert.ok(!buildNewsAlerts(early).some((a) => a.id === "strike-education-26n"));
@@ -135,7 +144,11 @@ test("each line is shown only inside its window, in Madrid time; each disappears
   assert.deepEqual(ids("2026-11-24T00:00:00+01:00"), ["strike-education-26n", "election-29n"]);
   assert.deepEqual(ids("2026-11-27T00:00:00+01:00"), ["election-29n"]);
   assert.deepEqual(ids("2026-11-29T23:59:59+01:00"), ["election-29n"]);
-  assert.deepEqual(ids("2026-11-30T00:00:00+01:00"), []);
+  assert.deepEqual(ids("2026-11-30T00:00:00+01:00"), ["december-bridge"]);
+  assert.deepEqual(ids("2026-12-08T23:59:59+01:00"), ["december-bridge"]);
+  assert.deepEqual(ids("2026-12-09T00:00:00+01:00"), []);
+  // Not on the page it links to.
+  assert.deepEqual(ids("2026-12-01T12:00:00+01:00", "es", "/es/guias/puente-diciembre-espana/"), []);
   // Never two lines to one page at once.
   for (let day = 4; day <= 30; day++) {
     const instant = at(`2026-11-${String(day).padStart(2, "0")}T12:00:00+01:00`);
@@ -177,6 +190,7 @@ const ARTICLES: Partial<Record<B2Key, { article: B2Article; constName: string }>
   strikeRenfe: { article: STRIKE_RENFE_GUIDE, constName: "STRIKE_RENFE_GUIDE" },
   strikeEducation: { article: STRIKE_EDUCATION_GUIDE, constName: "STRIKE_EDUCATION_GUIDE" },
   voting: { article: VOTING, constName: "VOTING" },
+  decemberBridgeSpain: { article: DECEMBER_BRIDGE_SPAIN, constName: "DECEMBER_BRIDGE_SPAIN" },
 };
 
 test("every line links to its guide's real path in the reader's language", () => {
@@ -235,6 +249,9 @@ test("the copy names the day, never 'today', and stays short and calm", () => {
   assert.equal(byId("election-29n").text.ca, "Eleccions generals el diumenge 29 de novembre: on i com votar");
   assert.equal(byId("election-29n").text.es, "Elecciones generales el domingo 29 de noviembre: dónde y cómo votar");
   assert.equal(byId("election-29n").text.en, "General election on Sunday 29 November: how and where to vote");
+  assert.equal(byId("december-bridge").text.ca, "Pont de desembre: on és festiu el dilluns 7 de desembre");
+  assert.equal(byId("december-bridge").text.es, "Puente de diciembre: dónde es festivo el lunes 7 de diciembre");
+  assert.equal(byId("december-bridge").text.en, "December bridge: where it is a holiday on Monday 7 December");
 
   for (const alert of NEWS_ALERTS) {
     for (const locale of LOCALES) {
@@ -292,7 +309,8 @@ test("the expiry script hides ended lines, and the strip once none is left", () 
   assert.match(after11.css ?? "", /\.ci-alerts:not\(:has\(li:not\(\[data-alert="strike-11n"\]\):not\(\[data-alert="strike-renfe"\]\)\)\)\{display:none\}/);
   assert.equal(after11.timers.length, 1);
 
-  const afterAll = runExpiry("2026-11-30T00:00:00+01:00");
+  // 12 Nov 2026: the December bridge line is the last one; it ends with 8 Dec.
+  const afterAll = runExpiry("2026-12-09T00:00:00+01:00");
   for (const alert of NEWS_ALERTS) assert.match(afterAll.css ?? "", new RegExp(`\\[data-alert="${alert.id}"\\]`));
   assert.deepEqual(afterAll.timers, []);
 });
