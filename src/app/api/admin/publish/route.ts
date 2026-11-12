@@ -58,6 +58,7 @@ import { STRIKE_11N } from "@/lib/content/batch02/strike-11n";
 import { STRIKE_EDUCATION_GUIDE, STRIKE_RENFE_GUIDE } from "@/lib/content/batch02/strike-guides";
 import { STRIKE_11N_CITY_ARTICLES } from "@/lib/content/batch02/strike-11n-cities";
 import { STRIKES_SPAIN_GUIDE } from "@/lib/content/batch02/strikes-spain";
+import { RAIL_17N_GUIDE } from "@/lib/content/batch02/strike-rail-17n";
 import { STRIKE_11N_SPAIN } from "@/lib/content/batch02/strike-11n-spain";
 import { PAY_DATES } from "@/lib/content/batch02/pay-dates";
 import { SHOPS_SPAIN_DECEMBER } from "@/lib/content/batch02/shops-spain-december";
@@ -249,9 +250,15 @@ export async function POST(request: Request) {
         await publishB2Article(STRIKE_RENFE_GUIDE),
         await publishB2Article(STRIKE_EDUCATION_GUIDE),
         await publishB2Article(STRIKES_SPAIN_GUIDE),
+        // 13 Nov 2026: the 17 Nov rail strike across Spain, built from the same entries.
+        await publishB2Article(RAIL_17N_GUIDE),
       );
     }
     if (wants("strike-renfe")) published.push(await publishB2Article(STRIKE_RENFE_GUIDE));
+    // 13 Nov 2026: "Huelga de trenes del 17 de noviembre en España" on its own
+    // (also in `strikes`). The 11N Spain and city pages now link it from their
+    // "upcoming strikes" list: they go out once with `strike-11n-cities`.
+    if (wants("huelga-trenes-17n")) published.push(await publishB2Article(RAIL_17N_GUIDE));
     if (wants("strike-educacio")) published.push(await publishB2Article(STRIKE_EDUCATION_GUIDE));
     if (wants("strikes-links")) published.push(await publishB2Article(HOURS), await publishB2Article(TRANSPORT));
     // The 11 November 2026 general strike's own page, with the strikes hub,

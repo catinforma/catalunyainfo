@@ -1,4 +1,4 @@
-import { nextDateLinks } from "@/lib/alerts/news-alerts";
+import { NEWS_ALERTS, nextDateLinks } from "@/lib/alerts/news-alerts";
 import type { Block } from "@/lib/content/blocks";
 import { TRAINS } from "@/lib/content/features/trains";
 import { PATHS as TOOL_PATHS } from "@/lib/content/home-tools";
@@ -22,6 +22,7 @@ import {
   table,
   verifiedLine,
   type B2Article,
+  type B2Key,
   type B2Source,
 } from "./shared";
 import { strike11nCityLinks } from "./strike-11n-city-paths";
@@ -562,10 +563,19 @@ const NEXT_DATES_HUB: Record<"strikes" | "strikesSpain", Record<Locale, string>>
   },
 };
 
+/**
+ * 13 Nov 2026: on the pages for the rest of Spain (the 11N Spain and city
+ * pages, hub "strikesSpain"), the 17 Nov rail line links the Spain-wide rail
+ * page instead of the Rodalies guide; the strip and the Catalan pages keep
+ * the Rodalies guide. Logged in docs/SEO_EXPERIMENTS.md (13 Nov 2026).
+ */
+export const SPAIN_NEXT_TARGETS: Readonly<Record<string, B2Key>> = { "strike-rail-17n": "railStrike17n" };
+
 export function nextDatesBlocks(locale: Locale, asOf: string, hub: "strikes" | "strikesSpain"): Block[] {
+  const alerts = hub === "strikesSpain" ? NEWS_ALERTS.map((alert) => ({ ...alert, target: SPAIN_NEXT_TARGETS[alert.id] ?? alert.target })) : NEWS_ALERTS;
   return [
     heading(2, NEXT_DATES_HEADING[locale], NEXT_DATES_ID[locale]),
-    list(...nextDateLinks(locale, asOf), b2link(hub, locale, NEXT_DATES_HUB[hub][locale])),
+    list(...nextDateLinks(locale, asOf, alerts), b2link(hub, locale, NEXT_DATES_HUB[hub][locale])),
   ];
 }
 

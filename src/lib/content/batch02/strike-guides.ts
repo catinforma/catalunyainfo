@@ -103,6 +103,9 @@ import {
 
 export type StrikeGuideKey = "strikeRenfe" | "strikeEducation";
 
+/** 13 Nov 2026: while the Renfe guide covers this entry, it links the Spain-wide page (strike-rail-17n.ts). */
+const SPAIN_RAIL_ENTRY = "vaga-ferroviaria-2026-11-17";
+
 const U = STRIKE_URLS;
 const link = (href: string, label: string) => `[${label}](${href})`;
 const cap = (text: string) => text.charAt(0).toUpperCase() + text.slice(1);
@@ -594,6 +597,7 @@ const RENFE: GuideSpec = {
           `Rodalies de Catalunya i els trens regionals són un servei del Grup Renfe: per a la vaga del 29 d'octubre, l'${link(U.ordreRenfe29, "Ordre EMT/210/2026")} en garantia «el servei essencial de transport de viatgers per ferrocarril a Catalunya (serveis de rodalies i regionals) que presta l'empresa Grupo Renfe», i ${link(U.rodalies29, "l'avís de Rodalies")} enllaçava l'horari de serveis mínims de cada línia.${c.strike.minimumServices.status === "pending" ? ` Quan es publiquin els d'aquesta vaga, mira'ls a ${link(U.rodaliesStatus, "rodalies.gencat.cat")}.` : ""}`,
           `**Els avisos en directe de cada línia:** ${lineLinks("ca")}.`,
         ),
+        ...(c.strike.id === SPAIN_RAIL_ENTRY ? paras(`**Fora de Catalunya** (Cercanías de Madrid, València, Sevilla, Bilbao i altres xarxes, AVE i Mitja Distància): ${b2link("railStrike17n", "ca", "la vaga de trens del 17 de novembre a Espanya")}.`) : []),
       ],
       todo: (c) => [
         "**No tots els trens de la teva hora hi seran:** els serveis mínims no els reparteixen igual a totes les hores (per a la vaga del 29 d'octubre, més en hora punta que la resta del dia). Mira el teu tren el vespre abans i el mateix matí.",
@@ -637,6 +641,7 @@ const RENFE: GuideSpec = {
           `Rodalies de Catalunya y los trenes regionales son un servicio del Grupo Renfe: para la huelga del 29 de octubre, la ${link(U.ordreRenfe29, "Ordre EMT/210/2026")} garantizaba «el servei essencial de transport de viatgers per ferrocarril a Catalunya (serveis de rodalies i regionals) que presta l'empresa Grupo Renfe», y ${link(U.rodalies29, "el aviso de Rodalies")} enlazaba el horario de servicios mínimos de cada línea.${c.strike.minimumServices.status === "pending" ? ` Cuando se publiquen los de esta huelga, míralos en ${link(U.rodaliesStatus, "rodalies.gencat.cat")}.` : ""}`,
           `**Los avisos en directo de cada línea:** ${lineLinks("es")}.`,
         ),
+        ...(c.strike.id === SPAIN_RAIL_ENTRY ? paras(`**Fuera de Cataluña** (Cercanías de Madrid, Valencia, Sevilla, Bilbao y otras redes, AVE y Media Distancia): ${b2link("railStrike17n", "es", "la huelga de trenes del 17 de noviembre en España")}.`) : []),
       ],
       todo: (c) => [
         "**No estarán todos los trenes de tu hora:** los servicios mínimos no los reparten igual a todas las horas (para la huelga del 29 de octubre, más en hora punta que el resto del día). Mira tu tren la noche antes y la misma mañana.",
@@ -675,6 +680,7 @@ const RENFE: GuideSpec = {
           `Rodalies de Catalunya and the regional trains are a Renfe Group service: for the 29 October strike, ${link(U.ordreRenfe29, "Order EMT/210/2026")} guaranteed "el servei essencial de transport de viatgers per ferrocarril a Catalunya (serveis de rodalies i regionals) que presta l'empresa Grupo Renfe" (the essential rail passenger service in Catalonia, Rodalies and regional, that Grupo Renfe provides), and ${link(U.rodalies29, "Rodalies' notice")} linked a minimum-service timetable for every line.${c.strike.minimumServices.status === "pending" ? ` Once this strike's are out, check them on ${link(U.rodaliesStatus, "rodalies.gencat.cat")}.` : ""}`,
           `**Live notices for every line:** [Rodalies today](${rodaliesHub("en")}), read live from Rodalies de Catalunya.`,
         ),
+        ...(c.strike.id === SPAIN_RAIL_ENTRY ? paras(`**Outside Catalonia** (Cercanías in Madrid, Valencia, Seville, Bilbao and other networks, AVE and Media Distancia): ${b2link("railStrike17n", "en", "the 17 November rail strike across Spain")}.`) : []),
       ],
       todo: (c) => [
         "**Not every train at your usual time will run:** minimum services do not spread trains evenly over the day (for the 29 October strike, more at peak times than the rest of the day). Check your train the evening before and that morning.",
@@ -1049,6 +1055,9 @@ const KNOWN_SOURCES: B2Source[] = [
   { name: "Diari Oficial de la Generalitat de Catalunya", url: U.dogc, publisher: "DOGC" },
   { name: "Informació de vagues amb serveis mínims (e-Tauler)", url: U.treballMs, publisher: "Departament d'Empresa i Treball" },
   { name: "Ordre EMT/ /2026, de 5 de novembre: serveis mínims de Rodalies i regionals, 10 i 12 de novembre (e-Tauler)", url: U.ordreRenfe1012, publisher: "Departament d'Empresa i Treball" },
+  { name: "Ordre EMT/ /2026, de 12 de novembre: serveis mínims de Rodalies i regionals, 17 de novembre (e-Tauler)", url: U.ordreRenfe17, publisher: "Departament d'Empresa i Treball" },
+  { name: "SCFCOM 35: Las motivaciones de una negociación (12/11/2026)", url: U.scf35, publisher: "Sindicato de Circulación Ferroviario (SCF)" },
+  { name: "Avances en seguridad y derechos que deben notarse en el trabajo (12/11/2026)", url: U.ccooRail17Still, publisher: "CCOO, Sector Ferroviario" },
   { name: "Ordre EMT/ /2026, de 5 de novembre: serveis essencials de la vaga general de l'11 de novembre (e-Tauler)", url: U.ordre11n, publisher: "Departament d'Empresa i Treball" },
   { name: "Resoluciones de servicios mínimos ferroviarios", url: U.ministryRail, publisher: "Ministerio de Transportes y Movilidad Sostenible" },
   { name: "Alteracions del servei", url: U.rodaliesStatus, publisher: "Rodalies de Catalunya" },

@@ -859,3 +859,6 @@ export const STRIKES_SPAIN_GUIDE: B2Article = {
     ]),
   ) as B2Article["editions"],
 };
+
+/** `fill` for other pages that print an entry's text (strike-rail-17n.ts). */
+export const fillChecked = fill;

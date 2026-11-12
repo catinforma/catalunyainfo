@@ -3719,3 +3719,56 @@ Vilanova, around 18–20 Nov. In 2025 most announced between 12 and 25 Nov.
 Then fill `y2026`, move `LIGHTS_TOWNS_AS_OF`, deploy and publish `llums-nadal`.
 
 **Outcome:** _pending_
+
+## 2026-11-13 — Rail strike of 17 Nov across Spain: a Spain-wide page, Rodalies minimum services out, the 11N pages for the rest of Spain hand on to it (deploy; groups `strikes`, `strike-11n-cities`)
+
+**Why.** GSC 7–13 Nov (`qsearch` over rail-strike queries): ~2,480 impressions
+a week, most in Spanish and Spain-wide: "huelga renfe noviembre 2026" 347 at
+pos 10.0, "huelga de trenes noviembre 2026" 100 at 8.3, "huelga renfe que
+trenes afecta" 63 at 9.7, plus Cercanías by city ("huelga cercanias sevilla"
+26, "malaga" 22+19, "zaragoza" 17, "huelga renfe alicante" 15). They landed on
+the Renfe guide, which is about Rodalies. On 12 Nov the 17 Nov strike grew:
+the Generalitat's order of that day (e-Tauler 658536) lists registered calls
+at Grupo Renfe by FeSMC-UGT, CCOO, SF-Intersindical, SEMAF, ALFERRO and
+SFF-CGT, 00:00–23:59, all staff, on top of Adif's works council, SCF (17 and
+19) and SEMAF at other operators. Same shape as 11N, whose Spain-wide pages
+drew ~6,400 Google sessions on 9 Nov (Murcia page alone 16,678 impressions
+10–12 Nov). No query with "17 noviembre" yet (GSC lags 2 days; the all-union
+call was news on 12 Nov).
+
+**What changed.**
+- New page `railStrike17n` (`strike-rail-17n.ts`): `/es/guias/huelga-trenes-17-noviembre/`,
+  `/ca/guies/vaga-trens-17-novembre/`, `/en/guides/spain-rail-strike-17-november/`.
+  Every fact from the Spain and Catalan entries; Cercanías table with Renfe's
+  14 networks + Rodalies; the 10 Nov Ministry figures printed only while the
+  17th's resolution is out, labelled "not the 17th's". In `strikes` (so the
+  strike watch republishes it) and its own group `huelga-trenes-17n`.
+- Rodalies minimum services for 17 Nov in `strikes.ts` (66 % peak
+  06:00–09:30 and 17:00–20:30, 33 % rest) → hub, Renfe guide, strip text unchanged.
+- The "upcoming strikes" list on the 11N Spain page and the 13 city pages
+  (hub `strikesSpain`) now links the 17 Nov line to the Spain page
+  (`SPAIN_NEXT_TARGETS` in strike-11n.ts); the Catalan 11N page and the
+  sitewide strip keep the Rodalies guide. The Renfe guide gains one
+  "outside Catalonia" sentence linking the Spain page while it covers 17 Nov.
+- Spain hub: 17 Nov entry lists the six unions and links the new page; meat
+  strike 12–13 Nov called off (UGT FICA 12 Nov). `STRIKES_AS_OF` and
+  `STRIKES_SPAIN_AS_OF` → 2026-11-13 after re-reading every source.
+- **Not in the answer-first switch** on purpose: the 19 Nov review compares
+  the existing set; the new page stays on the classic layout.
+
+**Prediction.** By 18 Nov (day after the strike, `snapshot.py page huelga-trenes 5`):
+the three editions ≥ 3,000 impressions and ≥ 150 clicks in total, ES position
+≤ 8 for "huelga trenes 17 noviembre" / "huelga renfe 17 noviembre"; the
+Renfe guide keeps its Catalan queries (no cannibalisation: its ES title says
+"Rodalies", this one "en España").
+
+**Revert rule.** If by 18 Nov the Spain page has < 300 impressions while the
+Renfe guide gains the Spain-wide queries, drop the 11N retarget (empty
+`SPAIN_NEXT_TARGETS`) and fold the network table into the Renfe guide.
+
+**Re-check.** Ministry rail list (transportes.gob.es) and Renfe press room on
+13–16 Nov: when the resolution for 17/19 is out, put its figures in the Spain
+entry (status `official`, minimum services `published`, the Ministry PDF in
+`sources`) and in the Catalan entry's text, move both as-ofs, publish `strikes`.
+
+**Outcome:** _pending_
