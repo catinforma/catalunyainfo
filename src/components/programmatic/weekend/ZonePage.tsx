@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import { Breadcrumbs, type Crumb } from "@/components/Breadcrumbs";
+import { ShareBar, crumbPath } from "@/components/share/ShareBar";
 import { B2_TITLES, b2href } from "@/lib/content/batch02/shared";
 import { AGENDA_SOURCE, type WeekendWindow } from "@/lib/content/weekend/agenda";
 import { EVERGREEN } from "@/lib/content/weekend/evergreen";
@@ -72,6 +73,7 @@ export function ZonePage({ zone, locale, window }: { zone: ZoneDef; locale: Week
           </p>
           <p className="ci-measure mt-3 text-lg text-[var(--color-ink-soft)]">{zoneLead(zone, locale)}</p>
           {longNote ? <p className="ci-measure mt-3">{longNote}</p> : null}
+          <ShareBar locale={locale} path={crumbPath(zoneCrumbs(zone, locale))} title={zoneH1(zone, locale)} contentType="weekend_zone" />
         </div>
       </header>
 
@@ -127,6 +129,7 @@ export function ZonePage({ zone, locale, window }: { zone: ZoneDef; locale: Week
           <Link href={`/${locale}/${EVERGREEN[locale].path}/`}>{t.cataloniaPage}</Link>
         </p>
         <Sources locale={locale} />
+        <ShareBar locale={locale} path={crumbPath(zoneCrumbs(zone, locale))} title={zoneH1(zone, locale)} contentType="weekend_zone" variant="full" />
       </div>
     </article>
   );

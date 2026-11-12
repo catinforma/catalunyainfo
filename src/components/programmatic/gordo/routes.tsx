@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 
 import { BlockRenderer } from "@/components/blocks/BlockRenderer";
 import { Breadcrumbs, type Crumb } from "@/components/Breadcrumbs";
+import { ShareBar, crumbPath } from "@/components/share/ShareBar";
 import { JsonLd } from "@/components/JsonLd";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
@@ -57,10 +58,12 @@ function Shell({ locale, m, crumbs, blocks, translations }: { locale: Locale; m:
             <div className="ci-shell py-5 md:py-8 lg:py-12">
               <Breadcrumbs items={crumbs} locale={locale} />
               <h1 className="ci-measure">{m.h1}</h1>
+              <ShareBar locale={locale} path={crumbPath(crumbs)} title={m.h1} contentType="gordo" />
             </div>
           </header>
           <div className="ci-shell py-10">
             <BlockRenderer body={blocks} context={{ locale, media: new Map(), related: new Map(), sources: new Map(), translations }} />
+            <ShareBar locale={locale} path={crumbPath(crumbs)} title={m.h1} contentType="gordo" variant="full" />
           </div>
         </article>
       </main>

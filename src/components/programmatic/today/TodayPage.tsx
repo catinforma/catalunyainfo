@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 
 import { Breadcrumbs } from "@/components/Breadcrumbs";
+import { ShareBar, crumbPath } from "@/components/share/ShareBar";
 import { JsonLd } from "@/components/JsonLd";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
@@ -203,6 +204,7 @@ export function TodayPage({ locale }: { locale: Locale }) {
                 <time dateTime={todayLastModified()}>{verifiedLine(locale)}</time>
               </span>
             </div>
+            <ShareBar locale={locale} path={crumbPath(crumbs)} title={copy.h1} contentType="today" />
           </div>
         </header>
 
@@ -292,6 +294,7 @@ export function TodayPage({ locale }: { locale: Locale }) {
               </ol>
             </section>
           </div>
+          <ShareBar locale={locale} path={crumbPath(crumbs)} title={copy.h1} contentType="today" variant="full" />
         </div>
       </main>
       <JsonLd json={graph(todaySchemas(locale))} />

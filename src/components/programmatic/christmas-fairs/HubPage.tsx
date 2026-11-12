@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import { Breadcrumbs, type Crumb } from "@/components/Breadcrumbs";
+import { ShareBar, crumbPath } from "@/components/share/ShareBar";
 import { LinkList } from "@/components/programmatic/weekend/parts";
 import { B2_TITLES, b2href } from "@/lib/content/batch02/shared";
 import { getMessages } from "@/lib/i18n";
@@ -53,6 +54,7 @@ export function HubPage({ locale }: { locale: FairsLocale }) {
           <Breadcrumbs items={hubCrumbs(locale)} locale={locale} />
           <h1 className="ci-measure">{meta.h1}</h1>
           <p className="ci-measure mt-3 text-lg text-[var(--color-ink-soft)]">{hubLead(locale, counts, checked)}</p>
+          <ShareBar locale={locale} path={crumbPath(hubCrumbs(locale))} title={meta.h1} contentType="christmas_fairs_hub" />
         </div>
       </header>
 
@@ -97,6 +99,7 @@ export function HubPage({ locale }: { locale: FairsLocale }) {
           </p>
         ) : null}
         <Sources locale={locale} fairs={FAIRS} />
+        <ShareBar locale={locale} path={crumbPath(hubCrumbs(locale))} title={meta.h1} contentType="christmas_fairs_hub" variant="full" />
       </div>
     </article>
   );

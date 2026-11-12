@@ -1,5 +1,6 @@
 import Link from "next/link";
 
+import { ShareBar, crumbPath } from "@/components/share/ShareBar";
 import type { Crumb } from "@/components/Breadcrumbs";
 import { WidgetPlaceLink } from "@/components/programmatic/embed-2027/WidgetLink";
 import { dayMonthYear } from "@/lib/programmatic/holidays/format";
@@ -379,6 +380,7 @@ export function CityPageIntl({ c, locale }: { c: City; locale: Edition }) {
             {tr(locale, `Festes locals consultades el ${dayMonthYear(CITIES_AS_OF, "ca")}.`, `Local holidays read on ${dayMonthYear(CITIES_AS_OF, "en")}.`)}
           </time>
         </p>
+        <ShareBar locale={locale} path={crumbPath(cityCrumbsIntl(c, locale))} title={cityH1Intl(c, locale)} contentType="holidays_2027" variant="full" />
       </div>
     </article>
   );

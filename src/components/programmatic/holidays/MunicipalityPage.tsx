@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import { Breadcrumbs, type Crumb } from "@/components/Breadcrumbs";
+import { ShareBar, crumbPath } from "@/components/share/ShareBar";
 import { WidgetPlaceLink } from "@/components/programmatic/embed-2027/WidgetLink";
 import { getMessages } from "@/lib/i18n";
 import { todayInCatalonia } from "@/lib/content/holidays/calendar";
@@ -111,6 +112,7 @@ export function MunicipalityPage({ m, locale }: { m: SnapshotMunicipality; local
           <Breadcrumbs items={crumbs} locale={locale} />
           <p className="ci-label mb-3 max-md:hidden">{m.comarca}</p>
           <h1 className="ci-measure">{municipalityH1(m, locale)}</h1>
+          <ShareBar locale={locale} path={crumbPath(crumbs)} title={municipalityH1(m, locale)} contentType="holidays_town" />
         </div>
       </header>
 
@@ -301,6 +303,7 @@ export function MunicipalityPage({ m, locale }: { m: SnapshotMunicipality; local
           title={t.sourcesTitle}
           extra={council ? [council.source] : []}
         />
+        <ShareBar locale={locale} path={crumbPath(crumbs)} title={municipalityH1(m, locale)} contentType="holidays_town" variant="full" />
       </div>
     </article>
   );

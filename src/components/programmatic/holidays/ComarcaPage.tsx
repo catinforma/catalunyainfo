@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import { Breadcrumbs, type Crumb } from "@/components/Breadcrumbs";
+import { ShareBar, crumbPath } from "@/components/share/ShareBar";
 import { getMessages } from "@/lib/i18n";
 import { comarcaCopy, comarcaH1, dateQuestion, displayName, hubCopy } from "@/lib/programmatic/holidays/copy";
 import { byComarca, sharedDates, type ComarcaGroup } from "@/lib/programmatic/holidays/data";
@@ -42,6 +43,7 @@ export function ComarcaPage({ g, locale }: { g: ComarcaGroup; locale: MuniLocale
         <div className="ci-shell py-5 md:py-8 lg:py-12">
           <Breadcrumbs items={comarcaCrumbs(g, locale)} locale={locale} />
           <h1 className="ci-measure">{comarcaH1(g, locale)}</h1>
+          <ShareBar locale={locale} path={crumbPath(comarcaCrumbs(g, locale))} title={comarcaH1(g, locale)} contentType="holidays_comarca" />
         </div>
       </header>
 
@@ -147,6 +149,7 @@ export function ComarcaPage({ g, locale }: { g: ComarcaGroup; locale: MuniLocale
         <GuideLinks keys={["holidayToday", "workCalendar", "localHolidays", "shops", "school", "decemberBridge"]} locale={locale} title={t.guidesTitle} />
 
         <Sources keys={["localOrder", "amendment", "openData", "regional2027", "shops", "shopsOrder", "population"]} locale={locale} title={t.sourcesTitle} />
+        <ShareBar locale={locale} path={crumbPath(comarcaCrumbs(g, locale))} title={comarcaH1(g, locale)} contentType="holidays_comarca" variant="full" />
       </div>
     </article>
   );

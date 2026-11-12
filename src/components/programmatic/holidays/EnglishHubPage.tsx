@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import { Breadcrumbs, type Crumb } from "@/components/Breadcrumbs";
+import { ShareBar, crumbPath } from "@/components/share/ShareBar";
 import { renderInline } from "@/lib/content/inline";
 import { getMessages } from "@/lib/i18n";
 import { hubPath as electionsHubPath } from "@/lib/programmatic/elections/paths";
@@ -75,6 +76,7 @@ export function EnglishHubPage() {
           <Breadcrumbs items={englishHubCrumbs()} locale="en" />
           <h1 className="ci-measure">{t.h1}</h1>
           <p className="ci-measure mt-4 text-lg text-[var(--color-ink-soft)]">{t.lead}</p>
+          <ShareBar locale="en" path={crumbPath(englishHubCrumbs())} title={t.h1} contentType="holidays_hub" />
         </div>
       </header>
 
@@ -128,6 +130,7 @@ export function EnglishHubPage() {
         <GuideLinks keys={["holidayToday", "workCalendar", "localHolidays", "shops", "metroHours", "strikes", "decemberBridge", "school"]} locale="en" title={t.guidesTitle} />
 
         <Sources keys={["localOrder", "amendment", "openData", "regional2026", "regional2027", "population"]} locale="en" title={t.sourcesTitle} />
+        <ShareBar locale="en" path={crumbPath(englishHubCrumbs())} title={t.h1} contentType="holidays_hub" variant="full" />
       </div>
     </article>
   );

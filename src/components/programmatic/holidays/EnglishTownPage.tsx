@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import { Breadcrumbs, type Crumb } from "@/components/Breadcrumbs";
+import { ShareBar, crumbPath } from "@/components/share/ShareBar";
 import { WidgetPlaceLink } from "@/components/programmatic/embed-2027/WidgetLink";
 import { getMessages } from "@/lib/i18n";
 import { NEXT, YEAR, councilApproved2027, localThrough, nextYearFor, regionalThrough, statusDays, yearRows } from "@/lib/programmatic/holidays/data";
@@ -76,6 +77,7 @@ export function EnglishTownPage({ m }: { m: SnapshotMunicipality }) {
           <Breadcrumbs items={englishTownCrumbs(m)} locale="en" />
           <p className="ci-label mb-3 max-md:hidden">{m.comarca}</p>
           <h1 className="ci-measure">{englishTownH1(m)}</h1>
+          <ShareBar locale="en" path={crumbPath(englishTownCrumbs(m))} title={englishTownH1(m)} contentType="holidays_town" />
         </div>
       </header>
 
@@ -267,6 +269,7 @@ export function EnglishTownPage({ m }: { m: SnapshotMunicipality }) {
           title={t.sourcesTitle}
           extra={council ? [council.source] : []}
         />
+        <ShareBar locale="en" path={crumbPath(englishTownCrumbs(m))} title={englishTownH1(m)} contentType="holidays_town" variant="full" />
       </div>
     </article>
   );

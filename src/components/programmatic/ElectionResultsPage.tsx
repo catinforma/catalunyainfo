@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import { Breadcrumbs, type Crumb } from "@/components/Breadcrumbs";
+import { ShareBar, crumbPath } from "@/components/share/ShareBar";
 import { JsonLd } from "@/components/JsonLd";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
@@ -70,6 +71,7 @@ export function ElectionResultsPage({ locale, municipality }: { locale: Locale; 
                   <time dateTime={model.dataDate}>{model.readLine}</time>
                 </span>
               </div>
+              <ShareBar locale={locale} path={crumbPath(crumbs)} title={model.h1} contentType="elections_town" />
             </div>
           </header>
 
@@ -233,6 +235,7 @@ export function ElectionResultsPage({ locale, municipality }: { locale: Locale; 
                 </nav>
               </div>
             </div>
+            <ShareBar locale={locale} path={crumbPath(crumbs)} title={model.h1} contentType="elections_town" variant="full" />
           </div>
         </article>
       </main>

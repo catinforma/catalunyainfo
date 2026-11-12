@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import { Breadcrumbs, type Crumb } from "@/components/Breadcrumbs";
+import { ShareBar, crumbPath } from "@/components/share/ShareBar";
 import { JsonLd } from "@/components/JsonLd";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
@@ -54,6 +55,7 @@ export function ElectionsHubPage({ locale }: { locale: Locale }) {
                 <time dateTime={latestDataDate()}>{copy.readLine}</time>
               </span>
             </div>
+            <ShareBar locale={locale} path={crumbPath(crumbs)} title={meta.h1} contentType="elections_hub" />
           </div>
         </header>
 
@@ -127,6 +129,7 @@ export function ElectionsHubPage({ locale }: { locale: Locale }) {
               ))}
             </ul>
           </div>
+          <ShareBar locale={locale} path={crumbPath(crumbs)} title={meta.h1} contentType="elections_hub" variant="full" />
         </div>
       </main>
       <JsonLd json={graph([breadcrumbSchema(crumbs), electionHubDataset(locale)])} />

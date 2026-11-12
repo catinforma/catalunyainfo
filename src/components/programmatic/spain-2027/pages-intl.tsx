@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import { Breadcrumbs, type Crumb } from "@/components/Breadcrumbs";
+import { ShareBar, crumbPath } from "@/components/share/ShareBar";
 import { WidgetHubLink } from "@/components/programmatic/embed-2027/WidgetLink";
 import { getMessages } from "@/lib/i18n";
 import { REGIONS } from "@/lib/programmatic/holidays/boe-2027";
@@ -95,6 +96,7 @@ export function Header({ crumbs, h1, lead, locale }: { crumbs: Crumb[]; h1: stri
         <Breadcrumbs items={crumbs} locale={locale} />
         <h1 className="ci-measure">{h1}</h1>
         {lead ? <p className="ci-measure mt-4 text-lg text-[var(--color-ink-soft)]">{lead}</p> : null}
+        <ShareBar locale={locale} path={crumbPath(crumbs)} title={h1} contentType="holidays_2027" />
       </div>
     </header>
   );
@@ -566,6 +568,7 @@ export function CommunityPageIntl({ c, locale }: { c: EditionNames; locale: Edit
             ...(s.extraSources ?? []),
           ]}
         />
+        <ShareBar locale={locale} path={crumbPath(communityCrumbsIntl(c, locale))} title={communityH1Intl(c, locale)} contentType="holidays_2027" variant="full" />
       </div>
     </article>
   );
@@ -692,6 +695,7 @@ export function SpainHubPageIntl({ locale }: { locale: Edition }) {
         <CommunityLinks locale={locale} />
 
         <SourceList items={[BOE_REF]} locale={locale} />
+        <ShareBar locale={locale} path={crumbPath(hubCrumbsIntl(locale))} title={HUB_INTL[locale].h1} contentType="holidays_2027" variant="full" />
       </div>
     </article>
   );
@@ -793,6 +797,7 @@ export function SpainBridgesPageIntl({ locale }: { locale: Edition }) {
         <CommunityLinks locale={locale} />
 
         <SourceList items={[BOE_REF]} locale={locale} />
+        <ShareBar locale={locale} path={crumbPath(bridgesCrumbsIntl(locale))} title={BRIDGES_INTL[locale].h1} contentType="holidays_2027" variant="full" />
       </div>
     </article>
   );

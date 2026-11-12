@@ -108,6 +108,7 @@ ad-hoc names nobody can interpret six months later.
 | `affiliate_click` | `partner`, `placement`, `locale` | Phase 5 |
 | `useful_feedback` | `is_useful`, `content_type`, `locale` | The quality signal that is not a pageview |
 | `newsletter_signup` | `placement`, `locale` | Retention |
+| `share` | `method`, `content_type`, `item_id` (the path), `locale` | Which pages readers pass on, and through which channel. The shared URL carries `utm_source=share&utm_medium=<method>`, so the visits it brings show up as source `share` |
 
 ### Privacy rules, enforced by the types
 
