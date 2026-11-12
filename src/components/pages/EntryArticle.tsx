@@ -7,8 +7,13 @@ import { EntryCard } from "@/components/EntryCard";
 import { VerifiedStamp } from "@/components/VerifiedStamp";
 import { PageFeedback } from "@/components/PageFeedback";
 import { ShareBar } from "@/components/share/ShareBar";
+import { PreferredSource } from "@/components/share/PreferredSource";
 import { tableOfContents } from "@/lib/content/blocks";
+import { todayInCatalonia } from "@/lib/content/holidays/calendar";
+import { renderInline } from "@/lib/content/inline";
+import { MOST_READ, MOST_READ_COPY, mostReadFor } from "@/lib/content/most-read";
 import type { EntryDetail } from "@/lib/content/types";
+import { MORE_FACTS_LABEL, answerFirstEnabled, answerFirstLayout, type AnswerSummary } from "@/lib/layout/answer-first";
 import { formatDate, formatDistance, formatDuration, isoDate } from "@/lib/format";
 import { getMessages, interpolate } from "@/lib/i18n";
 import type { Locale } from "@/lib/i18n/config";
@@ -37,13 +42,84 @@ export function EntryArticle({
 }) {
   const locale = entry.locale;
   const t = getMessages(locale);
-  const toc = tableOfContents(entry.body);
   const published = entry.publishedAt;
+  // Answer-first pages (lib/layout/answer-first.ts): summary under the byline,
+  // then the photo and the body; supporting boxes after the body.
+  const answerFirst = answerFirstEnabled(entry.key);
+  const layout = answerFirst ? answerFirstLayout(entry.body, locale) : null;
+  const body = layout ? layout.body : entry.body;
+  const endBlocks = layout ? layout.end : [];
+  const toc = tableOfContents([...body, ...endBlocks]);
+  const h2Toc = toc.filter((item) => item.level === 2);
+  const mostRead = answerFirst ? mostReadFor(locale, entry.href, todayInCatalonia()) : [];
+
+  // Phones never see the sidebar index; long pages get it collapsed, without
+  // JavaScript. On answer-first pages it sits under the summary, closed.
+  const phoneToc =
+    h2Toc.length > 4 ? (
+      <details className={`ci-margin-block lg:hidden ${answerFirst ? "ci-answer-toc" : "mb-8"}`}>
+        <summary className="min-h-11 cursor-pointer py-2 font-semibold">
+          {t.meta.inThisPage} ({h2Toc.length})
+        </summary>
+        <ol className="m-0 list-none p-0 text-sm">
+          {h2Toc.map((item) => (
+            <li key={item.id}>
+              <a href={`#${item.id}`} className="block min-h-11 py-2 no-underline">
+                {item.text}
+              </a>
+            </li>
+          ))}
+        </ol>
+      </details>
+    ) : null;
+
+  const hero = entry.hero ? (
+    <figure className="m-0 border-b border-[var(--color-rule)]">
+      <Image
+        src={entry.hero.url}
+        alt={entry.hero.alt}
+        width={entry.hero.width ?? 1920}
+        height={entry.hero.height ?? 1080}
+        sizes="100vw"
+        // Next.js 16 deprecated `priority` in favour of `preload`. The hero
+        // is the LCP element on most articles, so it is preloaded from the
+        // head and fetched at high priority.
+        preload
+        fetchPriority="high"
+        placeholder={entry.hero.blurDataUrl ? "blur" : "empty"}
+        blurDataURL={entry.hero.blurDataUrl ?? undefined}
+        // Capped at 40vw on phones so the opening paragraph reaches the
+        // first screen (32vw under an answer-first summary); the full 32rem
+        // from md up. The width/height attributes reserve the box (no CLS).
+        className={`w-full object-cover md:max-h-[32rem] ${answerFirst ? "max-h-[32vw]" : "max-h-[40vw]"}`}
+        style={{
+          objectPosition: `${entry.hero.focalX * 100}% ${entry.hero.focalY * 100}%`,
+        }}
+      />
+      {entry.hero.caption || entry.hero.credit ? (
+        <figcaption className="ci-shell py-2 text-xs text-[var(--color-muted)]">
+          {entry.hero.caption}
+          {entry.hero.credit ? (
+            <span className="ml-2 text-[var(--color-faint)]">
+              {entry.hero.creditUrl ? (
+                <a href={entry.hero.creditUrl} rel="noopener nofollow" target="_blank">
+                  {entry.hero.credit}
+                </a>
+              ) : (
+                entry.hero.credit
+              )}
+              {entry.hero.license ? ` · ${entry.hero.license}` : null}
+            </span>
+          ) : null}
+        </figcaption>
+      ) : null}
+    </figure>
+  ) : null;
 
   return (
     <article>
       <header className="border-b border-[var(--color-rule)] bg-[var(--color-surface)]">
-        <div className="ci-shell py-5 md:py-8 lg:py-12">
+        <div className={`ci-shell md:py-8 lg:py-12 ${answerFirst ? "pt-4 pb-4" : "py-5"}`}>
           <Breadcrumbs items={crumbs} locale={locale} />
 
           {entry.category ? (
@@ -64,7 +140,7 @@ export function EntryArticle({
             </p>
           ) : null}
 
-          <div className="mt-5 flex flex-wrap items-center gap-x-5 gap-y-2 text-xs text-[var(--color-muted)]">
+          <div className={`flex flex-wrap items-center gap-x-5 gap-y-2 text-xs text-[var(--color-muted)] ${answerFirst ? "mt-3 md:mt-5" : "mt-5"}`}>
             {entry.author ? (
               <span>
                 {t.meta.by}{" "}
@@ -92,55 +168,25 @@ export function EntryArticle({
             {entry.lastVerifiedAt ? (
               <VerifiedStamp date={entry.lastVerifiedAt} locale={locale} />
             ) : null}
+            {answerFirst ? <PreferredSource locale={locale} /> : null}
           </div>
 
           <ShareBar locale={locale} path={entry.href} title={entry.title} contentType={entry.type} />
         </div>
       </header>
 
-      {entry.hero ? (
-        <figure className="m-0 border-b border-[var(--color-rule)]">
-          <Image
-            src={entry.hero.url}
-            alt={entry.hero.alt}
-            width={entry.hero.width ?? 1920}
-            height={entry.hero.height ?? 1080}
-            sizes="100vw"
-            // Next.js 16 deprecated `priority` in favour of `preload`. The hero
-            // is the LCP element on most articles, so it is preloaded from the
-            // head and fetched at high priority.
-            preload
-            fetchPriority="high"
-            placeholder={entry.hero.blurDataUrl ? "blur" : "empty"}
-            blurDataURL={entry.hero.blurDataUrl ?? undefined}
-            // Capped at 40vw on phones so the opening paragraph reaches the
-            // first screen; the full 32rem from md up.
-            className="max-h-[40vw] w-full object-cover md:max-h-[32rem]"
-            style={{
-              objectPosition: `${entry.hero.focalX * 100}% ${entry.hero.focalY * 100}%`,
-            }}
-          />
-          {entry.hero.caption || entry.hero.credit ? (
-            <figcaption className="ci-shell py-2 text-xs text-[var(--color-muted)]">
-              {entry.hero.caption}
-              {entry.hero.credit ? (
-                <span className="ml-2 text-[var(--color-faint)]">
-                  {entry.hero.creditUrl ? (
-                    <a href={entry.hero.creditUrl} rel="noopener nofollow" target="_blank">
-                      {entry.hero.credit}
-                    </a>
-                  ) : (
-                    entry.hero.credit
-                  )}
-                  {entry.hero.license ? ` · ${entry.hero.license}` : null}
-                </span>
-              ) : null}
-            </figcaption>
-          ) : null}
-        </figure>
+      {layout?.summary ? (
+        <div className="ci-shell pt-5 md:pt-8">
+          <div className="ci-answer-wrap">
+            <SummaryBox summary={layout.summary} context={context} locale={locale} />
+            {phoneToc}
+          </div>
+        </div>
       ) : null}
 
-      <div className="ci-shell py-10">
+      {layout?.summary && hero ? <div className="mt-5 md:mt-8">{hero}</div> : hero}
+
+      <div className={`ci-shell ${answerFirst ? "pt-6 pb-10 md:py-10" : "py-10"}`}>
         <div className="ci-article-layout">
           <div>
             {/* Marginalia on mobile, only when there are real facts: without
@@ -152,28 +198,18 @@ export function EntryArticle({
               </div>
             ) : null}
 
-            {/* Phones never see the sidebar index; long pages get it here,
-                collapsed, without JavaScript. */}
-            {toc.filter((item) => item.level === 2).length > 4 ? (
-              <details className="ci-margin-block mb-8 lg:hidden">
-                <summary className="min-h-11 cursor-pointer py-2 font-semibold">
-                  {t.meta.inThisPage} ({toc.filter((item) => item.level === 2).length})
-                </summary>
-                <ol className="m-0 list-none p-0 text-sm">
-                  {toc
-                    .filter((item) => item.level === 2)
-                    .map((item) => (
-                      <li key={item.id}>
-                        <a href={`#${item.id}`} className="block min-h-11 py-2 no-underline">
-                          {item.text}
-                        </a>
-                      </li>
-                    ))}
-                </ol>
-              </details>
-            ) : null}
+            {layout?.summary ? null : phoneToc}
 
-            <BlockRenderer body={entry.body} context={context} />
+            <BlockRenderer body={body} context={context} />
+
+            {/* Answer-first pages: the boxes that used to stand between the
+                answer and the first section ("Próximas huelgas y fechas",
+                "Última verificación", "Lee también"), in their order. */}
+            {endBlocks.length > 0 ? (
+              <div className="ci-after-body mt-12">
+                <BlockRenderer body={endBlocks} context={context} />
+              </div>
+            ) : null}
 
             {entry.sources.length > 0 ? (
               <section className="ci-measure mt-12">
@@ -303,8 +339,80 @@ export function EntryArticle({
             </div>
           </section>
         ) : null}
+
+        {mostRead.length > 0 ? (
+          <section className="mt-16" aria-labelledby="ci-most-read">
+            <div className="ci-section-head">
+              <h2 id="ci-most-read">{MOST_READ_COPY[locale].heading}</h2>
+            </div>
+            <ol className="ci-most-read-list">
+              {mostRead.map((item) => (
+                <li key={item.path}>
+                  <Link href={item.path}>{item.title}</Link>
+                </li>
+              ))}
+            </ol>
+            <p className="mt-3 text-xs text-[var(--color-muted)]">
+              <time dateTime={MOST_READ.asOf}>
+                {MOST_READ_COPY[locale].asOf(formatDate(new Date(`${MOST_READ.asOf}T12:00:00Z`), locale))}
+              </time>
+            </p>
+          </section>
+        ) : null}
       </div>
     </article>
+  );
+}
+
+/**
+ * The answer-first summary: the page's own "at a glance" facts as 3 to 5
+ * bullets, the rest collapsed (lib/layout/answer-first.ts), or the lead when
+ * the page has no facts block. Text is the stored block's, unchanged.
+ */
+function SummaryBox({
+  summary,
+  context,
+  locale,
+}: {
+  summary: AnswerSummary;
+  context: BlockContext;
+  locale: Locale;
+}) {
+  if (summary.kind === "lead") {
+    return (
+      <div className="ci-answer ci-answer-lead">
+        <BlockRenderer body={[summary.block]} context={context} />
+      </div>
+    );
+  }
+  const item = (fact: (typeof summary.shown)[number], key: number) => {
+    const source = fact.sourceId ? context.sources.get(fact.sourceId) : undefined;
+    return (
+      <li key={key}>
+        <strong>{fact.label}:</strong> {renderInline(fact.value)}
+        {source?.url ? (
+          <a href={source.url} rel="noopener" target="_blank" className="ml-1 text-xs text-[var(--color-muted)]">
+            {source.name}
+          </a>
+        ) : null}
+      </li>
+    );
+  };
+  return (
+    <section className="ci-answer" aria-labelledby={summary.title ? "ci-answer-title" : undefined}>
+      {summary.title ? (
+        <h2 id="ci-answer-title" className="ci-answer-title">
+          {summary.title}
+        </h2>
+      ) : null}
+      <ul className="ci-answer-list">{summary.shown.map(item)}</ul>
+      {summary.more.length > 0 ? (
+        <details className="ci-answer-more">
+          <summary>{MORE_FACTS_LABEL[locale](summary.more.length)}</summary>
+          <ul className="ci-answer-list">{summary.more.map((fact, i) => item(fact, summary.shown.length + i))}</ul>
+        </details>
+      ) : null}
+    </section>
   );
 }
 

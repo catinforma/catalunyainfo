@@ -3,13 +3,14 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { EntryCard } from "@/components/EntryCard";
-import { HomeTools } from "@/components/HomeTools";
+import { HomeTools, HomeTopTools } from "@/components/HomeTools";
 import { SearchBox } from "@/components/SearchBox";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
 import { B2_PATHS } from "@/lib/content/batch02/shared";
 import { todayInCatalonia } from "@/lib/content/holidays/calendar";
 import { homeLeadKey, rotationIndex } from "@/lib/content/home-lead";
+import { DUPLICATES_TOP } from "@/lib/content/home-tools";
 import { getHomeData, resolvePath } from "@/lib/content/repository";
 import type { EntrySummary } from "@/lib/content/types";
 import { getMessages } from "@/lib/i18n";
@@ -67,15 +68,6 @@ export default async function HomePage({
   const t = getMessages(locale);
   const data = await getHomeData(locale);
 
-  const sections: { key: SectionKey; items: EntrySummary[] }[] = [
-    { key: "destinations", items: data.destinations },
-    { key: "guides", items: data.guides },
-    { key: "events", items: data.events },
-    { key: "routes", items: data.routes },
-    { key: "news", items: data.news },
-  ];
-
-  const populated = sections.filter((s) => s.items.length > 0);
   const today = todayInCatalonia();
   const seasonal = homeLeadKey(today);
   const seasonalEntry = seasonal ? await resolvePath(locale, B2_PATHS[seasonal][locale]) : null;
@@ -91,6 +83,17 @@ export default async function HomePage({
     data.destinations[0] ??
     null;
 
+  // The desktop lead card is not repeated in the grids below it.
+  const notLead = <T extends EntrySummary>(items: T[]) => items.filter((item) => item.translationId !== lead?.translationId);
+  const sections: { key: SectionKey; items: EntrySummary[] }[] = [
+    { key: "destinations", items: notLead(data.destinations) },
+    { key: "guides", items: notLead(data.guides) },
+    { key: "events", items: notLead(data.events) },
+    { key: "routes", items: notLead(data.routes) },
+    { key: "news", items: notLead(data.news) },
+  ];
+  const populated = sections.filter((s) => s.items.length > 0);
+
   return (
     <>
       <SiteHeader locale={locale} translations={homeTranslations()} showSearch={false} />
@@ -100,9 +103,13 @@ export default async function HomePage({
             The product's job is to answer something specific, so the search
             field is the largest object on the page. */}
         <section className="border-b border-[var(--color-rule)] bg-[var(--color-surface)]">
-          <div className="ci-shell grid gap-10 py-12 lg:grid-cols-[minmax(0,1fr)_22rem] lg:py-20">
+          <div className="ci-shell grid gap-10 py-6 md:py-12 lg:grid-cols-[minmax(0,1fr)_22rem] lg:py-20">
             <div>
               <h1 className="ci-measure">{t.home.tagline}</h1>
+              {/* 12 Nov 2026: the most-searched utilities first (strikes,
+                  holidays, elections, school calendar), then the intro and
+                  the search (docs/SEO_EXPERIMENTS.md). */}
+              <HomeTopTools locale={locale} />
               <p className="ci-measure mt-5 text-lg text-[var(--color-ink-soft)]">
                 {t.home.intro}
               </p>
@@ -124,7 +131,7 @@ export default async function HomePage({
           </div>
         </section>
 
-        <HomeTools locale={locale} />
+        <HomeTools locale={locale} exclude={DUPLICATES_TOP} />
 
         {populated.map(({ key, items }) => (
           <section key={key} className="ci-shell py-12">
@@ -139,7 +146,7 @@ export default async function HomePage({
             </div>
 
             {key === "events" ? (
-              <EventList items={data.events} locale={locale} />
+              <EventList items={items as typeof data.events} locale={locale} />
             ) : (
               <div className="ci-grid ci-grid--hub">
                 {items.map((item) => (

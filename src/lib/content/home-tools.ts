@@ -161,6 +161,25 @@ function inWindow(monthDay: string, from: string, to: string): boolean {
   return from <= to ? monthDay >= from && monthDay <= to : monthDay >= from || monthDay <= to;
 }
 
+/*
+ * 12 Nov 2026 (answer-first layout, docs/SEO_EXPERIMENTS.md): the most-searched
+ * utilities open the homepage, before the articles. They are the menu's
+ * topical hubs (lib/nav/menu.ts: strikes, holidays, elections, ordered by each
+ * edition's Search Console impressions) plus the school calendar. A strip tool
+ * that leads to the same page as a top card is left out of the strip, so no
+ * card appears twice (tests/home-tools.test.ts).
+ */
+export type TopToolKey = "strikes" | "holidays" | "elections" | "school";
+
+export const TOP_TOOLS: Record<Locale, TopToolKey[]> = {
+  es: ["strikes", "holidays", "elections", "school"],
+  ca: ["elections", "strikes", "holidays", "school"],
+  en: ["elections", "strikes", "holidays", "school"],
+};
+
+/** Strip tools that open the same page as a top card. */
+export const DUPLICATES_TOP: ToolKey[] = ["school"];
+
 /** The strip for one edition on one day (`today` as YYYY-MM-DD). */
 export function toolsFor(locale: Locale, today: string): ToolKey[] {
   const monthDay = today.slice(5, 10);

@@ -1,0 +1,73 @@
+{
+  "source": "GA4 properties/554310792, screenPageViews, 2026-11-05 to 2026-11-11",
+  "from": "2026-11-05",
+  "asOf": "2026-11-11",
+  "items": {
+    "ca": [
+      {
+        "path": "/ca/guies/vaga-general-11-novembre/",
+        "title": "Vaga general de l'11 de novembre de 2026: serveis mínims i què funciona a Catalunya"
+      },
+      {
+        "path": "/ca/guies/vaga-educacio-novembre/",
+        "title": "Vaga a l'educació el 26 de novembre de 2026: escoles, serveis mínims i què fer"
+      },
+      {
+        "path": "/ca/guies/vaga-renfe-rodalies-novembre/",
+        "title": "Vaga de trens el 17 i 19 de novembre de 2026: Renfe, Adif, Rodalies, serveis mínims i què fer"
+      },
+      {
+        "path": "/ca/guies/candidats-eleccions-generals-catalunya/",
+        "title": "Candidats i llistes electorals de les eleccions generals del 29N a Barcelona, Girona, Lleida i Tarragona"
+      },
+      {
+        "path": "/ca/guies/vaga-avui-catalunya/",
+        "title": "Vaga avui i demà a Catalunya: què funciona, serveis mínims i calendari de vagues"
+      }
+    ],
+    "es": [
+      {
+        "path": "/es/guias/huelga-general-11-noviembre-sevilla/",
+        "title": "Huelga general del 11 de noviembre en Sevilla: servicios mínimos y qué funciona"
+      },
+      {
+        "path": "/es/guias/huelga-general-11-noviembre/",
+        "title": "Huelga general del 11 de noviembre de 2026: servicios mínimos y qué funciona en Cataluña"
+      },
+      {
+        "path": "/es/guias/huelga-general-11-noviembre-zaragoza/",
+        "title": "Huelga general del 11 de noviembre en Zaragoza: servicios mínimos y qué funciona"
+      },
+      {
+        "path": "/es/guias/huelga-general-11-noviembre-alicante/",
+        "title": "Huelga general del 11 de noviembre en Alicante: servicios mínimos y qué funciona"
+      },
+      {
+        "path": "/es/guias/huelga-general-11-noviembre-malaga/",
+        "title": "Huelga general del 11 de noviembre en Málaga: servicios mínimos y qué funciona"
+      }
+    ],
+    "en": [
+      {
+        "path": "/en/guides/general-strike-11-november-spain/",
+        "title": "General strike on 11 November 2026 in Spain: what runs in Barcelona and Catalonia"
+      },
+      {
+        "path": "/en/guides/how-to-vote-catalonia/",
+        "title": "How to vote in Spain's 2026 general election on 29 November: registration, polling stations and dates"
+      },
+      {
+        "path": "/en/guides/renfe-rodalies-strike-november/",
+        "title": "Rail strike on 17 and 19 November 2026: Renfe, Adif, Rodalies, minimum services and what to do"
+      },
+      {
+        "path": "/en/guides/spain-election-night-results/",
+        "title": "Spain election results, 29 November 2026: when they come out and how the count works"
+      },
+      {
+        "path": "/en/guides/barcelona-catalonia-tourist-tax/",
+        "title": "Barcelona tourist tax: what you'll actually pay"
+      }
+    ]
+  }
+}

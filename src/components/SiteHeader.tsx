@@ -74,7 +74,7 @@ export async function SiteHeader({
   return (
     <>
       <header className="ci-header">
-        <div className="ci-shell flex items-center gap-4 py-3">
+        <div className="ci-shell flex min-h-14 items-center gap-3 py-1.5 sm:gap-4">
           <Wordmark href={`/${locale}/`} />
 
           <nav aria-label={t.common.menu} className="ml-auto hidden items-center gap-5 lg:flex">

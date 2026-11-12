@@ -118,6 +118,10 @@ export function MunicipalityPage({ m, locale }: { m: SnapshotMunicipality; local
 
       <div className="ci-shell py-10">
         <div className="ci-prose">
+          {/* Dates first (12 Nov 2026, answer-first layout; docs/SEO_EXPERIMENTS.md): the list is the answer. */}
+          <h2 id="festius-2026" className="mt-0">{t.tableTitle}</h2>
+          <HolidayTable rows={rows} locale={locale} caption={t.tableCaption} />
+
           {/* First screen (CTR sweep, 3 Nov 2026): the next holiday, the year's local days,
               then the live today/tomorrow box, before the notes that qualify them. */}
           <p className="ci-lead">
@@ -149,9 +153,6 @@ export function MunicipalityPage({ m, locale }: { m: SnapshotMunicipality; local
           {t.nucleiLead ? <p>{t.nucleiLead}</p> : null}
           {t.correction ? <p className="ci-callout ci-callout-official">{t.correction}</p> : null}
           {t.unlisted ? <p className="ci-callout ci-callout-official">{t.unlisted}</p> : null}
-
-          <h2 id="festius-2026">{t.tableTitle}</h2>
-          <HolidayTable rows={rows} locale={locale} caption={t.tableCaption} />
 
           {m.nuclei.length > 0 ? (
             <>

@@ -2,7 +2,8 @@ import Link from "next/link";
 
 import { daysBetween, holidayOn, isCovered, nextHolidayAfter, shortDate, todayInCatalonia } from "@/lib/content/holidays/calendar";
 import { READ_AT } from "@/lib/content/mushrooms/conditions";
-import { PATHS, toolsFor, type ToolKey } from "@/lib/content/home-tools";
+import { PATHS, TOP_TOOLS, toolsFor, type ToolKey } from "@/lib/content/home-tools";
+import { MENU_LABELS, MENU_PATHS } from "@/lib/nav/menu";
 import { hrefFor } from "@/lib/content/repository";
 import { getMessages } from "@/lib/i18n";
 import type { Locale } from "@/lib/i18n/config";
@@ -39,7 +40,33 @@ function liveLine(key: ToolKey, locale: Locale): string | null {
   return null;
 }
 
-export function HomeTools({ locale }: { locale: Locale }) {
+/**
+ * The most-searched utilities, first thing under the homepage title
+ * (lib/content/home-tools.ts TOP_TOOLS): one compact tile each, labelled as in
+ * the site menu, with the next-holiday line on the holidays tile.
+ */
+export function HomeTopTools({ locale }: { locale: Locale }) {
+  const t = getMessages(locale).home.tools;
+  return (
+    <nav aria-label={t.title} className="ci-home-top">
+      <ul>
+        {TOP_TOOLS[locale].map((key) => {
+          const live = key === "holidays" ? liveLine("holiday", locale) : null;
+          return (
+            <li key={key}>
+              <Link href={MENU_PATHS[key][locale]} className="ci-home-top-tile">
+                <span className="ci-home-top-title">{MENU_LABELS[key][locale]}</span>
+                {live ? <span className="ci-home-top-live">{live}</span> : null}
+              </Link>
+            </li>
+          );
+        })}
+      </ul>
+    </nav>
+  );
+}
+
+export function HomeTools({ locale, exclude = [] }: { locale: Locale; exclude?: ToolKey[] }) {
   const t = getMessages(locale).home.tools;
 
   return (
@@ -48,7 +75,7 @@ export function HomeTools({ locale }: { locale: Locale }) {
         <h2 id="home-tools">{t.title}</h2>
       </div>
       <ul className="ci-tools">
-        {toolsFor(locale, todayInCatalonia()).map((key) => {
+        {toolsFor(locale, todayInCatalonia()).filter((key) => !exclude.includes(key)).map((key) => {
           const live = liveLine(key, locale);
           return (
             <li key={key}>

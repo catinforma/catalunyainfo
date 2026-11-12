@@ -90,10 +90,48 @@ export function CityPage({ c }: { c: City }) {
 
   return (
     <article>
-      <Header crumbs={cityCrumbs(c)} h1={cityH1(c)} lead={cityLead(c)} />
+      <Header crumbs={cityCrumbs(c)} h1={cityH1(c)} />
 
       <div className="ci-shell py-10">
         <div className="ci-prose">
+          {/* Dates first (12 Nov 2026, answer-first layout; docs/SEO_EXPERIMENTS.md): the list is the answer. */}
+          <h2 id="calendario" className="mt-0">Calendario laboral {YEAR} de {c.name}</h2>
+          <div className="ci-table-scroll mt-4">
+            <table className="ci-local-table">
+              <caption className="pb-2 text-left text-sm text-[var(--color-muted)]">
+                Festivos de {YEAR} en {c.name}: los nacionales y autonómicos del BOE ({BOE_REF.id})
+                {island ? `, la fiesta insular de ${island.place}` : ""}
+                {list ? " y las fiestas locales" : common.length ? " y la fiesta local común a toda la comunidad" : ""}.
+              </caption>
+              <thead>
+                <tr>
+                  <th scope="col">Fecha</th>
+                  <th scope="col">Festividad</th>
+                  <th scope="col">Tipo</th>
+                </tr>
+              </thead>
+              <tbody>
+                {calendar.map((d) => (
+                  <tr key={`${d.date}-${d.kind}`}>
+                    <th scope="row" className="font-normal">
+                      <time dateTime={d.date}>{weekdayDate(d.date)}</time>
+                    </th>
+                    <td>{d.kind === "local" ? localName(d) : d.name ? dayName({ name: d.name, replaces: d.replaces ?? null }) : ""}</td>
+                    <td>{KIND[d.kind]}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          {!list ? (
+            <p>
+              {common.length ? `Falta la fiesta local propia de ${c.name} en ${YEAR}` : `Faltan las 2 fiestas locales de ${c.name} en ${YEAR}`}, que se añadirá{common.length ? "" : "n"} cuando se publique{common.length ? "" : "n"}.
+            </p>
+          ) : null}
+          <WidgetPlaceLink locale="es" place={{ kind: "city", c }} />
+
+          <p className="ci-lead">{cityLead(c)}</p>
+
           <dl className="ci-facts">
             <dt>Fiestas locales {YEAR}</dt>
             <dd>{list ? cityListLine(c) : common.length ? `${compactDates(common.map((d) => d.date))} (común); la otra, sin publicar` : "Aún sin publicar"}</dd>
@@ -189,41 +227,6 @@ export function CityPage({ c }: { c: City }) {
               ) : null}
             </>
           )}
-
-          <h2 id="calendario">Calendario laboral {YEAR} de {c.name}</h2>
-          <div className="ci-table-scroll mt-4">
-            <table className="ci-local-table">
-              <caption className="pb-2 text-left text-sm text-[var(--color-muted)]">
-                Festivos de {YEAR} en {c.name}: los nacionales y autonómicos del BOE ({BOE_REF.id})
-                {island ? `, la fiesta insular de ${island.place}` : ""}
-                {list ? " y las fiestas locales" : common.length ? " y la fiesta local común a toda la comunidad" : ""}.
-              </caption>
-              <thead>
-                <tr>
-                  <th scope="col">Fecha</th>
-                  <th scope="col">Festividad</th>
-                  <th scope="col">Tipo</th>
-                </tr>
-              </thead>
-              <tbody>
-                {calendar.map((d) => (
-                  <tr key={`${d.date}-${d.kind}`}>
-                    <th scope="row" className="font-normal">
-                      <time dateTime={d.date}>{weekdayDate(d.date)}</time>
-                    </th>
-                    <td>{d.kind === "local" ? localName(d) : d.name ? dayName({ name: d.name, replaces: d.replaces ?? null }) : ""}</td>
-                    <td>{KIND[d.kind]}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-          {!list ? (
-            <p>
-              {common.length ? `Falta la fiesta local propia de ${c.name} en ${YEAR}` : `Faltan las 2 fiestas locales de ${c.name} en ${YEAR}`}, que se añadirá{common.length ? "" : "n"} cuando se publique{common.length ? "" : "n"}.
-            </p>
-          ) : null}
-          <WidgetPlaceLink locale="es" place={{ kind: "city", c }} />
 
           <h2 id="puentes">Puentes de {YEAR} en {c.name}</h2>
           <p>

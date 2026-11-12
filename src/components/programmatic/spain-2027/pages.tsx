@@ -246,25 +246,8 @@ export function CommunityPage({ c }: { c: CommunityNames }) {
 
       <div className="ci-shell py-10">
         <div className="ci-prose">
-          <p className="ci-lead">{communityLead(c)}</p>
-
-          <dl className="ci-facts">
-            <dt>Festivos {YEAR}</dt>
-            <dd>
-              {days.length}
-              {s.subRegional ? ` en todo el territorio, más 1 ${s.subRegional.unit}` : ""} ({compactDates(days.map((d) => d.date))})
-            </dd>
-            <dt>Propios de {c.city ? "la ciudad" : "la comunidad"} o no comunes</dt>
-            <dd>{own.length}</dd>
-            <dt>Fines de semana largos sin vacaciones</dt>
-            <dd>
-              {summary.free} <small>(calculado)</small>
-            </dd>
-            <dt>Festivos locales {YEAR}</dt>
-            <dd>{s.local.status === "published" ? "Publicados" : s.local.status === "partial" ? "Publicados en parte" : "Pendientes de publicar"}</dd>
-          </dl>
-
-          <h2 id="festivos">Los {days.length} festivos de {YEAR} {c.en}</h2>
+          {/* Dates first (12 Nov 2026, answer-first layout; docs/SEO_EXPERIMENTS.md): the list is the answer. */}
+          <h2 id="festivos" className="mt-0">Los {days.length} festivos de {YEAR} {c.en}</h2>
           <div className="ci-table-scroll mt-4">
             <table className="ci-local-table ci-stack-table">
               <caption className="pb-2 text-left text-sm text-[var(--color-muted)]">
@@ -317,6 +300,24 @@ export function CommunityPage({ c }: { c: CommunityNames }) {
               </ul>
             </>
           ) : null}
+
+          <p className="ci-lead">{communityLead(c)}</p>
+
+          <dl className="ci-facts">
+            <dt>Festivos {YEAR}</dt>
+            <dd>
+              {days.length}
+              {s.subRegional ? ` en todo el territorio, más 1 ${s.subRegional.unit}` : ""} ({compactDates(days.map((d) => d.date))})
+            </dd>
+            <dt>Propios de {c.city ? "la ciudad" : "la comunidad"} o no comunes</dt>
+            <dd>{own.length}</dd>
+            <dt>Fines de semana largos sin vacaciones</dt>
+            <dd>
+              {summary.free} <small>(calculado)</small>
+            </dd>
+            <dt>Festivos locales {YEAR}</dt>
+            <dd>{s.local.status === "published" ? "Publicados" : s.local.status === "partial" ? "Publicados en parte" : "Pendientes de publicar"}</dd>
+          </dl>
 
           <h2 id="diferencias">Qué cambia respecto al resto de España</h2>
           <p>
@@ -488,10 +489,22 @@ export function SpainHubPage() {
   const free = everywhereFree();
   return (
     <article>
-      <Header crumbs={hubCrumbs()} h1={HUB.h1} lead={hubLead()} />
+      <Header crumbs={hubCrumbs()} h1={HUB.h1} />
 
       <div className="ci-shell py-10">
         <div className="ci-prose">
+          {/* Dates first (12 Nov 2026, answer-first layout; docs/SEO_EXPERIMENTS.md): the list is the answer. */}
+          <h2 id="comunes" className="mt-0">Los {COMMON_DATES.length} festivos comunes a toda España en {YEAR}</h2>
+          <ul>
+            {commonRows().map((r) => (
+              <li key={r.date}>
+                {weekdayDate(r.date)}: {r.name}
+              </li>
+            ))}
+          </ul>
+
+          <p className="ci-lead">{hubLead()}</p>
+
           <h2 id="comunidades">Festivos {YEAR} por comunidad autónoma</h2>
           <div className="ci-table-scroll mt-4">
             <table className="ci-local-table ci-stack-table">
@@ -526,15 +539,6 @@ export function SpainHubPage() {
               </tbody>
             </table>
           </div>
-
-          <h2 id="comunes">Los {COMMON_DATES.length} festivos comunes a toda España en {YEAR}</h2>
-          <ul>
-            {commonRows().map((r) => (
-              <li key={r.date}>
-                {weekdayDate(r.date)}: {r.name}
-              </li>
-            ))}
-          </ul>
 
           <h2 id="variables">Festivos que cambian según la comunidad</h2>
           <ul>

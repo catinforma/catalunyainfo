@@ -1042,13 +1042,16 @@ export type B2SpanishArticle = Omit<B2Article, "key" | "editions"> & { editions:
  */
 export type B2UnkeyedArticle = Omit<B2Article, "key" | "editions"> & { editions: { es: B2Edition } & Partial<Record<"ca" | "en", B2Edition>> };
 
+/** The label of `verifiedLine`; the answer-first layout (lib/layout/answer-first.ts) finds the callout by it. */
+export const VERIFIED_LABEL: Record<Locale, string> = {
+  ca: "Última verificació de les dades d'aquesta pàgina",
+  es: "Última verificación de los datos de esta página",
+  en: "Data on this page last verified",
+};
+
 /** "Última verificació" line, printed where a reader will actually see it. */
 export function verifiedLine(locale: Locale, isoDate: string): string {
-  const label: Record<Locale, string> = {
-    ca: "Última verificació de les dades d'aquesta pàgina",
-    es: "Última verificación de los datos de esta página",
-    en: "Data on this page last verified",
-  };
+  const label = VERIFIED_LABEL;
   const [year, month, day] = isoDate.split("-");
   const months: Record<Locale, string[]> = {
     ca: ["gener", "febrer", "març", "abril", "maig", "juny", "juliol", "agost", "setembre", "octubre", "novembre", "desembre"],
@@ -1064,7 +1067,7 @@ export function verifiedLine(locale: Locale, isoDate: string): string {
   return `${label[locale]}: ${date}.`;
 }
 
-const READ_NEXT: Record<Locale, string> = {
+export const READ_NEXT: Record<Locale, string> = {
   ca: "Llegeix també",
   es: "Lee también",
   en: "Read next",

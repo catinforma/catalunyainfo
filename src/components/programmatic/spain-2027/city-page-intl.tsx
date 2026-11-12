@@ -112,10 +112,62 @@ export function CityPageIntl({ c, locale }: { c: City; locale: Edition }) {
 
   return (
     <article>
-      <Header crumbs={cityCrumbsIntl(c, locale)} h1={cityH1Intl(c, locale)} lead={cityLeadIntl(c, locale)} locale={locale} />
+      <Header crumbs={cityCrumbsIntl(c, locale)} h1={cityH1Intl(c, locale)} locale={locale} />
 
       <div className="ci-shell py-10">
         <div className="ci-prose">
+          {/* Dates first (12 Nov 2026, answer-first layout; docs/SEO_EXPERIMENTS.md): the list is the answer. */}
+          <h2 id="calendario" className="mt-0">{tr(locale, `Calendari laboral ${YEAR} ${caOf(name)}`, `${Name} work calendar ${YEAR}`)}</h2>
+          <div className="ci-table-scroll mt-4">
+            <table className="ci-local-table">
+              <caption className="pb-2 text-left text-sm text-[var(--color-muted)]">
+                {ca
+                  ? `Festius del ${YEAR} ${caIn(name)}: els estatals i autonòmics del BOE (${BOE_REF.id})${island ? `, la festa insular ${caOf(islandPlace)}` : ""}${list ? " i les festes locals" : common.length ? " i la festa local comuna a tota la comunitat" : ""}.`
+                  : `${Name}'s ${YEAR} holidays: the national and regional ones in the BOE (${BOE_REF.id})${island ? `, the island holiday of ${islandPlace}` : ""}${list ? " and the local holidays" : common.length ? " and the local holiday shared by the whole community" : ""}.`}
+              </caption>
+              <thead>
+                <tr>
+                  <th scope="col">{tr(locale, "Data", "Date")}</th>
+                  <th scope="col">{tr(locale, "Festa", "Holiday")}</th>
+                  <th scope="col">{tr(locale, "Tipus", "Type")}</th>
+                </tr>
+              </thead>
+              <tbody>
+                {calendar.map((d) => (
+                  <tr key={`${d.date}-${d.kind}`}>
+                    <th scope="row" className="font-normal">
+                      <time dateTime={d.date}>{weekdayDateIntl(d.date, locale)}</time>
+                    </th>
+                    <td>
+                      {d.kind === "local"
+                        ? localNameIntl({ date: d.date, name: d.name }, locale)
+                        : d.kind === "island"
+                          ? (d.name ?? "")
+                          : d.name
+                            ? dayNameIntl({ name: d.name, replaces: d.replaces ?? null }, locale)
+                            : ""}
+                    </td>
+                    <td>{kindLabel(d.kind, locale)}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          {!list ? (
+            <p>
+              {ca
+                ? common.length
+                  ? `Falta la festa local pròpia ${caOf(name)} del ${YEAR}, que s'hi afegirà quan es publiqui.`
+                  : `Falten les 2 festes locals ${caOf(name)} del ${YEAR}, que s'hi afegiran quan es publiquin.`
+                : common.length
+                  ? `${Name}'s own ${YEAR} local holiday is still missing; it will be added once it is published.`
+                  : `${Name}'s 2 local holidays for ${YEAR} are still missing; they will be added once they are published.`}
+            </p>
+          ) : null}
+          <WidgetPlaceLink locale={locale} place={{ kind: "city", c }} />
+
+          <p className="ci-lead">{cityLeadIntl(c, locale)}</p>
+
           <dl className="ci-facts">
             <dt>{tr(locale, `Festes locals ${YEAR}`, `Local holidays ${YEAR}`)}</dt>
             <dd>
@@ -252,55 +304,6 @@ export function CityPageIntl({ c, locale }: { c: City; locale: Edition }) {
               ) : null}
             </>
           )}
-
-          <h2 id="calendario">{tr(locale, `Calendari laboral ${YEAR} ${caOf(name)}`, `${Name} work calendar ${YEAR}`)}</h2>
-          <div className="ci-table-scroll mt-4">
-            <table className="ci-local-table">
-              <caption className="pb-2 text-left text-sm text-[var(--color-muted)]">
-                {ca
-                  ? `Festius del ${YEAR} ${caIn(name)}: els estatals i autonòmics del BOE (${BOE_REF.id})${island ? `, la festa insular ${caOf(islandPlace)}` : ""}${list ? " i les festes locals" : common.length ? " i la festa local comuna a tota la comunitat" : ""}.`
-                  : `${Name}'s ${YEAR} holidays: the national and regional ones in the BOE (${BOE_REF.id})${island ? `, the island holiday of ${islandPlace}` : ""}${list ? " and the local holidays" : common.length ? " and the local holiday shared by the whole community" : ""}.`}
-              </caption>
-              <thead>
-                <tr>
-                  <th scope="col">{tr(locale, "Data", "Date")}</th>
-                  <th scope="col">{tr(locale, "Festa", "Holiday")}</th>
-                  <th scope="col">{tr(locale, "Tipus", "Type")}</th>
-                </tr>
-              </thead>
-              <tbody>
-                {calendar.map((d) => (
-                  <tr key={`${d.date}-${d.kind}`}>
-                    <th scope="row" className="font-normal">
-                      <time dateTime={d.date}>{weekdayDateIntl(d.date, locale)}</time>
-                    </th>
-                    <td>
-                      {d.kind === "local"
-                        ? localNameIntl({ date: d.date, name: d.name }, locale)
-                        : d.kind === "island"
-                          ? (d.name ?? "")
-                          : d.name
-                            ? dayNameIntl({ name: d.name, replaces: d.replaces ?? null }, locale)
-                            : ""}
-                    </td>
-                    <td>{kindLabel(d.kind, locale)}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-          {!list ? (
-            <p>
-              {ca
-                ? common.length
-                  ? `Falta la festa local pròpia ${caOf(name)} del ${YEAR}, que s'hi afegirà quan es publiqui.`
-                  : `Falten les 2 festes locals ${caOf(name)} del ${YEAR}, que s'hi afegiran quan es publiquin.`
-                : common.length
-                  ? `${Name}'s own ${YEAR} local holiday is still missing; it will be added once it is published.`
-                  : `${Name}'s 2 local holidays for ${YEAR} are still missing; they will be added once they are published.`}
-            </p>
-          ) : null}
-          <WidgetPlaceLink locale={locale} place={{ kind: "city", c }} />
 
           <h2 id="puentes">{tr(locale, `Ponts del ${YEAR} ${caIn(name)}`, `Long weekends in ${Name} in ${YEAR}`)}</h2>
           <p>
