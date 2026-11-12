@@ -1068,14 +1068,14 @@ test("neutral: no polls, forecasts or winners; no guessed results site; no templ
     }
   }
   assert.equal(ELECTION_NIGHT_RESULTS_URL, null, "no results-night link until Interior announces it");
-  // Re-checked 29 Oct 2026: Interior's 21 Oct note is a media-only repository, not a public site.
-  assert.equal(INTERIOR_CHECKED, "2026-10-29");
+  // Re-checked 13 Nov 2026 (results-night.ts): no public results site announced yet.
+  assert.equal(INTERIOR_CHECKED, "2026-11-13");
   if (SNAPSHOT.general2026) {
     // Once the official file is in, the slot shows it and nothing about provisional results.
     for (const locale of LOCALES) assert.doesNotMatch(JSON.stringify(buildElectionPage(bySlug("salou"), locale).slot), /provisional/i, locale);
   } else {
-    assert.match(buildElectionPage(bySlug("salou"), "ca").slot.md[1]!, /comprovat el 29 d'octubre de 2026/);
-    assert.match(buildElectionPage(bySlug("salou"), "en").slot.md[1]!, /checked on 29 October 2026/);
+    assert.match(buildElectionPage(bySlug("salou"), "ca").slot.md[1]!, /comprovat el 13 de novembre de 2026/);
+    assert.match(buildElectionPage(bySlug("salou"), "en").slot.md[1]!, /checked on 13 November 2026/);
   }
 });
 

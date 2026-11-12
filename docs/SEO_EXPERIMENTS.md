@@ -3719,3 +3719,90 @@ Vilanova, around 18–20 Nov. In 2025 most announced between 12 and 25 Nov.
 Then fill `y2026`, move `LIGHTS_TOWNS_AS_OF`, deploy and publish `llums-nadal`.
 
 **Outcome:** _pending_
+
+## 13 Nov 2026 — 29N results night: one switch for the official results site, postal and results lines on the strip, "is 29/30 Nov a holiday" answers (deploy; groups `election-night`, `election-results`, later `voting`, `mesa`)
+
+**Why.** The election is a Spanish general election (Congress and Senate),
+Sunday 29 Nov 2026, called by RD 806/2026 (BOE 248, 6 Oct 2026; read on
+boe.es 13 Nov: campaign 13 Nov 0:00 to 27 Nov 24:00, Cortes meet 23 Dec).
+Demand on the election families is past its first peak (the mesa draw: 22.5k
+impressions/day on 2 Nov, 6.3k on 10 Nov) and returns for the deadlines
+(postal request 19 Nov, hand-in 25 Nov) and for the night itself. The night
+is when "resultados elecciones" and "resultados <town>" peak; the site may
+show no figure it cannot verify, so every page needs to say, in the same
+words, when the figures come out, who publishes them and where, and carry
+the official link the moment Interior names it, from one place.
+
+**Titles.** None changed. The guides are inside the 11 Nov window (day 7 =
+18 Nov, no retitle before 30 Nov) and the town pages inside the 3 Nov one.
+The coordinator's CTR list of 13 Nov (EN how-to-vote 1.9 % at 5.7, EN mesa
+1.2 % at 3.0, EN election night 2.1 % at 6.4, ES how-to-vote anchors
+#voto-por-correo / #calendario ~1,500 impressions at 6.2, 0 clicks) is all
+inside the 11 Nov window, so it is left to that entry's revert rule. The
+anchor impressions come from the "cuándo son las elecciones en Cataluña"
+queries (GSC, 28 d), which the anchors cannot answer; nothing to fix in them.
+
+**What changed.**
+- `src/lib/programmatic/elections/results-night.ts` (new): the one switch,
+  `ELECTION_NIGHT_RESULTS_URL` (null) and `ELECTION_NIGHT_RESULTS_SOURCE`
+  (the official note naming it; a test requires it and an official host:
+  lamoncloa.gob.es, interior.gob.es, 29neleccionesgenerales.es), and
+  `resultsNightLine(locale)`: voting ends at 20:00 (LOREG 88.1; Canaries
+  21:00 peninsular), Interior publishes the provisional count that night
+  (LOREG 98.2), official result from the provincial boards' general count
+  4–7 Dec (JEC 29N calendar PDF, read 13 Nov) and the BOE. No link while
+  null; checked 13 Nov (29neleccionesgenerales.es home: no results link;
+  Infoelectoral 403 to scripts). `model.ts` re-exports it; INTERIOR_CHECKED
+  is 13 Nov.
+- Town pages (all, ca/es/en; deploy): the slot's results line is that
+  paragraph plus the election-night guide. Hubs `/ca/eleccions/`,
+  `/es/elecciones/`, `/en/elections/` (deploy): the same paragraph in the
+  intro until the 29N file is in.
+- `election-night` (group): the "not yet" sentences, EN lead, EN FAQ and the
+  note read the switch; dates move to 13 Nov; once set, the site and the note
+  join the sources. Language line ("En català · En castellano · In
+  English") under the lead.
+- `election-results` (Congress guide; group `election-results`): the 29N
+  paragraph after the lead is the shared line plus the night guide and the
+  town pages; LOREG and JEC calendar as sources.
+- `voting` (group; publish on 20 Nov, after the answer-first review, since
+  it is that experiment's control): FAQ "¿El 29 de noviembre es festivo? ¿Y
+  el lunes 30?" (Sunday; RD 806/2026 declares no holiday, Catalan 2026
+  calendar has none on 29/30 Nov; up to 4 paid hours, RD 605/1999 art. 13;
+  mesa full paid day + 5 h off Monday 30 Nov, LOREG 28.1; 30 Nov date page
+  for Sant Andreu towns) and "¿Qué es la jornada de reflexión?" (28 Nov;
+  LOREG 53; polls ban 24–28 Nov), ca/es/en. DOGC voter-leave order still not
+  out: issues 9792–9794 (11–13 Nov) read on the summary API; "not yet" lines
+  re-dated in `voting` and `mesa`. Language line under the lead (voting) and
+  under the key facts (mesa): EN mesa ranks at 3.0 for Spanish fragments
+  ("cuanto pagan", "se cobra?").
+- Strip (`news-alerts.ts`, deploy): `postal-vote-request` (13–19 Nov, "Voto
+  por correo: se puede pedir hasta el jueves 19 de noviembre"),
+  `postal-vote-deliver` (20–25 Nov, "se entrega en Correos hasta el miércoles
+  25"), both from POSTAL_29N (Correos and Interior re-read 13 Nov);
+  `election-results-29n` (28–30 Nov, to the night guide), before the
+  December bridge line so phones show it on 30 Nov. Lines with a future
+  start reach static pages only at the next deploy on or after that start:
+  deploy on/after 20 Nov and on 28 Nov.
+
+**Baseline** (GSC 14 d to 13 Nov, partial last day; clicks / impressions /
+CTR / position): `/es/elecciones/` family 2,233 / 41,395 / 5.4 % / 4.6;
+`/ca/eleccions/` 1,398 / 42,238 / 3.3 % / 5.5; `/en/elections/` 13 / 498 /
+2.6 % / 5.2; election night ES 16 / 534 / 3.0 % / 6.1, CA 1 / 106 / 0.9 % /
+8.0, EN 92 / 4,385 / 2.1 % / 6.6; Congress results ES 11 / 254 / 4.3 % / 9.4,
+CA 2 / 25, EN 0 / 81; postal vote ES 17 / 391 / 4.3 % / 6.8, CA 22 / 1,038 /
+2.1 % / 6.4, EN 18 / 453 / 4.0 % / 3.9.
+
+**Prediction.** Postal guide clicks (3 editions) from ~4/day to ≥ 15/day on
+14–19 Nov (strip links from ~3,000 pages, deadline demand). Election night
+and Congress results: ≥ 3× their 14-day impressions on 28–30 Nov alone, CTR
+≥ 4 % ES/EN. Town families: on 29–30 Nov, "resultados/resultats <town>"
+queries appear with CTR ≥ 3 % (the slot says honestly where the figures
+are). EN mesa CTR ≥ 2 % at similar position after the 20 Nov publish.
+
+**Measure:** 20 Nov (postal, `snapshot.py page voto-por-correo 7` etc.), 2 Dec
+(night guides, families, `rising 3 40` on 29 Nov–1 Dec). Revert rule: none for
+titles (unchanged); if the strip's postal lines coincide with a fall in
+engagement on strike pages, move them after the strike lines' end.
+
+**Outcome:** _pending_

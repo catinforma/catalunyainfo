@@ -1,5 +1,7 @@
 import type { Block } from "@/lib/content/blocks";
 import type { Locale } from "@/lib/i18n/config";
+import { hubPath } from "@/lib/programmatic/elections/paths";
+import { ELECTION_NIGHT_RESULTS_URL, resultsNightLine } from "@/lib/programmatic/elections/results-night";
 
 import {
   b2link,
@@ -52,11 +54,17 @@ const VERIFIED = "2026-10-12";
  */
 const PARLIAMENT_VERIFIED = "2026-11-11";
 
-/** Where the 29 November 2026 count is explained (Congress page only). */
+/**
+ * The 29 November 2026 results, first thing after the lead (Congress page
+ * only). 13 Nov 2026 (body only, logged in docs/SEO_EXPERIMENTS.md, "13 Nov
+ * 2026 — 29N results night"): the shared results-night line (when, who,
+ * provisional vs official; the official link once the switch in
+ * elections/results-night.ts is set), then the night guide and the town pages.
+ */
 const NIGHT: Record<Locale, string> = {
-  ca: `Per als resultats del **29 de novembre de 2026**, la nit electoral, mira ${b2link("electionNight", "ca", "a quina hora surten i com és l'escrutini provisional")}.`,
-  es: `Para los resultados del **29 de noviembre de 2026**, la noche electoral, mira ${b2link("electionNight", "es", "a qué hora salen y cómo es el escrutinio provisional")}.`,
-  en: `For the results of **29 November 2026** on election night, see ${b2link("electionNight", "en", "when they come out and how the provisional count works")}.`,
+  ca: `${resultsNightLine("ca")} Més detalls: ${b2link("electionNight", "ca", "a quina hora surten i com és l'escrutini provisional")}; per municipis, els [resultats electorals de cada municipi](${hubPath("ca")}).`,
+  es: `${resultsNightLine("es")} Más detalles: ${b2link("electionNight", "es", "a qué hora salen y cómo es el escrutinio provisional")}; por municipios, los [resultados electorales de cada municipio](${hubPath("es")}).`,
+  en: `${resultsNightLine("en")} More: ${b2link("electionNight", "en", "when they come out and how the provisional count works")}; town by town, the [election results in each Catalan town](${hubPath("en")}).`,
 };
 
 const DATA_SOURCES: B2Source[] = [
@@ -181,6 +189,9 @@ export const CONGRESS_RESULTS: B2Article = {
   sources: [
     ...DATA_SOURCES,
     { name: "Real Decreto 806/2026 (convocatoria y escaños por provincia)", url: "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2026-20742", publisher: "Boletín Oficial del Estado" },
+    { name: "Ley Orgánica 5/1985, del Régimen Electoral General (arts. 88 y 98: cierre de la votación e información provisional de resultados)", url: "https://www.boe.es/buscar/act.php?id=BOE-A-1985-11672", publisher: "Boletín Oficial del Estado" },
+    { name: "Calendario electoral, elecciones generales 2026 (escrutinio general 4-7 de diciembre)", url: "https://www.juntaelectoralcentral.es/cs/jec/documentos/eg2026_calendario.pdf", publisher: "Junta Electoral Central" },
+    ...(ELECTION_NIGHT_RESULTS_URL ? [{ name: "Resultados provisionales de las elecciones generales del 29 de noviembre de 2026 (web oficial)", url: ELECTION_NIGHT_RESULTS_URL, publisher: "Ministerio del Interior" }] : []),
   ],
   heroKey: "congres-hemicicle-sostre",
   heroAlt: {

@@ -1,4 +1,5 @@
 import { b2href, type B2Key } from "@/lib/content/batch02/shared";
+import { POSTAL_29N } from "@/lib/content/batch02/postal-vote";
 import { STRIKES, andList, lastDay, type Strike } from "@/lib/content/batch02/strikes";
 import { WEEKDAY_NAMES, shortDate, weekdayIndex } from "@/lib/content/holidays/calendar";
 import type { Locale } from "@/lib/i18n/config";
@@ -80,6 +81,18 @@ export const NEXT_ALERTS_FROM = "2026-11-12";
 
 /** The 29N line is one of them (13 Nov until 11 Nov 2026). */
 export const ELECTION_ALERT_FROM = NEXT_ALERTS_FROM;
+
+/**
+ * 13 Nov 2026 (docs/SEO_EXPERIMENTS.md, "13 Nov 2026 — 29N results night"):
+ * the postal-vote lines start this day. Their two deadlines come from
+ * POSTAL_29N in postal-vote.ts (Correos and Interior, re-read 13 Nov).
+ */
+export const POSTAL_ALERT_FROM = "2026-11-13";
+
+/** The civil date before `isoDate`. */
+function previousDay(isoDate: string): string {
+  return new Date(Date.parse(`${isoDate}T12:00:00Z`) - 86_400_000).toISOString().slice(0, 10);
+}
 
 /** The entries in strikes.ts the strike lines are built from. */
 export const STRIKE_11N_ID = "vaga-general-2026-11-11";
@@ -208,6 +221,7 @@ function chained(lines: NewsAlert[]): NewsAlert[] {
 export function buildNewsAlerts(
   strikes: readonly Strike[] = STRIKES,
   electionDay: string = GENERAL_ELECTION_DAY,
+  postal: { requestBy: string; deliverBy: string } = POSTAL_29N,
 ): NewsAlert[] {
   const next = madridMidnight(NEXT_ALERTS_FROM);
   return chained([
@@ -257,6 +271,30 @@ export function buildNewsAlerts(
       }),
       next,
     ),
+    // 13 Nov 2026: the postal vote, request deadline then hand-in deadline
+    // (one guide, so the second line starts when the first ends).
+    {
+      id: "postal-vote-request",
+      start: madridMidnight(POSTAL_ALERT_FROM),
+      end: endOfMadridDay(postal.requestBy),
+      target: "postalVote",
+      text: {
+        ca: `Vot per correu: es pot demanar fins ${daysPhrase([postal.requestBy], "ca").replace(/^el /, "al ")}`,
+        es: `Voto por correo: se puede pedir hasta ${daysPhrase([postal.requestBy], "es")}`,
+        en: `Postal vote: apply by ${daysPhrase([postal.requestBy], "en").replace(/^on /, "")}`,
+      },
+    },
+    {
+      id: "postal-vote-deliver",
+      start: madridMidnight(POSTAL_ALERT_FROM),
+      end: endOfMadridDay(postal.deliverBy),
+      target: "postalVote",
+      text: {
+        ca: `Vot per correu: es lliura a Correus fins ${daysPhrase([postal.deliverBy], "ca").replace(/^el /, "al ")}`,
+        es: `Voto por correo: se entrega en Correos hasta ${daysPhrase([postal.deliverBy], "es")}`,
+        en: `Postal vote: hand it in at Correos by ${daysPhrase([postal.deliverBy], "en").replace(/^on /, "")}`,
+      },
+    },
     {
       id: "election-29n",
       start: madridMidnight(ELECTION_ALERT_FROM),
@@ -266,6 +304,20 @@ export function buildNewsAlerts(
         ca: `Eleccions generals ${daysPhrase([electionDay], "ca")}: on i com votar`,
         es: `Elecciones generales ${daysPhrase([electionDay], "es")}: dónde y cómo votar`,
         en: `General election ${daysPhrase([electionDay], "en")}: how and where to vote`,
+      },
+    },
+    {
+      // 13 Nov 2026: results, from the day of reflection to the end of the
+      // day after polling day, to the guide that says when they come out and
+      // where (the official link comes from elections/results-night.ts).
+      id: "election-results-29n",
+      start: madridMidnight(previousDay(electionDay)),
+      end: endOfMadridDay(nextDay(electionDay)),
+      target: "electionNight",
+      text: {
+        ca: `Resultats de les eleccions ${daysPhrase([electionDay], "ca").replace(/^el /, "del ")}: quan i on surten`,
+        es: `Resultados de las elecciones ${daysPhrase([electionDay], "es").replace(/^el /, "del ")}: cuándo y dónde salen`,
+        en: `General election results, Sunday ${shortDate(electionDay, "en")}: when and where`,
       },
     },
     {

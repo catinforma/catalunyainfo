@@ -33,6 +33,7 @@ import {
 } from "./results";
 import { buildMesaDuty, type MesaDutyModel } from "./mesa-duty";
 import { buildPolling, type PollingModel } from "./polling";
+import { RESULTS_SITE_CHECKED, resultsNightLine } from "./results-night";
 import { SNAPSHOT } from "./snapshot";
 import type { DayLines } from "./today";
 import type { ElectionsSnapshot, General2026, Municipality, RegionalVotes } from "./types";
@@ -45,18 +46,14 @@ export const INTERIOR_DOWNLOADS: Record<Locale, string> = {
 };
 
 /**
- * The official election-night results site. Null until the Interior Ministry
- * announces it: never guessed, never scraped. Checked 27 and 29 Oct 2026 on
- * infoelectoral.interior.gob.es and 29neleccionesgenerales.es (no results
- * section, no announcement). Interior's note of 21 Oct 2026 ("Dispositivo de
- * recepción de resultados provisionales...") is not one: it describes a data
- * repository for accredited media only, whose address the media receive by
- * email on 17 Nov. It names no public website.
+ * The official election-night results site and the date it was last looked
+ * for: one switch for every page, in results-night.ts (13 Nov 2026). Null
+ * until the Interior Ministry announces it: never guessed, never scraped.
  */
-export const ELECTION_NIGHT_RESULTS_URL: string | null = null;
+export { ELECTION_NIGHT_RESULTS_URL } from "./results-night";
 
-/** The date the Interior pages above were last checked. */
-export const INTERIOR_CHECKED = "2026-10-29";
+/** The date the Interior pages were last checked for a results site (see results-night.ts). */
+export const INTERIOR_CHECKED = RESULTS_SITE_CHECKED;
 
 export const LOREG_URL = "https://www.boe.es/buscar/act.php?id=BOE-A-1985-11672";
 export const RD_806_2026_URL = "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2026-20742";
@@ -588,9 +585,7 @@ function buildResults(m: Municipality, locale: Locale, snapshot: ElectionsSnapsh
             ]
           : [
               `**Els resultats ${de} apareixeran aquí quan el Ministeri de l'Interior publiqui el fitxer oficial de resultats per municipis** a la seva [àrea de descàrregues](${INTERIOR_DOWNLOADS.ca}).`,
-              ELECTION_NIGHT_RESULTS_URL
-                ? `Resultats provisionals de la nit electoral: [web oficial del Ministeri de l'Interior](${ELECTION_NIGHT_RESULTS_URL}).`
-                : `Resultats provisionals de la nit electoral: Interior encara no ha anunciat el web on els publicarà (comprovat el ${f.date(INTERIOR_CHECKED)}). Quan ho faci, n'hi posarem l'enllaç oficial. Com funciona l'escrutini: [${B2_TITLES.electionNight.ca}](${b2href("electionNight", "ca")}).`,
+              `${resultsNightLine("ca")} Com funciona la nit electoral: [${B2_TITLES.electionNight.ca}](${b2href("electionNight", "ca")}).`,
               `Si has de votar: [com votar a Catalunya](${b2href("voting", "ca")}), [el vot per correu](${b2href("postalVote", "ca")}) i [les llistes de candidats del 29N](${b2href("candidates", "ca")}).`,
             ],
         results:
@@ -777,9 +772,7 @@ function buildResults(m: Municipality, locale: Locale, snapshot: ElectionsSnapsh
             ]
           : [
               `**Los resultados de ${place} aparecerán aquí cuando el Ministerio del Interior publique el fichero oficial de resultados por municipios** en su [área de descargas](${INTERIOR_DOWNLOADS.es}).`,
-              ELECTION_NIGHT_RESULTS_URL
-                ? `Resultados provisionales de la noche electoral: [web oficial del Ministerio del Interior](${ELECTION_NIGHT_RESULTS_URL}).`
-                : `Resultados provisionales de la noche electoral: Interior aún no ha anunciado la web donde los publicará (comprobado el ${f.date(INTERIOR_CHECKED)}). Cuando lo haga, pondremos aquí el enlace oficial. Cómo funciona el escrutinio: [${B2_TITLES.electionNight.es}](${b2href("electionNight", "es")}).`,
+              `${resultsNightLine("es")} Cómo funciona la noche electoral: [${B2_TITLES.electionNight.es}](${b2href("electionNight", "es")}).`,
               `Si tienes que votar: [cómo votar en Cataluña](${b2href("voting", "es")}), [el voto por correo](${b2href("postalVote", "es")}) y [las listas de candidatos del 29N](${b2href("candidates", "es")}).`,
             ],
         results:
@@ -965,9 +958,7 @@ function buildResults(m: Municipality, locale: Locale, snapshot: ElectionsSnapsh
           ]
         : [
             `**Results for ${place} will appear here when the Spanish Ministry of the Interior publishes the official results file by municipality** in its [download area](${INTERIOR_DOWNLOADS.en}).`,
-            ELECTION_NIGHT_RESULTS_URL
-              ? `Provisional results on election night: [the Interior Ministry's official site](${ELECTION_NIGHT_RESULTS_URL}).`
-              : `Provisional results on election night: the ministry has not yet announced the website where it will publish them (checked on ${f.date(INTERIOR_CHECKED)}). When it does, we will add the official link here. How the count works: [${B2_TITLES.electionNight.en}](${b2href("electionNight", "en")}).`,
+            `${resultsNightLine("en")} How election night works: [${B2_TITLES.electionNight.en}](${b2href("electionNight", "en")}).`,
             `If you are voting: [how to vote in Catalonia](${b2href("voting", "en")}), [the postal vote](${b2href("postalVote", "en")}) and [the 29 November candidate lists](${b2href("candidates", "en")}).`,
           ],
       results:
