@@ -1,5 +1,6 @@
 import type { Locale } from "@/lib/i18n/config";
 import { hubPath, PAGES_PER_LOCALE } from "@/lib/programmatic/elections/paths";
+import { datePath } from "@/lib/programmatic/holidays/paths";
 import { pollsPath } from "@/lib/programmatic/polls/paths";
 
 import {
@@ -8,6 +9,7 @@ import {
   callout,
   faq,
   h2,
+  languageLinks,
   lead,
   list,
   table,
@@ -183,6 +185,23 @@ import {
  * guide is linked once already, as its test wants). VERIFIED stays 3 Nov:
  * the rest was not re-read.
  *
+ * 13 Nov 2026 (body only; titles frozen to 30 Nov by the 11 Nov entry,
+ * logged in docs/SEO_EXPERIMENTS.md, "13 Nov 2026 — 29N results night").
+ * The DOGC voter-leave order for 29N is still not out: DOGC summary API
+ * (portaldogc.gencat.cat/eadop-rest/api/dogc/summaryDOGC), issues 9792-9794
+ * (11-13 Nov) read that day, no order on time off to vote; the "not yet"
+ * lines move to 13 Nov. Two FAQ items for the questions the calendar now
+ * brings ("es festivo el 29 / el 30 de noviembre", "jornada de reflexión"),
+ * from texts read that day on the BOE: RD 806/2026 arts. 2 and 4 (Sunday
+ * 29 Nov; campaign 13 Nov 0:00 to 27 Nov 24:00; no holiday declared), LOREG
+ * art. 28.1 ("permiso retribuido de jornada completa durante el día de la
+ * votación, si es laboral. En todo caso ... reducción de su jornada de
+ * trabajo de cinco horas el día inmediatamente posterior") and art. 53 ("No
+ * puede difundirse propaganda electoral ni realizarse acto alguno de campaña
+ * electoral una vez que ésta haya legalmente terminado"), and the JEC 29N
+ * calendar ("Jornada de reflexión 28 de noviembre"; polls ban 24-28 Nov).
+ * The 30 Nov local holidays are the holiday family's own date page.
+ *
  * The URL is evergreen on purpose: after 29 November the same page switches
  * its worked example to the municipal elections, whose date is fixed by law
  * (LOREG art. 42.3, fourth Sunday of May). Strictly procedural and
@@ -347,7 +366,7 @@ const COPY: Record<Locale, T> = {
       `**Digital DNI (MiDNI app):** accepted. On 5 November 2026 the Central Electoral Board lifted the suspension it had ordered on 26 March (Acuerdo 94/2026), once the Interior Ministry confirmed that every polling table will have a device with a camera to check the temporary QR code the app generates, which must be opened in front of the table (${a("Acuerdo 334/2026", URL.midni)}). The DGT's driving-licence app, MiDGT, is still not accepted.`,
       "**Polls and campaign:** no polls may be published from Tuesday 24 to Saturday 28 November. The campaign ends at midnight on Friday 27, and Saturday 28 is the day of reflection.",
       "**Braille voting kit:** for voters who read braille and have a recognised disability of 33% or more or belong to ONCE; request it from the Interior Ministry by Monday 2 November.",
-      "**Working that day:** you are entitled to up to four paid hours to vote, pro rata if you work part-time. In Catalonia a Generalitat order published in the DOGC sets the detail; for 29 November it was still not in the DOGC on 11 November (issues up to no. 9792 checked; in 2023 the order came out on 7 July, 16 days before the vote). If your job keeps you away from home that day, the Interior Ministry says the measures should let you vote by post, with up to four paid hours off to request it.",
+      "**Working that day:** you are entitled to up to four paid hours to vote, pro rata if you work part-time. In Catalonia a Generalitat order published in the DOGC sets the detail; for 29 November it was still not in the DOGC on 13 November (issues up to no. 9794 checked; in 2023 the order came out on 7 July, 16 days before the vote). If your job keeps you away from home that day, the Interior Ministry says the measures should let you vote by post, with up to four paid hours off to request it.",
     ],
     abroadTitle: "If you are abroad",
     abroad: [
@@ -371,10 +390,12 @@ const COPY: Record<Locale, T> = {
       { question: "Do I need my DNI to find my polling station?", answer: "No. The INE's public finder only asks for your province, your municipality and the first letter of your first surname, plus your street if you want to narrow it down; it needs no ID number, Cl@ve or certificate. With Cl@ve you can also see your full entry on the electoral roll on the INE's website." },
       { question: "What time do the polls open and close on 29 November?", answer: "From 9:00 to 20:00 on Sunday 29 November 2026. Anyone inside or at the door at 20:00 can still vote." },
       { question: "Until when can I request a postal vote?", answer: "Until 19 November 2026, in person at Correos with your original ID or online with an electronic DNI or digital certificate; the vote must be handed in by 25 November." },
-      { question: "Do I get paid time off work to vote on 29 November?", answer: "Yes, if you work that day: you are entitled to up to four paid hours to vote, pro rata for part-time work, according to the Interior Ministry. In Catalonia a Generalitat order in the DOGC sets the detail for each election; the order for 29 November was still not out on 11 November. In 2023 it gave two hours when the shift overlapped the polling hours by more than two and less than four hours, and four hours for four or more." },
+      { question: "Do I get paid time off work to vote on 29 November?", answer: "Yes, if you work that day: you are entitled to up to four paid hours to vote, pro rata for part-time work, according to the Interior Ministry. In Catalonia a Generalitat order in the DOGC sets the detail for each election; the order for 29 November was still not out on 13 November. In 2023 it gave two hours when the shift overlapped the polling hours by more than two and less than four hours, and four hours for four or more." },
       { question: "How do Spaniards living abroad vote (CERA)?", answer: "Voters on the overseas roll (CERA) do not have to request anything: the census office posts them the documents. They can send their vote to the consulate by registered mail by 24 November, or vote in person at the consulate or polling centre from 21 to 26 November. CERA voters who are in Spain can request a postal vote at Correos until 19 November. Spaniards who live in Spain but are temporarily abroad request their vote at the consulate by 31 October." },
       { question: "What ID do I need? Is the digital DNI on my phone valid?", answer: "Your original DNI, passport or driving licence with a photo; the DNI and passport are valid even if expired. The MiDNI app is accepted too: the Central Electoral Board lifted its suspension on 5 November (Acuerdo 334/2026), because every table will have a reader for its temporary QR code, which you open in front of the table. The MiDGT app is not." },
       { question: "What is Royal Decree 806/2026?", answer: "The decree of 5 October 2026, published in the BOE on 6 October, that dissolved the Congress and the Senate and called the election for 29 November. It sets the campaign from 13 to 27 November and the first sitting of the new chambers on 23 December." },
+      { question: "Is 29 November a public holiday? Do I get Monday 30 November off?", answer: `No. 29 November 2026 is a Sunday, and neither the decree calling the election nor Catalonia's 2026 work calendar makes it or Monday 30 November a holiday. If you work on the Sunday, you are entitled to up to four paid hours to vote (Royal Decree 605/1999, article 13). Polling-station members who would work that day get the whole day off with pay and, in every case, five fewer working hours on Monday 30 November (LOREG, article 28). Some towns have 30 November, Saint Andrew's Day, as a local holiday: [where 30 November is a holiday](${datePath("en", "2026-11-30")}).` },
+      { question: "What is the day of reflection?", answer: "Saturday 28 November. The campaign ends at midnight on Friday 27 November (Royal Decree 806/2026), and after that no campaign material may be spread and no campaign event held (LOREG, article 53). Polls may not be published from 24 to 28 November." },
     ],
     note: "Electoral deadlines are fixed by law, the Central Electoral Board and the INE; check the official calendar if a date seems to have changed.",
     warnTitle: "Postal vote: request it by 19 November",
@@ -448,7 +469,7 @@ const COPY: Record<Locale, T> = {
       `**DNI del móvil (MiDNI):** vale. El 5 de noviembre de 2026 la Junta Electoral Central levantó la suspensión que había acordado el 26 de marzo (Acuerdo 94/2026), al confirmar el Ministerio del Interior que cada mesa tendrá un dispositivo con cámara para comprobar el código QR temporal que genera la aplicación, que hay que abrir delante de la mesa (${a("Acuerdo 334/2026", URL.midni)}). La app de la DGT, MiDGT, sigue sin valer.`,
       "**Encuestas y campaña:** no se pueden publicar encuestas del martes 24 al sábado 28 de noviembre. La campaña termina a medianoche del viernes 27, y el sábado 28 es la jornada de reflexión.",
       "**Kit de voto en braille:** para quien lee braille y tiene reconocida una discapacidad igual o superior al 33 % o está afiliado a la ONCE; se pide al Ministerio del Interior hasta el lunes 2 de noviembre.",
-      "**Si trabajas ese día:** en toda España tienes derecho a hasta cuatro horas retribuidas para votar, proporcionales si haces jornada parcial (Real Decreto 605/1999, artículo 13). En Cataluña el detalle lo fija una orden de la Generalitat publicada en el DOGC; la del 29 de noviembre aún no estaba en el DOGC el 11 de noviembre (revisados los números hasta el 9792; en 2023 salió el 7 de julio, 16 días antes de votar). Si trabajas lejos de tu domicilio ese día, según el Ministerio del Interior las medidas deben permitirte votar por correo, con un permiso de hasta cuatro horas libres para solicitarlo.",
+      "**Si trabajas ese día:** en toda España tienes derecho a hasta cuatro horas retribuidas para votar, proporcionales si haces jornada parcial (Real Decreto 605/1999, artículo 13). En Cataluña el detalle lo fija una orden de la Generalitat publicada en el DOGC; la del 29 de noviembre aún no estaba en el DOGC el 13 de noviembre (revisados los números hasta el 9794; en 2023 salió el 7 de julio, 16 días antes de votar). Si trabajas lejos de tu domicilio ese día, según el Ministerio del Interior las medidas deben permitirte votar por correo, con un permiso de hasta cuatro horas libres para solicitarlo.",
     ],
     abroadTitle: "Si estás en el extranjero",
     abroad: [
@@ -467,12 +488,14 @@ const COPY: Record<Locale, T> = {
       { question: "¿Puedo saber dónde voto con el DNI?", answer: "No hace falta el DNI: el buscador público del INE solo pide la provincia, el municipio y la inicial del primer apellido, y si quieres afinar, la calle; no pide número de documento, Cl@ve ni certificado. Con Cl@ve también puedes ver tu inscripción completa en el censo en la sede del INE." },
       { question: "¿Qué horario hay para votar el domingo 29 de noviembre?", answer: "De 9:00 a 20:00. Quien está dentro o en la puerta a las 20:00 todavía puede votar." },
       { question: "¿Hasta cuándo se puede pedir el voto por correo?", answer: "Hasta el 19 de noviembre de 2026, en persona en Correos con el documento original o por internet con DNI electrónico o certificado digital; el voto se entrega hasta el 25 de noviembre." },
-      { question: "¿Tengo horas libres en el trabajo para ir a votar el 29 de noviembre?", answer: "Sí, si trabajas ese día: hasta cuatro horas retribuidas, proporcionales si haces jornada parcial, según el Ministerio del Interior. En Cataluña el detalle lo fija para cada elección una orden de la Generalitat en el DOGC; la del 29 de noviembre aún no se había publicado el 11 de noviembre. En 2023 daba dos horas si el horario coincidía con el de votación más de dos y menos de cuatro horas, y cuatro si coincidía cuatro o más." },
+      { question: "¿Tengo horas libres en el trabajo para ir a votar el 29 de noviembre?", answer: "Sí, si trabajas ese día: hasta cuatro horas retribuidas, proporcionales si haces jornada parcial, según el Ministerio del Interior. En Cataluña el detalle lo fija para cada elección una orden de la Generalitat en el DOGC; la del 29 de noviembre aún no se había publicado el 13 de noviembre. En 2023 daba dos horas si el horario coincidía con el de votación más de dos y menos de cuatro horas, y cuatro si coincidía cuatro o más." },
       { question: "¿Qué documento necesito para votar? ¿Vale el DNI del móvil?", answer: "DNI, pasaporte o carné de conducir originales con foto; el DNI y el pasaporte valen caducados. La app MiDNI también vale: la Junta Electoral Central levantó su suspensión el 5 de noviembre (Acuerdo 334/2026), porque cada mesa tendrá un lector de su código QR temporal, que se abre delante de la mesa. La app MiDGT no vale." },
       { question: "¿Se puede votar con el DNI caducado?", answer: "Sí. Según el Ministerio del Interior, el DNI, el pasaporte y el carné de conducir valen aunque estén caducados, siempre que sean los originales con foto: no valen fotocopias." },
       { question: "¿Tengo que inscribirme para votar?", answer: "No, si eres español y vives en España: el INE forma el censo a partir del padrón. El censo del 29 de noviembre se cerró el 1 de agosto de 2026." },
       { question: "¿Qué es el Real Decreto 806/2026?", answer: "El decreto de 5 de octubre de 2026, publicado en el BOE el 6 de octubre, que disuelve el Congreso y el Senado y convoca elecciones para el 29 de noviembre. Fija la campaña del 13 al 27 de noviembre y la constitución de las nuevas Cortes el 23 de diciembre." },
       { question: "¿Pueden votar los extranjeros en Cataluña?", answer: "En las generales, no. Los ciudadanos de la UE pueden votar en las municipales del 23 de mayo de 2027 si manifiestan su voluntad de votar hasta el 30 de diciembre de 2026." },
+      { question: "¿El 29 de noviembre es festivo? ¿Y el lunes 30?", answer: `No. El 29 de noviembre de 2026 es domingo, y ni el decreto de convocatoria ni el calendario laboral de Cataluña de 2026 hacen festivo ese día ni el lunes 30. Si trabajas el domingo, tienes derecho a hasta cuatro horas retribuidas para votar (Real Decreto 605/1999, artículo 13). Los miembros de mesa que trabajarían ese día tienen permiso retribuido de jornada completa y, en todos los casos, cinco horas menos de trabajo el lunes 30 de noviembre (LOREG, artículo 28). En algunos municipios el 30 de noviembre, San Andrés, es fiesta local: [dónde es festivo el 30 de noviembre](${datePath("es", "2026-11-30")}).` },
+      { question: "¿Qué es la jornada de reflexión?", answer: "El sábado 28 de noviembre. La campaña termina a las 24:00 del viernes 27 (Real Decreto 806/2026) y a partir de entonces no se puede difundir propaganda electoral ni hacer actos de campaña (LOREG, artículo 53). Las encuestas no se pueden publicar del 24 al 28 de noviembre." },
     ],
     note: "Los plazos electorales los fijan la ley, la Junta Electoral Central y el INE: consulta el calendario oficial si una fecha parece haber cambiado.",
     warnTitle: "Voto por correo: pídelo hasta el 19 de noviembre",
@@ -546,7 +569,7 @@ const COPY: Record<Locale, T> = {
       `**DNI del mòbil (MiDNI):** val. El 5 de novembre de 2026 la Junta Electoral Central va aixecar la suspensió que havia acordat el 26 de març (Acord 94/2026), en confirmar el Ministeri de l'Interior que cada mesa tindrà un dispositiu amb càmera per comprovar el codi QR temporal que genera l'aplicació, que s'ha d'obrir davant de la mesa (${a("Acord 334/2026", URL.midni)}). L'app de la DGT, MiDGT, continua sense valer.`,
       "**Enquestes i campanya:** no se'n poden publicar del dimarts 24 al dissabte 28 de novembre. La campanya acaba a mitjanit del divendres 27, i el dissabte 28 és la jornada de reflexió.",
       "**Kit de vot en braille:** per a qui llegeix braille i té reconeguda una discapacitat igual o superior al 33 % o està afiliat a l'ONCE; es demana al Ministeri de l'Interior fins al dilluns 2 de novembre.",
-      "**Si treballes aquell dia:** tens dret a fins a quatre hores retribuïdes per votar, proporcionals si fas jornada parcial. A Catalunya el detall el fixa una ordre de la Generalitat publicada al DOGC; la del 29 de novembre encara no era al DOGC l'11 de novembre (revisats els números fins al 9792; el 2023 va sortir el 7 de juliol, 16 dies abans de votar). Si treballes lluny de casa aquell dia, segons el Ministeri de l'Interior les mesures han de permetre que votis per correu, amb un permís de fins a quatre hores lliures per demanar-lo.",
+      "**Si treballes aquell dia:** tens dret a fins a quatre hores retribuïdes per votar, proporcionals si fas jornada parcial. A Catalunya el detall el fixa una ordre de la Generalitat publicada al DOGC; la del 29 de novembre encara no era al DOGC el 13 de novembre (revisats els números fins al 9794; el 2023 va sortir el 7 de juliol, 16 dies abans de votar). Si treballes lluny de casa aquell dia, segons el Ministeri de l'Interior les mesures han de permetre que votis per correu, amb un permís de fins a quatre hores lliures per demanar-lo.",
     ],
     abroadTitle: "Si ets a l'estranger",
     abroad: [
@@ -565,11 +588,13 @@ const COPY: Record<Locale, T> = {
       { question: "Puc saber on voto amb el DNI?", answer: "No cal el DNI: el cercador públic de l'INE només demana la província, el municipi i la inicial del primer cognom, i si vols afinar, el carrer; no demana número de document, Cl@ve ni certificat. Amb Cl@ve també pots veure la inscripció completa al cens a la seu de l'INE." },
       { question: "Quin horari hi ha per votar el diumenge 29 de novembre?", answer: "De 9:00 a 20:00. Qui és a dins o a la porta a les 20:00 encara pot votar." },
       { question: "Fins quan es pot demanar el vot per correu?", answer: "Fins al 19 de novembre de 2026, en persona a Correus amb el document original o per internet amb DNI electrònic o certificat digital; el vot es lliura fins al 25 de novembre." },
-      { question: "Tinc hores lliures a la feina per anar a votar el 29 de novembre?", answer: "Sí, si treballes aquell dia: fins a quatre hores retribuïdes, proporcionals si fas jornada parcial, segons el Ministeri de l'Interior. A Catalunya el detall el fixa per a cada elecció una ordre de la Generalitat al DOGC; la del 29 de novembre encara no s'havia publicat l'11 de novembre. El 2023 donava dues hores si l'horari coincidia amb el de votació més de dues i menys de quatre hores, i quatre si coincidia quatre o més." },
+      { question: "Tinc hores lliures a la feina per anar a votar el 29 de novembre?", answer: "Sí, si treballes aquell dia: fins a quatre hores retribuïdes, proporcionals si fas jornada parcial, segons el Ministeri de l'Interior. A Catalunya el detall el fixa per a cada elecció una ordre de la Generalitat al DOGC; la del 29 de novembre encara no s'havia publicat el 13 de novembre. El 2023 donava dues hores si l'horari coincidia amb el de votació més de dues i menys de quatre hores, i quatre si coincidia quatre o més." },
       { question: "Quin document necessito per votar? Val el DNI del mòbil?", answer: "DNI, passaport o carnet de conduir originals amb foto; el DNI i el passaport valen caducats. L'app MiDNI també val: la Junta Electoral Central en va aixecar la suspensió el 5 de novembre (Acord 334/2026), perquè cada mesa tindrà un lector del seu codi QR temporal, que s'obre davant de la mesa. L'app MiDGT no val." },
       { question: "M'he d'inscriure per votar?", answer: "No, si ets espanyol i vius a Espanya: l'INE forma el cens a partir del padró. El cens del 29 de novembre es va tancar l'1 d'agost de 2026." },
       { question: "Què és el Reial decret 806/2026?", answer: "El decret de 5 d'octubre de 2026, publicat al BOE el 6 d'octubre, que dissol el Congrés i el Senat i convoca eleccions per al 29 de novembre. Fixa la campanya del 13 al 27 de novembre i la constitució de les noves Corts el 23 de desembre." },
       { question: "Poden votar els estrangers a Catalunya?", answer: "A les generals, no. Els ciutadans de la UE poden votar a les municipals del 23 de maig de 2027 si manifesten la voluntat de votar fins al 30 de desembre de 2026." },
+      { question: "El 29 de novembre és festiu? I el dilluns 30?", answer: `No. El 29 de novembre de 2026 és diumenge, i ni el decret de convocatòria ni el calendari laboral de Catalunya del 2026 fan festiu aquest dia ni el dilluns 30. Si treballes el diumenge, tens dret a fins a quatre hores retribuïdes per votar (Reial decret 605/1999, article 13). Els membres de mesa que treballarien aquell dia tenen permís retribuït de jornada completa i, en tots els casos, cinc hores menys de feina el dilluns 30 de novembre (LOREG, article 28). En alguns municipis el 30 de novembre, Sant Andreu, és festa local: [on és festiu el 30 de novembre](${datePath("ca", "2026-11-30")}).` },
+      { question: "Què és la jornada de reflexió?", answer: "El dissabte 28 de novembre. La campanya acaba a les 24:00 del divendres 27 (Reial decret 806/2026) i a partir d'aleshores no es pot difondre propaganda electoral ni fer actes de campanya (LOREG, article 53). Les enquestes no es poden publicar del 24 al 28 de novembre." },
     ],
     note: "Els terminis electorals els fixen la llei, la Junta Electoral Central i l'INE: consulta el calendari oficial si una data sembla haver canviat.",
     warnTitle: "Vot per correu: demana'l fins al 19 de novembre",
@@ -623,6 +648,8 @@ function body(locale: Locale) {
   const t = COPY[locale];
   return [
     lead(t.lead),
+    // 13 Nov 2026: "En català · En castellano · In English" under the answer (GSC: Spanish queries land on the English edition at position 3-6; docs/SEO_EXPERIMENTS.md, "13 Nov 2026 — 29N results night").
+    languageLinks(),
     ...h2(t.nextTitle, ...t.next),
     table(t.nextCaption, t.nextHeaders, t.nextRows, t.nextNote),
     ...h2(t.whereTitle),

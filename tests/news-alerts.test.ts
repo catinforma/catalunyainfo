@@ -25,6 +25,8 @@ import {
   type NewsAlert,
 } from "../src/lib/alerts/news-alerts.ts";
 import { DECEMBER_BRIDGE_SPAIN, SPAIN_DAYS } from "../src/lib/content/batch02/december-bridge-spain.ts";
+import { ELECTION_NIGHT } from "../src/lib/content/batch02/election-night.ts";
+import { POSTAL_29N, POSTAL_VOTE } from "../src/lib/content/batch02/postal-vote.ts";
 import { B2_PATHS, type B2Article, type B2Key } from "../src/lib/content/batch02/shared.ts";
 import { STRIKE_11N } from "../src/lib/content/batch02/strike-11n.ts";
 import { STRIKE_EDUCATION_GUIDE, STRIKE_RENFE_GUIDE } from "../src/lib/content/batch02/strike-guides.ts";
@@ -82,7 +84,12 @@ test("the alerts and their windows, as of 11 Nov 2026: from the 12th, what comes
       // Same guide as the 17/19 line: it starts when that one ends.
       ["strike-renfe-23n", "strikeRenfe", "2026-11-20T00:00:00+01:00", "2026-11-24T00:00:00+01:00"],
       ["strike-education-26n", "strikeEducation", "2026-11-12T00:00:00+01:00", "2026-11-27T00:00:00+01:00"],
+      // 13 Nov 2026: the postal vote's two deadlines, one after the other (same guide).
+      ["postal-vote-request", "postalVote", "2026-11-13T00:00:00+01:00", "2026-11-20T00:00:00+01:00"],
+      ["postal-vote-deliver", "postalVote", "2026-11-20T00:00:00+01:00", "2026-11-26T00:00:00+01:00"],
       ["election-29n", "voting", "2026-11-12T00:00:00+01:00", "2026-11-30T00:00:00+01:00"],
+      // 13 Nov 2026: results, from the day of reflection to the end of the day after the vote.
+      ["election-results-29n", "electionNight", "2026-11-28T00:00:00+01:00", "2026-12-01T00:00:00+01:00"],
       // 12 Nov 2026: the day after the election, the December bridge until the end of the 8th.
       ["december-bridge", "decemberBridgeSpain", "2026-11-30T00:00:00+01:00", "2026-12-09T00:00:00+01:00"],
     ],
@@ -104,6 +111,26 @@ test("the ends are derived from the source modules, not typed in", () => {
   assert.equal(byId("december-bridge").end, endOfMadridDay(SPAIN_DAYS.immaculada));
 });
 
+test("13 Nov 2026: the postal and results lines take their days from postal-vote.ts and elections/today.ts", () => {
+  assert.equal(byId("postal-vote-request").end, endOfMadridDay(POSTAL_29N.requestBy));
+  assert.equal(byId("postal-vote-deliver").start, byId("postal-vote-request").end, "the hand-in line follows the request line");
+  assert.equal(byId("postal-vote-deliver").end, endOfMadridDay(POSTAL_29N.deliverBy));
+  // Postal deadlines moved by the board: the lines and their wording follow.
+  const moved = buildNewsAlerts(STRIKES, GENERAL_ELECTION_DAY, { requestBy: "2026-11-18", deliverBy: "2026-11-24" });
+  assert.equal(byId("postal-vote-request", moved).end, "2026-11-19T00:00:00+01:00");
+  assert.match(byId("postal-vote-request", moved).text.es, /miércoles 18 de noviembre/);
+  assert.match(byId("postal-vote-deliver", moved).text.en, /Tuesday 24 November/);
+  // Results: from the day before polling day to the end of the day after it.
+  assert.equal(byId("election-results-29n").start, madridMidnight("2026-11-28"));
+  assert.equal(byId("election-results-29n").end, endOfMadridDay("2026-11-30"));
+  const later = byId("election-results-29n", buildNewsAlerts(STRIKES, "2026-12-06"));
+  assert.equal(later.start, madridMidnight("2026-12-05"));
+  assert.match(later.text.ca, /diumenge 6 de desembre/);
+  // On phones only the first line shows: on 30 Nov the results line comes before the December bridge.
+  const order = NEWS_ALERTS.map((a) => a.id);
+  assert.ok(order.indexOf("election-29n") < order.indexOf("election-results-29n") && order.indexOf("election-results-29n") < order.indexOf("december-bridge"));
+});
+
 test("a day called off in strikes.ts moves the end and the wording; a strike removed drops its line", () => {
   const edited: Strike[] = STRIKES.map((s) => (s.id === STRIKE_RAIL_ID ? { ...s, dates: ["2026-11-17"] } : s));
   const rail = byId("strike-rail-17n", buildNewsAlerts(edited));
@@ -114,7 +141,7 @@ test("a day called off in strikes.ts moves the end and the wording; a strike rem
   assert.equal(byId("strike-renfe-23n", buildNewsAlerts(edited)).start, "2026-11-18T00:00:00+01:00");
 
   const without = buildNewsAlerts(STRIKES.filter((s) => s.id !== STRIKE_11N_ID && s.id !== STRIKE_EDUCATION_ID));
-  assert.deepEqual(without.map((a) => a.id), ["strike-renfe", "strike-rail-17n", "strike-renfe-23n", "election-29n", "december-bridge"]);
+  assert.deepEqual(without.map((a) => a.id), ["strike-renfe", "strike-rail-17n", "strike-renfe-23n", "postal-vote-request", "postal-vote-deliver", "election-29n", "election-results-29n", "december-bridge"]);
   // A strike whose days are all before the line's start drops its line.
   const early: Strike[] = STRIKES.map((s) => (s.id === STRIKE_EDUCATION_ID ? { ...s, dates: ["2026-11-11"] } : s));
   assert.ok(!buildNewsAlerts(early).some((a) => a.id === "strike-education-26n"));
@@ -130,6 +157,7 @@ test("a day called off in strikes.ts moves the end and the wording; a strike rem
 
 test("each line is shown only inside its window, in Madrid time; each disappears after its day", () => {
   const next = ["strike-rail-17n", "strike-education-26n", "election-29n"];
+  const nextPostal = ["strike-rail-17n", "strike-education-26n", "postal-vote-request", "election-29n"];
   assert.deepEqual(ids("2026-11-03T23:59:59+01:00"), []);
   assert.deepEqual(ids("2026-11-04T00:00:00+01:00"), ["strike-11n", "strike-renfe"]);
   assert.deepEqual(ids("2026-11-10T23:59:59+01:00"), ["strike-11n", "strike-renfe"]);
@@ -138,13 +166,20 @@ test("each line is shown only inside its window, in Madrid time; each disappears
   // 23:30 UTC on the 11th is already the 12th in Madrid.
   assert.deepEqual(ids("2026-11-11T23:30:00Z"), next);
   assert.deepEqual(ids("2026-11-12T00:00:00+01:00"), next);
-  assert.deepEqual(ids("2026-11-19T23:59:59+01:00"), next);
-  assert.deepEqual(ids("2026-11-20T00:00:00+01:00"), ["strike-renfe-23n", "strike-education-26n", "election-29n"]);
-  assert.deepEqual(ids("2026-11-23T23:59:59+01:00"), ["strike-renfe-23n", "strike-education-26n", "election-29n"]);
-  assert.deepEqual(ids("2026-11-24T00:00:00+01:00"), ["strike-education-26n", "election-29n"]);
+  assert.deepEqual(ids("2026-11-12T23:59:59+01:00"), next);
+  assert.deepEqual(ids("2026-11-13T00:00:00+01:00"), nextPostal);
+  assert.deepEqual(ids("2026-11-19T23:59:59+01:00"), nextPostal);
+  assert.deepEqual(ids("2026-11-20T00:00:00+01:00"), ["strike-renfe-23n", "strike-education-26n", "postal-vote-deliver", "election-29n"]);
+  assert.deepEqual(ids("2026-11-23T23:59:59+01:00"), ["strike-renfe-23n", "strike-education-26n", "postal-vote-deliver", "election-29n"]);
+  assert.deepEqual(ids("2026-11-24T00:00:00+01:00"), ["strike-education-26n", "postal-vote-deliver", "election-29n"]);
+  assert.deepEqual(ids("2026-11-25T23:59:59+01:00"), ["strike-education-26n", "postal-vote-deliver", "election-29n"]);
+  assert.deepEqual(ids("2026-11-26T00:00:00+01:00"), ["strike-education-26n", "election-29n"]);
   assert.deepEqual(ids("2026-11-27T00:00:00+01:00"), ["election-29n"]);
-  assert.deepEqual(ids("2026-11-29T23:59:59+01:00"), ["election-29n"]);
-  assert.deepEqual(ids("2026-11-30T00:00:00+01:00"), ["december-bridge"]);
+  assert.deepEqual(ids("2026-11-28T00:00:00+01:00"), ["election-29n", "election-results-29n"]);
+  assert.deepEqual(ids("2026-11-29T23:59:59+01:00"), ["election-29n", "election-results-29n"]);
+  assert.deepEqual(ids("2026-11-30T00:00:00+01:00"), ["election-results-29n", "december-bridge"]);
+  assert.deepEqual(ids("2026-11-30T23:59:59+01:00"), ["election-results-29n", "december-bridge"]);
+  assert.deepEqual(ids("2026-12-01T00:00:00+01:00"), ["december-bridge"]);
   assert.deepEqual(ids("2026-12-08T23:59:59+01:00"), ["december-bridge"]);
   assert.deepEqual(ids("2026-12-09T00:00:00+01:00"), []);
   // Not on the page it links to.
@@ -190,6 +225,8 @@ const ARTICLES: Partial<Record<B2Key, { article: B2Article; constName: string }>
   strikeRenfe: { article: STRIKE_RENFE_GUIDE, constName: "STRIKE_RENFE_GUIDE" },
   strikeEducation: { article: STRIKE_EDUCATION_GUIDE, constName: "STRIKE_EDUCATION_GUIDE" },
   voting: { article: VOTING, constName: "VOTING" },
+  postalVote: { article: POSTAL_VOTE, constName: "POSTAL_VOTE" },
+  electionNight: { article: ELECTION_NIGHT, constName: "ELECTION_NIGHT" },
   decemberBridgeSpain: { article: DECEMBER_BRIDGE_SPAIN, constName: "DECEMBER_BRIDGE_SPAIN" },
 };
 
@@ -224,8 +261,10 @@ test("a line is not shown on the page it links to (with or without the trailing 
   assert.deepEqual(ids(t, "ca", "/ca/guies/vaga-renfe-rodalies-novembre"), ["strike-11n"]);
   // Another language's page is not this page.
   assert.deepEqual(ids(t, "ca", "/es/guias/huelga-general-11-noviembre/"), ["strike-11n", "strike-renfe"]);
-  assert.deepEqual(ids("2026-11-20T12:00:00+01:00", "en", "/en/guides/how-to-vote-catalonia/"), ["strike-renfe-23n", "strike-education-26n"]);
-  assert.deepEqual(ids("2026-11-13T12:00:00+01:00", "ca", "/ca/guies/vaga-educacio-novembre/"), ["strike-rail-17n", "election-29n"]);
+  assert.deepEqual(ids("2026-11-20T12:00:00+01:00", "en", "/en/guides/how-to-vote-catalonia/"), ["strike-renfe-23n", "strike-education-26n", "postal-vote-deliver"]);
+  assert.deepEqual(ids("2026-11-13T12:00:00+01:00", "ca", "/ca/guies/vaga-educacio-novembre/"), ["strike-rail-17n", "postal-vote-request", "election-29n"]);
+  // The postal lines are not on the postal-vote guide itself.
+  assert.deepEqual(ids("2026-11-13T12:00:00+01:00", "es", "/es/guias/voto-por-correo/"), ["strike-rail-17n", "strike-education-26n", "election-29n"]);
 });
 
 /* -------------------------------------------------------------------------- */
@@ -249,6 +288,15 @@ test("the copy names the day, never 'today', and stays short and calm", () => {
   assert.equal(byId("election-29n").text.ca, "Eleccions generals el diumenge 29 de novembre: on i com votar");
   assert.equal(byId("election-29n").text.es, "Elecciones generales el domingo 29 de noviembre: dónde y cómo votar");
   assert.equal(byId("election-29n").text.en, "General election on Sunday 29 November: how and where to vote");
+  assert.equal(byId("postal-vote-request").text.ca, "Vot per correu: es pot demanar fins al dijous 19 de novembre");
+  assert.equal(byId("postal-vote-request").text.es, "Voto por correo: se puede pedir hasta el jueves 19 de noviembre");
+  assert.equal(byId("postal-vote-request").text.en, "Postal vote: apply by Thursday 19 November");
+  assert.equal(byId("postal-vote-deliver").text.ca, "Vot per correu: es lliura a Correus fins al dimecres 25 de novembre");
+  assert.equal(byId("postal-vote-deliver").text.es, "Voto por correo: se entrega en Correos hasta el miércoles 25 de noviembre");
+  assert.equal(byId("postal-vote-deliver").text.en, "Postal vote: hand it in at Correos by Wednesday 25 November");
+  assert.equal(byId("election-results-29n").text.ca, "Resultats de les eleccions del diumenge 29 de novembre: quan i on surten");
+  assert.equal(byId("election-results-29n").text.es, "Resultados de las elecciones del domingo 29 de noviembre: cuándo y dónde salen");
+  assert.equal(byId("election-results-29n").text.en, "General election results, Sunday 29 November: when and where");
   assert.equal(byId("december-bridge").text.ca, "Pont de desembre: on és festiu el dilluns 7 de desembre");
   assert.equal(byId("december-bridge").text.es, "Puente de diciembre: dónde es festivo el lunes 7 de diciembre");
   assert.equal(byId("december-bridge").text.en, "December bridge: where it is a holiday on Monday 7 December");

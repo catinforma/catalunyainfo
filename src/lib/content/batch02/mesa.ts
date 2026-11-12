@@ -7,6 +7,7 @@ import {
   faq,
   h2,
   keyFacts,
+  languageLinks,
   lead,
   list,
   table,
@@ -354,7 +355,7 @@ const COPY: Record<Locale, T> = {
     work: [
       "**Membres de mesa:** si el dia de la votació és laborable per a tu, tens permís retribuït de jornada completa, i **en tots els casos** una reducció de **cinc hores** de la jornada l'endemà. Per al 29N, que és diumenge, això vol dir el **dilluns 30 de novembre**. Els suplents que acaben a la mesa tenen els mateixos drets. El justificant te'l dona la Junta Electoral de Zona.",
       "**Torn de nit:** segons el Ministeri de l'Interior, el torn de nit que comença el 29 de novembre compta com a jornada del dia electoral, i la reducció de cinc hores es pot fer al torn de nit següent si comença el dia 30. Has de complir a la mesa encara que hagis treballat la jornada anterior.",
-      "**Votants que treballen aquell dia:** tenen dret a **fins a quatre hores retribuïdes** per anar a votar, proporcionals si fan jornada reduïda. A Catalunya la Generalitat fixa el detall per a cada elecció: el 2023 eren dues hores si l'horari coincidia més de dues i menys de quatre amb el de votació, i quatre si coincidia quatre o més, i l'empresa decidia en quin moment. L'ordre per al 29N encara no és al DOGC (consultat l'11 de novembre, fins al número 9792); la del 2023 (Ordre EMT/178/2023) va sortir el 7 de juliol, 16 dies abans de votar.",
+      "**Votants que treballen aquell dia:** tenen dret a **fins a quatre hores retribuïdes** per anar a votar, proporcionals si fan jornada reduïda. A Catalunya la Generalitat fixa el detall per a cada elecció: el 2023 eren dues hores si l'horari coincidia més de dues i menys de quatre amb el de votació, i quatre si coincidia quatre o més, i l'empresa decidia en quin moment. L'ordre per al 29N encara no és al DOGC (consultat el 13 de novembre, fins al número 9794); la del 2023 (Ordre EMT/178/2023) va sortir el 7 de juliol, 16 dies abans de votar.",
       "**Seguretat Social:** titulars i suplents estan coberts aquell dia; qualsevol lesió, també anant-hi o tornant, es considera accident de treball.",
     ],
     dayTitle: "Com és el dia",
@@ -490,7 +491,7 @@ const COPY: Record<Locale, T> = {
       title: "Si te ha tocado mesa en Cataluña",
       items: [
         `**Tu Junta Electoral de Zona:** en Cataluña hay ${CATALONIA_JEZ.boards} (${CATALONIA_JEZ.barcelona} en la provincia de Barcelona, ${CATALONIA_JEZ.girona} en la de Girona, ${CATALONIA_JEZ.lleida} en la de Lleida y ${CATALONIA_JEZ.tarragona} en la de Tarragona), menos que partidos judiciales (${CATALONIA_JEZ.districts}), porque la LOREG las sitúa en las cabeceras de los partidos judiciales de las elecciones locales de 1979 (artículo 8). Por eso, en ${CATALONIA_JEZ.elsewhere} municipios la sede de la Junta no es la cabecera de su partido judicial actual. La dirección y el teléfono de la tuya, tal como los publica la Junta Electoral Central, están en la página de tu municipio: búscalo en [las elecciones en Cataluña por municipio](${hubPath("es")}).`,
-        "**Permiso para votar si trabajas el 29:** en Cataluña el reparto de las cuatro horas lo fija una orden de la Generalitat en el DOGC. En 2023 eran dos horas si el horario coincidía más de dos y menos de cuatro con el de votación, y cuatro si coincidía cuatro o más, y la empresa decidía en qué momento. La orden para el 29N aún no está en el DOGC (consultado el 11 de noviembre, hasta el número 9792); la de 2023 (Ordre EMT/178/2023) salió el 7 de julio, 16 días antes de votar.",
+        "**Permiso para votar si trabajas el 29:** en Cataluña el reparto de las cuatro horas lo fija una orden de la Generalitat en el DOGC. En 2023 eran dos horas si el horario coincidía más de dos y menos de cuatro con el de votación, y cuatro si coincidía cuatro o más, y la empresa decidía en qué momento. La orden para el 29N aún no está en el DOGC (consultado el 13 de noviembre, hasta el número 9794); la de 2023 (Ordre EMT/178/2023) salió el 7 de julio, 16 días antes de votar.",
       ],
     },
     faq: [
@@ -587,7 +588,7 @@ const COPY: Record<Locale, T> = {
     work: [
       "**Mesa members:** if polling day is a working day for you, you get the whole day off with pay, and **in every case** five fewer hours of work the next day. For 29 November, a Sunday, that is **Monday 30 November**. Substitutes who end up sitting get the same. The electoral board issues the certificate.",
       "**Night shifts:** according to the Interior Ministry, a night shift that starts on 29 November counts as polling-day work, and the five-hour reduction can be taken on your next night shift if it starts on the 30th. You must serve at the table even if you worked the day before.",
-      "**Voters working that day:** you are entitled to **up to four paid hours** to vote, pro rata for part-time work. In Catalonia the Generalitat sets the detail for each election: in 2023 it was two hours if your shift overlapped voting hours by more than two and less than four, and four if it overlapped by four or more, with the employer choosing when. The order for 29 November was still not in the DOGC on 11 November (issues up to no. 9792 checked); the 2023 one (Ordre EMT/178/2023) came out on 7 July, 16 days before the vote.",
+      "**Voters working that day:** you are entitled to **up to four paid hours** to vote, pro rata for part-time work. In Catalonia the Generalitat sets the detail for each election: in 2023 it was two hours if your shift overlapped voting hours by more than two and less than four, and four if it overlapped by four or more, with the employer choosing when. The order for 29 November was still not in the DOGC on 13 November (issues up to no. 9794 checked); the 2023 one (Ordre EMT/178/2023) came out on 7 July, 16 days before the vote.",
       "**Social Security:** chairs, members and substitutes are covered that day; any injury, including on the way there or back, counts as a work accident.",
     ],
     dayTitle: "How the day goes",
@@ -630,6 +631,8 @@ function body(locale: Locale) {
   return [
     lead(t.lead),
     keyFacts(t.nowTitle, t.now),
+    // 13 Nov 2026: "En català · En castellano · In English" under the answer (GSC: Spanish queries land on the English edition at position 3-6; docs/SEO_EXPERIMENTS.md, "13 Nov 2026 — 29N results night").
+    languageLinks(),
     callout("official", verifiedLine(locale, VERIFIED), t.note),
     ...h2(t.payTitle),
     table(t.payCaption, t.payHeaders, t.payRows, t.payNote),
