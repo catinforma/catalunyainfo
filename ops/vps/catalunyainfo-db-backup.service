@@ -1,0 +1,15 @@
+# /etc/systemd/system/catalunyainfo-db-backup.service
+# Nightly dump of the local database + off-site copy (ops/vps/db-backup.sh).
+# Run by hand:  sudo systemctl start catalunyainfo-db-backup.service
+# Logs:         journalctl -u catalunyainfo-db-backup
+
+[Unit]
+Description=CatalunyaInfo database backup (local dump + Supabase standby)
+After=postgresql.service network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+EnvironmentFile=/srv/catalunyainfo/shared/.env.production
+ExecStart=/usr/local/bin/catalunyainfo-db-backup
+TimeoutStartSec=15min

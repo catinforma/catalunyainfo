@@ -8,9 +8,10 @@ out and would pause the account. On a VPS ISR writes cost nothing.
 ```
 visitor ─▶ [Cloudflare, optional] ─▶ Caddy :443 (TLS, HTTP/3, zstd/gzip, apex→www)
                                        └─▶ Next.js standalone 127.0.0.1:3000  (systemd, user deploy)
-                                             ├─▶ Supabase Postgres (eu-west-1), as today
+                                             ├─▶ PostgreSQL 17 on this host, 127.0.0.1:5432 (since 12 Nov 2026; was Supabase)
                                              └─▶ ISR cache on local disk
 systemd timer 23:05 UTC ─▶ GET /api/cron/publish-scheduled/   (was the Vercel cron)
+systemd timer 02:30 UTC ─▶ pg_dump to /srv/catalunyainfo/backups/db/ + restore into Supabase (off-site standby)
 ```
 
 The whole setup takes about an hour over SSH. **Nothing in this folder changes
@@ -25,6 +26,8 @@ DNS moves.
 | `catalunyainfo-cron.service` / `.timer` | `/etc/systemd/system/` | the daily job that replaces the Vercel cron |
 | `cron-publish-scheduled.sh` | `/usr/local/bin/catalunyainfo-cron` | calls the cron endpoint with the bearer token |
 | `Caddyfile` | `/etc/caddy/Caddyfile` | TLS, redirects, compression, reverse proxy |
+| `db-backup.sh` | `/usr/local/bin/catalunyainfo-db-backup` | nightly dump (30 days) + off-site copy into the old Supabase project, locked |
+| `catalunyainfo-db-backup.service` / `.timer` | `/etc/systemd/system/` | runs it at 02:30 UTC |
 | `env.production.example` | `/srv/catalunyainfo/shared/.env.production` (first run only) | every variable the app reads, with placeholders |
 
 ---
@@ -733,3 +736,36 @@ image, and `/api/admin/*` and `/api/cron/*` answer 404 from the internet.
 - **Publishing content groups:**
   `ssh deploy@<server> 'bash /srv/catalunyainfo/current/ops/vps/publish.sh strikes voting'`.
 - **Daily job:** the timer already calls `http://127.0.0.1:3000/api/cron/publish-scheduled/`.
+
+
+---
+
+## Local PostgreSQL (since 12 Nov 2026)
+
+The Supabase free plan ran out of egress (5.5 GB/month): the database is 20 MB,
+but the site queried it tens of thousands of times a day over the network. It
+now runs on this host. Setup, as done on 12 Nov 2026:
+
+```bash
+sudo apt-get install -y postgresql-common
+sudo /usr/share/postgresql-common/pgdg/apt.postgresql.org.sh -y   # PGDG repo: same major as Supabase (17)
+sudo apt-get install -y postgresql-17
+# /etc/postgresql/17/main/conf.d/catalunyainfo.conf: listen_addresses = 'localhost',
+#   shared_buffers 512MB, effective_cache_size 2GB, work_mem 8MB, pg_stat_statements
+sudo -u postgres psql -c "CREATE ROLE catinfo LOGIN PASSWORD '<generated>'"
+sudo -u postgres psql -c "CREATE DATABASE catalunyainfo OWNER catinfo TEMPLATE template0 \
+  LOCALE_PROVIDER icu ICU_LOCALE 'en-US' LC_COLLATE 'en_US.UTF-8' LC_CTYPE 'en_US.UTF-8'"   # Supabase's collation
+sudo -u postgres psql -c "ALTER DATABASE catalunyainfo SET timezone TO 'UTC'"
+pg_dump -n public --no-owner --no-acl -Fc <supabase session-pooler URL, port 5432> -f dump
+pg_restore --no-owner --no-acl -n public -d postgres://catinfo:...@127.0.0.1:5432/catalunyainfo dump
+```
+
+- Every table was compared row by row (count + md5 of all rows) before the switch: identical.
+- `.env.production`: `APP_DATABASE_URL` is the local URL. The Supabase URL is kept
+  as `SUPABASE_DATABASE_URL` (not read by the app) for the off-site copy and
+  for rollback.
+- **Rollback:** set `APP_DATABASE_URL` to the `SUPABASE_DATABASE_URL` value,
+  then `sudo systemctl restart catalunyainfo`. Supabase holds last night's copy.
+- **Restore a dump:** `sudo -u postgres pg_restore --clean --if-exists --no-owner --role=catinfo -d catalunyainfo /srv/catalunyainfo/backups/db/<file>.dump`
+- **Moving servers:** install as above on the new host, `pg_restore` the latest
+  dump, and copy the env file.

@@ -1,0 +1,13 @@
+# /etc/systemd/system/catalunyainfo-db-backup.timer
+# Check:  systemctl list-timers catalunyainfo-db-backup.timer
+
+[Unit]
+Description=Nightly CatalunyaInfo database backup
+
+[Timer]
+OnCalendar=*-*-* 02:30:00 UTC
+Persistent=true
+RandomizedDelaySec=5min
+
+[Install]
+WantedBy=timers.target

@@ -25,8 +25,9 @@ declare global {
 /**
  * `APP_DATABASE_URL` wins over the rest: the DATABASE_URL/POSTGRES_* variables
  * are written by the Neon integration on Vercel and cannot be edited there, so
- * the database the site actually uses (Supabase since 26 Oct 2026) is set
- * under its own name. Removing it falls back to Neon.
+ * the database the site actually uses is set under its own name: Supabase
+ * from 26 Oct 2026, the VPS's own PostgreSQL since 12 Nov 2026
+ * (ops/vps/README.md, "Local PostgreSQL").
  */
 export function databaseUrl(): string | null {
   const url =
