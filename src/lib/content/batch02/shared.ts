@@ -109,7 +109,9 @@ export type B2Key =
   // 9 Nov 2026 (ca and en editions, 10 Nov): shops open in December 2026, community by community.
   | "shopsSpainDecember"
   // 10 Nov 2026: the Spain-wide strikes calendar (strikes-spain.ts), in three languages.
-  | "strikesSpain";
+  | "strikesSpain"
+  // 13 Nov 2026: the 17 Nov rail strike across Spain (strike-rail-17n.ts).
+  | "railStrike17n";
 
 /** Path after the locale prefix, no leading or trailing slash. */
 export const B2_PATHS: Record<B2Key, Record<Locale, string>> = {
@@ -445,6 +447,12 @@ export const B2_PATHS: Record<B2Key, Record<Locale, string>> = {
     ca: "guies/vagues-espanya",
     es: "guias/huelgas-espana",
     en: "guides/strikes-spain",
+  },
+  // One strike, one date: the day is in the searched words ("huelga trenes 17 noviembre").
+  railStrike17n: {
+    ca: "guies/vaga-trens-17-novembre",
+    es: "guias/huelga-trenes-17-noviembre",
+    en: "guides/spain-rail-strike-17-november",
   },
   // No year in the path: the campaign comes back every November.
   granRecapte: {
@@ -859,6 +867,11 @@ export const B2_TITLES: Record<B2Key, Record<Locale, string>> = {
     ca: "Vagues a Espanya: calendari i serveis mínims",
     es: "Huelgas en España: calendario y servicios mínimos",
     en: "Strikes in Spain: dates and minimum services",
+  },
+  railStrike17n: {
+    ca: "Vaga de trens del 17 de novembre a Espanya: Cercanías i AVE",
+    es: "Huelga de trenes del 17 de noviembre en España: Cercanías y AVE",
+    en: "Spain rail strike on 17 November: Cercanías and AVE",
   },
   granRecapte: {
     ca: "Gran Recapte 2026: dies, voluntariat i on donar",

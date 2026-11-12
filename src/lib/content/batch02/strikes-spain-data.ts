@@ -28,8 +28,22 @@ import type { SpainNotHappening, SpainOpenStrike, SpainStrike } from "./strikes-
  * guides carry them), and any strike in December or January (none found).
  */
 
-/** The day every source below was last read. Tests fail 4 days after it, and on the Monday after its week. */
-export const STRIKES_SPAIN_AS_OF = "2026-11-10";
+/**
+ * The day every source below was last read. Tests fail 4 days after it, and on the Monday after its week.
+ *
+ * 13 Nov 2026: every source re-read with a browser User-Agent. Changes: the
+ * meat-industry strike's 12 and 13 Nov were called off on 12 Nov (UGT FICA
+ * nº 3857, pre-agreement); the 17 Nov rail strike now lists the six unions
+ * whose registered calls at Grupo Renfe the Generalitat's order of 12 Nov
+ * cites (FeSMC-UGT, CCOO, SF-Intersindical, SEMAF, ALFERRO, SFF-CGT), SCF nº
+ * 35 (12 Nov) keeps 17 and 19 Nov, CCOO (12 Nov) keeps the 17th. Unchanged:
+ * the Ministry's rail list (no resolution for 17, 19 or 23 Nov) and air list
+ * (SAERCO, Groundforce and Outsmart resolutions in force to 30 Nov), SEMAF
+ * (newest 10 Nov), ALFERRO (newest 82/2026), Sindicato de Estudiantes (20N
+ * call of 30 Oct, mobilisations at 12:00), CESM (indefinite strike still
+ * postponed; on 12 Nov it also postponed its 21 Nov march).
+ */
+export const STRIKES_SPAIN_AS_OF = "2026-11-13";
 
 /** Printed as the page's "last verified" date. */
 export const STRIKES_SPAIN_VERIFIED = STRIKES_SPAIN_AS_OF;
@@ -58,11 +72,14 @@ export const SPAIN_URLS = {
   // Rail, 23 Nov (SEMAF, 10 Nov: replaces the 12th's stoppages).
   semaf23: STRIKE_URLS.semaf23,
   scfAdif: STRIKE_URLS.scfAdif,
+  scf35: STRIKE_URLS.scf35,
+  ccooRail17Still: STRIKE_URLS.ccooRail17Still,
   treballMs: STRIKE_URLS.treballMs,
   // Meat industry, 9 to 13 Nov.
   meatCall: `${FICA}/3806?catid=43`,
   meatMediation: `${FICA}/3815?catid=43`,
   meatFirstDay: `${FICA}/3847?catid=43`,
+  meatCalledOff: `${FICA}/3857?catid=43`,
   poultry: `${FICA}/3831?catid=43`,
   // Students, 20 Nov.
   students: "https://www.sindicatodeestudiantes.net/index.php/noticias/internacional/20n-huelga-estudiantil-europea",
@@ -164,7 +181,8 @@ export const SPAIN_STRIKES: SpainStrike[] = [
   },
   {
     id: "huelga-carnicas-2026-11-09",
-    dates: ["2026-11-09", "2026-11-10", "2026-11-11", "2026-11-12", "2026-11-13"],
+    // 12 and 13 Nov called off on 12 Nov after a pre-agreement (UGT FICA, meatCalledOff).
+    dates: ["2026-11-09", "2026-11-10", "2026-11-11"],
     sector: "industry",
     status: "called",
     title: {
@@ -184,9 +202,9 @@ export const SPAIN_STRIKES: SpainStrike[] = [
       en: `The unions UGT FICA and CCOO Industria, according to ${link(U.meatCall, "the call UGT FICA published on 16 October")}.`,
     },
     basis: {
-      ca: `Consta als avisos dels sindicats: la mediació prèvia al SIMA va acabar sense acord i van mantenir la convocatòria (${link(U.meatMediation, "UGT FICA, 22 d'octubre")}), i el 9 de novembre UGT FICA va informar de la primera jornada de vaga (${link(U.meatFirstDay, "la seva nota")}).`,
-      es: `Consta en los avisos de los sindicatos: la mediación previa en el SIMA terminó sin acuerdo y mantuvieron la convocatoria (${link(U.meatMediation, "UGT FICA, 22 de octubre")}), y el 9 de noviembre UGT FICA informó de la primera jornada de huelga (${link(U.meatFirstDay, "su nota")}).`,
-      en: `It rests on the unions' own notices: the mediation at SIMA beforehand ended without agreement and they kept the call (${link(U.meatMediation, "UGT FICA, 22 October")}), and on 9 November UGT FICA reported on the first strike day (${link(U.meatFirstDay, "its note")}).`,
+      ca: `Consta als avisos dels sindicats: la mediació prèvia al SIMA va acabar sense acord i van mantenir la convocatòria (${link(U.meatMediation, "UGT FICA, 22 d'octubre")}), i el 9 de novembre UGT FICA va informar de la primera jornada de vaga (${link(U.meatFirstDay, "la seva nota")}). El 12 de novembre, UGT FICA i CCOO van desconvocar les jornades del 12 i el 13 després d'un preacord (${link(U.meatCalledOff, "UGT FICA, 12 de novembre")}).`,
+      es: `Consta en los avisos de los sindicatos: la mediación previa en el SIMA terminó sin acuerdo y mantuvieron la convocatoria (${link(U.meatMediation, "UGT FICA, 22 de octubre")}), y el 9 de noviembre UGT FICA informó de la primera jornada de huelga (${link(U.meatFirstDay, "su nota")}). El 12 de noviembre, UGT FICA y CCOO desconvocaron las jornadas del 12 y el 13 tras un preacuerdo (${link(U.meatCalledOff, "UGT FICA, 12 de noviembre")}).`,
+      en: `It rests on the unions' own notices: the mediation at SIMA beforehand ended without agreement and they kept the call (${link(U.meatMediation, "UGT FICA, 22 October")}), and on 9 November UGT FICA reported on the first strike day (${link(U.meatFirstDay, "its note")}). On 12 November, UGT FICA and CCOO called off the 12th and 13th after a pre-agreement (${link(U.meatCalledOff, "UGT FICA, 12 November")}).`,
     },
     minimumServices: {
       status: "none",
@@ -201,6 +219,7 @@ export const SPAIN_STRIKES: SpainStrike[] = [
       { name: "UGT FICA y CCOO Industria convocan cinco días de huelga en el sector cárnico (16 de octubre de 2026)", url: U.meatCall, publisher: "UGT FICA" },
       { name: "Mediación en el SIMA sin acuerdo: se mantiene la huelga de industrias cárnicas (22 de octubre de 2026)", url: U.meatMediation, publisher: "UGT FICA" },
       { name: "Primera jornada de huelga en las industrias cárnicas (9 de noviembre de 2026)", url: U.meatFirstDay, publisher: "UGT FICA" },
+      { name: "Desconvocada la huelga en las industrias cárnicas tras alcanzar un preacuerdo (12 de noviembre de 2026)", url: U.meatCalledOff, publisher: "UGT FICA" },
     ],
   },
   {
@@ -320,7 +339,7 @@ export const SPAIN_STRIKES: SpainStrike[] = [
     sector: "rail",
     status: "called",
     catalanEntry: "vaga-ferroviaria-2026-11-17",
-    guides: ["strikes"],
+    guides: ["railStrike17n", "strikes"],
     title: {
       ca: "vaga ferroviària a Adif, Renfe i les operadores privades",
       es: "huelga ferroviaria en Adif, Renfe y las operadoras privadas",
@@ -328,19 +347,19 @@ export const SPAIN_STRIKES: SpainStrike[] = [
     },
     label: { ca: "vaga ferroviària", es: "huelga ferroviaria", en: "rail strike" },
     scope: {
-      ca: "El dia 17: Adif i el Grup Renfe, i els maquinistes de Renfe, Iryo, Ouigo, Transfesa, Continental Rail, Tracción Rail, Captrain i Medway. El dia 19: Adif.",
-      es: "El día 17: Adif y el Grupo Renfe, y los maquinistas de Renfe, Iryo, Ouigo, Transfesa, Continental Rail, Tracción Rail, Captrain y Medway. El día 19: Adif.",
-      en: "On the 17th: Adif (the track operator) and the Renfe group, plus train drivers at Renfe, Iryo, Ouigo, Transfesa, Continental Rail, Tracción Rail, Captrain and Medway. On the 19th: Adif.",
+      ca: "El dia 17: tot el personal del Grup Renfe (Rodalies i Cercanías, Mitja Distància, AVE i Llarga Distància, mercaderies) i Adif, i els maquinistes d'Iryo, Ouigo, Transfesa, Continental Rail, Tracción Rail, Captrain i Medway. El dia 19: el personal de circulació d'Adif.",
+      es: "El día 17: toda la plantilla del Grupo Renfe (Cercanías y Rodalies, Media Distancia, AVE y Larga Distancia, mercancías) y Adif, y los maquinistas de Iryo, Ouigo, Transfesa, Continental Rail, Tracción Rail, Captrain y Medway. El día 19: el personal de circulación de Adif.",
+      en: "On the 17th: all Renfe Group staff (Cercanías and Rodalies commuter trains, Media Distancia, AVE and long distance, freight) and Adif (the track operator), plus train drivers at Iryo, Ouigo, Transfesa, Continental Rail, Tracción Rail, Captrain and Medway. On the 19th: Adif's traffic-control staff.",
     },
     hours: {
-      ca: "Vaga de 24 hores el dia 17, segons CCOO; a Adif, aturades de 24 hores el 17 i el 19, segons l'SCF.",
-      es: "Huelga de 24 horas el día 17, según CCOO; en Adif, paros de 24 horas el 17 y el 19, según el SCF.",
-      en: "A 24-hour strike on the 17th, according to CCOO; at Adif, 24-hour stoppages on the 17th and the 19th, according to SCF.",
+      ca: "El 17, de 0.00 a 23.59 h al Grup Renfe, segons l'ordre de serveis mínims de la Generalitat; a Adif, aturades de 24 hores el 17 i el 19, segons l'SCF.",
+      es: "El 17, de 0.00 a 23.59 h en el Grupo Renfe, según la orden de servicios mínimos de la Generalitat; en Adif, paros de 24 horas el 17 y el 19, según el SCF.",
+      en: "On the 17th, 00:00 to 23:59 at the Renfe Group, according to the Generalitat's minimum-services order; at Adif, 24-hour stoppages on the 17th and the 19th, according to SCF.",
     },
     calledBy: {
-      ca: `El dia 17, els sindicats del Comitè General d'Empresa d'Adif (${link(U.ccooRail17, "CCOO, 3 de novembre")}), als quals es va sumar el Comitè General d'Empresa de Renfe (${link(U.alferro80, "ALFERRO, comunicat 80/2026")}), i SEMAF amb una convocatòria pròpia per als maquinistes de totes les operadores (${link(U.semafCuerpo, "SEMAF, 5 de novembre")}). El 17 i el 19, el sindicat SCF a Adif (${link(U.scfAdif, "SCF, 6 de novembre")}).`,
-      es: `El día 17, los sindicatos del Comité General de Empresa de Adif (${link(U.ccooRail17, "CCOO, 3 de noviembre")}), a los que se sumó el Comité General de Empresa de Renfe (${link(U.alferro80, "ALFERRO, comunicado 80/2026")}), y SEMAF con una convocatoria propia para los maquinistas de todas las operadoras (${link(U.semafCuerpo, "SEMAF, 5 de noviembre")}). El 17 y el 19, el sindicato SCF en Adif (${link(U.scfAdif, "SCF, 6 de noviembre")}).`,
-      en: `On the 17th, the unions on Adif's company-wide works council (${link(U.ccooRail17, "CCOO, 3 November")}), joined by Renfe's works council (${link(U.alferro80, "ALFERRO, notice 80/2026")}), and SEMAF with a call of its own for drivers at every operator (${link(U.semafCuerpo, "SEMAF, 5 November")}). On the 17th and the 19th, the SCF union at Adif (${link(U.scfAdif, "SCF, 6 November")}).`,
+      ca: `El dia 17, els sindicats del Comitè General d'Empresa d'Adif (${link(U.ccooRail17, "CCOO, 3 de novembre")}), als quals es va sumar el Comitè General d'Empresa de Renfe (${link(U.alferro80, "ALFERRO, comunicat 80/2026")}): al Grup Renfe hi han registrat vaga FeSMC-UGT, CCOO, SF-Intersindical, SEMAF, ALFERRO i SFF-CGT, segons l'ordre de la Generalitat del 12 de novembre (${link(U.treballMs, "llista del Departament d'Empresa i Treball")}). SEMAF també crida els maquinistes de les altres operadores (${link(U.semafCuerpo, "SEMAF, 5 de novembre")}). El 17 i el 19, el sindicat SCF a Adif (${link(U.scfAdif, "SCF, 6 de novembre")}), que els mantenia el 12 de novembre (${link(U.scf35, "comunicat 35")}). CCOO, el 12 de novembre: «la huelga del 17 de noviembre sigue siendo necesaria» (${link(U.ccooRail17Still, "el seu comunicat")}).`,
+      es: `El día 17, los sindicatos del Comité General de Empresa de Adif (${link(U.ccooRail17, "CCOO, 3 de noviembre")}), a los que se sumó el Comité General de Empresa de Renfe (${link(U.alferro80, "ALFERRO, comunicado 80/2026")}): en el Grupo Renfe han registrado huelga FeSMC-UGT, CCOO, SF-Intersindical, SEMAF, ALFERRO y SFF-CGT, según la orden de la Generalitat del 12 de noviembre (${link(U.treballMs, "lista del Departament d'Empresa i Treball")}). SEMAF llama también a los maquinistas de las demás operadoras (${link(U.semafCuerpo, "SEMAF, 5 de noviembre")}). El 17 y el 19, el sindicato SCF en Adif (${link(U.scfAdif, "SCF, 6 de noviembre")}), que los mantenía el 12 de noviembre (${link(U.scf35, "comunicado 35")}). CCOO, el 12 de noviembre: «la huelga del 17 de noviembre sigue siendo necesaria» (${link(U.ccooRail17Still, "su comunicado")}).`,
+      en: `On the 17th, the unions on Adif's company-wide works council (${link(U.ccooRail17, "CCOO, 3 November")}), joined by Renfe's works council (${link(U.alferro80, "ALFERRO, notice 80/2026")}): at the Renfe Group, FeSMC-UGT, CCOO, SF-Intersindical, SEMAF, ALFERRO and SFF-CGT have registered strike calls, according to the Generalitat's order of 12 November (${link(U.treballMs, "the Catalan labour department's list")}). SEMAF also calls out drivers at the other operators (${link(U.semafCuerpo, "SEMAF, 5 November")}). On the 17th and the 19th, the SCF union at Adif (${link(U.scfAdif, "SCF, 6 November")}), which kept both days on 12 November (${link(U.scf35, "notice 35")}). CCOO on 12 November: "la huelga del 17 de noviembre sigue siendo necesaria" (the 17 November strike is still necessary; ${link(U.ccooRail17Still, "its notice")}).`,
     },
     basis: {
       ca: `Consta als comunicats dels sindicats. El {checked} no hi havia cap resolució de serveis mínims per a aquests dies a ${link(U.ministryRail, "la llista del Ministeri de Transports")}.`,
@@ -349,11 +368,11 @@ export const SPAIN_STRIKES: SpainStrike[] = [
     },
     minimumServices: {
       status: "pending",
-      short: { ca: "Per confirmar, encara no publicats", es: "Por confirmar, aún no publicados", en: "To be confirmed, not published yet" },
+      short: { ca: "Per confirmar, llevat de Rodalies", es: "Por confirmar, salvo Rodalies", en: "To be confirmed, except Rodalies" },
       text: {
-        ca: `Per confirmar. El {checked} el Ministeri de Transports no havia publicat cap resolució per al 17 ni per al 19 a ${link(U.ministryRail, "la seva llista de resolucions ferroviàries")}, que és on sortiran. Els de Rodalies de Catalunya els fixa la Generalitat i sortiran a ${link(U.treballMs, "la llista del Departament d'Empresa i Treball")}.`,
-        es: `Por confirmar. El {checked} el Ministerio de Transportes no había publicado ninguna resolución para el 17 ni para el 19 en ${link(U.ministryRail, "su lista de resoluciones ferroviarias")}, que es donde saldrán. Los de Rodalies de Catalunya los fija la Generalitat y saldrán en ${link(U.treballMs, "la lista del Departament d'Empresa i Treball")}.`,
-        en: `To be confirmed. On {checked} the Ministry of Transport had published no resolution for the 17th or the 19th on ${link(U.ministryRail, "its list of rail resolutions")}, which is where they will appear. Those for Rodalies in Catalonia are set by the Generalitat and will appear on ${link(U.treballMs, "the Catalan labour department's list")}.`,
+        ca: `Per confirmar. El {checked} el Ministeri de Transports no havia publicat cap resolució per al 17 ni per al 19 a ${link(U.ministryRail, "la seva llista de resolucions ferroviàries")}, que és on sortiran els de Cercanías, Mitja Distància, AVE i Llarga Distància i Adif. Els de Rodalies de Catalunya i els regionals ja els ha fixat la Generalitat, per ordre del 12 de novembre, a ${link(U.treballMs, "la llista del Departament d'Empresa i Treball")}.`,
+        es: `Por confirmar. El {checked} el Ministerio de Transportes no había publicado ninguna resolución para el 17 ni para el 19 en ${link(U.ministryRail, "su lista de resoluciones ferroviarias")}, que es donde saldrán los de Cercanías, Media Distancia, AVE y Larga Distancia y Adif. Los de Rodalies de Catalunya y los regionales ya los ha fijado la Generalitat, por orden del 12 de noviembre, en ${link(U.treballMs, "la lista del Departament d'Empresa i Treball")}.`,
+        en: `To be confirmed. On {checked} the Ministry of Transport had published no resolution for the 17th or the 19th on ${link(U.ministryRail, "its list of rail resolutions")}, which is where those for Cercanías, Media Distancia, AVE and long distance and Adif will appear. Those for Rodalies in Catalonia and regional trains there were set by the Generalitat in an order of 12 November, on ${link(U.treballMs, "the Catalan labour department's list")}.`,
       },
     },
     sources: [
@@ -361,6 +380,8 @@ export const SPAIN_STRIKES: SpainStrike[] = [
       { name: "Comunicado 80/2026: modificación de las fechas de huelga de noviembre de 2026", url: U.alferro80, publisher: "ALFERRO" },
       { name: "Encuentro con el ministro Carlos Cuerpo: alcance de las movilizaciones (5 de noviembre de 2026)", url: U.semafCuerpo, publisher: "SEMAF" },
       { name: "SCFCOM 33: SCF convoca huelga en Adif (6 de noviembre de 2026)", url: U.scfAdif, publisher: "Sindicato de Circulación Ferroviario (SCF)" },
+      { name: "SCFCOM 35: Las motivaciones de una negociación (12 de noviembre de 2026)", url: U.scf35, publisher: "Sindicato de Circulación Ferroviario (SCF)" },
+      { name: "Avances en seguridad y derechos que deben notarse en el trabajo (12 de noviembre de 2026)", url: U.ccooRail17Still, publisher: "CCOO, Sector Ferroviario" },
       SRC.ministryRail,
       { name: "Serveis mínims en cas de vaga", url: U.treballMs, publisher: "Generalitat de Catalunya, Departament d'Empresa i Treball" },
     ],
