@@ -186,8 +186,9 @@
     scroll-behavior: smooth;
     /* Room for the sticky header when jumping to an anchor. The header is one
        row at every width since the phone section rail became a menu button
-       (Nov 2026); before that phones needed 8.5rem. */
-    scroll-padding-top: 5.5rem;
+       (Nov 2026), and 56 px tall since 12 Nov 2026; before that phones
+       needed 8.5rem. */
+    scroll-padding-top: 4.5rem;
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -536,6 +537,127 @@
   .ci-facts dd {
     margin: 0;
     font-variant-numeric: tabular-nums;
+  }
+
+  /* --- Answer-first summary (lib/layout/answer-first.ts) ---------------- */
+  .ci-answer-wrap {
+    max-width: var(--spacing-measure);
+  }
+  .ci-answer {
+    border-left: 3px solid var(--color-contour);
+    background: var(--color-surface);
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    padding: 0.75rem 1rem;
+    font-size: 0.9375rem;
+    line-height: 1.45;
+    overflow-wrap: break-word;
+  }
+  .ci-answer-title {
+    margin: 0 0 0.4rem;
+    font-family: var(--font-sans);
+    font-size: var(--text-base);
+    font-weight: 600;
+    line-height: 1.3;
+  }
+  .ci-answer-list {
+    margin: 0;
+    padding-left: 1.1rem;
+    list-style: disc;
+  }
+  .ci-answer-list li + li {
+    margin-top: 0.3rem;
+  }
+  .ci-answer-more {
+    margin-top: 0.4rem;
+  }
+  .ci-answer-more > summary {
+    min-height: 2.75rem;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: var(--text-sm);
+  }
+  .ci-answer-more[open] > summary {
+    margin-bottom: 0.3rem;
+  }
+  /* The lead as the summary: the box, the lead's own size. */
+  .ci-answer-lead .ci-prose > p:first-child {
+    margin-top: 0;
+  }
+  .ci-answer-lead .ci-prose > p:last-child {
+    margin-bottom: 0;
+  }
+  .ci-answer-toc {
+    margin-top: 0.75rem;
+    padding-block: 0.25rem;
+  }
+  .ci-answer-toc > summary {
+    font-size: var(--text-sm);
+  }
+
+  /* Google Preferred Sources deeplink, beside the byline. */
+  .ci-preferred-source {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    min-height: 1.5rem;
+    color: var(--color-ink-soft);
+  }
+
+  /* Homepage: the most-searched utilities under the title (HomeTopTools). */
+  .ci-home-top {
+    margin-top: 1rem;
+    max-width: 48rem;
+  }
+  .ci-home-top ul {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.5rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  @media (min-width: 48rem) {
+    .ci-home-top ul {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+  }
+  .ci-home-top-tile {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 0.15rem;
+    height: 100%;
+    min-height: 3.25rem;
+    padding: 0.6rem 0.8rem;
+    border: 1px solid var(--color-rule-strong);
+    border-radius: var(--radius-sm);
+    background: var(--color-paper);
+    text-decoration: none;
+  }
+  .ci-home-top-tile:hover {
+    background: var(--color-surface-sunk);
+  }
+  .ci-home-top-title {
+    font-weight: 600;
+    color: var(--color-ink);
+    line-height: 1.25;
+  }
+  .ci-home-top-live {
+    font-size: 0.8rem;
+    line-height: 1.3;
+    color: var(--color-sea);
+  }
+
+  .ci-most-read-list {
+    margin: 0;
+    padding-left: 1.4rem;
+    list-style: decimal;
+    max-width: var(--spacing-measure);
+  }
+  .ci-most-read-list li + li {
+    margin-top: 0.5rem;
   }
 
   /* --- Prose ------------------------------------------------------------ */

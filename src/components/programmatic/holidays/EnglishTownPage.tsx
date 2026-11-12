@@ -83,6 +83,10 @@ export function EnglishTownPage({ m }: { m: SnapshotMunicipality }) {
 
       <div className="ci-shell py-10">
         <div className="ci-prose">
+          {/* Dates first (12 Nov 2026, answer-first layout; docs/SEO_EXPERIMENTS.md): the list is the answer. */}
+          <h2 id="holidays-2026" className="mt-0">{t.tableTitle}</h2>
+          <HolidayTable rows={yearRows(m, YEAR, "en")} locale="en" caption={t.tableCaption} />
+
           <p className="ci-lead">
             {t.lead} {t.source}
           </p>
@@ -102,9 +106,6 @@ export function EnglishTownPage({ m }: { m: SnapshotMunicipality }) {
             locale="en"
             labels={STATUS_LABELS}
           />
-
-          <h2 id="holidays-2026">{t.tableTitle}</h2>
-          <HolidayTable rows={yearRows(m, YEAR, "en")} locale="en" caption={t.tableCaption} />
 
           {m.nuclei.length > 0 ? (
             <>

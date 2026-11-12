@@ -3481,3 +3481,72 @@ de nadal 2026" 46 (pos 7.8) + variants ~40: the Catalan pages use SELAE's
 Catalan name ("loteria de Nadal") and say it is not La Grossa de Cap d'Any.
 **Measure** from 23 Dec with `snapshot.py page donde-ha-tocado 7` (and
 `on-ha-tocat`, `christmas-lottery-results`).
+
+## 2026-11-12 — Answer-first layout: summary under the byline, boxes after the body (first group; review 2026-11-19)
+
+**Why.** Composition benchmark of 23 publisher pages
+(`research_notes/x10/composition-benchmark-nov2026.md`): the leaders put a
+bullet summary or a one-line answer straight under the H1 and keep
+recirculation, "last verified" and "upcoming" boxes after the body. Ours put a
+TOC, "de un vistazo", "Última verificación", "Próximas huelgas y fechas" and
+"Lee también" before the first section (Sevilla 11N: first section at
+2,502 px on a Pixel 7) and the Spain 2027 calendar listed its dates at
+4,170 px.
+
+**What changed (render time, no republish).**
+
+- Switch: `src/lib/layout/answer-first.ts` (`ANSWER_FIRST_ENTRY_KEYS`,
+  `ANSWER_FIRST_KEY_PREFIXES`). Order on those pages: title → byline, date,
+  "Verificado" chip, "Añádenos como fuente preferida en Google" (Preferred
+  Sources deeplink) → share bar → summary (the page's own keyFacts block as
+  3–5 bullets, the rest in a closed `<details>`; the lead when there is no
+  keyFacts block) → closed "En esta página" → photo (32vw on phones) → body →
+  the moved boxes, in their original order → sources, share, feedback,
+  related → "Lo más leído" (GA4, dated, `scripts/most-read.py`).
+- Programmatic holiday pages (all of them, not switched): the date list is
+  the first block under the title on `/es/festivos/2027/`, `/ca/festius/2027/`,
+  `/en/holidays/2027/`, every community and city page under them, and every
+  Catalan town page (`/ca/festius/<town>/`, `/es/festivos/<town>/`,
+  `/en/holidays/<town>/`); the lead follows the list.
+- Sitewide: header one row of 56 px (was 69 px; 115 px before 5f644b8);
+  homepage opens with four tiles (strikes, holidays, elections, school
+  calendar), the school card no longer repeated in "Útil ahora mismo", the
+  desktop lead card no longer repeated in the grids.
+
+**First group (answer-first switch).** strike-11n `/ca/guies/vaga-general-11-novembre/`
+(+ es, en); the Spain-wide 11N page `/ca/guies/vaga-general-11-novembre-espanya/`
+(+ es, en); the 11N city pages `/es/guias/huelga-general-11-noviembre-<city>/`
+(+ ca, en editions); strikes hubs `/ca/guies/vaga-avui-catalunya/`,
+`/es/guias/huelga-hoy-cataluna/`, `/en/guides/strike-barcelona-catalonia-today/`
+and `/es/guias/huelgas-espana/` (+ ca, en); Renfe guide
+`/ca/guies/vaga-renfe-rodalies-novembre/` (+ es, en); calendari laboral
+`/ca/guies/calendari-laboral-catalunya/` (+ es, en); és festiu avui
+`/ca/guies/es-festiu-avui-catalunya/` (+ es, en); ponts 2027
+`/ca/guies/ponts-2027-catalunya/` (+ es, en); December bridge
+`/ca/guies/pont-desembre-catalunya/` and `/es/guias/puente-diciembre-espana/`
+(+ other editions).
+
+**Measured on the dev server (Pixel 7, 412×915, y in CSS px).** Sevilla 11N:
+answer (summary) 497, first section 1,253 (was: lead 621, first section 2,502).
+Strikes hub ca: summary 497, first section 2,183 (was 2,837). Renfe es:
+summary 534, first section 1,770 (2,522). `/ca/festius/2027/` dates 396
+(4,170); `/es/festivos/2027/` 396 (4,176); Girona town page 2026 list 359
+(1,245). Home ca: first utility tile 225 (660).
+
+**Metrics to compare (7 days after vs 7 days before, per page family and
+device).** GA4 (property 554310792): engagement rate and bounce rate by
+device category, average engagement time per session, views per session.
+Search Console: clicks, CTR and average position per page (`snapshot.py page
+<path> 7`). Compare against a control family that kept the old layout (e.g.
+`/ca/guies/calendari-escolar-catalunya/`, the mesa and voting guides).
+
+**Decision rule (19 Nov).** Extend the switch to every DB article if mobile
+engagement rate on the first group is not lower than before by more than
+3 points and average engagement time does not fall by more than 10 %, with
+GSC CTR within its normal band at the same position. Otherwise revert the
+switch (empty the two arrays: a deploy, no republish).
+
+**Confounders.** The 11N pages are past-tense since 12 Nov 06:30 and lose
+demand whatever the layout; the Renfe strike (17/19 Nov) and the education
+strike (26 Nov) rise in the same week; the header and homepage changes are
+sitewide, so they move the control family too.

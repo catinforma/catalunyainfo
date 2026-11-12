@@ -300,30 +300,8 @@ export function CommunityPageIntl({ c, locale }: { c: EditionNames; locale: Edit
 
       <div className="ci-shell py-10">
         <div className="ci-prose">
-          <p className="ci-lead">{communityLeadIntl(c, locale)}</p>
-
-          <dl className="ci-facts">
-            <dt>{tr(locale, `Festius ${YEAR}`, `Holidays ${YEAR}`)}</dt>
-            <dd>
-              {days.length}
-              {prose.subRegional ? tr(locale, ` a tot el territori, més 1 ${prose.subRegional.unit}`, ` across the territory, plus 1 ${prose.subRegional.unit}`) : ""} (
-              {compactDatesIntl(
-                days.map((d) => d.date),
-                locale,
-              )}
-              )
-            </dd>
-            <dt>{tr(locale, `Propis ${whose} o no comuns`, `Not shared by all of Spain`)}</dt>
-            <dd>{own.length}</dd>
-            <dt>{tr(locale, "Caps de setmana llargs sense vacances", "Long weekends with no leave")}</dt>
-            <dd>
-              {summary.free} <small>({tr(locale, "calculat", "worked out")})</small>
-            </dd>
-            <dt>{tr(locale, `Festius locals ${YEAR}`, `Local holidays ${YEAR}`)}</dt>
-            <dd>{localWord(s.local.status)}</dd>
-          </dl>
-
-          <h2 id="festius">{tr(locale, `Els ${days.length} festius del ${YEAR} ${c.in}`, `The ${days.length} public holidays of ${YEAR} ${c.in}`)}</h2>
+          {/* Dates first (12 Nov 2026, answer-first layout; docs/SEO_EXPERIMENTS.md): the list is the answer. */}
+          <h2 id="festius" className="mt-0">{tr(locale, `Els ${days.length} festius del ${YEAR} ${c.in}`, `The ${days.length} public holidays of ${YEAR} ${c.in}`)}</h2>
           <div className="ci-table-scroll mt-4">
             <table className="ci-local-table ci-stack-table">
               <caption className="pb-2 text-left text-sm text-[var(--color-muted)]">
@@ -376,6 +354,29 @@ export function CommunityPageIntl({ c, locale }: { c: EditionNames; locale: Edit
               </ul>
             </>
           ) : null}
+
+          <p className="ci-lead">{communityLeadIntl(c, locale)}</p>
+
+          <dl className="ci-facts">
+            <dt>{tr(locale, `Festius ${YEAR}`, `Holidays ${YEAR}`)}</dt>
+            <dd>
+              {days.length}
+              {prose.subRegional ? tr(locale, ` a tot el territori, més 1 ${prose.subRegional.unit}`, ` across the territory, plus 1 ${prose.subRegional.unit}`) : ""} (
+              {compactDatesIntl(
+                days.map((d) => d.date),
+                locale,
+              )}
+              )
+            </dd>
+            <dt>{tr(locale, `Propis ${whose} o no comuns`, `Not shared by all of Spain`)}</dt>
+            <dd>{own.length}</dd>
+            <dt>{tr(locale, "Caps de setmana llargs sense vacances", "Long weekends with no leave")}</dt>
+            <dd>
+              {summary.free} <small>({tr(locale, "calculat", "worked out")})</small>
+            </dd>
+            <dt>{tr(locale, `Festius locals ${YEAR}`, `Local holidays ${YEAR}`)}</dt>
+            <dd>{localWord(s.local.status)}</dd>
+          </dl>
 
           <h2 id="diferencies">{tr(locale, "Què canvia respecte a la resta d'Espanya", "How it differs from the rest of Spain")}</h2>
           <p>
@@ -588,10 +589,22 @@ export function SpainHubPageIntl({ locale }: { locale: Edition }) {
     st === "published" ? tr(locale, "Publicats", "Published") : st === "partial" ? tr(locale, "En part", "Partly") : tr(locale, "Pendents", "Pending");
   return (
     <article>
-      <Header crumbs={hubCrumbsIntl(locale)} h1={HUB_INTL[locale].h1} lead={hubLeadIntl(locale)} locale={locale} />
+      <Header crumbs={hubCrumbsIntl(locale)} h1={HUB_INTL[locale].h1} locale={locale} />
 
       <div className="ci-shell py-10">
         <div className="ci-prose">
+          {/* Dates first (12 Nov 2026, answer-first layout; docs/SEO_EXPERIMENTS.md): the list is the answer. */}
+          <h2 id="comuns" className="mt-0">{tr(locale, `Els ${COMMON_DATES.length} festius comuns a tot Espanya el ${YEAR}`, `The ${COMMON_DATES.length} holidays shared by all of Spain in ${YEAR}`)}</h2>
+          <ul>
+            {commonRows().map((r) => (
+              <li key={r.date}>
+                {wd(r.date)}: {holidayLabel(r.name, locale)}
+              </li>
+            ))}
+          </ul>
+
+          <p className="ci-lead">{hubLeadIntl(locale)}</p>
+
           <h2 id="comunitats">{tr(locale, `Festius ${YEAR} per comunitat autònoma`, `${YEAR} holidays by autonomous community`)}</h2>
           <div className="ci-table-scroll mt-4">
             <table className="ci-local-table ci-stack-table">
@@ -635,15 +648,6 @@ export function SpainHubPageIntl({ locale }: { locale: Edition }) {
               </tbody>
             </table>
           </div>
-
-          <h2 id="comuns">{tr(locale, `Els ${COMMON_DATES.length} festius comuns a tot Espanya el ${YEAR}`, `The ${COMMON_DATES.length} holidays shared by all of Spain in ${YEAR}`)}</h2>
-          <ul>
-            {commonRows().map((r) => (
-              <li key={r.date}>
-                {wd(r.date)}: {holidayLabel(r.name, locale)}
-              </li>
-            ))}
-          </ul>
 
           <h2 id="variables">{tr(locale, "Festius que canvien segons la comunitat", "Holidays that vary by region")}</h2>
           <ul>

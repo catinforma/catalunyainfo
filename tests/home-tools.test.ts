@@ -4,7 +4,8 @@ import { test } from "node:test";
 import { B2_PATHS } from "../src/lib/content/batch02/shared.ts";
 import { COPY as LOCAL_COPY } from "../src/lib/content/holidays/local-publish.ts";
 import { COPY as TODAY_COPY } from "../src/lib/content/holidays/today-publish.ts";
-import { ORDER, PATHS, SEASONAL, toolsFor, type ToolKey } from "../src/lib/content/home-tools.ts";
+import { DUPLICATES_TOP, ORDER, PATHS, SEASONAL, TOP_TOOLS, toolsFor, type ToolKey } from "../src/lib/content/home-tools.ts";
+import { MENU_LABELS, MENU_PATHS } from "../src/lib/nav/menu.ts";
 import { COPY as MUSHROOM_COPY } from "../src/lib/content/mushrooms/payload.ts";
 import { COPY as AUTUMN_COPY } from "../src/lib/content/autumn/payload.ts";
 import { ARTICLE_PATHS as FEATURE_PATHS } from "../src/lib/content/features/shared.ts";
@@ -79,5 +80,20 @@ test("seasonal tools open and close on their dates, across New Year too", () => 
   for (const day of ["2026-10-23", "2026-12-24", "2027-03-01", "2027-07-15"]) {
     const keys = strip(day);
     assert.equal(new Set(keys).size, keys.length, `duplicate tool on ${day}`);
+  }
+});
+
+test("the top tiles are the menu hubs plus the school calendar, labelled in every edition, and no strip card repeats one", () => {
+  for (const locale of LOCALES) {
+    const top = TOP_TOOLS[locale];
+    assert.deepEqual([...top].sort(), ["elections", "holidays", "school", "strikes"], locale);
+    const topPaths = new Set(top.map((key) => MENU_PATHS[key][locale]));
+    for (const key of top) assert.ok(MENU_LABELS[key][locale].trim(), `${key} ${locale}`);
+    const strip = toolsFor(locale, "2026-11-12").filter((key) => !DUPLICATES_TOP.includes(key));
+    for (const key of strip) {
+      assert.ok(!topPaths.has(`/${locale}/${PATHS[key][locale]}/`), `${key} repeats a top tile (${locale})`);
+    }
+    // Every excluded tool really is a duplicate.
+    for (const key of DUPLICATES_TOP) assert.ok(topPaths.has(`/${locale}/${PATHS[key][locale]}/`), `${key} (${locale})`);
   }
 });
