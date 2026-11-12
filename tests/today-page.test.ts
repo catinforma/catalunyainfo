@@ -398,8 +398,9 @@ test("strikes: today, tomorrow and next from the embedded dates; the list's age"
   assert.equal(nextStrike("2026-11-11", STRIKE_FIXTURE), null);
   assert.equal(strikesListStale("2026-11-06", "2026-10-30"), false);
   assert.equal(strikesListStale("2026-11-07", "2026-10-30"), true);
-  // On the real list: the general strike is on 11 November.
-  assert.ok(strikesOn("2026-11-11", todayStrikes("ca")).some((s) => s.id === "vaga-general-2026-11-11"));
+  // On the real list: the next rail strike is on 17 November (12 Nov 2026: the general strike of the 11th is past).
+  assert.ok(strikesOn("2026-11-17", todayStrikes("ca")).some((s) => s.id === "vaga-ferroviaria-2026-11-17"));
+  assert.ok(!todayStrikes("ca").some((s) => s.id === "vaga-general-2026-11-11"));
 });
 
 test("strikes: an indefinite strike is on every day from its first, until the day it ended, and is never 'next' once begun", () => {

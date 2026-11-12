@@ -694,8 +694,14 @@ test("the 'what runs' table has one row per service and lists exactly the strike
   }
   const rows = Object.fromEntries(SERVICE_KEYS.map((key, i) => [key, whatRunsRows("ca")[i]?.[1] ?? ""]));
   assert.match(rows.health ?? "", /^Des del dimecres 28 d'octubre de 2026: vaga indefinida de metges/);
-  assert.match(rows.rodalies ?? "", /^Dimecres 11 de novembre de 2026: vaga general de 24 hores; Dimarts 17 de novembre i dijous 19 de novembre de 2026: vaga ferroviària/);
-  assert.equal(rows.metroBus, "Dimecres 11 de novembre de 2026: vaga general de 24 hores");
+  // 12 Nov 2026: the general strike is past, so it has left the "what runs" table.
+  if (STRIKES_AS_OF <= "2026-11-11") {
+    assert.match(rows.rodalies ?? "", /^Dimecres 11 de novembre de 2026: vaga general de 24 hores; Dimarts 17 de novembre i dijous 19 de novembre de 2026: vaga ferroviària/);
+    assert.equal(rows.metroBus, "Dimecres 11 de novembre de 2026: vaga general de 24 hores");
+  } else {
+    assert.match(rows.rodalies ?? "", /^Dimarts 17 de novembre i dijous 19 de novembre de 2026: vaga ferroviària/);
+    assert.ok(!(rows.metroBus ?? "").includes("11 de novembre"), rows.metroBus);
+  }
   assert.equal(whatRunsRows("ca", "2026-11-12")[1]?.[1], "Cap vaga anunciada");
   for (const strike of STRIKES) assert.ok(strike.affects.length > 0 && strike.affects.every((k) => SERVICE_KEYS.includes(k)), strike.id);
 });

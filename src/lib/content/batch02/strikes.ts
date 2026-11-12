@@ -197,8 +197,17 @@ import { strike11nCityLinks } from "./strike-11n-city-paths";
  * education on 26 Nov), USTEC·STEs (26N still announced, no registered call
  * or minimum services) and Metges de Catalunya (indefinite strike still on,
  * newest notice 10 Nov).
+ *
+ * 12 Nov 2026: re-read the morning after the general strike: SEMAF (newest
+ * notice still 10 Nov: 23 Nov strike), SCF (Adif 17 and 19 Nov kept; newest
+ * items 10-11 Nov, no call-off), the Ministry of Transport's rail list (newest
+ * still the 6 Nov resolution; none for 17, 19 or 23 Nov), the Departament
+ * d'Empresa i Treball's list (newest entry 11 Nov, meat industry; nothing for
+ * the rail strikes or education on 26 Nov), ALFERRO (newest communiqué 82,
+ * no new dates), USTEC·STEs (nothing new on 26N) and Metges de Catalunya
+ * (indefinite strike still on, newest notice 10 Nov). The 11N strike is past.
  */
-export const STRIKES_AS_OF = "2026-11-11";
+export const STRIKES_AS_OF = "2026-11-12";
 
 /**
  * The day the facts on the page were last read on the sources. Bringing the
@@ -419,21 +428,21 @@ export const STRIKES: Strike[] = [
       ca: [
         "**Convocatòria:** el sindicat Metges de Catalunya (MC), que la va registrar el 15 de setembre de 2026. Els sindicats mèdics de tot l'Estat havien acordat començar una vaga indefinida el 28 d'octubre, i MC la fa a Catalunya.",
         "**Des de quan:** des de les 8.00 h del dimecres 28 d'octubre de 2026, sense data de final. En paraules del secretari general de MC, Xavier Lleonart, «té data d'inici, però no de final».",
-        `**On és:** l'11 de novembre de 2026 la vaga continuava. Metges de Catalunya no havia anunciat cap acord amb el Departament de Salut ni cap data de final a ${link(U.metgesNews, "les seves notícies")}.`,
+        `**On és:** el 12 de novembre de 2026 la vaga continuava. Metges de Catalunya no havia anunciat cap acord amb el Departament de Salut ni cap data de final a ${link(U.metgesNews, "les seves notícies")}.`,
         "**Qui hi està cridat:** el personal facultatiu (metges i altres facultatius, també els residents en formació) dels hospitals, els CAP i la resta de centres de la xarxa sanitària pública SISCAT i de les entitats adscrites al CatSalut o al Departament de Salut.",
         `**Per què:** MC reclama un conveni propi per als metges i que el Departament de Salut negociï amb el sindicat; diu que només hi ha «dues sortides possibles» per a la vaga, una negociació «real i efectiva» amb MC o unes eleccions, segons ${link(U.metgesStrike, "el seu comunicat del 28 d'octubre")}.`,
       ],
       es: [
         "**Convocatoria:** el sindicato Metges de Catalunya (MC), que la registró el 15 de septiembre de 2026. Los sindicatos médicos de toda España habían acordado empezar una huelga indefinida el 28 de octubre, y MC la hace en Cataluña.",
         "**Desde cuándo:** desde las 8.00 h del miércoles 28 de octubre de 2026, sin fecha de final. En palabras del secretario general de MC, Xavier Lleonart, «té data d'inici, però no de final» (tiene fecha de inicio, pero no de final).",
-        `**Cómo está:** el 11 de noviembre de 2026 la huelga seguía. Metges de Catalunya no había anunciado ningún acuerdo con el Departament de Salut ni ninguna fecha de final en ${link(U.metgesNews, "sus noticias")}.`,
+        `**Cómo está:** el 12 de noviembre de 2026 la huelga seguía. Metges de Catalunya no había anunciado ningún acuerdo con el Departament de Salut ni ninguna fecha de final en ${link(U.metgesNews, "sus noticias")}.`,
         "**A quién llama:** al personal facultativo (médicos y otros facultativos, también los residentes en formación) de los hospitales, los CAP y el resto de centros de la red sanitaria pública SISCAT y de las entidades adscritas al CatSalut o al Departament de Salut.",
         `**Por qué:** MC reclama un convenio propio para los médicos y que el Departament de Salut negocie con el sindicato; dice que solo hay dos salidas posibles para la huelga, una negociación real y efectiva con MC o unas elecciones, según ${link(U.metgesStrike, "su comunicado del 28 de octubre")}.`,
       ],
       en: [
         "**Called by:** the doctors' union Metges de Catalunya (MC), which registered it on 15 September 2026. Doctors' unions across Spain had agreed to start an indefinite strike on 28 October, and MC is holding it in Catalonia.",
         "**Since when:** 08:00 on Wednesday 28 October 2026, with no end date. In the words of MC's general secretary, Xavier Lleonart, it \"té data d'inici, però no de final\" (has a start date but no end date).",
-        `**Where it stands:** on 11 November 2026 the strike was still on. Metges de Catalunya had announced no agreement with the Health Department and no end date in ${link(U.metgesNews, "its news")}.`,
+        `**Where it stands:** on 12 November 2026 the strike was still on. Metges de Catalunya had announced no agreement with the Health Department and no end date in ${link(U.metgesNews, "its news")}.`,
         "**Who is called out:** doctors and other medical graduates (residents in training included) at hospitals, primary care centres (CAP) and the other centres of Catalonia's public health network SISCAT and the bodies attached to CatSalut or the Health Department.",
         `**Why:** MC wants a collective agreement of doctors' own and for the Health Department to negotiate with the union; it says there are only two ways out of the strike, real and effective negotiation with MC or elections, according to ${link(U.metgesStrike, "its statement of 28 October")}.`,
       ],
@@ -760,9 +769,9 @@ export const STRIKES: Strike[] = [
         en: "Minimum services not published yet",
       },
       text: {
-        ca: `**Encara no s'han publicat** (consultat l'11 de novembre de 2026). Els de Rodalies sortiran a la ${link(U.treballMs, "llista de serveis mínims del Departament d'Empresa i Treball")}; els de la resta de trens, a les ${link(U.ministryRail, "resolucions del Ministeri de Transports")}. Per a la vaga de Renfe del 10 de novembre van sortir quatre i cinc dies abans: la Generalitat va signar l'ordre de Rodalies el 5 de novembre i el Ministeri, la seva resolució el 6. Els afegirem aquí quan surtin.`,
-        es: `**Aún no se han publicado** (consultado el 11 de noviembre de 2026). Los de Rodalies saldrán en la ${link(U.treballMs, "lista de servicios mínimos del Departament d'Empresa i Treball")}; los del resto de trenes, en las ${link(U.ministryRail, "resoluciones del Ministerio de Transportes")}. Para la huelga de Renfe del 10 de noviembre salieron cuatro y cinco días antes: la Generalitat firmó la orden de Rodalies el 5 de noviembre y el Ministerio, su resolución el 6. Los añadiremos aquí en cuanto salgan.`,
-        en: `**Not published yet** (checked on 11 November 2026). Rodalies' will appear on the ${link(U.treballMs, "Department of Business and Labour's minimum-services list")}; other trains' in the ${link(U.ministryRail, "Ministry of Transport's resolutions")}. For the Renfe strike of 10 November they came out four and five days before: the Generalitat signed the Rodalies order on 5 November and the Ministry its resolution on the 6th. We will add them here as soon as they are out.`,
+        ca: `**Encara no s'han publicat** (consultat el 12 de novembre de 2026). Els de Rodalies sortiran a la ${link(U.treballMs, "llista de serveis mínims del Departament d'Empresa i Treball")}; els de la resta de trens, a les ${link(U.ministryRail, "resolucions del Ministeri de Transports")}. Per a la vaga de Renfe del 10 de novembre van sortir quatre i cinc dies abans: la Generalitat va signar l'ordre de Rodalies el 5 de novembre i el Ministeri, la seva resolució el 6. Els afegirem aquí quan surtin.`,
+        es: `**Aún no se han publicado** (consultado el 12 de noviembre de 2026). Los de Rodalies saldrán en la ${link(U.treballMs, "lista de servicios mínimos del Departament d'Empresa i Treball")}; los del resto de trenes, en las ${link(U.ministryRail, "resoluciones del Ministerio de Transportes")}. Para la huelga de Renfe del 10 de noviembre salieron cuatro y cinco días antes: la Generalitat firmó la orden de Rodalies el 5 de noviembre y el Ministerio, su resolución el 6. Los añadiremos aquí en cuanto salgan.`,
+        en: `**Not published yet** (checked on 12 November 2026). Rodalies' will appear on the ${link(U.treballMs, "Department of Business and Labour's minimum-services list")}; other trains' in the ${link(U.ministryRail, "Ministry of Transport's resolutions")}. For the Renfe strike of 10 November they came out four and five days before: the Generalitat signed the Rodalies order on 5 November and the Ministry its resolution on the 6th. We will add them here as soon as they are out.`,
       },
     },
     advice: {
@@ -826,9 +835,9 @@ export const STRIKES: Strike[] = [
         en: "Minimum services not published yet",
       },
       text: {
-        ca: `**Encara no s'han publicat** (consultat l'11 de novembre de 2026). Els de Rodalies sortiran a la ${link(U.treballMs, "llista de serveis mínims del Departament d'Empresa i Treball")}; els de la resta de trens, a les ${link(U.ministryRail, "resolucions del Ministeri de Transports")}. Per a la vaga de Renfe del 10 de novembre van sortir quatre i cinc dies abans.`,
-        es: `**Aún no se han publicado** (consultado el 11 de noviembre de 2026). Los de Rodalies saldrán en la ${link(U.treballMs, "lista de servicios mínimos del Departament d'Empresa i Treball")}; los del resto de trenes, en las ${link(U.ministryRail, "resoluciones del Ministerio de Transportes")}. Para la huelga de Renfe del 10 de noviembre salieron cuatro y cinco días antes.`,
-        en: `**Not published yet** (checked on 11 November 2026). Rodalies' will appear on the ${link(U.treballMs, "Department of Business and Labour's minimum-services list")}; other trains' in the ${link(U.ministryRail, "Ministry of Transport's resolutions")}. For the Renfe strike of 10 November they came out four and five days before.`,
+        ca: `**Encara no s'han publicat** (consultat el 12 de novembre de 2026). Els de Rodalies sortiran a la ${link(U.treballMs, "llista de serveis mínims del Departament d'Empresa i Treball")}; els de la resta de trens, a les ${link(U.ministryRail, "resolucions del Ministeri de Transports")}. Per a la vaga de Renfe del 10 de novembre van sortir quatre i cinc dies abans.`,
+        es: `**Aún no se han publicado** (consultado el 12 de noviembre de 2026). Los de Rodalies saldrán en la ${link(U.treballMs, "lista de servicios mínimos del Departament d'Empresa i Treball")}; los del resto de trenes, en las ${link(U.ministryRail, "resoluciones del Ministerio de Transportes")}. Para la huelga de Renfe del 10 de noviembre salieron cuatro y cinco días antes.`,
+        en: `**Not published yet** (checked on 12 November 2026). Rodalies' will appear on the ${link(U.treballMs, "Department of Business and Labour's minimum-services list")}; other trains' in the ${link(U.ministryRail, "Ministry of Transport's resolutions")}. For the Renfe strike of 10 November they came out four and five days before.`,
       },
     },
     advice: {
@@ -887,9 +896,9 @@ export const STRIKES: Strike[] = [
         en: "Minimum services not published yet",
       },
       text: {
-        ca: `**Encara no s'han publicat** (consultat l'11 de novembre de 2026 a la ${link(U.treballMs, "llista de vagues amb serveis mínims del Departament d'Empresa i Treball")}). A les escoles i els instituts públics els fixa el Departament d'Empresa i Treball per ordre: per a la vaga a l'educació del 8 de setembre de 2026, l'ordre es va signar el 3 de setembre, cinc dies abans. Els afegirem aquí quan surtin.`,
-        es: `**Aún no se han publicado** (consultado el 11 de noviembre de 2026 en la ${link(U.treballMs, "lista de huelgas con servicios mínimos del Departament d'Empresa i Treball")}). En las escuelas e institutos públicos los fija el Departament d'Empresa i Treball por orden: para la huelga en la educación del 8 de septiembre de 2026, la orden se firmó el 3 de septiembre, cinco días antes. Los añadiremos aquí en cuanto salgan.`,
-        en: `**Not published yet** (checked on 11 November 2026 on the ${link(U.treballMs, "Department of Business and Labour's list of strikes with minimum services")}). For state schools, the Department of Business and Labour sets them by order: for the education strike of 8 September 2026, the order was signed on 3 September, five days before. We will add them here as soon as they are out.`,
+        ca: `**Encara no s'han publicat** (consultat el 12 de novembre de 2026 a la ${link(U.treballMs, "llista de vagues amb serveis mínims del Departament d'Empresa i Treball")}). A les escoles i els instituts públics els fixa el Departament d'Empresa i Treball per ordre: per a la vaga a l'educació del 8 de setembre de 2026, l'ordre es va signar el 3 de setembre, cinc dies abans. Els afegirem aquí quan surtin.`,
+        es: `**Aún no se han publicado** (consultado el 12 de noviembre de 2026 en la ${link(U.treballMs, "lista de huelgas con servicios mínimos del Departament d'Empresa i Treball")}). En las escuelas e institutos públicos los fija el Departament d'Empresa i Treball por orden: para la huelga en la educación del 8 de septiembre de 2026, la orden se firmó el 3 de septiembre, cinco días antes. Los añadiremos aquí en cuanto salgan.`,
+        en: `**Not published yet** (checked on 12 November 2026 on the ${link(U.treballMs, "Department of Business and Labour's list of strikes with minimum services")}). For state schools, the Department of Business and Labour sets them by order: for the education strike of 8 September 2026, the order was signed on 3 September, five days before. We will add them here as soon as they are out.`,
       },
     },
     advice: {
@@ -1539,6 +1548,10 @@ export function buildStrikesBody(locale: Locale, asOf: string = STRIKES_AS_OF, s
       const days = strikeDays(strike, locale);
       blocks.push(heading(3, `${cap(days)}: ${strike.title[locale]}`, strike.id));
       blocks.push(list(...strike.facts[locale], `**${t.msLabel}:** ${strike.minimumServices.text[locale]}`, ...guideItem(strike)));
+      // 12 Nov 2026: the city pages stay linked once the strike is past.
+      if (locale === "es" && strike.id === "vaga-general-2026-11-11") {
+        blocks.push(...paras(`**Fuera de Cataluña:** los servicios mínimos que se fijaron el 11 de noviembre en ${strike11nCityLinks()}.`));
+      }
     }
   }
 
