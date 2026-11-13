@@ -15,6 +15,7 @@ import { leaveEditions } from "@/lib/programmatic/leave-2027/copy";
 import { netSalaryEditions } from "@/lib/programmatic/net-salary/copy";
 import { selfEmployedEditions } from "@/lib/programmatic/self-employed/copy";
 import { sickLeaveEditions } from "@/lib/programmatic/sick-leave/copy";
+import { paidLeaveEditions } from "@/lib/programmatic/paid-leave/copy";
 import { calcEditions, calculatorsHubEditions } from "@/lib/programmatic/calculators/paths";
 import { rentEditions } from "@/lib/programmatic/rent-update/copy";
 import { pensionEditions } from "@/lib/programmatic/pensions-2027/copy";
@@ -129,6 +130,11 @@ export function liveTools(): LiveTool[] {
       name: "Sick pay calculator (Spain, incapacidad temporal / baja laboral)",
       hubs: sickLeaveEditions(),
       description: "Social Security sick pay for employees day by day: ordinary illness or non-work accident nothing on days 1-3, 60% of the daily base reguladora on days 4-20 (employer bears days 4-15, INSS or mutua from day 16), 75% from day 21; work accident or occupational disease 75% from the day after; the special cases (menstruation, termination of pregnancy, pregnancy from week 39, donation at 100%, and from 1 Dec 2026 menopause and gender-violence injuries); the Royal Decree-law 31/2026 changes from 1 Dec 2026 (base of the month before last, special cases paid from the day after); 365 + 180 days, 545 maximum; optional collective-agreement top-up; gross, IRPF withheld (LGSS arts. 169-176, RD 53/1980, Decreto 3158/1966).",
+    },
+    {
+      name: "Paid leave in Spain (permisos laborales, Estatuto de los Trabajadores)",
+      hubs: paidLeaveEditions(),
+      description: "the legal minimum paid leave for employees with who pays each and a calculator of the last day: marriage or registered partnership 15 calendar days (ET art. 37.3.a); a relative's serious accident or illness, hospitalisation or surgery with home rest 5 days (37.3.b); death 2 days, 4 when travelling (37.3.b bis); moving house 1 day (37.3.c); public duty for the time needed; up to 4 days when work cannot be reached (37.3.g); force majeure hours equal to 4 days a year (37.9); nursing hour to 9 months (37.4); at least 30 calendar days of holiday (38.1); all paid by the employer. Only marriage and holidays say calendar days: for the others the ET says just 'días', so both the consecutive and the Monday-to-Friday count (national and regional holidays) are shown. Birth and childcare leave 19 weeks per parent, 32 for a single parent (6 mandatory after the birth + 11 until 12 months + 2 until age 8; RDL 9/2025), paid by Social Security at 100% of the base reguladora (LGSS art. 179), exempt from IRPF except in Navarre; parental leave 8 weeks until age 8 (art. 48 bis), unpaid by law. Collective agreements can improve all of them.",
     },
     {
       name: "Rent increase calculator (Spain)",

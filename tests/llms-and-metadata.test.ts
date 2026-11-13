@@ -23,6 +23,7 @@ const { leaveEditions } = await import("../src/lib/programmatic/leave-2027/copy.
 const { netSalaryEditions } = await import("../src/lib/programmatic/net-salary/copy.ts");
 const { selfEmployedEditions } = await import("../src/lib/programmatic/self-employed/copy.ts");
 const { sickLeaveEditions } = await import("../src/lib/programmatic/sick-leave/copy.ts");
+const { paidLeaveEditions } = await import("../src/lib/programmatic/paid-leave/copy.ts");
 const { CALC_KEYS, calcEditions, calculatorsHubEditions } = await import("../src/lib/programmatic/calculators/paths.ts");
 const { rentEditions } = await import("../src/lib/programmatic/rent-update/copy.ts");
 const { pensionEditions } = await import("../src/lib/programmatic/pensions-2027/copy.ts");
@@ -100,6 +101,7 @@ test("every URL llms.txt names is a page a family or guide publishes", () => {
     ...Object.values(netSalaryEditions()),
     ...Object.values(selfEmployedEditions()),
     ...Object.values(sickLeaveEditions()),
+    ...Object.values(paidLeaveEditions()),
     ...CALC_KEYS.flatMap((k) => Object.values(calcEditions(k))),
     ...Object.values(rentEditions()),
     ...Object.values(calculatorsHubEditions()),

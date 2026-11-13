@@ -47,6 +47,7 @@ test("registry: the live URLs did not move (13 Nov 2026)", () => {
   assert.deepEqual(calcEditions("settlement"), { ca: "/ca/calculadores/quitanca-finiquito/", es: "/es/calculadoras/finiquito/", en: "/en/calculators/final-settlement-spain/" });
   assert.deepEqual(calcEditions("unemployment"), { ca: "/ca/calculadores/atur/", es: "/es/calculadoras/paro/", en: "/en/calculators/unemployment-benefit-spain/" });
   assert.deepEqual(calcEditions("sick-leave"), { ca: "/ca/calculadores/baixa-laboral/", es: "/es/calculadoras/baja-laboral/", en: "/en/calculators/sick-leave-pay-spain/" });
+  assert.deepEqual(calcEditions("paid-leave"), { ca: "/ca/calculadores/permisos-laborals/", es: "/es/calculadoras/permisos-laborales/", en: "/en/calculators/spain-paid-leave/" });
   assert.deepEqual(calcEditions("rent-update"), { ca: "/ca/calculadores/actualitzar-lloguer/", es: "/es/calculadoras/actualizar-alquiler/", en: "/en/calculators/rent-increase-spain/" });
   assert.deepEqual(calcEditions("smi-2027"), { ca: "/ca/calculadores/salari-minim-2027/", es: "/es/calculadoras/salario-minimo-2027/", en: "/en/calculators/spain-minimum-wage-2027/" });
   assert.deepEqual(calcEditions("ipc"), { ca: "/ca/calculadores/ipc/", es: "/es/calculadoras/ipc/", en: "/en/calculators/spain-inflation-cpi/" });

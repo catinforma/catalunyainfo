@@ -13,6 +13,7 @@ import { RULES_AS_OF as EURIBOR_RULES_AS_OF } from "@/lib/programmatic/euribor/r
 import { RULES_AS_OF as MORTGAGE_RULES_AS_OF } from "@/lib/programmatic/mortgage/rules";
 import { RULES_AS_OF as SELF_EMPLOYED_AS_OF } from "@/lib/programmatic/self-employed/rules-2026";
 import { RULES_AS_OF as SICK_LEAVE_AS_OF } from "@/lib/programmatic/sick-leave/rules";
+import { RULES_AS_OF as PAID_LEAVE_AS_OF } from "@/lib/programmatic/paid-leave/rules";
 import { PENSION_RULES_AS_OF } from "@/lib/programmatic/pensions-2027/rules";
 import { SMI_RULES_AS_OF } from "@/lib/programmatic/smi/rules";
 import { RULES_AS_OF as TREASURY_RULES_AS_OF } from "@/lib/programmatic/treasury-bills/rules";
@@ -182,6 +183,24 @@ export const HUB_GROUPS: HubGroup[] = [
         },
         scope: "spain",
         checked: SICK_LEAVE_AS_OF,
+      },
+      {
+        key: "paid-leave",
+        calculator: true,
+        href: calc("paid-leave"),
+        title: { ca: "Permisos laborals (dies per llei)", es: "Permisos laborales (días por ley)", en: "Paid leave (days by law)" },
+        answers: {
+          ca: "Quants dies de permís et toquen per casament, hospitalització, defunció, mudança o naixement, qui els paga i quin dia acaben?",
+          es: "¿Cuántos días de permiso te tocan por boda, hospitalización, fallecimiento, mudanza o nacimiento, quién los paga y qué día terminan?",
+          en: "How many days off you get to marry, for a relative in hospital, a death, a move or a birth, who pays, and the last day.",
+        },
+        basis: {
+          ca: "Estatut dels treballadors, arts. 37, 38, 48 i 48 bis (Reial decret llei 5/2023 i 9/2025); Llei general de la Seguretat Social, art. 179.",
+          es: "Estatuto de los Trabajadores, arts. 37, 38, 48 y 48 bis (Reales Decretos-ley 5/2023 y 9/2025); Ley General de la Seguridad Social, art. 179.",
+          en: "Workers' Statute, arts. 37, 38, 48 and 48 bis (Royal Decree-laws 5/2023 and 9/2025); General Social Security Act, art. 179.",
+        },
+        scope: "spain",
+        checked: PAID_LEAVE_AS_OF,
       },
       {
         key: "pensions-2027",

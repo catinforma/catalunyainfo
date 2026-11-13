@@ -5860,3 +5860,60 @@ rules: Orden art. 27, BdE notice, EMMI terms, Ley 5/2019).
 **Measure 15 Dec, 1 Feb, 15 Feb**: `snapshot.py page /calculadoras/euribor-hoy/ 28` and `/calculadoras/hipoteca/`.
 
 **Outcome:** _pending_
+
+## 2026-11-13 — New tool: "Permisos laborales 2026: días que te corresponden" (reference + calculator), es + ca + en (deploy only; no publish group)
+
+**What.** `/es/calculadoras/permisos-laborales/`, `/ca/calculadores/permisos-laborals/`,
+`/en/calculators/spain-paid-leave/` (lib/programmatic/paid-leave/), in the
+calculators registry (after sick leave) and hub group "Trabajo y sueldo",
+sitemap (+hreflang, x-default en) and llms.txt.
+
+- Rules (read 13 Nov 2026 in the BOE consolidated Estatuto de los Trabajadores,
+  BOE-A-2015-11430, update of 21 Oct 2026; LGSS BOE-A-2015-11724, update of
+  11 Nov 2026; Seguridad Social birth-benefit page): art. 37.3 (RDL 5/2023 art.
+  127.3): marriage / partnership 15 días naturales; relative's serious
+  accident/illness, hospitalisation or surgery with home rest 5 días; death
+  2 días, +2 with travel; moving house 1 día; public duty, antenatal exams,
+  organ-donation steps "el tiempo indispensable"; work unreachable (authorities,
+  catastrophe, weather) up to 4 days (RDL 8/2024, Ley 6/2024). Art. 37.9 force
+  majeure: hours equal to 4 days/year paid. Art. 37.4 nursing hour to 9 months
+  (12 with both parents; LGSS 183–185 benefit). Art. 38.1: ≥ 30 días naturales.
+  Art. 48.4 (RDL 9/2025, BOE-A-2025-15741, convalidated BOE-A-2025-17999):
+  19 weeks = 6 mandatory + 11 until 12 months + 2 until age 8 (single parent
+  32 = 6 + 22 + 4); DT única: the 2 extra weeks for births from 2 Aug 2024,
+  requestable from 1 Jan 2026. Paid by the INSS at 100 % of the base
+  reguladora (LGSS art. 179.1), IRPF-exempt except Navarre (SS page). Art. 48
+  bis parental leave 8 weeks until age 8: suspension (art. 45.1.o), art. 45.2
+  "exonera ... de remunerar"; no LGSS benefit → unpaid by law.
+- Natural vs working days: only 37.3.a and 38.1 say "naturales"; 37.3.b, b bis,
+  c say only "días"; "hábiles"/"laborables" appear nowhere in art. 37.3 (the
+  brief's RDL 5/2023 "días hábiles" rule is not in the BOE text). The page says
+  so, shows both counts and does not summarise case law. The ET does not say
+  when a leave starts either; the calculator asks for the first day.
+- Calculator: event + first day → days and last day (consecutive) and, for the
+  "días" leaves, the Monday-to-Friday count with national + regional holidays
+  (working-days engine; 20 places, ~4 KB; 2026–2027 only, otherwise refused).
+  Birth: date of birth → mandatory end, flexible window to the first birthday,
+  end if taken in a row, 2 weeks to age 8, nursing to 9/12 months, parental to 8.
+  Server-rendered default: 5 days from Thu 3 Dec 2026 → Mon 7 Dec consecutive;
+  Fri 11 Dec working days in Madrid (es), Thu 10 Dec in Catalonia (ca/en).
+  URL hash, YMYL disclaimer, convenio section.
+
+**Why.** research_notes/spain-utilities-opportunities-nov2026.md row 22:
+"días de vacaciones" 18.7k + "permiso paternidad" 8.6k + "permisos
+retribuidos" 3k a month; competitors still print "16 semanas" and none
+separates the legal minimum from the convenio.
+
+**Baseline.** New URLs: 0 impressions.
+
+**Prediction.** By 15 Feb 2027: es page ≥ 2k impressions/28 days, position
+≤ 20 for "permisos retribuidos 2026" / "días por fallecimiento familiar" /
+"permiso nacimiento 19 semanas".
+
+**Date guards.** `tests/paid-leave.test.ts`: `RULES_UNTIL` 1 Jan 2027 (re-read
+ET arts. 37, 38, 45, 48, 48 bis, LGSS 177–185 and the SS page; move the
+example dates and the title year; the working-day count only covers 2026–2027).
+
+**Measure 15 Dec, 1 Feb, 15 Feb**: `snapshot.py page /calculadoras/permisos-laborales/ 28`.
+
+**Outcome:** _pending_

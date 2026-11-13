@@ -10,7 +10,7 @@ import type { Locale } from "@/lib/i18n/config";
  *   /ca/calculadores/…
  *   /en/calculators/…
  *
- * Every tool's module (net-salary/copy.ts, self-employed/copy.ts, sick-leave/copy.ts, employment/*, rent-update/copy.ts)
+ * Every tool's module (net-salary/copy.ts, self-employed/copy.ts, sick-leave/copy.ts, paid-leave/copy.ts, employment/*, rent-update/copy.ts)
  * reads its slugs from `CALCULATORS` below, and the hub lists the same
  * registry, so a tool added here shows up on the hub (tests/calculators-hub.test.ts
  * fails until it has a card). Slugs are live URLs: never change one.
@@ -32,6 +32,8 @@ export const CALCULATORS = [
   { id: "unemployment", slugs: { es: "paro", ca: "atur", en: "unemployment-benefit-spain" } },
   // Sick pay (incapacidad temporal): LGSS arts. 169-176 as amended by RDL 31/2026 from 1 Dec 2026.
   { id: "sick-leave", slugs: { es: "baja-laboral", ca: "baixa-laboral", en: "sick-leave-pay-spain" } },
+  // Paid leave (permisos retribuidos, ET arts. 37, 38, 48 and 48 bis): days per event, last day, birth-leave timeline.
+  { id: "paid-leave", slugs: { es: "permisos-laborales", ca: "permisos-laborals", en: "spain-paid-leave" } },
   { id: "rent-update", slugs: { es: "actualizar-alquiler", ca: "actualitzar-lloguer", en: "rent-increase-spain" } },
   // Housing: the official Euribor (Banco de España / BOE monthly figure) and the mortgage calculator that reads it.
   { id: "euribor", slugs: { es: "euribor-hoy", ca: "euribor-avui", en: "euribor-today" } },
