@@ -16,6 +16,15 @@ const PUBLISHED = new Set(ALL_PATHS.flatMap((paths) => LOCALES.map((locale) => `
 // The calculators and their hub ship with the deploy (routes, not published entries).
 for (const id of CALCULATOR_IDS) for (const path of Object.values(calcEditions(id))) PUBLISHED.add(path);
 for (const path of Object.values(calculatorsHubEditions())) PUBLISHED.add(path);
+import { calcEditions } from "../src/lib/programmatic/employment/paths.ts";
+import { pensionEditions } from "../src/lib/programmatic/pensions-2027/copy.ts";
+
+const ALL_PATHS = [...Object.values(B2_PATHS), ...Object.values(ARTICLE_PATHS), ...Object.values(SIBLING_PATHS)];
+const PUBLISHED = new Set(ALL_PATHS.flatMap((paths) => LOCALES.map((locale) => `/${locale}/${paths[locale]}/`)));
+// The unemployment benefit calculator ships with the deploy (a route, not a published entry).
+for (const path of Object.values(calcEditions("unemployment"))) PUBLISHED.add(path);
+// So does the 2027 pension increase calculator.
+for (const path of Object.values(pensionEditions())) PUBLISHED.add(path);
 const json = (locale: Locale) => JSON.stringify(PAY_DATES.editions[locale].blocks);
 const links = (locale: Locale) => [...json(locale).matchAll(/\]\(([^)\s]+)\)/g)].map((m) => m[1]!);
 const tables = (locale: Locale) => (PAY_DATES.editions[locale].blocks as unknown as { type: string; rows?: string[][] }[]).filter((b) => b.type === "table");

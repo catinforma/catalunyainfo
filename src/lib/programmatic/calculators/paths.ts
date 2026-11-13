@@ -64,3 +64,5 @@ export function calculatorsHubPath(locale: CalcLocale): string {
 export function calculatorsHubEditions(): Record<CalcLocale, string> {
   return { ca: calculatorsHubPath("ca"), es: calculatorsHubPath("es"), en: calculatorsHubPath("en") };
 }
+  { id: "pensions-2027", slugs: { es: "subida-pensiones-2027", ca: "pujada-pensions-2027", en: "spain-pension-increase-2027" } },
+] as const satisfies readonly { id: string; slugs: Record<Locale, string> }[];
