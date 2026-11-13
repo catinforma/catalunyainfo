@@ -115,7 +115,7 @@ health_check() {
   [[ $code == 200 ]] || { warn "/ca/ answered $code after 60 s"; return 1; }
   ok "/ca/ 200 after ${i}s"
 
-  for path in /es/ /en/ /robots.txt /sitemap.xml /llms.txt; do
+  for path in /es/ /en/ /robots.txt /sitemap.xml /llms.txt /favicon.ico /site.webmanifest; do
     code=$(http_status "$path")
     if [[ $code == 200 ]]; then ok "$path 200"; else warn "$path answered $code"; failed=1; fi
   done
@@ -293,8 +293,12 @@ ok "built in $(( $(date +%s) - BUILD_START ))s"
 log "Assembling .next/standalone"
 SA="$DIR/.next/standalone"
 [[ -f $SA/server.js ]] || fail_build "no .next/standalone/server.js: was NEXT_OUTPUT=standalone honoured?"
-# server.js serves these itself, but the build does not copy them.
-cp -a public "$SA/public"
+# server.js serves these itself, but the build does not copy them. File tracing
+# already creates $SA/public/images (the /img route reads it), so copy the
+# contents: `cp -a public "$SA/public"` would land in $SA/public/public and
+# every root file (favicon, manifest, IndexNow key) would 404.
+mkdir -p "$SA/public"
+cp -a public/. "$SA/public/"
 mkdir -p "$SA/.next"
 cp -a .next/static "$SA/.next/static"
 # /api/admin/migrate reads ./drizzle at runtime. File tracing includes it today;
