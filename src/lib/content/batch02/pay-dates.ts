@@ -4,7 +4,6 @@ import { LOCALES, type Locale } from "@/lib/i18n/config";
 import { boeRegionsOn2026 } from "@/lib/programmatic/holidays/boe-2026";
 import { boeRegionsOn } from "@/lib/programmatic/holidays/boe-2027";
 import { calcEditions, calculatorsHubEditions } from "@/lib/programmatic/calculators/paths";
-import { calcEditions } from "@/lib/programmatic/employment/paths";
 import { pensionEditions } from "@/lib/programmatic/pensions-2027/copy";
 
 import { B2_PATHS, faq, h2, lead, list, paras, table, type B2Article, type B2Edition, type B2Source } from "./shared";

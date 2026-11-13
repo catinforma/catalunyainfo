@@ -30,6 +30,7 @@ export const CALCULATORS = [
   { id: "settlement", slugs: { es: "finiquito", ca: "quitanca-finiquito", en: "final-settlement-spain" } },
   { id: "unemployment", slugs: { es: "paro", ca: "atur", en: "unemployment-benefit-spain" } },
   { id: "rent-update", slugs: { es: "actualizar-alquiler", ca: "actualitzar-lloguer", en: "rent-increase-spain" } },
+  { id: "pensions-2027", slugs: { es: "subida-pensiones-2027", ca: "pujada-pensions-2027", en: "spain-pension-increase-2027" } },
 ] as const satisfies readonly { id: string; slugs: Record<CalcLocale, string> }[];
 
 export type CalculatorId = (typeof CALCULATORS)[number]["id"];
@@ -64,5 +65,3 @@ export function calculatorsHubPath(locale: CalcLocale): string {
 export function calculatorsHubEditions(): Record<CalcLocale, string> {
   return { ca: calculatorsHubPath("ca"), es: calculatorsHubPath("es"), en: calculatorsHubPath("en") };
 }
-  { id: "pensions-2027", slugs: { es: "subida-pensiones-2027", ca: "pujada-pensions-2027", en: "spain-pension-increase-2027" } },
-] as const satisfies readonly { id: string; slugs: Record<Locale, string> }[];

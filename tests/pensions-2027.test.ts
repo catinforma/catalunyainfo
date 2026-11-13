@@ -326,7 +326,6 @@ test("routes: one static folder per language under the calculators root, registr
     assert.match(page, new RegExp(`const LOCALE = "${l}"`));
     assert.match(page, /export const revalidate = 86400;/);
     assert.match(page, /export const dynamicParams = true;/);
-    assert.ok(!existsSync(join(dir, "..", "page.tsx")), `${pensionPath(l)}: a calculators hub page exists`);
   }
   const entries = pensionSitemapEntries();
   assert.equal(entries.length, 3);

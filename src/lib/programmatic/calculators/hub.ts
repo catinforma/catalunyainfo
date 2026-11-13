@@ -8,6 +8,8 @@ import { hubPath as holidaysHubPath } from "@/lib/programmatic/holidays/paths";
 import { leavePath } from "@/lib/programmatic/leave-2027/copy";
 import { SALARY_RULES_AS_OF } from "@/lib/programmatic/net-salary/rules-2026";
 import { RENT_RULES_AS_OF } from "@/lib/programmatic/rent-update/rules";
+import { PENSION_RULES_AS_OF } from "@/lib/programmatic/pensions-2027/rules";
+import { pvpcTranslations } from "@/lib/programmatic/pvpc/paths";
 import { reservoirHubPath } from "@/lib/programmatic/reservoirs/paths";
 import { hubPath as rodaliesHubPath } from "@/lib/programmatic/rodalies/paths";
 
@@ -30,7 +32,7 @@ export type Scope = "spain" | "catalonia";
 
 export interface HubCard {
   /** The calculator's registry id, or a key of its own for the other tools. */
-  key: CalculatorId | "pay-dates" | "leave-2027" | "ics" | "tourist-tax" | "fuel" | "reservoirs" | "rodalies";
+  key: CalculatorId | "pay-dates" | "leave-2027" | "ics" | "tourist-tax" | "fuel" | "reservoirs" | "rodalies" | "pvpc";
   calculator: boolean;
   href: Record<CalcLocale, string>;
   /** Set when an edition links a page in another language (fuel has no English edition). */
@@ -135,6 +137,24 @@ export const HUB_GROUPS: HubGroup[] = [
         },
         scope: "spain",
         checked: EMPLOYMENT_AS_OF,
+      },
+      {
+        key: "pensions-2027",
+        calculator: true,
+        href: calc("pensions-2027"),
+        title: { ca: "Pujada de les pensions 2027", es: "Subida de las pensiones 2027", en: "Pension increase 2027" },
+        answers: {
+          ca: "Quant pujarà la teva pensió el gener del 2027, amb l'IPC mitjà de desembre a novembre?",
+          es: "¿Cuánto subirá tu pensión en enero de 2027, con el IPC medio de diciembre a noviembre?",
+          en: "How much your pension rises in January 2027, with the average CPI from December to November.",
+        },
+        basis: {
+          ca: "Llei general de la Seguretat Social, art. 58; IPC de l'INE.",
+          es: "Ley General de la Seguridad Social, art. 58; IPC del INE.",
+          en: "General Social Security Act, art. 58; the INE's CPI.",
+        },
+        scope: "spain",
+        checked: PENSION_RULES_AS_OF,
       },
       {
         key: "pay-dates",
@@ -248,12 +268,23 @@ export const HUB_GROUPS: HubGroup[] = [
     id: "live",
     title: { ca: "Dades en directe", es: "Datos en directo", en: "Live data" },
     cards: [
-      // PRECIO DE LA LUZ: the electricity price tool (/es/precio-luz/ or
-      // similar) is being built outside this folder. When it ships, add its
-      // card here, first in this group, with its own paths module as `href`,
-      // "Red Eléctrica (PVPC, ESIOS)" as the basis and scope "spain". Do not
-      // add a card before its route exists: tests/calculators-hub.test.ts
-      // checks every card's route file.
+      {
+        key: "pvpc",
+        calculator: false,
+        href: pvpcTranslations("today"),
+        title: { ca: "Preu de la llum avui i demà", es: "Precio de la luz hoy y mañana", en: "Electricity price today and tomorrow" },
+        answers: {
+          ca: "Quines són avui i demà les hores més barates de la llum amb la tarifa regulada (PVPC)?",
+          es: "¿Cuáles son hoy y mañana las horas más baratas de la luz con la tarifa regulada (PVPC)?",
+          en: "The cheapest hours today and tomorrow on Spain's regulated tariff (PVPC).",
+        },
+        basis: {
+          ca: "Red Eléctrica (PVPC, dades obertes REData i e·sios).",
+          es: "Red Eléctrica (PVPC, datos abiertos REData y e·sios).",
+          en: "Red Eléctrica (PVPC, REData and e·sios open data).",
+        },
+        scope: "spain",
+      },
       {
         key: "fuel",
         calculator: false,

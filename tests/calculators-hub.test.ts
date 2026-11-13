@@ -71,8 +71,8 @@ test("hub: the four groups, each card complete in ca, es and en, linking indexab
       assert.ok(!isLowDemandPath(href), `${card.key} (${l}): ${href} is noindex`);
     }
   }
-  // The electricity price tool gets its card when its route exists; the spot is marked.
-  assert.match(read("src/lib/programmatic/calculators/hub.ts"), /PRECIO DE LA LUZ/);
+  // The electricity price tool (lib/programmatic/pvpc) opens the live-data group.
+  assert.equal(HUB_GROUPS.find((g) => g.id === "live")?.cards[0]?.key, "pvpc");
 });
 
 test("hub: one static route per language, a 404 in the others, never dynamicParams = false", () => {

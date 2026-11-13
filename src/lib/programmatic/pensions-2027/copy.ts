@@ -1,4 +1,4 @@
-import { CALCULATORS, calculatorPath } from "@/lib/programmatic/calculators/paths";
+import { CALCULATORS, CALCULATORS_ROOT } from "@/lib/programmatic/calculators/paths";
 import { elDay, euros, monthText, num, pct } from "@/lib/programmatic/rent-update/copy";
 import type { DateLocale } from "@/lib/programmatic/holidays/format";
 
@@ -24,7 +24,7 @@ const ENTRY = CALCULATORS.find((c) => c.id === "pensions-2027")!;
 export const PENSION_SLUG: Record<PensionLocale, string> = ENTRY.slugs;
 
 export function pensionPath(locale: PensionLocale): string {
-  return calculatorPath(locale, PENSION_SLUG[locale]);
+  return `/${locale}/${CALCULATORS_ROOT[locale]}/${PENSION_SLUG[locale]}/`;
 }
 
 export function pensionEditions(): Record<PensionLocale, string> {
