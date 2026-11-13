@@ -67,6 +67,12 @@ const GROUPS: Record<Locale, { lead: string; intro: string; groups: Group[]; out
           ["andorra", "Andorra by bus", "About three hours, from €33, and what you can bring back."],
         ],
       },
+      {
+        title: "Living in Barcelona",
+        items: [
+          ["padro", "Registering on the padrón", "Free at the City Council, online or at an OAC; no rental contract or legal residence needed, and the documents for each situation."],
+        ],
+      },
     ],
     outro: "Prices and hours change through the year. Each guide states when its figures were last checked against the official source.",
   },
@@ -117,6 +123,12 @@ const GROUPS: Record<Locale, { lead: string; intro: string; groups: Group[]; out
           ["andorra", "Andorra en autobús", "Unas tres horas, desde 33 €, y lo que puedes traer de vuelta."],
         ],
       },
+      {
+        title: "Vivir en Barcelona",
+        items: [
+          ["padro", "Empadronarse", "Gratis en el Ayuntamiento, por internet o en una OAC; sin contrato de alquiler ni residencia legal, y los documentos para cada caso."],
+        ],
+      },
     ],
     outro: "Los precios y horarios cambian a lo largo del año. Cada guía indica cuándo se comprobaron sus cifras con la fuente oficial.",
   },
@@ -165,6 +177,12 @@ const GROUPS: Record<Locale, { lead: string; intro: string; groups: Group[]; out
           ["figueres", "Figueres i el Museu Dalí", "2 hores amb l'R11 o menys d'una en alta velocitat; entrades des de 18,50 €."],
           ["portaventura", "PortAventura", "Obert cada dia fins al 6 de gener; només l'R17 i l'RT2 paren al parc."],
           ["andorra", "Andorra en autobús", "Unes tres hores, des de 33 €, i el que pots tornar a portar."],
+        ],
+      },
+      {
+        title: "Viure a Barcelona",
+        items: [
+          ["padro", "Empadronar-se", "Gratuït a l'Ajuntament, per internet o a una OAC; sense contracte de lloguer ni residència legal, i els documents per a cada cas."],
         ],
       },
     ],

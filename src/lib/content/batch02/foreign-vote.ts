@@ -339,7 +339,7 @@ const EN: Copy = {
   ],
   euAfter: [
     "**No letter?** The OCE wrote only to EU citizens it had not contacted for earlier local elections and who had never declared. If you received a letter years ago and let it pass, there will not be another: use Cl@ve or go to the town hall.",
-    "**Not on the padrón yet?** Go to your town hall, register and make the declaration there on the same visit.",
+    `**Not on the padrón yet?** Go to your town hall, register and make the declaration there on the same visit. What to bring, with or without a rental contract: ${b2link("padro", "en", "how to register on the padrón")}.`,
     `The numbers show how many people have not done it. On 30 September 2026 the INE counted 345,312 EU citizens on the roll for local elections, and the OCE was writing to another 515,363 who had never declared. In Catalonia, 58,333 were on the roll and 104,614 letters went out: Barcelona 34,244 and 81,050, Girona 12,983 and 8,074, Tarragona 7,433 and 9,901, Lleida 3,673 and 5,589 (${a("INE press note", U.inePress)}, in Spanish).`,
     "The same procedure covers European Parliament elections: you choose municipal elections, European ones or both.",
   ],
@@ -519,7 +519,7 @@ const ES: Copy = {
   ],
   euAfter: [
     "**¿No te ha llegado la carta?** La OCE solo ha escrito a los ciudadanos de la UE a los que no se dirigió en municipales anteriores y que nunca habían manifestado su voluntad de votar. Si recibiste una carta hace años y la dejaste pasar, no llegará otra: usa Cl@ve o ve al ayuntamiento.",
-    "**¿Aún no estás empadronado?** Ve a tu ayuntamiento, empadrónate y haz la declaración allí, en la misma visita.",
+    `**¿Aún no estás empadronado?** Ve a tu ayuntamiento, empadrónate y haz la declaración allí, en la misma visita. Qué documentos llevar, con contrato o sin él: ${b2link("padro", "es", "cómo empadronarse")}.`,
     `Las cifras dan una idea de cuánta gente no lo ha hecho. El 30 de septiembre de 2026 el INE contaba 345.312 ciudadanos de la UE en el censo de las municipales, y la OCE escribía a otros 515.363 que nunca se habían inscrito. En Cataluña había 58.333 inscritos y salieron 104.614 cartas: Barcelona, 34.244 y 81.050; Girona, 12.983 y 8.074; Tarragona, 7.433 y 9.901; Lleida, 3.673 y 5.589 (${a("nota de prensa del INE", U.inePress)}).`,
     "El mismo trámite sirve para las elecciones al Parlamento Europeo: eliges municipales, europeas o las dos.",
   ],
@@ -700,7 +700,7 @@ const CA: Copy = {
   ],
   euAfter: [
     "**No t'ha arribat la carta?** L'OCE només ha escrit als ciutadans de la UE als quals no es va adreçar en municipals anteriors i que no havien manifestat mai la voluntat de votar. Si vas rebre una carta fa anys i la vas deixar passar, no n'arribarà cap altra: fes servir Cl@ve o ves a l'ajuntament.",
-    "**Encara no estàs empadronat?** Ves al teu ajuntament, empadrona-t'hi i fes la declaració allà mateix, en la mateixa visita.",
+    `**Encara no estàs empadronat?** Ves al teu ajuntament, empadrona-t'hi i fes la declaració allà mateix, en la mateixa visita. Quins documents cal portar, amb contracte o sense: ${b2link("padro", "ca", "com empadronar-se")}.`,
     `Les xifres donen una idea de quanta gent no ho ha fet. El 30 de setembre del 2026 l'INE comptava 345.312 ciutadans de la UE al cens de les municipals, i l'OCE escrivia a 515.363 més que no s'hi havien inscrit mai. A Catalunya n'hi havia 58.333 d'inscrits i van sortir 104.614 cartes: Barcelona, 34.244 i 81.050; Girona, 12.983 i 8.074; Tarragona, 7.433 i 9.901; Lleida, 3.673 i 5.589 (${a("nota de premsa de l'INE", U.inePress)}).`,
     "El mateix tràmit serveix per a les eleccions al Parlament Europeu: tries municipals, europees o totes dues.",
   ],

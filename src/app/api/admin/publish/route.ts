@@ -74,6 +74,8 @@ import { CHRISTMAS_TRANSPORT } from "@/lib/content/batch02/christmas-transport";
 import { SCHOOL_FREE_DAYS } from "@/lib/content/batch02/school-free-days";
 import { POSTAL_VOTE } from "@/lib/content/batch02/postal-vote";
 import { FOREIGN_VOTE } from "@/lib/content/batch02/foreign-vote";
+import { PADRO } from "@/lib/content/batch02/padro";
+import { CARNIVAL_GUIDE } from "@/lib/content/batch02/carnival";
 import { publishHolidayTodayGuide } from "@/lib/content/holidays/today-publish";
 import { publishLocalHolidaysGuide } from "@/lib/content/holidays/local-publish";
 import { publishReservoirGuide } from "@/lib/content/reservoirs/publish";
@@ -288,6 +290,16 @@ export async function POST(request: Request) {
     }
     // 9 Nov 2026: when the dole and pensions are paid (SEPE, Social Security); ca, es and en since 10 Nov.
     if (wants("pagos")) published.push(await publishB2Article(PAY_DATES));
+    // 13 Nov 2026: evergreen flagships. How to register on the padró (ca, es, en),
+    // on its own; the foreign-vote guide and the Barcelona hub, which gained one
+    // sentence linking to it, go out once with `padro-links`.
+    if (wants("padro")) published.push(await publishB2Article(PADRO));
+    if (wants("padro-links")) published.push(await publishB2Article(FOREIGN_VOTE), await publishB2Article(BARCELONA_HUB));
+    // 13 Nov 2026: Carnival 2027 in Catalonia, on its own so each organiser's
+    // programme (PROGRAMMES_2027) and the DOGC local-holiday order republish only
+    // it. The Sitges day trip and the calçots guide link to it: `carnaval-links`.
+    if (wants("carnaval")) published.push(await publishB2Article(CARNIVAL_GUIDE));
+    if (wants("carnaval-links")) published.push(await publishB2Article(SITGES), await publishB2Article(CALCOTS));
     // 9 Nov 2026: shops open on 6, 7 and 8 December by community (Ministry calendar); ca, es and en since 10 Nov.
     if (wants("tiendas-espana")) published.push(await publishB2Article(SHOPS_SPAIN_DECEMBER));
     // La Grossa de Cap d'Any 2026: one page, on its own so the 31 December

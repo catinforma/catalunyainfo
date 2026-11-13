@@ -3719,3 +3719,128 @@ Vilanova, around 18–20 Nov. In 2025 most announced between 12 and 25 Nov.
 Then fill `y2026`, move `LIGHTS_TOWNS_AS_OF`, deploy and publish `llums-nadal`.
 
 **Outcome:** _pending_
+
+
+## 2026-11-13 — Two evergreen flagships: the padró (new) and Carnival 2027 (new), from the demand research (groups `padro`, `padro-links`, `carnaval`, `carnaval-links`; deploy first)
+
+**Why.** The owner: too much of the site is strikes and calendars, and he
+doesn't know what else people ask for. The research
+(`research_notes/evergreen-demand-nov2026.md`) ranked the non-event demand.
+These two came first among the ones the site could win now:
+- **Padró / empadronament.** "empadronamiento" + "padron" ≈ 8,000 searches a
+  week in Catalonia, flat all year (Trends 5 y, "festivos" anchor). The site
+  had nothing. The results page is expat blogs and gestorías that contradict
+  each other; none quotes the law or the council.
+- **Carnival 2027.** "carnaval 2026" peaked at ≈37,000 searches in Catalonia
+  in the week of 8–14 Feb 2026, and "carnaval sitges" at ≈3,700 a week in
+  February. It is a date-answer query, the family this site already wins.
+  The site had no page. Publishing in November gives it 10 weeks to rank
+  before the late-January ramp.
+
+**What was added.**
+
+*Padró.* Three editions on year-free URLs:
+- `/ca/guies/empadronament-padro-barcelona-catalunya/`
+- `/es/guias/empadronarse-padron-barcelona-cataluna/`
+- `/en/guides/padron-registration-barcelona-catalonia/`
+
+Module `src/lib/content/batch02/padro.ts`; PADRO_AS_OF 2026-11-13, sources and
+quotes in its header.
+- The answer comes first: free, at your own town hall, no rental contract or
+  legal residence needed, at most 3 months, and the council is silent → you
+  are registered.
+- Six key facts and Barcelona step by step (online with an electronic
+  signature, or at an OAC).
+- Tables: ID by nationality; proof of address by situation (seven rows, from
+  the council's procedure sheet); renewal (2 / 5 years); four more cities
+  (L'Hospitalet, Girona, Lleida, Tarragona).
+- Sections: registering without a contract (2020 BOE instructions plus the
+  council), children, volante vs certificado, and why to do it now (CatSalut
+  TSI; EU citizens must be on the padró by 30 Dec 2026 to vote on 23 May 2027).
+- Nine-question FAQ.
+- Hero reused: Barcelona City Hall at night (CC BY-SA 3.0).
+
+*Carnival 2027.* Three editions:
+- `/ca/tradicions/carnaval-catalunya/`
+- `/es/tradiciones/carnaval-cataluna/`
+- `/en/traditions/carnival-catalonia/`
+
+Module `src/lib/content/batch02/carnival.ts`; CARNIVAL_AS_OF 2026-11-13.
+- Dates are computed from the 2027 calendar's Easter: 4–10 Feb.
+- The lead answers when, "is it a holiday" (no, except in 26 towns) and
+  "is there school on Monday 8" (a free day in 29 of the 36 towns we track,
+  Barcelona included), plus the Sitges parades (Sun 7, Tue 9, VisitSitges).
+- Tables:
+  - the week day by day (Sitges, Vilanova, Barcelona);
+  - local holidays in the week, from the council acts and labelled pending
+    the DOGC; they switch to the order automatically;
+  - school free days in the week.
+- Short sections on Sitges, Vilanova, Solsona, Platja d'Aro and Barcelona,
+  each from the organiser's own page. Six-question FAQ.
+- `PROGRAMMES_2027` holds the slot for each organiser's 2027 programme.
+- Hero reused: Sitges seafront (CC BY-SA 4.0).
+
+**Links in** (body only; no title or description touched):
+- foreign-vote guide: the "not on the padrón yet?" item links the padró page;
+- Barcelona hub: a new "Living in Barcelona" group with the padró;
+- Sitges day trip: one sentence with the 2027 Carnival dates, in the town section;
+- calçots guide: Carnival added to its related rail.
+
+The school free-days page mentions Carnival but is inside the 6 Nov title
+window, so it got no link. Add one after that window closes.
+
+**Go-live.** Deploy, then publish `padro` and `carnaval`, then `padro-links`
+(the foreign-vote guide and the hub) and `carnaval-links` (Sitges and calçots).
+IndexNow the six new URLs.
+
+**Baseline** (GSC, 17 Oct–13 Nov):
+- padró/empadronament queries: 2 impressions, 0 clicks, no page;
+- carnival queries: 37 impressions ("carnaval sallent 2027" etc. on town
+  holiday pages), 0 clicks, no page;
+- linking pages:
+  - `/es/escapadas/sitges-desde-barcelona-tren/`: 457 impressions at 17.5, 1 click;
+  - `/en/day-trips/sitges-from-barcelona-by-train/`: 663 at 11.7, 6 clicks;
+  - `/ca/tradicions/calcotada-valls-temporada-calcots/`: 470 at 8.8, 5 clicks;
+  - the hub and the foreign-vote guide: under 30 impressions each.
+
+**Prediction.**
+
+*Padró:*
+- Indexed by 27 Nov.
+- By 15 Jan 2027 (28 days): 2,000–6,000 impressions across the three
+  editions, two thirds ES; CTR 2–4 %.
+- The long tail reaches position ≤ 10: "empadronarse sin contrato",
+  "empadronamiento barcelona documentos", "empadronarse sin papeles",
+  "padron barcelona online", "how to get padron barcelona".
+- The head term "empadronamiento barcelona" stays at 10–20 behind the
+  Ajuntament.
+- It is wrong if the pages have under 500 impressions by 15 Jan or are not
+  indexed by 4 Dec.
+
+*Carnival:*
+- Indexed by 4 Dec.
+- Under 2,000 impressions until 15 Jan (no demand yet).
+- From 25 Jan to 10 Feb: 10,000–40,000 impressions, CTR 3–6 %. "carnaval 2027
+  cataluña", "cuando es carnaval 2027", "carnaval sitges 2027" and "es festivo
+  el lunes de carnaval" at position ≤ 8.
+- It is wrong if the page is under 5,000 impressions in that window.
+- The Sitges and calçots pages must not lose position (the added sentence and
+  link are not about their queries).
+
+**Measure:**
+- 4 Dec: indexing (`batch_url_inspection`, six URLs).
+- 15 Jan 2027: `snapshot.py page empadron 28`, `page padron 28` and `page carnaval 28`.
+- 27 Jan, 3 Feb, 12 Feb: `snapshot.py page carnaval 14`, `page carnival 14`,
+  `page sitges 14`.
+
+**Upkeep** (tests fail until done):
+- from 25 Jan 2027, until every organiser's 2027 programme is read into
+  `PROGRAMMES_2027` (republish `carnaval`);
+- from 11 Feb 2027, until the page moves to 2028;
+- from 13 Feb 2027 (PADRO_REREAD_BY), until the Barcelona sheet, BOE and
+  CatSalut are re-read.
+
+When the DOGC 2027 local-holiday order is parsed (expected mid-December),
+republish `carnaval`: the table switches source by itself.
+
+**Outcome:** _pending_

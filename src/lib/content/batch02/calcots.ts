@@ -351,7 +351,8 @@ function festivalDayTransport(locale: Locale, programme: ProgrammeNotice | null)
 /* Body                                                                       */
 /* -------------------------------------------------------------------------- */
 
-const RELATED = ["tarragona", "workCalendar", "climate", "christmas"] as const;
+// 13 Nov 2026: Carnival (4-10 Feb 2027) falls in the high calçot season, right after the Gran Festa.
+const RELATED = ["tarragona", "carnival", "workCalendar", "climate", "christmas"] as const;
 
 export function buildCalcotsBody(locale: Locale, programme: ProgrammeNotice | null = PROGRAMME_2027): Block[] {
   const festa = dayDate(FESTA_2027.date, locale);
