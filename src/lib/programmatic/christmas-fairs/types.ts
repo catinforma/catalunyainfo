@@ -96,12 +96,38 @@ export interface OrganiserFair {
   /** The calendar's fair this announcement corrects (its snapshot id), when the dates differ. */
   replaces?: string;
   /**
+   * Opening hours as the page gives them, per locale ("de 10 a 20 h"), only
+   * when the page states them for this edition; never last year's.
+   */
+  hours?: Localized;
+  /** Days inside [start, end] on which the page says the fair is closed (ISO). */
+  closed?: readonly string[];
+  /**
    * Other snapshot rows that are this same fair (typically the cultural
    * agenda's listing of it, which the script's overlap check cannot match
    * against an organiser's corrected dates): dropped from the list, so the
    * fair is shown once.
    */
   alsoReplaces?: readonly string[];
+}
+
+/** One short sentence per locale. */
+export type Localized = { ca: string; es: string; en: string };
+
+/**
+ * A fairs-calendar row whose organiser's own page was read and does not
+ * carry the 2026 edition yet (it still shows 2025, or no year at all): the
+ * page shows the calendar's dates and says plainly that the organiser has not
+ * confirmed them.
+ */
+export interface UnconfirmedFair {
+  /** The snapshot row (`vm32:<id>`). */
+  fairId: string;
+  url: string;
+  publisher: string;
+  readOn: string;
+  /** What the official page shows today, per locale (one short sentence). */
+  shows: Localized;
 }
 
 /** A market people search for whose dates for this season are not published yet. */
@@ -135,4 +161,10 @@ export interface Fair {
   checked: { url: string; publisher: string; readOn: string; quote: string } | null;
   /** The calendar's dates, when an organiser's page gives others (the page's are shown). */
   datasetDates: { start: string; end: string } | null;
+  /** Opening hours from the page in `checked`, when it gives them. */
+  hours: Localized | null;
+  /** Days inside [start, end] the fair is closed, per the page in `checked`. */
+  closed: readonly string[];
+  /** Set when the organiser's page was read and does not carry the 2026 edition yet. */
+  unconfirmed: Omit<UnconfirmedFair, "fairId"> | null;
 }

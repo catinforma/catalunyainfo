@@ -7,7 +7,7 @@ import { townBySlug } from "@/lib/programmatic/christmas-fairs/data";
 import { fairsHubPath, townPath as fairsTownPath } from "@/lib/programmatic/christmas-fairs/paths";
 import { municipalityBySlug } from "@/lib/programmatic/holidays/data";
 
-import { CHRISTMAS, FAMILY, SANTA_LLUCIA_2025, hoursText } from "./christmas";
+import { CHRISTMAS, FAMILY, SAGRADA_2026, SANTA_LLUCIA_2025, hoursText } from "./christmas";
 import { metroTable, when } from "./christmas-barcelona";
 import { LIGHTS_TOWNS } from "./christmas-lights-towns";
 import { ANNOUNCED_TRADITIONS, pastoretsSentence, range, santaLluciaSource, type TraditionAnnouncements } from "./christmas-traditions";
@@ -468,9 +468,9 @@ export function fairsParagraph(locale: Locale, traditions: TraditionAnnouncement
   if (s) {
     const hours = s.hours ? `, ${hoursText(s.hours, locale)}` : "";
     return {
-      ca: `**Fires.** La Fira de Santa Llúcia es fa ${range(s.from, s.to, "ca")}${hours}, davant de la Catedral, segons ${santaLluciaSource(s, "ca")}; com arribar-hi i què és festiu aquells dies, a ${bcnFairsPage("ca", "fires de Nadal a Barcelona")}. La de la Sagrada Família encara no ha publicat les dates del 2026. A tot Catalunya, ${FAMILY.fairs} fires de Nadal ja tenen data oficial: són a ${hub} i a ${guide}.`,
-      es: `**Ferias.** La Fira de Santa Llúcia se celebra ${range(s.from, s.to, "es")}${hours}, frente a la Catedral, según ${santaLluciaSource(s, "es")}; cómo llegar y qué es festivo esos días, en ${bcnFairsPage("es", "ferias de Navidad en Barcelona")}. La de la Sagrada Família aún no ha publicado sus fechas de 2026. En toda Cataluña, ${FAMILY.fairs} ferias de Navidad ya tienen fecha oficial: están en ${hub} y en ${guide}.`,
-      en: `**Markets.** The Fira de Santa Llúcia runs from ${range(s.from, s.to, "en")}${hours}, in front of the Cathedral, according to ${santaLluciaSource(s, "en")}; getting there and the holidays on those days: ${bcnFairsPage("en", "Christmas markets in Barcelona")}. The Sagrada Família fair has not published its 2026 dates yet. Across Catalonia, ${FAMILY.fairs} Christmas fairs already have an official date: see ${hub} and ${guide}.`,
+      ca: `**Fires.** La Fira de Santa Llúcia es fa ${range(s.from, s.to, "ca")}${hours}, davant de la Catedral, segons ${santaLluciaSource(s, "ca")}; com arribar-hi i què és festiu aquells dies, a ${bcnFairsPage("ca", "fires de Nadal a Barcelona")}. La de la Sagrada Família es fa ${range(SAGRADA_2026.start, SAGRADA_2026.end, "ca")}, de 10 a 21 h, segons la Guia BCN de l'Ajuntament. A tot Catalunya, ${FAMILY.fairs} fires de Nadal ja tenen data oficial: són a ${hub} i a ${guide}.`,
+      es: `**Ferias.** La Fira de Santa Llúcia se celebra ${range(s.from, s.to, "es")}${hours}, frente a la Catedral, según ${santaLluciaSource(s, "es")}; cómo llegar y qué es festivo esos días, en ${bcnFairsPage("es", "ferias de Navidad en Barcelona")}. La de la Sagrada Família se celebra ${range(SAGRADA_2026.start, SAGRADA_2026.end, "es")}, de 10 a 21 h, según la Guia BCN del Ayuntamiento. En toda Cataluña, ${FAMILY.fairs} ferias de Navidad ya tienen fecha oficial: están en ${hub} y en ${guide}.`,
+      en: `**Markets.** The Fira de Santa Llúcia runs from ${range(s.from, s.to, "en")}${hours}, in front of the Cathedral, according to ${santaLluciaSource(s, "en")}; getting there and the holidays on those days: ${bcnFairsPage("en", "Christmas markets in Barcelona")}. The Sagrada Família fair runs from ${range(SAGRADA_2026.start, SAGRADA_2026.end, "en")}, 10:00 to 21:00, according to the City Council's Guia BCN. Across Catalonia, ${FAMILY.fairs} Christmas fairs already have an official date: see ${hub} and ${guide}.`,
     }[locale];
   }
   return {

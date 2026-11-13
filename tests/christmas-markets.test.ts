@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
 
-import { CHRISTMAS, FAMILY, SANTA_LLUCIA_2026 } from "../src/lib/content/batch02/christmas.ts";
+import { CHRISTMAS, FAMILY, GIRONA_2026, SAGRADA_2026, SANTA_LLUCIA_2026 } from "../src/lib/content/batch02/christmas.ts";
 import { ANNOUNCED_TRADITIONS, seasonSpanProblems } from "../src/lib/content/batch02/christmas-traditions.ts";
 import { range } from "../src/lib/content/batch02/festive.ts";
 import { LOCAL_MONDAY_7 } from "../src/lib/content/batch02/december-bridge.ts";
@@ -82,9 +82,18 @@ test("Santa Llúcia 2026: the agenda's dates and hours, credited to the agenda, 
     const faqBlock = edition.blocks.find((b) => b.type === "faq") as { items: { question: string; answer: string }[] };
     const when26 = faqBlock.items.find((i) => /Santa Llúcia 2026/.test(i.question))!;
     assert.ok(when26.answer.toLowerCase().includes(when.toLowerCase()), `${locale}: FAQ answer`);
-    // The Sagrada Família fair is still said to be undated.
-    assert.match(text, /Sagrada Família[^.]*(encara no|aún no|not (been )?(announced|published)|has not announced)/i, `${locale}: Sagrada Família pending`);
+    // 13 Nov 2026: the Sagrada Família fair's 2026 dates (council's Guia BCN), never "pending" again.
+    assert.doesNotMatch(text, /Sagrada Família[^.]*(encara no|aún no|not (been )?(announced|published)|has not announced)/i, `${locale}: Sagrada Família no longer pending`);
+    const sf = rows.find((r) => /Sagrada Fam/.test(r[0]!))!;
+    assert.ok(sf[3]!.toLowerCase().includes(range(SAGRADA_2026.start, SAGRADA_2026.end, locale).toLowerCase()), `${locale}: ${sf[3]}`);
+    const girona = rows.find((r) => r[1] === "Girona")!;
+    assert.ok(girona[3]!.toLowerCase().includes(range(GIRONA_2026.start, GIRONA_2026.end, locale).toLowerCase()), `${locale}: ${girona[3]}`);
+    assert.doesNotMatch(girona[3]!, /Pendent|Pendiente|Not yet published|2025/, locale);
   }
+  // The guide and the fairs family read the same entries.
+  assert.equal(`${SAGRADA_2026.start}..${SAGRADA_2026.end}`, "2026-11-21..2026-12-23");
+  assert.equal(`${GIRONA_2026.start}..${GIRONA_2026.end}`, "2026-11-27..2027-01-05");
+  assert.ok(CHRISTMAS.sources.some((s) => s.url === SAGRADA_2026.checked!.url) && CHRISTMAS.sources.some((s) => s.url === GIRONA_2026.checked!.url));
 });
 
 test("the URL carries no year", () => {

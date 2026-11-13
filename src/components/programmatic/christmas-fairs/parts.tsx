@@ -13,7 +13,14 @@ import { municipality } from "@/lib/programmatic/weekend/data";
 
 /** The dates the browser's "today" box works from, embedded in the HTML. */
 export function datedFairs(fairs: readonly Fair[], locale: FairsLocale): DatedFair[] {
-  return fairs.map((f) => ({ id: f.id, s: f.start, e: f.end, n: fairShortName(f, "ca"), t: townName(municipality(f.ine)?.name ?? "", locale) }));
+  return fairs.map((f) => ({
+    id: f.id,
+    s: f.start,
+    e: f.end,
+    n: fairShortName(f, "ca"),
+    t: townName(municipality(f.ine)?.name ?? "", locale),
+    ...(f.closed.length > 0 ? { x: [...f.closed] } : {}),
+  }));
 }
 
 /** One fair, in full: what a town page is about. */
@@ -22,9 +29,11 @@ export function FairCard({ fair, locale }: { fair: Fair; locale: FairsLocale }) 
   const source =
     fair.source === "organiser" || (fair.checked && fair.datasetDates)
       ? t.fromOrganiser(fair.checked!.publisher, fullDate(fair.checked!.readOn, locale))
-      : fair.source === "agenda"
-        ? t.fromAgenda
-        : t.fromCalendar;
+      : fair.checked
+        ? t.confirmed(fair.checked.publisher, fullDate(fair.checked.readOn, locale))
+        : fair.source === "agenda"
+          ? t.fromAgenda
+          : t.fromCalendar;
   // An agenda row links its own page on the Agenda Cultural (dates, hours, organiser).
   const agendaUrl = fair.source === "agenda" && !fair.checked ? agendaActivityUrl(fair.id) : null;
   return (
@@ -43,6 +52,11 @@ export function FairCard({ fair, locale }: { fair: Fair; locale: FairsLocale }) 
         {fair.organiser ? (
           <li>
             <strong>{t.organiser}:</strong> {fair.organiser}
+          </li>
+        ) : null}
+        {fair.hours ? (
+          <li>
+            <strong>{t.hours}:</strong> {fair.hours[locale]}
           </li>
         ) : null}
         {fair.since ? (
@@ -69,7 +83,16 @@ export function FairCard({ fair, locale }: { fair: Fair; locale: FairsLocale }) 
         {fair.datasetDates ? ` ${t.corrected(rangeText(fair.datasetDates.start, fair.datasetDates.end, locale, { weekdays: false }))}` : ""}
         {fair.toConfirm ? ` ${t.toConfirm}` : ""}
       </p>
-      {fair.checked && fair.source === "organiser" ? (
+      {fair.unconfirmed ? (
+        <p className="ci-agenda-meta">
+          <strong>{t.notConfirmed}</strong> {fair.unconfirmed.shows[locale]}{" "}
+          <a href={fair.unconfirmed.url} rel="noopener nofollow" target="_blank">
+            {fair.unconfirmed.publisher}
+          </a>
+          {`, ${t.checkedOn(fullDate(fair.unconfirmed.readOn, locale))}`}
+        </p>
+      ) : null}
+      {fair.checked ? (
         <blockquote className="mt-2 text-sm text-[var(--color-ink-soft)]" lang="ca">
           «{fair.checked.quote}»{" "}
           <a href={fair.checked.url} rel="noopener nofollow" target="_blank">
@@ -146,7 +169,11 @@ export function Sources({ locale, fairs }: { locale: FairsLocale; fairs: readonl
   const t = labels(locale);
   const { fairs: calendar, agenda } = SNAPSHOT.sources;
   const date = (iso: string | null) => (iso ? fullDate(iso, locale) : "");
-  const organisers = [...new Map(fairs.filter((f) => f.checked).map((f) => [f.checked!.url, f.checked!])).values()];
+  const organisers = [
+    ...new Map(
+      fairs.flatMap((f) => [f.checked, f.unconfirmed]).filter((o): o is NonNullable<typeof o> => Boolean(o)).map((o) => [o.url, { url: o.url, publisher: o.publisher, readOn: o.readOn }]),
+    ).values(),
+  ];
   const updated = locale === "en" ? "updated" : locale === "es" ? "actualizado el" : "actualitzat el";
   const read = locale === "en" ? "read on" : locale === "es" ? "leída el" : "llegit el";
   return (

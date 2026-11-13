@@ -18,10 +18,10 @@ import type { RegisterMunicipality } from "@/lib/programmatic/weekend/types";
 import { zoneFilter, type ZoneDef } from "@/lib/programmatic/weekend/zones";
 
 import { SEASON, inSeason } from "./classify";
-import { ORGANISER_FAIRS, PENDING_MARKETS } from "./organisers";
+import { ORGANISER_FAIRS, PENDING_MARKETS, UNCONFIRMED_FAIRS } from "./organisers";
 import { EN_TOWNS } from "./paths";
 import snapshotJson from "./snapshot.json" with { type: "json" };
-import type { ChristmasSnapshot, Fair, OrganiserFair, PendingMarket } from "./types";
+import type { ChristmasSnapshot, Fair, OrganiserFair, PendingMarket, UnconfirmedFair } from "./types";
 
 export const SNAPSHOT = snapshotJson as ChristmasSnapshot;
 
@@ -29,15 +29,18 @@ const byDate = (a: Fair, b: Fair) => a.start.localeCompare(b.start) || a.end.loc
 
 /**
  * The season's fairs: the snapshot's rows, with an organiser's dates where its
- * page corrects the calendar, plus the organisers' announcements the open data
- * does not carry. In date order.
+ * page corrects (or confirms) the calendar, plus the organisers' announcements
+ * the open data does not carry. A row whose organiser's page was read and
+ * still shows no 2026 edition carries that reading (`unconfirmed`). In date
+ * order.
  */
-export function mergeFairs(snapshot: ChristmasSnapshot, organisers: readonly OrganiserFair[]): Fair[] {
+export function mergeFairs(snapshot: ChristmasSnapshot, organisers: readonly OrganiserFair[], unconfirmed: readonly UnconfirmedFair[] = []): Fair[] {
   const corrections = new Map(organisers.filter((o) => o.replaces).map((o) => [o.replaces!, o]));
   const duplicates = new Set(organisers.flatMap((o) => o.alsoReplaces ?? []));
+  const pending = new Map(unconfirmed.map(({ fairId, ...rest }) => [fairId, rest]));
   const out: Fair[] = snapshot.fairs.filter((f) => !duplicates.has(f.id)).map((f) => {
     const o = corrections.get(f.id);
-    const base: Fair = { ...f, checked: null, datasetDates: null };
+    const base: Fair = { ...f, checked: null, datasetDates: null, hours: null, closed: [], unconfirmed: o ? null : (pending.get(f.id) ?? null) };
     if (!o) return base;
     const changed = o.start !== f.start || o.end !== f.end;
     return {
@@ -47,6 +50,8 @@ export function mergeFairs(snapshot: ChristmasSnapshot, organisers: readonly Org
       place: o.place ?? f.place,
       checked: { url: o.url, publisher: o.publisher, readOn: o.readOn, quote: o.quote },
       datasetDates: changed ? { start: f.start, end: f.end } : null,
+      hours: o.hours ?? null,
+      closed: o.closed ?? [],
     };
   });
   for (const o of organisers) {
@@ -67,12 +72,15 @@ export function mergeFairs(snapshot: ChristmasSnapshot, organisers: readonly Org
       toConfirm: false,
       checked: { url: o.url, publisher: o.publisher, readOn: o.readOn, quote: o.quote },
       datasetDates: null,
+      hours: o.hours ?? null,
+      closed: o.closed ?? [],
+      unconfirmed: null,
     });
   }
   return out.filter((f) => inSeason(f.start, f.end, snapshot.season)).sort(byDate);
 }
 
-export const FAIRS: readonly Fair[] = mergeFairs(SNAPSHOT, ORGANISER_FAIRS);
+export const FAIRS: readonly Fair[] = mergeFairs(SNAPSHOT, ORGANISER_FAIRS, UNCONFIRMED_FAIRS);
 
 /** A fair that can give its town a page: dated, placed in a known municipality. */
 export function qualifies(f: Fair): boolean {
@@ -226,10 +234,11 @@ export function weekendZoneFor(town: Pick<Town, "ine" | "comarca" | "province">)
 
 /** The last day anything on the town's page was read: the snapshot, or an organiser's page. */
 export function lastChecked(town: Pick<Town, "fairs">): string {
-  return town.fairs.reduce((latest, f) => (f.checked && f.checked.readOn > latest ? f.checked.readOn : latest), SNAPSHOT.readOn);
+  const read = (f: Fair) => [f.checked?.readOn, f.unconfirmed?.readOn].filter((d): d is string => Boolean(d));
+  return town.fairs.flatMap(read).reduce((latest, d) => (d > latest ? d : latest), SNAPSHOT.readOn);
 }
 
 /** The latest date anything in the family was read (hub and sitemap). */
 export function familyLastChecked(): string {
-  return [SNAPSHOT.readOn, ...ORGANISER_FAIRS.map((o) => o.readOn), ...PENDING_MARKETS.map((p) => p.readOn)].sort().at(-1)!;
+  return [SNAPSHOT.readOn, ...ORGANISER_FAIRS.map((o) => o.readOn), ...UNCONFIRMED_FAIRS.map((u) => u.readOn), ...PENDING_MARKETS.map((p) => p.readOn)].sort().at(-1)!;
 }

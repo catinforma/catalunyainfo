@@ -4247,4 +4247,82 @@ before), then IndexNow the six URLs.
   Figaró cut ends on 14 Dec), the FGC fares (labelled "temporada 2026"), the
   ski-bus and Bus Natura dates and Masella, then republish `neu`.
 
+## 2026-11-13 — Christmas fairs: 2026 editions checked on the organisers' pages, the confirmed days in two titles, Barcelona's snippet held (deploy; groups `christmas`, `barcelona-december`)
+
+**Why.** Peak season starts in two weeks and the town pages rank 8–10 for
+"fira santa llucia canyelles 2026" (483 impr., 0 clicks, ES page) and
+"espinelves navidad" (332, 0). The pages gave the Generalitat calendar's
+dates without saying whether the organiser had confirmed the 2026 edition.
+
+**Data checked (13 Nov 2026, curl with a browser user agent + grep; quotes in
+`christmas-fairs/organisers.ts`).** Snapshot rebuilt (calendar updated 9 Nov,
+agenda 12 Nov; one change: la Pobla de Segur's place). Of the 30 towns with
+the most impressions (28 days):
+- confirmed on the organiser's page, same dates as the calendar: Espinelves,
+  Cardedeu (http only: its https certificate is the host's), Olot (Normativa
+  2026 PDF), Arbúcies, Banyoles (Sunday mornings only), Balaguer, Tivissa,
+  Tàrrega, Berga, Ascó; already confirmed and re-read: Canyelles (21–22 Nov,
+  calendar still 28–29), Vic, Figueres, both Vilamajors, Cubelles, Altafulla,
+  les Masies, Garriguella (9–14 h), Roquetes;
+- the organiser gives other dates: Ripoll 5–8 Dec (calendar 5–6); Caldes de
+  Montbui opening evening Fri 4 Dec 18–20 h, then 5–8 Dec 10–20 h. The weekend
+  pages pick up both corrections too (`weekend/corrections.ts`);
+- not confirmed (page shows 2025 or no year): Manresa, Sant Celoni, Solsona,
+  Vallirana, Sant Feliu de Guíxols, Valls, Martorell, l'Arboç, Balsareny,
+  Montgat, la Pobla de Segur. Their pages keep the calendar's dates and say
+  "Edició 2026 encara sense confirmar per l'organitzador" with the page read;
+- Barcelona: Sagrada Família 21 Nov–23 Dec, 10–21 h, and Nadal al Port (Moll
+  de la Fusta) 27 Nov–6 Jan, 11–23 h, both from the Ajuntament's Guia BCN;
+  Santa Llúcia stays 27 Nov–23 Dec 10–21 h (agenda; firadesantallucia.cat and
+  barcelona.cat/nadal still show 2025);
+- Girona: council agenda, 27 Nov 2026–5 Jan 2027, 10.30–21 h, closed 25–26 Dec
+  and 1 Jan: new town page (ca/es/en; Girona is in EN_TOWNS). Lleida,
+  Tarragona, Granollers, Sitges stay pending.
+
+**Page changes.** Every fair card: "confirmed on the official page" or "not
+yet confirmed by the organiser", hours when the page gives them, the quote.
+The lead adds one sentence when all of the town's fairs are confirmed or all
+unconfirmed. The "open today" box skips closed days (Girona 25 Dec says it
+reopens Sunday 27). Markets guide (`christmas`): Sagrada Família and Girona
+rows, sections, leads and FAQs give the 2026 dates; the EN description said
+"Sagrada Família fair: dates not out yet", now false, so it becomes
+"Sagrada Família fair: 21 Nov–23 Dec" inside the 3 Nov window (fact fix; title
+untouched). Barcelona in December (`barcelona-december`): the same sentence.
+
+**Barcelona's title held.** With three fairs the template would retitle
+`/…/barcelona/` to "Fires de Nadal a Barcelona 2026: dates i llocs", inside
+the 3 Nov window (reads 17 Nov and 1 Dec). `SNIPPET_HOLDS` keeps the title and
+description on Santa Llúcia until 1 Dec; a test fails from 2 Dec to remove it
+(then log the retitle here).
+
+**Title experiment: the confirmed days in the title (Canyelles, Espinelves;
+`DATED_TITLE_TOWNS`).** Outside any window (template titles since 1 Nov; the
+10 Nov note decided no retitle on site-curve grounds). Changed because the
+queries ask for the date and the answer is now confirmed by the councils.
+
+| Page | Old → new | Baseline (28 d to 12 Nov: clicks / impr. / CTR / pos) |
+| --- | --- | --- |
+| `/ca/fires-de-nadal/canyelles/` | "Fira de Santa Llúcia de Canyelles 2026: dates i lloc" → "Fira de Santa Llúcia de Canyelles 2026: 21 i 22 de novembre" | 4 / 459 / 0.9 % / 8.4 |
+| `/es/mercados-navidad/canyelles/` | "Feria de Santa Llúcia de Canyelles 2026: fechas y lugar" → "Feria de Santa Llúcia de Canyelles 2026: 21–22 nov." | 34 / 1,835 / 1.9 % / 7.9 |
+| `/ca/fires-de-nadal/espinelves/` | "Fira de l'Avet d'Espinelves 2026: dates i lloc" → "Fira de l'Avet d'Espinelves 2026: 28 nov. – 8 des." | 6 / 1,127 / 0.5 % / 8.8 |
+| `/es/mercados-navidad/espinelves/` | "Feria del Abeto de Espinelves 2026: fechas y lugar" → "Feria del Abeto de Espinelves 2026: 28 nov. – 8 dic." | 15 / 1,852 / 0.8 % / 8.2 |
+
+Queries (family, 28 d): fira santa llucia canyelles 2026 483 / 0 / 10.2 (ES)
+and 84 / 0 / 9.8 (CA); fira canyelles 2026 107 / 1 / 9.5; espinelves navidad
+332 / 0 / 9.2; fira de l'avet d'espinelves 2026 177 / 1 / 8.9 (CA); fira
+espinelves 2026 139 / 0 / 10.7 (ES) and 101 / 0 / 10.6 (CA).
+
+**Prediction.** CTR on the four pages at least doubles at equal position
+(Canyelles ES ≥ 3.5 %, Espinelves ES ≥ 1.6 %), and the date queries get their
+first clicks. **Review 20 Nov** (day 7 after deploy, `snapshot.py page
+/es/mercados-navidad/canyelles/ 7` and the other three; Canyelles' fair is
+21–22 Nov, so read it before demand ends) **and 27 Nov** (Espinelves opens 28
+Nov). Revert a page to "dates i lloc" if its CTR is below baseline at the same
+or better position. Body and description unchanged on these pages.
+
+**Upkeep.** Unconfirmed fairs: a test fails when one still to come was last
+read more than 10 days ago (re-read ~20 Nov; move any that publish to
+`ORGANISER_FAIRS`). Snapshot: re-run Mon/Thu (`npm run christmasfairs:snapshot
+-- build`).
+
 **Outcome:** _pending_

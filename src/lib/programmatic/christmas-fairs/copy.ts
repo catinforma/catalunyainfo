@@ -61,7 +61,28 @@ export function fairShortName(f: Pick<Fair, "name" | "nameEs">, locale: FairsLoc
 
 interface TownLike {
   name: string;
-  fairs: Pick<Fair, "name" | "nameEs" | "start" | "end" | "place">[];
+  fairs: (Pick<Fair, "name" | "nameEs" | "start" | "end" | "place"> & { id?: string })[];
+}
+
+/**
+ * Towns whose title and description stay on one fair while a measurement
+ * window is open (docs/SEO_EXPERIMENTS.md), even if the page now lists more:
+ * town INE -> the fair the snippet keeps talking about, and the last day of
+ * the hold. Barcelona: the 3 Nov 2026 entry measures the Santa Llúcia title
+ * on 17 Nov and 1 Dec; the Sagrada Família and Nadal al Port fairs (added 13
+ * Nov) go into the page body and H1 only. Remove the entry after 1 Dec
+ * (tests/christmas-fairs.test.ts fails from 2 Dec 2026 as a reminder).
+ */
+export const SNIPPET_HOLDS: Readonly<Record<string, { fairId: string; until: string }>> = {
+  "08019": { fairId: "agenda:2026110300020", until: "2026-12-01" },
+};
+
+/** The fairs the title and description speak of: all of the town's, or the held one. */
+function snippetTown<T extends TownLike & { ine?: string }>(town: T): T {
+  const hold = town.ine ? SNIPPET_HOLDS[town.ine] : undefined;
+  if (!hold) return town;
+  const fair = town.fairs.find((f) => f.id === hold.fairId);
+  return fair ? { ...town, fairs: [fair] } : town;
 }
 
 /**
@@ -88,7 +109,17 @@ const TITLE_TAIL: Record<FairsLocale, { one: string; many: string }> = {
   en: { one: "dates and place", many: "dates and places" },
 };
 
-export function townTitle(town: TownLike, locale: FairsLocale): string {
+/**
+ * Title experiment (docs/SEO_EXPERIMENTS.md, 13 Nov 2026): towns whose title
+ * gives the fair's days instead of "dates i lloc", once the organiser has
+ * confirmed them. Canyelles and Espinelves: the two most-searched fair pages,
+ * 0-2 % CTR at positions 8-10 for queries that ask for the date ("fira santa
+ * llucia canyelles 2026", "fira espinelves 2026"). Review 20 and 27 Nov.
+ */
+export const DATED_TITLE_TOWNS: readonly string[] = ["08043", "17063"];
+
+export function townTitle(subject: TownLike & { ine?: string }, locale: FairsLocale): string {
+  const town = snippetTown(subject);
   const h = `${headline(town, locale)} ${SEASON_YEAR}`;
   const tail = town.fairs.length > 1 ? TITLE_TAIL[locale].many : TITLE_TAIL[locale].one;
   const generic =
@@ -97,12 +128,18 @@ export function townTitle(town: TownLike, locale: FairsLocale): string {
       : locale === "es"
         ? `Feria de Navidad de ${townName(town.name, "es")} ${SEASON_YEAR}`
         : `${townName(town.name, "en")} Christmas market ${SEASON_YEAR}`;
-  return first([`${h}: ${tail}`, h, generic], TITLE_LIMIT);
+  const only = town.fairs.length === 1 ? town.fairs[0]! : null;
+  const dated =
+    only && subject.ine && DATED_TITLE_TOWNS.includes(subject.ine)
+      ? [`${h}: ${rangeText(only.start, only.end, locale, { weekdays: false, year: false })}`, `${h}: ${shortRange(only.start, only.end, locale)}`]
+      : [];
+  return first([...dated, `${h}: ${tail}`, h, generic], TITLE_LIMIT);
 }
 
 const placeNote = (place: string | null) => (place ? ` (${place})` : "");
 
-export function townDescription(town: TownLike, locale: FairsLocale): string {
+export function townDescription(subject: TownLike & { ine?: string }, locale: FairsLocale): string {
+  const town = snippetTown(subject);
   const h = headline(town, locale);
   if (town.fairs.length === 1) {
     const f = town.fairs[0]!;
@@ -125,6 +162,29 @@ export function townDescription(town: TownLike, locale: FairsLocale): string {
         ? [`${h} en ${SEASON_YEAR}: ${joinList(list, "es")}. Fechas oficiales y cómo llegar.`, `${h} en ${SEASON_YEAR}: ${town.fairs.length} ferias con fechas oficiales, lugares y cómo llegar.`]
         : [`${h} ${SEASON_YEAR}: ${joinList(list, "en")}. Official dates and how to get there.`, `${h} ${SEASON_YEAR}: ${town.fairs.length} fairs with official dates, places and how to get there.`];
   return first(options, DESCRIPTION_LIMIT);
+}
+
+/**
+ * One sentence after the lead on whether the 2026 edition is confirmed: every
+ * fair on the page read on an official page for 2026, or every fair still
+ * waiting for its organiser. Mixed pages say it fair by fair, in the cards.
+ */
+export function confirmationNote(fairs: readonly Pick<Fair, "checked" | "unconfirmed">[], locale: FairsLocale): string | null {
+  if (fairs.length === 0) return null;
+  const one = fairs.length === 1;
+  if (fairs.every((f) => f.unconfirmed)) {
+    if (locale === "ca")
+      return `${one ? "L'organitzador encara no ha confirmat" : "Els organitzadors encara no han confirmat"} l'edició del 2026 al seu web: les dates són les del calendari oficial de fires.`;
+    if (locale === "es")
+      return `${one ? "El organizador aún no ha confirmado" : "Los organizadores aún no han confirmado"} la edición de 2026 en su web: las fechas son las del calendario oficial de ferias.`;
+    return `${one ? "The organiser has not confirmed the 2026 edition on its website" : "The organisers have not confirmed the 2026 edition on their websites"} yet: the dates are the official fairs calendar's.`;
+  }
+  if (fairs.every((f) => f.checked)) {
+    if (locale === "ca") return one ? "Dates del 2026 confirmades a la pàgina oficial de la fira." : "Dates del 2026 confirmades a la pàgina oficial de cada fira.";
+    if (locale === "es") return one ? "Fechas de 2026 confirmadas en la página oficial de la feria." : "Fechas de 2026 confirmadas en la página oficial de cada feria.";
+    return one ? "2026 dates confirmed on the market's official page." : "2026 dates confirmed on each market's official page.";
+  }
+  return null;
 }
 
 /** The sentence under the H1. Markdown links allowed. */
@@ -235,6 +295,12 @@ export interface Labels {
   fromCalendar: string;
   fromAgenda: string;
   fromOrganiser: (publisher: string, date: string) => string;
+  /** The calendar's (or agenda's) dates, confirmed on the organiser's page for this edition. */
+  confirmed: (publisher: string, date: string) => string;
+  /** Lead-in of the note on a fair whose organiser has not published the 2026 edition yet. */
+  notConfirmed: string;
+  checkedOn: (date: string) => string;
+  hours: string;
   corrected: (calendarDates: string) => string;
   toConfirm: string;
   readOn: (date: string) => string;
@@ -267,6 +333,10 @@ export function labels(locale: FairsLocale): Labels {
       fromCalendar: "Dates del calendari oficial de fires de la Generalitat.",
       fromAgenda: "Dates de l'Agenda Cultural de Catalunya.",
       fromOrganiser: (publisher, date) => `Dates del web de l'organitzador (${publisher}), llegit el ${date}.`,
+      confirmed: (publisher, date) => `Dates del 2026 confirmades a la pàgina oficial (${publisher}), llegida el ${date}.`,
+      notConfirmed: "Edició 2026 encara sense confirmar per l'organitzador:",
+      checkedOn: (date) => `revisat el ${date}. Fins que no la confirmi, les dates d'aquí dalt són les del calendari oficial de fires: torna-ho a mirar abans d'anar-hi.`,
+      hours: "Horari",
       corrected: (dates) => `El calendari oficial de fires diu ${dates}; donem les dates de l'organitzador, que són més recents.`,
       toConfirm: "Dates pendents de confirmar segons el calendari oficial.",
       readOn: (date) => `Dades llegides el ${date}.`,
@@ -298,6 +368,10 @@ export function labels(locale: FairsLocale): Labels {
       fromCalendar: "Fechas del calendario oficial de ferias de la Generalitat.",
       fromAgenda: "Fechas de la Agenda Cultural de Catalunya.",
       fromOrganiser: (publisher, date) => `Fechas de la web del organizador (${publisher}), leída el ${date}.`,
+      confirmed: (publisher, date) => `Fechas de 2026 confirmadas en la página oficial (${publisher}), leída el ${date}.`,
+      notConfirmed: "Edición 2026 aún sin confirmar por el organizador:",
+      checkedOn: (date) => `revisado el ${date}. Hasta que la confirme, las fechas de arriba son las del calendario oficial de ferias: vuelve a mirarlo antes de ir.`,
+      hours: "Horario",
       corrected: (dates) => `El calendario oficial de ferias dice ${dates}; damos las fechas del organizador, que son más recientes.`,
       toConfirm: "Fechas pendientes de confirmar según el calendario oficial.",
       readOn: (date) => `Datos leídos el ${date}.`,
@@ -328,6 +402,10 @@ export function labels(locale: FairsLocale): Labels {
     fromCalendar: "Dates from the Catalan government's official fairs calendar.",
     fromAgenda: "Dates from the Agenda Cultural de Catalunya.",
     fromOrganiser: (publisher, date) => `Dates from the organiser's website (${publisher}), read on ${date}.`,
+    confirmed: (publisher, date) => `2026 dates confirmed on the official page (${publisher}), read on ${date}.`,
+    notConfirmed: "2026 edition not yet confirmed by the organiser:",
+    checkedOn: (date) => `checked on ${date}. Until it is, the dates above are the official fairs calendar's: check again before you go.`,
+    hours: "Opening hours",
     corrected: (dates) => `The official fairs calendar says ${dates}; we give the organiser's dates, which are more recent.`,
     toConfirm: "Dates still to be confirmed, according to the official calendar.",
     readOn: (date) => `Data read on ${date}.`,

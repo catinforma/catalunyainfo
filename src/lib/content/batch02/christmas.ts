@@ -104,7 +104,19 @@ import {
 // 4 Nov 2026: "I la resta de ciutats?" gains one sentence linking the new
 // Christmas lights page (Barcelona and 25 towns; group `llums-nadal-links`).
 // No date in it; titles and descriptions untouched (3 Nov window).
-const VERIFIED = "2026-11-03";
+// 13 Nov 2026 (fairs freshness pass, the 30 most-searched towns): the
+// Ajuntament de Barcelona's guide (guia.barcelona.cat) lists the Sagrada
+// Família fair 21 Nov - 23 Dec 2026, "Cada dia de 10:00 h a 21:00 h", and
+// Girona's council agenda the Mercat de Nadal from Friday 27 Nov "fins al
+// 05/01/27", 10.30-21 h, closed 25-26 Dec and 1 Jan. Both rows, their
+// sections, the leads, the FAQs and the EN description now give those dates
+// (SAGRADA_2026 and GIRONA_2026 are the fairs family's own entries, so the two
+// pages agree). Re-read the same day, unchanged: firadesantallucia.cat (2025
+// text), barcelona.cat/nadal (2025), Lleida (2025-26), Manresa (2025),
+// Granollers (2025-26), Tarragona (no 2026 dates), Reus (homepage, no 2026
+// market), Figueres' call, Vic's medieval market and the nine confirmed
+// councils (each quote still on its page). Titles untouched (3 Nov window).
+const VERIFIED = "2026-11-13";
 
 /** Fairs open on at least one day between `from` and `to`. */
 const openBetween = (from: string, to: string) => FAIRS.filter((f) => f.start <= to && f.end >= from).length;
@@ -161,6 +173,23 @@ export function hoursText(hours: { open: string; close: string }, locale: Locale
   return `de ${h(hours.open)} a ${h(hours.close)} h`;
 }
 
+/** The Sagrada Família fair and Girona's market, as the fairs family lists them (organisers.ts, read 13 Nov 2026). */
+export const SAGRADA_2026 = FAIRS.find((f) => f.id === "org:barcelona-sagrada-familia")!;
+export const GIRONA_2026 = FAIRS.find((f) => f.id === "org:girona-mercat-de-nadal")!;
+const sfRange = (locale: Locale) => range(SAGRADA_2026.start, SAGRADA_2026.end, locale);
+const gironaRange = (locale: Locale) => range(GIRONA_2026.start, GIRONA_2026.end, locale);
+const SF_SOURCE: Record<Locale, string> = {
+  ca: `la [Guia BCN de l'Ajuntament de Barcelona](${SAGRADA_2026.checked!.url})`,
+  es: `la [Guia BCN del Ayuntamiento de Barcelona](${SAGRADA_2026.checked!.url})`,
+  en: `[Barcelona City Council's Guia BCN](${SAGRADA_2026.checked!.url})`,
+};
+const GIRONA_SOURCE: Record<Locale, string> = {
+  ca: `l'[agenda de l'Ajuntament de Girona](${GIRONA_2026.checked!.url})`,
+  es: `la [agenda del Ayuntamiento de Girona](${GIRONA_2026.checked!.url})`,
+  en: `[Girona City Council's events listing](${GIRONA_2026.checked!.url})`,
+};
+
+const cap = (text: string) => `${text.charAt(0).toUpperCase()}${text.slice(1)}`;
 const SL = SANTA_LLUCIA_2026;
 const SL_HOURS = SL.hours!;
 /** "del 27 de novembre al 23 de desembre de 2026" / "27 November to 23 December 2026". */
@@ -183,6 +212,8 @@ const SOURCES: B2Source[] = [
   { name: "Agenda Cultural de Catalunya: Fira de Santa Llúcia a l'Avinguda de la Catedral de Barcelona (2026)", url: SANTA_LLUCIA_2026.url, publisher: "Departament de Cultura, Generalitat de Catalunya" },
   { name: "Fira de Santa Llúcia", url: "https://www.barcelona.cat/culturapopular/ca/festes-i-tradicions/fires/fira-de-santa-llucia", publisher: "Ajuntament de Barcelona" },
   { name: "Fira de Nadal de la Sagrada Família", url: "https://www.barcelona.cat/culturapopular/ca/festes-i-tradicions/fires/fira-de-nadal-de-la-sagrada-familia", publisher: "Ajuntament de Barcelona" },
+  { name: "Guia BCN: Fira de Nadal a la Sagrada Família (21/11/2026 - 23/12/2026)", url: "https://guia.barcelona.cat/detall/fira-de-nadal-a-la-sagrada-familia_99400017122.html", publisher: "Ajuntament de Barcelona" },
+  { name: "Agenda de Girona: Mercat de Nadal (2026-2027)", url: "https://www.girona.cat/agenda/cat/agenda_fitxa.php?id=44370&ta=age", publisher: "Ajuntament de Girona" },
   { name: "Nadal a Barcelona", url: "https://www.barcelona.cat/nadal/ca", publisher: "Ajuntament de Barcelona" },
   { name: "Fira de Santa Llúcia: calendari 2025", url: "https://firadesantallucia.cat/calendari.php", publisher: "Associació Fira de Santa Llúcia" },
   { name: "Fira de Santa Llúcia", url: "https://firadesantallucia.cat/", publisher: "Associació Fira de Santa Llúcia" },
@@ -230,7 +261,7 @@ const META: Record<Locale, { path: string; title: string; seoTitle: string; seoD
     title: "Christmas markets in Barcelona and Catalonia 2026: dates and places",
     seoTitle: "Barcelona Christmas markets 2026: Santa Llúcia from 27 Nov",
     seoDescription:
-      "Fira de Santa Llúcia 2026: 27 Nov–23 Dec, 10:00–21:00, by Barcelona Cathedral. Sagrada Família fair: dates not out yet. Every Catalan market with dates.",
+      "Fira de Santa Llúcia 2026: 27 Nov–23 Dec, 10:00–21:00, by Barcelona Cathedral. Sagrada Família fair: 21 Nov–23 Dec. Every Catalan market with dates.",
     excerpt:
       "Christmas markets in Barcelona and Catalonia in 2026: the dates organisers have confirmed, last year's dates for the rest, and where each one is held.",
   },
@@ -242,9 +273,9 @@ type Row = [market: string, town: string, where: string, dates: string];
 const MARKETS: Record<Locale, Row[]> = {
   ca: [
     ["Fira de Santa Llúcia", "Barcelona", "Pla de la Seu i avinguda de la Catedral", `**${slWhen("ca")}**, segons l'Agenda Cultural de la Generalitat`],
-    ["Fira de Nadal de la Sagrada Família", "Barcelona", "Plaça de la Sagrada Família", "Pendent. Sol començar a finals de novembre o principis de desembre"],
+    ["Fira de Nadal de la Sagrada Família", "Barcelona", "Plaça de la Sagrada Família", `**${cap(sfRange("ca"))}, cada dia de 10 a 21 h**, segons la Guia BCN de l'Ajuntament`],
     ["Fira de l'Avet (45a)", "Espinelves", "—", "**Del 28 de novembre al 8 de desembre de 2026**"],
-    ["Mercat de Nadal", "Girona", "Plaça de la Independència", "Pendent. El 2025: del 28 de novembre de 2025 al 5 de gener de 2026"],
+    ["Mercat de Nadal", "Girona", "Plaça de la Independència", `**${cap(gironaRange("ca"))}**, segons l'agenda de l'Ajuntament (tancat el 25 i el 26 de desembre i l'1 de gener)`],
     ["Mercat de Nadal", "Figueres", "La Rambla", "Del 27 de novembre al 24 de desembre de 2026"],
     ["Mercat de Nadal", "Lleida", "Plaça de la Catedral i voltants", "Pendent"],
     ["Fira de Santa Llúcia", "Manresa", "Plaça Major i Baixada de la Seu", "12 i 13 de desembre de 2026, segons el calendari de fires de la Generalitat (l'Ajuntament encara mostra el 2025)"],
@@ -252,9 +283,9 @@ const MARKETS: Record<Locale, Row[]> = {
   ],
   es: [
     ["Fira de Santa Llúcia", "Barcelona", "Pla de la Seu y avenida de la Catedral", `**${slWhen("es")}**, según la Agenda Cultural de la Generalitat`],
-    ["Fira de Nadal de la Sagrada Família", "Barcelona", "Plaza de la Sagrada Família", "Pendiente. Suele empezar a finales de noviembre o principios de diciembre"],
+    ["Fira de Nadal de la Sagrada Família", "Barcelona", "Plaza de la Sagrada Família", `**${cap(sfRange("es"))}, todos los días de 10 a 21 h**, según la Guia BCN del Ayuntamiento`],
     ["Fira de l'Avet (45.ª)", "Espinelves", "—", "**Del 28 de noviembre al 8 de diciembre de 2026**"],
-    ["Mercat de Nadal", "Girona", "Plaza de la Independència", "Pendiente. En 2025: del 28 de noviembre de 2025 al 5 de enero de 2026"],
+    ["Mercat de Nadal", "Girona", "Plaza de la Independència", `**${cap(gironaRange("es"))}**, según la agenda del Ayuntamiento (cerrado el 25 y el 26 de diciembre y el 1 de enero)`],
     ["Mercat de Nadal", "Figueres", "La Rambla", "Del 27 de noviembre al 24 de diciembre de 2026"],
     ["Mercat de Nadal", "Lleida", "Plaza de la Catedral y alrededores", "Pendiente"],
     ["Fira de Santa Llúcia", "Manresa", "Plaza Major y Baixada de la Seu", "12 y 13 de diciembre de 2026, según el calendario de ferias de la Generalitat (el Ayuntamiento aún muestra 2025)"],
@@ -262,9 +293,9 @@ const MARKETS: Record<Locale, Row[]> = {
   ],
   en: [
     ["Fira de Santa Llúcia", "Barcelona", "Pla de la Seu and Avinguda de la Catedral", `**${slWhen("en")}**, according to the Catalan government's cultural agenda`],
-    ["Sagrada Família Christmas Fair", "Barcelona", "Plaça de la Sagrada Família", "Not yet published. Usually opens late November or early December"],
+    ["Sagrada Família Christmas Fair", "Barcelona", "Plaça de la Sagrada Família", `**${sfRange("en")}, daily 10:00 to 21:00**, according to Barcelona City Council's Guia BCN`],
     ["Fir Tree Fair (45th)", "Espinelves", "—", "**28 November to 8 December 2026**"],
-    ["Christmas market", "Girona", "Plaça de la Independència", "Not yet published. In 2025: 28 November 2025 to 5 January 2026"],
+    ["Christmas market", "Girona", "Plaça de la Independència", `**${gironaRange("en")}**, according to the City Council's events listing (closed on 25 and 26 December and 1 January)`],
     ["Christmas market", "Figueres", "La Rambla", "27 November to 24 December 2026"],
     ["Christmas market", "Lleida", "Plaça de la Catedral and around", "Not yet published"],
     ["Fira de Santa Llúcia", "Manresa", "Plaça Major and Baixada de la Seu", "12 and 13 December 2026, according to the Catalan government's fairs calendar (the council's page still shows 2025)"],
@@ -285,9 +316,9 @@ function marketTable(locale: Locale) {
     en: "The main Christmas markets in Catalonia and their dates",
   };
   const note: Record<Locale, string> = {
-    ca: `«Pendent» vol dir que l'organitzador encara no ha publicat les dates del 2026; les del 2025 surten de la seva pàgina oficial i poden canviar. «On» només quan una pàgina oficial ho diu. Comprovat el ${dateYear(VERIFIED, "ca")}; Santa Llúcia, a l'Agenda Cultural de la Generalitat (el web de la fira encara mostra el 2025), i Manresa, al calendari oficial de fires de la Generalitat.`,
-    es: `«Pendiente» significa que el organizador aún no ha publicado las fechas de 2026; las de 2025 salen de su página oficial y pueden cambiar. «Dónde» solo cuando una página oficial lo dice. Comprobado el ${dateYear(VERIFIED, "es")}; Santa Llúcia, en la Agenda Cultural de la Generalitat (la web de la feria aún muestra 2025), y Manresa, en el calendario oficial de ferias de la Generalitat.`,
-    en: `"Not yet published" means the organiser has not announced its 2026 dates; the 2025 dates come from its official page and may change. "Where" only when an official page says so. Checked on ${dateYear(VERIFIED, "en")}; Santa Llúcia in the Catalan government's cultural agenda (the fair's own website still shows 2025), and Manresa in the Catalan government's official fairs calendar.`,
+    ca: `«Pendent» vol dir que l'organitzador encara no ha publicat les dates del 2026; les del 2025 surten de la seva pàgina oficial i poden canviar. «On» només quan una pàgina oficial ho diu. Comprovat el ${dateYear(VERIFIED, "ca")}; Santa Llúcia, a l'Agenda Cultural de la Generalitat (el web de la fira encara mostra el 2025); la Sagrada Família, a la Guia BCN de l'Ajuntament de Barcelona; Girona, a l'agenda de l'Ajuntament, i Manresa, al calendari oficial de fires de la Generalitat.`,
+    es: `«Pendiente» significa que el organizador aún no ha publicado las fechas de 2026; las de 2025 salen de su página oficial y pueden cambiar. «Dónde» solo cuando una página oficial lo dice. Comprobado el ${dateYear(VERIFIED, "es")}; Santa Llúcia, en la Agenda Cultural de la Generalitat (la web de la feria aún muestra 2025); la Sagrada Família, en la Guia BCN del Ayuntamiento de Barcelona; Girona, en la agenda del Ayuntamiento, y Manresa, en el calendario oficial de ferias de la Generalitat.`,
+    en: `"Not yet published" means the organiser has not announced its 2026 dates; the 2025 dates come from its official page and may change. "Where" only when an official page says so. Checked on ${dateYear(VERIFIED, "en")}; Santa Llúcia in the Catalan government's cultural agenda (the fair's own website still shows 2025), the Sagrada Família in Barcelona City Council's Guia BCN, Girona in the City Council's events listing, and Manresa in the Catalan government's official fairs calendar.`,
   };
   return table(caption[locale], HEADERS[locale], MARKETS[locale], note[locale]);
 }
@@ -352,12 +383,12 @@ function body(locale: Locale) {
   if (locale === "ca") {
     return [
       lead(
-        `${countSentence("ca")} La **Fira de Santa Llúcia 2026** de Barcelona es fa **${slRange("ca")}, ${hoursText(SL_HOURS, "ca")}**, davant de la Catedral, segons ${SL_SOURCE.ca}. La de la **Sagrada Família** encara no té dates. Entre les altres, la **Fira de l'Avet d'Espinelves** va del 28 de novembre al 8 de desembre de 2026.`,
+        `${countSentence("ca")} La **Fira de Santa Llúcia 2026** de Barcelona es fa **${slRange("ca")}, ${hoursText(SL_HOURS, "ca")}**, davant de la Catedral, segons ${SL_SOURCE.ca}. La de la **Sagrada Família** va ${sfRange("ca")}, segons ${SF_SOURCE.ca}. Entre les altres, la **Fira de l'Avet d'Espinelves** va del 28 de novembre al 8 de desembre de 2026.`,
       ),
       callout(
         "info",
         "Com llegir aquesta pàgina",
-        "Només hi posem una data del 2026 quan l'organitzador o l'administració l'ha publicada. Per als grans mercats que encara no ho han fet, donem la del 2025 i ho diem clarament. Les dates de Santa Llúcia surten de l'Agenda Cultural de la Generalitat, que dona l'Associació Fira de Santa Llúcia com a organitzadora: el web de la fira encara mostra el calendari del 2025. L'Ajuntament de Barcelona diu que actualitzarà el seu web de Nadal cap al novembre del 2026; aquí ho afegim el dia que surti.",
+        "Només hi posem una data del 2026 quan l'organitzador o l'administració l'ha publicada. Per als grans mercats que encara no ho han fet, donem la del 2025 i ho diem clarament. Les dates de Santa Llúcia surten de l'Agenda Cultural de la Generalitat, que dona l'Associació Fira de Santa Llúcia com a organitzadora: el web de la fira encara mostra el calendari del 2025. Les de la Sagrada Família surten de la Guia BCN de l'Ajuntament de Barcelona.",
       ),
       marketTable("ca"),
       ...h2("Mercats de Nadal amb dates del 2026 confirmades", "Aquestes fires ja tenen dates oficials del 2026, publicades pels seus ajuntaments:"),
@@ -376,11 +407,11 @@ function body(locale: Locale) {
       ...h2(
         "Fira de Nadal de la Sagrada Família",
         "Es fa a la plaça de la Sagrada Família des del 1962 i té un centenar de parades en quatre sectors: arbres i plantes, pessebres i decoració (caganers i tions inclosos), alimentació i regals. L'organitza l'Associació d'Artesans i Firaires Nadalencs de la Sagrada Família.",
-        `Segons l'Ajuntament, comença a la darreria de novembre o principi de desembre i es pot visitar fins als dies de Nadal. Les dates del 2026 encara no s'han anunciat (comprovat el ${dateYear(VERIFIED, "ca")}).`,
+        `**El 2026 es fa ${sfRange("ca")}, cada dia de 10 a 21 h**, segons ${SF_SOURCE.ca} (comprovat el ${dateYear(VERIFIED, "ca")}). Barcelona té una tercera fira aquest Nadal, la de **Nadal al Port**, al moll de la Fusta; totes tres, amb com arribar-hi, són a ${bcnFairsLink("ca", "fires de Nadal a Barcelona")}.`,
       ),
       ...h2(
         "Mercats de Nadal de Girona, Figueres i Lleida",
-        `**Girona** fa el seu Mercat de Nadal a la plaça de la Independència. El 2025 va anar del 28 de novembre de 2025 al 5 de gener de 2026, i l'Ajuntament lliga la data d'inici al dia oficial del Black Friday. Si hi vas des de Barcelona, mira ${b2link("girona", "ca", "com anar a Girona en tren")}.`,
+        `**Girona** fa el seu Mercat de Nadal a la plaça de la Independència. **El 2026 va ${gironaRange("ca")}**, de 10.30 a 21 h (el 24 i el 31 de desembre i el 5 de gener tanca a les 19 h; el 25 i el 26 de desembre i l'1 de gener, tancat), segons ${GIRONA_SOURCE.ca}; la fitxa, a [fires de Nadal a Girona](${fairsTownPath("ca", "girona")}). Si hi vas des de Barcelona, mira ${b2link("girona", "ca", "com anar a Girona en tren")}.`,
         `**Figueres** el fa a la Rambla, amb casetes de fusta, avets, plantes i productes agroalimentaris; segons la convocatòria de l'Ajuntament per als paradistes, el 2026 es fa del 27 de novembre al 24 de desembre. Per combinar-ho amb el museu, ${b2link("figueres", "ca", "Figueres i el Teatre-Museu Dalí")}.`,
         "**Lleida** instal·la el Mercat de Nadal a la plaça de la Catedral i voltants; la Paeria encara no n'ha publicat el calendari del 2026.",
       ),
@@ -403,7 +434,7 @@ function body(locale: Locale) {
       faq([
         {
           question: "Quines fires de Nadal hi ha a Catalunya el 2026?",
-          answer: `A ${dateYear(FAMILY.checked, "ca")}, ${FAMILY.fairs} fires i mercats de Nadal tenen data oficial del 2026, a ${FAMILY.towns} municipis: entre d'altres, la Fira de Santa Llúcia de Barcelona (${slRange("ca")}), la Fira de l'Avet d'Espinelves (del 28 de novembre al 8 de desembre), el Mercat de Nadal de Figueres (del 27 de novembre al 24 de desembre) i la Fira de Santa Llúcia de Manresa (12 i 13 de desembre). La llista completa és a la pàgina de fires de Nadal per municipi. La Fira de Nadal de la Sagrada Família encara no té dates.`,
+          answer: `A ${dateYear(FAMILY.checked, "ca")}, ${FAMILY.fairs} fires i mercats de Nadal tenen data oficial del 2026, a ${FAMILY.towns} municipis: entre d'altres, la Fira de Santa Llúcia de Barcelona (${slRange("ca")}), la Fira de l'Avet d'Espinelves (del 28 de novembre al 8 de desembre), el Mercat de Nadal de Figueres (del 27 de novembre al 24 de desembre) i la Fira de Santa Llúcia de Manresa (12 i 13 de desembre). La llista completa és a la pàgina de fires de Nadal per municipi. La Fira de Nadal de la Sagrada Família es fa ${sfRange("ca")}.`,
         },
         {
           question: "Quan és la Fira de Santa Llúcia 2026?",
@@ -434,12 +465,12 @@ function body(locale: Locale) {
   if (locale === "es") {
     return [
       lead(
-        `${countSentence("es")} La **Fira de Santa Llúcia 2026** de Barcelona se celebra **${slRange("es")}, ${hoursText(SL_HOURS, "es")}**, frente a la Catedral, según ${SL_SOURCE.es}. La de la **Sagrada Família** aún no tiene fechas. Entre las demás, la **Fira de l'Avet de Espinelves** va del 28 de noviembre al 8 de diciembre de 2026.`,
+        `${countSentence("es")} La **Fira de Santa Llúcia 2026** de Barcelona se celebra **${slRange("es")}, ${hoursText(SL_HOURS, "es")}**, frente a la Catedral, según ${SL_SOURCE.es}. La de la **Sagrada Família** va ${sfRange("es")}, según ${SF_SOURCE.es}. Entre las demás, la **Fira de l'Avet de Espinelves** va del 28 de noviembre al 8 de diciembre de 2026.`,
       ),
       callout(
         "info",
         "Cómo leer esta página",
-        "Solo ponemos una fecha de 2026 cuando el organizador o la administración la ha publicado. Para los grandes mercados que aún no lo han hecho, damos la de 2025 y lo decimos claramente. Las fechas de Santa Llúcia salen de la Agenda Cultural de la Generalitat, que da como organizadora a la Associació Fira de Santa Llúcia: la web de la feria aún muestra el calendario de 2025. El Ayuntamiento de Barcelona dice que actualizará su web de Navidad hacia noviembre de 2026; aquí lo añadimos el día que salga.",
+        "Solo ponemos una fecha de 2026 cuando el organizador o la administración la ha publicado. Para los grandes mercados que aún no lo han hecho, damos la de 2025 y lo decimos claramente. Las fechas de Santa Llúcia salen de la Agenda Cultural de la Generalitat, que da como organizadora a la Associació Fira de Santa Llúcia: la web de la feria aún muestra el calendario de 2025. Las de la Sagrada Família salen de la Guia BCN del Ayuntamiento de Barcelona.",
       ),
       marketTable("es"),
       ...h2("Mercados de Navidad con fechas de 2026 confirmadas", "Estas ferias ya tienen fechas oficiales de 2026, publicadas por sus ayuntamientos:"),
@@ -458,11 +489,11 @@ function body(locale: Locale) {
       ...h2(
         "Fira de Nadal de la Sagrada Família",
         "Se celebra en la plaza de la Sagrada Família desde 1962 y tiene un centenar de puestos en cuatro sectores: árboles y plantas, belenes y decoración (caganers y tiós incluidos), alimentación y regalos. La organiza la Associació d'Artesans i Firaires Nadalencs de la Sagrada Família.",
-        `Según el Ayuntamiento, empieza a finales de noviembre o principios de diciembre y se puede visitar hasta los días de Navidad. Las fechas de 2026 aún no se han anunciado (comprobado el ${dateYear(VERIFIED, "es")}).`,
+        `**En 2026 se celebra ${sfRange("es")}, todos los días de 10 a 21 h**, según ${SF_SOURCE.es} (comprobado el ${dateYear(VERIFIED, "es")}). Barcelona tiene una tercera feria esta Navidad, la de **Nadal al Port**, en el moll de la Fusta; las tres, con cómo llegar, están en ${bcnFairsLink("es", "ferias de Navidad en Barcelona")}.`,
       ),
       ...h2(
         "Mercados de Navidad de Girona, Figueres y Lleida",
-        `**Girona** celebra su Mercat de Nadal en la plaza de la Independència. En 2025 fue del 28 de noviembre de 2025 al 5 de enero de 2026, y el Ayuntamiento liga la fecha de inicio al día oficial del Black Friday. Si vas desde Barcelona, mira ${b2link("girona", "es", "cómo ir a Girona en tren")}.`,
+        `**Girona** celebra su Mercat de Nadal en la plaza de la Independència. **En 2026 va ${gironaRange("es")}**, de 10.30 a 21 h (el 24 y el 31 de diciembre y el 5 de enero cierra a las 19 h; el 25 y el 26 de diciembre y el 1 de enero, cerrado), según ${GIRONA_SOURCE.es}; la ficha, en [ferias de Navidad en Girona](${fairsTownPath("es", "girona")}). Si vas desde Barcelona, mira ${b2link("girona", "es", "cómo ir a Girona en tren")}.`,
         `**Figueres** lo hace en la Rambla, con casetas de madera, abetos, plantas y productos agroalimentarios; según la convocatoria del Ayuntamiento para los paradistas, en 2026 se celebra del 27 de noviembre al 24 de diciembre. Para combinarlo con el museo, ${b2link("figueres", "es", "Figueres y el Teatro-Museo Dalí")}.`,
         "**Lleida** instala el Mercat de Nadal en la plaza de la Catedral y alrededores; la Paeria aún no ha publicado el calendario de 2026.",
       ),
@@ -485,7 +516,7 @@ function body(locale: Locale) {
       faq([
         {
           question: "¿Qué ferias de Navidad hay en Cataluña en 2026?",
-          answer: `A ${dateYear(FAMILY.checked, "es")}, ${FAMILY.fairs} ferias y mercados de Navidad tienen fecha oficial de 2026, en ${FAMILY.towns} municipios: entre otros, la Fira de Santa Llúcia de Barcelona (${slRange("es")}), la Fira de l'Avet de Espinelves (del 28 de noviembre al 8 de diciembre), el Mercat de Nadal de Figueres (del 27 de noviembre al 24 de diciembre) y la Fira de Santa Llúcia de Manresa (12 y 13 de diciembre). La lista completa está en la página de ferias de Navidad por municipio. La Fira de Nadal de la Sagrada Família aún no tiene fechas.`,
+          answer: `A ${dateYear(FAMILY.checked, "es")}, ${FAMILY.fairs} ferias y mercados de Navidad tienen fecha oficial de 2026, en ${FAMILY.towns} municipios: entre otros, la Fira de Santa Llúcia de Barcelona (${slRange("es")}), la Fira de l'Avet de Espinelves (del 28 de noviembre al 8 de diciembre), el Mercat de Nadal de Figueres (del 27 de noviembre al 24 de diciembre) y la Fira de Santa Llúcia de Manresa (12 y 13 de diciembre). La lista completa está en la página de ferias de Navidad por municipio. La Fira de Nadal de la Sagrada Família se celebra ${sfRange("es")}.`,
         },
         {
           question: "¿Cuándo es la Fira de Santa Llúcia 2026?",
@@ -515,12 +546,12 @@ function body(locale: Locale) {
 
   return [
     lead(
-      `Barcelona's Christmas market is the **Fira de Santa Llúcia**, in front of the Cathedral, and **the 2026 fair runs from ${slRange("en")}, ${hoursText(SL_HOURS, "en")}**, according to ${SL_SOURCE.en}. The city's second fair, at the **Sagrada Família**, has not announced its dates yet. Elsewhere in Catalonia, the **Espinelves Fir Tree Fair** runs from 28 November to 8 December 2026, and Barcelona is this year's **European Capital of Christmas**, according to the City Council.`,
+      `Barcelona's Christmas market is the **Fira de Santa Llúcia**, in front of the Cathedral, and **the 2026 fair runs from ${slRange("en")}, ${hoursText(SL_HOURS, "en")}**, according to ${SL_SOURCE.en}. The city's second fair, at the **Sagrada Família**, runs from ${sfRange("en")}, according to ${SF_SOURCE.en}. Elsewhere in Catalonia, the **Espinelves Fir Tree Fair** runs from 28 November to 8 December 2026, and Barcelona is this year's **European Capital of Christmas**, according to the City Council.`,
     ),
     callout(
       "info",
       "How to read this page",
-      "We give a 2026 date only once the organiser or an official body has published it. For the big markets that have not, we give the 2025 dates and say so. The Santa Llúcia dates come from the Catalan government's cultural agenda, which names the Associació Fira de Santa Llúcia as the organiser; the fair's own website still shows its 2025 calendar. Barcelona City Council says it will update its Christmas website around November 2026; we add each date the day it appears.",
+      "We give a 2026 date only once the organiser or an official body has published it. For the big markets that have not, we give the 2025 dates and say so. The Santa Llúcia dates come from the Catalan government's cultural agenda, which names the Associació Fira de Santa Llúcia as the organiser; the fair's own website still shows its 2025 calendar. The Sagrada Família dates come from Barcelona City Council's Guia BCN.",
     ),
     marketTable("en"),
     ...h2("Christmas markets with confirmed 2026 dates", "These fairs already have official 2026 dates, published by their town councils:"),
@@ -539,11 +570,11 @@ function body(locale: Locale) {
     ...h2(
       "Sagrada Família Christmas Fair",
       "Held on Plaça de la Sagrada Família since 1962, it has about a hundred stalls in four sections: trees and plants, nativity scenes and decorations (caganers and tiós included), food, and gifts. It is run by the Associació d'Artesans i Firaires Nadalencs de la Sagrada Família.",
-      `According to the City Council, it starts at the end of November or early December and runs until the Christmas days. The 2026 dates have not been announced (checked on ${dateYear(VERIFIED, "en")}).`,
+      `**In 2026 it runs from ${sfRange("en")}, daily from 10:00 to 21:00**, according to ${SF_SOURCE.en} (checked on ${dateYear(VERIFIED, "en")}). Barcelona has a third Christmas fair this year, **Nadal al Port** on the Moll de la Fusta; all three, with how to get there, are in ${bcnFairsLink("en", "Christmas markets in Barcelona")}.`,
     ),
     ...h2(
       "Christmas markets in Girona, Figueres and Lleida",
-      `**Girona** holds its Christmas market on Plaça de la Independència. In 2025 it ran from 28 November 2025 to 5 January 2026, and the council ties its opening day to the official Black Friday. From Barcelona, see ${b2link("girona", "en", "Girona by train")}.`,
+      `**Girona** holds its Christmas market on Plaça de la Independència. **In 2026 it runs from ${gironaRange("en")}**, 10:30 to 21:00 (closing at 19:00 on 24 and 31 December and 5 January; closed on 25 and 26 December and 1 January), according to ${GIRONA_SOURCE.en}; details in [Girona Christmas market](${fairsTownPath("en", "girona")}). From Barcelona, see ${b2link("girona", "en", "Girona by train")}.`,
       `**Figueres** holds it on La Rambla, in wooden huts selling Christmas items, food, plants and fir trees; the council's call for stallholders gives 27 November to 24 December 2026. To combine it with the museum, see ${b2link("figueres", "en", "Figueres and the Dalí Theatre-Museum")}.`,
       "**Lleida** sets up its Christmas market on Plaça de la Catedral and the streets around it; the city has not yet published its 2026 calendar.",
     ),
@@ -574,11 +605,11 @@ function body(locale: Locale) {
       {
         question: "Where is the Christmas market in Barcelona?",
         answer:
-          "The oldest, the Fira de Santa Llúcia, is in front of Barcelona Cathedral (Pla de la Seu and Avinguda de la Catedral), where it has been held since 1786. The second is the Sagrada Família Christmas Fair, on Plaça de la Sagrada Família.",
+          "The oldest, the Fira de Santa Llúcia, is in front of Barcelona Cathedral (Pla de la Seu and Avinguda de la Catedral), where it has been held since 1786. The second is the Sagrada Família Christmas Fair, on Plaça de la Sagrada Família (21 November to 23 December 2026, according to the City Council's Guia BCN).",
       },
       {
         question: "Which Christmas markets have confirmed 2026 dates?",
-        answer: `As of ${dateYear(FAMILY.checked, "en")}, ${FAMILY.fairs} Christmas markets and fairs in ${FAMILY.towns} towns have official 2026 dates, among them Barcelona's Fira de Santa Llúcia (${slRange("en")}), the Espinelves Fir Tree Fair (28 November to 8 December), Figueres's Christmas market (27 November to 24 December) and Manresa's Fira de Santa Llúcia (12 and 13 December). The full list is on the Christmas markets by town page. The Sagrada Família Christmas Fair has not announced its dates yet.`,
+        answer: `As of ${dateYear(FAMILY.checked, "en")}, ${FAMILY.fairs} Christmas markets and fairs in ${FAMILY.towns} towns have official 2026 dates, among them Barcelona's Fira de Santa Llúcia (${slRange("en")}), the Espinelves Fir Tree Fair (28 November to 8 December), Figueres's Christmas market (27 November to 24 December) and Manresa's Fira de Santa Llúcia (12 and 13 December). The full list is on the Christmas markets by town page. The Sagrada Família Christmas Fair runs from ${sfRange("en")}.`,
       },
       {
         question: "Is Barcelona the European Capital of Christmas 2026?",

@@ -16,13 +16,15 @@ export interface DatedFair {
   n: string;
   /** Town, as the page writes it. */
   t: string;
+  /** Days between `s` and `e` the organiser says it is closed (25 Dec, say). Omitted when none. */
+  x?: string[];
 }
 
 export type SeasonStatus =
-  /** At least one fair is on today; `next` is the next one to open after today. */
-  | { state: "open"; open: DatedFair[]; next: DatedFair | null; nextIn: number | null }
-  /** None on today; `next` opens in `nextIn` days (1 = tomorrow). */
-  | { state: "upcoming"; next: DatedFair; nextIn: number }
+  /** At least one fair is on today; `next` is the next one to open (on `nextOn`) of those not open today. */
+  | { state: "open"; open: DatedFair[]; next: DatedFair | null; nextOn: string | null; nextIn: number | null }
+  /** None on today; `next` opens (or reopens, after a closed day) on `nextOn`, in `nextIn` days (1 = tomorrow). */
+  | { state: "upcoming"; next: DatedFair; nextOn: string; nextIn: number }
   /** Every fair on the page is over. */
   | { state: "over"; lastDay: string };
 
@@ -61,13 +63,40 @@ export function daysBetween(from: string, to: string): number {
 
 const byStart = (a: DatedFair, b: DatedFair) => a.s.localeCompare(b.s) || a.e.localeCompare(b.e) || a.n.localeCompare(b.n);
 
+function addDays(iso: string, days: number): string {
+  return new Date(Date.parse(`${iso}T12:00:00Z`) + days * 86_400_000).toISOString().slice(0, 10);
+}
+
+/** Whether the fair is on that day: inside its dates and not one of its closed days. */
+export function isOpenOn(f: DatedFair, day: string): boolean {
+  return f.s <= day && f.e >= day && !(f.x ?? []).includes(day);
+}
+
+/** The first day after `today` the fair is on, or null when it has no such day left. */
+export function nextOpenDay(f: DatedFair, today: string): string | null {
+  for (let day = f.s > today ? f.s : addDays(today, 1); day <= f.e; day = addDays(day, 1)) {
+    if (isOpenOn(f, day)) return day;
+  }
+  return null;
+}
+
 /** The state of a list of fairs on `today` (Madrid date). Null for an empty list. */
 export function seasonStatus(today: string, fairs: readonly DatedFair[]): SeasonStatus | null {
   if (fairs.length === 0) return null;
   const sorted = [...fairs].sort(byStart);
-  const open = sorted.filter((f) => f.s <= today && f.e >= today);
-  const next = sorted.find((f) => f.s > today) ?? null;
-  if (open.length > 0) return { state: "open", open, next, nextIn: next ? daysBetween(today, next.s) : null };
-  if (next) return { state: "upcoming", next, nextIn: daysBetween(today, next.s) };
+  const open = sorted.filter((f) => isOpenOn(f, today));
+  // The next opening among the fairs not on today: a fair yet to start, or one closed today that reopens.
+  let next: DatedFair | null = null;
+  let nextOn: string | null = null;
+  for (const f of sorted) {
+    if (open.includes(f)) continue;
+    const day = nextOpenDay(f, today);
+    if (day && (!nextOn || day < nextOn)) {
+      next = f;
+      nextOn = day;
+    }
+  }
+  if (open.length > 0) return { state: "open", open, next, nextOn, nextIn: nextOn ? daysBetween(today, nextOn) : null };
+  if (next && nextOn) return { state: "upcoming", next, nextOn, nextIn: daysBetween(today, nextOn) };
   return { state: "over", lastDay: sorted.reduce((last, f) => (f.e > last ? f.e : last), sorted[0]!.e) };
 }

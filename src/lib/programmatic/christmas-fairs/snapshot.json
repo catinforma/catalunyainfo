@@ -1,5 +1,5 @@
 {
- "readOn": "2026-11-03",
+ "readOn": "2026-11-13",
  "season": {
   "from": "2026-11-01",
   "to": "2027-01-07"
@@ -10,20 +10,20 @@
    "publisher": "Departament d'Empresa i Treball, Generalitat de Catalunya",
    "url": "https://analisi.transparenciacatalunya.cat/d/vm32-przc",
    "api": "https://analisi.transparenciacatalunya.cat/resource/vm32-przc.json",
-   "updated": "2026-09-25"
+   "updated": "2026-11-09"
   },
   "agenda": {
    "name": "Agenda cultural de Catalunya (per localitzacions)",
    "publisher": "Departament de Cultura, Generalitat de Catalunya",
    "url": "https://analisi.transparenciacatalunya.cat/d/rhpv-yr4f",
    "api": "https://analisi.transparenciacatalunya.cat/resource/rhpv-yr4f.json",
-   "updated": "2026-11-03"
+   "updated": "2026-11-12"
   }
  },
  "measured": {
-  "fairRows": 430,
+  "fairRows": 434,
   "fairChristmas": 34,
-  "agendaRows": 1210,
+  "agendaRows": 1478,
   "agendaChristmas": 6
  },
  "fairs": [
@@ -170,7 +170,7 @@
    "ine": "25171",
    "start": "2026-12-05",
    "end": "2026-12-05",
-   "place": "Carrer de la Font s/n",
+   "place": "Plaça de l'Ajuntament",
    "web": "https://www.lapobladesegur.cat/",
    "webReplaced": false,
    "organiser": "Ajuntament de la Pobla de Segur",
@@ -508,21 +508,6 @@
    "toConfirm": false
   },
   {
-   "id": "vm32:24033260",
-   "source": "fairs",
-   "name": "Fira de Santa Llúcia",
-   "nameEs": "Feria de Santa Llúcia",
-   "ine": "25234",
-   "start": "2026-12-13",
-   "end": "2026-12-13",
-   "place": "Plaça del Fossar Vell i Plaça Ramon Martí de Vilamitjana",
-   "web": "https://www.tremp.cat/",
-   "webReplaced": true,
-   "organiser": "Entitat Municipal Descentralitzada de Vilamitjana",
-   "since": 1999,
-   "toConfirm": false
-  },
-  {
    "id": "vm32:24032887",
    "source": "fairs",
    "name": "Fira de Santa Llúcia",
@@ -535,6 +520,21 @@
    "webReplaced": false,
    "organiser": "Ajuntament de Sant Feliu de Pallerols",
    "since": null,
+   "toConfirm": false
+  },
+  {
+   "id": "vm32:24033260",
+   "source": "fairs",
+   "name": "Fira de Santa Llúcia",
+   "nameEs": "Feria de Santa Llúcia",
+   "ine": "25234",
+   "start": "2026-12-13",
+   "end": "2026-12-13",
+   "place": "Plaça del Fossar Vell i Plaça Ramon Martí de Vilamitjana",
+   "web": "https://www.tremp.cat/",
+   "webReplaced": true,
+   "organiser": "Entitat Municipal Descentralitzada de Vilamitjana",
+   "since": 1999,
    "toConfirm": false
   },
   {
