@@ -167,6 +167,8 @@ const CITY_NAME: Record<Edition, Record<string, string>> = {
     Ávila: "Àvila",
     Cáceres: "Càceres",
     Palencia: "Palència",
+    // The 20,000+ wave (cities-more.ts).
+    Mahón: "Maó",
   },
   en: {
     Sevilla: "Seville",

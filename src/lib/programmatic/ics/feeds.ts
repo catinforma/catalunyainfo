@@ -4,8 +4,7 @@ import { caDe, joinList } from "@/lib/programmatic/holidays/names";
 import { fullPagePath, placeName, type EmbedLocale, type EmbedPlace } from "@/lib/programmatic/embed-2027/places";
 import type { SnapshotMunicipality } from "@/lib/programmatic/holidays/types";
 import { YEAR as SPAIN_YEAR } from "@/lib/programmatic/spain-2027/calendar";
-import { cityCalendar, commonLocalDays, islandDay, local2027, type City, type CityDayKind } from "@/lib/programmatic/spain-2027/cities";
-import { CITIES_AS_OF } from "@/lib/programmatic/spain-2027/cities-data";
+import { cityCalendar, cityReadOn, commonLocalDays, islandDay, local2027, type City, type CityDayKind } from "@/lib/programmatic/spain-2027/cities";
 import { caOf, localNameIntl, localNoteIntl } from "@/lib/programmatic/spain-2027/city-copy-intl";
 import { localName } from "@/lib/programmatic/spain-2027/city-copy";
 import { dayName } from "@/lib/programmatic/spain-2027/copy";
@@ -276,7 +275,7 @@ export function cityFeed(locale: FeedLocale, c: City): FeedModel {
       url: pageUrl,
       source: absoluteUrl(cityFeedPath(locale, c)),
       refresh: FEED_REFRESH,
-      stamp: latest(SOURCES_READ_ON, CITIES_AS_OF),
+      stamp: latest(SOURCES_READ_ON, cityReadOn(c)),
       events,
     },
     years: [...new Set(events.map((e) => Number(e.date.slice(0, 4))))].sort(),

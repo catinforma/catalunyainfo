@@ -318,6 +318,10 @@ export const LOCAL_DAY_NOTE: Record<string, Record<IntlLocale, string>> = {
   "en todo el Territorio Histórico de Gipuzkoa": { ca: "a tot el territori històric de Guipúscoa", en: "across the historical territory of Gipuzkoa" },
   "día de fiesta del territorio histórico de Álava": { ca: "festa del territori històric d'Àlaba", en: "holiday of the historical territory of Álava" },
   "común a toda Navarra": { ca: "comuna a tota Navarra", en: "shared by the whole of Navarre" },
+  // The 20,000+ wave (cities-more.ts): Mieres, BOPA núm. 110.
+  "en todo el Municipio": { ca: "a tot el municipi", en: "across the whole municipality" },
+  "en todo el Municipio excepto en el Valle de Turón": { ca: "a tot el municipi excepte la vall de Turón", en: "across the whole municipality except the Turón valley" },
+  "en el Valle de Turón": { ca: "a la vall de Turón", en: "in the Turón valley" },
 };
 
 /** Place names that differ from the Spanish. */
