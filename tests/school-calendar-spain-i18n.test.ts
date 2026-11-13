@@ -149,9 +149,9 @@ test("each edition is written in its own language", () => {
     for (const s of [hubTitle(locale), hubSeoTitle(locale), hubExcerpt(locale)]) assert.doesNotMatch(s, foreign[locale], s);
   }
   const ca = json(buildRegionBody(localizeRegion(SPAIN_REGIONS.find((r) => r.slug === "madrid")!, "ca")));
-  assert.match(ca, /Vacances de Nadal a la Comunitat de Madrid: del dimecres 23 de desembre de 2026 al divendres 8 de gener de 2027/);
+  assert.match(ca, /Vacances de Nadal 2026-27 a la Comunitat de Madrid: del dimecres 23 de desembre de 2026 al divendres 8 de gener de 2027 \(tornada a classe el dilluns 11 de gener\)/);
   const en = json(buildRegionBody(localizeRegion(SPAIN_REGIONS.find((r) => r.slug === "madrid")!, "en")));
-  assert.match(en, /Christmas holidays in the Community of Madrid: Wednesday 23 December 2026 to Friday 8 January 2027/);
+  assert.match(en, /Christmas holidays 2026-27 in the Community of Madrid: from Wednesday 23 December 2026 to Friday 8 January 2027 \(back to school on Monday 11 January\)/);
 });
 
 test("live titles and descriptions exist in every language, name the community and fit, every day of the year", () => {

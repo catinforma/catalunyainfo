@@ -220,6 +220,76 @@ export function nextSchoolDay(region: RegionCalendar, iso: string): string {
   return addDays(iso, 1);
 }
 
+/** The last weekday with class before a break. */
+export function lastClassBefore(region: RegionCalendar, period: Period): string {
+  let iso = addDays(period.from, -1);
+  for (let i = 0; i < 14; i++, iso = addDays(iso, -1)) {
+    if (schoolDayIn(region, iso).kind === "school") return iso;
+  }
+  return addDays(period.from, -1);
+}
+
+export type BreakKind = "christmas" | "easter";
+
+/** The three days a parent asks about a break: last day of class, first day without, first day back. */
+export interface BreakDays {
+  last: string;
+  first: string;
+  back: string;
+}
+
+export function breakDays(calendar: RegionCalendar, kind: BreakKind): BreakDays {
+  const p = calendar[kind];
+  return { last: lastClassBefore(calendar, p), first: p.from, back: nextSchoolDay(calendar, p.to) };
+}
+
+/**
+ * One entry per province where the provinces set their own dates (Andalucía),
+ * else the region's own: tables and sentences are computed from these, so a
+ * province's day is never hidden behind the region's common days.
+ */
+export function breakDaysAll(region: RegionCalendar, kind: BreakKind): { name: string | null; days: BreakDays }[] {
+  const provinces = provinceCalendars(region);
+  if (!provinces.length) return [{ name: null, days: breakDays(region, kind) }];
+  return provinces.map(({ name, calendar }) => ({ name, days: breakDays(calendar, kind) }));
+}
+
+/** "o" / "u" (before 8 and 11, "ocho", "once") / "or". */
+function or(next: string, locale: Locale): string {
+  if (locale === "en") return "or";
+  return locale === "es" && /^(8|11)(\D|$)/.test(next) ? "u" : "o";
+}
+
+/**
+ * One day in words, or the alternatives the provinces give:
+ * "martes 22 de diciembre", "22 o 23 de diciembre", "7, 8 u 11 de enero".
+ */
+export function alternatives(dates: string[], locale: Locale = "es"): string {
+  const days = [...new Set(dates)].sort();
+  if (days.length === 1) return weekdayDay(days[0]!, locale);
+  const sameMonth = new Set(days.map((d) => d.slice(0, 7))).size === 1;
+  const words = sameMonth ? days.map((d) => String(Number(d.slice(8, 10)))) : days.map((d) => dayMonth(d, locale));
+  const last = words.at(-1)!;
+  const list = `${words.slice(0, -1).join(", ")} ${or(last, locale)} ${last}`;
+  return sameMonth ? `${list}${dayMonth(days[0]!, locale).replace(/^\d+/, "")}` : list;
+}
+
+/** "entre el 7 y el 11 de enero", "entre el 7 i l'11 de gener", "between 7 and 11 January". */
+export function between(from: string, to: string, locale: Locale = "es"): string {
+  const sameMonth = from.slice(0, 7) === to.slice(0, 7);
+  const a = sameMonth ? String(Number(from.slice(8, 10))) : dayMonth(from, locale);
+  const b = dayMonth(to, locale);
+  if (locale === "ca") return `entre ${caEl(a)} i ${caEl(b)}`;
+  if (locale === "en") return `between ${a} and ${b}`;
+  return `entre el ${a} y el ${b}`;
+}
+
+/** Every community's (and province's) last day of class before Christmas and first day back. */
+export function christmasDays(regions: readonly RegionCalendar[]): { lasts: string[]; backs: string[] } {
+  const all = regions.flatMap((r) => breakDaysAll(r, "christmas").map((x) => x.days));
+  return { lasts: all.map((d) => d.last).sort(), backs: all.map((d) => d.back).sort() };
+}
+
 export type NextBreak =
   | { kind: "christmas" | "easter"; period: Period }
   | { kind: "break"; period: SchoolBreak }
@@ -397,7 +467,41 @@ function esHubTitle(regions: readonly RegionCalendar[], today: string): string {
   return `Fin de curso ${easterYear}: último día de clase por comunidades`;
 }
 
+/**
+ * Until the last community is back after Christmas (13 Nov 2026: "cuándo
+ * empiezan las vacaciones de Navidad 2026", 279 impressions a day at 6), the
+ * hub's description is the answer: the days the last class falls on and the
+ * window of return, computed from every order. Then the calendar words again.
+ */
+function christmasHubDescription(regions: readonly RegionCalendar[], today: string): string | null {
+  const L = regions[0] ? lang(regions[0]) : "es";
+  const { lasts, backs } = christmasDays(regions);
+  if (!backs.length || today >= backs.at(-1)!) return null;
+  const year = regions[0]!.christmas.from.slice(0, 4);
+  const last = alternatives(lasts, L);
+  const window = between(backs[0]!, backs.at(-1)!, L);
+  const n = regions.length;
+  const parts =
+    L === "ca"
+      ? [
+          `Vacances de Nadal ${year} a les escoles: últim dia de classe ${caEl(last)}, segons la comunitat, i tornada ${window}.`,
+          `Les ${n} comunitats i ciutats autònomes, amb el text oficial.`,
+        ]
+      : L === "en"
+        ? [
+            `Christmas ${year} school holidays in Spain: last day of class ${last}, depending on the region, and back ${window}.`,
+            `All ${n} regions and cities, with each official text.`,
+          ]
+        : [
+            `Vacaciones de Navidad ${year} en los colegios: último día de clase el ${last}, según la comunidad, y vuelta ${window}.`,
+            `Las ${n} comunidades y ciudades autónomas, con su orden oficial.`,
+          ];
+  return addWhileFits(parts);
+}
+
 function esHubDescription(regions: readonly RegionCalendar[], today: string): string {
+  const christmas = christmasHubDescription(regions, today);
+  if (christmas) return christmas;
   const n = regions.length;
   const what = regions.every((r) => today > r.christmas.to) ? "Semana Santa, fin de curso" : "Navidad, Semana Santa, fin de curso";
   return `Calendario escolar ${SPAIN_SCHOOL_YEAR} en ${n} comunidades y ciudades autónomas, con la orden oficial de cada una: inicio, ${what} y otros días sin clase.`;
@@ -648,6 +752,8 @@ export function liveHubTitle(regions: readonly RegionCalendar[], today: string):
 export function liveHubDescription(regions: readonly RegionCalendar[], today: string): string {
   const L = regions[0] ? lang(regions[0]) : "es";
   if (L === "es") return esHubDescription(regions, today);
+  const christmas = christmasHubDescription(regions, today);
+  if (christmas) return christmas;
   const n = regions.length;
   const christmasOver = regions.every((r) => today > r.christmas.to);
   if (L === "ca") {
