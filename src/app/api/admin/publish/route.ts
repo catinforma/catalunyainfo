@@ -87,7 +87,7 @@ import { spainDayPaths, spainHubPath, spainPaths } from "@/lib/programmatic/spai
 import { widgetEditions } from "@/lib/programmatic/embed-2027/places";
 import { gordoPaths } from "@/lib/programmatic/gordo/sitemap";
 import { authoriseDeployRequest, describeError } from "@/lib/admin/deploy-auth";
-import { FEED_PATHS } from "@/lib/seo/feed-paths";
+import { revalidateSitemapAndFeeds } from "@/lib/seo/revalidate-feeds";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -513,9 +513,8 @@ export async function POST(request: Request) {
     }
     // Exact paths only: no section or locale-home revalidation for code routes.
     for (const path of codePaths) revalidate(path.replace(/\/$/, ""));
-    revalidate("/sitemap.xml");
-    // The RSS feeds and the Google News sitemap list the same pieces.
-    for (const feed of FEED_PATHS) revalidate(feed);
+    // The sitemap, the RSS feeds and the Google News sitemap list the same pieces.
+    for (const url of revalidateSitemapAndFeeds()) revalidated.add(url);
 
     // Cloudflare may cache HTML (ops/vps/README.md section 10), and it does not
     // hear revalidatePath: purge the same URLs there. A no-op without a token.

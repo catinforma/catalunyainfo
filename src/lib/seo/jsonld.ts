@@ -260,6 +260,9 @@ export function placeSchema(entry: EntryDetail): Json | null {
 export function eventSchema(entry: EntryDetail): Json | null {
   if (!entry.event) return null;
   const e = entry.event;
+  // Google requires `location` on Event; without a venue there is none to
+  // state, and an Event missing it is an error in Search Console.
+  if (!e.venueName) return null;
   return {
     "@type": "Event",
     "@id": `${absoluteUrl(entry.href)}#event`,
@@ -269,19 +272,15 @@ export function eventSchema(entry: EntryDetail): Json | null {
     ...(e.endsAt ? { endDate: e.endsAt.toISOString() } : {}),
     eventStatus: "https://schema.org/EventScheduled",
     eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
-    ...(e.venueName
-      ? {
-          location: {
-            "@type": "Place",
-            name: e.venueName,
-            address: {
-              "@type": "PostalAddress",
-              addressRegion: "Catalunya",
-              addressCountry: "ES",
-            },
-          },
-        }
-      : {}),
+    location: {
+      "@type": "Place",
+      name: e.venueName,
+      address: {
+        "@type": "PostalAddress",
+        addressRegion: "Catalunya",
+        addressCountry: "ES",
+      },
+    },
     ...(e.organiser ? { organizer: { "@type": "Organization", name: e.organiser } } : {}),
     ...(e.ticketUrl || e.isFree
       ? {

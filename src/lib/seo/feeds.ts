@@ -167,18 +167,21 @@ export interface NewsSitemapItem {
   updatedAt: Date;
 }
 
-/** The pieces a news sitemap may list now: published or modified in the last 48 hours. */
+/**
+ * The pieces a news sitemap may list now: published in the last 48 hours.
+ * Google: "Only include recent URLs for articles that were created in the
+ * last two days", with news:publication_date the original publication date.
+ * An older piece that is updated stays out: the main sitemap's lastmod
+ * carries the update.
+ */
 export function inNewsWindow<T extends { publishedAt: Date; updatedAt: Date }>(items: T[], now: Date): T[] {
   const since = now.getTime() - NEWS_WINDOW_MS;
-  return items.filter((item) => {
-    const latest = Math.max(item.publishedAt.getTime(), item.updatedAt.getTime());
-    return latest >= since && item.publishedAt.getTime() <= now.getTime();
-  });
+  return items.filter((item) => item.publishedAt.getTime() >= since && item.publishedAt.getTime() <= now.getTime());
 }
 
 /**
- * Google News sitemap: one `<url>` per piece published or modified in the
- * last 48 hours, newest first, at most 1,000. `news:publication_date` is the
+ * Google News sitemap: one `<url>` per piece published in the last 48
+ * hours, most recently updated first, at most 1,000. `news:publication_date` is the
  * real publication date; `news:name` the site's name as Google News shows it.
  */
 export function buildNewsSitemap(siteName: string, items: NewsSitemapItem[], now: Date): string {

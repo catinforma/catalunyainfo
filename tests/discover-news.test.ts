@@ -431,9 +431,9 @@ test("feed items carry the byline, the 16:9 crop of a licensed photo, and never 
   assert.equal(early.updatedAt.getTime(), early.publishedAt.getTime());
 });
 
-test("the Google News sitemap is well-formed and lists only pieces published or modified in the last 48 hours", () => {
+test("the Google News sitemap is well-formed and lists only pieces published in the last 48 hours", () => {
   const now = new Date("2026-11-06T12:00:00Z");
-  const row = (i: number, updated: string, published = "2026-10-29T19:00:00Z") => ({
+  const row = (i: number, updated: string, published = "2026-11-05T08:00:00Z") => ({
     url: `${ORIGIN}/ca/guies/g${i}/`,
     locale: "ca" as const,
     title: `Vaga ${i} & serveis`,
@@ -441,8 +441,9 @@ test("the Google News sitemap is well-formed and lists only pieces published or 
     updatedAt: new Date(updated),
   });
   const xml = feeds.buildNewsSitemap(SITE.name, [
-    row(1, "2026-11-05T11:00:00Z"), // modified 25 h ago: listed
-    row(2, "2026-11-04T11:00:00Z"), // 49 h ago: out
+    row(1, "2026-11-05T11:00:00Z"), // published 28 h ago: listed
+    row(2, "2026-11-04T11:00:00Z", "2026-11-04T11:00:00Z"), // published 49 h ago: out
+    row(5, "2026-11-06T10:00:00Z", "2026-10-29T19:00:00Z"), // old piece updated today: out (Google: "created in the last two days")
     row(3, "2026-11-06T09:00:00Z", "2026-11-06T09:00:00Z"), // new today
     row(4, "2026-11-07T09:00:00Z", "2026-11-07T09:00:00Z"), // scheduled, not yet published: out
   ], now);
@@ -459,7 +460,7 @@ test("the Google News sitemap is well-formed and lists only pieces published or 
     assert.ok(elements(news, "news:title")[0]!.includes("&amp;"));
   }
   // The real publication date, not the modification.
-  assert.equal(elements(urls[1]!, "news:publication_date")[0], "2026-10-29T19:00:00.000Z");
+  assert.equal(elements(urls[1]!, "news:publication_date")[0], "2026-11-05T08:00:00.000Z");
   // A quiet day: an empty, valid urlset.
   assert.equal(assertWellFormed(feeds.buildNewsSitemap(SITE.name, [], now)), "urlset");
   // Never more than 1,000 entries.
@@ -511,7 +512,8 @@ test("robots.txt names the news sitemap; feeds are shareable in caches and reval
   assert.match(route, /^export const dynamicParams = true;$/m);
   assert.match(route, /^export const revalidate = \d+;$/m);
   for (const file of [join(SRC, "app", "api", "admin", "publish", "route.ts"), join(SRC, "app", "api", "cron", "publish-scheduled", "route.ts"), join(SRC, "lib", "admin", "actions.ts")]) {
-    assert.match(readFileSync(file, "utf8"), /FEED_PATHS/, `${file}: feeds revalidated (and purged) with the sitemap`);
+    // revalidateSitemapAndFeeds: tests/feed-revalidation.test.ts checks it reaches each feed's cache entry.
+    assert.match(readFileSync(file, "utf8"), /revalidateSitemapAndFeeds\(\)/, `${file}: feeds revalidated (and purged) with the sitemap`);
   }
 });
 
@@ -521,3 +523,18 @@ function filesUnder(dir: string): string[] {
     return statSync(full).isDirectory() ? filesUnder(full) : full.endsWith(".ts") ? [full] : [];
   });
 }
+
+/* -------------------------------------------------------------------------- */
+/* Event JSON-LD (CMS event entries)                                          */
+/* -------------------------------------------------------------------------- */
+
+test("eventSchema emits no Event without a venue: Google requires location", () => {
+  const event = { startsAt: new Date("2026-12-05T10:00:00Z"), endsAt: null, isAllDay: false, recurrenceRule: null, venueName: null, ticketUrl: null, isFree: true, organiser: null };
+  assert.equal(jsonld.eventSchema(entry({ type: "event", event })), null);
+  const node = jsonld.eventSchema(entry({ type: "event", event: { ...event, venueName: "Plaça Major" } })) as Json;
+  assert.equal(node["@type"], "Event");
+  for (const field of ["name", "startDate", "location"]) assert.ok(node[field], `Event without ${field}`);
+  const location = node.location as Json;
+  assert.equal(location.name, "Plaça Major");
+  assert.ok(location.address, "Event location needs an address");
+});
