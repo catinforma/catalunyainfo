@@ -9,6 +9,8 @@ import { hubPath as holidaysHubPath } from "@/lib/programmatic/holidays/paths";
 import { leavePath } from "@/lib/programmatic/leave-2027/copy";
 import { SALARY_RULES_AS_OF } from "@/lib/programmatic/net-salary/rules-2026";
 import { RENT_RULES_AS_OF } from "@/lib/programmatic/rent-update/rules";
+import { RULES_AS_OF as EURIBOR_RULES_AS_OF } from "@/lib/programmatic/euribor/rules";
+import { RULES_AS_OF as MORTGAGE_RULES_AS_OF } from "@/lib/programmatic/mortgage/rules";
 import { RULES_AS_OF as SELF_EMPLOYED_AS_OF } from "@/lib/programmatic/self-employed/rules-2026";
 import { RULES_AS_OF as SICK_LEAVE_AS_OF } from "@/lib/programmatic/sick-leave/rules";
 import { PENSION_RULES_AS_OF } from "@/lib/programmatic/pensions-2027/rules";
@@ -243,6 +245,42 @@ export const HUB_GROUPS: HubGroup[] = [
         },
         scope: "spain",
         checked: RENT_RULES_AS_OF,
+      },
+      {
+        key: "mortgage",
+        calculator: true,
+        href: calc("mortgage"),
+        title: { ca: "Calculadora d'hipoteca", es: "Calculadora de hipoteca", en: "Mortgage calculator" },
+        answers: {
+          ca: "Quina quota pagaràs amb una hipoteca fixa, variable o mixta, quants interessos en total, i quant canvia a la revisió?",
+          es: "¿Qué cuota pagarás con una hipoteca fija, variable o mixta, cuántos intereses en total, y cuánto cambia en la revisión?",
+          en: "What you pay each month on a fixed, variable or mixed mortgage, the total interest, and how much it changes at the revision.",
+        },
+        basis: {
+          ca: "Sistema francès d'amortització; Llei 5/2019 (BOE) i Orden EHA/2899/2011; Euríbor oficial del Banc d'Espanya.",
+          es: "Sistema francés de amortización; Ley 5/2019 (BOE) y Orden EHA/2899/2011; Euríbor oficial del Banco de España.",
+          en: "French amortisation; Ley 5/2019 (BOE) and Orden EHA/2899/2011; the Banco de España's official Euribor.",
+        },
+        scope: "spain",
+        checked: MORTGAGE_RULES_AS_OF,
+      },
+      {
+        key: "euribor",
+        calculator: true,
+        href: calc("euribor"),
+        title: { ca: "Euríbor avui (dada oficial)", es: "Euríbor hoy (dato oficial)", en: "Euribor today (official figure)" },
+        answers: {
+          ca: "Quin és l'Euríbor oficial de l'últim mes, com ha anat els últims 24 mesos i quan surt el proper?",
+          es: "¿Cuál es el Euríbor oficial del último mes, cómo ha ido en los últimos 24 meses y cuándo sale el próximo?",
+          en: "What is the latest official monthly Euribor, how has it moved over 24 months, and when is the next one out?",
+        },
+        basis: {
+          ca: "Tipus de referència oficials del mercat hipotecari que el Banc d'Espanya publica cada mes al BOE (Orden EHA/2899/2011, art. 27), llegits cada dia.",
+          es: "Tipos de referencia oficiales del mercado hipotecario que el Banco de España publica cada mes en el BOE (Orden EHA/2899/2011, art. 27), leídos cada día.",
+          en: "The official mortgage reference rates the Banco de España publishes each month in the BOE (Orden EHA/2899/2011, art. 27), read daily.",
+        },
+        scope: "spain",
+        checked: EURIBOR_RULES_AS_OF,
       },
     ],
   },

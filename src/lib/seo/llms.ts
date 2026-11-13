@@ -22,6 +22,8 @@ import { workingDaysEditions } from "@/lib/programmatic/working-days/copy";
 import { smiEditions } from "@/lib/programmatic/smi/copy";
 import { ipcEditions } from "@/lib/programmatic/ipc/copy";
 import { letrasEditions } from "@/lib/programmatic/treasury-bills/copy";
+import { euriborEditions } from "@/lib/programmatic/euribor/copy";
+import { mortgageEditions } from "@/lib/programmatic/mortgage/copy";
 import { itvEditions } from "@/lib/programmatic/itv/copy";
 import { LOCALES, type Locale } from "@/lib/i18n/config";
 import { PATHS as TOOL_PATHS } from "@/lib/content/home-tools";
@@ -132,6 +134,16 @@ export function liveTools(): LiveTool[] {
       name: "Rent increase calculator (Spain)",
       hubs: rentEditions(),
       description: "the annual rent update for any Spanish housing or commercial lease: the INE's IRAV and CPI read daily, the month that applies on the anniversary from the INE's release calendar, and the legal cap by signing date (Ley 12/2023, RDL 29/2026, the 2023 IGC and 2024 3% caps), with the BOE texts.",
+    },
+    {
+      name: "Euribor today: the official monthly figure (Banco de España, BOE)",
+      hubs: euriborEditions(),
+      description: "the official monthly 12-month Euribor as the Banco de España publishes it in the BOE (Orden EHA/2899/2011 art. 27; table 19.1, be1901.csv, read daily, every value since January 2024 checked against its BOE resolution), the change on the month and the year, the last 24 months with the other official mortgage reference rates (IRPH entidades, euro-area housing loan rate, 5-year IRS, one-year €STR-based rate, 2-6 year public debt yield, Míbor), the BOE days each is published on, and a variable-mortgage revision calculator. Monthly official figures only: no daily Euribor (EMMI licence). Not financial advice.",
+    },
+    {
+      name: "Spain mortgage calculator (fixed, variable, mixed) and revision",
+      hubs: mortgageEditions(),
+      description: "monthly instalment with French amortisation to the cent, total interest and a year-by-year amortisation table for fixed, variable (Euribor + spread, optional initial months, never below 0% under Ley 5/2019 art. 21.4) and mixed loans, with the latest official Euribor prefilled; the revision calculator (new vs old instalment on the outstanding capital); and the Ley 5/2019 basics quoted from the BOE (FIPRE, FEIN as binding offer, FiAE, 10 calendar days, free notary act, no floor clause, early-repayment fee caps, default interest). No lender named. Not financial advice.",
     },
     {
       name: "Spain pension increase 2027 calculator",

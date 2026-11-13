@@ -33,6 +33,9 @@ export const CALCULATORS = [
   // Sick pay (incapacidad temporal): LGSS arts. 169-176 as amended by RDL 31/2026 from 1 Dec 2026.
   { id: "sick-leave", slugs: { es: "baja-laboral", ca: "baixa-laboral", en: "sick-leave-pay-spain" } },
   { id: "rent-update", slugs: { es: "actualizar-alquiler", ca: "actualitzar-lloguer", en: "rent-increase-spain" } },
+  // Housing: the official Euribor (Banco de España / BOE monthly figure) and the mortgage calculator that reads it.
+  { id: "euribor", slugs: { es: "euribor-hoy", ca: "euribor-avui", en: "euribor-today" } },
+  { id: "mortgage", slugs: { es: "hipoteca", ca: "hipoteca", en: "mortgage-calculator-spain" } },
   { id: "pensions-2027", slugs: { es: "subida-pensiones-2027", ca: "pujada-pensions-2027", en: "spain-pension-increase-2027" } },
   { id: "working-days", slugs: { es: "dias-habiles", ca: "dies-habils", en: "working-days-spain" } },
   // Reference pages with official figures (hub group "official"): the SMI with its small calculator, the INE's CPI, and the Tesoro's Letras auctions with a yield calculator.

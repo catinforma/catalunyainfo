@@ -52,6 +52,12 @@ test("registry: the live URLs did not move (13 Nov 2026)", () => {
   assert.deepEqual(calcEditions("ipc"), { ca: "/ca/calculadores/ipc/", es: "/es/calculadoras/ipc/", en: "/en/calculators/spain-inflation-cpi/" });
   assert.deepEqual(calcEditions("treasury-bills"), { ca: "/ca/calculadores/lletres-del-tresor/", es: "/es/calculadoras/letras-del-tesoro/", en: "/en/calculators/spain-treasury-bills/" });
   assert.deepEqual(calcEditions("itv"), { ca: "/ca/calculadores/itv/", es: "/es/calculadoras/itv/", en: "/en/calculators/itv-spain/" });
+  assert.deepEqual(calcEditions("euribor"), { ca: "/ca/calculadores/euribor-avui/", es: "/es/calculadoras/euribor-hoy/", en: "/en/calculators/euribor-today/" });
+  assert.deepEqual(calcEditions("mortgage"), { ca: "/ca/calculadores/hipoteca/", es: "/es/calculadoras/hipoteca/", en: "/en/calculators/mortgage-calculator-spain/" });
+});
+
+test("hub: the housing group holds the rent, mortgage and Euribor tools", () => {
+  assert.deepEqual(HUB_GROUPS.find((g) => g.id === "housing")?.cards.map((c) => c.key), ["rent-update", "mortgage", "euribor"]);
 });
 
 test("hub: lists every calculator of the registry exactly once, linking its own editions", () => {
