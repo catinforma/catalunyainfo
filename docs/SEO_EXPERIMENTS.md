@@ -5169,3 +5169,63 @@ and `RULES_AS_OF` moves. The pay-dates guide keeps its own PAY_DATES_AS_OF.
 
 **Review 27 Nov 2026 (indexing, first queries), 15 Jan 2027 (prediction).
 Outcome:** _pending_
+
+## 2026-11-13 — New tool: "Actualizar el alquiler" (rent update with the INE's IRAV and IPC), es + ca + en (deploy only; no publish group)
+
+**Why.** Spain-wide, every-month question ("cuánto me pueden subir el
+alquiler", "IRAV octubre", "actualizar renta IPC") with an official answer
+that changes on the INE's release day, and a legal regime that changed three
+times in 2026 (RDL 8/2026 2 % cap, repealed 30 Apr; RDL 26/2026, one day;
+RDL 29/2026 from 8 Oct, validated by the Congress 12 Nov, BOE 13 Nov 2026:
+the IRAV cap now covers contracts signed before 26 May 2023 too). Housing
+finance queries carry high RPM; nothing on the site targets them.
+
+**URLs.** `/es/calculadoras/actualizar-alquiler/` (primary),
+`/ca/calculadores/actualitzar-lloguer/`, `/en/calculators/rent-increase-spain/`.
+Static folders; no calculators hub page (sibling calculators are other
+agents' work). Sitemap (`rentSitemapEntries`, x-default = en as in the page
+head), hreflang through `buildMetadata` translations, llms.txt entry.
+
+**Data.** INE JSON API, read on the server once a day (`revalidate = 86400`,
+8 s timeout, `lib/programmatic/rent-update/server.ts`), falling back per
+series to the committed snapshot (`snapshot.json`, `npm run rent:snapshot --
+build`), which the page then dates:
+- IPC290750 "Nacional. Índice general. Variación anual." (base 2025, table
+  76125; same rates as the old base-2021 IPC251856 for Jun 2022 – Dec 2025);
+- IRAV1 (table 72975), first month Nov 2024, released 2 Jan 2025;
+- IGC1 (table 10802), snapshot only, for the 2023 cap.
+Release days from the INE's calendar (`PUBLICACIONFECHA_PUBLICACION/8, 654,
+417`, flash "Avance" skipped): the month applied is the last one released on
+the anniversary (LAU art. 18.1); a month not yet released is never shown —
+the calculator says which month will apply and the INE's scheduled day.
+
+**Rules (BOE consolidated texts, read 13 Nov 2026; `rules.ts`).** LAU art.
+18 (RDL 29/2026 wording) and DA 11; Ley 12/2023 DT 4 (original and RDL
+29/2026 wordings); RDL 6/2022 art. 46 (2023: IGC, 0–2 % band of Ley 2/2015
+annex; 2024: 3 %); RDL 7/2019 IPC cap for pre-2023 contracts signed from 6
+Mar 2019; RDL 8/2026 art. 2 (22 Mar – 29 Apr 2026, 2 %); LAU art. 4.3
+(commercial: the contract, no cap). INE IRAV page quoted for the definition.
+Catalonia: the Generalitat's rent-limit pages linked (latest resolutions
+TER/3739/2026 and TER/3740/2026, DOGC 9775, 19 Oct 2026); not computed —
+it limits the starting rent of new contracts, not the annual update.
+
+**Page.** Server-rendered answer for today (lead from the engine: "si tu
+contrato se actualiza hoy… IRAV de octubre de 2026: 2,57 %… 1.000 € pasa a
+1.025,70 €"), the calculator with that example worked out (works without
+JS), last 12 months of IPC and IRAV with release days, rules by kind of
+contract, which month counts, notice (art. 18.2), IRAV definition, Catalonia,
+sources, YMYL disclaimer. Title carries the latest figures: "Actualizar el
+alquiler: IRAV 2,57 % e IPC 4,9 % de octubre" (changes on each INE release).
+
+**Prediction.** Indexed within 2 weeks; by 15 Dec (after the 15 Dec IRAV
+release) ES page with impressions for "irav" / "actualizar alquiler" /
+"subida alquiler 2026|2027" queries, top 20 for at least one; January 2027
+(annual IPC talk) the biggest month.
+
+**Date guards.** `RENT_RULES_REVIEW_BY = 2027-01-01` (tests/rent-update.test.ts
+fails from then until rules.ts is re-read: new decree-laws, the 2027
+regime). `LAST_UPDATE = 2027-12-31` (calculator range). Snapshot staleness
+does not fail a test (the live read covers it); refresh it monthly with
+`npm run rent:snapshot -- check`.
+
+**Review 15 Dec 2026, 20 Jan 2027. Outcome:** _pending_

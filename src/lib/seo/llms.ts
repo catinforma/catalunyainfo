@@ -14,6 +14,7 @@
 import { leaveEditions } from "@/lib/programmatic/leave-2027/copy";
 import { netSalaryEditions } from "@/lib/programmatic/net-salary/copy";
 import { calcEditions } from "@/lib/programmatic/employment/paths";
+import { rentEditions } from "@/lib/programmatic/rent-update/copy";
 import { LOCALES, type Locale } from "@/lib/i18n/config";
 import { PATHS as TOOL_PATHS } from "@/lib/content/home-tools";
 import { SEASON_YEAR } from "@/lib/programmatic/christmas-fairs/classify";
@@ -101,6 +102,11 @@ export function liveTools(): LiveTool[] {
       name: "Unemployment benefit calculator (Spain)",
       hubs: calcEditions("unemployment"),
       description: "contributory unemployment benefit (paro): duration from days contributed (LGSS art. 269 scale), 70% of the base for 180 days then 60%, the 2026 minimum and maximum by children (IPREM 600 €), and the Social Security deduction.",
+    },
+    {
+      name: "Rent increase calculator (Spain)",
+      hubs: rentEditions(),
+      description: "the annual rent update for any Spanish housing or commercial lease: the INE's IRAV and CPI read daily, the month that applies on the anniversary from the INE's release calendar, and the legal cap by signing date (Ley 12/2023, RDL 29/2026, the 2023 IGC and 2024 3% caps), with the BOE texts.",
     },
     {
       name: "Strikes in Catalonia today",
