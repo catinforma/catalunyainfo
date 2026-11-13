@@ -13,7 +13,7 @@ test("WhatsApp channel: the owner's channel URL, copy in ca/es/en", () => {
 });
 
 test("WhatsApp channel: linked at the end of every article and in the footer, as a plain link", () => {
-  assert.match(readFileSync("src/components/pages/EntryArticle.tsx", "utf8"), /<FollowChannel locale=\{locale\} \/>/);
+  assert.match(readFileSync("src/components/pages/EntryArticle.tsx", "utf8"), /<FollowChannel locale=\{locale\}[ />]/);
   assert.match(readFileSync("src/components/SiteFooter.tsx", "utf8"), /<FollowChannelLink locale=\{locale\} \/>/);
   // No WhatsApp script or widget: nothing third-party loads before a tap.
   assert.doesNotMatch(readFileSync("src/components/share/FollowChannel.tsx", "utf8"), /<script|next\/script/);

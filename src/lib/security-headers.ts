@@ -92,6 +92,8 @@ export const ALWAYS_NOINDEX_SOURCES = [
   "/admin",
   "/admin/:path*",
   "/api/:path*",
+  // The WhatsApp channel's private post page (lib/share/channel-token.ts).
+  "/canal/:path*",
   "/ca/cerca",
   "/ca/cerca/:path*",
   "/es/buscar",

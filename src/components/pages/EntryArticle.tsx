@@ -9,6 +9,7 @@ import { PageFeedback } from "@/components/PageFeedback";
 import { ShareBar } from "@/components/share/ShareBar";
 import { PreferredSource } from "@/components/share/PreferredSource";
 import { FollowChannel } from "@/components/share/FollowChannel";
+import { isDailyFollowPage } from "@/lib/share/channel";
 import { tableOfContents } from "@/lib/content/blocks";
 import { todayInCatalonia } from "@/lib/content/holidays/calendar";
 import { renderInline } from "@/lib/content/inline";
@@ -267,7 +268,7 @@ export function EntryArticle({
 
             <ShareBar locale={locale} path={entry.href} title={entry.title} contentType={entry.type} variant="full" />
 
-            <FollowChannel locale={locale} />
+            <FollowChannel locale={locale} variant={isDailyFollowPage(entry.href) ? "daily" : "default"} />
 
             <div className="ci-measure mt-10">
               <PageFeedback locale={locale} path={entry.href} contentType={entry.type} copy={t.feedback} />

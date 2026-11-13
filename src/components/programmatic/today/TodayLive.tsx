@@ -416,7 +416,8 @@ export function FuelToday({ locale, children }: { locale: TodayLocale; children:
   const payload = state.value;
   if (!payload) return <Answer tone="warn">{t.failed}</Answer>;
   const [date = payload.fecha, clock = ""] = payload.fecha.split(" ");
-  const time = clock.slice(0, 5);
+  // "11:36:05" -> "11:36"; before 10:00 the Ministry writes "0:54:13" -> "0:54".
+  const time = clock.split(":").slice(0, 2).join(":");
   const fresh = freshness(payload.updated, state.now.getTime());
   if (fresh === "stale") return <Answer tone="warn">{fill(t.stale, { when: time ? `${date} ${time}` : date })}</Answer>;
   const medians = fuelMedians(payload.stations);

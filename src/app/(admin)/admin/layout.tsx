@@ -39,6 +39,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
                 <Link href="/admin/media">Imatges</Link>
                 <Link href="/admin/messages">Missatges</Link>
                 <Link href="/admin/redirects">Redireccions</Link>
+                <Link href="/admin/canal">Canal</Link>
               </nav>
 
               <div className="ml-auto flex items-center gap-3 text-xs text-[var(--color-muted)]">

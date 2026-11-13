@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 
 import { Breadcrumbs } from "@/components/Breadcrumbs";
+import { FollowChannel } from "@/components/share/FollowChannel";
 import { ShareBar, crumbPath } from "@/components/share/ShareBar";
 import { JsonLd } from "@/components/JsonLd";
 import { SiteFooter } from "@/components/SiteFooter";
@@ -269,6 +270,8 @@ export function TodayPage({ locale }: { locale: Locale }) {
               </SnowToday>
             </Item>
           </div>
+
+          <FollowChannel locale={locale} variant="daily" />
 
           <div className="ci-prose mt-12">
             <h2 id="com-funciona">{copy.aboutTitle}</h2>
