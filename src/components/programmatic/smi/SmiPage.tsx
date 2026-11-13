@@ -15,6 +15,9 @@ import { currentYear, increaseOn, officialYears, prorated12 } from "@/lib/progra
 import { freshnessText, leadText, smiMeta, statusOf } from "@/lib/programmatic/smi/page";
 import { DRAFT_2027, NORMS, QUOTE, SMI_2026, SMI_HISTORY, SMI_RULES_AS_OF, boeUrl, type SmiYear } from "@/lib/programmatic/smi/rules";
 import type { LiveBoe } from "@/lib/programmatic/smi/engine";
+import { percent } from "@/lib/programmatic/net-salary/copy";
+import { DEFAULT_INPUT as NET_DEFAULT, calculateNetSalary } from "@/lib/programmatic/net-salary/engine";
+import { SMI_DEDUCTION } from "@/lib/programmatic/net-salary/rules-2026";
 import { breadcrumbSchema, graph } from "@/lib/seo/jsonld";
 import { buildMetadata } from "@/lib/seo/metadata";
 
@@ -240,19 +243,69 @@ export function SmiRoute({ locale, data }: { locale: SmiLocale; data: SmiPageDat
 
   const irpf = L(locale, {
     es: [
-      "No debería: el Real Decreto-ley 5/2026 (art. 28, convalidado por el Congreso) reescribió la deducción por rendimientos del trabajo de la Ley del IRPF con efectos desde el 1 de enero de 2026, porque, según su preámbulo,",
+      "No debería: el Real Decreto-ley 5/2026 (art. 28, convalidado por el Congreso) reescribió la deducción por rendimientos del trabajo de la Ley del IRPF (disposición adicional 61.ª) con efectos desde el 1 de enero de 2026, porque, según su preámbulo,",
       "Sí cotizas a la Seguridad Social. Para ver tu neto con cotizaciones y la retención de tu nómina:",
       `calcula el sueldo neto del SMI de ${shown.year}`,
     ],
     ca: [
-      "No hauria de pagar-ne: el Reial decret llei 5/2026 (art. 28, convalidat pel Congrés) va reescriure la deducció per rendiments del treball de la Llei de l'IRPF amb efectes des de l'1 de gener del 2026, perquè, segons el preàmbul,",
+      "No hauria de pagar-ne: el Reial decret llei 5/2026 (art. 28, convalidat pel Congrés) va reescriure la deducció per rendiments del treball de la Llei de l'IRPF (disposició addicional 61a) amb efectes des de l'1 de gener del 2026, perquè, segons el preàmbul,",
       "Sí que cotitzes a la Seguretat Social. Per veure el teu net amb cotitzacions i la retenció de la nòmina:",
       `calcula el sou net de l'SMI del ${shown.year}`,
     ],
     en: [
-      "It should not: Royal Decree-law 5/2026 (art. 28, validated by Congress) rewrote the income tax deduction for employment income with effect from 1 January 2026 because, in its preamble's words,",
+      "It should not: Royal Decree-law 5/2026 (art. 28, validated by Congress) rewrote the income tax deduction for employment income (additional provision 61 of the IRPF Law) with effect from 1 January 2026 because, in its preamble's words,",
       "You do pay Social Security contributions. To see your net pay with contributions and your payslip's withholding:",
       `work out the net pay of the ${shown.year} SMI`,
+    ],
+  });
+
+  // The 2026 SMI in net, with the net salary engine (2026 rules: the SMI deduction is the 2026 law's, 17,094 €).
+  const net14 = calculateNetSalary({ ...NET_DEFAULT, gross: SMI_2026.annual, payments: 14 });
+  const net12 = calculateNetSalary({ ...NET_DEFAULT, gross: SMI_2026.annual, payments: 12 });
+  const D = SMI_DEDUCTION;
+  const netCols = L(locale, {
+    es: ["SMI 2026 en neto", "14 pagas", "12 pagas"],
+    ca: ["SMI 2026 en net", "14 pagues", "12 pagues"],
+    en: ["2026 SMI, net", "14 payments", "12 payments"],
+  });
+  const netRows: [string, string, string][] = L(locale, {
+    es: [
+      ["Neto en cada nómina ordinaria", money(net14.net.perPayment, "es"), money(net12.net.perPayment, "es")],
+      ["Neto en cada paga extra (junio y diciembre)", money(net14.net.extraPayment ?? 0, "es"), "—"],
+      ["Neto al año", money(net14.net.annual, "es"), money(net12.net.annual, "es")],
+      ["Seguridad Social (tu parte), al año", money(net14.ss.annual, "es"), money(net12.ss.annual, "es")],
+      [`Retención de IRPF (${percent(net14.irpf.rate, "es")}), al año`, money(net14.irpf.annual, "es"), money(net12.irpf.annual, "es")],
+    ],
+    ca: [
+      ["Net a cada nòmina ordinària", money(net14.net.perPayment, "ca"), money(net12.net.perPayment, "ca")],
+      ["Net a cada paga extra (juny i desembre)", money(net14.net.extraPayment ?? 0, "ca"), "—"],
+      ["Net a l'any", money(net14.net.annual, "ca"), money(net12.net.annual, "ca")],
+      ["Seguretat Social (la teva part), l'any", money(net14.ss.annual, "ca"), money(net12.ss.annual, "ca")],
+      [`Retenció d'IRPF (${percent(net14.irpf.rate, "ca")}), l'any`, money(net14.irpf.annual, "ca"), money(net12.irpf.annual, "ca")],
+    ],
+    en: [
+      ["Net in each ordinary payslip", money(net14.net.perPayment, "en"), money(net12.net.perPayment, "en")],
+      ["Net in each extra payment (June and December)", money(net14.net.extraPayment ?? 0, "en"), "—"],
+      ["Net a year", money(net14.net.annual, "en"), money(net12.net.annual, "en")],
+      ["Social Security (your share), a year", money(net14.ss.annual, "en"), money(net12.ss.annual, "en")],
+      [`IRPF withholding (${percent(net14.irpf.rate, "en")}), a year`, money(net14.irpf.annual, "en"), money(net12.irpf.annual, "en")],
+    ],
+  });
+  const netText = L(locale, {
+    es: [
+      `El SMI de 2026 (${money(SMI_2026.annual, "es")} al año) en neto, soltero, sin hijos, contrato indefinido, en Cataluña o cualquier comunidad de régimen común: ${money(net14.net.perPayment, "es")} en cada nómina en 14 pagas (y ${money(net14.net.extraPayment ?? 0, "es")} en cada paga extra), o ${money(net12.net.perPayment, "es")} al mes en 12 pagas.`,
+      `La retención puede ser mayor que el IRPF final: la nómina retiene ${money(net14.irpf.annual, "es")} al año porque el algoritmo de retención de la Agencia Tributaria no aplica la deducción de la disposición adicional 61.ª de la Ley del IRPF (${money(D.full, "es")} hasta ${money(D.fullUpTo, "es")}; menos el 20 % de lo que pase de esa cifra, hasta desaparecer en ${money(D.endBelow, "es")}). Con esa deducción, quien gana hasta ${money(D.fullUpTo, "es")} no debería pagar IRPF y recupera la retención al presentar la Renta ${D.returnYear}; la cifra exacta depende de la escala de su comunidad y exige no tener otras rentas no exentas de más de ${money(D.otherIncomeMax, "es")}.`,
+      "Con otra situación familiar o contrato:",
+    ],
+    ca: [
+      `L'SMI del 2026 (${money(SMI_2026.annual, "ca")} l'any) en net, solter, sense fills, contracte indefinit, a Catalunya o qualsevol comunitat de règim comú: ${money(net14.net.perPayment, "ca")} a cada nòmina en 14 pagues (i ${money(net14.net.extraPayment ?? 0, "ca")} a cada paga extra), o ${money(net12.net.perPayment, "ca")} al mes en 12 pagues.`,
+      `La retenció pot ser més alta que l'IRPF final: la nòmina reté ${money(net14.irpf.annual, "ca")} l'any perquè l'algoritme de retenció de l'Agència Tributària no aplica la deducció de la disposició addicional 61a de la Llei de l'IRPF (${money(D.full, "ca")} fins a ${money(D.fullUpTo, "ca")}; menys el 20 % del que passi d'aquesta xifra, fins a desaparèixer a ${money(D.endBelow, "ca")}). Amb aquesta deducció, qui guanya fins a ${money(D.fullUpTo, "ca")} no hauria de pagar IRPF i recupera la retenció en presentar la renda ${D.returnYear}; la xifra exacta depèn de l'escala de la seva comunitat i exigeix no tenir altres rendes no exemptes de més de ${money(D.otherIncomeMax, "ca")}.`,
+      "Amb una altra situació familiar o contracte:",
+    ],
+    en: [
+      `The 2026 SMI (${money(SMI_2026.annual, "en")} a year) in net pay, single, no children, open-ended contract, in Catalonia or any common-regime region: ${money(net14.net.perPayment, "en")} in each payslip on 14 payments (and ${money(net14.net.extraPayment ?? 0, "en")} in each extra payment), or ${money(net12.net.perPayment, "en")} a month on 12 payments.`,
+      `Withholding may be more than the final tax: payroll withholds ${money(net14.irpf.annual, "en")} a year because the Tax Agency's withholding algorithm does not apply the deduction in additional provision 61 of the IRPF Law (${money(D.full, "en")} up to ${money(D.fullUpTo, "en")}; minus 20% of the pay above that, down to nothing at ${money(D.endBelow, "en")}). With that deduction, employees earning up to ${money(D.fullUpTo, "en")} should pay no IRPF and get the withholding back when they file the ${D.returnYear} return; the exact figure depends on their region's scale, and it requires no more than ${money(D.otherIncomeMax, "en")} of other non-exempt income.`,
+      "For another family situation or contract:",
     ],
   });
 
@@ -262,7 +315,7 @@ export function SmiRoute({ locale, data }: { locale: SmiLocale; data: SmiPageDat
     en: `Official gross amounts from the BOE (checked on ${day(SMI_RULES_AS_OF)}). Your collective agreement may set higher pay, which is what you are owed; the SMI is the floor for any job.`,
   });
 
-  const sourceNorms = [NORMS.et, NORMS.rdl38_2020, NORMS.rdl5_2026, NORMS.rd1620_2011];
+  const sourceNorms = [NORMS.et, NORMS.rdl38_2020, NORMS.rdl5_2026, NORMS.lirpfDa61, NORMS.rd1620_2011];
 
   return (
     <>
@@ -383,9 +436,40 @@ export function SmiRoute({ locale, data }: { locale: SmiLocale; data: SmiPageDat
               <h2 id="irpf">{h.irpf}</h2>
               <p>{irpf[0]}</p>
               <Quote>{QUOTE.rdl5irpf}</Quote>
+              <p>{netText[0]}</p>
+              <div className="ci-table-scroll mt-4">
+                <table className="ci-local-table">
+                  <thead>
+                    <tr>
+                      {netCols.map((c, k) => (
+                        <th key={c} scope="col" className={k > 0 ? "text-right" : undefined}>
+                          {c}
+                        </th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {netRows.map(([k, a, b]) => (
+                      <tr key={k}>
+                        <th scope="row" className="font-normal">
+                          {k}
+                        </th>
+                        <td className="whitespace-nowrap text-right tabular-nums">{a}</td>
+                        <td className="whitespace-nowrap text-right tabular-nums">{b}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+              <p>{netText[1]}</p>
               <p>
-                {irpf[1]} <Link href={netSalaryPreset(locale, shown.annual, 14)}>{irpf[2]}</Link> (14 {L(locale, { es: "pagas", ca: "pagues", en: "payments" })}) · <Link href={netSalaryPreset(locale, shown.annual, 12)}>12 {L(locale, { es: "pagas", ca: "pagues", en: "payments" })}</Link>.
+                {netText[2]} <Link href={netSalaryPreset(locale, SMI_2026.annual, 14)}>{L(locale, { es: "calcula el sueldo neto del SMI de 2026", ca: "calcula el sou net de l'SMI del 2026", en: "work out the net pay of the 2026 SMI" })}</Link> (14 {L(locale, { es: "pagas", ca: "pagues", en: "payments" })}) · <Link href={netSalaryPreset(locale, SMI_2026.annual, 12)}>12 {L(locale, { es: "pagas", ca: "pagues", en: "payments" })}</Link>.
               </p>
+              {shown.year !== 2026 ? (
+                <p>
+                  {irpf[1]} <Link href={netSalaryPreset(locale, shown.annual, 14)}>{irpf[2]}</Link> (14 {L(locale, { es: "pagas", ca: "pagues", en: "payments" })}) · <Link href={netSalaryPreset(locale, shown.annual, 12)}>12 {L(locale, { es: "pagas", ca: "pagues", en: "payments" })}</Link>.
+                </p>
+              ) : null}
 
               <h2 id="fuentes">{h.sources}</h2>
               <ul className="text-sm">

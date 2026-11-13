@@ -48,6 +48,7 @@ test("registry: the live URLs did not move (13 Nov 2026)", () => {
   assert.deepEqual(calcEditions("rent-update"), { ca: "/ca/calculadores/actualitzar-lloguer/", es: "/es/calculadoras/actualizar-alquiler/", en: "/en/calculators/rent-increase-spain/" });
   assert.deepEqual(calcEditions("smi-2027"), { ca: "/ca/calculadores/salari-minim-2027/", es: "/es/calculadoras/salario-minimo-2027/", en: "/en/calculators/spain-minimum-wage-2027/" });
   assert.deepEqual(calcEditions("ipc"), { ca: "/ca/calculadores/ipc/", es: "/es/calculadoras/ipc/", en: "/en/calculators/spain-inflation-cpi/" });
+  assert.deepEqual(calcEditions("treasury-bills"), { ca: "/ca/calculadores/lletres-del-tresor/", es: "/es/calculadoras/letras-del-tesoro/", en: "/en/calculators/spain-treasury-bills/" });
   assert.deepEqual(calcEditions("itv"), { ca: "/ca/calculadores/itv/", es: "/es/calculadoras/itv/", en: "/en/calculators/itv-spain/" });
 });
 
@@ -63,8 +64,8 @@ test("hub: the six groups, each card complete in ca, es and en, linking indexabl
   assert.deepEqual(HUB_GROUPS.map((g) => g.id), ["work", "housing", "official", "vehicle", "holidays", "live"]);
   // The vehicles group: the ITV calculator (lib/programmatic/itv).
   assert.deepEqual(HUB_GROUPS.find((g) => g.id === "vehicle")?.cards.map((c) => c.key), ["itv"]);
-  // The official-figures group: the SMI and the CPI reference pages.
-  assert.deepEqual(HUB_GROUPS.find((g) => g.id === "official")?.cards.map((c) => c.key), ["smi-2027", "ipc"]);
+  // The official-figures group: the SMI, the CPI and the Letras del Tesoro reference pages.
+  assert.deepEqual(HUB_GROUPS.find((g) => g.id === "official")?.cards.map((c) => c.key), ["smi-2027", "ipc", "treasury-bills"]);
   for (const g of HUB_GROUPS) {
     assert.ok(g.cards.length > 0, g.id);
     for (const l of CALC_LOCALES) assert.ok(g.title[l].trim(), `${g.id} (${l})`);

@@ -4,10 +4,10 @@ import { join } from "node:path";
 import { test } from "node:test";
 
 import { CALCULATORS_ROOT, calculatorSlugs } from "../src/lib/programmatic/calculators/paths.ts";
-import { CALC_COPY, NET_LOCALES, NET_SLUG, fillFigures, money, netSalaryEditions, netSalaryPath, parseAmount, percent, readHash, writeHash } from "../src/lib/programmatic/net-salary/copy.ts";
-import { DEFAULT_INPUT, calculateNetSalary, round2, scale, trunc2, workReduction, type SalaryInput } from "../src/lib/programmatic/net-salary/engine.ts";
+import { CALC_COPY, NET_LOCALES, NET_SLUG, TABLE_SALARIES, fillFigures, money, netSalaryEditions, netSalaryPath, parseAmount, percent, readHash, smiDeductionNote, writeHash } from "../src/lib/programmatic/net-salary/copy.ts";
+import { DEFAULT_INPUT, calculateNetSalary, round2, scale, smiDeduction, trunc2, workReduction, type SalaryInput } from "../src/lib/programmatic/net-salary/engine.ts";
 import { REGIONS, regionById } from "../src/lib/programmatic/net-salary/regions.ts";
-import { AEAT_VALIDATION, IRPF, SALARY_RULES_AS_OF, SALARY_RULES_UNTIL, SALARY_RULES_YEAR, SOCIAL_SECURITY, SOURCES } from "../src/lib/programmatic/net-salary/rules-2026.ts";
+import { AEAT_VALIDATION, IRPF, SALARY_RULES_AS_OF, SALARY_RULES_UNTIL, SALARY_RULES_YEAR, SMI_DEDUCTION, SOCIAL_SECURITY, SOURCES } from "../src/lib/programmatic/net-salary/rules-2026.ts";
 import { netSalarySitemapEntries } from "../src/lib/programmatic/net-salary/sitemap.ts";
 
 /**
@@ -320,4 +320,71 @@ test("date guard: from 1 January 2027 the calculator needs the 2027 AEAT algorit
   // the 2027 Orden de cotización (BOE) — or, until it is out, the decree-law that sets the 2027 bases —
   // into a rules-2027.ts, re-run the AEAT service check (PER for 2027), and move the page to 2027.
   assert.ok(Date.now() < Date.parse(`${SALARY_RULES_UNTIL}T00:00:00Z`), "Net salary calculator: load the 2027 AEAT algorithm and contribution rules");
+});
+
+/* -------------------------------------------------------------------------- */
+/* The SMI deduction (DA 61.ª LIRPF, RDL 5/2026 art. 28): Renta, not payroll  */
+/* -------------------------------------------------------------------------- */
+
+test("SMI deduction: the law's amounts (590.89 up to 17,094; −0.2 per euro above; nothing from 20,048.45)", () => {
+  assert.deepEqual({ ...SMI_DEDUCTION }, { full: 590.89, fullUpTo: 17094, endBelow: 20048.45, slope: 0.2, otherIncomeMax: 6500, returnYear: 2026 });
+  assert.equal(smiDeduction(0), 0);
+  assert.equal(smiDeduction(12000), 590.89);
+  assert.equal(smiDeduction(17094), 590.89);
+  assert.equal(smiDeduction(18000), 409.69);
+  assert.equal(smiDeduction(20048), 0.09);
+  assert.equal(smiDeduction(20048.45), 0);
+  assert.equal(smiDeduction(30000), 0);
+  // Letter b) meets zero exactly at the limit: no jump.
+  assert.ok(Math.abs(SMI_DEDUCTION.full - SMI_DEDUCTION.slope * (SMI_DEDUCTION.endBelow - SMI_DEDUCTION.fullUpTo)) < 0.005);
+});
+
+test("SMI deduction: the AEAT's own service withholds at the SMI, so withholding does not include it", () => {
+  const smi = FIXTURE.cases.find((c) => c.id === "smi-2026-17094-da61")!;
+  assert.equal(smi.input.gross, SMI_DEDUCTION.fullUpTo);
+  assert.equal(smi.aeat.annual, 523.08);
+  assert.equal(smi.aeat.rate, 3.06);
+  const end = FIXTURE.cases.find((c) => c.id === "da61-phaseout-end-20048")!;
+  assert.ok(end.aeat.annual > 0);
+  // So the engine keeps withholding as the AEAT does and only flags the deduction.
+  const r = calc({ gross: SMI_DEDUCTION.fullUpTo });
+  assert.equal(r.irpf.annual, 523.08);
+  assert.deepEqual(r.smiDeduction, { deduction: 590.89, full: true, applies: true });
+});
+
+test("SMI deduction note: in the result when something is withheld below 20,048.45 €, never above or when exempt or foral", () => {
+  for (const l of NET_LOCALES) {
+    const full = smiDeductionNote(calc({ gross: 17094 }), l)!;
+    assert.ok(full.includes(money(523.08, l)) && full.includes(money(590.89, l)) && full.includes(money(17094, l, 0)), l);
+    assert.match(full, /61/);
+    assert.match(full, /5\/2026/);
+    const mid = smiDeductionNote(calc({ gross: 18000 }), l)!;
+    assert.ok(mid.includes(money(409.69, l)) && mid.includes(money(20048.45, l)) && mid.includes("20"), l);
+    assert.notEqual(mid, full);
+    assert.equal(smiDeductionNote(calc({ gross: 20048.45 }), l), null);
+    assert.equal(smiDeductionNote(calc({ gross: 30000 }), l), null);
+    // Exempt (situation 2 at the SMI): nothing withheld, nothing to get back.
+    assert.equal(smiDeductionNote(calc({ gross: 17094, family: 2 }), l), null);
+    assert.equal(smiDeductionNote(calc({ gross: 17094, region: "navarra" }), l), null);
+  }
+  // Short contracts: the 2 % floor withholds even under the exempt threshold.
+  assert.ok(calc({ gross: 12000, contract: "short" }).smiDeduction.applies);
+  const client = read("src/components/programmatic/net-salary/NetSalaryCalculator.tsx");
+  assert.match(client, /smiDeductionNote\(r, locale\)/);
+});
+
+test("net-by-gross table: every 1,000 € from 15,000 to 60,000 €, in 14 and 12 payments, server-rendered", () => {
+  for (let g = 15000; g <= 60000; g += 1000) assert.ok(TABLE_SALARIES.includes(g), String(g));
+  assert.deepEqual([...TABLE_SALARIES].sort((a, b) => a - b), [...TABLE_SALARIES]);
+  const page = read("src/components/programmatic/net-salary/NetSalaryPage.tsx");
+  assert.match(page, /r12\.net\.perPayment/);
+  assert.match(page, /r14\.net\.perPayment/);
+  assert.match(page, /id="smi"/);
+  // Net grows with gross along the table.
+  let last = 0;
+  for (const g of TABLE_SALARIES) {
+    const n = calc({ gross: g }).net.annual;
+    assert.ok(n > last, String(g));
+    last = n;
+  }
 });

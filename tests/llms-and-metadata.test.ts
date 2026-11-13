@@ -27,6 +27,7 @@ const { pensionEditions } = await import("../src/lib/programmatic/pensions-2027/
 const { workingDaysEditions } = await import("../src/lib/programmatic/working-days/copy.ts");
 const { smiEditions } = await import("../src/lib/programmatic/smi/copy.ts");
 const { ipcEditions } = await import("../src/lib/programmatic/ipc/copy.ts");
+const { letrasEditions } = await import("../src/lib/programmatic/treasury-bills/copy.ts");
 const { itvEditions } = await import("../src/lib/programmatic/itv/copy.ts");
 const { PATHS: TOOL_PATHS } = await import("../src/lib/content/home-tools.ts");
 
@@ -100,6 +101,7 @@ test("every URL llms.txt names is a page a family or guide publishes", () => {
     ...Object.values(workingDaysEditions()),
     ...Object.values(smiEditions()),
     ...Object.values(ipcEditions()),
+    ...Object.values(letrasEditions()),
     ...Object.values(itvEditions()),
   ]);
   for (const tool of liveTools()) {

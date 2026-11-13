@@ -1,8 +1,8 @@
 import type { Locale } from "@/lib/i18n/config";
 import { calcPath, calculatorSlugs } from "@/lib/programmatic/calculators/paths";
 
-import type { AgeBand, Contract, Disability, FamilySituation, SalaryInput } from "./engine";
-import { IRPF, SOCIAL_SECURITY } from "./rules-2026";
+import type { AgeBand, Contract, Disability, FamilySituation, SalaryInput, SalaryResult } from "./engine";
+import { IRPF, SMI_DEDUCTION, SOCIAL_SECURITY } from "./rules-2026";
 
 /**
  * Paths and words of the net salary calculator, small enough for the
@@ -26,6 +26,13 @@ export function netSalaryPath(locale: NetLocale): string {
 export function netSalaryEditions(): Record<NetLocale, string> {
   return { ca: netSalaryPath("ca"), es: netSalaryPath("es"), en: netSalaryPath("en") };
 }
+
+/**
+ * Gross salaries of the page's table (single, no children, open-ended
+ * contract, under 65): every 1,000 € from 15,000 to 60,000 € — the "X brutos
+ * son cuánto netos" answers, without one page per amount — then three higher ones.
+ */
+export const TABLE_SALARIES: readonly number[] = [...Array.from({ length: 46 }, (_, k) => 15000 + k * 1000), 70000, 80000, 100000];
 
 /* -------------------------------------------------------------------------- */
 /* Numbers                                                                    */
@@ -167,6 +174,8 @@ export interface CalculatorCopy {
   ceuta: string;
   capped: string;
   belowMinimum: string;
+  /** The SMI deduction note (DA 61.ª LIRPF): `full` up to 17,094 €, otherwise the phase-out. */
+  smiNote: (f: SmiNoteFigures) => string;
   foral: string;
   foralLinks: string;
   share: string;
@@ -224,6 +233,10 @@ export const CALC_COPY: Record<NetLocale, CalculatorCopy> = {
     ceuta: "Residente en Ceuta, Melilla o La Palma con ingresos obtenidos allí: la retención se reduce un 60 %. En La Palma, desde el 10 de septiembre de 2026 (Real Decreto-ley 23/2026).",
     capped: "Tu sueldo supera la base máxima de cotización: cotizas por {max} al mes, más la cotización de solidaridad sobre el exceso.",
     belowMinimum: "Por debajo de la base mínima de cotización de jornada completa ({min} al mes): solo es posible a tiempo parcial, y el cálculo usa tu sueldo real.",
+    smiNote: (f) =>
+      f.full
+        ? `La retención puede ser mayor que el IRPF final. Con la deducción de la disposición adicional 61.ª de la Ley del IRPF (Real Decreto-ley 5/2026, art. 28), quien gana hasta ${f.upTo} brutos al año (el SMI) por un trabajo asalariado no debería pagar IRPF: la nómina no la aplica, pero la declaración de la Renta ${f.year} resta hasta ${f.ded}. Si presentas la Renta, Hacienda puede devolverte hasta los ${f.ret} retenidos; la cifra exacta depende de la escala de tu comunidad. Requisito: no tener otras rentas no exentas de más de ${f.other}.`
+        : `La retención puede ser mayor que el IRPF final. La deducción de la disposición adicional 61.ª de la Ley del IRPF (Real Decreto-ley 5/2026, art. 28) no se aplica en la nómina, sino en la Renta ${f.year}: con ${f.gross} es de ${f.ded} (${f.max} hasta ${f.upTo}, menos el 20 % de lo que pase de esa cifra, y nada desde ${f.end}), sin superar tu cuota del impuesto. Lo que te devuelvan de los ${f.ret} retenidos depende de la escala de tu comunidad: esta calculadora no lo estima. Requisito: no tener otras rentas no exentas de más de ${f.other}.`,
     foral: "Navarra y el País Vasco tienen su propio IRPF y sus propias tablas de retención, que esta calculadora no incluye. Consulta la Hacienda Foral:",
     foralLinks: "Tablas y simuladores oficiales",
     share: "El enlace de la página guarda tus datos: puedes copiarlo y compartirlo.",
@@ -279,6 +292,10 @@ export const CALC_COPY: Record<NetLocale, CalculatorCopy> = {
     ceuta: "Resident a Ceuta, Melilla o La Palma amb ingressos obtinguts allà: la retenció es redueix un 60 %. A La Palma, des del 10 de setembre de 2026 (Reial decret llei 23/2026).",
     capped: "El teu sou supera la base màxima de cotització: cotitzes per {max} al mes, més la cotització de solidaritat sobre l'excés.",
     belowMinimum: "Per sota de la base mínima de cotització de jornada completa ({min} al mes): només és possible a temps parcial, i el càlcul fa servir el teu sou real.",
+    smiNote: (f) =>
+      f.full
+        ? `La retenció pot ser més alta que l'IRPF final. Amb la deducció de la disposició addicional 61a de la Llei de l'IRPF (Reial decret llei 5/2026, art. 28), qui guanya fins a ${f.upTo} bruts l'any (l'SMI) per una feina assalariada no hauria de pagar IRPF: la nòmina no l'aplica, però la declaració de la renda ${f.year} resta fins a ${f.ded}. Si presentes la renda, Hisenda et pot retornar fins als ${f.ret} retinguts; la xifra exacta depèn de l'escala de la teva comunitat. Requisit: no tenir altres rendes no exemptes de més de ${f.other}.`
+        : `La retenció pot ser més alta que l'IRPF final. La deducció de la disposició addicional 61a de la Llei de l'IRPF (Reial decret llei 5/2026, art. 28) no s'aplica a la nòmina, sinó a la renda ${f.year}: amb ${f.gross} és de ${f.ded} (${f.max} fins a ${f.upTo}, menys el 20 % del que passi d'aquesta xifra, i res des de ${f.end}), sense superar la teva quota de l'impost. El que et retornin dels ${f.ret} retinguts depèn de l'escala de la teva comunitat: aquesta calculadora no ho estima. Requisit: no tenir altres rendes no exemptes de més de ${f.other}.`,
     foral: "Navarra i el País Basc tenen el seu propi IRPF i les seves taules de retenció, que aquesta calculadora no inclou. Consulta la Hisenda Foral:",
     foralLinks: "Taules i simuladors oficials",
     share: "L'enllaç de la pàgina guarda les teves dades: el pots copiar i compartir.",
@@ -334,12 +351,45 @@ export const CALC_COPY: Record<NetLocale, CalculatorCopy> = {
     ceuta: "Resident in Ceuta, Melilla or La Palma with income earned there: withholding is cut by 60%. In La Palma, from 10 September 2026 (Royal Decree-law 23/2026).",
     capped: "Your salary is above the maximum contribution base: you contribute on {max} a month, plus the solidarity contribution on the excess.",
     belowMinimum: "Below the full-time minimum contribution base ({min} a month): only possible part-time, and the result uses your actual pay.",
+    smiNote: (f) =>
+      f.full
+        ? `Withholding may be more than your final income tax. Under the deduction in additional provision 61 of the IRPF Law (Royal Decree-law 5/2026, art. 28), employees earning up to ${f.upTo} gross a year (the minimum wage) should pay no IRPF: payroll does not apply it, but the ${f.year} annual return (Renta) takes off up to ${f.ded}. If you file the return, the Tax Agency can refund up to the ${f.ret} withheld; the exact figure depends on your region's scale. Condition: no other non-exempt income above ${f.other}.`
+        : `Withholding may be more than your final income tax. The deduction in additional provision 61 of the IRPF Law (Royal Decree-law 5/2026, art. 28) is not applied on the payslip but in the ${f.year} annual return (Renta): on ${f.gross} it is ${f.ded} (${f.max} up to ${f.upTo}, minus 20% of the pay above that, nothing from ${f.end}), never more than your tax due. How much of the ${f.ret} withheld comes back depends on your region's scale: this calculator does not estimate it. Condition: no other non-exempt income above ${f.other}.`,
     foral: "Navarre and the Basque Country have their own income tax and withholding tables, which this calculator does not cover. See the regional tax office:",
     foralLinks: "Official tables and simulators",
     share: "The page link keeps your figures: you can copy and share it.",
     disclaimer: "This estimates withholding and contributions, not your final tax: what you owe in IRPF is settled in the annual return (Renta), with your region's scale and your deductions. Your employer may apply a collective agreement, bonuses or items that change the payslip.",
   },
 };
+
+export interface SmiNoteFigures {
+  full: boolean;
+  gross: string;
+  ret: string;
+  ded: string;
+  max: string;
+  upTo: string;
+  end: string;
+  other: string;
+  year: number;
+}
+
+/** The SMI deduction note for a result, or null when it does not apply (from 20,048.45 €, nothing withheld, foral). */
+export function smiDeductionNote(r: SalaryResult, locale: NetLocale): string | null {
+  if (!r.smiDeduction.applies) return null;
+  const d = SMI_DEDUCTION;
+  return CALC_COPY[locale].smiNote({
+    full: r.smiDeduction.full,
+    gross: money(r.input.gross, locale),
+    ret: money(r.irpf.annual, locale),
+    ded: money(r.smiDeduction.deduction, locale),
+    max: money(d.full, locale),
+    upTo: money(d.fullUpTo, locale, 0),
+    end: money(d.endBelow, locale),
+    other: money(d.otherIncomeMax, locale, 0),
+    year: d.returnYear,
+  });
+}
 
 /** Puts the order's and the algorithm's figures into a sentence: {max}, {min}, {housing}. */
 export function fillFigures(text: string, locale: NetLocale): string {

@@ -22,9 +22,9 @@
    "cotizacionesSent": 1950,
    "aeat": {
     "rate": 16.42,
-    "annual": 4926.0,
-    "base": 26050.0,
-    "minimum": 5550.0
+    "annual": 4926,
+    "base": 26050,
+    "minimum": 5550
    }
   },
   {
@@ -45,10 +45,10 @@
    },
    "cotizacionesSent": 780,
    "aeat": {
-    "rate": 0.0,
-    "annual": 0.0,
-    "base": 1918.0,
-    "minimum": 5550.0
+    "rate": 0,
+    "annual": 0,
+    "base": 1918,
+    "minimum": 5550
    }
   },
   {
@@ -69,10 +69,10 @@
    },
    "cotizacionesSent": 1031.88,
    "aeat": {
-    "rate": 0.0,
-    "annual": 0.0,
+    "rate": 0,
+    "annual": 0,
     "base": 5542.12,
-    "minimum": 5550.0
+    "minimum": 5550
    }
   },
   {
@@ -93,10 +93,10 @@
    },
    "cotizacionesSent": 1031.88,
    "aeat": {
-    "rate": 0.0,
-    "annual": 0.0,
+    "rate": 0,
+    "annual": 0,
     "base": 5543.12,
-    "minimum": 5550.0
+    "minimum": 5550
    }
   },
   {
@@ -117,10 +117,10 @@
    },
    "cotizacionesSent": 1080.84,
    "aeat": {
-    "rate": 2.0,
-    "annual": 330.0,
+    "rate": 2,
+    "annual": 330,
     "base": 7109.69,
-    "minimum": 5550.0
+    "minimum": 5550
    }
   },
   {
@@ -144,7 +144,7 @@
     "rate": 5.07,
     "annual": 912.6,
     "base": 10989.5,
-    "minimum": 5550.0
+    "minimum": 5550
    }
   },
   {
@@ -168,7 +168,7 @@
     "rate": 7.07,
     "annual": 1343.3,
     "base": 13505.12,
-    "minimum": 5550.0
+    "minimum": 5550
    }
   },
   {
@@ -190,9 +190,9 @@
    "cotizacionesSent": 1299.96,
    "aeat": {
     "rate": 8.86,
-    "annual": 1772.0,
+    "annual": 1772,
     "base": 15505.93,
-    "minimum": 5550.0
+    "minimum": 5550
    }
   },
   {
@@ -216,7 +216,7 @@
     "rate": 11.96,
     "annual": 2631.2,
     "base": 18569.96,
-    "minimum": 5550.0
+    "minimum": 5550
    }
   },
   {
@@ -240,7 +240,7 @@
     "rate": 14.09,
     "annual": 3522.5,
     "base": 21375.08,
-    "minimum": 5550.0
+    "minimum": 5550
    }
   },
   {
@@ -264,7 +264,7 @@
     "rate": 18.13,
     "annual": 6381.76,
     "base": 30911.96,
-    "minimum": 5550.0
+    "minimum": 5550
    }
   },
   {
@@ -286,9 +286,9 @@
    "cotizacionesSent": 2600.04,
    "aeat": {
     "rate": 19.36,
-    "annual": 7744.0,
+    "annual": 7744,
     "base": 35399.96,
-    "minimum": 5550.0
+    "minimum": 5550
    }
   },
   {
@@ -310,9 +310,9 @@
    "cotizacionesSent": 3249.96,
    "aeat": {
     "rate": 22.4,
-    "annual": 11200.0,
+    "annual": 11200,
     "base": 44750.04,
-    "minimum": 5550.0
+    "minimum": 5550
    }
   },
   {
@@ -334,9 +334,9 @@
    "cotizacionesSent": 3900,
    "aeat": {
     "rate": 24.44,
-    "annual": 14664.0,
-    "base": 54100.0,
-    "minimum": 5550.0
+    "annual": 14664,
+    "base": 54100,
+    "minimum": 5550
    }
   },
   {
@@ -360,7 +360,7 @@
     "rate": 24.64,
     "annual": 15083.23,
     "base": 55235.44,
-    "minimum": 5550.0
+    "minimum": 5550
    }
   },
   {
@@ -382,9 +382,9 @@
    "cotizacionesSent": 3996.24,
    "aeat": {
     "rate": 26.64,
-    "annual": 18648.0,
+    "annual": 18648,
     "base": 64003.76,
-    "minimum": 5550.0
+    "minimum": 5550
    }
   },
   {
@@ -406,9 +406,9 @@
    "cotizacionesSent": 4061.64,
    "aeat": {
     "rate": 32.11,
-    "annual": 32110.0,
+    "annual": 32110,
     "base": 93938.36,
-    "minimum": 5550.0
+    "minimum": 5550
    }
   },
   {
@@ -430,9 +430,9 @@
    "cotizacionesSent": 4661.64,
    "aeat": {
     "rate": 41.49,
-    "annual": 145215.0,
+    "annual": 145215,
     "base": 343338.36,
-    "minimum": 5550.0
+    "minimum": 5550
    }
   },
   {
@@ -454,9 +454,9 @@
    "cotizacionesSent": 1950,
    "aeat": {
     "rate": 16.42,
-    "annual": 4926.0,
-    "base": 26050.0,
-    "minimum": 5550.0
+    "annual": 4926,
+    "base": 26050,
+    "minimum": 5550
    }
   },
   {
@@ -478,9 +478,9 @@
    "cotizacionesSent": 1950,
    "aeat": {
     "rate": 14.8,
-    "annual": 4440.0,
-    "base": 26050.0,
-    "minimum": 8100.0
+    "annual": 4440,
+    "base": 26050,
+    "minimum": 8100
    }
   },
   {
@@ -502,9 +502,9 @@
    "cotizacionesSent": 1950,
    "aeat": {
     "rate": 13.91,
-    "annual": 4173.0,
-    "base": 26050.0,
-    "minimum": 9500.0
+    "annual": 4173,
+    "base": 26050,
+    "minimum": 9500
    }
   },
   {
@@ -526,9 +526,9 @@
    "cotizacionesSent": 1950,
    "aeat": {
     "rate": 14.9,
-    "annual": 4470.0,
-    "base": 26050.0,
-    "minimum": 7950.0
+    "annual": 4470,
+    "base": 26050,
+    "minimum": 7950
    }
   },
   {
@@ -549,10 +549,10 @@
    },
    "cotizacionesSent": 1170,
    "aeat": {
-    "rate": 0.0,
-    "annual": 0.0,
+    "rate": 0,
+    "annual": 0,
     "base": 10989.5,
-    "minimum": 10650.0
+    "minimum": 10650
    }
   },
   {
@@ -576,7 +576,7 @@
     "rate": 1.77,
     "annual": 345.15,
     "base": 14505.01,
-    "minimum": 10650.0
+    "minimum": 10650
    }
   },
   {
@@ -598,9 +598,9 @@
    "cotizacionesSent": 2925.12,
    "aeat": {
     "rate": 12.34,
-    "annual": 5553.0,
+    "annual": 5553,
     "base": 39474.88,
-    "minimum": 21950.0
+    "minimum": 21950
    }
   },
   {
@@ -621,10 +621,10 @@
    },
    "cotizacionesSent": 1137.48,
    "aeat": {
-    "rate": 0.0,
-    "annual": 0.0,
+    "rate": 0,
+    "annual": 0,
     "base": 9703.93,
-    "minimum": 6750.0
+    "minimum": 6750
    }
   },
   {
@@ -646,9 +646,9 @@
    "cotizacionesSent": 1950,
    "aeat": {
     "rate": 15.69,
-    "annual": 4707.0,
-    "base": 26050.0,
-    "minimum": 6700.0
+    "annual": 4707,
+    "base": 26050,
+    "minimum": 6700
    }
   },
   {
@@ -670,9 +670,9 @@
    "cotizacionesSent": 1950,
    "aeat": {
     "rate": 14.8,
-    "annual": 4440.0,
-    "base": 26050.0,
-    "minimum": 8100.0
+    "annual": 4440,
+    "base": 26050,
+    "minimum": 8100
    }
   },
   {
@@ -694,9 +694,9 @@
    "cotizacionesSent": 1950,
    "aeat": {
     "rate": 11.02,
-    "annual": 3306.0,
-    "base": 22550.0,
-    "minimum": 8550.0
+    "annual": 3306,
+    "base": 22550,
+    "minimum": 8550
    }
   },
   {
@@ -718,9 +718,9 @@
    "cotizacionesSent": 1950,
    "aeat": {
     "rate": 5.25,
-    "annual": 1575.0,
-    "base": 18300.0,
-    "minimum": 11550.0
+    "annual": 1575,
+    "base": 18300,
+    "minimum": 11550
    }
   },
   {
@@ -742,9 +742,9 @@
    "cotizacionesSent": 1950,
    "aeat": {
     "rate": 0.6,
-    "annual": 180.0,
-    "base": 18300.0,
-    "minimum": 17550.0
+    "annual": 180,
+    "base": 18300,
+    "minimum": 17550
    }
   },
   {
@@ -766,9 +766,9 @@
    "cotizacionesSent": 1950,
    "aeat": {
     "rate": 6.56,
-    "annual": 1968.0,
-    "base": 26050.0,
-    "minimum": 5550.0
+    "annual": 1968,
+    "base": 26050,
+    "minimum": 5550
    }
   },
   {
@@ -790,9 +790,9 @@
    "cotizacionesSent": 2925.12,
    "aeat": {
     "rate": 8.42,
-    "annual": 3789.0,
+    "annual": 3789,
     "base": 40074.88,
-    "minimum": 5550.0
+    "minimum": 5550
    }
   },
   {
@@ -814,9 +814,9 @@
    "cotizacionesSent": 1950,
    "aeat": {
     "rate": 6.56,
-    "annual": 1968.0,
-    "base": 26050.0,
-    "minimum": 5550.0
+    "annual": 1968,
+    "base": 26050,
+    "minimum": 5550
    }
   },
   {
@@ -838,9 +838,9 @@
    "cotizacionesSent": 1080.84,
    "aeat": {
     "rate": 0.8,
-    "annual": 132.0,
+    "annual": 132,
     "base": 7109.69,
-    "minimum": 5550.0
+    "minimum": 5550
    }
   },
   {
@@ -862,9 +862,9 @@
    "cotizacionesSent": 1950,
    "aeat": {
     "rate": 14.42,
-    "annual": 4326.0,
-    "base": 24050.0,
-    "minimum": 5550.0
+    "annual": 4326,
+    "base": 24050,
+    "minimum": 5550
    }
   },
   {
@@ -888,7 +888,7 @@
     "rate": 12.09,
     "annual": 3022.5,
     "base": 21375.08,
-    "minimum": 5550.0
+    "minimum": 5550
    }
   },
   {
@@ -910,9 +910,9 @@
    "cotizacionesSent": 2619.96,
    "aeat": {
     "rate": 19.34,
-    "annual": 7736.0,
+    "annual": 7736,
     "base": 35380.04,
-    "minimum": 5550.0
+    "minimum": 5550
    }
   },
   {
@@ -934,9 +934,129 @@
    "cotizacionesSent": 1950,
    "aeat": {
     "rate": 16.42,
-    "annual": 4926.0,
-    "base": 26050.0,
-    "minimum": 5550.0
+    "annual": 4926,
+    "base": 26050,
+    "minimum": 5550
+   }
+  },
+  {
+   "id": "smi-2026-17094-da61",
+   "input": {
+    "gross": 17094,
+    "payments": 14,
+    "region": "cataluna",
+    "age": "under65",
+    "family": 3,
+    "children": 0,
+    "childrenUnder3": 0,
+    "childrenWhole": false,
+    "disability": "none",
+    "contract": "open-ended",
+    "mobility": false,
+    "housingLoan": false
+   },
+   "cotizacionesSent": 1111.08,
+   "aeat": {
+    "rate": 3.06,
+    "annual": 523.08,
+    "base": 8660.03,
+    "minimum": 5550
+   }
+  },
+  {
+   "id": "smi-2026-17094-12-payments",
+   "input": {
+    "gross": 17094,
+    "payments": 12,
+    "region": "cataluna",
+    "age": "under65",
+    "family": 3,
+    "children": 0,
+    "childrenUnder3": 0,
+    "childrenWhole": false,
+    "disability": "none",
+    "contract": "open-ended",
+    "mobility": false,
+    "housingLoan": false
+   },
+   "cotizacionesSent": 1111.08,
+   "aeat": {
+    "rate": 3.06,
+    "annual": 523.08,
+    "base": 8660.03,
+    "minimum": 5550
+   }
+  },
+  {
+   "id": "da61-phaseout-end-20048",
+   "input": {
+    "gross": 20048,
+    "payments": 14,
+    "region": "cataluna",
+    "age": "under65",
+    "family": 3,
+    "children": 0,
+    "childrenUnder3": 0,
+    "childrenWhole": false,
+    "disability": "none",
+    "contract": "open-ended",
+    "mobility": false,
+    "housingLoan": false
+   },
+   "cotizacionesSent": 1303.2,
+   "aeat": {
+    "rate": 8.94,
+    "annual": 1792.29,
+    "base": 15601.72,
+    "minimum": 5550
+   }
+  },
+  {
+   "id": "short-contract-exempt-12000",
+   "input": {
+    "gross": 12000,
+    "payments": 14,
+    "region": "cataluna",
+    "age": "under65",
+    "family": 3,
+    "children": 0,
+    "childrenUnder3": 0,
+    "childrenWhole": false,
+    "disability": "none",
+    "contract": "short",
+    "mobility": false,
+    "housingLoan": false
+   },
+   "cotizacionesSent": 786,
+   "aeat": {
+    "rate": 2,
+    "annual": 240,
+    "base": 1912,
+    "minimum": 5550
+   }
+  },
+  {
+   "id": "ceuta-short-exempt-12000",
+   "input": {
+    "gross": 12000,
+    "payments": 14,
+    "region": "ceuta",
+    "age": "under65",
+    "family": 3,
+    "children": 0,
+    "childrenUnder3": 0,
+    "childrenWhole": false,
+    "disability": "none",
+    "contract": "short",
+    "mobility": false,
+    "housingLoan": false
+   },
+   "cotizacionesSent": 786,
+   "aeat": {
+    "rate": 0.8,
+    "annual": 96,
+    "base": 1912,
+    "minimum": 5550
    }
   }
  ]

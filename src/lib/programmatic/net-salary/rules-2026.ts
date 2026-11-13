@@ -78,7 +78,70 @@ export const SOURCES = {
     url: "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2026-18828",
     date: "2026-09-09",
   },
+  lirpfDa61: {
+    name: "Ley 35/2006 del IRPF, disposición adicional sexagésima primera (deducción por obtención de rendimientos del trabajo), texto consolidado",
+    ref: "BOE-A-2006-20764, actualización del 11-11-2026",
+    url: "https://www.boe.es/buscar/act.php?id=BOE-A-2006-20764#da-15",
+    date: "2026-11-11",
+  },
+  rdl5: {
+    name: "Real Decreto-ley 5/2026, de 17 de febrero, art. 28 (eliminación de la tributación en el IRPF de los perceptores del SMI), convalidado por el Congreso el 18 de marzo de 2026 (BOE-A-2026-6483)",
+    ref: "BOE-A-2026-3810",
+    url: "https://www.boe.es/buscar/doc.php?id=BOE-A-2026-3810",
+    date: "2026-02-19",
+  },
 } as const satisfies Record<string, Source>;
+
+/**
+ * The SMI deduction in the annual return (Renta), NOT in withholding.
+ *
+ * Ley 35/2006, disposición adicional sexagésima primera, as rewritten with
+ * effect from 1 January 2026 by Real Decreto-ley 5/2026, art. 28 (BOE núm. 44,
+ * 19 Feb 2026; convalidated by the Congress, Resolución de 18 de marzo de
+ * 2026, BOE núm. 70, 20 Mar 2026). Consolidated text read on 13 Nov 2026
+ * (last update 11 Nov 2026):
+ *
+ *   "1. Los contribuyentes con rendimientos íntegros del trabajo, derivados
+ *   de la prestación efectiva de servicios correspondientes a una relación
+ *   laboral o estatutaria, inferiores a 20.048,45 euros anuales, siempre que
+ *   no tengan rentas, excluidas las exentas, distintas de las del trabajo
+ *   antes referidas, superiores a 6.500 euros, se deducirán la siguiente
+ *   cuantía: a) cuando los rendimientos íntegros del trabajo [...] sean
+ *   iguales o inferiores a 17.094 euros anuales: 590,89 euros anuales. b)
+ *   cuando [...] estén comprendidos entre 17.094 euros anuales y 20.048,45
+ *   euros anuales: 590,89 euros menos el resultado de multiplicar por 0,2 la
+ *   diferencia entre los rendimientos íntegros del trabajo y 17.094 euros
+ *   anuales. El importe de la deducción no podrá exceder de la parte de la
+ *   suma de las cuotas íntegras estatal y autonómica que proporcionalmente
+ *   corresponda a los rendimientos netos del trabajo [...]. 2. El importe de
+ *   esta deducción se restará de la cuota líquida total [...]".
+ *
+ * Withholding does not apply it: neither AEAT algorithm of 2026 (the
+ * 10-09-2026 one lists its "últimas modificaciones normativas" up to RDL
+ * 23/2026 and computes CUOTA = ESCALA(BASE) − ESCALA(MINPERFA), 43 % limit,
+ * Ceuta and housing loan only, pages 3-4 and 29-32) nor RIRPF art. 85
+ * (consolidated, update of 7 Oct 2026) mentions it, and the AEAT's own
+ * withholding service returns 3.06 % / 523.08 € for the SMI on 13 Nov 2026
+ * (fixture cases smi-2026-*). So an SMI earner has tax withheld that the
+ * Renta should give back. What exactly comes back depends on the regional
+ * scale (the cap above is the state + regional cuota), which the calculator
+ * does not model: the page shows the deduction and the withholding, not a
+ * refund figure.
+ */
+export const SMI_DEDUCTION = {
+  /** Letter a): this much a year at or under `fullUpTo`. */
+  full: 590.89,
+  /** The 2026 SMI (RD 126/2026, art. 3.1). */
+  fullUpTo: 17094,
+  /** "inferiores a 20.048,45 euros anuales": nothing at or above. */
+  endBelow: 20048.45,
+  /** Letter b): 590.89 − 0.2 × (gross − 17,094). */
+  slope: 0.2,
+  /** Other income (not exempt, not this employment) above this: no deduction. */
+  otherIncomeMax: 6500,
+  /** The return where it applies: Renta 2026, filed in spring 2027. */
+  returnYear: 2026,
+} as const;
 
 /**
  * The check against the AEAT's own calculation (the retention web service
@@ -86,7 +149,7 @@ export const SOURCES = {
  * annual amount equal in every case. The cases are
  * tests/fixtures/net-salary-aeat-2026.json (a test holds the count).
  */
-export const AEAT_VALIDATION = { date: "2026-11-13", cases: 39 } as const;
+export const AEAT_VALIDATION = { date: "2026-11-13", cases: 44 } as const;
 
 /** The foral systems the calculator does not model, with their official withholding pages (checked 13 Nov 2026). */
 export const FORAL_LINKS = {
