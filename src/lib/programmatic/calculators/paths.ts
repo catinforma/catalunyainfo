@@ -31,6 +31,7 @@ export const CALCULATORS = [
   { id: "unemployment", slugs: { es: "paro", ca: "atur", en: "unemployment-benefit-spain" } },
   { id: "rent-update", slugs: { es: "actualizar-alquiler", ca: "actualitzar-lloguer", en: "rent-increase-spain" } },
   { id: "pensions-2027", slugs: { es: "subida-pensiones-2027", ca: "pujada-pensions-2027", en: "spain-pension-increase-2027" } },
+  { id: "working-days", slugs: { es: "dias-habiles", ca: "dies-habils", en: "working-days-spain" } },
 ] as const satisfies readonly { id: string; slugs: Record<CalcLocale, string> }[];
 
 export type CalculatorId = (typeof CALCULATORS)[number]["id"];

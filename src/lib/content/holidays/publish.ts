@@ -32,6 +32,7 @@ import { datePath, isDatePage, municipalityPath } from "@/lib/programmatic/holid
 import { largestTownLinks, townPageCount } from "@/lib/programmatic/holidays/towns";
 import { calculatorsHubPath } from "@/lib/programmatic/calculators/paths";
 import { LEAVE_YEAR, leavePath } from "@/lib/programmatic/leave-2027/copy";
+import { workingDaysPath } from "@/lib/programmatic/working-days/copy";
 import { COPY, type HolidayCopy } from "./copy";
 import { ARAN_SUBSTITUTIONS, HOLIDAYS_BY_YEAR, addDays, longDate } from "./calendar";
 import { DIADA_IMAGE, SANT_JOAN_IMAGE } from "./images";
@@ -433,6 +434,13 @@ const LEAVE_LINE: Record<Locale, string> = {
   en: `For your own town and the leave you have, the [${LEAVE_YEAR} leave planner](${leavePath("en")}) works out which days to book for the longest breaks.`,
 };
 
+/** After the leave planner line: the working-days calculator (plazos with the town's holidays). */
+const WORKING_DAYS_LINE: Record<Locale, string> = {
+  ca: `Si tens un termini en dies hàbils, la [calculadora de dies hàbils](${workingDaysPath("ca")}) en compta l'últim dia amb els festius del teu municipi.`,
+  es: `Si tienes un plazo en días hábiles, la [calculadora de días hábiles](${workingDaysPath("es")}) cuenta su último día con los festivos de tu municipio.`,
+  en: `If you have a deadline in working days, the [working days calculator](${workingDaysPath("en")}) finds its last day with your town's holidays.`,
+};
+
 /** Last line: the calculators hub (net salary, settlement, dismissal, unemployment, rent). */
 const CALCULATORS_LINE: Record<Locale, string> = {
   ca: `I si estàs fent números de l'any: les [calculadores de sou net, quitança, atur i lloguer](${calculatorsHubPath("ca")}).`,
@@ -525,6 +533,7 @@ export function buildBody(locale: Locale, inlineMediaId?: string): Block[] {
   });
   // The planner does the same sums for the reader's own town and days of leave.
   blocks.push({ type: "paragraph", text: LEAVE_LINE[locale] });
+  blocks.push({ type: "paragraph", text: WORKING_DAYS_LINE[locale] });
 
   /* ---- Barcelona --------------------------------------------------------- */
   blocks.push({ type: "heading", level: 2, text: copy.barcelonaTitle });

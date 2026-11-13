@@ -28,6 +28,7 @@ import { rentSitemapEntries } from "@/lib/programmatic/rent-update/page";
 import { pvpcSitemapEntries } from "@/lib/programmatic/pvpc/pages";
 import { madridDate } from "@/lib/programmatic/pvpc/time";
 import { pensionSitemapEntries } from "@/lib/programmatic/pensions-2027/page";
+import { workingDaysSitemapEntries } from "@/lib/programmatic/working-days/places";
 
 /**
  * Cached for an hour (ISR) and refreshed at once by every publish, and by the
@@ -180,6 +181,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...pvpcSitemapEntries(madridDate(Date.now())),
     // "Subida de las pensiones 2027": the pension revaluation calculator (INE CPI), in es, ca and en.
     ...pensionSitemapEntries(),
+    // "Calculadora de días hábiles": working days and deadlines (Ley 39/2015 art. 30, LOPJ, LEC), in es, ca and en.
+    ...workingDaysSitemapEntries(),
     ...fuelSitemapEntries(),
     ...rodaliesSitemap(),
     ...reservoirSitemapEntries(),

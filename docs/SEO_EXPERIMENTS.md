@@ -5441,3 +5441,52 @@ unchanged.
 and the per-town query pull (scratch `sp27x/pull.py`).
 
 **Outcome:** _pending_
+
+## 2026-11-13 — New tool: "Calculadora de días hábiles" (working days and deadlines with regional and local holidays), es + ca + en (deploy; republish group `holidays`)
+
+**What.** `/es/calculadoras/dias-habiles/` (primary), `/ca/calculadores/dies-habils/`,
+`/en/calculators/working-days-spain/`. Two modes: last day of a plazo (N días
+hábiles / naturales / meses from the notification) and working days between
+two dates. Three rule sets, each from the BOE consolidated text read on
+13 Nov 2026 and quoted on the page: administrative (Ley 39/2015 art. 30:
+day after notification, Sat/Sun/holidays inhábiles, months to the same day
+or the month's last, inhábil last day moves on, 30.6 two places), judicial
+(LOPJ 182–183/185, LEC 130.2/133: also August and 24 Dec–6 Jan — added by
+LO 14/2022, not LO 1/2025; days only; LEC 135.5 15:00 grace day shown apart)
+and job working days (optional Saturdays). Places: all of Spain, each
+community, every Catalan town (2026 DOGC local days; 2027 only once the DOGC
+order is parsed — council-approved days NOT counted) and the Spanish cities
+with a page (2027 bulletin days; 2026 local days where held; Canarias island
+days; Navarra 3 Dec). Each result says what is counted for the place.
+Engine `src/lib/programmatic/working-days/` (pure, no `Date`), registry
+`working-days` in calculators/paths.ts + hub card (holidays group).
+
+**Why.** research_notes/spain-utilities-opportunities-nov2026.md row 2:
+~40k searches/month flat ("días hábiles", "días naturales", "plazo
+administrativo", "calculadora días"), "días inhábiles" peaks in December.
+No Spanish tool applies community and local holidays; we hold them.
+
+**Links (body only, no titles changed).** Catalan work calendar guide
+(`/es/guias/calendario-laboral-cataluna/` + ca/en, new paragraph after the
+leave-planner line: publish group `holidays`), Spain 2027 work calendar hubs
+(`/es/festivos/2027/`, `/ca/festius/2027/`, `/en/holidays/2027/`, deploy),
+leave planner "more" list (deploy). Sitemap + hreflang (x-default en) +
+llms.txt.
+
+**Baseline.** 0 impressions for the three URLs (new).
+
+**Prediction.** By 15 Jan: es page indexed, ≥ 1,000 impressions in 28 days,
+"calculadora días hábiles" and "días hábiles <ciudad>" top-20; peak with the
+"días inhábiles 2027" December searches.
+
+**Date guards.** `AGE_2027_RECHECK_BY` 31 Dec 2026 (test fails while
+`AGE_2027` is null: look for the AGE 2027 calendar of días inhábiles in the
+BOE — the 2026 one was BOE-A-2025-23702, 24 Nov 2025 — fill it and an annex
+check like `AGE_2026_ANNEX`); `RULES_RECHECK_BY` 13 May 2027 (re-read the
+articles, refresh tests/fixtures/working-days/boe-articles.txt);
+`COVER_EXTEND_BY` 15 Nov 2027 (add 2028 lists). The DOGC 2027 local order
+(~mid-Dec) flows in with the next deploy after `local-2027.json` is updated.
+
+**Measure 1 Dec, 15 Dec, 15 Jan**: `snapshot.py page /calculadoras/dias-habiles/ 14`.
+
+**Outcome:** _pending_

@@ -34,6 +34,7 @@ import { HUB_INTL } from "@/lib/programmatic/spain-2027/copy-intl";
 import { CITIES } from "@/lib/programmatic/spain-2027/cities";
 import { editionBridgesPath, editionHubPath } from "@/lib/programmatic/spain-2027/editions";
 import { spainBridgesPath, spainHubPath } from "@/lib/programmatic/spain-2027/paths";
+import { workingDaysPath } from "@/lib/programmatic/working-days/copy";
 import { breadcrumbSchema, graph } from "@/lib/seo/jsonld";
 import { buildMetadata } from "@/lib/seo/metadata";
 
@@ -239,6 +240,7 @@ export function LeaveRoute({ locale }: { locale: LeaveLocale }) {
     { href: GUIDES.workCalendar[locale], label: L(locale, { ca: `Calendari laboral ${YEAR} a Catalunya`, es: `Calendario laboral ${YEAR} en Cataluña`, en: `Catalonia public holidays ${YEAR}` }) },
     { href: hubPath(locale), label: L(locale, { ca: "Festius locals de cada municipi", es: "Festivos locales de cada municipio", en: "Local holidays town by town" }) },
     { href: widgetPagePath(locale), label: L(locale, { ca: `Posa el calendari ${YEAR} al teu web`, es: `Pon el calendario ${YEAR} en tu web`, en: `Put the ${YEAR} calendar on your website` }) },
+    { href: workingDaysPath(locale), label: L(locale, { ca: "Calculadora de dies hàbils i terminis, amb els festius del teu municipi", es: "Calculadora de días hábiles y plazos, con los festivos de tu municipio", en: "Working days and deadline calculator, with your town's holidays" }) },
   ];
 
   return (

@@ -11,6 +11,7 @@ import { RENT_RULES_AS_OF } from "@/lib/programmatic/rent-update/rules";
 import { PENSION_RULES_AS_OF } from "@/lib/programmatic/pensions-2027/rules";
 import { pvpcTranslations } from "@/lib/programmatic/pvpc/paths";
 import { reservoirHubPath } from "@/lib/programmatic/reservoirs/paths";
+import { RULES_AS_OF as WORKING_DAYS_AS_OF } from "@/lib/programmatic/working-days/rules";
 import { hubPath as rodaliesHubPath } from "@/lib/programmatic/rodalies/paths";
 
 import { calcPath, calculatorsHubPath, type CalcLocale, type CalculatorId } from "./paths";
@@ -207,6 +208,24 @@ export const HUB_GROUPS: HubGroup[] = [
     id: "holidays",
     title: { ca: "Festius i vacances", es: "Festivos y vacaciones", en: "Holidays and time off" },
     cards: [
+      {
+        key: "working-days",
+        calculator: true,
+        href: calc("working-days"),
+        title: { ca: "Dies hàbils i terminis", es: "Días hábiles y plazos", en: "Working days and deadlines" },
+        answers: {
+          ca: "Quin és l'últim dia d'un termini administratiu o judicial, o quants dies hàbils hi ha entre dues dates, amb els festius del teu municipi?",
+          es: "¿Cuál es el último día de un plazo administrativo o judicial, o cuántos días hábiles hay entre dos fechas, con los festivos de tu municipio?",
+          en: "The last day of an administrative or court deadline, or the working days between two dates, with your town's holidays.",
+        },
+        basis: {
+          ca: "Llei 39/2015, art. 30; LOPJ, arts. 182 i 183; LEC, arts. 130 i 133 (BOE). Festius del BOE, el DOGC i els butlletins de cada comunitat.",
+          es: "Ley 39/2015, art. 30; LOPJ, arts. 182 y 183; LEC, arts. 130 y 133 (BOE). Festivos del BOE, el DOGC y los boletines de cada comunidad.",
+          en: "Ley 39/2015, art. 30; LOPJ, arts. 182 and 183; LEC, arts. 130 and 133 (BOE). Holidays from the BOE, the DOGC and each region's bulletin.",
+        },
+        scope: "spain",
+        checked: WORKING_DAYS_AS_OF,
+      },
       {
         key: "leave-2027",
         calculator: false,

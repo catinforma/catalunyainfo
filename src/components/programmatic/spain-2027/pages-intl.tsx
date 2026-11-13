@@ -4,6 +4,7 @@ import { Breadcrumbs, type Crumb } from "@/components/Breadcrumbs";
 import { ShareBar, crumbPath } from "@/components/share/ShareBar";
 import { WidgetHubLink } from "@/components/programmatic/embed-2027/WidgetLink";
 import { LeaveHubLink } from "@/components/programmatic/leave-2027/LeaveLink";
+import { WorkingDaysHubLink } from "@/components/programmatic/working-days/WorkingDaysLink";
 import { CalculatorsHubLink } from "@/components/programmatic/calculators/MoreCalculators";
 import { getMessages } from "@/lib/i18n";
 import { REGIONS } from "@/lib/programmatic/holidays/boe-2027";
@@ -696,6 +697,7 @@ export function SpainHubPageIntl({ locale }: { locale: Edition }) {
 
           <HubCityList locale={locale} />
           <LeaveHubLink locale={locale} />
+          <WorkingDaysHubLink locale={locale} />
           <CalculatorsHubLink locale={locale} />
           <WidgetHubLink locale={locale} />
         </div>
