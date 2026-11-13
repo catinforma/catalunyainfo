@@ -342,7 +342,7 @@ const ca = {
     noRateTitle: "Sense tarifa verificada",
     noRate:
       "No tenim una tarifa oficial verificada per a aquesta data i aquesta ubicació, i no en direm cap que no puguem comprovar. Consulta l'Agència Tributària de Catalunya.",
-    sourceLine: "Tarifes verificades el 24 de setembre de 2026 a l'",
+    sourceLine: "Tarifes verificades el 13 de novembre de 2026 a l'",
     disclaimer:
       "Càlcul orientatiu. L'import final el determina l'establiment segons la normativa aplicable i l'ha de mostrar separat a la factura.",
     rules:

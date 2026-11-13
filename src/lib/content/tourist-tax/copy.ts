@@ -10,7 +10,11 @@ import type { Locale } from "@/lib/i18n/config";
  * `{restHostel}` the regional rate elsewhere, `{rest4next}` the four-star rate
  * elsewhere from 1 April 2027, `{s0}`/`{s1}` Barcelona's surcharge now and from
  * 1 April 2027, `{hosp4}`/`{hosp4total}` L'Hospitalet's four-star surcharge and
- * total, `{te1}` `{te2}` `{te3}` the special rate, `{minInt}` `{maxInt}`
+ * total, `{bcn4next}`/`{hosp4next}` the Barcelona four-star total and
+ * L'Hospitalet's four-star surcharge from 1 April 2027, `{bcnCruiseOver}`/
+ * `{bcnCruiseUnder}` Barcelona's cruise totals now, `{cdfOver}` `{cdfUnder}`
+ * `{cdfOver27}` `{cdfUnder27}` the Castelldefels / El Prat cruise surcharge,
+ * `{te1}` `{te2}` `{te3}` the special rate, `{minInt}` `{maxInt}`
  * `{surInt}` whole-euro forms for the search title, `{age}` and `{max}`.
  */
 
@@ -79,6 +83,25 @@ export interface TaxCopy {
   futureHeaders: { type: string; rate: string };
   barcelonaFutureTitle: string;
   barcelonaFuture: string[];
+  /** Caption of the Barcelona table from 1 April 2027 (regional + surcharge). */
+  futureBarcelonaCaption: string;
+  /** The six municipal surcharges that rise on 1 April 2027 (ATC). */
+  muniFutureTitle: string;
+  muniFuture: string[];
+  muniFutureCaption: string;
+  muniFutureNote: string;
+
+  /**
+   * Cruise passengers (ATC "Meritació"). The note may carry `{cdfOver}`,
+   * `{cdfUnder}`, `{cdfOver27}`, `{cdfUnder27}`: the Castelldefels / El Prat
+   * cruise surcharge now and from 1 April 2027.
+   */
+  cruiseTitle: string;
+  cruise: string[];
+  cruiseCaption: string;
+  cruiseHeaders: { call: string; bcnNow: string; bcnNext: string; restNow: string; restNext: string };
+  cruiseRows: { over12h: string; upTo12h: string };
+  cruiseNote: string;
 
   childrenTitle: string;
   children: string[];
@@ -134,7 +157,7 @@ export const COPY: Record<Locale, TaxCopy> = {
     keyFactValues: {
       exemption: "16 anys o menys",
       scope: "Recàrrec municipal vigent des de l'1/10/2026 a Castelldefels, Esplugues, l'Hospitalet, el Prat, Sabadell, Sant Cugat i Sant Just Desvern",
-      verified: "30 d'octubre de 2026",
+      verified: "13 de novembre de 2026",
       review: "1 de desembre de 2026",
     },
 
@@ -159,16 +182,16 @@ export const COPY: Record<Locale, TaxCopy> = {
     },
     noSurcharge: "Cal comprovar-ho",
     tableNote:
-      "Tarifes verificades el 30 d'octubre de 2026 a l'Agència Tributària de Catalunya. Import per persona i unitat d'estada.",
+      "Tarifes verificades el 13 de novembre de 2026 a l'Agència Tributària de Catalunya. Import per persona i unitat d'estada.",
 
     muniTitle: "Taxa turística a l'Hospitalet, Sabadell, Sant Cugat i els altres municipis amb recàrrec",
     muni: [
-      "Des de l'1 d'octubre de 2026, set municipis sumen un recàrrec propi a la tarifa de la Generalitat. Per exemple, en un hotel de 4 estrelles de l'Hospitalet pagues {hosp4} de recàrrec més {rest4} de tarifa autonòmica: **{hosp4total} per persona i nit**. Aquests són els recàrrecs que publica l'Agència Tributària de Catalunya, vigents fins al 31 de març de 2027:",
+      "Des de l'1 d'octubre de 2026, set municipis sumen un recàrrec propi a la tarifa de la Generalitat. Per exemple, en un hotel de 4 estrelles de l'Hospitalet pagues {hosp4} de recàrrec més {rest4} de tarifa autonòmica: **{hosp4total} per persona i nit**. Aquests són els recàrrecs que publica l'Agència Tributària de Catalunya de l'1 d'octubre de 2026 al 31 de març de 2027 (a Sant Just Desvern, sense data final); els que regeixen des de l'1 d'abril de 2027 són més avall:",
     ],
     muniCaption: "Recàrrec municipal fora de Barcelona, per persona i unitat d'estada (1/10/2026–31/3/2027)",
     muniHeaders: { municipality: "Municipi", hotel5: "Hotel 5★", hotel4: "Hotel 4★", flat: "Habitatge d'ús turístic", hostel: "Alberg", other: "Resta" },
     muniNote:
-      "Agència Tributària de Catalunya, consultada el 30 d'octubre de 2026. S'afegeix a la tarifa de la Generalitat. «—»: l'ATC no hi publica recàrrec per a aquesta categoria. Les xifres d'Esplugues són les que publica l'ATC. No s'hi inclouen els recàrrecs de creuers de Castelldefels i el Prat.",
+      "Agència Tributària de Catalunya, consultada el 13 de novembre de 2026. S'afegeix a la tarifa de la Generalitat. «—»: l'ATC no hi publica recàrrec per a aquesta categoria. Les xifres d'Esplugues són les que publica l'ATC. Els recàrrecs de creuers de Castelldefels i el Prat són a l'apartat sobre creuers.",
     special:
       "També hi ha una tarifa especial per als establiments d'un centre recreatiu turístic situats a les zones on s'admet el joc: {te1} als hotels de 5 estrelles, {te2} als de 4 i {te3} a la resta, per persona i nit.",
 
@@ -178,21 +201,47 @@ export const COPY: Record<Locale, TaxCopy> = {
       { question: "Quant és la taxa turística a Catalunya fora de Barcelona?", answer: "La tarifa de la Generalitat va de {restHostel} (alberg) a {rest5} (hotel de 5 estrelles) per persona i nit; {rest4} en un hotel de 4 estrelles. A Castelldefels, Esplugues, l'Hospitalet, el Prat, Sabadell, Sant Cugat i Sant Just Desvern s'hi suma un recàrrec municipal." },
       { question: "Els nens paguen la taxa turística?", answer: "No. Les persones de {age} anys o menys n'estan exemptes." },
       { question: "Quantes nits es paga la taxa turística?", answer: "Com a màxim {max} per persona en una estada continuada al mateix establiment; si canvies d'allotjament, el còmput torna a començar." },
-      { question: "Puja la taxa turística el 2027?", answer: "Sí, l'1 d'abril de 2027: a Barcelona el recàrrec municipal passa de {s0} a {s1} per persona i nit, i fora de Barcelona puja la tarifa de la Generalitat (en un hotel de 4 estrelles, de {rest4} a {rest4next})." },
+      { question: "Puja la taxa turística el 2027?", answer: "Sí, l'1 d'abril de 2027: a Barcelona el recàrrec municipal passa de {s0} a {s1} per persona i nit (un hotel de 4 estrelles, de {bcn4} a {bcn4next}); fora de Barcelona puja la tarifa de la Generalitat (en un hotel de 4 estrelles, de {rest4} a {rest4next}), i sis dels set municipis amb recàrrec l'apugen (a l'Hospitalet, en un hotel de 4 estrelles, de {hosp4} a {hosp4next})." },
+      { question: "Els passatgers de creuer paguen la taxa turística?", answer: "Sí, els que fan escala en trànsit en un port català. Qui hi embarca per començar el viatge o hi desembarca perquè és el final del viatge no la paga per aquella escala. A Barcelona, fins al 31 de març de 2027, són {bcnCruiseOver} per persona en una escala de més de 12 hores i {bcnCruiseUnder} en una de 12 hores o menys, recàrrec municipal inclòs." },
       { question: "Qui cobra la taxa turística?", answer: "L'allotjament, que la cobra a qui s'hi allotja i la declara. A la factura ha d'aparèixer separada del preu, amb les unitats d'estada i la tarifa aplicada." },
     ],
 
     futureTitle: "Què canvia l'1 d'abril de 2027",
     future: [
-      "La Generalitat ja té aprovades tarifes superiors per a la resta de Catalunya a partir de l'1 d'abril de 2027. Aquestes són les que consten oficialment:",
+      "Els imports a partir de l'1 d'abril de 2027 ja estan fixats: la Llei 2/2026 apuja la tarifa de la Generalitat fora de Barcelona, l'Ordenança fiscal 2.2 apuja el recàrrec de Barcelona i sis dels set municipis amb recàrrec propi n'han aprovat un de més alt. A Barcelona, la taxa per persona i nit queda així:",
     ],
-    futureCaption: "Tarifes fora de Barcelona des de l'1 d'abril de 2027",
+    futureCaption: "Tarifes fora de Barcelona des de l'1 d'abril de 2027 (municipis sense recàrrec)",
     futureHeaders: { type: "Tipus d'allotjament", rate: "Tarifa" },
-    barcelonaFutureTitle: "I a Barcelona?",
+    futureBarcelonaCaption: "Taxa turística a Barcelona des de l'1 d'abril de 2027, per persona i unitat d'estada",
+    barcelonaFutureTitle: "Barcelona: el recàrrec puja cada 1 d'abril fins al 2029",
     barcelonaFuture: [
       "El recàrrec municipal de Barcelona puja cada 1 d'abril fins al 2029, segons l'Ordenança fiscal 2.2 de l'Ajuntament: **{s0}** fins al 31 de març de 2027, **{s1}** de l'1 d'abril de 2027 al 31 de març de 2028, **{s2}** fins al 31 de març de 2029 i **{s3}** a partir de llavors, el màxim que permet la llei. La tarifa de la Generalitat per a Barcelona no canvia.",
       "Així, l'1 d'abril de 2027 un hotel a Barcelona pagarà **{step} més per persona i nit**. La calculadora ja aplica aquests imports segons la data.",
     ],
+    muniFutureTitle: "Municipis amb recàrrec propi des de l'1 d'abril de 2027",
+    muniFuture: [
+      "L'Agència Tributària de Catalunya ja publica els recàrrecs que aquests municipis aplicaran a partir de l'1 d'abril de 2027. Pugen tots, llevat del dels hotels de 5 estrelles. Sant Just Desvern no hi té una columna nova: manté el recàrrec vigent des de l'1 d'octubre de 2026.",
+    ],
+    muniFutureCaption: "Recàrrec municipal fora de Barcelona des de l'1 d'abril de 2027, per persona i unitat d'estada",
+    muniFutureNote:
+      "Agència Tributària de Catalunya, consultada el 13 de novembre de 2026. S'afegeix a la tarifa de la Generalitat des de l'1 d'abril de 2027. «—»: l'ATC no hi publica recàrrec per a aquesta categoria. Les xifres de Castelldefels i d'Esplugues són les que publica l'ATC. Sant Just Desvern: import vigent des de l'1/10/2026, sense data final.",
+
+    cruiseTitle: "Creuers: qui paga la taxa i quant",
+    cruise: [
+      "Els passatgers de creuer paguen l'impost quan el vaixell fa **escala** en un port de Catalunya i ells hi són en trànsit. Qui embarca en un port català per començar el viatge, o hi desembarca perquè és el final del viatge, **no el paga** per aquella escala, segons l'Agència Tributària de Catalunya.",
+      "La tarifa depèn de la durada de l'escala: més de 12 hores, o 12 hores o menys. El vaixell compta com a amarrat des que llança el primer cap fins que afluixa l'última amarra. A Barcelona s'hi suma el mateix recàrrec municipal que als hotels, i també puja l'1 d'abril de 2027.",
+    ],
+    cruiseCaption: "Taxa per passatger de creuer en trànsit, per persona",
+    cruiseHeaders: {
+      call: "Escala",
+      bcnNow: "Barcelona fins al 31/3/2027",
+      bcnNext: "Barcelona des de l'1/4/2027",
+      restNow: "Resta de Catalunya fins al 31/3/2027",
+      restNext: "Resta de Catalunya des de l'1/4/2027",
+    },
+    cruiseRows: { over12h: "Més de 12 hores", upTo12h: "12 hores o menys" },
+    cruiseNote:
+      "Agència Tributària de Catalunya, consultada el 13 de novembre de 2026. Barcelona: tarifa de la Generalitat més recàrrec municipal. Resta de Catalunya: tarifa de la Generalitat sola. Castelldefels i el Prat de Llobregat hi sumen un recàrrec de creuers propi: {cdfOver} (més de 12 hores) i {cdfUnder} (12 hores o menys) fins al 31 de març de 2027; {cdfOver27} i {cdfUnder27} a partir de l'1 d'abril de 2027.",
 
     childrenTitle: "Els menors paguen?",
     children: [
@@ -279,7 +328,7 @@ export const COPY: Record<Locale, TaxCopy> = {
     keyFactValues: {
       exemption: "16 años o menos",
       scope: "Recargo municipal vigente desde el 1/10/2026 en Castelldefels, Esplugues, L'Hospitalet, El Prat, Sabadell, Sant Cugat y Sant Just Desvern",
-      verified: "30 de octubre de 2026",
+      verified: "13 de noviembre de 2026",
       review: "1 de diciembre de 2026",
     },
 
@@ -304,16 +353,16 @@ export const COPY: Record<Locale, TaxCopy> = {
     },
     noSurcharge: "Hay que comprobarlo",
     tableNote:
-      "Tarifas verificadas el 30 de octubre de 2026 en la Agència Tributària de Catalunya. Importe por persona y unidad de estancia.",
+      "Tarifas verificadas el 13 de noviembre de 2026 en la Agència Tributària de Catalunya. Importe por persona y unidad de estancia.",
 
     muniTitle: "Tasa turística en L'Hospitalet, Sabadell, Sant Cugat y los demás municipios con recargo",
     muni: [
-      "Desde el 1 de octubre de 2026, siete municipios suman un recargo propio a la tarifa de la Generalitat. Por ejemplo, en un hotel de 4 estrellas de L'Hospitalet pagas {hosp4} de recargo más {rest4} de tarifa autonómica: **{hosp4total} por persona y noche**. Estos son los recargos que publica la Agència Tributària de Catalunya, vigentes hasta el 31 de marzo de 2027:",
+      "Desde el 1 de octubre de 2026, siete municipios suman un recargo propio a la tarifa de la Generalitat. Por ejemplo, en un hotel de 4 estrellas de L'Hospitalet pagas {hosp4} de recargo más {rest4} de tarifa autonómica: **{hosp4total} por persona y noche**. Estos son los recargos que publica la Agència Tributària de Catalunya del 1 de octubre de 2026 al 31 de marzo de 2027 (en Sant Just Desvern, sin fecha final); los que rigen desde el 1 de abril de 2027 están más abajo:",
     ],
     muniCaption: "Recargo municipal fuera de Barcelona, por persona y unidad de estancia (1/10/2026–31/3/2027)",
     muniHeaders: { municipality: "Municipio", hotel5: "Hotel 5★", hotel4: "Hotel 4★", flat: "Vivienda de uso turístico", hostel: "Albergue", other: "Resto" },
     muniNote:
-      "Agència Tributària de Catalunya, consultada el 30 de octubre de 2026. Se suma a la tarifa de la Generalitat. «—»: la ATC no publica recargo para esa categoría. Las cifras de Esplugues son las que publica la ATC. No se incluyen los recargos de cruceros de Castelldefels y El Prat.",
+      "Agència Tributària de Catalunya, consultada el 13 de noviembre de 2026. Se suma a la tarifa de la Generalitat. «—»: la ATC no publica recargo para esa categoría. Las cifras de Esplugues son las que publica la ATC. Los recargos de cruceros de Castelldefels y El Prat están en el apartado sobre cruceros.",
     special:
       "Hay además una tarifa especial para los establecimientos de un centro recreativo turístico situados en las zonas donde se admite el juego: {te1} en hoteles de 5 estrellas, {te2} en los de 4 y {te3} en el resto, por persona y noche.",
 
@@ -323,21 +372,47 @@ export const COPY: Record<Locale, TaxCopy> = {
       { question: "¿Cuánto es la tasa turística en Cataluña fuera de Barcelona?", answer: "La tarifa de la Generalitat va de {restHostel} (albergue) a {rest5} (hotel de 5 estrellas) por persona y noche; {rest4} en un hotel de 4 estrellas. En Castelldefels, Esplugues, L'Hospitalet, El Prat, Sabadell, Sant Cugat y Sant Just Desvern se suma un recargo municipal." },
       { question: "¿Los niños pagan la tasa turística?", answer: "No. Las personas de {age} años o menos están exentas." },
       { question: "¿Cuántas noches se paga la tasa turística?", answer: "Como máximo {max} por persona en una estancia continuada en el mismo establecimiento; si cambias de alojamiento, el cómputo empieza de nuevo." },
-      { question: "¿Sube la tasa turística en 2027?", answer: "Sí, el 1 de abril de 2027: en Barcelona el recargo municipal pasa de {s0} a {s1} por persona y noche, y fuera de Barcelona sube la tarifa de la Generalitat (en un hotel de 4 estrellas, de {rest4} a {rest4next})." },
+      { question: "¿Sube la tasa turística en 2027?", answer: "Sí, el 1 de abril de 2027: en Barcelona el recargo municipal pasa de {s0} a {s1} por persona y noche (un hotel de 4 estrellas, de {bcn4} a {bcn4next}); fuera de Barcelona sube la tarifa de la Generalitat (en un hotel de 4 estrellas, de {rest4} a {rest4next}), y seis de los siete municipios con recargo lo suben (en L'Hospitalet, en un hotel de 4 estrellas, de {hosp4} a {hosp4next})." },
+      { question: "¿Los pasajeros de crucero pagan la tasa turística?", answer: "Sí, los que hacen escala en tránsito en un puerto catalán. Quien embarca para empezar el viaje o desembarca porque es el final del viaje no la paga por esa escala. En Barcelona, hasta el 31 de marzo de 2027, son {bcnCruiseOver} por persona en una escala de más de 12 horas y {bcnCruiseUnder} en una de 12 horas o menos, recargo municipal incluido." },
       { question: "¿Quién cobra la tasa turística?", answer: "El alojamiento, que la cobra a quien se aloja y la declara. En la factura debe aparecer separada del precio, con las unidades de estancia y la tarifa aplicada." },
     ],
 
     futureTitle: "Qué cambia el 1 de abril de 2027",
     future: [
-      "La Generalitat ya tiene aprobadas tarifas superiores para el resto de Cataluña a partir del 1 de abril de 2027. Estas son las que constan oficialmente:",
+      "Los importes a partir del 1 de abril de 2027 ya están fijados: la Ley 2/2026 sube la tarifa de la Generalitat fuera de Barcelona, la Ordenanza fiscal 2.2 sube el recargo de Barcelona y seis de los siete municipios con recargo propio han aprobado uno más alto. En Barcelona, la tasa por persona y noche queda así:",
     ],
-    futureCaption: "Tarifas fuera de Barcelona desde el 1 de abril de 2027",
+    futureCaption: "Tarifas fuera de Barcelona desde el 1 de abril de 2027 (municipios sin recargo)",
     futureHeaders: { type: "Tipo de alojamiento", rate: "Tarifa" },
-    barcelonaFutureTitle: "¿Y en Barcelona?",
+    futureBarcelonaCaption: "Tasa turística en Barcelona desde el 1 de abril de 2027, por persona y unidad de estancia",
+    barcelonaFutureTitle: "Barcelona: el recargo sube cada 1 de abril hasta 2029",
     barcelonaFuture: [
       "El recargo municipal de Barcelona sube cada 1 de abril hasta 2029, según la Ordenanza fiscal 2.2 del Ayuntamiento: **{s0}** hasta el 31 de marzo de 2027, **{s1}** del 1 de abril de 2027 al 31 de marzo de 2028, **{s2}** hasta el 31 de marzo de 2029 y **{s3}** a partir de entonces, el máximo que permite la ley. La tarifa de la Generalitat para Barcelona no cambia.",
       "Así, el 1 de abril de 2027 un hotel en Barcelona pagará **{step} más por persona y noche**. La calculadora ya aplica estos importes según la fecha.",
     ],
+    muniFutureTitle: "Municipios con recargo propio desde el 1 de abril de 2027",
+    muniFuture: [
+      "La Agència Tributària de Catalunya ya publica los recargos que estos municipios aplicarán a partir del 1 de abril de 2027. Suben todos, salvo el de los hoteles de 5 estrellas. Sant Just Desvern no tiene una columna nueva: mantiene el recargo vigente desde el 1 de octubre de 2026.",
+    ],
+    muniFutureCaption: "Recargo municipal fuera de Barcelona desde el 1 de abril de 2027, por persona y unidad de estancia",
+    muniFutureNote:
+      "Agència Tributària de Catalunya, consultada el 13 de noviembre de 2026. Se suma a la tarifa de la Generalitat desde el 1 de abril de 2027. «—»: la ATC no publica recargo para esa categoría. Las cifras de Castelldefels y Esplugues son las que publica la ATC. Sant Just Desvern: importe vigente desde el 1/10/2026, sin fecha final.",
+
+    cruiseTitle: "Cruceros: quién paga la tasa y cuánto",
+    cruise: [
+      "Los pasajeros de crucero pagan el impuesto cuando el barco hace **escala** en un puerto de Cataluña y ellos están en tránsito. Quien embarca en un puerto catalán para empezar el viaje, o desembarca porque es el final del viaje, **no lo paga** por esa escala, según la Agència Tributària de Catalunya.",
+      "La tarifa depende de la duración de la escala: más de 12 horas, o 12 horas o menos. El barco cuenta como amarrado desde que lanza el primer cabo hasta que larga la última amarra. En Barcelona se suma el mismo recargo municipal que en los hoteles, que también sube el 1 de abril de 2027.",
+    ],
+    cruiseCaption: "Tasa por pasajero de crucero en tránsito, por persona",
+    cruiseHeaders: {
+      call: "Escala",
+      bcnNow: "Barcelona hasta el 31/3/2027",
+      bcnNext: "Barcelona desde el 1/4/2027",
+      restNow: "Resto de Cataluña hasta el 31/3/2027",
+      restNext: "Resto de Cataluña desde el 1/4/2027",
+    },
+    cruiseRows: { over12h: "Más de 12 horas", upTo12h: "12 horas o menos" },
+    cruiseNote:
+      "Agència Tributària de Catalunya, consultada el 13 de noviembre de 2026. Barcelona: tarifa de la Generalitat más recargo municipal. Resto de Cataluña: tarifa de la Generalitat sola. Castelldefels y El Prat de Llobregat suman un recargo de cruceros propio: {cdfOver} (más de 12 horas) y {cdfUnder} (12 horas o menos) hasta el 31 de marzo de 2027; {cdfOver27} y {cdfUnder27} a partir del 1 de abril de 2027.",
 
     childrenTitle: "¿Los niños pagan?",
     children: [
@@ -426,7 +501,7 @@ export const COPY: Record<Locale, TaxCopy> = {
     keyFactValues: {
       exemption: "16 or younger",
       scope: "Municipal surcharge in force since 1 Oct 2026 in Castelldefels, Esplugues, L'Hospitalet, El Prat, Sabadell, Sant Cugat and Sant Just Desvern",
-      verified: "30 October 2026",
+      verified: "13 November 2026",
       review: "1 December 2026",
     },
 
@@ -451,16 +526,16 @@ export const COPY: Record<Locale, TaxCopy> = {
     },
     noSurcharge: "Needs checking",
     tableNote:
-      "Rates verified on 30 October 2026 against the Catalan Tax Agency. Amount per liable guest per stay unit.",
+      "Rates verified on 13 November 2026 against the Catalan Tax Agency. Amount per liable guest per stay unit.",
 
     muniTitle: "Tourist tax in L'Hospitalet, Sabadell, Sant Cugat and the other towns with a surcharge",
     muni: [
-      "Since 1 October 2026, seven municipalities have added their own surcharge to the Catalan rate. In a four-star hotel in L'Hospitalet, for example, you pay a {hosp4} surcharge plus the {rest4} regional rate: **{hosp4total} per person per night**. These are the surcharges the Catalan Tax Agency publishes, valid until 31 March 2027:",
+      "Since 1 October 2026, seven municipalities have added their own surcharge to the Catalan rate. In a four-star hotel in L'Hospitalet, for example, you pay a {hosp4} surcharge plus the {rest4} regional rate: **{hosp4total} per person per night**. These are the surcharges the Catalan Tax Agency publishes for 1 October 2026 to 31 March 2027 (in Sant Just Desvern, with no end date); the ones that apply from 1 April 2027 are further down:",
     ],
     muniCaption: "Municipal surcharge outside Barcelona, per liable guest per stay unit (1 Oct 2026–31 Mar 2027)",
     muniHeaders: { municipality: "Municipality", hotel5: "5★ hotel", hotel4: "4★ hotel", flat: "Tourist dwelling", hostel: "Youth hostel", other: "Other" },
     muniNote:
-      "Catalan Tax Agency (ATC), read on 30 October 2026. Added to the Catalan rate. \"—\": the ATC lists no surcharge for that category. Esplugues figures are as the ATC publishes them. Cruise surcharges in Castelldefels and El Prat are not shown.",
+      "Catalan Tax Agency (ATC), read on 13 November 2026. Added to the Catalan rate. \"—\": the ATC lists no surcharge for that category. Esplugues figures are as the ATC publishes them. The Castelldefels and El Prat cruise surcharges are in the cruise section.",
     special:
       "There is also a special rate for establishments inside a tourist recreation centre in the areas where gaming is allowed: {te1} in five-star hotels, {te2} in four-star hotels and {te3} elsewhere, per person per night.",
 
@@ -470,21 +545,47 @@ export const COPY: Record<Locale, TaxCopy> = {
       { question: "How much is the tourist tax elsewhere in Catalonia?", answer: "The Catalan rate runs from {restHostel} (youth hostel) to {rest5} (five-star hotel) per person per night; {rest4} in a four-star hotel. Castelldefels, Esplugues, L'Hospitalet, El Prat, Sabadell, Sant Cugat and Sant Just Desvern add a municipal surcharge." },
       { question: "Do children pay the tourist tax?", answer: "No. Guests aged {age} or younger are exempt." },
       { question: "How many nights is the tourist tax charged for?", answer: "At most {max} per person for one continuous stay at the same establishment; if you change accommodation, the count starts again." },
-      { question: "Is the tourist tax going up in 2027?", answer: "Yes, on 1 April 2027: Barcelona's municipal surcharge rises from {s0} to {s1} per person per night, and the Catalan rate rises outside Barcelona (from {rest4} to {rest4next} in a four-star hotel)." },
+      { question: "Is the tourist tax going up in 2027?", answer: "Yes, on 1 April 2027: Barcelona's municipal surcharge rises from {s0} to {s1} per person per night (a four-star hotel goes from {bcn4} to {bcn4next}); the Catalan rate rises outside Barcelona (from {rest4} to {rest4next} in a four-star hotel), and six of the seven towns with a surcharge raise theirs (four-star in L'Hospitalet: from {hosp4} to {hosp4next})." },
+      { question: "Do cruise passengers pay the tourist tax?", answer: "Yes, if they are in transit when the ship calls at a Catalan port. Passengers who board there to start their trip, or leave the ship there because it is the end of the trip, do not pay for that call. In Barcelona, until 31 March 2027, it is {bcnCruiseOver} per person for a call of more than 12 hours and {bcnCruiseUnder} for 12 hours or less, municipal surcharge included." },
       { question: "Who collects the tourist tax?", answer: "The accommodation, which charges it to the guest and files it. On the invoice it must be shown separately from the price, with the stay units and the rate applied." },
     ],
 
     futureTitle: "What changes on 1 April 2027",
     future: [
-      "Catalonia has already legislated higher regional rates for accommodation outside Barcelona from 1 April 2027. These are the figures on record:",
+      "The amounts from 1 April 2027 are already fixed: Law 2/2026 raises the Catalan rate outside Barcelona, Fiscal Ordinance 2.2 raises Barcelona's surcharge, and six of the seven towns with their own surcharge have approved a higher one. In Barcelona, the tax per person per night becomes:",
     ],
-    futureCaption: "Rates outside Barcelona from 1 April 2027",
+    futureCaption: "Rates outside Barcelona from 1 April 2027 (municipalities without a surcharge)",
     futureHeaders: { type: "Accommodation type", rate: "Rate" },
-    barcelonaFutureTitle: "And in Barcelona?",
+    futureBarcelonaCaption: "Tourist tax in Barcelona from 1 April 2027, per liable guest per stay unit",
+    barcelonaFutureTitle: "Barcelona: the surcharge rises every 1 April until 2029",
     barcelonaFuture: [
       "Barcelona's municipal surcharge rises every 1 April until 2029, under the city's Fiscal Ordinance 2.2: **{s0}** until 31 March 2027, **{s1}** from 1 April 2027 to 31 March 2028, **{s2}** until 31 March 2029 and **{s3}** from then on, the legal maximum. The Catalan rate for Barcelona does not change.",
       "So from 1 April 2027 a Barcelona hotel stay costs **{step} more per person per night**. The calculator already applies these amounts by date.",
     ],
+    muniFutureTitle: "Towns with their own surcharge from 1 April 2027",
+    muniFuture: [
+      "The Catalan Tax Agency already publishes the surcharges these towns will charge from 1 April 2027. All of them rise except the five-star rate. Sant Just Desvern has no new column: it keeps the surcharge in force since 1 October 2026.",
+    ],
+    muniFutureCaption: "Municipal surcharge outside Barcelona from 1 April 2027, per liable guest per stay unit",
+    muniFutureNote:
+      "Catalan Tax Agency (ATC), read on 13 November 2026. Added to the Catalan rate from 1 April 2027. \"—\": the ATC lists no surcharge for that category. Castelldefels and Esplugues figures are as the ATC publishes them. Sant Just Desvern: the amount in force since 1 Oct 2026, with no end date.",
+
+    cruiseTitle: "Cruise passengers: who pays and how much",
+    cruise: [
+      "Cruise passengers pay the tax when the ship **calls** at a Catalan port while they are in transit. Passengers who board at a Catalan port to start their trip, or leave the ship there because it is the end of their trip, **do not pay** for that call, according to the Catalan Tax Agency.",
+      "The rate depends on how long the call lasts: more than 12 hours, or 12 hours or less. The ship counts as moored from the moment the first line is thrown until the last mooring line is let go. In Barcelona the same municipal surcharge as for hotels is added, and it also rises on 1 April 2027.",
+    ],
+    cruiseCaption: "Tax per cruise passenger in transit, per person",
+    cruiseHeaders: {
+      call: "Call",
+      bcnNow: "Barcelona until 31 Mar 2027",
+      bcnNext: "Barcelona from 1 Apr 2027",
+      restNow: "Rest of Catalonia until 31 Mar 2027",
+      restNext: "Rest of Catalonia from 1 Apr 2027",
+    },
+    cruiseRows: { over12h: "More than 12 hours", upTo12h: "12 hours or less" },
+    cruiseNote:
+      "Catalan Tax Agency (ATC), read on 13 November 2026. Barcelona: Catalan rate plus municipal surcharge. Rest of Catalonia: Catalan rate only. Castelldefels and El Prat de Llobregat add their own cruise surcharge: {cdfOver} (more than 12 hours) and {cdfUnder} (12 hours or less) until 31 March 2027; {cdfOver27} and {cdfUnder27} from 1 April 2027.",
 
     childrenTitle: "Do children pay?",
     children: [

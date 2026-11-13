@@ -1,6 +1,12 @@
 import type { Block } from "@/lib/content/blocks";
 import { link } from "@/lib/content/features/shared";
-import { SOURCES as TMB_SOURCES, TICKETS, VERIFIED_AT } from "@/lib/content/transport-cards/rates";
+import {
+  CURRENT_FARES,
+  SOURCES as TMB_SOURCES,
+  TICKETS,
+  VERIFIED_AT,
+  ZONE_KEYS,
+} from "@/lib/content/transport-cards/rates";
 import { fuelPath } from "@/lib/programmatic/fuel/paths";
 import { hubPath as rodaliesHub } from "@/lib/programmatic/rodalies/paths";
 
@@ -114,25 +120,23 @@ const PROFILE_HEADERS: Record<string, string[]> = {
 // calculator. T-familiar and T-grup from the same TMB table and ATM's pages.
 // ATM had announced no 2027 fares on 28 Oct 2026. Re-read 30 Oct 2026 on the
 // same TMB table: every zone, T-familiar, T-grup and the €5.90 airport ticket
-// unchanged; still no 2027 fares.
-const ZONE_FARES: string[][] = [
-  ["1", "2,90 €", "13,00 €", "12,00 €", "22,80 €"],
-  ["2", "4,15 €", "25,50 €", "18,30 €", "30,55 €"],
-  ["3", "5,40 €", "34,70 €", "22,95 €", "42,70 €"],
-  ["4", "6,90 €", "44,65 €", "25,65 €", "52,15 €"],
-  ["5", "8,80 €", "51,20 €", "28,70 €", "59,60 €"],
-  ["6", "10,25 €", "54,45 €", "32,10 €", "63,85 €"],
-  ["7", "11,60 €", "57,60 €", "34,70 €", "67,65 €"],
-];
+// unchanged; still no 2027 fares. 13 Nov 2026: the figures now come from the
+// dated table CURRENT_FARES in transport-cards/rates.ts (re-read that day,
+// unchanged; ATM and TMB still list no 2027 fares).
+function zoneRows(locale: "ca" | "es" | "en"): string[][] {
+  return ZONE_KEYS.map((zone) => {
+    const z = CURRENT_FARES.zones[zone];
+    return [zone, ...[z.single, z.tCasual, z.tDia, z.tUsual].map((v) => euros(v, locale))];
+  });
+}
 
-/** The zone table with English money formatting: "2,90 €" -> "€2.90". */
-const ZONE_FARES_EN: string[][] = ZONE_FARES.map(([zone, ...cells]) => [
-  zone ?? "",
-  ...cells.map((cell) => `€${cell.replace(" €", "").replace(",", ".")}`),
-]);
+const ZONE_FARES: string[][] = zoneRows("ca");
 
-/** TMB's airport ticket: one metro journey including Aeroport T1 and T2 (re-read 30 Oct 2026). */
-const AIRPORT_TICKET = 5.9;
+/** The zone table with English money formatting: "€2.90". */
+const ZONE_FARES_EN: string[][] = zoneRows("en");
+
+/** TMB's airport ticket: one metro journey including Aeroport T1 and T2. */
+const AIRPORT_TICKET = CURRENT_FARES.airportTicket;
 
 const VS_COPY = {
   ca: {
@@ -232,7 +236,7 @@ export const TRANSPORT: B2Article = {
         ),
         table("Preus de TMB per zones, 2026", ["Zones", "Bitllet senzill", "T-casual (10 viatges)", "T-dia (24 h)", "T-usual (30 dies)"], ZONE_FARES, "Font: TMB, preus vigents des del 15 de gener de 2026; la T-usual porta el 50 % de descompte del Reial decret llei 17/2025. Barcelona i el Prat de Llobregat són a la zona 1."),
         ...paras(
-          "Aquests preus valen fins al pròxim canvi de tarifes de l'ATM; a 30 d'octubre de 2026 encara no s'han anunciat els del 2027.",
+          "Aquests preus valen fins al pròxim canvi de tarifes de l'ATM; a 13 de novembre de 2026 ni l'ATM ni TMB no han publicat els del 2027 (l'any passat l'ATM els va aprovar el 19 de desembre). Les ajudes estatals del Reial decret llei 17/2025, que paguen el 50 % de descompte de la T-usual, cobreixen de l'1 de gener al 31 de desembre de 2026; encara no s'ha anunciat cap pròrroga per al 2027.",
           "**Quantes zones necessites?** Compta el sector tarifari d'on surts i el d'arribada: per anar de Barcelona (zona 1) a Sabadell (zona 2C) cal un títol de 2 zones, segons TMB. Badalona i Montgat són a la zona 1; el Masnou (amb Ocata) i Premià de Mar, a la zona 2. Cada viatge permet fins a 3 transbordaments en 75 minuts en una zona, 15 minuts més per cada zona addicional. La T-casual en targeta de cartró T-mobilitat costa 1 € més.",
         ),
         ...h2(
@@ -330,7 +334,7 @@ export const TRANSPORT: B2Article = {
         ),
         table("Precios de TMB por zonas, 2026", ["Zonas", "Billete sencillo", "T-casual (10 viajes)", "T-dia (24 h)", "T-usual (30 días)"], ZONE_FARES, "Fuente: TMB, precios vigentes desde el 15 de enero de 2026; la T-usual lleva el 50 % de descuento del Real Decreto-ley 17/2025. Barcelona y El Prat de Llobregat están en la zona 1."),
         ...paras(
-          "Estos precios valen hasta el próximo cambio de tarifas de la ATM; a 30 de octubre de 2026 aún no se han anunciado los de 2027.",
+          "Estos precios valen hasta el próximo cambio de tarifas de la ATM; a 13 de noviembre de 2026 ni la ATM ni TMB han publicado los de 2027 (el año pasado la ATM los aprobó el 19 de diciembre). Las ayudas estatales del Real Decreto-ley 17/2025, que pagan el 50 % de descuento de la T-usual, cubren del 1 de enero al 31 de diciembre de 2026; aún no se ha anunciado ninguna prórroga para 2027.",
           "**¿Cuántas zonas necesitas?** Cuenta el sector tarifario de salida y el de llegada: para ir de Barcelona (zona 1) a Sabadell (zona 2C) hace falta un título de 2 zonas, según TMB. Badalona y Montgat están en la zona 1; El Masnou (con Ocata) y Premià de Mar, en la zona 2. Cada viaje permite hasta 3 transbordos en 75 minutos en una zona, 15 minutos más por cada zona adicional. La T-casual en tarjeta de cartón T-mobilitat cuesta 1 € más.",
         ),
         ...h2(
@@ -421,7 +425,7 @@ export const TRANSPORT: B2Article = {
         ),
         table("TMB fares by zone, 2026", ["Zones", "Single ticket", "T-casual (10 journeys)", "T-dia (24 h)", "T-usual (30 days)"], ZONE_FARES_EN, "Source: TMB, prices in force from 15 January 2026; the T-usual carries the 50% discount of Royal Decree-Law 17/2025. Barcelona and El Prat de Llobregat are in zone 1."),
         ...paras(
-          "These prices apply until ATM's next fare change; as of 30 October 2026 the 2027 fares had not been announced.",
+          "These prices apply until ATM's next fare change; as of 13 November 2026 neither ATM nor TMB had published the 2027 fares (last year ATM approved them on 19 December). The State aid of Royal Decree-Law 17/2025, which pays for the T-usual's 50% discount, covers 1 January to 31 December 2026; no extension for 2027 has been announced yet.",
           "**How many zones do you need?** Count the fare sector you leave from and the one you arrive in: Barcelona (zone 1) to Sabadell (zone 2C) needs a 2-zone ticket, according to TMB. Badalona and Montgat are in zone 1; El Masnou (with Ocata) and Premià de Mar in zone 2. Each journey allows up to 3 transfers within 75 minutes in one zone, plus 15 minutes for each extra zone. A T-casual on a cardboard T-mobilitat card costs €1 more.",
         ),
         ...h2(

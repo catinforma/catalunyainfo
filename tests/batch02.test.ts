@@ -475,7 +475,7 @@ test("transport: EN zone table and FAQ, prices in the EN and ES snippets", () =>
   assert.match(text.slice(0, 200), /T-casual.*€13.*T-dia.*€12/, "EN answer first");
   assert.match(text, /€24\.80/, "EN: T-casual plus two airport tickets");
   assert.match(text, /T-familiar[^.]*€11\.50/, "EN: T-familiar fare");
-  assert.match(text, /2027 fares had not been announced/);
+  assert.match(text, /neither ATM nor TMB had published the 2027 fares/);
   assert.ok(blocks.some((b) => b.type === "faq"), "EN FAQ");
   assert.ok(JSON.stringify(en.blocks).includes(`](/en/${B2_PATHS.hours.en}/)`), "EN links the metro hours page");
   for (const locale of ["es", "en"] as const) {
@@ -484,7 +484,7 @@ test("transport: EN zone table and FAQ, prices in the EN and ES snippets", () =>
     assert.ok(seoDescription.length <= 155, `${locale}: ${seoDescription.length}`);
     assert.match(seoTitle, /T-casual.*13/, `${locale}: T-casual price in the title`);
   }
-  assert.equal(TRANSPORT.verifiedAt, "2026-10-30");
+  assert.equal(TRANSPORT.verifiedAt, "2026-11-13");
 });
 
 test("the selector block is placed on the transport article in every language", () => {

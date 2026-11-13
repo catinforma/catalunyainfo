@@ -343,7 +343,7 @@ const es: Messages = {
     noRateTitle: "Sin tarifa verificada",
     noRate:
       "No tenemos una tarifa oficial verificada para esta fecha y esta ubicación, y no daremos ninguna que no podamos comprobar. Consulta la Agència Tributària de Catalunya.",
-    sourceLine: "Tarifas verificadas el 24 de septiembre de 2026 en la",
+    sourceLine: "Tarifas verificadas el 13 de noviembre de 2026 en la",
     disclaimer:
       "Cálculo orientativo. El importe final lo determina el establecimiento según la normativa aplicable y debe mostrarlo separado en la factura.",
     rules:

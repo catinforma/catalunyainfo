@@ -185,6 +185,8 @@ for (const locale of LOCALES) {
       ...copy.rest,
       ...copy.future,
       ...copy.barcelonaFuture,
+      ...copy.muniFuture,
+      ...copy.cruise,
       ...copy.children,
       ...copy.nights,
       ...copy.booking,
@@ -268,4 +270,83 @@ test("the lead gives the Barcelona range first; the municipal surcharges and an 
     assert.ok(body.some((b) => b.type === "faq"), `${locale}: FAQ`);
     assert.match(text, /3[.,]60/, `${locale}: L'Hospitalet four-star total`);
   }
+});
+
+/* -------------------------------------------------------------------------- */
+/* From 1 April 2027 and cruise passengers (re-read 13 Nov 2026)              */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * ATC tariff page, re-read 13 Nov 2026: every 1 April 2027 figure is fixed —
+ * Barcelona (Generalitat rate unchanged + Ordenança fiscal 2.2's 6 EUR), the
+ * rest of Catalonia (Llei 2/2026) and a new "a partir de l'01.04.2027" column
+ * for six of the seven municipal surcharges (Sant Just Desvern keeps one
+ * open-ended column). Cruise rule from the ATC "Meritació" page: passengers in
+ * transit pay at the call; embarking at the start or leaving at the end of
+ * the trip does not accrue the tax.
+ */
+test("from 1 April 2027: Barcelona table, municipal column and cruise table on the page", () => {
+  const bcn = { ca: /1 d'abril de 2027/, es: /1 de abril de 2027/, en: /1 April 2027/ };
+  for (const locale of LOCALES) {
+    const body = buildBody(locale);
+    const tables = body.filter((b) => b.type === "table") as { caption?: string; rows: string[][]; note?: string }[];
+
+    const bcn2027 = tables.find((t) => /Barcelona/.test(t.caption ?? "") && bcn[locale].test(t.caption ?? ""));
+    assert.ok(bcn2027, `${locale}: dated Barcelona 2027 table`);
+    const four = bcn2027.rows[ACCOMMODATION_ORDER.indexOf("hotel-4")]!;
+    assert.match(four[2]!, /6[.,]00/, `${locale}: 6 EUR surcharge`);
+    assert.match(four[3]!, /9[.,]40/, `${locale}: 3.40 + 6.00`);
+    assert.match(bcn2027.rows[ACCOMMODATION_ORDER.indexOf("hotel-5")]![3]!, /13[.,]00/, `${locale}: five-star 2027`);
+
+    const muni2027 = tables.filter((t) => JSON.stringify(t.rows).includes("Sant Just Desvern"))[1];
+    assert.ok(muni2027, `${locale}: municipal 2027 table`);
+    const row = (name: string) => muni2027.rows.find((r) => r[0] === name)!;
+    assert.match(row("L'Hospitalet de Llobregat")[2]!, /2[.,]40/, `${locale}: L'Hospitalet four-star 2027`);
+    assert.match(row("L'Hospitalet de Llobregat")[3]!, /2[.,]50/, `${locale}: L'Hospitalet dwelling 2027`);
+    assert.match(row("Castelldefels")[3]!, /2[.,]40/, `${locale}: Castelldefels dwelling as printed`);
+    assert.match(row("Esplugues de Llobregat")[3]!, /1[.,]20/, `${locale}: Esplugues dwelling 2027 as printed`);
+    assert.match(row("Esplugues de Llobregat")[5]!, /2[.,]50/, `${locale}: Esplugues other 2027 as printed`);
+    assert.match(row("Sant Just Desvern")[2]!, /1[.,]80/, `${locale}: Sant Just keeps its open-ended amount`);
+    assert.equal(row("Esplugues de Llobregat")[1], "—");
+
+    const cruise = tables.find((t) => t.rows.length === 2 && t.rows[0]!.length === 5);
+    assert.ok(cruise, `${locale}: cruise table`);
+    // Barcelona: 4 + 5 / 6 + 5 now, 4 + 6 / 6 + 6 from April 2027; elsewhere 3 / 4.50 then 4 / 6.
+    assert.deepEqual(cruise.rows.map((r) => r.slice(1).map((c) => c.replace(/[^\d.,]/g, ""))), [
+      locale === "en" ? ["9.00", "10.00", "3.00", "4.00"] : ["9,00", "10,00", "3,00", "4,00"],
+      locale === "en" ? ["11.00", "12.00", "4.50", "6.00"] : ["11,00", "12,00", "4,50", "6,00"],
+    ]);
+    assert.match(cruise.note ?? "", /3[.,]00.*4[.,]00.*4[.,]00.*4[.,]00/, `${locale}: Castelldefels / El Prat cruise surcharge`);
+
+    const text = bodyToPlainText(body);
+    assert.match(text, /trànsit|tránsito|transit/, `${locale}: transit rule`);
+    assert.match(text, /desembarca|leave the ship/, `${locale}: end-of-trip passengers do not pay`);
+    assert.doesNotMatch(text, /\{\w+\}/, `${locale}: unfilled placeholder`);
+  }
+});
+
+test("the calculator applies the 1 April 2027 figures by date", () => {
+  const at = (scope: "barcelona" | "rest-of-catalonia", date: string, accommodation: (typeof ACCOMMODATION_ORDER)[number]) =>
+    calculateTax({ scope, date, accommodation, liableGuests: 1, nights: 1 }).perPersonPerUnit;
+  assert.equal(at("barcelona", "2027-03-31", "cruise-under-12h"), 11);
+  assert.equal(at("barcelona", "2027-04-01", "cruise-under-12h"), 12);
+  assert.equal(at("rest-of-catalonia", "2027-03-31", "hotel-4"), 1.8);
+  assert.equal(at("rest-of-catalonia", "2027-04-01", "hotel-4"), 2.4);
+  assert.equal(at("barcelona", "2028-04-01", "hotel-4"), 10.4);
+  assert.equal(at("barcelona", "2029-04-01", "hotel-4"), 11.4);
+});
+
+test("date guards: re-read the ATC before 1 April 2027, and roll the page over on that day", async () => {
+  const { LAST_VERIFIED, RECHECK_BEFORE_APRIL_2027 } = await import("../src/lib/content/tourist-tax/rates.ts");
+  const today = new Intl.DateTimeFormat("en-CA", { timeZone: "Europe/Madrid" }).format(new Date());
+  assert.ok(LAST_VERIFIED <= today, `LAST_VERIFIED (${LAST_VERIFIED}) is in the future`);
+  assert.ok(
+    today < RECHECK_BEFORE_APRIL_2027 || LAST_VERIFIED >= RECHECK_BEFORE_APRIL_2027,
+    `On ${today} the tourist-tax rates were last read on ${LAST_VERIFIED}. Before 1 April 2027 re-read the ATC tariff page (https://atc.gencat.cat/ca/tributs/ieet/quota-tributaria) and Barcelona's Ordenança fiscal 2.2, update rates.ts and LAST_VERIFIED, and publish the \`tourist-tax\` group.`,
+  );
+  const now = RATE_PERIODS.find((p) => p.scope === "barcelona" && p.from === "2026-04-01")!;
+  assert.ok(
+    now.until === null || today <= now.until,
+    `On ${today} the page still leads with the period that ended on ${now.until}. Move EXAMPLE_DATE and the "now"/"2027" periods in publish.ts to the 1 April 2027 period, retitle (2027) per docs/SEO_EXPERIMENTS.md, and publish \`tourist-tax\`.`,
+  );
 });

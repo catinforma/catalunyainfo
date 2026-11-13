@@ -103,7 +103,7 @@ export const RATE_PERIODS: RatePeriod[] = [
     regional: BARCELONA_REGIONAL,
     surcharge,
     sourceUrl: surcharge === 5.0 ? ATC_RATES : BCN_ORDINANCE,
-    verifiedAt: "2026-10-30",
+    verifiedAt: "2026-11-13",
   })),
   {
     scope: "rest-of-catalonia",
@@ -122,7 +122,7 @@ export const RATE_PERIODS: RatePeriod[] = [
     // (seven municipalities have one since 1 Oct 2026; the page names them).
     surcharge: null,
     sourceUrl: ATC_RATES,
-    verifiedAt: "2026-10-30",
+    verifiedAt: "2026-11-13",
   },
   {
     scope: "rest-of-catalonia",
@@ -139,7 +139,7 @@ export const RATE_PERIODS: RatePeriod[] = [
     },
     surcharge: null,
     sourceUrl: ATC_RATES,
-    verifiedAt: "2026-10-30",
+    verifiedAt: "2026-11-13",
   },
 ];
 
@@ -304,6 +304,11 @@ export const SOURCES = [
     publisher: "Agència Tributària de Catalunya",
   },
   {
+    name: "Impost sobre les estades en establiments turístics — meritació (creuers)",
+    url: "https://atc.gencat.cat/ca/tributs/ieet/meritacio/",
+    publisher: "Agència Tributària de Catalunya",
+  },
+  {
     name: "Ordenança fiscal núm. 2.2 — recàrrec sobre l'impost sobre les estades en establiments turístics",
     url: "https://ajuntament.barcelona.cat/hisenda/sites/default/files/normativa/2026-02/2.2-ordenanca-recarrec-turistic.pdf",
     publisher: "Ajuntament de Barcelona",
@@ -324,21 +329,83 @@ export const SOURCES = [
  * Esplugues is transcribed as printed (tourist dwelling 0,90 €, other
  * establishments 1,75 €), even though it reads like the other towns' two
  * values swapped: the ATC page is the source, and the page says so.
+ *
+ * ## From 1 April 2027 (re-read 13 Nov 2026)
+ *
+ * The same ATC table now has a second column, "Recàrrec de l'Ajuntament a
+ * partir de l'01.04.2027", for six of the seven: the four-star, tourist
+ * dwelling, hostel and "other" surcharges rise (the five-star stays 4,00 €).
+ * Transcribed as printed, including Castelldefels' tourist dwelling at 2,40 €
+ * (the others 2,50 €) and Esplugues' 1,20 € / 2,50 €. Sant Just Desvern has
+ * one open-ended column, "a partir de l'01.10.2026": `from2027` is null and
+ * its first amounts carry on.
+ *
+ * Castelldefels and El Prat also list a cruise-ship surcharge (CR1 more than
+ * 12 hours / CR2 12 hours or less): 3,00 / 4,00 € to 31 Mar 2027, then
+ * 4,00 / 4,00 €.
  */
-export interface MunicipalSurcharge {
-  municipality: string;
-  amounts: Partial<Record<"hotel-5" | "hotel-4" | "tourist-dwelling" | "hostel" | "other", number | null>>;
+type MunicipalCategory = "hotel-5" | "hotel-4" | "tourist-dwelling" | "hostel" | "other";
+
+export interface CruiseAmounts {
+  over12h: number;
+  upTo12h: number;
 }
 
+export interface MunicipalSurcharge {
+  municipality: string;
+  /** 1 Oct 2026 to 31 Mar 2027 (open-ended when `from2027` is null). */
+  amounts: Partial<Record<MunicipalCategory, number | null>>;
+  /** From 1 Apr 2027; null when the ATC lists a single open-ended column. */
+  from2027: Partial<Record<MunicipalCategory, number | null>> | null;
+  cruise?: { now: CruiseAmounts; from2027: CruiseAmounts };
+}
+
+const STD_2026 = { "hotel-5": 4.0, "hotel-4": 1.8, "tourist-dwelling": 1.75, hostel: 0.8, other: 0.9 };
+const STD_2027 = { "hotel-5": 4.0, "hotel-4": 2.4, "tourist-dwelling": 2.5, hostel: 1.0, other: 1.2 };
+const CRUISE_SURCHARGE = { now: { over12h: 3.0, upTo12h: 4.0 }, from2027: { over12h: 4.0, upTo12h: 4.0 } };
+
 export const MUNICIPAL_SURCHARGES: MunicipalSurcharge[] = [
-  { municipality: "Castelldefels", amounts: { "hotel-5": 4.0, "hotel-4": 1.8, "tourist-dwelling": 1.75, hostel: 0.8, other: 0.9 } },
-  { municipality: "Esplugues de Llobregat", amounts: { "hotel-5": null, "hotel-4": 1.8, "tourist-dwelling": 0.9, hostel: null, other: 1.75 } },
-  { municipality: "L'Hospitalet de Llobregat", amounts: { "hotel-5": 4.0, "hotel-4": 1.8, "tourist-dwelling": 1.75, hostel: 0.8, other: 0.9 } },
-  { municipality: "El Prat de Llobregat", amounts: { "hotel-5": 4.0, "hotel-4": 1.8, "tourist-dwelling": 1.75, hostel: 0.8, other: 0.9 } },
-  { municipality: "Sabadell", amounts: { "hotel-5": 4.0, "hotel-4": 1.8, "tourist-dwelling": 1.75, hostel: 0.8, other: 0.9 } },
-  { municipality: "Sant Cugat del Vallès", amounts: { "hotel-5": 4.0, "hotel-4": 1.8, "tourist-dwelling": 1.75, hostel: 0.8, other: 0.9 } },
-  { municipality: "Sant Just Desvern", amounts: { "hotel-5": 4.0, "hotel-4": 1.8, "tourist-dwelling": 1.75, hostel: 0.8, other: 0.9 } },
+  {
+    municipality: "Castelldefels",
+    amounts: STD_2026,
+    from2027: { ...STD_2027, "tourist-dwelling": 2.4 },
+    cruise: CRUISE_SURCHARGE,
+  },
+  {
+    municipality: "Esplugues de Llobregat",
+    amounts: { "hotel-5": null, "hotel-4": 1.8, "tourist-dwelling": 0.9, hostel: null, other: 1.75 },
+    from2027: { "hotel-5": null, "hotel-4": 2.4, "tourist-dwelling": 1.2, hostel: null, other: 2.5 },
+  },
+  { municipality: "L'Hospitalet de Llobregat", amounts: STD_2026, from2027: STD_2027 },
+  { municipality: "El Prat de Llobregat", amounts: STD_2026, from2027: STD_2027, cruise: CRUISE_SURCHARGE },
+  { municipality: "Sabadell", amounts: STD_2026, from2027: STD_2027 },
+  { municipality: "Sant Cugat del Vallès", amounts: STD_2026, from2027: STD_2027 },
+  { municipality: "Sant Just Desvern", amounts: STD_2026, from2027: null },
 ];
+
+/** A municipality's surcharges from 1 April 2027 (its open-ended amounts when it lists no 2027 column). */
+export function municipalAmounts2027(m: MunicipalSurcharge): Partial<Record<MunicipalCategory, number | null>> {
+  return m.from2027 ?? m.amounts;
+}
+
+/* -------------------------------------------------------------------------- */
+/* Cruise passengers                                                           */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * Cruise rules, ATC "Meritació" page (read 13 Nov 2026): "pel que fa a les
+ * estades en embarcacions de creuers, l'impost es merita, per als
+ * contribuents que es troben en trànsit, en el moment en què el vaixell fa
+ * escala en algun port de Catalunya. La persona que embarca en un port de
+ * Catalunya iniciant així el seu viatge, o aquella que hi desembarca perquè
+ * aquest port és la destinació final del seu viatge, no merita l'impost."
+ * The rate depends on whether the call lasts more than 12 hours (CR1/CR3) or
+ * 12 hours or less (CR2/CR4); the ship counts as moored "des del moment en
+ * què es llança el primer cap ... fins al moment en què el vaixell afluixa
+ * l'última amarra" ("Fet imposable i exempcions"). The rates themselves are
+ * the cruise rows of RATE_PERIODS.
+ */
+export const ATC_ACCRUAL = "https://atc.gencat.cat/ca/tributs/ieet/meritacio/";
 
 /** The categories the municipal table shows, in page order. */
 export const MUNICIPAL_COLUMNS = ["hotel-5", "hotel-4", "tourist-dwelling", "hostel", "other"] as const;
@@ -350,6 +417,11 @@ export const MUNICIPAL_COLUMNS = ["hotel-5", "hotel-4", "tourist-dwelling", "hos
  */
 export const SPECIAL_RATE = { "hotel-5": 10.0, "hotel-4": 7.0, other: 5.0 } as const;
 
-export const LAST_VERIFIED = "2026-10-30";
+// 13 Nov 2026: ATC tariff, taxable-event and accrual pages re-read; Barcelona
+// Ordenança fiscal 2.2 (BOPB 2-2-2026) re-read, no 2027 modification on the
+// Ajuntament's tax page; no IEET news from the ATC since 30 Sep 2026.
+export const LAST_VERIFIED = "2026-11-13";
 // New municipal surcharges approved this autumn; then again before 1 Apr 2027.
 export const NEXT_REVIEW = "2026-12-01";
+/** By this date the 1 April 2027 figures are re-read on the ATC page (date-guard test). */
+export const RECHECK_BEFORE_APRIL_2027 = "2027-03-01";

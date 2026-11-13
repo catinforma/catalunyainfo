@@ -4400,3 +4400,43 @@ fees can change on 1 January (Orden PJC/617/2025 art. 1.2): re-read the BOE
 order, the Police fee table and the office pages, then move NIE_TIE_AS_OF.
 
 **Outcome:** _pending_
+
+## 2026-11-13 — Tourist tax: the 1 April 2027 figures and cruise passengers; transport fares as a dated table (body only; deploy, then groups `tourist-tax`, `transport`)
+
+**Windows respected.** Tourist tax ca/es/en titles and descriptions are
+measured until 30 Nov (6 Nov sweep): unchanged, body only. Transport EN
+title frozen to 16 Nov: unchanged, body only (one dated sentence).
+
+**Tourist tax (read 13 Nov 2026 on the ATC tariff, taxable-event and
+accrual pages; Barcelona Ordenança fiscal 2.2, BOPB 2-2-2026).** Every
+1 April 2027 figure is fixed in law: Barcelona = unchanged Generalitat
+rate + 6 € (then 7 € from 1 Apr 2028, 8 € from 1 Apr 2029); rest of
+Catalonia = Llei 2/2026 rates; and new on the ATC page, a "a partir de
+l'01.04.2027" column for six of the seven municipal surcharges (Sant Just
+Desvern keeps one open-ended column). New on the page: a dated Barcelona
+table from 1 April 2027, the municipal 2027 table, a cruise section (transit
+passengers pay at the call; boarding at the start or leaving at the end of
+the trip does not accrue it; > 12 h vs ≤ 12 h; Castelldefels / El Prat
+cruise surcharges) and an FAQ "do cruise passengers pay". The calculator
+already priced by date; tests now pin 31 Mar / 1 Apr 2027, 2028 and 2029.
+No Barcelona ordinance change for 2027 on the Ajuntament's tax page.
+
+**Transport (read 13 Nov 2026).** TMB's 2026 table unchanged; ATM home page
+"En vigor les tarifes de 2026", no 2027 fares in its press room (latest note
+9 Nov); RDL 17/2025 aid runs 1 Jan–31 Dec 2026, no 2027 extension announced.
+Code: `FARES_2026` / `FARES_2027 = null` / `CURRENT_FARES` in
+transport-cards/rates.ts; the zone table, airport ticket and selector read
+it. A drift test lists every euro figure in the transport prose that is not
+in the current table, so the January swap is: fill FARES_2027, point
+CURRENT_FARES, fix what the test lists, publish `transport`.
+
+**Date guards.** tests/transport-fares.test.ts fails from 16 Dec 2026 and
+again from 15 Jan 2027 until FARES_AS_OF is moved past them (ATM approved
+2026 fares on 19 Dec 2025). tests/tourist-tax.test.ts fails from 1 Mar 2027
+until the ATC is re-read, and from 1 Apr 2027 until the page leads with the
+2027 period.
+
+**Expected:** "tasa turistica barcelona 2027", "taxa turistica 2027",
+"tasa turistica cruceros barcelona" long tail; measure with the 30 Nov read.
+
+**Outcome:** _pending_

@@ -342,7 +342,7 @@ const en: Messages = {
     noRateTitle: "No verified rate",
     noRate:
       "We have no verified official rate for this date and location, and we will not quote one we cannot check. Please consult the Catalan Tax Agency.",
-    sourceLine: "Rates verified on 24 September 2026 against the",
+    sourceLine: "Rates verified on 13 November 2026 against the",
     disclaimer:
       "An estimate. The final amount is determined by the accommodation under the applicable rules, and must appear separately on your invoice.",
     rules:

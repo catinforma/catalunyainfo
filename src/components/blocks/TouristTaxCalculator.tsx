@@ -28,7 +28,7 @@ import type { Locale } from "@/lib/i18n/config";
  *
  *  - When no verified rate covers the chosen date, it says so and shows
  *    nothing. Outside Barcelona there is no verified period before 1 April
- *    2026, and no Barcelona period after 31 March 2027.
+ *    2026 (Barcelona runs open-ended, with the surcharge stepping up each 1 April).
  *  - Outside Barcelona it never adds a municipal surcharge. Municipalities may
  *    levy one for stays from 1 October 2026; we do not know which have, and
  *    inventing a zero would read as "there is none".

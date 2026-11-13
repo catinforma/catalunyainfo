@@ -24,6 +24,7 @@ import {
   SOURCES,
   SPECIAL_RATE,
   calculateTax,
+  municipalAmounts2027,
   periodFor,
   round,
   type AccommodationType,
@@ -99,6 +100,12 @@ function plain(value: number, locale: Locale): string {
 }
 
 const HOSPITALET = MUNICIPAL_SURCHARGES.find((m) => m.municipality === "L'Hospitalet de Llobregat");
+const CASTELLDEFELS = MUNICIPAL_SURCHARGES.find((m) => m.municipality === "Castelldefels");
+
+/** Barcelona's total (regional + surcharge) for a type in a period. */
+function totalIn(period: RatePeriod, type: AccommodationType): number {
+  return round(period.regional[type] + (period.surcharge ?? 0));
+}
 
 /**
  * Fills every `{placeholder}` the copy may carry (see copy.ts) from the rate
@@ -107,7 +114,17 @@ const HOSPITALET = MUNICIPAL_SURCHARGES.find((m) => m.municipality === "L'Hospit
  */
 export function fillFigures(text: string, locale: Locale): string {
   const hosp4 = HOSPITALET?.amounts["hotel-4"] ?? 0;
+  const hosp4next = HOSPITALET ? (municipalAmounts2027(HOSPITALET)["hotel-4"] ?? 0) : 0;
+  const cruise = CASTELLDEFELS?.cruise;
   const values: Record<string, string> = {
+    bcn4next: money(totalIn(BCN_2027, "hotel-4"), locale),
+    hosp4next: money(hosp4next, locale),
+    bcnCruiseOver: money(totalIn(BCN_NOW, "cruise-over-12h"), locale),
+    bcnCruiseUnder: money(totalIn(BCN_NOW, "cruise-under-12h"), locale),
+    cdfOver: money(cruise?.now.over12h ?? 0, locale),
+    cdfUnder: money(cruise?.now.upTo12h ?? 0, locale),
+    cdfOver27: money(cruise?.from2027.over12h ?? 0, locale),
+    cdfUnder27: money(cruise?.from2027.upTo12h ?? 0, locale),
     bcnMin: money(Math.min(...BCN_TOTALS), locale),
     bcnMax: money(Math.max(...BCN_TOTALS), locale),
     bcnSur: money(BCN_NOW.surcharge ?? 0, locale),
@@ -142,13 +159,31 @@ export function seoFor(locale: Locale): { seoTitle: string; seoDescription: stri
 }
 
 /** One row per municipality with a surcharge; "—" where the ATC lists none. */
-function municipalRows(locale: Locale): string[][] {
-  return MUNICIPAL_SURCHARGES.map((m) => [
-    m.municipality,
-    ...MUNICIPAL_COLUMNS.map((type) => {
-      const amount = m.amounts[type];
-      return amount === null || amount === undefined ? "—" : money(amount, locale);
-    }),
+function municipalRows(locale: Locale, from2027 = false): string[][] {
+  return MUNICIPAL_SURCHARGES.map((m) => {
+    const amounts = from2027 ? municipalAmounts2027(m) : m.amounts;
+    return [
+      m.municipality,
+      ...MUNICIPAL_COLUMNS.map((type) => {
+        const amount = amounts[type];
+        return amount === null || amount === undefined ? "—" : money(amount, locale);
+      }),
+    ];
+  });
+}
+
+/** Cruise rows: Barcelona total and the regional rate elsewhere, now and from 1 April 2027. */
+function cruiseRows(copy: TaxCopy, locale: Locale): string[][] {
+  const rows: [string, AccommodationType][] = [
+    [copy.cruiseRows.over12h, "cruise-over-12h"],
+    [copy.cruiseRows.upTo12h, "cruise-under-12h"],
+  ];
+  return rows.map(([label, type]) => [
+    label,
+    money(totalIn(BCN_NOW, type), locale),
+    money(totalIn(BCN_2027, type), locale),
+    money(REST_NOW.regional[type], locale),
+    money(REST_2027.regional[type], locale),
   ]);
 }
 
@@ -349,9 +384,22 @@ export function buildBody(locale: Locale, inlineMediaId?: string): Block[] {
   });
   blocks.push({ type: "paragraph", text: fillFigures(copy.special, locale) });
 
-  /* ---- 1 April 2027 -------------------------------------------------------- */
+  /* ---- 1 April 2027: every figure already fixed by law and ordinance -------- */
   blocks.push({ type: "heading", level: 2, text: copy.futureTitle });
   for (const text of copy.future) blocks.push({ type: "paragraph", text });
+  blocks.push({
+    type: "table",
+    caption: copy.futureBarcelonaCaption,
+    headers: [
+      copy.tableHeaders.type,
+      copy.tableHeaders.regional,
+      copy.tableHeaders.surcharge,
+      copy.tableHeaders.total,
+    ],
+    rows: combinedRows(BCN_2027, copy, locale),
+    note: copy.tableNote,
+    stickyColumn: 0,
+  });
   blocks.push({
     type: "table",
     caption: copy.futureCaption,
@@ -363,6 +411,42 @@ export function buildBody(locale: Locale, inlineMediaId?: string): Block[] {
 
   blocks.push({ type: "heading", level: 3, text: copy.barcelonaFutureTitle });
   for (const text of copy.barcelonaFuture) blocks.push({ type: "paragraph", text: barcelonaFuture(text, locale) });
+
+  blocks.push({ type: "heading", level: 3, text: copy.muniFutureTitle });
+  for (const text of copy.muniFuture) blocks.push({ type: "paragraph", text });
+  blocks.push({
+    type: "table",
+    caption: copy.muniFutureCaption,
+    headers: [
+      copy.muniHeaders.municipality,
+      copy.muniHeaders.hotel5,
+      copy.muniHeaders.hotel4,
+      copy.muniHeaders.flat,
+      copy.muniHeaders.hostel,
+      copy.muniHeaders.other,
+    ],
+    rows: municipalRows(locale, true),
+    note: copy.muniFutureNote,
+    stickyColumn: 0,
+  });
+
+  /* ---- Cruise passengers ------------------------------------------------------ */
+  blocks.push({ type: "heading", level: 2, text: copy.cruiseTitle });
+  for (const text of copy.cruise) blocks.push({ type: "paragraph", text });
+  blocks.push({
+    type: "table",
+    caption: copy.cruiseCaption,
+    headers: [
+      copy.cruiseHeaders.call,
+      copy.cruiseHeaders.bcnNow,
+      copy.cruiseHeaders.bcnNext,
+      copy.cruiseHeaders.restNow,
+      copy.cruiseHeaders.restNext,
+    ],
+    rows: cruiseRows(copy, locale),
+    note: fillFigures(copy.cruiseNote, locale),
+    stickyColumn: 0,
+  });
 
   /* ---- Exemptions and the cap ---------------------------------------------- */
   blocks.push({ type: "heading", level: 2, text: copy.childrenTitle });
