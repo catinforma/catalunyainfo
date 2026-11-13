@@ -69,7 +69,7 @@ import {
  *   torrades, 30 grams d'avellanes torrades, 4 o 5 tomàquets vermells
  *   escalivats, 1 cabeça d'alls escalivats, 80 cl d'oli d'oliva de Valls, 1/2
  *   gotet de vinagre, 1 pebrot sec o pebre vermell dolç, julivert i sal".
- *   Printed exactly as published (80 cl included), attributed.
+ *   Printed as published except the oil: the page says 80 cl for four, which looks like a typo (13 Nov 2026), so no oil quantity is given.
  * - IGP "On comprar Calçots? | Compra directa als productors": producers by
  *   comarca with their phone; some "També venda de cuits". Linked, no names
  *   or numbers copied (private individuals).
@@ -512,7 +512,7 @@ export function buildCalcotsBody(locale: Locale, programme: ProgrammeNotice | nu
         "30 grams d'avellanes torrades;",
         "4 o 5 tomàquets vermells escalivats;",
         "1 cabeça d'alls escalivats;",
-        "80 cl d'oli d'oliva de Valls;",
+        "oli d'oliva de Valls, afegit a poc a poc fins que la salsa lligui;",
         "1/2 gotet de vinagre;",
         "1 pebrot sec o pebre vermell dolç;",
         "julivert i sal.",
@@ -553,7 +553,7 @@ export function buildCalcotsBody(locale: Locale, programme: ProgrammeNotice | nu
         },
         {
           question: "Com es fa la salsa dels calçots?",
-          answer: "La Cambra de Comerç de Valls dona aquests ingredients per a quatre persones, tot ben picat: 100 g d'ametlles torrades, 30 g d'avellanes torrades, 4 o 5 tomàquets vermells escalivats, 1 cabeça d'alls escalivats, 80 cl d'oli d'oliva, mig gotet de vinagre, 1 pebrot sec o pebre vermell dolç, julivert i sal.",
+          answer: "La Cambra de Comerç de Valls dona aquests ingredients per a quatre persones, tot ben picat: 100 g d'ametlles torrades, 30 g d'avellanes torrades, 4 o 5 tomàquets vermells escalivats, 1 cabeça d'alls escalivats, oli d'oliva (a poc a poc, fins que lligui), mig gotet de vinagre, 1 pebrot sec o pebre vermell dolç, julivert i sal.",
         },
         {
           question: "On es poden comprar calçots IGP?",
@@ -691,7 +691,7 @@ export function buildCalcotsBody(locale: Locale, programme: ProgrammeNotice | nu
         "30 gramos de avellanas tostadas;",
         "4 o 5 tomates rojos asados;",
         "1 cabeza de ajos asados;",
-        "80 cl de aceite de oliva de Valls;",
+        "aceite de oliva de Valls, añadido poco a poco hasta que la salsa ligue;",
         "1/2 vasito de vinagre;",
         "1 pimiento seco o pimentón dulce;",
         "perejil y sal.",
@@ -732,7 +732,7 @@ export function buildCalcotsBody(locale: Locale, programme: ProgrammeNotice | nu
         },
         {
           question: "¿Cómo se hace la salsa de los calçots?",
-          answer: "La Cambra de Comerç de Valls da estos ingredientes para cuatro personas, todo bien picado: 100 g de almendras tostadas, 30 g de avellanas tostadas, 4 o 5 tomates rojos asados, 1 cabeza de ajos asados, 80 cl de aceite de oliva, medio vasito de vinagre, 1 pimiento seco o pimentón dulce, perejil y sal.",
+          answer: "La Cambra de Comerç de Valls da estos ingredientes para cuatro personas, todo bien picado: 100 g de almendras tostadas, 30 g de avellanas tostadas, 4 o 5 tomates rojos asados, 1 cabeza de ajos asados, aceite de oliva (poco a poco, hasta que ligue), medio vasito de vinagre, 1 pimiento seco o pimentón dulce, perejil y sal.",
         },
         {
           question: "¿Dónde comprar calçots IGP?",
@@ -869,7 +869,7 @@ export function buildCalcotsBody(locale: Locale, programme: ProgrammeNotice | nu
       "30 grams of toasted hazelnuts;",
       "4 or 5 roasted red tomatoes;",
       "1 head of roasted garlic;",
-      "80 cl of Valls olive oil;",
+      "Valls olive oil, added slowly until the sauce binds;",
       "half a small glass of vinegar;",
       "1 dried pepper or sweet paprika;",
       "parsley and salt.",
@@ -910,7 +910,7 @@ export function buildCalcotsBody(locale: Locale, programme: ProgrammeNotice | nu
       },
       {
         question: "How do you make calçot sauce?",
-        answer: "The Valls Chamber of Commerce gives these ingredients for four people, all finely ground: 100 g toasted almonds, 30 g toasted hazelnuts, 4 or 5 roasted red tomatoes, 1 head of roasted garlic, 80 cl olive oil, half a small glass of vinegar, 1 dried pepper or sweet paprika, parsley and salt.",
+        answer: "The Valls Chamber of Commerce gives these ingredients for four people, all finely ground: 100 g toasted almonds, 30 g toasted hazelnuts, 4 or 5 roasted red tomatoes, 1 head of roasted garlic, olive oil (added slowly until it binds), half a small glass of vinegar, 1 dried pepper or sweet paprika, parsley and salt.",
       },
       {
         question: "Where can I buy IGP calçots?",

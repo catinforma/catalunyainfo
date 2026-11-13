@@ -313,9 +313,9 @@ test("the organiser's per-person figure is in the key facts and the FAQ, never a
 
 test("the sauce for four is the Cambra's list, exactly, with its source linked", () => {
   const items: Record<Locale, string[]> = {
-    ca: ["100 grams d'ametlles torrades", "30 grams d'avellanes torrades", "4 o 5 tomàquets vermells escalivats", "1 cabeça d'alls escalivats", "80 cl d'oli d'oliva de Valls", "1/2 gotet de vinagre", "1 pebrot sec o pebre vermell dolç"],
-    es: ["100 gramos de almendras tostadas", "30 gramos de avellanas tostadas", "4 o 5 tomates rojos asados", "1 cabeza de ajos asados", "80 cl de aceite de oliva de Valls", "1/2 vasito de vinagre", "1 pimiento seco o pimentón dulce"],
-    en: ["100 grams of toasted almonds", "30 grams of toasted hazelnuts", "4 or 5 roasted red tomatoes", "1 head of roasted garlic", "80 cl of Valls olive oil", "half a small glass of vinegar", "1 dried pepper or sweet paprika"],
+    ca: ["100 grams d'ametlles torrades", "30 grams d'avellanes torrades", "4 o 5 tomàquets vermells escalivats", "1 cabeça d'alls escalivats", "oli d'oliva de Valls, afegit a poc a poc", "1/2 gotet de vinagre", "1 pebrot sec o pebre vermell dolç"],
+    es: ["100 gramos de almendras tostadas", "30 gramos de avellanas tostadas", "4 o 5 tomates rojos asados", "1 cabeza de ajos asados", "aceite de oliva de Valls, añadido poco a poco", "1/2 vasito de vinagre", "1 pimiento seco o pimentón dulce"],
+    en: ["100 grams of toasted almonds", "30 grams of toasted hazelnuts", "4 or 5 roasted red tomatoes", "1 head of roasted garlic", "Valls olive oil, added slowly", "half a small glass of vinegar", "1 dried pepper or sweet paprika"],
   };
   for (const locale of LOCALES) {
     const body = text(CALCOTS.editions[locale].blocks);
