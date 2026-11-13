@@ -646,6 +646,53 @@
     min-height: 1.5rem;
   }
 
+  /* Town and city holiday pages: subscribe to the .ics feed (CalendarSubscribe). */
+  .ci-subscribe {
+    margin: 1.25rem 0;
+    border: 1px solid var(--color-rule);
+    border-left: 4px solid var(--color-sea);
+    border-radius: var(--radius-sm);
+    background: var(--color-surface);
+    padding: 1rem 1.25rem;
+  }
+  .ci-subscribe-title {
+    font-weight: 600;
+    margin: 0;
+  }
+  .ci-subscribe-text {
+    margin: 0.25rem 0 0.5rem;
+    font-size: 0.95rem;
+    color: var(--color-ink-soft);
+  }
+  /* Two classes: wins over `.ci-prose ul` / `.ci-prose li + li` on the pages that hold it. */
+  .ci-subscribe .ci-subscribe-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem 1.25rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .ci-subscribe .ci-subscribe-links li {
+    margin: 0;
+  }
+  .ci-subscribe-links a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.75rem;
+    font-weight: 500;
+  }
+  .ci-subscribe-url {
+    margin: 0.25rem 0 0;
+    font-size: 0.85rem;
+    color: var(--color-muted);
+    overflow-wrap: anywhere;
+  }
+  .ci-subscribe-url code {
+    font-size: 0.85em;
+    user-select: all;
+  }
+
   /* Homepage: the most-searched utilities under the title (HomeTopTools). */
   .ci-home-top {
     margin-top: 1rem;

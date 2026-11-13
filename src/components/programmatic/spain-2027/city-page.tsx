@@ -3,6 +3,7 @@ import Link from "next/link";
 import { ShareBar, crumbPath } from "@/components/share/ShareBar";
 import type { Crumb } from "@/components/Breadcrumbs";
 import { WidgetPlaceLink } from "@/components/programmatic/embed-2027/WidgetLink";
+import { CalendarSubscribe } from "@/components/programmatic/ics/CalendarSubscribe";
 import { dayMonthYear } from "@/lib/programmatic/holidays/format";
 import { YEAR } from "@/lib/programmatic/spain-2027/calendar";
 import { CITIES_AS_OF, INE_POPULATION, ineTableUrl, type LocalDay } from "@/lib/programmatic/spain-2027/cities-data";
@@ -129,6 +130,8 @@ export function CityPage({ c }: { c: City }) {
             </p>
           ) : null}
           <WidgetPlaceLink locale="es" place={{ kind: "city", c }} />
+          {/* The city's confirmed 2027 holidays as a calendar feed (.ics). */}
+          <CalendarSubscribe locale="es" place={{ kind: "city", c }} />
 
           <p className="ci-lead">{cityLead(c)}</p>
 

@@ -94,6 +94,8 @@ export const ALWAYS_NOINDEX_SOURCES = [
   "/api/:path*",
   // The WhatsApp channel's private post page (lib/share/channel-token.ts).
   "/canal/:path*",
+  // The holiday calendar feeds (.ics, lib/programmatic/ics/feeds.ts): for calendar apps, not search results.
+  "/ics/:path*",
   "/ca/cerca",
   "/ca/cerca/:path*",
   "/es/buscar",
