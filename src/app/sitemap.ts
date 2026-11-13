@@ -26,6 +26,7 @@ import { netSalarySitemapEntries } from "@/lib/programmatic/net-salary/sitemap";
 import { selfEmployedSitemapEntries } from "@/lib/programmatic/self-employed/sitemap";
 import { employmentSitemapEntries } from "@/lib/programmatic/employment/sitemap";
 import { sickLeaveSitemapEntries } from "@/lib/programmatic/sick-leave/sitemap";
+import { subsidySitemapEntries } from "@/lib/programmatic/unemployment-subsidy/sitemap";
 import { rentSitemapEntries } from "@/lib/programmatic/rent-update/page";
 import { pvpcSitemapEntries } from "@/lib/programmatic/pvpc/pages";
 import { butaneSitemapEntries } from "@/lib/programmatic/butane/page";
@@ -190,6 +191,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...employmentSitemapEntries(),
     // "Calculadora de baja laboral": sick pay (incapacidad temporal) day by day, in es, ca and en.
     ...sickLeaveSitemapEntries(),
+    // "Subsidio por desempleo 2026": who gets it, how much and how long (+ IMV 2026), in es, ca and en.
+    ...subsidySitemapEntries(),
     // "Actualizar el alquiler": the rent-update calculator (INE IPC and IRAV), in es, ca and en.
     ...rentSitemapEntries(),
     // Precio de la luz hoy / mañana (PVPC), Spain-wide, in es, ca and en.

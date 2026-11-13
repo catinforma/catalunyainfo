@@ -15,6 +15,7 @@ import { leaveEditions } from "@/lib/programmatic/leave-2027/copy";
 import { netSalaryEditions } from "@/lib/programmatic/net-salary/copy";
 import { selfEmployedEditions } from "@/lib/programmatic/self-employed/copy";
 import { sickLeaveEditions } from "@/lib/programmatic/sick-leave/copy";
+import { subsidyEditions } from "@/lib/programmatic/unemployment-subsidy/copy";
 import { calcEditions, calculatorsHubEditions } from "@/lib/programmatic/calculators/paths";
 import { rentEditions } from "@/lib/programmatic/rent-update/copy";
 import { pensionEditions } from "@/lib/programmatic/pensions-2027/copy";
@@ -129,6 +130,11 @@ export function liveTools(): LiveTool[] {
       name: "Sick pay calculator (Spain, incapacidad temporal / baja laboral)",
       hubs: sickLeaveEditions(),
       description: "Social Security sick pay for employees day by day: ordinary illness or non-work accident nothing on days 1-3, 60% of the daily base reguladora on days 4-20 (employer bears days 4-15, INSS or mutua from day 16), 75% from day 21; work accident or occupational disease 75% from the day after; the special cases (menstruation, termination of pregnancy, pregnancy from week 39, donation at 100%, and from 1 Dec 2026 menopause and gender-violence injuries); the Royal Decree-law 31/2026 changes from 1 Dec 2026 (base of the month before last, special cases paid from the day after); 365 + 180 days, 545 maximum; optional collective-agreement top-up; gross, IRPF withheld (LGSS arts. 169-176, RD 53/1980, Decreto 3158/1966).",
+    },
+    {
+      name: "Unemployment subsidy checker (Spain, subsidio por desempleo) + Minimum Living Income 2026",
+      hubs: subsidyEditions(),
+      description: "who qualifies for the non-contributory unemployment subsidy after the 2024 reform (RDL 2/2024, from 1 Nov 2024): benefit exhausted (6 months; 24 or 30 with family responsibilities; under 45 without family needs a 360-day benefit), insufficient contributions 90-359 days (3-6 months, 21 with family), aged 52+ (80% IPREM until retirement, retirement contributions paid), returning emigrants (18 months), victims of gender or sexual violence (30 months); income test: own gross income of the previous month, or family-unit income per head, no more than 75% of the SMI without extra payments = 915.75 EUR in 2026; amounts 95/90/80% of the 600 EUR IPREM = 570/540/480 EUR; the employment support top-up (CAE) when working; IMV 2026 guaranteed income 733.60 EUR a month for one adult and the household scale (LGSS arts. 274-282, DA 57-58; Ley 19/2021 art. 13; RDL 3/2026 art. 2.5).",
     },
     {
       name: "Rent increase calculator (Spain)",

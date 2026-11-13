@@ -1,9 +1,10 @@
 "use client";
 
+import Link from "next/link";
 import { useId, useState } from "react";
 
 import { money, num, parseAmount, pct } from "@/lib/programmatic/employment/paths";
-import type { CalcLocale } from "@/lib/programmatic/calculators/paths";
+import { calcPath, type CalcLocale } from "@/lib/programmatic/calculators/paths";
 import { BENEFIT_SS_RATE, SUBSIDY_MONTHLY } from "@/lib/programmatic/employment/rules";
 import { unemploymentBenefit, type Children } from "@/lib/programmatic/employment/unemployment";
 
@@ -45,6 +46,7 @@ type Copy = {
   next: (at: number, more: number) => string;
   top: string;
   notEligible: (subsidy: string) => string;
+  subsidyLink: string;
   noBase: string;
   irpf: string;
 };
@@ -76,6 +78,7 @@ const T: Record<CalcLocale, Copy> = {
     next: (at, more) => `Con ${at} días cotizados (te faltan ${more}) pasarías al siguiente tramo de duración.`,
     top: "Ya estás en el tramo más alto: 720 días, dos años.",
     notEligible: (s) => `Con menos de 360 días cotizados no hay prestación contributiva. Puede corresponderte el subsidio por cotización insuficiente (${s} al mes los primeros 180 días, según el SEPE), si cumples sus requisitos de rentas.`,
+    subsidyLink: "Comprueba si te corresponde el subsidio.",
     noBase: "Pon tu base de cotización mensual.",
     irpf: "El SEPE también retiene IRPF si corresponde: depende de lo que vayas a cobrar en el año y de tu situación familiar.",
   },
@@ -105,6 +108,7 @@ const T: Record<CalcLocale, Copy> = {
     next: (at, more) => `Amb ${at} dies cotitzats (te'n falten ${more}) passaries al tram següent de durada.`,
     top: "Ja ets al tram més alt: 720 dies, dos anys.",
     notEligible: (s) => `Amb menys de 360 dies cotitzats no hi ha prestació contributiva. Et pot correspondre el subsidi per cotització insuficient (${s} al mes els primers 180 dies, segons el SEPE), si compleixes els requisits de rendes.`,
+    subsidyLink: "Comprova si et correspon el subsidi.",
     noBase: "Posa la teva base de cotització mensual.",
     irpf: "El SEPE també reté IRPF si correspon: depèn del que cobraràs durant l'any i de la teva situació familiar.",
   },
@@ -134,6 +138,7 @@ const T: Record<CalcLocale, Copy> = {
     next: (at, more) => `At ${at} days contributed (${more} more) you would move up a duration bracket.`,
     top: "You are already in the top bracket: 720 days, two years.",
     notEligible: (s) => `With fewer than 360 days contributed there is no contributory benefit. You may get the subsidy for insufficient contributions (${s} a month for the first 180 days, per SEPE) if you meet its income test.`,
+    subsidyLink: "Check whether you qualify for the subsidy.",
     noBase: "Enter your monthly contribution base.",
     irpf: "SEPE also withholds income tax (IRPF) where due: it depends on what you will receive in the year and your family situation.",
   },
@@ -199,7 +204,11 @@ export function UnemploymentCalculator({ locale, initial }: { locale: CalcLocale
       </div>
 
       <div aria-live="polite">
-        {contributed < 360 ? <p className="ci-calc-note">{t.notEligible(m(SUBSIDY_MONTHLY[0]))}</p> : null}
+        {contributed < 360 ? (
+          <p className="ci-calc-note">
+            {t.notEligible(m(SUBSIDY_MONTHLY[0]))} <Link href={calcPath("unemployment-subsidy", locale)}>{t.subsidyLink}</Link>
+          </p>
+        ) : null}
         {contributed >= 360 && base <= 0 ? <p className="ci-calc-note">{t.noBase}</p> : null}
         {r.eligible ? (
           <dl className="ci-calc-results">

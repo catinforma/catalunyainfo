@@ -10,7 +10,7 @@ import type { Locale } from "@/lib/i18n/config";
  *   /ca/calculadores/…
  *   /en/calculators/…
  *
- * Every tool's module (net-salary/copy.ts, self-employed/copy.ts, sick-leave/copy.ts, employment/*, rent-update/copy.ts)
+ * Every tool's module (net-salary/copy.ts, self-employed/copy.ts, sick-leave/copy.ts, unemployment-subsidy/copy.ts, employment/*, rent-update/copy.ts)
  * reads its slugs from `CALCULATORS` below, and the hub lists the same
  * registry, so a tool added here shows up on the hub (tests/calculators-hub.test.ts
  * fails until it has a card). Slugs are live URLs: never change one.
@@ -30,6 +30,8 @@ export const CALCULATORS = [
   { id: "dismissal", slugs: { es: "indemnizacion-despido", ca: "indemnitzacio-acomiadament", en: "severance-pay-spain" } },
   { id: "settlement", slugs: { es: "finiquito", ca: "quitanca-finiquito", en: "final-settlement-spain" } },
   { id: "unemployment", slugs: { es: "paro", ca: "atur", en: "unemployment-benefit-spain" } },
+  // Unemployment subsidy (subsidio por desempleo): LGSS arts. 274-280 and DA 57ª-58ª as reformed by RDL 2/2024, plus the IMV 2026 amounts.
+  { id: "unemployment-subsidy", slugs: { es: "subsidio-desempleo", ca: "subsidi-atur", en: "spain-unemployment-subsidy" } },
   // Sick pay (incapacidad temporal): LGSS arts. 169-176 as amended by RDL 31/2026 from 1 Dec 2026.
   { id: "sick-leave", slugs: { es: "baja-laboral", ca: "baixa-laboral", en: "sick-leave-pay-spain" } },
   { id: "rent-update", slugs: { es: "actualizar-alquiler", ca: "actualitzar-lloguer", en: "rent-increase-spain" } },
