@@ -1,6 +1,7 @@
 import Link from "next/link";
 
-import { calcPath, dateWords, money, num, type CalcLocale } from "@/lib/programmatic/employment/paths";
+import { dateWords, money, num } from "@/lib/programmatic/employment/paths";
+import { calcPath, type CalcLocale } from "@/lib/programmatic/calculators/paths";
 import { RULES_AS_OF } from "@/lib/programmatic/employment/rules";
 import { settlement } from "@/lib/programmatic/employment/settlement";
 

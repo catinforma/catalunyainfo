@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { existsSync, readFileSync } from "node:fs";
+import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { test } from "node:test";
 
@@ -351,7 +351,7 @@ test("page: the 12-month table is newest first, from the INE's published months 
   assert.ok(rows.every((r) => r.ipc !== null && r.irav !== null));
 });
 
-test("routes: one static folder per language, no calculators hub page, sitemap with hreflang", () => {
+test("routes: one static folder per language, sitemap with hreflang", () => {
   assert.deepEqual(rentEditions(), {
     es: "/es/calculadoras/actualizar-alquiler/",
     ca: "/ca/calculadores/actualitzar-lloguer/",
@@ -362,7 +362,6 @@ test("routes: one static folder per language, no calculators hub page, sitemap w
     const page = readFileSync(join(dir, "page.tsx"), "utf8");
     assert.match(page, new RegExp(`const LOCALE = "${l}"`));
     assert.match(page, /export const revalidate = 86400;/);
-    assert.ok(!existsSync(join(dir, "..", "page.tsx")), `${rentPath(l)}: a calculators hub page exists`);
   }
   const entries = rentSitemapEntries();
   assert.equal(entries.length, 3);

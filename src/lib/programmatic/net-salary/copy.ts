@@ -1,5 +1,5 @@
 import type { Locale } from "@/lib/i18n/config";
-import { CALCULATORS, calculatorPath } from "@/lib/programmatic/calculators/paths";
+import { calcPath, calculatorSlugs } from "@/lib/programmatic/calculators/paths";
 
 import type { AgeBand, Contract, Disability, FamilySituation, SalaryInput } from "./engine";
 import { IRPF, SOCIAL_SECURITY } from "./rules-2026";
@@ -16,10 +16,11 @@ import { IRPF, SOCIAL_SECURITY } from "./rules-2026";
 
 export type NetLocale = Locale;
 export const NET_LOCALES: readonly NetLocale[] = ["es", "ca", "en"];
-export const NET_SLUG: Record<NetLocale, string> = CALCULATORS[0].slugs;
+/** From the family registry (lib/programmatic/calculators/paths.ts). */
+export const NET_SLUG: Record<NetLocale, string> = calculatorSlugs("net-salary");
 
 export function netSalaryPath(locale: NetLocale): string {
-  return calculatorPath(locale, NET_SLUG[locale]);
+  return calcPath("net-salary", locale);
 }
 
 export function netSalaryEditions(): Record<NetLocale, string> {

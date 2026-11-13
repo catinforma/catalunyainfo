@@ -2,10 +2,12 @@ import type { Metadata } from "next";
 
 import { Breadcrumbs, type Crumb } from "@/components/Breadcrumbs";
 import { JsonLd } from "@/components/JsonLd";
+import { MoreCalculators } from "@/components/programmatic/calculators/MoreCalculators";
 import { ShareBar } from "@/components/share/ShareBar";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
 import { getMessages } from "@/lib/i18n";
+import { hubCrumb } from "@/lib/programmatic/calculators/hub";
 import { dayMonthYear } from "@/lib/programmatic/holidays/format";
 import { money, netSalaryEditions, netSalaryPath, percent, type NetLocale } from "@/lib/programmatic/net-salary/copy";
 import { DEFAULT_INPUT, calculateNetSalary, scale, type SalaryResult } from "@/lib/programmatic/net-salary/engine";
@@ -59,6 +61,7 @@ export const NET_META: Record<NetLocale, { title: string; description: string; h
 export function netSalaryCrumbs(locale: NetLocale): Crumb[] {
   return [
     { label: getMessages(locale).common.home, href: `/${locale}/` },
+    hubCrumb(locale),
     { label: NET_META[locale].breadcrumb, href: netSalaryPath(locale) },
   ];
 }
@@ -435,6 +438,8 @@ export function NetSalaryRoute({ locale }: { locale: NetLocale }) {
                   <li key={l}>{l}</li>
                 ))}
               </ul>
+
+              <MoreCalculators current="net-salary" locale={locale} />
             </div>
             <ShareBar locale={locale} path={netSalaryPath(locale)} title={meta.h1} contentType="net_salary_calculator" variant="full" />
           </div>

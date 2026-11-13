@@ -3,7 +3,8 @@
 import { useId, useState } from "react";
 
 import { isIsoDate } from "@/lib/programmatic/employment/dates";
-import { dateWords, money, num, parseAmount, type CalcLocale } from "@/lib/programmatic/employment/paths";
+import { dateWords, money, num, parseAmount } from "@/lib/programmatic/employment/paths";
+import type { CalcLocale } from "@/lib/programmatic/calculators/paths";
 import { END_REASONS, defaultPendingDays, settlement, type EndReason, type ExtraAccrual } from "@/lib/programmatic/employment/settlement";
 
 /**

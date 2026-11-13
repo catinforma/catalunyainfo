@@ -30,6 +30,8 @@ import { joinList } from "@/lib/programmatic/holidays/names";
 import { hasEnglishPage } from "@/lib/programmatic/holidays/english";
 import { datePath, isDatePage, municipalityPath } from "@/lib/programmatic/holidays/paths";
 import { largestTownLinks, townPageCount } from "@/lib/programmatic/holidays/towns";
+import { calculatorsHubPath } from "@/lib/programmatic/calculators/paths";
+import { LEAVE_YEAR, leavePath } from "@/lib/programmatic/leave-2027/copy";
 import { COPY, type HolidayCopy } from "./copy";
 import { ARAN_SUBSTITUTIONS, HOLIDAYS_BY_YEAR, addDays, longDate } from "./calendar";
 import { DIADA_IMAGE, SANT_JOAN_IMAGE } from "./images";
@@ -424,6 +426,20 @@ function currentYearSection(copy: HolidayCopy, locale: Locale): Block[] {
   ];
 }
 
+/** After the bridges table: the 2027 leave planner (/es/festivos/2027/aprovechar-vacaciones/), with the reader's town and days. */
+const LEAVE_LINE: Record<Locale, string> = {
+  ca: `Per al teu municipi i els dies de vacances que tens, el [planificador de vacances del ${LEAVE_YEAR}](${leavePath("ca")}) calcula quins dies has de demanar per encadenar més dies lliures.`,
+  es: `Para tu municipio y los días de vacaciones que tienes, el [planificador de vacaciones de ${LEAVE_YEAR}](${leavePath("es")}) calcula qué días pedir para encadenar más días libres.`,
+  en: `For your own town and the leave you have, the [${LEAVE_YEAR} leave planner](${leavePath("en")}) works out which days to book for the longest breaks.`,
+};
+
+/** Last line: the calculators hub (net salary, settlement, dismissal, unemployment, rent). */
+const CALCULATORS_LINE: Record<Locale, string> = {
+  ca: `I si estàs fent números de l'any: les [calculadores de sou net, quitança, atur i lloguer](${calculatorsHubPath("ca")}).`,
+  es: `Y si estás haciendo números del año: las [calculadoras de sueldo neto, finiquito, paro y alquiler](${calculatorsHubPath("es")}).`,
+  en: `And if you are doing the year's sums: the [net salary, final settlement, unemployment benefit and rent calculators](${calculatorsHubPath("en")}).`,
+};
+
 export function buildBody(locale: Locale, inlineMediaId?: string): Block[] {
   const copy = COPY[locale];
   const blocks: Block[] = [];
@@ -507,6 +523,8 @@ export function buildBody(locale: Locale, inlineMediaId?: string): Block[] {
       ]),
     note: copy.efficiencyNote,
   });
+  // The planner does the same sums for the reader's own town and days of leave.
+  blocks.push({ type: "paragraph", text: LEAVE_LINE[locale] });
 
   /* ---- Barcelona --------------------------------------------------------- */
   blocks.push({ type: "heading", level: 2, text: copy.barcelonaTitle });
@@ -569,6 +587,7 @@ export function buildBody(locale: Locale, inlineMediaId?: string): Block[] {
   };
   blocks.push({ type: "paragraph", text: related[locale] });
   blocks.push({ type: "paragraph", text: copy.schoolLine });
+  blocks.push({ type: "paragraph", text: CALCULATORS_LINE[locale] });
 
   return blocks;
 }

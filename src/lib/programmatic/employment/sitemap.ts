@@ -2,7 +2,7 @@ import type { MetadataRoute } from "next";
 
 import { absoluteUrl } from "@/lib/site";
 
-import { CALC_KEYS, CALC_LOCALES, calcEditions, type CalcKey } from "./paths";
+import { CALC_KEYS, CALC_LOCALES, calcEditions, type CalcKey } from "@/lib/programmatic/calculators/paths";
 import { RULES_AS_OF } from "./rules";
 
 /** Dismissal pay, final settlement and unemployment benefit, ca/es/en each, with reciprocal hreflang (x-default: English, as buildAlternates writes it in the HTML). */

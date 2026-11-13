@@ -1,5 +1,6 @@
 import type { Block } from "@/lib/content/blocks";
 import type { Locale } from "@/lib/i18n/config";
+import { calcPath } from "@/lib/programmatic/calculators/paths";
 
 /**
  * Editorial batch 02: Barcelona practical, day trips, Ripollès and winter.
@@ -976,15 +977,29 @@ export const RELATED_HEADING: Record<Locale, string> = {
   en: "Keep reading",
 };
 
-export function b2Related(keys: B2Key[], locale: Locale): Block[] {
+/** `extra`: ready-made Markdown items appended to the list (tools that are routes, not B2 articles). */
+export function b2Related(keys: B2Key[], locale: Locale, extra: string[] = []): Block[] {
   return [
     { type: "heading", level: 2, text: RELATED_HEADING[locale] },
     {
       type: "list",
       ordered: false,
-      items: keys.map((key) => b2link(key, locale, B2_TITLES[key][locale])),
+      items: [...keys.map((key) => b2link(key, locale, B2_TITLES[key][locale])), ...extra],
     },
   ] as Block[];
+}
+
+/**
+ * The net salary calculator as a related-list item, for the newcomer guides
+ * (padró, NIE/TIE): what a payslip leaves once you start working here.
+ */
+export function netSalaryRelatedItem(locale: Locale): string {
+  const label = {
+    ca: "Calculadora de sou net 2026: quant cobraràs al mes si véns a treballar",
+    es: "Calculadora de sueldo neto 2026: cuánto cobrarás al mes si vienes a trabajar",
+    en: "Spain net salary calculator 2026: what you take home each month if you come to work",
+  }[locale];
+  return `[${label}](${calcPath("net-salary", locale)})`;
 }
 
 /* -------------------------------------------------------------------------- */

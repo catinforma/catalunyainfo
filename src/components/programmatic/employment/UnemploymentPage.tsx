@@ -1,6 +1,7 @@
 import Link from "next/link";
 
-import { PAY_DATES_PATH, calcPath, dateWords, money, num, pct, type CalcLocale } from "@/lib/programmatic/employment/paths";
+import { PAY_DATES_PATH, dateWords, money, num, pct } from "@/lib/programmatic/employment/paths";
+import { calcPath, type CalcLocale } from "@/lib/programmatic/calculators/paths";
 import { BENEFIT_SS_RATE, DURATION_SCALE, IPREM_MONTHLY, IPREM_PLUS_SIXTH, MAX_CONTRIBUTION_BASE, SUBSIDY_MONTHLY } from "@/lib/programmatic/employment/rules";
 import { benefitLimits, unemploymentBenefit, type Children } from "@/lib/programmatic/employment/unemployment";
 

@@ -8,7 +8,7 @@ import { NOT_FOUND_METADATA } from "@/components/programmatic/spain-2027/routes"
  * /en/calculators/net-salary-spain/ — "Spain net salary calculator 2026"
  * (lib/programmatic/net-salary/), server-rendered with the €30,000 example.
  * The first tool of the calculators family (lib/programmatic/calculators/paths.ts);
- * no hub page yet. Ships with the deploy: no publish group (nothing here is in the database).
+ * listed on the hub (/es/calculadoras/). Ships with the deploy: no publish group (nothing here is in the database).
  */
 export const revalidate = false;
 // true, like the leave planner: self-hosted, a dynamicParams = false route

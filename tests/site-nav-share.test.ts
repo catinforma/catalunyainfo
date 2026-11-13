@@ -17,6 +17,7 @@ import {
   primaryItems,
   type MenuKey,
 } from "../src/lib/nav/menu.ts";
+import { calculatorsHubPath } from "../src/lib/programmatic/calculators/paths.ts";
 import { hubPath as electionsHubPath } from "../src/lib/programmatic/elections/paths.ts";
 import { hubPath as holidaysHubPath } from "../src/lib/programmatic/holidays/paths.ts";
 import { hubEditions } from "../src/lib/programmatic/spain-2027/editions.ts";
@@ -34,6 +35,7 @@ const OWNER: Record<MenuKey, (l: Locale) => string> = {
   strikes: (l) => `/${l}/${B2_PATHS.strikes[l]}/`,
   holidays: (l) => `/${l}/${B2_PATHS.workCalendar[l]}/`,
   elections: (l) => electionsHubPath(l),
+  calculators: (l) => calculatorsHubPath(l),
   school: (l) => `/${l}/${SCHOOL_COPY[l].path}/`,
   localHolidays: (l) => holidaysHubPath(l),
   spain2027: (l) => hubEditions()[l],
@@ -43,6 +45,7 @@ const OWNER: Record<MenuKey, (l: Locale) => string> = {
 // Programmatic hubs are routes of their own: the page file must exist.
 const ROUTE_FILE: Partial<Record<MenuKey, Record<Locale, string>>> = {
   elections: { ca: "eleccions/page.tsx", es: "elecciones/page.tsx", en: "elections/page.tsx" },
+  calculators: { ca: "calculadores/page.tsx", es: "calculadoras/page.tsx", en: "calculators/page.tsx" },
   localHolidays: { ca: "festius/page.tsx", es: "festivos/page.tsx", en: "holidays/page.tsx" },
   spain2027: { ca: "festius/2027/page.tsx", es: "festivos/2027/page.tsx", en: "holidays/2027/page.tsx" },
 };

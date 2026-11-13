@@ -2,7 +2,8 @@
 
 import { useId, useState } from "react";
 
-import { money, num, parseAmount, pct, type CalcLocale } from "@/lib/programmatic/employment/paths";
+import { money, num, parseAmount, pct } from "@/lib/programmatic/employment/paths";
+import type { CalcLocale } from "@/lib/programmatic/calculators/paths";
 import { BENEFIT_SS_RATE, SUBSIDY_MONTHLY } from "@/lib/programmatic/employment/rules";
 import { unemploymentBenefit, type Children } from "@/lib/programmatic/employment/unemployment";
 

@@ -3,10 +3,12 @@ import type { ReactNode } from "react";
 
 import { Breadcrumbs, type Crumb } from "@/components/Breadcrumbs";
 import { JsonLd } from "@/components/JsonLd";
+import { MoreCalculators } from "@/components/programmatic/calculators/MoreCalculators";
 import { ShareBar } from "@/components/share/ShareBar";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
 import { getMessages } from "@/lib/i18n";
+import { hubCrumb } from "@/lib/programmatic/calculators/hub";
 import { DECIMALS, SERIES_LABEL, elDay, monthText, pct, rentEditions, rentPath, type RentLocale } from "@/lib/programmatic/rent-update/copy";
 import { defaultExample } from "@/lib/programmatic/rent-update/engine";
 import { SERIES, tableUrl } from "@/lib/programmatic/rent-update/ine";
@@ -31,6 +33,7 @@ const L = <T,>(locale: RentLocale, v: Record<RentLocale, T>): T => v[locale];
 export function rentCrumbs(locale: RentLocale, label: string): Crumb[] {
   return [
     { label: getMessages(locale).common.home, href: `/${locale}/` },
+    hubCrumb(locale),
     { label, href: rentPath(locale) },
   ];
 }
@@ -337,6 +340,8 @@ export function RentRoute({ locale, data }: { locale: RentLocale; data: ServerRe
                   <A href={tableUrl(SERIES.irav)}>IRAV {SERIES.irav.code}</A> · <A href={tableUrl(SERIES.igc)}>IGC {SERIES.igc.code}</A>
                 </li>
               </ul>
+
+              <MoreCalculators current="rent-update" locale={locale} />
             </div>
             <ShareBar locale={locale} path={rentPath(locale)} title={meta.h1} contentType="rent_update" variant="full" />
           </div>

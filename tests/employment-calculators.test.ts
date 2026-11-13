@@ -5,7 +5,8 @@ import { test } from "node:test";
 
 import { addMonths, cents, serviceMonths } from "../src/lib/programmatic/employment/dates.ts";
 import { compareDismissals, dismissalPay } from "../src/lib/programmatic/employment/dismissal.ts";
-import { CALC_KEYS, CALC_LOCALES, CALC_ROOT, CALC_SLUG, PAY_DATES_PATH, calcEditions, calcPath, money, parseAmount } from "../src/lib/programmatic/employment/paths.ts";
+import { PAY_DATES_PATH, money, parseAmount } from "../src/lib/programmatic/employment/paths.ts";
+import { CALCULATORS_ROOT, CALC_KEYS, CALC_LOCALES, calcEditions, calcPath, calculatorSlugs } from "../src/lib/programmatic/calculators/paths.ts";
 import {
   DURATION_SCALE,
   IPREM_MONTHLY,
@@ -259,8 +260,8 @@ test("nine pages on unique paths under the calculators folder of each language, 
   assert.equal(new Set(all).size, 9);
   for (const k of CALC_KEYS) {
     for (const l of CALC_LOCALES) {
-      assert.equal(calcPath(k, l), `/${l}/${CALC_ROOT[l]}/${CALC_SLUG[k][l]}/`);
-      const file = join(APP, CALC_ROOT[l], CALC_SLUG[k][l], "page.tsx");
+      assert.equal(calcPath(k, l), `/${l}/${CALCULATORS_ROOT[l]}/${calculatorSlugs(k)[l]}/`);
+      const file = join(APP, CALCULATORS_ROOT[l], calculatorSlugs(k)[l], "page.tsx");
       assert.ok(existsSync(file), `missing ${file}`);
       const src = readFileSync(file, "utf8");
       assert.match(src, new RegExp(`locale !== "${l}"\\) notFound\\(\\)`), `${file} must 404 in other languages`);
