@@ -37,6 +37,7 @@
     "reservoirs:snapshot": "node --experimental-strip-types --import ./tests/register-alias.mjs scripts/reservoirs-snapshot.ts",
     "rent:snapshot": "node --experimental-strip-types --import ./tests/register-alias.mjs scripts/rent-index-snapshot.ts",
     "ipc:snapshot": "node --experimental-strip-types --import ./tests/register-alias.mjs scripts/ipc-snapshot.ts",
+    "letras:snapshot": "node --experimental-strip-types --import ./tests/register-alias.mjs scripts/letras-snapshot.ts",
     "weekend:snapshot": "node --experimental-strip-types --import ./tests/register-alias.mjs scripts/weekend-snapshot.ts",
     "elections:29n": "node --experimental-strip-types --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --import ./tests/register-alias.mjs scripts/elections-29n.ts",
     "christmasfairs:snapshot": "node --experimental-strip-types --import ./tests/register-alias.mjs scripts/christmas-fairs-snapshot.ts"

@@ -19,6 +19,7 @@ import { pensionEditions } from "@/lib/programmatic/pensions-2027/copy";
 import { workingDaysEditions } from "@/lib/programmatic/working-days/copy";
 import { smiEditions } from "@/lib/programmatic/smi/copy";
 import { ipcEditions } from "@/lib/programmatic/ipc/copy";
+import { letrasEditions } from "@/lib/programmatic/treasury-bills/copy";
 import { LOCALES, type Locale } from "@/lib/i18n/config";
 import { PATHS as TOOL_PATHS } from "@/lib/content/home-tools";
 import { SEASON_YEAR } from "@/lib/programmatic/christmas-fairs/classify";
@@ -138,6 +139,11 @@ export function liveTools(): LiveTool[] {
       name: "Spain CPI (IPC) today and INE release calendar",
       hubs: ipcEditions(),
       description: "the INE's latest all-items and core CPI, annual and monthly change, read daily from the INE's API (series IPC290750, IPC290752, IPC292510, IPC292512), the last 24 months, the flash and final release dates from the INE's official calendar, and what the CPI is used for (pensions, rent, minimum wage).",
+    },
+    {
+      name: "Spanish Treasury bills (Letras del Tesoro): auctions, latest rates and calculator",
+      hubs: letrasEditions(),
+      description: "the Tesoro Público's latest 3-, 6-, 9- and 12-month Letras auction results (average and marginal rate, price, issue and maturity dates) read from tesoro.es every 3 hours, every 2026 auction month by month, the official 2026 auction calendar with the Banco de España request and payment deadlines, a calculator (face value in multiples of 1,000 euros, price, return at maturity, equivalent TAE, savings-scale IRPF estimate, Banco de España fee), how to buy (Tesoro online service, Banco de España Cuenta Directa, banks), competitive vs non-competitive bids (Orden ECM/2/2026), and the tax rules (LIRPF arts. 25.2, 66, 76, 96; no withholding under RIRPF art. 75.3.b). Not investment advice.",
     },
     {
       name: "Strikes in Catalonia today",

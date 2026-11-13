@@ -11,6 +11,7 @@ import { SALARY_RULES_AS_OF } from "@/lib/programmatic/net-salary/rules-2026";
 import { RENT_RULES_AS_OF } from "@/lib/programmatic/rent-update/rules";
 import { PENSION_RULES_AS_OF } from "@/lib/programmatic/pensions-2027/rules";
 import { SMI_RULES_AS_OF } from "@/lib/programmatic/smi/rules";
+import { RULES_AS_OF as TREASURY_RULES_AS_OF } from "@/lib/programmatic/treasury-bills/rules";
 import { pvpcTranslations } from "@/lib/programmatic/pvpc/paths";
 import { reservoirHubPath } from "@/lib/programmatic/reservoirs/paths";
 import { RULES_AS_OF as WORKING_DAYS_AS_OF } from "@/lib/programmatic/working-days/rules";
@@ -244,6 +245,24 @@ export const HUB_GROUPS: HubGroup[] = [
           en: "The INE's CPI (series IPC290750, IPC290752, IPC292510 and IPC292512) and the INE's official calendar, read daily.",
         },
         scope: "spain",
+      },
+      {
+        key: "treasury-bills",
+        calculator: true,
+        href: calc("treasury-bills"),
+        title: { ca: "Lletres del Tresor", es: "Letras del Tesoro", en: "Spanish Treasury bills (Letras)" },
+        answers: {
+          ca: "A quin tipus han sortit les lletres a 3, 6, 9 i 12 mesos, quan és la propera subhasta i quant guanyaràs després de l'IRPF?",
+          es: "¿A qué tipo han salido las Letras a 3, 6, 9 y 12 meses, cuándo es la próxima subasta y cuánto ganarás después del IRPF?",
+          en: "What rate did 3-, 6-, 9- and 12-month bills fetch, when is the next auction, and what you earn after income tax.",
+        },
+        basis: {
+          ca: "Resultats i calendari de subhastes del Tresor Públic (tesoro.es, llegits cada 3 hores), anunci del Banc d'Espanya, Orden ECM/2/2026 i Llei i Reglament de l'IRPF (BOE).",
+          es: "Resultados y calendario de subastas del Tesoro Público (tesoro.es, leídos cada 3 horas), anuncio del Banco de España, Orden ECM/2/2026 y Ley y Reglamento del IRPF (BOE).",
+          en: "The Tesoro Público's auction results and calendar (tesoro.es, read every 3 hours), the Banco de España's notice, Orden ECM/2/2026 and the income tax act and regulation (BOE).",
+        },
+        scope: "spain",
+        checked: TREASURY_RULES_AS_OF,
       },
     ],
   },
