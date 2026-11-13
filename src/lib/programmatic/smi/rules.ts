@@ -172,6 +172,7 @@ export const NORMS = {
   et: { name: "Estatuto de los Trabajadores (Real Decreto Legislativo 2/2015), arts. 27 y 34", ref: "BOE-A-2015-11430", url: boe("BOE-A-2015-11430") },
   rdl38_2020: { name: "Real Decreto-ley 38/2020, de 29 de diciembre (disposición adicional sexta: prórroga del SMI de 2020)", ref: "BOE-A-2020-17266", url: boe("BOE-A-2020-17266") },
   rdl5_2026: { name: "Real Decreto-ley 5/2026, de 17 de febrero, art. 28 (deducción del IRPF para el SMI), convalidado (BOE-A-2026-6483)", ref: "BOE-A-2026-3810", url: boe("BOE-A-2026-3810") },
+  lirpfDa61: { name: "Ley 35/2006 del IRPF, disposición adicional sexagésima primera (deducción por obtención de rendimientos del trabajo), texto consolidado del 11 de noviembre de 2026", ref: "BOE-A-2006-20764", url: `${boe("BOE-A-2006-20764")}#da-15` },
   rd1620_2011: { name: "Real Decreto 1620/2011 (empleo de hogar), art. 8.5", ref: "BOE-A-2011-17975", url: boe("BOE-A-2011-17975") },
 } as const;
 

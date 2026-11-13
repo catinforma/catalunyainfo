@@ -221,6 +221,15 @@ test("calculator: the net-salary link opens that calculator on the SMI (its hash
   assert.equal(readHash(`#${netSalaryPreset("es", 8547, 12).split("#")[1]}`, NET_DEFAULT, () => true).payments, 12);
 });
 
+test("page: the 2026 SMI in net (12 and 14 payments) from the net salary engine, with the DA 61.ª note and the preset link", () => {
+  const src = readFileSync(join(import.meta.dirname, "..", "src", "components", "programmatic", "smi", "SmiPage.tsx"), "utf8");
+  assert.match(src, /calculateNetSalary\(\{ \.\.\.NET_DEFAULT, gross: SMI_2026\.annual, payments: 14 \}\)/);
+  assert.match(src, /calculateNetSalary\(\{ \.\.\.NET_DEFAULT, gross: SMI_2026\.annual, payments: 12 \}\)/);
+  assert.match(src, /netSalaryPreset\(locale, SMI_2026\.annual, 14\)/);
+  assert.equal(netSalaryPreset("es", SMI_2026.annual, 14), "/es/calculadoras/sueldo-neto/#b=17094&n=14");
+  assert.match(src, /NORMS\.lirpfDa61/);
+});
+
 /* -------------------------------------------------------------------------- */
 /* Page words, states and routes                                              */
 /* -------------------------------------------------------------------------- */

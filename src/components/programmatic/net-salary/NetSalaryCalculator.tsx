@@ -2,7 +2,7 @@
 
 import { useEffect, useId, useState } from "react";
 
-import { CALC_COPY, fillFigures, money, parseAmount, percent, readHash, writeHash, type NetLocale } from "@/lib/programmatic/net-salary/copy";
+import { CALC_COPY, fillFigures, money, parseAmount, percent, readHash, smiDeductionNote, writeHash, type NetLocale } from "@/lib/programmatic/net-salary/copy";
 import { calculateNetSalary, type AgeBand, type Contract, type Disability, type FamilySituation, type SalaryInput } from "@/lib/programmatic/net-salary/engine";
 import { REGIONS, regionById } from "@/lib/programmatic/net-salary/regions";
 import { FORAL_LINKS } from "@/lib/programmatic/net-salary/rules-2026";
@@ -26,7 +26,8 @@ export function NetSalaryCalculator({ locale, initial }: { locale: NetLocale; in
   // The hash is only known in the browser: read it after mount, never during render.
   useEffect(() => {
     const fromHash = () => {
-      if (!window.location.hash) return;
+      // Only a calculator hash ("#b=…"): an in-page anchor such as "#smi" must not reset the inputs.
+      if (!/^#(?:.*&)?b=/.test(window.location.hash)) return;
       const next = readHash(window.location.hash, initial, (r) => Boolean(regionById(r)));
       setInput(next);
       setGrossText(String(next.gross));
@@ -48,6 +49,7 @@ export function NetSalaryCalculator({ locale, initial }: { locale: NetLocale; in
   const foral = region?.regime === "foral" ? FORAL_LINKS[region.id as keyof typeof FORAL_LINKS] : null;
   const p = r.input.payments;
   const f = (s: string) => fillFigures(s, locale);
+  const smiNote = smiDeductionNote(r, locale);
 
   return (
     <section className="ci-calc" aria-labelledby={`${id}-title`}>
@@ -254,10 +256,11 @@ export function NetSalaryCalculator({ locale, initial }: { locale: NetLocale; in
                 <dd className="ci-numeric">{percent(r.effectiveRate, locale)}</dd>
               </div>
             </dl>
-            {r.irpf.exempt ? <p className="ci-calc-note">{t.exempt}</p> : null}
+            {r.irpf.exempt && r.irpf.annual === 0 ? <p className="ci-calc-note">{t.exempt}</p> : null}
             {r.irpf.limited ? <p className="ci-calc-note">{t.limited}</p> : null}
             {r.irpf.minimumRateApplied ? <p className="ci-calc-note">{t.minimumRate}</p> : null}
             {r.irpf.reducedByCeuta ? <p className="ci-calc-note">{t.ceuta}</p> : null}
+            {smiNote ? <p className="ci-calc-note">{smiNote}</p> : null}
             {r.ss.capped ? <p className="ci-calc-note">{f(t.capped)}</p> : null}
             {r.ss.belowMinimum ? <p className="ci-calc-note">{f(t.belowMinimum)}</p> : null}
           </>

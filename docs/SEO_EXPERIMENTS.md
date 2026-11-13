@@ -5119,6 +5119,19 @@ new tables).
 - If the AEAT publishes a third 2026 version, re-read it and re-run the
   check.
 
+**Change, 13 Nov 2026 (same day, before any measurement; title and
+description untouched):** body only. (1) The net-by-gross table now lists
+every 1,000 € from 15,000 to 60,000 € (+70k, 80k, 100k), 14 and 12 payments,
+compact (no per-amount pages). (2) SMI deduction section `#smi` + note in the
+result for gross < 20,048.45 € with withholding: DA 61.ª LIRPF (RDL 5/2026
+art. 28; 590.89 € up to 17,094 €, −0.2 per euro above) is applied in the
+Renta, not in withholding (AEAT algorithm 10-09-2026 and RIRPF art. 85 leave
+it out; the AEAT service withholds 3.06 % / 523.08 € at the SMI). No refund
+figure: it depends on the regional scale. (3) Engine fix: exempt pay on a
+contract under one year still gets the 2 % floor (0.80 % Ceuta/Melilla/La
+Palma), as the AEAT service returns. AEAT check now 44 cases. The SMI page
+shows the 2026 SMI net (12/14 payments) with the same explanation.
+
 **Outcome:** _pending_
 
 ## 2026-11-13 — Employment calculators: dismissal pay, final settlement (finiquito), unemployment benefit (paro) — new tools, ca/es/en (ships with the deploy; group `pagos` for the pay-dates link)

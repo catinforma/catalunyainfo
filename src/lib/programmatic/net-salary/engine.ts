@@ -1,5 +1,5 @@
 import { regionById, type Regime } from "./regions";
-import { IRPF, SOCIAL_SECURITY } from "./rules-2026";
+import { IRPF, SMI_DEDUCTION, SOCIAL_SECURITY } from "./rules-2026";
 
 /**
  * Net salary 2026 for an employee in Spain: the worker's Social Security
@@ -102,6 +102,14 @@ export interface SalaryResult {
   };
   /** (contributions + withholding) / gross, %. */
   effectiveRate: number;
+  /**
+   * The annual return's SMI deduction (DA 61.ª LIRPF, RDL 5/2026 art. 28),
+   * which withholding does not apply. `deduction` is the law's amount for
+   * this gross before its cap (the state + regional cuota, not modelled);
+   * `applies` when it is positive and something is withheld, i.e. when the
+   * withholding may be more than the final tax.
+   */
+  smiDeduction: { deduction: number; full: boolean; applies: boolean };
 }
 
 /** REDONDEAR1: two decimals, 0.005 up. */
@@ -131,6 +139,18 @@ export function workReduction(rnt: number): number {
   else if (rnt < w.thirdTo) red = w.thirdBase - w.thirdSlope * (rnt - w.secondTo);
   else red = 0;
   return round2(Math.max(0, red));
+}
+
+/**
+ * DA 61.ª LIRPF (2026 wording): 590.89 € up to 17,094 € of gross pay,
+ * then 590.89 − 0.2 × (gross − 17,094), nothing from 20,048.45 €. Before the
+ * cap on the state + regional cuota. Rounded to cents.
+ */
+export function smiDeduction(gross: number): number {
+  const d = SMI_DEDUCTION;
+  if (!(gross > 0) || gross >= d.endBelow) return 0;
+  if (gross <= d.fullUpTo) return d.full;
+  return Math.max(0, round2(d.full - d.slope * (gross - d.fullUpTo)));
 }
 
 /** The TABLA 1 threshold for this family (null: situation 1 with no descendant, not a valid case). */
@@ -233,7 +253,13 @@ export function withholding(input: SalaryInput, contributions: number, regime: R
 
   // Rendimientos exentos (TABLA 1).
   const threshold = exemptThreshold(input.family, n);
-  if (threshold !== null && retrib <= threshold) return { ...empty, exempt: true, rate: 0, annual: 0 };
+  // "Si EXENTOS = S: CUOTA = 0,00, TIPO = 0,00, Ir a 1" (page 29): label 1 is the rate block, so the
+  // minimum rate of short contracts still applies (AEAT service, 13 Nov 2026: 12,000 €, under one year → 2 %).
+  if (threshold !== null && retrib <= threshold) {
+    const floor = regime === "ceuta-melilla" ? 0.8 : IRPF.minRateShortContract;
+    const rate = input.contract === "short" && retrib > 0 ? floor : 0;
+    return { ...empty, exempt: true, reducedByCeuta: rate > 0 && regime === "ceuta-melilla", minimumRateApplied: rate > 0, rate, annual: round2((retrib * rate) / 100) };
+  }
 
   // Cuota (pages 29-30).
   const cuota1 = scale(base);
@@ -277,6 +303,7 @@ export function calculateNetSalary(raw: SalaryInput): SalaryResult {
   const irpfPayment = (grossPayment * irpf.rate) / 100;
   const perPayment = round2(grossPayment - irpfPayment - ss.annual / 12);
   const extraPayment = p === 14 ? round2(grossPayment - irpfPayment) : null;
+  const deduction = supported ? smiDeduction(input.gross) : 0;
   return {
     input,
     regime,
@@ -285,6 +312,7 @@ export function calculateNetSalary(raw: SalaryInput): SalaryResult {
     irpf,
     net: { annual, perPayment, extraPayment, monthlyAverage: round2(annual / 12) },
     effectiveRate: input.gross > 0 ? round2(((ss.annual + irpf.annual) / input.gross) * 100) : 0,
+    smiDeduction: { deduction, full: deduction === SMI_DEDUCTION.full, applies: deduction > 0 && irpf.annual > 0 },
   };
 }
 

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 
 import { Breadcrumbs, type Crumb } from "@/components/Breadcrumbs";
 import { JsonLd } from "@/components/JsonLd";
@@ -9,10 +10,12 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { getMessages } from "@/lib/i18n";
 import { hubCrumb } from "@/lib/programmatic/calculators/hub";
 import { dayMonthYear } from "@/lib/programmatic/holidays/format";
-import { money, netSalaryEditions, netSalaryPath, percent, type NetLocale } from "@/lib/programmatic/net-salary/copy";
+import { TABLE_SALARIES, money, netSalaryEditions, netSalaryPath, percent, type NetLocale } from "@/lib/programmatic/net-salary/copy";
 import { DEFAULT_INPUT, calculateNetSalary, scale, type SalaryResult } from "@/lib/programmatic/net-salary/engine";
 import { REGIONS, regionById } from "@/lib/programmatic/net-salary/regions";
-import { AEAT_VALIDATION, FORAL_LINKS, IRPF, SALARY_RULES_AS_OF, SALARY_RULES_YEAR, SOCIAL_SECURITY, SOURCES } from "@/lib/programmatic/net-salary/rules-2026";
+import { AEAT_VALIDATION, FORAL_LINKS, IRPF, SALARY_RULES_AS_OF, SALARY_RULES_YEAR, SMI_DEDUCTION, SOCIAL_SECURITY, SOURCES } from "@/lib/programmatic/net-salary/rules-2026";
+import { smiPath } from "@/lib/programmatic/smi/copy";
+import { QUOTE as SMI_QUOTE } from "@/lib/programmatic/smi/rules";
 import { absoluteUrl } from "@/lib/site";
 import { breadcrumbSchema, graph } from "@/lib/seo/jsonld";
 import { buildMetadata } from "@/lib/seo/metadata";
@@ -31,8 +34,6 @@ import { NetSalaryCalculator } from "./NetSalaryCalculator";
 const L = <T,>(locale: NetLocale, v: Record<NetLocale, T>): T => v[locale];
 const Y = SALARY_RULES_YEAR;
 
-/** Gross salaries of the table (single, no children, open-ended contract, under 65). */
-export const TABLE_SALARIES = [15000, 18000, 20000, 22000, 24000, 25000, 28000, 30000, 32000, 35000, 40000, 45000, 50000, 60000, 70000, 80000, 100000] as const;
 
 export const NET_META: Record<NetLocale, { title: string; description: string; h1: string; breadcrumb: string; appName: string }> = {
   es: {
@@ -118,9 +119,42 @@ export function NetSalaryRoute({ locale }: { locale: NetLocale }) {
     en: `Single (situation 3), no children, under 65, open-ended contract, in any of the ${common} common-regime regions (Catalonia and Madrid included: withholding is the same). In 14 payments, the two extras carry no contributions, so they pay a little more than an ordinary payslip.`,
   });
   const cols = L(locale, {
-    es: ["Bruto anual", "Neto al mes (14 pagas)", "Neto al mes (12 pagas)", "Neto al año", "Retención IRPF", "Seguridad Social"],
-    ca: ["Brut anual", "Net al mes (14 pagues)", "Net al mes (12 pagues)", "Net a l'any", "Retenció IRPF", "Seguretat Social"],
-    en: ["Gross a year", "Net a month (14 payments)", "Net a month (12 payments)", "Net a year", "IRPF withheld", "Social Security"],
+    es: ["Bruto anual", "Neto al mes, 14 pagas", "Neto al mes, 12 pagas", "Neto al año", "Retención"],
+    ca: ["Brut anual", "Net al mes, 14 pagues", "Net al mes, 12 pagues", "Net a l'any", "Retenció"],
+    en: ["Gross a year", "Net a month, 14 payments", "Net a month, 12 payments", "Net a year", "Withholding"],
+  });
+  const D = SMI_DEDUCTION;
+  const tableFootnote = L(locale, {
+    es: `† Hasta ${m(D.endBelow)} la declaración de la Renta aplica una deducción que la nómina no aplica: la retención puede ser mayor que el IRPF final (ver abajo). Neto al año = bruto − Seguridad Social − retención.`,
+    ca: `† Fins a ${m(D.endBelow)} la declaració de la renda aplica una deducció que la nòmina no aplica: la retenció pot ser més alta que l'IRPF final (vegeu més avall). Net a l'any = brut − Seguretat Social − retenció.`,
+    en: `† Up to ${m(D.endBelow)} the annual return applies a deduction that payroll does not: withholding may be more than the final tax (see below). Net a year = gross − Social Security − withholding.`,
+  });
+
+  // The SMI deduction (DA 61.ª LIRPF): withholding vs the annual return.
+  const smiEx = calculateNetSalary({ ...DEFAULT_INPUT, gross: D.fullUpTo });
+  const midGross = 18000;
+  const midEx = calculateNetSalary({ ...DEFAULT_INPUT, gross: midGross });
+  const smiH = L(locale, {
+    es: `Hasta ${m(D.endBelow)}: la retención puede ser mayor que el IRPF final`,
+    ca: `Fins a ${m(D.endBelow)}: la retenció pot ser més alta que l'IRPF final`,
+    en: `Up to ${m(D.endBelow)}: withholding may be more than the final tax`,
+  });
+  const smiText = L(locale, {
+    es: [
+      `La retención puede ser mayor que el IRPF final: con la deducción de la disposición adicional 61.ª de la Ley del IRPF, en la redacción que le dio el Real Decreto-ley 5/2026 (art. 28, con efectos desde el 1 de enero de ${Y}), quien gana hasta ${m(D.fullUpTo, 0)} brutos al año (el salario mínimo de ${Y}) por un trabajo asalariado no debería pagar IRPF, y recupera la retención en la Renta. La deducción es de ${m(D.full)} hasta ${m(D.fullUpTo, 0)}; entre ${m(D.fullUpTo, 0)} y ${m(D.endBelow)} baja: ${m(D.full)} menos el 20 % de lo que el sueldo pase de ${m(D.fullUpTo, 0)}; desde ${m(D.endBelow)}, nada.`,
+      `La nómina no la aplica. El algoritmo de retención de la Agencia Tributaria (versión del 10 de septiembre de ${Y}) y el artículo 85 del Reglamento del IRPF no incluyen esta deducción, y el servicio de cálculo de retenciones de la Agencia Tributaria lo confirma: con ${m(D.fullUpTo, 0)}, soltero y sin hijos, retiene un ${pc(smiEx.irpf.rate)}, ${m(smiEx.irpf.annual)} al año (es lo que muestra esta calculadora). Con ${m(midGross, 0)} retiene ${m(midEx.irpf.annual)} y la deducción en la Renta es de ${m(midEx.smiDeduction.deduction)}.`,
+      `Cuánto te devuelven exactamente depende de la escala autonómica de tu comunidad, porque la deducción no puede superar la cuota estatal y autonómica de tu sueldo; por eso la calculadora no lo estima. Requisitos: sueldo de una relación laboral o estatutaria (no pensiones ni paro) y otras rentas no exentas de ${m(D.otherIncomeMax, 0)} como máximo. Para recuperar la retención hay que presentar la declaración de la Renta ${D.returnYear} (en la primavera de ${D.returnYear + 1}).`,
+    ],
+    ca: [
+      `La retenció pot ser més alta que l'IRPF final: amb la deducció de la disposició addicional 61a de la Llei de l'IRPF, en la redacció del Reial decret llei 5/2026 (art. 28, amb efectes des de l'1 de gener del ${Y}), qui guanya fins a ${m(D.fullUpTo, 0)} bruts l'any (el salari mínim del ${Y}) per una feina assalariada no hauria de pagar IRPF, i recupera la retenció a la renda. La deducció és de ${m(D.full)} fins a ${m(D.fullUpTo, 0)}; entre ${m(D.fullUpTo, 0)} i ${m(D.endBelow)} baixa: ${m(D.full)} menys el 20 % del que el sou passi de ${m(D.fullUpTo, 0)}; des de ${m(D.endBelow)}, res.`,
+      `La nòmina no l'aplica. L'algoritme de retenció de l'Agència Tributària (versió del 10 de setembre del ${Y}) i l'article 85 del Reglament de l'IRPF no inclouen aquesta deducció, i el servei de càlcul de retencions de l'Agència Tributària ho confirma: amb ${m(D.fullUpTo, 0)}, solter i sense fills, reté un ${pc(smiEx.irpf.rate)}, ${m(smiEx.irpf.annual)} l'any (és el que mostra aquesta calculadora). Amb ${m(midGross, 0)} reté ${m(midEx.irpf.annual)} i la deducció a la renda és de ${m(midEx.smiDeduction.deduction)}.`,
+      `Quant et retornen exactament depèn de l'escala autonòmica de la teva comunitat, perquè la deducció no pot superar la quota estatal i autonòmica del teu sou; per això la calculadora no ho estima. Requisits: sou d'una relació laboral o estatutària (no pensions ni atur) i altres rendes no exemptes de ${m(D.otherIncomeMax, 0)} com a màxim. Per recuperar la retenció cal presentar la declaració de la renda ${D.returnYear} (a la primavera del ${D.returnYear + 1}).`,
+    ],
+    en: [
+      `Withholding may be more than your final income tax: under the deduction in additional provision 61 of the IRPF Law, as worded by Royal Decree-law 5/2026 (art. 28, in effect from 1 January ${Y}), employees earning up to ${m(D.fullUpTo, 0)} gross a year (the ${Y} minimum wage) should pay no IRPF and get the withholding back in the annual return (Renta). The deduction is ${m(D.full)} up to ${m(D.fullUpTo, 0)}; between ${m(D.fullUpTo, 0)} and ${m(D.endBelow)} it tapers: ${m(D.full)} minus 20% of the pay above ${m(D.fullUpTo, 0)}; from ${m(D.endBelow)}, nothing.`,
+      `Payroll does not apply it. The Tax Agency's withholding algorithm (10 September ${Y} version) and article 85 of the IRPF Regulation leave this deduction out, and the Tax Agency's withholding calculation service confirms it: on ${m(D.fullUpTo, 0)}, single, no children, it withholds ${pc(smiEx.irpf.rate)}, ${m(smiEx.irpf.annual)} a year (which is what this calculator shows). On ${m(midGross, 0)} it withholds ${m(midEx.irpf.annual)} and the deduction in the return is ${m(midEx.smiDeduction.deduction)}.`,
+      `How much comes back exactly depends on your region's scale, because the deduction cannot exceed the state and regional tax on your pay; that is why the calculator does not estimate it. Conditions: pay from an employment or civil-service relationship (not pensions or unemployment benefit) and no more than ${m(D.otherIncomeMax, 0)} of other non-exempt income. To get the withholding back you must file the ${D.returnYear} return (in spring ${D.returnYear + 1}).`,
+    ],
   });
   const caption = L(locale, {
     es: `Sueldo neto ${Y} por tramos de bruto anual; soltero, sin hijos, contrato indefinido`,
@@ -213,6 +247,7 @@ export function NetSalaryRoute({ locale }: { locale: NetLocale }) {
     es: [
       { q: "¿Cobro lo mismo al año en 12 que en 14 pagas?", a: `Sí. El bruto y el neto anual son los mismos; en 14 pagas se reparte en 12 nóminas y dos pagas extra, y como la Seguridad Social se cotiza cada mes con las extras prorrateadas, las pagas extra no llevan cotización. Con ${m(ex.input.gross, 0)}: ${m(ex.net.perPayment)} al mes y ${m(ex.net.extraPayment ?? 0)} en cada extra, o ${m(ex.net.monthlyAverage)} en 12 pagas.` },
       { q: "¿La retención es lo que pago de IRPF?", a: "No: es un pago a cuenta. El impuesto final se calcula en la declaración de la Renta, con la escala de tu comunidad, tus deducciones y el resto de ingresos del año. Si te retuvieron más de lo que toca, Hacienda te devuelve la diferencia; si fue menos, pagas." },
+      { q: "¿Cobrando el salario mínimo me retienen IRPF?", a: `Sí, algo: con ${m(D.fullUpTo, 0)} al año, soltero y sin hijos, el ${pc(smiEx.irpf.rate)} (${m(smiEx.irpf.annual)} al año), porque la nómina no aplica la deducción de ${m(D.full)} de la disposición adicional 61.ª de la Ley del IRPF (Real Decreto-ley 5/2026). Esa deducción entra en la Renta y busca que quien cobra el SMI no pague IRPF: presentando la declaración se recupera la retención. En las situaciones familiares 1 (monoparental) y 2 (cónyuge que no gana más de 1.500 € al año) el SMI no lleva retención. En neto: ${m(smiEx.net.perPayment)} al mes en 14 pagas.` },
       { q: "¿Por qué mi nómina no coincide con la calculadora?", a: "Lo habitual: pluses, horas extra o retribución en especie que no son parte del bruto que has puesto; una regularización del tipo a mitad de año (cambio de sueldo o de familia); datos del modelo 145 distintos de los que has marcado; o un tipo más alto pedido por escrito a la empresa, que se puede solicitar." },
       { q: "¿Cambia algo si vivo en Madrid o en Cataluña?", a: regionsText[0]! },
       { q: "¿Qué es el MEI que aparece en la nómina?", a: `El mecanismo de equidad intergeneracional, una cotización adicional para el fondo de reserva de las pensiones: en ${Y} es el ${pc(S.rates.intergenerationalEquityTotal)} de la base, del que tú pagas el ${pc(S.rates.intergenerationalEquity)} y la empresa el resto (Orden PJC/297/2026, art. 16).` },
@@ -220,6 +255,7 @@ export function NetSalaryRoute({ locale }: { locale: NetLocale }) {
     ca: [
       { q: "Cobro el mateix l'any en 12 que en 14 pagues?", a: `Sí. El brut i el net anual són els mateixos; en 14 pagues es reparteix en 12 nòmines i dues pagues extra, i com que la Seguretat Social es cotitza cada mes amb les extres prorratejades, les pagues extra no porten cotització. Amb ${m(ex.input.gross, 0)}: ${m(ex.net.perPayment)} al mes i ${m(ex.net.extraPayment ?? 0)} a cada extra, o ${m(ex.net.monthlyAverage)} en 12 pagues.` },
       { q: "La retenció és el que pago d'IRPF?", a: "No: és un pagament a compte. L'impost final es calcula a la declaració de la renda, amb l'escala de la teva comunitat, les teves deduccions i la resta d'ingressos de l'any. Si t'han retingut més del que toca, Hisenda et retorna la diferència; si ha estat menys, pagues." },
+      { q: "Cobrant el salari mínim em retenen IRPF?", a: `Sí, una mica: amb ${m(D.fullUpTo, 0)} l'any, solter i sense fills, el ${pc(smiEx.irpf.rate)} (${m(smiEx.irpf.annual)} l'any), perquè la nòmina no aplica la deducció de ${m(D.full)} de la disposició addicional 61a de la Llei de l'IRPF (Reial decret llei 5/2026). Aquesta deducció entra a la renda i vol que qui cobra l'SMI no pagui IRPF: presentant la declaració es recupera la retenció. A les situacions familiars 1 (monoparental) i 2 (cònjuge que no guanya més de 1.500 € l'any) l'SMI no porta retenció. En net: ${m(smiEx.net.perPayment)} al mes en 14 pagues.` },
       { q: "Per què la meva nòmina no coincideix amb la calculadora?", a: "El més habitual: plusos, hores extra o retribució en espècie que no formen part del brut que has posat; una regularització del tipus a mitjan any (canvi de sou o de família); dades del model 145 diferents de les que has marcat; o un tipus més alt demanat per escrit a l'empresa, que es pot sol·licitar." },
       { q: "Canvia res si visc a Madrid o a Catalunya?", a: regionsText[0]! },
       { q: "Què és l'MEI que surt a la nòmina?", a: `El mecanisme d'equitat intergeneracional, una cotització addicional per al fons de reserva de les pensions: el ${Y} és el ${pc(S.rates.intergenerationalEquityTotal)} de la base, del qual tu pagues el ${pc(S.rates.intergenerationalEquity)} i l'empresa la resta (Ordre PJC/297/2026, art. 16).` },
@@ -227,6 +263,7 @@ export function NetSalaryRoute({ locale }: { locale: NetLocale }) {
     en: [
       { q: "Do I earn the same in a year on 12 or 14 payments?", a: `Yes. Gross and net annual pay are the same; 14 payments split it into 12 payslips and two extra payments, and since Social Security is paid monthly with the extras spread over the year, the extra payments carry no contributions. On ${m(ex.input.gross, 0)}: ${m(ex.net.perPayment)} a month and ${m(ex.net.extraPayment ?? 0)} in each extra, or ${m(ex.net.monthlyAverage)} on 12 payments.` },
       { q: "Is withholding the income tax I pay?", a: "No: it is a payment on account. The final tax is worked out in the annual return (Renta), with your region's scale, your deductions and the rest of the year's income. If more was withheld than you owe, the Tax Agency refunds the difference; if less, you pay it." },
+      { q: "Is IRPF withheld from the minimum wage?", a: `Yes, a little: on ${m(D.fullUpTo, 0)} a year, single, no children, ${pc(smiEx.irpf.rate)} (${m(smiEx.irpf.annual)} a year), because payroll does not apply the ${m(D.full)} deduction in additional provision 61 of the IRPF Law (Royal Decree-law 5/2026). That deduction comes in with the annual return and aims for minimum-wage earners to pay no IRPF: filing the return gets the withholding back. In family situations 1 (single parent) and 2 (spouse earning no more than €1,500 a year) nothing is withheld on the minimum wage. Net: ${m(smiEx.net.perPayment)} a month in 14 payments.` },
       { q: "Why does my payslip differ from the calculator?", a: "Usually: bonuses, overtime or benefits in kind that are not in the gross you entered; a mid-year rate adjustment (a pay or family change); form 145 details that differ from what you ticked; or a higher rate you asked your employer for in writing, which you are allowed to do." },
       { q: "Does it matter whether I live in Madrid or Catalonia?", a: regionsText[0]! },
       { q: "What is the MEI on my payslip?", a: `The intergenerational equity mechanism, an extra contribution to the pensions reserve fund: in ${Y} it is ${pc(S.rates.intergenerationalEquityTotal)} of the base, of which you pay ${pc(S.rates.intergenerationalEquity)} and your employer the rest (Orden PJC/297/2026, art. 16).` },
@@ -238,7 +275,7 @@ export function NetSalaryRoute({ locale }: { locale: NetLocale }) {
     ca: `Fonts oficials, llegides el ${asOf}. Comprovació: el ${validated} vam enviar ${AEAT_VALIDATION.cases} casos diferents (sous de 12.000 a 350.000 €, les tres situacions familiars, fills, edat, discapacitat, contractes temporals, Ceuta, Melilla i La Palma, mobilitat, hipoteca) al servei de càlcul de retencions de l'Agència Tributària: el tipus i l'import de la retenció coincideixen en tots.`,
     en: `Official sources, read on ${asOf}. Check: on ${validated} we sent ${AEAT_VALIDATION.cases} different cases (salaries from €12,000 to €350,000, all three family situations, children, age, disability, fixed-term contracts, Ceuta, Melilla and La Palma, mobility, mortgage) to the Tax Agency's withholding calculation service: the rate and the amount withheld match in every one.`,
   });
-  const sourceList = [SOURCES.algorithm, SOURCES.algorithmJanuary, SOURCES.contributions, SOURCES.laPalma];
+  const sourceList = [SOURCES.algorithm, SOURCES.algorithmJanuary, SOURCES.contributions, SOURCES.laPalma, SOURCES.lirpfDa61, SOURCES.rdl5];
   const sourceNote = L(locale, {
     es: `La Agencia Tributaria publicó en ${Y} dos versiones del algoritmo: la del 10 de septiembre solo añade la isla de La Palma (Real Decreto-ley 23/2026). Para el resto de España las cifras son las mismas todo el año.`,
     ca: `L'Agència Tributària va publicar el ${Y} dues versions de l'algoritme: la del 10 de setembre només hi afegeix l'illa de La Palma (Reial decret llei 23/2026). Per a la resta d'Espanya les xifres són les mateixes tot l'any.`,
@@ -304,12 +341,12 @@ export function NetSalaryRoute({ locale }: { locale: NetLocale }) {
               <h2 id="tabla">{h.table}</h2>
               <p>{tableLead}</p>
               <div className="ci-table-scroll mt-4">
-                <table className="ci-local-table ci-stack-table">
+                <table className="ci-local-table">
                   <caption className="pb-2 text-left text-sm text-[var(--color-muted)]">{caption}</caption>
                   <thead>
                     <tr>
-                      {cols.map((c) => (
-                        <th key={c} scope="col">
+                      {cols.map((c, k) => (
+                        <th key={c} scope="col" className={k > 0 ? "text-right" : undefined}>
                           {c}
                         </th>
                       ))}
@@ -317,22 +354,38 @@ export function NetSalaryRoute({ locale }: { locale: NetLocale }) {
                   </thead>
                   <tbody>
                     {rows.map(({ gross, r14, r12 }) => (
-                      <tr key={gross}>
-                        <th scope="row" className="font-normal">
+                      <tr key={gross} id={`neto-${gross}`}>
+                        <th scope="row" className="whitespace-nowrap font-normal">
                           {m(gross, 0)}
+                          {r14.smiDeduction.applies ? " †" : ""}
                         </th>
-                        <td data-label={cols[1]}>{m(r14.net.perPayment)}</td>
-                        <td data-label={cols[2]}>{m(r12.net.perPayment)}</td>
-                        <td data-label={cols[3]}>{m(r14.net.annual)}</td>
-                        <td data-label={cols[4]}>
-                          {m(r14.irpf.annual)} ({pc(r14.irpf.rate)})
-                        </td>
-                        <td data-label={cols[5]}>{m(r14.ss.annual)}</td>
+                        <td className="whitespace-nowrap text-right tabular-nums">{m(r14.net.perPayment)}</td>
+                        <td className="whitespace-nowrap text-right tabular-nums">{m(r12.net.perPayment)}</td>
+                        <td className="whitespace-nowrap text-right tabular-nums">{m(r14.net.annual, 0)}</td>
+                        <td className="whitespace-nowrap text-right tabular-nums">{pc(r14.irpf.rate)}</td>
                       </tr>
                     ))}
                   </tbody>
                 </table>
               </div>
+              <p className="text-sm">{tableFootnote}</p>
+
+              <h2 id="smi">{smiH}</h2>
+              <p>{smiText[0]}</p>
+              <blockquote lang="es">
+                <p>«{SMI_QUOTE.rdl5irpf}»</p>
+                <footer className="text-sm">
+                  <a href={SOURCES.rdl5.url} rel="noopener" target="_blank">
+                    Real Decreto-ley 5/2026
+                  </a>
+                  , {L(locale, { es: "preámbulo", ca: "preàmbul", en: "preamble" })} ({SOURCES.rdl5.ref})
+                </footer>
+              </blockquote>
+              <p>{smiText[1]}</p>
+              <p>
+                {smiText[2]}{" "}
+                <Link href={smiPath(locale)}>{L(locale, { es: "Cuantías del salario mínimo y su neto", ca: "Quanties del salari mínim i el seu net", en: "Minimum wage amounts and net pay" })}</Link>.
+              </p>
 
               <h2 id="calculo">{h.how}</h2>
               <ol>
