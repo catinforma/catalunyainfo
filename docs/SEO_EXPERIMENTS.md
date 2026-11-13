@@ -5053,3 +5053,70 @@ re-read every 10 days until 19 Dec (test fails otherwise: next by 23 Nov);
 the 2026-27 table fails a test from 15 Jan 2027 (after-season pass).
 
 **Review 1 Dec 2026, 4 Jan 2027. Outcome:** _pending_
+
+## 2026-11-13 — Net salary calculator 2026, "Calculadora de sueldo neto 2026" (new tool, Spain-wide, es/ca/en; first of the calculators family; ships with the deploy, no group)
+
+**What.** Gross annual salary → net pay for 2026 anywhere in Spain: worker's
+Social Security (Orden PJC/297/2026: 4.70 + 1.55/1.60 + 0.10 + MEI 0.15, base
+max 5,101.20 €/month, solidarity bands above it) and IRPF withholding with the
+AEAT "Algoritmo de cálculo del tipo de retención 2026" (version of 10 Sep
+2026; the only change vs the January one is La Palma, RDL 23/2026). Inputs:
+gross, 12/14 payments, community (15 common-regime + Ceuta, Melilla, La
+Palma; Navarra and País Vasco shown as "not supported" with the foral
+offices' links), age band, family situation 1/2/3, children under 25 and
+under 3, whole/half, disability, contract (open-ended / fixed-term ≥ 1 year /
+under 1 year), geographic mobility, pre-2013 mortgage. Output: net per
+ordinary payslip and per extra payment, net a year, SS line by line, IRPF
+rate and amount, effective rate, and the notes that apply (exempt, 43 %
+limit, 2 % floor, Ceuta, cap).
+
+- URLs: `/es/calculadoras/sueldo-neto/`, `/ca/calculadores/sou-net/`,
+  `/en/calculators/net-salary-spain/` (static folders under the new
+  calculators roots, `lib/programmatic/calculators/paths.ts`; no hub yet —
+  a test fails if a `page.tsx` appears at the root by accident; sitemap +
+  hreflang, x-default en like the HTML; llms.txt entry). Hash state
+  `#b=…&n=…&r=…` so a result can be shared.
+- Server HTML (no JS): the 30,000 € Catalonia example (1,628.50 € × 12 +
+  1,791.00 € × 2 = 23,124 € net; 16.42 %), a table of 17 gross salaries
+  (15k–100k) in 12 and 14 payments, the worked example step by step, why
+  the community does not change the payslip (one state scale for
+  withholding; the regional scale only in the Renta), rates and scale
+  tables, 5 FAQ (FAQPage + WebApplication JSON-LD), dated sources,
+  limitations.
+- Validation: 39 cases sent on 13 Nov 2026 to the AEAT's own retention web
+  service (PRET-R200, documented in espeSWRET_2026.pdf, no login): rate,
+  annual amount, base and minimum equal in all 39
+  (`tests/fixtures/net-salary-aeat-2026.json`, `tests/net-salary.test.ts`,
+  which also holds the algorithm's worked example, hand checks, SS,
+  community invariance, monotonic net 8k–200k).
+
+**Baseline:** 0 (no page; the site has no salary or tax tool). Queries:
+"calculadora sueldo neto", "sueldo neto 2026", "de bruto a neto", "30000
+brutos cuanto es neto", "calculadora nomina" — very high Spain-wide demand
+all year, dominated by large finance/HR sites; peaks in January (new pay,
+new tables).
+
+**Prediction.**
+- Indexed by 27 Nov.
+- By 15 Jan 2027: 3,000–15,000 impressions across the three editions,
+  mostly es, average position 25–45 for the head terms and top 10 for long
+  tail ("30000 brutos cuanto es neto en cataluña", "sueldo neto ceuta");
+  CTR 1–3 %.
+- Wrong if under 1,000 impressions by 15 Jan, or not indexed by 4 Dec.
+
+**Measure:**
+- 27 Nov: indexing (`batch_url_inspection`, three URLs).
+- 15 Dec (review date) and 15 Jan 2027: `snapshot.py page sueldo-neto 28`,
+  `page sou-net 28`, `page net-salary-spain 28`; GA4 engagement on the
+  three paths.
+
+**Upkeep / date guards** (tests fail until done):
+- 1 Jan 2027: load the 2027 AEAT algorithm and the 2027 contribution rules
+  (Orden de cotización, or the decree-law that sets the bases while it is
+  pending) into a `rules-2027.ts`, re-run the AEAT service check (new
+  `PER` code), retitle to 2027. Until then the page stays 2026 — in
+  December, that is correct.
+- If the AEAT publishes a third 2026 version, re-read it and re-run the
+  check.
+
+**Outcome:** _pending_

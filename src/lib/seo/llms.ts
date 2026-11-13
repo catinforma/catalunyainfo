@@ -12,6 +12,7 @@
  */
 
 import { leaveEditions } from "@/lib/programmatic/leave-2027/copy";
+import { netSalaryEditions } from "@/lib/programmatic/net-salary/copy";
 import { LOCALES, type Locale } from "@/lib/i18n/config";
 import { PATHS as TOOL_PATHS } from "@/lib/content/home-tools";
 import { SEASON_YEAR } from "@/lib/programmatic/christmas-fairs/classify";
@@ -79,6 +80,11 @@ export function liveTools(): LiveTool[] {
       name: "2027 leave planner",
       hubs: leaveEditions(),
       description: "pick a Catalan town, a Spanish city or region and 1 to 25 days of leave: which working days to book in 2027 for the most days off in a row, ranked by days off per day of leave, from the official 2027 holiday lists (DOGC, BOE, city bulletins).",
+    },
+    {
+      name: "Spain net salary calculator 2026",
+      hubs: netSalaryEditions(),
+      description: "gross annual salary to net pay for 2026 anywhere in Spain's common tax regime (plus Ceuta, Melilla and La Palma): IRPF withholding with the Tax Agency's official 2026 algorithm and the worker's Social Security contributions (Orden PJC/297/2026), in 12 or 14 payments, by family situation, children, age, disability and contract type; checked against the Tax Agency's own withholding service.",
     },
     {
       name: "Strikes in Catalonia today",

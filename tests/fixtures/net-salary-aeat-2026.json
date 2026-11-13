@@ -1,0 +1,943 @@
+{
+ "source": "AEAT, servicio de cálculo de retenciones IRPF (https://www2.agenciatributaria.gob.es/wlpl/PRET-R200/mc), EJER=2026, PER=1 (from 10 Sep 2026)",
+ "calledOn": "2026-11-13",
+ "note": "Cotizaciones sent = the engine Social Security annual total for the same input. Birth years: under65 1990, 65to74 1960, 75plus 1948; children under 3 born 2025, others 2015 or earlier.",
+ "cases": [
+  {
+   "id": "default-30000-cataluna",
+   "input": {
+    "gross": 30000,
+    "payments": 14,
+    "region": "cataluna",
+    "age": "under65",
+    "family": 3,
+    "children": 0,
+    "childrenUnder3": 0,
+    "childrenWhole": false,
+    "disability": "none",
+    "contract": "open-ended",
+    "mobility": false,
+    "housingLoan": false
+   },
+   "cotizacionesSent": 1950,
+   "aeat": {
+    "rate": 16.42,
+    "annual": 4926.0,
+    "base": 26050.0,
+    "minimum": 5550.0
+   }
+  },
+  {
+   "id": "exempt-12000",
+   "input": {
+    "gross": 12000,
+    "payments": 14,
+    "region": "cataluna",
+    "age": "under65",
+    "family": 3,
+    "children": 0,
+    "childrenUnder3": 0,
+    "childrenWhole": false,
+    "disability": "none",
+    "contract": "open-ended",
+    "mobility": false,
+    "housingLoan": false
+   },
+   "cotizacionesSent": 780,
+   "aeat": {
+    "rate": 0.0,
+    "annual": 0.0,
+    "base": 1918.0,
+    "minimum": 5550.0
+   }
+  },
+  {
+   "id": "exempt-boundary-15876",
+   "input": {
+    "gross": 15876,
+    "payments": 14,
+    "region": "cataluna",
+    "age": "under65",
+    "family": 3,
+    "children": 0,
+    "childrenUnder3": 0,
+    "childrenWhole": false,
+    "disability": "none",
+    "contract": "open-ended",
+    "mobility": false,
+    "housingLoan": false
+   },
+   "cotizacionesSent": 1031.88,
+   "aeat": {
+    "rate": 0.0,
+    "annual": 0.0,
+    "base": 5542.12,
+    "minimum": 5550.0
+   }
+  },
+  {
+   "id": "limit43-15877",
+   "input": {
+    "gross": 15877,
+    "payments": 14,
+    "region": "cataluna",
+    "age": "under65",
+    "family": 3,
+    "children": 0,
+    "childrenUnder3": 0,
+    "childrenWhole": false,
+    "disability": "none",
+    "contract": "open-ended",
+    "mobility": false,
+    "housingLoan": false
+   },
+   "cotizacionesSent": 1031.88,
+   "aeat": {
+    "rate": 0.0,
+    "annual": 0.0,
+    "base": 5543.12,
+    "minimum": 5550.0
+   }
+  },
+  {
+   "id": "short-contract-16500",
+   "input": {
+    "gross": 16500,
+    "payments": 14,
+    "region": "cataluna",
+    "age": "under65",
+    "family": 3,
+    "children": 0,
+    "childrenUnder3": 0,
+    "childrenWhole": false,
+    "disability": "none",
+    "contract": "short",
+    "mobility": false,
+    "housingLoan": false
+   },
+   "cotizacionesSent": 1080.84,
+   "aeat": {
+    "rate": 2.0,
+    "annual": 330.0,
+    "base": 7109.69,
+    "minimum": 5550.0
+   }
+  },
+  {
+   "id": "s3-18000",
+   "input": {
+    "gross": 18000,
+    "payments": 14,
+    "region": "cataluna",
+    "age": "under65",
+    "family": 3,
+    "children": 0,
+    "childrenUnder3": 0,
+    "childrenWhole": false,
+    "disability": "none",
+    "contract": "open-ended",
+    "mobility": false,
+    "housingLoan": false
+   },
+   "cotizacionesSent": 1170,
+   "aeat": {
+    "rate": 5.07,
+    "annual": 912.6,
+    "base": 10989.5,
+    "minimum": 5550.0
+   }
+  },
+  {
+   "id": "s3-19000-red20-third-band",
+   "input": {
+    "gross": 19000,
+    "payments": 14,
+    "region": "cataluna",
+    "age": "under65",
+    "family": 3,
+    "children": 0,
+    "childrenUnder3": 0,
+    "childrenWhole": false,
+    "disability": "none",
+    "contract": "open-ended",
+    "mobility": false,
+    "housingLoan": false
+   },
+   "cotizacionesSent": 1234.92,
+   "aeat": {
+    "rate": 7.07,
+    "annual": 1343.3,
+    "base": 13505.12,
+    "minimum": 5550.0
+   }
+  },
+  {
+   "id": "s3-20000",
+   "input": {
+    "gross": 20000,
+    "payments": 14,
+    "region": "cataluna",
+    "age": "under65",
+    "family": 3,
+    "children": 0,
+    "childrenUnder3": 0,
+    "childrenWhole": false,
+    "disability": "none",
+    "contract": "open-ended",
+    "mobility": false,
+    "housingLoan": false
+   },
+   "cotizacionesSent": 1299.96,
+   "aeat": {
+    "rate": 8.86,
+    "annual": 1772.0,
+    "base": 15505.93,
+    "minimum": 5550.0
+   }
+  },
+  {
+   "id": "s3-22000-12-payments",
+   "input": {
+    "gross": 22000,
+    "payments": 12,
+    "region": "cataluna",
+    "age": "under65",
+    "family": 3,
+    "children": 0,
+    "childrenUnder3": 0,
+    "childrenWhole": false,
+    "disability": "none",
+    "contract": "open-ended",
+    "mobility": false,
+    "housingLoan": false
+   },
+   "cotizacionesSent": 1430.04,
+   "aeat": {
+    "rate": 11.96,
+    "annual": 2631.2,
+    "base": 18569.96,
+    "minimum": 5550.0
+   }
+  },
+  {
+   "id": "s3-25000",
+   "input": {
+    "gross": 25000,
+    "payments": 14,
+    "region": "cataluna",
+    "age": "under65",
+    "family": 3,
+    "children": 0,
+    "childrenUnder3": 0,
+    "childrenWhole": false,
+    "disability": "none",
+    "contract": "open-ended",
+    "mobility": false,
+    "housingLoan": false
+   },
+   "cotizacionesSent": 1624.92,
+   "aeat": {
+    "rate": 14.09,
+    "annual": 3522.5,
+    "base": 21375.08,
+    "minimum": 5550.0
+   }
+  },
+  {
+   "id": "s3-35200",
+   "input": {
+    "gross": 35200,
+    "payments": 14,
+    "region": "cataluna",
+    "age": "under65",
+    "family": 3,
+    "children": 0,
+    "childrenUnder3": 0,
+    "childrenWhole": false,
+    "disability": "none",
+    "contract": "open-ended",
+    "mobility": false,
+    "housingLoan": false
+   },
+   "cotizacionesSent": 2288.04,
+   "aeat": {
+    "rate": 18.13,
+    "annual": 6381.76,
+    "base": 30911.96,
+    "minimum": 5550.0
+   }
+  },
+  {
+   "id": "s3-40000",
+   "input": {
+    "gross": 40000,
+    "payments": 14,
+    "region": "cataluna",
+    "age": "under65",
+    "family": 3,
+    "children": 0,
+    "childrenUnder3": 0,
+    "childrenWhole": false,
+    "disability": "none",
+    "contract": "open-ended",
+    "mobility": false,
+    "housingLoan": false
+   },
+   "cotizacionesSent": 2600.04,
+   "aeat": {
+    "rate": 19.36,
+    "annual": 7744.0,
+    "base": 35399.96,
+    "minimum": 5550.0
+   }
+  },
+  {
+   "id": "s3-50000",
+   "input": {
+    "gross": 50000,
+    "payments": 14,
+    "region": "cataluna",
+    "age": "under65",
+    "family": 3,
+    "children": 0,
+    "childrenUnder3": 0,
+    "childrenWhole": false,
+    "disability": "none",
+    "contract": "open-ended",
+    "mobility": false,
+    "housingLoan": false
+   },
+   "cotizacionesSent": 3249.96,
+   "aeat": {
+    "rate": 22.4,
+    "annual": 11200.0,
+    "base": 44750.04,
+    "minimum": 5550.0
+   }
+  },
+  {
+   "id": "s3-60000",
+   "input": {
+    "gross": 60000,
+    "payments": 14,
+    "region": "cataluna",
+    "age": "under65",
+    "family": 3,
+    "children": 0,
+    "childrenUnder3": 0,
+    "childrenWhole": false,
+    "disability": "none",
+    "contract": "open-ended",
+    "mobility": false,
+    "housingLoan": false
+   },
+   "cotizacionesSent": 3900,
+   "aeat": {
+    "rate": 24.44,
+    "annual": 14664.0,
+    "base": 54100.0,
+    "minimum": 5550.0
+   }
+  },
+  {
+   "id": "s3-61214.40-max-base",
+   "input": {
+    "gross": 61214.4,
+    "payments": 14,
+    "region": "cataluna",
+    "age": "under65",
+    "family": 3,
+    "children": 0,
+    "childrenUnder3": 0,
+    "childrenWhole": false,
+    "disability": "none",
+    "contract": "open-ended",
+    "mobility": false,
+    "housingLoan": false
+   },
+   "cotizacionesSent": 3978.96,
+   "aeat": {
+    "rate": 24.64,
+    "annual": 15083.23,
+    "base": 55235.44,
+    "minimum": 5550.0
+   }
+  },
+  {
+   "id": "s3-70000-solidarity",
+   "input": {
+    "gross": 70000,
+    "payments": 14,
+    "region": "cataluna",
+    "age": "under65",
+    "family": 3,
+    "children": 0,
+    "childrenUnder3": 0,
+    "childrenWhole": false,
+    "disability": "none",
+    "contract": "open-ended",
+    "mobility": false,
+    "housingLoan": false
+   },
+   "cotizacionesSent": 3996.24,
+   "aeat": {
+    "rate": 26.64,
+    "annual": 18648.0,
+    "base": 64003.76,
+    "minimum": 5550.0
+   }
+  },
+  {
+   "id": "s3-100000-solidarity3",
+   "input": {
+    "gross": 100000,
+    "payments": 14,
+    "region": "cataluna",
+    "age": "under65",
+    "family": 3,
+    "children": 0,
+    "childrenUnder3": 0,
+    "childrenWhole": false,
+    "disability": "none",
+    "contract": "open-ended",
+    "mobility": false,
+    "housingLoan": false
+   },
+   "cotizacionesSent": 4061.64,
+   "aeat": {
+    "rate": 32.11,
+    "annual": 32110.0,
+    "base": 93938.36,
+    "minimum": 5550.0
+   }
+  },
+  {
+   "id": "s3-350000-top-rate",
+   "input": {
+    "gross": 350000,
+    "payments": 14,
+    "region": "cataluna",
+    "age": "under65",
+    "family": 3,
+    "children": 0,
+    "childrenUnder3": 0,
+    "childrenWhole": false,
+    "disability": "none",
+    "contract": "open-ended",
+    "mobility": false,
+    "housingLoan": false
+   },
+   "cotizacionesSent": 4661.64,
+   "aeat": {
+    "rate": 41.49,
+    "annual": 145215.0,
+    "base": 343338.36,
+    "minimum": 5550.0
+   }
+  },
+  {
+   "id": "s2-30000-no-children",
+   "input": {
+    "gross": 30000,
+    "payments": 14,
+    "region": "cataluna",
+    "age": "under65",
+    "family": 2,
+    "children": 0,
+    "childrenUnder3": 0,
+    "childrenWhole": false,
+    "disability": "none",
+    "contract": "open-ended",
+    "mobility": false,
+    "housingLoan": false
+   },
+   "cotizacionesSent": 1950,
+   "aeat": {
+    "rate": 16.42,
+    "annual": 4926.0,
+    "base": 26050.0,
+    "minimum": 5550.0
+   }
+  },
+  {
+   "id": "s2-30000-two-children-half",
+   "input": {
+    "gross": 30000,
+    "payments": 14,
+    "region": "cataluna",
+    "age": "under65",
+    "family": 2,
+    "children": 2,
+    "childrenUnder3": 0,
+    "childrenWhole": false,
+    "disability": "none",
+    "contract": "open-ended",
+    "mobility": false,
+    "housingLoan": false
+   },
+   "cotizacionesSent": 1950,
+   "aeat": {
+    "rate": 14.8,
+    "annual": 4440.0,
+    "base": 26050.0,
+    "minimum": 8100.0
+   }
+  },
+  {
+   "id": "s3-30000-two-children-one-under3-half",
+   "input": {
+    "gross": 30000,
+    "payments": 14,
+    "region": "cataluna",
+    "age": "under65",
+    "family": 3,
+    "children": 2,
+    "childrenUnder3": 1,
+    "childrenWhole": false,
+    "disability": "none",
+    "contract": "open-ended",
+    "mobility": false,
+    "housingLoan": false
+   },
+   "cotizacionesSent": 1950,
+   "aeat": {
+    "rate": 13.91,
+    "annual": 4173.0,
+    "base": 26050.0,
+    "minimum": 9500.0
+   }
+  },
+  {
+   "id": "s1-30000-one-child-whole",
+   "input": {
+    "gross": 30000,
+    "payments": 14,
+    "region": "cataluna",
+    "age": "under65",
+    "family": 1,
+    "children": 1,
+    "childrenUnder3": 0,
+    "childrenWhole": true,
+    "disability": "none",
+    "contract": "open-ended",
+    "mobility": false,
+    "housingLoan": false
+   },
+   "cotizacionesSent": 1950,
+   "aeat": {
+    "rate": 14.9,
+    "annual": 4470.0,
+    "base": 26050.0,
+    "minimum": 7950.0
+   }
+  },
+  {
+   "id": "s1-18000-two-children-exempt",
+   "input": {
+    "gross": 18000,
+    "payments": 14,
+    "region": "cataluna",
+    "age": "under65",
+    "family": 1,
+    "children": 2,
+    "childrenUnder3": 0,
+    "childrenWhole": true,
+    "disability": "none",
+    "contract": "open-ended",
+    "mobility": false,
+    "housingLoan": false
+   },
+   "cotizacionesSent": 1170,
+   "aeat": {
+    "rate": 0.0,
+    "annual": 0.0,
+    "base": 10989.5,
+    "minimum": 10650.0
+   }
+  },
+  {
+   "id": "s1-19500-two-children-limit43",
+   "input": {
+    "gross": 19500,
+    "payments": 14,
+    "region": "cataluna",
+    "age": "under65",
+    "family": 1,
+    "children": 2,
+    "childrenUnder3": 0,
+    "childrenWhole": true,
+    "disability": "none",
+    "contract": "open-ended",
+    "mobility": false,
+    "housingLoan": false
+   },
+   "cotizacionesSent": 1267.68,
+   "aeat": {
+    "rate": 1.77,
+    "annual": 345.15,
+    "base": 14505.01,
+    "minimum": 10650.0
+   }
+  },
+  {
+   "id": "s3-45000-four-children-one-under3-whole",
+   "input": {
+    "gross": 45000,
+    "payments": 14,
+    "region": "cataluna",
+    "age": "under65",
+    "family": 3,
+    "children": 4,
+    "childrenUnder3": 1,
+    "childrenWhole": true,
+    "disability": "none",
+    "contract": "open-ended",
+    "mobility": false,
+    "housingLoan": false
+   },
+   "cotizacionesSent": 2925.12,
+   "aeat": {
+    "rate": 12.34,
+    "annual": 5553.0,
+    "base": 39474.88,
+    "minimum": 21950.0
+   }
+  },
+  {
+   "id": "s2-17500-one-child-exempt",
+   "input": {
+    "gross": 17500,
+    "payments": 14,
+    "region": "cataluna",
+    "age": "under65",
+    "family": 2,
+    "children": 1,
+    "childrenUnder3": 0,
+    "childrenWhole": false,
+    "disability": "none",
+    "contract": "open-ended",
+    "mobility": false,
+    "housingLoan": false
+   },
+   "cotizacionesSent": 1137.48,
+   "aeat": {
+    "rate": 0.0,
+    "annual": 0.0,
+    "base": 9703.93,
+    "minimum": 6750.0
+   }
+  },
+  {
+   "id": "age-65-74",
+   "input": {
+    "gross": 30000,
+    "payments": 14,
+    "region": "cataluna",
+    "age": "65to74",
+    "family": 3,
+    "children": 0,
+    "childrenUnder3": 0,
+    "childrenWhole": false,
+    "disability": "none",
+    "contract": "open-ended",
+    "mobility": false,
+    "housingLoan": false
+   },
+   "cotizacionesSent": 1950,
+   "aeat": {
+    "rate": 15.69,
+    "annual": 4707.0,
+    "base": 26050.0,
+    "minimum": 6700.0
+   }
+  },
+  {
+   "id": "age-75-plus",
+   "input": {
+    "gross": 30000,
+    "payments": 14,
+    "region": "cataluna",
+    "age": "75plus",
+    "family": 3,
+    "children": 0,
+    "childrenUnder3": 0,
+    "childrenWhole": false,
+    "disability": "none",
+    "contract": "open-ended",
+    "mobility": false,
+    "housingLoan": false
+   },
+   "cotizacionesSent": 1950,
+   "aeat": {
+    "rate": 14.8,
+    "annual": 4440.0,
+    "base": 26050.0,
+    "minimum": 8100.0
+   }
+  },
+  {
+   "id": "disability-33",
+   "input": {
+    "gross": 30000,
+    "payments": 14,
+    "region": "cataluna",
+    "age": "under65",
+    "family": 3,
+    "children": 0,
+    "childrenUnder3": 0,
+    "childrenWhole": false,
+    "disability": "33",
+    "contract": "open-ended",
+    "mobility": false,
+    "housingLoan": false
+   },
+   "cotizacionesSent": 1950,
+   "aeat": {
+    "rate": 11.02,
+    "annual": 3306.0,
+    "base": 22550.0,
+    "minimum": 8550.0
+   }
+  },
+  {
+   "id": "disability-33-mobility",
+   "input": {
+    "gross": 30000,
+    "payments": 14,
+    "region": "cataluna",
+    "age": "under65",
+    "family": 3,
+    "children": 0,
+    "childrenUnder3": 0,
+    "childrenWhole": false,
+    "disability": "33mobility",
+    "contract": "open-ended",
+    "mobility": false,
+    "housingLoan": false
+   },
+   "cotizacionesSent": 1950,
+   "aeat": {
+    "rate": 5.25,
+    "annual": 1575.0,
+    "base": 18300.0,
+    "minimum": 11550.0
+   }
+  },
+  {
+   "id": "disability-65",
+   "input": {
+    "gross": 30000,
+    "payments": 14,
+    "region": "cataluna",
+    "age": "under65",
+    "family": 3,
+    "children": 0,
+    "childrenUnder3": 0,
+    "childrenWhole": false,
+    "disability": "65",
+    "contract": "open-ended",
+    "mobility": false,
+    "housingLoan": false
+   },
+   "cotizacionesSent": 1950,
+   "aeat": {
+    "rate": 0.6,
+    "annual": 180.0,
+    "base": 18300.0,
+    "minimum": 17550.0
+   }
+  },
+  {
+   "id": "ceuta-30000",
+   "input": {
+    "gross": 30000,
+    "payments": 14,
+    "region": "ceuta",
+    "age": "under65",
+    "family": 3,
+    "children": 0,
+    "childrenUnder3": 0,
+    "childrenWhole": false,
+    "disability": "none",
+    "contract": "open-ended",
+    "mobility": false,
+    "housingLoan": false
+   },
+   "cotizacionesSent": 1950,
+   "aeat": {
+    "rate": 6.56,
+    "annual": 1968.0,
+    "base": 26050.0,
+    "minimum": 5550.0
+   }
+  },
+  {
+   "id": "melilla-45000",
+   "input": {
+    "gross": 45000,
+    "payments": 14,
+    "region": "melilla",
+    "age": "under65",
+    "family": 3,
+    "children": 0,
+    "childrenUnder3": 0,
+    "childrenWhole": false,
+    "disability": "none",
+    "contract": "open-ended",
+    "mobility": false,
+    "housingLoan": false
+   },
+   "cotizacionesSent": 2925.12,
+   "aeat": {
+    "rate": 8.42,
+    "annual": 3789.0,
+    "base": 40074.88,
+    "minimum": 5550.0
+   }
+  },
+  {
+   "id": "la-palma-30000",
+   "input": {
+    "gross": 30000,
+    "payments": 14,
+    "region": "la-palma",
+    "age": "under65",
+    "family": 3,
+    "children": 0,
+    "childrenUnder3": 0,
+    "childrenWhole": false,
+    "disability": "none",
+    "contract": "open-ended",
+    "mobility": false,
+    "housingLoan": false
+   },
+   "cotizacionesSent": 1950,
+   "aeat": {
+    "rate": 6.56,
+    "annual": 1968.0,
+    "base": 26050.0,
+    "minimum": 5550.0
+   }
+  },
+  {
+   "id": "ceuta-short-16500-floor",
+   "input": {
+    "gross": 16500,
+    "payments": 14,
+    "region": "ceuta",
+    "age": "under65",
+    "family": 3,
+    "children": 0,
+    "childrenUnder3": 0,
+    "childrenWhole": false,
+    "disability": "none",
+    "contract": "short",
+    "mobility": false,
+    "housingLoan": false
+   },
+   "cotizacionesSent": 1080.84,
+   "aeat": {
+    "rate": 0.8,
+    "annual": 132.0,
+    "base": 7109.69,
+    "minimum": 5550.0
+   }
+  },
+  {
+   "id": "mobility-30000",
+   "input": {
+    "gross": 30000,
+    "payments": 14,
+    "region": "cataluna",
+    "age": "under65",
+    "family": 3,
+    "children": 0,
+    "childrenUnder3": 0,
+    "childrenWhole": false,
+    "disability": "none",
+    "contract": "open-ended",
+    "mobility": true,
+    "housingLoan": false
+   },
+   "cotizacionesSent": 1950,
+   "aeat": {
+    "rate": 14.42,
+    "annual": 4326.0,
+    "base": 24050.0,
+    "minimum": 5550.0
+   }
+  },
+  {
+   "id": "housing-loan-25000",
+   "input": {
+    "gross": 25000,
+    "payments": 14,
+    "region": "cataluna",
+    "age": "under65",
+    "family": 3,
+    "children": 0,
+    "childrenUnder3": 0,
+    "childrenWhole": false,
+    "disability": "none",
+    "contract": "open-ended",
+    "mobility": false,
+    "housingLoan": true
+   },
+   "cotizacionesSent": 1624.92,
+   "aeat": {
+    "rate": 12.09,
+    "annual": 3022.5,
+    "base": 21375.08,
+    "minimum": 5550.0
+   }
+  },
+  {
+   "id": "fixed-term-40000",
+   "input": {
+    "gross": 40000,
+    "payments": 14,
+    "region": "cataluna",
+    "age": "under65",
+    "family": 3,
+    "children": 0,
+    "childrenUnder3": 0,
+    "childrenWhole": false,
+    "disability": "none",
+    "contract": "fixed-term",
+    "mobility": false,
+    "housingLoan": false
+   },
+   "cotizacionesSent": 2619.96,
+   "aeat": {
+    "rate": 19.34,
+    "annual": 7736.0,
+    "base": 35380.04,
+    "minimum": 5550.0
+   }
+  },
+  {
+   "id": "madrid-30000-same-as-cataluna",
+   "input": {
+    "gross": 30000,
+    "payments": 14,
+    "region": "madrid",
+    "age": "under65",
+    "family": 3,
+    "children": 0,
+    "childrenUnder3": 0,
+    "childrenWhole": false,
+    "disability": "none",
+    "contract": "open-ended",
+    "mobility": false,
+    "housingLoan": false
+   },
+   "cotizacionesSent": 1950,
+   "aeat": {
+    "rate": 16.42,
+    "annual": 4926.0,
+    "base": 26050.0,
+    "minimum": 5550.0
+   }
+  }
+ ]
+}

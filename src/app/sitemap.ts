@@ -21,6 +21,7 @@ import { editionSitemapEntries } from "@/lib/programmatic/spain-2027/editions";
 import { spainDaySitemapEntries, spainSitemapEntries } from "@/lib/programmatic/spain-2027/paths";
 import { widgetSitemapEntries } from "@/lib/programmatic/embed-2027/places";
 import { leaveSitemapEntries } from "@/lib/programmatic/leave-2027/places";
+import { netSalarySitemapEntries } from "@/lib/programmatic/net-salary/sitemap";
 
 /**
  * Cached for an hour (ISR) and refreshed at once by every publish, and by the
@@ -161,6 +162,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...widgetSitemapEntries(),
     // "Com aprofitar les vacances el 2027": the leave planner, in ca, es and en.
     ...leaveSitemapEntries(),
+    // "Calculadora de sueldo neto 2026" (calculators family), in es, ca and en.
+    ...netSalarySitemapEntries(),
     ...fuelSitemapEntries(),
     ...rodaliesSitemap(),
     ...reservoirSitemapEntries(),
