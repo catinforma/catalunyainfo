@@ -22,6 +22,7 @@ import { spainDaySitemapEntries, spainSitemapEntries } from "@/lib/programmatic/
 import { widgetSitemapEntries } from "@/lib/programmatic/embed-2027/places";
 import { leaveSitemapEntries } from "@/lib/programmatic/leave-2027/places";
 import { netSalarySitemapEntries } from "@/lib/programmatic/net-salary/sitemap";
+import { employmentSitemapEntries } from "@/lib/programmatic/employment/sitemap";
 
 /**
  * Cached for an hour (ISR) and refreshed at once by every publish, and by the
@@ -164,6 +165,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...leaveSitemapEntries(),
     // "Calculadora de sueldo neto 2026" (calculators family), in es, ca and en.
     ...netSalarySitemapEntries(),
+    // Dismissal pay, final settlement and unemployment benefit calculators, in ca, es and en.
+    ...employmentSitemapEntries(),
     ...fuelSitemapEntries(),
     ...rodaliesSitemap(),
     ...reservoirSitemapEntries(),

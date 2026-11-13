@@ -5120,3 +5120,52 @@ new tables).
   check.
 
 **Outcome:** _pending_
+
+## 2026-11-13 — Employment calculators: dismissal pay, final settlement (finiquito), unemployment benefit (paro) — new tools, ca/es/en (ships with the deploy; group `pagos` for the pay-dates link)
+
+**What.** Three calculators, Spain-wide, each on its own URL beside the
+net-salary calculator (same folders; the hub is built separately):
+
+- `/es/calculadoras/indemnizacion-despido/`, `/ca/calculadores/indemnitzacio-acomiadament/`,
+  `/en/calculators/severance-pay-spain/` — unfair (33 days/year; 45 before
+  12 Feb 2012 with the DT 11ª caps 720 days / 42 months), objective or ERE
+  (20 days, 12 months), end of fixed-term contract (12 days); dates + gross
+  annual or daily salary; the three cases side by side.
+- `/es/calculadoras/finiquito/`, `/ca/calculadores/quitanca-finiquito/`,
+  `/en/calculators/final-settlement-spain/` — last month's days, accrued extra
+  payments (yearly or half-yearly accrual, or prorated), unused vacation
+  (30 calendar days default, editable), optional dismissal pay and the 15
+  days' notice of an objective dismissal.
+- `/es/calculadoras/paro/`, `/ca/calculadores/atur/`,
+  `/en/calculators/unemployment-benefit-spain/` — LGSS art. 269 duration
+  scale, 70 % / 60 % (art. 270.2: unchanged by RDL 2/2024, which reformed the
+  subsidios), 2026 limits from IPREM 600 € + 1/6 (560/749 min, 1,225/1,400/1,575
+  max = SEPE "Cuantías anuales"), part-time scaling, SS deduction 4.85 % of
+  the base. Linked both ways with `/es/guias/cuando-se-cobra-paro-pension/`
+  (and its ca/en editions: republish group `pagos` after the deploy).
+
+Engines pure TS in `src/lib/programmatic/employment/` (rules.ts quotes every
+figure, read 13 Nov 2026 on BOE consolidated ET/LGSS, SEPE, Orden PJC/297/2026,
+RD 126/2026); tests `tests/employment-calculators.test.ts` with hand-worked
+cases and SEPE's own example (420 days → 120). Server-rendered example on each
+page (works without JS); breadcrumb JSON-LD only (no FAQPage: not eligible).
+Sitemap + reciprocal hreflang (x-default en), llms.txt entries.
+
+**Baseline.** 0 impressions, 0 clicks (new URLs).
+
+**Prediction.** High-demand evergreen Spanish queries ("calcular finiquito",
+"calculadora paro", "indemnización por despido") are dominated by big
+publishers and the SEPE simulator; realistic: indexed within 7 days, first
+impressions on long-tail ("indemnización despido antes de 2012 45 días",
+"paro 1500 días cotizados cuánto cobro", "finiquito pagas extra semestral")
+within 2–3 weeks; by 15 Jan 2027 ≥ 1,000 impressions/week across the nine
+URLs, average position < 30 on the ES pages, CTR ≥ 1.5 %. January (dismissals
+after the holidays, new IPREM/SMI) should lift demand.
+
+**Date guards.** `RULES_VALID_UNTIL` 2026-12-31: a test fails from 1 Jan 2027
+until IPREM (PGE 2027 or prorogation), SMI 2027, the 2027 maximum base and
+worker rate (Orden de cotización 2027) and the ET/LGSS articles are re-read
+and `RULES_AS_OF` moves. The pay-dates guide keeps its own PAY_DATES_AS_OF.
+
+**Review 27 Nov 2026 (indexing, first queries), 15 Jan 2027 (prediction).
+Outcome:** _pending_
