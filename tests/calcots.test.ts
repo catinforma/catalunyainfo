@@ -6,6 +6,7 @@ import { bodySchema, bodyToPlainText, wordCount, type Block } from "../src/lib/c
 import {
   CALCOFEST_2026,
   CALCOTS,
+  CALCOTS_REREAD_BY,
   CALCOTS_VERIFIED,
   FESTA_2027,
   PAST_2026,
@@ -87,10 +88,10 @@ test("sources are official https pages, untracked, and the reader sees the check
   for (const host of ["festacalcotadavalls.cat", "www.valls.cat", "www.calcotdevalls.com", "agricultura.gencat.cat", "rodalies.gencat.cat"]) {
     assert.ok(hosts.has(host), `no source from ${host}`);
   }
-  assert.equal(CALCOTS.verifiedAt, "2026-10-26");
+  assert.equal(CALCOTS.verifiedAt, "2026-11-13");
   assert.equal(CALCOTS_VERIFIED, CALCOTS.verifiedAt);
   for (const locale of LOCALES) {
-    assert.match(text(CALCOTS.editions[locale].blocks), /26 (d'octubre|de octubre|October) (de )?2026/, locale);
+    assert.match(text(CALCOTS.editions[locale].blocks), /13 (de novembre|de noviembre|November) (de )?2026/, locale);
   }
 });
 
@@ -282,5 +283,63 @@ test("Calçofest is printed only with what the council's note states", () => {
     assert.match(body, /1[.,]500/, locale);
     // The concert and bus prices change week by week; they are not printed.
     assert.doesNotMatch(body, /48 ?€|€48|28 ?€|€28|35 ?€|€35/, locale);
+  }
+});
+
+/* -------------------------------------------------------------------------- */
+/* 13 Nov 2026: the generic "calçots" intent (at home, per person, sauce, buy) */
+/* -------------------------------------------------------------------------- */
+
+test("re-read guard: the Calçofest section and the 2027 programme are re-checked after 21 November 2026", () => {
+  const today = new Date().toISOString().slice(0, 10);
+  assert.ok(
+    today <= CALCOTS_REREAD_BY,
+    `calcots.ts: Calçofest (${CALCOFEST_2026.date}) has passed. Rewrite its section in the past tense, re-read festacalcotadavalls.cat/premsa/ for the 2027 programme (PROGRAMME_2027), move CALCOTS_REREAD_BY (next: the 2026 advance sale opened on ${PAST_2026.advanceSale}, so about 2027-01-08) and republish \`calcots\`.`,
+  );
+  assert.ok(CALCOTS_REREAD_BY > CALCOFEST_2026.date && CALCOTS_REREAD_BY < FESTA_2027.date);
+});
+
+test("the organiser's per-person figure is in the key facts and the FAQ, never another one", () => {
+  for (const locale of LOCALES) {
+    const blocks = CALCOTS.editions[locale].blocks;
+    const facts = JSON.stringify(blocks.find((b) => b.type === "keyFacts"));
+    assert.match(facts, /20 (a|to) 35/, `${locale}: key facts`);
+    const faqBlock = JSON.stringify(blocks.find((b) => b.type === "faq"));
+    assert.match(faqBlock, /20 (i|y|and) 35/, `${locale}: FAQ`);
+    // Competitors print 10-20, 25 or up to 50; the page gives only the Cambra's range.
+    assert.doesNotMatch(text(blocks), /10 (a|i|y|to|and) 20 calçots|fins a 50|hasta 50|up to 50/, locale);
+  }
+});
+
+test("the sauce for four is the Cambra's list, exactly, with its source linked", () => {
+  const items: Record<Locale, string[]> = {
+    ca: ["100 grams d'ametlles torrades", "30 grams d'avellanes torrades", "4 o 5 tomàquets vermells escalivats", "1 cabeça d'alls escalivats", "oli d'oliva de Valls, afegit a poc a poc", "1/2 gotet de vinagre", "1 pebrot sec o pebre vermell dolç"],
+    es: ["100 gramos de almendras tostadas", "30 gramos de avellanas tostadas", "4 o 5 tomates rojos asados", "1 cabeza de ajos asados", "aceite de oliva de Valls, añadido poco a poco", "1/2 vasito de vinagre", "1 pimiento seco o pimentón dulce"],
+    en: ["100 grams of toasted almonds", "30 grams of toasted hazelnuts", "4 or 5 roasted red tomatoes", "1 head of roasted garlic", "Valls olive oil, added slowly", "half a small glass of vinegar", "1 dried pepper or sweet paprika"],
+  };
+  for (const locale of LOCALES) {
+    const body = text(CALCOTS.editions[locale].blocks);
+    for (const item of items[locale]) assert.ok(body.includes(item), `${locale}: ${item}`);
+    assert.match(body, /(quatre|cuatro|four) (persones|personas|people)/, locale);
+    assert.ok(JSON.stringify(CALCOTS.editions[locale].blocks).includes("](https://festacalcotadavalls.cat/la-festa/com-fer-una-calcotada/)"));
+  }
+});
+
+test("where to buy links the IGP growers' list but copies no grower's name or phone number", () => {
+  for (const locale of LOCALES) {
+    const json = JSON.stringify(CALCOTS.editions[locale].blocks);
+    assert.ok(json.includes("](https://www.calcotdevalls.com/productors/)"), locale);
+    assert.ok(json.includes("](https://www.calcotdevalls.com/cuinar-calcots/)"), locale);
+    const body = text(CALCOTS.editions[locale].blocks);
+    assert.doesNotMatch(body, /\b[69]\d{2} ?\d{3} ?\d{3}\b/, `${locale}: phone number`);
+    assert.doesNotMatch(body, /Amill|Banús|Bonet Llordachs|Cucurull|Figueroa|Fortuny|Galofré|Grimau|Mateu Martí|Padró Mon|coopvalls|@/i, `${locale}: grower named`);
+  }
+});
+
+test("the 2026-27 harvest note is dated and comes from the IGP", () => {
+  for (const locale of LOCALES) {
+    const json = JSON.stringify(CALCOTS.editions[locale].blocks);
+    assert.ok(json.includes("calcotdevalls.com/la-igp-calcot-de-valls-avanca-les-previsions"), locale);
+    assert.match(text(CALCOTS.editions[locale].blocks), /27 (d'octubre|de octubre|October) (de )?2026/, locale);
   }
 });

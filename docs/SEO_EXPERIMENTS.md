@@ -4137,3 +4137,114 @@ measurement clean. Publishing now folds this upgrade into that window (the
 ## 13 Nov 2026 — Montserrat EN upgrade published inside the 28 Oct title window (decision)
 
 The EN Montserrat page had 1,360 impressions in 28 days at position 34.8 and 0 clicks: a title test cannot read anything at page 4, so the content upgrade (comparison table, which-to-choose, FAQ) ships now instead of 29 Nov. The 28 Oct title entry is closed as inconclusive; the upgrade's own entry above carries the baseline and review dates.
+
+## 2026-11-13 — Evergreen wave 3: snow without skiing and calçots at home (body upgrades, same URLs) (groups `neu`, `calcots`; deploy first)
+
+**Why.** Items 6 and 8 of `research_notes/evergreen-demand-nov2026.md`.
+- **Snow.** "nieve" averages about 22k searches a week in Catalonia in January.
+  The site already had a page for the intent (`/es/guias/donde-ver-nieve-cataluna-sin-esquiar/`
+  + ca, en), so it is upgraded in place; no new URL. The 13 Nov SERP
+  (escapadarural, barcelonaurbana, escapadaambnens, guiarepsol, salir.com)
+  lists the same resorts. None of them gives the R3 cuts, the 2026-27 prices,
+  the chain and 3PMSF tyre rules, or the avalanche bulletin.
+- **Calçots.** "calçots" gets about 5–7k searches a week in Jan–Feb. The
+  page targets "calçotada valls", and the generic intent (at home, per person,
+  sauce, where to buy) is not served. The SERP (hola.com, naciodigital, 3cat,
+  surtdecasa, barcelo.com) disagrees on calçots per person (8.7, 10–20, 25,
+  up to 50), and none prints the organiser's sauce for four.
+
+**Titles and descriptions unchanged on both pages.** The snow page is inside
+the 28 Oct window (to 28 Nov) and the calçots page inside its 26 Oct
+publication measurement (24 Nov). Tests pin the snow titles and descriptions.
+
+**What was added.**
+
+*Snow* (module moved from `pyrenees.ts` to `src/lib/content/batch02/snow-trips.ts`;
+`pyrenees.ts` re-exports `SNOW`; SNOW_AS_OF 2026-11-13, quotes in the header):
+- The lead answers first: Núria and La Molina by train, the 2026-27 opening
+  dates, and the R3 and chain warnings. Then key facts.
+- By train:
+  - TreNatura €40.20 / €30.70, as published, not valid on November weekdays;
+  - Núria 2026 fares, plus the 2026-27 telefèric inclusion;
+  - La Molina sightseeing gondola 2026-27, €20 / €10, with last rides and
+    accessibility;
+  - Bus Natura days (no dates published).
+- An R3 section:
+  - Barcelona–La Garriga is cut, with the R4 plus buses, at 50% of the
+    January service and no end date;
+  - the new La Garriga–Figaró cut, 16 Nov–14 Dec;
+  - ticket validity on the buses.
+- The places table now has 9 rows: Aran and Rasos de Peguera are added.
+- Per-place updates: Núria parc lúdic and snowcat dates, La Molina sledging
+  run, Masella (nothing published), Vallter online-only on high-season days
+  and the P5/P6 car parks, Espot, Port Ainé and Boí Taüll details, and
+  Baqueira's 11 Nov news (28 Nov–4 Apr).
+- Chains and winter tyres:
+  - RGV art. 12.5.2;
+  - **3PMSF on every axle for vehicles up to 3,500 kg since 30 May 2026**
+    (Orden PJC/528/2026);
+  - textile socks not named in the rules;
+  - motorway rule (RGC 32.2);
+  - Protecció Civil's advice, 012 and the MCT, NEUCAT.
+- Avalanches and weather:
+  - the ICGC bulletin, daily from 1 Dec, and Lauegi for Aran;
+  - the European scale, which counts a snowshoer as a light load;
+  - Protecció Civil's 90% figure;
+  - Meteocat's Pyrenees forecast and InfoGruixNEU.
+- An eight-question FAQ: four existing questions updated, four new (Núria
+  cost, La Molina gondola, chains, avalanches).
+- Prices with no season label on their page are left out.
+
+*Calçots* (`calcots.ts`, CALCOTS_VERIFIED 2026-11-13, every source re-read):
+- Key fact "20 to 35 per person" (Cambra de Comerç).
+- The season section gets the IGP's 27 Oct 2026 harvest note.
+- "Where to buy IGP calçots": a link to the IGP growers' list. No names or
+  phone numbers are copied.
+- "Calçotada at home: what you need" (Cambra's list).
+- The sauce for four with the Cambra's exact quantities.
+- "Other ways to eat calçots": the Ajuntament's dishes and the IGP recipes.
+- Three FAQs: per person, sauce, where to buy.
+- The 2027 programme is still unpublished. Checked 13 Nov.
+
+**Go-live.** Deploy (the `neu` group is new in the route). Then publish
+`neu` and `calcots` (the latter also republishes the food-fairs feature, as
+before), then IndexNow the six URLs.
+
+**Baseline** (GSC, 17 Oct–13 Nov, 28 days):
+- `/es/guias/donde-ver-nieve-cataluna-sin-esquiar/`: 78 impressions at 6.1,
+  4 clicks ("donde hay nieve en cataluña" 6 at 7.8).
+- `/ca/guies/on-veure-neu-catalunya-sense-esquiar/`: 98 at 29.1, 6 clicks
+  ("rutes hivern catalunya" 32 at 61.2).
+- `/en/guides/where-to-see-snow-catalonia-without-skiing/`: 37 at 7.2, 0 clicks.
+- calçots:
+  - `/ca/tradicions/calcotada-valls-temporada-calcots/`: 487 at 8.8, 5 clicks;
+  - es: 116 at 5.5, 5 clicks;
+  - en: 96 at 5.2, 1 click;
+  - "temporada calçots" 4 at 61.5.
+
+**Prediction.**
+- *Snow:* by 15 Jan 2027 (28 days), 3,000–10,000 impressions across the three
+  editions (the demand starts in December). The ES and EN "nieve/snow near
+  Barcelona", "sin coche/by train", "cadenas" and "raquetas" long tail reaches
+  position ≤ 10. "nieve cataluña" alone stays behind Meteocat and the resorts.
+  Wrong if under 1,000 impressions by 15 Jan.
+- *Calçots:* by 15 Feb 2027, "calçots per persona / por persona", "salsa
+  calçots" and "calçotada a casa / en casa" reach position ≤ 10. The page's
+  impressions rise 3–5× over January's festival-date demand alone. The
+  "calçotada valls 2027" queries must not fall below position 8.
+
+**Measure:**
+- 15 Jan 2027: `snapshot.py page ver-nieve 28`, `page veure-neu 28`,
+  `page where-to-see-snow 28`.
+- 15 Feb 2027: `snapshot.py page calcotada 28`.
+
+**Upkeep** (tests fail until done):
+- from 23 Nov 2026 (CALCOTS_REREAD_BY 2026-11-22): rewrite the Calçofest
+  section in the past tense, re-read the press room for the 2027 programme,
+  move the date (next: about 8 Jan 2027, when the 2026 advance sale opened)
+  and republish `calcots`;
+- from 16 Dec 2026 (SNOW_REREAD_BY 2026-12-15): re-read the R3 notices (the
+  Figaró cut ends on 14 Dec), the FGC fares (labelled "temporada 2026"), the
+  ski-bus and Bus Natura dates and Masella, then republish `neu`.
+
+**Outcome:** _pending_

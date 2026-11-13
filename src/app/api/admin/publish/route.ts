@@ -43,7 +43,7 @@ import { PESSEBRES } from "@/lib/content/batch02/pessebres";
 import { CHRISTMAS_BARCELONA } from "@/lib/content/batch02/christmas-barcelona";
 import { NEW_YEAR } from "@/lib/content/batch02/new-year";
 import { SNOW_NOW } from "@/lib/content/batch02/snow-now";
-import { SNOW } from "@/lib/content/batch02/pyrenees";
+import { SNOW } from "@/lib/content/batch02/snow-trips";
 import { PARKING, TRANSPORT, ZBE } from "@/lib/content/batch02/barcelona-practical";
 import { ELECTION_NIGHT } from "@/lib/content/batch02/election-night";
 import { CONGRESS_RESULTS, PARLIAMENT_RESULTS } from "@/lib/content/batch02/election-results";
@@ -319,6 +319,11 @@ export async function POST(request: Request) {
     // index 6 of FEATURES, and Christmas in Barcelona).
     if (wants("montserrat")) published.push(...(await publishBatch02(3, 4)));
     if (wants("montserrat-links")) published.push(...(await publishFeatures(6, 7)), await publishB2Article(CHRISTMAS_BARCELONA));
+    // 13 Nov 2026: evergreen wave 3. The snow-without-skiing guide (snow-trips.ts)
+    // on its own, upgraded in place (by train, chains, avalanche bulletin);
+    // `snow-now` still republishes it with the ski guide. The calçots guide's
+    // at-home upgrade goes out with its existing `calcots` group.
+    if (wants("neu")) published.push(await publishB2Article(SNOW));
     // 9 Nov 2026: shops open on 6, 7 and 8 December by community (Ministry calendar); ca, es and en since 10 Nov.
     if (wants("tiendas-espana")) published.push(await publishB2Article(SHOPS_SPAIN_DECEMBER));
     // La Grossa de Cap d'Any 2026: one page, on its own so the 31 December

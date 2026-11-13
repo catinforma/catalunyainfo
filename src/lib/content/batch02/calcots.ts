@@ -54,13 +54,46 @@ import {
  * organiser's post and republish (`?only=calcots`): the lead, key facts and
  * FAQ switch from "not published" to the link. The 2026 lines stay, labelled.
  *
+ * 13 Nov 2026 (research_notes/evergreen-demand-nov2026.md, opportunity 6):
+ * upgraded in place for the generic "calçots" intent (calçotada a casa,
+ * quants calçots per persona, salsa, on comprar). Titles and descriptions
+ * untouched: the 26 Oct entry in docs/SEO_EXPERIMENTS.md measures them on
+ * 24 Nov. Every source above re-read on 13 Nov (all HTTP 200; the R13 sheet
+ * is still the 10/07/2026 one and the Monbus sheet still has "DG i festius"
+ * columns; no 2027 programme in the press room). New, read 13 Nov:
+ * - Cambra de Comerç, "Com fer una calçotada": the basic elements ("els
+ *   calçots de Valls amb la salsa ..., la carn d'anyell i la llonganissa (o
+ *   botifarra) a la brasa, i les postres (taronges, crema catalana i productes
+ *   de pastisseria)"; "el vi i el cava"); "es pot consumir de 20 a 35
+ *   calçots"; the sauce "per a quatre persones": "100 grams d'ametlles
+ *   torrades, 30 grams d'avellanes torrades, 4 o 5 tomàquets vermells
+ *   escalivats, 1 cabeça d'alls escalivats, 80 cl d'oli d'oliva de Valls, 1/2
+ *   gotet de vinagre, 1 pebrot sec o pebre vermell dolç, julivert i sal".
+ *   Printed as published except the oil: the page says 80 cl for four, which looks like a typo (13 Nov 2026), so no oil quantity is given.
+ * - IGP "On comprar Calçots? | Compra directa als productors": producers by
+ *   comarca with their phone; some "També venda de cuits". Linked, no names
+ *   or numbers copied (private individuals).
+ * - IGP news of 27.10.2026: "els camps estan gairebé apunt de collir les
+ *   primeres motes de Calçots IGP de la temporada 26/27".
+ * - IGP "Cuinar Calçots" (recipes) and the Ajuntament's "cuina del calçot"
+ *   list ("truites de calçots; calçots amb beixamel; bacallà amb calçots").
+ * - Ajuntament: IGP calçots "hauran d'estar nets però mai rentats".
+ * Competitors (13 Nov SERP: hola.com, naciodigital, 3cat, surtdecasa,
+ * barcelo.com) disagree on calçots per person (8.7 by a "formula", 10-20,
+ * 25, up to 50) and none prints the organiser's sauce for four.
+ * CALCOTS_REREAD_BY: Calçofest (21 Nov 2026) turns past tense, and the 2027
+ * programme is due before the Gran Festa; the test fails after that day.
+ *
  * No new photograph: the hero is the Rodalies-at-Estació-de-França picture
  * already in the manifest (the rail day-trips guide's lead image), which is
  * also where the R13 to Valls starts. Its alt and caption are TRAINS's own,
  * because media rows are keyed by file.
  */
 
-export const CALCOTS_VERIFIED = "2026-10-26";
+export const CALCOTS_VERIFIED = "2026-11-13";
+
+/** After this day the Calçofest section reads as future: rewrite it in the past and re-read the press room. */
+export const CALCOTS_REREAD_BY = "2026-11-22";
 
 export const FESTA_2027 = { date: "2027-01-31", edition: 45 } as const;
 export const CALCOFEST_2026 = { date: "2026-11-21", edition: 2 } as const;
@@ -126,6 +159,10 @@ const URLS = {
   calcofest: "https://calcofest.cat/",
   igp: "https://www.calcotdevalls.com/",
   igpProcess: "https://www.calcotdevalls.com/proces-productiu/",
+  igpProducers: "https://www.calcotdevalls.com/productors/",
+  igpRecipes: "https://www.calcotdevalls.com/cuinar-calcots/",
+  igpHarvest2026:
+    "https://www.calcotdevalls.com/la-igp-calcot-de-valls-avanca-les-previsions-de-la-nova-collita-i-anuncia-els-detalls-del-segon-calcofest-al-programa-la-selva/",
   gencatIgp:
     "https://agricultura.gencat.cat/ca/ambits/alimentacio/segells-qualitat-diferenciada/distintius-origen/dop-igp/igp/productes-reconeixement-comunitari/calcot-valls",
   plec: "https://agricultura.gencat.cat/web/.content/al_alimentacio/al02_qualitat_alimentaria/normativa-dop-igp/plecs-vigor/plec_condicions_catala_igp_calcot_valls.pdf",
@@ -152,6 +189,9 @@ const SOURCES: B2Source[] = [
   { name: "Calçofest 2026", url: URLS.calcofest, publisher: "Calçofest" },
   { name: "IGP Calçot de Valls", url: URLS.igp, publisher: "Consell Regulador de la IGP Calçot de Valls" },
   { name: "El Calçot, un cultiu ancestral", url: URLS.igpProcess, publisher: "Consell Regulador de la IGP Calçot de Valls" },
+  { name: "On comprar Calçots? Compra directa als productors", url: URLS.igpProducers, publisher: "Consell Regulador de la IGP Calçot de Valls" },
+  { name: "Cuinar Calçots: receptes fetes amb Calçot de Valls", url: URLS.igpRecipes, publisher: "Consell Regulador de la IGP Calçot de Valls" },
+  { name: "La IGP Calçot de Valls avança les previsions de la nova collita (27 d'octubre de 2026)", url: URLS.igpHarvest2026, publisher: "Consell Regulador de la IGP Calçot de Valls" },
   { name: "Calçot de Valls (IGP)", url: URLS.gencatIgp, publisher: "Departament d'Agricultura, Ramaderia, Pesca i Alimentació" },
   { name: "Plec de condicions de la IGP Calçot de Valls", url: URLS.plec, publisher: "Generalitat de Catalunya" },
   { name: "Línia R13", url: URLS.r13, publisher: "Rodalies de Catalunya" },
@@ -195,9 +235,9 @@ export const CALCOTS_META: Record<Locale, { path: string; title: string; seoTitl
 /* -------------------------------------------------------------------------- */
 
 const CHECKED: Record<Locale, string> = {
-  ca: "consultat el 26 d'octubre de 2026",
-  es: "consultado el 26 de octubre de 2026",
-  en: "checked on 26 October 2026",
+  ca: "consultat el 13 de novembre de 2026",
+  es: "consultado el 13 de noviembre de 2026",
+  en: "checked on 13 November 2026",
 };
 
 function check(programme: ProgrammeNotice | null): ProgrammeNotice | null {
@@ -363,6 +403,7 @@ export function buildCalcotsBody(locale: Locale, programme: ProgrammeNotice | nu
       lead(calcotsLead("ca", programme)),
       keyFacts("Calçots i Gran Festa, d'un cop d'ull", [
         { label: "Temporada de calçots", value: "De novembre a abril; la campanya de la IGP va de l'1 de novembre a final d'abril" },
+        { label: "Calçots per persona", value: "De 20 a 35, segons la Cambra de Comerç de Valls" },
         { label: "Gran Festa de la Calçotada 2027", value: `${festa.charAt(0).toUpperCase()}${festa.slice(1)}, a Valls (45a edició)` },
         { label: "Qui l'organitza", value: "La Cambra de Comerç de Valls i l'Ajuntament de Valls" },
         { label: "Programa i tiquets del 2027", value: programmeFact("ca", programme) },
@@ -378,6 +419,7 @@ export function buildCalcotsBody(locale: Locale, programme: ProgrammeNotice | nu
         "Quan és la temporada de calçots?",
         `La IGP Calçot de Valls, el consell regulador del producte, ho resumeix així: «La seva temporada és de novembre a abril». El [plec de condicions](${URLS.plec}) que publica la Generalitat ho concreta: la campanya comença l'1 de novembre i s'acaba al final d'abril de l'any següent, i els calçots de fora de campanya no es poden vendre com a IGP. Aquesta temporada, doncs, va de l'1 de novembre de 2026 a final d'abril de 2027.`,
         "L'Ajuntament de Valls hi coincideix: els millors moments per fer una calçotada són els mesos d'hivern, «especialment des de novembre fins a abril». La Gran Festa de finals de gener cau al mig de la temporada, i després encara queden tres mesos de calçotades.",
+        `Per a la temporada 2026-27, la IGP explicava el 27 d'octubre de 2026 que els camps estaven gairebé a punt de collir les primeres motes de calçots IGP ([nota de la IGP](${URLS.igpHarvest2026})).`,
       ),
       ...h2(
         "Quan és la Gran Festa de la Calçotada de Valls 2027?",
@@ -428,6 +470,10 @@ export function buildCalcotsBody(locale: Locale, programme: ProgrammeNotice | nu
         "Com saber si un manat és IGP",
         "Mira la lligadura i l'etiqueta. Els calçots IGP es venen en manats lligats amb una cinta blava i una **etiqueta numerada** amb el nom «Calçot de Valls. Indicació Geogràfica Protegida» i el logotip de la IGP; l'Ajuntament de Valls afegeix que hi figura el nom del productor. Segons el plec de condicions, només surten al mercat amb aquesta etiqueta els calçots que han superat tots els controls. Un calçot sense etiqueta pot ser bo, però no té la garantia de la IGP.",
       ),
+      ...h3(
+        "On comprar calçots IGP",
+        `La IGP publica una [llista de productors per comarca](${URLS.igpProducers}) (Alt Camp, Baix Camp, Tarragonès i Baix Penedès), amb el telèfon de cadascun per comprar-los directament; alguns també venen calçots cuits. Segons l'Ajuntament de Valls, els calçots IGP es venen «nets però mai rentats».`,
+      ),
       ...h2(
         "Com es fa una calçotada i com es mengen els calçots",
         "La calçotada és més un ritual que un plat: un dinar de colla, a l'aire lliure si el temps ho permet, amb els calçots de protagonistes. Així la descriuen l'Ajuntament de Valls i la Cambra de Comerç:",
@@ -445,10 +491,39 @@ export function buildCalcotsBody(locale: Locale, programme: ProgrammeNotice | nu
         "**D'on ve?** Segons l'Ajuntament de Valls, la calçotada va néixer a Valls a finals del segle XIX, quan un pagès conegut com el Xat de Benaiges va rostir a la flama els brots d'unes cebes i se'ls va menjar amanits amb oli, vinagre i sal. A finals dels anys quaranta la Penya Artística de l'Olla la va fer conèixer fora de Valls, convidant-hi gent del món artístic i cultural de Barcelona.",
       ),
       ...h2(
+        "Calçotada a casa: què cal tenir",
+        `Si la fas tu, aquests són els elements bàsics de l'àpat segons la guia [Com fer una calçotada](${URLS.festaHowTo}) de la Cambra de Comerç de Valls, que organitza la Gran Festa:`,
+      ),
+      list(
+        "**Calçots:** de 20 a 35 per persona, segons l'experiència i la gana de cadascú.",
+        "**La salsa de la calçotada**, feta expressament per acompanyar-los (la recepta per a quatre és a la secció següent).",
+        "**Per a la brasa:** carn d'anyell i llonganissa o botifarra; de vegades, botifarra negra i carxofes.",
+        "**Postres:** taronges, crema catalana i pastisseria.",
+        "**Per beure:** vi al porró, preferentment negre i també blanc, i cava; per acabar, el cafè i els licors de la calçotada.",
+        "**Per coure'ls i servir-los:** una graella, un foc viu de sarments de vinya, paper de diari per embolicar-los, una teula per portar-los a taula, pa i un pitet per a cada comensal.",
+      ),
+      ...h2(
         "La salsa: salvitxada o salsa de calçotada",
         "Els calçots se sucen en una salsa de fruits secs i hortalisses escalivades. El Departament d'Agricultura en diu **salsa salvitxada**; la Cambra de Comerç i l'Ajuntament de Valls en diuen **salsa de la calçotada**, i la Gran Festa en fa un concurs propi.",
-        "Segons l'Ajuntament i la Cambra, els ingredients bàsics són ametlles i avellanes torrades, tomàquets i alls escalivats, oli d'oliva, vinagre, pebrot sec o pebre vermell dolç, julivert i sal, tot ben picat. Les proporcions són cosa de cada casa: «cada família té el seu secret», diu la Cambra.",
+        "«Cada família té el seu secret», diu la Cambra de Comerç, però dona aquests ingredients bàsics **per a quatre persones**, tot ben picat:",
+      ),
+      list(
+        "100 grams d'ametlles torrades;",
+        "30 grams d'avellanes torrades;",
+        "4 o 5 tomàquets vermells escalivats;",
+        "1 cabeça d'alls escalivats;",
+        "oli d'oliva de Valls, afegit a poc a poc fins que la salsa lligui;",
+        "1/2 gotet de vinagre;",
+        "1 pebrot sec o pebre vermell dolç;",
+        "julivert i sal.",
+      ),
+      ...paras(
+        `Són les quantitats tal com les publica la Cambra a [Com fer una calçotada](${URLS.festaHowTo}). L'Ajuntament de Valls hi dona els mateixos ingredients bàsics, sense quantitats.`,
         "El 2026, la festa va incloure també una demostració de salsa per a celíacs i per a persones amb intolerància als fruits secs.",
+      ),
+      ...h3(
+        "Altres maneres de menjar calçots",
+        `A més de la calçotada, l'Ajuntament de Valls parla de la «cuina del calçot», amb plats com truites de calçots, calçots amb beixamel, bacallà amb calçots o amanida de calçot amb carxofa. La IGP en recull receptes de restaurants a [Cuinar calçots](${URLS.igpRecipes}).`,
       ),
       ...h2(
         "Com arribar a Valls des de Barcelona en transport públic",
@@ -473,6 +548,18 @@ export function buildCalcotsBody(locale: Locale, programme: ProgrammeNotice | nu
           answer: "Se'ls treu la capa de fora, ennegrida pel foc, se sucen a la salsa i s'aixequen enlaire per menjar-los. Es mengen calents, tradicionalment drets i amb pitet, i després vénen la carn i la llonganissa a la brasa.",
         },
         {
+          question: "Quants calçots per persona cal comprar?",
+          answer: "Entre 20 i 35, segons la Cambra de Comerç de Valls, que organitza la Gran Festa: depèn de l'experiència i la gana de cadascú.",
+        },
+        {
+          question: "Com es fa la salsa dels calçots?",
+          answer: "La Cambra de Comerç de Valls dona aquests ingredients per a quatre persones, tot ben picat: 100 g d'ametlles torrades, 30 g d'avellanes torrades, 4 o 5 tomàquets vermells escalivats, 1 cabeça d'alls escalivats, oli d'oliva (a poc a poc, fins que lligui), mig gotet de vinagre, 1 pebrot sec o pebre vermell dolç, julivert i sal.",
+        },
+        {
+          question: "On es poden comprar calçots IGP?",
+          answer: "Directament als productors: la IGP Calçot de Valls en publica la llista per comarca, amb telèfon, al seu web, i alguns també venen calçots cuits. A la botiga, els reconeixeràs per la cinta blava i l'etiqueta numerada.",
+        },
+        {
           question: "Com es reconeixen els calçots IGP Calçot de Valls?",
           answer: "Per la cinta blava que lliga el manat i l'etiqueta numerada amb el nom «Calçot de Valls. Indicació Geogràfica Protegida» i el logotip de la IGP.",
         },
@@ -495,6 +582,7 @@ export function buildCalcotsBody(locale: Locale, programme: ProgrammeNotice | nu
       lead(calcotsLead("es", programme)),
       keyFacts("Calçots y Gran Festa, de un vistazo", [
         { label: "Temporada de calçots", value: "De noviembre a abril; la campaña de la IGP va del 1 de noviembre a finales de abril" },
+        { label: "Calçots por persona", value: "De 20 a 35, según la Cambra de Comerç de Valls" },
         { label: "Gran Festa de la Calçotada 2027", value: `${festa.charAt(0).toUpperCase()}${festa.slice(1)}, en Valls (45.ª edición)` },
         { label: "Quién la organiza", value: "La Cambra de Comerç de Valls y el Ayuntamiento de Valls" },
         { label: "Programa y tickets de 2027", value: programmeFact("es", programme) },
@@ -510,6 +598,7 @@ export function buildCalcotsBody(locale: Locale, programme: ProgrammeNotice | nu
         "¿Cuándo es la temporada de calçots?",
         `La IGP Calçot de Valls, el consejo regulador del producto, lo resume así: «La seva temporada és de novembre a abril» (de noviembre a abril). El [pliego de condiciones](${URLS.plec}) que publica la Generalitat pone las fechas: la campaña empieza el 1 de noviembre y termina a finales de abril del año siguiente, y los calçots de fuera de campaña no pueden venderse como IGP. Esta temporada, por tanto, va del 1 de noviembre de 2026 a finales de abril de 2027.`,
         "El Ayuntamiento de Valls coincide: los mejores momentos para una calçotada son los meses de invierno, «especialment des de novembre fins a abril». La Gran Festa de finales de enero cae en mitad de la temporada, y después aún quedan tres meses de calçotadas.",
+        `Para la temporada 2026-27, la IGP explicaba el 27 de octubre de 2026 que los campos estaban casi a punto de recoger las primeras matas de calçots IGP ([nota de la IGP](${URLS.igpHarvest2026}), en catalán).`,
       ),
       ...h2(
         "¿Cuándo es la Gran Festa de la Calçotada de Valls 2027?",
@@ -560,6 +649,10 @@ export function buildCalcotsBody(locale: Locale, programme: ProgrammeNotice | nu
         "Cómo saber si un manojo es IGP",
         "Fíjate en la atadura y la etiqueta. Los calçots IGP se venden en manojos atados con una cinta azul y una **etiqueta numerada** con el nombre «Calçot de Valls. Indicació Geogràfica Protegida» y el logotipo de la IGP; el Ayuntamiento de Valls añade que figura el nombre del productor. Según el pliego de condiciones, solo salen al mercado con esa etiqueta los calçots que han superado todos los controles. Un calçot sin etiqueta puede ser bueno, pero no tiene la garantía de la IGP.",
       ),
+      ...h3(
+        "Dónde comprar calçots IGP",
+        `La IGP publica una [lista de productores por comarca](${URLS.igpProducers}) (Alt Camp, Baix Camp, Tarragonès y Baix Penedès), con el teléfono de cada uno para comprarlos directamente; algunos también venden calçots ya asados. Según el Ayuntamiento de Valls, los calçots IGP se venden «nets però mai rentats» (limpios, pero nunca lavados).`,
+      ),
       ...h2(
         "Cómo es una calçotada y cómo se comen los calçots",
         "La calçotada es más un ritual que un plato: una comida en grupo, al aire libre si el tiempo acompaña, con los calçots de protagonistas. Así la describen el Ayuntamiento de Valls y la Cambra de Comerç:",
@@ -577,10 +670,39 @@ export function buildCalcotsBody(locale: Locale, programme: ProgrammeNotice | nu
         "**¿De dónde viene?** Según el Ayuntamiento de Valls, la calçotada nació en Valls a finales del siglo XIX, cuando un payés conocido como el Xat de Benaiges asó a la llama los brotes de unas cebollas y se los comió aliñados con aceite, vinagre y sal. A finales de los años cuarenta la Penya Artística de l'Olla la dio a conocer fuera de Valls, invitando a gente del mundo artístico y cultural de Barcelona.",
       ),
       ...h2(
+        "Calçotada en casa: qué hace falta",
+        `Si la organizas tú, estos son los elementos básicos de la comida según la guía [Com fer una calçotada](${URLS.festaHowTo}) (en catalán) de la Cambra de Comerç de Valls, que organiza la Gran Festa:`,
+      ),
+      list(
+        "**Calçots:** de 20 a 35 por persona, según la experiencia y el hambre de cada uno.",
+        "**La salsa de la calçotada**, hecha expresamente para acompañarlos (la receta para cuatro está en la sección siguiente).",
+        "**Para la brasa:** carne de cordero y longaniza o butifarra; a veces, butifarra negra y alcachofas.",
+        "**Postre:** naranjas, crema catalana y pastelería.",
+        "**Para beber:** vino en porrón, preferentemente tinto y también blanco, y cava; para terminar, el café y los licores de la calçotada.",
+        "**Para asarlos y servirlos:** una parrilla, un fuego vivo de sarmientos de viña, papel de periódico para envolverlos, una teja para llevarlos a la mesa, pan y un babero para cada comensal.",
+      ),
+      ...h2(
         "La salsa: salvitxada o salsa de calçotada",
         "Los calçots se mojan en una salsa de frutos secos y hortalizas asadas. El Departament d'Agricultura la llama **salsa salvitxada**; la Cambra de Comerç y el Ayuntamiento de Valls la llaman **salsa de la calçotada**, y la Gran Festa le dedica un concurso propio.",
-        "Según el Ayuntamiento y la Cambra, los ingredientes básicos son almendras y avellanas tostadas, tomates y ajos asados, aceite de oliva, vinagre, pimiento seco o pimentón dulce, perejil y sal, todo bien picado. Las proporciones son cosa de cada casa: «cada família té el seu secret» (cada familia tiene su secreto), dice la Cambra.",
+        "«Cada família té el seu secret» (cada familia tiene su secreto), dice la Cambra de Comerç, pero da estos ingredientes básicos **para cuatro personas**, todo bien picado:",
+      ),
+      list(
+        "100 gramos de almendras tostadas;",
+        "30 gramos de avellanas tostadas;",
+        "4 o 5 tomates rojos asados;",
+        "1 cabeza de ajos asados;",
+        "aceite de oliva de Valls, añadido poco a poco hasta que la salsa ligue;",
+        "1/2 vasito de vinagre;",
+        "1 pimiento seco o pimentón dulce;",
+        "perejil y sal.",
+      ),
+      ...paras(
+        `Son las cantidades tal como las publica la Cambra en [Com fer una calçotada](${URLS.festaHowTo}). El Ayuntamiento de Valls da los mismos ingredientes básicos, sin cantidades.`,
         "En 2026, la fiesta incluyó también una demostración de salsa para celíacos y para personas con intolerancia a los frutos secos.",
+      ),
+      ...h3(
+        "Otras formas de comer calçots",
+        `Además de la calçotada, el Ayuntamiento de Valls habla de la «cuina del calçot» (cocina del calçot), con platos como tortillas de calçots, calçots con bechamel, bacalao con calçots o ensalada de calçot con alcachofa. La IGP recoge recetas de restaurantes en [Cuinar calçots](${URLS.igpRecipes}) (en catalán).`,
       ),
       ...h2(
         "Cómo llegar a Valls desde Barcelona en transporte público",
@@ -605,6 +727,18 @@ export function buildCalcotsBody(locale: Locale, programme: ProgrammeNotice | nu
           answer: "Se les quita la capa de fuera, ennegrecida por el fuego, se mojan en la salsa y se levantan en alto para comerlos. Se comen calientes, tradicionalmente de pie y con babero, y después llegan la carne y la longaniza a la brasa.",
         },
         {
+          question: "¿Cuántos calçots por persona hay que comprar?",
+          answer: "Entre 20 y 35, según la Cambra de Comerç de Valls, que organiza la Gran Festa: depende de la experiencia y el hambre de cada uno.",
+        },
+        {
+          question: "¿Cómo se hace la salsa de los calçots?",
+          answer: "La Cambra de Comerç de Valls da estos ingredientes para cuatro personas, todo bien picado: 100 g de almendras tostadas, 30 g de avellanas tostadas, 4 o 5 tomates rojos asados, 1 cabeza de ajos asados, aceite de oliva (poco a poco, hasta que ligue), medio vasito de vinagre, 1 pimiento seco o pimentón dulce, perejil y sal.",
+        },
+        {
+          question: "¿Dónde comprar calçots IGP?",
+          answer: "Directamente a los productores: la IGP Calçot de Valls publica la lista por comarca, con teléfono, en su web, y algunos también venden calçots ya asados. En la tienda, los reconocerás por la cinta azul y la etiqueta numerada.",
+        },
+        {
           question: "¿Cómo se reconocen los calçots IGP Calçot de Valls?",
           answer: "Por la cinta azul que ata el manojo y la etiqueta numerada con el nombre «Calçot de Valls. Indicació Geogràfica Protegida» y el logotipo de la IGP.",
         },
@@ -626,6 +760,7 @@ export function buildCalcotsBody(locale: Locale, programme: ProgrammeNotice | nu
     lead(calcotsLead("en", programme)),
     keyFacts("Calçots and the Gran Festa at a glance", [
       { label: "Calçot season", value: "November to April; the IGP campaign runs from 1 November to the end of April" },
+      { label: "Calçots per person", value: "20 to 35, according to the Valls Chamber of Commerce" },
       { label: "Gran Festa de la Calçotada 2027", value: `${festa}, in Valls (45th edition)` },
       { label: "Organised by", value: "The Valls Chamber of Commerce (Cambra de Comerç) and Valls City Council" },
       { label: "2027 programme and tickets", value: programmeFact("en", programme) },
@@ -641,6 +776,7 @@ export function buildCalcotsBody(locale: Locale, programme: ProgrammeNotice | nu
       "When is calçot season?",
       `The IGP Calçot de Valls, the body that regulates the product, puts it simply: "La seva temporada és de novembre a abril" (its season is November to April). The Generalitat's [product specification](${URLS.plec}) gives the dates: the campaign starts on 1 November and ends at the end of April the following year, and calçots grown outside it cannot be sold as IGP. This season, then, runs from 1 November 2026 to the end of April 2027.`,
       "Valls City Council agrees: the best time for a calçotada is the winter months, \"especially from November to April\". The Gran Festa at the end of January falls in the middle of the season, with three more months of calçotades after it.",
+      `For the 2026-27 season, the IGP said on 27 October 2026 that the fields were almost ready for the first IGP calçots to be lifted ([IGP note](${URLS.igpHarvest2026}), in Catalan).`,
     ),
     ...h2(
       "When is the Valls Calçotada 2027?",
@@ -691,6 +827,10 @@ export function buildCalcotsBody(locale: Locale, programme: ProgrammeNotice | nu
       "How to tell an IGP bunch",
       "Look at the tie and the tag. IGP calçots are sold in bunches tied with a blue ribbon and a **numbered label** bearing the name \"Calçot de Valls. Indicació Geogràfica Protegida\" and the IGP logo; Valls City Council adds that the grower's name is on it. Under the product specification, only calçots that have passed every check reach the market with that label. A calçot without one may be good, but it has no IGP guarantee.",
     ),
+    ...h3(
+      "Where to buy IGP calçots",
+      `The IGP publishes a [list of growers by comarca](${URLS.igpProducers}) (Alt Camp, Baix Camp, Tarragonès and Baix Penedès), with each grower's phone number so you can buy direct; some also sell them ready-grilled. According to Valls City Council, IGP calçots are sold "nets però mai rentats" (clean, but never washed).`,
+    ),
     ...h2(
       "How a calçotada works and how to eat calçots",
       "A calçotada is more a ritual than a dish: a group lunch, outdoors if the weather allows, with calçots as the star. This is how Valls City Council and the Chamber of Commerce describe it:",
@@ -708,10 +848,39 @@ export function buildCalcotsBody(locale: Locale, programme: ProgrammeNotice | nu
       "**Where does it come from?** According to Valls City Council, the calçotada was born in Valls at the end of the 19th century, when a farmer known as the Xat de Benaiges roasted onion shoots over a flame and ate them dressed with oil, vinegar and salt. In the late 1940s the Penya Artística de l'Olla made it known beyond Valls by inviting people from Barcelona's arts and culture world.",
     ),
     ...h2(
+      "A calçotada at home: what you need",
+      `If you are hosting one, these are the basic elements of the meal according to the [Com fer una calçotada](${URLS.festaHowTo}) guide (in Catalan) by the Valls Chamber of Commerce, which runs the Gran Festa:`,
+    ),
+    list(
+      "**Calçots:** 20 to 35 per person, depending on experience and appetite.",
+      "**Calçotada sauce**, made specially to go with them (the recipe for four is in the next section).",
+      "**For the embers:** lamb and llonganissa or botifarra sausage; sometimes black botifarra and artichokes.",
+      "**Dessert:** oranges, crema catalana and pastries.",
+      "**To drink:** wine from the porró, preferably red but also white, and cava; to finish, coffee and the calçotada liqueurs.",
+      "**To cook and serve them:** a grill, a lively fire of vine cuttings, newspaper to wrap them in, a roof tile to bring them to the table, bread, and a bib for every guest.",
+    ),
+    ...h2(
       "The sauce: salvitxada or calçotada sauce",
       "Calçots are dipped in a sauce of nuts and roasted vegetables. The Department of Agriculture calls it **salvitxada**; the Chamber of Commerce and Valls City Council call it **salsa de la calçotada** (calçotada sauce), and the Gran Festa holds a contest for it.",
-      "According to the City Council and the Chamber, the basic ingredients are toasted almonds and hazelnuts, roasted tomatoes and garlic, olive oil, vinegar, dried pepper or sweet paprika, parsley and salt, all finely ground. The proportions are each household's business: \"every family has its secret\", says the Chamber.",
+      "\"Every family has its secret\", says the Chamber of Commerce, but it gives these basic ingredients **for four people**, all finely ground:",
+    ),
+    list(
+      "100 grams of toasted almonds;",
+      "30 grams of toasted hazelnuts;",
+      "4 or 5 roasted red tomatoes;",
+      "1 head of roasted garlic;",
+      "Valls olive oil, added slowly until the sauce binds;",
+      "half a small glass of vinegar;",
+      "1 dried pepper or sweet paprika;",
+      "parsley and salt.",
+    ),
+    ...paras(
+      `These are the quantities exactly as the Chamber publishes them in [Com fer una calçotada](${URLS.festaHowTo}). Valls City Council lists the same basic ingredients, without quantities.`,
       "In 2026 the festival also included a sauce demonstration for people with coeliac disease and nut intolerance.",
+    ),
+    ...h3(
+      "Other ways to eat calçots",
+      `Beyond the calçotada, Valls City Council describes a "cuina del calçot" (calçot cooking), with dishes such as calçot omelettes, calçots with béchamel, salt cod with calçots or calçot and artichoke salad. The IGP collects restaurant recipes under [Cuinar calçots](${URLS.igpRecipes}) (in Catalan).`,
     ),
     ...h2(
       "Getting to Valls from Barcelona by public transport",
@@ -734,6 +903,18 @@ export function buildCalcotsBody(locale: Locale, programme: ProgrammeNotice | nu
       {
         question: "How do you eat calçots?",
         answer: "Pull off the charred outer layer, dip the calçot in the sauce and lift it high to eat it. They are eaten hot, traditionally standing up and wearing a bib, followed by grilled meat and sausage.",
+      },
+      {
+        question: "How many calçots per person should I buy?",
+        answer: "Between 20 and 35, according to the Valls Chamber of Commerce, which runs the Gran Festa: it depends on experience and appetite.",
+      },
+      {
+        question: "How do you make calçot sauce?",
+        answer: "The Valls Chamber of Commerce gives these ingredients for four people, all finely ground: 100 g toasted almonds, 30 g toasted hazelnuts, 4 or 5 roasted red tomatoes, 1 head of roasted garlic, olive oil (added slowly until it binds), half a small glass of vinegar, 1 dried pepper or sweet paprika, parsley and salt.",
+      },
+      {
+        question: "Where can I buy IGP calçots?",
+        answer: "Direct from the growers: the IGP Calçot de Valls lists them by comarca, with phone numbers, on its website, and some also sell them ready-grilled. In a shop, look for the blue ribbon and the numbered label.",
       },
       {
         question: "How can I tell IGP Calçot de Valls calçots?",
