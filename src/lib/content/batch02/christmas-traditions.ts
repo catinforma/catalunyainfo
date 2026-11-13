@@ -2,7 +2,9 @@ import { CHRISTMAS, SANTA_LLUCIA_2026, hoursText } from "./christmas";
 import { WEEKDAY_NAMES, aranSubstitutionFor, weekdayIndex } from "@/lib/content/holidays/calendar";
 import type { Locale } from "@/lib/i18n/config";
 
-import { dateYear, dayDate, range } from "./festive";
+import { fairsHubPath } from "@/lib/programmatic/christmas-fairs/paths";
+
+import { ANNOUNCED_2026, dateYear, dayDate, range, type Announcements } from "./festive";
 import {
   b2Related,
   b2link,
@@ -54,6 +56,20 @@ import {
  * parade's times on the New Year's Eve guide; it links the Three Kings parade
  * page, which carries them (group `reis-2027-links`).
  *
+ * 13 Nov 2026 (December freshness pass, body only: the titles are inside the
+ * 26 Oct page's 28-day window, docs/SEO_EXPERIMENTS.md). The lead now opens
+ * with the 2026 days themselves (Nit de Nadal, Nadal, Sant Esteve), the
+ * searched questions being "quan falta per Nadal", "dia de Nadal", "Nadal a
+ * Catalunya", "tió caganer", "navidad catalana"; it names every tradition the
+ * page covers, Cap d'Any's grapes included (the council's Cap d'Any page,
+ * re-read today). `plansLine` follows it: the lights switch-on
+ * (ANNOUNCED_2026), the fairs calendar with Santa Llúcia, the living
+ * nativities (Corbera from 28 Nov, read today) and Barcelona in December.
+ * The caganer section says it is not the tió. The council's Christmas
+ * traditions, tió, caganer and canelons pages were re-read and still say
+ * what the page cites; the Pastorets site answered 503, so its "not
+ * presented" line and TRADITIONS_VERIFIED keep 26 Oct.
+ *
  * No new photograph: the hero is the nativity-figures picture already in the
  * manifest (the Christmas markets guide's second image), with that file's own
  * alt and caption, because media rows are keyed by file.
@@ -67,6 +83,9 @@ export const TRADITION_DAYS = {
   nitDeNadal: "2026-12-24",
   nadal: "2026-12-25",
   santEsteve: "2026-12-26",
+  /** Cap d'Any: a working day; 1 Jan 2027 is a holiday (Ordre EMT/52/2026). */
+  capDany: "2026-12-31",
+  anyNou: "2027-01-01",
   reisEve: "2027-01-05",
   reis: "2027-01-06",
   /** In 2027 Sant Esteve falls on a Sunday and is not in Ordre EMT/52/2026. */
@@ -269,12 +288,15 @@ function buyAnswer(locale: Locale, facts: TraditionAnnouncements): string {
 /* -------------------------------------------------------------------------- */
 
 const CP = "https://www.barcelona.cat/culturapopular/ca/festes-i-tradicions";
+/** The council's New Year's Eve traditions page (read 13 Nov 2026: "A ritme de cada campanada, es menja un gra de raïm i se sol demanar un desig"). */
+const CAP_DANY = "https://www.barcelona.cat/nadal/ca/tradicions/tradicions-de-cap-dany";
 
 const SOURCES: B2Source[] = [
   { name: "Ordre EMT/66/2025, calendari oficial de festes laborals a Catalunya per a l'any 2026", url: "https://portaldogc.gencat.cat/utilsEADOP/AppJava/PdfProviderServlet?documentId=1013204&type=01&language=ca_ES", publisher: "DOGC" },
   { name: "Ordre EMT/52/2026, calendari oficial de festes laborals a Catalunya per a l'any 2027", url: "https://portaldogc.gencat.cat/utilsEADOP/AppJava/PdfProviderServlet?documentId=1040896&type=01&language=ca_ES", publisher: "DOGC" },
   { name: "Relación de fiestas laborales para el año 2026", url: "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2025-21667", publisher: "BOE" },
   { name: "Tradicions de Nadal", url: "https://www.barcelona.cat/nadal/ca/tradicions/tradicions-de-nadal", publisher: "Ajuntament de Barcelona" },
+  { name: "Tradicions de Cap d'Any", url: CAP_DANY, publisher: "Ajuntament de Barcelona" },
   { name: "Tió", url: `${CP}/personatges-i-elements-festius/tio`, publisher: "Ajuntament de Barcelona, Cultura Popular" },
   { name: "Caganer", url: `${CP}/personatges-i-elements-festius/caganer`, publisher: "Ajuntament de Barcelona, Cultura Popular" },
   { name: "Pessebre", url: `${CP}/personatges-i-elements-festius/pessebre`, publisher: "Ajuntament de Barcelona, Cultura Popular" },
@@ -334,18 +356,46 @@ export const CHRISTMAS_TRADITIONS_META: Record<Locale, { path: string; title: st
 /* Body                                                                       */
 /* -------------------------------------------------------------------------- */
 
+/** First day of the season's first living nativity (Corbera de Llobregat), as the pessebres guide's table gives it (read 13 Nov 2026). */
+const FIRST_NATIVITY = "2026-11-28";
+
+/**
+ * The paragraph straight after the lead: where to see it all this December,
+ * with the dates that are already official (lights, Santa Llúcia, the first
+ * living nativity). A date that is not announced is left out, never guessed.
+ */
+export function plansLine(locale: Locale, facts: TraditionAnnouncements = ANNOUNCED_TRADITIONS, festive: Announcements = ANNOUNCED_2026): string {
+  const lights = festive.lightsSwitchOn;
+  const fair = facts.santaLlucia;
+  if (locale === "ca") {
+    const l = lights ? `l'${b2link("christmasLights", "ca", "encesa dels llums de Barcelona")}, el ${dayDate(lights.date, "ca", false)}; ` : "";
+    const f = fair ? `, amb la Fira de Santa Llúcia ${range(fair.from, fair.to, "ca")}` : "";
+    return `**Per viure-ho aquest desembre:** ${l}[les fires de Nadal 2026, poble per poble](${fairsHubPath("ca")})${f}; ${b2link("pessebres", "ca", "els pessebres vivents")}, el primer a Corbera de Llobregat des del ${dayDate(FIRST_NATIVITY, "ca", false)}, i, si ets a Barcelona, ${b2link("barcelonaDecember", "ca", "tot el desembre dia a dia")}.`;
+  }
+  if (locale === "es") {
+    const l = lights ? `el ${b2link("christmasLights", "es", "encendido de las luces de Barcelona")}, el ${dayDate(lights.date, "es", false)}; ` : "";
+    const f = fair ? `, con la Fira de Santa Llúcia ${range(fair.from, fair.to, "es")}` : "";
+    return `**Para vivirlo este diciembre:** ${l}[los mercados de Navidad 2026, pueblo a pueblo](${fairsHubPath("es")})${f}; ${b2link("pessebres", "es", "los belenes vivientes")}, el primero en Corbera de Llobregat desde el ${dayDate(FIRST_NATIVITY, "es", false)}, y, si estás en Barcelona, ${b2link("barcelonaDecember", "es", "todo diciembre día a día")}.`;
+  }
+  const l = lights ? `the ${b2link("christmasLights", "en", "Barcelona Christmas lights switch-on")} on ${dayDate(lights.date, "en", false)}; ` : "";
+  const f = fair ? `, including the Fira de Santa Llúcia from ${range(fair.from, fair.to, "en")}` : "";
+  return `**Where to see it this December:** ${l}[every Christmas market of 2026, town by town](${fairsHubPath("en")})${f}; ${b2link("pessebres", "en", "living nativity scenes")}, the first in Corbera de Llobregat from ${dayDate(FIRST_NATIVITY, "en", false)}; and, in Barcelona, ${b2link("barcelonaDecember", "en", "the whole of December day by day")}.`;
+}
+
 const RELATED = ["christmasBarcelona", "pessebres", "christmas", "newYear", "workCalendar", "shops", "holidayToday"] as const;
 
 function bodyCa(facts: TraditionAnnouncements) {
   return [
     lead(
-      `**A Catalunya, per Nadal la mainada fa cagar el tió, un tronc que «caga» regals la nit del 24 o el dia 25 de desembre; al pessebre s'hi amaga un caganer, i l'endemà de Nadal, Sant Esteve, és un altre festiu: el dia dels canelons.** El 2026, Nadal és ${weekday(D.nadal, "ca")} i Sant Esteve, ${dayDate(D.santEsteve, "ca")}, festiu a tot Catalunya excepte a l'Aran.`,
+      `**El Nadal a Catalunya, el 2026: la Nit de Nadal és ${dayDate(D.nitDeNadal, "ca")} (dia feiner); Nadal, ${dayDate(D.nadal, "ca")}, i Sant Esteve, ${dayDate(D.santEsteve, "ca")}, tots dos festius (Sant Esteve, excepte a l'Aran).** La mainada fa cagar el tió, un tronc que «caga» regals, la nit del 24 o el dia 25; al pessebre s'hi amaga el caganer; a mitjanit del 24 es fa la Missa del Gall; per Nadal es menja escudella i carn d'olla, per Sant Esteve, canelons, i per Cap d'Any, un gra de raïm a cada campanada.`,
     ),
+    ...paras(plansLine("ca", facts)),
     keyFacts("El Nadal 2026-27, dia a dia", [
       { label: "Tió", value: `Menja des de la Immaculada (${dayDate(D.immaculada, "ca", false)}, festiu) i caga la nit de Nadal o el dia de Nadal, segons cada casa` },
       { label: "Missa del Gall", value: `A mitjanit de la Nit de Nadal, ${dayDate(D.nitDeNadal, "ca", false)} (dia feiner)` },
       { label: "Nadal", value: `${cap(dayDate(D.nadal, "ca"))}, festiu: escudella i carn d'olla, torrons i neules` },
       { label: "Sant Esteve", value: `${cap(dayDate(D.santEsteve, "ca"))}, festiu a Catalunya excepte a l'Aran: canelons` },
+      { label: "Cap d'Any", value: `${cap(dayDate(D.capDany, "ca"))}, feiner: a mitjanit, un gra de raïm a cada campanada; l'1 de gener, festiu` },
       { label: "Reis", value: `${cap(dayDate(D.reis, "ca"))}, festiu; la cavalcada és el vespre del 5` },
       { label: "Fira de Santa Llúcia", value: santaLluciaFact("ca", facts) },
       { label: "Pastorets", value: pastoretsFact("ca", facts) },
@@ -377,7 +427,7 @@ function bodyCa(facts: TraditionAnnouncements) {
     ...h2(
       "Què és el caganer i per què es posa al pessebre?",
       "És la «figura popular del pessebre nadalenc en actitud de fer de cos», segons el diccionari de l'IEC. La imatge tradicional és la d'un home amb barretina, ajupit i amb les natges a l'aire, que fuma amb pipa o un cigar i de vegades llegeix el diari; de tant en tant, amb un porquet que l'ensuma per darrere.",
-      "**Es col·loca amagat, darrere d'un arbre o sota un pont, i es diu que porta bona sort.** Què significa, però, ningú no ho sap del cert: la pàgina de Cultura Popular de l'Ajuntament admet que la interpretació de la figura encara és motiu de controvèrsia.",
+      "**Es col·loca amagat, darrere d'un arbre o sota un pont, i es diu que porta bona sort.** Què significa, però, ningú no ho sap del cert: la pàgina de Cultura Popular de l'Ajuntament admet que la interpretació de la figura encara és motiu de controvèrsia. I no s'ha de confondre amb el tió: el tió és el tronc que caga regals a casa; el caganer, la figureta amagada al pessebre.",
       "Des de fa anys, els figuraires en fan de personatges coneguts, com futbolistes, polítics, actors o cantants, i la novetat de cada any té ressò als mitjans. També és peça de col·leccionista: fins i tot hi ha una associació, els Amics del Caganer, que l'estudia i en fa exposicions.",
     ),
     ...h2(
@@ -412,7 +462,7 @@ function bodyCa(facts: TraditionAnnouncements) {
     ),
     ...h2(
       "Cap d'Any i Reis",
-      `La nit del 31 de desembre, amb el raïm i la festa de la ciutat, té la seva pròpia guia: ${b2link("newYear", "ca", "Cap d'Any a Barcelona")}. Els Reis arriben el vespre del 5 de gener, i el ${dayDate(D.reis, "ca")} és festiu a Catalunya (Ordre EMT/52/2026); l'horari i el recorregut de la cavalcada de Barcelona i de les d'altres ciutats són a ${b2link("reis", "ca", "la Cavalcada de Reis 2027")}.`,
+      `La nit de Cap d'Any, ${dayDate(D.capDany, "ca")}, a cada una de les dotze campanades de mitjanit es menja un gra de raïm i se sol demanar un desig, segons recull l'[Ajuntament de Barcelona](${CAP_DANY}); l'endemà, l'1 de gener, és festiu. La festa de la ciutat té la seva pròpia guia: ${b2link("newYear", "ca", "Cap d'Any a Barcelona")}. Els Reis arriben el vespre del 5 de gener, i el ${dayDate(D.reis, "ca")} és festiu a Catalunya (Ordre EMT/52/2026); l'horari i el recorregut de la cavalcada de Barcelona i de les d'altres ciutats són a ${b2link("reis", "ca", "la Cavalcada de Reis 2027")}.`,
     ),
     ...h2("On veure-ho i on comprar-ho el 2026"),
     list(
@@ -439,13 +489,15 @@ function bodyCa(facts: TraditionAnnouncements) {
 function bodyEs(facts: TraditionAnnouncements) {
   return [
     lead(
-      `**En Cataluña, por Navidad los niños hacen «cagar» el tió, un tronco que deja regalos la noche del 24 o el día 25 de diciembre; en el belén se esconde un caganer, y el día después de Navidad, San Esteban (Sant Esteve), es otro festivo: el de los canelones.** En 2026, Navidad cae en ${weekday(D.nadal, "es")} y San Esteban, el ${dayDate(D.santEsteve, "es")}, festivo en toda Cataluña salvo en Arán.`,
+      `**La Navidad catalana en 2026: Nochebuena es el ${dayDate(D.nitDeNadal, "es")} (laborable); Navidad, el ${dayDate(D.nadal, "es")}, y San Esteban (Sant Esteve), el ${dayDate(D.santEsteve, "es")}, los dos festivos en Cataluña (San Esteban, salvo en Arán).** Los niños hacen «cagar» el tió, un tronco que deja regalos, la noche del 24 o el día 25; en el belén se esconde el caganer; a medianoche del 24 se celebra la Misa del Gallo; en Navidad se come escudella i carn d'olla, por San Esteban, canelones, y en Nochevieja, una uva con cada campanada.`,
     ),
+    ...paras(plansLine("es", facts)),
     keyFacts("La Navidad 2026-27, día a día", [
       { label: "Tió", value: `Come desde la Inmaculada (${dayDate(D.immaculada, "es", false)}, festivo) y «caga» en Nochebuena o el día de Navidad, según cada casa` },
       { label: "Misa del Gallo", value: `A medianoche de Nochebuena, ${dayDate(D.nitDeNadal, "es", false)} (laborable)` },
       { label: "Navidad", value: `${cap(dayDate(D.nadal, "es"))}, festivo: escudella i carn d'olla, turrones y neules` },
       { label: "San Esteban", value: `${cap(dayDate(D.santEsteve, "es"))}, festivo en Cataluña salvo en Arán: canelones` },
+      { label: "Nochevieja", value: `${cap(dayDate(D.capDany, "es"))}, laborable: a medianoche, una uva con cada campanada; el 1 de enero, festivo` },
       { label: "Reyes", value: `${cap(dayDate(D.reis, "es"))}, festivo; la cabalgata es la tarde-noche del 5` },
       { label: "Fira de Santa Llúcia", value: santaLluciaFact("es", facts) },
       { label: "Pastorets", value: pastoretsFact("es", facts) },
@@ -477,7 +529,7 @@ function bodyEs(facts: TraditionAnnouncements) {
     ...h2(
       "¿Qué es el caganer y por qué se pone en el belén?",
       "Es, según el diccionario del IEC, la figura popular del belén navideño en actitud de hacer de vientre. La imagen tradicional es la de un hombre con barretina, agachado y con las nalgas al aire, que fuma en pipa o un puro y a veces lee el periódico; de vez en cuando, con un cerdito que lo olisquea por detrás.",
-      "**Se coloca escondido, detrás de un árbol o debajo de un puente, y se dice que trae buena suerte.** Qué significa, en cambio, nadie lo sabe con certeza: la página de Cultura Popular del Ayuntamiento admite que su interpretación todavía es motivo de controversia.",
+      "**Se coloca escondido, detrás de un árbol o debajo de un puente, y se dice que trae buena suerte.** Qué significa, en cambio, nadie lo sabe con certeza: la página de Cultura Popular del Ayuntamiento admite que su interpretación todavía es motivo de controversia. Y no hay que confundirlo con el tió: el tió es el tronco que «caga» regalos en casa; el caganer, la figurita escondida en el belén.",
       "Desde hace años los artesanos hacen caganers de personajes conocidos, como futbolistas, políticos, actores o cantantes, y la novedad de cada año tiene eco en los medios. También es pieza de coleccionista: hay incluso una asociación, Amics del Caganer, que lo estudia y organiza exposiciones.",
     ),
     ...h2(
@@ -512,7 +564,7 @@ function bodyEs(facts: TraditionAnnouncements) {
     ),
     ...h2(
       "Nochevieja y Reyes",
-      `La noche del 31 de diciembre, con las uvas y la fiesta de la ciudad, tiene su propia guía: ${b2link("newYear", "es", "Nochevieja en Barcelona")}. Los Reyes llegan la tarde-noche del 5 de enero, y el ${dayDate(D.reis, "es")} es festivo en Cataluña (Orden EMT/52/2026); el horario y el recorrido de la cabalgata de Barcelona y de las de otras ciudades están en ${b2link("reis", "es", "la Cabalgata de Reyes 2027")}.`,
+      `En Nochevieja, el ${dayDate(D.capDany, "es")}, con cada una de las doce campanadas de medianoche se come una uva y se suele pedir un deseo, según recoge el [Ayuntamiento de Barcelona](${CAP_DANY}); el día siguiente, 1 de enero, es festivo. La fiesta de la ciudad tiene su propia guía: ${b2link("newYear", "es", "Nochevieja en Barcelona")}. Los Reyes llegan la tarde-noche del 5 de enero, y el ${dayDate(D.reis, "es")} es festivo en Cataluña (Orden EMT/52/2026); el horario y el recorrido de la cabalgata de Barcelona y de las de otras ciudades están en ${b2link("reis", "es", "la Cabalgata de Reyes 2027")}.`,
     ),
     ...h2("Dónde verlo y comprarlo en 2026"),
     list(
@@ -539,13 +591,15 @@ function bodyEs(facts: TraditionAnnouncements) {
 function bodyEn(facts: TraditionAnnouncements) {
   return [
     lead(
-      `**At Christmas in Catalonia, children make the tió "poo": a log that leaves presents on the night of 24 December or on Christmas Day. The nativity scene hides a caganer, and the day after Christmas, Sant Esteve, is a second public holiday, the day for canelons.** In 2026 Christmas Day is a ${weekday(D.nadal, "en")} and Sant Esteve is ${dayDate(D.santEsteve, "en")}, a holiday across Catalonia except in Aran.`,
+      `**Christmas in Catalonia, 2026: Christmas Eve is ${dayDate(D.nitDeNadal, "en")} (a working day); Christmas Day is ${dayDate(D.nadal, "en")} and Sant Esteve (St Stephen's Day) ${dayDate(D.santEsteve, "en")}, both public holidays (Sant Esteve except in Aran).** Children make the tió, a log, "poo" presents on the night of the 24th or on the 25th; a caganer hides in the nativity scene; Midnight Mass (the Missa del Gall) is at midnight on the 24th; Christmas lunch is escudella i carn d'olla, Sant Esteve is the day for canelons, and on New Year's Eve you eat a grape on each stroke of midnight.`,
     ),
+    ...paras(plansLine("en", facts)),
     keyFacts("Christmas 2026-27, day by day", [
       { label: "Tió", value: `Fed from the Immaculada (${dayDate(D.immaculada, "en", false)}, a holiday); it "poos" on Christmas Eve or Christmas Day, depending on the family` },
       { label: "Missa del Gall", value: `Midnight Mass on Christmas Eve, ${dayDate(D.nitDeNadal, "en", false)} (a working day)` },
       { label: "Christmas Day", value: `${dayDate(D.nadal, "en")}, holiday: escudella i carn d'olla, turrón and neules` },
       { label: "Sant Esteve", value: `${dayDate(D.santEsteve, "en")}, holiday in Catalonia except Aran: canelons` },
+      { label: "New Year's Eve", value: `${dayDate(D.capDany, "en")}, a working day: at midnight, one grape on each stroke; 1 January is a holiday` },
       { label: "Three Kings", value: `${dayDate(D.reis, "en")}, holiday; the parade is on the evening of the 5th` },
       { label: "Fira de Santa Llúcia", value: santaLluciaFact("en", facts) },
       { label: "Pastorets", value: pastoretsFact("en", facts) },
@@ -577,7 +631,7 @@ function bodyEn(facts: TraditionAnnouncements) {
     ...h2(
       "What is a caganer, and why is it in the nativity scene?",
       "The caganer (literally \"the pooper\") is, as the IEC dictionary describes it, a popular figure of the Christmas nativity scene shown relieving himself. The traditional figure is a man in a barretina, squatting with his bottom in the air, smoking a pipe or a cigar and sometimes reading the paper; now and then a piglet sniffs at him from behind.",
-      "**He is hidden somewhere in the scene, behind a tree or under a bridge, and is said to bring good luck.** What he actually means nobody knows for sure: the City Council's Cultura Popular page admits that how to interpret the figure is still debated.",
+      "**He is hidden somewhere in the scene, behind a tree or under a bridge, and is said to bring good luck.** What he actually means nobody knows for sure: the City Council's Cultura Popular page admits that how to interpret the figure is still debated. And he is not the tió: the tió is the log that \"poos\" presents at home; the caganer is the little figure hidden in the nativity scene.",
       "For years figure makers have produced caganers of famous people, from footballers and politicians to actors and singers, and each year's new ones get media coverage. Caganers are also collected: there is even an association, the Amics del Caganer, that researches the figure and puts on exhibitions.",
     ),
     ...h2(
@@ -612,7 +666,7 @@ function bodyEn(facts: TraditionAnnouncements) {
     ),
     ...h2(
       "New Year's Eve and the Three Kings",
-      `New Year's Eve, with the twelve grapes and the city's celebration, has its own guide: ${b2link("newYear", "en", "New Year's Eve in Barcelona")}. The Three Kings arrive on the evening of 5 January, and ${dayDate(D.reis, "en")} is a public holiday in Catalonia (Ordre EMT/52/2026); the times and route of Barcelona's parade, and of other towns' parades, are in ${b2link("reis", "en", "the 2027 Three Kings parade")}.`,
+      `On New Year's Eve, ${dayDate(D.capDany, "en")}, people eat one grape on each of the twelve strokes of midnight and make a wish, as [Barcelona City Council](${CAP_DANY}) records; the next day, 1 January, is a public holiday. The city's celebration has its own guide: ${b2link("newYear", "en", "New Year's Eve in Barcelona")}. The Three Kings arrive on the evening of 5 January, and ${dayDate(D.reis, "en")} is a public holiday in Catalonia (Ordre EMT/52/2026); the times and route of Barcelona's parade, and of other towns' parades, are in ${b2link("reis", "en", "the 2027 Three Kings parade")}.`,
     ),
     ...h2("Where to see it and buy it in 2026"),
     list(

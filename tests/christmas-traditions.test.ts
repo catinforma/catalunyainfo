@@ -26,6 +26,9 @@ import { ARTICLE_PATHS } from "../src/lib/content/features/shared.ts";
 import { holidayOn, isCovered, weekdayIndex } from "../src/lib/content/holidays/calendar.ts";
 import { IMAGE_BY_KEY } from "../src/lib/content/images.ts";
 import { LOCALES, type Locale } from "../src/lib/i18n/config.ts";
+import { fairsHubPath } from "../src/lib/programmatic/christmas-fairs/paths.ts";
+import { ANNOUNCED_2026 } from "../src/lib/content/batch02/festive.ts";
+import { plansLine } from "../src/lib/content/batch02/christmas-traditions.ts";
 
 /**
  * Catalan Christmas traditions. Same structural checks as the batch-02 suite
@@ -40,9 +43,10 @@ const A = CHRISTMAS_TRADITIONS;
 const NONE: TraditionAnnouncements = { santaLlucia: null, pastorets: null };
 const text = (blocks: Block[]) => bodyToPlainText(blocks);
 const sentences = (value: string) => value.split(/(?<=[.!?])\s+(?=[A-ZÀ-ÚÇ¿«"(*])/u);
-const PUBLISHED = new Set(
-  [...Object.values(B2_PATHS), ...Object.values(ARTICLE_PATHS)].flatMap((paths) => LOCALES.map((locale) => `/${locale}/${paths[locale]}/`)),
-);
+const PUBLISHED = new Set([
+  ...[...Object.values(B2_PATHS), ...Object.values(ARTICLE_PATHS)].flatMap((paths) => LOCALES.map((locale) => `/${locale}/${paths[locale]}/`)),
+  ...LOCALES.map((locale) => fairsHubPath(locale)),
+]);
 
 /* -------------------------------------------------------------------------- */
 /* Structure, SEO, links                                                      */
@@ -98,6 +102,24 @@ test("the lead answers the question: tió, caganer and Sant Esteve with its 2026
     assert.match(first.text, /caganer/);
     assert.match(first.text, /Sant Esteve/);
     assert.ok(first.text.includes(dayDate(TRADITION_DAYS.santEsteve, locale)), `${locale}: ${first.text}`);
+    // 13 Nov 2026: "quan falta per Nadal" / "dia de Nadal" - the day itself is in the first words.
+    assert.ok(first.text.slice(0, 160).includes(dayDate(TRADITION_DAYS.nadal, locale)), `${locale}: Christmas Day is not in the opening`);
+    for (const word of [/Missa del Gall|Misa del Gallo/, /canelons|canelones/, /raïm|uva|grape/]) assert.match(first.text, word, locale);
+  }
+});
+
+test("the paragraph after the lead sends readers to this December's dated plans", () => {
+  for (const locale of LOCALES) {
+    const second = A.editions[locale].blocks[1] as { type: string; text: string };
+    assert.equal(second.type, "paragraph");
+    assert.equal(second.text, plansLine(locale));
+    for (const href of [fairsHubPath(locale), `/${locale}/${B2_PATHS.pessebres[locale]}/`, `/${locale}/${B2_PATHS.barcelonaDecember[locale]}/`]) {
+      assert.ok(second.text.includes(`](${href})`), `${locale}: no ${href}`);
+    }
+    // The lights only with the council's date; nothing undated is promised.
+    if (ANNOUNCED_2026.lightsSwitchOn) assert.ok(second.text.includes(dayDate(ANNOUNCED_2026.lightsSwitchOn.date, locale, false)), locale);
+    const bare = plansLine(locale, NONE, { ...ANNOUNCED_2026, lightsSwitchOn: null });
+    assert.doesNotMatch(bare, /Santa Llúcia|llums|luces|lights/, locale);
   }
 });
 
@@ -179,14 +201,14 @@ test("the publish route has a 'nadal-tradicions' group", () => {
 test("every day the page names is the Generalitat's, on the weekday printed", () => {
   const D = TRADITION_DAYS;
   // Ordre EMT/66/2025 (2026) and Ordre EMT/52/2026 (2027).
-  for (const iso of [D.immaculada, D.nadal, D.santEsteve, D.reis]) assert.ok(holidayOn(iso), `${iso} should be a holiday`);
-  for (const iso of [D.nitDeNadal, D.reisEve, D.santEsteveNextYear]) {
+  for (const iso of [D.immaculada, D.nadal, D.santEsteve, D.anyNou, D.reis]) assert.ok(holidayOn(iso), `${iso} should be a holiday`);
+  for (const iso of [D.nitDeNadal, D.capDany, D.reisEve, D.santEsteveNextYear]) {
     assert.ok(isCovered(iso), `${iso} is outside the published calendars`);
     assert.equal(holidayOn(iso), null, `${iso} should not be a holiday`);
   }
   assert.deepEqual(
-    [D.immaculada, D.nitDeNadal, D.nadal, D.santEsteve, D.reisEve, D.reis, D.santEsteveNextYear].map(weekdayIndex),
-    [2, 4, 5, 6, 2, 3, 0],
+    [D.immaculada, D.nitDeNadal, D.nadal, D.santEsteve, D.capDany, D.anyNou, D.reisEve, D.reis, D.santEsteveNextYear].map(weekdayIndex),
+    [2, 4, 5, 6, 4, 5, 2, 3, 0],
   );
   // Art. 1.b: in Aran, Sant Esteve is replaced by the Festa d'Aran on Wednesday 17 June 2026.
   assert.equal(ARAN_DAY, "2026-06-17");

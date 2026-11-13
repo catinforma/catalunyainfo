@@ -1,6 +1,7 @@
 import type { Block } from "@/lib/content/blocks";
 import { NATIVITY_SOURCE } from "@/lib/content/pessebres/agenda";
 import { EVERGREEN as WEEKEND } from "@/lib/content/weekend/evergreen";
+import { fairsHubPath } from "@/lib/programmatic/christmas-fairs/paths";
 import type { Locale } from "@/lib/i18n/config";
 
 import { CHRISTMAS } from "./christmas";
@@ -69,13 +70,39 @@ import {
  * Barcelona in December, Christmas in Barcelona, the traditions and the
  * Three Kings parade.
  *
+ * 13 Nov 2026 (December freshness pass; fact pack
+ * research_notes/pessebres-vivents-2026-13nov.md): every organiser page in
+ * KNOWN re-read with a browser user agent and grepped; each entry now carries
+ * its `readOn` and `quote`. Three of the four pending ones have published:
+ * Bàscara (its own site elpessebre.cat, linked from the council's page),
+ * els Prats de Rei (55th; the cultural agenda says 21 Dec, the organiser 20
+ * Dec: the organiser's is printed and the note says so) and Peralada (43rd).
+ * Rupit still shows 2025-26 and says "2026 no confirmat". This season's
+ * prices and times added where the page gives them (Corbera, Tona, Torres de
+ * Fals, Sant Fost, Bàscara, Peralada); the Torres de Fals times read on 25
+ * Oct are no longer on its page and were dropped. Sant Guim's ticket sale is
+ * "properament" (recheck). Castellar de n'Hug and l'Arboç were checked: no
+ * living nativity in the agenda and no official page, so neither is listed.
+ * The open-data agenda carries the first 2026-27 living nativities since 10
+ * Nov (Cànoves, Corró d'Avall, Canyelles, la Torreta…); the live block shows
+ * them. Date guards: `recheck` entries re-read every 10 days until
+ * KNOWN_SEASON_STARTS; after KNOWN_SEASON_ENDS the page needs its
+ * after-season pass (tests/living-nativities-guide.test.ts).
+ *
  * The lead image reuses the Christmas markets guide's photograph of nativity
  * figures, with the same alt text and caption: the publisher requires a lead
  * photo, the media row is keyed by file, and identical wording keeps the
  * other article's row unchanged.
  */
 
-const VERIFIED = "2026-10-25";
+const VERIFIED = "2026-11-13";
+
+/** The day the table's organiser pages were last read, as the note prints it. */
+const CHECKED_ON: Record<Locale, string> = {
+  ca: "13 de novembre de 2026",
+  es: "13 de noviembre de 2026",
+  en: "13 November 2026",
+};
 
 const HOLIDAYS_2026 = "https://treball.gencat.cat/ca/ambits/relacions_laborals/ci/calendari_laboral/calendari-festes-2026/";
 const HOLIDAYS_2027 = "https://treball.gencat.cat/ca/ambits/relacions_laborals/ci/calendari_laboral/calendari-festes-2027/";
@@ -89,13 +116,15 @@ const SOURCES: B2Source[] = [
 ];
 
 /**
- * The best-known living nativities, each checked on 25 Oct 2026 on its own
- * organiser's or town council's site. `dates` only when that site gives the
- * 2026-27 season; otherwise null, rendered as "not yet published" — never
- * last season's days. Corbera links to its tickets pages: its home page
- * carried injected spam text on the day of checking.
+ * The best-known living nativities, each read on its own organiser's or town
+ * council's site on the date in `readOn`. `dates` only when that site gives
+ * the 2026-27 season (with this season's hours and prices when the same page
+ * gives them); otherwise null, rendered as "2026 not confirmed" — never last
+ * season's days. `quote` is what the page says, as it writes it. Corbera
+ * links to its tickets pages: its home page carried injected spam text on 25
+ * Oct.
  */
-interface Known {
+export interface Known {
   /** The organiser's own name, kept in Catalan in every edition. */
   name: string;
   place: string;
@@ -103,6 +132,16 @@ interface Known {
   url: string;
   label: string;
   publisher: string;
+  /** ISO day the page was last read. */
+  readOn: string;
+  /** The page's own words for this season (or, for a pending one, what it still shows). */
+  quote: string;
+  /**
+   * Something on the page is still to come (the dates, or the ticket sale):
+   * re-read at least every 10 days until KNOWN_SEASON_STARTS
+   * (tests/living-nativities-guide.test.ts).
+   */
+  recheck?: boolean;
 }
 
 export const KNOWN: Known[] = [
@@ -110,49 +149,58 @@ export const KNOWN: Known[] = [
     name: "Pessebre Vivent de Corbera de Llobregat",
     place: "Corbera de Llobregat (Baix Llobregat)",
     dates: {
-      ca: "Sessions del 28 de novembre de 2026 al 9 de gener de 2027; entrades només per internet",
-      es: "Pases del 28 de noviembre de 2026 al 9 de enero de 2027; entradas solo por internet",
-      en: "Sessions from 28 November 2026 to 9 January 2027; tickets online only",
+      ca: "Del 28 de novembre de 2026 al 9 de gener de 2027, en dies concrets, amb passis a les 18, 19 o 20 h; entrades només per internet (adults, 17 €; menors de 14 anys, Carnet Jove i majors de 65, 12 €; fins a 6 anys, gratis)",
+      es: "Del 28 de noviembre de 2026 al 9 de enero de 2027, en días concretos, con pases a las 18, 19 o 20 h; entradas solo por internet (adultos, 17 €; menores de 14 años, Carnet Jove y mayores de 65, 12 €; hasta 6 años, gratis)",
+      en: "28 November 2026 to 9 January 2027, on set days, with sessions at 18:00, 19:00 or 20:00; tickets online only (adults €17; under-14s, Carnet Jove and over-65s €12; under-6s free)",
     },
     url: "https://tickets.pessebrecorbera.cat/",
     label: "tickets.pessebrecorbera.cat",
     publisher: "Pessebre Vivent de Corbera de Llobregat",
+    readOn: "2026-11-13",
+    quote: "torna del 28 de novembre de 2026 al 9 de gener de 2027 … la venda de les entrades es fa exclusivament online … Adults 17 € … Menors de 14 anys 12 €",
   },
   {
     name: "55è Pessebre Vivent d'Osona",
     place: "Tona (Osona)",
     dates: {
-      ca: "20, 25, 26 i 27 de desembre de 2026 i 1, 3, 6 i 10 de gener de 2027; entrades només a taquilla",
-      es: "20, 25, 26 y 27 de diciembre de 2026 y 1, 3, 6 y 10 de enero de 2027; entradas solo en taquilla",
-      en: "20, 25, 26 and 27 December 2026 and 1, 3, 6 and 10 January 2027; tickets at the box office only",
+      ca: "20, 25, 26 i 27 de desembre de 2026 i 1, 3, 6 i 10 de gener de 2027, de 18 a 20 h (el 20 de desembre i el 6 i el 10 de gener, fins a les 19.30 h); entrades només a taquilla (adults, 10 €; de 6 a 13 anys, 3 €)",
+      es: "20, 25, 26 y 27 de diciembre de 2026 y 1, 3, 6 y 10 de enero de 2027, de 18 a 20 h (el 20 de diciembre y el 6 y el 10 de enero, hasta las 19.30 h); entradas solo en taquilla (adultos, 10 €; de 6 a 13 años, 3 €)",
+      en: "20, 25, 26 and 27 December 2026 and 1, 3, 6 and 10 January 2027, 18:00 to 20:00 (to 19:30 on 20 December and 6 and 10 January); tickets at the box office only (adults €10; ages 6 to 13, €3)",
     },
     url: "https://pessebre-vivent-osona.cat/",
     label: "pessebre-vivent-osona.cat",
     publisher: "Agrupació Pessebre Vivent de Tona",
+    readOn: "2026-11-13",
+    quote: "55è Pessebre Vivent d'Osona (2026-2027) … 20 de Desembre de 18h a 19:30 · 25, 26 i 27 de Desembre, 1 i 3 de Gener de 18h a 20h · 6 i 10 de Gener de 18h a 19:30 … Adults, 10€",
   },
   {
     name: "Pessebre Vivent del Bages a les Torres de Fals",
     place: "Fonollosa (Bages)",
     dates: {
-      ca: "19, 20, 26 i 27 de desembre de 2026 i 1, 2, 3 i 6 de gener de 2027, a les 18 h i a les 19.15 h",
-      es: "19, 20, 26 y 27 de diciembre de 2026 y 1, 2, 3 y 6 de enero de 2027, a las 18 h y a las 19.15 h",
-      en: "19, 20, 26 and 27 December 2026 and 1, 2, 3 and 6 January 2027, at 18:00 and 19:15",
+      ca: "19, 20, 26 i 27 de desembre de 2026 i 1, 2, 3 i 6 de gener de 2027; entrada general, 15 € (majors de 65 anys, 12 €; de 6 a 12 anys, 6 €)",
+      es: "19, 20, 26 y 27 de diciembre de 2026 y 1, 2, 3 y 6 de enero de 2027; entrada general, 15 € (mayores de 65 años, 12 €; de 6 a 12 años, 6 €)",
+      en: "19, 20, 26 and 27 December 2026 and 1, 2, 3 and 6 January 2027; general admission €15 (over-65s €12; ages 6 to 12, €6)",
     },
     url: "https://pessebre.cat/",
     label: "pessebre.cat",
     publisher: "Pessebre vivent del Bages a les Torres de Fals",
+    readOn: "2026-11-13",
+    quote: "19, 20, 26 i 27 de desembre de 2026 · 1, 2, 3 i 6 de gener de 2027 … Entrada general: 15€",
   },
   {
     name: "Pessebre Vivent dels Oficis Perduts (40è aniversari)",
     place: "Sant Guim de la Plana (Segarra)",
     dates: {
-      ca: "19, 20, 26 i 27 de desembre de 2026 i 2, 3, 9 i 10 de gener de 2027, a les 18.30 h; entrades només per internet",
-      es: "19, 20, 26 y 27 de diciembre de 2026 y 2, 3, 9 y 10 de enero de 2027, a las 18.30 h; entradas solo por internet",
-      en: "19, 20, 26 and 27 December 2026 and 2, 3, 9 and 10 January 2027, at 18:30; tickets online only",
+      ca: "19, 20, 26 i 27 de desembre de 2026 i 2, 3, 9 i 10 de gener de 2027, a les 18.30 h; entrades només per internet (el 13 de novembre, venda encara no oberta: «properament»)",
+      es: "19, 20, 26 y 27 de diciembre de 2026 y 2, 3, 9 y 10 de enero de 2027, a las 18.30 h; entradas solo por internet (el 13 de noviembre, venta aún no abierta: «properament», próximamente)",
+      en: "19, 20, 26 and 27 December 2026 and 2, 3, 9 and 10 January 2027, at 18:30; tickets online only (on 13 November not on sale yet: \"properament\", coming soon)",
     },
     url: "https://pessebre.org/",
     label: "pessebre.org",
     publisher: "Associació Cultural La Marinada",
+    readOn: "2026-11-13",
+    quote: "Desembre 2026: 19, 20, 26 i 27 · Gener 2027: 2, 3, 9 i 10 … Hora: 18.30h … VENDA D'ENTRADES PROPERAMENT",
+    recheck: true,
   },
   {
     name: "49è Pessebre Vivent parlat de les Gunyoles",
@@ -165,18 +213,22 @@ export const KNOWN: Known[] = [
     url: "https://pessebrelesgunyoles.cat/",
     label: "pessebrelesgunyoles.cat",
     publisher: "Pessebre Vivent de les Gunyoles",
+    readOn: "2026-11-13",
+    quote: "Desembre 2026: 20, 25, 26 i 27 · Gener 2027: 1, 2 i 3 · a les 18:00h, a les 18:45h i a les 19:30h",
   },
   {
     name: "Pessebre Vivent de l'Espluga de Francolí",
     place: "l'Espluga de Francolí (Conca de Barberà)",
     dates: {
-      ca: "27, 28 i 29 de desembre de 2026 (es fa cada dos anys); entrades només anticipades, des del 22 de novembre a les 9 h",
-      es: "27, 28 y 29 de diciembre de 2026 (se hace cada dos años); entradas solo anticipadas, desde el 22 de noviembre a las 9 h",
-      en: "27, 28 and 29 December 2026 (held every two years); advance tickets only, on sale from 22 November at 9:00",
+      ca: "27, 28 i 29 de desembre de 2026 (es fa cada dos anys); entrades només anticipades, des del 22 de novembre a les 9 h, sense taquilla",
+      es: "27, 28 y 29 de diciembre de 2026 (se hace cada dos años); entradas solo anticipadas, desde el 22 de noviembre a las 9 h, sin taquilla",
+      en: "27, 28 and 29 December 2026 (held every two years); advance tickets only, on sale from 22 November at 9:00, no box office",
     },
     url: "https://pessebredelespluga.com/",
     label: "pessebredelespluga.com",
     publisher: "Associació del Pessebre Vivent de l'Espluga de Francolí",
+    readOn: "2026-11-13",
+    quote: "27, 28 i 29 de desembre de 2026 … Entrades NOMÉS anticipades a partir del 22 de novembre de 2026 a les 9 del matí FINS EXHAURIR AFORAMENT (no hi haurà taquilla)",
   },
   {
     name: "33è Pessebre Vivent de la Torre del Suro",
@@ -189,18 +241,22 @@ export const KNOWN: Known[] = [
     url: "https://www.pessebrevivent.cat/",
     label: "pessebrevivent.cat",
     publisher: "Pessebre Vivent de la Torre del Suro",
+    readOn: "2026-11-13",
+    quote: "Propera representació 21 de desembre de 2026 a les 18 h … NO CAL INSCRIPCIÓ PREVIA · L'ENTRADA ÉS LLIURE",
   },
   {
     name: "Pessebre Vivent de Sant Fost de Campsentelles",
     place: "Sant Fost de Campsentelles (Vallès Oriental)",
     dates: {
-      ca: "13, 19, 20, 25, 26 i 27 de desembre de 2026 i 1, 3, 6 i 10 de gener de 2027; uns 60 minuts; entrades només per internet (adults, 10 €)",
-      es: "13, 19, 20, 25, 26 y 27 de diciembre de 2026 y 1, 3, 6 y 10 de enero de 2027; unos 60 minutos; entradas solo por internet (adultos, 10 €)",
-      en: "13, 19, 20, 25, 26 and 27 December 2026 and 1, 3, 6 and 10 January 2027; about 60 minutes; tickets online only (adults €10)",
+      ca: "13, 19, 20, 25, 26 i 27 de desembre de 2026 i 1, 3, 6 i 10 de gener de 2027; uns 60 minuts; entrades només per internet (adults, 10 €; de 6 a 12 anys, 4 €; Carnet Jove, 6 €; menors de 6, gratis)",
+      es: "13, 19, 20, 25, 26 y 27 de diciembre de 2026 y 1, 3, 6 y 10 de enero de 2027; unos 60 minutos; entradas solo por internet (adultos, 10 €; de 6 a 12 años, 4 €; Carnet Jove, 6 €; menores de 6, gratis)",
+      en: "13, 19, 20, 25, 26 and 27 December 2026 and 1, 3, 6 and 10 January 2027; about 60 minutes; tickets online only (adults €10; ages 6 to 12, €4; Carnet Jove €6; under-6s free)",
     },
     url: "https://www.pessebreviventsantfost.cat/",
     label: "pessebreviventsantfost.cat",
     publisher: "Pessebre Vivent de Sant Fost de Campsentelles",
+    readOn: "2026-11-13",
+    quote: "13, 19, 20, 25, 26 i 27 DE DESEMBRE '26 · 1, 3, 6 i 10 DE GENER '27 … El preu de l'entrada per adults és de 10€. Nens entre 6 i 12 anys paguen 4 €",
   },
   {
     name: "Pessebre dels Estels",
@@ -213,22 +269,54 @@ export const KNOWN: Known[] = [
     url: "https://www.masiacastello.cat/entrades-del-pessebre/",
     label: "masiacastello.cat",
     publisher: "Masia de Castelló",
+    readOn: "2026-11-13",
+    quote: "Pessebre dels Estels 2026 … Entrades per al 5 de desembre · 6 · 12 · 13 de desembre … General: 10 anys i endavant (15€) · Infantil: de 4 a 9 anys (10€); l'accés és a partir de les 16.30 h",
   },
   {
     name: "El Pessebre de Bàscara",
     place: "Bàscara (Alt Empordà)",
-    dates: null,
-    url: "https://bascara.cat/coneix/el-pessebre-vivent/",
-    label: "bascara.cat",
-    publisher: "Ajuntament de Bàscara",
+    dates: {
+      ca: "20, 25, 26 i 27 de desembre de 2026 i 1, 2 i 3 de gener de 2027, a les 19 h; entrades per internet i a taquilla (des de 30 minuts abans)",
+      es: "20, 25, 26 y 27 de diciembre de 2026 y 1, 2 y 3 de enero de 2027, a las 19 h; entradas por internet y en taquilla (desde 30 minutos antes)",
+      en: "20, 25, 26 and 27 December 2026 and 1, 2 and 3 January 2027, at 19:00; tickets online and at the box office (from 30 minutes before)",
+    },
+    // The organiser's own site, which the council's page links to.
+    url: "https://www.elpessebre.cat/",
+    label: "elpessebre.cat",
+    publisher: "El Pessebre de Bàscara",
+    readOn: "2026-11-13",
+    quote: "Nadal 2026–2027 · Venda d'entrades · 20, 25, 26 i 27 de desembre de 2026 · 1, 2 i 3 de gener de 2027 · Totes les representacions a les 19 h (7 del vespre) … TAQUILLA: des de 30 minuts abans",
   },
   {
-    name: "Pessebre Vivent dels Prats de Rei",
+    name: "55è Pessebre Vivent dels Prats de Rei",
     place: "els Prats de Rei (Anoia)",
-    dates: null,
-    url: "https://www.acrsigarra.cat/pessebreprats/",
+    dates: {
+      ca: "20, 26 i 27 de desembre de 2026 i 1, 3 i 6 de gener de 2027, a les 18.30 h",
+      es: "20, 26 y 27 de diciembre de 2026 y 1, 3 y 6 de enero de 2027, a las 18.30 h",
+      en: "20, 26 and 27 December 2026 and 1, 3 and 6 January 2027, at 18:30",
+    },
+    url: "https://www.acrsigarra.cat/pessebreprats/?page_id=69",
     label: "acrsigarra.cat",
     publisher: "Agrupació Cultural i Recreativa Sigarra",
+    readOn: "2026-11-13",
+    // The Generalitat's cultural agenda (2026111000027) gives 21 Dec as the
+    // first day; the organiser's page says 20 Dec. The organiser's is
+    // printed, and the table note says the agenda differs.
+    quote: "REPRESENTACIONS 20, 26 i 27 de desembre de 2026 · 1,3 i 6 de gener de 2027 · A 2/4 de 7 de la tarda",
+  },
+  {
+    name: "43è Pessebre Vivent de Peralada",
+    place: "Peralada (Alt Empordà)",
+    dates: {
+      ca: "25, 26 i 27 de desembre de 2026 i 1, 2 i 3 de gener de 2027, a les 18.30 h, al casc històric; venda anticipada (6 €; de 4 a 13 anys, 3 €)",
+      es: "25, 26 y 27 de diciembre de 2026 y 1, 2 y 3 de enero de 2027, a las 18.30 h, en el casco histórico; venta anticipada (6 €; de 4 a 13 años, 3 €)",
+      en: "25, 26 and 27 December 2026 and 1, 2 and 3 January 2027, at 18:30, in the old town; advance tickets (€6; ages 4 to 13, €3)",
+    },
+    url: "https://www.visitperalada.cat/ca/agenda/pessebre-vivent/",
+    label: "visitperalada.cat",
+    publisher: "Ajuntament de Peralada",
+    readOn: "2026-11-13",
+    quote: "El Pessebre Vivent de Peralada arriba a la seva 43a edició … Venda anticipada d'entrades · 25 de desembre de 2026 · A les 18:30 · Casc Històric de Peralada · 6€ / 3€ de 4 a 13 anys",
   },
   {
     name: "Pessebre Vivent de la Vila de Rupit",
@@ -237,21 +325,21 @@ export const KNOWN: Known[] = [
     url: "https://www.rupitpruit.cat/pessebre-vivent",
     label: "rupitpruit.cat",
     publisher: "Ajuntament de Rupit i Pruit",
-  },
-  {
-    name: "Pessebre Vivent de Peralada",
-    place: "Peralada (Alt Empordà)",
-    dates: null,
-    url: "https://www.visitperalada.cat/ca/agenda/pessebre-vivent/",
-    label: "visitperalada.cat",
-    publisher: "Ajuntament de Peralada",
+    readOn: "2026-11-13",
+    quote: "NOVES DATES: 3 i 4 DE GENER DE 2026 … Darrera actualització: 27.12.2025",
+    recheck: true,
   },
 ];
 
+/** The re-read guard on `recheck` entries runs until this day (the first big weekend of the season). */
+export const KNOWN_SEASON_STARTS = "2026-12-19";
+/** Last performance in the table (Tona, Sant Guim, Sant Fost: 10 Jan 2027); the page needs its after-season pass after it. */
+export const KNOWN_SEASON_ENDS = "2027-01-10";
+
 export const PENDING: Record<Locale, string> = {
-  ca: "Pendent: el web encara mostra la temporada 2025-26",
-  es: "Pendiente: la web aún muestra la temporada 2025-26",
-  en: "Not yet published: the website still shows 2025-26",
+  ca: "2026 no confirmat: el web encara mostra la temporada 2025-26",
+  es: "2026 no confirmado: la web aún muestra la temporada 2025-26",
+  en: "2026 not confirmed: the website still shows 2025-26",
 };
 
 function knownTable(locale: Locale): Block {
@@ -266,9 +354,9 @@ function knownTable(locale: Locale): Block {
     en: ["Living nativity", "Where", "2026-27 season", "Official website"],
   };
   const note: Record<Locale, string> = {
-    ca: "Dates del web oficial de cada organitzador o ajuntament, comprovades el 25 d'octubre de 2026 (Sant Fost i el Pessebre dels Estels, el 31 d'octubre; els pendents, el 3 de novembre). «Pendent» vol dir que encara no han publicat les de la temporada 2026-27: no hi posem les de l'any passat.",
-    es: "Fechas de la web oficial de cada organizador o ayuntamiento, comprobadas el 25 de octubre de 2026 (Sant Fost y el Pessebre dels Estels, el 31 de octubre; los pendientes, el 3 de noviembre). «Pendiente» significa que aún no han publicado las de la temporada 2026-27: no ponemos las del año pasado.",
-    en: "Dates from each organiser's or town council's official website, checked on 25 October 2026 (Sant Fost and the Pessebre dels Estels on 31 October; the pending ones on 3 November). \"Not yet published\" means the 2026-27 dates are not out yet: we do not repeat last year's.",
+    ca: `Dates, horaris i preus del web oficial de cada organitzador o ajuntament, comprovats el ${CHECKED_ON.ca}. «2026 no confirmat» vol dir que encara no han publicat la temporada 2026-27: no hi posem les dates de l'any passat. Als Prats de Rei, l'Agenda Cultural de la Generalitat dona el 21 de desembre com a primer dia; posem el 20, que és el que diu el web de l'organització.`,
+    es: `Fechas, horarios y precios de la web oficial de cada organizador o ayuntamiento, comprobados el ${CHECKED_ON.es}. «2026 no confirmado» significa que aún no han publicado la temporada 2026-27: no ponemos las fechas del año pasado. En els Prats de Rei, la Agenda Cultural de la Generalitat da el 21 de diciembre como primer día; ponemos el 20, que es lo que dice la web de la organización.`,
+    en: `Dates, times and prices from each organiser's or town council's official website, checked on ${CHECKED_ON.en}. "2026 not confirmed" means the 2026-27 season is not out yet: we do not repeat last year's dates. For els Prats de Rei, the Generalitat's cultural agenda gives 21 December as the first day; we give 20 December, as the organiser's own website does.`,
   };
   const rows = KNOWN.map((item) => [item.name, item.place, item.dates?.[locale] ?? PENDING[locale], `[${item.label}](${item.url})`]);
   return table(caption[locale], headers[locale], rows, note[locale]);
@@ -314,7 +402,7 @@ function body(locale: Locale): Block[] {
   if (locale === "ca") {
     return [
       lead(
-        "**Els primers pessebres vivents 2026 a Catalunya** són el de Corbera de Llobregat, que comença el 28 de novembre, i el Pessebre dels Estels de la Masia de Castelló (Vandellòs), el 5, 6, 12 i 13 de desembre. Sant Fost de Campsentelles, Tona, les Torres de Fals, Sant Guim de la Plana, les Gunyoles, l'Espluga de Francolí i la Torre del Suro, a Barcelona, també han publicat els seus dies (taula de sota). El calendari d'aquí sota afegeix cada pessebre vivent quan l'organitzador el publica a l'Agenda Cultural de la Generalitat, que es llegeix cada dia: només hi surten els que encara no han acabat, amb poble, comarca, dates i l'enllaç a la fitxa oficial.",
+        "**Els pessebres vivents 2026 a Catalunya comencen el 28 de novembre a Corbera de Llobregat; el Pessebre dels Estels (Vandellòs) es fa el 5, 6, 12 i 13 de desembre, i la majoria, entre el 19 de desembre i el 10 de gener.** Ja tenen dies oficials, i molts també horari i preu, Tona, les Torres de Fals, Sant Guim de la Plana, les Gunyoles, l'Espluga de Francolí, Bàscara, els Prats de Rei, Peralada, Sant Fost de Campsentelles i la Torre del Suro, a Barcelona (21 de desembre, gratuït): són a la taula de més avall, comprovats el 13 de novembre al web de cada organitzador. El calendari d'aquí sota afegeix cada pessebre vivent quan l'organitzador el publica a l'Agenda Cultural de la Generalitat, que es llegeix cada dia: només hi surten els que encara no han acabat, amb poble, comarca, dates i l'enllaç a la fitxa oficial.",
       ),
       LIVE,
       callout(
@@ -329,7 +417,7 @@ function body(locale: Locale): Block[] {
       ),
       ...h2(
         "Quan es fan els pessebres vivents 2026",
-        "Cada organitzador tria els seus dies i els publica a l'agenda quan els té: la temporada passada, el primer hi va aparèixer el 19 de novembre, la meitat hi eren a finals de novembre i 41 dels 44 abans del 15 de desembre. Per això, fins a mitjan novembre és normal que la llista sigui buida.",
+        "Cada organitzador tria els seus dies i els publica a l'agenda quan els té: la temporada passada, el primer hi va aparèixer el 19 de novembre, la meitat hi eren a finals de novembre i 41 dels 44 abans del 15 de desembre. Aquesta temporada, el 13 de novembre ja n'hi havia nou, i la llista anirà creixent fins a mitjan desembre.",
         "Com a referència, la temporada 2025-26 l'Agenda Cultural en va recollir **44, en 22 comarques**. El primer va obrir el 29 de novembre de 2025 i l'últim va tancar l'11 de gener de 2026; 36 van començar el 20 de desembre o més tard, i 40 havien acabat per Reis. Les dates de cada un són el primer i l'últim dia: dins d'aquest interval, molts només es representen alguns dies.",
         "L'agenda no els recull tots: per a la mateixa temporada, la Federació de Pessebres Vivents de Catalunya, que agrupa els organitzadors, va anunciar més de 300 representacions en 51 municipis, entre el 6 de desembre i l'11 de gener.",
         "La temporada passada, 32 dels 44 van començar en dissabte o diumenge, i les representacions es concentraven en caps de setmana i festius. A tot Catalunya són festius el **dimarts 8**, el **divendres 25** i el **dissabte 26 de desembre de 2026** (a l'Aran, el 26 no ho és), i l'**1 de gener** (divendres) i el **6 de gener de 2027** (dimecres), segons el calendari oficial de la Generalitat.",
@@ -345,12 +433,13 @@ function body(locale: Locale): Block[] {
       ...h2(
         "Cal entrada per veure un pessebre vivent?",
         "Gairebé sempre. Dels 44 pessebres vivents de la temporada 2025-26 a l'agenda, només 3 eren gratuïts (Celrà, la Seu d'Urgell i Fornells de la Selva) i 3 més demanaven un donatiu; la resta cobraven entrada, i 22 tenien un enllaç de venda d'entrades a la fitxa.",
-        "Cada organitzador ho fa a la seva manera. Aquesta temporada, Corbera de Llobregat, Sant Guim de la Plana i Sant Fost de Campsentelles venen les entrades només per internet; l'Espluga de Francolí, només anticipades i a partir del 22 de novembre; Tona, només a taquilla, i el de la Torre del Suro, a Barcelona, és d'entrada lliure. Els preus i les condicions són al web de cada un: mira-ho abans d'anar-hi.",
+        "Cada organitzador ho fa a la seva manera. Aquesta temporada, Corbera de Llobregat, Sant Guim de la Plana i Sant Fost de Campsentelles venen les entrades només per internet; l'Espluga de Francolí, només anticipades i a partir del 22 de novembre; Tona, només a taquilla; Bàscara, per internet i a taquilla, i el de la Torre del Suro, a Barcelona, és d'entrada lliure.",
+        "Els preus d'aquesta temporada que ja han publicat, per a un adult: **17 € a Corbera**, 15 € a les Torres de Fals i al Pessebre dels Estels, 10 € a Tona i a Sant Fost, i 6 € a Peralada; la mainada i els majors de 65 paguen menys, i els més petits hi entren gratis (cada web en diu l'edat). Les condicions completes són al web de cada un: mira-ho abans d'anar-hi.",
         "La temporada passada, gairebé tots es feien a la tarda o al vespre, molts per passis amb hora fixa. Si vas amb canalla o amb cotxet, pregunta quant dura el recorregut i si és accessible: el de Sant Guim de la Plana, per exemple, avisa que no ho és ni amb cadira de rodes ni amb cotxet.",
       ),
       ...h2(
         "Com combinar-ho amb altres plans de Nadal",
-        `Si vols combinar-ho amb una fira, mira ${b2link("christmas", "ca", "els mercats i fires de Nadal de Catalunya")} i les seves dates. Si vols aprofitar per comprar, ${b2link("shops", "ca", "quins diumenges i festius obren les botigues")}; per als ponts, ${b2link("workCalendar", "ca", "el calendari de festius")}, i per a la resta de plans del cap de setmana, [l'agenda d'aquest cap de setmana](/ca/${WEEKEND.ca.path}/).`,
+        `Si vols combinar-ho amb una fira, mira [les fires de Nadal 2026 poble per poble](${fairsHubPath("ca")}) i ${b2link("christmas", "ca", "els mercats i fires de Nadal de Catalunya")}, amb Santa Llúcia. Si vols aprofitar per comprar, ${b2link("shops", "ca", "quins diumenges i festius obren les botigues")}; per als ponts, ${b2link("workCalendar", "ca", "el calendari de festius")}, i per a la resta de plans del cap de setmana, [l'agenda d'aquest cap de setmana](/ca/${WEEKEND.ca.path}/).`,
         `Si ets a Barcelona, tot el mes dia a dia és a ${b2link("barcelonaDecember", "ca", "Barcelona al desembre del 2026")}, i el pessebre de la plaça de Sant Jaume i els llums, a ${b2link("christmasBarcelona", "ca", "Nadal a Barcelona")}. El tió, el caganer i com es fa el pessebre a casa, a ${b2link("christmasTraditions", "ca", "les tradicions de Nadal a Catalunya")}, i per tancar les festes, ${b2link("reis", "ca", "la Cavalcada de Reis 2027")}.`,
       ),
       faq([
@@ -367,7 +456,7 @@ function body(locale: Locale): Block[] {
         {
           question: "Cal pagar per veure un pessebre vivent?",
           answer:
-            "Normalment sí. La temporada 2025-26 només 3 dels 44 de l'agenda eren gratuïts i 3 més anaven amb donatiu. El preu i on comprar l'entrada són a la fitxa de cada un.",
+            "Normalment sí. Aquesta temporada, l'entrada d'adult va dels 6 € de Peralada als 17 € de Corbera de Llobregat, i el de la Torre del Suro, a Barcelona, és gratuït. La temporada 2025-26 només 3 dels 44 de l'agenda eren gratuïts i 3 més anaven amb donatiu. El preu i on comprar l'entrada són a la fitxa de cada un.",
         },
         {
           question: "Hi ha pessebre vivent a Barcelona?",
@@ -398,7 +487,7 @@ function body(locale: Locale): Block[] {
   if (locale === "es") {
     return [
       lead(
-        "**Los primeros belenes vivientes 2026 en Cataluña** («pessebres vivents») son el de Corbera de Llobregat, que empieza el 28 de noviembre, y el Pessebre dels Estels de la Masia de Castelló (Vandellòs), el 5, 6, 12 y 13 de diciembre. Sant Fost de Campsentelles, Tona, les Torres de Fals, Sant Guim de la Plana, les Gunyoles, l'Espluga de Francolí y la Torre del Suro, en Barcelona, también han publicado sus días (tabla de abajo). El calendario de abajo añade cada belén viviente cuando el organizador lo publica en la Agenda Cultural de la Generalitat, que se lee cada día: solo salen los que aún no han terminado, con pueblo, comarca, fechas y el enlace a la ficha oficial.",
+        "**Los belenes vivientes 2026 en Cataluña («pessebres vivents») empiezan el 28 de noviembre en Corbera de Llobregat; el Pessebre dels Estels (Vandellòs) es el 5, 6, 12 y 13 de diciembre, y la mayoría, entre el 19 de diciembre y el 10 de enero.** Ya tienen días oficiales, y muchos también horario y precio, Tona, les Torres de Fals, Sant Guim de la Plana, les Gunyoles, l'Espluga de Francolí, Bàscara, els Prats de Rei, Peralada, Sant Fost de Campsentelles y la Torre del Suro, en Barcelona (21 de diciembre, gratis): están en la tabla de más abajo, comprobados el 13 de noviembre en la web de cada organizador. El calendario de abajo añade cada belén viviente cuando el organizador lo publica en la Agenda Cultural de la Generalitat, que se lee cada día: solo salen los que aún no han terminado, con pueblo, comarca, fechas y el enlace a la ficha oficial.",
       ),
       LIVE,
       callout(
@@ -413,7 +502,7 @@ function body(locale: Locale): Block[] {
       ),
       ...h2(
         "Cuándo son los belenes vivientes 2026",
-        "Cada organizador elige sus días y los publica en la agenda cuando los tiene: la temporada pasada, el primero apareció el 19 de noviembre, la mitad estaban a finales de noviembre y 41 de los 44 antes del 15 de diciembre. Por eso, hasta mediados de noviembre es normal que la lista esté vacía.",
+        "Cada organizador elige sus días y los publica en la agenda cuando los tiene: la temporada pasada, el primero apareció el 19 de noviembre, la mitad estaban a finales de noviembre y 41 de los 44 antes del 15 de diciembre. Esta temporada, el 13 de noviembre ya había nueve, y la lista irá creciendo hasta mediados de diciembre.",
         "Como referencia, en la temporada 2025-26 la Agenda Cultural recogió **44, en 22 comarcas**. El primero abrió el 29 de noviembre de 2025 y el último cerró el 11 de enero de 2026; 36 empezaron el 20 de diciembre o más tarde, y 40 habían terminado por Reyes. Las fechas de cada uno son el primer y el último día: dentro de ese intervalo, muchos solo se representan algunos días.",
         "La agenda no los recoge todos: para la misma temporada, la Federació de Pessebres Vivents de Catalunya, que agrupa a los organizadores, anunció más de 300 representaciones en 51 municipios, entre el 6 de diciembre y el 11 de enero.",
         "La temporada pasada, 32 de los 44 empezaron en sábado o domingo, y las representaciones se concentraban en fines de semana y festivos. En toda Cataluña son festivos el **martes 8**, el **viernes 25** y el **sábado 26 de diciembre de 2026** (en Arán, el 26 no lo es), y el **1 de enero** (viernes) y el **6 de enero de 2027** (miércoles), según el calendario oficial de la Generalitat.",
@@ -429,12 +518,13 @@ function body(locale: Locale): Block[] {
       ...h2(
         "¿Hace falta entrada para ver un belén viviente?",
         "Casi siempre. De los 44 belenes vivientes de la temporada 2025-26 en la agenda, solo 3 eran gratuitos (Celrà, la Seu d'Urgell y Fornells de la Selva) y otros 3 pedían un donativo; el resto cobraban entrada, y 22 tenían un enlace de venta de entradas en la ficha.",
-        "Cada organizador lo hace a su manera. Esta temporada, Corbera de Llobregat, Sant Guim de la Plana y Sant Fost de Campsentelles venden las entradas solo por internet; l'Espluga de Francolí, solo anticipadas y a partir del 22 de noviembre; Tona, solo en taquilla, y el de la Torre del Suro, en Barcelona, es de entrada libre. Los precios y las condiciones están en la web de cada uno: míralo antes de ir.",
+        "Cada organizador lo hace a su manera. Esta temporada, Corbera de Llobregat, Sant Guim de la Plana y Sant Fost de Campsentelles venden las entradas solo por internet; l'Espluga de Francolí, solo anticipadas y a partir del 22 de noviembre; Tona, solo en taquilla; Bàscara, por internet y en taquilla, y el de la Torre del Suro, en Barcelona, es de entrada libre.",
+        "Los precios de esta temporada que ya han publicado, para un adulto: **17 € en Corbera**, 15 € en les Torres de Fals y en el Pessebre dels Estels, 10 € en Tona y en Sant Fost, y 6 € en Peralada; los niños y los mayores de 65 pagan menos, y los más pequeños entran gratis (cada web dice la edad). Las condiciones completas están en la web de cada uno: míralo antes de ir.",
         "La temporada pasada, casi todos se hacían por la tarde o al anochecer, muchos en pases con hora fija. Si vas con niños o con carrito, pregunta cuánto dura el recorrido y si es accesible: el de Sant Guim de la Plana, por ejemplo, avisa de que no lo es ni en silla de ruedas ni con carrito.",
       ),
       ...h2(
         "Cómo combinarlo con otros planes de Navidad",
-        `Si quieres combinarlo con una feria, mira ${b2link("christmas", "es", "los mercados y ferias de Navidad de Cataluña")} y sus fechas. Si quieres aprovechar para comprar, ${b2link("shops", "es", "qué domingos y festivos abren las tiendas")}; para los puentes, ${b2link("workCalendar", "es", "el calendario de festivos")}, y para el resto de planes, [la agenda de este fin de semana](/es/${WEEKEND.es.path}/).`,
+        `Si quieres combinarlo con una feria, mira [los mercados de Navidad 2026 pueblo a pueblo](${fairsHubPath("es")}) y ${b2link("christmas", "es", "los mercados y ferias de Navidad de Cataluña")}, con Santa Llúcia. Si quieres aprovechar para comprar, ${b2link("shops", "es", "qué domingos y festivos abren las tiendas")}; para los puentes, ${b2link("workCalendar", "es", "el calendario de festivos")}, y para el resto de planes, [la agenda de este fin de semana](/es/${WEEKEND.es.path}/).`,
         `Si estás en Barcelona, todo el mes día a día está en ${b2link("barcelonaDecember", "es", "Barcelona en diciembre de 2026")}, y el belén de la plaza de Sant Jaume y las luces, en ${b2link("christmasBarcelona", "es", "Navidad en Barcelona")}. El tió, el caganer y cómo se monta el belén en casa, en ${b2link("christmasTraditions", "es", "las tradiciones de Navidad en Cataluña")}, y para cerrar las fiestas, ${b2link("reis", "es", "la Cabalgata de Reyes 2027")}.`,
       ),
       faq([
@@ -451,7 +541,7 @@ function body(locale: Locale): Block[] {
         {
           question: "¿Hay que pagar para ver un belén viviente?",
           answer:
-            "Normalmente sí. En la temporada 2025-26 solo 3 de los 44 de la agenda eran gratuitos y otros 3 iban con donativo. El precio y dónde comprar la entrada están en la ficha de cada uno.",
+            "Normalmente sí. Esta temporada, la entrada de adulto va de los 6 € de Peralada a los 17 € de Corbera de Llobregat, y el de la Torre del Suro, en Barcelona, es gratuito. En la temporada 2025-26 solo 3 de los 44 de la agenda eran gratuitos y otros 3 iban con donativo. El precio y dónde comprar la entrada están en la ficha de cada uno.",
         },
         {
           question: "¿Hay belén viviente en Barcelona?",
@@ -481,7 +571,7 @@ function body(locale: Locale): Block[] {
 
   return [
     lead(
-      "**The first living nativity scenes of Christmas 2026 in Catalonia** (\"pessebres vivents\") are Corbera de Llobregat's, which opens on 28 November, and the Pessebre dels Estels at the Masia de Castelló (Vandellòs), on 5, 6, 12 and 13 December. Sant Fost de Campsentelles, Tona, les Torres de Fals, Sant Guim de la Plana, les Gunyoles, l'Espluga de Francolí and the Torre del Suro in Barcelona have also published their days (table below). The calendar below adds each living nativity as its organiser posts it in the Generalitat's cultural agenda, which is read every day: only those that have not finished are shown, with town, comarca (county), dates and a link to the official listing.",
+      "**Catalonia's living nativity scenes (\"pessebres vivents\") for Christmas 2026 start on 28 November in Corbera de Llobregat; the Pessebre dels Estels (Vandellòs) is on 5, 6, 12 and 13 December, and most run between 19 December and 10 January.** Tona, les Torres de Fals, Sant Guim de la Plana, les Gunyoles, l'Espluga de Francolí, Bàscara, els Prats de Rei, Peralada, Sant Fost de Campsentelles and the Torre del Suro in Barcelona (21 December, free) have published their official days, most with times and prices: they are in the table further down, checked on 13 November on each organiser's website. The calendar below adds each living nativity as its organiser posts it in the Generalitat's cultural agenda, which is read every day: only those that have not finished are shown, with town, comarca (county), dates and a link to the official listing.",
     ),
     LIVE,
     callout(
@@ -496,7 +586,7 @@ function body(locale: Locale): Block[] {
     ),
     ...h2(
       "When are the living nativity scenes in 2026?",
-      "Each organiser picks its own days and posts them in the agenda when they are set: last season the first appeared on 19 November, half were listed by the end of November and 41 of the 44 before 15 December. So until mid-November an empty list is normal.",
+      "Each organiser picks its own days and posts them in the agenda when they are set: last season the first appeared on 19 November, half were listed by the end of November and 41 of the 44 before 15 December. This season nine were already listed on 13 November, and the list will keep growing until mid-December.",
       "For reference, in the 2025-26 season the cultural agenda listed **44, in 22 comarques**. The first opened on 29 November 2025 and the last closed on 11 January 2026; 36 started on 20 December or later, and 40 had finished by Epiphany. Each one's dates are its first and last day: in between, many are performed only on some days.",
       "The agenda does not list them all: for the same season, the Federació de Pessebres Vivents de Catalunya, the organisers' association, announced more than 300 performances in 51 towns between 6 December and 11 January.",
       "Last season, 32 of the 44 started on a Saturday or Sunday, and performances were concentrated on weekends and public holidays. Catalonia-wide public holidays are **Tuesday 8**, **Friday 25** and **Saturday 26 December 2026** (26 December is not a holiday in Aran), and **1 January** (Friday) and **6 January 2027** (Wednesday), according to the Generalitat's official calendar.",
@@ -512,12 +602,13 @@ function body(locale: Locale): Block[] {
     ...h2(
       "Do you need a ticket for a living nativity?",
       "Almost always. Of the 44 living nativities in the agenda in 2025-26, only 3 were free (Celrà, la Seu d'Urgell and Fornells de la Selva) and 3 more asked for a donation; the rest charged for entry, and 22 had an online ticket link on their listing.",
-      "Each organiser does it differently. This season Corbera de Llobregat, Sant Guim de la Plana and Sant Fost de Campsentelles sell tickets online only; l'Espluga de Francolí sells advance tickets only, from 22 November; Tona sells them only at the box office; and the Torre del Suro nativity in Barcelona is free. Prices and conditions are on each website, so check before you go.",
+      "Each organiser does it differently. This season Corbera de Llobregat, Sant Guim de la Plana and Sant Fost de Campsentelles sell tickets online only; l'Espluga de Francolí sells advance tickets only, from 22 November; Tona sells them only at the box office; Bàscara both online and at the box office; and the Torre del Suro nativity in Barcelona is free.",
+      "This season's adult prices published so far: **€17 in Corbera**, €15 at les Torres de Fals and the Pessebre dels Estels, €10 in Tona and Sant Fost, and €6 in Peralada; children and over-65s pay less, and the youngest go free (each website gives the ages). Full conditions are on each website, so check before you go.",
       "Last season nearly all of them took place in the late afternoon or evening, many in timed sessions. If you are going with children or a pushchair, ask how long the route takes and whether it is accessible: Sant Guim de la Plana, for example, warns that its route is not suitable for wheelchairs or pushchairs.",
     ),
     ...h2(
       "Combining it with other Christmas plans",
-      `To combine it with a fair, see ${b2link("christmas", "en", "Christmas markets in Barcelona and Catalonia")} and their dates. If you want to shop too, see ${b2link("shops", "en", "which Sundays and holidays shops may open")}; for long weekends, ${b2link("workCalendar", "en", "the public holiday calendar")}; and for everything else, [things to do this weekend](/en/${WEEKEND.en.path}/).`,
+      `To combine it with a fair, see [every Christmas market of 2026 by date and town](${fairsHubPath("en")}) and ${b2link("christmas", "en", "Christmas markets in Barcelona and Catalonia")}, with Santa Llúcia. If you want to shop too, see ${b2link("shops", "en", "which Sundays and holidays shops may open")}; for long weekends, ${b2link("workCalendar", "en", "the public holiday calendar")}; and for everything else, [things to do this weekend](/en/${WEEKEND.en.path}/).`,
       `In Barcelona, the whole month day by day is in ${b2link("barcelonaDecember", "en", "Barcelona in December 2026")}, and the Plaça de Sant Jaume nativity scene and the lights in ${b2link("christmasBarcelona", "en", "Christmas in Barcelona")}. The tió, the caganer and how Catalans build a nativity scene at home: ${b2link("christmasTraditions", "en", "Catalan Christmas traditions")}; and to close the season, ${b2link("reis", "en", "the 2027 Three Kings parade")}.`,
     ),
     faq([
@@ -549,7 +640,7 @@ function body(locale: Locale): Block[] {
       {
         question: "Do living nativity scenes cost money?",
         answer:
-          "Usually, yes. In 2025-26 only 3 of the 44 in the agenda were free and 3 more asked for a donation. The price and where to buy a ticket are on each listing.",
+          "Usually, yes. This season adult tickets range from €6 in Peralada to €17 in Corbera de Llobregat, and the Torre del Suro nativity in Barcelona is free. In 2025-26 only 3 of the 44 in the agenda were free and 3 more asked for a donation. The price and where to buy a ticket are on each listing.",
       },
       {
         question: "What is the difference between a living nativity and a nativity exhibition?",

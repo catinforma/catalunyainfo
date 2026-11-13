@@ -3,7 +3,8 @@ import { readFileSync } from "node:fs";
 import { test } from "node:test";
 
 import { CHRISTMAS } from "../src/lib/content/batch02/christmas.ts";
-import { KNOWN, PENDING, PESSEBRES } from "../src/lib/content/batch02/pessebres.ts";
+import { KNOWN, KNOWN_SEASON_ENDS, KNOWN_SEASON_STARTS, PENDING, PESSEBRES } from "../src/lib/content/batch02/pessebres.ts";
+import { fairsHubPath } from "../src/lib/programmatic/christmas-fairs/paths.ts";
 import { B2_PATHS, withReadNext } from "../src/lib/content/batch02/shared.ts";
 import { bodySchema, bodyToPlainText, wordCount } from "../src/lib/content/blocks.ts";
 import { IMAGE_BY_KEY } from "../src/lib/content/images.ts";
@@ -20,6 +21,7 @@ import { LOCALES } from "../src/lib/i18n/config.ts";
 const PUBLISHED = new Set([
   ...Object.values(B2_PATHS).flatMap((paths) => LOCALES.map((locale) => `/${locale}/${paths[locale]}/`)),
   ...LOCALES.map((locale) => `/${locale}/${EVERGREEN[locale].path}/`),
+  ...LOCALES.map((locale) => fairsHubPath(locale)),
 ]);
 
 test("three editions that validate, are substantial and sit on the registry paths", () => {
@@ -77,28 +79,70 @@ test("no 2025-26 date is written as a 2026-27 one", () => {
 });
 
 /**
- * The 2026-27 dates exactly as each official site gave them on 25 Oct 2026.
- * Changing one means re-checking that site; a nativity whose site still
- * shows last season stays "not yet published".
+ * The 2026-27 dates exactly as each official site gave them, re-read on 13
+ * Nov 2026 (quotes in KNOWN[].quote; fact pack
+ * research_notes/pessebres-vivents-2026-13nov.md). Changing one means
+ * re-checking that site; a nativity whose site still shows last season stays
+ * "2026 no confirmat".
  */
 const VERIFIED_2026: Record<string, string | null> = {
-  "Pessebre Vivent de Corbera de Llobregat": "Sessions del 28 de novembre de 2026 al 9 de gener de 2027; entrades només per internet",
-  "55è Pessebre Vivent d'Osona": "20, 25, 26 i 27 de desembre de 2026 i 1, 3, 6 i 10 de gener de 2027; entrades només a taquilla",
-  "Pessebre Vivent del Bages a les Torres de Fals": "19, 20, 26 i 27 de desembre de 2026 i 1, 2, 3 i 6 de gener de 2027, a les 18 h i a les 19.15 h",
-  "Pessebre Vivent dels Oficis Perduts (40è aniversari)": "19, 20, 26 i 27 de desembre de 2026 i 2, 3, 9 i 10 de gener de 2027, a les 18.30 h; entrades només per internet",
+  "Pessebre Vivent de Corbera de Llobregat": "Del 28 de novembre de 2026 al 9 de gener de 2027, en dies concrets, amb passis a les 18, 19 o 20 h; entrades només per internet (adults, 17 €; menors de 14 anys, Carnet Jove i majors de 65, 12 €; fins a 6 anys, gratis)",
+  "55è Pessebre Vivent d'Osona": "20, 25, 26 i 27 de desembre de 2026 i 1, 3, 6 i 10 de gener de 2027, de 18 a 20 h (el 20 de desembre i el 6 i el 10 de gener, fins a les 19.30 h); entrades només a taquilla (adults, 10 €; de 6 a 13 anys, 3 €)",
+  // The 18 h / 19.15 h sessions read on 25 Oct are no longer on the page.
+  "Pessebre Vivent del Bages a les Torres de Fals": "19, 20, 26 i 27 de desembre de 2026 i 1, 2, 3 i 6 de gener de 2027; entrada general, 15 € (majors de 65 anys, 12 €; de 6 a 12 anys, 6 €)",
+  "Pessebre Vivent dels Oficis Perduts (40è aniversari)": "19, 20, 26 i 27 de desembre de 2026 i 2, 3, 9 i 10 de gener de 2027, a les 18.30 h; entrades només per internet (el 13 de novembre, venda encara no oberta: «properament»)",
   "49è Pessebre Vivent parlat de les Gunyoles": "20, 25, 26 i 27 de desembre de 2026 i 1, 2 i 3 de gener de 2027, a les 18, 18.45 i 19.30 h",
-  "Pessebre Vivent de l'Espluga de Francolí": "27, 28 i 29 de desembre de 2026 (es fa cada dos anys); entrades només anticipades, des del 22 de novembre a les 9 h",
+  "Pessebre Vivent de l'Espluga de Francolí": "27, 28 i 29 de desembre de 2026 (es fa cada dos anys); entrades només anticipades, des del 22 de novembre a les 9 h, sense taquilla",
   "33è Pessebre Vivent de la Torre del Suro": "21 de desembre de 2026 a les 18 h; entrada lliure, sense inscripció",
-  // Read on 31 Oct 2026 on pessebreviventsantfost.cat ("13, 19, 20, 25, 26 i 27 DE DESEMBRE '26",
-  // "1, 3, 6 i 10 DE GENER '27") and masiacastello.cat ("Els dies 5, 6, 12 i 13 de desembre",
-  // "Entrades Pessebre 2026"; 12 Dec is a Saturday in 2026, as the page says).
-  "Pessebre Vivent de Sant Fost de Campsentelles": "13, 19, 20, 25, 26 i 27 de desembre de 2026 i 1, 3, 6 i 10 de gener de 2027; uns 60 minuts; entrades només per internet (adults, 10 €)",
+  "Pessebre Vivent de Sant Fost de Campsentelles": "13, 19, 20, 25, 26 i 27 de desembre de 2026 i 1, 3, 6 i 10 de gener de 2027; uns 60 minuts; entrades només per internet (adults, 10 €; de 6 a 12 anys, 4 €; Carnet Jove, 6 €; menors de 6, gratis)",
   "Pessebre dels Estels": "5, 6, 12 i 13 de desembre de 2026, des de les 16.30 h, amb entrada per franges de mitja hora; entrades per internet (15 €; de 4 a 9 anys, 10 €)",
-  "El Pessebre de Bàscara": null,
-  "Pessebre Vivent dels Prats de Rei": null,
+  // Published between 3 and 13 Nov 2026.
+  "El Pessebre de Bàscara": "20, 25, 26 i 27 de desembre de 2026 i 1, 2 i 3 de gener de 2027, a les 19 h; entrades per internet i a taquilla (des de 30 minuts abans)",
+  "55è Pessebre Vivent dels Prats de Rei": "20, 26 i 27 de desembre de 2026 i 1, 3 i 6 de gener de 2027, a les 18.30 h",
+  "43è Pessebre Vivent de Peralada": "25, 26 i 27 de desembre de 2026 i 1, 2 i 3 de gener de 2027, a les 18.30 h, al casc històric; venda anticipada (6 €; de 4 a 13 anys, 3 €)",
   "Pessebre Vivent de la Vila de Rupit": null,
-  "Pessebre Vivent de Peralada": null,
 };
+
+const today = () => new Intl.DateTimeFormat("en-CA", { timeZone: "Europe/Madrid" }).format(new Date());
+
+test("every entry says when its page was read and what it says; dated ones quote this season", () => {
+  for (const item of KNOWN) {
+    assert.match(item.readOn, /^\d{4}-\d{2}-\d{2}$/, item.name);
+    assert.ok(item.readOn >= "2026-11-13", `${item.name}: read ${item.readOn}`);
+    assert.ok(item.quote.length > 20, item.name);
+    assert.ok(item.publisher.length > 5, item.name);
+    if (item.dates) assert.match(item.quote, /2026|'26/, `${item.name}: the quote does not carry this season`);
+    else assert.ok(item.recheck, `${item.name}: a pending entry must be re-read`);
+  }
+});
+
+/**
+ * Date guard. Organisers publish and open ticket sales through November and
+ * December: every `recheck` entry (dates still to come, or tickets
+ * "properament") must be re-read at least every 10 days until
+ * KNOWN_SEASON_STARTS. Re-read the page, update the entry and its readOn,
+ * republish `pessebres`.
+ */
+test("date guard: pending nativities re-read within 10 days until the season starts", () => {
+  const now = today();
+  if (now >= KNOWN_SEASON_STARTS) return;
+  const tenDaysAgo = new Date(Date.parse(`${now}T12:00:00Z`) - 10 * 86_400_000).toISOString().slice(0, 10);
+  for (const item of KNOWN.filter((k) => k.recheck)) {
+    assert.ok(item.readOn >= tenDaysAgo, `${item.name} last read ${item.readOn}: re-read ${item.url}`);
+  }
+});
+
+/**
+ * Date guard. After the last performance in the table the page still speaks
+ * of "this season" in the future: from 15 Jan 2027 it needs its after-season
+ * pass (past tense, or the 2027-28 table when organisers publish it).
+ */
+test("date guard: the 2026-27 table is not left up after the season", () => {
+  assert.equal(KNOWN_SEASON_ENDS, "2027-01-10");
+  const lastDay = KNOWN.flatMap((k) => (k.dates ? [...k.dates.ca.matchAll(/(\d{1,2}) de gener de 2027/g)].map((m) => Number(m[1])) : []));
+  assert.equal(Math.max(...lastDay), 10, "KNOWN_SEASON_ENDS no longer matches the table");
+  assert.ok(today() < "2027-01-15", "the living nativity season is over: give the page its after-season pass");
+});
 
 test("the best-known table carries only dates their official sites published", () => {
   assert.deepEqual(
@@ -125,7 +169,7 @@ test("the best-known table carries only dates their official sites published", (
       else {
         // Pending: the label and nothing else - no day, no month.
         assert.equal(cell, PENDING[locale], `${item.name}/${locale}`);
-        assert.doesNotMatch(cell.replace("2025-26", ""), /\d/, `${item.name}/${locale}`);
+        assert.doesNotMatch(cell.replace("2025-26", "").replace(/^2026 /, ""), /\d/, `${item.name}/${locale}`);
       }
     }
   }
@@ -143,6 +187,7 @@ test("internal links stay in their language, end in a slash and point at publish
     // The two siblings the brief asks for.
     assert.ok(links.includes(`/${locale}/${B2_PATHS.christmas[locale]}/`), `${locale}: no Christmas markets link`);
     assert.ok(links.includes(`/${locale}/${B2_PATHS.shops[locale]}/`), `${locale}: no shops link`);
+    assert.ok(links.includes(fairsHubPath(locale)), `${locale}: no link to the fairs calendar`);
   }
 });
 

@@ -4992,3 +4992,64 @@ logging a new entry. 11 Dec (28 days): outcome.
 answer-first review of 19 Nov, AdSense decision on fuel indexing.
 
 **Review 27 Nov 2026 / 11 Dec 2026. Outcome:** _pending_
+
+## 2026-11-13 — Living nativities 2026-27 re-read on every organiser's page; Christmas traditions answer the searched questions first (body only; deploy, then groups `pessebres`, `nadal-tradicions`)
+
+**Why.** December demand. The nativity table still showed four "pending"
+nativities read on 3 Nov, and the traditions page ranks 4-5 for countdown
+and "dia de Nadal" queries it did not answer in its first line.
+
+**Baseline, `snapshot.py page <pattern> 28` (17 Oct – 13 Nov 2026).**
+- `/ca/tradicions/pessebres-vivents-catalunya/`: 268 impr. / 8 clicks;
+  pessebres vivents catalunya 2026 25 at 8.8; pessebre vivent 6 at 63.8.
+- `/es/tradiciones/belenes-vivientes-cataluna/`: 446 / 20; belenes vivientes
+  2026 44 / 2 clicks at 5.8; belen viviente cataluña 23 at 6.0; pessebres
+  vivents catalunya 2026 11 at 6.5.
+- `/en/traditions/living-nativity-scenes-catalonia/`: ~29 / 1 (pattern
+  "nativity").
+- `/ca/tradicions/tradicions-de-nadal-catalunya/`: 568 / 4; quan queda per
+  nadal 10 at 4.0, quan falta per nadal 8 at 4.8, dia de nadal 7 at 11.3,
+  nadal a catalunya 7 at 7.0, festa de nadal 4 at 15.0, cuando se (hace)
+  caga el tio 1+1 at 7-9.
+- `/es/tradiciones/tradiciones-navidad-cataluna/`: 149 / 0; navidades
+  cataluña 9 at 64, tio caganer 6 at 21, navidad catalana 5 at 62.
+- `/en/traditions/catalan-christmas-traditions/`: 14 / 0.
+
+**Windows.** Traditions: the 26 Oct new-page entry measures on 23 Nov.
+Nativities: descriptions changed 3 Nov (measure 17 Nov and 1 Dec). Both
+inside a window, so **no title or description touched**; body only.
+
+**What changed.**
+- Nativities (KNOWN, every entry now with `readOn` 13 Nov and the page's
+  quote): Bàscara (elpessebre.cat: 20, 25-27 Dec, 1-3 Jan, 19 h), els Prats
+  de Rei (55th: 20, 26, 27 Dec, 1, 3, 6 Jan, 18.30 h; the agenda says 21 Dec,
+  the note says so) and Peralada (43rd: 25-27 Dec, 1-3 Jan, 18.30 h, €6/€3)
+  are now dated; Rupit says "2026 no confirmat" (page still 2025-26). This
+  season's prices and times where the page gives them (Corbera €17/€12,
+  sessions 18/19/20 h; Tona 18-20 h, €10/€3, box office; Torres de Fals
+  €15/€12/€6 — its old times are no longer on the page and were dropped;
+  Sant Fost €10/€4/€6; Sant Guim tickets "properament"). Lead: first day,
+  Estels, "most between 19 Dec and 10 Jan", the dated towns. "Cal entrada"
+  section and the price FAQ give this season's adult range (€6–€17, Torre
+  del Suro free). Link to the fairs hub. Castellar de n'Hug and l'Arboç:
+  no living nativity in the agenda and no official page, not listed.
+- Traditions: the lead opens with the three days ("la Nit de Nadal és
+  dijous 24 de desembre de 2026 … Nadal, divendres 25 … Sant Esteve,
+  dissabte 26") and names tió, caganer, Missa del Gall, escudella, canelons
+  and the grapes; ES lead says "La Navidad catalana". New paragraph right
+  after it (`plansLine`): lights switch-on 26 Nov, the fairs hub with Santa
+  Llúcia 27 Nov–23 Dec, living nativities from 28 Nov, Barcelona in
+  December. Key facts gain Cap d'Any (Thursday 31 Dec, working day; 1 Jan
+  holiday). Caganer section: "not the tió" (the "tio caganer" query). Cap
+  d'Any section quotes the council's grapes page (new source).
+
+**Prediction.** By 1 Dec: CA traditions page in the top 3 for "quan falta
+per nadal" / "dia de nadal" variants (4-11 now), CTR > 2 %; ES "tio
+caganer" inside the top 10. Nativities: ES "belenes vivientes 2026" ≤ 5
+with CTR ≥ 5 %, CA "pessebres vivents catalunya 2026" ≤ 6.
+
+**Date guards.** `recheck` nativities (Rupit dates, Sant Guim ticket sale)
+re-read every 10 days until 19 Dec (test fails otherwise: next by 23 Nov);
+the 2026-27 table fails a test from 15 Jan 2027 (after-season pass).
+
+**Review 1 Dec 2026, 4 Jan 2027. Outcome:** _pending_
