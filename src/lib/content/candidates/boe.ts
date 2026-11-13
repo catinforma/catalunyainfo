@@ -1,4 +1,5 @@
 import { addDays, todayInCatalonia } from "@/lib/content/holidays/calendar";
+import { applyCorrections } from "@/lib/content/candidates/corrections";
 
 /**
  * Who is standing in Catalonia at the 29 November 2026 general election, read
@@ -285,6 +286,8 @@ export interface Candidacy {
   candidates: Candidate[];
   /** Congress only: the list's substitutes ("Suplentes:"). */
   substitutes: Candidate[];
+  /** BOE corrections applied to this candidacy (corrections.ts), by id. */
+  corrections?: string[];
 }
 
 export interface JuntaLists {
@@ -714,6 +717,8 @@ export interface CorrectionNotice extends BoeNotice {
   /** Junta headings in the correction; null when it could not be read. */
   juntas: string[] | null;
   catalan: ProvinceKey[];
+  /** Applied to the lists shown (a hand-checked fix in corrections.ts held). */
+  applied: boolean;
 }
 
 export type Phase = "before" | "waiting" | "lists" | "unreadable" | "unreachable";
@@ -817,15 +822,30 @@ export async function loadCandidates(
   result.corrections = (
     await mapLimit([...corrections.values()], CONCURRENCY, async (notice): Promise<CorrectionNotice> => {
       const answer = await readItem(notice.id, deadline);
-      if (!answer.ok) return { ...notice, juntas: null, catalan: [] };
+      if (!answer.ok) return { ...notice, juntas: null, catalan: [], applied: false };
       const meta = itemMeta(answer.value);
       const filled: BoeNotice =
         meta && !notice.date ? { ...notice, title: meta.title, date: meta.date, issue: meta.issue } : notice;
       const juntas = juntasIn(answer.value);
       const catalan = PROVINCES.filter((key) => juntas.some((junta) => provinceOf(junta) === key));
-      return { ...filled, juntas, catalan };
+      return { ...filled, juntas, catalan, applied: false };
     })
   ).sort((a, b) => (a.date || "9999").localeCompare(b.date || "9999") || a.id.localeCompare(b.id));
+
+  // Corrections of the proclaimed lists that were found and read, applied
+  // where a hand-checked fix still matches the lists (corrections.ts).
+  const available = new Set(
+    result.corrections
+      .filter((notice) => notice.juntas !== null && notice.corrects !== "presented")
+      .map((notice) => notice.id),
+  );
+  const proclaimedLists = result.provinces.filter((province) => province.stage === "proclaimed");
+  const { lists: correctedLists, applied } = applyCorrections(proclaimedLists, available);
+  if (applied.length > 0) {
+    const byKey = new Map(correctedLists.map((province) => [province.province, province]));
+    result.provinces = result.provinces.map((province) => byKey.get(province.province) ?? province);
+    result.corrections = result.corrections.map((notice) => ({ ...notice, applied: applied.includes(notice.id) }));
+  }
 
   return result;
 }

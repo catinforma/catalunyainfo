@@ -72,11 +72,21 @@ interface Copy {
   missing: (names: string) => string;
   correctionsTitle: string;
   correctionsWarning: string;
+  /** Every correction listed was applied to the lists below. */
+  correctionsApplied: string;
+  /** Some were applied, some not. */
+  correctionsMixed: string;
+  correctionAppliedMark: string;
+  correctionNotAppliedMark: string;
+  /** Next to a candidacy the BOE corrected. */
+  correctedMark: (date: string) => string;
   correctionTouches: (provinces: string) => string;
   correctionNoCatalan: string;
   correctionUnread: string;
   orderNote: string;
   sourceLine: string;
+  /** When a BOE correction was applied to the lists. */
+  sourceLineCorrected: string;
   boeHome: string;
   and: string;
   numberFormat: string;
@@ -133,13 +143,22 @@ const COPY: Record<Locale, Copy> = {
     correctionsTitle: "Correccions publicades al BOE",
     correctionsWarning:
       "Les llistes d'aquí sota són tal com es van publicar originalment: aquestes correccions no s'hi han aplicat. Si afecten la teva província, llegeix-les.",
+    correctionsApplied:
+      "Les llistes d'aquí sota ja inclouen aquestes correccions, tal com les publica el BOE: les candidatures que han canviat porten la marca «corregida».",
+    correctionsMixed:
+      "Algunes d'aquestes correccions ja s'han aplicat a les llistes d'aquí sota (les candidatures que han canviat porten la marca «corregida»); les altres, no: si afecten la teva província, llegeix-les.",
+    correctionAppliedMark: "aplicada a les llistes",
+    correctionNotAppliedMark: "no aplicada: llegeix-la",
+    correctedMark: (date) => `corregida al BOE del ${date}`,
     correctionTouches: (provinces) => `afecta ${provinces}`,
     correctionNoCatalan: "no afecta cap junta electoral catalana",
     correctionUnread: "no l'hem pogut llegir",
     orderNote:
-      "L'ordre i els números són els de la junta electoral (ordre de presentació, art. 46.9 de la LOREG), no cap rànquing. A la papereta del Senat les candidatures surten en un altre ordre.",
+      "L'ordre i els números són els de la junta electoral (ordre de presentació, art. 46.9 de la LOREG), no cap rànquing. A la papereta del Senat l'ordre de les candidatures pot ser un altre: hi van primer les més votades a les últimes eleccions al Senat de la província (art. 172.3).",
     sourceLine:
       "Noms i candidatures tal com els publica el BOE, sense cap canvi. Font: Boletín Oficial del Estado, dades obertes.",
+    sourceLineCorrected:
+      "Noms i candidatures tal com els publica el BOE, amb les correccions d'errors del mateix BOE aplicades on hi ha la marca «corregida». Font: Boletín Oficial del Estado, dades obertes.",
     boeHome: "boe.es",
     and: " i ",
     numberFormat: "ca-ES",
@@ -194,13 +213,22 @@ const COPY: Record<Locale, Copy> = {
     correctionsTitle: "Correcciones publicadas en el BOE",
     correctionsWarning:
       "Las listas de abajo son tal como se publicaron originalmente: estas correcciones no se han aplicado. Si afectan a tu provincia, léelas.",
+    correctionsApplied:
+      "Las listas de abajo ya incluyen estas correcciones, tal como las publica el BOE: las candidaturas que han cambiado llevan la marca «corregida».",
+    correctionsMixed:
+      "Algunas de estas correcciones ya se han aplicado a las listas de abajo (las candidaturas que han cambiado llevan la marca «corregida»); las demás, no: si afectan a tu provincia, léelas.",
+    correctionAppliedMark: "aplicada a las listas",
+    correctionNotAppliedMark: "no aplicada: léela",
+    correctedMark: (date) => `corregida en el BOE del ${date}`,
     correctionTouches: (provinces) => `afecta a ${provinces}`,
     correctionNoCatalan: "no afecta a ninguna junta electoral catalana",
     correctionUnread: "no la hemos podido leer",
     orderNote:
-      "El orden y los números son los de la junta electoral (orden de presentación, art. 46.9 de la LOREG), no un ranking. En la papeleta del Senado las candidaturas aparecen en otro orden.",
+      "El orden y los números son los de la junta electoral (orden de presentación, art. 46.9 de la LOREG), no un ranking. En la papeleta del Senado el orden de las candidaturas puede ser otro: van primero las más votadas en las últimas elecciones al Senado en la provincia (art. 172.3).",
     sourceLine:
       "Nombres y candidaturas tal como los publica el BOE, sin ningún cambio. Fuente: Boletín Oficial del Estado, datos abiertos.",
+    sourceLineCorrected:
+      "Nombres y candidaturas tal como los publica el BOE, con las correcciones de errores del propio BOE aplicadas donde aparece la marca «corregida». Fuente: Boletín Oficial del Estado, datos abiertos.",
     boeHome: "boe.es",
     and: " y ",
     numberFormat: "es-ES",
@@ -255,13 +283,22 @@ const COPY: Record<Locale, Copy> = {
     correctionsTitle: "Corrections published in the BOE",
     correctionsWarning:
       "The lists below are as originally published: these corrections have not been applied to them. If one concerns your province, read it.",
+    correctionsApplied:
+      "The lists below already include these corrections, exactly as the BOE publishes them: candidacies that changed are marked \"corrected\".",
+    correctionsMixed:
+      "Some of these corrections are already applied to the lists below (candidacies that changed are marked \"corrected\"); the others are not: if one concerns your province, read it.",
+    correctionAppliedMark: "applied to the lists",
+    correctionNotAppliedMark: "not applied: read it",
+    correctedMark: (date) => `corrected in the BOE of ${date}`,
     correctionTouches: (provinces) => `concerns ${provinces}`,
     correctionNoCatalan: "concerns no Catalan electoral board",
     correctionUnread: "we could not read it",
     orderNote:
-      "Order and numbers are the electoral board's (order of filing, electoral law art. 46.9), not a ranking. The Senate ballot paper lists the candidacies in a different order.",
+      "Order and numbers are the electoral board's (order of filing, electoral law art. 46.9), not a ranking. The Senate ballot paper may list them in another order: lists with the most votes at the last Senate election in the province come first (art. 172.3).",
     sourceLine:
       "Names and lists exactly as the BOE publishes them, unchanged. Source: Boletín Oficial del Estado, open data.",
+    sourceLineCorrected:
+      "Names and lists exactly as the BOE publishes them, with the BOE's own corrections applied where a list is marked \"corrected\". Source: Boletín Oficial del Estado, open data.",
     boeHome: "boe.es",
     and: " and ",
     numberFormat: "en-GB",
@@ -324,8 +361,21 @@ function NoticeLinks({ notice, locale }: { notice: BoeNotice; locale: Locale }) 
   );
 }
 
-function CandidacyView({ candidacy, chamber, locale }: { candidacy: Candidacy; chamber: "congress" | "senate"; locale: Locale }) {
+function CandidacyView({
+  candidacy,
+  chamber,
+  locale,
+  corrections,
+}: {
+  candidacy: Candidacy;
+  chamber: "congress" | "senate";
+  locale: Locale;
+  corrections: CorrectionNotice[];
+}) {
   const t = COPY[locale];
+  const correctedOn = (candidacy.corrections ?? [])
+    .map((id) => corrections.find((notice) => notice.id === id)?.date)
+    .filter((date): date is string => Boolean(date));
   const count =
     chamber === "congress"
       ? t.listCount(candidacy.candidates.length, candidacy.substitutes.length)
@@ -336,6 +386,9 @@ function CandidacyView({ candidacy, chamber, locale }: { candidacy: Candidacy; c
         {candidacy.number !== null ? `${candidacy.number}. ` : null}
         {candidacy.name}
         <span className="ci-agenda-count"> · {count}</span>
+        {correctedOn.length > 0 ? (
+          <span className="ci-agenda-count"> · {t.correctedMark(correctedOn.map((date) => shortDate(date, locale)).join(", "))}</span>
+        ) : null}
       </summary>
       <ul className="m-0 mt-2 list-none p-0 text-sm sm:columns-2">
         {candidacy.candidates.map((candidate, index) => (
@@ -392,7 +445,17 @@ function Unlisted({ candidacies, locale }: { candidacies: Candidacy[]; locale: L
   );
 }
 
-function ProvinceView({ lists, locale, showStage }: { lists: ProvinceResult; locale: Locale; showStage: boolean }) {
+function ProvinceView({
+  lists,
+  locale,
+  showStage,
+  corrections,
+}: {
+  lists: ProvinceResult;
+  locale: Locale;
+  showStage: boolean;
+  corrections: CorrectionNotice[];
+}) {
   const t = COPY[locale];
   const seats = SEATS[lists.province];
   const numbers = new Intl.NumberFormat(t.numberFormat);
@@ -414,7 +477,7 @@ function ProvinceView({ lists, locale, showStage }: { lists: ProvinceResult; loc
         <>
           <h5 className="mb-1 mt-4 text-sm font-semibold">{t.congress}</h5>
           {congress.map((candidacy, index) => (
-            <CandidacyView key={index} candidacy={candidacy} chamber="congress" locale={locale} />
+            <CandidacyView key={index} candidacy={candidacy} chamber="congress" locale={locale} corrections={corrections} />
           ))}
           <Unlisted candidacies={unlisted(lists.congress)} locale={locale} />
         </>
@@ -423,7 +486,7 @@ function ProvinceView({ lists, locale, showStage }: { lists: ProvinceResult; loc
         <>
           <h5 className="mb-1 mt-4 text-sm font-semibold">{t.senate}</h5>
           {senate.map((candidacy, index) => (
-            <CandidacyView key={index} candidacy={candidacy} chamber="senate" locale={locale} />
+            <CandidacyView key={index} candidacy={candidacy} chamber="senate" locale={locale} corrections={corrections} />
           ))}
           <Unlisted candidacies={unlisted(lists.senate)} locale={locale} />
         </>
@@ -435,10 +498,13 @@ function ProvinceView({ lists, locale, showStage }: { lists: ProvinceResult; loc
 function Corrections({ corrections, locale }: { corrections: CorrectionNotice[]; locale: Locale }) {
   const t = COPY[locale];
   if (corrections.length === 0) return null;
+  const applied = corrections.filter((notice) => notice.applied).length;
+  const intro =
+    applied === 0 ? t.correctionsWarning : applied === corrections.length ? t.correctionsApplied : t.correctionsMixed;
   return (
-    <div role="note" className="ci-callout ci-callout-warning mt-6">
+    <div role="note" className={`ci-callout ${applied === corrections.length ? "ci-callout-info" : "ci-callout-warning"} mt-6`}>
       <p className="mb-1 font-semibold text-[var(--color-ink)]">{t.correctionsTitle}</p>
-      <p>{t.correctionsWarning}</p>
+      <p>{intro}</p>
       <ul className="mt-2">
         {corrections.map((notice) => (
           <li key={notice.id}>
@@ -449,6 +515,9 @@ function Corrections({ corrections, locale }: { corrections: CorrectionNotice[];
               : notice.catalan.length > 0
                 ? t.correctionTouches(joinNames(notice.catalan.map((key) => PROVINCE_NAMES[key]), locale))
                 : t.correctionNoCatalan}
+            {applied > 0 && notice.catalan.length > 0
+              ? ` · ${notice.applied ? t.correctionAppliedMark : t.correctionNotAppliedMark}`
+              : null}
           </li>
         ))}
       </ul>
@@ -593,7 +662,13 @@ export async function CandidateLists({ locale }: { locale: Locale }) {
       ) : null}
 
       {result.provinces.map((province) => (
-        <ProvinceView key={province.province} lists={province} locale={locale} showStage={!allProclaimed && !allPresented} />
+        <ProvinceView
+          key={province.province}
+          lists={province}
+          locale={locale}
+          showStage={!allProclaimed && !allPresented}
+          corrections={result.corrections}
+        />
       ))}
 
       {result.missing.length > 0 ? (
@@ -604,7 +679,7 @@ export async function CandidateLists({ locale }: { locale: Locale }) {
 
       <p className="ci-agenda-note">{t.orderNote}</p>
       <p className="ci-agenda-note">
-        {t.sourceLine}{" "}
+        {result.corrections.some((notice) => notice.applied) ? t.sourceLineCorrected : t.sourceLine}{" "}
         <a href={BOE_SOURCE.api} rel="noopener" target="_blank">
           {BOE_SOURCE.api.replace(/^https:\/\/www\./, "").replace(/\/$/, "")}
         </a>
