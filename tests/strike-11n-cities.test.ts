@@ -4,7 +4,7 @@ import { test } from "node:test";
 
 import { bodySchema, bodyToPlainText, wordCount, type Block } from "../src/lib/content/blocks.ts";
 import { SIBLING_PATHS } from "../src/lib/content/batch02/december-bridge.ts";
-import { B2_PATHS } from "../src/lib/content/batch02/shared.ts";
+import { B2_PATHS, RELATED_HEADING } from "../src/lib/content/batch02/shared.ts";
 import { NEXT_DATES_HEADING, NEXT_DATES_ID, STRIKE_11N, STRIKE_11N_META, buildStrike11nBody } from "../src/lib/content/batch02/strike-11n.ts";
 import { CITIES, STATE_SERVICES, STRIKE_11N_CITIES_AS_OF, STRIKE_11N_CITIES_VERIFIED } from "../src/lib/content/batch02/strike-11n-cities-data.ts";
 import type { StateService, Strike11nCity } from "../src/lib/content/batch02/strike-11n-cities-model.ts";
@@ -30,7 +30,13 @@ import { weekdayIndex } from "../src/lib/content/holidays/calendar.ts";
 import { PATHS as TOOL_PATHS } from "../src/lib/content/home-tools.ts";
 import { IMAGE_BY_KEY } from "../src/lib/content/images.ts";
 import { LOCALES } from "../src/lib/i18n/config.ts";
-
+import { HUB_PATHS as SCHOOL_HUB_PATHS, SPAIN_REGIONS as SCHOOL_REGIONS, regionPath } from "../src/lib/content/school-spain/regions.ts";
+import { leaveEditions } from "../src/lib/programmatic/leave-2027/copy.ts";
+import { plannerData, plannerPlace } from "../src/lib/programmatic/leave-2027/places.ts";
+import { cityBySlug } from "../src/lib/programmatic/spain-2027/cities.ts";
+import { editionPaths } from "../src/lib/programmatic/spain-2027/editions.ts";
+import { spainPaths } from "../src/lib/programmatic/spain-2027/paths.ts";
+import { AFTER_STRIKE_ID, STRIKE_11N_CITY_PLACES, cityNextLinks, spainNextLinks } from "../src/lib/content/batch02/strike-11n-next.ts";
 /**
  * The 11N general strike city by city (6 Nov 2026): one Spanish-only page per
  * large city outside Catalonia, rendered from strike-11n-cities-data.ts.
@@ -53,10 +59,28 @@ const json = (city: Strike11nCity) => JSON.stringify(articleFor(city).editions.e
 const body = (city: Strike11nCity) => text(articleFor(city).editions.es.blocks);
 
 const CITY_HREFS = STRIKE_11N_CITY_REFS.map((ref) => strike11nCityHref(ref.key));
-const PUBLISHED_ES = new Set([
-  ...[...Object.values(B2_PATHS), ...Object.values(ARTICLE_PATHS), ...Object.values(SIBLING_PATHS), ...Object.values(TOOL_PATHS)].map((paths) => `/es/${paths.es}/`),
-  ...CITY_HREFS,
-]);
+
+/**
+ * Every path these pages may link in one language: the guide registries, the
+ * 11N city and Spain pages, and (13 Nov 2026, the "Y ahora" block) the pages
+ * other families build: the school calendar of each community and its hub
+ * (school-spain/publish.ts), the 2027 calendar's hub, communities and cities
+ * (the sitemap helpers spainPaths / editionPaths) and the leave planner.
+ */
+function knownPaths(locale: (typeof LOCALES)[number]): Set<string> {
+  return new Set([
+    ...[...Object.values(B2_PATHS), ...Object.values(ARTICLE_PATHS), ...Object.values(SIBLING_PATHS), ...Object.values(TOOL_PATHS)].map((paths) => `/${locale}/${paths[locale]}/`),
+    ...STRIKE_11N_CITY_REFS.map((ref) => strike11nCityHref(ref.key, locale)),
+    `/${locale}/${STRIKE_11N_SPAIN_PATHS[locale]}/`,
+    ...SCHOOL_REGIONS.map((region) => `/${locale}/${regionPath(region.slug, locale)}/`),
+    `/${locale}/${SCHOOL_HUB_PATHS[locale]}/`,
+    ...(locale === "es" ? spainPaths() : editionPaths(locale)),
+    leaveEditions()[locale],
+  ]);
+}
+const PUBLISHED_ES = knownPaths("es");
+/** "/es/festivos/2027/aprovechar-vacaciones/#p=andalucia/sevilla&d=5" → its path, which must end in a slash. */
+const pathOf = (href: string) => href.split("#")[0]!;
 
 /** Every slot published with a test figure (shape only; not real figures). */
 function filledCity(city: Strike11nCity): Strike11nCity {
@@ -163,11 +187,12 @@ test("internal links stay in Spanish, end in a slash and point at a published pa
     const hrefs = [...json(city).matchAll(/\]\((\/[^)]*)\)/g)].map((m) => m[1] ?? "");
     for (const href of hrefs) {
       assert.ok(href.startsWith("/es/"), `${city.key} links to ${href}`);
-      assert.ok(href.endsWith("/"), href);
-      assert.ok(PUBLISHED_ES.has(href), `${city.key}: ${href} is not a published path`);
+      assert.ok(pathOf(href).endsWith("/"), href);
+      assert.ok(PUBLISHED_ES.has(pathOf(href)), `${city.key}: ${href} is not a published path`);
     }
     assert.ok(hrefs.includes(`/es/${B2_PATHS.strike11n.es}/`), `${city.key}: no link to the 11N page`);
-    assert.ok(hrefs.includes(`/es/${B2_PATHS.strikes.es}/`), `${city.key}: no link to the strikes hub`);
+    // Since 13 Nov 2026 the Spain strikes hub, not the Catalan one (these readers live elsewhere).
+    assert.ok(hrefs.includes(`/es/${B2_PATHS.strikesSpain.es}/`), `${city.key}: no link to the strikes hub`);
     for (const other of CITY_HREFS) {
       if (other === strike11nCityHref(city.key)) assert.ok(!hrefs.includes(other), `${city.key} links to itself`);
       else assert.ok(hrefs.includes(other), `${city.key}: no link to ${other}`);
@@ -549,18 +574,15 @@ test("ca and en: valid, substantial, in the page's language, titles ≤60 and de
 
 test("ca and en: internal links stay in the page's language, point at a published path, and reach every other city, the 11N page and the strikes hub", () => {
   for (const locale of TR_LOCALES) {
-    const published = new Set([
-      ...[...Object.values(B2_PATHS), ...Object.values(ARTICLE_PATHS), ...Object.values(SIBLING_PATHS), ...Object.values(TOOL_PATHS)].map((paths) => `/${locale}/${paths[locale]}/`),
-      ...STRIKE_11N_CITY_REFS.map((ref) => strike11nCityHref(ref.key, locale)),
-    ]);
+    const published = knownPaths(locale);
     for (const city of CITIES) {
       const hrefs = [...trJson(city, locale).matchAll(/\]\((\/[^)]*)\)/g)].map((m) => m[1] ?? "");
       for (const href of hrefs) {
         assert.ok(href.startsWith(`/${locale}/`), `${city.key}/${locale} links to ${href}`);
-        assert.ok(published.has(href), `${city.key}/${locale}: ${href} is not a published path`);
+        assert.ok(published.has(pathOf(href)), `${city.key}/${locale}: ${href} is not a published path`);
       }
       assert.ok(hrefs.includes(`/${locale}/${B2_PATHS.strike11n[locale]}/`), `${city.key}/${locale}: no link to the 11N page`);
-      assert.ok(hrefs.includes(`/${locale}/${B2_PATHS.strikes[locale]}/`), `${city.key}/${locale}: no link to the strikes hub`);
+      assert.ok(hrefs.includes(`/${locale}/${B2_PATHS.strikesSpain[locale]}/`), `${city.key}/${locale}: no link to the strikes hub`);
       for (const ref of STRIKE_11N_CITY_REFS) {
         const other = strike11nCityHref(ref.key, locale);
         if (ref.key === city.key) assert.ok(!hrefs.includes(other), `${city.key}/${locale} links to itself`);
@@ -569,7 +591,7 @@ test("ca and en: internal links stay in the page's language, point at a publishe
     }
     // The Spain page: every city in this language, nothing in another.
     const spain = JSON.stringify(STRIKE_11N_SPAIN.editions[locale]!.blocks);
-    for (const href of [...spain.matchAll(/\]\((\/[^)]*)\)/g)].map((m) => m[1] ?? "")) assert.ok(href.startsWith(`/${locale}/`) && published.has(href), `Spain/${locale}: ${href}`);
+    for (const href of [...spain.matchAll(/\]\((\/[^)]*)\)/g)].map((m) => m[1] ?? "")) assert.ok(href.startsWith(`/${locale}/`) && published.has(pathOf(href)), `Spain/${locale}: ${href}`);
     for (const ref of STRIKE_11N_CITY_REFS) assert.ok(spain.includes(`](${strike11nCityHref(ref.key, locale)})`), `Spain/${locale}: no ${ref.key}`);
   }
 });
@@ -699,5 +721,97 @@ test("upcoming strikes and dates: the 11N page, every city and the Spain page li
     // The published editions carry it too.
     block(STRIKE_11N.editions[locale].blocks, locale);
     block(STRIKE_11N_SPAIN.editions[locale]?.blocks ?? [], locale);
+  }
+});
+
+/* -------------------------------------------------------------------------- */
+/* "Y ahora en <ciudad>" (13 Nov 2026, strike-11n-next.ts)                    */
+/* -------------------------------------------------------------------------- */
+
+test("after the strike: every city and the Spain page hand on to 5-6 real evergreen pages for their own city and community, in ca, es and en", () => {
+  const LINK = /\[([^\]]+)\]\((\/[^)]+)\)/g;
+  const blockOf = (blocks: Block[], locale: (typeof LOCALES)[number]) => {
+    const at = blocks.findIndex((b) => b.type === "heading" && (b as { id?: string }).id === AFTER_STRIKE_ID[locale]);
+    if (at < 0) return null;
+    const list = blocks[at + 1] as { type: string; items: string[] };
+    assert.equal(list.type, "list", locale);
+    return list.items;
+  };
+  const check = (items: string[], locale: (typeof LOCALES)[number], where: string) => {
+    const known = knownPaths(locale);
+    const links = items.flatMap((item) => [...item.matchAll(LINK)].map((m) => ({ label: m[1]!, href: m[2]! })));
+    assert.ok(links.length >= 5 && links.length <= 6, `${where}/${locale}: ${links.length} links`);
+    assert.equal(new Set(links.map((l) => pathOf(l.href))).size, links.length, `${where}/${locale}: a target twice`);
+    for (const { label, href } of links) {
+      assert.ok(href.startsWith(`/${locale}/`), `${where}/${locale}: ${href}`);
+      assert.ok(known.has(pathOf(href)), `${where}/${locale}: ${href} is not a path the site builds`);
+      // Descriptive anchors, no Catalan-only target, no urgency.
+      assert.ok(label.length >= 25, `${where}/${locale}: anchor "${label}"`);
+      assert.doesNotMatch(href, /catalun|cataluna|catalonia/, `${where}/${locale}: Catalan page ${href}`);
+      assert.doesNotMatch(label, /!|¡|ya mismo|ahora mismo|última hora|right now|urgent|corre/i, `${where}/${locale}: "${label}"`);
+    }
+    return links;
+  };
+
+  for (const locale of LOCALES) {
+    const data = plannerData(locale);
+    for (const city of CITIES) {
+      const name = localizeCity(city, locale).name;
+      // Only once the strike is past.
+      assert.equal(blockOf(buildCityBody(city, "2026-11-10", STATE_SERVICES, locale), locale), null, `${city.key}/${locale}: block before the strike`);
+      assert.equal(blockOf(buildCityBody(city, "2026-11-11", STATE_SERVICES, locale), locale), null, `${city.key}/${locale}: block on the day`);
+      const items = blockOf(buildCityBody(city, "2026-11-12", STATE_SERVICES, locale), locale);
+      assert.ok(items, `${city.key}/${locale}: no block after the strike`);
+      assert.deepEqual(items, cityNextLinks(city.key, name, locale));
+      const links = check(items, locale, city.key);
+      const hrefs = links.map((l) => l.href);
+      // The city's own community and city, not somewhere else.
+      const { region, slug } = STRIKE_11N_CITY_PLACES[city.key];
+      assert.ok(cityBySlug(region, slug), `${city.key}: no 2027 page ${region}/${slug}`);
+      const schoolSlug = SCHOOL_REGIONS.find((r) => r.boe === region)?.slug;
+      assert.ok(schoolSlug, `${city.key}: no school calendar for ${region}`);
+      assert.ok(hrefs.includes(`/${locale}/${regionPath(schoolSlug, locale)}/`), `${city.key}/${locale}: not its community's school calendar`);
+      const holidays = hrefs.find((h) => h.includes("/2027/") && h.endsWith(`/${slug}/`));
+      assert.ok(holidays, `${city.key}/${locale}: not its 2027 holidays page`);
+      // The leave planner opens with this city picked (an id the picker knows, whose page is that one) and 5 days.
+      const leave = hrefs.find((h) => pathOf(h) === leaveEditions()[locale]);
+      assert.ok(leave, `${city.key}/${locale}: no leave planner`);
+      const params = new URLSearchParams(leave.split("#")[1]);
+      assert.equal(params.get("d"), "5");
+      const picked = plannerPlace(data, params.get("p") ?? "");
+      assert.ok(picked, `${city.key}/${locale}: planner id ${params.get("p")} unknown`);
+      assert.equal(picked.item[2], holidays, `${city.key}/${locale}: planner id ${params.get("p")} is another place`);
+      // The anchors name the city; the same number of targets in every language.
+      assert.ok(links.filter((l) => l.label.includes(name)).length >= 2, `${city.key}/${locale}: anchors do not name ${name}`);
+      assert.equal(links.length, cityNextLinks(city.key, city.name, "es").length);
+    }
+    // The published editions carry it (the pages are past since 12 Nov).
+    for (const article of STRIKE_11N_CITY_ARTICLES) assert.ok(blockOf(article.editions[locale]!.blocks, locale), `${article.entryKey}/${locale}: not published with the block`);
+
+    // The Spain page: the Spain-wide editions of the same targets.
+    assert.equal(blockOf(buildSpainBody("2026-11-10", locale), locale), null, `spain/${locale}: block before the strike`);
+    const spain = blockOf(buildSpainBody("2026-11-12", locale), locale);
+    assert.ok(spain, `spain/${locale}: no block`);
+    assert.deepEqual(spain, spainNextLinks(locale));
+    const spainHrefs = check(spain, locale, "spain").map((l) => l.href);
+    assert.ok(spainHrefs.includes(`/${locale}/${SCHOOL_HUB_PATHS[locale]}/`), `spain/${locale}: no school hub`);
+    assert.ok(blockOf(STRIKE_11N_SPAIN.editions[locale]!.blocks, locale), `spain/${locale}: not published with the block`);
+  }
+});
+
+test("the related rail of the city pages points at the Spain-wide pages, not the Catalan ones; the Catalan 11N page has no such block", () => {
+  for (const locale of LOCALES) {
+    for (const article of STRIKE_11N_CITY_ARTICLES) {
+      const blocks = article.editions[locale]!.blocks;
+      const at = blocks.findIndex((b) => b.type === "heading" && (b as { text?: string }).text === RELATED_HEADING[locale]);
+      assert.ok(at > 0, `${article.entryKey}/${locale}: no related rail`);
+      const items = (blocks[at + 1] as { items: string[] }).items.join(" ");
+      assert.ok(items.includes(`](/${locale}/${STRIKE_11N_SPAIN_PATHS[locale]}/)`), `${article.entryKey}/${locale}: no Spain 11N page`);
+      assert.ok(items.includes(`](/${locale}/${B2_PATHS.strikesSpain[locale]}/)`), `${article.entryKey}/${locale}: no Spain strikes hub`);
+      assert.ok(!items.includes(`](/${locale}/${B2_PATHS.strikes[locale]}/)`), `${article.entryKey}/${locale}: Catalan strikes hub in the rail`);
+      assert.ok(!items.includes(`](/${locale}/${B2_PATHS.strike11n[locale]}/)`), `${article.entryKey}/${locale}: Catalan 11N page in the rail`);
+    }
+    // The Catalan 11N page (strike-11n.ts) keeps its own links: no block of this kind.
+    assert.ok(!JSON.stringify(STRIKE_11N.editions[locale].blocks).includes(`"id":"${AFTER_STRIKE_ID[locale]}"`), `11N/${locale}`);
   }
 });

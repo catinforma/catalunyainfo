@@ -6,6 +6,8 @@ import { nextDatesBlocks, strikePhase } from "./strike-11n";
 import { STRIKE_URLS } from "./strikes";
 import { CITY_HERO, NATIONAL_SOURCES, localizeCity } from "./strike-11n-cities";
 import { CITIES, STRIKE_11N_CITIES_AS_OF, STRIKE_11N_CITIES_VERIFIED } from "./strike-11n-cities-data";
+import { STRIKE_11N_SPAIN_PATHS } from "./strike-11n-city-paths";
+import { spainNextBlocks } from "./strike-11n-next";
 
 /**
  * "Huelga general 11 de noviembre en España: ciudad por ciudad" (9 Nov 2026),
@@ -23,11 +25,7 @@ import { CITIES, STRIKE_11N_CITIES_AS_OF, STRIKE_11N_CITIES_VERIFIED } from "./s
  */
 const link = (href: string, label: string) => `[${label}](${href})`;
 
-export const STRIKE_11N_SPAIN_PATHS: Record<Locale, string> = {
-  ca: "guies/vaga-general-11-novembre-espanya",
-  es: "guias/huelga-general-11-noviembre-espana",
-  en: "guides/general-strike-11-november-spain-by-city",
-};
+export { STRIKE_11N_SPAIN_PATHS };
 
 function leadText(asOf: string, locale: Locale): string {
   const phase = strikePhase(asOf);
@@ -155,6 +153,9 @@ export function buildSpainBody(asOf: string = STRIKE_11N_CITIES_AS_OF, locale: L
     table(t.caption, [...t.headers], rows, t.note),
     // 11 Nov 2026: what comes next (strike-11n.ts, nextDatesBlocks).
     ...nextDatesBlocks(locale, asOf, "strikesSpain"),
+    // 13 Nov 2026: once the strike is past, evergreen pages for the same readers (strike-11n-next.ts).
+    // Stored after the upcoming block, which the answer-first layout moves to the end: it renders under the table.
+    ...(strikePhase(asOf) === "past" ? spainNextBlocks(locale) : []),
     ...h2(t.stateHeading, t.state(STRIKE_URLS.ministryRail), t.cataloniaLine(catalonia)),
     ...h2(t.demosHeading),
     list(...demos, t.barcelonaItem(catalonia)),

@@ -4694,3 +4694,92 @@ pages with CTR > 1 %; `/es/festivos/2027/` city queries ("festivos <city>
 breakdown).
 
 **Outcome:** _pending_
+
+## 2026-11-13 — 11N pages for the rest of Spain: "Y ahora en <ciudad>" hands past-event readers to their own community's evergreen pages; related rail off Catalonia (deploy; group `strike-11n-cities`)
+
+**Why.** GSC 7–13 Nov: the past 11N city pages still draw large impressions
+from readers who live in those cities: Sevilla 71.6k, Zaragoza 41k, Alicante
+36k, Murcia 28.6k, Málaga 21k, Vigo 16k, Las Palmas 15k, A Coruña 14k,
+Valladolid 12k, Palma 10.7k, plus Madrid, Valencia and the Spain page. Their
+onward links were the strike (upcoming block, moved to the end by the
+answer-first layout) and a related rail / "Lee también" box pointing at the
+Catalan 11N page and the Catalan strikes hub, pages about somewhere else.
+The traffic dies with the event; the readers' next questions (school
+holidays, 2027 holidays, the December bridge, shops in December) have
+evergreen pages of ours for their own community and city.
+
+**What changed** (`strike-11n-next.ts`, wired into `strike-11n-cities.ts` and
+`strike-11n-spain.ts`; titles, descriptions and excerpts untouched, so the
+11N title entries of 29 Oct, 8 Nov and 11 Nov are not disturbed):
+1. **"Y ahora en Sevilla: colegio, festivos y diciembre"** (ca "I ara a …:
+   escola, festius i desembre", en "Next for …: school, holidays and
+   December"), H2 + 6 links, only once the strike is past
+   (`strikePhase(asOf) === "past"`). Stored after the upcoming block, so it
+   renders right under the lead that says the strike is over and above the
+   minimum-services section. Per city: the community's school calendar
+   2026-27 (`/es/guias/calendario-escolar-<comunidad>/`), the city's 2027
+   holidays (`/es/festivos/2027/<comunidad>/<ciudad>/`), the leave planner
+   with the city picked (`…/aprovechar-vacaciones/#p=<comunidad>/<ciudad>&d=5`,
+   the picker's own ids), the Spain December bridge, shops open in December
+   (Spain) and the Spain strikes hub; ca/en link their own editions. The
+   Spain page gets the Spain-wide versions (school hub with the Christmas
+   table, `/es/festivos/2027/`, the planner, same last three), under its table.
+   The 17N rail page stays in the upcoming block (it already links it).
+2. **Related rail of the 13 city pages** (and so their "Lee también" box):
+   Catalan 11N page + "Huelga hoy en Cataluña" → the Spain-wide 11N page +
+   "Huelgas en España". The Catalan 11N page stays in the other-cities list;
+   the Catalan 11N page itself (`strike-11n.ts`) is unchanged.
+3. Not changed: the site header's "Festivos" / "Calendario escolar" items
+   still point at the Catalan pages on every page (global nav, out of scope).
+
+Tests (`tests/strike-11n-cities.test.ts`): every link in the block resolves
+to a path the site builds (B2/feature registries, school-spain `regionPath` /
+`HUB_PATHS`, the 2027 calendar's sitemap helpers `spainPaths` /
+`editionPaths`, `leaveEditions`), the planner id is one `plannerData` knows
+and opens that city's page, 5–6 links, no Catalan target, block absent before
+and on the day; the related rail carries the Spain pages and no Catalan ones.
+
+**Baseline.** GA4 sessions from these pages to the targets are not measurable
+with `scripts/snapshot.py` (no referrer / next-page command), so GSC 7–13 Nov
+(13 Nov partial), `snapshot.py page <path> 7`, clicks / impressions:
+
+| Target | Clicks | Impr. |
+| --- | --- | --- |
+| `/es/guias/calendario-escolar-espana/` | 5 | 864 |
+| `…-andalucia/` (Sevilla, Málaga) | 8 | 2,613 |
+| `…-madrid/` | 3 | 1,178 |
+| `…-comunidad-valenciana/` (Valencia, Alicante) | 2 | 758 |
+| `…-murcia/` | 0 | 349 |
+| `…-galicia/` (Vigo, A Coruña) | 1 | 330 |
+| `…-aragon/` | 0 | 0 |
+| `/es/festivos/2027/andalucia/sevilla/` | 1 | 58 |
+| `/es/festivos/2027/aragon/zaragoza/` | 0 | 46 |
+| `/es/festivos/2027/comunidad-valenciana/alicante/` | 1 | 30 |
+| `/es/festivos/2027/murcia/murcia/` | 0 | 16 |
+| `/es/festivos/2027/aprovechar-vacaciones/` (new 13 Nov) | 0 | 0 |
+| `/es/guias/puente-diciembre-espana/` | 495 | 13,767 |
+| `/es/guias/tiendas-abiertas-diciembre-espana/` | 0 | 0 |
+| `/es/guias/huelgas-espana/` | 64 | 2,234 |
+| Source: `/es/guias/huelga-general-11-noviembre-*` (13 cities + Spain) | 16,214 | 283,216 |
+| Source: `/en/guides/general-strike-11-november-*` (incl. the Catalan EN page) | 462 | 10,009 |
+| Source: `/ca/guies/vaga-general-11-novembre-*` | 5 | 109 |
+
+**Prediction.** Internal links move impressions little; the honest readings
+are (a) GA4 page views of the targets with `pageReferrer` containing
+`huelga-general-11-noviembre-` (run once, ad hoc, on 27 Nov for 14–26 Nov:
+≥ 300 sessions in total would mean the block is used), and (b) GSC: the
+community school pages and the five 2027 city pages above gain impressions
+faster than the school pages of communities with no 11N city (Asturias,
+Cantabria, Navarra…), at equal query. Wrong if (a) is under 100.
+
+**Revert rule (27 Nov).** If the block gets under 100 referred sessions and
+the 11N city pages' engagement rate falls against 7–13 Nov, drop it
+(`cityNextBlocks` / `spainNextBlocks` calls) and republish
+`strike-11n-cities`. The related-rail change stays (it only stops pointing at
+the wrong region).
+
+**Confounders.** Answer-first review 19 Nov (these pages are in it); the 11N
+pages decay anyway; the 17N rail strike and 29N election bring their own
+traffic; Christmas-holiday demand rises into December.
+
+**Review 27 Nov 2026. Outcome:** _pending_

@@ -3,6 +3,7 @@ import type { Locale } from "@/lib/i18n/config";
 
 import { dateYear, dayDate } from "./festive";
 import {
+  B2_TITLES,
   RELATED_HEADING,
   b2href,
   b2link,
@@ -28,7 +29,8 @@ import {
 } from "./strike-11n-cities-data";
 import type { CityService, CityServiceGroup, MsSlot, StateService, Strike11nCity } from "./strike-11n-cities-model";
 import { CITY_TR, STATE_TR } from "./strike-11n-cities-i18n";
-import { STRIKE_11N_CITY_REFS, strike11nCityHref, strike11nCityRef, type Strike11nCityKey } from "./strike-11n-city-paths";
+import { STRIKE_11N_CITY_REFS, STRIKE_11N_SPAIN_PATHS, strike11nCityHref, strike11nCityRef, type Strike11nCityKey } from "./strike-11n-city-paths";
+import { cityNextBlocks } from "./strike-11n-next";
 import { STRIKES, isUpcoming } from "./strikes";
 
 /**
@@ -1026,6 +1028,10 @@ export function buildCityBody(
 
   // 11 Nov 2026: what comes next (strike-11n.ts, nextDatesBlocks), for the readers who arrive after the day.
   blocks.push(...nextDatesBlocks(locale, asOf, "strikesSpain"));
+  // 13 Nov 2026: once the strike is past, evergreen pages for this city and its community
+  // (strike-11n-next.ts). Stored after the upcoming block, which the answer-first layout moves
+  // to the end, so it renders right under the lead that says the strike is over.
+  if (c.phase === "past") blocks.push(...cityNextBlocks(lc.key, n, locale));
 
   // Minimum services: the answer most readers came for, first.
   blocks.push(
@@ -1105,20 +1111,19 @@ export function buildCityBody(
 
   blocks.push(...paras(verifiedLine(locale, STRIKE_11N_CITIES_VERIFIED)));
   // The related rail (its first two links also become the read-next box): the
-  // 11N page and the strikes hub, in the page's language.
+  // Spain-wide 11N page and the Spain strikes hub, in the page's language. Until
+  // 13 Nov 2026 these were the Catalan 11N page and the Catalan strikes hub,
+  // pages about somewhere else for these readers; the Catalan 11N page stays in
+  // the other-cities list above.
   blocks.push(heading(2, RELATED_HEADING[locale]));
   blocks.push(
     list(
-      b2link(
-        "strike11n",
-        locale,
-        T(c, {
-          es: "Huelga general del 11 de noviembre en Cataluña: servicios mínimos",
-          ca: "Vaga general de l'11 de novembre a Catalunya: serveis mínims",
-          en: "General strike on 11 November in Catalonia: minimum services",
-        }),
-      ),
-      b2link("strikes", locale, T(c, { es: "Huelga hoy en Cataluña: qué funciona", ca: "Vaga avui a Catalunya: què funciona", en: "Strike in Barcelona and Catalonia today: what runs" })),
+      `[${T(c, {
+        es: "Huelga general del 11 de noviembre en España, ciudad por ciudad",
+        ca: "Vaga general de l'11 de novembre a Espanya, ciutat per ciutat",
+        en: "General strike on 11 November in Spain, city by city",
+      })}](/${locale}/${STRIKE_11N_SPAIN_PATHS[locale]}/)`,
+      b2link("strikesSpain", locale, B2_TITLES.strikesSpain[locale]),
     ),
   );
   return blocks;

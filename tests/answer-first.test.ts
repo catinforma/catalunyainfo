@@ -5,6 +5,7 @@ import type { Block } from "../src/lib/content/blocks.ts";
 import { READ_NEXT, VERIFIED_LABEL, withReadNext } from "../src/lib/content/batch02/shared.ts";
 import { NEXT_DATES_ID, STRIKE_11N } from "../src/lib/content/batch02/strike-11n.ts";
 import { STRIKE_11N_CITY_ARTICLES } from "../src/lib/content/batch02/strike-11n-cities.ts";
+import { AFTER_STRIKE_ID } from "../src/lib/content/batch02/strike-11n-next.ts";
 import { STRIKES_GUIDE } from "../src/lib/content/batch02/strikes.ts";
 import { STRIKE_RENFE_GUIDE } from "../src/lib/content/batch02/strike-guides.ts";
 import { STRIKES_SPAIN_GUIDE } from "../src/lib/content/batch02/strikes-spain.ts";
@@ -61,12 +62,15 @@ test("the switch covers the first group: strike guides, 11N cities, holiday guid
   assert.equal(new Set(ANSWER_FIRST_ENTRY_KEYS).size, ANSWER_FIRST_ENTRY_KEYS.length);
 });
 
-test("Sevilla 11N: facts on top, the minimum-services section right after the lead, boxes at the end", () => {
+test("Sevilla 11N: facts on top, after the lead the 'Y ahora en Sevilla' links (past), then the minimum-services section, boxes at the end", () => {
   const layout = sameBlocks(SEVILLA.editions.es.blocks, "es");
   assert.equal(layout.summary?.kind, "keyFacts");
   assert.equal(layout.body[0]?.type, "paragraph", "the lead opens the body");
-  const firstH2 = layout.body.find((b) => b.type === "heading" && b.level === 2) as { id?: string };
-  assert.equal(firstH2.id, "servicios-minimos");
+  const h2s = layout.body.filter((b) => b.type === "heading" && b.level === 2) as { id?: string }[];
+  // 13 Nov 2026: the strike is past (STRIKE_11N_CITIES_AS_OF), so the evergreen block comes first.
+  assert.equal(h2s[0]?.id, AFTER_STRIKE_ID.es);
+  assert.equal(layout.body[1], layout.body.find((b) => b.type === "heading" && b.level === 2), "the block follows the lead directly");
+  assert.equal(h2s[1]?.id, "servicios-minimos");
   const endHeadings = layout.end.filter((b) => b.type === "heading").map((b) => (b as { id?: string }).id);
   assert.deepEqual(endHeadings, [NEXT_DATES_ID.es]);
   assert.ok(layout.end.some((b) => b.type === "callout" && (b.title ?? "").startsWith(VERIFIED_LABEL.es)));

@@ -78,6 +78,16 @@ export function strike11nCityHref(key: Strike11nCityKey, locale: Locale = "es"):
   return `/${locale}/${strike11nCityRef(key).paths[locale]}/`;
 }
 
+/**
+ * The Spain-wide 11N page (`strike-11n-spain.ts`), here so that the city pages
+ * can link it without an import cycle (the Spain page imports them).
+ */
+export const STRIKE_11N_SPAIN_PATHS: Record<Locale, string> = {
+  ca: "guies/vaga-general-11-novembre-espanya",
+  es: "guias/huelga-general-11-noviembre-espana",
+  en: "guides/general-strike-11-november-spain-by-city",
+};
+
 const AND: Record<Locale, string> = { ca: "i", es: "y", en: "and" };
 
 /** "[Madrid](/es/...), [Valencia](/es/...) y [A Coruña](/es/...)": every city page, or all but one, in one language. */
