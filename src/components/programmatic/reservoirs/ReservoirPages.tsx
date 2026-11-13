@@ -13,9 +13,12 @@ import {
   droughtParagraphs,
   facts,
   faq,
+  hubAnswer,
   hubCopy,
+  liveReadLine,
   readParagraphs,
   relatedLinks,
+  reservoirAnswer,
   reservoirH1,
   reservoirLead,
   reservoirLinkLabel,
@@ -25,7 +28,8 @@ import {
   usesParagraph,
   words,
 } from "@/lib/programmatic/reservoirs/copy";
-import { RESERVOIR_DATA, SNAPSHOT, siblingsOf, snapshotReadings } from "@/lib/programmatic/reservoirs/data";
+import { RESERVOIR_DATA, SNAPSHOT, siblingsOf } from "@/lib/programmatic/reservoirs/data";
+import type { ServerReservoirs } from "@/lib/programmatic/reservoirs/server";
 import { formatDate, formatNumber } from "@/lib/programmatic/reservoirs/live";
 import { OFFICIAL, indicatorsOf, officialUrl } from "@/lib/programmatic/reservoirs/official";
 import { reservoirHubPath, reservoirHubTranslations, reservoirPath, reservoirTranslations } from "@/lib/programmatic/reservoirs/paths";
@@ -37,9 +41,12 @@ import { Faq, LinkList, Paragraphs, Sources } from "../rodalies/parts";
 import { IndicatorVolumes, ReservoirReading, ReservoirTable } from "./ReservoirLive";
 
 /**
- * Server-rendered pages of the reservoir family. Everything in the HTML comes
- * from the committed snapshot and the verified official facts: no database,
- * no fetch, no clock. Today's reading is the browser's (ReservoirLive).
+ * Server-rendered pages of the reservoir family. The facts come from the
+ * committed snapshot and the verified official facts; the reading is the
+ * ACA's latest, read by the route at render (lib/programmatic/reservoirs/
+ * server.ts, every three hours), or the snapshot's with its own date when the
+ * ACA did not answer. The browser block refreshes it after mount
+ * (ReservoirLive). No database, no clock in the render.
  */
 
 export function hubCrumbs(locale: Locale): Crumb[] {
@@ -53,19 +60,42 @@ export function reservoirCrumbs(r: SnapshotReservoir, locale: Locale): Crumb[] {
   return [...hubCrumbs(locale), { label: r.name.charAt(0).toUpperCase() + r.name.slice(1), href: reservoirPath(locale, r.slug) }];
 }
 
-function Header({ crumbs, locale, kicker, h1, lead }: { crumbs: Crumb[]; locale: Locale; kicker: string; h1: string; lead: string }) {
+function Header({
+  crumbs,
+  locale,
+  kicker,
+  h1,
+  lead,
+  answer,
+  server,
+}: {
+  crumbs: Crumb[];
+  locale: Locale;
+  kicker: string;
+  h1: string;
+  lead: string;
+  /** The live answer (markdown bold/links), first under the H1; none without a reading from the ACA. */
+  answer?: string;
+  server: ServerReservoirs;
+}) {
   const w = words(locale);
+  const live = server.live && server.fetchedAt;
   return (
     <header className="border-b border-[var(--color-rule)] bg-[var(--color-surface)]">
       <div className="ci-shell py-5 md:py-8 lg:py-12">
         <Breadcrumbs items={crumbs} locale={locale} />
         <p className="ci-label mb-3 max-md:hidden">{kicker}</p>
         <h1 className="ci-measure">{h1}</h1>
-        <p className="ci-measure mt-4 text-lg text-[var(--color-ink-soft)]">{lead}</p>
+        {answer ? <p className="ci-measure mt-4 text-lg">{renderInline(answer)}</p> : null}
+        <p className={`ci-measure ${answer ? "mt-3 text-base" : "mt-4 text-lg"} text-[var(--color-ink-soft)]`}>{lead}</p>
         <div className="mt-5 flex flex-wrap items-center gap-x-5 gap-y-2 text-xs text-[var(--color-muted)]">
           <span className="ci-verified">
             <span className="ci-verified-dot" aria-hidden="true" />
-            <time dateTime={SNAPSHOT.readOn}>{w.readLine}</time>
+            {live ? (
+              <time dateTime={server.fetchedAt!}>{liveReadLine(locale, server.latestDate, server.fetchedAt!)}</time>
+            ) : (
+              <time dateTime={SNAPSHOT.readOn}>{w.readLine}</time>
+            )}
           </span>
         </div>
         <ShareBar locale={locale} path={crumbPath(crumbs)} title={h1} contentType="reservoirs" />
@@ -78,7 +108,7 @@ function Header({ crumbs, locale, kicker, h1, lead }: { crumbs: Crumb[]; locale:
 /* One reservoir                                                              */
 /* -------------------------------------------------------------------------- */
 
-export function ReservoirPage({ reservoir: r, locale }: { reservoir: SnapshotReservoir; locale: Locale }) {
+export function ReservoirPage({ reservoir: r, locale, server }: { reservoir: SnapshotReservoir; locale: Locale; server: ServerReservoirs }) {
   const w = words(locale);
   const o = OFFICIAL[r.slug];
   const crumbs = reservoirCrumbs(r, locale);
@@ -87,7 +117,9 @@ export function ReservoirPage({ reservoir: r, locale }: { reservoir: SnapshotRes
   const drought = droughtParagraphs(r, locale);
   const tables = thresholdTables(r.slug, locale);
   const sib = siblingsOf(r.slug);
-  const own = snapshotReadings();
+  const own = server.readings;
+  const mine = own.find((x) => x.slug === r.slug);
+  const answer = server.live && mine ? reservoirAnswer(r, locale, mine, o.capacity, server.yearAgo[r.slug] ?? null) : undefined;
   const pctSign = locale === "en" ? "%" : " %";
   const toc = [
     { id: "avui", label: w.today },
@@ -103,7 +135,7 @@ export function ReservoirPage({ reservoir: r, locale }: { reservoir: SnapshotRes
       <SiteHeader locale={locale} translations={reservoirTranslations(r.slug)} activeSection={null} />
       <main id="main">
         <article>
-          <Header crumbs={crumbs} locale={locale} kicker={w.kicker} h1={reservoirH1(r, locale)} lead={reservoirLead(r, locale)} />
+          <Header crumbs={crumbs} locale={locale} kicker={w.kicker} h1={reservoirH1(r, locale)} lead={reservoirLead(r, locale)} answer={answer} server={server} />
 
           <div className="ci-shell py-10">
             <div className="ci-article-layout">
@@ -251,7 +283,7 @@ export function ReservoirPage({ reservoir: r, locale }: { reservoir: SnapshotRes
           </div>
         </article>
       </main>
-      <JsonLd json={graph([breadcrumbSchema(crumbs), reservoirDataset(r, locale), faqSchema([faqBlock])])} />
+      <JsonLd json={graph([breadcrumbSchema(crumbs), reservoirDataset(r, locale, server.live ? mine?.date : undefined), faqSchema([faqBlock])])} />
       <SiteFooter locale={locale} />
     </>
   );
@@ -261,10 +293,11 @@ export function ReservoirPage({ reservoir: r, locale }: { reservoir: SnapshotRes
 /* Hub                                                                        */
 /* -------------------------------------------------------------------------- */
 
-export function ReservoirHubPage({ locale }: { locale: Locale }) {
+export function ReservoirHubPage({ locale, server, totalPct }: { locale: Locale; server: ServerReservoirs; totalPct: number | null }) {
   const t = hubCopy(locale);
   const w = words(locale);
   const crumbs = hubCrumbs(locale);
+  const answer = server.live ? hubAnswer(locale, server.readings, totalPct) : undefined;
   const rows = RESERVOIR_DATA.map((r) => ({
     slug: r.slug,
     name: r.name.charAt(0).toUpperCase() + r.name.slice(1),
@@ -277,13 +310,20 @@ export function ReservoirHubPage({ locale }: { locale: Locale }) {
     <>
       <SiteHeader locale={locale} translations={reservoirHubTranslations()} activeSection={null} />
       <main id="main">
-        <Header crumbs={crumbs} locale={locale} kicker={w.kicker} h1={t.h1} lead={t.lead} />
+        <Header crumbs={crumbs} locale={locale} kicker={w.kicker} h1={t.h1} lead={t.lead} answer={answer} server={server} />
         <div className="ci-shell py-10">
           <div className="ci-prose">
             <h2 id="nivell" className="!mt-0">
               {t.tableTitle}
             </h2>
-            <ReservoirTable locale={locale} rows={rows} own={snapshotReadings()} ownDate={SNAPSHOT.latestDate} officialUrl={officialUrl.reserves(locale)} />
+            <ReservoirTable
+              locale={locale}
+              rows={rows}
+              own={server.readings}
+              ownDate={server.latestDate}
+              officialUrl={officialUrl.reserves(locale)}
+              yearAgo={server.yearAgo}
+            />
 
             <nav aria-labelledby="ci-reservoir-pages">
               <h2 id="ci-reservoir-pages">{w.hub}</h2>
@@ -311,7 +351,7 @@ export function ReservoirHubPage({ locale }: { locale: Locale }) {
           <ShareBar locale={locale} path={crumbPath(crumbs)} title={t.h1} contentType="reservoirs" variant="full" />
         </div>
       </main>
-      <JsonLd json={graph([breadcrumbSchema(crumbs), reservoirHubDataset(locale)])} />
+      <JsonLd json={graph([breadcrumbSchema(crumbs), reservoirHubDataset(locale, server.live ? server.latestDate : undefined)])} />
       <SiteFooter locale={locale} />
     </>
   );

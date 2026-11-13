@@ -7,9 +7,10 @@
 import { B2_PATHS } from "@/lib/content/batch02/shared";
 import { PATHS as TOOL_PATHS } from "@/lib/content/home-tools";
 import type { Locale } from "@/lib/i18n/config";
+import { caDel, caEl, liveStamp } from "@/lib/programmatic/live-stamp";
 
 import { SNAPSHOT, reservoirBySlug } from "./data";
-import { formatDate, formatNumber } from "./live";
+import { formatChange, formatDate, formatNumber, type Reading } from "./live";
 import { OFFICIAL, OFFICIAL_VERIFIED, SOURCES, indicatorsOf, officialUrl, type Indicator, type Stage } from "./official";
 import { reservoirHubPath, reservoirPath } from "./paths";
 import type { ReservoirSlug, SnapshotReservoir } from "./types";
@@ -267,13 +268,13 @@ export function trendParagraphs(r: SnapshotReservoir, l: Locale): string[] {
     const pp = num(Math.abs(diff), l);
     if (l === "ca") {
       const dir = Math.abs(diff) < 0.05 ? "el mateix percentatge" : diff > 0 ? `**${pp} punts més**` : `**${pp} punts menys**`;
-      out.push(`Fa un any, el ${date(t.yearAgo.date, l)}, ${name} era al **${num(t.yearAgo.percent, l)} %** (${num(t.yearAgo.volume, l, 2)} hm³). En la lectura més recent d'aquesta pàgina, la del ${date(t.latest.date, l)}, és al **${num(t.latest.percent, l)} %** (${num(t.latest.volume, l, 2)} hm³): ${dir}.`);
+      out.push(`Fa un any, el ${date(t.yearAgo.date, l)}, ${name} era al **${num(t.yearAgo.percent, l)} %** (${num(t.yearAgo.volume, l, 2)} hm³). ${upper(caEl(date(t.latest.date, l)))} era al **${num(t.latest.percent, l)} %** (${num(t.latest.volume, l, 2)} hm³): ${dir}.`);
     } else if (l === "es") {
       const dir = Math.abs(diff) < 0.05 ? "el mismo porcentaje" : diff > 0 ? `**${pp} puntos más**` : `**${pp} puntos menos**`;
-      out.push(`Hace un año, el ${date(t.yearAgo.date, l)}, ${name} estaba al **${num(t.yearAgo.percent, l)} %** (${num(t.yearAgo.volume, l, 2)} hm³). En la lectura más reciente de esta página, la del ${date(t.latest.date, l)}, está al **${num(t.latest.percent, l)} %** (${num(t.latest.volume, l, 2)} hm³): ${dir}.`);
+      out.push(`Hace un año, el ${date(t.yearAgo.date, l)}, ${name} estaba al **${num(t.yearAgo.percent, l)} %** (${num(t.yearAgo.volume, l, 2)} hm³). El ${date(t.latest.date, l)} estaba al **${num(t.latest.percent, l)} %** (${num(t.latest.volume, l, 2)} hm³): ${dir}.`);
     } else {
       const dir = Math.abs(diff) < 0.05 ? "the same share" : diff > 0 ? `**${pp} points more**` : `**${pp} points less**`;
-      out.push(`A year earlier, on ${date(t.yearAgo.date, l)}, ${name} was **${num(t.yearAgo.percent, l)}%** full (${num(t.yearAgo.volume, l, 2)} hm³). In this page's latest reading, of ${date(t.latest.date, l)}, it is **${num(t.latest.percent, l)}%** full (${num(t.latest.volume, l, 2)} hm³): ${dir}.`);
+      out.push(`A year earlier, on ${date(t.yearAgo.date, l)}, ${name} was **${num(t.yearAgo.percent, l)}%** full (${num(t.yearAgo.volume, l, 2)} hm³). On ${date(t.latest.date, l)} it was **${num(t.latest.percent, l)}%** full (${num(t.latest.volume, l, 2)} hm³): ${dir}.`);
     }
   }
   if (l === "ca") {
@@ -610,6 +611,86 @@ export function sources(l: Locale): SourceItem[] {
     { name: SOURCES.plan.name, publisher: SOURCES.plan.publisher, url: SOURCES.plan.url, note: t.plan },
     { name: SOURCES.pes.name, publisher: SOURCES.pes.publisher, url: SOURCES.pes.url, note: t.pes },
   ];
+}
+
+/* -------------------------------------------------------------------------- */
+/* The answer, first (server HTML; only with a reading the ACA gave today)    */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * "Dada de l'ACA de l'11/11/2026 · consultada el 13/11/2026 a les 11:50": the
+ * header line when the render read the ACA. `fetchedAt` is when the ACA's
+ * portal answered, not when the page was built.
+ */
+export function liveReadLine(l: Locale, readingDate: string, fetchedAt: string): string {
+  const s = liveStamp(fetchedAt, l);
+  const reading = date(readingDate, l);
+  if (l === "ca") return `Dada de l'ACA ${caDel(reading)}${s ? ` · consultada ${caEl(s.date)} a les ${s.time}` : ""}`;
+  if (l === "es") return `Dato de la ACA del ${reading}${s ? ` · consultado el ${s.date} a las ${s.time}` : ""}`;
+  return `ACA reading of ${reading}${s ? ` · checked ${s.date}, ${s.time}` : ""}`;
+}
+
+export interface YearAgoReading {
+  date: string;
+  percent: number;
+}
+
+/**
+ * The first line of a reservoir page: today's percentage with its date, the
+ * volume, the change over the week and the same day a year earlier, each only
+ * when the ACA's rows give it.
+ */
+export function reservoirAnswer(r: SnapshotReservoir, l: Locale, reading: Reading, capacity: number, yearAgo: YearAgoReading | null): string {
+  const pct = num(reading.percent, l);
+  const vol = num(reading.volume, l, 2);
+  const cap = num(capacity, l, 2);
+  const day = date(reading.date, l);
+  const week = typeof reading.change === "number" && reading.changeFrom ? { pp: formatChange(reading.change, l), from: date(reading.changeFrom, l) } : null;
+  const year = yearAgo ? { pct: num(yearAgo.percent, l), on: date(yearAgo.date, l) } : null;
+  if (l === "ca") {
+    const parts = [`**${upper(inSentence(r, l))} és al ${pct} %** (dada de l'ACA ${caDel(day)}): ${vol} hm³ de ${cap} hm³ de capacitat.`];
+    const tail = [week ? `Des ${caDel(week.from)}, ${week.pp} punts` : null, year ? `fa un any, ${caEl(year.on)}, era al ${year.pct} %` : null].filter(Boolean);
+    if (tail.length) parts.push(`${upper(tail.join("; "))}.`);
+    return parts.join(" ");
+  }
+  if (l === "es") {
+    const parts = [`**${upper(inSentence(r, l))} está al ${pct} %** (dato de la ACA del ${day}): ${vol} hm³ de ${cap} hm³ de capacidad.`];
+    const tail = [week ? `Desde el ${week.from}, ${week.pp} puntos` : null, year ? `hace un año, el ${year.on}, estaba al ${year.pct} %` : null].filter(Boolean);
+    if (tail.length) parts.push(`${upper(tail.join("; "))}.`);
+    return parts.join(" ");
+  }
+  const parts = [`**${enName(r)} is ${pct}% full** (ACA reading of ${day}): ${vol} hm³ of ${cap} hm³ capacity.`];
+  const tail = [week ? `Since ${week.from}, ${week.pp} points` : null, year ? `a year ago, on ${year.on}, it was ${year.pct}% full` : null].filter(Boolean);
+  if (tail.length) parts.push(`${upper(tail.join("; "))}.`);
+  return parts.join(" ");
+}
+
+/**
+ * The hub's first line: the fullest and the emptiest reservoir of the day,
+ * and the overall figure with a link to the guide that owns it (the total and
+ * Ter-Llobregat), so the two pages answer different questions. `totalPct` is
+ * the guide's own report, so both pages print the same number.
+ */
+export function hubAnswer(l: Locale, readings: Reading[], totalPct: number | null): string {
+  const named = readings
+    .map((x) => ({ x, r: reservoirBySlug(x.slug) }))
+    .sort((a, b) => b.x.percent - a.x.percent);
+  const top = named[0];
+  const low = named.at(-1);
+  if (!top || !low) return "";
+  const day = date(readings.reduce((max, x) => (x.date > max ? x.date : max), readings[0]!.date), l);
+  const nm = (r: SnapshotReservoir) => upper(r.name);
+  const guide = `/${l}/${TOOL_PATHS.reservoirs[l]}/`;
+  if (l === "ca") {
+    const total = totalPct === null ? "" : ` En conjunt són al **${num(totalPct, l)} %**: el total i el Ter-Llobregat, a [l'estat dels embassaments avui](${guide}).`;
+    return `Amb la dada de l'ACA ${caDel(day)}, el més ple és **${nm(top.r)} (${num(top.x.percent, l)} %)** i el més baix, **${nm(low.r)} (${num(low.x.percent, l)} %)**.${total}`;
+  }
+  if (l === "es") {
+    const total = totalPct === null ? "" : ` En conjunto están al **${num(totalPct, l)} %**: el total y el Ter-Llobregat, en [los embalses de Cataluña hoy](${guide}).`;
+    return `Con el dato de la ACA del ${day}, el más lleno es **${nm(top.r)} (${num(top.x.percent, l)} %)** y el más bajo, **${nm(low.r)} (${num(low.x.percent, l)} %)**.${total}`;
+  }
+  const total = totalPct === null ? "" : ` Together they are **${num(totalPct, l)}%** full: the total and Ter-Llobregat are on [Catalonia reservoir levels today](${guide}).`;
+  return `On the ACA's reading of ${day}, the fullest is **${nm(top.r)} (${num(top.x.percent, l)}%)** and the lowest **${nm(low.r)} (${num(low.x.percent, l)}%)**.${total}`;
 }
 
 /* -------------------------------------------------------------------------- */

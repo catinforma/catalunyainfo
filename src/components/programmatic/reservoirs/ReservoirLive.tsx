@@ -149,17 +149,22 @@ export interface ReservoirTableProps {
   locale: BlockLocale;
   rows: ReservoirTableRow[];
   own: Reading[];
-  /** The snapshot's latest reading date. */
+  /** The latest reading date among `own` (the server's ACA reading, or the snapshot's). */
   ownDate: string;
   officialUrl: string;
+  /** Each reservoir's ACA reading a year before, from the server render; absent ones print "—". */
+  yearAgo?: Partial<Record<ReservoirSlug, { date: string; percent: number }>>;
 }
 
 /** The hub's table: static facts from the server, the percentage and its date refreshed in the browser. */
-export function ReservoirTable({ locale, rows, own, ownDate, officialUrl }: ReservoirTableProps) {
+export function ReservoirTable({ locale, rows, own, ownDate, officialUrl, yearAgo = {} }: ReservoirTableProps) {
   const L = READING_LABELS[locale];
   const live = useLive();
   const merged = live ? mergeReadings(live.payload, own) : { readings: own, live: 0 };
   const status = !live ? fill(L.tableOwn, { date: formatDate(ownDate, locale) }) : merged.live > 0 ? L.tableLive : fill(L.tableFailed, { date: formatDate(ownDate, locale) });
+  const pctSign = locale === "en" ? "%" : " %";
+  const yearDates = [...new Set(Object.values(yearAgo).map((y) => y?.date))].filter(Boolean);
+  const hasYear = yearDates.length > 0;
 
   return (
     <section className="ci-reservoirs" aria-live="polite">
@@ -172,12 +177,15 @@ export function ReservoirTable({ locale, rows, own, ownDate, officialUrl }: Rese
               <th scope="col">{L.cols.river}</th>
               <th scope="col">{L.cols.capacity}</th>
               <th scope="col">{L.cols.full}</th>
+              <th scope="col">{L.cols.week}</th>
+              {hasYear ? <th scope="col">{yearDates.length === 1 ? `${L.cols.yearAgo} (${formatDate(yearDates[0]!, locale)})` : L.cols.yearAgo}</th> : null}
               <th scope="col">{L.cols.date}</th>
             </tr>
           </thead>
           <tbody>
             {rows.map((row) => {
               const reading = merged.readings.find((r) => r.slug === row.slug);
+              const before = yearAgo[row.slug];
               return (
                 <tr key={row.slug}>
                   <th scope="row">
@@ -185,7 +193,9 @@ export function ReservoirTable({ locale, rows, own, ownDate, officialUrl }: Rese
                   </th>
                   <td>{row.river}</td>
                   <td className="ci-numeric">{formatNumber(row.capacity, locale, 2)}</td>
-                  <td className="ci-numeric">{reading ? `${formatNumber(reading.percent, locale)}${locale === "en" ? "%" : " %"}` : "—"}</td>
+                  <td className="ci-numeric">{reading ? `${formatNumber(reading.percent, locale)}${pctSign}` : "—"}</td>
+                  <td className="ci-numeric">{reading && typeof reading.change === "number" ? formatChange(reading.change, locale) : "—"}</td>
+                  {hasYear ? <td className="ci-numeric">{before ? `${formatNumber(before.percent, locale)}${pctSign}` : "—"}</td> : null}
                   <td className="ci-numeric">{reading ? formatDate(reading.date, locale) : "—"}</td>
                 </tr>
               );

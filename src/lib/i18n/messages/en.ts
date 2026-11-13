@@ -226,6 +226,10 @@ const en: Messages = {
     capNote: "Capacity is calculated from the volume and percentage the ACA publishes.",
     unavailable: "We cannot read the ACA's data right now. Check it directly in the",
     sourceLine: "Daily data from the",
+    yearAgo: "A year ago ({date}) they were {pct}% full (now {pp} points).",
+    checked: "Checked with the ACA: {date}, {time}.",
+    colYear: "A year ago",
+    rowLink: "{name} reservoir page",
   },
   conditions: {
     legend: "Conditions legend",

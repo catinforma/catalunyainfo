@@ -3,19 +3,23 @@
 import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
 
+import { liveStamp } from "@/lib/programmatic/live-stamp";
 import { liveLabels, type LiveLabels } from "@/lib/programmatic/rodalies/labels";
-import { ALERTS_ENDPOINT, alertText, fill, liveView, noticeDay, parsePayload } from "@/lib/programmatic/rodalies/live";
-import type { AlertsPayload, CompactAlert, LineId } from "@/lib/programmatic/rodalies/types";
+import { ALERTS_ENDPOINT, alertText, alertsForLine, fill, liveView, noticeDay, parsePayload } from "@/lib/programmatic/rodalies/live";
+import type { AlertsOk, AlertsPayload, CompactAlert, LineId } from "@/lib/programmatic/rodalies/types";
 
 /**
  * The live notices, fetched in the browser from /api/rodalies/alerts/.
  *
- * The server renders `fallback` only: it never says whether a line has
- * notices, so the cached HTML cannot go stale. After mount the component
- * asks our endpoint (CDN-cached for two minutes), checks the answer, and
- * shows the notices, "none", or a failure. An answer older than 15 minutes
- * is shown as a failure, never as current. The official status page is
- * linked in every state.
+ * The server HTML shows `initial`, the notices the route read when it was
+ * rendered (every five minutes at most, `lib/programmatic/rodalies/server.ts`),
+ * always under the time they were read and with absolute publication times, so
+ * an old copy of the HTML can never pass for "now"; without a current
+ * `initial` it shows `fallback`, which never says whether a line has notices.
+ * After mount the component asks our endpoint (CDN-cached for two minutes),
+ * checks the answer, and shows the notices, "none", or a failure. An answer
+ * older than 15 minutes is shown as a failure, never as current. The official
+ * status page is linked in every state.
  */
 
 type State = { kind: "idle" } | { kind: "loading" } | { kind: "done"; payload: AlertsPayload | null };
@@ -29,6 +33,8 @@ export interface RodaliesLiveProps {
   /** Links for the line names under each notice (none in English). */
   lineHrefs: Partial<Record<LineId, string>>;
   statusUrl: string;
+  /** The notices the server read for this render (already reduced to this line on a line page), or null. */
+  initial?: AlertsOk | null;
 }
 
 /** Our endpoint's answer, checked; null on any failure (never "no notices"). */
@@ -41,7 +47,7 @@ async function fetchPayload(): Promise<AlertsPayload | null> {
   }
 }
 
-export function RodaliesLive({ locale, intlLocale, line, lineNames, lineHrefs, statusUrl }: RodaliesLiveProps) {
+export function RodaliesLive({ locale, intlLocale, line, lineNames, lineHrefs, statusUrl, initial = null }: RodaliesLiveProps) {
   // Built here, in the browser bundle, so only `fallback` reaches the server HTML.
   const labels = liveLabels(locale, line ? (lineNames[line] ?? line) : null);
   const [state, setState] = useState<State>({ kind: "idle" });
@@ -77,6 +83,45 @@ export function RodaliesLive({ locale, intlLocale, line, lineNames, lineHrefs, s
       </a>
     </p>
   );
+
+  if (state.kind === "idle" && initial) {
+    // Server HTML and the first client render: the same props, no clock.
+    const readAt = new Date(initial.fetchedAt);
+    const stamp = liveStamp(initial.fetchedAt, locale);
+    const alerts = line ? alertsForLine(initial.alerts, line) : initial.alerts;
+    return (
+      <div className="ci-today" aria-live="polite">
+        {alerts.length === 0 ? (
+          <p className="ci-today-answer is-not">{fill(labels.none, { line: line ? (lineNames[line] ?? line) : "" })}</p>
+        ) : (
+          <ul className="m-0 list-none p-0">
+            {alerts.map((alert) => (
+              <AlertItem
+                key={alert.id}
+                alert={alert}
+                labels={labels}
+                locale={locale}
+                intlLocale={intlLocale}
+                now={readAt}
+                absolute
+                line={line}
+                lineNames={lineNames}
+                lineHrefs={lineHrefs}
+              />
+            ))}
+          </ul>
+        )}
+        <p className="ci-today-note">
+          {stamp ? (
+            <time dateTime={initial.fetchedAt}>{fill(labels.snapshot, { time: stamp.time, date: stamp.date })}</time>
+          ) : null}{" "}
+          {labels.attribution[initial.source]}
+          {labels.languageNote ? ` ${labels.languageNote}` : ""}
+        </p>
+        {official}
+      </div>
+    );
+  }
 
   if (state.kind !== "done" || !now) {
     return (
@@ -159,6 +204,7 @@ function AlertItem({
   locale,
   intlLocale,
   now,
+  absolute = false,
   line,
   lineNames,
   lineHrefs,
@@ -168,12 +214,14 @@ function AlertItem({
   locale: "ca" | "es" | "en";
   intlLocale: string;
   now: Date;
+  /** Always "posted on <date> at <time>" (server HTML: "today" would age with the copy). */
+  absolute?: boolean;
   line: LineId | null;
   lineNames: Record<string, string>;
   lineHrefs: Partial<Record<LineId, string>>;
 }) {
   const time = alert.time ?? "";
-  const day = noticeDay(alert.date, now);
+  const day = absolute ? "earlier" : noticeDay(alert.date, now);
   let when: string | null = null;
   if (alert.date && alert.time) {
     if (day === "today") when = fill(labels.publishedToday, { time });

@@ -3,15 +3,21 @@ import type { Locale } from "@/lib/i18n/config";
 import { officialUrl } from "./official";
 
 /**
- * Words of the live block. They live in the browser bundle, not in the page
- * props: the server HTML then contains only `fallback`, which never says
- * whether a line has notices ("no incidents" can only be the browser's
- * answer, from data it has just read).
+ * Words of the live block, built in the browser bundle.
+ *
+ * Until 13 Nov 2026 the server HTML carried only `fallback` and never said
+ * whether a line had notices. Since then the routes regenerate every five
+ * minutes with the notices read at render time (`server.ts`), and the HTML
+ * prints them under `snapshot`, which always names the time they were read;
+ * the browser replaces them with a fresh read after mount. `fallback` is what
+ * the HTML says when that render could not read a current answer.
  */
 
 export interface LiveLabels {
-  /** Server HTML and no-JS text. Never says whether there are notices. */
+  /** Server HTML and no-JS text when the render had no current notices. Never says whether there are any. */
   fallback: string;
+  /** Server HTML: "{time}" and "{date}" (Madrid) of the read, always printed with the notices. */
+  snapshot: string;
   loading: string;
   /** "{source}" and "{n}". */
   sourceAgo: string;
@@ -43,6 +49,7 @@ export function liveLabels(locale: Locale, lineName: string | null): LiveLabels 
   if (locale === "ca") {
     return {
       fallback: `Els avisos en directe de Rodalies de Catalunya es carreguen aquí quan el navegador té JavaScript. Si no apareixen, consulta ${link("l'estat oficial del servei", statusUrl)}.`,
+      snapshot: "Avisos publicats per Rodalies de Catalunya, llegits a les {time} h ({date}). En obrir la pàgina es tornen a llegir.",
       loading: "Carregant els avisos de Rodalies de Catalunya…",
       sourceAgo: "Font: {source}, fa {n} min",
       sourceNow: "Font: {source}, ara mateix",
@@ -70,6 +77,7 @@ export function liveLabels(locale: Locale, lineName: string | null): LiveLabels 
   if (locale === "es") {
     return {
       fallback: `Los avisos en directo de Rodalies de Catalunya se cargan aquí cuando el navegador tiene JavaScript. Si no aparecen, consulta ${link("el estado oficial del servicio", statusUrl)}.`,
+      snapshot: "Avisos publicados por Rodalies de Catalunya, leídos a las {time} h ({date}). Al abrir la página se vuelven a leer.",
       loading: "Cargando los avisos de Rodalies de Catalunya…",
       sourceAgo: "Fuente: {source}, hace {n} min",
       sourceNow: "Fuente: {source}, ahora mismo",
@@ -96,6 +104,7 @@ export function liveLabels(locale: Locale, lineName: string | null): LiveLabels 
   }
   return {
     fallback: `Live notices from Rodalies de Catalunya load here when your browser runs JavaScript. If they do not appear, check ${link("the official service status", statusUrl)}.`,
+    snapshot: "Notices posted by Rodalies de Catalunya, as read at {time} ({date}). They are read again when the page opens.",
     loading: "Loading notices from Rodalies de Catalunya…",
     sourceAgo: "Source: {source}, {n} min ago",
     sourceNow: "Source: {source}, just now",

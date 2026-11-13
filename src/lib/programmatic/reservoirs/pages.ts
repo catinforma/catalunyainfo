@@ -105,9 +105,11 @@ export function reservoirSitemapEntries(): MetadataRoute.Sitemap {
     languages["x-default"] = absoluteUrl(entry.translations[X_DEFAULT_LOCALE]);
     return {
       url: absoluteUrl(entry.path),
+      // The snapshot's date: the facts change with it. Since 13 Nov 2026 the
+      // reading in the HTML is the ACA's latest (routes regenerate every three
+      // hours, server.ts), which the sitemap has no date for without a fetch.
       lastModified: new Date(`${entry.lastModified}T00:00:00Z`),
-      // The HTML changes only with the snapshot; today's reading is fetched by the browser.
-      changeFrequency: "weekly" as const,
+      changeFrequency: "daily" as const,
       priority: 0.6,
       alternates: { languages },
     };

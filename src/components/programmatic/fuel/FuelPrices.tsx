@@ -3,25 +3,50 @@
 import { useEffect, useMemo, useState } from "react";
 
 import type { LiveLabels } from "@/lib/programmatic/fuel/copy";
-import { FUELS, FUEL_ENDPOINT, freshness, rank, type Freshness, type Fuel, type LivePayload, type StationFilter } from "@/lib/programmatic/fuel/live";
+import {
+  FUELS,
+  FUEL_ENDPOINT,
+  freshness,
+  rank,
+  type Freshness,
+  type Fuel,
+  type FuelRanking,
+  type InitialPrices,
+  type LivePayload,
+  type LiveStation,
+  type StationFilter,
+} from "@/lib/programmatic/fuel/live";
 
 /**
- * Today's prices, in the browser.
+ * Today's prices.
  *
- * The page around it is static and carries no price: prices change every half
- * hour and a cached page would show yesterday's as today's. The first render
- * (server and no-JS) says where the prices come from and links the Ministry's
- * own map; once mounted, the component reads `/api/fuel/catalonia/` (one
- * CDN-cached response for every page), keeps the stations of this page and
- * shows the ten cheapest for the chosen product with the Ministry's timestamp.
- * A list older than four hours is shown under a warning, one older than a day
- * not at all.
+ * Since 13 Nov 2026 the server HTML carries `initial`: the ten cheapest
+ * stations per product for this page, from the list the route read at render
+ * (every half hour at most), under the Ministry's own timestamp. Once mounted,
+ * the component reads `/api/fuel/catalonia/` (one CDN-cached response for every
+ * page), keeps the stations of this page and ranks them again, so a reader
+ * always ends on the newest list. A list older than four hours is shown under
+ * a warning, one older than a day not at all. Without `initial` (the Ministry
+ * did not answer at render) the first render says where the prices come from
+ * and links the Ministry's own map, as before.
  */
 
 type State = { kind: "loading" } | { kind: "failed" } | { kind: "ready"; payload: LivePayload; fresh: Freshness };
 
 function fill(template: string, values: Record<string, string | number>): string {
   return template.replace(/\{(\w+)\}/g, (match, key: string) => (key in values ? String(values[key]) : match));
+}
+
+/** A label with its "{price}" slot in bold (every other slot filled as text). */
+function withPrice(template: string, values: Record<string, string>, priceText: string) {
+  const [before, after = ""] = fill(template, values).split("{price}");
+  return (
+    <>
+      {before}
+      <strong>{priceText}</strong>
+      {after}
+    </>
+  );
 }
 
 /** "28/10/2026 11:36:05" -> { date: "28/10/2026", time: "11:36" }. */
@@ -38,6 +63,7 @@ export function FuelPrices({
   labels,
   geoportalUrl,
   expectedRows = 10,
+  initial = null,
 }: {
   filter: StationFilter;
   /** "de Manresa" / "de la provincia de Girona": completes the median line. */
@@ -49,6 +75,8 @@ export function FuelPrices({
   geoportalUrl: string;
   /** Rows the price table will most likely have: min(10, stations behind the page). */
   expectedRows?: number;
+  /** The server's ranking for this page (see `initialPrices`), or null. */
+  initial?: InitialPrices | null;
 }) {
   const [state, setState] = useState<State>({ kind: "loading" });
   const [fuel, setFuel] = useState<Fuel>("e95");
@@ -56,7 +84,7 @@ export function FuelPrices({
 
   useEffect(() => {
     let cancelled = false;
-    // One state update after mount: the server render stays price-free.
+    // One state update after mount: the first render is the server's.
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setMounted(true);
     fetch(FUEL_ENDPOINT)
@@ -76,7 +104,7 @@ export function FuelPrices({
 
   const rankings = useMemo(() => {
     if (state.kind !== "ready") return null;
-    return Object.fromEntries(FUELS.map((f) => [f, rank(state.payload.stations, filter, f)])) as Record<Fuel, ReturnType<typeof rank>>;
+    return Object.fromEntries(FUELS.map((f) => [f, rank(state.payload.stations, filter, f)])) as Record<Fuel, FuelRanking>;
   }, [state, filter]);
 
   const geoportal = (
@@ -99,17 +127,26 @@ export function FuelPrices({
     );
   };
 
-  if (!mounted || state.kind === "loading") {
-    return (
-      <div className="ci-today" aria-live="polite" aria-busy={mounted}>
-        <div className="ci-live-pending">
-          <PriceSkeleton labels={labels} showTown={showTown} rows={expectedRows} placeOf={placeOf} />
-          <p className="ci-live-placeholder">{mounted ? labels.loading : withGeoportal(labels.fallback)}</p>
+  // What to show: the browser's own read once it has one; until then (and if
+  // that read fails) the server's, which carries its own timestamp.
+  const shown: { fecha: string; updated: string | null; fresh: Freshness; rankings: Record<Fuel, FuelRanking> | null } | null =
+    state.kind === "ready"
+      ? { fecha: state.payload.fecha, updated: state.payload.updated, fresh: state.fresh, rankings }
+      : initial
+        ? { fecha: initial.fecha, updated: initial.updated, fresh: initial.fresh, rankings: initial.rankings }
+        : null;
+
+  if (!shown) {
+    if (!mounted || state.kind === "loading") {
+      return (
+        <div className="ci-today" aria-live="polite" aria-busy={mounted}>
+          <div className="ci-live-pending">
+            <PriceSkeleton labels={labels} showTown={showTown} rows={expectedRows} placeOf={placeOf} />
+            <p className="ci-live-placeholder">{mounted ? labels.loading : withGeoportal(labels.fallback)}</p>
+          </div>
         </div>
-      </div>
-    );
-  }
-  if (state.kind === "failed") {
+      );
+    }
     return (
       <div className="ci-today" aria-live="polite">
         <p className="ci-callout ci-callout-warning m-0">{withGeoportal(labels.failed)}</p>
@@ -117,10 +154,9 @@ export function FuelPrices({
     );
   }
 
-  const { payload, fresh } = state;
-  const { date, time } = splitFecha(payload.fecha);
+  const { date, time } = splitFecha(shown.fecha);
   const when = time ? `${date} ${time}` : date;
-  if (fresh === "stale" || !rankings) {
+  if (shown.fresh === "stale" || !shown.rankings) {
     return (
       <div className="ci-today" aria-live="polite">
         <p className="ci-callout ci-callout-warning m-0">{withGeoportal(fill(labels.stale, { when }))}</p>
@@ -129,15 +165,27 @@ export function FuelPrices({
   }
 
   const price = new Intl.NumberFormat(locale === "es" ? "es-ES" : "ca-ES", { minimumFractionDigits: 3, maximumFractionDigits: 3 });
-  const available = FUELS.filter((f) => rankings[f].count > 0);
-  const current = rankings[available.includes(fuel) ? fuel : (available[0] ?? fuel)];
+  const all = shown.rankings;
+  const available = FUELS.filter((f) => all[f].count > 0);
+  const current = all[available.includes(fuel) ? fuel : (available[0] ?? fuel)];
+  const townOf = (s: LiveStation) => (locale === "es" ? s.t.charAt(0).toUpperCase() + s.t.slice(1) : s.t);
+  const stationLabel = (s: LiveStation) => `${s.b} (${s.a}${showTown ? `, ${townOf(s)}` : ""})`;
+  const best95 = all.e95.cheapest[0];
+  const bestGoa = all.goa.cheapest[0];
 
   return (
     <div className="ci-today" aria-live="polite">
-      <p className="m-0 text-sm text-[var(--color-ink-soft)]">
-        <time dateTime={payload.updated ?? undefined}>{fill(labels.updated, { time, date })}</time>
+      {best95 || bestGoa ? (
+        <p className="m-0 text-lg">
+          {best95 ? withPrice(labels.cheapestE95, { place: placeOf, station: stationLabel(best95) }, `${price.format(best95.e95!)} ${labels.perLitre}`) : null}
+          {best95 && bestGoa ? " " : null}
+          {bestGoa ? withPrice(labels.cheapestGoa, { station: stationLabel(bestGoa) }, `${price.format(bestGoa.goa!)} ${labels.perLitre}`) : null}
+        </p>
+      ) : null}
+      <p className="mt-2 mb-0 text-sm text-[var(--color-ink-soft)]">
+        <time dateTime={shown.updated ?? undefined}>{fill(labels.updated, { time, date })}</time>
       </p>
-      {fresh === "old" ? <p className="ci-callout ci-callout-warning mt-3">{withGeoportal(fill(labels.old, { when }))}</p> : null}
+      {shown.fresh === "old" ? <p className="ci-callout ci-callout-warning mt-3">{withGeoportal(fill(labels.old, { when }))}</p> : null}
 
       <div role="group" aria-label={labels.picker} className="mt-4 flex flex-wrap gap-2">
         {available.map((f) => (
@@ -187,7 +235,7 @@ export function FuelPrices({
                       <br />
                       <small>{s.a}</small>
                     </td>
-                    {showTown ? <td>{locale === "es" ? s.t.charAt(0).toUpperCase() + s.t.slice(1) : s.t}</td> : null}
+                    {showTown ? <td>{townOf(s)}</td> : null}
                     <td className="text-right font-semibold whitespace-nowrap tabular-nums">{price.format(s[current.fuel]!)}</td>
                     <td>
                       {s.lat !== undefined && s.lon !== undefined ? (
@@ -213,7 +261,8 @@ export function FuelPrices({
 }
 
 /**
- * The shape of the price list, invisible, while it loads.
+ * The shape of the price list, invisible, while it loads (only when the server
+ * had no list to render).
  *
  * The list arrives after hydration and is the tallest thing on the page (up to
  * ten rows of station, address and price). Without a reserved space everything
@@ -246,21 +295,21 @@ function PriceSkeleton({ labels, showTown, rows, placeOf }: { labels: LiveLabels
               <th scope="col">{labels.cols.station}</th>
               {showTown ? <th scope="col">{labels.cols.town}</th> : null}
               <th scope="col">{labels.cols.price}</th>
-              <th scope="col">{" "}</th>
+              <th scope="col">{" "}</th>
             </tr>
           </thead>
           <tbody>
             {Array.from({ length: n }, (_, i) => (
               <tr key={i} className={showTown ? "ci-skeleton-row ci-skeleton-row-town" : "ci-skeleton-row"}>
-                <td>{" "}</td>
+                <td>{" "}</td>
                 <td>
-                  {" "}
+                  {" "}
                   <br />
-                  <small>{" "}</small>
+                  <small>{" "}</small>
                 </td>
-                {showTown ? <td>{" "}</td> : null}
-                <td>{" "}</td>
-                <td>{" "}</td>
+                {showTown ? <td>{" "}</td> : null}
+                <td>{" "}</td>
+                <td>{" "}</td>
               </tr>
             ))}
           </tbody>

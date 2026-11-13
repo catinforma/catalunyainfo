@@ -225,6 +225,10 @@ const ca = {
     capNote: "La capacitat es calcula a partir del volum i el percentatge que publica l'ACA.",
     unavailable: "Ara mateix no podem llegir les dades de l'ACA. Consulta-les directament a",
     sourceLine: "Dades diàries de",
+    yearAgo: "Fa un any ({date}) eren al {pct} % (ara, {pp} punts).",
+    checked: "Dades consultades a l'ACA: {date}, {time} h.",
+    colYear: "Fa un any",
+    rowLink: "Pàgina de l'embassament {name}",
   },
   conditions: {
     legend: "Llegenda de condicions",

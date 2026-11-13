@@ -38,6 +38,9 @@ import {
   type Reading,
 } from "../src/lib/programmatic/reservoirs/live.ts";
 import { INDICATORS, OFFICIAL, indicatorsOf } from "../src/lib/programmatic/reservoirs/official.ts";
+import { SERVER_REVALIDATE_SECONDS, freshReadings, yearAgoBySlug } from "../src/lib/programmatic/reservoirs/server.ts";
+import { hubAnswer, liveReadLine, reservoirAnswer } from "../src/lib/programmatic/reservoirs/copy.ts";
+import { caDel, caEl, liveStamp } from "../src/lib/programmatic/live-stamp.ts";
 import {
   NOT_FOUND_METADATA,
   reservoirFamilyPaths,
@@ -405,7 +408,7 @@ test("routes: the nine prerendered per language, always with the route's own loc
   }
 });
 
-test("route files: revalidate=false, own locale, notFound(), no database", () => {
+test("route files: ISR every 3 h with dynamicParams, own locale, notFound(), no database", () => {
   const app = join(ROOT, "src/app/(public)/[locale]");
   for (const [file, locale] of [
     ["embassaments/page.tsx", "ca"],
@@ -416,12 +419,16 @@ test("route files: revalidate=false, own locale, notFound(), no database", () =>
     ["reservoirs/[reservoir]/page.tsx", "en"],
   ] as const) {
     const source = readFileSync(join(app, file), "utf8");
-    assert.match(source, /export const revalidate = false;/, file);
+    // Since 13 Nov 2026 the HTML carries the ACA's latest reading: the routes
+    // regenerate on a timer, so every one of them (hubs too) must allow
+    // dynamic params (self-hosted, a false there answers 404 on regeneration).
+    assert.match(source, new RegExp(`export const revalidate = ${SERVER_REVALIDATE_SECONDS};`), file);
+    assert.match(source, /export const dynamicParams = true;/, file);
+    assert.match(source, /loadServerReservoirs\(\)/, file);
     assert.match(source, new RegExp(`const ROUTE = "${locale}";`), file);
     assert.match(source, /resolveReservoir(Hub)?\(ROUTE, /, file);
     assert.match(source, /notFound\(\)/, file);
     assert.doesNotMatch(source, /repository|getDb|@\/lib\/db/, `${file} reads no database`);
-    if (file.includes("[")) assert.match(source, /export const dynamicParams = true;/, file);
   }
   assert.deepEqual(NOT_FOUND_METADATA, { robots: { index: false, follow: false } });
 });
@@ -570,4 +577,73 @@ test("server output carries no clock; the reading block is a client component re
   for (const file of ["live.ts", "labels.ts", "types.ts"]) {
     assert.doesNotMatch(readFileSync(join(ROOT, "src/lib/programmatic/reservoirs", file), "utf8"), /^import (?!type )[^;]*from "\.\/(snapshot\.json|data|copy|pages|official|upstream|prepare)";/m, file);
   }
+});
+
+/* -------------------------------------------------------------------------- */
+/* 13 Nov 2026: the ACA's reading in the server HTML                          */
+/* -------------------------------------------------------------------------- */
+
+test("live stamp: Madrid date and time, Catalan elision before 1 and 11", () => {
+  assert.deepEqual(liveStamp("2026-11-13T10:50:52Z", "es"), { iso: "2026-11-13", date: "13/11/2026", time: "11:50" });
+  assert.deepEqual(liveStamp("2026-07-01T22:05:00Z", "en"), { iso: "2026-07-02", date: "2 Jul 2026", time: "00:05" });
+  assert.equal(liveStamp("not a date", "ca"), null);
+  assert.equal(caEl("11/11/2026"), "l'11/11/2026");
+  assert.equal(caEl("01/12/2026"), "l'01/12/2026");
+  assert.equal(caEl("13/11/2026"), "el 13/11/2026");
+  assert.equal(caDel("1 de desembre"), "de l'1 de desembre");
+  assert.equal(caDel("10/11/2026"), "del 10/11/2026");
+});
+
+test("freshReadings: the ACA's reading wins only when it is not older; too few readings fall back to the snapshot", () => {
+  const own = snapshotReadings();
+  const newer: Reading[] = own.map((r) => ({ ...r, date: "2099-01-01", percent: 50, change: -1.2, changeFrom: "2098-12-25" }));
+  const fresh = freshReadings(newer);
+  assert.equal(fresh.live, true);
+  assert.ok(fresh.readings.every((r) => r.date === "2099-01-01" && r.percent === 50));
+  const older = own.map((r) => ({ ...r, date: "2000-01-01" }));
+  assert.deepEqual(freshReadings(older), { readings: own, live: false });
+  assert.deepEqual(freshReadings(newer.slice(0, 3)), { readings: own, live: false });
+  assert.deepEqual(freshReadings(null), { readings: own, live: false });
+});
+
+test("yearAgoBySlug: only a clean report, by slug", () => {
+  const ok = yearAgoBySlug({
+    date: "2025-11-11",
+    compareDate: null,
+    reservoirs: [{ name: "Sau", place: null, volume: 91.13, percent: 55, capacity: 165.7, change: null }],
+    total: { volume: 0, capacity: 0, percent: 0 },
+    terLlobregat: { volume: 0, capacity: 0, percent: 0 },
+    totalCompare: null,
+    error: null,
+  });
+  assert.deepEqual(ok, { sau: { date: "2025-11-11", percent: 55, volume: 91.13 } });
+  assert.deepEqual(yearAgoBySlug({ date: "", compareDate: null, reservoirs: [], total: ok as never, terLlobregat: ok as never, totalCompare: null, error: "x" }), {});
+});
+
+test("reservoir answer: figure and date first, week and year only when given, all languages", () => {
+  const sau = reservoirBySlug("sau");
+  const reading: Reading = { slug: "sau", date: "2026-11-11", percent: 69.6, volume: 115.46, level: 415.62, change: -2, changeFrom: "2026-11-04" };
+  const year = { date: "2025-11-11", percent: 55 };
+  const es = reservoirAnswer(sau, "es", reading, OFFICIAL.sau.capacity, year);
+  assert.equal(es, "**El embalse de Sau está al 69,6 %** (dato de la ACA del 11/11/2026): 115,46 hm³ de 165,81 hm³ de capacidad. Desde el 04/11/2026, −2,0 puntos; hace un año, el 11/11/2025, estaba al 55,0 %.");
+  const ca = reservoirAnswer(sau, "ca", reading, OFFICIAL.sau.capacity, year);
+  assert.match(ca, /^\*\*L'embassament de Sau és al 69,6 %\*\* \(dada de l'ACA de l'11\/11\/2026\)/);
+  assert.match(ca, /fa un any, l'11\/11\/2025, era al 55,0 %\.$/);
+  const en = reservoirAnswer(sau, "en", { ...reading, change: null, changeFrom: null }, OFFICIAL.sau.capacity, null);
+  assert.equal(en, "**Sau reservoir is 69.6% full** (ACA reading of 11 Nov 2026): 115.46 hm³ of 165.81 hm³ capacity.");
+});
+
+test("hub answer and read line: fullest and lowest, the guide's total with a link to the guide", () => {
+  const readings = snapshotReadings();
+  const top = [...readings].sort((a, b) => b.percent - a.percent)[0]!;
+  for (const locale of LOCALES) {
+    const text = hubAnswer(locale, readings, 78.1);
+    assert.ok(text.includes(reservoirBySlug(top.slug).name.replace(/^./, (c) => c.toUpperCase())), locale);
+    assert.match(text, locale === "en" ? /78\.1%/ : /78,1 %/, locale);
+    assert.match(text, /\]\(\/(ca|es|en)\/[^)]+\/\)/, `${locale} links the guide`);
+    assert.doesNotMatch(hubAnswer(locale, readings, null), /\]\(/, `${locale}: no total, no link`);
+  }
+  assert.equal(liveReadLine("ca", "2026-11-11", "2026-11-13T10:50:52Z"), "Dada de l'ACA de l'11/11/2026 · consultada el 13/11/2026 a les 11:50");
+  assert.equal(liveReadLine("es", "2026-11-11", "2026-11-13T10:50:52Z"), "Dato de la ACA del 11/11/2026 · consultado el 13/11/2026 a las 11:50");
+  assert.equal(liveReadLine("en", "2026-11-11", "2026-11-13T10:50:52Z"), "ACA reading of 11 Nov 2026 · checked 13 Nov 2026, 11:50");
 });

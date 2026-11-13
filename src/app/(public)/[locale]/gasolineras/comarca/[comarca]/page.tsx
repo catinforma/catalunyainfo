@@ -5,7 +5,8 @@ import { FuelPlaceRoute, NOT_FOUND_METADATA, fuelPlaceMetadata } from "@/compone
 import { comarcaStaticParams, resolveComarca } from "@/lib/programmatic/fuel/routing";
 
 /** /es/gasolineras/comarca/<comarca>/ — comarques with at least five stations. `es` only. */
-export const revalidate = false;
+/** SERVER_REVALIDATE_SECONDS in lib/programmatic/fuel/server.ts (a literal: Next reads it statically). */
+export const revalidate = 1800;
 export const dynamicParams = true;
 
 type Params = Promise<{ locale: string; comarca: string }>;

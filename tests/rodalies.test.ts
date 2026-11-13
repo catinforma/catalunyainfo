@@ -23,7 +23,8 @@ import {
   plainText,
   type Fetcher,
 } from "../src/lib/programmatic/rodalies/alerts.ts";
-import { KEY_STATIONS, hubCopy, lineCopy, linesAt, siblingLinks } from "../src/lib/programmatic/rodalies/copy.ts";
+import { KEY_STATIONS, alertsAnswer, hubCopy, lineCopy, linesAt, siblingLinks } from "../src/lib/programmatic/rodalies/copy.ts";
+import { SERVER_REVALIDATE_SECONDS, asOfAnswer } from "../src/lib/programmatic/rodalies/server.ts";
 import { liveLabels } from "../src/lib/programmatic/rodalies/labels.ts";
 import { LINES, SNAPSHOT, lineById, siblings } from "../src/lib/programmatic/rodalies/data.ts";
 import {
@@ -443,19 +444,44 @@ test("routes: every line prerendered in both languages, each param complete", ()
   for (const p of params) assert.ok(resolveLine(p.locale, p.linia), `${p.locale}/${p.linia}`);
 });
 
-test("route files: revalidate=false, notFound(), their own resolver, no database", () => {
+test("route files: ISR every 5 min with dynamicParams, notices read on the server, notFound(), no database", () => {
   const app = join(ROOT, "src/app/(public)/[locale]/rodalies");
   for (const [file, resolver] of [
     ["page.tsx", /resolveHub\(/],
     ["[linia]/page.tsx", /resolveLine\(/],
   ] as const) {
     const source = readFileSync(join(app, file), "utf8");
-    assert.match(source, /export const revalidate = false;/, file);
+    assert.match(source, new RegExp(`export const revalidate = ${SERVER_REVALIDATE_SECONDS};`), file);
+    // Regenerated on a timer: a dynamicParams = false route 404s self-hosted.
+    assert.match(source, /export const dynamicParams = true;/, file);
+    assert.match(source, /loadServerAlerts\(\)/, file);
     assert.match(source, resolver, file);
     assert.match(source, /notFound\(\)/, file);
     assert.doesNotMatch(source, /repository|getDb|@\/lib\/db/, `${file} reads no database`);
   }
-  assert.match(readFileSync(join(app, "[linia]/page.tsx"), "utf8"), /export const dynamicParams = true;/);
+});
+
+test("server notices: kept only when the source answered within 15 minutes, dated by that answer", () => {
+  const body = { ok: true as const, source: "rodalies" as const, fetchedAt: "2026-11-13T11:00:00.000Z", sourceUpdatedAt: null, alerts: [], unmapped: [] };
+  const now = new Date("2026-11-13T11:00:00.000Z");
+  assert.equal(asOfAnswer(body, "2026-11-13T10:50:00.000Z", now, 15 * 60_000)?.fetchedAt, "2026-11-13T10:50:00.000Z");
+  assert.equal(asOfAnswer(body, "2026-11-13T10:40:00.000Z", now, 15 * 60_000), null);
+  assert.equal(asOfAnswer(body, null, now, 15 * 60_000)?.fetchedAt, body.fetchedAt);
+});
+
+test("alerts answer: count, lines and the read time, never 'now'; line pages count their own line", () => {
+  const r1 = lineById("R1");
+  const alerts = [
+    { id: "a", lines: ["R1", "R4"], stations: [], date: "2026-11-13", time: "10:04", text: { ca: "x", es: "x", en: null } },
+    { id: "b", lines: ["R4"], stations: [], date: "2026-11-13", time: "09:00", text: { ca: "y", es: "y", en: null } },
+  ] as AlertsOk["alerts"];
+  const payload: AlertsOk = { ok: true, source: "rodalies", fetchedAt: "2026-11-13T10:50:52Z", sourceUpdatedAt: null, alerts, unmapped: [] };
+  assert.equal(alertsAnswer("es", payload, null), "**2 avisos activos** en Rodalies a las 11:50 h del 13 de noviembre de 2026: R1, R4.");
+  assert.equal(alertsAnswer("es", payload, r1), "**R1: 1 aviso activo** a las 11:50 h del 13 de noviembre de 2026.");
+  assert.equal(alertsAnswer("ca", { ...payload, alerts: [] }, r1), "**R1: cap avís actiu** a les 11:50 h del 13 de novembre de 2026.");
+  assert.match(alertsAnswer("ca", { ...payload, fetchedAt: "2026-11-11T08:00:00Z" }, null)!, /de l'11 de novembre/);
+  assert.match(alertsAnswer("en", payload, null)!, /^\*\*2 active notices\*\* on Rodalies at 11:50 on 13 November 2026: R1, R4\.$/);
+  for (const locale of LOCALES) assert.doesNotMatch(alertsAnswer(locale, payload, null)!, /\b(ahora|ara|now)\b/i, locale);
 });
 
 test("metadata: titles <= 60 in the searched words, descriptions <= 155, unique", () => {

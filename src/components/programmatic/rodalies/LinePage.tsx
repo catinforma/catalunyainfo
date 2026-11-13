@@ -9,11 +9,11 @@ import type { Block } from "@/lib/content/blocks";
 import { renderInline } from "@/lib/content/inline";
 import { getMessages } from "@/lib/i18n";
 import { INTL_LOCALE, type Locale } from "@/lib/i18n/config";
-import { lineCopy, siblingLinks, stationConnections } from "@/lib/programmatic/rodalies/copy";
+import { alertsAnswer, lineCopy, siblingLinks, stationConnections } from "@/lib/programmatic/rodalies/copy";
 import { LINES, SNAPSHOT } from "@/lib/programmatic/rodalies/data";
 import { officialUrl } from "@/lib/programmatic/rodalies/official";
 import { hubPath, linePath, lineTranslations, type LineLocale } from "@/lib/programmatic/rodalies/paths";
-import type { LineId, SnapshotLine } from "@/lib/programmatic/rodalies/types";
+import type { AlertsOk, LineId, SnapshotLine } from "@/lib/programmatic/rodalies/types";
 import { breadcrumbSchema, faqSchema, graph } from "@/lib/seo/jsonld";
 
 import { Compensation, Faq, LinkList, Paragraphs, Sources } from "./parts";
@@ -37,12 +37,14 @@ export function lineCrumbs(line: SnapshotLine, locale: LineLocale): Crumb[] {
 }
 
 /**
- * One line's page. Everything in the server HTML comes from the committed
- * snapshot and the verified official links: no database, no fetch, no clock.
- * The notices are the browser's (RodaliesLive).
+ * One line's page. The facts come from the committed snapshot and the
+ * verified official links (no database, no clock); the notices are the ones
+ * the route read at render (`initial`, every five minutes at most, printed
+ * with the time they were read), which the browser reads again (RodaliesLive).
  */
-export function LinePage({ line, locale }: { line: SnapshotLine; locale: LineLocale }) {
+export function LinePage({ line, locale, initial = null }: { line: SnapshotLine; locale: LineLocale; initial?: AlertsOk | null }) {
   const t = lineCopy(line, locale);
+  const answer = initial ? alertsAnswer(locale, initial, line) : null;
   const crumbs = lineCrumbs(line, locale);
   const sibling = siblingLinks(line.id, locale);
   const faqBlock = { type: "faq", items: t.faq } as Block;
@@ -64,7 +66,8 @@ export function LinePage({ line, locale }: { line: SnapshotLine; locale: LineLoc
               <Breadcrumbs items={crumbs} locale={locale} />
               <p className="ci-label mb-3 max-md:hidden">{t.kicker}</p>
               <h1 className="ci-measure">{t.h1}</h1>
-              <p className="ci-measure mt-4 text-lg text-[var(--color-ink-soft)]">{t.lead}</p>
+              {answer ? <p className="ci-measure mt-4 text-lg">{renderInline(answer)}</p> : null}
+              <p className={`ci-measure ${answer ? "mt-3 text-base" : "mt-4 text-lg"} text-[var(--color-ink-soft)]`}>{t.lead}</p>
               <div className="mt-5 flex flex-wrap items-center gap-x-5 gap-y-2 text-xs text-[var(--color-muted)]">
                 <span className="ci-verified">
                   <span className="ci-verified-dot" aria-hidden="true" />
@@ -86,6 +89,7 @@ export function LinePage({ line, locale }: { line: SnapshotLine; locale: LineLoc
                   lineNames={lineNames()}
                   lineHrefs={lineHrefs(locale)}
                   statusUrl={officialUrl.status(locale)}
+                  initial={initial}
                 />
 
                 <section className="ci-margin-block" aria-label={line.name}>

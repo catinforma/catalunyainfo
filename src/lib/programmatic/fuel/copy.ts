@@ -300,6 +300,10 @@ export interface LiveLabels {
   map: string;
   perLitre: string;
   geoportal: string;
+  /** The answer first: "{place}", "{price}" (with €/l), "{station}" (brand, address, town). */
+  cheapestE95: string;
+  /** "{price}", "{station}". */
+  cheapestGoa: string;
 }
 
 export function liveLabels(locale: FuelLocale): LiveLabels {
@@ -320,6 +324,8 @@ export function liveLabels(locale: FuelLocale): LiveLabels {
       map: "Ver en el mapa",
       perLitre: "€/l",
       geoportal: "Geoportal Gasolineras",
+      cheapestE95: "Gasolina 95 más barata {place}: {price} en {station}.",
+      cheapestGoa: "Diésel más barato: {price} en {station}.",
     };
   }
   return {
@@ -338,6 +344,8 @@ export function liveLabels(locale: FuelLocale): LiveLabels {
     map: "Veure al mapa",
     perLitre: "€/l",
     geoportal: "Geoportal Gasolineras",
+    cheapestE95: "Gasolina 95 més barata {place}: {price} a {station}.",
+    cheapestGoa: "Dièsel més barat: {price} a {station}.",
   };
 }
 

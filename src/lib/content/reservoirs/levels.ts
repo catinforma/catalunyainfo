@@ -65,6 +65,11 @@ export interface ReservoirReport {
   terLlobregat: ReservoirTotals;
   totalCompare: ReservoirTotals | null;
   error: string | null;
+  /**
+   * When the ACA's portal answered (its HTTP `Date`, which the data cache
+   * keeps with the response), ISO instant. Absent on reports built in tests.
+   */
+  fetchedAt?: string | null;
 }
 
 interface Row {
@@ -226,30 +231,60 @@ export function liveReservoirTitle(locale: keyof typeof LIVE_TITLE, report: Rese
   return LIVE_TITLE[locale].replace("{pct}", locale === "en" ? pct : pct.replace(".", ",")).replace("{date}", date);
 }
 
-async function query(params: string): Promise<Row[]> {
+/** The upstream's own `Date` header (when it answered), else `now`. */
+export function answeredAt(response: Pick<Response, "headers">, now: Date): string {
+  const header = Date.parse(response.headers.get("date") ?? "");
+  return Number.isFinite(header) ? new Date(header).toISOString() : now.toISOString();
+}
+
+async function query(params: string, now: Date): Promise<{ rows: Row[]; fetchedAt: string }> {
   const response = await fetch(`${ENDPOINT}?${params}`, {
     headers: { accept: "application/json" },
     next: { revalidate: REVALIDATE_SECONDS },
     signal: AbortSignal.timeout(20_000),
   } as RequestInit);
   if (!response.ok) throw new Error(`${response.status}`);
-  return (await response.json()) as Row[];
+  return { rows: (await response.json()) as Row[], fetchedAt: answeredAt(response, now) };
+}
+
+function failedReport(error: unknown): ReservoirReport {
+  return {
+    date: "",
+    compareDate: null,
+    reservoirs: [],
+    total: EMPTY,
+    terLlobregat: EMPTY,
+    totalCompare: null,
+    error: error instanceof Error ? error.message : "unreachable",
+  };
 }
 
 export async function loadReservoirs(now: Date = new Date()): Promise<ReservoirReport> {
   try {
     const since = shiftIso(now.toISOString().slice(0, 10), -14);
-    const rows = await query(`$where=${encodeURIComponent(`dia >= '${since}T00:00:00.000'`)}&$limit=500`);
-    return buildReport(parseRows(rows));
+    const { rows, fetchedAt } = await query(`$where=${encodeURIComponent(`dia >= '${since}T00:00:00.000'`)}&$limit=500`, now);
+    return { ...buildReport(parseRows(rows)), fetchedAt };
   } catch (error) {
-    return {
-      date: "",
-      compareDate: null,
-      reservoirs: [],
-      total: EMPTY,
-      terLlobregat: EMPTY,
-      totalCompare: null,
-      error: error instanceof Error ? error.message : "unreachable",
-    };
+    return failedReport(error);
+  }
+}
+
+/**
+ * The same report one year before `date` (the current reading's ISO date):
+ * the latest day, among `date` minus 365 and the three days before it, on
+ * which every reservoir reads clean, by the same rules as today's report. An
+ * error report, never an estimate, when the ACA has no such day; callers then
+ * print no comparison.
+ */
+export async function loadReservoirsYearAgo(date: string, now: Date = new Date()): Promise<ReservoirReport> {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) return failedReport(new Error("no date"));
+  try {
+    const to = shiftIso(date, -365);
+    const from = shiftIso(to, -3);
+    const where = `dia between '${from}T00:00:00.000' and '${to}T00:00:00.000'`;
+    const { rows, fetchedAt } = await query(`$where=${encodeURIComponent(where)}&$limit=200`, now);
+    return { ...buildReport(parseRows(rows)), fetchedAt };
+  } catch (error) {
+    return failedReport(error);
   }
 }
