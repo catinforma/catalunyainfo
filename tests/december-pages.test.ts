@@ -19,7 +19,7 @@ import {
   runWords,
 } from "../src/lib/content/batch02/december-bridge.ts";
 import { dayDate } from "../src/lib/content/batch02/festive.ts";
-import { MARATO, MARATO_GUIDE, MARATO_VERIFIED } from "../src/lib/content/batch02/marato.ts";
+import { MARATO, MARATO_GUIDE, MARATO_VERIFIED, PROGRAMME, PROGRAMME_CHECKED } from "../src/lib/content/batch02/marato.ts";
 import { B2_PATHS, withReadNext, type B2Article } from "../src/lib/content/batch02/shared.ts";
 import { SHOPS } from "../src/lib/content/batch02/shops.ts";
 import { ARTICLE_PATHS } from "../src/lib/content/features/shared.ts";
@@ -241,9 +241,10 @@ test("every weekday printed next to a day of the month matches the date", () => 
   for (const article of ARTICLES) {
     for (const locale of LOCALES) {
       const body = text(article.editions[locale].blocks).toLowerCase();
-      const pattern = new RegExp(`\\b(${weekdays[locale].join("|")}),? (?:the )?(\\d{1,2})(?:st|nd|rd|th)?(?![\\d:])`, "gu");
+      // December unless November follows (La Marató's album: 29 November).
+      const pattern = new RegExp(`\\b(${weekdays[locale].join("|")}),? (?:the )?(\\d{1,2})(?:st|nd|rd|th)?(?![\\d:])( (?:de )?(?:novembre|noviembre|november))?`, "gu");
       for (const match of body.matchAll(pattern)) {
-        const iso = `2026-12-${match[2]!.padStart(2, "0")}`;
+        const iso = `2026-${match[3] ? "11" : "12"}-${match[2]!.padStart(2, "0")}`;
         assert.equal(weekdays[locale][weekdayIndex(iso)], match[1], `${article.key}/${locale}: "${match[0]}"`);
         checked += 1;
       }
@@ -349,15 +350,21 @@ test("La Marató 2026 is Sunday 13 December and the lead says so with the cause"
   }
 });
 
-test("donations only through what the official page publishes: Bizum code, no copied IBAN, no phone number", () => {
+test("donations only through what 3Cat publishes: Bizum code, no copied IBAN, only the announced phone number", () => {
+  // 13 Nov 2026: 3Cat's news of 10 Nov 2026 announced the 13 December line,
+  // "El diumenge 13 de desembre també estarà actiu el telèfon 900 21 50 50."
+  assert.equal(PROGRAMME.phone, "900 21 50 50");
+  assert.ok(MARATO_GUIDE.sources.some((source) => source.url === PROGRAMME.news), "the announcement is a source");
   for (const locale of LOCALES) {
     const json = JSON.stringify(MARATO_GUIDE.editions[locale].blocks);
     const body = text(MARATO_GUIDE.editions[locale].blocks);
     assert.ok(body.includes(MARATO.bizum), `${locale}: Bizum code`);
     assert.ok(json.includes(`](${MARATO.donate[locale]})`), `${locale}: official donation page linked`);
+    assert.ok(body.includes(PROGRAMME.phone), `${locale}: the announced phone number`);
     assert.doesNotMatch(body, /\bES\d{2}[\s\d]{10,}/, `${locale}: an account number is printed`);
-    assert.doesNotMatch(body, /\b[6789]\d{2}[ .]?\d{2,3}[ .]?\d{2,3}[ .]?\d{0,3}\b(?![,.]\d)/, `${locale}: something that looks like a phone number`);
-    assert.doesNotMatch(body, /\b90[0-9] ?\d{3} ?\d{3}\b/, `${locale}: premium-rate number`);
+    const other = body.split(PROGRAMME.phone).join(" ");
+    assert.doesNotMatch(other, /\b[6789]\d{2}[ .]?\d{2,3}[ .]?\d{2,3}[ .]?\d{0,3}\b(?![,.]\d)/, `${locale}: another phone-like number`);
+    assert.doesNotMatch(other, /\b90[0-9] ?\d{3} ?\d{3}\b/, `${locale}: premium-rate number`);
   }
 });
 
@@ -376,12 +383,18 @@ test("no other edition's figures are printed as 2026's", () => {
     }
     // Last year's provisional total from the April note is not reused.
     assert.doesNotMatch(body, /267[,.]2/, locale);
-    // The programme times are not invented: the only clock times are the
-    // volunteer sign-up window the Fundació published.
-    for (const sentence of sentences(body).filter((s) => /\b(?:[01]?\d|2[0-3])(?::[0-5]\d| h\b)/.test(s))) {
-      assert.match(sentence, /voluntariat\.org/, `${locale}: "${sentence}" has a clock time`);
+    // The programme times are not invented: every clock time printed is one
+    // 3Cat announced on 10 Nov 2026 (TV3 9.30-14.30 and 16.00-1.00, radio
+    // from 8.00), in the Catalan "9.30" or the es/en "9:30" style.
+    const announced = new Set([...PROGRAMME.tv.flatMap((slot) => [slot.from, slot.to]), PROGRAMME.radioFrom].flatMap((t) => [t, t.replace(".", ":")]));
+    for (const match of body.matchAll(/\b(?:[01]?\d|2[0-3])[.:][0-5]\d\b(?![.,]?\d)/g)) {
+      const prefix = body.slice(Math.max(0, match.index! - 3), match.index!);
+      if (/\d[.,]$/.test(prefix)) continue; // part of a larger number such as 271,9 or 1.084
+      assert.ok(announced.has(match[0]), `${locale}: clock time ${match[0]} was not announced by 3Cat`);
     }
+    assert.ok(body.includes(locale === "ca" ? "9.30" : "9:30"), `${locale}: the start time`);
   }
+  assert.equal(PROGRAMME_CHECKED, "2026-11-13");
 });
 
 test("top-3 push (30 Oct 2026): the bridge snippet lists December's holidays and the FAQ asks for the Purísima bridge; La Marató's title gives the date", () => {
@@ -427,10 +440,11 @@ test("La Marató answers in the searchers' words: TV3 in the H1, lead and snippe
     for (const question of questions[locale]) assert.ok(items.some((item) => item.question === question), `${locale}: ${question}`);
     const answer = (question: string) => items.find((item) => item.question === question)!.answer;
     assert.ok(answer(questions[locale][0]!).includes(dayDate(MARATO.date, locale)), locale);
-    // No start time was published: the answer says so and prints none.
+    // 13 Nov 2026: 3Cat announced the times on 10 Nov; the answer gives the TV3 start.
     const time = answer(questions[locale][1]!);
-    assert.match(time, /encara no ho ha publicat|aún no lo ha publicado|has not published/, locale);
-    assert.doesNotMatch(time, /\b(?:[01]?\d|2[0-3])(?::[0-5]\d| h\b)/, `${locale}: a clock time in "${time}"`);
+    const start = locale === "ca" ? PROGRAMME.tv[0].from : PROGRAMME.tv[0].from.replace(".", ":");
+    assert.ok(time.includes(start), `${locale}: start time in "${time}"`);
+    assert.match(time, /Collserola/, locale);
     const volunteer = answer(questions[locale][3]!);
     assert.match(volunteer, /marato\.voluntariat\.org/, locale);
     assert.match(volunteer, /10 (de )?(novembre|noviembre|November) (de )?2026/, locale);

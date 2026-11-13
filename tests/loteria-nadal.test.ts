@@ -649,3 +649,39 @@ test("the publish route has a loteria-nadal group and a links group for the thre
     /wants\("loteria-nadal-links"\)\) \{\s*published\.push\(await publishB2Article\(GROSSA\), await publishB2Article\(NEW_YEAR\), await publishB2Article\(CHRISTMAS_BARCELONA\)\);/,
   );
 });
+
+/* -------------------------------------------------------------------------- */
+/* 13 Nov 2026: participaciones and "la grossa de nadal"                       */
+/* -------------------------------------------------------------------------- */
+
+test("participaciones: the exemption is split by share, with a quarter-share Gordo example computed from the programme", () => {
+  // AEAT notice 17 Dec 2024 and Ley 35/2006 DA 33ª.2 (BOE, read 13 Nov 2026):
+  // a quarter of a 400,000 € décimo is 100,000 €, 10,000 € tax-free, 20% of 90,000 €.
+  const figures: Record<Locale, RegExp> = {
+    ca: /quarta part d'un dècim del Gordo en cobra 100\.000 €, en té 10\.000 € exempts i paga 18\.000 € de gravamen: n'hi queden 82\.000 €/,
+    es: /cuarta parte de un décimo del Gordo cobra 100\.000 €, tiene 10\.000 € exentos y paga 18\.000 € de gravamen: le quedan 82\.000 €/,
+    en: /quarter share of a Gordo décimo is €100,000, with €10,000 tax-free and €18,000 in levy: €82,000 left/,
+  };
+  for (const locale of LOCALES) {
+    const plain = body(locale);
+    assert.match(plain, figures[locale], locale);
+    assert.match(plain, /titulars de les participacions|titulares de las participaciones|holders of the participaciones/, locale);
+    assert.match(plain, /13 (de )?(novembre|noviembre|November) (de )?2026/, `${locale}: the tax re-read is dated`);
+  }
+});
+
+test("the FAQ answers 'la grossa de nadal' with the two draws and their dates", () => {
+  const question: Record<Locale, string> = {
+    ca: "La Grossa de Nadal i la loteria de Nadal són el mateix?",
+    es: "¿La Grossa de Navidad es lo mismo que la Lotería de Navidad?",
+    en: "Is La Grossa the same as the Spanish Christmas Lottery?",
+  };
+  const days: Record<Locale, RegExp> = { ca: /dimarts 22 de desembre.*dijous 31 de desembre/, es: /martes 22 de diciembre.*jueves 31 de diciembre/, en: /Tuesday 22 December.*Thursday 31 December/ };
+  for (const locale of LOCALES) {
+    const faqBlock = LOTERIA_NADAL.editions[locale].blocks.find((b) => b.type === "faq") as { items: { question: string; answer: string }[] };
+    const item = faqBlock.items.find((i) => i.question === question[locale]);
+    assert.ok(item, `${locale}: missing "${question[locale]}"`);
+    assert.match(item.answer, /^No\./, locale);
+    assert.match(item.answer, days[locale], locale);
+  }
+});

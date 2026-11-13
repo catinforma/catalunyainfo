@@ -64,6 +64,19 @@ import { SHOPS } from "./shops";
  * tables (its two tables disagree), which fourth prize each Catalan outlet
  * sold (SELAE does not say), shop names, and anything only the press reported.
  *
+ * 13 Nov 2026 (December push): tax re-read on the BOE (consolidated Ley
+ * 35/2006 updated 11 Nov 2026; DA 33ª.2 unchanged since 2018) and the AEAT
+ * notice (TAX_CHECKED). Added in ca/es/en: participaciones (the exemption
+ * split by share, the collector's duty to prove the split, a quarter-share
+ * Gordo example computed from the programme), the non-residents' treaty
+ * refund, DA 33ª.8 (not in the taxable base), and an FAQ for "la grossa de
+ * nadal" (GSC: ~100 impressions in 28 days land here for it) that says La
+ * Grossa is the Generalitat's lottery and its holiday draw is La Grossa de
+ * Cap d'Any. No claim that a "Grossa de Nadal" does not exist: Loteries de
+ * Catalunya's site answered 403 to the server that day. SELAE's whole site
+ * (pages, PDFs and the buscadorSorteos API) also answered 403 (Akamai) to
+ * the server on 13 Nov: see docs/GORDO_NAVIDAD_RUNBOOK.md before 22 Dec.
+ *
  * HOW TO UPDATE (the lead):
  *  - SELAE's 2026 Christmas dossier (the 2025 one is dated 16 Dec) states the
  *    start time: set DRAW_TIME_2026 = { time: "8:30", source: { name, url,
@@ -592,6 +605,26 @@ const HALF_EXEMPT = LEVY_EXEMPT / 2;
 const HALF_LEVY = levy(perDecimo("second")) / 2;
 const NET_SECOND = perDecimo("second") - levy(perDecimo("second"));
 const NET_THIRD = perDecimo("third") - levy(perDecimo("third"));
+/**
+ * A participación of a quarter of a Gordo décimo (13 Nov 2026): the AEAT
+ * notice splits the 40,000 € exemption by each holder's share, so a quarter
+ * share gets a quarter of the prize, of the exemption and of the levy.
+ */
+const QUARTER_FIRST = perDecimo("first") / 4;
+const QUARTER_EXEMPT = LEVY_EXEMPT / 4;
+const QUARTER_LEVY = levy(perDecimo("first")) / 4;
+const QUARTER_NET = QUARTER_FIRST - QUARTER_LEVY;
+
+/**
+ * The tax rule was re-read on 13 Nov 2026 on the BOE's consolidated Ley
+ * 35/2006 (updated 11 Nov 2026; DA 33ª.2 unchanged since Ley 6/2018: 40,000 €
+ * exempt per décimo, the exemption prorated between co-holders) and on the
+ * AEAT notice of 17 Dec 2024 (shared prizes, "titulares de participaciones",
+ * no other return, non-residents' treaty refund). SELAE's site answered 403
+ * to the server that day, so the SELAE facts keep their 31 Oct reading.
+ */
+export const TAX_CHECKED = "2026-11-13";
+const TAX_CHECKED_TEXT: Record<Locale, string> = { ca: "13 de novembre de 2026", es: "13 de noviembre de 2026", en: "13 November 2026" };
 
 const R25 = RESULTS_2025;
 const SOLD25 = R25.soldInCatalonia as { first: CatalanSale[]; second: CatalanSale[]; third: CatalanSale[]; fourth: CatalanSale[] };
@@ -734,7 +767,7 @@ const COPY: Record<Locale, Copy> = {
       "Si el dècim premiat està fet malbé, s'ha de portar a un punt de venda amb el formulari de sol·licitud de pagament de premis, i SELAE l'autentica. Si te l'han robat, SELAE recomana denunciar-ho.",
     ],
     taxHeading: "Quants impostos paga la loteria de Nadal?",
-    taxIntro: `Els premis de fins a 40.000 € per dècim no paguen. Del que passa de 40.000 €, Hisenda se'n queda el 20%: és el gravamen especial sobre els premis de loteries de la ${link(U.irpf, "llei de l'IRPF (disposició addicional 33a)")}, i es reté en el moment de cobrar, segons ${link(U.tax, "SELAE")}. Per dècim de 20 €:`,
+    taxIntro: `Els premis de fins a 40.000 € per dècim no paguen. Del que passa de 40.000 €, Hisenda se'n queda el 20%: és el gravamen especial sobre els premis de loteries de la ${link(U.irpf, "llei de l'IRPF (disposició addicional 33a)")}, i es reté en el moment de cobrar, segons ${link(U.tax, "SELAE")}. El 2026 l'exempció continua sent de 40.000 € per dècim: aquest punt de la llei no ha canviat des del 2018 (text consolidat del BOE consultat el ${TAX_CHECKED_TEXT.ca}). Per dècim de 20 €:`,
     taxTable: {
       caption: "Gravamen sobre un dècim de 20 € premiat",
       headers: ["Premi del dècim", "Gravamen (20% del que passa de 40.000 €)", "Cobres"],
@@ -746,11 +779,12 @@ const COPY: Record<Locale, Copy> = {
       ],
     },
     taxAfter: [
-      `El gravamen es calcula per dècim. Si un dècim és de diverses persones, els ${eur(LEVY_EXEMPT, "ca")} exempts es reparteixen segons la part de cadascuna. Les persones que no resideixen a Espanya tenen el mateix gravamen i la mateixa exempció, segons l'${link(U.aeatNonResidents, "Agència Tributària")}.`,
+      `El gravamen es calcula per dècim. Si un dècim és de diverses persones, els ${eur(LEVY_EXEMPT, "ca")} exempts es reparteixen segons la part de cadascuna. Les persones que no resideixen a Espanya tenen el mateix gravamen i la mateixa exempció, segons l'${link(U.aeatNonResidents, "Agència Tributària")}, i si un conveni per evitar la doble imposició els ho permet poden demanar la devolució que els correspongui.`,
       `**Exemple de dècim compartit:** si dues persones tenen a mitges un dècim del segon premi (${D("second", "ca")}), cadascuna en cobra ${eur(HALF_SECOND, "ca")}, en té ${eur(HALF_EXEMPT, "ca")} exempts i paga ${eur(HALF_LEVY, "ca")} de gravamen. Qui cobri el premi per a tots ha de poder demostrar a Hisenda com s'ha repartit, amb la identificació de cada guanyador i la seva part, segons l'${link(U.aeatPrizes, "Agència Tributària")}.`,
-      "**No es declara a la Renda:** el gravamen ja es reté en cobrar el premi, i qui ha patit aquesta retenció no ha de presentar cap altra autoliquidació per aquest premi, segons la mateixa nota de l'Agència Tributària.",
+      `**Participacions** (d'una colla d'amics o de família, d'una penya, d'una confraria, d'una entitat...): per a Hisenda el premi també és compartit. Els ${eur(LEVY_EXEMPT, "ca")} exempts del dècim es reparteixen entre tots els titulars segons el seu percentatge de participació, i qui cobri el dècim com a beneficiari únic o gestor del cobrament ha de poder acreditar davant l'Agència Tributària que l'ha repartit entre els titulars de les participacions (${link(U.aeatPrizes, "nota de l'Agència Tributària")}). Per exemple, qui tingui una quarta part d'un dècim del Gordo en cobra ${eur(QUARTER_FIRST, "ca")}, en té ${eur(QUARTER_EXEMPT, "ca")} exempts i paga ${eur(QUARTER_LEVY, "ca")} de gravamen: n'hi queden ${eur(QUARTER_NET, "ca")}.`,
+      "**No es declara a la Renda:** el gravamen ja es reté en cobrar el premi, i qui ha patit aquesta retenció no ha de presentar cap altra autoliquidació per aquest premi, segons la mateixa nota de l'Agència Tributària. La llei de l'IRPF diu, a més, que aquests premis no s'integren a la base imposable de l'impost.",
     ],
-    grossaHeading: "Loteria de Nadal, La Grossa de Cap d'Any i el Nen",
+    grossaHeading: "La loteria de Nadal no és La Grossa: La Grossa de Cap d'Any i el Nen",
     grossa: [
       `La loteria de Nadal és de l'Estat (SELAE) i se sorteja a Madrid. A Catalunya, nou dies després, hi ha ${b2link("grossa", "ca", "La Grossa de Cap d'Any")}, la loteria de la Generalitat: es fa el ${dayDate(GROSSA_DRAW_DATE, "ca")}, el bitllet costa ${eur(GROSSA_TICKET, "ca")} i el primer premi és de ${eur(GROSSA_PRIZES.first.five, "ca")} per bitllet. Els bitllets d'una no serveixen per a l'altra.`,
       `Després ve el sorteig extraordinari del Nen (El Niño) de SELAE, el dimecres 6 de gener de 2027, amb 2 milions d'euros per sèrie al primer premi i dècims de 20 €, segons la ${link(U.lnac, "pàgina de la Loteria Nacional")}. Per a la resta de les festes, mira ${b2link("christmasBarcelona", "ca", "Nadal a Barcelona")} i ${b2link("newYear", "ca", "Cap d'Any a Barcelona")}.`,
@@ -798,8 +832,12 @@ const COPY: Record<Locale, Copy> = {
         answer: "Amb el comprovador de la pàgina de la Loteria Nacional del web de SELAE o a la llista oficial de premis, que és l'única que val per cobrar.",
       },
       {
-        question: "Quina diferència hi ha entre la loteria de Nadal i La Grossa de Cap d'Any?",
-        answer: `La loteria de Nadal és de l'Estat, se sorteja el 22 de desembre i el dècim costa 20 €. La Grossa de Cap d'Any és de la Generalitat, se sorteja el 31 de desembre i el bitllet costa ${eur(GROSSA_TICKET, "ca")}.`,
+        question: "La Grossa de Nadal i la loteria de Nadal són el mateix?",
+        answer: `No. La loteria de Nadal és de l'Estat (SELAE), se sorteja el ${c.dayNoYear} a Madrid i el dècim costa 20 €. La Grossa és la loteria de la Generalitat, i el seu sorteig d'aquestes festes és La Grossa de Cap d'Any, el ${dayDate(GROSSA_DRAW_DATE, "ca", false)}, amb bitllets de ${eur(GROSSA_TICKET, "ca")}. Els bitllets d'una no serveixen per a l'altra.`,
+      },
+      {
+        question: "Com tributa una participació de la loteria de Nadal?",
+        answer: `Com un premi compartit: els ${eur(LEVY_EXEMPT, "ca")} exempts del dècim es reparteixen segons la part de cada titular, i el 20% s'aplica només al que passa de la seva part exempta. Una quarta part d'un dècim del Gordo cobra ${eur(QUARTER_FIRST, "ca")} i en paga ${eur(QUARTER_LEVY, "ca")}.`,
       },
     ],
   },
@@ -941,7 +979,7 @@ const COPY: Record<Locale, Copy> = {
       "Si el décimo premiado está estropeado, hay que llevarlo a un punto de venta con el formulario de solicitud de pago de premios, y SELAE lo autentica. Si te lo han robado, SELAE recomienda denunciarlo.",
     ],
     taxHeading: "¿Cuántos impuestos paga la Lotería de Navidad?",
-    taxIntro: `Los premios de hasta 40.000 € por décimo no pagan. De lo que pasa de 40.000 €, Hacienda se queda el 20%: es el gravamen especial sobre los premios de loterías de la ${link(U.irpf, "ley del IRPF (disposición adicional 33.ª)")}, y se retiene al cobrar, según ${link(U.tax, "SELAE")}. Por décimo de 20 €:`,
+    taxIntro: `Los premios de hasta 40.000 € por décimo no pagan. De lo que pasa de 40.000 €, Hacienda se queda el 20%: es el gravamen especial sobre los premios de loterías de la ${link(U.irpf, "ley del IRPF (disposición adicional 33.ª)")}, y se retiene al cobrar, según ${link(U.tax, "SELAE")}. En 2026 la exención sigue siendo de 40.000 € por décimo: ese punto de la ley no ha cambiado desde 2018 (texto consolidado del BOE consultado el ${TAX_CHECKED_TEXT.es}). Por décimo de 20 €:`,
     taxTable: {
       caption: "Gravamen sobre un décimo de 20 € premiado",
       headers: ["Premio del décimo", "Gravamen (20% de lo que pasa de 40.000 €)", "Cobras"],
@@ -953,11 +991,12 @@ const COPY: Record<Locale, Copy> = {
       ],
     },
     taxAfter: [
-      `El gravamen se calcula por décimo. Si un décimo es de varias personas, los ${eur(LEVY_EXEMPT, "es")} exentos se reparten según la parte de cada una. Las personas que no residen en España tienen el mismo gravamen y la misma exención, según la ${link(U.aeatNonResidents, "Agencia Tributaria")}.`,
+      `El gravamen se calcula por décimo. Si un décimo es de varias personas, los ${eur(LEVY_EXEMPT, "es")} exentos se reparten según la parte de cada una. Las personas que no residen en España tienen el mismo gravamen y la misma exención, según la ${link(U.aeatNonResidents, "Agencia Tributaria")}, y si un convenio para evitar la doble imposición se lo permite pueden pedir la devolución que les corresponda.`,
       `**Ejemplo de décimo compartido:** si dos personas llevan a medias un décimo del segundo premio (${D("second", "es")}), cada una cobra ${eur(HALF_SECOND, "es")}, tiene ${eur(HALF_EXEMPT, "es")} exentos y paga ${eur(HALF_LEVY, "es")} de gravamen. Quien cobre el premio para todos debe poder acreditar ante Hacienda cómo se ha repartido, con la identificación de cada ganador y su parte, según la ${link(U.aeatPrizes, "Agencia Tributaria")}.`,
-      "**No se declara en la Renta:** el gravamen ya se retiene al cobrar el premio, y quien ha soportado esa retención no tiene que presentar ninguna otra autoliquidación por ese premio, según la misma nota de la Agencia Tributaria.",
+      `**Participaciones** (de un grupo de amigos o parientes, una peña, una cofradía, una entidad...): para Hacienda el premio también es compartido. Los ${eur(LEVY_EXEMPT, "es")} exentos del décimo se reparten entre todos los titulares en proporción a su porcentaje de participación, y quien cobre el décimo como beneficiario único o gestor de cobro debe poder acreditar ante la Agencia Tributaria que lo ha repartido entre los titulares de las participaciones (${link(U.aeatPrizes, "nota de la Agencia Tributaria")}). Por ejemplo, quien tenga una cuarta parte de un décimo del Gordo cobra ${eur(QUARTER_FIRST, "es")}, tiene ${eur(QUARTER_EXEMPT, "es")} exentos y paga ${eur(QUARTER_LEVY, "es")} de gravamen: le quedan ${eur(QUARTER_NET, "es")}.`,
+      "**No se declara en la Renta:** el gravamen ya se retiene al cobrar el premio, y quien ha soportado esa retención no tiene que presentar ninguna otra autoliquidación por ese premio, según la misma nota de la Agencia Tributaria. La ley del IRPF dice, además, que estos premios no se integran en la base imponible del impuesto.",
     ],
-    grossaHeading: "Lotería de Navidad, La Grossa de Cap d'Any y El Niño",
+    grossaHeading: "La Lotería de Navidad no es La Grossa: La Grossa de Cap d'Any y El Niño",
     grossa: [
       `La Lotería de Navidad es del Estado (SELAE) y se sortea en Madrid. En Cataluña, nueve días después, está ${b2link("grossa", "es", "La Grossa de Cap d'Any")}, la lotería de la Generalitat: se celebra el ${dayDate(GROSSA_DRAW_DATE, "es")}, el billete cuesta ${eur(GROSSA_TICKET, "es")} y el primer premio es de ${eur(GROSSA_PRIZES.first.five, "es")} por billete. Los billetes de una no valen para la otra.`,
       `Después llega el sorteo extraordinario de El Niño de SELAE, el miércoles 6 de enero de 2027, con 2 millones de euros por serie al primer premio y décimos de 20 €, según la ${link(U.lnac, "página de la Lotería Nacional")}. Para el resto de las fiestas, mira ${b2link("christmasBarcelona", "es", "Navidad en Barcelona")} y ${b2link("newYear", "es", "Nochevieja en Barcelona")}.`,
@@ -1005,8 +1044,12 @@ const COPY: Record<Locale, Copy> = {
         answer: "Con el comprobador de la página de la Lotería Nacional de la web de SELAE o en la lista oficial de premios, que es la única que vale para cobrar.",
       },
       {
-        question: "¿En qué se diferencia la Lotería de Navidad de La Grossa de Cap d'Any?",
-        answer: `La Lotería de Navidad es del Estado, se sortea el 22 de diciembre y el décimo cuesta 20 €. La Grossa de Cap d'Any es de la Generalitat, se sortea el 31 de diciembre y el billete cuesta ${eur(GROSSA_TICKET, "es")}.`,
+        question: "¿La Grossa de Navidad es lo mismo que la Lotería de Navidad?",
+        answer: `No. La Lotería de Navidad es del Estado (SELAE), se sortea el ${c.dayNoYear} en Madrid y el décimo cuesta 20 €. La Grossa es la lotería de la Generalitat, y su sorteo de estas fiestas es La Grossa de Cap d'Any, el ${dayDate(GROSSA_DRAW_DATE, "es", false)}, con billetes de ${eur(GROSSA_TICKET, "es")}. Los billetes de una no valen para la otra.`,
+      },
+      {
+        question: "¿Cómo tributa una participación de Lotería de Navidad?",
+        answer: `Como un premio compartido: los ${eur(LEVY_EXEMPT, "es")} exentos del décimo se reparten según la parte de cada titular, y el 20% se aplica solo a lo que pasa de su parte exenta. Una cuarta parte de un décimo del Gordo cobra ${eur(QUARTER_FIRST, "es")} y paga ${eur(QUARTER_LEVY, "es")}.`,
       },
     ],
   },
@@ -1148,7 +1191,7 @@ const COPY: Record<Locale, Copy> = {
       "If a winning décimo is damaged, take it to an outlet with the prize payment request form and SELAE will authenticate it. If it was stolen, SELAE recommends reporting it to the authorities.",
     ],
     taxHeading: "How is the Spanish Christmas Lottery taxed?",
-    taxIntro: `Prizes of up to €40,000 per décimo are tax-free. Of anything above €40,000, the tax office keeps 20%: this is the special levy on lottery prizes in ${link(U.irpf, "Spain's income tax law (additional provision 33)")}, withheld when you collect, according to ${link(U.tax, "SELAE")}. Per €20 décimo:`,
+    taxIntro: `Prizes of up to €40,000 per décimo are tax-free. Of anything above €40,000, the tax office keeps 20%: this is the special levy on lottery prizes in ${link(U.irpf, "Spain's income tax law (additional provision 33)")}, withheld when you collect, according to ${link(U.tax, "SELAE")}. In 2026 the exemption is still €40,000 per décimo: that part of the law has not changed since 2018 (BOE consolidated text checked on ${TAX_CHECKED_TEXT.en}). Per €20 décimo:`,
     taxTable: {
       caption: "Levy on a winning €20 décimo",
       headers: ["Décimo prize", "Levy (20% of the part above €40,000)", "You receive"],
@@ -1160,9 +1203,10 @@ const COPY: Record<Locale, Copy> = {
       ],
     },
     taxAfter: [
-      `The levy is worked out per décimo. If a décimo belongs to several people, the ${eur(LEVY_EXEMPT, "en")} exemption is split according to each one's share. People who are not resident in Spain pay the same levy with the same exemption, according to the ${link(U.aeatNonResidents, "Agencia Tributaria")} (Spain's tax agency).`,
+      `The levy is worked out per décimo. If a décimo belongs to several people, the ${eur(LEVY_EXEMPT, "en")} exemption is split according to each one's share. People who are not resident in Spain pay the same levy with the same exemption, according to the ${link(U.aeatNonResidents, "Agencia Tributaria")} (Spain's tax agency), and where a double taxation treaty allows it they can ask for a refund.`,
       `**Example of a shared décimo:** if two people share a second-prize décimo (${D("second", "en")}) half and half, each collects ${eur(HALF_SECOND, "en")}, has ${eur(HALF_EXEMPT, "en")} tax-free and pays ${eur(HALF_LEVY, "en")} in levy. Whoever collects the prize for everyone must be able to show the tax office how it was split, identifying each winner and their share, according to the ${link(U.aeatPrizes, "Agencia Tributaria")}.`,
-      "**It does not go on your income tax return:** the levy is withheld when the prize is paid, and anyone who has had it withheld does not have to file any other return for that prize, according to the same Agencia Tributaria notice.",
+      `**Participaciones** (shares of a décimo held by a group of friends or relatives, a club, a brotherhood or an association): for the tax office the prize is shared too. The décimo's ${eur(LEVY_EXEMPT, "en")} exemption is split between all the holders in proportion to their share, and whoever collects the décimo as sole winner or collecting agent must be able to show the Agencia Tributaria that it was shared out among the holders of the participaciones (${link(U.aeatPrizes, "Agencia Tributaria notice")}). For example, a quarter share of a Gordo décimo is ${eur(QUARTER_FIRST, "en")}, with ${eur(QUARTER_EXEMPT, "en")} tax-free and ${eur(QUARTER_LEVY, "en")} in levy: ${eur(QUARTER_NET, "en")} left.`,
+      "**It does not go on your income tax return:** the levy is withheld when the prize is paid, and anyone who has had it withheld does not have to file any other return for that prize, according to the same Agencia Tributaria notice. The income tax law also says these prizes are not part of the taxable base.",
     ],
     grossaHeading: "Christmas Lottery, La Grossa de Cap d'Any and El Niño",
     grossa: [
@@ -1213,7 +1257,15 @@ const COPY: Record<Locale, Copy> = {
       },
       {
         question: "Do non-residents pay the same tax?",
-        answer: "Yes. According to Spain's tax agency, people not resident in Spain pay the same 20% levy on prizes above €40,000 per décimo.",
+        answer: "Yes. According to Spain's tax agency, people not resident in Spain pay the same 20% levy on prizes above €40,000 per décimo, and may ask for a refund where a double taxation treaty allows it.",
+      },
+      {
+        question: "Is La Grossa the same as the Spanish Christmas Lottery?",
+        answer: `No. The Christmas Lottery is the Spanish state's (SELAE), drawn in Madrid on ${c.dayNoYear}, at €20 a décimo. La Grossa is the Catalan government's lottery, and its holiday draw is La Grossa de Cap d'Any on ${dayDate(GROSSA_DRAW_DATE, "en", false)}, at ${eur(GROSSA_TICKET, "en")} a ticket. Tickets for one are no good for the other.`,
+      },
+      {
+        question: "How is a participación (a share of a décimo) taxed?",
+        answer: `As a shared prize: the décimo's ${eur(LEVY_EXEMPT, "en")} exemption is split by each holder's share, and the 20% applies only above that holder's tax-free part. A quarter share of a Gordo décimo is ${eur(QUARTER_FIRST, "en")} and pays ${eur(QUARTER_LEVY, "en")}.`,
       },
     ],
   },
