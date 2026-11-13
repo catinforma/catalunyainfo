@@ -65,6 +65,24 @@ import { VOTING } from "./voting";
  * descriptions and the EN title/description say so too (logged in
  * docs/SEO_EXPERIMENTS.md). Appeals 4-5 Nov and resolution by 12 Nov
  * re-read in the JEC calendar PDF.
+ *
+ * 13 Nov 2026 (body only; titles/descriptions untouched). BOE summaries
+ * 28 Oct-13 Nov re-read: one correction of the proclaimed lists,
+ * BOE-A-2026-23383 (7 Nov), touching Girona (Senate) and Tarragona (Congress
+ * and Senate), and nothing after it. The block now applies it through the
+ * hand-checked fixes in src/lib/content/candidates/corrections.ts (it was
+ * only linked before, so Tarragona's Senate showed the two lists numbered 4
+ * and 5 the wrong way round and one surname misspelt). Checked against
+ * Interior's official CERA ballot PDFs (29neleccionesgenerales.es/papeletas-
+ * descargables/, read 13 Nov): one Congress ballot per proclaimed list in
+ * each province (Barcelona 11, Girona 10, Lleida 10, Tarragona 13), Girona's
+ * 100 Congress names identical to the BOE, Tarragona's Senate ballot with
+ * the corrected numbers and the Congress ballot with "Ester Roca Domedel".
+ * The Senate ballot follows LOREG 172.3 (order of last Senate votes; new
+ * lists by lot), which in Barcelona and Lleida differs from the BOE numbers
+ * and in Girona and Tarragona matches them, so the component's note now says
+ * "can" differ. VERIFIED stays 3 Nov: the census and law facts were not
+ * re-read.
  */
 
 const VERIFIED = "2026-11-03";
@@ -83,9 +101,13 @@ const URL = {
   boeData: "https://www.boe.es/datosabiertos/",
   correction2023a: "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2023-15548",
   correction2023b: "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2023-15828",
+  correction: "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2026-23383",
+  ballots: "https://29neleccionesgenerales.es/papeletas-descargables/",
 };
 
 const SOURCES: B2Source[] = [
+  { name: "Corrección de errores de las candidaturas proclamadas para las elecciones al Congreso de los Diputados y al Senado, convocadas por Real Decreto 806/2026 (BOE de 7 de noviembre de 2026; afecta a Girona y Tarragona)", url: URL.correction, publisher: "Boletín Oficial del Estado" },
+  { name: "Papeletas descargables por provincia (válidas solo para electores residentes en el extranjero, CERA; consultado el 13 de noviembre de 2026)", url: URL.ballots, publisher: "Ministerio del Interior" },
   { name: "Candidaturas proclamadas para las elecciones al Congreso de los Diputados y al Senado, convocadas por Real Decreto 806/2026 (BOE de 3 de noviembre de 2026)", url: URL.proclaimed, publisher: "Boletín Oficial del Estado" },
   { name: "Candidaturas presentadas para las elecciones al Congreso de los Diputados y al Senado, convocadas por Real Decreto 806/2026 (BOE de 28 de octubre de 2026)", url: URL.presented, publisher: "Boletín Oficial del Estado" },
   { name: "Real Decreto 806/2026, de 5 de octubre, de disolución del Congreso de los Diputados y del Senado y de convocatoria de elecciones", url: URL.rd, publisher: "Boletín Oficial del Estado" },
@@ -226,13 +248,13 @@ function body(locale: Locale): Block[] {
   if (locale === "ca") {
     return [
       lead(
-        `Els candidats de les **eleccions generals del 29 de novembre de 2026** a Barcelona, Girona, Lleida i Tarragona són els de les llistes que les juntes electorals provincials publiquen al BOE: les **presentades, el 28 d'octubre**, i les **proclamades, el 3 de novembre**. Les presentades ja hi són: ${a("BOE del 28 d'octubre de 2026", URL.presented)}. I les definitives, les proclamades, també: ${a("BOE del 3 de novembre de 2026", URL.proclaimed)}; es poden recórrer el 4 i el 5 de novembre. Les candidatures apareixen aquí sota, província per província, llegides directament del BOE a mesura que s'hi publiquen. Al Congrés es vota una llista tancada i al Senat es poden marcar fins a tres noms.`,
+        `Els candidats de les **eleccions generals del 29 de novembre de 2026** a Barcelona, Girona, Lleida i Tarragona són els de les llistes que les juntes electorals provincials publiquen al BOE: les **presentades, el 28 d'octubre**, i les **proclamades, el 3 de novembre**. Les presentades ja hi són: ${a("BOE del 28 d'octubre de 2026", URL.presented)}. I les definitives, les proclamades, també: ${a("BOE del 3 de novembre de 2026", URL.proclaimed)}, amb la ${a("correcció d'errors del 7 de novembre", URL.correction)} ja aplicada; el termini per resoldre'n els recursos es va acabar el 12 de novembre. Les candidatures apareixen aquí sota, província per província, llegides directament del BOE a mesura que s'hi publiquen. Al Congrés es vota una llista tancada i al Senat es poden marcar fins a tres noms.`,
       ),
       LIVE,
       callout(
         "info",
         "Com es fa aquesta llista",
-        "Es llegeix cada dia del BOE, que és on la llei mana publicar les candidatures de les generals (art. 169.4 de la LOREG), no als butlletins oficials de les províncies. Els noms, les candidatures i la numeració surten tal com els publica cada junta electoral, sense cap canvi. Si el BOE hi publica correccions, l'enllaç surt a sobre de les llistes.",
+        "Es llegeix cada dia del BOE, que és on la llei mana publicar les candidatures de les generals (art. 169.4 de la LOREG), no als butlletins oficials de les províncies. Els noms, les candidatures i la numeració surten tal com els publica cada junta electoral, sense cap altre canvi que les correccions d'errors que publica el mateix BOE: l'enllaç a cada correcció surt a sobre de les llistes, i les candidatures corregides porten la marca «corregida».",
       ),
       ...h2(
         "Què s'escull el 29N a Barcelona, Girona, Lleida i Tarragona",
@@ -264,11 +286,13 @@ function body(locale: Locale): Block[] {
         "Per què una llista pot canviar després del 3 de novembre",
         "Les proclamacions es poden recórrer davant del jutjat contenciós administratiu els dos dies següents a la publicació, el 4 i el 5 de novembre, i segons l'INE l'últim dia per resoldre els recursos és el 12 de novembre (art. 49 de la LOREG). Mentre hi ha un recurs en una circumscripció, les seves paperetes no s'imprimeixen fins que es resol (art. 71.2).",
         "El BOE també pot publicar correccions d'errors: a les generals del 2023, en va publicar dues de les candidatures proclamades, set i deu dies després. Si n'hi ha, aquesta pàgina les enllaça a sobre de les llistes i diu quines províncies afecten.",
+        `Per al 29N n'ha publicat una, al ${a("BOE del 7 de novembre", URL.correction)}: a Girona i a Tarragona treu de tres llistes la sigla que acompanyava cada nom, corregeix un cognom i, al Senat per Tarragona, intercanvia els números 4 i 5 de dues candidatures. Les llistes d'aquesta pàgina ja la tenen aplicada.`,
       ),
       ...h2(
         "Paperetes: on són i qui les pot descarregar",
         "El dia de la votació, cada mesa electoral rep les paperetes i els sobres almenys una hora abans d'obrir (art. 71.4 de la LOREG).",
         `L'INE ofereix ${a("la descàrrega de paperetes del 29N", URL.ineBallots)} només per als electors residents a l'estranger (CERA), fins al 26 de novembre de 2026, i adverteix: «Si usted reside en España no las utilice ya que su voto sería nulo».`,
+        `Les mateixes paperetes, província per província, són al ${a("web del Ministeri de l'Interior per al 29N", URL.ballots)}: tenen les mateixes candidatures que les llistes proclamades, i hi pots veure en quin ordre surten a la papereta del Senat. Si vius a Espanya, només per consultar-les: el dia de la votació en tindràs a la mesa.`,
       ),
       ...paras(
         `On has de votar, el vot per correu i quin document cal portar són a ${b2link("voting", "ca", "com votar el 29 de novembre a Catalunya")}. Si t'ha tocat ser-hi, a ${b2link("mesa", "ca", "membre de mesa electoral")}; per a la nit del 29, ${b2link("electionNight", "ca", "a quina hora surten els resultats")}, i per als d'altres anys, ${b2link("congressResults", "ca", "els resultats de les eleccions generals a Catalunya")}.`,
@@ -288,7 +312,7 @@ function body(locale: Locale): Block[] {
         {
           question: "Quan es publiquen les llistes definitives del 29N?",
           answer:
-            "Les juntes electorals van proclamar les candidatures el 2 de novembre i el BOE les va publicar el 3 de novembre. Es poden recórrer el 4 i el 5 de novembre, i els recursos s'han de resoldre com a molt tard el 12 de novembre.",
+            "Les juntes electorals van proclamar les candidatures el 2 de novembre i el BOE les va publicar el 3 de novembre. Es podien recórrer el 4 i el 5 de novembre, i els recursos s'havien de resoldre com a molt tard el 12 de novembre. El 7 de novembre el BOE en va publicar una correcció d'errors que afecta Girona i Tarragona, ja aplicada a les llistes d'aquesta pàgina.",
         },
         {
           question: "Quants candidats al Senat puc votar a Barcelona?",
@@ -303,7 +327,7 @@ function body(locale: Locale): Block[] {
         {
           question: "Què vol dir «No proclamada»?",
           answer:
-            "Que la junta electoral provincial no ha proclamat aquella candidatura perquè no compleix algun requisit legal. La decisió es pot recórrer el 4 i el 5 de novembre.",
+            "Que la junta electoral provincial no ha proclamat aquella candidatura perquè no compleix algun requisit legal. La decisió es podia recórrer el 4 i el 5 de novembre.",
         },
         {
           question: "Les candidatures surten al butlletí oficial de la província?",
@@ -324,13 +348,13 @@ function body(locale: Locale): Block[] {
   if (locale === "es") {
     return [
       lead(
-        `Los candidatos de las **elecciones generales del 29 de noviembre de 2026** en Barcelona, Girona, Lleida y Tarragona son los de las listas que las juntas electorales provinciales publican en el BOE: las **presentadas, el 28 de octubre**, y las **proclamadas, el 3 de noviembre**. Las presentadas ya están publicadas: ${a("BOE del 28 de octubre de 2026", URL.presented)}. Y las definitivas, las proclamadas, también: ${a("BOE del 3 de noviembre de 2026", URL.proclaimed)}; se pueden recurrir el 4 y el 5 de noviembre. Las candidaturas aparecen aquí abajo, provincia por provincia, leídas directamente del BOE a medida que se publican. Al Congreso se vota una lista cerrada y en el Senado se puede marcar hasta a tres candidatos.`,
+        `Los candidatos de las **elecciones generales del 29 de noviembre de 2026** en Barcelona, Girona, Lleida y Tarragona son los de las listas que las juntas electorales provinciales publican en el BOE: las **presentadas, el 28 de octubre**, y las **proclamadas, el 3 de noviembre**. Las presentadas ya están publicadas: ${a("BOE del 28 de octubre de 2026", URL.presented)}. Y las definitivas, las proclamadas, también: ${a("BOE del 3 de noviembre de 2026", URL.proclaimed)}, con la ${a("corrección de errores del 7 de noviembre", URL.correction)} ya aplicada; el plazo para resolver sus recursos terminó el 12 de noviembre. Las candidaturas aparecen aquí abajo, provincia por provincia, leídas directamente del BOE a medida que se publican. Al Congreso se vota una lista cerrada y en el Senado se puede marcar hasta a tres candidatos.`,
       ),
       LIVE,
       callout(
         "info",
         "Cómo se hace esta lista",
-        "Se lee cada día del BOE, que es donde la ley manda publicar las candidaturas de las generales (art. 169.4 de la LOREG), no en los boletines oficiales de las provincias. Los nombres, las candidaturas y su numeración salen tal como los publica cada junta electoral, sin ningún cambio. Si el BOE publica correcciones, el enlace aparece encima de las listas.",
+        "Se lee cada día del BOE, que es donde la ley manda publicar las candidaturas de las generales (art. 169.4 de la LOREG), no en los boletines oficiales de las provincias. Los nombres, las candidaturas y su numeración salen tal como los publica cada junta electoral, sin más cambios que las correcciones de errores que publica el propio BOE: el enlace a cada corrección aparece encima de las listas, y las candidaturas corregidas llevan la marca «corregida».",
       ),
       ...h2(
         "Qué se elige el 29N en Barcelona, Girona, Lleida y Tarragona",
@@ -362,11 +386,13 @@ function body(locale: Locale): Block[] {
         "Por qué una lista puede cambiar después del 3 de noviembre",
         "Las proclamaciones se pueden recurrir ante el juzgado de lo contencioso-administrativo en los dos días siguientes a su publicación, el 4 y el 5 de noviembre, y según el INE el último día para resolver los recursos es el 12 de noviembre (art. 49 de la LOREG). Mientras hay un recurso en una circunscripción, sus papeletas no se imprimen hasta que se resuelve (art. 71.2).",
         "El BOE también puede publicar correcciones de errores: en las generales de 2023 publicó dos de las candidaturas proclamadas, siete y diez días después. Si las hay, esta página las enlaza encima de las listas y dice a qué provincias afectan.",
+        `Para el 29N ha publicado una, en el ${a("BOE del 7 de noviembre", URL.correction)}: en Girona y en Tarragona quita de tres listas la sigla que acompañaba a cada nombre, corrige un apellido y, en el Senado por Tarragona, intercambia los números 4 y 5 de dos candidaturas. Las listas de esta página ya la tienen aplicada.`,
       ),
       ...h2(
         "Papeletas: dónde están y quién puede descargarlas",
         "El día de la votación, cada mesa electoral recibe las papeletas y los sobres al menos una hora antes de abrir (art. 71.4 de la LOREG).",
         `El INE ofrece ${a("la descarga de papeletas del 29N", URL.ineBallots)} solo para los electores residentes en el extranjero (CERA), hasta el 26 de noviembre de 2026, y advierte: «Si usted reside en España no las utilice ya que su voto sería nulo».`,
+        `Las mismas papeletas, provincia por provincia, están en la ${a("web del Ministerio del Interior para el 29N", URL.ballots)}: llevan las mismas candidaturas que las listas proclamadas, y en ellas puedes ver en qué orden aparecen en la papeleta del Senado. Si vives en España, solo para consultarlas: el día de la votación las tendrás en la mesa.`,
       ),
       ...paras(
         `Dónde te toca votar, el voto por correo y qué documento llevar están en ${b2link("voting", "es", "cómo votar el 29 de noviembre en Cataluña")}. Si te ha tocado estar en una mesa, mira ${b2link("mesa", "es", "miembro de mesa electoral")}; para la noche del 29, ${b2link("electionNight", "es", "a qué hora salen los resultados")}, y para los de otros años, ${b2link("congressResults", "es", "los resultados de las elecciones generales en Cataluña")}.`,
@@ -386,7 +412,7 @@ function body(locale: Locale): Block[] {
         {
           question: "¿Cuándo se publican las listas definitivas del 29N?",
           answer:
-            "Las juntas electorales proclamaron las candidaturas el 2 de noviembre y el BOE las publicó el 3 de noviembre. Se pueden recurrir el 4 y el 5 de noviembre, y los recursos deben resolverse como muy tarde el 12 de noviembre.",
+            "Las juntas electorales proclamaron las candidaturas el 2 de noviembre y el BOE las publicó el 3 de noviembre. Se podían recurrir el 4 y el 5 de noviembre, y los recursos debían resolverse como muy tarde el 12 de noviembre. El 7 de noviembre el BOE publicó una corrección de errores que afecta a Girona y Tarragona, ya aplicada a las listas de esta página.",
         },
         {
           question: "¿Cuántos candidatos al Senado puedo votar en Barcelona?",
@@ -401,7 +427,7 @@ function body(locale: Locale): Block[] {
         {
           question: "¿Qué significa «No proclamada»?",
           answer:
-            "Que la junta electoral provincial no ha proclamado esa candidatura porque no cumple algún requisito legal. La decisión se puede recurrir el 4 y el 5 de noviembre.",
+            "Que la junta electoral provincial no ha proclamado esa candidatura porque no cumple algún requisito legal. La decisión se podía recurrir el 4 y el 5 de noviembre.",
         },
         {
           question: "¿Salen los candidatos en el Boletín Oficial de la Provincia?",
@@ -421,13 +447,13 @@ function body(locale: Locale): Block[] {
 
   return [
     lead(
-      `The candidates in **Spain's general election of 29 November 2026** in Barcelona, Girona, Lleida and Tarragona are those on the lists that the provincial electoral boards publish in the BOE, Spain's official gazette: the lists **as filed on 28 October** and the **proclaimed lists on 3 November**. The lists as filed are already out: ${a("BOE of 28 October 2026", URL.presented)}. So are the final, proclaimed lists: ${a("BOE of 3 November 2026", URL.proclaimed)}; they can be appealed on 4 and 5 November. The lists appear below, province by province, read straight from the BOE as they are published. For Congress you vote for one closed list; for the Senate you can mark up to three names.`,
+      `The candidates in **Spain's general election of 29 November 2026** in Barcelona, Girona, Lleida and Tarragona are those on the lists that the provincial electoral boards publish in the BOE, Spain's official gazette: the lists **as filed on 28 October** and the **proclaimed lists on 3 November**. The lists as filed are already out: ${a("BOE of 28 October 2026", URL.presented)}. So are the final, proclaimed lists: ${a("BOE of 3 November 2026", URL.proclaimed)}, with the ${a("correction of 7 November", URL.correction)} already applied; the deadline for settling appeals passed on 12 November. The lists appear below, province by province, read straight from the BOE as they are published. For Congress you vote for one closed list; for the Senate you can mark up to three names.`,
     ),
     LIVE,
     callout(
       "info",
       "How this list is made",
-      "It is read every day from the BOE, which is where the law requires general-election candidacies to be published (electoral law, LOREG art. 169.4), not the provincial gazettes. Names, lists and their numbering appear exactly as each electoral board publishes them, unchanged. If the BOE publishes corrections, the link appears above the lists.",
+      "It is read every day from the BOE, which is where the law requires general-election candidacies to be published (electoral law, LOREG art. 169.4), not the provincial gazettes. Names, lists and their numbering appear exactly as each electoral board publishes them, with no change other than the corrections the BOE itself publishes: each correction is linked above the lists, and corrected lists are marked “corrected”.",
     ),
     ...h2(
       "What Barcelona, Girona, Lleida and Tarragona elect on 29 November",
@@ -459,11 +485,13 @@ function body(locale: Locale): Block[] {
       "Why a list can still change after 3 November",
       "A proclamation can be appealed to the administrative court within two days of its publication, on 4 and 5 November, and according to the INE the last day for appeals to be settled is 12 November (LOREG art. 49). While an appeal is pending in a constituency, its ballot papers are not printed until it is resolved (art. 71.2).",
       "The BOE can also publish corrections: at the 2023 general election it published two for the proclaimed lists, seven and ten days later. If any appear, this page links to them above the lists and says which provinces they concern.",
+      `For 29 November it has published one, in the ${a("BOE of 7 November", URL.correction)}: in Girona and Tarragona it removes from three lists the acronym printed after each name, corrects a surname and, in the Senate race in Tarragona, swaps the numbers 4 and 5 of two lists. The lists on this page already include it.`,
     ),
     ...h2(
       "Ballot papers: where they are and who can download them",
       "On polling day every polling table receives the ballot papers and envelopes at least an hour before opening (LOREG art. 71.4).",
       `The INE offers ${a("downloadable 29 November ballot papers", URL.ineBallots)} only to voters registered as living abroad (CERA), until 26 November 2026, and warns that anyone living in Spain must not use them, because the vote would be void.`,
+      `The same ballot papers, province by province, are on the ${a("Interior Ministry's 29 November website", URL.ballots)}: they carry the same lists as the proclaimed ones, and show the order in which the lists appear on the Senate ballot. If you live in Spain, use them only to look: there will be ballot papers at your polling table on the day.`,
     ),
     ...paras(
       `Where you vote, the postal vote and what ID to bring are in ${b2link("voting", "en", "how to vote in Catalonia on 29 November")}. If you have been drawn to staff a polling table, see ${b2link("mesa", "en", "polling-station duty in Spain")}; for the night of the 29th, ${b2link("electionNight", "en", "when the results come out")}; and for earlier years, ${b2link("congressResults", "en", "general election results in Catalonia")}.`,
@@ -483,7 +511,7 @@ function body(locale: Locale): Block[] {
       {
         question: "When are the final candidate lists for 29 November published?",
         answer:
-          "The electoral boards proclaimed the candidates on 2 November and the BOE published them on 3 November. They can be appealed on 4 and 5 November, and appeals must be settled by 12 November at the latest.",
+          "The electoral boards proclaimed the candidates on 2 November and the BOE published them on 3 November. They could be appealed on 4 and 5 November, and appeals had to be settled by 12 November at the latest. On 7 November the BOE published a correction affecting Girona and Tarragona, already applied to the lists on this page.",
       },
       {
         question: "How many Senate candidates can I vote for in Barcelona?",
@@ -498,7 +526,7 @@ function body(locale: Locale): Block[] {
       {
         question: "What does \"No proclamada\" (not proclaimed) mean?",
         answer:
-          "That the provincial electoral board did not proclaim that list because it fails a legal requirement. The decision can be appealed on 4 and 5 November.",
+          "That the provincial electoral board did not proclaim that list because it fails a legal requirement. The decision could be appealed on 4 and 5 November.",
       },
       {
         question: "Are the candidates published in the provincial gazette?",
