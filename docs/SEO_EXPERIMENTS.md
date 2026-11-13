@@ -5604,3 +5604,59 @@ check whether the AEAT 2026 withholding algorithm applies that deduction.
 **Measure 1 Dec, 15 Jan, 15 Feb**: `snapshot.py page /calculadoras/salario-minimo-2027/ 28`, `snapshot.py page /calculadoras/ipc/ 28`.
 
 **Outcome:** _pending_
+
+## 2026-11-13 — New tool: "¿Cuándo me toca pasar la ITV?" (RD 920/2017 art. 6 + official fee per community), es + ca + en (deploy only; no publish group)
+
+**What.** New hub group "Coche y transporte" (`vehicle`) in the calculators
+family; the tool is in the registry (`calculators/paths.ts`, id `itv`) so the
+hub, "Más calculadoras", sitemap (+hreflang, x-default en) and llms.txt carry it:
+`/es/calculadoras/itv/`, `/ca/calculadores/itv/`, `/en/calculators/itv-spain/`
+(lib/programmatic/itv/, components/programmatic/itv/).
+
+- Calculator (pure engine `itv/engine.ts`, tests/itv.test.ts): vehicle
+  category + first registration (+ optional last ITV and the expiry it
+  replaced) → next due date, the 30-day window that keeps it, the next four
+  dates. Server-rendered on a fixed example (car 15 Mar 2019, last ITV 20 Feb
+  2025, expiry 15 Mar 2025 → before 15 Mar 2027); days-left only in the browser.
+- Rules read in the BOE on 13 Nov 2026, quoted verbatim: RD 920/2017
+  (BOE-A-2017-12841) art. 6.1 table (it is in art. 6, not annex I), 6.2
+  historic (RD 892/2024), 6.3–6.4, 6.5 30-day rule, 6.9 ten days, 11.2, 11.8,
+  12.1 V-19 sticker, 12.2, 14.7 c), 19.1, annex II "Fecha próxima
+  inspección"; Ley de Tráfico (BOE-A-2015-11722) art. 76.o grave → 200 €
+  (80.1), 100 € paid within 20 days (94); not in the points annex II.
+- Our reading, printed on the page: band by age on the day the new validity
+  starts (anniversary included); when a stricter band starts inside a
+  validity the result warns and points to the report. The 30-day rule is
+  not applied to the first ITV (the text says "inspección anterior").
+- Fees per community (itv/prices.ts), only from bulletins / regional
+  governments / public ITV companies: Cataluña (Ordre IUE/361/2010 maximums,
+  DOGC 30.6.2010, sin IVA ni taxa), Andalucía (VEIASA, BOJA 2014/2016),
+  Aragón (BOA 31.12.2025), Asturias (BOPA 26.12.2025), Illes Balears
+  (Mallorca BOIB 4.4.2020, Eivissa BOIB 25.8.2026), Canarias (BOC 4.2.2026),
+  Cantabria (BOC 23.12.2025), Castilla-La Mancha (DOCM 30.12.2025), Castilla
+  y León (BOCYL 22.12.2025), Comunitat Valenciana (GVA/SITVAL from 1.1.2023),
+  Extremadura (Junta stations, DOE 30.9.2026), País Vasco (BOPV 10.12.2025),
+  Melilla (BOME 19.12.2025). "No publicado oficialmente": Galicia, Madrid,
+  Murcia, Navarra (2021 base only), La Rioja (BOR unreadable from the
+  server), Ceuta. DGT fee 4,18 € as printed by GVA/VEIASA/Melilla tables
+  (DGT page itself unreachable from the VPS: re-check).
+
+**Why.** research_notes/spain-utilities-opportunities-nov2026.md row 10:
+"itv" ~518k/month (mostly station-seeking) + "cita itv" 160k; SERP has
+contradictory prices and no per-region table citing official tariffs.
+
+**Baseline.** New URLs: 0 impressions.
+
+**Prediction.** By 1 Mar 2027 (before the Jun–Jul peak): es page ≥ 1k
+impressions/28 days, top 20 for "cuándo pasar la itv" / "precio itv
+[comunidad]".
+
+**Date guards.** `PRICES_REREAD_BY` 1 Feb 2027 (re-read every community's
+2027 tariff; most publish Dec–Jan) and `ITV_REREAD_BY` 1 Jun 2027 (RD 920/2017
+and Ley de Tráfico). Open: Asturias (itvasa.es), Valencia (sitval.com),
+Mallorca (itv.mallorca.es) and La Rioja booking pages refused connections
+from the VPS, so no station link printed for them yet; check from a browser.
+
+**Measure 15 Jan, 1 Mar, 1 Jun 2027**: `snapshot.py page /calculadoras/itv/ 28`.
+
+**Outcome:** _pending_

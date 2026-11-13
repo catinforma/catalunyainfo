@@ -14,6 +14,7 @@ import { SMI_RULES_AS_OF } from "@/lib/programmatic/smi/rules";
 import { pvpcTranslations } from "@/lib/programmatic/pvpc/paths";
 import { reservoirHubPath } from "@/lib/programmatic/reservoirs/paths";
 import { RULES_AS_OF as WORKING_DAYS_AS_OF } from "@/lib/programmatic/working-days/rules";
+import { ITV_RULES_AS_OF } from "@/lib/programmatic/itv/rules";
 import { hubPath as rodaliesHubPath } from "@/lib/programmatic/rodalies/paths";
 
 import { calcPath, calculatorsHubPath, type CalcLocale, type CalculatorId } from "./paths";
@@ -30,7 +31,7 @@ import { calcPath, calculatorsHubPath, type CalcLocale, type CalculatorId } from
  * figures come from, as the tool's own page cites them.
  */
 
-export type HubGroupId = "work" | "housing" | "official" | "holidays" | "live";
+export type HubGroupId = "work" | "housing" | "official" | "vehicle" | "holidays" | "live";
 export type Scope = "spain" | "catalonia";
 
 export interface HubCard {
@@ -244,6 +245,30 @@ export const HUB_GROUPS: HubGroup[] = [
           en: "The INE's CPI (series IPC290750, IPC290752, IPC292510 and IPC292512) and the INE's official calendar, read daily.",
         },
         scope: "spain",
+      },
+    ],
+  },
+  {
+    id: "vehicle",
+    title: { ca: "Cotxe i transport", es: "Coche y transporte", en: "Car and transport" },
+    cards: [
+      {
+        key: "itv",
+        calculator: true,
+        href: calc("itv"),
+        title: { ca: "Quan em toca l'ITV", es: "Cuándo me toca la ITV", en: "When is my ITV due" },
+        answers: {
+          ca: "Quan has de passar l'ITV segons el vehicle i la data de matriculació, quan la pots avançar 30 dies i quant costa a cada comunitat?",
+          es: "¿Cuándo tienes que pasar la ITV según el vehículo y la fecha de matriculación, cuándo puedes adelantarla 30 días y cuánto cuesta en cada comunidad?",
+          en: "When your ITV is due from the vehicle type and first registration, how early you can go without losing days, and the official fee by region.",
+        },
+        basis: {
+          ca: "Reial decret 920/2017, art. 6 (BOE); Llei de trànsit, arts. 76 i 80; tarifes oficials de cada comunitat.",
+          es: "Real Decreto 920/2017, art. 6 (BOE); Ley de Tráfico, arts. 76 y 80; tarifas oficiales de cada comunidad.",
+          en: "Royal Decree 920/2017, art. 6 (BOE); Traffic Act, arts. 76 and 80; each region's official tariffs.",
+        },
+        scope: "spain",
+        checked: ITV_RULES_AS_OF,
       },
     ],
   },

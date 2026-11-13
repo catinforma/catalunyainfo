@@ -35,6 +35,8 @@ export const CALCULATORS = [
   // Reference pages with official figures (hub group "official"): the SMI with its small calculator, and the INE's CPI.
   { id: "smi-2027", slugs: { es: "salario-minimo-2027", ca: "salari-minim-2027", en: "spain-minimum-wage-2027" } },
   { id: "ipc", slugs: { es: "ipc", ca: "ipc", en: "spain-inflation-cpi" } },
+  // Vehicles (hub group "vehicle"): when the ITV is due (RD 920/2017 art. 6) and the official fee per region.
+  { id: "itv", slugs: { es: "itv", ca: "itv", en: "itv-spain" } },
 ] as const satisfies readonly { id: string; slugs: Record<CalcLocale, string> }[];
 
 export type CalculatorId = (typeof CALCULATORS)[number]["id"];

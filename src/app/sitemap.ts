@@ -32,6 +32,7 @@ import { pensionSitemapEntries } from "@/lib/programmatic/pensions-2027/page";
 import { workingDaysSitemapEntries } from "@/lib/programmatic/working-days/places";
 import { smiSitemapEntries } from "@/lib/programmatic/smi/page";
 import { ipcSitemapEntries } from "@/lib/programmatic/ipc/page";
+import { itvSitemapEntries } from "@/lib/programmatic/itv/page";
 
 /**
  * Cached for an hour (ISR) and refreshed at once by every publish, and by the
@@ -191,6 +192,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // "Salario mínimo (SMI) 2027" and "IPC hoy" (calculators family, group "official"), in es, ca and en.
     ...smiSitemapEntries(),
     ...ipcSitemapEntries(),
+    // "¿Cuándo me toca pasar la ITV?" (calculators family, group "vehicle"), in es, ca and en.
+    ...itvSitemapEntries(),
     ...fuelSitemapEntries(),
     ...rodaliesSitemap(),
     ...reservoirSitemapEntries(),
