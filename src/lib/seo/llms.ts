@@ -13,6 +13,7 @@
 
 import { leaveEditions } from "@/lib/programmatic/leave-2027/copy";
 import { netSalaryEditions } from "@/lib/programmatic/net-salary/copy";
+import { selfEmployedEditions } from "@/lib/programmatic/self-employed/copy";
 import { calcEditions, calculatorsHubEditions } from "@/lib/programmatic/calculators/paths";
 import { rentEditions } from "@/lib/programmatic/rent-update/copy";
 import { pensionEditions } from "@/lib/programmatic/pensions-2027/copy";
@@ -100,6 +101,11 @@ export function liveTools(): LiveTool[] {
       name: "Spain net salary calculator 2026",
       hubs: netSalaryEditions(),
       description: "gross annual salary to net pay for 2026 anywhere in Spain's common tax regime (plus Ceuta, Melilla and La Palma): IRPF withholding with the Tax Agency's official 2026 algorithm and the worker's Social Security contributions (Orden PJC/297/2026), in 12 or 14 payments, by family situation, children, age, disability and contract type; checked against the Tax Agency's own withholding service.",
+    },
+    {
+      name: "Spain self-employed contributions (cuota de autónomos) 2026 calculator",
+      hubs: selfEmployedEditions(),
+      description: "the 2026 self-employed (RETA) contribution from expected income and expenses: net earnings as Social Security counts them (LGSS art. 308.1.c, 7% generic expenses, 3% for corporate self-employed), the band of the reduced or general table with its minimum and maximum base (Orden PJC/297/2026 art. 18, the 2025 tables kept by Royal Decree-law 3/2026, maximum base 5,101.20 euros), the monthly contribution at 31.50% (common 28.30, professional 1.30, cessation 0.90, training 0.10, MEI 0.90), the 80-euro flat rate (88.64 with MEI per the TGSS) and its extension below the minimum wage, what the yearly regularisation would pay or refund, and the 2027 status (no official tables yet; MEI 1% by law).",
     },
     {
       name: "Severance pay calculator (Spain)",

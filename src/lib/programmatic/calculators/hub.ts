@@ -9,6 +9,7 @@ import { hubPath as holidaysHubPath } from "@/lib/programmatic/holidays/paths";
 import { leavePath } from "@/lib/programmatic/leave-2027/copy";
 import { SALARY_RULES_AS_OF } from "@/lib/programmatic/net-salary/rules-2026";
 import { RENT_RULES_AS_OF } from "@/lib/programmatic/rent-update/rules";
+import { RULES_AS_OF as SELF_EMPLOYED_AS_OF } from "@/lib/programmatic/self-employed/rules-2026";
 import { PENSION_RULES_AS_OF } from "@/lib/programmatic/pensions-2027/rules";
 import { SMI_RULES_AS_OF } from "@/lib/programmatic/smi/rules";
 import { RULES_AS_OF as TREASURY_RULES_AS_OF } from "@/lib/programmatic/treasury-bills/rules";
@@ -88,6 +89,24 @@ export const HUB_GROUPS: HubGroup[] = [
         },
         scope: "spain",
         checked: SALARY_RULES_AS_OF,
+      },
+      {
+        key: "self-employed",
+        calculator: true,
+        href: calc("self-employed"),
+        title: { ca: "Quota d'autònoms 2026", es: "Cuota de autónomos 2026", en: "Self-employed contributions 2026" },
+        answers: {
+          ca: "Quant pagaràs d'autònom cada mes segons els teus rendiments nets, i amb tarifa plana?",
+          es: "¿Cuánto pagarás de autónomo al mes según tus rendimientos netos, y con tarifa plana?",
+          en: "How much will you pay each month as self-employed, from your net earnings, and on the flat rate?",
+        },
+        basis: {
+          ca: "Ordre PJC/297/2026, art. 18 (trams 2026), Reial decret llei 3/2026, Llei general de la Seguretat Social, art. 308, i Estatut del treball autònom, art. 38 ter.",
+          es: "Orden PJC/297/2026, art. 18 (tramos 2026), Real Decreto-ley 3/2026, Ley General de la Seguridad Social, art. 308, y Estatuto del trabajo autónomo, art. 38 ter.",
+          en: "Orden PJC/297/2026, art. 18 (2026 bands), Royal Decree-law 3/2026, General Social Security Act, art. 308, and the Self-Employment Statute, art. 38 ter.",
+        },
+        scope: "spain",
+        checked: SELF_EMPLOYED_AS_OF,
       },
       {
         key: "dismissal",

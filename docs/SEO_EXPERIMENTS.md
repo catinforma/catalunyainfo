@@ -5721,4 +5721,44 @@ from the VPS, so no station link printed for them yet; check from a browser.
 
 **Measure 15 Jan, 1 Mar, 1 Jun 2027**: `snapshot.py page /calculadoras/itv/ 28`.
 
+## 2026-11-13 — New tool: "Cuota de autónomos 2026 (y 2027)", es + ca + en (deploy only; no publish group)
+
+**What.** `/es/calculadoras/cuota-autonomos/`, `/ca/calculadores/quota-autonoms/`,
+`/en/calculators/spain-self-employed-contributions/` (lib/programmatic/self-employed/),
+in the calculators registry (after net salary) and hub group "Trabajo y sueldo",
+sitemap (+hreflang, x-default en) and llms.txt.
+
+- Rules (all read 13 Nov 2026 in the BOE / Seguridad Social): the 15 bands of
+  Orden PJC/297/2026 art. 18.1 (BOE-A-2026-7296) = the 2025 tables kept by
+  RDL 3/2026 art. 3.4 (BOE-A-2026-2548, convalidated BOE-A-2026-4668) "hasta la
+  aprobación de la correspondiente Ley de Presupuestos", max base 5.101,20 €;
+  rate 31,50 % (CC 28,30, CP 1,30, cese 0,90, FP 0,10 — arts. 18.2 and 37.5–6 —
+  and MEI 0,90). Earnings: LGSS 308.1.c — IRPF net + own cuotas, −7 % generic
+  (3 % for art. 305.2 b/e corporate, who also have the 1.424,40 € group-7 floor).
+  Tarifa plana: LETA art. 38 ter (12 + 12 months under the SMI 17.094 €;
+  24 + 36 special); 2026 total "88,64 €" quoted from the TGSS Import@ss guide
+  (80 € + MEI), not recomputed. Regularisation: LGSS 308.1.c 3.ª–4.ª.
+- 2027: no official tables (no PGE, RDL or Orden with 2027 bands); page says
+  "Pendiente" in all three languages; only the MEI 1 % (LGSS DT 43.ª) is quoted.
+- Calculator: server-rendered default (30.000 € income, 6.000 € expenses →
+  general band 5, 380,88 €/month), client recompute + URL hash; optional chosen
+  base → regularisation estimate (pay/refund), tarifa plana first/extension.
+  Links the official Import@ss simulator. YMYL disclaimer.
+
+**Why.** research_notes/spain-utilities-opportunities-nov2026.md row 13:
+"cuota autónomos" 9k + "cuota autónomos 2026" 2.6k + "tarifa plana autónomos"
+2.5k ≈ 14k/month; Jan index 192; competitors print unofficial 2027 drafts.
+
+**Baseline.** New URLs: 0 impressions.
+
+**Prediction.** By 15 Feb 2027: es page ≥ 2k impressions/28 days, position
+≤ 20 for "cuota autónomos 2026" / "tramos autónomos" / "cuota autónomos 2027".
+
+**Date guards.** `STATUS_2027_RECHECK_BY` 15 Dec 2026 (re-read the BOE for a
+late-December RDL / PGE / Orden with 2027 bands; fill `STATUS_2027` or move the
+date). `RULES_UNTIL` 1 Jan 2027: load rules-2027 (MEI 1 %, tables, tarifa plana)
+or state which 2026 rules keep applying and why.
+
+**Measure 15 Dec, 1 Feb, 15 Feb**: `snapshot.py page /calculadoras/cuota-autonomos/ 28`.
+
 **Outcome:** _pending_

@@ -42,6 +42,7 @@ test("registry: every calculator has a unique path per language, under the famil
 
 test("registry: the live URLs did not move (13 Nov 2026)", () => {
   assert.deepEqual(calcEditions("net-salary"), { ca: "/ca/calculadores/sou-net/", es: "/es/calculadoras/sueldo-neto/", en: "/en/calculators/net-salary-spain/" });
+  assert.deepEqual(calcEditions("self-employed"), { ca: "/ca/calculadores/quota-autonoms/", es: "/es/calculadoras/cuota-autonomos/", en: "/en/calculators/spain-self-employed-contributions/" });
   assert.deepEqual(calcEditions("dismissal"), { ca: "/ca/calculadores/indemnitzacio-acomiadament/", es: "/es/calculadoras/indemnizacion-despido/", en: "/en/calculators/severance-pay-spain/" });
   assert.deepEqual(calcEditions("settlement"), { ca: "/ca/calculadores/quitanca-finiquito/", es: "/es/calculadoras/finiquito/", en: "/en/calculators/final-settlement-spain/" });
   assert.deepEqual(calcEditions("unemployment"), { ca: "/ca/calculadores/atur/", es: "/es/calculadoras/paro/", en: "/en/calculators/unemployment-benefit-spain/" });
