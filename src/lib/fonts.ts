@@ -22,7 +22,19 @@ export const fraunces = Fraunces({
   // mobile LCP went from 3.5-3.9 s to 2.4-2.6 s with both changes.
   axes: ["opsz"],
   variable: "--font-fraunces",
-  fallback: ["ui-serif", "Georgia", "serif"],
+  // No `fallback` list, on purpose (both faces). With Turbopack a `fallback`
+  // list REPLACES the automatic metric-matched face instead of following it:
+  // production CSS (13 Nov 2026, Next 16.3.5) had `--font-fraunces: "Fraunces",
+  // ui-serif, Georgia, serif` and no "Fraunces Fallback" @font-face at all, so
+  // `adjustFontFallback` did nothing. Without the list Next emits
+  // `"Fraunces", "Fraunces Fallback"` (Times New Roman with size-adjust 115.45%
+  // and ascent/descent overrides; checked with a throwaway `next dev`). The
+  // generic fallbacks still come after it from `--font-display` /
+  // `--font-sans` in globals.css. Measured: when Fraunces arrives late, the
+  // swap re-wrapped H2s and moved what follows (CLS 0.062 on the Spain 2027
+  // city pages, at 412 px); see docs/SEO_EXPERIMENTS.md, 2026-11-13 "Core Web
+  // Vitals check on 10 templates". Android has neither Times New Roman nor
+  // Arial for `local()`, so there the fallback face is skipped as before.
   adjustFontFallback: true,
 });
 
@@ -47,7 +59,7 @@ export const plexSans = IBM_Plex_Sans({
   display: "optional",
   weight: ["400", "500", "600"],
   variable: "--font-plex",
-  fallback: ["ui-sans-serif", "system-ui", "Segoe UI", "sans-serif"],
+  // No `fallback` list: see Fraunces above (Arial with size-adjust 101.17%).
   adjustFontFallback: true,
 });
 

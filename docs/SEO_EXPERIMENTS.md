@@ -4783,3 +4783,99 @@ pages decay anyway; the 17N rail strike and 29N election bring their own
 traffic; Christmas-holiday demand rises into December.
 
 **Review 27 Nov 2026. Outcome:** _pending_
+
+## 2026-11-13 — Core Web Vitals check on 10 templates; font fallback fix (deploy; no group)
+
+**Field data: none available from the server.** The keyless PageSpeed
+Insights API v5 answered 429 on every request (`quota_limit_value: "0"`,
+`defaultPerDayPerProject`: the anonymous quota is gone, not just used up);
+PSI refuses OAuth, and the CrUX API needs a key. The site sends no RUM
+(no web-vitals reporting to GA4). So the numbers below are **lab**, not
+CrUX p75. Get field data from pagespeed.web.dev in a browser (no quota there)
+or from a PSI/CrUX API key, and from Search Console → Core Web Vitals.
+
+**Lab method** (Playwright Chromium 130 on the VPS against production,
+13 Nov ~11:00–12:30, release 925cf2d): 412×823 at DPR 1.75, mobile, cache
+off, 1.6 Mbps / 150 ms RTT, CPU throttle ×2 (this VPS runs JS about 3× slower
+than a desktop, so ×2 here is roughly a mid-range Android; ×4 over-throttled),
+consent card left open as a first visit sees it. 2–5 loads per page; the VPS
+link is lossy (see the Contabo note), so the spread between runs is wide and
+only repeatable effects were acted on.
+
+| Template | URL | LCP (lab, range) | LCP element | CLS | Notes |
+| --- | --- | --- | --- | --- | --- |
+| Home | /ca/ | 1.9–3.0 s | lead paragraph | 0 | ~205 KB of `?_rsc=` viewport prefetches |
+| Strike guide | /es/guias/huelga-general-11-noviembre-sevilla/ | 1.8–5.1 s | H1 | 0 | FCP = LCP; long hydration task |
+| Town holidays | /es/festivos/barcelona/ | 3.5–4.5 s | **consent card text** | 0 | page's own lead paints at 2.4–3.3 s |
+| Spain 2027 city | /es/festivos/2027/madrid/madrid/ | 2.6–3.7 s | lead paragraph | **0.062** | font swap re-wraps the H2 (fixed here) |
+| School calendar hub | /es/guias/calendario-escolar-espana/ | 2.1–4.2 s | hero image | 0 | hero preloaded, AVIF |
+| 2027 leave planner | /es/festivos/2027/aprovechar-vacaciones/ | 1.7–2.9 s | lead paragraph | 0 | checkbox tap 120–128 ms (INP-good) |
+| Christmas fair town | /es/mercados-navidad/barcelona/ | 1.6–2.2 s | lead paragraph | 0.003 | FairStatus line, negligible |
+| Fuel prices | /es/gasolineras/ | 2.0–3.2 s | lead paragraph | 0 | |
+| Election town | /es/elecciones/sabadell/ | 3.6–4.5 s | **consent card text** | 0 | |
+| NIE guide | /es/guias/nie-tie-barcelona-cataluna/ | 2.0–4.4 s | hero image (640w AVIF, 68 KB) | 0 | LCP waits for the main-thread task, not the download |
+
+Every page ships ~157–179 KB of JS (transfer) and preloads 108 KB of fonts;
+TTFB from the VPS is 60–150 ms (Cloudflare HIT), up to ~1 s on a lossy run.
+
+**What was tested and not changed (no effect shown):**
+- Viewport prefetch of `next/link` (`?_rsc=`, bypassed by Cloudflare rule 3,
+  so it also reaches origin): blocking it changed neither LCP nor TBT beyond
+  the noise (3 interleaved rounds × 4 pages). Not a CWV problem; left as is.
+- Leave planner: interactions stay under 200 ms in the lab (click 120–128 ms,
+  handler 22–41 ms); the optimizer takes 6–58 ms per call in Node here. Note
+  for whoever edits it: LeavePlanner.tsx says "the React Compiler memoises
+  these", but the compiler is **not** enabled (no `reactCompiler` in
+  next.config.ts), so each change recomputes the plan and re-renders the
+  ~1,060 `<option>`s. Fine today; first thing to memoise if INP turns poor.
+- Hero images: already preloaded at high priority, AVIF, `sizes="100vw"`
+  correct for a full-bleed figure.
+
+**Not ours to change (owner decision):** on town-holiday and election pages
+the consent card's paragraph is the largest text on the first screen, so it
+becomes the LCP element and LCP is when the card renders after hydration
+(3.5–4.5 s lab vs 2.4–3.3 s for the page's own lead). The banner was not
+touched. If field LCP on those templates is poor, this is the first
+suspect; any change is the owner's call (look, behaviour and AEPD wording).
+
+**The change** (`src/lib/fonts.ts`, test `tests/fonts.test.ts`): removed the
+`fallback: [...]` lists from both next/font calls. With Turbopack (Next
+16.3.5) a `fallback` list replaces the automatic metric-matched fallback
+instead of following it, so production had **no** "Fraunces Fallback" /
+"IBM Plex Sans Fallback" `@font-face` (prod CSS `2qv2t_3ccnbny.css`:
+`--font-fraunces:"Fraunces", ui-serif, Georgia, serif`) and
+`adjustFontFallback: true` did nothing. Verified with a throwaway `next dev`
+app: with the list, no fallback face; without it, `"Fraunces", "Fraunces
+Fallback"` with `src: local(Times New Roman); size-adjust: 115.45%;
+ascent-override: 84.71%; descent-override: 22.09%` and Plex with Arial at
+101.17% / 101.32% / 27.18% (same values as `capsize-font-metrics.json`). The
+generic families still follow from `--font-display` / `--font-sans` in
+globals.css. No title, description, AdSense, consent or verification code
+touched.
+
+**Evidence in lab.** Fonts held 2.5 s so the swap lands after first paint,
+prod CSS served as is vs rewritten to what the fix emits (with Liberation
+Serif/Sans, metric clones of Times New Roman/Arial), 2 runs each: Spain 2027
+Madrid swap CLS **0.0624 → 0.0003** (the H2 "Calendario laboral 2027 de
+Madrid" no longer goes from one line to two and pushes the table 28 px);
+the other nine templates 0.0002 → 0.0001 (wordmark only).
+
+**Hypothesis.** Lab CLS on the Spain 2027 city pages (129 cities × ca/es/en,
+plus any page whose headings re-wrap on swap) goes to ~0 for readers on iOS,
+macOS and Windows. **Android is unchanged**: it has no Times New Roman/Arial
+for `local()`, so the fallback face is skipped and the swap behaves as
+before (a hand-tuned Noto Serif face would be the next step, not verifiable
+here because Noto Serif is not installed on the VPS).
+
+**Re-test after deploy:**
+1. `curl -s https://www.catalunyainfo.com/es/festivos/2027/madrid/madrid/ | grep -o '/_next/static/chunks/[^"]*\.css'`
+   then grep that CSS for `Fraunces Fallback` and `size-adjust:115.45%`.
+2. PSI mobile (pagespeed.web.dev or the API with a key) on the 10 URLs in the
+   table, CLS and LCP element first: https://pagespeed.web.dev/analysis?url=https://www.catalunyainfo.com/es/festivos/2027/madrid/madrid/&form_factor=mobile
+3. Search Console → Core Web Vitals (mobile), from ~11 Dec (28-day window).
+
+**Revert rule.** If the deployed CSS lacks the fallback faces, or any of the
+10 pages shows new CLS > 0.05 in PSI from the font swap, put the two
+`fallback` lists back (one-line revert of the fonts.ts hunk).
+
+**Review 11 Dec 2026. Outcome:** _pending_
