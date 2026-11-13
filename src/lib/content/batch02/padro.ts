@@ -162,6 +162,7 @@ export function buildPadroBody(locale: Locale): Block[] {
   const B = bcn(L);
   const vote = b2link("foreignVote", L, { ca: "guia del vot dels estrangers", es: "guía del voto de los extranjeros", en: "foreign residents' vote guide" }[L]);
   const tsi = b2link("tsi", L, { ca: "com demanar la targeta sanitària", es: "cómo pedir la tarjeta sanitaria", en: "how to get the health card" }[L]);
+  const nieTie = b2link("nieTie", L, { ca: "guia del NIE i la TIE", es: "guía del NIE y la TIE", en: "NIE and TIE guide" }[L]);
 
   const t = {
     ca: {
@@ -178,7 +179,7 @@ export function buildPadroBody(locale: Locale): Block[] {
       whyH: "Per a què serveix i per què convé fer-ho de seguida",
       why: [
         `El padró és el registre de veïns del municipi i prova on vius. És una obligació legal i, a la pràctica, la clau d'altres tràmits. Segons l'Ajuntament de Barcelona, dona accés a l'assistència sanitària pública i a l'escolarització dels menors, i el demanen la majoria dels tràmits d'estrangeria (reagrupament familiar, arrelament).`,
-        `**Targeta sanitària (TSI).** El CatSalut posa com a requisit bàsic estar empadronat en un municipi de Catalunya, i demana un certificat d'empadronament de menys de tres mesos si el teu ajuntament no ofereix la consulta en línia (${a(PADRO_URLS.tsi, "CatSalut")}). Qui hi té dret i com es demana, pas a pas: ${tsi}.`,
+        `**Targeta sanitària (TSI).** El CatSalut posa com a requisit bàsic estar empadronat en un municipi de Catalunya, i demana un certificat d'empadronament de menys de tres mesos si el teu ajuntament no ofereix la consulta en línia (${a(PADRO_URLS.tsi, "CatSalut")}). Qui hi té dret i com es demana, pas a pas: ${tsi}. Per empadronar-te no et cal el NIE; si l'has de demanar després, o la TIE o el certificat de la UE, ho expliquem a la ${nieTie}.`,
         `**Votar a les municipals del 23 de maig de 2027.** Si ets ciutadà d'un altre país de la UE, l'INE només compta els empadronaments fets fins al **30 de desembre de 2026**. Tot el procés, a la ${vote}.`,
       ],
       bcnH: "A Barcelona, pas a pas",
@@ -275,7 +276,7 @@ export function buildPadroBody(locale: Locale): Block[] {
       whyH: "Para qué sirve y por qué conviene hacerlo enseguida",
       why: [
         `El padrón es el registro de vecinos del municipio y prueba dónde vives. Es una obligación legal y, en la práctica, la llave de otros trámites. Según el Ayuntamiento de Barcelona, da acceso a la asistencia sanitaria pública y a la escolarización de los menores, y lo piden la mayoría de trámites de extranjería (reagrupación familiar, arraigo).`,
-        `**Tarjeta sanitaria (TSI).** El CatSalut pone como requisito básico estar empadronado en un municipio de Cataluña, y pide un certificado de empadronamiento de menos de tres meses si tu ayuntamiento no ofrece la consulta en línea (${a(PADRO_URLS.tsi, "CatSalut, en catalán")}). Quién tiene derecho y cómo se pide, paso a paso: ${tsi}.`,
+        `**Tarjeta sanitaria (TSI).** El CatSalut pone como requisito básico estar empadronado en un municipio de Cataluña, y pide un certificado de empadronamiento de menos de tres meses si tu ayuntamiento no ofrece la consulta en línea (${a(PADRO_URLS.tsi, "CatSalut, en catalán")}). Quién tiene derecho y cómo se pide, paso a paso: ${tsi}. Para empadronarte no te hace falta el NIE; si tienes que pedirlo después, o la TIE o el certificado de la UE, lo explicamos en la ${nieTie}.`,
         `**Votar en las municipales del 23 de mayo de 2027.** Si eres ciudadano de otro país de la UE, el INE solo cuenta los empadronamientos hechos hasta el **30 de diciembre de 2026**. Todo el proceso, en la ${vote}.`,
       ],
       bcnH: "En Barcelona, paso a paso",
@@ -372,7 +373,7 @@ export function buildPadroBody(locale: Locale): Block[] {
       whyH: "What it is for, and why to do it straight away",
       why: [
         "The padrón (padró in Catalan) is the town's register of residents and the proof of where you live. Registering is a legal duty and, in practice, the key to other paperwork. Barcelona City Council says it gives access to public healthcare and to schooling for children, and most immigration procedures (family reunification, arraigo) ask for it.",
-        `**Health card (TSI).** CatSalut makes being registered in a Catalan municipality the basic requirement, and asks for a padrón certificate issued within the last three months unless your council offers online checks (${a(PADRO_URLS.tsi, "CatSalut, in Catalan")}). Who is entitled and how to apply, step by step: ${tsi}.`,
+        `**Health card (TSI).** CatSalut makes being registered in a Catalan municipality the basic requirement, and asks for a padrón certificate issued within the last three months unless your council offers online checks (${a(PADRO_URLS.tsi, "CatSalut, in Catalan")}). Who is entitled and how to apply, step by step: ${tsi}. You do not need a NIE to register; if you have to get one afterwards, or a TIE or the EU certificate, see our ${nieTie}.`,
         `**Voting in the local elections of 23 May 2027.** If you are a citizen of another EU country, the INE only counts padrón registrations made by **30 December 2026**. The whole process is in the ${vote}.`,
       ],
       bcnH: "In Barcelona, step by step",
@@ -482,7 +483,7 @@ export function buildPadroBody(locale: Locale): Block[] {
       es: `Ley 7/1985 e ${a(PADRO_URLS.instructions, "instrucciones técnicas del padrón")} (BOE), ficha y guía del Ayuntamiento de Barcelona, CatSalut, INE y las sedes electrónicas de Girona, Lleida, Tarragona y L'Hospitalet.`,
       en: `Law 7/1985 and the ${a(PADRO_URLS.instructions, "padrón technical instructions")} (BOE, in Spanish), Barcelona City Council's procedure sheet and guide, CatSalut, the INE and the e-offices of Girona, Lleida, Tarragona and L'Hospitalet.`,
     }[L]),
-    ...b2Related(["tsi", "foreignVote", "barcelonaHub", "transport", "payDates"], L),
+    ...b2Related(["tsi", "nieTie", "foreignVote", "barcelonaHub", "transport", "payDates"], L),
   ];
 }
 
