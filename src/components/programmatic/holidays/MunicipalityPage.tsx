@@ -3,6 +3,7 @@ import Link from "next/link";
 import { Breadcrumbs, type Crumb } from "@/components/Breadcrumbs";
 import { ShareBar, crumbPath } from "@/components/share/ShareBar";
 import { WidgetPlaceLink } from "@/components/programmatic/embed-2027/WidgetLink";
+import { LeavePlaceLink } from "@/components/programmatic/leave-2027/LeaveLink";
 import { CalendarSubscribe } from "@/components/programmatic/ics/CalendarSubscribe";
 import { getMessages } from "@/lib/i18n";
 import { todayInCatalonia } from "@/lib/content/holidays/calendar";
@@ -220,6 +221,8 @@ export function MunicipalityPage({ m, locale }: { m: SnapshotMunicipality; local
               <DateList dates={regionalDays(NEXT, isAran(m)).map((d) => d.date)} locale={locale} />
             </>
           )}
+          {/* The 2027 leave planner, with this town picked. */}
+          <LeavePlaceLink locale={locale} placeId={m.slug} place={name} />
           {/* The embeddable 2027 calendar, with this town picked. */}
           <WidgetPlaceLink locale={locale} place={{ kind: "town", m }} />
           {/* The town's confirmed holidays as a calendar feed (.ics). */}

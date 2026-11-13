@@ -122,7 +122,7 @@ test("URLs: one slug per community and language, no clash with the static folder
     const slugs = editionCommunities(l).map((c) => c.slug);
     assert.equal(new Set(slugs).size, 19);
     for (const s of slugs) assert.match(s, /^[a-z]+(-[a-z]+)*$/, s);
-    for (const reserved of [EDITION_BRIDGES_SLUG[l], "ponts", "long-weekends", "dia", "day", "comarca", "al-teu-web", "for-your-website"]) assert.ok(!slugs.includes(reserved), reserved);
+    for (const reserved of [EDITION_BRIDGES_SLUG[l], "ponts", "long-weekends", "dia", "day", "comarca", "al-teu-web", "for-your-website", "aprofitar-vacances", "leave-planner"]) assert.ok(!slugs.includes(reserved), reserved);
     assert.deepEqual(
       editionCommunityParams(l, "x").map((p) => p.x),
       slugs,

@@ -17,6 +17,7 @@ const { electionsSitemapPaths } = await import("../src/lib/programmatic/election
 const { weekendFamilyPaths } = await import("../src/lib/programmatic/weekend/sitemap.ts");
 const { christmasFairsPaths } = await import("../src/lib/programmatic/christmas-fairs/sitemap.ts");
 const { GUIDES } = await import("../src/lib/programmatic/holidays/links.ts");
+const { leaveEditions } = await import("../src/lib/programmatic/leave-2027/copy.ts");
 const { PATHS: TOOL_PATHS } = await import("../src/lib/content/home-tools.ts");
 
 // Titles and descriptions of every programmatic page.
@@ -76,6 +77,7 @@ test("every URL llms.txt names is a page a family or guide publishes", () => {
     ...Object.values(GUIDES.strikes),
     ...LOCALES.map((l) => `/${l}/${TOOL_PATHS.weekend[l]}/`),
     ...LOCALES.map((l) => todayPath(l)),
+    ...Object.values(leaveEditions()),
   ]);
   for (const tool of liveTools()) {
     for (const href of Object.values(tool.hubs)) assert.ok(known.has(href!), `${tool.name}: ${href} is not a published page`);

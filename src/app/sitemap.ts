@@ -20,6 +20,7 @@ import { pollsSitemapEntries } from "@/lib/programmatic/polls/page";
 import { editionSitemapEntries } from "@/lib/programmatic/spain-2027/editions";
 import { spainDaySitemapEntries, spainSitemapEntries } from "@/lib/programmatic/spain-2027/paths";
 import { widgetSitemapEntries } from "@/lib/programmatic/embed-2027/places";
+import { leaveSitemapEntries } from "@/lib/programmatic/leave-2027/places";
 
 /**
  * Cached for an hour (ISR) and refreshed at once by every publish, and by the
@@ -158,6 +159,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...editionSitemapEntries(),
     // "Posa el calendari laboral 2027 al teu web", in ca, es and en. Never the /embed/ widgets themselves (noindex).
     ...widgetSitemapEntries(),
+    // "Com aprofitar les vacances el 2027": the leave planner, in ca, es and en.
+    ...leaveSitemapEntries(),
     ...fuelSitemapEntries(),
     ...rodaliesSitemap(),
     ...reservoirSitemapEntries(),

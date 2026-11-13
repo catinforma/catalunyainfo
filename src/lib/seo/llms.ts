@@ -11,6 +11,7 @@
  * summary in a blockquote, then sections of `- [name](url): notes`.
  */
 
+import { leaveEditions } from "@/lib/programmatic/leave-2027/copy";
 import { LOCALES, type Locale } from "@/lib/i18n/config";
 import { PATHS as TOOL_PATHS } from "@/lib/content/home-tools";
 import { SEASON_YEAR } from "@/lib/programmatic/christmas-fairs/classify";
@@ -73,6 +74,11 @@ export function liveTools(): LiveTool[] {
       name: "Is it a public holiday on…?",
       hubs: { ca: datePath("ca", DATE_PAGE_RANGE.first), es: datePath("es", DATE_PAGE_RANGE.first), en: datePath("en", DATE_PAGE_RANGE.first) },
       description: `one page per date (${DATE_PAGES.length} dates from ${DATE_PAGE_RANGE.first} to ${DATE_PAGE_RANGE.last}): whether the day is a holiday across Catalonia and in the rest of Spain, which towns have a local holiday, shops and schools.`,
+    },
+    {
+      name: "2027 leave planner",
+      hubs: leaveEditions(),
+      description: "pick a Catalan town, a Spanish city or region and 1 to 25 days of leave: which working days to book in 2027 for the most days off in a row, ranked by days off per day of leave, from the official 2027 holiday lists (DOGC, BOE, city bulletins).",
     },
     {
       name: "Strikes in Catalonia today",

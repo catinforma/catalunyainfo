@@ -3,6 +3,7 @@ import Link from "next/link";
 import { Breadcrumbs, type Crumb } from "@/components/Breadcrumbs";
 import { ShareBar, crumbPath } from "@/components/share/ShareBar";
 import { WidgetHubLink } from "@/components/programmatic/embed-2027/WidgetLink";
+import { LeaveHubLink } from "@/components/programmatic/leave-2027/LeaveLink";
 import { getMessages } from "@/lib/i18n";
 import { REGIONS } from "@/lib/programmatic/holidays/boe-2027";
 import { municipalities } from "@/lib/programmatic/holidays/data";
@@ -693,6 +694,7 @@ export function SpainHubPageIntl({ locale }: { locale: Edition }) {
           </ul>
 
           <HubCityList locale={locale} />
+          <LeaveHubLink locale={locale} />
           <WidgetHubLink locale={locale} />
         </div>
 
@@ -725,6 +727,7 @@ export function SpainBridgesPageIntl({ locale }: { locale: Edition }) {
       <div className="ci-shell py-10">
         <div className="ci-prose">
           <p className="text-sm text-[var(--color-muted)]">{computedNote(locale)}</p>
+          <LeaveHubLink locale={locale} />
 
           <h2 id="tots">{tr(locale, `Tots els ponts del ${YEAR}, i on`, `Every long weekend of ${YEAR}, and where`)}</h2>
           <div className="ci-table-scroll mt-4">
