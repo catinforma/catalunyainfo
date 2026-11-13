@@ -14,6 +14,7 @@ const { fuelFamilyPaths } = await import("../src/lib/programmatic/fuel/sitemap.t
 const { rodaliesFamilyPaths } = await import("../src/lib/programmatic/rodalies/pages.ts");
 const { reservoirFamilyPaths } = await import("../src/lib/programmatic/reservoirs/pages.ts");
 const { pvpcFamilyPaths } = await import("../src/lib/programmatic/pvpc/pages.ts");
+const { butaneFamilyPaths } = await import("../src/lib/programmatic/butane/page.ts");
 const { electionsSitemapPaths } = await import("../src/lib/programmatic/elections/pages.ts");
 const { weekendFamilyPaths } = await import("../src/lib/programmatic/weekend/sitemap.ts");
 const { christmasFairsPaths } = await import("../src/lib/programmatic/christmas-fairs/sitemap.ts");
@@ -57,6 +58,7 @@ test("llms.txt lists every live tool and hub, each with a one-line description",
     "/ca/rodalies/", "/es/rodalies/", "/en/rodalies/",
     "/ca/embassaments/", "/es/embalses/", "/en/reservoirs/",
     "/es/precio-luz/", "/ca/preu-llum/", "/en/electricity-price-spain/",
+    "/es/precio-butano/", "/ca/preu-buta/", "/en/butane-price-spain/",
     "/ca/eleccions/", "/es/elecciones/", "/en/elections/",
     "/ca/cap-de-setmana/", "/es/fin-de-semana/",
     "/ca/fires-de-nadal/", "/es/mercados-navidad/", "/en/christmas-markets/",
@@ -78,6 +80,7 @@ test("every URL llms.txt names is a page a family or guide publishes", () => {
     ...rodaliesFamilyPaths().map((p) => p.path),
     ...reservoirFamilyPaths().map((p) => p.path),
     ...pvpcFamilyPaths().map((p) => p.path),
+    ...butaneFamilyPaths().map((p) => p.path),
     ...electionsSitemapPaths().map((p) => p.path),
     ...weekendFamilyPaths().map((p) => p.path),
     ...christmasFairsPaths().map((p) => p.path),

@@ -5441,3 +5441,60 @@ unchanged.
 and the per-town query pull (scratch `sp27x/pull.py`).
 
 **Outcome:** _pending_
+
+## 2026-11-13 — "Precio de la bombona de butano hoy", Spain-wide (new page, es/ca/en; ships with the deploy, no publish group)
+
+**Why.** Research row 11 (research_notes/spain-utilities-opportunities-nov2026.md):
+"precio butano" ~13k/month, peaks Jan (index 149), Mar (144), Nov–Dec
+(129–141). Competitors (endesa blog, OCU, press) each cover one revision and
+disagree on the rule; none links every BOE resolution. Fact pack:
+research_notes/butano-precio-nov2026.md (gitignored).
+
+- URLs: `/es/precio-butano/`, `/ca/preu-buta/`, `/en/butane-price-spain/`
+  (sitemap + hreflang, x-default en; lastModified = last revision or tax
+  month). Hub card in the calculators hub "live" group right after the PVPC
+  card; the PVPC pages link it and it links them back (energía en casa),
+  plus fuel and calculators; llms.txt entry.
+- Facts (all BOE/INE, read 13 Nov 2026): rule = Orden IET/389/2015 (as
+  amended by TED/211/2025; ITC/2608/2009 is superseded): revised every two
+  months, effective the **third Tuesday** of Jan/Mar/May/Jul/Sep/Nov, **±5 %**
+  cap per revision, butane only since Mar 2025. RDL 25/2026 art. 3: pre-tax
+  ceiling **127,7838 c€/kg** (= May 2022, "19,55 euros por envase" on the
+  peninsula) until 30 Jun 2027. In force: **123,4447 c€/kg** since 15 Sep
+  2026 (BOE-A-2026-19115) → **18,90 €** per 12.5 kg with taxes (Península +
+  Baleares: hydrocarbons tax 15 €/t in Nov per RDL 25/2026 art. 14 and INE
+  Sep CPI 10.2 %; VAT 21 %); 0 €/t in December (INE Oct CPI 16.1 %, art. 15)
+  → 18,67 € at the same pre-tax price. History: 17 resolutions Jan 2024–Sep
+  2026, each linked; all published the Monday before (observed, printed as
+  practice, not as a rule). Operators with home delivery: BOE-A-2026-13564.
+  Bono social térmico from RDL 15/2018 + bonosocial.gob.es. No price is
+  forecast; the page prints only the range the rules allow (117,27–127,78).
+- Caching: routes `revalidate = 3600`, figures in
+  `src/lib/programmatic/butane/data.ts` (no DB, no fetch).
+
+**Date guards (tests/butane.test.ts).**
+- From **18 Nov 2026** the test fails until the 17 Nov resolution is one new
+  line in `REVISIONS` (or the date in `NO_RESOLUTION` if the BOE publishes
+  none). Same every revision (next 19 Jan 2027). On 17 Nov itself, until the
+  line is in and deployed, the page says the revision is in force and does
+  not call the old price today's.
+- From **1 Jan 2027** the test fails until `TAX_PERIODS` gets the 2027
+  hydrocarbons tax rate and VAT for butane (no with-tax price is printed for
+  an uncovered day).
+- 16 Nov (BOE Monday): enter the line, deploy; the page shows "nuevo precio
+  desde el martes" until Tuesday 00:00, then switches within the hour.
+
+**Baseline:** 0 (no page).
+
+**Prediction.** Indexed within 7 days (IndexNow the three URLs). Head
+"precio butano" is media-bound: positions 15–40 in December; long tail
+("precio bombona butano noviembre 2026", "cuándo sube el butano", "próxima
+revisión butano", "tope butano 19,55") page 1 possible. By 31 Jan 2027:
+2,000–8,000 impressions/28 days (January peak), CTR 2–4 %. Wrong if under
+500 impressions/28 days by 31 Jan.
+
+**Measure:** 20 Nov `batch_url_inspection` (rendered price + table);
+1 Dec and 25 Jan `snapshot.py page precio-butano 14` (+ preu-buta,
+butane-price-spain).
+
+**Outcome:** _pending_
