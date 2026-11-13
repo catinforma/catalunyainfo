@@ -5229,3 +5229,70 @@ does not fail a test (the live read covers it); refresh it monthly with
 `npm run rent:snapshot -- check`.
 
 **Review 15 Dec 2026, 20 Jan 2027. Outcome:** _pending_
+
+---
+
+## 2026-11-13 — Spain 2027 city pages: 147 more towns (20,000+ inhabitants), each from its 2027 bulletin (deploy; group `calendario-2027-espana`)
+
+**Why.** The calendar long tail already ranks for mid-size cities outside
+Catalonia with no other page of the same depth: GSC 31 Oct–13 Nov,
+`/festivos/2027/` family 630–1,965 impr./day since 8 Nov at 7.7–9.6
+("calendario laboral alcobendas 2027" 61 at 9.1, "calendario laboral
+torrelavega 2027" 58 at 8.2, "calendario laboral marbella 2027" 38 at 9.6,
+"festivos valdemoro 2027" 38 at 6.7, "calendario laboral pinto 2027" 34 at
+6.4). Demand for "festivos <town> 2027" peaks Dec–Jan. Pages existed only
+for capitals and 50,000+ towns (129).
+
+**Selection rule** (`src/lib/programmatic/spain-2027/cities-more.ts` header):
+every municipality outside Catalonia, Ceuta and Melilla with 20,000–49,999
+inhabitants (INE padrón 1 Jan 2025, RD 1117/2025), plus any smaller town named
+in a holiday query in GSC 1 Aug–12 Nov 2026 (one: Castilleja de la Cuesta, "es
+festivo hoy en castilleja de la cuesta"; other small-town matches were Catalan
+towns or "Todos los Santos"). A page only where the community's official 2027
+list is out and gives the town's two days; never 2026 days, never guessed.
+
+**What changed.** 147 city pages × es/ca/en (441 URLs), same template and
+depth as the first 129 (BOE + regional days, the two local days with the
+bulletin and its line, bridges, leave planner preselected, .ics feed,
+embed widget), sitemap + hreflang automatic:
+
+| Community | Added | Source |
+|---|---|---|
+| Andalucía | 58 | BOJA núm. 210, 29.10.2026 (each row also in the Junta's work-calendar API; Lepe: BOJA "10 DEMAYO" kept, API lacks it) |
+| Canarias | 20 | BOC núm. 168, 21.8.2026 |
+| Murcia | 16 | BORM núm. 171, 27.7.2026 (printed weekdays checked) |
+| Galicia | 15 | DOG núm. 204, 26.10.2026 (Xunta open data agrees) |
+| País Vasco | 14 | BOB núm. 181, 22.9.2026; BOG núm. 187, 1.10.2026 |
+| Illes Balears | 10 | BOIB núm. 122, 29.9.2026 (Menorca included) |
+| Castilla y León | 6 | BOP Burgos 145, León 144, Valladolid 129 |
+| Extremadura | 4 | DOE núm. 207, 27.10.2026 |
+| Asturias | 3 | BOPA núm. 110, 10.6.2026 |
+| La Rioja | 1 | BOR núm. 160, 21.8.2026 |
+
+No page: Arcos de la Frontera (not in the BOJA list) and Cangas (the DOG's
+19 March is already San José in Galicia; Xunta data has only 30 Aug). Waiting
+for their community's 2027 list (no page, `WAITING_TOWNS`): Comunitat
+Valenciana 53, Madrid 13, Castilla-La Mancha 10, Cantabria 3, Navarra 3,
+Aragón 1 — 83 towns, slugs fixed in advance.
+
+**Baseline.** The 147 towns: 0 impressions (no page; GSC 1 Aug–12 Nov, no
+query names them outside Catalonia's own towns). Family: 7–12 Nov
+630–1,965 impr./day, 81 clicks, position 7.7–9.6.
+
+**Prediction.** By 15 Dec: ≥ 60 of the 147 pages with impressions; queries
+"festivos <town> 2027" / "calendario laboral <town> 2027" for them at ≤ 10
+median position; family impressions/day up ≥ 25 % over the 129-page trend at
+equal date. Risk to watch: if fewer than 20 pages get any impression by
+15 Jan, the wave is thin for Google and goes into `low-demand.ts` (noindex)
+at the January review.
+
+**Date guards.** `WAITING_RECHECK_BY` 20 Nov (test fails until the six pending
+communities are re-read: DOGV daily, BOA ~20 Nov, BON ~2 Dec, BOC/DOCM/BOCM
+~11–12 Dec); a community that flips to "published" in sources.ts fails the
+test until its waiting towns become rows. Core `CITIES_RECHECK_BY` 27 Nov
+unchanged.
+
+**Measure 1 Dec, 15 Dec, 15 Jan**: `snapshot.py page /festivos/2027/ 14`
+and the per-town query pull (scratch `sp27x/pull.py`).
+
+**Outcome:** _pending_

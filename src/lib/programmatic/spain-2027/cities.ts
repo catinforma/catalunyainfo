@@ -31,6 +31,11 @@ export function cityBySlug(region: Region, slug: string): City | null {
   return CITIES.find((c) => c.region === region && c.slug === slug) ?? null;
 }
 
+/** The day the city's local days were read on its bulletin: the row's own date (20,000+ wave) or `CITIES_AS_OF`. */
+export function cityReadOn(c: Pick<CityRow, "readOn">): string {
+  return c.readOn ?? CITIES_AS_OF;
+}
+
 /** "Las Palmas" where the full name would not fit a title. */
 export function shortName(c: City): string {
   return c.short ?? c.name;

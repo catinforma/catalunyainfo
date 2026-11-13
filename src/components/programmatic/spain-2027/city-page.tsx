@@ -7,10 +7,11 @@ import { LeavePlaceLink } from "@/components/programmatic/leave-2027/LeaveLink";
 import { CalendarSubscribe } from "@/components/programmatic/ics/CalendarSubscribe";
 import { dayMonthYear } from "@/lib/programmatic/holidays/format";
 import { YEAR } from "@/lib/programmatic/spain-2027/calendar";
-import { CITIES_AS_OF, INE_POPULATION, ineTableUrl, type LocalDay } from "@/lib/programmatic/spain-2027/cities-data";
+import { INE_POPULATION, ineTableUrl, type LocalDay } from "@/lib/programmatic/spain-2027/cities-data";
 import {
   citiesOf,
   cityCalendar,
+  cityReadOn,
   cityRuns,
   commonLocalDays,
   holidayCount,
@@ -297,7 +298,7 @@ export function CityPage({ c }: { c: City }) {
           ]}
         />
         <p className="ci-measure mt-2 text-xs text-[var(--color-muted)]">
-          <time dateTime={CITIES_AS_OF}>Fiestas locales leídas el {dayMonthYear(CITIES_AS_OF, "es")}.</time>
+          <time dateTime={cityReadOn(c)}>Fiestas locales leídas el {dayMonthYear(cityReadOn(c), "es")}.</time>
         </p>
         <ShareBar locale="es" path={crumbPath(cityCrumbs(c))} title={cityH1(c)} contentType="holidays_2027" variant="full" />
       </div>

@@ -71,6 +71,25 @@ const AREA_NAME: Record<string, Record<Edition, string>> = {
     ca: "Tot el municipi excepte la parròquia de Lugones/Llugones",
     en: "The whole municipality except the parish of Lugones/Llugones",
   },
+  // The 20,000+ wave (cities-more.ts): Mieres (BOPA), Ibiza's parishes (BOIB).
+  "Todo el municipio salvo el Valle de Turón": { ca: "Tot el municipi excepte la vall de Turón", en: "The whole municipality except the Turón valley" },
+  "Valle de Turón": { ca: "Vall de Turón", en: "Turón valley" },
+  "Parroquias de Santa Eulària i Puig d'en Valls": { ca: "Parròquies de Santa Eulària i Puig d'en Valls", en: "Parishes of Santa Eulària and Puig d'en Valls" },
+  "Parroquia de Jesús": { ca: "Parròquia de Jesús", en: "Parish of Jesús" },
+  "Parroquia de Sant Carles de Peralta": { ca: "Parròquia de Sant Carles de Peralta", en: "Parish of Sant Carles de Peralta" },
+  "Parroquia de Santa Gertrudis de Fruitera": { ca: "Parròquia de Santa Gertrudis de Fruitera", en: "Parish of Santa Gertrudis de Fruitera" },
+  "Parroquias de Sant Josep de sa Talaia, Es Cubells i Sant Agustí des Vedrà": {
+    ca: "Parròquies de Sant Josep de sa Talaia, es Cubells i Sant Agustí des Vedrà",
+    en: "Parishes of Sant Josep de sa Talaia, Es Cubells and Sant Agustí des Vedrà",
+  },
+  "Parroquias de Sant Jordi de ses Salines i Sant Francesc de s'Estany": {
+    ca: "Parròquies de Sant Jordi de ses Salines i Sant Francesc de s'Estany",
+    en: "Parishes of Sant Jordi de ses Salines and Sant Francesc de s'Estany",
+  },
+  "Parroquia de Sant Antoni": { ca: "Parròquia de Sant Antoni", en: "Parish of Sant Antoni" },
+  "Parroquia de Sant Mateu": { ca: "Parròquia de Sant Mateu", en: "Parish of Sant Mateu" },
+  "Parroquia de Sant Rafel": { ca: "Parròquia de Sant Rafel", en: "Parish of Sant Rafel" },
+  "Parroquia de Santa Agnès": { ca: "Parròquia de Santa Agnès", en: "Parish of Santa Agnès" },
 };
 
 /** A zone or area of a municipality in the page's language. */

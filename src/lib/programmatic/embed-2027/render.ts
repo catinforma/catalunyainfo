@@ -2,8 +2,7 @@ import { councilApproved2027, isAran, NEXT, NEXT_YEAR, nextYearFor, SNAPSHOT, YE
 import { councilLabel, councilSource } from "@/lib/programmatic/holidays/copy";
 import { dayMonth, dayMonthYear, weekdayName } from "@/lib/programmatic/holidays/format";
 import { caDe, joinList } from "@/lib/programmatic/holidays/names";
-import { cityCalendar, commonLocalDays, local2027, type CityDayKind } from "@/lib/programmatic/spain-2027/cities";
-import { CITIES_AS_OF } from "@/lib/programmatic/spain-2027/cities-data";
+import { cityCalendar, cityReadOn, commonLocalDays, local2027, type CityDayKind } from "@/lib/programmatic/spain-2027/cities";
 import { areaNameIntl, caOf, localNameIntl, localNoteIntl } from "@/lib/programmatic/spain-2027/city-copy-intl";
 import { localName } from "@/lib/programmatic/spain-2027/city-copy";
 import { dayName } from "@/lib/programmatic/spain-2027/copy";
@@ -236,7 +235,7 @@ function cityModel(lang: EmbedLocale, place: Extract<EmbedPlace, { kind: "city" 
     rows,
     status,
     sources,
-    readOn: latest(SOURCES_READ_ON, CITIES_AS_OF),
+    readOn: latest(SOURCES_READ_ON, cityReadOn(place.c)),
     page: attributionPath(lang, place),
   };
 }

@@ -9,7 +9,7 @@ process.env.NEXT_PUBLIC_ALLOW_INDEXING = "true";
 type Region = import("../src/lib/programmatic/holidays/boe-2027.ts").Region;
 const { SNAPSHOT, municipalities } = await import("../src/lib/programmatic/holidays/data.ts");
 const { communityDays } = await import("../src/lib/programmatic/spain-2027/calendar.ts");
-const { AUTONOMOUS_CITIES, CATALAN_CITIES, CITIES_AS_OF, CITIES_RECHECK_DAYS, CITY_ROWS, INE_POPULATION, NOT_YET, ineTableUrl } = await import(
+const { AUTONOMOUS_CITIES, CATALAN_CITIES, CITIES_AS_OF, CITIES_RECHECK_DAYS, CITY_ROWS, CORE_CITY_ROWS, INE_POPULATION, NOT_YET, ineTableUrl } = await import(
   "../src/lib/programmatic/spain-2027/cities-data.ts"
 );
 const { CITIES, CITIES_RECHECK_BY, cityCalendar, cityRuns, commonLocalDays, holidayCount, islandDay, localDays, localOnRegional, localRuns } = await import(
@@ -70,8 +70,9 @@ test("the city statuses are re-read within 21 days of CITIES_AS_OF", () => {
 /* -------------------------------------------------------------------------- */
 
 test("scope: every provincial capital and 50,000+ municipality, each once, with its INE figure", () => {
+  // The core rows; the 20,000+ wave (cities-more.ts) has its own test file.
   const all = [
-    ...CITY_ROWS.map((r) => ({ ine: r.ine, population: r.population, capital: r.capital, ineTable: r.ineTable })),
+    ...CORE_CITY_ROWS.map((r) => ({ ine: r.ine, population: r.population, capital: r.capital, ineTable: r.ineTable })),
     ...NOT_YET.map((r) => ({ ine: r.ine, population: r.population, capital: r.capital, ineTable: r.ineTable })),
     ...AUTONOMOUS_CITIES.map((r) => ({ ine: r.ine, population: r.population, capital: true, ineTable: r.ineTable })),
     ...CATALAN_CITIES.map((r) => ({ ine: r.ine, population: r.population, capital: r.capital, ineTable: r.ineTable })),
@@ -89,7 +90,7 @@ test("scope: every provincial capital and 50,000+ municipality, each once, with 
     assert.ok(r.ineTable >= 2854 && r.ineTable <= 2909, `${r.ine}: INE table ${r.ineTable}`);
   }
   for (const r of CATALAN_CITIES) assert.equal(PROVINCE_REGION[r.ine.slice(0, 2)], "CT", r.ine);
-  for (const r of [...CITY_ROWS, ...NOT_YET, ...AUTONOMOUS_CITIES]) assert.equal(PROVINCE_REGION[r.ine.slice(0, 2)], r.region, `${r.ine} is not in ${r.region}`);
+  for (const r of [...CORE_CITY_ROWS, ...NOT_YET, ...AUTONOMOUS_CITIES]) assert.equal(PROVINCE_REGION[r.ine.slice(0, 2)], r.region, `${r.ine} is not in ${r.region}`);
   assert.match(INE_POPULATION.url, /BOE-A-2025-25362$/);
   assert.equal(INE_POPULATION.asOf, "2025-01-01");
   assert.equal(ineTableUrl(2895), "https://www.ine.es/jaxiT3/Tabla.htm?t=2895");

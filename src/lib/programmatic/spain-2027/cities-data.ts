@@ -1,5 +1,6 @@
 import type { Region } from "@/lib/programmatic/holidays/boe-2027";
 
+import { MORE_CITY_ROWS } from "./cities-more";
 import { SOURCES, type OfficialText } from "./sources";
 
 /**
@@ -10,7 +11,10 @@ import { SOURCES, type OfficialText } from "./sources";
  * provincial capital outside Catalonia, every other municipality outside
  * Catalonia with 50,000 inhabitants or more, and Ceuta and Melilla. Ceuta
  * and Melilla are one municipality each: their page is the community page,
- * which already carries their two local days (`sources.ts`).
+ * which already carries their two local days (`sources.ts`). The towns of
+ * 20,000 to 50,000 inhabitants (and smaller ones people search for) are the
+ * second file, `cities-more.ts`, with its own selection rule; `CITY_ROWS`
+ * joins both.
  *
  * Every date and name below was transcribed from the bulletin the row cites
  * (`source`), read on `CITIES_AS_OF`; a name is null where the bulletin gives
@@ -94,6 +98,8 @@ export interface CityRow {
   local2026: LocalList | null;
   /** One sentence on the city's status, when the list says something about it. */
   note?: string;
+  /** The day the row was read on its bulletin, when later than `CITIES_AS_OF` (the 20,000+ wave, `cities-more.ts`). */
+  readOn?: string;
 }
 
 /* -------------------------------------------------------------------------- */
@@ -396,8 +402,8 @@ const VALENCIANA: CityRow[] = [
   pending("VC", "Castellón", { ine: "12135", slug: "vila-real", name: "Vila-real", ineName: "Vila-real", population: 53623, ineTable: 2865, capital: false }, [d("2026-05-18", "Festividad de San Pascual"), d("2026-12-26", "San Esteban")]),
 ];
 
-/** Every city with a page, by community in the BOE's order, then as listed. */
-export const CITY_ROWS: readonly CityRow[] = [
+/** The first two waves: every provincial capital and 50,000+ municipality, by community in the BOE's order, then as listed. */
+export const CORE_CITY_ROWS: readonly CityRow[] = [
   ...ANDALUCIA,
   ...ARAGON,
   ...ASTURIAS,
@@ -415,6 +421,9 @@ export const CITY_ROWS: readonly CityRow[] = [
   ...LA_RIOJA,
   ...VALENCIANA,
 ];
+
+/** Every city with a page: the core rows, then the 20,000+ wave (`cities-more.ts`). */
+export const CITY_ROWS: readonly CityRow[] = [...CORE_CITY_ROWS, ...MORE_CITY_ROWS];
 
 /**
  * Ceuta and Melilla: in scope, one municipality each. Their two local days
