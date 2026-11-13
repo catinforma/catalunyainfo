@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { test } from "node:test";
 
 import { FAIRS as CHRISTMAS_FAIRS } from "../src/lib/programmatic/christmas-fairs/data.ts";
-import { ORGANISER_FAIRS } from "../src/lib/programmatic/christmas-fairs/organisers.ts";
+import { HTTP_ONLY_HOSTS, ORGANISER_FAIRS } from "../src/lib/programmatic/christmas-fairs/organisers.ts";
 import { attribution, correctionNote } from "../src/lib/programmatic/weekend/copy.ts";
 import { FAIR_CORRECTIONS, applyFairCorrections, type CalendarCorrection } from "../src/lib/programmatic/weekend/corrections.ts";
 import { FAIRS, SNAPSHOT, fairsIn, fairsInWindow, listedFairs } from "../src/lib/programmatic/weekend/data.ts";
@@ -86,7 +86,8 @@ test("corrections: reused from the Christmas family's organiser list, one per ca
   assert.equal(new Set(FAIR_CORRECTIONS.map((c) => c.id)).size, FAIR_CORRECTIONS.length, "one correction per row");
   for (const c of FAIR_CORRECTIONS) {
     assert.match(c.id, /^\d+$/);
-    assert.match(c.url, /^https:\/\//);
+    // http only for the organiser sites listed as http-only (Cardedeu's, 13 Nov 2026).
+    assert.match(c.url, HTTP_ONLY_HOSTS.includes(new URL(c.url).hostname) ? /^http:\/\// : /^https:\/\//);
     assert.match(c.readOn, /^\d{4}-\d{2}-\d{2}$/);
     assert.ok(c.start <= c.end);
     assert.ok(c.quote.length > 20, "the sentence that gives the dates");

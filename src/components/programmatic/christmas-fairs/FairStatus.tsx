@@ -46,7 +46,7 @@ export function FairStatus({ fairs, locale, labels, showTown }: { fairs: DatedFa
         ? fill(labels.openOne, { n: f.n, t: f.t, until: untilDate(f.e, locale) })
         : fill(labels.openMany, { count: value.open.length });
   } else if (value.state === "upcoming") {
-    answer = fill(labels.upcoming, { n: value.next.n, t: value.next.t, when: when(value.next.s), in: inText(value.nextIn) });
+    answer = fill(labels.upcoming, { n: value.next.n, t: value.next.t, when: when(value.nextOn), in: inText(value.nextIn) });
   } else {
     answer = fill(labels.over, { last: onDate(value.lastDay, locale) });
   }
@@ -68,7 +68,7 @@ export function FairStatus({ fairs, locale, labels, showTown }: { fairs: DatedFa
           <div>
             <dt>{labels.next}</dt>
             <dd>
-              {where(value.next)}: {when(value.next.s)} ({inText(value.nextIn ?? 0)})
+              {where(value.next)}: {when(value.nextOn ?? value.next.s)} ({inText(value.nextIn ?? 0)})
             </dd>
           </div>
         </dl>

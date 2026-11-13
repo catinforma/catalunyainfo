@@ -6,7 +6,7 @@ import { LinkList } from "@/components/programmatic/weekend/parts";
 import { B2_TITLES, b2href } from "@/lib/content/batch02/shared";
 import { renderInline } from "@/lib/content/inline";
 import { getMessages } from "@/lib/i18n";
-import { hubMeta, labels, statusLabels, townH1, townLead, townName } from "@/lib/programmatic/christmas-fairs/copy";
+import { confirmationNote, hubMeta, labels, statusLabels, townH1, townLead, townName } from "@/lib/programmatic/christmas-fairs/copy";
 import {
   FAIRS,
   comarcaOf,
@@ -82,7 +82,9 @@ export function TownPage({ town, locale }: { town: Town; locale: FairsLocale }) 
         <div className="ci-shell py-5 md:py-8 lg:py-12">
           <Breadcrumbs items={townCrumbs(town, locale)} locale={locale} />
           <h1 className="ci-measure">{townH1(town, locale)}</h1>
-          <p className="ci-measure mt-3 text-lg text-[var(--color-ink-soft)]">{townLead({ ...town, comarcaName: comarcaOf(town) }, locale, checked)}</p>
+          <p className="ci-measure mt-3 text-lg text-[var(--color-ink-soft)]">
+            {[townLead({ ...town, comarcaName: comarcaOf(town) }, locale, checked), confirmationNote(town.fairs, locale)].filter(Boolean).join(" ")}
+          </p>
           <ShareBar locale={locale} path={crumbPath(townCrumbs(town, locale))} title={townH1(town, locale)} contentType="christmas_fairs_town" />
         </div>
       </header>
