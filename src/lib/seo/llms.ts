@@ -14,6 +14,7 @@
 import { leaveEditions } from "@/lib/programmatic/leave-2027/copy";
 import { netSalaryEditions } from "@/lib/programmatic/net-salary/copy";
 import { selfEmployedEditions } from "@/lib/programmatic/self-employed/copy";
+import { sickLeaveEditions } from "@/lib/programmatic/sick-leave/copy";
 import { calcEditions, calculatorsHubEditions } from "@/lib/programmatic/calculators/paths";
 import { rentEditions } from "@/lib/programmatic/rent-update/copy";
 import { pensionEditions } from "@/lib/programmatic/pensions-2027/copy";
@@ -121,6 +122,11 @@ export function liveTools(): LiveTool[] {
       name: "Unemployment benefit calculator (Spain)",
       hubs: calcEditions("unemployment"),
       description: "contributory unemployment benefit (paro): duration from days contributed (LGSS art. 269 scale), 70% of the base for 180 days then 60%, the 2026 minimum and maximum by children (IPREM 600 €), and the Social Security deduction.",
+    },
+    {
+      name: "Sick pay calculator (Spain, incapacidad temporal / baja laboral)",
+      hubs: sickLeaveEditions(),
+      description: "Social Security sick pay for employees day by day: ordinary illness or non-work accident nothing on days 1-3, 60% of the daily base reguladora on days 4-20 (employer bears days 4-15, INSS or mutua from day 16), 75% from day 21; work accident or occupational disease 75% from the day after; the special cases (menstruation, termination of pregnancy, pregnancy from week 39, donation at 100%, and from 1 Dec 2026 menopause and gender-violence injuries); the Royal Decree-law 31/2026 changes from 1 Dec 2026 (base of the month before last, special cases paid from the day after); 365 + 180 days, 545 maximum; optional collective-agreement top-up; gross, IRPF withheld (LGSS arts. 169-176, RD 53/1980, Decreto 3158/1966).",
     },
     {
       name: "Rent increase calculator (Spain)",

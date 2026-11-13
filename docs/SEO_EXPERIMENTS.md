@@ -5762,3 +5762,47 @@ or state which 2026 rules keep applying and why.
 **Measure 15 Dec, 1 Feb, 15 Feb**: `snapshot.py page /calculadoras/cuota-autonomos/ 28`.
 
 **Outcome:** _pending_
+
+## 2026-11-13 — New tool: "Calculadora de baja laboral" (incapacidad temporal), es + ca + en (deploy only; no publish group)
+
+**What.** `/es/calculadoras/baja-laboral/`, `/ca/calculadores/baixa-laboral/`,
+`/en/calculators/sick-leave-pay-spain/` (lib/programmatic/sick-leave/), in the
+calculators registry (after unemployment) and hub group "Trabajo y sueldo",
+sitemap (+hreflang, x-default en) and llms.txt.
+
+- Rules (all read 13 Nov 2026 in the BOE / Seguridad Social): LGSS arts. 169–176
+  (BOE-A-2015-11724, update of 11 Nov 2026), both texts: in force (Ley 6/2024)
+  and from 1 Dec 2026 (RDL 31/2026, BOE-A-2026-21872, DF 4.ª.2). Common
+  illness / non-work accident: days 1–3 nothing, 60 % days 4–20 (RD 53/1980),
+  75 % from day 21 (D 3158/1966 art. 2.1); employer bears days 4–15, INSS/mutua
+  from 16 (art. 173.1; pago delegado). Professional: salary on day 1, 75 % from
+  day 2. 365 + 180, end at 545 days (arts. 169, 174). Base reguladora: base of
+  the month before (D 1646/1972 art. 13) until 30 Nov 2026; from 1 Dec 2026 the
+  month before last (new art. 171.2); ÷ 30; professional + overtime/365; max
+  base 5.101,20 € (Orden PJC/297/2026 art. 2.1). Special cases: menstruation,
+  pregnancy termination / week 39, donation 100 % (Ley 6/2024, SS percentages);
+  from 1 Dec 2026 also menopause and gender-violence injuries, all paid from the
+  day after (art. 173.1 new; DT 1.ª). IRPF: Ley 35/2006 art. 17.2.a).1.ª.
+- RDL 31/2026 not yet convalidated in the BOE (sumarios 22 Oct–13 Nov checked).
+- Not in the LGSS: any flexible / part-time return from sick leave; page silent.
+- Calculator: server-rendered default (common, 1.800 € base, 30 days from
+  1 Dec 2026 → 1.062 €: 432 employer + 630 INSS/mutua), client recompute + URL
+  hash, days ⇄ end date, gross-salary helper (÷ 12, capped), optional convenio
+  top-up % and start day, day-by-day band table with payer. YMYL disclaimer.
+
+**Why.** research_notes/spain-utilities-opportunities-nov2026.md row 21:
+"baja médica" 21.7k/month, flat; the 1 Dec 2026 change of the base month is
+new and competitors still print the old rule.
+
+**Baseline.** New URLs: 0 impressions.
+
+**Prediction.** By 15 Feb 2027: es page ≥ 3k impressions/28 days, position
+≤ 20 for "calculadora baja laboral" / "cuánto se cobra de baja".
+
+**Date guards.** `CONVALIDATION_RECHECK_BY` 28 Nov 2026 (BOE: convalidación or
+derogación of RDL 31/2026; update the reform section). `RULES_UNTIL` 1 Jan 2027
+(2027 maximum base for bajas from 1 Mar 2027; re-read LGSS 169–176).
+
+**Measure 15 Dec, 1 Feb, 15 Feb**: `snapshot.py page /calculadoras/baja-laboral/ 28`.
+
+**Outcome:** _pending_

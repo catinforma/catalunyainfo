@@ -10,6 +10,7 @@ import { leavePath } from "@/lib/programmatic/leave-2027/copy";
 import { SALARY_RULES_AS_OF } from "@/lib/programmatic/net-salary/rules-2026";
 import { RENT_RULES_AS_OF } from "@/lib/programmatic/rent-update/rules";
 import { RULES_AS_OF as SELF_EMPLOYED_AS_OF } from "@/lib/programmatic/self-employed/rules-2026";
+import { RULES_AS_OF as SICK_LEAVE_AS_OF } from "@/lib/programmatic/sick-leave/rules";
 import { PENSION_RULES_AS_OF } from "@/lib/programmatic/pensions-2027/rules";
 import { SMI_RULES_AS_OF } from "@/lib/programmatic/smi/rules";
 import { RULES_AS_OF as TREASURY_RULES_AS_OF } from "@/lib/programmatic/treasury-bills/rules";
@@ -161,6 +162,24 @@ export const HUB_GROUPS: HubGroup[] = [
         },
         scope: "spain",
         checked: EMPLOYMENT_AS_OF,
+      },
+      {
+        key: "sick-leave",
+        calculator: true,
+        href: calc("sick-leave"),
+        title: { ca: "Baixa laboral (incapacitat temporal)", es: "Baja laboral (incapacidad temporal)", en: "Sick pay (incapacidad temporal)" },
+        answers: {
+          ca: "Quant cobraràs cada dia de baixa, qui ho paga i què canvia des de l'1 de desembre de 2026?",
+          es: "¿Cuánto cobrarás cada día de baja, quién lo paga y qué cambia desde el 1 de diciembre de 2026?",
+          en: "How much you get for each day of sick leave, who pays it, and what changes from 1 December 2026.",
+        },
+        basis: {
+          ca: "Llei general de la Seguretat Social, arts. 169 a 174 (amb el Reial decret llei 31/2026), Decret 3158/1966 i Reial decret 53/1980.",
+          es: "Ley General de la Seguridad Social, arts. 169 a 174 (con el Real Decreto-ley 31/2026), Decreto 3158/1966 y Real Decreto 53/1980.",
+          en: "General Social Security Act (LGSS), arts. 169 to 174 (as amended by Royal Decree-law 31/2026), Decreto 3158/1966 and Royal Decree 53/1980.",
+        },
+        scope: "spain",
+        checked: SICK_LEAVE_AS_OF,
       },
       {
         key: "pensions-2027",
