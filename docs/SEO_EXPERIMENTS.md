@@ -5859,6 +5859,60 @@ rules: Orden art. 27, BdE notice, EMMI terms, Ley 5/2019).
 
 **Measure 15 Dec, 1 Feb, 15 Feb**: `snapshot.py page /calculadoras/euribor-hoy/ 28` and `/calculadoras/hipoteca/`.
 
+## 2026-11-13 — New tool: "Impuestos al comprar vivienda: ITP o IVA + AJD por comunidad", es + ca + en (deploy only; no publish group)
+
+**What.** `/es/calculadoras/impuestos-compra-vivienda/`, `/ca/calculadores/impostos-compra-habitatge/`,
+`/en/calculators/spain-home-purchase-taxes/` (lib/programmatic/home-purchase-tax/), in the
+calculators registry (after rent update) and hub group "Vivienda", sitemap (+hreflang,
+x-default en) and llms.txt.
+
+- Second-hand home: ITP at each territory's general rate or scale and the reduced rates /
+  bonificaciones for young buyers, large families, disability, habitual/first home, VPO and
+  price caps, each with its article and the law's words (quotes mechanically checked as exact
+  substrings of the saved official text); conditions the calculator cannot check (income limits,
+  mortgage share, time to move in) are printed with the result; benefits that hang on facts it
+  does not ask (rural parishes, depopulated towns, victims, single-parent) are listed, never applied.
+- New home: IVA 10 % / 4 % special-regime VPO (LIVA art. 91, consolidated 07/10/2026; RDL
+  26/2026 rewrote 91.Dos.1.6.º with the same first paragraph and was not convalidated on
+  2 Oct 2026) + the deed's AJD per community. Canarias: IGIC 7 / 5 / 3 / 0 % (DLeg 1/2025).
+  Basque territories: first delivery of a home exempt from AJD; IVA via Concierto art. 26;
+  Navarre via Convenio art. 32.
+- Mortgage AJD: lender is the taxpayer (TRLITP art. 29, RDL 17/2018). Notary and registry:
+  RD 1426/1989 and RD 1427/1989 scales quoted, no computed totals. Base: reference value
+  (TRLITP art. 10.2) explained; the engine uses the typed price.
+- Laws read 13 Nov 2026 (BOE consolidated texts unless noted): Andalucía Ley 5/2021; Aragón
+  DLeg 1/2005; Asturias DLeg 2/2014; Baleares DLeg 1/2014; Canarias DLeg 1/2009; Cantabria
+  DLeg 62/2008 (Ley 5/2026); CLM Ley 8/2013 (Ley 1/2026); CyL DLeg 1/2013; Cataluña DLeg 1/2024
+  (+ Ley 11/2026 read in the DOGC); Valencia Ley 13/1997 (Leyes 5/2025, 5/2026); Extremadura
+  DLeg 1/2018 (Ley 2/2026); Galicia DLeg 1/2011; Madrid DLeg 1/2010; Murcia DLeg 1/2010
+  (Ley 3/2025); La Rioja Ley 10/2017; Navarra DFLeg 129/1999; Álava NF 11/2003, Bizkaia
+  NF 1/2011, Gipuzkoa NF 18/1987 (Diputaciones' consolidated texts). Ceuta/Melilla: state
+  rates with the 50 % bonificación (TRLITP arts. 11, 31.2, 57 bis); IPSI on new homes: Melilla
+  4 % / 0,5 % VPO from the ordinance in BOME 5857 (4-5-2021, no later consolidated text:
+  page says confirm with the city); Ceuta 0,5 % on the first sale of new homes (ordinance art.
+  33.tres, BOCCE extraordinario 16 of 8-5-2025).
+- State rule added for every common-regime territory: first-transfer deed of a VPO with
+  calificación definitiva exempt from AJD (TRLITP art. 45.I.B.12.c).
+- 21 territories, 188 benefits; 'manual' benefits (rural towns, victims, single-parent,
+  surface limits) are listed but never applied.
+- Server-rendered default: Cataluña, 250.000 €, second-hand → 10 % = 25.000 € (art. 641-1.1).
+
+**Why.** research_notes/spain-utilities-opportunities-nov2026.md row 18: "itp" 36k/month,
+flat demand; guiafiscal.es has a 17-region calculator; the others print rates without the law.
+
+**Baseline.** New URLs: 0 impressions.
+
+**Prediction.** By 1 Mar 2027: es page ≥ 3k impressions/28 days, position ≤ 20 for
+"calculadora itp", "itp cataluña", "impuestos compra vivienda".
+
+**Date guard.** `COMMUNITIES_REREAD_BY` 1 Feb 2027 (as-of.ts; tests/home-purchase-tax.test.ts):
+January budget / fiscal-measures laws often change ITP and AJD from 1 January (watch: Castilla
+y León announced 2027 cuts with no law yet; Murcia runs a rolled-over 2025 budget; Bizkaia's
+2026 tax-measures norm pending in the Juntas Generales; Aragón housing bill). Re-read every
+law, regenerate communities-data.ts, move COMMUNITIES_AS_OF / COMMUNITIES_REREAD_BY.
+
+**Measure 15 Jan, 1 Mar, 1 Jun 2027**: `snapshot.py page /calculadoras/impuestos-compra-vivienda/ 28`.
+
 **Outcome:** _pending_
 
 ## 2026-11-13 — New tool: "Subsidio por desempleo 2026: quién lo cobra, cuánto y cuánto tiempo" (checker + IMV 2026), es + ca + en (deploy; republish group `pagos`)
