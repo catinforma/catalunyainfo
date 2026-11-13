@@ -108,9 +108,10 @@ test("URLs: /ca/festius/2027/dia/<d>-<mes>/ and /en/holidays/2027/day/<d>-<month
   assert.ok(!municipalities().some((m) => m.slug === "2027" || m.slug === "dia" || m.slug === "day"));
   // Since 10 Nov 2026 the calendar's own ca/en editions sit beside the day pages.
   // Since 11 Nov 2026 the embeddable calendar's page too (embed-2027/places.ts WIDGET_SLUG).
-  assert.deepEqual(readdirSync(join(APP, "festius", "2027")).sort(), ["[comunitat]", "al-teu-web", "dia", "page.tsx", "ponts"]);
+  // Since 13 Nov 2026 the leave planner too (leave-2027/copy.ts LEAVE_SLUG).
+  assert.deepEqual(readdirSync(join(APP, "festius", "2027")).sort(), ["[comunitat]", "al-teu-web", "aprofitar-vacances", "dia", "page.tsx", "ponts"]);
   assert.deepEqual(readdirSync(join(APP, "festius", "2027", "dia")), ["[fecha]"]);
-  assert.deepEqual(readdirSync(join(APP, "holidays", "2027")).sort(), ["[community]", "day", "for-your-website", "long-weekends", "page.tsx"]);
+  assert.deepEqual(readdirSync(join(APP, "holidays", "2027")).sort(), ["[community]", "day", "for-your-website", "leave-planner", "long-weekends", "page.tsx"]);
   assert.deepEqual(readdirSync(join(APP, "holidays", "2027", "day")), ["[fecha]"]);
 });
 

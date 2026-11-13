@@ -3,6 +3,7 @@ import Link from "next/link";
 import { ShareBar, crumbPath } from "@/components/share/ShareBar";
 import type { Crumb } from "@/components/Breadcrumbs";
 import { WidgetPlaceLink } from "@/components/programmatic/embed-2027/WidgetLink";
+import { LeavePlaceLink } from "@/components/programmatic/leave-2027/LeaveLink";
 import { CalendarSubscribe } from "@/components/programmatic/ics/CalendarSubscribe";
 import { dayMonthYear } from "@/lib/programmatic/holidays/format";
 import { YEAR } from "@/lib/programmatic/spain-2027/calendar";
@@ -129,6 +130,7 @@ export function CityPage({ c }: { c: City }) {
               {common.length ? `Falta la fiesta local propia de ${c.name} en ${YEAR}` : `Faltan las 2 fiestas locales de ${c.name} en ${YEAR}`}, que se añadirá{common.length ? "" : "n"} cuando se publique{common.length ? "" : "n"}.
             </p>
           ) : null}
+          <LeavePlaceLink locale="es" placeId={`${c.community.slug}/${c.slug}`} place={c.name} />
           <WidgetPlaceLink locale="es" place={{ kind: "city", c }} />
           {/* The city's confirmed 2027 holidays as a calendar feed (.ics). */}
           <CalendarSubscribe locale="es" place={{ kind: "city", c }} />

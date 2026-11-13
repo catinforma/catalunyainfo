@@ -9,6 +9,7 @@ import type { Locale } from "@/lib/i18n/config";
 import { displayName } from "@/lib/programmatic/holidays/copy";
 import { NEXT_YEAR, SNAPSHOT, aranSwap, councilApproved2027, nextYearFor, regionalDays } from "@/lib/programmatic/holidays/data";
 import { hasEnglishPage } from "@/lib/programmatic/holidays/english";
+import { leavePath } from "@/lib/programmatic/leave-2027/copy";
 import { enName } from "@/lib/programmatic/holidays/english-copy";
 import { caDayArticle, dayMonthYear } from "@/lib/programmatic/holidays/format";
 import { joinList } from "@/lib/programmatic/holidays/names";
@@ -597,6 +598,8 @@ export function buildBridgesBody(locale: Locale): Block[] {
   const local = sibling("local", locale, L(locale, { ca: "festius locals de tots els municipis", es: "festivos locales de todos los municipios", en: "local holidays in every town" }));
   const school = sibling("school", locale, L(locale, { ca: "calendari escolar", es: "calendario escolar", en: "school calendar" }));
   const easter = `[${L(locale, { ca: `Setmana Santa ${YEAR} a Catalunya`, es: `Semana Santa ${YEAR} en Cataluña`, en: `Easter ${YEAR} in Catalonia` })}](${easterHref(locale)})`;
+  // 13 Nov 2026: the leave planner, the reader's own town and number of days (publish group ponts-2027).
+  const planner = `[${L(locale, { ca: `calcula el teu pla del ${YEAR}`, es: `calcula tu plan de ${YEAR}`, en: `work out your own ${YEAR} plan` })}](${leavePath(locale)})`;
   const work = b2link("workCalendar", locale, L(locale, { ca: `calendari laboral ${YEAR}`, es: `calendario laboral ${YEAR}`, en: `Catalonia public holidays ${YEAR}` }));
   const numberWords = L(locale, { ca: ["cap", "un", "dos", "tres", "quatre"], es: ["ninguno", "uno", "dos", "tres", "cuatro"], en: ["no", "one", "two", "three", "four"] });
   const leaveRange = joinOr(x.leaveCounts.map((c) => numberWords[c] ?? String(c)), locale);
@@ -761,6 +764,7 @@ export function buildBridgesBody(locale: Locale): Block[] {
       ...paras(
         ...(jumpLine ? [jumpLine] : []),
         "És un càlcul, no un dret: les vacances es demanen i es pacten amb l'empresa, i els torns, els convenis i les festes locals ho poden canviar tot.",
+        `Si tens més dies o vols comptar-hi les festes del teu municipi, ${planner}: tries el municipi i els dies de vacances, i et diu quins dies demanar per fer més dies de festa seguits.`,
       ),
       ...h2(
         "Barcelona: dos ponts més amb les festes locals",
@@ -832,6 +836,7 @@ export function buildBridgesBody(locale: Locale): Block[] {
       ...paras(
         ...(jumpLine ? [jumpLine] : []),
         "Es un cálculo, no un derecho: las vacaciones se piden y se pactan con la empresa, y los turnos, los convenios y las fiestas locales pueden cambiarlo todo.",
+        `Si tienes más días o quieres contar las fiestas de tu municipio, ${planner}: eliges el municipio y los días de vacaciones, y te dice qué días pedir para encadenar más días de fiesta.`,
       ),
       ...h2(
         "Barcelona: dos puentes más con las fiestas locales",
@@ -902,6 +907,7 @@ export function buildBridgesBody(locale: Locale): Block[] {
     ...paras(
       ...(jumpLine ? [jumpLine] : []),
       "This is a calculation, not an entitlement: leave has to be requested and agreed with your employer, and shifts, collective agreements and local holidays can change everything.",
+      `With more leave, or to count your town's local holidays, ${planner}: pick the town and the days of leave, and it tells you which days to book for the most days off in a row.`,
     ),
     ...h2(
       "Barcelona: two more long weekends from its local holidays",

@@ -4400,3 +4400,72 @@ fees can change on 1 January (Orden PJC/617/2025 art. 1.2): re-read the BOE
 order, the Police fee table and the office pages, then move NIE_TIE_AS_OF.
 
 **Outcome:** _pending_
+
+## 2026-11-13 — 2027 leave planner, "Com aprofitar les vacances el 2027" (new tool, ca/es/en; ships with the deploy; group `ponts-2027` for the guide's link)
+
+**What.** An interactive planner: the reader picks a Catalan town (917 with a
+page), all of Catalonia, a Spanish city (129) or community, and 1–25 days of
+leave; it returns the breaks to book, ranked by days off per day of leave,
+with dates, plus the longest single block the same leave buys. Optional
+"I also work Saturdays". No competitor in ca/es does it per town with
+official data.
+
+- URLs: `/ca/festius/2027/aprofitar-vacances/`,
+  `/es/festivos/2027/aprovechar-vacaciones/`, `/en/holidays/2027/leave-planner/`
+  (static folders beside the 2027 calendar, like the widget page; sitemap +
+  hreflang, x-default en). Hash state `#p=<place>&d=<days>&s=1&c=1`; town and
+  city pages link with `#p=<slug>`.
+- Logic: `src/lib/programmatic/leave-2027/optimizer.ts` (pure; DP over the
+  blocks of leave, each break built around a holiday on a working day, ≥ 3
+  working days between breaks, deterministic ties), data from the holiday
+  engine (`places.ts`: Ordre EMT/52/2026, Aran swap, BOE-A-2026-21254 per
+  community, city bulletins, Ceuta/Melilla agreements). Council-approved
+  2027 local days (420 towns) count only when the reader ticks the box,
+  labelled "pending the DOGC order" (same rule as the .ics feeds). Default
+  server render: Barcelona, 5 days → 22 days off in 5 bridges (Catalonia-wide
+  days only), so the page answers without JavaScript.
+- Tests: `tests/leave-2027.test.ts` (6–8 Dec bridge, brute-force check for
+  1–3 days, no holiday/weekend ever booked on every distinct place calendar,
+  tie-breaks, data statuses, paths, links).
+
+**Links in:** every Catalan town page (ca/es/en), every Spanish city page
+(es/ca/en), the Spain 2027 hubs and long-weekend pages (static, ship with
+the deploy); the Catalonia long weekends guide `ponts-2027` in ca/es/en
+(body paragraph under "Amb quants dies de vacances…", DB entry: publish
+`ponts-2027` after the deploy). No title changed anywhere.
+
+**Go-live.**
+1. Deploy (the three pages are static routes, no DB entry).
+2. Publish `ponts-2027`.
+3. IndexNow the three planner URLs.
+
+**Baseline:** no page. Queries it targets ("cómo aprovechar los festivos
+2027", "puentes 2027", "ponts 2027", "con 5 días de vacaciones…") peak
+Dec–Jan; the bridges guides keep "ponts/puentes 2027".
+
+**Prediction.**
+- Indexed by 4 Dec.
+- By 31 Jan 2027: 2,000–8,000 impressions across the three editions, CTR
+  3–6%, mostly es; engaged sessions longer than the bridges guide's
+  (interaction).
+- Must not cannibalise `/ca/guies/ponts-2027-catalunya/` and
+  `/es/guias/puentes-2027-cataluna/`: if their clicks drop > 20% while the
+  planner gains the same queries, differentiate titles (after their window).
+- Wrong if under 500 impressions by 31 Jan, or not indexed by 11 Dec.
+
+**Measure:**
+- 4 Dec: indexing (`batch_url_inspection`, three URLs).
+- 8 Jan 2027 (review date): `snapshot.py page aprovechar-vacaciones 28`,
+  `page aprofitar-vacances 28`, `page leave-planner 28`; bridges guides
+  same window; GA4 engagement on the three paths.
+- 31 Jan 2027: outcome.
+
+**Upkeep / date guards** (tests fail until done):
+- 16 Jan 2027: the DOGC 2027 local order must be parsed into
+  `local-2027.json` (`prepare2027`); the planner then counts every town's
+  local days with no edit, and the council box disappears. Redeploy, and
+  republish `ponts-2027`.
+- 1 Nov 2027: build the 2028 edition (same code, new year).
+- Spanish city statuses follow `CITIES_AS_OF` (recheck every 21 days).
+
+**Outcome:** _pending_

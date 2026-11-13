@@ -3,6 +3,7 @@ import Link from "next/link";
 import { Breadcrumbs, type Crumb } from "@/components/Breadcrumbs";
 import { ShareBar, crumbPath } from "@/components/share/ShareBar";
 import { WidgetPlaceLink } from "@/components/programmatic/embed-2027/WidgetLink";
+import { LeavePlaceLink } from "@/components/programmatic/leave-2027/LeaveLink";
 import { CalendarSubscribe } from "@/components/programmatic/ics/CalendarSubscribe";
 import { getMessages } from "@/lib/i18n";
 import { NEXT, YEAR, councilApproved2027, localThrough, nextYearFor, regionalThrough, statusDays, yearRows } from "@/lib/programmatic/holidays/data";
@@ -150,6 +151,8 @@ export function EnglishTownPage({ m }: { m: SnapshotMunicipality }) {
               </a>
             </p>
           )}
+          {/* The 2027 leave planner, with this town picked. */}
+          <LeavePlaceLink locale="en" placeId={m.slug} place={name} />
           {/* The embeddable 2027 calendar, with this town picked. */}
           <WidgetPlaceLink locale="en" place={{ kind: "town", m }} />
           {/* The town's confirmed holidays as a calendar feed (.ics). */}

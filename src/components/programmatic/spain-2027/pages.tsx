@@ -3,6 +3,7 @@ import Link from "next/link";
 import { Breadcrumbs, type Crumb } from "@/components/Breadcrumbs";
 import { ShareBar, crumbPath } from "@/components/share/ShareBar";
 import { WidgetHubLink } from "@/components/programmatic/embed-2027/WidgetLink";
+import { LeaveHubLink } from "@/components/programmatic/leave-2027/LeaveLink";
 import { getMessages } from "@/lib/i18n";
 import { municipalities } from "@/lib/programmatic/holidays/data";
 import { GUIDES } from "@/lib/programmatic/holidays/links";
@@ -579,6 +580,7 @@ export function SpainHubPage() {
           </ul>
 
           <HubCityList />
+          <LeaveHubLink locale="es" />
           <WidgetHubLink locale="es" />
         </div>
 
@@ -607,6 +609,7 @@ export function SpainBridgesPage() {
       <div className="ci-shell py-10">
         <div className="ci-prose">
           <p className="text-sm text-[var(--color-muted)]">{COMPUTED_NOTE}</p>
+          <LeaveHubLink locale="es" />
 
           <h2 id="todos">Todos los puentes de {YEAR}, y dónde</h2>
           <div className="ci-table-scroll mt-4">
