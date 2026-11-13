@@ -6,6 +6,7 @@ import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
 import { ShareBar, crumbPath } from "@/components/share/ShareBar";
 import { renderInline } from "@/lib/content/inline";
+import { butanePath } from "@/lib/programmatic/butane/paths";
 import { getMessages } from "@/lib/i18n";
 import type { Locale } from "@/lib/i18n/config";
 import { CHART, chartGeometry } from "@/lib/programmatic/pvpc/chart";
@@ -202,7 +203,8 @@ function relatedLinks(locale: Locale, which: PvpcDayView) {
   const w = words(locale);
   const other = which === "today" ? { label: w.tomorrowLink, href: pvpcPath(locale, "tomorrow") } : { label: w.todayLink, href: pvpcPath(locale, "today") };
   const today = { ca: "Avui a Catalunya", es: "Hoy en Cataluña", en: "Today in Catalonia" }[locale];
-  return [other, { label: today, href: todayPath(locale) }];
+  const butane = { ca: "Preu de la bombona de butà avui", es: "Precio de la bombona de butano hoy", en: "Butane bottle price today" }[locale];
+  return [other, { label: butane, href: butanePath(locale) }, { label: today, href: todayPath(locale) }];
 }
 
 export function PvpcPage({ locale, which, view }: { locale: Locale; which: PvpcDayView; view: PvpcView }) {

@@ -30,6 +30,7 @@ import { englishTowns } from "@/lib/programmatic/holidays/english";
 import { GUIDES } from "@/lib/programmatic/holidays/links";
 import { DATE_PAGES, DATE_PAGE_RANGE, datePath, hubPath as holidaysHub } from "@/lib/programmatic/holidays/paths";
 import { pvpcPath } from "@/lib/programmatic/pvpc/paths";
+import { butaneTranslations } from "@/lib/programmatic/butane/paths";
 import { RESERVOIR_DATA } from "@/lib/programmatic/reservoirs/data";
 import { reservoirHubPath } from "@/lib/programmatic/reservoirs/paths";
 import { lineIds } from "@/lib/programmatic/rodalies/pages";
@@ -145,6 +146,11 @@ export function liveTools(): LiveTool[] {
       name: "Electricity price in Spain today and tomorrow (PVPC)",
       hubs: { es: pvpcPath("es"), ca: pvpcPath("ca"), en: pvpcPath("en") },
       description: "the regulated PVPC 2.0TD electricity price for every hour of today and, once Red Eléctrica publishes it before 20:15, tomorrow: cheapest and dearest hours, daily average, peak/standard/off-peak periods and the Ceuta and Melilla prices, read from REE's open REData API every 15 minutes.",
+    },
+    {
+      name: "Butane bottle price in Spain today",
+      hubs: butaneTranslations(),
+      description: "the regulated maximum price of the 12.5 kg butane bottle from each BOE resolution of the Directorate-General for Energy Policy and Mines: today's price with taxes for the mainland and Balearics, the next revision date (third Tuesday of every other month, ±5% cap, RDL 25/2026 ceiling to 30 June 2027), every revision since 2024 with its BOE link, and the home-delivery operators.",
     },
     {
       name: "Reservoir levels",

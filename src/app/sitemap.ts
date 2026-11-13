@@ -26,6 +26,7 @@ import { netSalarySitemapEntries } from "@/lib/programmatic/net-salary/sitemap";
 import { employmentSitemapEntries } from "@/lib/programmatic/employment/sitemap";
 import { rentSitemapEntries } from "@/lib/programmatic/rent-update/page";
 import { pvpcSitemapEntries } from "@/lib/programmatic/pvpc/pages";
+import { butaneSitemapEntries } from "@/lib/programmatic/butane/page";
 import { madridDate } from "@/lib/programmatic/pvpc/time";
 import { pensionSitemapEntries } from "@/lib/programmatic/pensions-2027/page";
 import { workingDaysSitemapEntries } from "@/lib/programmatic/working-days/places";
@@ -179,6 +180,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...rentSitemapEntries(),
     // Precio de la luz hoy / mañana (PVPC), Spain-wide, in es, ca and en.
     ...pvpcSitemapEntries(madridDate(Date.now())),
+    // "Precio de la bombona de butano hoy" (BOE regulated price), in es, ca and en.
+    ...butaneSitemapEntries(madridDate(Date.now())),
     // "Subida de las pensiones 2027": the pension revaluation calculator (INE CPI), in es, ca and en.
     ...pensionSitemapEntries(),
     // "Calculadora de días hábiles": working days and deadlines (Ley 39/2015 art. 30, LOPJ, LEC), in es, ca and en.

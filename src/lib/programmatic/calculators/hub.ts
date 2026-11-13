@@ -1,5 +1,6 @@
 import { B2_PATHS } from "@/lib/content/batch02/shared";
 import type { Locale } from "@/lib/i18n/config";
+import { butaneTranslations } from "@/lib/programmatic/butane/paths";
 import { PAY_DATES_PATH } from "@/lib/programmatic/employment/paths";
 import { RULES_AS_OF as EMPLOYMENT_AS_OF } from "@/lib/programmatic/employment/rules";
 import { fuelHubPath } from "@/lib/programmatic/fuel/paths";
@@ -33,7 +34,7 @@ export type Scope = "spain" | "catalonia";
 
 export interface HubCard {
   /** The calculator's registry id, or a key of its own for the other tools. */
-  key: CalculatorId | "pay-dates" | "leave-2027" | "ics" | "tourist-tax" | "fuel" | "reservoirs" | "rodalies" | "pvpc";
+  key: CalculatorId | "pay-dates" | "leave-2027" | "ics" | "tourist-tax" | "fuel" | "reservoirs" | "rodalies" | "pvpc" | "butane";
   calculator: boolean;
   href: Record<CalcLocale, string>;
   /** Set when an edition links a page in another language (fuel has no English edition). */
@@ -301,6 +302,23 @@ export const HUB_GROUPS: HubGroup[] = [
           ca: "Red Eléctrica (PVPC, dades obertes REData i e·sios).",
           es: "Red Eléctrica (PVPC, datos abiertos REData y e·sios).",
           en: "Red Eléctrica (PVPC, REData and e·sios open data).",
+        },
+        scope: "spain",
+      },
+      {
+        key: "butane",
+        calculator: false,
+        href: butaneTranslations(),
+        title: { ca: "Preu de la bombona de butà avui", es: "Precio de la bombona de butano hoy", en: "Butane bottle price today" },
+        answers: {
+          ca: "Quant costa avui la bombona de butà de 12,5 kg i quan torna a canviar el preu regulat?",
+          es: "¿Cuánto cuesta hoy la bombona de butano de 12,5 kg y cuándo vuelve a cambiar el precio regulado?",
+          en: "What a 12.5 kg butane bottle costs today and when the regulated price changes next.",
+        },
+        basis: {
+          ca: "Resolucions de la Direcció General de Política Energètica i Mines al BOE; Ordre IET/389/2015 i Reial decret llei 25/2026.",
+          es: "Resoluciones de la Dirección General de Política Energética y Minas en el BOE; Orden IET/389/2015 y Real Decreto-ley 25/2026.",
+          en: "Resolutions of the Directorate-General for Energy Policy and Mines in the BOE; Orden IET/389/2015 and Royal Decree-law 25/2026.",
         },
         scope: "spain",
       },
