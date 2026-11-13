@@ -5617,3 +5617,52 @@ check whether the AEAT 2026 withholding algorithm applies that deduction.
 **Measure 1 Dec, 15 Jan, 15 Feb**: `snapshot.py page /calculadoras/salario-minimo-2027/ 28`, `snapshot.py page /calculadoras/ipc/ 28`.
 
 **Outcome:** _pending_
+
+## 2026-11-13 — New tool: "Letras del Tesoro: próximas subastas, último tipo y calculadora", es + ca + en (deploy only; no publish group)
+
+**What.** `/es/calculadoras/letras-del-tesoro/`, `/ca/calculadores/lletres-del-tresor/`,
+`/en/calculators/spain-treasury-bills/` (lib/programmatic/treasury-bills/), in
+the calculators registry and hub group "Datos oficiales" (after SMI and IPC),
+sitemap (+hreflang, x-default en) and llms.txt.
+
+- Results: the Tesoro Público's own HTML (no CSV/XLS/JSON of the current year:
+  the "histórico de subastas" XLSX stops at 2025). Routes revalidate every 3 h
+  and parse "Resultado de últimas subastas · Letras" live; a column is only
+  accepted if dates are in order and the average/minimum prices equal the Orden
+  ECM/2/2026 art. 14 formula for the published rates, else the committed
+  snapshot (`npm run letras:snapshot -- build`: latest table + one detail page
+  per past auction, all 44 Letras results of 2026, each with its source URL).
+  Latest shown: 3 m 2,652 % (10 Nov), 6 m 2,822 % (3 Nov), 9 m 2,936 %
+  (10 Nov), 12 m 3,045 % (3 Nov; price 97,014, issue 6 Nov 2026 → 5 Nov 2027).
+- Calendar: typed from the Tesoro's 2026 PDF (created 3 Dec 2025; includes Jan
+  2027), checked by a test against its pdftotext; requests by 14:00 on the
+  "Peticiones" day for Cuenta Directa investors, BdE notice for branch payment
+  rules (2 % / 100 % deposit, transfer by 14:00 the working day before).
+- Calculator (server-rendered 10.000 € × 12 m, client re-runs): price, paid,
+  repaid, gross, TAE-equivalent, savings-scale IRPF (19–30 %, LIRPF 66/76 as
+  amended by Ley 7/2024; the Tesoro's own tax page still says 28 % — we follow
+  the BOE), BdE 1,5 ‰ fee (0,90–200 €). No retención (RIRPF 75.3.b, AEAT
+  manual 2025), art. 96.2.c filing threshold. Neutral: no bank/broker named or
+  linked (test allows only official hosts).
+
+**Why.** research_notes/spain-utilities-opportunities-nov2026.md row 8:
+"letras del tesoro" ≈ 24k/month, Jan–Feb index 144–150; tesoro.es not in the
+top 5, stale pages (2016 Q&A, 2023 calendar) rank.
+
+**Baseline.** New URLs: 0 impressions.
+
+**Prediction.** By 15 Feb 2027: es page ≥ 2k impressions/28 days and position
+≤ 15 for "letras del tesoro" / "subasta letras del tesoro" / "calendario
+letras del tesoro 2027".
+
+**Date guards.** Each auction: test fails 3 days after a scheduled auction until
+the snapshot holds its result (live page already shows it) — next: 1 Dec (6/12
+m) → fails 4 Dec; 9 Dec (3/9 m) → 12 Dec. `CALENDAR_2027_DUE` 15 Dec 2026: type
+the 2027 PDF into calendar.ts (the server already links it if it appears on
+tesoro.es's home). `RULES_REREAD_BY` 15 Jan 2027 (savings scale, BdE fee, the
+2027 Orden de creación de Deuda). After 19 Jan 2027 without CALENDAR_2027 the
+page says the next auction is not in the published calendar.
+
+**Measure 15 Dec, 1 Feb, 15 Feb**: `snapshot.py page /calculadoras/letras-del-tesoro/ 28`.
+
+**Outcome:** _pending_

@@ -32,6 +32,8 @@ import { pensionSitemapEntries } from "@/lib/programmatic/pensions-2027/page";
 import { workingDaysSitemapEntries } from "@/lib/programmatic/working-days/places";
 import { smiSitemapEntries } from "@/lib/programmatic/smi/page";
 import { ipcSitemapEntries } from "@/lib/programmatic/ipc/page";
+import { letrasSitemapEntries } from "@/lib/programmatic/treasury-bills/page";
+import { LETRAS_SNAPSHOT } from "@/lib/programmatic/treasury-bills/data";
 
 /**
  * Cached for an hour (ISR) and refreshed at once by every publish, and by the
@@ -191,6 +193,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // "Salario mínimo (SMI) 2027" and "IPC hoy" (calculators family, group "official"), in es, ca and en.
     ...smiSitemapEntries(),
     ...ipcSitemapEntries(),
+    // "Letras del Tesoro" (calculators family, group "official"), in es, ca and en; last modified on the newest snapshot auction.
+    ...letrasSitemapEntries(LETRAS_SNAPSHOT.results),
     ...fuelSitemapEntries(),
     ...rodaliesSitemap(),
     ...reservoirSitemapEntries(),
