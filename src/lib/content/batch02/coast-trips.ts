@@ -311,6 +311,14 @@ const SITGES_COPY: Record<Locale, SitgesT> = {
   },
 };
 
+// 13 Nov 2026: Sitges's Carnival is the most searched in Catalonia; the
+// Carnival page has its 2027 dates (VisitSitges) and the rest of the week.
+const SITGES_CARNIVAL: Record<Locale, string> = {
+  ca: `Al febrer, el Carnaval de Sitges 2027 va del 4 al 10 de febrer, amb la Rua de la Disbauxa el diumenge 7 i la Rua de l'Extermini el dimarts 9: ${b2link("carnival", "ca", "el Carnaval 2027 a Catalunya")}, amb els festius locals i les escoles.`,
+  es: `En febrero, el Carnaval de Sitges 2027 va del 4 al 10 de febrero, con la Rua de la Disbauxa el domingo 7 y la Rua de l'Extermini el martes 9: ${b2link("carnival", "es", "el Carnaval 2027 en Cataluña")}, con los festivos locales y los colegios.`,
+  en: `In February, Sitges Carnival 2027 runs from 4 to 10 February, with the Rua de la Disbauxa parade on Sunday 7 and the Rua de l'Extermini on Tuesday 9: see ${b2link("carnival", "en", "Carnival 2027 in Catalonia")}, with local holidays and schools.`,
+};
+
 // Strikes change the R2 Sud service; the hub says what runs that day.
 const SITGES_STRIKES: Record<Locale, string> = {
   ca: ` Els dies de vaga, mira ${b2link("strikes", "ca", "què funciona")}.`,
@@ -330,7 +338,7 @@ function sitgesBody(locale: Locale) {
     ...h2(t.fareTitle, ...t.fare),
     ...h2(t.stationsTitle, ...t.stations),
     ...h2(t.museumsTitle, ...t.museums),
-    ...h2(t.townTitle, ...t.town),
+    ...h2(t.townTitle, ...t.town, SITGES_CARNIVAL[locale]),
     ...h2(t.planTitle),
     list(...t.plan),
     faq(t.faq),

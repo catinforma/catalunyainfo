@@ -111,7 +111,12 @@ export type B2Key =
   // 10 Nov 2026: the Spain-wide strikes calendar (strikes-spain.ts), in three languages.
   | "strikesSpain"
   // 13 Nov 2026: the 17 Nov rail strike across Spain (strike-rail-17n.ts).
-  | "railStrike17n";
+  | "railStrike17n"
+  // 13 Nov 2026: evergreen flagship guides (research_notes/evergreen-demand-nov2026.md).
+  // How to register on the padró (padro.ts).
+  | "padro"
+  // Carnival 2027 in Catalonia: dates, local holidays, schools, the big carnivals (carnival.ts).
+  | "carnival";
 
 /** Path after the locale prefix, no leading or trailing slash. */
 export const B2_PATHS: Record<B2Key, Record<Locale, string>> = {
@@ -503,6 +508,18 @@ export const B2_PATHS: Record<B2Key, Record<Locale, string>> = {
     ca: "guies/botigues-obertes-desembre-espanya",
     es: "guias/tiendas-abiertas-diciembre-espana",
     en: "guides/shops-open-december-spain",
+  },
+  // Evergreen: no year in the path.
+  padro: {
+    ca: "guies/empadronament-padro-barcelona-catalunya",
+    es: "guias/empadronarse-padron-barcelona-cataluna",
+    en: "guides/padron-registration-barcelona-catalonia",
+  },
+  // No year in the path: next year's Carnival rolls onto the same URLs.
+  carnival: {
+    ca: "tradicions/carnaval-catalunya",
+    es: "tradiciones/carnaval-cataluna",
+    en: "traditions/carnival-catalonia",
   },
 };
 
@@ -914,6 +931,16 @@ export const B2_TITLES: Record<B2Key, Record<Locale, string>> = {
     ca: "Botigues obertes el 6, 7 i 8 de desembre de 2026, per comunitat",
     es: "Tiendas abiertas el 6, 7 y 8 de diciembre de 2026, por comunidad",
     en: "Shops open on 6, 7 and 8 December 2026 in Spain, by region",
+  },
+  padro: {
+    ca: "Com empadronar-se a Barcelona i Catalunya: documents i què fer sense contracte",
+    es: "Cómo empadronarse en Barcelona y Cataluña: documentos y qué hacer sin contrato",
+    en: "How to register on the padrón in Barcelona and Catalonia",
+  },
+  carnival: {
+    ca: "Carnaval 2027 a Catalunya: dates, festius locals i rues",
+    es: "Carnaval 2027 en Cataluña: fechas, festivos locales y rúas",
+    en: "Carnival 2027 in Catalonia: dates, local holidays and parades",
   },
 };
 
