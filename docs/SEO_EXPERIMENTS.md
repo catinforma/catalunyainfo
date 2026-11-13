@@ -4133,3 +4133,7 @@ measurement clean. Publishing now folds this upgrade into that window (the
 - from 13 Feb 2027 (TSI_REREAD_BY), until every source in `tsi.ts` is re-read.
 
 **Outcome:** _pending_
+
+## 13 Nov 2026 — Montserrat EN upgrade published inside the 28 Oct title window (decision)
+
+The EN Montserrat page had 1,360 impressions in 28 days at position 34.8 and 0 clicks: a title test cannot read anything at page 4, so the content upgrade (comparison table, which-to-choose, FAQ) ships now instead of 29 Nov. The 28 Oct title entry is closed as inconclusive; the upgrade's own entry above carries the baseline and review dates.
