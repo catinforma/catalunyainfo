@@ -2190,3 +2190,42 @@
 }
 .ci-brief-date { margin: 0.6rem 0 0; font-weight: 600; color: var(--color-ink-soft); }
 .ci-brief-tz { font-weight: 400; font-size: 0.85em; color: var(--color-muted); }
+
+/* --- Electricity price (PVPC) chart --------------------------------------
+   Bar colour = the 2.0TD toll period (identity, three slots). Light and dark
+   steps validated with the dataviz palette script on #ffffff / #12212a
+   (13 Nov 2026): all-pairs CVD ΔE >= 9.2, normal-vision >= 20.9. Valle is
+   2.8:1 on white, so the table below the chart carries every value as text.
+   ------------------------------------------------------------------------ */
+:root {
+  --pvpc-valle: #1baf7a;
+  --pvpc-llano: #2a78d6;
+  --pvpc-punta: #eb6834;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --pvpc-valle: #199e70;
+    --pvpc-llano: #3987e5;
+    --pvpc-punta: #d95926;
+  }
+}
+:root[data-theme="dark"] {
+  --pvpc-valle: #199e70;
+  --pvpc-llano: #3987e5;
+  --pvpc-punta: #d95926;
+}
+.ci-pvpc-chart { width: 100%; height: auto; display: block; }
+.ci-pvpc-chart text { font-family: var(--font-sans); fill: var(--color-muted); font-size: 13px; }
+.ci-pvpc-chart .ci-pvpc-value { fill: var(--color-ink); font-weight: 600; }
+.ci-pvpc-chart .ci-pvpc-grid { stroke: var(--color-rule); stroke-width: 1; }
+.ci-pvpc-chart .ci-pvpc-now { fill: none; stroke: var(--color-ink); stroke-width: 2; }
+.ci-pvpc-valle { fill: var(--pvpc-valle); background: var(--pvpc-valle); }
+.ci-pvpc-llano { fill: var(--pvpc-llano); background: var(--pvpc-llano); }
+.ci-pvpc-punta { fill: var(--pvpc-punta); background: var(--pvpc-punta); }
+.ci-pvpc-legend { display: flex; flex-wrap: wrap; gap: 0.4rem 1rem; margin: 0.5rem 0 0; padding: 0; list-style: none; font-size: 0.8rem; color: var(--color-ink-soft); }
+.ci-pvpc-legend li { display: inline-flex; align-items: center; gap: 0.35rem; margin: 0; }
+.ci-pvpc-swatch { display: inline-block; width: 0.75rem; height: 0.75rem; border-radius: 2px; }
+.ci-pvpc-table td.ci-numeric, .ci-pvpc-table th.ci-numeric { text-align: right; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.ci-pvpc-table tr.ci-pvpc-current td, .ci-pvpc-table tr.ci-pvpc-current th { background: var(--color-sea-wash); font-weight: 600; }
+.ci-pvpc-tag { display: inline-block; margin-left: 0.4rem; font-size: 0.72rem; font-weight: 600; color: var(--color-ink-soft); }
+.ci-pvpc-answer { border-left: 3px solid var(--color-sea); padding-left: 0.9rem; }

@@ -27,6 +27,7 @@ import { SNAPSHOT as HOLIDAYS, YEAR } from "@/lib/programmatic/holidays/data";
 import { englishTowns } from "@/lib/programmatic/holidays/english";
 import { GUIDES } from "@/lib/programmatic/holidays/links";
 import { DATE_PAGES, DATE_PAGE_RANGE, datePath, hubPath as holidaysHub } from "@/lib/programmatic/holidays/paths";
+import { pvpcPath } from "@/lib/programmatic/pvpc/paths";
 import { RESERVOIR_DATA } from "@/lib/programmatic/reservoirs/data";
 import { reservoirHubPath } from "@/lib/programmatic/reservoirs/paths";
 import { lineIds } from "@/lib/programmatic/rodalies/pages";
@@ -66,7 +67,7 @@ export function liveTools(): LiveTool[] {
     {
       name: "Today in Catalonia",
       hubs: { ca: todayPath("ca"), es: todayPath("es"), en: todayPath("en") },
-      description: "one daily page: whether today and tomorrow are holidays and where there is a local holiday, strikes today and tomorrow, Rodalies notices, reservoir levels and the median fuel price, each linked to its full page.",
+      description: "one daily page: whether today and tomorrow are holidays and where there is a local holiday, strikes today and tomorrow, Rodalies notices, reservoir levels, the median fuel price and the current hour's electricity price, each linked to its full page.",
     },
     {
       name: "Public holidays by town",
@@ -122,6 +123,11 @@ export function liveTools(): LiveTool[] {
       name: "Cheapest petrol stations",
       hubs: { ca: fuelHubPath("ca"), es: fuelHubPath("es") },
       description: `today's petrol and diesel prices at Catalonia's ${STATIONS.stations.length} public stations, cheapest first, by province, comarca, town and chain (${fuelPages} pages per language), from the Ministry for the Ecological Transition (CC BY 4.0).`,
+    },
+    {
+      name: "Electricity price in Spain today and tomorrow (PVPC)",
+      hubs: { es: pvpcPath("es"), ca: pvpcPath("ca"), en: pvpcPath("en") },
+      description: "the regulated PVPC 2.0TD electricity price for every hour of today and, once Red Eléctrica publishes it before 20:15, tomorrow: cheapest and dearest hours, daily average, peak/standard/off-peak periods and the Ceuta and Melilla prices, read from REE's open REData API every 15 minutes.",
     },
     {
       name: "Reservoir levels",

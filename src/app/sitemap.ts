@@ -24,6 +24,8 @@ import { leaveSitemapEntries } from "@/lib/programmatic/leave-2027/places";
 import { netSalarySitemapEntries } from "@/lib/programmatic/net-salary/sitemap";
 import { employmentSitemapEntries } from "@/lib/programmatic/employment/sitemap";
 import { rentSitemapEntries } from "@/lib/programmatic/rent-update/page";
+import { pvpcSitemapEntries } from "@/lib/programmatic/pvpc/pages";
+import { madridDate } from "@/lib/programmatic/pvpc/time";
 
 /**
  * Cached for an hour (ISR) and refreshed at once by every publish, and by the
@@ -170,6 +172,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...employmentSitemapEntries(),
     // "Actualizar el alquiler": the rent-update calculator (INE IPC and IRAV), in es, ca and en.
     ...rentSitemapEntries(),
+    // Precio de la luz hoy / mañana (PVPC), Spain-wide, in es, ca and en.
+    ...pvpcSitemapEntries(madridDate(Date.now())),
     ...fuelSitemapEntries(),
     ...rodaliesSitemap(),
     ...reservoirSitemapEntries(),

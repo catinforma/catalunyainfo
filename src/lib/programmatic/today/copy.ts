@@ -20,8 +20,8 @@ import { TODAY_NAME } from "./paths";
 export const TITLE_LIMIT = 60;
 export const DESCRIPTION_LIMIT = 155;
 
-export type ItemKey = "holidays" | "strikes" | "rodalies" | "reservoirs" | "fuel" | "weekend" | "snow";
-export const ITEM_ORDER: readonly ItemKey[] = ["holidays", "strikes", "rodalies", "reservoirs", "fuel", "weekend", "snow"];
+export type ItemKey = "holidays" | "strikes" | "rodalies" | "reservoirs" | "fuel" | "electricity" | "weekend" | "snow";
+export const ITEM_ORDER: readonly ItemKey[] = ["holidays", "strikes", "rodalies", "reservoirs", "fuel", "electricity", "weekend", "snow"];
 
 interface PageCopy {
   title: string;
@@ -54,6 +54,7 @@ const COPY: Record<Locale, PageCopy> = {
       rodalies: "Rodalies: hi ha avisos?",
       reservoirs: "Com estan els embassaments?",
       fuel: "Quant costa la benzina avui?",
+      electricity: "Quant costa la llum avui?",
       weekend: "Aquest cap de setmana",
       snow: "Hi ha neu al Pirineu?",
     },
@@ -76,6 +77,7 @@ const COPY: Record<Locale, PageCopy> = {
       rodalies: "Rodalies: ¿hay avisos?",
       reservoirs: "¿Cómo están los embalses?",
       fuel: "¿Cuánto cuesta la gasolina hoy?",
+      electricity: "¿Cuánto cuesta la luz hoy?",
       weekend: "Este fin de semana",
       snow: "¿Hay nieve en el Pirineo?",
     },
@@ -98,6 +100,7 @@ const COPY: Record<Locale, PageCopy> = {
       rodalies: "Rodalies trains: any notices?",
       reservoirs: "How full are the reservoirs?",
       fuel: "Fuel prices today",
+      electricity: "Electricity price today (PVPC)",
       weekend: "This weekend",
       snow: "Is there snow in the Pyrenees?",
     },
@@ -189,6 +192,12 @@ export function fuelFallback(locale: Locale): string {
   return "The Ministry's prices load here, live: they change several times a day.";
 }
 
+export function electricityFallback(locale: Locale): string {
+  if (locale === "ca") return "El preu PVPC de l'hora en curs, segons Red Eléctrica, es carrega aquí en directe. La taula de les 24 hores és a la pàgina del preu de la llum.";
+  if (locale === "es") return "El precio PVPC de la hora en curso, según Red Eléctrica, se carga aquí en directo. La tabla de las 24 horas está en la página del precio de la luz.";
+  return "The PVPC price for the current hour, from Red Eléctrica, loads here live. The full 24-hour table is on the electricity price page.";
+}
+
 export function weekendFallback(locale: Locale): string {
   if (locale === "ca") return "Les dates d'aquest cap de setmana, el proper festiu i el proper pont es calculen al navegador amb el calendari oficial.";
   if (locale === "es") return "Las fechas de este fin de semana, el próximo festivo y el próximo puente se calculan en el navegador con el calendario oficial.";
@@ -230,6 +239,7 @@ export function sourceLine(item: ItemKey, locale: Locale): string {
       rodalies: "Font: Rodalies de Catalunya, estat del servei (Renfe, dades obertes, si no respon).",
       reservoirs: "Font: Agència Catalana de l'Aigua, dades obertes diàries (els nou embassaments de les conques internes; els de l'Ebre no hi són).",
       fuel: "Font: Ministeri per a la Transició Ecològica, preus de les benzineres (CC BY 4.0).",
+      electricity: "Font: Red Eléctrica (REData), preu PVPC 2.0TD de cada hora; igual a tot Espanya peninsular i a les illes.",
       weekend: "Font: calendari oficial de festes laborals de la Generalitat (festius de tot Catalunya).",
       snow: "Font: Servei Meteorològic de Catalunya (Meteocat), xarxa d'estacions automàtiques.",
     },
@@ -239,6 +249,7 @@ export function sourceLine(item: ItemKey, locale: Locale): string {
       rodalies: "Fuente: Rodalies de Catalunya, estado del servicio (Renfe, datos abiertos, si no responde).",
       reservoirs: "Fuente: Agència Catalana de l'Aigua, datos abiertos diarios (los nueve embalses de las cuencas internas; los del Ebro no están).",
       fuel: "Fuente: Ministerio para la Transición Ecológica, precios de las gasolineras (CC BY 4.0).",
+      electricity: "Fuente: Red Eléctrica (REData), precio PVPC 2.0TD de cada hora; igual en toda la Península y las islas.",
       weekend: "Fuente: calendario oficial de fiestas laborales de la Generalitat (festivos de toda Cataluña).",
       snow: "Fuente: Servei Meteorològic de Catalunya (Meteocat), red de estaciones automáticas.",
     },
@@ -248,6 +259,7 @@ export function sourceLine(item: ItemKey, locale: Locale): string {
       rodalies: "Source: Rodalies de Catalunya service status (Renfe open data when it does not answer).",
       reservoirs: "Source: Catalan Water Agency (ACA) daily open data (the nine reservoirs of Catalonia's internal basins; the Ebro basin's are not included).",
       fuel: "Source: Spain's Ministry for the Ecological Transition, station prices (CC BY 4.0).",
+      electricity: "Source: Red Eléctrica (REData), hourly PVPC 2.0TD price; the same across mainland Spain and the islands.",
       weekend: "Source: the Generalitat's official calendar of public holidays (Catalonia-wide days).",
       snow: "Source: Catalan Meteorological Service (Meteocat), automatic weather stations.",
     },
@@ -306,5 +318,6 @@ export function sources(locale: Locale): SourceItem[] {
     },
     { name: RESERVOIR_SNAPSHOT.sources.daily.name, publisher: RESERVOIR_SNAPSHOT.sources.daily.publisher, url: RESERVOIR_SNAPSHOT.sources.daily.url, note: live },
     { name: FUEL.sources.prices.name, publisher: FUEL.sources.prices.publisher, url: FUEL.sources.prices.url, note: `${FUEL.sources.prices.licence}, ${live}` },
+    { name: "REData — PVPC 2.0TD", publisher: "Red Eléctrica", url: "https://www.ree.es/es/datos/apidatos", note: live },
   ];
 }

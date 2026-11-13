@@ -68,6 +68,16 @@ export interface TodayLabels {
     stale: string;
     failed: string;
   };
+  /** Electricity (PVPC): {range} "16:00–17:00", {price} "0,2286 €/kWh"; {date} and {time} of REE's answer (ca: {date} carries its article). */
+  electricity: {
+    loading: string;
+    now: string;
+    cheapest: string;
+    average: string;
+    note: string;
+    tomorrow: string;
+    failed: string;
+  };
   weekend: {
     current: string;
     long: string;
@@ -143,6 +153,15 @@ const CA: TodayLabels = {
     old: "Atenció: el Ministeri no ha actualitzat els preus des del {date} a les {time}.",
     stale: "El Ministeri no publica preus des del {when}: no els mostrem com a actuals.",
     failed: "Ara mateix no podem llegir els preus del Ministeri.",
+  },
+  electricity: {
+    loading: "Carregant el preu de Red Eléctrica…",
+    now: "Ara ({range}): {price}",
+    cheapest: "Hora més barata avui: {range} ({price})",
+    average: "Mitjana del dia: {price}",
+    note: "Preu PVPC 2.0TD de Red Eléctrica, llegit {date} a les {time}.",
+    tomorrow: "El de demà ja està publicat.",
+    failed: "Ara mateix no podem llegir el preu de Red Eléctrica.",
   },
   weekend: {
     current: "{range}.",
@@ -220,6 +239,15 @@ const ES: TodayLabels = {
     stale: "El Ministerio no publica precios desde el {when}: no los mostramos como actuales.",
     failed: "Ahora mismo no podemos leer los precios del Ministerio.",
   },
+  electricity: {
+    loading: "Cargando el precio de Red Eléctrica…",
+    now: "Ahora ({range}): {price}",
+    cheapest: "Hora más barata hoy: {range} ({price})",
+    average: "Media del día: {price}",
+    note: "Precio PVPC 2.0TD de Red Eléctrica, leído el {date} a las {time}.",
+    tomorrow: "El de mañana ya está publicado.",
+    failed: "Ahora mismo no podemos leer el precio de Red Eléctrica.",
+  },
   weekend: {
     current: "{range}.",
     long: "Fin de semana largo: {range} ({names}).",
@@ -296,6 +324,15 @@ const EN: TodayLabels = {
     old: "Note: the Ministry has not updated prices since {date} at {time}.",
     stale: "The Ministry has published no prices since {when}: we do not show them as current.",
     failed: "We cannot read the Ministry's prices right now.",
+  },
+  electricity: {
+    loading: "Loading Red Eléctrica's price…",
+    now: "Now ({range}): {price}",
+    cheapest: "Cheapest hour today: {range} ({price})",
+    average: "Day average: {price}",
+    note: "PVPC 2.0TD price from Red Eléctrica, read on {date} at {time}.",
+    tomorrow: "Tomorrow's prices are already out.",
+    failed: "We cannot read Red Eléctrica's price right now.",
   },
   weekend: {
     current: "{range}.",
