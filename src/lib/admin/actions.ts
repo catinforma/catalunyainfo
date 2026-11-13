@@ -30,7 +30,7 @@ import {
 import type { Locale } from "@/lib/i18n/config";
 import { slugify } from "@/lib/format";
 import { purgeCdnPaths } from "@/lib/cdn/purge";
-import { FEED_PATHS } from "@/lib/seo/feed-paths";
+import { revalidateSitemapAndFeeds } from "@/lib/seo/revalidate-feeds";
 import { z } from "zod";
 
 const createDraftSchema = z.object({
@@ -665,13 +665,13 @@ export async function deleteContactMessage(input: unknown): Promise<ActionResult
 
 /** Invalidates every cached surface a publish can appear on. */
 function revalidateForTranslation(locale: Locale, path: string) {
-  // The RSS feeds and the Google News sitemap list the same pieces.
-  const paths = [`/${locale}`, `/${locale}/${path}`, "/sitemap.xml", ...FEED_PATHS];
+  const paths = [`/${locale}`, `/${locale}/${path}`];
   // Hub pages list the entry, so the first segment is invalidated too.
   const first = path.split("/")[0];
   if (first) paths.push(`/${locale}/${first}`);
   for (const p of paths) revalidatePath(p);
-  purgeCdnAfterResponse(paths);
+  // The sitemap, the RSS feeds and the Google News sitemap list the same pieces.
+  purgeCdnAfterResponse([...paths, ...revalidateSitemapAndFeeds()]);
 }
 
 /**

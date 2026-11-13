@@ -23,7 +23,7 @@ import { widgetSitemapEntries } from "@/lib/programmatic/embed-2027/places";
 
 /**
  * Cached for an hour (ISR) and refreshed at once by every publish, and by the
- * nightly cron when scheduled entries go live (revalidatePath("/sitemap.xml")). On Vercel it had to be
+ * nightly cron when scheduled entries go live (revalidateSitemapAndFeeds). On Vercel it had to be
  * rendered on every request because the ISR-write quota left the cached copy
  * 30 hours old (DECISION_LOG, 18-20 Oct); on the VPS ISR writes are free, and
  * the on-request render took 2.5-9 s for 2.5 MB. If the database read fails

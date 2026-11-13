@@ -512,7 +512,8 @@ test("robots.txt names the news sitemap; feeds are shareable in caches and reval
   assert.match(route, /^export const dynamicParams = true;$/m);
   assert.match(route, /^export const revalidate = \d+;$/m);
   for (const file of [join(SRC, "app", "api", "admin", "publish", "route.ts"), join(SRC, "app", "api", "cron", "publish-scheduled", "route.ts"), join(SRC, "lib", "admin", "actions.ts")]) {
-    assert.match(readFileSync(file, "utf8"), /FEED_PATHS/, `${file}: feeds revalidated (and purged) with the sitemap`);
+    // revalidateSitemapAndFeeds: tests/feed-revalidation.test.ts checks it reaches each feed's cache entry.
+    assert.match(readFileSync(file, "utf8"), /revalidateSitemapAndFeeds\(\)/, `${file}: feeds revalidated (and purged) with the sitemap`);
   }
 });
 

@@ -192,7 +192,9 @@ test("publish route: purges the revalidated URLs after revalidatePath and report
   assert.equal(route.match(/revalidatePath\(/g)?.length, 1, "revalidatePath only inside the recording helper");
   assert.match(route, /revalidatePath\(path\);\s*revalidated\.add\(path\);/);
   // …and the purge comes after the last one, and again after the response.
-  const lastRevalidate = route.lastIndexOf('revalidate("/sitemap.xml")');
+  // The sitemap and feeds: revalidated by their helper, their URLs recorded for the purge.
+  assert.match(route, /for \(const url of revalidateSitemapAndFeeds\(\)\) revalidated\.add\(url\);/);
+  const lastRevalidate = route.lastIndexOf("revalidateSitemapAndFeeds()");
   const purge = route.indexOf("await purgeCdnPaths(revalidated");
   assert.ok(lastRevalidate > 0 && purge > lastRevalidate, "purge after revalidating");
   assert.ok(route.indexOf("after(async () =>", purge) > purge, "follow-up purge after the response");
@@ -205,6 +207,7 @@ test("cron route: purges every path it revalidates, in both responses", () => {
   for (const family of ["weekendPaths", "holidayPaths", "dayDependent", "due"]) {
     assert.match(cron, new RegExp(`for \\(const (path|row) of ${family}\\) (\\{\\s*)?revalidate\\(`), family);
   }
+  assert.match(cron, /for \(const url of revalidateSitemapAndFeeds\(\)\) revalidated\.add\(url\);/);
   const lastRevalidate = cron.lastIndexOf("revalidate(`/${locale}`)");
   const purge = cron.lastIndexOf("await purgeCdn(revalidated)");
   assert.ok(lastRevalidate > 0 && purge > lastRevalidate, "purge after the last revalidation");
@@ -216,7 +219,7 @@ test("cron route: purges every path it revalidates, in both responses", () => {
 test("CMS saves purge the paths they revalidate, after the response", () => {
   const actions = read("src/lib/admin/actions.ts");
   const helper = actions.slice(actions.indexOf("function revalidateForTranslation("));
-  assert.match(helper, /for \(const p of paths\) revalidatePath\(p\);\s*purgeCdnAfterResponse\(paths\);/);
+  assert.match(helper, /for \(const p of paths\) revalidatePath\(p\);[^]*?purgeCdnAfterResponse\(\[\.\.\.paths, \.\.\.revalidateSitemapAndFeeds\(\)\]\);/);
   assert.match(actions, /revalidatePath\(data\.fromPath\);\s*purgeCdnAfterResponse\(\[data\.fromPath\]\);/);
 });
 
