@@ -300,6 +300,60 @@ export function pendingLineIntl(c: City, locale: Edition): string {
   return `${status}${known}${last}`;
 }
 
+/** The first line under the H1, as `cityAnswer` in the Spanish edition (13 Nov 2026). */
+export function cityAnswerIntl(c: City, locale: Edition): { strong: string; rest: string } {
+  const name = nameOf(c, locale);
+  const Name = cap(name);
+  const r = region(c, locale);
+  const list = local2027(c);
+  const days = localDays(c);
+  const ca = locale === "ca";
+  if (list && !isZoned(c)) {
+    const island = islandDay(c) ? tr(locale, " i la festa insular", " and the island holiday") : "";
+    return {
+      strong: tr(locale, `Festes locals ${caOf(name)} el ${YEAR}: ${joinList(days.map((d) => withName(d, "ca")), "ca")}.`, `${Name} local holidays ${YEAR}: ${joinList(days.map((d) => withName(d, "en")), "en")}.`),
+      rest: tr(
+        locale,
+        ` Les publica el ${list.source.ref}. Amb els ${dayCount(c.region)} festius ${r.of}${island}, són ${holidayCount(c)} festius el ${YEAR}.`,
+        ` Published in the ${list.source.ref}. With the ${dayCount(c.region)} holidays ${r.of}${island}, that makes ${holidayCount(c)} public holidays in ${YEAR}.`,
+      ),
+    };
+  }
+  if (list) {
+    const main = areaNameIntl(list.mainArea ?? c.name, locale).replace(/^(Tot|The) /, (w) => w.toLowerCase());
+    return {
+      strong: tr(
+        locale,
+        `Festes locals ${caOf(name)} el ${YEAR}, per zones: ${main}, ${joinList(days.map((d) => withName(d, "ca")), "ca")}.`,
+        `${Name} local holidays ${YEAR}, by area: ${main}, ${joinList(days.map((d) => withName(d, "en")), "en")}.`,
+      ),
+      rest: tr(locale, ` Les altres zones, a la taula de festes locals. Font: ${list.source.ref}.`, ` The other areas are in the local holidays table. Source: ${list.source.ref}.`),
+    };
+  }
+  const where = bulletinIn(r, locale);
+  const when = expectedWordsIntl(c, locale);
+  const common = commonLocalDays(c);
+  const note = CITY_NOTE[c.slug]?.[locale];
+  const status =
+    c.status2027 === "missing"
+      ? ` ${note ?? tr(locale, `La llista del ${YEAR} ja ha sortit, però no les dona.`, `The ${YEAR} list is out but does not give them.`)}`
+      : ca
+        ? ` S'esperen ${when ? `el mes ${caOf(when.replace(/ de \d{4}$/, ""))}` : "les pròximes setmanes"} ${where}.`
+        : ` They are expected ${when ? `in ${when.replace(/ \d{4}$/, "")}` : "in the coming weeks"} ${where}.`;
+  const known = common.length
+    ? tr(locale, ` Una ja se sap: el ${weekdayDateIntl(common[0]!.date, "ca")} (${common[0]!.name}).`, ` One is already known: ${weekdayDateIntl(common[0]!.date, "en")} (${common[0]!.name}).`)
+    : "";
+  const last = c.local2026
+    ? ca
+      ? ` El 2026 van ser ${joinList(c.local2026.days.map((d) => `${caDayArticle(d.date)}${dayMonth(d.date, "ca")}`), "ca")}.`
+      : ` In 2026 they were ${joinList(c.local2026.days.map((d) => dayMonth(d.date, "en")), "en")}.`
+    : "";
+  return {
+    strong: tr(locale, `Festes locals ${caOf(name)} el ${YEAR}: encara sense publicar.`, `${Name} local holidays ${YEAR}: not published yet.`),
+    rest: `${status}${known}${last}${tr(locale, ` Butlletins consultats el ${dayMonthYear(CITIES_AS_OF, "ca")}.`, ` Bulletins read on ${dayMonthYear(CITIES_AS_OF, "en")}.`)}`,
+  };
+}
+
 /** " (BOE ref of the community's decree)" when it is published, as the Spanish edition cites it. */
 function decreeRef(c: City): string {
   const decree = SOURCES[c.region].decree;

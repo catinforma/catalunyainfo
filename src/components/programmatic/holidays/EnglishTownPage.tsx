@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { renderInline } from "@/lib/content/inline";
 
 import { Breadcrumbs, type Crumb } from "@/components/Breadcrumbs";
 import { ShareBar, crumbPath } from "@/components/share/ShareBar";
@@ -9,6 +10,7 @@ import { getMessages } from "@/lib/i18n";
 import { NEXT, YEAR, councilApproved2027, localThrough, nextYearFor, regionalThrough, statusDays, yearRows } from "@/lib/programmatic/holidays/data";
 import { englishTowns, isLargestTown } from "@/lib/programmatic/holidays/english";
 import { enName, englishHubCopy, englishTownCopy, englishTownFaq, englishTownH1, townDateAnswers } from "@/lib/programmatic/holidays/english-copy";
+import { workCalendarLine } from "@/lib/programmatic/holidays/copy";
 import { dayMonth, longDate, weekdayDayMonth } from "@/lib/programmatic/holidays/format";
 import { GUIDES, OFFICIAL, type GuideKey } from "@/lib/programmatic/holidays/links";
 import { joinList } from "@/lib/programmatic/holidays/names";
@@ -153,6 +155,8 @@ export function EnglishTownPage({ m }: { m: SnapshotMunicipality }) {
           )}
           {/* The 2027 leave planner, with this town picked. */}
           <LeavePlaceLink locale="en" placeId={m.slug} place={name} />
+          {/* The Catalonia-wide 2027 calendar, month by month (13 Nov 2026). */}
+          <p>{renderInline(workCalendarLine("en"))}</p>
           {/* The embeddable 2027 calendar, with this town picked. */}
           <WidgetPlaceLink locale="en" place={{ kind: "town", m }} />
           {/* The town's confirmed holidays as a calendar feed (.ics). */}

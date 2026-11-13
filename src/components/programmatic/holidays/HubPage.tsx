@@ -4,7 +4,7 @@ import { Breadcrumbs, type Crumb } from "@/components/Breadcrumbs";
 import { ShareBar, crumbPath } from "@/components/share/ShareBar";
 import { renderInline } from "@/lib/content/inline";
 import { getMessages } from "@/lib/i18n";
-import { HUB_VISIBLE, displayName, hubCopy } from "@/lib/programmatic/holidays/copy";
+import { HUB_VISIBLE, displayName, hubCopy, workCalendarLine } from "@/lib/programmatic/holidays/copy";
 import { SNAPSHOT, byComarca } from "@/lib/programmatic/holidays/data";
 import { dayMonth } from "@/lib/programmatic/holidays/format";
 import { esName, joinList } from "@/lib/programmatic/holidays/names";
@@ -52,6 +52,7 @@ export function HubPage({ locale }: { locale: MuniLocale }) {
             <Link href={GUIDES.bridges2027[locale]}>{t.bridges.label}</Link>
             {t.bridges.after}
           </p>
+          <p>{renderInline(workCalendarLine(locale))}</p>
           <p>{renderInline(t.easter)}</p>
           {locale === "es" ? (
             <p>

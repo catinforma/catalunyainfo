@@ -400,6 +400,37 @@ function monday7Short(locale: Locale): string {
   return joinList(MONDAY_7.map((r) => (locale === "ca" && r === "RI" ? "la Rioja" : shortName(r, locale))), locale);
 }
 
+/**
+ * 13 Nov 2026: "festivos puente diciembre" (1,202 impressions in 28 days, 0.3 %
+ * CTR; 513 here at 10.5, 689 on the Catalan page at 9.2) asks which days the
+ * bridge's holidays are and where it is four days long. The summary box opens
+ * with exactly that, then the Catalan exception with its page linked.
+ */
+function bridgeSummaryFacts(locale: Locale): { label: string; value: string }[] {
+  const bridge = runIn("MD", SPAIN_DAYS.immaculada);
+  const n7 = countWords(MONDAY_7, locale);
+  const rest = joinList(MONDAY_7_WORKING.filter((r) => r !== "CT").map((r) => shortName(r, locale)), locale);
+  if (locale === "es") {
+    return [
+      { label: "Festivos del puente de diciembre", value: `Lunes 7 de diciembre (solo en ${n7}, que pasan a él la Constitución del domingo 6) y martes 8, la Inmaculada (en toda España)` },
+      { label: `Puente de ${bridge.days} días sin pedir ninguno`, value: `${cap(runWords(bridge, "es"))}, en ${monday7Short("es")}` },
+      { label: "Donde el lunes 7 es laborable", value: `${rest}: hay que pedir el lunes 7. En Cataluña, también: ${b2link("decemberBridge", "es", "solo es festivo el martes 8")}` },
+    ];
+  }
+  if (locale === "ca") {
+    return [
+      { label: "Festius del pont de desembre", value: `Dilluns 7 de desembre (només en ${n7}, que hi passen la Constitució del diumenge 6) i dimarts 8, la Immaculada (a tot Espanya)` },
+      { label: `Pont de ${bridge.days} dies sense demanar-ne cap`, value: `${cap(runWords(bridge, "ca"))}, a ${monday7Short("ca")}` },
+      { label: "On el dilluns 7 és feiner", value: `${rest}: cal demanar el dilluns 7. A Catalunya, també: ${b2link("decemberBridge", "ca", "només és festiu el dimarts 8")}` },
+    ];
+  }
+  return [
+    { label: "The December bridge holidays", value: `Monday 7 December (only in ${n7}, which move Sunday's Constitution Day to it) and Tuesday 8, the Immaculate Conception (all of Spain)` },
+    { label: `${bridge.days}-day break with no leave`, value: `${cap(runWords(bridge, "en"))}, in ${monday7Short("en")}` },
+    { label: "Where Monday the 7th is a working day", value: `${rest}: take Monday the 7th off. Catalonia too: ${b2link("decemberBridge", "en", "only Tuesday the 8th is a holiday")}` },
+  ];
+}
+
 export const SPAIN_BRIDGE_META: Record<Locale, { path: string; title: string; seoTitle: string; seoDescription: string; excerpt: string }> = {
   es: {
     path: "guias/puente-diciembre-espana",
@@ -477,10 +508,8 @@ function bodyEs(): Block[] {
     lead(
       `**El lunes 7 de diciembre de 2026 es festivo en ${n7}:** ${proseList(communities(MONDAY_7), L)}. Allí el puente va ${runWords(bridge, L)} sin pedir ningún día. En ${proseList(MONDAY_7_WORKING, L)}, el 7 es laborable y el único festivo del puente es el martes 8, la Inmaculada, que lo es en toda España.`,
     ),
-    keyFacts("Diciembre de 2026 y Reyes de 2027, de un vistazo", [
-      { label: "Lunes 7 de diciembre", value: `Festivo en ${n7}; laborable en el resto` },
-      { label: "Martes 8 de diciembre", value: `Festivo en ${whereWords(SPAIN_DAYS.immaculada, L)} (Inmaculada Concepción)` },
-      { label: "Domingo 6 de diciembre", value: "Día de la Constitución en domingo: donde se traslada, el festivo es el lunes 7" },
+    keyFacts("Festivos del puente de diciembre 2026, Navidad y Reyes, de un vistazo", [
+      ...bridgeSummaryFacts(L),
       { label: "Viernes 25 de diciembre", value: `Festivo en ${whereWords(SPAIN_DAYS.christmas, L)} (Navidad)` },
       { label: "Sábado 26 de diciembre", value: `Festivo solo en ${whereWords(SPAIN_DAYS.stStephen, L)} (San Esteban)` },
       { label: "24 y 31 de diciembre", value: "No son festivos en ninguna comunidad" },
@@ -585,6 +614,7 @@ function bodyCa(): Block[] {
     lead(
       `**El dilluns 7 de desembre de 2026 és festiu en ${n7}:** ${proseList(communities(MONDAY_7), L)}. Allà el pont va ${runWords(bridge, L)} sense demanar cap dia. A Catalunya, no: el 7 és feiner, llevat de ${local} municipis amb festa local, i el dimarts 8 és festiu a tot Espanya.`,
     ),
+    keyFacts("El pont de desembre del 2026, d'un cop d'ull", bridgeSummaryFacts(L)),
     ...h2(
       "On és festiu el 7 de desembre? Comunitat per comunitat",
       `El dilluns 7 és el dia que canvia d'una comunitat a una altra; el dimarts 8, el 25 de desembre, l'1 i el 6 de gener són festius a totes, i el dissabte 26 només a ${proseList(stStephen, L)}.`,
@@ -639,9 +669,8 @@ function bodyEn(): Block[] {
     lead(
       `**Monday 7 December 2026 is a public holiday in ${n7}:** ${proseList(communities(MONDAY_7), L)}. There the long weekend runs ${runWords(bridge, L)} without booking a day. In ${proseList(MONDAY_7_WORKING, L)}, the 7th is a working day and the only holiday that week is Tuesday the 8th, which is a holiday everywhere in Spain.`,
     ),
-    keyFacts("December 2026 and Epiphany 2027 at a glance", [
-      { label: "Monday 7 December", value: `Holiday in ${n7}; a working day elsewhere` },
-      { label: "Tuesday 8 December", value: `Holiday in ${whereWords(SPAIN_DAYS.immaculada, L)} (Immaculate Conception)` },
+    keyFacts("December 2026 bridge, Christmas and Epiphany at a glance", [
+      ...bridgeSummaryFacts(L),
       { label: "Friday 25 December", value: `Holiday in ${whereWords(SPAIN_DAYS.christmas, L)} (Christmas Day)` },
       { label: "Saturday 26 December", value: `Holiday only in ${whereWords(SPAIN_DAYS.stStephen, L)} (St Stephen's Day)` },
       { label: "24 and 31 December", value: "Not public holidays anywhere in Spain" },
