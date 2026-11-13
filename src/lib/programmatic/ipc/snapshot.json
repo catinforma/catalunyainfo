@@ -1,0 +1,1431 @@
+{
+ "fetchedAt": "2026-11-13T15:19:58.938Z",
+ "asOf": "2026-11-13",
+ "series": {
+  "general": [
+   {
+    "month": "2023-01",
+    "value": 5.9,
+    "published": "2023-02-15"
+   },
+   {
+    "month": "2023-02",
+    "value": 6,
+    "published": "2023-03-14"
+   },
+   {
+    "month": "2023-03",
+    "value": 3.3,
+    "published": "2023-04-14"
+   },
+   {
+    "month": "2023-04",
+    "value": 4.1,
+    "published": "2023-05-12"
+   },
+   {
+    "month": "2023-05",
+    "value": 3.2,
+    "published": "2023-06-13"
+   },
+   {
+    "month": "2023-06",
+    "value": 1.9,
+    "published": "2023-07-12"
+   },
+   {
+    "month": "2023-07",
+    "value": 2.3,
+    "published": "2023-08-11"
+   },
+   {
+    "month": "2023-08",
+    "value": 2.6,
+    "published": "2023-09-12"
+   },
+   {
+    "month": "2023-09",
+    "value": 3.5,
+    "published": "2023-10-13"
+   },
+   {
+    "month": "2023-10",
+    "value": 3.5,
+    "published": "2023-11-14"
+   },
+   {
+    "month": "2023-11",
+    "value": 3.2,
+    "published": "2023-12-14"
+   },
+   {
+    "month": "2023-12",
+    "value": 3.1,
+    "published": "2024-01-12"
+   },
+   {
+    "month": "2024-01",
+    "value": 3.4,
+    "published": "2024-02-15"
+   },
+   {
+    "month": "2024-02",
+    "value": 2.8,
+    "published": "2024-03-14"
+   },
+   {
+    "month": "2024-03",
+    "value": 3.2,
+    "published": "2024-04-12"
+   },
+   {
+    "month": "2024-04",
+    "value": 3.3,
+    "published": "2024-05-14"
+   },
+   {
+    "month": "2024-05",
+    "value": 3.6,
+    "published": "2024-06-13"
+   },
+   {
+    "month": "2024-06",
+    "value": 3.4,
+    "published": "2024-07-12"
+   },
+   {
+    "month": "2024-07",
+    "value": 2.8,
+    "published": "2024-08-13"
+   },
+   {
+    "month": "2024-08",
+    "value": 2.3,
+    "published": "2024-09-12"
+   },
+   {
+    "month": "2024-09",
+    "value": 1.5,
+    "published": "2024-10-15"
+   },
+   {
+    "month": "2024-10",
+    "value": 1.8,
+    "published": "2024-11-14"
+   },
+   {
+    "month": "2024-11",
+    "value": 2.4,
+    "published": "2024-12-13"
+   },
+   {
+    "month": "2024-12",
+    "value": 2.8,
+    "published": "2025-01-15"
+   },
+   {
+    "month": "2025-01",
+    "value": 2.9,
+    "published": "2025-02-14"
+   },
+   {
+    "month": "2025-02",
+    "value": 3,
+    "published": "2025-03-14"
+   },
+   {
+    "month": "2025-03",
+    "value": 2.3,
+    "published": "2025-04-11"
+   },
+   {
+    "month": "2025-04",
+    "value": 2.2,
+    "published": "2025-05-14"
+   },
+   {
+    "month": "2025-05",
+    "value": 2,
+    "published": "2025-06-13"
+   },
+   {
+    "month": "2025-06",
+    "value": 2.3,
+    "published": "2025-07-15"
+   },
+   {
+    "month": "2025-07",
+    "value": 2.7,
+    "published": "2025-08-13"
+   },
+   {
+    "month": "2025-08",
+    "value": 2.7,
+    "published": "2025-09-12"
+   },
+   {
+    "month": "2025-09",
+    "value": 3,
+    "published": "2025-10-15"
+   },
+   {
+    "month": "2025-10",
+    "value": 3.1,
+    "published": "2025-11-14"
+   },
+   {
+    "month": "2025-11",
+    "value": 3,
+    "published": "2025-12-12"
+   },
+   {
+    "month": "2025-12",
+    "value": 2.9,
+    "published": "2026-01-15"
+   },
+   {
+    "month": "2026-01",
+    "value": 2.3,
+    "published": "2026-02-13"
+   },
+   {
+    "month": "2026-02",
+    "value": 2.3,
+    "published": "2026-03-13"
+   },
+   {
+    "month": "2026-03",
+    "value": 3.4,
+    "published": "2026-04-14"
+   },
+   {
+    "month": "2026-04",
+    "value": 3.2,
+    "published": "2026-05-14"
+   },
+   {
+    "month": "2026-05",
+    "value": 3.2,
+    "published": "2026-06-12"
+   },
+   {
+    "month": "2026-06",
+    "value": 3.2,
+    "published": "2026-07-15"
+   },
+   {
+    "month": "2026-07",
+    "value": 3.6,
+    "published": "2026-08-13"
+   },
+   {
+    "month": "2026-08",
+    "value": 4.3,
+    "published": "2026-09-15"
+   },
+   {
+    "month": "2026-09",
+    "value": 4.9,
+    "published": "2026-10-14"
+   },
+   {
+    "month": "2026-10",
+    "value": 4.9,
+    "published": "2026-11-13"
+   },
+   {
+    "month": "2026-11",
+    "value": null,
+    "published": "2026-12-15"
+   }
+  ],
+  "generalMonthly": [
+   {
+    "month": "2023-01",
+    "value": -0.2,
+    "published": "2023-02-15"
+   },
+   {
+    "month": "2023-02",
+    "value": 0.9,
+    "published": "2023-03-14"
+   },
+   {
+    "month": "2023-03",
+    "value": 0.4,
+    "published": "2023-04-14"
+   },
+   {
+    "month": "2023-04",
+    "value": 0.6,
+    "published": "2023-05-12"
+   },
+   {
+    "month": "2023-05",
+    "value": 0,
+    "published": "2023-06-13"
+   },
+   {
+    "month": "2023-06",
+    "value": 0.6,
+    "published": "2023-07-12"
+   },
+   {
+    "month": "2023-07",
+    "value": 0.2,
+    "published": "2023-08-11"
+   },
+   {
+    "month": "2023-08",
+    "value": 0.5,
+    "published": "2023-09-12"
+   },
+   {
+    "month": "2023-09",
+    "value": 0.2,
+    "published": "2023-10-13"
+   },
+   {
+    "month": "2023-10",
+    "value": 0.3,
+    "published": "2023-11-14"
+   },
+   {
+    "month": "2023-11",
+    "value": -0.3,
+    "published": "2023-12-14"
+   },
+   {
+    "month": "2023-12",
+    "value": 0,
+    "published": "2024-01-12"
+   },
+   {
+    "month": "2024-01",
+    "value": 0.1,
+    "published": "2024-02-15"
+   },
+   {
+    "month": "2024-02",
+    "value": 0.4,
+    "published": "2024-03-14"
+   },
+   {
+    "month": "2024-03",
+    "value": 0.8,
+    "published": "2024-04-12"
+   },
+   {
+    "month": "2024-04",
+    "value": 0.7,
+    "published": "2024-05-14"
+   },
+   {
+    "month": "2024-05",
+    "value": 0.3,
+    "published": "2024-06-13"
+   },
+   {
+    "month": "2024-06",
+    "value": 0.4,
+    "published": "2024-07-12"
+   },
+   {
+    "month": "2024-07",
+    "value": -0.5,
+    "published": "2024-08-13"
+   },
+   {
+    "month": "2024-08",
+    "value": 0,
+    "published": "2024-09-12"
+   },
+   {
+    "month": "2024-09",
+    "value": -0.6,
+    "published": "2024-10-15"
+   },
+   {
+    "month": "2024-10",
+    "value": 0.6,
+    "published": "2024-11-14"
+   },
+   {
+    "month": "2024-11",
+    "value": 0.2,
+    "published": "2024-12-13"
+   },
+   {
+    "month": "2024-12",
+    "value": 0.5,
+    "published": "2025-01-15"
+   },
+   {
+    "month": "2025-01",
+    "value": 0.2,
+    "published": "2025-02-14"
+   },
+   {
+    "month": "2025-02",
+    "value": 0.4,
+    "published": "2025-03-14"
+   },
+   {
+    "month": "2025-03",
+    "value": 0.1,
+    "published": "2025-04-11"
+   },
+   {
+    "month": "2025-04",
+    "value": 0.6,
+    "published": "2025-05-14"
+   },
+   {
+    "month": "2025-05",
+    "value": 0.1,
+    "published": "2025-06-13"
+   },
+   {
+    "month": "2025-06",
+    "value": 0.7,
+    "published": "2025-07-15"
+   },
+   {
+    "month": "2025-07",
+    "value": -0.1,
+    "published": "2025-08-13"
+   },
+   {
+    "month": "2025-08",
+    "value": 0,
+    "published": "2025-09-12"
+   },
+   {
+    "month": "2025-09",
+    "value": -0.3,
+    "published": "2025-10-15"
+   },
+   {
+    "month": "2025-10",
+    "value": 0.7,
+    "published": "2025-11-14"
+   },
+   {
+    "month": "2025-11",
+    "value": 0.2,
+    "published": "2025-12-12"
+   },
+   {
+    "month": "2025-12",
+    "value": 0.3,
+    "published": "2026-01-15"
+   },
+   {
+    "month": "2026-01",
+    "value": -0.4,
+    "published": "2026-02-13"
+   },
+   {
+    "month": "2026-02",
+    "value": 0.4,
+    "published": "2026-03-13"
+   },
+   {
+    "month": "2026-03",
+    "value": 1.2,
+    "published": "2026-04-14"
+   },
+   {
+    "month": "2026-04",
+    "value": 0.4,
+    "published": "2026-05-14"
+   },
+   {
+    "month": "2026-05",
+    "value": 0.1,
+    "published": "2026-06-12"
+   },
+   {
+    "month": "2026-06",
+    "value": 0.6,
+    "published": "2026-07-15"
+   },
+   {
+    "month": "2026-07",
+    "value": 0.3,
+    "published": "2026-08-13"
+   },
+   {
+    "month": "2026-08",
+    "value": 0.7,
+    "published": "2026-09-15"
+   },
+   {
+    "month": "2026-09",
+    "value": 0.3,
+    "published": "2026-10-14"
+   },
+   {
+    "month": "2026-10",
+    "value": 0.6,
+    "published": "2026-11-13"
+   },
+   {
+    "month": "2026-11",
+    "value": null,
+    "published": "2026-12-15"
+   }
+  ],
+  "core": [
+   {
+    "month": "2023-01",
+    "value": 7.5,
+    "published": "2023-02-15"
+   },
+   {
+    "month": "2023-02",
+    "value": 7.6,
+    "published": "2023-03-14"
+   },
+   {
+    "month": "2023-03",
+    "value": 7.5,
+    "published": "2023-04-14"
+   },
+   {
+    "month": "2023-04",
+    "value": 6.6,
+    "published": "2023-05-12"
+   },
+   {
+    "month": "2023-05",
+    "value": 6.1,
+    "published": "2023-06-13"
+   },
+   {
+    "month": "2023-06",
+    "value": 5.9,
+    "published": "2023-07-12"
+   },
+   {
+    "month": "2023-07",
+    "value": 6.2,
+    "published": "2023-08-11"
+   },
+   {
+    "month": "2023-08",
+    "value": 6.1,
+    "published": "2023-09-12"
+   },
+   {
+    "month": "2023-09",
+    "value": 5.8,
+    "published": "2023-10-13"
+   },
+   {
+    "month": "2023-10",
+    "value": 5.2,
+    "published": "2023-11-14"
+   },
+   {
+    "month": "2023-11",
+    "value": 4.5,
+    "published": "2023-12-14"
+   },
+   {
+    "month": "2023-12",
+    "value": 3.8,
+    "published": "2024-01-12"
+   },
+   {
+    "month": "2024-01",
+    "value": 3.6,
+    "published": "2024-02-15"
+   },
+   {
+    "month": "2024-02",
+    "value": 3.5,
+    "published": "2024-03-14"
+   },
+   {
+    "month": "2024-03",
+    "value": 3.3,
+    "published": "2024-04-12"
+   },
+   {
+    "month": "2024-04",
+    "value": 2.9,
+    "published": "2024-05-14"
+   },
+   {
+    "month": "2024-05",
+    "value": 3,
+    "published": "2024-06-13"
+   },
+   {
+    "month": "2024-06",
+    "value": 3,
+    "published": "2024-07-12"
+   },
+   {
+    "month": "2024-07",
+    "value": 2.8,
+    "published": "2024-08-13"
+   },
+   {
+    "month": "2024-08",
+    "value": 2.7,
+    "published": "2024-09-12"
+   },
+   {
+    "month": "2024-09",
+    "value": 2.4,
+    "published": "2024-10-15"
+   },
+   {
+    "month": "2024-10",
+    "value": 2.5,
+    "published": "2024-11-14"
+   },
+   {
+    "month": "2024-11",
+    "value": 2.4,
+    "published": "2024-12-13"
+   },
+   {
+    "month": "2024-12",
+    "value": 2.6,
+    "published": "2025-01-15"
+   },
+   {
+    "month": "2025-01",
+    "value": 2.4,
+    "published": "2025-02-14"
+   },
+   {
+    "month": "2025-02",
+    "value": 2.2,
+    "published": "2025-03-14"
+   },
+   {
+    "month": "2025-03",
+    "value": 2,
+    "published": "2025-04-11"
+   },
+   {
+    "month": "2025-04",
+    "value": 2.4,
+    "published": "2025-05-14"
+   },
+   {
+    "month": "2025-05",
+    "value": 2.2,
+    "published": "2025-06-13"
+   },
+   {
+    "month": "2025-06",
+    "value": 2.2,
+    "published": "2025-07-15"
+   },
+   {
+    "month": "2025-07",
+    "value": 2.3,
+    "published": "2025-08-13"
+   },
+   {
+    "month": "2025-08",
+    "value": 2.4,
+    "published": "2025-09-12"
+   },
+   {
+    "month": "2025-09",
+    "value": 2.4,
+    "published": "2025-10-15"
+   },
+   {
+    "month": "2025-10",
+    "value": 2.5,
+    "published": "2025-11-14"
+   },
+   {
+    "month": "2025-11",
+    "value": 2.6,
+    "published": "2025-12-12"
+   },
+   {
+    "month": "2025-12",
+    "value": 2.6,
+    "published": "2026-01-15"
+   },
+   {
+    "month": "2026-01",
+    "value": 2.6,
+    "published": "2026-02-13"
+   },
+   {
+    "month": "2026-02",
+    "value": 2.7,
+    "published": "2026-03-13"
+   },
+   {
+    "month": "2026-03",
+    "value": 2.9,
+    "published": "2026-04-14"
+   },
+   {
+    "month": "2026-04",
+    "value": 2.8,
+    "published": "2026-05-14"
+   },
+   {
+    "month": "2026-05",
+    "value": 3,
+    "published": "2026-06-12"
+   },
+   {
+    "month": "2026-06",
+    "value": 2.9,
+    "published": "2026-07-15"
+   },
+   {
+    "month": "2026-07",
+    "value": 3,
+    "published": "2026-08-13"
+   },
+   {
+    "month": "2026-08",
+    "value": 2.9,
+    "published": "2026-09-15"
+   },
+   {
+    "month": "2026-09",
+    "value": 3.1,
+    "published": "2026-10-14"
+   },
+   {
+    "month": "2026-10",
+    "value": 3.1,
+    "published": "2026-11-13"
+   },
+   {
+    "month": "2026-11",
+    "value": null,
+    "published": "2026-12-15"
+   }
+  ],
+  "coreMonthly": [
+   {
+    "month": "2023-01",
+    "value": -0.2,
+    "published": "2023-02-15"
+   },
+   {
+    "month": "2023-02",
+    "value": 0.7,
+    "published": "2023-03-14"
+   },
+   {
+    "month": "2023-03",
+    "value": 0.7,
+    "published": "2023-04-14"
+   },
+   {
+    "month": "2023-04",
+    "value": 1,
+    "published": "2023-05-12"
+   },
+   {
+    "month": "2023-05",
+    "value": 0.2,
+    "published": "2023-06-13"
+   },
+   {
+    "month": "2023-06",
+    "value": 0.5,
+    "published": "2023-07-12"
+   },
+   {
+    "month": "2023-07",
+    "value": 0,
+    "published": "2023-08-11"
+   },
+   {
+    "month": "2023-08",
+    "value": 0.3,
+    "published": "2023-09-12"
+   },
+   {
+    "month": "2023-09",
+    "value": -0.1,
+    "published": "2023-10-13"
+   },
+   {
+    "month": "2023-10",
+    "value": 0.4,
+    "published": "2023-11-14"
+   },
+   {
+    "month": "2023-11",
+    "value": 0.1,
+    "published": "2023-12-14"
+   },
+   {
+    "month": "2023-12",
+    "value": 0.2,
+    "published": "2024-01-12"
+   },
+   {
+    "month": "2024-01",
+    "value": -0.4,
+    "published": "2024-02-15"
+   },
+   {
+    "month": "2024-02",
+    "value": 0.5,
+    "published": "2024-03-14"
+   },
+   {
+    "month": "2024-03",
+    "value": 0.6,
+    "published": "2024-04-12"
+   },
+   {
+    "month": "2024-04",
+    "value": 0.6,
+    "published": "2024-05-14"
+   },
+   {
+    "month": "2024-05",
+    "value": 0.3,
+    "published": "2024-06-13"
+   },
+   {
+    "month": "2024-06",
+    "value": 0.5,
+    "published": "2024-07-12"
+   },
+   {
+    "month": "2024-07",
+    "value": -0.3,
+    "published": "2024-08-13"
+   },
+   {
+    "month": "2024-08",
+    "value": 0.2,
+    "published": "2024-09-12"
+   },
+   {
+    "month": "2024-09",
+    "value": -0.4,
+    "published": "2024-10-15"
+   },
+   {
+    "month": "2024-10",
+    "value": 0.4,
+    "published": "2024-11-14"
+   },
+   {
+    "month": "2024-11",
+    "value": 0.1,
+    "published": "2024-12-13"
+   },
+   {
+    "month": "2024-12",
+    "value": 0.4,
+    "published": "2025-01-15"
+   },
+   {
+    "month": "2025-01",
+    "value": -0.5,
+    "published": "2025-02-14"
+   },
+   {
+    "month": "2025-02",
+    "value": 0.3,
+    "published": "2025-03-14"
+   },
+   {
+    "month": "2025-03",
+    "value": 0.4,
+    "published": "2025-04-11"
+   },
+   {
+    "month": "2025-04",
+    "value": 1,
+    "published": "2025-05-14"
+   },
+   {
+    "month": "2025-05",
+    "value": 0.1,
+    "published": "2025-06-13"
+   },
+   {
+    "month": "2025-06",
+    "value": 0.5,
+    "published": "2025-07-15"
+   },
+   {
+    "month": "2025-07",
+    "value": -0.2,
+    "published": "2025-08-13"
+   },
+   {
+    "month": "2025-08",
+    "value": 0.3,
+    "published": "2025-09-12"
+   },
+   {
+    "month": "2025-09",
+    "value": -0.3,
+    "published": "2025-10-15"
+   },
+   {
+    "month": "2025-10",
+    "value": 0.5,
+    "published": "2025-11-14"
+   },
+   {
+    "month": "2025-11",
+    "value": 0.1,
+    "published": "2025-12-12"
+   },
+   {
+    "month": "2025-12",
+    "value": 0.4,
+    "published": "2026-01-15"
+   },
+   {
+    "month": "2026-01",
+    "value": -0.6,
+    "published": "2026-02-13"
+   },
+   {
+    "month": "2026-02",
+    "value": 0.4,
+    "published": "2026-03-13"
+   },
+   {
+    "month": "2026-03",
+    "value": 0.7,
+    "published": "2026-04-14"
+   },
+   {
+    "month": "2026-04",
+    "value": 0.8,
+    "published": "2026-05-14"
+   },
+   {
+    "month": "2026-05",
+    "value": 0.2,
+    "published": "2026-06-12"
+   },
+   {
+    "month": "2026-06",
+    "value": 0.4,
+    "published": "2026-07-15"
+   },
+   {
+    "month": "2026-07",
+    "value": -0.1,
+    "published": "2026-08-13"
+   },
+   {
+    "month": "2026-08",
+    "value": 0.3,
+    "published": "2026-09-15"
+   },
+   {
+    "month": "2026-09",
+    "value": -0.2,
+    "published": "2026-10-14"
+   },
+   {
+    "month": "2026-10",
+    "value": 0.6,
+    "published": "2026-11-13"
+   },
+   {
+    "month": "2026-11",
+    "value": null,
+    "published": "2026-12-15"
+   }
+  ]
+ },
+ "releases": [
+  {
+   "kind": "flash",
+   "month": "2023-01",
+   "day": "2023-01-30"
+  },
+  {
+   "kind": "final",
+   "month": "2023-01",
+   "day": "2023-02-15"
+  },
+  {
+   "kind": "flash",
+   "month": "2023-02",
+   "day": "2023-02-28"
+  },
+  {
+   "kind": "final",
+   "month": "2023-02",
+   "day": "2023-03-14"
+  },
+  {
+   "kind": "flash",
+   "month": "2023-03",
+   "day": "2023-03-30"
+  },
+  {
+   "kind": "final",
+   "month": "2023-03",
+   "day": "2023-04-14"
+  },
+  {
+   "kind": "flash",
+   "month": "2023-04",
+   "day": "2023-04-28"
+  },
+  {
+   "kind": "final",
+   "month": "2023-04",
+   "day": "2023-05-12"
+  },
+  {
+   "kind": "flash",
+   "month": "2023-05",
+   "day": "2023-05-30"
+  },
+  {
+   "kind": "final",
+   "month": "2023-05",
+   "day": "2023-06-13"
+  },
+  {
+   "kind": "flash",
+   "month": "2023-06",
+   "day": "2023-06-29"
+  },
+  {
+   "kind": "final",
+   "month": "2023-06",
+   "day": "2023-07-12"
+  },
+  {
+   "kind": "flash",
+   "month": "2023-07",
+   "day": "2023-07-28"
+  },
+  {
+   "kind": "final",
+   "month": "2023-07",
+   "day": "2023-08-11"
+  },
+  {
+   "kind": "flash",
+   "month": "2023-08",
+   "day": "2023-08-30"
+  },
+  {
+   "kind": "final",
+   "month": "2023-08",
+   "day": "2023-09-12"
+  },
+  {
+   "kind": "flash",
+   "month": "2023-09",
+   "day": "2023-09-28"
+  },
+  {
+   "kind": "final",
+   "month": "2023-09",
+   "day": "2023-10-13"
+  },
+  {
+   "kind": "flash",
+   "month": "2023-10",
+   "day": "2023-10-30"
+  },
+  {
+   "kind": "final",
+   "month": "2023-10",
+   "day": "2023-11-14"
+  },
+  {
+   "kind": "flash",
+   "month": "2023-11",
+   "day": "2023-11-29"
+  },
+  {
+   "kind": "final",
+   "month": "2023-11",
+   "day": "2023-12-14"
+  },
+  {
+   "kind": "flash",
+   "month": "2023-12",
+   "day": "2023-12-29"
+  },
+  {
+   "kind": "final",
+   "month": "2023-12",
+   "day": "2024-01-12"
+  },
+  {
+   "kind": "flash",
+   "month": "2024-01",
+   "day": "2024-01-30"
+  },
+  {
+   "kind": "final",
+   "month": "2024-01",
+   "day": "2024-02-15"
+  },
+  {
+   "kind": "flash",
+   "month": "2024-02",
+   "day": "2024-02-29"
+  },
+  {
+   "kind": "final",
+   "month": "2024-02",
+   "day": "2024-03-14"
+  },
+  {
+   "kind": "flash",
+   "month": "2024-03",
+   "day": "2024-03-27"
+  },
+  {
+   "kind": "final",
+   "month": "2024-03",
+   "day": "2024-04-12"
+  },
+  {
+   "kind": "flash",
+   "month": "2024-04",
+   "day": "2024-04-29"
+  },
+  {
+   "kind": "final",
+   "month": "2024-04",
+   "day": "2024-05-14"
+  },
+  {
+   "kind": "flash",
+   "month": "2024-05",
+   "day": "2024-05-30"
+  },
+  {
+   "kind": "final",
+   "month": "2024-05",
+   "day": "2024-06-13"
+  },
+  {
+   "kind": "flash",
+   "month": "2024-06",
+   "day": "2024-06-28"
+  },
+  {
+   "kind": "final",
+   "month": "2024-06",
+   "day": "2024-07-12"
+  },
+  {
+   "kind": "flash",
+   "month": "2024-07",
+   "day": "2024-07-30"
+  },
+  {
+   "kind": "final",
+   "month": "2024-07",
+   "day": "2024-08-13"
+  },
+  {
+   "kind": "flash",
+   "month": "2024-08",
+   "day": "2024-08-29"
+  },
+  {
+   "kind": "final",
+   "month": "2024-08",
+   "day": "2024-09-12"
+  },
+  {
+   "kind": "flash",
+   "month": "2024-09",
+   "day": "2024-09-27"
+  },
+  {
+   "kind": "final",
+   "month": "2024-09",
+   "day": "2024-10-15"
+  },
+  {
+   "kind": "flash",
+   "month": "2024-10",
+   "day": "2024-10-30"
+  },
+  {
+   "kind": "final",
+   "month": "2024-10",
+   "day": "2024-11-14"
+  },
+  {
+   "kind": "flash",
+   "month": "2024-11",
+   "day": "2024-11-28"
+  },
+  {
+   "kind": "final",
+   "month": "2024-11",
+   "day": "2024-12-13"
+  },
+  {
+   "kind": "flash",
+   "month": "2024-12",
+   "day": "2024-12-30"
+  },
+  {
+   "kind": "final",
+   "month": "2024-12",
+   "day": "2025-01-15"
+  },
+  {
+   "kind": "flash",
+   "month": "2025-01",
+   "day": "2025-01-30"
+  },
+  {
+   "kind": "final",
+   "month": "2025-01",
+   "day": "2025-02-14"
+  },
+  {
+   "kind": "flash",
+   "month": "2025-02",
+   "day": "2025-02-27"
+  },
+  {
+   "kind": "final",
+   "month": "2025-02",
+   "day": "2025-03-14"
+  },
+  {
+   "kind": "flash",
+   "month": "2025-03",
+   "day": "2025-03-28"
+  },
+  {
+   "kind": "final",
+   "month": "2025-03",
+   "day": "2025-04-11"
+  },
+  {
+   "kind": "flash",
+   "month": "2025-04",
+   "day": "2025-04-29"
+  },
+  {
+   "kind": "final",
+   "month": "2025-04",
+   "day": "2025-05-14"
+  },
+  {
+   "kind": "flash",
+   "month": "2025-05",
+   "day": "2025-05-30"
+  },
+  {
+   "kind": "final",
+   "month": "2025-05",
+   "day": "2025-06-13"
+  },
+  {
+   "kind": "flash",
+   "month": "2025-06",
+   "day": "2025-06-27"
+  },
+  {
+   "kind": "final",
+   "month": "2025-06",
+   "day": "2025-07-15"
+  },
+  {
+   "kind": "flash",
+   "month": "2025-07",
+   "day": "2025-07-30"
+  },
+  {
+   "kind": "final",
+   "month": "2025-07",
+   "day": "2025-08-13"
+  },
+  {
+   "kind": "flash",
+   "month": "2025-08",
+   "day": "2025-08-29"
+  },
+  {
+   "kind": "final",
+   "month": "2025-08",
+   "day": "2025-09-12"
+  },
+  {
+   "kind": "flash",
+   "month": "2025-09",
+   "day": "2025-09-29"
+  },
+  {
+   "kind": "final",
+   "month": "2025-09",
+   "day": "2025-10-15"
+  },
+  {
+   "kind": "flash",
+   "month": "2025-10",
+   "day": "2025-10-30"
+  },
+  {
+   "kind": "final",
+   "month": "2025-10",
+   "day": "2025-11-14"
+  },
+  {
+   "kind": "flash",
+   "month": "2025-11",
+   "day": "2025-11-28"
+  },
+  {
+   "kind": "final",
+   "month": "2025-11",
+   "day": "2025-12-12"
+  },
+  {
+   "kind": "flash",
+   "month": "2025-12",
+   "day": "2025-12-30"
+  },
+  {
+   "kind": "final",
+   "month": "2025-12",
+   "day": "2026-01-15"
+  },
+  {
+   "kind": "flash",
+   "month": "2026-01",
+   "day": "2026-01-30"
+  },
+  {
+   "kind": "final",
+   "month": "2026-01",
+   "day": "2026-02-13"
+  },
+  {
+   "kind": "flash",
+   "month": "2026-02",
+   "day": "2026-02-27"
+  },
+  {
+   "kind": "final",
+   "month": "2026-02",
+   "day": "2026-03-13"
+  },
+  {
+   "kind": "flash",
+   "month": "2026-03",
+   "day": "2026-03-27"
+  },
+  {
+   "kind": "final",
+   "month": "2026-03",
+   "day": "2026-04-14"
+  },
+  {
+   "kind": "flash",
+   "month": "2026-04",
+   "day": "2026-04-29"
+  },
+  {
+   "kind": "final",
+   "month": "2026-04",
+   "day": "2026-05-14"
+  },
+  {
+   "kind": "flash",
+   "month": "2026-05",
+   "day": "2026-05-29"
+  },
+  {
+   "kind": "final",
+   "month": "2026-05",
+   "day": "2026-06-12"
+  },
+  {
+   "kind": "flash",
+   "month": "2026-06",
+   "day": "2026-06-29"
+  },
+  {
+   "kind": "final",
+   "month": "2026-06",
+   "day": "2026-07-15"
+  },
+  {
+   "kind": "flash",
+   "month": "2026-07",
+   "day": "2026-07-30"
+  },
+  {
+   "kind": "final",
+   "month": "2026-07",
+   "day": "2026-08-13"
+  },
+  {
+   "kind": "flash",
+   "month": "2026-08",
+   "day": "2026-08-28"
+  },
+  {
+   "kind": "final",
+   "month": "2026-08",
+   "day": "2026-09-15"
+  },
+  {
+   "kind": "flash",
+   "month": "2026-09",
+   "day": "2026-09-29"
+  },
+  {
+   "kind": "final",
+   "month": "2026-09",
+   "day": "2026-10-14"
+  },
+  {
+   "kind": "flash",
+   "month": "2026-10",
+   "day": "2026-10-30"
+  },
+  {
+   "kind": "final",
+   "month": "2026-10",
+   "day": "2026-11-13"
+  },
+  {
+   "kind": "flash",
+   "month": "2026-11",
+   "day": "2026-11-27"
+  },
+  {
+   "kind": "final",
+   "month": "2026-11",
+   "day": "2026-12-15"
+  },
+  {
+   "kind": "flash",
+   "month": "2026-12",
+   "day": "2026-12-30"
+  }
+ ]
+}

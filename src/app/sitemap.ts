@@ -28,6 +28,8 @@ import { rentSitemapEntries } from "@/lib/programmatic/rent-update/page";
 import { pvpcSitemapEntries } from "@/lib/programmatic/pvpc/pages";
 import { madridDate } from "@/lib/programmatic/pvpc/time";
 import { pensionSitemapEntries } from "@/lib/programmatic/pensions-2027/page";
+import { smiSitemapEntries } from "@/lib/programmatic/smi/page";
+import { ipcSitemapEntries } from "@/lib/programmatic/ipc/page";
 
 /**
  * Cached for an hour (ISR) and refreshed at once by every publish, and by the
@@ -180,6 +182,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...pvpcSitemapEntries(madridDate(Date.now())),
     // "Subida de las pensiones 2027": the pension revaluation calculator (INE CPI), in es, ca and en.
     ...pensionSitemapEntries(),
+    // "Salario mínimo (SMI) 2027" and "IPC hoy" (calculators family, group "official"), in es, ca and en.
+    ...smiSitemapEntries(),
+    ...ipcSitemapEntries(),
     ...fuelSitemapEntries(),
     ...rodaliesSitemap(),
     ...reservoirSitemapEntries(),

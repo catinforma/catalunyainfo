@@ -16,6 +16,8 @@ import { netSalaryEditions } from "@/lib/programmatic/net-salary/copy";
 import { calcEditions, calculatorsHubEditions } from "@/lib/programmatic/calculators/paths";
 import { rentEditions } from "@/lib/programmatic/rent-update/copy";
 import { pensionEditions } from "@/lib/programmatic/pensions-2027/copy";
+import { smiEditions } from "@/lib/programmatic/smi/copy";
+import { ipcEditions } from "@/lib/programmatic/ipc/copy";
 import { LOCALES, type Locale } from "@/lib/i18n/config";
 import { PATHS as TOOL_PATHS } from "@/lib/content/home-tools";
 import { SEASON_YEAR } from "@/lib/programmatic/christmas-fairs/classify";
@@ -88,7 +90,7 @@ export function liveTools(): LiveTool[] {
     {
       name: "Calculators for Spain (hub)",
       hubs: calculatorsHubEditions(),
-      description: "every calculator on the site in one page, grouped by work and pay, housing, holidays and live data, each with the question it answers and the law or official data it is built on.",
+      description: "every calculator on the site in one page, grouped by work and pay, housing, official figures (minimum wage, CPI), holidays and live data, each with the question it answers and the law or official data it is built on.",
     },
     {
       name: "Spain net salary calculator 2026",
@@ -119,6 +121,16 @@ export function liveTools(): LiveTool[] {
       name: "Spain pension increase 2027 calculator",
       hubs: pensionEditions(),
       description: "the January 2027 revaluation of Spanish contributory pensions: the average of the INE's annual CPI rates from December 2025 to November 2026 (LGSS art. 58), read daily and marked provisional until November's figure is out, a monthly and yearly calculator, no catch-up payment, and the 2026 minimum and non-contributory pensions and IPREM from the BOE (RDL 3/2026, RD 241/2026).",
+    },
+    {
+      name: "Spain minimum wage (SMI) 2027",
+      hubs: smiEditions(),
+      description: "Spain's minimum wage from the BOE: 2026 (RD 126/2026: 1,221 euros a month in 14 payments, 17,094 a year, 40.70 a day, 9.55 an hour for domestic workers), every decree since 2018 with its BOE link, where 2027 stands from official documents only (advisory committee report, the Ministry of Labour's draft, Council of Ministers, BOE checked hourly) and a part-time / 12-or-14-payments calculator linked to the net salary calculator.",
+    },
+    {
+      name: "Spain CPI (IPC) today and INE release calendar",
+      hubs: ipcEditions(),
+      description: "the INE's latest all-items and core CPI, annual and monthly change, read daily from the INE's API (series IPC290750, IPC290752, IPC292510, IPC292512), the last 24 months, the flash and final release dates from the INE's official calendar, and what the CPI is used for (pensions, rent, minimum wage).",
     },
     {
       name: "Strikes in Catalonia today",
