@@ -4439,4 +4439,42 @@ until the ATC is re-read, and from 1 Apr 2027 until the page leads with the
 **Expected:** "tasa turistica barcelona 2027", "taxa turistica 2027",
 "tasa turistica cruceros barcelona" long tail; measure with the 30 Nov read.
 
+## 2026-11-13 — December peaks: La Marató programme and Christmas-lottery tax gaps (body only; deploy, then groups `marato` and `loteria-nadal`)
+
+**Baseline (GSC 17 Oct–13 Nov, `snapshot.py page … 28`).** La Marató CA:
+"marató tv3 2026" 464 impr. at 8.5, "marato tv3 2026" 291 at 8.2, "marató tv3
+2026 data" 419 at 5.6 (1 click), "la marato 2026" 230 at 8.5, volunteer
+variants ~120 at 8–9; ES "marato tv3 2026" 201 at 9.7. Lottery CA guide: "la
+grossa de nadal 2026" 59 at 7.9 plus variants ~45, "loteria de nadal 2026" 54
+at 7.4, "quant val un decim" 16 at 2.7. Gordo hubs: no impressions yet.
+
+**What changed (no title, H1 or description touched; the Marató title waits
+for the 18 Nov check of the 11 Nov entry).**
+- La Marató ca/es/en: 3Cat's news of 10 Nov 2026 (read 13 Nov) gives the
+  programme: TV3 9.30–14.30 from the Torre de Collserola and 16.00–1.00 from
+  the Parc Audiovisual de Catalunya (Terrassa); Catalunya Ràdio from 8.00
+  (Universitat de Lleida); donation line 900 21 50 50 on 13 Dec. Lead, key
+  facts, "when / what time" H2, new "what is on" H2 (40+ testimonies,
+  reporters, match at Nou Sardenya on Esport3, InfoK special 7 Dec, audience
+  places full), album H2 (22nd, on sale 29 Nov only, CD 12 €, tracks), FAQs
+  "what time", "where", "phone", "album". Tests now pin the announced times
+  and number instead of forbidding them.
+- Lottery guide ca/es/en: participaciones (AEAT: the 40,000 € split by share;
+  the collector must prove the split; quarter-share Gordo example 100,000 →
+  82,000 €), BOE consolidated text re-read 13 Nov (DA 33ª.2 unchanged since
+  2018), non-residents' treaty refund, DA 33ª.8; FAQ "La Grossa de Nadal i la
+  loteria de Nadal són el mateix?" (+ es/en) and a heading in the searched
+  words ("La loteria de Nadal no és La Grossa").
+
+**Not done.** No 2026 draw time (SELAE has published none; its whole site
+answered 403 to the server on 13 Nov — see the runbook), no computed claim
+deadline, no claim that "La Grossa de Nadal" does not exist (Loteries de
+Catalunya unreadable from the server).
+
+**Prediction.** Marató CA "marató tv3 2026" variants from 8–8.6 to ≤ 6 by
+1 Dec, with "a quina hora / horari / telèfon" long tail appearing; lottery
+"la grossa de nadal 2026" CTR > 0 at the same position.
+
+**Measure** on 1 Dec (`page la-marato 14`, `page loteria 14`) and 14 Dec.
+
 **Outcome:** _pending_
