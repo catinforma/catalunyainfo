@@ -38,6 +38,13 @@ export const UNEMPLOYMENT_META: Record<CalcLocale, CalcMeta> = {
   },
 };
 
+/** The subsidy checker (lib/programmatic/unemployment-subsidy/), which links back here. */
+const SUBSIDY_LINK: Record<CalcLocale, { text: string; link: string }> = {
+  es: { text: "¿Se te acaba el paro o no llegas a 360 días cotizados?", link: "Comprueba si te corresponde el subsidio por desempleo" },
+  ca: { text: "Se t'acaba l'atur o no arribes a 360 dies cotitzats?", link: "Comprova si et correspon el subsidi per desocupació" },
+  en: { text: "Benefit running out, or fewer than 360 days of contributions?", link: "Check whether you qualify for the unemployment subsidy" },
+};
+
 export const unemploymentMetadata = (locale: CalcLocale) => calcMetadata("unemployment", locale, UNEMPLOYMENT_META[locale]);
 
 export function UnemploymentRoute({ locale }: { locale: CalcLocale }) {
@@ -222,6 +229,9 @@ export function UnemploymentRoute({ locale }: { locale: CalcLocale }) {
 
       <h2 id="reforma-2024">{copy.reformTitle}</h2>
       <p>{copy.reform}</p>
+      <p>
+        {SUBSIDY_LINK[locale].text} <Link href={calcPath("unemployment-subsidy", locale)}>{SUBSIDY_LINK[locale].link}</Link>.
+      </p>
 
       <h2 id="descuentos">{copy.dedTitle}</h2>
       <p>{copy.ded}</p>

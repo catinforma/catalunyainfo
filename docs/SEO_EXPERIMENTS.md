@@ -5970,4 +5970,58 @@ example dates and the title year; the working-day count only covers 2026–2027)
 
 **Measure 15 Dec, 1 Feb, 15 Feb**: `snapshot.py page /calculadoras/permisos-laborales/ 28`.
 
+## 2026-11-13 — New tool: "Subsidio por desempleo 2026: quién lo cobra, cuánto y cuánto tiempo" (checker + IMV 2026), es + ca + en (deploy; republish group `pagos`)
+
+**What.** `/es/calculadoras/subsidio-desempleo/`, `/ca/calculadores/subsidi-atur/`,
+`/en/calculators/spain-unemployment-subsidy/` (lib/programmatic/unemployment-subsidy/),
+in the calculators registry (after unemployment) and hub group "Trabajo y sueldo",
+sitemap (+hreflang, x-default en) and llms.txt. Linked both ways with the paro
+calculator (page + "menos de 360 días" note) and from the pay-dates guide
+(`cuando-se-cobra-paro-pension`, all three editions: needs `pagos` republished).
+
+- Rules (read 13 Nov 2026): LGSS arts. 274–282 and DA 57ª–59ª, BOE consolidated
+  text (update 11/11/2026), as worded by RDL 2/2024 (BOE-A-2024-10235), for
+  subsidies from 1 Nov 2024. Income test art. 275: own rents of the previous
+  month, or family-unit rents per head, ≤ 75 % of the SMI «excluida la parte
+  proporcional de dos pagas extraordinarias» = 915,75 € (SEPE prints the same;
+  NOT 1.221 × 14 / 12). Amount art. 278: 95/90/80 % of IPREM 600 € = 570/540/480 €;
+  over 52 80 % = 480 € (art. 280.4). Duration art. 277.1 (6; RF 24 with a
+  120-day benefit, 30 with ≥ 180; under 45 without RF needs a ≥ 360-day benefit)
+  and 277.2 (90/120/150/180 days → 3/4/5/6 months, 21 with RF). Over 52 (art.
+  280): retirement requirements except age (art. 205.1.b: 15 years, 2 in the
+  last 15) + 6 years of unemployment contributions + own income only; until the
+  ordinary retirement age (SEPE); SEPE pays retirement contributions (280.9).
+  Emigrants DA 57ª 18 months; victims DA 58ª 30/20/10 months. CAE art. 282.3
+  (quarters 80…20 % IPREM full time; 180 days). Prison release: special access
+  removed by RDL 2/2024 (preamble quoted) → "consulta en el SEPE".
+- IMV section (no eligibility calculator): Ley 19/2021 art. 13 + Anexo I and
+  RDL 3/2026 art. 2.5 (PNC 8.803,20 €/year, convalidated) → 733,60 € a month for
+  one adult, scale 953,68 … 1.613,92 €, monoparental 1.115,07 … 1.775,31 € (all
+  equal to the Seguridad Social IMV page, test); CAPI 115 / 80,50 / 57,50 €
+  quoted from the Seguridad Social page (the consolidated law still prints
+  100/70/50). Links: official IMV simulator, SEPE e-office.
+- Checker: server-rendered default (47, 360-day benefit exhausted, partner +
+  child, 1.200 € at home → RF, 30 months, 15.300 €), client recompute + URL hash.
+  Anything it cannot evaluate (other situations, unknown over-52 records,
+  emigrant without the abroad requirement known, 3 earlier RAI) → "consulta en
+  el SEPE". YMYL disclaimer; not covered: subsidio agrario / renta agraria,
+  fijos discontinuos, subsidies started before 1 Nov 2024, IRPF.
+
+**Why.** research_notes/spain-utilities-opportunities-nov2026.md row 12:
+"subsidio 52 años" 21k + "subsidio desempleo" 20k + "ingreso mínimo vital" 26k
+≈ 67k/month, flat (IMV peaks in January); the SERP has contradictory scales
+("480 € sin cambios" vs 570/540/480) and no BOE table in the top 5.
+
+**Baseline.** New URLs: 0 impressions.
+
+**Prediction.** By 15 Feb 2027: es page ≥ 3k impressions/28 days, position
+≤ 20 for "subsidio desempleo 2026" / "subsidio mayores de 52".
+
+**Date guards.** `SUBSIDY_RULES_UNTIL` 1 Jan 2027 (tests/unemployment-subsidy.test.ts):
+re-read IPREM 2027 (PGE or decree-law), SMI 2027 (income limit) and the PNC/IMV
+2027 amounts (revaluation decree-law, Seguridad Social page), and LGSS 274–282.
+The paro calculator's `RULES_VALID_UNTIL` (31 Dec 2026) guards the shared IPREM/SMI.
+
+**Measure 15 Dec, 1 Feb, 15 Feb**: `snapshot.py page /calculadoras/subsidio-desempleo/ 28`.
+
 **Outcome:** _pending_

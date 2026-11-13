@@ -14,6 +14,7 @@ import { RULES_AS_OF as MORTGAGE_RULES_AS_OF } from "@/lib/programmatic/mortgage
 import { RULES_AS_OF as SELF_EMPLOYED_AS_OF } from "@/lib/programmatic/self-employed/rules-2026";
 import { RULES_AS_OF as SICK_LEAVE_AS_OF } from "@/lib/programmatic/sick-leave/rules";
 import { RULES_AS_OF as PAID_LEAVE_AS_OF } from "@/lib/programmatic/paid-leave/rules";
+import { SUBSIDY_RULES_AS_OF } from "@/lib/programmatic/unemployment-subsidy/rules";
 import { PENSION_RULES_AS_OF } from "@/lib/programmatic/pensions-2027/rules";
 import { SMI_RULES_AS_OF } from "@/lib/programmatic/smi/rules";
 import { RULES_AS_OF as TREASURY_RULES_AS_OF } from "@/lib/programmatic/treasury-bills/rules";
@@ -166,6 +167,24 @@ export const HUB_GROUPS: HubGroup[] = [
         },
         scope: "spain",
         checked: EMPLOYMENT_AS_OF,
+      },
+      {
+        key: "unemployment-subsidy",
+        calculator: true,
+        href: calc("unemployment-subsidy"),
+        title: { ca: "Subsidi per desocupació 2026", es: "Subsidio por desempleo 2026", en: "Unemployment subsidy (subsidio) 2026" },
+        answers: {
+          ca: "Et correspon el subsidi quan s'acaba l'atur o no hi arribes, quant cobraràs (570, 540, 480 €) i quants mesos? Amb l'IMV 2026.",
+          es: "¿Te corresponde el subsidio al acabar el paro o si no llegas a él, cuánto cobrarás (570, 540, 480 €) y cuántos meses? Con el IMV 2026.",
+          en: "Whether you qualify for the subsidy when your benefit ends or you fall short of it, how much (€570, €540, €480) and for how many months. With the 2026 IMV.",
+        },
+        basis: {
+          ca: "Llei general de la Seguretat Social, arts. 274 a 282 i DA 57a i 58a (Reial decret llei 2/2024); Llei 19/2021 de l'IMV i Reial decret llei 3/2026.",
+          es: "Ley General de la Seguridad Social, arts. 274 a 282 y DA 57ª y 58ª (Real Decreto-ley 2/2024); Ley 19/2021 del IMV y Real Decreto-ley 3/2026.",
+          en: "General Social Security Act (LGSS), arts. 274 to 282 and additional provisions 57 and 58 (Royal Decree-law 2/2024); IMV Act 19/2021 and Royal Decree-law 3/2026.",
+        },
+        scope: "spain",
+        checked: SUBSIDY_RULES_AS_OF,
       },
       {
         key: "sick-leave",

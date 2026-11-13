@@ -16,6 +16,7 @@ import { netSalaryEditions } from "@/lib/programmatic/net-salary/copy";
 import { selfEmployedEditions } from "@/lib/programmatic/self-employed/copy";
 import { sickLeaveEditions } from "@/lib/programmatic/sick-leave/copy";
 import { paidLeaveEditions } from "@/lib/programmatic/paid-leave/copy";
+import { subsidyEditions } from "@/lib/programmatic/unemployment-subsidy/copy";
 import { calcEditions, calculatorsHubEditions } from "@/lib/programmatic/calculators/paths";
 import { rentEditions } from "@/lib/programmatic/rent-update/copy";
 import { pensionEditions } from "@/lib/programmatic/pensions-2027/copy";
@@ -136,6 +137,11 @@ export function liveTools(): LiveTool[] {
       name: "Paid leave in Spain (permisos laborales, Estatuto de los Trabajadores)",
       hubs: paidLeaveEditions(),
       description: "the legal minimum paid leave for employees with who pays each and a calculator of the last day: marriage or registered partnership 15 calendar days (ET art. 37.3.a); a relative's serious accident or illness, hospitalisation or surgery with home rest 5 days (37.3.b); death 2 days, 4 when travelling (37.3.b bis); moving house 1 day (37.3.c); public duty for the time needed; up to 4 days when work cannot be reached (37.3.g); force majeure hours equal to 4 days a year (37.9); nursing hour to 9 months (37.4); at least 30 calendar days of holiday (38.1); all paid by the employer. Only marriage and holidays say calendar days: for the others the ET says just 'días', so both the consecutive and the Monday-to-Friday count (national and regional holidays) are shown. Birth and childcare leave 19 weeks per parent, 32 for a single parent (6 mandatory after the birth + 11 until 12 months + 2 until age 8; RDL 9/2025), paid by Social Security at 100% of the base reguladora (LGSS art. 179), exempt from IRPF except in Navarre; parental leave 8 weeks until age 8 (art. 48 bis), unpaid by law. Collective agreements can improve all of them.",
+    },
+    {
+      name: "Unemployment subsidy checker (Spain, subsidio por desempleo) + Minimum Living Income 2026",
+      hubs: subsidyEditions(),
+      description: "who qualifies for the non-contributory unemployment subsidy after the 2024 reform (RDL 2/2024, from 1 Nov 2024): benefit exhausted (6 months; 24 or 30 with family responsibilities; under 45 without family needs a 360-day benefit), insufficient contributions 90-359 days (3-6 months, 21 with family), aged 52+ (80% IPREM until retirement, retirement contributions paid), returning emigrants (18 months), victims of gender or sexual violence (30 months); income test: own gross income of the previous month, or family-unit income per head, no more than 75% of the SMI without extra payments = 915.75 EUR in 2026; amounts 95/90/80% of the 600 EUR IPREM = 570/540/480 EUR; the employment support top-up (CAE) when working; IMV 2026 guaranteed income 733.60 EUR a month for one adult and the household scale (LGSS arts. 274-282, DA 57-58; Ley 19/2021 art. 13; RDL 3/2026 art. 2.5).",
     },
     {
       name: "Rent increase calculator (Spain)",

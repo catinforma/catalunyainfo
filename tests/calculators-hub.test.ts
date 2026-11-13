@@ -46,6 +46,7 @@ test("registry: the live URLs did not move (13 Nov 2026)", () => {
   assert.deepEqual(calcEditions("dismissal"), { ca: "/ca/calculadores/indemnitzacio-acomiadament/", es: "/es/calculadoras/indemnizacion-despido/", en: "/en/calculators/severance-pay-spain/" });
   assert.deepEqual(calcEditions("settlement"), { ca: "/ca/calculadores/quitanca-finiquito/", es: "/es/calculadoras/finiquito/", en: "/en/calculators/final-settlement-spain/" });
   assert.deepEqual(calcEditions("unemployment"), { ca: "/ca/calculadores/atur/", es: "/es/calculadoras/paro/", en: "/en/calculators/unemployment-benefit-spain/" });
+  assert.deepEqual(calcEditions("unemployment-subsidy"), { ca: "/ca/calculadores/subsidi-atur/", es: "/es/calculadoras/subsidio-desempleo/", en: "/en/calculators/spain-unemployment-subsidy/" });
   assert.deepEqual(calcEditions("sick-leave"), { ca: "/ca/calculadores/baixa-laboral/", es: "/es/calculadoras/baja-laboral/", en: "/en/calculators/sick-leave-pay-spain/" });
   assert.deepEqual(calcEditions("paid-leave"), { ca: "/ca/calculadores/permisos-laborals/", es: "/es/calculadoras/permisos-laborales/", en: "/en/calculators/spain-paid-leave/" });
   assert.deepEqual(calcEditions("rent-update"), { ca: "/ca/calculadores/actualitzar-lloguer/", es: "/es/calculadoras/actualizar-alquiler/", en: "/en/calculators/rent-increase-spain/" });

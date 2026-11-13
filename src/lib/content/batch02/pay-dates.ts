@@ -58,6 +58,8 @@ const U = {
 const link = (href: string, label: string) => `[${label}](${href})`;
 /** The unemployment benefit calculator (lib/programmatic/employment/), which links back here. */
 const CALC = calcEditions("unemployment");
+/** The unemployment subsidy checker (lib/programmatic/unemployment-subsidy/), which links back here. */
+const SUBSIDY = calcEditions("unemployment-subsidy");
 /** The net salary calculator and the calculators hub, for readers checking a payslip rather than a benefit. */
 const NET = calcEditions("net-salary");
 const HUB = calculatorsHubEditions();
@@ -129,7 +131,7 @@ const COPY: Record<Locale, PayCopy> = {
       `**El paro (SEPE) se cobra el día 10 de cada mes**, o el siguiente día hábil si cae en festivo: en diciembre de 2026, el **${dec}**. **Las pensiones de la Seguridad Social y el Ingreso Mínimo Vital** se pagan, como tarde, el **primer día hábil del mes** (y nunca después del día 4); muchos bancos las adelantan unos días. Aquí tienes el calendario hasta diciembre de 2027.`,
     sepe: {
       heading: "Paro y subsidio: el día 10",
-      text: `El SEPE paga la prestación y el subsidio por desempleo «el día 10 de cada mes» y, «si coincide que es festivo, el primer día hábil siguiente» (${link(U.sepe, "SEPE")}). Cada pago corresponde al mes anterior. ¿Cuánto te toca y durante cuánto tiempo? ${link(CALC.es, "Calcula tu paro")}.`,
+      text: `El SEPE paga la prestación y el subsidio por desempleo «el día 10 de cada mes» y, «si coincide que es festivo, el primer día hábil siguiente» (${link(U.sepe, "SEPE")}). Cada pago corresponde al mes anterior. ¿Cuánto te toca y durante cuánto tiempo? ${link(CALC.es, "Calcula tu paro")}. ¿Se te acaba el paro o no llegas a 360 días cotizados? ${link(SUBSIDY.es, "Comprueba si te corresponde el subsidio")}.`,
       caption: "Pago del paro y del subsidio (SEPE), diciembre 2026 – diciembre 2027",
       headers: ["Mes del pago", "Día", "Prestación que se cobra"],
       note: "Solo se ha movido el día cuando el 10 cae en sábado o domingo; el SEPE no dice qué festivos autonómicos cuentan.",
@@ -170,7 +172,7 @@ const COPY: Record<Locale, PayCopy> = {
       `**L'atur (SEPE) es cobra el dia 10 de cada mes**, o el primer dia hàbil següent si cau en festiu: el desembre de 2026, el **${dec}**. **Les pensions de la Seguretat Social i l'Ingrés Mínim Vital** s'han de pagar, com a molt tard, el **primer dia hàbil del mes** (i mai després del dia 4); molts bancs les avancen uns dies. Aquí tens el calendari fins al desembre de 2027.`,
     sepe: {
       heading: "Atur i subsidi: el dia 10",
-      text: `El SEPE paga la prestació i el subsidi per desocupació el dia 10 de cada mes i, si coincideix amb un festiu, el primer dia hàbil següent (${link(U.sepe, "SEPE")}). Cada pagament correspon al mes anterior. Quant et toca i durant quant de temps? ${link(CALC.ca, "Calcula el teu atur")}.`,
+      text: `El SEPE paga la prestació i el subsidi per desocupació el dia 10 de cada mes i, si coincideix amb un festiu, el primer dia hàbil següent (${link(U.sepe, "SEPE")}). Cada pagament correspon al mes anterior. Quant et toca i durant quant de temps? ${link(CALC.ca, "Calcula el teu atur")}. Se t'acaba l'atur o no arribes a 360 dies cotitzats? ${link(SUBSIDY.ca, "Comprova si et correspon el subsidi")}.`,
       caption: "Pagament de l'atur i del subsidi (SEPE), desembre 2026 – desembre 2027",
       headers: ["Mes del pagament", "Dia", "Prestació que es cobra"],
       note: "El dia només s'ha mogut quan el 10 cau en dissabte o diumenge; el SEPE no diu quins festius autonòmics compten.",
@@ -211,7 +213,7 @@ const COPY: Record<Locale, PayCopy> = {
       `**Unemployment benefit in Spain (the "paro", paid by SEPE) arrives on the 10th of each month**, or on the next business day if the 10th is a holiday: in December 2026, on **${dec}**. **Social Security pensions and the Minimum Living Income (IMV)** must be paid by the **first business day of the month** at the latest (and never after the 4th); many banks pay a few days early. Here is the calendar up to December 2027.`,
     sepe: {
       heading: "Unemployment benefit and subsidy: the 10th",
-      text: `SEPE, Spain's public employment service, pays unemployment benefit (prestación por desempleo) and the unemployment subsidy (subsidio) on the 10th of each month and, if that day is a holiday, on the next business day (${link(U.sepe, "SEPE")}). Each payment covers the previous month. How much you get, and for how long: ${link(CALC.en, "unemployment benefit calculator")}.`,
+      text: `SEPE, Spain's public employment service, pays unemployment benefit (prestación por desempleo) and the unemployment subsidy (subsidio) on the 10th of each month and, if that day is a holiday, on the next business day (${link(U.sepe, "SEPE")}). Each payment covers the previous month. How much you get, and for how long: ${link(CALC.en, "unemployment benefit calculator")}. Benefit running out, or fewer than 360 days of contributions? ${link(SUBSIDY.en, "unemployment subsidy checker")}.`,
       caption: "SEPE unemployment benefit and subsidy payment dates, December 2026 – December 2027",
       headers: ["Payment month", "Day", "Month it covers"],
       note: "The day has been moved only when the 10th falls on a Saturday or Sunday; SEPE does not say which regional holidays count.",
