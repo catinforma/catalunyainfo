@@ -23,7 +23,7 @@ import {
   type City,
   type CityDayKind,
 } from "@/lib/programmatic/spain-2027/cities";
-import { areaNameIntl, caIn, caOf, cityFaqIntl, cityH1Intl, cityLeadIntl, cityListLineIntl, localNameIntl, localNoteIntl, planWordsIntl, populationIntl } from "@/lib/programmatic/spain-2027/city-copy-intl";
+import { areaNameIntl, caIn, caOf, cityAnswerIntl, cityFaqIntl, cityH1Intl, cityLeadIntl, cityListLineIntl, localNameIntl, localNoteIntl, planWordsIntl, populationIntl } from "@/lib/programmatic/spain-2027/city-copy-intl";
 import { KIND_LABEL_INTL, compactDatesIntl, dayNameIntl, runLineIntl, tr, weekdayDateIntl } from "@/lib/programmatic/spain-2027/copy-intl";
 import {
   editionBridgesPath,
@@ -110,6 +110,7 @@ export function CityPageIntl({ c, locale }: { c: City; locale: Edition }) {
   const freeRuns = runs.filter((x) => x.take.length === 0).length;
   const leaveRuns = runs.filter((x) => x.take.length > 0).length;
   const islandPlace = island ? placeName(island.place, locale) : "";
+  const answer = cityAnswerIntl(c, locale);
 
   return (
     <article>
@@ -117,8 +118,13 @@ export function CityPageIntl({ c, locale }: { c: City; locale: Edition }) {
 
       <div className="ci-shell py-10">
         <div className="ci-prose">
+          {/* The two local days (or their status) in one sentence, then the full list (13 Nov 2026). */}
+          <p className="mt-0" data-answer>
+            <strong>{answer.strong}</strong>
+            {answer.rest}
+          </p>
           {/* Dates first (12 Nov 2026, answer-first layout; docs/SEO_EXPERIMENTS.md): the list is the answer. */}
-          <h2 id="calendario" className="mt-0">{tr(locale, `Calendari laboral ${YEAR} ${caOf(name)}`, `${Name} work calendar ${YEAR}`)}</h2>
+          <h2 id="calendario">{tr(locale, `Calendari laboral ${YEAR} ${caOf(name)}`, `${Name} work calendar ${YEAR}`)}</h2>
           <div className="ci-table-scroll mt-4">
             <table className="ci-local-table">
               <caption className="pb-2 text-left text-sm text-[var(--color-muted)]">

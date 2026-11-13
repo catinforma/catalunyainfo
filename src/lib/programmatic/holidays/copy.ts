@@ -736,6 +736,19 @@ export function bridgesLine(locale: DateLocale): { before: string; label: string
   return { before: `The ${PLANNER_YEAR} Catalonia-wide holidays make ${n} long weekends: all of them, with the days of leave to book, are in `, label: `long weekends ${PLANNER_YEAR} in Catalonia`, after: "." };
 }
 
+/**
+ * One sentence to the work calendar guide (`GUIDES.workCalendar`), for the
+ * hub and the town pages: "calendario laboral 2027 catalunya" lands on the
+ * guide at 8-10 (13 Nov 2026), and the holiday pages, which Google crawls far
+ * more often than the guides, linked it only in the guide list at the foot.
+ */
+export function workCalendarLine(locale: DateLocale): string {
+  const href = GUIDES.workCalendar[locale];
+  if (locale === "ca") return `Els dotze festius del ${PLANNER_YEAR} a tot Catalunya, mes a mes i amb els dies feiners de cada mes i els ponts, són al [calendari laboral ${PLANNER_YEAR} de Catalunya](${href}).`;
+  if (locale === "es") return `Los doce festivos de ${PLANNER_YEAR} en toda Cataluña, mes a mes y con los días laborables de cada mes y los puentes, están en el [calendario laboral ${PLANNER_YEAR} de Cataluña](${href}).`;
+  return `Catalonia's twelve public holidays in ${PLANNER_YEAR}, month by month with the working days in each and the long weekends, are in [Catalonia public holidays ${PLANNER_YEAR}](${href}).`;
+}
+
 export function hubCopy(locale: MuniLocale) {
   const count = SNAPSHOT.municipalities.length;
   const excluded = SNAPSHOT.excluded.length;

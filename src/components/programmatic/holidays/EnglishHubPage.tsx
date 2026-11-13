@@ -8,6 +8,7 @@ import { hubPath as electionsHubPath } from "@/lib/programmatic/elections/paths"
 import { NEXT, YEAR, regionalDays, type HolidayRow } from "@/lib/programmatic/holidays/data";
 import { englishTowns, isLargestTown } from "@/lib/programmatic/holidays/english";
 import { enName, englishHubCopy } from "@/lib/programmatic/holidays/english-copy";
+import { workCalendarLine } from "@/lib/programmatic/holidays/copy";
 import { weekdayDayMonth } from "@/lib/programmatic/holidays/format";
 import { joinList } from "@/lib/programmatic/holidays/names";
 import { GUIDES } from "@/lib/programmatic/holidays/links";
@@ -92,6 +93,7 @@ export function EnglishHubPage() {
             <Link href={GUIDES.bridges2027.en}>{t.bridges.label}</Link>
             {t.bridges.after}
           </p>
+          <p>{renderInline(workCalendarLine("en"))}</p>
 
           <h2 id="towns">{t.townsTitle}</h2>
           <p>{t.townsLead}</p>

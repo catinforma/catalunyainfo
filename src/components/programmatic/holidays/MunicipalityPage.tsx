@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { renderInline } from "@/lib/content/inline";
 
 import { Breadcrumbs, type Crumb } from "@/components/Breadcrumbs";
 import { ShareBar, crumbPath } from "@/components/share/ShareBar";
@@ -8,7 +9,7 @@ import { getMessages } from "@/lib/i18n";
 import { todayInCatalonia } from "@/lib/content/holidays/calendar";
 import { SCHOOL_YEARS } from "@/lib/content/school/calendar";
 import { SchoolFreeDays } from "@/components/programmatic/holidays/SchoolFreeDays";
-import { comarcaLinkLabel, municipalityCopy, displayName, municipalityFaq, municipalityH1, municipalityNextLine, sharedDayLead } from "@/lib/programmatic/holidays/copy";
+import { comarcaLinkLabel, municipalityCopy, displayName, municipalityFaq, municipalityH1, municipalityNextLine, sharedDayLead, workCalendarLine } from "@/lib/programmatic/holidays/copy";
 import { GUIDES } from "@/lib/programmatic/holidays/links";
 import {
   NEXT,
@@ -220,6 +221,8 @@ export function MunicipalityPage({ m, locale }: { m: SnapshotMunicipality; local
               <DateList dates={regionalDays(NEXT, isAran(m)).map((d) => d.date)} locale={locale} />
             </>
           )}
+          {/* The Catalonia-wide 2027 calendar, month by month (13 Nov 2026). */}
+          <p>{renderInline(workCalendarLine(locale))}</p>
           {/* The embeddable 2027 calendar, with this town picked. */}
           <WidgetPlaceLink locale={locale} place={{ kind: "town", m }} />
           {/* The town's confirmed holidays as a calendar feed (.ics). */}

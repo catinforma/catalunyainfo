@@ -23,7 +23,7 @@ import {
   type City,
   type CityDayKind,
 } from "@/lib/programmatic/spain-2027/cities";
-import { cityFaq, cityH1, cityLead, cityListLine, localName, planWords, population } from "@/lib/programmatic/spain-2027/city-copy";
+import { cityAnswer, cityFaq, cityH1, cityLead, cityListLine, localName, planWords, population } from "@/lib/programmatic/spain-2027/city-copy";
 import { KIND_LABEL, compactDates, dayName, runLine, weekdayDate } from "@/lib/programmatic/spain-2027/copy";
 import { cityPath, communityPath, spainBridgesPath, spainHubPath } from "@/lib/programmatic/spain-2027/paths";
 import { BOE_REF, SOURCES } from "@/lib/programmatic/spain-2027/sources";
@@ -88,6 +88,7 @@ export function CityPage({ c }: { c: City }) {
   const neighbours = citiesOf(c.region).filter((x) => x.slug !== c.slug);
   const weekend = weekendLocalDays(c);
   const common = commonLocalDays(c);
+  const answer = cityAnswer(c);
 
   return (
     <article>
@@ -95,8 +96,13 @@ export function CityPage({ c }: { c: City }) {
 
       <div className="ci-shell py-10">
         <div className="ci-prose">
+          {/* The two local days (or their status) in one sentence, then the full list (13 Nov 2026). */}
+          <p className="mt-0" data-answer>
+            <strong>{answer.strong}</strong>
+            {answer.rest}
+          </p>
           {/* Dates first (12 Nov 2026, answer-first layout; docs/SEO_EXPERIMENTS.md): the list is the answer. */}
-          <h2 id="calendario" className="mt-0">Calendario laboral {YEAR} de {c.name}</h2>
+          <h2 id="calendario">Calendario laboral {YEAR} de {c.name}</h2>
           <div className="ci-table-scroll mt-4">
             <table className="ci-local-table">
               <caption className="pb-2 text-left text-sm text-[var(--color-muted)]">

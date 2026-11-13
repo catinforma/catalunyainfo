@@ -19,7 +19,7 @@ export interface HolidayCopy {
   tableTitle: string;
   tableCaption: string;
   tableHeaders: string[];
-  /** `{bcn}`: Barcelona's two local days, linked to its town page (rendered from the payload). */
+  /** `{bcn}`: Barcelona's two local days, linked to its town page (rendered from the payload); `{local}`: the local-days section. */
   tableNote: string;
 
   /**
@@ -68,9 +68,24 @@ export interface HolidayCopy {
   /** One sentence linking the Easter 2027 guide. */
   easterGuide: string;
 
-  /** Local holidays of other towns: when next year's appear, where this year's are. `{towns}`, `{count}` (how many towns have a page). */
+  /**
+   * Local holidays of other towns: when next year's order appears, the days
+   * the largest towns' councils have already approved (table), where this
+   * year's are, and the calendar feeds. `{asOf}` (the day the open data was
+   * read), `{approved}` (towns with council-approved 2027 days), `{shown}`
+   * (rows in the table), `{towns}`, `{count}` (how many towns have a page),
+   * `{example}` (a town page's "add to calendar" block).
+   */
   localTitle: string;
   local: string[];
+  localTableCaption: string;
+  localTableHeaders: [string, string, string];
+  /** The 2027 cell of a town whose council has not approved its days (none read yet). */
+  localNotYet: string;
+  localTableNote: string;
+  localFeeds: string;
+  /** Under the downloadable file: the town feeds, which carry the local days and update themselves. `{link}`: the local section. */
+  calendarTowns: string;
 
   /** The current year, for searches that still name it. `{last}`, `{dec7}`, `{bcn}`. */
   year2026Title: string;
@@ -132,7 +147,7 @@ export const COPY: Record<Locale, HolidayCopy> = {
     tableCaption: "Festius laborals a Catalunya, 2027",
     tableHeaders: ["Data", "Dia", "Festiu"],
     tableNote:
-      "Font: Ordre EMT/52/2026, de 25 de març (DOGC de l'1 d'abril de 2026), publicada també al BOE del 13 d'octubre de 2026. A aquests dies cal afegir-hi dues festes locals que determina cada ajuntament: a {bcn}.",
+      "Font: Ordre EMT/52/2026, de 25 de març (DOGC de l'1 d'abril de 2026), publicada també al BOE del 13 d'octubre de 2026. Cada ajuntament n'hi afegeix dues de locals: a {bcn}; les de les grans ciutats, [més avall]({local}).",
 
     last2026Title: "Els últims festius del 2026",
     last2026:
@@ -200,11 +215,21 @@ export const COPY: Record<Locale, HolidayCopy> = {
     easterGuide:
       "Les botigues, el metro, les festes locals que hi toquen i els ponts de Setmana Santa són a [Setmana Santa 2027 a Catalunya](/ca/guies/setmana-santa-2027-catalunya/).",
 
-    localTitle: "Festes locals del 2027: quan es publiquen",
+    localTitle: "Festes locals del 2027 de les grans ciutats",
     local: [
-      "A més dels dotze festius, cada municipi en té dos de locals, que fixa una ordre del Departament d'Empresa i Treball a proposta dels ajuntaments. Les del 2027 encara no s'han publicat: a 3 de novembre de 2026, les dades obertes de la Generalitat no en tenen cap. Les del 2026 van sortir al DOGC el 17 de desembre de 2025 (Ordre EMT/208/2025).",
-      "Mentrestant, les festes locals del 2026 són a [festius locals per municipi](/ca/festius/), amb una pàgina per a cadascun dels {count} municipis que en tenen ({towns}), i en una sola llista amb cercador a [festius locals de tots els municipis](/ca/guies/festius-locals-catalunya/). Hi afegirem les del 2027 quan surti l'ordre.",
+      "A més dels dotze festius, cada municipi en té dos de locals, que fixa una ordre del Departament d'Empresa i Treball a proposta dels ajuntaments. L'ordre del 2027 encara no ha sortit: a {asOf}, les dades obertes de la Generalitat no en tenen cap. La del 2026 va sortir al DOGC el 17 de desembre de 2025 (Ordre EMT/208/2025).",
+      "Mentrestant, {approved} ajuntaments ja han aprovat els seus dos dies del 2027, segons publiquen ells mateixos. A la taula, les {shown} ciutats més grans de Catalunya: les que ja els tenen aprovats i aquelles de les quals encara no n'hem trobat l'acord, amb els dies del 2026 al costat.",
+      "Les festes locals del 2026 i les del 2027 que ja ha aprovat cada ajuntament són a [festius locals per municipi](/ca/festius/), amb una pàgina per a cadascun dels {count} municipis que en tenen ({towns}), i en una sola llista amb cercador a [festius locals de tots els municipis](/ca/guies/festius-locals-catalunya/). Hi afegirem les de l'ordre del 2027 quan surti.",
     ],
+    localTableCaption: "Festes locals del 2027 a les ciutats més grans de Catalunya",
+    localTableHeaders: ["Municipi", "Festes locals 2027", "El 2026"],
+    localNotYet: "Encara no n'hem trobat l'acord de l'ajuntament",
+    localTableNote:
+      "Dies del 2027 aprovats per cada ajuntament i llegits al seu web, a la seu electrònica o al butlletí provincial: queden pendents de l'ordre del DOGC, que és la que els fa oficials. La font de cada municipi és a la seva pàgina. Els del 2026 són de l'Ordre EMT/208/2025.",
+    localFeeds:
+      "Per tenir-los al mòbil, la pàgina de cada municipi té el bloc «Afegeix al teu calendari»: una subscripció per a Google Calendar, Apple Calendar o Outlook amb els festius confirmats del municipi, els de tot Catalunya i les dues festes locals, que s'actualitza sola i hi afegirà les festes locals del 2027 quan surti l'ordre. Per exemple, el de {example}.",
+    calendarTowns:
+      "Aquest fitxer no s'actualitza ni porta festes locals. Per als festius del teu municipi, amb les dues festes locals i al dia, subscriu-te al calendari de la seva pàgina: ho expliquem a [festes locals del 2027]({link}).",
 
     year2026Title: "Calendari laboral 2026 a Catalunya",
     year2026Intro:
@@ -262,7 +287,7 @@ export const COPY: Record<Locale, HolidayCopy> = {
     tableCaption: "Festivos laborales en Cataluña, 2027",
     tableHeaders: ["Fecha", "Día", "Festivo"],
     tableNote:
-      "Fuente: Orden EMT/52/2026, de 25 de marzo (DOGC del 1 de abril de 2026), recogida también en el BOE del 13 de octubre de 2026. A estas fechas se suman dos festivos locales determinados por cada ayuntamiento: en {bcn}.",
+      "Fuente: Orden EMT/52/2026, de 25 de marzo (DOGC del 1 de abril de 2026), recogida también en el BOE del 13 de octubre de 2026. Cada ayuntamiento añade dos fiestas locales: en {bcn}; las de las grandes ciudades, [más abajo]({local}).",
 
     last2026Title: "Los últimos festivos de 2026",
     last2026:
@@ -331,11 +356,21 @@ export const COPY: Record<Locale, HolidayCopy> = {
     easterGuide:
       "Las tiendas, el metro, las fiestas locales que caen junto a ella y los puentes de Semana Santa están en [Semana Santa 2027 en Cataluña](/es/guias/semana-santa-2027-cataluna/).",
 
-    localTitle: "Fiestas locales 2027: cuándo se publican",
+    localTitle: "Fiestas locales 2027 de las grandes ciudades",
     local: [
-      "Además de los doce festivos, cada municipio tiene dos fiestas locales, que fija una orden del Departament d'Empresa i Treball a propuesta de los ayuntamientos. Las de 2027 todavía no se han publicado: a 3 de noviembre de 2026, los datos abiertos de la Generalitat no tienen ninguna. Las de 2026 salieron en el DOGC el 17 de diciembre de 2025 (Orden EMT/208/2025).",
-      "Mientras tanto, las fiestas locales de 2026 están en [festivos locales por municipio](/es/festivos/), con una página para cada uno de los {count} municipios que las tienen ({towns}), y en una sola lista con buscador en [festivos locales de todos los municipios](/es/guias/festivos-locales-cataluna/). Añadiremos las de 2027 cuando salga la orden.",
+      "Además de los doce festivos, cada municipio tiene dos fiestas locales, que fija una orden del Departament d'Empresa i Treball a propuesta de los ayuntamientos. La orden de 2027 todavía no ha salido: a {asOf}, los datos abiertos de la Generalitat no tienen ninguna. La de 2026 salió en el DOGC el 17 de diciembre de 2025 (Orden EMT/208/2025).",
+      "Mientras tanto, {approved} ayuntamientos ya han aprobado sus dos días de 2027, según publican ellos mismos. En la tabla, las {shown} ciudades más grandes de Cataluña: las que ya los tienen aprobados y aquellas cuyo acuerdo aún no hemos encontrado, con los días de 2026 al lado.",
+      "Las fiestas locales de 2026 y las de 2027 que ya ha aprobado cada ayuntamiento están en [festivos locales por municipio](/es/festivos/), con una página para cada uno de los {count} municipios que las tienen ({towns}), y en una sola lista con buscador en [festivos locales de todos los municipios](/es/guias/festivos-locales-cataluna/). Añadiremos las de la orden de 2027 cuando salga.",
     ],
+    localTableCaption: "Fiestas locales de 2027 en las ciudades más grandes de Cataluña",
+    localTableHeaders: ["Municipio", "Fiestas locales 2027", "En 2026"],
+    localNotYet: "Aún no hemos encontrado el acuerdo del ayuntamiento",
+    localTableNote:
+      "Días de 2027 aprobados por cada ayuntamiento y leídos en su web, en su sede electrónica o en el boletín provincial: quedan pendientes de la orden del DOGC, que es la que los hace oficiales. La fuente de cada municipio está en su página. Los de 2026 son de la Orden EMT/208/2025.",
+    localFeeds:
+      "Para tenerlos en el móvil, la página de cada municipio tiene el bloque «Añádelo a tu calendario»: una suscripción para Google Calendar, Apple Calendar u Outlook con los festivos confirmados del municipio, los de toda Cataluña y las dos fiestas locales, que se actualiza sola y añadirá las fiestas locales de 2027 cuando salga la orden. Por ejemplo, el de {example}.",
+    calendarTowns:
+      "Este archivo no se actualiza ni lleva fiestas locales. Para los festivos de tu municipio, con sus dos fiestas locales y al día, suscríbete al calendario de su página: lo explicamos en [fiestas locales 2027]({link}).",
 
     year2026Title: "Calendario laboral 2026 en Cataluña",
     year2026Intro:
@@ -393,7 +428,7 @@ export const COPY: Record<Locale, HolidayCopy> = {
     tableCaption: "Public holidays in Catalonia, 2027",
     tableHeaders: ["Date", "Day", "Holiday"],
     tableNote:
-      "Source: Order EMT/52/2026 of 25 March (DOGC, 1 April 2026), also listed in the BOE of 13 October 2026. Each municipality adds two local holidays on top of these: in {bcn}.",
+      "Source: Order EMT/52/2026 of 25 March (DOGC, 1 April 2026), also listed in the BOE of 13 October 2026. Each town adds two local holidays: in {bcn}; the largest towns' are [further down]({local}).",
 
     last2026Title: "The last public holidays of 2026",
     last2026:
@@ -461,11 +496,21 @@ export const COPY: Record<Locale, HolidayCopy> = {
     easterGuide:
       "Shops, the metro, the local holidays next to Easter and the long weekends are in [Easter 2027 in Catalonia](/en/guides/easter-2027-catalonia/).",
 
-    localTitle: "Local holidays in 2027: when they are published",
+    localTitle: "Local holidays 2027 in the largest towns",
     local: [
-      "On top of the twelve, each town has two local holidays, set by an order of the Catalan labour department on the town councils' proposals. The 2027 ones are not out yet: on 3 November 2026 the Catalan government's open data had none. The 2026 ones were published in the DOGC on 17 December 2025 (Order EMT/208/2025).",
-      "Until then, each town's 2026 local holidays are in [local holidays in Catalonia](/en/guides/local-holidays-catalonia/). We will add the 2027 ones when the order appears.",
+      "On top of the twelve, each town has two local holidays, set by an order of the Catalan labour department on the town councils' proposals. The 2027 order is not out yet: on {asOf} the Catalan government's open data had none. The 2026 one was published in the DOGC on 17 December 2025 (Order EMT/208/2025).",
+      "Meanwhile, {approved} town councils have already approved their two days for 2027, as they publish themselves. The table has Catalonia's {shown} largest towns: those that have approved theirs and those whose decision we have not found yet, with the 2026 days alongside.",
+      "Each town's 2026 local holidays are in [local holidays in Catalonia](/en/guides/local-holidays-catalonia/). We will add the 2027 ones from the order when it appears.",
     ],
+    localTableCaption: "2027 local holidays in Catalonia's largest towns",
+    localTableHeaders: ["Town", "Local holidays 2027", "In 2026"],
+    localNotYet: "No council decision found yet",
+    localTableNote:
+      "2027 days approved by each town council and read on its website, its e-office or the provincial gazette: they await the DOGC order, which is what makes them official. Each town's source is on its page. The 2026 days are from Order EMT/208/2025.",
+    localFeeds:
+      "To have them on your phone, each town page has an \"Add to your calendar\" box: a subscription for Google Calendar, Apple Calendar or Outlook with the town's confirmed holidays, Catalonia's and its two local days, which updates itself and will pick up the 2027 local days when the order is out. For example, {example}.",
+    calendarTowns:
+      "This file does not update and has no local holidays. For your own town's holidays, with its two local days and kept up to date, subscribe to the calendar on its page: see [local holidays in 2027]({link}).",
 
     year2026Title: "Catalonia public holidays 2026",
     year2026Intro:

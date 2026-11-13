@@ -409,9 +409,9 @@ export const OUTSIDE_CATALONIA_TITLE: Record<Locale, string> = {
 export function outsideCataloniaCallout(locale: Locale): Block {
   const regions = joinList(MONDAY_7_REGIONS[locale], locale);
   const text = {
-    ca: `A ${regions}, el dilluns 7 sí que és festiu i el pont del dissabte 5 al dimarts 8 surt sense demanar cap dia. Els festius de desembre, Nadal i Reis de cada comunitat són a ${b2link("decemberBridgeSpain", "ca", "el pont de desembre 2026 a Espanya")}.`,
-    es: `En ${regions}, el lunes 7 sí es festivo y el puente del sábado 5 al martes 8 sale sin pedir ningún día. Los festivos de diciembre, Navidad y Reyes de cada comunidad están en ${b2link("decemberBridgeSpain", "es", "el puente de diciembre 2026 en España")}.`,
-    en: `In ${regions}, Monday the 7th is a public holiday, so the Saturday 5 to Tuesday 8 break comes without booking a day. Every region's December, Christmas and Epiphany holidays are in ${b2link("decemberBridgeSpain", "en", "December 2026 holidays in Spain")}.`,
+    ca: `A ${regions}, el dilluns 7 sí que és festiu i el pont del dissabte 5 al dimarts 8 surt sense demanar cap dia. Tens ${b2link("decemberBridgeSpain", "ca", "els festius del pont de desembre 2026 a cada comunitat")}, amb Nadal i Reis.`,
+    es: `En ${regions}, el lunes 7 sí es festivo y el puente del sábado 5 al martes 8 sale sin pedir ningún día. Tienes ${b2link("decemberBridgeSpain", "es", "los festivos del puente de diciembre 2026 en cada comunidad")}, con Navidad y Reyes.`,
+    en: `In ${regions}, Monday the 7th is a public holiday, so the Saturday 5 to Tuesday 8 break comes without booking a day. See ${b2link("decemberBridgeSpain", "en", "the December 2026 bridge holidays in every region of Spain")}, with Christmas and Epiphany.`,
   }[locale];
   return callout("info", OUTSIDE_CATALONIA_TITLE[locale], text);
 }

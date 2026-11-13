@@ -4478,3 +4478,77 @@ Catalunya unreadable from the server).
 **Measure** on 1 Dec (`page la-marato 14`, `page loteria 14`) and 14 Dec.
 
 **Outcome:** _pending_
+
+## 2026-11-13 — Work calendar 2027, December bridge, Spain 2027 cities: body answers and internal links, no title touched (deploy; groups `pont-desembre`, `puente-diciembre-espana`)
+
+**Why.** GSC 28 d to 12 Nov (`snapshot.py page …`, a page→query breakdown):
+
+- `/es/guias/calendario-laboral-cataluna/` 1,759 impr. (ca 202): "calendario
+  2027 catalunya con festivos" 53 at 8.8, "calendario laboral 2027 catalunya"
+  40 at 10.0, "calendari laboral 2027 catalunya" 26 at 8.7, "puentes 2027
+  catalunya" 19 at 9.8, "festivos 2027 catalunya" 18 at 10.3; daily position
+  11.8–19 since 31 Oct (dragged by Spain-wide "calendario laboral" at 56 and
+  expired "30 de octubre" queries). Top results (diainternacionalde,
+  fedratecalc, absentify, ara.cat) give the 12 days and Barcelona's; the
+  guide gave every 2027 answer except the other towns' local days, and its
+  local section still said "a 3 de noviembre … ninguna".
+- "festivos puente diciembre": 1,202 impr., 0.3 % CTR (689 at 9.2 on the
+  Catalan ES page, 513 at 10.5 on the Spain page).
+- `/es/festivos/2027/` family: ~1,000–2,000 impr./day at 8–9.6 since 8 Nov;
+  "festivos vigo 2027" 69 at 9.8, "calendario laboral paterna 2027" 30 at 6.6.
+  City pages opened with the full 14-row calendar; the city's two days were
+  only rows in it and the paragraph after it.
+
+**What changed (body and links only).**
+
+1. Work calendar ca/es/en (`holidays` via `pont-desembre`): the local-days H2
+   becomes "Festes locals del 2027 de les grans ciutats" (es/en alike): order
+   status re-read 13 Nov (Generalitat open data b4eh-r8up: newest year 2026),
+   420 councils with approved days, a table of the 15 largest towns (council
+   days with weekday, "acuerdo no encontrado" for Terrassa, Tarragona and
+   Santa Coloma, 2026 days alongside, each linked to its town page), and the
+   town calendar feeds ("Afegeix al teu calendari", Barcelona's linked at
+   `#afegeix-calendari`). The 2027 table note and the line under the .ics
+   download point to it; the FAQ "when are the local days published" gives
+   the council count. `LOCAL_ORDER_CHECKED` test fails 4 Dec; the build stops
+   if `local-2027.json` gets the DOGC order before the section is rewritten.
+2. Holiday hub (ca/es/en) and every town page (ca/es/en): one sentence in the
+   body linking the work calendar ("calendari laboral 2027 de Catalunya", mes
+   a mes, dies feiners, ponts). Deploy only.
+3. Spain December bridge ca/es/en (`puente-diciembre-espana`): the summary box
+   opens with "Festivos del puente de diciembre" (Monday 7 in 9 communities +
+   Melilla, Tuesday 8 everywhere), "Puente de 4 días sin pedir ninguno" (Sat
+   5–Tue 8, where), and where the 7th is a working day, with Catalonia linked
+   ("solo es festivo el martes 8"). CA edition gets the box too.
+4. Catalan December bridge ca/es/en (`pont-desembre`): the "¿No vives en
+   Cataluña?" box links the Spain page as "los festivos del puente de
+   diciembre 2026 en cada comunidad". First paragraph unchanged.
+5. Spain 2027 city pages es/ca/en (129 × 3, deploy only): a first line above
+   the calendar table: "**Fiestas locales de Vigo en 2027: el lunes 29 de
+   marzo y el lunes 16 de agosto.** Las publica el DOG núm. 204…; 14
+   festivos". Pending cities: "aún sin publicar", where and when expected,
+   2026 days, "Boletines consultados el 6 de noviembre de 2026".
+
+**Facts re-read 13 Nov.** Vigo: Xunta open data calendario-laboral-2027 CSV
+(29 Mar, 16 Aug, INE 36057); the DOG HTML answered 500. Telde: BOC 168/3035
+("TELDE. 24 de junio … 17 de noviembre"). Valencian 2027 local list: not in
+the DOGV up to núm. 10493 (13 Nov), scanned through the DOGV API (the 2026
+list, DOGV 10238 of 14 Nov 2025, is found by the same scan) — Paterna stays
+pending. Aragón (precedent 20 Nov), Navarra (2 Dec), Cantabria, Castilla-La
+Mancha, Madrid (11–12 Dec): not re-read; `CITIES_AS_OF` unchanged.
+
+**Confounders.** Answer-first review 19 Nov (the work calendar and both
+bridge pages are in the first group); Spain bridge title window to 19 Nov;
+Catalan ES bridge retitle window to 18 Nov. Demand rises into 4–8 Dec and
+Nov–Jan for 2027: compare position at equal query, not clicks.
+
+**Prediction.** By 1 Dec: Catalan 2027 queries on the work calendar from
+8.7–10.3 to ≤ 7; "festivos puente diciembre" ≤ 7 on one of the two bridge
+pages with CTR > 1 %; `/es/festivos/2027/` city queries ("festivos <city>
+2027") from 8–10 to ≤ 7.
+
+**Measure 20 Nov and 1 Dec**: `snapshot.py page calendario-laboral 7`,
+`page puente-diciembre 7`, `page festivos/2027 7` (+ the scratch page→query
+breakdown).
+
+**Outcome:** _pending_

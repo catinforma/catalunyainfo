@@ -170,6 +170,45 @@ export function cityLead(c: City): string {
   return `${pendingLine(c)} ${capitalise(base)} ya son oficiales (BOE de 13 de octubre de 2026); ${c.name} tiene ${population(c)} habitantes y ${c.capital ? "es" : "está"} ${placeWords(c)}.`;
 }
 
+/**
+ * The answer, in the first line under the H1 (13 Nov 2026): "festivos vigo
+ * 2027", "calendario laboral paterna 2027" ask for the city's two days, which
+ * the page gave only inside the full calendar table and in the paragraph after
+ * it. `strong` is the answer itself, `rest` its source and total; for a city
+ * whose list is not out, the status, where it is expected and the day the
+ * bulletins were read.
+ */
+export function cityAnswer(c: City): { strong: string; rest: string } {
+  const list = local2027(c);
+  const days = localDays(c);
+  if (list && !isZoned(c)) {
+    const island = islandDay(c) ? " y la fiesta insular" : "";
+    return {
+      strong: `Fiestas locales de ${c.name} en ${YEAR}: ${joinList(days.map(withName), "es")}.`,
+      rest: ` Las publica el ${list.source.ref}. Con los ${dayCount(c.region)} festivos ${c.community.de}${island}, son ${holidayCount(c)} festivos en ${YEAR}.`,
+    };
+  }
+  if (list) {
+    return {
+      strong: `Fiestas locales de ${c.name} en ${YEAR}, por zonas: ${(list.mainArea ?? c.name).replace(/^Todo /, "todo ")}, ${joinList(days.map(withName), "es")}.`,
+      rest: ` Las demás zonas, en la tabla de las fiestas locales. Fuente: ${list.source.ref}.`,
+    };
+  }
+  const bulletin = SOURCES[c.region].local.bulletinShort;
+  const when = expectedWords(c);
+  const common = commonLocalDays(c);
+  const status =
+    c.status2027 === "missing"
+      ? ` ${c.note ?? `La lista de ${YEAR} ya ha salido en ${bulletin}, pero no las da.`}`.replace(/\s+/g, " ")
+      : ` Se esperan ${when ? `en ${when}` : "en las próximas semanas"} en ${bulletin}.`;
+  const known = common.length ? ` Una ya se conoce: el ${weekdayDate(common[0]!.date)} (${common[0]!.name}).` : "";
+  const last = c.local2026 ? ` En 2026 fueron ${joinList(c.local2026.days.map((d) => `el ${dayMonth(d.date, "es")}`), "es")}.` : "";
+  return {
+    strong: `Fiestas locales de ${c.name} en ${YEAR}: aún sin publicar.`,
+    rest: `${status}${known}${last} Boletines consultados el ${dayMonthYear(CITIES_AS_OF, "es")}.`,
+  };
+}
+
 function capitalise(text: string): string {
   return text.charAt(0).toUpperCase() + text.slice(1);
 }
