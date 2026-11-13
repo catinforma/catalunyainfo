@@ -5,8 +5,10 @@
  * (gn9e-3qhr, history vjx7-6kcp), under the Generalitat's open-data licence.
  * The creator is written the way the licence asks the data to be cited (the
  * «…» in the snapshot's `terms`), falling back to the publisher. Name and
- * description are the page's own H1 and meta description. No `dateModified`:
- * the browser refreshes the reading, so the date in the HTML is not the last.
+ * description are the page's own H1 and meta description. `dateModified` is
+ * the date of the ACA reading the HTML prints, and only when the render read
+ * it from the ACA (since 13 Nov 2026, routes regenerate every three hours); a
+ * page that fell back to the snapshot carries none.
  */
 
 import type { Locale } from "@/lib/i18n/config";
@@ -34,7 +36,7 @@ function common() {
   };
 }
 
-export function reservoirDataset(r: SnapshotReservoir, locale: Locale) {
+export function reservoirDataset(r: SnapshotReservoir, locale: Locale, dateModified?: string) {
   return datasetSchema({
     path: reservoirPath(locale, r.slug),
     name: reservoirH1(r, locale),
@@ -42,10 +44,11 @@ export function reservoirDataset(r: SnapshotReservoir, locale: Locale) {
     locale,
     ...common(),
     spatialCoverage: `${r.name.charAt(0).toUpperCase()}${r.name.slice(1)}, ${CATALONIA[locale]}`,
+    ...(dateModified ? { dateModified } : {}),
   });
 }
 
-export function reservoirHubDataset(locale: Locale) {
+export function reservoirHubDataset(locale: Locale, dateModified?: string) {
   const t = hubCopy(locale);
   return datasetSchema({
     path: reservoirHubPath(locale),
@@ -54,5 +57,6 @@ export function reservoirHubDataset(locale: Locale) {
     locale,
     ...common(),
     spatialCoverage: CATALONIA[locale],
+    ...(dateModified ? { dateModified } : {}),
   });
 }

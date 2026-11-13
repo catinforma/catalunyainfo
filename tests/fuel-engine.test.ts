@@ -21,7 +21,8 @@ import {
   stationsOf,
   type Place,
 } from "../src/lib/programmatic/fuel/data.ts";
-import { FRESH_HOURS, MAX_SHOWN_HOURS, freshness, matches, median, ministryTimestampToIso, parseCoordinate, parsePrice, rank, type LiveStation } from "../src/lib/programmatic/fuel/live.ts";
+import { FRESH_HOURS, MAX_SHOWN_HOURS, freshness, initialPrices, matches, median, ministryTimestampToIso, parseCoordinate, parsePrice, rank, type LiveStation } from "../src/lib/programmatic/fuel/live.ts";
+import { SERVER_REVALIDATE_SECONDS as FUEL_SERVER_REVALIDATE } from "../src/lib/programmatic/fuel/server.ts";
 import { fromIdescat, fromMinistry } from "../src/lib/programmatic/fuel/names.ts";
 import { FUEL_LOCALES, fuelHubPath, fuelPath, fuelTranslations, type FuelLocale } from "../src/lib/programmatic/fuel/paths.ts";
 import {
@@ -588,7 +589,7 @@ test("sitemap: the site sitemap includes the family with one import and one spre
 /* The route files                                                            */
 /* -------------------------------------------------------------------------- */
 
-test("routes: static forever, one locale each, live data never through ISR", () => {
+test("routes: half-hourly ISR with dynamicParams, one locale each, the list read once in server.ts", () => {
   const read = (p: string) => readFileSync(join(ROOT, "src/app", p), "utf8");
   const pagesFiles: [string, FuelLocale][] = [
     ["(public)/[locale]/gasolineras/page.tsx", "es"],
@@ -602,13 +603,49 @@ test("routes: static forever, one locale each, live data never through ISR", () 
   ];
   for (const [file, locale] of pagesFiles) {
     const source = read(file);
-    assert.match(source, /export const revalidate = false;/, file);
+    // Since 13 Nov 2026 the HTML carries the prices: every route regenerates
+    // on a timer, so every one (hubs too) must allow dynamic params.
+    assert.match(source, new RegExp(`export const revalidate = ${FUEL_SERVER_REVALIDATE};`), file);
+    assert.match(source, /export const dynamicParams = true;/, file);
     assert.match(source, /notFound\(\)/, file);
     assert.ok(source.includes(`"${locale}"`) && !source.includes(`"${locale === "es" ? "ca" : "es"}"`), `${file}: serves ${locale} only`);
+    // The list is read in one place (fuel/server.ts, memoised), never per route.
     assert.doesNotMatch(source, /new Date\(|fetch\(/, file);
-    if (file.split("/").at(-2)!.startsWith("[")) assert.match(source, /export const dynamicParams = true;/, file);
   }
+  const routes = readFileSync(join(ROOT, "src/components/programmatic/fuel/routes.tsx"), "utf8");
+  assert.match(routes, /loadServerPrices\(\)/);
   const route = read("api/fuel/catalonia/route.ts");
   assert.match(route, /export const dynamic = "force-dynamic";/);
   assert.doesNotMatch(route, /export const revalidate/);
+});
+
+test("initialPrices: the page's own ranking with the Ministry's timestamp; nothing from a list over a day old", () => {
+  const stations: LiveStation[] = [
+    { id: "1", b: "A", a: "C/ 1", t: "Manresa", ine: "08113", c: "07", p: "08", e95: 1.5, goa: 1.6 },
+    { id: "2", b: "B", a: "C/ 2", t: "Manresa", ine: "08113", c: "07", p: "08", e95: 1.4 },
+    { id: "3", b: "C", a: "C/ 3", t: "Girona", ine: "17079", c: "20", p: "17", e95: 1.3, goa: 1.5 },
+  ];
+  const updated = "2026-11-13T11:52:46+01:00";
+  const payload = { fecha: "13/11/2026 11:52:46", updated, stations };
+  const now = Date.parse(updated) + 60_000;
+  const manresa = initialPrices(payload, { ine: "08113" }, now)!;
+  assert.equal(manresa.fresh, "fresh");
+  assert.equal(manresa.fecha, "13/11/2026 11:52:46");
+  assert.deepEqual(manresa.rankings.e95.cheapest.map((s) => s.id), ["2", "1"]);
+  assert.equal(manresa.rankings.goa.count, 1);
+  assert.equal(manresa.rankings.glp.count, 0);
+  assert.equal(initialPrices(payload, {}, now)!.rankings.e95.cheapest[0]!.id, "3");
+  assert.equal(initialPrices(payload, {}, Date.parse(updated) + 5 * 3_600_000)!.fresh, "old");
+  assert.equal(initialPrices(payload, {}, Date.parse(updated) + 25 * 3_600_000), null);
+  assert.equal(initialPrices(null, {}, now), null);
+});
+
+test("answer labels: cheapest 95 and diesel first, with the price slot and the station", () => {
+  for (const locale of FUEL_LOCALES) {
+    const l = liveLabels(locale);
+    assert.match(l.cheapestE95, /\{place\}.*\{price\}.*\{station\}/, locale);
+    assert.match(l.cheapestGoa, /\{price\}.*\{station\}/, locale);
+  }
+  const client = readFileSync(join(ROOT, "src/components/programmatic/fuel/FuelPrices.tsx"), "utf8");
+  assert.doesNotMatch(client, /^import (?!type )[^;]*from "@\/lib\/programmatic\/fuel\/(server|upstream|data)";/m, "no server code or snapshot in the browser bundle");
 });

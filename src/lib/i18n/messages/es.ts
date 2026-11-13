@@ -226,6 +226,10 @@ const es: Messages = {
     capNote: "La capacidad se calcula a partir del volumen y el porcentaje que publica la ACA.",
     unavailable: "Ahora mismo no podemos leer los datos de la ACA. Consúltalos directamente en",
     sourceLine: "Datos diarios de",
+    yearAgo: "Hace un año ({date}) estaban al {pct} % (ahora, {pp} puntos).",
+    checked: "Datos consultados en la ACA: {date}, {time} h.",
+    colYear: "Hace un año",
+    rowLink: "Página del embalse {name}",
   },
   conditions: {
     legend: "Leyenda de condiciones",

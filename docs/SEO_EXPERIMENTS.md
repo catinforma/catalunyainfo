@@ -4783,3 +4783,116 @@ pages decay anyway; the 17N rail strike and 29N election bring their own
 traffic; Christmas-holiday demand rises into December.
 
 **Review 27 Nov 2026. Outcome:** _pending_
+
+## 2026-11-13 — Live-data pages: the official figure, its time and the comparisons in the server HTML (reservoirs, Rodalies, fuel; deploy only, no title or description touched)
+
+**Why.** The live tools are the hardest pages to copy, and they sat on page 2.
+GSC 17 Oct–13 Nov (28 days, `snapshot.py page <family> 28` and page × query):
+
+| Page | Impr. | Pos. | Top queries (impr. @ pos.) |
+| --- | --- | --- | --- |
+| `/es/guias/embalses-cataluna-hoy/` | 237 | 15.4 | embalses cataluña 40 @ 17.1, embalses catalunya 37 @ 19.1 |
+| `/es/embalses/` | 163 | 11.6 | embalses cataluña 95 @ 11.2, embalses catalunya 29 @ 10.1 |
+| `/ca/guies/embassaments-catalunya-avui/` | 255 | 15.7 | estat embassaments 20 @ 27.1, embassaments catalunya 11 @ 27.4 |
+| `/ca/embassaments/` | 181 | 9.9 | embassaments catalunya 32 @ 9.7, estat embassaments 7 @ 21.3 |
+| `/es/embalses/sau/` (+ susqueda, la-baells) | 411 (+174, 112) | 12.1 (10.9, 10.2) | pantano de sau hoy 87 @ 9.5, pantano de susqueda hoy 74 @ 9.6 |
+| `/en/reservoirs/` | 87 | 5.9 | water reserves catalunya 7 @ 6.0 |
+| `/es/rodalies/` | 113 | 14.3 | scattered (rodalies hoy 12, retrasos rodalies hoy 48) |
+| `/es/rodalies/r2-sud/` (+ r4, r1, r2-nord) | 395 (+364, 362, 357) | 9.4 (11.6, 11.6, 11.9) | r2 sud 60 @ 8.6 |
+| `/es/gasolineras/`, `/ca/benzineres/` (hubs) | 5, 5 | 8.6, 14.6 | — (place pages noindex since 11 Nov, `low-demand.ts`) |
+
+What the HTML (what Googlebot's first pass and a no-JS reader get) said on
+13 Nov, read with curl:
+- **Reservoir hub and the 27 reservoir pages**: static since 28 Oct; "nivel
+  hoy" printed the **28 Oct** snapshot ("Datos de la ACA leídos el
+  28/10/2026; la lectura del día se carga en el navegador"). Cache-Control
+  `s-maxage=31536000`: Cloudflare kept that until the next deploy's purge.
+- **Rodalies hub and 38 line pages**: no notice at all, only "los avisos se
+  cargan aquí cuando el navegador tiene JavaScript".
+- **Fuel hubs and pages**: the loading skeleton, i.e. "Precios en vigor a las
+  00:00 del 00/00/0000" and "Precio mediano … 0,000 €/l".
+- **Reservoir guide**: already server-rendered (78.1 %, reading of 11 Nov,
+  `s-maxage=10800`), but no year-ago figure and no link from its table to
+  the reservoir pages.
+
+Competitors (WebSearch, 13 Nov): reservoirs = dated news stories (ara.cat,
+iagua, ecoticias; the newest figure in the snippets was January) and data
+pages (iagua.es/data, embalses.net per the module notes); Rodalies = news
+items and the official status page; fuel = aggregators (carwow, carnovo,
+motor.es, casacochecurro) that print the cheapest station, its price and
+"actualizado hoy" in the HTML. The query asks for a number with its date
+(and for Rodalies, "is my line running"); we had the number only after
+JavaScript.
+
+**Which URL owns which query.** Reservoirs: the guide owns the head query
+("embalses cataluña / embassaments catalunya / estat dels embassaments":
+the total and Ter-Llobregat; its title already carries the live % and is in
+the window of the 28 Oct entry until 25 Nov); the hub is the "one by one"
+table and says so in its first line, giving the guide's own total with a
+link to it; each reservoir page owns "pantano de X hoy". Google currently
+ranks the hub higher for the head term (11.2 vs 17.1): see the review rule.
+
+**What changed** (code only: ships with the deploy, no publish group):
+1. **Reservoirs** (`lib/programmatic/reservoirs/server.ts`; routes
+   `revalidate = 10800`, `dynamicParams = true`): the HTML renders the ACA's
+   latest reading (same validation as `/api/reservoirs/levels/`), else the
+   snapshot's with its own date. First line on each reservoir page: "**El
+   embalse de Sau está al 69,6 %** (dato de la ACA del 11/11/2026): 115,46 hm³
+   de 165,81. Desde el 04/11/2026, −2,0 puntos; hace un año, el 11/11/2025,
+   estaba al 55,0 %." Header: "Dato de la ACA del 11/11/2026 · consultado el
+   13/11/2026 a las 12:18" (the ACA portal's HTTP Date, not the build time).
+   Hub: fullest/lowest + the guide's total and link; table gains "cambio en
+   una semana" and "hace un año (dd/mm/aaaa)". Year-ago = the same rules as
+   today's report on the four days up to date − 365 (`loadReservoirsYearAgo`);
+   no comparison when the ACA has no clean day. The "last year" paragraph no
+   longer calls the 28 Oct snapshot "the latest reading". Dataset JSON-LD
+   gets `dateModified` = the reading date, only when the render read the ACA.
+2. **Reservoir guide block** (`components/blocks/ReservoirLevels.tsx`, all
+   three languages): year-ago total ("Hace un año (11 de noviembre de 2025)
+   estaban al 72,9 % (ahora, +5,2 puntos)"), a "hace un año" column, each
+   reservoir name links its page, "Datos consultados en la ACA: 13/11/2026,
+   12:18 h". Guide title/description untouched.
+3. **Rodalies** (`lib/programmatic/rodalies/server.ts`; routes
+   `revalidate = 300`, `dynamicParams = true`): the notices read at render
+   are in the HTML, under "leídos a las 12:18 h (13/11/2026)" and with
+   absolute publication times (a cached copy never says "hoy"); first line
+   "**9 avisos activos** en Rodalies a las 12:18 h del 13 de noviembre de 2026:
+   R1, R2, …" / "**R2 Sud: 1 aviso activo** a las …". Same sources and
+   15-minute rule as the API; a stale or failed read keeps the old fallback.
+   The browser re-reads after mount as before.
+4. **Fuel** (`lib/programmatic/fuel/server.ts`, one memoised read of the
+   Ministry list per process every 10 min; routes `revalidate = 1800`,
+   `dynamicParams = true`): the ten cheapest per product with the Ministry's
+   timestamp in the HTML, and a first line "Gasolina 95 más barata de
+   Barcelona: **1,399 €/l** en TAMOIL (CALLE TUCUMAN, 2). Diésel más barato:
+   …". Only the page's ranking travels in the props, not the 1,500 stations.
+   Dataset `dateModified` = the Ministry's timestamp. The noindex of the
+   place pages (`low-demand.ts`, AdSense) is **not** changed: the head queries
+   ("gasolineras baratas barcelona" 60 @ 30, "gasolineras bonarea" …) land on
+   those pages, so the fuel lever is re-indexing them, owner's decision after
+   AdSense (the 0,000 skeleton they showed is gone).
+5. Cache: Cloudflare rule 2 follows the origin's Cache-Control, so the edge
+   copy now expires with the ISR interval (10800 / 300 / 1800) instead of a
+   year; deploy still purges everything.
+
+**Prediction.** Reservoir pages (Sau, Susqueda, la Baells) and the R-line
+pages move from 9–12 into 5–8 for "pantano de X hoy" / "rX" within 28 days,
+as Google recrawls and sees a dated figure in the first line; CTR up at
+equal position on the reservoir pages (a number in the snippet). The fuel
+hubs gain little (their queries go to the noindex pages). Wrong if the
+reservoir and line pages' average position is unchanged (±1) on 11 Dec.
+
+**Review rules.** 27 Nov (14 days): curl the three families and check the
+HTML still carries a reading/notices/prices with a time no older than the
+ISR interval plus a margin (`grep -c "consultado el\|leídos a las\|Precios en
+vigor"`); GSC per page as in the table. 25 Nov (end of the guide's title
+window): if the hub still outranks the guide for "embalses cataluña" by more
+than 3 positions, retitle the guide to its supporting angle (Ter-Llobregat /
+Barcelona water, how to read the figures) and give the hub the live-% title,
+logging a new entry. 11 Dec (28 days): outcome.
+
+**Confounders.** Rain (reservoir news peaks), Rodalies strikes 17/19/23 Nov
+(the strike guides own those queries and also contain "rodalies"), the
+answer-first review of 19 Nov, AdSense decision on fuel indexing.
+
+**Review 27 Nov 2026 / 11 Dec 2026. Outcome:** _pending_

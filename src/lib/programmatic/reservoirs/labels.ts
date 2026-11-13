@@ -28,7 +28,7 @@ export interface ReadingLabels {
   indicatorNames: Record<Indicator["key"], string>;
   indicatorMissing: string;
   /** Hub table. */
-  cols: { name: string; river: string; capacity: string; full: string; date: string };
+  cols: { name: string; river: string; capacity: string; full: string; date: string; week: string; yearAgo: string };
   /** Hub: the page's own readings; "{date}". */
   tableOwn: string;
   tableLive: string;
@@ -61,7 +61,7 @@ export const READING_LABELS: Record<BlockLocale, ReadingLabels> = {
       siuranaRiudecanyes: "Reserves de Siurana i Riudecanyes",
     },
     indicatorMissing: "La suma surt quan tots els embassaments tenen lectura del mateix dia.",
-    cols: { name: "Embassament", river: "Riu", capacity: "Capacitat (hm³)", full: "Ple", date: "Lectura" },
+    cols: { name: "Embassament", river: "Riu", capacity: "Capacitat (hm³)", full: "Ple", date: "Lectura", week: "Canvi en una setmana (punts)", yearAgo: "Fa un any" },
     tableOwn: "Lectures de l'ACA del {date}, les més recents quan es va generar aquesta pàgina.",
     tableLive: "Lectures més recents de l'ACA, amb la data de cadascuna.",
     tableFailed: "Ara mateix no podem llegir les dades més noves de l'ACA: aquestes són les del {date}.",
@@ -91,7 +91,7 @@ export const READING_LABELS: Record<BlockLocale, ReadingLabels> = {
       siuranaRiudecanyes: "Reservas de Siurana y Riudecanyes",
     },
     indicatorMissing: "La suma aparece cuando todos los embalses tienen lectura del mismo día.",
-    cols: { name: "Embalse", river: "Río", capacity: "Capacidad (hm³)", full: "Lleno", date: "Lectura" },
+    cols: { name: "Embalse", river: "Río", capacity: "Capacidad (hm³)", full: "Lleno", date: "Lectura", week: "Cambio en una semana (puntos)", yearAgo: "Hace un año" },
     tableOwn: "Lecturas de la ACA del {date}, las más recientes cuando se generó esta página.",
     tableLive: "Lecturas más recientes de la ACA, con la fecha de cada una.",
     tableFailed: "Ahora mismo no podemos leer los datos más nuevos de la ACA: estos son los del {date}.",
@@ -121,7 +121,7 @@ export const READING_LABELS: Record<BlockLocale, ReadingLabels> = {
       siuranaRiudecanyes: "Siurana and Riudecanyes reserves",
     },
     indicatorMissing: "The sum appears when every reservoir has a reading of the same day.",
-    cols: { name: "Reservoir", river: "River", capacity: "Capacity (hm³)", full: "Full", date: "Reading" },
+    cols: { name: "Reservoir", river: "River", capacity: "Capacity (hm³)", full: "Full", date: "Reading", week: "Change in a week (points)", yearAgo: "A year ago" },
     tableOwn: "ACA readings of {date}, the latest when this page was generated.",
     tableLive: "The ACA's latest readings, each with its date.",
     tableFailed: "We cannot read the ACA's newest figures right now: these are the ones of {date}.",

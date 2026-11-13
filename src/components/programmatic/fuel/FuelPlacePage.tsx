@@ -19,7 +19,7 @@ import {
   townCount,
   type Place,
 } from "@/lib/programmatic/fuel/data";
-import type { StationFilter } from "@/lib/programmatic/fuel/live";
+import { initialPrices, type LivePayload, type StationFilter } from "@/lib/programmatic/fuel/live";
 import { fuelHubPath, fuelPath, type FuelLocale } from "@/lib/programmatic/fuel/paths";
 import { esName } from "@/lib/programmatic/holidays/names";
 
@@ -63,7 +63,7 @@ function provinceLabel(name: string, locale: FuelLocale): string {
 
 const townName = (name: string, locale: FuelLocale) => (locale === "es" ? esName(name) : name);
 
-export function FuelPlacePage({ place, locale }: { place: Place; locale: FuelLocale }) {
+export function FuelPlacePage({ place, locale, prices = null, now }: { place: Place; locale: FuelLocale; prices?: LivePayload | null; now: number }) {
   const t = sectionTitles(locale);
   const stations = stationsOf(place);
   const brands = brandCounts(stations);
@@ -99,6 +99,7 @@ export function FuelPlacePage({ place, locale }: { place: Place; locale: FuelLoc
             labels={liveLabels(locale)}
             geoportalUrl={GEOPORTAL_HOME}
             expectedRows={Math.min(10, stations.length)}
+            initial={initialPrices(prices, placeFilter(place), now)}
           />
 
           <h2 id="estacions">{t.stations}</h2>

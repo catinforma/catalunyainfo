@@ -1,20 +1,21 @@
 /**
  * Words of the Rodalies pages. Pure: every fact comes from the snapshot
  * (lines and stations, read from Rodalies de Catalunya) or from `official.ts`
- * (pages and rules read on rodalies.gencat.cat on 28 Oct 2026). Nothing here
- * says whether a line is running now: that is the browser's job, from the
- * live notices, so the server HTML can never claim "no incidents".
+ * (pages and rules read on rodalies.gencat.cat on 28 Oct 2026). The one
+ * exception is `alertsAnswer`, which states the notices read at render time
+ * and always prints the time they were read, never "now".
  */
 
 import { b2href } from "@/lib/content/batch02/shared";
 import type { Locale } from "@/lib/i18n/config";
 import { caDayArticle, dayMonthYear } from "@/lib/programmatic/holidays/format";
+import { liveStamp } from "@/lib/programmatic/live-stamp";
 
 import { LINES, SNAPSHOT, accessibleCount, linesInGroup, siblings } from "./data";
 import { LINE_OFFICIAL, OFFICIAL_VERIFIED, PHONE, linePageUrl, officialUrl, xUrl, type ServiceGroup } from "./official";
 import { caLine, hubMeta } from "./pages";
 import { hubPath, linePath, type LineLocale } from "./paths";
-import type { LineId, SnapshotLine, SnapshotStation, SnapshotTransfer } from "./types";
+import type { AlertsOk, LineId, SnapshotLine, SnapshotStation, SnapshotTransfer } from "./types";
 
 const link = (label: string, url: string) => `[${label}](${url})`;
 
@@ -621,4 +622,37 @@ export function hubCopy(locale: Locale): HubCopy {
     sourcesNote: `Official data. Live notices are read when you open the page; everything else on ${read}.`,
     sources: sources(locale),
   };
+}
+
+/* -------------------------------------------------------------------------- */
+/* The answer, first (server HTML, from the notices read at render)           */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * "**3 avisos activos** en Rodalies a las 11:50 h del 13 de noviembre de 2026:
+ * R1, R4, R7." on the hub, "**R2 Sud: ningún aviso activo** a las …" on a line
+ * page. Always with the time the notices were read (`payload.fetchedAt`, the
+ * source's own answer time), never "now". Null without a readable time.
+ */
+export function alertsAnswer(locale: Locale, payload: AlertsOk, line: SnapshotLine | null): string | null {
+  const stamp = liveStamp(payload.fetchedAt, locale);
+  if (!stamp) return null;
+  const alerts = line ? payload.alerts.filter((a) => a.lines.includes(line.id)) : payload.alerts;
+  const n = alerts.length;
+  const when = onDate(stamp.iso, locale);
+  const named = new Set(alerts.flatMap((a) => a.lines));
+  const lines = LINES.filter((l) => named.has(l.id)).map((l) => l.name).join(", ");
+  if (locale === "ca") {
+    const count = n === 0 ? "cap avís actiu" : n === 1 ? "1 avís actiu" : `${n} avisos actius`;
+    if (line) return `**${line.name}: ${count}** a les ${stamp.time} h ${when.startsWith("l'") ? `de ${when}` : when.replace(/^el /, "del ")}.`;
+    return `**${count.charAt(0).toUpperCase()}${count.slice(1)}** a Rodalies a les ${stamp.time} h ${when.startsWith("l'") ? `de ${when}` : when.replace(/^el /, "del ")}${lines ? `: ${lines}` : ""}.`;
+  }
+  if (locale === "es") {
+    const count = n === 0 ? "ningún aviso activo" : n === 1 ? "1 aviso activo" : `${n} avisos activos`;
+    if (line) return `**${line.name}: ${count}** a las ${stamp.time} h ${when.replace(/^el /, "del ")}.`;
+    return `**${count.charAt(0).toUpperCase()}${count.slice(1)}** en Rodalies a las ${stamp.time} h ${when.replace(/^el /, "del ")}${lines ? `: ${lines}` : ""}.`;
+  }
+  const count = n === 0 ? "no active notice" : n === 1 ? "1 active notice" : `${n} active notices`;
+  if (line) return `**${line.name}: ${count}** at ${stamp.time} on ${when}.`;
+  return `**${count.charAt(0).toUpperCase()}${count.slice(1)}** on Rodalies at ${stamp.time} on ${when}${lines ? `: ${lines}` : ""}.`;
 }

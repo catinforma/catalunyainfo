@@ -5,6 +5,8 @@ import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
 import { fuelDescription, fuelTitle, hubMeta } from "@/lib/programmatic/fuel/copy";
 import type { Place } from "@/lib/programmatic/fuel/data";
+import { freshness, type LivePayload } from "@/lib/programmatic/fuel/live";
+import { loadServerPrices } from "@/lib/programmatic/fuel/server";
 import { fuelHubPath, fuelHubTranslations, fuelPath, fuelTranslations, type FuelLocale } from "@/lib/programmatic/fuel/paths";
 import { fuelHubDataset, fuelPlaceDataset } from "@/lib/programmatic/fuel/structured";
 import { breadcrumbSchema, graph } from "@/lib/seo/jsonld";
@@ -26,14 +28,23 @@ export function fuelHubMetadata(locale: FuelLocale): Metadata {
   return buildMetadata({ locale, path: fuelHubPath(locale), title: meta.title, description: meta.description, translations: fuelHubTranslations() });
 }
 
-export function FuelHubRoute({ locale }: { locale: FuelLocale }) {
+/** The Ministry's list for this render and its time, when it is no more than a day old. */
+async function pricesForRender(): Promise<{ prices: LivePayload | null; now: number; dateModified?: string }> {
+  const prices = await loadServerPrices();
+  const now = Date.now();
+  const usable = prices && freshness(prices.updated, now) !== "stale" ? prices : null;
+  return { prices: usable, now, dateModified: usable?.updated ?? undefined };
+}
+
+export async function FuelHubRoute({ locale }: { locale: FuelLocale }) {
+  const { prices, now, dateModified } = await pricesForRender();
   return (
     <>
       <SiteHeader locale={locale} translations={fuelHubTranslations()} activeSection={null} />
       <main id="main">
-        <FuelHubPage locale={locale} />
+        <FuelHubPage locale={locale} prices={prices} now={now} />
       </main>
-      <JsonLd json={graph([breadcrumbSchema(hubCrumbs(locale)), fuelHubDataset(locale)])} />
+      <JsonLd json={graph([breadcrumbSchema(hubCrumbs(locale)), fuelHubDataset(locale, dateModified)])} />
       <SiteFooter locale={locale} />
     </>
   );
@@ -49,14 +60,15 @@ export function fuelPlaceMetadata(locale: FuelLocale, place: Place): Metadata {
   });
 }
 
-export function FuelPlaceRoute({ locale, place }: { locale: FuelLocale; place: Place }) {
+export async function FuelPlaceRoute({ locale, place }: { locale: FuelLocale; place: Place }) {
+  const { prices, now, dateModified } = await pricesForRender();
   return (
     <>
       <SiteHeader locale={locale} translations={fuelTranslations(place.kind, place.slug)} activeSection={null} />
       <main id="main">
-        <FuelPlacePage place={place} locale={locale} />
+        <FuelPlacePage place={place} locale={locale} prices={prices} now={now} />
       </main>
-      <JsonLd json={graph([breadcrumbSchema(placeCrumbs(place, locale)), fuelPlaceDataset(place, locale)])} />
+      <JsonLd json={graph([breadcrumbSchema(placeCrumbs(place, locale)), fuelPlaceDataset(place, locale, dateModified)])} />
       <SiteFooter locale={locale} />
     </>
   );

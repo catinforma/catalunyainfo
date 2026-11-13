@@ -5,6 +5,7 @@ import { ShareBar, crumbPath } from "@/components/share/ShareBar";
 import { getMessages } from "@/lib/i18n";
 import { GEOPORTAL_HOME, hubLead, hubMeta, liveLabels, placeName, readLine, sectionTitles } from "@/lib/programmatic/fuel/copy";
 import { MUNICIPALITIES, STATIONS, chains, citiesIn, comarquesIn, provinces } from "@/lib/programmatic/fuel/data";
+import { initialPrices, type LivePayload } from "@/lib/programmatic/fuel/live";
 import { fuelHubPath, fuelPath, type FuelLocale } from "@/lib/programmatic/fuel/paths";
 
 import { FuelPrices } from "./FuelPrices";
@@ -24,7 +25,7 @@ export function hubCrumbs(locale: FuelLocale): Crumb[] {
 const provinceLabel = (name: string, locale: FuelLocale) => (locale === "es" ? `Provincia de ${name}` : `Província de ${name}`);
 
 /** The family's index: Catalonia's live table and a link to every page, by province. */
-export function FuelHubPage({ locale }: { locale: FuelLocale }) {
+export function FuelHubPage({ locale, prices = null, now }: { locale: FuelLocale; prices?: LivePayload | null; now: number }) {
   const t = sectionTitles(locale);
   const { stations, towns } = hubTotals();
   const meta = hubMeta(locale, stations);
@@ -58,6 +59,7 @@ export function FuelHubPage({ locale }: { locale: FuelLocale }) {
             locale={locale}
             labels={liveLabels(locale)}
             geoportalUrl={GEOPORTAL_HOME}
+            initial={initialPrices(prices, {}, now)}
           />
 
           <h2 id="zones">{t.provinces}</h2>

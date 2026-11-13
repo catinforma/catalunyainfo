@@ -185,3 +185,30 @@ export function freshness(updated: string | null, now: number): Freshness {
   if (hours <= MAX_SHOWN_HOURS) return "old";
   return "stale";
 }
+
+/* -------------------------------------------------------------------------- */
+/* The server's first read (13 Nov 2026)                                      */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * What the server HTML shows before the browser reads the list itself: the
+ * Ministry's timestamp and the ranking of each product for the page's filter,
+ * never the ~1,500 stations (they would travel in every page's props). Built
+ * at render from the list the route read (`server.ts`); null when there is no
+ * list or it is more than a day old, so the HTML then falls back to the
+ * Geoportal text exactly as before.
+ */
+export interface InitialPrices {
+  fecha: string;
+  updated: string | null;
+  fresh: Exclude<Freshness, "stale">;
+  rankings: Record<Fuel, FuelRanking>;
+}
+
+export function initialPrices(payload: LivePayload | null, filter: StationFilter, now: number): InitialPrices | null {
+  if (!payload) return null;
+  const fresh = freshness(payload.updated, now);
+  if (fresh === "stale") return null;
+  const rankings = Object.fromEntries(FUELS.map((f) => [f, rank(payload.stations, filter, f)])) as Record<Fuel, FuelRanking>;
+  return { fecha: payload.fecha, updated: payload.updated, fresh, rankings };
+}

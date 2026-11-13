@@ -5,9 +5,11 @@ import { ShareBar, crumbPath } from "@/components/share/ShareBar";
 import { JsonLd } from "@/components/JsonLd";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
+import { renderInline } from "@/lib/content/inline";
 import { getMessages } from "@/lib/i18n";
 import { INTL_LOCALE, type Locale } from "@/lib/i18n/config";
-import { hubCopy } from "@/lib/programmatic/rodalies/copy";
+import { alertsAnswer, hubCopy } from "@/lib/programmatic/rodalies/copy";
+import type { AlertsOk } from "@/lib/programmatic/rodalies/types";
 import { SNAPSHOT } from "@/lib/programmatic/rodalies/data";
 import { officialUrl } from "@/lib/programmatic/rodalies/official";
 import { hubPath, hubTranslations } from "@/lib/programmatic/rodalies/paths";
@@ -25,9 +27,10 @@ export function hubCrumbs(locale: Locale): Crumb[] {
 }
 
 /** The family's index: live notices on every line, the lines, and where each goes. */
-export function HubPage({ locale }: { locale: Locale }) {
+export function HubPage({ locale, initial = null }: { locale: Locale; initial?: AlertsOk | null }) {
   const t = hubCopy(locale);
   const crumbs = hubCrumbs(locale);
+  const answer = initial ? alertsAnswer(locale, initial, null) : null;
 
   return (
     <>
@@ -37,7 +40,8 @@ export function HubPage({ locale }: { locale: Locale }) {
           <div className="ci-shell py-5 md:py-8 lg:py-12">
             <Breadcrumbs items={crumbs} locale={locale} />
             <h1 className="ci-measure">{t.h1}</h1>
-            <p className="ci-measure mt-4 text-lg text-[var(--color-ink-soft)]">{t.lead}</p>
+            {answer ? <p className="ci-measure mt-4 text-lg">{renderInline(answer)}</p> : null}
+            <p className={`ci-measure ${answer ? "mt-3 text-base" : "mt-4 text-lg"} text-[var(--color-ink-soft)]`}>{t.lead}</p>
             <div className="mt-5 flex flex-wrap items-center gap-x-5 gap-y-2 text-xs text-[var(--color-muted)]">
               <span className="ci-verified">
                 <span className="ci-verified-dot" aria-hidden="true" />
@@ -58,6 +62,7 @@ export function HubPage({ locale }: { locale: Locale }) {
               lineNames={lineNames()}
               lineHrefs={lineHrefs(locale)}
               statusUrl={officialUrl.status(locale)}
+              initial={initial}
             />
 
             {t.visitorTitle ? (

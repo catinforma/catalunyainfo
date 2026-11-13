@@ -6,10 +6,13 @@ import { fuelHubAllowed } from "@/lib/programmatic/fuel/routing";
 
 /**
  * /ca/benzineres/ — les benzineres més barates de Catalunya i totes les
- * pàgines de la família. Només `ca`. L'HTML és estàtic (sense preus); la taula
- * en directe s'omple al navegador des de /api/fuel/catalonia/.
+ * pàgines de la família. Només `ca`. ISR cada mitja hora amb els preus a l'HTML
+ * (lib/programmatic/fuel/server.ts); el navegador els torna a llegir.
  */
-export const revalidate = false;
+/** SERVER_REVALIDATE_SECONDS in lib/programmatic/fuel/server.ts (a literal: Next reads it statically). */
+export const revalidate = 1800;
+// Regenerated on a timer: self-hosted, a dynamicParams = false route then 404s.
+export const dynamicParams = true;
 
 type Params = Promise<{ locale: string }>;
 

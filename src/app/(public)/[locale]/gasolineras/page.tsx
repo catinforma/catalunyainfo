@@ -6,10 +6,13 @@ import { fuelHubAllowed } from "@/lib/programmatic/fuel/routing";
 
 /**
  * /es/gasolineras/ — Catalonia's cheapest stations now and every fuel page.
- * `es` only. The HTML is static (no prices); the live table is filled in the
- * browser from /api/fuel/catalonia/.
+ * `es` only. ISR every half hour with the ten cheapest per product in the
+ * HTML (lib/programmatic/fuel/server.ts); the browser re-reads /api/fuel/catalonia/.
  */
-export const revalidate = false;
+/** SERVER_REVALIDATE_SECONDS in lib/programmatic/fuel/server.ts (a literal: Next reads it statically). */
+export const revalidate = 1800;
+// Regenerated on a timer: self-hosted, a dynamicParams = false route then 404s.
+export const dynamicParams = true;
 
 type Params = Promise<{ locale: string }>;
 

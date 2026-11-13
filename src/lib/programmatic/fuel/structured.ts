@@ -5,8 +5,9 @@
  * suministro de combustibles…", CC BY 4.0, recorded in the snapshot's
  * `sources.prices`). The page filters them by place and orders them by price;
  * the markup names the Ministry as creator and its licence, and takes the
- * page's own H1 and meta description. No `dateModified`: the prices are read
- * live in the browser, so no single date in the HTML would be true.
+ * page's own H1 and meta description. `dateModified` is the Ministry's own
+ * timestamp of the list the HTML prints (since 13 Nov 2026 the routes render
+ * it, every half hour); none when the render had no current list.
  */
 
 import { datasetSchema } from "@/lib/seo/jsonld";
@@ -33,7 +34,7 @@ function common() {
   return { creator: prices.publisher, license: prices.licenceUrl, isBasedOn: [prices.url] };
 }
 
-export function fuelPlaceDataset(place: Place, locale: FuelLocale) {
+export function fuelPlaceDataset(place: Place, locale: FuelLocale, dateModified?: string) {
   return datasetSchema({
     path: fuelPath(locale, place.kind, place.slug),
     name: fuelH1(place, locale),
@@ -41,10 +42,11 @@ export function fuelPlaceDataset(place: Place, locale: FuelLocale) {
     locale,
     ...common(),
     spatialCoverage: spatial(place, locale),
+    ...(dateModified ? { dateModified } : {}),
   });
 }
 
-export function fuelHubDataset(locale: FuelLocale) {
+export function fuelHubDataset(locale: FuelLocale, dateModified?: string) {
   const meta = hubMeta(locale, STATIONS.stations.length);
   return datasetSchema({
     path: fuelHubPath(locale),
@@ -53,5 +55,6 @@ export function fuelHubDataset(locale: FuelLocale) {
     locale,
     ...common(),
     spatialCoverage: CATALONIA[locale],
+    ...(dateModified ? { dateModified } : {}),
   });
 }
