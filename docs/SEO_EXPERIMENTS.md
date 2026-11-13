@@ -5053,3 +5053,87 @@ re-read every 10 days until 19 Dec (test fails otherwise: next by 23 Nov);
 the 2026-27 table fails a test from 15 Jan 2027 (after-season pass).
 
 **Review 1 Dec 2026, 4 Jan 2027. Outcome:** _pending_
+
+## 2026-11-13 — "Precio de la luz hoy y mañana (PVPC)", Spain-wide live page (new family, es/ca/en; ships with the deploy, no publish group)
+
+**What.** Today's and tomorrow's PVPC 2.0TD price for every hour, read from
+Red Eléctrica and printed in the server HTML: the answer first (cheapest and
+dearest hour, daily average, the current hour, today vs yesterday), an SVG
+bar chart coloured by 2.0TD period with the current hour ringed, the 24-row
+table, a Ceuta/Melilla table (their periods start an hour later), when
+tomorrow is published, what the PVPC is and who has it, punta/llano/valle
+schedule, what the price includes, the 15-minute market note and the bono
+social links. Demand (research_notes/spain-utilities-opportunities-nov2026.md
+row 4): "precio luz" 269k + "precio luz hoy" 167k + "tarifa luz" 66k +
+"precio luz mañana" 23k + "pvpc" 11k a month (overlapping, ×0.5–1.5), a daily
+habit; competitors are comparators/lead-gen and none states when tomorrow's
+price is published.
+
+- URLs: `/es/precio-luz/`, `/es/precio-luz/manana/`, `/ca/preu-llum/`,
+  `/ca/preu-llum/dema/`, `/en/electricity-price-spain/`,
+  `/en/electricity-price-spain/tomorrow/` (sitemap + hreflang, x-default en,
+  lastModified = today 00:00 Madrid, changefreq hourly).
+- Data: REData `GET https://apidatos.ree.es/es/datos/mercados/precios-mercados-tiempo-real?start_date=<yesterday>T00:00&end_date=<tomorrow>T23:59&time_trunc=hour`,
+  series id `1001` ("PVPC"), €/MWh, one value per hour with the Madrid offset
+  on each instant (24/day; 23 on 29 Mar 2026, 25 on 25 Oct 2026, both
+  checked). Since 1 Oct 2025 the spot series (id 600) has 96 quarter-hours a
+  day; the PVPC is still hourly. REData has no PVPC for Canarias/Baleares/
+  Ceuta/Melilla (geo_ids 8742–8745 return 400): the e·sios daily file
+  `https://api.esios.ree.es/archives/70/download_json?locale=es&date=<d>`
+  (open, no token) has `PCB` (Península, Canarias, Baleares — equal to REData)
+  and `CYM` (Ceuta y Melilla); used for the CYM column only, when PCB matches.
+  Publication: "antes de las 20 h 15 de cada día" (PO 14.12, BOE-A-2023-15276
+  §4); REData showed last-update 20:46 on 24 Oct, 28 Mar and 12 Nov 2026.
+- Caching: routes `revalidate = 900`; one read per process memoised 5 min
+  (failure 1 min) for all six pages + metadata + `/api/pvpc/today/`; fetches
+  through the data cache (revalidate 900), 20 s timeout each (first TLS
+  connect from the VPS took 5–11 s). Fallback: last good answer in memory and
+  in `/srv/catalunyainfo/shared/cache/pvpc-last-good.json`
+  (`PVPC_SNAPSHOT_FILE`); a held day is printed only for its own date; no
+  day → "no hemos podido leer…" + e·sios link, never a figure.
+- Structured data: BreadcrumbList + Dataset (creator Red Eléctrica,
+  temporalCoverage = the day shown, dateModified = REE's last-update of the
+  series) only when the page prints that day's prices.
+- "Avui a Catalunya" (`/ca/avui/`, `/es/hoy/`, `/en/today/`): new item "Quant
+  costa la llum avui?" (current hour, cheapest hour, average; client island on
+  `/api/pvpc/today/`, CDN 5 min; refuses another day's prices).
+- Reuse terms: REE legal notice §5.1 allows publishing its data "for
+  information only, and not for commercial purposes", naming REE as source,
+  unaltered, with the last-update date. The pages do all three. **Owner
+  decision before ads run on these URLs:** ask REE for written authorisation
+  or keep them ad-free.
+- Tests: `tests/pvpc.test.ts` (committed REE samples in
+  `tests/fixtures/pvpc/`: parser, DST days, periods incl. holidays and
+  Ceuta/Melilla, cheapest/dearest/average, fallback and restart, fake-fetch
+  upstream, routes' revalidate literal, Dataset, brief API).
+
+**Baseline:** 0 (no page; GSC has no PVPC query for the site).
+
+**Prediction.**
+- Indexed within 7 days of the deploy (IndexNow the six URLs).
+- The head ("precio luz", "precio luz hoy") is authority-bound (Selectra,
+  tarifaluzhora, OMIE/REE, big media): expect positions 30–60 in December.
+  The long tail ("precio luz mañana", "a qué hora se publica el precio de la
+  luz", "pvpc ceuta", "precio luz hoy por horas", Catalan "preu llum avui")
+  is where page 1 is possible.
+- By 15 Jan 2027: 3,000–15,000 impressions/28 days across the six URLs, CTR
+  1–3%, mostly es; "mañana" queries peak 20:00–23:00 (GA4 hour report).
+- Wrong if under 1,000 impressions/28 days by 15 Jan, or not indexed by
+  27 Nov.
+
+**Measure:**
+- 20 Nov: `batch_url_inspection` on the six URLs (rendered HTML must show
+  the prices and the chart); Rich Results test: Dataset valid, no errors.
+- 27 Nov (review 1): `snapshot.py page precio-luz 14`, `page preu-llum 14`,
+  `page electricity-price-spain 14`; check `journalctl -u catalunyainfo` for
+  REE timeouts; check the kept file exists and is from today.
+- 15 Jan 2027 (review 2): outcome; if the "mañana" page beats the hub on
+  CTR, move the "hacia las 20:15" answer into the hub's title.
+
+**Upkeep:** none daily (automatic). Check yearly that series 1001 still exists
+and that the PVPC is still hourly (a quarter-hour PVPC would change the
+table: the parser rejects a day whose hours do not match, so the page falls
+back instead of printing wrong rows). If CNMC changes the 2.0TD periods,
+update `periods.ts` (Circular 3/2020 art. 7.3).
+
+**Outcome:** _pending_

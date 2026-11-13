@@ -10,6 +10,7 @@ import { SiteHeader } from "@/components/SiteHeader";
 import type { Locale } from "@/lib/i18n/config";
 import {
   aboutParagraphs,
+  electricityFallback,
   fuelFallback,
   holidayFallback,
   onDate,
@@ -36,9 +37,10 @@ import {
 } from "@/lib/programmatic/today/data";
 import { todaySchemas, todayCrumbs } from "@/lib/programmatic/today/page";
 import { todayTranslations } from "@/lib/programmatic/today/paths";
+import { pvpcPath } from "@/lib/programmatic/pvpc/paths";
 import { graph } from "@/lib/seo/jsonld";
 
-import { FuelToday, HolidayToday, ReservoirsToday, RodaliesToday, SnowToday, StrikesToday, TodayDate, WeekendToday } from "./TodayLive";
+import { ElectricityToday, FuelToday, HolidayToday, ReservoirsToday, RodaliesToday, SnowToday, StrikesToday, TodayDate, WeekendToday } from "./TodayLive";
 
 /**
  * "Avui a Catalunya" / "Hoy en Cataluña" / "Today in Catalonia".
@@ -64,6 +66,8 @@ const LINK_WORDS: Record<Locale, Record<string, string>> = {
     reservoirsHub: "Embassaments un per un",
     reservoirsGuide: "Embassaments avui: el total i el Ter-Llobregat",
     fuelHub: "Benzineres més barates per municipi i comarca",
+    electricityToday: "Preu de la llum avui, hora a hora",
+    electricityTomorrow: "Preu de la llum demà",
     weekendAgenda: "Què fer aquest cap de setmana",
     weekendHub: "Fires i mercats per zones",
     weekendBridge: "El pont de desembre",
@@ -81,6 +85,8 @@ const LINK_WORDS: Record<Locale, Record<string, string>> = {
     reservoirsHub: "Embalses uno por uno",
     reservoirsGuide: "Embalses hoy: el total y el Ter-Llobregat",
     fuelHub: "Gasolineras más baratas por municipio y comarca",
+    electricityToday: "Precio de la luz hoy, hora a hora",
+    electricityTomorrow: "Precio de la luz mañana",
     weekendAgenda: "Qué hacer este fin de semana",
     weekendHub: "Ferias y mercados por zonas",
     weekendBridge: "El puente de diciembre",
@@ -98,6 +104,8 @@ const LINK_WORDS: Record<Locale, Record<string, string>> = {
     reservoirsHub: "Each reservoir",
     reservoirsGuide: "Reservoir levels today: the total and Ter-Llobregat",
     fuelHub: "Cheapest fuel by town (in Spanish)",
+    electricityToday: "Electricity price today, hour by hour",
+    electricityTomorrow: "Electricity price tomorrow",
     weekendAgenda: "Things to do this weekend",
     weekendHub: "",
     weekendBridge: "The December long weekend",
@@ -129,6 +137,10 @@ function itemLinks(locale: Locale): Record<ItemKey, LinkItem[]> {
       { label: w.reservoirsGuide!, href: l.reservoirs.guide },
     ],
     fuel: [{ label: w.fuelHub!, href: l.fuel.hub }],
+    electricity: [
+      { label: w.electricityToday!, href: pvpcPath(locale, "today") },
+      { label: w.electricityTomorrow!, href: pvpcPath(locale, "tomorrow") },
+    ],
     weekend: some([
       { label: w.weekendAgenda!, href: l.weekend.agenda },
       l.weekend.hub ? { label: w.weekendHub!, href: l.weekend.hub } : null,
@@ -173,6 +185,7 @@ const IDS: Record<ItemKey, string> = {
   rodalies: "rodalies",
   reservoirs: "embassaments",
   fuel: "carburant",
+  electricity: "llum",
   weekend: "cap-de-setmana",
   snow: "neu",
 };
@@ -239,6 +252,12 @@ export function TodayPage({ locale }: { locale: Locale }) {
               <FuelToday locale={locale}>
                 <Fallback text={fuelFallback(locale)} />
               </FuelToday>
+            </Item>
+
+            <Item id={IDS.electricity} title={copy.headings.electricity} links={links.electricity} source={sourceLine("electricity", locale)}>
+              <ElectricityToday locale={locale}>
+                <Fallback text={electricityFallback(locale)} />
+              </ElectricityToday>
             </Item>
 
             <Item

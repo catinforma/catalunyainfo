@@ -21,6 +21,8 @@ import { editionSitemapEntries } from "@/lib/programmatic/spain-2027/editions";
 import { spainDaySitemapEntries, spainSitemapEntries } from "@/lib/programmatic/spain-2027/paths";
 import { widgetSitemapEntries } from "@/lib/programmatic/embed-2027/places";
 import { leaveSitemapEntries } from "@/lib/programmatic/leave-2027/places";
+import { pvpcSitemapEntries } from "@/lib/programmatic/pvpc/pages";
+import { madridDate } from "@/lib/programmatic/pvpc/time";
 
 /**
  * Cached for an hour (ISR) and refreshed at once by every publish, and by the
@@ -161,6 +163,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...widgetSitemapEntries(),
     // "Com aprofitar les vacances el 2027": the leave planner, in ca, es and en.
     ...leaveSitemapEntries(),
+    // Precio de la luz hoy / mañana (PVPC), Spain-wide, in es, ca and en.
+    ...pvpcSitemapEntries(madridDate(Date.now())),
     ...fuelSitemapEntries(),
     ...rodaliesSitemap(),
     ...reservoirSitemapEntries(),

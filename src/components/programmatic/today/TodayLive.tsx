@@ -6,6 +6,9 @@ import { Fragment, useEffect, useState, type ReactNode } from "react";
 import { freshness, type LivePayload as FuelPayload } from "@/lib/programmatic/fuel/live";
 import { addDays, capitalize, dayMonth, longDate, weekdayDayMonth, weekdayName } from "@/lib/programmatic/holidays/format";
 import { todayInMadrid } from "@/lib/programmatic/holidays/status";
+import { caEl, liveStamp } from "@/lib/programmatic/live-stamp";
+import { PVPC_TODAY_ENDPOINT, briefAt, parseBriefPayload } from "@/lib/programmatic/pvpc/brief";
+import { perKwh } from "@/lib/programmatic/pvpc/periods";
 import {
   LEVELS_ENDPOINT,
   formatDate as formatReadingDate,
@@ -435,6 +438,41 @@ export function FuelToday({ locale, children }: { locale: TodayLocale; children:
         <time dateTime={payload.updated ?? undefined}>{fill(t.median, { n: new Intl.NumberFormat(intl).format(count), date, time })}</time>
       </p>
       {fresh === "old" ? <p className="ci-brief-line">{fill(t.old, { date, time })}</p> : null}
+    </div>
+  );
+}
+
+/* -------------------------------------------------------------------------- */
+/* Electricity (PVPC)                                                         */
+/* -------------------------------------------------------------------------- */
+
+export function ElectricityToday({ locale, children }: { locale: TodayLocale; children: ReactNode }) {
+  const state = useEndpoint(PVPC_TODAY_ENDPOINT, parseBriefPayload);
+  const t = TODAY_LABELS[locale].electricity;
+  if (state.kind === "idle") return <>{children}</>;
+  if (state.kind === "loading") return <Loading text={t.loading} />;
+  const payload = state.value;
+  // Prices of another day (REE down past midnight) are never shown as today's.
+  const brief = payload ? briefAt(payload, state.now.getTime()) : null;
+  if (!payload || !brief) return <Answer tone="warn">{t.failed}</Answer>;
+  const decimals = (eurMwh: number) => perKwh(eurMwh).toFixed(4);
+  const price = (eurMwh: number) => (locale === "en" ? `€${decimals(eurMwh)}/kWh` : `${decimals(eurMwh).replace(".", ",")} €/kWh`);
+  const range = (h: { label: { from: string; to: string } }) => `${h.label.from}–${h.label.to}`;
+  const stamp = liveStamp(payload.fetchedAt, locale);
+  const { current, summary } = brief;
+  return (
+    <div aria-live="polite">
+      <Answer>{current ? fill(t.now, { range: range(current), price: price(current.price) }) : fill(t.average, { price: price(summary.average) })}</Answer>
+      <p className="ci-brief-line">
+        {fill(t.cheapest, { range: range(summary.cheapest), price: price(summary.cheapest.price) })}
+        {current ? ` · ${fill(t.average, { price: price(summary.average) })}` : null}
+      </p>
+      {payload.tomorrow ? <p className="ci-brief-line">{t.tomorrow}</p> : null}
+      {stamp ? (
+        <p className="ci-brief-note">
+          <time dateTime={payload.fetchedAt}>{fill(t.note, { date: locale === "ca" ? caEl(stamp.date) : stamp.date, time: stamp.time })}</time>
+        </p>
+      ) : null}
     </div>
   );
 }
