@@ -34,6 +34,9 @@ import { smiSitemapEntries } from "@/lib/programmatic/smi/page";
 import { ipcSitemapEntries } from "@/lib/programmatic/ipc/page";
 import { letrasSitemapEntries } from "@/lib/programmatic/treasury-bills/page";
 import { LETRAS_SNAPSHOT } from "@/lib/programmatic/treasury-bills/data";
+import { euriborSitemapEntries } from "@/lib/programmatic/euribor/page";
+import { EURIBOR_SNAPSHOT } from "@/lib/programmatic/euribor/data";
+import { mortgageSitemapEntries } from "@/lib/programmatic/mortgage/page";
 
 /**
  * Cached for an hour (ISR) and refreshed at once by every publish, and by the
@@ -195,6 +198,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...ipcSitemapEntries(),
     // "Letras del Tesoro" (calculators family, group "official"), in es, ca and en; last modified on the newest snapshot auction.
     ...letrasSitemapEntries(LETRAS_SNAPSHOT.results),
+    // "Euríbor hoy" and "Calculadora de hipoteca" (calculators family, group "housing"), in es, ca and en; last modified on the snapshot's newest BOE day.
+    ...euriborSitemapEntries(EURIBOR_SNAPSHOT.series),
+    ...mortgageSitemapEntries(EURIBOR_SNAPSHOT.series),
     ...fuelSitemapEntries(),
     ...rodaliesSitemap(),
     ...reservoirSitemapEntries(),

@@ -28,6 +28,8 @@ const { workingDaysEditions } = await import("../src/lib/programmatic/working-da
 const { smiEditions } = await import("../src/lib/programmatic/smi/copy.ts");
 const { ipcEditions } = await import("../src/lib/programmatic/ipc/copy.ts");
 const { letrasEditions } = await import("../src/lib/programmatic/treasury-bills/copy.ts");
+const { euriborEditions } = await import("../src/lib/programmatic/euribor/copy.ts");
+const { mortgageEditions } = await import("../src/lib/programmatic/mortgage/copy.ts");
 const { PATHS: TOOL_PATHS } = await import("../src/lib/content/home-tools.ts");
 
 // Titles and descriptions of every programmatic page.
@@ -101,6 +103,8 @@ test("every URL llms.txt names is a page a family or guide publishes", () => {
     ...Object.values(smiEditions()),
     ...Object.values(ipcEditions()),
     ...Object.values(letrasEditions()),
+    ...Object.values(euriborEditions()),
+    ...Object.values(mortgageEditions()),
   ]);
   for (const tool of liveTools()) {
     for (const href of Object.values(tool.hubs)) assert.ok(known.has(href!), `${tool.name}: ${href} is not a published page`);

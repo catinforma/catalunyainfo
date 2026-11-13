@@ -5666,3 +5666,57 @@ page says the next auction is not in the published calendar.
 **Measure 15 Dec, 1 Feb, 15 Feb**: `snapshot.py page /calculadoras/letras-del-tesoro/ 28`.
 
 **Outcome:** _pending_
+
+## 2026-11-13 — Two housing tools: "Euríbor hoy" (official monthly figure) and "Calculadora de hipoteca" (with revision), es + ca + en (deploy only; no publish group)
+
+**What.** `/es/calculadoras/euribor-hoy/`, `/ca/calculadores/euribor-avui/`,
+`/en/calculators/euribor-today/` and `/es/calculadoras/hipoteca/`,
+`/ca/calculadores/hipoteca/`, `/en/calculators/mortgage-calculator-spain/`
+(registry ids `euribor`, `mortgage`; hub group "housing"; sitemap, hreflang,
+llms.txt). Code: lib/programmatic/euribor/, lib/programmatic/mortgage/,
+components/programmatic/{euribor,mortgage}/.
+- Data: Banco de España Boletín Estadístico table 19.1, `be1901.csv` (series
+  D_1NBAF472 Euríbor 1 año, D_1T9H0000 IRPH entidades, D_1T9H0010 vivienda
+  1–5 años zona euro, D_1T9H0011 IRS 5 años, D_1NBAF572 €STR 1 año,
+  D_1T9H0004 deuda 2–6 años; BOE days from D_1TFECHABOE/2/4), read once a day
+  (revalidate 86400). A month shows only from its BOE day. Committed snapshot
+  (`npm run euribor:snapshot -- build`) checks every value since Jan 2024
+  against the BOE resolution text (101 resolutions, all matched on 13 Nov) and
+  keeps their BOE-A ids for the links; live CSV only adds months after it.
+- Latest shown on 13 Nov 2026: Euríbor octubre 2026 = 3,239 % (BOE 4 Nov 2026,
+  BOE-A-2026-23168); septiembre 3,247 %; octubre 2025 2,187 %. IRPH septiembre
+  3,189 % (BOE 20 Oct, BOE-A-2026-21866); IRPH octubre due ~18–21 Nov.
+- Licence decision: monthly official figures only. The daily Euribor is EMMI
+  data (terms of use forbid commercial redistribution without a licence; the
+  BdE daily table ti_1_7.csv carries the same EMMI note) — not used. Monthly
+  figures: Orden EHA/2899/2011 art. 27.2 (published monthly by the BdE in the
+  BOE) + BdE legal notice (faithful reproduction and calculations, citing
+  "Banco de España").
+- Mortgage calculator: French amortisation in cents (tests to the cent vs a
+  Decimal reference: 150.000 € 3 % 25 a = 711,32 €; 200.000 € 2,5 % 30 a =
+  790,24 €; variable, mixed, 0 % floor art. 21.4), yearly table, total
+  interest; revision calculator (old vs new instalment on today's balance)
+  on both pages. Ley 5/2019 arts. 14, 15, 21, 23, 25 and Orden EHA/2899/2011
+  arts. 21–22 quoted from the BOE. Example inputs labelled as examples; no
+  lender named, no affiliate link; "no es asesoramiento financiero".
+
+**Why.** research_notes/spain-utilities-opportunities-nov2026.md row 17:
+"euríbor" 89k/month + "hipoteca" 205k + "calculadora hipoteca" 5.6k; SERP held
+by lead-gen brokers with stale "hoy" posts and disagreeing provisional
+averages; BdE not in the top 5. Highest-RPM topic of the list.
+
+**Baseline.** New URLs: 0 impressions.
+
+**Prediction.** By 15 Feb 2027: es Euríbor page ≥ 5k impressions/28 days and
+position ≤ 20 for "euribor hoy" / "euribor octubre 2026" style queries (the
+title carries the month and figure); mortgage page ≥ 1k impressions/28 days.
+
+**Date guards.** `tests/euribor.test.ts`: snapshot > 40 days old fails (next
+rebuild after the BOE of early December: run `npm run euribor:snapshot --
+build` ~3–5 Dec, commit, deploy); snapshot that misses the month before last
+after the 10th fails; `RULES_REREAD_BY` 13 May 2027 (euribor and mortgage
+rules: Orden art. 27, BdE notice, EMMI terms, Ley 5/2019).
+
+**Measure 15 Dec, 1 Feb, 15 Feb**: `snapshot.py page /calculadoras/euribor-hoy/ 28` and `/calculadoras/hipoteca/`.
+
+**Outcome:** _pending_
