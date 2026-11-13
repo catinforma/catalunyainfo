@@ -20,6 +20,7 @@ import { pvpcTranslations } from "@/lib/programmatic/pvpc/paths";
 import { reservoirHubPath } from "@/lib/programmatic/reservoirs/paths";
 import { RULES_AS_OF as WORKING_DAYS_AS_OF } from "@/lib/programmatic/working-days/rules";
 import { ITV_RULES_AS_OF } from "@/lib/programmatic/itv/rules";
+import { COMMUNITIES_AS_OF as HOME_TAX_AS_OF } from "@/lib/programmatic/home-purchase-tax/as-of";
 import { hubPath as rodaliesHubPath } from "@/lib/programmatic/rodalies/paths";
 
 import { calcPath, calculatorsHubPath, type CalcLocale, type CalculatorId } from "./paths";
@@ -281,6 +282,24 @@ export const HUB_GROUPS: HubGroup[] = [
         },
         scope: "spain",
         checked: EURIBOR_RULES_AS_OF,
+      },
+      {
+        key: "home-purchase-tax",
+        calculator: true,
+        href: calc("home-purchase-tax"),
+        title: { ca: "Impostos en comprar habitatge (ITP o IVA)", es: "Impuestos al comprar vivienda (ITP o IVA)", en: "Home purchase taxes (ITP or IVA)" },
+        answers: {
+          ca: "Quant pagaràs d'ITP per un pis de segona mà, o d'IVA i AJD per un de nou, a la teva comunitat i amb els tipus reduïts?",
+          es: "¿Cuánto pagarás de ITP por un piso de segunda mano, o de IVA y AJD por uno nuevo, en tu comunidad y con los tipos reducidos?",
+          en: "How much ITP you pay on a resale home, or IVA and AJD on a new one, in your region and with the reduced rates.",
+        },
+        basis: {
+          ca: "Lleis de tributs cedits de cada comunitat i normes forals (BOE i butlletins), Llei de l'IVA art. 91 i text refós de l'ITPAJD (art. 29, Reial decret llei 17/2018).",
+          es: "Leyes de tributos cedidos de cada comunidad y normas forales (BOE y boletines), Ley del IVA art. 91 y texto refundido del ITPAJD (art. 29, Real Decreto-ley 17/2018).",
+          en: "Each region's law on ceded taxes and the foral norms (BOE and bulletins), VAT Act art. 91 and the ITPAJD consolidated act (art. 29, Royal Decree-law 17/2018).",
+        },
+        scope: "spain",
+        checked: HOME_TAX_AS_OF,
       },
     ],
   },

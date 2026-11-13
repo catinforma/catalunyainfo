@@ -36,6 +36,8 @@ export const CALCULATORS = [
   // Housing: the official Euribor (Banco de España / BOE monthly figure) and the mortgage calculator that reads it.
   { id: "euribor", slugs: { es: "euribor-hoy", ca: "euribor-avui", en: "euribor-today" } },
   { id: "mortgage", slugs: { es: "hipoteca", ca: "hipoteca", en: "mortgage-calculator-spain" } },
+  // Housing (hub group "housing"): ITP or IVA + AJD on buying a home, by community (lib/programmatic/home-purchase-tax).
+  { id: "home-purchase-tax", slugs: { es: "impuestos-compra-vivienda", ca: "impostos-compra-habitatge", en: "spain-home-purchase-taxes" } },
   { id: "pensions-2027", slugs: { es: "subida-pensiones-2027", ca: "pujada-pensions-2027", en: "spain-pension-increase-2027" } },
   { id: "working-days", slugs: { es: "dias-habiles", ca: "dies-habils", en: "working-days-spain" } },
   // Reference pages with official figures (hub group "official"): the SMI with its small calculator, the INE's CPI, and the Tesoro's Letras auctions with a yield calculator.
