@@ -118,7 +118,9 @@ export type B2Key =
   // Carnival 2027 in Catalonia: dates, local holidays, schools, the big carnivals (carnival.ts).
   | "carnival"
   // The TSI health card: who is entitled, documents, how to apply (tsi.ts).
-  | "tsi";
+  | "tsi"
+  // NIE, TIE and the EU registration certificate: forms, fee, appointments, offices (nie-tie.ts).
+  | "nieTie";
 
 /** Path after the locale prefix, no leading or trailing slash. */
 export const B2_PATHS: Record<B2Key, Record<Locale, string>> = {
@@ -528,6 +530,12 @@ export const B2_PATHS: Record<B2Key, Record<Locale, string>> = {
     ca: "guies/targeta-sanitaria-tsi-catalunya",
     es: "guias/tarjeta-sanitaria-tsi-cataluna",
     en: "guides/health-card-tsi-catalonia",
+  },
+  // Evergreen: no year in the path.
+  nieTie: {
+    ca: "guies/nie-tie-barcelona-catalunya",
+    es: "guias/nie-tie-barcelona-cataluna",
+    en: "guides/nie-tie-barcelona-catalonia",
   },
 };
 
@@ -954,6 +962,11 @@ export const B2_TITLES: Record<B2Key, Record<Locale, string>> = {
     ca: "Com demanar la targeta sanitària (TSI) a Catalunya",
     es: "Cómo pedir la tarjeta sanitaria (TSI) en Cataluña",
     en: "How to get the health card (TSI) in Catalonia",
+  },
+  nieTie: {
+    ca: "NIE i TIE a Barcelona i Catalunya: quin et cal i com demanar-lo",
+    es: "NIE y TIE en Barcelona y Cataluña: cuál necesitas y cómo pedirlo",
+    en: "NIE and TIE in Barcelona and Catalonia: which one you need and how to apply",
   },
 };
 

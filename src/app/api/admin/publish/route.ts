@@ -78,6 +78,7 @@ import { FOREIGN_VOTE } from "@/lib/content/batch02/foreign-vote";
 import { PADRO } from "@/lib/content/batch02/padro";
 import { CARNIVAL_GUIDE } from "@/lib/content/batch02/carnival";
 import { TSI_GUIDE } from "@/lib/content/batch02/tsi";
+import { NIE_TIE_GUIDE } from "@/lib/content/batch02/nie-tie";
 import { publishHolidayTodayGuide } from "@/lib/content/holidays/today-publish";
 import { publishLocalHolidaysGuide } from "@/lib/content/holidays/local-publish";
 import { publishReservoirGuide } from "@/lib/content/reservoirs/publish";
@@ -313,6 +314,11 @@ export async function POST(request: Request) {
     // Montserrat anchor in the query's words): `tsi-links`.
     if (wants("tsi")) published.push(await publishB2Article(TSI_GUIDE));
     if (wants("tsi-links")) published.push(await publishB2Article(PADRO), await publishB2Article(BARCELONA_HUB));
+    // 13 Nov 2026: NIE, TIE and the EU registration certificate (ca, es, en), on
+    // its own. The padró and TSI guides and the Barcelona hub gained a link to
+    // it: `nie-tie-links`.
+    if (wants("nie-tie")) published.push(await publishB2Article(NIE_TIE_GUIDE));
+    if (wants("nie-tie-links")) published.push(await publishB2Article(PADRO), await publishB2Article(TSI_GUIDE), await publishB2Article(BARCELONA_HUB));
     // 13 Nov 2026: the Montserrat guide (index 3 of BATCH_02) on its own, for the
     // cable car vs rack railway vs car/coach upgrade; `montserrat-links` sends
     // the two pages whose English anchor text changed (Beyond Montserrat,

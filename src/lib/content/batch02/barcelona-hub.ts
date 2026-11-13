@@ -72,6 +72,7 @@ const GROUPS: Record<Locale, { lead: string; intro: string; groups: Group[]; out
         items: [
           ["padro", "Registering on the padrón", "Free at the City Council, online or at an OAC; no rental contract or legal residence needed, and the documents for each situation."],
           ["tsi", "The health card (TSI)", "Once you are on the padró: apply online or at your CAP, who is entitled in each situation, and the provisional receipt by email."],
+          ["nieTie", "NIE, TIE and the EU certificate", "Which one you need, forms EX-15, EX-17 and EX-18, the 790-012 fee, Police appointments and the offices in each province."],
         ],
       },
     ],
@@ -129,6 +130,7 @@ const GROUPS: Record<Locale, { lead: string; intro: string; groups: Group[]; out
         items: [
           ["padro", "Empadronarse", "Gratis en el Ayuntamiento, por internet o en una OAC; sin contrato de alquiler ni residencia legal, y los documentos para cada caso."],
           ["tsi", "La tarjeta sanitaria (TSI)", "Con el padrón hecho: se pide por internet o en el CAP, quién tiene derecho en cada caso y el resguardo provisional por correo."],
+          ["nieTie", "NIE, TIE y certificado de la UE", "Cuál necesitas, los formularios EX-15, EX-17 y EX-18, la tasa 790-012, la cita en la Policía y las oficinas de cada provincia."],
         ],
       },
     ],
@@ -186,6 +188,7 @@ const GROUPS: Record<Locale, { lead: string; intro: string; groups: Group[]; out
         items: [
           ["padro", "Empadronar-se", "Gratuït a l'Ajuntament, per internet o a una OAC; sense contracte de lloguer ni residència legal, i els documents per a cada cas."],
           ["tsi", "La targeta sanitària (TSI)", "Amb el padró fet: es demana per internet o al CAP, qui hi té dret en cada cas i el resguard provisional per correu."],
+          ["nieTie", "NIE, TIE i certificat de la UE", "Quin et cal, els formularis EX-15, EX-17 i EX-18, la taxa 790-012, la cita a la Policia i les oficines de cada província."],
         ],
       },
     ],

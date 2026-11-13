@@ -4137,3 +4137,79 @@ measurement clean. Publishing now folds this upgrade into that window (the
 ## 13 Nov 2026 — Montserrat EN upgrade published inside the 28 Oct title window (decision)
 
 The EN Montserrat page had 1,360 impressions in 28 days at position 34.8 and 0 clicks: a title test cannot read anything at page 4, so the content upgrade (comparison table, which-to-choose, FAQ) ships now instead of 29 Nov. The 28 Oct title entry is closed as inconclusive; the upgrade's own entry above carries the baseline and review dates.
+
+
+## 2026-11-13 — Evergreen wave 3: NIE, TIE and the EU registration certificate (new) (groups `nie-tie`, `nie-tie-links`; deploy first)
+
+**Why.** Item 7 of `research_notes/evergreen-demand-nov2026.md`: "cita nie"
+≈ 3,200 searches a week in Catalonia (peak in May), "tie" ≈ 3,000 (ambiguous).
+The site had no page. GSC (120 days to 13 Nov): not one NIE/TIE query, so the
+URLs are new and nothing is cannibalised. The SERP is law firms, gestorías,
+expat blogs and the Ministry. Read on 13 Nov:
+- one sends readers to other provinces "with less demand" (RD 240/2007 art. 7.5
+  says the province where you live);
+- one says fingerprints within "30 working days" (RD 1155/2024 art. 209.1:
+  apply within one month);
+- blogs still print €10.30 for the EU certificate (now €12) or pay the TIE
+  with another fee code;
+- none prints the June 2025 fee order or an official office list per
+  province.
+
+**What was added.** Three editions on year-free URLs:
+- `/ca/guies/nie-tie-barcelona-catalunya/`
+- `/es/guias/nie-tie-barcelona-cataluna/`
+- `/en/guides/nie-tie-barcelona-catalonia/`
+
+Module `src/lib/content/batch02/nie-tie.ts`; NIE_TIE_AS_OF 2026-11-13, every
+quote in its header, fact pack `research_notes/nie-tie-nov2026.md`.
+- The answer comes first: NIE = number, TIE = card for non-EU nationals with
+  a permit over six months, EU citizens get the registration certificate
+  (with the NIE); forms EX-15 / EX-17 / EX-18; Police with cita previa; fee
+  790-012 at €9.84 / €12 / €16.08.
+- "Which one you need" table (8 situations, incl. EU family card EX-19,
+  relatives of Spaniards EX-24, Brexit TIE).
+- The law: RD 1155/2024 (in force 20 May 2025) arts. 205 and 209; RD 240/2007
+  arts. 7, 8, 10.
+- Six steps; how the appointment system works (Police vs Immigration Office;
+  Barcelona office appointments by email to citabarcelona@correo.gob.es, exact
+  subject, no attachments — from the Sub-delegation's note).
+- Fee table from Orden PJC/617/2025, matching the Police fee table on 13 Nov.
+- Office table for the four provinces (Delegación del Gobierno + Police
+  locator), with the Tortosa address conflict printed.
+- Timings table, six common mistakes, padró/TSI section, "when to ask the
+  office" callout, 9 FAQs.
+- Not printed (no official source we could read): waiting times, TIE delivery
+  time, photo sizes, services per Barcelona police office, the automatic
+  fingerprint appointment pilot. inclusion.gob.es and interior.gob.es return
+  403 (not bypassed); sede.policia.gob.es times out from the VPS and was read
+  through WebFetch.
+- Hero reused: Passeig de Gràcia (CC BY-SA 4.0).
+
+**Links in** (body only): padró guide (TSI paragraph + related rail), TSI
+guide (documents paragraph + related rail), Barcelona hub ("Living in
+Barcelona"). The new page links both back.
+
+**Go-live.**
+1. Deploy, then publish `nie-tie` and `nie-tie-links` (padró, TSI, hub).
+2. IndexNow the three URLs.
+
+**Baseline:** no page; 0 NIE/TIE impressions in GSC (120 days to 13 Nov).
+
+**Prediction.**
+- Indexed by 4 Dec.
+- By 15 Jan 2027: 1,000–4,000 impressions across the three editions; CTR
+  2–4%; long tail at ≤ 10 ("tasa 790 012 nie importe", "certificado de
+  registro ciudadano ue barcelona", "nie tie diferencia", "oficina extranjería
+  tarragona", "tie fingerprints barcelona").
+- "cita nie barcelona" itself stays behind the Ministry and the law firms.
+- Wrong if under 300 impressions by 15 Jan, or not indexed by 11 Dec.
+
+**Measure:**
+- 4 Dec: indexing (`batch_url_inspection`, three URLs).
+- 15 Jan 2027: `snapshot.py page nie-tie 28`.
+
+**Upkeep** (test fails until done): from 15 Jan 2027 (NIE_TIE_REREAD_BY) —
+fees can change on 1 January (Orden PJC/617/2025 art. 1.2): re-read the BOE
+order, the Police fee table and the office pages, then move NIE_TIE_AS_OF.
+
+**Outcome:** _pending_

@@ -220,6 +220,7 @@ export function buildTsiBody(locale: Locale): Block[] {
   const L = locale;
   const padro = b2link("padro", L, { ca: "guia de l'empadronament", es: "guía del empadronamiento", en: "padró registration guide" }[L]);
   const padroShort = b2link("padro", L, { ca: "com empadronar-se", es: "cómo empadronarse", en: "how to register on the padró" }[L]);
+  const nieTie = b2link("nieTie", L, { ca: "com obtenir el NIE, la TIE o el certificat de la UE", es: "cómo obtener el NIE, la TIE o el certificado de la UE", en: "how to get a NIE, TIE or EU registration certificate" }[L]);
 
   const t = {
     ca: {
@@ -277,7 +278,7 @@ export function buildTsiBody(locale: Locale): Block[] {
         "Si ho demanes per una altra persona, el document que acrediti la representació: el certificat de naixement o el llibre de família, en el cas d'un fill.",
       ],
       docsAfter: [
-        `Si abans has de passar per l'**INSS** (familiars, residents que no treballen, ciutadans de la UE), la Seguretat Social demana el DNI o la targeta d'identitat d'estranger (TIE) o el passaport, la residència legal si no ets espanyol, el certificat de padró si t'has empadronat fa poc, el llibre de família o el certificat de matrimoni o de parella de fet per als familiars i, per als ciutadans de la UE, l'EEE, Suïssa o el Regne Unit, el certificat del teu país que diu que no hi exporta la cobertura (${a(TSI_URLS.inssHow, "Seguretat Social, en castellà")}).`,
+        `Si abans has de passar per l'**INSS** (familiars, residents que no treballen, ciutadans de la UE), la Seguretat Social demana el DNI o la targeta d'identitat d'estranger (TIE) o el passaport, la residència legal si no ets espanyol, el certificat de padró si t'has empadronat fa poc, el llibre de família o el certificat de matrimoni o de parella de fet per als familiars i, per als ciutadans de la UE, l'EEE, Suïssa o el Regne Unit, el certificat del teu país que diu que no hi exporta la cobertura (${a(TSI_URLS.inssHow, "Seguretat Social, en castellà")}). Si encara no tens el NIE o la TIE: ${nieTie}.`,
       ],
       howH: "Com es demana, pas a pas",
       stepsTitle: "De l'empadronament a la targeta",
@@ -395,7 +396,7 @@ export function buildTsiBody(locale: Locale): Block[] {
         "Si lo pides para otra persona, el documento que acredite la representación: el certificado de nacimiento o el libro de familia, en el caso de un hijo.",
       ],
       docsAfter: [
-        `Si antes tienes que pasar por el **INSS** (familiares, residentes que no trabajan, ciudadanos de la UE), la Seguridad Social pide el DNI o la tarjeta de identidad de extranjero (TIE) o el pasaporte, la residencia legal si no eres español, el certificado de padrón si te has empadronado hace poco, el libro de familia o el certificado de matrimonio o de pareja de hecho para los familiares y, para los ciudadanos de la UE, el EEE, Suiza o el Reino Unido, el certificado de tu país que dice que no exporta allí la cobertura (${a(TSI_URLS.inssHow, "Seguridad Social")}).`,
+        `Si antes tienes que pasar por el **INSS** (familiares, residentes que no trabajan, ciudadanos de la UE), la Seguridad Social pide el DNI o la tarjeta de identidad de extranjero (TIE) o el pasaporte, la residencia legal si no eres español, el certificado de padrón si te has empadronado hace poco, el libro de familia o el certificado de matrimonio o de pareja de hecho para los familiares y, para los ciudadanos de la UE, el EEE, Suiza o el Reino Unido, el certificado de tu país que dice que no exporta allí la cobertura (${a(TSI_URLS.inssHow, "Seguridad Social")}). Si aún no tienes el NIE o la TIE: ${nieTie}.`,
       ],
       howH: "Cómo se pide, paso a paso",
       stepsTitle: "Del empadronamiento a la tarjeta",
@@ -513,7 +514,7 @@ export function buildTsiBody(locale: Locale): Block[] {
         "If you apply for someone else, proof that you represent them: for a child, the birth certificate or family book.",
       ],
       docsAfter: [
-        `If you have to go through the **INSS** first (family members, residents who do not work, EU citizens), Social Security asks for your DNI or foreigner's identity card (TIE) or passport, proof of legal residence if you are not Spanish, a padró certificate if you registered recently, the family book or a marriage or registered-partnership certificate for dependants and, for EU, EEA, Swiss or UK citizens, the certificate from your country saying it does not export your cover (${a(TSI_URLS.inssHow, "Social Security, in Spanish")}).`,
+        `If you have to go through the **INSS** first (family members, residents who do not work, EU citizens), Social Security asks for your DNI or foreigner's identity card (TIE) or passport, proof of legal residence if you are not Spanish, a padró certificate if you registered recently, the family book or a marriage or registered-partnership certificate for dependants and, for EU, EEA, Swiss or UK citizens, the certificate from your country saying it does not export your cover (${a(TSI_URLS.inssHow, "Social Security, in Spanish")}). If you do not have a NIE or TIE yet: ${nieTie}.`,
       ],
       howH: "How to apply, step by step",
       stepsTitle: "From the padró to the card",
@@ -601,7 +602,7 @@ export function buildTsiBody(locale: Locale): Block[] {
     { type: "heading", level: 2, text: t.faqH } as Block,
     faq(t.faq),
     callout("official", verifiedLine(L, TSI_AS_OF), t.official),
-    ...b2Related(["padro", "barcelonaHub", "foreignVote", "transport"], L),
+    ...b2Related(["padro", "nieTie", "barcelonaHub", "foreignVote", "transport"], L),
   ];
 }
 
