@@ -42,6 +42,7 @@ test("registry: every calculator has a unique path per language, under the famil
 
 test("registry: the live URLs did not move (13 Nov 2026)", () => {
   assert.deepEqual(calcEditions("net-salary"), { ca: "/ca/calculadores/sou-net/", es: "/es/calculadoras/sueldo-neto/", en: "/en/calculators/net-salary-spain/" });
+  assert.deepEqual(calcEditions("self-employed"), { ca: "/ca/calculadores/quota-autonoms/", es: "/es/calculadoras/cuota-autonomos/", en: "/en/calculators/spain-self-employed-contributions/" });
   assert.deepEqual(calcEditions("dismissal"), { ca: "/ca/calculadores/indemnitzacio-acomiadament/", es: "/es/calculadoras/indemnizacion-despido/", en: "/en/calculators/severance-pay-spain/" });
   assert.deepEqual(calcEditions("settlement"), { ca: "/ca/calculadores/quitanca-finiquito/", es: "/es/calculadoras/finiquito/", en: "/en/calculators/final-settlement-spain/" });
   assert.deepEqual(calcEditions("unemployment"), { ca: "/ca/calculadores/atur/", es: "/es/calculadoras/paro/", en: "/en/calculators/unemployment-benefit-spain/" });
@@ -49,6 +50,7 @@ test("registry: the live URLs did not move (13 Nov 2026)", () => {
   assert.deepEqual(calcEditions("smi-2027"), { ca: "/ca/calculadores/salari-minim-2027/", es: "/es/calculadoras/salario-minimo-2027/", en: "/en/calculators/spain-minimum-wage-2027/" });
   assert.deepEqual(calcEditions("ipc"), { ca: "/ca/calculadores/ipc/", es: "/es/calculadoras/ipc/", en: "/en/calculators/spain-inflation-cpi/" });
   assert.deepEqual(calcEditions("treasury-bills"), { ca: "/ca/calculadores/lletres-del-tresor/", es: "/es/calculadoras/letras-del-tesoro/", en: "/en/calculators/spain-treasury-bills/" });
+  assert.deepEqual(calcEditions("itv"), { ca: "/ca/calculadores/itv/", es: "/es/calculadoras/itv/", en: "/en/calculators/itv-spain/" });
   assert.deepEqual(calcEditions("euribor"), { ca: "/ca/calculadores/euribor-avui/", es: "/es/calculadoras/euribor-hoy/", en: "/en/calculators/euribor-today/" });
   assert.deepEqual(calcEditions("mortgage"), { ca: "/ca/calculadores/hipoteca/", es: "/es/calculadoras/hipoteca/", en: "/en/calculators/mortgage-calculator-spain/" });
 });
@@ -65,8 +67,10 @@ test("hub: lists every calculator of the registry exactly once, linking its own 
   assert.equal(new Set(keys).size, keys.length, "a card appears twice");
 });
 
-test("hub: the five groups, each card complete in ca, es and en, linking indexable pages", () => {
-  assert.deepEqual(HUB_GROUPS.map((g) => g.id), ["work", "housing", "official", "holidays", "live"]);
+test("hub: the six groups, each card complete in ca, es and en, linking indexable pages", () => {
+  assert.deepEqual(HUB_GROUPS.map((g) => g.id), ["work", "housing", "official", "vehicle", "holidays", "live"]);
+  // The vehicles group: the ITV calculator (lib/programmatic/itv).
+  assert.deepEqual(HUB_GROUPS.find((g) => g.id === "vehicle")?.cards.map((c) => c.key), ["itv"]);
   // The official-figures group: the SMI, the CPI and the Letras del Tesoro reference pages.
   assert.deepEqual(HUB_GROUPS.find((g) => g.id === "official")?.cards.map((c) => c.key), ["smi-2027", "ipc", "treasury-bills"]);
   for (const g of HUB_GROUPS) {

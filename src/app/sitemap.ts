@@ -23,6 +23,7 @@ import { widgetSitemapEntries } from "@/lib/programmatic/embed-2027/places";
 import { leaveSitemapEntries } from "@/lib/programmatic/leave-2027/places";
 import { calculatorsHubSitemapEntries } from "@/lib/programmatic/calculators/sitemap";
 import { netSalarySitemapEntries } from "@/lib/programmatic/net-salary/sitemap";
+import { selfEmployedSitemapEntries } from "@/lib/programmatic/self-employed/sitemap";
 import { employmentSitemapEntries } from "@/lib/programmatic/employment/sitemap";
 import { rentSitemapEntries } from "@/lib/programmatic/rent-update/page";
 import { pvpcSitemapEntries } from "@/lib/programmatic/pvpc/pages";
@@ -37,6 +38,7 @@ import { LETRAS_SNAPSHOT } from "@/lib/programmatic/treasury-bills/data";
 import { euriborSitemapEntries } from "@/lib/programmatic/euribor/page";
 import { EURIBOR_SNAPSHOT } from "@/lib/programmatic/euribor/data";
 import { mortgageSitemapEntries } from "@/lib/programmatic/mortgage/page";
+import { itvSitemapEntries } from "@/lib/programmatic/itv/page";
 
 /**
  * Cached for an hour (ISR) and refreshed at once by every publish, and by the
@@ -181,6 +183,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...calculatorsHubSitemapEntries(),
     // "Calculadora de sueldo neto 2026" (calculators family), in es, ca and en.
     ...netSalarySitemapEntries(),
+    // "Cuota de autónomos 2026 (y 2027)": the self-employed contributions calculator (Orden PJC/297/2026 bands), in es, ca and en.
+    ...selfEmployedSitemapEntries(),
     // Dismissal pay, final settlement and unemployment benefit calculators, in ca, es and en.
     ...employmentSitemapEntries(),
     // "Actualizar el alquiler": the rent-update calculator (INE IPC and IRAV), in es, ca and en.
@@ -201,6 +205,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // "Euríbor hoy" and "Calculadora de hipoteca" (calculators family, group "housing"), in es, ca and en; last modified on the snapshot's newest BOE day.
     ...euriborSitemapEntries(EURIBOR_SNAPSHOT.series),
     ...mortgageSitemapEntries(EURIBOR_SNAPSHOT.series),
+    // "¿Cuándo me toca pasar la ITV?" (calculators family, group "vehicle"), in es, ca and en.
+    ...itvSitemapEntries(),
     ...fuelSitemapEntries(),
     ...rodaliesSitemap(),
     ...reservoirSitemapEntries(),

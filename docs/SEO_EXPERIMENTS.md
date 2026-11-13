@@ -5667,6 +5667,102 @@ page says the next auction is not in the published calendar.
 
 **Outcome:** _pending_
 
+## 2026-11-13 — New tool: "¿Cuándo me toca pasar la ITV?" (RD 920/2017 art. 6 + official fee per community), es + ca + en (deploy only; no publish group)
+
+**What.** New hub group "Coche y transporte" (`vehicle`) in the calculators
+family; the tool is in the registry (`calculators/paths.ts`, id `itv`) so the
+hub, "Más calculadoras", sitemap (+hreflang, x-default en) and llms.txt carry it:
+`/es/calculadoras/itv/`, `/ca/calculadores/itv/`, `/en/calculators/itv-spain/`
+(lib/programmatic/itv/, components/programmatic/itv/).
+
+- Calculator (pure engine `itv/engine.ts`, tests/itv.test.ts): vehicle
+  category + first registration (+ optional last ITV and the expiry it
+  replaced) → next due date, the 30-day window that keeps it, the next four
+  dates. Server-rendered on a fixed example (car 15 Mar 2019, last ITV 20 Feb
+  2025, expiry 15 Mar 2025 → before 15 Mar 2027); days-left only in the browser.
+- Rules read in the BOE on 13 Nov 2026, quoted verbatim: RD 920/2017
+  (BOE-A-2017-12841) art. 6.1 table (it is in art. 6, not annex I), 6.2
+  historic (RD 892/2024), 6.3–6.4, 6.5 30-day rule, 6.9 ten days, 11.2, 11.8,
+  12.1 V-19 sticker, 12.2, 14.7 c), 19.1, annex II "Fecha próxima
+  inspección"; Ley de Tráfico (BOE-A-2015-11722) art. 76.o grave → 200 €
+  (80.1), 100 € paid within 20 days (94); not in the points annex II.
+- Our reading, printed on the page: band by age on the day the new validity
+  starts (anniversary included); when a stricter band starts inside a
+  validity the result warns and points to the report. The 30-day rule is
+  not applied to the first ITV (the text says "inspección anterior").
+- Fees per community (itv/prices.ts), only from bulletins / regional
+  governments / public ITV companies: Cataluña (Ordre IUE/361/2010 maximums,
+  DOGC 30.6.2010, sin IVA ni taxa), Andalucía (VEIASA, BOJA 2014/2016),
+  Aragón (BOA 31.12.2025), Asturias (BOPA 26.12.2025), Illes Balears
+  (Mallorca BOIB 4.4.2020, Eivissa BOIB 25.8.2026), Canarias (BOC 4.2.2026),
+  Cantabria (BOC 23.12.2025), Castilla-La Mancha (DOCM 30.12.2025), Castilla
+  y León (BOCYL 22.12.2025), Comunitat Valenciana (GVA/SITVAL from 1.1.2023),
+  Extremadura (Junta stations, DOE 30.9.2026), País Vasco (BOPV 10.12.2025),
+  Melilla (BOME 19.12.2025). "No publicado oficialmente": Galicia, Madrid,
+  Murcia, Navarra (2021 base only), La Rioja (BOR unreadable from the
+  server), Ceuta. DGT fee 4,18 € as printed by GVA/VEIASA/Melilla tables
+  (DGT page itself unreachable from the VPS: re-check).
+
+**Why.** research_notes/spain-utilities-opportunities-nov2026.md row 10:
+"itv" ~518k/month (mostly station-seeking) + "cita itv" 160k; SERP has
+contradictory prices and no per-region table citing official tariffs.
+
+**Baseline.** New URLs: 0 impressions.
+
+**Prediction.** By 1 Mar 2027 (before the Jun–Jul peak): es page ≥ 1k
+impressions/28 days, top 20 for "cuándo pasar la itv" / "precio itv
+[comunidad]".
+
+**Date guards.** `PRICES_REREAD_BY` 1 Feb 2027 (re-read every community's
+2027 tariff; most publish Dec–Jan) and `ITV_REREAD_BY` 1 Jun 2027 (RD 920/2017
+and Ley de Tráfico). Open: Asturias (itvasa.es), Valencia (sitval.com),
+Mallorca (itv.mallorca.es) and La Rioja booking pages refused connections
+from the VPS, so no station link printed for them yet; check from a browser.
+
+**Measure 15 Jan, 1 Mar, 1 Jun 2027**: `snapshot.py page /calculadoras/itv/ 28`.
+
+## 2026-11-13 — New tool: "Cuota de autónomos 2026 (y 2027)", es + ca + en (deploy only; no publish group)
+
+**What.** `/es/calculadoras/cuota-autonomos/`, `/ca/calculadores/quota-autonoms/`,
+`/en/calculators/spain-self-employed-contributions/` (lib/programmatic/self-employed/),
+in the calculators registry (after net salary) and hub group "Trabajo y sueldo",
+sitemap (+hreflang, x-default en) and llms.txt.
+
+- Rules (all read 13 Nov 2026 in the BOE / Seguridad Social): the 15 bands of
+  Orden PJC/297/2026 art. 18.1 (BOE-A-2026-7296) = the 2025 tables kept by
+  RDL 3/2026 art. 3.4 (BOE-A-2026-2548, convalidated BOE-A-2026-4668) "hasta la
+  aprobación de la correspondiente Ley de Presupuestos", max base 5.101,20 €;
+  rate 31,50 % (CC 28,30, CP 1,30, cese 0,90, FP 0,10 — arts. 18.2 and 37.5–6 —
+  and MEI 0,90). Earnings: LGSS 308.1.c — IRPF net + own cuotas, −7 % generic
+  (3 % for art. 305.2 b/e corporate, who also have the 1.424,40 € group-7 floor).
+  Tarifa plana: LETA art. 38 ter (12 + 12 months under the SMI 17.094 €;
+  24 + 36 special); 2026 total "88,64 €" quoted from the TGSS Import@ss guide
+  (80 € + MEI), not recomputed. Regularisation: LGSS 308.1.c 3.ª–4.ª.
+- 2027: no official tables (no PGE, RDL or Orden with 2027 bands); page says
+  "Pendiente" in all three languages; only the MEI 1 % (LGSS DT 43.ª) is quoted.
+- Calculator: server-rendered default (30.000 € income, 6.000 € expenses →
+  general band 5, 380,88 €/month), client recompute + URL hash; optional chosen
+  base → regularisation estimate (pay/refund), tarifa plana first/extension.
+  Links the official Import@ss simulator. YMYL disclaimer.
+
+**Why.** research_notes/spain-utilities-opportunities-nov2026.md row 13:
+"cuota autónomos" 9k + "cuota autónomos 2026" 2.6k + "tarifa plana autónomos"
+2.5k ≈ 14k/month; Jan index 192; competitors print unofficial 2027 drafts.
+
+**Baseline.** New URLs: 0 impressions.
+
+**Prediction.** By 15 Feb 2027: es page ≥ 2k impressions/28 days, position
+≤ 20 for "cuota autónomos 2026" / "tramos autónomos" / "cuota autónomos 2027".
+
+**Date guards.** `STATUS_2027_RECHECK_BY` 15 Dec 2026 (re-read the BOE for a
+late-December RDL / PGE / Orden with 2027 bands; fill `STATUS_2027` or move the
+date). `RULES_UNTIL` 1 Jan 2027: load rules-2027 (MEI 1 %, tables, tarifa plana)
+or state which 2026 rules keep applying and why.
+
+**Measure 15 Dec, 1 Feb, 15 Feb**: `snapshot.py page /calculadoras/cuota-autonomos/ 28`.
+
+**Outcome:** _pending_
+
 ## 2026-11-13 — Two housing tools: "Euríbor hoy" (official monthly figure) and "Calculadora de hipoteca" (with revision), es + ca + en (deploy only; no publish group)
 
 **What.** `/es/calculadoras/euribor-hoy/`, `/ca/calculadores/euribor-avui/`,

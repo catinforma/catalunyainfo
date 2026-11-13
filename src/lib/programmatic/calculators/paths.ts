@@ -10,7 +10,7 @@ import type { Locale } from "@/lib/i18n/config";
  *   /ca/calculadores/…
  *   /en/calculators/…
  *
- * Every tool's module (net-salary/copy.ts, employment/*, rent-update/copy.ts)
+ * Every tool's module (net-salary/copy.ts, self-employed/copy.ts, employment/*, rent-update/copy.ts)
  * reads its slugs from `CALCULATORS` below, and the hub lists the same
  * registry, so a tool added here shows up on the hub (tests/calculators-hub.test.ts
  * fails until it has a card). Slugs are live URLs: never change one.
@@ -26,6 +26,7 @@ export const CALCULATORS_ROOT: Record<CalcLocale, string> = { es: "calculadoras"
 /** Every tool of the family with its slug per language, in the hub's order. */
 export const CALCULATORS = [
   { id: "net-salary", slugs: { es: "sueldo-neto", ca: "sou-net", en: "net-salary-spain" } },
+  { id: "self-employed", slugs: { es: "cuota-autonomos", ca: "quota-autonoms", en: "spain-self-employed-contributions" } },
   { id: "dismissal", slugs: { es: "indemnizacion-despido", ca: "indemnitzacio-acomiadament", en: "severance-pay-spain" } },
   { id: "settlement", slugs: { es: "finiquito", ca: "quitanca-finiquito", en: "final-settlement-spain" } },
   { id: "unemployment", slugs: { es: "paro", ca: "atur", en: "unemployment-benefit-spain" } },
@@ -39,6 +40,8 @@ export const CALCULATORS = [
   { id: "smi-2027", slugs: { es: "salario-minimo-2027", ca: "salari-minim-2027", en: "spain-minimum-wage-2027" } },
   { id: "ipc", slugs: { es: "ipc", ca: "ipc", en: "spain-inflation-cpi" } },
   { id: "treasury-bills", slugs: { es: "letras-del-tesoro", ca: "lletres-del-tresor", en: "spain-treasury-bills" } },
+  // Vehicles (hub group "vehicle"): when the ITV is due (RD 920/2017 art. 6) and the official fee per region.
+  { id: "itv", slugs: { es: "itv", ca: "itv", en: "itv-spain" } },
 ] as const satisfies readonly { id: string; slugs: Record<CalcLocale, string> }[];
 
 export type CalculatorId = (typeof CALCULATORS)[number]["id"];

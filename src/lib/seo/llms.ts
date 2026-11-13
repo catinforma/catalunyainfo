@@ -13,6 +13,7 @@
 
 import { leaveEditions } from "@/lib/programmatic/leave-2027/copy";
 import { netSalaryEditions } from "@/lib/programmatic/net-salary/copy";
+import { selfEmployedEditions } from "@/lib/programmatic/self-employed/copy";
 import { calcEditions, calculatorsHubEditions } from "@/lib/programmatic/calculators/paths";
 import { rentEditions } from "@/lib/programmatic/rent-update/copy";
 import { pensionEditions } from "@/lib/programmatic/pensions-2027/copy";
@@ -22,6 +23,7 @@ import { ipcEditions } from "@/lib/programmatic/ipc/copy";
 import { letrasEditions } from "@/lib/programmatic/treasury-bills/copy";
 import { euriborEditions } from "@/lib/programmatic/euribor/copy";
 import { mortgageEditions } from "@/lib/programmatic/mortgage/copy";
+import { itvEditions } from "@/lib/programmatic/itv/copy";
 import { LOCALES, type Locale } from "@/lib/i18n/config";
 import { PATHS as TOOL_PATHS } from "@/lib/content/home-tools";
 import { SEASON_YEAR } from "@/lib/programmatic/christmas-fairs/classify";
@@ -103,6 +105,11 @@ export function liveTools(): LiveTool[] {
       description: "gross annual salary to net pay for 2026 anywhere in Spain's common tax regime (plus Ceuta, Melilla and La Palma): IRPF withholding with the Tax Agency's official 2026 algorithm and the worker's Social Security contributions (Orden PJC/297/2026), in 12 or 14 payments, by family situation, children, age, disability and contract type; checked against the Tax Agency's own withholding service.",
     },
     {
+      name: "Spain self-employed contributions (cuota de autónomos) 2026 calculator",
+      hubs: selfEmployedEditions(),
+      description: "the 2026 self-employed (RETA) contribution from expected income and expenses: net earnings as Social Security counts them (LGSS art. 308.1.c, 7% generic expenses, 3% for corporate self-employed), the band of the reduced or general table with its minimum and maximum base (Orden PJC/297/2026 art. 18, the 2025 tables kept by Royal Decree-law 3/2026, maximum base 5,101.20 euros), the monthly contribution at 31.50% (common 28.30, professional 1.30, cessation 0.90, training 0.10, MEI 0.90), the 80-euro flat rate (88.64 with MEI per the TGSS) and its extension below the minimum wage, what the yearly regularisation would pay or refund, and the 2027 status (no official tables yet; MEI 1% by law).",
+    },
+    {
       name: "Severance pay calculator (Spain)",
       hubs: calcEditions("dismissal"),
       description: "statutory dismissal pay in Spain from start and end dates and salary: unfair dismissal (33 days a year, 45 before 12 Feb 2012, DT 11ª caps), objective dismissal or ERE (20 days, 12 months' cap) and end of a fixed-term contract (12 days), Estatuto de los Trabajadores.",
@@ -156,6 +163,11 @@ export function liveTools(): LiveTool[] {
       name: "Spanish Treasury bills (Letras del Tesoro): auctions, latest rates and calculator",
       hubs: letrasEditions(),
       description: "the Tesoro Público's latest 3-, 6-, 9- and 12-month Letras auction results (average and marginal rate, price, issue and maturity dates) read from tesoro.es every 3 hours, every 2026 auction month by month, the official 2026 auction calendar with the Banco de España request and payment deadlines, a calculator (face value in multiples of 1,000 euros, price, return at maturity, equivalent TAE, savings-scale IRPF estimate, Banco de España fee), how to buy (Tesoro online service, Banco de España Cuenta Directa, banks), competitive vs non-competitive bids (Orden ECM/2/2026), and the tax rules (LIRPF arts. 25.2, 66, 76, 96; no withholding under RIRPF art. 75.3.b). Not investment advice.",
+    },
+    {
+      name: "When is my ITV due? Spain vehicle inspection calculator",
+      hubs: itvEditions(),
+      description: "the next ITV (Spanish periodic vehicle inspection) date from vehicle category and first registration, with Royal Decree 920/2017 art. 6 quoted from the BOE (private car: exempt until 4 years, then every 2 years, every year from 10; vans, motorcycles, mopeds, caravans, buses, taxis, tractors), the 30-day early rule that keeps the date (art. 6.5), the fine for driving with it expired (Traffic Act art. 76.o: 200 euros, 100 if paid within 20 days), the V-19 sticker, historic vehicles, and the fee per autonomous community only where the community publishes an official tariff, with each region's official station list.",
     },
     {
       name: "Strikes in Catalonia today",

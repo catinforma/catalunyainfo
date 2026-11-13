@@ -11,12 +11,14 @@ import { SALARY_RULES_AS_OF } from "@/lib/programmatic/net-salary/rules-2026";
 import { RENT_RULES_AS_OF } from "@/lib/programmatic/rent-update/rules";
 import { RULES_AS_OF as EURIBOR_RULES_AS_OF } from "@/lib/programmatic/euribor/rules";
 import { RULES_AS_OF as MORTGAGE_RULES_AS_OF } from "@/lib/programmatic/mortgage/rules";
+import { RULES_AS_OF as SELF_EMPLOYED_AS_OF } from "@/lib/programmatic/self-employed/rules-2026";
 import { PENSION_RULES_AS_OF } from "@/lib/programmatic/pensions-2027/rules";
 import { SMI_RULES_AS_OF } from "@/lib/programmatic/smi/rules";
 import { RULES_AS_OF as TREASURY_RULES_AS_OF } from "@/lib/programmatic/treasury-bills/rules";
 import { pvpcTranslations } from "@/lib/programmatic/pvpc/paths";
 import { reservoirHubPath } from "@/lib/programmatic/reservoirs/paths";
 import { RULES_AS_OF as WORKING_DAYS_AS_OF } from "@/lib/programmatic/working-days/rules";
+import { ITV_RULES_AS_OF } from "@/lib/programmatic/itv/rules";
 import { hubPath as rodaliesHubPath } from "@/lib/programmatic/rodalies/paths";
 
 import { calcPath, calculatorsHubPath, type CalcLocale, type CalculatorId } from "./paths";
@@ -33,7 +35,7 @@ import { calcPath, calculatorsHubPath, type CalcLocale, type CalculatorId } from
  * figures come from, as the tool's own page cites them.
  */
 
-export type HubGroupId = "work" | "housing" | "official" | "holidays" | "live";
+export type HubGroupId = "work" | "housing" | "official" | "vehicle" | "holidays" | "live";
 export type Scope = "spain" | "catalonia";
 
 export interface HubCard {
@@ -89,6 +91,24 @@ export const HUB_GROUPS: HubGroup[] = [
         },
         scope: "spain",
         checked: SALARY_RULES_AS_OF,
+      },
+      {
+        key: "self-employed",
+        calculator: true,
+        href: calc("self-employed"),
+        title: { ca: "Quota d'autònoms 2026", es: "Cuota de autónomos 2026", en: "Self-employed contributions 2026" },
+        answers: {
+          ca: "Quant pagaràs d'autònom cada mes segons els teus rendiments nets, i amb tarifa plana?",
+          es: "¿Cuánto pagarás de autónomo al mes según tus rendimientos netos, y con tarifa plana?",
+          en: "How much will you pay each month as self-employed, from your net earnings, and on the flat rate?",
+        },
+        basis: {
+          ca: "Ordre PJC/297/2026, art. 18 (trams 2026), Reial decret llei 3/2026, Llei general de la Seguretat Social, art. 308, i Estatut del treball autònom, art. 38 ter.",
+          es: "Orden PJC/297/2026, art. 18 (tramos 2026), Real Decreto-ley 3/2026, Ley General de la Seguridad Social, art. 308, y Estatuto del trabajo autónomo, art. 38 ter.",
+          en: "Orden PJC/297/2026, art. 18 (2026 bands), Royal Decree-law 3/2026, General Social Security Act, art. 308, and the Self-Employment Statute, art. 38 ter.",
+        },
+        scope: "spain",
+        checked: SELF_EMPLOYED_AS_OF,
       },
       {
         key: "dismissal",
@@ -301,6 +321,30 @@ export const HUB_GROUPS: HubGroup[] = [
         },
         scope: "spain",
         checked: TREASURY_RULES_AS_OF,
+      },
+    ],
+  },
+  {
+    id: "vehicle",
+    title: { ca: "Cotxe i transport", es: "Coche y transporte", en: "Car and transport" },
+    cards: [
+      {
+        key: "itv",
+        calculator: true,
+        href: calc("itv"),
+        title: { ca: "Quan em toca l'ITV", es: "Cuándo me toca la ITV", en: "When is my ITV due" },
+        answers: {
+          ca: "Quan has de passar l'ITV segons el vehicle i la data de matriculació, quan la pots avançar 30 dies i quant costa a cada comunitat?",
+          es: "¿Cuándo tienes que pasar la ITV según el vehículo y la fecha de matriculación, cuándo puedes adelantarla 30 días y cuánto cuesta en cada comunidad?",
+          en: "When your ITV is due from the vehicle type and first registration, how early you can go without losing days, and the official fee by region.",
+        },
+        basis: {
+          ca: "Reial decret 920/2017, art. 6 (BOE); Llei de trànsit, arts. 76 i 80; tarifes oficials de cada comunitat.",
+          es: "Real Decreto 920/2017, art. 6 (BOE); Ley de Tráfico, arts. 76 y 80; tarifas oficiales de cada comunidad.",
+          en: "Royal Decree 920/2017, art. 6 (BOE); Traffic Act, arts. 76 and 80; each region's official tariffs.",
+        },
+        scope: "spain",
+        checked: ITV_RULES_AS_OF,
       },
     ],
   },
