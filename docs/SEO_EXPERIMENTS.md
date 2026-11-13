@@ -5229,3 +5229,64 @@ does not fail a test (the live read covers it); refresh it monthly with
 `npm run rent:snapshot -- check`.
 
 **Review 15 Dec 2026, 20 Jan 2027. Outcome:** _pending_
+
+## 2026-11-13 — New tool: "Subida de las pensiones 2027" (INE CPI average, LGSS art. 58), es + ca + en (deploy; republish group `pagos`)
+
+**Why.** Research row 3 (research_notes/spain-utilities-opportunities-nov2026.md):
+"subida pensiones" index 223–249 from October to January, ~40–60k/month
+addressable with "pensiones"/"jubilación"; the top 5 are all estimates (no
+Seguridad Social, no calculator). The figure is set by the INE's November CPI
+(flash 27 Nov, final 15 Dec 2026) and then the BOE; nobody shows which month
+is still missing.
+
+**URLs.** `/es/calculadoras/subida-pensiones-2027/` (primary),
+`/ca/calculadores/pujada-pensions-2027/`, `/en/calculators/spain-pension-increase-2027/`.
+Static folders; entry `pensions-2027` in `lib/programmatic/calculators/paths.ts`.
+Sitemap (`pensionSitemapEntries`, x-default = en), hreflang via `buildMetadata`
+translations, llms.txt entry. Pay-dates guide (`/es/guias/cuando-se-cobra-paro-pension/`
++ ca/en) links to it from its pensions section and the page links back:
+**republish group `pagos`** after the deploy.
+
+**Data.** INE IPC290750 (annual rate, base 2025) through the rent-update
+loader (`fetchLiveSeries("ipc")`, once a day, 8 s timeout) with the
+rent-update snapshot as dated fallback; a month is never shown before its
+INE release day. On 13 Nov 2026: Dec 2025–Oct 2026 = 2.9, 2.3, 2.3, 3.4, 3.2,
+3.2, 3.2, 3.6, 4.3, 4.9, 4.9 → **provisional mean 3.47 % (11 of 12 months)**,
+November pending. The engine reproduces 2024 3.8 %, 2025 2.8 % and 2026 2.7 %
+(RDL 3/2026) from the same series. States: provisional → flash (hand-typed
+`NOVEMBER_FLASH` from the INE press release; not in the API) → final (INE API,
+automatic on 15 Dec) → official (`OFFICIAL_2027`, from the BOE). Rounding to
+one decimal as RDL 3/2026 ("expresado con un decimal"); the law does not say.
+Scenario table "which November figure gives which increase" (pure arithmetic:
+3.2–4.3 → 3.5 %, 4.4–5.5 → 3.6 %…), labelled not a forecast.
+
+**Law (BOE, read 13 Nov 2026).** LGSS art. 58.2–58.3 (Ley 21/2021 + RDL 2/2023
+wording; the brief said "Ley 20/2021": it is **Ley 21/2021**), art. 62 (PNC at
+least the same %), DA 53ª (2027 minimums up to the two-adult poverty line;
+amounts by each year's norm). No "paguilla": old LGSS 1994 art. 48.1.2 quoted
+("pago único, antes del 1 de abril"), current art. 58 has no deviation payment.
+2026 figures: RDL 3/2026 (BOE-A-2026-2548, 4 Feb 2026, validated 26 Feb; RDL
+16/2025 not validated, repealed 28 Jan) and RD 241/2026 (BOE-A-2026-6977):
+2.7 %, max 3.359,60 €/month, gender gap 36,90 €/month, minimums table (anexo
+I), income limits 9.442 / 11.013 €, PNC 8.803,20 €/year (628,80 × 14), rent
+supplement 525 €; IPREM 600 €/month (Ley 31/2022 DA 90ª, prorogued; shared
+constant with the employment calculators).
+
+**Page.** Answer-first lead (rule, provisional 3,47 %, 1.000 € → 1.034,70 €,
+"falta el IPC de noviembre: adelantado 27 nov, definitivo 15 dic"), calculator
+(monthly gross, 14 or 12 payments → 2027 monthly/annual and rises; works
+without JS), 12-month CPI table with release days and the mean, scenarios,
+the law quoted, paguilla, official vs pending, 2026 minimums table, PNC/IPREM,
+pay dates link, sources, YMYL "simulación orientativa" + Seguridad Social link.
+Title by state: "Subida pensiones 2027: 3,47 % provisional (falta noviembre)".
+
+**Date guards (tests/pensions-2027.test.ts).** From 28 Nov 2026: NOVEMBER_FLASH
+must be typed in. From 15 Dec 2026: the snapshot must have November 2026
+(`npm run rent:snapshot -- build`). From 1 Feb 2027 (`OFFICIAL_DUE`):
+OFFICIAL_2027 (percentage, norm, 2027 minimums, PNC) from the BOE.
+
+**Prediction.** Indexed within a week; impressions for "subida pensiones 2027"
+from the 27 Nov flash; top 10 for at least one "subida pensiones 2027" query
+by 15 Dec; January 2027 the biggest month.
+
+**Review 1 Dec 2026, 20 Dec 2026, 15 Jan 2027. Outcome:** _pending_

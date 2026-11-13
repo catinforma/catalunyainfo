@@ -27,4 +27,5 @@ export function calculatorPath(locale: Locale, slug: string): string {
 /** Every tool of the family with its slug per language, for the future hub and the tests. */
 export const CALCULATORS = [
   { id: "net-salary", slugs: { es: "sueldo-neto", ca: "sou-net", en: "net-salary-spain" } },
+  { id: "pensions-2027", slugs: { es: "subida-pensiones-2027", ca: "pujada-pensions-2027", en: "spain-pension-increase-2027" } },
 ] as const satisfies readonly { id: string; slugs: Record<Locale, string> }[];

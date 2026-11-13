@@ -4,6 +4,7 @@ import { LOCALES, type Locale } from "@/lib/i18n/config";
 import { boeRegionsOn2026 } from "@/lib/programmatic/holidays/boe-2026";
 import { boeRegionsOn } from "@/lib/programmatic/holidays/boe-2027";
 import { calcEditions } from "@/lib/programmatic/employment/paths";
+import { pensionEditions } from "@/lib/programmatic/pensions-2027/copy";
 
 import { B2_PATHS, faq, h2, lead, list, paras, table, type B2Article, type B2Edition, type B2Source } from "./shared";
 
@@ -57,6 +58,8 @@ const U = {
 const link = (href: string, label: string) => `[${label}](${href})`;
 /** The unemployment benefit calculator (lib/programmatic/employment/), which links back here. */
 const CALC = calcEditions("unemployment");
+/** The 2027 pension increase calculator (lib/programmatic/pensions-2027/), which links back here. */
+const PENSION_CALC = pensionEditions();
 
 const iso = (y: number, m: number, d: number) => `${y}-${String(m).padStart(2, "0")}-${String(d).padStart(2, "0")}`;
 const weekday = (s: string) => new Date(`${s}T12:00:00Z`).getUTCDay();
@@ -130,7 +133,7 @@ const COPY: Record<Locale, PayCopy> = {
     },
     pensions: {
       heading: "Pensiones e Ingreso Mínimo Vital: el primer día hábil",
-      text: `El ${link(U.rd696, "Real Decreto 696/2018")} obliga a que las pensiones estén en la cuenta «el primer día hábil del mes en que se realice el pago y, como máximo, el cuarto día natural». Los días hábiles son los del calendario bancario europeo ${link(U.ecb, "TARGET")}, sin contar los festivos de la ciudad de Madrid. El ${link(U.imv, "Ingreso Mínimo Vital")} se paga cada mes con la misma regla.`,
+      text: `El ${link(U.rd696, "Real Decreto 696/2018")} obliga a que las pensiones estén en la cuenta «el primer día hábil del mes en que se realice el pago y, como máximo, el cuarto día natural». Los días hábiles son los del calendario bancario europeo ${link(U.ecb, "TARGET")}, sin contar los festivos de la ciudad de Madrid. El ${link(U.imv, "Ingreso Mínimo Vital")} se paga cada mes con la misma regla. ¿Cuánto sube tu pensión en enero de 2027? ${link(PENSION_CALC.es, "Calcula la subida de las pensiones 2027")}.`,
       caption: "Fecha límite legal de pago de las pensiones de la Seguridad Social y del IMV",
       headers: ["Mes del pago", "Como tarde", "Paga extra"],
       note: "Es el plazo de la norma, no la fecha de tu banco: muchas entidades adelantan el ingreso unos días.",
@@ -170,7 +173,7 @@ const COPY: Record<Locale, PayCopy> = {
     },
     pensions: {
       heading: "Pensions i Ingrés Mínim Vital: el primer dia hàbil",
-      text: `El ${link(U.rd696, "Reial decret 696/2018")} obliga que les pensions siguin al compte el primer dia hàbil del mes en què es fa el pagament i, com a màxim, el quart dia natural. Els dies hàbils són els del calendari bancari europeu ${link(U.ecb, "TARGET")}, sense comptar els festius de la ciutat de Madrid. L'${link(U.imv, "Ingrés Mínim Vital")} es paga cada mes amb la mateixa regla.`,
+      text: `El ${link(U.rd696, "Reial decret 696/2018")} obliga que les pensions siguin al compte el primer dia hàbil del mes en què es fa el pagament i, com a màxim, el quart dia natural. Els dies hàbils són els del calendari bancari europeu ${link(U.ecb, "TARGET")}, sense comptar els festius de la ciutat de Madrid. L'${link(U.imv, "Ingrés Mínim Vital")} es paga cada mes amb la mateixa regla. Quant puja la teva pensió el gener del 2027? ${link(PENSION_CALC.ca, "Calcula la pujada de les pensions 2027")}.`,
       caption: "Data límit legal de pagament de les pensions de la Seguretat Social i de l'IMV",
       headers: ["Mes del pagament", "Com a molt tard", "Paga extra"],
       note: "És el termini de la norma, no la data del teu banc: moltes entitats avancen l'ingrés uns dies.",
@@ -210,7 +213,7 @@ const COPY: Record<Locale, PayCopy> = {
     },
     pensions: {
       heading: "Pensions and the Minimum Living Income: the first business day",
-      text: `${link(U.rd696, "Royal Decree 696/2018")} requires pensions to be in the account on the first business day of the month in which they are paid and, at the latest, on the fourth calendar day. Business days are those of the European banking calendar, ${link(U.ecb, "TARGET")}, leaving out public holidays in the city of Madrid. The ${link(U.imv, "Minimum Living Income (Ingreso Mínimo Vital)")} is paid every month under the same rule.`,
+      text: `${link(U.rd696, "Royal Decree 696/2018")} requires pensions to be in the account on the first business day of the month in which they are paid and, at the latest, on the fourth calendar day. Business days are those of the European banking calendar, ${link(U.ecb, "TARGET")}, leaving out public holidays in the city of Madrid. The ${link(U.imv, "Minimum Living Income (Ingreso Mínimo Vital)")} is paid every month under the same rule. How much will your pension rise in January 2027? ${link(PENSION_CALC.en, "Work out the 2027 pension increase")}.`,
       caption: "Legal deadline for paying Social Security pensions and the IMV",
       headers: ["Payment month", "At the latest", "Extra payment"],
       note: "This is the deadline in the regulation, not your bank's date: many banks credit the money a few days earlier.",

@@ -21,6 +21,7 @@ const { leaveEditions } = await import("../src/lib/programmatic/leave-2027/copy.
 const { netSalaryEditions } = await import("../src/lib/programmatic/net-salary/copy.ts");
 const { CALC_KEYS, calcEditions } = await import("../src/lib/programmatic/employment/paths.ts");
 const { rentEditions } = await import("../src/lib/programmatic/rent-update/copy.ts");
+const { pensionEditions } = await import("../src/lib/programmatic/pensions-2027/copy.ts");
 const { PATHS: TOOL_PATHS } = await import("../src/lib/content/home-tools.ts");
 
 // Titles and descriptions of every programmatic page.
@@ -84,6 +85,7 @@ test("every URL llms.txt names is a page a family or guide publishes", () => {
     ...Object.values(netSalaryEditions()),
     ...CALC_KEYS.flatMap((k) => Object.values(calcEditions(k))),
     ...Object.values(rentEditions()),
+    ...Object.values(pensionEditions()),
   ]);
   for (const tool of liveTools()) {
     for (const href of Object.values(tool.hubs)) assert.ok(known.has(href!), `${tool.name}: ${href} is not a published page`);
