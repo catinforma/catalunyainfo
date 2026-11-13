@@ -4008,3 +4008,128 @@ When the DOGC 2027 local-holiday order is parsed (expected mid-December),
 republish `carnaval`: the table switches source by itself.
 
 **Outcome:** _pending_
+
+
+## 2026-11-13 — Evergreen wave 2: the TSI health card (new) and Montserrat cable car vs rack railway (body upgrade, same URL) (groups `tsi`, `tsi-links`, `montserrat`, `montserrat-links`; deploy first)
+
+**Why.** Items 3 and 9 of `research_notes/evergreen-demand-nov2026.md`.
+- **TSI.** "tarjeta sanitaria" ≈ 2,700 searches a week in Catalonia; "catsalut"
+  peaks in Nov–Jan. The site had no page. The SERP is papelea,
+  soynomadadigital, nimextranjeria, shbarcelona and expat blogs. They
+  disagree on whether you can apply online, and some print rules no official
+  page gives (a photo, a one-year expiry). CatSalut's own answer is spread
+  over a dozen pages, in Catalan only. The page needs the padró first, so the
+  two guides link both ways.
+- **Montserrat (EN).** About 30 phrasings of "cable car or rack railway" sit
+  at positions 22–37. We already have a page for this intent
+  (`montserratFree`), so it is upgraded in place; no new URL.
+
+**What was added.**
+
+*TSI.* Three editions on year-free URLs:
+- `/ca/guies/targeta-sanitaria-tsi-catalunya/`
+- `/es/guias/tarjeta-sanitaria-tsi-cataluna/`
+- `/en/guides/health-card-tsi-catalonia/`
+
+Module `src/lib/content/batch02/tsi.ts`; TSI_AS_OF 2026-11-13, quotes in its
+header.
+- The answer comes first: the padró; apply online or at the CAP; a
+  provisional receipt with the CIP by email; the card posted free.
+- Two tables by situation: Social Security (5 rows) and everyone else (9 rows:
+  EHIC visitors, S1, non-working legal residents at the INSS, undocumented,
+  asylum, "segon nivell", conveni especial at €60/€157 a month, moving from
+  another region, returning).
+- Royal Decree 180/2026 (in force 13 Mar 2026): no minimum time on the padró,
+  a provisional document on applying, 3 months then positive silence, no
+  expiry. CatSalut's November 2025 page still says "more than three months";
+  the page prints the conflict.
+- Also: documents, five steps, the provisional receipt and the digital TSI, a
+  timings table, a renewal / lost card / moving / changing CAP table, free
+  choice of CAP (10 working days, after a year), La Meva Salut, and a
+  nine-question FAQ.
+- Hero reused: Barcelona from the Bunkers del Carmel (CC BY-SA 4.0).
+
+*Montserrat.* Same URLs; **titles and descriptions unchanged**, because the
+28 Oct title window runs to 28 Nov. Body only:
+- A comparison table straight after the facts: cable car, rack railway, car,
+  coach × from Barcelona, connection, total time, combined tickets, price.
+- A "by situation" table and an "up one way, down the other" section (two
+  singles cost €19).
+- Accessibility (FGC: accessible; the Aeri publishes nothing, so its phone
+  number), the sanctuary opening hours and the Escolania, a "by car" key
+  fact, and six new FAQs.
+- Re-verified 13 Nov: FGC GTFS (version 10 Nov), the Aeri calendar,
+  Turistren and the shop prices. Nothing in the existing tables changed.
+- The Autocars Julià coach is named, but its time and fare are not printed:
+  the operator's site did not answer, and Montserrat Visita's page also
+  carries stale FGC times.
+- MONTSERRAT_REREAD_BY 2027-01-01: the fares and the Aeri calendar end on
+  31 Dec 2026.
+
+**Links in** (body only; no title or description touched):
+- padró guide: the TSI sentence links the TSI guide, which is also added to
+  its related rail;
+- Barcelona hub: TSI added under "Living in Barcelona", and the EN Montserrat
+  item now reads "Montserrat: cable car or rack railway";
+- EN anchors to Montserrat in the query's words:
+  - Beyond Montserrat: "Montserrat cable car or rack railway: which to take,
+    times and fares";
+  - Christmas in Barcelona: "Montserrat by cable car or rack railway".
+
+**Go-live.**
+1. Deploy, then publish `tsi` and `tsi-links` (padró and hub).
+2. Publish `montserrat` and `montserrat-links` (the Beyond Montserrat feature
+   and Christmas in Barcelona).
+3. IndexNow the three TSI URLs and the three Montserrat URLs.
+
+Publishing `montserrat` on or after 29 Nov keeps the 28 Oct entry's
+measurement clean. Publishing now folds this upgrade into that window (the
+28 Oct entry already reads per page, not per change). Main session's call.
+
+**Baseline** (GSC, 17 Oct–13 Nov):
+- TSI: no page. The whole paperwork cluster (padró, NIE, TIE, TSI) had 12
+  impressions from July to November.
+- `/en/day-trips/montserrat-without-a-tour-from-barcelona/`: 1,360
+  impressions, 0 clicks, weighted position 34.8. The spike was 830 + 241
+  impressions on 9–10 Nov at 38.5. Top queries:
+  - "montserrat cable car" 36 at 33.7;
+  - "montserrat cable car or rack train" 31 at 24.6;
+  - "montserrat rack railway or cable car" 26 at 26.5;
+  - "rack railway vs cable car montserrat" 23 at 22.6;
+  - "montserrat cable car vs rack railway" 22 at 24.0.
+- ES edition: 115 impressions at 29.8. CA edition: 46 at 7.1.
+
+**Prediction.**
+
+*TSI:*
+- Indexed by 4 Dec.
+- By 15 Jan 2027 (28 days): 1,500–5,000 impressions across the three
+  editions, mostly ES; CTR 2–4%.
+- Long tail at position ≤ 10: "cómo pedir la tarjeta sanitaria en cataluña",
+  "tarjeta sanitaria sin papeles cataluña", "tsi online catsalut", "health
+  card catalonia", "targeta sanitària duplicat", "canviar de CAP".
+- "tarjeta sanitaria" alone stays behind CatSalut.
+- Wrong if under 400 impressions by 15 Jan, or not indexed by 11 Dec.
+
+*Montserrat:*
+- 28 days after the publish date, the EN "cable car vs rack railway" queries
+  move from 22–37 to 8–15.
+- EN impressions rise 50–150% (more queries at page-2 positions).
+- First clicks: at least 10 in 28 days.
+- Wrong if the median position of the five queries above is still above 20.
+- The ES and CA editions must not fall: the ES head terms stay at 15–45, CA
+  holds ≤ 10.
+
+**Measure:**
+- 4 Dec: indexing (`batch_url_inspection`, three TSI URLs).
+- 15 Jan 2027: `snapshot.py page tarjeta-sanitaria 28`,
+  `page health-card-tsi 28` and `page targeta-sanitaria 28`.
+- Publish date + 28 days: `snapshot.py page montserrat-without-a-tour 28` and
+  `page montserrat-por-libre 28`.
+
+**Upkeep** (tests fail until done):
+- from 1 Jan 2027 (MONTSERRAT_REREAD_BY), until the 2027 Turistren and Aeri
+  fares and the Aeri 2027 calendar are read in;
+- from 13 Feb 2027 (TSI_REREAD_BY), until every source in `tsi.ts` is re-read.
+
+**Outcome:** _pending_

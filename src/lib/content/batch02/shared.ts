@@ -116,7 +116,9 @@ export type B2Key =
   // How to register on the padró (padro.ts).
   | "padro"
   // Carnival 2027 in Catalonia: dates, local holidays, schools, the big carnivals (carnival.ts).
-  | "carnival";
+  | "carnival"
+  // The TSI health card: who is entitled, documents, how to apply (tsi.ts).
+  | "tsi";
 
 /** Path after the locale prefix, no leading or trailing slash. */
 export const B2_PATHS: Record<B2Key, Record<Locale, string>> = {
@@ -520,6 +522,12 @@ export const B2_PATHS: Record<B2Key, Record<Locale, string>> = {
     ca: "tradicions/carnaval-catalunya",
     es: "tradiciones/carnaval-cataluna",
     en: "traditions/carnival-catalonia",
+  },
+  // Evergreen: no year in the path.
+  tsi: {
+    ca: "guies/targeta-sanitaria-tsi-catalunya",
+    es: "guias/tarjeta-sanitaria-tsi-cataluna",
+    en: "guides/health-card-tsi-catalonia",
   },
 };
 
@@ -941,6 +949,11 @@ export const B2_TITLES: Record<B2Key, Record<Locale, string>> = {
     ca: "Carnaval 2027 a Catalunya: dates, festius locals i rues",
     es: "Carnaval 2027 en Cataluña: fechas, festivos locales y rúas",
     en: "Carnival 2027 in Catalonia: dates, local holidays and parades",
+  },
+  tsi: {
+    ca: "Com demanar la targeta sanitària (TSI) a Catalunya",
+    es: "Cómo pedir la tarjeta sanitaria (TSI) en Cataluña",
+    en: "How to get the health card (TSI) in Catalonia",
   },
 };
 

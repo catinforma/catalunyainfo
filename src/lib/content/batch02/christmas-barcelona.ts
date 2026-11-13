@@ -880,7 +880,7 @@ export function buildChristmasBarcelonaBody(locale: Locale, facts: Announcements
     ),
     ...h2(
       "Weather and day trips in December",
-      `December's averages (temperature, rain and sunshine, from AEMET) are in ${b2link("climate", "en", "Barcelona weather by month")}. Day trips that work in winter: ${b2link("montserratFree", "en", "Montserrat without a tour")}, ${b2link("girona", "en", "Girona by train")}, ${b2link("sitges", "en", "Sitges")} or ${b2link("figueres", "en", "Figueres and the Dalí Museum")}. For snow, ${b2link("nuria", "en", "Vall de Núria")}, ${b2link("snow", "en", "where to see snow without skiing")} and ${b2link("ski", "en", "Catalonia's ski resorts")}.`,
+      `December's averages (temperature, rain and sunshine, from AEMET) are in ${b2link("climate", "en", "Barcelona weather by month")}. Day trips that work in winter: ${b2link("montserratFree", "en", "Montserrat by cable car or rack railway")}, ${b2link("girona", "en", "Girona by train")}, ${b2link("sitges", "en", "Sitges")} or ${b2link("figueres", "en", "Figueres and the Dalí Museum")}. For snow, ${b2link("nuria", "en", "Vall de Núria")}, ${b2link("snow", "en", "where to see snow without skiing")} and ${b2link("ski", "en", "Catalonia's ski resorts")}.`,
     ),
     ...h2(
       "New Year's Eve and the Three Kings",

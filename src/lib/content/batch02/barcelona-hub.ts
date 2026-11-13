@@ -58,7 +58,7 @@ const GROUPS: Record<Locale, { lead: string; intro: string; groups: Group[]; out
       {
         title: "Day trips",
         items: [
-          ["montserratFree", "Montserrat without a tour", "R5 train, then rack railway or cable car at €15 return."],
+          ["montserratFree", "Montserrat: cable car or rack railway", "R5 train, then rack railway or cable car at €15 return."],
           ["sitges", "Sitges by train", "31–37 minutes on the R2 Sud, €5.50 single; last train back 22:22."],
           ["girona", "Girona by train", "R11 regional from €8.95 in 1 h 19–1 h 31, or high-speed in about 40 minutes."],
           ["tarragona", "Tarragona by train", "69 minutes from Sants, €8.60 single; Roman sites €5 each or €15 for five."],
@@ -71,6 +71,7 @@ const GROUPS: Record<Locale, { lead: string; intro: string; groups: Group[]; out
         title: "Living in Barcelona",
         items: [
           ["padro", "Registering on the padrón", "Free at the City Council, online or at an OAC; no rental contract or legal residence needed, and the documents for each situation."],
+          ["tsi", "The health card (TSI)", "Once you are on the padró: apply online or at your CAP, who is entitled in each situation, and the provisional receipt by email."],
         ],
       },
     ],
@@ -127,6 +128,7 @@ const GROUPS: Record<Locale, { lead: string; intro: string; groups: Group[]; out
         title: "Vivir en Barcelona",
         items: [
           ["padro", "Empadronarse", "Gratis en el Ayuntamiento, por internet o en una OAC; sin contrato de alquiler ni residencia legal, y los documentos para cada caso."],
+          ["tsi", "La tarjeta sanitaria (TSI)", "Con el padrón hecho: se pide por internet o en el CAP, quién tiene derecho en cada caso y el resguardo provisional por correo."],
         ],
       },
     ],
@@ -183,6 +185,7 @@ const GROUPS: Record<Locale, { lead: string; intro: string; groups: Group[]; out
         title: "Viure a Barcelona",
         items: [
           ["padro", "Empadronar-se", "Gratuït a l'Ajuntament, per internet o a una OAC; sense contracte de lloguer ni residència legal, i els documents per a cada cas."],
+          ["tsi", "La targeta sanitària (TSI)", "Amb el padró fet: es demana per internet o al CAP, qui hi té dret en cada cas i el resguard provisional per correu."],
         ],
       },
     ],
