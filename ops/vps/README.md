@@ -736,6 +736,16 @@ image, and `/api/admin/*` and `/api/cron/*` answer 404 from the internet.
 - **Publishing content groups:**
   `ssh deploy@<server> 'bash /srv/catalunyainfo/current/ops/vps/publish.sh strikes voting'`.
 - **Daily job:** the timer already calls `http://127.0.0.1:3000/api/cron/publish-scheduled/`.
+- **WhatsApp channel post (Nov 2026):** the owner's phone opens
+  `https://www.catalunyainfo.com/canal/<CHANNEL_PAGE_TOKEN>/` (today's and
+  tomorrow's post, a "Copia" button; noindex, no-referrer, 404 for any other
+  token or when the variable is unset). Same page in the CMS at `/admin/canal/`.
+  Set or rotate the token without printing it:
+  `sudo sh -c 'sed -i "/^CHANNEL_PAGE_TOKEN=/d" /srv/catalunyainfo/shared/.env.production && printf "CHANNEL_PAGE_TOKEN=%s\n" "$(openssl rand -hex 24)" >> /srv/catalunyainfo/shared/.env.production'`
+  then `sudo systemctl restart catalunyainfo`. The owner reads the URL in
+  their own SSH session: `sudo sed -n "s|^CHANNEL_PAGE_TOKEN=\(.*\)|https://www.catalunyainfo.com/canal/\1/|p" /srv/catalunyainfo/shared/.env.production`
+  (append `| qrencode -t ansiutf8` to scan it with the phone). GA4:
+  `scripts/snapshot.py channel`.
 
 
 ---

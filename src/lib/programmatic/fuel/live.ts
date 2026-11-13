@@ -96,9 +96,11 @@ function madridOffsetMinutes(instant: number): number {
  */
 export function ministryTimestampToIso(fecha: unknown): string | null {
   if (typeof fecha !== "string") return null;
-  const m = /^(\d{2})\/(\d{2})\/(\d{4}) (\d{2}):(\d{2}):(\d{2})$/.exec(fecha.trim());
+  // The hour has no leading zero before 10:00 ("13/11/2026 0:54:13", read 13 Nov 2026).
+  const m = /^(\d{1,2})\/(\d{1,2})\/(\d{4}) (\d{1,2}):(\d{2}):(\d{2})$/.exec(fecha.trim());
   if (!m) return null;
-  const [, dd, mm, yyyy, hh, mi, ss] = m;
+  const pad = (v: string) => v.padStart(2, "0");
+  const [dd, mm, yyyy, hh, mi, ss] = [pad(m[1]!), pad(m[2]!), m[3]!, pad(m[4]!), m[5]!, m[6]!];
   const asUtc = Date.UTC(Number(yyyy), Number(mm) - 1, Number(dd), Number(hh), Number(mi), Number(ss));
   // Madrid is UTC+1 or UTC+2; take the offset that is true at the instant it gives.
   for (const offset of [120, 60]) {

@@ -323,6 +323,9 @@ test("live: the Ministry's Fecha in Madrid time, winter and summer", () => {
   // Day after the change to winter time (25 Oct 2026) and day of the change to summer time (29 Mar 2026).
   assert.equal(ministryTimestampToIso("26/10/2026 00:30:00"), "2026-10-26T00:30:00+01:00");
   assert.equal(ministryTimestampToIso("29/03/2026 12:00:00"), "2026-03-29T12:00:00+02:00");
+  // Before 10:00 the Ministry writes the hour with one digit.
+  assert.equal(ministryTimestampToIso("13/11/2026 0:54:13"), "2026-11-13T00:54:13+01:00");
+  assert.equal(ministryTimestampToIso("13/11/2026 9:05:00"), "2026-11-13T09:05:00+01:00");
   assert.equal(ministryTimestampToIso("2026-10-28 11:36"), null);
   assert.equal(ministryTimestampToIso(undefined), null);
   assert.equal(Date.parse(ministryTimestampToIso(FIXTURE.Fecha)!), Date.parse("2026-10-28T10:36:05Z"));

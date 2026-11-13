@@ -13,6 +13,7 @@ few dozen short lines. Works on the VPS (Linux) and on the owner's Windows PC.
     $PY scripts/snapshot.py page <substr> [days] # one page (or family): per-day + top queries
     $PY scripts/snapshot.py audience [days]      # GA4: device, country, city, language, age, gender, channel
     $PY scripts/snapshot.py families [days]      # impressions by URL family (/es/festivos/dia/, ...)
+    $PY scripts/snapshot.py channel [days]       # GA4: WhatsApp channel visits (utm whatsapp / channel), per day + pages
 
 GSC data lags ~2 days; the last day is partial. Dates are Europe/Madrid.
 """
@@ -240,6 +241,31 @@ def cmd_audience(a):
             print("  %-28s users %6d (%4.1f%%)  sess %6s  engaged %4.0f%%" % (
                 x["dimensionValues"][0]["value"][:28], u, 100 * u / tot, x["metricValues"][1]["value"],
                 100 * float(x["metricValues"][2]["value"])))
+
+
+def cmd_channel(a):
+    """GA4: visits from the WhatsApp channel's daily post (utm_source=whatsapp, utm_medium=channel)."""
+    days = int(a[0]) if a else 28
+    svc = ga()
+    rng = [{"startDate": "%ddaysAgo" % days, "endDate": "today"}]
+    flt = {"andGroup": {"expressions": [
+        {"filter": {"fieldName": "sessionSource", "stringFilter": {"value": "whatsapp"}}},
+        {"filter": {"fieldName": "sessionMedium", "stringFilter": {"value": "channel"}}}]}}
+    mets = [{"name": "sessions"}, {"name": "activeUsers"}, {"name": "engagementRate"}]
+    for dims, n in ((["date"], days), (["sessionManualAdContent"], 5), (["landingPage"], 15)):
+        r = svc.properties().runReport(property=GA_PROPERTY, body={
+            "dateRanges": rng, "dimensions": [{"name": d} for d in dims], "metrics": mets,
+            "dimensionFilter": flt, "limit": n,
+            "orderBys": [{"dimension": {"dimensionName": "date"}}] if dims == ["date"]
+            else [{"metric": {"metricName": "sessions"}, "desc": True}]}).execute()
+        rows = r.get("rows", [])
+        print("--- %s (whatsapp / channel, last %d days)" % (dims[0], days))
+        if not rows:
+            print("  (no sessions yet)")
+        for x in rows:
+            print("  %-60s sess %5s  users %5s  engaged %4.0f%%" % (
+                x["dimensionValues"][0]["value"][:60], x["metricValues"][0]["value"],
+                x["metricValues"][1]["value"], 100 * float(x["metricValues"][2]["value"])))
 
 
 CMDS = {k[4:]: v for k, v in globals().items() if k.startswith("cmd_")}

@@ -1,6 +1,6 @@
 import type { Locale } from "@/lib/i18n/config";
 
-import { FOLLOW_CHANNEL_COPY, WHATSAPP_CHANNEL_URL } from "@/lib/share/channel";
+import { DAILY_FOLLOW_COPY, FOLLOW_CHANNEL_COPY, WHATSAPP_CHANNEL_URL } from "@/lib/share/channel";
 
 function WhatsAppIcon({ size = 18 }: { size?: number }) {
   return (
@@ -13,9 +13,12 @@ function WhatsAppIcon({ size = 18 }: { size?: number }) {
   );
 }
 
-/** End-of-article box. */
-export function FollowChannel({ locale }: { locale: Locale }) {
-  const c = FOLLOW_CHANNEL_COPY[locale];
+/**
+ * End-of-article box. `daily` on the pages readers revisit every day (the
+ * daily page, the strikes hub): "get this every morning".
+ */
+export function FollowChannel({ locale, variant = "default" }: { locale: Locale; variant?: "default" | "daily" }) {
+  const c = variant === "daily" ? DAILY_FOLLOW_COPY[locale] : FOLLOW_CHANNEL_COPY[locale];
   return (
     <aside className="ci-follow ci-measure mt-10" aria-label={c.title}>
       <p className="ci-follow-title">{c.title}</p>
