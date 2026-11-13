@@ -9,12 +9,13 @@ import { B2_PATHS, B2_TITLES, b2href } from "../src/lib/content/batch02/shared.t
 import { ARTICLE_PATHS } from "../src/lib/content/features/shared.ts";
 import { WEEKDAY_NAMES, weekdayIndex } from "../src/lib/content/holidays/calendar.ts";
 import { LOCALES, type Locale } from "../src/lib/i18n/config.ts";
-import { calcEditions } from "../src/lib/programmatic/employment/paths.ts";
+import { CALCULATOR_IDS, calcEditions, calculatorsHubEditions } from "../src/lib/programmatic/calculators/paths.ts";
 
 const ALL_PATHS = [...Object.values(B2_PATHS), ...Object.values(ARTICLE_PATHS), ...Object.values(SIBLING_PATHS)];
 const PUBLISHED = new Set(ALL_PATHS.flatMap((paths) => LOCALES.map((locale) => `/${locale}/${paths[locale]}/`)));
-// The unemployment benefit calculator ships with the deploy (a route, not a published entry).
-for (const path of Object.values(calcEditions("unemployment"))) PUBLISHED.add(path);
+// The calculators and their hub ship with the deploy (routes, not published entries).
+for (const id of CALCULATOR_IDS) for (const path of Object.values(calcEditions(id))) PUBLISHED.add(path);
+for (const path of Object.values(calculatorsHubEditions())) PUBLISHED.add(path);
 const json = (locale: Locale) => JSON.stringify(PAY_DATES.editions[locale].blocks);
 const links = (locale: Locale) => [...json(locale).matchAll(/\]\(([^)\s]+)\)/g)].map((m) => m[1]!);
 const tables = (locale: Locale) => (PAY_DATES.editions[locale].blocks as unknown as { type: string; rows?: string[][] }[]).filter((b) => b.type === "table");

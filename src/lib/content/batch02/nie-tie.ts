@@ -1,7 +1,7 @@
 import type { Block } from "@/lib/content/blocks";
 import { LOCALES, type Locale } from "@/lib/i18n/config";
 
-import { B2_PATHS, b2Related, b2link, callout, faq, h2, keyFacts, lead, list, paras, steps, table, verifiedLine, type B2Article, type B2Source } from "./shared";
+import { B2_PATHS, b2Related, b2link, netSalaryRelatedItem, callout, faq, h2, keyFacts, lead, list, paras, steps, table, verifiedLine, type B2Article, type B2Source } from "./shared";
 
 /**
  * NIE and TIE in Barcelona and Catalonia: the number (NIE), the card (TIE) and
@@ -588,7 +588,7 @@ export function buildNieTieBody(locale: Locale): Block[] {
     { type: "heading", level: 2, text: t.faqH } as Block,
     faq(t.faq),
     callout("official", verifiedLine(L, NIE_TIE_AS_OF), t.official),
-    ...b2Related(["padro", "tsi", "barcelonaHub", "foreignVote"], L),
+    ...b2Related(["padro", "tsi", "barcelonaHub", "foreignVote"], L, [netSalaryRelatedItem(L)]),
   ];
 }
 

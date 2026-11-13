@@ -4,7 +4,8 @@ import { useId, useState } from "react";
 
 import { isIsoDate } from "@/lib/programmatic/employment/dates";
 import { DISMISSAL_TYPES, compareDismissals, type DismissalResult, type DismissalType } from "@/lib/programmatic/employment/dismissal";
-import { dateWords, money, num, parseAmount, type CalcLocale } from "@/lib/programmatic/employment/paths";
+import { dateWords, money, num, parseAmount } from "@/lib/programmatic/employment/paths";
+import type { CalcLocale } from "@/lib/programmatic/calculators/paths";
 import { SMI_ANNUAL } from "@/lib/programmatic/employment/rules";
 
 /**

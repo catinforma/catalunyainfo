@@ -13,7 +13,7 @@
 
 import { leaveEditions } from "@/lib/programmatic/leave-2027/copy";
 import { netSalaryEditions } from "@/lib/programmatic/net-salary/copy";
-import { calcEditions } from "@/lib/programmatic/employment/paths";
+import { calcEditions, calculatorsHubEditions } from "@/lib/programmatic/calculators/paths";
 import { rentEditions } from "@/lib/programmatic/rent-update/copy";
 import { LOCALES, type Locale } from "@/lib/i18n/config";
 import { PATHS as TOOL_PATHS } from "@/lib/content/home-tools";
@@ -82,6 +82,11 @@ export function liveTools(): LiveTool[] {
       name: "2027 leave planner",
       hubs: leaveEditions(),
       description: "pick a Catalan town, a Spanish city or region and 1 to 25 days of leave: which working days to book in 2027 for the most days off in a row, ranked by days off per day of leave, from the official 2027 holiday lists (DOGC, BOE, city bulletins).",
+    },
+    {
+      name: "Calculators for Spain (hub)",
+      hubs: calculatorsHubEditions(),
+      description: "every calculator on the site in one page, grouped by work and pay, housing, holidays and live data, each with the question it answers and the law or official data it is built on.",
     },
     {
       name: "Spain net salary calculator 2026",

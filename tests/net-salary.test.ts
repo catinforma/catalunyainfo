@@ -1,9 +1,9 @@
 import assert from "node:assert/strict";
-import { existsSync, readFileSync } from "node:fs";
+import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { test } from "node:test";
 
-import { CALCULATORS, CALCULATORS_ROOT } from "../src/lib/programmatic/calculators/paths.ts";
+import { CALCULATORS_ROOT, calculatorSlugs } from "../src/lib/programmatic/calculators/paths.ts";
 import { CALC_COPY, NET_LOCALES, NET_SLUG, fillFigures, money, netSalaryEditions, netSalaryPath, parseAmount, percent, readHash, writeHash } from "../src/lib/programmatic/net-salary/copy.ts";
 import { DEFAULT_INPUT, calculateNetSalary, round2, scale, trunc2, workReduction, type SalaryInput } from "../src/lib/programmatic/net-salary/engine.ts";
 import { REGIONS, regionById } from "../src/lib/programmatic/net-salary/regions.ts";
@@ -274,13 +274,13 @@ test("copy: every locale has every string; percentages in the words match the ru
 /* Pages                                                                      */
 /* -------------------------------------------------------------------------- */
 
-test("pages: one static folder per language under the calculators root; no hub page yet", () => {
+test("pages: one static folder per language under the calculators root", () => {
   assert.deepEqual(netSalaryEditions(), {
     ca: "/ca/calculadores/sou-net/",
     es: "/es/calculadoras/sueldo-neto/",
     en: "/en/calculators/net-salary-spain/",
   });
-  assert.deepEqual(CALCULATORS[0].slugs, NET_SLUG);
+  assert.deepEqual(calculatorSlugs("net-salary"), NET_SLUG);
   for (const locale of NET_LOCALES) {
     assert.ok(netSalaryPath(locale).startsWith(`/${locale}/${CALCULATORS_ROOT[locale]}/`));
     const source = readFileSync(join(APP, CALCULATORS_ROOT[locale], NET_SLUG[locale], "page.tsx"), "utf8");
@@ -288,8 +288,6 @@ test("pages: one static folder per language under the calculators root; no hub p
     assert.match(source, /^export const dynamicParams = true;$/m);
     assert.match(source, new RegExp(`if \\(locale !== "${locale}"\\) notFound\\(\\);`));
     assert.match(source, new RegExp(`<NetSalaryRoute locale="${locale}" />`));
-    // The hub is the main session's: it must not appear by accident (remove this line when it is built).
-    assert.ok(!existsSync(join(APP, CALCULATORS_ROOT[locale], "page.tsx")), `${locale}: calculators hub`);
   }
 });
 

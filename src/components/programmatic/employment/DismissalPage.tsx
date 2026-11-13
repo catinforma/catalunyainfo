@@ -1,7 +1,8 @@
 import Link from "next/link";
 
 import { compareDismissals, dismissalPay } from "@/lib/programmatic/employment/dismissal";
-import { calcPath, dateWords, money, num, type CalcLocale } from "@/lib/programmatic/employment/paths";
+import { dateWords, money, num } from "@/lib/programmatic/employment/paths";
+import { calcPath, type CalcLocale } from "@/lib/programmatic/calculators/paths";
 import {
   IRPF_EXEMPT_CAP,
   OBJECTIVE_DAYS_PER_YEAR,

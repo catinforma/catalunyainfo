@@ -5,6 +5,7 @@ import { hasAnyAuthors, hasAnyTags, nonEmptySections } from "@/lib/content/repos
 import { getMessages } from "@/lib/i18n";
 import { LEGAL_KEYS, legalPath, sectionPath } from "@/lib/i18n/routes";
 import type { Locale } from "@/lib/i18n/config";
+import { MENU_LABELS, MENU_PATHS } from "@/lib/nav/menu";
 import { SITE } from "@/lib/site";
 import { Wordmark } from "@/components/Wordmark";
 import { FollowChannelLink } from "@/components/share/FollowChannel";
@@ -45,6 +46,11 @@ export async function SiteFooter({ locale }: { locale: Locale }) {
                 <Link href={sectionPath(key, locale)}>{t.nav[key]}</Link>
               </li>
             ))}
+            {/* The calculators hub, which the owner asked to have in the
+                header and the footer (lib/nav/menu.ts). */}
+            <li>
+              <Link href={MENU_PATHS.calculators[locale]}>{MENU_LABELS.calculators[locale]}</Link>
+            </li>
             {/* Topics and authors are linked only once they have something
                 to list. Both are out of the sitemap for the same reason, and
                 a link from every page to an empty index is the other half of

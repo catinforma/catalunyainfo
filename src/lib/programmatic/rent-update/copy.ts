@@ -1,3 +1,4 @@
+import { calcPath, calculatorSlugs } from "@/lib/programmatic/calculators/paths";
 import { MONTHS, caDayArticle, dayMonthYear, type DateLocale } from "@/lib/programmatic/holidays/format";
 
 import type { AgreedIndex, Cap, NoteId, PendingResult } from "./engine";
@@ -14,17 +15,17 @@ import type { SeriesId } from "./ine";
  *   /en/calculators/rent-increase-spain/
  *
  * Static folders under each language's calculators folder, beside the
- * other calculators; there is deliberately no calculators hub page.
+ * other calculators; the slugs come from the family registry
+ * (lib/programmatic/calculators/paths.ts), which the calculators hub lists.
  */
 
 export type RentLocale = DateLocale;
 export const RENT_LOCALES: readonly RentLocale[] = ["es", "ca", "en"];
 
-const FOLDER: Record<RentLocale, string> = { es: "calculadoras", ca: "calculadores", en: "calculators" };
-export const RENT_SLUG: Record<RentLocale, string> = { es: "actualizar-alquiler", ca: "actualitzar-lloguer", en: "rent-increase-spain" };
+export const RENT_SLUG: Record<RentLocale, string> = calculatorSlugs("rent-update");
 
 export function rentPath(locale: RentLocale): string {
-  return `/${locale}/${FOLDER[locale]}/${RENT_SLUG[locale]}/`;
+  return calcPath("rent-update", locale);
 }
 
 export function rentEditions(): Record<RentLocale, string> {

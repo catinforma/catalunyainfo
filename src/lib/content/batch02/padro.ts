@@ -1,7 +1,7 @@
 import type { Block } from "@/lib/content/blocks";
 import { LOCALES, type Locale } from "@/lib/i18n/config";
 
-import { B2_PATHS, b2Related, b2link, callout, faq, h2, h3, keyFacts, lead, paras, steps, table, verifiedLine, type B2Article, type B2Source } from "./shared";
+import { B2_PATHS, b2Related, b2link, netSalaryRelatedItem, callout, faq, h2, h3, keyFacts, lead, paras, steps, table, verifiedLine, type B2Article, type B2Source } from "./shared";
 
 /**
  * Empadronar-se: how to register on the padró in Barcelona and Catalonia
@@ -483,7 +483,7 @@ export function buildPadroBody(locale: Locale): Block[] {
       es: `Ley 7/1985 e ${a(PADRO_URLS.instructions, "instrucciones técnicas del padrón")} (BOE), ficha y guía del Ayuntamiento de Barcelona, CatSalut, INE y las sedes electrónicas de Girona, Lleida, Tarragona y L'Hospitalet.`,
       en: `Law 7/1985 and the ${a(PADRO_URLS.instructions, "padrón technical instructions")} (BOE, in Spanish), Barcelona City Council's procedure sheet and guide, CatSalut, the INE and the e-offices of Girona, Lleida, Tarragona and L'Hospitalet.`,
     }[L]),
-    ...b2Related(["tsi", "nieTie", "foreignVote", "barcelonaHub", "transport", "payDates"], L),
+    ...b2Related(["tsi", "nieTie", "foreignVote", "barcelonaHub", "transport", "payDates"], L, [netSalaryRelatedItem(L)]),
   ];
 }
 

@@ -3,7 +3,7 @@ import { WEEKDAY_NAMES } from "@/lib/content/holidays/calendar";
 import { LOCALES, type Locale } from "@/lib/i18n/config";
 import { boeRegionsOn2026 } from "@/lib/programmatic/holidays/boe-2026";
 import { boeRegionsOn } from "@/lib/programmatic/holidays/boe-2027";
-import { calcEditions } from "@/lib/programmatic/employment/paths";
+import { calcEditions, calculatorsHubEditions } from "@/lib/programmatic/calculators/paths";
 
 import { B2_PATHS, faq, h2, lead, list, paras, table, type B2Article, type B2Edition, type B2Source } from "./shared";
 
@@ -57,6 +57,9 @@ const U = {
 const link = (href: string, label: string) => `[${label}](${href})`;
 /** The unemployment benefit calculator (lib/programmatic/employment/), which links back here. */
 const CALC = calcEditions("unemployment");
+/** The net salary calculator and the calculators hub, for readers checking a payslip rather than a benefit. */
+const NET = calcEditions("net-salary");
+const HUB = calculatorsHubEditions();
 
 const iso = (y: number, m: number, d: number) => `${y}-${String(m).padStart(2, "0")}-${String(d).padStart(2, "0")}`;
 const weekday = (s: string) => new Date(`${s}T12:00:00Z`).getUTCDay();
@@ -111,7 +114,7 @@ interface PayCopy {
   sepe: { heading: string; text: string; caption: string; headers: string[]; note: string };
   pensions: { heading: string; text: string; caption: string; headers: string[]; note: string };
   extras: { heading: string; texts: string[] };
-  bank: { heading: string; text: string; items: string[] };
+  bank: { heading: string; text: string; items: string[]; payroll: string };
   faq: (dec: string) => { question: string; answer: string }[];
 }
 
@@ -149,6 +152,7 @@ const COPY: Record<Locale, PayCopy> = {
         "Las pensiones no contributivas las paga la Tesorería de la Seguridad Social, salvo en Navarra y el País Vasco, que las gestionan ellos.",
         "Este calendario no sirve para nóminas de empresa ni para ayudas autonómicas.",
       ],
+      payroll: `Para saber cuánto cobrarás en la nómina, usa la ${link(NET.es, "calculadora de sueldo neto")}; el finiquito, el despido y la subida del alquiler están en las ${link(HUB.es, "calculadoras")}.`,
     },
     faq: (dec) => [
       { question: "¿Qué día se cobra el paro en diciembre de 2026?", answer: `El ${dec}, porque el SEPE paga el día 10 de cada mes, o el siguiente día hábil si es festivo.` },
@@ -189,6 +193,7 @@ const COPY: Record<Locale, PayCopy> = {
         "Les pensions no contributives les paga la Tresoreria de la Seguretat Social, tret de Navarra i el País Basc, que les gestionen ells mateixos.",
         "Aquest calendari no serveix per a les nòmines d'empresa ni per als ajuts autonòmics.",
       ],
+      payroll: `Per saber quant cobraràs a la nòmina, fes servir la ${link(NET.ca, "calculadora de sou net")}; la quitança, l'acomiadament i la pujada del lloguer són a les ${link(HUB.ca, "calculadores")}.`,
     },
     faq: (dec) => [
       { question: "Quin dia es cobra l'atur el desembre de 2026?", answer: `El ${dec}, perquè el SEPE paga el dia 10 de cada mes, o el primer dia hàbil següent si és festiu.` },
@@ -229,6 +234,7 @@ const COPY: Record<Locale, PayCopy> = {
         "Non-contributory pensions are paid by the Social Security Treasury, except in Navarre and the Basque Country, which manage their own.",
         "This calendar does not apply to company payrolls or to regional benefits.",
       ],
+      payroll: `To see what your payslip will show, use the ${link(NET.en, "net salary calculator")}; final settlement, severance pay and rent increases are in the ${link(HUB.en, "calculators")}.`,
     },
     faq: (dec) => [
       { question: "What day is unemployment benefit paid in Spain in December 2026?", answer: `On ${dec}: SEPE pays on the 10th of each month, or on the next business day if the 10th is a holiday.` },
@@ -261,6 +267,7 @@ export function buildPayBody(locale: Locale = "es"): Block[] {
     ...h2(t.bank.heading),
     ...paras(t.bank.text),
     list(...t.bank.items),
+    ...paras(t.bank.payroll),
     faq(t.faq(dec)),
   ];
 }

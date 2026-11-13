@@ -1,4 +1,5 @@
 import type { Locale } from "@/lib/i18n/config";
+import { calculatorsHubEditions } from "@/lib/programmatic/calculators/paths";
 
 /**
  * The topical entries of the site menu: the hubs that carry the traffic.
@@ -12,11 +13,16 @@ import type { Locale } from "@/lib/i18n/config";
  * against the module that publishes it, so a renamed slug fails the suite
  * instead of leaving a dead menu link.
  *
+ * One entry is not chosen by impressions: the calculators hub, which the
+ * owner asked for explicitly on 13 Nov 2026 (the Spain-wide calculators are
+ * the site's move beyond Catalonia, with steady demand all year). It goes
+ * last in the bar of every edition until its own numbers say where it ranks.
+ *
  * `primary` entries sit in the desktop bar; `more` entries go in its "More"
  * group. The phone menu lists all of them.
  */
 
-export type MenuKey = "strikes" | "holidays" | "elections" | "school" | "localHolidays" | "spain2027" | "contact";
+export type MenuKey = "strikes" | "holidays" | "elections" | "calculators" | "school" | "localHolidays" | "spain2027" | "contact";
 
 export interface MenuItem {
   key: MenuKey;
@@ -40,6 +46,8 @@ export const MENU_PATHS: Record<MenuKey, Record<Locale, string>> = {
   },
   // The elections hub: results for every municipality, the 29N night included.
   elections: { ca: "/ca/eleccions/", es: "/es/elecciones/", en: "/en/elections/" },
+  // The calculators hub (lib/programmatic/calculators/): sueldo neto, despido, finiquito, paro, alquiler.
+  calculators: calculatorsHubEditions(),
   school: {
     ca: "/ca/guies/calendari-escolar-catalunya/",
     es: "/es/guias/calendario-escolar-cataluna/",
@@ -56,17 +64,18 @@ export const MENU_LABELS: Record<MenuKey, Record<Locale, string>> = {
   strikes: { ca: "Vagues", es: "Huelgas", en: "Strikes" },
   holidays: { ca: "Festius", es: "Festivos", en: "Holidays" },
   elections: { ca: "Eleccions", es: "Elecciones", en: "Elections" },
+  calculators: { ca: "Calculadores", es: "Calculadoras", en: "Calculators" },
   school: { ca: "Calendari escolar", es: "Calendario escolar", en: "School calendar" },
   localHolidays: { ca: "Festius per municipi", es: "Festivos por municipio", en: "Holidays by town" },
   spain2027: { ca: "Festius 2027 a Espanya", es: "Festivos 2027 en España", en: "Spain holidays 2027" },
   contact: { ca: "Contacte", es: "Contacto", en: "Contact" },
 };
 
-/** Desktop-bar entries, before the section hubs, ordered by each edition's impressions. */
+/** Desktop-bar entries, before the section hubs, ordered by each edition's impressions (calculators last: see above). */
 export const PRIMARY_ORDER: Record<Locale, MenuKey[]> = {
-  es: ["strikes", "holidays", "elections"],
-  ca: ["elections", "strikes", "holidays"],
-  en: ["elections", "strikes", "holidays"],
+  es: ["strikes", "holidays", "elections", "calculators"],
+  ca: ["elections", "strikes", "holidays", "calculators"],
+  en: ["elections", "strikes", "holidays", "calculators"],
 };
 
 /** The "More" group, after the section hubs. */
