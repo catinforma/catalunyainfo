@@ -21,6 +21,7 @@ import { editionSitemapEntries } from "@/lib/programmatic/spain-2027/editions";
 import { spainDaySitemapEntries, spainSitemapEntries } from "@/lib/programmatic/spain-2027/paths";
 import { widgetSitemapEntries } from "@/lib/programmatic/embed-2027/places";
 import { leaveSitemapEntries } from "@/lib/programmatic/leave-2027/places";
+import { rentSitemapEntries } from "@/lib/programmatic/rent-update/page";
 
 /**
  * Cached for an hour (ISR) and refreshed at once by every publish, and by the
@@ -161,6 +162,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...widgetSitemapEntries(),
     // "Com aprofitar les vacances el 2027": the leave planner, in ca, es and en.
     ...leaveSitemapEntries(),
+    // "Actualizar el alquiler": the rent-update calculator (INE IPC and IRAV), in es, ca and en.
+    ...rentSitemapEntries(),
     ...fuelSitemapEntries(),
     ...rodaliesSitemap(),
     ...reservoirSitemapEntries(),

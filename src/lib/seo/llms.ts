@@ -12,6 +12,7 @@
  */
 
 import { leaveEditions } from "@/lib/programmatic/leave-2027/copy";
+import { rentEditions } from "@/lib/programmatic/rent-update/copy";
 import { LOCALES, type Locale } from "@/lib/i18n/config";
 import { PATHS as TOOL_PATHS } from "@/lib/content/home-tools";
 import { SEASON_YEAR } from "@/lib/programmatic/christmas-fairs/classify";
@@ -79,6 +80,11 @@ export function liveTools(): LiveTool[] {
       name: "2027 leave planner",
       hubs: leaveEditions(),
       description: "pick a Catalan town, a Spanish city or region and 1 to 25 days of leave: which working days to book in 2027 for the most days off in a row, ranked by days off per day of leave, from the official 2027 holiday lists (DOGC, BOE, city bulletins).",
+    },
+    {
+      name: "Rent increase calculator (Spain)",
+      hubs: rentEditions(),
+      description: "the annual rent update for any Spanish housing or commercial lease: the INE's IRAV and CPI read daily, the month that applies on the anniversary from the INE's release calendar, and the legal cap by signing date (Ley 12/2023, RDL 29/2026, the 2023 IGC and 2024 3% caps), with the BOE texts.",
     },
     {
       name: "Strikes in Catalonia today",
