@@ -46,6 +46,8 @@ test("registry: the live URLs did not move (13 Nov 2026)", () => {
   assert.deepEqual(calcEditions("settlement"), { ca: "/ca/calculadores/quitanca-finiquito/", es: "/es/calculadoras/finiquito/", en: "/en/calculators/final-settlement-spain/" });
   assert.deepEqual(calcEditions("unemployment"), { ca: "/ca/calculadores/atur/", es: "/es/calculadoras/paro/", en: "/en/calculators/unemployment-benefit-spain/" });
   assert.deepEqual(calcEditions("rent-update"), { ca: "/ca/calculadores/actualitzar-lloguer/", es: "/es/calculadoras/actualizar-alquiler/", en: "/en/calculators/rent-increase-spain/" });
+  assert.deepEqual(calcEditions("smi-2027"), { ca: "/ca/calculadores/salari-minim-2027/", es: "/es/calculadoras/salario-minimo-2027/", en: "/en/calculators/spain-minimum-wage-2027/" });
+  assert.deepEqual(calcEditions("ipc"), { ca: "/ca/calculadores/ipc/", es: "/es/calculadoras/ipc/", en: "/en/calculators/spain-inflation-cpi/" });
 });
 
 test("hub: lists every calculator of the registry exactly once, linking its own editions", () => {
@@ -56,8 +58,10 @@ test("hub: lists every calculator of the registry exactly once, linking its own 
   assert.equal(new Set(keys).size, keys.length, "a card appears twice");
 });
 
-test("hub: the four groups, each card complete in ca, es and en, linking indexable pages", () => {
-  assert.deepEqual(HUB_GROUPS.map((g) => g.id), ["work", "housing", "holidays", "live"]);
+test("hub: the five groups, each card complete in ca, es and en, linking indexable pages", () => {
+  assert.deepEqual(HUB_GROUPS.map((g) => g.id), ["work", "housing", "official", "holidays", "live"]);
+  // The official-figures group: the SMI and the CPI reference pages.
+  assert.deepEqual(HUB_GROUPS.find((g) => g.id === "official")?.cards.map((c) => c.key), ["smi-2027", "ipc"]);
   for (const g of HUB_GROUPS) {
     assert.ok(g.cards.length > 0, g.id);
     for (const l of CALC_LOCALES) assert.ok(g.title[l].trim(), `${g.id} (${l})`);

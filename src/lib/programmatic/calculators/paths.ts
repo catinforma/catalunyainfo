@@ -32,6 +32,9 @@ export const CALCULATORS = [
   { id: "rent-update", slugs: { es: "actualizar-alquiler", ca: "actualitzar-lloguer", en: "rent-increase-spain" } },
   { id: "pensions-2027", slugs: { es: "subida-pensiones-2027", ca: "pujada-pensions-2027", en: "spain-pension-increase-2027" } },
   { id: "working-days", slugs: { es: "dias-habiles", ca: "dies-habils", en: "working-days-spain" } },
+  // Reference pages with official figures (hub group "official"): the SMI with its small calculator, and the INE's CPI.
+  { id: "smi-2027", slugs: { es: "salario-minimo-2027", ca: "salari-minim-2027", en: "spain-minimum-wage-2027" } },
+  { id: "ipc", slugs: { es: "ipc", ca: "ipc", en: "spain-inflation-cpi" } },
 ] as const satisfies readonly { id: string; slugs: Record<CalcLocale, string> }[];
 
 export type CalculatorId = (typeof CALCULATORS)[number]["id"];

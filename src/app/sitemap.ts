@@ -30,6 +30,8 @@ import { butaneSitemapEntries } from "@/lib/programmatic/butane/page";
 import { madridDate } from "@/lib/programmatic/pvpc/time";
 import { pensionSitemapEntries } from "@/lib/programmatic/pensions-2027/page";
 import { workingDaysSitemapEntries } from "@/lib/programmatic/working-days/places";
+import { smiSitemapEntries } from "@/lib/programmatic/smi/page";
+import { ipcSitemapEntries } from "@/lib/programmatic/ipc/page";
 
 /**
  * Cached for an hour (ISR) and refreshed at once by every publish, and by the
@@ -186,6 +188,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...pensionSitemapEntries(),
     // "Calculadora de días hábiles": working days and deadlines (Ley 39/2015 art. 30, LOPJ, LEC), in es, ca and en.
     ...workingDaysSitemapEntries(),
+    // "Salario mínimo (SMI) 2027" and "IPC hoy" (calculators family, group "official"), in es, ca and en.
+    ...smiSitemapEntries(),
+    ...ipcSitemapEntries(),
     ...fuelSitemapEntries(),
     ...rodaliesSitemap(),
     ...reservoirSitemapEntries(),

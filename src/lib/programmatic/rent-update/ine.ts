@@ -160,16 +160,20 @@ export function parseCalendar(json: unknown): Map<string, string> {
  * figure is never shown ahead of its release. Pure.
  */
 export function buildSeries(id: SeriesId, values: Map<string, number>, calendar: Map<string, string>, today: string, from: string = SERIES[id].from): SeriesData {
+  return { id, points: buildPoints(values, calendar, today, from) };
+}
+
+/** buildSeries' months for any INE series (the IPC page reads four of them with one calendar). Pure. */
+export function buildPoints(values: Map<string, number>, calendar: Map<string, string>, today: string, from: string): MonthPoint[] {
   const months = new Set<string>();
   for (const m of values.keys()) if (m >= from) months.add(m);
   for (const [m, day] of calendar) if (m >= from && day > today) months.add(m);
-  const points: MonthPoint[] = [...months].sort().map((month) => {
+  return [...months].sort().map((month) => {
     const published = calendar.get(month) ?? null;
     const value = values.get(month);
     const released = value !== undefined && (published === null || published <= today);
     return { month, value: released ? value! : null, published };
   });
-  return { id, points };
 }
 
 /** The published months, oldest first. */

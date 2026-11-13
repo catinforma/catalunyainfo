@@ -5544,4 +5544,63 @@ revisión butano", "tope butano 19,55") page 1 possible. By 31 Jan 2027:
 1 Dec and 25 Jan `snapshot.py page precio-butano 14` (+ preu-buta,
 butane-price-spain).
 
+## 2026-11-13 — Two reference pages: "Salario mínimo (SMI) 2027" and "IPC hoy: último dato y calendario del INE", es + ca + en (deploy only; no publish group)
+
+**What.** New hub group "Datos oficiales" (`official`) in the calculators
+family, both pages in the registry (`calculators/paths.ts`) so the hub,
+"Más calculadoras", sitemap (+hreflang, x-default en) and llms.txt carry them:
+
+- `/es/calculadoras/salario-minimo-2027/`, `/ca/calculadores/salari-minim-2027/`,
+  `/en/calculators/spain-minimum-wage-2027/` (lib/programmatic/smi/). SMI 2026
+  from RD 126/2026 (BOE-A-2026-3815, 19 Feb 2026): 1.221 €/month in 14
+  payments, 17.094 €/year (1.424,50 € in 12), 40,70 €/day, 9,55 €/hour
+  domestic work, 57,82 €/day fixed-term ≤120 days. History 2018–2026, every
+  figure read from each decree's BOE XML (tests parse three of them). 2027
+  status from official documents only: CAASMI report 3 Nov 2026 (+4,9 %,
+  1.281 €), Ministry of Labour draft RD in public hearing 5–16 Nov 2026
+  (+5,3 %: 1.286 €/month, 18.004 €/year, 42,87 €/day, 10,06 €/h), social
+  dialogue 4 Nov; not approved, not in the BOE (BOE open-data search empty,
+  13 Nov). No press figure printed. Part-time / 12-vs-14 calculator; "neto
+  del SMI" opens the net salary calculator with its existing hash preset
+  (`#b=17094&n=14`).
+  **The page changes the day the BOE publishes the 2027 decree**: routes
+  revalidate hourly and `smi/boe.ts` asks the BOE legislation search, then
+  today's BOE summary, and reads the amounts from the decree XML with sanity
+  checks (yearly = monthly × 14, daily ≈ monthly ÷ 30, ≥ 2026 and ≤ +25 %);
+  if they do not parse it links the decree and prints no figure.
+- `/es/calculadoras/ipc/`, `/ca/calculadores/ipc/`, `/en/calculators/spain-inflation-cpi/`
+  (lib/programmatic/ipc/): INE API once a day (IPC290750, IPC290752,
+  IPC292510 core, IPC292512) + release calendar 8, committed snapshot
+  fallback (`npm run ipc:snapshot -- build`). October 2026 (INE 13 Nov):
+  4,9 % annual, +0,6 % monthly, core 3,1 %. Last 24 months; calendar rows from
+  the INE (next: flash 27 Nov, final 15 Dec; the INE has not published its
+  2027 calendar yet, rows appear by themselves). A value is shown only once
+  its final release day has come, never one the calendar does not date.
+  Links pensions 2027, rent update, SMI.
+
+**Why.** research_notes/spain-utilities-opportunities-nov2026.md rows 5–6:
+"smi"+"salario mínimo" ≈ 90k/month (150–200k Jan–Feb, SERP = news with
+contradictory figures, no BOE); "ipc" 113k/month (~220k in January).
+
+**Baseline.** New URLs: 0 impressions.
+
+**Prediction.** By 15 Jan 2027: SMI es page in the top 10 for "salario mínimo
+2027" / "smi 2027" (≥ 3k impressions in the 28 days after the BOE decree);
+IPC es page ≥ 1k impressions/month by the 15 Jan release, position ≤ 15 for
+"ipc último dato" / "calendario ipc".
+
+**Date guards.** `STATUS_RECHECK_BY` 1 Dec 2026 (re-read Ministry hearing /
+Council of Ministers / BOE); `OFFICIAL_2027_DUE` 15 Jan 2027 (fill
+`OFFICIAL_2027` in smi/rules.ts from the BOE decree; the live page already
+shows it); IPC snapshot ≤ 62 days old; from 10 Jan 2027 the snapshot must hold
+the INE's 2027 calendar.
+
+**Note for the net salary calculator owner.** At 17.094 € (14 payments) the
+engine withholds ~523 €/year IRPF; RDL 5/2026 art. 28 (convalidated,
+BOE-A-2026-6483) rewrote LIRPF DA 61ª so SMI earners do not pay IRPF. The SMI
+page quotes the decree and links the calculator but prints no net figure;
+check whether the AEAT 2026 withholding algorithm applies that deduction.
+
+**Measure 1 Dec, 15 Jan, 15 Feb**: `snapshot.py page /calculadoras/salario-minimo-2027/ 28`, `snapshot.py page /calculadoras/ipc/ 28`.
+
 **Outcome:** _pending_

@@ -10,6 +10,7 @@ import { leavePath } from "@/lib/programmatic/leave-2027/copy";
 import { SALARY_RULES_AS_OF } from "@/lib/programmatic/net-salary/rules-2026";
 import { RENT_RULES_AS_OF } from "@/lib/programmatic/rent-update/rules";
 import { PENSION_RULES_AS_OF } from "@/lib/programmatic/pensions-2027/rules";
+import { SMI_RULES_AS_OF } from "@/lib/programmatic/smi/rules";
 import { pvpcTranslations } from "@/lib/programmatic/pvpc/paths";
 import { reservoirHubPath } from "@/lib/programmatic/reservoirs/paths";
 import { RULES_AS_OF as WORKING_DAYS_AS_OF } from "@/lib/programmatic/working-days/rules";
@@ -29,7 +30,7 @@ import { calcPath, calculatorsHubPath, type CalcLocale, type CalculatorId } from
  * figures come from, as the tool's own page cites them.
  */
 
-export type HubGroupId = "work" | "housing" | "holidays" | "live";
+export type HubGroupId = "work" | "housing" | "official" | "holidays" | "live";
 export type Scope = "spain" | "catalonia";
 
 export interface HubCard {
@@ -202,6 +203,47 @@ export const HUB_GROUPS: HubGroup[] = [
         },
         scope: "spain",
         checked: RENT_RULES_AS_OF,
+      },
+    ],
+  },
+  {
+    id: "official",
+    title: { ca: "Dades oficials", es: "Datos oficiales", en: "Official figures" },
+    cards: [
+      {
+        key: "smi-2027",
+        calculator: true,
+        href: calc("smi-2027"),
+        title: { ca: "Salari mínim (SMI) 2027", es: "Salario mínimo (SMI) 2027", en: "Minimum wage (SMI) 2027" },
+        answers: {
+          ca: "Quant és el salari mínim al mes, al dia i per hora, què hi ha d'oficial del 2027 i quant et toca a temps parcial?",
+          es: "¿Cuánto es el salario mínimo al mes, al día y por hora, qué hay oficial de 2027 y cuánto te toca a tiempo parcial?",
+          en: "How much is Spain's minimum wage a month, a day and an hour, what is official for 2027, and what you get part-time.",
+        },
+        basis: {
+          ca: "Reials decrets de l'SMI al BOE (RD 126/2026 i anteriors), Estatut dels Treballadors art. 27, i el projecte del Ministeri de Treball per al 2027.",
+          es: "Reales decretos del SMI en el BOE (RD 126/2026 y anteriores), Estatuto de los Trabajadores art. 27, y el proyecto del Ministerio de Trabajo para 2027.",
+          en: "The SMI royal decrees in the BOE (RD 126/2026 and earlier), Workers' Statute art. 27, and the Ministry of Labour's 2027 draft.",
+        },
+        scope: "spain",
+        checked: SMI_RULES_AS_OF,
+      },
+      {
+        key: "ipc",
+        calculator: true,
+        href: calc("ipc"),
+        title: { ca: "IPC: última dada i calendari", es: "IPC: último dato y calendario", en: "CPI: latest figure and calendar" },
+        answers: {
+          ca: "Quant ha pujat l'IPC aquest mes i en l'últim any, la inflació subjacent i quan publica l'INE la propera dada?",
+          es: "¿Cuánto ha subido el IPC este mes y en el último año, la inflación subyacente y cuándo publica el INE el próximo dato?",
+          en: "How much Spain's CPI rose this month and over the year, core inflation, and when the INE releases the next figure.",
+        },
+        basis: {
+          ca: "IPC de l'INE (sèries IPC290750, IPC290752, IPC292510 i IPC292512) i calendari oficial de l'INE, llegits cada dia.",
+          es: "IPC del INE (series IPC290750, IPC290752, IPC292510 e IPC292512) y calendario oficial del INE, leídos cada día.",
+          en: "The INE's CPI (series IPC290750, IPC290752, IPC292510 and IPC292512) and the INE's official calendar, read daily.",
+        },
+        scope: "spain",
       },
     ],
   },
