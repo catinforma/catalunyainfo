@@ -244,7 +244,7 @@ function en(): Block[] {
     ),
     ...paras(
       "Montserrat deserves its reputation, but \"day trip from Barcelona\" has collapsed into a single answer. For each place we give how to get there, what you will see, and the practical details we could check against the official source.",
-      `If you do go to Montserrat itself, ${b2link("montserratFree", "en", "Montserrat without a tour: rack railway and cable car times, fares and the R5")} explains how to get up on your own.`,
+      `If you do go to Montserrat itself, ${b2link("montserratFree", "en", "Montserrat cable car or rack railway: which to take, times and fares")} compares the ways up, from Barcelona by the R5 or by car.`,
     ),
     table(
       "10 day trips from Barcelona: how to get there and what you will see",

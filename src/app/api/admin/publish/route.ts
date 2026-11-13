@@ -77,6 +77,7 @@ import { POSTAL_VOTE } from "@/lib/content/batch02/postal-vote";
 import { FOREIGN_VOTE } from "@/lib/content/batch02/foreign-vote";
 import { PADRO } from "@/lib/content/batch02/padro";
 import { CARNIVAL_GUIDE } from "@/lib/content/batch02/carnival";
+import { TSI_GUIDE } from "@/lib/content/batch02/tsi";
 import { publishHolidayTodayGuide } from "@/lib/content/holidays/today-publish";
 import { publishLocalHolidaysGuide } from "@/lib/content/holidays/local-publish";
 import { publishReservoirGuide } from "@/lib/content/reservoirs/publish";
@@ -307,6 +308,17 @@ export async function POST(request: Request) {
     // it. The Sitges day trip and the calçots guide link to it: `carnaval-links`.
     if (wants("carnaval")) published.push(await publishB2Article(CARNIVAL_GUIDE));
     if (wants("carnaval-links")) published.push(await publishB2Article(SITGES), await publishB2Article(CALCOTS));
+    // 13 Nov 2026: the TSI health card (ca, es, en), on its own. The padró guide
+    // and the Barcelona hub gained a link to it (the hub also got the English
+    // Montserrat anchor in the query's words): `tsi-links`.
+    if (wants("tsi")) published.push(await publishB2Article(TSI_GUIDE));
+    if (wants("tsi-links")) published.push(await publishB2Article(PADRO), await publishB2Article(BARCELONA_HUB));
+    // 13 Nov 2026: the Montserrat guide (index 3 of BATCH_02) on its own, for the
+    // cable car vs rack railway vs car/coach upgrade; `montserrat-links` sends
+    // the two pages whose English anchor text changed (Beyond Montserrat,
+    // index 6 of FEATURES, and Christmas in Barcelona).
+    if (wants("montserrat")) published.push(...(await publishBatch02(3, 4)));
+    if (wants("montserrat-links")) published.push(...(await publishFeatures(6, 7)), await publishB2Article(CHRISTMAS_BARCELONA));
     // 9 Nov 2026: shops open on 6, 7 and 8 December by community (Ministry calendar); ca, es and en since 10 Nov.
     if (wants("tiendas-espana")) published.push(await publishB2Article(SHOPS_SPAIN_DECEMBER));
     // La Grossa de Cap d'Any 2026: one page, on its own so the 31 December
