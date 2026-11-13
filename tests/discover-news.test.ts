@@ -521,3 +521,18 @@ function filesUnder(dir: string): string[] {
     return statSync(full).isDirectory() ? filesUnder(full) : full.endsWith(".ts") ? [full] : [];
   });
 }
+
+/* -------------------------------------------------------------------------- */
+/* Event JSON-LD (CMS event entries)                                          */
+/* -------------------------------------------------------------------------- */
+
+test("eventSchema emits no Event without a venue: Google requires location", () => {
+  const event = { startsAt: new Date("2026-12-05T10:00:00Z"), endsAt: null, isAllDay: false, recurrenceRule: null, venueName: null, ticketUrl: null, isFree: true, organiser: null };
+  assert.equal(jsonld.eventSchema(entry({ type: "event", event })), null);
+  const node = jsonld.eventSchema(entry({ type: "event", event: { ...event, venueName: "Plaça Major" } })) as Json;
+  assert.equal(node["@type"], "Event");
+  for (const field of ["name", "startDate", "location"]) assert.ok(node[field], `Event without ${field}`);
+  const location = node.location as Json;
+  assert.equal(location.name, "Plaça Major");
+  assert.ok(location.address, "Event location needs an address");
+});
