@@ -4478,3 +4478,78 @@ Catalunya unreadable from the server).
 **Measure** on 1 Dec (`page la-marato 14`, `page loteria 14`) and 14 Dec.
 
 **Outcome:** _pending_
+
+## 2026-11-13 — "¿Cuándo empiezan las vacaciones de Navidad 2026?" for all of Spain: the hub becomes the comparison table, every community page answers first (deploy; groups `calendario-escolar-espana`, `calendario-escolar-espana-links`)
+
+**Why.** GSC 10–12 Nov vs the 3 days before: "cuando empiezan las
+vacaciones de navidad 2026" +164 to 279 impressions at 6.2 (2 clicks).
+Google answers the Spain-wide query with the reader's community page, not
+the hub: 28 d, queries containing "vacaciones de navidad" → Andalucía 872
+impr. at 7.4 (2 clicks), Madrid 448 at 8.0 (2), Valenciana 237 at 8.9 (0),
+hub 204 at 8.3 (0), Castilla y León 168 at 6.1, then 13 other community
+pages. Demand grows daily until ~20 Dec. No new page: the hub
+(/es/guias/calendario-escolar-espana/, /ca/guies/calendari-escolar-espanya/,
+/en/guides/spain-school-calendar/) already compared the 19 calendars, so it
+was upgraded instead of duplicated.
+
+**Baseline (GSC, `snapshot.py page <path> 7`, 7–12 Nov).** Hub ES 864 impr. /
+5 clicks (0.6 %), pos 7.2–11.0; its top queries "cuando empiezan las
+vacaciones de navidad 2026" 43 at 6.0, "vacaciones de navidad 2026" 36 at
+7.4, "cuando son las vacaciones de navidad 2026" 21 at 7.8 (all 0 clicks).
+Hub CA 7 impr. (first on 12 Nov), EN 0. Andalucía 2,611 / 8 (0.3 %) at
+7.4–8.0 ("cuando dan las vacaciones de navidad 2026" 152 at 6.2, 0 clicks);
+Madrid 1,177 / 3 (0.3 %) at 7.8–8.9 ("cuando empiezan…" 100 at 7.2, 0);
+Valenciana 758 / 2 at 6.2–8.9 ("cuando empiezan…" 63 at 5.9, 0).
+
+**Facts re-read 13 Nov 2026** (official texts, curl + pdftotext): the
+Christmas sentence of the orders of Aragón (BOA 88, 2026-2027 section),
+Asturias, Baleares, Canarias, Cantabria (list of days), Castilla y León,
+Castilla-La Mancha (Orden 79/2026, art. 4 c: "desde el día 23/12/2026 hasta
+el 08/01/2027"), Ceuta, Valenciana, Extremadura, Madrid, Melilla, Murcia,
+Navarra, País Vasco, and the 7 Andalusian provincial resolutions: all match
+data.ts. Not re-readable from the server: Galicia (xunta.gal answers 500 on
+every path) and La Rioja (BOR 403, Cloudflare); both keep their 6 Nov
+reading. Jaén's 2026/2027 resolution is still not on the Junta's portal
+(searched the portal, the Delegación's page and the news items: only Cádiz,
+Córdoba, Almería, Huelva and Sevilla appear): stays "por confirmar".
+
+**What changed (body + hub description; no title touched anywhere).**
+- Community pages ×18 ×3 languages: the lead opens with "**Vacaciones de
+  Navidad 2026-27 en <comunidad>: del … al … (vuelta a clase el …)**. El
+  último día de clase es el …". Andalucía: the return per province (7 Jan
+  Almería/Granada/Málaga, 8 Córdoba/Huelva, 11 Cádiz/Sevilla; Jaén por
+  confirmar). País Vasco: "como mínimo … (vuelta como pronto el …)". A new
+  paragraph right under the Christmas section links the hub's table.
+- Hub ×3: bold answer first ("en la mayoría de comunidades el último día de
+  clase es el martes 22 de diciembre, y se vuelve a clase entre el 7 y el 11
+  de enero", then who finishes earlier/later, Andalusian provinces named).
+  Christmas and Easter tables now: Comunidad | Último día de clase | Primer
+  día sin clase | Vuelta a clase | Fuente (one official link per row; the
+  provincial page where provinces differ). Andalucía's cells give the
+  provinces' alternatives ("7, 8 u 11 de enero") instead of "según la
+  provincia". FAQ: the "cuándo empiezan" answer lists every first and last
+  day by community; new "¿Cuándo se vuelve al colegio después de Navidad?".
+- Hub description (live, `liveHubDescription`, until the last community is
+  back on 11 Jan): ES "Vacaciones de Navidad 2026 en los colegios: último día
+  de clase el 21, 22 o 23 de diciembre, según la comunidad, y vuelta entre el
+  7 y el 11 de enero." (ca/en alike). Before: "Calendario escolar 2026-2027
+  en 19 comunidades y ciudades autónomas, con la orden oficial de cada una…".
+  No window was open on the hub.
+- Catalan guide (`school-calendar` page, ca/es/en): its Christmas box adds
+  one sentence with the Spain-wide days and the hub link. Body only: its
+  description test (11 Nov entry, to 9 Dec) and title are untouched.
+
+**Prediction.** Hub ES: "cuando empiezan/dan/son las vacaciones de navidad
+2026" from 6–8 to ≤ 5 and CTR from 0 % to ≥ 2 % by 27 Nov; community pages
+keep their positions and CTR rises above 0.5 % (Madrid, Valenciana at 0 %
+today) as the snippet now carries the return day.
+
+**Review** 20 Nov (day 7: `page calendario-escolar-espana 7`, `page
+calendario-escolar-madrid 7`, `page calendario-escolar-andalucia 7`) and
+27 Nov. Revert rule for the hub description: if its CTR at a comparable
+position is below the 7–12 Nov 0.6 % on 27 Nov, go back to the calendar
+wording. Date guards: Jaén resolution (re-search the portal on 20 Nov);
+the hub description switches itself off on 11 Jan 2027; the Catalan box
+line only shows while the guide is on 2026-2027.
+
+**Outcome:** _pending_

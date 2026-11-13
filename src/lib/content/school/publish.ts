@@ -20,6 +20,8 @@ import { BARCELONA_LOCAL } from "@/lib/content/holidays/payload";
 import { municipalityBySlug } from "@/lib/programmatic/holidays/data";
 import { townPageCount } from "@/lib/programmatic/holidays/towns";
 
+import { spainChristmasLine } from "@/lib/content/school-spain/body";
+import { SPAIN_SCHOOL_YEAR } from "@/lib/content/school-spain/logic";
 import { SCHOOL_SOURCE, SCHOOL_VERIFIED_AT, SCHOOL_YEARS, type SchoolYear } from "./calendar";
 import { bridgeDays, generalSchoolDays, weekdayDay } from "./snippet";
 
@@ -322,12 +324,14 @@ function christmasCallout(year: SchoolYear, locale: Locale): Block {
     // es (5 Nov 2026): in the searchers' words, "vacaciones de Navidad 2026
     // colegios Cataluña"; ca and en keep theirs (the ca title is under test).
     title: L(locale, `Vacances de Nadal ${years}`, `Vacaciones de Navidad ${years} en los colegios de Cataluña`, `Christmas school holidays ${years}`),
-    text: L(
+    // 13 Nov 2026: the Spain-wide question ("cuándo empiezan las vacaciones de
+    // Navidad 2026") lands on community pages; this one hands it to the table.
+    text: `${L(
       locale,
       `Del **${day(from, locale)}** al **${day(to, locale)}**, tots dos inclosos. Es torna a classe el **${back}**.`,
       `Del **${day(from, locale)}** al **${day(to, locale)}**, ambos incluidos. Se vuelve a clase el **${back}**.`,
       `From **${day(from, locale)}** to **${day(to, locale)}**, both included. Classes restart on **${back}**.`,
-    ),
+    )}${year.label === SPAIN_SCHOOL_YEAR ? ` ${spainChristmasLine(locale)}` : ""}`,
   };
 }
 

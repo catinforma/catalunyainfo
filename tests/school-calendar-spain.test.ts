@@ -9,6 +9,7 @@ import { buildHubBody, buildRegionBody, daysOffRows, regionTitle } from "../src/
 import {
   SPAIN_SCHOOL_EXPIRES,
   SPAIN_TITLE_MAX,
+  liveHubDescription,
   liveHubTitle,
   liveRegionDescription,
   liveRegionTitle,
@@ -29,6 +30,7 @@ import {
   regionPath,
 } from "../src/lib/content/school-spain/regions.ts";
 import { COMMUNITIES } from "../src/lib/programmatic/spain-2027/communities.ts";
+import { buildBody as buildCatalanBody } from "../src/lib/content/school/publish.ts";
 
 /**
  * The Spanish school calendars 2026-2027 (school-spain/). Every date below
@@ -198,6 +200,62 @@ test("every body validates, puts the live block first and links the hub and the 
   const text = JSON.stringify(hub);
   for (const r of SPAIN_REGIONS) assert.ok(text.includes(`(/es/${regionPath(r.slug)}/)`), r.slug);
   assert.ok(text.includes("(/es/guias/calendario-escolar-cataluna/)"));
+});
+
+test("Christmas answered first: each community's lead, the hub's table with one source per row, the hub's description", () => {
+  // Community lead: "Vacaciones de Navidad 2026-27 en ...: del ... al ... (vuelta a clase el ...)".
+  for (const r of SPAIN_REGIONS) {
+    const body = buildRegionBody(r);
+    const lead = (body[0] as { text: string }).text;
+    assert.match(lead, /^\*\*Vacaciones de Navidad 2026-27 /, r.slug);
+    assert.match(lead, /[Vv]uelta a clase/, r.slug);
+    // The hub link sits right under the Christmas section, before Easter.
+    const hubLink = body.findIndex((b) => b.type === "paragraph" && JSON.stringify(b).includes("(/es/guias/calendario-escolar-espana/)"));
+    const easter = body.findIndex((b) => b.type === "heading" && /Semana Santa/.test((b as { text: string }).text));
+    assert.ok(hubLink > 0 && hubLink < easter, r.slug);
+  }
+  const madrid = (buildRegionBody(regionBySlug("madrid")!)[0] as { text: string }).text;
+  assert.ok(madrid.includes("del miércoles 23 de diciembre de 2026 al viernes 8 de enero de 2027 (vuelta a clase el lunes 11 de enero)"));
+  assert.ok(madrid.includes("El último día de clase es el martes 22 de diciembre."));
+  const andalucia = (buildRegionBody(regionBySlug("andalucia")!)[0] as { text: string }).text;
+  assert.ok(andalucia.includes("el jueves 7 de enero en Almería, Granada y Málaga; el viernes 8 de enero en Córdoba y Huelva; el lunes 11 de enero en Cádiz y Sevilla"));
+  assert.ok(andalucia.includes("Jaén: por confirmar."));
+
+  // Hub: one row per community, Catalonia included, each with its official text.
+  const hub = buildHubBody();
+  const table = hub.find((b) => b.type === "table") as { headers: string[]; rows: string[][] };
+  assert.deepEqual(table.headers, ["Comunidad", "Último día de clase", "Primer día sin clase", "Vuelta a clase", "Fuente"]);
+  assert.equal(table.rows.length, hubRegions().length + pendingRegions().length);
+  for (const row of table.rows) assert.match(row[4]!, /\]\(https:\/\//, row[0]);
+  const row = (slug: string) => table.rows.find((r) => r[0]!.includes(`/${slug}/`))!;
+  assert.deepEqual(row("calendario-escolar-madrid").slice(1, 4), ["martes 22 de diciembre", "miércoles 23 de diciembre", "lunes 11 de enero"]);
+  assert.deepEqual(row("calendario-escolar-cataluna").slice(1, 4), ["lunes 21 de diciembre", "martes 22 de diciembre", "viernes 8 de enero"]);
+  assert.equal(row("calendario-escolar-andalucia")[3], "7, 8 u 11 de enero (según la provincia)");
+  // Castilla-La Mancha's Christmas is the regional order's, not the provinces'.
+  assert.ok(row("calendario-escolar-castilla-la-mancha")[4]!.includes(regionBySlug("castilla-la-mancha")!.order.url));
+  assert.match((hub[0] as { text: string }).text, /^\*\*Vacaciones de Navidad 2026 en los colegios: en la mayoría de comunidades el último día de clase es el martes 22 de diciembre, y se vuelve a clase entre el 7 y el 11 de enero\.\*\*/);
+
+  // Description: the answer until the last community is back, then the calendar again.
+  assert.equal(
+    liveHubDescription(hubRegions(), "2026-11-13"),
+    "Vacaciones de Navidad 2026 en los colegios: último día de clase el 21, 22 o 23 de diciembre, según la comunidad, y vuelta entre el 7 y el 11 de enero.",
+  );
+  assert.match(liveHubDescription(hubRegions(), "2027-01-11"), /^Calendario escolar 2026-2027/);
+  for (const locale of ["ca", "en"] as const) {
+    const d = liveHubDescription(hubRegions(locale), "2026-11-13");
+    assert.ok(d.length > 0 && d.length <= 158 && /2026/.test(d), `${locale}: ${d}`);
+  }
+});
+
+test("Catalonia's guide hands the Spain-wide Christmas question to the hub from its Christmas box, in each language", () => {
+  const hubs = { ca: "/ca/guies/calendari-escolar-espanya/", es: "/es/guias/calendario-escolar-espana/", en: "/en/guides/spain-school-calendar/" } as const;
+  for (const locale of ["ca", "es", "en"] as const) {
+    const callout = buildCatalanBody(locale).find((b) => b.type === "callout") as { text: string } | undefined;
+    // The line is for the 2026-2027 year only; from summer 2027 the guide shows the next year without it.
+    if (todayInCatalonia() >= "2027-07-01") continue;
+    assert.ok(callout?.text.includes(`(${hubs[locale]})`), locale);
+    assert.match(callout!.text, /21, 22 (o|or) 23/, locale);
+  }
 });
 
 test("Murcia lists its 45 municipalities, Madrid's December days are in its table", () => {
