@@ -1,7 +1,8 @@
 /**
  * The regulated price of bottled butane: every figure as the BOE prints it.
  * No logic here (rules.ts) and no words (copy.ts). Fact pack:
- * research_notes/butano-precio-nov2026.md (gitignored), checked 13 Nov 2026.
+ * research_notes/butano-precio-nov2026.md (gitignored), checked 13 Nov 2026;
+ * the 17 Nov 2026 resolution read on 16 Nov 2026.
  *
  * TO ENTER A NEW REVISION (17 Nov 2026, then 19 Jan 2027, …): when the BOE
  * publishes the Resolución of the Dirección General de Política Energética y
@@ -48,7 +49,8 @@ export const REVISIONS: readonly Revision[] = [
   r("2026-05-19", "BOE-A-2026-10669", "2026-05-12", "2026-05-18", "111,9680"),
   r("2026-07-21", "BOE-A-2026-15740", "2026-07-09", "2026-07-20", "117,5664"),
   r("2026-09-15", "BOE-A-2026-19115", "2026-09-08", "2026-09-14", "123,4447"),
-  // 17 Nov 2026: add the line here when the BOE publishes it (expected Monday 16 Nov).
+  // Read 16 Nov 2026: +3,52 % on September, held at the RDL 25/2026 ceiling (theoretical price 146,4901, see ADJUSTMENTS).
+  r("2026-11-17", "BOE-A-2026-23896", "2026-11-12", "2026-11-16", "127,7838"),
 ];
 
 /**
@@ -83,11 +85,22 @@ export const CEILING = {
 } as const;
 
 /**
- * The pending gap the September 2026 resolution carries to the next revision
- * ("el valor del desajuste para la próxima revisión bimestral de precios será
- * de +15,8822 cts.€/Kg"). Quoted, never turned into a forecast.
+ * The gap each resolution carries to the next revision ("el valor del
+ * desajuste para la próxima revisión bimestral de precios será de …
+ * cts.€/Kg", its "Cuarto") and, where the RDL 25/2026 ceiling held the price
+ * back, the theoretical price of its table ("Precio sin impuestos teórico
+ * (PSIbt)"). Quoted, never turned into a forecast.
  */
-export const PENDING_ADJUSTMENT = { boe: "BOE-A-2026-19115", centsPerKg: "+15,8822" } as const;
+export interface Adjustment {
+  boe: string;
+  centsPerKg: string;
+  theoreticalCentsPerKg: string | null;
+}
+
+export const ADJUSTMENTS: readonly Adjustment[] = [
+  { boe: "BOE-A-2026-19115", centsPerKg: "+15,8822", theoreticalCentsPerKg: null },
+  { boe: "BOE-A-2026-23896", centsPerKg: "+31,5366", theoreticalCentsPerKg: "146,4901" },
+];
 
 /**
  * Taxes on the bottle in the Peninsula and the Balearic Islands, by period:
@@ -134,7 +147,7 @@ export const OPERATORS = [
 export const OPERATORS_BOE = "BOE-A-2026-13564";
 
 /** The day every figure above was last read from its source. */
-export const BUTANE_CHECKED = "2026-11-13";
+export const BUTANE_CHECKED = "2026-11-16";
 
 export const URLS = {
   boeTxt: (id: string) => `https://www.boe.es/diario_boe/txt.php?id=${id}`,

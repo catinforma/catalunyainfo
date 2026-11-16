@@ -80,7 +80,8 @@ export function butaneState(day: string, revisions: readonly Revision[] = REVISI
   const due = lastScheduledRevision(day);
   const skipped = NO_RESOLUTION.some((n) => n.date === due);
   if (due > last.effective && !skipped) return { kind: "awaiting", last, due, next: nextScheduledRevision(day) };
-  const upcoming = revisions.find((r) => r.effective > day) ?? null;
+  // Only a resolution already in the BOE on `day`: the table can hold one dated later than a past `day`.
+  const upcoming = revisions.find((r) => r.effective > day && r.published <= day) ?? null;
   return { kind: "current", current: last, previous: past.at(-2) ?? null, upcoming, next: nextScheduledRevision(day) };
 }
 
@@ -101,6 +102,11 @@ export function hitFivePercent(revision: Revision, revisions: readonly Revision[
   const up = Math.round(before * (1 + MAX_STEP) * 10000) / 10000;
   const down = Math.round(before * (1 - MAX_STEP) * 10000) / 10000;
   return Math.abs(now - up) < 0.00015 || Math.abs(now - down) < 0.00015;
+}
+
+/** True when a revision's price is exactly the RDL 25/2026 ceiling while it applies. */
+export function atCeiling(revision: Revision): boolean {
+  return revision.effective <= CEILING.until && revision.effective >= "2026-10-01" && revision.centsPerKg === CEILING.centsPerKg;
 }
 
 /** Euros, rounded to the cent. */

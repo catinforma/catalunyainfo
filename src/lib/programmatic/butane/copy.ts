@@ -6,8 +6,8 @@
 
 import type { Locale } from "@/lib/i18n/config";
 
-import { BOTTLE_KG, BUTANE_CHECKED, BUTANE_ONLY_FROM, CEILING, INE_LPG_CPI, OPERATORS, OPERATORS_BOE, PENDING_ADJUSTMENT, REVISIONS, URLS, type Revision } from "./data";
-import { bottleBeforeTax, bottleWithTax, changePercent, dayBefore, hitFivePercent, nextBounds, scheduledRevisions, type BottleWithTax, type ButaneState } from "./rules";
+import { BOTTLE_KG, BUTANE_CHECKED, BUTANE_ONLY_FROM, CEILING, ADJUSTMENTS, INE_LPG_CPI, OPERATORS, OPERATORS_BOE, REVISIONS, URLS, type Revision } from "./data";
+import { atCeiling, bottleBeforeTax, bottleWithTax, changePercent, dayBefore, hitFivePercent, nextBounds, scheduledRevisions, type BottleWithTax, type ButaneState } from "./rules";
 
 const INTL: Record<Locale, string> = { es: "es-ES", ca: "ca-ES", en: "en-GB" };
 
@@ -85,6 +85,8 @@ export interface Words {
   productButane: string;
   productLpg: string;
   capTag: string;
+  /** History tag: price held at the RDL 25/2026 ceiling. */
+  ceilingTag: string;
   scopeTitle: string;
   buyTitle: string;
   areas: Record<(typeof OPERATORS)[number]["area"], string>;
@@ -117,6 +119,7 @@ const WORDS: Record<Locale, Words> = {
     productButane: "Butano",
     productLpg: "GLP envasado",
     capTag: "tope del 5 %",
+    ceilingTag: "tope del RDL 25/2026",
     scopeTitle: "Qué bombonas tienen precio regulado",
     buyTitle: "Dónde comprar o pedir la bombona",
     areas: { "peninsula-baleares": "Península e Illes Balears", canarias: "Canarias", "ceuta-melilla": "Ceuta y Melilla" },
@@ -147,6 +150,7 @@ const WORDS: Record<Locale, Words> = {
     productButane: "Butà",
     productLpg: "GLP envasat",
     capTag: "límit del 5 %",
+    ceilingTag: "límit del RDL 25/2026",
     scopeTitle: "Quines bombones tenen preu regulat",
     buyTitle: "On comprar o demanar la bombona",
     areas: { "peninsula-baleares": "Península i Illes Balears", canarias: "Canàries", "ceuta-melilla": "Ceuta i Melilla" },
@@ -177,6 +181,7 @@ const WORDS: Record<Locale, Words> = {
     productButane: "Butane",
     productLpg: "Bottled LPG",
     capTag: "5% cap",
+    ceilingTag: "RDL 25/2026 ceiling",
     scopeTitle: "Which bottles have a regulated price",
     buyTitle: "Where to buy or order a bottle",
     areas: { "peninsula-baleares": "Mainland Spain and the Balearic Islands", canarias: "Canary Islands", "ceuta-melilla": "Ceuta and Melilla" },
@@ -372,12 +377,23 @@ export function rulesParagraphs(locale: Locale, state: ButaneState): string[] {
       }[locale],
     );
   }
-  if (ref.boe === PENDING_ADJUSTMENT.boe && !(state.kind === "current" && state.upcoming)) {
+  const adj = ADJUSTMENTS.find((x) => x.boe === ref.boe);
+  if (adj && !(state.kind === "current" && state.upcoming)) {
+    const month = new Intl.DateTimeFormat(INTL[locale], { month: "long", year: "numeric", timeZone: "UTC" }).format(utc(ref.effective));
+    if (adj.theoreticalCentsPerKg && atCeiling(ref)) {
+      out.push(
+        {
+          es: `El precio en vigor es **exactamente ese tope**: sin él, la fórmula daba ${centsKg(adj.theoreticalCentsPerKg, "es")} ("Precio sin impuestos teórico", ${boeLink(ref.boe)}).`,
+          ca: `El preu en vigor és **exactament aquest límit**: sense ell, la fórmula donava ${centsKg(adj.theoreticalCentsPerKg, "ca")} ("Precio sin impuestos teórico", ${boeLink(ref.boe)}).`,
+          en: `The price in force is **exactly that ceiling**: without it, the formula gave ${centsKg(adj.theoreticalCentsPerKg, "en")} ("Precio sin impuestos teórico", ${boeLink(ref.boe)}).`,
+        }[locale],
+      );
+    }
     out.push(
       {
-        es: `La resolución de septiembre de 2026 dice que "el valor del desajuste para la próxima revisión bimestral de precios será de ${PENDING_ADJUSTMENT.centsPerKg} cts.€/Kg" (${boeLink(PENDING_ADJUSTMENT.boe)}).`,
-        ca: `La resolució de setembre del 2026 diu que "el valor del desajuste para la próxima revisión bimestral de precios será de ${PENDING_ADJUSTMENT.centsPerKg} cts.€/Kg" (${boeLink(PENDING_ADJUSTMENT.boe)}).`,
-        en: `The September 2026 resolution states that the adjustment carried to the next revision is ${PENDING_ADJUSTMENT.centsPerKg.replace(",", ".")} c€/kg ("el valor del desajuste para la próxima revisión bimestral de precios será de ${PENDING_ADJUSTMENT.centsPerKg} cts.€/Kg", ${boeLink(PENDING_ADJUSTMENT.boe)}).`,
+        es: `La resolución de ${month} dice que "el valor del desajuste para la próxima revisión bimestral de precios será de ${adj.centsPerKg} cts.€/Kg" (${boeLink(adj.boe)}).`,
+        ca: `La resolució de ${month} diu que "el valor del desajuste para la próxima revisión bimestral de precios será de ${adj.centsPerKg} cts.€/Kg" (${boeLink(adj.boe)}).`,
+        en: `The ${month} resolution states that the adjustment carried to the next revision is ${adj.centsPerKg.replace(",", ".")} c€/kg ("el valor del desajuste para la próxima revisión bimestral de precios será de ${adj.centsPerKg} cts.€/Kg", ${boeLink(adj.boe)}).`,
       }[locale],
     );
   }
@@ -422,7 +438,8 @@ export function historyRows(locale: Locale, day: string): HistoryRow[] {
   return REVISIONS.filter((r) => r.effective <= day || r.published <= day)
     .map((r) => {
       const ch = changePercent(r);
-      const change = ch === null ? "—" : `${percent(ch, locale)}${hitFivePercent(r) ? ` (${w.capTag})` : ""}`;
+      const tag = hitFivePercent(r) ? w.capTag : atCeiling(r) ? w.ceilingTag : null;
+      const change = ch === null ? "—" : `${percent(ch, locale)}${tag ? ` (${tag})` : ""}`;
       return {
         key: r.boe,
         since: longDay(r.effective, locale),

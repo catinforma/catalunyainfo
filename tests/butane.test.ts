@@ -5,12 +5,14 @@ import { test } from "node:test";
 import { fileURLToPath } from "node:url";
 
 import { answerLines, butaneDescription, butaneTitle, calendarItems, historyRows, nextLine, rulesParagraphs, sources } from "../src/lib/programmatic/butane/copy.ts";
-import { BUTANE_CHECKED, CEILING, FIVE_PERCENT_CHECK_FROM, MAX_STEP, OPERATORS, REVISIONS, TAX_PERIODS, type Revision } from "../src/lib/programmatic/butane/data.ts";
+import { ADJUSTMENTS, BUTANE_CHECKED, CEILING, FIVE_PERCENT_CHECK_FROM, MAX_STEP, OPERATORS, REVISIONS, TAX_PERIODS, URLS, type Revision } from "../src/lib/programmatic/butane/data.ts";
 import { butaneFamilyPaths } from "../src/lib/programmatic/butane/page.ts";
 import { BUTANE_SEGMENT, butanePath, butaneTranslations, resolveButane } from "../src/lib/programmatic/butane/paths.ts";
 import {
+  atCeiling,
   bottleBeforeTax,
   bottleWithTax,
+  changePercent,
   butaneState,
   dayBefore,
   hitFivePercent,
@@ -36,8 +38,9 @@ const ROOT = fileURLToPath(new URL("..", import.meta.url));
 const read = (rel: string) => readFileSync(join(ROOT, rel), "utf8");
 const LOCALES = ["es", "ca", "en"] as const;
 
-/** A made-up November resolution, for the state machine only (never in data.ts). */
-const FAKE_NOV: Revision = { effective: "2026-11-17", boe: "BOE-A-2026-99999", signed: "2026-11-10", published: "2026-11-16", centsPerKg: "127,7838" };
+/** The table as it stood before the 17 Nov 2026 resolution was entered, for the "awaiting" state. */
+const BEFORE_NOV: readonly Revision[] = REVISIONS.filter((r) => r.effective < "2026-11-17");
+const NOV = REVISIONS.find((r) => r.boe === "BOE-A-2026-23896")!;
 
 /* -------------------------------------------------------------------------- */
 /* DATE GUARDS (real clock)                                                    */
@@ -87,7 +90,9 @@ test("data: every revision takes effect on a scheduled third Tuesday and was pub
     parseCents(r.centsPerKg);
   }
   assert.deepEqual(missingRevisions("2026-11-16"), [], "no gap in the history");
-  assert.deepEqual(missingRevisions("2026-11-17"), ["2026-11-17"]);
+  assert.deepEqual(missingRevisions("2026-11-17"), []);
+  assert.deepEqual(missingRevisions("2026-11-17", BEFORE_NOV), ["2026-11-17"]);
+  assert.deepEqual(missingRevisions("2027-01-19"), ["2027-01-19"]);
 });
 
 test("data: the ±5 % step holds for every butane-only revision; nothing above the RDL 25/2026 ceiling once it applies", () => {
@@ -102,6 +107,13 @@ test("data: the ±5 % step holds for every butane-only revision; nothing above t
   assert.equal(hitFivePercent(REVISIONS.find((r) => r.boe === "BOE-A-2026-19115")!), true);
   assert.equal(hitFivePercent(REVISIONS.find((r) => r.boe === "BOE-A-2025-5189")!), false);
   assert.equal(hitFivePercent(REVISIONS.find((r) => r.boe === "BOE-A-2025-9811")!), false);
+  // November 2026 (BOE-A-2026-23896, read 16 Nov): +3,52 %, inside the 5 % step, held at exactly the ceiling (theoretical 146,4901).
+  assert.deepEqual([NOV.effective, NOV.signed, NOV.published, NOV.centsPerKg], ["2026-11-17", "2026-11-12", "2026-11-16", "127,7838"]);
+  assert.equal(changePercent(NOV), 3.52);
+  assert.equal(hitFivePercent(NOV), false);
+  assert.equal(atCeiling(NOV), true);
+  assert.equal(atCeiling(REVISIONS.find((r) => r.boe === "BOE-A-2026-19115")!), false);
+  assert.equal(ADJUSTMENTS.find((a) => a.boe === NOV.boe)?.centsPerKg, "+31,5366");
 });
 
 /* -------------------------------------------------------------------------- */
@@ -132,6 +144,14 @@ test("bounds of the next revision from the rules: −5 % floor, the RDL ceiling 
   assert.deepEqual(nextBounds(sep, "2026-11-17"), { low: 117.27, high: 127.78, ceilingApplies: true });
   // After 30 Jun 2027 only the 5 % step bounds it.
   assert.deepEqual(nextBounds(sep, "2027-07-20"), { low: 117.27, high: 129.62, ceilingApplies: false });
+  // From November's price, already at the ceiling: January can only stay or fall (at most −5 %).
+  assert.deepEqual(nextBounds(NOV, "2027-01-19"), { low: 121.39, high: 127.78, ceilingApplies: true });
+});
+
+test("bottle with taxes from 17 Nov 2026: the ceiling price gives 19,55 € in November, 19,33 € in December (0 €/t)", () => {
+  assert.equal(bottleWithTax(NOV.centsPerKg, "2026-11-17")!.total, 19.55);
+  assert.equal(bottleWithTax(NOV.centsPerKg, "2026-12-01")!.total, 19.33);
+  assert.equal(bottleBeforeTax(NOV.centsPerKg), 15.97);
 });
 
 /* -------------------------------------------------------------------------- */
@@ -149,7 +169,7 @@ test("state: 13 Nov 2026 → September's price, next revision 17 Nov", () => {
 });
 
 test("state: 17 Nov with no resolution entered → awaiting, the old price is not called today's", () => {
-  const s = butaneState("2026-11-17");
+  const s = butaneState("2026-11-17", BEFORE_NOV);
   assert.equal(s.kind, "awaiting");
   if (s.kind !== "awaiting") return;
   assert.equal(s.due, "2026-11-17");
@@ -161,19 +181,53 @@ test("state: 17 Nov with no resolution entered → awaiting, the old price is no
   }
 });
 
-test("state: a resolution entered on Monday 16 Nov shows as 'new price from Tuesday', then becomes current", () => {
-  const data = [...REVISIONS, FAKE_NOV];
-  const mon = butaneState("2026-11-16", data);
+test("state: the resolution published Monday 16 Nov shows as 'new price from Tuesday', then becomes current", () => {
+  const mon = butaneState("2026-11-16");
   assert.equal(mon.kind, "current");
   if (mon.kind !== "current") return;
   assert.equal(mon.current.boe, "BOE-A-2026-19115");
-  assert.equal(mon.upcoming?.boe, FAKE_NOV.boe);
-  const tue = butaneState("2026-11-17", data);
+  assert.equal(mon.upcoming?.boe, NOV.boe);
+  const next = { es: "127,7838 c€/kg", ca: "127,7838 c€/kg", en: "127.7838 c€/kg" };
+  const taxed = { es: "19,55 €", ca: "19,55 €", en: "€19.55" };
+  for (const l of LOCALES) {
+    const line = nextLine(l, mon);
+    assert.ok(line.includes(next[l]) && line.includes(taxed[l]) && line.includes(NOV.boe), `${l}: ${line}`);
+    // Monday's page still prices the bottle at September's figure.
+    assert.ok(answerLines(l, mon, "2026-11-16")[0]!.includes(l === "en" ? "€18.90" : "18,90 €"), l);
+  }
+  const tue = butaneState("2026-11-17");
   assert.equal(tue.kind, "current");
   if (tue.kind !== "current") return;
-  assert.equal(tue.current.boe, FAKE_NOV.boe);
+  assert.equal(tue.current.boe, NOV.boe);
+  assert.equal(tue.upcoming, null);
   assert.equal(tue.next, "2027-01-19");
-  assert.deepEqual(missingRevisions("2026-11-17", data), []);
+});
+
+test("copy from 17 Nov 2026: 19,55 €, the ceiling and November's adjustment quoted, in all three languages", () => {
+  const s = butaneState("2026-11-17");
+  const answer = { es: "19,55 €", ca: "19,55 €", en: "€19.55" };
+  for (const l of LOCALES) {
+    const lines = answerLines(l, s, "2026-11-17");
+    assert.ok(lines[0]!.startsWith(`**${answer[l]}**`), `${l}: ${lines[0]}`);
+    assert.ok(lines.join(" ").includes(URLS.boeTxt(NOV.boe)), l);
+    const title = butaneTitle(l, s, "2026-11-17");
+    const desc = butaneDescription(l, s, "2026-11-17");
+    assert.ok(title.length <= 60 && title.includes(answer[l]), `${l} title: ${title}`);
+    assert.ok(desc.length <= 165, `${l} description ${desc.length}: ${desc}`);
+    const rules = rulesParagraphs(l, s).join(" ");
+    assert.ok(rules.includes("+31,5366") && !rules.includes("+15,8822"), l);
+    assert.ok(rules.includes(l === "en" ? "146.4901" : "146,4901"), l);
+    assert.ok(rules.includes(l === "en" ? "121.39" : "121,39") && rules.includes(l === "en" ? "127.78" : "127,78"), l);
+    assert.doesNotMatch([...lines, nextLine(l, s), title, desc, rules].join(" "), /undefined|NaN|null/, l);
+  }
+  assert.match(rulesParagraphs("es", s).join(" "), /La resolución de noviembre de 2026 dice/);
+  assert.match(rulesParagraphs("ca", s).join(" "), /La resolució de novembre del 2026 diu/);
+  const rows = historyRows("es", "2026-11-17");
+  assert.equal(rows[0]!.boe, NOV.boe);
+  assert.equal(rows[0]!.change, "+3,52 % (tope del RDL 25/2026)");
+  assert.equal(rows[0]!.bottle, "15,97 €");
+  assert.equal(historyRows("en", "2026-11-17")[0]!.change, "+3.52% (RDL 25/2026 ceiling)");
+  assert.equal(historyRows("es", "2026-11-16")[0]!.boe, NOV.boe, "listed from its publication day");
 });
 
 /* -------------------------------------------------------------------------- */
@@ -208,7 +262,7 @@ test("copy on 13 Nov 2026: the price first, the BOE figure and link, the next re
 
 test("history: newest first, every row links its own BOE resolution, the 5 % steps marked", () => {
   const rows = historyRows("es", "2026-11-13");
-  assert.equal(rows.length, REVISIONS.length);
+  assert.equal(rows.length, REVISIONS.filter((r) => r.published <= "2026-11-13").length, "a resolution appears only once published");
   assert.equal(rows[0]!.boe, "BOE-A-2026-19115");
   assert.equal(rows[0]!.price, "123,4447 c€/kg");
   assert.equal(rows[0]!.bottle, "15,43 €");
@@ -267,5 +321,6 @@ test("energía en casa: hub live group lists it after the electricity price, and
 test("sitemap lastModified follows revisions and tax months", () => {
   assert.equal(lastChange("2026-11-13"), "2026-11-01");
   assert.equal(lastChange("2026-12-05"), "2026-12-01");
-  assert.equal(lastChange("2026-11-17", [...REVISIONS, FAKE_NOV]), "2026-11-17");
+  assert.equal(lastChange("2026-11-16"), "2026-11-16");
+  assert.equal(lastChange("2026-11-17"), "2026-11-17");
 });

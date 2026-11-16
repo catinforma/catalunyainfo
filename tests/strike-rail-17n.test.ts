@@ -103,7 +103,8 @@ test("no figure for a network whose minimum services are pending; the precedent 
     assert.equal(rodalies[0], "Rodalies de Catalunya");
     if (catalan().minimumServices.status === "published") assert.match(rodalies[2] ?? "", /66 ?%.*33 ?%/);
     const paragraphs = blocks.filter((b) => b.type === "paragraph").map((b) => (b as unknown as { text: string }).text);
-    const precedent = paragraphs.filter((p) => /75 ?%/.test(p));
+    // The 10 Nov precedent is the paragraph that says it is not the 17th's (the published Ministry text also carries 75 %).
+    const precedent = paragraphs.filter((p) => /75 ?%/.test(p) && /no son los del 17|no són els del 17|not the 17th's/.test(p));
     assert.equal(precedent.length, pending ? 1 : 0, locale);
     for (const p of precedent) {
       assert.match(p, /10 (de )?(noviembre|novembre|November)/, locale);

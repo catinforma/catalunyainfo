@@ -73,6 +73,15 @@ export const CERCANIAS_NETWORKS = [
 ] as const;
 
 const RENFE_CERCANIAS = "https://www.renfe.com/es/es/cercanias";
+
+/**
+ * Cercanías networks whose minimum services the Basque Government sets (RD
+ * 368/2024; the Ministry's resolution of 12 Nov 2026 says so), and whether its
+ * order for the 17th is out: Orden de 13 de noviembre de 2026, 50 % at peak /
+ * 25 % (euskadi.eus, read 16 Nov 2026; linked from the Spain entry).
+ */
+const BASQUE_NETWORKS: ReadonlySet<string> = new Set(["Bilbao", "San Sebastián"]);
+const BASQUE_MS_PUBLISHED = true;
 const U = STRIKE_URLS;
 const link = (href: string, label: string) => `[${label}](${href})`;
 const heading = (level: 2 | 3, text: string, id?: string): Block => ({ type: "heading", level, text, ...(id ? { id } : {}) }) as Block;
@@ -133,8 +142,13 @@ interface Copy {
   headers: [string, string, string];
   ministry: string;
   generalitat: string;
+  basque: string;
   pending: string;
   rodaliesRow: string;
+  /** The Ministry's Cercanías figures, once its resolution is out (BOE-free: the resolution's PDF, read 16 Nov 2026). */
+  stateRow: string;
+  /** Cercanías Bilbao and San Sebastián: the Basque Government's order (RD 368/2024 transfer). */
+  basqueRow: string;
   networksNote: string;
   rodaliesGuide: (href: string) => string;
   ticketsHeading: string;
@@ -165,7 +179,7 @@ const COPY: Record<Locale, Copy> = {
     whoId: "quien-convoca",
     notIn: "Metro, autobuses, tranvías y trenes autonómicos que no son de Renfe (FGC, Euskotren, Metrovalencia, Serveis Ferroviaris de Mallorca): no forman parte de las convocatorias publicadas",
     statePending: "Por confirmar: los fija el Ministerio de Transportes y aún no se han publicado",
-    statePublished: "Publicados por el Ministerio de Transportes: en «Servicios mínimos»",
+    statePublished: "Publicados por el Ministerio de Transportes: Cercanías, 75 % en hora punta y 50 % el resto del día; Media Distancia, 65 % de media; AVE y Larga Distancia, 72 %",
     msHeading: "Servicios mínimos: qué trenes funcionan el 17 de noviembre",
     msId: "servicios-minimos",
     stateSub: "**Cercanías, Media Distancia, AVE y Larga Distancia, Iryo, Ouigo y Adif (Ministerio de Transportes).**",
@@ -175,14 +189,17 @@ const COPY: Record<Locale, Copy> = {
     networksHeading: "Cercanías: red por red",
     networksId: "cercanias",
     networksIntro: (renfe) =>
-      `Todas las redes de Cercanías las opera Renfe, cuya plantilla está llamada a la huelga del 17. Los servicios mínimos los fija el Ministerio de Transportes para todas a la vez, salvo Rodalies de Catalunya, que los recibe de la Generalitat. Los horarios de cada red, en ${link(renfe, "renfe.com")}.`,
+      `Todas las redes de Cercanías las opera Renfe, cuya plantilla está llamada a la huelga del 17. Los servicios mínimos los fija el Ministerio de Transportes, salvo en Rodalies de Catalunya (Generalitat) y en Bilbao y San Sebastián (Gobierno Vasco). Los horarios de cada red, en ${link(renfe, "renfe.com")}.`,
     caption: "Huelga de trenes del 17 de noviembre: servicios mínimos en cada red de Cercanías",
     headers: ["Red", "Quién fija los mínimos", "Servicios mínimos del 17"],
     ministry: "Ministerio de Transportes",
     generalitat: "Generalitat de Catalunya",
+    basque: "Gobierno Vasco",
     pending: "Por confirmar",
     rodaliesRow: "66 % en hora punta y 33 % el resto del día",
-    networksNote: "Las redes, como las lista renfe.com. Si el Ministerio fija cifras distintas por red, se verán aquí cuando publique la resolución.",
+    stateRow: "75 % en hora punta y 50 % el resto del día",
+    basqueRow: "50 % en hora punta y 25 % el resto del día",
+    networksNote: "Las redes, como las lista renfe.com. Cifras de la resolución del Ministerio de Transportes del 12 de noviembre (la misma en todas sus redes; en Madrid, la C9 está cerrada por obras), de la orden del Gobierno Vasco del 13 de noviembre y de la de la Generalitat del 12.",
     rodaliesGuide: (href) => `Líneas, horarios de servicios mínimos y avisos en directo de Rodalies: ${link(href, "la guía de la huelga de Renfe y Rodalies")}.`,
     ticketsHeading: "Si tienes billete de AVE, Larga Distancia, Iryo u Ouigo",
     tickets: [
@@ -223,7 +240,7 @@ const COPY: Record<Locale, Copy> = {
     whoId: "qui-convoca",
     notIn: "Metro, autobusos, tramvies i trens autonòmics que no són de Renfe (FGC, Euskotren, Metrovalencia, Serveis Ferroviaris de Mallorca): no formen part de les convocatòries publicades",
     statePending: "Per confirmar: els fixa el Ministeri de Transports i encara no s'han publicat",
-    statePublished: "Publicats pel Ministeri de Transports: a «Serveis mínims»",
+    statePublished: "Publicats pel Ministeri de Transports: Cercanías, 75 % en hora punta i 50 % la resta del dia; Mitja Distància, 65 % de mitjana; AVE i Llarga Distància, 72 %",
     msHeading: "Serveis mínims: quins trens funcionen el 17 de novembre",
     msId: "serveis-minims",
     stateSub: "**Cercanías, Mitja Distància, AVE i Llarga Distància, Iryo, Ouigo i Adif (Ministeri de Transports).**",
@@ -233,14 +250,17 @@ const COPY: Record<Locale, Copy> = {
     networksHeading: "Cercanías: xarxa per xarxa",
     networksId: "cercanias",
     networksIntro: (renfe) =>
-      `Totes les xarxes de Cercanías les opera Renfe, el personal de la qual està cridat a la vaga del 17. Els serveis mínims els fixa el Ministeri de Transports per a totes alhora, llevat de Rodalies de Catalunya, que els rep de la Generalitat. Els horaris de cada xarxa, a ${link(renfe, "renfe.com")}.`,
+      `Totes les xarxes de Cercanías les opera Renfe, el personal de la qual està cridat a la vaga del 17. Els serveis mínims els fixa el Ministeri de Transports, llevat de Rodalies de Catalunya (Generalitat) i de Bilbao i Sant Sebastià (Govern Basc). Els horaris de cada xarxa, a ${link(renfe, "renfe.com")}.`,
     caption: "Vaga de trens del 17 de novembre: serveis mínims a cada xarxa de Cercanías",
     headers: ["Xarxa", "Qui fixa els mínims", "Serveis mínims del 17"],
     ministry: "Ministeri de Transports",
     generalitat: "Generalitat de Catalunya",
+    basque: "Govern Basc",
     pending: "Per confirmar",
     rodaliesRow: "66 % en hora punta i 33 % la resta del dia",
-    networksNote: "Les xarxes, com les llista renfe.com. Si el Ministeri fixa xifres diferents per xarxa, es veuran aquí quan publiqui la resolució.",
+    stateRow: "75 % en hora punta i 50 % la resta del dia",
+    basqueRow: "50 % en hora punta i 25 % la resta del dia",
+    networksNote: "Les xarxes, com les llista renfe.com. Xifres de la resolució del Ministeri de Transports del 12 de novembre (la mateixa a totes les seves xarxes; a Madrid, la C9 és tancada per obres), de l'ordre del Govern Basc del 13 de novembre i de la de la Generalitat del 12.",
     rodaliesGuide: (href) => `Línies, horaris de serveis mínims i avisos en directe de Rodalies: ${link(href, "la guia de la vaga de Renfe i Rodalies")}.`,
     ticketsHeading: "Si tens bitllet d'AVE, Llarga Distància, Iryo o Ouigo",
     tickets: [
@@ -281,7 +301,7 @@ const COPY: Record<Locale, Copy> = {
     whoId: "who-called-it",
     notIn: "Metro, buses, trams and regional railways not run by Renfe (FGC, Euskotren, Metrovalencia, Serveis Ferroviaris de Mallorca): not part of the published calls",
     statePending: "To be confirmed: the Ministry of Transport sets them and has not published them yet",
-    statePublished: "Published by the Ministry of Transport: see \"Minimum services\"",
+    statePublished: "Published by the Ministry of Transport: Cercanías 75% at peak times and 50% the rest of the day; Media Distancia 65% on average; AVE and long distance 72%",
     msHeading: "Minimum services: which trains run on 17 November",
     msId: "minimum-services",
     stateSub: "**Cercanías, Media Distancia, AVE and long distance, Iryo, Ouigo and Adif (Ministry of Transport).**",
@@ -291,14 +311,17 @@ const COPY: Record<Locale, Copy> = {
     networksHeading: "Cercanías commuter trains: network by network",
     networksId: "cercanias",
     networksIntro: (renfe) =>
-      `Renfe runs every Cercanías network, and its staff are called out on the 17th. The Ministry of Transport sets minimum services for all of them at once, except Rodalies de Catalunya, whose are set by the Generalitat. Each network's timetables are on ${link(renfe, "renfe.com")}.`,
+      `Renfe runs every Cercanías network, and its staff are called out on the 17th. The Ministry of Transport sets minimum services, except on Rodalies de Catalunya (the Generalitat) and in Bilbao and San Sebastián (the Basque Government). Each network's timetables are on ${link(renfe, "renfe.com")}.`,
     caption: "Rail strike on 17 November: minimum services on each Cercanías network",
     headers: ["Network", "Who sets minimum services", "Minimum services on the 17th"],
     ministry: "Ministry of Transport",
     generalitat: "Generalitat de Catalunya",
+    basque: "Basque Government",
     pending: "To be confirmed",
     rodaliesRow: "66% at peak times, 33% the rest of the day",
-    networksNote: "Networks as renfe.com lists them. If the Ministry sets different figures per network, they will show here once its resolution is out.",
+    stateRow: "75% at peak times, 50% the rest of the day",
+    basqueRow: "50% at peak times, 25% the rest of the day",
+    networksNote: "Networks as renfe.com lists them. Figures from the Ministry of Transport's resolution of 12 November (the same on all its networks; in Madrid, line C9 is closed for works), the Basque Government's order of 13 November and the Generalitat's of the 12th.",
     rodaliesGuide: (href) => `Rodalies lines, minimum-service timetables and live notices: ${link(href, "our Renfe and Rodalies strike guide")}.`,
     ticketsHeading: "Holding an AVE, long-distance, Iryo or Ouigo ticket",
     tickets: [
@@ -337,13 +360,13 @@ export function buildRail17nBody(locale: Locale, asOf: string = STRIKES_AS_OF): 
   const msPending = spain.minimumServices.status !== "published";
   const stateText = fillChecked(spain.minimumServices.text, locale, STRIKES_SPAIN_AS_OF);
   const rodaliesText = catalan.minimumServices.text[locale];
-  const stateCell = msPending ? t.pending : t.statePublished;
+  const stateCell = msPending ? t.pending : t.stateRow;
   const rodaliesCell = catalan.minimumServices.status === "published" ? t.rodaliesRow : t.pending;
   const next = SPAIN_STRIKES.find((s) => s.id === RAIL_17N_ID.next);
   const renfeGuide = `/${locale}/${B2_PATHS.strikeRenfe[locale]}/`;
 
   const rows = [
-    ...CERCANIAS_NETWORKS.map((network) => [network, t.ministry, stateCell]),
+    ...CERCANIAS_NETWORKS.map((network) => (BASQUE_NETWORKS.has(network) ? [network, t.basque, BASQUE_MS_PUBLISHED ? t.basqueRow : t.pending] : [network, t.ministry, stateCell])),
     ["Rodalies de Catalunya", t.generalitat, rodaliesCell],
   ];
 
