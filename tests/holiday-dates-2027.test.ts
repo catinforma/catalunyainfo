@@ -24,6 +24,7 @@ import {
   datePath,
   dateSlug,
   holidaySitemapEntries,
+  sameDayIn2026,
 } from "../src/lib/programmatic/holidays/paths.ts";
 import { dateQuestion } from "../src/lib/programmatic/holidays/question.ts";
 import { dateStaticParams, resolveDatePage } from "../src/lib/programmatic/holidays/routing.ts";
@@ -540,4 +541,19 @@ test("linking: the long weekends table and the Easter guide send each day to its
     const easter = JSON.stringify(EASTER_2027.editions[locale].blocks);
     assert.ok(easter.includes(`](${datePath(locale, "2027-05-17")})`), locale);
   }
+});
+
+test("a 2027 date page links the same day of 2026 when that day has a page (16 Nov 2026)", () => {
+  assert.equal(sameDayIn2026("2027-12-07"), "2026-12-07");
+  assert.equal(sameDayIn2026("2027-12-08"), "2026-12-08");
+  assert.equal(sameDayIn2026("2027-12-24"), "2026-12-24");
+  // No 2026 page for 17 May; and 2026 pages never point anywhere.
+  assert.equal(sameDayIn2026("2027-05-17"), null);
+  assert.equal(sameDayIn2026("2026-12-07"), null);
+  for (const iso of DATE_PAGES) {
+    const twin = sameDayIn2026(iso);
+    if (twin) assert.ok(DATE_PAGES.includes(twin) && twin.slice(5) === iso.slice(5), iso);
+  }
+  const view = readFileSync(join(ROOT, "src/components/programmatic/holidays/DatePage.tsx"), "utf8");
+  assert.ok(view.includes("sameDayIn2026(iso)"));
 });

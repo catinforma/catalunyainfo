@@ -100,6 +100,18 @@ export function isDatePage(iso: string): boolean {
   return DATE_PAGES.includes(iso);
 }
 
+/**
+ * For a 2027 date page, the same day's 2026 page when there is one (7 December
+ * 2027 → 7 December 2026), else null. GSC 3–16 Nov 2026: "el 7 de diciembre es
+ * festivo en cataluña" took 100 impressions at 3.7 on the 2027 page, as many as
+ * on the 2026 page, from readers asking about the coming one.
+ */
+export function sameDayIn2026(iso: string): DatePage | null {
+  if (!iso.startsWith("2027-")) return null;
+  const twin = `2026-${iso.slice(5)}`;
+  return isDatePage(twin) ? twin : null;
+}
+
 /** The first and last dates with a page, for the summaries that give the range (llms.txt). */
 export const DATE_PAGE_RANGE = { first: DATE_PAGES[0] ?? "", last: DATE_PAGES.at(-1) ?? "" } as const;
 

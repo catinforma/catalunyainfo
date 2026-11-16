@@ -11,7 +11,7 @@ import { isTranche4 } from "@/lib/programmatic/holidays/dates-2027";
 import { hasEnglishPage } from "@/lib/programmatic/holidays/english";
 import { longDate, type DateLocale } from "@/lib/programmatic/holidays/format";
 import { esName } from "@/lib/programmatic/holidays/names";
-import { datePath, hubPath, municipalityPath, type DatePage as DatePageIso } from "@/lib/programmatic/holidays/paths";
+import { datePath, hubPath, municipalityPath, sameDayIn2026, type DatePage as DatePageIso } from "@/lib/programmatic/holidays/paths";
 import { restOfSpainLabel } from "@/lib/programmatic/spain-2027/day-copy";
 import { restOfSpainLabelIntl } from "@/lib/programmatic/spain-2027/day-copy-intl";
 import { hasDayPage } from "@/lib/programmatic/spain-2027/days";
@@ -21,6 +21,9 @@ import { DateQuestions, GuideLinks, Sources, type SourceKey } from "./parts";
 
 /** The question before the link to the Spain-wide day page. */
 const REST_OF_SPAIN: Record<DateLocale, string> = { ca: "I a la resta d'Espanya?", es: "¿Y en el resto de España?", en: "And in the rest of Spain?" };
+
+/** The lead-in before the link from a 2027 date page to the same day in 2026. */
+const SAME_DAY_2026: Record<DateLocale, string> = { ca: "Busques el 2026?", es: "¿Buscas el de 2026?", en: "Looking for 2026?" };
 
 export function dateCrumbs(iso: DatePageIso, locale: DateLocale): Crumb[] {
   const ui = DATE_UI[locale];
@@ -45,6 +48,7 @@ export function DatePageView({ iso, locale }: { iso: DatePageIso; locale: DateLo
   // Tranche 4 (2027): the order, the BOE's national list, the 2027 shop calendar, the retail law and the
   // school order; then each council whose days are listed, or the DOGC order once it is out.
   const tranche4 = isTranche4(iso);
+  const sameDay2026 = sameDayIn2026(iso);
   const sources: SourceKey[] = tranche4
     ? ["regional2027", "boe2027", "shopsOrder2027", "retailLaw", "school"]
     : year === "2026"
@@ -82,6 +86,13 @@ export function DatePageView({ iso, locale }: { iso: DatePageIso; locale: DateLo
             </p>
           </div>
           <p className="ci-lead">{content.answer}</p>
+          {/* A 2027 page whose day also has a 2026 page: readers asking about the coming
+              one land here too ("el 7 de diciembre es festivo en cataluña", 16 Nov 2026). */}
+          {sameDay2026 ? (
+            <p>
+              <strong>{SAME_DAY_2026[locale]}</strong> <Link href={datePath(locale, sameDay2026)}>{dateQuestion(sameDay2026, locale)}</Link>
+            </p>
+          ) : null}
           {content.answerNote.map((p) => (
             <p key={p}>{p}</p>
           ))}
