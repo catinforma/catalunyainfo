@@ -6083,3 +6083,49 @@ Catalan hub's "Mañana" line drops), deploy, publish `strikes`. When the
 Ministry publishes Adif's resolution (17/19): Spain entry text + `ADIF_MS_PUBLISHED`.
 
 **Outcome:** _pending_
+
+## 2026-11-16 — 29N: town pages answer "censo electoral <town>" and "mesa electoral 29N <town>"; candidates guide answers "qué partidos se presentan"; ES how-to-vote lead answers its title (body only; deploy, groups `candidates`, `voting`)
+
+**Observation.** GSC 10–16 Nov. `/es/elecciones/<town>/` (6,672 impressions,
+4.9 %, position 5.6): the visible queries are "censo electoral <town>"
+(Badalona 16 at 7.1, Santa Coloma 15 at 6.7, Ripollet 11 at 7.5, Cornellà 10
+at 6.3, Mataró 9 at 4.6, Rubí, Viladecans, Reus, Vilanova) and "mesa electoral
+(29n) <town>" (Viladecans 12 at 7.8, Santa Coloma 8 at 9.0, Cornellà 6 at 9.0,
+Cerdanyola, El Vendrell, L'Hospitalet 4 at 13), almost all 0 clicks; the
+section was "Qué es el censo electoral" (a definition, the town's figure in
+the second sentence) and the polling H2 "Dónde votar el 29N en <town>".
+Candidates ES (4,394 impressions, 11.6 %, 5.0–6.7): "partidos politicos en
+cataluña 2026" 17 at 6.6, "partidos que se presentan en cataluña" 11 at 6.4,
+"partidos políticos catalanes 2026" 7 at 7.4, "elecciones cataluña
+candidatos" 29 at 5.4 (0 clicks), "candidatos a los que puedo votar viviendo
+en barcelona" 12 at 9.0. How-to-vote ES: "cuando son las elecciones en
+cataluña" 309 at 7.7 (0.3 %), "cuando hay elecciones en cataluña" 151 at 7.8,
+"proximas elecciones cataluña" 148 at 6.7: the 11 Nov title asks "¿Cuándo
+son las elecciones en Cataluña?" but the lead answered it in its last sentence.
+
+**What changed (no title or description).**
+- Town pages, ca/es/en (`elections/model.ts`, `polling.ts`): census section
+  retitled "Censo electoral de <town>" / "Cens electoral de <town>" /
+  "Electoral roll (censo electoral) of <town>", first paragraph gives the
+  roll at the 2023 general election and the 2023 municipal one (snapshot
+  counts) and points to the census card and the INE's mesa/local lookup for
+  where to vote; polling H2 → "Dónde votar el 29N en <town>: locales y mesas electorales".
+- Candidates guide, ca/es/en: one paragraph with the proclaimed Congress lists
+  per province (11/10/10/13; BOE-A-2026-23103, Interior CERA ballots re-read
+  13 Nov), no party named (the page's rule); FAQ "¿Qué partidos se presentan
+  a las elecciones generales en Cataluña?" and "¿A qué candidatos puedo votar
+  si vivo en Barcelona?".
+- How-to-vote ES lead now opens "Las próximas elecciones en Cataluña son las
+  generales del domingo 29 de noviembre…; las siguientes, las municipales,
+  previstas para el 23 de mayo de 2027, y no hay elecciones al Parlament
+  convocadas" (ca already did). Confound: the 11 Nov title test's day-7
+  review (18 Nov) now also sees this lead; read it as title + lead.
+
+No poll figure added anywhere (blackout from 24 Nov 00:00).
+
+**Prediction.** By 27 Nov (`snapshot.py page /es/elecciones/ 7`, filter
+"censo electoral" / "mesa electoral"): those queries ≥ 2 % CTR and position
+≤ 6; candidates ES "partidos … cataluña" queries ≤ 5; how-to-vote ES "cuando
+son las elecciones en cataluña" CTR ≥ 1 %.
+
+**Outcome:** _pending_

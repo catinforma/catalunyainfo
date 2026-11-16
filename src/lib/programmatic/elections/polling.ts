@@ -131,7 +131,7 @@ const capital = (text: string) => text.charAt(0).toUpperCase() + text.slice(1);
 
 const WORDS: Record<Locale, Words> = {
   ca: {
-    title: (place) => `On votar el 29N ${inCa(place)}`,
+    title: (place) => `On votar el 29N ${inCa(place)}: locals i meses electorals`,
     places: (n) => plural(n, "local electoral", "locals electorals"),
     sections: (n) => plural(n, "secció", "seccions"),
     tables: (n) => plural(n, "mesa", "meses"),
@@ -157,7 +157,7 @@ const WORDS: Record<Locale, Words> = {
     fact: (n, t) => `${plural(n, "local", "locals")}, ${plural(t, "mesa", "meses")} (BOP)`,
   },
   es: {
-    title: (place) => `Dónde votar el 29N en ${place}`,
+    title: (place) => `Dónde votar el 29N en ${place}: locales y mesas electorales`,
     places: (n) => plural(n, "local electoral", "locales electorales"),
     sections: (n) => plural(n, "sección", "secciones"),
     tables: (n) => plural(n, "mesa", "mesas"),
@@ -183,7 +183,7 @@ const WORDS: Record<Locale, Words> = {
     fact: (n, t) => `${plural(n, "local", "locales")}, ${plural(t, "mesa", "mesas")} (BOP)`,
   },
   en: {
-    title: (place) => `Where to vote on 29 November in ${place}`,
+    title: (place) => `Where to vote on 29 November in ${place}: polling places and tables`,
     places: (n) => plural(n, "polling place", "polling places"),
     sections: (n) => plural(n, "section", "sections"),
     tables: (n) => plural(n, "table", "tables"),
