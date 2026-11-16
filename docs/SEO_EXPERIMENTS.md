@@ -6196,4 +6196,83 @@ No poll figure added anywhere (blackout from 24 Nov 00:00).
 ≤ 6; candidates ES "partidos … cataluña" queries ≤ 5; how-to-vote ES "cuando
 son las elecciones en cataluña" CTR ≥ 1 %.
 
+## 2026-11-16 — Holidays family: 15 Nov interim readings, the 6 Nov day-7 check (8 Dec reverted), and three gap fixes in the body (deploy; groups `shops`, `puente-diciembre-espana`)
+
+Owner, 16 Nov: "hem de pujar rang, top 3 mínim, millora-ho tot". Scope: holidays, calendars, bridges, shops and school pages (ca/es/en).
+GSC 3–16 Nov (`snapshot.py pages 14 600`, `ctr 14 300`, `gaps 14 120`, `page <path> 14`, plus a query×page split before/after a date;
+15–16 Nov partial). Every title window in this family is still open: the 11 Nov retitles review 18 Nov, the Spain bridge and
+answer-first 19 Nov, school Spain 20 Nov, work-calendar and town titles to 1 Dec. **So no title or description changed here except
+the one revert the 6 Nov rule orders.**
+
+### 1. Overdue readings (recorded, no action unless stated)
+
+- **6 Nov sweep, day-7 check (was due 13 Nov), 7 and 8 December date pages.** Named queries, per day, 24 Oct–6 Nov vs 7–16 Nov:
+  - `/es/festivos/dia/7-diciembre-2026/`: 1.1 → 3.4 clicks, 56 → 138 impressions, position 6.3 → 5.3. **Keep** "… Dónde sí" / "… On sí ho és".
+  - `/es/festivos/dia/8-diciembre-2026/`: 0.4 → 0 clicks on 6 → 66 impressions, position 4.8 → 7.3 (14 d: 3 clicks / 1,183, 0.3 %).
+    Both revert conditions hold (clicks fell at higher impressions; position −2.5 with no CTR gain). **Reverted** to the bare question,
+    es "¿Es festivo el 8 de diciembre de 2026 en Cataluña?" and ca "És festiu el 8 de desembre de 2026 a Catalunya?" (CA had ~1
+    impression a day and no signal of its own; reverted with ES because it was the same hypothesis). The queries are national
+    ("8 de diciembre es festivo" 149 at 7.6, "8 diciembre festivo" 120 at 8.6); the body already says "y en el resto de España".
+    Deploy only. **Review 30 Nov** (`snapshot.py page /es/festivos/dia/8-diciembre-2026/ 7`), read at equal distance from the date.
+- **3 Nov CTR sweep, 15 Nov interim** (14 d to 16 Nov; baselines in that entry):
+  - Town family `/es/festivos/` 1,013 clicks / 48,612 impr. (2.08 %, baseline 1.7 %); `/ca/festius/` 812 / 23,274 (3.49 %).
+  - Lleida es 9 / 1,450 (0.6 %, was 0.2 %) at 7.5; Terrassa es 5 / 795 (0.6 %, was 0.4 %) at 7.3; Badalona es 9 / 881 (1.0 %, was 0.5 %)
+    at 6.9; Girona ca 1 / 199 (0.5 %, was 0.2 %), es 5 / 369 (1.4 %) at 6.8; Sant Boi ca 2 / 255 (0.8 %, was 0 %), es 2 / 142 (1.4 %).
+    Small gains, every page still at 7–8. Ranking, not CTR, as the 13 Nov queue says: read again on 1 Dec, then work the body.
+  - The family dipped to position 13.4 on Sat 14 Nov and recovered on the 15th (7.6). `/es/festivos/barcelona/` reads 32–53 on 14–16 Nov
+    on 16–133 impressions a day. URL Inspection 16 Nov: indexed, self-canonical, crawled 13 Nov, Breadcrumbs + Dataset valid. Not a
+    fault on our side. Its "hoy es festivo en barcelona" demand fell after 11N. Re-read on 20 Nov with complete days.
+- **3 Nov holidays head pages, 15 Nov reading.** ES work calendar 17 / 2,818 (0.6 %), page position 23.4. That number comes from the
+  Spain-wide head terms ("calendario laboral" 59 at 49, "festividades" at 85). The Catalonia 2027 queries hold at 8.7–10.3
+  ("calendario 2027 catalunya con festivos" 36 at 8.7). CA work calendar 6 / 279 (2.2 %) at 10.8. ES "es festivo hoy" 1 / 369 at 24.8
+  (was 1,450 / 14 d on 5 Nov): its "hoy es festivo en cataluña" impressions went to the date and town pages. No change; 1 Dec as planned.
+- **3 Nov shops and ES bridge, 15 Nov reading.** Superseded by the 11 Nov retitles (day 7 = 18 Nov, not touched).
+  Numbers for that review:
+  - shops ES 167 / 11,913 (1.4 %) at 6.2, CA 20 / 1,300 (1.5 %), EN 11 / 495 (2.2 %);
+  - Catalan bridge ES 235 / 13,241 (1.8 %) at 6.1, CA 16 / 1,093, EN 0 / 154 at 4.6.
+- **For the 19 Nov Spain-bridge review (not acted on).**
+  - `/es/guias/puente-diciembre-espana/` per day: 1,618 named impressions at 7.1 (7–11 Nov) → 112 at 14.6 (12–16 Nov), clicks 56.6 → 0.8.
+  - Demand fell too. Over the same split the 7 Dec date page went 158 → 114 at equal position, and the Catalan ES bridge page
+    965 → 180 at 6.8 → 7.4. The 8–11 Nov peak was a news-driven spike.
+  - The Spain page's position loss (7 → 15) starts on the day of its 12 Nov retitle and answer-first switch. The 19 Nov reviewer
+    should weigh a revert of the ES title on position, not only on CTR, although the revert rule as written does not cover that.
+
+### 2. Gaps fixed (body and links only)
+
+| Page (group) | Gap (GSC 3–16 Nov / competitors) | Change |
+| --- | --- | --- |
+| `/es/guias/tiendas-abiertas-festivos-cataluna/` + ca, en (`shops`) | A new cluster appeared on 14–15 Nov (2,061 and 3,092 impr./day). "cuando empiezan a abrir las tiendas los domingos" 365 at 7.4, "cuando abren las tiendas los domingos" 229 at 9.4, plus 92, 83, 49, 47 and 46 variants, all at 6–11 with 0 clicks. The page answered only "qué domingos". The leading answer elsewhere (barcelonaurbana) gives "el próximo domingo es el 29 de noviembre". The guide never linked the Spain-wide shops page. | First H2 (after the verified callout, before the date table): "¿Cuándo empiezan a abrir las tiendas los domingos en Navidad?" / "Quan comencen a obrir les botigues els diumenges per Nadal?" / "When do shops start opening on Sundays for Christmas?". It answers 29 Nov first (except Gironella, Martorell, Salt), then 6, 13, 20 and 27 Dec and Tuesday 8. It adds the ten-a-year rule, 3 Jan 2027 as the first day of 2027, and a link to the Spain-wide page. Every fact was already on the page (Ordre EMT/77/2025, Resolució EMT/4342/2025, Ordre EMT/89/2026). Lead, title and description are unchanged. |
+| `/es/guias/tiendas-abiertas-diciembre-espana/` (linked from `shops` and `puente-diciembre-espana`) | URL Inspection 16 Nov: **"Discovered – currently not indexed", never crawled**. Its only referrers were its own ca/en editions. Meanwhile the national shop queries land on the Catalan guide. | It is now the owner of the Spain-wide December shop queries. It is linked from the shops guide (above) and from the Spain bridge page (below) in all three languages. Nothing on the page itself changed. |
+| `/es/guias/puente-diciembre-espana/` + ca, en (`puente-diciembre-espana`) | 14.8k impressions, the family's largest page. It had nothing on whether shops open on the bridge, a sub-answer the news results carry. It did not link the 2027 leave planner or the working-days calculator. | New H2 "¿Abren las tiendas en el puente de diciembre?" (ca/en alike), built from the Ministry table already in `shops-spain-december.ts` (`bridgeShopsParagraph`). It gives the regions where shops may open on Sunday 6, Monday 7 and Tuesday 8, plus a caveat: Catalan, Extremaduran and Navarrese councils add their own days, and in Barcelona and most Catalan towns the 8th is one of them. Madrid is free; Canarias goes by island. It ends with the link to the Spain shops page. In "¿Y en 2027?" a sentence now links `/es/festivos/2027/aprovechar-vacaciones/` and `/es/calculadoras/dias-habiles/` (ca/en paths alike). |
+| 2027 date pages with a 2026 twin (`/es/festivos/dia/7-diciembre-2027/` etc., deploy) | Cannibalisation: "el 7 de diciembre es festivo en cataluña" took 100 impressions at 3.7 on the **2027** page against 107 at 2.3 on the 2026 page, and "el 7 de diciembre es festivo en barcelona" took 32 at 6.2 there. Searchers want the coming one. | Right under the 2027 answer: "¿Buscas el de 2026? [¿Es festivo el 7 de diciembre de 2026 en Cataluña?]" (ca "Busques el 2026?", en "Looking for 2026?"). It is built by `sameDayIn2026()` in `holidays/paths.ts` and appears only where the same day has a 2026 page (1 Nov; 7, 8, 24, 25, 26 and 31 Dec). The 2026 page owns the query; the 2027 page hands it on. |
+
+**Structured data.** Live check on 16 Nov of 25 pages in the family (both bridges, the 4 shops pages, Barcelona es/en, the hub, the 7 and
+8 Dec 2026 and 7 Dec 2027 date pages, `/es/festivos/2027/` and Vigo, the planner, días hábiles, the work calendar, the CA school
+calendar, the Andalucía and Spain school pages, "es festivo hoy", local holidays and puentes 2027).
+- Every page has a BreadcrumbList.
+- FAQPage appears only where the page prints the same FAQ.
+- No Event markup anywhere. All JSON-LD parses.
+- Nothing to fix.
+
+**Not done, with reasons.**
+- No title or description touched beyond the 8 Dec revert: every page is inside a window (see the dates above).
+- School community pages, e.g. Andalucía at 0.3 % at 8.1 on 3,426 impressions, Madrid at 0.2 % at 10.0: their body changed on 13 Nov
+  and the review is on 20 Nov.
+- Spain 2027 city pages ("festivos vigo 2027" 136 at 10.8, Alcobendas at 9.3): their first line changed on 13 Nov, measured on 20 Nov and 1 Dec.
+- The DOGC 2027 municipal shop-opening list is not out as far as search shows (precedent 27 Nov 2025). The guide's "a 5 de
+  noviembre" lines stay true and were not re-dated, because the DOGC itself was not re-read today.
+- Competitor SERPs: the web search tool is US-located and returns Colombian results for "puente de diciembre 2026" and "festivos puente
+  diciembre". The gaps above come from our own query data and the Spanish results it did return.
+
+**Prediction.**
+- Shops ES: the "cuándo empiezan a abrir … domingos" queries move from 7–10 to ≤ 6, with CTR > 2 % in the week before 29 Nov.
+- The ES Spain shops page gets crawled and indexed by 25 Nov, and shows for "tiendas abiertas 8 de diciembre" style queries outside Catalonia.
+- The 2027 7 Dec page's share of "el 7 de diciembre es festivo en cataluña" falls below a third by 1 Dec.
+
+**Review 25 Nov.** Run `batch_url_inspection` on `/es/guias/tiendas-abiertas-diciembre-espana/`, then `snapshot.py page
+tiendas-abiertas-festivos-cataluna 7` for the "cuando empiezan" queries, and the 7 Dec query split by page. **Review again 2 Dec.**
+
+**Go-live.** Deploy first: the date pages and the `bridgeShopsParagraph` helper ship with the code. Then publish `shops` and
+`puente-diciembre-espana`, and send IndexNow for the two shops URLs and the Spain bridge URLs (ca/es/en).
+
 **Outcome:** _pending_

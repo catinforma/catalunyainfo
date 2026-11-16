@@ -94,8 +94,10 @@ test("guide: the December block comes first; titles, descriptions and H1s are un
     const lead = blocks[0] as { type: string; text: string };
     assert.match(lead.text, /^\*\*(Al desembre|En diciembre|In December)/, `${locale}: lead opens with December`);
     const h2 = blocks.filter((b) => b.type === "heading") as { text: string }[];
-    assert.match(h2[0]!.text, firstH2[locale]!, `${locale}: first section`);
-    assert.match(h2[1]!.text, firstH2[locale]!, `${locale}: second section (your town)`);
+    // 16 Nov 2026: "when do shops start opening on Sundays" (for Christmas) comes first, then the date table and your town.
+    assert.match(h2[0]!.text, /diumenges per Nadal|domingos en Navidad|Sundays for Christmas/, `${locale}: first section (Sundays)`);
+    assert.match(h2[1]!.text, firstH2[locale]!, `${locale}: second section (date table)`);
+    assert.match(h2[2]!.text, firstH2[locale]!, `${locale}: third section (your town)`);
     const town = blocks.findIndex((b) => b.type === "shopsChristmas");
     const election = blocks.findIndex((b) => b.type === "heading" && /eleccions|elecciones|election/.test((b as { text: string }).text));
     assert.ok(town > 0 && town < election, `${locale}: per-town table before the election section`);

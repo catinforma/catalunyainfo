@@ -6,10 +6,13 @@ import { BOE_2027, REGIONS, REGION_NAME, boeRegionsOn, type Region } from "@/lib
 import { joinList } from "@/lib/programmatic/holidays/names";
 import { COMMUNITIES_AZ, names } from "@/lib/programmatic/spain-2027/communities";
 import { communityPath, spainBridgesPath, spainHubPath } from "@/lib/programmatic/spain-2027/paths";
+import { calcPath } from "@/lib/programmatic/calculators/paths";
+import { leavePath } from "@/lib/programmatic/leave-2027/copy";
 import { HUB_PATHS as SCHOOL_HUB_PATHS } from "@/lib/content/school-spain/regions";
 
 import { LOCAL_MONDAY_7, runWords, type Run } from "./december-bridge";
 import { SHOPS } from "./shops";
+import { bridgeShopsParagraph } from "./shops-spain-december";
 import { trafficBlocks, trafficSources } from "./traffic-dec-2026";
 import { b2Related, b2link, callout, faq, h2, keyFacts, lead, paras, table, verifiedLine, type B2Article, type B2Source } from "./shared";
 
@@ -559,6 +562,7 @@ function bodyEs(): Block[] {
       `Y si ya estás mirando el año que viene, los festivos de 2027 de cada comunidad, con sus puentes, están en [el calendario laboral 2027 por comunidades](${spainHubPath()}).`,
     ),
     ...trafficBlocks("spain", "es"),
+    ...h2("¿Abren las tiendas en el puente de diciembre?", bridgeShopsParagraph(L)),
     ...h2(
       "Las fiestas locales también cuentan",
       `A los festivos de la comunidad, cada municipio suma hasta dos fiestas locales, y algunos ponen una el lunes 7: en Cataluña, por ejemplo, lo hacen ${local} municipios aunque la comunidad no lo tenga. Las fiestas locales se publican en el boletín oficial de cada comunidad o en el de la provincia. Si tu ayuntamiento eligió el 7, en tu municipio también hay puente sin pedir días.`,
@@ -567,6 +571,7 @@ function bodyEs(): Block[] {
       "¿Y en 2027?",
       `El año que viene el puente es para todos: en 2027 el 6 de diciembre cae en ${wd(NEXT_DECEMBER.constitution, L)} y el 8 en ${wd(NEXT_DECEMBER.immaculada, L)}, los dos festivos en toda España, y pidiendo el 7 salen ${next.days} días seguidos, del 4 al 8 de diciembre de 2027. Todos los puentes del año, comunidad por comunidad, están en [puentes 2027 en España](${spainBridgesPath()}).`,
       `Festivos de 2027 de cada comunidad: ${communityLinks2027()}.`,
+      plannerLine(L),
     ),
     faq([
       {
@@ -598,6 +603,16 @@ function bodyEs(): Block[] {
     ...paras(verifiedLine(L, SPAIN_BRIDGE_VERIFIED)),
     ...b2Related([...RELATED], L),
   ];
+}
+
+/**
+ * 16 Nov 2026: the 2027 leave planner and the working-days calculator, linked
+ * from the page with the most December holiday impressions (14.8k in 14 days).
+ */
+function plannerLine(L: Locale): string {
+  if (L === "es") return `Para tu comunidad o tu ciudad y los días de vacaciones que tienes, el [planificador de vacaciones de 2027](${leavePath("es")}) calcula qué días pedir para encadenar más días libres, y la [calculadora de días hábiles](${calcPath("working-days", "es")}) cuenta un plazo con los festivos de tu comunidad y, en las ciudades con página, también los locales.`;
+  if (L === "ca") return `Per a la teva comunitat o la teva ciutat i els dies de vacances que tens, el [planificador de vacances del 2027](${leavePath("ca")}) calcula quins dies demanar per encadenar més dies lliures, i la [calculadora de dies hàbils](${calcPath("working-days", "ca")}) compta un termini amb els festius de la teva comunitat i, a les ciutats amb pàgina, també els locals.`;
+  return `For your region or city and the leave you have, the [2027 leave planner](${leavePath("en")}) works out which days to book for the longest breaks, and the [working days calculator](${calcPath("working-days", "en")}) counts a deadline with your region's holidays and, in the cities it covers, the local ones.`;
 }
 
 function bodyCa(): Block[] {
@@ -635,10 +650,12 @@ function bodyCa(): Block[] {
       schoolChristmasLine(L),
     ),
     ...trafficBlocks("spain", "ca"),
+    ...h2("Obren les botigues pel pont de desembre?", bridgeShopsParagraph(L)),
     ...h2(
       "I a Catalunya?",
       `Aquí el pont només surt demanant el dilluns 7: l'únic festiu és el dimarts 8, i el dissabte 26, Sant Esteve, també és festiu (a l'Aran, no). Tot el detall, amb escoles i botigues, és a ${b2link("decemberBridge", L, "el pont de desembre a Catalunya")}.`,
       `El 2027 el pont és per a tothom: el 6 de desembre cau en ${wd(NEXT_DECEMBER.constitution, L)} i el 8 en ${wd(NEXT_DECEMBER.immaculada, L)}, i demanant el 7 surten ${next.days} dies seguits. Tots els ponts de l'any són a ${b2link("bridges2027", L, "ponts 2027 a Catalunya")}.`,
+      plannerLine(L),
     ),
     faq([
       { question: "El 7 de desembre de 2026 és festiu?", answer: `Depèn de la comunitat: ho és a ${proseList(MONDAY_7, L)}. A Catalunya és feiner, llevat de ${local} municipis amb festa local.` },
@@ -706,10 +723,12 @@ function bodyEn(): Block[] {
       schoolChristmasLine(L),
     ),
     ...trafficBlocks("spain", "en"),
+    ...h2("Are shops open over the December long weekend?", bridgeShopsParagraph(L)),
     ...h2(
       "Living in Catalonia?",
       `Monday the 7th is a working day in Catalonia, except in ${local} towns that have it as a local holiday, and the only bridge holiday is Tuesday the 8th; 26 December (Sant Esteve) is a holiday there. Schools and shops are covered in ${b2link("decemberBridge", L, "December 2026 public holidays in Catalonia")}.`,
       `Next year the bridge is for everyone: in 2027, 6 December is a ${wd(NEXT_DECEMBER.constitution, L)} and the 8th a ${wd(NEXT_DECEMBER.immaculada, L)}, both national holidays, so taking the 7th off gives ${next.days} days in a row. Catalonia's 2027 long weekends are in ${b2link("bridges2027", L, "long weekends 2027 in Catalonia")}.`,
+      plannerLine(L),
     ),
     faq([
       { question: "Is 7 December 2026 a holiday in Spain?", answer: `Only in some regions: ${proseList(MONDAY_7, L)}, which moved Sunday's Constitution Day to the Monday. In ${proseList(MONDAY_7_WORKING, L)} it is a working day.` },

@@ -107,6 +107,21 @@ const noteOf = (r: Row, L: Locale) => (L === "es" ? r.note : r.note ? (COMMUNITY
 const day = (d: number, L: Locale) => `${WEEKDAY_NAMES[L][new Date(Date.UTC(2026, 11, d)).getUTCDay()]} ${d}`;
 const whereOpen = (d: number, L: Locale) => DECEMBER_2026.filter((r) => r.days.includes(d)).map((r) => proseName(r, L));
 
+/**
+ * One paragraph for the Spain-wide December bridge page (16 Nov 2026): where
+ * shops may open on 6, 7 and 8 December, from the same Ministry table, and a
+ * link to this page. GSC 3–16 Nov: the ES edition of this page was "Discovered
+ * – currently not indexed", linked only from its own ca/en editions, while
+ * the bridge page took 14.8k impressions.
+ */
+export function bridgeShopsParagraph(L: Locale): string {
+  const j = (d: number) => joinList(whereOpen(d, L), L);
+  const to = b2link("shopsSpainDecember", L, L === "es" ? "tiendas abiertas el 6, 7 y 8 de diciembre por comunidad" : L === "ca" ? "botigues obertes el 6, 7 i 8 de desembre per comunitat" : "shops open on 6, 7 and 8 December, region by region");
+  if (L === "es") return `Depende de la comunidad: cada una fija sus domingos y festivos de apertura. El **martes 8** las tiendas pueden abrir en ${j(8)}; el **lunes 7**, en ${j(7)}, y el **domingo 6**, en ${j(6)}. En Cataluña, Extremadura y Navarra se suman días que elige cada ayuntamiento: en Barcelona y la mayoría de municipios catalanes, también el martes 8. En Madrid cada comercio decide qué días abre, y en Canarias depende de la isla. Poder abrir no obliga a abrir. La tabla completa, con las islas: ${to}.`;
+  if (L === "ca") return `Depèn de la comunitat: cadascuna fixa els seus diumenges i festius d'obertura. El **dimarts 8** les botigues poden obrir a ${j(8)}; el **dilluns 7**, a ${j(7)}, i el **diumenge 6**, a ${j(6)}. A Catalunya, Extremadura i Navarra s'hi sumen dies que tria cada ajuntament: a Barcelona i a la majoria de municipis catalans, també el dimarts 8. A Madrid cada comerç decideix quins dies obre, i a Canàries depèn de l'illa. Poder obrir no obliga a obrir. La taula sencera, amb les illes: ${to}.`;
+  return `It depends on the region: each one sets its own Sunday and holiday opening days. On **Tuesday 8** shops may open in ${j(8)}; on **Monday 7**, in ${j(7)}; and on **Sunday 6**, in ${j(6)}. In Catalonia, Extremadura and Navarre each town council adds days of its own: in Barcelona and most Catalan towns, Tuesday 8 too. In Madrid each shop decides which days it opens, and in the Canary Islands it depends on the island. Being allowed to open does not mean every shop will. The full table, with the islands: ${to}.`;
+}
+
 interface ShopsCopy {
   yes: string;
   yesFree: string;

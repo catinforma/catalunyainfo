@@ -37,6 +37,8 @@ import { LOCALES, type Locale } from "../src/lib/i18n/config.ts";
 import { BOE_2026, BOE_2026_ROWS, REGION_WIDE_LOCAL, boeRegionsOn2026 } from "../src/lib/programmatic/holidays/boe-2026.ts";
 import { BOE_2027_ROWS, REGIONS, REGION_NAME, boeRegionsOn, type BoeCode, type Region } from "../src/lib/programmatic/holidays/boe-2027.ts";
 import { spainPaths } from "../src/lib/programmatic/spain-2027/paths.ts";
+import { calcPath } from "../src/lib/programmatic/calculators/paths.ts";
+import { leavePath } from "../src/lib/programmatic/leave-2027/copy.ts";
 
 /**
  * The December bridge, Christmas and Reyes in every community of Spain
@@ -194,6 +196,9 @@ const PUBLISHED = new Set([
   ...spainPaths(),
   // 12 Nov 2026: the school Christmas line links the Spain-wide school calendar hub.
   ...LOCALES.map((locale) => `/${locale}/${SCHOOL_HUB_PATHS[locale]}/`),
+  // 16 Nov 2026: the 2027 leave planner and the working-days calculator (code routes).
+  ...LOCALES.map((locale) => leavePath(locale)),
+  ...LOCALES.map((locale) => calcPath("working-days", locale)),
 ]);
 
 test("three valid editions on the registry paths, the Spanish one the fullest", () => {

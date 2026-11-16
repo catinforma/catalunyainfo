@@ -276,12 +276,16 @@ function noticeFor(iso: DatePage, locale: DateLocale): DateContent["notice"] {
  * CTR sweep, 6 Nov 2026 (docs/SEO_EXPERIMENTS.md): after the question, a few
  * words promising what the snippet cannot list. 7 December: the 43
  * municipalities and 2 nuclei where it is a local holiday ("donde es festivo el
- * 7 de diciembre de 2026", 36 impressions at 6.2, no click). 8 December: which
- * shops may open, town by town. Added only while the whole title fits in 60.
+ * 7 de diciembre de 2026", 36 impressions at 6.2, no click). Added only while
+ * the whole title fits in 60.
+ *
+ * 8 December ("… Qué abre" / "… Què obre") was REVERTED on 16 Nov 2026 by the
+ * 6 Nov entry's day-7 rule: ES position 4.8 → 7.3 and 0 clicks on ~66 named
+ * impressions a day (7–16 Nov), against 0.4 clicks on 6 a day before. The
+ * 7 December promise stays (clicks 1.1 → 3.4 a day, position 6.3 → 5.3).
  */
 const TITLE_PROMISE: Record<string, Partial<Record<DateLocale, string>>> = {
   [DEC7]: { ca: "On sí ho és", es: "Dónde sí" },
-  "2026-12-08": { ca: "Què obre", es: "Qué abre" },
 };
 
 /** The page's `<title>`: the H1's question, or for the 2027 pages the question with the day's name when it fits. */

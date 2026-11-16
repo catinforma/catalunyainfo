@@ -417,6 +417,9 @@ const NO_6_DEC = closedOn("2026-12-06");
 type T = {
   lead: string;
   note: string;
+  /** 16 Nov 2026: "cuando empiezan a abrir las tiendas los domingos" (~1,000 impressions in 14 days at 6–11, 0 clicks). */
+  sundaysTitle: string;
+  sundays: string;
   weeksTitle: string;
   weeksCaption: string;
   weeksHeaders: string[];
@@ -457,6 +460,8 @@ const COPY: Record<Locale, T> = {
   ca: {
     lead: `**Al desembre, les botigues poden obrir el diumenge 6, el dimarts 8 i els diumenges 13, 20 i 27** a Barcelona i a la majoria de municipis de Catalunya. **El divendres 25 i el dissabte 26 de desembre (Sant Esteve) i l'1 i el 6 de gener han de tancar**, i el primer dia d'obertura del calendari general del 2027 és el **diumenge 3 de gener**. Abans, el **diumenge 29 de novembre, dia de les eleccions generals, també poden obrir**, excepte a ${joinList(NO_29_NOV, "ca")}. ${NO_8_DEC.length} municipis, com ${NO_8_DEC_EXAMPLES.slice(0, -1).join(", ")} o ${NO_8_DEC_EXAMPLES.at(-1)}, no obren el 8 de desembre, i el 6 no és dia d'obertura ${notIn(NO_6_DEC, "ca")}. A Catalunya les botigues poden obrir deu diumenges o festius l'any: vuit els fixa la Generalitat i dos més cada ajuntament. Les botigues d'alimentació de fins a 300 m², les fleques o les de conveniència, entre d'altres, no tenen aquest límit.`,
     note: "Obrir aquests dies és una opció, no una obligació: cada botiga decideix si obre. Els dos dies municipals canvien d'un poble a un altre.",
+    sundaysTitle: "Quan comencen a obrir les botigues els diumenges per Nadal?",
+    sundays: `A Barcelona i a gairebé tot Catalunya, **el diumenge 29 de novembre**: és el primer diumenge d'obertura de la temporada de Nadal (no ho és ${notIn(NO_29_NOV, "ca")}). Després, **els diumenges 6, 13, 20 i 27 de desembre**, i també el dimarts 8. Les botigues amb horari general no obren tots els diumenges: a Catalunya només poden obrir deu diumenges o festius l'any, i el primer del 2027 és el diumenge 3 de gener. A la resta d'Espanya cada comunitat fixa els seus dies: ${b2link("shopsSpainDecember", "ca", "botigues obertes al desembre per comunitat")}.`,
     weeksTitle: "Poden obrir les botigues per Nadal? Del 29 de novembre al 10 de gener, dia per dia",
     weeksCaption: "Diumenges, festius i dies assenyalats de Nadal: poden obrir les botigues?",
     weeksHeaders: ["Dia", "Catalunya", "Barcelona", "Base oficial"],
@@ -535,6 +540,8 @@ const COPY: Record<Locale, T> = {
   es: {
     lead: `**En diciembre, las tiendas pueden abrir el domingo 6, el martes 8 y los domingos 13, 20 y 27** en Barcelona y en la mayoría de municipios de Cataluña. **El viernes 25 y el sábado 26 de diciembre (San Esteban) y el 1 y el 6 de enero deben cerrar**, y el primer día de apertura del calendario general de 2027 es el **domingo 3 de enero**. Antes, el **domingo 29 de noviembre, día de las elecciones generales, también pueden abrir**, salvo en ${joinList(NO_29_NOV, "es")}. ${NO_8_DEC.length} municipios, como ${NO_8_DEC_EXAMPLES.slice(0, -1).join(", ")} o ${NO_8_DEC_EXAMPLES.at(-1)}, no abren el 8 de diciembre, y el 6 no es día de apertura ${notIn(NO_6_DEC, "es")}. En Cataluña las tiendas pueden abrir diez domingos o festivos al año: ocho los fija la Generalitat y dos más cada ayuntamiento. Las tiendas de alimentación de hasta 300 m², las panaderías o las de conveniencia, entre otras, no tienen ese límite.`,
     note: "Abrir esos días es una opción, no una obligación: cada tienda decide si abre. Los dos días municipales cambian de un pueblo a otro.",
+    sundaysTitle: "¿Cuándo empiezan a abrir las tiendas los domingos en Navidad?",
+    sundays: `En Barcelona y en casi toda Cataluña, **el domingo 29 de noviembre**: es el primer domingo de apertura de la temporada de Navidad (no lo es ${notIn(NO_29_NOV, "es")}). Después, **los domingos 6, 13, 20 y 27 de diciembre**, y también el martes 8. Las tiendas con horario general no abren todos los domingos: en Cataluña solo pueden abrir diez domingos o festivos al año, y el primero de 2027 es el domingo 3 de enero. En el resto de España cada comunidad fija sus días: ${b2link("shopsSpainDecember", "es", "tiendas abiertas en diciembre por comunidad")}.`,
     weeksTitle: "¿Pueden abrir las tiendas en Navidad? Del 29 de noviembre al 10 de enero, día a día",
     weeksCaption: "Domingos, festivos y días señalados de Navidad: ¿pueden abrir las tiendas?",
     weeksHeaders: ["Día", "Cataluña", "Barcelona", "Base oficial"],
@@ -612,6 +619,8 @@ const COPY: Record<Locale, T> = {
   en: {
     lead: `**In December, shops may open on Sunday 6, Tuesday 8 and Sundays 13, 20 and 27** in Barcelona and most towns in Catalonia. **They must close on Friday 25 and Saturday 26 December (St Stephen's Day) and on 1 and 6 January**, and the first opening day in the 2027 general calendar is **Sunday 3 January**. Before that, **on Sunday 29 November, general election day, shops may open too**, except in ${joinList(NO_29_NOV, "en")}. ${NO_8_DEC.length} towns, such as ${NO_8_DEC_EXAMPLES.slice(0, -1).join(", ")} and ${NO_8_DEC_EXAMPLES.at(-1)}, do not open on 8 December, and 6 December is not an opening day ${notIn(NO_6_DEC, "en")}. Shops in Catalonia may open on ten Sundays or public holidays a year: eight set by the Generalitat and two chosen by each town council. Food shops of up to 300 m², bakeries and convenience stores, among others, are not bound by that limit.`,
     note: "Opening on these days is optional: each shop decides. The two municipal days vary from town to town.",
+    sundaysTitle: "When do shops start opening on Sundays for Christmas?",
+    sundays: `In Barcelona and almost all of Catalonia, **on Sunday 29 November**: it is the first Sunday opening of the Christmas season (not ${notIn(NO_29_NOV, "en")}). Then **Sundays 6, 13, 20 and 27 December**, and Tuesday 8 December too. Shops on the general timetable do not open every Sunday: in Catalonia they may open on only ten Sundays or holidays a year, and the first one of 2027 is Sunday 3 January. Elsewhere in Spain each region sets its own days: ${b2link("shopsSpainDecember", "en", "shops open in December, region by region")}.`,
     weeksTitle: "Can shops open over Christmas? 29 November to 10 January, date by date",
     weeksCaption: "Sundays, holidays and key dates over Christmas: can shops open?",
     weeksHeaders: ["Date", "Catalonia", "Barcelona", "Official basis"],
@@ -701,6 +710,7 @@ function body(locale: Locale) {
   return [
     lead(t.lead),
     callout("official", verifiedLine(locale, VERIFIED), t.note),
+    ...h2(t.sundaysTitle, t.sundays),
     ...h2(t.weeksTitle),
     table(t.weeksCaption, t.weeksHeaders, NEXT_WEEKS.map((row) => [row.day[locale], row.cat(locale), row.bcn(locale), row.basis[locale]]), t.weeksNote),
     ...paras(t.weeksAfter, t.saintStephen, novemberSundays(locale)),
