@@ -6025,3 +6025,61 @@ The paro calculator's `RULES_VALID_UNTIL` (31 Dec 2026) guards the shared IPREM/
 **Measure 15 Dec, 1 Feb, 15 Feb**: `snapshot.py page /calculadoras/subsidio-desempleo/ 28`.
 
 **Outcome:** _pending_
+
+## 2026-11-16 — 17N rail strike: answer first with the official minimum services, the description carries them, 19N and 23N sections; strikes hubs answer "mañana" and each day of the week (deploy; group `strikes`)
+
+**Observation.** GSC 14–16 Nov (`snapshot.py page huelga-trenes 3`): the 17N
+pages took 15,974 impressions at position 6.6–7.1 with 1.1–2.0 % CTR
+("huelga renfe 17 noviembre (2026)" 2,583 at 6.8–7.4, "huelga adif 17
+noviembre" 518 at 7.7, "huelga 17 noviembre" 455 at 6.9, "servicios minimos
+renfe 17 noviembre" 32 at 5.7, "huelga renfe 17 noviembre 2026 servicios
+minimos" 35 at 4.7). The description (13 Nov) promised "servicios mínimos …
+red por red" before any figure was out, and the lead opened with the union
+list. Spain hub `/es/guias/huelgas-espana/`: "huelga 20 noviembre 2026" 842 at
+9.5, "el viernes hay huelga" (+variants) ~420 at 7.6–9.0, "huelga 19
+noviembre (2026)" ~170 at 6.0–10.5, 0–1 clicks each. Catalan hub
+`/es/guias/huelga-hoy-cataluna/`: "huelga mañana / mañana hay huelga / hay
+huelga mañana" ~340 at 4.5–6.2, 0 clicks. Top results checked by WebSearch
+(16 Nov): news pages, most still on older strikes; none carries the 12 Nov
+Ministry figures with Iryo/Ouigo and Rodalies together.
+
+**What changed.**
+- `/es/guias/huelga-trenes-17-noviembre/` (+ ca, en; `strike-rail-17n.ts`):
+  lead now "Sí: el martes 17 de noviembre de 2026 hay huelga de trenes…" with
+  the official figures in the first lines (Cercanías 75/50, Bilbao and San
+  Sebastián 50/25, MD 65 %, AVE/LD 72 %, Iryo 70 %, Ouigo 65,38 %, Rodalies
+  66/33; metro, bus, tram and FGC not called out) and "el jueves 19 … con
+  servicios mínimos aún pendientes". When `STRIKES_AS_OF` is the 17th the lead
+  and the first FAQ say "Hoy, martes 17…" (no relative day before that, test).
+  New H2 "Jueves 19 de noviembre: huelga en Adif (circulación)" (SCF only, no
+  call at Renfe/Iryo/Ouigo, minimum services "pendientes" with the Ministry
+  list; `ADIF_MS_PUBLISHED` kept in step with the Spain entry by a test). The
+  "Después" H2 becomes "Lunes 23 de noviembre: huelga de maquinistas (SEMAF)"
+  with the entry's scope and "por confirmar". FAQ: first answer carries the
+  figures; "¿Qué servicios mínimos hay en Renfe el 17?"; new "¿Hay huelga de
+  trenes el 23 de noviembre?" from the 23N entry.
+- **Description only** (title untouched): "Sí, el martes 17 hay huelga en
+  Renfe y Adif (0 a 23.59 h). Servicios mínimos: Cercanías 75 % en hora punta y
+  50 %, Media Distancia 65 %, AVE 72 %." (ca leads with Rodalies 66/33; en
+  likewise); "Hoy martes 17, …" variant on the 17th. Inside the 28-day window
+  of a page first published on 13 Nov: allowed because the old text promised
+  figures that did not exist yet and the event ends on the 19th, so a 28-day
+  window cannot be measured anyway; one field changed.
+- Spain hub (`strikes-spain.ts`): one FAQ per remaining day of the week with
+  a strike ("¿Hay huelga el viernes 20 de noviembre?" → student strike, not a
+  labour strike; 17 and 19 with status and minimum services), from the entries.
+- Catalan hub (`strikes.ts`): when a strike falls on the day after the as-of,
+  the lead opens "Mañana, martes 17 de noviembre, hay huelga (fuentes
+  oficiales revisadas el lunes 16…): …" with its Rodalies minimum services.
+
+**Prediction.** 17–18 Nov (`snapshot.py page huelga-trenes 3`): ES CTR on
+"huelga renfe 17 noviembre*" ≥ 3 % (from 1.2–1.3 %), position ≤ 6; Spain hub
+"el viernes hay huelga / huelga 20 noviembre" CTR > 1 %; Catalan hub "huelga
+mañana" ≥ 1 click a day.
+
+**To do on 17 Nov after 00:00.** Re-read the sources, move `STRIKES_AS_OF` /
+`STRIKES_SPAIN_AS_OF` to 2026-11-17 (the 17N page then says "hoy", the
+Catalan hub's "Mañana" line drops), deploy, publish `strikes`. When the
+Ministry publishes Adif's resolution (17/19): Spain entry text + `ADIF_MS_PUBLISHED`.
+
+**Outcome:** _pending_

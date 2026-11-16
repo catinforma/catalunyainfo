@@ -18,6 +18,7 @@ import {
 import { STRIKES, STRIKES_AS_OF, STRIKES_VERIFIED, STRIKE_URLS, type Strike } from "./strikes";
 import { STRIKES_SPAIN_AS_OF, STRIKES_SPAIN_VERIFIED, SPAIN_STRIKES } from "./strikes-spain-data";
 import { fillChecked } from "./strikes-spain";
+import { dateYear } from "./festive";
 import type { SpainStrike } from "./strikes-spain-model";
 import { TRAINS } from "@/lib/content/features/trains";
 
@@ -82,8 +83,16 @@ const RENFE_CERCANIAS = "https://www.renfe.com/es/es/cercanias";
  */
 const BASQUE_NETWORKS: ReadonlySet<string> = new Set(["Bilbao", "San Sebastián"]);
 const BASQUE_MS_PUBLISHED = true;
+
+/**
+ * Whether the Ministry's resolution for Adif (17 and 19 Nov) is out. False on
+ * 16 Nov 2026 (~15:00): the Spain entry's text says "Adif, el 17 y el 19: por
+ * confirmar". Flip it with that text; a test keeps the two in step.
+ */
+export const ADIF_MS_PUBLISHED = false;
 const U = STRIKE_URLS;
 const link = (href: string, label: string) => `[${label}](${href})`;
+const lowerFirst = (s: string) => `${s.charAt(0).toLowerCase()}${s.slice(1)}`;
 const heading = (level: 2 | 3, text: string, id?: string): Block => ({ type: "heading", level, text, ...(id ? { id } : {}) }) as Block;
 
 export type Rail17nPhase = "before" | "during" | "after";
@@ -120,7 +129,8 @@ export const RAIL_17N_VERIFIED = STRIKES_VERIFIED < STRIKES_SPAIN_VERIFIED ? STR
 /* -------------------------------------------------------------------------- */
 
 interface Copy {
-  lead: (phase: Rail17nPhase, msPending: boolean) => string;
+  /** `today`: the as-of date is the 17th itself ("hoy"); `adifPending`: Adif's resolution for the 17th and 19th not out. */
+  lead: (phase: Rail17nPhase, msPending: boolean, today: boolean, adifPending: boolean) => string;
   factsTitle: string;
   labels: { when: string; who: string; scope: string; rodalies: string; state: string; notIn: string };
   when: string;
@@ -154,22 +164,35 @@ interface Copy {
   ticketsHeading: string;
   tickets: string[];
   nextHeading: string;
+  /** The 23 Nov section's heading, while that strike is listed. */
+  next23Heading: string;
   nextId: string;
   next23: (title: string, scope: string) => string;
+  next23Ms: (ms: string) => string;
+  /** The 19 Nov section: Adif traffic control only (SCF). */
+  day19Heading: string;
+  day19Id: string;
+  day19: (scf: string, ministry: string, checked: string, adifPending: boolean) => string;
+  /** FAQ for the 23 Nov strike, from its Spain entry (scope and minimum-services status). */
+  q23: string;
+  a23: (scope: string, ms: string) => string;
   nextLinks: (locale: Locale) => string[];
-  faq: (msState: string, rodalies: string) => { question: string; answer: string }[];
+  faq: (msState: string, rodalies: string, today: boolean, msPending: boolean) => { question: string; answer: string }[];
 }
 
 const COPY: Record<Locale, Copy> = {
   es: {
-    lead: (phase, msPending) => {
+    lead: (phase, msPending, today, adifPending) => {
       const who = "toda la plantilla del Grupo Renfe (Cercanías, Rodalies, Media Distancia, AVE y Larga Distancia) y Adif, convocada por FeSMC-UGT, CCOO, SF-Intersindical, SEMAF, ALFERRO y SFF-CGT; SEMAF llama también a los maquinistas de Iryo y Ouigo";
+      const scope = "en el Grupo Renfe (Cercanías, Rodalies, Media Distancia, AVE y Larga Distancia) y Adif; SEMAF llama también a los maquinistas de Iryo y Ouigo";
       const ms = msPending
         ? "Los servicios mínimos del Ministerio de Transportes para Cercanías, Media Distancia y AVE aún no se han publicado; en Rodalies, la Generalitat ya los ha fijado."
-        : "Los servicios mínimos, red por red, están más abajo.";
+        : "**Servicios mínimos oficiales:** Cercanías, 75 % en hora punta y 50 % el resto del día (Bilbao y San Sebastián, 50 % y 25 %); Media Distancia, 65 %; AVE y Larga Distancia, 72 %; Iryo, 70 %; Ouigo, 65,38 %; Rodalies de Catalunya, 66 % en hora punta y 33 % el resto. Metro, autobuses, tranvías y FGC no están convocados.";
+      const day19 = `El jueves 19 paran solo los responsables de circulación de Adif (SCF)${adifPending ? ", con servicios mínimos aún pendientes" : ""}.`;
       if (phase === "after") return `**El martes 17 de noviembre de 2026 hubo huelga de trenes en toda España,** de 0.00 a 23.59 h: ${who}. El jueves 19 pararon los responsables de circulación de Adif (SCF). Más abajo, los servicios mínimos que se fijaron.`;
+      if (today) return `**Hoy, martes 17 de noviembre, hay huelga de trenes en toda España,** de 0.00 a 23.59 h, ${scope}. ${ms} ${day19}`;
       if (phase === "during") return `**Huelga de trenes del martes 17 de noviembre (Grupo Renfe y Adif, de 0.00 a 23.59 h) y del jueves 19 (circulación de Adif):** ${who}. ${ms}`;
-      return `**El martes 17 de noviembre de 2026 hay huelga de trenes en toda España,** de 0.00 a 23.59 h: ${who}. El jueves 19 paran los responsables de circulación de Adif (SCF). ${ms}`;
+      return `**Sí: el martes 17 de noviembre de 2026 hay huelga de trenes en toda España,** de 0.00 a 23.59 h, ${scope}. ${ms} ${day19}`;
     },
     factsTitle: "La huelga de trenes, de un vistazo",
     labels: { when: "Cuándo", who: "Quién convoca", scope: "A quién afecta", rodalies: "Rodalies (Cataluña)", state: "Cercanías, Media Distancia y AVE", notIn: "Fuera de la huelga" },
@@ -208,29 +231,49 @@ const COPY: Record<Locale, Copy> = {
       "**Mira tu tren la víspera y la misma mañana:** con servicios mínimos no circulan todos los trenes de tu hora.",
     ],
     nextHeading: "Después del 17 y el 19",
+    next23Heading: "Lunes 23 de noviembre: huelga de maquinistas (SEMAF)",
     nextId: "despues",
     next23: (title, scope) => `**Lunes 23 de noviembre: ${title}.** ${scope}`,
+    next23Ms: (ms) => `**Servicios mínimos del 23:** ${ms}.`,
+    day19Heading: "Jueves 19 de noviembre: huelga en Adif (circulación)",
+    day19Id: "19-noviembre",
+    q23: "¿Hay huelga de trenes el 23 de noviembre?",
+    a23: (scope, ms) => `Sí: el sindicato de maquinistas SEMAF la ha convocado para el lunes 23 de noviembre. ${scope} Servicios mínimos: ${ms.charAt(0).toLowerCase()}${ms.slice(1)}.`,
+    day19: (scf, ministry, checked, adifPending) =>
+      `El jueves 19 de noviembre solo está convocado el personal de circulación de Adif, por el sindicato SCF, con paros de 24 horas (${link(scf, "comunicado del SCF")}). Ese día no hay convocatoria en Renfe, Iryo ni Ouigo. ${
+        adifPending
+          ? `**Servicios mínimos: pendientes.** Los fija el Ministerio de Transportes; el ${checked} aún no estaban en ${link(ministry, "su lista de resoluciones ferroviarias")}. Los añadiremos aquí en cuanto se publiquen.`
+          : `**Servicios mínimos:** publicados en ${link(ministry, "la lista de resoluciones ferroviarias del Ministerio de Transportes")}.`
+      }`,
     nextLinks: (locale) => [
       b2link("strikesSpain", locale, "Todas las huelgas convocadas en España, día a día"),
       b2link("strikeEducation", locale, "Huelga educativa en Cataluña el jueves 26 de noviembre: ¿hay colegio?"),
     ],
-    faq: (msState, rodalies) => [
-      { question: "¿Hay huelga de trenes el 17 de noviembre?", answer: "Sí. El martes 17 de noviembre de 2026, de 0.00 a 23.59 h, está convocada toda la plantilla del Grupo Renfe (Cercanías, Rodalies, Media Distancia, AVE y Larga Distancia) y Adif, y SEMAF llama también a los maquinistas de Iryo, Ouigo y otras operadoras." },
-      { question: "¿Qué servicios mínimos hay en Cercanías el 17 de noviembre?", answer: msState },
+    faq: (msState, rodalies, today, msPending) => [
+      {
+        question: today ? "¿Hay huelga de trenes hoy, 17 de noviembre?" : "¿Hay huelga de trenes el martes 17 de noviembre?",
+        answer: `Sí. ${today ? "Hoy, martes 17 de noviembre" : "El martes 17 de noviembre de 2026"}, de 0.00 a 23.59 h, está convocada toda la plantilla del Grupo Renfe (Cercanías, Rodalies, Media Distancia, AVE y Larga Distancia) y Adif, y SEMAF llama también a los maquinistas de Iryo, Ouigo y otras operadoras.${
+          msPending ? "" : " Servicios mínimos: Cercanías, 75 % en hora punta y 50 % el resto del día; Media Distancia, 65 %; AVE y Larga Distancia, 72 %; Iryo, 70 %; Ouigo, 65,38 %; Rodalies, 66 % y 33 %."
+        }`,
+      },
+      { question: "¿Qué servicios mínimos hay en Renfe el 17 de noviembre?", answer: msState },
       { question: "¿Y en Rodalies?", answer: rodalies },
       { question: "¿Hay huelga de trenes el 19 de noviembre?", answer: "El jueves 19 de noviembre la convoca solo el sindicato SCF, para el personal de circulación de Adif, con paros de 24 horas. Sus servicios mínimos los fija el Ministerio de Transportes." },
       { question: "¿La huelga de trenes afecta al metro?", answer: "No: el metro, los autobuses y los tranvías no forman parte de las convocatorias publicadas para el 17 y el 19, ni los trenes autonómicos que no son de Renfe, como FGC, Euskotren o Metrovalencia." },
     ],
   },
   ca: {
-    lead: (phase, msPending) => {
+    lead: (phase, msPending, today, adifPending) => {
       const who = "tot el personal del Grup Renfe (Rodalies, Cercanías, Mitja Distància, AVE i Llarga Distància) i Adif, convocada per FeSMC-UGT, CCOO, SF-Intersindical, SEMAF, ALFERRO i SFF-CGT; SEMAF també crida els maquinistes d'Iryo i Ouigo";
+      const scope = "al Grup Renfe (Rodalies, Cercanías, Mitja Distància, AVE i Llarga Distància) i Adif; SEMAF també crida els maquinistes d'Iryo i Ouigo";
       const ms = msPending
         ? "Els serveis mínims del Ministeri de Transports per a Cercanías, Mitja Distància i AVE encara no s'han publicat; a Rodalies, la Generalitat ja els ha fixat."
-        : "Els serveis mínims, xarxa per xarxa, són més avall.";
+        : "**Serveis mínims oficials:** Rodalies de Catalunya, 66 % en hora punta i 33 % la resta del dia; Cercanías, 75 % en hora punta i 50 % la resta (Bilbao i Sant Sebastià, 50 % i 25 %); Mitja Distància, 65 %; AVE i Llarga Distància, 72 %; Iryo, 70 %; Ouigo, 65,38 %. El metro, els autobusos, els tramvies i FGC no hi estan convocats.";
+      const day19 = `El dijous 19 només s'aturen els responsables de circulació d'Adif (SCF)${adifPending ? ", amb els serveis mínims encara pendents" : ""}.`;
       if (phase === "after") return `**El dimarts 17 de novembre de 2026 hi va haver vaga de trens a tot Espanya,** de 0.00 a 23.59 h: ${who}. El dijous 19 van aturar-se els responsables de circulació d'Adif (SCF). Més avall, els serveis mínims que es van fixar.`;
+      if (today) return `**Avui, dimarts 17 de novembre, hi ha vaga de trens a tot Espanya,** de 0.00 a 23.59 h, ${scope}. ${ms} ${day19}`;
       if (phase === "during") return `**Vaga de trens del dimarts 17 de novembre (Grup Renfe i Adif, de 0.00 a 23.59 h) i del dijous 19 (circulació d'Adif):** ${who}. ${ms}`;
-      return `**El dimarts 17 de novembre de 2026 hi ha vaga de trens a tot Espanya,** de 0.00 a 23.59 h: ${who}. El dijous 19 s'aturen els responsables de circulació d'Adif (SCF). ${ms}`;
+      return `**Sí: el dimarts 17 de novembre de 2026 hi ha vaga de trens a tot Espanya,** de 0.00 a 23.59 h, ${scope}. ${ms} ${day19}`;
     },
     factsTitle: "La vaga de trens, d'un cop d'ull",
     labels: { when: "Quan", who: "Qui la convoca", scope: "A qui afecta", rodalies: "Rodalies (Catalunya)", state: "Cercanías, Mitja Distància i AVE", notIn: "Fora de la vaga" },
@@ -269,29 +312,49 @@ const COPY: Record<Locale, Copy> = {
       "**Mira el teu tren la vigília i el mateix matí:** amb serveis mínims no circulen tots els trens de la teva hora.",
     ],
     nextHeading: "Després del 17 i el 19",
+    next23Heading: "Dilluns 23 de novembre: vaga de maquinistes (SEMAF)",
     nextId: "despres",
     next23: (title, scope) => `**Dilluns 23 de novembre: ${title}.** ${scope}`,
+    next23Ms: (ms) => `**Serveis mínims del 23:** ${ms}.`,
+    day19Heading: "Dijous 19 de novembre: vaga a Adif (circulació)",
+    day19Id: "19-novembre",
+    q23: "Hi ha vaga de trens el 23 de novembre?",
+    a23: (scope, ms) => `Sí: el sindicat de maquinistes SEMAF l'ha convocada per al dilluns 23 de novembre. ${scope} Serveis mínims: ${ms.charAt(0).toLowerCase()}${ms.slice(1)}.`,
+    day19: (scf, ministry, checked, adifPending) =>
+      `El dijous 19 de novembre només hi està convocat el personal de circulació d'Adif, pel sindicat SCF, amb aturades de 24 hores (${link(scf, "comunicat de l'SCF")}). Aquell dia no hi ha cap convocatòria a Renfe, Iryo ni Ouigo. ${
+        adifPending
+          ? `**Serveis mínims: pendents.** Els fixa el Ministeri de Transports; el ${checked} encara no eren a ${link(ministry, "la seva llista de resolucions ferroviàries")}. Els afegirem aquí quan es publiquin.`
+          : `**Serveis mínims:** publicats a ${link(ministry, "la llista de resolucions ferroviàries del Ministeri de Transports")}.`
+      }`,
     nextLinks: (locale) => [
       b2link("strikesSpain", locale, "Totes les vagues convocades a Espanya, dia a dia"),
       b2link("strikeEducation", locale, "Vaga a l'educació a Catalunya el dijous 26 de novembre: hi ha escola?"),
     ],
-    faq: (msState, rodalies) => [
-      { question: "Hi ha vaga de trens el 17 de novembre?", answer: "Sí. El dimarts 17 de novembre de 2026, de 0.00 a 23.59 h, hi està convocat tot el personal del Grup Renfe (Rodalies, Cercanías, Mitja Distància, AVE i Llarga Distància) i Adif, i SEMAF també crida els maquinistes d'Iryo, Ouigo i altres operadores." },
-      { question: "Quins serveis mínims hi ha a Cercanías el 17 de novembre?", answer: msState },
+    faq: (msState, rodalies, today, msPending) => [
+      {
+        question: today ? "Hi ha vaga de trens avui, 17 de novembre?" : "Hi ha vaga de trens el dimarts 17 de novembre?",
+        answer: `Sí. ${today ? "Avui, dimarts 17 de novembre" : "El dimarts 17 de novembre de 2026"}, de 0.00 a 23.59 h, hi està convocat tot el personal del Grup Renfe (Rodalies, Cercanías, Mitja Distància, AVE i Llarga Distància) i Adif, i SEMAF també crida els maquinistes d'Iryo, Ouigo i altres operadores.${
+          msPending ? "" : " Serveis mínims: Rodalies, 66 % en hora punta i 33 % la resta del dia; Cercanías, 75 % i 50 %; Mitja Distància, 65 %; AVE i Llarga Distància, 72 %; Iryo, 70 %; Ouigo, 65,38 %."
+        }`,
+      },
+      { question: "Quins serveis mínims hi ha a Renfe el 17 de novembre?", answer: msState },
       { question: "I a Rodalies?", answer: rodalies },
       { question: "Hi ha vaga de trens el 19 de novembre?", answer: "El dijous 19 de novembre la convoca només el sindicat SCF, per al personal de circulació d'Adif, amb aturades de 24 hores. Els serveis mínims els fixa el Ministeri de Transports." },
       { question: "La vaga de trens afecta el metro?", answer: "No: el metro, els autobusos i els tramvies no formen part de les convocatòries publicades per al 17 i el 19, ni els trens autonòmics que no són de Renfe, com FGC, Euskotren o Metrovalencia." },
     ],
   },
   en: {
-    lead: (phase, msPending) => {
+    lead: (phase, msPending, today, adifPending) => {
       const who = "all Renfe Group staff (Cercanías and Rodalies commuter trains, Media Distancia, AVE and long distance) and Adif, called by FeSMC-UGT, CCOO, SF-Intersindical, SEMAF, ALFERRO and SFF-CGT; SEMAF also calls out drivers at Iryo and Ouigo";
+      const scope = "at the Renfe Group (Cercanías and Rodalies commuter trains, Media Distancia, AVE and long distance) and Adif; SEMAF also calls out drivers at Iryo and Ouigo";
       const ms = msPending
         ? "The Ministry of Transport's minimum services for Cercanías, Media Distancia and AVE have not been published yet; for Rodalies, the Generalitat has set them."
-        : "Minimum services, network by network, are below.";
+        : "**Official minimum services:** Cercanías 75% at peak times and 50% the rest of the day (Bilbao and San Sebastián 50% and 25%); Media Distancia 65%; AVE and long distance 72%; Iryo 70%; Ouigo 65.38%; Rodalies de Catalunya 66% at peak times and 33% the rest. Metro, buses, trams and FGC are not called out.";
+      const day19 = `On Thursday 19 only Adif's traffic controllers (SCF) stop work${adifPending ? "; their minimum services are still pending" : ""}.`;
       if (phase === "after") return `**On Tuesday 17 November 2026 there was a rail strike across Spain,** 00:00 to 23:59: ${who}. On Thursday 19 Adif's traffic controllers (SCF) stopped work. The minimum services that were set are below.`;
+      if (today) return `**Today, Tuesday 17 November, there is a rail strike across Spain,** 00:00 to 23:59, ${scope}. ${ms} ${day19}`;
       if (phase === "during") return `**Rail strike on Tuesday 17 November (Renfe Group and Adif, 00:00 to 23:59) and Thursday 19 (Adif traffic control):** ${who}. ${ms}`;
-      return `**On Tuesday 17 November 2026 there is a rail strike across Spain,** 00:00 to 23:59: ${who}. On Thursday 19 Adif's traffic controllers (SCF) stop work. ${ms}`;
+      return `**Yes: on Tuesday 17 November 2026 there is a rail strike across Spain,** 00:00 to 23:59, ${scope}. ${ms} ${day19}`;
     },
     factsTitle: "The rail strike at a glance",
     labels: { when: "When", who: "Called by", scope: "Who is called out", rodalies: "Rodalies (Catalonia)", state: "Cercanías, Media Distancia and AVE", notIn: "Not part of it" },
@@ -330,15 +393,32 @@ const COPY: Record<Locale, Copy> = {
       "**Check your train the evening before and that morning:** under minimum services not every train at your usual time runs.",
     ],
     nextHeading: "After the 17th and 19th",
+    next23Heading: "Monday 23 November: train drivers' strike (SEMAF)",
     nextId: "after",
     next23: (title, scope) => `**Monday 23 November: ${title}.** ${scope}`,
+    next23Ms: (ms) => `**Minimum services on the 23rd:** ${ms}.`,
+    day19Heading: "Thursday 19 November: strike at Adif (traffic control)",
+    day19Id: "19-november",
+    q23: "Is there a rail strike on 23 November?",
+    a23: (scope, ms) => `Yes: the train drivers' union SEMAF has called one for Monday 23 November. ${scope} Minimum services: ${ms.charAt(0).toLowerCase()}${ms.slice(1)}.`,
+    day19: (scf, ministry, checked, adifPending) =>
+      `On Thursday 19 November only Adif's traffic-control staff are called out, by the SCF union, with 24-hour stoppages (${link(scf, "SCF's notice")}). There is no call at Renfe, Iryo or Ouigo that day. ${
+        adifPending
+          ? `**Minimum services: pending.** The Ministry of Transport sets them; on ${checked} they were not yet on ${link(ministry, "its list of rail resolutions")}. We will add them here once published.`
+          : `**Minimum services:** published on ${link(ministry, "the Ministry of Transport's list of rail resolutions")}.`
+      }`,
     nextLinks: (locale) => [
       b2link("strikesSpain", locale, "Every strike called in Spain, day by day"),
       b2link("strikeEducation", locale, "Catalonia education strike on Thursday 26 November: is there school?"),
     ],
-    faq: (msState, rodalies) => [
-      { question: "Is there a rail strike in Spain on 17 November?", answer: "Yes. On Tuesday 17 November 2026, 00:00 to 23:59, all Renfe Group staff (Cercanías, Rodalies, Media Distancia, AVE and long distance) and Adif are called out, and SEMAF also calls out drivers at Iryo, Ouigo and other operators." },
-      { question: "What minimum services are there on Cercanías on 17 November?", answer: msState },
+    faq: (msState, rodalies, today, msPending) => [
+      {
+        question: today ? "Is there a rail strike in Spain today, 17 November?" : "Is there a rail strike in Spain on Tuesday 17 November?",
+        answer: `Yes. ${today ? "Today, Tuesday 17 November" : "On Tuesday 17 November 2026"}, 00:00 to 23:59, all Renfe Group staff (Cercanías, Rodalies, Media Distancia, AVE and long distance) and Adif are called out, and SEMAF also calls out drivers at Iryo, Ouigo and other operators.${
+          msPending ? "" : " Minimum services: Cercanías 75% at peak times and 50% the rest of the day; Media Distancia 65%; AVE and long distance 72%; Iryo 70%; Ouigo 65.38%; Rodalies 66% and 33%."
+        }`,
+      },
+      { question: "What minimum services are there on Renfe on 17 November?", answer: msState },
       { question: "And on Rodalies?", answer: rodalies },
       { question: "Is there a rail strike on 19 November?", answer: "On Thursday 19 November only the SCF union calls one, for Adif's traffic-control staff, with 24-hour stoppages. The Ministry of Transport sets its minimum services." },
       { question: "Does the rail strike affect the metro?", answer: "No: metros, buses and trams are not part of the calls published for the 17th and 19th, nor are regional railways not run by Renfe, such as FGC, Euskotren or Metrovalencia." },
@@ -357,6 +437,8 @@ export function buildRail17nBody(locale: Locale, asOf: string = STRIKES_AS_OF): 
   const spain = spainEntry();
   const catalan = catalanEntry();
   const phase = rail17nPhase(asOf);
+  const today = asOf === rail17nDays()[0];
+  const adifPending = !ADIF_MS_PUBLISHED;
   const msPending = spain.minimumServices.status !== "published";
   const stateText = fillChecked(spain.minimumServices.text, locale, STRIKES_SPAIN_AS_OF);
   const rodaliesText = catalan.minimumServices.text[locale];
@@ -371,7 +453,7 @@ export function buildRail17nBody(locale: Locale, asOf: string = STRIKES_AS_OF): 
   ];
 
   return [
-    lead(t.lead(phase, msPending)),
+    lead(t.lead(phase, msPending, today, adifPending)),
     keyFacts(t.factsTitle, [
       { label: t.labels.when, value: t.when },
       { label: t.labels.who, value: t.who },
@@ -388,11 +470,12 @@ export function buildRail17nBody(locale: Locale, asOf: string = STRIKES_AS_OF): 
     ...paras(t.networksIntro(RENFE_CERCANIAS)),
     table(t.caption, [...t.headers], rows, t.networksNote),
     ...paras(t.rodaliesGuide(renfeGuide)),
+    ...(phase === "after" ? [] : [heading(2, t.day19Heading, t.day19Id), ...paras(t.day19(U.scfAdif, U.ministryRail, dateYear(STRIKES_SPAIN_AS_OF, locale), adifPending))]),
     heading(2, t.ticketsHeading),
     list(...t.tickets),
-    heading(2, t.nextHeading, t.nextId),
-    list(...(next ? [t.next23(next.title[locale], next.scope[locale])] : []), ...t.nextLinks(locale)),
-    faq(t.faq(stateText, rodaliesText)),
+    heading(2, next ? t.next23Heading : t.nextHeading, t.nextId),
+    list(...(next ? [t.next23(next.title[locale], next.scope[locale]), t.next23Ms(lowerFirst(next.minimumServices.short[locale]))] : []), ...t.nextLinks(locale)),
+    faq([...t.faq(stateText, rodaliesText, today, msPending), ...(next ? [{ question: t.q23, answer: t.a23(next.scope[locale], next.minimumServices.short[locale]) }] : [])]),
     ...paras(verifiedLine(locale, RAIL_17N_VERIFIED)),
     ...b2Related(["strikeRenfe", "strikesSpain", "strikes"], locale),
   ];
@@ -402,11 +485,19 @@ export function buildRail17nBody(locale: Locale, asOf: string = STRIKES_AS_OF): 
 /* Meta and article                                                           */
 /* -------------------------------------------------------------------------- */
 
-const META: Record<Locale, { title: string; seoTitle: string; before: string; after: string; excerpt: string }> = {
+/**
+ * Descriptions. `before` was written on 13 Nov, before any figure was out; from
+ * 16 Nov (Ministry resolution of 12 Nov published) `published` carries the
+ * figures and `today` the same on the 17th itself. docs/SEO_EXPERIMENTS.md,
+ * 16 Nov 2026: the description only, the title is untouched.
+ */
+const META: Record<Locale, { title: string; seoTitle: string; before: string; published: string; today: string; after: string; excerpt: string }> = {
   es: {
     title: "Huelga de trenes del 17 de noviembre en España: Renfe, Adif, Cercanías, AVE y servicios mínimos",
     seoTitle: "Huelga de trenes 17 noviembre en España: Cercanías y AVE",
     before: "Martes 17 de noviembre, de 0.00 a 23.59 h: huelga en Renfe y Adif en toda España. Servicios mínimos en Cercanías, Rodalies y AVE, red por red.",
+    published: "Sí, el martes 17 hay huelga en Renfe y Adif (0 a 23.59 h). Servicios mínimos: Cercanías 75 % en hora punta y 50 %, Media Distancia 65 %, AVE 72 %.",
+    today: "Hoy martes 17, huelga en Renfe y Adif de 0 a 23.59 h. Servicios mínimos: Cercanías 75 % en hora punta y 50 %, Media Distancia 65 %, AVE 72 %.",
     after: "El 17 de noviembre de 2026 hubo huelga en Renfe y Adif en toda España: quién la convocó y los servicios mínimos que se fijaron, red por red.",
     excerpt: "La huelga de trenes del 17 de noviembre de 2026 en toda España: quién la convoca, Cercanías red por red, Rodalies, AVE y servicios mínimos.",
   },
@@ -414,6 +505,8 @@ const META: Record<Locale, { title: string; seoTitle: string; before: string; af
     title: "Vaga de trens del 17 de novembre a Espanya: Renfe, Adif, Cercanías, AVE i serveis mínims",
     seoTitle: "Vaga de trens 17 novembre a Espanya: Cercanías i AVE",
     before: "Dimarts 17 de novembre, de 0.00 a 23.59 h: vaga a Renfe i Adif a tot Espanya. Serveis mínims a Cercanías, Rodalies i AVE, xarxa per xarxa.",
+    published: "Sí, dimarts 17 hi ha vaga a Renfe i Adif (0 a 23.59 h). Serveis mínims: Rodalies 66 % en hora punta i 33 %, Cercanías 75 % i 50 %, AVE 72 %.",
+    today: "Avui dimarts 17, vaga a Renfe i Adif de 0 a 23.59 h. Serveis mínims: Rodalies 66 % en hora punta i 33 %, Cercanías 75 % i 50 %, AVE 72 %.",
     after: "El 17 de novembre de 2026 hi va haver vaga a Renfe i Adif a tot Espanya: qui la va convocar i els serveis mínims que es van fixar.",
     excerpt: "La vaga de trens del 17 de novembre de 2026 a tot Espanya: qui la convoca, Cercanías xarxa per xarxa, Rodalies, AVE i serveis mínims.",
   },
@@ -421,13 +514,19 @@ const META: Record<Locale, { title: string; seoTitle: string; before: string; af
     title: "Spain rail strike on 17 November: Renfe, Adif, Cercanías, AVE and minimum services",
     seoTitle: "Spain rail strike 17 November: Cercanías, AVE, what runs",
     before: "Tuesday 17 November, 00:00 to 23:59: strike at Renfe and Adif across Spain. Minimum services on Cercanías, Rodalies and AVE, network by network.",
+    published: "Yes: Renfe and Adif strike on Tuesday 17 November, 00:00-23:59. Minimum services: Cercanías 75% at peak, 50% otherwise; AVE 72%; Media Distancia 65%.",
+    today: "Today, Tuesday 17: Renfe and Adif strike, 00:00-23:59. Minimum services: Cercanías 75% at peak, 50% otherwise; AVE 72%; Media Distancia 65%.",
     after: "On 17 November 2026 Renfe and Adif staff went on strike across Spain: who called it and the minimum services that were set, network by network.",
     excerpt: "The rail strike of 17 November 2026 across Spain: who called it, Cercanías network by network, Rodalies, AVE and minimum services.",
   },
 };
 
 export function rail17nDescription(locale: Locale, asOf: string = STRIKES_AS_OF): string {
-  return rail17nPhase(asOf) === "after" ? META[locale].after : META[locale].before;
+  const phase = rail17nPhase(asOf);
+  if (phase === "after") return META[locale].after;
+  if (spainEntry().minimumServices.status !== "published") return META[locale].before;
+  if (asOf === rail17nDays()[0]) return META[locale].today;
+  return META[locale].published;
 }
 
 /** Every external link the page carries, named: the Spain and Catalan entries' sources plus Renfe's pages. */

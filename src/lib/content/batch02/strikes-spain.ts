@@ -362,6 +362,14 @@ interface Wording {
   law: string[];
   qToday: string;
   aToday: (when: string, days: string, open: string, checked: string) => string;
+  /**
+   * 16 Nov 2026: one question per day left in the week that has a strike
+   * ("el viernes hay huelga", "huelga 20 noviembre 2026" ~1,300 impressions
+   * at 8.7-9.8 on 14-15 Nov; "huelga 19 noviembre" at 6.5-10.5).
+   */
+  qDay: (day: string) => string;
+  aDay: (items: string, checked: string) => string;
+  msWord: string;
   noneOnDays: string;
   openToo: (titles: string) => string;
   qRail: string;
@@ -431,6 +439,9 @@ const T: Record<Locale, Wording> = {
       `El ${md(U.rdl17, "Reial decret llei 17/1977")} en fixa la resta: la vaga s'ha de comunicar a l'empresa i a l'autoritat laboral amb cinc dies naturals d'antelació, o deu si afecta serveis públics (articles 3 i 4), i l'autoritat governativa pot acordar les mesures necessàries per assegurar el funcionament dels serveis (article 10). Per això cada govern fixa els dels serveis que en depenen: el Ministeri de Transports, els de Renfe, Adif, els aeroports i les companyies aèries, que publica a les seves llistes de resolucions ${md(U.ministryRail, "ferroviàries")} i ${md(U.ministryAir, "del transport aeri")}; cada comunitat autònoma, els del seu transport, la seva sanitat i les seves escoles, al seu butlletí oficial.`,
     ],
     qToday: "Quines vagues hi ha avui a Espanya?",
+    qDay: (day) => `Hi ha vaga el ${day}?`,
+    aDay: (items, checked) => `Sí, al calendari de vagues d'àmbit estatal (fonts revisades: ${checked}): ${items}`,
+    msWord: "Serveis mínims",
     aToday: (when, days, open, checked) => `Depèn del dia. La setmana ${when}: ${days}.${open} Fonts revisades: ${checked}.`,
     noneOnDays: "cap amb data en aquest calendari",
     openToo: (titles) => ` A més, continuen obertes vagues indefinides en aeroports (${titles}).`,
@@ -497,6 +508,9 @@ const T: Record<Locale, Wording> = {
       `El ${md(U.rdl17, "Real Decreto-ley 17/1977")} fija el resto: la huelga se comunica a la empresa y a la autoridad laboral con cinco días naturales de antelación, o diez si afecta a servicios públicos (artículos 3 y 4), y «la Autoridad gubernativa podrá acordar las medidas necesarias para asegurar el funcionamiento de los servicios» (artículo 10). Por eso cada gobierno fija los de los servicios que dependen de él: el Ministerio de Transportes, los de Renfe, Adif, los aeropuertos y las compañías aéreas, que publica en sus listas de resoluciones ${md(U.ministryRail, "ferroviarias")} y ${md(U.ministryAir, "del transporte aéreo")}; cada comunidad autónoma, los de su transporte, su sanidad y sus colegios, en su boletín oficial.`,
     ],
     qToday: "¿Qué huelgas hay hoy en España?",
+    qDay: (day) => `¿Hay huelga el ${day}?`,
+    aDay: (items, checked) => `Sí, en el calendario de huelgas de ámbito estatal (fuentes revisadas: ${checked}): ${items}`,
+    msWord: "Servicios mínimos",
     aToday: (when, days, open, checked) => `Depende del día. En la semana ${when}: ${days}.${open} Fuentes revisadas: ${checked}.`,
     noneOnDays: "ninguna con fecha en este calendario",
     openToo: (titles) => ` Además, siguen abiertas huelgas indefinidas en aeropuertos (${titles}).`,
@@ -563,6 +577,9 @@ const T: Record<Locale, Wording> = {
       `${md(U.rdl17, "Royal Decree-law 17/1977")} sets the rest: a strike must be notified to the employer and to the labour authority five calendar days in advance, or ten if it affects public services (articles 3 and 4), and the government authority may order the measures needed to keep services running (article 10). That is why each government sets minimum services for the services that depend on it: the Ministry of Transport for Renfe, Adif, airports and airlines, published on its lists of ${md(U.ministryRail, "rail")} and ${md(U.ministryAir, "air transport")} resolutions; each region for its own transport, health care and schools, in its official gazette.`,
     ],
     qToday: "What strikes are there in Spain today?",
+    qDay: (day) => `Is there a strike on ${day}?`,
+    aDay: (items, checked) => `Yes, in the calendar of Spain-wide strikes (sources checked: ${checked}): ${items}`,
+    msWord: "Minimum services",
     aToday: (when, days, open, checked) => `It depends on the day. In the week of ${when}: ${days}.${open} Sources checked: ${checked}.`,
     noneOnDays: "none with a date in this calendar",
     openToo: (titles) => ` Open-ended strikes at airports also continue (${titles}).`,
@@ -765,6 +782,22 @@ export function buildStrikesSpainBody(locale: Locale, asOf: string = STRIKES_SPA
       question: t.qToday,
       answer: t.aToday(when, weekInWords(locale, asOf, strikes), open.length > 0 ? t.openToo(open.map((strike) => strike.title[locale]).join("; ")) : "", checked),
     },
+    ...week.days
+      .filter((day) => day >= asOf && strikesOn(day, strikes).length > 0)
+      .map((day) => ({
+        question: t.qDay(dayDate(day, locale, false)),
+        answer: t.aDay(
+          strikesOn(day, strikes)
+            .map(
+              (strike) =>
+                `${cap(strike.title[locale])} (${lower(STATUS_LABEL[strike.status][locale])}). ${strike.scope[locale]}${
+                  strike.minimumServices.status === "none" ? "" : ` ${t.msWord}: ${lower(strike.minimumServices.short[locale])}.`
+                }`,
+            )
+            .join(" "),
+          checked,
+        ),
+      })),
     {
       question: t.qRail,
       answer:
