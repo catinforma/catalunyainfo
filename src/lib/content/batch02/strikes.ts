@@ -240,14 +240,14 @@ import { strike11nCityLinks } from "./strike-11n-city-paths";
  * Ensenyament (nothing new) and Metges de Catalunya (indefinite strike, no
  * call-off).
  */
-export const STRIKES_AS_OF = "2026-11-16";
+export const STRIKES_AS_OF = "2026-11-17";
 
 /**
  * The day the facts on the page were last read on the sources. Bringing the
  * list up to date means re-reading them, so it is the same day by design: one
  * constant to move.
  */
-export const STRIKES_VERIFIED = STRIKES_AS_OF;
+export const STRIKES_VERIFIED = "2026-11-16";
 
 export type StrikeScope = "general" | "rail" | "transport" | "education" | "health" | "other";
 

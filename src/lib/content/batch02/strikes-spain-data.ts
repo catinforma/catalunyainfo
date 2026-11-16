@@ -55,10 +55,10 @@ import type { SpainNotHappening, SpainOpenStrike, SpainStrike } from "./strikes-
  * UGT FICA (nothing new on poultry), the Ministry's air list (SAERCO,
  * Groundforce, Outsmart in force to 30 Nov).
  */
-export const STRIKES_SPAIN_AS_OF = "2026-11-16";
+export const STRIKES_SPAIN_AS_OF = "2026-11-17";
 
 /** Printed as the page's "last verified" date. */
-export const STRIKES_SPAIN_VERIFIED = STRIKES_SPAIN_AS_OF;
+export const STRIKES_SPAIN_VERIFIED = "2026-11-16";
 
 const CDN = "https://cdn.transportes.gob.es/portal-web-transportes";
 const FICA = "https://ugt-fica.org/component/content/article";
