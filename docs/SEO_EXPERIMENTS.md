@@ -6094,4 +6094,106 @@ inside measurement windows that close 27 Nov–4 Dec).
 **Review:** 20 Nov (lead hold, with the Canyelles/Espinelves title test),
 30 Nov (fair leads, Gran Recapte results guard).
 
+## 2026-11-16 — 17N rail strike: answer first with the official minimum services, the description carries them, 19N and 23N sections; strikes hubs answer "mañana" and each day of the week (deploy; group `strikes`)
+
+**Observation.** GSC 14–16 Nov (`snapshot.py page huelga-trenes 3`): the 17N
+pages took 15,974 impressions at position 6.6–7.1 with 1.1–2.0 % CTR
+("huelga renfe 17 noviembre (2026)" 2,583 at 6.8–7.4, "huelga adif 17
+noviembre" 518 at 7.7, "huelga 17 noviembre" 455 at 6.9, "servicios minimos
+renfe 17 noviembre" 32 at 5.7, "huelga renfe 17 noviembre 2026 servicios
+minimos" 35 at 4.7). The description (13 Nov) promised "servicios mínimos …
+red por red" before any figure was out, and the lead opened with the union
+list. Spain hub `/es/guias/huelgas-espana/`: "huelga 20 noviembre 2026" 842 at
+9.5, "el viernes hay huelga" (+variants) ~420 at 7.6–9.0, "huelga 19
+noviembre (2026)" ~170 at 6.0–10.5, 0–1 clicks each. Catalan hub
+`/es/guias/huelga-hoy-cataluna/`: "huelga mañana / mañana hay huelga / hay
+huelga mañana" ~340 at 4.5–6.2, 0 clicks. Top results checked by WebSearch
+(16 Nov): news pages, most still on older strikes; none carries the 12 Nov
+Ministry figures with Iryo/Ouigo and Rodalies together.
+
+**What changed.**
+- `/es/guias/huelga-trenes-17-noviembre/` (+ ca, en; `strike-rail-17n.ts`):
+  lead now "Sí: el martes 17 de noviembre de 2026 hay huelga de trenes…" with
+  the official figures in the first lines (Cercanías 75/50, Bilbao and San
+  Sebastián 50/25, MD 65 %, AVE/LD 72 %, Iryo 70 %, Ouigo 65,38 %, Rodalies
+  66/33; metro, bus, tram and FGC not called out) and "el jueves 19 … con
+  servicios mínimos aún pendientes". When `STRIKES_AS_OF` is the 17th the lead
+  and the first FAQ say "Hoy, martes 17…" (no relative day before that, test).
+  New H2 "Jueves 19 de noviembre: huelga en Adif (circulación)" (SCF only, no
+  call at Renfe/Iryo/Ouigo, minimum services "pendientes" with the Ministry
+  list; `ADIF_MS_PUBLISHED` kept in step with the Spain entry by a test). The
+  "Después" H2 becomes "Lunes 23 de noviembre: huelga de maquinistas (SEMAF)"
+  with the entry's scope and "por confirmar". FAQ: first answer carries the
+  figures; "¿Qué servicios mínimos hay en Renfe el 17?"; new "¿Hay huelga de
+  trenes el 23 de noviembre?" from the 23N entry.
+- **Description only** (title untouched): "Sí, el martes 17 hay huelga en
+  Renfe y Adif (0 a 23.59 h). Servicios mínimos: Cercanías 75 % en hora punta y
+  50 %, Media Distancia 65 %, AVE 72 %." (ca leads with Rodalies 66/33; en
+  likewise); "Hoy martes 17, …" variant on the 17th. Inside the 28-day window
+  of a page first published on 13 Nov: allowed because the old text promised
+  figures that did not exist yet and the event ends on the 19th, so a 28-day
+  window cannot be measured anyway; one field changed.
+- Spain hub (`strikes-spain.ts`): one FAQ per remaining day of the week with
+  a strike ("¿Hay huelga el viernes 20 de noviembre?" → student strike, not a
+  labour strike; 17 and 19 with status and minimum services), from the entries.
+- Catalan hub (`strikes.ts`): when a strike falls on the day after the as-of,
+  the lead opens "Mañana, martes 17 de noviembre, hay huelga (fuentes
+  oficiales revisadas el lunes 16…): …" with its Rodalies minimum services.
+
+**Prediction.** 17–18 Nov (`snapshot.py page huelga-trenes 3`): ES CTR on
+"huelga renfe 17 noviembre*" ≥ 3 % (from 1.2–1.3 %), position ≤ 6; Spain hub
+"el viernes hay huelga / huelga 20 noviembre" CTR > 1 %; Catalan hub "huelga
+mañana" ≥ 1 click a day.
+
+**To do on 17 Nov after 00:00.** Re-read the sources, move `STRIKES_AS_OF` /
+`STRIKES_SPAIN_AS_OF` to 2026-11-17 (the 17N page then says "hoy", the
+Catalan hub's "Mañana" line drops), deploy, publish `strikes`. When the
+Ministry publishes Adif's resolution (17/19): Spain entry text + `ADIF_MS_PUBLISHED`.
+
+**Outcome:** _pending_
+
+## 2026-11-16 — 29N: town pages answer "censo electoral <town>" and "mesa electoral 29N <town>"; candidates guide answers "qué partidos se presentan"; ES how-to-vote lead answers its title (body only; deploy, groups `candidates`, `voting`)
+
+**Observation.** GSC 10–16 Nov. `/es/elecciones/<town>/` (6,672 impressions,
+4.9 %, position 5.6): the visible queries are "censo electoral <town>"
+(Badalona 16 at 7.1, Santa Coloma 15 at 6.7, Ripollet 11 at 7.5, Cornellà 10
+at 6.3, Mataró 9 at 4.6, Rubí, Viladecans, Reus, Vilanova) and "mesa electoral
+(29n) <town>" (Viladecans 12 at 7.8, Santa Coloma 8 at 9.0, Cornellà 6 at 9.0,
+Cerdanyola, El Vendrell, L'Hospitalet 4 at 13), almost all 0 clicks; the
+section was "Qué es el censo electoral" (a definition, the town's figure in
+the second sentence) and the polling H2 "Dónde votar el 29N en <town>".
+Candidates ES (4,394 impressions, 11.6 %, 5.0–6.7): "partidos politicos en
+cataluña 2026" 17 at 6.6, "partidos que se presentan en cataluña" 11 at 6.4,
+"partidos políticos catalanes 2026" 7 at 7.4, "elecciones cataluña
+candidatos" 29 at 5.4 (0 clicks), "candidatos a los que puedo votar viviendo
+en barcelona" 12 at 9.0. How-to-vote ES: "cuando son las elecciones en
+cataluña" 309 at 7.7 (0.3 %), "cuando hay elecciones en cataluña" 151 at 7.8,
+"proximas elecciones cataluña" 148 at 6.7: the 11 Nov title asks "¿Cuándo
+son las elecciones en Cataluña?" but the lead answered it in its last sentence.
+
+**What changed (no title or description).**
+- Town pages, ca/es/en (`elections/model.ts`, `polling.ts`): census section
+  retitled "Censo electoral de <town>" / "Cens electoral de <town>" /
+  "Electoral roll (censo electoral) of <town>", first paragraph gives the
+  roll at the 2023 general election and the 2023 municipal one (snapshot
+  counts) and points to the census card and the INE's mesa/local lookup for
+  where to vote; polling H2 → "Dónde votar el 29N en <town>: locales y mesas electorales".
+- Candidates guide, ca/es/en: one paragraph with the proclaimed Congress lists
+  per province (11/10/10/13; BOE-A-2026-23103, Interior CERA ballots re-read
+  13 Nov), no party named (the page's rule); FAQ "¿Qué partidos se presentan
+  a las elecciones generales en Cataluña?" and "¿A qué candidatos puedo votar
+  si vivo en Barcelona?".
+- How-to-vote ES lead now opens "Las próximas elecciones en Cataluña son las
+  generales del domingo 29 de noviembre…; las siguientes, las municipales,
+  previstas para el 23 de mayo de 2027, y no hay elecciones al Parlament
+  convocadas" (ca already did). Confound: the 11 Nov title test's day-7
+  review (18 Nov) now also sees this lead; read it as title + lead.
+
+No poll figure added anywhere (blackout from 24 Nov 00:00).
+
+**Prediction.** By 27 Nov (`snapshot.py page /es/elecciones/ 7`, filter
+"censo electoral" / "mesa electoral"): those queries ≥ 2 % CTR and position
+≤ 6; candidates ES "partidos … cataluña" queries ≤ 5; how-to-vote ES "cuando
+son las elecciones en cataluña" CTR ≥ 1 %.
+
 **Outcome:** _pending_

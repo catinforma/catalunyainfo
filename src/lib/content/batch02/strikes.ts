@@ -4,6 +4,7 @@ import type { Locale } from "@/lib/i18n/config";
 import { hubPath as rodaliesHub } from "@/lib/programmatic/rodalies/paths";
 import { TODAY_NAME, todayPath } from "@/lib/programmatic/today/paths";
 
+import { addDays } from "@/lib/content/holidays/calendar";
 import { dateYear, dayDate } from "./festive";
 import {
   b2Related,
@@ -1191,6 +1192,12 @@ export const STRIKES_META: Record<Locale, { path: string; title: string; seoTitl
 type Copy = {
   /** Strikes under way on the as-of day. */
   leadNow: (items: string, date: string) => string;
+  /**
+   * 16 Nov 2026: a strike on the day after the as-of date ("huelga mañana" is
+   * this hub's top query family, 0 clicks at 5-6). The as-of date is named in
+   * the same sentence, so "mañana" is never read without its day.
+   */
+  leadTomorrow: (day: string, items: string, checked: string) => string;
   leadNoneNow: (date: string) => string;
   /** Strikes that start after the as-of day. */
   leadNext: (items: string) => string;
@@ -1246,6 +1253,7 @@ type Copy = {
 const COPY: Record<Locale, Copy> = {
   ca: {
     leadNow: (items, date) => `**Vagues en curs a Catalunya el ${date}, segons les fonts oficials:** ${items}.`,
+    leadTomorrow: (day, items, checked) => `**Demà, ${day}, hi ha vaga** (fonts oficials revisades el ${checked}): ${items}.`,
     leadNoneNow: (date) => `**El ${date} no hi havia cap vaga en curs a Catalunya a les fonts oficials.**`,
     leadNext: (items) => `**Properes vagues:** ${items}.`,
     leadNone: (date) => `**No hi ha cap vaga anunciada que afecti Catalunya a les fonts oficials consultades el ${date}.** Quan se'n convoqui una, l'afegirem aquí amb els serveis mínims oficials.`,
@@ -1332,6 +1340,7 @@ const COPY: Record<Locale, Copy> = {
   },
   es: {
     leadNow: (items, date) => `**Huelgas en curso en Cataluña el ${date}, según las fuentes oficiales:** ${items}.`,
+    leadTomorrow: (day, items, checked) => `**Mañana, ${day}, hay huelga** (fuentes oficiales revisadas el ${checked}): ${items}.`,
     leadNoneNow: (date) => `**El ${date} no había ninguna huelga en curso en Cataluña en las fuentes oficiales.**`,
     leadNext: (items) => `**Próximas huelgas:** ${items}.`,
     leadNone: (date) => `**No hay ninguna huelga anunciada que afecte a Cataluña en las fuentes oficiales consultadas el ${date}.** Cuando se convoque una, la añadiremos aquí con los servicios mínimos oficiales.`,
@@ -1418,6 +1427,7 @@ const COPY: Record<Locale, Copy> = {
   },
   en: {
     leadNow: (items, date) => `**Strikes under way in Barcelona and Catalonia on ${date}, according to the official sources:** ${items}.`,
+    leadTomorrow: (day, items, checked) => `**Tomorrow, ${day}, there is a strike** (official sources checked on ${checked}): ${items}.`,
     leadNoneNow: (date) => `**On ${date} no strike was under way in Catalonia, according to the official sources.**`,
     leadNext: (items) => `**Coming up:** ${items}.`,
     leadNone: (date) => `**No strike affecting Catalonia had been announced in the official sources checked on ${date}.** When one is called, we will add it here with the official minimum services.`,
@@ -1552,7 +1562,13 @@ export function buildStrikesBody(locale: Locale, asOf: string = STRIKES_AS_OF, s
     const nowLine =
       now.length > 0 ? t.leadNow(now.map((strike) => `${strike.title[locale]}, ${strikeDays(strike, locale)}`).join("; "), checked) : t.leadNoneNow(checked);
     const nextLine = next.length > 0 ? t.leadNext(next.map((strike) => `${strikeDays(strike, locale)}, ${strike.short[locale]}`).join("; ")) : "";
-    blocks.push(lead([nowLine, nextLine, t.cityTransport(city.map((strike) => strikeName(strike, locale))), pendingLine].filter(Boolean).join(" ")));
+    const tomorrow = addDays(asOf, 1);
+    const onTomorrow = next.filter((strike) => strike.dates.includes(tomorrow));
+    const tomorrowLine =
+      onTomorrow.length > 0
+        ? t.leadTomorrow(dayDate(tomorrow, locale, false), onTomorrow.map((strike) => `${strike.title[locale]}. ${strike.minimumServices.msShort[locale]}`).join("; "), checked)
+        : "";
+    blocks.push(lead([tomorrowLine, nowLine, nextLine, t.cityTransport(city.map((strike) => strikeName(strike, locale))), pendingLine].filter(Boolean).join(" ")));
     blocks.push(
       keyFacts(
         t.keyFactsTitle,

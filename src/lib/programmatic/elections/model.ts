@@ -32,7 +32,7 @@ import {
   type RegionalView,
 } from "./results";
 import { buildMesaDuty, type MesaDutyModel } from "./mesa-duty";
-import { buildPolling, type PollingModel } from "./polling";
+import { INE_MESA_URL, buildPolling, type PollingModel } from "./polling";
 import { RESULTS_SITE_CHECKED, resultsNightLine } from "./results-night";
 import { SNAPSHOT } from "./snapshot";
 import type { DayLines } from "./today";
@@ -684,8 +684,9 @@ function buildResults(m: Municipality, locale: Locale, snapshot: ElectionsSnapsh
         },
       },
       census: {
-        title: "Què és el cens electoral",
+        title: `Cens electoral ${ofCa(place)}`,
         md: [
+          `A les generals del ${dates.congress}, el cens electoral ${ofCa(place)} era de **${f.n(m.congress.electorate)} persones**; a les municipals del 2023, de ${f.n(m.municipal.electorate)}. On votes el 29 de novembre (secció, mesa i local) ho diuen la targeta censal i la [consulta oficial de mesa i local de l'INE](${INE_MESA_URL}).`,
           `El cens electoral és la llista de les persones amb dret a vot ([LOREG, article 31](${LOREG_URL})). No és la població: no hi ha els menors de 18 anys ni els estrangers sense dret a vot. Per això ${place} té ${f.n(m.population)} habitants i a les municipals del 2023 tenia un cens de ${f.n(m.municipal.electorate)} persones.`,
           "A les municipals, el cens també inclou els ciutadans de la Unió Europea i dels països amb tractat de reciprocitat que hi resideixen i s'hi han inscrit (article 176). A les generals i a les del Parlament, el vot de les persones inscrites a l'estranger (CERA) es compta per províncies i no apareix a les xifres del municipi.",
           "La **participació** és el nombre de votants dividit pel cens. Els percentatges de cada llista es calculen sobre els **vots vàlids**: els vots a candidatures més els vots en blanc. Els vots nuls no compten.",
@@ -871,8 +872,9 @@ function buildResults(m: Municipality, locale: Locale, snapshot: ElectionsSnapsh
         },
       },
       census: {
-        title: "Qué es el censo electoral",
+        title: `Censo electoral de ${place}`,
         md: [
+          `En las generales del ${dates.congress}, el censo electoral de ${place} era de **${f.n(m.congress.electorate)} personas**; en las municipales de 2023, de ${f.n(m.municipal.electorate)}. Dónde votas el 29 de noviembre (sección, mesa y local) lo dicen la tarjeta censal y la [consulta oficial de mesa y local del INE](${INE_MESA_URL}).`,
           `El censo electoral es la lista de las personas con derecho a voto ([LOREG, artículo 31](${LOREG_URL})). No es la población: no están los menores de 18 años ni los extranjeros sin derecho a voto. Por eso ${place} tiene ${f.n(m.population)} habitantes y en las municipales de 2023 tenía un censo de ${f.n(m.municipal.electorate)} personas.`,
           "En las municipales, el censo también incluye a los ciudadanos de la Unión Europea y de los países con tratado de reciprocidad que residen allí y se han inscrito (artículo 176). En las generales y en las del Parlament, el voto de las personas inscritas en el extranjero (CERA) se cuenta por provincias y no aparece en las cifras del municipio.",
           "La **participación** es el número de votantes dividido por el censo. Los porcentajes de cada lista se calculan sobre los **votos válidos**: los votos a candidaturas más los votos en blanco. Los votos nulos no cuentan.",
@@ -1057,8 +1059,9 @@ function buildResults(m: Municipality, locale: Locale, snapshot: ElectionsSnapsh
       },
     },
     census: {
-      title: "What the electoral roll (census) is",
+      title: `Electoral roll (censo electoral) of ${place}`,
       md: [
+        `At the general election of ${dates.congress}, ${place}'s electoral roll had **${f.n(m.congress.electorate)} people**; at the 2023 local election, ${f.n(m.municipal.electorate)}. Where you vote on 29 November (section, table and polling place) is on your census card and in the [INE's official polling place and table lookup](${INE_MESA_URL}) (in Spanish).`,
         `The electoral roll (_censo electoral_) lists everyone entitled to vote ([LOREG, article 31](${LOREG_URL})). It is not the population: under-18s and foreign residents without voting rights are not on it. That is why ${place} has ${f.n(m.population)} residents and had an electorate of ${f.n(m.municipal.electorate)} at the 2023 local election.`,
         "For local elections the roll also includes citizens of other EU countries, and of countries with a reciprocity treaty, who live there and have registered (article 176). In general and Catalan elections, votes from people registered abroad (CERA) are counted by province and do not appear in the municipality's figures.",
         "**Turnout** is voters divided by the electorate. Each list's percentage is of **valid votes**: votes for lists plus blank votes. Spoilt votes do not count.",

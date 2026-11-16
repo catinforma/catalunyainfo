@@ -9,6 +9,7 @@ import { STRIKE_11N_CITIES_AS_OF } from "../src/lib/content/batch02/strike-11n-c
 import { buildSpainBody } from "../src/lib/content/batch02/strike-11n-spain.ts";
 import { buildStrikeGuideBody } from "../src/lib/content/batch02/strike-guides.ts";
 import {
+  ADIF_MS_PUBLISHED,
   CERCANIAS_NETWORKS,
   RAIL_17N_GUIDE,
   RAIL_17N_ID,
@@ -175,4 +176,29 @@ test("publish route: in the strikes group and on its own", () => {
   const route = readFileSync(new URL("../src/app/api/admin/publish/route.ts", import.meta.url), "utf8");
   assert.match(route, /wants\("strikes"\)\) \{[^}]*publishB2Article\(RAIL_17N_GUIDE\)/);
   assert.match(route, /wants\("huelga-trenes-17n"\)\) published\.push\(await publishB2Article\(RAIL_17N_GUIDE\)\)/);
+});
+
+test("16 Nov: the lead answers first with the official figures; the 17th says 'hoy'; 19 and 23 Nov say pending honestly", () => {
+  const lead = (locale: Locale, asOf: string) => text([buildRail17nBody(locale, asOf)[0]!]);
+  assert.match(lead("es", "2026-11-16"), /^Sí: el martes 17 de noviembre de 2026 hay huelga de trenes/);
+  assert.match(lead("es", "2026-11-16"), /Cercanías, 75 % en hora punta y 50 %.*Media Distancia, 65 %.*AVE y Larga Distancia, 72 %.*Iryo, 70 %.*Ouigo, 65,38 %/);
+  assert.match(lead("es", "2026-11-17"), /^Hoy, martes 17 de noviembre, hay huelga de trenes/);
+  assert.match(lead("ca", "2026-11-17"), /^Avui, dimarts 17 de novembre, hi ha vaga de trens/);
+  assert.match(lead("en", "2026-11-17"), /^Today, Tuesday 17 November, there is a rail strike/);
+  for (const locale of LOCALES) assert.doesNotMatch(lead(locale, "2026-11-16"), /\b(mañana|demà|tomorrow|hoy|avui|today)\b/i, `${locale}: no relative day before the 17th`);
+  // The lead's figures are the Spain entry's: published, and the same numbers.
+  assert.equal(spain().minimumServices.status, "published");
+  for (const n of ["75%", "50%", "65%", "72%", "70%", "65,38%"]) assert.ok(spain().minimumServices.text.es.includes(n), n);
+  // Adif: the constant and the entry's text agree.
+  const adifPendingInEntry = /\*\*Adif, el 17 y el 19:\*\* por confirmar/.test(spain().minimumServices.text.es);
+  assert.equal(ADIF_MS_PUBLISHED, !adifPendingInEntry);
+  for (const locale of LOCALES) {
+    const body = buildRail17nBody(locale, "2026-11-16");
+    const headings = body.filter((b) => b.type === "heading").map((b) => (b as unknown as { text: string }).text);
+    assert.ok(headings.some((h) => /19/.test(h) && /Adif/.test(h)), `${locale}: 19 Nov section`);
+    assert.ok(headings.some((h) => /23/.test(h) && /SEMAF/.test(h)), `${locale}: 23 Nov section`);
+    if (!ADIF_MS_PUBLISHED) assert.match(text(body), /pendientes|pendents|pending/, locale);
+    assert.notEqual(rail17nDescription(locale, "2026-11-16"), rail17nDescription(locale, "2026-11-17"));
+    assert.ok(rail17nDescription(locale, "2026-11-17").length <= 155, locale);
+  }
 });

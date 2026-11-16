@@ -87,6 +87,22 @@ import { VOTING } from "./voting";
 
 const VERIFIED = "2026-11-03";
 
+/**
+ * 16 Nov 2026: proclaimed Congress lists per province, as the live block's
+ * parser counted them in BOE-A-2026-23103 (3 Nov) and as Interior's CERA
+ * ballot PDFs confirm (one Congress ballot per list, read 13 Nov: Barcelona
+ * 11, Girona 10, Lleida 10, Tarragona 13). Counts only, no party named: for
+ * "qué partidos se presentan en Cataluña" (GSC 10-16 Nov, positions 5-7.6).
+ */
+const PROCLAIMED_COUNT: Record<Locale, string> = {
+  ca:
+    "**Quantes candidatures es presenten:** segons les llistes proclamades (BOE del 3 de novembre), al Congrés n'hi ha 11 a Barcelona, 10 a Girona, 10 a Lleida i 13 a Tarragona. El nom de cada partit, coalició o agrupació d'electors i els seus candidats són a les llistes de dalt, amb la numeració de la junta electoral.",
+  es:
+    "**Cuántas candidaturas se presentan:** según las listas proclamadas (BOE del 3 de noviembre), al Congreso hay 11 en Barcelona, 10 en Girona, 10 en Lleida y 13 en Tarragona. El nombre de cada partido, coalición o agrupación de electores y sus candidatos están en las listas de arriba, con la numeración de la junta electoral.",
+  en:
+    "**How many lists are standing:** according to the proclaimed lists (BOE, 3 November), there are 11 Congress lists in Barcelona, 10 in Girona, 10 in Lleida and 13 in Tarragona. Each party, coalition or group of voters, with its candidates, is in the lists above, numbered as the electoral board numbered them.",
+};
+
 const URL = {
   rd: "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2026-20742",
   presented: "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2026-22607",
@@ -263,6 +279,7 @@ function body(locale: Locale): Block[] {
       seatsTable("ca"),
       ...paras(
         "Els altres senadors que representen Catalunya els designa el Parlament, i no es voten el 29 de novembre.",
+        PROCLAIMED_COUNT.ca,
       ),
       ...h2(
         "Quan surten les llistes de candidats",
@@ -315,6 +332,16 @@ function body(locale: Locale): Block[] {
             "Les juntes electorals van proclamar les candidatures el 2 de novembre i el BOE les va publicar el 3 de novembre. Es podien recórrer el 4 i el 5 de novembre, i els recursos s'havien de resoldre com a molt tard el 12 de novembre. El 7 de novembre el BOE en va publicar una correcció d'errors que afecta Girona i Tarragona, ja aplicada a les llistes d'aquesta pàgina.",
         },
         {
+          question: "Quins partits es presenten a les eleccions generals a Catalunya?",
+          answer:
+            "Els proclamats a cada província, que són a les llistes de dalt amb el nom complet i els candidats: al Congrés, 11 candidatures a Barcelona, 10 a Girona, 10 a Lleida i 13 a Tarragona (BOE del 3 de novembre de 2026). Cada província té les seves llistes.",
+        },
+        {
+          question: "A quins candidats puc votar si visc a Barcelona?",
+          answer:
+            "Als de la província on estàs inscrit al cens: si vius a Barcelona, a una de les 11 candidatures al Congrés de la província de Barcelona (llista tancada) i, al Senat, a un màxim de tres candidats de Barcelona. Les llistes són més amunt, a l'apartat de Barcelona.",
+        },
+        {
           question: "Quants candidats al Senat puc votar a Barcelona?",
           answer:
             "Fins a tres, de la mateixa candidatura o de diferents. Se n'escullen quatre per província. Si en marques més de tres el vot és nul, i si no en marques cap és un vot en blanc.",
@@ -363,6 +390,7 @@ function body(locale: Locale): Block[] {
       seatsTable("es"),
       ...paras(
         "Los demás senadores que representan a Cataluña los designa el Parlament y no se votan el 29 de noviembre.",
+        PROCLAIMED_COUNT.es,
       ),
       ...h2(
         "Cuándo salen las listas de candidatos",
@@ -415,6 +443,16 @@ function body(locale: Locale): Block[] {
             "Las juntas electorales proclamaron las candidaturas el 2 de noviembre y el BOE las publicó el 3 de noviembre. Se podían recurrir el 4 y el 5 de noviembre, y los recursos debían resolverse como muy tarde el 12 de noviembre. El 7 de noviembre el BOE publicó una corrección de errores que afecta a Girona y Tarragona, ya aplicada a las listas de esta página.",
         },
         {
+          question: "¿Qué partidos se presentan a las elecciones generales en Cataluña?",
+          answer:
+            "Los proclamados en cada provincia, que están en las listas de arriba con su nombre completo y sus candidatos: al Congreso, 11 candidaturas en Barcelona, 10 en Girona, 10 en Lleida y 13 en Tarragona (BOE del 3 de noviembre de 2026). Cada provincia tiene sus propias listas.",
+        },
+        {
+          question: "¿A qué candidatos puedo votar si vivo en Barcelona?",
+          answer:
+            "A los de la provincia en la que estás inscrito en el censo: si vives en Barcelona, a una de las 11 candidaturas al Congreso de la provincia de Barcelona (lista cerrada) y, en el Senado, a un máximo de tres candidatos de Barcelona. Las listas están más arriba, en el apartado de Barcelona.",
+        },
+        {
           question: "¿Cuántos candidatos al Senado puedo votar en Barcelona?",
           answer:
             "Hasta tres, de la misma candidatura o de distintas. Se eligen cuatro por provincia. Si marcas más de tres el voto es nulo, y si no marcas ninguno es un voto en blanco.",
@@ -462,6 +500,7 @@ function body(locale: Locale): Block[] {
     seatsTable("en"),
     ...paras(
       "The other senators who represent Catalonia are appointed by the Parliament of Catalonia and are not voted for on 29 November.",
+      PROCLAIMED_COUNT.en,
     ),
     ...h2(
       "When the candidate lists come out",
@@ -512,6 +551,16 @@ function body(locale: Locale): Block[] {
         question: "When are the final candidate lists for 29 November published?",
         answer:
           "The electoral boards proclaimed the candidates on 2 November and the BOE published them on 3 November. They could be appealed on 4 and 5 November, and appeals had to be settled by 12 November at the latest. On 7 November the BOE published a correction affecting Girona and Tarragona, already applied to the lists on this page.",
+      },
+      {
+        question: "Which parties are standing in Catalonia at the general election?",
+        answer:
+          "The ones proclaimed in each province, listed above with their full names and candidates: for Congress, 11 lists in Barcelona, 10 in Girona, 10 in Lleida and 13 in Tarragona (BOE, 3 November 2026). Each province has its own lists.",
+      },
+      {
+        question: "Which candidates can I vote for if I live in Barcelona?",
+        answer:
+          "Those of the province where you are on the electoral roll: if you live in Barcelona, one of the 11 Congress lists for the province of Barcelona (a closed list) and, for the Senate, up to three Barcelona candidates. The lists are above, under Barcelona.",
       },
       {
         question: "How many Senate candidates can I vote for in Barcelona?",
