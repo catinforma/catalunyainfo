@@ -1,0 +1,57 @@
+diff --git a/src/lib/content/batch02/climate.ts b/src/lib/content/batch02/climate.ts
+index b16fd5e..2d026fc 100644
+--- a/src/lib/content/batch02/climate.ts
++++ b/src/lib/content/batch02/climate.ts
+@@ -1,3 +1,4 @@
++import { slugifyAnchor, type Block } from "@/lib/content/blocks";
+ import { link as featureLink } from "@/lib/content/features/shared";
+ import type { Locale } from "@/lib/i18n/config";
+ import { PATHS as TOOL_PATHS } from "@/lib/content/home-tools";
+@@ -203,6 +204,31 @@ function monthHeading(locale: Locale, i: number): string {
+   return `Barcelona ${/^[ao]/.test(lower) ? "a l'" : "al "}${lower}`;
+ }
+ 
++/**
++ * The month H3 in the query's words (19 Nov 2026 plan, docs/SEO_EXPERIMENTS.md
++ * 13 Nov entry): "Barcelona weather in January" / "El tiempo en Barcelona en
++ * enero" / "El temps a Barcelona al gener". The anchor keeps the old heading's
++ * id, so links to "#barcelona-in-january" still land.
++ */
++function monthQueryHeading(locale: Locale, i: number): Block {
++  const month = MONTHS[locale][i] ?? "";
++  const old = monthHeading(locale, i);
++  const text =
++    locale === "en"
++      ? `Barcelona weather in ${month}`
++      : locale === "es"
++        ? `El tiempo en Barcelona en ${month.toLowerCase()}`
++        : `El temps ${old.replace(/^Barcelona /, "a Barcelona ")}`;
++  return { type: "heading", level: 3, text, id: slugifyAnchor(old) } as Block;
++}
++
++/** One line under the lead: the twelve months, each linking its H3. */
++function monthJumpLine(locale: Locale): string {
++  const label = { ca: "Ves al mes", es: "Ir al mes", en: "Jump to a month" }[locale];
++  const links = MONTHS[locale].map((m, i) => `[${m}](#${slugifyAnchor(monthHeading(locale, i))})`);
++  return `**${label}:** ${links.join(" · ")}`;
++}
++
+ /** What singles a month out, read straight off the two tables. */
+ const MONTH_NOTE: Record<Locale, (string | null)[]> = {
+   ca: ["És el mes més fred.", null, null, null, null, "Les nits tropicals es tornen habituals al centre.", "És el mes més sec i el més assolellat.", "És el mes més calorós i, amb el setembre, el de més dies de tempesta.", "És el segon mes més plujós.", "És el mes més plujós.", "Les temperatures baixen de cop: la màxima mitjana cau gairebé 5 graus respecte a l'octubre.", "És el mes amb menys hores de sol."],
+@@ -454,13 +480,14 @@ function body(locale: Locale) {
+   cityRows.push([t.yearLabel, f(cHigh), f(cLow), f(cRain), f(cTropical)]);
+   return [
+     lead(t.lead),
++    ...paras(monthJumpLine(locale)),
+     callout("official", verifiedLine(locale, VERIFIED), t.note),
+     ...h2(t.tableTitle),
+     table(t.tableCaption, t.tableHeaders, rows, t.tableNote),
+     ...h2(t.cityTitle, ...t.city),
+     table(t.cityCaption, t.cityHeaders, cityRows, t.cityNote),
+     ...h2(t.monthsTitle, t.monthsIntro),
+-    ...MONTHS[locale].flatMap((_, i) => [...h3(monthHeading(locale, i), monthText(locale, i)), ...(i === 11 ? paras(DECEMBER_LINK[locale]) : [])]),
++    ...MONTHS[locale].flatMap((_, i) => [monthQueryHeading(locale, i), ...paras(monthText(locale, i)), ...(i === 11 ? paras(DECEMBER_LINK[locale]) : [])]),
+     ...h2(t.seasonsTitle),
+     list(...t.seasons),
+     ...h2(t.recordsTitle, ...t.records),

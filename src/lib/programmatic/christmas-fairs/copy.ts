@@ -187,10 +187,50 @@ export function confirmationNote(fairs: readonly Pick<Fair, "checked" | "unconfi
   return null;
 }
 
+/**
+ * Towns whose lead stays as it was while their title test runs
+ * (docs/SEO_EXPERIMENTS.md, 13 Nov 2026: "Body and description unchanged on
+ * these pages"; review 20 Nov). INE -> last day of the hold. The dated lead
+ * reaches them after the review; tests/christmas-fairs.test.ts fails from
+ * 21 Nov 2026 until this list is emptied (or the hold renewed and logged).
+ */
+export const LEAD_HOLDS: Readonly<Record<string, string>> = {
+  "08043": "2026-11-20",
+  "17063": "2026-11-20",
+};
+
+/**
+ * The first sentence under the H1 gives the days (16 Nov 2026): the queries
+ * ask "fira <town> 2026" for the date, and the old lead only said the town
+ * "has a fair with an official date". Tense-free, so it stays true before,
+ * during and after the fair. Dates are the page's own (calendar or organiser);
+ * the confirmation note that follows says which.
+ */
+export function townDatesLine(town: TownLike, locale: FairsLocale): string {
+  const fairs = town.fairs;
+  if (fairs.length === 1) {
+    const f = fairs[0]!;
+    const when = rangeText(f.start, f.end, locale, { year: false });
+    const where = f.place ? `, ${f.place}` : "";
+    return `${headline(town, locale)} ${SEASON_YEAR}: ${when}${where}.`;
+  }
+  // In a list the fairs must stay distinguishable: without a Spanish name in
+  // the calendar, the Catalan one (not the generic "Feria de Navidad").
+  const name = (f: (typeof fairs)[number]) => (locale === "es" && !f.nameEs ? fairShortName(f, "ca") : fairShortName(f, locale));
+  const items = fairs.map((f) => `${name(f)}, ${rangeText(f.start, f.end, locale, { weekdays: false, year: false })}`);
+  return `${headline(town, locale)} ${SEASON_YEAR}: ${items.join("; ")}.`;
+}
+
 /** The sentence under the H1. Markdown links allowed. */
-export function townLead(town: TownLike & { comarcaName: string }, locale: FairsLocale, checked: string): string {
+export function townLead(town: TownLike & { comarcaName: string; ine?: string }, locale: FairsLocale, checked: string): string {
   const where = locale === "ca" ? `${caStart(town.name)} (${town.comarcaName})` : `${townName(town.name, locale)} (${town.comarcaName})`;
   const n = town.fairs.length;
+  if (!(town.ine && LEAD_HOLDS[town.ine]) && n > 0) {
+    const dates = townDatesLine(town, locale);
+    if (locale === "ca") return `${dates} ${where}: revisat el ${fullDate(checked, "ca")} al calendari oficial de fires de la Generalitat i als webs dels organitzadors.`;
+    if (locale === "es") return `${dates} ${where}: revisado el ${fullDate(checked, "es")} en el calendario oficial de ferias de la Generalitat y en las webs de los organizadores.`;
+    return `${dates} ${where}: checked on ${fullDate(checked, "en")} against the Catalan government's official fairs calendar and the organisers' own websites.`;
+  }
   if (locale === "ca") {
     const what = n === 1 ? "té una fira de Nadal amb data oficial" : `té ${n} fires de Nadal amb data oficial`;
     return `${where} ${what} aquesta temporada. Revisat el ${fullDate(checked, "ca")} al calendari oficial de fires de la Generalitat i als webs dels organitzadors.`;

@@ -8,6 +8,7 @@ import { SEASON, SEASON_YEAR, inSeason, isChristmasAgendaMarket, isChristmasName
 import {
   DATED_TITLE_TOWNS,
   DESCRIPTION_LIMIT,
+  LEAD_HOLDS,
   SNIPPET_HOLDS,
   TITLE_LIMIT,
   confirmationNote,
@@ -18,7 +19,9 @@ import {
   stripOrdinal,
   stripVenue,
   townDescription,
+  townDatesLine,
   townH1,
+  townLead,
   townTitle,
 } from "../src/lib/programmatic/christmas-fairs/copy.ts";
 import {
@@ -386,6 +389,31 @@ test("date guard: unconfirmed fairs re-read within 10 days while still to come",
     const f = FAIRS.find((x) => x.id === u.fairId)!;
     if (f.start <= today) continue;
     assert.ok(u.readOn >= tenDaysAgo, `${u.fairId} (${u.publisher}) last read ${u.readOn}: re-read it`);
+  }
+});
+
+/** The lead's first sentence gives the days (16 Nov 2026), except on the towns whose title test holds the body. */
+test("town lead: the first sentence gives the fair's days", () => {
+  const cardedeu = townBySlug("cardedeu")!;
+  for (const locale of ["ca", "es", "en"] as const) {
+    const lead = townLead({ ...cardedeu, comarcaName: "Vallès Oriental" }, locale, "2026-11-13");
+    assert.ok(lead.startsWith(townDatesLine(cardedeu, locale)), `${locale}: ${lead}`);
+    assert.ok(townDatesLine(cardedeu, locale).includes(String(Number(cardedeu.fairs[0]!.start.slice(8)))), `${locale}: day in the first sentence`);
+    assert.match(townDatesLine(cardedeu, locale), /2026/);
+  }
+  const multi = towns().find((t) => t.fairs.length > 1)!;
+  assert.equal(townDatesLine(multi, "es").split("; ").length, multi.fairs.length);
+  for (const ine of Object.keys(LEAD_HOLDS)) {
+    const town = towns().find((t) => t.ine === ine)!;
+    assert.ok(!townLead({ ...town, comarcaName: "x" }, "ca", "2026-11-13").startsWith(townDatesLine(town, "ca")), `${ine} keeps the held lead`);
+  }
+});
+
+/** Date guard: the lead holds end with the Canyelles/Espinelves title review (20 Nov 2026). */
+test("date guard: lead holds end on their date", () => {
+  const today = new Intl.DateTimeFormat("en-CA", { timeZone: "Europe/Madrid" }).format(new Date());
+  for (const [ine, until] of Object.entries(LEAD_HOLDS)) {
+    assert.ok(today <= until, `${ine}: the lead hold ended ${until}; read the title test (docs/SEO_EXPERIMENTS.md, 13 Nov), remove the hold so the lead gives the dates, and log it`);
   }
 });
 

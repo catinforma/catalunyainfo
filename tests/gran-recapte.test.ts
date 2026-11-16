@@ -9,9 +9,11 @@ import {
   CHAINS,
   GRAN_RECAPTE,
   GRAN_RECAPTE_AS_OF,
+  GRAN_RECAPTE_FIRST_READ,
   GRAN_RECAPTE_GUIDE,
   GRAN_RECAPTE_META,
   GRAN_RECAPTE_REFRESH_BY,
+  GRAN_RECAPTE_RESULTS_RECHECK_BY,
   GR_HERO,
   MARKETS_BCN,
   MONEY_ONLY,
@@ -322,6 +324,21 @@ test("re-read after the campaign: from GRAN_RECAPTE_REFRESH_BY the page must hav
     assert.ok(
       GRAN_RECAPTE_AS_OF > lastDay,
       `GRAN_RECAPTE_AS_OF is ${GRAN_RECAPTE_AS_OF}: re-read granrecapte.org (transparència) for the 2026 results, update gran-recapte.ts, move GRAN_RECAPTE_AS_OF and publish \`gran-recapte\``,
+    );
+  }
+});
+
+test("after the campaign: the lead is in the past tense and the 2026 results are re-checked by GRAN_RECAPTE_RESULTS_RECHECK_BY", () => {
+  for (const locale of LOCALES) {
+    const lead = text(GRAN_RECAPTE_GUIDE.editions[locale].blocks.slice(0, 1));
+    assert.match(lead, locale === "ca" ? /va ser/ : locale === "es" ? /\bfue\b/ : /took place/, `${locale}: ${lead.slice(0, 80)}`);
+    assert.match(lead, locale === "ca" ? /mitjans de desembre/ : locale === "es" ? /mediados de diciembre/ : /mid-December/, `${locale}: online donations until mid-December (ACATBAL)`);
+  }
+  assert.ok(GRAN_RECAPTE_FIRST_READ < GRAN_RECAPTE_AS_OF);
+  if (madridDate(new Date()) >= GRAN_RECAPTE_RESULTS_RECHECK_BY) {
+    assert.ok(
+      GRAN_RECAPTE_AS_OF >= GRAN_RECAPTE_RESULTS_RECHECK_BY,
+      `GRAN_RECAPTE_AS_OF is ${GRAN_RECAPTE_AS_OF}: re-read granrecapte.org/ca/transparencia/ and acatbal.org for the 2026 results, add them (lead, results section, FAQ), move GRAN_RECAPTE_AS_OF and publish \`gran-recapte\``,
     );
   }
 });

@@ -6025,3 +6025,73 @@ The paro calculator's `RULES_VALID_UNTIL` (31 Dec 2026) guards the shared IPREM/
 **Measure 15 Dec, 1 Feb, 15 Feb**: `snapshot.py page /calculadoras/subsidio-desempleo/ 28`.
 
 **Outcome:** _pending_
+
+## 2026-11-16 — Top-3 push, Barcelona practical + Christmas + EN: the fair's days in the first line, Gran Recapte after the campaign, the weather patch held for 19 Nov (deploy; groups `gran-recapte`, `gran-recapte-links`)
+
+Owner, 16 Nov: "hem de pujar rang, hem de sortir top 3 mínim, millora-ho tot".
+Inventory: `snapshot.py gaps 14 120`, `ctr 14 300`, `pages 14 600` and
+`page <pattern> 14` (3–16 Nov). Every page in scope at position 3.5–15 with
+≥150 impressions was checked against its window in this log. Only what is due
+today or has no window was changed; titles and descriptions untouched.
+
+| Page (14 d: clicks / impr. / pos) | Window | Decision today |
+| --- | --- | --- |
+| `/es/guias/aparcar-barcelona-zona-azul-verde/` (32 / 8,906 / 7.8), CA (17 / 2,171 / 5.6) | ES title 3 Nov (to 1 Dec), CA title 6 Nov (to 4 Dec), body measure 28/30 Nov | No change. Body re-read against areaverda.cat (blue and green "tipos de plazas", Zone 36 news) on 16 Nov: hours, Saturday and beach rules identical to the page. The page already leads with the hours; top results (parclick, highmotor) give less. "horario zona azul barcelona" 66 at 10.6 is authority, not content |
+| `/es/guias/tarjetas-transporte-barcelona/` (9 / 5,376 / 8.4) | title 30 Oct (to 27 Nov) | No change. "t casual 1 zona" 92 at **4.4, 0 clicks** and "tarjeta t casual barcelona" 23 at 3.5, 0: the title gives the whole answer (13 € / 25,50 €), the 6 Nov hypothesis. **Proposal 28 Nov:** "T-casual Barcelona 2026: precio por zonas y cuándo compensa", prices kept in the description |
+| `/en/guides/barcelona-weather-by-month/` (26 / 7,220 / 7.9) | 11 Nov title, check 18 Nov, window to 9 Dec | Not applied: the 19 Nov plan needs the 18 Nov check first. **Ready patch** `docs/patches/weather-month-h3-19nov.patch` (`git apply`): month H3s "Barcelona weather in January" / "El tiempo en Barcelona en enero" / "El temps a Barcelona al gener" with the old anchor ids, and a 12-month jump line under the lead in ca/es/en; no figure changes. Tests (`batch02`) and tsc pass with it. Then deploy + group `climate` |
+| `/en/guides/barcelona-transport-passes/` (23 / 3,292 / 7.5) | 30 Oct, measure 30 Nov | No change |
+| `/en/guides/barcelona-metro-hours/` (7 / 3,093 / 7.5) | 6 Nov, window to 4 Dec | No change (the 10–11 Nov jump was strike demand) |
+| `/es/guias/horarios-metro-barcelona/` (2 / 1,051 / 11.9) | 28/30 Oct, measure 28 Nov | No change |
+| Tourist tax ES (13 / 2,156 / 7.8), EN (27 / 2,439 / 7.3), CA | measure 30 Nov; ranking work "after 30 Nov" | No change |
+| La Marató CA (28 / 3,338 / 6.7), ES | 11 Nov title, check 18 Nov | One body sentence only (the Gran Recapte mention, below) |
+| Christmas lights ES (31 / 2,040 / 6.9), CA (32 / 1,546 / 6.4), EN | 12 Nov, review 19 Nov | No change. **Cannibalisation:** "cuando encienden las luces de navidad en barcelona 2026" lands on the hub `/es/guias/navidad-en-barcelona/` (216 at 9.0), "encesa llums nadal barcelona 2026" splits between the lights page (166 at 9.0) and `/ca/guies/nadal-a-barcelona/` (137 at 9.7). The hub's title carries the lights date since 12 Nov. **Proposal for the hub's 17 Nov check:** owner URL = the lights page; give the hub a title that is not about the lights (e.g. "Nadal a Barcelona 2026: fires, llums i què fer, dia a dia") and keep the date in its description |
+| `/es/mercados-navidad/espinelves/` (17 / 3,049 / 8.5), CA (8 / 1,305 / 9.0); Canyelles ES (40 / 2,591 / 8.2), CA (8 / 699 / 8.5) | 13 Nov title test, review 20 Nov (Espinelves also 27 Nov), "body unchanged" | Not touched: the new lead below is held on these two towns (`LEAD_HOLDS`) |
+| Other fair towns: Cardedeu CA (1 / 471 / 7.9) and ES (6 / 225 / 6.4), Caldes ES (17 / 477 / 5.8), Arbúcies ES (8 / 351 / 6.5), Vic ES (7 / 349 / 7.1) and CA (5 / 309 / 6.0), Olot CA (14 / 350 / 4.7), Manresa ES (10 / 201 / 4.8), Ripoll ES (21 / 172 / 5.8), Banyoles CA (11 / 190 / 4.1) | template titles since 1 Nov; no body window | **Changed: lead** (below) |
+| Christmas markets guide ES (59 / 2,457 / 7.4), CA (49 / 1,283 / 6.3) | 3 Nov, 13 Nov body | No change |
+| Traditions CA (2 / 494 / 6.8), living nativities ES (12 / 439 / 5.9), CA (5 / 224 / 8.6) | review 23 Nov / 1 Dec | No change |
+| Gran Recapte ES (40 / 2,529 / 6.3), CA (37 / 1,918 / 6.4), EN (1 / 176 / 4.1) | 4 Nov title (to 2 Dec); refresh due after 14 Nov | **Changed: body** (below) |
+| Montserrat EN (`/en/day-trips/montserrat-without-a-tour-from-barcelona/`, 38.7) | 13 Nov upgrade, measure publish + 28 d | No change: the upgrade has had three days |
+| Day trips EN (Sitges 520 at 12.1, PortAventura 429 at 8.2, Núria 381 at 7.5, Figueres 179 at 12.5, Andorra 151 at 7.4), nature (bolets, colors: 4.6–5.5) | 28 Oct sprint, measure 28 Nov | No change |
+
+**1. Fair town pages: the first sentence gives the days (deploy, no group).**
+The 13 Nov entry found the queries ask for the date ("fira <town> 2026"); the
+lead said only "<town> té una fira de Nadal amb data oficial aquesta
+temporada". Now `townDatesLine` opens the lead: "Fira de Nadal i del Torró
+Artesà de Cardedeu 2026: del divendres 11 al diumenge 13 de desembre, Centre
+de la Vila." (es/en alike; several fairs as a list, Barcelona's three included —
+its `SNIPPET_HOLDS` covers only title and description). Tense-free, from the
+page's own dates; the confirmation note still follows. No title, description
+or other block changed. Canyelles (08043) and Espinelves (17063) keep the old
+lead until 20 Nov (`LEAD_HOLDS`; a test fails from 21 Nov: after the review,
+empty the list, deploy, log). Event JSON-LD checked: name, start/end, Place
+with PostalAddress, URL only when it is the organiser's own; valid.
+*Prediction:* by 30 Nov, at equal position, the changed towns' CTR rises on
+"fira <town> 2026" queries (Google quotes the first line for date queries);
+read `page fires-de-nadal 14` and `page mercados-navidad 14` without the two
+held towns. Revert the lead if their combined CTR falls at equal position.
+
+**2. Gran Recapte after the campaign (groups `gran-recapte`, then
+`gran-recapte-links`).** Re-read 16 Nov: granrecapte.org home, press and
+donation pages (Bizum 33596 and 900 898 076 still listed), transparency (2025
+figures unchanged; no 2026 results), acatbal.org/el-gran-recapte/ ("Durant la
+campanya i fins a mitjans de desembre, també es poden fer donacions
+econòmiques a través del web"). The lead is past tense ("va ser / fue / took
+place on Friday 13 and Saturday 14 November"), then what can still be done
+(online until mid-December, Bizum, phone), then "no 2026 results yet". The
+volunteer sentences keep their 4 Nov reading date (`GRAN_RECAPTE_FIRST_READ`).
+AS_OF 16 Nov. New guard: `GRAN_RECAPTE_RESULTS_RECHECK_BY` 30 Nov. The
+mentions on La Marató (volunteering section) and the markets guide (tip) were
+present-tense ("que també busca voluntaris"): now past, with the online
+donation line. Titles and descriptions untouched (4 Nov window; the title
+does not state a false fact). **Proposal 2 Dec**, when the window ends: a
+title about the results or "Gran Recapte 2027" once the organisers publish.
+
+**Not done:** no 2026 Gran Recapte figures (none published; the 2025 tonnage
+still disagrees between granrecapte.org and acatbal.org); no lights re-read
+(due 18–20 Nov); no parking, transport, metro or tourist-tax body change (all
+inside measurement windows that close 27 Nov–4 Dec).
+
+**Review:** 20 Nov (lead hold, with the Canyelles/Espinelves title test),
+30 Nov (fair leads, Gran Recapte results guard).
+
+**Outcome:** _pending_

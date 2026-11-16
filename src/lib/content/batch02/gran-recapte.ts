@@ -99,7 +99,16 @@ import {
  * them equal.
  */
 
-export const GRAN_RECAPTE_AS_OF = "2026-11-04";
+export const GRAN_RECAPTE_AS_OF = "2026-11-16";
+/**
+ * First full read (4 Nov 2026). The volunteer and shop facts were read that
+ * day and not again: the collection was over when the page was re-read on
+ * 16 Nov (home, donation pages, ACATBAL's "fins a mitjans de desembre",
+ * transparency: 2025 figures unchanged, no 2026 results yet).
+ */
+export const GRAN_RECAPTE_FIRST_READ = "2026-11-04";
+/** From this day the page must have been re-read for the organisers' 2026 results (a test fails otherwise). */
+export const GRAN_RECAPTE_RESULTS_RECHECK_BY = "2026-11-30";
 /** After this day the page must have been re-read after the campaign (a test fails otherwise). */
 export const GRAN_RECAPTE_REFRESH_BY = "2026-11-20";
 
@@ -271,14 +280,14 @@ export function granRecapteMention(locale: Locale, where: "marato" | "markets"):
   const markets = joinNames(MARKETS_BCN[locale], locale);
   const texts: Record<"marato" | "markets", Record<Locale, string>> = {
     marato: {
-      ca: `Abans, al novembre, hi ha l'altra gran campanya solidària de l'any: el Gran Recapte d'aliments, ${bare}, als supermercats de tot Catalunya, que també busca voluntaris. Com fer-t'hi voluntari o donar-hi, a ${b2link("granRecapte", "ca", "la guia del Gran Recapte 2026")}.`,
-      es: `Antes, en noviembre, llega la otra gran campaña solidaria del año: el Gran Recapte de alimentos, ${bare}, en los supermercados de toda Cataluña, que también busca voluntarios. Cómo ser voluntario o donar, en ${b2link("granRecapte", "es", "la guía del Gran Recapte 2026")}.`,
-      en: `Before that, in November, comes the year's other big charity drive: the Gran Recapte food collection, on ${bare}, in supermarkets across Catalonia, which also needs volunteers. How to volunteer or give is in ${b2link("granRecapte", "en", "our Gran Recapte 2026 guide")}.`,
+      ca: `Al novembre hi va haver l'altra gran campanya solidària de l'any: el Gran Recapte d'aliments, ${bare}, als supermercats de tot Catalunya. Fins a mitjans de desembre encara s'hi pot fer un donatiu en línia: com fer-ho, a ${b2link("granRecapte", "ca", "la guia del Gran Recapte 2026")}.`,
+      es: `En noviembre fue la otra gran campaña solidaria del año: el Gran Recapte de alimentos, ${bare}, en los supermercados de toda Cataluña. Hasta mediados de diciembre todavía se puede hacer un donativo en línea: cómo hacerlo, en ${b2link("granRecapte", "es", "la guía del Gran Recapte 2026")}.`,
+      en: `In November came the year's other big charity drive: the Gran Recapte food collection, on ${bare}, in supermarkets across Catalonia. Online donations stay open until mid-December: how to give is in ${b2link("granRecapte", "en", "our Gran Recapte 2026 guide")}.`,
     },
     markets: {
-      ca: `**Gran Recapte:** ${days}, sis mercats municipals de Barcelona (${markets}) tenen un punt de donació del Gran Recapte d'aliments. Ho expliquem a ${b2link("granRecapte", "ca", "la guia del Gran Recapte 2026")}.`,
-      es: `**Gran Recapte:** ${days}, seis mercados municipales de Barcelona (${markets}) tienen un punto de donación del Gran Recapte de alimentos. Lo explicamos en ${b2link("granRecapte", "es", "la guía del Gran Recapte 2026")}.`,
-      en: `**Gran Recapte:** on ${days}, six of Barcelona's municipal markets (${markets}) have a donation point for the Gran Recapte food drive. Details in ${b2link("granRecapte", "en", "our Gran Recapte 2026 guide")}.`,
+      ca: `**Gran Recapte:** ${days}, sis mercats municipals de Barcelona (${markets}) van tenir un punt de donació del Gran Recapte d'aliments. Fins a mitjans de desembre encara s'hi pot donar en línia: ho expliquem a ${b2link("granRecapte", "ca", "la guia del Gran Recapte 2026")}.`,
+      es: `**Gran Recapte:** ${days}, seis mercados municipales de Barcelona (${markets}) tuvieron un punto de donación del Gran Recapte de alimentos. Hasta mediados de diciembre todavía se puede donar en línea: lo explicamos en ${b2link("granRecapte", "es", "la guía del Gran Recapte 2026")}.`,
+      en: `**Gran Recapte:** on ${days}, six of Barcelona's municipal markets (${markets}) had a donation point for the Gran Recapte food drive. Online donations stay open until mid-December: details in ${b2link("granRecapte", "en", "our Gran Recapte 2026 guide")}.`,
     },
   };
   return texts[where][locale];
@@ -297,12 +306,13 @@ export function buildGranRecapteBody(locale: Locale): Block[] {
   const moneyOnly = joinNames(MONEY_ONLY, locale);
   const markets = joinNames(MARKETS_BCN[locale], locale);
   const asOf = dateYear(GRAN_RECAPTE_AS_OF, locale);
+  const firstRead = dateYear(GRAN_RECAPTE_FIRST_READ, locale);
   const { bizum, bizumGirona, phone, edition } = GRAN_RECAPTE;
 
   if (locale === "ca") {
     return [
       lead(
-        `**El Gran Recapte 2026 és ${days}.** Aquests dos dies, els supermercats col·laboradors de tot Catalunya tenen punts de recollida on pots deixar aliments per als quatre Bancs dels Aliments. És la ${edition}a edició i, per primer cop, està dedicada a les «noves pobreses»: persones que, fins i tot amb feina o amb pensió, no arriben a final de mes. També hi pots col·laborar fent un torn de voluntariat de quatre hores o amb un donatiu, per exemple per Bizum amb el codi ${bizum}.`,
+        `**El Gran Recapte 2026 va ser ${days}**, als supermercats col·laboradors de tot Catalunya: la ${edition}a edició, dedicada a les «noves pobreses». La recollida d'aliments a les botigues ja s'ha acabat, però **encara pots fer un donatiu en diners**: per internet fins a mitjans de desembre, segons l'Associació Catalana de Bancs dels Aliments, per Bizum amb el codi ${bizum} o per telèfon al ${phone}. L'organització encara no ha publicat el balanç del 2026 (el ${asOf}); quan ho faci, l'afegirem aquí.`,
       ),
       keyFacts("El Gran Recapte 2026, d'un cop d'ull", [
         { label: "Dies", value: daysCap.charAt(0).toUpperCase() + daysCap.slice(1) },
@@ -317,7 +327,7 @@ export function buildGranRecapteBody(locale: Locale): Block[] {
       callout(
         "info",
         "Com tractem les dades",
-        `Tot el que hi ha en aquesta pàgina surt de la web del Gran Recapte (granrecapte.org), de l'Associació Catalana de Bancs dels Aliments i de les webs dels quatre Bancs dels Aliments, consultades el ${asOf}. L'organització no ha publicat cap data límit per inscriure's al voluntariat ni cap horari de recollida comú a totes les botigues, i per això no n'hi posem. Quan publiqui els resultats del 2026, els afegirem.`,
+        `Tot el que hi ha en aquesta pàgina surt de la web del Gran Recapte (granrecapte.org), de l'Associació Catalana de Bancs dels Aliments i de les webs dels quatre Bancs dels Aliments, consultades el ${firstRead} i de nou el ${asOf}, després de la campanya. L'organització no ha publicat cap data límit per inscriure's al voluntariat ni cap horari de recollida comú a totes les botigues, i per això no n'hi posem. Quan publiqui els resultats del 2026, els afegirem.`,
       ),
       ...h2(
         "Quan és el Gran Recapte 2026?",
@@ -345,7 +355,7 @@ export function buildGranRecapteBody(locale: Locale): Block[] {
         "**En grup:** amb amics, família o companys de feina. Amb un mínim de dues persones ja podeu cobrir un torn de quatre hores en un supermercat.",
       ),
       ...paras(
-        `Si t'hi vas inscriure en edicions anteriors, només cal que et descarreguis l'app i hi entris amb el DNI. L'organització no ha publicat cap data límit: el ${asOf} la inscripció era oberta. El Banc dels Aliments de Tarragona també té ${link(GR_URLS.tarragonaSignUp, "el seu propi formulari d'inscripció")}, i a Lleida els estudiants de la UdL poden obtenir crèdits ECTS fent voluntariat al Gran Recapte.`,
+        `Si t'hi vas inscriure en edicions anteriors, només cal que et descarreguis l'app i hi entris amb el DNI. L'organització no va publicar cap data límit: el ${firstRead} la inscripció era oberta. El Banc dels Aliments de Tarragona també té ${link(GR_URLS.tarragonaSignUp, "el seu propi formulari d'inscripció")}, i a Lleida els estudiants de la UdL poden obtenir crèdits ECTS fent voluntariat al Gran Recapte.`,
         "Si t'hi has inscrit però finalment no hi pots anar, l'organització demana que cancel·lis la inscripció i ho diguis a la persona coordinadora del teu punt de recollida, perquè algú altre pugui ocupar la plaça.",
       ),
       ...h2(
@@ -378,7 +388,7 @@ export function buildGranRecapteBody(locale: Locale): Block[] {
         { question: "Quins supermercats participen al Gran Recapte 2026?", answer: `Segons la web del Gran Recapte, ${faqChains}, entre més de trenta cadenes. A ${moneyOnly} només s'hi pot fer un donatiu en diners a la caixa.` },
         { question: "Quins aliments puc donar?", answer: "Aliments bàsics i d'alt valor nutritiu. El Banc dels Aliments de Tarragona demana llegums secs, oli, llet, conserves de peix i aliments infantils." },
         { question: "Com em puc fer voluntari del Gran Recapte?", answer: "Inscrivint-te a voluntariat.granrecapte.org o a l'app del Gran Recapte. Un torn és de quatre hores en un punt de recollida; també t'hi pots apuntar en grup (mínim dues persones) o com a coordinador." },
-        { question: "Fins quan em puc inscriure com a voluntari?", answer: `L'organització no ha publicat cap data límit, i el ${asOf} la inscripció era oberta. Les places de cada torn són limitades: si un torn ja és ple, en pots triar un altre.` },
+        { question: "Fins quan em puc inscriure com a voluntari?", answer: `L'organització no va publicar cap data límit, i el ${firstRead} la inscripció era oberta. La recollida als supermercats es va fer el 13 i el 14 de novembre; el voluntariat de la propera edició s'obrirà a la mateixa web. Les places de cada torn són limitades: si un torn ja és ple, en pots triar un altre.` },
         { question: "Quin és el Bizum del Gran Recapte?", answer: `El codi ${bizum}, a l'apartat «Fer un donatiu» o «Aportar a causes socials» de l'app del teu banc, amb el teu codi postal al camp «Concepte».` },
         { question: "Puc donar aliments a Mercadona?", answer: `No. Segons l'organització, a ${moneyOnly} només s'hi pot fer un donatiu en diners a la caixa, ${days}.` },
         { question: "Els donatius al Gran Recapte desgraven?", answer: "Sí. Segons la web del Gran Recapte, els particulars es poden deduir el 80% dels primers 250 € i el 40% de la resta (el 45% els donants habituals), fins al 10% de la base liquidable." },
@@ -392,7 +402,7 @@ export function buildGranRecapteBody(locale: Locale): Block[] {
   if (locale === "es") {
     return [
       lead(
-        `**El Gran Recapte 2026 es ${days}.** Esos dos días, los supermercados colaboradores de toda Cataluña tienen puntos de recogida donde puedes dejar alimentos para los cuatro Bancs dels Aliments (bancos de alimentos) catalanes. Es la ${edition}.ª edición y, por primera vez, está dedicada a las «nuevas pobrezas»: personas que, incluso con trabajo o con pensión, no llegan a final de mes. También puedes colaborar haciendo un turno de voluntariado de cuatro horas o con un donativo, por ejemplo por Bizum con el código ${bizum}.`,
+        `**El Gran Recapte 2026 fue ${days}**, en los supermercados colaboradores de toda Cataluña: la ${edition}.ª edición, dedicada a las «nuevas pobrezas». La recogida de alimentos en las tiendas ya ha terminado, pero **todavía puedes hacer un donativo en dinero**: por internet hasta mediados de diciembre, según la Associació Catalana de Bancs dels Aliments, por Bizum con el código ${bizum} o por teléfono en el ${phone}. La organización aún no ha publicado el balance de 2026 (a ${asOf}); cuando lo haga, lo añadiremos aquí.`,
       ),
       keyFacts("El Gran Recapte 2026, de un vistazo", [
         { label: "Días", value: daysCap.charAt(0).toUpperCase() + daysCap.slice(1) },
@@ -407,7 +417,7 @@ export function buildGranRecapteBody(locale: Locale): Block[] {
       callout(
         "info",
         "Cómo tratamos los datos",
-        `Todo lo que hay en esta página sale de la web del Gran Recapte (granrecapte.org), de la Associació Catalana de Bancs dels Aliments y de las webs de los cuatro Bancs dels Aliments, consultadas el ${asOf}. La organización no ha publicado ninguna fecha límite para inscribirse como voluntario ni un horario de recogida común a todas las tiendas, y por eso no lo ponemos. Cuando publique los resultados de 2026, los añadiremos.`,
+        `Todo lo que hay en esta página sale de la web del Gran Recapte (granrecapte.org), de la Associació Catalana de Bancs dels Aliments y de las webs de los cuatro Bancs dels Aliments, consultadas el ${firstRead} y de nuevo el ${asOf}, después de la campaña. La organización no ha publicado ninguna fecha límite para inscribirse como voluntario ni un horario de recogida común a todas las tiendas, y por eso no lo ponemos. Cuando publique los resultados de 2026, los añadiremos.`,
       ),
       ...h2(
         "¿Cuándo es el Gran Recapte 2026?",
@@ -435,7 +445,7 @@ export function buildGranRecapteBody(locale: Locale): Block[] {
         "**En grupo:** con amigos, familia o compañeros de trabajo. Con un mínimo de dos personas ya podéis cubrir un turno de cuatro horas en un supermercado.",
       ),
       ...paras(
-        `Si te inscribiste en ediciones anteriores, solo tienes que descargarte la app y entrar con tu DNI. La organización no ha publicado ninguna fecha límite: el ${asOf} la inscripción estaba abierta. El Banc dels Aliments de Tarragona tiene además ${link(GR_URLS.tarragonaSignUp, "su propio formulario de inscripción")}, y en Lleida los estudiantes de la UdL pueden obtener créditos ECTS haciendo voluntariado en el Gran Recapte.`,
+        `Si te inscribiste en ediciones anteriores, solo tienes que descargarte la app y entrar con tu DNI. La organización no publicó ninguna fecha límite: el ${firstRead} la inscripción estaba abierta. El Banc dels Aliments de Tarragona tiene además ${link(GR_URLS.tarragonaSignUp, "su propio formulario de inscripción")}, y en Lleida los estudiantes de la UdL pueden obtener créditos ECTS haciendo voluntariado en el Gran Recapte.`,
         "Si te has inscrito y al final no puedes ir, la organización pide que canceles la inscripción y avises a la persona coordinadora de tu punto de recogida, para que otra persona pueda ocupar la plaza.",
       ),
       ...h2(
@@ -468,7 +478,7 @@ export function buildGranRecapteBody(locale: Locale): Block[] {
         { question: "¿Qué supermercados participan en el Gran Recapte 2026?", answer: `Según la web del Gran Recapte, ${faqChains}, entre más de treinta cadenas. En ${moneyOnly} solo se puede hacer un donativo en dinero en caja.` },
         { question: "¿Qué alimentos puedo donar?", answer: "Alimentos básicos y de alto valor nutritivo. El Banc dels Aliments de Tarragona pide legumbres secas, aceite, leche, conservas de pescado y alimentos infantiles." },
         { question: "¿Cómo puedo ser voluntario del Gran Recapte?", answer: "Inscribiéndote en voluntariat.granrecapte.org o en la app del Gran Recapte. Un turno es de cuatro horas en un punto de recogida; también puedes apuntarte en grupo (mínimo dos personas) o como coordinador." },
-        { question: "¿Hasta cuándo puedo inscribirme como voluntario?", answer: `La organización no ha publicado ninguna fecha límite, y el ${asOf} la inscripción estaba abierta. Las plazas de cada turno son limitadas: si un turno ya está lleno, puedes elegir otro.` },
+        { question: "¿Hasta cuándo puedo inscribirme como voluntario?", answer: `La organización no publicó ninguna fecha límite, y el ${firstRead} la inscripción estaba abierta. La recogida en los supermercados se hizo el 13 y el 14 de noviembre; el voluntariado de la próxima edición se abrirá en la misma web. Las plazas de cada turno son limitadas: si un turno ya está lleno, puedes elegir otro.` },
         { question: "¿Cuál es el Bizum del Gran Recapte?", answer: `El código ${bizum}, en el apartado «Hacer una donación» o «Aportar a causas sociales» de la app de tu banco, con tu código postal en el campo «Concepto».` },
         { question: "¿Puedo donar alimentos en Mercadona?", answer: `No. Según la organización, en ${moneyOnly} solo se puede hacer un donativo en dinero en caja, ${days}.` },
         { question: "¿Los donativos al Gran Recapte desgravan?", answer: "Sí. Según la web del Gran Recapte, los particulares pueden deducirse el 80% de los primeros 250 € y el 40% del resto (el 45% los donantes habituales), hasta el 10% de la base liquidable." },
@@ -481,7 +491,7 @@ export function buildGranRecapteBody(locale: Locale): Block[] {
 
   return [
     lead(
-      `**The Gran Recapte 2026 is on ${days}.** On those two days, participating supermarkets across Catalonia have collection points where you can leave food for the region's four food banks (Bancs dels Aliments). It is the ${edition}th edition and, for the first time, it is dedicated to the "new poverty": people who cannot make ends meet even with a job or a pension. You can also help by volunteering for a four-hour shift or by giving money, for example by Bizum with code ${bizum}.`,
+      `**The Gran Recapte 2026 took place on ${days}** in participating supermarkets across Catalonia: the ${edition}th edition, dedicated to the "new poverty". The food collection in shops is over, but **you can still give money**: online until mid-December, according to the Catalan association of food banks, by Bizum with code ${bizum} or by phone on ${phone}. As of ${asOf} the organisers had not published the 2026 results; we will add them here when they do.`,
     ),
     keyFacts("The Gran Recapte 2026 at a glance", [
       { label: "Days", value: daysCap },
@@ -496,7 +506,7 @@ export function buildGranRecapteBody(locale: Locale): Block[] {
     callout(
       "info",
       "How we handle the details",
-      `Everything on this page comes from the Gran Recapte website (granrecapte.org), the Catalan association of food banks and the four food banks' own websites, checked on ${asOf}. The organisers have not published a closing date for volunteer sign-up or collection hours common to every shop, so we do not give any. We will add the 2026 results once they publish them.`,
+      `Everything on this page comes from the Gran Recapte website (granrecapte.org), the Catalan association of food banks and the four food banks' own websites, checked on ${firstRead} and again on ${asOf}, after the campaign. The organisers have not published a closing date for volunteer sign-up or collection hours common to every shop, so we do not give any. We will add the 2026 results once they publish them.`,
     ),
     ...h2(
       "When is the Gran Recapte 2026?",
@@ -524,7 +534,7 @@ export function buildGranRecapteBody(locale: Locale): Block[] {
       "**As a group:** with friends, family or colleagues. Any group of two or more people can cover a four-hour shift in a supermarket.",
     ),
     ...paras(
-      `If you signed up in previous years, just download the app and log in with your DNI (Spanish ID number). The organisers have not published a closing date: on ${asOf} sign-up was open. The Tarragona food bank also runs ${link(GR_URLS.tarragonaSignUp, "its own sign-up form")}, and in Lleida, students at the University of Lleida (UdL) can earn ECTS credits by volunteering for the Gran Recapte.`,
+      `If you signed up in previous years, just download the app and log in with your DNI (Spanish ID number). The organisers did not publish a closing date: on ${firstRead} sign-up was open. The Tarragona food bank also runs ${link(GR_URLS.tarragonaSignUp, "its own sign-up form")}, and in Lleida, students at the University of Lleida (UdL) can earn ECTS credits by volunteering for the Gran Recapte.`,
       "If you have signed up but cannot make it after all, the organisers ask you to cancel your booking and tell the coordinator of your collection point, so that someone else can take the place.",
     ),
     ...h2(
@@ -557,7 +567,7 @@ export function buildGranRecapteBody(locale: Locale): Block[] {
       { question: "Which supermarkets take part in the Gran Recapte 2026?", answer: `According to the Gran Recapte website, ${faqChains}, among more than thirty chains. In ${moneyOnly} you can only give money at the till.` },
       { question: "What food can I give?", answer: "Basic, highly nutritious food. The Tarragona food bank asks for dried pulses, oil, milk, tinned fish and baby food." },
       { question: "How can I volunteer for the Gran Recapte?", answer: "Sign up at voluntariat.granrecapte.org or in the Gran Recapte app. A shift is four hours at a collection point; you can also sign up as a group (two people or more) or as a coordinator." },
-      { question: "Is there a deadline to sign up as a volunteer?", answer: `The organisers have not published one, and on ${asOf} sign-up was open. Each shift has a limited number of places: if one is full, you can choose another.` },
+      { question: "Is there a deadline to sign up as a volunteer?", answer: `The organisers have not published a closing date, and on ${firstRead} sign-up was open. The supermarket collection took place on 13 and 14 November; volunteering for the next edition will open on the same website. Each shift has a limited number of places: if one is full, you can choose another.` },
       { question: "What is the Gran Recapte Bizum code?", answer: `Code ${bizum}, in the donations section of your banking app ("Hacer una donación" or "Aportar a causas sociales"), with your postcode in the concept field.` },
       { question: "Can I give food at Mercadona?", answer: `No. According to the organisers, in ${moneyOnly} you can only give money at the till, on ${days}.` },
       { question: "Are donations to the Gran Recapte tax-deductible?", answer: "Yes, for Spanish income tax payers. According to the Gran Recapte website, individuals can deduct 80% of the first €250 and 40% of the rest (45% for regular donors), up to 10% of the taxable base." },
