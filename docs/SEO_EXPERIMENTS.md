@@ -6599,3 +6599,42 @@ calculator, `whatsapp_channel_click` by `link_context`, share of `internal_searc
 Console's Core Web Vitals report (28-day window) from ~15 Dec.
 
 **Outcome:** _pending_
+
+## 2026-11-17 — Lottery prize tax calculator, "cuánto se queda Hacienda del Gordo" (new tool, Spain-wide, es/ca/en; ships with the deploy) + gordo hub body links (review 2026-12-29)
+
+**URLs.** `/es/calculadoras/premios-loteria/` (primary), `/ca/calculadores/premis-loteria/`,
+`/en/calculators/spain-lottery-prize-tax/`. Calculators family (`CALCULATORS` id `lottery-tax`), new hub group
+"Lotería y premios", sitemap and llms.txt entries. One page per language, no variants.
+
+**What.** The special levy of Ley 35/2006, DA 33ª (BOE consolidated text of 11/11/2026, read 17 Nov): 40,000 € exempt
+per décimo, 20 % of the rest withheld when paid, shared décimos and participaciones split the exempt part by share
+(33ª.2), the 0.50 € stake rule, not in the IRPF base (33ª.8). Presets: Christmas 2026 (SELAE programme read
+31 Oct; SELAE answers 403 since 13 Nov), El Niño 2027 first prize only, La Grossa de Cap d'Any 2026 (DOGC 9640, read
+17 Nov). Server-rendered answer: lead with the Gordo figures (72,000 € withheld, 328,000 € net, 82,000 € for a 5 €
+share), a table of every preset, worked examples (incl. the AEAT's 100,000 € example), FAQ (7, FAQPage JSON-LD),
+non-residents (modelo 210), modelos 136/230, YMYL disclaimer with the AEAT link. `RULES_UNTIL` 2027-01-01 test guard.
+
+**Titles (new pages, no baseline).** es "Calculadora de premios de lotería: cuánto se queda Hacienda"; ca "Calculadora
+de premis de loteria: quant se'n queda Hisenda"; en "Spanish lottery prize tax calculator: El Gordo after tax".
+Descriptions lead with the Gordo figures.
+
+**Gordo hub (body only, no title or description change).** `/es/donde-ha-tocado-el-gordo/`,
+`/ca/on-ha-tocat-la-loteria-de-nadal/`, `/en/spanish-christmas-lottery-results/`: the tax paragraph now gives the net
+per Gordo décimo and links the calculator; the FAQ answer "¿Cuánto paga el Gordo?" adds the net figure; the
+province and municipality pages (from the 22 Dec snapshot) link the calculator instead of the guide for tax.
+The hub's own window ("measure from 23 Dec") is untouched: titles unchanged. The lottery guide
+(`loteria-nadal`) is NOT touched: its tax-section body change of 13 Nov is measured on 1 Dec.
+
+**Baseline (GSC, 14 days to 17 Nov).** Gordo hubs: 27 impressions, 3 clicks (pos 3–21). Lottery pages: no
+tax queries yet ("quant val un decim de loteria de nadal" 18 imp, pos 2.7, is the closest). Demand is seasonal: the
+queries ("cuánto se queda Hacienda del Gordo", "cuánto cobra un décimo del Gordo", "calculadora premios lotería")
+peak 22–23 Dec.
+
+**Hypothesis.** A dated, official-source calculator page indexed before mid-December ranks top 10 for the Hacienda
+queries on draw day; the hub link carries draw-day visitors to it.
+
+**Review.** 2026-12-29 (`snapshot.py page premios-loteria 7`, `page premis-loteria 7`,
+`page spain-lottery-prize-tax 7`; queries containing hacienda/hisenda/tax). Before then, 1 Dec: indexed? (URL
+inspection.)
+
+**Outcome:** _pending_

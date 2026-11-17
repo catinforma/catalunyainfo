@@ -43,6 +43,7 @@ import { EURIBOR_SNAPSHOT } from "@/lib/programmatic/euribor/data";
 import { mortgageSitemapEntries } from "@/lib/programmatic/mortgage/page";
 import { itvSitemapEntries } from "@/lib/programmatic/itv/page";
 import { htSitemapEntries } from "@/lib/programmatic/home-purchase-tax/page";
+import { lotteryTaxSitemapEntries } from "@/lib/programmatic/lottery-tax/page";
 
 /**
  * Cached for an hour (ISR) and refreshed at once by every publish, and by the
@@ -219,6 +220,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...itvSitemapEntries(),
     // Taxes on buying a home: ITP or IVA + AJD by community (calculators family, group "housing"), in es, ca and en.
     ...htSitemapEntries(),
+    // Lottery prize tax (Ley 35/2006 DA 33ª; calculators family, group "lottery"), in es, ca and en.
+    ...lotteryTaxSitemapEntries(),
     ...fuelSitemapEntries(),
     ...rodaliesSitemap(),
     ...reservoirSitemapEntries(),

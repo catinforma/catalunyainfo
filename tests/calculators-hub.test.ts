@@ -54,6 +54,7 @@ test("registry: the live URLs did not move (13 Nov 2026)", () => {
   assert.deepEqual(calcEditions("ipc"), { ca: "/ca/calculadores/ipc/", es: "/es/calculadoras/ipc/", en: "/en/calculators/spain-inflation-cpi/" });
   assert.deepEqual(calcEditions("treasury-bills"), { ca: "/ca/calculadores/lletres-del-tresor/", es: "/es/calculadoras/letras-del-tesoro/", en: "/en/calculators/spain-treasury-bills/" });
   assert.deepEqual(calcEditions("itv"), { ca: "/ca/calculadores/itv/", es: "/es/calculadoras/itv/", en: "/en/calculators/itv-spain/" });
+  assert.deepEqual(calcEditions("lottery-tax"), { ca: "/ca/calculadores/premis-loteria/", es: "/es/calculadoras/premios-loteria/", en: "/en/calculators/spain-lottery-prize-tax/" });
   assert.deepEqual(calcEditions("home-purchase-tax"), { ca: "/ca/calculadores/impostos-compra-habitatge/", es: "/es/calculadoras/impuestos-compra-vivienda/", en: "/en/calculators/spain-home-purchase-taxes/" });
   assert.deepEqual(calcEditions("euribor"), { ca: "/ca/calculadores/euribor-avui/", es: "/es/calculadoras/euribor-hoy/", en: "/en/calculators/euribor-today/" });
   assert.deepEqual(calcEditions("mortgage"), { ca: "/ca/calculadores/hipoteca/", es: "/es/calculadoras/hipoteca/", en: "/en/calculators/mortgage-calculator-spain/" });
@@ -71,8 +72,10 @@ test("hub: lists every calculator of the registry exactly once, linking its own 
   assert.equal(new Set(keys).size, keys.length, "a card appears twice");
 });
 
-test("hub: the six groups, each card complete in ca, es and en, linking indexable pages", () => {
-  assert.deepEqual(HUB_GROUPS.map((g) => g.id), ["work", "housing", "official", "vehicle", "holidays", "live"]);
+test("hub: the seven groups, each card complete in ca, es and en, linking indexable pages", () => {
+  assert.deepEqual(HUB_GROUPS.map((g) => g.id), ["work", "housing", "official", "lottery", "vehicle", "holidays", "live"]);
+  // The lottery group: the prize tax calculator (lib/programmatic/lottery-tax).
+  assert.deepEqual(HUB_GROUPS.find((g) => g.id === "lottery")?.cards.map((c) => c.key), ["lottery-tax"]);
   // The vehicles group: the ITV calculator (lib/programmatic/itv).
   assert.deepEqual(HUB_GROUPS.find((g) => g.id === "vehicle")?.cards.map((c) => c.key), ["itv"]);
   // The official-figures group: the SMI, the CPI and the Letras del Tesoro reference pages.

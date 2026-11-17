@@ -31,7 +31,10 @@
  *    SMS; the "Apuestas" listing prevails).
  *  - BOE, Ley 35/2006 (IRPF), disposición adicional 33ª: exempt up to 40,000 €
  *    per décimo, 20% on the rest, withheld at payment (the lottery guide
- *    explains it; this page links there).
+ *    explains it; this page links there). Since 17 Nov 2026 the hub's tax
+ *    paragraph and FAQ also give the net per Gordo décimo and link the lottery
+ *    prize tax calculator (lib/programmatic/lottery-tax, same engine), and the
+ *    province and municipality pages link the calculator for tax.
  *
  * Checked and not used: a BOE resolution with the 2026 programme does not
  * exist (a BOE title search for "programa de premios 22 de diciembre" returns
@@ -51,6 +54,9 @@ import { eur } from "@/lib/content/batch02/grossa";
 import { DRAW_TIME_2026, NADAL_DRAW_DATE, NADAL_URLS } from "@/lib/content/batch02/loteria-nadal";
 import { b2href, callout, faq, keyFacts, lead, list, paras, table, verifiedLine, type B2Source } from "@/lib/content/batch02/shared";
 import type { Locale } from "@/lib/i18n/config";
+import { calcPath } from "@/lib/programmatic/calculators/paths";
+import { calculateOk } from "@/lib/programmatic/lottery-tax/engine";
+import { presetInput } from "@/lib/programmatic/lottery-tax/page";
 
 import { hasResults, prizesIn, provinceGroups, readDay, readTime, webSales, type GordoMunicipalityGroup, type GordoProvinceGroup, type GordoSale } from "./data";
 import { gordoHubPath, gordoMunicipalityPath, gordoProvincePath } from "./paths";
@@ -213,6 +219,10 @@ function ctx(locale: Locale): Ctx {
 }
 
 const guide = (locale: Locale, label: string) => link(b2href("loteriaNadal", locale), label);
+/** The lottery prize tax calculator (calculators family), linked wherever these pages mention tax. */
+const taxCalc = (locale: Locale, label: string) => link(calcPath("lottery-tax", locale), label);
+/** What one whole El Gordo décimo leaves after the levy, from the calculator's engine. */
+const gordoNet = (locale: Locale) => eur(calculateOk(presetInput("gordo")).total.net, locale);
 const grossa = (locale: Locale, label: string) => link(b2href("grossa", locale), label);
 
 function timeLine(c: Ctx): string {
@@ -254,7 +264,7 @@ function evergreen(c: Ctx): Block[] {
         `**2.000 € o més**: només a BBVA o CaixaBank, amb el document d'identitat original, sense haver de ser-ne client i sense comissió (${link(U.collect, "SELAE")}).`,
         `**Termini**: tres mesos, comptats des de l'endemà del sorteig (${link(U.dossier2025, "SELAE")}).`,
       ),
-      ...paras(`**Impostos.** Cada dècim està exempt fins a 40.000 € i Hisenda reté el 20% de la resta en pagar-lo (${link(U.irpf, "llei de l'IRPF")}). Els càlculs per a cada premi i els dècims compartits són a ${guide("ca", "la guia de la loteria de Nadal")}.`),
+      ...paras(`**Impostos.** Cada dècim està exempt fins a 40.000 € i Hisenda reté el 20% de la resta en pagar-lo (${link(U.irpf, "llei de l'IRPF")}): d'un dècim del Gordo en cobres ${gordoNet("ca")}. Quant et queda de cada premi, d'una participació o de diversos dècims: ${taxCalc("ca", "calculadora de premis de loteria")}. Més detalls a ${guide("ca", "la guia de la loteria de Nadal")}.`),
       h("Com es fa el sorteig"),
       ...paras(
         `Amb dos bombos: un amb les 100.000 boles dels números i un altre amb les dels premis. Un nen o una nena de la Residència de San Ildefonso treu una bola de cada bombo alhora i dos més les canten (${link(U.dossier2025, "SELAE")}). ${timeLine(c)}`,
@@ -284,7 +294,7 @@ function evergreen(c: Ctx): Block[] {
         `**2.000 € o más**: solo en BBVA o CaixaBank, con el documento de identidad original, sin ser cliente y sin comisión (${link(U.collect, "SELAE")}).`,
         `**Plazo**: tres meses, contados desde el día siguiente al sorteo (${link(U.dossier2025, "SELAE")}).`,
       ),
-      ...paras(`**Impuestos.** Cada décimo está exento hasta 40.000 € y Hacienda retiene el 20% del resto al pagarlo (${link(U.irpf, "ley del IRPF")}). Los cálculos para cada premio y los décimos compartidos están en ${guide("es", "la guía de la Lotería de Navidad")}.`),
+      ...paras(`**Impuestos.** Cada décimo está exento hasta 40.000 € y Hacienda retiene el 20% del resto al pagarlo (${link(U.irpf, "ley del IRPF")}): de un décimo del Gordo cobras ${gordoNet("es")}. Cuánto te queda de cada premio, de una participación o de varios décimos: ${taxCalc("es", "calculadora de premios de lotería")}. Más detalles en ${guide("es", "la guía de la Lotería de Navidad")}.`),
       h("Cómo es el sorteo"),
       ...paras(
         `Con dos bombos: uno con las 100.000 bolas de los números y otro con las de los premios. Un niño o una niña de la Residencia de San Ildefonso saca una bola de cada bombo a la vez y otros dos las cantan (${link(U.dossier2025, "SELAE")}). ${timeLine(c)}`,
@@ -313,7 +323,7 @@ function evergreen(c: Ctx): Block[] {
       `**€2,000 or more**: only at BBVA or CaixaBank, with your original ID, without being a customer and with no fee (${link(U.collect, "SELAE")}).`,
       `**Deadline**: three months, counted from the day after the draw (${link(U.dossier2025, "SELAE")}).`,
     ),
-    ...paras(`**Tax.** Each décimo is tax-free up to €40,000 and 20% of the rest is withheld when it is paid (${link(U.irpf, "Spanish income tax law")}). Worked examples per prize and for shared décimos are in ${guide("en", "our Spanish Christmas Lottery guide")}.`),
+    ...paras(`**Tax.** Each décimo is tax-free up to €40,000 and 20% of the rest is withheld when it is paid (${link(U.irpf, "Spanish income tax law")}): an El Gordo décimo leaves you ${gordoNet("en")}. What you keep from each prize, a share or several décimos: ${taxCalc("en", "lottery prize tax calculator")}. More in ${guide("en", "our Spanish Christmas Lottery guide")}.`),
     h("How the draw works"),
     ...paras(
       `Two drums: one with the 100,000 number balls and one with the prize balls. A child from the San Ildefonso residence in Madrid draws a ball from each drum at the same time and two others sing them out (${link(U.dossier2025, "SELAE")}). ${timeLine(c)}`,
@@ -526,7 +536,7 @@ export function hubFaq(locale: Locale, s: GordoSnapshot | null, c: Ctx = ctx(loc
     return [
       { question: "Quan és el sorteig de la loteria de Nadal 2026?", answer: `El ${c.day}, al Teatro Real de Madrid. ${strip(timeLine(c))}` },
       { question: "On es mira on ha tocat el Gordo?", answer: first ? `El Gordo del 2026 és el ${first}; on s'ha venut és a la taula d'aquesta pàgina, amb les pàgines de punts de venda de SELAE.` : "SELAE publica una pàgina per premi amb les administracions que l'han venut; aquesta pàgina les recull per províncies i municipis el dia del sorteig." },
-      { question: "Quant paga el Gordo?", answer: "400.000 € per dècim de 20 € (4 milions per bitllet). Cada dècim està exempt fins a 40.000 € i Hisenda reté el 20% de la resta." },
+      { question: "Quant paga el Gordo?", answer: `400.000 € per dècim de 20 € (4 milions per bitllet). Cada dècim està exempt fins a 40.000 € i Hisenda reté el 20% de la resta: en cobres ${gordoNet("ca")} per dècim.` },
       { question: "Quina llista val per cobrar?", answer: "Només la Llista Oficial de Premis de SELAE, que el 2025 es va repartir la tarda del 22 de desembre." },
     ];
   }
@@ -534,14 +544,14 @@ export function hubFaq(locale: Locale, s: GordoSnapshot | null, c: Ctx = ctx(loc
     return [
       { question: "¿Cuándo es el sorteo de la Lotería de Navidad 2026?", answer: `El ${c.day}, en el Teatro Real de Madrid. ${strip(timeLine(c))}` },
       { question: "¿Dónde se mira dónde ha tocado el Gordo?", answer: first ? `El Gordo de 2026 es el ${first}; dónde se ha vendido está en la tabla de esta página, con las páginas de puntos de venta de SELAE.` : "SELAE publica una página por premio con las administraciones que lo vendieron; esta página las recoge por provincias y municipios el día del sorteo." },
-      { question: "¿Cuánto paga el Gordo?", answer: "400.000 € por décimo de 20 € (4 millones por billete). Cada décimo está exento hasta 40.000 € y Hacienda retiene el 20% del resto." },
+      { question: "¿Cuánto paga el Gordo?", answer: `400.000 € por décimo de 20 € (4 millones por billete). Cada décimo está exento hasta 40.000 € y Hacienda retiene el 20% del resto: cobras ${gordoNet("es")} por décimo.` },
       { question: "¿Qué lista vale para cobrar?", answer: "Solo la Lista Oficial de Premios de SELAE, que en 2025 se repartió la tarde del 22 de diciembre." },
     ];
   }
   return [
     { question: "When is the 2026 Spanish Christmas Lottery draw?", answer: `On ${c.day}, at the Teatro Real in Madrid. ${strip(timeLine(c))}` },
     { question: "Where can I see where El Gordo was sold?", answer: first ? `El Gordo 2026 is ${first}; where it was sold is in the table on this page, from SELAE's points-of-sale pages.` : "SELAE publishes one page per prize listing the shops that sold it; on the day this page gathers them by province and town." },
-    { question: "How much does El Gordo pay?", answer: "€400,000 per €20 décimo (€4 million per full ticket). Each décimo is tax-free up to €40,000 and 20% of the rest is withheld." },
+    { question: "How much does El Gordo pay?", answer: `€400,000 per €20 décimo (€4 million per full ticket). Each décimo is tax-free up to €40,000 and 20% of the rest is withheld: you keep ${gordoNet("en")} per décimo.` },
     { question: "Which list is valid for payment?", answer: "Only SELAE's Lista Oficial de Premios, handed out on the afternoon of 22 December in 2025." },
   ];
 }
@@ -620,9 +630,9 @@ export function provinceBlocks(locale: Locale, s: GordoSnapshot, g: GordoProvinc
   blocks.push(
     ...paras(
       {
-        ca: `Els quarts i els cinquens premis tenen una sola llista per categoria: SELAE no diu quin dels números va vendre cada punt.${unmatched ? " Quan SELAE escriu una localitat que no és el nom d'un municipi (un nucli, una urbanització), la deixem tal com l'escriu." : ""} On i com es cobra, a ${link(gordoHubPath("ca") + "#cobrar", "com es cobra")}; els impostos, a ${guide("ca", "la guia de la loteria de Nadal")}.`,
-        es: `Los cuartos y los quintos premios tienen una sola lista por categoría: SELAE no dice cuál de los números vendió cada punto.${unmatched ? " Cuando SELAE escribe una localidad que no es el nombre de un municipio (un núcleo, una urbanización), la dejamos tal como la escribe." : ""} Dónde y cómo se cobra, en ${link(gordoHubPath("es") + "#cobrar", "cómo se cobra")}; los impuestos, en ${guide("es", "la guía de la Lotería de Navidad")}.`,
-        en: `The fourth and fifth prizes have one list per category: SELAE does not say which number each shop sold.${unmatched ? " Where SELAE prints a locality that is not a municipality's name (a village or estate), it is shown as SELAE writes it." : ""} Where and how to collect: ${link(gordoHubPath("en") + "#collect", "collecting a prize")}; tax: ${guide("en", "our Spanish Christmas Lottery guide")}.`,
+        ca: `Els quarts i els cinquens premis tenen una sola llista per categoria: SELAE no diu quin dels números va vendre cada punt.${unmatched ? " Quan SELAE escriu una localitat que no és el nom d'un municipi (un nucli, una urbanització), la deixem tal com l'escriu." : ""} On i com es cobra, a ${link(gordoHubPath("ca") + "#cobrar", "com es cobra")}; els quant et queda després d'impostos, a la ${taxCalc("ca", "calculadora de premis de loteria")}.`,
+        es: `Los cuartos y los quintos premios tienen una sola lista por categoría: SELAE no dice cuál de los números vendió cada punto.${unmatched ? " Cuando SELAE escribe una localidad que no es el nombre de un municipio (un núcleo, una urbanización), la dejamos tal como la escribe." : ""} Dónde y cómo se cobra, en ${link(gordoHubPath("es") + "#cobrar", "cómo se cobra")}; los cuánto te queda después de impuestos, en la ${taxCalc("es", "calculadora de premios de lotería")}.`,
+        en: `The fourth and fifth prizes have one list per category: SELAE does not say which number each shop sold.${unmatched ? " Where SELAE prints a locality that is not a municipality's name (a village or estate), it is shown as SELAE writes it." : ""} Where and how to collect: ${link(gordoHubPath("en") + "#collect", "collecting a prize")}; what you keep after tax: ${taxCalc("en", "lottery prize tax calculator")}.`,
       }[locale],
     ),
   );
@@ -675,9 +685,9 @@ export function municipalityBlocks(locale: Locale, s: GordoSnapshot, m: GordoMun
     ),
     ...paras(
       {
-        ca: `Comprova el teu dècim al ${link(U.lnac, "comprovador de SELAE")}. Els altres municipis de la província: ${provincePage}. Tots els números: ${link(gordoHubPath("ca"), "on ha tocat la loteria de Nadal")}. Menys de 2.000 € per dècim es cobren a qualsevol punt de venda, i 2.000 € o més, a BBVA o CaixaBank (${link(U.collect, "SELAE")}); els impostos, a ${guide("ca", "la guia de la loteria de Nadal")}.`,
-        es: `Comprueba tu décimo en el ${link(U.lnac, "comprobador de SELAE")}. Los demás municipios de la provincia: ${provincePage}. Todos los números: ${link(gordoHubPath("es"), "dónde ha tocado el Gordo")}. Menos de 2.000 € por décimo se cobran en cualquier punto de venta, y 2.000 € o más, en BBVA o CaixaBank (${link(U.collect, "SELAE")}); los impuestos, en ${guide("es", "la guía de la Lotería de Navidad")}.`,
-        en: `Check your décimo on ${link(U.lnac, "SELAE's checker")}. Other towns in the province: ${provincePage}. All numbers: ${link(gordoHubPath("en"), "the results page")}. Under €2,000 per décimo is paid at any lottery shop, €2,000 or more at BBVA or CaixaBank (${link(U.collect, "SELAE")}); tax is in ${guide("en", "our Spanish Christmas Lottery guide")}.`,
+        ca: `Comprova el teu dècim al ${link(U.lnac, "comprovador de SELAE")}. Els altres municipis de la província: ${provincePage}. Tots els números: ${link(gordoHubPath("ca"), "on ha tocat la loteria de Nadal")}. Menys de 2.000 € per dècim es cobren a qualsevol punt de venda, i 2.000 € o més, a BBVA o CaixaBank (${link(U.collect, "SELAE")}); els quant et queda després d'impostos, a la ${taxCalc("ca", "calculadora de premis de loteria")}.`,
+        es: `Comprueba tu décimo en el ${link(U.lnac, "comprobador de SELAE")}. Los demás municipios de la provincia: ${provincePage}. Todos los números: ${link(gordoHubPath("es"), "dónde ha tocado el Gordo")}. Menos de 2.000 € por décimo se cobran en cualquier punto de venta, y 2.000 € o más, en BBVA o CaixaBank (${link(U.collect, "SELAE")}); los cuánto te queda después de impuestos, en la ${taxCalc("es", "calculadora de premios de lotería")}.`,
+        en: `Check your décimo on ${link(U.lnac, "SELAE's checker")}. Other towns in the province: ${provincePage}. All numbers: ${link(gordoHubPath("en"), "the results page")}. Under €2,000 per décimo is paid at any lottery shop, €2,000 or more at BBVA or CaixaBank (${link(U.collect, "SELAE")}); what you keep after tax is in the ${taxCalc("en", "lottery prize tax calculator")}.`,
       }[locale],
     ),
   ];

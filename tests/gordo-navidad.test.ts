@@ -7,6 +7,7 @@ import { test } from "node:test";
 
 import { bodyToPlainText, bodySchema, type Block } from "../src/lib/content/blocks.ts";
 import { B2_PATHS } from "../src/lib/content/batch02/shared.ts";
+import { calcEditions } from "../src/lib/programmatic/calculators/paths.ts";
 import { LOCALES, type Locale } from "../src/lib/i18n/config.ts";
 import {
   GORDO_AS_OF,
@@ -54,6 +55,8 @@ const OFFICIAL = ["www.loteriasyapuestas.es", "www.selae.es", "www.boe.es", "www
 const KNOWN_INTERNAL = new Set([
   ...Object.values(B2_PATHS).flatMap((paths) => LOCALES.map((locale) => `/${locale}/${paths[locale]}/`)),
   ...gordoPaths(S).map((entry) => entry.path),
+  // The lottery prize tax calculator, linked wherever these pages mention tax.
+  ...Object.values(calcEditions("lottery-tax")),
 ]);
 
 function checkLinks(blocks: Block[], locale: Locale, sources: string[]) {
