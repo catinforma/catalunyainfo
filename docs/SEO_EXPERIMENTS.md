@@ -6535,3 +6535,67 @@ than 3 clicks; URL inspection finds every calculator indexed; the fairs town pag
 **Review 15 Dec** (`npm run site:audit`, `crawl-gap.py out.json urls.txt` on the 50-URL sample, `snapshot.py families 28`).
 
 **Outcome:** _pending_
+
+## 2026-11-17 — Measurement events, accessibility audit (axe + keyboard) and lab CWV on 15 templates (deploy only; no publish group)
+
+**Analytics.** Tracking plan and owner steps in `docs/ANALYTICS.md` ("Tracking plan"). New events through `track()` (consent
+first): `calculator_use` (first result change by the visitor, once per tab session per tool; 21 tools), `whatsapp_channel_click`
+(`link_context` article_box/daily_box/footer), `internal_search` (term length + results count; the term already reaches GA4 via
+enhanced measurement's `view_search_results`), `outbound_official_source_click` (host only; source lists + official domains),
+`ics_subscribe_click` (`method` apple/google/download). `share` (= share_click) and `useful_feedback` (= page_feedback) were live
+already and keep their names. The AI-referral channel is a GA4 admin setting: GA4's default group already has "AI Assistant"
+(chatgpt.com 624 sessions in 28 days); the custom-group steps for the leftovers and for `utm_source=share` are in ANALYTICS.md.
+**Owner, before deploy:** register the event-scoped custom dimension `calculator_id`.
+
+**Accessibility.** axe-core 4.11 (Playwright Chromium 130 on the VPS, production, consent decided) on 15 templates × phone
+(Pixel 7) and desktop (1366 px) × light and dark = 60 runs: **0 violations**. 18 more templates on the phone, light + dark:
+3 rules. Plus a 320 px reflow check, the consent card and the open phone menu (0 violations, nothing changed there), and a
+keyboard walk of the 21 calculator pages (focus order, visible focus, sticky header, results driven by keyboard).
+
+| Severity | Issue | Where | Fix |
+| --- | --- | --- | --- |
+| Critical | Two code boxes with no label (axe `label`) | 2027 widget page (`EmbedBuilder.tsx`) | named by their headings (`aria-labelledby`) |
+| Serious | Below 378 px the wordmark ran over "CA"; at 320 px the menu button sat 14 px off-screen and every page scrolled sideways (WCAG 1.4.10) — screen widths 320–377 px are about a quarter of mobile users in GA4 | header, every page | wordmark scales with the viewport and gives way (`globals.css`), language links and menu never shrink; mark only below 342 px |
+| Serious | Two stacked source links 18 px tall with no gap (axe `target-size`, 2.5.8) | ITV fee table | 8 px between them |
+| Moderate | Ticket selector: results change silently (4.1.3), title h3 before any h2 (axe `heading-order`) | transport cards guide | `role="status"` line with the cheapest ticket; h2 |
+| Moderate | "Thanks" after "Was this useful?" lands in a live region created with it, so it is usually not announced | every article | status paragraph mounted from the start |
+
+Not changed: Chrome's own date-picker button has no site focus ring (browser UI); axe "incomplete" contrast items are the
+aria-hidden alert arrows and the PVPC chart labels (computed ≥ 4.5:1). Guards: `tests/a11y-fixes.test.ts`.
+
+**Performance (lab only; no field data from the server).** Two methods on the VPS against production, 17 Nov 13:50–14:30:
+(a) Lighthouse 12.8.2 mobile, 15 templates × 6 runs, CPU multiplier 2 instead of 4 because the VPS benchmark index was 250–1,190
+(other agents building; Lighthouse's own warning). Its simulated LCP is 2.9–4.2 s everywhere, but the **observed** LCP equals FCP
+in 74 of 78 runs on 13 templates, and in 0 of 12 on the town and election pages, where the card paints after hydration: Lantern counts every
+font and JS request that starts before the paint, so read (b) instead. (b) Playwright with DevTools throttling, the 13 Nov setup (412×823 @1.75, 1.6 Mbps / 150 ms, CPU ×2,
+cache off), 3 runs per state, first visit (card up) and decided (necessary-only cookie) interleaved:
+
+| Template | LCP first visit (median, range) | LCP decided | LCP element (first visit) | 13 Nov, first visit |
+| --- | --- | --- | --- | --- |
+| Town holidays `/ca/festius/sabadell/` | 3.84 s (3.57–5.15) | 2.40 s (2.02–2.63) | **consent card text** | 3.5–4.5 s (Barcelona, es) |
+| Election town `/ca/eleccions/sabadell/` | 3.70 s (2.71–3.77) | 1.90 s (1.72–2.05) | **consent card text** | 3.6–4.5 s (es) |
+| Spain 2027 city `/es/festivos/2027/madrid/madrid/` | 2.21 s (2.06–2.37) | 1.96 s | lead paragraph | 2.6–3.7 s, CLS 0.062 → now 0 |
+| Home `/es/` | 2.24 s (1.95–2.53) | 1.92 s | lead paragraph | 1.9–3.0 s (/ca/) |
+| Net salary calculator | 2.57 s (1.80–3.92) | 2.08 s | lead paragraph | — |
+| Work calendar guide | 2.64 s (2.52–3.24) | 2.44 s | lead paragraph | — |
+
+CLS 0–0.003 on all 15 templates (Lighthouse) and 0 in (b) except one first-visit run on the town page (0.028). TTFB 70–180 ms
+(Cloudflare). Page weight 360–475 KB, home 640–670 KB. JS: ~165–180 KB transfer on every page; each calculator adds only its own
+9–16 KB chunk (all three languages' copy included; splitting it would save ~5 KB, not worth it). The legacy-polyfill chunk is
+`noModule`. Long tasks are React/Next hydration (react-dom and router chunks), not site code: TBT after FCP 130–460 ms decided,
+up to ~1.2 s on a first visit, noisy on this host.
+
+**Change:** home and section hubs ask phones for thumbnail-sized card images (`EntryCard` `phoneThumb`, `sizes` …10rem instead of
+92vw). Home, four hub thumbnails (104 px squares): 117 KB → 37 KB at DPR 1.75 and 265 KB → 73 KB at DPR 3 (Playwright,
+production images, HTML rewritten). No LCP change expected (the thumbnails are below the fold and lazy); fewer bytes on a phone.
+Test `tests/hub-thumbnails.test.ts`.
+
+**Owner decision (numbers only, nothing changed):** on town-holiday and election-town pages the consent card's paragraph is the
+LCP element on a first visit, +1.4 s (town) and +1.8 s (election) over the same page with the card answered. Elsewhere the page's
+own lead is larger, and the card costs ~0.2–0.5 s.
+
+**Review.** After the deploy: DebugView checklist in ANALYTICS.md; 24 Nov: `calculator_use` per tool vs page views of each
+calculator, `whatsapp_channel_click` by `link_context`, share of `internal_search` with `results_count` 0. Field CWV: Search
+Console's Core Web Vitals report (28-day window) from ~15 Dec.
+
+**Outcome:** _pending_

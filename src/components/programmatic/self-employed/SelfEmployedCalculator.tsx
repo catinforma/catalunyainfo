@@ -4,6 +4,7 @@ import { useEffect, useId, useState } from "react";
 
 import { CALC_COPY, bandName, money, parseAmount, percent, rangeText, readHash, writeHash, type SeLocale } from "@/lib/programmatic/self-employed/copy";
 import { calculateSelfEmployed, type FlatRate, type Period, type SelfEmployedInput } from "@/lib/programmatic/self-employed/engine";
+import { useCalculatorUse } from "@/lib/analytics/use-calculator-use";
 
 /**
  * The self-employed contributions calculator. Server-rendered with the
@@ -46,8 +47,11 @@ export function SelfEmployedCalculator({ locale, initial }: { locale: SeLocale; 
   const r = calculateSelfEmployed(input);
   const mo = (v: number) => money(v, locale);
 
+  // First result change by the visitor, once per session (lib/analytics/calculator-use.ts).
+  const calcUse = useCalculatorUse("self-employed", locale, r);
+
   return (
-    <section className="ci-calc" aria-labelledby={`${id}-title`}>
+    <section className="ci-calc" {...calcUse} aria-labelledby={`${id}-title`}>
       <h2 id={`${id}-title`} className="ci-calc-title">
         {t.title}
       </h2>

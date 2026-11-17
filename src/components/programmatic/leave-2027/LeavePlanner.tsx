@@ -6,6 +6,7 @@ import { useEffect, useId, useMemo, useState } from "react";
 import { CATALONIA_ID, PLANNER_COPY, dayText, listDays, rangeText, ratioText, shortDay, type LeaveLocale } from "@/lib/programmatic/leave-2027/copy";
 import { MAX_LEAVE, leaveAdvice } from "@/lib/programmatic/leave-2027/optimizer";
 import type { PlannerData, PlannerItem } from "@/lib/programmatic/leave-2027/places";
+import { useCalculatorUse } from "@/lib/analytics/use-calculator-use";
 
 /**
  * The 2027 leave planner: place, days of leave, two options, and the plan.
@@ -103,8 +104,11 @@ export function LeavePlanner({ locale, data, initialPlace, initialLeave }: { loc
   const placeLabel = whole ? (groupOf.get(item[0]) ?? label) : label;
   const longestDiffers = longest && !plan.breaks.some((b) => b.from === longest.from && b.to === longest.to);
 
+  // First result change by the visitor, once per session (lib/analytics/calculator-use.ts).
+  const calcUse = useCalculatorUse("leave-planner-2027", locale, plan);
+
   return (
-    <section className="ci-calc" aria-labelledby={`${id}-title`}>
+    <section className="ci-calc" {...calcUse} aria-labelledby={`${id}-title`}>
       <h2 id={`${id}-title`} className="ci-calc-title">
         {t.title}
       </h2>

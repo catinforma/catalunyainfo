@@ -1520,6 +1520,34 @@
   .ci-wordmark-name span {
     color: var(--color-brand-red-text);
   }
+  /* Narrow phones. The full lock-up needs 390 px beside the language links
+     and the menu button; below that the name ran over "CA" (360 px phones are
+     about a quarter of mobile visitors, GA4 28 days to 16 Nov 2026) and at
+     320 px the menu button was pushed off-screen (WCAG 1.4.10 reflow). The
+     name now scales with the viewport and, if a fallback font is wider, is
+     clipped rather than drawn over its neighbours. */
+  @media (max-width: 24.374rem) {
+    .ci-wordmark {
+      min-width: 0;
+      gap: 0.4rem;
+      font-size: clamp(1rem, 14.9vw - 2.2rem, var(--text-xl));
+    }
+    .ci-wordmark-name {
+      min-width: 0;
+      overflow: hidden;
+    }
+  }
+  /* Below 342 px the mark alone; the name stays for screen readers. */
+  @media (max-width: 21.374rem) {
+    .ci-wordmark-name {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+    }
+  }
 
   .ci-nav-link {
     color: var(--color-ink-soft);

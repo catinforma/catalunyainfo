@@ -4,6 +4,7 @@ import { useId, useState } from "react";
 
 import { REVISION_COPY, centsText, num, optionMonth, rateText, signedCents, type EuriborOption, type MortgageLocale } from "@/lib/programmatic/mortgage/copy";
 import { computeRevision, parseAmount, parsePct, parseWhole } from "@/lib/programmatic/mortgage/engine";
+import { useCalculatorUse } from "@/lib/analytics/use-calculator-use";
 
 /**
  * "Revisión de tu hipoteca": capital outstanding, time left and spread, the
@@ -23,7 +24,18 @@ export interface RevisionDefaults {
   spreadPct: number;
 }
 
-export function RevisionCalculator({ locale, options, defaults }: { locale: MortgageLocale; options: EuriborOption[]; defaults: RevisionDefaults }) {
+export function RevisionCalculator({
+  locale,
+  options,
+  defaults,
+  calculatorId,
+}: {
+  locale: MortgageLocale;
+  options: EuriborOption[];
+  defaults: RevisionDefaults;
+  /** Which page it sits on, for `calculator_use`: the Euríbor page's tool, or the second tool of the mortgage page. */
+  calculatorId: "euribor" | "mortgage-revision";
+}) {
   const t = REVISION_COPY[locale];
   const id = useId();
   const latest = options[0] ?? null;
@@ -68,8 +80,11 @@ export function RevisionCalculator({ locale, options, defaults }: { locale: Mort
     </p>
   );
 
+  // First result change by the visitor, once per session (lib/analytics/calculator-use.ts).
+  const calcUse = useCalculatorUse(calculatorId, locale, result);
+
   return (
-    <section className="ci-calc" aria-labelledby={`${id}-title`}>
+    <section className="ci-calc" {...calcUse} aria-labelledby={`${id}-title`}>
       <h2 id={`${id}-title`} className="ci-calc-title">
         {t.title}
       </h2>

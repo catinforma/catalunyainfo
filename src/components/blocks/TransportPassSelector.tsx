@@ -5,6 +5,7 @@ import { useMemo, useState } from "react";
 import { TICKETS, cheapest, compareTickets } from "@/lib/content/transport-cards/rates";
 import type { Messages } from "@/lib/i18n";
 import type { Locale } from "@/lib/i18n/config";
+import { useCalculatorUse } from "@/lib/analytics/use-calculator-use";
 
 /**
  * Which Barcelona transport ticket fits a given trip.
@@ -62,9 +63,13 @@ export function TransportPassSelector({ locale, copy }: { locale: Locale; copy: 
 
   const id = "tp";
 
+  // First result change by the visitor, once per session (lib/analytics/calculator-use.ts).
+  const calcUse = useCalculatorUse("transport-pass", locale, priced);
+
   return (
-    <section className="ci-calc" aria-label={t.title}>
-      <h3 className="ci-calc-title">{t.title}</h3>
+    <section className="ci-calc" {...calcUse} aria-label={t.title}>
+      {/* h2: on the transport-cards guide the tool comes before the first h2 (axe heading-order). */}
+      <h2 className="ci-calc-title">{t.title}</h2>
       <p className="ci-calc-intro">{t.intro}</p>
 
       <div className="ci-calc-inputs">
@@ -167,6 +172,12 @@ export function TransportPassSelector({ locale, copy }: { locale: Locale; copy: 
           })}
         </tbody>
       </table>
+      {/* The table updates silently as the inputs change; this line tells a
+          screen reader what changed (WCAG 4.1.3). Always in the DOM, so the
+          change is announced. */}
+      <p className="ci-visually-hidden" role="status">
+        {best && best.total !== null ? `${best.ticket.name}: ${money(best.total)}, ${t.cheapestTag.replace(/^←\s*/, "")}` : ""}
+      </p>
 
       <p className="ci-calc-note">{t.personalNote}</p>
       <p className="ci-calc-note">

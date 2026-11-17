@@ -6,6 +6,7 @@ import { CALC_COPY, fillFigures, money, parseAmount, percent, readHash, smiDeduc
 import { calculateNetSalary, type AgeBand, type Contract, type Disability, type FamilySituation, type SalaryInput } from "@/lib/programmatic/net-salary/engine";
 import { REGIONS, regionById } from "@/lib/programmatic/net-salary/regions";
 import { FORAL_LINKS } from "@/lib/programmatic/net-salary/rules-2026";
+import { useCalculatorUse } from "@/lib/analytics/use-calculator-use";
 
 /**
  * The net salary calculator. Server-rendered with the page's default example
@@ -51,8 +52,11 @@ export function NetSalaryCalculator({ locale, initial }: { locale: NetLocale; in
   const f = (s: string) => fillFigures(s, locale);
   const smiNote = smiDeductionNote(r, locale);
 
+  // First result change by the visitor, once per session (lib/analytics/calculator-use.ts).
+  const calcUse = useCalculatorUse("net-salary", locale, r);
+
   return (
-    <section className="ci-calc" aria-labelledby={`${id}-title`}>
+    <section className="ci-calc" {...calcUse} aria-labelledby={`${id}-title`}>
       <h2 id={`${id}-title`} className="ci-calc-title">
         {t.title}
       </h2>

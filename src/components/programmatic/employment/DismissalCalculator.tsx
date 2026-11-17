@@ -7,6 +7,7 @@ import { DISMISSAL_TYPES, compareDismissals, type DismissalResult, type Dismissa
 import { dateWords, money, num, parseAmount } from "@/lib/programmatic/employment/paths";
 import type { CalcLocale } from "@/lib/programmatic/calculators/paths";
 import { SMI_ANNUAL } from "@/lib/programmatic/employment/rules";
+import { useCalculatorUse } from "@/lib/analytics/use-calculator-use";
 
 /**
  * Dismissal pay calculator. Server-rendered with the page's example (so the
@@ -186,8 +187,11 @@ export function DismissalCalculator({ locale, initial }: { locale: CalcLocale; i
   const r = all ? all[s.type] : null;
   const fmt = (iso: string) => dateWords(iso, locale);
 
+  // First result change by the visitor, once per session (lib/analytics/calculator-use.ts).
+  const calcUse = useCalculatorUse("dismissal", locale, r);
+
   return (
-    <section className="ci-calc" aria-labelledby={`${id}-title`}>
+    <section className="ci-calc" {...calcUse} aria-labelledby={`${id}-title`}>
       <h2 id={`${id}-title`} className="ci-calc-title">
         {t.title}
       </h2>

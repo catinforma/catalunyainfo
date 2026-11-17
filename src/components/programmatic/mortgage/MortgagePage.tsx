@@ -155,7 +155,7 @@ export function MortgageRoute({ locale, data }: { locale: MortgageLocale; data: 
               <MortgageCalculator locale={locale} euribor={e ? { value: e.value, month: e.month } : null} defaults={{ kind: "variable", amount: 150_000, years: 25, fixedPct: 2.5, fixedYears: 5, spreadPct: 0.75 }} />
               <p className="text-sm text-[var(--color-muted)]">{disclaimer}</p>
 
-              <div id="revision">{options.length ? <RevisionCalculator locale={locale} options={options} defaults={{ balance: 120_000, years: 20, months: 0, spreadPct: 0.8 }} /> : null}</div>
+              <div id="revision">{options.length ? <RevisionCalculator locale={locale} options={options} defaults={{ balance: 120_000, years: 20, months: 0, spreadPct: 0.8 }} calculatorId="mortgage-revision" /> : null}</div>
               <p>
                 {euriborLink[0]} <Link href={euriborPath(locale)}>{euriborLink[1]}</Link>.
               </p>

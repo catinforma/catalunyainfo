@@ -7,6 +7,7 @@ import { calcPath } from "@/lib/programmatic/calculators/paths";
 import { CALC_COPY, money, parseAmount, percent, readHash, writeHash, type SubLocale } from "@/lib/programmatic/unemployment-subsidy/copy";
 import { ANSWERS, EXHAUSTED_OPTIONS, SITUATIONS, checkSubsidy, type Answer, type Situation, type SubsidyInput } from "@/lib/programmatic/unemployment-subsidy/engine";
 import { MIN_DAYS_INSUFFICIENT, OVER52_AGE } from "@/lib/programmatic/unemployment-subsidy/rules";
+import { useCalculatorUse } from "@/lib/analytics/use-calculator-use";
 
 /**
  * The unemployment subsidy checker. Server-rendered with the page's default
@@ -67,8 +68,11 @@ export function SubsidyCalculator({ locale, initial }: { locale: SubLocale; init
     </p>
   );
 
+  // First result change by the visitor, once per session (lib/analytics/calculator-use.ts).
+  const calcUse = useCalculatorUse("unemployment-subsidy", locale, r);
+
   return (
-    <section className="ci-calc" aria-labelledby={field("title")}>
+    <section className="ci-calc" {...calcUse} aria-labelledby={field("title")}>
       <h2 id={field("title")} className="ci-calc-title">
         {t.title}
       </h2>

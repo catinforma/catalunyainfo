@@ -7,6 +7,7 @@ import { money, num, parseAmount, pct } from "@/lib/programmatic/employment/path
 import { calcPath, type CalcLocale } from "@/lib/programmatic/calculators/paths";
 import { BENEFIT_SS_RATE, SUBSIDY_MONTHLY } from "@/lib/programmatic/employment/rules";
 import { unemploymentBenefit, type Children } from "@/lib/programmatic/employment/unemployment";
+import { useCalculatorUse } from "@/lib/analytics/use-calculator-use";
 
 /**
  * Unemployment benefit (paro) calculator. Server-rendered with the page's
@@ -156,8 +157,11 @@ export function UnemploymentCalculator({ locale, initial }: { locale: CalcLocale
   const r = unemploymentBenefit({ contributedDays: contributed, monthlyBase: base, children: s.children, partTimePct: partTime });
   const m = (x: number) => money(x, locale);
 
+  // First result change by the visitor, once per session (lib/analytics/calculator-use.ts).
+  const calcUse = useCalculatorUse("unemployment", locale, r);
+
   return (
-    <section className="ci-calc" aria-labelledby={`${id}-title`}>
+    <section className="ci-calc" {...calcUse} aria-labelledby={`${id}-title`}>
       <h2 id={`${id}-title`} className="ci-calc-title">
         {t.title}
       </h2>

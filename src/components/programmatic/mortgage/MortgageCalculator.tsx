@@ -4,6 +4,7 @@ import { useId, useState } from "react";
 
 import { CALC_COPY, centsText, monthText, num, rateInput, rateText, type MortgageLocale } from "@/lib/programmatic/mortgage/copy";
 import { computeMortgage, parseAmount, parsePct, parseWhole, type MortgageKind } from "@/lib/programmatic/mortgage/engine";
+import { useCalculatorUse } from "@/lib/analytics/use-calculator-use";
 
 /**
  * The mortgage calculator: fixed, variable (Euribor + spread, optional
@@ -75,8 +76,11 @@ export function MortgageCalculator({ locale, euribor, defaults }: { locale: Mort
     </p>
   );
 
+  // First result change by the visitor, once per session (lib/analytics/calculator-use.ts).
+  const calcUse = useCalculatorUse("mortgage", locale, result);
+
   return (
-    <section className="ci-calc" aria-labelledby={`${id}-title`}>
+    <section className="ci-calc" {...calcUse} aria-labelledby={`${id}-title`}>
       <h2 id={`${id}-title`} className="ci-calc-title">
         {t.title}
       </h2>

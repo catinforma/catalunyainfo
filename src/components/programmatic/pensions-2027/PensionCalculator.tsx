@@ -5,6 +5,7 @@ import { useId, useState } from "react";
 import { parseAmount } from "@/lib/programmatic/employment/paths";
 import { CALC_COPY, euros, percentText, type PensionLocale } from "@/lib/programmatic/pensions-2027/copy";
 import { revaluePension, type Payments, type PensionInput, type RateStatus } from "@/lib/programmatic/pensions-2027/engine";
+import { useCalculatorUse } from "@/lib/analytics/use-calculator-use";
 
 /**
  * The 2027 pension calculator: gross monthly pension and payments a year.
@@ -22,8 +23,11 @@ export function PensionCalculator({ locale, status, initial }: { locale: Pension
   const result = revaluePension({ monthly: parseAmount(amount), payments }, status.percent);
   const p = percentText(status, locale);
 
+  // First result change by the visitor, once per session (lib/analytics/calculator-use.ts).
+  const calcUse = useCalculatorUse("pensions-2027", locale, result);
+
   return (
-    <section className="ci-calc" aria-labelledby={`${id}-title`}>
+    <section className="ci-calc" {...calcUse} aria-labelledby={`${id}-title`}>
       <h2 id={`${id}-title`} className="ci-calc-title">
         {t.title}
       </h2>

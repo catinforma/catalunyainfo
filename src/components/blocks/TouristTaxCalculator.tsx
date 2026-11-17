@@ -15,6 +15,7 @@ import {
 } from "@/lib/content/tourist-tax/rates";
 import type { Messages } from "@/lib/i18n";
 import type { Locale } from "@/lib/i18n/config";
+import { useCalculatorUse } from "@/lib/analytics/use-calculator-use";
 
 /**
  * The tourist tax calculator.
@@ -79,8 +80,11 @@ export function TouristTaxCalculator({ locale, copy }: { locale: Locale; copy: M
 
   const id = "tt";
 
+  // First result change by the visitor, once per session (lib/analytics/calculator-use.ts).
+  const calcUse = useCalculatorUse("tourist-tax", locale, result);
+
   return (
-    <section className="ci-calc" aria-label={t.title}>
+    <section className="ci-calc" {...calcUse} aria-label={t.title}>
       <h3 className="ci-calc-title">{t.title}</h3>
       <p className="ci-calc-intro">{t.intro}</p>
 

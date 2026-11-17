@@ -348,6 +348,7 @@ export default async function CatchAllPage({
                     locale={locale}
                     priority={index === 0}
                     headingLevel={2}
+                    phoneThumb
                   />
                 ))}
               </div>
