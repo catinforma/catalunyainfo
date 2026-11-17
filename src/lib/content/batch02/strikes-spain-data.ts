@@ -81,10 +81,10 @@ import type { SpainNotHappening, SpainOpenStrike, SpainStrike } from "./strikes-
  * 20N kept, mobilisations at 12:00 (city list on its page). SMU: no
  * call-off. BOE sumarios of 13, 14, 16 and 17 Nov: no strike order.
  */
-export const STRIKES_SPAIN_AS_OF = "2026-11-17";
+export const STRIKES_SPAIN_AS_OF = "2026-11-18";
 
 /** Printed as the page's "last verified" date. */
-export const STRIKES_SPAIN_VERIFIED = STRIKES_SPAIN_AS_OF;
+export const STRIKES_SPAIN_VERIFIED = "2026-11-17";
 
 const CDN = "https://cdn.transportes.gob.es/portal-web-transportes";
 const FICA = "https://ugt-fica.org/component/content/article";

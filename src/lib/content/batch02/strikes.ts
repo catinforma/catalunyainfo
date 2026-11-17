@@ -265,14 +265,14 @@ import { strike11nCityLinks } from "./strike-11n-city-paths";
  * Nov on Treball's list or the newest 60 e-Tauler edicts; USTEC·STEs nothing
  * new on 26N; Metges de Catalunya and the SMU, no call-off.
  */
-export const STRIKES_AS_OF = "2026-11-17";
+export const STRIKES_AS_OF = "2026-11-18";
 
 /**
  * The day the facts on the page were last read on the sources. Bringing the
  * list up to date means re-reading them, so it is the same day by design: one
  * constant to move.
  */
-export const STRIKES_VERIFIED = STRIKES_AS_OF;
+export const STRIKES_VERIFIED = "2026-11-17";
 
 export type StrikeScope = "general" | "rail" | "transport" | "education" | "health" | "other";
 
