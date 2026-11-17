@@ -10,7 +10,7 @@ import type { Locale } from "@/lib/i18n/config";
  *   /ca/calculadores/…
  *   /en/calculators/…
  *
- * Every tool's module (net-salary/copy.ts, self-employed/copy.ts, sick-leave/copy.ts, paid-leave/copy.ts, employment/*, rent-update/copy.ts)
+ * Every tool's module (net-salary/copy.ts, self-employed/copy.ts, sick-leave/copy.ts, paid-leave/copy.ts, employment/*, rent-update/copy.ts, lottery-tax/copy.ts)
  * reads its slugs from `CALCULATORS` below, and the hub lists the same
  * registry, so a tool added here shows up on the hub (tests/calculators-hub.test.ts
  * fails until it has a card). Slugs are live URLs: never change one.
@@ -48,6 +48,8 @@ export const CALCULATORS = [
   { id: "smi-2027", slugs: { es: "salario-minimo-2027", ca: "salari-minim-2027", en: "spain-minimum-wage-2027" } },
   { id: "ipc", slugs: { es: "ipc", ca: "ipc", en: "spain-inflation-cpi" } },
   { id: "treasury-bills", slugs: { es: "letras-del-tesoro", ca: "lletres-del-tresor", en: "spain-treasury-bills" } },
+  // Lottery (hub group "lottery"): the special levy on lottery prizes (Ley 35/2006, DA 33ª) per décimo, share and draw.
+  { id: "lottery-tax", slugs: { es: "premios-loteria", ca: "premis-loteria", en: "spain-lottery-prize-tax" } },
   // Vehicles (hub group "vehicle"): when the ITV is due (RD 920/2017 art. 6) and the official fee per region.
   { id: "itv", slugs: { es: "itv", ca: "itv", en: "itv-spain" } },
 ] as const satisfies readonly { id: string; slugs: Record<CalcLocale, string> }[];

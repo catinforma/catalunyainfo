@@ -28,6 +28,8 @@ import { euriborEditions } from "@/lib/programmatic/euribor/copy";
 import { mortgageEditions } from "@/lib/programmatic/mortgage/copy";
 import { itvEditions } from "@/lib/programmatic/itv/copy";
 import { htEditions } from "@/lib/programmatic/home-purchase-tax/copy";
+import { lotteryTaxEditions, money as lotteryMoney } from "@/lib/programmatic/lottery-tax/copy";
+import { headline as lotteryHeadline } from "@/lib/programmatic/lottery-tax/page";
 import { LOCALES, type Locale } from "@/lib/i18n/config";
 import { legalPath, sectionPath } from "@/lib/i18n/routes";
 import { siteAuthorPath } from "@/lib/content/author";
@@ -244,6 +246,11 @@ export function liveTools(): LiveTool[] {
       name: "Spanish Treasury bills (Letras del Tesoro): auctions, latest rates and calculator",
       hubs: letrasEditions(),
       description: "the Tesoro Público's latest 3-, 6-, 9- and 12-month Letras auction results (average and marginal rate, price, issue and maturity dates) read from tesoro.es every 3 hours, every 2026 auction month by month, the official 2026 auction calendar with the Banco de España request and payment deadlines, a calculator (face value in multiples of 1,000 euros, price, return at maturity, equivalent TAE, savings-scale IRPF estimate, Banco de España fee), how to buy (Tesoro online service, Banco de España Cuenta Directa, banks), competitive vs non-competitive bids (Orden ECM/2/2026), and the tax rules (LIRPF arts. 25.2, 66, 76, 96; no withholding under RIRPF art. 75.3.b). Not investment advice.",
+    },
+    {
+      name: "Spanish lottery prize tax calculator (El Gordo, El Niño, La Grossa)",
+      hubs: lotteryTaxEditions(),
+      description: `what you keep from a Spanish lottery prize after the special levy of Law 35/2006 on income tax, additional provision 33, quoted from the BOE: each winning décimo (ticket or bet) has its own 40,000 euros tax-free and 20% of the rest is withheld when it is paid; shared décimos and participaciones split the tax-free part by each holder's share; not declared on the income tax return. Presets for the Christmas Lottery 2026 prizes per 20-euro décimo (El Gordo ${lotteryMoney(lotteryHeadline().gordo.total.gross, "en")}: ${lotteryMoney(lotteryHeadline().gordo.total.withholding, "en")} withheld, ${lotteryMoney(lotteryHeadline().gordo.total.net, "en")} kept), El Niño 2027's first prize and La Grossa de Cap d'Any 2026 (Catalan government lottery, DOGC 9640), any other amount, non-residents (treaty refund on form 210) and the Agencia Tributaria's forms 136 and 230.`,
     },
     {
       name: "When is my ITV due? Spain vehicle inspection calculator",

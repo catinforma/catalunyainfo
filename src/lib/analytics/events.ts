@@ -78,6 +78,7 @@ export const CALCULATOR_USE_IDS = [
   "working-days",
   "smi-2027",
   "treasury-bills",
+  "lottery-tax",
   "itv",
   "leave-planner-2027",
   "tourist-tax",

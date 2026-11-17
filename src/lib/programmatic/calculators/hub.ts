@@ -22,6 +22,7 @@ import { pvpcTranslations } from "@/lib/programmatic/pvpc/paths";
 import { reservoirHubPath } from "@/lib/programmatic/reservoirs/paths";
 import { RULES_AS_OF as WORKING_DAYS_AS_OF } from "@/lib/programmatic/working-days/rules";
 import { ITV_RULES_AS_OF } from "@/lib/programmatic/itv/rules";
+import { RULES_AS_OF as LOTTERY_TAX_AS_OF } from "@/lib/programmatic/lottery-tax/rules";
 import { COMMUNITIES_AS_OF as HOME_TAX_AS_OF } from "@/lib/programmatic/home-purchase-tax/as-of";
 import { hubPath as rodaliesHubPath } from "@/lib/programmatic/rodalies/paths";
 
@@ -39,7 +40,7 @@ import { calcPath, calculatorsHubPath, type CalcLocale, type CalculatorId } from
  * figures come from, as the tool's own page cites them.
  */
 
-export type HubGroupId = "work" | "housing" | "official" | "vehicle" | "holidays" | "live";
+export type HubGroupId = "work" | "housing" | "official" | "lottery" | "vehicle" | "holidays" | "live";
 export type Scope = "spain" | "catalonia";
 
 export interface HubCard {
@@ -397,6 +398,30 @@ export const HUB_GROUPS: HubGroup[] = [
         },
         scope: "spain",
         checked: TREASURY_RULES_AS_OF,
+      },
+    ],
+  },
+  {
+    id: "lottery",
+    title: { ca: "Loteria i premis", es: "Lotería y premios", en: "Lottery prizes" },
+    cards: [
+      {
+        key: "lottery-tax",
+        calculator: true,
+        href: calc("lottery-tax"),
+        title: { ca: "Premis de loteria i Hisenda", es: "Premios de lotería y Hacienda", en: "Lottery prize tax" },
+        answers: {
+          ca: "Quant se'n queda Hisenda del Gordo, d'un dècim compartit o d'una participació, i quant cobres de La Grossa?",
+          es: "¿Cuánto se queda Hacienda del Gordo, de un décimo compartido o de una participación, y cuánto cobras de La Grossa?",
+          en: "How much tax is taken from El Gordo, a shared décimo or a participación, and what you keep from La Grossa.",
+        },
+        basis: {
+          ca: "Llei 35/2006 de l'IRPF, disposició addicional 33a (BOE), notes de l'Agència Tributària, programa de premis de SELAE i DOGC núm. 9640 (La Grossa).",
+          es: "Ley 35/2006 del IRPF, disposición adicional 33.ª (BOE), notas de la Agencia Tributaria, programa de premios de SELAE y DOGC núm. 9640 (La Grossa).",
+          en: "Law 35/2006 on income tax, additional provision 33 (BOE), Agencia Tributaria notes, SELAE's prize programme and DOGC no. 9640 (La Grossa).",
+        },
+        scope: "spain",
+        checked: LOTTERY_TAX_AS_OF,
       },
     ],
   },
