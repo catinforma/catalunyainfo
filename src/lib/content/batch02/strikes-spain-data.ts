@@ -68,6 +68,18 @@ import type { SpainNotHappening, SpainOpenStrike, SpainStrike } from "./strikes-
  * 19) and none for 23 Nov. Unchanged: SEMAF (nº 2026-34, 16 Nov), CCOO rail,
  * CESM (newest 12 Nov, strike still postponed), the air list (SAERCO,
  * Groundforce, Outsmart in force to 30 Nov).
+ *
+ * 17 Nov 2026 (~16:00-17:10 CET): re-read again
+ * (research_notes/x10/strikes-wave-17nov-factpack.md). The 23 Nov strike is
+ * now "official": the Generalitat's order of 16 Nov (e-Tauler 659191, on
+ * Treball's list on the 17th) cites SEMAF's notice registered at Grupo Renfe
+ * on 11 Nov, 0.01 to 23.59, all drivers, and sets Rodalies 66 % / 33 %; SEMAF
+ * nº 2026-34 (16 Nov) keeps "la jornada trasladada al día 23". Still no
+ * Ministry resolution for Adif (17, 19) or for the rest of Renfe on the 23rd
+ * (rail list newest = 12 Nov; air list 2026 top = the 17N ones and ELA
+ * Bizkaia). SCF newest SCFCOM 37 (19th kept). Sindicato de Estudiantes:
+ * 20N kept, mobilisations at 12:00 (city list on its page). SMU: no
+ * call-off. BOE sumarios of 13, 14, 16 and 17 Nov: no strike order.
  */
 export const STRIKES_SPAIN_AS_OF = "2026-11-17";
 
@@ -125,6 +137,8 @@ export const SPAIN_URLS = {
   elaResolution: `${CDN}/aereo/huelga-servicios-minimos/2026/54_26-11-17_-_dgac_resolucion_huelga_aspel_sectorial_limpieza_vizcaya_-_ela_vi.pdf`,
   // Adif, 17 and 19 Nov: SCFCOM 37 (16 Nov 2026).
   scf37: "https://www.scf.es/com37/",
+  // Rail, 23 Nov (read 17 Nov 2026): SEMAF nº 2026-34 (16 Nov). The Generalitat's order of 16 Nov is cited through treballMs.
+  semaf34: STRIKE_URLS.semaf34,
   // Airports.
   usca: "https://www.usca.es/usca-y-ccoo-convocan-huelga-indefinida-en-saerco-por-recortes-de-plantilla-y-riesgos-para-la-seguridad-operacional/",
   saercoResolution: `${CDN}/aereo/huelga-servicios-minimos/51_26-10-01--resolucion-huelga-saerco_vi.pdf`,
@@ -381,7 +395,8 @@ export const SPAIN_STRIKES: SpainStrike[] = [
     sector: "rail",
     status: "official",
     catalanEntry: "vaga-ferroviaria-2026-11-17",
-    guides: ["railStrike17n", "strikes"],
+    // 17 Nov 2026: the 19th has a page of its own ("huelga renfe 19 noviembre" lands here and on the Renfe guide).
+    guides: ["railStrike17n", "strike19n", "strikes"],
     title: {
       ca: "vaga ferroviària a Adif, Renfe i les operadores privades",
       es: "huelga ferroviaria en Adif, Renfe y las operadoras privadas",
@@ -443,43 +458,60 @@ export const SPAIN_STRIKES: SpainStrike[] = [
     id: "huelga-renfe-2026-11-23",
     dates: ["2026-11-23"],
     sector: "rail",
-    status: "called",
+    // 17 Nov 2026: "official" — the Generalitat's order of 16 Nov (on Treball's official list) cites SEMAF's strike notice registered at
+    // Grupo Renfe on 11 Nov and sets Rodalies' minimum services; the Ministry's resolution for the rest of Renfe is still to come.
+    status: "official",
     catalanEntry: "vaga-renfe-2026-11-23",
     guides: ["strikeRenfe"],
     title: {
-      ca: "vaga de maquinistes (SEMAF)",
-      es: "huelga de maquinistas (SEMAF)",
-      en: "train drivers' strike (SEMAF)",
+      ca: "vaga de maquinistes del Grup Renfe (SEMAF)",
+      es: "huelga de maquinistas del Grupo Renfe (SEMAF)",
+      en: "Renfe Group train drivers' strike (SEMAF)",
     },
-    label: { ca: "maquinistes (SEMAF)", es: "maquinistas (SEMAF)", en: "train drivers (SEMAF)" },
+    label: { ca: "maquinistes de Renfe (SEMAF)", es: "maquinistas de Renfe (SEMAF)", en: "Renfe train drivers (SEMAF)" },
     scope: {
-      ca: "SEMAF encara no n'ha publicat l'abast. Substitueix les aturades parcials del 12 de novembre, que eren al Grup Renfe.",
-      es: "SEMAF aún no ha publicado su alcance. Sustituye a los paros parciales del 12 de noviembre, que eran en el Grupo Renfe.",
-      en: "SEMAF has not yet published its scope. It replaces the partial stoppages of 12 November, which were at the Renfe group.",
+      ca: "Tot el col·lectiu de maquinistes del Grup Renfe, segons l'ordre de serveis mínims de la Generalitat del 16 de novembre. Substitueix les aturades parcials del 12 de novembre, que eren al Grup Renfe a tot Espanya.",
+      es: "Todo el colectivo de maquinistas del Grupo Renfe, según la orden de servicios mínimos de la Generalitat del 16 de noviembre. Sustituye a los paros parciales del 12 de noviembre, que eran en el Grupo Renfe en toda España.",
+      en: "All Renfe Group train drivers, according to the Generalitat's minimum-services order of 16 November. It replaces the partial stoppages of 12 November, which were at the Renfe Group across Spain.",
+    },
+    hours: {
+      ca: "De 0.01 a 23.59 h, segons l'ordre de serveis mínims de la Generalitat.",
+      es: "De 0.01 a 23.59 h, según la orden de servicios mínimos de la Generalitat.",
+      en: "00:01 to 23:59, according to the Generalitat's minimum-services order.",
     },
     calledBy: {
-      ca: `El sindicat de maquinistes SEMAF, que el 10 de novembre va decidir «sustituir el paro previsto para el día 12 de noviembre por una nueva convocatoria de huelga el día 23 de noviembre», segons ${link(U.semaf23, "el seu comunicat")}.`,
-      es: `El sindicato de maquinistas SEMAF, que el 10 de noviembre decidió «sustituir el paro previsto para el día 12 de noviembre por una nueva convocatoria de huelga el día 23 de noviembre», según ${link(U.semaf23, "su comunicado")}.`,
-      en: `The train drivers' union SEMAF, which on 10 November decided to "sustituir el paro previsto para el día 12 de noviembre por una nueva convocatoria de huelga el día 23 de noviembre" (replace the 12 November stoppage with a new strike call on 23 November), according to ${link(U.semaf23, "its notice")}.`,
+      ca: `El sindicat de maquinistes SEMAF, que el 10 de novembre va decidir «sustituir el paro previsto para el día 12 de noviembre por una nueva convocatoria de huelga el día 23 de noviembre», segons ${link(U.semaf23, "el seu comunicat")}, i el 16 de novembre la mantenia: «así como la jornada trasladada al día 23» (${link(U.semaf34, "comunicat 2026-34")}).`,
+      es: `El sindicato de maquinistas SEMAF, que el 10 de noviembre decidió «sustituir el paro previsto para el día 12 de noviembre por una nueva convocatoria de huelga el día 23 de noviembre», según ${link(U.semaf23, "su comunicado")}, y el 16 de noviembre la mantenía: «así como la jornada trasladada al día 23» (${link(U.semaf34, "comunicado 2026-34")}).`,
+      en: `The train drivers' union SEMAF, which on 10 November decided to "sustituir el paro previsto para el día 12 de noviembre por una nueva convocatoria de huelga el día 23 de noviembre" (replace the 12 November stoppage with a new strike call on 23 November), according to ${link(U.semaf23, "its notice")}, and kept it on 16 November: "así como la jornada trasladada al día 23" (as well as the day moved to the 23rd; ${link(U.semaf34, "notice 2026-34")}).`,
     },
+    // The order is cited through Treball's official list, never by its e-Tauler notice (withdrawn on 15 Dec; the DOGC number is not out yet).
     basis: {
-      ca: `Consta al comunicat del sindicat. El {checked} no hi havia cap resolució de serveis mínims per a aquest dia a ${link(U.ministryRail, "la llista del Ministeri de Transports")}.`,
-      es: `Consta en el comunicado del sindicato. El {checked} no había ninguna resolución de servicios mínimos para este día en ${link(U.ministryRail, "la lista del Ministerio de Transportes")}.`,
-      en: `It rests on the union's own notice. On {checked} there was no minimum-services resolution for this day on ${link(U.ministryRail, "the Ministry of Transport's list")}.`,
+      ca: `L'ordre del Departament d'Empresa i Treball del 16 de novembre, a ${link(U.treballMs, "la llista oficial de vagues amb serveis mínims")}, cita la comunicació de vaga de SEMAF al Grup Renfe, registrada l'11 de novembre. El {checked} no hi havia cap resolució del Ministeri de Transports per a aquest dia a ${link(U.ministryRail, "la seva llista")}.`,
+      es: `La orden del Departament d'Empresa i Treball del 16 de noviembre, en ${link(U.treballMs, "la lista oficial de huelgas con servicios mínimos")}, cita la comunicación de huelga de SEMAF en el Grupo Renfe, registrada el 11 de noviembre. El {checked} no había ninguna resolución del Ministerio de Transportes para este día en ${link(U.ministryRail, "su lista")}.`,
+      en: `The Catalan Department of Business and Labour's order of 16 November, on ${link(U.treballMs, "the official list of strikes with minimum services")}, cites SEMAF's strike notice at the Renfe Group, registered on 11 November. On {checked} there was no Ministry of Transport resolution for this day on ${link(U.ministryRail, "its list")}.`,
     },
     minimumServices: {
-      status: "pending",
-      short: { ca: "Per confirmar, encara no publicats", es: "Por confirmar, aún no publicados", en: "To be confirmed, not published yet" },
+      status: "published",
+      short: {
+        ca: "A Rodalies, 66% en hora punta i 33%; Cercanías, Mitja Distància i AVE, per confirmar",
+        es: "En Rodalies, 66% en hora punta y 33%; Cercanías, Media Distancia y AVE, por confirmar",
+        en: "On Rodalies, 66% at peak and 33%; Cercanías, Media Distancia, AVE to be confirmed",
+      },
       text: {
-        ca: `Per confirmar. Els fixa el Ministeri de Transports i sortiran a ${link(U.ministryRail, "la seva llista de resolucions ferroviàries")}; els de Rodalies de Catalunya, a ${link(U.treballMs, "la llista del Departament d'Empresa i Treball")}.`,
-        es: `Por confirmar. Los fija el Ministerio de Transportes y saldrán en ${link(U.ministryRail, "su lista de resoluciones ferroviarias")}; los de Rodalies de Catalunya, en ${link(U.treballMs, "la lista del Departament d'Empresa i Treball")}.`,
-        en: `To be confirmed. The Ministry of Transport sets them and they will appear on ${link(U.ministryRail, "its list of rail resolutions")}; those for Rodalies in Catalonia on ${link(U.treballMs, "the Catalan labour department's list")}.`,
+        ca: `**Rodalies de Catalunya i regionals:** l'ordre de la Generalitat del 16 de novembre (${link(U.treballMs, "llista del Departament d'Empresa i Treball")}) fixa el 66% del servei habitual en hora punta (de 6.00 a 9.30 h i de 17.00 a 20.30 h) i el 33% la resta del dia. **Cercanías, Mitja Distància, AVE i Llarga Distància:** per confirmar; els fixa el Ministeri de Transports, que el {checked} encara no els tenia a ${link(U.ministryRail, "la seva llista de resolucions ferroviàries")}. Per a la vaga de SEMAF del 10 de novembre, la resolució va ser del 6, quatre dies abans.`,
+        es: `**Rodalies de Catalunya y regionales:** la orden de la Generalitat del 16 de noviembre (${link(U.treballMs, "lista del Departament d'Empresa i Treball")}) fija el 66% del servicio habitual en hora punta (de 6.00 a 9.30 h y de 17.00 a 20.30 h) y el 33% el resto del día. **Cercanías, Media Distancia, AVE y Larga Distancia:** por confirmar; los fija el Ministerio de Transportes, que el {checked} aún no los tenía en ${link(U.ministryRail, "su lista de resoluciones ferroviarias")}. Para la huelga de SEMAF del 10 de noviembre, la resolución fue del 6, cuatro días antes.`,
+        en: `**Rodalies de Catalunya and regional trains:** the Generalitat's order of 16 November (${link(U.treballMs, "the Catalan labour department's list")}) sets 66% of the usual service at peak times (06:00 to 09:30 and 17:00 to 20:30) and 33% the rest of the day. **Cercanías, Media Distancia, AVE and long distance:** to be confirmed; the Ministry of Transport sets them and on {checked} they were not yet on ${link(U.ministryRail, "its list of rail resolutions")}. For SEMAF's strike of 10 November, the resolution was dated the 6th, four days before.`,
       },
     },
     sources: [
+      {
+        name: "Ordre EMT/ /2026, de 16 de novembre: serveis mínims de Rodalies i regionals el 23 de novembre, vaga de SEMAF al Grupo Renfe (llista de vagues amb serveis mínims, 17/11/2026)",
+        url: U.treballMs,
+        publisher: "Generalitat de Catalunya, Departament d'Empresa i Treball",
+      },
       { name: "Primer Real Decreto-ley aprobado: SEMAF mueve el paro del 12 al 23 de noviembre (10/11/2026)", url: U.semaf23, publisher: "SEMAF" },
+      { name: "La fuerza del colectivo da resultados (nº 2026-34, 16/11/2026)", url: U.semaf34, publisher: "SEMAF" },
       SRC.ministryRail,
-      { name: "Serveis mínims de vagues", url: U.treballMs, publisher: "Departament d'Empresa i Treball" },
     ],
   },
   {
@@ -488,6 +520,8 @@ export const SPAIN_STRIKES: SpainStrike[] = [
     sector: "health",
     status: "official",
     catalanEntry: "vaga-metges-smu-2026-11-16",
+    // The marches of the 19th are on that day's page.
+    guides: ["strike19n"],
     title: {
       ca: "vaga de metges a la sanitat pública (Sindicato Médicos Unidos)",
       es: "huelga de médicos en la sanidad pública (Sindicato Médicos Unidos)",
@@ -588,6 +622,7 @@ export const SPAIN_STRIKES: SpainStrike[] = [
     dates: ["2026-11-20"],
     sector: "education",
     status: "called",
+    guides: ["strike20n"],
     title: {
       ca: "vaga estudiantil europea",
       es: "huelga estudiantil europea",

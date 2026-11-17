@@ -42,10 +42,13 @@ import {
   lastDay,
   linkedGuide,
   strikeDays,
+  STRIKE_DAY_PAGES,
+  strikeDayNote,
   upcomingStrikes,
   type ServiceKey,
   type Strike,
 } from "./strikes";
+import { addDays } from "@/lib/content/holidays/calendar";
 
 /**
  * One guide per called strike that people search by name ("vaga renfe 10
@@ -196,7 +199,10 @@ interface Common {
   sets: (parts: { authority: Authority; names: string }[]) => string;
   msPending: (msShort: string, checked: string, sets: string) => string;
   checkedNote: (checked: string) => string;
-  today: (day: string) => string;
+  /** `note`: the entry's own sentence for that day (`dayNotes`), when it has one. */
+  today: (day: string, note?: string) => string;
+  /** 17 Nov 2026: the as-of date is the eve of a strike day; the check date is in the same sentence. */
+  tomorrow: (day: string, checked: string, note?: string) => string;
   past: (hub: string) => string;
   hubLabel: string;
   data: (hub: string) => string;
@@ -276,7 +282,8 @@ const COMMON: Record<Locale, Common> = {
     },
     msPending: (msShort, checked, sets) => `**${msShort}** (consultat el ${checked}): ${sets}, pocs dies abans de la vaga.`,
     checkedNote: (checked) => `consultat el ${checked}`,
-    today: (day) => `**Avui, ${day}, és dia de vaga.**`,
+    today: (day, note) => (note ? `**Avui, ${day}, és dia de vaga:** ${note}.` : `**Avui, ${day}, és dia de vaga.**`),
+    tomorrow: (day, checked, note) => `**Demà, ${day}, és dia de vaga** (fonts revisades el ${checked})${note ? `: ${note}` : ""}.`,
     past: (hub) => `Aquesta vaga ja ha passat: aquí tens què s'havia anunciat i els serveis mínims, tal com eren a les fonts oficials. Les vagues que vénen, a ${hub}.`,
     hubLabel: "la guia de vagues a Catalunya",
     data: (hub) =>
@@ -353,7 +360,8 @@ const COMMON: Record<Locale, Common> = {
     },
     msPending: (msShort, checked, sets) => `**${msShort}** (consultado el ${checked}): ${sets}, pocos días antes de la huelga.`,
     checkedNote: (checked) => `consultado el ${checked}`,
-    today: (day) => `**Hoy, ${day}, es día de huelga.**`,
+    today: (day, note) => (note ? `**Hoy, ${day}, es día de huelga:** ${note}.` : `**Hoy, ${day}, es día de huelga.**`),
+    tomorrow: (day, checked, note) => `**Mañana, ${day}, es día de huelga** (fuentes revisadas el ${checked})${note ? `: ${note}` : ""}.`,
     past: (hub) => `Esta huelga ya ha pasado: aquí tienes lo que se había anunciado y los servicios mínimos, tal como estaban en las fuentes oficiales. Las próximas huelgas, en ${hub}.`,
     hubLabel: "la guía de huelgas en Cataluña",
     data: (hub) =>
@@ -432,7 +440,8 @@ const COMMON: Record<Locale, Common> = {
     },
     msPending: (msShort, checked, sets) => `**${msShort}** (checked on ${checked}): ${sets}, a few days before the strike.`,
     checkedNote: (checked) => `checked on ${checked}`,
-    today: (day) => `**Today, ${day}, is a strike day.**`,
+    today: (day, note) => (note ? `**Today, ${day}, is a strike day:** ${note}.` : `**Today, ${day}, is a strike day.**`),
+    tomorrow: (day, checked, note) => `**Tomorrow, ${day}, is a strike day** (sources checked on ${checked})${note ? `: ${note}` : ""}.`,
     past: (hub) => `This strike is over: here is what had been announced and the minimum services, as they stood in the official sources. Strikes still to come are in ${hub}.`,
     hubLabel: "our guide to strikes in Barcelona and Catalonia",
     data: (hub) =>
@@ -573,6 +582,33 @@ const schoolYearLabel = (iso: string) => {
   return status.kind === "term" ? status.year.label : "";
 };
 
+/**
+ * 17 Nov 2026: while the guide covers the 17 and 19 Nov strike, the 19th and
+ * the 20th have pages of their own ("huelga renfe 19 noviembre" 529
+ * impressions at 8.3 on this guide, GSC 14 days to 17 Nov); each line until
+ * its day has passed (STRIKE_DAY_PAGES). The 19th's anchor answers the query.
+ */
+const DAY_PAGE_LINES: Record<Locale, Partial<Record<B2Key, string>>> = {
+  ca: {
+    strike19n: `**Dijous 19 de novembre:** només s'atura el personal de circulació d'Adif (SCF), 24 hores; Renfe, que opera Rodalies, no hi està convocada, i els serveis mínims d'Adif són pendents de publicar. Tot el que hi ha aquell dia, també la vaga de metges: ${b2link("strike19n", "ca", "Hi ha vaga de Renfe el 19 de novembre? Només Adif (circulació)")}.`,
+    strike20n: `**Divendres 20 de novembre:** no hi ha vaga de trens; sí la d'estudiants i la de metges: ${b2link("strike20n", "ca", B2_TITLES.strike20n.ca)}.`,
+  },
+  es: {
+    strike19n: `**Jueves 19 de noviembre:** solo para el personal de circulación de Adif (SCF), 24 horas; Renfe, que opera Rodalies, no está convocada, y los servicios mínimos de Adif están pendientes de publicar. Todo lo que hay ese día, también la huelga de médicos: ${b2link("strike19n", "es", "¿Hay huelga de Renfe el 19 de noviembre? Solo Adif (circulación)")}.`,
+    strike20n: `**Viernes 20 de noviembre:** no hay huelga de trenes; sí la de estudiantes y la de médicos: ${b2link("strike20n", "es", B2_TITLES.strike20n.es)}.`,
+  },
+  en: {
+    strike19n: `**Thursday 19 November:** only Adif's traffic-control staff stop work (SCF), 24 hours; Renfe, which runs Rodalies, is not called out, and Adif's minimum services are not published yet. Everything on that day, the doctors' strike included: ${b2link("strike19n", "en", "Is there a Renfe strike on 19 November? Adif (traffic control) only")}.`,
+    strike20n: `**Friday 20 November:** no rail strike; there is a students' strike and the doctors' strike: ${b2link("strike20n", "en", B2_TITLES.strike20n.en)}.`,
+  },
+};
+
+function dayPageParas(c: Ctx): Block[] {
+  if (c.strike.id !== SPAIN_RAIL_ENTRY) return [];
+  const lines = STRIKE_DAY_PAGES.filter((page) => page.day >= c.asOf).flatMap((page) => DAY_PAGE_LINES[c.locale][page.key] ?? []);
+  return lines.length > 0 ? paras(...lines) : [];
+}
+
 /** Other strikes on the same days that touch the metro or TMB buses. */
 const metroSameDay = (c: Ctx) => c.others.filter((o) => o.affects.includes("metroBus") && o.dates.some((d) => c.strike.dates.includes(d)));
 
@@ -598,6 +634,7 @@ const RENFE: GuideSpec = {
           `**Els avisos en directe de cada línia:** ${lineLinks("ca")}.`,
         ),
         ...(c.strike.id === SPAIN_RAIL_ENTRY ? paras(`**Fora de Catalunya** (Cercanías de Madrid, València, Sevilla, Bilbao i altres xarxes, AVE i Mitja Distància): ${b2link("railStrike17n", "ca", "la vaga de trens del 17 de novembre a Espanya")}.`) : []),
+        ...dayPageParas(c),
       ],
       todo: (c) => [
         "**No tots els trens de la teva hora hi seran:** els serveis mínims no els reparteixen igual a totes les hores (per a la vaga del 29 d'octubre, més en hora punta que la resta del dia). Mira el teu tren el vespre abans i el mateix matí.",
@@ -642,6 +679,7 @@ const RENFE: GuideSpec = {
           `**Los avisos en directo de cada línea:** ${lineLinks("es")}.`,
         ),
         ...(c.strike.id === SPAIN_RAIL_ENTRY ? paras(`**Fuera de Cataluña** (Cercanías de Madrid, Valencia, Sevilla, Bilbao y otras redes, AVE y Media Distancia): ${b2link("railStrike17n", "es", "la huelga de trenes del 17 de noviembre en España")}.`) : []),
+        ...dayPageParas(c),
       ],
       todo: (c) => [
         "**No estarán todos los trenes de tu hora:** los servicios mínimos no los reparten igual a todas las horas (para la huelga del 29 de octubre, más en hora punta que el resto del día). Mira tu tren la noche antes y la misma mañana.",
@@ -681,6 +719,7 @@ const RENFE: GuideSpec = {
           `**Live notices for every line:** [Rodalies today](${rodaliesHub("en")}), read live from Rodalies de Catalunya.`,
         ),
         ...(c.strike.id === SPAIN_RAIL_ENTRY ? paras(`**Outside Catalonia** (Cercanías in Madrid, Valencia, Seville, Bilbao and other networks, AVE and Media Distancia): ${b2link("railStrike17n", "en", "the 17 November rail strike across Spain")}.`) : []),
+        ...dayPageParas(c),
       ],
       todo: (c) => [
         "**Not every train at your usual time will run:** minimum services do not spread trains evenly over the day (for the 29 October strike, more at peak times than the rest of the day). Check your train the evening before and that morning.",
@@ -914,10 +953,14 @@ export function buildStrikeGuideBody(
 
   // 1. The answer: days, what it is, what it touches, where minimum services stand.
   const affectsLine = `**${t.labels.affects}:** ${inlineList(strike.affects, locale)}.${c.outside.length > 0 ? ` **${t.labels.outside}:** ${inlineList(c.outside, locale)}.` : ""}`;
+  // 17 Nov 2026: the eve of a strike day says "tomorrow" with the check date; a day with a note of its own (19 Nov: Adif only) says what that day is.
+  const tomorrow = addDays(asOf, 1);
+  const eve = !isOnDay(strike, asOf) && strike.dates.includes(tomorrow);
   blocks.push(
     lead(
       [
-        isOnDay(strike, asOf) ? t.today(dayDate(asOf, locale)) : "",
+        isOnDay(strike, asOf) ? t.today(dayDate(asOf, locale), strikeDayNote(strike, asOf, locale)) : "",
+        eve ? t.tomorrow(dayDate(tomorrow, locale), c.checked, strikeDayNote(strike, tomorrow, locale)) : "",
         `**${cap(c.days)}: ${strike.short[locale]}.**`,
         affectsLine,
         msLead(c),
@@ -1056,6 +1099,7 @@ const KNOWN_SOURCES: B2Source[] = [
   { name: "Informació de vagues amb serveis mínims (e-Tauler)", url: U.treballMs, publisher: "Departament d'Empresa i Treball" },
   { name: "Ordre EMT/ /2026, de 5 de novembre: serveis mínims de Rodalies i regionals, 10 i 12 de novembre (e-Tauler)", url: U.ordreRenfe1012, publisher: "Departament d'Empresa i Treball" },
   { name: "Ordre EMT/ /2026, de 12 de novembre: serveis mínims de Rodalies i regionals, 17 de novembre (e-Tauler)", url: U.ordreRenfe17, publisher: "Departament d'Empresa i Treball" },
+  { name: "Ordre EMT/ /2026, de 16 de novembre: serveis mínims de Rodalies i regionals, 23 de novembre (e-Tauler)", url: U.ordreRenfe23, publisher: "Departament d'Empresa i Treball" },
   { name: "SCFCOM 35: Las motivaciones de una negociación (12/11/2026)", url: U.scf35, publisher: "Sindicato de Circulación Ferroviario (SCF)" },
   { name: "Avances en seguridad y derechos que deben notarse en el trabajo (12/11/2026)", url: U.ccooRail17Still, publisher: "CCOO, Sector Ferroviario" },
   { name: "Ordre EMT/ /2026, de 5 de novembre: serveis essencials de la vaga general de l'11 de novembre (e-Tauler)", url: U.ordre11n, publisher: "Departament d'Empresa i Treball" },

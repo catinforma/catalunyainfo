@@ -1,4 +1,5 @@
 import type { Block } from "@/lib/content/blocks";
+import { addDays } from "@/lib/content/holidays/calendar";
 import type { Locale } from "@/lib/i18n/config";
 
 import { dateYear, dayDate } from "./festive";
@@ -32,14 +33,24 @@ import { fillChecked, spainDays, strikesOn } from "./strikes-spain";
  * the 19th (medicosunidos.es/manifestaciones/) and the indefinite strike in
  * Madrid's state schools (CCOO Madrid, CSIF), which no other page carries.
  *
- * Dates: before / on the day / after from STRIKES_SPAIN_AS_OF only (no
+ * Dates: before / eve / on the day / after from STRIKES_SPAIN_AS_OF only (no
  * clock). The `strikes` and `huelgas-espana` groups republish both, so the
  * strike watch that moves the as-of moves these pages too.
+ *
+ * 17 Nov 2026 (afternoon): titles open with the searched words ("Huelga 20
+ * de noviembre de 2026: …"); the eve says "Mañana, jueves 19…" with the check
+ * date; the 20th lists the Sindicato de Estudiantes' mobilisations at 12:00.
  */
 
 export const STRIKE_DAY = { strike19n: "2026-11-19", strike20n: "2026-11-20" } as const;
 export type StrikeDayKey = keyof typeof STRIKE_DAY;
-export type StrikeDayPhase = "before" | "today" | "after";
+/**
+ * 17 Nov 2026: "eve" is the as-of day just before the strike day ("Mañana,
+ * jueves 19 de noviembre…", with the check date in the same sentence, as the
+ * Catalan hub's "Mañana" line). "huelga mañana" / "mañana hay huelga" ~260
+ * impressions each at position 8 (GSC, 14 days to 17 Nov).
+ */
+export type StrikeDayPhase = "before" | "eve" | "today" | "after";
 
 const SMU_ID = "huelga-medicos-smu-2026-11-16";
 const RAIL_ID = "huelga-ferroviaria-2026-11-17";
@@ -51,6 +62,7 @@ export const STRIKE_DAYS_VERIFIED = STRIKES_VERIFIED < STRIKES_SPAIN_VERIFIED ? 
 
 export function strikeDayPhase(key: StrikeDayKey, asOf: string = STRIKES_SPAIN_AS_OF): StrikeDayPhase {
   const day = STRIKE_DAY[key];
+  if (asOf === addDays(day, -1)) return "eve";
   if (asOf < day) return "before";
   if (asOf === day) return "today";
   return "after";
@@ -94,6 +106,40 @@ export const SMU_MARCHES_19N: readonly { city: string; start: string; end: strin
   { city: "Jaén", start: "Subdelegación del Gobierno (Plaza de las Batallas)", end: "" },
 ];
 
+/**
+ * The Sindicato de Estudiantes' mobilisations on Friday 20 November 2026, all
+ * at 12:00, as its 20N page lists them ("MOVILIZACIONES 12H", read 17 Nov
+ * 2026, SPAIN_URLS.students). Places verbatim; city names in their usual
+ * form (the page writes Bilbo, Gasteiz, Xixón, Uviéu, Compostela, Alacant,
+ * Castelló).
+ */
+export const STUDENT_DEMOS_20N: readonly { city: string; place: string }[] = [
+  { city: "Madrid", place: "Sol" },
+  { city: "Barcelona", place: "Plaça Universitat" },
+  { city: "Tarragona", place: "Plaça Imperial Tàrraco" },
+  { city: "Sevilla", place: "Plaza San Francisco" },
+  { city: "Málaga", place: "Plaza de la Constitución" },
+  { city: "Granada", place: "Jardines del Triunfo" },
+  { city: "Córdoba", place: "Plaza de las Tendillas" },
+  { city: "A Coruña", place: "Obelisco" },
+  { city: "Vigo", place: "Farola Urzáiz" },
+  { city: "Ferrol", place: "Edificio Xunta" },
+  { city: "Santiago de Compostela", place: "Alameda" },
+  { city: "Bilbao", place: "Ayuntamiento" },
+  { city: "Vitoria-Gasteiz", place: "Virgen Blanca" },
+  { city: "Gijón", place: "Plaza Parchís" },
+  { city: "Oviedo", place: "Plaza Escandalera" },
+  { city: "València", place: "Facultat d'Història" },
+  { city: "Alicante", place: "Escales Jorge Juan" },
+  { city: "Castellón", place: "Plaça Maria Agustina" },
+  { city: "Palencia", place: "Estatua de la Mujer Palentina" },
+  { city: "Salamanca", place: "Plaza de los Bandos" },
+  { city: "Valladolid", place: "Fuente Dorada" },
+  { city: "Segovia", place: "Plaza del Azoguejo" },
+  { city: "Santander", place: "Plaza de Numancia" },
+  { city: "Murcia", place: "Plaza de la Merced (Pº Menéndez Pelayo, 2)" },
+];
+
 const MADRID_SOURCES: B2Source[] = [
   { name: "La escuela pública madrileña abrirá en septiembre con una huelga indefinida (nota de prensa, 27 de mayo de 2026)", url: DAY_URLS.ccooMadridCall, publisher: "Federación de Educación de CCOO Madrid" },
   { name: "CCOO llevará a los tribunales el endurecimiento de los servicios mínimos (11 de noviembre de 2026)", url: DAY_URLS.ccooMadridMs, publisher: "Federación de Educación de CCOO Madrid" },
@@ -110,8 +156,10 @@ const heading = (level: 2 | 3, text: string, id?: string): Block => ({ type: "he
 const strip = (text: string) => text.replace(/\*\*/g, "").replace(/\[([^\]]+)\]\([^)]+\)/g, "$1");
 
 interface DayCopy {
-  /** The first line: who, where, hours and minimum services, in the searched words. */
-  lead: (phase: StrikeDayPhase) => string;
+  /** The first line: who, where, hours and minimum services, in the searched words. `checked`: the as-of day, named beside "mañana". */
+  lead: (phase: StrikeDayPhase, checked: string) => string;
+  /** The first FAQ question on the eve and on the day ("¿Hay huelga mañana…?", "¿Hay huelga hoy…?"). */
+  firstQuestion: Partial<Record<StrikeDayPhase, string>>;
   title: string;
   seoTitle: string;
   description: Record<StrikeDayPhase, string>;
@@ -158,6 +206,8 @@ interface Copy {
 const marchRows = (locale: Locale): string[][] =>
   SMU_MARCHES_19N.map((m) => [m.city, m.start, m.end || { ca: "Concentració", es: "Concentración", en: "Rally (no march)" }[locale]]);
 
+const demoRows = (): string[][] => STUDENT_DEMOS_20N.map((d) => [d.city, d.place]);
+
 const COPY: Record<Locale, Copy> = {
   es: {
     factsTitle: (day) => `Las huelgas del ${day}, de un vistazo`,
@@ -197,17 +247,21 @@ const COPY: Record<Locale, Copy> = {
     checked: (checked) => `Fuentes revisadas: ${checked}.`,
     days: {
       strike19n: {
-        lead: (phase) => {
+        lead: (phase, checked) => {
           const what =
             "paran los responsables de circulación de Adif (sindicato SCF, 24 horas; Renfe no está convocada y los servicios mínimos de Adif no se han publicado), sigue la huelga de médicos del Sindicato Médicos Unidos en la sanidad pública de toda España, con urgencias garantizadas y manifestaciones a las 18.00 h en una veintena de ciudades, y sigue la de la limpieza en Bizkaia (ELA). En Madrid continúa la huelga indefinida de la enseñanza pública. No es una huelga general.";
           if (phase === "after") return "**El jueves 19 de noviembre de 2026 hubo huelga en Adif (circulación), en la sanidad pública (médicos del SMU, con manifestaciones a las 18.00 h) y en la limpieza de Bizkaia;** no fue una huelga general ni de Renfe. Más abajo, quién convocó cada una y sus servicios mínimos.";
           if (phase === "today") return `**Hoy, jueves 19 de noviembre, hay huelga, pero no general:** ${what}`;
+          if (phase === "eve") return `**Mañana, jueves 19 de noviembre, hay huelga, pero no general:** ${what} Fuentes revisadas el ${checked}.`;
           return `**Sí: el jueves 19 de noviembre de 2026 hay huelga, pero no general:** ${what}`;
         },
-        title: "¿Hay huelga el jueves 19 de noviembre de 2026? Adif, médicos, limpieza y educación en Madrid",
-        seoTitle: "¿Hay huelga el 19 de noviembre? Adif, Renfe y médicos",
+        firstQuestion: { eve: "¿Hay huelga mañana, jueves 19 de noviembre de 2026?", today: "¿Hay huelga hoy, jueves 19 de noviembre de 2026?" },
+        // 17 Nov 2026 (new page, docs/SEO_EXPERIMENTS.md): the H1 and the title open with the searched words, "huelga 19 noviembre (2026)".
+        title: "Huelga 19 de noviembre de 2026: Adif (no Renfe), médicos, limpieza en Bizkaia y Madrid",
+        seoTitle: "Huelga 19 de noviembre de 2026: Adif (no Renfe) y médicos",
         description: {
           before: "Jueves 19: huelga en Adif (circulación, no Renfe), de médicos (SMU) con manifestaciones a las 18 h y de limpieza en Bizkaia. Servicios mínimos.",
+          eve: "Mañana jueves 19: huelga en Adif (circulación, no Renfe), de médicos (SMU) con manifestaciones a las 18 h y de limpieza en Bizkaia.",
           today: "Hoy jueves 19: huelga en Adif (circulación, no Renfe), de médicos (SMU) con manifestaciones a las 18 h y de limpieza en Bizkaia. Servicios mínimos.",
           after: "El 19 de noviembre de 2026 hubo huelga en Adif, de médicos (SMU) y de limpieza en Bizkaia: quién la convocó y los servicios mínimos.",
         },
@@ -228,17 +282,21 @@ const COPY: Record<Locale, Copy> = {
         ],
       },
       strike20n: {
-        lead: (phase) => {
+        lead: (phase, checked) => {
           const what =
             "huelga de estudiantes en toda España (Sindicato de Estudiantes, toda la jornada lectiva, desde 3.º de ESO, con movilizaciones a las 12 h; no es una huelga laboral), y siguen la huelga de médicos del Sindicato Médicos Unidos en la sanidad pública, con las urgencias garantizadas, y la de la limpieza en Bizkaia (ELA). En Madrid, la enseñanza pública sigue en huelga indefinida y CSIF convoca paros de 9.00 a 11.00 y de 17.00 a 19.00 h. No hay huelga general ni de trenes.";
           if (phase === "after") return "**El viernes 20 de noviembre de 2026 hubo huelga de estudiantes en toda España,** siguió la de médicos del Sindicato Médicos Unidos y la de la limpieza en Bizkaia, y en Madrid hubo paros en la enseñanza pública. No fue una huelga general.";
           if (phase === "today") return `**Hoy, viernes 20 de noviembre, hay** ${what}`;
+          if (phase === "eve") return `**Mañana, viernes 20 de noviembre, hay** ${what} Fuentes revisadas el ${checked}.`;
           return `**Sí: el viernes 20 de noviembre de 2026 hay** ${what}`;
         },
-        title: "¿Hay huelga el viernes 20 de noviembre de 2026? Estudiantes, médicos y educación en Madrid",
-        seoTitle: "¿Hay huelga el viernes 20 de noviembre? Estudiantes y más",
+        firstQuestion: { eve: "¿Hay huelga mañana, viernes 20 de noviembre de 2026?", today: "¿Hay huelga hoy, viernes 20 de noviembre de 2026?" },
+        // 17 Nov 2026 (new page, docs/SEO_EXPERIMENTS.md): the H1 and the title open with the searched words, "huelga 20 noviembre 2026".
+        title: "Huelga 20 de noviembre de 2026: estudiantes, médicos y Madrid. ¿Hay clase?",
+        seoTitle: "Huelga 20 de noviembre de 2026: estudiantes y médicos",
         description: {
           before: "Viernes 20: huelga de estudiantes (toda la jornada, movilizaciones a las 12 h), de médicos (SMU) y de limpieza en Bizkaia; paros en Madrid. No es general.",
+          eve: "Mañana viernes 20: huelga de estudiantes (toda la jornada, movilizaciones a las 12 h), de médicos (SMU) y de limpieza en Bizkaia; paros en Madrid.",
           today: "Hoy viernes 20: huelga de estudiantes (toda la jornada, movilizaciones a las 12 h), de médicos (SMU) y de limpieza en Bizkaia; paros en Madrid.",
           after: "El 20 de noviembre de 2026 hubo huelga de estudiantes, de médicos (SMU) y de limpieza en Bizkaia, y paros en Madrid: quién convocó cada una.",
         },
@@ -250,14 +308,18 @@ const COPY: Record<Locale, Copy> = {
             `**Sí, los colegios e institutos abren.** La huelga del 20 es de estudiantes, no del profesorado: el Sindicato de Estudiantes la comunica a cada dirección como una decisión colectiva de los alumnos desde 3.º de ESO, que el artículo 8 de la Ley Orgánica 8/1985 permite sin sanción si se comunica antes al centro (${link(SPAIN_URLS.studentsNotice, "su comunicación oficial")}). Los alumnos más pequeños tienen clase con normalidad.`,
             "**En Madrid** es distinto: allí el profesorado de la enseñanza pública está en huelga indefinida y CSIF para el 20 de 9.00 a 11.00 y de 17.00 a 19.00 h, con los servicios mínimos de la Comunidad. Lo detallamos más abajo.",
           ),
+          heading(2, "Manifestaciones de estudiantes el viernes 20 a las 12 h", "manifestaciones"),
+          ...paras(`El Sindicato de Estudiantes convoca movilizaciones a las 12 h del viernes 20 en estas ciudades, según ${link(SPAIN_URLS.students, "su convocatoria")}.`),
+          table("Movilizaciones del Sindicato de Estudiantes el viernes 20 de noviembre de 2026, 12 h", ["Ciudad", "Lugar"], demoRows(), "Tal como las publica el sindicato."),
         ],
         notCalled:
           "No hay huelga general, ni de trenes: el Ministerio de Transportes no tiene ninguna resolución de servicios mínimos ferroviarios para el viernes 20 y ningún sindicato ferroviario ha convocado ese día. El metro, los autobuses y los tranvías no forman parte de ninguna convocatoria estatal.",
         faq: [
           { question: "¿Hay huelga el viernes 20 de noviembre de 2026?", answer: "Sí, pero no general: huelga de estudiantes en toda España convocada por el Sindicato de Estudiantes, la huelga de médicos del Sindicato Médicos Unidos, que sigue, y la de la limpieza en Bizkaia. En Madrid, paros en la enseñanza pública. No hay huelga de trenes." },
           { question: "¿Hay huelga de estudiantes el 20 de noviembre?", answer: "Sí: el Sindicato de Estudiantes la convoca en toda la jornada lectiva del viernes 20, desde 3.º de ESO, con movilizaciones a las 12 h, dentro de una jornada estudiantil europea contra las guerras y el militarismo. No es una huelga laboral." },
+          { question: "¿Dónde son las manifestaciones de estudiantes del 20 de noviembre?", answer: "A las 12 h, en una veintena de ciudades. En Madrid, en Sol; en Barcelona, en la plaça Universitat; en Sevilla, en la plaza San Francisco; en València, en la Facultat d'Història; en Bilbao, en el Ayuntamiento." },
           { question: "¿Hay clase el viernes 20 de noviembre?", answer: "Sí: los centros abren y el profesorado no está convocado, salvo en Madrid, donde la enseñanza pública está en huelga indefinida y CSIF convoca paros de 9.00 a 11.00 y de 17.00 a 19.00 h." },
-          { question: "¿Hay huelga de trenes el viernes 20?", answer: "No: el Ministerio de Transportes no tiene ninguna resolución de servicios mínimos ferroviarios para el 20 y ningún sindicato ferroviario ha convocado ese día. La próxima huelga de trenes es la de maquinistas de SEMAF del lunes 23." },
+          { question: "¿Hay huelga de trenes el viernes 20?", answer: "No: el Ministerio de Transportes no tiene ninguna resolución de servicios mínimos ferroviarios para el 20 y ningún sindicato ferroviario ha convocado ese día. La próxima huelga de trenes es la de los maquinistas del Grupo Renfe (SEMAF), el lunes 23, de 0.01 a 23.59 h." },
         ],
       },
     },
@@ -300,17 +362,20 @@ const COPY: Record<Locale, Copy> = {
     checked: (checked) => `Fonts revisades: ${checked}.`,
     days: {
       strike19n: {
-        lead: (phase) => {
+        lead: (phase, checked) => {
           const what =
             "s'aturen els responsables de circulació d'Adif (sindicat SCF, 24 hores; Renfe no hi està convocada i els serveis mínims d'Adif no s'han publicat), continua la vaga de metges del Sindicato Médicos Unidos a la sanitat pública de tot Espanya, amb les urgències garantides i manifestacions a les 18.00 h en una vintena de ciutats, també Barcelona, i continua la de la neteja a Biscaia (ELA). A Madrid continua la vaga indefinida de l'ensenyament públic. No és una vaga general.";
           if (phase === "after") return "**El dijous 19 de novembre de 2026 hi va haver vaga a Adif (circulació), a la sanitat pública (metges de l'SMU, amb manifestacions a les 18.00 h) i a la neteja de Biscaia;** no va ser una vaga general ni de Renfe. Més avall, qui va convocar cadascuna i els seus serveis mínims.";
           if (phase === "today") return `**Avui, dijous 19 de novembre, hi ha vaga, però no general:** ${what}`;
+          if (phase === "eve") return `**Demà, dijous 19 de novembre, hi ha vaga, però no general:** ${what} Fonts revisades el ${checked}.`;
           return `**Sí: el dijous 19 de novembre de 2026 hi ha vaga, però no general:** ${what}`;
         },
-        title: "Hi ha vaga el dijous 19 de novembre de 2026? Adif, metges, neteja i educació a Madrid",
-        seoTitle: "Hi ha vaga el 19 de novembre? Adif, Renfe i metges",
+        firstQuestion: { eve: "Hi ha vaga demà, dijous 19 de novembre de 2026?", today: "Hi ha vaga avui, dijous 19 de novembre de 2026?" },
+        title: "Vaga 19 de novembre de 2026: Adif (no Renfe), metges, neteja a Biscaia i Madrid",
+        seoTitle: "Vaga 19 de novembre de 2026: Adif (no Renfe) i metges",
         description: {
           before: "Dijous 19: vaga a Adif (circulació, no Renfe), de metges (SMU) amb manifestacions a les 18 h, també a Barcelona, i de neteja a Biscaia. Serveis mínims.",
+          eve: "Demà dijous 19: vaga a Adif (circulació, no Renfe), de metges (SMU) amb manifestacions a les 18 h, també a Barcelona, i de neteja a Biscaia.",
           today: "Avui dijous 19: vaga a Adif (circulació, no Renfe), de metges (SMU) amb manifestacions a les 18 h, també a Barcelona, i de neteja a Biscaia.",
           after: "El 19 de novembre de 2026 hi va haver vaga a Adif, de metges (SMU) i de neteja a Biscaia: qui la va convocar i els serveis mínims.",
         },
@@ -331,17 +396,20 @@ const COPY: Record<Locale, Copy> = {
         ],
       },
       strike20n: {
-        lead: (phase) => {
+        lead: (phase, checked) => {
           const what =
             "vaga d'estudiants a tot Espanya (Sindicato de Estudiantes, tota la jornada lectiva, des de 3r d'ESO, amb mobilitzacions a les 12 h; no és una vaga laboral), i continuen la vaga de metges del Sindicato Médicos Unidos a la sanitat pública, amb les urgències garantides, i la de la neteja a Biscaia (ELA). A Madrid, l'ensenyament públic continua en vaga indefinida i CSIF hi convoca aturades de 9.00 a 11.00 i de 17.00 a 19.00 h. No hi ha vaga general ni de trens.";
           if (phase === "after") return "**El divendres 20 de novembre de 2026 hi va haver vaga d'estudiants a tot Espanya,** va continuar la de metges del Sindicato Médicos Unidos i la de la neteja a Biscaia, i a Madrid hi va haver aturades a l'ensenyament públic. No va ser una vaga general.";
           if (phase === "today") return `**Avui, divendres 20 de novembre, hi ha** ${what}`;
+          if (phase === "eve") return `**Demà, divendres 20 de novembre, hi ha** ${what} Fonts revisades el ${checked}.`;
           return `**Sí: el divendres 20 de novembre de 2026 hi ha** ${what}`;
         },
-        title: "Hi ha vaga el divendres 20 de novembre de 2026? Estudiants, metges i educació a Madrid",
-        seoTitle: "Hi ha vaga el divendres 20 de novembre? Estudiants i més",
+        firstQuestion: { eve: "Hi ha vaga demà, divendres 20 de novembre de 2026?", today: "Hi ha vaga avui, divendres 20 de novembre de 2026?" },
+        title: "Vaga 20 de novembre de 2026: estudiants, metges i Madrid. Hi ha classe?",
+        seoTitle: "Vaga 20 de novembre de 2026: estudiants i metges",
         description: {
           before: "Divendres 20: vaga d'estudiants (tota la jornada, mobilitzacions a les 12 h), de metges (SMU) i de neteja a Biscaia; aturades a Madrid. No és general.",
+          eve: "Demà divendres 20: vaga d'estudiants (tota la jornada, mobilitzacions a les 12 h), de metges (SMU) i de neteja a Biscaia; aturades a Madrid.",
           today: "Avui divendres 20: vaga d'estudiants (tota la jornada, mobilitzacions a les 12 h), de metges (SMU) i de neteja a Biscaia; aturades a Madrid.",
           after: "El 20 de novembre de 2026 hi va haver vaga d'estudiants, de metges (SMU) i de neteja a Biscaia, i aturades a Madrid: qui va convocar cadascuna.",
         },
@@ -353,14 +421,18 @@ const COPY: Record<Locale, Copy> = {
             `**Sí, les escoles i els instituts obren.** La vaga del 20 és d'estudiants, no del professorat: el Sindicato de Estudiantes la comunica a cada direcció com una decisió col·lectiva dels alumnes des de 3r d'ESO, que l'article 8 de la Llei orgànica 8/1985 permet sense sanció si es comunica abans al centre (${link(SPAIN_URLS.studentsNotice, "la seva comunicació oficial")}). Els alumnes més petits tenen classe amb normalitat.`,
             "**A Madrid** és diferent: allà el professorat de l'ensenyament públic és en vaga indefinida i CSIF s'hi atura el 20 de 9.00 a 11.00 i de 17.00 a 19.00 h, amb els serveis mínims de la Comunitat. Ho detallem més avall.",
           ),
+          heading(2, "Manifestacions d'estudiants el divendres 20 a les 12 h", "manifestacions"),
+          ...paras(`El Sindicato de Estudiantes convoca mobilitzacions a les 12 h del divendres 20 en aquestes ciutats, segons ${link(SPAIN_URLS.students, "la seva convocatòria")}; a Catalunya, a la plaça Universitat de Barcelona i a la plaça Imperial Tàrraco de Tarragona.`),
+          table("Mobilitzacions del Sindicato de Estudiantes el divendres 20 de novembre de 2026, 12 h", ["Ciutat", "Lloc"], demoRows(), "Tal com les publica el sindicat."),
         ],
         notCalled:
           "No hi ha vaga general, ni de trens: el Ministeri de Transports no té cap resolució de serveis mínims ferroviaris per al divendres 20 i cap sindicat ferroviari hi ha convocat. El metro, els autobusos i els tramvies no formen part de cap convocatòria estatal.",
         faq: [
           { question: "Hi ha vaga el divendres 20 de novembre de 2026?", answer: "Sí, però no general: vaga d'estudiants a tot Espanya convocada pel Sindicato de Estudiantes, la vaga de metges del Sindicato Médicos Unidos, que continua, i la de la neteja a Biscaia. A Madrid, aturades a l'ensenyament públic. No hi ha vaga de trens." },
           { question: "Hi ha vaga d'estudiants el 20 de novembre?", answer: "Sí: el Sindicato de Estudiantes la convoca tota la jornada lectiva del divendres 20, des de 3r d'ESO, amb mobilitzacions a les 12 h, dins una jornada estudiantil europea contra les guerres i el militarisme. No és una vaga laboral." },
+          { question: "On són les manifestacions d'estudiants del 20 de novembre?", answer: "A les 12 h, en una vintena de ciutats. A Barcelona, a la plaça Universitat; a Tarragona, a la plaça Imperial Tàrraco; a Madrid, a Sol; a València, a la Facultat d'Història; a Sevilla, a la plaza San Francisco." },
           { question: "Hi ha classe el divendres 20 de novembre?", answer: "Sí: els centres obren i el professorat no hi està convocat, llevat de Madrid, on l'ensenyament públic és en vaga indefinida i CSIF hi convoca aturades de 9.00 a 11.00 i de 17.00 a 19.00 h." },
-          { question: "Hi ha vaga de trens el divendres 20?", answer: "No: el Ministeri de Transports no té cap resolució de serveis mínims ferroviaris per al 20 i cap sindicat ferroviari hi ha convocat. La propera vaga de trens és la dels maquinistes de SEMAF del dilluns 23." },
+          { question: "Hi ha vaga de trens el divendres 20?", answer: "No: el Ministeri de Transports no té cap resolució de serveis mínims ferroviaris per al 20 i cap sindicat ferroviari hi ha convocat. La propera vaga de trens és la dels maquinistes del Grup Renfe (SEMAF), el dilluns 23, de 0.01 a 23.59 h." },
         ],
       },
     },
@@ -403,17 +475,20 @@ const COPY: Record<Locale, Copy> = {
     checked: (checked) => `Sources checked: ${checked}.`,
     days: {
       strike19n: {
-        lead: (phase) => {
+        lead: (phase, checked) => {
           const what =
             "Adif's traffic controllers stop work (SCF union, 24 hours; Renfe is not called out and Adif's minimum services have not been published), the Sindicato Médicos Unidos doctors' strike in public healthcare across Spain continues, with A&E guaranteed and marches at 18:00 in some twenty cities, and so does Bizkaia's cleaning strike (ELA). In Madrid the open-ended strike in state schools goes on. It is not a general strike.";
           if (phase === "after") return "**On Thursday 19 November 2026 there were strikes at Adif (traffic control), in public healthcare (SMU doctors, with marches at 18:00) and in Bizkaia's cleaning sector;** it was not a general strike and Renfe was not called out. Who called each one and its minimum services are below.";
           if (phase === "today") return `**Today, Thursday 19 November, there are strikes, but not a general strike:** ${what}`;
+          if (phase === "eve") return `**Tomorrow, Thursday 19 November, there are strikes in Spain, but not a general strike:** ${what} Sources checked on ${checked}.`;
           return `**Yes: on Thursday 19 November 2026 there are strikes in Spain, but not a general strike:** ${what}`;
         },
-        title: "Is there a strike in Spain on Thursday 19 November 2026? Adif, doctors, cleaning and Madrid schools",
-        seoTitle: "Spain strike on 19 November? Adif, Renfe and doctors",
+        firstQuestion: { eve: "Is there a strike in Spain tomorrow, Thursday 19 November 2026?", today: "Is there a strike in Spain today, Thursday 19 November 2026?" },
+        title: "Strike in Spain on 19 November 2026: Adif (not Renfe), doctors, Bizkaia cleaning and Madrid schools",
+        seoTitle: "Spain strike 19 November 2026: Adif (not Renfe), doctors",
         description: {
           before: "Thursday 19: Adif traffic-control strike (not Renfe), SMU doctors' strike with marches at 18:00, Bizkaia cleaning strike. Minimum services.",
+          eve: "Tomorrow, Thursday 19: Adif traffic-control strike (not Renfe), SMU doctors' strike with marches at 18:00, Bizkaia cleaning strike.",
           today: "Today, Thursday 19: Adif traffic-control strike (not Renfe), SMU doctors' strike with marches at 18:00, Bizkaia cleaning strike.",
           after: "On 19 November 2026 Adif, SMU doctors and Bizkaia's cleaners were on strike: who called each one and the minimum services.",
         },
@@ -434,17 +509,20 @@ const COPY: Record<Locale, Copy> = {
         ],
       },
       strike20n: {
-        lead: (phase) => {
+        lead: (phase, checked) => {
           const what =
             "a students' strike across Spain (Sindicato de Estudiantes, the whole school day, from the third year of secondary school, with demonstrations at 12:00; not a labour strike), and the Sindicato Médicos Unidos doctors' strike in public healthcare continues, with A&E guaranteed, as does Bizkaia's cleaning strike (ELA). In Madrid, state schools stay on an open-ended strike and CSIF calls stoppages from 09:00 to 11:00 and 17:00 to 19:00. There is no general strike and no rail strike.";
           if (phase === "after") return "**On Friday 20 November 2026 there was a students' strike across Spain,** the Sindicato Médicos Unidos doctors' strike and Bizkaia's cleaning strike went on, and Madrid's state schools had stoppages. It was not a general strike.";
           if (phase === "today") return `**Today, Friday 20 November, there is** ${what}`;
+          if (phase === "eve") return `**Tomorrow, Friday 20 November, there is** ${what} Sources checked on ${checked}.`;
           return `**Yes: on Friday 20 November 2026 there is** ${what}`;
         },
-        title: "Is there a strike in Spain on Friday 20 November 2026? Students, doctors and Madrid schools",
-        seoTitle: "Spain strike on Friday 20 November? Students and more",
+        firstQuestion: { eve: "Is there a strike in Spain tomorrow, Friday 20 November 2026?", today: "Is there a strike in Spain today, Friday 20 November 2026?" },
+        title: "Strike in Spain on 20 November 2026: students, doctors and Madrid schools. Is there school?",
+        seoTitle: "Spain strike 20 November 2026: students and doctors",
         description: {
           before: "Friday 20: students' strike (whole school day, demos at 12:00), SMU doctors' strike, Bizkaia cleaning strike, Madrid school stoppages. Not general.",
+          eve: "Tomorrow, Friday 20: students' strike (whole school day, demos at 12:00), SMU doctors' strike, Bizkaia cleaning strike, Madrid school stoppages.",
           today: "Today, Friday 20: students' strike (whole school day, demos at 12:00), SMU doctors' strike, Bizkaia cleaning strike, Madrid school stoppages.",
           after: "On 20 November 2026 students, SMU doctors and Bizkaia's cleaners were on strike, with stoppages in Madrid schools: who called each one.",
         },
@@ -456,14 +534,18 @@ const COPY: Record<Locale, Copy> = {
             `**Yes, schools open.** The 20th is a students' strike, not a teachers' one: Sindicato de Estudiantes notifies each school head of a collective decision by pupils from the third year of secondary school (ESO), which article 8 of Organic Law 8/1985 allows without sanction if the school is told beforehand (${link(SPAIN_URLS.studentsNotice, "its official notice")}). Younger pupils have lessons as usual.`,
             "**Madrid** is different: there, state-school teachers are on an open-ended strike and CSIF stops work on the 20th from 09:00 to 11:00 and 17:00 to 19:00, under the Community's minimum services. Details below.",
           ),
+          heading(2, "Students' demonstrations on Friday 20 at 12:00", "demonstrations"),
+          ...paras(`Sindicato de Estudiantes calls demonstrations at 12:00 on Friday 20 in these cities, according to ${link(SPAIN_URLS.students, "its call")}.`),
+          table("Sindicato de Estudiantes demonstrations on Friday 20 November 2026, 12:00", ["City", "Place"], demoRows(), "As the union lists them."),
         ],
         notCalled:
           "There is no general strike and no rail strike: the Ministry of Transport has no rail minimum-services resolution for Friday 20 and no rail union has called that day. Metros, buses and trams are not part of any nationwide call.",
         faq: [
           { question: "Is there a strike in Spain on Friday 20 November 2026?", answer: "Yes, but not a general strike: a nationwide students' strike called by Sindicato de Estudiantes, the Sindicato Médicos Unidos doctors' strike, which continues, and Bizkaia's cleaning strike. In Madrid, stoppages in state schools. There is no rail strike." },
           { question: "Is there a student strike on 20 November?", answer: "Yes: Sindicato de Estudiantes calls it for the whole school day on Friday 20, from the third year of secondary school, with demonstrations at 12:00, as part of a European student day against war and militarism. It is not a labour strike." },
+          { question: "Where are the students' demonstrations on 20 November?", answer: "At 12:00, in some twenty cities. In Madrid, at Sol; in Barcelona, at Plaça Universitat; in Seville, at Plaza San Francisco; in Valencia, at the Facultat d'Història; in Bilbao, at the city hall (Ayuntamiento)." },
           { question: "Is there school on Friday 20 November?", answer: "Yes: schools open and teachers are not called out, except in Madrid, where state schools are on an open-ended strike and CSIF calls stoppages from 09:00 to 11:00 and 17:00 to 19:00." },
-          { question: "Is there a rail strike on Friday 20?", answer: "No: the Ministry of Transport has no rail minimum-services resolution for the 20th and no rail union has called that day. The next rail strike is SEMAF's train drivers' strike on Monday 23." },
+          { question: "Is there a rail strike on Friday 20?", answer: "No: the Ministry of Transport has no rail minimum-services resolution for the 20th and no rail union has called that day. The next rail strike is the Renfe Group train drivers' strike (SEMAF) on Monday 23, 00:01 to 23:59." },
         ],
       },
     },
@@ -484,10 +566,11 @@ export function catalanStrikesOnDay(key: StrikeDayKey, strikes: Strike[] = STRIK
   return strikes.filter((strike) => isOnDay(strike, STRIKE_DAY[key]));
 }
 
-function strikeSection(strike: SpainStrike, locale: Locale): Block[] {
+function strikeSection(strike: SpainStrike, locale: Locale, page: StrikeDayKey): Block[] {
   const t = COPY[locale];
   const fill = (value: L) => fillChecked(value, locale, STRIKES_SPAIN_AS_OF);
-  const guides = (strike.guides ?? []).filter((key) => key !== "strikes").map((key: B2Key) => b2link(key, locale, B2_TITLES[key][locale]));
+  // The Catalan hub is linked from its own section; the page never links itself.
+  const guides = (strike.guides ?? []).filter((key) => key !== "strikes" && key !== page).map((key: B2Key) => b2link(key, locale, B2_TITLES[key][locale]));
   return [
     heading(3, `${cap(spainDays(strike.dates, locale))}: ${strike.title[locale]}`, strike.id),
     list(
@@ -516,13 +599,16 @@ export function buildStrikeDayBody(key: StrikeDayKey, locale: Locale, asOf: stri
     { label: t.madridLabel, value: `${t.madridValue(twentieth)}.` },
   ];
 
+  const first = d.firstQuestion[phase];
+  const faqItems = d.faq.map((item, index) => ({ question: index === 0 && first ? first : item.question, answer: strip(item.answer) }));
+
   return [
-    lead(d.lead(phase)),
+    lead(d.lead(phase, dayDate(asOf, locale))),
     keyFacts(t.factsTitle(dayName), facts),
     heading(2, d.extraHeading, d.extraId),
     ...d.extra(),
     heading(2, t.allHeading(dayName), t.allId),
-    ...spain.flatMap((strike) => strikeSection(strike, locale)),
+    ...spain.flatMap((strike) => strikeSection(strike, locale, key)),
     heading(2, t.madridHeading, t.madridId),
     list(...t.madrid(twentieth)),
     heading(2, t.airportsHeading, t.airportsId),
@@ -539,7 +625,7 @@ export function buildStrikeDayBody(key: StrikeDayKey, locale: Locale, asOf: stri
     heading(2, t.notHeading, t.notId),
     ...paras(`${d.notCalled} ${t.checked(checked)}`),
     list(...t.nextLinks(locale), b2link(key === "strike19n" ? "strike20n" : "strike19n", locale, B2_TITLES[key === "strike19n" ? "strike20n" : "strike19n"][locale])),
-    ...(phase === "after" ? [] : [faq(d.faq.map((item) => ({ question: item.question, answer: strip(item.answer) })))]),
+    ...(phase === "after" ? [] : [faq(faqItems)]),
     ...paras(verifiedLine(locale, STRIKE_DAYS_VERIFIED)),
     ...b2Related(["strikesSpain", "strikes", "strikeRenfe"], locale),
   ];

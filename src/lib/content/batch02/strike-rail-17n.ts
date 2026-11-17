@@ -1,4 +1,5 @@
 import type { Block } from "@/lib/content/blocks";
+import { addDays } from "@/lib/content/holidays/calendar";
 import type { Locale } from "@/lib/i18n/config";
 
 import {
@@ -130,8 +131,12 @@ export const RAIL_17N_VERIFIED = STRIKES_VERIFIED < STRIKES_SPAIN_VERIFIED ? STR
 /* -------------------------------------------------------------------------- */
 
 interface Copy {
-  /** `today`: the as-of date is the 17th itself ("hoy"); `adifPending`: Adif's resolution for the 17th and 19th not out. */
-  lead: (phase: Rail17nPhase, msPending: boolean, today: boolean, adifPending: boolean) => string;
+  /**
+   * `today`: the as-of date is the 17th itself ("hoy"); `adifPending`: Adif's resolution for the 17th and 19th not out;
+   * `day19When` (17 Nov 2026): the as-of date is the 18th ("eve": "Mañana, jueves 19") or the 19th ("today"), so the figures
+   * are labelled as the 17th's and the 19th (Adif only) gets its own sentence.
+   */
+  lead: (phase: Rail17nPhase, msPending: boolean, today: boolean, adifPending: boolean, day19When?: "eve" | "today") => string;
   factsTitle: string;
   labels: { when: string; who: string; scope: string; rodalies: string; state: string; notIn: string };
   when: string;
@@ -183,7 +188,7 @@ interface Copy {
 
 const COPY: Record<Locale, Copy> = {
   es: {
-    lead: (phase, msPending, today, adifPending) => {
+    lead: (phase, msPending, today, adifPending, day19When) => {
       const who = "toda la plantilla del Grupo Renfe (Cercanías, Rodalies, Media Distancia, AVE y Larga Distancia) y Adif, convocada por FeSMC-UGT, CCOO, SF-Intersindical, SEMAF, ALFERRO y SFF-CGT; SEMAF llama también a los maquinistas de Iryo y Ouigo";
       const scope = "en el Grupo Renfe (Cercanías, Rodalies, Media Distancia, AVE y Larga Distancia) y Adif; SEMAF llama también a los maquinistas de Iryo y Ouigo";
       const ms = msPending
@@ -192,6 +197,10 @@ const COPY: Record<Locale, Copy> = {
       const day19 = `El jueves 19 paran solo los responsables de circulación de Adif (SCF)${adifPending ? ", con servicios mínimos aún pendientes" : ""}.`;
       if (phase === "after") return `**El martes 17 de noviembre de 2026 hubo huelga de trenes en toda España,** de 0.00 a 23.59 h: ${who}. El jueves 19 pararon los responsables de circulación de Adif (SCF). Más abajo, los servicios mínimos que se fijaron.`;
       if (today) return `**Hoy, martes 17 de noviembre, hay huelga de trenes en toda España,** de 0.00 a 23.59 h, ${scope}. ${ms} ${day19}`;
+      if (phase === "during" && day19When) {
+        const when19 = day19When === "eve" ? "Mañana, jueves 19 de noviembre" : "Hoy, jueves 19 de noviembre";
+        return `**Huelga de trenes del martes 17 de noviembre (Grupo Renfe y Adif, de 0.00 a 23.59 h) y del jueves 19 (circulación de Adif):** ${who}. ${ms.replace("**Servicios mínimos oficiales:**", "**Servicios mínimos oficiales del martes 17:**")} **${when19}, paran solo los responsables de circulación de Adif (SCF):** Renfe, Iryo y Ouigo no están convocados${adifPending ? " y los servicios mínimos de Adif están pendientes de publicar" : ""}.`;
+      }
       if (phase === "during") return `**Huelga de trenes del martes 17 de noviembre (Grupo Renfe y Adif, de 0.00 a 23.59 h) y del jueves 19 (circulación de Adif):** ${who}. ${ms}`;
       return `**Sí: el martes 17 de noviembre de 2026 hay huelga de trenes en toda España,** de 0.00 a 23.59 h, ${scope}. ${ms} ${day19}`;
     },
@@ -264,7 +273,7 @@ const COPY: Record<Locale, Copy> = {
     ],
   },
   ca: {
-    lead: (phase, msPending, today, adifPending) => {
+    lead: (phase, msPending, today, adifPending, day19When) => {
       const who = "tot el personal del Grup Renfe (Rodalies, Cercanías, Mitja Distància, AVE i Llarga Distància) i Adif, convocada per FeSMC-UGT, CCOO, SF-Intersindical, SEMAF, ALFERRO i SFF-CGT; SEMAF també crida els maquinistes d'Iryo i Ouigo";
       const scope = "al Grup Renfe (Rodalies, Cercanías, Mitja Distància, AVE i Llarga Distància) i Adif; SEMAF també crida els maquinistes d'Iryo i Ouigo";
       const ms = msPending
@@ -273,6 +282,10 @@ const COPY: Record<Locale, Copy> = {
       const day19 = `El dijous 19 només s'aturen els responsables de circulació d'Adif (SCF)${adifPending ? ", amb els serveis mínims encara pendents" : ""}.`;
       if (phase === "after") return `**El dimarts 17 de novembre de 2026 hi va haver vaga de trens a tot Espanya,** de 0.00 a 23.59 h: ${who}. El dijous 19 van aturar-se els responsables de circulació d'Adif (SCF). Més avall, els serveis mínims que es van fixar.`;
       if (today) return `**Avui, dimarts 17 de novembre, hi ha vaga de trens a tot Espanya,** de 0.00 a 23.59 h, ${scope}. ${ms} ${day19}`;
+      if (phase === "during" && day19When) {
+        const when19 = day19When === "eve" ? "Demà, dijous 19 de novembre" : "Avui, dijous 19 de novembre";
+        return `**Vaga de trens del dimarts 17 de novembre (Grup Renfe i Adif, de 0.00 a 23.59 h) i del dijous 19 (circulació d'Adif):** ${who}. ${ms.replace("**Serveis mínims oficials:**", "**Serveis mínims oficials del dimarts 17:**")} **${when19}, només s'aturen els responsables de circulació d'Adif (SCF):** Renfe, Iryo i Ouigo no hi estan convocats${adifPending ? " i els serveis mínims d'Adif són pendents de publicar" : ""}.`;
+      }
       if (phase === "during") return `**Vaga de trens del dimarts 17 de novembre (Grup Renfe i Adif, de 0.00 a 23.59 h) i del dijous 19 (circulació d'Adif):** ${who}. ${ms}`;
       return `**Sí: el dimarts 17 de novembre de 2026 hi ha vaga de trens a tot Espanya,** de 0.00 a 23.59 h, ${scope}. ${ms} ${day19}`;
     },
@@ -345,7 +358,7 @@ const COPY: Record<Locale, Copy> = {
     ],
   },
   en: {
-    lead: (phase, msPending, today, adifPending) => {
+    lead: (phase, msPending, today, adifPending, day19When) => {
       const who = "all Renfe Group staff (Cercanías and Rodalies commuter trains, Media Distancia, AVE and long distance) and Adif, called by FeSMC-UGT, CCOO, SF-Intersindical, SEMAF, ALFERRO and SFF-CGT; SEMAF also calls out drivers at Iryo and Ouigo";
       const scope = "at the Renfe Group (Cercanías and Rodalies commuter trains, Media Distancia, AVE and long distance) and Adif; SEMAF also calls out drivers at Iryo and Ouigo";
       const ms = msPending
@@ -354,6 +367,10 @@ const COPY: Record<Locale, Copy> = {
       const day19 = `On Thursday 19 only Adif's traffic controllers (SCF) stop work${adifPending ? "; their minimum services are still pending" : ""}.`;
       if (phase === "after") return `**On Tuesday 17 November 2026 there was a rail strike across Spain,** 00:00 to 23:59: ${who}. On Thursday 19 Adif's traffic controllers (SCF) stopped work. The minimum services that were set are below.`;
       if (today) return `**Today, Tuesday 17 November, there is a rail strike across Spain,** 00:00 to 23:59, ${scope}. ${ms} ${day19}`;
+      if (phase === "during" && day19When) {
+        const when19 = day19When === "eve" ? "Tomorrow, Thursday 19 November" : "Today, Thursday 19 November";
+        return `**Rail strike on Tuesday 17 November (Renfe Group and Adif, 00:00 to 23:59) and Thursday 19 (Adif traffic control):** ${who}. ${ms.replace("**Official minimum services:**", "**Official minimum services on Tuesday 17:**")} **${when19}, only Adif's traffic controllers (SCF) stop work:** Renfe, Iryo and Ouigo are not called out${adifPending ? " and Adif's minimum services are not published yet" : ""}.`;
+      }
       if (phase === "during") return `**Rail strike on Tuesday 17 November (Renfe Group and Adif, 00:00 to 23:59) and Thursday 19 (Adif traffic control):** ${who}. ${ms}`;
       return `**Yes: on Tuesday 17 November 2026 there is a rail strike across Spain,** 00:00 to 23:59, ${scope}. ${ms} ${day19}`;
     },
@@ -453,14 +470,20 @@ export function buildRail17nBody(locale: Locale, asOf: string = STRIKES_AS_OF): 
     ["Rodalies de Catalunya", t.generalitat, rodaliesCell],
   ];
 
+  // 17 Nov 2026: on the 18th and the 19th the lead labels the figures as the 17th's and gives the 19th (Adif only) its own sentence.
+  const day19 = rail17nDays()[1] ?? "";
+  const day19When = asOf === addDays(day19, -1) ? "eve" : asOf === day19 ? "today" : undefined;
+  // "Rodalies el 17: 66 % …" under the label "Rodalies (Cataluña)": the label already names the network.
+  const rodaliesShort = catalan.minimumServices.msShort[locale].replace(/^Rodalies(:|,)? (on )?/, "");
+
   return [
-    lead(t.lead(phase, msPending, today, adifPending)),
+    lead(t.lead(phase, msPending, today, adifPending, phase === "during" ? day19When : undefined)),
     keyFacts(t.factsTitle, [
       { label: t.labels.when, value: t.when },
       { label: t.labels.who, value: t.who },
       { label: t.labels.scope, value: spain.scope[locale] },
       { label: t.labels.state, value: msPending ? t.statePending : t.statePublished },
-      { label: t.labels.rodalies, value: catalan.minimumServices.msShort[locale].replace(/^Rodalies: /, "") },
+      { label: t.labels.rodalies, value: `${rodaliesShort.charAt(0).toUpperCase()}${rodaliesShort.slice(1)}` },
       { label: t.labels.notIn, value: t.notIn },
     ]),
     heading(2, t.whoHeading, t.whoId),
@@ -501,13 +524,20 @@ export function buildRail17nBody(locale: Locale, asOf: string = STRIKES_AS_OF): 
  * figures and `today` the same on the 17th itself. docs/SEO_EXPERIMENTS.md,
  * 16 Nov 2026: the description only, the title is untouched.
  */
-const META: Record<Locale, { title: string; seoTitle: string; before: string; published: string; today: string; after: string; excerpt: string }> = {
+/**
+ * 17 Nov 2026: `day19` on the 18th and the 19th, when "Sí, el martes 17 hay
+ * huelga" is no longer true and the searches are "huelga renfe 19 noviembre"
+ * (529 impressions at 8.3 on the Renfe guide, 14 days to 17 Nov). Logged in
+ * docs/SEO_EXPERIMENTS.md (17 Nov, strikes wave).
+ */
+const META: Record<Locale, { title: string; seoTitle: string; before: string; published: string; today: string; day19: string; after: string; excerpt: string }> = {
   es: {
     title: "Huelga de trenes del 17 de noviembre en España: Renfe, Adif, Cercanías, AVE y servicios mínimos",
     seoTitle: "Huelga de trenes 17 noviembre en España: Cercanías y AVE",
     before: "Martes 17 de noviembre, de 0.00 a 23.59 h: huelga en Renfe y Adif en toda España. Servicios mínimos en Cercanías, Rodalies y AVE, red por red.",
     published: "Sí, el martes 17 hay huelga en Renfe y Adif (0 a 23.59 h). Servicios mínimos: Cercanías 75 % en hora punta y 50 %, Media Distancia 65 %, AVE 72 %.",
     today: "Hoy martes 17, huelga en Renfe y Adif de 0 a 23.59 h. Servicios mínimos: Cercanías 75 % en hora punta y 50 %, Media Distancia 65 %, AVE 72 %.",
+    day19: "Jueves 19: solo paran los responsables de circulación de Adif (SCF), no Renfe. Martes 17: Cercanías 75 % en hora punta y 50 %, AVE 72 %.",
     after: "El 17 de noviembre de 2026 hubo huelga en Renfe y Adif en toda España: quién la convocó y los servicios mínimos que se fijaron, red por red.",
     excerpt: "La huelga de trenes del 17 de noviembre de 2026 en toda España: quién la convoca, Cercanías red por red, Rodalies, AVE y servicios mínimos.",
   },
@@ -517,6 +547,7 @@ const META: Record<Locale, { title: string; seoTitle: string; before: string; pu
     before: "Dimarts 17 de novembre, de 0.00 a 23.59 h: vaga a Renfe i Adif a tot Espanya. Serveis mínims a Cercanías, Rodalies i AVE, xarxa per xarxa.",
     published: "Sí, dimarts 17 hi ha vaga a Renfe i Adif (0 a 23.59 h). Serveis mínims: Rodalies 66 % en hora punta i 33 %, Cercanías 75 % i 50 %, AVE 72 %.",
     today: "Avui dimarts 17, vaga a Renfe i Adif de 0 a 23.59 h. Serveis mínims: Rodalies 66 % en hora punta i 33 %, Cercanías 75 % i 50 %, AVE 72 %.",
+    day19: "Dijous 19: només s'aturen els responsables de circulació d'Adif (SCF), no Renfe. Dimarts 17: Rodalies 66 % i 33 %, Cercanías 75 % i 50 %.",
     after: "El 17 de novembre de 2026 hi va haver vaga a Renfe i Adif a tot Espanya: qui la va convocar i els serveis mínims que es van fixar.",
     excerpt: "La vaga de trens del 17 de novembre de 2026 a tot Espanya: qui la convoca, Cercanías xarxa per xarxa, Rodalies, AVE i serveis mínims.",
   },
@@ -526,6 +557,7 @@ const META: Record<Locale, { title: string; seoTitle: string; before: string; pu
     before: "Tuesday 17 November, 00:00 to 23:59: strike at Renfe and Adif across Spain. Minimum services on Cercanías, Rodalies and AVE, network by network.",
     published: "Yes: Renfe and Adif strike on Tuesday 17 November, 00:00-23:59. Minimum services: Cercanías 75% at peak, 50% otherwise; AVE 72%; Media Distancia 65%.",
     today: "Today, Tuesday 17: Renfe and Adif strike, 00:00-23:59. Minimum services: Cercanías 75% at peak, 50% otherwise; AVE 72%; Media Distancia 65%.",
+    day19: "Thursday 19: only Adif's traffic controllers (SCF) stop work, not Renfe. Tuesday 17: Cercanías 75% at peak and 50% otherwise, AVE 72%.",
     after: "On 17 November 2026 Renfe and Adif staff went on strike across Spain: who called it and the minimum services that were set, network by network.",
     excerpt: "The rail strike of 17 November 2026 across Spain: who called it, Cercanías network by network, Rodalies, AVE and minimum services.",
   },
@@ -536,6 +568,7 @@ export function rail17nDescription(locale: Locale, asOf: string = STRIKES_AS_OF)
   if (phase === "after") return META[locale].after;
   if (spainEntry().minimumServices.status !== "published") return META[locale].before;
   if (asOf === rail17nDays()[0]) return META[locale].today;
+  if (phase === "during" && asOf > (rail17nDays()[0] ?? "")) return META[locale].day19;
   return META[locale].published;
 }
 

@@ -6770,4 +6770,72 @@ RIRPF 82/83/87), then EXTRA_PAY_YEAR / AS_OF / UNTIL.
 (+ `/calculadores/paga-extra/`, `/calculators/christmas-extra-pay-spain/`); GA4
 `calculator_use` with `calculator_id` = `extra-pay`.
 
+## 2026-11-17 (evening) — Strikes 19N/20N/23N/26N: the day pages take the searched words, both hubs and the Renfe guide hand the "19/20 noviembre" queries to them, the 23N Rodalies order is in, "mañana" wording for 18–23 Nov (deploy; groups `strikes`, `huelgas-espana`, `huelga-19-20n`, `huelga-trenes-17n`)
+
+**Observation (GSC, 14 days to ~15 Nov, from the owner).** "huelga 20 noviembre 2026" → `/es/guias/huelgas-espana/` 1,031
+impressions at 9.5 (7 clicks); "huelga renfe 19 noviembre" → `/es/guias/huelga-renfe-rodalies-noviembre/` 529 at 8.3;
+"huelga renfe 19 noviembre 2026" → huelgas-espana 268 at 9.2; "huelga renfe noviembre 2026" 696 at 10.0; "huelga mañana" /
+"mañana hay huelga" ~260 each at 8 (Catalan hub). The day pages (`/es/guias/huelga-19-noviembre/`, `-20-`) went live at 11:00
+today, not known to Google yet.
+
+**Sources re-read 17 Nov ~16:00–17:10 CET** (research_notes/x10/strikes-wave-17nov-factpack.md; curl + grep log in the session
+scratchpad). NEW: Generalitat Ordre EMT/ /2026 of 16 Nov (e-Tauler 659191, Treball's list 17 Nov): SEMAF at Grupo Renfe on 23
+Nov, 0.01–23.59, all drivers, registered 11 Nov; Rodalies/Regionals 66 % at peak (06:00–09:30, 17:00–20:30), 33 % the rest. 21N
+march: 12:00, plaça d'Urquinaona (USTEC·STEs and CGT Ensenyament, 17 Nov). Sindicato de Estudiantes: 24 mobilisation points at
+12:00 on 20N. STILL PENDING: Ministry resolution for Adif 17/19 (`ADIF_MS_PUBLISHED` stays false; SCFCOM 37 says Adif staff follow
+minimum services "determinados por la Secretaría de estado … y la Circular de Dirección General nº 5 del 13-11-2026", unpublished);
+Ministry resolution for the rest of Renfe on 23N; any 26N education order (Treball, e-Tauler). No BOE strike order 13–17 Nov.
+
+**What changed.**
+- **Day pages (new since 11:00, so no window):** H1 and title open with the searched words. es "¿Hay huelga el jueves 19 de
+  noviembre de 2026? Adif, médicos, limpieza y educación en Madrid" → H1 "Huelga 19 de noviembre de 2026: Adif (no Renfe),
+  médicos, limpieza en Bizkaia y Madrid", title "¿Hay huelga el 19 de noviembre? Adif, Renfe y médicos" → "Huelga 19 de
+  noviembre de 2026: Adif (no Renfe) y médicos"; 20N title "¿Hay huelga el viernes 20 de noviembre? Estudiantes y más" →
+  "Huelga 20 de noviembre de 2026: estudiantes y médicos" (H1 "… estudiantes, médicos y Madrid. ¿Hay clase?"); ca "Vaga 19/20
+  de novembre de 2026: …", en "Spain strike 19/20 November 2026: …". New "eve" state (as-of = the day before): lead "Mañana,
+  jueves 19 de noviembre, hay huelga, pero no general: … Fuentes revisadas el miércoles 18…", description "Mañana jueves 19: …",
+  first FAQ "¿Hay huelga mañana, jueves 19…?" (and "¿… hoy …?" on the day). 20N: table of the students' 24 mobilisation points at
+  12 h + FAQ "¿Dónde son las manifestaciones de estudiantes del 20 de noviembre?". Descriptions otherwise unchanged.
+- **Anchors** (`B2_TITLES.strike19n/20n`, every link to the day pages): "Huelga del 19 de noviembre de 2026: Adif (no Renfe),
+  médicos y limpieza", "Huelga del 20 de noviembre de 2026: estudiantes, médicos y Madrid" (ca/en alike).
+- **Spain hub (body only; title and description code untouched):** the "Día a día" links move from under the week table to
+  right under the week summary (second paragraph); the rail entry's section links the 19N page, the SMU entry's the 19N page
+  (marches), the students' entry's the 20N page, each only until its day has passed. 23N entry: "official" (Generalitat order,
+  cited through Treball's list), title "huelga de maquinistas del Grupo Renfe (SEMAF)", label "maquinistas de Renfe (SEMAF)",
+  hours 0.01–23.59, Rodalies 66/33, Cercanías/MD/AVE "por confirmar". The description lists this week's labels only, so it
+  does not change before 23 Nov (from then the 23N label reads "maquinistas de Renfe (SEMAF)").
+- **Renfe guide (title untouched):** while it covers 17/19 Nov, two lines under the "Fuera de Cataluña" paragraph: "¿Hay huelga
+  de Renfe el 19 de noviembre? Solo Adif (circulación)" → 19N page, and the 20th → 20N page (each until its day). Lead: "Mañana,
+  jueves 19…, es día de huelga (fuentes revisadas el 18…): huelga ferroviaria solo del personal de circulación de Adif…" on the
+  18th, "Hoy, jueves 19…: …" on the 19th; generic "Mañana, <day>, es día de huelga" on any eve (22 Nov for the 23rd).
+  **Description (data-driven, changes with the entry's `msShort`):** "Martes 17 y jueves 19 de noviembre de 2026: huelga
+  ferroviaria: Grupo Renfe, Adif y maquinistas. Rodalies: 66% en hora punta y 33% el resto del día." → "17 y 19 de noviembre de
+  2026: huelga ferroviaria: Grupo Renfe, Adif y maquinistas. Rodalies el 17: 66% en hora punta y 33% el resto; el 19, solo
+  Adif." Reason: the old line printed the 17th's Rodalies figures as if they applied on the 19th (Renfe is not called that day).
+  From 20 Nov it covers 23N: "23 de noviembre de 2026: huelga de maquinistas del Grupo Renfe (SEMAF). Rodalies: 66% en hora
+  punta y 33% el resto del día. Rodalies: líneas y qué hacer."
+- **Catalan hub (`strikes.ts`, body only; description labels unchanged):** entry `dayNotes` — the "Mañana, jueves 19" line on the
+  18th (and the "en curso" line on the 19th) say "huelga ferroviaria solo del personal de circulación de Adif … Renfe … no está
+  convocada. Servicios mínimos de Adif: pendientes de publicar" instead of the 17th's 66/33. 23N entry: published (66/33, order of
+  16 Nov), title "vaga de maquinistes del Grup Renfe (SEMAF)". 26N entry: 21N march at 12 h in Urquinaona; still "Aún no se han
+  publicado" (checked 17 Nov).
+- **17N page:** on the 18th/19th the lead labels its figures "del martes 17" and adds "Mañana/Hoy, jueves 19, paran solo los
+  responsables de circulación de Adif (SCF)…"; **description dated variant for 18–19 Nov only** ("Jueves 19: solo paran los
+  responsables de circulación de Adif (SCF), no Renfe. Martes 17: Cercanías 75 % en hora punta y 50 %, AVE 72 %.") because
+  "Sí, el martes 17 hay huelga" becomes false on the 18th; the 16 Nov description is untouched on the 17th and the "after"
+  one from the 20th. Inside the 16 Nov entry's window: tense fix for two days, same reasoning as that entry (event ends 19th).
+
+**Baseline / prediction / review.**
+- 20 Nov (`snapshot.py page huelga-19-noviembre 3`, `page huelga-renfe-rodalies 3`): the 19N page gets impressions for "huelga
+  (renfe) 19 noviembre (2026)" at ≤ 8; the Renfe guide keeps "huelga renfe noviembre 2026" (696 at 10.0) without losing CTR.
+- 23 Nov (`snapshot.py page huelga-20-noviembre 5`, `page huelgas-espana 7`): "huelga 20 noviembre 2026" lands on the 20N page
+  at ≤ 6 with CTR ≥ 3 % (hub baseline 1,031 at 9.5, 0.7 %); hub CTR on those queries > 1 %. Catalan hub "huelga mañana" ≥ 1
+  click/day on 18, 22 Nov.
+- **Revert rule:** if by 23 Nov the hub still gets > 60 % of "huelga 20 noviembre 2026" impressions and the 20N page < 100, put
+  the day-pages line back under the week table and restore the question-form titles (`strike-days-1920n.ts` git history).
+
+**Confounders:** the 18 Nov day-7 check of the 11 Nov Renfe-guide retitle (this deploy changes its description and body on the
+last day of that window: read 12–17 Nov for it); the 19 Nov answer-first review (the Spain hub's second paragraph changes);
+the as-of switches 18–23 Nov; any Ministry resolution for Adif or 23N published meanwhile.
+
 **Outcome:** _pending_

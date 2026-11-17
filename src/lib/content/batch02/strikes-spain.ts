@@ -6,7 +6,7 @@ import { dateYear, dayDate, range, span } from "./festive";
 import { B2_PATHS, B2_TITLES, RELATED_HEADING, b2link, callout, faq, lead, list, paras, table, verifiedLine, type B2Article, type B2Key, type B2Source } from "./shared";
 import { CITY_HERO } from "./strike-11n-cities";
 import { STRIKE_11N_SPAIN } from "./strike-11n-spain";
-import { STRIKES, andList, isUpcoming as isCatalanUpcoming, strikeDayPagesLine, strikeDays as catalanDays, type Strike } from "./strikes";
+import { STRIKES, STRIKE_DAY_PAGES, andList, isUpcoming as isCatalanUpcoming, strikeDayPagesLine, strikeDays as catalanDays, type Strike } from "./strikes";
 import {
   SPAIN_FRAMEWORK_SOURCES,
   SPAIN_NOT_HAPPENING,
@@ -613,8 +613,14 @@ const SPANISH_ONLY_GUIDES: Record<string, string> = {
   "huelga-general-2026-11-11": `[La huelga general en el resto de España, ciudad por ciudad](/es/${STRIKE_11N_SPAIN.editions.es.path}/)`,
 };
 
-function guideLinks(strike: SpainStrike, locale: Locale): string[] {
-  const own = (strike.guides ?? []).map((key: B2Key) => b2link(key, locale, B2_TITLES[key][locale]));
+/** 17 Nov 2026: a one-day page (19 or 20 Nov) is linked from an entry's section only until its day has passed. */
+function dayPageOver(key: B2Key, asOf: string): boolean {
+  const page = STRIKE_DAY_PAGES.find((p) => p.key === key);
+  return Boolean(page && page.day < asOf);
+}
+
+function guideLinks(strike: SpainStrike, locale: Locale, asOf: string): string[] {
+  const own = (strike.guides ?? []).filter((key) => !dayPageOver(key, asOf)).map((key: B2Key) => b2link(key, locale, B2_TITLES[key][locale]));
   const extra = locale === "es" ? SPANISH_ONLY_GUIDES[strike.id] : undefined;
   return extra ? [...own, extra] : own;
 }
@@ -697,14 +703,16 @@ export function buildStrikesSpainBody(locale: Locale, asOf: string = STRIKES_SPA
   const laterLine =
     later.length > 0 ? ` **${t.after}:** ${andList(later.map((strike) => `${strike.label[locale]} (${spainDays(strike.dates, locale, false)})`), locale)}.` : "";
   blocks.push(...paras(`**${t.week(when)}:** ${weekLine}.${laterLine}${open.length > 0 ? ` ${t.airportsToo}` : ""}`));
+  // 17 Nov 2026: the one-day pages for the 19th and the 20th (strike-days-1920n.ts), while their day is to come, right under the
+  // week in one line ("huelga 20 noviembre 2026" 1,031 impressions at 9.5 and "huelga renfe 19 noviembre 2026" 268 at 9.2 land
+  // here; the day pages answer them). Was under the week table.
+  const dayPages = strikeDayPagesLine(locale, asOf).trim();
+  if (dayPages) blocks.push(...paras(dayPages));
   blocks.push(callout("official", STATUS_KEY[locale].title, STATUS_KEY[locale].text));
 
   /* This week, day by day. */
   blocks.push(heading(2, t.weekHeading(when), t.weekId));
   blocks.push(table(t.weekCaption(when), t.dayHeaders, weekRows(locale, asOf, strikes), t.weekNote(checked, open.length > 0)));
-  // 17 Nov 2026: the one-day pages for the 19th and the 20th (strike-days-1920n.ts), while their day is to come.
-  const dayPages = strikeDayPagesLine(locale, asOf).trim();
-  if (dayPages) blocks.push(...paras(dayPages));
 
   /* Every dated strike. */
   if (listed.length > 0) {
@@ -721,7 +729,7 @@ export function buildStrikesSpainBody(locale: Locale, asOf: string = STRIKES_SPA
     /* One section per strike. */
     blocks.push(heading(2, t.detailHeading, t.detailId));
     for (const strike of listed) {
-      const guides = guideLinks(strike, locale);
+      const guides = guideLinks(strike, locale, asOf);
       blocks.push(heading(3, `${cap(spainDays(strike.dates, locale))}: ${strike.title[locale]}`, strike.id));
       blocks.push(
         list(

@@ -132,6 +132,17 @@ test("before, during and after, from the as-of date only", () => {
   assert.doesNotMatch(lead("es", "2026-11-20"), /\bhay huelga|aún no/);
   assert.match(lead("ca", "2026-11-20"), /hi va haver vaga/);
   assert.match(lead("en", "2026-11-20"), /there was a rail strike/);
+  // 17 Nov 2026: on the 18th and the 19th the figures are labelled as the 17th's and the 19th (Adif only) has its own sentence.
+  assert.match(lead("es", "2026-11-18"), /Servicios mínimos oficiales del martes 17:.*Mañana, jueves 19 de noviembre, paran solo los responsables de circulación de Adif/);
+  assert.match(lead("es", "2026-11-19"), /Hoy, jueves 19 de noviembre, paran solo/);
+  assert.match(lead("ca", "2026-11-18"), /Demà, dijous 19 de novembre, només s'aturen/);
+  assert.match(lead("en", "2026-11-19"), /Today, Thursday 19 November, only Adif's traffic controllers/);
+  assert.doesNotMatch(lead("es", "2026-11-17"), /Mañana, jueves 19/);
+  for (const locale of LOCALES) {
+    assert.match(rail17nDescription(locale, "2026-11-18"), /^(Jueves|Dijous|Thursday) 19/, locale);
+    assert.equal(rail17nDescription(locale, "2026-11-18"), rail17nDescription(locale, "2026-11-19"), locale);
+    assert.ok(rail17nDescription(locale, "2026-11-18").length <= 155, locale);
+  }
   for (const locale of LOCALES) {
     assert.doesNotMatch(lead(locale, "2026-11-18"), /\b(hay|hubo) huelga|hi ha vaga|there is a/, `${locale}: tense-neutral while the days run`);
     assert.notEqual(rail17nDescription(locale, "2026-11-13"), rail17nDescription(locale, "2026-11-20"));
