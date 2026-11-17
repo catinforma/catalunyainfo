@@ -298,7 +298,10 @@ export function MunicipalityPage({ m, locale }: { m: SnapshotMunicipality; local
 
         <section className="mt-12" aria-labelledby="ci-hol-dates">
           <h2 id="ci-hol-dates">{locale === "ca" ? "És festiu…?" : "¿Es festivo…?"}</h2>
-          <DateQuestions locale={locale} />
+          <DateQuestions locale={locale} upcoming={12} />
+          <p className="mt-4 text-sm">
+            <Link href={`${hubPath(locale)}#ci-hol-dates`}>{locale === "ca" ? "Totes les dates" : "Todas las fechas"}</Link>
+          </p>
         </section>
 
         <GuideLinks

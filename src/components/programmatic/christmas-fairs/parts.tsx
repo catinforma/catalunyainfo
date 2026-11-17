@@ -1,10 +1,10 @@
 import Link from "next/link";
 
 import { renderInline } from "@/lib/content/inline";
-import { attribution, fairShortName, guidance, labels, townName } from "@/lib/programmatic/christmas-fairs/copy";
+import { attribution, fairShortName, guidance, guidanceShort, labels, townName } from "@/lib/programmatic/christmas-fairs/copy";
 import { comarcaOf, hasEnglish, SNAPSHOT, townByIne } from "@/lib/programmatic/christmas-fairs/data";
 import { capitalize, fullDate, rangeText, shortRange } from "@/lib/programmatic/christmas-fairs/format";
-import { agendaActivityUrl, townPath, type FairsLocale } from "@/lib/programmatic/christmas-fairs/paths";
+import { agendaActivityUrl, fairsHubPath, townPath, type FairsLocale } from "@/lib/programmatic/christmas-fairs/paths";
 import type { DatedFair } from "@/lib/programmatic/christmas-fairs/today";
 import type { Fair, PendingMarket } from "@/lib/programmatic/christmas-fairs/types";
 import { municipality } from "@/lib/programmatic/weekend/data";
@@ -162,6 +162,11 @@ export function Guidance({ locale }: { locale: FairsLocale }) {
       ))}
     </section>
   );
+}
+
+/** Town pages: the advice for the day and a link to the hub's full note (`Guidance`), 17 Nov 2026. */
+export function GuidanceShort({ locale }: { locale: FairsLocale }) {
+  return <p className="mt-8">{renderInline(guidanceShort(locale, fairsHubPath(locale)))}</p>;
 }
 
 /** The two datasets, every organiser page the list uses, and the day the data was read. */

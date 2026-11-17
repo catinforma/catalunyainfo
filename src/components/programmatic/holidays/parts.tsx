@@ -45,15 +45,20 @@ const GUIDE_LABEL: Record<GuideKey, Record<DateLocale, string>> = {
  * (2 Nov 2026) there are 34, too many for one undivided list. `first` puts a
  * year first (a date page's own); `exclude` leaves a page out (itself).
  */
-export function DateQuestions({ locale, first, exclude }: { locale: DateLocale; first?: string; exclude?: string }) {
-  const years = [...(first ? [first] : []), ...DATE_PAGES.map((d) => d.slice(0, 4))].filter((y, i, all) => all.indexOf(y) === i);
+export function DateQuestions({ locale, first, exclude, upcoming }: { locale: DateLocale; first?: string; exclude?: string; upcoming?: number }) {
+  // `upcoming` (town and comarca pages, 17 Nov 2026): only the next N dates from today. The full list
+  // (34 links, ~300 words) was the largest identical block on ~1,850 town pages, and it kept linking
+  // days already past; the hub and the date pages still list every date.
+  const next = upcoming ? DATE_PAGES.filter((d) => d >= todayInCatalonia()).slice(0, upcoming) : [];
+  const pages = next.length > 0 ? next : DATE_PAGES;
+  const years = [...(first ? [first] : []), ...pages.map((d) => d.slice(0, 4))].filter((y, i, all) => all.indexOf(y) === i);
   return (
     <>
       {years.map((y) => (
         <div key={y}>
           <h3 className="mt-6 font-sans text-base font-semibold">{y}</h3>
           <ul className="mt-2 grid list-none gap-2 p-0 sm:grid-cols-2">
-            {DATE_PAGES.filter((d) => d !== exclude && d.startsWith(y)).map((d) => (
+            {pages.filter((d) => d !== exclude && d.startsWith(y)).map((d) => (
               <li key={d}>
                 <Link href={datePath(locale, d)}>{dateQuestion(d, locale)}</Link>
               </li>

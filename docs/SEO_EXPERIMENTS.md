@@ -6422,4 +6422,75 @@ fetch at least 5 of the 13 guides llms.txt now adds (access log); "catalunyainfo
 **Go-live.** Deploy (llms.txt, JSON-LD, hub, SMI caption, author page). Publish `editorial-policy`, `about-page` and
 `corrections-page` only after the owner has read the new AI wording.
 
+## 2026-11-17 — Programmatic families audit for AdSense: 680 thin or finished variants out of the index (rules in `low-demand.ts`), two template blocks cut (deploy only; no publish group)
+
+**Why.** The AdSense review is pending and rejects "low-value content" and scaled content abuse; the programmatic families are the
+largest page count and also large traffic assets. Each family was measured on uniqueness and demand before deciding (skills
+programmatic-seo and seo-audit, house rules first: no data added that we do not already hold from the official sources).
+
+**Method.**
+- Uniqueness: ~20 live pages per family (stratified by impressions: top, middle, bottom), `<main>` only (header, footer, nav,
+  scripts out), the page's own place name replaced by a placeholder so swapped-name sentences count as template; 5-word shingles;
+  a shingle is template when it appears on ≥ 30 % of the other sampled pages. "Unique" = share of words covered only by
+  page-specific shingles. Scripts and samples: session scratchpad `pseo-audit-a82c-scripts/` (uniq.py, simulate.py).
+- Demand: GSC per page, 28 days 2026-10-21..2026-11-17 (and 90 days), live sitemap of 17 Nov (3,413 URLs).
+- One bar for every page decided on data: **noindex only with 0 clicks and < 10 impressions in the 28 days.** The past event
+  (11N) is decided on its after-event days instead.
+
+**Families (indexed = in the sitemap on 17 Nov; impressions / clicks of the indexed pages, 28 d).**
+
+| Family | URLs | Indexed | Impr. / clicks | Unique (median page-specific words) | Decision |
+| --- | --- | --- | --- | --- | --- |
+| Town holidays ca/es `/ca/festius/<t>/`, `/es/festivos/<t>/` | ~1,860 | 664 | 94,729 / 2,281 | es 17.0 % (402 of ~2,450), ca 19.1 %; the noindexed ones 12.0 % | Keep. Trim the 34-link "¿Es festivo…?" block to the next 12 dates (→ ~18.8 %). Noindex `/es/festivos/ponts/` (0 in 90 d; the 11 Nov script skipped every slug "ponts"). The 9 zero-impression indexed pages are the councils added today (Monistrol, Cerdanyola…): kept. |
+| Town holidays EN `/en/holidays/<t>/` (since 30 Oct) | 29 | 29 → 15 | 634 / 9 | 13.3 % (median 10.7 %), the lowest | **Noindex 14** (0 clicks, < 10 impr.; 51 impr. between them, at positions 2–17: low demand, not low rank). |
+| Comarca holidays | 86 | 14 | 496 / 10 | 44.2 % | Keep; date block trimmed too. |
+| Date pages `/…/dia/<d>/` (Catalonia) | 102 | 102 → 99 | 28,740 / 937 (es 25,301 / 877) | 48.5 % | Keep; **new rule: out of the index 14 days after the date** (1 Nov 2026 page: 5,242 impr. on the day, 14/day ten days later). 1 Nov ×3 leave now, 11 Nov ×3 on 25 Nov. |
+| Spain 2027 cities `/es/festivos/2027/<c>/<city>/` | 828 | 828 → 292 | es 13,163 / 125; ca 107 / 2; en 409 / 8 | 65.5 % (885 words; BOE + regional bulletins) | ES: keep (147 towns live since 13 Nov; 15 Jan rule of 13 Nov stands). **CA: rule `spain-2027-ca`**, 274 of 276 out. **EN: rule `spain-2027-en`**, 262 of 276 out; kept the 14 with a click or ≥ 10 impr. (Marbella, Mazarrón, Bilbao, Ibiza, Palma…). |
+| Spain 2027 communities and days | 57 + 81 | 138 → 52 | es 540 / 2 and 993 / 7; ca+en 239 / 3 | 43 % / 55 % | ES keep. CA/EN in the two rules (Catalonia's own page kept; 4 more kept: 3 on a click, 1 on 12 impr.). The ca/en day pages also competed with Catalonia's `/ca/festius/dia/<d>-2027/`, `/en/holidays/day/<d>-2027/`. |
+| Election towns | ~1,920 | 912 (ca 485, es 397, en 30) | 94,076 / 3,892 (+ 5,133 / 299 on the 1,012 noindexed) | indexed 41.7 %, noindexed 31.1 %, EN 55.7 % | **No change** (owner decision on re-indexing; 29N in 12 days). EN: 15 of 30 under 10 impr. — re-read after 29N. |
+| Christmas fairs | 92 | 92 | 16,556 / 430 | 31.6 % (231 of 740) | Keep all (season starts; 19 zero-impression pages are mostly new or re-read on 13 Nov). The ~200-word method note moved off the town pages to the hub (#ci-xmas-guide) with a two-sentence pointer (→ ~38.5 %). |
+| Fuel (place, comarca, province, chain) | 148 | 0 | (2,403 / 11 before 11 Nov) | 45.7 % (live prices) | No change: noindexed since 11 Nov, re-index the top ones after AdSense approval (owner). |
+| Reservoirs | 27 | 27 | 2,139 / 5 | 42.6 % (live ACA figures) | Keep (small, unique official data). |
+| Rodalies lines | 38 | 38 | 4,744 / 43 | 25.6 % (station tables shared between lines count as template) | Keep (live notices + station list per line). |
+| Weekend zones | 22 | 22 | 1,229 / 18 | 36.1 % | Keep. |
+| 11N strike city pages | 43 | 43 → 3 | 288,426 / 17,222, **all before 13 Nov**; since then 0 clicks/day, ~250 impr./day at ~9 for "¿cuándo es la próxima huelga?" | 41.5 % (4,400 words each) | **Rule `strike-11n-cities`**: the 13 cities × es/ca/en + the ES Spain page (0 impr. ever) out. Kept: main 11N guides, EN Spain page and city index, CA Spain page. The strikes hub answers the residual queries. |
+| Calculators | 54 | 54 | 1,561 / 27 (live since 13 Nov) | 91 % | Keep. |
+
+**What changed (code).**
+- `src/lib/seo/low-demand.ts`: `LOW_DEMAND_RULES` (pattern + `keep` list: `spain-2027-ca`, `spain-2027-en`,
+  `strike-11n-cities`), `expiredDatePage` (date pages 14 days after their date), 15 paths added to the list (14 EN towns +
+  Ponts); `LOW_DEMAND_AS_OF` 2026-11-17. `isLowDemandPath` covers all three, so robots meta, sitemap, share bar and the widget's
+  attribution follow. Sitemap 3,413 → 2,733 URLs (simulated on the 17 Nov sitemap).
+- `scripts/low-demand.py`: the "ponts" bug fixed; English town pages read with the 0-clicks / < 10 bar (`[days]` argument).
+- Town and comarca pages: `DateQuestions upcoming={12}` + "Todas las fechas" link to the hub's list (the hub and the date pages
+  still list every date). Fair town pages: `GuidanceShort` instead of `Guidance` (the hub keeps the full note; each page keeps its
+  own sources list).
+- Hubs already link every family's top-15 pages by clicks (checked: festivos/festius, holidays EN, 2027 hub, fairs, calculators,
+  reservoirs, Rodalies, weekend, elections), so no hub link was added.
+- Not changed: titles, descriptions, election pages, fuel, AdSense/consent/verification code. Hreflang still lists noindexed
+  alternates (ignored by Google; the Spain-wide clusters' x-default is the EN edition): follow-up, drop low-demand alternates in
+  `buildAlternates` and the family sitemap builders together with their tests.
+
+**Baseline (28 d to 17 Nov).** Groups taken out: ca/en Spain 2027 622 pages, 421 impr., 0 clicks; EN towns 51 impr., 0 clicks;
+11N 40 pages, 0 clicks 13–17 Nov. Families kept: town holidays ca/es 94,729 / 2,281 (CTR 2.4 %), date pages 28,740 / 937, fairs
+16,556 / 430, Spain 2027 ES 13,163 / 125 + 1,533 / 9.
+
+**Prediction.**
+- By 1 Dec: GSC coverage shows the 680 as "Excluded by noindex tag"; site clicks lose < 5/day from them (0 in their last 5 days).
+- Town pages ca/es: family position and CTR within ± 0.3 / ± 0.3 pt of the baseline on 1 Dec (the trimmed block is below the
+  fold); upcoming date pages keep their impressions (they stay linked from every town page).
+- Fair town pages: no position loss on "fira de nadal <town>" queries by 1 Dec.
+
+**Confounders.** 12 Nov answer-first first group includes the 11N city pages (review 19 Nov): they had no organic clicks from 13 Nov,
+so that review reads the main 11N guides and hubs. 16 Nov fair first-line change (the method-note cut is further down the page).
+Seasonal rise of holiday and fair demand from late November.
+
+**Review.** 1 Dec (`snapshot.py families 14`, `page /es/festivos/ 14`, `page mercados-navidad 14`, GSC coverage for 10 sample
+URLs per rule). **10 Dec = `LOW_DEMAND_REVIEW_BY`** (test fails): re-read the list and both `keep` lists on December data with
+`scripts/low-demand.py 28`; a noindexed page that clears the bar leaves the list. 15 Jan: Spain 2027 ES rule of 13 Nov. After
+29N: EN election town pages (15 under the bar) to the owner.
+
+**Go-live.** Deploy only (all pages concerned are code routes or rendered on request; deploy.sh purges Cloudflare). No publish
+group, no IndexNow (the URLs leave the sitemap).
+
 **Outcome:** _pending_
