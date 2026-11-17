@@ -6,6 +6,7 @@ import { getMessages } from "@/lib/i18n";
 import { LEGAL_KEYS, legalPath, sectionPath } from "@/lib/i18n/routes";
 import type { Locale } from "@/lib/i18n/config";
 import { MENU_LABELS, MENU_PATHS } from "@/lib/nav/menu";
+import { seasonalFooterLinks } from "@/lib/nav/footer";
 import { SITE } from "@/lib/site";
 import { Wordmark } from "@/components/Wordmark";
 import { FollowChannelLink } from "@/components/share/FollowChannel";
@@ -51,6 +52,13 @@ export async function SiteFooter({ locale }: { locale: Locale }) {
             <li>
               <Link href={MENU_PATHS.calculators[locale]}>{MENU_LABELS.calculators[locale]}</Link>
             </li>
+            {/* In season only: the Christmas fairs hub (lib/nav/footer.ts), so
+                its town pages are two clicks from any page. */}
+            {seasonalFooterLinks(locale).map((item) => (
+              <li key={item.key}>
+                <Link href={item.href}>{item.label}</Link>
+              </li>
+            ))}
             {/* Topics and authors are linked only once they have something
                 to list. Both are out of the sitemap for the same reason, and
                 a link from every page to an empty index is the other half of
@@ -86,8 +94,11 @@ export async function SiteFooter({ locale }: { locale: Locale }) {
         </nav>
 
         <nav aria-labelledby="ci-foot-legal">
+          {/* The heading links the legal index (/ca/legal/), a sitemap page
+              that nothing linked: the site audit of 17 Nov 2026 found it
+              unreachable from the home pages in all three languages. */}
           <h2 id="ci-foot-legal" className="ci-label mb-3 font-sans">
-            {t.nav.legal}
+            <Link href={sectionPath("legal", locale)}>{t.nav.legal}</Link>
           </h2>
           <ul className="flex list-none flex-col gap-2 p-0 text-sm">
             {FOOTER_LEGAL.map((key) => (

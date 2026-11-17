@@ -410,10 +410,15 @@ export function daySections(day: SpainDay): DaySection[] {
   return sections;
 }
 
-/** The page's questions, as printed, for FAQPage: the H1's, then each section's. */
+/**
+ * The page's questions, as printed, for FAQPage: the H1's, then each section's.
+ * The H1 itself, not `dayQuestion`: for the feasts that move with Easter the H1
+ * adds the date ("… Jueves Santo de 2027 (25 de marzo)?"), and an FAQ question
+ * the page does not show is markup without visible content (site audit, 17 Nov 2026).
+ */
 export function dayFaq(day: SpainDay): Faq[] {
   return [
-    { question: dayQuestion(day.date), answer: [dayLead(day), ...dayNotes(day)].join(" ") },
+    { question: dayH1(day.date), answer: [dayLead(day), ...dayNotes(day)].join(" ") },
     ...daySections(day).map(({ question, answer }) => ({ question, answer })),
   ];
 }

@@ -20,6 +20,11 @@ export function workingDaysPath(locale: WdLocale): string {
   return calcPath("working-days", locale);
 }
 
+/** The calculator with a place picked (the hash the calculator reads: `p` = the leave planner's place id). */
+export function workingDaysLinkFor(locale: WdLocale, placeId: string): string {
+  return `${workingDaysPath(locale)}#p=${placeId}`;
+}
+
 export function workingDaysEditions(): Record<WdLocale, string> {
   return calcEditions("working-days");
 }

@@ -180,3 +180,44 @@ test("low-demand list is re-read before the holidays season (LOW_DEMAND_REVIEW_B
     "re-read the list and the rules' keep lists against fresh Search Console data (scripts/low-demand.py, docs/SEO_EXPERIMENTS.md 17 Nov 2026) and move LOW_DEMAND_REVIEW_BY",
   );
 });
+
+/*
+ * Site audit, 17 Nov 2026: low-demand pages are chosen per language, so 400
+ * indexable sitemap pages named a noindex sibling as an hreflang alternate
+ * (HTML and sitemap alike). The cluster is now the indexable editions only.
+ */
+test("hreflang clusters: a noindex (low-demand) sibling is left out, and a low-demand page lists none", async () => {
+  process.env.VERCEL_ENV = "production";
+  process.env.NEXT_PUBLIC_ALLOW_INDEXING = "true";
+  const { buildAlternates, indexableSitemapLanguages } = await import("../src/lib/seo/metadata.ts");
+  const ORIGIN = "https://www.catalunyainfo.com";
+  const ca = "/ca/eleccions/pineda-de-mar/";
+  const es = "/es/elecciones/pineda-de-mar/";
+  assert.ok(isLowDemandPath(es) && !isLowDemandPath(ca), "fixture: es is low-demand, ca is not");
+
+  const indexed = buildAlternates({ path: ca, translations: { ca, es } });
+  assert.deepEqual(indexed?.languages, { ca: `${ORIGIN}${ca}`, "x-default": `${ORIGIN}${ca}` });
+  assert.equal(indexed?.canonical, `${ORIGIN}${ca}`);
+
+  const noindexed = buildAlternates({ path: es, translations: { ca, es } });
+  assert.equal(noindexed?.languages, undefined);
+  assert.equal(noindexed?.canonical, `${ORIGIN}${es}`, "the canonical stays self-referencing");
+
+  // The sitemap entry for the same page names the same cluster as its HTML.
+  assert.deepEqual(
+    indexableSitemapLanguages(`${ORIGIN}${ca}`, { ca: `${ORIGIN}${ca}`, es: `${ORIGIN}${es}`, "x-default": `${ORIGIN}${ca}` }),
+    indexed?.languages,
+  );
+  // An x-default that pointed at a noindex edition falls back as buildAlternates does (en, ca, the page).
+  assert.deepEqual(
+    indexableSitemapLanguages(`${ORIGIN}${ca}`, { ca: `${ORIGIN}${ca}`, es: `${ORIGIN}${es}`, "x-default": `${ORIGIN}${es}` }),
+    { ca: `${ORIGIN}${ca}`, "x-default": `${ORIGIN}${ca}` },
+  );
+  // The home cluster keeps "/" as x-default.
+  assert.deepEqual(indexableSitemapLanguages(`${ORIGIN}/ca/`, { ca: `${ORIGIN}/ca/`, es: `${ORIGIN}/es/`, "x-default": `${ORIGIN}/` }), {
+    ca: `${ORIGIN}/ca/`,
+    es: `${ORIGIN}/es/`,
+    "x-default": `${ORIGIN}/`,
+  });
+  assert.match(readFileSync("src/app/sitemap.ts", "utf8"), /indexableSitemapLanguages\(entry\.url, languages\)/);
+});

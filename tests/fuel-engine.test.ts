@@ -40,6 +40,7 @@ import { fuelFamilyPaths, fuelSitemapEntries } from "../src/lib/programmatic/fue
 import { API_URLS, FAILURE_CACHE, GEOPORTAL_URL, SUCCESS_CACHE, compactPayload, compactStation, loadCatalonia } from "../src/lib/programmatic/fuel/upstream.ts";
 import { SLUG_PATTERN } from "../src/lib/programmatic/holidays/slug.ts";
 import { buildMetadata } from "../src/lib/seo/metadata.ts";
+import { isLowDemandPath } from "../src/lib/seo/low-demand.ts";
 
 const ROOT = join(import.meta.dirname, "..");
 /** Recorded from the Ministry's service on 28 Oct 2026 at 11:36:05 (26 of the 1,482 stations, unedited). */
@@ -277,12 +278,22 @@ test("metadata: canonical and hreflang between the two editions, x-default to Ca
     description: fuelDescription(place, "es"),
     translations: fuelTranslations(place.kind, place.slug),
   });
-  const alternates = meta.alternates as { canonical: string; languages: Record<string, string> };
+  const alternates = meta.alternates as { canonical: string; languages?: Record<string, string> };
   assert.match(alternates.canonical, /\/es\/gasolineras\/comarca\/osona\/$/);
-  assert.match(alternates.languages.ca!, /\/ca\/benzineres\/comarca\/osona\/$/);
-  assert.match(alternates.languages.es!, /\/es\/gasolineras\/comarca\/osona\/$/);
-  assert.equal(alternates.languages["x-default"], alternates.languages.ca);
-  assert.equal(alternates.languages.en, undefined);
+  // The two editions name each other ...
+  const translations = fuelTranslations(place.kind, place.slug);
+  assert.match(translations.ca!, /^\/ca\/benzineres\/comarca\/osona\/$/);
+  assert.match(translations.es!, /^\/es\/gasolineras\/comarca\/osona\/$/);
+  assert.equal((translations as Record<string, string | undefined>).en, undefined);
+  // ... but while the fuel pages are noindex (lib/seo/low-demand.ts, since 11 Nov) they are in no
+  // hreflang cluster (site audit 17 Nov 2026); once re-indexed, x-default is the Catalan edition.
+  if (isLowDemandPath(translations.es!)) {
+    assert.equal(alternates.languages, undefined);
+  } else {
+    assert.match(alternates.languages!.ca!, /\/ca\/benzineres\/comarca\/osona\/$/);
+    assert.equal(alternates.languages!["x-default"], alternates.languages!.ca);
+    assert.equal(alternates.languages!.en, undefined);
+  }
 });
 
 test("copy: guidance cites the order and the Geoportal; labels carry their placeholders", () => {

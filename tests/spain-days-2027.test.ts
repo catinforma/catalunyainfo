@@ -23,7 +23,6 @@ const {
   dayH1,
   dayLead,
   dayNotes,
-  dayQuestion,
   daySections,
   dayTitle,
   dayVerdict,
@@ -33,6 +32,7 @@ const {
 const { SPAIN_BRIDGES_SLUG, SPAIN_DAY_SLUG, resolveCommunity, resolveSpainDay, spainDayPath, spainDayPaths, spainDaySitemapEntries, spainDaySlug, spainDayStaticParams, spainDayTranslations, spainPaths } =
   await import("../src/lib/programmatic/spain-2027/paths.ts");
 const { B2_PATHS } = await import("../src/lib/content/batch02/shared.ts");
+const { dayFaqIntl, dayH1Intl } = await import("../src/lib/programmatic/spain-2027/day-copy-intl.ts");
 
 type Region = (typeof REGIONS)[number];
 type Day = (typeof SPAIN_DAYS)[number];
@@ -298,7 +298,10 @@ test("FAQPage: the H1's question and each section's, as printed; nothing unfille
   for (const iso of DAY_PAGES) {
     const d = day(iso);
     const faq = dayFaq(d);
-    assert.equal(faq[0]!.question, dayQuestion(iso));
+    // The H1 as printed, the date included for the Easter feasts (site audit 17 Nov 2026:
+    // "¿Es festivo el Jueves Santo de 2027?" was marked up but not on the page).
+    assert.equal(faq[0]!.question, dayH1(iso));
+    for (const L of ["ca", "en"] as const) assert.equal(dayFaqIntl(d, L)[0]!.question, dayH1Intl(iso, L), `${iso} ${L}`);
     assert.ok(faq[0]!.answer.startsWith(dayLead(d)));
     assert.deepEqual(
       faq.slice(1).map((f) => f.question),

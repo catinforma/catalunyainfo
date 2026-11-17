@@ -7,6 +7,7 @@ process.env.VERCEL_ENV = "production";
 process.env.NEXT_PUBLIC_ALLOW_INDEXING = "true";
 
 const { buildMetadata } = await import("../src/lib/seo/metadata.ts");
+const { isLowDemandPath } = await import("../src/lib/seo/low-demand.ts");
 const { municipalitiesFor } = await import("../src/lib/programmatic/elections/pages.ts");
 const { EN_LARGEST, EN_RESORTS } = await import("../src/lib/programmatic/elections/english.ts");
 const { NEXT, SNAPSHOT, YEAR, councilApproved2027 } = await import("../src/lib/programmatic/holidays/data.ts");
@@ -117,26 +118,30 @@ function alternatesOf(locale: "ca" | "es" | "en", path: string, translations: Pa
 }
 
 test("hreflang: each English town and its Catalan and Spanish pages list one another, x-default English", () => {
+  // A noindex (low-demand) edition is in no cluster: it lists no alternates and
+  // the others leave it out (site audit 17 Nov 2026, lib/seo/metadata.ts indexableCluster).
   for (const m of englishTowns()) {
     const translations = municipalityTranslations(m.slug);
-    const expected = {
-      ca: `${ORIGIN}/ca/festius/${m.slug}/`,
-      es: `${ORIGIN}/es/festivos/${m.slug}/`,
-      en: `${ORIGIN}/en/holidays/${m.slug}/`,
-      "x-default": `${ORIGIN}/en/holidays/${m.slug}/`,
-    };
+    const paths = { ca: `/ca/festius/${m.slug}/`, es: `/es/festivos/${m.slug}/`, en: `/en/holidays/${m.slug}/` };
+    const expected: Record<string, string> = {};
+    for (const [code, path] of Object.entries(paths)) if (!isLowDemandPath(path)) expected[code] = `${ORIGIN}${path}`;
+    // x-default is the English page while it is indexed, then the Catalan one (buildAlternates).
+    expected["x-default"] = expected.en ?? expected.ca ?? expected.es!;
     for (const locale of ["ca", "es", "en"] as const) {
       const alternates = alternatesOf(locale, municipalityPath(locale, m.slug), translations);
-      assert.deepEqual(alternates.languages, expected, `${locale} ${m.slug}`);
-      assert.equal(alternates.canonical, expected[locale]);
+      if (isLowDemandPath(paths[locale])) assert.equal(alternates.languages, undefined, `${locale} ${m.slug}`);
+      else assert.deepEqual(alternates.languages, expected, `${locale} ${m.slug}`);
+      assert.equal(alternates.canonical, `${ORIGIN}${paths[locale]}`);
     }
   }
   // A town outside the selection: Catalan and Spanish only, x-default Catalan, no English URL anywhere.
   for (const slug of ["sentmenat", "vilanova-i-la-geltru", "figueres"]) {
     const translations = municipalityTranslations(slug);
     assert.deepEqual(Object.keys(translations).sort(), ["ca", "es"], slug);
+    assert.ok(!isLowDemandPath(`/ca/festius/${slug}/`), `fixture: ${slug} is indexed in Catalan`);
     const alternates = alternatesOf("ca", municipalityPath("ca", slug), translations);
-    assert.deepEqual(Object.keys(alternates.languages).sort(), ["ca", "es", "x-default"]);
+    const keys = isLowDemandPath(`/es/festivos/${slug}/`) ? ["ca", "x-default"] : ["ca", "es", "x-default"];
+    assert.deepEqual(Object.keys(alternates.languages).sort(), keys, slug);
     assert.equal(alternates.languages["x-default"], `${ORIGIN}/ca/festius/${slug}/`);
   }
   // The three hubs.

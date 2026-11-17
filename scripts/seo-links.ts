@@ -25,14 +25,18 @@
  *
  * Usage: `npm run seo:links`
  * Exit code is non-zero when broken links or orphans are found, so it can gate
- * a deploy.
+ * a deploy. Fetching goes through scripts/lib/crawl.ts: at most SEO_CONCURRENCY
+ * (default 4) requests in flight, a browser UA, and SEO_CACHE_DIR to reuse the
+ * responses a `site:audit` run already fetched. `site:audit` also reports
+ * broken links, orphans and click depth over a wider crawl; this script keeps
+ * the editorial questions (contextual vs menu links, cross-language leaks).
  */
 import { SITE } from "../src/lib/site.ts";
+import { CONCURRENCY, fetchPage, mapLimit, readSitemap } from "./lib/crawl.ts";
 
 export {};
 
 const ORIGIN = process.env.SEO_ORIGIN ?? SITE.productionOrigin;
-const CONCURRENCY = 8;
 
 interface PageReport {
   url: string;
@@ -43,27 +47,19 @@ interface PageReport {
 }
 
 async function fetchText(url: string): Promise<string | null> {
-  try {
-    const response = await fetch(url, {
-      headers: { "user-agent": "CatalunyaInfo-link-audit" },
-      signal: AbortSignal.timeout(30_000),
-    });
-    if (!response.ok) return null;
-    return await response.text();
-  } catch {
-    return null;
-  }
+  const page = await fetchPage(url, { timeoutMs: 30_000 });
+  return page.finalStatus === 200 ? page.body : null;
 }
 
 async function sitemapUrls(): Promise<string[]> {
-  const xml = await fetchText(`${ORIGIN}/sitemap.xml`);
-  if (!xml) throw new Error(`Could not read ${ORIGIN}/sitemap.xml`);
-  return [...xml.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1] ?? "").filter(Boolean);
+  return (await readSitemap(`${ORIGIN}/sitemap.xml`)).map((entry) => entry.loc);
 }
 
 function linksIn(scope: string): Set<string> {
   const out = new Set<string>();
-  for (const match of scope.matchAll(/href="(\/[a-z]{2}\/[^"#?]*)"/g)) {
+  // Relative links and absolute ones on our own host (a block that writes the full URL).
+  const host = ORIGIN.replace(/[.]/g, "\\.");
+  for (const match of scope.matchAll(new RegExp(`href="(?:${host})?(\\/[a-z]{2}\\/[^"#?]*)"`, "g"))) {
     const href = match[1];
     if (href) out.add(href.endsWith("/") ? href : `${href}/`);
   }
@@ -83,21 +79,6 @@ function internalLinks(html: string): { contextual: Set<string>; all: Set<string
   const end = html.indexOf("</main>");
   const main = start >= 0 && end > start ? html.slice(start, end + 7) : "";
   return { contextual: linksIn(main), all: linksIn(html) };
-}
-
-async function mapLimit<T, R>(items: T[], limit: number, fn: (item: T) => Promise<R>) {
-  const results: R[] = [];
-  let index = 0;
-  await Promise.all(
-    Array.from({ length: Math.min(limit, items.length) }, async () => {
-      while (index < items.length) {
-        const current = index++;
-        const item = items[current];
-        if (item !== undefined) results[current] = await fn(item);
-      }
-    }),
-  );
-  return results;
 }
 
 async function main() {
@@ -129,21 +110,12 @@ async function main() {
   for (const page of pages) {
     for (const href of page.all) if (!known.has(href)) offSitemap.add(href);
   }
+  // Bounded like the crawl: an unbounded Promise.all fired every HEAD at once.
   const resolved = new Map<string, boolean>();
-  await Promise.all(
-    [...offSitemap].map(async (href) => {
-      try {
-        const response = await fetch(`${ORIGIN}${href}`, {
-          method: "HEAD",
-          headers: { "user-agent": "CatalunyaInfo-link-audit" },
-          signal: AbortSignal.timeout(20_000),
-        });
-        resolved.set(href, response.ok);
-      } catch {
-        resolved.set(href, false);
-      }
-    }),
-  );
+  await mapLimit([...offSitemap], CONCURRENCY, async (href) => {
+    const response = await fetchPage(`${ORIGIN}${href}`, { method: "HEAD", timeoutMs: 20_000 });
+    resolved.set(href, response.finalStatus >= 200 && response.finalStatus < 300);
+  });
 
   for (const page of pages) {
     const from = page.url.replace(ORIGIN, "");

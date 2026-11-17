@@ -313,3 +313,24 @@ test("date guard: the legal texts are read again by RULES_RECHECK_BY, and 2028 h
   assert.ok(today < RULES_RECHECK_BY, `re-read Ley 39/2015 art. 30, LOPJ 182-185 and LEC 130-135 on the BOE, refresh the fixture and move RULES_AS_OF (${RULES_AS_OF})`);
   assert.ok(today < COVER_EXTEND_BY, `the calculator only covers ${COVER_FROM}–${COVER_TO}: add the 2028 lists and move COVER_TO`);
 });
+
+test("links: town and city pages open the calculator with their place picked (site audit 17 Nov 2026)", async () => {
+  const { workingDaysLinkFor } = await import("../src/lib/programmatic/working-days/copy.ts");
+  for (const locale of WD_LOCALES) {
+    const values = new Set(workingDaysData(locale).groups.flatMap((g) => g.items.map((i) => i[0])));
+    const town = municipalities()[0]!;
+    assert.ok(values.has(town.slug), `${locale}: ${town.slug} is a picker value`);
+    assert.equal(workingDaysLinkFor(locale, town.slug), `${workingDaysEditions()[locale]}#p=${town.slug}`);
+    const city = CITIES[0]!;
+    const cityId = [...values].find((v) => v.endsWith(`/${city.slug}`));
+    assert.ok(cityId, `${locale}: ${city.slug} is a picker value`);
+  }
+  for (const file of [
+    "src/components/programmatic/holidays/MunicipalityPage.tsx",
+    "src/components/programmatic/holidays/EnglishTownPage.tsx",
+    "src/components/programmatic/spain-2027/city-page.tsx",
+    "src/components/programmatic/spain-2027/city-page-intl.tsx",
+  ]) {
+    assert.match(read(file), /<WorkingDaysPlaceLink locale=/, file);
+  }
+});

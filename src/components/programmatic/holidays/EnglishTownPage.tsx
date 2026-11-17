@@ -5,6 +5,7 @@ import { Breadcrumbs, type Crumb } from "@/components/Breadcrumbs";
 import { ShareBar, crumbPath } from "@/components/share/ShareBar";
 import { WidgetPlaceLink } from "@/components/programmatic/embed-2027/WidgetLink";
 import { LeavePlaceLink } from "@/components/programmatic/leave-2027/LeaveLink";
+import { WorkingDaysPlaceLink } from "@/components/programmatic/working-days/WorkingDaysLink";
 import { CalendarSubscribe } from "@/components/programmatic/ics/CalendarSubscribe";
 import { getMessages } from "@/lib/i18n";
 import { NEXT, YEAR, councilApproved2027, localThrough, nextYearFor, regionalThrough, statusDays, yearRows } from "@/lib/programmatic/holidays/data";
@@ -155,6 +156,8 @@ export function EnglishTownPage({ m }: { m: SnapshotMunicipality }) {
           )}
           {/* The 2027 leave planner, with this town picked. */}
           <LeavePlaceLink locale="en" placeId={m.slug} place={name} />
+          {/* The working-days calculator, with this place picked. */}
+          <WorkingDaysPlaceLink locale="en" placeId={m.slug} place={name} />
           {/* The Catalonia-wide 2027 calendar, month by month (13 Nov 2026). */}
           <p>{renderInline(workCalendarLine("en"))}</p>
           {/* The embeddable 2027 calendar, with this town picked. */}

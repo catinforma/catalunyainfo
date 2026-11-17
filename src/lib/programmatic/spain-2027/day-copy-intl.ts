@@ -533,9 +533,10 @@ export function daySectionsIntl(day: SpainDay, L: IntlLocale): DaySection[] {
   return sections;
 }
 
+/** As `dayFaq`: the first question is the H1 as printed (with the date for the Easter feasts). */
 export function dayFaqIntl(day: SpainDay, L: IntlLocale): Faq[] {
   return [
-    { question: dayQuestionIntl(day.date, L), answer: [dayLeadIntl(day, L), ...dayNotesIntl(day, L)].join(" ") },
+    { question: dayH1Intl(day.date, L), answer: [dayLeadIntl(day, L), ...dayNotesIntl(day, L)].join(" ") },
     ...daySectionsIntl(day, L).map(({ question, answer }) => ({ question, answer })),
   ];
 }

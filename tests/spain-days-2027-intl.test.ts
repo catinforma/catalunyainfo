@@ -24,7 +24,6 @@ const {
   dayH1Intl,
   dayLeadIntl,
   dayNotesIntl,
-  dayQuestionIntl,
   daySectionsIntl,
   dayTitleIntl,
   dayVerdictIntl,
@@ -198,7 +197,8 @@ test("titles <= 60 with the question first, descriptions <= 165; nothing unfille
       assert.ok(description.length <= DESCRIPTION_LIMIT, `${iso} ${locale}: ${description.length}`);
       assert.doesNotMatch(allText(iso, locale), /undefined|null|NaN|\[object|\s{2}|\s[,.]/, `${iso} ${locale}`);
       const faq = dayFaqIntl(d, locale);
-      assert.equal(faq[0]!.question, dayQuestionIntl(iso, locale));
+      // The H1 as printed (site audit 17 Nov 2026: the Easter feasts' H1 carries the date).
+      assert.equal(faq[0]!.question, dayH1Intl(iso, locale));
       assert.deepEqual(
         faq.slice(1).map((f) => f.question),
         daySectionsIntl(d, locale).map((s) => s.question),

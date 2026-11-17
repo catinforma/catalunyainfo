@@ -6493,4 +6493,45 @@ URLs per rule). **10 Dec = `LOW_DEMAND_REVIEW_BY`** (test fails): re-read the li
 **Go-live.** Deploy only (all pages concerned are code routes or rendered on request; deploy.sh purges Cloudflare). No publish
 group, no IndexNow (the URLs leave the sitemap).
 
+## 2026-11-17 — Technical SEO audit of the live site: hreflang clusters without noindex editions, FAQ markup = visible questions, Christmas fairs two clicks deep, calculators linked from town pages (deploy only; no group; no title or description touched)
+
+**Observation.** `npm run site:audit` (extended today: sitemap + news sitemap + llms.txt + every linked page, 4 requests in flight,
+browser UA) crawled 5,911 pages on 17 Nov ~12:20 UTC (3,413 sitemap URLs, 2,498 noindex low-demand pages). Clean: 0 broken internal
+links, 0 internal links to redirects, 0 orphans, 0 noindex or non-canonical URLs in the sitemap, 0 indexable pages missing from it,
+canonical = self and one H1 everywhere, 0 invalid JSON-LD, 0 images without alt, 0 mixed content, OG/Twitter complete, html lang and
+hreflang/sitemap agreement 100 %, llms.txt 394/394 URLs live and indexable, median response 264 ms. Defects:
+- **hreflang to noindex editions:** 400 sitemap URLs (2,506 pages in all) listed a low-demand (noindex) sibling as an alternate, in
+  the HTML and in the sitemap's xhtml:link: the low-demand list is per language (e.g. `/ca/eleccions/pineda-de-mar/` indexed,
+  `/es/elecciones/pineda-de-mar/` noindex). Families: election towns 232, holiday towns 151 (English editions included), comarques 17.
+- **FAQPage not visible:** 12 Spain-2027 day pages (Jueves/Viernes Santo, Lunes de Pascua, Corpus; es/ca/en) marked up
+  "¿Es festivo el Jueves Santo de 2027?" while the H1 reads "… de 2027 (25 de marzo)?".
+- **Click depth:** the Christmas fairs hubs at 3 and their town pages at 4 (84 sitemap URLs) since the homepage strip of seasonal
+  tools left (12 Nov); the legal index (`/ca/legal/`, `/es/legal/`, `/en/legal/`) linked from nowhere reachable.
+- **Calculators as an island:** 14 of the 19 Spanish calculators had no link from outside the calculators family (hub + "More
+  calculators"); GSC URL inspection on 17 Nov: finiquito, hipoteca and the EN net salary calculator "URL is unknown to Google";
+  the sitemap was last downloaded on 13 Nov 00:34 (resubmitted today 12:41 UTC).
+- `JsonLd.tsx` escaped `<` with `"<"`, which in TS source is `<` itself (a no-op): a `</script>` in any string value would have
+  closed the element.
+
+**What changed.**
+- `lib/seo/metadata.ts` `indexableCluster` / `indexableSitemapLanguages`: noindex (low-demand) editions are left out of every hreflang
+  cluster, in the HTML and in the sitemap; a low-demand page lists no alternates (it keeps its self canonical); an x-default that
+  pointed at a noindex edition falls back to en, then ca, then the page.
+- `spain-2027/day-copy*.ts`: the first FAQ question is the H1 as printed.
+- Footer: "Fires de Nadal / Mercados de Navidad / Christmas markets" (fairs hub) from 2 Nov to 6 Jan (the homepage's SEASONAL
+  window; `lib/nav/footer.ts`); the "Legal" heading links the legal index.
+- Town holiday pages (ca/es/en) and Spain 2027 city pages: one line to the working-days calculator with the place picked
+  (`#p=<place>`), next to the leave planner's.
+- `JsonLd.tsx`: `jsonForScript` escapes `<`, U+2028, U+2029.
+- Not touched (inside windows): 59 titles over 65 characters, all in families changed on 13 Nov (Spain school calendars, review
+  20/27 Nov; calculators, review 15 Dec; PVPC EN) and 14 calculator descriptions cut with "…" at 165 characters.
+
+**Baseline (GSC 21 Oct–17 Nov).** `/es/mercados-navidad/` 37 pages 10,163 impressions 2.43 % CTR; `/ca/fires-de-nadal/` 36 pages
+7,455 impressions 3.00 %; `/es/calculadoras/` 16 pages 1,272 impressions 1.26 %; `dias-habiles` a handful of impressions, 0 clicks.
+
+**Prediction.** By 15 Dec: `site:audit` shows 0 hreflang-target-not-indexable, 0 jsonld-faq-not-visible and no sitemap URL deeper
+than 3 clicks; URL inspection finds every calculator indexed; the fairs town pages' last crawl is within 7 days.
+
+**Review 15 Dec** (`npm run site:audit`, `crawl-gap.py out.json urls.txt` on the 50-URL sample, `snapshot.py families 28`).
+
 **Outcome:** _pending_

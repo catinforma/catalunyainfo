@@ -53,19 +53,74 @@ export function buildAlternates({
   canonicalOverride,
 }: AlternatesInput): Metadata["alternates"] {
   const languages: Record<string, string> = {};
+  const cluster = indexableCluster(path, translations);
 
   for (const locale of LOCALES) {
-    const href = translations[locale];
+    const href = cluster[locale];
     if (href) languages[HTML_LANG[locale]] = absoluteUrl(href);
   }
 
-  const xDefault = isHomeCluster(translations) ? "/" : (translations[X_DEFAULT_LOCALE] ?? translations.ca ?? path);
-  if (xDefault) languages["x-default"] = absoluteUrl(xDefault);
+  if (Object.keys(languages).length > 0) {
+    const xDefault = isHomeCluster(cluster) ? "/" : (cluster[X_DEFAULT_LOCALE] ?? cluster.ca ?? path);
+    if (xDefault) languages["x-default"] = absoluteUrl(xDefault);
+  }
 
   return {
     canonical: canonicalOverride ?? absoluteUrl(path),
     languages: Object.keys(languages).length > 0 ? languages : undefined,
   };
+}
+
+/**
+ * The editions that may stand in an hreflang cluster: the indexable ones.
+ *
+ * The low-demand pages (lib/seo/low-demand.ts) are decided per language, so
+ * an indexable town page often has a noindex sibling: /ca/eleccions/pineda-de-mar/
+ * is indexed, /es/elecciones/pineda-de-mar/ is not. Listing that sibling as an
+ * alternate names a noindex URL in the HTML and in the sitemap's xhtml:link,
+ * and Google drops the pair anyway (site audit, 17 Nov 2026: 400 sitemap URLs,
+ * 2,506 pages in all). So a noindex sibling is left out of the cluster, and a
+ * low-demand page itself is in none: it lists no alternates at all, as Google
+ * ignores hreflang on a page it does not index. The language switcher is not
+ * affected; it reads the translations, not these alternates.
+ */
+export function indexableCluster(
+  path: string,
+  translations: Partial<Record<Locale, string>>,
+): Partial<Record<Locale, string>> {
+  if (isLowDemandPath(path)) return {};
+  const out: Partial<Record<Locale, string>> = {};
+  for (const locale of LOCALES) {
+    const href = translations[locale];
+    if (href && !isLowDemandPath(href)) out[locale] = href;
+  }
+  return out;
+}
+
+/**
+ * The same rule for a sitemap entry's `alternates.languages` (hreflang code ->
+ * absolute URL), built by each family's own sitemap module: noindex editions
+ * are dropped, and an x-default that pointed at one falls back the way
+ * `buildAlternates` chooses it (English, then Catalan, then the page itself),
+ * so the sitemap and the HTML keep naming the same cluster.
+ */
+export function indexableSitemapLanguages(
+  url: string,
+  languages: Record<string, string> | undefined,
+): Record<string, string> | undefined {
+  if (!languages) return languages;
+  const kept: Record<string, string> = {};
+  for (const [code, href] of Object.entries(languages)) {
+    if (code !== "x-default" && !isLowDemandPath(href)) kept[code] = href;
+  }
+  if (Object.keys(kept).length === 0) return undefined;
+  const xDefault = languages["x-default"];
+  if (xDefault !== undefined) {
+    kept["x-default"] = !isLowDemandPath(xDefault)
+      ? xDefault
+      : (kept[HTML_LANG[X_DEFAULT_LOCALE]] ?? kept[HTML_LANG.ca] ?? url);
+  }
+  return kept;
 }
 
 export interface PageMetadataInput {

@@ -5,7 +5,7 @@ import { allIndexablePaths, countBySection } from "@/lib/content/repository";
 import { HTML_LANG, LOCALES, X_DEFAULT_LOCALE, type Locale } from "@/lib/i18n/config";
 import { allSystemPaths, sectionPath } from "@/lib/i18n/routes";
 import { absoluteUrl, indexingAllowed } from "@/lib/site";
-import { isHomeCluster } from "@/lib/seo/metadata";
+import { indexableSitemapLanguages, isHomeCluster } from "@/lib/seo/metadata";
 import { isLowDemandPath } from "@/lib/seo/low-demand";
 import { electionsSitemap } from "@/lib/programmatic/elections/pages";
 import { holidaySitemapEntries } from "@/lib/programmatic/holidays/paths";
@@ -230,8 +230,17 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // URLs only: no title or snippet, so nothing here can carry a poll figure.
     ...pollsSitemapEntries(),
   ];
-  // The pages kept out of the index (noindex) are left out here too (lib/seo/low-demand.ts).
-  return all.filter((entry) => !isLowDemandPath(entry.url));
+  // The pages kept out of the index (noindex) are left out here too (lib/seo/low-demand.ts),
+  // as <loc> and as anyone's hreflang alternate: the HTML leaves them out the same way
+  // (indexableCluster in lib/seo/metadata.ts).
+  return all
+    .filter((entry) => !isLowDemandPath(entry.url))
+    .map((entry) => {
+      const languages = entry.alternates?.languages as Record<string, string> | undefined;
+      if (!languages) return entry;
+      const kept = indexableSitemapLanguages(entry.url, languages);
+      return { ...entry, alternates: { ...entry.alternates, languages: kept } };
+    });
 }
 
 function languageMap(group: Partial<Record<Locale, string>>): Record<string, string> {

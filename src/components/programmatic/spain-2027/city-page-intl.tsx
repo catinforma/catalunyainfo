@@ -4,6 +4,7 @@ import { ShareBar, crumbPath } from "@/components/share/ShareBar";
 import type { Crumb } from "@/components/Breadcrumbs";
 import { WidgetPlaceLink } from "@/components/programmatic/embed-2027/WidgetLink";
 import { LeavePlaceLink } from "@/components/programmatic/leave-2027/LeaveLink";
+import { WorkingDaysPlaceLink } from "@/components/programmatic/working-days/WorkingDaysLink";
 import { CalendarSubscribe } from "@/components/programmatic/ics/CalendarSubscribe";
 import { dayMonthYear } from "@/lib/programmatic/holidays/format";
 import { YEAR } from "@/lib/programmatic/spain-2027/calendar";
@@ -174,6 +175,8 @@ export function CityPageIntl({ c, locale }: { c: City; locale: Edition }) {
             </p>
           ) : null}
           <LeavePlaceLink locale={locale} placeId={`${c.community.slug}/${c.slug}`} place={name} />
+          {/* The working-days calculator, with this place picked. */}
+          <WorkingDaysPlaceLink locale={locale} placeId={`${c.community.slug}/${c.slug}`} place={name} />
           <WidgetPlaceLink locale={locale} place={{ kind: "city", c }} />
           {/* The city's confirmed 2027 holidays as a calendar feed (.ics). */}
           <CalendarSubscribe locale={locale} place={{ kind: "city", c }} />
