@@ -184,7 +184,7 @@ export function inNewsWindow<T extends { publishedAt: Date; updatedAt: Date }>(i
  * hours, most recently updated first, at most 1,000. `news:publication_date` is the
  * real publication date; `news:name` the site's name as Google News shows it.
  */
-export function buildNewsSitemap(siteName: string, items: NewsSitemapItem[], now: Date): string {
+export function buildNewsSitemap(siteName: string, items: NewsSitemapItem[], now: Date, quietDayUrl?: string): string {
   const listed = inNewsWindow(items, now)
     .sort((a, b) => b.updatedAt.getTime() - a.updatedAt.getTime())
     .slice(0, NEWS_SITEMAP_MAX);
@@ -208,6 +208,11 @@ export function buildNewsSitemap(siteName: string, items: NewsSitemapItem[], now
       "</url>",
     );
   }
+  // A quiet day (nothing published in 48 h): Search Console reports an empty
+  // <urlset> as "Missing XML tag: url" (seen 17 Nov 2026). One plain <url>
+  // with no <news:news> keeps the file valid without passing an old piece off
+  // as news.
+  if (listed.length === 0 && quietDayUrl) out.push("<url>", `<loc>${xmlEscape(quietDayUrl)}</loc>`, "</url>");
   out.push("</urlset>");
   return `${out.join("\n")}\n`;
 }

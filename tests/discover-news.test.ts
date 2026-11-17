@@ -461,8 +461,13 @@ test("the Google News sitemap is well-formed and lists only pieces published in 
   }
   // The real publication date, not the modification.
   assert.equal(elements(urls[1]!, "news:publication_date")[0], "2026-11-05T08:00:00.000Z");
-  // A quiet day: an empty, valid urlset.
+  // A quiet day: still a valid urlset, with the home page as one plain <url> and no news entry.
   assert.equal(assertWellFormed(feeds.buildNewsSitemap(SITE.name, [], now)), "urlset");
+  const quiet = feeds.buildNewsSitemap(SITE.name, [], now, `${ORIGIN}/ca/`);
+  assert.deepEqual(elements(quiet, "url").map((u) => elements(u, "loc")[0]), [`${ORIGIN}/ca/`]);
+  assert.equal(elements(quiet, "news:news").length, 0);
+  // With news in the window, no plain fallback entry.
+  assert.ok(!feeds.buildNewsSitemap(SITE.name, [row(3, "2026-11-06T09:00:00Z", "2026-11-06T09:00:00Z")], now, `${ORIGIN}/ca/`).includes(`<loc>${ORIGIN}/ca/</loc>`));
   // Never more than 1,000 entries.
   const many = Array.from({ length: 1200 }, (_, i) => row(i, "2026-11-06T10:00:00Z"));
   assert.equal(elements(feeds.buildNewsSitemap(SITE.name, many, now), "url").length, feeds.NEWS_SITEMAP_MAX);

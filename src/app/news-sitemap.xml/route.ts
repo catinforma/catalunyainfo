@@ -6,8 +6,9 @@ import { SITE, absoluteUrl, indexingAllowed } from "@/lib/site";
  * `/news-sitemap.xml`: the Google News sitemap (lib/seo/feeds.ts), listed in
  * robots.txt next to the main sitemap. Only written pieces published in the
  * last 48 hours, as Google's news sitemap rules require (buildNewsSitemap
- * drops the older ones the modified-since query returns); an empty
- * `<urlset>` on a quiet day is valid.
+ * drops the older ones the modified-since query returns). On a quiet day the
+ * file lists the home page as one plain <url>: Search Console flags an empty
+ * <urlset> as an error.
  *
  * Revalidated every 15 minutes, so an item leaves the file soon after its two
  * days are up, and at once by every publish (FEED_PATHS). Nothing is listed on
@@ -33,6 +34,7 @@ export async function GET() {
       updatedAt: row.updatedAt,
     })),
     now,
+    indexingAllowed() ? absoluteUrl("/ca/") : undefined,
   );
 
   return new Response(xml, { headers: { "content-type": "application/xml; charset=utf-8" } });
