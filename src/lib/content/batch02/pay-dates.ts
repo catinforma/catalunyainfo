@@ -62,6 +62,8 @@ const CALC = calcEditions("unemployment");
 const SUBSIDY = calcEditions("unemployment-subsidy");
 /** The net salary calculator and the calculators hub, for readers checking a payslip rather than a benefit. */
 const NET = calcEditions("net-salary");
+/** The Christmas extra pay calculator (lib/programmatic/extra-pay/), which links back here: the payslip extra, not the pension one. */
+const EXTRA = calcEditions("extra-pay");
 const HUB = calculatorsHubEditions();
 /** The 2027 pension increase calculator (lib/programmatic/pensions-2027/), which links back here. */
 const PENSION_CALC = pensionEditions();
@@ -148,6 +150,7 @@ const COPY: Record<Locale, PayCopy> = {
       texts: [
         `Las pensiones contributivas de la Seguridad Social tienen «dos pagas extraordinarias que se devengan en los meses de junio y noviembre», que se cobran con la mensualidad de esos meses. Las pensiones por accidente de trabajo o enfermedad profesional las tienen **prorrateadas** en las 12 mensualidades. Las ${link(U.imserso, "pensiones no contributivas")} también tienen extra en junio y noviembre (${link(U.lgss, "Ley General de la Seguridad Social")}, art. 46.2). El Ingreso Mínimo Vital no tiene pagas extra.`,
         `Las **pensiones de Clases Pasivas** (funcionarios del Estado) son distintas: el pago se ordena «a partir del día 25 de cada mes», salvo en diciembre, que se adelanta (${link(U.pasivasFaq, "Seguridad Social")}), y sus pagas extra son en **junio y diciembre** (${link(U.pasivas, "Real Decreto Legislativo 670/1987")}).`,
+        `¿Cobras una nómina? Tu paga extra de Navidad no sigue este calendario: el día y el importe los fija tu convenio colectivo. ${link(EXTRA.es, "Calcula tu paga extra de Navidad")}: bruto, parte proporcional si entraste este año, retención de IRPF y neto.`,
       ],
     },
     bank: {
@@ -189,6 +192,7 @@ const COPY: Record<Locale, PayCopy> = {
       texts: [
         `Les pensions contributives de la Seguretat Social tenen dues pagues extraordinàries que es meriten els mesos de juny i novembre i es cobren amb la mensualitat d'aquests mesos. Les pensions per accident de treball o malaltia professional les tenen **prorratejades** en les 12 mensualitats. Les ${link(U.imserso, "pensions no contributives")} també tenen paga extra al juny i al novembre (${link(U.lgss, "Llei general de la Seguretat Social")}, art. 46.2). L'Ingrés Mínim Vital no té pagues extra.`,
         `Les **pensions de Classes Passives** (funcionaris de l'Estat) van a part: el pagament s'ordena a partir del dia 25 de cada mes, tret del desembre, que s'avança (${link(U.pasivasFaq, "Seguretat Social")}), i les pagues extra són al **juny i al desembre** (${link(U.pasivas, "Reial decret legislatiu 670/1987")}).`,
+        `Cobres una nòmina? La teva paga extra de Nadal no segueix aquest calendari: el dia i l'import els fixa el teu conveni col·lectiu. ${link(EXTRA.ca, "Calcula la teva paga extra de Nadal")}: brut, part proporcional si vas entrar aquest any, retenció d'IRPF i net.`,
       ],
     },
     bank: {
@@ -230,6 +234,7 @@ const COPY: Record<Locale, PayCopy> = {
       texts: [
         `Contributory Social Security pensions come with two extra payments (pagas extraordinarias) that accrue in June and November and are paid with the pension for those months. Pensions for a work accident or an occupational disease have them **spread** across the 12 monthly payments. ${link(U.imserso, "Non-contributory pensions")} also get an extra payment in June and November (${link(U.lgss, "General Social Security Act")}, art. 46.2). The Minimum Living Income has no extra payments.`,
         `**Clases Pasivas pensions** (for state civil servants) work differently: the payment order is issued from the 25th of each month, except in December, when it is brought forward (${link(U.pasivasFaq, "Social Security")}), and their extra payments come in **June and December** (${link(U.pasivas, "Royal Legislative Decree 670/1987")}).`,
+        `On a payroll? Your Christmas extra payment does not follow this calendar: the day and the amount are set by your collective agreement. ${link(EXTRA.en, "Work out your Christmas extra pay")}: gross, the part earned if you started this year, IRPF withheld and net.`,
       ],
     },
     bank: {

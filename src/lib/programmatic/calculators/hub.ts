@@ -8,6 +8,7 @@ import { caDayArticle, dayMonthYear } from "@/lib/programmatic/holidays/format";
 import { hubPath as holidaysHubPath } from "@/lib/programmatic/holidays/paths";
 import { leavePath } from "@/lib/programmatic/leave-2027/copy";
 import { SALARY_RULES_AS_OF } from "@/lib/programmatic/net-salary/rules-2026";
+import { EXTRA_PAY_RULES_AS_OF } from "@/lib/programmatic/extra-pay/rules";
 import { RENT_RULES_AS_OF } from "@/lib/programmatic/rent-update/rules";
 import { RULES_AS_OF as EURIBOR_RULES_AS_OF } from "@/lib/programmatic/euribor/rules";
 import { RULES_AS_OF as MORTGAGE_RULES_AS_OF } from "@/lib/programmatic/mortgage/rules";
@@ -95,6 +96,24 @@ export const HUB_GROUPS: HubGroup[] = [
         },
         scope: "spain",
         checked: SALARY_RULES_AS_OF,
+      },
+      {
+        key: "extra-pay",
+        calculator: true,
+        href: calc("extra-pay"),
+        title: { ca: "Paga extra de Nadal 2026", es: "Paga extra de Navidad 2026", en: "Christmas extra pay 2026" },
+        answers: {
+          ca: "Quant cobraràs net de paga extra, quina part et toca si vas entrar aquest any i per què no porta Seguretat Social?",
+          es: "¿Cuánto cobrarás neto de paga extra, qué parte te toca si entraste este año y por qué no lleva Seguridad Social?",
+          en: "How much your extra payment comes to after tax, the part you have earned if you started this year, and why it carries no Social Security.",
+        },
+        basis: {
+          ca: "Estatut dels Treballadors, art. 31; Llei general de la Seguretat Social, art. 147.1; Reglament de l'IRPF, arts. 82 i 83, i algoritme de retencions 2026 de l'Agència Tributària.",
+          es: "Estatuto de los Trabajadores, art. 31; Ley General de la Seguridad Social, art. 147.1; Reglamento del IRPF, arts. 82 y 83, y algoritmo de retenciones 2026 de la Agencia Tributaria.",
+          en: "Workers' Statute, art. 31; General Social Security Act, art. 147.1; IRPF Regulation, arts. 82 and 83, and the Tax Agency's 2026 withholding algorithm.",
+        },
+        scope: "spain",
+        checked: EXTRA_PAY_RULES_AS_OF,
       },
       {
         key: "self-employed",

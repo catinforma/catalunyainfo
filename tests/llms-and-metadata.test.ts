@@ -27,6 +27,7 @@ const { christmasFairsPaths } = await import("../src/lib/programmatic/christmas-
 const { GUIDES } = await import("../src/lib/programmatic/holidays/links.ts");
 const { leaveEditions } = await import("../src/lib/programmatic/leave-2027/copy.ts");
 const { netSalaryEditions } = await import("../src/lib/programmatic/net-salary/copy.ts");
+const { extraPayEditions } = await import("../src/lib/programmatic/extra-pay/copy.ts");
 const { selfEmployedEditions } = await import("../src/lib/programmatic/self-employed/copy.ts");
 const { sickLeaveEditions } = await import("../src/lib/programmatic/sick-leave/copy.ts");
 const { paidLeaveEditions } = await import("../src/lib/programmatic/paid-leave/copy.ts");
@@ -109,6 +110,7 @@ test("every URL llms.txt names is a page a family or guide publishes", () => {
     ...LOCALES.map((l) => todayPath(l)),
     ...Object.values(leaveEditions()),
     ...Object.values(netSalaryEditions()),
+    ...Object.values(extraPayEditions()),
     ...Object.values(selfEmployedEditions()),
     ...Object.values(sickLeaveEditions()),
     ...Object.values(paidLeaveEditions()),

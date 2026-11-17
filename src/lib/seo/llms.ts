@@ -13,6 +13,7 @@
 
 import { leaveEditions } from "@/lib/programmatic/leave-2027/copy";
 import { netSalaryEditions } from "@/lib/programmatic/net-salary/copy";
+import { extraPayEditions } from "@/lib/programmatic/extra-pay/copy";
 import { selfEmployedEditions } from "@/lib/programmatic/self-employed/copy";
 import { sickLeaveEditions } from "@/lib/programmatic/sick-leave/copy";
 import { paidLeaveEditions } from "@/lib/programmatic/paid-leave/copy";
@@ -169,6 +170,11 @@ export function liveTools(): LiveTool[] {
       name: "Spain net salary calculator 2026",
       hubs: netSalaryEditions(),
       description: "gross annual salary to net pay for 2026 anywhere in Spain's common tax regime (plus Ceuta, Melilla and La Palma): IRPF withholding with the Tax Agency's official 2026 algorithm and the worker's Social Security contributions (Orden PJC/297/2026), in 12 or 14 payments, by family situation, children, age, disability and contract type; checked against the Tax Agency's own withholding service.",
+    },
+    {
+      name: "Spain Christmas extra pay calculator 2026 (paga extra de Navidad)",
+      hubs: extraPayEditions(),
+      description: "the Christmas extra payment of an employee in Spain: the gross amount (set by the collective agreement, ET art. 31; one month's pay unless entered), the part earned by someone who started during the accrual period (yearly 1 Jan-31 Dec or half-yearly 1 Jul-31 Dec, calendar days), the IRPF withheld at the same rate as every payslip (IRPF Regulation arts. 82.5 and 83.2; payslip rate or the Tax Agency's 2026 algorithm via the net salary engine) and the net; why no Social Security is deducted in the extra pay's month (LGSS art. 147.1 and Orden PJC/297/2026 art. 1: the monthly base already includes one twelfth of the extras); prorated payments (12 payslips) versus 14; pensioners' extra accrued in November (LGSS art. 46).",
     },
     {
       name: "Spain self-employed contributions (cuota de autónomos) 2026 calculator",
