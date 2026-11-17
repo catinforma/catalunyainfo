@@ -7,6 +7,8 @@ import { SIBLING_PATHS } from "../src/lib/content/batch02/december-bridge.ts";
 import {
   CATEGORY_ORDER,
   DRAW_TIME_2026,
+  DRAW_TIME_CHECKED,
+  DRAW_TIME_RECHECK_BY,
   GROSSA,
   GROSSA_AS_OF,
   GROSSA_DRAW_DATE,
@@ -114,9 +116,10 @@ test("titles fit in 60 characters and descriptions in 155, before and after the 
     en: /^La Grossa de Cap d'Any 2026, Catalonia's New Year's Eve lottery, is drawn on 31 December: €10 tickets, €200,000 top prize/,
   };
   const searched: Record<Locale, RegExp> = {
-    ca: /^La Grossa de Cap d'Any 2026: resultats/,
-    es: /^La Grossa de Cap d'Any 2026: resultados/,
-    en: /^La Grossa de Cap d'Any 2026: results/,
+    // Before the draw people ask when, what time and how much (GSC 4-17 Nov 2026); the results title takes over once RESULTS_2026 is in.
+    ca: /^La Grossa de Cap d'Any 2026: dia, hora i premis/,
+    es: /^La Grossa de Cap d'Any 2026: día, hora y premios/,
+    en: /^La Grossa de Cap d'Any 2026: draw date, time and prizes/,
   };
   for (const locale of LOCALES) {
     const { seoTitle, seoDescription, excerpt, title } = GROSSA.editions[locale];
@@ -503,6 +506,21 @@ test("the results are in after the draw (fill RESULTS_2026, set GROSSA_AS_OF and
   if (RESULTS_2026) {
     assert.ok(GROSSA_AS_OF >= GROSSA_DRAW_DATE, `RESULTS_2026 is filled but GROSSA_AS_OF (${GROSSA_AS_OF}) is before the draw: move it to the day you filled it`);
   }
+});
+
+test("the draw time was looked for recently (re-read the press notes, move DRAW_TIME_CHECKED or fill DRAW_TIME_2026)", () => {
+  const today = madridDate(new Date());
+  assert.ok(DRAW_TIME_CHECKED >= GROSSA_AS_OF, `DRAW_TIME_CHECKED (${DRAW_TIME_CHECKED}) is older than GROSSA_AS_OF`);
+  assert.ok(DRAW_TIME_CHECKED <= today, `DRAW_TIME_CHECKED (${DRAW_TIME_CHECKED}) is in the future`);
+  if (DRAW_TIME_2026 || RESULTS_2026) return;
+  assert.ok(
+    today < DRAW_TIME_RECHECK_BY || DRAW_TIME_CHECKED >= DRAW_TIME_RECHECK_BY,
+    `On ${today} the page still says the 2026 draw time is not announced (checked ${DRAW_TIME_CHECKED}). Re-read https://www.loteriesdecatalunya.info/ca/sobre-loteries/publicitat/premsa/ (2024's time came in a 19 Dec note): fill DRAW_TIME_2026 or move DRAW_TIME_CHECKED to today, then publish ?only=grossa.`,
+  );
+  // The "not announced" sentences carry the check date, not the older as-of reading.
+  const plain = bodyToPlainText(buildGrossaBody("ca"));
+  assert.match(plain, /encara no s'ha anunciat \(\d+ d/);
+  if (DRAW_TIME_CHECKED > GROSSA_AS_OF) assert.doesNotMatch(plain, /encara no s'ha anunciat \(30 d'octubre de 2026\)/);
 });
 
 test("the page is deterministic: no clock in the module, same output on every call", () => {

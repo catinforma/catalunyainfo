@@ -98,9 +98,9 @@ export function LetrasRoute({ locale, data }: { locale: LetrasLocale; data: Letr
   });
 
   const h = L(locale, {
-    es: { latest: "Último resultado de las subastas de Letras", per1000: "Cuánto pagas y cuánto ganas por cada letra de 1.000 €", next: "Próximas subastas de Letras del Tesoro", year: "Tipos de las Letras en 2026, mes a mes", buy: "Cómo comprar Letras del Tesoro", bids: "Petición competitiva o no competitiva", formula: "Cómo se calcula el precio y la rentabilidad (TAE)", tax: "Impuestos: cómo tributan las Letras del Tesoro", sources: "Fuentes" },
-    ca: { latest: "Últim resultat de les subhastes de lletres", per1000: "Quant pagues i quant guanyes per cada lletra de 1.000 €", next: "Properes subhastes de lletres del Tresor", year: "Tipus de les lletres el 2026, mes a mes", buy: "Com comprar lletres del Tresor", bids: "Petició competitiva o no competitiva", formula: "Com es calcula el preu i la rendibilitat (TAE)", tax: "Impostos: com tributen les lletres del Tresor", sources: "Fonts" },
-    en: { latest: "Latest Treasury bill auction results", per1000: "What you pay and earn per €1,000 bill", next: "Next Treasury bill auctions", year: "Treasury bill rates in 2026, month by month", buy: "How to buy Spanish Treasury bills", bids: "Competitive or non-competitive bid", formula: "How the price and the yield (TAE) are worked out", tax: "Tax: how Treasury bills are taxed", sources: "Sources" },
+    es: { latest: "Último resultado de las subastas de Letras", per1000: "Cuánto pagas y cuánto ganas por cada letra de 1.000 €", next: "Calendario de subastas de Letras del Tesoro: próximas fechas", year: "Tipos de las Letras en 2026, mes a mes", buy: "Cómo comprar Letras del Tesoro", bids: "Petición competitiva o no competitiva", formula: "Cómo se calcula el precio y la rentabilidad (TAE)", tax: "Impuestos: cómo tributan las Letras del Tesoro", sources: "Fuentes" },
+    ca: { latest: "Últim resultat de les subhastes de lletres", per1000: "Quant pagues i quant guanyes per cada lletra de 1.000 €", next: "Calendari de subhastes de lletres del Tresor: properes dates", year: "Tipus de les lletres el 2026, mes a mes", buy: "Com comprar lletres del Tresor", bids: "Petició competitiva o no competitiva", formula: "Com es calcula el preu i la rendibilitat (TAE)", tax: "Impostos: com tributen les lletres del Tresor", sources: "Fonts" },
+    en: { latest: "Latest Treasury bill auction results", per1000: "What you pay and earn per €1,000 bill", next: "Spanish Treasury bill auction calendar: next dates", year: "Treasury bill rates in 2026, month by month", buy: "How to buy Spanish Treasury bills", bids: "Competitive or non-competitive bid", formula: "How the price and the yield (TAE) are worked out", tax: "Tax: how Treasury bills are taxed", sources: "Sources" },
   });
 
   const disclaimer = L(locale, {
@@ -140,10 +140,12 @@ export function LetrasRoute({ locale, data }: { locale: LetrasLocale; data: Letr
     ca: ["Subhasta", "Terminis", "Peticions al Banc d'Espanya fins al (14.00)", "Pagament si vas demanar en sucursal (abans de les 14.00)", "Emissió"],
     en: ["Auction", "Terms", "Banco de España requests by (14:00)", "Payment if you asked at a branch (before 14:00)", "Issue"],
   });
+  // Calendar queries lead this page's GSC set (4-17 Nov 2026: "calendario letras del tesoro 2026 pdf",
+  // "… 2027", "próxima subasta"): the heading says "calendario" and the intro links the official PDF.
   const nextIntro = L(locale, {
-    es: "Las Letras a 6 y 12 meses se subastan la semana en que vencen las del mes y las de 3 y 9 meses el martes siguiente. Fechas del calendario oficial del Tesoro para 2026 (incluye enero de 2027):",
-    ca: "Les lletres a 6 i 12 mesos se subhasten la setmana que vencen les del mes i les de 3 i 9 mesos el dimarts següent. Dates del calendari oficial del Tresor per al 2026 (inclou el gener del 2027):",
-    en: "6- and 12-month bills are auctioned in the week the month's bills mature, 3- and 9-month bills on the following Tuesday. Dates from the Treasury's official 2026 calendar (which includes January 2027):",
+    es: <>Las Letras a 6 y 12 meses se subastan la semana en que vencen las del mes y las de 3 y 9 meses el martes siguiente. Fechas del <A href={CALENDAR_2026_PDF}>calendario oficial de subastas del Tesoro para 2026 (PDF)</A>, que incluye enero de 2027:</>,
+    ca: <>Les lletres a 6 i 12 mesos se subhasten la setmana que vencen les del mes i les de 3 i 9 mesos el dimarts següent. Dates del <A href={CALENDAR_2026_PDF}>calendari oficial de subhastes del Tresor per al 2026 (PDF)</A>, que inclou el gener del 2027:</>,
+    en: <>6- and 12-month bills are auctioned in the week the month's bills mature, 3- and 9-month bills on the following Tuesday. Dates from the <A href={CALENDAR_2026_PDF}>Treasury's official 2026 auction calendar (PDF)</A>, which includes January 2027:</>,
   });
   const deadlineNote = L(locale, {
     es: "Peticiones: el último día para los particulares con Cuenta Directa en el Banco de España, antes de las 14:00 (hora peninsular). Quien pide en una sucursal entregando el 2 % paga el resto el día de «Pago» antes de las 14:00; por transferencia, el dinero debe estar en el Banco de España antes de las 14:00 del día hábil anterior a la subasta (anuncio del Banco de España). Las festividades locales pueden adelantar estos plazos.",

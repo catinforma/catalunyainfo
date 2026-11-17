@@ -93,6 +93,20 @@ export const GROSSA_AS_OF = "2026-10-30";
 /** The facts were re-read on the sources on the as-of day: one constant to move. */
 export const GROSSA_VERIFIED = GROSSA_AS_OF;
 
+/**
+ * The last day the draw time was looked for and found unannounced: the
+ * "not announced yet (<date>)" sentences read it (never earlier than
+ * GROSSA_AS_OF). Loteries de Catalunya announces the time in a press note
+ * (2024: "La Grossa de Cap d'Any 2024: Presentadors", 19 Dec). Read on 17 Nov
+ * 2026, https://www.loteriesdecatalunya.info/ca/sobre-loteries/publicitat/premsa/
+ * lists no 2026 Cap d'Any note; the newest is "La Grossa de La Diada 2026:
+ * Números premiats". The game page answered 403 to the server that day.
+ */
+export const DRAW_TIME_CHECKED = "2026-11-17";
+
+/** From this day a test fails while DRAW_TIME_2026 is null and DRAW_TIME_CHECKED is older: re-read the press notes. */
+export const DRAW_TIME_RECHECK_BY = "2026-12-20";
+
 /* -------------------------------------------------------------------------- */
 /* The two slots the lead fills                                               */
 /* -------------------------------------------------------------------------- */
@@ -339,10 +353,16 @@ export const GROSSA_META: Record<Locale, Meta> = {
   },
 };
 
+// Pending title, 17 Nov 2026: before the draw the queries ask when, what time
+// and how much ("la grossa de cap d'any 2026", "cuando es la grossa", "cuanto
+// vale", "premis"), not for results; the news pages that rank for the draw
+// title it the same way ("La Grossa de Cap d'Any 2025: dia, hora, premis…").
+// "Resultats" came first in the 30 Oct title, a promise the page cannot keep
+// until 31 Dec; the results title below takes over then.
 const SEO_TITLE: Record<Locale, { pending: string; results: string }> = {
-  ca: { pending: "La Grossa de Cap d'Any 2026: resultats, premis i hora", results: "Resultats La Grossa de Cap d'Any 2026: números premiats" },
-  es: { pending: "La Grossa de Cap d'Any 2026: resultados, premios y hora", results: "Resultados La Grossa de Cap d'Any 2026: números premiados" },
-  en: { pending: "La Grossa de Cap d'Any 2026: results, prizes, draw time", results: "La Grossa de Cap d'Any 2026 results: all winning numbers" },
+  ca: { pending: "La Grossa de Cap d'Any 2026: dia, hora i premis del sorteig", results: "Resultats La Grossa de Cap d'Any 2026: números premiats" },
+  es: { pending: "La Grossa de Cap d'Any 2026: día, hora y premios del sorteo", results: "Resultados La Grossa de Cap d'Any 2026: números premiados" },
+  en: { pending: "La Grossa de Cap d'Any 2026: draw date, time and prizes", results: "La Grossa de Cap d'Any 2026 results: all winning numbers" },
 };
 
 export function grossaSeoTitle(locale: Locale, results: GrossaResults | null = RESULTS_2026): string {
@@ -1120,7 +1140,7 @@ export function buildGrossaBody(
     time,
     day: dayDate(GROSSA_DRAW_DATE, locale),
     dayNoYear: dayDate(GROSSA_DRAW_DATE, locale, false),
-    checked: dateYear(asOf, locale),
+    checked: dateYear(asOf > DRAW_TIME_CHECKED ? asOf : DRAW_TIME_CHECKED, locale),
   };
 
   const blocks: Block[] = [];

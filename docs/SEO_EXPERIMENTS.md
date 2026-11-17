@@ -6599,3 +6599,83 @@ calculator, `whatsapp_channel_click` by `link_context`, share of `internal_searc
 Console's Core Web Vitals report (28-day window) from ~15 Dec.
 
 **Outcome:** _pending_
+
+## 2026-11-17 — Top-3 wave on unowned pages: La Grossa's pending title answers "when, what time, how much", Easter 2027 hands on to Carnival 2027, the Letras calendar heading; 25 other pages left alone (deploy; groups `grossa`, `setmana-santa-2027`)
+
+Owner, 17 Nov: top 3. Inventory: `snapshot.py pages 14 700`, `ctr 14 300`, `gaps 14 500`, `rising 3 60` and page×query pulls
+(4–17 Nov; 17 Nov partial). Out of scope (other owners or dated reviews): strikes, December bridge + shops (25 Nov), Barcelona
+weather (19 Nov patch), Canyelles/Espinelves (20 Nov), elections (26 Nov), today's lottery-prize and paga-extra calculators.
+Every page with ≥120 impressions at 4–15.5 was checked against this log. Most are inside a window with a dated review, or
+already answer their queries in the first lines.
+
+**Left alone (14 d clicks / impr. / pos; the reason).**
+
+| Page | Baseline | Why no change today |
+| --- | --- | --- |
+| Parking ES (`aparcar-barcelona-zona-azul-verde`), CA | 30 / 8,769 / 7.9; 17 / 2,145 / 5.6 | The "rising" +660 is the two Saturdays (7 and 14 Nov: 1,364 and 1,218 impr.). Hours, weekend, prices and zone 36 Trinitat Vella are already in the body (30 Oct, re-read 16 Nov). Titles to 1/4 Dec, body measure 30 Nov |
+| Barcelona holidays ES (`/es/festivos/barcelona/`) | 18 / 5,520 / 11.1 | "hoy es festivo en barcelona" variants (~600 impr. at 7–9, 0 clicks) are answered: next holiday in the first line, JS today/tomorrow box, FAQ. Town-template title window to 1 Dec |
+| T-casual ES, EN | 7 / 4,659 / 8.5; 20 / 3,307 / 7.6 | "t casual 1 zona" 86 at 4.0, 0 clicks: the title gives the price (zero-click). 28 Nov proposal (16 Nov entry) stands |
+| Semana Santa 2027 ES, CA | 27 / 3,658 / 6.5; 15 / 2,927 / 6.7 | 18 Nov review (13 Nov queue) and the 17 Nov first-screen wording. Only a link far below the lead added (change 2) |
+| School calendar Andalucía | 9 / 3,603 / 8.2 | It ranks for Spain-wide "cuándo dan las vacaciones de navidad 2026" (208 at 6.5) that the hub targets: the 13 Nov entry's 20 Nov review decides |
+| La Marató CA; lights ES/CA/EN; tourist tax EN/ES; metro EN | — | 18 Nov, 19 Nov, 30 Nov and 4 Dec reviews already logged |
+| Spain 2027 cities (family) | ~18k impr. / 0.9 % / ~9 | 13 Nov lead, measure 20 Nov and 1 Dec |
+| Carnival 2027 ES, CA | 15 / 657 / 10.1; 10 / 607 / 5.0 | New 13 Nov; CA lead changed this morning. The page answers Dijous Gras, Ash Wednesday, "is it a holiday" and schools. The ES average is pulled down by Spain-wide "cuando es carnaval" (25–65). No body change; links in (change 2) |
+| 17 May 2027 date page ES, CA | 4 / 586 / 5.2; 7 / 302 / 5.4 | "17 de mayo 2027 es festivo" 68 at 4.2, 0 clicks. The description says nothing about Galicia, which is where the day is a regional holiday, but the 2027 date pages are in their 2 Nov window (measure 1 Feb 2027). Proposal for that review: the "local" description names the regions where the day is a holiday, as the working-day branch already does |
+| SMI 2027, butano, días hábiles, TSI (rising) | 6 / 326 / 7.0 … | New pages; queries mostly anonymised. SMI's lead already answers "¿está aprobado?" |
+| Vilassar de Mar ES, CA (rising) | 6 / 897 / 4.5 | The spike was its 16 Nov local holiday, now past |
+| L2 closure ES/EN/CA, ZBE EN/ES, cruise port EN | ≤ 971 | Event over (L2: 18 impr. on 16 Nov) or too thin and spread across queries |
+
+**Christmas hub, the 17 Nov check (12 Nov entry; 16 Nov proposal to take the lights off its title): no change.** The 14-day query
+totals that pointed to cannibalisation ("cuando encienden las luces de navidad en barcelona 2026" 88 at 10.4 on
+`/es/guias/navidad-en-barcelona/`) come from 4 Nov: the ES hub had 732 impressions that day and 0–4 a day since 5 Nov. The CA hub
+has 9–40 a day, of which ~150 in 14 days are lights queries at 7–10, against ~700 on the lights page. Google already sends the
+lights queries to the lights page, so retitling the hub would change nothing measurable before 26 Nov. Re-read after the switch-on.
+
+**1. La Grossa de Cap d'Any 2026 (ca/es/en; no window: no entry since publication on 30 Oct). Pending title only.**
+- Queries, 14 d: "la grossa de cap d'any 2026" 207 at 7.7 (2 clicks), "la grossa de cap d'any" 64 at 7.1, "grossa de cap d'any 2026"
+  33 at 7.6, "la grossa cap d any 2026" 33 at 8.0, "la grossa 2026" (ES) 27 at 7.2, "…premis", "cuanto vale", "donde se cobra", "cuando
+  es la grossa". No query asks for results: the draw is on 31 Dec.
+- Before: "La Grossa de Cap d'Any 2026: resultats, premis i hora". After: "La Grossa de Cap d'Any 2026: dia, hora i premis del
+  sorteig" (es "…: día, hora y premios del sorteo", en "…: draw date, time and prizes"). The news pages that rank for the draw
+  title it the same way (Nació Digital: "La Grossa de Cap d'Any 2025: dia, hora, premis…"). The results title ("Resultats La
+  Grossa de Cap d'Any 2026: números premiats") still takes over by itself when RESULTS_2026 is filled. Description, H1 and lead
+  wording unchanged.
+- Fact refresh, no new claim: the "time not announced yet (date)" sentences now carry `DRAW_TIME_CHECKED` = 17 Nov. Read that day:
+  https://www.loteriesdecatalunya.info/ca/sobre-loteries/publicitat/premsa/ lists no 2026 Cap d'Any note; the newest is "La Grossa
+  de La Diada 2026: Números premiats" (2024's time came in "La Grossa de Cap d'Any 2024: Presentadors", 19 Dec). The game page
+  answered 403 to the server, so `GROSSA_AS_OF` (30 Oct, every other fact) does not move. New guard: from 20 Dec
+  (`DRAW_TIME_RECHECK_BY`) a test fails while the time is still missing and the check is older.
+- Baseline: CA 9 / 1,437 / 0.6 % / 8.4; ES 25 / 884 / 2.8 % / 7.8; EN under 120.
+- Prediction: by 1 Dec, at equal or better position, CTR on the "la grossa de cap d'any 2026" variants above 1.5 % (CA) and the
+  head query at ≤ 6. Demand climbs into 31 Dec, so compare CTR at equal position, not clicks. Revert to the old pending title if
+  CTR falls at equal position by 8 Dec.
+
+**2. Easter 2027 → Carnival 2027 (ca/es/en; body only, group `setmana-santa-2027`).** Carnival 2027 (new 13 Nov, rising +514 ES
+/ +414 CA in three days) had no link from the strongest 2027 page on the site, Easter 2027 (6.6k impr. in 14 days). One sentence
+after the Passion plays, in the traditions section, far below the lead: Carnival moves with Easter (Ash Wednesday 46 days before
+Easter Sunday), with the 2027 week from Dijous Gras, Thursday 4 February, to Ash Wednesday, 10 February. The dates are
+`CARNIVAL.dijousGras` / `.ashWednesday`, computed from the calendar's Easter, not retyped. Anchors: "Carnaval 2027 a Catalunya" / "Carnaval 2027 en
+Cataluña" / "Carnival 2027 in Catalonia". Confounder: the Easter page's 18 Nov review. A link at the end of the body does not
+touch its title, snippet or lead.
+- Prediction: by 1 Dec, "carnaval 2027 catalunya" on the ES page from 5.5 to ≤ 4 and "carnestoltes 2027" (CA) from 6.9 to ≤ 5,
+  read with the 17 Nov entry's carnival review.
+
+**3. Letras del Tesoro (es/ca/en; body only, ships with the deploy).** Calendar queries are most of the visible set: "calendario
+letras del tesoro 2026 pdf" 15 at 8.2, "proxima subasta letras del tesoro" 11 at 8.6, "calendario letras del tesoro 2027" 9 at
+10.2, "calendario subastas letras del tesoro 2027" 6 at 4.2. The section was headed "Próximas subastas de Letras del Tesoro". It is
+now "Calendario de subastas de Letras del Tesoro: próximas fechas" (ca "Calendari de subhastes de lletres del Tresor: properes
+dates", en "Spanish Treasury bill auction calendar: next dates"), with the same `#proximas-subastas` anchor. Its intro links the
+Tesoro's official 2026 PDF (already in the sources and the lead line). The 2027 sentence (published in December, link to the
+Tesoro's calendar page) was already there. Title, description and lead untouched (new page, 13 Nov window).
+- Baseline: 6 / 392 / 1.5 % / 7.1 (first impressions 14 Nov).
+- Prediction: by 1 Dec, the "calendario … letras" queries at ≤ 6. Read with the 15 Dec measure of the 13 Nov entry.
+
+**Go-live.** Deploy (Letras is a route; the code for 1–2 ships with it), then publish `grossa` and `setmana-santa-2027`. IndexNow:
+`/ca/guies/la-grossa-cap-d-any/ /es/guias/la-grossa-fin-de-ano/ /en/guides/la-grossa-new-years-eve-lottery/
+/ca/guies/setmana-santa-2027-catalunya/ /es/guias/semana-santa-2027-cataluna/ /en/guides/easter-2027-catalonia/
+/es/calculadoras/letras-del-tesoro/ /ca/calculadores/lletres-del-tresor/ /en/calculators/spain-treasury-bills/`.
+
+**Review 1 Dec** (`snapshot.py page la-grossa 14`, `page carnaval 14`, `page letras-del-tesoro 14`, `page lletres-del-tresor 14`)
+and 8 Dec (Grossa revert rule).
+
+**Outcome:** _pending_

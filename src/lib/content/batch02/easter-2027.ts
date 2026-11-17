@@ -32,6 +32,7 @@ import {
   type B2Article,
   type B2Source,
 } from "./shared";
+import { CARNIVAL } from "./carnival";
 import { OPENING_2027 } from "./shops";
 
 /**
@@ -706,6 +707,7 @@ export function buildEasterBody(locale: Locale): Block[] {
       ),
       ...paras(
         "Les dates de les dues Passions són les que publicaven els organitzadors el 31 d'octubre de 2026: comprova-les al seu web abans de comprar entrades.",
+        `El Carnaval es mou amb la Pasqua: el Dimecres de Cendra cau 46 dies abans del diumenge de Pasqua. El 2027 va del ${d(CARNIVAL.dijousGras, "ca")}, Dijous Gras, al ${d(CARNIVAL.ashWednesday, "ca")}, Dimecres de Cendra. On és festa local i quines escoles fan festa: ${b2link("carnival", "ca", "Carnaval 2027 a Catalunya")}.`,
         `Si busques una sortida, mira ${montserrat}, ${link("trains", "ca", "les escapades en tren")} o ${link("weekend", "ca", "què fer aquest cap de setmana")}.`,
       ),
       faq([
@@ -816,6 +818,7 @@ export function buildEasterBody(locale: Locale): Block[] {
       ),
       ...paras(
         "Las fechas de las dos Passions son las que publicaban los organizadores el 31 de octubre de 2026: compruébalas en su web antes de comprar entradas.",
+        `El Carnaval se mueve con la Pascua: el Miércoles de Ceniza cae 46 días antes del Domingo de Pascua. En 2027 va del ${d(CARNIVAL.dijousGras, "es")}, Jueves Lardero (Dijous Gras), al ${d(CARNIVAL.ashWednesday, "es")}, Miércoles de Ceniza. Dónde es fiesta local y qué colegios no tienen clase: ${b2link("carnival", "es", "Carnaval 2027 en Cataluña")}.`,
         `Si buscas una salida, mira ${montserrat}, ${link("trains", "es", "las escapadas en tren")} o ${link("weekend", "es", "qué hacer este fin de semana")}.`,
       ),
       faq([
@@ -925,6 +928,7 @@ export function buildEasterBody(locale: Locale): Block[] {
     ),
     ...paras(
       "The dates of both Passion plays are those the organisers published on 31 October 2026: check their websites before buying tickets.",
+      `Carnival moves with Easter: Ash Wednesday falls 46 days before Easter Sunday. In 2027 it runs from ${d(CARNIVAL.dijousGras, "en")} (Dijous Gras, Fat Thursday) to ${d(CARNIVAL.ashWednesday, "en")} (Ash Wednesday). Local holidays and school days off: ${b2link("carnival", "en", "Carnival 2027 in Catalonia")}.`,
       `For a day out, see ${montserrat}, ${link("trains", "en", "day trips by train")} or ${link("weekend", "en", "what's on this weekend")}.`,
     ),
     faq([
