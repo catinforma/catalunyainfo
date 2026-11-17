@@ -929,15 +929,16 @@ export const B2_TITLES: Record<B2Key, Record<Locale, string>> = {
     es: "Huelga de trenes del 17 de noviembre en España: Cercanías y AVE",
     en: "Spain rail strike on 17 November: Cercanías and AVE",
   },
+  // 17 Nov 2026: link labels in the searched words ("huelga 19 noviembre", "huelga 20 noviembre 2026"), with what each day holds.
   strike19n: {
-    ca: "Hi ha vaga el dijous 19 de novembre? Adif, metges i més",
-    es: "¿Hay huelga el jueves 19 de noviembre? Adif, médicos y más",
-    en: "Is there a strike on Thursday 19 November? Adif, doctors and more",
+    ca: "Vaga del 19 de novembre de 2026: Adif (no Renfe), metges i neteja",
+    es: "Huelga del 19 de noviembre de 2026: Adif (no Renfe), médicos y limpieza",
+    en: "Strikes on 19 November 2026 in Spain: Adif (not Renfe), doctors, cleaning",
   },
   strike20n: {
-    ca: "Hi ha vaga el divendres 20 de novembre? Estudiants, metges i més",
-    es: "¿Hay huelga el viernes 20 de noviembre? Estudiantes, médicos y más",
-    en: "Is there a strike on Friday 20 November? Students, doctors and more",
+    ca: "Vaga del 20 de novembre de 2026: estudiants, metges i Madrid",
+    es: "Huelga del 20 de noviembre de 2026: estudiantes, médicos y Madrid",
+    en: "Strikes on 20 November 2026 in Spain: students, doctors, Madrid",
   },
   granRecapte: {
     ca: "Gran Recapte 2026: dies, voluntariat i on donar",

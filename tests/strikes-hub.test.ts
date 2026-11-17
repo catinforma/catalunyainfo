@@ -617,7 +617,8 @@ test("known answers read on the evening of 30 October 2026: Ouigo's resolution, 
   assert.deepEqual(schools.affects, ["schools"]);
   assert.equal(schools.minimumServices.status, "pending");
   // Re-checked 2 Nov 2026: the joint press release of 28 Oct (PDF on cgtensenyament.cat) lists the 26 November strike too.
-  assert.deepEqual(schools.sources.map((s) => s.publisher).sort(), ["CGT Ensenyament", "CGT Ensenyament", "USTEC·STEs"]);
+  // 17 Nov 2026: plus USTEC·STEs' unitary 21N manifesto (the march's time and place).
+  assert.deepEqual(schools.sources.map((s) => s.publisher).sort(), ["CGT Ensenyament", "CGT Ensenyament", "USTEC·STEs", "USTEC·STEs"]);
   assert.ok(schools.sources.some((s) => s.url === STRIKE_URLS.edu26Joint));
   assert.match(STRIKE_URLS.edu26Joint, /^https:\/\/www\.cgtensenyament\.cat\/.+\.pdf$/);
   assert.ok(isOpen(metges), "the doctors' strike was still on when last checked");
@@ -842,5 +843,39 @@ test("a strike added by the lead renders without touching the template", () => {
     assert.ok(headings(blocks).some((h) => h.id === extra.id), locale);
     const description = strikesDescription(locale, STRIKES_AS_OF, list);
     assert.ok(description.length <= 155, `${locale}: ${description.length}`);
+  }
+});
+
+test("known answers read on 17 Nov 2026 (afternoon): the Generalitat's order for 23 Nov, the 21N march, the 19th is Adif only", async () => {
+  const { SPAIN_STRIKES } = await import("../src/lib/content/batch02/strikes-spain-data.ts");
+  const drivers = byId("vaga-renfe-2026-11-23");
+  const spain = SPAIN_STRIKES.find((s) => s.id === "huelga-renfe-2026-11-23");
+  assert.ok(spain, "Spain entry for 23 Nov");
+  // Ordre EMT/ /2026 of 16 Nov (e-Tauler 659191, Treball's list 17 Nov): SEMAF at Grupo Renfe, 0.01-23.59, all drivers, 66 % / 33 %.
+  assert.equal(STRIKE_URLS.ordreRenfe23, "https://tauler.seu-e.cat/detall?idEns=1&idEdicte=659191");
+  assert.deepEqual(drivers.dates, ["2026-11-23"]);
+  assert.equal(drivers.minimumServices.status, "published");
+  assert.equal(spain.status, "official");
+  assert.equal(spain.minimumServices.status, "published");
+  const peak = /66% .*\((de 6\.00 a 9\.30 h [iy] de 17\.00 a 20\.30 h|06:00 to 09:30 and 17:00 to 20:30)\)/;
+  for (const locale of LOCALES) {
+    assert.match(drivers.minimumServices.text[locale], peak, locale);
+    assert.match(drivers.minimumServices.text[locale], /33%/, locale);
+    assert.ok(drivers.minimumServices.text[locale].includes(`](${STRIKE_URLS.ordreRenfe23})`), `${locale}: links the order`);
+    assert.match(drivers.facts[locale].join(" "), /0\.01 a 23\.59|00:01 to 23:59/, locale);
+    // The rest of Renfe: the Ministry's resolution is still to come, said as such, with no figure for it.
+    assert.match(spain.minimumServices.short[locale], /confirmar|to be confirmed/i, locale);
+    assert.match(spain.minimumServices.text[locale], /Cercanías.*(per confirmar|por confirmar|to be confirmed)/, locale);
+  }
+  // The 21N march (USTEC·STEs, 17 Nov): 12:00, plaça d'Urquinaona.
+  const schools = byId("vaga-educacio-2026-11-26");
+  for (const locale of LOCALES) assert.match(schools.facts[locale].join(" "), /Urquinaona/, locale);
+  assert.ok(schools.sources.some((s) => s.url === STRIKE_URLS.ustec21n));
+  // The 19th: the rail entry's day note, and the short line names the day of its figures.
+  const rail = byId("vaga-ferroviaria-2026-11-17");
+  for (const locale of LOCALES) {
+    assert.match(rail.dayNotes?.["2026-11-19"]?.[locale] ?? "", /Adif/, locale);
+    assert.doesNotMatch(rail.dayNotes?.["2026-11-19"]?.[locale] ?? "", /\d ?%/, locale);
+    assert.match(rail.minimumServices.msShort[locale], /^Rodalies (el 17|on the 17th): 66%/, locale);
   }
 });
