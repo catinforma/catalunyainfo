@@ -16,7 +16,7 @@ import type { B2Key, B2Source } from "./shared";
 
 export type L = Record<Locale, string>;
 
-export type SpainStrikeSector = "general" | "rail" | "air" | "industry" | "education";
+export type SpainStrikeSector = "general" | "rail" | "air" | "industry" | "education" | "health" | "services";
 
 /**
  * official: a registered call or an official minimum-services order or

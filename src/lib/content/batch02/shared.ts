@@ -113,6 +113,9 @@ export type B2Key =
   | "strikesSpain"
   // 13 Nov 2026: the 17 Nov rail strike across Spain (strike-rail-17n.ts).
   | "railStrike17n"
+  // 17 Nov 2026: is there a strike on Thursday 19 / Friday 20 November? (strike-days-1920n.ts).
+  | "strike19n"
+  | "strike20n"
   // 13 Nov 2026: evergreen flagship guides (research_notes/evergreen-demand-nov2026.md).
   // How to register on the padró (padro.ts).
   | "padro"
@@ -463,6 +466,17 @@ export const B2_PATHS: Record<B2Key, Record<Locale, string>> = {
     ca: "guies/vaga-trens-17-novembre",
     es: "guias/huelga-trenes-17-noviembre",
     en: "guides/spain-rail-strike-17-november",
+  },
+  // One day, one page: the date is the searched words ("huelga 19 noviembre", "huelga 20 noviembre 2026").
+  strike19n: {
+    ca: "guies/vaga-19-novembre",
+    es: "guias/huelga-19-noviembre",
+    en: "guides/spain-strike-19-november",
+  },
+  strike20n: {
+    ca: "guies/vaga-20-novembre",
+    es: "guias/huelga-20-noviembre",
+    en: "guides/spain-strike-20-november",
   },
   // No year in the path: the campaign comes back every November.
   granRecapte: {
@@ -906,6 +920,16 @@ export const B2_TITLES: Record<B2Key, Record<Locale, string>> = {
     ca: "Vaga de trens del 17 de novembre a Espanya: Cercanías i AVE",
     es: "Huelga de trenes del 17 de noviembre en España: Cercanías y AVE",
     en: "Spain rail strike on 17 November: Cercanías and AVE",
+  },
+  strike19n: {
+    ca: "Hi ha vaga el dijous 19 de novembre? Adif, metges i més",
+    es: "¿Hay huelga el jueves 19 de noviembre? Adif, médicos y más",
+    en: "Is there a strike on Thursday 19 November? Adif, doctors and more",
+  },
+  strike20n: {
+    ca: "Hi ha vaga el divendres 20 de novembre? Estudiants, metges i més",
+    es: "¿Hay huelga el viernes 20 de noviembre? Estudiantes, médicos y más",
+    en: "Is there a strike on Friday 20 November? Students, doctors and more",
   },
   granRecapte: {
     ca: "Gran Recapte 2026: dies, voluntariat i on donar",

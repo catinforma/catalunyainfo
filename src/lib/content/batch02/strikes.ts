@@ -239,6 +239,19 @@ import { strike11nCityLinks } from "./strike-11n-city-paths";
  * Nov), USTEC·STEs (26N still announced, newest items 13 and 16 Nov), CGT
  * Ensenyament (nothing new) and Metges de Catalunya (indefinite strike, no
  * call-off).
+ *
+ * 17 Nov 2026 (~10:30 UTC, the 17N strike day): re-read. New on the
+ * Departament d'Empresa i Treball's list (16 Nov): the order of 13 Nov for
+ * the doctors' strike of Sindicato Médicos Unidos (08:00 16 Nov to 08:00 28
+ * Nov, ICS and every SISCAT provider), now an entry of its own; and the order
+ * of 16 Nov amending Ordre EMT/227/2026 (17 Nov Renfe order) to add Renfe's
+ * works council among the callers (same minimum services). SCFCOM 37 (16
+ * Nov) keeps the 19th; still no Adif resolution on the Ministry's list.
+ * Unchanged: SEMAF (nº 2026-34, 16 Nov), Metges de Catalunya (no call-off,
+ * newest 17 Nov), USTEC·STEs and CGT Ensenyament (nothing new on 26N), no
+ * order for 23 or 26 Nov. Searched for and not found on the list or any
+ * organiser: an ambulance strike in Sabadell, a self-employed (autònoms)
+ * strike.
  */
 export const STRIKES_AS_OF = "2026-11-17";
 
@@ -247,7 +260,7 @@ export const STRIKES_AS_OF = "2026-11-17";
  * list up to date means re-reading them, so it is the same day by design: one
  * constant to move.
  */
-export const STRIKES_VERIFIED = "2026-11-16";
+export const STRIKES_VERIFIED = STRIKES_AS_OF;
 
 export type StrikeScope = "general" | "rail" | "transport" | "education" | "health" | "other";
 
@@ -347,6 +360,12 @@ export const STRIKE_URLS = {
   ccooRail17Still: "https://ferroviario.fsc.ccoo.es/noticia:772249--Avances_en_seguridad_y_derechos_que_deben_notarse_en_el_trabajo",
   // SCF nº 35, 12 Nov 2026: "Los próximos días 17 y 19 de noviembre, SCF tiene convocados periodos de huelga para el personal de Circulación".
   scf35: "https://www.scf.es/scfcom35/",
+  // SCF nº 37, 16 Nov 2026: "SCF llama a la huelga a todas las personas que no tengan servicios mínimos fijados" (17 and 19 Nov).
+  scf37: "https://www.scf.es/com37/",
+  // 17 Nov 2026 (read that day): Sindicato Médicos Unidos, doctors' strike 08:00 16 Nov to 08:00 28 Nov.
+  smuNotice: "https://cdn.medicosunidos.es/huelga-2026-16N/Preavisos/_ESTATAL.pdf",
+  smuDocs: "https://medicosunidos.es/documentacion-convocatoria/",
+  smuMarches: "https://medicosunidos.es/manifestaciones/",
   semafCuerpo: "https://www.semaf.org/informaciones/encuentro-con-el-ministro-carlos-cuerpo-ni-una-tragedia-mas/",
   // SEMAF, 10 Nov 2026 (read 11 Nov): the 12 Nov stoppages replaced by a new strike on 23 Nov; 17 Nov kept "en todo el sector".
   semaf23: "https://www.semaf.org/informaciones/primer-real-decreto-ley-aprobado-semaf-mueve-el-paro-del-12-al-23-de-noviembre-para-facilitar-la-negociacion-sin-levantar-la-presion/",
@@ -481,21 +500,21 @@ export const STRIKES: Strike[] = [
       ca: [
         "**Convocatòria:** el sindicat Metges de Catalunya (MC), que la va registrar el 15 de setembre de 2026. Els sindicats mèdics de tot l'Estat havien acordat començar una vaga indefinida el 28 d'octubre, i MC la fa a Catalunya.",
         "**Des de quan:** des de les 8.00 h del dimecres 28 d'octubre de 2026, sense data de final. En paraules del secretari general de MC, Xavier Lleonart, «té data d'inici, però no de final».",
-        `**On és:** el 16 de novembre de 2026 la vaga continuava. Metges de Catalunya no havia anunciat cap acord amb el Departament de Salut ni cap data de final a ${link(U.metgesNews, "les seves notícies")}.`,
+        `**On és:** el 17 de novembre de 2026 la vaga continuava. Metges de Catalunya no havia anunciat cap acord amb el Departament de Salut ni cap data de final a ${link(U.metgesNews, "les seves notícies")}.`,
         "**Qui hi està cridat:** el personal facultatiu (metges i altres facultatius, també els residents en formació) dels hospitals, els CAP i la resta de centres de la xarxa sanitària pública SISCAT i de les entitats adscrites al CatSalut o al Departament de Salut.",
         `**Per què:** MC reclama un conveni propi per als metges i que el Departament de Salut negociï amb el sindicat; diu que només hi ha «dues sortides possibles» per a la vaga, una negociació «real i efectiva» amb MC o unes eleccions, segons ${link(U.metgesStrike, "el seu comunicat del 28 d'octubre")}.`,
       ],
       es: [
         "**Convocatoria:** el sindicato Metges de Catalunya (MC), que la registró el 15 de septiembre de 2026. Los sindicatos médicos de toda España habían acordado empezar una huelga indefinida el 28 de octubre, y MC la hace en Cataluña.",
         "**Desde cuándo:** desde las 8.00 h del miércoles 28 de octubre de 2026, sin fecha de final. En palabras del secretario general de MC, Xavier Lleonart, «té data d'inici, però no de final» (tiene fecha de inicio, pero no de final).",
-        `**Cómo está:** el 16 de noviembre de 2026 la huelga seguía. Metges de Catalunya no había anunciado ningún acuerdo con el Departament de Salut ni ninguna fecha de final en ${link(U.metgesNews, "sus noticias")}.`,
+        `**Cómo está:** el 17 de noviembre de 2026 la huelga seguía. Metges de Catalunya no había anunciado ningún acuerdo con el Departament de Salut ni ninguna fecha de final en ${link(U.metgesNews, "sus noticias")}.`,
         "**A quién llama:** al personal facultativo (médicos y otros facultativos, también los residentes en formación) de los hospitales, los CAP y el resto de centros de la red sanitaria pública SISCAT y de las entidades adscritas al CatSalut o al Departament de Salut.",
         `**Por qué:** MC reclama un convenio propio para los médicos y que el Departament de Salut negocie con el sindicato; dice que solo hay dos salidas posibles para la huelga, una negociación real y efectiva con MC o unas elecciones, según ${link(U.metgesStrike, "su comunicado del 28 de octubre")}.`,
       ],
       en: [
         "**Called by:** the doctors' union Metges de Catalunya (MC), which registered it on 15 September 2026. Doctors' unions across Spain had agreed to start an indefinite strike on 28 October, and MC is holding it in Catalonia.",
         "**Since when:** 08:00 on Wednesday 28 October 2026, with no end date. In the words of MC's general secretary, Xavier Lleonart, it \"té data d'inici, però no de final\" (has a start date but no end date).",
-        `**Where it stands:** on 16 November 2026 the strike was still on. Metges de Catalunya had announced no agreement with the Health Department and no end date in ${link(U.metgesNews, "its news")}.`,
+        `**Where it stands:** on 17 November 2026 the strike was still on. Metges de Catalunya had announced no agreement with the Health Department and no end date in ${link(U.metgesNews, "its news")}.`,
         "**Who is called out:** doctors and other medical graduates (residents in training included) at hospitals, primary care centres (CAP) and the other centres of Catalonia's public health network SISCAT and the bodies attached to CatSalut or the Health Department.",
         `**Why:** MC wants a collective agreement of doctors' own and for the Health Department to negotiate with the union; it says there are only two ways out of the strike, real and effective negotiation with MC or elections, according to ${link(U.metgesStrike, "its statement of 28 October")}.`,
       ],
@@ -775,6 +794,75 @@ export const STRIKES: Strike[] = [
     ],
   },
   {
+    id: "vaga-metges-smu-2026-11-16",
+    dates: ["2026-11-16", "2026-11-17", "2026-11-18", "2026-11-19", "2026-11-20", "2026-11-21", "2026-11-22", "2026-11-23", "2026-11-24", "2026-11-25", "2026-11-26", "2026-11-27"],
+    scope: "health",
+    affects: ["health"],
+    title: {
+      ca: "vaga de metges del Sindicato Médicos Unidos (ICS i SISCAT)",
+      es: "huelga de médicos del Sindicato Médicos Unidos (ICS y SISCAT)",
+      en: "Sindicato Médicos Unidos doctors' strike (ICS and SISCAT)",
+    },
+    short: {
+      ca: "vaga de metges del Sindicato Médicos Unidos a l'ICS i al SISCAT, del 16 al 28 de novembre a les 8.00 h: urgències i unitats especials funcionen",
+      es: "huelga de médicos del Sindicato Médicos Unidos en el ICS y el SISCAT, del 16 al 28 de noviembre a las 8.00 h: urgencias y unidades especiales funcionan",
+      en: "Sindicato Médicos Unidos doctors' strike at the ICS and SISCAT, 16 November to 08:00 on 28 November: A&E and special units keep running",
+    },
+    label: { ca: "metges (SMU) del 16 al 27 de novembre", es: "médicos (SMU) del 16 al 27 de noviembre", en: "doctors (SMU), 16 to 27 November" },
+    facts: {
+      ca: [
+        `**Convocatòria:** el Sindicato Médicos Unidos (SMU), d'àmbit estatal, en ${link(U.smuNotice, "el seu preavís")}; a Catalunya la va registrar el 5 de novembre de 2026, segons l'ordre de serveis mínims. És una convocatòria diferent de la vaga indefinida de Metges de Catalunya, que també continua.`,
+        "**Quan:** des de les 8.00 h del dilluns 16 fins a les 8.00 h del dissabte 28 de novembre, cada dia. El sindicat la planteja com la primera fase d'una vaga indefinida.",
+        "**Qui hi està cridat:** el personal mèdic, també els residents en formació, dels centres de l'Institut Català de la Salut (hospitals i CAP) i de la resta d'entitats públiques proveïdores del Servei Català de la Salut.",
+        `**Manifestació:** el dijous 19 de novembre a les 18.00 h a Barcelona, de la plaça de les Drassanes a la plaça d'Espanya, segons ${link(U.smuMarches, "la llista de manifestacions del sindicat")}.`,
+      ],
+      es: [
+        `**Convocatoria:** el Sindicato Médicos Unidos (SMU), de ámbito estatal, en ${link(U.smuNotice, "su preaviso")}; en Cataluña la registró el 5 de noviembre de 2026, según la orden de servicios mínimos. Es una convocatoria distinta de la huelga indefinida de Metges de Catalunya, que también sigue.`,
+        "**Cuándo:** desde las 8.00 h del lunes 16 hasta las 8.00 h del sábado 28 de noviembre, todos los días. El sindicato la plantea como la primera fase de una huelga indefinida.",
+        "**A quién llama:** al personal médico, también los residentes en formación, de los centros del Institut Català de la Salut (hospitales y CAP) y del resto de entidades públicas proveedoras del Servei Català de la Salut.",
+        `**Manifestación:** el jueves 19 de noviembre a las 18.00 h en Barcelona, de la plaza de las Drassanes a la plaza de España, según ${link(U.smuMarches, "la lista de manifestaciones del sindicato")}.`,
+      ],
+      en: [
+        `**Called by:** Sindicato Médicos Unidos (SMU), a nationwide doctors' union, in ${link(U.smuNotice, "its strike notice")}; in Catalonia it registered the call on 5 November 2026, according to the minimum-services order. It is a different call from Metges de Catalunya's indefinite strike, which also continues.`,
+        "**When:** from 08:00 on Monday 16 to 08:00 on Saturday 28 November, every day. The union describes it as the first phase of an open-ended strike.",
+        "**Who is called out:** doctors, residents in training included, at the Catalan Health Institute (ICS: hospitals and primary care centres) and the other public providers of the Catalan Health Service.",
+        `**March:** on Thursday 19 November at 18:00 in Barcelona, from Plaça de les Drassanes to Plaça d'Espanya, according to ${link(U.smuMarches, "the union's list of marches")}.`,
+      ],
+    },
+    minimumServices: {
+      status: "published",
+      msShort: {
+        ca: "Serveis mínims publicats: urgències i unitats especials amb normalitat, 25% de la plantilla a la primària",
+        es: "Servicios mínimos publicados: urgencias y unidades especiales con normalidad, 25% de la plantilla en primaria",
+        en: "Minimum services published: A&E and special units run normally, 25% of staff in primary care",
+      },
+      text: {
+        ca: `Els fixa l'ordre del Departament d'Empresa i Treball del 13 de novembre de 2026, a ${link(U.treballMs, "la llista de vagues amb serveis mínims")}. Funcionen amb normalitat les urgències, les unitats especials (cures intensives, unitats coronàries, hemodiàlisi, neonatologia, parts, radioteràpia i quimioteràpia) i l'atenció urgent dels CUAP, els PAC i els PADES, i s'ha de fer la cirurgia urgent que no es pot ajornar. La resta de l'atenció primària, amb el 25% de la plantilla; els altres serveis, com un dia festiu (o amb el 50% on un festiu es treballa amb la plantilla d'un dia feiner); les donacions del Banc de Sang i Teixits, al 50%. Es mantenen el transport sanitari urgent, les emergències mèdiques i els serveis farmacèutics de guàrdia.`,
+        es: `Los fija la orden del Departament d'Empresa i Treball del 13 de noviembre de 2026, en ${link(U.treballMs, "la lista de huelgas con servicios mínimos")}. Funcionan con normalidad las urgencias, las unidades especiales (cuidados intensivos, unidades coronarias, hemodiálisis, neonatología, partos, radioterapia y quimioterapia) y la atención urgente de los CUAP, los PAC y los PADES, y debe hacerse la cirugía urgente que no se puede aplazar. El resto de la atención primaria, con el 25% de la plantilla; los demás servicios, como un día festivo (o con el 50% donde un festivo se trabaja con la plantilla de un día laborable); las donaciones del Banc de Sang i Teixits, al 50%. Se mantienen el transporte sanitario urgente, las emergencias médicas y los servicios farmacéuticos de guardia.`,
+        en: `They are set by the Department of Business and Labour's order of 13 November 2026, on ${link(U.treballMs, "the list of strikes with minimum services")}. A&E, the special units (intensive care, coronary units, haemodialysis, neonatal care, maternity, radiotherapy and chemotherapy) and urgent care at the CUAP, PAC and PADES run normally, and urgent surgery that cannot wait goes ahead. The rest of primary care runs with 25% of staff; other services as on a public holiday (or with 50% where a holiday is staffed like a working day); Blood and Tissue Bank donations at 50%. Urgent patient transport, medical emergencies and on-call pharmacy services are kept.`,
+      },
+    },
+    advice: {
+      ca: [
+        "Si tens una visita o una prova programada entre el 16 i el 27 de novembre, pregunta al teu CAP o hospital si es manté: dues vagues de metges coincideixen aquests dies.",
+        "Per a una urgència, les urgències dels hospitals, els CUAP i els PAC funcionen amb normalitat.",
+      ],
+      es: [
+        "Si tienes una visita o una prueba programada entre el 16 y el 27 de noviembre, pregunta a tu CAP u hospital si se mantiene: dos huelgas de médicos coinciden estos días.",
+        "Para una urgencia, las urgencias de los hospitales, los CUAP y los PAC funcionan con normalidad.",
+      ],
+      en: [
+        "If you have an appointment or a test booked between 16 and 27 November, ask your CAP or hospital whether it goes ahead: two doctors' strikes overlap these days.",
+        "For anything urgent, hospital A&E and the CUAP and PAC urgent-care centres run normally.",
+      ],
+    },
+    sources: [
+      { name: "Informació de vagues amb serveis mínims: ordre del 13 de novembre de 2026, assistència sanitària de l'ICS i del SISCAT (vaga del Sindicato Médicos Unidos)", url: U.treballMs, publisher: "Departament d'Empresa i Treball" },
+      { name: "Comunicación de huelga de ámbito estatal del personal médico del Sistema Nacional de Salud (4 de noviembre de 2026)", url: U.smuNotice, publisher: "Sindicato Médicos Unidos (SMU)" },
+      { name: "Manifestaciones del 19 de noviembre de 2026", url: U.smuMarches, publisher: "Sindicato Médicos Unidos (SMU)" },
+    ],
+  },
+  {
     id: "vaga-ferroviaria-2026-11-17",
     dates: ["2026-11-17", "2026-11-19"],
     scope: "rail",
@@ -825,9 +913,9 @@ export const STRIKES: Strike[] = [
         en: "Rodalies: 66% at peak times, 33% the rest of the day",
       },
       text: {
-        ca: `A **Rodalies de Catalunya i els regionals**, ${link(U.ordreRenfe17, "l'ordre del Departament d'Empresa i Treball del 12 de novembre de 2026")} fixa per al 17 el **66% del servei habitual en hora punta** (de 6.00 a 9.30 h i de 17.00 a 20.30 h) i el **33% la resta del dia**. ${link(U.rodalies17, "L'avís de Rodalies")}, actualitzat el 14 de novembre, enllaça l'horari de serveis mínims de cada línia. Per als altres trens de Renfe, ${link(U.ministryRenfe17, "la resolució del Ministeri de Transports del 12 de novembre")} fixa el **72% a l'alta velocitat i la llarga distància** (177 de 246 trens) i una **mitjana del 65% a Mitja Distància** (444 de 682), segons també ${link(U.renfe17, "l'avís de Renfe del 14 de novembre")}; a Iryo, el 70% (${link(U.iryo17, "28 de 40 trens")}), i a Ouigo, el 65,38% (${link(U.ouigo17, "17 de 26")}). Per a Adif, el 17 i el 19, el 16 de novembre encara no hi havia cap resolució a ${link(U.ministryRail, "la llista del Ministeri")}.`,
-        es: `En **Rodalies de Catalunya y los regionales**, ${link(U.ordreRenfe17, "la orden del Departament d'Empresa i Treball del 12 de noviembre de 2026")} fija para el 17 el **66% del servicio habitual en hora punta** (de 6.00 a 9.30 h y de 17.00 a 20.30 h) y el **33% el resto del día**. ${link(U.rodalies17, "El aviso de Rodalies")}, actualizado el 14 de noviembre, enlaza el horario de servicios mínimos de cada línea. Para los demás trenes de Renfe, ${link(U.ministryRenfe17, "la resolución del Ministerio de Transportes del 12 de noviembre")} fija el **72% en alta velocidad y larga distancia** (177 de 246 trenes) y una **media del 65% en Media Distancia** (444 de 682), según también ${link(U.renfe17, "el aviso de Renfe del 14 de noviembre")}; en Iryo, el 70% (${link(U.iryo17, "28 de 40 trenes")}), y en Ouigo, el 65,38% (${link(U.ouigo17, "17 de 26")}). Para Adif, el 17 y el 19, el 16 de noviembre aún no había ninguna resolución en ${link(U.ministryRail, "la lista del Ministerio")}.`,
-        en: `On **Rodalies de Catalunya and regional trains**, ${link(U.ordreRenfe17, "the Department of Business and Labour's order of 12 November 2026")} sets for the 17th **66% of the usual service at peak times** (06:00 to 09:30 and 17:00 to 20:30) and **33% for the rest of the day**. ${link(U.rodalies17, "Rodalies' notice")}, updated on 14 November, links a minimum-service timetable for every line. For Renfe's other trains, ${link(U.ministryRenfe17, "the Ministry of Transport's resolution of 12 November")} sets **72% on high-speed and long-distance** (177 of 246 trains) and **65% on average on Media Distancia** (444 of 682), as ${link(U.renfe17, "Renfe's notice of 14 November")} also says; Iryo, 70% (${link(U.iryo17, "28 of 40 trains")}), and Ouigo, 65.38% (${link(U.ouigo17, "17 of 26")}). For Adif, on the 17th and the 19th, there was still no resolution on ${link(U.ministryRail, "the Ministry's list")} on 16 November.`,
+        ca: `A **Rodalies de Catalunya i els regionals**, ${link(U.ordreRenfe17, "l'ordre del Departament d'Empresa i Treball del 12 de novembre de 2026")} fixa per al 17 el **66% del servei habitual en hora punta** (de 6.00 a 9.30 h i de 17.00 a 20.30 h) i el **33% la resta del dia**. ${link(U.rodalies17, "L'avís de Rodalies")}, actualitzat el 14 de novembre, enllaça l'horari de serveis mínims de cada línia. Per als altres trens de Renfe, ${link(U.ministryRenfe17, "la resolució del Ministeri de Transports del 12 de novembre")} fixa el **72% a l'alta velocitat i la llarga distància** (177 de 246 trens) i una **mitjana del 65% a Mitja Distància** (444 de 682), segons també ${link(U.renfe17, "l'avís de Renfe del 14 de novembre")}; a Iryo, el 70% (${link(U.iryo17, "28 de 40 trens")}), i a Ouigo, el 65,38% (${link(U.ouigo17, "17 de 26")}). Per a Adif, el 17 i el 19, el 17 de novembre encara no hi havia cap resolució a ${link(U.ministryRail, "la llista del Ministeri")}; l'SCF, que hi crida «Todos a la huelga», diu que la circulació en garanteix la seguretat durant les aturades (${link(U.scf37, "comunicat 37, 16 de novembre")}).`,
+        es: `En **Rodalies de Catalunya y los regionales**, ${link(U.ordreRenfe17, "la orden del Departament d'Empresa i Treball del 12 de noviembre de 2026")} fija para el 17 el **66% del servicio habitual en hora punta** (de 6.00 a 9.30 h y de 17.00 a 20.30 h) y el **33% el resto del día**. ${link(U.rodalies17, "El aviso de Rodalies")}, actualizado el 14 de noviembre, enlaza el horario de servicios mínimos de cada línea. Para los demás trenes de Renfe, ${link(U.ministryRenfe17, "la resolución del Ministerio de Transportes del 12 de noviembre")} fija el **72% en alta velocidad y larga distancia** (177 de 246 trenes) y una **media del 65% en Media Distancia** (444 de 682), según también ${link(U.renfe17, "el aviso de Renfe del 14 de noviembre")}; en Iryo, el 70% (${link(U.iryo17, "28 de 40 trenes")}), y en Ouigo, el 65,38% (${link(U.ouigo17, "17 de 26")}). Para Adif, el 17 y el 19, el 17 de noviembre aún no había ninguna resolución en ${link(U.ministryRail, "la lista del Ministerio")}; el SCF, que llama «Todos a la huelga», dice que la circulación garantiza su seguridad durante los paros (${link(U.scf37, "comunicado 37, 16 de noviembre")}).`,
+        en: `On **Rodalies de Catalunya and regional trains**, ${link(U.ordreRenfe17, "the Department of Business and Labour's order of 12 November 2026")} sets for the 17th **66% of the usual service at peak times** (06:00 to 09:30 and 17:00 to 20:30) and **33% for the rest of the day**. ${link(U.rodalies17, "Rodalies' notice")}, updated on 14 November, links a minimum-service timetable for every line. For Renfe's other trains, ${link(U.ministryRenfe17, "the Ministry of Transport's resolution of 12 November")} sets **72% on high-speed and long-distance** (177 of 246 trains) and **65% on average on Media Distancia** (444 of 682), as ${link(U.renfe17, "Renfe's notice of 14 November")} also says; Iryo, 70% (${link(U.iryo17, "28 of 40 trains")}), and Ouigo, 65.38% (${link(U.ouigo17, "17 of 26")}). For Adif, on the 17th and the 19th, there was still no resolution on ${link(U.ministryRail, "the Ministry's list")} on 17 November; SCF, which calls "Todos a la huelga" (everyone on strike), says traffic control keeps rail traffic safe during the stoppages (${link(U.scf37, "notice 37, 16 November")}).`,
       },
     },
     advice: {
@@ -854,6 +942,7 @@ export const STRIKES: Strike[] = [
       { name: "Resolución de servicios mínimos en Intermodalidad de Levante (Iryo), 17 de noviembre de 2026", url: U.iryo17, publisher: "Ministerio de Transportes y Movilidad Sostenible" },
       { name: "Resolución de servicios mínimos en Ouigo España, 17 de noviembre de 2026", url: U.ouigo17, publisher: "Ministerio de Transportes y Movilidad Sostenible" },
       { name: "Reunión de trabajo con el Ministerio de Transportes; las movilizaciones por la Seguridad continúan (nº 2026-33, 14/11/2026)", url: U.semaf33, publisher: "SEMAF" },
+      { name: "SCFCOM 37: Todos a la huelga (16/11/2026)", url: U.scf37, publisher: "Sindicato de Circulación Ferroviario (SCF)" },
     ],
     // 11 Nov 2026: the Renfe guide follows the next rail strike (guideEntry): this one once 10 Nov is past.
     guide: "strikeRenfe",
@@ -1075,6 +1164,12 @@ export function strikeDays(strike: Strike, locale: Locale): string {
     return `${FROM[locale]}${dayDate(first, locale, first.slice(0, 4) !== end.slice(0, 4))}${TO[locale]}${dayDate(end, locale)}`;
   }
   const last = strike.dates.length - 1;
+  // 17 Nov 2026: three or more consecutive days read as a range ("des del dilluns 16 de novembre fins al divendres 27 de novembre de 2026").
+  const first = strike.dates[0] ?? "";
+  const end = strike.dates[last] ?? "";
+  if (last >= 2 && strike.dates.every((iso, index) => iso === addDays(first, index))) {
+    return `${FROM[locale]}${dayDate(first, locale, first.slice(0, 4) !== end.slice(0, 4))}${TO[locale]}${dayDate(end, locale)}`;
+  }
   return andList(strike.dates.map((iso, index) => dayDate(iso, locale, index === last)), locale);
 }
 
@@ -1100,6 +1195,24 @@ function strikeWhen(strike: Strike, locale: Locale): string {
 const cap = (text: string) => text.charAt(0).toUpperCase() + text.slice(1);
 
 /** The line to the Spain-wide strikes calendar (strikes-spain.ts), in the reader's own language. */
+/**
+ * 17 Nov 2026: the one-day pages ("¿Hay huelga el jueves 19 / el viernes 20?",
+ * strike-days-1920n.ts), linked from both hubs until their day has passed.
+ */
+export const STRIKE_DAY_PAGES: readonly { day: string; key: B2Key }[] = [
+  { day: "2026-11-19", key: "strike19n" },
+  { day: "2026-11-20", key: "strike20n" },
+];
+
+const DAY_PAGES_LEAD: Record<Locale, string> = { ca: "Dia a dia:", es: "Día a día:", en: "Day by day:" };
+
+/** " Día a día: [¿Hay huelga el jueves 19…?](…) · […]" for the day pages still to come on `asOf`, or "". */
+export function strikeDayPagesLine(locale: Locale, asOf: string): string {
+  const pages = STRIKE_DAY_PAGES.filter((page) => page.day >= asOf);
+  if (pages.length === 0) return "";
+  return ` ${DAY_PAGES_LEAD[locale]} ${pages.map((page) => b2link(page.key, locale, B2_TITLES[page.key][locale])).join(" · ")}`;
+}
+
 export const SPAIN_HUB_LINE: Record<Locale, string> = {
   ca: `Les vagues de tot Espanya, amb la data, qui les convoca i els serveis mínims, són al ${b2link("strikesSpain", "ca", "calendari de vagues a Espanya")}.`,
   es: `Las huelgas de toda España, con su fecha, quién las convoca y sus servicios mínimos, están en el ${b2link("strikesSpain", "es", "calendario de huelgas en España")}.`,
@@ -1593,7 +1706,7 @@ export function buildStrikesBody(locale: Locale, asOf: string = STRIKES_AS_OF, s
   // 10 Nov 2026: every edition also sends readers from the rest of Spain
   // (about five times Catalonia's strike demand) to the Spain-wide calendar
   // (strikes-spain.ts, three languages), in the same paragraph.
-  blocks.push(...paras(`${t.today} ${SPAIN_HUB_LINE[locale]}`));
+  blocks.push(...paras(`${t.today} ${SPAIN_HUB_LINE[locale]}${strikeDayPagesLine(locale, asOf)}`));
   blocks.push(callout("official", t.dataTitle, t.data));
 
   if (upcoming.length > 0) {
