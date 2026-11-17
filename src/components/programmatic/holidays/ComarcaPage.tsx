@@ -157,7 +157,10 @@ export function ComarcaPage({ g, locale }: { g: ComarcaGroup; locale: MuniLocale
 
         <section className="mt-12" aria-labelledby="ci-hol-dates">
           <h2 id="ci-hol-dates">{t.datesTitle}</h2>
-          <DateQuestions locale={locale} />
+          <DateQuestions locale={locale} upcoming={12} />
+          <p className="mt-4 text-sm">
+            <Link href={`${hubPath(locale)}#ci-hol-dates`}>{locale === "ca" ? "Totes les dates" : "Todas las fechas"}</Link>
+          </p>
         </section>
 
         <GuideLinks keys={["holidayToday", "workCalendar", "localHolidays", "shops", "school", "decemberBridge"]} locale={locale} title={t.guidesTitle} />

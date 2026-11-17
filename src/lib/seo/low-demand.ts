@@ -16,12 +16,147 @@
  * window, 1,012 pages. Two municipal pages chosen at random shared 66-78% of their
  * text: the "scaled, low value" pattern that cost v1 its AdSense approval.
  *
- * Regenerate with scripts/low-demand.py. Review by LOW_DEMAND_REVIEW_BY: holiday pages see their demand in December
- * and January, so the list is re-read against fresh data then (a test fails
- * from that date until it is).
+ *
+ * 17 Nov 2026, programmatic-families audit (docs/SEO_EXPERIMENTS.md, entry of
+ * that day), GSC 28 days 2026-10-21..2026-11-17. One rule for every page
+ * decided on data: noindex only with 0 clicks and fewer than 10 impressions.
+ *  - Added to the list: the English town pages (/en/holidays/<town>/, live
+ *    since 30 Oct) under that bar, 14 of 29; /es/festivos/ponts/ (0 in 90
+ *    days, missed on 11 Nov because the script skipped every slug "ponts").
+ *  - LOW_DEMAND_RULES below: whole groups by URL pattern, with the pages of
+ *    the group that cleared the bar kept indexable.
+ *
+ * Regenerate the list with scripts/low-demand.py. Review by LOW_DEMAND_REVIEW_BY: holiday pages see their demand in December
+ * and January, so the list and the rules' keep lists are re-read against
+ * fresh data then (a test fails from that date until they are).
  */
-export const LOW_DEMAND_AS_OF = "2026-11-11";
+export const LOW_DEMAND_AS_OF = "2026-11-17";
 export const LOW_DEMAND_REVIEW_BY = "2026-12-10";
+
+/**
+ * A group of pages kept out of the index by URL pattern. `keep` lists the
+ * pages of the group that earned a click or 10 impressions in the 28 days
+ * before the rule: they stay indexable. (The date pages have their own,
+ * date-driven rule: `expiredDatePage`.)
+ */
+export type LowDemandRule = {
+  /** Quoted in docs/SEO_EXPERIMENTS.md and the tests. */
+  id: string;
+  pattern: RegExp;
+  keep?: readonly string[];
+};
+
+export const LOW_DEMAND_RULES: readonly LowDemandRule[] = [
+  {
+    // Spain-wide 2027 calendar in Catalan (/ca/festius/2027/<comunitat>/,
+    // /<comunitat>/<ciutat>/, /dia/<d>/), live since 10 and 13 Nov: 321
+    // pages, 131 impressions and 0 clicks from the 317 not kept. Catalan
+    // searchers ask about Catalonia (its own town and date pages); the same
+    // data is indexed in Spanish, and the ca date pages (/ca/festius/2027/dia/)
+    // compete with /ca/festius/dia/<d>-2027/. Kept: Catalonia's own page (not
+    // matched), the hub, bridges, planner and widget pages, and four pages
+    // that earned a click or 10 impressions.
+    id: "spain-2027-ca",
+    pattern: /^\/ca\/festius\/2027\/(?!(?:ponts|al-teu-web|aprofitar-vacances|catalunya)\/)[a-z0-9-]+\/(?:[a-z0-9-]+\/)?$/,
+    keep: [
+      "/ca/festius/2027/comunitat-valenciana/gandia/",
+      "/ca/festius/2027/dia/29-marc/",
+      "/ca/festius/2027/illes-balears/",
+      "/ca/festius/2027/illes-balears/ciutadella-de-menorca/",
+    ],
+  },
+  {
+    // The same group in English (/en/holidays/2027/...): 321 pages, 290
+    // impressions and 0 clicks from the 305 not kept. The English date pages
+    // compete with /en/holidays/day/<d>-2027/ (Catalonia). Kept: Catalonia's
+    // page, the hub, long weekends, planner and widget pages, and the 16 pages
+    // with a click or 10 impressions (expat and tourist towns).
+    id: "spain-2027-en",
+    pattern: /^\/en\/holidays\/2027\/(?!(?:long-weekends|for-your-website|leave-planner|catalonia)\/)[a-z0-9-]+\/(?:[a-z0-9-]+\/)?$/,
+    keep: [
+      "/en/holidays/2027/andalusia/barbate/",
+      "/en/holidays/2027/andalusia/cadiz/",
+      "/en/holidays/2027/andalusia/cordoba/",
+      "/en/holidays/2027/andalusia/malaga/",
+      "/en/holidays/2027/andalusia/marbella/",
+      "/en/holidays/2027/andalusia/sevilla/",
+      "/en/holidays/2027/aragon/zaragoza/",
+      "/en/holidays/2027/balearic-islands/ibiza/",
+      "/en/holidays/2027/balearic-islands/palma/",
+      "/en/holidays/2027/basque-country/bilbao/",
+      "/en/holidays/2027/canary-islands/las-palmas-de-gran-canaria/",
+      "/en/holidays/2027/castile-and-leon/salamanca/",
+      "/en/holidays/2027/day/8-september/",
+      "/en/holidays/2027/melilla/",
+      "/en/holidays/2027/murcia/mazarron/",
+      "/en/holidays/2027/valencian-community/alicante/",
+    ],
+  },
+  {
+    // 11N general strike, the 13 city pages in es, ca and en plus the Spanish
+    // Spain-wide page (0 impressions ever): a past event. 270,901 impressions
+    // and 16,297 clicks in the 28 days, all before 13 Nov; 0 clicks a day since,
+    // ~250 impressions a day at position ~9 for "¿cuándo es la próxima huelga?"
+    // queries the strikes hub answers. 41 % of their text is page-specific (4,400
+    // words each): 40 near-twins of a finished event. Kept (not matched): the
+    // main 11N guide in each language, the English Spain page and city index,
+    // the Catalan Spain page.
+    id: "strike-11n-cities",
+    pattern: /^\/(?:es\/guias\/huelga-general-11-noviembre|ca\/guies\/vaga-general-11-novembre|en\/guides\/general-strike-11-november)-(?!(?:spain|spain-by-city|espanya)\/)[a-z0-9-]+\/$/,
+  },
+];
+
+/**
+ * The "¿Es festivo el …?" date pages, Catalonia's (/ca/festius/dia/1-novembre-2026/,
+ * /es/festivos/dia/…, /en/holidays/day/…) and Spain's 2027 ones
+ * (/es/festivos/2027/dia/1-mayo/), leave the index this many days after their
+ * date: demand ends with the day (1 Nov 2026 page: 5,242 impressions on the
+ * day, 14 a day ten days later) and next year's page answers the question.
+ */
+export const DATE_PAGE_GRACE_DAYS = 14;
+
+const MONTHS: Record<string, number> = {
+  // ca
+  gener: 1, febrer: 2, marc: 3, abril: 4, maig: 5, juny: 6, juliol: 7, agost: 8, setembre: 9, octubre: 10, novembre: 11, desembre: 12,
+  // es (abril, octubre shared)
+  enero: 1, febrero: 2, marzo: 3, mayo: 5, junio: 6, julio: 7, agosto: 8, septiembre: 9, noviembre: 11, diciembre: 12,
+  // en
+  january: 1, february: 2, march: 3, april: 4, may: 5, june: 6, july: 7, august: 8, september: 9, october: 10, november: 11, december: 12,
+};
+
+const DATE_PAGE = /^\/(?:ca\/festius\/dia|es\/festivos\/dia|en\/holidays\/day)\/(\d{1,2})-([a-z]+)-(\d{4})\/$/;
+const DATE_PAGE_2027 = /^\/(?:ca\/festius|es\/festivos|en\/holidays)\/2027\/(?:dia|day)\/(\d{1,2})-([a-z]+)\/$/;
+
+/** The ISO date a date page answers for, or null when the path is not one. */
+export function datePageIso(path: string): string | null {
+  const m = DATE_PAGE.exec(path);
+  const n = m ? null : DATE_PAGE_2027.exec(path);
+  const [day, month, year] = m ? [m[1], m[2], m[3]] : n ? [n[1], n[2], "2027"] : [];
+  const mm = month ? MONTHS[month] : undefined;
+  if (!day || !mm || !year) return null;
+  return `${year}-${String(mm).padStart(2, "0")}-${day.padStart(2, "0")}`;
+}
+
+/** True once a date page is DATE_PAGE_GRACE_DAYS past its date (`today` is a Madrid ISO date). */
+export function expiredDatePage(path: string, today: string): boolean {
+  const iso = datePageIso(path);
+  if (!iso) return false;
+  const end = new Date(`${iso}T00:00:00Z`);
+  end.setUTCDate(end.getUTCDate() + DATE_PAGE_GRACE_DAYS);
+  return today >= end.toISOString().slice(0, 10);
+}
+
+const MADRID_DAY = new Intl.DateTimeFormat("en-CA", { timeZone: "Europe/Madrid", year: "numeric", month: "2-digit", day: "2-digit" });
+
+/** Today's date in Madrid, YYYY-MM-DD. */
+function madridToday(): string {
+  return MADRID_DAY.format(new Date());
+}
+
+/** The rule that keeps a path out of the index, if any (`keep` pages excepted). */
+export function lowDemandRule(path: string): LowDemandRule | null {
+  return LOW_DEMAND_RULES.find((r) => r.pattern.test(path) && !r.keep?.includes(path)) ?? null;
+}
 
 /** Site paths, with both slashes ("/ca/festius/la-maso/"). */
 export const LOW_DEMAND_PATHS: readonly string[] = [
@@ -1211,6 +1346,20 @@ export const LOW_DEMAND_PATHS: readonly string[] = [
   "/ca/festius/vinaixa/",
   "/ca/festius/vinebre/",
   "/ca/festius/viver-i-serrateix/",
+  "/en/holidays/calella/",
+  "/en/holidays/cambrils/",
+  "/en/holidays/castell-d-aro-platja-d-aro-i-s-agaro/",
+  "/en/holidays/castello-d-empuries/",
+  "/en/holidays/girona/",
+  "/en/holidays/l-ametlla-de-mar/",
+  "/en/holidays/l-escala/",
+  "/en/holidays/mont-roig-del-camp/",
+  "/en/holidays/roses/",
+  "/en/holidays/santa-coloma-de-gramenet/",
+  "/en/holidays/santa-susanna/",
+  "/en/holidays/torroella-de-montgri/",
+  "/en/holidays/tossa-de-mar/",
+  "/en/holidays/vila-seca/",
   "/es/elecciones/abella-de-la-conca/",
   "/es/elecciones/ager/",
   "/es/elecciones/aguilar-de-segarra/",
@@ -2238,6 +2387,7 @@ export const LOW_DEMAND_PATHS: readonly string[] = [
   "/es/festivos/pontils/",
   "/es/festivos/pontons/",
   "/es/festivos/pontos/",
+  "/es/festivos/ponts/",
   "/es/festivos/portbou/",
   "/es/festivos/pradell-de-la-teixeta/",
   "/es/festivos/prades/",
@@ -2524,8 +2674,12 @@ export const LOW_DEMAND_PATHS: readonly string[] = [
 
 const SET = new Set(LOW_DEMAND_PATHS);
 
-/** True for a path (or absolute URL) on the list; the trailing slash is optional. */
-export function isLowDemandPath(pathOrUrl: string): boolean {
+/**
+ * True for a path (or absolute URL) kept out of the index: on the list, in a
+ * rule's group (and not kept), or a date page past its grace period. The
+ * trailing slash is optional; `today` (Madrid ISO date) defaults to now.
+ */
+export function isLowDemandPath(pathOrUrl: string, today: string = madridToday()): boolean {
   let path = pathOrUrl;
   if (/^https?:\/\//.test(path)) {
     try {
@@ -2535,5 +2689,5 @@ export function isLowDemandPath(pathOrUrl: string): boolean {
     }
   }
   if (!path.endsWith("/")) path += "/";
-  return SET.has(path);
+  return SET.has(path) || lowDemandRule(path) !== null || expiredDatePage(path, today);
 }

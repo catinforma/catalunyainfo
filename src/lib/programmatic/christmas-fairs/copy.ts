@@ -527,6 +527,23 @@ export function guidance(locale: FairsLocale, fairsUrl: string, agendaUrl: strin
   ];
 }
 
+/**
+ * The town pages' short version (17 Nov 2026): the advice that matters on the
+ * day, then a link to the full note on the hub (`guidance`, anchor
+ * #ci-xmas-guide). The full note was ~200 identical words on every town page,
+ * a quarter of each; the page's own sources stay listed below it.
+ */
+export function guidanceShort(locale: FairsLocale, hubHref: string): string {
+  const href = `${hubHref}#ci-xmas-guide`;
+  if (locale === "ca") {
+    return `**Abans de sortir**, torna a mirar el web de l'organitzador: una fira a l'aire lliure pot canviar de dia per mal temps. D'on surten les dates i com les comprovem: [a la pàgina de totes les fires](${href}).`;
+  }
+  if (locale === "es") {
+    return `**Antes de salir**, vuelve a mirar la web del organizador: una feria al aire libre puede cambiar de día por mal tiempo. De dónde salen las fechas y cómo las comprobamos: [en la página de todas las ferias](${href}).`;
+  }
+  return `**Before you set off**, check the organiser's website again: an outdoor market can move because of bad weather. Where the dates come from and how we check them: [on the page with every market](${href}).`;
+}
+
 /** Attribution in the form the Generalitat's open-data licence asks for. */
 export function attribution(locale: FairsLocale, dates: { fairs: string; agenda: string }): string {
   if (locale === "ca") {

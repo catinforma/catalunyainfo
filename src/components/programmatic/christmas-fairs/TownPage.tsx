@@ -25,7 +25,7 @@ import { shortRange } from "@/lib/programmatic/christmas-fairs/format";
 import { holidaySentences, regionalHolidaysIn, trainLines, weekendSentence } from "@/lib/programmatic/christmas-fairs/guide";
 import { fairsHubPath, townPath, type FairsLocale } from "@/lib/programmatic/christmas-fairs/paths";
 
-import { FairCard, Guidance, PendingList, Sources, datedFairs } from "./parts";
+import { FairCard, GuidanceShort, PendingList, Sources, datedFairs } from "./parts";
 import { FairStatus } from "./FairStatus";
 
 export function townCrumbs(town: Town, locale: FairsLocale): Crumb[] {
@@ -128,7 +128,7 @@ export function TownPage({ town, locale }: { town: Town; locale: FairsLocale }) 
             </>
           ) : null}
 
-          <Guidance locale={locale} />
+          <GuidanceShort locale={locale} />
         </div>
 
         <LinkList title={t.nearby} id="ci-xmas-nearby" links={nearby} />
