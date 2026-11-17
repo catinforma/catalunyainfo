@@ -37,3 +37,4 @@ reports/
 
 # Local database dumps (personal data: contact messages, admin users)
 /backups/
+__pycache__/
