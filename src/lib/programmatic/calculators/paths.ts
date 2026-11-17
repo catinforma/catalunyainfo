@@ -26,6 +26,8 @@ export const CALCULATORS_ROOT: Record<CalcLocale, string> = { es: "calculadoras"
 /** Every tool of the family with its slug per language, in the hub's order. */
 export const CALCULATORS = [
   { id: "net-salary", slugs: { es: "sueldo-neto", ca: "sou-net", en: "net-salary-spain" } },
+  // Christmas extra pay (ET art. 31, LGSS art. 147.1, RIRPF arts. 82-83): gross, earned part, IRPF, net, on the net salary engine.
+  { id: "extra-pay", slugs: { es: "paga-extra", ca: "paga-extra", en: "christmas-extra-pay-spain" } },
   { id: "self-employed", slugs: { es: "cuota-autonomos", ca: "quota-autonoms", en: "spain-self-employed-contributions" } },
   { id: "dismissal", slugs: { es: "indemnizacion-despido", ca: "indemnitzacio-acomiadament", en: "severance-pay-spain" } },
   { id: "settlement", slugs: { es: "finiquito", ca: "quitanca-finiquito", en: "final-settlement-spain" } },

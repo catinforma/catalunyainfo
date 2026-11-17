@@ -156,6 +156,7 @@ const TOPICS: readonly Topic[] = [
 /** Calculators: names people type, to the tool. */
 const CALC_KEYS: readonly { keys: readonly string[]; id: CalculatorId; label: PerLocale<string> }[] = [
   { keys: ["sou net", "sueldo neto", "salari net", "salario neto", "net salary", "nomina"], id: "net-salary", label: { ca: "Calculadora de sou net", es: "Calculadora de sueldo neto", en: "Net salary calculator" } },
+  { keys: ["paga extra", "pagas extra", "pagues extra", "paga de navidad", "paga de nadal", "extra pay", "christmas bonus"], id: "extra-pay", label: { ca: "Calculadora de la paga extra", es: "Calculadora de la paga extra", en: "Christmas extra pay calculator" } },
   { keys: ["hipoteca", "mortgage"], id: "mortgage", label: { ca: "Calculadora d'hipoteca", es: "Calculadora de hipoteca", en: "Mortgage calculator" } },
   { keys: ["euribor"], id: "euribor", label: { ca: "Euríbor avui", es: "Euríbor hoy", en: "Euribor today" } },
   { keys: ["itv"], id: "itv", label: { ca: "Quan toca passar l'ITV", es: "Cuándo toca pasar la ITV", en: "When the ITV is due" } },

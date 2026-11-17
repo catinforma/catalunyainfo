@@ -23,6 +23,7 @@ import { widgetSitemapEntries } from "@/lib/programmatic/embed-2027/places";
 import { leaveSitemapEntries } from "@/lib/programmatic/leave-2027/places";
 import { calculatorsHubSitemapEntries } from "@/lib/programmatic/calculators/sitemap";
 import { netSalarySitemapEntries } from "@/lib/programmatic/net-salary/sitemap";
+import { extraPaySitemapEntries } from "@/lib/programmatic/extra-pay/sitemap";
 import { selfEmployedSitemapEntries } from "@/lib/programmatic/self-employed/sitemap";
 import { employmentSitemapEntries } from "@/lib/programmatic/employment/sitemap";
 import { sickLeaveSitemapEntries } from "@/lib/programmatic/sick-leave/sitemap";
@@ -188,6 +189,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...calculatorsHubSitemapEntries(),
     // "Calculadora de sueldo neto 2026" (calculators family), in es, ca and en.
     ...netSalarySitemapEntries(),
+    // "Paga extra de Navidad 2026": gross, earned part, IRPF and net of the Christmas extra pay, in es, ca and en.
+    ...extraPaySitemapEntries(),
     // "Cuota de autónomos 2026 (y 2027)": the self-employed contributions calculator (Orden PJC/297/2026 bands), in es, ca and en.
     ...selfEmployedSitemapEntries(),
     // Dismissal pay, final settlement and unemployment benefit calculators, in ca, es and en.

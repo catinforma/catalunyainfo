@@ -62,6 +62,7 @@ export type IcsMethod = "apple" | "google" | "download";
  */
 export const CALCULATOR_USE_IDS = [
   "net-salary",
+  "extra-pay",
   "self-employed",
   "dismissal",
   "settlement",

@@ -6715,4 +6715,59 @@ queries on draw day; the hub link carries draw-day visitors to it.
 `page spain-lottery-prize-tax 7`; queries containing hacienda/hisenda/tax). Before then, 1 Dec: indexed? (URL
 inspection.)
 
+## 2026-11-17 — New tool: "Paga extra de Navidad 2026: cuánto cobrarás neto y cuándo" (calculator), es + ca + en (deploy; republish group `pagos`)
+
+**What.** `/es/calculadoras/paga-extra/`, `/ca/calculadores/paga-extra/`,
+`/en/calculators/christmas-extra-pay-spain/` (lib/programmatic/extra-pay/), in the
+calculators registry right after net salary, hub group "Trabajo y sueldo" (card after
+net salary), sitemap (+hreflang, x-default en), llms.txt and `calculator_use`
+(`extra-pay`). Linked from the net salary page (body paragraph under the salary table)
+and from the three editions of the pay-dates guide (`cuando-se-cobra-paro-pension`,
+extras section: needs `pagos` republished); the page links back to that guide and to
+the finiquito calculator. No existing title or description touched.
+
+- Rules (read 17 Nov 2026 in the BOE consolidated texts; fact pack
+  research_notes/paga-extra-navidad-2026.md): ET art. 31 (two extras, one "con ocasión
+  de las fiestas de Navidad"; amount by convenio; may be prorated in 12) and 29.1 (date
+  agreed or by custom) — update 21/10/2026; LGSS art. 147.1 ("percepciones de
+  vencimiento superior al mensual se prorratearán a lo largo de los doce meses") and
+  46.1 (pensions: extras accrued in June and November) — update 11/11/2026; Orden
+  PJC/297/2026 art. 1.1 rule two (proportional part of the gratificaciones in each
+  month's base, annual ÷ 12 for monthly pay) and art. 29.2 (complementary settlement);
+  RIRPF arts. 82.5ª (rate applied to every payment), 83.2.1ª (rate on the year's
+  expected pay) and 87 (regularisations) — update 07/10/2026. Seguridad Social's own
+  "Bases y tipos 2026" page states the prorating rule only for household employees, so
+  the general rule is quoted from the BOE.
+- Calculator: annual or monthly gross, 14 or 12 (prorated) payments, optional convenio
+  amount (default one month = monthly, or annual ÷ 14), accrual period yearly (1 Jan–31
+  Dec) or half-yearly (1 Jul–31 Dec), start date for new hires (calendar days, like the
+  finiquito tool), withholding from the payslip or estimated with the net salary engine
+  (AEAT 2026 algorithm; foral regions → payslip rate only). Outputs gross, earned part,
+  IRPF, net, 0 € Social Security with the reason and the contribution already paid on
+  the extra inside the monthly bases (6.50 % of it; not shown above the 5,101.20 € cap).
+  Server-rendered default = the net salary page's example: 30,000 € in 14 payments →
+  2,142.86 € gross, 16.42 %, 1,791.00 € net (test: equals the net salary engine's
+  `extraPayment`). Worked examples: September hire 716.24 € (yearly) / 1,420.81 €
+  (half-yearly); prorated 178.57 € a month. Links: AEAT Servicio de Cálculo de
+  Retenciones (R261), REGCON. YMYL disclaimer; no payment day printed (convenio).
+
+**Why.** December spike for "paga extra", "cuánto cobraré de paga extra", "paga extra
+neta", "paga extra prorrateada", "cuándo se cobra la paga extra de Navidad"; the net
+salary page already answers the 14-payment net but nothing on the site covered the
+new-hire proportional part or why the extra carries no Social Security.
+
+**Baseline.** New URLs: 0 impressions.
+
+**Prediction.** By 31 Dec 2026: es page ≥ 3k impressions in December, position ≤ 20 for
+"paga extra navidad" / "calcular paga extra" / "paga extra neta".
+
+**Date guard.** `EXTRA_PAY_RULES_UNTIL` 1 Jan 2027 (tests/extra-pay.test.ts, with
+`SALARY_RULES_UNTIL`): move the page to the 2027 rules (net salary rules-2027, AEAT
+"R27x" simulator link, re-read ET 29/31, LGSS 46/147, the 2027 contribution order,
+RIRPF 82/83/87), then EXTRA_PAY_YEAR / AS_OF / UNTIL.
+
+**Measure 1 Dec, 15 Dec, 8 Jan 2027**: `snapshot.py page /calculadoras/paga-extra/ 28`
+(+ `/calculadores/paga-extra/`, `/calculators/christmas-extra-pay-spain/`); GA4
+`calculator_use` with `calculator_id` = `extra-pay`.
+
 **Outcome:** _pending_

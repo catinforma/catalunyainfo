@@ -14,6 +14,7 @@ import { TABLE_SALARIES, money, netSalaryEditions, netSalaryPath, percent, type 
 import { DEFAULT_INPUT, calculateNetSalary, scale, type SalaryResult } from "@/lib/programmatic/net-salary/engine";
 import { REGIONS, regionById } from "@/lib/programmatic/net-salary/regions";
 import { AEAT_VALIDATION, FORAL_LINKS, IRPF, SALARY_RULES_AS_OF, SALARY_RULES_YEAR, SMI_DEDUCTION, SOCIAL_SECURITY, SOURCES } from "@/lib/programmatic/net-salary/rules-2026";
+import { extraPayPath } from "@/lib/programmatic/extra-pay/copy";
 import { smiPath } from "@/lib/programmatic/smi/copy";
 import { QUOTE as SMI_QUOTE } from "@/lib/programmatic/smi/rules";
 import { absoluteUrl } from "@/lib/site";
@@ -370,6 +371,14 @@ export function NetSalaryRoute({ locale }: { locale: NetLocale }) {
                 </table>
               </div>
               <p className="text-sm">{tableFootnote}</p>
+              <p>
+                {L(locale, {
+                  es: "¿Cuánto te queda en la paga extra de Navidad, o qué parte te toca si entraste este año?",
+                  ca: "Quant et queda a la paga extra de Nadal, o quina part et toca si vas entrar aquest any?",
+                  en: "How much your Christmas extra payment comes to, or the part you are owed if you started this year?",
+                })}{" "}
+                <Link href={extraPayPath(locale)}>{L(locale, { es: "Calculadora de la paga extra", ca: "Calculadora de la paga extra", en: "Christmas extra pay calculator" })}</Link>.
+              </p>
 
               <h2 id="smi">{smiH}</h2>
               <p>{smiText[0]}</p>
