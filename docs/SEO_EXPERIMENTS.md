@@ -6276,3 +6276,66 @@ tiendas-abiertas-festivos-cataluna 7` for the "cuando empiezan" queries, and the
 `puente-diciembre-espana`, and send IndexNow for the two shops URLs and the Spain bridge URLs (ca/es/en).
 
 **Outcome:** _pending_
+
+---
+
+## 2026-11-17 — What visitors search on the site: town 2027 days (Tona, Monistrol and 7 more towns without 2026 days), site search answers directly, farmers' markets guide, bridge/Carnival/Easter body wording (deploy; groups `pont-desembre`, `carnaval`, `setmana-santa-2027`, `mercats-pages`)
+
+Owner, 17 Nov: "mira què volen els nostres visitants, millora-ho tot". Evidence: GA4 site search (28 d) and GSC 14–16 Nov.
+
+**1. Council-approved 2027 days.** "festiu local de monistrol de montserrat 2027" was searched 3 times on the site, and
+"festivos adicionales Tona" too.
+- Tona: Ple of 25 Jun 2026 (17 May, 30 Nov). The town page gives the days in the line under the lead and first in the 2027
+  section, labelled "aprovats per l'Ajuntament (ple …), pendents de l'ordre del DOGC", with the acta linked.
+- Monistrol de Montserrat had **no page** (404). The 2026 order lists it with "proposta no formulada". Its Ple of 25 Jun 2026
+  proposes 20 Jan and 26 Jul 2027.
+- New: a council left out of the 2026 order whose 2027 days are known gets a page at the usual town URL
+  (`unlistedTowns` in data.ts, `UnlistedTownPage.tsx`, ca/es; in the sitemap; linked from the hub list and the comarca page).
+  The 2027 days and their label come first, then the source, the 2027 table and the 2026 fact. 8 towns: Cerdanyola del Vallès,
+  Barberà del Vallès, Torelló, Argentona, Santa Eulàlia de Ronçana, Gironella, Calaf, Monistrol de Montserrat. Their titles are
+  new: "Festius locals <town> 2027", with no window to respect.
+- Top-200 towns by GSC impressions (28 d) without council data: 50. Added 5 (Tona, Cambrils, Cassà de la Selva, la Selva del Camp,
+  Santa Susanna). 39 have no official 2027 publication found (AOC actes, BOP, web). Skipped 5: Tarragona and Santa Perpètua (acta
+  lists the item without dates), Santa Coloma and Terrassa (council site 403, press only), les Franqueses (days per nucleus).
+- The new listed towns are in `COUNCIL_2027_METADATA_HELD`: the town-title window runs to 1 Dec. Body only.
+- Read date for all entries: 17 Nov. Quotes are in the comments above each entry.
+
+**2. Site search.** The CMS search sorted only by date and saw no programmatic page. "metro barcelona" put the Spain strikes
+hub first, "FGC" a strike page, "monistrol de montserrat" the Christmas lottery, "mercats agraris de Catalunya" nothing.
+- New `search-shortcuts.ts`: in-memory "Pàgines directes" above the results, with no external service. It covers town holiday
+  pages (+ unlisted towns), Spain 2027 cities, weekend zones, calculators, and curated synonyms (metro/TMB, FGC, Rodalies/Renfe,
+  T-casual, strikes, Montserrat, Sitges, Girona, Tarragona, bridge, Easter, Carnival, shops, farmers' markets).
+- `searchEntries` is now ranked: title A, excerpt B, body C, `ts_rank_cd`. When every word together matches nothing, it falls
+  back to any word.
+- The search pages are noindex, so this is no SEO change; it is measured in GA4 `view_search_results` followed by a page view.
+
+**3. New guide: farmers' markets and the Venda de Proximitat label** (ca/es/en; group `mercats-pages`).
+- Source: the Departament d'Agricultura producer list (Excel, 2,410 producers at 2 Jul 2026), its Q&A PDF (5 May 2026), the logo
+  guide and DL 21/2025. No official list of markets exists, so no market days are printed; producers' personal data stays off the
+  page.
+- Re-read the Excel by 17 Feb 2027 (test). Review 8 Dec with `snapshot.py page mercats-de-pages 14`.
+
+**4. Body wording on pages at 5–8 (titles untouched: every one is in a window, reviews 18–19 Nov).**
+- `/ca/guies/pont-desembre-catalunya/` (+es/en). "pont de la purissima 2026": 480 impressions at 5.3, 0 clicks (14 d). The lead and
+  the first key fact now name it: "El pont de la Puríssima del 2026 té, a Catalunya, un únic festiu: el dimarts 8 de desembre (la
+  Puríssima o Immaculada)" (es "Purísima", en "(la Puríssima)"). The rest of the lead is unchanged.
+- `/ca/tradicions/carnaval-catalunya/` (ca only). "carnestoltes 2027" 69 at 6.9, "quan es carnestoltes 2027" 33 at 6.1,
+  "dijous llarder 2027" 11. The lead says "El Carnestoltes (Carnaval) 2027 … (Dijous Gras o Dijous Llarder)", and the H2 is now
+  "Quan és el Carnestoltes 2027". es/en unchanged (their queries say "carnaval").
+- `/ca/guies/setmana-santa-2027-catalunya/` (+es/en). "dia de la mona 2027" 54 at 4.1. The key-facts label is now "Dilluns de
+  Pasqua (dia de la mona)". The lead is unchanged: it already answers "quan és".
+- Confounder: the 11 Nov title change on the bridge and Easter pages (day-7 review 18 Nov) and the answer-first review (19 Nov).
+  These are wording changes inside the first screen; read them together with those reviews, not apart.
+
+**Prediction.**
+- "pont de la purissima 2026" gets a first click and moves to ≤ 5 by 25 Nov.
+- "carnestoltes 2027" moves to ≤ 5 by 1 Dec.
+- Monistrol and Tona: their 2027 queries show impressions on the town pages by 1 Dec.
+
+**Review 25 Nov and 1 Dec.** Run `snapshot.py page pont-desembre-catalunya 7`, `page carnaval 14`, `page santa-2027 7`,
+`page monistrol 14`, and GA4 site search on the same queries.
+
+**Go-live.** Deploy first (new routes, search, the guide's module). Then publish `pont-desembre`, `carnaval`,
+`setmana-santa-2027` and `mercats-pages`. IndexNow for the 16 unlisted town URLs, Tona's two and the 3 guide URLs.
+
+**Outcome:** _pending_

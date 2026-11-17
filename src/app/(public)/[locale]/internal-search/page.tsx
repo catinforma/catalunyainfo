@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { EmptyState } from "@/components/EmptyState";
@@ -7,6 +8,7 @@ import { SearchBox } from "@/components/SearchBox";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
 import { searchEntries } from "@/lib/content/repository";
+import { searchShortcuts } from "@/lib/content/search-shortcuts";
 import { getMessages, interpolate } from "@/lib/i18n";
 import { LOCALES, isLocale, type Locale } from "@/lib/i18n/config";
 import { sectionPath } from "@/lib/i18n/routes";
@@ -57,6 +59,9 @@ export default async function SearchPage({
   const t = getMessages(locale);
 
   const results = query.length >= 2 ? await searchEntries(locale, query) : [];
+  // Direct pages first: towns, networks, calculators (lib/content/search-shortcuts.ts).
+  const shortcuts = searchShortcuts(locale, query);
+  const shortcutsTitle = { ca: "Pàgines directes", es: "Páginas directas", en: "Direct pages" }[locale];
 
   const translations = Object.fromEntries(
     LOCALES.map((l) => [l, sectionPath("search", l)]),
@@ -78,13 +83,30 @@ export default async function SearchPage({
           <SearchBox locale={locale} size="hero" defaultValue={query} autoFocus={!query} />
         </div>
 
+        {shortcuts.length > 0 ? (
+          <section className="mt-10" aria-labelledby="ci-search-direct">
+            <h2 id="ci-search-direct" className="ci-label mb-4">
+              {shortcutsTitle}
+            </h2>
+            <ul className="grid list-none gap-2 p-0 sm:grid-cols-2">
+              {shortcuts.map((s) => (
+                <li key={s.href}>
+                  <Link href={s.href} className="font-semibold">
+                    {s.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </section>
+        ) : null}
+
         {query.length >= 2 ? (
           <section className="mt-10">
             <p className="ci-label mb-6" aria-live="polite">
               {results.length} — {query}
             </p>
 
-            {results.length > 0 ? (
+            {results.length > 0 || shortcuts.length > 0 ? (
               <div className="ci-grid">
                 {results.map((entry) => (
                   <EntryCard key={entry.translationId} entry={entry} locale={locale} />

@@ -5,7 +5,8 @@ import { ShareBar, crumbPath } from "@/components/share/ShareBar";
 import { renderInline } from "@/lib/content/inline";
 import { getMessages } from "@/lib/i18n";
 import { HUB_VISIBLE, displayName, hubCopy, workCalendarLine } from "@/lib/programmatic/holidays/copy";
-import { SNAPSHOT, byComarca } from "@/lib/programmatic/holidays/data";
+import { SNAPSHOT, byComarca, unlistedTownBySlug } from "@/lib/programmatic/holidays/data";
+import { slugify } from "@/lib/programmatic/holidays/slug";
 import { dayMonth } from "@/lib/programmatic/holidays/format";
 import { esName, joinList } from "@/lib/programmatic/holidays/names";
 import { GUIDES } from "@/lib/programmatic/holidays/links";
@@ -127,7 +128,9 @@ export function HubPage({ locale }: { locale: MuniLocale }) {
                 .sort((a, b) => a.name.localeCompare(b.name, "ca"))
                 .map((e) => (
                   <li key={e.ine}>
-                    {show(e.name)} <span>({e.comarca})</span>
+                    {/* A council that has approved its 2027 days has a page with them (17 Nov 2026). */}
+                    {unlistedTownBySlug(slugify(e.name)) ? <Link href={municipalityPath(locale, slugify(e.name))}>{show(e.name)}</Link> : show(e.name)}{" "}
+                    <span>({e.comarca})</span>
                   </li>
                 ))}
             </ul>

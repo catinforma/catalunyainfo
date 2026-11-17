@@ -269,6 +269,54 @@ export function holidayRefreshDue(m: SnapshotMunicipality, today: string): boole
 }
 
 /* -------------------------------------------------------------------------- */
+/* Councils without 2026 days ("proposta no formulada") that have 2027 days   */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * A council the 2026 order lists with "proposta no formulada", so it has no
+ * 2026 town page, but whose 2027 days are known: from its own approval
+ * (`council-2027.ts`) before the DOGC order, or from the order once parsed.
+ * Each gets a page at the usual town URL (17 Nov 2026: "festiu local de
+ * monistrol de montserrat 2027" was searched on the site three times and the
+ * URL was a 404). Without 2027 days the town keeps having no page.
+ */
+export interface UnlistedTown {
+  slug: string;
+  name: string;
+  comarca: string;
+  population: number;
+  /** The council's own 2027 days, before the order (null once it is parsed). */
+  council: CouncilApproved | null;
+  /** The order's 2027 days, once parsed. */
+  next: { local: string[]; nuclei: NucleusDays[] } | null;
+}
+
+export function unlistedTowns(): UnlistedTown[] {
+  return SNAPSHOT.excluded
+    .map((e) => {
+      const slug = slugify(e.name);
+      return { slug, name: e.name, comarca: e.comarca, population: e.population, council: councilApproved2027(slug), next: nextYearFor(slug) };
+    })
+    .filter((u) => u.council || u.next)
+    .sort((a, b) => b.population - a.population);
+}
+
+export function unlistedTownBySlug(slug: string): UnlistedTown | null {
+  return unlistedTowns().find((u) => u.slug === slug) ?? null;
+}
+
+/** Next year's days in an unlisted town: the Catalonia-wide twelve plus its local days (the council's marked pending). */
+export function unlistedYearRows(u: UnlistedTown, lang: Lang): HolidayRow[] {
+  const regional = regionalDays(NEXT, isAran(u)).map((d) => ({
+    date: d.date,
+    kind: d.aranOnly ? ("aran" as const) : ("catalonia" as const),
+    name: d.name[lang],
+  }));
+  const local = u.next ? localRows(u.next.local, u.next.nuclei, lang) : u.council ? councilRows(u.council, lang) : [];
+  return [...regional, ...local].sort((a, b) => a.date.localeCompare(b.date) || a.kind.localeCompare(b.kind));
+}
+
+/* -------------------------------------------------------------------------- */
 /* Grouping                                                                   */
 /* -------------------------------------------------------------------------- */
 

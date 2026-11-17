@@ -21,6 +21,7 @@ import type {
 import { BYLINE_ENTRY_TYPES, SECTION_CATEGORY_KEYS, SECTION_ENTRY_TYPES } from "./types";
 import { DAY_DEPENDENT_PATTERN } from "./day-dependent";
 import { relatedTerms } from "./related-terms";
+import { anyWordTsQuery } from "./search-query";
 import { isRegionSchoolPage } from "./school-spain/regions";
 
 const {
@@ -909,6 +910,15 @@ async function relatedFill(
 /* Search                                                                     */
 /* -------------------------------------------------------------------------- */
 
+/**
+ * The site search over CMS entries. Ranked (17 Nov 2026), not by date: the
+ * title weighs most (A), then the excerpt (B), then the body text (C), so
+ * "metro barcelona" puts the metro-hours guide before a strike page that
+ * mentions the metro. When all the words together match nothing ("mercats
+ * agraris de Catalunya"), any of them does, ranked the same way. Newer first
+ * only between equal ranks. Programmatic pages are answered by
+ * `search-shortcuts.ts`, shown above these results.
+ */
 export async function searchEntries(
   locale: Locale,
   query: string,
@@ -920,17 +930,18 @@ export async function searchEntries(
 
   return safeRead("searchEntries", [], async () => {
     const tsConfig = locale === "es" ? "spanish" : locale === "en" ? "english" : "simple";
+    const cfg = sql.raw(`'${tsConfig}'`);
+    const doc = sql`setweight(to_tsvector(${cfg}, coalesce(${entryTranslations.title}, '')), 'A') || setweight(to_tsvector(${cfg}, coalesce(${entryTranslations.excerpt}, '')), 'B') || setweight(to_tsvector(${cfg}, coalesce(${entryTranslations.searchText}, '')), 'C')`;
 
-    const rows = await summaryQuery(db, locale)
-      .where(
-        and(
-          publishedWhere(locale),
-          eq(entryTranslations.noindex, false),
-          sql`to_tsvector(${sql.raw(`'${tsConfig}'`)}, coalesce(${entryTranslations.title}, '') || ' ' || coalesce(${entryTranslations.excerpt}, '') || ' ' || coalesce(${entryTranslations.searchText}, '')) @@ websearch_to_tsquery(${sql.raw(`'${tsConfig}'`)}, ${trimmed})`,
-        ),
-      )
-      .orderBy(desc(entryTranslations.publishedAt))
-      .limit(Math.min(limit, 50));
+    const run = async (tsquery: ReturnType<typeof sql>) =>
+      summaryQuery(db, locale)
+        .where(and(publishedWhere(locale), eq(entryTranslations.noindex, false), sql`(${doc}) @@ ${tsquery}`))
+        .orderBy(desc(sql`ts_rank_cd(${doc}, ${tsquery})`), desc(entryTranslations.publishedAt))
+        .limit(Math.min(limit, 50));
+
+    let rows = await run(sql`websearch_to_tsquery(${cfg}, ${trimmed})`);
+    const any = rows.length === 0 ? anyWordTsQuery(trimmed) : null;
+    if (any) rows = await run(sql`to_tsquery(${cfg}, ${any})`);
 
     return rows.map((row) => mapSummary(row as SummaryRow, locale));
   });

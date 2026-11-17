@@ -79,6 +79,7 @@ import { PADRO } from "@/lib/content/batch02/padro";
 import { CARNIVAL_GUIDE } from "@/lib/content/batch02/carnival";
 import { TSI_GUIDE } from "@/lib/content/batch02/tsi";
 import { NIE_TIE_GUIDE } from "@/lib/content/batch02/nie-tie";
+import { FARMERS_MARKETS } from "@/lib/content/batch02/farmers-markets";
 import { publishHolidayTodayGuide } from "@/lib/content/holidays/today-publish";
 import { publishLocalHolidaysGuide } from "@/lib/content/holidays/local-publish";
 import { publishReservoirGuide } from "@/lib/content/reservoirs/publish";
@@ -319,6 +320,9 @@ export async function POST(request: Request) {
     // it: `nie-tie-links`.
     if (wants("nie-tie")) published.push(await publishB2Article(NIE_TIE_GUIDE));
     if (wants("nie-tie-links")) published.push(await publishB2Article(PADRO), await publishB2Article(TSI_GUIDE), await publishB2Article(BARCELONA_HUB));
+    // 17 Nov 2026: farmers' markets and the Venda de Proximitat label (ca, es, en),
+    // on its own so the next reading of the Department's producer list republishes only it.
+    if (wants("mercats-pages")) published.push(await publishB2Article(FARMERS_MARKETS));
     // 13 Nov 2026: the Montserrat guide (index 3 of BATCH_02) on its own, for the
     // cable car vs rack railway vs car/coach upgrade; `montserrat-links` sends
     // the two pages whose English anchor text changed (Beyond Montserrat,

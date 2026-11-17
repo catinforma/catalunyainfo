@@ -4,10 +4,11 @@ import { Breadcrumbs, type Crumb } from "@/components/Breadcrumbs";
 import { ShareBar, crumbPath } from "@/components/share/ShareBar";
 import { getMessages } from "@/lib/i18n";
 import { comarcaCopy, comarcaH1, dateQuestion, displayName, hubCopy } from "@/lib/programmatic/holidays/copy";
-import { byComarca, sharedDates, type ComarcaGroup } from "@/lib/programmatic/holidays/data";
+import { byComarca, sharedDates, unlistedTownBySlug, type ComarcaGroup } from "@/lib/programmatic/holidays/data";
+import { slugify } from "@/lib/programmatic/holidays/slug";
 import { LOCAL_DATE_PAGES } from "@/lib/programmatic/holidays/dates";
-import { dayMonth, weekdayDayMonth } from "@/lib/programmatic/holidays/format";
-import { esName, joinList } from "@/lib/programmatic/holidays/names";
+import { dayMonth, dayPair, weekdayDayMonth } from "@/lib/programmatic/holidays/format";
+import { caDe, esName, joinList } from "@/lib/programmatic/holidays/names";
 import { comarcaPath, datePath, hubPath, municipalityPath, type MuniLocale } from "@/lib/programmatic/holidays/paths";
 
 import { DateQuestions, GuideLinks, Sources } from "./parts";
@@ -52,6 +53,19 @@ export function ComarcaPage({ g, locale }: { g: ComarcaGroup; locale: MuniLocale
           <p className="ci-lead">{t.lead}</p>
           {t.nucleiOnly ? <p>{t.nucleiOnly}</p> : null}
           {t.excluded ? <p>{t.excluded}</p> : null}
+          {/* Those of them whose council has approved its 2027 days have a page with them (17 Nov 2026). */}
+          {g.excluded
+            .map((e) => unlistedTownBySlug(slugify(e.name)))
+            .filter((u) => u !== null)
+            .map((u) => {
+              const local = u.next?.local ?? u.council?.local ?? [];
+              return (
+                <p key={u.slug}>
+                  <Link href={municipalityPath(locale, u.slug)}>{locale === "ca" ? `Festius locals ${caDe(u.name)} el 2027` : `Festivos locales de ${esName(u.name)} en 2027`}</Link>
+                  {local.length === 2 ? `: ${dayPair(local[0]!, local[1]!, locale)}${u.next ? "" : locale === "ca" ? " (aprovats per l'Ajuntament, pendents del DOGC)" : " (aprobados por el Ayuntamiento, pendientes del DOGC)"}.` : "."}
+                </p>
+              );
+            })}
 
           <h2 id="municipis">{t.tableTitle}</h2>
           <div className="ci-table-scroll mt-4">

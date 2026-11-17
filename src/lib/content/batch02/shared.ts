@@ -121,7 +121,9 @@ export type B2Key =
   // The TSI health card: who is entitled, documents, how to apply (tsi.ts).
   | "tsi"
   // NIE, TIE and the EU registration certificate: forms, fee, appointments, offices (nie-tie.ts).
-  | "nieTie";
+  | "nieTie"
+  // 17 Nov 2026: farmers' markets and the Generalitat's Venda de Proximitat label (farmers-markets.ts).
+  | "farmersMarkets";
 
 /** Path after the locale prefix, no leading or trailing slash. */
 export const B2_PATHS: Record<B2Key, Record<Locale, string>> = {
@@ -537,6 +539,12 @@ export const B2_PATHS: Record<B2Key, Record<Locale, string>> = {
     ca: "guies/nie-tie-barcelona-catalunya",
     es: "guias/nie-tie-barcelona-cataluna",
     en: "guides/nie-tie-barcelona-catalonia",
+  },
+  // Evergreen: no year in the path.
+  farmersMarkets: {
+    ca: "guies/mercats-de-pages-venda-proximitat",
+    es: "guias/mercados-payeses-venta-proximidad-cataluna",
+    en: "guides/farmers-markets-catalonia",
   },
 };
 
@@ -968,6 +976,11 @@ export const B2_TITLES: Record<B2Key, Record<Locale, string>> = {
     ca: "NIE i TIE a Barcelona i Catalunya: quin et cal i com demanar-lo",
     es: "NIE y TIE en Barcelona y Cataluña: cuál necesitas y cómo pedirlo",
     en: "NIE and TIE in Barcelona and Catalonia: which one you need and how to apply",
+  },
+  farmersMarkets: {
+    ca: "Mercats de pagès i venda de proximitat: on comprar directament al pagès",
+    es: "Mercados payeses y venta de proximidad: dónde comprar directamente al payés",
+    en: "Farmers' markets in Catalonia: buying direct with the Venda de Proximitat label",
   },
 };
 

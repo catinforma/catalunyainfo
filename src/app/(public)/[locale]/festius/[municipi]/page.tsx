@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
 import { MunicipalityRoute, municipalityMetadata } from "@/components/programmatic/holidays/routes";
-import { municipalityStaticParams, resolveMunicipality } from "@/lib/programmatic/holidays/routing";
+import { municipalityStaticParams, townRouteExists } from "@/lib/programmatic/holidays/routing";
 
 /**
  * /ca/festius/<municipi>/ — one municipality's holidays. Static forever
@@ -20,11 +20,11 @@ export function generateStaticParams() {
 
 export async function generateMetadata({ params }: { params: Params }): Promise<Metadata> {
   const { locale, municipi } = await params;
-  return resolveMunicipality("ca", locale, municipi) ? municipalityMetadata("ca", municipi) : {};
+  return townRouteExists("ca", locale, municipi) ? municipalityMetadata("ca", municipi) : {};
 }
 
 export default async function Page({ params }: { params: Params }) {
   const { locale, municipi } = await params;
-  if (!resolveMunicipality("ca", locale, municipi)) notFound();
+  if (!townRouteExists("ca", locale, municipi)) notFound();
   return <MunicipalityRoute locale="ca" slug={municipi} />;
 }

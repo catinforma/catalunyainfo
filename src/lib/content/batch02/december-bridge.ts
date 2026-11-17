@@ -425,10 +425,10 @@ export function buildDecemberBridgeBody(locale: Locale): Block[] {
   if (locale === "ca") {
     return [
       lead(
-        `**El 2026, a Catalunya, l'únic festiu del pont de desembre és el dimarts 8 (la Immaculada).** El 6 de desembre, Dia de la Constitució, cau en diumenge i no és al calendari de festes laborals de Catalunya, i el dilluns 7 és un dia feiner: per tenir ${bridge.days} dies seguits, ${runWords(bridge, "ca")}, cal demanar el dilluns 7.`,
+        `**El pont de la Puríssima del 2026 té, a Catalunya, un únic festiu: el dimarts 8 de desembre (la Puríssima o Immaculada).** El 6 de desembre, Dia de la Constitució, cau en diumenge i no és al calendari de festes laborals de Catalunya, i el dilluns 7 és un dia feiner: per tenir ${bridge.days} dies seguits, ${runWords(bridge, "ca")}, cal demanar el dilluns 7.`,
       ),
       keyFacts("El pont de desembre del 2026, d'un cop d'ull", [
-        { label: "Festiu a tot Catalunya", value: "Dimarts 8 de desembre (la Immaculada)" },
+        { label: "Festiu a tot Catalunya", value: "Dimarts 8 de desembre (la Puríssima o Immaculada)" },
         { label: "Diumenge 6 de desembre", value: "No és festiu a Catalunya: el Dia de la Constitució cau en diumenge i no es passa al dilluns" },
         { label: "Dilluns 7 de desembre", value: `Feiner, excepte als ${n} municipis que hi tenen festa local` },
         { label: "Per fer pont", value: `Demanar el dilluns 7: ${bridge.days} dies, ${runWords(bridge, "ca")}` },
@@ -514,10 +514,10 @@ export function buildDecemberBridgeBody(locale: Locale): Block[] {
   if (locale === "es") {
     return [
       lead(
-        `**En 2026, en Cataluña, el único festivo del puente de diciembre es el martes 8 (la Inmaculada).** El 6 de diciembre, Día de la Constitución, cae en domingo y no está en el calendario de fiestas laborales de Cataluña, y el lunes 7 es laborable: para tener ${bridge.days} días seguidos, ${runWords(bridge, "es")}, hay que pedir el lunes 7.`,
+        `**El puente de la Purísima de 2026 tiene, en Cataluña, un único festivo: el martes 8 de diciembre (la Purísima o Inmaculada).** El 6 de diciembre, Día de la Constitución, cae en domingo y no está en el calendario de fiestas laborales de Cataluña, y el lunes 7 es laborable: para tener ${bridge.days} días seguidos, ${runWords(bridge, "es")}, hay que pedir el lunes 7.`,
       ),
       keyFacts("El puente de diciembre de 2026, de un vistazo", [
-        { label: "Festivo en toda Cataluña", value: "Martes 8 de diciembre (la Inmaculada)" },
+        { label: "Festivo en toda Cataluña", value: "Martes 8 de diciembre (la Purísima o Inmaculada)" },
         { label: "Domingo 6 de diciembre", value: "No es festivo en Cataluña: el Día de la Constitución cae en domingo y no se pasa al lunes" },
         { label: "Lunes 7 de diciembre", value: `Laborable, salvo en los ${n} municipios que tienen fiesta local` },
         { label: "Para hacer puente", value: `Pedir el lunes 7: ${bridge.days} días, ${runWords(bridge, "es")}` },
@@ -602,10 +602,10 @@ export function buildDecemberBridgeBody(locale: Locale): Block[] {
 
   return [
     lead(
-      `**In 2026 the only public holiday of the December bridge in Catalonia is Tuesday 8 December (the Immaculate Conception).** 6 December, Constitution Day, falls on a Sunday and is not in Catalonia's holiday calendar, and Monday the 7th is a working day: to get ${bridge.days} days in a row, ${runWords(bridge, "en")}, you have to take Monday the 7th off.`,
+      `**The only public holiday of the December 2026 bridge (la Puríssima) in Catalonia is Tuesday 8 December, the Immaculate Conception.** 6 December, Constitution Day, falls on a Sunday and is not in Catalonia's holiday calendar, and Monday the 7th is a working day: to get ${bridge.days} days in a row, ${runWords(bridge, "en")}, you have to take Monday the 7th off.`,
     ),
     keyFacts("The December 2026 bridge at a glance", [
-      { label: "Public holiday across Catalonia", value: "Tuesday 8 December (Immaculate Conception)" },
+      { label: "Public holiday across Catalonia", value: "Tuesday 8 December (Immaculate Conception, la Puríssima)" },
       { label: "Sunday 6 December", value: "Not a holiday in Catalonia: Constitution Day falls on a Sunday and is not moved to the Monday" },
       { label: "Monday 7 December", value: `A working day, except in the ${n} towns that have a local holiday` },
       { label: "For a long weekend", value: `Take Monday the 7th off: ${bridge.days} days, ${runWords(bridge, "en")}` },

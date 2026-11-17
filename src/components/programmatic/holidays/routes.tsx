@@ -5,7 +5,8 @@ import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
 import { todayInCatalonia } from "@/lib/content/holidays/calendar";
 import { comarcaDescription, comarcaTitle, hubCopy, municipalityDescription, municipalityFaq, municipalityTitle } from "@/lib/programmatic/holidays/copy";
-import { comarcaBySlug, municipalityBySlug, nextYearFor } from "@/lib/programmatic/holidays/data";
+import { comarcaBySlug, municipalityBySlug, nextYearFor, unlistedTownBySlug } from "@/lib/programmatic/holidays/data";
+import { unlistedCopy } from "@/lib/programmatic/holidays/unlisted-copy";
 import { dateContent, dateTitle } from "@/lib/programmatic/holidays/dates";
 import { englishTownBySlug } from "@/lib/programmatic/holidays/english";
 import { englishHubCopy, englishTownDescription, englishTownFaq, englishTownTitle } from "@/lib/programmatic/holidays/english-copy";
@@ -40,6 +41,7 @@ import { EnglishHubPage, englishHubCrumbs } from "./EnglishHubPage";
 import { EnglishTownPage, englishTownCrumbs } from "./EnglishTownPage";
 import { HubPage, hubCrumbs } from "./HubPage";
 import { MunicipalityPage, municipalityCrumbs } from "./MunicipalityPage";
+import { UnlistedTownPage, unlistedCrumbs } from "./UnlistedTownPage";
 
 /**
  * Route bodies for the holiday family. Each `page.tsx` under
@@ -71,7 +73,7 @@ export function HubRoute({ locale }: { locale: MuniLocale }) {
 
 export function municipalityMetadata(locale: MuniLocale, slug: string): Metadata {
   const m = municipalityBySlug(slug);
-  if (!m) return { robots: { index: false, follow: false } };
+  if (!m) return unlistedMetadata(locale, slug);
   return buildMetadata({
     locale,
     path: municipalityPath(locale, m.slug),
@@ -85,7 +87,7 @@ export function municipalityMetadata(locale: MuniLocale, slug: string): Metadata
 /** Null when the slug is not one of the municipalities (the page then 404s). */
 export function MunicipalityRoute({ locale, slug }: { locale: MuniLocale; slug: string }) {
   const m = municipalityBySlug(slug);
-  if (!m) return null;
+  if (!m) return <UnlistedTownRoute locale={locale} slug={slug} />;
   return (
     <>
       <SiteHeader locale={locale} translations={municipalityTranslations(m.slug)} />
@@ -105,6 +107,31 @@ export function MunicipalityRoute({ locale, slug }: { locale: MuniLocale; slug: 
           ]),
         ])}
       />
+      <SiteFooter locale={locale} />
+    </>
+  );
+}
+
+/* ------------------- Unlisted town (no 2026 days, 2027 days known) --- */
+
+function unlistedMetadata(locale: MuniLocale, slug: string): Metadata {
+  const u = unlistedTownBySlug(slug);
+  if (!u) return { robots: { index: false, follow: false } };
+  const t = unlistedCopy(u, locale);
+  return buildMetadata({ locale, path: municipalityPath(locale, u.slug), title: t.title, description: t.description, translations: municipalityTranslations(u.slug) });
+}
+
+/** Null when the slug is not an unlisted town with 2027 days either (the page then 404s). */
+function UnlistedTownRoute({ locale, slug }: { locale: MuniLocale; slug: string }) {
+  const u = unlistedTownBySlug(slug);
+  if (!u) return null;
+  return (
+    <>
+      <SiteHeader locale={locale} translations={municipalityTranslations(u.slug)} />
+      <main id="main">
+        <UnlistedTownPage u={u} locale={locale} />
+      </main>
+      <JsonLd json={graph([breadcrumbSchema(unlistedCrumbs(u, locale)), faqSchema([{ type: "faq", items: unlistedCopy(u, locale).faq }])])} />
       <SiteFooter locale={locale} />
     </>
   );

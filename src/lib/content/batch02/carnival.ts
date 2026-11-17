@@ -308,7 +308,7 @@ export function buildCarnivalBody(L: Locale): Block[] {
 
   const t = {
     ca: {
-      lead: `**El Carnaval 2027 va del dijous 4 de febrer (Dijous Gras) al dimecres 10 de febrer (Dimecres de Cendra).** No és festiu a Catalunya, però ${localTowns} municipis tenen una festa local aquella setmana, com ${biggestLocal("ca")}. I el **dilluns 8 de febrer** és dia de lliure disposició a moltes escoles${school.barcelonaMonday ? ", també a Barcelona" : ""}. A Sitges, la Rua de la Disbauxa és el diumenge 7 i la Rua de l'Extermini, el dimarts 9.`,
+      lead: `**El Carnestoltes (Carnaval) 2027 va del dijous 4 de febrer (Dijous Gras o Dijous Llarder) al dimecres 10 de febrer (Dimecres de Cendra).** No és festiu a Catalunya, però ${localTowns} municipis tenen una festa local aquella setmana, com ${biggestLocal("ca")}. I el **dilluns 8 de febrer** és dia de lliure disposició a moltes escoles${school.barcelonaMonday ? ", també a Barcelona" : ""}. A Sitges, la Rua de la Disbauxa és el diumenge 7 i la Rua de l'Extermini, el dimarts 9.`,
       factsTitle: "El Carnaval 2027 en sis dates",
       facts: [
         { label: "Dijous Gras", value: d(C.dijousGras) },
@@ -318,7 +318,7 @@ export function buildCarnivalBody(L: Locale): Block[] {
         { label: "Dimecres de Cendra", value: `${d(C.ashWednesday)}: enterrament de la sardina i fi del Carnaval` },
         { label: "És festiu?", value: `No a Catalunya; sí a ${localTowns} municipis (festa local)` },
       ],
-      whenH: "Quan és el Carnaval 2027",
+      whenH: "Quan és el Carnestoltes 2027",
       when: [
         `El Carnaval es mou cada any amb la Pasqua. El 2027 el Diumenge de Pasqua és el 28 de març (el Dilluns de Pasqua, 29 de març, és festiu segons el ${a(CARNIVAL_URLS.calendar2027, "calendari laboral 2027")}), i el Dimecres de Cendra cau 46 dies abans: el **10 de febrer**. La setmana de Carnaval comença el dijous anterior, el **Dijous Gras, 4 de febrer**, el dia dels berenars i àpats populars.`,
       ],

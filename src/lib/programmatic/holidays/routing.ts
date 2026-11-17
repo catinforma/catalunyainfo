@@ -1,4 +1,4 @@
-import { comarcaBySlug, holidayRefreshDue, municipalities, municipalityBySlug, prerenderComarques, prerenderSlugs, type ComarcaGroup } from "./data";
+import { comarcaBySlug, holidayRefreshDue, municipalities, municipalityBySlug, prerenderComarques, prerenderSlugs, unlistedTownBySlug, type ComarcaGroup } from "./data";
 import { englishTownBySlug, englishTowns } from "./english";
 import type { DateLocale } from "./format";
 import { DATE_PAGES, MUNI_LOCALES, dateFromSlug, dateSlug, municipalityPath, type DatePage, type MuniLocale } from "./paths";
@@ -19,6 +19,16 @@ export function hubAllowed(route: DateLocale, locale: string): boolean {
 export function resolveMunicipality(route: DateLocale, locale: string, slug: string): SnapshotMunicipality | null {
   if (route !== locale) return null;
   return route === "en" ? englishTownBySlug(slug) : municipalityBySlug(slug);
+}
+
+/**
+ * Whether a ca/es town route has a page for the slug: a municipality of the
+ * snapshot, or a council without 2026 days whose 2027 days are known
+ * (`unlistedTownBySlug`, 17 Nov 2026). English has neither kind of extra page.
+ */
+export function townRouteExists(route: "ca" | "es", locale: string, slug: string): boolean {
+  if (route !== locale) return false;
+  return Boolean(municipalityBySlug(slug) ?? unlistedTownBySlug(slug));
 }
 
 export function resolveComarca(route: MuniLocale, locale: string, slug: string): ComarcaGroup | null {

@@ -6303,6 +6303,202 @@ export const COUNCIL_2027: Readonly<Record<string, CouncilApproved>> = {
     act: { kind: "ple", date: "2026-04-17" },
     readOn: "2026-11-04",
   },
+  // Acta del Ple ordinari de 25 de juny de 2026, punt 7 (p. 7–8): "el dictamen s’aprova per
+  // unanimitat. En conseqüència el Ple de l’Ajuntament acorda: Primer.- Fixar, com a festes locals
+  // de Tona per al proper any de 2027, els dies 17 de maig, dilluns de Pasqua Granada i el dia 30
+  // de novembre, Sant Andreu." Signed by the mayor and the secretary on 31 July 2026.
+  tona: {
+    local: ["2027-05-17", "2027-11-30"],
+    names: ["Dilluns de Pasqua Granada", "Sant Andreu"],
+    source: {
+      name: "Acta de la sessió ordinària del Ple de l’Ajuntament de Tona de 25 de juny de 2026",
+      ref: "Ajuntament de Tona, actes del Ple municipal",
+      url: "https://tona.cat/wp-content/uploads/Acta_ple_250626.pdf",
+    },
+    act: { kind: "ple", date: "2026-06-25" },
+    readOn: "2026-11-17",
+  },
+  // Not in the 2026 order ("proposta no formulada"), so no 2026 town page until now: the 2027
+  // proposal makes one (`unlistedTown` in data.ts). Acta del Ple ordinari de 25 de juny de 2026,
+  // punt 2.6 (X2026001244): "PRIMER.- Proposar com a festes locals del municipi de Monistrol de
+  // Montserrat pel proper any 2027 els dies 20 de gener (DIMECRES) corresponent a la festivitat de
+  // Sant Sebastià, i el dia 26 de juliol (DILLUNS), atès que la festivitat de Sant Jaume (25 de
+  // juliol) escau en diumenge." "Vots totals: 11 SI".
+  "monistrol-de-montserrat": {
+    local: ["2027-01-20", "2027-07-26"],
+    names: ["Sant Sebastià", "Sant Jaume"],
+    source: {
+      name: "Acta de la sessió ordinària del Ple de l’Ajuntament de Monistrol de Montserrat de 25 de juny de 2026",
+      ref: "Ajuntament de Monistrol de Montserrat, actes del Ple (seu electrònica)",
+      url: "https://media.seu-e.cat/acteca/812710007/2026/54cee398-078b-4089-abc4-c03fc029422b/ACTA%20PLE%2025%20JUNY%202026.pdf",
+    },
+    act: { kind: "ple", date: "2026-06-25" },
+    readOn: "2026-11-17",
+  },
+  // Acta de la sessió ordinària de Ple del dia 25 de setembre de 2026, punt 7: "El Ple de
+  // l’Ajuntament, per unanimitat dels seus membres, […] S’acorda aprovar com a festes locals per
+  // l’any 2027 els següents dies: El dia 29 de juny (dimarts), Festa Major de Sant Pere. El dia 8 de
+  // setembre (dimecres), Festa Major de la Mare de Déu del Camí."
+  cambrils: {
+    local: ["2027-06-29", "2027-09-08"],
+    names: ["Festa Major de Sant Pere", "Festa Major de la Mare de Déu del Camí"],
+    source: {
+      name: "Acta de la sessió ordinària del Ple de l’Ajuntament de Cambrils de 25 de setembre de 2026",
+      ref: "Ajuntament de Cambrils, actes del Ple (seu electrònica)",
+      url: "https://media.seu-e.cat/acteca/4303850006/2026/ee4e2b54-18e9-4317-abc3-bc19d071f413/11_Ple_ordinari_25.09.26.pdf",
+    },
+    act: { kind: "ple", date: "2026-09-25" },
+    readOn: "2026-11-17",
+  },
+  // Acta de la sessió del Ple del dia 24 de setembre de 2026, punt urgent 13.1 "Aprovació dels
+  // festius locals de l'any 2027": "Primer.- APROVAR les dues festes locals del municipi de Cassà
+  // de la Selva que seran el dilluns 24 i dimarts 25 de maig de l’any 2027." Votes for: 16. (The
+  // open-data index files this acta under 29 April 2026; the acta itself is of 24 September.)
+  "cassa-de-la-selva": {
+    local: ["2027-05-24", "2027-05-25"],
+    source: {
+      name: "Acta de la sessió ordinària del Ple de l’Ajuntament de Cassà de la Selva de 24 de setembre de 2026",
+      ref: "Ajuntament de Cassà de la Selva, actes del Ple (seu electrònica)",
+      url: "https://media.seu-e.cat/acteca/1704480001/2026/3366190e-6dc3-4734-bbc6-4a0078f2486f/acta%20ple%2024092026_10.pdf",
+    },
+    act: { kind: "ple", date: "2026-09-24" },
+    readOn: "2026-11-17",
+  },
+  // Acta PLE/2026/03 de 24 de febrer de 2026, punt 4.7: "PRIMER.- Establir els següents dies
+  // festius locals del municipi de la Selva del Camp per a l’any 2027: - Dilluns 7 de juny (Festa
+  // Major d’Estiu) - Dimarts 30 de novembre (Sant Andreu)".
+  "la-selva-del-camp": {
+    local: ["2027-06-07", "2027-11-30"],
+    names: ["Festa Major d’Estiu", "Sant Andreu"],
+    source: {
+      name: "Acta de la sessió ordinària del Ple de l’Ajuntament de la Selva del Camp de 24 de febrer de 2026",
+      ref: "Ajuntament de la Selva del Camp, actes del Ple (seu electrònica)",
+      url: "https://media.seu-e.cat/acteca/4314570005/2026/0f9a5fe6-d9be-4775-a467-e25607ae5af4/3.ACTA%20PLE%2024.02.2026_ordinari_signat.pdf",
+    },
+    act: { kind: "ple", date: "2026-02-24" },
+    readOn: "2026-11-17",
+  },
+  // Acta de la sessió del Ple del dia 16 de juny de 2026, punt 3 (X2026001639): "PRIMER.- Proposar
+  // al Departament d’Empresa i Treball, les següents festes locals de caràcter oficial per al 2027:
+  // - 10 d'agost de 2.027. - 11 d’agost de 2.027." "La proposta resta aprovada per unanimitat".
+  "santa-susanna": {
+    local: ["2027-08-10", "2027-08-11"],
+    source: {
+      name: "Acta de la sessió ordinària del Ple de l’Ajuntament de Santa Susanna de 16 de juny de 2026",
+      ref: "Ajuntament de Santa Susanna, actes del Ple (seu electrònica)",
+      url: "https://media.seu-e.cat/acteca/826130008/2026/f403ca87-66d4-4973-915a-228c68167bce/5.%20APOR16062026_sgt.pdf",
+    },
+    act: { kind: "ple", date: "2026-06-16" },
+    readOn: "2026-11-17",
+  },
+  // Not in the 2026 order ("proposta no formulada"). Acta del Ple de 22 de juliol de 2026, expedient
+  // 1394/2026: "Primer. Proposar al Departament d’Empresa i Treball de la Generalitat de Catalunya,
+  // com a festes locals del municipi de Barberà del Vallès, el dilluns 17 de maig i el dilluns 5 de
+  // juliol de 2027." Votes: 13 for, 0 against, 7 abstentions.
+  "barbera-del-valles": {
+    local: ["2027-05-17", "2027-07-05"],
+    source: {
+      name: "Acta de la sessió ordinària del Ple de l’Ajuntament de Barberà del Vallès de 22 de juliol de 2026",
+      ref: "Ajuntament de Barberà del Vallès, actes del Ple (seu electrònica)",
+      url: "https://media.seu-e.cat/acteca/825200000/2026/ce4f8294-7041-481f-b590-011bf75ad3ee/07.6%20Acta%20Ple%20%20(22.07.2026).pdf",
+    },
+    act: { kind: "ple", date: "2026-07-22" },
+    readOn: "2026-11-17",
+  },
+  // Not in the 2026 order ("proposta no formulada"). Acta de la sessió del Ple de 30 d'abril de 2026,
+  // punt 12 (expedient 586/2026/0002): "Primer.- APROVAR com a festius de caràcter local del municipi
+  // de Cerdanyola del Vallès per a l'any 2027, els dos dies següents: 3 de maig de 2027 (Festa Major
+  // del Roser de Maig) 11 de novembre de 2027 (Festa tardor de Sant Martí)". (The report quoted in
+  // the antecedents calls the 11th a "dimecres"; 11 November 2027 is a Thursday. The agreement
+  // itself gives the date only.)
+  "cerdanyola-del-valles": {
+    local: ["2027-05-03", "2027-11-11"],
+    names: ["Festa Major del Roser de Maig", "Festa tardor de Sant Martí"],
+    source: {
+      name: "Acta de la sessió ordinària del Ple de l’Ajuntament de Cerdanyola del Vallès de 30 d’abril de 2026",
+      ref: "Ajuntament de Cerdanyola del Vallès, actes del Ple (seu electrònica)",
+      url: "https://media.seu-e.cat/acteca/826650006/2026/78588c30-13c3-407f-9024-b416cabb0bc8/ACTA%20SESSI%d3%20PLE%2030-4-2026.pdf",
+    },
+    act: { kind: "ple", date: "2026-04-30" },
+    readOn: "2026-11-17",
+  },
+  // Not in the 2026 order ("proposta no formulada"). Acta del Ple de 29 de juny de 2026, punt 2.1
+  // (X2026000087): "el ple de l'Ajuntament, per Unanimitat, ACORDA: Primer.- Aprovar la proposta de
+  // celebració de les dues festes locals del municipi de Torelló, per a l’any 2027, en les dates que
+  // s’indiquen a continuació: Dilluns, dia 17 de maig, segona Pasqua o Pasqua Granada. Dilluns, dia
+  // 20 de setembre, Rocaprevera." The council's news page of 30 June 2026 says the same
+  // (torello.cat, "Les festes locals del 2027 seran la Segona Pasqua i Rocaprevera").
+  torello: {
+    local: ["2027-05-17", "2027-09-20"],
+    names: ["Segona Pasqua o Pasqua Granada", "Rocaprevera"],
+    source: {
+      name: "Acta de la sessió del Ple de l’Ajuntament de Torelló de 29 de juny de 2026",
+      ref: "Ajuntament de Torelló, actes del Ple (seu electrònica)",
+      url: "https://media.seu-e.cat/acteca/828580001/2026/161d35a5-8394-475e-98e5-97f87ae6e24c/2026.06.29%20Acta%20Ple%20X2026003946_compressed.pdf",
+    },
+    act: { kind: "ple", date: "2026-06-29" },
+    readOn: "2026-11-17",
+  },
+  // Not in the 2026 order ("proposta no formulada"). Acta núm. 7 del Ple de 29 de juny de 2026,
+  // expedient 3210/2026 (17 for, 0 against): "Primer.- Es fixen com a festes locals, retribuïdes i no
+  // recuperables al municipi d’Argentona per a l’any 2027 els dies 17 de maig (dilluns de Pasqua
+  // Granada) i dimecres 4 d’agost (Festa Major)."
+  argentona: {
+    local: ["2027-05-17", "2027-08-04"],
+    names: ["Dilluns de Pasqua Granada", "Festa Major"],
+    source: {
+      name: "Acta de la sessió ordinària del Ple de l’Ajuntament d’Argentona de 29 de juny de 2026",
+      ref: "Ajuntament d’Argentona, actes del Ple (seu electrònica)",
+      url: "https://media.seu-e.cat/acteca/800950006/2026/983c07c6-4453-4b15-a7cd-f5af0fb6aefa/Acta%20n%fam.%207%20PC%20de%2029%20juny%202026.pdf",
+    },
+    act: { kind: "ple", date: "2026-06-29" },
+    readOn: "2026-11-17",
+  },
+  // Not in the 2026 order ("proposta no formulada"). Acta de la sessió extraordinària del dia 29 de
+  // juny de 2026, punt 6 (expedient 1560/2026), approved unanimously: "PRIMER. PROPOSAR al
+  // Departament d’Empresa i Treball com a festes locals del municipi de Calaf per a l’any 2027 les
+  // que s’indiquen a continuació: - 5 de febrer (divendres) - 6 de setembre (dilluns)".
+  calaf: {
+    local: ["2027-02-05", "2027-09-06"],
+    source: {
+      name: "Acta de la sessió extraordinària del Ple de l’Ajuntament de Calaf de 29 de juny de 2026",
+      ref: "Ajuntament de Calaf, actes del Ple (seu electrònica)",
+      url: "https://media.seu-e.cat/acteca/803120002/2026/8920512b-f809-49f9-8994-87aaafba813e/6.%20ACTA%20DEL%20PLE%202026-0006%20%5BActa%20sessi%f3%20extraordin%e0ria%2029-06-2026%5D.pdf",
+    },
+    act: { kind: "ple", date: "2026-06-29" },
+    readOn: "2026-11-17",
+  },
+  // Not in the 2026 order ("proposta no formulada"). Acta del Ple ordinari de 7 de juliol de 2026,
+  // expedient 1039/2026 (unanimitat): "PRIMER. Establir com a festes locals del municipi de Gironella
+  // per a l’exercici 2027 els dies següents: - Dilluns 26 d’abril de 2027 - Dilluns 16 d’agost de
+  // 2027". The mayor adds that they match "la festivitat de Sant Marc i les festes de Sant Roc".
+  gironella: {
+    local: ["2027-04-26", "2027-08-16"],
+    names: ["Sant Marc", "Sant Roc"],
+    source: {
+      name: "Acta de la sessió ordinària del Ple de l’Ajuntament de Gironella de 7 de juliol de 2026",
+      ref: "Ajuntament de Gironella, actes del Ple (seu electrònica)",
+      url: "https://media.seu-e.cat/acteca/809240003/2026/0eb0bb26-0d81-4a0d-af7d-186a51af881c/2026-07-07%20ORD.pdf",
+    },
+    act: { kind: "ple", date: "2026-07-07" },
+    readOn: "2026-11-17",
+  },
+  // Not in the 2026 order ("proposta no formulada"). Acta del Ple ordinari de 16 de juliol de 2026,
+  // punt 4 "Aprovació Festes Locals 2027" (unanimitat): "Primer.- Establir com a dies de Festa Local,
+  // retribuïts i no recuperables, en aquest municipi per a l’any 2027, les dates següents: El
+  // divendres 30 de juliol de 2027 (Festa Major d’Estiu). El divendres 10 de desembre de 2027
+  // (Santa Eulàlia)."
+  "santa-eulalia-de-roncana": {
+    local: ["2027-07-30", "2027-12-10"],
+    names: ["Festa Major d’Estiu", "Santa Eulàlia"],
+    source: {
+      name: "Acta de la sessió ordinària del Ple de l’Ajuntament de Santa Eulàlia de Ronçana de 16 de juliol de 2026",
+      ref: "Ajuntament de Santa Eulàlia de Ronçana, actes del Ple (seu electrònica)",
+      url: "https://media.seu-e.cat/acteca/824820002/2026/b601ce5b-4818-4273-8455-4d9e927a2103/PLE2026-07%2016-07-2026%20Ordinari.pdf",
+    },
+    act: { kind: "ple", date: "2026-07-16" },
+    readOn: "2026-11-17",
+  },
 };
 
 /**
@@ -6372,6 +6568,9 @@ export const COUNCIL_2027_METADATA_HELD: ReadonlySet<string> = new Set<string>([
   "parlava", "sant-miquel-de-fluvia", "savalla-del-comtat", "toses", "la-coma-i-la-pedra",
   "la-nou-de-gaia", "fogars-de-la-selva", "vilanova-de-segria", "la-secuita", "la-granadella",
   "corbins",
+  // Added 17 Nov 2026, inside the town-title window that runs to 1 Dec (docs/SEO_EXPERIMENTS.md, 16 Nov entry).
+  "tona",
+  "cambrils", "cassa-de-la-selva", "la-selva-del-camp", "santa-susanna",
 ]);
 
 /** The slugs with council data, in no particular order. */

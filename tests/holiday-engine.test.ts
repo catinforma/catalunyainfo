@@ -39,6 +39,7 @@ import {
   sharedDates,
   siblings,
   statusDays,
+  unlistedTowns,
   yearRows,
 } from "../src/lib/programmatic/holidays/data.ts";
 import { LOCAL_DATE_PAGES, dateContent, dateTitle, municipalityDatePages } from "../src/lib/programmatic/holidays/dates.ts";
@@ -911,8 +912,9 @@ test("route files: one per locale folder, revalidate=false, calling the resolver
   const files: [string, string, RegExp][] = [
     ["festius/page.tsx", "ca", /hubAllowed\("ca"/],
     ["festivos/page.tsx", "es", /hubAllowed\("es"/],
-    ["festius/[municipi]/page.tsx", "ca", /resolveMunicipality\("ca"/],
-    ["festivos/[municipi]/page.tsx", "es", /resolveMunicipality\("es"/],
+    // 17 Nov 2026: ca/es town routes also serve the unlisted councils with 2027 days (townRouteExists).
+    ["festius/[municipi]/page.tsx", "ca", /townRouteExists\("ca"/],
+    ["festivos/[municipi]/page.tsx", "es", /townRouteExists\("es"/],
     ["festius/comarca/[comarca]/page.tsx", "ca", /resolveComarca\("ca"/],
     ["festivos/comarca/[comarca]/page.tsx", "es", /resolveComarca\("es"/],
     ["festius/dia/[dia]/page.tsx", "ca", /resolveDatePage\("ca"/],
@@ -1186,14 +1188,20 @@ test("a town whose days belong to its nuclei says which nuclei are off", () => {
 /* Sitemap                                                                    */
 /* -------------------------------------------------------------------------- */
 
-test("sitemap: 2,054 URLs, unique, dated with the dataset, with hreflang", () => {
+test("sitemap: 2,054 URLs plus the unlisted towns, unique, dated with the dataset, with hreflang", () => {
   const entries = holidaySitemapEntries();
-  // 2 hubs, 43 comarques x 2, 917 towns x 2 locales, the English hub and 29 English towns, 34 dates x 3 locales.
-  assert.equal(entries.length, 2 + 86 + 1834 + 1 + 29 + 102);
+  // 2 hubs, 43 comarques x 2, 917 towns x 2 locales, the English hub and 29 English towns, 34 dates x 3 locales,
+  // and (17 Nov 2026) the councils without 2026 days whose 2027 days are known, x 2 locales.
+  assert.equal(entries.length, 2 + 86 + 1834 + 1 + 29 + 102 + 2 * unlistedTowns().length);
+  assert.ok(unlistedTowns().length >= 1);
   for (const m of SNAPSHOT.municipalities) {
     for (const locale of MUNI_LOCALES) assert.ok(entries.some((e) => e.url.endsWith(municipalityPath(locale, m.slug))), m.slug);
   }
-  for (const e of SNAPSHOT.excluded) assert.ok(!entries.some((x) => x.url.endsWith(`/${slugify(e.name)}/`)), e.name);
+  const unlisted = new Set(unlistedTowns().map((u) => u.slug));
+  for (const e of SNAPSHOT.excluded) {
+    const has = entries.some((x) => x.url.endsWith(`/${slugify(e.name)}/`));
+    assert.equal(has, unlisted.has(slugify(e.name)), e.name);
+  }
   const comarca = entries.find((e) => e.url.endsWith("/ca/festius/comarca/alt-emporda/"))!;
   assert.deepEqual(Object.keys((comarca.alternates?.languages ?? {}) as Record<string, string>).sort(), ["ca", "es", "x-default"]);
   assert.equal(new Set(entries.map((e) => e.url)).size, entries.length);

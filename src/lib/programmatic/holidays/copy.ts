@@ -34,7 +34,7 @@ export const TITLE_MAX = 60;
 export const DESCRIPTION_MAX = 155;
 
 /** First candidate that fits. The last one is the shortest form and always used. */
-function fit(candidates: string[], max: number): string {
+export function fit(candidates: string[], max: number): string {
   return candidates.find((c) => c.length <= max) ?? candidates.at(-1) ?? "";
 }
 
@@ -89,7 +89,7 @@ export function councilLabel(c: CouncilApproved, locale: DateLocale): string {
 }
 
 /** The two days with the name the council gives each, in Catalan only: "el dilluns 17 de maig (Segona Pasqua)". */
-function councilDays(c: CouncilApproved, locale: MuniLocale): string {
+export function councilDays(c: CouncilApproved, locale: MuniLocale): string {
   return joinList(
     c.local.map((d, i) => {
       const name = locale === "ca" ? c.names?.[i] : null;

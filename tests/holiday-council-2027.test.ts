@@ -28,6 +28,9 @@ import {
   municipalityBySlug,
   nextYearPublished,
   statusDays,
+  unlistedTownBySlug,
+  unlistedTowns,
+  unlistedYearRows,
   yearRows,
 } from "../src/lib/programmatic/holidays/data.ts";
 import { hasEnglishPage } from "../src/lib/programmatic/holidays/english.ts";
@@ -49,6 +52,8 @@ const town = (slug: string) => {
   assert.ok(m, slug);
   return m;
 };
+/** Council entries for towns with a 2026 page (the unlisted ones, "proposta no formulada" in 2026, have their own page). */
+const listedSlugs = () => councilSlugs().filter((slug) => municipalityBySlug(slug));
 
 /**
  * Each town's own domain, or the provincial bulletins. A source must sit on
@@ -72,6 +77,21 @@ const COUNCIL_DOMAIN: Record<string, string> = {
   "esplugues-de-llobregat": "esplugues.cat",
   blanes: "blanes.cat",
   "vilafranca-del-penedes": "vilafranca.cat",
+  tona: "tona.cat",
+  // The council's own actes folder on the AOC e-seu (entity 812710007).
+  "monistrol-de-montserrat": "media.seu-e.cat/acteca/812710007/",
+  // Added 17 Nov 2026: each council's own actes folder on the AOC e-seu (entity code in the path).
+  cambrils: "media.seu-e.cat/acteca/4303850006/",
+  "cassa-de-la-selva": "media.seu-e.cat/acteca/1704480001/",
+  "la-selva-del-camp": "media.seu-e.cat/acteca/4314570005/",
+  "santa-susanna": "media.seu-e.cat/acteca/826130008/",
+  "barbera-del-valles": "media.seu-e.cat/acteca/825200000/",
+  "cerdanyola-del-valles": "media.seu-e.cat/acteca/826650006/",
+  torello: "media.seu-e.cat/acteca/828580001/",
+  argentona: "media.seu-e.cat/acteca/800950006/",
+  calaf: "media.seu-e.cat/acteca/803120002/",
+  gironella: "media.seu-e.cat/acteca/809240003/",
+  "santa-eulalia-de-roncana": "media.seu-e.cat/acteca/824820002/",
   ripollet: "ripollet.cat",
   olot: "olot.cat",
   "sant-adria-de-besos": "sant-adria.cat",
@@ -762,7 +782,7 @@ test("council data: every entry is a town with a page, two distinct valid 2027 d
   const regional2027 = new Set(CATALONIA_HOLIDAYS.map((h) => h.date));
   assert.ok(councilSlugs().length >= 420, `${councilSlugs().length} towns`);
   for (const [slug, c] of Object.entries(COUNCIL_2027)) {
-    town(slug);
+    assert.ok(municipalityBySlug(slug) ?? unlistedTownBySlug(slug), `${slug}: neither a town with a page nor a council the 2026 order lists without days`);
     assert.equal(c.local.length, 2, slug);
     const [a, b] = c.local;
     for (const d of c.local) {
@@ -784,7 +804,7 @@ test("council data: every entry is a town with a page, two distinct valid 2027 d
     assert.ok(onOfficialDomain(slug, c.source.url), `${slug}: ${c.source.url} is not on the council's own domain or a provincial bulletin`);
     assert.ok(c.source.name.length > 3 && c.source.ref.length > 3, slug);
     assert.ok(["ple", "decret", "junta", "web"].includes(c.act.kind), slug);
-    assert.ok(valid(c.readOn) && c.readOn >= "2026-10-30" && c.readOn <= "2026-11-04", `${slug}: read on ${c.readOn}`);
+    assert.ok(valid(c.readOn) && c.readOn >= "2026-10-30" && c.readOn <= "2026-11-17", `${slug}: read on ${c.readOn}`);
     if (c.act.date) assert.ok(valid(c.act.date) && c.act.date.startsWith(`${YEAR}-`) && c.act.date < c.readOn, `${slug}: act of ${c.act.date}`);
   }
 });
@@ -817,7 +837,7 @@ test("local-2027.json stays empty until the DOGC order: the council data is what
   assert.equal(NEXT_YEAR.order, null);
   assert.deepEqual(NEXT_YEAR.municipalities, {});
   assert.equal(nextYearPublished(), false);
-  assert.equal(councilApprovedTowns().length, councilSlugs().length);
+  assert.equal(councilApprovedTowns().length, listedSlugs().length);
   for (const slug of councilSlugs()) assert.equal(councilApproved2027(slug), COUNCIL_2027[slug]);
   assert.equal(councilApproved2027("tarragona"), null);
 });
@@ -866,7 +886,7 @@ test("the DOGC order supersedes the council's word everywhere", () => {
 
 test("titles <= 60 and descriptions <= 155 in all three languages, with the 2027 dates in one of them", () => {
   // The towns held out of the metadata (added 4 Nov) are checked in the next test.
-  for (const slug of councilSlugs().filter((s) => !COUNCIL_2027_METADATA_HELD.has(s))) {
+  for (const slug of listedSlugs().filter((s) => !COUNCIL_2027_METADATA_HELD.has(s))) {
     const m = town(slug);
     const c = COUNCIL_2027[slug]!;
     for (const locale of ["ca", "es"] as const) {
@@ -914,7 +934,7 @@ test("towns added inside the retitle's measurement window keep their title, H1 a
     const m = town(slug);
     const c = COUNCIL_2027[slug];
     assert.ok(c, `${slug}: held but has no council data`);
-    assert.equal(c.readOn, "2026-11-04", `${slug}: only the 4 Nov additions are held`);
+    assert.ok(["2026-11-04", "2026-11-17"].includes(c.readOn), `${slug}: only the 4 Nov and 17 Nov additions are held`);
     assert.equal(councilForMetadata(slug), null, slug);
     assert.equal(councilApproved2027(slug), c, slug);
     for (const locale of ["ca", "es"] as const) {
@@ -1014,9 +1034,56 @@ test("deterministic: no clock in the council data or the code that prints it", (
     const source = readFileSync(join(ROOT, file), "utf8");
     assert.doesNotMatch(source, /new Date\(\)|Date\.now\(/, file);
   }
-  for (const slug of councilSlugs()) {
+  for (const slug of listedSlugs()) {
     const m = town(slug);
     assert.equal(municipalityTitle(m, "ca"), municipalityTitle(m, "ca"));
     assert.deepEqual(municipalityCopy(m, "es", null, m.comarca), municipalityCopy(m, "es", null, m.comarca));
   }
+});
+
+/* -------------------------------------------------------------------------- */
+/* 17 Nov 2026: Tona, and the councils without 2026 days that approved 2027's  */
+/* -------------------------------------------------------------------------- */
+
+test("Tona: the council's 2027 days, labelled and sourced, in the first lines of the 2027 section", () => {
+  const tona = town("tona");
+  const ca = municipalityCopy(tona, "ca", null, "Osona");
+  assert.equal(ca.nextLead, "Festius locals del 2027: 17 de maig i 30 de novembre, aprovats per l'Ajuntament (ple del 25 de juny de 2026), pendents de l'ordre del DOGC.");
+  assert.match(ca.nextCouncil![0]!, /^Els festius locals de Tona el 2027 seran el dilluns 17 de maig \(Dilluns de Pasqua Granada\) i el dimarts 30 de novembre \(Sant Andreu\)/);
+  assert.equal(ca.councilSource?.url, "https://tona.cat/wp-content/uploads/Acta_ple_250626.pdf");
+  // Title held to 1 Dec (town-title window).
+  assert.ok(COUNCIL_2027_METADATA_HELD.has("tona"));
+});
+
+test("unlisted towns: Monistrol de Montserrat (no 2026 days) gets a page with its 2027 days first", async () => {
+  const { unlistedCopy } = await import("../src/lib/programmatic/holidays/unlisted-copy.ts");
+  assert.equal(municipalityBySlug("monistrol-de-montserrat"), null);
+  const u = unlistedTownBySlug("monistrol-de-montserrat");
+  assert.ok(u);
+  assert.deepEqual(u.council?.local, ["2027-01-20", "2027-07-26"]);
+  const ca = unlistedCopy(u, "ca");
+  assert.equal(ca.h1, "Festius locals de Monistrol de Montserrat 2027");
+  assert.match(
+    ca.lead,
+    /^Els festius locals de Monistrol de Montserrat el 2027 seran el dimecres 20 de gener \(Sant Sebastià\) i el dilluns 26 de juliol \(Sant Jaume\): aprovats per l'Ajuntament \(ple del 25 de juny de 2026\), pendents de l'ordre del DOGC\.$/,
+  );
+  assert.match(ca.text2026, /proposta no formulada/);
+  const es = unlistedCopy(u, "es");
+  assert.match(es.lead, /pendientes de la orden del DOGC\.$/);
+  for (const t of [ca, es]) {
+    assert.ok(t.title.length <= TITLE_MAX, `${t.title} (${t.title.length})`);
+    assert.ok(t.description.length <= DESCRIPTION_MAX, `${t.description} (${t.description.length})`);
+    assert.ok(t.title.includes("2027"), t.title);
+    assert.equal(t.source?.url, u.council!.source.url);
+  }
+  // The 2027 table: the twelve Catalonia-wide days plus the two pending local ones.
+  const rows = unlistedYearRows(u, "ca");
+  assert.equal(rows.length, 14);
+  assert.deepEqual(rows.filter((r) => r.pending).map((r) => r.date), ["2027-01-20", "2027-07-26"]);
+  for (const t of unlistedTowns()) {
+    assert.ok(t.council || t.next, t.slug);
+    assert.equal(municipalityBySlug(t.slug), null, t.slug);
+  }
+  // Once the order is parsed the council's word is gone: a page stays only if the order lists the town.
+  assert.equal(councilApproved2027("monistrol-de-montserrat", true), null);
 });

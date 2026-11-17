@@ -3,7 +3,7 @@ import type { MetadataRoute } from "next";
 import { absoluteUrl } from "@/lib/site";
 
 import { MONTHS, type DateLocale } from "./format";
-import { NEXT_YEAR, SNAPSHOT, byComarca, regionalDays } from "./data";
+import { NEXT_YEAR, SNAPSHOT, byComarca, regionalDays, unlistedTowns } from "./data";
 import { englishTowns, hasEnglishPage } from "./english";
 import { slugify } from "./slug";
 
@@ -192,6 +192,10 @@ export function holidayFamilyPaths(): FamilyPath[] {
     }
     for (const m of SNAPSHOT.municipalities) {
       out.push({ path: municipalityPath(locale, m.slug), lastModified: localDate, translations: municipalityTranslations(m.slug) });
+    }
+    // Councils with no 2026 days whose 2027 days are known (17 Nov 2026).
+    for (const u of unlistedTowns()) {
+      out.push({ path: municipalityPath(locale, u.slug), lastModified: localDate, translations: municipalityTranslations(u.slug) });
     }
   }
   // English: the hub and the towns of the English selection (no comarca pages).
