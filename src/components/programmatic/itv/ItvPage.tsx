@@ -378,7 +378,7 @@ export function ItvRoute({ locale }: { locale: ItvLocale }) {
                             {r.sources.length === 0
                               ? "—"
                               : r.sources.map((src) => (
-                                  <span key={src.url} className="block">
+                                  <span key={src.url} className="mt-2 block first:mt-0">
                                     <A href={src.url}>{src.title}</A>
                                     {src.published ? ` (${day(src.published)})` : null}
                                   </span>

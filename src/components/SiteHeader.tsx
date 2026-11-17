@@ -74,7 +74,7 @@ export async function SiteHeader({
   return (
     <>
       <header className="ci-header">
-        <div className="ci-shell flex min-h-14 items-center gap-3 py-1.5 sm:gap-4">
+        <div className="ci-shell flex min-h-14 items-center gap-2 py-1.5 sm:gap-4">
           <Wordmark href={`/${locale}/`} />
 
           <nav aria-label={t.common.menu} className="ml-auto hidden items-center gap-5 lg:flex">
@@ -112,7 +112,9 @@ export async function SiteHeader({
             </MenuDisclosure>
           </nav>
 
-          <div className="ml-auto flex items-center gap-3 lg:ml-0">
+          {/* shrink-0: on a narrow phone the wordmark gives way (globals.css,
+              .ci-wordmark), never the language links or the menu button. */}
+          <div className="ml-auto flex shrink-0 items-center gap-2 sm:gap-3 lg:ml-0">
             {showSearch ? (
               <div className="hidden xl:block">
                 <SearchBox locale={locale} />

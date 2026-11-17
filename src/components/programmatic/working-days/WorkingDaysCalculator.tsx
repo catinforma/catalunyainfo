@@ -16,6 +16,7 @@ import {
   type WdItem,
   type WdLocale,
 } from "@/lib/programmatic/working-days/copy";
+import { useCalculatorUse } from "@/lib/analytics/use-calculator-use";
 
 /**
  * The working-days calculator. Server-rendered with `initial` (the page's
@@ -155,8 +156,11 @@ export function WorkingDaysCalculator({ locale, data, initial }: { locale: WdLoc
   ));
   const list = [...itemHolidays(data, entry.item)];
 
+  // First result change by the visitor, once per session (lib/analytics/calculator-use.ts).
+  const calcUse = useCalculatorUse("working-days", locale, [due, span]);
+
   return (
-    <section className="ci-calc" aria-labelledby={`${id}-title`}>
+    <section className="ci-calc" {...calcUse} aria-labelledby={`${id}-title`}>
       <h2 id={`${id}-title`} className="ci-calc-title">
         {t.title}
       </h2>

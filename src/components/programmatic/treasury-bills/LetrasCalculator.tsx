@@ -5,6 +5,7 @@ import { useId, useState } from "react";
 import { CALC_COPY, bareDay, euros, num, pct, price3, rate3, weekdayDay, type LetrasLocale } from "@/lib/programmatic/treasury-bills/copy";
 import { computeBill, parseEuros, parseRate } from "@/lib/programmatic/treasury-bills/engine";
 import type { Term } from "@/lib/programmatic/treasury-bills/results";
+import { useCalculatorUse } from "@/lib/analytics/use-calculator-use";
 
 /**
  * The Letras del Tesoro calculator: face value (multiples of 1,000 €), term
@@ -42,8 +43,11 @@ export function LetrasCalculator({ locale, options, initialTerm, initialAmount }
     setRate(num(next.avgRate, 3, locale));
   }
 
+  // First result change by the visitor, once per session (lib/analytics/calculator-use.ts).
+  const calcUse = useCalculatorUse("treasury-bills", locale, result);
+
   return (
-    <section className="ci-calc" aria-labelledby={`${id}-title`}>
+    <section className="ci-calc" {...calcUse} aria-labelledby={`${id}-title`}>
       <h2 id={`${id}-title`} className="ci-calc-title">
         {t.title}
       </h2>

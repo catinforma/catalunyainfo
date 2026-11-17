@@ -6,6 +6,7 @@ import { isIsoDate } from "@/lib/programmatic/employment/dates";
 import { dateWords, money, num, parseAmount } from "@/lib/programmatic/employment/paths";
 import type { CalcLocale } from "@/lib/programmatic/calculators/paths";
 import { END_REASONS, defaultPendingDays, settlement, type EndReason, type ExtraAccrual } from "@/lib/programmatic/employment/settlement";
+import { useCalculatorUse } from "@/lib/analytics/use-calculator-use";
 
 /**
  * Final settlement (finiquito) calculator. Server-rendered with the page's
@@ -207,8 +208,11 @@ export function SettlementCalculator({ locale, initial }: { locale: CalcLocale; 
   const m = (x: number) => money(x, locale);
   const n = (x: number) => num(x, locale);
 
+  // First result change by the visitor, once per session (lib/analytics/calculator-use.ts).
+  const calcUse = useCalculatorUse("settlement", locale, r);
+
   return (
-    <section className="ci-calc" aria-labelledby={`${id}-title`}>
+    <section className="ci-calc" {...calcUse} aria-labelledby={`${id}-title`}>
       <h2 id={`${id}-title`} className="ci-calc-title">
         {t.title}
       </h2>

@@ -7,6 +7,7 @@ import { parseAmount } from "@/lib/programmatic/employment/paths";
 import { CALC_COPY, euros, money, netSalaryPreset, pct, type SmiLocale } from "@/lib/programmatic/smi/copy";
 import { domesticFor, smiFor, type Payments } from "@/lib/programmatic/smi/engine";
 import type { SmiYear } from "@/lib/programmatic/smi/rules";
+import { useCalculatorUse } from "@/lib/analytics/use-calculator-use";
 
 /**
  * The SMI calculator: the decree's amount for your weekly hours ("si se
@@ -29,8 +30,11 @@ export function SmiCalculator({ locale, years, initialYear }: { locale: SmiLocal
   const domestic = domesticFor(entry, parseAmount(domHours));
   const choices = years.filter((y) => y.year >= 2025).reverse();
 
+  // First result change by the visitor, once per session (lib/analytics/calculator-use.ts).
+  const calcUse = useCalculatorUse("smi-2027", locale, [result, domestic]);
+
   return (
-    <section className="ci-calc" aria-labelledby={`${id}-title`}>
+    <section className="ci-calc" {...calcUse} aria-labelledby={`${id}-title`}>
       <h2 id={`${id}-title`} className="ci-calc-title">
         {t.title}
       </h2>

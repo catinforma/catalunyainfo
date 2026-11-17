@@ -6,6 +6,7 @@ import { dayMonthYear } from "@/lib/programmatic/holidays/format";
 import { CALC_COPY, DISCLAIMER, EVENT_LABEL, REASON_LABEL, calendarOf, etArticle, eventArticle, fullDate, readHash, writeHash, type PlLocale, type PlPlace } from "@/lib/programmatic/paid-leave/copy";
 import { birthPlan, isShortEvent, shortLeave, validDate, type PaidLeaveInput } from "@/lib/programmatic/paid-leave/engine";
 import { BIRTH, EVENTS, type EventId } from "@/lib/programmatic/paid-leave/rules";
+import { useCalculatorUse } from "@/lib/analytics/use-calculator-use";
 
 /**
  * The paid-leave calculator. Server-rendered with the page's default example,
@@ -42,8 +43,11 @@ export function PaidLeaveCalculator({ locale, initial, places }: { locale: PlLoc
   const short = isShortEvent(input.event) ? shortLeave(input.event, input.start, input.travel, calendarOf(places, input.place)) : null;
   const birth = input.event === "birth" ? birthPlan(input.birth, input.single) : null;
 
+  // First result change by the visitor, once per session (lib/analytics/calculator-use.ts).
+  const calcUse = useCalculatorUse("paid-leave", locale, [short, birth]);
+
   return (
-    <section className="ci-calc" aria-labelledby={field("title")}>
+    <section className="ci-calc" {...calcUse} aria-labelledby={field("title")}>
       <h2 id={field("title")} className="ci-calc-title">
         {t.title}
       </h2>

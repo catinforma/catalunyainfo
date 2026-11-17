@@ -6,6 +6,7 @@ import { CALC_COPY, EXAMPLE, TAX_NAME, benefitRate, euros, pct, rateText, readHa
 import { calculate, type TaxLine } from "@/lib/programmatic/home-purchase-tax/engine";
 import type { Community, HomeType, HtInput } from "@/lib/programmatic/home-purchase-tax/types";
 import { parseAmount } from "@/lib/programmatic/rent-update/engine";
+import { useCalculatorUse } from "@/lib/analytics/use-calculator-use";
 
 /**
  * Community + price + new/second-hand + the buyer's profile → the tax, the
@@ -59,8 +60,11 @@ export function HomeTaxCalculator({ locale, communities }: { locale: HtLocale; c
   const r = calculate(input, communities);
   const sorted = [...communities].sort((a, b) => a.name[locale].localeCompare(b.name[locale], locale));
 
+  // First result change by the visitor, once per session (lib/analytics/calculator-use.ts).
+  const calcUse = useCalculatorUse("home-purchase-tax", locale, r);
+
   return (
-    <section className="ci-calc" aria-labelledby={`${id}-title`}>
+    <section className="ci-calc" {...calcUse} aria-labelledby={`${id}-title`}>
       <h2 id={`${id}-title`} className="ci-calc-title">
         {t.title}
       </h2>

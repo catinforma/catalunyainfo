@@ -6,6 +6,7 @@ import type { Block } from "@/lib/content/blocks";
 import { renderInline } from "@/lib/content/inline";
 import type { Messages } from "@/lib/i18n";
 import type { Locale } from "@/lib/i18n/config";
+import { useCalculatorUse } from "@/lib/analytics/use-calculator-use";
 
 /**
  * A calculator driven entirely by its payload.
@@ -85,8 +86,11 @@ export function Calculator({ block, locale, copy }: { block: CalculatorBlock; lo
     };
   });
 
+  // First result change by the visitor, once per session (lib/analytics/calculator-use.ts).
+  const calcUse = useCalculatorUse("block-calculator", locale, results);
+
   return (
-    <section className="ci-calc" aria-label={block.title}>
+    <section className="ci-calc" {...calcUse} aria-label={block.title}>
       <h3 className="ci-calc-title">{block.title}</h3>
       {block.intro ? <p className="ci-calc-intro">{renderInline(block.intro)}</p> : null}
 

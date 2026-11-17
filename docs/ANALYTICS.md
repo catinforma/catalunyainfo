@@ -96,33 +96,105 @@ is a Phase-5 decision, recorded in `MONETIZATION.md`.
 the list cannot be sent, which is what keeps a GA4 property from filling up with
 ad-hoc names nobody can interpret six months later.
 
-| Event | Parameters | Question it answers |
-| --- | --- | --- |
-| `article_view` | `content_type`, `content_path`, `locale`, `category`, `days_since_verified` | Which guides get read, and does freshness correlate with engagement |
-| `news_view` | same | Is the news section worth keeping |
-| `internal_search` | `search_term_length`, `results_count`, `locale` | What people expect to find and do not |
-| `related_content_click` | `from_type`, `to_type`, `position`, `locale` | Does the related rail work |
-| `language_change` | `from_locale`, `to_locale` | Are the translations reaching the right audience |
-| `external_link` | `link_domain`, `link_context` | Do readers follow through to official sources |
-| `map_interaction` | `place_kind`, `locale` | Is the map worth the weight |
-| `affiliate_click` | `partner`, `placement`, `locale` | Phase 5 |
-| `useful_feedback` | `is_useful`, `content_type`, `locale` | The quality signal that is not a pageview |
-| `newsletter_signup` | `placement`, `locale` | Retention |
-| `share` | `method`, `content_type`, `item_id` (the path), `locale` | Which pages readers pass on, and through which channel. The shared URL carries `utm_source=share&utm_medium=<method>`, so the visits it brings show up as source `share` |
+### Tracking plan (updated 17 Nov 2026)
+
+Inventory before this update (GA4, 28 days to 16 Nov 2026): only two of the
+contract's events had ever fired, `share` (8) and `useful_feedback` (5). The
+rest of the traffic is GA4's own: `page_view`, `session_start`, `first_visit`,
+`user_engagement`, and enhanced measurement's `click` (outbound, 3,122),
+`scroll` (782), `file_download` (101), `form_start`/`form_submit` (the search
+form) and `view_search_results` (45).
+
+Every event below goes through `track()`, so nothing is sent before the visitor
+accepts measurement. "Dimension" is the GA4 dimension that makes a parameter
+reportable: *built-in* needs nothing, *registered* is already set up in the
+property, **register** means the owner must create it (Admin → Custom
+definitions → Create custom dimension, scope Event) before the data counts —
+registration is not retroactive.
+
+| Event | Trigger | Parameters | Dimension | Question it answers | Status |
+| --- | --- | --- | --- | --- | --- |
+| `calculator_use` | First change of a calculator's result caused by the visitor's own input; once per tab session per calculator (`lib/analytics/calculator-use.ts`, hook `use-calculator-use.ts`). The server-rendered example and a result restored from a shared `#hash` link do not count. | `calculator_id` (`CALCULATOR_USE_IDS`), `locale` | `calculator_id`: **register** ("Calculadora"); `locale`: registered | Which tools are used, not just read about; use rate per tool = users with the event ÷ users on the page | New |
+| `whatsapp_channel_click` | Click on our channel link (`FollowChannel.tsx`) | `link_context` = `article_box` \| `daily_box` \| `footer` \| `other`, `locale` | registered (`link_context`) | Which placement grows the owned audience | New |
+| `share` | Share bar: a channel link, the copy button, or a completed native share sheet (`ShareControls.tsx`). This is the plan's *share_click*, under GA4's recommended name so it feeds the built-in reports. | `method`, `content_type`, `item_id` (path, no query), `locale` | built-in (`method`); registered (`content_type`, `locale`) | Which pages readers pass on, and through which channel. The shared URL carries `utm_source=share&utm_medium=<method>` | Live since 12 Nov |
+| `internal_search` | Search results page rendered with a query of 2+ characters (`SearchAnalytics.tsx`) | `search_term_length`, `results_count` (articles + direct pages), `locale` | registered (`results_count`, `locale`) | How often a search finds nothing. The term itself is **not** sent by us: enhanced measurement's `view_search_results` already carries it (see below) | New |
+| `outbound_official_source_click` | Click on a link in a page's source list (`.ci-sources`, any domain: by house rule every listed source is official or primary), or on an official domain anywhere else (`OFFICIAL_DOMAINS` in `lib/analytics/clicks.ts`) | `link_domain` (host only, never the URL), `link_context` = `sources` \| `calculator` \| `content`, `locale` | built-in (`link_domain` → "Link domain"); registered (`link_context`) | Do readers check the official source, and from where | New (replaces the never-wired `external_link`) |
+| `ics_subscribe_click` | Click in the town/city "Add to your calendar" block (`CalendarSubscribe.tsx`), recognised from the href | `method` = `apple` (webcal) \| `google` \| `download`, `locale` | built-in (`method`) | Is the calendar feed product used, and which app | New |
+| `useful_feedback` | "Was this useful?" yes/no (`PageFeedback.tsx`). This is the plan's *page_feedback*; the name is kept so the history since September stays in one series. | `is_useful`, `content_type`, `locale` | registered | The quality signal that is not a pageview | Live |
+| `article_view`, `news_view`, `related_content_click`, `language_change`, `map_interaction`, `affiliate_click`, `newsletter_signup` | — | see `events.ts` | — | — | Declared, not wired |
+
+The three link events (`whatsapp_channel_click`, `outbound_official_source_click`,
+`ics_subscribe_click`) come from one delegated click listener mounted in the
+layout (`components/AnalyticsClicks.tsx`), so the server-rendered links stay
+plain links. Everything else outbound is left to enhanced measurement's own
+`click`, so nothing is counted twice under our names.
+
+Suggested key events (Admin → Events → Mark as key event), once a week of data
+shows the volumes: `calculator_use` and `whatsapp_channel_click`.
+
+### Search terms (owner decision)
+
+Enhanced measurement's site search is on, so `view_search_results` sends the raw
+`search_term`, and the search page's `page_location` carries `?q=` as well. In
+the 28 days to 16 Nov 2026 the 36 distinct terms were place names, topics and one
+postal code; none was personal. That is GA4's default behaviour and is left as
+it is. If it should ever change: Admin → Data streams → the web stream →
+Redact data → add `q` to the query parameters to redact, then check in
+DebugView whether `view_search_results` still carries a term.
+
+### AI assistant and shared-link traffic: GA4 admin, no code
+
+GA4's default channel group already has an **AI Assistant** channel (28 days to
+16 Nov 2026: chatgpt.com 624 sessions, gemini.google.com 38, perplexity.ai 5,
+claude.ai 1). A few visits fall outside it: `perplexity` as a bare source
+(Unassigned, 2), chatgpt.com as Referral (3), notebook.google.com (1). And the
+share bar's own visits (`utm_source=share`) land in **Unassigned** (6), because
+GA4 has no default rule for that medium list.
+
+Steps for the owner (Admin → Data display → Channel groups → Create new channel
+group, start from a copy of the default):
+
+1. Add a channel **AI assistants** with the condition *Source matches regex*
+   `chatgpt|openai|perplexity|copilot|gemini|bard|claude|anthropic|mistral|deepseek|notebooklm|notebook\.google|meta\.ai|grok|phind`
+   and move it above Referral.
+2. Add a channel **Shared links** with *Source exactly matches* `share`, above
+   Unassigned.
+3. Save. The new group applies to past data too and is chosen in reports'
+   dimension picker. Nothing in the site's code changes.
+
+Traffic from assistants that arrives without a referrer shows as Direct, so
+treat the channel as a floor, not the total.
 
 ### Privacy rules, enforced by the types
 
 - **No personal data.** No email, no name, no user id, no IP.
-- **No raw search terms.** `internal_search` sends the *length* of the query and
-  the number of results, never the text. A search term is user-entered free text
-  and can contain anything.
+- **No raw search terms from our code.** `internal_search` sends the *length* of
+  the query and the number of results, never the text. A search term is
+  user-entered free text and can contain anything.
 - **No URLs with query strings.** `safePath()` strips query and hash before any
-  path is sent.
+  path is sent; outbound links are reported by host only (`link_domain`), and
+  placement and method parameters are closed lists, never free text
+  (tests/analytics-events.test.ts checks both).
+- **Calculator inputs never leave the page.** `calculator_use` says *that* a
+  tool was used, not with which salary, dates or amounts.
 - GA4 snake_case parameter names, so they map to custom dimensions without a
   transformation layer.
 
 `track()` is a silent no-op when consent has not been granted or no measurement
-id is set. Analytics must never break a page, so it is wrapped in a `try`.
+id is set. Analytics must never break a page, so it is wrapped in a `try`. It
+returns whether the event was handed to gtag, so `calculator_use` is not marked
+as sent for the session while consent is still missing.
+
+### Validating the 17 Nov events after deploy
+
+1. Register `calculator_id` first (see the table), so the first day counts.
+2. With consent accepted and `?debug_mode=true` (DebugView): change a value in
+   `/es/calculadoras/sueldo-neto/` (one `calculator_use`; a second change sends
+   nothing), click the footer WhatsApp link, a BOE link in a source list, the
+   three calendar links on `/ca/festius/sabadell/`, and search `/es/buscar/?q=zzzz`
+   (`internal_search` with `results_count` 0).
+3. Reject consent and repeat: no request to `googletagmanager.com` or
+   `google-analytics.com` at all.
 
 ## Setting GA4 up
 

@@ -17,6 +17,7 @@ import {
 } from "@/lib/programmatic/sick-leave/copy";
 import { CONTINGENCIES, SPECIAL_KINDS, baseFromAnnualGross, calculateSickLeave, type Contingency, type SickLeaveInput, type SpecialKind } from "@/lib/programmatic/sick-leave/engine";
 import { isIsoDate } from "@/lib/programmatic/employment/dates";
+import { useCalculatorUse } from "@/lib/analytics/use-calculator-use";
 
 /**
  * The sick-leave pay calculator. Server-rendered with the page's default
@@ -69,8 +70,11 @@ export function SickLeaveCalculator({ locale, initial }: { locale: SlLocale; ini
   const pc = (v: number) => percent(v, locale, 0);
   const field = (name: string) => `${id}-${name}`;
 
+  // First result change by the visitor, once per session (lib/analytics/calculator-use.ts).
+  const calcUse = useCalculatorUse("sick-leave", locale, r);
+
   return (
-    <section className="ci-calc" aria-labelledby={field("title")}>
+    <section className="ci-calc" {...calcUse} aria-labelledby={field("title")}>
       <h2 id={field("title")} className="ci-calc-title">
         {t.title}
       </h2>

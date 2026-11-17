@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 
 import "../../globals.css";
 
+import { AnalyticsClicks } from "@/components/AnalyticsClicks";
 import { ConsentGate } from "@/components/ConsentGate";
 import { JsonLd } from "@/components/JsonLd";
 import { NewsAlertsExpiry } from "@/components/NewsAlerts";
@@ -11,6 +12,7 @@ import { fontClassNames } from "@/lib/fonts";
 import { getMessages } from "@/lib/i18n";
 import { HTML_LANG, LOCALES, isLocale, type Locale } from "@/lib/i18n/config";
 import { graph, organizationSchema, websiteSchema } from "@/lib/seo/jsonld";
+import { WHATSAPP_CHANNEL_URL } from "@/lib/share/channel";
 import { SITE, adsensePublisherId } from "@/lib/site";
 
 /**
@@ -104,6 +106,7 @@ export default async function LocaleLayout({
         </a>
         {children}
         <ScrollReset />
+        <AnalyticsClicks locale={typed} channelUrl={WHATSAPP_CHANNEL_URL} />
         <JsonLd json={siteGraph} />
         <ConsentGate locale={typed} t={{ consent: getMessages(typed).consent, legalLabel: getMessages(typed).nav.legal }} />
       </body>

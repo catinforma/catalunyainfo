@@ -22,12 +22,21 @@ export function EntryCard({
   priority = false,
   headingLevel = 3,
   showImage = true,
+  phoneThumb = false,
 }: {
   entry: EntrySummary;
   locale: Locale;
   priority?: boolean;
   headingLevel?: 2 | 3 | 4;
   showImage?: boolean;
+  /**
+   * The card sits in a `.ci-grid--hub`, where phones show the image as a
+   * 6.5rem square thumbnail (globals.css). With the default `92vw` a phone
+   * fetched the 640 px file for it: Lighthouse, home page, 17 Nov 2026,
+   * 120 KB of images for four 104 px thumbnails. 10rem covers the thumbnail's
+   * cover-cropped width (a 3:2 or 16:9 image scaled to fill the square).
+   */
+  phoneThumb?: boolean;
 }) {
   const t = getMessages(locale);
   const Heading = `h${headingLevel}` as "h2" | "h3" | "h4";
@@ -42,7 +51,7 @@ export function EntryCard({
             alt={entry.hero.alt}
             width={entry.hero.width ?? 1200}
             height={entry.hero.height ?? 800}
-            sizes="(min-width: 1024px) 22rem, (min-width: 640px) 45vw, 92vw"
+            sizes={`(min-width: 1024px) 22rem, (min-width: 640px) 45vw, ${phoneThumb ? "10rem" : "92vw"}`}
             placeholder={entry.hero.blurDataUrl ? "blur" : "empty"}
             blurDataURL={entry.hero.blurDataUrl ?? undefined}
             preload={priority}

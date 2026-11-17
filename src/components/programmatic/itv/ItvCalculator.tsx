@@ -5,6 +5,7 @@ import { useEffect, useId, useState } from "react";
 import { CALC_COPY, CATEGORY_LABEL, EXAMPLE, bareDay, dayInText, frequencyText, weekdayDay, yearsText, type ItvLocale } from "@/lib/programmatic/itv/copy";
 import { addDays, nextItv } from "@/lib/programmatic/itv/engine";
 import { CATEGORIES, COMMON_CATEGORIES, type CategoryId } from "@/lib/programmatic/itv/rules";
+import { useCalculatorUse } from "@/lib/analytics/use-calculator-use";
 
 /**
  * "¿Cuándo me toca pasar la ITV?": vehicle type + first registration (+ last
@@ -41,8 +42,11 @@ export function ItvCalculator({ locale }: { locale: ItvLocale }) {
     setTouched(true);
   };
 
+  // First result change by the visitor, once per session (lib/analytics/calculator-use.ts).
+  const calcUse = useCalculatorUse("itv", locale, r);
+
   return (
-    <section className="ci-calc" aria-labelledby={`${id}-title`}>
+    <section className="ci-calc" {...calcUse} aria-labelledby={`${id}-title`}>
       <h2 id={`${id}-title`} className="ci-calc-title">
         {t.title}
       </h2>

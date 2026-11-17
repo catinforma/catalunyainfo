@@ -23,7 +23,7 @@ export function FollowChannel({ locale, variant = "default" }: { locale: Locale;
     <aside className="ci-follow ci-measure mt-10" aria-label={c.title}>
       <p className="ci-follow-title">{c.title}</p>
       <p className="ci-follow-text">{c.text}</p>
-      <a href={WHATSAPP_CHANNEL_URL} rel="noopener" target="_blank" className="ci-follow-button">
+      <a href={WHATSAPP_CHANNEL_URL} rel="noopener" target="_blank" className="ci-follow-button" data-ci-placement={variant === "daily" ? "daily_box" : "article_box"}>
         <WhatsAppIcon />
         {c.cta}
       </a>
@@ -34,7 +34,7 @@ export function FollowChannel({ locale, variant = "default" }: { locale: Locale;
 /** One-line link for the footer. */
 export function FollowChannelLink({ locale }: { locale: Locale }) {
   return (
-    <a href={WHATSAPP_CHANNEL_URL} rel="noopener" target="_blank" className="ci-follow-link">
+    <a href={WHATSAPP_CHANNEL_URL} rel="noopener" target="_blank" className="ci-follow-link" data-ci-placement="footer">
       <WhatsAppIcon size={16} />
       {FOLLOW_CHANNEL_COPY[locale].short}
     </a>

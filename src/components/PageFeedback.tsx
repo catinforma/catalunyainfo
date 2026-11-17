@@ -52,33 +52,36 @@ export function PageFeedback({
     setPending(false);
   }
 
-  if (sent) {
-    return (
-      <p aria-live="polite" className="text-sm text-[var(--color-moss)]">
-        {t.feedback.thanks}
-      </p>
-    );
-  }
-
+  // The status line stays mounted in both states (same position in the same
+  // fragment, so React keeps the element): a live region inserted together
+  // with its text is usually not announced, so the thanks went unheard by
+  // screen-reader users. Until the answer it is empty and visually hidden.
   return (
-    <div className="flex flex-wrap items-center gap-3 border-t border-[var(--color-rule)] pt-6">
-      <p className="text-sm">{t.feedback.question}</p>
-      <button
-        type="button"
-        className="ci-btn ci-btn-quiet"
-        disabled={pending}
-        onClick={() => answer(true)}
-      >
-        {t.feedback.yes}
-      </button>
-      <button
-        type="button"
-        className="ci-btn ci-btn-quiet"
-        disabled={pending}
-        onClick={() => answer(false)}
-      >
-        {t.feedback.no}
-      </button>
-    </div>
+    <>
+      {sent ? null : (
+        <div className="flex flex-wrap items-center gap-3 border-t border-[var(--color-rule)] pt-6">
+          <p className="text-sm">{t.feedback.question}</p>
+          <button
+            type="button"
+            className="ci-btn ci-btn-quiet"
+            disabled={pending}
+            onClick={() => answer(true)}
+          >
+            {t.feedback.yes}
+          </button>
+          <button
+            type="button"
+            className="ci-btn ci-btn-quiet"
+            disabled={pending}
+            onClick={() => answer(false)}
+          >
+            {t.feedback.no}
+          </button>
+        </div>
+      )}
+      <p role="status" className={sent ? "text-sm text-[var(--color-moss)]" : "ci-visually-hidden"}>
+        {sent ? t.feedback.thanks : ""}
+      </p>
+    </>
   );
 }

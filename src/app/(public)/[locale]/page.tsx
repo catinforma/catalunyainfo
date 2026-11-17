@@ -150,7 +150,7 @@ export default async function HomePage({
             ) : (
               <div className="ci-grid ci-grid--hub">
                 {items.map((item) => (
-                  <EntryCard key={item.translationId} entry={item} locale={locale} />
+                  <EntryCard key={item.translationId} entry={item} locale={locale} phoneThumb />
                 ))}
               </div>
             )}

@@ -117,22 +117,28 @@ export function EmbedBuilder({ groups, initial, origin, labels }: { groups: Pick
         className="mt-4 block w-full max-w-[520px] rounded border border-[var(--color-rule)] bg-white"
       />
 
-      <h2 className="mt-8">{labels.codeTitle}</h2>
+      <h2 id={`${id}-iframe-title`} className="mt-8">
+        {labels.codeTitle}
+      </h2>
       <p>{labels.codeHelp}</p>
-      <CodeBox id={`${id}-iframe`} code={iframeCode} button={copied === "iframe" ? labels.copied : labels.copy} onCopy={(area) => copy(iframeCode, "iframe", area)} />
+      <CodeBox id={`${id}-iframe`} labelledBy={`${id}-iframe-title`} code={iframeCode} button={copied === "iframe" ? labels.copied : labels.copy} onCopy={(area) => copy(iframeCode, "iframe", area)} />
 
-      <h2 className="mt-8">{labels.linkTitle}</h2>
+      <h2 id={`${id}-link-title`} className="mt-8">
+        {labels.linkTitle}
+      </h2>
       <p>{labels.linkHelp}</p>
-      <CodeBox id={`${id}-link`} code={linkCode} button={copied === "link" ? labels.copied : labels.copy} onCopy={(area) => copy(linkCode, "link", area)} />
+      <CodeBox id={`${id}-link`} labelledBy={`${id}-link-title`} code={linkCode} button={copied === "link" ? labels.copied : labels.copy} onCopy={(area) => copy(linkCode, "link", area)} />
     </div>
   );
 }
 
-function CodeBox({ id, code, button, onCopy }: { id: string; code: string; button: string; onCopy: (area: HTMLTextAreaElement | null) => void }) {
+// The heading above the box names it (it had no label: axe "label", critical).
+function CodeBox({ id, labelledBy, code, button, onCopy }: { id: string; labelledBy: string; code: string; button: string; onCopy: (area: HTMLTextAreaElement | null) => void }) {
   return (
     <div className="mt-3">
       <textarea
         id={id}
+        aria-labelledby={labelledBy}
         readOnly
         value={code}
         rows={code.split("\n").length + 2}

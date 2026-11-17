@@ -196,7 +196,7 @@ export function EuriborRoute({ locale, data }: { locale: EuriborLocale; data: Eu
                 </>
               ) : null}
 
-              {options.length ? <RevisionCalculator locale={locale} options={options} defaults={{ balance: 120_000, years: 20, months: 0, spreadPct: 0.8 }} /> : null}
+              {options.length ? <RevisionCalculator locale={locale} options={options} defaults={{ balance: 120_000, years: 20, months: 0, spreadPct: 0.8 }} calculatorId="euribor" /> : null}
               <p className="text-sm text-[var(--color-muted)]">{disclaimer}</p>
               <p>
                 {mortgageLink[0]} <Link href={mortgagePath(locale)}>{mortgageLink[1]}</Link>.

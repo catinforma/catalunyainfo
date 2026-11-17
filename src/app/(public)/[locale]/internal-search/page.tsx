@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 
 import { EmptyState } from "@/components/EmptyState";
 import { EntryCard } from "@/components/EntryCard";
+import { SearchAnalytics } from "@/components/SearchAnalytics";
 import { SearchBox } from "@/components/SearchBox";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
@@ -102,6 +103,7 @@ export default async function SearchPage({
 
         {query.length >= 2 ? (
           <section className="mt-10">
+            <SearchAnalytics locale={locale} termLength={query.length} resultsCount={results.length + shortcuts.length} />
             <p className="ci-label mb-6" aria-live="polite">
               {results.length} — {query}
             </p>

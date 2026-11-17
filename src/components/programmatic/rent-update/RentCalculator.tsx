@@ -7,6 +7,7 @@ import { anniversaryIn, computeRentUpdate, parseAmount, validIso, type AgreedInd
 import { MONTHS } from "@/lib/programmatic/holidays/format";
 import { SERIES, apiSeriesUrl, latestPoint, tableUrl, type SeriesId } from "@/lib/programmatic/rent-update/ine";
 import { FIRST_UPDATE, LAST_UPDATE, NORMS } from "@/lib/programmatic/rent-update/rules";
+import { useCalculatorUse } from "@/lib/analytics/use-calculator-use";
 
 /**
  * The rent-update calculator: rent, lease type, signing date, the month of
@@ -147,8 +148,11 @@ export function RentCalculator({ locale, series, initial }: { locale: RentLocale
   };
   const result = computeRentUpdate(input, series);
 
+  // First result change by the visitor, once per session (lib/analytics/calculator-use.ts).
+  const calcUse = useCalculatorUse("rent-update", locale, result);
+
   return (
-    <section className="ci-calc" aria-labelledby={`${id}-title`}>
+    <section className="ci-calc" {...calcUse} aria-labelledby={`${id}-title`}>
       <h2 id={`${id}-title`} className="ci-calc-title">
         {t.title}
       </h2>
