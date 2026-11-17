@@ -5,7 +5,13 @@ import { test } from "node:test";
 process.env.VERCEL_ENV = "production";
 process.env.NEXT_PUBLIC_ALLOW_INDEXING = "true";
 
-const { buildLlmsTxt, liveTools } = await import("../src/lib/seo/llms.ts");
+const { buildLlmsTxt, liveTools, trustPages, LLMS_SUMMARY } = await import("../src/lib/seo/llms.ts");
+const { legalPath, sectionPath } = await import("../src/lib/i18n/routes.ts");
+const { siteAuthorPath } = await import("../src/lib/content/author.ts");
+const { b2href } = await import("../src/lib/content/batch02/shared.ts");
+const { SITE, WHATSAPP_CHANNEL } = await import("../src/lib/site.ts");
+const { spainHubPath } = await import("../src/lib/programmatic/spain-2027/paths.ts");
+const { editionHubPath, editionPaths } = await import("../src/lib/programmatic/spain-2027/editions.ts");
 const { LOCALES } = await import("../src/lib/i18n/config.ts");
 
 // Every family's own list of URLs (what its sitemap emits).
@@ -77,7 +83,9 @@ test("llms.txt lists every live tool and hub, each with a one-line description",
     GUIDES.strikes.ca, GUIDES.strikes.es, GUIDES.strikes.en,
   ];
   for (const hub of hubs) assert.ok(text.includes(`(${ORIGIN}${hub})`), `llms.txt does not link ${hub}`);
-  const lines = text.split("\n").filter((l) => l.startsWith("- ["));
+  const toolsSection = text.split("\n## ")[1] ?? "";
+  assert.ok(toolsSection.startsWith("Live tools and data"));
+  const lines = toolsSection.split("\n").filter((l) => l.startsWith("- ["));
   assert.equal(lines.length, liveTools().length);
   for (const line of lines) {
     assert.match(line, /^- \[[^\]]+\]\(https:\/\/www\.catalunyainfo\.com\/[^)]+\): [A-Z0-9]/, line);
@@ -118,9 +126,35 @@ test("every URL llms.txt names is a page a family or guide publishes", () => {
     ...Object.values(itvEditions()),
     ...Object.values(htEditions()),
   ]);
+  for (const href of [spainHubPath(), ...editionPaths()]) known.add(href);
+  for (const l of LOCALES) known.add(b2href("strikesSpain", l));
   for (const tool of liveTools()) {
     for (const href of Object.values(tool.hubs)) assert.ok(known.has(href!), `${tool.name}: ${href} is not a published page`);
   }
+});
+
+test("llms.txt names the Spain-wide families and the trust pages, in all three languages", () => {
+  const text = buildLlmsTxt(ORIGIN, "CatalunyaInfo", {});
+  // The summary says what the site covers today, not only Catalonia.
+  assert.match(LLMS_SUMMARY, /Spain/);
+  assert.match(LLMS_SUMMARY, /calculators/);
+  for (const hub of [spainHubPath(), editionHubPath("ca"), editionHubPath("en"), ...LOCALES.map((l) => b2href("strikesSpain", l))]) {
+    assert.ok(text.includes(`(${ORIGIN}${hub})`), `llms.txt does not link ${hub}`);
+  }
+  const about = text.split("\n## ").find((s) => s.startsWith("About this site"));
+  assert.ok(about, "no About section");
+  for (const page of trustPages()) {
+    for (const l of LOCALES) {
+      const href = page.hubs[l]!;
+      assert.ok(about!.includes(`${ORIGIN}${href}`), `${page.name}: ${l} edition missing`);
+    }
+  }
+  for (const href of [legalPath("editorial-policy", "es"), legalPath("sources", "ca"), legalPath("corrections", "en"), sectionPath("about", "es"), siteAuthorPath("ca")]) {
+    assert.ok(about!.includes(href), `About section lacks ${href}`);
+  }
+  // Only the publication's own channel; never the founder's personal profiles.
+  assert.ok(about!.includes(WHATSAPP_CHANNEL));
+  assert.deepEqual([...SITE.sameAs], [WHATSAPP_CHANNEL]);
 });
 
 test("llms.txt is deterministic: guides are sorted by URL whatever order they arrive in", () => {

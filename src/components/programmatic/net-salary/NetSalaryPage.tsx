@@ -17,7 +17,7 @@ import { AEAT_VALIDATION, FORAL_LINKS, IRPF, SALARY_RULES_AS_OF, SALARY_RULES_YE
 import { smiPath } from "@/lib/programmatic/smi/copy";
 import { QUOTE as SMI_QUOTE } from "@/lib/programmatic/smi/rules";
 import { absoluteUrl } from "@/lib/site";
-import { breadcrumbSchema, graph } from "@/lib/seo/jsonld";
+import { ORGANIZATION_ID, breadcrumbSchema, graph } from "@/lib/seo/jsonld";
 import { buildMetadata } from "@/lib/seo/metadata";
 
 import { NetSalaryCalculator } from "./NetSalaryCalculator";
@@ -313,6 +313,7 @@ export function NetSalaryRoute({ locale }: { locale: NetLocale }) {
     operatingSystem: "Any",
     inLanguage: locale,
     isAccessibleForFree: true,
+    publisher: { "@id": ORGANIZATION_ID },
     offers: { "@type": "Offer", price: "0", priceCurrency: "EUR" },
     description: meta.description,
   };

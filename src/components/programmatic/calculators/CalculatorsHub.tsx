@@ -8,6 +8,7 @@ import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
 import { getMessages } from "@/lib/i18n";
 import { HTML_LANG } from "@/lib/i18n/config";
+import { legalPath } from "@/lib/i18n/routes";
 import { HUB_COPY, HUB_GROUPS, SCOPE_LABEL, hubCrumb, type HubCard } from "@/lib/programmatic/calculators/hub";
 import { calculatorsHubEditions, calculatorsHubPath, type CalcLocale } from "@/lib/programmatic/calculators/paths";
 import { breadcrumbSchema, graph } from "@/lib/seo/jsonld";
@@ -90,6 +91,14 @@ export function CalculatorsHubRoute({ locale }: { locale: CalcLocale }) {
           <div role="note" className="ci-callout ci-callout-warning ci-measure">
             <p>{c.note}</p>
           </div>
+
+          <section aria-labelledby="como-las-hacemos" className="ci-measure mt-10">
+            <h2 id="como-las-hacemos">{c.methodHeading}</h2>
+            <p>{c.method}</p>
+            <p>
+              <Link href={legalPath("editorial-policy", locale)}>{c.methodLink}</Link>
+            </p>
+          </section>
 
           <ShareBar locale={locale} path={calculatorsHubPath(locale)} title={c.h1} contentType="calculators_hub" variant="full" />
         </div>

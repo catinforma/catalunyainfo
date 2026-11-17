@@ -38,7 +38,7 @@ import {
   monthlyAmount,
 } from "@/lib/programmatic/unemployment-subsidy/rules";
 import { absoluteUrl } from "@/lib/site";
-import { breadcrumbSchema, graph } from "@/lib/seo/jsonld";
+import { ORGANIZATION_ID, breadcrumbSchema, graph } from "@/lib/seo/jsonld";
 import { buildMetadata } from "@/lib/seo/metadata";
 
 import { SubsidyCalculator } from "./SubsidyCalculator";
@@ -435,6 +435,7 @@ export function SubsidyRoute({ locale }: { locale: SubLocale }) {
     operatingSystem: "Any",
     inLanguage: locale,
     isAccessibleForFree: true,
+    publisher: { "@id": ORGANIZATION_ID },
     offers: { "@type": "Offer", price: "0", priceCurrency: "EUR" },
     description: meta.description,
   };

@@ -195,3 +195,27 @@ test("no trust page claims the site will never carry advertising", () => {
     }
   }
 });
+
+test("the trust pages describe the workflow the site actually has (17 Nov 2026)", () => {
+  // Text and code are drafted by AI agents under the founder's rules, live
+  // data updates itself, timers switch strike pages, and the site names one
+  // person. So no page may promise a per-page human review before
+  // publication, say nothing is published automatically, or invent a second
+  // reviewer; and the AI section has to say what the assistants do.
+  const unbackable = /revisió humana abans|revisión humana antes|human review before|es publica automàticament|se publica automáticamente|published automatically|segona persona|segunda persona|second person/i;
+  for (const page of PAGES) {
+    for (const locale of LOCALES) {
+      assert.doesNotMatch(JSON.stringify(page.copy[locale].blocks), unbackable, `${page.key}/${locale}`);
+    }
+  }
+  const disclosure = { ca: /assistents d'IA/, es: /asistentes de IA/, en: /AI assistants/ } as const;
+  const live = { ca: /dades en directe/i, es: /datos en directo/i, en: /live data/i } as const;
+  for (const key of ["page-about", "page-editorial-policy"]) {
+    const page = PAGES.find((p) => p.key === key)!;
+    for (const locale of LOCALES) {
+      const text = JSON.stringify(page.copy[locale].blocks);
+      assert.match(text, disclosure[locale], `${key}/${locale}: AI drafting not disclosed`);
+      assert.match(text, live[locale], `${key}/${locale}: automatic live data not disclosed`);
+    }
+  }
+});

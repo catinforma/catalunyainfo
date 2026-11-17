@@ -81,8 +81,8 @@ without changing them makes them false:
   block (LSSI art. 10) change with them.
 - **Publish groups**: `ads-disclosure` republishes the eight pages that wording
   touches; `privacy-cookies`, `legal-notice`, `editorial-policy`, `legal-hub`,
-  `accessibility-page`, `about-page` and `contact-page` publish one or two
-  pages each. `pages` republishes all ten and overwrites CMS edits on every one.
+  `accessibility-page`, `about-page`, `contact-page` and `corrections-page`
+  publish one or two pages each. `pages` republishes all ten and overwrites CMS edits on every one.
   `verifiedAt` on a `PageSpec` sets the page's verification date.
 
 ## Corrections and right of reply

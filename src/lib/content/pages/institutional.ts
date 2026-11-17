@@ -61,7 +61,7 @@ export function aboutCopy(locale: Locale): AboutCopy {
 
   const copy: Record<Locale, AboutCopy> = {
     ca: {
-      lead: "CatalunyaInfo és un projecte editorial independent que respon una pregunta concreta: què necessites saber abans d'anar a un lloc de Catalunya. També cobreix la resta d'Espanya quan afecta qui hi viu o hi viatja: festius, vagues, calendaris i eleccions.",
+      lead: "CatalunyaInfo és un projecte editorial independent que respon una pregunta concreta: què necessites saber abans d'anar a un lloc de Catalunya. També cobreix la resta d'Espanya quan afecta qui hi viu o hi viatja: festius, vagues, calendaris, eleccions i calculadores de nòmina, prestacions i impostos amb les regles oficials.",
       who: {
         heading: "Qui hi ha al darrere",
         paragraphs: [
@@ -74,7 +74,7 @@ export function aboutCopy(locale: Locale): AboutCopy {
       what: {
         heading: "Què fem",
         paragraphs: [
-          "Publiquem informació pràctica i verificada, sobretot de Catalunya, i de la resta d'Espanya quan afecta qui hi viu o hi viatja (festius, vagues, calendaris laborals i escolars, eleccions): com arribar-hi, quan val la pena anar-hi, què cal tenir en compte i on consultar la font oficial. Tot en català, castellà i anglès, amb la mateixa informació als tres idiomes i no una traducció automàtica de mig contingut.",
+          "Publiquem informació pràctica i verificada, sobretot de Catalunya, i de la resta d'Espanya quan afecta qui hi viu o hi viatja (festius, vagues, calendaris laborals i escolars, eleccions, calculadores de nòmina, atur, pensions i impostos, i dades oficials en directe com el preu de la llum): com arribar-hi, quan val la pena anar-hi, què cal tenir en compte i on consultar la font oficial. Tot en català, castellà i anglès, amb la mateixa informació als tres idiomes i no una traducció automàtica de mig contingut.",
           "No som una administració pública ni una oficina de turisme. Tampoc som un agregador: cada pàgina la escrivim nosaltres, citant d'on surt cada dada.",
         ],
       },
@@ -91,8 +91,8 @@ export function aboutCopy(locale: Locale): AboutCopy {
       ai: {
         heading: "Intel·ligència artificial, dit clar",
         paragraphs: [
-          "Fem servir eines d'IA com a suport de redacció i per generar algunes il·lustracions. Cap contingut es publica automàticament: tot passa per revisió humana, i la responsabilitat editorial és sempre humana.",
-          "Les imatges generades s'identifiquen sempre al peu de la imatge, i mai no les presentem com si fossin fotografies reals d'un lloc concret.",
+          "Bona part del text i del codi d'aquest web la redacten assistents d'IA, amb les regles de la política editorial: cada dada variable es llegeix a la font oficial i es publica amb l'enllaç i la data de lectura. La IA no és mai la font d'una dada, i la responsabilitat editorial és del fundador.",
+          "Les dades en directe (preu de la llum, carburants, embassaments, avisos de Rodalies) es llegeixen automàticament de les fonts oficials i es mostren amb l'hora de lectura. Les imatges generades s'identifiquen sempre al peu de la imatge, i mai no les presentem com si fossin fotografies reals d'un lloc concret.",
         ],
       },
       funding: {
@@ -110,7 +110,7 @@ export function aboutCopy(locale: Locale): AboutCopy {
       },
     },
     es: {
-      lead: "CatalunyaInfo es un proyecto editorial independiente que responde a una pregunta concreta: qué necesitas saber antes de ir a un lugar de Cataluña. También cubre el resto de España cuando afecta a quien vive o viaja allí: festivos, huelgas, calendarios y elecciones.",
+      lead: "CatalunyaInfo es un proyecto editorial independiente que responde a una pregunta concreta: qué necesitas saber antes de ir a un lugar de Cataluña. También cubre el resto de España cuando afecta a quien vive o viaja allí: festivos, huelgas, calendarios, elecciones y calculadoras de nóminas, prestaciones e impuestos con las reglas oficiales.",
       who: {
         heading: "Quién está detrás",
         paragraphs: [
@@ -123,7 +123,7 @@ export function aboutCopy(locale: Locale): AboutCopy {
       what: {
         heading: "Qué hacemos",
         paragraphs: [
-          "Publicamos información práctica y verificada, sobre todo de Cataluña, y del resto de España cuando afecta a quien vive o viaja allí (festivos, huelgas, calendarios laborales y escolares, elecciones): cómo llegar, cuándo merece la pena ir, qué conviene tener en cuenta y dónde consultar la fuente oficial. Todo en catalán, castellano e inglés, con la misma información en los tres idiomas y no una traducción automática de medio contenido.",
+          "Publicamos información práctica y verificada, sobre todo de Cataluña, y del resto de España cuando afecta a quien vive o viaja allí (festivos, huelgas, calendarios laborales y escolares, elecciones, calculadoras de nómina, paro, pensiones e impuestos, y datos oficiales en directo como el precio de la luz): cómo llegar, cuándo merece la pena ir, qué conviene tener en cuenta y dónde consultar la fuente oficial. Todo en catalán, castellano e inglés, con la misma información en los tres idiomas y no una traducción automática de medio contenido.",
           "No somos una administración pública ni una oficina de turismo. Tampoco un agregador: cada página la escribimos nosotros, citando de dónde sale cada dato.",
         ],
       },
@@ -140,8 +140,8 @@ export function aboutCopy(locale: Locale): AboutCopy {
       ai: {
         heading: "Inteligencia artificial, dicho claro",
         paragraphs: [
-          "Usamos herramientas de IA como apoyo de redacción y para generar algunas ilustraciones. Ningún contenido se publica automáticamente: todo pasa por revisión humana, y la responsabilidad editorial es siempre humana.",
-          "Las imágenes generadas se identifican siempre al pie de la imagen, y nunca las presentamos como fotografías reales de un lugar concreto.",
+          "Gran parte del texto y del código de este sitio lo redactan asistentes de IA, con las reglas de la política editorial: cada dato variable se lee en la fuente oficial y se publica con su enlace y la fecha de lectura. La IA nunca es la fuente de un dato, y la responsabilidad editorial es del fundador.",
+          "Los datos en directo (precio de la luz, carburantes, embalses, avisos de Rodalies) se leen automáticamente de las fuentes oficiales y se muestran con la hora de lectura. Las imágenes generadas se identifican siempre al pie de la imagen, y nunca las presentamos como fotografías reales de un lugar concreto.",
         ],
       },
       funding: {
@@ -159,7 +159,7 @@ export function aboutCopy(locale: Locale): AboutCopy {
       },
     },
     en: {
-      lead: "CatalunyaInfo is an independent editorial project answering one question: what you need to know before going somewhere in Catalonia. It also covers the rest of Spain where it affects people who live or travel there: holidays, strikes, calendars and elections.",
+      lead: "CatalunyaInfo is an independent editorial project answering one question: what you need to know before going somewhere in Catalonia. It also covers the rest of Spain where it affects people who live or travel there: holidays, strikes, calendars, elections, and pay, benefit and tax calculators built on the official rules.",
       who: {
         heading: "Who is behind it",
         paragraphs: [
@@ -172,7 +172,7 @@ export function aboutCopy(locale: Locale): AboutCopy {
       what: {
         heading: "What we do",
         paragraphs: [
-          "We publish practical, verified information, mostly about Catalonia, and about the rest of Spain where it affects people who live or travel there (holidays, strikes, work and school calendars, elections): how to get there, when it is worth going, what to bear in mind, and where to check the official source. All of it in Catalan, Spanish and English, with the same information in each language rather than a machine translation of half the content.",
+          "We publish practical, verified information, mostly about Catalonia, and about the rest of Spain where it affects people who live or travel there (holidays, strikes, work and school calendars, elections, calculators for pay, unemployment, pensions and taxes, and live official data such as the electricity price): how to get there, when it is worth going, what to bear in mind, and where to check the official source. All of it in Catalan, Spanish and English, with the same information in each language rather than a machine translation of half the content.",
           "We are not a public authority or a tourist board, and we are not an aggregator: every page is written here, citing where each fact came from.",
         ],
       },
@@ -189,8 +189,8 @@ export function aboutCopy(locale: Locale): AboutCopy {
       ai: {
         heading: "Artificial intelligence, plainly",
         paragraphs: [
-          "We use AI tools to support drafting and to generate some illustrations. Nothing is published automatically: everything goes through human review, and editorial responsibility is always human.",
-          "Generated images are always labelled in the caption, and we never present them as real photographs of a specific place.",
+          "Much of the text and code on this site is drafted by AI assistants, working to the rules of the editorial policy: every variable fact is read in the official source and published with its link and the date it was read. AI is never the source of a fact, and editorial responsibility lies with the founder.",
+          "Live data (electricity price, fuel, reservoirs, Rodalies notices) is read automatically from the official sources and shown with the time it was read. Generated images are always labelled in the caption, and we never present them as real photographs of a specific place.",
         ],
       },
       funding: {
@@ -247,7 +247,7 @@ const ABOUT_COPY: Record<Locale, Omit<PageCopy, "blocks">> = {
 export const ABOUT: PageSpec = {
   key: "page-about",
   path: sectionEntryPath("about"),
-  verifiedAt: "2026-11-11",
+  verifiedAt: "2026-11-17",
   copy: Object.fromEntries(
     LOCALES.map((locale) => [locale, { ...ABOUT_COPY[locale], blocks: aboutBlocks(locale) }]),
   ) as Record<Locale, PageCopy>,

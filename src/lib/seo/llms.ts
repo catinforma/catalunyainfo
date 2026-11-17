@@ -29,7 +29,16 @@ import { mortgageEditions } from "@/lib/programmatic/mortgage/copy";
 import { itvEditions } from "@/lib/programmatic/itv/copy";
 import { htEditions } from "@/lib/programmatic/home-purchase-tax/copy";
 import { LOCALES, type Locale } from "@/lib/i18n/config";
+import { legalPath, sectionPath } from "@/lib/i18n/routes";
+import { siteAuthorPath } from "@/lib/content/author";
+import { b2href } from "@/lib/content/batch02/shared";
+import { OWNER } from "@/lib/content/pages/institutional";
 import { PATHS as TOOL_PATHS } from "@/lib/content/home-tools";
+import { SITE, WHATSAPP_CHANNEL } from "@/lib/site";
+import { CITIES as SPAIN_CITIES } from "@/lib/programmatic/spain-2027/cities";
+import { COMMUNITIES as SPAIN_COMMUNITIES } from "@/lib/programmatic/spain-2027/communities";
+import { editionHubPath } from "@/lib/programmatic/spain-2027/editions";
+import { spainHubPath } from "@/lib/programmatic/spain-2027/paths";
 import { SEASON_YEAR } from "@/lib/programmatic/christmas-fairs/classify";
 import { FAIRS as CHRISTMAS_FAIRS, englishTowns as christmasEnglishTowns, towns as christmasTowns } from "@/lib/programmatic/christmas-fairs/data";
 import { fairsHubPath } from "@/lib/programmatic/christmas-fairs/paths";
@@ -65,7 +74,55 @@ const GUIDE_HEADINGS: Record<Locale, string> = {
 };
 
 export const LLMS_SUMMARY =
-  "> Practical, verified information about Catalonia in Catalan, Spanish and English: transport, public holidays, taxes, weekend agenda, nature conditions and day trips. Every figure is checked against an official source, linked on each page.";
+  "> Practical, verified information in Catalan, Spanish and English about Catalonia and, where it affects people living in or travelling to Spain, the whole country: strikes and their minimum services, public holidays and work and school calendars, elections, Spain-wide calculators (net salary, severance, unemployment, sick pay, self-employed contributions, pensions, minimum wage, rent, mortgage, home-purchase taxes) and live official data (electricity price, butane, fuel, reservoirs, Rodalies, CPI, Euribor). Every variable figure is taken from the official source (BOE, DOGC, the Tax Agency, Social Security, INE, the operators), linked on the page with the date it was read.";
+
+/**
+ * The pages that say who makes the site, how a figure is checked and how to
+ * report an error, listed after the tools so an assistant that quotes a page
+ * can also say where its method is written down. One line each, stating only
+ * what the page itself says.
+ */
+export interface TrustPage {
+  name: string;
+  hubs: Partial<Record<Locale, string>>;
+  description: string;
+}
+
+export function trustPages(): TrustPage[] {
+  const per = (f: (l: Locale) => string) => Object.fromEntries(LOCALES.map((l) => [l, f(l)])) as Record<Locale, string>;
+  return [
+    {
+      name: "About CatalunyaInfo",
+      hubs: per((l) => sectionPath("about", l)),
+      description: `who makes the site (founder ${OWNER.name}), what it covers, how it is funded and how AI tools are used.`,
+    },
+    {
+      name: "Author page",
+      hubs: per((l) => siteAuthorPath(l)),
+      description: `${OWNER.name}, who signs the guides, with his public profiles and his recently updated pieces.`,
+    },
+    {
+      name: "Editorial policy",
+      hubs: per((l) => legalPath("editorial-policy", l)),
+      description: "what gets published and what does not, how facts are verified and dated, how the calculators and live data are built, the use of AI, and why the site takes no paid content.",
+    },
+    {
+      name: "Sources",
+      hubs: per((l) => legalPath("sources", l)),
+      description: "the order of preference (official source, primary document, press only to find the original), what is never accepted as a source, and how sources are cited at the foot of each page.",
+    },
+    {
+      name: "Corrections",
+      hubs: per((l) => legalPath("corrections", l)),
+      description: "how to report an error, what happens to the report, and how a substantial correction is noted on the page with its date.",
+    },
+    {
+      name: "Contact",
+      hubs: per((l) => sectionPath("contact", l)),
+      description: `contact form and email (${SITE.contactEmail}) for corrections, suggestions, press and data protection.`,
+    },
+  ];
+}
 
 export interface LiveTool {
   name: string;
@@ -87,6 +144,11 @@ export function liveTools(): LiveTool[] {
       name: "Public holidays by town",
       hubs: { ca: holidaysHub("ca"), es: holidaysHub("es"), en: holidaysHub("en") },
       description: `the ${YEAR} local holidays of the ${HOLIDAYS.municipalities.length} municipalities of Catalonia that have them, one page per town (${englishTowns().length} in English: the largest cities and the main resorts), with the Catalonia-wide days, whether today is a holiday and the Sundays shops may open (DOGC order and Generalitat open data).`,
+    },
+    {
+      name: "Spain 2027 public holidays and work calendar",
+      hubs: { es: spainHubPath(), ca: editionHubPath("ca"), en: editionHubPath("en") },
+      description: `the 2027 holidays of all Spain from the BOE list (BOE-A-2026-21254): the national days, one page for each of the ${SPAIN_COMMUNITIES.length} autonomous communities and cities, one for each of ${SPAIN_CITIES.length} cities with its local days where the council or regional bulletin has published them, and every long weekend.`,
     },
     {
       name: "Is it a public holiday on…?",
@@ -199,6 +261,11 @@ export function liveTools(): LiveTool[] {
       description: "upcoming and current strikes affecting transport, schools and health in Catalonia, with the official minimum services for each.",
     },
     {
+      name: "Strikes in Spain: calendar and minimum services",
+      hubs: { es: b2href("strikesSpain", "es"), ca: b2href("strikesSpain", "ca"), en: b2href("strikesSpain", "en") },
+      description: "the dated strikes called across Spain, this week day by day and a calendar of the rest: who calls each one, its status, and the minimum services with the official resolution that sets them; the open-ended airport strikes, and what was postponed or called off, listed apart.",
+    },
+    {
       name: "Rodalies live service notices",
       hubs: { ca: rodaliesHub("ca"), es: rodaliesHub("es"), en: rodaliesHub("en") },
       description: `live notices and incidents for every Rodalies de Catalunya line (${lineIds().length} line pages in Catalan and Spanish), read from Rodalies de Catalunya and Renfe's open data, with each line's stations and official timetable.`,
@@ -251,7 +318,7 @@ export function liveTools(): LiveTool[] {
  * edition follows the site's x-default rule: English when it exists, else
  * Catalan.
  */
-function toolLine(tool: LiveTool, origin: string): string {
+function toolLine(tool: Pick<LiveTool, "name" | "hubs" | "description">, origin: string): string {
   const main: Locale = tool.hubs.en ? "en" : "ca";
   const others = LOCALES.filter((l) => l !== main && tool.hubs[l]).map((l) => `[${LANGUAGE_NAME[l]}](${origin}${tool.hubs[l]})`);
   const description = tool.description.charAt(0).toUpperCase() + tool.description.slice(1);
@@ -261,6 +328,9 @@ function toolLine(tool: LiveTool, origin: string): string {
 export function buildLlmsTxt(origin: string, siteName: string, guides: Partial<Record<Locale, readonly LlmsEntry[]>>): string {
   const parts: string[] = [`# ${siteName}`, "", LLMS_SUMMARY, "", "## Live tools and data", ""];
   for (const tool of liveTools()) parts.push(toolLine(tool, origin));
+  parts.push("", "## About this site and how we verify", "");
+  for (const page of trustPages()) parts.push(toolLine(page, origin));
+  parts.push(`- [WhatsApp channel](${WHATSAPP_CHANNEL}): The site's own channel, a daily post in Catalan with what to know today.`);
   parts.push("");
 
   for (const locale of LOCALES) {

@@ -32,7 +32,7 @@ import {
   TOTAL_RATE,
 } from "@/lib/programmatic/self-employed/rules-2026";
 import { absoluteUrl } from "@/lib/site";
-import { breadcrumbSchema, graph } from "@/lib/seo/jsonld";
+import { ORGANIZATION_ID, breadcrumbSchema, graph } from "@/lib/seo/jsonld";
 import { buildMetadata } from "@/lib/seo/metadata";
 
 import { SelfEmployedCalculator } from "./SelfEmployedCalculator";
@@ -305,6 +305,7 @@ export function SelfEmployedRoute({ locale }: { locale: SeLocale }) {
     operatingSystem: "Any",
     inLanguage: locale,
     isAccessibleForFree: true,
+    publisher: { "@id": ORGANIZATION_ID },
     offers: { "@type": "Offer", price: "0", priceCurrency: "EUR" },
     description: meta.description,
   };

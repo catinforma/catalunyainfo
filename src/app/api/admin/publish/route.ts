@@ -115,6 +115,8 @@ const INSTITUTIONAL_PAGE_GROUPS: Record<string, readonly string[]> = {
   "legal-hub": ["page-legal-hub"],
   "accessibility-page": ["page-accessibility"],
   "contact-page": ["page-contact"],
+  // 17 Nov 2026: the "if you disagree" paragraph no longer names a second reviewer.
+  "corrections-page": ["page-corrections"],
   // The AdSense advertising disclosure (11 Nov 2026): every page whose wording
   // it changed. Leaves corrections and sources alone.
   "ads-disclosure": [

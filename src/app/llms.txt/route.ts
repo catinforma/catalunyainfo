@@ -18,13 +18,35 @@ import { buildLlmsTxt, type LlmsEntry } from "@/lib/seo/llms";
  */
 export const revalidate = 86400;
 
+/** listEntries returns at most 100 rows a call (repository.ts). */
+const PAGE = 100;
+/** A ceiling, not a target: far above today's guide count per language. */
+const MAX_GUIDES = 3000;
+
+/**
+ * Every published guide of one language, newest first. Until 17 Nov 2026 the
+ * route asked for 200 and got the 100 most recent (listEntries caps a call at
+ * 100), so long-lived guides such as the Barcelona parking guide (3,654
+ * impressions 11-17 Nov) were missing from the file.
+ */
+async function allGuides(locale: Locale): Promise<LlmsEntry[]> {
+  // Keyed by URL: entries published in the same second can trade places
+  // between two offset pages, and the file must list each guide once.
+  const out = new Map<string, LlmsEntry>();
+  for (let offset = 0; offset < MAX_GUIDES; offset += PAGE) {
+    const entries = await listEntries(locale, { types: ["article", "guide"], limit: PAGE, offset });
+    for (const entry of entries) out.set(entry.href, { title: entry.title, href: entry.href, excerpt: entry.excerpt ?? null });
+    if (entries.length < PAGE) break;
+  }
+  return [...out.values()];
+}
+
 export async function GET() {
   const guides: Partial<Record<Locale, LlmsEntry[]>> = {};
   for (const locale of LOCALES) {
     // listEntries rethrows DB errors (so pages keep their last good version);
     // llms.txt is auxiliary, so a failing locale is skipped instead.
-    const entries = await listEntries(locale, { types: ["article", "guide"], limit: 200 }).catch(() => []);
-    guides[locale] = entries.map((entry) => ({ title: entry.title, href: entry.href, excerpt: entry.excerpt ?? null }));
+    guides[locale] = await allGuides(locale).catch(() => []);
   }
 
   return new Response(buildLlmsTxt(SITE.productionOrigin, SITE.name, guides), {

@@ -128,6 +128,7 @@ export function SmiRoute({ locale, data }: { locale: SmiLocale; data: SmiPageDat
   const official27 = status.kind === "official" ? status.year : null;
   const day = (iso: string) => bareDay(iso, locale);
   const d = DRAFT_2027;
+  const heard = data.today > d.hearingTo;
 
   const h = L(locale, {
     es: { y27: "SMI 2027: las cuantías oficiales", y26: "SMI 2026: todas las cuantías", status: "SMI 2027: qué es oficial y qué no", when: "¿Cuándo se aprueba el SMI de cada año?", history: "Historia del SMI de 2018 a 2026", irpf: "¿El SMI paga IRPF?", sources: "Fuentes" },
@@ -375,9 +376,10 @@ export function SmiRoute({ locale, data }: { locale: SmiLocale; data: SmiPageDat
                     locale={locale}
                     draft
                     caption={L(locale, {
-                      es: `Proyecto de real decreto del SMI para 2027 (Ministerio de Trabajo, ${day(d.published)}), en audiencia pública hasta el ${day(d.hearingTo)}. No aprobado ni publicado en el BOE.`,
-                      ca: `Projecte de reial decret de l'SMI per al 2027 (Ministeri de Treball, ${day(d.published)}), en audiència pública fins al ${day(d.hearingTo)}. No aprovat ni publicat al BOE.`,
-                      en: `Draft royal decree on the 2027 SMI (Ministry of Labour, ${day(d.published)}), open to public comment until ${day(d.hearingTo)}. Not approved or published in the BOE.`,
+                      // Same past/present switch as the lead (smi/page.ts), so the two never disagree.
+                      es: `Proyecto de real decreto del SMI para 2027 (Ministerio de Trabajo, ${day(d.published)}), que ${heard ? "estuvo" : "está"} en audiencia pública hasta el ${day(d.hearingTo)}. No aprobado ni publicado en el BOE.`,
+                      ca: `Projecte de reial decret de l'SMI per al 2027 (Ministeri de Treball, ${day(d.published)}), que ${heard ? "va estar" : "està"} en audiència pública fins al ${day(d.hearingTo)}. No aprovat ni publicat al BOE.`,
+                      en: `Draft royal decree on the 2027 SMI (Ministry of Labour, ${day(d.published)}), ${heard ? "which was" : "which is"} open to public comment until ${day(d.hearingTo)}. Not approved or published in the BOE.`,
                     })}
                   />
                   <p>{draftQuote}</p>

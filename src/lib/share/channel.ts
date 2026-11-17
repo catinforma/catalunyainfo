@@ -1,5 +1,6 @@
 import { b2href } from "@/lib/content/batch02/shared";
 import type { Locale } from "@/lib/i18n/config";
+import { WHATSAPP_CHANNEL } from "@/lib/site";
 
 /**
  * The WhatsApp channel (created by the owner on 13 Nov 2026). A channel is
@@ -7,9 +8,10 @@ import type { Locale } from "@/lib/i18n/config";
  *
  * A plain link, no WhatsApp script: the CSP and the consent model are
  * untouched, and nothing loads until the reader taps it. Checked with curl on
- * 13 Nov 2026 (og:title "CatalunyaInfo").
+ * 13 Nov 2026 (og:title "CatalunyaInfo"). Defined once in lib/site.ts, where
+ * it is also the Organization's `sameAs`.
  */
-export const WHATSAPP_CHANNEL_URL = "https://whatsapp.com/channel/0029VbEgw2ZJpe8jQPi18O3O";
+export const WHATSAPP_CHANNEL_URL = WHATSAPP_CHANNEL;
 
 export const FOLLOW_CHANNEL_COPY: Record<Locale, { title: string; text: string; cta: string; short: string }> = {
   ca: {

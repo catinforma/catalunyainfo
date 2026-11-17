@@ -15,7 +15,7 @@ import { CALC_COPY, bandDays, money, monthYear, ofMonthYear, payerText, percent,
 import { DEFAULT_INPUT, calculateSickLeave, referenceMonth, type Band, type Contingency, type SickLeaveResult, type SpecialKind } from "@/lib/programmatic/sick-leave/engine";
 import { DAYS, MAX_BASE_2026, OFFICIAL_LINKS, PCT, QUOTE, REFORM_FROM, RULES_AS_OF, SOURCES } from "@/lib/programmatic/sick-leave/rules";
 import { absoluteUrl } from "@/lib/site";
-import { breadcrumbSchema, graph } from "@/lib/seo/jsonld";
+import { ORGANIZATION_ID, breadcrumbSchema, graph } from "@/lib/seo/jsonld";
 import { buildMetadata } from "@/lib/seo/metadata";
 
 import { SickLeaveCalculator } from "./SickLeaveCalculator";
@@ -339,6 +339,7 @@ export function SickLeaveRoute({ locale }: { locale: SlLocale }) {
     operatingSystem: "Any",
     inLanguage: locale,
     isAccessibleForFree: true,
+    publisher: { "@id": ORGANIZATION_ID },
     offers: { "@type": "Offer", price: "0", priceCurrency: "EUR" },
     description: meta.description,
   };

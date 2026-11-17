@@ -457,7 +457,7 @@ function editorialBlocks(locale: Locale): Block[] {
       {
         type: "paragraph",
         lead: true,
-        text: "CatalunyaInfo existeix per respondre bé una pregunta concreta: què necessites saber abans d'anar a un lloc de Catalunya, i què passa a la resta d'Espanya quan afecta qui hi viu o hi viatja (festius, vagues, calendaris, eleccions). Aquesta pàgina explica com decidim què publiquem, com ho comprovem i què no farem mai.",
+        text: "CatalunyaInfo existeix per respondre bé una pregunta concreta: què necessites saber abans d'anar a un lloc de Catalunya, i què passa a la resta d'Espanya quan afecta qui hi viu o hi viatja (festius, vagues, calendaris, eleccions, i calculadores de nòmina, prestacions i impostos amb les regles oficials). Aquesta pàgina explica com decidim què publiquem, com ho comprovem i què no farem mai.",
       } as Block,
       ...section(
         "Què publiquem",
@@ -475,9 +475,19 @@ function editorialBlocks(locale: Locale): Block[] {
         "Tampoc convertim una previsió en una promesa. Si una finestra temporal és aproximada, la pàgina ho diu.",
       ),
       ...section(
+        "Calculadores: com les fem i què no són",
+        "Les calculadores apliquen la norma general tal com la publica el BOE o el butlletí autonòmic. Cadascuna cita l'article, la taula o la sèrie oficial que fa servir, diu en quina data es va llegir i explica quins casos no cobreix.",
+        "Quan l'organisme publica el seu propi algoritme o servei de càlcul, el fem servir per comprovar els resultats: la de sou net, per exemple, s'ha contrastat cas per cas amb el càlcul de retencions de l'Agència Tributària. Cada calculadora explica al seu apartat de fonts d'on surt cada regla.",
+        "Les regles que canvien cada any (cotitzacions, IPREM, salari mínim, taules de retenció) tenen data de caducitat al codi del web: quan arriba l'any següent o la data de relectura, una prova automàtica falla fins que es torna a llegir la norma i s'actualitza la calculadora.",
+        "El resultat és una estimació amb la norma general: no substitueix el càlcul de la teva empresa, de la Seguretat Social, del SEPE o de l'Agència Tributària, ni el consell d'un professional, que pot tenir en compte el teu conveni i el teu cas.",
+      ),
+      ...section(
         "Intel·ligència artificial",
-        "Fem servir eines d'IA com a suport de redacció i per generar algunes il·lustracions. Dues regles no negociables:",
-        "**Cap contingut generat per IA es publica automàticament.** Tot passa per revisió humana abans de publicar-se, i la responsabilitat editorial és sempre humana.",
+        "Bona part del text i del codi d'aquest web la redacten assistents d'IA, que treballen amb les regles d'aquesta pàgina i amb les instruccions del fundador. Així és com ho fem, sense embuts:",
+        "**La IA no és mai la font d'una dada.** Cada xifra, data o norma es llegeix a l'original (el BOE, el DOGC, l'Agència Tributària, la Seguretat Social, l'INE, l'operador) i la pàgina enllaça aquest original amb la data en què es va llegir. El que no es pot comprovar així no es publica.",
+        "**Les dates tenen alarma.** Les dades que caduquen (una vaga, un preu regulat, les regles d'un any) es desen amb la data de lectura i una prova automàtica que falla quan toca tornar a llegir la font, perquè una pàgina no es pugui quedar vella en silenci.",
+        "**Les dades en directe s'actualitzen soles.** El preu de la llum, els carburants, els embassaments, els avisos de Rodalies o l'IPC es llegeixen automàticament de les dades obertes oficials i es mostren amb la data o l'hora de lectura; aquestes xifres no les revisa una persona cada vegada que canvien.",
+        `**La responsabilitat editorial és humana.** El fundador, ${OWNER.name}, fixa aquestes regles i l'abast del web i respon del que s'hi publica. Els avisos d'error arriben a la seva bústia i es tracten com explica la pàgina de [correccions](${corrections}).`,
         "**Les imatges generades s'identifiquen sempre**, al peu de la imatge, en tots els idiomes. No presentem mai una imatge generada com si fos una fotografia real d'un lloc concret.",
       ),
       ...section(
@@ -500,7 +510,7 @@ function editorialBlocks(locale: Locale): Block[] {
       {
         type: "paragraph",
         lead: true,
-        text: "CatalunyaInfo existe para responder bien a una pregunta concreta: qué necesitas saber antes de ir a un lugar de Cataluña, y qué pasa en el resto de España cuando afecta a quien vive o viaja allí (festivos, huelgas, calendarios, elecciones). Esta página explica cómo decidimos qué publicamos, cómo lo comprobamos y qué no haremos nunca.",
+        text: "CatalunyaInfo existe para responder bien a una pregunta concreta: qué necesitas saber antes de ir a un lugar de Cataluña, y qué pasa en el resto de España cuando afecta a quien vive o viaja allí (festivos, huelgas, calendarios, elecciones, y calculadoras de nóminas, prestaciones e impuestos con las reglas oficiales). Esta página explica cómo decidimos qué publicamos, cómo lo comprobamos y qué no haremos nunca.",
       } as Block,
       ...section(
         "Qué publicamos",
@@ -518,9 +528,19 @@ function editorialBlocks(locale: Locale): Block[] {
         "Tampoco convertimos una previsión en una promesa. Si una ventana temporal es aproximada, la página lo dice.",
       ),
       ...section(
+        "Calculadoras: cómo las hacemos y qué no son",
+        "Las calculadoras aplican la norma general tal como la publica el BOE o el boletín autonómico. Cada una cita el artículo, la tabla o la serie oficial que usa, dice en qué fecha se leyó y explica qué casos no cubre.",
+        "Cuando el organismo publica su propio algoritmo o servicio de cálculo, lo usamos para comprobar los resultados: la de sueldo neto, por ejemplo, se ha contrastado caso por caso con el cálculo de retenciones de la Agencia Tributaria. Cada calculadora explica en su apartado de fuentes de dónde sale cada regla.",
+        "Las reglas que cambian cada año (cotizaciones, IPREM, salario mínimo, tablas de retención) tienen fecha de caducidad en el código del sitio: cuando llega el año siguiente o la fecha de relectura, una prueba automática falla hasta que se vuelve a leer la norma y se actualiza la calculadora.",
+        "El resultado es una estimación con la norma general: no sustituye el cálculo de tu empresa, de la Seguridad Social, del SEPE o de la Agencia Tributaria, ni el consejo de un profesional, que puede tener en cuenta tu convenio y tu caso.",
+      ),
+      ...section(
         "Inteligencia artificial",
-        "Utilizamos herramientas de IA como apoyo de redacción y para generar algunas ilustraciones. Dos reglas no negociables:",
-        "**Ningún contenido generado por IA se publica automáticamente.** Todo pasa por revisión humana antes de publicarse, y la responsabilidad editorial es siempre humana.",
+        "Gran parte del texto y del código de este sitio lo redactan asistentes de IA, que trabajan con las reglas de esta página y con las instrucciones del fundador. Así es como lo hacemos, sin rodeos:",
+        "**La IA nunca es la fuente de un dato.** Cada cifra, fecha o norma se lee en el original (el BOE, el DOGC, la Agencia Tributaria, la Seguridad Social, el INE, el operador) y la página enlaza ese original con la fecha en que se leyó. Lo que no se puede comprobar así no se publica.",
+        "**Las fechas tienen alarma.** Los datos que caducan (una huelga, un precio regulado, las reglas de un año) se guardan con su fecha de lectura y una prueba automática que falla cuando toca volver a leer la fuente, para que una página no pueda quedarse vieja en silencio.",
+        "**Los datos en directo se actualizan solos.** El precio de la luz, los carburantes, los embalses, los avisos de Rodalies o el IPC se leen automáticamente de los datos abiertos oficiales y se muestran con la fecha u hora de lectura; esas cifras no las revisa una persona cada vez que cambian.",
+        `**La responsabilidad editorial es humana.** El fundador, ${OWNER.name}, fija estas reglas y el alcance del sitio y responde de lo que se publica. Los avisos de error llegan a su buzón y se tratan como explica la página de [correcciones](${corrections}).`,
         "**Las imágenes generadas se identifican siempre** al pie de la imagen y en todos los idiomas. Nunca presentamos una imagen generada como si fuera una fotografía real de un lugar concreto.",
       ),
       ...section(
@@ -540,7 +560,7 @@ function editorialBlocks(locale: Locale): Block[] {
       {
         type: "paragraph",
         lead: true,
-        text: "CatalunyaInfo exists to answer one question well: what you need to know before going somewhere in Catalonia, and what is happening in the rest of Spain where it affects people who live or travel there (holidays, strikes, calendars, elections). This page explains how we decide what to publish, how we check it, and what we will never do.",
+        text: "CatalunyaInfo exists to answer one question well: what you need to know before going somewhere in Catalonia, and what is happening in the rest of Spain where it affects people who live or travel there (holidays, strikes, calendars, elections, and pay, benefit and tax calculators built on the official rules). This page explains how we decide what to publish, how we check it, and what we will never do.",
       } as Block,
       ...section(
         "What we publish",
@@ -558,9 +578,19 @@ function editorialBlocks(locale: Locale): Block[] {
         "Nor do we turn a forecast into a promise. Where a time window is approximate, the page says so.",
       ),
       ...section(
+        "Calculators: how we build them and what they are not",
+        "The calculators apply the general rule as the BOE or the regional bulletin publishes it. Each one cites the article, table or official series it uses, says on what date it was read, and explains which cases it does not cover.",
+        "Where the public body publishes its own algorithm or calculation service, we use it to check the results: the net salary calculator, for example, has been checked case by case against the Tax Agency's withholding calculation. Each calculator's sources section says where every rule comes from.",
+        "Rules that change every year (contributions, IPREM, minimum wage, withholding tables) carry an expiry date in the site's code: when the next year or the re-reading date arrives, an automated test fails until the rule has been read again and the calculator updated.",
+        "The result is an estimate under the general rule: it does not replace the calculation by your employer, Social Security, the SEPE or the Tax Agency, or the advice of a professional who can take your collective agreement and your own case into account.",
+      ),
+      ...section(
         "Artificial intelligence",
-        "We use AI tools to support drafting and to generate some illustrations. Two rules are non-negotiable:",
-        "**No AI-generated content is ever published automatically.** Everything goes through human review before publication, and editorial responsibility is always human.",
+        "Much of the text and code on this site is drafted by AI assistants, working to the rules on this page and to the founder's instructions. Here is how that works, plainly:",
+        "**AI is never the source of a fact.** Every figure, date or rule is read in the original (the BOE, the DOGC, the Tax Agency, Social Security, INE, the operator), and the page links that original with the date it was read. What cannot be checked that way is not published.",
+        "**Dates have an alarm.** Facts that expire (a strike, a regulated price, a year's rules) are stored with the date they were read and an automated test that fails when the source is due to be read again, so a page cannot go stale silently.",
+        "**Live data updates itself.** Electricity and fuel prices, reservoir levels, Rodalies notices and the CPI are read automatically from official open data and shown with the date or time they were read; no person reviews those figures each time they change.",
+        `**Editorial responsibility is human.** The founder, ${OWNER.name}, sets these rules and the site's scope, and answers for what it publishes. Error reports reach his inbox and are handled as the [corrections page](${corrections}) explains.`,
         "**Generated images are always labelled** in the caption, in every language. We never present a generated image as a real photograph of a specific place.",
       ),
       ...section(
@@ -608,7 +638,7 @@ const EDITORIAL_COPY: Record<Locale, Omit<PageCopy, "blocks">> = {
 export const EDITORIAL_POLICY: PageSpec = {
   key: "page-editorial-policy",
   path: legalEntryPath("editorial-policy"),
-  verifiedAt: "2026-11-11",
+  verifiedAt: "2026-11-17",
   copy: Object.fromEntries(
     LOCALES.map((locale) => [
       locale,
@@ -648,7 +678,7 @@ function correctionsBlocks(locale: Locale): Block[] {
       ),
       ...section(
         "Si no hi estàs d'acord",
-        "Si has demanat una correcció i creus que la resposta no és satisfactòria, contesta el mateix fil: ho revisa una segona persona abans de tancar-ho.",
+        "Si has demanat una correcció i creus que la resposta no és satisfactòria, contesta el mateix fil: ho tornem a comprovar des de zero contra la font oficial i et responem per escrit amb el motiu de la decisió.",
       ),
       ...section(
         "Dret de rectificació",
@@ -678,7 +708,7 @@ function correctionsBlocks(locale: Locale): Block[] {
       ),
       ...section(
         "Si no estás de acuerdo",
-        "Si has pedido una corrección y consideras que la respuesta no es satisfactoria, responde en el mismo hilo: lo revisa una segunda persona antes de cerrarlo.",
+        "Si has pedido una corrección y consideras que la respuesta no es satisfactoria, responde en el mismo hilo: lo volvemos a comprobar desde cero contra la fuente oficial y te respondemos por escrito con el motivo de la decisión.",
       ),
       ...section(
         "Derecho de rectificación",
@@ -708,7 +738,7 @@ function correctionsBlocks(locale: Locale): Block[] {
       ),
       ...section(
         "If you disagree with the outcome",
-        "If you asked for a correction and are not satisfied with the response, reply on the same thread: a second person reviews it before it is closed.",
+        "If you asked for a correction and are not satisfied with the response, reply on the same thread: we check it again from scratch against the official source and reply in writing with the reason for the decision.",
       ),
       ...section(
         "Right of reply",

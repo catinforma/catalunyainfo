@@ -625,6 +625,10 @@ export interface HubCopy {
   /** "Normas revisadas el 13 de noviembre de 2026", from an ISO date. */
   checked: (iso: string) => string;
   otherLanguage: string;
+  /** "How we build them": the method in two sentences, then the editorial policy's full section. */
+  methodHeading: string;
+  method: string;
+  methodLink: string;
 }
 
 export const HUB_COPY: Record<CalcLocale, HubCopy> = {
@@ -639,6 +643,10 @@ export const HUB_COPY: Record<CalcLocale, HubCopy> = {
     basis: "Base oficial",
     checked: (iso) => `Normas revisadas el ${dayMonthYear(iso, "es")}`,
     otherLanguage: "en castellano",
+    methodHeading: "Cómo hacemos las calculadoras",
+    method:
+      "Cada calculadora aplica la norma general tal como la publica el BOE o el boletín autonómico, cita el artículo o la tabla que usa con la fecha en que se leyó y dice qué casos no cubre. Las reglas que cambian cada año tienen fecha de caducidad en el código: una prueba automática avisa cuando toca volver a leerlas.",
+    methodLink: "El método completo, en la política editorial",
   },
   ca: {
     label: "Calculadores",
@@ -651,6 +659,10 @@ export const HUB_COPY: Record<CalcLocale, HubCopy> = {
     basis: "Base oficial",
     checked: (iso) => `Normes revisades ${caDayArticle(iso)}${dayMonthYear(iso, "ca")}`,
     otherLanguage: "en castellà",
+    methodHeading: "Com fem les calculadores",
+    method:
+      "Cada calculadora aplica la norma general tal com la publica el BOE o el butlletí autonòmic, cita l'article o la taula que fa servir amb la data en què es va llegir i diu quins casos no cobreix. Les regles que canvien cada any tenen data de caducitat al codi: una prova automàtica avisa quan toca tornar-les a llegir.",
+    methodLink: "El mètode complet, a la política editorial",
   },
   en: {
     label: "Calculators",
@@ -663,6 +675,10 @@ export const HUB_COPY: Record<CalcLocale, HubCopy> = {
     basis: "Official basis",
     checked: (iso) => `Rules checked on ${dayMonthYear(iso, "en")}`,
     otherLanguage: "in Spanish",
+    methodHeading: "How we build the calculators",
+    method:
+      "Each calculator applies the general rule as the BOE or the regional bulletin publishes it, cites the article or table it uses with the date it was read, and says which cases it does not cover. Rules that change every year carry an expiry date in the code: an automated test flags when they are due to be read again.",
+    methodLink: "The full method, in our editorial policy",
   },
 };
 

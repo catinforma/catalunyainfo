@@ -46,7 +46,7 @@ export function organizationSchema(locale: Locale = "ca"): Json {
       height: 512,
     },
     ...(SITE.contactEmail ? { email: SITE.contactEmail } : {}),
-    // The publication's own profiles only; none exists yet (site.ts).
+    // The publication's own profiles only (site.ts): the WhatsApp channel.
     ...(SITE.sameAs.length > 0 ? { sameAs: [...SITE.sameAs] } : {}),
     founder: sitePersonNode(locale),
   };

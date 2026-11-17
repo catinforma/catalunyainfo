@@ -10,6 +10,14 @@
 /** The only host that may ever be indexed. */
 export const CANONICAL_HOST = "www.catalunyainfo.com";
 
+/**
+ * The publication's WhatsApp channel (created by the owner on 13 Nov 2026).
+ * Checked 17 Nov 2026 (curl, browser UA): 200, og:title "CatalunyaInfo",
+ * og:description ends "catalunyainfo.com" — the channel names the site back,
+ * which is what makes it a fair `sameAs`. lib/share/channel.ts links it.
+ */
+export const WHATSAPP_CHANNEL = "https://whatsapp.com/channel/0029VbEgw2ZJpe8jQPi18O3O";
+
 export const SITE = {
   name: "CatalunyaInfo",
   /** Canonical production origin. Never a *.vercel.app URL. */
@@ -22,11 +30,12 @@ export const SITE = {
   /**
    * The publication's own public profiles (X, Threads, WhatsApp channel,
    * Telegram, Google News publication page...), listed as the Organization's
-   * `sameAs`. None exists yet (5 Nov 2026): add each URL once the owner has
-   * created the profile. Never the founder's personal profiles, which belong
-   * to his Person node (lib/content/author.ts).
+   * `sameAs`. Only the WhatsApp channel exists (17 Nov 2026): add each other
+   * URL once the owner has created the profile and it names the site back.
+   * Never the founder's personal profiles, which belong to his Person node
+   * (lib/content/author.ts).
    */
-  sameAs: [] as readonly string[],
+  sameAs: [WHATSAPP_CHANNEL] as readonly string[],
 } as const;
 
 /**

@@ -6368,3 +6368,58 @@ strike (17–20 Nov; Ministry air resolution of 13 Nov for Bilbao airport). Madr
 noindexing them or leaving them as records.
 
 **Outcome:** _pending_
+
+## 2026-11-17 — AI-search readiness and trust: complete llms.txt, Organization `sameAs`, methodology on the calculators hub, trust pages describe the real workflow (deploy; groups `editorial-policy`, `about-page`, `corrections-page`)
+
+**Observation.** "huelga renfe": 1,680 impressions 20 Oct–17 Nov on `/es/guias/huelga-trenes-17-noviembre/` at 3.8 (9 clicks),
+plus 277 + 277 + 159 on its `#servicios-minimos`, `#quien-convoca` and `#cercanias` fragments at 10.1 with 0 clicks: the passages
+are shown (AI Overview / jump links) and answered in place. GA4 28 days to 17 Nov: AI Assistant channel 546 users, 666 sessions
+(2.3 %, engaged 49 %). Caddy access logs 14–16 Nov: OAI-SearchBot 4,602 requests (3,087 × 200, 1,399 × 304), GPTBot 1,702
+(1,691 × 200), PerplexityBot 1,667 (1,627 × 200), ChatGPT-User 741, Claude-User 135, Applebot 240, MistralAI-User 67,
+DuckAssistBot 64, meta-webindexer 4,743; the 404s under "ClaudeBot", "Perplexity-User" and "CCBot" are scanners probing `.env`
+files with spoofed agents, not those crawlers. curl with 12 AI/search user agents on 17 Nov: 200 on a guide, `/llms.txt` and the
+about page (Cloudflare lets them through; robots.txt is ours, `*` allows all, no AI group). llms.txt listed only the 100 most
+recently published guides per language (`listEntries` caps a call at 100): 13 of the 102 Spanish guides in the sitemap were
+missing, among them the zona azul/verde guide (3,654 impressions 11–17 Nov), the 2026 work calendar, transport cards and the
+tourist tax; its summary still said "Catalonia" only, and it named no trust page. `SITE.sameAs` was empty although the WhatsApp
+channel exists and names catalunyainfo.com back. The about page and editorial policy said "nothing is published automatically"
+and "everything goes through human review before publication"; the corrections page promised "a second person reviews it". The
+site names one person, its text and code are drafted by AI agents, live data and timed strike switches publish on their own.
+
+**What changed.**
+- `/llms.txt`: every published guide (paged, deduplicated by URL); new summary (Spain-wide strikes, holidays, calculators, live
+  data; every variable figure from the official source with its reading date); two families it lacked (Spain 2027 work calendar
+  es/ca/en; Spain strikes hub); new section "About this site and how we verify" (about, author page, editorial policy, sources,
+  corrections, contact, WhatsApp channel). `lib/seo/llms.ts`, `app/llms.txt/route.ts`; tests in `llms-and-metadata.test.ts`.
+- Organization JSON-LD `sameAs`: the WhatsApp channel only (`WHATSAPP_CHANNEL` in `lib/site.ts`, read by `lib/share/channel.ts`).
+  The founder's profiles stay on his Person node.
+- Calculator `WebApplication` nodes (net salary, self-employed, sick pay, subsidy, paid leave): `publisher` = the Organization @id.
+- Calculators hub (es/ca/en): "Cómo hacemos las calculadoras" section linking the editorial policy.
+- Editorial policy (ca/es/en): new section "Calculadoras: cómo las hacemos y qué no son" (general rule from the BOE or regional
+  bulletin, article and reading date cited, cases not covered; checked against the authority's own algorithm where one exists, e.g.
+  net salary vs the Tax Agency's withholding calculation; yearly rules expire in code and a test fails until re-read; estimate, not
+  advice). AI section rewritten to what is true: AI assistants draft much of the text and code under the founder's rules; AI is never
+  a source; dated facts carry a re-read test; live data updates automatically and is not reviewed each time; the founder sets the
+  rules and answers for the site; generated images labelled. Lead names the calculators. `verifiedAt` 2026-11-17.
+- About (ca/es/en): AI paragraphs to the same effect; lead and "what we do" name the calculators and live data. The author page
+  reuses these words (code-rendered: changes on deploy). `verifiedAt` 2026-11-17.
+- Corrections (ca/es/en): "a second person reviews it" → "we check it again from scratch against the official source and reply in
+  writing with the reason". New publish group `corrections-page`.
+- Test `institutional-pages.test.ts`: no trust page may promise per-page human review, "published automatically" or a second
+  reviewer; about and editorial policy must disclose AI drafting and automatic live data.
+- Facts: SMI 2027 draft table caption said the hearing "is" open after 16 Nov while the lead said "was" (live page); now the same
+  switch as the lead. New `tests/fact-consistency.test.ts` ties the copies of SMI 2026, max/min contribution base 2026, IPREM
+  shares and subsidy amounts (incl. the calculators hub card) to their source modules. No other disagreement found in 18 facts.
+- Titles and descriptions: untouched.
+
+**Prediction.** By 15 Dec: GA4 AI Assistant sessions per 28 days above 666 (same window length); OAI-SearchBot and ChatGPT-User
+fetch at least 5 of the 13 guides llms.txt now adds (access log); "catalunyainfo" brand queries unchanged or up.
+
+**Review 15 Dec.** `snapshot.py audience 28` (AI Assistant row), access-log count of OAI-SearchBot/ChatGPT-User hits on
+`/es/guias/aparcar-barcelona-zona-azul-verde/`, `/es/guias/calendario-laboral-cataluna/`, `/es/guias/tarjetas-transporte-barcelona/`,
+`/es/guias/tasa-turistica-barcelona-cataluna/` (and ca/en twins). No revert rule for the trust wording: it states facts.
+
+**Go-live.** Deploy (llms.txt, JSON-LD, hub, SMI caption, author page). Publish `editorial-policy`, `about-page` and
+`corrections-page` only after the owner has read the new AI wording.
+
+**Outcome:** _pending_

@@ -17,7 +17,7 @@ import { DEFAULT_INPUT, birthPlan, shortLeave, type BirthPlan, type PaidLeaveInp
 import { paidLeavePlaces } from "@/lib/programmatic/paid-leave/places";
 import { BIRTH, FORCE_MAJEURE_DAYS_PER_YEAR, NURSING, PARENTAL, QUOTE, RULES_AS_OF, SHORT_RULES, SOURCES, UNREACHABLE_WORK_DAYS } from "@/lib/programmatic/paid-leave/rules";
 import { absoluteUrl } from "@/lib/site";
-import { breadcrumbSchema, graph } from "@/lib/seo/jsonld";
+import { ORGANIZATION_ID, breadcrumbSchema, graph } from "@/lib/seo/jsonld";
 import { buildMetadata } from "@/lib/seo/metadata";
 
 import { PaidLeaveCalculator } from "./PaidLeaveCalculator";
@@ -327,6 +327,7 @@ export function PaidLeaveRoute({ locale }: { locale: PlLocale }) {
     operatingSystem: "Any",
     inLanguage: locale,
     isAccessibleForFree: true,
+    publisher: { "@id": ORGANIZATION_ID },
     offers: { "@type": "Offer", price: "0", priceCurrency: "EUR" },
     description: meta.description,
   };
