@@ -54,8 +54,22 @@ import type { SpainNotHappening, SpainOpenStrike, SpainStrike } from "./strikes-
  * Estudiantes (20N, 12:00), CESM (newest 13 Nov; strike still postponed),
  * UGT FICA (nothing new on poultry), the Ministry's air list (SAERCO,
  * Groundforce, Outsmart in force to 30 Nov).
+ *
+ * 17 Nov 2026 (~10:30 UTC, the 17N strike day): re-read. New: the doctors'
+ * strike of Sindicato Médicos Unidos (SMU), 08:00 on 16 Nov to 08:00 on 28
+ * Nov, every region's public health service plus INGESA (its notice of 4
+ * Nov, the regional minimum-services orders it publishes, the Generalitat's
+ * order of 13 Nov on Treball's list; marches on 19 Nov at 18:00); ELA's
+ * Bizkaia building-cleaning strike, 17 to 20 Nov (the Ministry's air
+ * resolution of 13 Nov for Bilbao airport); the students' 20N notice to
+ * schools (whole school day). SCFCOM 37 (16 Nov) keeps the 19th and says
+ * Adif's minimum services were set by the Secretary of State and Circular nº
+ * 5 of 13 Nov; the Ministry's rail list still has no Adif resolution (17,
+ * 19) and none for 23 Nov. Unchanged: SEMAF (nº 2026-34, 16 Nov), CCOO rail,
+ * CESM (newest 12 Nov, strike still postponed), the air list (SAERCO,
+ * Groundforce, Outsmart in force to 30 Nov).
  */
-export const STRIKES_SPAIN_AS_OF = "2026-11-16";
+export const STRIKES_SPAIN_AS_OF = "2026-11-17";
 
 /** Printed as the page's "last verified" date. */
 export const STRIKES_SPAIN_VERIFIED = STRIKES_SPAIN_AS_OF;
@@ -101,6 +115,16 @@ export const SPAIN_URLS = {
   poultry: `${FICA}/3831?catid=43`,
   // Students, 20 Nov.
   students: "https://www.sindicatodeestudiantes.net/index.php/noticias/internacional/20n-huelga-estudiantil-europea",
+  studentsNotice: "https://www.sindicatodeestudiantes.net/images/2026/noviembre/comunicacionoficial_20N.pdf",
+  // Doctors (Sindicato Médicos Unidos), 16 to 27 Nov (read 17 Nov 2026).
+  smuNotice: "https://cdn.medicosunidos.es/huelga-2026-16N/Preavisos/_ESTATAL.pdf",
+  smuDocs: "https://medicosunidos.es/documentacion-convocatoria/",
+  smuMarches: "https://medicosunidos.es/manifestaciones/",
+  treballMsList: STRIKE_URLS.treballMs,
+  // Building cleaning in Bizkaia (ELA), 17 to 20 Nov (read 17 Nov 2026).
+  elaResolution: `${CDN}/aereo/huelga-servicios-minimos/2026/54_26-11-17_-_dgac_resolucion_huelga_aspel_sectorial_limpieza_vizcaya_-_ela_vi.pdf`,
+  // Adif, 17 and 19 Nov: SCFCOM 37 (16 Nov 2026).
+  scf37: "https://www.scf.es/com37/",
   // Airports.
   usca: "https://www.usca.es/usca-y-ccoo-convocan-huelga-indefinida-en-saerco-por-recortes-de-plantilla-y-riesgos-para-la-seguridad-operacional/",
   saercoResolution: `${CDN}/aereo/huelga-servicios-minimos/51_26-10-01--resolucion-huelga-saerco_vi.pdf`,
@@ -380,9 +404,9 @@ export const SPAIN_STRIKES: SpainStrike[] = [
       en: `On the 17th, the unions on Adif's company-wide works council (${link(U.ccooRail17, "CCOO, 3 November")}), joined by Renfe's works council (${link(U.alferro80, "ALFERRO, notice 80/2026")}): at the Renfe Group, FeSMC-UGT, CCOO, SF-Intersindical, SEMAF, ALFERRO and SFF-CGT have registered strike calls, according to the Generalitat's order of 12 November (${link(U.treballMs, "the Catalan labour department's list")}). SEMAF also calls out drivers at the other operators (${link(U.semafCuerpo, "SEMAF, 5 November")}). On the 17th and the 19th, the SCF union at Adif (${link(U.scfAdif, "SCF, 6 November")}), which kept both days on 12 November (${link(U.scf35, "notice 35")}). CCOO on 12 November: "la huelga del 17 de noviembre sigue siendo necesaria" (the 17 November strike is still necessary; ${link(U.ccooRail17Still, "its notice")}); SEMAF on the 14th: "Se mantienen los paros convocados para el día 17" (the stoppages called for the 17th stand; ${link(U.semaf33, "notice 2026-33")}).`,
     },
     basis: {
-      ca: `El 17, ${link(U.ministryRenfe17, "la resolució de serveis mínims del Ministeri de Transports del 12 de novembre")}, que cita les convocatòries del Comitè General del Grup Renfe, SEMAF, CCOO, UGT, SFF-CGT, SF-Intersindical i ALFERRO, de 0.00 a 23.59 h. El 19 (Adif) consta al comunicat de l'SCF. El {checked} no hi havia cap resolució per a aquest dia a ${link(U.ministryRail, "la llista del Ministeri")}.`,
-      es: `El 17, ${link(U.ministryRenfe17, "la resolución de servicios mínimos del Ministerio de Transportes del 12 de noviembre")}, que cita las convocatorias del Comité General del Grupo Renfe, SEMAF, CCOO, UGT, SFF-CGT, SF-Intersindical y ALFERRO, de 0.00 a 23.59 h. El 19 (Adif) consta en el comunicado del SCF. El {checked} no había ninguna resolución para ese día en ${link(U.ministryRail, "la lista del Ministerio")}.`,
-      en: `For the 17th, ${link(U.ministryRenfe17, "the Ministry of Transport's minimum-services resolution of 12 November")}, which cites the calls by the Renfe Group's works council, SEMAF, CCOO, UGT, SFF-CGT, SF-Intersindical and ALFERRO, 00:00 to 23:59. The 19th (Adif) rests on SCF's notice. On {checked} there was no resolution for that day on ${link(U.ministryRail, "the Ministry's list")}.`,
+      ca: `El 17, ${link(U.ministryRenfe17, "la resolució de serveis mínims del Ministeri de Transports del 12 de novembre")}, que cita les convocatòries del Comitè General del Grup Renfe, SEMAF, CCOO, UGT, SFF-CGT, SF-Intersindical i ALFERRO, de 0.00 a 23.59 h. El 19 (Adif) consta al comunicat de l'SCF, que el 16 de novembre cridava «Todos a la huelga» (${link(U.scf37, "comunicat 37")}). El {checked} no hi havia cap resolució per a aquest dia a ${link(U.ministryRail, "la llista del Ministeri")}.`,
+      es: `El 17, ${link(U.ministryRenfe17, "la resolución de servicios mínimos del Ministerio de Transportes del 12 de noviembre")}, que cita las convocatorias del Comité General del Grupo Renfe, SEMAF, CCOO, UGT, SFF-CGT, SF-Intersindical y ALFERRO, de 0.00 a 23.59 h. El 19 (Adif) consta en el comunicado del SCF, que el 16 de noviembre llamaba «Todos a la huelga» (${link(U.scf37, "comunicado 37")}). El {checked} no había ninguna resolución para ese día en ${link(U.ministryRail, "la lista del Ministerio")}.`,
+      en: `For the 17th, ${link(U.ministryRenfe17, "the Ministry of Transport's minimum-services resolution of 12 November")}, which cites the calls by the Renfe Group's works council, SEMAF, CCOO, UGT, SFF-CGT, SF-Intersindical and ALFERRO, 00:00 to 23:59. The 19th (Adif) rests on SCF's notice, which on 16 November said "Todos a la huelga" (everyone on strike; ${link(U.scf37, "notice 37")}). On {checked} there was no resolution for that day on ${link(U.ministryRail, "the Ministry's list")}.`,
     },
     minimumServices: {
       status: "published",
@@ -392,9 +416,9 @@ export const SPAIN_STRIKES: SpainStrike[] = [
         en: "Published: Cercanías 75% at peak, AVE 72%, Media Distancia 65%; Adif to be confirmed",
       },
       text: {
-        ca: `Per al 17, ${link(U.ministryRenfe17, "la resolució del Ministeri de Transports del 12 de novembre")} fixa al Grup Renfe: **Cercanías, el 75% del servei habitual en hora punta** (de 6.00 a 9.00, de 13.30 a 15.30 i de 18.30 a 20.30 h; fora de Madrid, la franja del migdia és de 13.30/14.00 a 15.30/16.00 h) **i el 50% la resta del dia**; **Mitja Distància, una mitjana del 65%** (444 de 682 trens); **AVE i Llarga Distància, el 72%** (177 de 246 trens), i mercaderies, el 26%. Renfe ho confirma en ${link(U.renfe17, "el seu avís del 14 de novembre")}. A **Iryo**, el 70% (28 de 40 trens), i a **Ouigo**, el 65,38% (17 de 26), segons les resolucions del 13 de novembre (${link(U.iryo17, "Iryo")}, ${link(U.ouigo17, "Ouigo")}). A **Cercanías de Bilbao i Sant Sebastià** els fixa el Govern Basc: el 50% en hora punta i el 25% la resta del dia (${link(U.euskadi17, "ordre del 13 de novembre")}); a **Rodalies de Catalunya** i els regionals, la Generalitat: el 66% i el 33% (${link(U.treballMs, "llista del Departament d'Empresa i Treball")}). **Adif, el 17 i el 19:** per confirmar. El {checked} encara no hi havia cap resolució a ${link(U.ministryRail, "la llista del Ministeri")}.`,
-        es: `Para el 17, ${link(U.ministryRenfe17, "la resolución del Ministerio de Transportes del 12 de noviembre")} fija en el Grupo Renfe: **Cercanías, el 75% del servicio habitual en hora punta** (de 6.00 a 9.00, de 13.30 a 15.30 y de 18.30 a 20.30 h; fuera de Madrid, la franja de mediodía es de 13.30/14.00 a 15.30/16.00 h) **y el 50% el resto del día**; **Media Distancia, una media del 65%** (444 de 682 trenes); **AVE y Larga Distancia, el 72%** (177 de 246 trenes), y mercancías, el 26%. Renfe lo confirma en ${link(U.renfe17, "su aviso del 14 de noviembre")}. En **Iryo**, el 70% (28 de 40 trenes), y en **Ouigo**, el 65,38% (17 de 26), según las resoluciones del 13 de noviembre (${link(U.iryo17, "Iryo")}, ${link(U.ouigo17, "Ouigo")}). En **Cercanías de Bilbao y San Sebastián** los fija el Gobierno Vasco: el 50% en hora punta y el 25% el resto del día (${link(U.euskadi17, "orden del 13 de noviembre")}); en **Rodalies de Catalunya** y los regionales, la Generalitat: el 66% y el 33% (${link(U.treballMs, "lista del Departament d'Empresa i Treball")}). **Adif, el 17 y el 19:** por confirmar. El {checked} aún no había ninguna resolución en ${link(U.ministryRail, "la lista del Ministerio")}.`,
-        en: `For the 17th, ${link(U.ministryRenfe17, "the Ministry of Transport's resolution of 12 November")} sets at the Renfe Group: **Cercanías, 75% of the usual service at peak times** (06:00 to 09:00, 13:30 to 15:30 and 18:30 to 20:30; outside Madrid the midday band is 13:30/14:00 to 15:30/16:00) **and 50% the rest of the day**; **Media Distancia, 65% on average** (444 of 682 trains); **AVE and long distance, 72%** (177 of 246 trains); freight, 26%. Renfe confirms it in ${link(U.renfe17, "its notice of 14 November")}. **Iryo**, 70% (28 of 40 trains), and **Ouigo**, 65.38% (17 of 26), under the resolutions of 13 November (${link(U.iryo17, "Iryo")}, ${link(U.ouigo17, "Ouigo")}). On **Cercanías Bilbao and San Sebastián** the Basque Government sets them: 50% at peak times and 25% the rest of the day (${link(U.euskadi17, "order of 13 November")}); on **Rodalies de Catalunya** and regional trains, the Generalitat: 66% and 33% (${link(U.treballMs, "the Catalan labour department's list")}). **Adif, 17th and 19th:** to be confirmed. On {checked} there was still no resolution on ${link(U.ministryRail, "the Ministry's list")}.`,
+        ca: `Per al 17, ${link(U.ministryRenfe17, "la resolució del Ministeri de Transports del 12 de novembre")} fixa al Grup Renfe: **Cercanías, el 75% del servei habitual en hora punta** (de 6.00 a 9.00, de 13.30 a 15.30 i de 18.30 a 20.30 h; fora de Madrid, la franja del migdia és de 13.30/14.00 a 15.30/16.00 h) **i el 50% la resta del dia**; **Mitja Distància, una mitjana del 65%** (444 de 682 trens); **AVE i Llarga Distància, el 72%** (177 de 246 trens), i mercaderies, el 26%. Renfe ho confirma en ${link(U.renfe17, "el seu avís del 14 de novembre")}. A **Iryo**, el 70% (28 de 40 trens), i a **Ouigo**, el 65,38% (17 de 26), segons les resolucions del 13 de novembre (${link(U.iryo17, "Iryo")}, ${link(U.ouigo17, "Ouigo")}). A **Cercanías de Bilbao i Sant Sebastià** els fixa el Govern Basc: el 50% en hora punta i el 25% la resta del dia (${link(U.euskadi17, "ordre del 13 de novembre")}); a **Rodalies de Catalunya** i els regionals, la Generalitat: el 66% i el 33% (${link(U.treballMs, "llista del Departament d'Empresa i Treball")}). **Adif, el 17 i el 19:** per confirmar. El {checked} encara no hi havia cap resolució a ${link(U.ministryRail, "la llista del Ministeri")}; l'SCF diu que el personal d'Adif es regeix pels serveis mínims «determinados por la Secretaría de estado de transportes y movilidad sostenible y la Circular de Dirección General nº 5 del 13-11-2026» i que, durant les aturades, la circulació garanteix la seguretat del trànsit i les obres d'emergència (${link(U.scf37, "comunicat 37, 16 de novembre")}).`,
+        es: `Para el 17, ${link(U.ministryRenfe17, "la resolución del Ministerio de Transportes del 12 de noviembre")} fija en el Grupo Renfe: **Cercanías, el 75% del servicio habitual en hora punta** (de 6.00 a 9.00, de 13.30 a 15.30 y de 18.30 a 20.30 h; fuera de Madrid, la franja de mediodía es de 13.30/14.00 a 15.30/16.00 h) **y el 50% el resto del día**; **Media Distancia, una media del 65%** (444 de 682 trenes); **AVE y Larga Distancia, el 72%** (177 de 246 trenes), y mercancías, el 26%. Renfe lo confirma en ${link(U.renfe17, "su aviso del 14 de noviembre")}. En **Iryo**, el 70% (28 de 40 trenes), y en **Ouigo**, el 65,38% (17 de 26), según las resoluciones del 13 de noviembre (${link(U.iryo17, "Iryo")}, ${link(U.ouigo17, "Ouigo")}). En **Cercanías de Bilbao y San Sebastián** los fija el Gobierno Vasco: el 50% en hora punta y el 25% el resto del día (${link(U.euskadi17, "orden del 13 de noviembre")}); en **Rodalies de Catalunya** y los regionales, la Generalitat: el 66% y el 33% (${link(U.treballMs, "lista del Departament d'Empresa i Treball")}). **Adif, el 17 y el 19:** por confirmar. El {checked} aún no había ninguna resolución en ${link(U.ministryRail, "la lista del Ministerio")}; el SCF dice que la plantilla de Adif se rige por los servicios mínimos «determinados por la Secretaría de estado de transportes y movilidad sostenible y la Circular de Dirección General nº 5 del 13-11-2026» y que, durante los paros, la circulación garantiza la seguridad del tráfico y las obras de emergencia (${link(U.scf37, "comunicado 37, 16 de noviembre")}).`,
+        en: `For the 17th, ${link(U.ministryRenfe17, "the Ministry of Transport's resolution of 12 November")} sets at the Renfe Group: **Cercanías, 75% of the usual service at peak times** (06:00 to 09:00, 13:30 to 15:30 and 18:30 to 20:30; outside Madrid the midday band is 13:30/14:00 to 15:30/16:00) **and 50% the rest of the day**; **Media Distancia, 65% on average** (444 of 682 trains); **AVE and long distance, 72%** (177 of 246 trains); freight, 26%. Renfe confirms it in ${link(U.renfe17, "its notice of 14 November")}. **Iryo**, 70% (28 of 40 trains), and **Ouigo**, 65.38% (17 of 26), under the resolutions of 13 November (${link(U.iryo17, "Iryo")}, ${link(U.ouigo17, "Ouigo")}). On **Cercanías Bilbao and San Sebastián** the Basque Government sets them: 50% at peak times and 25% the rest of the day (${link(U.euskadi17, "order of 13 November")}); on **Rodalies de Catalunya** and regional trains, the Generalitat: 66% and 33% (${link(U.treballMs, "the Catalan labour department's list")}). **Adif, 17th and 19th:** to be confirmed. On {checked} there was still no resolution on ${link(U.ministryRail, "the Ministry's list")}; SCF says Adif staff follow the minimum services "determinados por la Secretaría de estado de transportes y movilidad sostenible y la Circular de Dirección General nº 5 del 13-11-2026" (set by the Secretary of State for Transport and Adif's Circular no. 5 of 13 November) and that during the stoppages traffic control keeps rail traffic safe and emergency works going (${link(U.scf37, "notice 37, 16 November")}).`,
       },
     },
     sources: [
@@ -412,6 +436,7 @@ export const SPAIN_STRIKES: SpainStrike[] = [
       { name: "Resolución de servicios mínimos en Ouigo España, 17 de noviembre de 2026", url: U.ouigo17, publisher: MINISTRY },
       { name: "Orden de 13 de noviembre de 2026: servicios mínimos del Grupo Renfe en Euskadi (Cercanías), 17 de noviembre", url: U.euskadi17, publisher: "Gobierno Vasco, Departamento de Economía, Trabajo y Empleo" },
       { name: "Reunión de trabajo con el Ministerio de Transportes; las movilizaciones por la Seguridad continúan (nº 2026-33, 14 de noviembre de 2026)", url: U.semaf33, publisher: "SEMAF" },
+      { name: "SCFCOM 37: Todos a la huelga (16 de noviembre de 2026)", url: U.scf37, publisher: "Sindicato de Circulación Ferroviario (SCF)" },
     ],
   },
   {
@@ -458,6 +483,107 @@ export const SPAIN_STRIKES: SpainStrike[] = [
     ],
   },
   {
+    id: "huelga-medicos-smu-2026-11-16",
+    dates: ["2026-11-16", "2026-11-17", "2026-11-18", "2026-11-19", "2026-11-20", "2026-11-21", "2026-11-22", "2026-11-23", "2026-11-24", "2026-11-25", "2026-11-26", "2026-11-27"],
+    sector: "health",
+    status: "official",
+    catalanEntry: "vaga-metges-smu-2026-11-16",
+    title: {
+      ca: "vaga de metges a la sanitat pública (Sindicato Médicos Unidos)",
+      es: "huelga de médicos en la sanidad pública (Sindicato Médicos Unidos)",
+      en: "doctors' strike in public healthcare (Sindicato Médicos Unidos)",
+    },
+    label: { ca: "metges (SMU)", es: "médicos (SMU)", en: "doctors (SMU)" },
+    scope: {
+      ca: "Els metges, també els residents en formació (MIR), dels centres sanitaris públics dels serveis de salut de totes les comunitats autònomes i dels que gestiona l'INGESA a Ceuta i Melilla.",
+      es: "Los médicos, también los residentes en formación (MIR), de los centros sanitarios públicos de los servicios de salud de todas las comunidades autónomas y de los que gestiona el INGESA en Ceuta y Melilla.",
+      en: "Doctors, residents in training (MIR) included, at the public health centres of every region's health service and those run by INGESA in Ceuta and Melilla.",
+    },
+    hours: {
+      ca: "Des de les 8.00 h del dilluns 16 fins a les 8.00 h del dissabte 28 de novembre (a Canàries, hora local), cada dia: és la primera fase d'una vaga indefinida, amb aturada total excepte els serveis mínims.",
+      es: "Desde las 8.00 h del lunes 16 hasta las 8.00 h del sábado 28 de noviembre (en Canarias, hora local), todos los días: es la primera fase de una huelga indefinida, con cese total de la actividad salvo los servicios mínimos.",
+      en: "From 08:00 on Monday 16 to 08:00 on Saturday 28 November (local time in the Canaries), every day: it is the first phase of an open-ended strike, a full stoppage except for minimum services.",
+    },
+    calledBy: {
+      ca: `El Sindicato Médicos Unidos (SMU), en ${link(U.smuNotice, "el seu preavís de vaga d'àmbit estatal")}, adreçat al Ministeri de Treball, al de Sanitat i als serveis de salut. Convoca també manifestacions el dijous 19 de novembre a les 18.00 h en una vintena de ciutats, entre les quals Madrid, Barcelona, Sevilla, Bilbao i Palma (${link(U.smuMarches, "llista del sindicat")}). És una convocatòria diferent de la de CESM, que continua ajornada.`,
+      es: `El Sindicato Médicos Unidos (SMU), en ${link(U.smuNotice, "su preaviso de huelga de ámbito estatal")}, dirigido al Ministerio de Trabajo, al de Sanidad y a los servicios de salud. Convoca también manifestaciones el jueves 19 de noviembre a las 18.00 h en una veintena de ciudades, entre ellas Madrid, Barcelona, Sevilla, Bilbao y Palma (${link(U.smuMarches, "lista del sindicato")}). Es una convocatoria distinta de la de CESM, que sigue aplazada.`,
+      en: `Sindicato Médicos Unidos (SMU), in ${link(U.smuNotice, "its notice of a nationwide strike")} to the Ministries of Labour and Health and the regional health services. It also calls marches on Thursday 19 November at 18:00 in some twenty cities, Madrid, Barcelona, Seville, Bilbao and Palma among them (${link(U.smuMarches, "the union's list")}). It is a different call from CESM's, which stays postponed.`,
+    },
+    basis: {
+      ca: `Hi ha ordres de serveis mínims: el sindicat publica la de cada comunitat a ${link(U.smuDocs, "la documentació de la convocatòria")}, i a Catalunya l'ordre del Departament d'Empresa i Treball del 13 de novembre és a ${link(U.treballMsList, "la llista oficial de vagues amb serveis mínims")}.`,
+      es: `Hay órdenes de servicios mínimos: el sindicato publica la de cada comunidad en ${link(U.smuDocs, "la documentación de la convocatoria")}, y en Cataluña la orden del Departament d'Empresa i Treball del 13 de noviembre está en ${link(U.treballMsList, "la lista oficial de huelgas con servicios mínimos")}.`,
+      en: `Minimum-services orders are out: the union posts each region's in ${link(U.smuDocs, "its strike documents")}, and in Catalonia the Department of Business and Labour's order of 13 November is on ${link(U.treballMsList, "the official list of strikes with minimum services")}.`,
+    },
+    minimumServices: {
+      status: "published",
+      short: {
+        ca: "Els fixa cada comunitat; a Catalunya, urgències i unitats especials amb normalitat",
+        es: "Los fija cada comunidad; en Cataluña, urgencias y unidades especiales con normalidad",
+        en: "Set by each region; in Catalonia, A&E and special units run normally",
+      },
+      text: {
+        ca: `Els fixa cada servei de salut, amb una ordre pròpia (${link(U.smuDocs, "totes, a la pàgina del sindicat")}). **A Catalunya**, ${link(U.treballMsList, "l'ordre del Departament d'Empresa i Treball del 13 de novembre")} manté amb normalitat les urgències, les unitats especials (cures intensives, unitats coronàries, hemodiàlisi, neonatologia, parts, radioteràpia i quimioteràpia), la cirurgia urgent que no es pot ajornar i l'atenció urgent dels CUAP, els PAC i els PADES; la resta de l'atenció primària, amb el 25% de la plantilla; els altres serveis, com un dia festiu (o amb el 50% on un festiu es treballa amb la plantilla d'un dia feiner), i les donacions de sang, al 50%. El transport sanitari urgent i les emergències mèdiques es mantenen.`,
+        es: `Los fija cada servicio de salud, con una orden propia (${link(U.smuDocs, "todas, en la página del sindicato")}). **En Cataluña**, ${link(U.treballMsList, "la orden del Departament d'Empresa i Treball del 13 de noviembre")} mantiene con normalidad las urgencias, las unidades especiales (cuidados intensivos, unidades coronarias, hemodiálisis, neonatología, partos, radioterapia y quimioterapia), la cirugía urgente que no se puede aplazar y la atención urgente de los CUAP, los PAC y los PADES; el resto de la atención primaria, con el 25% de la plantilla; los demás servicios, como un día festivo (o con el 50% donde un festivo se trabaja con la plantilla de un día laborable), y las donaciones de sangre, al 50%. El transporte sanitario urgente y las emergencias médicas se mantienen.`,
+        en: `Each health service sets them in an order of its own (${link(U.smuDocs, "all of them on the union's page")}). **In Catalonia**, ${link(U.treballMsList, "the Department of Business and Labour's order of 13 November")} keeps A&E, the special units (intensive care, coronary units, haemodialysis, neonatal care, maternity, radiotherapy and chemotherapy), urgent surgery that cannot wait and urgent care at the CUAP, PAC and PADES running normally; the rest of primary care runs with 25% of staff; other services as on a public holiday (or with 50% where a holiday is staffed like a working day), and blood donations at 50%. Urgent patient transport and medical emergencies are kept.`,
+      },
+    },
+    sources: [
+      { name: "Comunicación de huelga de ámbito estatal del personal médico del Sistema Nacional de Salud (preaviso, 4 de noviembre de 2026)", url: U.smuNotice, publisher: "Sindicato Médicos Unidos (SMU)" },
+      { name: "Documentación de la convocatoria: preavisos y órdenes de servicios mínimos por comunidad", url: U.smuDocs, publisher: "Sindicato Médicos Unidos (SMU)" },
+      { name: "Manifestaciones del 19 de noviembre de 2026", url: U.smuMarches, publisher: "Sindicato Médicos Unidos (SMU)" },
+      { name: "Informació de vagues amb serveis mínims (e-Tauler): ordre del 13 de novembre de 2026, assistència sanitària de l'ICS i del SISCAT", url: U.treballMsList, publisher: "Generalitat de Catalunya, Departament d'Empresa i Treball" },
+    ],
+  },
+  {
+    id: "huelga-limpieza-bizkaia-2026-11-17",
+    dates: ["2026-11-17", "2026-11-18", "2026-11-19", "2026-11-20"],
+    sector: "services",
+    status: "official",
+    title: {
+      ca: "vaga de la neteja d'edificis i locals a Biscaia (ELA)",
+      es: "huelga de la limpieza de edificios y locales en Bizkaia (ELA)",
+      en: "building-cleaning strike in Bizkaia (ELA)",
+    },
+    label: { ca: "neteja a Biscaia", es: "limpieza en Bizkaia", en: "cleaning in Bizkaia" },
+    scope: {
+      ca: "Les plantilles de la neteja d'edificis i locals de la província de Biscaia, també la neteja de l'aeroport de Bilbao.",
+      es: "Las plantillas de la limpieza de edificios y locales de la provincia de Bizkaia, también la limpieza del aeropuerto de Bilbao.",
+      en: "Building and premises cleaning staff in the province of Bizkaia, cleaning at Bilbao airport included.",
+    },
+    hours: {
+      ca: "Tota la jornada, del dimarts 17 al divendres 20 de novembre, segons la resolució del Ministeri de Transports.",
+      es: "Toda la jornada, del martes 17 al viernes 20 de noviembre, según la resolución del Ministerio de Transportes.",
+      en: "The whole working day, Tuesday 17 to Friday 20 November, according to the Ministry of Transport's resolution.",
+    },
+    calledBy: {
+      ca: `El sindicat ELA, que va comunicar la vaga al Govern Basc el 12 d'octubre de 2026, segons ${link(U.elaResolution, "la resolució del Ministeri de Transports")}.`,
+      es: `El sindicato ELA, que comunicó la huelga al Gobierno Vasco el 12 de octubre de 2026, según ${link(U.elaResolution, "la resolución del Ministerio de Transportes")}.`,
+      en: `The ELA union, which notified the Basque Government of the strike on 12 October 2026, according to ${link(U.elaResolution, "the Ministry of Transport's resolution")}.`,
+    },
+    basis: {
+      ca: `${link(U.elaResolution, "La resolució de serveis mínims del Ministeri de Transports del 13 de novembre")} per a l'aeroport de Bilbao, a ${link(U.ministryAir, "la seva llista del transport aeri")}.`,
+      es: `${link(U.elaResolution, "La resolución de servicios mínimos del Ministerio de Transportes del 13 de noviembre")} para el aeropuerto de Bilbao, en ${link(U.ministryAir, "su lista del transporte aéreo")}.`,
+      en: `${link(U.elaResolution, "The Ministry of Transport's minimum-services resolution of 13 November")} for Bilbao airport, on ${link(U.ministryAir, "its air-transport list")}.`,
+    },
+    minimumServices: {
+      status: "published",
+      short: {
+        ca: "A l'aeroport de Bilbao, fixats pel Ministeri de Transports",
+        es: "En el aeropuerto de Bilbao, fijados por el Ministerio de Transportes",
+        en: "At Bilbao airport, set by the Ministry of Transport",
+      },
+      text: {
+        ca: `A l'aeroport de Bilbao, ${link(U.elaResolution, "la resolució del Ministeri de Transports del 13 de novembre")} fixa el **50% de la plantilla programada** per als lavabos de les terminals, les dependències tècniques i de control del trànsit aeri i l'exterior de les terminals al costat aire, i el **25%** per a la resta de zones públiques; la neteja dels avions es manté segons el tipus de vol (tots els d'emergència, la majoria dels que van a les illes). És l'única ordre d'aquesta vaga que hem trobat publicada.`,
+        es: `En el aeropuerto de Bilbao, ${link(U.elaResolution, "la resolución del Ministerio de Transportes del 13 de noviembre")} fija el **50% de la plantilla programada** para los aseos de las terminales, las dependencias técnicas y de control del tráfico aéreo y el exterior de las terminales en el lado aire, y el **25%** para el resto de zonas públicas; la limpieza de los aviones se mantiene según el tipo de vuelo (todos los de emergencia, la mayoría de los que van a las islas). Es la única orden de esta huelga que hemos encontrado publicada.`,
+        en: `At Bilbao airport, ${link(U.elaResolution, "the Ministry of Transport's resolution of 13 November")} sets **50% of scheduled staff** for terminal toilets, the technical and air-traffic-control premises and the outside of the terminals airside, and **25%** for the other public areas; aircraft cleaning is kept according to the type of flight (every emergency flight, most flights to the islands). It is the only order for this strike we found published.`,
+      },
+    },
+    sources: [
+      { name: "Resolución de servicios mínimos en el transporte aéreo durante la huelga sectorial de limpieza de edificios y locales en Bizkaia convocada por ELA (13 de noviembre de 2026)", url: U.elaResolution, publisher: MINISTRY },
+      SRC.ministryAir,
+    ],
+  },
+  {
     id: "huelga-estudiantil-2026-11-20",
     dates: ["2026-11-20"],
     sector: "education",
@@ -469,14 +595,14 @@ export const SPAIN_STRIKES: SpainStrike[] = [
     },
     label: { ca: "vaga estudiantil", es: "huelga estudiantil", en: "student strike" },
     scope: {
-      ca: "Estudiants. No és una vaga laboral.",
-      es: "Estudiantes. No es una huelga laboral.",
-      en: "Students. It is not a labour strike.",
+      ca: "Estudiants, des de 3r d'ESO. No és una vaga laboral: els professors i els centres no hi estan convocats.",
+      es: "Estudiantes, desde 3.º de ESO. No es una huelga laboral: el profesorado y los centros no están convocados.",
+      en: "Students, from the third year of secondary school (ESO). It is not a labour strike: teachers and schools are not called out.",
     },
     hours: {
-      ca: "Mobilitzacions a les 12 h, segons la convocatòria.",
-      es: "Movilizaciones a las 12 h, según la convocatoria.",
-      en: "Demonstrations at 12:00, according to the call.",
+      ca: `Tota la jornada lectiva, de matí i de tarda, segons ${link(U.studentsNotice, "la comunicació que el Sindicato de Estudiantes fa arribar a les direccions dels centres")}; mobilitzacions a les 12 h.`,
+      es: `Toda la jornada lectiva, también la de la tarde, según ${link(U.studentsNotice, "la comunicación que el Sindicato de Estudiantes hace llegar a las direcciones de los centros")}; movilizaciones a las 12 h.`,
+      en: `The whole school day, morning and afternoon, according to ${link(U.studentsNotice, "the notice Sindicato de Estudiantes hands to school heads")}; demonstrations at 12:00.`,
     },
     calledBy: {
       ca: `El Sindicato de Estudiantes, amb organitzacions estudiantils d'altres països europeus, a ${link(U.students, "la seva convocatòria del 30 d'octubre")}.`,
@@ -497,7 +623,10 @@ export const SPAIN_STRIKES: SpainStrike[] = [
         en: "A student organisation calls it and it is addressed to students: it is not a labour strike.",
       },
     },
-    sources: [{ name: "20N: huelga estudiantil europea (30 de octubre de 2026)", url: U.students, publisher: "Sindicato de Estudiantes" }],
+    sources: [
+      { name: "20N: huelga estudiantil europea (30 de octubre de 2026)", url: U.students, publisher: "Sindicato de Estudiantes" },
+      { name: "Comunicación oficial a los equipos directivos: huelga de estudiantes del viernes 20 de noviembre de 2026", url: U.studentsNotice, publisher: "Sindicato de Estudiantes" },
+    ],
   },
 ];
 

@@ -3,6 +3,7 @@ import type { Locale } from "@/lib/i18n/config";
 
 import {
   B2_PATHS,
+  B2_TITLES,
   b2Related,
   b2link,
   faq,
@@ -470,11 +471,20 @@ export function buildRail17nBody(locale: Locale, asOf: string = STRIKES_AS_OF): 
     ...paras(t.networksIntro(RENFE_CERCANIAS)),
     table(t.caption, [...t.headers], rows, t.networksNote),
     ...paras(t.rodaliesGuide(renfeGuide)),
-    ...(phase === "after" ? [] : [heading(2, t.day19Heading, t.day19Id), ...paras(t.day19(U.scfAdif, U.ministryRail, dateYear(STRIKES_SPAIN_AS_OF, locale), adifPending))]),
+    ...(phase === "after"
+      ? []
+      : [
+          heading(2, t.day19Heading, t.day19Id),
+          ...paras(t.day19(U.scfAdif, U.ministryRail, dateYear(STRIKES_SPAIN_AS_OF, locale), adifPending), b2link("strike19n", locale, B2_TITLES.strike19n[locale])),
+        ]),
     heading(2, t.ticketsHeading),
     list(...t.tickets),
     heading(2, next ? t.next23Heading : t.nextHeading, t.nextId),
-    list(...(next ? [t.next23(next.title[locale], next.scope[locale]), t.next23Ms(lowerFirst(next.minimumServices.short[locale]))] : []), ...t.nextLinks(locale)),
+    list(
+      ...(next ? [t.next23(next.title[locale], next.scope[locale]), t.next23Ms(lowerFirst(next.minimumServices.short[locale]))] : []),
+      ...t.nextLinks(locale),
+      b2link("strike20n", locale, B2_TITLES.strike20n[locale]),
+    ),
     faq([...t.faq(stateText, rodaliesText, today, msPending), ...(next ? [{ question: t.q23, answer: t.a23(next.scope[locale], next.minimumServices.short[locale]) }] : [])]),
     ...paras(verifiedLine(locale, RAIL_17N_VERIFIED)),
     ...b2Related(["strikeRenfe", "strikesSpain", "strikes"], locale),

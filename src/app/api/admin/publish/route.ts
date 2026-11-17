@@ -59,6 +59,7 @@ import { STRIKE_EDUCATION_GUIDE, STRIKE_RENFE_GUIDE } from "@/lib/content/batch0
 import { STRIKE_11N_CITY_ARTICLES } from "@/lib/content/batch02/strike-11n-cities";
 import { STRIKES_SPAIN_GUIDE } from "@/lib/content/batch02/strikes-spain";
 import { RAIL_17N_GUIDE } from "@/lib/content/batch02/strike-rail-17n";
+import { STRIKE_19N_GUIDE, STRIKE_20N_GUIDE } from "@/lib/content/batch02/strike-days-1920n";
 import { STRIKE_11N_SPAIN } from "@/lib/content/batch02/strike-11n-spain";
 import { PAY_DATES } from "@/lib/content/batch02/pay-dates";
 import { SHOPS_SPAIN_DECEMBER } from "@/lib/content/batch02/shops-spain-december";
@@ -257,6 +258,9 @@ export async function POST(request: Request) {
         await publishB2Article(STRIKES_SPAIN_GUIDE),
         // 13 Nov 2026: the 17 Nov rail strike across Spain, built from the same entries.
         await publishB2Article(RAIL_17N_GUIDE),
+        // 17 Nov 2026: "¿Hay huelga el jueves 19 / el viernes 20?", built from the same entries.
+        await publishB2Article(STRIKE_19N_GUIDE),
+        await publishB2Article(STRIKE_20N_GUIDE),
       );
     }
     if (wants("strike-renfe")) published.push(await publishB2Article(STRIKE_RENFE_GUIDE));
@@ -277,7 +281,10 @@ export async function POST(request: Request) {
     // Catalan strikes hub (one sentence linking to it, in each language) and
     // the 11N page (one sentence in its Spanish callout) go out once with
     // `huelgas-espana-links`.
-    if (wants("huelgas-espana")) published.push(await publishB2Article(STRIKES_SPAIN_GUIDE));
+    // 17 Nov 2026: the 19 and 20 Nov day pages read the same entries and the hub links them: they go out with it.
+    if (wants("huelgas-espana")) published.push(await publishB2Article(STRIKES_SPAIN_GUIDE), await publishB2Article(STRIKE_19N_GUIDE), await publishB2Article(STRIKE_20N_GUIDE));
+    // 17 Nov 2026: the two day pages on their own.
+    if (wants("huelga-19-20n")) published.push(await publishB2Article(STRIKE_19N_GUIDE), await publishB2Article(STRIKE_20N_GUIDE));
     if (wants("huelgas-espana-links")) published.push(await publishB2Article(STRIKES_GUIDE), await publishB2Article(STRIKE_11N));
     // 6 Nov 2026: the 11N general strike city by city (Madrid, Valencia,
     // Sevilla…), rendered from strike-11n-cities-data.ts; in Catalan and

@@ -6338,4 +6338,33 @@ hub first, "FGC" a strike page, "monistrol de montserrat" the Christmas lottery,
 **Go-live.** Deploy first (new routes, search, the guide's module). Then publish `pont-desembre`, `carnaval`,
 `setmana-santa-2027` and `mercats-pages`. IndexNow for the 16 unlisted town URLs, Tona's two and the 3 guide URLs.
 
+## 2026-11-17 — New pages: "¿Hay huelga el jueves 19 / el viernes 20 de noviembre?", es + ca + en; SMU doctors' strike and Bizkaia cleaning strike added to both hubs (deploy; groups `huelgas-espana`, `strikes`, `huelga-19-20n`)
+
+**Observation.** GSC 14–16 Nov: "huelga 20 noviembre 2026" 877 impressions at 9.6 (0.5 % CTR), "el viernes hay huelga" 259 at 8.9,
+"este viernes hay huelga" 91, "huelga renfe 19 noviembre" 491 at 8.4, "huelga 19 noviembre 2026" 436 at 6.6, all landing on
+`/es/guias/huelgas-espana/`, whose first screen is the whole week. Sources re-read on 17 Nov (~10:30 UTC) found two strikes the
+hubs did not list: the Sindicato Médicos Unidos doctors' strike (08:00 16 Nov – 08:00 28 Nov, every region's public health service +
+INGESA; preaviso of 4 Nov; Generalitat order of 13 Nov; marches on 19 Nov 18:00 in 20 cities) and ELA's Bizkaia building-cleaning
+strike (17–20 Nov; Ministry air resolution of 13 Nov for Bilbao airport). Madrid's state schools are on an open-ended strike since
+14 Oct (CCOO/UGT, CSIF; CSIF stoppages 9–11 h and 17–19 h on 20 Nov).
+
+**What changed.**
+- New `/es/guias/huelga-19-noviembre/`, `/ca/guies/vaga-19-novembre/`, `/en/guides/spain-strike-19-november/` and
+  `/es/guias/huelga-20-noviembre/`, `/ca/guies/vaga-20-novembre/`, `/en/guides/spain-strike-20-november/`
+  (`strike-days-1920n.ts`). First line answers "¿Hay huelga el jueves 19 / viernes 20?" with who, where, hours and minimum
+  services; 19: no Renfe call (Adif SCF only), SMU marches table; 20: students (whole school day, from 3.º ESO), "¿hay clase?".
+  Tense from `STRIKES_SPAIN_AS_OF` (before / "Hoy" / past).
+- Spain hub: new entries `huelga-medicos-smu-2026-11-16`, `huelga-limpieza-bizkaia-2026-11-17`; the student entry now says the
+  whole school day; "Día a día" line under the week table links both day pages (until their day passes); the doctors FAQ starts
+  with the SMU strike. Title and description code untouched (the description lists the week's labels, so it changes with the data).
+- Catalan hub: new entry `vaga-metges-smu-2026-11-16`; the paragraph under the answer links the day pages; ranges of 3+ days print
+  as "des del … fins al …". 17N page: links both day pages.
+- `STRIKES_AS_OF` / `STRIKES_SPAIN_AS_OF` 2026-11-17 with VERIFIED = AS_OF again (the 17N timer branch is merged).
+
+**Prediction.** By 23 Nov (`snapshot.py page huelga-19-noviembre 5`, `huelga-20-noviembre 5`): the day pages rank ≤ 6 for
+"huelga 19 noviembre" / "huelga 20 noviembre 2026" with CTR ≥ 3 %; the hub's CTR on those queries rises above 1 %.
+
+**Review 23 Nov.** After the 20th the pages switch to past tense by themselves only when the as-of moves; past 1 Dec, consider
+noindexing them or leaving them as records.
+
 **Outcome:** _pending_

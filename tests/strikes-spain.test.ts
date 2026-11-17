@@ -90,7 +90,8 @@ const PRESS_HOSTS =
   /(^|\.)(elpais|elmundo|abc|larazon|lavanguardia|elperiodico|eldiario|elconfidencial|publico|20minutos|europapress|efe|rtve|cadenaser|ondacero|cope|antena3|telecinco|lasexta|huffingtonpost|que|cronista|elespanol|vozpopuli|libertaddigital|niusdiario|newtral|ara|naciodigital|elnacional|lavozdegalicia|heraldo|diariodesevilla|ideal|lasprovincias|levante-emv|elcorreo|diariovasco|lne|elcomercio|eldebate|okdiario|infobae|bolsamania|expansion|cincodias|eleconomista|hosteltur|alicanteplaza|ondavasca|democrata|diaridetarragona|diariodeleon|vivirediciones)\.(es|com|cat|net|info)$/;
 
 /** Hosts whose pages are an official record: the state gazette and the Ministry of Transport. */
-const OFFICIAL_HOSTS = /(^|\.)(boe\.es|transportes\.gob\.es)$/;
+// 17 Nov 2026: and the Generalitat (treball.gencat.cat lists its minimum-services orders; the regional doctors' strike has no BOE or Ministry record).
+const OFFICIAL_HOSTS = /(^|\.)(boe\.es|transportes\.gob\.es|gencat\.cat)$/;
 
 const texts = (value: L | undefined) => (value ? LOCALES.map((locale) => value[locale]) : []);
 const strikeTexts = (strike: SpainStrike) => [strike.scope, strike.hours, strike.calledBy, strike.basis, strike.minimumServices.text].flatMap(texts);
@@ -558,7 +559,8 @@ test("the Catalan strikes hub links the calendar in each language; the 11N page 
 test("the publish route: huelgas-espana (three languages), huelgas-espana-links, and the strikes groups republish the calendar", () => {
   const route = readFileSync(new URL("../src/app/api/admin/publish/route.ts", import.meta.url), "utf8");
   assert.match(route, /import \{ STRIKES_SPAIN_GUIDE \} from "@\/lib\/content\/batch02\/strikes-spain";/);
-  assert.match(route, /wants\("huelgas-espana"\)\) published\.push\(await publishB2Article\(STRIKES_SPAIN_GUIDE\)\);/);
+  // 17 Nov 2026: the 19 and 20 Nov day pages go out with the calendar.
+  assert.match(route, /wants\("huelgas-espana"\)\) published\.push\(await publishB2Article\(STRIKES_SPAIN_GUIDE\)(, await publishB2Article\(STRIKE_(19|20)N_GUIDE\))*\);/);
   assert.match(route, /wants\("huelgas-espana-links"\)\) published\.push\(await publishB2Article\(STRIKES_GUIDE\), await publishB2Article\(STRIKE_11N\)\);/);
   assert.doesNotMatch(route, /publishB2SpanishArticle\(STRIKES_SPAIN_GUIDE\)/, "the calendar has three editions");
   const strikes = route.slice(route.indexOf('if (wants("strikes"))'), route.indexOf('if (wants("strike-renfe"))'));

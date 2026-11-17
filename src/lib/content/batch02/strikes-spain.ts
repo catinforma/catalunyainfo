@@ -6,7 +6,7 @@ import { dateYear, dayDate, range, span } from "./festive";
 import { B2_PATHS, B2_TITLES, RELATED_HEADING, b2link, callout, faq, lead, list, paras, table, verifiedLine, type B2Article, type B2Key, type B2Source } from "./shared";
 import { CITY_HERO } from "./strike-11n-cities";
 import { STRIKE_11N_SPAIN } from "./strike-11n-spain";
-import { STRIKES, andList, isUpcoming as isCatalanUpcoming, strikeDays as catalanDays, type Strike } from "./strikes";
+import { STRIKES, andList, isUpcoming as isCatalanUpcoming, strikeDayPagesLine, strikeDays as catalanDays, type Strike } from "./strikes";
 import {
   SPAIN_FRAMEWORK_SOURCES,
   SPAIN_NOT_HAPPENING,
@@ -383,6 +383,8 @@ interface Wording {
   aPay: string;
   qDoctors: string;
   aDoctors: (text: string, checked: string) => string;
+  /** 17 Nov 2026: a dated doctors' strike is listed (SMU): the answer starts with it, CESM's postponed call follows. */
+  aDoctorsDated: (items: string, other: string, checked: string) => string;
   inCatalonia: (items: string) => string;
 }
 
@@ -457,6 +459,7 @@ const T: Record<Locale, Wording> = {
     aPay: "No. Segons l'article 6 del Reial decret llei 17/1977, durant la vaga el contracte de treball queda en suspens i el treballador no té dret al salari d'aquest temps. El mateix article diu que fer vaga no extingeix la relació laboral ni pot comportar cap sanció, tret que el treballador cometi una falta laboral durant la vaga.",
     qDoctors: "Hi ha vaga de metges a tot Espanya?",
     aDoctors: (text, checked) => `Sense data, segons les fonts revisades (${checked}). ${text}`,
+    aDoctorsDated: (items, other, checked) => `Sí, segons les fonts revisades (${checked}): ${items} A part d'aquesta, ${other.charAt(0).toLowerCase()}${other.slice(1)}`,
     inCatalonia: (items) => ` A Catalunya hi ha una convocatòria pròpia: ${items}.`,
   },
   es: {
@@ -526,6 +529,7 @@ const T: Record<Locale, Wording> = {
     aPay: "No. Según el artículo 6 del Real Decreto-ley 17/1977, durante la huelga el contrato de trabajo queda en suspenso y el trabajador no tiene derecho al salario de ese tiempo. El mismo artículo dice que ejercer el derecho de huelga no extingue la relación de trabajo ni puede dar lugar a sanción, salvo que el trabajador cometa una falta laboral durante la huelga.",
     qDoctors: "¿Hay huelga de médicos en toda España?",
     aDoctors: (text, checked) => `Sin fecha, según las fuentes revisadas (${checked}). ${text}`,
+    aDoctorsDated: (items, other, checked) => `Sí, según las fuentes revisadas (${checked}): ${items} Aparte, ${other.charAt(0).toLowerCase()}${other.slice(1)}`,
     inCatalonia: (items) => ` En Cataluña hay una convocatoria propia: ${items}.`,
   },
   en: {
@@ -595,6 +599,7 @@ const T: Record<Locale, Wording> = {
     aPay: "No. Under article 6 of Royal Decree-law 17/1977, the employment contract is suspended during the strike and the worker has no right to pay for that time. The same article says that going on strike does not end the employment relationship and cannot lead to any sanction, unless the worker commits a labour offence during the strike.",
     qDoctors: "Is there a doctors' strike across Spain?",
     aDoctors: (text, checked) => `Not with a date, according to the sources checked (${checked}). ${text}`,
+    aDoctorsDated: (items, other, checked) => `Yes, according to the sources checked (${checked}): ${items} Separately, ${other.charAt(0).toLowerCase()}${other.slice(1)}`,
     inCatalonia: (items) => ` Catalonia has a call of its own: ${items}.`,
   },
 };
@@ -697,6 +702,9 @@ export function buildStrikesSpainBody(locale: Locale, asOf: string = STRIKES_SPA
   /* This week, day by day. */
   blocks.push(heading(2, t.weekHeading(when), t.weekId));
   blocks.push(table(t.weekCaption(when), t.dayHeaders, weekRows(locale, asOf, strikes), t.weekNote(checked, open.length > 0)));
+  // 17 Nov 2026: the one-day pages for the 19th and the 20th (strike-days-1920n.ts), while their day is to come.
+  const dayPages = strikeDayPagesLine(locale, asOf).trim();
+  if (dayPages) blocks.push(...paras(dayPages));
 
   /* Every dated strike. */
   if (listed.length > 0) {
@@ -777,6 +785,7 @@ export function buildStrikesSpainBody(locale: Locale, asOf: string = STRIKES_SPA
   const rail = listed.filter((strike) => strike.sector === "rail" || strike.sector === "general");
   const doctors = notHappening.find((item) => item.id === DOCTORS_ENTRY);
   const catalanHealth = catalan.filter((strike) => strike.scope === "health");
+  const health = listed.filter((strike) => strike.sector === "health");
   const items: { question: string; answer: string }[] = [
     {
       question: t.qToday,
@@ -820,7 +829,11 @@ export function buildStrikesSpainBody(locale: Locale, asOf: string = STRIKES_SPA
       ? [
           {
             question: t.qDoctors,
-            answer: `${t.aDoctors(text(doctors.text), checked)}${
+            answer: `${
+              health.length > 0
+                ? t.aDoctorsDated(health.map((strike) => `${cap(spainDays(strike.dates, locale))}, ${strike.title[locale]}. ${text(strike.scope)}`).join(" "), text(doctors.text), checked)
+                : t.aDoctors(text(doctors.text), checked)
+            }${
               catalanHealth.length > 0 ? t.inCatalonia(catalanHealth.map((strike) => `${strike.title[locale]}, ${catalanDays(strike, locale)}`).join("; ")) : ""
             }`,
           },
