@@ -55,6 +55,7 @@ import { GUIDES } from "@/lib/programmatic/holidays/links";
 import { DATE_PAGES, DATE_PAGE_RANGE, datePath, hubPath as holidaysHub } from "@/lib/programmatic/holidays/paths";
 import { pvpcPath } from "@/lib/programmatic/pvpc/paths";
 import { butaneTranslations } from "@/lib/programmatic/butane/paths";
+import { warningsTranslations } from "@/lib/programmatic/warnings/paths";
 import { RESERVOIR_DATA } from "@/lib/programmatic/reservoirs/data";
 import { reservoirHubPath } from "@/lib/programmatic/reservoirs/paths";
 import { lineIds } from "@/lib/programmatic/rodalies/pages";
@@ -283,6 +284,11 @@ export function liveTools(): LiveTool[] {
       name: "Strikes in Spain: calendar and minimum services",
       hubs: { es: b2href("strikesSpain", "es"), ca: b2href("strikesSpain", "ca"), en: b2href("strikesSpain", "en") },
       description: "the dated strikes called across Spain, this week day by day and a calendar of the rest: who calls each one, its status, and the minimum services with the official resolution that sets them; the open-ended airport strikes, and what was postponed or called off, listed apart.",
+    },
+    {
+      name: "Official warnings in Catalonia now",
+      hubs: warningsTranslations(),
+      description: "AEMET Meteoalerta weather warnings in force and coming up for each Catalan zone (level, phenomenon, start and end), Protecció Civil plans in pre-alert, alert or emergency, and Servei Català de Trànsit road incidents and closures, read from the three official open feeds every five minutes with the time of each reading.",
     },
     {
       name: "Rodalies live service notices",

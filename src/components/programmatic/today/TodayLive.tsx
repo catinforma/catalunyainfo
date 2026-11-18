@@ -22,6 +22,10 @@ import { liveLabels } from "@/lib/programmatic/rodalies/labels";
 import { ALERTS_ENDPOINT, liveView, parsePayload as parseAlerts } from "@/lib/programmatic/rodalies/live";
 import type { AlertsPayload, LineId } from "@/lib/programmatic/rodalies/types";
 import { TODAY_LABELS } from "@/lib/programmatic/today/labels";
+import { BRIEF_MAX_AGE_MS, parseBrief, type WarningsBrief } from "@/lib/programmatic/warnings/brief";
+import { LEVEL_NAMES, levelRank, phaseName, phenomenonName } from "@/lib/programmatic/warnings/names";
+import { WARNINGS_ENDPOINT } from "@/lib/programmatic/warnings/paths";
+import type { WarningLevel } from "@/lib/programmatic/warnings/types";
 import {
   FUEL_ENDPOINT,
   fill,
@@ -370,6 +374,96 @@ export function RodaliesToday({
         </p>
       ) : null}
       <p className="ci-brief-note">{sourceLine}.</p>
+    </div>
+  );
+}
+
+/* -------------------------------------------------------------------------- */
+/* Official warnings (AEMET, Protecció Civil, SCT)                            */
+/* -------------------------------------------------------------------------- */
+
+const EN_MONTH_SHORT = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+/** "12:35", or "dc. 19/11 00:00" / "Thu 19 Nov 00:00" with `withDay`, in Madrid time. */
+function madridClock(iso: string, locale: TodayLocale, withDay = false): string {
+  const parts = new Intl.DateTimeFormat(locale === "en" ? "en-GB" : `${locale}-ES`, {
+    timeZone: "Europe/Madrid",
+    weekday: "short",
+    day: "2-digit",
+    month: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    hourCycle: "h23",
+  }).formatToParts(new Date(Date.parse(iso)));
+  const get = (type: Intl.DateTimeFormatPartTypes) => parts.find((p) => p.type === type)?.value ?? "";
+  const time = `${get("hour")}:${get("minute")}`;
+  if (!withDay) return time;
+  if (locale === "en") return `${get("weekday")} ${Number(get("day"))} ${EN_MONTH_SHORT[Number(get("month")) - 1] ?? ""} ${time}`;
+  return `${get("weekday")} ${get("day")}/${get("month")} ${time}`;
+}
+
+function topLevel(levels: WarningLevel[]): WarningLevel | null {
+  return levels.reduce<WarningLevel | null>((top, level) => (!top || levelRank(level) > levelRank(top) ? level : top), null);
+}
+
+export function WarningsToday({ locale, children }: { locale: TodayLocale; children: ReactNode }) {
+  const state = useEndpoint<WarningsBrief>(WARNINGS_ENDPOINT, parseBrief);
+  const t = TODAY_LABELS[locale].warnings;
+  if (state.kind === "idle") return <>{children}</>;
+  if (state.kind === "loading") return <Loading text={t.loading} />;
+  const brief = state.value;
+  const now = state.now.getTime();
+  if (!brief) return <Answer tone="warn">{t.failed}</Answer>;
+  // A stuck cache never passes for the current state.
+  if (now - Date.parse(brief.readAt) > BRIEF_MAX_AGE_MS) return <Answer tone="warn">{t.stale}</Answer>;
+
+  const count = (n: number) => (n === 1 ? t.one : fill(t.many, { n }));
+  const join = (items: string[]) => (items.length <= 1 ? items.join("") : `${items.slice(0, -1).join(", ")}${t.and}${items.at(-1)}`);
+  const missing: string[] = [];
+
+  let answer: ReactNode = null;
+  let tone: "yes" | "no" = "no";
+  let upcomingLine: string | null = null;
+  if (brief.weather) {
+    const open = brief.weather.warnings.filter((w) => Date.parse(w.e) > now);
+    const inForce = open.filter((w) => Date.parse(w.o) <= now);
+    const upcoming = open.filter((w) => Date.parse(w.o) > now).sort((a, b) => Date.parse(a.o) - Date.parse(b.o));
+    const top = topLevel(inForce.map((w) => w.l));
+    if (top) {
+      const names = [...new Map(inForce.map((w) => [w.p, w.pe])).entries()].map(([code, es]) => phenomenonName(code, es, locale).toLocaleLowerCase(locale));
+      answer = fill(t.inForce, { n: count(inForce.length), level: LEVEL_NAMES[locale][top], list: join(names) });
+      tone = "yes";
+    } else answer = t.inForceNone;
+    const next = upcoming[0];
+    const upTop = topLevel(upcoming.map((w) => w.l));
+    if (next && upTop) upcomingLine = fill(t.upcoming, { n: count(upcoming.length), from: madridClock(next.o, locale, true), level: LEVEL_NAMES[locale][upTop] });
+  } else missing.push(t.sources.weather);
+
+  let civilLine: string | null = null;
+  if (brief.civil) {
+    civilLine =
+      brief.civil.plans.length === 0
+        ? t.civilNone
+        : fill(t.civilSome, { list: join(brief.civil.plans.map((p) => `${p.acronym} (${phaseName(p.phase, locale).toLocaleLowerCase(locale)})`)) });
+  } else missing.push(t.sources.civil);
+
+  const roadsLine = brief.roads ? fill(t.roads, { traffic: brief.roads.traffic, closures: brief.roads.closures }) : null;
+  if (!brief.roads) missing.push(t.sources.roads);
+
+  return (
+    <div aria-live="polite">
+      {answer ? <Answer tone={tone}>{answer}</Answer> : null}
+      {upcomingLine ? <p className="ci-brief-line">{upcomingLine}</p> : null}
+      {civilLine ? <p className="ci-brief-line">{civilLine}</p> : null}
+      {roadsLine ? <p className="ci-brief-line">{roadsLine}</p> : null}
+      {missing.map((source) => (
+        <p key={source} className="ci-brief-line">
+          {fill(t.missing, { source })}
+        </p>
+      ))}
+      <p className="ci-brief-note">
+        <time dateTime={brief.readAt}>{fill(t.note, { time: madridClock(brief.readAt, locale) })}</time>
+      </p>
     </div>
   );
 }

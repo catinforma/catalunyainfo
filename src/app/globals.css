@@ -2309,3 +2309,23 @@
 .ci-pvpc-table tr.ci-pvpc-current td, .ci-pvpc-table tr.ci-pvpc-current th { background: var(--color-sea-wash); font-weight: 600; }
 .ci-pvpc-tag { display: inline-block; margin-left: 0.4rem; font-size: 0.72rem; font-weight: 600; color: var(--color-ink-soft); }
 .ci-pvpc-answer { border-left: 3px solid var(--color-sea); padding-left: 0.9rem; }
+
+/* Warnings in force (/ca/avisos/, /es/avisos/, /en/warnings/): AEMET level chip.
+   The colour is a swatch next to the level's name, never the only signal. */
+.ci-warn-level { display: inline-flex; align-items: center; gap: 0.4rem; font-weight: 600; white-space: nowrap; }
+.ci-warn-level::before {
+  content: "";
+  width: 0.8rem;
+  height: 0.8rem;
+  border-radius: 2px;
+  border: 1px solid var(--color-rule-strong);
+  background: var(--ci-warn-swatch, transparent);
+}
+.ci-warn-level[data-level="yellow"] { --ci-warn-swatch: #ffd400; }
+.ci-warn-level[data-level="orange"] { --ci-warn-swatch: #f28c00; }
+.ci-warn-level[data-level="red"] { --ci-warn-swatch: #d7000f; }
+.ci-warn-note { margin-top: 0.75rem; }
+.ci-warn-note.is-warn { color: var(--color-ink-soft); font-weight: 500; }
+.ci-warn-source { margin-top: 0.75rem; font-size: 0.85rem; color: var(--color-muted); }
+.ci-warn-details { margin-top: 0.75rem; }
+.ci-warn-details > summary { cursor: pointer; font-weight: 600; }

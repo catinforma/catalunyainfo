@@ -26,6 +26,8 @@ import { LEVELS_ENDPOINT } from "../src/lib/programmatic/reservoirs/live.ts";
 import { rodaliesFamilyPaths } from "../src/lib/programmatic/rodalies/pages.ts";
 import type { CompactAlert } from "../src/lib/programmatic/rodalies/types.ts";
 import { weekendFamilyPaths } from "../src/lib/programmatic/weekend/sitemap.ts";
+import { warningsFamilyPaths } from "../src/lib/programmatic/warnings/page.ts";
+import { WARNINGS_ENDPOINT } from "../src/lib/programmatic/warnings/paths.ts";
 import {
   DESCRIPTION_LIMIT,
   TITLE_LIMIT,
@@ -501,6 +503,7 @@ test("every internal link resolves to a real page (family routes or the path its
     ...rodaliesFamilyPaths().map((p) => p.path),
     ...weekendFamilyPaths().map((p) => p.path),
     ...fuelFamilyPaths().map((p) => p.path),
+    ...warningsFamilyPaths().map((p) => p.path),
   ]);
   for (const locale of LOCALES) {
     for (const meta of [STRIKES_META, STRIKE_11N_META, DECEMBER_BRIDGE_META]) known.add(`/${locale}/${meta[locale].path}/`);
@@ -526,6 +529,7 @@ test("every internal link resolves to a real page (family routes or the path its
       l.weekend.hub,
       l.weekend.bridge,
       l.snow.page,
+      l.warnings.page,
       ...l.weekend.zones.map((z) => z.href),
       ...Object.values(data.datePages).map((p) => p.href),
       ...Object.values(data.local).flatMap((places) => places.map((p) => p.h)),
@@ -542,12 +546,13 @@ test("every internal link resolves to a real page (family routes or the path its
       assert.equal(l.holidays.hub, null);
     }
     assert.ok(l.rodalies.official.startsWith("https://rodalies.gencat.cat/"));
+    assert.ok(l.warnings.aemet.startsWith("https://www.aemet.es/"));
     for (const source of sources(locale)) assert.match(source.url, /^https:\/\//);
   }
 });
 
 test("the live items read the existing CDN-cached route handlers only", () => {
-  for (const endpoint of [ALERTS_ENDPOINT, LEVELS_ENDPOINT, FUEL_ENDPOINT]) {
+  for (const endpoint of [ALERTS_ENDPOINT, LEVELS_ENDPOINT, FUEL_ENDPOINT, WARNINGS_ENDPOINT]) {
     const route = join(ROOT, "src/app", endpoint.replace(/\/$/, ""), "route.ts");
     assert.ok(existsSync(route), endpoint);
     assert.match(readFileSync(route, "utf8"), /cache-control|CACHE/i, `${endpoint} sets its own cache header`);

@@ -22,6 +22,7 @@ import {
   sources,
   strikesFallback,
   verifiedLine,
+  warningsFallback,
   weekendFallback,
   type ItemKey,
 } from "@/lib/programmatic/today/copy";
@@ -41,7 +42,7 @@ import { todayTranslations } from "@/lib/programmatic/today/paths";
 import { pvpcPath } from "@/lib/programmatic/pvpc/paths";
 import { graph } from "@/lib/seo/jsonld";
 
-import { ElectricityToday, FuelToday, HolidayToday, ReservoirsToday, RodaliesToday, SnowToday, StrikesToday, TodayDate, WeekendToday } from "./TodayLive";
+import { ElectricityToday, FuelToday, HolidayToday, ReservoirsToday, RodaliesToday, SnowToday, StrikesToday, TodayDate, WarningsToday, WeekendToday } from "./TodayLive";
 
 /**
  * "Avui a Catalunya" / "Hoy en Cataluña" / "Today in Catalonia".
@@ -73,6 +74,8 @@ const LINK_WORDS: Record<Locale, Record<string, string>> = {
     weekendHub: "Fires i mercats per zones",
     weekendBridge: "El pont de desembre",
     snowPage: "Neu avui al Pirineu",
+    warningsPage: "Avisos ara: AEMET, Protecció Civil i trànsit",
+    warningsAemet: "Avisos de l'AEMET per a Catalunya",
   },
   es: {
     holidayHub: "Festivos por municipio",
@@ -92,6 +95,8 @@ const LINK_WORDS: Record<Locale, Record<string, string>> = {
     weekendHub: "Ferias y mercados por zonas",
     weekendBridge: "El puente de diciembre",
     snowPage: "Nieve hoy en el Pirineo",
+    warningsPage: "Avisos hoy: AEMET, Protección Civil y tráfico",
+    warningsAemet: "Avisos de la AEMET para Cataluña",
   },
   en: {
     holidayHub: "",
@@ -111,6 +116,8 @@ const LINK_WORDS: Record<Locale, Record<string, string>> = {
     weekendHub: "",
     weekendBridge: "The December long weekend",
     snowPage: "Snow in the Pyrenees today",
+    warningsPage: "Warnings now: AEMET, Civil Protection and roads",
+    warningsAemet: "AEMET warnings for Catalonia",
   },
 };
 
@@ -148,6 +155,10 @@ function itemLinks(locale: Locale): Record<ItemKey, LinkItem[]> {
       { label: w.weekendBridge!, href: l.weekend.bridge },
     ]),
     snow: [{ label: w.snowPage!, href: l.snow.page }],
+    warnings: [
+      { label: w.warningsPage!, href: l.warnings.page },
+      { label: w.warningsAemet!, href: l.warnings.aemet, external: true },
+    ],
   };
 }
 
@@ -183,6 +194,7 @@ function Fallback({ text }: { text: string }) {
 const IDS: Record<ItemKey, string> = {
   holidays: "festius",
   strikes: "vagues",
+  warnings: "avisos",
   rodalies: "rodalies",
   reservoirs: "embassaments",
   fuel: "carburant",
@@ -235,6 +247,12 @@ export function TodayPage({ locale }: { locale: Locale }) {
               <StrikesToday locale={locale} strikes={todayStrikes(locale)} asOf={STRIKES_AS_OF} asOfText={asOf}>
                 <Fallback text={strikesFallback(locale)} />
               </StrikesToday>
+            </Item>
+
+            <Item id={IDS.warnings} title={copy.headings.warnings} links={links.warnings} source={sourceLine("warnings", locale)}>
+              <WarningsToday locale={locale}>
+                <Fallback text={warningsFallback(locale)} />
+              </WarningsToday>
             </Item>
 
             <Item id={IDS.rodalies} title={copy.headings.rodalies} links={links.rodalies} source={sourceLine("rodalies", locale)}>

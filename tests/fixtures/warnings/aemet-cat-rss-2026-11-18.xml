@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+  <channel>
+    <title>AEMET - Avisos de fenómenos meteorológicos adversos - Cataluña</title>
+    <link>https://www.aemet.es/es/eltiempo/prediccion/avisos?k=cat</link>
+    <description>Avisos de fenómenos meteorológicos adversos según el Plan Meteoalerta de la Agencia Estatal de Meteorología (AEMET) para Cataluña.</description>
+    <language>es</language>
+    <copyright>https://www.aemet.es/es/nota_legal</copyright>
+    <pubDate>2026-11-18T09:57:34+00:00</pubDate>
+    <lastBuildDate>2026-11-18T09:57:34+00:00</lastBuildDate>
+    <image>
+      <url>https://www.aemet.es/imagenes/gif/logo_AEMET_web.gif</url>
+    </image>
+    <item>
+      <title>Estado completo de avisos para Cataluña</title>
+      <description>Fichero tar.gz que contiene todos los avisos para Cataluña de 10:57 18-11-2026 CET (UTC+1) a 23:59 20-11-2026 CET (UTC+1).</description>
+      <link>https://www.aemet.es/documentos_d/eltiempo/prediccion/avisos/cap/Z_CAP_C_LEMM_20261118095734_AFAC69.tar.gz</link>
+      <guid>Z_CAP_C_LEMM_20261118095734_AFAC69.tar.gz</guid>
+      <pubDate>2026-11-18T09:57:34+00:00</pubDate>
+    </item>
+    <item>
+      <title>Aviso. Nivel amarillo. Costeros. Litoral norte de Tarragona</title>
+      <description>Aviso de costeros de nivel amarillo de 21:00 18-11-2026 CET (UTC+1) a 02:59 19-11-2026 CET (UTC+1).</description>
+      <link>https://www.aemet.es/documentos_d/eltiempo/prediccion/avisos/cap/Z_CAP_C_LEMM_20261118095734_AFAZ694303COCO1902.xml</link>
+      <guid>Z_CAP_C_LEMM_20261118095734_AFAZ694303COCO1902.xml</guid>
+      <pubDate>2026-11-18T09:57:34+00:00</pubDate>
+    </item>
+    <item>
+      <title>Aviso. Nivel amarillo. Costeros. Litoral sur de Tarragona</title>
+      <description>Aviso de costeros de nivel amarillo de 21:00 18-11-2026 CET (UTC+1) a 02:59 19-11-2026 CET (UTC+1).</description>
+      <link>https://www.aemet.es/documentos_d/eltiempo/prediccion/avisos/cap/Z_CAP_C_LEMM_20261118095734_AFAZ694304COCO1902.xml</link>
+      <guid>Z_CAP_C_LEMM_20261118095734_AFAZ694304COCO1902.xml</guid>
+      <pubDate>2026-11-18T09:57:34+00:00</pubDate>
+    </item>
+    <item>
+      <title>Aviso. Nivel amarillo. Vientos. Prelitoral de Barcelona</title>
+      <description>Aviso de rachas máximas de nivel amarillo de 00:00 19-11-2026 CET (UTC+1) a 09:59 19-11-2026 CET (UTC+1).</description>
+      <link>https://www.aemet.es/documentos_d/eltiempo/prediccion/avisos/cap/Z_CAP_C_LEMM_20261118095734_AFAZ690803VIRM1909.xml</link>
+      <guid>Z_CAP_C_LEMM_20261118095734_AFAZ690803VIRM1909.xml</guid>
+      <pubDate>2026-11-18T09:57:34+00:00</pubDate>
+    </item>
+    <item>
+      <title>Aviso. Nivel amarillo. Vientos. Prelitoral de Girona</title>
+      <description>Aviso de rachas máximas de nivel amarillo de 00:00 19-11-2026 CET (UTC+1) a 05:59 19-11-2026 CET (UTC+1).</description>
+      <link>https://www.aemet.es/documentos_d/eltiempo/prediccion/avisos/cap/Z_CAP_C_LEMM_20261118095734_AFAZ691702VIRM1905.xml</link>
+      <guid>Z_CAP_C_LEMM_20261118095734_AFAZ691702VIRM1905.xml</guid>
+      <pubDate>2026-11-18T09:57:34+00:00</pubDate>
+    </item>
+    <item>
+      <title>Aviso. Nivel amarillo. Vientos. Prelitoral norte de Tarragona</title>
+      <description>Aviso de rachas máximas de nivel amarillo de 00:00 19-11-2026 CET (UTC+1) a 09:59 19-11-2026 CET (UTC+1).</description>
+      <link>https://www.aemet.es/documentos_d/eltiempo/prediccion/avisos/cap/Z_CAP_C_LEMM_20261118095734_AFAZ694302VIRM1909.xml</link>
+      <guid>Z_CAP_C_LEMM_20261118095734_AFAZ694302VIRM1909.xml</guid>
+      <pubDate>2026-11-18T09:57:34+00:00</pubDate>
+    </item>
+    <item>
+      <title>Aviso. Nivel amarillo. Vientos. Prelitoral sur de Tarragona</title>
+      <description>Aviso de rachas máximas de nivel amarillo de 00:00 19-11-2026 CET (UTC+1) a 09:59 19-11-2026 CET (UTC+1).</description>
+      <link>https://www.aemet.es/documentos_d/eltiempo/prediccion/avisos/cap/Z_CAP_C_LEMM_20261118095734_AFAZ694305VIRM1909.xml</link>
+      <guid>Z_CAP_C_LEMM_20261118095734_AFAZ694305VIRM1909.xml</guid>
+      <pubDate>2026-11-18T09:57:34+00:00</pubDate>
+    </item>
+    <item>
+      <title>Aviso. Nivel amarillo. Costeros. Litoral de Barcelona</title>
+      <description>Aviso de costeros de nivel amarillo de 00:00 19-11-2026 CET (UTC+1) a 14:59 19-11-2026 CET (UTC+1).</description>
+      <link>https://www.aemet.es/documentos_d/eltiempo/prediccion/avisos/cap/Z_CAP_C_LEMM_20261118095734_AFAZ690804COCO1914.xml</link>
+      <guid>Z_CAP_C_LEMM_20261118095734_AFAZ690804COCO1914.xml</guid>
+      <pubDate>2026-11-18T09:57:34+00:00</pubDate>
+    </item>
+    <item>
+      <title>Aviso. Nivel amarillo. Costeros. Ampurdán</title>
+      <description>Aviso de costeros de nivel amarillo de 00:00 19-11-2026 CET (UTC+1) a 04:59 19-11-2026 CET (UTC+1).</description>
+      <link>https://www.aemet.es/documentos_d/eltiempo/prediccion/avisos/cap/Z_CAP_C_LEMM_20261118095734_AFAZ691703COCO1904.xml</link>
+      <guid>Z_CAP_C_LEMM_20261118095734_AFAZ691703COCO1904.xml</guid>
+      <pubDate>2026-11-18T09:57:34+00:00</pubDate>
+    </item>
+    <item>
+      <title>Aviso. Nivel amarillo. Costeros. Litoral sur de Girona</title>
+      <description>Aviso de costeros de nivel amarillo de 00:00 19-11-2026 CET (UTC+1) a 11:59 19-11-2026 CET (UTC+1).</description>
+      <link>https://www.aemet.es/documentos_d/eltiempo/prediccion/avisos/cap/Z_CAP_C_LEMM_20261118095734_AFAZ691704COCO1911.xml</link>
+      <guid>Z_CAP_C_LEMM_20261118095734_AFAZ691704COCO1911.xml</guid>
+      <pubDate>2026-11-18T09:57:34+00:00</pubDate>
+    </item>
+    <item>
+      <title>Aviso. Nivel amarillo. Costeros. Ampurdán</title>
+      <description>Aviso de costeros de nivel amarillo de 05:00 19-11-2026 CET (UTC+1) a 11:59 19-11-2026 CET (UTC+1).</description>
+      <link>https://www.aemet.es/documentos_d/eltiempo/prediccion/avisos/cap/Z_CAP_C_LEMM_20261118095734_AFAZ691703COCO1911.xml</link>
+      <guid>Z_CAP_C_LEMM_20261118095734_AFAZ691703COCO1911.xml</guid>
+      <pubDate>2026-11-18T09:57:34+00:00</pubDate>
+    </item>
+    <item>
+      <title>Aviso. Nivel amarillo. Costeros. Litoral norte de Tarragona</title>
+      <description>Aviso de costeros de nivel amarillo de 06:00 19-11-2026 CET (UTC+1) a 11:59 19-11-2026 CET (UTC+1).</description>
+      <link>https://www.aemet.es/documentos_d/eltiempo/prediccion/avisos/cap/Z_CAP_C_LEMM_20261118095734_AFAZ694303COCO1911.xml</link>
+      <guid>Z_CAP_C_LEMM_20261118095734_AFAZ694303COCO1911.xml</guid>
+      <pubDate>2026-11-18T09:57:34+00:00</pubDate>
+    </item>
+    <item>
+      <title>Aviso. Nivel amarillo. Costeros. Litoral sur de Tarragona</title>
+      <description>Aviso de costeros de nivel amarillo de 06:00 19-11-2026 CET (UTC+1) a 11:59 19-11-2026 CET (UTC+1).</description>
+      <link>https://www.aemet.es/documentos_d/eltiempo/prediccion/avisos/cap/Z_CAP_C_LEMM_20261118095734_AFAZ694304COCO1911.xml</link>
+      <guid>Z_CAP_C_LEMM_20261118095734_AFAZ694304COCO1911.xml</guid>
+      <pubDate>2026-11-18T09:57:34+00:00</pubDate>
+    </item>
+  </channel>
+</rss>

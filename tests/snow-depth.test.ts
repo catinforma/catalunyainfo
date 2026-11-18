@@ -7,6 +7,7 @@ import { SNOW } from "../src/lib/content/batch02/pyrenees.ts";
 import { SKI } from "../src/lib/content/batch02/ski.ts";
 import { SNOW_NOW } from "../src/lib/content/batch02/snow-now.ts";
 import { B2_PATHS, b2href } from "../src/lib/content/batch02/shared.ts";
+import { warningsPath } from "../src/lib/programmatic/warnings/paths.ts";
 import { IMAGES } from "../src/lib/content/images.ts";
 import {
   areaFor,
@@ -370,6 +371,8 @@ test("paths, titles and descriptions fit the house rules", () => {
 
 test("links stay in their language, end in a slash, and point at published paths", () => {
   const known = new Set(Object.keys(B2_PATHS).flatMap((key) => LOCALES.map((l) => b2href(key as keyof typeof B2_PATHS, l))));
+  // The warnings page has its own route ("before you set off" links it).
+  for (const l of LOCALES) known.add(warningsPath(l));
   for (const locale of LOCALES) {
     const text = JSON.stringify(SNOW_NOW.editions[locale].blocks);
     for (const match of text.matchAll(/\]\((\/[^)]*)\)/g)) {
