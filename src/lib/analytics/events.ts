@@ -92,6 +92,7 @@ export const CALCULATOR_USE_IDS = [
   // The Christmas lottery checker (lib/programmatic/lottery-check): not in the calculators registry, same event.
   "lottery-check",
   "itv",
+  "traffic-fines",
   "bono-social",
   "leave-planner-2027",
   "tourist-tax",

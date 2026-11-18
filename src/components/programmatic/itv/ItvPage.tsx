@@ -312,6 +312,15 @@ export function ItvRoute({ locale }: { locale: ItvLocale }) {
               <Quote>{QUOTE.fine}</Quote>
               <p>{expiredText[2]}</p>
               <Quote>{`${QUOTE.discountWhen} […] ${QUOTE.discount}`}</Quote>
+              <p>
+                <Link href={calcPath("traffic-fines", locale)}>
+                  {L(locale, {
+                    es: "Calcula el último día para pagar la multa con el 50 %, alegar o recurrir",
+                    ca: "Calcula l'últim dia per pagar la multa amb el 50 %, al·legar o recórrer",
+                    en: "Work out the last day to pay the fine with 50% off, contest or appeal it",
+                  })}
+                </Link>
+              </p>
               <p>{expiredText[3]}</p>
               <Quote>{QUOTE.tenDays}</Quote>
               <p>{expiredText[4]}</p>

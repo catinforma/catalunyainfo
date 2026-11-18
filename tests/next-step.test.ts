@@ -295,6 +295,7 @@ test("templates render the box server-side, after the answer, with the placement
     "employment/UnemploymentPage", "unemployment-subsidy/SubsidyPage", "sick-leave/SickLeavePage", "paid-leave/PaidLeavePage", "rent-update/RentPage",
     "euribor/EuriborPage", "mortgage/MortgagePage", "home-purchase-tax/HomeTaxPage", "pensions-2027/PensionPage", "working-days/WorkingDaysPage",
     "smi/SmiPage", "ipc/IpcPage", "treasury-bills/LetrasPage", "lottery-tax/LotteryTaxPage", "itv/ItvPage", "bono-social/BonoSocialPage", "average-salary/AverageSalaryPage", "leave-2027/LeavePage",
+    "smi/SmiPage", "ipc/IpcPage", "treasury-bills/LetrasPage", "lottery-tax/LotteryTaxPage", "itv/ItvPage", "traffic-fines/TrafficFinesPage", "bono-social/BonoSocialPage", "leave-2027/LeavePage",
   ];
   assert.equal(calcPages.length, CALCULATOR_IDS.length + 1);
   for (const page of calcPages) {

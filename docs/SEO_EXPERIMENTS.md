@@ -7881,3 +7881,66 @@ are position (8–10 → 5–7) and the event calendar, not snippets.
 
 **Review:** none (nothing changed). The queue's own dates are above. Each item is logged as a new entry, with its
 baseline, when it is applied.
+
+## 2026-11-18 — "Multas de tráfico: plazos, descuento del 50 % y recursos", deadline calculator, es + ca + en (new page; deploy only, no publish group) (review 2026-12-16)
+
+**Why.** Research row 24 (research_notes/spain-utilities-opportunities-nov2026.md): "multas dgt" ≈ 25k/month + "puntos dgt"
+≈ 13.5k, summer index 112–130. The SERP (ro-des PDF, cronista, diariodeavisos 2023, deia; sede.dgt ~#12) has **no deadline
+calculator** and **disagrees on which fines lose the 50 %**. All three lists are "real": the law since 21 Mar 2022 (art. 93.2
+as worded by Ley 18/2021) excludes art. 77 h, j, n, ñ, o, p, q, r, s, t; the SCT page (29.10.2024) gives the 2015 list (8,
+no s/t); the DGT page (26/07/2023) only four groups. The page prints the law and says why. Fact pack:
+research_notes/multas-dgt-nov2026.md (gitignored, worktree copy).
+
+- URLs: `/es/calculadoras/multas-trafico/` (primary), `/ca/calculadores/multes-transit/`, `/en/calculators/traffic-fines-spain/`
+  (sitemap + hreflang, x-default en; llms.txt entry; site-search shortcut "multa(s) dgt", "puntos carnet"…; `calculator_use`
+  id `traffic-fines`). Registry `CALCULATORS` id `traffic-fines`; hub card in the `vehicle` group after the ITV. Next step:
+  ITV, working days; the ITV's next step now offers the fines tool first, then fuel.
+- Calculator inputs: stage (denuncia / resolución sancionadora / providencia de apremio), channel (on the spot, post, DEV
+  opened, DEV unopened, TEU), date, amount, type (leve / grave / muy grave / don't know), points, art. 93.2 case, day of the
+  offence (optional), community (holidays). Outputs: last day with 50 % and the amount, alegaciones, naming the driver, what
+  follows under art. 95.4 (DGT's 45 days), surcharges 5/10/20 %, prescription, points back; resolution: 15 days to pay,
+  reposición in one month; apremio: the 20th or the 5th (LGT art. 62.5). We never ask for plate, ID or file number.
+- Rules (read 18 Nov 2026, curl + grep; all 60 quotes and the 22 annex II rows checked verbatim against the downloads):
+  RDL 6/2015 consolidated (BOE-A-2015-11722, última actualización 26/06/2026) arts. 63-65, 71, 77, 80-81, 83.1, 84, 89-96, 110,
+  112, annexes II and IV; Ley 39/2015 arts. 30.2/30.5/30.6 and 43.2; LGT arts. 28 and 62.5; LGP art. 10.1; LJCA art. 46.1;
+  Orden INT/914/2024 arts. 3-4 (course = 4 points; the Act's art. 65.4 caps at 6); DGT pages (45 days, AEAT 20 %, TEU
+  date = publication, 10 days to identify vs the Act's 20, no instalments); SCT pay and appeals pages (ATC collects); ATC
+  (10 % / 20 %).
+- Where sources disagree, the stricter one is computed and the other shown: TEU counted from publication (DGT) with art. 91's
+  +20 as the later reading; last day on a Saturday/Sunday/holiday: the 20th natural day is the "safe" day, the art. 30.5
+  move is the legal one (no DGT/SCT page says it), with national + regional holidays from the working-days data (local ones
+  not counted: page links the working-days calculator); identification: law's 20 days with the DGT's "10" flagged.
+- Server-rendered: the calculator on a letter received 18 Nov 2026 (day 20 = 8 Dec, national holiday → 9 Dec), official
+  services list (DGT pay/appeal/DEV/TEU/points via dgt.es links, SCT pay), deadlines table (11 rows with articles), 50 % and
+  exclusions, notification table, holiday rule, doing nothing, apremio table, amounts table, annex IV speeding table with the
+  50 % amounts, annex II points table, prescription, who fines (DGT / SCT / councils), 8 worked examples, 8-question FAQ +
+  FAQPage JSON-LD, YMYL disclaimer, sources, limits.
+- Links (body only, no title or description touched): ITV pages (ca/es/en) one line after the 50 % quote in "ITV caducada";
+  fuel pages (ca/es) "Si vas amb cotxe / Si vas en coche" list gains the fines tool.
+- Not verified: sede.dgt.gob.es does not answer from the VPS (curl timeout, connection refused); its services are linked
+  through dgt.es's own `/.galleries/enlaces/sede/…` links (302 to the sede, checked). SCT has no English page (404): en links
+  the es page.
+
+**Date guard (tests/traffic-fines.test.ts).** From **18 May 2027** the test fails: re-read the consolidated Ley de Tráfico
+(its "última actualización"), Ley 39/2015 art. 30, LGT 28/62.5, the Orden INT/914/2024 and the DGT/SCT pages. Holiday data
+coverage ends 31 Dec 2027 (working-days guard `COVER_EXTEND_BY`); after it the tool still gives the 20th day and the weekend,
+without the moved day.
+
+**Baseline:** 0 (no page; the ITV pages carry one paragraph on the ITV fine and its 50 %).
+
+**Prediction.** Indexed within 7 days (IndexNow). The heads "multas dgt" / "puntos dgt" are navigational (DGT sede): positions
+10–25 by mid-December; long tail on page 1 possible ("plazo pagar multa 50 %", "multa último día festivo", "multas sin
+descuento 50", "cuándo prescribe una multa de tráfico", "multa tablón edictal plazo", "recuperar puntos 2 años"). By 13 Jan
+2027: 2,000–8,000 impressions/28 days, CTR 2–5 %. Wrong if under 600 impressions/28 days by 13 Jan.
+
+**Measure:** 25 Nov `batch_url_inspection` (rendered calculator + tables); 16 Dec and 13 Jan 2027 `snapshot.py page
+multas-trafico 28` (+ multes-transit, traffic-fines-spain); `calculator_use` `traffic-fines`; ITV pages' next-step clicks to it.
+**Review: 2026-12-16.**
+
+**Confounders.** The ITV pages get one more body link and a changed next-step box (ITV review windows 15 Jan / 1 Mar 2027 read
+the same body plus this line). Any DGT campaign or Christmas traffic news moves "multas" searches.
+
+**Deploy.** Deploy only (static, nothing in the database): no publish group. IndexNow prefixes:
+`/es/calculadoras/multas-trafico/`, `/ca/calculadores/multes-transit/`, `/en/calculators/traffic-fines-spain/`, plus the
+re-crawl of `/es/calculadoras/itv/`, `/ca/calculadores/itv/`, `/en/calculators/itv-spain/`, `/es/gasolineras/`,
+`/ca/benzineres/` and the three calculators hubs.

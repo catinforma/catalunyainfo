@@ -20,6 +20,7 @@
  */
 
 import { B2_TITLES, b2href } from "@/lib/content/batch02/shared";
+import { calcPath } from "@/lib/programmatic/calculators/paths";
 import { caA, caComarca, caDe, esName } from "@/lib/programmatic/holidays/names";
 
 import type { Place } from "./data";
@@ -426,9 +427,11 @@ export function driverGuides(locale: FuelLocale): { label: string; href: string 
     ? [
         { label: B2_TITLES.zbe.es, href: b2href("zbe", "es") },
         { label: B2_TITLES.parking.es, href: b2href("parking", "es") },
+        { label: "Multas de tráfico: plazos y descuento del 50 %", href: calcPath("traffic-fines", "es") },
       ]
     : [
         { label: B2_TITLES.zbe.ca, href: b2href("zbe", "ca") },
         { label: B2_TITLES.parking.ca, href: b2href("parking", "ca") },
+        { label: "Multes de trànsit: terminis i descompte del 50 %", href: calcPath("traffic-fines", "ca") },
       ];
 }
