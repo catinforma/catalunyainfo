@@ -88,6 +88,8 @@ export const CALCULATOR_USE_IDS = [
   "smi-2027",
   "treasury-bills",
   "lottery-tax",
+  // The Christmas lottery checker (lib/programmatic/lottery-check): not in the calculators registry, same event.
+  "lottery-check",
   "itv",
   "bono-social",
   "leave-planner-2027",

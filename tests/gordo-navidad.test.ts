@@ -23,6 +23,7 @@ import {
 } from "../src/lib/programmatic/gordo/copy.ts";
 import { SNAPSHOT, provinceGroups, webSales } from "../src/lib/programmatic/gordo/data.ts";
 import { GORDO_ROUTE, gordoHubPath } from "../src/lib/programmatic/gordo/paths.ts";
+import { checkEditions } from "../src/lib/programmatic/lottery-check/paths.ts";
 import { PROVINCES } from "../src/lib/programmatic/gordo/provinces.ts";
 import { placeStaticParams, resolveMunicipalityPage, resolveProvincePage } from "../src/lib/programmatic/gordo/routing.ts";
 import { gordoPaths } from "../src/lib/programmatic/gordo/sitemap.ts";
@@ -57,6 +58,8 @@ const KNOWN_INTERNAL = new Set([
   ...gordoPaths(S).map((entry) => entry.path),
   // The lottery prize tax calculator, linked wherever these pages mention tax.
   ...Object.values(calcEditions("lottery-tax")),
+  // The Christmas lottery checker, linked from "how to check a décimo".
+  ...Object.values(checkEditions()),
 ]);
 
 function checkLinks(blocks: Block[], locale: Locale, sources: string[]) {

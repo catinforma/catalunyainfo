@@ -21,12 +21,34 @@ downloads in their own new directory (they are untrusted input):
   # 4. Print RESULTS_2026 for the Catalan lottery guide (loteria-nadal.ts).
   python3 -I scripts/gordo-snapshot.py catalonia
 
+  # 5. Check SELAE's 2026 prize programme PDF (fetched as programa.pdf) against
+  #    the programme the checker applies (lib/programmatic/lottery-check).
+  python3 -I scripts/gordo-snapshot.py programme --dir ~/gordo/run-1305
+
 Official sources only (SELAE, Sociedad Estatal Loterías y Apuestas del Estado):
   - draw record (numbers):  https://www.loteriasyapuestas.es/servicios/buscadorSorteos?game_id=LNAC&celebrados=true&fechaInicioInclusiva=YYYY1222&fechaFinInclusiva=YYYY1222
   - one page per prize listing the points of sale that sold it:
       https://www.loteriasyapuestas.es/es/premios/{primer|segundo|tercer|cuarto|quinto}-premio-de-loteria-nacional-del-sorteo-extraordinario-de-navidad-del-22-de-diciembre-de-YYYY
 If SELAE's CDN blocks the script, save the same URLs from a browser into the
 directory as draw.json and prize-<ordinal>.html and run `build` on it.
+
+The checker ("Comprobar Lotería de Navidad", lib/programmatic/lottery-check)
+also needs the pedrea, the 1,794 numbers of 1,000 € a billete. `build` takes
+it, in this order, from:
+  1. pedrea.txt in the directory (one five-digit number per line, '#' lines
+     ignored), when a human saved it from SELAE's official list; or
+  2. the draw record: the one list of five-digit "decimo" entries besides the
+     top prizes (SELAE's format could not be read from the server in Nov 2026:
+     the key is discovered, never assumed; several candidates are refused).
+Either way it must add up to the programme: five digits, each once, never a
+top-prize number (a list of every extraction is accepted once it holds every
+top number drawn so far, which are then left out), at most 1,794, exactly
+1,794 once the 13 top numbers are out (a WARNING until then). When
+lista-oficial.pdf (the Lista Oficial de Premios, urlListadoOficial in the draw
+record; `fetch` saves it once SELAE publishes it) or lista-oficial.txt is in
+the directory, every number the snapshot carries must appear in its text.
+--no-pedrea builds the snapshot without the list (the results still go out;
+the checker then says the pedrea is not in yet).
 
 Municipalities: SELAE prints the point of sale's locality ("Localidad"), which
 is not always a municipality (LAS NORIAS, CALA D'OR...). A locality is linked
@@ -85,6 +107,50 @@ PRIZES = [
     ("fifth", "quinto", 8, 6_000),
 ]
 DRAW_KEYS = {"first": "primerPremio", "second": "segundoPremio", "third": "tercerosPremios", "fourth": "cuartosPremios", "fifth": "quintosPremios"}
+
+# SELAE 2026 programme: "1.794" prizes of 1,000 € a billete besides the 13 top ones (the pedrea).
+PEDREA_COUNT = 1_794
+TOP_COUNT = sum(count for _k, _o, count, _a in PRIZES)
+
+
+def programme_url(year: int) -> str:
+    """SELAE's prize programmes for the fourth-quarter (Saturday) draws: the Christmas draw is on page 12 in 2026."""
+    return f"{HOST}/f/loterias/documentos/Loter%C3%ADa%20Nacional/programas%20de%20premios/PROGRAMAS_PREMIOS_CUARTO_TRIMESTRE_{year}_SABADOS.pdf"
+
+
+def list_url_guess(year: int) -> str:
+    """Where the 2025 Lista Oficial de Premios lived (SM_LISTAOFICIAL.A2025.S102.pdf): only a fallback for urlListadoOficial."""
+    return f"{HOST}/f/loterias/documentos/Loter%C3%ADa%20Nacional/listas%20de%20premios/SM_LISTAOFICIAL.A{year}.S102.pdf"
+
+
+# What `programme` looks for in SELAE's programme PDF text (2026 figures, as
+# SELAE prints them: Spanish thousands dots). Read on 31 Oct 2026; the rule
+# words are the BOE's 2010 wording (BOE-A-2010-19540), still to be confirmed
+# in the 2026 text: lib/programmatic/lottery-check/programme.ts.
+PROGRAMME_CHECKS = [
+    ("first prize 4.000.000", r"4\.000\.000"),
+    ("second prize 1.250.000", r"1\.250\.000"),
+    ("third prize 500.000", r"(?<![\d.])500\.000"),
+    ("fourth prizes 200.000", r"(?<![\d.])200\.000"),
+    ("fifth prizes 60.000", r"(?<![\d.])60\.000"),
+    ("pedrea 1.794", r"1\.794"),
+    ("aproximaciones 20.000", r"(?<![\d.])20\.000"),
+    ("aproximaciones 12.500", r"12\.500"),
+    ("aproximaciones 9.600", r"(?<![\d.])9\.600"),
+    ("centenas 99", r"(?<![\d.])99(?![\d.])"),
+    ("centenas of the fourths 198", r"(?<![\d.])198(?![\d.])"),
+    ("last two digits 999", r"(?<![\d.])999(?![\d.])"),
+    ("reintegros 9.999", r"9\.999"),
+    ("15.304 prizes per series", r"15\.304"),
+    ("14.000.000 per series", r"14\.000\.000"),
+    ("décimos de 20", r"d[ée]cimos de 20"),
+    ("aproximaciones: anterior y posterior", r"anterior y posterior"),
+    ("wrap: 99.999", r"99\.?999"),
+    ("centena: 99 números restantes", r"99 n[úu]meros restantes"),
+    ("terminaciones: dos últimas cifras", r"dos [úu]ltimas cifras"),
+    ("reintegro: última cifra", r"[úu]ltima cifra"),
+    ("exclusion: exceptuados", r"exceptuad"),
+]
 
 # SELAE's province labels (as printed on the prize pages, folded) -> INE province code.
 PROVINCE_LABELS = {
@@ -264,6 +330,15 @@ def cmd_fetch(args: argparse.Namespace) -> None:
         raise Refused(f"draw record: HTTP {status} (SELAE may be blocking scripts: save it from a browser, see the runbook)")
     (out / "draw.json").write_bytes(body)
     manifest.append({"file": "draw.json", "url": url, "status": status, "sha256": hashlib.sha256(body).hexdigest()})
+    official_list = None
+    try:
+        record = json.loads(body)
+        if isinstance(record, list) and record and isinstance(record[0], dict):
+            official_list = record[0].get("urlListadoOficial")
+            found = pedrea_candidates(record[0])
+            print(f"draw record: five-digit lists besides the top prizes: {', '.join(f'{k} ({len(v)})' for k, v in found.items()) or 'none'}")
+    except ValueError:
+        pass
 
     for _key, ordinal, _count, _amount in PRIZES:
         url = prize_url(ordinal, args.year)
@@ -274,6 +349,18 @@ def cmd_fetch(args: argparse.Namespace) -> None:
         name = f"prize-{ordinal}.html"
         (out / name).write_bytes(body)
         manifest.append({"file": name, "url": url, "status": status, "sha256": hashlib.sha256(body).hexdigest()})
+
+    # The Lista Oficial de Premios (afternoon) and the year's prize programme, both PDFs.
+    lists = [HOST + urllib.parse.quote(official_list) if str(official_list).startswith("/") else official_list] if official_list else []
+    lists.append(list_url_guess(args.year))
+    for name, urls in (("lista-oficial.pdf", lists), ("programa.pdf", [programme_url(args.year)])):
+        for url in urls:
+            status, body = get(url)
+            print(f"{status} {url}")
+            if status == 200 and body.startswith(b"%PDF"):
+                (out / name).write_bytes(body)
+                manifest.append({"file": name, "url": url, "status": status, "sha256": hashlib.sha256(body).hexdigest()})
+                break
 
     stamp = dt.datetime.now(dt.timezone.utc).astimezone().isoformat(timespec="seconds")
     (out / "manifest.json").write_text(json.dumps({"fetchedAt": stamp, "files": manifest}, indent=2), encoding="utf-8")
@@ -320,7 +407,106 @@ def parse_draw(raw: str, year: int) -> dict:
     official_list = d.get("urlListadoOficial")
     if official_list:
         official_list = HOST + urllib.parse.quote(official_list) if official_list.startswith("/") else official_list
-    return {"drawId": str(d["id_sorteo"]), "numbers": numbers, "officialList": official_list or None}
+    return {"drawId": str(d["id_sorteo"]), "numbers": numbers, "officialList": official_list or None, "record": d}
+
+
+# ------------------------------------------------------------------------ pedrea
+
+
+FIVE = re.compile(r"(?<!\d)\d{5}(?!\d)")
+
+
+def pedrea_candidates(record: dict) -> dict[str, list[str]]:
+    """Every list in the draw record, besides the five top-prize keys, whose entries carry a five-digit "decimo"."""
+    out: dict[str, list[str]] = {}
+    for key, value in record.items():
+        if key in DRAW_KEYS.values() or not isinstance(value, list) or not value:
+            continue
+        if not all(isinstance(item, dict) for item in value):
+            continue
+        numbers = [str(item.get("decimo", "")) for item in value]
+        if all(re.fullmatch(r"\d{5}", n) for n in numbers):
+            out[key] = numbers
+    return out
+
+
+def read_pedrea(directory: Path, record: dict, tops: list[str]) -> tuple[list[str] | None, str, list[str]]:
+    """The pedrea for the checker, from pedrea.txt or the draw record; refused when it does not add up to the programme."""
+    warnings: list[str] = []
+    manual = directory / "pedrea.txt"
+    if manual.exists():
+        lines = [line for line in manual.read_text(encoding="utf-8").splitlines() if line.strip() and not line.lstrip().startswith("#")]
+        numbers = [n for line in lines for n in FIVE.findall(line)]
+        bad = [line for line in lines if not FIVE.search(line)]
+        if bad:
+            raise Refused(f"pedrea.txt: lines without a five-digit number: {bad[:3]}")
+        source = "pedrea.txt"
+    else:
+        found = pedrea_candidates(record)
+        if not found:
+            warnings.append("pedrea: the draw record has no five-digit list besides the top prizes; save pedrea.txt from SELAE's official list (runbook)")
+            return None, "none", warnings
+        if len(found) > 1:
+            raise Refused(f"pedrea: several five-digit lists in the draw record ({', '.join(f'{k}: {len(v)}' for k, v in found.items())}): save pedrea.txt, or build with --no-pedrea")
+        key, numbers = next(iter(found.items()))
+        source = f"draw record, {key}"
+    if len(set(numbers)) != len(numbers):
+        dupes = sorted({n for n in numbers if numbers.count(n) > 1})
+        raise Refused(f"pedrea ({source}): numbers appear twice: {dupes[:5]}")
+    in_list = [n for n in tops if n in set(numbers)]
+    if in_list:
+        if len(in_list) != len(tops):
+            raise Refused(f"pedrea ({source}): holds some top-prize numbers ({in_list}) but not all of them: not SELAE's pedrea")
+        numbers = [n for n in numbers if n not in set(tops)]
+        warnings.append(f"pedrea ({source}): the list holds every extraction; the {len(tops)} top numbers were left out")
+    if len(numbers) > PEDREA_COUNT:
+        raise Refused(f"pedrea ({source}): {len(numbers)} numbers, the programme has {PEDREA_COUNT}")
+    if len(tops) == TOP_COUNT and len(numbers) != PEDREA_COUNT:
+        warnings.append(f"pedrea ({source}): {len(numbers)} of {PEDREA_COUNT} numbers while all {TOP_COUNT} top prizes are out")
+    elif len(numbers) < PEDREA_COUNT:
+        warnings.append(f"pedrea ({source}): {len(numbers)} of {PEDREA_COUNT} numbers so far")
+    return sorted(numbers), source, warnings
+
+
+def pdf_text(path: Path) -> str | None:
+    """pdftotext -layout (poppler-utils), or None when it is not installed."""
+    import shutil
+    import subprocess
+
+    exe = shutil.which("pdftotext")
+    if not exe:
+        return None
+    done = subprocess.run([exe, "-layout", str(path), "-"], capture_output=True, timeout=120)
+    if done.returncode != 0:
+        raise Refused(f"{path.name}: pdftotext failed ({done.stderr.decode(errors='replace')[:200]})")
+    return done.stdout.decode("utf-8", errors="replace")
+
+
+def official_list_text(directory: Path) -> tuple[str | None, str]:
+    for name in ("lista-oficial.txt", "lista-oficial.pdf"):
+        path = directory / name
+        if not path.exists():
+            continue
+        text = path.read_text(encoding="utf-8") if name.endswith(".txt") else pdf_text(path)
+        if text is None:
+            return None, f"{name} (pdftotext missing: install poppler-utils)"
+        return text, name
+    return None, ""
+
+
+def check_against_list(directory: Path, numbers: list[str]) -> list[str]:
+    """Every number the snapshot carries must be on the Lista Oficial, when the directory holds it."""
+    text, name = official_list_text(directory)
+    if text is None:
+        return [f"{name}: not checked against the Lista Oficial"] if name else []
+    tokens = set(FIVE.findall(text))
+    missing = [n for n in numbers if n not in tokens]
+    if len(tokens) < 1_000:
+        return [f"{name}: only {len(tokens)} five-digit numbers in its text (it may print them by thousand): compare three numbers by hand"]
+    if missing:
+        raise Refused(f"{name}: {len(missing)} of {len(numbers)} numbers are not on the Lista Oficial ({missing[:5]}): fix the input or remove {name}")
+    print(f"{name}: all {len(numbers)} numbers are on the Lista Oficial")
+    return []
 
 
 def parse_prize_page(raw: str, ordinal: str, year: int) -> list[dict]:
@@ -356,7 +542,7 @@ def split_outlet(text: str) -> tuple[str, str, str]:
     return ", ".join(parts[:-2]).strip(" -"), parts[-2], parts[-1]
 
 
-def build_snapshot(directory: Path, year: int, read_at: str, test_data: bool) -> tuple[dict, list[str]]:
+def build_snapshot(directory: Path, year: int, read_at: str, test_data: bool, with_pedrea: bool = True) -> tuple[dict, list[str]]:
     marker = (directory / "TEST_DATA").exists()
     if marker and not test_data:
         raise Refused(f"{directory} is marked TEST_DATA: pass --test-data (and never ship the result)")
@@ -425,6 +611,16 @@ def build_snapshot(directory: Path, year: int, read_at: str, test_data: bool) ->
         },
         "prizes": prizes,
     }
+    tops = [n for prize in prizes for n in prize["numbers"]]
+    if with_pedrea:
+        pedrea, source, more = read_pedrea(directory, draw["record"], tops)
+        warnings.extend(more)
+        snapshot["pedrea"] = pedrea
+        warnings.extend(check_against_list(directory, tops + (pedrea or [])))
+        print(f"pedrea: {len(pedrea) if pedrea is not None else 'none'} ({source})")
+    else:
+        snapshot["pedrea"] = None
+        warnings.append("pedrea: left out (--no-pedrea): the checker says the list is not in yet")
     problems = snapshot_problems(snapshot)
     if problems:
         raise Refused("; ".join(problems))
@@ -495,6 +691,23 @@ def snapshot_problems(s: object) -> list[str]:
                     p.append(f"{key}: municipality {m.get('ine')!r} has no name or a bad slug")
     if not prizes[0].get("numbers"):
         p.append("the snapshot has no Gordo")
+    # The pedrea (src/lib/programmatic/gordo/validate.ts, same rules).
+    pedrea = s.get("pedrea")
+    if pedrea is not None:
+        if not isinstance(pedrea, list):
+            p.append("pedrea must be a list or null")
+        else:
+            if len(pedrea) > PEDREA_COUNT:
+                p.append(f"pedrea: {len(pedrea)} numbers, the programme has {PEDREA_COUNT}")
+            listed: set[str] = set()
+            for n in pedrea:
+                if not re.fullmatch(r"\d{5}", str(n)):
+                    p.append(f"pedrea: {n!r} is not five digits")
+                elif n in seen:
+                    p.append(f"pedrea: {n} is also a top prize")
+                elif n in listed:
+                    p.append(f"pedrea: {n} appears twice")
+                listed.add(n)
     # One slug per municipality and province: a URL must name one place.
     slugs: dict[str, str] = {}
     for prize in prizes:
@@ -524,7 +737,7 @@ def summary(snapshot: dict, warnings: list[str]) -> None:
 def cmd_build(args: argparse.Namespace) -> None:
     directory = Path(args.dir).expanduser()
     read_at = args.read_at or dt.datetime.now(dt.timezone.utc).astimezone().isoformat(timespec="seconds")
-    snapshot, warnings = build_snapshot(directory, args.year, read_at, args.test_data)
+    snapshot, warnings = build_snapshot(directory, args.year, read_at, args.test_data, with_pedrea=not args.no_pedrea)
     summary(snapshot, warnings)
     if args.dry_run:
         return
@@ -542,7 +755,38 @@ def cmd_check(args: argparse.Namespace) -> None:
         problems.append("the committed snapshot is marked testData")
     if problems:
         raise Refused("; ".join(problems))
-    print("no snapshot (pages do not exist)" if data is None else f"ok: {sum(len(p['outlets'] or []) for p in data['prizes'])} points of sale")
+    pedrea = None if data is None else data.get("pedrea")
+    print("no snapshot (pages do not exist)" if data is None else f"ok: {sum(len(p['outlets'] or []) for p in data['prizes'])} points of sale, pedrea {len(pedrea) if pedrea is not None else 'none'}")
+
+
+def cmd_programme(args: argparse.Namespace) -> None:
+    """Looks for the checker's figures and rule words in SELAE's programme PDF; a human still reads it before confirming."""
+    directory = Path(args.dir).expanduser()
+    txt, pdf = directory / "programa.txt", directory / "programa.pdf"
+    if txt.exists():
+        text, name = txt.read_text(encoding="utf-8"), txt.name
+    elif pdf.exists():
+        text, name = pdf_text(pdf), pdf.name
+        if text is None:
+            raise Refused("pdftotext is not installed (apt install poppler-utils)")
+    else:
+        raise Refused(f"no programa.pdf in {directory}: run fetch, or save {programme_url(args.year)} there from a browser")
+    flat = re.sub(r"\s+", " ", text)
+    start = flat.lower().find("navidad")
+    if start < 0:
+        raise Refused(f"{name}: no Christmas (Navidad) programme in it")
+    window = flat[start : start + 12_000]
+    missing = []
+    for label, pattern in PROGRAMME_CHECKS:
+        ok = re.search(pattern, window, flags=re.I) is not None
+        print(f"{'ok     ' if ok else 'MISSING'} {label}")
+        if not ok:
+            missing.append(label)
+    if missing:
+        raise Refused(f"{len(missing)} of {len(PROGRAMME_CHECKS)} checks missing: read page 12 of the PDF by hand before confirming anything")
+    digest = hashlib.sha256((pdf if pdf.exists() else txt).read_bytes()).hexdigest()[:12]
+    print("All checks found. Read the Christmas page of the PDF yourself, then set in src/lib/programmatic/lottery-check/programme.ts:")
+    print(f'export const PROGRAMME_CONFIRMED: {{ read: string; how: string }} | null = {{ read: "{dt.date.today().isoformat()}", how: "SELAE programme PDF, Christmas page, read by <who>; gordo-snapshot.py programme ok (sha256 {digest})" }};')
 
 
 CATALAN_PROVINCES = {"08": "Barcelona", "17": "Girona", "25": "Lleida", "43": "Tarragona"}
@@ -600,13 +844,17 @@ def main() -> int:
     b.add_argument("--read-at", help="ISO timestamp of the download (default: now)")
     b.add_argument("--dry-run", action="store_true")
     b.add_argument("--test-data", action="store_true", help="only for the test fixture directory")
+    b.add_argument("--no-pedrea", action="store_true", help="build without the pedrea (the checker then says it is not in yet)")
     c = sub.add_parser("check", help="validate a snapshot file")
     c.add_argument("--file", default=str(DEFAULT_OUT))
     g = sub.add_parser("catalonia", help="print RESULTS_2026 for the lottery guide from a snapshot")
     g.add_argument("--file", default=str(DEFAULT_OUT))
+    pr = sub.add_parser("programme", help="check SELAE's prize programme PDF (programa.pdf) against the checker's programme")
+    pr.add_argument("--year", type=int, default=2026)
+    pr.add_argument("--dir", required=True)
     args = parser.parse_args()
     try:
-        {"fetch": cmd_fetch, "build": cmd_build, "check": cmd_check, "catalonia": cmd_catalonia}[args.command](args)
+        {"fetch": cmd_fetch, "build": cmd_build, "check": cmd_check, "catalonia": cmd_catalonia, "programme": cmd_programme}[args.command](args)
     except Refused as error:
         print(f"REFUSED: {error}", file=sys.stderr)
         return 1

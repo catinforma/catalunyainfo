@@ -1,0 +1,12 @@
+TEST DATA - NOT SELAE'S TEXT. A made-up page in the shape of a prize programme, for tests/lottery-check.test.ts only (scripts/gordo-snapshot.py programme). Never quote it.
+
+SORTEO EXTRAORDINARIO DE NAVIDAD (TEST)
+205 series de 100.000 billetes a 200 euros, divididos en décimos de 20 euros.
+1 de 4.000.000 | 1 de 1.250.000 | 1 de 500.000 | 2 de 200.000 | 8 de 60.000 | 1.794 de 1.000
+2 aproximaciones de 20.000 para el número anterior y posterior al primero
+2 de 12.500 | 2 de 9.600
+99 premios para los 99 números restantes de la centena del primero, segundo y tercero; 198 de los cuartos
+999 premios para los billetes cuyas dos últimas cifras sean iguales
+9.999 reintegros para los billetes cuya última cifra sea igual a la del primero
+Si saliese el 00000, su anterior es el 99.999. Quedan exceptuados los números de los que se deriven.
+15.304 premios, 14.000.000 por serie.

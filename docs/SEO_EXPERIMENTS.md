@@ -7464,3 +7464,38 @@ the 11 with impressions by 15 Jan → noindex them in `low-demand.ts`). Date gua
 `calendario-2027-espana`; IndexNow prefixes `/es/festivos/2027/`, `/ca/festius/2027/`, `/en/holidays/2027/`.
 
 **Outcome:** _pending_
+
+## 2026-11-18 — New page: "Comprobar Lotería de Navidad 2026" (number checker, es/ca/en; deploy, then group `comprobar-loteria`; review 2026-12-29)
+
+**URLs.** `/es/comprobar-loteria-navidad/` (primary), `/ca/comprovar-loteria-nadal/`,
+`/en/check-spanish-christmas-lottery-ticket/`; evergreen (same URLs for 2027). Code route family
+`src/lib/programmatic/lottery-check/`, sitemap (+hreflang, x-default en), llms.txt (with the gordo hub, which was
+missing), `calculator_use` id `lottery-check`. Data: `/data/loteria-navidad.json` (noindex, `s-maxage=300`, purged by
+`comprobar-loteria` and `gordo-navidad`), built from the committed gordo snapshot, which now carries the pedrea.
+
+**What.** Before the draw: what the checker will do, the 17 prize categories of SELAE's 2026 programme (read 31 Oct;
+15,304 prizes, 14 M€ per series) per décimo, per euro and net after the levy, the derived-prize rules quoted from
+BOE-A-2010-19540 (the BOE has published no Lotería Nacional programme since March 2011; "pendiente de confirmar" until
+SELAE's 2026 wording is read: `PROGRAMME_CONFIRMED`, test fails from 14 Dec), the draw, collecting, official ways to
+check, FAQ (6, FAQPage JSON-LD). From the 22 Dec snapshot: the checker (number + amount played → every prize, per
+décimo/euro, net), the 13 drawn prizes, the derived ones and the full pedrea grouped by thousand. Never "no prize"
+before all 1,807 numbers are in.
+
+**Titles (new pages, no baseline).** es "Comprobar Lotería de Navidad 2026: décimo, pedrea y premios"; ca "Comprovar la
+Loteria de Nadal 2026: dècim, pedrea i premis"; en "Check your Spanish Christmas Lottery ticket 2026 (El Gordo)". Titles
+stay the same on draw day; the description switches by design to lead with the Gordo's number (like the gordo hub).
+
+**Links (body only, no title or description change).** Gordo hub ca/es/en: one sentence under "how to check a décimo"
+(hub window "measure from 23 Dec" untouched). Prize tax calculator: related list + next-step box (checker first).
+Lottery guide: one line in "how to check" — **publish `loteria-nadal` only after its 1 Dec review** (13 Nov body change).
+
+**Baseline.** 0 impressions (new). Demand is the year's peak on 22 Dec ("comprobar lotería de navidad", "comprobar
+décimo", "números premiados lotería navidad 2026", "pedrea").
+
+**Hypothesis.** Indexed by mid-December, the page ranks top 10 for "comprobar lotería navidad" / "pedrea lotería navidad
+2026" on draw day and the hub and calculator pass their visitors to it (views/session on the lottery family ≥ 1.3).
+
+**Review 2026-12-29** (`snapshot.py page comprobar-loteria 7`, `page comprovar-loteria 7`, `page check-spanish-christmas 7`;
+GA4 `calculator_use` `lottery-check`). Before then: 1 Dec indexed? (URL inspection), 14 Dec programme confirmed.
+
+**Outcome:** _pending_

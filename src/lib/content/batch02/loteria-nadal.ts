@@ -1,6 +1,7 @@
 import type { Block } from "@/lib/content/blocks";
 import type { Locale } from "@/lib/i18n/config";
 import { gordoHubPath } from "@/lib/programmatic/gordo/paths";
+import { checkPath } from "@/lib/programmatic/lottery-check/paths";
 
 import { dateYear, dayDate } from "./festive";
 import { GROSSA_DRAW_DATE, GROSSA_URLS, PRIZES as GROSSA_PRIZES, TICKET_PRICE as GROSSA_TICKET, eur, levy, LEVY_EXEMPT } from "./grossa";
@@ -752,6 +753,7 @@ const COPY: Record<Locale, Copy> = {
     checkHeading: "Com comprovar si t'ha tocat la loteria de Nadal",
     check: [
       `**Al web de SELAE:** la ${link(U.lnac, "pàgina de la Loteria Nacional")} té un comprovador de números.`,
+      `**Al nostre ${link(checkPath("ca"), "comprovador de la Loteria de Nadal")}:** tots els premis del teu número (també la pedrea, les aproximacions, les centenes i el reintegrament), per dècim i per euro, i el que en cobres després d'Hisenda, amb els números de SELAE.`,
       `**A la llista oficial de premis:** és l'única que val per cobrar, i el 2025 SELAE la va penjar al seu web la mateixa tarda del sorteig. Hi surten la pedrea, les aproximacions (marcades amb una a), les centenes (c) i les terminacions (t).`,
       `**Si l'has comprat per internet,** SELAE t'avisa per correu electrònic i SMS, i els premis de menys de 2.000 € s'ingressen sols al moneder del teu compte (${link(U.notify, "SELAE")}).`,
     ],
@@ -964,6 +966,7 @@ const COPY: Record<Locale, Copy> = {
     checkHeading: "Cómo comprobar si te ha tocado la Lotería de Navidad",
     check: [
       `**En la web de SELAE:** la ${link(U.lnac, "página de la Lotería Nacional")} tiene un comprobador de números.`,
+      `**En nuestro ${link(checkPath("es"), "comprobador de la Lotería de Navidad")}:** todos los premios de tu número (también la pedrea, las aproximaciones, las centenas y el reintegro), por décimo y por euro, y lo que cobras tras Hacienda, con los números de SELAE.`,
       "**En la lista oficial de premios:** es la única que vale para cobrar, y en 2025 SELAE la colgó en su web la misma tarde del sorteo. Ahí están la pedrea, las aproximaciones (marcadas con una a), las centenas (c) y las terminaciones (t).",
       `**Si lo compraste por internet,** SELAE te avisa por correo electrónico y SMS, y los premios de menos de 2.000 € se ingresan solos en el monedero de tu cuenta (${link(U.notify, "SELAE")}).`,
     ],
@@ -1176,6 +1179,7 @@ const COPY: Record<Locale, Copy> = {
     checkHeading: "How to check your Christmas Lottery décimo",
     check: [
       `**On SELAE's website:** the ${link(U.lnac, "Lotería Nacional page")} has a number checker.`,
+      `**On our ${link(checkPath("en"), "Spanish Christmas Lottery checker")}:** every prize your number wins (pedrea, aproximaciones, centenas and reintegro included), per décimo and per euro, and what you keep after tax, from SELAE's numbers.`,
       "**On the official prize list:** the only one that counts for payment; in 2025 SELAE posted it on its website on the afternoon of the draw. It includes the pedrea, the numbers next to the big prizes (marked a), the hundreds (c) and the endings (t).",
       `**If you bought online,** SELAE tells you by email and SMS, and prizes under €2,000 are paid into your account's wallet automatically (${link(U.notify, "SELAE")}).`,
     ],

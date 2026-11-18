@@ -54,4 +54,10 @@ export interface GordoSnapshot {
   readAt: string;
   sources: { results: string; officialList: string | null };
   prizes: GordoPrize[];
+  /**
+   * The pedrea (1,794 numbers of 1,000 € a billete, 100 € a décimo) as read so
+   * far, for the checker (lib/programmatic/lottery-check). Absent or null when
+   * the script could not read the list; never holds a top-prize number.
+   */
+  pedrea?: string[] | null;
 }

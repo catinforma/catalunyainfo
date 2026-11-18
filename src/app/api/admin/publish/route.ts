@@ -90,6 +90,7 @@ import { editionHubPath, editionPaths } from "@/lib/programmatic/spain-2027/edit
 import { spainDayPaths, spainHubPath, spainPaths } from "@/lib/programmatic/spain-2027/paths";
 import { widgetEditions } from "@/lib/programmatic/embed-2027/places";
 import { gordoPaths } from "@/lib/programmatic/gordo/sitemap";
+import { checkPublishPaths } from "@/lib/programmatic/lottery-check/sitemap";
 import { authoriseDeployRequest, describeError } from "@/lib/admin/deploy-auth";
 import { revalidateSitemapAndFeeds } from "@/lib/seo/revalidate-feeds";
 
@@ -505,6 +506,14 @@ export async function POST(request: Request) {
     // Christmas lottery guide, which links the hub in its three editions, goes
     // out with `gordo-navidad-links`.
     const gordoCodePaths = wants("gordo-navidad") ? gordoPaths().map((entry) => entry.path) : [];
+    // Comprobar Lotería de Navidad (/es/comprobar-loteria-navidad/,
+    // /ca/comprovar-loteria-nadal/, /en/check-spanish-christmas-lottery-ticket/):
+    // code routes on the same snapshot, so `gordo-navidad` carries them too on
+    // 22 December; `comprobar-loteria` alone sends them out the first time.
+    // The checker's JSON (/data/loteria-navidad.json) is revalidated and
+    // purged with them, never sent to IndexNow (noindex).
+    const checkWanted = wants("comprobar-loteria") || wants("gordo-navidad");
+    if (checkWanted) gordoCodePaths.push(...checkPublishPaths().pages);
     if (wants("gordo-navidad-links")) published.push(await publishB2Article(LOTERIA_NADAL));
     const codePaths = [...(wants("calendario-2027-espana") ? [...spainPaths(), ...spainDayPaths(), ...editionPaths()] : []), ...gordoCodePaths];
     // "Posa el calendari laboral 2027 al teu web" (/ca/festius/2027/al-teu-web/,
@@ -549,6 +558,7 @@ export async function POST(request: Request) {
     }
     // Exact paths only: no section or locale-home revalidation for code routes.
     for (const path of codePaths) revalidate(path.replace(/\/$/, ""));
+    if (checkWanted) for (const path of checkPublishPaths().data) revalidate(path);
     // The sitemap, the RSS feeds and the Google News sitemap list the same pieces.
     for (const url of revalidateSitemapAndFeeds()) revalidated.add(url);
 
