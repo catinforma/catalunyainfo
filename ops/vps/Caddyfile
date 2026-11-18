@@ -116,7 +116,9 @@ catalunyainfo.com {
 # Every response there is noindex (X-Robots-Tag) and robots.txt disallows all,
 # because the host is not www.catalunyainfo.com. Links and canonicals point to
 # www. Comment it out again (and delete the record) after the cutover.
+# Closed 18 Nov 2026 (owner OK): the preview no longer serves the app; every
+# request goes to the same path on www. The Cloudflare record can be deleted.
 #
 vps.catalunyainfo.com {
-	import next_app
+	redir https://www.catalunyainfo.com{uri} 308
 }
