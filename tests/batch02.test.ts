@@ -578,7 +578,8 @@ test("shops: the November-December towns table is the DOGC resolution's, town by
   // 11 Nov 2026 (CTR retitles): "tiendas abiertas domingo / hoy barcelona"
   // and the date-by-date table; 29 November stays in the description.
   assert.equal(SHOPS.editions.es.seoTitle, "Tiendas abiertas domingo y festivos Barcelona: fecha a fecha");
-  assert.equal(SHOPS.editions.ca.seoTitle, "Botigues obertes diumenges i festius a Barcelona, dia a dia");
+  // 18 Nov 2026 (day-7 rule): CA back to its 3 Nov title; ES and EN keep the 11 Nov ones.
+  assert.equal(SHOPS.editions.ca.seoTitle, "Botigues obertes a Barcelona: diumenge 29 nov i desembre");
   for (const locale of ["ca", "es", "en"] as const) assert.match(SHOPS.editions[locale].seoDescription, /29 (de )?(novembre|noviembre|November)/, `${locale}: 29N in the snippet`);
   const caFaq = SHOPS.editions.ca.blocks.find((b) => b.type === "faq") as { items: { question: string; answer: string }[] } | undefined;
   assert.equal(caFaq?.items[0]?.question, "Quins festius d'obertura comercial queden el 2026?");

@@ -90,11 +90,12 @@ test("the sibling paths the bridge page links to are the ones those guides publi
 test("titles fit in 60 characters, descriptions in 155, name the year and use the searched words", () => {
   const words: Record<string, Record<Locale, RegExp>> = {
     // EN titles of both retitled 30 Oct (CTR sweep): the holiday dates and the Marató date.
+    // 18 Nov 2026: the Marató EN title follows ca/es (schedule, presenters, how to donate); the date leads its description.
     // CA/ES retitled 3 Nov (CTR sweep) with the answer, then 6 Nov (CTR sweep:
     // the answer titles lost clicks) with the promise of the leave table;
     // 11 Nov (CTR retitles) with the Purísima wording and the day-by-day table.
     decemberBridge: { ca: /^Pont de desembre 2026 \(Puríssima\) a Catalunya, dia a dia$/, es: /^Puente de diciembre 2026 \(Purísima\) en Cataluña, día a día$/, en: /^December 2026 holidays in Catalonia: the bridge day by day$/ },
-    marato: { ca: /^La Marató/, es: /^La Marató/, en: /^La Marató 2026: TV3 telethon on 13 December/ },
+    marato: { ca: /^La Marató/, es: /^La Marató/, en: /^La Marató TV3 2026: schedule, presenters and how to donate$/ },
   };
   for (const article of ARTICLES) {
     for (const locale of LOCALES) {
@@ -397,7 +398,7 @@ test("no other edition's figures are printed as 2026's", () => {
   assert.equal(PROGRAMME_CHECKED, "2026-11-13");
 });
 
-test("top-3 push (30 Oct 2026): the bridge snippet lists December's holidays and the FAQ asks for the Purísima bridge; La Marató's title gives the date", () => {
+test("top-3 push (30 Oct 2026): the bridge snippet lists December's holidays and the FAQ asks for the Purísima bridge; La Marató's description gives the date", () => {
   const description: Record<"ca" | "es", RegExp> = {
     ca: /^Festius de desembre 2026 a Catalunya: dimarts 8 \(la Immaculada\), 25 i 26\./,
     es: /^Festivos de diciembre 2026 en Cataluña: martes 8 \(la Purísima\), 25 y 26\./,
@@ -409,8 +410,13 @@ test("top-3 push (30 Oct 2026): the bridge snippet lists December's holidays and
     assert.ok(edition.seoDescription.includes(String(LOCAL_MONDAY_7.municipalities)), `${locale}: the local Monday-7 holidays are not hidden`);
     const faqBlock = edition.blocks.find((b) => b.type === "faq") as { items: { question: string }[] };
     assert.ok(faqBlock.items.some((item) => item.question === question[locale]), locale);
-    assert.match(MARATO_GUIDE.editions[locale].seoTitle, /13 de (desembre|diciembre)/, locale);
+    // 18 Nov 2026 (day-7 review, docs/SEO_EXPERIMENTS.md): the title promises the schedule, the presenters and
+    // how to donate; the date leads the description instead.
+    assert.match(MARATO_GUIDE.editions[locale].seoTitle, /^La Marató TV3 2026: (horari, presentadors i com donar|horario, presentadores y cómo donar)$/, locale);
+    assert.match(MARATO_GUIDE.editions[locale].seoDescription, /^(Diumenge|Domingo) 13 de (desembre|diciembre) /, locale);
   }
+  assert.equal(MARATO_GUIDE.editions.en.seoTitle, "La Marató TV3 2026: schedule, presenters and how to donate");
+  assert.match(MARATO_GUIDE.editions.en.seoDescription, /Sunday 13 December/);
   // The days named in the snippet are what the holiday calendar says.
   assert.equal(weekdayIndex("2026-12-08"), 2);
   for (const iso of ["2026-12-08", "2026-12-25", "2026-12-26"]) assert.ok(holidayOn(iso), iso);

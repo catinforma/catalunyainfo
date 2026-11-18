@@ -3372,7 +3372,26 @@ position, not raw clicks. Read the ES bridge against the Spain-wide page's
 share of the same queries. If the CA Marató page is reverted, do not restore
 its old description, because the volunteer deadline (10 Nov) is past.
 
-**Outcome:** _pending_
+**Outcome (day-7 review, 18 Nov 2026).** GSC full days only: the last full day is 16 Nov (17 Nov partial). The deploy went out
+on 11 Nov at ~20:30, so "after" = 12–16 Nov (5 days), against this entry's 14-day baseline (29 Oct–11 Nov). Because several
+baselines straddle earlier snippet changes, the 6–11 Nov stretch is shown too. Figures: clicks / impressions / CTR / position,
+then per day. Pulled with `snapshot.py page <path> 14|21` and a date-bounded page×query pull from the same API.
+
+| Page | Baseline 29 Oct–11 Nov | 6–11 Nov | After 12–16 Nov | Rule | Decision |
+| --- | --- | --- | --- | --- | --- |
+| ES bridge `puente-diciembre-cataluna` | 288 / 15,034 / 1.9 % / 5.9 (20.6 clicks, 1,074 impr./day) | 158 / 8,527 / 1.9 % / 6.1 | 45 / 2,241 / 2.0 % / 6.3 (9.0, 448/day) | Clicks fell on 58 % fewer impressions; −0.4 | Not triggered: keep. No action today (brief: the bridge reviews on 25 Nov with the 17 Nov lead wording) |
+| CA bridge `pont-desembre-catalunya` | 21 / 1,015 / 2.1 % / 5.0 (1.5, 73/day) | 7 / 365 / 1.9 % / 5.1 | 11 / 735 / 1.5 % / 6.7 (2.2, 147/day) | Page average −1.7 with lower CTR: the literal "position" condition holds. Query level it does not: "pont de desembre 2026" 7.4 → 7.5, "pont de la purissima 2026" 6.0 → 5.3 (24 → 473 impressions); the average fell because new, lower queries came in | Not acted on (25 Nov review). The 25 Nov reviewer should judge it by query, not by page average |
+| EN bridge | 2 / 333 / 0.6 % / 4.1 | 0 / 32 | 0 / 53 / 3.8 | Too small | Keep |
+| ES shops `tiendas-abiertas-festivos-cataluna` | 362 / 13,477 / 2.7 % / 5.8 (25.9, 963/day) | 92 / 7,603 / 1.2 % / 6.3 | 57 / 3,636 / 1.6 % / 6.3 (11.4, 727/day) | Clicks fell on 25 % fewer impressions (the 1 Nov peak is in the baseline); −0.5. Against 6–11 Nov: +0.4 points at equal position | **Keep.** The 13 Nov queue's live description needs CTR < 1.5 % at ≤ 6.5: not met (1.6 %). The 16 Nov H2 reviews on 25 Nov |
+| CA shops `botigues-obertes-festius-catalunya` | 38 / 1,665 / 2.3 % / 5.3 (2.7, 119/day) | 15 / 806 / 1.9 % / 6.1 | 2 / 418 / 0.5 % / 7.1 (0.4, 84/day) | Position −1.8 with no CTR gain (the daily position went 5.6 → 6.4 → 7.6 → 7.1 → 8.7 over 12–16 Nov) | **Reverted** to the 3 Nov title and description (entry of 18 Nov below) |
+| EN shops | 9 / 571 / 1.6 % / 6.2 | 4 / 317 / 1.3 % / 6.5 | 4 / 113 / 3.5 % / 6.2 | — | Keep |
+| EN weather `barcelona-weather-by-month` | 23 / 6,958 / 0.3 % / 7.3 (1.6, 497/day) | — | 11 / 2,596 / 0.4 % / 8.6 (2.2, 519/day) | Clicks up at higher impressions; −1.3 (under 1.5) with a CTR gain | **Keep.** So the 13 Nov plan holds: apply `docs/patches/weather-month-h3-19nov.patch` on 19 Nov (it still applies cleanly on 18 Nov). The slide to 8.0–9.3 (10.6 on partial 17 Nov) is the ranking problem the patch targets |
+| CA school calendar (live title) | 40 / 4,188 / 1.0 % / 5.0 (2.9, 299/day) | 8 / 1,129 / 0.7 % / 5.1 | 2 / 1,004 / 0.2 % / 6.6 (0.4, 201/day) | Position −1.6 with no CTR gain. A step on the first day: 4.7–5.1 on 9–11 Nov, then 6.4–7.5 on 12–16 Nov. Against 6–11 Nov, clicks also fell at higher impressions | **Reverted** in ca/es/en (one function builds all three: ES 1 / 376 at 15.9, EN 0 / 90 at 5.8, was 4 / 234 at 5.2) |
+| CA Marató | 29 / 4,203 / 0.7 % / 6.5 (2.1, 300/day) | — | 2 / 534 / 0.4 % / 7.2 (0.4, 107/day) | Impressions −64 %. "… tv3 2026" queries ran 92–180 a day to 10 Nov and 19–32 a day from 11 Nov, the day before the new title could show (volunteer sign-up closed on 10 Nov). −0.7 | Not triggered: keep the 11 Nov title over the old one. But there is no gain, so the 13 Nov queued title goes out (entry of 18 Nov below) |
+| ES Marató | 12 / 876 / 1.4 % / 6.8 | — | 4 / 139 / 2.9 % / 5.6 | Gain (on 4 clicks) | Keep over the old title; follows CA in the queued title (owner rule, one hypothesis) |
+| ES Easter `semana-santa-2027-cataluna` | 52 / 3,423 / 1.5 % / 6.0 (3.7, 245/day) | 8 / 1,802 / 0.4 % / 6.5 | 2 / 1,191 / 0.2 % / 7.1 (0.4, 238/day) | Clicks fell at equal impressions: **triggered**. Against 6–11 Nov also lower (0.44 → 0.17 %, −0.6) | **Reverted**, together with the 13 Nov queued description revert (entry of 18 Nov below) |
+| CA Easter `setmana-santa-2027-catalunya` | 25 / 2,562 / 1.0 % / 6.3 (1.8, 183/day) | 4 / 1,213 / 0.3 % / 6.5 | 3 / 1,016 / 0.3 % / 6.9 (0.6, 203/day) | Clicks fell at higher impressions: **triggered** | **Reverted** (same) |
+| EN Easter | ~30 impr. | — | 0 / 18 / 4.2 | Too small | Reverted with ca/es (same hypothesis) |
 
 ## 11 Nov 2026 — After 11N: next strikes on the strip, an "upcoming" block on the 11N pages, and the Renfe guide follows the next rail strike (deploy; groups `strikes`, `strike-11n`, `strike-11n-cities`)
 
@@ -3883,6 +3902,17 @@ edited. Note that the 28-day baselines below were measured before the
 | `/es/festivos/lleida/`, `/es/festivos/terrassa/` (template) | 10 / 2,954 / 0.3 % / 7.5; 8 / 1,915 / 0.4 % / 7.4 | 3 Nov; measure 15 Nov and 1 Dec | Every named query at 8–10 ("hoy es festivo en lleida" 49 at 8.8, "festivos lleida 2027" 49 at 8.3): ranking. No Spain 2027 city page competes (the `/es/festivos/2027/<comunidad>/<ciudad>/` pages cover other communities) | Read the 1 Dec measurement. Then, if ranking is still 8+, work the body: the next holiday and its date, the DOGC 2027 order when it is out (mid-December). Not the title |
 
 **Outcome:** no change; queue for 18 Nov, 28–30 Nov and 1 Dec.
+
+**18 Nov rows, done 18 Nov 2026** (numbers in the 11 Nov entry's outcome, GSC 12–16 Nov):
+- EN weather: the title is kept (0.3 → 0.4 % at 7.3 → 8.6), so the 19 Nov body patch goes ahead as planned. Title not before 9 Dec.
+- CA school calendar: the 18 Nov rule reverts the title (5.0 → 6.6, 0.2 %). The description test moves from 19 Nov to **25 Nov**,
+  after the revert's own day-7 reading, so that two snippet changes are not read together.
+- ES shops: 1.6 % at 6.3, so "CTR < 1.5 % at ≤ 6.5" is not met: no live description. Treated as ranking. The CA edition is reverted
+  by the 11 Nov rule.
+- La Marató CA: no gain (0.7 → 0.4 %). 3Cat had published the schedule (10 Nov news) and the presenters (2 Oct). Both were re-read
+  18 Nov, so the queued title is applied in ca/es/en.
+- Semana Santa ES/CA: CTR has not recovered (0.2 / 0.3 %), so the 3 Nov description is reverted. The 11 Nov title is reverted too,
+  because the 11 Nov rule fired. Together this is the 31 Oct snippet, a single test (entry of 18 Nov below).
 
 
 ## 2026-11-13 — Two evergreen flagships: the padró (new) and Carnival 2027 (new), from the demand research (groups `padro`, `padro-links`, `carnaval`, `carnaval-links`; deploy first)
@@ -6094,6 +6124,13 @@ inside measurement windows that close 27 Nov–4 Dec).
 **Review:** 20 Nov (lead hold, with the Canyelles/Espinelves title test),
 30 Nov (fair leads, Gran Recapte results guard).
 
+**Weather patch, decided 18 Nov 2026:** the 18 Nov check keeps the EN title (CTR 0.3 → 0.4 %, position 7.3 → 8.6, under the
+1.5 revert threshold), so **apply `docs/patches/weather-month-h3-19nov.patch` on 19 Nov**. `git apply --check` passed on 18 Nov
+on top of the 18 Nov changes, which do not touch `climate.ts`. Then deploy and publish `climate`, and IndexNow the three
+weather URLs. Baseline for the patch is the EN page on 12–16 Nov: 11 / 2,596 / 0.4 % / 8.6 ("barcelona weather by month" 167 at
+10.4, "august" 149 at 9.3, "temperature by month" 133 at 9.8, "january" 115 at 9.6). Read it on 26 Nov and 9 Dec with
+`snapshot.py page barcelona-weather-by-month 7`, by query and at equal query.
+
 ## 2026-11-16 — 17N rail strike: answer first with the official minimum services, the description carries them, 19N and 23N sections; strikes hubs answer "mañana" and each day of the week (deploy; group `strikes`)
 
 **Observation.** GSC 14–16 Nov (`snapshot.py page huelga-trenes 3`): the 17N
@@ -6839,3 +6876,127 @@ last day of that window: read 12–17 Nov for it); the 19 Nov answer-first revie
 the as-of switches 18–23 Nov; any Ministry resolution for Adif or 23N published meanwhile.
 
 **Outcome:** _pending_
+
+---
+
+## 2026-11-18 — Day-7 reviews of the 11 Nov retitles: Easter 2027 back to its 31 Oct snippet, La Marató's queued title, CA shops and the school calendar reverted (deploy; groups `setmana-santa-2027`, `marato`, `shops`)
+
+Reviews due 18 Nov (`grep "18 Nov"`): the 11 Nov CTR retitles (bridge, shops, EN weather, school calendar, Marató, Easter) and the
+13 Nov queue rows. The readings and the rule for each page are under the 11 Nov entry's outcome. GSC full days only, last full day
+16 Nov. **Not reviewed here** (out of this brief): the strike entries (29 Oct/3 Nov 11N measures, the Renfe-guide day-7 rule, the
+17N Spain-page rule), the 11 Nov election-guide rule (26 Nov) and the bridge pages (25 Nov). Calculators were not touched.
+
+### 1. Semana Santa 2027: why CTR is near zero at position 6–7
+
+`snapshot.py page santa-2027 14` (5–18 Nov, partial days included): "semana santa 2027 catalunya" 1,312 impressions at 6.5, 0.2 %;
+"setmana santa 2027 catalunya" 1,123 at 6.3, 0 clicks. The site's own curve expects 4.1 % at position 7 (`ctr 14 300`).
+
+- **When it broke.** The daily CTR (both editions) was 2.1–2.9 % at 5.3–5.9 from 1 to 5 Nov, and 0.0–0.8 % at 6.1–7.2 from 6 Nov.
+  Per edition: ES 44 / 1,621 / 2.7 % / 5.4 (1–5 Nov), then 8 / 1,802 / 0.4 % / 6.5 (6–11 Nov), then 2 / 1,191 / 0.2 % / 7.1
+  (12–16 Nov). CA: 21 / 1,349 / 1.6 % / 6.2, then 4 / 1,213 / 0.3 % / 6.5, then 3 / 1,016 / 0.3 % / 6.9. The break follows the
+  3 Nov deploy (17:45, group published the same evening) by 2–3 days. That deploy put the week, "del 21 al 28 de marzo", first in
+  both the description and the lead. The position loss (about −1) is far too small to explain a fall from 2.7 % to 0.2 %.
+- **What our snippet says.** Live HTML on 18 Nov (curl): ES "Semana Santa 2027: del 21 al 28 de marzo. Festivos: Viernes Santo 26 y
+  Lunes de Pascua 29 (el Jueves Santo, no). Colegios: del 20 al 29 de marzo." The CA one is the same. Every answer the head query
+  asks for sits in the first 40 characters, so the snippet answers the query on the results page. The 11 Nov titles carry no date
+  ("día a día: festivos y colegios"). They changed nothing: 0.2 / 0.3 %.
+- **What the results page answers.** It could not be observed. Google served its "tráfico inusual" page to the server's IP on
+  18 Nov (Playwright, google.es, two queries), and this was not worked around. The WebSearch tool is US-located and not
+  representative. Indirect evidence that the answer is on the page itself: where we rank 2–4 we get no clicks either ("semana santa
+  cataluña 2027" 29 at 3.2, "dia de la mona 2027" 41 at 4.0, "cuando es semana santa en 2027 en cataluña" 17 at 4.1; 14 d).
+- **Cannibalisation: minor, not the cause.** hreflang is reciprocal (ca/es/en, x-default en) and each page is self-canonical
+  (curl 18 Nov). Each head query goes mostly to the right edition, 12–16 Nov: "semana santa 2027 catalunya" ES 474 at 7.0 vs CA
+  81 at 7.6 (85 % right), "setmana santa 2027 catalunya" CA 385 at 5.8 vs ES 106 at 7.7 (78 % right). Both editions collapsed on
+  the same days, so the split did not cause the fall. "setmana santa 2027" (no region) is on CA only, at 9.8: that is ranking.
+- **Diagnosis.** A full answer in the first words of the snippet, possibly on top of a direct answer from Google. Only a
+  return to the snippet that last worked can tell these apart.
+
+### 2. Change: Easter 2027 back to its 31 Oct snippet (ca/es/en; group `setmana-santa-2027`)
+
+Two logged rules both fire today. The 11 Nov day-7 rule reverts the title: clicks fell at equal or higher impressions in both
+editions. The 13 Nov queue reverts the 3 Nov description ("take the week range out … give the two holidays"). Together they restore
+the state of 31 Oct–3 Nov, the only one measured at 1.6–2.7 %. This is one test of one hypothesis: the "week first" snippet killed
+the clicks. The lead's 3 Nov week clause goes too, so Google cannot rebuild the same snippet from the first sentence.
+
+| Edition | Title | Description | Lead |
+| --- | --- | --- | --- |
+| CA | "Setmana Santa 2027 a Catalunya dia a dia: festius i escoles" → "Setmana Santa 2027 a Catalunya: festius 26 i 29 de març" | "Setmana Santa 2027: del 21 al 28 de març. Festius: …" → "Divendres Sant i Dilluns de Pasqua (26 i 29 de març) són festius; el Dijous Sant, no. Vacances escolars del 20 al 29 de març. Botigues, ponts i la Passió." | "la Setmana Santa del 2027, del 21 al 28 de març, té dos festius" → "la Setmana Santa del 2027 té dos festius" |
+| ES | "… día a día: festivos y colegios" → "Semana Santa 2027 en Cataluña: festivos 26 y 29 de marzo" | → "Viernes Santo y Lunes de Pascua (26 y 29 de marzo) son festivos; el Jueves Santo, no. Vacaciones escolares del 20 al 29 de marzo. Tiendas y puentes." | same, without "del 21 al 28 de marzo" |
+| EN | "Easter 2027 in Catalonia and Barcelona, day by day" → "Easter 2027 in Catalonia and Barcelona: 26 and 29 March" | unchanged (never had the week) | unchanged (never had it) |
+
+The week stays on the page in the key facts (Palm Sunday 21, Easter Sunday 28 March). The 17 Nov items are kept: the "dia de la
+mona" key-fact label and the Carnival link. **No fact changed.** All of them were re-read on 18 Nov with curl and grep:
+treball.gencat.cat calendari-festes-2027 "26 de març, divendres", "29 de març, dilluns" (Ordre EMT/52/2026), and the Ordre
+EDF/66/2026 PDF (DOGC 27.4.2026) "Setmana Santa: del 20 de març al 29 de març de 2027, ambdós inclosos".
+`tests/easter-2027.test.ts` pins the restored strings. It also forbids "21 al/to 28" in the title, the description and the lead.
+
+**New baseline (12–16 Nov):** ES 2 / 1,191 / 0.2 % / 7.1; CA 3 / 1,016 / 0.3 % / 6.9; EN 0 / 18 / 4.2. Head queries: ES "semana
+santa 2027 catalunya" 474 at 7.0 (0 clicks); CA "setmana santa 2027 catalunya" 385 at 5.8 (0); CA "setmana santa 2027" 101 at 9.8.
+**Prediction:** within 7 days of pickup, ES CTR ≥ 1.2 % and CA ≥ 0.8 % at position ≤ 7.5, half of the 1–5 Nov levels.
+**Review 26 Nov and 2 Dec** with `snapshot.py page santa-2027 14` and a page×query split. Find the pickup from the daily break and
+read only the days after it.
+- Keep if the prediction holds.
+- If both editions stay ≤ 0.5 % at equal position, the snippet is not the cause: the results page answers the date itself. Keep
+  the restored strings (the best measured). Run no further snippet test on this page before 1 Feb 2027 (demand peaks Feb–Mar), and
+  move the work to ranking (CA "setmana santa 2027" at 9.8, ES head query at 7).
+- In between: hold, and re-read on 2 Dec.
+- In both reviews, also check the share of the wrong edition on each head query (ES 22 %, CA 15 % today). Above a third, look at
+  internal links.
+
+### 3. La Marató: the 13 Nov queued title (ca/es/en; group `marato`)
+
+The 11 Nov rule does not fire, but CA gained nothing: 0.7 → 0.4 % at 6.5 → 7.2 on 64 % fewer impressions, because demand fell after
+the volunteer deadline (10 Nov). The 13 Nov precondition is met: 3Cat has published the schedule and the presenters. Re-read 18 Nov
+(curl + grep): the 10 Nov news says "El programa de televisió començarà a les 9.30 des de la Torre de Collserola, on s'allargarà
+fins a les 14.30, i es reprendrà a les 16.00 des del Parc Audiovisual de Catalunya, a Terrassa, fins a la 1.00" and "Raquel Sans i
+Miki Núñez conduiran La Marató a TV3". The presenters video has uploadDate 2026-10-02. Both are already in the body (13 Nov).
+- CA "La Marató TV3 2026: 13 de desembre, com donar i desgravar" → "La Marató TV3 2026: horari, presentadors i com donar"
+- ES "… 13 de diciembre, cómo donar y desgravar" → "La Marató TV3 2026: horario, presentadores y cómo donar"
+- EN "La Marató 2026: TV3 telethon on 13 December, how to donate" → "La Marató TV3 2026: schedule, presenters and how to donate"
+
+"TV3" stays, because it is in the queries. The descriptions are unchanged and open with the date ("Diumenge 13 de desembre a TV3…"),
+as the queue asked. ES had gained (1.4 → 2.9 %, on 4 clicks), but it follows CA: same hypothesis, owner rule.
+**Baseline (12–16 Nov):** CA 2 / 534 / 0.4 % / 7.2; ES 4 / 139 / 2.9 % / 5.6; EN 0 / 11. "marató tv3 2026 data" 70 at 8.4.
+**Prediction:** by 2 Dec, "a quina hora / horari / presentadors" queries appear and CA CTR is > 1 % at ≤ 7.
+**Review 25 Nov and 2 Dec** (`snapshot.py page la-marato 7`). Revert an edition to its 11 Nov title if its CTR falls at equal
+position (±0.5). Demand climbs into 13 Dec, so compare CTR, not clicks. Confounder: the 13 Nov body update (measure 1 Dec).
+
+### 4. CA shops: reverted by the rule (group `shops`)
+
+Position 5.3 → 7.1 with CTR 2.3 → 0.5 % (rule: more than −1.5 with no CTR gain).
+- Title: "Botigues obertes diumenges i festius a Barcelona, dia a dia" → back to "Botigues obertes a Barcelona: diumenge 29 nov i
+  desembre".
+- Description back to "Diumenge 29 de novembre, dia d'eleccions: sí que poden obrir a Barcelona i Catalunya. Al desembre, 6, 8, 13,
+  20 i 27; 25 i 26, no. 30 municipis canvien." It has the same dates and the same count as the live one; no new fact.
+
+ES and EN keep the 11 Nov strings (they pass). Baseline CA 2 / 418 / 0.5 % / 7.1. **Read 25 Nov** with the 16 Nov shops review.
+Keep the revert if the position is back to ≤ 6. Otherwise it is ranking, and there is no further snippet change before 29 Nov.
+
+### 5. School calendar: live title reverted (deploy only)
+
+CA moved from 5.0 to 6.6 on the first day (CTR 0.7–1.0 → 0.2 %), so the rule fires. `liveSchoolTitle` is restored for all three
+editions, because one function builds them:
+- CA "Calendari escolar 2026-2027: festius i lliure disposició" (6 Nov)
+- ES "Calendario escolar 2026-27 Cataluña: Navidad 22/12-7/1"
+- EN "Catalonia school calendar 2026-27: Christmas 22 Dec–7 Jan"
+
+Baseline CA 2 / 1,004 / 0.2 % / 6.6; ES 1 / 376 / 15.9; EN 0 / 90 / 5.8. **Review 25 Nov.** Keep the revert if CA is back to ≤ 5.5,
+and run the 13 Nov description test (town free days, "demà hi ha escola?") that day, not on 19 Nov.
+
+### 6. Kept
+
+ES shops, EN shops, EN weather (patch on 19 Nov: see the 16 Nov entry), ES/EN bridge, ES Marató over its old title. The CA
+bridge's page-average trigger is a query-mix effect and goes to its 25 Nov review.
+
+**Tests.** `npx tsc --noEmit -p .` has one error, in `tests/strike-days-1920n.test.ts` (strike constants, not touched here).
+`npm test`: 2,328 tests. The only failures are the date guards already due today, all out of this brief: polls staleness ×2
+(elections), strikes as-of ×3. Logs: scratchpad `reviews-18n-tsc.log`, `reviews-18n-test2.log`.
+
+**Go-live.** Deploy first: the school title is code, and publish reads the deployed modules. Then publish `setmana-santa-2027`,
+`marato` and `shops`. `marato` also republishes the Barcelona Christmas guide, whose module is unchanged since 13 Nov.
+IndexNow: `/ca/guies/setmana-santa-2027-catalunya/ /es/guias/semana-santa-2027-cataluna/ /en/guides/easter-2027-catalonia/
+/ca/guies/la-marato-tv3-3cat/ /es/guias/la-marato-tv3-3cat/ /en/guides/la-marato-tv3-telethon/
+/ca/guies/botigues-obertes-festius-catalunya/ /ca/guies/calendari-escolar-catalunya/ /es/guias/calendario-escolar-cataluna/
+/en/guides/catalonia-school-calendar/`.
+
+**Outcome:** _pending_ (26 Nov / 2 Dec Easter; 25 Nov / 2 Dec Marató; 25 Nov CA shops and school)

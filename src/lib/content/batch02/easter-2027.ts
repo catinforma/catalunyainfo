@@ -361,33 +361,23 @@ export interface EasterMeta {
   excerpt: string;
 }
 
-/** First candidate within the description budget; the last one is the shortest. */
-function fitDescription(candidates: string[]): string {
-  return candidates.find((c) => c.length <= 155) ?? candidates.at(-1)!;
-}
-
 function buildMeta(locale: Locale): EasterMeta {
   const holidays = dayPair(EASTER.goodFriday, EASTER.easterMonday, locale);
   const school = span(EASTER.schoolFrom, EASTER.schoolTo, locale);
-  // "setmana santa 2027", "quan és setmana santa 2027" (Search Console,
-  // 21 Oct-3 Nov 2026): the week itself first, Palm Sunday to Easter Sunday
-  // as the key facts give them, then the two holidays by day number.
-  // 11 Nov 2026 (CTR retitles, docs/SEO_EXPERIMENTS.md): ES fell from about
-  // 2.8 % at 5.5 (1-5 Nov) to 0.7 % at 6.5 with the dates in the title and
-  // again in the description. The dates stay in the description; the title
-  // promises the day-by-day table (and the school break, bridges, shops and
-  // metro below it), which no snippet can hold.
-  const week = span(EASTER.palmSunday, EASTER.easterSunday, locale);
-  const n = (iso: string) => String(Number(iso.slice(8, 10)));
+  // 18 Nov 2026 (docs/SEO_EXPERIMENTS.md, "Easter 2027: back to the 31 Oct
+  // snippet"): the 31 Oct title, description and lead are restored. With them
+  // (1-5 Nov) ES had 2.7 % CTR at 5.4 and CA 1.6 % at 6.2. The 3 Nov snippet
+  // (the week, "del 21 al 28", first in the description and the lead) was
+  // picked up 4-6 Nov and CTR fell to 0.4 / 0.3 % at 6.5; the 11 Nov
+  // "dia a dia" title kept it there (0.2 / 0.3 % at 7.1 / 6.9, 12-16 Nov).
+  // The holidays lead; the week stays in the key facts (Palm Sunday, Easter
+  // Sunday). Review 26 Nov and 2 Dec.
   if (locale === "ca") {
     return {
       path: "guies/setmana-santa-2027-catalunya",
       title: "Setmana Santa 2027 a Catalunya: festius, vacances escolars, botigues i ponts",
-      seoTitle: "Setmana Santa 2027 a Catalunya dia a dia: festius i escoles",
-      seoDescription: fitDescription([
-        `Setmana Santa 2027: ${week}. Festius: Divendres Sant ${n(EASTER.goodFriday)} i Dilluns de Pasqua ${n(EASTER.easterMonday)} (el Dijous Sant, no). Vacances escolars ${school}.`,
-        `Setmana Santa 2027: ${week}. Festius: Divendres Sant ${n(EASTER.goodFriday)} i Dilluns de Pasqua ${n(EASTER.easterMonday)}. Vacances escolars ${school}.`,
-      ]),
+      seoTitle: `Setmana Santa 2027 a Catalunya: festius ${holidays}`,
+      seoDescription: `Divendres Sant i Dilluns de Pasqua (${holidays}) són festius; el Dijous Sant, no. Vacances escolars ${school}. Botigues, ponts i la Passió.`,
       excerpt: "Quins dies són festius per Setmana Santa del 2027 a Catalunya, les vacances de les escoles, les festes locals, si obren les botigues, el metro, els ponts i les tradicions.",
     };
   }
@@ -395,18 +385,15 @@ function buildMeta(locale: Locale): EasterMeta {
     return {
       path: "guias/semana-santa-2027-cataluna",
       title: "Semana Santa 2027 en Cataluña: festivos, vacaciones escolares, tiendas y puentes",
-      seoTitle: "Semana Santa 2027 en Cataluña día a día: festivos y colegios",
-      seoDescription: fitDescription([
-        `Semana Santa 2027: ${week}. Festivos: Viernes Santo ${n(EASTER.goodFriday)} y Lunes de Pascua ${n(EASTER.easterMonday)} (el Jueves Santo, no). Vacaciones escolares ${school}.`,
-        `Semana Santa 2027: ${week}. Festivos: Viernes Santo ${n(EASTER.goodFriday)} y Lunes de Pascua ${n(EASTER.easterMonday)} (el Jueves Santo, no). Colegios: ${school}.`,
-      ]),
+      seoTitle: `Semana Santa 2027 en Cataluña: festivos ${holidays}`,
+      seoDescription: `Viernes Santo y Lunes de Pascua (${holidays}) son festivos; el Jueves Santo, no. Vacaciones escolares ${school}. Tiendas y puentes.`,
       excerpt: "Qué días son festivos en Semana Santa de 2027 en Cataluña, las vacaciones de los colegios, las fiestas locales, si abren las tiendas, el metro, los puentes y las tradiciones.",
     };
   }
   return {
     path: "guides/easter-2027-catalonia",
     title: "Easter 2027 in Catalonia and Barcelona: public holidays, school holidays, shops and long weekends",
-    seoTitle: "Easter 2027 in Catalonia and Barcelona, day by day",
+    seoTitle: `Easter 2027 in Catalonia and Barcelona: ${holidays}`,
     seoDescription: `Good Friday and Easter Monday, ${holidays}, are public holidays in Catalonia; Maundy Thursday is not. School holidays ${school}. Shops and metro.`,
     excerpt: "Which days are public holidays over Easter 2027 in Catalonia, the school Easter break, local holidays, whether shops open, the metro, long weekends and traditions.",
   };
@@ -618,7 +605,7 @@ export function buildEasterBody(locale: Locale): Block[] {
   if (locale === "ca") {
     return [
       lead(
-        `**A Catalunya, la Setmana Santa del 2027, ${span(E.palmSunday, E.easterSunday, "ca")}, té dos festius: el Divendres Sant, ${dm(E.goodFriday, "ca")}, i el Dilluns de Pasqua, ${dm(E.easterMonday, "ca")}.** El Dijous Sant (${dm(E.holyThursday, "ca")}) és un dia feiner, tot i que és festiu a gairebé tota la resta d'Espanya. Amb el cap de setmana surten ${easterRun.days} dies seguits de festa, ${runWords(easterRun, "ca")}. A les escoles, les vacances de Setmana Santa van ${runWords({ from: E.schoolFrom, to: E.schoolTo, days: 0 }, "ca")}, i es torna a classe el ${d(school.back, "ca")}.`,
+        `**A Catalunya, la Setmana Santa del 2027 té dos festius: el Divendres Sant, ${dm(E.goodFriday, "ca")}, i el Dilluns de Pasqua, ${dm(E.easterMonday, "ca")}.** El Dijous Sant (${dm(E.holyThursday, "ca")}) és un dia feiner, tot i que és festiu a gairebé tota la resta d'Espanya. Amb el cap de setmana surten ${easterRun.days} dies seguits de festa, ${runWords(easterRun, "ca")}. A les escoles, les vacances de Setmana Santa van ${runWords({ from: E.schoolFrom, to: E.schoolTo, days: 0 }, "ca")}, i es torna a classe el ${d(school.back, "ca")}.`,
       ),
       keyFacts("La Setmana Santa del 2027, d'un cop d'ull", [
         { label: "Diumenge de Rams", value: cap(d(E.palmSunday, "ca")) },
@@ -729,7 +716,7 @@ export function buildEasterBody(locale: Locale): Block[] {
   if (locale === "es") {
     return [
       lead(
-        `**En Cataluña, la Semana Santa de 2027, ${span(E.palmSunday, E.easterSunday, "es")}, tiene dos festivos: el Viernes Santo, ${dm(E.goodFriday, "es")}, y el Lunes de Pascua, ${dm(E.easterMonday, "es")}.** El Jueves Santo (${dm(E.holyThursday, "es")}) es laborable, aunque es festivo en casi todo el resto de España. Con el fin de semana salen ${easterRun.days} días seguidos de fiesta, ${runWords(easterRun, "es")}. En los colegios, las vacaciones de Semana Santa van ${runWords({ from: E.schoolFrom, to: E.schoolTo, days: 0 }, "es")}, y se vuelve a clase el ${d(school.back, "es")}.`,
+        `**En Cataluña, la Semana Santa de 2027 tiene dos festivos: el Viernes Santo, ${dm(E.goodFriday, "es")}, y el Lunes de Pascua, ${dm(E.easterMonday, "es")}.** El Jueves Santo (${dm(E.holyThursday, "es")}) es laborable, aunque es festivo en casi todo el resto de España. Con el fin de semana salen ${easterRun.days} días seguidos de fiesta, ${runWords(easterRun, "es")}. En los colegios, las vacaciones de Semana Santa van ${runWords({ from: E.schoolFrom, to: E.schoolTo, days: 0 }, "es")}, y se vuelve a clase el ${d(school.back, "es")}.`,
       ),
       keyFacts("La Semana Santa de 2027, de un vistazo", [
         { label: "Domingo de Ramos", value: cap(d(E.palmSunday, "es")) },

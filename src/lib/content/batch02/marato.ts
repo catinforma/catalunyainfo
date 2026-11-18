@@ -98,6 +98,16 @@ import {
  * 49/2002 art. 19, both above); the descriptions add the presenters and
  * where to watch. EN title kept; its description follows. No new fact.
  *
+ * 18 Nov 2026 (docs/SEO_EXPERIMENTS.md, day-7 review of the 11 Nov titles):
+ * CA had no gain (0.7 % at 6.5 -> 0.4 % at 7.2, 12-16 Nov), so the title
+ * queued on 13 Nov goes out in all three editions: "horari, presentadors i
+ * com donar". Both facts are 3Cat's, re-read with curl on 18 Nov: the 10 Nov
+ * news ("El programa de televisió començarà a les 9.30 des de la Torre de
+ * Collserola, on s'allargarà fins a les 14.30, i es reprendrà a les 16.00
+ * ... fins a la 1.00"; "Raquel Sans i Miki Núñez conduiran La Marató a TV3")
+ * and the 2 Oct presenters video. The date stays first in the description,
+ * which is unchanged. Review 25 Nov and 2 Dec.
+ *
  * 11 Nov 2026 (after the volunteer deadline): the key facts, the
  * volunteering paragraph and the FAQ answer in ca/es/en say pre-registration
  * is closed and what the registration site says now (VOLUNTEER_CHECKED
@@ -253,7 +263,7 @@ export const MARATO_META: Record<Locale, { path: string; title: string; seoTitle
   ca: {
     path: "guies/la-marato-tv3-3cat",
     title: "La Marató de TV3 2026: diumenge 13 de desembre, a què es dedica i com fer un donatiu",
-    seoTitle: "La Marató TV3 2026: 13 de desembre, com donar i desgravar",
+    seoTitle: "La Marató TV3 2026: horari, presentadors i com donar",
     seoDescription:
       "Diumenge 13 de desembre a TV3, per a les malalties neurodegeneratives i neuromusculars. Qui la presenta, on veure-la, Bizum 33333 i quant desgrava donar.",
     excerpt:
@@ -262,7 +272,7 @@ export const MARATO_META: Record<Locale, { path: string; title: string; seoTitle
   es: {
     path: "guias/la-marato-tv3-3cat",
     title: "La Marató de TV3 2026: domingo 13 de diciembre, a qué se dedica y cómo donar",
-    seoTitle: "La Marató TV3 2026: 13 de diciembre, cómo donar y desgravar",
+    seoTitle: "La Marató TV3 2026: horario, presentadores y cómo donar",
     seoDescription:
       "Domingo 13 de diciembre en TV3, para las enfermedades neurodegenerativas y neuromusculares. Quién la presenta, dónde verla, Bizum 33333 y cuánto desgrava.",
     excerpt:
@@ -271,7 +281,7 @@ export const MARATO_META: Record<Locale, { path: string; title: string; seoTitle
   en: {
     path: "guides/la-marato-tv3-telethon",
     title: "La Marató 2026: Catalonia's TV3 telethon on Sunday 13 December, cause and how to donate",
-    seoTitle: "La Marató 2026: TV3 telethon on 13 December, how to donate",
+    seoTitle: "La Marató TV3 2026: schedule, presenters and how to donate",
     seoDescription:
       "TV3 telethon on Sunday 13 December, for neurodegenerative and neuromuscular diseases. Who presents it, where to watch, Bizum code 33333 and the tax relief.",
     excerpt:
