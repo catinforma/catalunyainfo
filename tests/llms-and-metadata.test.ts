@@ -50,6 +50,7 @@ const { checkEditions } = await import("../src/lib/programmatic/lottery-check/pa
 const { gordoHubTranslations } = await import("../src/lib/programmatic/gordo/paths.ts");
 const { bonoSocialEditions } = await import("../src/lib/programmatic/bono-social/copy.ts");
 const { trafficFinesEditions } = await import("../src/lib/programmatic/traffic-fines/copy.ts");
+const { ztEditions } = await import("../src/lib/programmatic/zona-tensionada/copy.ts");
 const { reportEditions } = await import("../src/lib/programmatic/holidays/report-copy.ts");
 const { PATHS: TOOL_PATHS } = await import("../src/lib/content/home-tools.ts");
 
@@ -141,6 +142,7 @@ test("every URL llms.txt names is a page a family or guide publishes", () => {
     ...Object.values(lotteryTaxEditions()),
     ...Object.values(bonoSocialEditions()),
     ...Object.values(trafficFinesEditions()),
+    ...Object.values(ztEditions()),
     ...Object.values(checkEditions()),
     ...Object.values(gordoHubTranslations()),
     ...Object.values(reportEditions()),

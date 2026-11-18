@@ -1,0 +1,7576 @@
+{
+  "_about": "Built by scripts/zonas-tensionadas-snapshot.ts from the Ministry of Housing's quarterly lists in the BOE (Ley 12/2023 art. 18.2.d), checked against the Ministry's page of declared zones, plus the Generalitat's DOGC resolutions TER/3739/2026 and TER/3740/2026 (19 Oct 2026, not yet in a BOE list). INE codes: INE municipal register at 1 Jan 2026. Do not edit by hand: rebuild.",
+  "boeIds": [
+    "BOE-A-2024-5214",
+    "BOE-A-2024-20576",
+    "BOE-A-2025-1721",
+    "BOE-A-2025-8636",
+    "BOE-A-2025-15728",
+    "BOE-A-2025-21901",
+    "BOE-A-2026-2448",
+    "BOE-A-2026-9175",
+    "BOE-A-2026-16532",
+    "BOE-A-2026-23088"
+  ],
+  "boeErrata": [
+    "BOE-A-2025-20246"
+  ],
+  "dogc": [
+    {
+      "act": "TER/3739/2026",
+      "dogc": "9775",
+      "published": "2026-10-19",
+      "url": "https://dogc.gencat.cat/ca/document-del-dogc/?documentId=1057089"
+    },
+    {
+      "act": "TER/3740/2026",
+      "dogc": "9775",
+      "published": "2026-10-19",
+      "url": "https://dogc.gencat.cat/ca/document-del-dogc/?documentId=1057087"
+    }
+  ],
+  "builtOn": "2026-11-18",
+  "resolutions": [
+    {
+      "boe": "BOE-A-2024-5214",
+      "quarter": "2024-Q1",
+      "title": "Resolución de 14 de marzo de 2024, de la Secretaría de Estado de Vivienda y Agenda Urbana, por la que se publica la relación de zonas de mercado residencial tensionado que han sido declaradas en virtud del procedimiento establecido en el artículo 18 de la Ley 12/2023, de 24 de mayo, por el derecho a la vivienda, en el primer trimestre de 2024.",
+      "published": "2024-03-15",
+      "from": "2024-03-16",
+      "until": "2027-03-16",
+      "url": "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2024-5214"
+    },
+    {
+      "boe": "BOE-A-2024-20576",
+      "quarter": "2024-Q3",
+      "title": "Resolución de 8 de octubre de 2024, de la Secretaría de Estado de Vivienda y Agenda Urbana, por la que se publica la relación de zonas de mercado residencial tensionado que han sido declaradas en virtud del procedimiento establecido en el artículo 18 de la Ley 12/2023, de 24 de mayo, por el derecho a la vivienda, en el tercer trimestre de 2024.",
+      "published": "2024-10-09",
+      "from": "2024-10-10",
+      "until": "2027-10-10",
+      "url": "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2024-20576"
+    },
+    {
+      "boe": "BOE-A-2025-1721",
+      "quarter": "2024-Q4",
+      "title": "Resolución de 28 de enero de 2025, de la Secretaría de Estado de Vivienda y Agenda Urbana, por la que se publica la relación de zonas de mercado residencial tensionado que han sido declaradas en virtud del procedimiento establecido en el artículo 18 de la Ley 12/2023, de 24 de mayo, por el derecho a la vivienda, en el cuarto trimestre de 2024.",
+      "published": "2025-01-30",
+      "from": "2025-01-31",
+      "until": "2028-01-31",
+      "url": "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2025-1721"
+    },
+    {
+      "boe": "BOE-A-2025-8636",
+      "quarter": "2025-Q1",
+      "title": "Resolución de 29 de abril de 2025, de la Secretaría de Estado de Vivienda y Agenda Urbana, por la que se publica la relación de zonas de mercado residencial tensionado que han sido declaradas en virtud del procedimiento establecido en el artículo 18 de la Ley 12/2023, de 24 de mayo, por el derecho a la vivienda, en el primer trimestre de 2025.",
+      "published": "2025-04-30",
+      "from": "2025-05-01",
+      "until": "2028-05-01",
+      "url": "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2025-8636"
+    },
+    {
+      "boe": "BOE-A-2025-15728",
+      "quarter": "2025-Q2",
+      "title": "Resolución de 28 de julio de 2025, de la Secretaría de Estado de Vivienda y Agenda Urbana, por la que se publica la relación de zonas de mercado residencial tensionado que han sido declaradas en virtud del procedimiento establecido en el artículo 18 de la Ley 12/2023, de 24 de mayo, por el derecho a la vivienda, en el segundo trimestre de 2025.",
+      "published": "2025-07-29",
+      "from": "2025-07-30",
+      "until": "2028-07-30",
+      "url": "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2025-15728"
+    },
+    {
+      "boe": "BOE-A-2025-21901",
+      "quarter": "2025-Q3",
+      "title": "Resolución de 29 de octubre de 2025, de la Secretaría de Estado de Vivienda y Agenda Urbana, por la que se publica la relación de zonas de mercado residencial tensionado que han sido declaradas en virtud del procedimiento establecido en el artículo 18 de la Ley 12/2023, de 24 de mayo, por el derecho a la vivienda, en el tercer trimestre de 2025.",
+      "published": "2025-10-30",
+      "from": "2025-10-31",
+      "until": "2028-10-31",
+      "url": "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2025-21901"
+    },
+    {
+      "boe": "BOE-A-2026-2448",
+      "quarter": "2025-Q4",
+      "title": "Resolución de 30 de enero de 2026, de la Secretaría de Estado de Vivienda y Agenda Urbana, por la que se publica la relación de zonas de mercado residencial tensionado que han sido declaradas en virtud del procedimiento establecido en el artículo 18 de la Ley 12/2023, de 24 de mayo, por el derecho a la vivienda, en el cuarto trimestre de 2025.",
+      "published": "2026-02-02",
+      "from": "2026-02-03",
+      "until": "2029-02-03",
+      "url": "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2026-2448"
+    },
+    {
+      "boe": "BOE-A-2026-9175",
+      "quarter": "2026-Q1",
+      "title": "Resolución de 23 de abril de 2026, de la Secretaría de Estado de Vivienda y Agenda Urbana, por la que se publica la relación de zonas de mercado residencial tensionado que han sido declaradas en virtud del procedimiento establecido en el artículo 18 de la Ley 12/2023, de 24 de mayo, por el derecho a la vivienda, en el primer trimestre de 2026.",
+      "published": "2026-04-27",
+      "from": "2026-04-28",
+      "until": "2029-04-28",
+      "url": "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2026-9175"
+    },
+    {
+      "boe": "BOE-A-2026-16532",
+      "quarter": "2026-Q2",
+      "title": "Resolución de 24 de julio de 2026, de la Secretaría de Estado de Vivienda y Agenda Urbana, por la que se publica la relación de zonas de mercado residencial tensionado que han sido declaradas en virtud del procedimiento establecido en el artículo 18 de la Ley 12/2023, de 24 de mayo, por el derecho a la vivienda, en el segundo trimestre de 2026.",
+      "published": "2026-07-29",
+      "from": "2026-07-30",
+      "until": "2029-07-30",
+      "url": "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2026-16532"
+    },
+    {
+      "boe": "BOE-A-2026-23088",
+      "quarter": "2026-Q3",
+      "title": "Resolución de 29 de octubre de 2026, de la Secretaría de Estado de Vivienda y Agenda Urbana, por la que se publica la relación de zonas de mercado residencial tensionado que han sido declaradas en virtud del procedimiento establecido en el artículo 18 de la Ley 12/2023, de 24 de mayo, por el derecho a la vivienda, en el tercer trimestre de 2026.",
+      "published": "2026-11-03",
+      "from": "2026-11-04",
+      "until": "2029-11-04",
+      "url": "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2026-23088"
+    }
+  ],
+  "extension": {
+    "act": "Resolució TER/3739/2026, de 16 d'octubre, per la qual es prorroga en 118 municipis la vigència de la zona de mercat residencial tensat declarada mitjançant la Resolució TER/800/2024, de 13 de març, per la qual es modifica la Resolució TER/2940/2023, d'11 d'agost, per la qual es declaren zona de mercat residencial tensionat diversos municipis, d'acord amb la Llei estatal 12/2023, de 24 de maig, pel dret a l'habitatge",
+    "number": "TER/3739/2026",
+    "date": "2026-10-16",
+    "bulletin": "DOGC núm. 9775",
+    "published": "2026-10-19",
+    "url": "https://dogc.gencat.cat/ca/document-del-dogc/?documentId=1057089",
+    "of": "BOE-A-2024-5214#1",
+    "extended": 118,
+    "notExtended": 22
+  },
+  "pending": {
+    "declaration": "TER/3740/2026",
+    "date": "2026-10-16",
+    "bulletin": "DOGC núm. 9775",
+    "published": "2026-10-19",
+    "url": "https://dogc.gencat.cat/ca/document-del-dogc/?documentId=1057087"
+  },
+  "declarations": [
+    {
+      "id": "BOE-A-2024-5214#1",
+      "community": "catalonia",
+      "act": "Resolución TER/800/2024, de 13 de marzo, por la que se modifica la Resolución TER/2940/2023, de 11 de agosto, por la que se declaran zona de mercado residencial tensionado varios municipios, de acuerdo con la Ley Estatal 12/2023, de 14 de mayo, por el derecho a la vivienda.",
+      "bulletin": "DOGC núm. 9122",
+      "url": "https://dogc.gencat.cat/ca/document-del-dogc/?documentId=980806",
+      "also": null,
+      "memoria": "https://habitatge.gencat.cat/web/.content/home/normativa/Zones-mercat-tensionat/20240313-Memoria-ZMRT-CAT.pdf",
+      "boe": "BOE-A-2024-5214",
+      "from": "2024-03-16",
+      "until": "2027-03-16",
+      "granTenedor": {
+        "rule": "five-or-more",
+        "quote": "Conforme a la Resolución TER/800/2024, de 13 de marzo, la persona física o jurídica que sea titular de cinco o más inmuebles urbanos de uso residencial ubicados en la zona de mercado residencial tensionado."
+      },
+      "neverRented": {
+        "applies": true,
+        "quote": "Sí, conforme a la Resolución TER/800/2024, de 13 de marzo."
+      }
+    },
+    {
+      "id": "BOE-A-2024-20576#1",
+      "community": "catalonia",
+      "act": "Resolución TER/2408/2024, de 1 de julio, por la que se declara una nueva zona de mercado residencial tensionado formada por 131 municipios de Cataluña, de acuerdo con la Ley estatal 12/2023, de 24 de mayo, por el derecho a la vivienda",
+      "bulletin": "DOGC núm. 9196",
+      "url": "https://dogc.gencat.cat/es/document-del-dogc/index.html?documentId=989344",
+      "also": null,
+      "memoria": "https://habitatge.gencat.cat/web/.content/home/normativa/Zones-mercat-tensionat/20240701-Memoria-ZMRT-ESP-CA.pdf",
+      "boe": "BOE-A-2024-20576",
+      "from": "2024-10-10",
+      "until": "2027-10-10",
+      "granTenedor": {
+        "rule": "five-or-more",
+        "quote": "Conforme a la Resolución TER/2408/2024, de 1 de julio, la persona física o jurídica que sea titular de cinco o más inmuebles urbanos de uso residencial ubicados en la zona de mercado residencial tensionado."
+      },
+      "neverRented": {
+        "applies": true,
+        "quote": "Sí, conforme a la Resolución TER/2408/2024, de 1 de julio."
+      }
+    },
+    {
+      "id": "BOE-A-2025-1721#1",
+      "community": "basque-country",
+      "act": "Orden de 1 de octubre de 2024, del Consejero de Vivienda y Agenda Urbana, por la que se declara el municipio de Errenteria como zona de mercado residencial tensionado",
+      "bulletin": "BOPV núm. 202, 16 de octubre de 2024",
+      "url": "https://www.euskadi.eus/web01-bopv/es/bopv2/datos/2024/10/2404748a.shtml",
+      "also": null,
+      "memoria": "https://www.legegunea.euskadi.eus/contenidos/tramita_orden/2469358_ord/es_def/adjuntos/MEMORIA-DEFINITIVA-DECLARAC.pdf",
+      "boe": "BOE-A-2025-1721",
+      "from": "2025-01-31",
+      "until": "2028-01-31",
+      "granTenedor": {
+        "rule": "five-or-more",
+        "quote": "Conforme a la Orden de 1 de octubre de 2024, del Consejero de Vivienda y Agenda Urbana, la persona física o jurídica que sea titular de cinco o más inmuebles urbanos de uso residencial en el municipio excluyendo en todo caso garajes y trasteros, con excepción de aquellas viviendas que sean de titularidad de administraciones públicas, de sus entes instrumentales o de las sociedades en las que participen de forma mayoritaria."
+      },
+      "neverRented": {
+        "applies": true,
+        "quote": "Sí, conforme a la Orden de 1 de octubre de 2024, del Consejero de Vivienda y Agenda Urbana."
+      }
+    },
+    {
+      "id": "BOE-A-2025-8636#1",
+      "community": "basque-country",
+      "act": "Orden de 18 de marzo de 2025, del Consejero de Vivienda y Agenda Urbana, por la que se declara el municipio de Lasarte-Oria como zona de mercado residencial tensionado",
+      "bulletin": "BOPV núm. 69, 9 de abril de 2025",
+      "url": "https://www.euskadi.eus/web01-bopv/es/bopv2/datos/2025/04/2501575a.shtml",
+      "also": null,
+      "memoria": "https://www.legegunea.euskadi.eus/contenidos/tramita_orden/2797190_ord/es_def/adjuntos/MEMORIA-DEFINITIVA-DECLARACION-LASARTE-ZMRT.pdf",
+      "boe": "BOE-A-2025-8636",
+      "from": "2025-05-01",
+      "until": "2028-05-01",
+      "granTenedor": {
+        "rule": "five-or-more",
+        "quote": "Conforme a la Orden de 18 de marzo de 2025, del Consejero de Vivienda y Agenda Urbana, la persona física o jurídica que sea titular de cinco o más inmuebles urbanos de uso residencial en el municipio excluyendo en todo caso garajes y trasteros, con excepción de aquellas viviendas que sean de titularidad de administraciones públicas, de sus entes instrumentales o de las sociedades en las que participen de forma mayoritaria."
+      },
+      "neverRented": {
+        "applies": true,
+        "quote": "Sí, conforme a la Orden de 18 de marzo de 2025, del Consejero de Vivienda y Agenda Urbana."
+      }
+    },
+    {
+      "id": "BOE-A-2025-8636#2",
+      "community": "basque-country",
+      "act": "Orden de 18 de marzo de 2025, del Consejero de Vivienda y Agenda Urbana, por la que se declara el municipio de Zumaia como zona de mercado residencial tensionado",
+      "bulletin": "BOPV núm. 69, 9 de abril de 2025",
+      "url": "https://www.euskadi.eus/web01-bopv/es/bopv2/datos/2025/04/2501576a.shtml",
+      "also": null,
+      "memoria": "https://www.legegunea.euskadi.eus/contenidos/tramita_resolucion/2602636_res/es_def/adjuntos/MEMORIA-DEFINITIVA-ZUMAIA-ZMRT.pdf",
+      "boe": "BOE-A-2025-8636",
+      "from": "2025-05-01",
+      "until": "2028-05-01",
+      "granTenedor": {
+        "rule": "five-or-more",
+        "quote": "Conforme a la Orden de 18 de marzo de 2025, del Consejero de Vivienda y Agenda Urbana, la persona física o jurídica que sea titular de cinco o más inmuebles urbanos de uso residencial en el municipio excluyendo en todo caso garajes y trasteros, con excepción de aquellas viviendas que sean de titularidad de administraciones públicas, de sus entes instrumentales o de las sociedades en las que participen de forma mayoritaria."
+      },
+      "neverRented": {
+        "applies": true,
+        "quote": "Sí, conforme a la Orden de 18 de marzo de 2025, del Consejero de Vivienda y Agenda Urbana."
+      }
+    },
+    {
+      "id": "BOE-A-2025-8636#3",
+      "community": "basque-country",
+      "act": "Orden de 31 de marzo de 2025, del Consejero de Vivienda y Agenda Urbana, por la que se declara el municipio de Barakaldo como zona de mercado residencial tensionado",
+      "bulletin": "BOPV núm. 76, 23 de abril de 2025",
+      "url": "https://www.euskadi.eus/web01-bopv/es/bopv2/datos/2025/04/2501749a.shtml",
+      "also": null,
+      "memoria": "https://www.legegunea.euskadi.eus/contenidos/tramita_orden/2799329_ord/es_def/adjuntos/Memoria-definitiva-BARAKALDO-ZMRT.pdf",
+      "boe": "BOE-A-2025-8636",
+      "from": "2025-05-01",
+      "until": "2028-05-01",
+      "granTenedor": {
+        "rule": "five-or-more",
+        "quote": "Conforme a la Orden de 31 de marzo de 2025, del Consejero de Vivienda y Agenda Urbana, la persona física o jurídica que sea titular de cinco o más inmuebles urbanos de uso residencial en el municipio excluyendo en todo caso garajes y trasteros, con excepción de aquellas viviendas que sean de titularidad de administraciones públicas, de sus entes instrumentales o de las sociedades en las que participen de forma mayoritaria."
+      },
+      "neverRented": {
+        "applies": true,
+        "quote": "Sí, conforme a la Orden de 31 de marzo de 2025, del Consejero de Vivienda y Agenda Urbana."
+      }
+    },
+    {
+      "id": "BOE-A-2025-8636#4",
+      "community": "basque-country",
+      "act": "Orden de 31 de marzo de 2025, del Consejero de Vivienda y Agenda Urbana, por la que se declara el municipio de Irún como zona de mercado residencial tensionado",
+      "bulletin": "BOPV núm. 76, 23 de abril de 2025",
+      "url": "https://www.euskadi.eus/web01-bopv/es/bopv2/datos/2025/04/2501748a.shtml",
+      "also": null,
+      "memoria": "https://www.legegunea.euskadi.eus/contenidos/tramita_orden/2797135_ord/es_def/adjuntos/Memoria-definitiva-IRUN-ZMRT.pdf",
+      "boe": "BOE-A-2025-8636",
+      "from": "2025-05-01",
+      "until": "2028-05-01",
+      "granTenedor": {
+        "rule": "five-or-more",
+        "quote": "Conforme a la Orden de 31 de marzo de 2025, del Consejero de Vivienda y Agenda Urbana, la persona física o jurídica que sea titular de cinco o más inmuebles urbanos de uso residencial en el municipio excluyendo en todo caso garajes y trasteros, con excepción de aquellas viviendas que sean de titularidad de administraciones públicas, de sus entes instrumentales o de las sociedades en las que participen de forma mayoritaria."
+      },
+      "neverRented": {
+        "applies": true,
+        "quote": "Sí, conforme a la Orden de 31 de marzo de 2025, del Consejero de Vivienda y Agenda Urbana."
+      }
+    },
+    {
+      "id": "BOE-A-2025-15728#1",
+      "community": "navarre",
+      "act": "Orden Foral 157E/2025, de 19 de mayo, de la consejera de Vivienda, Juventud y Políticas Migratorias por la que se declaran los municipios de Pamplona/Iruña, Tudela, Valle de Egüés/Eguesibar, Burlada/Burlata, Barañáin/Barañain, Zizur Mayor, Estella-Lizarra, Aranguren, Berriozar, Tafalla, Ansoáin/Antsoain, Villava/Atarrabia, Corella, Valle de Elorz/Elortzibar, Cintruénigo, Baztan, Altsasu/Alsasua, Huarte/Uharte, Berrioplano/Berriobeiti, San Adrián, Peralta/Azkoien, como zona de mercado residencial tensionado en Navarra",
+      "bulletin": "BON núm. 118, 13 de junio de 2025",
+      "url": "https://bon.navarra.es/es/anuncio/-/texto/2025/118/36",
+      "also": null,
+      "memoria": "https://participa.navarra.es/rails/active_storage/blobs/redirect/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBBcUl2IiwiZXhwIjpudWxsLCJwdXIiOiJibG9iX2lkIn19--ec33db1042056e162fcf81ef2c4aee348f32fb04/Memoria%20ZMT%20versi%C3%B3n%2024.01%20CASTELLANO.pdf",
+      "boe": "BOE-A-2025-15728",
+      "from": "2025-07-30",
+      "until": "2028-07-30",
+      "granTenedor": {
+        "rule": "five-or-more",
+        "quote": "Conforme a la Orden Foral 157E/2025, de 19 de mayo, de la consejera de Vivienda, Juventud y Políticas Migratorias: a) La persona física o jurídica que sea titular de más de diez inmuebles urbanos de uso residencial o una superficie construida de más de 1.500 m² de uso residencial, excluyendo garajes y trasteros. b) La persona física o jurídica propietaria de cinco o más inmuebles urbanos de uso residencial ubicados dentro de la zona de mercado residencial tensionado. Según la referida Orden Foral 157E/2025, no tendrán la consideración de gran tenedora de vivienda las administraciones públicas, sus sociedades públicas dependientes, así como las sociedades de capital mixto dedicadas a la gestión de viviendas protegidas."
+      },
+      "neverRented": {
+        "applies": true,
+        "quote": "Sí, conforme a la Orden Foral 157E/2025, de 19 de mayo, de la consejera de Vivienda, Juventud y Políticas Migratorias."
+      }
+    },
+    {
+      "id": "BOE-A-2025-15728#2",
+      "community": "galicia",
+      "act": "Resolución de 30 de mayo de 2025 de la presidenta del Instituto Gallego de la Vivienda y Suelo por la que se declara, a solicitud del ayuntamiento, el municipio de La Coruña como zona de mercado residencial tensionado",
+      "bulletin": null,
+      "url": "https://cdn.mivau.gob.es/portal-web-mivau/vivienda/alquila/Resolucion_zona_tensionada_Coru%C3%B1a.pdf",
+      "also": null,
+      "memoria": "https://cdn.mivau.gob.es/portal-web-mivau/vivienda/alquila/ZRMT_MEMORIA_XUSTIFICATIVA_DEFINITIVA_Coru%C3%B1a.pdf",
+      "boe": "BOE-A-2025-15728",
+      "from": "2025-07-30",
+      "until": "2028-07-30",
+      "granTenedor": {
+        "rule": "general",
+        "quote": "Conforme a la Resolución de 30 de mayo de 2025 de la presidenta del Instituto Gallego de la Vivienda y Suelo, la persona física o jurídica que sea titular de más de diez inmuebles urbanos de uso residencial o una superficie construida de más de 1.500 m 2 de uso residencial, excluyendo en todo caso garajes y trasteros, con la excepción de aquellas viviendas que sean de titularidad de administraciones públicas, de sus entes instrumentales o de las sociedades en las que participen estas de forma mayoritaria, así como aquellas que sean propiedad de entidades con fin social y sin ánimo de lucro."
+      },
+      "neverRented": {
+        "applies": true,
+        "quote": "Sí, conforme a la Resolución de 30 de mayo de 2025 de la presidenta del Instituto Gallego de la Vivienda y Suelo."
+      }
+    },
+    {
+      "id": "BOE-A-2025-15728#3",
+      "community": "basque-country",
+      "act": "Orden de 3 de abril de 2025, del Consejero de Vivienda y Agenda Urbana, por la que se declara el Distrito 2 del municipio de Galdakao como zona de mercado residencial tensionado",
+      "bulletin": "BOPV núm. 78, 25 de abril de 2025",
+      "url": "https://www.euskadi.eus/web01-bopv/es/bopv2/datos/2025/04/2501795a.shtml",
+      "also": null,
+      "memoria": "https://www.legegunea.euskadi.eus/contenidos/tramita_orden/2797104_ord/es_def/adjuntos/Memoria-definitiva-GALDAKAO-ZMRT.pdf",
+      "boe": "BOE-A-2025-15728",
+      "from": "2025-07-30",
+      "until": "2028-07-30",
+      "granTenedor": {
+        "rule": "five-or-more",
+        "quote": "Conforme a la Orden de 3 de abril de 2025, del Consejero de Vivienda y Agenda Urbana, la persona física o jurídica que sea titular de cinco o más inmuebles urbanos de uso residencial en el municipio excluyendo en todo caso garajes y trasteros, con excepción de aquellas viviendas que sean de titularidad de administraciones públicas, de sus entes instrumentales o de las sociedades en las que participen de forma mayoritaria."
+      },
+      "neverRented": {
+        "applies": true,
+        "quote": "Sí, conforme a la Orden de 3 de abril de 2025, del Consejero de Vivienda y Agenda Urbana."
+      }
+    },
+    {
+      "id": "BOE-A-2025-15728#4",
+      "community": "basque-country",
+      "act": "Orden de 2 de mayo de 2025, del Consejero de Vivienda y Agenda Urbana, por la que se declara el municipio de Donostia/San Sebastián como zona de mercado residencial tensionado",
+      "bulletin": "BOPV núm. 96, 23 de mayo de 2025",
+      "url": "https://www.euskadi.eus/web01-bopv/es/bopv2/datos/2025/05/2502228a.shtml",
+      "also": null,
+      "memoria": "https://www.legegunea.euskadi.eus/contenidos/tramita_orden/2799380_ord/es_def/adjuntos/MEMORIA-DEFINITIVA-DONOSTIA-ZMRT.pdf",
+      "boe": "BOE-A-2025-15728",
+      "from": "2025-07-30",
+      "until": "2028-07-30",
+      "granTenedor": {
+        "rule": "five-or-more",
+        "quote": "Conforme a la Orden de 2 de mayo de 2025, del Consejero de Vivienda y Agenda Urbana, la persona física o jurídica que sea titular de cinco o más inmuebles urbanos de uso residencial en el municipio excluyendo en todo caso garajes y trasteros, con excepción de aquellas viviendas que sean de titularidad de administraciones públicas, de sus entes instrumentales o de las sociedades en las que participen de forma mayoritaria."
+      },
+      "neverRented": {
+        "applies": true,
+        "quote": "Sí, conforme a la Orden de 2 de mayo de 2025, del Consejero de Vivienda y Agenda Urbana."
+      }
+    },
+    {
+      "id": "BOE-A-2025-21901#1",
+      "community": "basque-country",
+      "act": "Orden de 21 de agosto de 2025, del consejero de Vivienda y Agenda Urbana, por la que se declara el municipio de Astigarraga como zona de mercado residencial tensionado",
+      "bulletin": "BOPV núm. 173, 12 de septiembre de 2025",
+      "url": "https://www.euskadi.eus/web01-bopv/es/bopv2/datos/2025/09/2503832a.shtml",
+      "also": null,
+      "memoria": "https://www.legegunea.euskadi.eus/contenidos/tramita_orden/2914885_ord/es_def/adjuntos/Memoria-final-ZT-Astigarraga.pdf",
+      "boe": "BOE-A-2025-21901",
+      "from": "2025-10-31",
+      "until": "2028-10-31",
+      "granTenedor": {
+        "rule": "five-or-more",
+        "quote": "Conforme a la Orden de 21 de agosto de 2025, del Consejero de Vivienda y Agenda Urbana, la persona física o jurídica que sea titular de cinco o más inmuebles urbanos de uso residencial en el municipio excluyendo en todo caso garajes y trasteros, con excepción de aquellas viviendas que sean de titularidad de administraciones públicas, de sus entes instrumentales o de las sociedades en las que participen de forma mayoritaria."
+      },
+      "neverRented": {
+        "applies": true,
+        "quote": "Sí, conforme a la Orden de 21 de agosto de 2025, del Consejero de Vivienda y Agenda Urbana."
+      }
+    },
+    {
+      "id": "BOE-A-2025-21901#2",
+      "community": "basque-country",
+      "act": "Orden de 21 de agosto de 2025, del consejero de Vivienda y Agenda Urbana, por la que se declara el municipio de Bilbao como zona de mercado residencial tensionado",
+      "bulletin": "BOPV núm. 167, 4 de septiembre de 2025",
+      "url": "https://www.euskadi.eus/web01-bopv/es/bopv2/datos/2025/09/2503749a.shtml",
+      "also": null,
+      "memoria": "https://www.legegunea.euskadi.eus/contenidos/tramita_orden/3127188_ord/es_def/adjuntos/Memoria-final-ZT-Bilbao.pdf",
+      "boe": "BOE-A-2025-21901",
+      "from": "2025-10-31",
+      "until": "2028-10-31",
+      "granTenedor": {
+        "rule": "general",
+        "quote": "Conforme a la Orden de 21 de agosto de 2025, del Consejero de Vivienda y Agenda Urbana, la persona física o jurídica que sea titular de más de diez inmuebles urbanos de uso residencial o una superficie construida de más de 1.500 m 2 de uso residencial, excluyendo en todo caso garajes y trasteros."
+      },
+      "neverRented": {
+        "applies": true,
+        "quote": "Sí, conforme a la Orden de 21 de agosto de 2025, del Consejero de Vivienda y Agenda Urbana."
+      }
+    },
+    {
+      "id": "BOE-A-2025-21901#3",
+      "community": "basque-country",
+      "act": "Orden de 21 de agosto de 2025, del consejero de Vivienda y Agenda Urbana, por la que se declara el municipio de Usurbil, como zona de mercado residencial tensionado",
+      "bulletin": "BOPV núm. 173, 12 de septiembre de 2025",
+      "url": "https://www.euskadi.eus/web01-bopv/es/bopv2/datos/2025/09/2503831a.shtml",
+      "also": null,
+      "memoria": "https://www.legegunea.euskadi.eus/contenidos/tramita_orden/3093734_ord/es_def/adjuntos/Memoria-final-Usurbil.pdf",
+      "boe": "BOE-A-2025-21901",
+      "from": "2025-10-31",
+      "until": "2028-10-31",
+      "granTenedor": {
+        "rule": "five-or-more",
+        "quote": "Conforme a la Orden de 21 de agosto de 2025, del Consejero de Vivienda y Agenda Urbana, la persona física o jurídica que sea titular de cinco o más inmuebles urbanos de uso residencial en el municipio excluyendo en todo caso garajes y trasteros, con excepción de aquellas viviendas que sean de titularidad de administraciones públicas, de sus entes instrumentales o de las sociedades en las que participen de forma mayoritaria."
+      },
+      "neverRented": {
+        "applies": true,
+        "quote": "Sí, conforme a la Orden de 21 de agosto de 2025, del Consejero de Vivienda y Agenda Urbana."
+      }
+    },
+    {
+      "id": "BOE-A-2025-21901#4",
+      "community": "basque-country",
+      "act": "Orden de 18 de septiembre de 2025, del consejero de Vivienda y Agenda Urbana, por la que se declara el municipio de Vitoria-Gasteiz, excepto la zona rural constituida por entidades locales menores no incluida en la trama urbana, como zona de mercado residencial tensionado",
+      "bulletin": "BOPV núm. 184, 29 de septiembre de 2025",
+      "url": "https://www.euskadi.eus/web01-bopv/es/bopv2/datos/2025/09/2504056a.shtml",
+      "also": null,
+      "memoria": "https://www.legegunea.euskadi.eus/contenidos/tramita_orden/3332273_ord/es_def/adjuntos/Memoria-final-ZT-Vitoria.pdf",
+      "boe": "BOE-A-2025-21901",
+      "from": "2025-10-31",
+      "until": "2028-10-31",
+      "granTenedor": {
+        "rule": "five-or-more",
+        "quote": "Conforme a la Orden de 18 de septiembre de 2025, del Consejero de Vivienda y Agenda Urbana, la persona física o jurídica que sea titular de cinco o más inmuebles urbanos de uso residencial en el municipio excluyendo en todo caso garajes y trasteros, con excepción de aquellas viviendas que sean de titularidad de administraciones públicas, de sus entes instrumentales o de las sociedades en las que participen de forma mayoritaria."
+      },
+      "neverRented": {
+        "applies": true,
+        "quote": "Sí, conforme a la Orden de 18 de septiembre de 2025, del Consejero de Vivienda y Agenda Urbana."
+      }
+    },
+    {
+      "id": "BOE-A-2026-2448#1",
+      "community": "basque-country",
+      "act": "Orden de 18 de noviembre de 2025, del consejero de Vivienda y Agenda Urbana, por la que se declara el municipio de Hernani como zona de mercado residencial tensionado",
+      "bulletin": "BOPV núm. 229, 27 de noviembre de 2025",
+      "url": "https://www.euskadi.eus/web01-bopv/es/bopv2/datos/2025/11/2505077a.shtml",
+      "also": null,
+      "memoria": "https://www.legegunea.euskadi.eus/contenidos/tramita_orden/3042442_ord/es_def/adjuntos/Memoria-definitiva-ZT-Hernani.pdf",
+      "boe": "BOE-A-2026-2448",
+      "from": "2026-02-03",
+      "until": "2029-02-03",
+      "granTenedor": {
+        "rule": "five-or-more",
+        "quote": "Conforme a la Orden de 18 de noviembre de 2025, del Consejero de Vivienda y Agenda Urbana, la persona física o jurídica que sea titular de cinco o más inmuebles urbanos de uso residencial en el municipio excluyendo en todo caso garajes y trasteros, con excepción de aquellas viviendas que sean de titularidad de Administraciones públicas, de sus entes instrumentales o de las sociedades en las que participen de forma mayoritaria."
+      },
+      "neverRented": {
+        "applies": true,
+        "quote": "Sí, conforme a la Orden de 18 de noviembre de 2025, del Consejero de Vivienda y Agenda Urbana."
+      }
+    },
+    {
+      "id": "BOE-A-2026-2448#2",
+      "community": "basque-country",
+      "act": "Orden de 11 de diciembre de 2025, del consejero de Vivienda y Agenda Urbana, por la que se declara el municipio de Lezo como zona de mercado residencial tensionado",
+      "bulletin": "BOPV núm. 251, 30 de diciembre de 2025",
+      "url": "https://www.euskadi.eus/web01-bopv/es/bopv2/datos/2025/12/2505552a.shtml",
+      "also": null,
+      "memoria": "https://www.legegunea.euskadi.eus/contenidos/tramita_orden/3234855_ord/es_def/adjuntos/Memoria-definitva-ZT-Lezo.pdf",
+      "boe": "BOE-A-2026-2448",
+      "from": "2026-02-03",
+      "until": "2029-02-03",
+      "granTenedor": {
+        "rule": "five-or-more",
+        "quote": "Conforme a la Orden de 11 de diciembre de 2025, del Consejero de Vivienda y Agenda Urbana, la persona física o jurídica que sea titular de cinco o más inmuebles urbanos de uso residencial en el municipio excluyendo en todo caso garajes y trasteros, con excepción de aquellas viviendas que sean de titularidad de Administraciones públicas, de sus entes instrumentales o de las sociedades en las que participen de forma mayoritaria."
+      },
+      "neverRented": {
+        "applies": true,
+        "quote": "Sí, conforme a la Orden de 11 de diciembre de 2025, del Consejero de Vivienda y Agenda Urbana."
+      }
+    },
+    {
+      "id": "BOE-A-2026-2448#3",
+      "community": "basque-country",
+      "act": "Orden de 11 de diciembre de 2025, del consejero de Vivienda y Agenda Urbana, por la que se declara el municipio de Tolosa como zona de mercado residencial tensionado",
+      "bulletin": "BOPV núm. 251, 30 de diciembre de 2025",
+      "url": "https://www.euskadi.eus/web01-bopv/es/bopv2/datos/2025/12/2505553a.shtml",
+      "also": null,
+      "memoria": "https://www.legegunea.euskadi.eus/contenidos/tramita_orden/3360232_ord/es_def/adjuntos/Memoria-definitiva-TOLOSA_ZMRT.pdf",
+      "boe": "BOE-A-2026-2448",
+      "from": "2026-02-03",
+      "until": "2029-02-03",
+      "granTenedor": {
+        "rule": "five-or-more",
+        "quote": "Conforme a la Orden de 11 de diciembre de 2025, del Consejero de Vivienda y Agenda Urbana, la persona física o jurídica que sea titular de cinco o más inmuebles urbanos de uso residencial en el municipio excluyendo en todo caso garajes y trasteros, con excepción de aquellas viviendas que sean de titularidad de Administraciones públicas, de sus entes instrumentales o de las sociedades en las que participen de forma mayoritaria."
+      },
+      "neverRented": {
+        "applies": true,
+        "quote": "Sí, conforme a la Orden de 11 de diciembre de 2025, del Consejero de Vivienda y Agenda Urbana."
+      }
+    },
+    {
+      "id": "BOE-A-2026-9175#1",
+      "community": "basque-country",
+      "act": "Orden de 17 de febrero de 2026, del consejero de Vivienda y Agenda Urbana, por la que se declara el municipio de Pasaia como zona de mercado residencial tensionado",
+      "bulletin": "BOPV núm. 39, 26 de febrero de 2026",
+      "url": "https://www.euskadi.eus/web01-bopv/es/bopv2/datos/2026/02/2600865a.shtml",
+      "also": null,
+      "memoria": "https://www.legegunea.euskadi.eus/contenidos/tramita_orden/3590530_ord/es_def/adjuntos/Memoria-final-ZT-Pasaia.pdf",
+      "boe": "BOE-A-2026-9175",
+      "from": "2026-04-28",
+      "until": "2029-04-28",
+      "granTenedor": {
+        "rule": "more-than-five",
+        "quote": "Conforme a la Orden de 17 de febrero de 2026, del consejero de Vivienda y Agenda Urbana, la persona física o jurídica que sea titular de más de cinco inmuebles urbanos de uso residencial en el municipio, o una superficie construida de más de 1.500 m², excluyendo en todo caso garajes y trasteros, con excepción de aquellas viviendas que sean de titularidad de administraciones públicas, de sus entes instrumentales o de las sociedades en las que participen de forma mayoritaria."
+      },
+      "neverRented": {
+        "applies": true,
+        "quote": "Sí, conforme a la Orden de 17 de febrero de 2026, del consejero de Vivienda y Agenda Urbana."
+      }
+    },
+    {
+      "id": "BOE-A-2026-9175#2",
+      "community": "basque-country",
+      "act": "Orden de 17 de febrero de 2026, del consejero de Vivienda y Agenda Urbana, por la que se declara el municipio de Zestoa como zona de mercado residencial tensionado",
+      "bulletin": "BOPV núm. 39, 26 de febrero de 2026",
+      "url": "https://www.euskadi.eus/web01-bopv/es/bopv2/datos/2026/02/2600866a.shtml",
+      "also": null,
+      "memoria": "https://www.legegunea.euskadi.eus/contenidos/tramita_orden/3339156_ord/es_def/adjuntos/Memoria-final-ZT-Zestoa.pdf",
+      "boe": "BOE-A-2026-9175",
+      "from": "2026-04-28",
+      "until": "2029-04-28",
+      "granTenedor": {
+        "rule": "general",
+        "quote": "Conforme a la Orden de 17 de febrero de 2026, del consejero de Vivienda y Agenda Urbana, la persona física o jurídica que sea titular de más de diez inmuebles urbanos de uso residencial en el municipio, o una superficie construida de más de 1.500 m², excluyendo en todo caso garajes y trasteros, con excepción de aquellas viviendas que sean de titularidad de administraciones públicas, de sus entes instrumentales o de las sociedades en las que participen de forma mayoritaria."
+      },
+      "neverRented": {
+        "applies": true,
+        "quote": "Sí, conforme a la Orden de 17 de febrero de 2026, del consejero de Vivienda y Agenda Urbana."
+      }
+    },
+    {
+      "id": "BOE-A-2026-9175#3",
+      "community": "basque-country",
+      "act": "Orden de 3 de marzo de 2026, del consejero de Vivienda y Agenda Urbana, por la que se declara el municipio de Mondragón como zona de mercado residencial tensionado",
+      "bulletin": "BOPV núm. 49, 12 de marzo de 2026",
+      "url": "https://www.euskadi.eus/web01-bopv/es/bopv2/datos/2026/03/2601108a.shtml",
+      "also": null,
+      "memoria": "https://www.legegunea.euskadi.eus/contenidos/tramita_orden/3323233_ord/es_def/adjuntos/Memoria-final-ZT-Arrasate.pdf",
+      "boe": "BOE-A-2026-9175",
+      "from": "2026-04-28",
+      "until": "2029-04-28",
+      "granTenedor": {
+        "rule": "five-or-more",
+        "quote": "Conforme a la Orden de 3 de marzo de 2026, del consejero de Vivienda y Agenda Urbana, la persona física o jurídica que sea titular de cinco o más inmuebles urbanos de uso residencial en el municipio, excluyendo en todo caso garajes y trasteros, con excepción de aquellas viviendas que sean de titularidad de administraciones públicas, de sus entes instrumentales o de las sociedades en las que participen de forma mayoritaria."
+      },
+      "neverRented": {
+        "applies": true,
+        "quote": "Sí, conforme a la Orden de 3 de marzo de 2026, del consejero de Vivienda y Agenda Urbana."
+      }
+    },
+    {
+      "id": "BOE-A-2026-16532#1",
+      "community": "asturias",
+      "act": "Resolución de 24 de abril de 2026, de la Consejería de Ordenación de Territorio, Urbanismo, Vivienda y Derechos Ciudadanos, por la que se declaran diversos ámbitos como zonas de mercado residencial tensionado",
+      "bulletin": "BOPA núm. 82, 30 de abril de 2026",
+      "url": "https://miprincipado.asturias.es/bopa/2026/04/30/2026-03383.pdf",
+      "also": {
+        "act": "Resolución de 11 de mayo de 2026, de la Consejería de Ordenación de Territorio, Urbanismo, Vivienda y Derechos Ciudadanos, por la que se precisan y completan los efectos de las declaraciones de diversos ámbitos como zonas de mercado residencial tensionado",
+        "bulletin": "BOPA núm. 96, 21 de mayo de 2026",
+        "url": "https://miprincipado.asturias.es/bopa/2026/05/21/2026-04016.pdf"
+      },
+      "memoria": "https://miprincipado.asturias.es/bopa/2026/04/30/2026-03383.pdf",
+      "boe": "BOE-A-2026-16532",
+      "from": "2026-07-30",
+      "until": "2029-07-30",
+      "granTenedor": {
+        "rule": "general",
+        "quote": "Conforme a las Resoluciones de 24 de abril de 2026 y de 11 de mayo de 2026, de la Consejería de Ordenación de Territorio, Urbanismo, Vivienda y Derechos Ciudadanos, la definición prevista en el artículo 3.k) de la Ley 12/2023, de 24 de mayo, por el derecho a la vivienda: la persona física o jurídica que sea titular de más de diez inmuebles urbanos de uso residencial o una superficie construida de más de 1.500 m 2 de uso residencial, excluyendo en todo caso garajes y trasteros."
+      },
+      "neverRented": {
+        "applies": true,
+        "quote": "Sí, conforme a las Resoluciones de 24 de abril de 2026 y de 11 de mayo de 2026, de la Consejería de Ordenación de Territorio, Urbanismo, Vivienda y Derechos Ciudadanos."
+      }
+    },
+    {
+      "id": "BOE-A-2026-16532#2",
+      "community": "galicia",
+      "act": "Resolución de 24 de abril de 2026 de la presidenta del Instituto Gallego de la Vivienda y Suelo por la que se declara, a solicitud del ayuntamiento, el municipio de Santiago de Compostela como zona de mercado residencial tensionado",
+      "bulletin": null,
+      "url": "https://cdn.mivau.gob.es/portal-web-mivau/vivienda/alquila/20260424_Resolucion_ZMRT_Santiago_Cast.pdf",
+      "also": null,
+      "memoria": "https://cdn.mivau.gob.es/portal-web-mivau/vivienda/alquila/ZMRT_SANTIAGO_MEMORIA.pdf",
+      "boe": "BOE-A-2026-16532",
+      "from": "2026-07-30",
+      "until": "2029-07-30",
+      "granTenedor": {
+        "rule": "five-or-more",
+        "quote": "Conforme a la Resolución de 24 de abril de 2026 de la presidenta del Instituto Gallego de la Vivienda y Suelo, aquellas personas físicas o jurídicas que sean titulares de cinco o más inmuebles urbanos de uso residencial en el término municipal de Santiago de Compostela, quedando excluidas las administraciones públicas y las entidades de derecho público vinculadas o dependientes de aquéllas, así como las empresas públicas y las sociedades participadas por cualquiera de las anteriores."
+      },
+      "neverRented": {
+        "applies": true,
+        "quote": "Sí, conforme a la Resolución de 24 de abril de 2026 de la presidenta del Instituto Gallego de la Vivienda y Suelo."
+      }
+    },
+    {
+      "id": "BOE-A-2026-16532#3",
+      "community": "asturias",
+      "act": "Resolución de 14 de mayo de 2026, de la Consejería de Ordenación de Territorio, Urbanismo, Vivienda y Derechos Ciudadanos, por la que se declaran los ámbitos de La Arena y Cimadevilla, en el concejo de Gijón, como zonas de mercado residencial tensionado",
+      "bulletin": "BOPA núm. 96, 21 de mayo de 2026",
+      "url": "https://miprincipado.asturias.es/bopa/2026/05/21/2026-04106.pdf",
+      "also": null,
+      "memoria": "https://miprincipado.asturias.es/bopa/2026/05/21/2026-04106.pdf",
+      "boe": "BOE-A-2026-16532",
+      "from": "2026-07-30",
+      "until": "2029-07-30",
+      "granTenedor": {
+        "rule": "general",
+        "quote": "Conforme a la Resolución de 14 de mayo de 2026, de la Consejería de Ordenación de Territorio, Urbanismo, Vivienda y Derechos Ciudadanos, la definición prevista en el artículo 3.k) de la Ley 12/2023, de 24 de mayo, por el derecho a la vivienda: la persona física o jurídica que sea titular de más de diez inmuebles urbanos de uso residencial o una superficie construida de más de 1.500 m 2 de uso residencial, excluyendo en todo caso garajes y trasteros."
+      },
+      "neverRented": {
+        "applies": true,
+        "quote": "Sí, conforme a la Resolución de 14 de mayo de 2026, de la Consejería de Ordenación de Territorio, Urbanismo, Vivienda y Derechos Ciudadanos."
+      }
+    },
+    {
+      "id": "BOE-A-2026-16532#4",
+      "community": "asturias",
+      "act": "Resolución de 15 de mayo de 2026, de la Consejería de Ordenación de Territorio, Urbanismo, Vivienda y Derechos Ciudadanos, por la que se declara el barrio de La Magdalena, en el concejo de Avilés, como zona de mercado residencial tensionado",
+      "bulletin": "BOPA núm. 96, 21 de mayo de 2026",
+      "url": "https://miprincipado.asturias.es/bopa/2026/05/21/2026-04107.pdf",
+      "also": null,
+      "memoria": "https://miprincipado.asturias.es/bopa/2026/05/21/2026-04107.pdf",
+      "boe": "BOE-A-2026-16532",
+      "from": "2026-07-30",
+      "until": "2029-07-30",
+      "granTenedor": {
+        "rule": "general",
+        "quote": "Conforme a la Resolución de 15 de mayo de 2026, de la Consejería de Ordenación de Territorio, Urbanismo, Vivienda y Derechos Ciudadanos, la definición prevista en el artículo 3.k) de la Ley 12/2023, de 24 de mayo, por el derecho a la vivienda: la persona física o jurídica que sea titular de más de diez inmuebles urbanos de uso residencial o una superficie construida de más de 1.500 m 2 de uso residencial, excluyendo en todo caso garajes y trasteros."
+      },
+      "neverRented": {
+        "applies": true,
+        "quote": "Sí, conforme a la Resolución de 15 de mayo de 2026, de la Consejería de Ordenación de Territorio, Urbanismo, Vivienda y Derechos Ciudadanos."
+      }
+    },
+    {
+      "id": "BOE-A-2026-16532#5",
+      "community": "asturias",
+      "act": "Resolución de 21 de mayo de 2026, de la Consejería de Ordenación de Territorio, Urbanismo, Vivienda y Derechos Ciudadanos, por la que se declara Luanco, en el concejo de Gozón, como zona de mercado residencial tensionado",
+      "bulletin": "BOPA núm. 100, 27 de mayo de 2026",
+      "url": "https://miprincipado.asturias.es/bopa/2026/05/27/2026-04318.pdf",
+      "also": null,
+      "memoria": "https://miprincipado.asturias.es/bopa/2026/05/27/2026-04318.pdf",
+      "boe": "BOE-A-2026-16532",
+      "from": "2026-07-30",
+      "until": "2029-07-30",
+      "granTenedor": {
+        "rule": "general",
+        "quote": "Conforme a la Resolución de 21 de mayo de 2026, de la Consejería de Ordenación de Territorio, Urbanismo, Vivienda y Derechos Ciudadanos, la definición prevista en el artículo 3.k) de la Ley 12/2023, de 24 de mayo, por el derecho a la vivienda: la persona física o jurídica que sea titular de más de diez inmuebles urbanos de uso residencial o una superficie construida de más de 1.500 m 2 de uso residencial, excluyendo en todo caso garajes y trasteros."
+      },
+      "neverRented": {
+        "applies": true,
+        "quote": "Sí, conforme a la Resolución de 21 de mayo de 2026, de la Consejería de Ordenación de Territorio, Urbanismo, Vivienda y Derechos Ciudadanos."
+      }
+    },
+    {
+      "id": "BOE-A-2026-16532#6",
+      "community": "basque-country",
+      "act": "Orden de 28 de mayo de 2026, del consejero de Vivienda y Agenda Urbana, por la que se declara el municipio de Basauri como zona de mercado residencial tensionado",
+      "bulletin": "BOPV núm. 106, 8 de junio de 2026",
+      "url": "https://www.euskadi.eus/web01-bopv/es/bopv2/datos/2026/06/2602460a.shtml",
+      "also": null,
+      "memoria": "https://www.legegunea.euskadi.eus/contenidos/tramita_orden/3703928_ord/es_def/adjuntos/Memoria-definitiva-ZT-Basauri.pdf",
+      "boe": "BOE-A-2026-16532",
+      "from": "2026-07-30",
+      "until": "2029-07-30",
+      "granTenedor": {
+        "rule": "five-or-more",
+        "quote": "Conforme a la Orden de 28 de mayo de 2026, del consejero de Vivienda y Agenda Urbana, la persona física o jurídica que sea titular de cinco o más inmuebles urbanos de uso residencial en el municipio excluyendo en todo caso garajes y trasteros, con excepción de aquellas viviendas que sean de titularidad de administraciones públicas, de sus entes instrumentales o de las sociedades en las que participen de forma mayoritaria."
+      },
+      "neverRented": {
+        "applies": true,
+        "quote": "Sí, conforme a la Orden de 28 de mayo de 2026, del consejero de Vivienda y Agenda Urbana."
+      }
+    },
+    {
+      "id": "BOE-A-2026-16532#7",
+      "community": "asturias",
+      "act": "Resolución de 1 de junio de 2026, de la Consejería de Ordenación de Territorio, Urbanismo, Vivienda y Derechos Ciudadanos, por la que se declaran como zonas de mercado residencial tensionado los núcleos de Nueva, Poo, Barro y Celorio, en el concejo de Llanes",
+      "bulletin": "BOPA núm. 109, 9 de junio de 2026",
+      "url": "https://miprincipado.asturias.es/bopa/2026/06/09/2026-04627.pdf",
+      "also": null,
+      "memoria": "https://miprincipado.asturias.es/bopa/2026/06/09/2026-04627.pdf",
+      "boe": "BOE-A-2026-16532",
+      "from": "2026-07-30",
+      "until": "2029-07-30",
+      "granTenedor": {
+        "rule": "general",
+        "quote": "Conforme a la Resolución de 1 de junio de 2026, de la Consejería de Ordenación de Territorio, Urbanismo, Vivienda y Derechos Ciudadanos, la definición prevista en el artículo 3.k) de la Ley 12/2023, de 24 de mayo, por el derecho a la vivienda: la persona física o jurídica que sea titular de más de diez inmuebles urbanos de uso residencial o una superficie construida de más de 1.500 m 2 de uso residencial, excluyendo en todo caso garajes y trasteros."
+      },
+      "neverRented": {
+        "applies": true,
+        "quote": "Sí, conforme a la Resolución de 1 de junio de 2026, de la Consejería de Ordenación de Territorio, Urbanismo, Vivienda y Derechos Ciudadanos."
+      }
+    },
+    {
+      "id": "BOE-A-2026-23088#1",
+      "community": "basque-country",
+      "act": "Orden de 27 de julio de 2026, del consejero de Vivienda y Agenda Urbana, por la que se declara el municipio de Sopela como zona de mercado residencial tensionado",
+      "bulletin": "BOPV núm. 154, 14 de agosto de 2026",
+      "url": "https://www.euskadi.eus/web01-bopv/es/bopv2/datos/2026/08/2603610a.shtml",
+      "also": null,
+      "memoria": "https://www.legegunea.euskadi.eus/contenidos/tramita_orden/4010905_ord/es_def/adjuntos/Memoria-final-ZT-Sopela.pdf",
+      "boe": "BOE-A-2026-23088",
+      "from": "2026-11-04",
+      "until": "2029-11-04",
+      "granTenedor": {
+        "rule": "five-or-more",
+        "quote": "Conforme a la Orden de 27 de julio de 2026, del consejero de Vivienda y Agenda Urbana, la persona física o jurídica que sea titular de cinco o más inmuebles urbanos de uso residencial en el municipio excluyendo en todo caso garajes y trasteros, con excepción de aquellas viviendas que sean de titularidad de administraciones públicas, de sus entes instrumentales o de las sociedades en las que participen de forma mayoritaria."
+      },
+      "neverRented": {
+        "applies": true,
+        "quote": "Sí, conforme a la Orden de 27 de julio de 2026, del consejero de Vivienda y Agenda Urbana."
+      }
+    },
+    {
+      "id": "BOE-A-2026-23088#2",
+      "community": "basque-country",
+      "act": "Orden de 27 de julio de 2026, del consejero de Vivienda y Agenda Urbana, por la que se declara el municipio de Urduliz como zona de mercado residencial tensionado",
+      "bulletin": "BOPV núm. 154, 14 de agosto de 2026",
+      "url": "https://www.euskadi.eus/web01-bopv/es/bopv2/datos/2026/08/2603609a.shtml",
+      "also": null,
+      "memoria": "https://www.legegunea.euskadi.eus/contenidos/tramita_orden/4011090_ord/es_def/adjuntos/Memoria-final-ZT-Urduliz.pdf",
+      "boe": "BOE-A-2026-23088",
+      "from": "2026-11-04",
+      "until": "2029-11-04",
+      "granTenedor": {
+        "rule": "five-or-more",
+        "quote": "Conforme a la Orden de 27 de julio de 2026, del consejero de Vivienda y Agenda Urbana, la persona física o jurídica que sea titular de cinco o más inmuebles urbanos de uso residencial en el municipio excluyendo en todo caso garajes y trasteros, con excepción de aquellas viviendas que sean de titularidad de administraciones públicas, de sus entes instrumentales o de las sociedades en las que participen de forma mayoritaria."
+      },
+      "neverRented": {
+        "applies": true,
+        "quote": "Sí, conforme a la Orden de 27 de julio de 2026, del consejero de Vivienda y Agenda Urbana."
+      }
+    },
+    {
+      "id": "BOE-A-2026-23088#3",
+      "community": "basque-country",
+      "act": "Orden de 11 de septiembre de 2026, del consejero de Vivienda y Agenda Urbana, por la que se declara el municipio de Bergara como zona de mercado residencial tensionado",
+      "bulletin": "BOPV núm. 182, 23 de septiembre de 2026",
+      "url": "https://www.euskadi.eus/web01-bopv/es/bopv2/datos/2026/09/2603985a.shtml",
+      "also": null,
+      "memoria": "https://www.legegunea.euskadi.eus/contenidos/tramita_orden/4010772_ord/es_def/adjuntos/Memoria-final-ZT-Bergara.pdf",
+      "boe": "BOE-A-2026-23088",
+      "from": "2026-11-04",
+      "until": "2029-11-04",
+      "granTenedor": {
+        "rule": "five-or-more",
+        "quote": "Conforme a la Orden de 11 de septiembre de 2026, del consejero de Vivienda y Agenda Urbana, la persona física o jurídica que sea titular de cinco o más inmuebles urbanos de uso residencial en el municipio, excluyendo en todo caso garajes y trasteros, con excepción de aquellas viviendas que sean de titularidad de administraciones públicas, de sus entes instrumentales o de las sociedades en las que participen de forma mayoritaria."
+      },
+      "neverRented": {
+        "applies": true,
+        "quote": "Sí, conforme a la Orden de 11 de septiembre de 2026, del consejero de Vivienda y Agenda Urbana."
+      }
+    },
+    {
+      "id": "TER/3740/2026",
+      "community": "catalonia",
+      "act": "Resolució TER/3740/2026, de 16 d'octubre, per la qual es declaren zona de mercat residencial tensat 53 municipis de Catalunya, d'acord amb la Llei estatal 12/2023, de 24 de maig, pel dret a l'habitatge",
+      "bulletin": "DOGC núm. 9775",
+      "url": "https://dogc.gencat.cat/ca/document-del-dogc/?documentId=1057087",
+      "also": null,
+      "memoria": null,
+      "boe": null,
+      "from": null,
+      "until": null,
+      "granTenedor": {
+        "rule": "five-or-more",
+        "quote": "Considerar com a gran tenidor, de conformitat amb l'article 3.k) de la Llei 12/2023, de 24 de maig, també a la persona física o jurídica que sigui titular de cinc o més immobles urbans d'ús residencial situats dins la zona de mercat residencial tensat declarada."
+      },
+      "neverRented": {
+        "applies": true,
+        "quote": "Aplicar, en el seu cas, el límit màxim del preu aplicable de conformitat amb el sistema d'índex de preus de referència corresponent en els termes de l'article 17.7 de la Llei 29/1994, de 24 de novembre, d'arrendaments urbans, als contractes de lloguer d'immobles situats en la zona de mercat residencial tensat declarada sobre els quals no hagués estat vigent cap contracte d'arrendament d'habitatge en els darrers cinc anys."
+      }
+    }
+  ],
+  "entries": [
+    {
+      "ine": "08001",
+      "name": "Abrera",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-5214#1",
+      "extension": "extended"
+    },
+    {
+      "ine": "08003",
+      "name": "Alella",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-5214#1",
+      "extension": "extended"
+    },
+    {
+      "ine": "43014",
+      "name": "Amposta",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-5214#1",
+      "extension": "extended"
+    },
+    {
+      "ine": "08006",
+      "name": "Arenys de Mar",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-5214#1",
+      "extension": "extended"
+    },
+    {
+      "ine": "08007",
+      "name": "Arenys de Munt",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-5214#1",
+      "extension": "extended"
+    },
+    {
+      "ine": "08009",
+      "name": "Argentona",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-5214#1",
+      "extension": "extended"
+    },
+    {
+      "ine": "08015",
+      "name": "Badalona",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-5214#1",
+      "extension": "extended"
+    },
+    {
+      "ine": "08904",
+      "name": "Badia del Vallès",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-5214#1",
+      "extension": "extended"
+    },
+    {
+      "ine": "25040",
+      "name": "Balaguer",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-5214#1",
+      "extension": "extended"
+    },
+    {
+      "ine": "17015",
+      "name": "Banyoles",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-5214#1",
+      "extension": "not-extended"
+    },
+    {
+      "ine": "08252",
+      "name": "Barberà del Vallès",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-5214#1",
+      "extension": "extended"
+    },
+    {
+      "ine": "08019",
+      "name": "Barcelona",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-5214#1",
+      "extension": "extended"
+    },
+    {
+      "ine": "08022",
+      "name": "Berga",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-5214#1",
+      "extension": "not-extended"
+    },
+    {
+      "ine": "17022",
+      "name": "la Bisbal d'Empordà",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-5214#1",
+      "extension": "extended"
+    },
+    {
+      "ine": "17023",
+      "name": "Blanes",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-5214#1",
+      "extension": "extended"
+    },
+    {
+      "ine": "08029",
+      "name": "Cabrera de Mar",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-5214#1",
+      "extension": "not-extended"
+    },
+    {
+      "ine": "08030",
+      "name": "Cabrils",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-5214#1",
+      "extension": "extended"
+    },
+    {
+      "ine": "08033",
+      "name": "Caldes de Montbui",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-5214#1",
+      "extension": "extended"
+    },
+    {
+      "ine": "08032",
+      "name": "Caldes d'Estrac",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-5214#1",
+      "extension": "not-extended"
+    },
+    {
+      "ine": "08035",
+      "name": "Calella",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-5214#1",
+      "extension": "extended"
+    },
+    {
+      "ine": "08037",
+      "name": "Calldetenes",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-5214#1",
+      "extension": "not-extended"
+    },
+    {
+      "ine": "43038",
+      "name": "Cambrils",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-5214#1",
+      "extension": "extended"
+    },
+    {
+      "ine": "08040",
+      "name": "Canet de Mar",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-5214#1",
+      "extension": "extended"
+    },
+    {
+      "ine": "43907",
+      "name": "la Canonja",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-5214#1",
+      "extension": "extended"
+    },
+    {
+      "ine": "08041",
+      "name": "Canovelles",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-5214#1",
+      "extension": "not-extended"
+    },
+    {
+      "ine": "08046",
+      "name": "Cardedeu",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-5214#1",
+      "extension": "extended"
+    },
+    {
+      "ine": "08051",
+      "name": "Castellar del Vallès",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-5214#1",
+      "extension": "extended"
+    },
+    {
+      "ine": "08054",
+      "name": "Castellbisbal",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-5214#1",
+      "extension": "extended"
+    },
+    {
+      "ine": "08056",
+      "name": "Castelldefels",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-5214#1",
+      "extension": "extended"
+    },
+    {
+      "ine": "08266",
+      "name": "Cerdanyola del Vallès",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-5214#1",
+      "extension": "extended"
+    },
+    {
+      "ine": "08068",
+      "name": "Cervelló",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-5214#1",
+      "extension": "not-extended"
+    },
+    {
+      "ine": "25072",
+      "name": "Cervera",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-5214#1",
+      "extension": "not-extended"
+    },
+    {
+      "ine": "08072",
+      "name": "Corbera de Llobregat",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-5214#1",
+      "extension": "extended"
+    },
+    {
+      "ine": "08073",
+      "name": "Cornellà de Llobregat",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-5214#1",
+      "extension": "extended"
+    },
+    {
+      "ine": "08074",
+      "name": "Cubelles",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-5214#1",
+      "extension": "extended"
+    },
+    {
+      "ine": "08076",
+      "name": "Esparreguera",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-5214#1",
+      "extension": "extended"
+    },
+    {
+      "ine": "08077",
+      "name": "Esplugues de Llobregat",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-5214#1",
+      "extension": "extended"
+    },
+    {
+      "ine": "43055",
+      "name": "Falset",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-5214#1",
+      "extension": "extended"
+    },
+    {
+      "ine": "17066",
+      "name": "Figueres",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-5214#1",
+      "extension": "not-extended"
+    },
+    {
+      "ine": "08086",
+      "name": "les Franqueses del Vallès",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-5214#1",
+      "extension": "not-extended"
+    },
+    {
+      "ine": "08088",
+      "name": "la Garriga",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-5214#1",
+      "extension": "extended"
+    },
+    {
+      "ine": "08089",
+      "name": "Gavà",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-5214#1",
+      "extension": "extended"
+    },
+    {
+      "ine": "17079",
+      "name": "Girona",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-5214#1",
+      "extension": "extended"
+    },
+    {
+      "ine": "08096",
+      "name": "Granollers",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-5214#1",
+      "extension": "not-extended"
+    },
+    {
+      "ine": "25110",
+      "name": "Guissona",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-5214#1",
+      "extension": "not-extended"
+    },
+    {
+      "ine": "08101",
+      "name": "l'Hospitalet de Llobregat",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-5214#1",
+      "extension": "extended"
+    },
+    {
+      "ine": "08102",
+      "name": "Igualada",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-5214#1",
+      "extension": "extended"
+    },
+    {
+      "ine": "08105",
+      "name": "la Llagosta",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-5214#1",
+      "extension": "extended"
+    },
+    {
+      "ine": "25120",
+      "name": "Lleida",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-5214#1",
+      "extension": "not-extended"
+    },
+    {
+      "ine": "08106",
+      "name": "Llinars del Vallès",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-5214#1",
+      "extension": "extended"
+    },
+    {
+      "ine": "17095",
+      "name": "Lloret de Mar",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-5214#1",
+      "extension": "extended"
+    },
+    {
+      "ine": "08110",
+      "name": "Malgrat de Mar",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-5214#1",
+      "extension": "extended"
+    },
+    {
+      "ine": "08112",
+      "name": "Manlleu",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-5214#1",
+      "extension": "extended"
+    },
+    {
+      "ine": "08113",
+      "name": "Manresa",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-5214#1",
+      "extension": "extended"
+    },
+    {
+      "ine": "08118",
+      "name": "el Masnou",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-5214#1",
+      "extension": "extended"
+    },
+    {
+      "ine": "08120",
+      "name": "Matadepera",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-5214#1",
+      "extension": "extended"
+    },
+    {
+      "ine": "08121",
+      "name": "Mataró",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-5214#1",
+      "extension": "extended"
+    },
+    {
+      "ine": "08123",
+      "name": "Molins de Rei",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-5214#1",
+      "extension": "extended"
+    },
+    {
+      "ine": "25137",
+      "name": "Mollerussa",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-5214#1",
+      "extension": "extended"
+    },
+    {
+      "ine": "08124",
+      "name": "Mollet del Vallès",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-5214#1",
+      "extension": "not-extended"
+    },
+    {
+      "ine": "08125",
+      "name": "Montcada i Reixac",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-5214#1",
+      "extension": "extended"
+    },
+    {
+      "ine": "08126",
+      "name": "Montgat",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-5214#1",
+      "extension": "extended"
+    },
+    {
+      "ine": "08135",
+      "name": "Montmeló",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-5214#1",
+      "extension": "not-extended"
+    },
+    {
+      "ine": "08136",
+      "name": "Montornès del Vallès",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-5214#1",
+      "extension": "extended"
+    },
+    {
+      "ine": "43094",
+      "name": "Móra la Nova",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-5214#1",
+      "extension": "extended"
+    },
+    {
+      "ine": "08147",
+      "name": "Olesa de Montserrat",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-5214#1",
+      "extension": "extended"
+    },
+    {
+      "ine": "17114",
+      "name": "Olot",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-5214#1",
+      "extension": "extended"
+    },
+    {
+      "ine": "08155",
+      "name": "Palafolls",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-5214#1",
+      "extension": "extended"
+    },
+    {
+      "ine": "17117",
+      "name": "Palafrugell",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-5214#1",
+      "extension": "extended"
+    },
+    {
+      "ine": "17118",
+      "name": "Palamós",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-5214#1",
+      "extension": "extended"
+    },
+    {
+      "ine": "08156",
+      "name": "Palau-solità i Plegamans",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-5214#1",
+      "extension": "extended"
+    },
+    {
+      "ine": "08158",
+      "name": "el Papiol",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-5214#1",
+      "extension": "not-extended"
+    },
+    {
+      "ine": "08159",
+      "name": "Parets del Vallès",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-5214#1",
+      "extension": "not-extended"
+    },
+    {
+      "ine": "08163",
+      "name": "Pineda de Mar",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-5214#1",
+      "extension": "extended"
+    },
+    {
+      "ine": "08167",
+      "name": "Polinyà",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-5214#1",
+      "extension": "extended"
+    },
+    {
+      "ine": "17137",
+      "name": "Porqueres",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-5214#1",
+      "extension": "extended"
+    },
+    {
+      "ine": "08169",
+      "name": "el Prat de Llobregat",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-5214#1",
+      "extension": "extended"
+    },
+    {
+      "ine": "08230",
+      "name": "Premià de Dalt",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-5214#1",
+      "extension": "extended"
+    },
+    {
+      "ine": "08172",
+      "name": "Premià de Mar",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-5214#1",
+      "extension": "extended"
+    },
+    {
+      "ine": "17141",
+      "name": "Puigcerdà",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-5214#1",
+      "extension": "extended"
+    },
+    {
+      "ine": "43123",
+      "name": "Reus",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-5214#1",
+      "extension": "not-extended"
+    },
+    {
+      "ine": "17147",
+      "name": "Ripoll",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-5214#1",
+      "extension": "extended"
+    },
+    {
+      "ine": "08180",
+      "name": "Ripollet",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-5214#1",
+      "extension": "extended"
+    },
+    {
+      "ine": "08181",
+      "name": "la Roca del Vallès",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-5214#1",
+      "extension": "extended"
+    },
+    {
+      "ine": "43133",
+      "name": "Roquetes",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-5214#1",
+      "extension": "extended"
+    },
+    {
+      "ine": "08184",
+      "name": "Rubí",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-5214#1",
+      "extension": "extended"
+    },
+    {
+      "ine": "08187",
+      "name": "Sabadell",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-5214#1",
+      "extension": "extended"
+    },
+    {
+      "ine": "43905",
+      "name": "Salou",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-5214#1",
+      "extension": "extended"
+    },
+    {
+      "ine": "17155",
+      "name": "Salt",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-5214#1",
+      "extension": "extended"
+    },
+    {
+      "ine": "08194",
+      "name": "Sant Adrià de Besòs",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-5214#1",
+      "extension": "extended"
+    },
+    {
+      "ine": "08197",
+      "name": "Sant Andreu de Llavaneres",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-5214#1",
+      "extension": "extended"
+    },
+    {
+      "ine": "08200",
+      "name": "Sant Boi de Llobregat",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-5214#1",
+      "extension": "extended"
+    },
+    {
+      "ine": "08202",
+      "name": "Sant Celoni",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-5214#1",
+      "extension": "extended"
+    },
+    {
+      "ine": "08204",
+      "name": "Sant Climent de Llobregat",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-5214#1",
+      "extension": "not-extended"
+    },
+    {
+      "ine": "08205",
+      "name": "Sant Cugat del Vallès",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-5214#1",
+      "extension": "extended"
+    },
+    {
+      "ine": "08208",
+      "name": "Sant Esteve Sesrovires",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-5214#1",
+      "extension": "extended"
+    },
+    {
+      "ine": "17160",
+      "name": "Sant Feliu de Guíxols",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-5214#1",
+      "extension": "extended"
+    },
+    {
+      "ine": "08211",
+      "name": "Sant Feliu de Llobregat",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-5214#1",
+      "extension": "extended"
+    },
+    {
+      "ine": "08209",
+      "name": "Sant Fost de Campsentelles",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-5214#1",
+      "extension": "extended"
+    },
+    {
+      "ine": "08213",
+      "name": "Sant Fruitós de Bages",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-5214#1",
+      "extension": "not-extended"
+    },
+    {
+      "ine": "08217",
+      "name": "Sant Joan Despí",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-5214#1",
+      "extension": "extended"
+    },
+    {
+      "ine": "08221",
+      "name": "Sant Just Desvern",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-5214#1",
+      "extension": "extended"
+    },
+    {
+      "ine": "08231",
+      "name": "Sant Pere de Ribes",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-5214#1",
+      "extension": "extended"
+    },
+    {
+      "ine": "08235",
+      "name": "Sant Pol de Mar",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-5214#1",
+      "extension": "extended"
+    },
+    {
+      "ine": "08238",
+      "name": "Sant Quirze del Vallès",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-5214#1",
+      "extension": "extended"
+    },
+    {
+      "ine": "08240",
+      "name": "Sant Sadurní d'Anoia",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-5214#1",
+      "extension": "extended"
+    },
+    {
+      "ine": "08264",
+      "name": "Sant Vicenç de Montalt",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-5214#1",
+      "extension": "extended"
+    },
+    {
+      "ine": "08263",
+      "name": "Sant Vicenç dels Horts",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-5214#1",
+      "extension": "extended"
+    },
+    {
+      "ine": "08244",
+      "name": "Santa Coloma de Cervelló",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-5214#1",
+      "extension": "extended"
+    },
+    {
+      "ine": "17180",
+      "name": "Santa Coloma de Farners",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-5214#1",
+      "extension": "extended"
+    },
+    {
+      "ine": "08245",
+      "name": "Santa Coloma de Gramenet",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-5214#1",
+      "extension": "extended"
+    },
+    {
+      "ine": "08250",
+      "name": "Santa Margarida de Montbui",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-5214#1",
+      "extension": "not-extended"
+    },
+    {
+      "ine": "08260",
+      "name": "Santa Perpètua de Mogoda",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-5214#1",
+      "extension": "extended"
+    },
+    {
+      "ine": "08261",
+      "name": "Santa Susanna",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-5214#1",
+      "extension": "extended"
+    },
+    {
+      "ine": "17186",
+      "name": "Sarrià de Ter",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-5214#1",
+      "extension": "extended"
+    },
+    {
+      "ine": "25203",
+      "name": "la Seu d'Urgell",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-5214#1",
+      "extension": "extended"
+    },
+    {
+      "ine": "08270",
+      "name": "Sitges",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-5214#1",
+      "extension": "extended"
+    },
+    {
+      "ine": "25207",
+      "name": "Solsona",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-5214#1",
+      "extension": "extended"
+    },
+    {
+      "ine": "25209",
+      "name": "Sort",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-5214#1",
+      "extension": "extended"
+    },
+    {
+      "ine": "43148",
+      "name": "Tarragona",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-5214#1",
+      "extension": "extended"
+    },
+    {
+      "ine": "25217",
+      "name": "Tàrrega",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-5214#1",
+      "extension": "extended"
+    },
+    {
+      "ine": "08281",
+      "name": "Teià",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-5214#1",
+      "extension": "extended"
+    },
+    {
+      "ine": "08279",
+      "name": "Terrassa",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-5214#1",
+      "extension": "extended"
+    },
+    {
+      "ine": "08282",
+      "name": "Tiana",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-5214#1",
+      "extension": "extended"
+    },
+    {
+      "ine": "08283",
+      "name": "Tona",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-5214#1",
+      "extension": "extended"
+    },
+    {
+      "ine": "08285",
+      "name": "Torelló",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-5214#1",
+      "extension": "extended"
+    },
+    {
+      "ine": "43153",
+      "name": "Torredembarra",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-5214#1",
+      "extension": "extended"
+    },
+    {
+      "ine": "08289",
+      "name": "Torrelles de Llobregat",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-5214#1",
+      "extension": "extended"
+    },
+    {
+      "ine": "43155",
+      "name": "Tortosa",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-5214#1",
+      "extension": "not-extended"
+    },
+    {
+      "ine": "25234",
+      "name": "Tremp",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-5214#1",
+      "extension": "extended"
+    },
+    {
+      "ine": "08295",
+      "name": "Vallirana",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-5214#1",
+      "extension": "extended"
+    },
+    {
+      "ine": "43161",
+      "name": "Valls",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-5214#1",
+      "extension": "extended"
+    },
+    {
+      "ine": "43163",
+      "name": "el Vendrell",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-5214#1",
+      "extension": "extended"
+    },
+    {
+      "ine": "08298",
+      "name": "Vic",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-5214#1",
+      "extension": "extended"
+    },
+    {
+      "ine": "08301",
+      "name": "Viladecans",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-5214#1",
+      "extension": "extended"
+    },
+    {
+      "ine": "08305",
+      "name": "Vilafranca del Penedès",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-5214#1",
+      "extension": "extended"
+    },
+    {
+      "ine": "08302",
+      "name": "Vilanova del Camí",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-5214#1",
+      "extension": "extended"
+    },
+    {
+      "ine": "08307",
+      "name": "Vilanova i la Geltrú",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-5214#1",
+      "extension": "extended"
+    },
+    {
+      "ine": "08214",
+      "name": "Vilassar de Dalt",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-5214#1",
+      "extension": "extended"
+    },
+    {
+      "ine": "08219",
+      "name": "Vilassar de Mar",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-5214#1",
+      "extension": "extended"
+    },
+    {
+      "ine": "08014",
+      "name": "Aiguafreda",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-20576#1",
+      "extension": null
+    },
+    {
+      "ine": "43002",
+      "name": "Albinyana",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-20576#1",
+      "extension": null
+    },
+    {
+      "ine": "43004",
+      "name": "Alcanar",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-20576#1",
+      "extension": null
+    },
+    {
+      "ine": "25011",
+      "name": "Alcarràs",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-20576#1",
+      "extension": null
+    },
+    {
+      "ine": "43005",
+      "name": "Alcover",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-20576#1",
+      "extension": null
+    },
+    {
+      "ine": "43904",
+      "name": "l'Aldea",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-20576#1",
+      "extension": null
+    },
+    {
+      "ine": "25019",
+      "name": "Almacelles",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-20576#1",
+      "extension": null
+    },
+    {
+      "ine": "25023",
+      "name": "Alpicat",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-20576#1",
+      "extension": null
+    },
+    {
+      "ine": "43012",
+      "name": "Altafulla",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-20576#1",
+      "extension": null
+    },
+    {
+      "ine": "43013",
+      "name": "l'Ametlla de Mar",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-20576#1",
+      "extension": null
+    },
+    {
+      "ine": "08005",
+      "name": "l'Ametlla del Vallès",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-20576#1",
+      "extension": null
+    },
+    {
+      "ine": "43906",
+      "name": "l'Ampolla",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-20576#1",
+      "extension": null
+    },
+    {
+      "ine": "17008",
+      "name": "Anglès",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-20576#1",
+      "extension": null
+    },
+    {
+      "ine": "43016",
+      "name": "l'Arboç",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-20576#1",
+      "extension": null
+    },
+    {
+      "ine": "17009",
+      "name": "Arbúcies",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-20576#1",
+      "extension": null
+    },
+    {
+      "ine": "08010",
+      "name": "Artés",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-20576#1",
+      "extension": null
+    },
+    {
+      "ine": "25034",
+      "name": "Artesa de Segre",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-20576#1",
+      "extension": null
+    },
+    {
+      "ine": "08016",
+      "name": "Bagà",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-20576#1",
+      "extension": null
+    },
+    {
+      "ine": "08020",
+      "name": "Begues",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-20576#1",
+      "extension": null
+    },
+    {
+      "ine": "17013",
+      "name": "Begur",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-20576#1",
+      "extension": null
+    },
+    {
+      "ine": "25050",
+      "name": "Bellpuig",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-20576#1",
+      "extension": null
+    },
+    {
+      "ine": "25051",
+      "name": "Bellver de Cerdanya",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-20576#1",
+      "extension": null
+    },
+    {
+      "ine": "17019",
+      "name": "Besalú",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-20576#1",
+      "extension": null
+    },
+    {
+      "ine": "08023",
+      "name": "Bigues i Riells del Fai",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-20576#1",
+      "extension": null
+    },
+    {
+      "ine": "43028",
+      "name": "la Bisbal del Penedès",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-20576#1",
+      "extension": null
+    },
+    {
+      "ine": "25058",
+      "name": "les Borges Blanques",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-20576#1",
+      "extension": null
+    },
+    {
+      "ine": "17027",
+      "name": "Breda",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-20576#1",
+      "extension": null
+    },
+    {
+      "ine": "17032",
+      "name": "Cadaqués",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-20576#1",
+      "extension": null
+    },
+    {
+      "ine": "08031",
+      "name": "Calaf",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-20576#1",
+      "extension": null
+    },
+    {
+      "ine": "43037",
+      "name": "Calafell",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-20576#1",
+      "extension": null
+    },
+    {
+      "ine": "17033",
+      "name": "Caldes de Malavella",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-20576#1",
+      "extension": null
+    },
+    {
+      "ine": "17034",
+      "name": "Calonge i Sant Antoni",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-20576#1",
+      "extension": null
+    },
+    {
+      "ine": "08043",
+      "name": "Canyelles",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-20576#1",
+      "extension": null
+    },
+    {
+      "ine": "17044",
+      "name": "Cassà de la Selva",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-20576#1",
+      "extension": null
+    },
+    {
+      "ine": "08058",
+      "name": "Castellet i la Gornal",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-20576#1",
+      "extension": null
+    },
+    {
+      "ine": "08061",
+      "name": "Castellgalí",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-20576#1",
+      "extension": null
+    },
+    {
+      "ine": "17047",
+      "name": "Castelló d'Empúries",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-20576#1",
+      "extension": null
+    },
+    {
+      "ine": "17048",
+      "name": "Castell d'Aro, Platja d'Aro i S'Agaró",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-20576#1",
+      "extension": null
+    },
+    {
+      "ine": "08064",
+      "name": "Castellterçol",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-20576#1",
+      "extension": null
+    },
+    {
+      "ine": "17049",
+      "name": "Celrà",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-20576#1",
+      "extension": null
+    },
+    {
+      "ine": "08067",
+      "name": "Centelles",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-20576#1",
+      "extension": null
+    },
+    {
+      "ine": "43050",
+      "name": "Creixell",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-20576#1",
+      "extension": null
+    },
+    {
+      "ine": "43051",
+      "name": "Cunit",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-20576#1",
+      "extension": null
+    },
+    {
+      "ine": "43901",
+      "name": "Deltebre",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-20576#1",
+      "extension": null
+    },
+    {
+      "ine": "08075",
+      "name": "Dosrius",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-20576#1",
+      "extension": null
+    },
+    {
+      "ine": "17062",
+      "name": "l'Escala",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-20576#1",
+      "extension": null
+    },
+    {
+      "ine": "08254",
+      "name": "l'Esquirol",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-20576#1",
+      "extension": null
+    },
+    {
+      "ine": "08083",
+      "name": "Folgueroles",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-20576#1",
+      "extension": null
+    },
+    {
+      "ine": "17073",
+      "name": "Fornells de la Selva",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-20576#1",
+      "extension": null
+    },
+    {
+      "ine": "08091",
+      "name": "Gelida",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-20576#1",
+      "extension": null
+    },
+    {
+      "ine": "08092",
+      "name": "Gironella",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-20576#1",
+      "extension": null
+    },
+    {
+      "ine": "17083",
+      "name": "Hostalric",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-20576#1",
+      "extension": null
+    },
+    {
+      "ine": "25122",
+      "name": "Linyola",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-20576#1",
+      "extension": null
+    },
+    {
+      "ine": "17092",
+      "name": "Llançà",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-20576#1",
+      "extension": null
+    },
+    {
+      "ine": "08107",
+      "name": "Lliçà d'Amunt",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-20576#1",
+      "extension": null
+    },
+    {
+      "ine": "08108",
+      "name": "Lliçà de Vall",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-20576#1",
+      "extension": null
+    },
+    {
+      "ine": "17103",
+      "name": "Maçanet de la Selva",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-20576#1",
+      "extension": null
+    },
+    {
+      "ine": "08119",
+      "name": "Masquefa",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-20576#1",
+      "extension": null
+    },
+    {
+      "ine": "08138",
+      "name": "Moià",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-20576#1",
+      "extension": null
+    },
+    {
+      "ine": "08127",
+      "name": "Monistrol de Montserrat",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-20576#1",
+      "extension": null
+    },
+    {
+      "ine": "43086",
+      "name": "Montblanc",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-20576#1",
+      "extension": null
+    },
+    {
+      "ine": "43088",
+      "name": "Montbrió del Camp",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-20576#1",
+      "extension": null
+    },
+    {
+      "ine": "43092",
+      "name": "Mont-roig del Camp",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-20576#1",
+      "extension": null
+    },
+    {
+      "ine": "43093",
+      "name": "Móra d'Ebre",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-20576#1",
+      "extension": null
+    },
+    {
+      "ine": "43095",
+      "name": "el Morell",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-20576#1",
+      "extension": null
+    },
+    {
+      "ine": "08141",
+      "name": "Navàs",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-20576#1",
+      "extension": null
+    },
+    {
+      "ine": "08143",
+      "name": "Òdena",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-20576#1",
+      "extension": null
+    },
+    {
+      "ine": "08145",
+      "name": "Olèrdola",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-20576#1",
+      "extension": null
+    },
+    {
+      "ine": "08146",
+      "name": "Olesa de Bonesvalls",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-20576#1",
+      "extension": null
+    },
+    {
+      "ine": "08148",
+      "name": "Olivella",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-20576#1",
+      "extension": null
+    },
+    {
+      "ine": "08157",
+      "name": "Pallejà",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-20576#1",
+      "extension": null
+    },
+    {
+      "ine": "08905",
+      "name": "la Palma de Cervelló",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-20576#1",
+      "extension": null
+    },
+    {
+      "ine": "17124",
+      "name": "Pals",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-20576#1",
+      "extension": null
+    },
+    {
+      "ine": "17132",
+      "name": "Peralada",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-20576#1",
+      "extension": null
+    },
+    {
+      "ine": "08161",
+      "name": "Piera",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-20576#1",
+      "extension": null
+    },
+    {
+      "ine": "43111",
+      "name": "la Pobla de Montornès",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-20576#1",
+      "extension": null
+    },
+    {
+      "ine": "25173",
+      "name": "el Pont de Suert",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-20576#1",
+      "extension": null
+    },
+    {
+      "ine": "25172",
+      "name": "Ponts",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-20576#1",
+      "extension": null
+    },
+    {
+      "ine": "08171",
+      "name": "Prats de Lluçanès",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-20576#1",
+      "extension": null
+    },
+    {
+      "ine": "08175",
+      "name": "Puig-reig",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-20576#1",
+      "extension": null
+    },
+    {
+      "ine": "43136",
+      "name": "la Ràpita",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-20576#1",
+      "extension": null
+    },
+    {
+      "ine": "17146",
+      "name": "Riells i Viabrea",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-20576#1",
+      "extension": null
+    },
+    {
+      "ine": "17148",
+      "name": "Riudarenes",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-20576#1",
+      "extension": null
+    },
+    {
+      "ine": "43129",
+      "name": "Riudoms",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-20576#1",
+      "extension": null
+    },
+    {
+      "ine": "43131",
+      "name": "Roda de Berà",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-20576#1",
+      "extension": null
+    },
+    {
+      "ine": "08183",
+      "name": "Roda de Ter",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-20576#1",
+      "extension": null
+    },
+    {
+      "ine": "17152",
+      "name": "Roses",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-20576#1",
+      "extension": null
+    },
+    {
+      "ine": "08198",
+      "name": "Sant Antoni de Vilamajor",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-20576#1",
+      "extension": null
+    },
+    {
+      "ine": "08203",
+      "name": "Sant Cebrià de Vallalta",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-20576#1",
+      "extension": null
+    },
+    {
+      "ine": "08207",
+      "name": "Sant Esteve de Palautordera",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-20576#1",
+      "extension": null
+    },
+    {
+      "ine": "08210",
+      "name": "Sant Feliu de Codines",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-20576#1",
+      "extension": null
+    },
+    {
+      "ine": "08215",
+      "name": "Sant Hipòlit de Voltregà",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-20576#1",
+      "extension": null
+    },
+    {
+      "ine": "43137",
+      "name": "Sant Jaume dels Domenys",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-20576#1",
+      "extension": null
+    },
+    {
+      "ine": "43902",
+      "name": "Sant Jaume d'Enveja",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-20576#1",
+      "extension": null
+    },
+    {
+      "ine": "08218",
+      "name": "Sant Joan de Vilatorrada",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-20576#1",
+      "extension": null
+    },
+    {
+      "ine": "17169",
+      "name": "Sant Julià de Ramis",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-20576#1",
+      "extension": null
+    },
+    {
+      "ine": "08222",
+      "name": "Sant Llorenç d'Hortons",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-20576#1",
+      "extension": null
+    },
+    {
+      "ine": "08223",
+      "name": "Sant Llorenç Savall",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-20576#1",
+      "extension": null
+    },
+    {
+      "ine": "08227",
+      "name": "Sant Martí Sarroca",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-20576#1",
+      "extension": null
+    },
+    {
+      "ine": "08232",
+      "name": "Sant Pere de Riudebitlles",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-20576#1",
+      "extension": null
+    },
+    {
+      "ine": "08233",
+      "name": "Sant Pere de Torelló",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-20576#1",
+      "extension": null
+    },
+    {
+      "ine": "08234",
+      "name": "Sant Pere de Vilamajor",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-20576#1",
+      "extension": null
+    },
+    {
+      "ine": "17178",
+      "name": "Sant Pere Pescador",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-20576#1",
+      "extension": null
+    },
+    {
+      "ine": "08237",
+      "name": "Sant Quirze de Besora",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-20576#1",
+      "extension": null
+    },
+    {
+      "ine": "43138",
+      "name": "Santa Bàrbara",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-20576#1",
+      "extension": null
+    },
+    {
+      "ine": "43139",
+      "name": "Santa Coloma de Queralt",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-20576#1",
+      "extension": null
+    },
+    {
+      "ine": "17181",
+      "name": "Santa Cristina d'Aro",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-20576#1",
+      "extension": null
+    },
+    {
+      "ine": "08248",
+      "name": "Santa Eulàlia de Ronçana",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-20576#1",
+      "extension": null
+    },
+    {
+      "ine": "08259",
+      "name": "Santa Maria de Palautordera",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-20576#1",
+      "extension": null
+    },
+    {
+      "ine": "43140",
+      "name": "Santa Oliva",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-20576#1",
+      "extension": null
+    },
+    {
+      "ine": "08192",
+      "name": "Santpedor",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-20576#1",
+      "extension": null
+    },
+    {
+      "ine": "43145",
+      "name": "la Selva del Camp",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-20576#1",
+      "extension": null
+    },
+    {
+      "ine": "43044",
+      "name": "la Sénia",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-20576#1",
+      "extension": null
+    },
+    {
+      "ine": "08267",
+      "name": "Sentmenat",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-20576#1",
+      "extension": null
+    },
+    {
+      "ine": "08269",
+      "name": "Seva",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-20576#1",
+      "extension": null
+    },
+    {
+      "ine": "17193",
+      "name": "Sils",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-20576#1",
+      "extension": null
+    },
+    {
+      "ine": "08274",
+      "name": "Súria",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-20576#1",
+      "extension": null
+    },
+    {
+      "ine": "08278",
+      "name": "Taradell",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-20576#1",
+      "extension": null
+    },
+    {
+      "ine": "08288",
+      "name": "Torrelles de Foix",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-20576#1",
+      "extension": null
+    },
+    {
+      "ine": "17199",
+      "name": "Torroella de Montgrí",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-20576#1",
+      "extension": null
+    },
+    {
+      "ine": "17202",
+      "name": "Tossa de Mar",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-20576#1",
+      "extension": null
+    },
+    {
+      "ine": "43156",
+      "name": "Ulldecona",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-20576#1",
+      "extension": null
+    },
+    {
+      "ine": "08291",
+      "name": "Vacarisses",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-20576#1",
+      "extension": null
+    },
+    {
+      "ine": "08294",
+      "name": "Vallgorguina",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-20576#1",
+      "extension": null
+    },
+    {
+      "ine": "17213",
+      "name": "Vidreres",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-20576#1",
+      "extension": null
+    },
+    {
+      "ine": "25243",
+      "name": "Vielha e Mijaran",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-20576#1",
+      "extension": null
+    },
+    {
+      "ine": "08300",
+      "name": "Viladecavalls",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-20576#1",
+      "extension": null
+    },
+    {
+      "ine": "17221",
+      "name": "Vilafant",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-20576#1",
+      "extension": null
+    },
+    {
+      "ine": "08902",
+      "name": "Vilanova del Vallès",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-20576#1",
+      "extension": null
+    },
+    {
+      "ine": "17233",
+      "name": "Vilobí d'Onyar",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-20576#1",
+      "extension": null
+    },
+    {
+      "ine": "43178",
+      "name": "Vinyols i els Arcs",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "BOE-A-2024-20576#1",
+      "extension": null
+    },
+    {
+      "ine": "20067",
+      "name": "Errenteria",
+      "community": "basque-country",
+      "area": null,
+      "declaration": "BOE-A-2025-1721#1",
+      "extension": null
+    },
+    {
+      "ine": "20902",
+      "name": "Lasarte-Oria",
+      "community": "basque-country",
+      "area": null,
+      "declaration": "BOE-A-2025-8636#1",
+      "extension": null
+    },
+    {
+      "ine": "20081",
+      "name": "Zumaia",
+      "community": "basque-country",
+      "area": null,
+      "declaration": "BOE-A-2025-8636#2",
+      "extension": null
+    },
+    {
+      "ine": "48013",
+      "name": "Barakaldo",
+      "community": "basque-country",
+      "area": null,
+      "declaration": "BOE-A-2025-8636#3",
+      "extension": null
+    },
+    {
+      "ine": "20045",
+      "name": "Irun",
+      "community": "basque-country",
+      "area": null,
+      "declaration": "BOE-A-2025-8636#4",
+      "extension": null
+    },
+    {
+      "ine": "31201",
+      "name": "Pamplona/Iruña",
+      "community": "navarre",
+      "area": null,
+      "declaration": "BOE-A-2025-15728#1",
+      "extension": null
+    },
+    {
+      "ine": "31232",
+      "name": "Tudela",
+      "community": "navarre",
+      "area": null,
+      "declaration": "BOE-A-2025-15728#1",
+      "extension": null
+    },
+    {
+      "ine": "31086",
+      "name": "Valle de Egüés/Eguesibar",
+      "community": "navarre",
+      "area": null,
+      "declaration": "BOE-A-2025-15728#1",
+      "extension": null
+    },
+    {
+      "ine": "31060",
+      "name": "Burlada/Burlata",
+      "community": "navarre",
+      "area": null,
+      "declaration": "BOE-A-2025-15728#1",
+      "extension": null
+    },
+    {
+      "ine": "31901",
+      "name": "Barañáin/Barañain",
+      "community": "navarre",
+      "area": null,
+      "declaration": "BOE-A-2025-15728#1",
+      "extension": null
+    },
+    {
+      "ine": "31907",
+      "name": "Zizur Mayor",
+      "community": "navarre",
+      "area": null,
+      "declaration": "BOE-A-2025-15728#1",
+      "extension": null
+    },
+    {
+      "ine": "31097",
+      "name": "Estella-Lizarra",
+      "community": "navarre",
+      "area": null,
+      "declaration": "BOE-A-2025-15728#1",
+      "extension": null
+    },
+    {
+      "ine": "31023",
+      "name": "Aranguren",
+      "community": "navarre",
+      "area": null,
+      "declaration": "BOE-A-2025-15728#1",
+      "extension": null
+    },
+    {
+      "ine": "31903",
+      "name": "Berriozar",
+      "community": "navarre",
+      "area": null,
+      "declaration": "BOE-A-2025-15728#1",
+      "extension": null
+    },
+    {
+      "ine": "31227",
+      "name": "Tafalla",
+      "community": "navarre",
+      "area": null,
+      "declaration": "BOE-A-2025-15728#1",
+      "extension": null
+    },
+    {
+      "ine": "31016",
+      "name": "Ansoáin/Antsoain",
+      "community": "navarre",
+      "area": null,
+      "declaration": "BOE-A-2025-15728#1",
+      "extension": null
+    },
+    {
+      "ine": "31258",
+      "name": "Villava/Atarrabia",
+      "community": "navarre",
+      "area": null,
+      "declaration": "BOE-A-2025-15728#1",
+      "extension": null
+    },
+    {
+      "ine": "31077",
+      "name": "Corella",
+      "community": "navarre",
+      "area": null,
+      "declaration": "BOE-A-2025-15728#1",
+      "extension": null
+    },
+    {
+      "ine": "31088",
+      "name": "Valle de Elorz/Elortzibar",
+      "community": "navarre",
+      "area": null,
+      "declaration": "BOE-A-2025-15728#1",
+      "extension": null
+    },
+    {
+      "ine": "31072",
+      "name": "Cintruénigo",
+      "community": "navarre",
+      "area": null,
+      "declaration": "BOE-A-2025-15728#1",
+      "extension": null
+    },
+    {
+      "ine": "31050",
+      "name": "Baztan",
+      "community": "navarre",
+      "area": null,
+      "declaration": "BOE-A-2025-15728#1",
+      "extension": null
+    },
+    {
+      "ine": "31010",
+      "name": "Altsasu/Alsasua",
+      "community": "navarre",
+      "area": null,
+      "declaration": "BOE-A-2025-15728#1",
+      "extension": null
+    },
+    {
+      "ine": "31122",
+      "name": "Huarte/Uharte",
+      "community": "navarre",
+      "area": null,
+      "declaration": "BOE-A-2025-15728#1",
+      "extension": null
+    },
+    {
+      "ine": "31902",
+      "name": "Berrioplano/Berriobeiti",
+      "community": "navarre",
+      "area": null,
+      "declaration": "BOE-A-2025-15728#1",
+      "extension": null
+    },
+    {
+      "ine": "31215",
+      "name": "San Adrián",
+      "community": "navarre",
+      "area": null,
+      "declaration": "BOE-A-2025-15728#1",
+      "extension": null
+    },
+    {
+      "ine": "31202",
+      "name": "Peralta/Azkoien",
+      "community": "navarre",
+      "area": null,
+      "declaration": "BOE-A-2025-15728#1",
+      "extension": null
+    },
+    {
+      "ine": "15030",
+      "name": "A Coruña",
+      "community": "galicia",
+      "area": null,
+      "declaration": "BOE-A-2025-15728#2",
+      "extension": null
+    },
+    {
+      "ine": "48036",
+      "name": "Galdakao",
+      "community": "basque-country",
+      "area": "Distrito 2",
+      "declaration": "BOE-A-2025-15728#3",
+      "extension": null
+    },
+    {
+      "ine": "20069",
+      "name": "Donostia/San Sebastián",
+      "community": "basque-country",
+      "area": null,
+      "declaration": "BOE-A-2025-15728#4",
+      "extension": null
+    },
+    {
+      "ine": "20903",
+      "name": "Astigarraga",
+      "community": "basque-country",
+      "area": null,
+      "declaration": "BOE-A-2025-21901#1",
+      "extension": null
+    },
+    {
+      "ine": "48020",
+      "name": "Bilbao",
+      "community": "basque-country",
+      "area": null,
+      "declaration": "BOE-A-2025-21901#2",
+      "extension": null
+    },
+    {
+      "ine": "20073",
+      "name": "Usurbil",
+      "community": "basque-country",
+      "area": null,
+      "declaration": "BOE-A-2025-21901#3",
+      "extension": null
+    },
+    {
+      "ine": "01059",
+      "name": "Vitoria-Gasteiz",
+      "community": "basque-country",
+      "area": "excepto la zona rural constituida por entidades locales menores no incluida en la trama urbana",
+      "declaration": "BOE-A-2025-21901#4",
+      "extension": null
+    },
+    {
+      "ine": "20040",
+      "name": "Hernani",
+      "community": "basque-country",
+      "area": null,
+      "declaration": "BOE-A-2026-2448#1",
+      "extension": null
+    },
+    {
+      "ine": "20053",
+      "name": "Lezo",
+      "community": "basque-country",
+      "area": null,
+      "declaration": "BOE-A-2026-2448#2",
+      "extension": null
+    },
+    {
+      "ine": "20071",
+      "name": "Tolosa",
+      "community": "basque-country",
+      "area": null,
+      "declaration": "BOE-A-2026-2448#3",
+      "extension": null
+    },
+    {
+      "ine": "20064",
+      "name": "Pasaia",
+      "community": "basque-country",
+      "area": null,
+      "declaration": "BOE-A-2026-9175#1",
+      "extension": null
+    },
+    {
+      "ine": "20027",
+      "name": "Zestoa",
+      "community": "basque-country",
+      "area": null,
+      "declaration": "BOE-A-2026-9175#2",
+      "extension": null
+    },
+    {
+      "ine": "20055",
+      "name": "Arrasate/Mondragón",
+      "community": "basque-country",
+      "area": null,
+      "declaration": "BOE-A-2026-9175#3",
+      "extension": null
+    },
+    {
+      "ine": "33036",
+      "name": "Llanes",
+      "community": "asturias",
+      "area": "núcleo urbano de Llanes y núcleo de Posada de Llanes",
+      "declaration": "BOE-A-2026-16532#1",
+      "extension": null
+    },
+    {
+      "ine": "33008",
+      "name": "Cabrales",
+      "community": "asturias",
+      "area": "núcleo de Arenas y núcleo de Poo",
+      "declaration": "BOE-A-2026-16532#1",
+      "extension": null
+    },
+    {
+      "ine": "15078",
+      "name": "Santiago de Compostela",
+      "community": "galicia",
+      "area": null,
+      "declaration": "BOE-A-2026-16532#2",
+      "extension": null
+    },
+    {
+      "ine": "33024",
+      "name": "Gijón",
+      "community": "asturias",
+      "area": "barrio de La Arena y barrio de Cimadevilla",
+      "declaration": "BOE-A-2026-16532#3",
+      "extension": null
+    },
+    {
+      "ine": "33004",
+      "name": "Avilés",
+      "community": "asturias",
+      "area": "barrio de La Magdalena",
+      "declaration": "BOE-A-2026-16532#4",
+      "extension": null
+    },
+    {
+      "ine": "33025",
+      "name": "Gozón",
+      "community": "asturias",
+      "area": "Luanco",
+      "declaration": "BOE-A-2026-16532#5",
+      "extension": null
+    },
+    {
+      "ine": "48015",
+      "name": "Basauri",
+      "community": "basque-country",
+      "area": null,
+      "declaration": "BOE-A-2026-16532#6",
+      "extension": null
+    },
+    {
+      "ine": "33036",
+      "name": "Llanes",
+      "community": "asturias",
+      "area": "núcleos de Nueva, Poo, Barro y Celorio",
+      "declaration": "BOE-A-2026-16532#7",
+      "extension": null
+    },
+    {
+      "ine": "48085",
+      "name": "Sopela",
+      "community": "basque-country",
+      "area": null,
+      "declaration": "BOE-A-2026-23088#1",
+      "extension": null
+    },
+    {
+      "ine": "48089",
+      "name": "Urduliz",
+      "community": "basque-country",
+      "area": null,
+      "declaration": "BOE-A-2026-23088#2",
+      "extension": null
+    },
+    {
+      "ine": "20074",
+      "name": "Bergara",
+      "community": "basque-country",
+      "area": null,
+      "declaration": "BOE-A-2026-23088#3",
+      "extension": null
+    },
+    {
+      "ine": "25003",
+      "name": "Agramunt",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "TER/3740/2026",
+      "extension": null
+    },
+    {
+      "ine": "17016",
+      "name": "Bàscara",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "TER/3740/2026",
+      "extension": null
+    },
+    {
+      "ine": "43024",
+      "name": "Bellvei",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "TER/3740/2026",
+      "extension": null
+    },
+    {
+      "ine": "08038",
+      "name": "Callús",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "TER/3740/2026",
+      "extension": null
+    },
+    {
+      "ine": "43903",
+      "name": "Camarles",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "TER/3740/2026",
+      "extension": null
+    },
+    {
+      "ine": "17036",
+      "name": "Campdevànol",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "TER/3740/2026",
+      "extension": null
+    },
+    {
+      "ine": "08044",
+      "name": "Capellades",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "TER/3740/2026",
+      "extension": null
+    },
+    {
+      "ine": "08047",
+      "name": "Cardona",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "TER/3740/2026",
+      "extension": null
+    },
+    {
+      "ine": "08053",
+      "name": "Castellbell i el Vilar",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "TER/3740/2026",
+      "extension": null
+    },
+    {
+      "ine": "43047",
+      "name": "Constantí",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "TER/3740/2026",
+      "extension": null
+    },
+    {
+      "ine": "17058",
+      "name": "Crespià",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "TER/3740/2026",
+      "extension": null
+    },
+    {
+      "ine": "43054",
+      "name": "l'Espluga de Francolí",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "TER/3740/2026",
+      "extension": null
+    },
+    {
+      "ine": "08134",
+      "name": "Figaró-Montmany",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "TER/3740/2026",
+      "extension": null
+    },
+    {
+      "ine": "08162",
+      "name": "els Hostalets de Pierola",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "TER/3740/2026",
+      "extension": null
+    },
+    {
+      "ine": "17086",
+      "name": "la Jonquera",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "TER/3740/2026",
+      "extension": null
+    },
+    {
+      "ine": "17089",
+      "name": "Llagostera",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "TER/3740/2026",
+      "extension": null
+    },
+    {
+      "ine": "17097",
+      "name": "Madremanya",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "TER/3740/2026",
+      "extension": null
+    },
+    {
+      "ine": "08114",
+      "name": "Martorell",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "TER/3740/2026",
+      "extension": null
+    },
+    {
+      "ine": "43079",
+      "name": "Masllorenç",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "TER/3740/2026",
+      "extension": null
+    },
+    {
+      "ine": "25140",
+      "name": "Montferrer i Castellbò",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "TER/3740/2026",
+      "extension": null
+    },
+    {
+      "ine": "43090",
+      "name": "el Montmell",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "TER/3740/2026",
+      "extension": null
+    },
+    {
+      "ine": "08140",
+      "name": "Navarcles",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "TER/3740/2026",
+      "extension": null
+    },
+    {
+      "ine": "17116",
+      "name": "Osor",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "TER/3740/2026",
+      "extension": null
+    },
+    {
+      "ine": "17121",
+      "name": "Palau-sator",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "TER/3740/2026",
+      "extension": null
+    },
+    {
+      "ine": "43108",
+      "name": "el Pla de Santa Maria",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "TER/3740/2026",
+      "extension": null
+    },
+    {
+      "ine": "43109",
+      "name": "la Pobla de Mafumet",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "TER/3740/2026",
+      "extension": null
+    },
+    {
+      "ine": "25171",
+      "name": "la Pobla de Segur",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "TER/3740/2026",
+      "extension": null
+    },
+    {
+      "ine": "17140",
+      "name": "el Port de la Selva",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "TER/3740/2026",
+      "extension": null
+    },
+    {
+      "ine": "25175",
+      "name": "Prats i Sansor",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "TER/3740/2026",
+      "extension": null
+    },
+    {
+      "ine": "17139",
+      "name": "les Preses",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "TER/3740/2026",
+      "extension": null
+    },
+    {
+      "ine": "25185",
+      "name": "Ribera d'Urgellet",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "TER/3740/2026",
+      "extension": null
+    },
+    {
+      "ine": "25189",
+      "name": "Rosselló",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "TER/3740/2026",
+      "extension": null
+    },
+    {
+      "ine": "08191",
+      "name": "Sallent",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "TER/3740/2026",
+      "extension": null
+    },
+    {
+      "ine": "43135",
+      "name": "Salomó",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "TER/3740/2026",
+      "extension": null
+    },
+    {
+      "ine": "08196",
+      "name": "Sant Andreu de la Barca",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "TER/3740/2026",
+      "extension": null
+    },
+    {
+      "ine": "17161",
+      "name": "Sant Feliu de Pallerols",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "TER/3740/2026",
+      "extension": null
+    },
+    {
+      "ine": "17163",
+      "name": "Sant Gregori",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "TER/3740/2026",
+      "extension": null
+    },
+    {
+      "ine": "17164",
+      "name": "Sant Hilari Sacalm",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "TER/3740/2026",
+      "extension": null
+    },
+    {
+      "ine": "08193",
+      "name": "Sant Iscle de Vallalta",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "TER/3740/2026",
+      "extension": null
+    },
+    {
+      "ine": "17167",
+      "name": "Sant Joan de les Abadesses",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "TER/3740/2026",
+      "extension": null
+    },
+    {
+      "ine": "17185",
+      "name": "Sant Joan les Fonts",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "TER/3740/2026",
+      "extension": null
+    },
+    {
+      "ine": "08224",
+      "name": "Sant Martí de Centelles",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "TER/3740/2026",
+      "extension": null
+    },
+    {
+      "ine": "08262",
+      "name": "Sant Vicenç de Castellet",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "TER/3740/2026",
+      "extension": null
+    },
+    {
+      "ine": "08246",
+      "name": "Santa Eugènia de Berga",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "TER/3740/2026",
+      "extension": null
+    },
+    {
+      "ine": "08251",
+      "name": "Santa Margarida i els Monjos",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "TER/3740/2026",
+      "extension": null
+    },
+    {
+      "ine": "25223",
+      "name": "Torà",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "TER/3740/2026",
+      "extension": null
+    },
+    {
+      "ine": "08284",
+      "name": "Tordera",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "TER/3740/2026",
+      "extension": null
+    },
+    {
+      "ine": "25228",
+      "name": "Torrefarrera",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "TER/3740/2026",
+      "extension": null
+    },
+    {
+      "ine": "17204",
+      "name": "Ullà",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "TER/3740/2026",
+      "extension": null
+    },
+    {
+      "ine": "25240",
+      "name": "Vallfogona de Balaguer",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "TER/3740/2026",
+      "extension": null
+    },
+    {
+      "ine": "43162",
+      "name": "Vandellòs i l'Hospitalet de l'Infant",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "TER/3740/2026",
+      "extension": null
+    },
+    {
+      "ine": "08306",
+      "name": "Vilalba Sasserra",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "TER/3740/2026",
+      "extension": null
+    },
+    {
+      "ine": "43171",
+      "name": "Vila-seca",
+      "community": "catalonia",
+      "area": null,
+      "declaration": "TER/3740/2026",
+      "extension": null
+    }
+  ],
+  "register": {
+    "source": "INE, Relación de municipios y sus códigos a 1 de enero de 2026 (diccionario26.xlsx)",
+    "catalonia": [
+      [
+        "08001",
+        "Abrera"
+      ],
+      [
+        "08002",
+        "Aguilar de Segarra"
+      ],
+      [
+        "08003",
+        "Alella"
+      ],
+      [
+        "08004",
+        "Alpens"
+      ],
+      [
+        "08005",
+        "l'Ametlla del Vallès"
+      ],
+      [
+        "08006",
+        "Arenys de Mar"
+      ],
+      [
+        "08007",
+        "Arenys de Munt"
+      ],
+      [
+        "08008",
+        "Argençola"
+      ],
+      [
+        "08009",
+        "Argentona"
+      ],
+      [
+        "08010",
+        "Artés"
+      ],
+      [
+        "08011",
+        "Avià"
+      ],
+      [
+        "08012",
+        "Avinyó"
+      ],
+      [
+        "08013",
+        "Avinyonet del Penedès"
+      ],
+      [
+        "08014",
+        "Aiguafreda"
+      ],
+      [
+        "08015",
+        "Badalona"
+      ],
+      [
+        "08016",
+        "Bagà"
+      ],
+      [
+        "08017",
+        "Balenyà"
+      ],
+      [
+        "08018",
+        "Balsareny"
+      ],
+      [
+        "08019",
+        "Barcelona"
+      ],
+      [
+        "08020",
+        "Begues"
+      ],
+      [
+        "08021",
+        "Bellprat"
+      ],
+      [
+        "08022",
+        "Berga"
+      ],
+      [
+        "08023",
+        "Bigues i Riells del Fai"
+      ],
+      [
+        "08024",
+        "Borredà"
+      ],
+      [
+        "08025",
+        "el Bruc"
+      ],
+      [
+        "08026",
+        "el Brull"
+      ],
+      [
+        "08027",
+        "les Cabanyes"
+      ],
+      [
+        "08028",
+        "Cabrera d'Anoia"
+      ],
+      [
+        "08029",
+        "Cabrera de Mar"
+      ],
+      [
+        "08030",
+        "Cabrils"
+      ],
+      [
+        "08031",
+        "Calaf"
+      ],
+      [
+        "08032",
+        "Caldes d'Estrac"
+      ],
+      [
+        "08033",
+        "Caldes de Montbui"
+      ],
+      [
+        "08034",
+        "Calders"
+      ],
+      [
+        "08035",
+        "Calella"
+      ],
+      [
+        "08036",
+        "Calonge de Segarra"
+      ],
+      [
+        "08037",
+        "Calldetenes"
+      ],
+      [
+        "08038",
+        "Callús"
+      ],
+      [
+        "08039",
+        "Campins"
+      ],
+      [
+        "08040",
+        "Canet de Mar"
+      ],
+      [
+        "08041",
+        "Canovelles"
+      ],
+      [
+        "08042",
+        "Cànoves i Samalús"
+      ],
+      [
+        "08043",
+        "Canyelles"
+      ],
+      [
+        "08044",
+        "Capellades"
+      ],
+      [
+        "08045",
+        "Capolat"
+      ],
+      [
+        "08046",
+        "Cardedeu"
+      ],
+      [
+        "08047",
+        "Cardona"
+      ],
+      [
+        "08048",
+        "Carme"
+      ],
+      [
+        "08049",
+        "Casserres"
+      ],
+      [
+        "08050",
+        "Castellar del Riu"
+      ],
+      [
+        "08051",
+        "Castellar del Vallès"
+      ],
+      [
+        "08052",
+        "Castellar de n'Hug"
+      ],
+      [
+        "08053",
+        "Castellbell i el Vilar"
+      ],
+      [
+        "08054",
+        "Castellbisbal"
+      ],
+      [
+        "08055",
+        "Castellcir"
+      ],
+      [
+        "08056",
+        "Castelldefels"
+      ],
+      [
+        "08057",
+        "Castell de l'Areny"
+      ],
+      [
+        "08058",
+        "Castellet i la Gornal"
+      ],
+      [
+        "08059",
+        "Castellfollit del Boix"
+      ],
+      [
+        "08060",
+        "Castellfollit de Riubregós"
+      ],
+      [
+        "08061",
+        "Castellgalí"
+      ],
+      [
+        "08062",
+        "Castellnou de Bages"
+      ],
+      [
+        "08063",
+        "Castellolí"
+      ],
+      [
+        "08064",
+        "Castellterçol"
+      ],
+      [
+        "08065",
+        "Castellví de la Marca"
+      ],
+      [
+        "08066",
+        "Castellví de Rosanes"
+      ],
+      [
+        "08067",
+        "Centelles"
+      ],
+      [
+        "08068",
+        "Cervelló"
+      ],
+      [
+        "08069",
+        "Collbató"
+      ],
+      [
+        "08070",
+        "Collsuspina"
+      ],
+      [
+        "08071",
+        "Copons"
+      ],
+      [
+        "08072",
+        "Corbera de Llobregat"
+      ],
+      [
+        "08073",
+        "Cornellà de Llobregat"
+      ],
+      [
+        "08074",
+        "Cubelles"
+      ],
+      [
+        "08075",
+        "Dosrius"
+      ],
+      [
+        "08076",
+        "Esparreguera"
+      ],
+      [
+        "08077",
+        "Esplugues de Llobregat"
+      ],
+      [
+        "08078",
+        "l'Espunyola"
+      ],
+      [
+        "08079",
+        "l'Estany"
+      ],
+      [
+        "08080",
+        "Fígols"
+      ],
+      [
+        "08081",
+        "Fogars de Montclús"
+      ],
+      [
+        "08082",
+        "Fogars de la Selva"
+      ],
+      [
+        "08083",
+        "Folgueroles"
+      ],
+      [
+        "08084",
+        "Fonollosa"
+      ],
+      [
+        "08085",
+        "Font-rubí"
+      ],
+      [
+        "08086",
+        "les Franqueses del Vallès"
+      ],
+      [
+        "08087",
+        "Gallifa"
+      ],
+      [
+        "08088",
+        "la Garriga"
+      ],
+      [
+        "08089",
+        "Gavà"
+      ],
+      [
+        "08090",
+        "Gaià"
+      ],
+      [
+        "08091",
+        "Gelida"
+      ],
+      [
+        "08092",
+        "Gironella"
+      ],
+      [
+        "08093",
+        "Gisclareny"
+      ],
+      [
+        "08094",
+        "la Granada"
+      ],
+      [
+        "08095",
+        "Granera"
+      ],
+      [
+        "08096",
+        "Granollers"
+      ],
+      [
+        "08097",
+        "Gualba"
+      ],
+      [
+        "08098",
+        "Sant Salvador de Guardiola"
+      ],
+      [
+        "08099",
+        "Guardiola de Berguedà"
+      ],
+      [
+        "08100",
+        "Gurb"
+      ],
+      [
+        "08101",
+        "l'Hospitalet de Llobregat"
+      ],
+      [
+        "08102",
+        "Igualada"
+      ],
+      [
+        "08103",
+        "Jorba"
+      ],
+      [
+        "08104",
+        "la Llacuna"
+      ],
+      [
+        "08105",
+        "la Llagosta"
+      ],
+      [
+        "08106",
+        "Llinars del Vallès"
+      ],
+      [
+        "08107",
+        "Lliçà d'Amunt"
+      ],
+      [
+        "08108",
+        "Lliçà de Vall"
+      ],
+      [
+        "08109",
+        "Lluçà"
+      ],
+      [
+        "08110",
+        "Malgrat de Mar"
+      ],
+      [
+        "08111",
+        "Malla"
+      ],
+      [
+        "08112",
+        "Manlleu"
+      ],
+      [
+        "08113",
+        "Manresa"
+      ],
+      [
+        "08114",
+        "Martorell"
+      ],
+      [
+        "08115",
+        "Martorelles"
+      ],
+      [
+        "08116",
+        "les Masies de Roda"
+      ],
+      [
+        "08117",
+        "les Masies de Voltregà"
+      ],
+      [
+        "08118",
+        "el Masnou"
+      ],
+      [
+        "08119",
+        "Masquefa"
+      ],
+      [
+        "08120",
+        "Matadepera"
+      ],
+      [
+        "08121",
+        "Mataró"
+      ],
+      [
+        "08122",
+        "Mediona"
+      ],
+      [
+        "08123",
+        "Molins de Rei"
+      ],
+      [
+        "08124",
+        "Mollet del Vallès"
+      ],
+      [
+        "08125",
+        "Montcada i Reixac"
+      ],
+      [
+        "08126",
+        "Montgat"
+      ],
+      [
+        "08127",
+        "Monistrol de Montserrat"
+      ],
+      [
+        "08128",
+        "Monistrol de Calders"
+      ],
+      [
+        "08129",
+        "Muntanyola"
+      ],
+      [
+        "08130",
+        "Montclar"
+      ],
+      [
+        "08131",
+        "Montesquiu"
+      ],
+      [
+        "08132",
+        "Montmajor"
+      ],
+      [
+        "08133",
+        "Montmaneu"
+      ],
+      [
+        "08134",
+        "Figaró-Montmany"
+      ],
+      [
+        "08135",
+        "Montmeló"
+      ],
+      [
+        "08136",
+        "Montornès del Vallès"
+      ],
+      [
+        "08137",
+        "Montseny"
+      ],
+      [
+        "08138",
+        "Moià"
+      ],
+      [
+        "08139",
+        "Mura"
+      ],
+      [
+        "08140",
+        "Navarcles"
+      ],
+      [
+        "08141",
+        "Navàs"
+      ],
+      [
+        "08142",
+        "la Nou de Berguedà"
+      ],
+      [
+        "08143",
+        "Òdena"
+      ],
+      [
+        "08144",
+        "Olvan"
+      ],
+      [
+        "08145",
+        "Olèrdola"
+      ],
+      [
+        "08146",
+        "Olesa de Bonesvalls"
+      ],
+      [
+        "08147",
+        "Olesa de Montserrat"
+      ],
+      [
+        "08148",
+        "Olivella"
+      ],
+      [
+        "08149",
+        "Olost"
+      ],
+      [
+        "08150",
+        "Orís"
+      ],
+      [
+        "08151",
+        "Oristà"
+      ],
+      [
+        "08152",
+        "Orpí"
+      ],
+      [
+        "08153",
+        "Òrrius"
+      ],
+      [
+        "08154",
+        "Pacs del Penedès"
+      ],
+      [
+        "08155",
+        "Palafolls"
+      ],
+      [
+        "08156",
+        "Palau-solità i Plegamans"
+      ],
+      [
+        "08157",
+        "Pallejà"
+      ],
+      [
+        "08158",
+        "el Papiol"
+      ],
+      [
+        "08159",
+        "Parets del Vallès"
+      ],
+      [
+        "08160",
+        "Perafita"
+      ],
+      [
+        "08161",
+        "Piera"
+      ],
+      [
+        "08162",
+        "els Hostalets de Pierola"
+      ],
+      [
+        "08163",
+        "Pineda de Mar"
+      ],
+      [
+        "08164",
+        "el Pla del Penedès"
+      ],
+      [
+        "08165",
+        "la Pobla de Claramunt"
+      ],
+      [
+        "08166",
+        "la Pobla de Lillet"
+      ],
+      [
+        "08167",
+        "Polinyà"
+      ],
+      [
+        "08168",
+        "Pontons"
+      ],
+      [
+        "08169",
+        "el Prat de Llobregat"
+      ],
+      [
+        "08170",
+        "els Prats de Rei"
+      ],
+      [
+        "08171",
+        "Prats de Lluçanès"
+      ],
+      [
+        "08172",
+        "Premià de Mar"
+      ],
+      [
+        "08174",
+        "Puigdàlber"
+      ],
+      [
+        "08175",
+        "Puig-reig"
+      ],
+      [
+        "08176",
+        "Pujalt"
+      ],
+      [
+        "08177",
+        "la Quar"
+      ],
+      [
+        "08178",
+        "Rajadell"
+      ],
+      [
+        "08179",
+        "Rellinars"
+      ],
+      [
+        "08180",
+        "Ripollet"
+      ],
+      [
+        "08181",
+        "la Roca del Vallès"
+      ],
+      [
+        "08182",
+        "el Pont de Vilomara i Rocafort"
+      ],
+      [
+        "08183",
+        "Roda de Ter"
+      ],
+      [
+        "08184",
+        "Rubí"
+      ],
+      [
+        "08185",
+        "Rubió"
+      ],
+      [
+        "08187",
+        "Sabadell"
+      ],
+      [
+        "08188",
+        "Sagàs"
+      ],
+      [
+        "08189",
+        "Sant Pere Sallavinera"
+      ],
+      [
+        "08190",
+        "Saldes"
+      ],
+      [
+        "08191",
+        "Sallent"
+      ],
+      [
+        "08192",
+        "Santpedor"
+      ],
+      [
+        "08193",
+        "Sant Iscle de Vallalta"
+      ],
+      [
+        "08194",
+        "Sant Adrià de Besòs"
+      ],
+      [
+        "08195",
+        "Sant Agustí de Lluçanès"
+      ],
+      [
+        "08196",
+        "Sant Andreu de la Barca"
+      ],
+      [
+        "08197",
+        "Sant Andreu de Llavaneres"
+      ],
+      [
+        "08198",
+        "Sant Antoni de Vilamajor"
+      ],
+      [
+        "08199",
+        "Sant Bartomeu del Grau"
+      ],
+      [
+        "08200",
+        "Sant Boi de Llobregat"
+      ],
+      [
+        "08201",
+        "Sant Boi de Lluçanès"
+      ],
+      [
+        "08202",
+        "Sant Celoni"
+      ],
+      [
+        "08203",
+        "Sant Cebrià de Vallalta"
+      ],
+      [
+        "08204",
+        "Sant Climent de Llobregat"
+      ],
+      [
+        "08205",
+        "Sant Cugat del Vallès"
+      ],
+      [
+        "08206",
+        "Sant Cugat Sesgarrigues"
+      ],
+      [
+        "08207",
+        "Sant Esteve de Palautordera"
+      ],
+      [
+        "08208",
+        "Sant Esteve Sesrovires"
+      ],
+      [
+        "08209",
+        "Sant Fost de Campsentelles"
+      ],
+      [
+        "08210",
+        "Sant Feliu de Codines"
+      ],
+      [
+        "08211",
+        "Sant Feliu de Llobregat"
+      ],
+      [
+        "08212",
+        "Sant Feliu Sasserra"
+      ],
+      [
+        "08213",
+        "Sant Fruitós de Bages"
+      ],
+      [
+        "08214",
+        "Vilassar de Dalt"
+      ],
+      [
+        "08215",
+        "Sant Hipòlit de Voltregà"
+      ],
+      [
+        "08216",
+        "Sant Jaume de Frontanyà"
+      ],
+      [
+        "08217",
+        "Sant Joan Despí"
+      ],
+      [
+        "08218",
+        "Sant Joan de Vilatorrada"
+      ],
+      [
+        "08219",
+        "Vilassar de Mar"
+      ],
+      [
+        "08220",
+        "Sant Julià de Vilatorta"
+      ],
+      [
+        "08221",
+        "Sant Just Desvern"
+      ],
+      [
+        "08222",
+        "Sant Llorenç d'Hortons"
+      ],
+      [
+        "08223",
+        "Sant Llorenç Savall"
+      ],
+      [
+        "08224",
+        "Sant Martí de Centelles"
+      ],
+      [
+        "08225",
+        "Sant Martí d'Albars"
+      ],
+      [
+        "08226",
+        "Sant Martí de Tous"
+      ],
+      [
+        "08227",
+        "Sant Martí Sarroca"
+      ],
+      [
+        "08228",
+        "Sant Martí Sesgueioles"
+      ],
+      [
+        "08229",
+        "Sant Mateu de Bages"
+      ],
+      [
+        "08230",
+        "Premià de Dalt"
+      ],
+      [
+        "08231",
+        "Sant Pere de Ribes"
+      ],
+      [
+        "08232",
+        "Sant Pere de Riudebitlles"
+      ],
+      [
+        "08233",
+        "Sant Pere de Torelló"
+      ],
+      [
+        "08234",
+        "Sant Pere de Vilamajor"
+      ],
+      [
+        "08235",
+        "Sant Pol de Mar"
+      ],
+      [
+        "08236",
+        "Sant Quintí de Mediona"
+      ],
+      [
+        "08237",
+        "Sant Quirze de Besora"
+      ],
+      [
+        "08238",
+        "Sant Quirze del Vallès"
+      ],
+      [
+        "08239",
+        "Sant Quirze Safaja"
+      ],
+      [
+        "08240",
+        "Sant Sadurní d'Anoia"
+      ],
+      [
+        "08241",
+        "Sant Sadurní d'Osormort"
+      ],
+      [
+        "08242",
+        "Marganell"
+      ],
+      [
+        "08243",
+        "Santa Cecília de Voltregà"
+      ],
+      [
+        "08244",
+        "Santa Coloma de Cervelló"
+      ],
+      [
+        "08245",
+        "Santa Coloma de Gramenet"
+      ],
+      [
+        "08246",
+        "Santa Eugènia de Berga"
+      ],
+      [
+        "08247",
+        "Santa Eulàlia de Riuprimer"
+      ],
+      [
+        "08248",
+        "Santa Eulàlia de Ronçana"
+      ],
+      [
+        "08249",
+        "Santa Fe del Penedès"
+      ],
+      [
+        "08250",
+        "Santa Margarida de Montbui"
+      ],
+      [
+        "08251",
+        "Santa Margarida i els Monjos"
+      ],
+      [
+        "08252",
+        "Barberà del Vallès"
+      ],
+      [
+        "08253",
+        "Santa Maria de Besora"
+      ],
+      [
+        "08254",
+        "l'Esquirol"
+      ],
+      [
+        "08255",
+        "Santa Maria de Merlès"
+      ],
+      [
+        "08256",
+        "Santa Maria de Martorelles"
+      ],
+      [
+        "08257",
+        "Santa Maria de Miralles"
+      ],
+      [
+        "08258",
+        "Santa Maria d'Oló"
+      ],
+      [
+        "08259",
+        "Santa Maria de Palautordera"
+      ],
+      [
+        "08260",
+        "Santa Perpètua de Mogoda"
+      ],
+      [
+        "08261",
+        "Santa Susanna"
+      ],
+      [
+        "08262",
+        "Sant Vicenç de Castellet"
+      ],
+      [
+        "08263",
+        "Sant Vicenç dels Horts"
+      ],
+      [
+        "08264",
+        "Sant Vicenç de Montalt"
+      ],
+      [
+        "08265",
+        "Sant Vicenç de Torelló"
+      ],
+      [
+        "08266",
+        "Cerdanyola del Vallès"
+      ],
+      [
+        "08267",
+        "Sentmenat"
+      ],
+      [
+        "08268",
+        "Cercs"
+      ],
+      [
+        "08269",
+        "Seva"
+      ],
+      [
+        "08270",
+        "Sitges"
+      ],
+      [
+        "08271",
+        "Sobremunt"
+      ],
+      [
+        "08272",
+        "Sora"
+      ],
+      [
+        "08273",
+        "Subirats"
+      ],
+      [
+        "08274",
+        "Súria"
+      ],
+      [
+        "08275",
+        "Tavèrnoles"
+      ],
+      [
+        "08276",
+        "Tagamanent"
+      ],
+      [
+        "08277",
+        "Talamanca"
+      ],
+      [
+        "08278",
+        "Taradell"
+      ],
+      [
+        "08279",
+        "Terrassa"
+      ],
+      [
+        "08280",
+        "Tavertet"
+      ],
+      [
+        "08281",
+        "Teià"
+      ],
+      [
+        "08282",
+        "Tiana"
+      ],
+      [
+        "08283",
+        "Tona"
+      ],
+      [
+        "08284",
+        "Tordera"
+      ],
+      [
+        "08285",
+        "Torelló"
+      ],
+      [
+        "08286",
+        "la Torre de Claramunt"
+      ],
+      [
+        "08287",
+        "Torrelavit"
+      ],
+      [
+        "08288",
+        "Torrelles de Foix"
+      ],
+      [
+        "08289",
+        "Torrelles de Llobregat"
+      ],
+      [
+        "08290",
+        "Ullastrell"
+      ],
+      [
+        "08291",
+        "Vacarisses"
+      ],
+      [
+        "08292",
+        "Vallbona d'Anoia"
+      ],
+      [
+        "08293",
+        "Vallcebre"
+      ],
+      [
+        "08294",
+        "Vallgorguina"
+      ],
+      [
+        "08295",
+        "Vallirana"
+      ],
+      [
+        "08296",
+        "Vallromanes"
+      ],
+      [
+        "08297",
+        "Veciana"
+      ],
+      [
+        "08298",
+        "Vic"
+      ],
+      [
+        "08299",
+        "Vilada"
+      ],
+      [
+        "08300",
+        "Viladecavalls"
+      ],
+      [
+        "08301",
+        "Viladecans"
+      ],
+      [
+        "08302",
+        "Vilanova del Camí"
+      ],
+      [
+        "08303",
+        "Vilanova de Sau"
+      ],
+      [
+        "08304",
+        "Vilobí del Penedès"
+      ],
+      [
+        "08305",
+        "Vilafranca del Penedès"
+      ],
+      [
+        "08306",
+        "Vilalba Sasserra"
+      ],
+      [
+        "08307",
+        "Vilanova i la Geltrú"
+      ],
+      [
+        "08308",
+        "Viver i Serrateix"
+      ],
+      [
+        "08901",
+        "Rupit i Pruit"
+      ],
+      [
+        "08902",
+        "Vilanova del Vallès"
+      ],
+      [
+        "08903",
+        "Sant Julià de Cerdanyola"
+      ],
+      [
+        "08904",
+        "Badia del Vallès"
+      ],
+      [
+        "08905",
+        "la Palma de Cervelló"
+      ],
+      [
+        "17001",
+        "Agullana"
+      ],
+      [
+        "17002",
+        "Aiguaviva"
+      ],
+      [
+        "17003",
+        "Albanyà"
+      ],
+      [
+        "17004",
+        "Albons"
+      ],
+      [
+        "17005",
+        "el Far d'Empordà"
+      ],
+      [
+        "17006",
+        "Alp"
+      ],
+      [
+        "17007",
+        "Amer"
+      ],
+      [
+        "17008",
+        "Anglès"
+      ],
+      [
+        "17009",
+        "Arbúcies"
+      ],
+      [
+        "17010",
+        "Argelaguer"
+      ],
+      [
+        "17011",
+        "l'Armentera"
+      ],
+      [
+        "17012",
+        "Avinyonet de Puigventós"
+      ],
+      [
+        "17013",
+        "Begur"
+      ],
+      [
+        "17014",
+        "la Vajol"
+      ],
+      [
+        "17015",
+        "Banyoles"
+      ],
+      [
+        "17016",
+        "Bàscara"
+      ],
+      [
+        "17018",
+        "Bellcaire d'Empordà"
+      ],
+      [
+        "17019",
+        "Besalú"
+      ],
+      [
+        "17020",
+        "Bescanó"
+      ],
+      [
+        "17021",
+        "Beuda"
+      ],
+      [
+        "17022",
+        "la Bisbal d'Empordà"
+      ],
+      [
+        "17023",
+        "Blanes"
+      ],
+      [
+        "17024",
+        "Bolvir"
+      ],
+      [
+        "17025",
+        "Bordils"
+      ],
+      [
+        "17026",
+        "Borrassà"
+      ],
+      [
+        "17027",
+        "Breda"
+      ],
+      [
+        "17028",
+        "Brunyola i Sant Martí Sapresa"
+      ],
+      [
+        "17029",
+        "Boadella i les Escaules"
+      ],
+      [
+        "17030",
+        "Cabanes"
+      ],
+      [
+        "17031",
+        "Cabanelles"
+      ],
+      [
+        "17032",
+        "Cadaqués"
+      ],
+      [
+        "17033",
+        "Caldes de Malavella"
+      ],
+      [
+        "17034",
+        "Calonge i Sant Antoni"
+      ],
+      [
+        "17035",
+        "Camós"
+      ],
+      [
+        "17036",
+        "Campdevànol"
+      ],
+      [
+        "17037",
+        "Campelles"
+      ],
+      [
+        "17038",
+        "Campllong"
+      ],
+      [
+        "17039",
+        "Camprodon"
+      ],
+      [
+        "17040",
+        "Canet d'Adri"
+      ],
+      [
+        "17041",
+        "Cantallops"
+      ],
+      [
+        "17042",
+        "Capmany"
+      ],
+      [
+        "17043",
+        "Queralbs"
+      ],
+      [
+        "17044",
+        "Cassà de la Selva"
+      ],
+      [
+        "17046",
+        "Castellfollit de la Roca"
+      ],
+      [
+        "17047",
+        "Castelló d'Empúries"
+      ],
+      [
+        "17048",
+        "Castell d'Aro, Platja d'Aro i s'Agaró"
+      ],
+      [
+        "17049",
+        "Celrà"
+      ],
+      [
+        "17050",
+        "Cervià de Ter"
+      ],
+      [
+        "17051",
+        "Cistella"
+      ],
+      [
+        "17052",
+        "Siurana"
+      ],
+      [
+        "17054",
+        "Colera"
+      ],
+      [
+        "17055",
+        "Colomers"
+      ],
+      [
+        "17056",
+        "Cornellà del Terri"
+      ],
+      [
+        "17057",
+        "Corçà"
+      ],
+      [
+        "17058",
+        "Crespià"
+      ],
+      [
+        "17060",
+        "Darnius"
+      ],
+      [
+        "17061",
+        "Das"
+      ],
+      [
+        "17062",
+        "l'Escala"
+      ],
+      [
+        "17063",
+        "Espinelves"
+      ],
+      [
+        "17064",
+        "Espolla"
+      ],
+      [
+        "17065",
+        "Esponellà"
+      ],
+      [
+        "17066",
+        "Figueres"
+      ],
+      [
+        "17067",
+        "Flaçà"
+      ],
+      [
+        "17068",
+        "Foixà"
+      ],
+      [
+        "17069",
+        "Fontanals de Cerdanya"
+      ],
+      [
+        "17070",
+        "Fontanilles"
+      ],
+      [
+        "17071",
+        "Fontcoberta"
+      ],
+      [
+        "17073",
+        "Fornells de la Selva"
+      ],
+      [
+        "17074",
+        "Fortià"
+      ],
+      [
+        "17075",
+        "Garrigàs"
+      ],
+      [
+        "17076",
+        "Garrigoles"
+      ],
+      [
+        "17077",
+        "Garriguella"
+      ],
+      [
+        "17078",
+        "Ger"
+      ],
+      [
+        "17079",
+        "Girona"
+      ],
+      [
+        "17080",
+        "Gombrèn"
+      ],
+      [
+        "17081",
+        "Gualta"
+      ],
+      [
+        "17082",
+        "Guils de Cerdanya"
+      ],
+      [
+        "17083",
+        "Hostalric"
+      ],
+      [
+        "17084",
+        "Isòvol"
+      ],
+      [
+        "17085",
+        "Jafre"
+      ],
+      [
+        "17086",
+        "la Jonquera"
+      ],
+      [
+        "17087",
+        "Juià"
+      ],
+      [
+        "17088",
+        "Lladó"
+      ],
+      [
+        "17089",
+        "Llagostera"
+      ],
+      [
+        "17090",
+        "Llambilles"
+      ],
+      [
+        "17091",
+        "Llanars"
+      ],
+      [
+        "17092",
+        "Llançà"
+      ],
+      [
+        "17093",
+        "Llers"
+      ],
+      [
+        "17094",
+        "Llívia"
+      ],
+      [
+        "17095",
+        "Lloret de Mar"
+      ],
+      [
+        "17096",
+        "les Llosses"
+      ],
+      [
+        "17097",
+        "Madremanya"
+      ],
+      [
+        "17098",
+        "Maià de Montcal"
+      ],
+      [
+        "17099",
+        "Meranges"
+      ],
+      [
+        "17100",
+        "Masarac i Vilarnadal"
+      ],
+      [
+        "17101",
+        "Massanes"
+      ],
+      [
+        "17102",
+        "Maçanet de Cabrenys"
+      ],
+      [
+        "17103",
+        "Maçanet de la Selva"
+      ],
+      [
+        "17105",
+        "Mieres"
+      ],
+      [
+        "17106",
+        "Mollet de Peralada"
+      ],
+      [
+        "17107",
+        "Molló"
+      ],
+      [
+        "17109",
+        "Montagut i Oix"
+      ],
+      [
+        "17110",
+        "Mont-ras"
+      ],
+      [
+        "17111",
+        "Navata"
+      ],
+      [
+        "17112",
+        "Ogassa"
+      ],
+      [
+        "17114",
+        "Olot"
+      ],
+      [
+        "17115",
+        "Ordis"
+      ],
+      [
+        "17116",
+        "Osor"
+      ],
+      [
+        "17117",
+        "Palafrugell"
+      ],
+      [
+        "17118",
+        "Palamós"
+      ],
+      [
+        "17119",
+        "Palau de Santa Eulàlia"
+      ],
+      [
+        "17120",
+        "Palau-saverdera"
+      ],
+      [
+        "17121",
+        "Palau-sator"
+      ],
+      [
+        "17123",
+        "Palol de Revardit"
+      ],
+      [
+        "17124",
+        "Pals"
+      ],
+      [
+        "17125",
+        "Pardines"
+      ],
+      [
+        "17126",
+        "Parlavà"
+      ],
+      [
+        "17128",
+        "Pau"
+      ],
+      [
+        "17129",
+        "Pedret i Marzà"
+      ],
+      [
+        "17130",
+        "la Pera"
+      ],
+      [
+        "17132",
+        "Peralada"
+      ],
+      [
+        "17133",
+        "les Planes d'Hostoles"
+      ],
+      [
+        "17134",
+        "Planoles"
+      ],
+      [
+        "17135",
+        "Pont de Molins"
+      ],
+      [
+        "17136",
+        "Pontós"
+      ],
+      [
+        "17137",
+        "Porqueres"
+      ],
+      [
+        "17138",
+        "Portbou"
+      ],
+      [
+        "17139",
+        "les Preses"
+      ],
+      [
+        "17140",
+        "el Port de la Selva"
+      ],
+      [
+        "17141",
+        "Puigcerdà"
+      ],
+      [
+        "17142",
+        "Quart"
+      ],
+      [
+        "17143",
+        "Rabós"
+      ],
+      [
+        "17144",
+        "Regencós"
+      ],
+      [
+        "17145",
+        "Ribes de Freser"
+      ],
+      [
+        "17146",
+        "Riells i Viabrea"
+      ],
+      [
+        "17147",
+        "Ripoll"
+      ],
+      [
+        "17148",
+        "Riudarenes"
+      ],
+      [
+        "17149",
+        "Riudaura"
+      ],
+      [
+        "17150",
+        "Riudellots de la Selva"
+      ],
+      [
+        "17151",
+        "Riumors"
+      ],
+      [
+        "17152",
+        "Roses"
+      ],
+      [
+        "17153",
+        "Rupià"
+      ],
+      [
+        "17154",
+        "Sales de Llierca"
+      ],
+      [
+        "17155",
+        "Salt"
+      ],
+      [
+        "17157",
+        "Sant Andreu Salou"
+      ],
+      [
+        "17158",
+        "Sant Climent Sescebes"
+      ],
+      [
+        "17159",
+        "Sant Feliu de Buixalleu"
+      ],
+      [
+        "17160",
+        "Sant Feliu de Guíxols"
+      ],
+      [
+        "17161",
+        "Sant Feliu de Pallerols"
+      ],
+      [
+        "17162",
+        "Sant Ferriol"
+      ],
+      [
+        "17163",
+        "Sant Gregori"
+      ],
+      [
+        "17164",
+        "Sant Hilari Sacalm"
+      ],
+      [
+        "17165",
+        "Sant Jaume de Llierca"
+      ],
+      [
+        "17166",
+        "Sant Jordi Desvalls"
+      ],
+      [
+        "17167",
+        "Sant Joan de les Abadesses"
+      ],
+      [
+        "17168",
+        "Sant Joan de Mollet"
+      ],
+      [
+        "17169",
+        "Sant Julià de Ramis"
+      ],
+      [
+        "17170",
+        "Vallfogona de Ripollès"
+      ],
+      [
+        "17171",
+        "Sant Llorenç de la Muga"
+      ],
+      [
+        "17172",
+        "Sant Martí de Llémena"
+      ],
+      [
+        "17173",
+        "Sant Martí Vell"
+      ],
+      [
+        "17174",
+        "Sant Miquel de Campmajor"
+      ],
+      [
+        "17175",
+        "Sant Miquel de Fluvià"
+      ],
+      [
+        "17176",
+        "Sant Mori"
+      ],
+      [
+        "17177",
+        "Sant Pau de Segúries"
+      ],
+      [
+        "17178",
+        "Sant Pere Pescador"
+      ],
+      [
+        "17180",
+        "Santa Coloma de Farners"
+      ],
+      [
+        "17181",
+        "Santa Cristina d'Aro"
+      ],
+      [
+        "17182",
+        "Santa Llogaia d'Àlguema"
+      ],
+      [
+        "17183",
+        "Sant Aniol de Finestres"
+      ],
+      [
+        "17184",
+        "Santa Pau"
+      ],
+      [
+        "17185",
+        "Sant Joan les Fonts"
+      ],
+      [
+        "17186",
+        "Sarrià de Ter"
+      ],
+      [
+        "17187",
+        "Saus, Camallera i Llampaies"
+      ],
+      [
+        "17188",
+        "la Selva de Mar"
+      ],
+      [
+        "17189",
+        "la Cellera de Ter"
+      ],
+      [
+        "17190",
+        "Serinyà"
+      ],
+      [
+        "17191",
+        "Serra de Daró"
+      ],
+      [
+        "17192",
+        "Setcases"
+      ],
+      [
+        "17193",
+        "Sils"
+      ],
+      [
+        "17194",
+        "Susqueda"
+      ],
+      [
+        "17195",
+        "la Tallada d'Empordà"
+      ],
+      [
+        "17196",
+        "Terrades"
+      ],
+      [
+        "17197",
+        "Torrent"
+      ],
+      [
+        "17198",
+        "Torroella de Fluvià"
+      ],
+      [
+        "17199",
+        "Torroella de Montgrí"
+      ],
+      [
+        "17200",
+        "Tortellà"
+      ],
+      [
+        "17201",
+        "Toses"
+      ],
+      [
+        "17202",
+        "Tossa de Mar"
+      ],
+      [
+        "17203",
+        "Ultramort"
+      ],
+      [
+        "17204",
+        "Ullà"
+      ],
+      [
+        "17205",
+        "Ullastret"
+      ],
+      [
+        "17206",
+        "Urús"
+      ],
+      [
+        "17207",
+        "la Vall d'en Bas"
+      ],
+      [
+        "17208",
+        "la Vall de Bianya"
+      ],
+      [
+        "17209",
+        "Vall-llobrega"
+      ],
+      [
+        "17210",
+        "Ventalló"
+      ],
+      [
+        "17211",
+        "Verges"
+      ],
+      [
+        "17212",
+        "Vidrà"
+      ],
+      [
+        "17213",
+        "Vidreres"
+      ],
+      [
+        "17214",
+        "Vilabertran"
+      ],
+      [
+        "17215",
+        "Vilablareix"
+      ],
+      [
+        "17216",
+        "Viladasens"
+      ],
+      [
+        "17217",
+        "Viladamat"
+      ],
+      [
+        "17218",
+        "Vilademuls"
+      ],
+      [
+        "17220",
+        "Viladrau"
+      ],
+      [
+        "17221",
+        "Vilafant"
+      ],
+      [
+        "17222",
+        "Vilaür"
+      ],
+      [
+        "17223",
+        "Vilajuïga"
+      ],
+      [
+        "17224",
+        "Vilallonga de Ter"
+      ],
+      [
+        "17225",
+        "Vilamacolum"
+      ],
+      [
+        "17226",
+        "Vilamalla"
+      ],
+      [
+        "17227",
+        "Vilamaniscle"
+      ],
+      [
+        "17228",
+        "Vilanant"
+      ],
+      [
+        "17230",
+        "Vila-sacra"
+      ],
+      [
+        "17232",
+        "Vilopriu"
+      ],
+      [
+        "17233",
+        "Vilobí d'Onyar"
+      ],
+      [
+        "17234",
+        "Biure"
+      ],
+      [
+        "17901",
+        "Cruïlles, Monells i Sant Sadurní de l'Heura"
+      ],
+      [
+        "17902",
+        "Forallac"
+      ],
+      [
+        "17903",
+        "Sant Julià del Llor i Bonmatí"
+      ],
+      [
+        "25001",
+        "Abella de la Conca"
+      ],
+      [
+        "25002",
+        "Àger"
+      ],
+      [
+        "25003",
+        "Agramunt"
+      ],
+      [
+        "25004",
+        "els Alamús"
+      ],
+      [
+        "25005",
+        "Alàs i Cerc"
+      ],
+      [
+        "25006",
+        "l'Albagés"
+      ],
+      [
+        "25007",
+        "Albatàrrec"
+      ],
+      [
+        "25008",
+        "Albesa"
+      ],
+      [
+        "25009",
+        "l'Albi"
+      ],
+      [
+        "25010",
+        "Alcanó"
+      ],
+      [
+        "25011",
+        "Alcarràs"
+      ],
+      [
+        "25012",
+        "Alcoletge"
+      ],
+      [
+        "25013",
+        "Alfarràs"
+      ],
+      [
+        "25014",
+        "Alfés"
+      ],
+      [
+        "25015",
+        "Algerri"
+      ],
+      [
+        "25016",
+        "Alguaire"
+      ],
+      [
+        "25017",
+        "Alins"
+      ],
+      [
+        "25019",
+        "Almacelles"
+      ],
+      [
+        "25020",
+        "Almatret"
+      ],
+      [
+        "25021",
+        "Almenar"
+      ],
+      [
+        "25022",
+        "Alòs de Balaguer"
+      ],
+      [
+        "25023",
+        "Alpicat"
+      ],
+      [
+        "25024",
+        "Alt Àneu"
+      ],
+      [
+        "25025",
+        "Naut Aran"
+      ],
+      [
+        "25027",
+        "Anglesola"
+      ],
+      [
+        "25029",
+        "Arbeca"
+      ],
+      [
+        "25030",
+        "el Pont de Bar"
+      ],
+      [
+        "25031",
+        "Arres"
+      ],
+      [
+        "25032",
+        "Arsèguel"
+      ],
+      [
+        "25033",
+        "Artesa de Lleida"
+      ],
+      [
+        "25034",
+        "Artesa de Segre"
+      ],
+      [
+        "25035",
+        "la Sentiu de Sió"
+      ],
+      [
+        "25036",
+        "Aspa"
+      ],
+      [
+        "25037",
+        "les Avellanes i Santa Linya"
+      ],
+      [
+        "25038",
+        "Aitona"
+      ],
+      [
+        "25039",
+        "Baix Pallars"
+      ],
+      [
+        "25040",
+        "Balaguer"
+      ],
+      [
+        "25041",
+        "Barbens"
+      ],
+      [
+        "25042",
+        "la Baronia de Rialb"
+      ],
+      [
+        "25043",
+        "la Vall de Boí"
+      ],
+      [
+        "25044",
+        "Bassella"
+      ],
+      [
+        "25045",
+        "Bausen"
+      ],
+      [
+        "25046",
+        "Belianes"
+      ],
+      [
+        "25047",
+        "Bellcaire d'Urgell"
+      ],
+      [
+        "25048",
+        "Bell-lloc d'Urgell"
+      ],
+      [
+        "25049",
+        "Bellmunt d'Urgell"
+      ],
+      [
+        "25050",
+        "Bellpuig"
+      ],
+      [
+        "25051",
+        "Bellver de Cerdanya"
+      ],
+      [
+        "25052",
+        "Bellvís"
+      ],
+      [
+        "25053",
+        "Benavent de Segrià"
+      ],
+      [
+        "25055",
+        "Biosca"
+      ],
+      [
+        "25056",
+        "Bovera"
+      ],
+      [
+        "25057",
+        "Bòrdes, Es"
+      ],
+      [
+        "25058",
+        "les Borges Blanques"
+      ],
+      [
+        "25059",
+        "Bossòst"
+      ],
+      [
+        "25060",
+        "Cabanabona"
+      ],
+      [
+        "25061",
+        "Cabó"
+      ],
+      [
+        "25062",
+        "Camarasa"
+      ],
+      [
+        "25063",
+        "Canejan"
+      ],
+      [
+        "25064",
+        "Castellar de la Ribera"
+      ],
+      [
+        "25067",
+        "Castelldans"
+      ],
+      [
+        "25068",
+        "Castellnou de Seana"
+      ],
+      [
+        "25069",
+        "Castelló de Farfanya"
+      ],
+      [
+        "25070",
+        "Castellserà"
+      ],
+      [
+        "25071",
+        "Cava"
+      ],
+      [
+        "25072",
+        "Cervera"
+      ],
+      [
+        "25073",
+        "Cervià de les Garrigues"
+      ],
+      [
+        "25074",
+        "Ciutadilla"
+      ],
+      [
+        "25075",
+        "Clariana de Cardener"
+      ],
+      [
+        "25076",
+        "el Cogul"
+      ],
+      [
+        "25077",
+        "Coll de Nargó"
+      ],
+      [
+        "25078",
+        "Corbins"
+      ],
+      [
+        "25079",
+        "Cubells"
+      ],
+      [
+        "25081",
+        "l'Espluga Calba"
+      ],
+      [
+        "25082",
+        "Espot"
+      ],
+      [
+        "25085",
+        "Estaràs"
+      ],
+      [
+        "25086",
+        "Esterri d'Àneu"
+      ],
+      [
+        "25087",
+        "Esterri de Cardós"
+      ],
+      [
+        "25088",
+        "Estamariu"
+      ],
+      [
+        "25089",
+        "Farrera"
+      ],
+      [
+        "25092",
+        "la Floresta"
+      ],
+      [
+        "25093",
+        "Fondarella"
+      ],
+      [
+        "25094",
+        "Foradada"
+      ],
+      [
+        "25096",
+        "la Fuliola"
+      ],
+      [
+        "25097",
+        "Fulleda"
+      ],
+      [
+        "25098",
+        "Gavet de la Conca"
+      ],
+      [
+        "25099",
+        "Golmés"
+      ],
+      [
+        "25100",
+        "Gósol"
+      ],
+      [
+        "25101",
+        "la Granadella"
+      ],
+      [
+        "25102",
+        "la Granja d'Escarp"
+      ],
+      [
+        "25103",
+        "Granyanella"
+      ],
+      [
+        "25104",
+        "Granyena de Segarra"
+      ],
+      [
+        "25105",
+        "Granyena de les Garrigues"
+      ],
+      [
+        "25109",
+        "Guimerà"
+      ],
+      [
+        "25110",
+        "Guissona"
+      ],
+      [
+        "25111",
+        "Guixers"
+      ],
+      [
+        "25112",
+        "Ivars de Noguera"
+      ],
+      [
+        "25113",
+        "Ivars d'Urgell"
+      ],
+      [
+        "25114",
+        "Ivorra"
+      ],
+      [
+        "25115",
+        "Isona i Conca Dellà"
+      ],
+      [
+        "25118",
+        "Juncosa"
+      ],
+      [
+        "25119",
+        "Juneda"
+      ],
+      [
+        "25120",
+        "Lleida"
+      ],
+      [
+        "25121",
+        "Les"
+      ],
+      [
+        "25122",
+        "Linyola"
+      ],
+      [
+        "25123",
+        "Lladorre"
+      ],
+      [
+        "25124",
+        "Lladurs"
+      ],
+      [
+        "25125",
+        "Llardecans"
+      ],
+      [
+        "25126",
+        "Llavorsí"
+      ],
+      [
+        "25127",
+        "Lles de Cerdanya"
+      ],
+      [
+        "25128",
+        "Llimiana"
+      ],
+      [
+        "25129",
+        "Llobera"
+      ],
+      [
+        "25130",
+        "Maldà"
+      ],
+      [
+        "25131",
+        "Massalcoreig"
+      ],
+      [
+        "25132",
+        "Massoteres"
+      ],
+      [
+        "25133",
+        "Maials"
+      ],
+      [
+        "25134",
+        "Menàrguens"
+      ],
+      [
+        "25135",
+        "Miralcamp"
+      ],
+      [
+        "25136",
+        "la Molsosa"
+      ],
+      [
+        "25137",
+        "Mollerussa"
+      ],
+      [
+        "25138",
+        "Montgai"
+      ],
+      [
+        "25139",
+        "Montellà i Martinet"
+      ],
+      [
+        "25140",
+        "Montferrer i Castellbò"
+      ],
+      [
+        "25141",
+        "Montoliu de Segarra"
+      ],
+      [
+        "25142",
+        "Montoliu de Lleida"
+      ],
+      [
+        "25143",
+        "Montornès de Segarra"
+      ],
+      [
+        "25145",
+        "Nalec"
+      ],
+      [
+        "25146",
+        "Navès"
+      ],
+      [
+        "25148",
+        "Odèn"
+      ],
+      [
+        "25149",
+        "Oliana"
+      ],
+      [
+        "25150",
+        "Oliola"
+      ],
+      [
+        "25151",
+        "Olius"
+      ],
+      [
+        "25152",
+        "les Oluges"
+      ],
+      [
+        "25153",
+        "els Omellons"
+      ],
+      [
+        "25154",
+        "els Omells de na Gaia"
+      ],
+      [
+        "25155",
+        "Organyà"
+      ],
+      [
+        "25156",
+        "Os de Balaguer"
+      ],
+      [
+        "25157",
+        "Ossó de Sió"
+      ],
+      [
+        "25158",
+        "el Palau d'Anglesola"
+      ],
+      [
+        "25161",
+        "Conca de Dalt"
+      ],
+      [
+        "25163",
+        "la Coma i la Pedra"
+      ],
+      [
+        "25164",
+        "Penelles"
+      ],
+      [
+        "25165",
+        "Peramola"
+      ],
+      [
+        "25166",
+        "Pinell de Solsonès"
+      ],
+      [
+        "25167",
+        "Pinós"
+      ],
+      [
+        "25168",
+        "el Poal"
+      ],
+      [
+        "25169",
+        "la Pobla de Cérvoles"
+      ],
+      [
+        "25170",
+        "Bellaguarda"
+      ],
+      [
+        "25171",
+        "la Pobla de Segur"
+      ],
+      [
+        "25172",
+        "Ponts"
+      ],
+      [
+        "25173",
+        "el Pont de Suert"
+      ],
+      [
+        "25174",
+        "la Portella"
+      ],
+      [
+        "25175",
+        "Prats i Sansor"
+      ],
+      [
+        "25176",
+        "Preixana"
+      ],
+      [
+        "25177",
+        "Preixens"
+      ],
+      [
+        "25179",
+        "Prullans"
+      ],
+      [
+        "25180",
+        "Puiggròs"
+      ],
+      [
+        "25181",
+        "Puigverd d'Agramunt"
+      ],
+      [
+        "25182",
+        "Puigverd de Lleida"
+      ],
+      [
+        "25183",
+        "Rialp"
+      ],
+      [
+        "25185",
+        "Ribera d'Urgellet"
+      ],
+      [
+        "25186",
+        "Riner"
+      ],
+      [
+        "25189",
+        "Rosselló"
+      ],
+      [
+        "25190",
+        "Salàs de Pallars"
+      ],
+      [
+        "25191",
+        "Sanaüja"
+      ],
+      [
+        "25192",
+        "Sant Guim de Freixenet"
+      ],
+      [
+        "25193",
+        "Sant Llorenç de Morunys"
+      ],
+      [
+        "25194",
+        "Sant Ramon"
+      ],
+      [
+        "25196",
+        "Sant Esteve de la Sarga"
+      ],
+      [
+        "25197",
+        "Sant Guim de la Plana"
+      ],
+      [
+        "25200",
+        "Sarroca de Lleida"
+      ],
+      [
+        "25201",
+        "Sarroca de Bellera"
+      ],
+      [
+        "25202",
+        "Senterada"
+      ],
+      [
+        "25203",
+        "la Seu d'Urgell"
+      ],
+      [
+        "25204",
+        "Seròs"
+      ],
+      [
+        "25205",
+        "Sidamon"
+      ],
+      [
+        "25206",
+        "el Soleràs"
+      ],
+      [
+        "25207",
+        "Solsona"
+      ],
+      [
+        "25208",
+        "Soriguera"
+      ],
+      [
+        "25209",
+        "Sort"
+      ],
+      [
+        "25210",
+        "Soses"
+      ],
+      [
+        "25211",
+        "Sudanell"
+      ],
+      [
+        "25212",
+        "Sunyer"
+      ],
+      [
+        "25215",
+        "Talarn"
+      ],
+      [
+        "25216",
+        "Talavera"
+      ],
+      [
+        "25217",
+        "Tàrrega"
+      ],
+      [
+        "25218",
+        "Tarrés"
+      ],
+      [
+        "25219",
+        "Tarroja de Segarra"
+      ],
+      [
+        "25220",
+        "Térmens"
+      ],
+      [
+        "25221",
+        "Tírvia"
+      ],
+      [
+        "25222",
+        "Tiurana"
+      ],
+      [
+        "25223",
+        "Torà"
+      ],
+      [
+        "25224",
+        "els Torms"
+      ],
+      [
+        "25225",
+        "Tornabous"
+      ],
+      [
+        "25226",
+        "Torrebesses"
+      ],
+      [
+        "25227",
+        "la Torre de Cabdella"
+      ],
+      [
+        "25228",
+        "Torrefarrera"
+      ],
+      [
+        "25230",
+        "Torregrossa"
+      ],
+      [
+        "25231",
+        "Torrelameu"
+      ],
+      [
+        "25232",
+        "Torres de Segre"
+      ],
+      [
+        "25233",
+        "Torre-serona"
+      ],
+      [
+        "25234",
+        "Tremp"
+      ],
+      [
+        "25238",
+        "Vallbona de les Monges"
+      ],
+      [
+        "25239",
+        "les Valls de Valira"
+      ],
+      [
+        "25240",
+        "Vallfogona de Balaguer"
+      ],
+      [
+        "25242",
+        "Verdú"
+      ],
+      [
+        "25243",
+        "Vielha e Mijaran"
+      ],
+      [
+        "25244",
+        "Vilagrassa"
+      ],
+      [
+        "25245",
+        "Vilaller"
+      ],
+      [
+        "25247",
+        "Vilamòs"
+      ],
+      [
+        "25248",
+        "Vilanova de Bellpuig"
+      ],
+      [
+        "25249",
+        "Vilanova de l'Aguda"
+      ],
+      [
+        "25250",
+        "Vilanova de Meià"
+      ],
+      [
+        "25251",
+        "Vilanova de Segrià"
+      ],
+      [
+        "25252",
+        "Vila-sana"
+      ],
+      [
+        "25253",
+        "el Vilosell"
+      ],
+      [
+        "25254",
+        "Vilanova de la Barca"
+      ],
+      [
+        "25255",
+        "Vinaixa"
+      ],
+      [
+        "25901",
+        "Vall de Cardós"
+      ],
+      [
+        "25902",
+        "Sant Martí de Riucorb"
+      ],
+      [
+        "25903",
+        "la Guingueta d'Àneu"
+      ],
+      [
+        "25904",
+        "Castell de Mur"
+      ],
+      [
+        "25905",
+        "Ribera d'Ondara"
+      ],
+      [
+        "25906",
+        "les Valls d'Aguilar"
+      ],
+      [
+        "25907",
+        "Torrefeta i Florejacs"
+      ],
+      [
+        "25908",
+        "Fígols i Alinyà"
+      ],
+      [
+        "25909",
+        "la Vansa i Fórnols"
+      ],
+      [
+        "25910",
+        "Josa i Tuixén"
+      ],
+      [
+        "25911",
+        "els Plans de Sió"
+      ],
+      [
+        "25912",
+        "Gimenells i el Pla de la Font"
+      ],
+      [
+        "25913",
+        "Riu de Cerdanya"
+      ],
+      [
+        "43001",
+        "Aiguamúrcia"
+      ],
+      [
+        "43002",
+        "Albinyana"
+      ],
+      [
+        "43003",
+        "l'Albiol"
+      ],
+      [
+        "43004",
+        "Alcanar"
+      ],
+      [
+        "43005",
+        "Alcover"
+      ],
+      [
+        "43006",
+        "Aldover"
+      ],
+      [
+        "43007",
+        "l'Aleixar"
+      ],
+      [
+        "43008",
+        "Alfara de Carles"
+      ],
+      [
+        "43009",
+        "Alforja"
+      ],
+      [
+        "43010",
+        "Alió"
+      ],
+      [
+        "43011",
+        "Almoster"
+      ],
+      [
+        "43012",
+        "Altafulla"
+      ],
+      [
+        "43013",
+        "l'Ametlla de Mar"
+      ],
+      [
+        "43014",
+        "Amposta"
+      ],
+      [
+        "43015",
+        "Arbolí"
+      ],
+      [
+        "43016",
+        "l'Arboç"
+      ],
+      [
+        "43017",
+        "l'Argentera"
+      ],
+      [
+        "43018",
+        "Arnes"
+      ],
+      [
+        "43019",
+        "Ascó"
+      ],
+      [
+        "43020",
+        "Banyeres del Penedès"
+      ],
+      [
+        "43021",
+        "Barberà de la Conca"
+      ],
+      [
+        "43022",
+        "Batea"
+      ],
+      [
+        "43023",
+        "Bellmunt del Priorat"
+      ],
+      [
+        "43024",
+        "Bellvei"
+      ],
+      [
+        "43025",
+        "Benifallet"
+      ],
+      [
+        "43026",
+        "Benissanet"
+      ],
+      [
+        "43027",
+        "la Bisbal de Montsant"
+      ],
+      [
+        "43028",
+        "la Bisbal del Penedès"
+      ],
+      [
+        "43029",
+        "Blancafort"
+      ],
+      [
+        "43030",
+        "Bonastre"
+      ],
+      [
+        "43031",
+        "les Borges del Camp"
+      ],
+      [
+        "43032",
+        "Bot"
+      ],
+      [
+        "43033",
+        "Botarell"
+      ],
+      [
+        "43034",
+        "Bràfim"
+      ],
+      [
+        "43035",
+        "Cabacés"
+      ],
+      [
+        "43036",
+        "Cabra del Camp"
+      ],
+      [
+        "43037",
+        "Calafell"
+      ],
+      [
+        "43038",
+        "Cambrils"
+      ],
+      [
+        "43039",
+        "Capafonts"
+      ],
+      [
+        "43040",
+        "Capçanes"
+      ],
+      [
+        "43041",
+        "Caseres"
+      ],
+      [
+        "43042",
+        "Castellvell del Camp"
+      ],
+      [
+        "43043",
+        "el Catllar"
+      ],
+      [
+        "43044",
+        "la Sénia"
+      ],
+      [
+        "43045",
+        "Colldejou"
+      ],
+      [
+        "43046",
+        "Conesa"
+      ],
+      [
+        "43047",
+        "Constantí"
+      ],
+      [
+        "43048",
+        "Corbera d'Ebre"
+      ],
+      [
+        "43049",
+        "Cornudella de Montsant"
+      ],
+      [
+        "43050",
+        "Creixell"
+      ],
+      [
+        "43051",
+        "Cunit"
+      ],
+      [
+        "43052",
+        "Xerta"
+      ],
+      [
+        "43053",
+        "Duesaigües"
+      ],
+      [
+        "43054",
+        "l'Espluga de Francolí"
+      ],
+      [
+        "43055",
+        "Falset"
+      ],
+      [
+        "43056",
+        "la Fatarella"
+      ],
+      [
+        "43057",
+        "la Febró"
+      ],
+      [
+        "43058",
+        "la Figuera"
+      ],
+      [
+        "43059",
+        "Figuerola del Camp"
+      ],
+      [
+        "43060",
+        "Flix"
+      ],
+      [
+        "43061",
+        "Forès"
+      ],
+      [
+        "43062",
+        "Freginals"
+      ],
+      [
+        "43063",
+        "la Galera"
+      ],
+      [
+        "43064",
+        "Gandesa"
+      ],
+      [
+        "43065",
+        "Garcia"
+      ],
+      [
+        "43066",
+        "els Garidells"
+      ],
+      [
+        "43067",
+        "Ginestar"
+      ],
+      [
+        "43068",
+        "Godall"
+      ],
+      [
+        "43069",
+        "Gratallops"
+      ],
+      [
+        "43070",
+        "els Guiamets"
+      ],
+      [
+        "43071",
+        "Horta de Sant Joan"
+      ],
+      [
+        "43072",
+        "el Lloar"
+      ],
+      [
+        "43073",
+        "Llorac"
+      ],
+      [
+        "43074",
+        "Llorenç del Penedès"
+      ],
+      [
+        "43075",
+        "Margalef"
+      ],
+      [
+        "43076",
+        "Marçà"
+      ],
+      [
+        "43077",
+        "Mas de Barberans"
+      ],
+      [
+        "43078",
+        "Masdenverge"
+      ],
+      [
+        "43079",
+        "Masllorenç"
+      ],
+      [
+        "43080",
+        "la Masó"
+      ],
+      [
+        "43081",
+        "Maspujols"
+      ],
+      [
+        "43082",
+        "el Masroig"
+      ],
+      [
+        "43083",
+        "el Milà"
+      ],
+      [
+        "43084",
+        "Miravet"
+      ],
+      [
+        "43085",
+        "el Molar"
+      ],
+      [
+        "43086",
+        "Montblanc"
+      ],
+      [
+        "43088",
+        "Montbrió del Camp"
+      ],
+      [
+        "43089",
+        "Montferri"
+      ],
+      [
+        "43090",
+        "el Montmell"
+      ],
+      [
+        "43091",
+        "Mont-ral"
+      ],
+      [
+        "43092",
+        "Mont-roig del Camp"
+      ],
+      [
+        "43093",
+        "Móra d'Ebre"
+      ],
+      [
+        "43094",
+        "Móra la Nova"
+      ],
+      [
+        "43095",
+        "el Morell"
+      ],
+      [
+        "43096",
+        "la Morera de Montsant"
+      ],
+      [
+        "43097",
+        "la Nou de Gaià"
+      ],
+      [
+        "43098",
+        "Nulles"
+      ],
+      [
+        "43099",
+        "la Palma d'Ebre"
+      ],
+      [
+        "43100",
+        "els Pallaresos"
+      ],
+      [
+        "43101",
+        "Passanant i Belltall"
+      ],
+      [
+        "43102",
+        "Paüls"
+      ],
+      [
+        "43103",
+        "Perafort"
+      ],
+      [
+        "43104",
+        "el Perelló"
+      ],
+      [
+        "43105",
+        "les Piles"
+      ],
+      [
+        "43106",
+        "el Pinell de Brai"
+      ],
+      [
+        "43107",
+        "Pira"
+      ],
+      [
+        "43108",
+        "el Pla de Santa Maria"
+      ],
+      [
+        "43109",
+        "la Pobla de Mafumet"
+      ],
+      [
+        "43110",
+        "la Pobla de Massaluca"
+      ],
+      [
+        "43111",
+        "la Pobla de Montornès"
+      ],
+      [
+        "43112",
+        "Poboleda"
+      ],
+      [
+        "43113",
+        "el Pont d'Armentera"
+      ],
+      [
+        "43114",
+        "Porrera"
+      ],
+      [
+        "43115",
+        "Pradell de la Teixeta"
+      ],
+      [
+        "43116",
+        "Prades"
+      ],
+      [
+        "43117",
+        "Prat de Comte"
+      ],
+      [
+        "43118",
+        "Pratdip"
+      ],
+      [
+        "43119",
+        "Puigpelat"
+      ],
+      [
+        "43120",
+        "Querol"
+      ],
+      [
+        "43121",
+        "Rasquera"
+      ],
+      [
+        "43122",
+        "Renau"
+      ],
+      [
+        "43123",
+        "Reus"
+      ],
+      [
+        "43124",
+        "la Riba"
+      ],
+      [
+        "43125",
+        "Riba-roja d'Ebre"
+      ],
+      [
+        "43126",
+        "la Riera de Gaià"
+      ],
+      [
+        "43127",
+        "Riudecanyes"
+      ],
+      [
+        "43128",
+        "Riudecols"
+      ],
+      [
+        "43129",
+        "Riudoms"
+      ],
+      [
+        "43130",
+        "Rocafort de Queralt"
+      ],
+      [
+        "43131",
+        "Roda de Berà"
+      ],
+      [
+        "43132",
+        "Rodonyà"
+      ],
+      [
+        "43133",
+        "Roquetes"
+      ],
+      [
+        "43134",
+        "el Rourell"
+      ],
+      [
+        "43135",
+        "Salomó"
+      ],
+      [
+        "43136",
+        "la Ràpita"
+      ],
+      [
+        "43137",
+        "Sant Jaume dels Domenys"
+      ],
+      [
+        "43138",
+        "Santa Bàrbara"
+      ],
+      [
+        "43139",
+        "Santa Coloma de Queralt"
+      ],
+      [
+        "43140",
+        "Santa Oliva"
+      ],
+      [
+        "43141",
+        "Pontils"
+      ],
+      [
+        "43142",
+        "Sarral"
+      ],
+      [
+        "43143",
+        "Savallà del Comtat"
+      ],
+      [
+        "43144",
+        "la Secuita"
+      ],
+      [
+        "43145",
+        "la Selva del Camp"
+      ],
+      [
+        "43146",
+        "Senan"
+      ],
+      [
+        "43147",
+        "Solivella"
+      ],
+      [
+        "43148",
+        "Tarragona"
+      ],
+      [
+        "43149",
+        "Tivenys"
+      ],
+      [
+        "43150",
+        "Tivissa"
+      ],
+      [
+        "43151",
+        "la Torre de Fontaubella"
+      ],
+      [
+        "43152",
+        "la Torre de l'Espanyol"
+      ],
+      [
+        "43153",
+        "Torredembarra"
+      ],
+      [
+        "43154",
+        "Torroja del Priorat"
+      ],
+      [
+        "43155",
+        "Tortosa"
+      ],
+      [
+        "43156",
+        "Ulldecona"
+      ],
+      [
+        "43157",
+        "Ulldemolins"
+      ],
+      [
+        "43158",
+        "Vallclara"
+      ],
+      [
+        "43159",
+        "Vallfogona de Riucorb"
+      ],
+      [
+        "43160",
+        "Vallmoll"
+      ],
+      [
+        "43161",
+        "Valls"
+      ],
+      [
+        "43162",
+        "Vandellòs i l'Hospitalet de l'Infant"
+      ],
+      [
+        "43163",
+        "el Vendrell"
+      ],
+      [
+        "43164",
+        "Vespella de Gaià"
+      ],
+      [
+        "43165",
+        "Vilabella"
+      ],
+      [
+        "43166",
+        "Vilallonga del Camp"
+      ],
+      [
+        "43167",
+        "Vilanova d'Escornalbou"
+      ],
+      [
+        "43168",
+        "Vilanova de Prades"
+      ],
+      [
+        "43169",
+        "Vilaplana"
+      ],
+      [
+        "43170",
+        "Vila-rodona"
+      ],
+      [
+        "43171",
+        "Vila-seca"
+      ],
+      [
+        "43172",
+        "Vilaverd"
+      ],
+      [
+        "43173",
+        "la Vilella Alta"
+      ],
+      [
+        "43174",
+        "la Vilella Baixa"
+      ],
+      [
+        "43175",
+        "Vilalba dels Arcs"
+      ],
+      [
+        "43176",
+        "Vimbodí i Poblet"
+      ],
+      [
+        "43177",
+        "Vinebre"
+      ],
+      [
+        "43178",
+        "Vinyols i els Arcs"
+      ],
+      [
+        "43901",
+        "Deltebre"
+      ],
+      [
+        "43902",
+        "Sant Jaume d'Enveja"
+      ],
+      [
+        "43903",
+        "Camarles"
+      ],
+      [
+        "43904",
+        "l'Aldea"
+      ],
+      [
+        "43905",
+        "Salou"
+      ],
+      [
+        "43906",
+        "l'Ampolla"
+      ],
+      [
+        "43907",
+        "la Canonja"
+      ]
+    ]
+  }
+}

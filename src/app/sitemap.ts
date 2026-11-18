@@ -52,6 +52,7 @@ import { htSitemapEntries } from "@/lib/programmatic/home-purchase-tax/page";
 import { lotteryTaxSitemapEntries } from "@/lib/programmatic/lottery-tax/page";
 import { bonoSocialSitemapEntries } from "@/lib/programmatic/bono-social/page";
 import { trafficFinesSitemapEntries } from "@/lib/programmatic/traffic-fines/page";
+import { ztSitemapEntries } from "@/lib/programmatic/zona-tensionada/page";
 
 /**
  * Cached for an hour (ISR) and refreshed at once by every publish, and by the
@@ -241,6 +242,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...bonoSocialSitemapEntries(),
     // Traffic fines: deadlines, the 50 % and points (Ley de Tráfico; calculators family, group "vehicle"), in es, ca and en.
     ...trafficFinesSitemapEntries(),
+    // Zonas tensionadas (Ley 12/2023 art. 18; calculators family, group "housing"), in es, ca and en.
+    ...ztSitemapEntries(),
     ...fuelSitemapEntries(),
     ...rodaliesSitemap(),
     ...reservoirSitemapEntries(),

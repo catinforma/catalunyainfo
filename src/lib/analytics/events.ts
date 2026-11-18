@@ -94,6 +94,7 @@ export const CALCULATOR_USE_IDS = [
   "itv",
   "traffic-fines",
   "bono-social",
+  "zona-tensionada",
   "leave-planner-2027",
   "tourist-tax",
   "transport-pass",

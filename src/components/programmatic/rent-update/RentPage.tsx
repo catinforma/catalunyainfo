@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import type { ReactNode } from "react";
 
 import { Breadcrumbs, type Crumb } from "@/components/Breadcrumbs";
@@ -9,6 +10,7 @@ import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
 import { getMessages } from "@/lib/i18n";
 import { hubCrumb } from "@/lib/programmatic/calculators/hub";
+import { calcPath } from "@/lib/programmatic/calculators/paths";
 import { DECIMALS, SERIES_LABEL, elDay, monthText, pct, rentEditions, rentPath, type RentLocale } from "@/lib/programmatic/rent-update/copy";
 import { defaultExample } from "@/lib/programmatic/rent-update/engine";
 import { SERIES, tableUrl } from "@/lib/programmatic/rent-update/ine";
@@ -321,6 +323,12 @@ export function RentRoute({ locale, data }: { locale: RentLocale; data: ServerRe
               {catParas.map((p) => (
                 <p key={p}>{p}</p>
               ))}
+              {/* The list of declared towns with their dates, in every region, and what changes on a new lease. */}
+              <p>
+                <Link href={calcPath("zona-tensionada", locale)}>
+                  {L(locale, { es: "¿Está tu municipio en zona tensionada? Lista oficial con fechas, en toda España", ca: "El teu municipi és zona tensionada? Llista oficial amb dates, a tot Espanya", en: "Is your town a zona tensionada? The official list with dates, all of Spain" })}
+                </Link>
+              </p>
               <ul>
                 {catLinks.map(([href, label]) => (
                   <li key={href}>
