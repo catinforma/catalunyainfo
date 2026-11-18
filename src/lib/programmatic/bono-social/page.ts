@@ -4,7 +4,9 @@ import { absoluteUrl } from "@/lib/site";
 
 import { BS_LOCALES, bonoSocialEditions, money, rate, type BsLocale } from "./copy";
 import { checkOk, household, thresholdsFor, capRowFor, type BonoInput } from "./engine";
-import { DISCOUNT_2026, IPREM_14, KWH_CAP, PERMANENT_DISCOUNT, PER_EXTRA_ADULT, PER_MINOR, RULES_AS_OF, SPECIAL_BONUS } from "./rules";
+import { IPREM_14 } from "@/lib/programmatic/iprem/rules";
+
+import { DISCOUNT_2026, KWH_CAP, PERMANENT_DISCOUNT, PER_EXTRA_ADULT, PER_MINOR, RULES_AS_OF, SPECIAL_BONUS } from "./rules";
 
 /**
  * Pure pieces of the bono social page: titles, the default input, the income

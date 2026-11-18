@@ -40,6 +40,7 @@ import { madridDate } from "@/lib/programmatic/pvpc/time";
 import { pensionSitemapEntries } from "@/lib/programmatic/pensions-2027/page";
 import { workingDaysSitemapEntries } from "@/lib/programmatic/working-days/places";
 import { smiSitemapEntries } from "@/lib/programmatic/smi/page";
+import { ipremSitemapEntries } from "@/lib/programmatic/iprem/page";
 import { ipcSitemapEntries } from "@/lib/programmatic/ipc/page";
 import { wageSitemapEntries } from "@/lib/programmatic/average-salary/page";
 import { letrasSitemapEntries } from "@/lib/programmatic/treasury-bills/page";
@@ -226,6 +227,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...workingDaysSitemapEntries(),
     // "Salario mínimo (SMI) 2027" and "IPC hoy" (calculators family, group "official"), in es, ca and en.
     ...smiSitemapEntries(),
+    // "IPREM 2026" (calculators family, group "official"), in es, ca and en.
+    ...ipremSitemapEntries(),
     ...ipcSitemapEntries(),
     // "Salario medio en España" (INE EAES + EPA deciles; calculators family, group "official"), in es, ca and en; last modified on the newest INE release in the snapshot.
     ...wageSitemapEntries(),

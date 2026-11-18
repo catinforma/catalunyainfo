@@ -3,7 +3,7 @@ import { elDay, euros, num, pct } from "@/lib/programmatic/rent-update/copy";
 import type { DateLocale } from "@/lib/programmatic/holidays/format";
 
 import type { Category, InvalidReason, Route, SpecialId, Tariff } from "./engine";
-import type { CapRow } from "./rules";
+import { IPREM_14, type CapRow } from "./rules";
 
 /**
  * Paths and words of the bono social eléctrico checker, small enough for the
@@ -151,7 +151,7 @@ export const CALC_COPY: Record<BsLocale, CalcCopy> = {
     largeFamily: "Tenemos título de familia numerosa en vigor",
     minimumPension: "Todos los que tienen ingresos cobran la pensión mínima de jubilación o incapacidad permanente (y menos de 500 € al año de otros ingresos)",
     imv: "Alguien del hogar cobra el ingreso mínimo vital",
-    specialLegend: "Circunstancias especiales (suman 8.400 € al límite)",
+    specialLegend: `Circunstancias especiales (suman ${money(IPREM_14, "es")} al límite)`,
     specialHint: "Cuenta una sola vez aunque se den varias.",
     socialServices: "Los servicios sociales de mi comunidad o ayuntamiento pagan al menos la mitad de mi factura de la luz",
     tariff: "Tarifa de luz que tienes ahora",
@@ -164,7 +164,7 @@ export const CALC_COPY: Record<BsLocale, CalcCopy> = {
     cap: "Energía con descuento",
     capValue: (yearly, monthly) => `${yearly} al año (unos ${monthly} al mes)`,
     qualifiesBy: (routes) => `Cumples ${routes}.`,
-    multiplier: (m) => `Tu límite de ingresos es ${m} veces el IPREM de 14 pagas (8.400 €).`,
+    multiplier: (m) => `Tu límite de ingresos es ${m} veces el IPREM de 14 pagas (${money(IPREM_14, "es")}).`,
     severityUnknown: "Para saber si eres vulnerable severo, escribe los ingresos del hogar.",
     notEligible: (limit) => `Con estos ingresos no cumples el requisito de renta: el límite de tu hogar es ${limit} al año. Revisa si tenéis familia numerosa, pensión mínima, IMV o alguna circunstancia especial.`,
     exclusion: "No pagas la factura: la cubren los servicios sociales (al menos el 50 %) y el resto lo financian las empresas eléctricas. Tampoco te pueden cortar la luz.",
@@ -194,7 +194,7 @@ export const CALC_COPY: Record<BsLocale, CalcCopy> = {
     largeFamily: "Tenim títol de família nombrosa vigent",
     minimumPension: "Tots els qui tenen ingressos cobren la pensió mínima de jubilació o d'incapacitat permanent (i menys de 500 € l'any d'altres ingressos)",
     imv: "Algú de la llar cobra l'ingrés mínim vital",
-    specialLegend: "Circumstàncies especials (sumen 8.400 € al límit)",
+    specialLegend: `Circumstàncies especials (sumen ${money(IPREM_14, "ca")} al límit)`,
     specialHint: "Compta una sola vegada encara que se'n donin diverses.",
     socialServices: "Els serveis socials de la meva comunitat o ajuntament paguen almenys la meitat de la meva factura de la llum",
     tariff: "Tarifa de llum que tens ara",
@@ -207,7 +207,7 @@ export const CALC_COPY: Record<BsLocale, CalcCopy> = {
     cap: "Energia amb descompte",
     capValue: (yearly, monthly) => `${yearly} l'any (uns ${monthly} al mes)`,
     qualifiesBy: (routes) => `Compleixes ${routes}.`,
-    multiplier: (m) => `El teu límit d'ingressos és ${m} vegades l'IPREM de 14 pagues (8.400 €).`,
+    multiplier: (m) => `El teu límit d'ingressos és ${m} vegades l'IPREM de 14 pagues (${money(IPREM_14, "ca")}).`,
     severityUnknown: "Per saber si ets vulnerable sever, escriu els ingressos de la llar.",
     notEligible: (limit) => `Amb aquests ingressos no compleixes el requisit de renda: el límit de la teva llar és ${limit} l'any. Revisa si teniu família nombrosa, pensió mínima, IMV o alguna circumstància especial.`,
     exclusion: "No pagues la factura: la cobreixen els serveis socials (almenys el 50 %) i la resta la financen les empreses elèctriques. Tampoc no et poden tallar la llum.",
@@ -237,7 +237,7 @@ export const CALC_COPY: Record<BsLocale, CalcCopy> = {
     largeFamily: "We hold a valid large-family title (familia numerosa)",
     minimumPension: "Everyone with income gets the minimum retirement or permanent incapacity pension (and under €500 a year of other income)",
     imv: "Someone in the household gets the minimum living income (IMV)",
-    specialLegend: "Special circumstances (add €8,400 to the limit)",
+    specialLegend: `Special circumstances (add ${money(IPREM_14, "en")} to the limit)`,
     specialHint: "Counts once, however many apply.",
     socialServices: "My region's or town council's social services pay at least half of my electricity bill",
     tariff: "Your electricity tariff now",
@@ -250,7 +250,7 @@ export const CALC_COPY: Record<BsLocale, CalcCopy> = {
     cap: "Energy with the discount",
     capValue: (yearly, monthly) => `${yearly} a year (about ${monthly} a month)`,
     qualifiesBy: (routes) => `You qualify ${routes}.`,
-    multiplier: (m) => `Your income limit is ${m} times the 14-payment IPREM (€8,400).`,
+    multiplier: (m) => `Your income limit is ${m} times the 14-payment IPREM (${money(IPREM_14, "en")}).`,
     severityUnknown: "To know whether you are severely vulnerable, type the household's income.",
     notEligible: (limit) => `With this income you do not meet the income test: your household's limit is ${limit} a year. Check whether you have a large-family title, a minimum pension, the IMV or a special circumstance.`,
     exclusion: "You pay nothing: social services cover at least 50% of the bill and the electricity companies fund the rest. Your supply cannot be cut off either.",

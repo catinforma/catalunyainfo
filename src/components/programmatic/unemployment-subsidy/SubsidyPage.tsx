@@ -25,7 +25,6 @@ import {
   IMV_SINGLE_MONTHLY,
   INCOME_LIMIT,
   INSUFFICIENT_SCALE,
-  IPREM_MONTHLY,
   OFFICIAL_LINKS,
   OVER52_SHARE,
   PNC_ANNUAL_2026,
@@ -37,6 +36,8 @@ import {
   imvGuaranteed,
   monthlyAmount,
 } from "@/lib/programmatic/unemployment-subsidy/rules";
+import { ipremPath } from "@/lib/programmatic/iprem/copy";
+import { IPREM_MONTHLY, IPREM_YEAR } from "@/lib/programmatic/iprem/rules";
 import { absoluteUrl } from "@/lib/site";
 import { ORGANIZATION_ID, breadcrumbSchema, graph } from "@/lib/seo/jsonld";
 import { buildMetadata } from "@/lib/seo/metadata";
@@ -464,6 +465,14 @@ export function SubsidyRoute({ locale }: { locale: SubLocale }) {
               <p>{amountText}</p>
               <Table head={amountHead} rows={amountRows} />
               <Quote text={QUOTE.art278} url={SOURCES.lgss.url} label={lgss(L(locale, { es: "art. 278", ca: "art. 278", en: "art. 278" }))} />
+              <p>
+                {L(locale, {
+                  es: "El IPREM, de dónde sale y por qué no cambia desde 2023:",
+                  ca: "L'IPREM, d'on surt i per què no canvia des del 2023:",
+                  en: "The IPREM, where it comes from and why it has not changed since 2023:",
+                })}{" "}
+                <Link href={ipremPath(locale)}>{L(locale, { es: `IPREM ${IPREM_YEAR}`, ca: `IPREM ${IPREM_YEAR}`, en: `IPREM ${IPREM_YEAR}` })}</Link>.
+              </p>
 
               <h2 id="tipos">{h.kinds}</h2>
               <Table head={kindsHead} rows={kindsRows} />

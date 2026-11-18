@@ -8,7 +8,7 @@ import { ShareBar } from "@/components/share/ShareBar";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
 import { getMessages } from "@/lib/i18n";
-import { IPREM_MONTHLY } from "@/lib/programmatic/employment/rules";
+import { IPREM_MONTHLY } from "@/lib/programmatic/iprem/rules";
 import { calcPath } from "@/lib/programmatic/calculators/paths";
 import { PAY_DATES_PATH } from "@/lib/programmatic/employment/paths";
 import { MINIMUM_COLS, MINIMUM_LABEL, bareDay, elDay, euros, monthText, pct, pensionEditions, pensionPath, percentText, type PensionLocale } from "@/lib/programmatic/pensions-2027/copy";
@@ -260,7 +260,7 @@ export function PensionRoute({ locale, data }: { locale: PensionLocale; data: Se
           : `Depende del IPC de noviembre (INE: adelantado el ${day(INE_FLASH_DAY)}, definitivo el ${day(INE_FINAL_DAY)}) y de la norma que apruebe el Gobierno (para 2026, el Real Decreto-ley 16/2025 salió el 24 de diciembre y, al no convalidarse, el 3/2026 el 4 de febrero).`,
       ],
       [official?.minimums ? done : pending, "Las pensiones mínimas de 2027", "Suben al menos lo mismo y, por la disposición adicional 53ª, lo necesario para alcanzar el umbral de pobreza de un hogar de dos adultos. Las fija la norma de cada año: no las publicamos hasta que salgan en el BOE."],
-      [official?.pncAnnual ? done : pending, "Las no contributivas y el IPREM de 2027", "Las no contributivas suben, al menos, el mismo porcentaje (art. 62) y tienen su propia subida adicional (DA 53ª.5). El IPREM lo fijan los Presupuestos: sigue en 600 € al mes desde 2023."],
+      [official?.pncAnnual ? done : pending, "Las no contributivas y el IPREM de 2027", `Las no contributivas suben, al menos, el mismo porcentaje (art. 62) y tienen su propia subida adicional (DA 53ª.5). El IPREM lo fijan los Presupuestos: sigue en ${IPREM_MONTHLY} € al mes desde 2023.`],
     ],
     ca: [
       [done, "La regla", "Mitjana de l'IPC de desembre a novembre (art. 58.2 LGSS); si és negativa, no baixen (art. 58.3)."],
@@ -273,7 +273,7 @@ export function PensionRoute({ locale, data }: { locale: PensionLocale; data: Se
           : `Depèn de l'IPC de novembre (INE: avançat ${elDay(INE_FLASH_DAY, "ca")}, definitiu ${elDay(INE_FINAL_DAY, "ca")}) i de la norma que aprovi el Govern (per al 2026, el Reial decret llei 16/2025 va sortir el 24 de desembre i, com que no es va convalidar, el 3/2026 el 4 de febrer).`,
       ],
       [official?.minimums ? done : pending, "Les pensions mínimes del 2027", "Pugen almenys el mateix i, per la disposició addicional 53a, el necessari per arribar al llindar de pobresa d'una llar de dos adults. Les fixa la norma de cada any: no les publiquem fins que surtin al BOE."],
-      [official?.pncAnnual ? done : pending, "Les no contributives i l'IPREM del 2027", "Les no contributives pugen, almenys, el mateix percentatge (art. 62) i tenen una pujada addicional pròpia (DA 53a.5). L'IPREM el fixen els pressupostos: continua en 600 € al mes des del 2023."],
+      [official?.pncAnnual ? done : pending, "Les no contributives i l'IPREM del 2027", `Les no contributives pugen, almenys, el mateix percentatge (art. 62) i tenen una pujada addicional pròpia (DA 53a.5). L'IPREM el fixen els pressupostos: continua en ${IPREM_MONTHLY} € al mes des del 2023.`],
     ],
     en: [
       [done, "The rule", "Average CPI from December to November (LGSS art. 58.2); if negative, pensions do not fall (art. 58.3)."],
@@ -286,7 +286,7 @@ export function PensionRoute({ locale, data }: { locale: PensionLocale; data: Se
           : `Depends on November's CPI (INE: flash on ${day(INE_FLASH_DAY)}, final on ${day(INE_FINAL_DAY)}) and on the rule the government approves (for 2026, Royal Decree-law 16/2025 came out on 24 December and, as it was not validated, 3/2026 on 4 February).`,
       ],
       [official?.minimums ? done : pending, "2027 minimum pensions", "They rise at least as much and, under additional provision 53, as much as needed to reach the poverty line for a two-adult household. Each year's rules set them: we will not print them until they are in the BOE."],
-      [official?.pncAnnual ? done : pending, "2027 non-contributory pensions and IPREM", "Non-contributory pensions rise by at least the same percentage (art. 62) and get their own extra rise (DA 53.5). The State Budget sets the IPREM: it has stayed at €600 a month since 2023."],
+      [official?.pncAnnual ? done : pending, "2027 non-contributory pensions and IPREM", `Non-contributory pensions rise by at least the same percentage (art. 62) and get their own extra rise (DA 53.5). The State Budget sets the IPREM: it has stayed at €${IPREM_MONTHLY} a month since 2023.`],
     ],
   });
 

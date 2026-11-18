@@ -1,3 +1,5 @@
+import { IPREM_MONTHLY } from "@/lib/programmatic/iprem/rules";
+
 /**
  * The figures and legal rules behind the three employment calculators
  * (dismissal pay, final settlement, unemployment benefit). Nothing here is
@@ -5,11 +7,10 @@
  * quoted in the comment above it. Client-safe (no data files, no server code).
  *
  * Re-read every January (a test fails from RULES_VALID_UNTIL + 1 day):
- *  - IPREM: set by the State Budget law. The 2023 budget (Ley 31/2022, DA 90ª)
- *    fixed 600 €/month; with no budget since, it is still the figure SEPE
- *    applies in 2026 ("Cuantías anuales", read 13 Nov 2026: "Del indicador
- *    público de renta de efectos múltiples (IPREM) fijado en: Ley 31/2022").
- *    A 2027 budget or decree-law can change it.
+ *  - IPREM: lib/programmatic/iprem/rules.ts, the one source for every
+ *    calculator (Ley 31/2022 DA 90ª, budget extended; SEPE "Cuantías anuales"
+ *    2026: "Del indicador público de renta de efectos múltiples (IPREM) fijado
+ *    en: Ley 31/2022"). A 2027 budget act can change it.
  *  - SMI 2026: Real Decreto 126/2026 (BOE-A-2026-3815), 1.221 €/month in 14
  *    payments, 17.094 €/year, in force 1 Jan to 31 Dec 2026.
  *  - Contribution caps and rates 2026: Orden PJC/297/2026 (BOE-A-2026-7296).
@@ -117,8 +118,8 @@ export const MIN_CONTRIBUTED_DAYS = 360;
 export const RATE_FIRST = 0.7;
 export const RATE_AFTER = 0.6;
 export const FIRST_PERIOD_DAYS = 180;
-/** Ley 31/2022 DA 90ª: «b) El IPREM mensual, 600 euros». Still applied by SEPE in 2026 (budget prorogued). */
-export const IPREM_MONTHLY = 600;
+/** Ley 31/2022 DA 90ª: «b) El IPREM mensual, 600 euros», from the shared IPREM module (budget extended; SEPE 2026). */
+export { IPREM_MONTHLY };
 /** Art. 270.3 LGSS: limits use «el indicador … mensual vigente en el momento del nacimiento del derecho, incrementado en una sexta parte». */
 export const IPREM_PLUS_SIXTH = (IPREM_MONTHLY * 7) / 6;
 /**

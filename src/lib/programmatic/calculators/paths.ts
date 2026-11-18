@@ -56,6 +56,8 @@ export const CALCULATORS = [
   { id: "average-salary", slugs: { es: "salario-medio", ca: "salari-mitja", en: "average-salary-spain" } },
   { id: "ipc", slugs: { es: "ipc", ca: "ipc", en: "spain-inflation-cpi" } },
   { id: "treasury-bills", slugs: { es: "letras-del-tesoro", ca: "lletres-del-tresor", en: "spain-treasury-bills" } },
+  // The IPREM (hub group "official"): the figures in force from the BOE, 2004–2026, 2027 and a multiples calculator (lib/programmatic/iprem). No year in the slug.
+  { id: "iprem", slugs: { es: "iprem", ca: "iprem", en: "iprem-spain" } },
   // Lottery (hub group "lottery"): the special levy on lottery prizes (Ley 35/2006, DA 33ª) per décimo, share and draw.
   { id: "lottery-tax", slugs: { es: "premios-loteria", ca: "premis-loteria", en: "spain-lottery-prize-tax" } },
   // Vehicles (hub group "vehicle"): when the ITV is due (RD 920/2017 art. 6) and the official fee per region.

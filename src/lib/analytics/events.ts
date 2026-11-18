@@ -87,6 +87,7 @@ export const CALCULATOR_USE_IDS = [
   "retirement-age",
   "working-days",
   "smi-2027",
+  "iprem",
   "average-salary",
   "treasury-bills",
   "lottery-tax",

@@ -1,8 +1,9 @@
+import { IPREM_14 } from "@/lib/programmatic/iprem/rules";
+
 import {
   BASE_MULTIPLIER,
   CAP_ROWS,
   DISCOUNT_2026,
-  IPREM_14,
   KWH_CAP,
   KWH_CAP_MONTHLY,
   PERMANENT_DISCOUNT,

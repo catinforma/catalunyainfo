@@ -15,8 +15,6 @@ import { DEFAULT_INPUT, HOUSEHOLD_LABEL, bonoSocialFaq, bonoSocialMeta, examples
 import {
   CAP_ROWS,
   DISCOUNT_2026,
-  IPREM_14,
-  IPREM_MONTHLY,
   KWH_CAP,
   KWH_CAP_MONTHLY,
   MAX_POWER_KW,
@@ -30,6 +28,8 @@ import {
   SOURCES,
 } from "@/lib/programmatic/bono-social/rules";
 import { butanePath } from "@/lib/programmatic/butane/paths";
+import { ipremPath } from "@/lib/programmatic/iprem/copy";
+import { IPREM_14, IPREM_MONTHLY, IPREM_YEAR } from "@/lib/programmatic/iprem/rules";
 import { hubCrumb } from "@/lib/programmatic/calculators/hub";
 import { dayMonthYear } from "@/lib/programmatic/holidays/format";
 import { pvpcPath } from "@/lib/programmatic/pvpc/paths";
@@ -453,6 +453,14 @@ export function BonoSocialRoute({ locale }: { locale: BsLocale }) {
               </ul>
               <Quote text={QUOTE.income} href={SOURCES.rd897.url} label={rd("art. 3.2.a")} />
               <Quote text={QUOTE.increments} href={SOURCES.rd897.url} label={rd("art. 3.2.a")} />
+              <p>
+                {L(locale, {
+                  es: "Qué es el IPREM, la diferencia entre el de 12 y el de 14 pagas, y otros límites que se miden con él:",
+                  ca: "Què és l'IPREM, la diferència entre el de 12 i el de 14 pagues, i altres límits que s'hi mesuren:",
+                  en: "What the IPREM is, the 12- vs 14-payment figure, and other limits measured with it:",
+                })}{" "}
+                <Link href={ipremPath(locale)}>{L(locale, { es: `IPREM ${IPREM_YEAR}`, ca: `IPREM ${IPREM_YEAR}`, en: `IPREM ${IPREM_YEAR}` })}</Link>.
+              </p>
 
               <h2 id="requisitos">{hd.who}</h2>
               <ul>

@@ -53,6 +53,7 @@ test("registry: the live URLs did not move (13 Nov 2026)", () => {
   assert.deepEqual(calcEditions("smi-2027"), { ca: "/ca/calculadores/salari-minim-2027/", es: "/es/calculadoras/salario-minimo-2027/", en: "/en/calculators/spain-minimum-wage-2027/" });
   assert.deepEqual(calcEditions("ipc"), { ca: "/ca/calculadores/ipc/", es: "/es/calculadoras/ipc/", en: "/en/calculators/spain-inflation-cpi/" });
   assert.deepEqual(calcEditions("treasury-bills"), { ca: "/ca/calculadores/lletres-del-tresor/", es: "/es/calculadoras/letras-del-tesoro/", en: "/en/calculators/spain-treasury-bills/" });
+  assert.deepEqual(calcEditions("iprem"), { ca: "/ca/calculadores/iprem/", es: "/es/calculadoras/iprem/", en: "/en/calculators/iprem-spain/" });
   assert.deepEqual(calcEditions("itv"), { ca: "/ca/calculadores/itv/", es: "/es/calculadoras/itv/", en: "/en/calculators/itv-spain/" });
   assert.deepEqual(calcEditions("lottery-tax"), { ca: "/ca/calculadores/premis-loteria/", es: "/es/calculadoras/premios-loteria/", en: "/en/calculators/spain-lottery-prize-tax/" });
   assert.deepEqual(calcEditions("home-purchase-tax"), { ca: "/ca/calculadores/impostos-compra-habitatge/", es: "/es/calculadoras/impuestos-compra-vivienda/", en: "/en/calculators/spain-home-purchase-taxes/" });
@@ -83,8 +84,8 @@ test("hub: the eight groups, each card complete in ca, es and en, linking indexa
   assert.deepEqual(HUB_GROUPS.find((g) => g.id === "energy")?.cards.map((c) => c.key), ["bono-social"]);
   // The lottery group: the prize tax calculator (lib/programmatic/lottery-tax).
   assert.deepEqual(HUB_GROUPS.find((g) => g.id === "lottery")?.cards.map((c) => c.key), ["lottery-tax"]);
-  // The official-figures group: the SMI, the INE average salary, the CPI and the Letras del Tesoro reference pages.
-  assert.deepEqual(HUB_GROUPS.find((g) => g.id === "official")?.cards.map((c) => c.key), ["smi-2027", "average-salary", "ipc", "treasury-bills"]);
+  // The official-figures group: the SMI, the IPREM, the INE average salary, the CPI and the Letras del Tesoro reference pages.
+  assert.deepEqual(HUB_GROUPS.find((g) => g.id === "official")?.cards.map((c) => c.key), ["smi-2027", "iprem", "average-salary", "ipc", "treasury-bills"]);
   // The vehicles group: the ITV calculator (lib/programmatic/itv) and the traffic-fines deadlines (lib/programmatic/traffic-fines).
   assert.deepEqual(HUB_GROUPS.find((g) => g.id === "vehicle")?.cards.map((c) => c.key), ["itv", "traffic-fines"]);
   for (const g of HUB_GROUPS) {

@@ -47,6 +47,8 @@ export const CALCULATOR_NEXT: Partial<Record<NextToolKey, readonly NextToolKey[]
   "retirement-age": ["pensions-2027", "pay-dates"],
   "working-days": ["leave-2027", "paid-leave"],
   "smi-2027": ["net-salary", "extra-pay"],
+  // The IPREM's readers want a benefit measured in it: the bono social and the unemployment subsidy.
+  iprem: ["bono-social", "unemployment-subsidy"],
   // The average salary is gross: its readers want the net of a figure, then the floor (SMI).
   "average-salary": ["net-salary", "smi-2027"],
   ipc: ["rent-update", "pensions-2027"],
