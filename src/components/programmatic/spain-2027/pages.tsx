@@ -13,7 +13,7 @@ import { esName } from "@/lib/programmatic/holidays/names";
 import { hubPath, municipalityPath } from "@/lib/programmatic/holidays/paths";
 import { dayMonthYear } from "@/lib/programmatic/holidays/format";
 import { REGIONS } from "@/lib/programmatic/holidays/boe-2027";
-import { citiesOf } from "@/lib/programmatic/spain-2027/cities";
+import { citiesOf, searchedCitiesOf } from "@/lib/programmatic/spain-2027/cities";
 import { CATALAN_CITIES } from "@/lib/programmatic/spain-2027/cities-data";
 import { cityListLine } from "@/lib/programmatic/spain-2027/city-copy";
 import {
@@ -53,7 +53,7 @@ import {
   whereElse,
 } from "@/lib/programmatic/spain-2027/copy";
 import { cityPath, communityPath, spainBridgesPath, spainHubPath } from "@/lib/programmatic/spain-2027/paths";
-import { BOE_REF, SOURCES, SOURCES_READ_ON, type OfficialText } from "@/lib/programmatic/spain-2027/sources";
+import { BOE_REF, SOURCES, SOURCES_READ_ON, latestReading, type OfficialText } from "@/lib/programmatic/spain-2027/sources";
 
 import { DayDateLink, SpainDayIndex } from "./days";
 
@@ -180,6 +180,36 @@ function CityList({ c }: { c: CommunityNames }) {
   );
 }
 
+/**
+ * Right under the community's calendar (18 Nov 2026): its most searched city
+ * pages with their two days or status (`SEARCHED_CITIES`), and the way to the
+ * full list. "festivos <ciudad> 2027" is where the demand is; the full table
+ * sits further down the page.
+ */
+function SearchedCities({ c }: { c: CommunityNames }) {
+  const cities = searchedCitiesOf(c.region);
+  if (cities.length === 0) return null;
+  const all = citiesOf(c.region).length;
+  return (
+    <p data-searched-cities>
+      <strong>Festivos locales de {YEAR} por ciudad:</strong>{" "}
+      {cities.map((x, i) => (
+        <span key={x.slug}>
+          {i > 0 ? " · " : ""}
+          <Link href={cityPath(x)}>{x.name}</Link> <small className="text-[var(--color-muted)]">({cityListLine(x)})</small>
+        </span>
+      ))}
+      {all > cities.length ? (
+        <>
+          {" · "}
+          <a href="#ciudades">las {all} ciudades</a>
+        </>
+      ) : null}
+      .
+    </p>
+  );
+}
+
 /** The hub's index of every city page, by community. */
 function HubCityList() {
   const groups = COMMUNITIES_AZ.map((c) => ({ c, cities: citiesOf(c.region) })).filter((g) => g.cities.length > 0);
@@ -284,6 +314,7 @@ export function CommunityPage({ c }: { c: CommunityNames }) {
             </table>
           </div>
           {weekend ? <p>{weekend}</p> : null}
+          <SearchedCities c={c} />
           {s.boeNote ? (
             <div role="note" className="ci-callout ci-callout-official">
               <p>
@@ -568,7 +599,7 @@ export function SpainHubPage() {
           <h2 id="locales">Festivos locales de {YEAR}</h2>
           <p>
             Además de los días del BOE, cada municipio tiene hasta 2 festivos locales, que publica cada comunidad en su boletín (o, en Castilla y
-            León y el País Vasco, los boletines de cada provincia). Estado a {dayMonthYear(SOURCES_READ_ON, "es")}:
+            León y el País Vasco, los boletines de cada provincia). Estado a {dayMonthYear(latestReading(), "es")}:
           </p>
           <ul>
             {COMMUNITIES_AZ.map((c) => {

@@ -69,6 +69,17 @@ export function weekdayDateIntl(iso: string, locale: Edition): string {
   return `${weekdayName(iso, locale)} ${dayMonth(iso, locale)}`;
 }
 
+const WEEKDAY_ABBR: Record<Edition, string[]> = {
+  ca: ["dg", "dl", "dt", "dc", "dj", "dv", "ds"],
+  en: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
+};
+
+/** "dv 19 març"; "Fri 19 Mar": the weekday and date in a list of many days. */
+export function shortWeekdayDateIntl(iso: string, locale: Edition): string {
+  const d = new Date(`${iso}T12:00:00Z`);
+  return `${WEEKDAY_ABBR[locale][d.getUTCDay()]} ${d.getUTCDate()} ${MONTH_ABBR[locale][d.getUTCMonth()]}`;
+}
+
 /** "del divendres 1 al diumenge 3 de gener"; "Friday 1 to Sunday 3 January". */
 export function rangeWordsIntl(from: string, to: string, locale: Edition): string {
   const sameMonth = from.slice(0, 7) === to.slice(0, 7);
@@ -313,9 +324,11 @@ export function localStatusLineIntl(c: EditionNames, local: LocalStatus, locale:
   const read = dayMonthYear(SOURCES_READ_ON, locale);
   if (locale === "ca") {
     const last = local.y2026 ? ` El 2026 es van publicar el ${dayMonthYear(local.y2026.date, "ca")} (${local.y2026.ref}).` : "";
+    if (local.checked) return `Pendents: ${c.in} encara no s'ha publicat la llista del ${YEAR} (consultat fins al ${local.checked.through}).${last}`;
     return `Pendents a ${read}: ${c.in} encara no s'ha publicat la llista del ${YEAR}.${last}`;
   }
   const last = local.y2026 ? ` In 2026 it came out on ${dayMonthYear(local.y2026.date, "en")} (${local.y2026.ref}).` : "";
+  if (local.checked) return `Pending: the ${YEAR} list has not been published yet ${c.in} (read up to ${local.checked.through}).${last}`;
   return `Pending as of ${read}: the ${YEAR} list has not been published yet ${c.in}.${last}`;
 }
 

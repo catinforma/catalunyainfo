@@ -7,7 +7,7 @@ import { absoluteUrl } from "@/lib/site";
 import { CITIES, cityBySlug, type City } from "./cities";
 import { CITIES_AS_OF } from "./cities-data";
 import { names } from "./communities";
-import { SOURCES_READ_ON } from "./sources";
+import { latestReading } from "./sources";
 
 /**
  * The Catalan and English editions of the Spain-wide 2027 calendar (the
@@ -279,7 +279,7 @@ export function editionLanguages(e: Editions): Record<string, string> {
 
 /** Sitemap entries of the ca and en editions (the Spanish ones are paths.ts `spainSitemapEntries`). */
 export function editionSitemapEntries(): MetadataRoute.Sitemap {
-  const read = SOURCES_READ_ON > CITIES_AS_OF ? SOURCES_READ_ON : CITIES_AS_OF;
+  const read = latestReading(CITIES_AS_OF);
   const lastModified = new Date(`${read}T00:00:00Z`);
   const clusters = allEditions();
   return EDITIONS.flatMap((l) =>

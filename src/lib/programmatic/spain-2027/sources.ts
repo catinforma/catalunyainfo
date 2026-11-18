@@ -21,6 +21,42 @@ export const SOURCES_READ_ON = "2026-11-06";
 /** A test fails after this date until every `local` status is read again. */
 export const STATUS_RECHECK_BY = "2026-11-27";
 
+/**
+ * The six lists still pending, read again on 18 Nov 2026: every issue of each
+ * bulletin since the 13 Nov reading (and since 1 Oct for the BOCM and the BOC,
+ * 26 Oct for the BOA, 30 Oct for the BON, 2 Nov for the DOCM) through that
+ * day's, by each bulletin's own summary (DOGV API `dogv-portal/dogv?date=`,
+ * BOA open data `OPENDATABOAJSONAPP`, BON `/boletin/-/sumario/2026/<n>`, BOC
+ * `busquedaBoletines.do` + `verBoletin.do`, DOCM `cambiarBoletin.do`, BOCM
+ * summary XML), searched for "fiestas locales", "fiestas laborales" and
+ * "calendario de fiestas". The same search finds each 2026 list on its day
+ * (DOGV 14.11.2025, BOA 20.11.2025, BON 2.12.2025, BOC 11.12.2025, DOCM and
+ * BOCM 12.12.2025). `through` is the last issue read; none has the 2027 list.
+ */
+export const PENDING_READ_ON = "2026-11-18";
+
+export const PENDING_CHECKS = {
+  AR: { through: "BOA núm. 223, de 18.11.2026", date: PENDING_READ_ON },
+  VC: { through: "DOGV núm. 10496, de 18.11.2026", date: PENDING_READ_ON },
+  CB: { through: "BOC núm. 222, de 18.11.2026", date: PENDING_READ_ON },
+  CM: { through: "DOCM núm. 221, de 18.11.2026", date: PENDING_READ_ON },
+  MD: { through: "BOCM núm. 277, de 18.11.2026", date: PENDING_READ_ON },
+  NC: { through: "BON núm. 230, de 18.11.2026", date: PENDING_READ_ON },
+} as const satisfies Record<string, PendingCheck>;
+
+/** The last issue of a bulletin read without the 2027 list, and the day it was read. */
+export interface PendingCheck {
+  /** "BOCM núm. 277, de 18.11.2026". */
+  through: string;
+  /** ISO day of the reading. */
+  date: string;
+}
+
+/** The latest reading behind any page of the family: the sitemap's lastModified. */
+export function latestReading(...others: string[]): string {
+  return [SOURCES_READ_ON, PENDING_READ_ON, ...others].reduce((a, b) => (b > a ? b : a));
+}
+
 export interface OfficialText {
   title: string;
   /** "BOCM núm. 123, de 4.6.2026". */
@@ -66,6 +102,8 @@ export interface LocalStatus {
   /** One sentence: who fixes them and in what text. */
   how: string;
   status: "published" | "pending" | "partial";
+  /** Pending only: the last issue read without the 2027 list (`PENDING_CHECKS`). */
+  checked?: PendingCheck;
   y2027: OfficialText | null;
   /** The 2026 list: the precedent for when the 2027 one should appear. */
   y2026: OfficialText | null;
@@ -223,6 +261,7 @@ const ARAGON: CommunitySources = {
     bulletinUrl: "https://www.boa.aragon.es/",
     how: "En Aragón los fija una resolución del Director General de Trabajo para los municipios de Huesca, Teruel y Zaragoza, en el",
     status: "pending",
+    checked: PENDING_CHECKS.AR,
     y2027: null,
     y2026: {
       title:
@@ -386,6 +425,7 @@ const VALENCIANA: CommunitySources = {
     bulletinUrl: "https://dogv.gva.es/es/",
     how: "En la Comunitat Valenciana los aprueba una resolución de la Conselleria competente en trabajo, con los 2 días de cada uno de los 542 municipios, en el",
     status: "pending",
+    checked: PENDING_CHECKS.VC,
     y2027: null,
     y2026: {
       title: "Resolución de 12 de noviembre de 2025, por la que se aprueba el calendario de fiestas locales, retribuidas y no recuperables, en el ámbito de la Comunitat Valenciana para el año 2026",
@@ -494,6 +534,7 @@ const CANTABRIA: CommunitySources = {
     bulletinUrl: "https://boc.cantabria.es/boces/",
     how: "En Cantabria los publica una resolución de la Dirección General de Trabajo, Economía Social y Empleo Autónomo junto con las fiestas nacionales y autonómicas, en el",
     status: "pending",
+    checked: PENDING_CHECKS.CB,
     y2027: null,
     y2026: {
       title: "Resolución por la que se dispone la publicación del calendario de fiestas nacionales, autonómicas y locales en el ámbito de la Comunidad Autónoma de Cantabria para el año 2026",
@@ -532,6 +573,7 @@ const CASTILLA_LA_MANCHA: CommunitySources = {
     bulletinUrl: "https://docm.jccm.es/",
     how: "En Castilla-La Mancha los da a conocer un anuncio de la Dirección General de Autónomos, Trabajo y Economía Social para todos los municipios, en el",
     status: "pending",
+    checked: PENDING_CHECKS.CM,
     y2027: null,
     y2026: {
       title:
@@ -757,6 +799,7 @@ const MADRID: CommunitySources = {
     bulletinUrl: "https://www.bocm.es/",
     how: "En la Comunidad de Madrid los declara una resolución de la Dirección General de Trabajo para todos los municipios, en el",
     status: "pending",
+    checked: PENDING_CHECKS.MD,
     y2027: null,
     y2026: {
       title: "Resolución de 2 de diciembre de 2025, de la Dirección General de Trabajo, por la que se declaran las fiestas laborales de ámbito local en la Comunidad de Madrid para el año 2026",
@@ -831,6 +874,7 @@ const NAVARRA: CommunitySources = {
     bulletinUrl: "https://bon.navarra.es/",
     how: "En Navarra uno de los 2 días locales es común a toda la comunidad; el otro lo propone cada ayuntamiento y lo publica una resolución de la Dirección General de Economía Social y Trabajo, en el",
     status: "pending",
+    checked: PENDING_CHECKS.NC,
     y2027: null,
     y2026: {
       title:

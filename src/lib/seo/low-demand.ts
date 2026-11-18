@@ -55,7 +55,8 @@ export const LOW_DEMAND_RULES: readonly LowDemandRule[] = [
     // data is indexed in Spanish, and the ca date pages (/ca/festius/2027/dia/)
     // compete with /ca/festius/dia/<d>-2027/. Kept: Catalonia's own page (not
     // matched), the hub, bridges, planner and widget pages, and four pages
-    // that earned a click or 10 impressions.
+    // that earned a click or 10 impressions. 18 Nov 2026 (GSC 22 Oct-18 Nov,
+    // same bar): + Sant Antoni de Portmany (1 click; 2027 days in the BOIB).
     id: "spain-2027-ca",
     pattern: /^\/ca\/festius\/2027\/(?!(?:ponts|al-teu-web|aprofitar-vacances|catalunya)\/)[a-z0-9-]+\/(?:[a-z0-9-]+\/)?$/,
     keep: [
@@ -63,6 +64,7 @@ export const LOW_DEMAND_RULES: readonly LowDemandRule[] = [
       "/ca/festius/2027/dia/29-marc/",
       "/ca/festius/2027/illes-balears/",
       "/ca/festius/2027/illes-balears/ciutadella-de-menorca/",
+      "/ca/festius/2027/illes-balears/sant-antoni-de-portmany/",
     ],
   },
   {
@@ -70,7 +72,14 @@ export const LOW_DEMAND_RULES: readonly LowDemandRule[] = [
     // impressions and 0 clicks from the 305 not kept. The English date pages
     // compete with /en/holidays/day/<d>-2027/ (Catalonia). Kept: Catalonia's
     // page, the hub, long weekends, planner and widget pages, and the 16 pages
-    // with a click or 10 impressions (expat and tourist towns).
+    // with a click or 10 impressions (expat and tourist towns). 18 Nov 2026
+    // (GSC 22 Oct-18 Nov, same bar), city pages with their 2027 local days
+    // published: + San Sebastián (14 impr. at 3.3), Torremolinos (11 at 6.0),
+    // Mérida (1 click). Held although over the bar, because their page has no
+    // 2027 local days yet (pending or left out of the list): Pamplona (11),
+    // Benidorm (10), Burgos (10); they join when their list is out. Not city
+    // pages, left for the 10 Dec review: the day pages 8 and 6 December,
+    // 29 and 19 March, and the Andalusia page.
     id: "spain-2027-en",
     pattern: /^\/en\/holidays\/2027\/(?!(?:long-weekends|for-your-website|leave-planner|catalonia)\/)[a-z0-9-]+\/(?:[a-z0-9-]+\/)?$/,
     keep: [
@@ -80,13 +89,16 @@ export const LOW_DEMAND_RULES: readonly LowDemandRule[] = [
       "/en/holidays/2027/andalusia/malaga/",
       "/en/holidays/2027/andalusia/marbella/",
       "/en/holidays/2027/andalusia/sevilla/",
+      "/en/holidays/2027/andalusia/torremolinos/",
       "/en/holidays/2027/aragon/zaragoza/",
       "/en/holidays/2027/balearic-islands/ibiza/",
       "/en/holidays/2027/balearic-islands/palma/",
       "/en/holidays/2027/basque-country/bilbao/",
+      "/en/holidays/2027/basque-country/san-sebastian/",
       "/en/holidays/2027/canary-islands/las-palmas-de-gran-canaria/",
       "/en/holidays/2027/castile-and-leon/salamanca/",
       "/en/holidays/2027/day/8-september/",
+      "/en/holidays/2027/extremadura/merida/",
       "/en/holidays/2027/melilla/",
       "/en/holidays/2027/murcia/mazarron/",
       "/en/holidays/2027/valencian-community/alicante/",

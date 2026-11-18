@@ -33,7 +33,8 @@ import { SOURCES, type OfficialText } from "./sources";
  *  4. Otherwise the town waits in `WAITING_TOWNS`, with no page: its
  *     community has not published (reason "pending": Aragón, Cantabria,
  *     Castilla-La Mancha, Madrid, Navarra, Comunitat Valenciana as of
- *     13 Nov 2026), or the published list leaves it out (reason "missing").
+ *     13 Nov 2026, still so on 18 Nov), or the published list leaves it out
+ *     (reason "missing").
  *     Unlike the core rows, a waiting town never gets a page with its 2026
  *     days: no page until its 2027 days are official.
  *
@@ -45,8 +46,13 @@ import { SOURCES, type OfficialText } from "./sources";
 
 /** The day every row below was read on its bulletin. */
 export const MORE_READ_ON = "2026-11-13";
-/** A test fails from this day until the pending communities are read again (DOGV expected any day; the rest from late November). */
-export const WAITING_RECHECK_BY = "2026-11-20";
+/**
+ * A test fails from this day until the pending communities are read again.
+ * Read again on 18 Nov 2026 (`PENDING_CHECKS`, sources.ts): still none out.
+ * Next by 25 Nov: the DOGV is past its 2026 precedent (14 Nov), the BOA
+ * reaches its own on 20 Nov, the BON on 2 Dec.
+ */
+export const WAITING_RECHECK_BY = "2026-11-25";
 export const MORE_MIN_POPULATION = 20_000;
 
 /** Smaller municipalities selected by a real Search Console query (rule 2): 1 Aug – 12 Nov 2026, impressions summed over pages. */

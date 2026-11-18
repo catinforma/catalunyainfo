@@ -7054,4 +7054,83 @@ the 19N page and the Spain hub; spot-check that a strike re-send at 00:05 left `
 2026-12-29 for the Gordo card (draw night). **Revert rule:** if Search Console reports date errors on Article items, put the
 full ISO instant back for unknown times (`modifiedIso`), keep the rest.
 
+## 2026-11-18 — Calendario laboral 2027, Spain cities: every day by layer with its source in the first lines, the six pending lists re-read, searched titles armed for 2 Dec, community pages lead to their searched cities (deploy; group `calendario-2027-espana`)
+
+**Why.** "festivos <ciudad> 2027" / "calendario laboral <ciudad> 2027" peaks in December and January, and the city pages
+already get it before the season: GSC 5–18 Nov (`snapshot.py page 2027 14`, `gaps 14 60`, plus a query×page pull) —
+"festivos vigo 2027" 136 at 10.8, "calendario laboral torrelavega 2027" 106 at 8.5, "festivos alcobendas 2027" 92 at 9.4,
+"calendario laboral alcobendas 2027" 80 at 8.9, "calendario laboral marbella 2027" 78 at 9.0, "festivos valdemoro 2027" 60 at
+7.2, "calendario laboral paterna 2027" 57 at 6.7, "calendario laboral gandia 2027" 57 at 8.7. Every one at 6–11: page one, not
+top 3. Gaps found on the page: the first line gave only the 2 local days; the national and regional days were rows of the
+table with a "Tipo" column and no date or text of their own; pending pages said "Boletines consultados el 6 de noviembre"
+(12 days old in a season that moves weekly); the title said "Festivos locales X" or "Calendario laboral X: festivos", never
+both forms; the community pages (hub and communities at 17–70 for head terms, 655 impressions) listed their cities only at
+the bottom.
+
+**Inventory (18 Nov).** `/es/festivos/2027/`: hub, puentes, 19 communities, 27 day pages, 276 city pages (129 capitals and
+50,000+, 147 of 20,000+; 223 with their 2027 days published, 51 pending, 2 left out of the published list: Burgos and
+Valladolid, `status2027` "missing"); same in `/ca/festius/2027/` and `/en/holidays/2027/`. ES all indexable; ca/en noindex by rules
+`spain-2027-ca`/`-en` except Catalonia, hubs, tools and the keep lists. Sources: BOE-A-2026-21254 (13.10.2026) for national +
+regional days; each community's decree (sources.ts); local days from each community's (or province's) 2027 bulletin — 10
+communities plus Ceuta and Melilla published, 6 pending (+ Catalonia's DOGC order, its own engine, mid-December).
+
+**Facts re-read 18 Nov (the six pending lists).** Every issue of each bulletin through 18 Nov, by its own summary, searched
+for "fiestas locales / laborales / de carácter local / calendario de fiestas"; the same search finds each 2026 list on its day.
+None has the 2027 list: BOA núm. 223, DOGV núm. 10496, BOC núm. 222, DOCM núm. 221, BOCM núm. 277, BON núm. 230 (all of
+18.11.2026). Recorded in `PENDING_CHECKS` (sources.ts), fact pack `research_notes/spain-2027-pending-local-lists-2026-11-18.md`.
+No council act found for the pending cities with demand (Alcobendas, Torrelavega, Gandia, Benidorm, Paterna, Sagunto):
+nothing printed from councils, nothing guessed from 2026. **Newly verified: none published. Still pending: all six.**
+
+**What changed.**
+1. City pages es/ca/en (276 × 3): under the answer line, a layers block — "Comunes a toda España (9): vie 1 ene … (BOE de 13 de
+   octubre de 2026, BOE-A-2026-21254)" / "Además, en <comunidad> (n): … (Decreto …, boletín, y BOE)" / "Fiesta insular" in
+   Canarias / "Locales de <ciudad> (2): … (DOG núm. 204, de 26.10.2026)" or "pendientes de publicación en el BOCM (consultado
+   hasta el BOCM núm. 277, de 18.11.2026)"; Navarra shows 3 December as known and the other as pending. Every day of the
+   table is in exactly one layer (test). Weekday on every date.
+2. Pending cities: answer line "Boletines consultados el 18 de noviembre de 2026 (hasta el <bulletin núm.>)", the local
+   section adds "no está en ningún número publicado hasta el …", footer read date 18 Nov (`cityReadOn`); community status
+   lines and the hub's status list name the issue too. Sitemap lastModified of the family → 18 Nov (`latestReading`).
+3. Community pages es/ca/en: under the calendar table, "Festivos locales de 2027 por ciudad:" with the most searched city
+   pages (`SEARCHED_CITIES`, GSC 5–18 Nov, ≥ 50 impressions, up to 6; Castilla-La Mancha falls back to its 4 largest), each
+   with its days or "Pendiente (2026: …)", and an anchor to the full table.
+4. **Titles (es only), armed for 2 Dec, not live now:** `CITY_TITLES_FROM = 2026-12-02` in `city-copy.ts`. From that day the
+   next build or `calendario-2027-espana` publish renders "Festivos Vigo 2027: calendario laboral, 29 mar y 16 ago" /
+   "Festivos Alcobendas 2027: calendario laboral" (pending) / "Festivos Pontevedra 2027: 10 feb y 29 mar" where 60 characters
+   do not fit both. Held because the 13 Nov first-line change on these pages is measured on 20 Nov and 1 Dec. Descriptions
+   unchanged (they already say "calendario laboral" and the days; one thing at a time). ca/en titles unchanged (mostly
+   noindex).
+5. `low-demand.ts` keep lists (same bar, GSC 22 Oct–18 Nov: a click or ≥ 10 impressions), city pages with their 2027 days:
+   + `/en/holidays/2027/basque-country/san-sebastian/` (14 at 3.3), `/en/holidays/2027/andalusia/torremolinos/` (11 at 6.0),
+   `/en/holidays/2027/extremadura/merida/` (1 click), `/ca/festius/2027/illes-balears/sant-antoni-de-portmany/` (1 click).
+   Held although over the bar (no 2027 local days yet): EN Pamplona 11, Benidorm 10, Burgos 10. Left to the 10 Dec review:
+   EN day pages 8 Dec (18), 6 Dec (14), 29 Mar (11), 19 Mar (10), EN Andalusia (12).
+6. 2026 → 2027 links: already in place for every place that has a 2026 page outside Catalonia (11N city pages "Y ahora en
+   <ciudad>" → the city's 2027 page; school-calendar community pages and the Spain December bridge → community 2027 pages;
+   Catalan town pages carry their own 2027 days). Nothing added.
+7. Date guards: `WAITING_RECHECK_BY` 20 → 25 Nov (DOGV past its 14 Nov precedent; BOA due 20 Nov; BON 2 Dec).
+   `STATUS_RECHECK_BY` and `CITIES_RECHECK_BY` stay 27 Nov. Test `tests/spain-2027-laboral-18nov.test.ts`.
+
+**Baseline (GSC 5–18 Nov, 14 d; 18 Nov partial).** ES city pages: 15,270 impressions, 137 clicks, CTR 0.90 %, position 9.4
+(impression-weighted); published 8,994 / 52 / 0.58 % / 9.1; pending 6,247 / 85 / 1.36 % / 9.7. ES hub + communities + days:
+655 / 2 / 17.2. Named queries as in "Why". The four ca/en pages kept today: 14, 11, 3 and 2 impressions (28 d), 2 clicks.
+
+**Prediction.** By 15 Dec (equal-query comparison; demand grows into December so clicks alone mean little): the eight named
+queries median position from ~8.9 to ≤ 6, at least three of them ≤ 3; ES city family CTR ≥ 1.5 % at equal position band.
+After the 2 Dec title switch: CTR on "calendario laboral <ciudad> 2027" queries for published cities up ≥ 30 % at equal
+position (13–28 Dec vs 17 Nov–1 Dec). Pending cities: when their list is published, the page flips to the days the same day
+(data update), which will dominate any title effect for those 51 pages.
+
+**Review.** 2 Dec (title switch day: confirm the 1 Dec reading of the 13 Nov entry is logged; if that reading says hold,
+move `CITY_TITLES_FROM`), 15 Dec, 15 Jan (with the 13 Nov 147-towns rule). `snapshot.py page /festivos/2027/ 14` and the
+query×page pull; `page /holidays/2027/ 28` for the four kept ca/en pages. **Revert rule (titles):** if by 16 Dec published
+cities lose ≥ 1 position at equal query with no CTR gain, set `CITY_TITLES_FROM` far ahead (old titles come back).
+
+**Confounders.** 13 Nov first-line change (its 20 Nov reading covers 13–19 Nov, before this deploy); 19 Nov answer-first
+review; any community publishing its list (BOA ~20 Nov, BON ~2 Dec, BOC/DOCM/BOCM ~11–12 Dec, DOGV any day) changes those
+pages' answer, title and layers on its own; seasonal demand.
+
+**Go-live.** Deploy first (code pages), then publish `calendario-2027-espana`; IndexNow prefixes `/es/festivos/2027/`,
+`/ca/festius/2027/`, `/en/holidays/2027/`. On or after 2 Dec, one more publish of `calendario-2027-espana` (or any deploy)
+renders the new titles.
+
 **Outcome:** _pending_
