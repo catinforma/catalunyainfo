@@ -7133,4 +7133,89 @@ pages' answer, title and layers on its own; seasonal demand.
 `/ca/festius/2027/`, `/en/holidays/2027/`. On or after 2 Dec, one more publish of `calendario-2027-espana` (or any deploy)
 renders the new titles.
 
+## 2026-11-18 — "Siguiente paso útil": one onward box right after the answer, six families, ca/es/en (deploy only; no publish group; no title, description or lead touched)
+
+**Observation (GA4, property 554310792).** 4–17 Nov: 24,784 sessions, 27,590 page views, **1.113 views per session**;
+17 Nov alone 1,236 sessions, 1,341 views (1.085). Visitors land from Google, read one answer and leave. The 15 landing pages
+with most sessions are all strike pages but one:
+
+| # | Landing page | Sessions | Views/session |
+| --- | --- | --- | --- |
+| 1 | /es/guias/huelga-general-11-noviembre-sevilla | 2,429 | 1.081 |
+| 2 | /es/guias/huelga-general-11-noviembre | 1,937 | 1.089 |
+| 3 | /ca/guies/vaga-general-11-novembre | 1,525 | 1.118 |
+| 4 | /es/guias/huelga-general-11-noviembre-zaragoza | 1,315 | 1.085 |
+| 5 | /es/guias/huelga-renfe-rodalies-noviembre | 1,274 | 1.155 |
+| 6 | /es/guias/huelga-trenes-17-noviembre | 1,242 | 1.109 |
+| 7 | /es/guias/huelga-general-11-noviembre-alicante | 1,054 | 1.067 |
+| 8 | /es/guias/huelga-general-11-noviembre-malaga | 832 | 1.096 |
+| 9 | /es/guias/candidatos-elecciones-generales-cataluna | 735 | 1.195 |
+| 10 | /en/guides/general-strike-11-november-spain | 692 | 1.223 |
+| 11 | /es/guias/huelga-general-11-noviembre-vigo | 669 | 1.102 |
+| 12 | /es/guias/huelga-hoy-cataluna | 664 | 1.096 |
+| 13 | /es/guias/huelga-general-11-noviembre-valladolid | 663 | 1.078 |
+| 14 | /ca/guies/vaga-educacio-novembre | 561 | 1.062 |
+| 15 | /es/guias/huelga-general-11-noviembre-murcia | 518 | 1.041 |
+
+(Excluded: "(not set)", 1,113 sessions with no page view.) Top page of the other families: holidays
+/es/guias/puente-diciembre-espana 273 sessions (1.015), Christmas /ca/tradicions/mercats-de-nadal-catalunya 44 (1.273),
+Barcelona practical /en/guides/barcelona-catalonia-tourist-tax 34 (1.029), calculators 28 sessions in all (launched 13 Nov).
+
+**Baseline by landing-page family** (`snapshot.py landing 2026-11-04 2026-11-17`, regexes `LANDING_FAMILIES` in the script;
+a session can count under two landing pages, so the rows add up to 25,476 sessions):
+
+| Family | Sessions 4–17 Nov | Views/session 4–17 Nov | Views/session 11–17 Nov | Page views 4–17 Nov |
+| --- | --- | --- | --- | --- |
+| Strikes | 17,854 | 1.100 | 1.102 | 19,469 |
+| Elections | 2,576 | 1.193 | 1.153 | 3,050 |
+| Holidays (guides, date and town pages) | 2,171 | 1.270 | 1.317 | 2,741 |
+| Christmas (fairs, lights) | 436 | 1.216 | 1.200 | 529 |
+| Barcelona practical | 153 | 1.098 | 1.105 | 188 |
+| Calculators | 28 | 1.179 | 1.179 | 39 |
+| Other | 1,062 | 1.313 | 1.257 | 1,574 |
+
+**Change.** A compact box, "Siguiente paso útil" / "Següent pas útil" / "Next useful step" (`components/NextStep.tsx`; the
+tip-callout colours of "Lee también"), right after the answer: under the answer-first summary, else after the key facts,
+else after the lead; on the programmatic pages after their answer block. 1–3 links, each anchor the target page's own title
+(or the sentence that already links it lower on the page), in the page's language; never the page itself. Links only, no
+fact of its own. Rules and dates in `lib/engagement/next-step.ts` (+ `-towns.ts`, `-calculators.ts`); tests
+`tests/next-step.test.ts` (every target a path the site builds, all three languages, no past strike day, anchors = titles).
+
+| Family | Pages | The box (as of 18 Nov) |
+| --- | --- | --- |
+| Strikes, Catalonia | hub, 11N, Renfe, education guides | Rodalies live (`/rodalies/`), then the next two strike days (19N, 20N; from 21 Nov the Renfe 23N and education 26N guides), by `STRIKES_AS_OF` like the pages; then the hubs |
+| Strikes, rest of Spain | 11N Spain + 13 city pages, Spain hub, 17N rail, 19N/20N | the next two strike days (19N, 20N), then the Spain strikes calendar |
+| Elections | candidates, how to vote, mesa, postal vote, results night, the town election pages | to 19 Nov: postal vote + "¿Dónde voto?" section; 20–29 Nov: "¿Dónde voto?" + results night; after: results night. Town pages (polling places already on them): postal vote while open, results night |
+| Holidays | town pages | the 2027 leave planner with the town picked, then the town's Christmas fair page while its season is on, else working days with the town picked |
+| Holidays | December bridge, shops, work calendar 2027, bridges 2027, is-today, Easter 2027, school free days; date pages | one seasonal page (bridge → school free days / shops in December by community; shops → bridge; to 8 Dec) + the 2027 leave planner (work calendar and bridges: + working days); date pages: the December bridge (2026 days, to 8 Dec) or the 2027 bridges, + the planner |
+| Christmas fairs | guide, hub, town pages; lights guides | lights switch-on, then the December bridge (Barcelona: what's on in December, then the lights); lights → the fairs guide + Barcelona in December; nothing after 7 Jan |
+| Calculators | every tool (20) + the leave planner | 1–2 related tools (net salary → extra pay, SMI; dismissal ↔ settlement + dole; dole → subsidy, settlement; mortgage → purchase taxes; IPC → rent update, pensions; …; never one the line just above already links), with the hub card's question as a note; the prize-tax tool → the Christmas lottery guide; ITV in English → the calculators hub (no English fuel page) |
+| Barcelona practical | transport cards, airport, parking, ZBE, tourist tax, weather | transport → airport + Rodalies live; airport → transport + Rodalies; parking ↔ ZBE; tourist tax → transport + airport; weather → Barcelona in December (to 31 Dec) + transport |
+
+**Measurement.** Clicks in the box are `related_content_click` with `link_context: "next_step"` (registered dimension),
+`link_url` = target path, `locale`; wired in `lib/analytics/clicks.ts` from the box's `data-ci-placement` (docs/ANALYTICS.md).
+No GA4 configuration added. Server-rendered plain links: no JavaScript, no layout shift (static HTML; on the fair pages the
+box sits below the browser-filled status line, which already moved what follows it).
+
+**Hypothesis.** Readers who got their answer take the one step offered: views per session rise in every family with enough
+traffic (strikes, elections, holidays) by at least +0.03 over the 4–17 Nov baseline, and the box gets ≥ 2 clicks per 100
+page views of its family. Calculators (28 sessions) and Barcelona practical (153) are too small to read views per session:
+read their clicks only.
+
+**Review: 2 Dec 2026** (14 days after the deploy). `snapshot.py landing 2026-11-18 2026-12-01` against the table above
+(views/session per family, the "clicks" and "clk/100v" columns), and GA4 Explore on `related_content_click` by Page path ×
+Link URL for which links work. Rule per family: < 1 click per 100 page views and views/session not above baseline → drop
+that family's box (one line in `next-step.ts` or the template); ≥ 3 per 100 → extend the same step to the family's next
+pages (Spain 2027 city pages, school calendars).
+
+**Confounders.** The mix moves on its own: the 11N/17N strike traffic is past its peak, election traffic rises to 29N and
+its postal-vote step ends on 19 Nov, Christmas searches grow through December; so compare within families, not the site
+total. The answer-first review of 19 Nov reads strike and holiday pages that get the box under their summary from this
+deploy (read that review on its own window, to 18 Nov). The strike as-of switches move the strike boxes most days. The
+"Lee también" boxes stay as they were. GA4 counts consenting visitors only (both windows alike). Static pages (town
+holidays, town elections, fairs) pick their dated links at deploy; the fair and English town pages by the day the fairs
+were last read (they never read the clock).
+
+**Deploy.** Deploy only: the box is drawn by the templates, nothing is stored in a body, so no publish group is needed.
+
 **Outcome:** _pending_

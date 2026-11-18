@@ -3,13 +3,16 @@ import Link from "next/link";
 import { Breadcrumbs, type Crumb } from "@/components/Breadcrumbs";
 import { ShareBar, crumbPath } from "@/components/share/ShareBar";
 import { JsonLd } from "@/components/JsonLd";
+import { NextStep } from "@/components/NextStep";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
 import { MesaSection } from "@/components/programmatic/ElectionMesaSection";
 import { PollingSection } from "@/components/programmatic/ElectionPollingSection";
 import { ElectionDayStatus } from "@/components/programmatic/ElectionDayStatus";
 import { slugifyAnchor, type Block } from "@/lib/content/blocks";
+import { todayInCatalonia } from "@/lib/content/holidays/calendar";
 import { renderInline } from "@/lib/content/inline";
+import { electionTownNextStep } from "@/lib/engagement/next-step";
 import { getMessages } from "@/lib/i18n";
 import type { Locale } from "@/lib/i18n/config";
 import { buildElectionPage, type Table } from "@/lib/programmatic/elections/model";
@@ -114,6 +117,9 @@ export function ElectionResultsPage({ locale, municipality }: { locale: Locale; 
                     ))}
                   </section>
                 )}
+
+                {/* The next useful step (lib/engagement/next-step.ts): the postal vote while it can be requested, then results night. */}
+                <NextStep step={electionTownNextStep(locale, crumbPath(crumbs), todayInCatalonia())} locale={locale} />
 
                 {/* Time-bound and compact (excuses are due within 7 days of the notice): before the polling places. */}
                 {model.mesa ? <MesaSection mesa={model.mesa} headingId={id(model.mesa.title)} /> : null}

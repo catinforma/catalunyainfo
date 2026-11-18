@@ -1,17 +1,20 @@
-import type { AnalyticsEvent, ChannelLinkContext, OfficialLinkContext } from "./events";
+import { RELATED_LINK_CONTEXTS, safePath, type AnalyticsEvent, type ChannelLinkContext, type OfficialLinkContext } from "./events";
 
 /**
  * Which link clicks become an analytics event (AnalyticsClicks.tsx listens,
  * this decides). Pure, so it is tested without a DOM.
  *
- * Three kinds of link are measured, all from the href, so server-rendered
- * links need no client component of their own:
+ * Four kinds of link are measured, from the href (and the box it sits in),
+ * so server-rendered links need no client component of their own:
  *  - our WhatsApp channel             -> whatsapp_channel_click
  *  - a town or city .ics feed         -> ics_subscribe_click
  *  - an official or primary source    -> outbound_official_source_click
+ *  - one of our pages, from the "next useful step" box
+ *    (`data-ci-placement="next_step"`) -> related_content_click
  *
  * Every other click is left to GA4's enhanced measurement (`click` for any
- * outbound link), so nothing is counted twice under our names.
+ * outbound link), so nothing is counted twice under our names; other
+ * internal links are not measured at all.
  */
 
 export interface LinkClick {
@@ -104,7 +107,10 @@ export function classifyLinkClick(click: LinkClick): AnalyticsEvent | null {
     return null;
   }
   if ((url.protocol === "https:" || url.protocol === "http:") && host === site) {
-    return isIcsPath(url.pathname) ? { name: "ics_subscribe_click", params: { method: "download", locale } } : null;
+    if (isIcsPath(url.pathname)) return { name: "ics_subscribe_click", params: { method: "download", locale } };
+    // Our own page, from an onward-links box: the box's placement and the target path only.
+    const related = RELATED_LINK_CONTEXTS.find((c) => c === click.placement);
+    return related ? { name: "related_content_click", params: { link_context: related, link_url: safePath(url.pathname), locale } } : null;
   }
 
   if (url.protocol !== "https:" && url.protocol !== "http:") return null;

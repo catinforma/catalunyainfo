@@ -3,7 +3,7 @@ import Link from "next/link";
 
 import { Breadcrumbs, type Crumb } from "@/components/Breadcrumbs";
 import { JsonLd } from "@/components/JsonLd";
-import { MoreCalculators } from "@/components/programmatic/calculators/MoreCalculators";
+import { CalculatorNextStep, MoreCalculators } from "@/components/programmatic/calculators/MoreCalculators";
 import { ShareBar } from "@/components/share/ShareBar";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
@@ -339,6 +339,7 @@ export function NetSalaryRoute({ locale }: { locale: NetLocale }) {
           <div className="ci-shell py-10">
             <div className="ci-prose">
               <NetSalaryCalculator locale={locale} initial={DEFAULT_INPUT} />
+              <CalculatorNextStep current="net-salary" locale={locale} />
 
               <h2 id="tabla">{h.table}</h2>
               <p>{tableLead}</p>

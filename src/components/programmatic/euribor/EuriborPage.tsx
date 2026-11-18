@@ -4,7 +4,7 @@ import type { ReactNode } from "react";
 
 import { Breadcrumbs, type Crumb } from "@/components/Breadcrumbs";
 import { JsonLd } from "@/components/JsonLd";
-import { MoreCalculators } from "@/components/programmatic/calculators/MoreCalculators";
+import { CalculatorNextStep, MoreCalculators } from "@/components/programmatic/calculators/MoreCalculators";
 import { RevisionCalculator } from "@/components/programmatic/mortgage/RevisionCalculator";
 import { ShareBar } from "@/components/share/ShareBar";
 import { SiteFooter } from "@/components/SiteFooter";
@@ -201,6 +201,7 @@ export function EuriborRoute({ locale, data }: { locale: EuriborLocale; data: Eu
               <p>
                 {mortgageLink[0]} <Link href={mortgagePath(locale)}>{mortgageLink[1]}</Link>.
               </p>
+              <CalculatorNextStep current="euribor" locale={locale} />
 
               {rows.length ? (
                 <>

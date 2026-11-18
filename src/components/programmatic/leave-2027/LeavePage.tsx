@@ -39,6 +39,7 @@ import { breadcrumbSchema, graph } from "@/lib/seo/jsonld";
 import { buildMetadata } from "@/lib/seo/metadata";
 
 import { LeavePlanner } from "./LeavePlanner";
+import { CalculatorNextStep } from "@/components/programmatic/calculators/MoreCalculators";
 
 /**
  * "Com aprofitar les vacances el 2027" / "Cómo aprovechar los festivos 2027"
@@ -260,6 +261,7 @@ export function LeaveRoute({ locale }: { locale: LeaveLocale }) {
             <div className="ci-prose">
               <LeavePlanner locale={locale} data={data} initialPlace={DEFAULT_PLACE} initialLeave={DEFAULT_LEAVE} />
               <p className="text-sm text-[var(--color-muted)]">{caveat}</p>
+              <CalculatorNextStep current="leave-2027" locale={locale} />
 
               <h2 id="taula">{headings.table}</h2>
               <p>{tableLead}</p>

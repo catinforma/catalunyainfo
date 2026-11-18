@@ -7,6 +7,7 @@ import { benefitLimits, unemploymentBenefit, type Children } from "@/lib/program
 
 import { CalcLayout, calcMetadata, type CalcMeta } from "./CalcLayout";
 import { UnemploymentCalculator, type UnemploymentInitial } from "./UnemploymentCalculator";
+import { CalculatorNextStep } from "@/components/programmatic/calculators/MoreCalculators";
 
 /**
  * "Calculadora del paro" (es primary, ca, en): duration (LGSS art. 269),
@@ -168,6 +169,7 @@ export function UnemploymentRoute({ locale }: { locale: CalcLocale }) {
     <CalcLayout calcKey="unemployment" locale={locale} meta={UNEMPLOYMENT_META[locale]} lead={copy.lead} sources={["lgssArt269", "lgssArt270", "lgss", "sepeAmounts", "sepeContributory", "pge2023", "cotizacion2026"]}>
       <UnemploymentCalculator locale={locale} initial={UNEMPLOYMENT_EXAMPLE} />
       <p>{copy.pay}</p>
+      <CalculatorNextStep current="unemployment" locale={locale} />
 
       <h2 id="duracion">{copy.durTitle}</h2>
       <p>{copy.durIntro}</p>

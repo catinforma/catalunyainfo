@@ -3,7 +3,7 @@ import Link from "next/link";
 
 import { Breadcrumbs, type Crumb } from "@/components/Breadcrumbs";
 import { JsonLd } from "@/components/JsonLd";
-import { MoreCalculators } from "@/components/programmatic/calculators/MoreCalculators";
+import { CalculatorNextStep, MoreCalculators } from "@/components/programmatic/calculators/MoreCalculators";
 import { ShareBar } from "@/components/share/ShareBar";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
@@ -376,6 +376,7 @@ export function SickLeaveRoute({ locale }: { locale: SlLocale }) {
           <div className="ci-shell py-10">
             <div className="ci-prose">
               <SickLeaveCalculator locale={locale} initial={DEFAULT_INPUT} />
+              <CalculatorNextStep current="sick-leave" locale={locale} />
 
               <h2 id="porcentajes">{h.pct}</h2>
               <p>{pctText[0]}</p>

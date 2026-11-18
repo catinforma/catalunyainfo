@@ -4,7 +4,7 @@ import type { ReactNode } from "react";
 
 import { Breadcrumbs, type Crumb } from "@/components/Breadcrumbs";
 import { JsonLd } from "@/components/JsonLd";
-import { MoreCalculators } from "@/components/programmatic/calculators/MoreCalculators";
+import { CalculatorNextStep, MoreCalculators } from "@/components/programmatic/calculators/MoreCalculators";
 import { ShareBar } from "@/components/share/ShareBar";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
@@ -293,6 +293,7 @@ export function LotteryTaxRoute({ locale }: { locale: LtLocale }) {
               <p className="text-sm text-[var(--color-muted)]">
                 {disclaimer} <A href={SOURCES.aeatNotice.url}>{links.aeat}</A>.
               </p>
+              <CalculatorNextStep current="lottery-tax" locale={locale} />
 
               <h2 id="tabla">{hd.table}</h2>
               <div className="ci-table-scroll mt-4">

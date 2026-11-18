@@ -2,12 +2,14 @@ import Link from "next/link";
 import { renderInline } from "@/lib/content/inline";
 
 import { Breadcrumbs, type Crumb } from "@/components/Breadcrumbs";
+import { NextStep } from "@/components/NextStep";
 import { ShareBar, crumbPath } from "@/components/share/ShareBar";
 import { WidgetPlaceLink } from "@/components/programmatic/embed-2027/WidgetLink";
 import { LeavePlaceLink } from "@/components/programmatic/leave-2027/LeaveLink";
 import { WorkingDaysPlaceLink } from "@/components/programmatic/working-days/WorkingDaysLink";
 import { CalendarSubscribe } from "@/components/programmatic/ics/CalendarSubscribe";
 import { getMessages } from "@/lib/i18n";
+import { townNextStep } from "@/lib/engagement/next-step-towns";
 import { NEXT, YEAR, councilApproved2027, localThrough, nextYearFor, regionalThrough, statusDays, yearRows } from "@/lib/programmatic/holidays/data";
 import { englishTowns, isLargestTown } from "@/lib/programmatic/holidays/english";
 import { enName, englishHubCopy, englishTownCopy, englishTownFaq, englishTownH1, townDateAnswers } from "@/lib/programmatic/holidays/english-copy";
@@ -95,6 +97,9 @@ export function EnglishTownPage({ m }: { m: SnapshotMunicipality }) {
           <p className="ci-lead">
             {t.lead} {t.source}
           </p>
+          {/* The next useful step (lib/engagement/next-step-towns.ts): the 2027 planner for this town, then its Christmas fair
+              (no date passed: the fair counts by the day the fairs were last read, so this page stays clock-free). */}
+          <NextStep step={townNextStep(m.slug, name, "en", crumbPath(englishTownCrumbs(m)))} locale="en" />
           {t.nextLead ? (
             <p className="ci-callout ci-callout-official">
               {t.nextLead} <a href="#holidays-2027">{`The ${NEXT} calendar`}</a>

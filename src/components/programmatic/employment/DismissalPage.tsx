@@ -14,6 +14,7 @@ import {
 
 import { CalcLayout, calcMetadata, type CalcMeta } from "./CalcLayout";
 import { DismissalCalculator, type DismissalInitial } from "./DismissalCalculator";
+import { CalculatorNextStep } from "@/components/programmatic/calculators/MoreCalculators";
 
 /**
  * "Calculadora de indemnización por despido" (es primary, ca, en). Every
@@ -188,6 +189,7 @@ export function DismissalRoute({ locale }: { locale: CalcLocale }) {
   return (
     <CalcLayout calcKey="dismissal" locale={locale} meta={DISMISSAL_META[locale]} lead={copy.lead} sources={["etArt56", "etDt11", "etArt53", "etArt49", "irpf", "lgss", "smi2026"]}>
       <DismissalCalculator locale={locale} initial={DISMISSAL_EXAMPLE} />
+      <CalculatorNextStep current="dismissal" locale={locale} />
 
       <h2 id="tabla">{copy.tableTitle}</h2>
       <div className="ci-table-scroll">

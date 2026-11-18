@@ -3,7 +3,7 @@ import Link from "next/link";
 
 import { Breadcrumbs, type Crumb } from "@/components/Breadcrumbs";
 import { JsonLd } from "@/components/JsonLd";
-import { MoreCalculators } from "@/components/programmatic/calculators/MoreCalculators";
+import { CalculatorNextStep, MoreCalculators } from "@/components/programmatic/calculators/MoreCalculators";
 import { ShareBar } from "@/components/share/ShareBar";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
@@ -458,6 +458,7 @@ export function SubsidyRoute({ locale }: { locale: SubLocale }) {
           <div className="ci-shell py-10">
             <div className="ci-prose">
               <SubsidyCalculator locale={locale} initial={DEFAULT_INPUT} />
+              <CalculatorNextStep current="unemployment-subsidy" locale={locale} />
 
               <h2 id="cuantia">{h.amount}</h2>
               <p>{amountText}</p>

@@ -4,7 +4,7 @@ import type { ReactNode } from "react";
 
 import { Breadcrumbs, type Crumb } from "@/components/Breadcrumbs";
 import { JsonLd } from "@/components/JsonLd";
-import { MoreCalculators } from "@/components/programmatic/calculators/MoreCalculators";
+import { CalculatorNextStep, MoreCalculators } from "@/components/programmatic/calculators/MoreCalculators";
 import { ShareBar } from "@/components/share/ShareBar";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
@@ -263,6 +263,7 @@ export function WorkingDaysRoute({ locale }: { locale: WdLocale }) {
             <div className="ci-prose">
               <WorkingDaysCalculator locale={locale} data={data} initial={initial} />
               <p className="text-sm text-[var(--color-muted)]">{disclaimer}</p>
+              <CalculatorNextStep current="working-days" locale={locale} />
 
               <h2 id="ejemplos">{h.examples}</h2>
               <ul>

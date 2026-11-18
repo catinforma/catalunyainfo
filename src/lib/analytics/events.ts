@@ -24,7 +24,12 @@ export type AnalyticsEvent =
   // never sent: enhanced measurement's `view_search_results` already carries
   // it, and this event adds what that one lacks, the number of results.
   | { name: "internal_search"; params: { search_term_length: number; results_count: number; locale: string } }
-  | { name: "related_content_click"; params: { from_type: string; to_type: string; position: number; locale: string } }
+  // 18 Nov 2026: a click on one of our own pages from an onward-links box
+  // (the "next useful step", components/NextStep.tsx). `link_context` is the
+  // registered dimension the other link events use; `link_url` is the target
+  // path (no origin, query or hash), read by GA4's built-in "Link URL"; the
+  // page it was clicked on is GA4's own page path.
+  | { name: "related_content_click"; params: { link_context: RelatedLinkContext; link_url: string; locale: string } }
   | { name: "language_change"; params: { from_locale: string; to_locale: string } }
   // A click to an official or primary source (clicks.ts decides which links
   // count). Domain only, never the URL: a BOE or SEPE link can carry a query.
@@ -50,6 +55,9 @@ export type AnalyticsEvent =
 export type OfficialLinkContext = "sources" | "calculator" | "content";
 /** The end-of-article box, the "every morning" box of daily pages, the footer line. */
 export type ChannelLinkContext = "article_box" | "daily_box" | "footer" | "other";
+/** The box an internal onward link sits in (`data-ci-placement`). */
+export type RelatedLinkContext = "next_step";
+export const RELATED_LINK_CONTEXTS: readonly RelatedLinkContext[] = ["next_step"];
 /** webcal:// subscription, Google Calendar's add-by-URL, or the plain .ics download. */
 export type IcsMethod = "apple" | "google" | "download";
 

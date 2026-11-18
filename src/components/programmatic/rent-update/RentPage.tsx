@@ -3,7 +3,7 @@ import type { ReactNode } from "react";
 
 import { Breadcrumbs, type Crumb } from "@/components/Breadcrumbs";
 import { JsonLd } from "@/components/JsonLd";
-import { MoreCalculators } from "@/components/programmatic/calculators/MoreCalculators";
+import { CalculatorNextStep, MoreCalculators } from "@/components/programmatic/calculators/MoreCalculators";
 import { ShareBar } from "@/components/share/ShareBar";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
@@ -251,6 +251,7 @@ export function RentRoute({ locale, data }: { locale: RentLocale; data: ServerRe
             <div className="ci-prose">
               <RentCalculator locale={locale} series={data.series} initial={defaultExample(data.today)} />
               <p className="text-sm text-[var(--color-muted)]">{disclaimer}</p>
+              <CalculatorNextStep current="rent-update" locale={locale} />
 
               <h2 id="indices">{h.table}</h2>
               <div className="ci-table-scroll mt-4">

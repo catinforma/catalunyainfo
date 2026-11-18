@@ -1,7 +1,10 @@
 import Link from "next/link";
 
 import { Breadcrumbs, type Crumb } from "@/components/Breadcrumbs";
+import { NextStep } from "@/components/NextStep";
 import { ShareBar, crumbPath } from "@/components/share/ShareBar";
+import { todayInCatalonia } from "@/lib/content/holidays/calendar";
+import { holidayDateNextStep } from "@/lib/engagement/next-step";
 import { getMessages } from "@/lib/i18n";
 import { BOE_2027 } from "@/lib/programmatic/holidays/boe-2027";
 import { DATE_UI, dateQuestion } from "@/lib/programmatic/holidays/copy";
@@ -110,6 +113,9 @@ export function DatePageView({ iso, locale }: { iso: DatePageIso; locale: DateLo
               <Link href={spainDayPath(iso, locale)}>{locale === "es" ? restOfSpainLabel(iso) : restOfSpainLabelIntl(iso, locale)}</Link>.
             </p>
           ) : null}
+
+          {/* The next useful step (lib/engagement/next-step.ts): the December bridge or the 2027 bridges, and the 2027 leave planner. */}
+          <NextStep step={holidayDateNextStep(iso, locale, datePath(locale, iso), todayInCatalonia())} locale={locale} />
 
           <h2 id="local">{content.local.title ?? ui.localTitle}</h2>
           <p>{content.local.text}</p>

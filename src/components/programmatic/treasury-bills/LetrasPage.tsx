@@ -3,7 +3,7 @@ import type { ReactNode } from "react";
 
 import { Breadcrumbs, type Crumb } from "@/components/Breadcrumbs";
 import { JsonLd } from "@/components/JsonLd";
-import { MoreCalculators } from "@/components/programmatic/calculators/MoreCalculators";
+import { CalculatorNextStep, MoreCalculators } from "@/components/programmatic/calculators/MoreCalculators";
 import { ShareBar } from "@/components/share/ShareBar";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
@@ -336,6 +336,7 @@ export function LetrasRoute({ locale, data }: { locale: LetrasLocale; data: Letr
             <div className="ci-prose">
               {options.length ? <LetrasCalculator locale={locale} options={options} initialTerm={12} initialAmount={10_000} /> : null}
               <p className="text-sm text-[var(--color-muted)]">{disclaimer}</p>
+              <CalculatorNextStep current="treasury-bills" locale={locale} />
 
               <h2 id="ultima-subasta">{h.latest}</h2>
               {known.length ? (

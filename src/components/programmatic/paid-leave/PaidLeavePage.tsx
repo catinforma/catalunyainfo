@@ -3,7 +3,7 @@ import Link from "next/link";
 
 import { Breadcrumbs, type Crumb } from "@/components/Breadcrumbs";
 import { JsonLd } from "@/components/JsonLd";
-import { MoreCalculators } from "@/components/programmatic/calculators/MoreCalculators";
+import { CalculatorNextStep, MoreCalculators } from "@/components/programmatic/calculators/MoreCalculators";
 import { ShareBar } from "@/components/share/ShareBar";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
@@ -365,6 +365,7 @@ export function PaidLeaveRoute({ locale }: { locale: PlLocale }) {
           <div className="ci-shell py-10">
             <div className="ci-prose">
               <PaidLeaveCalculator locale={locale} initial={initial} places={places} />
+              <CalculatorNextStep current="paid-leave" locale={locale} />
 
               <h2 id="tabla">{h.table}</h2>
               <div className="ci-table-scroll mt-4">

@@ -7,6 +7,7 @@ import { settlement } from "@/lib/programmatic/employment/settlement";
 
 import { CalcLayout, calcMetadata, type CalcMeta } from "./CalcLayout";
 import { SettlementCalculator, type SettlementInitial } from "./SettlementCalculator";
+import { CalculatorNextStep } from "@/components/programmatic/calculators/MoreCalculators";
 
 /**
  * "Calculadora de finiquito" (es primary, ca, en): pending salary, accrued
@@ -203,6 +204,7 @@ export function SettlementRoute({ locale }: { locale: CalcLocale }) {
   return (
     <CalcLayout calcKey="settlement" locale={locale} meta={SETTLEMENT_META[locale]} lead={copy.lead} sources={["etArt49", "etArt31", "etArt38", "etArt53", "lgss", "irpf"]}>
       <SettlementCalculator locale={locale} initial={SETTLEMENT_EXAMPLE} />
+      <CalculatorNextStep current="settlement" locale={locale} />
 
       <h2 id="incluye">{copy.inTitle}</h2>
       <ul>

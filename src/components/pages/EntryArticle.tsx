@@ -4,6 +4,7 @@ import Link from "next/link";
 import { BlockRenderer, type BlockContext } from "@/components/blocks/BlockRenderer";
 import { Breadcrumbs, type Crumb } from "@/components/Breadcrumbs";
 import { EntryCard } from "@/components/EntryCard";
+import { NextStep } from "@/components/NextStep";
 import { VerifiedStamp } from "@/components/VerifiedStamp";
 import { PageFeedback } from "@/components/PageFeedback";
 import { ShareBar } from "@/components/share/ShareBar";
@@ -15,6 +16,7 @@ import { todayInCatalonia } from "@/lib/content/holidays/calendar";
 import { renderInline } from "@/lib/content/inline";
 import { MOST_READ, MOST_READ_COPY, mostReadFor } from "@/lib/content/most-read";
 import type { EntryDetail } from "@/lib/content/types";
+import { entryNextStep, nextStepIndex } from "@/lib/engagement/next-step";
 import { MORE_FACTS_LABEL, answerFirstEnabled, answerFirstLayout, type AnswerSummary } from "@/lib/layout/answer-first";
 import { formatDate, formatDateAndTime, formatDistance, formatDuration, isoDate } from "@/lib/format";
 import { getMessages, interpolate } from "@/lib/i18n";
@@ -58,6 +60,12 @@ export function EntryArticle({
   const toc = tableOfContents([...body, ...endBlocks]);
   const h2Toc = toc.filter((item) => item.level === 2);
   const mostRead = answerFirst ? mostReadFor(locale, entry.href, todayInCatalonia()) : [];
+  // "Siguiente paso útil" (lib/engagement/next-step.ts): under the answer-first
+  // summary, or after the answer in the body (key facts, else the lead).
+  const step = entryNextStep({ href: entry.href, key: entry.key, locale }, todayInCatalonia());
+  const nextStepInSummary = Boolean(step && layout?.summary);
+  const bodyInsert =
+    step && !nextStepInSummary ? { at: nextStepIndex(body), node: <NextStep step={step} locale={locale} /> } : undefined;
 
   // Phones never see the sidebar index; long pages get it collapsed, without
   // JavaScript. On answer-first pages it sits under the summary, closed.
@@ -192,6 +200,7 @@ export function EntryArticle({
         <div className="ci-shell pt-5 md:pt-8">
           <div className="ci-answer-wrap">
             <SummaryBox summary={layout.summary} context={context} locale={locale} />
+            {nextStepInSummary ? <NextStep step={step} locale={locale} className="mt-3" /> : null}
             {phoneToc}
           </div>
         </div>
@@ -213,7 +222,7 @@ export function EntryArticle({
 
             {layout?.summary ? null : phoneToc}
 
-            <BlockRenderer body={body} context={context} />
+            <BlockRenderer body={body} context={context} insert={bodyInsert} />
 
             {/* Answer-first pages: the boxes that used to stand between the
                 answer and the first section ("Próximas huelgas y fechas",
