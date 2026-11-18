@@ -4,6 +4,8 @@ import { LEGACY_REDIRECTS } from "./src/lib/migration/legacy-redirects";
 import {
   ALWAYS_NOINDEX_SOURCES,
   contentSecurityPolicy,
+  EMBED_CALC_SOURCE,
+  embedCalcContentSecurityPolicy,
   EMBED_ROBOTS_VALUE,
   EMBED_SOURCE,
   embedContentSecurityPolicy,
@@ -233,6 +235,13 @@ const nextConfig: NextConfig = {
           { key: "Content-Security-Policy", value: embedContentSecurityPolicy() },
           { key: "X-Robots-Tag", value: EMBED_ROBOTS_VALUE },
         ],
+      },
+      // The embeddable calculators (/embed/<locale>/calc/…): the widget's
+      // policy plus `form-action 'self'` (a GET form the server answers; still
+      // no script). After the rule above, so its CSP wins on these paths only.
+      {
+        source: EMBED_CALC_SOURCE,
+        headers: [{ key: "Content-Security-Policy", value: embedCalcContentSecurityPolicy() }],
       },
     ];
   },

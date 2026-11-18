@@ -21,6 +21,8 @@ import { pollsSitemapEntries } from "@/lib/programmatic/polls/page";
 import { editionSitemapEntries } from "@/lib/programmatic/spain-2027/editions";
 import { spainDaySitemapEntries, spainSitemapEntries } from "@/lib/programmatic/spain-2027/paths";
 import { widgetSitemapEntries } from "@/lib/programmatic/embed-2027/places";
+import { reportAsOf } from "@/lib/programmatic/holidays/report";
+import { REPORT_PAGE_AS_OF, reportSitemapEntries } from "@/lib/programmatic/holidays/report-copy";
 import { leaveSitemapEntries } from "@/lib/programmatic/leave-2027/places";
 import { calculatorsHubSitemapEntries } from "@/lib/programmatic/calculators/sitemap";
 import { netSalarySitemapEntries } from "@/lib/programmatic/net-salary/sitemap";
@@ -186,6 +188,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...editionSitemapEntries(),
     // "Posa el calendari laboral 2027 al teu web", in ca, es and en. Never the /embed/ widgets themselves (noindex).
     ...widgetSitemapEntries(),
+    // "Festius locals de Catalunya: els dies que més es repeteixen", the data report, in ca, es and en (never its CSV).
+    ...reportSitemapEntries([REPORT_PAGE_AS_OF, reportAsOf()].sort().at(-1)!),
     // "Com aprofitar les vacances el 2027": the leave planner, in ca, es and en.
     ...leaveSitemapEntries(),
     // The calculators hub (/es/calculadoras/, /ca/calculadores/, /en/calculators/).

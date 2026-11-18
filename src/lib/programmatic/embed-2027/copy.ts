@@ -1,4 +1,4 @@
-import { municipalities, regionalDays } from "@/lib/programmatic/holidays/data";
+import { municipalities, regionalDays, YEAR as YEAR_2026 } from "@/lib/programmatic/holidays/data";
 import { BOE_REF } from "@/lib/programmatic/spain-2027/sources";
 import { caDe } from "@/lib/programmatic/holidays/names";
 import { CITIES } from "@/lib/programmatic/spain-2027/cities";
@@ -38,6 +38,14 @@ export interface WidgetCopy {
   ctaPlace: (place: string) => string;
   /** Before `cta` on the hubs. */
   ctaLead: string;
+  /** The year picker, and its 2026 option (Catalan towns only). */
+  year: string;
+  year2026: string;
+  snippetTitle2026: string;
+  /** The "embed this" box on a town or city page. */
+  boxLead: string;
+  boxCodeLabel: (place: string) => string;
+  boxMore: string;
 }
 
 export function widgetCopy(locale: EmbedLocale): WidgetCopy {
@@ -65,6 +73,7 @@ export function widgetCopy(locale: EmbedLocale): WidgetCopy {
       shows: [
         `A Catalunya, els ${regional} festius de tot Catalunya del ${Y} (Ordre EMT/52/2026); a la resta d'Espanya, els festius estatals i autonòmics del BOE (${BOE_REF.id}).`,
         "Els festius locals, només quan són oficials: a Catalunya, quan l'ordre del DOGC els publica o, abans, si l'ajuntament ja els ha aprovat, marcats «pendent del DOGC»; a la resta d'Espanya, quan els publica el butlletí oficial. Mentrestant, el calendari diu que encara no s'han publicat.",
+        `Per als municipis de Catalunya, també el calendari del ${YEAR_2026}, amb els festius locals de l'ordre del DOGC d'aquell any.`,
         "La font de cada llista i el dia que la vam llegir.",
       ],
       updates: "S'actualitza sol: quan surtin els festius locals, apareixeran al teu web sense tocar el codi.",
@@ -77,6 +86,12 @@ export function widgetCopy(locale: EmbedLocale): WidgetCopy {
       cta: `Posa el calendari laboral ${Y} al teu web`,
       ctaPlace: (place) => `Posa el calendari laboral ${Y} ${caDe(place)} al teu web`,
       ctaLead: "Per al web d'un ajuntament, una escola o una entitat:",
+      year: "Any",
+      year2026: `${YEAR_2026} (només municipis de Catalunya)`,
+      snippetTitle2026: `Calendari laboral ${YEAR_2026}`,
+      boxLead: "Copia aquest codi i enganxa'l al teu web: el calendari s'actualitza sol quan surten els festius locals. Mantén l'enllaç de sota del marc: és la font.",
+      boxCodeLabel: (place) => `Codi per posar el calendari laboral ${Y} ${caDe(place)} al teu web`,
+      boxMore: `Més opcions: un altre municipi, el ${YEAR_2026} o només un enllaç`,
     };
   }
   if (locale === "es") {
@@ -99,6 +114,7 @@ export function widgetCopy(locale: EmbedLocale): WidgetCopy {
       shows: [
         `En Cataluña, los ${regional} festivos de toda Cataluña de ${Y} (Orden EMT/52/2026); en el resto de España, los festivos nacionales y autonómicos del BOE (${BOE_REF.id}).`,
         "Los festivos locales, solo cuando son oficiales: en Cataluña, cuando la orden del DOGC los publica o, antes, si el ayuntamiento ya los ha aprobado, marcados «pendiente del DOGC»; en el resto de España, cuando los publica el boletín oficial. Mientras tanto, el calendario dice que todavía no se han publicado.",
+        `Para los municipios de Cataluña, también el calendario de ${YEAR_2026}, con los festivos locales de la orden del DOGC de ese año.`,
         "La fuente de cada lista y el día en que la leímos.",
       ],
       updates: "Se actualiza solo: cuando salgan los festivos locales, aparecerán en tu web sin tocar el código.",
@@ -111,6 +127,12 @@ export function widgetCopy(locale: EmbedLocale): WidgetCopy {
       cta: `Pon el calendario laboral ${Y} en tu web`,
       ctaPlace: (place) => `Pon el calendario laboral ${Y} de ${place} en tu web`,
       ctaLead: "Para la web de un ayuntamiento, un colegio o una asociación:",
+      year: "Año",
+      year2026: `${YEAR_2026} (solo municipios de Cataluña)`,
+      snippetTitle2026: `Calendario laboral ${YEAR_2026}`,
+      boxLead: "Copia este código y pégalo en tu web: el calendario se actualiza solo cuando salen los festivos locales. Mantén el enlace de debajo del marco: es la fuente.",
+      boxCodeLabel: (place) => `Código para poner el calendario laboral ${Y} de ${place} en tu web`,
+      boxMore: `Más opciones: otro municipio, ${YEAR_2026} o solo un enlace`,
     };
   }
   return {
@@ -132,6 +154,7 @@ export function widgetCopy(locale: EmbedLocale): WidgetCopy {
     shows: [
       `In Catalonia, the ${regional} Catalonia-wide holidays of ${Y} (Order EMT/52/2026); in the rest of Spain, the national and regional holidays in the BOE (${BOE_REF.id}).`,
       "The local holidays, only once they are official: in Catalonia, when the DOGC order publishes them or, before that, when the council has approved them, marked “pending the DOGC order”; in the rest of Spain, when the official bulletin publishes them. Until then, the calendar says they are not out yet.",
+      `For the towns of Catalonia, the ${YEAR_2026} calendar too, with the local holidays of that year's DOGC order.`,
       "The source of each list and the day we read it.",
     ],
     updates: "It updates itself: when the local holidays come out, they appear on your site without touching the code.",
@@ -144,5 +167,11 @@ export function widgetCopy(locale: EmbedLocale): WidgetCopy {
     cta: `Add the ${Y} holiday calendar to your website`,
     ctaPlace: (place) => `Add the ${Y} holiday calendar for ${place} to your website`,
     ctaLead: "For a council, school or association website:",
+    year: "Year",
+    year2026: `${YEAR_2026} (towns in Catalonia only)`,
+    snippetTitle2026: `${YEAR_2026} public holidays`,
+    boxLead: "Copy this code and paste it into your website: the calendar updates itself when the local holidays come out. Keep the link below the frame: it is the source.",
+    boxCodeLabel: (place) => `Code to add the ${Y} holiday calendar for ${place} to your website`,
+    boxMore: `More options: another town, ${YEAR_2026}, or just a link`,
   };
 }

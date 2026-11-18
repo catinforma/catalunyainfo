@@ -10,10 +10,11 @@ import { dayNameIntl } from "@/lib/programmatic/spain-2027/copy-intl";
 import { editionNames } from "@/lib/programmatic/spain-2027/editions";
 import { BOE_REF, SOURCES, SOURCES_READ_ON } from "@/lib/programmatic/spain-2027/sources";
 import { SOURCE_PROSE } from "@/lib/programmatic/spain-2027/sources-intl";
-import { EMBED_ROBOTS_VALUE } from "@/lib/security-headers";
-import { SITE, absoluteUrl } from "@/lib/site";
 
-import { EMBED_YEAR, attributionPath, placeName, type EmbedLocale, type EmbedPlace } from "./places";
+import { EMBED_YEAR, attributionPath, placeName, type EmbedLocale, type EmbedPlace, type EmbedYear } from "./places";
+import { embedDocument, esc } from "./shell";
+
+export { esc };
 
 /**
  * The widget itself: one self-contained HTML document per place and
@@ -34,13 +35,14 @@ import { EMBED_YEAR, attributionPath, placeName, type EmbedLocale, type EmbedPla
  *    island day, and the local days only where the city's 2027 list is
  *    published (`status2027`), else a line saying they are pending.
  *
+ * A Catalan town also has a 2026 widget (/embed/<locale>/2026/<municipi>/):
+ * that year's DOGC order, complete for every town (`yearRows(…, 2026)`).
+ * The Spanish cities have 2027 only: the site holds their 2026 local days
+ * for some cities, not all.
+ *
  * Every string from the data is escaped (`esc`): nothing reaches the HTML
- * unescaped but the fixed markup of this file.
+ * unescaped but the fixed markup of this file and shell.ts.
  */
-
-export function esc(text: string): string {
-  return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;");
-}
 
 interface Row {
   date: string;
@@ -63,10 +65,10 @@ interface Model {
   page: string;
 }
 
-const W: Record<EmbedLocale, { date: string; holiday: string; scope: string; attribution: string; read: (d: string) => string }> = {
-  ca: { date: "Dia", holiday: "Festa", scope: "Àmbit", attribution: "Font:", read: (d) => `Dades llegides el ${d} de les fonts oficials.` },
-  es: { date: "Día", holiday: "Fiesta", scope: "Ámbito", attribution: "Fuente:", read: (d) => `Datos leídos el ${d} de las fuentes oficiales.` },
-  en: { date: "Day", holiday: "Holiday", scope: "Where", attribution: "Source:", read: (d) => `Data read on ${d} from the official sources.` },
+const W: Record<EmbedLocale, { date: string; holiday: string; scope: string; read: (d: string) => string }> = {
+  ca: { date: "Dia", holiday: "Festa", scope: "Àmbit", read: (d) => `Dades llegides el ${d} de les fonts oficials.` },
+  es: { date: "Día", holiday: "Fiesta", scope: "Ámbito", read: (d) => `Datos leídos el ${d} de las fuentes oficiales.` },
+  en: { date: "Day", holiday: "Holiday", scope: "Where", read: (d) => `Data read on ${d} from the official sources.` },
 };
 
 const link = (url: string, text: string) => `<a href="${esc(url)}" rel="noopener nofollow" target="_blank">${esc(text)}</a>`;
@@ -90,7 +92,8 @@ const PENDING_LABEL: Record<EmbedLocale, string> = {
 /** The order's short name: "Ordre EMT/52/2026". */
 const shortOrder = (name: string) => name.split(",")[0] ?? name;
 
-function townModel(lang: EmbedLocale, place: Extract<EmbedPlace, { kind: "town" }>): Model {
+function townModel(lang: EmbedLocale, place: Extract<EmbedPlace, { kind: "town" }>, year: EmbedYear): Model {
+  if (year === YEAR) return townModelCurrent(lang, place);
   const { m } = place;
   const name = placeName(lang, place);
   const next = nextYearFor(m.slug);
@@ -144,6 +147,50 @@ function townModel(lang: EmbedLocale, place: Extract<EmbedPlace, { kind: "town" 
     status,
     sources,
     readOn: latest(SNAPSHOT.readOn, next ? NEXT_YEAR.readOn : null, council?.readOn),
+    page: attributionPath(lang, place),
+  };
+}
+
+/**
+ * A town's 2026 calendar: the year's DOGC order, complete for every town the
+ * site lists (the snapshot), with the order that corrected it when one did.
+ */
+function townModelCurrent(lang: EmbedLocale, place: Extract<EmbedPlace, { kind: "town" }>): Model {
+  const { m } = place;
+  const name = placeName(lang, place);
+  const rows: Row[] = yearRows(m, YEAR, lang).map((r) => ({
+    date: r.date,
+    name: r.kind === "local" ? r.name : r.name.charAt(0).toUpperCase() + r.name.slice(1),
+    scope: TOWN_SCOPE[lang][r.kind],
+    notes: r.where ? [r.where.join(", ")] : [],
+    local: r.kind === "local",
+  }));
+  const order = SNAPSHOT.sources.localOrder;
+  const lead = { ca: "Festius locals:", es: "Festivos locales:", en: "Local holidays:" }[lang];
+  const status = [`${lead} ${link(order.url, shortOrder(order.name))} (${esc(order.ref)}).`];
+  const amendment = m.correction ? SNAPSHOT.sources.localAmendments.find((a) => a.name.startsWith(m.correction!.by)) : null;
+  if (amendment) {
+    const by = { ca: "Modificada per a aquest municipi per", es: "Modificada para este municipio por", en: "Amended for this town by" }[lang];
+    status.push(`${by} ${link(amendment.url, shortOrder(amendment.name))} (${esc(amendment.ref)}).`);
+  }
+  if (m.local.length === 0 && m.nuclei.length > 0) {
+    status.push(esc({ ca: "El municipi no té festius locals propis: els tenen els seus nuclis.", es: "El municipio no tiene festivos locales propios: los tienen sus núcleos.", en: "The municipality has no local holidays of its own: its villages do." }[lang]));
+  } else if (m.nuclei.length > 0) {
+    const line = joinList(m.nuclei.map((n) => `${n.name} (${joinList(n.dates.map((d) => dayMonth(d, lang)), lang)})`), lang);
+    status.push(esc(`${{ ca: "Nuclis amb festius locals propis:", es: "Núcleos con festivos locales propios:", en: "Villages with local holidays of their own:" }[lang]} ${line}.`));
+  }
+  const regional = SNAPSHOT.sources.regional[String(YEAR)];
+  const sources = regional
+    ? [`${esc({ ca: "Festius de tot Catalunya:", es: "Festivos de toda Cataluña:", en: "Catalonia-wide holidays:" }[lang])} ${link(regional.url, shortOrder(regional.name))} (${esc(regional.ref)}).`]
+    : [];
+  if (isAran(m)) sources.push(esc({ ca: "A l'Aran, la Festa d'Aran substitueix un festiu de Catalunya.", es: "En Arán, la Fiesta de Arán sustituye a un festivo de Cataluña.", en: "In Aran, the Festa d'Aran replaces one Catalonia-wide holiday." }[lang]));
+  return {
+    lang,
+    title: { ca: `Calendari laboral ${YEAR} ${caDe(m.name)}`, es: `Calendario laboral ${YEAR} de ${name}`, en: `${name} public holidays ${YEAR}` }[lang],
+    rows,
+    status,
+    sources,
+    readOn: SNAPSHOT.readOn,
     page: attributionPath(lang, place),
   };
 }
@@ -243,35 +290,17 @@ function cityModel(lang: EmbedLocale, place: Extract<EmbedPlace, { kind: "city" 
 
 /* ------------------------------------------------------------- Document --- */
 
-/** Small on purpose: system fonts, no colours beyond two greys and the site's green, readable at 280 px. */
-const STYLE = [
-  ":root{color-scheme:light;font:14px/1.45 system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;color:#1b2a33;background:#fff}",
-  "body{margin:0;padding:12px}",
-  "h1{font-size:16px;margin:0 0 8px}",
-  "table{width:100%;border-collapse:collapse}",
-  "th,td{text-align:left;padding:4px 6px;border-bottom:1px solid #e3e8e6;vertical-align:top}",
-  "th{font-size:12px;color:#55636b;font-weight:600}",
-  "td.d{white-space:nowrap}",
-  "tr.l td{background:#f1f7f4}",
-  "small{display:block;color:#55636b;font-size:12px}",
-  "p{margin:8px 0 0;font-size:12px;color:#3d4b53}",
-  "a{color:#0b6b4f}",
-  "footer{margin-top:10px;padding-top:6px;border-top:1px solid #e3e8e6;font-size:13px}",
-].join("");
-
-export function renderEmbed(lang: EmbedLocale, place: EmbedPlace): string {
-  const model = place.kind === "town" ? townModel(lang, place) : cityModel(lang, place);
-  return documentHtml(model);
+export function renderEmbed(lang: EmbedLocale, place: EmbedPlace, year: EmbedYear = EMBED_YEAR): string {
+  return documentHtml(embedModel(lang, place, year));
 }
 
-/** The model behind the HTML, for tests. */
-export function embedModel(lang: EmbedLocale, place: EmbedPlace): Model {
-  return place.kind === "town" ? townModel(lang, place) : cityModel(lang, place);
+/** The model behind the HTML, for tests. A city has 2027 only (`year` is ignored for it). */
+export function embedModel(lang: EmbedLocale, place: EmbedPlace, year: EmbedYear = EMBED_YEAR): Model {
+  return place.kind === "town" ? townModel(lang, place, year) : cityModel(lang, place);
 }
 
 function documentHtml(model: Model): string {
   const w = W[model.lang];
-  const pageUrl = absoluteUrl(model.page);
   const body = model.rows
     .map(
       (r) =>
@@ -280,25 +309,16 @@ function documentHtml(model: Model): string {
         `<td>${esc(r.scope)}</td></tr>`,
     )
     .join("");
-  return [
-    "<!doctype html>",
-    `<html lang="${model.lang}">`,
-    "<head>",
-    '<meta charset="utf-8">',
-    '<meta name="viewport" content="width=device-width,initial-scale=1">',
-    `<meta name="robots" content="${EMBED_ROBOTS_VALUE}">`,
-    `<title>${esc(model.title)}</title>`,
-    `<style>${STYLE}</style>`,
-    "</head>",
-    "<body>",
-    `<h1>${esc(model.title)}</h1>`,
-    `<table><thead><tr><th scope="col">${w.date}</th><th scope="col">${w.holiday}</th><th scope="col">${w.scope}</th></tr></thead><tbody>${body}</tbody></table>`,
-    ...model.status.map((p) => `<p>${p}</p>`),
-    ...model.sources.map((p) => `<p>${p}</p>`),
-    `<p><time datetime="${model.readOn}">${esc(w.read(dayMonthYear(model.readOn, model.lang)))}</time></p>`,
-    // The attribution: a plain, followed link to the place's full page.
-    `<footer>${w.attribution} <a href="${esc(pageUrl)}" target="_blank" rel="noopener">${esc(SITE.name)}</a></footer>`,
-    "</body>",
-    "</html>",
-  ].join("\n");
+  return embedDocument({
+    lang: model.lang,
+    title: model.title,
+    page: model.page,
+    body: [
+      `<h1>${esc(model.title)}</h1>`,
+      `<table><thead><tr><th scope="col">${w.date}</th><th scope="col">${w.holiday}</th><th scope="col">${w.scope}</th></tr></thead><tbody>${body}</tbody></table>`,
+      ...model.status.map((p) => `<p>${p}</p>`),
+      ...model.sources.map((p) => `<p>${p}</p>`),
+      `<p><time datetime="${model.readOn}">${esc(w.read(dayMonthYear(model.readOn, model.lang)))}</time></p>`,
+    ],
+  });
 }

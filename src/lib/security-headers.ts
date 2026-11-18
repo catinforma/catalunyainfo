@@ -81,6 +81,18 @@ export function embedContentSecurityPolicy(): string {
 }
 
 /**
+ * The embeddable calculators (/embed/<locale>/calc/…, lib/programmatic/embed-calc/):
+ * the same policy plus `form-action 'self'`. They have no script either: the
+ * reader's figures go in a GET form that the server answers with the result,
+ * so the only thing they may do beyond the widget is submit to this origin.
+ */
+export const EMBED_CALC_SOURCE = "/embed/:locale/calc/:path*";
+
+export function embedCalcContentSecurityPolicy(): string {
+  return embedContentSecurityPolicy().replace(`form-action 'none'`, `form-action 'self'`);
+}
+
+/**
  * The widget is never a search result of its own; Google may still index it
  * as part of the page that embeds it (`indexifembedded`), attribution link
  * included. No `nofollow`: the attribution link is a normal link.

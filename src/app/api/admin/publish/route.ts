@@ -89,6 +89,9 @@ import { publishSpainSchoolCalendars } from "@/lib/content/school-spain/publish"
 import { editionHubPath, editionPaths } from "@/lib/programmatic/spain-2027/editions";
 import { spainDayPaths, spainHubPath, spainPaths } from "@/lib/programmatic/spain-2027/paths";
 import { widgetEditions } from "@/lib/programmatic/embed-2027/places";
+import { reportEditions } from "@/lib/programmatic/holidays/report-copy";
+import { netSalaryEditions } from "@/lib/programmatic/net-salary/copy";
+import { workingDaysEditions } from "@/lib/programmatic/working-days/copy";
 import { gordoPaths } from "@/lib/programmatic/gordo/sitemap";
 import { checkPublishPaths } from "@/lib/programmatic/lottery-check/sitemap";
 import { authoriseDeployRequest, describeError } from "@/lib/admin/deploy-auth";
@@ -522,6 +525,18 @@ export async function POST(request: Request) {
     // by the deploy; this group revalidates, purges and IndexNow-pings them.
     // Never the /embed/ widgets: noindex, and rebuilt by every deploy.
     if (wants("calendari-2027-widget")) codePaths.push(...Object.values(widgetEditions()), spainHubPath(), editionHubPath("ca"), editionHubPath("en"));
+    // The local-holiday data report (/ca/festius/dades-festius-locals/,
+    // /es/festivos/datos-festivos-locales/, /en/holidays/local-holidays-data/):
+    // code routes (dynamicParams = true) computed from the snapshot, shipped by
+    // the deploy; this group revalidates, purges and IndexNow-pings them. Re-run
+    // it after the deploy that parses the 2027 DOGC order. Never the holiday
+    // hubs that link it (/ca/festius/ … are dynamicParams = false: a revalidate
+    // would 404 them) nor the CSV (/data/…, rebuilt by every deploy).
+    if (wants("festius-locals-dades")) codePaths.push(...Object.values(reportEditions()));
+    // The net salary and working-days calculators gained an "embed this" box
+    // (lib/programmatic/embed-calc/): the six pages (dynamicParams = true).
+    // Never the /embed/ widgets: noindex, and rebuilt by every deploy.
+    if (wants("widgets-calculadores")) codePaths.push(...Object.values(netSalaryEditions()), ...Object.values(workingDaysEditions()));
     // The Catalan work calendar guide gained one sentence linking to the
     // Spain hub (Spanish edition); it goes out once, on its own.
     if (wants("calendario-2027-espana-links")) published.push(await publishHolidayGuide());

@@ -18,6 +18,8 @@ import { absoluteUrl } from "@/lib/site";
  * The embeddable 2027 work calendar: which places it covers, and its URLs.
  *
  *   /embed/<locale>/2027/<municipi>/               a Catalan town (holidays/data.ts)
+ *   /embed/<locale>/2026/<municipi>/               the same town's 2026 calendar (the DOGC
+ *                                                  order every town has; cities have 2027 only)
  *   /embed/<locale>/2027/<comunidad>/<ciudad>/     a Spanish city (spain-2027/cities.ts),
  *                                                  the Spanish community slug in every locale
  *
@@ -35,6 +37,9 @@ import { absoluteUrl } from "@/lib/site";
 export type EmbedLocale = DateLocale;
 export const EMBED_LOCALES: readonly EmbedLocale[] = ["ca", "es", "en"];
 export const EMBED_YEAR = 2027;
+/** The years a Catalan town's widget exists for; a Spanish city's, `EMBED_YEAR` only. */
+export const TOWN_EMBED_YEARS = [2027, 2026] as const;
+export type EmbedYear = (typeof TOWN_EMBED_YEARS)[number];
 
 export function isEmbedLocale(locale: string): locale is EmbedLocale {
   return (EMBED_LOCALES as readonly string[]).includes(locale);
@@ -46,8 +51,8 @@ export type EmbedPlace = { kind: "town"; m: SnapshotMunicipality } | { kind: "ci
 
 const EMBED_ROOT = "/embed";
 
-export function embedTownPath(locale: EmbedLocale, slug: string): string {
-  return `${EMBED_ROOT}/${locale}/${EMBED_YEAR}/${slug}/`;
+export function embedTownPath(locale: EmbedLocale, slug: string, year: EmbedYear = EMBED_YEAR): string {
+  return `${EMBED_ROOT}/${locale}/${year}/${slug}/`;
 }
 
 /** The Spanish community slug in every locale (communities.ts): the city slug is the same in all three. */
@@ -55,8 +60,9 @@ export function embedCityPath(locale: EmbedLocale, c: Pick<City, "slug" | "commu
   return `${EMBED_ROOT}/${locale}/${EMBED_YEAR}/${c.community.slug}/${c.slug}/`;
 }
 
-export function embedPath(locale: EmbedLocale, place: EmbedPlace): string {
-  return place.kind === "town" ? embedTownPath(locale, place.m.slug) : embedCityPath(locale, place.c);
+/** A city has 2027 only: `year` is ignored for it. */
+export function embedPath(locale: EmbedLocale, place: EmbedPlace, year: EmbedYear = EMBED_YEAR): string {
+  return place.kind === "town" ? embedTownPath(locale, place.m.slug, year) : embedCityPath(locale, place.c);
 }
 
 /** The picker's value for a place, and the hash a town page links with: "barcelona", "andalucia/sevilla". */
@@ -163,6 +169,8 @@ export interface PickerGroup {
   label: string;
   /** Path of the widget for `items[i][0]`: `${embedPrefix}${value}/`. */
   embedPrefix: string;
+  /** The 2026 widget's prefix, on the Catalan towns' group only (the cities have 2027 only). */
+  embedPrefix2026?: string;
   /**
    * Where the code's link points (`attributionPath`): `${pagePrefix}${slug}/`, `slug` being the
    * value's last segment ("sevilla" of "andalucia/sevilla"); `${altPagePrefix}${slug}/` when the
@@ -209,6 +217,7 @@ export function pickerGroups(locale: EmbedLocale): PickerGroup[] {
   const catalonia: PickerGroup = {
     label: CATALONIA[locale],
     ...base,
+    embedPrefix2026: `${EMBED_ROOT}/${locale}/2026/`,
     items: towns.map(({ m, label }) => item(m.slug, label, pageFlag(base, m.slug, attributionPath(locale, { kind: "town", m })))),
   };
   const communities = COMMUNITIES.map((community) => ({

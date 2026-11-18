@@ -2329,3 +2329,37 @@
 .ci-warn-source { margin-top: 0.75rem; font-size: 0.85rem; color: var(--color-muted); }
 .ci-warn-details { margin-top: 0.75rem; }
 .ci-warn-details > summary { cursor: pointer; font-weight: 600; }
+/* --- Local-holiday data report: ranked bar list ---------------------------
+   One series, one hue. Steps validated with the dataviz palette script
+   (18 Nov 2026): #008ba3 on #ffffff and #1f9aab on #12212a pass lightness,
+   chroma and >= 3:1 contrast. HTML bars, not SVG, so the labels keep their
+   size on a phone; the table under the chart carries every value as text.
+   ------------------------------------------------------------------------ */
+:root {
+  --viz-series-1: #008ba3;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --viz-series-1: #1f9aab;
+  }
+}
+:root[data-theme="dark"] {
+  --viz-series-1: #1f9aab;
+}
+.ci-viz { margin: 1.5rem 0; }
+.ci-viz figcaption { font-size: 0.85rem; color: var(--color-muted); margin-top: 0.5rem; }
+.ci-viz-bars { list-style: none; margin: 0; padding: 0; }
+.ci-viz-row { display: grid; grid-template-columns: minmax(6.5rem, 38%) 1fr; gap: 0.6rem; align-items: center; margin: 0 0 2px; }
+.ci-viz-label { font-size: 0.85rem; color: var(--color-ink-soft); text-align: right; line-height: 1.2; }
+.ci-viz-track { position: relative; height: 24px; margin-right: 2.5rem; }
+.ci-viz-grid { position: absolute; top: 0; bottom: 0; width: 1px; background: var(--color-rule); }
+.ci-viz-bar { position: relative; height: 20px; margin-top: 2px; background: var(--viz-series-1); border-radius: 0 4px 4px 0; min-width: 2px; }
+.ci-viz-value { position: absolute; left: 100%; top: 0; padding-left: 0.35rem; line-height: 20px; font-size: 0.8rem; font-weight: 600; color: var(--color-ink); white-space: nowrap; }
+.ci-viz-scale { display: grid; grid-template-columns: minmax(6.5rem, 38%) 1fr; gap: 0.6rem; margin-top: 0.25rem; }
+.ci-viz-ticks { position: relative; height: 1.1rem; margin-right: 2.5rem; font-size: 0.75rem; color: var(--color-muted); }
+.ci-viz-ticks span { position: absolute; transform: translateX(-50%); font-variant-numeric: tabular-nums; }
+.ci-viz-ticks span:first-child { transform: none; }
+.ci-report-figures { display: grid; grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr)); gap: 0.75rem; margin: 1rem 0; padding: 0; }
+.ci-report-figures div { border: 1px solid var(--color-rule); border-radius: 6px; padding: 0.6rem 0.8rem; }
+.ci-report-figures dt { font-size: 0.8rem; color: var(--color-muted); }
+.ci-report-figures dd { margin: 0.2rem 0 0; font-size: 1.35rem; font-weight: 600; color: var(--color-ink); font-variant-numeric: tabular-nums; }
