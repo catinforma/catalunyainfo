@@ -5,6 +5,7 @@ import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
 import { todayInCatalonia } from "@/lib/content/holidays/calendar";
 import { weekendWindow, type WeekendWindow } from "@/lib/content/weekend/agenda";
+import { loadWeekendAgendas } from "@/lib/programmatic/weekend/agenda-server";
 import { hubMeta, zoneDescription, zoneTitle } from "@/lib/programmatic/weekend/copy";
 import { listedFairs } from "@/lib/programmatic/weekend/data";
 import { hubTranslations, weekendHubPath, zonePath, zoneTranslations } from "@/lib/programmatic/weekend/paths";
@@ -24,10 +25,11 @@ import { ZonePage, zoneCrumbs } from "./ZonePage";
  *
  * The weekend window is computed once per render, from the clock in
  * Europe/Madrid, exactly as the Catalonia weekend page does: the title, the
- * headings and the fairs listed all come from it. The pages are static
- * (`revalidate = false`) and the nightly cron rebuilds them on the night the
- * window changes (`programmatic/weekend/refresh.ts`), so the dates in a title
- * are never those of a weekend that is over.
+ * headings, the fairs and the agenda all come from it. The pages regenerate
+ * every hour (`revalidate = 3600`, the agenda read on the server by
+ * `programmatic/weekend/agenda-server.ts`), and the nightly cron also rebuilds
+ * them on the night the window changes (`programmatic/weekend/refresh.ts`),
+ * so the dates in a title are never those of a weekend that is over.
  */
 
 export const NOT_FOUND_METADATA: Metadata = { robots: { index: false, follow: false } };
@@ -41,13 +43,14 @@ export function hubMetadata(locale: WeekendLocale, window: WeekendWindow = curre
   return buildMetadata({ locale, path: weekendHubPath(locale), title: meta.title, description: meta.description, translations: hubTranslations() });
 }
 
-export function HubRoute({ locale }: { locale: WeekendLocale }) {
-  const window = currentWindow();
+export async function HubRoute({ locale }: { locale: WeekendLocale }) {
+  const agendas = await loadWeekendAgendas();
+  const window = agendas.window;
   return (
     <>
       <SiteHeader locale={locale} translations={hubTranslations()} activeSection={null} />
       <main id="main">
-        <HubPage locale={locale} window={window} />
+        <HubPage locale={locale} window={window} agendas={agendas} />
       </main>
       {/* The fairs the page lists for this weekend: the same call HubPage makes. */}
       <JsonLd json={graph([breadcrumbSchema(hubCrumbs(locale)), ...fairEvents(listedFairs(null, window), weekendHubPath(locale), locale)])} />
@@ -66,13 +69,14 @@ export function zoneMetadata(locale: WeekendLocale, zone: ZoneDef, window: Weeke
   });
 }
 
-export function ZoneRoute({ locale, zone }: { locale: WeekendLocale; zone: ZoneDef }) {
-  const window = currentWindow();
+export async function ZoneRoute({ locale, zone }: { locale: WeekendLocale; zone: ZoneDef }) {
+  const agendas = await loadWeekendAgendas();
+  const window = agendas.window;
   return (
     <>
       <SiteHeader locale={locale} translations={zoneTranslations(zone)} activeSection={null} />
       <main id="main">
-        <ZonePage zone={zone} locale={locale} window={window} />
+        <ZonePage zone={zone} locale={locale} window={window} agendas={agendas} />
       </main>
       {/* The fairs the page lists for this weekend: the same call ZonePage makes. */}
       <JsonLd json={graph([breadcrumbSchema(zoneCrumbs(zone, locale)), ...fairEvents(listedFairs(zone, window), zonePath(locale, zone), locale)])} />

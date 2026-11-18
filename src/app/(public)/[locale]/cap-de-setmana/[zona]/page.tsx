@@ -6,11 +6,12 @@ import { resolveZone, zoneStaticParams } from "@/lib/programmatic/weekend/routin
 
 /**
  * /ca/cap-de-setmana/<zona>/ — what to do this weekend in one zone. `ca` only.
- * Static (`revalidate = false`): the HTML carries the weekend's dates, the
- * fairs calendar and the zone's guidance; the nightly cron rebuilds it when
- * the weekend changes, and the agenda's activities are read in the browser.
+ * ISR every hour: the HTML carries the weekend's dates, the fairs calendar,
+ * the official agenda (lib/programmatic/weekend/agenda-server.ts) and the
+ * zone's guidance; the nightly cron also rebuilds it when the weekend changes.
  */
-export const revalidate = false;
+/** SERVER_REVALIDATE_SECONDS in lib/programmatic/weekend/agenda-server.ts (a literal: Next reads it statically). */
+export const revalidate = 3600;
 export const dynamicParams = true;
 
 type Params = Promise<{ locale: string; zona: string }>;

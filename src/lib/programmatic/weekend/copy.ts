@@ -18,7 +18,6 @@
 import type { WeekendWindow } from "@/lib/content/weekend/agenda";
 import { WEEKDAY_NAMES, holidayOn, addDays, shortDate } from "@/lib/content/holidays/calendar";
 import { weekendRange } from "@/lib/content/live-title";
-import type { Category } from "./live";
 import { MIN_EVENTS, type WeekendLocale, type ZoneDef } from "./zones";
 
 export const TITLE_LIMIT = 60;
@@ -213,14 +212,14 @@ export function guidance(locale: WeekendLocale, zone: ZoneDef | null, widerName:
           : `**Si un cap de setmana hi ha menys de ${MIN_EVENTS} activitats ${zone.in.ca}**, la pàgina ho diu i t'enllaça l'agenda de tot Catalunya.`;
   const paragraphs = es
     ? [
-        `**La agenda** es la [Agenda Cultural de Catalunya](${agendaUrl}), que el Departament de Cultura describe como «un recull d'activitats culturals destacades» (una selección de actividades culturales destacadas) de toda Cataluña. Es una selección, no la lista completa: mira también la agenda de tu ayuntamiento. Se lee en directo cuando abres la página y cambia sola de fin de semana.`,
+        `**La agenda** es la [Agenda Cultural de Catalunya](${agendaUrl}), que el Departament de Cultura describe como «un recull d'activitats culturals destacades» (una selección de actividades culturales destacadas) de toda Cataluña. Es una selección, no la lista completa: mira también la agenda de tu ayuntamiento. La página la lee de la fuente oficial cada hora y cambia sola de fin de semana; en Barcelona se suma la agenda del Ayuntamiento.`,
         `**Las ferias** salen del [calendario oficial de ferias de Cataluña](${fairsUrl}) (Departament d'Empresa i Treball). Hay ferias para profesionales y ferias mercado para el público general: antes de ir, comprueba en la web del organizador si está abierta a todo el mundo y en qué horario.`,
         ...(short ? [short] : []),
         "**Gratuito quiere decir entrada libre**, no sin reserva: muchos conciertos y visitas gratuitos tienen aforo limitado y hay que inscribirse.",
         "**Si el viernes o el lunes es festivo en toda Cataluña**, la página cubre el puente entero.",
       ]
     : [
-        `**L'agenda** és l'[Agenda Cultural de Catalunya](${agendaUrl}), que segons el Departament de Cultura «ofereix un recull d'activitats culturals destacades» de tot Catalunya. És una selecció, no la llista completa: mira també l'agenda del teu ajuntament. Es llegeix en directe quan obres la pàgina i canvia sola de cap de setmana.`,
+        `**L'agenda** és l'[Agenda Cultural de Catalunya](${agendaUrl}), que segons el Departament de Cultura «ofereix un recull d'activitats culturals destacades» de tot Catalunya. És una selecció, no la llista completa: mira també l'agenda del teu ajuntament. La pàgina la llegeix de la font oficial cada hora i canvia sola de cap de setmana; a Barcelona s'hi suma l'agenda de l'Ajuntament.`,
         `**Les fires** surten del [calendari oficial de fires de Catalunya](${fairsUrl}) (Departament d'Empresa i Treball). Hi ha fires per a professionals i fires mercat per al públic general: abans d'anar-hi, comprova al web de l'organitzador si és oberta a tothom i en quin horari.`,
         ...(short ? [short] : []),
         "**Gratuït vol dir entrada lliure**, no sense reserva: molts concerts i visites gratuïts tenen aforament limitat i cal inscriure-s'hi.",
@@ -245,8 +244,8 @@ export function correctionNote(fair: { corrected?: { start: string; end: string;
 /** Attribution in the form the Generalitat's open-data licence asks for. */
 export function attribution(locale: WeekendLocale, dates: { agenda: string; fairs: string }): string {
   return locale === "es"
-    ? `Fuentes: Generalitat de Catalunya. Departament de Cultura (Agenda Cultural de Catalunya, leída en directo; datos actualizados el ${dates.agenda} cuando preparamos esta página) y Generalitat de Catalunya. Departament d'Empresa i Treball (calendario de ferias, actualizado el ${dates.fairs}). CatalunyaInfo filtra los datos por zona y no los modifica, salvo cuando la web oficial del organizador da otras fechas para una feria: entonces mostramos las del organizador y lo indicamos en esa feria. La Generalitat no participa en esta página.`
-    : `Fonts: Generalitat de Catalunya. Departament de Cultura (Agenda Cultural de Catalunya, llegida en directe; dades actualitzades el ${dates.agenda} quan vam preparar aquesta pàgina) i Generalitat de Catalunya. Departament d'Empresa i Treball (calendari de fires, actualitzat el ${dates.fairs}). CatalunyaInfo filtra les dades per zona i no les modifica, tret de quan el web oficial de l'organitzador dona unes altres dates per a una fira: aleshores mostrem les de l'organitzador i ho indiquem en aquella fira. La Generalitat no participa en aquesta pàgina.`;
+    ? `Fuentes: Generalitat de Catalunya. Departament de Cultura (Agenda Cultural de Catalunya, leída cada hora; su fecha de actualización figura arriba, junto a la agenda) y Generalitat de Catalunya. Departament d'Empresa i Treball (calendario de ferias, actualizado el ${dates.fairs}). CatalunyaInfo filtra los datos por zona y no los modifica, salvo cuando la web oficial del organizador da otras fechas para una feria: entonces mostramos las del organizador y lo indicamos en esa feria. La Generalitat no participa en esta página.`
+    : `Fonts: Generalitat de Catalunya. Departament de Cultura (Agenda Cultural de Catalunya, llegida cada hora; la seva data d'actualització figura més amunt, amb l'agenda) i Generalitat de Catalunya. Departament d'Empresa i Treball (calendari de fires, actualitzat el ${dates.fairs}). CatalunyaInfo filtra les dades per zona i no les modifica, tret de quan el web oficial de l'organitzador dona unes altres dates per a una fira: aleshores mostrem les de l'organitzador i ho indiquem en aquella fira. La Generalitat no participa en aquesta pàgina.`;
 }
 
 /* -------------------------------------------------------------------------- */
@@ -327,71 +326,5 @@ export function sectionTitles(locale: WeekendLocale): SectionTitles {
         fuelLine: "Preu de la gasolina i el dièsel avui:",
         weatherLine: "Previsió del Servei Meteorològic de Catalunya (Meteocat) per a",
         moreLines: "Totes les línies amb estació aquí:",
-      };
-}
-
-/** Labels of the live list, passed to the browser component. */
-export interface LiveLabels {
-  heading: string;
-  headingLong: string;
-  fallback: string;
-  loading: string;
-  failed: string;
-  stale: string;
-  summary: string;
-  none: string;
-  short: string;
-  shortCatalonia: string;
-  widerHeading: string;
-  capital: string;
-  free: string;
-  more: string;
-  official: string;
-  check: string;
-  catalonia: string;
-  categories: Record<Category, string>;
-}
-
-export function liveLabels(locale: WeekendLocale, categories: Record<Category, string>, free: string): LiveLabels {
-  return locale === "es"
-    ? {
-        heading: "Agenda de este fin de semana",
-        headingLong: "Agenda de este puente",
-        fallback: "Las actividades de este fin de semana se cargan de la Agenda Cultural de Catalunya al abrir la página, con JavaScript activado. Sin él, consúltalas en la web oficial:",
-        loading: "Cargando la agenda oficial…",
-        failed: "Ahora no podemos leer la agenda oficial. No te mostraremos la de un fin de semana pasado: consúltala directamente en la web oficial:",
-        stale: "La agenda del nuevo fin de semana se está actualizando. Mientras tanto, consúltala en la web oficial:",
-        summary: "Actividades {where}: {count} (gratuitas: {free}).",
-        none: "La agenda oficial no tiene ninguna actividad {where} este fin de semana.",
-        short: "Este fin de semana la agenda oficial tiene pocas actividades {where} ({count}). Debajo, también las {wider}.",
-        shortCatalonia: "Este fin de semana la agenda oficial tiene pocas actividades {where} ({count}). Mira también:",
-        widerHeading: "Otras actividades {wider}",
-        capital: "En la ciudad de {capital}",
-        free,
-        more: "Y {n} más en la agenda oficial.",
-        official: "Agenda Cultural de Catalunya",
-        check: "Comprueba horarios y entradas en la web de cada organizador antes de ir. Fuente:",
-        catalonia: "Qué hacer este fin de semana en Cataluña",
-        categories,
-      }
-    : {
-        heading: "Agenda d'aquest cap de setmana",
-        headingLong: "Agenda d'aquest pont",
-        fallback: "Les activitats d'aquest cap de setmana es carreguen de l'Agenda Cultural de Catalunya en obrir la pàgina, amb el JavaScript activat. Sense, consulta-les al web oficial:",
-        loading: "Carregant l'agenda oficial…",
-        failed: "Ara no podem llegir l'agenda oficial. No et mostrarem la d'un cap de setmana passat: consulta-la directament al web oficial:",
-        stale: "L'agenda del nou cap de setmana s'està actualitzant. Mentrestant, consulta-la al web oficial:",
-        summary: "Activitats {where}: {count} (gratuïtes: {free}).",
-        none: "L'agenda oficial no té cap activitat {where} aquest cap de setmana.",
-        short: "Aquest cap de setmana l'agenda oficial té poques activitats {where} ({count}). A sota, també les {wider}.",
-        shortCatalonia: "Aquest cap de setmana l'agenda oficial té poques activitats {where} ({count}). Mira també:",
-        widerHeading: "Altres activitats {wider}",
-        capital: "A la ciutat de {capital}",
-        free,
-        more: "I {n} més a l'agenda oficial.",
-        official: "Agenda Cultural de Catalunya",
-        check: "Comprova horaris i entrades al web de cada organitzador abans d'anar-hi. Font:",
-        catalonia: "Què fer aquest cap de setmana a Catalunya",
-        categories,
       };
 }

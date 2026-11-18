@@ -1,19 +1,18 @@
 /**
  * When the weekend pages must be rebuilt.
  *
- * The pages are static (`revalidate = false`) and carry the weekend's dates
- * in their title and headings, computed when they render. Everything else on
- * them comes from the committed snapshot, and this weekend's activities are
- * read in the browser. So the HTML changes only when the weekend window does:
- * on the Monday after a weekend (or the Tuesday, when the Monday is a holiday
- * and still part of it).
+ * Since 18 Nov 2026 the pages regenerate every hour (`revalidate = 3600`):
+ * this weekend's activities are read on the server (`agenda-server.ts`) and
+ * the weekend's dates in their title and headings are computed when they
+ * render. The window still changes only on the Monday after a weekend (or the
+ * Tuesday, when the Monday is a holiday and still part of it), and the first
+ * hourly regeneration after it would carry the new dates anyway; the cron
+ * refresh below stays as a belt-and-braces rebuild on that night.
  *
  * The nightly cron (`api/cron/publish-scheduled`, 23:05 UTC, which is already
  * the next day in Madrid) asks `weekendRefreshDue` and, on those nights,
  * revalidates the family's paths. It also does so on the following night, so
  * one failed cron run does not leave a past weekend in a title for a week.
- * About 2 nights a week x 22 URLs: ~190 renders a month, each a static page
- * with no fetch.
  */
 
 import { addDays } from "@/lib/content/holidays/calendar";

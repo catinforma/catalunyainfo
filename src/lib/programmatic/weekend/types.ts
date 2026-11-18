@@ -14,7 +14,8 @@
  *   - the cultural agenda (`rhpv-yr4f`, Departament de Cultura): read only to
  *     measure how many activities each zone had per weekend over the last
  *     year (the doorway guardrail). The agenda itself is never stored: the
- *     pages read it live, in the browser, from `/api/weekend/agenda/`.
+ *     pages read it on the server every hour (`agenda-server.ts`; the
+ *     committed fallback is `agenda-snapshot.json`, valid for one weekend).
  */
 
 export type ProvinceCode = "08" | "17" | "25" | "43";

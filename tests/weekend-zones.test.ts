@@ -356,7 +356,9 @@ test("paths: one route folder per locale, slugs per locale", () => {
   assert.equal(zonePath("es", zoneById("pirineu")), "/es/fin-de-semana/pirineo/");
   assert.equal(zonePath("es", zoneById("costa-daurada")), "/es/fin-de-semana/costa-dorada/");
   assert.deepEqual(zoneTranslations(zoneById("girona")), { ca: "/ca/cap-de-setmana/girona/", es: "/es/fin-de-semana/girona/" });
-  assert.deepEqual(hubTranslations(), { ca: "/ca/cap-de-setmana/", es: "/es/fin-de-semana/" });
+  assert.deepEqual(hubTranslations(), { ca: "/ca/cap-de-setmana/", es: "/es/fin-de-semana/", en: "/en/weekend/" });
+  // English: the hub and Barcelona only.
+  assert.deepEqual(zoneTranslations(zoneById("barcelona")), { ca: "/ca/cap-de-setmana/barcelona/", es: "/es/fin-de-semana/barcelona/", en: "/en/weekend/barcelona/" });
   for (const locale of WEEKEND_LOCALES) {
     const slugs = ZONES.map((z) => z.slug[locale]);
     assert.equal(new Set(slugs).size, slugs.length, `${locale}: unique slugs`);
@@ -384,12 +386,13 @@ test("routing: each route answers its own locale only (else 404)", () => {
   }
 });
 
-test("the route files exist, are static and 404 other locales", () => {
+test("the route files exist, regenerate hourly and 404 other locales", () => {
   for (const [dir, locale] of [["cap-de-setmana", "ca"], ["fin-de-semana", "es"]] as const) {
     const hub = readFileSync(join(ROOT, `src/app/(public)/[locale]/${dir}/page.tsx`), "utf8");
     const zone = readFileSync(join(ROOT, `src/app/(public)/[locale]/${dir}/[zona]/page.tsx`), "utf8");
     for (const source of [hub, zone]) {
-      assert.match(source, /export const revalidate = false;/);
+      // The agenda is in the HTML (agenda-server.ts); the literal must equal SERVER_REVALIDATE_SECONDS.
+      assert.match(source, /export const revalidate = 3600;/);
       assert.match(source, /notFound\(\)/);
       assert.ok(source.includes(`"${locale}"`));
     }
@@ -538,11 +541,13 @@ test("cron: every family path on refresh nights, none on the others", () => {
 
 test("sitemap: hubs and shipped zones in both locales, nothing when indexing is off", () => {
   const paths = weekendFamilyPaths();
-  assert.equal(paths.length, 2 * (1 + shippedZones().length));
+  // ca and es: hub + every zone; en: hub + Barcelona.
+  assert.equal(paths.length, 2 * (1 + shippedZones().length) + 2);
   assert.equal(paths[0]?.path, "/ca/cap-de-setmana/");
+  assert.deepEqual(paths.slice(-2).map((p) => p.path), ["/en/weekend/", "/en/weekend/barcelona/"]);
   assert.equal(new Set(paths.map((p) => p.path)).size, paths.length);
   assert.ok(!paths.some((p) => p.path.includes("alt-emporda")));
-  for (const p of paths) assert.ok(p.path === p.translations.ca || p.path === p.translations.es);
+  for (const p of paths) assert.ok(p.path === p.translations.ca || p.path === p.translations.es || p.path === p.translations.en);
   assert.deepEqual(weekendSitemapEntries("2026-11-05"), []);
   assert.equal(weekendLastModified("2026-11-05"), "2026-11-02");
   assert.equal(weekendLastModified("2026-10-28"), SNAPSHOT.readOn);

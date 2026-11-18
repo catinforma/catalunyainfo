@@ -71,7 +71,7 @@ import { lineIds } from "@/lib/programmatic/rodalies/pages";
 import { todayPath } from "@/lib/programmatic/today/paths";
 import { hubPath as rodaliesHub } from "@/lib/programmatic/rodalies/paths";
 import { shippedZones } from "@/lib/programmatic/weekend/data";
-import { weekendHubPath } from "@/lib/programmatic/weekend/paths";
+import { englishHubPath, weekendHubPath } from "@/lib/programmatic/weekend/paths";
 
 export interface LlmsEntry {
   title: string;
@@ -361,8 +361,8 @@ export function liveTools(): LiveTool[] {
     },
     {
       name: "What to do this weekend",
-      hubs: { ca: weekendHubPath("ca"), es: weekendHubPath("es") },
-      description: `this weekend's fairs and cultural agenda across Catalonia and in ${shippedZones().length} zones (cities, provinces and coasts), from the Generalitat's official agenda and fairs calendar.`,
+      hubs: { ca: weekendHubPath("ca"), es: weekendHubPath("es"), en: englishHubPath() },
+      description: `this weekend's fairs, Christmas markets and cultural agenda by day and by type, across Catalonia and in ${shippedZones().length} zones (cities, provinces and coasts), from the Generalitat's official agenda and fairs calendar, and for Barcelona the Ajuntament's own agenda (Open Data BCN); refreshed every hour, with times, prices and the official page of each activity.`,
     },
     {
       name: "Christmas markets by town",

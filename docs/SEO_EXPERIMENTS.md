@@ -8439,3 +8439,64 @@ date and 2027 pages; the script has no exclude).
 goes live later. Same scripts; query × page for the Barcelona and Tarragona ES temporal queries.
 
 **Outcome:** _pending_
+
+## 2026-11-18 — Weekend pages: this weekend's agenda server-rendered by day and type from official open data (Ajuntament de Barcelona + Generalitat), English hub and Barcelona page (body only; titles, descriptions and leads untouched; deploy only, no publish group)
+
+**Why.** The weekend hubs and zone pages rendered the agenda in the browser (`WeekendLive`), so their HTML had no
+activities. GSC 22 Oct–18 Nov: `cap-de-setmana` family 9 clicks / 608 impressions, `fin-de-semana` 16 / 1,118;
+"que fer aquest cap de setmana" 73 impr. pos 23.8, "agenda cap de setmana" 58 / 27.5, "què fer a barcelona aquest cap de
+setmana" 7 / 16.4, "plans cap de setmana barcelona" 9 / 7.9; ES Barcelona queries on `/es/fin-de-semana/barcelona/`
+at the bottom: "eventos barcelona este fin de semana" 12 / 69.7, "¿qué eventos hay este fin de semana en barcelona?"
+11 / 75.8, "qué hacer en barcelona este fin de semana" 8 / 69.1; "que hacer este fin de semana en cataluña" 15 / 34.7.
+The fairs-near-a-town queries already sit at 7–10 ("pueblos con ferias este fin de semana cerca de terrassa" 64 / 7.0).
+Weekends are the site's weak days (GA4 Sat 14 Nov 673 sessions, Sun 15 Nov 583, against ~1,100 on weekdays).
+
+**Sources** (checked from the VPS 18 Nov 2026, keyless):
+- Ajuntament de Barcelona, Open Data BCN `agenda-diaria`, resource "agenda ampliada" (ffa6d773-…), daily, CKAN
+  datastore SQL; CC BY 4.0 + Open Data BCN terms: "Font de les dades: Ajuntament de Barcelona", last update date,
+  transformations identified, images excluded. 602 activities ≤ 45 days overlap 20–22 Nov; 494 after the timetable
+  rules. Item page: `guia.barcelona.cat/{ca,es,en}/detall/<slug>_<register_id>.html`.
+- Generalitat, Agenda Cultural de Catalunya `rhpv-yr4f` (Departament de Cultura), Llicència oberta d'ús d'informació -
+  Catalunya: cite "Generalitat de Catalunya. Departament de Cultura" and the last update (Last-Modified). 232
+  activities for 20–22 Nov after the existing rules. Item page: `agenda.cultura.gencat.cat/ca/activitat.html/<codi>`.
+- No official Christmas-programme dataset in either catalogue (searched "nadal"); Christmas fairs come from our own
+  `christmas-fairs` family and link its town pages.
+
+**What changed.**
+1. `lib/programmatic/weekend/agenda-{list,upstream,server,copy}.ts`: one read per source per hour (memo, Next data
+   cache, 15 s timeout), kept file `/srv/catalunyainfo/shared/cache/weekend-agenda-last-good.json`, committed
+   fallback `agenda-snapshot.json` (`npm run weekend:agenda-snapshot`); a read of another weekend is never shown.
+   Window = `weekendWindow(today)` (Fri–Sun, holiday Thu/Mon included), past days dropped on Sat/Sun.
+2. Grouping by day (one-day activities) and "all weekend or several days", then type (fairs and markets, with
+   children, music, exhibitions, theatre/dance/circus, other), free and the Ajuntament's "Recomanem" picks first, 4
+   per group (3 in "several days"), "+N more" links to Guia Barcelona / Agenda Cultural. Per item: title, venue,
+   district or town, time and price text as published (truncated with "…"), "free" only when the price text says so
+   with no amount, official page link. Timetable "Dies" cells read mechanically (weekdays, ranges, dates, "excepte",
+   "tancat"): e.g. "Indiana Stones" (7 and 28 Nov) and term courses are left out. No descriptions, no images.
+3. Pages: `/ca/cap-de-setmana/`, `/es/fin-de-semana/` (+ every zone) now render the list on the server and
+   regenerate hourly (`revalidate = 3600`, was `false`); Barcelona uses the Ajuntament's agenda + the Generalitat's
+   Barcelona items it lacks (542 activities for 20–22 Nov); other zones keep the MIN_EVENTS guardrail (wider zone list
+   below). New "Christmas fairs open this weekend" block linking our town pages (Barcelona Sagrada Família 21 Nov,
+   Canyelles 21–22 Nov this weekend). New English pages `/en/weekend/` and `/en/weekend/barcelona/` (hreflang ca/es/en,
+   x-default en); other zones stay ca/es (no English demand). `WeekendLive` removed; `/api/weekend/agenda/` kept.
+4. Body copy: guidance "Es llegeix en directe…" → "cada hora; a Barcelona s'hi suma l'agenda de l'Ajuntament";
+   attribution lines per licence. **Not touched:** hub/zone titles, descriptions, H1s and leads (zone pages shipped
+   28 Oct: window to 25 Nov), the evergreen `/agenda/que-fer-aquest-cap-de-setmana-catalunya/` (title window to 28 Nov).
+
+**Prediction.** HTML with dated, official items lifts the weekend family on weekend days: (1) ES Barcelona queries
+("qué hacer / eventos en barcelona este fin de semana") from ~70 to ≤ 30 on `/es/fin-de-semana/barcelona/`; (2) "que
+fer aquest cap de setmana" ≤ 15 on the CA family; (3) family impressions on Sat+Sun ≥ 1.5× the 14–15 Nov weekend;
+(4) `/en/weekend/barcelona/` indexed and showing for "things to do in barcelona this weekend". Confounders: the 29N
+election weekend (28–29 Nov) and the Christmas-fair season starting (more fair demand regardless).
+
+**Follow-ups after the window (from 26 Nov):** the Barcelona zone description/lead still say "amb l'agenda oficial
+de la Generalitat" — add the Ajuntament if the review keeps the change; consider dating the EN Barcelona title
+differently only after its own 28 days.
+
+**IndexNow after the deploy:** `python scripts/indexnow-sitemap.py /ca/cap-de-setmana/ /es/fin-de-semana/ /en/weekend/`.
+
+**Review:** 2 Dec 2026, after two weekends (21–22 and 28–29 Nov; GSC lags ~2 days): `snapshot.py page
+cap-de-setmana 14`, `page fin-de-semana 14`, `page en/weekend 14`, `daily 14` (Sat/Sun sessions vs 14–15 Nov).
+Revert path: `revalidate = false` + the `WeekendLive` island (git history) if positions fall or weekend renders error.
+
+**Outcome:** _pending_

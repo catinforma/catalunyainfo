@@ -1,7 +1,7 @@
 /**
  * The weekend family's data, read from the committed snapshot. Server only:
  * nothing here touches the network or the database. The agenda's activities
- * are not here; the browser reads them live from `/api/weekend/agenda/`.
+ * are not here; the routes read them on the server (`agenda-server.ts`).
  */
 
 import { slugify } from "@/lib/content/weekend/agenda";

@@ -4,21 +4,26 @@ import { todayInCatalonia } from "@/lib/content/holidays/calendar";
 import { absoluteUrl, indexingAllowed } from "@/lib/site";
 
 import { SNAPSHOT, shippedZones } from "./data";
-import { hubTranslations, weekendHubPath, zonePath, zoneTranslations } from "./paths";
+import { englishHubPath, englishZonePath, hubTranslations, weekendHubPath, zonePath, zoneTranslations, type WeekendTranslations } from "./paths";
 import { windowStartedOn } from "./refresh";
-import { WEEKEND_LOCALES, type WeekendLocale } from "./zones";
+import { WEEKEND_LOCALES } from "./zones";
 
 export interface WeekendFamilyPath {
   path: string;
-  translations: Record<WeekendLocale, string>;
+  translations: WeekendTranslations;
 }
 
-/** Every URL of the family, hubs first (for the sitemap, the cron and IndexNow). */
+/** Every URL of the family, hubs first (for the sitemap, the cron and IndexNow); the English pages last. */
 export function weekendFamilyPaths(): WeekendFamilyPath[] {
   const out: WeekendFamilyPath[] = [];
   for (const locale of WEEKEND_LOCALES) {
     out.push({ path: weekendHubPath(locale), translations: hubTranslations() });
     for (const zone of shippedZones()) out.push({ path: zonePath(locale, zone), translations: zoneTranslations(zone) });
+  }
+  out.push({ path: englishHubPath(), translations: hubTranslations() });
+  for (const zone of shippedZones()) {
+    const en = englishZonePath(zone);
+    if (en) out.push({ path: en, translations: zoneTranslations(zone) });
   }
   return out;
 }
@@ -34,9 +39,9 @@ export function weekendLastModified(today: string = todayInCatalonia()): string 
 }
 
 /**
- * Sitemap entries with hreflang alternates (ca, es, and x-default to the
- * Catalan edition, as `buildAlternates` does when there is no English one).
- * Nothing on a deployment that may not be indexed.
+ * Sitemap entries with hreflang alternates (ca, es, en where it exists, and
+ * x-default to the English edition, else the Catalan one, as
+ * `buildAlternates` does). Nothing on a deployment that may not be indexed.
  */
 export function weekendSitemapEntries(today?: string): MetadataRoute.Sitemap {
   if (!indexingAllowed()) return [];
@@ -47,7 +52,12 @@ export function weekendSitemapEntries(today?: string): MetadataRoute.Sitemap {
     changeFrequency: "weekly" as const,
     priority: 0.6,
     alternates: {
-      languages: { ca: absoluteUrl(entry.translations.ca), es: absoluteUrl(entry.translations.es), "x-default": absoluteUrl(entry.translations.ca) },
+      languages: {
+        ca: absoluteUrl(entry.translations.ca),
+        es: absoluteUrl(entry.translations.es),
+        ...(entry.translations.en ? { en: absoluteUrl(entry.translations.en) } : {}),
+        "x-default": absoluteUrl(entry.translations.en ?? entry.translations.ca),
+      },
     },
   }));
 }
