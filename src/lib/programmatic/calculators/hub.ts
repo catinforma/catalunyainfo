@@ -24,6 +24,7 @@ import { warningsTranslations } from "@/lib/programmatic/warnings/paths";
 import { reservoirHubPath } from "@/lib/programmatic/reservoirs/paths";
 import { RULES_AS_OF as WORKING_DAYS_AS_OF } from "@/lib/programmatic/working-days/rules";
 import { ITV_RULES_AS_OF } from "@/lib/programmatic/itv/rules";
+import { RULES_AS_OF as TRAFFIC_FINES_AS_OF } from "@/lib/programmatic/traffic-fines/rules";
 import { RULES_AS_OF as LOTTERY_TAX_AS_OF } from "@/lib/programmatic/lottery-tax/rules";
 import { RULES_AS_OF as BONO_SOCIAL_AS_OF } from "@/lib/programmatic/bono-social/rules";
 import { COMMUNITIES_AS_OF as HOME_TAX_AS_OF } from "@/lib/programmatic/home-purchase-tax/as-of";
@@ -467,6 +468,24 @@ export const HUB_GROUPS: HubGroup[] = [
         },
         scope: "spain",
         checked: ITV_RULES_AS_OF,
+      },
+      {
+        key: "traffic-fines",
+        calculator: true,
+        href: calc("traffic-fines"),
+        title: { ca: "Multes de trànsit: terminis i 50 %", es: "Multas de tráfico: plazos y 50 %", en: "Traffic fines: deadlines and 50% off" },
+        answers: {
+          ca: "Fins a quin dia pots pagar la multa amb el 50 %, al·legar o recórrer, quines no tenen descompte i què passa si no la pagues?",
+          es: "¿Hasta qué día puedes pagar la multa con el 50 %, alegar o recurrir, cuáles no tienen descuento y qué pasa si no la pagas?",
+          en: "The last day to pay a fine with 50% off, contest or appeal it, which fines get no discount and what happens if you don't pay.",
+        },
+        basis: {
+          ca: "Llei de trànsit (Reial decret legislatiu 6/2015), arts. 63-65, 90-96, 110 i 112 i annexos II i IV; Llei 39/2015, art. 30; Llei general tributària, arts. 28 i 62 (BOE); DGT i Servei Català de Trànsit.",
+          es: "Ley de Tráfico (Real Decreto Legislativo 6/2015), arts. 63-65, 90-96, 110 y 112 y anexos II y IV; Ley 39/2015, art. 30; Ley General Tributaria, arts. 28 y 62 (BOE); DGT y Servei Català de Trànsit.",
+          en: "Traffic Act (Royal Legislative Decree 6/2015), arts. 63-65, 90-96, 110 and 112 and annexes II and IV; Ley 39/2015, art. 30; General Tax Act, arts. 28 and 62 (BOE); DGT and Servei Català de Trànsit.",
+        },
+        scope: "spain",
+        checked: TRAFFIC_FINES_AS_OF,
       },
     ],
   },

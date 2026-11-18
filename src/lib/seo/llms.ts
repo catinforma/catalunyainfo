@@ -32,6 +32,7 @@ import { htEditions } from "@/lib/programmatic/home-purchase-tax/copy";
 import { lotteryTaxEditions, money as lotteryMoney } from "@/lib/programmatic/lottery-tax/copy";
 import { headline as lotteryHeadline } from "@/lib/programmatic/lottery-tax/page";
 import { bonoSocialEditions } from "@/lib/programmatic/bono-social/copy";
+import { trafficFinesEditions } from "@/lib/programmatic/traffic-fines/copy";
 import { gordoHubTranslations } from "@/lib/programmatic/gordo/paths";
 import { checkEditions } from "@/lib/programmatic/lottery-check/paths";
 import { CATEGORIES as CHECK_CATEGORIES, PROGRAMME_YEAR as CHECK_YEAR } from "@/lib/programmatic/lottery-check/programme";
@@ -288,6 +289,11 @@ export function liveTools(): LiveTool[] {
       name: "When is my ITV due? Spain vehicle inspection calculator",
       hubs: itvEditions(),
       description: "the next ITV (Spanish periodic vehicle inspection) date from vehicle category and first registration, with Royal Decree 920/2017 art. 6 quoted from the BOE (private car: exempt until 4 years, then every 2 years, every year from 10; vans, motorcycles, mopeds, caravans, buses, taxis, tractors), the 30-day early rule that keeps the date (art. 6.5), the fine for driving with it expired (Traffic Act art. 76.o: 200 euros, 100 if paid within 20 days), the V-19 sticker, historic vehicles, and the fee per autonomous community only where the community publishes an official tariff, with each region's official station list.",
+    },
+    {
+      name: "Spanish traffic fines: deadlines, the 50% discount and appeals (calculator)",
+      hubs: trafficFinesEditions(),
+      description: "the last day to pay a Spanish traffic fine with 50% off, contest it or name the driver, quoted from the BOE (Traffic Act, Royal Legislative Decree 6/2015, consolidated text of 26/06/2026): 20 calendar days counted from the day after the notification (arts. 93.1, 94, 95.1); paying waives the right to contest, ends the procedure and makes the sanction final, and the points still come off (arts. 64, 94); no discount for the ten offences of art. 93.2 (art. 77 h, j, n, ñ, o, p, q, r, s, t: driving with or installing a radar jammer, not truthfully naming the driver, roadworks, industry, centres, courses, operators; s and t added by Law 18/2021 from 21 March 2022, which is why DGT and SCT pages list fewer); when a fine counts as notified (on the spot, post, DEV opened or 10 days after it arrives unopened, art. 90.2; the BOE notice board: the DGT counts from publication, art. 91 says 20 days later); a last day on a Saturday, Sunday or holiday moves to the next working day under Law 39/2015 art. 30.5 (applied by art. 83.1; not stated by the DGT or SCT), with national and regional holidays; doing nothing: the notice becomes the decision for the art. 95.4 cases and the DGT gives 45 days to pay in full (30 + 15, art. 110.1), otherwise a decision with one month for reposición (art. 96.2) and two months for court (Law 29/1998 art. 46.1); enforcement surcharges 5% / 10% / 20% plus interest (General Tax Act arts. 28 and 62.5; AEAT for the DGT, ATC for the Servei Català de Trànsit); amounts (art. 80: up to 100 / 200 / 500 euros, 1,000 alcohol and drugs, 6,000 jammer) and the annex IV speeding table; annex II points, 12 points back after 2 years without final sanctions (art. 65.1; the 3-year rule was deleted in 2022), recovery course 4 points (Orden INT/914/2024); prescription 3 / 6 months (art. 112); who fines (DGT on interurban roads, councils in town, the Servei Català de Trànsit in Catalonia). Links the official DGT and SCT services; never asks for a plate or ID. Not legal advice.",
     },
     {
       name: "Spain home purchase taxes calculator (ITP, IVA and AJD by region)",

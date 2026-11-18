@@ -45,7 +45,10 @@ export const CALCULATOR_NEXT: Partial<Record<NextToolKey, readonly NextToolKey[]
   "smi-2027": ["net-salary", "extra-pay"],
   ipc: ["rent-update", "pensions-2027"],
   "treasury-bills": ["euribor", "ipc"],
-  itv: ["fuel"],
+  // The fine for an expired ITV and its 50 %, then fuel prices.
+  itv: ["traffic-fines", "fuel"],
+  // Same car: the ITV (a common fine), and the working days for any other deadline.
+  "traffic-fines": ["itv", "working-days"],
   // Energy at home: the regulated tariff the bono social needs, then butane (the thermal bono).
   "bono-social": ["pvpc", "butane"],
   "leave-2027": ["working-days"],

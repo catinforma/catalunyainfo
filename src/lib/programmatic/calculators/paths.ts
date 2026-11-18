@@ -54,6 +54,8 @@ export const CALCULATORS = [
   { id: "lottery-tax", slugs: { es: "premios-loteria", ca: "premis-loteria", en: "spain-lottery-prize-tax" } },
   // Vehicles (hub group "vehicle"): when the ITV is due (RD 920/2017 art. 6) and the official fee per region.
   { id: "itv", slugs: { es: "itv", ca: "itv", en: "itv-spain" } },
+  // Vehicles: traffic fines' deadlines, the 50 % (Ley de Tráfico arts. 93-96, 110, 112) and points (arts. 63-65).
+  { id: "traffic-fines", slugs: { es: "multas-trafico", ca: "multes-transit", en: "traffic-fines-spain" } },
   // Energy at home (hub group "energy"): who qualifies for the bono social eléctrico (RD 897/2017 arts. 3-4) and its 2026 discount (RDL 7/2026 art. 1).
   { id: "bono-social", slugs: { es: "bono-social-electrico", ca: "bo-social-electric", en: "bono-social-electricity-spain" } },
 ] as const satisfies readonly { id: string; slugs: Record<CalcLocale, string> }[];

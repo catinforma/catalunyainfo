@@ -59,6 +59,7 @@ test("registry: the live URLs did not move (13 Nov 2026)", () => {
   assert.deepEqual(calcEditions("euribor"), { ca: "/ca/calculadores/euribor-avui/", es: "/es/calculadoras/euribor-hoy/", en: "/en/calculators/euribor-today/" });
   assert.deepEqual(calcEditions("mortgage"), { ca: "/ca/calculadores/hipoteca/", es: "/es/calculadoras/hipoteca/", en: "/en/calculators/mortgage-calculator-spain/" });
   assert.deepEqual(calcEditions("bono-social"), { ca: "/ca/calculadores/bo-social-electric/", es: "/es/calculadoras/bono-social-electrico/", en: "/en/calculators/bono-social-electricity-spain/" });
+  assert.deepEqual(calcEditions("traffic-fines"), { ca: "/ca/calculadores/multes-transit/", es: "/es/calculadoras/multas-trafico/", en: "/en/calculators/traffic-fines-spain/" });
 });
 
 test("hub: the housing group holds the rent, mortgage, Euribor and home-purchase tax tools", () => {
@@ -79,8 +80,8 @@ test("hub: the eight groups, each card complete in ca, es and en, linking indexa
   assert.deepEqual(HUB_GROUPS.find((g) => g.id === "energy")?.cards.map((c) => c.key), ["bono-social"]);
   // The lottery group: the prize tax calculator (lib/programmatic/lottery-tax).
   assert.deepEqual(HUB_GROUPS.find((g) => g.id === "lottery")?.cards.map((c) => c.key), ["lottery-tax"]);
-  // The vehicles group: the ITV calculator (lib/programmatic/itv).
-  assert.deepEqual(HUB_GROUPS.find((g) => g.id === "vehicle")?.cards.map((c) => c.key), ["itv"]);
+  // The vehicles group: the ITV calculator (lib/programmatic/itv) and the traffic-fines deadlines (lib/programmatic/traffic-fines).
+  assert.deepEqual(HUB_GROUPS.find((g) => g.id === "vehicle")?.cards.map((c) => c.key), ["itv", "traffic-fines"]);
   // The official-figures group: the SMI, the CPI and the Letras del Tesoro reference pages.
   assert.deepEqual(HUB_GROUPS.find((g) => g.id === "official")?.cards.map((c) => c.key), ["smi-2027", "ipc", "treasury-bills"]);
   for (const g of HUB_GROUPS) {
