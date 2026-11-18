@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { Fragment, type ReactNode } from "react";
 
 import { ContactForm } from "@/components/ContactForm";
 import { Calculator } from "@/components/blocks/Calculator";
@@ -48,12 +49,20 @@ const LANGUAGE_LINE_LABEL: Record<Locale, string> = {
   en: "In English",
 };
 
-export function BlockRenderer({ body, context }: { body: Body; context: BlockContext }) {
+/**
+ * `insert` puts one server-rendered node inside the same prose column, before
+ * the block at `at` (EntryArticle's "next useful step", after the answer).
+ */
+export function BlockRenderer({ body, context, insert }: { body: Body; context: BlockContext; insert?: { at: number; node: ReactNode } }) {
   return (
     <div className="ci-prose">
       {body.map((block, index) => (
-        <BlockView key={index} block={block} context={context} />
+        <Fragment key={index}>
+          {insert && insert.at === index ? insert.node : null}
+          <BlockView block={block} context={context} />
+        </Fragment>
       ))}
+      {insert && insert.at >= body.length ? insert.node : null}
     </div>
   );
 }

@@ -4,7 +4,7 @@ import type { ReactNode } from "react";
 
 import { Breadcrumbs, type Crumb } from "@/components/Breadcrumbs";
 import { JsonLd } from "@/components/JsonLd";
-import { MoreCalculators } from "@/components/programmatic/calculators/MoreCalculators";
+import { CalculatorNextStep, MoreCalculators } from "@/components/programmatic/calculators/MoreCalculators";
 import { ShareBar } from "@/components/share/ShareBar";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
@@ -336,6 +336,7 @@ export function SmiRoute({ locale, data }: { locale: SmiLocale; data: SmiPageDat
             <div className="ci-prose">
               <SmiCalculator locale={locale} years={years} initialYear={shown.year} />
               <p className="text-sm text-[var(--color-muted)]">{disclaimer}</p>
+              <CalculatorNextStep current="smi-2027" locale={locale} />
 
               {official27 ? (
                 <>

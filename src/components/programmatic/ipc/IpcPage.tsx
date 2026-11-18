@@ -4,7 +4,7 @@ import type { ReactNode } from "react";
 
 import { Breadcrumbs, type Crumb } from "@/components/Breadcrumbs";
 import { JsonLd } from "@/components/JsonLd";
-import { MoreCalculators } from "@/components/programmatic/calculators/MoreCalculators";
+import { CalculatorNextStep, MoreCalculators } from "@/components/programmatic/calculators/MoreCalculators";
 import { ShareBar } from "@/components/share/ShareBar";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
@@ -186,6 +186,7 @@ export function IpcRoute({ locale, data }: { locale: IpcLocale; data: ServerIpcD
                   {flashLine ? <p>{flashLine}</p> : null}
                 </>
               ) : null}
+              <CalculatorNextStep current="ipc" locale={locale} />
 
               {rows.length ? (
                 <>

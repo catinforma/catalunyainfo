@@ -3,7 +3,7 @@ import Link from "next/link";
 
 import { Breadcrumbs, type Crumb } from "@/components/Breadcrumbs";
 import { JsonLd } from "@/components/JsonLd";
-import { MoreCalculators } from "@/components/programmatic/calculators/MoreCalculators";
+import { CalculatorNextStep, MoreCalculators } from "@/components/programmatic/calculators/MoreCalculators";
 import { ShareBar } from "@/components/share/ShareBar";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
@@ -345,6 +345,7 @@ export function SelfEmployedRoute({ locale }: { locale: SeLocale }) {
                 </a>
                 .
               </p>
+              <CalculatorNextStep current="self-employed" locale={locale} />
 
               <h2 id="tramos">{h.table}</h2>
               <p>{tableLead}</p>

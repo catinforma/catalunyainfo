@@ -3,7 +3,7 @@ import Link from "next/link";
 
 import { Breadcrumbs, type Crumb } from "@/components/Breadcrumbs";
 import { JsonLd } from "@/components/JsonLd";
-import { MoreCalculators } from "@/components/programmatic/calculators/MoreCalculators";
+import { CalculatorNextStep, MoreCalculators } from "@/components/programmatic/calculators/MoreCalculators";
 import { ShareBar } from "@/components/share/ShareBar";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
@@ -309,6 +309,7 @@ export function ExtraPayRoute({ locale }: { locale: EpLocale }) {
           <div className="ci-shell py-10">
             <div className="ci-prose">
               <ExtraPayCalculator locale={locale} initial={DEFAULT_INPUT} />
+              <CalculatorNextStep current="extra-pay" locale={locale} />
 
               <h2 id="cuando">{h.when}</h2>
               <p>{when[0]}</p>

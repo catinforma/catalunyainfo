@@ -1,9 +1,11 @@
 import Link from "next/link";
 
 import { Breadcrumbs, type Crumb } from "@/components/Breadcrumbs";
+import { NextStep } from "@/components/NextStep";
 import { ShareBar, crumbPath } from "@/components/share/ShareBar";
 import { LinkList } from "@/components/programmatic/weekend/parts";
 import { B2_TITLES, b2href } from "@/lib/content/batch02/shared";
+import { christmasNextStep } from "@/lib/engagement/next-step";
 import { getMessages } from "@/lib/i18n";
 import { hubLead, hubMeta, labels, statusLabels, townName } from "@/lib/programmatic/christmas-fairs/copy";
 import { FAIRS, comarcaOf, familyLastChecked, hasEnglish, pendingMarkets, towns, townsByProvince } from "@/lib/programmatic/christmas-fairs/data";
@@ -61,6 +63,9 @@ export function HubPage({ locale }: { locale: FairsLocale }) {
       <div className="ci-shell py-10">
         <div className="ci-prose">
           <FairStatus fairs={datedFairs(FAIRS, locale)} locale={locale} labels={statusLabels(locale, "hub", "")} showTown />
+          {/* The next useful step (lib/engagement/next-step.ts): the lights switch-on and the December holidays,
+              dated by the day the fairs were last read (the server render stays clock-free). */}
+          <NextStep step={christmasNextStep(locale, fairsHubPath(locale), checked)} locale={locale} />
 
           <h2 id="pendents">{t.pending}</h2>
           <p>{t.pendingIntro}</p>

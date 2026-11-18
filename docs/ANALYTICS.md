@@ -121,13 +121,28 @@ registration is not retroactive.
 | `outbound_official_source_click` | Click on a link in a page's source list (`.ci-sources`, any domain: by house rule every listed source is official or primary), or on an official domain anywhere else (`OFFICIAL_DOMAINS` in `lib/analytics/clicks.ts`) | `link_domain` (host only, never the URL), `link_context` = `sources` \| `calculator` \| `content`, `locale` | built-in (`link_domain` → "Link domain"); registered (`link_context`) | Do readers check the official source, and from where | New (replaces the never-wired `external_link`) |
 | `ics_subscribe_click` | Click in the town/city "Add to your calendar" block (`CalendarSubscribe.tsx`), recognised from the href | `method` = `apple` (webcal) \| `google` \| `download`, `locale` | built-in (`method`) | Is the calendar feed product used, and which app | New |
 | `useful_feedback` | "Was this useful?" yes/no (`PageFeedback.tsx`). This is the plan's *page_feedback*; the name is kept so the history since September stays in one series. | `is_useful`, `content_type`, `locale` | registered | The quality signal that is not a pageview | Live |
-| `article_view`, `news_view`, `related_content_click`, `language_change`, `map_interaction`, `affiliate_click`, `newsletter_signup` | — | see `events.ts` | — | — | Declared, not wired |
+| `related_content_click` | Click on one of our own pages inside the "next useful step" box (`components/NextStep.tsx`, `data-ci-placement="next_step"`), the box right after a page's answer on six families (`lib/engagement/next-step.ts`). Other internal links are not measured. | `link_context` = `next_step` (closed list `RELATED_LINK_CONTEXTS`), `link_url` (target path, no origin, query or hash), `locale` | registered (`link_context`, `locale`); built-in (`link_url` → "Link URL"); the page clicked on is GA4's own "Page path" | Does the box take readers to a second page, from which family, to which target. Read with `snapshot.py landing [start end]` (clicks per 100 page views per family) | New, 18 Nov 2026 (wired; was declared with `from_type`/`to_type`/`position`, never sent) |
+| `article_view`, `news_view`, `language_change`, `map_interaction`, `affiliate_click`, `newsletter_signup` | — | see `events.ts` | — | — | Declared, not wired |
 
-The three link events (`whatsapp_channel_click`, `outbound_official_source_click`,
-`ics_subscribe_click`) come from one delegated click listener mounted in the
-layout (`components/AnalyticsClicks.tsx`), so the server-rendered links stay
-plain links. Everything else outbound is left to enhanced measurement's own
-`click`, so nothing is counted twice under our names.
+The four link events (`whatsapp_channel_click`, `outbound_official_source_click`,
+`ics_subscribe_click`, `related_content_click`) come from one delegated click
+listener mounted in the layout (`components/AnalyticsClicks.tsx`), so the
+server-rendered links stay plain links. Everything else outbound is left to
+enhanced measurement's own `click`, so nothing is counted twice under our
+names.
+
+**Pages per session by family (18 Nov 2026).** `scripts/snapshot.py landing
+[start end]` prints, for each landing-page family (strikes, elections,
+holidays, Christmas, calculators, Barcelona practical, other; the regexes are
+`LANDING_FAMILIES` in the script), sessions, views and views per session by
+GA4's `landingPage`, plus page views by `pagePath` and the
+`related_content_click` / `next_step` clicks on them. It also prints the
+property totals, which are the "pages per session" figure (a session can be
+counted under two landing pages, so the family rows add up to slightly more).
+Baseline 4–17 Nov 2026 and the 2 Dec review: `docs/SEO_EXPERIMENTS.md`,
+18 Nov 2026 entry. No GA4 configuration was added for it: `link_context` and
+`locale` are registered already and `link_url` is a built-in parameter. Check
+in the 48-hour step below that "Link URL" shows the target paths on this event.
 
 Suggested key events (Admin → Events → Mark as key event), once a week of data
 shows the volumes: `calculator_use` and `whatsapp_channel_click`.
@@ -192,7 +207,10 @@ as sent for the session while consent is still missing.
    `/es/calculadoras/sueldo-neto/` (one `calculator_use`; a second change sends
    nothing), click the footer WhatsApp link, a BOE link in a source list, the
    three calendar links on `/ca/festius/sabadell/`, and search `/es/buscar/?q=zzzz`
-   (`internal_search` with `results_count` 0).
+   (`internal_search` with `results_count` 0). Since 18 Nov: a link in the
+   "Siguiente paso útil" box of `/es/guias/huelga-hoy-cataluna/` (one
+   `related_content_click`, `link_context` `next_step`, `link_url`
+   `/es/rodalies/`); any other internal link sends nothing.
 3. Reject consent and repeat: no request to `googletagmanager.com` or
    `google-analytics.com` at all.
 

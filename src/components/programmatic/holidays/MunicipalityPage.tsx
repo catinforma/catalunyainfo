@@ -2,6 +2,7 @@ import Link from "next/link";
 import { renderInline } from "@/lib/content/inline";
 
 import { Breadcrumbs, type Crumb } from "@/components/Breadcrumbs";
+import { NextStep } from "@/components/NextStep";
 import { ShareBar, crumbPath } from "@/components/share/ShareBar";
 import { WidgetPlaceLink } from "@/components/programmatic/embed-2027/WidgetLink";
 import { LeavePlaceLink } from "@/components/programmatic/leave-2027/LeaveLink";
@@ -9,6 +10,7 @@ import { WorkingDaysPlaceLink } from "@/components/programmatic/working-days/Wor
 import { CalendarSubscribe } from "@/components/programmatic/ics/CalendarSubscribe";
 import { getMessages } from "@/lib/i18n";
 import { todayInCatalonia } from "@/lib/content/holidays/calendar";
+import { townNextStep } from "@/lib/engagement/next-step-towns";
 import { SCHOOL_YEARS } from "@/lib/content/school/calendar";
 import { SchoolFreeDays } from "@/components/programmatic/holidays/SchoolFreeDays";
 import { comarcaLinkLabel, municipalityCopy, displayName, municipalityFaq, municipalityH1, municipalityNextLine, sharedDayLead, workCalendarLine } from "@/lib/programmatic/holidays/copy";
@@ -139,6 +141,9 @@ export function MunicipalityPage({ m, locale }: { m: SnapshotMunicipality; local
             ) : null}
             {t.lead} {t.source}
           </p>
+
+          {/* The next useful step (lib/engagement/next-step-towns.ts): the 2027 planner for this town, then its Christmas fair. */}
+          <NextStep step={townNextStep(m.slug, name, locale, crumbPath(crumbs), todayInCatalonia())} locale={locale} />
 
           <h2 id="avui">{t.statusTitle}</h2>
           <HolidayStatus

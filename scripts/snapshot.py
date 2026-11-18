@@ -14,10 +14,12 @@ few dozen short lines. Works on the VPS (Linux) and on the owner's Windows PC.
     $PY scripts/snapshot.py audience [days]      # GA4: device, country, city, language, age, gender, channel
     $PY scripts/snapshot.py families [days]      # impressions by URL family (/es/festivos/dia/, ...)
     $PY scripts/snapshot.py channel [days]       # GA4: WhatsApp channel visits (utm whatsapp / channel), per day + pages
+    $PY scripts/snapshot.py landing [start end]  # GA4: pages/session by landing-page family + "next useful step" clicks
 
 GSC data lags ~2 days; the last day is partial. Dates are Europe/Madrid.
 """
 import os
+import re
 import sys
 from collections import defaultdict
 from datetime import date, timedelta
@@ -266,6 +268,84 @@ def cmd_channel(a):
             print("  %-60s sess %5s  users %5s  engaged %4.0f%%" % (
                 x["dimensionValues"][0]["value"][:60], x["metricValues"][0]["value"],
                 x["metricValues"][1]["value"], 100 * float(x["metricValues"][2]["value"])))
+
+
+# Landing-page families for pages per session (docs/SEO_EXPERIMENTS.md, 18 Nov 2026, "Next useful step").
+# First match wins, so the order matters (the leave planner lives under /festius/, the lights are Christmas).
+LANDING_FAMILIES = [
+    ("strikes", r"/(guias|guies|guides)/[^/]*(huelga|vag[au]|strike)"),
+    ("elections", r"elecci|election|candidat|votar|vot-per-correu|voto-por-correo|postal-vote|mesa-electoral|polling"),
+    ("christmas", r"mercados-navidad|mercats-de-nadal|christmas-markets|fires-de-nadal|llums-nadal|luces-navidad|christmas-lights|nadal-a-barcelona|navidad-en-barcelona|christmas-in-barcelona"),
+    ("calculators", r"/(calculadoras|calculadores|calculators)(/|$)|/2027/(aprofitar-vacances|aprovechar-vacaciones|leave-planner)"),
+    ("holidays", r"/(festivos|festius|holidays)(/|$)|puente|pont-|bridge|long-weekend|calendari|calendar|tiendas-abiertas|botigues|shops-open|festiu|festivo|holiday|lliure-disposicio|libre-disposicion|school-free|setmana-santa|semana-santa|easter"),
+    ("barcelona", r"tarjetas-transporte|targetes-transport|transport-passes|aparcar|parking|zbe|low-emission|tasa-turistica|taxa-turistica|tourist-tax|aeropuerto|aeroport|airport|tiempo-barcelona|temps-barcelona|weather"),
+]
+
+
+def landing_family(path):
+    if path in ("(not set)", ""):
+        return "(no landing page)"
+    for name, rx in LANDING_FAMILIES:
+        if re.search(rx, path):
+            return name
+    return "other"
+
+
+def _ga_rows(svc, body):
+    rows, offset = [], 0
+    while True:
+        r = svc.properties().runReport(property=GA_PROPERTY, body=dict(body, limit=10000, offset=offset)).execute()
+        got = r.get("rows", [])
+        rows += got
+        if len(got) < 10000:
+            return rows
+        offset += 10000
+
+
+def cmd_landing(a):
+    """GA4: pages per session by landing-page family, and clicks on the "next useful step" box.
+
+    snapshot.py landing [start end]   ISO dates; default the 14 days to yesterday.
+    """
+    if len(a) >= 2:
+        start, end = a[0], a[1]
+    else:
+        end_d = date.today() - timedelta(days=1)
+        start, end = str(end_d - timedelta(days=13)), str(end_d)
+    svc = ga()
+    rng = [{"startDate": start, "endDate": end}]
+    fam = defaultdict(lambda: [0, 0, 0])
+    for x in _ga_rows(svc, {"dateRanges": rng, "dimensions": [{"name": "landingPage"}],
+                            "metrics": [{"name": "sessions"}, {"name": "screenPageViews"}]}):
+        f = fam[landing_family(x["dimensionValues"][0]["value"])]
+        f[0] += int(x["metricValues"][0]["value"])
+        f[1] += int(x["metricValues"][1]["value"])
+        f[2] += 1
+    views = defaultdict(int)
+    for x in _ga_rows(svc, {"dateRanges": rng, "dimensions": [{"name": "pagePath"}], "metrics": [{"name": "screenPageViews"}]}):
+        views[landing_family(x["dimensionValues"][0]["value"])] += int(x["metricValues"][0]["value"])
+    clicks = defaultdict(int)
+    try:
+        for x in _ga_rows(svc, {
+                "dateRanges": rng, "dimensions": [{"name": "pagePath"}, {"name": "customEvent:link_context"}],
+                "metrics": [{"name": "eventCount"}],
+                "dimensionFilter": {"filter": {"fieldName": "eventName", "stringFilter": {"value": "related_content_click"}}}}):
+            if x["dimensionValues"][1]["value"] == "next_step":
+                clicks[landing_family(x["dimensionValues"][0]["value"])] += int(x["metricValues"][0]["value"])
+    except Exception as e:  # the event may have no rows yet
+        print("(next_step clicks unavailable: %s)" % str(e)[:80])
+    tot = svc.properties().runReport(property=GA_PROPERTY, body={
+        "dateRanges": rng, "metrics": [{"name": "sessions"}, {"name": "screenPageViews"}]}).execute()["rows"][0]["metricValues"]
+    ps, pv_all = int(tot[0]["value"]), int(tot[1]["value"])
+    ts = sum(v[0] for k, v in fam.items())
+    tv = sum(v[1] for k, v in fam.items())
+    print("%s..%s  GA4 property: %d sessions, %d views, %.3f views/session" % (start, end, ps, pv_all, pv_all / ps if ps else 0))
+    print("  by landing page (a session can count under two): %d sessions, %d views, %.3f" % (ts, tv, tv / ts if ts else 0))
+    print("%-18s %8s %8s %7s %6s %10s %7s %8s" % ("family", "sess", "views", "v/sess", "pages", "pageviews", "clicks", "clk/100v"))
+    for k in sorted(fam, key=lambda k: -fam[k][0]):
+        s, v, n = fam[k]
+        pv, c = views.get(k, 0), clicks.get(k, 0)
+        print("%-18s %8d %8d %7.3f %6d %10d %7d %8.2f" % (k, s, v, v / s if s else 0, n, pv, c, 100 * c / pv if pv else 0))
 
 
 CMDS = {k[4:]: v for k, v in globals().items() if k.startswith("cmd_")}

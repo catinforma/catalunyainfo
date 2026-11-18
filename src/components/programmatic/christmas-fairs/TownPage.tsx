@@ -1,10 +1,12 @@
 import Link from "next/link";
 
 import { Breadcrumbs, type Crumb } from "@/components/Breadcrumbs";
+import { NextStep } from "@/components/NextStep";
 import { ShareBar, crumbPath } from "@/components/share/ShareBar";
 import { LinkList } from "@/components/programmatic/weekend/parts";
 import { B2_TITLES, b2href } from "@/lib/content/batch02/shared";
 import { renderInline } from "@/lib/content/inline";
+import { christmasNextStep } from "@/lib/engagement/next-step";
 import { getMessages } from "@/lib/i18n";
 import { confirmationNote, hubMeta, labels, statusLabels, townH1, townLead, townName } from "@/lib/programmatic/christmas-fairs/copy";
 import {
@@ -104,6 +106,13 @@ export function TownPage({ town, locale }: { town: Town; locale: FairsLocale }) 
               <PendingList markets={pending} locale={locale} />
             </>
           ) : null}
+
+          {/* The next useful step (lib/engagement/next-step.ts): the lights switch-on and the December holidays (Barcelona: December's agenda).
+              Dated by the day the fairs were last read, like the rest of the page: the server render stays clock-free. */}
+          <NextStep
+            step={christmasNextStep(locale, crumbPath(townCrumbs(town, locale)), checked, { barcelona: town.ine === BARCELONA_INE })}
+            locale={locale}
+          />
 
           <h2 id="com-arribar">{t.getThere}</h2>
           <p>{renderInline(trains.intro)}</p>

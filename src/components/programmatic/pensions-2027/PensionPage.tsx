@@ -35,6 +35,7 @@ import { breadcrumbSchema, graph } from "@/lib/seo/jsonld";
 import { buildMetadata } from "@/lib/seo/metadata";
 
 import { PensionCalculator } from "./PensionCalculator";
+import { CalculatorNextStep } from "@/components/programmatic/calculators/MoreCalculators";
 
 /**
  * "Subida de las pensiones 2027" / "Pujada de les pensions 2027" / "Spain
@@ -378,6 +379,7 @@ export function PensionRoute({ locale, data }: { locale: PensionLocale; data: Se
               <p className="text-sm text-[var(--color-muted)]">
                 {disclaimer} <A href={OFFICIAL_LINKS.ssRevaluation}>{ssLink}</A>.
               </p>
+              <CalculatorNextStep current="pensions-2027" locale={locale} />
 
               {status ? (
                 <>

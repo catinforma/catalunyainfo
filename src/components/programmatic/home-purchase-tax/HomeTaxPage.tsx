@@ -4,7 +4,7 @@ import type { ReactNode } from "react";
 
 import { Breadcrumbs, type Crumb } from "@/components/Breadcrumbs";
 import { JsonLd } from "@/components/JsonLd";
-import { MoreCalculators } from "@/components/programmatic/calculators/MoreCalculators";
+import { CalculatorNextStep, MoreCalculators } from "@/components/programmatic/calculators/MoreCalculators";
 import { ShareBar } from "@/components/share/ShareBar";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
@@ -183,6 +183,7 @@ export function HomeTaxRoute({ locale }: { locale: HtLocale }) {
             <div className="ci-prose">
               <HomeTaxCalculator locale={locale} communities={clientCommunities()} />
               <p className="text-sm text-[var(--color-muted)]">{disclaimer}</p>
+              <CalculatorNextStep current="home-purchase-tax" locale={locale} />
 
               <h2 id="itp">{h.itp}</h2>
               <p>
