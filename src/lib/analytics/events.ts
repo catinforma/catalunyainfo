@@ -55,9 +55,9 @@ export type AnalyticsEvent =
 export type OfficialLinkContext = "sources" | "calculator" | "content";
 /** The end-of-article box, the "every morning" box of daily pages, the footer line. */
 export type ChannelLinkContext = "article_box" | "daily_box" | "footer" | "other";
-/** The box an internal onward link sits in (`data-ci-placement`). */
-export type RelatedLinkContext = "next_step";
-export const RELATED_LINK_CONTEXTS: readonly RelatedLinkContext[] = ["next_step"];
+/** The box an internal onward link sits in (`data-ci-placement`): the "next useful step" box, or a town's list of its other pages (TownHub.tsx). */
+export type RelatedLinkContext = "next_step" | "town_hub";
+export const RELATED_LINK_CONTEXTS: readonly RelatedLinkContext[] = ["next_step", "town_hub"];
 /** webcal:// subscription, Google Calendar's add-by-URL, or the plain .ics download. */
 export type IcsMethod = "apple" | "google" | "download";
 

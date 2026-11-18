@@ -32,6 +32,17 @@ export const ORGANIZATION_ID = `${SITE.productionOrigin}/#organization`;
 export const WEBSITE_ID = `${SITE.productionOrigin}/#website`;
 /** One id for the founder wherever he appears: Organization, Article author, author page. */
 export const SITE_AUTHOR_NODE_ID = `${SITE.productionOrigin}/#${SITE_AUTHOR_SLUG}`;
+/**
+ * One id for a Catalan municipality wherever a page describes it: the
+ * holiday and election pages' Dataset `spatialCoverage`, the Christmas fair
+ * pages' Event `location` (18 Nov 2026, town hubs: lib/engagement/town-hub.ts).
+ * Keyed by the INE code (five digits), which the three families share; the
+ * node carries only what each page already said (name, address), never
+ * coordinates or a population.
+ */
+export function townPlaceId(ine: string): string {
+  return `${SITE.productionOrigin}/#municipality-${ine}`;
+}
 
 export function organizationSchema(locale: Locale = "ca"): Json {
   return {
@@ -364,6 +375,8 @@ export interface DatasetInput {
   isBasedOn: string[];
   /** "Girona", "Província de Lleida", "Catalunya". */
   spatialCoverage: string;
+  /** `townPlaceId` when the coverage is one municipality, so every page about it names the same Place. */
+  spatialId?: string;
   /** ISO 8601 date or interval ("2026", "2023-05-28/2024-05-12"). */
   temporalCoverage?: string;
   /** ISO date the figures on the page were last read from the source. */
@@ -391,7 +404,7 @@ export function datasetSchema(input: DatasetInput): Json | null {
     creator: { "@type": "Organization", name: input.creator },
     license: input.license,
     isBasedOn: input.isBasedOn.length === 1 ? input.isBasedOn[0] : input.isBasedOn,
-    spatialCoverage: { "@type": "Place", name: input.spatialCoverage },
+    spatialCoverage: { "@type": "Place", ...(input.spatialId ? { "@id": input.spatialId } : {}), name: input.spatialCoverage },
     ...(input.temporalCoverage ? { temporalCoverage: input.temporalCoverage } : {}),
     ...(input.dateModified ? { dateModified: input.dateModified } : {}),
   };
@@ -416,6 +429,8 @@ export interface TownEventInput {
   region: string;
   /** Organiser's own website, when the source lists one. */
   url?: string | null;
+  /** `townPlaceId` of the municipality, so the location is the same Place the town's other pages describe. */
+  placeId?: string;
 }
 
 /**
@@ -435,6 +450,7 @@ export function townEventSchema(input: TownEventInput): Json {
     eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
     location: {
       "@type": "Place",
+      ...(input.placeId ? { "@id": input.placeId } : {}),
       name: input.town,
       address: {
         "@type": "PostalAddress",

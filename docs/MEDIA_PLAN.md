@@ -30,7 +30,7 @@ House rules still apply to every item (`.claude/product-marketing.md`): official
 7. E — embeddable widgets (holidays per town, 2 calculators) + attribution link; draft outreach list for the owner.
 8. C — next calculators from `research_notes/spain-utilities-opportunities-nov2026.md` (IRPF/renta, IPREM, cuota autónomos 2027, sueldo neto per amount pages only with demand).
 9. A — Christmas lottery night (22 Dec) and El Niño: runbook `docs/GORDO_NAVIDAD_RUNBOOK.md`, SELAE fetch from the owner's PC if the VPS stays blocked.
-10. D — town hubs: link 2026/2027 holidays, fair, elections and working days per town.
+10. D — town hubs: link 2026/2027 holidays, fair, elections and working days per town. *(built 18 Nov: `lib/engagement/town-hub.ts`, review 9 Dec in `docs/SEO_EXPERIMENTS.md`)*
 
 ## Targets (stretch goals set with the owner 18 Nov — goals, not results; first draft rejected as too weak)
 | When | Sessions (GA4) | What it takes |

@@ -4,6 +4,7 @@ import { Breadcrumbs, type Crumb } from "@/components/Breadcrumbs";
 import { ShareBar, crumbPath } from "@/components/share/ShareBar";
 import { JsonLd } from "@/components/JsonLd";
 import { NextStep } from "@/components/NextStep";
+import { TownHub } from "@/components/TownHub";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
 import { MesaSection } from "@/components/programmatic/ElectionMesaSection";
@@ -14,6 +15,7 @@ import { slugifyAnchor, type Block } from "@/lib/content/blocks";
 import { todayInCatalonia } from "@/lib/content/holidays/calendar";
 import { renderInline } from "@/lib/content/inline";
 import { electionTownNextStep } from "@/lib/engagement/next-step";
+import { townHub } from "@/lib/engagement/town-hub";
 import { getMessages } from "@/lib/i18n";
 import type { Locale } from "@/lib/i18n/config";
 import { electionPhase } from "@/lib/programmatic/elections/election-day";
@@ -178,6 +180,9 @@ export function ElectionResultsPage({ locale, municipality }: { locale: Locale; 
                     ))}
                   </dl>
                 </section>
+
+                {/* The town's other pages (lib/engagement/town-hub.ts), led by its holiday page. */}
+                <TownHub hub={townHub(municipality.slug, locale, "elections", todayInCatalonia())} />
 
                 <nav aria-labelledby="ci-elections-siblings">
                   <h2 id="ci-elections-siblings">{model.siblings.title}</h2>
