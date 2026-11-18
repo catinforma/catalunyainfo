@@ -702,8 +702,12 @@ test("the 'what runs' table has one row per service and lists exactly the strike
   if (STRIKES_AS_OF <= "2026-11-11") {
     assert.match(rows.rodalies ?? "", /^Dimecres 11 de novembre de 2026: vaga general de 24 hores; Dimarts 17 de novembre i dijous 19 de novembre de 2026: vaga ferroviària/);
     assert.equal(rows.metroBus, "Dimecres 11 de novembre de 2026: vaga general de 24 hores");
-  } else {
-    assert.match(rows.rodalies ?? "", /^Dimarts 17 de novembre i dijous 19 de novembre de 2026: vaga ferroviària/);
+  } else if (STRIKES_AS_OF <= "2026-11-17") {
+    assert.match(rows.rodalies ?? "", /^Dimarts 17 de novembre de 2026: vaga ferroviària/);
+    assert.ok(!(rows.metroBus ?? "").includes("11 de novembre"), rows.metroBus);
+  } else if (STRIKES_AS_OF <= "2026-11-23") {
+    // 18 Nov 2026: SCF called off the 19th (SCFCOM 38), so the 17 Nov strike is past and the next rail strike is the 23rd's.
+    assert.match(rows.rodalies ?? "", /^Dilluns 23 de novembre de 2026: vaga de maquinistes del Grup Renfe/);
     assert.ok(!(rows.metroBus ?? "").includes("11 de novembre"), rows.metroBus);
   }
   assert.equal(whatRunsRows("ca", "2026-11-12")[1]?.[1], "Cap vaga anunciada");
@@ -761,9 +765,10 @@ test("the page never prints press-only claims or an 11 November percentage nobod
         }
       }
       assert.ok(about11 >= 5, `${locale}/${asOf}: only ${about11} sentences about 11 November checked`);
-      // "Called off" only as SEMAF said it of Ouigo's partial stoppages (notice of 5 Nov 2026), never as a press report.
+      // "Called off" only as the organiser said it, never as a press report: SEMAF of Ouigo's partial stoppages (notice of 5 Nov
+      // 2026) and, from 18 Nov, SCF of its 19 Nov strike at Adif (SCFCOM 38, 17 Nov).
       for (const piece of body.split(/\n|(?<=[.!?])\s+/)) {
-        if (/desconvoca|called (them )?off|cancel·lada la vaga|huelga cancelada/i.test(piece)) assert.match(piece, /SEMAF|Ouigo/, `${locale}: "${piece}"`);
+        if (/desconvoca|called (them )?off|cancel·lada la vaga|huelga cancelada/i.test(piece)) assert.match(piece, /SEMAF|Ouigo|SCF|Adif/, `${locale}: "${piece}"`);
       }
     }
   }
@@ -846,7 +851,7 @@ test("a strike added by the lead renders without touching the template", () => {
   }
 });
 
-test("known answers read on 17 Nov 2026 (afternoon): the Generalitat's order for 23 Nov, the 21N march, the 19th is Adif only", async () => {
+test("known answers read on 17 Nov 2026 (afternoon): the Generalitat's order for 23 Nov, the 21N march; 18 Nov: the 19th called off", async () => {
   const { SPAIN_STRIKES } = await import("../src/lib/content/batch02/strikes-spain-data.ts");
   const drivers = byId("vaga-renfe-2026-11-23");
   const spain = SPAIN_STRIKES.find((s) => s.id === "huelga-renfe-2026-11-23");
@@ -871,11 +876,16 @@ test("known answers read on 17 Nov 2026 (afternoon): the Generalitat's order for
   const schools = byId("vaga-educacio-2026-11-26");
   for (const locale of LOCALES) assert.match(schools.facts[locale].join(" "), /Urquinaona/, locale);
   assert.ok(schools.sources.some((s) => s.url === STRIKE_URLS.ustec21n));
-  // The 19th: the rail entry's day note, and the short line names the day of its figures.
+  // 18 Nov 2026: SCF called off the 19th (SCFCOM 38, 17 Nov): the rail entry keeps the 17th only, says so in SCF's words and
+  // cites the notice; the short line names the day of its figures and that the 19th is off.
   const rail = byId("vaga-ferroviaria-2026-11-17");
+  assert.deepEqual(rail.dates, ["2026-11-17"]);
+  assert.equal(rail.dayNotes, undefined);
+  assert.equal(STRIKE_URLS.scf38, "https://www.scf.es/com38/");
+  assert.ok(rail.sources.some((s) => s.url === STRIKE_URLS.scf38));
   for (const locale of LOCALES) {
-    assert.match(rail.dayNotes?.["2026-11-19"]?.[locale] ?? "", /Adif/, locale);
-    assert.doesNotMatch(rail.dayNotes?.["2026-11-19"]?.[locale] ?? "", /\d ?%/, locale);
-    assert.match(rail.minimumServices.msShort[locale], /^Rodalies (el 17|on the 17th): 66%/, locale);
+    assert.ok(rail.facts[locale].join(" ").includes("«SCF ha acordado la desconvocatoria para el día 19»") || rail.facts[locale].join(" ").includes('"SCF ha acordado la desconvocatoria para el día 19"'), locale);
+    assert.ok(rail.facts[locale].join(" ").includes(`](${STRIKE_URLS.scf38})`), locale);
+    assert.match(rail.minimumServices.msShort[locale], /^Rodalies (el 17|on the 17th): 66%.*(desconvocada|called off)$/, locale);
   }
 });

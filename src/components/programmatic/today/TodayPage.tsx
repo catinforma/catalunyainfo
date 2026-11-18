@@ -27,6 +27,7 @@ import {
 } from "@/lib/programmatic/today/copy";
 import {
   STRIKES_AS_OF,
+  STRIKES_VERIFIED,
   holidayData,
   reservoirFallback,
   rodaliesLines,
@@ -197,7 +198,7 @@ export function TodayPage({ locale }: { locale: Locale }) {
   const holidays = holidayData(locale);
   const lines = rodaliesLines(locale);
   const zones = todayLinks(locale).weekend.zones;
-  const asOf = onDate(STRIKES_AS_OF, locale);
+  const asOf = onDate(STRIKES_VERIFIED, locale);
 
   return (
     <>

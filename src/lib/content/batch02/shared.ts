@@ -930,10 +930,11 @@ export const B2_TITLES: Record<B2Key, Record<Locale, string>> = {
     en: "Spain rail strike on 17 November: Cercanías and AVE",
   },
   // 17 Nov 2026: link labels in the searched words ("huelga 19 noviembre", "huelga 20 noviembre 2026"), with what each day holds.
+  // 18 Nov 2026: SCF called off the Adif strike on the 19th (SCFCOM 38).
   strike19n: {
-    ca: "Vaga del 19 de novembre de 2026: Adif (no Renfe), metges i neteja",
-    es: "Huelga del 19 de noviembre de 2026: Adif (no Renfe), médicos y limpieza",
-    en: "Strikes on 19 November 2026 in Spain: Adif (not Renfe), doctors, cleaning",
+    ca: "Vaga del 19 de novembre de 2026: metges i neteja; Adif, desconvocada",
+    es: "Huelga del 19 de noviembre de 2026: médicos y limpieza; Adif, desconvocada",
+    en: "Strikes on 19 November 2026 in Spain: doctors, cleaning; Adif called off",
   },
   strike20n: {
     ca: "Vaga del 20 de novembre de 2026: estudiants, metges i Madrid",

@@ -70,7 +70,8 @@ test("three editions at the registered paths, valid, substantial, with the date 
 
 test("the dates follow the entries, which agree with each other; weekdays are right", () => {
   assert.deepEqual(rail17nDays(), catalan().dates);
-  assert.deepEqual(rail17nDays(), ["2026-11-17", "2026-11-19"]);
+  // 18 Nov 2026: SCF called off the 19th (SCFCOM 38, 17 Nov): one day left.
+  assert.deepEqual(rail17nDays(), ["2026-11-17"]);
   assert.equal(weekdayIndex("2026-11-17"), 2); // Tuesday
   assert.equal(weekdayIndex("2026-11-19"), 4); // Thursday
   assert.equal(weekdayIndex("2026-11-23"), 1); // Monday
@@ -123,28 +124,27 @@ test("no figure for a network whose minimum services are pending; the precedent 
 test("before, during and after, from the as-of date only", () => {
   assert.equal(rail17nPhase("2026-11-13"), "before");
   assert.equal(rail17nPhase("2026-11-17"), "during");
-  assert.equal(rail17nPhase("2026-11-19"), "during");
+  // 18 Nov 2026: the 19th was called off, so the strike is over from the 18th.
+  assert.equal(rail17nPhase("2026-11-18"), "after");
+  assert.equal(rail17nPhase("2026-11-19"), "after");
   assert.equal(rail17nPhase("2026-11-20"), "after");
-  assert.equal(rail17nPhase(STRIKES_AS_OF), STRIKES_AS_OF < "2026-11-17" ? "before" : STRIKES_AS_OF > "2026-11-19" ? "after" : "during");
+  assert.equal(rail17nPhase(STRIKES_AS_OF), STRIKES_AS_OF < "2026-11-17" ? "before" : STRIKES_AS_OF > "2026-11-17" ? "after" : "during");
   const lead = (locale: Locale, asOf: string) => text([buildRail17nBody(locale, asOf)[0]!]);
   assert.match(lead("es", "2026-11-13"), /hay huelga de trenes/);
   assert.match(lead("es", "2026-11-20"), /hubo huelga de trenes/);
   assert.doesNotMatch(lead("es", "2026-11-20"), /\bhay huelga|aún no/);
   assert.match(lead("ca", "2026-11-20"), /hi va haver vaga/);
   assert.match(lead("en", "2026-11-20"), /there was a rail strike/);
-  // 17 Nov 2026: on the 18th and the 19th the figures are labelled as the 17th's and the 19th (Adif only) has its own sentence.
-  assert.match(lead("es", "2026-11-18"), /Servicios mínimos oficiales del martes 17:.*Mañana, jueves 19 de noviembre, paran solo los responsables de circulación de Adif/);
-  assert.match(lead("es", "2026-11-19"), /Hoy, jueves 19 de noviembre, paran solo/);
-  assert.match(lead("ca", "2026-11-18"), /Demà, dijous 19 de novembre, només s'aturen/);
-  assert.match(lead("en", "2026-11-19"), /Today, Thursday 19 November, only Adif's traffic controllers/);
-  assert.doesNotMatch(lead("es", "2026-11-17"), /Mañana, jueves 19/);
+  // 18 Nov 2026: from the 18th the lead is past and says the 19th (Adif) was called off; no "tomorrow" sentence for the 19th.
+  assert.match(lead("es", "2026-11-18"), /^El martes 17 de noviembre de 2026 hubo huelga de trenes.*El paro de Adif del jueves 19 se desconvocó/);
+  assert.match(lead("ca", "2026-11-18"), /^El dimarts 17 de novembre de 2026 hi va haver vaga de trens.*L'aturada d'Adif del dijous 19 es va desconvocar/);
+  assert.match(lead("en", "2026-11-18"), /^On Tuesday 17 November 2026 there was a rail strike.*The Adif stoppage on Thursday 19 was called off/);
   for (const locale of LOCALES) {
-    assert.match(rail17nDescription(locale, "2026-11-18"), /^(Jueves|Dijous|Thursday) 19/, locale);
-    assert.equal(rail17nDescription(locale, "2026-11-18"), rail17nDescription(locale, "2026-11-19"), locale);
+    assert.doesNotMatch(lead(locale, "2026-11-18"), /Mañana, jueves 19|Demà, dijous 19|Tomorrow, Thursday 19|paran solo|només s'aturen|only Adif's traffic controllers/, locale);
+    assert.equal(rail17nDescription(locale, "2026-11-18"), rail17nDescription(locale, "2026-11-20"), locale);
     assert.ok(rail17nDescription(locale, "2026-11-18").length <= 155, locale);
   }
   for (const locale of LOCALES) {
-    assert.doesNotMatch(lead(locale, "2026-11-18"), /\b(hay|hubo) huelga|hi ha vaga|there is a/, `${locale}: tense-neutral while the days run`);
     assert.notEqual(rail17nDescription(locale, "2026-11-13"), rail17nDescription(locale, "2026-11-20"));
     for (const asOf of ["2026-11-13", "2026-11-17", "2026-11-20"]) assert.ok(bodySchema.safeParse(buildRail17nBody(locale, asOf)).success, `${locale} ${asOf}`);
   }
@@ -189,7 +189,7 @@ test("publish route: in the strikes group and on its own", () => {
   assert.match(route, /wants\("huelga-trenes-17n"\)\) published\.push\(await publishB2Article\(RAIL_17N_GUIDE\)\)/);
 });
 
-test("16 Nov: the lead answers first with the official figures; the 17th says 'hoy'; 19 and 23 Nov say pending honestly", () => {
+test("16 Nov: the lead answers first with the official figures; the 17th says 'hoy'; 18 Nov: the 19th called off, the 23rd's Ministry figures to be confirmed", () => {
   const lead = (locale: Locale, asOf: string) => text([buildRail17nBody(locale, asOf)[0]!]);
   assert.match(lead("es", "2026-11-16"), /^Sí: el martes 17 de noviembre de 2026 hay huelga de trenes/);
   assert.match(lead("es", "2026-11-16"), /Cercanías, 75 % en hora punta y 50 %.*Media Distancia, 65 %.*AVE y Larga Distancia, 72 %.*Iryo, 70 %.*Ouigo, 65,38 %/);
@@ -200,15 +200,18 @@ test("16 Nov: the lead answers first with the official figures; the 17th says 'h
   // The lead's figures are the Spain entry's: published, and the same numbers.
   assert.equal(spain().minimumServices.status, "published");
   for (const n of ["75%", "50%", "65%", "72%", "70%", "65,38%"]) assert.ok(spain().minimumServices.text.es.includes(n), n);
-  // Adif: the constant and the entry's text agree.
-  const adifPendingInEntry = /\*\*Adif, el 17 y el 19:\*\* por confirmar/.test(spain().minimumServices.text.es);
-  assert.equal(ADIF_MS_PUBLISHED, !adifPendingInEntry);
+  // Adif: the constant and the entry's text agree (18 Nov 2026: no resolution for the 17th was ever on the Ministry's lists).
+  const adifUnpublishedInEntry = /\*\*Adif, el 17:\*\* sin resolución publicada/.test(spain().minimumServices.text.es);
+  assert.equal(ADIF_MS_PUBLISHED, !adifUnpublishedInEntry);
   for (const locale of LOCALES) {
     const body = buildRail17nBody(locale, "2026-11-16");
     const headings = body.filter((b) => b.type === "heading").map((b) => (b as unknown as { text: string }).text);
     assert.ok(headings.some((h) => /19/.test(h) && /Adif/.test(h)), `${locale}: 19 Nov section`);
     assert.ok(headings.some((h) => /23/.test(h) && /SEMAF/.test(h)), `${locale}: 23 Nov section`);
-    if (!ADIF_MS_PUBLISHED) assert.match(text(body), /pendientes|pendents|pending/, locale);
+    // The 19th: SCF's call-off, linked; the 23rd: the Ministry's figures still to be confirmed.
+    assert.match(text(body), /desconvocad|desconvocó|called off/, locale);
+    assert.ok(json(body).includes(`](${STRIKE_URLS.scf38})`), `${locale}: links SCFCOM 38`);
+    assert.match(text(body), /por confirmar|per confirmar|to be confirmed/, locale);
     assert.notEqual(rail17nDescription(locale, "2026-11-16"), rail17nDescription(locale, "2026-11-17"));
     assert.ok(rail17nDescription(locale, "2026-11-17").length <= 155, locale);
   }

@@ -641,6 +641,8 @@ export interface StrikesSpainInput {
   open?: SpainOpenStrike[];
   notHappening?: SpainNotHappening[];
   catalan?: Strike[];
+  /** The day the sources were last re-read (default STRIKES_SPAIN_VERIFIED): what every "Fuentes revisadas" line prints. */
+  verified?: string;
 }
 
 /** One row per day and strike, Monday to Sunday; a day without strikes says so. */
@@ -682,7 +684,9 @@ export function buildStrikesSpainBody(locale: Locale, asOf: string = STRIKES_SPA
   const open = input.open ?? SPAIN_OPEN_STRIKES;
   const notHappening = input.notHappening ?? SPAIN_NOT_HAPPENING;
   const t = T[locale];
-  const checked = dateYear(asOf, locale);
+  // 18 Nov 2026: "Fuentes revisadas …" and every {checked} print the day the sources were re-read (STRIKES_SPAIN_VERIFIED), never a later as-of day.
+  const reviewed = spainCheckedOn(asOf, input.verified);
+  const checked = dateYear(reviewed, locale);
   const week = weekOf(asOf);
   const when = range(week.from, week.to, locale);
   const listed = listedSpainStrikes(asOf, strikes);
@@ -690,7 +694,7 @@ export function buildStrikesSpainBody(locale: Locale, asOf: string = STRIKES_SPA
   const later = listed.filter((strike) => (strike.dates[0] ?? "") > week.to);
   const recent = recentSpainStrikes(asOf, strikes);
   const catalan = catalanOnlyStrikes(asOf, strikes, input.catalan ?? STRIKES);
-  const text = (value: L) => fill(value, locale, asOf);
+  const text = (value: L) => fill(value, locale, reviewed);
 
   const blocks: Block[] = [];
 
@@ -916,3 +920,8 @@ export const STRIKES_SPAIN_GUIDE: B2Article = {
 
 /** `fill` for other pages that print an entry's text (strike-rail-17n.ts). */
 export const fillChecked = fill;
+
+/** The date a "checked on" line may claim for a page built as of `asOf`: the last re-read, never later than the as-of day. */
+export function spainCheckedOn(asOf: string = STRIKES_SPAIN_AS_OF, verified: string = STRIKES_SPAIN_VERIFIED): string {
+  return verified < asOf ? verified : asOf;
+}

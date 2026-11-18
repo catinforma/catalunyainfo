@@ -13,7 +13,7 @@ import { caDayArticle, dayMonth, dayMonthYear, weekdayName } from "@/lib/program
 import { formatDate, formatNumber } from "@/lib/programmatic/reservoirs/live";
 import { officialUrl as rodaliesOfficial } from "@/lib/programmatic/rodalies/official";
 
-import { DATA_FROM, HOLIDAY_SNAPSHOT, RESERVOIR_SNAPSHOT, STRIKES_AS_OF, regionalList, reservoirFallback, snowSeason } from "./data";
+import { DATA_FROM, HOLIDAY_SNAPSHOT, RESERVOIR_SNAPSHOT, STRIKES_AS_OF, STRIKES_VERIFIED, regionalList, reservoirFallback, snowSeason } from "./data";
 import { joinList } from "./logic";
 import { TODAY_NAME } from "./paths";
 
@@ -151,7 +151,8 @@ export function holidayFallback(locale: Locale, count = 4): string {
 
 /** The strikes still to come on the list's own date, with their days. */
 export function strikesFallback(locale: Locale): string {
-  const asOf = onDate(STRIKES_AS_OF, locale);
+  // "revisada …" prints the day the strike sources were re-read, not the as-of day.
+  const asOf = onDate(STRIKES_VERIFIED, locale);
   const upcoming = upcomingStrikes(STRIKES_AS_OF, STRIKES);
   // "vaga general de 24 hores, dimecres 11 de novembre de 2026; …": titles can carry their own brackets.
   const list = upcoming.map((s) => `${s.title[locale]}, ${strikeDays(s, locale)}`).join("; ");
@@ -217,7 +218,7 @@ export function snowFallback(locale: Locale): string {
 
 /** The header's verified line: which list was checked when, and what is live. */
 export function verifiedLine(locale: Locale): string {
-  const strikes = onDate(STRIKES_AS_OF, locale);
+  const strikes = onDate(STRIKES_VERIFIED, locale);
   const holidays = onDate(HOLIDAY_SNAPSHOT.readOn, locale);
   if (locale === "ca") return `Vagues revisades ${strikes}; festius, ${holidays}. Rodalies, embassaments i preus, en directe.`;
   if (locale === "es") return `Huelgas revisadas ${strikes}; festivos, ${holidays}. Rodalies, embalses y precios, en directo.`;
@@ -230,7 +231,7 @@ export function verifiedLine(locale: Locale): string {
 
 export function sourceLine(item: ItemKey, locale: Locale): string {
   const holidaysRead = onDate(HOLIDAY_SNAPSHOT.readOn, locale);
-  const strikesRead = onDate(STRIKES_AS_OF, locale);
+  const strikesRead = onDate(STRIKES_VERIFIED, locale);
   const year = HOLIDAY_SNAPSHOT.year;
   const lines: Record<Locale, Record<ItemKey, string>> = {
     ca: {
@@ -274,7 +275,7 @@ export function sourceLine(item: ItemKey, locale: Locale): string {
 export function aboutParagraphs(locale: Locale): string[] {
   const towns = HOLIDAY_SNAPSHOT.municipalities.length;
   const year = HOLIDAY_SNAPSHOT.year;
-  const asOf = onDate(STRIKES_AS_OF, locale);
+  const asOf = onDate(STRIKES_VERIFIED, locale);
   if (locale === "ca") {
     return [
       "La data d'avui es calcula al teu navegador amb l'hora de Catalunya, de manera que les respostes canvien a mitjanit encara que la pàgina no s'hagi tornat a publicar.",

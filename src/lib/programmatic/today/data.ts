@@ -18,7 +18,7 @@
  */
 
 import { B2_PATHS, b2href } from "@/lib/content/batch02/shared";
-import { STRIKES, STRIKES_AS_OF, upcomingStrikes } from "@/lib/content/batch02/strikes";
+import { STRIKES, STRIKES_AS_OF, STRIKES_VERIFIED, upcomingStrikes } from "@/lib/content/batch02/strikes";
 import { STRIKE_11N_DATE } from "@/lib/content/batch02/strike-11n";
 import { CALENDAR_VERIFIED_AT } from "@/lib/content/holidays/calendar";
 import { PATHS as TOOL_PATHS, SEASONAL } from "@/lib/content/home-tools";
@@ -130,7 +130,8 @@ export function todayStrikes(locale: Locale): TodayStrike[] {
   }));
 }
 
-export { STRIKES_AS_OF };
+// 18 Nov 2026: STRIKES_VERIFIED is the date every "revisada / checked" line prints; STRIKES_AS_OF only decides upcoming vs past.
+export { STRIKES_AS_OF, STRIKES_VERIFIED };
 
 /* -------------------------------------------------------------------------- */
 /* Rodalies                                                                   */

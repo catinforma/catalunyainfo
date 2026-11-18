@@ -8,7 +8,7 @@ import { NEWS_ALERTS, alertHref } from "@/lib/alerts/news-alerts";
 import { getMessages } from "@/lib/i18n/index";
 import { GENERAL_ELECTION_DAY } from "@/lib/programmatic/elections/today";
 import { GUIDES } from "@/lib/programmatic/holidays/links";
-import { HOLIDAY_SNAPSHOT, STRIKES_AS_OF, holidayData, todayStrikes } from "@/lib/programmatic/today/data";
+import { HOLIDAY_SNAPSHOT, STRIKES_VERIFIED, holidayData, todayStrikes } from "@/lib/programmatic/today/data";
 import { weekendHubPath } from "@/lib/programmatic/weekend/paths";
 
 import {
@@ -47,7 +47,8 @@ export function channelInput(date: string, live?: ChannelLive): ChannelInput {
     date,
     holidays: holidayData("ca"),
     strikes: todayStrikes("ca"),
-    strikesAsOf: STRIKES_AS_OF,
+    // 18 Nov 2026: the day the strike list was re-read (its "revisada" warning and staleness), not the as-of day.
+    strikesAsOf: STRIKES_VERIFIED,
     election: alert ? { day: GENERAL_ELECTION_DAY, start: alert.start, end: alert.end, href: alertHref(alert, "ca") } : null,
     links: { holidayToday: GUIDES.holidayToday.ca, weekendHub: weekendHubPath("ca") },
     seasonal: seasonalLabels(),

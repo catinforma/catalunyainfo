@@ -7134,3 +7134,56 @@ pages' answer, title and layers on its own; seasonal demand.
 renders the new titles.
 
 **Outcome:** _pending_
+
+## 2026-11-18 (afternoon) — Strikes: SCF calls off the 19 Nov Adif strike; "Fuentes revisadas" now prints the verification date; CIS pre-electoral in on the polls page (deploy; groups `strikes`, `huelgas-espana`, `huelga-19-20n`, `huelga-trenes-17n`)
+
+**Why now.** Five dated guards failed on main: the nightly timer had moved `STRIKES_AS_OF` / `STRIKES_SPAIN_AS_OF` to 18 Nov while
+`*_VERIFIED` stayed 17 Nov, and the strike leads printed "Fuentes revisadas el <as-of>" although nobody had re-read the sources.
+
+**Sources re-read 18 Nov 2026 (afternoon; curl with a browser UA; fact pack research_notes/x10/strikes-18nov-factpack.md).**
+- NEW — SCF, SCFCOM 38 (17 Nov, 22:25), https://www.scf.es/com38/: "SCF ha acordado la desconvocatoria para el día 19" (call-off
+  agreement PDF linked there, scanned). The 19 Nov Adif strike is off; no rail strike is left on the 19th.
+- Ministry of Transport rail list (https://www.transportes.gob.es/transporte-terrestre/resoluciones-de-servicios-minimos-ferroviarios,
+  answered 200 today): newest still the 12 Nov Grupo Renfe resolution (17N). No Adif resolution for 17 or 19 Nov
+  (`ADIF_MS_PUBLISHED` stays false: never published), none for the rest of Renfe on 23N. Air list (aviacion-civil page): newest the
+  17N ones and ELA Bizkaia. Press room: 17 Nov note on the urgent processing of the RD 929/2020 change (traffic-control rest
+  times), no strike content.
+- SEMAF nº 2026-35 (17 Nov): "afrontamos el 23 de noviembre como la próxima jornada de movilización" (23N kept).
+- Departament d'Empresa i Treball list: newest 17/11 (23N Renfe order); newest 100 e-Tauler edicts (16–18 Nov): no 26N
+  education order. USTEC·STEs / CGT Ensenyament: nothing new on 26N (no hours). Metges de Catalunya: newest item 17 Nov, no
+  call-off. SMU: no call-off, marches 19 Nov 18:00. Sindicato de Estudiantes: 20N kept. BOE 18 Nov: no strike order.
+
+**What changed (ca, es, en).**
+- **19N day page — correctness fix inside its first days** (published 17 Nov 13:00): H1 "Huelga 19 de noviembre de 2026: Adif (no
+  Renfe), médicos, limpieza en Bizkaia y Madrid" → "Huelga 19 de noviembre de 2026: médicos, limpieza en Bizkaia y Madrid; Adif,
+  desconvocada"; title "Huelga 19 de noviembre de 2026: Adif (no Renfe) y médicos" → "Huelga 19 de noviembre de 2026: médicos;
+  Adif, desconvocada" (ca "Vaga 19 de novembre de 2026: metges; Adif, desconvocada", en "Spain strike 19 November 2026: doctors;
+  Adif called off"); descriptions, excerpt, lead, FAQ and "lo que no hay ese día" say there is no rail strike (SCF's call-off
+  printed from `SPAIN_NOT_HAPPENING`, linked). Anchors `B2_TITLES.strike19n` alike. Reason: the old wording announced a strike
+  that is not happening.
+- **Rail entry 17/19 → 17 only** (both hubs): dates, short, label ("Trens/Trenes/Trains on 17 November"), facts (SCF's quote),
+  `msShort` ("…; el 19, desconvocada"), Adif part of the minimum-services text ("sin resolución publicada"). Data-driven effects:
+  the entry is past from the 18th, so the **17N page** shows its `after` lead/description (scheduled for the 20th, now from the
+  18th; its dated 18–19 Nov description variant is removed) and keeps a "Jueves 19: huelga en Adif, desconvocada" section until
+  the 19th; the **Renfe guide** covers the 23 Nov SEMAF strike from the 18th instead of the 20th (its own data-driven title,
+  "Huelga Renfe 23 de noviembre: Rodalies y servicios mínimos"); the alert-strip line for 17N ends on the 17th and the 23N line
+  starts on the 18th. Bug fixed on the way: the guide's "when" key fact did not read the 23N entry's "Día y horas" label.
+- **Honesty fix (allowed inside any window, no title/description wording change):** every "fonts revisades / fuentes
+  revisadas / sources checked / consultat el / revisada" line and every `{checked}` now prints the verification date
+  (`STRIKES_VERIFIED`, `STRIKES_SPAIN_VERIFIED`, the earlier of the two on the day and 17N pages) — never a later as-of day:
+  hub leads and "what runs" note, the guides' "consultat el", the Spain hub, the 19N/20N leads, the /hoy/ page and the WhatsApp
+  draft's staleness warning. The four constants are typed `string` (the tsc `never` error at tests/strike-days-1920n.test.ts:228).
+- **Polls page (body only, title untouched):** CIS study 3584 (avance of 12 Nov) in, with its provincial seat ranges for
+  Catalonia and the LOREG technical sheet; CEO third wave still not announced (re-check by 20 Nov). Force-dynamic: ships with
+  the deploy.
+
+**Baseline / review.** 20 Nov with the 17 Nov entry's readings (`snapshot.py page huelga-19-noviembre 3`, `page
+huelga-renfe-rodalies 3`): expect "huelga renfe 19 noviembre" CTR to hold or rise on the 19N page with "desconvocada" in the
+title. No revert rule: the old title is false.
+
+**Go-live.** Deploy, then publish `strikes`, `huelgas-espana` (both also republish the 19N/20N pages), `huelga-trenes-17n`;
+IndexNow prefixes `/es/guias/huelga-`, `/ca/guies/vaga-`, `/en/guides/spain-strike-19-november`,
+`/en/guides/spain-rail-strike-17-november`, `/en/guides/renfe-rodalies-strike-november`, `/en/guides/strike-barcelona-catalonia-today`,
+`/es/guias/huelgas-espana`, `/ca/guies/vagues-espanya`, `/en/guides/strikes-spain`.
+
+**Outcome:** _pending_

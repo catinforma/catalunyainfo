@@ -4,7 +4,7 @@ import { join } from "node:path";
 import { test } from "node:test";
 
 import { B2_PATHS } from "../src/lib/content/batch02/shared.ts";
-import { STRIKES, STRIKES_AS_OF, STRIKES_META, buildStrikesBody, upcomingStrikes } from "../src/lib/content/batch02/strikes.ts";
+import { STRIKES, STRIKES_AS_OF, STRIKES_META, STRIKES_VERIFIED, buildStrikesBody, upcomingStrikes } from "../src/lib/content/batch02/strikes.ts";
 import { STRIKE_11N_META } from "../src/lib/content/batch02/strike-11n.ts";
 import { DECEMBER_BRIDGE_META } from "../src/lib/content/batch02/december-bridge.ts";
 import { CALENDAR_VERIFIED_AT } from "../src/lib/content/holidays/calendar.ts";
@@ -249,7 +249,8 @@ test("server output is the same on every call and never says what today is", () 
     }
     // Every date the fallbacks print is a dataset's own.
     assert.ok(holidayFallback(locale).includes(fromDate(DATA_FROM, locale)));
-    assert.ok(strikesFallback(locale).includes(onDate(STRIKES_AS_OF, locale)));
+    // 18 Nov 2026: "revisada …" is the day the sources were re-read (STRIKES_VERIFIED), not the as-of day.
+    assert.ok(strikesFallback(locale).includes(onDate(STRIKES_VERIFIED, locale)));
     const total = reservoirFallback().total;
     if (total) assert.ok(reservoirsFallback(locale).includes(total.date.split("-").reverse().join("/")) || locale === "en");
   }
@@ -398,9 +399,9 @@ test("strikes: today, tomorrow and next from the embedded dates; the list's age"
   assert.equal(nextStrike("2026-11-11", STRIKE_FIXTURE), null);
   assert.equal(strikesListStale("2026-11-06", "2026-10-30"), false);
   assert.equal(strikesListStale("2026-11-07", "2026-10-30"), true);
-  // On the real list: the next rail strike is on 17 November (12 Nov 2026: the general strike of the 11th is past).
-  assert.ok(strikesOn("2026-11-17", todayStrikes("ca")).some((s) => s.id === "vaga-ferroviaria-2026-11-17"));
-  assert.ok(!todayStrikes("ca").some((s) => s.id === "vaga-general-2026-11-11"));
+  // On the real list: the next rail strike is on 23 November (18 Nov 2026: the 17th is past and SCF called off the 19th).
+  assert.ok(strikesOn("2026-11-23", todayStrikes("ca")).some((s) => s.id === "vaga-renfe-2026-11-23"));
+  assert.ok(!todayStrikes("ca").some((s) => s.id === "vaga-general-2026-11-11" || s.id === "vaga-ferroviaria-2026-11-17"));
 });
 
 test("strikes: an indefinite strike is on every day from its first, until the day it ended, and is never 'next' once begun", () => {

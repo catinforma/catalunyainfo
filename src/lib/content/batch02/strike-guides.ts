@@ -35,6 +35,7 @@ import {
   STRIKES_VERIFIED,
   STRIKE_URLS,
   andList,
+  checkedOn,
   guideEntry,
   isOnDay,
   isOpen,
@@ -467,7 +468,8 @@ const COMMON: Record<Locale, Common> = {
 /* -------------------------------------------------------------------------- */
 
 const WHO_LABELS = ["Convocatòria", "Convocatoria", "Called by"];
-const WHEN_LABELS = ["Dies", "Dia", "Días", "Día", "Days", "Day"];
+// 18 Nov 2026: the 23 Nov entry says "Dia i hores" / "Día y horas" / "Day and hours"; without them the guide lost its "when" fact.
+const WHEN_LABELS = ["Dies", "Dia", "Dia i hores", "Días", "Día", "Día y horas", "Days", "Day", "Day and hours"];
 
 /** "**Convocatòria:** el sindicat ..." -> { label: "Convocatòria", value: "El sindicat ..." }. */
 export function splitFact(fact: string): { label: string | null; value: string } {
@@ -590,15 +592,16 @@ const schoolYearLabel = (iso: string) => {
  */
 const DAY_PAGE_LINES: Record<Locale, Partial<Record<B2Key, string>>> = {
   ca: {
-    strike19n: `**Dijous 19 de novembre:** només s'atura el personal de circulació d'Adif (SCF), 24 hores; Renfe, que opera Rodalies, no hi està convocada, i els serveis mínims d'Adif són pendents de publicar. Tot el que hi ha aquell dia, també la vaga de metges: ${b2link("strike19n", "ca", "Hi ha vaga de Renfe el 19 de novembre? Només Adif (circulació)")}.`,
+    // 18 Nov 2026: SCF called off the 19th (SCFCOM 38, 17 Nov).
+    strike19n: `**Dijous 19 de novembre:** no hi ha vaga de trens. L'SCF va desconvocar la vaga del personal de circulació d'Adif, i Renfe, que opera Rodalies, no hi estava convocada. Tot el que hi ha aquell dia, també la vaga de metges: ${b2link("strike19n", "ca", "Hi ha vaga de Renfe el 19 de novembre? No: la d'Adif, desconvocada")}.`,
     strike20n: `**Divendres 20 de novembre:** no hi ha vaga de trens; sí la d'estudiants i la de metges: ${b2link("strike20n", "ca", B2_TITLES.strike20n.ca)}.`,
   },
   es: {
-    strike19n: `**Jueves 19 de noviembre:** solo para el personal de circulación de Adif (SCF), 24 horas; Renfe, que opera Rodalies, no está convocada, y los servicios mínimos de Adif están pendientes de publicar. Todo lo que hay ese día, también la huelga de médicos: ${b2link("strike19n", "es", "¿Hay huelga de Renfe el 19 de noviembre? Solo Adif (circulación)")}.`,
+    strike19n: `**Jueves 19 de noviembre:** no hay huelga de trenes. El SCF desconvocó la huelga del personal de circulación de Adif, y Renfe, que opera Rodalies, no estaba convocada. Todo lo que hay ese día, también la huelga de médicos: ${b2link("strike19n", "es", "¿Hay huelga de Renfe el 19 de noviembre? No: la de Adif, desconvocada")}.`,
     strike20n: `**Viernes 20 de noviembre:** no hay huelga de trenes; sí la de estudiantes y la de médicos: ${b2link("strike20n", "es", B2_TITLES.strike20n.es)}.`,
   },
   en: {
-    strike19n: `**Thursday 19 November:** only Adif's traffic-control staff stop work (SCF), 24 hours; Renfe, which runs Rodalies, is not called out, and Adif's minimum services are not published yet. Everything on that day, the doctors' strike included: ${b2link("strike19n", "en", "Is there a Renfe strike on 19 November? Adif (traffic control) only")}.`,
+    strike19n: `**Thursday 19 November:** no rail strike. SCF called off the Adif traffic-control strike, and Renfe, which runs Rodalies, was not called out. Everything on that day, the doctors' strike included: ${b2link("strike19n", "en", "Is there a Renfe strike on 19 November? No: Adif's was called off")}.`,
     strike20n: `**Friday 20 November:** no rail strike; there is a students' strike and the doctors' strike: ${b2link("strike20n", "en", B2_TITLES.strike20n.en)}.`,
   },
 };
@@ -913,7 +916,8 @@ function context(spec: GuideSpec, locale: Locale, asOf: string, strikes: Strike[
     strike,
     asOf,
     days: strikeDays(strike, locale),
-    checked: dateYear(asOf, locale),
+    // 18 Nov 2026: "consultat el" / "fonts revisades el" print the day the sources were re-read, never a later as-of day.
+    checked: dateYear(checkedOn(asOf), locale),
     upcoming: isUpcoming(strike, asOf),
     who,
     when,
