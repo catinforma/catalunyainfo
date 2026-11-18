@@ -4,7 +4,7 @@ import { HOLIDAYS_BY_YEAR, addDays, daysBetween, holidayOn, shortDate, weekdayIn
 import type { Locale } from "@/lib/i18n/config";
 import { fairsHubPath } from "@/lib/programmatic/christmas-fairs/paths";
 
-import { dayDate, span } from "./festive";
+import { dayDate, range, span } from "./festive";
 import { FREE_DAYS_TOWNS, monday7 } from "./school-free-days-towns";
 import { SHOPS } from "./shops";
 import { trafficBlocks, trafficSources } from "./traffic-dec-2026";
@@ -328,7 +328,61 @@ const SOURCES: B2Source[] = [
   { name: "Baqueira Beret activa el invierno en pleno verano", url: "https://www.baqueira.es/es/noticia/baqueira-beret-activa-el-invierno-en-pleno-verano", publisher: "Baqueira Beret" },
   { name: "Fira de l'Avet 2026", url: "https://espinelves.cat/%f0%9f%8c%b2fira-de-lavet-2025-sollicituds-i-reglament-de-participacio/", publisher: "Ajuntament d'Espinelves" },
   { name: "Mercat Medieval Vic 2026", url: "https://www.vic.cat/ciutat/agenda/mercat-medieval-vic-2026", publisher: "Ajuntament de Vic" },
+  { name: "Fira de Santa Llúcia a l'Avinguda de la Catedral de Barcelona", url: "https://agenda.cultura.gencat.cat/ca/activitat.html/2026110300020", publisher: "Agenda Cultural de la Generalitat" },
+  { name: "Museu Nacional d'Art de Catalunya — horaris i preus", url: "https://www.museunacional.cat/ca/horaris-i-preus", publisher: "Museu Nacional d'Art de Catalunya" },
+  { name: "Diumenges de museu sense passar per taquilla", url: "https://www.barcelona.cat/infobarcelona/ca/tema/cultura-i-lleure/diumenges-de-museu-sense-passar-per-taquilla_1620590.html", publisher: "Ajuntament de Barcelona" },
 ];
+
+/**
+ * 18 Nov 2026 (position-loss diagnosis, docs/SEO_EXPERIMENTS.md). Two facts
+ * for "what to do over the bridge", both read that day:
+ *
+ * - Santa Llúcia. The page still said its 2026 dates were not out; the
+ *   Generalitat's Agenda Cultural (activity 2026110300020, "Darrera
+ *   actualització: 17/11/2026") prints "Inici: 27/11/2026 Fi: 23/12/2026
+ *   Horari: de 10 a 21 h", "Avinguda de la Catedral". The same object as
+ *   christmas.ts's SANTA_LLUCIA_2026 (christmas.ts imports this module, so it
+ *   is not imported back; tests/december-bridge.test.ts checks they agree).
+ * - Sunday 6 December is the month's first Sunday. MNAC, "Horaris i preus":
+ *   "Tots els dissabtes a partir de les 15 h, cada primer diumenge de mes i
+ *   jornades de portes obertes l'entrada al museu és gratuïta, però cal
+ *   reservar entrada anticipada en línia"; winter hours "diumenges i festius,
+ *   de 10 a 15 h". Barcelona City Council, "Diumenges de museu sense passar per
+ *   taquilla": Museu Picasso "Entrada gratuïta el primer diumenge de mes (amb
+ *   reserva prèvia)"; Museu d'Història de Barcelona "A tots els centres,
+ *   excepte al Park Güell, entrada lliure diumenges a la tarda i gratuïta tot
+ *   el dia el primer diumenge de mes". The free-museums guide lost its
+ *   homepage link on 12 Nov and fell from 15.5 to 30.4; this is its link from
+ *   the bridge page, the strongest related page (12k impressions, 5-18 Nov).
+ */
+export const BRIDGE_SANTA_LLUCIA = { from: "2026-11-27", to: "2026-12-23", open: "10:00", close: "21:00", url: "https://agenda.cultura.gencat.cat/ca/activitat.html/2026110300020" } as const;
+export const BRIDGE_FIRST_SUNDAY = "2026-12-06";
+const MNAC_URL = "https://www.museunacional.cat/ca/horaris-i-preus";
+const CITY_MUSEUMS_URL = "https://www.barcelona.cat/infobarcelona/ca/tema/cultura-i-lleure/diumenges-de-museu-sense-passar-per-taquilla_1620590.html";
+
+function bridgeMarkets(locale: Locale): string {
+  const sl = BRIDGE_SANTA_LLUCIA;
+  const when = range(sl.from, sl.to, locale);
+  const h = (t: string) => String(Number(t.slice(0, 2)));
+  if (locale === "ca") {
+    return `**Mercats de Nadal.** La 45a Fira de l'Avet d'Espinelves (Osona) és del 28 de novembre al 8 de desembre de 2026, segons l'Ajuntament d'Espinelves, i el Mercat Medieval de Vic comença el 5 de desembre, segons l'agenda de l'Ajuntament de Vic (mireu-ne el programa abans d'anar-hi). La Fira de Santa Llúcia de Barcelona és **${when}**, de ${h(sl.open)} a ${h(sl.close)} h, a l'avinguda de la Catedral, segons l'[Agenda Cultural de la Generalitat](${sl.url}): oberta tot el pont. Tots, a ${b2link("christmas", "ca", "la guia de mercats de Nadal")}, i les fires amb data oficial de cada poble, a [fires de Nadal per municipi](${fairsHubPath("ca")}).`;
+  }
+  if (locale === "es") {
+    return `**Mercados de Navidad.** La 45ª Fira de l'Avet de Espinelves (Osona) es del 28 de noviembre al 8 de diciembre de 2026, según el Ayuntamiento de Espinelves, y el Mercat Medieval de Vic empieza el 5 de diciembre, según la agenda del Ayuntamiento de Vic (consultad el programa antes de ir). La Fira de Santa Llúcia de Barcelona es **${when}**, de ${h(sl.open)} a ${h(sl.close)} h, en la avenida de la Catedral, según la [Agenda Cultural de la Generalitat](${sl.url}): abierta todo el puente. Todos, en ${b2link("christmas", "es", "la guía de mercados de Navidad")}, y las ferias con fecha oficial de cada pueblo, en [ferias de Navidad por municipio](${fairsHubPath("es")}).`;
+  }
+  return `**Christmas markets.** The 45th Fira de l'Avet in Espinelves (Osona) runs from 28 November to 8 December 2026, according to Espinelves town council, and the Vic Medieval Market starts on 5 December, according to Vic town council's listings (check the programme before you go). Barcelona's Fira de Santa Llúcia runs **${when}**, ${sl.open} to ${sl.close}, on Avinguda de la Catedral, according to the [Catalan government's cultural agenda](${sl.url}): open all through the long weekend. All of them are in ${b2link("christmas", "en", "our Christmas markets guide")}, and each town's markets with official dates in [Christmas markets by town](${fairsHubPath("en")}).`;
+}
+
+function bridgeMuseums(locale: Locale): string {
+  const sunday = dayDate(BRIDGE_FIRST_SUNDAY, locale, false);
+  if (locale === "ca") {
+    return `**Museus gratis.** El ${sunday} és el primer diumenge del mes: el MNAC hi és gratuït amb entrada reservada en línia (de 10 a 15 h, segons el [museu](${MNAC_URL})), i també el Museu Picasso, amb reserva, i els centres del Museu d'Història de Barcelona (tret del de Park Güell), segons la [llista de l'Ajuntament](${CITY_MUSEUMS_URL}). Quins són gratis cada dia i on cal reservar, a ${b2link("museums", "ca", "museus gratis a Barcelona")}.`;
+  }
+  if (locale === "es") {
+    return `**Museos gratis.** El ${sunday} es el primer domingo del mes: el MNAC es gratis con entrada reservada en línea (de 10 a 15 h, según el [museo](${MNAC_URL})), y también el Museu Picasso, con reserva, y los centros del Museu d'Història de Barcelona (salvo el de Park Güell), según la [lista del Ayuntamiento](${CITY_MUSEUMS_URL}). Cuáles son gratis cada día y dónde hay que reservar, en ${b2link("museums", "es", "museos gratis en Barcelona")}.`;
+  }
+  return `**Free museums.** ${sunday.charAt(0).toUpperCase()}${sunday.slice(1)} is the first Sunday of the month: the MNAC is free with a ticket booked online (10:00 to 15:00, according to the [museum](${MNAC_URL})), and so are the Picasso Museum, with booking, and the sites of the Barcelona History Museum (MUHBA, except Park Güell), according to the [City Council's list](${CITY_MUSEUMS_URL}). Which museums are free on each day, and where to book: ${b2link("museums", "en", "free museums in Barcelona")}.`;
+}
 
 /* -------------------------------------------------------------------------- */
 /* Meta                                                                       */
@@ -487,7 +541,8 @@ export function buildDecemberBridgeBody(locale: Locale): Block[] {
         "Algunes idees amb data oficial i les guies on les seguim:",
       ),
       list(
-        `**Mercats de Nadal.** La 45a Fira de l'Avet d'Espinelves (Osona) és del 28 de novembre al 8 de desembre de 2026, segons l'Ajuntament d'Espinelves, i el Mercat Medieval de Vic comença el 5 de desembre, segons l'agenda de l'Ajuntament de Vic (mireu-ne el programa abans d'anar-hi). Les dates de la Fira de Santa Llúcia de Barcelona del 2026 encara no s'han publicat. Tots, a ${b2link("christmas", "ca", "la guia de mercats de Nadal")}, i les fires amb data oficial de cada poble, a [fires de Nadal per municipi](${fairsHubPath("ca")}).`,
+        bridgeMarkets("ca"),
+        bridgeMuseums("ca"),
         `**Pessebres vivents.** El calendari, amb les dates de cada un quan les publiquen, és a ${b2link("pessebres", "ca", "la guia de pessebres vivents")}.`,
         `**Nadal a Barcelona.** Els llums, el pessebre de la plaça de Sant Jaume i què obre per les festes, a ${b2link("christmasBarcelona", "ca", "l'encesa de llums de Nadal a Barcelona")}.`,
         `**Neu i esquí.** Baqueira Beret té previst obrir la temporada el 28 de novembre, si la meteorologia i la neu ho permeten (notícia de l'estació del 28 de juliol de 2026); cap obertura és segura fins que no hi ha neu. Mira ${b2link("snowNow", "ca", "si hi ha neu al Pirineu avui")} i ${b2link("ski", "ca", "les estacions d'esquí de Catalunya")}.`,
@@ -576,7 +631,8 @@ export function buildDecemberBridgeBody(locale: Locale): Block[] {
         "Algunas ideas con fecha oficial y las guías donde las seguimos:",
       ),
       list(
-        `**Mercados de Navidad.** La 45ª Fira de l'Avet de Espinelves (Osona) es del 28 de noviembre al 8 de diciembre de 2026, según el Ayuntamiento de Espinelves, y el Mercat Medieval de Vic empieza el 5 de diciembre, según la agenda del Ayuntamiento de Vic (consultad el programa antes de ir). Las fechas de la Fira de Santa Llúcia de Barcelona de 2026 aún no se han publicado. Todos, en ${b2link("christmas", "es", "la guía de mercados de Navidad")}, y las ferias con fecha oficial de cada pueblo, en [ferias de Navidad por municipio](${fairsHubPath("es")}).`,
+        bridgeMarkets("es"),
+        bridgeMuseums("es"),
         `**Belenes vivientes.** El calendario, con las fechas de cada uno cuando se publican, está en ${b2link("pessebres", "es", "la guía de belenes vivientes")}.`,
         `**Navidad en Barcelona.** Las luces, el belén de la plaza de Sant Jaume y qué abre en las fiestas, en ${b2link("christmasBarcelona", "es", "el encendido de luces de Navidad en Barcelona")}.`,
         `**Nieve y esquí.** Baqueira Beret tiene previsto abrir la temporada el 28 de noviembre «siempre que las condiciones meteorológicas y de nieve lo permitan» (noticia de la estación del 28 de julio de 2026); ninguna apertura es segura hasta que hay nieve. Mira ${b2link("snowNow", "es", "si hay nieve en el Pirineo hoy")} y ${b2link("ski", "es", "las estaciones de esquí de Cataluña")}.`,
@@ -664,7 +720,8 @@ export function buildDecemberBridgeBody(locale: Locale): Block[] {
       "A few ideas with official dates, and the guides where we follow them:",
     ),
     list(
-      `**Christmas markets.** The 45th Fira de l'Avet in Espinelves (Osona) runs from 28 November to 8 December 2026, according to Espinelves town council, and the Vic Medieval Market starts on 5 December, according to Vic town council's listings (check the programme before you go). Barcelona's Fira de Santa Llúcia has not published its 2026 dates yet. All of them are in ${b2link("christmas", "en", "our Christmas markets guide")}, and each town's markets with official dates in [Christmas markets by town](${fairsHubPath("en")}).`,
+      bridgeMarkets("en"),
+      bridgeMuseums("en"),
       `**Living nativity scenes.** The calendar, with each one's dates once published, is in ${b2link("pessebres", "en", "our living nativity scenes guide")}.`,
       `**Christmas in Barcelona.** The lights, the Plaça de Sant Jaume nativity scene and what is open over the holidays: ${b2link("christmasBarcelona", "en", "the Barcelona Christmas lights switch-on")}.`,
       `**Snow and skiing.** Baqueira Beret plans to open its season on 28 November, weather and snow permitting (the resort's news item of 28 July 2026); no opening is certain until the snow is there. Check ${b2link("snowNow", "en", "whether there is snow in the Pyrenees today")} and ${b2link("ski", "en", "Catalonia's ski resorts")}.`,

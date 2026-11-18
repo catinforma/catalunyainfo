@@ -391,11 +391,13 @@ function body(locale: Locale) {
         "Només hi posem una data del 2026 quan l'organitzador o l'administració l'ha publicada. Per als grans mercats que encara no ho han fet, donem la del 2025 i ho diem clarament. Les dates de Santa Llúcia surten de l'Agenda Cultural de la Generalitat, que dona l'Associació Fira de Santa Llúcia com a organitzadora: el web de la fira encara mostra el calendari del 2025. Les de la Sagrada Família surten de la Guia BCN de l'Ajuntament de Barcelona.",
       ),
       marketTable("ca"),
-      ...h2("Mercats de Nadal amb dates del 2026 confirmades", "Aquestes fires ja tenen dates oficials del 2026, publicades pels seus ajuntaments:"),
+      ...h2(
+        "Fires de Nadal dels pobles: on és la llista sencera",
+        `Aquesta guia segueix els grans mercats. La llista de totes les fires amb data oficial, ordenada per dia i amb el lloc de cada una, és a [totes les fires de Nadal del 2026 per data i municipi](${fairsHubPath("ca")}). Algunes de les que els ajuntaments ja han publicat:`,
+      ),
       list(...CONFIRMED.ca),
       ...paras(
         "També al desembre, tot i que no és un mercat de Nadal: el **Mercat Medieval de Vic** ocupa el centre històric de la ciutat del 5 al 8 de desembre de 2026, segons l'agenda de l'Ajuntament de Vic.",
-        `Totes les fires de Nadal amb data oficial, municipi per municipi i amb el lloc i com arribar-hi, són a [fires de Nadal per municipi](${fairsHubPath("ca")}).`,
         busyWeekends("ca"),
       ),
       ...h2(
@@ -473,11 +475,13 @@ function body(locale: Locale) {
         "Solo ponemos una fecha de 2026 cuando el organizador o la administración la ha publicado. Para los grandes mercados que aún no lo han hecho, damos la de 2025 y lo decimos claramente. Las fechas de Santa Llúcia salen de la Agenda Cultural de la Generalitat, que da como organizadora a la Associació Fira de Santa Llúcia: la web de la feria aún muestra el calendario de 2025. Las de la Sagrada Família salen de la Guia BCN del Ayuntamiento de Barcelona.",
       ),
       marketTable("es"),
-      ...h2("Mercados de Navidad con fechas de 2026 confirmadas", "Estas ferias ya tienen fechas oficiales de 2026, publicadas por sus ayuntamientos:"),
+      ...h2(
+        "Ferias de Navidad de los pueblos: dónde está la lista completa",
+        `Esta guía sigue los grandes mercados. La lista de todas las ferias con fecha oficial, ordenada por día y con el lugar de cada una, está en [todas las ferias de Navidad de 2026 por fecha y municipio](${fairsHubPath("es")}). Algunas de las que los ayuntamientos ya han publicado:`,
+      ),
       list(...CONFIRMED.es),
       ...paras(
         "También en diciembre, aunque no es un mercado de Navidad: el **Mercat Medieval de Vic** ocupa el centro histórico de la ciudad del 5 al 8 de diciembre de 2026, según la agenda del Ayuntamiento de Vic.",
-        `Todas las ferias de Navidad con fecha oficial, municipio por municipio y con el lugar y cómo llegar, están en [ferias de Navidad por municipio](${fairsHubPath("es")}).`,
         busyWeekends("es"),
       ),
       ...h2(
@@ -554,11 +558,13 @@ function body(locale: Locale) {
       "We give a 2026 date only once the organiser or an official body has published it. For the big markets that have not, we give the 2025 dates and say so. The Santa Llúcia dates come from the Catalan government's cultural agenda, which names the Associació Fira de Santa Llúcia as the organiser; the fair's own website still shows its 2025 calendar. The Sagrada Família dates come from Barcelona City Council's Guia BCN.",
     ),
     marketTable("en"),
-    ...h2("Christmas markets with confirmed 2026 dates", "These fairs already have official 2026 dates, published by their town councils:"),
+    ...h2(
+      "Town Christmas fairs: where the full list is",
+      `This guide follows the big markets. Every fair with an official date, in date order and with its venue, is in [all 2026 Christmas fairs by date and town](${fairsHubPath("en")}): ${FAMILY.fairs} of them in ${FAMILY.towns} towns as of ${dateYear(FAMILY.checked, "en")}. Some of those their councils have already published:`,
+    ),
     list(...CONFIRMED.en),
     ...paras(
       "Also in December, though not a Christmas market: **Vic's Medieval Market** fills the historic centre from 5 to 8 December 2026, according to Vic City Council's events listing.",
-      `Every Christmas market in Catalonia with official dates, town by town, with the place and how to get there, is in [Christmas markets by town](${fairsHubPath("en")}): ${FAMILY.fairs} of them in ${FAMILY.towns} towns as of ${dateYear(FAMILY.checked, "en")}.`,
       busyWeekends("en"),
     ),
     ...h2(

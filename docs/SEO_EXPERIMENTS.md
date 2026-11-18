@@ -8064,3 +8064,157 @@ TRLIRNR 24–25 and the AEAT 149/151 pages are re-read), next to `SALARY_RULES_U
 `/en/calculators/net-salary-spain/`, `/es/calculadoras/sueldo-neto/`, `/ca/calculadores/sou-net/`.
 
 **Outcome:** _pending_
+
+---
+
+## 2026-11-18 — Position-loss diagnosis, 22 Oct–4 Nov vs 5–18 Nov: a core update and the 12 Nov holiday layout explain most of it; four body fixes for cannibalisation, freshness and a lost homepage link (deploy; groups `pont-desembre`, `christmas`)
+
+**Brief.** The CTR sweep found that ~40 % of the non-event CTR fall (2.04 → 1.48 %) is impressions moving to 11+.
+Find the pages and queries that lost position and why, and fix the causes in the body only (no title, description or
+lead; no redirect or noindex). Out of scope: strikes and elections pages, calculators launched in the last 7 days.
+
+**Data.** GSC API, query × page, page, query and page × date, A = 22 Oct–4 Nov, B = 5–18 Nov (18 Nov partial),
+paginated past 25k rows. Scripts in the session scratchpad (`posloss/`: `pull.py`, `analyse2.py`, `matched.py`,
+`step.py`), on `scripts/snapshot.py`'s `gsc()`. Event URLs (strike, election, vote, polls) excluded. Query × page pairs
+with ≥ 200 impressions in both windows are almost all event pairs: GSC anonymises most of the long tail. So the list is
+built at page level (≥ 200 impressions, lost ≥ 3 or crossed ≤ 10 → ≥ 11). Each page was then checked on the same
+queries in both windows (mix-free: weighted by min(A, B) impressions) and day by day.
+
+**Finding 1: a step on 13–14 Nov, in the Spanish edition, during Google's core update.** Google's Search Status
+Dashboard lists the "November 2026 core update" from 10 Nov (no completion message on 18 Nov). On 14 Nov, 24 of 259
+non-event pages (≥ 100 impressions on 5–12 Nov) fell ≥ 5 positions (median 14–17 Nov vs 5–12 Nov), and 6 improved.
+They were almost all `/es/`: /es/festivos 6 of 80, /es/guias 9 of 71, /es/rodalies 5 of 8, against 0 of 33 /ca/guies,
+0 of 28 /ca/festius and 1 of 30 /en/guides. No event page moved. URL inspection, 18 Nov: Barcelona holidays, the work
+calendar, the today-holiday guide, metro hours, R4 and Tarragona are all "Submitted and indexed", user canonical =
+Google canonical; metro hours and R4 were last crawled on 13 Oct and 30 Oct.
+
+**Finding 2: the pages with the 12 Nov answer-first layout fell hardest** (entry of 12 Nov, review 19 Nov; commit
+d2a328b moved the date list above the lead on every holiday town page and reordered the work calendar, today-holiday,
+ponts 2027 and December-bridge guides). Median position 5–12 Nov → 14–17 Nov: `/es/festivos/barcelona/` 9.1 → 34.7
+(Google crawled it on 13 Nov 05:47, after the deploy), `/es/guias/calendario-laboral-cataluna/` 18.9 → 49.1,
+`/es/guias/es-festivo-hoy-cataluna/` 17.7 → 49.0, `/es/festivos/tarragona/` 8.1 → 16.7, `/es/guias/puente-diciembre-espana/`
+6.7 → 10.1. Pages without that layout also fell (metro hours 11.3 → 22.8, R4 11.5 → 37.4), and the Catalan editions with
+the same layout did not. So the layout is not proven to be the cause, but it is the clearest page-level difference.
+The Spanish town page's dominant queries are "hoy es festivo en barcelona" (204 impr. in B at 8.0), "hoy es festivo",
+"mañana es festivo", "el lunes es festivo en barcelona". Its first screen is now the full 2026 table, most of it past;
+the "today" answer comes after it. The Catalan queries ("festius barcelona", "festius locals barcelona 2027") are
+answered by the table. **Handed to the 19 Nov review, not changed here**: the layout is that entry's lever, and a
+second change on the same pages would make both unreadable.
+
+**Finding 3: the 12 Nov homepage change removed the "Útil ara mateix" card grid** (owner request, 8cb8cf1): about 20
+homepage links in each edition. Three of its targets are among the losers: the today-holiday guide (above), free
+museums ES 15.5 → 30.4 (A → B) and the reservoirs guide ES 26.3 → 45.4 (median, 14 Nov step).
+
+**Finding 4: the 17 Nov pSEO cleanup is not the cause.** The step came on 14 Nov, three days before. The only overlap:
+the date pages of 1 and 2 Nov, which left the index on 15–16 Nov (`expiredDatePage`), link the today-holiday guide,
+the work calendar, metro hours and shops. They are `noindex, follow`, so the links are still followed. No loser
+depends on links from the Spain 2027 ca/en, 11N city or English town pages.
+
+**Loser list (A → B, page level; clicks A/B).**
+
+| Page | Impr. A → B | Pos. A → B | Cause |
+| --- | --- | --- | --- |
+| /es/festivos/barcelona/ | 4,736 → 5,320 | 9.8 → 11.3 | 14 Nov step on the 12 Nov layout page; "hoy" intent vs table-first screen. 19 Nov review |
+| /es/guias/calendario-laboral-cataluna/ (+ CA 9.4 → 10.8) | 3,325 → 2,473 | 12.4 → 26.9 | Mix: its 30 Oct queries ("viernes 30 de octubre es festivo", 6–9) ended; + 14 Nov step (layout page). "calendari laboral 2027" moved to town pages (Vic 6.3). No change |
+| /es/guias/es-festivo-hoy-cataluna/ | 1,460 → 368 | 12.7 → 26.2 | Cannibalisation: "hoy es festivo en cataluña" split from 9 Nov between it (7.5 → 12.1), /es/hoy/ (9.4), the December bridge page (9.3) and Barcelona's page; lost homepage link; layout page. **Fixed (today page)** |
+| /es/guias/horarios-metro-barcelona/ (+ CA 11.2 → 14.8) | 1,267 → 965 | 10.5 → 13.0 | Generic "a qué hora abre/cierra el metro" 8.4 → 15.7; Google's copy is from 13 Oct; facts re-read on TMB on 18 Nov, unchanged. No page-level cause found: not changed |
+| /es/guias/tiendas-abiertas-festivos-cataluna/ | 11,973 (B) | 5.1 → 6.3 (top-10 share 90 → 73 %) | "tiendas abiertas hoy en barcelona 2026" 6.4 → 10.5 on the November Sundays. Five logged changes since 30 Oct; review 25 Nov. Handed over, not changed |
+| /es/rodalies/r2/, r2-sud, r2-nord, ca editions | 133 → 295 (R2) | 10.2 → 16.5 (R2), 8.2 → 11.4 (R2 Sud) | Cannibalisation: "r2" over six of our URLs, all at 17–29 in B. Intent: Adif works on the R2 since 12 Nov. **Fixed** |
+| /ca/fires-de-nadal/ vs /ca/tradicions/mercats-de-nadal-catalunya/ | 318 → 849 (hub) | "fires de nadal catalunya 2026": hub 3.1 → 6.0 | Cannibalisation, alternating daily 2–13 Nov (hub 2–7, guide 7–10). **Fixed (guide body)** |
+| /es/guias/museos-gratis-barcelona/ (+ EN 14.6 → 19.5) | 312 → 155 | 15.5 → 30.4 | Lost homepage link (12 Nov); "museos gratis hoy" 7.9 → 11.8. **Fixed (link from the bridge page)** |
+| /ca/embassaments/ vs /ca/guies/embassaments-catalunya-avui/; /es/embalses/sau/, susqueda | 73 → 271; 111 → 464 | 8.9 → 12.2; 11.1 → 14.0 | Cannibalisation hub vs guide ("embassaments catalunya": hub 10 → 13.8, guide 23–34); lost homepage link (guide). The 13 Nov live-data entry's 25 Nov review decides hub vs guide: structural, listed for the owner |
+| /es/guias/zoo-aquarium-barcelona/, Boqueria ES/EN, Tibidabo EN | 355, 203, 480, 457 | 9.9 → 13.6, 10.0 → 15.4, 10.3 → 11.7, 11.6 → 15.9 | First screens answer the query with current official facts (zoo hours to 20 Dec, Boqueria Mon–Sat 8:00–20:30); 14 Nov step. Tibidabo EN back to 8.6–12.5 since 13 Nov. Not changed |
+| /es/escapadas/sitges-desde-barcelona-tren/, Núria ES, cruise port ES | 265, 336, 218 | 16.9 → 25.8, 14.4 → 18.8, 20.2 → 27.9 | Page 2–3, no named cause (the EN Sitges page ranks better). The R2 works do not affect the R2 Sud (Rodalies notice). Not changed |
+| /en/day-trips/montserrat-without-a-tour-from-barcelona/ | 165 → 2,474 | 14.6 → 37.4 | Mix: new head queries ("montserrat cable car" 419 at 35.8) from 9 to 15 Nov. Not a loss |
+| /en/guides/barcelona-airport-to-city-centre/, /es/escapadas/figueres-museo-dali-desde-barcelona/ | 448 → 497, 157 → 225 | 69.7 → 74.3, 54.6 → 59.6 | Authority (positions 55–75). Not changed |
+| / | 232 → 235 | 8.4 → 13.2 | Homepage; owner's layout decision. Not changed |
+
+Query-level, ≥ 200 impressions: "hoy es festivo" 9.0 → 13.0 (Barcelona's page), "encendido luces barcelona 2026"
+6.1 → 9.4 (moved from the Christmas guide to the new lights page, which the 19 Nov lights review owns), "tiendas
+abiertas hoy en barcelona 2026" 6.4 → 10.6 (shops, above).
+
+**What changed (body only; no title, description, lead, redirect or noindex).**
+
+1. **December bridge, Catalonia** (`/ca/guies/pont-desembre-catalunya/`, `/es/guias/puente-diciembre-cataluna/`,
+   `/en/guides/december-long-weekend-catalonia/`), "Qué hacer en el puente" list. (a) *Freshness:* the page said
+   Santa Llúcia's 2026 dates "aún no se han publicado". Generalitat Agenda Cultural, activity 2026110300020, read
+   18 Nov ("Darrera actualització: 17/11/2026"): "Inici: 27/11/2026 Fi: 23/12/2026 Horari: de 10 a 21 h", Avinguda de
+   la Catedral. Now: 27 Nov–23 Dec, 10–21 h, "open all through the long weekend". `BRIDGE_SANTA_LLUCIA` must equal
+   `SANTA_LLUCIA_2026` (tests/position-loss-18nov.test.ts). (b) *Lost homepage link:* new item "Museos gratis": Sunday
+   6 Dec is the first Sunday. MNAC "Horaris i preus", read 18 Nov: "Tots els dissabtes a partir de les 15 h, cada
+   primer diumenge de mes i jornades de portes obertes l'entrada al museu és gratuïta, però cal reservar entrada
+   anticipada en línia"; winter Sundays 10–15 h. Barcelona City Council, "Diumenges de museu sense passar per
+   taquilla", read 18 Nov: Picasso "Entrada gratuïta el primer diumenge de mes (amb reserva prèvia)"; MUHBA "A tots els
+   centres, excepte al Park Güell, … gratuïta tot el dia el primer diumenge de mes". The item links the free-museums
+   guide ("museos gratis en Barcelona"). The bridge page is the strongest related page (12,285 impr. ES in B).
+   Three sources added.
+2. **Christmas markets guide** (`/ca/tradicions/mercats-de-nadal-catalunya/` + es, en). *Cannibalisation with
+   `/ca/fires-de-nadal/` (+ es, en):* the H2 "Mercats de Nadal amb dates del 2026 confirmades" (the hub's job) becomes
+   "Fires de Nadal dels pobles: on és la llista sencera" / "Ferias de Navidad de los pueblos: dónde está la lista
+   completa" / "Town Christmas fairs: where the full list is". Its intro says the guide follows the big markets and
+   links the hub first: "totes les fires de Nadal del 2026 per data i municipi". The duplicate hub sentence after the
+   list is gone. The list, table, lead and titles are unchanged.
+3. **Rodalies R2, R2 Nord, R2 Sud** (`/ca|es/rodalies/r2/`, `r2-nord/`, `r2-sud/`; English hub `/en/rodalies/`).
+   *Cannibalisation + intent:* under the live notices, "¿R2, R2 Nord o R2 Sud?": which R2 the page is, the other two
+   linked with their routes, the four stations all three share (from the committed snapshot, read 28 Oct). Plus the
+   works, from Rodalies' notice "R2: Modificación temporal del servicio entre Gavà y Castelldefels por obras de Adif"
+   (updated 09.11.2026, read 18 Nov): "Desde el jueves 12 de noviembre y hasta el 14 de diciembre … los trenes de la
+   relación Granollers Centre – Castelldefels iniciarán y finalizarán su recorrido en Gavà … podrán continuar su
+   trayecto con los trenes de la R2 Sud". English: the same note, without links to other editions, in "Before you
+   travel". `tests/rodalies-r2-family.test.ts` fails from 15 Dec 2026, when the works sentence must go.
+4. **Today page** (`/ca/avui/`, `/es/hoy/`, `/en/today/`). *Cannibalisation with the today-holiday guide:* in the
+   holiday item, the guide's link now comes first, in the query's words: "¿Es festivo hoy en Cataluña? Hoy, mañana y
+   en cada municipio" (ca "És festiu avui a Catalunya? Avui, demà i a cada municipi", en "Is today a holiday in
+   Catalonia? Today, tomorrow and in every town"). It was second, as "¿Es festivo hoy? (todos los municipios)".
+
+**Baseline (GSC, clicks / impressions / CTR / position; A = 22 Oct–4 Nov, B = 5–18 Nov).**
+
+| Page | A | B |
+| --- | --- | --- |
+| /es/guias/puente-diciembre-cataluna/ | 119 / 5,667 / 2.1 % / 5.7 | 229 / 12,285 / 1.9 % / 6.1 |
+| /ca/guies/pont-desembre-catalunya/ | 16 / 658 / 2.4 % / 4.8 | 19 / 1,481 / 1.3 % / 6.1 |
+| /en/guides/december-long-weekend-catalonia/ | 2 / 281 / 0.7 % / 3.9 | 0 / 112 / 0 % / 4.2 |
+| /es/guias/museos-gratis-barcelona/ | 2 / 312 / 0.6 % / 15.5 | 2 / 155 / 1.3 % / 30.4 |
+| /ca/guies/museus-gratis-barcelona/ | 1 / 59 / 1.7 % / 14.2 | 1 / 98 / 1.0 % / 7.8 |
+| /en/guides/free-museums-barcelona/ | 3 / 130 / 2.3 % / 14.6 | 4 / 443 / 0.9 % / 19.5 |
+| /ca/tradicions/mercats-de-nadal-catalunya/ | 38 / 997 / 3.8 % / 6.6 | 52 / 1,289 / 4.0 % / 6.3 |
+| /es/tradiciones/mercados-navidad-cataluna/ | 40 / 959 / 4.2 % / 7.2 | 51 / 2,381 / 2.1 % / 7.4 |
+| /ca/fires-de-nadal/ | 16 / 318 / 5.0 % / 4.8 | 33 / 849 / 3.9 % / 5.9 |
+| /es/mercados-navidad/ · /en/christmas-markets/ | – · 0 / 12 | 3 / 159 / 10.8 · 3 / 96 / 11.0 |
+| /es/rodalies/r2/ · r2-nord · r2-sud | 1/133/10.2 · 3/154/11.0 · 1/179/8.2 | 1/295/16.5 · 5/461/13.0 · 2/385/11.4 |
+| /ca/rodalies/r2/ · r2-nord · r2-sud | 0/53/12.9 · 0/43/13.8 · 3/67/10.7 | 0/92/15.8 · 1/108/13.1 · 1/130/19.1 |
+| /es/guias/es-festivo-hoy-cataluna/ | 4 / 1,460 / 0.3 % / 12.7 | 1 / 368 / 0.3 % / 26.2 |
+| /ca/guies/es-festiu-avui-catalunya/ | 0 / 242 / 0 % / 5.4 | 1 / 60 / 1.7 % / 7.0 |
+| /es/hoy/ | 2 / 51 / 6.5 | 0 / 67 / 8.1 |
+
+Query baselines: "fires de nadal catalunya 2026" (B: hub 156 at 6.0, guide 52 at 7.8); "hoy es festivo en cataluña"
+(B: guide 42 at 12.1, /es/hoy/ 16 at 9.4, December bridge 21 at 9.3); "r2" (B: R2 Nord 136 at 21.8, R2 Sud 108 at
+17.4, R2 107 at 29.3).
+
+**Hypotheses.** (1) With one primary page per query, "fires de nadal catalunya 2026" settles on the hub at ≤ 5, and
+the daily alternation stops. (2) "hoy es festivo en cataluña" goes back to one URL (the guide) at ≤ 10. (3) The R2
+pages stop splitting "r2"; each of R2, R2 Nord and R2 Sud gets back to ≤ 12 on its own named queries. (4) The museums
+guide ES climbs back from 30 toward 15 with the bridge link, on the "museos gratis" queries. (5) No position loss on the
+bridge page from the two list items. Confounder for all five: the core update is still rolling out. Compare each
+page against the 14 Nov step pages left unchanged (metro hours, zoo, R4) as a control.
+
+**Not changed, on purpose, and decisions for the owner.**
+- **Holiday layout (19 Nov review):** evidence above. Proposal for that review: on the Spanish town pages, put the
+  "¿hoy/mañana es festivo en <town>?" line above the date table (ES only, where the queries are "hoy").
+- **Shops (25 Nov review):** "tiendas abiertas hoy en barcelona 2026" 6.4 → 10.5 on the November Sundays. Add it
+  to that review; no sixth change inside its window.
+- **Structural (not done; owner decision):** (a) reservoirs: merge `/ca|es|en/…/embassaments-catalunya-avui/` into the
+  live hubs `/ca/embassaments/` etc. with a 301 (they split "embassaments catalunya"), at the 25 Nov review; (b) a
+  compact row of text links on the homepage for the utilities the 12 Nov grid removal dropped (today-holiday guide,
+  free museums, reservoirs, shops, transport, airport…), with no cards; (c) nothing to redirect for the R2 pages or
+  the fairs pair: they serve different intents, and links are the right lever.
+
+**Publish.** Deploy (R2 pages, Rodalies hub, today page are code routes), then groups `pont-desembre` and
+`christmas`. IndexNow prefixes: `/ca/guies/pont-desembre-catalunya/ /es/guias/puente-diciembre-cataluna/
+/en/guides/december-long-weekend-catalonia/ /ca/tradicions/mercats-de-nadal-catalunya/
+/es/tradiciones/mercados-navidad-cataluna/ /en/traditions/christmas-markets-catalonia/ /ca/rodalies/ /es/rodalies/
+/en/rodalies/ /ca/avui/ /es/hoy/ /en/today/`.
+
+**Review:** 25 Nov 2026 (7 days) and 2 Dec 2026 (14 days), counted from 18 Nov; from the publish day if it goes
+live later. Same scripts, query × page per day for the three query baselines above. Revert any item whose page loses
+> 1.5 positions with no gain on its target query.
