@@ -5,6 +5,8 @@ import type { ReactNode } from "react";
 import { Breadcrumbs, type Crumb } from "@/components/Breadcrumbs";
 import { JsonLd } from "@/components/JsonLd";
 import { CalculatorNextStep, MoreCalculators } from "@/components/programmatic/calculators/MoreCalculators";
+import { CalcEmbedFrame } from "@/components/programmatic/embed-calc/CalcEmbedBox";
+import { WorkingDaysEmbedPicker } from "@/components/programmatic/embed-calc/WorkingDaysEmbedPicker";
 import { ShareBar } from "@/components/share/ShareBar";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
@@ -24,6 +26,7 @@ import { WD_META, pageFigures } from "@/lib/programmatic/working-days/page";
 import { workingDaysData } from "@/lib/programmatic/working-days/places";
 import { AGE_2026, AGE_2027, AGE_2027_CHECKED_ON, LEGAL_TEXTS, RULES_AS_OF, type LegalText } from "@/lib/programmatic/working-days/rules";
 import { breadcrumbSchema, graph } from "@/lib/seo/jsonld";
+import { siteOrigin } from "@/lib/site";
 import { buildMetadata } from "@/lib/seo/metadata";
 
 import { WorkingDaysCalculator, type WdState } from "./WorkingDaysCalculator";
@@ -354,6 +357,11 @@ export function WorkingDaysRoute({ locale }: { locale: WdLocale }) {
                   </li>
                 ))}
               </ul>
+              {/* The calculator for other websites (lib/programmatic/embed-calc/): the place picked from the same `data`. */}
+              <CalcEmbedFrame locale={locale}>
+                <WorkingDaysEmbedPicker locale={locale} data={data} origin={siteOrigin()} />
+              </CalcEmbedFrame>
+
               <MoreCalculators current="working-days" locale={locale} />
             </div>
             <ShareBar locale={locale} path={workingDaysPath(locale)} title={meta.h1} contentType="working_days" variant="full" />

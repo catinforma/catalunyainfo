@@ -11,6 +11,7 @@ import { dayMonth } from "@/lib/programmatic/holidays/format";
 import { esName, joinList } from "@/lib/programmatic/holidays/names";
 import { GUIDES } from "@/lib/programmatic/holidays/links";
 import { comarcaAnchor, comarcaPath, hubPath, municipalityPath, type MuniLocale } from "@/lib/programmatic/holidays/paths";
+import { REPORT_COPY, reportPath } from "@/lib/programmatic/holidays/report-copy";
 import { spainHubPath } from "@/lib/programmatic/spain-2027/paths";
 
 import { DateQuestions, GuideLinks, Sources } from "./parts";
@@ -54,6 +55,10 @@ export function HubPage({ locale }: { locale: MuniLocale }) {
             {t.bridges.after}
           </p>
           <p>{renderInline(workCalendarLine(locale))}</p>
+          {/* The data report (lib/programmatic/holidays/report.ts), 18 Nov 2026. */}
+          <p>
+            <Link href={reportPath(locale)}>{REPORT_COPY[locale].hubLink}</Link>
+          </p>
           <p>{renderInline(t.easter)}</p>
           {locale === "es" ? (
             <p>

@@ -9,6 +9,7 @@ import { getMessages } from "@/lib/i18n";
 import { widgetCopy } from "@/lib/programmatic/embed-2027/copy";
 import { pickerGroups, widgetEditions, widgetPagePath, type EmbedLocale } from "@/lib/programmatic/embed-2027/places";
 import { hubPath } from "@/lib/programmatic/holidays/paths";
+import { REPORT_COPY, reportPath } from "@/lib/programmatic/holidays/report-copy";
 import { HUB } from "@/lib/programmatic/spain-2027/copy";
 import { HUB_INTL } from "@/lib/programmatic/spain-2027/copy-intl";
 import { editionHubPath } from "@/lib/programmatic/spain-2027/editions";
@@ -75,6 +76,9 @@ export function WidgetRoute({ locale }: { locale: EmbedLocale }) {
                 origin={siteOrigin()}
                 labels={{
                   picker: t.picker,
+                  year: t.year,
+                  year2026: t.year2026,
+                  snippetTitle2026: t.snippetTitle2026,
                   previewTitle: t.previewTitle,
                   codeTitle: t.codeTitle,
                   codeHelp: t.codeHelp,
@@ -106,6 +110,9 @@ export function WidgetRoute({ locale }: { locale: EmbedLocale }) {
                 </li>
                 <li>
                   <Link href={hubPath(locale)}>{LOCAL_HUB[locale]}</Link>
+                </li>
+                <li>
+                  <Link href={reportPath(locale)}>{REPORT_COPY[locale].hubLink}</Link>
                 </li>
               </ul>
             </div>

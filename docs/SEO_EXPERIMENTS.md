@@ -7464,3 +7464,63 @@ the 11 with impressions by 15 Jan → noindex them in `low-demand.ts`). Date gua
 `calendario-2027-espana`; IndexNow prefixes `/es/festivos/2027/`, `/ca/festius/2027/`, `/en/holidays/2027/`.
 
 **Outcome:** _pending_
+
+## 2026-11-18 — Pillar E (links): embeddable 2026 calendar + two calculator widgets, "embed this" boxes, and the local-holiday data report with CSV, ca/es/en (deploy; groups `festius-locals-dades`, `widgets-calculadores`, `calendari-2027-widget`) (review 2026-12-16, links 2027-02-18)
+
+**Why.** `docs/MEDIA_PLAN.md` pillar E: the media beat us on authority. Earned links need assets other sites want on
+their pages. Outreach is drafted in `docs/OUTREACH_PLAN.md` and nothing has been sent (house rule: the owner approves
+each message).
+
+**New URLs (indexable).**
+- Data report: `/ca/festius/dades-festius-locals/`, `/es/festivos/datos-festivos-locales/`,
+  `/en/holidays/local-holidays-data/` (lib/programmatic/holidays/report.ts). Every figure is computed from the 2026
+  DOGC order snapshot (Ordre EMT/208/2025 + EMT/3/2026, Idescat PMH 2025) and the 433 councils' 2027 approvals
+  (`council-2027.ts`), which switch to the order automatically once `local-2027.json` is parsed. Ranked bar list
+  (HTML, colours validated with the dataviz script) + table, weekday, month, comarca and nuclei tables, a 2027
+  section, CSV download, "how to cite" code, sources, method, and Dataset JSON-LD (CC BY 4.0, `distribution`). In the
+  sitemap with hreflang and in llms.txt. Linked from the three holiday hubs (one line each, no title or description
+  change) and from the widget page.
+- CSV: `/data/festius-locals-catalunya-2026-2027.csv` (3,649 rows, BOM, a source and URL on every row, `Link:
+  rel=canonical` pointing to the report and `rel=license` CC BY 4.0). Not in the sitemap.
+
+**Computed findings (to quote in outreach).** 2026: 917 municipalities with local holidays, 1,772 own local days on 201
+different dates. Whit Monday, 25 May, is a local holiday in 139 municipalities, home to 3.6 M people (44.5 % of
+Catalonia). 24 Sep is a local holiday in 10 municipalities with 2.2 M people. 61.9 % of local holidays fall on a Monday or
+a Friday. August has the most local holidays (289, 16.3 %). 30 councils made no proposal. 2027 so far: 433 councils (81.3 %
+of the population) have approved their days. Whit Monday (17 May) leads again with 87.
+
+**Widgets (noindex, `indexifembedded`, canonical to the source page).**
+- `/embed/<l>/2026/<municipi>/`: the 2026 DOGC calendar for every Catalan town, next to the existing 2027 one. The
+  builder on `…/2027/al-teu-web/` gains a year picker, with 2026 for Catalan towns only.
+- `/embed/<l>/calc/net-salary/` and `/embed/<l>/calc/working-days/[<place id>/]`: GET forms answered on the server with
+  the same engines as the calculator pages. No script, no cookie, no analytics. Default views are CDN-cacheable for a
+  day; results are `private, no-store`.
+- Headers: `EMBED_CALC_SOURCE` adds `form-action 'self'` on `/embed/*/calc/*` only. Every other path keeps
+  `X-Frame-Options: DENY` and `frame-ancestors 'none'` (tests/embed-widgets.test.ts).
+- Change to the 2027 widget: it now carries `<link rel="canonical">` to its attribution page. The 11 Nov build said "no
+  canonical" (task brief of 18 Nov). Watch in GSC that the town pages are not dropped, i.e. that no noindex is inherited.
+
+**"Embed this" boxes (body only, no title or description touched).** Every town and city page: the
+`WidgetPlaceLink` line becomes a folded box with that place's iframe + link code and a copy button. The net salary pages
+(ca/es/en) and working-days pages (ca/es/en) get a folded box. The working-days box has a place picker, so a council can
+embed its own town.
+
+**Baseline.** New pages: 0 impressions. Referring domains: the GSC Links report is UI-only (the API does not expose it).
+The owner notes the "Top linking sites" count on deploy day. /embed/ requests: count by Referer origin in the Caddy
+access log (the browser sends origin only).
+
+**Prediction.** By 16 Dec, the report is indexed in all three languages and shows impressions on "festius locals" queries.
+By 18 Feb 2027, at least 5 new referring domains to the report, the widget pages or the town pages (embeds + citations),
+counting only after owner-approved outreach.
+
+**Review 2026-12-16** (URL inspection of the three report URLs; `snapshot.py page dades-festius-locals 28`,
+`page datos-festivos-locales 28`, `page local-holidays-data 28`; check that the 2027 town pages kept their impressions
+after the canonical change). **Links review 2027-02-18** (GSC Links: referring domains; Caddy /embed/ referers).
+When the 2027 DOGC order is parsed: deploy, then run `festius-locals-dades` again (the copy switches to "dogc" by itself).
+
+**Go-live.** Deploy, then publish `festius-locals-dades`, `widgets-calculadores`, `calendari-2027-widget`. IndexNow
+prefixes: `/ca/festius/dades-festius-locals/`, `/es/festivos/datos-festivos-locales/`,
+`/en/holidays/local-holidays-data/`. The groups already ping their own paths. The town pages' box is a body-only change
+and needs no ping.
+
+**Outcome:** _pending_

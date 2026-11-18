@@ -4,6 +4,7 @@ import Link from "next/link";
 import { Breadcrumbs, type Crumb } from "@/components/Breadcrumbs";
 import { JsonLd } from "@/components/JsonLd";
 import { CalculatorNextStep, MoreCalculators } from "@/components/programmatic/calculators/MoreCalculators";
+import { NetSalaryEmbedBox } from "@/components/programmatic/embed-calc/CalcEmbedBox";
 import { ShareBar } from "@/components/share/ShareBar";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
@@ -502,6 +503,9 @@ export function NetSalaryRoute({ locale }: { locale: NetLocale }) {
                   <li key={l}>{l}</li>
                 ))}
               </ul>
+
+              {/* The calculator for other websites (lib/programmatic/embed-calc/): the code to paste. */}
+              <NetSalaryEmbedBox locale={locale} />
 
               <MoreCalculators current="net-salary" locale={locale} />
             </div>

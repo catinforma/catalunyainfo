@@ -154,9 +154,10 @@ test("widget: noindex, no script, no tracking, no request to anyone", () => {
       assert.match(html, /^<!doctype html>/);
       assert.match(html, new RegExp(`<html lang="${locale}">`));
       assert.match(html, /<meta name="robots" content="noindex[^"]*">/);
-      assert.doesNotMatch(html, /<script|<iframe|<img|<link |@import|url\(|cookie|gtag|googletagmanager|analytics/i);
-      // No canonical: a noindex document does not point Google anywhere else.
-      assert.doesNotMatch(html, /rel="canonical"/);
+      assert.doesNotMatch(html, /<script|<iframe|<img|@import|url\(|cookie|gtag|googletagmanager|analytics/i);
+      // One <link>, the canonical: the page the content belongs to, the same as the attribution link (18 Nov 2026).
+      assert.equal(html.match(/<link /g)?.length, 1);
+      assert.ok(html.includes(`<link rel="canonical" href="${esc(absoluteUrl(attributionPath(locale, place)))}">`), `${locale}: canonical`);
     }
   }
 });
@@ -401,11 +402,17 @@ test("widget page: the picker lists every town and city once, and the browser bu
   assert.match(builder, /^"use client";/);
   assert.match(builder, /\$\{g\.embedPrefix\}\$\{value\}\//);
   assert.match(builder, /flag === 2 \? g\.hubPath : `\$\{flag === 1 && g\.altPagePrefix \? g\.altPagePrefix : g\.pagePrefix\}\$\{slug\}\/`/);
-  // The pasted code: the iframe, then a plain link to the full page (the one that earns the link), and the link-only alternative.
-  assert.match(builder, /<iframe src=/);
-  assert.match(builder, /<p><a href="\$\{attr\(origin \+ choice\.page\)\}">/);
-  assert.match(builder, /const linkCode = `<a href=/);
-  assert.doesNotMatch(builder, /nofollow/);
+  assert.match(builder, /embed2026: g\.embedPrefix2026 \? `\$\{g\.embedPrefix2026\}\$\{value\}\/` : null/);
+  // The pasted code (snippet.ts, shared with the town pages' box): the iframe, then a plain link to the
+  // full page (the one that earns the link), and the link-only alternative.
+  assert.match(builder, /const iframeCode = iframeSnippet\(snippet\);/);
+  assert.match(builder, /const linkCode = linkSnippet\(snippet\);/);
+  assert.match(builder, /page: choice\.page/);
+  const snippet = read("src/lib/programmatic/embed-2027/snippet.ts");
+  assert.match(snippet, /<iframe src=/);
+  assert.match(snippet, /<p><a href="\$\{attr\(s\.origin \+ s\.page\)\}">/);
+  assert.match(snippet, /return `<a href=/);
+  assert.doesNotMatch(builder + snippet, /nofollow/);
 });
 
 test("links: the three 2027 hubs, every town page and every city page link the widget page", () => {

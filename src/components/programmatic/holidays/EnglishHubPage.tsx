@@ -13,6 +13,7 @@ import { weekdayDayMonth } from "@/lib/programmatic/holidays/format";
 import { joinList } from "@/lib/programmatic/holidays/names";
 import { GUIDES } from "@/lib/programmatic/holidays/links";
 import { hubPath, municipalityPath } from "@/lib/programmatic/holidays/paths";
+import { REPORT_COPY, reportPath } from "@/lib/programmatic/holidays/report-copy";
 import type { SnapshotMunicipality } from "@/lib/programmatic/holidays/types";
 
 import { DateQuestions, GuideLinks, HolidayTable, Sources } from "./parts";
@@ -94,6 +95,10 @@ export function EnglishHubPage() {
             {t.bridges.after}
           </p>
           <p>{renderInline(workCalendarLine("en"))}</p>
+          {/* The data report (lib/programmatic/holidays/report.ts), 18 Nov 2026. */}
+          <p>
+            <Link href={reportPath("en")}>{REPORT_COPY.en.hubLink}</Link>
+          </p>
 
           <h2 id="towns">{t.townsTitle}</h2>
           <p>{t.townsLead}</p>

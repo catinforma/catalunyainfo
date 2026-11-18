@@ -51,6 +51,7 @@ import { STATIONS, selectPages } from "@/lib/programmatic/fuel/data";
 import { fuelHubPath } from "@/lib/programmatic/fuel/paths";
 import { SNAPSHOT as HOLIDAYS, YEAR } from "@/lib/programmatic/holidays/data";
 import { englishTowns } from "@/lib/programmatic/holidays/english";
+import { reportEditions } from "@/lib/programmatic/holidays/report-copy";
 import { GUIDES } from "@/lib/programmatic/holidays/links";
 import { DATE_PAGES, DATE_PAGE_RANGE, datePath, hubPath as holidaysHub } from "@/lib/programmatic/holidays/paths";
 import { pvpcPath } from "@/lib/programmatic/pvpc/paths";
@@ -148,6 +149,11 @@ export function liveTools(): LiveTool[] {
       name: "Public holidays by town",
       hubs: { ca: holidaysHub("ca"), es: holidaysHub("es"), en: holidaysHub("en") },
       description: `the ${YEAR} local holidays of the ${HOLIDAYS.municipalities.length} municipalities of Catalonia that have them, one page per town (${englishTowns().length} in English: the largest cities and the main resorts), with the Catalonia-wide days, whether today is a holiday and the Sundays shops may open (DOGC order and Generalitat open data).`,
+    },
+    {
+      name: "Catalonia local holidays: the data",
+      hubs: reportEditions(),
+      description: `which local holiday dates repeat most in Catalonia and where, computed from the ${YEAR} DOGC order of local holidays (${HOLIDAYS.municipalities.length} municipalities) and, for ${YEAR + 1}, the councils' own approvals until the order is out: top dates by towns and by population, weekday, month, comarca, with a CSV under CC BY 4.0 citing the official sources.`,
     },
     {
       name: "Spain 2027 public holidays and work calendar",

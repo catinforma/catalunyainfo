@@ -37,7 +37,9 @@ test("transport ticket selector announces the cheapest ticket and has a level-2 
 
 test("embed builder: both code boxes are named by their headings (axe label, critical)", () => {
   const src = read("src/components/programmatic/embed-2027/EmbedBuilder.tsx");
-  assert.match(src, /<textarea\s+id=\{id\}\s+aria-labelledby=\{labelledBy\}/);
+  // The box itself (CodeBox.tsx, shared with the town pages and the calculators): named by a heading or a label.
+  const box = read("src/components/programmatic/embed-2027/CodeBox.tsx");
+  assert.match(box, /<textarea\s+id=\{id\}\s+aria-labelledby=\{labelledBy\}\s+aria-label=\{labelledBy \? undefined : label\}/);
   assert.match(src, /<h2 id=\{`\$\{id\}-iframe-title`\}/);
   assert.match(src, /<h2 id=\{`\$\{id\}-link-title`\}/);
   assert.match(src, /labelledBy=\{`\$\{id\}-iframe-title`\}/);
