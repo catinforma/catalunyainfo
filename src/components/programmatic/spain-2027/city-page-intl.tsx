@@ -26,7 +26,23 @@ import {
   type City,
   type CityDayKind,
 } from "@/lib/programmatic/spain-2027/cities";
-import { areaNameIntl, caIn, caOf, cityAnswerIntl, cityFaqIntl, cityLayerLinesIntl, cityH1Intl, cityLeadIntl, cityListLineIntl, localNameIntl, localNoteIntl, planWordsIntl, populationIntl } from "@/lib/programmatic/spain-2027/city-copy-intl";
+import {
+  areaNameIntl,
+  caIn,
+  caOf,
+  cityAnswerIntl,
+  cityFaqIntl,
+  cityLayerLinesIntl,
+  cityH1Intl,
+  cityLeadIntl,
+  cityListLineIntl,
+  councilSentenceIntl,
+  councilShortIntl,
+  localNameIntl,
+  localNoteIntl,
+  planWordsIntl,
+  populationIntl,
+} from "@/lib/programmatic/spain-2027/city-copy-intl";
 import { KIND_LABEL_INTL, compactDatesIntl, dayNameIntl, runLineIntl, tr, weekdayDateIntl } from "@/lib/programmatic/spain-2027/copy-intl";
 import {
   editionBridgesPath,
@@ -236,7 +252,11 @@ export function CityPageIntl({ c, locale }: { c: City; locale: Edition }) {
                 caption={
                   isZoned(c)
                     ? tr(locale, `${areaNameIntl(list.mainArea ?? c.name, "ca")}, segons el ${list.source.ref}.`, `${areaNameIntl(list.mainArea ?? c.name, "en")}, according to the ${list.source.ref}.`)
-                    : tr(locale, `Festes locals ${caOf(name)}, segons el ${list.source.ref}.`, `${Name}'s local holidays, according to the ${list.source.ref}.`)
+                    : tr(
+                        locale,
+                        `Festes locals ${caOf(name)}, segons ${((t) => (t.startsWith("acord") ? `l'${t}` : `el ${t}`))(councilShortIntl(c, "ca") ?? list.source.ref)}.`,
+                        `${Name}'s local holidays, according to the ${councilShortIntl(c, "en") ?? list.source.ref}.`,
+                      )
                 }
               />
               {(list.zones ?? []).map((z) => (
@@ -283,7 +303,11 @@ export function CityPageIntl({ c, locale }: { c: City; locale: Edition }) {
                   {list.source.title}
                 </a>{" "}
                 ({list.source.ref}).{" "}
-                {list.days.some((d) => d.name === null) ? tr(locale, "El butlletí dona les dates sense el nom de la festa.", "The bulletin gives the dates without the name of the holiday.") : ""}
+                {councilSentenceIntl(c, locale)
+                  ? `${councilSentenceIntl(c, locale)} ${tr(locale, "Quan surti la llista oficial, aquesta pàgina passarà a citar-la.", "Once the official list is out, this page will cite it instead.")}`
+                  : list.days.some((d) => d.name === null)
+                    ? tr(locale, "El butlletí dona les dates sense el nom de la festa.", "The bulletin gives the dates without the name of the holiday.")
+                    : ""}
               </p>
             </>
           ) : (
@@ -357,8 +381,8 @@ export function CityPageIntl({ c, locale }: { c: City; locale: Edition }) {
           <p className="text-sm text-[var(--color-muted)]">
             {tr(
               locale,
-              "Calculat per CatalunyaInfo amb els festius del BOE i les festes locals del butlletí citat, per a una setmana de dilluns a divendres. No inclou torns ni convenis propis.",
-              "Worked out by CatalunyaInfo from the BOE holidays and the local holidays in the bulletin cited, for a Monday-to-Friday week. It leaves out shift patterns and collective agreements.",
+              `Calculat per CatalunyaInfo amb els festius del BOE i les festes locals ${councilShortIntl(c, "ca") ? "de l'acord municipal citat" : "del butlletí citat"}, per a una setmana de dilluns a divendres. No inclou torns ni convenis propis.`,
+              `Worked out by CatalunyaInfo from the BOE holidays and the local holidays in the ${councilShortIntl(c, "en") ? "council agreement" : "bulletin"} cited, for a Monday-to-Friday week. It leaves out shift patterns and collective agreements.`,
             )}
           </p>
           <p>

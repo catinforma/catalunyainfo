@@ -26,7 +26,19 @@ import {
   type City,
   type CityDayKind,
 } from "@/lib/programmatic/spain-2027/cities";
-import { cityAnswer, cityFaq, cityH1, cityLayerLines, cityLead, cityListLine, localName, planWords, population } from "@/lib/programmatic/spain-2027/city-copy";
+import {
+  cityAnswer,
+  cityFaq,
+  cityH1,
+  cityLayerLines,
+  cityLead,
+  cityListLine,
+  councilSentence,
+  councilShort,
+  localName,
+  planWords,
+  population,
+} from "@/lib/programmatic/spain-2027/city-copy";
 import { KIND_LABEL, compactDates, dayName, runLine, weekdayDate } from "@/lib/programmatic/spain-2027/copy";
 import { cityPath, communityPath, spainBridgesPath, spainHubPath } from "@/lib/programmatic/spain-2027/paths";
 import { BOE_REF, SOURCES } from "@/lib/programmatic/spain-2027/sources";
@@ -178,7 +190,9 @@ export function CityPage({ c }: { c: City }) {
               </h2>
               <DaysTable
                 days={days}
-                caption={isZoned(c) ? `${list.mainArea ?? c.name}, según el ${list.source.ref}.` : `Fiestas locales de ${c.name}, según el ${list.source.ref}.`}
+                caption={
+                  isZoned(c) ? `${list.mainArea ?? c.name}, según el ${councilShort(c) ?? list.source.ref}.` : `Fiestas locales de ${c.name}, según el ${councilShort(c) ?? list.source.ref}.`
+                }
               />
               {(list.zones ?? []).map((z) => (
                 <DaysTable key={z.place} days={z.days} caption={`${z.place}, según el mismo texto.`} />
@@ -218,7 +232,11 @@ export function CityPage({ c }: { c: City }) {
                   {list.source.title}
                 </a>{" "}
                 ({list.source.ref}).{" "}
-                {list.days.some((d) => d.name === null) ? "El boletín da las fechas sin el nombre de la fiesta." : ""}
+                {councilSentence(c)
+                  ? `${councilSentence(c)} ${s.local.how} ${s.local.bulletinName}; cuando salga la lista, esta página pasa a citarla.`
+                  : list.days.some((d) => d.name === null)
+                    ? "El boletín da las fechas sin el nombre de la fiesta."
+                    : ""}
               </p>
             </>
           ) : (
@@ -269,7 +287,7 @@ export function CityPage({ c }: { c: City }) {
               </li>
             ))}
           </ul>
-          <p className="text-sm text-[var(--color-muted)]">{CITY_COMPUTED_NOTE}</p>
+          <p className="text-sm text-[var(--color-muted)]">{councilShort(c) ? CITY_COMPUTED_NOTE.replace("del boletín citado", "del acuerdo municipal citado") : CITY_COMPUTED_NOTE}</p>
           <p>
             <Link href={`${communityPath(c.community)}#puentes`}>Puentes de {YEAR} {c.community.en}</Link>
             {" · "}
@@ -313,7 +331,9 @@ export function CityPage({ c }: { c: City }) {
           ]}
         />
         <p className="ci-measure mt-2 text-xs text-[var(--color-muted)]">
-          <time dateTime={cityReadOn(c)}>Fiestas locales leídas el {dayMonthYear(cityReadOn(c), "es")}.</time>
+          <time dateTime={cityReadOn(c)}>
+            {councilShort(c) ? "Acuerdo municipal y boletín leídos el" : "Fiestas locales leídas el"} {dayMonthYear(cityReadOn(c), "es")}.
+          </time>
         </p>
         <ShareBar locale="es" path={crumbPath(cityCrumbs(c))} title={cityH1(c)} contentType="holidays_2027" variant="full" />
       </div>

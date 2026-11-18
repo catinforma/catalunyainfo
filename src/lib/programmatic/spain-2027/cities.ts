@@ -3,7 +3,7 @@ import type { Region } from "@/lib/programmatic/holidays/boe-2027";
 import { addDays } from "@/lib/programmatic/holidays/format";
 
 import { communityDays, weekday, type CommunityDay } from "./calendar";
-import { CITY_ROWS, CITIES_AS_OF, CITIES_RECHECK_DAYS, type CityRow, type LocalDay, type LocalList } from "./cities-data";
+import { CITY_ROWS, CITIES_AS_OF, CITIES_RECHECK_DAYS, type CityRow, type CouncilAct, type LocalDay, type LocalList } from "./cities-data";
 import { names, type CommunityNames } from "./communities";
 import { SOURCES, type PendingCheck } from "./sources";
 
@@ -42,9 +42,13 @@ export function cityReadOn(c: Pick<CityRow, "readOn" | "status2027" | "region">)
   return checked?.date ?? c.readOn ?? CITIES_AS_OF;
 }
 
-/** The last issue of the community's bulletin searched for the city's 2027 days, while they are pending. */
+/**
+ * The last issue of the community's bulletin searched for the city's 2027
+ * days, while they are pending, or while only the council has fixed them
+ * (status "council": the bulletin still has to publish them).
+ */
 export function pendingCheck(c: Pick<CityRow, "status2027" | "region">): PendingCheck | null {
-  return c.status2027 === "pending" ? (SOURCES[c.region].local.checked ?? null) : null;
+  return c.status2027 === "pending" || c.status2027 === "council" ? (SOURCES[c.region].local.checked ?? null) : null;
 }
 
 /** "Las Palmas" where the full name would not fit a title. */
@@ -52,9 +56,25 @@ export function shortName(c: City): string {
   return c.short ?? c.name;
 }
 
-/** The 2027 list, when the city is in it. */
+/**
+ * The 2027 days the page prints: the community's list when the city is in
+ * it, or the council's own act before that list (status "council", labelled
+ * as such wherever it is printed).
+ */
 export function local2027(c: City): LocalList | null {
+  return c.status2027 === "published" || c.status2027 === "council" ? c.local2027 : null;
+}
+
+/** Only the bulletin's list: what the .ics feed, the widget and the working-days calculator count. */
+export function bulletinLocal2027(c: City): LocalList | null {
   return c.status2027 === "published" ? c.local2027 : null;
+}
+
+/** Status "council": the act and the bulletin still to publish the days. */
+export function councilAct(c: City): { act: CouncilAct; source: LocalList["source"]; bulletin: string; check: PendingCheck | null } | null {
+  const list = c.status2027 === "council" ? c.local2027 : null;
+  if (!list?.act) return null;
+  return { act: list.act, source: list.source, bulletin: SOURCES[c.region].local.bulletinShort, check: pendingCheck(c) };
 }
 
 /** True when the bulletin splits the municipality into parts with different days. */
@@ -106,6 +126,23 @@ export function cityCalendar(c: City): CityDay[] {
   return [...regional, ...(island ? [{ date: island.date, name: island.name, kind: "island" as const }] : []), ...local].sort(
     (a, b) => a.date.localeCompare(b.date) || a.kind.localeCompare(b.kind),
   );
+}
+
+/**
+ * `cityCalendar` as the bulletins publish it: without the days a council has
+ * approved and its community's bulletin has not yet listed (status
+ * "council"). The .ics feed, the widget, the working-days calculator and the
+ * planner's default count only these, as with the Catalan councils' days
+ * before the DOGC order.
+ */
+export function officialCalendar(c: City): CityDay[] {
+  if (c.status2027 !== "council") return cityCalendar(c);
+  return cityCalendar(c).filter((d) => d.kind !== "local");
+}
+
+/** Status "council": the council's two days, in date order (empty otherwise). */
+export function councilDays(c: City): string[] {
+  return c.status2027 === "council" ? localDays(c).map((d) => d.date) : [];
 }
 
 /** One per date: how many days off the city has in 2027 (a local day on a regional one would count once). */

@@ -124,7 +124,8 @@ test("rows: published cities carry two 2027 days from their community's official
       assert.ok(c.local2027.days.length === 2, `${c.slug}: ${c.local2027.days.length} days`);
       for (const z of c.local2027.zones ?? []) assert.ok(z.days.length >= 1 && z.days.every((d) => d.date.startsWith("2027-")), `${c.slug} ${z.place}`);
       if (c.local2027.zones?.length) assert.ok(c.local2027.mainArea, `${c.slug}: name the main area`);
-    } else {
+    } else if (c.status2027 !== "council") {
+      // Status "council" (cities-council.ts) has its own test: tests/spain-2027-council-towns.test.ts.
       assert.equal(c.local2027, null, c.slug);
       assert.ok(c.local2026, `${c.slug}: a city with no 2027 days needs its 2026 ones, or no page`);
       assert.equal(c.local2026.year, 2026);
@@ -216,7 +217,8 @@ test("titles: 'Festivos locales <Ciudad> 2027: <día 1> y <día 2>' when known, 
     const title = cityTitle(c, before);
     assert.ok(title.length <= TITLE_LIMIT, `${title} (${title.length})`);
     titles.add(title);
-    const known = c.status2027 === "published" && !c.local2027?.zones?.length;
+    // Status "council" (cities-council.ts): the council's days are in the title as well; the page labels them.
+    const known = (c.status2027 === "published" || c.status2027 === "council") && !c.local2027?.zones?.length;
     if (known) {
       assert.match(title, /^Festivos (locales )?.+ 2027: \d/, title);
       for (const d of localDays(c)) assert.ok(title.includes(String(Number(d.date.slice(8, 10)))), `${title}: ${d.date}`);
@@ -242,6 +244,8 @@ test("intros: each city's own facts, no two alike; pending cities say so plainly
     assert.ok(lead.includes(new Intl.NumberFormat("es-ES").format(c.population)), `${c.slug}: population`);
     if (c.status2027 === "published") {
       assert.ok(lead.includes(c.local2027!.source.ref), `${c.slug}: the bulletin`);
+    } else if (c.status2027 === "council") {
+      assert.ok(lead.includes("Las aprobó el Pleno del Ayuntamiento") && lead.includes("falta que las publique"), `${c.slug}: the act, pending the bulletin`);
     } else {
       assert.ok(lead.startsWith(`Las fiestas locales de 2027 de ${c.name} aún no se han publicado`), lead);
       assert.ok(pendingLine(c).includes("En 2026 fueron"), c.slug);
@@ -261,6 +265,14 @@ test("FAQ: '¿es festivo…?' for each local day, with the answer and its effect
         assert.match(q.answer, /^Sí\. Es fiesta local/);
       }
       assert.ok(faq[0]!.answer.includes(c.local2027!.source.ref));
+    } else if (c.status2027 === "council") {
+      for (const d of localDays(c)) {
+        const q = faq.find((f) => f.question.startsWith("¿Es festivo el") && f.question.includes(`${Number(d.date.slice(8, 10))} de`) && f.question.endsWith(`en ${c.name}?`));
+        assert.ok(q, `${c.slug}: question for ${d.date}`);
+        assert.match(q.answer, /^Sí, según el acuerdo del Ayuntamiento\. Es fiesta local/);
+        assert.match(q.answer, /Falta que la publique (el|la) /);
+      }
+      assert.ok(faq[0]!.answer.includes(c.local2027!.source.title));
     } else {
       assert.match(faq[0]!.answer, /^No\. Las fiestas locales de 2027/);
     }

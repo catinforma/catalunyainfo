@@ -7,7 +7,7 @@ import { fullPagePath, placeName } from "@/lib/programmatic/embed-2027/places";
 import type { Region } from "@/lib/programmatic/holidays/boe-2027";
 import type { SnapshotMunicipality } from "@/lib/programmatic/holidays/types";
 import { communityDays } from "@/lib/programmatic/spain-2027/calendar";
-import { CITIES, cityCalendar, type City } from "@/lib/programmatic/spain-2027/cities";
+import { CITIES, councilDays, officialCalendar, type City } from "@/lib/programmatic/spain-2027/cities";
 import { COMMUNITIES, type CommunityNames } from "@/lib/programmatic/spain-2027/communities";
 import { editionCommunityPath, editionNames } from "@/lib/programmatic/spain-2027/editions";
 import { communityPath } from "@/lib/programmatic/spain-2027/paths";
@@ -30,8 +30,10 @@ import { CATALONIA_ID, LEAVE_LOCALES, LEAVE_YEAR, leaveEditions, type LeaveLocal
  *    them out, so the default plan does too;
  *  - the rest of Spain: each community's column of the BOE's 2027 list
  *    (`communityDays`, BOE-A-2026-21254); for the cities with a page,
- *    `cityCalendar` (the island day in Canarias, Navarra's common local day,
- *    the city's two local days once its bulletin lists them); for Ceuta and
+ *    `officialCalendar` (the island day in Canarias, Navarra's common local
+ *    day, the city's two local days once its bulletin lists them; a council's
+ *    days still pending their bulletin, status "council", travel separately
+ *    like the Catalan councils' and count only when ticked); for Ceuta and
  *    Melilla, one municipality each, the two local days their own calendar
  *    agreement publishes.
  *
@@ -97,13 +99,14 @@ export function townDays(m: SnapshotMunicipality): { base: string[]; local: stri
   return council ? { base, local: [], council: [...council.local], status: "c" } : { base, local: [], council: [], status: "p" };
 }
 
-/** A Spanish city with a page: its whole 2027 calendar as the city page gives it. */
-export function cityDays(c: City): { base: string[]; extra: string[]; status: PlaceStatus } {
+/** A Spanish city with a page: its 2027 calendar as the bulletins give it, and a council's days pending their bulletin apart. */
+export function cityDays(c: City): { base: string[]; extra: string[]; council: string[]; status: PlaceStatus } {
   const base = communityDays(c.region).map((d) => d.date);
-  const all = cityCalendar(c).map((d) => d.date);
+  const all = officialCalendar(c).map((d) => d.date);
   const extra = all.filter((d) => !base.includes(d));
-  const status: PlaceStatus = c.status2027 === "published" ? "b" : c.status2027 === "missing" ? "m" : "s";
-  return { base, extra, status };
+  const council = councilDays(c).filter((d) => !all.includes(d));
+  const status: PlaceStatus = c.status2027 === "published" ? "b" : c.status2027 === "council" ? "k" : c.status2027 === "missing" ? "m" : "s";
+  return { base, extra, council, status };
 }
 
 /** A whole community: its BOE column; Ceuta and Melilla, one municipality each, with their two local days. */
@@ -151,7 +154,7 @@ export function plannerData(locale: LeaveLocale): PlannerData {
         .sort((a, b) => a.label.localeCompare(b.label, locale))
         .map(({ c, label }): PlannerItem => {
           const d = cityDays(c);
-          return [`${community.slug}/${c.slug}`, label, fullPagePath(locale, { kind: "city", c }), baseIndex(c.region), pack(d.extra), "", d.status];
+          return [`${community.slug}/${c.slug}`, label, fullPagePath(locale, { kind: "city", c }), baseIndex(c.region), pack(d.extra), pack(d.council), d.status];
         });
       const r = regionDays(community.region);
       const label = regionLabel(community.region, locale);

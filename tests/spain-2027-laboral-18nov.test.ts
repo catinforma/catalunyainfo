@@ -82,7 +82,9 @@ test("layers: every 2027 day of the city in exactly one layer, each layer with i
       assert.ok(local, c.slug);
       for (const x of lines) assert.ok(x.days.length > 0 && x.source.length > 0, `${c.slug} ${x.id}`);
       const list = local2027(c);
-      if (list) assert.equal(local!.source, list.source.ref, c.slug);
+      // A council's days (status "council", cities-council.ts) name the act and the bulletin still to publish them.
+      if (list && c.status2027 === "council") assert.ok(local!.source.includes(SOURCES[c.region].local.checked!.through), c.slug);
+      else if (list) assert.equal(local!.source, list.source.ref, c.slug);
       else if (c.status2027 === "pending") assert.ok(local!.source.includes(SOURCES[c.region].local.checked!.through), c.slug);
     }
   }

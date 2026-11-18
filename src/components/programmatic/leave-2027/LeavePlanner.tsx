@@ -90,7 +90,9 @@ export function LeavePlanner({ locale, data, initialPlace, initialLeave }: { loc
   const [, label, ownPage, base, extra, councilDays, status] = item;
   // places.ts `itemPage`: "" = this language's town page, "*" = the Catalan one.
   const page = ownPage === "*" ? `/ca/festius/${item[0]}/` : ownPage || `${data.townPrefix}${item[0]}/`;
-  const hasCouncil = status === "c" && councilDays.length > 0;
+  // "c": a Catalan council's days before the DOGC order; "k": a Spanish city's before its community's bulletin.
+  const cityCouncil = status === "k";
+  const hasCouncil = (status === "c" || cityCouncil) && councilDays.length > 0;
   const withCouncil = hasCouncil && state.council;
   // The React Compiler memoises these (a few milliseconds each, recomputed only when an input changes).
   const holidays = [...new Set([...unpack(data.bases[base] ?? "", data.year), ...unpack(extra, data.year), ...(withCouncil ? unpack(councilDays, data.year) : [])])].sort();
@@ -150,7 +152,9 @@ export function LeavePlanner({ locale, data, initialPlace, initialLeave }: { loc
           {hasCouncil ? (
             <label className="flex items-start gap-2 font-normal">
               <input type="checkbox" className="mt-1" checked={state.council} onChange={(e) => update({ council: e.target.checked })} />
-              <span>{t.council(unpack(councilDays, data.year).map((d) => shortDay(d, locale)).join(locale === "en" ? " and " : locale === "es" ? " y " : " i "))}</span>
+              <span>
+                {(cityCouncil ? t.councilCity : t.council)(unpack(councilDays, data.year).map((d) => shortDay(d, locale)).join(locale === "en" ? " and " : locale === "es" ? " y " : " i "))}
+              </span>
             </label>
           ) : null}
         </div>
@@ -176,7 +180,7 @@ export function LeavePlanner({ locale, data, initialPlace, initialLeave }: { loc
             <dd className="ci-numeric">{onWorkingDay.length}</dd>
           </div>
         </dl>
-        <p className="ci-calc-note">{withCouncil ? t.councilCounted(placeLabel) : t.status[status](placeLabel)}</p>
+        <p className="ci-calc-note">{withCouncil ? (cityCouncil ? t.councilCountedCity : t.councilCounted)(placeLabel) : t.status[status](placeLabel)}</p>
         {state.saturdays ? <p className="ci-calc-note">{t.saturdaysOn}</p> : null}
 
         <h3 className="mt-6">{t.planTitle(placeLabel, state.leave)}</h3>

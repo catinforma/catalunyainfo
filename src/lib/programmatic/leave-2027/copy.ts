@@ -64,9 +64,12 @@ export const CATALONIA_ID = "catalunya";
  *  - "n": the order gives days to the town's nuclei only, which differ;
  *  - "r": a whole community or Catalonia, local days left out by design;
  *  - "b": a Spanish city (or Ceuta, Melilla) whose bulletin lists its days;
+ *  - "k": a Spanish city whose council has approved its days before its
+ *    community's list (spain-2027/cities-council.ts); counted only when the
+ *    reader ticks the box, as with "c";
  *  - "m": the community's list is out and does not include the city.
  */
-export type PlaceStatus = "d" | "c" | "p" | "s" | "n" | "r" | "b" | "m";
+export type PlaceStatus = "d" | "c" | "p" | "s" | "n" | "r" | "b" | "k" | "m";
 
 /* -------------------------------------------------------------------------- */
 /* Date words                                                                 */
@@ -130,6 +133,8 @@ export interface PlannerCopy {
   leaveOption: (n: number) => string;
   saturdays: string;
   council: (dates: string) => string;
+  /** The same box for a Spanish city (status "k"): pending its community's bulletin, not the DOGC. */
+  councilCity: (dates: string) => string;
   noscript: string;
   daysOff: string;
   leaveUsed: string;
@@ -151,6 +156,8 @@ export interface PlannerCopy {
   status: Record<PlaceStatus, (place: string) => string>;
   /** Shown when the reader has ticked the council box. */
   councilCounted: (place: string) => string;
+  /** The same for a Spanish city (status "k"). */
+  councilCountedCity: (place: string) => string;
   saturdaysOn: string;
 }
 
@@ -165,6 +172,7 @@ export const PLANNER_COPY: Record<LeaveLocale, PlannerCopy> = {
     leaveOption: (n) => days(n, "dia", "dies"),
     saturdays: "També treballo els dissabtes",
     council: (dates) => `Compta-hi les festes locals que ha aprovat l'ajuntament (${dates}), pendents de l'ordre del DOGC`,
+    councilCity: (dates) => `Compta-hi les festes locals que ha aprovat l'ajuntament (${dates}), pendents del butlletí de la comunitat`,
     noscript: "Sense JavaScript, el càlcul es queda en l'exemple: Barcelona amb 5 dies de vacances.",
     daysOff: "Dies de festa seguits, en total",
     leaveUsed: "Dies de vacances que demanes",
@@ -190,9 +198,11 @@ export const PLANNER_COPY: Record<LeaveLocale, PlannerCopy> = {
       n: (p) => `${caStart(caA(p))} les festes locals són diferents a cada nucli: el càlcul fa servir només els festius de tot Catalunya.`,
       r: (p) => `Només els festius de tota la comunitat (${p}), sense festes locals: les de cada municipi s'hi afegeixen.`,
       b: (p) => `Amb els festius de la comunitat i les festes locals ${caDe(p)} publicades al butlletí oficial.`,
+      k: (p) => `La llista de festes locals del 2027 de la comunitat encara no ha sortit: el càlcul fa servir només els festius de la comunitat. L'Ajuntament ${caDe(p)} ja ha aprovat les seves; marca la casella per comptar-les.`,
       m: (p) => `La llista oficial de festes locals del 2027 ja ha sortit però no hi consta ${p}: el càlcul fa servir només els festius de la comunitat.`,
     },
     councilCounted: (p) => `Inclou les dues festes locals que ha aprovat l'Ajuntament ${caDe(p)}, pendents de l'ordre del DOGC.`,
+    councilCountedCity: (p) => `Inclou les dues festes locals que ha aprovat l'Ajuntament ${caDe(p)}, pendents del butlletí de la comunitat.`,
     saturdaysOn: "Comptem el dissabte com a dia laborable: els festius que cauen en dissabte també afegeixen un dia de festa.",
   },
   es: {
@@ -203,6 +213,7 @@ export const PLANNER_COPY: Record<LeaveLocale, PlannerCopy> = {
     leaveOption: (n) => days(n, "día", "días"),
     saturdays: "También trabajo los sábados",
     council: (dates) => `Contar las fiestas locales que ha aprobado el ayuntamiento (${dates}), pendientes de la orden del DOGC`,
+    councilCity: (dates) => `Contar las fiestas locales que ha aprobado el ayuntamiento (${dates}), pendientes del boletín de la comunidad`,
     noscript: "Sin JavaScript, el cálculo se queda en el ejemplo: Barcelona con 5 días de vacaciones.",
     daysOff: "Días de fiesta seguidos, en total",
     leaveUsed: "Días de vacaciones que pides",
@@ -228,9 +239,11 @@ export const PLANNER_COPY: Record<LeaveLocale, PlannerCopy> = {
       n: (p) => `En ${p} las fiestas locales son distintas en cada núcleo: el cálculo usa solo los festivos de toda Cataluña.`,
       r: (p) => `Solo los festivos de toda la comunidad (${p}), sin fiestas locales: las de cada municipio se suman.`,
       b: (p) => `Con los festivos de la comunidad y las fiestas locales de ${p} publicadas en el boletín oficial.`,
+      k: (p) => `La lista de fiestas locales de 2027 de la comunidad aún no ha salido: el cálculo usa solo los festivos de la comunidad. El Ayuntamiento de ${p} ya ha aprobado las suyas; marca la casilla para contarlas.`,
       m: (p) => `La lista oficial de fiestas locales de 2027 ya ha salido, pero no incluye ${p}: el cálculo usa solo los festivos de la comunidad.`,
     },
     councilCounted: (p) => `Incluye las dos fiestas locales que ha aprobado el Ayuntamiento de ${p}, pendientes de la orden del DOGC.`,
+    councilCountedCity: (p) => `Incluye las dos fiestas locales que ha aprobado el Ayuntamiento de ${p}, pendientes del boletín de la comunidad.`,
     saturdaysOn: "Contamos el sábado como día laborable: los festivos que caen en sábado también suman un día de fiesta.",
   },
   en: {
@@ -241,6 +254,7 @@ export const PLANNER_COPY: Record<LeaveLocale, PlannerCopy> = {
     leaveOption: (n) => days(n, "day", "days"),
     saturdays: "I also work Saturdays",
     council: (dates) => `Count the local holidays the council has approved (${dates}), pending the DOGC order`,
+    councilCity: (dates) => `Count the local holidays the council has approved (${dates}), pending the regional bulletin`,
     noscript: "Without JavaScript the calculation stays on the example: Barcelona with 5 days of leave.",
     daysOff: "Days off in a row, in total",
     leaveUsed: "Days of leave you book",
@@ -266,9 +280,11 @@ export const PLANNER_COPY: Record<LeaveLocale, PlannerCopy> = {
       n: (p) => `In ${p} the local holidays differ from one village to the next: the plan uses the Catalonia-wide holidays only.`,
       r: (p) => `Region-wide holidays only (${p}), without local holidays: each town adds its own.`,
       b: (p) => `With the region's holidays and ${p}'s local holidays as the official bulletin publishes them.`,
+      k: (p) => `The region's 2027 local-holiday list is not out yet: the plan uses the region's holidays only. ${p} council has already approved its own; tick the box to count them.`,
       m: (p) => `The official 2027 local-holiday list is out but does not include ${p}: the plan uses the region's holidays only.`,
     },
     councilCounted: (p) => `Includes the two local holidays ${p} council has approved, pending the DOGC order.`,
+    councilCountedCity: (p) => `Includes the two local holidays ${p} council has approved, pending the regional bulletin.`,
     saturdaysOn: "Saturday counts as a working day: holidays that fall on a Saturday add a day off too.",
   },
 };

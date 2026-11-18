@@ -21,7 +21,7 @@ import {
   ratioText,
 } from "../src/lib/programmatic/leave-2027/copy.ts";
 import { MAX_LEAVE, MIN_GAP, isWeekendDay, leaveCalendar, longestBreak, planLeave, type Break, type LeaveInput, type LeavePlan } from "../src/lib/programmatic/leave-2027/optimizer.ts";
-import { itemHolidays, itemPage, leaveSitemapEntries, plannerData, plannerPlace, townDays } from "../src/lib/programmatic/leave-2027/places.ts";
+import { itemHolidays, itemPage, leaveSitemapEntries, plannerData, plannerPlace, townDays, unpack } from "../src/lib/programmatic/leave-2027/places.ts";
 import { addDays } from "../src/lib/programmatic/holidays/format.ts";
 import { CITIES, localDays } from "../src/lib/programmatic/spain-2027/cities.ts";
 import { COMMUNITIES } from "../src/lib/programmatic/spain-2027/communities.ts";
@@ -293,11 +293,17 @@ test("places: Spanish cities count their local days only once their bulletin lis
     if (c.status2027 === "published") {
       assert.equal(item[6], "b", c.slug);
       for (const d of own) assert.ok(holidays.includes(d), `${c.slug} ${d}`);
+      assert.equal(item[5], "", `${c.slug}: no council days once the bulletin lists them`);
+    } else if (c.status2027 === "council") {
+      // The council's days before the bulletin (cities-council.ts): apart, counted only when ticked.
+      assert.equal(item[6], "k", c.slug);
+      assert.deepEqual(unpack(item[5]), own, c.slug);
+      for (const d of own) assert.ok(!holidays.includes(d) && itemHolidays(data, item, true).includes(d), `${c.slug} ${d}`);
     } else {
       assert.equal(own.length, 0, c.slug);
       assert.ok(item[6] === "s" || item[6] === "m", c.slug);
+      assert.equal(item[5], "", `${c.slug}: no council days`);
     }
-    assert.equal(item[5], "", `${c.slug}: no council days outside Catalonia`);
   }
   // Ceuta and Melilla are one municipality each: their two local days are in.
   const ceuta = itemHolidays(data, plannerPlace(data, "ceuta/all")!.item);
@@ -322,7 +328,7 @@ test("copy: ranges, ratios and the gap in words", () => {
   // Catalan contracts the article: "per al Masnou", "de l'Hospitalet".
   assert.match(PLANNER_COPY.ca.planTitle("el Masnou", 5), /^El pla per al Masnou amb 5 dies/);
   assert.match(PLANNER_COPY.ca.status.c("l'Hospitalet de Llobregat"), /L'Ajuntament de l'Hospitalet de Llobregat ja ha aprovat/);
-  for (const locale of LEAVE_LOCALES) assert.equal(Object.keys(PLANNER_COPY[locale].status).sort().join(), "b,c,d,m,n,p,r,s");
+  for (const locale of LEAVE_LOCALES) assert.equal(Object.keys(PLANNER_COPY[locale].status).sort().join(), "b,c,d,k,m,n,p,r,s");
 });
 
 /* -------------------------------------------------------------------------- */

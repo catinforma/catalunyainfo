@@ -2,7 +2,7 @@ import { councilApproved2027, isAran, NEXT, NEXT_YEAR, nextYearFor, SNAPSHOT, YE
 import { councilLabel, councilSource } from "@/lib/programmatic/holidays/copy";
 import { dayMonth, dayMonthYear, weekdayName } from "@/lib/programmatic/holidays/format";
 import { caDe, joinList } from "@/lib/programmatic/holidays/names";
-import { cityCalendar, cityReadOn, commonLocalDays, local2027, type CityDayKind } from "@/lib/programmatic/spain-2027/cities";
+import { bulletinLocal2027, cityReadOn, commonLocalDays, officialCalendar, type CityDayKind } from "@/lib/programmatic/spain-2027/cities";
 import { areaNameIntl, caOf, localNameIntl, localNoteIntl } from "@/lib/programmatic/spain-2027/city-copy-intl";
 import { localName } from "@/lib/programmatic/spain-2027/city-copy";
 import { dayName } from "@/lib/programmatic/spain-2027/copy";
@@ -159,10 +159,11 @@ const CITY_SCOPE: Record<EmbedLocale, Record<CityDayKind, string>> = {
 function cityModel(lang: EmbedLocale, place: Extract<EmbedPlace, { kind: "city" }>): Model {
   const { c } = place;
   const name = placeName(lang, place);
-  const list = local2027(c);
+  // The widget carries the bulletin's days only: a council's days still pending their bulletin stay out (status "council").
+  const list = bulletinLocal2027(c);
   const common = commonLocalDays(c);
   const s = SOURCES[c.region];
-  const rows: Row[] = cityCalendar(c).map((d) => {
+  const rows: Row[] = officialCalendar(c).map((d) => {
     const label =
       d.kind === "local"
         ? lang === "es"
