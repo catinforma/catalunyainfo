@@ -109,18 +109,25 @@ test("titles fit in 60 characters and descriptions in 155, both carrying the dat
     assert.ok(seoDescription.length > 60 && seoDescription.length <= 155, `${locale} description ${seoDescription.length}: ${seoDescription}`);
     assert.ok(excerpt.length > 30);
     for (const field of [seoTitle, title]) assert.match(field, new RegExp(String(EASTER_YEAR)));
-    // 11 Nov 2026 (CTR retitles): the two holidays are in the description; the
-    // title promises the day-by-day table instead of giving the answer.
-    assert.ok(seoDescription.includes(day(EASTER.goodFriday)) && seoDescription.includes(day(EASTER.easterMonday)), `${locale}: ${seoDescription}`);
-    assert.match(seoTitle, /(dia a dia|día a día|day by day)/, `${locale}: ${seoTitle}`);
+    // 18 Nov 2026 (docs/SEO_EXPERIMENTS.md, "Easter 2027: back to the 31 Oct
+    // snippet"): title and description both give the two holidays again.
+    for (const field of [seoTitle, seoDescription]) {
+      assert.ok(field.includes(day(EASTER.goodFriday)) && field.includes(day(EASTER.easterMonday)), `${locale}: ${field}`);
+    }
     assert.ok(seoDescription.includes(day(EASTER.schoolFrom)) && seoDescription.includes(day(EASTER.schoolTo)), `${locale}: school dates`);
   }
-  // 3 Nov (CTR sweep): "setmana santa 2027" / "quan és setmana santa 2027" get the week first, Palm Sunday to Easter Sunday.
-  assert.match(EASTER_2027.editions.ca.seoDescription, new RegExp(`^Setmana Santa 2027: del ${day(EASTER.palmSunday)} al ${day(EASTER.easterSunday)} de març\\. Festius: Divendres Sant ${day(EASTER.goodFriday)} `));
-  assert.match(EASTER_2027.editions.es.seoDescription, new RegExp(`^Semana Santa 2027: del ${day(EASTER.palmSunday)} al ${day(EASTER.easterSunday)} de marzo\\. Festivos: Viernes Santo ${day(EASTER.goodFriday)} `));
-  assert.match(EASTER_2027.editions.ca.seoTitle, /^Setmana Santa 2027 a Catalunya/);
-  assert.match(EASTER_2027.editions.es.seoTitle, /^Semana Santa 2027 en Cataluña/);
-  assert.match(EASTER_2027.editions.en.seoTitle, /^Easter 2027 in Catalonia and Barcelona/);
+  // The 3 Nov "week first" snippet (picked up 4-6 Nov, CTR 2.7 % -> 0.4 %) stays out of the title,
+  // the description and the lead: the holidays lead, the week is in the key facts.
+  assert.match(EASTER_2027.editions.ca.seoDescription, /^Divendres Sant i Dilluns de Pasqua \(26 i 29 de març\) són festius; el Dijous Sant, no\./);
+  assert.match(EASTER_2027.editions.es.seoDescription, /^Viernes Santo y Lunes de Pascua \(26 y 29 de marzo\) son festivos; el Jueves Santo, no\./);
+  assert.equal(EASTER_2027.editions.ca.seoTitle, "Setmana Santa 2027 a Catalunya: festius 26 i 29 de març");
+  assert.equal(EASTER_2027.editions.es.seoTitle, "Semana Santa 2027 en Cataluña: festivos 26 y 29 de marzo");
+  assert.equal(EASTER_2027.editions.en.seoTitle, "Easter 2027 in Catalonia and Barcelona: 26 and 29 March");
+  const week = new RegExp(`\\b${day(EASTER.palmSunday)} (al|to) ${day(EASTER.easterSunday)}\\b`);
+  for (const locale of LOCALES) {
+    const { seoTitle, seoDescription, blocks } = EASTER_2027.editions[locale];
+    for (const field of [seoTitle, seoDescription, text(blocks.slice(0, 1))]) assert.doesNotMatch(field, week, `${locale}: ${field}`);
+  }
 });
 
 test("sources are https and untracked, include each council printed, and the reader sees the check date", () => {

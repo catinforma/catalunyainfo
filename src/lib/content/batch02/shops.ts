@@ -113,6 +113,12 @@ import { CHRISTMAS_SHOPS_CHECKED, type ChristmasSourceKey } from "./shops-christ
  * say "domingo(s) y festivos" and promise the date table; the descriptions
  * keep 29 November and the December days, then the table and the 30 towns.
  * Same dates, same count.
+ *
+ * 18 Nov 2026 (day-7 review, same entry): the CA edition is reverted to its
+ * 3 Nov title and description. Position 5.3 -> 7.1 with CTR 2.3 % -> 0.5 %
+ * (29 Oct-11 Nov vs 12-16 Nov), the rule's "position down more than 1.5 with
+ * no CTR gain". ES (2.7 % -> 1.6 %, at 6.3 on 25 % fewer impressions; 1.2 %
+ * in 6-11 Nov) and EN (3.5 % on 113) keep the 11 Nov strings.
  */
 
 const VERIFIED = CHRISTMAS_SHOPS_CHECKED;
@@ -137,9 +143,9 @@ const META: Record<Locale, { path: string; title: string; seoTitle: string; seoD
   ca: {
     path: "guies/botigues-obertes-festius-catalunya",
     title: "Botigues obertes en diumenges i festius a Catalunya: calendari 2026 i 2027",
-    seoTitle: "Botigues obertes diumenges i festius a Barcelona, dia a dia",
+    seoTitle: "Botigues obertes a Barcelona: diumenge 29 nov i desembre",
     seoDescription:
-      "Diumenge 29 de novembre (eleccions) i 6, 8, 13, 20 i 27 de desembre: poden obrir; 25 i 26, no. Taula dia a dia i els 30 municipis que canvien.",
+      "Diumenge 29 de novembre, dia d'eleccions: sí que poden obrir a Barcelona i Catalunya. Al desembre, 6, 8, 13, 20 i 27; 25 i 26, no. 30 municipis canvien.",
     excerpt:
       "Els diumenges i festius en què les botigues poden obrir a Catalunya, segons el DOGC: el que queda del 2026, el calendari del 2027 i les botigues que poden obrir sempre.",
   },

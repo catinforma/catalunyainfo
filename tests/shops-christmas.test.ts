@@ -75,13 +75,14 @@ test("every row of the December table names its sources, and its basis cites one
 test("guide: the December block comes first; titles, descriptions and H1s are unchanged", () => {
   // Titles and descriptions: 3 Nov 2026 through the 5 Nov body-only change,
   // then retitled 11 Nov 2026 (CTR retitles, docs/SEO_EXPERIMENTS.md).
-  assert.equal(SHOPS_META.ca.seoTitle, "Botigues obertes diumenges i festius a Barcelona, dia a dia");
+  // 18 Nov 2026 (day-7 rule): the CA edition is back to its 3 Nov strings.
+  assert.equal(SHOPS_META.ca.seoTitle, "Botigues obertes a Barcelona: diumenge 29 nov i desembre");
   assert.equal(SHOPS_META.es.seoTitle, "Tiendas abiertas domingo y festivos Barcelona: fecha a fecha");
   assert.equal(SHOPS_META.ca.title, "Botigues obertes en diumenges i festius a Catalunya: calendari 2026 i 2027");
   assert.equal(SHOPS_META.es.title, "Tiendas abiertas en domingos y festivos en Cataluña: calendario 2026 y 2027");
   assert.equal(
     SHOPS_META.ca.seoDescription,
-    "Diumenge 29 de novembre (eleccions) i 6, 8, 13, 20 i 27 de desembre: poden obrir; 25 i 26, no. Taula dia a dia i els 30 municipis que canvien.",
+    "Diumenge 29 de novembre, dia d'eleccions: sí que poden obrir a Barcelona i Catalunya. Al desembre, 6, 8, 13, 20 i 27; 25 i 26, no. 30 municipis canvien.",
   );
   assert.equal(
     SHOPS_META.es.seoDescription,
