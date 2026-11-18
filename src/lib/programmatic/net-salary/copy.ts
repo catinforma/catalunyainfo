@@ -3,6 +3,7 @@ import { calcPath, calculatorSlugs } from "@/lib/programmatic/calculators/paths"
 
 import type { AgeBand, Contract, Disability, FamilySituation, SalaryInput, SalaryResult } from "./engine";
 import { IRPF, SMI_DEDUCTION, SOCIAL_SECURITY } from "./rules-2026";
+import { SPECIAL_REGIME } from "./special-regime";
 
 /**
  * Paths and words of the net salary calculator, small enough for the
@@ -33,6 +34,9 @@ export function netSalaryEditions(): Record<NetLocale, string> {
  * son cuánto netos" answers, without one page per amount — then three higher ones.
  */
 export const TABLE_SALARIES: readonly number[] = [...Array.from({ length: 46 }, (_, k) => 15000 + k * 1000), 70000, 80000, 100000];
+
+/** Gross salaries of the standard-vs-special-regime table ("how much tax will I pay on €X"): the last one crosses 600,000 €. */
+export const COMPARE_SALARIES: readonly number[] = [30000, 40000, 50000, 60000, 80000, 100000, 150000, 200000, 700000];
 
 /* -------------------------------------------------------------------------- */
 /* Numbers                                                                    */
@@ -85,7 +89,7 @@ export function parseAmount(text: string): number {
 /* Shareable state in the URL hash                                            */
 /* -------------------------------------------------------------------------- */
 
-/** "#b=30000&n=14&r=cataluna&a=0&f=3&h=0&u=0&w=0&d=0&c=i&m=0&v=0". */
+/** "#b=30000&n=14&r=cataluna&a=0&f=3&h=0&u=0&w=0&d=0&c=i" (+ "&m=1", "&v=1", "&e=1" for the special regime). */
 export function writeHash(s: SalaryInput): string {
   const p = new URLSearchParams();
   p.set("b", String(s.gross));
@@ -100,6 +104,7 @@ export function writeHash(s: SalaryInput): string {
   p.set("c", { "open-ended": "i", "fixed-term": "t", short: "s" }[s.contract]);
   if (s.mobility) p.set("m", "1");
   if (s.housingLoan) p.set("v", "1");
+  if (s.specialRegime) p.set("e", "1");
   return `#${p.toString()}`;
 }
 
@@ -127,6 +132,7 @@ export function readHash(hash: string, base: SalaryInput, knownRegion: (id: stri
   if (c) out.contract = c;
   out.mobility = p.get("m") === "1";
   out.housingLoan = p.get("v") === "1";
+  out.specialRegime = p.get("e") === "1";
   return out;
 }
 
@@ -178,8 +184,35 @@ export interface CalculatorCopy {
   smiNote: (f: SmiNoteFigures) => string;
   foral: string;
   foralLinks: string;
+  /** The special regime for posted workers (art. 93 LIRPF): the select and the side-by-side result. */
+  regime: string;
+  regimeOptions: Record<"standard" | "special", string>;
+  compareTitle: string;
+  compareCols: readonly [string, string, string];
+  taxRow: string;
+  differenceMore: (amount: string) => string;
+  differenceLess: (amount: string) => string;
+  differenceEqual: string;
+  specialAssumptionsTitle: string;
+  specialAssumptions: (f: SpecialFigures) => string[];
+  specialAbove: (f: SpecialFigures) => string;
+  specialMore: string;
   share: string;
   disclaimer: string;
+}
+
+/** The special regime's figures, formatted for the locale (from special-regime.ts). */
+export interface SpecialFigures {
+  rate: string;
+  top: string;
+  threshold: string;
+  months: number;
+  years: number;
+}
+
+export function specialFigures(locale: NetLocale): SpecialFigures {
+  const S = SPECIAL_REGIME;
+  return { rate: percent(S.rate, locale, 0), top: percent(S.topRate, locale, 0), threshold: money(S.threshold, locale, 0), months: S.optionMonths, years: S.followingYears + 1 };
 }
 
 export const CALC_COPY: Record<NetLocale, CalculatorCopy> = {
@@ -239,6 +272,24 @@ export const CALC_COPY: Record<NetLocale, CalculatorCopy> = {
         : `La retención puede ser mayor que el IRPF final. La deducción de la disposición adicional 61.ª de la Ley del IRPF (Real Decreto-ley 5/2026, art. 28) no se aplica en la nómina, sino en la Renta ${f.year}: con ${f.gross} es de ${f.ded} (${f.max} hasta ${f.upTo}, menos el 20 % de lo que pase de esa cifra, y nada desde ${f.end}), sin superar tu cuota del impuesto. Lo que te devuelvan de los ${f.ret} retenidos depende de la escala de tu comunidad: esta calculadora no lo estima. Requisito: no tener otras rentas no exentas de más de ${f.other}.`,
     foral: "Navarra y el País Vasco tienen su propio IRPF y sus propias tablas de retención, que esta calculadora no incluye. Consulta la Hacienda Foral:",
     foralLinks: "Tablas y simuladores oficiales",
+    regime: "Régimen del IRPF",
+    regimeOptions: { standard: "General (retención de IRPF)", special: "Régimen especial de trabajadores desplazados (ley Beckham)" },
+    compareTitle: "Régimen general y régimen especial, lado a lado",
+    compareCols: ["", "Régimen general", "Régimen especial"],
+    taxRow: "IRPF",
+    differenceMore: (x) => `Con el régimen especial te quedan ${x} más al año.`,
+    differenceLess: (x) => `Con el régimen especial te quedarían ${x} menos al año: con este sueldo y esta situación, el régimen general retiene menos.`,
+    differenceEqual: "Con este sueldo los dos regímenes dejan el mismo neto.",
+    specialAssumptionsTitle: "Qué supone el cálculo del régimen especial",
+    specialAssumptions: (f) => [
+      `Has optado por el régimen con el modelo 149 y has dado a tu empresa el documento de la Agencia Tributaria: no es automático. El plazo es de ${f.months} meses desde la fecha de alta en la Seguridad Social.`,
+      `Todo lo que cobras es sueldo de una sola empresa. Impuesto: el ${f.rate} del bruto hasta ${f.threshold} y el ${f.top} de lo que pase de esa cifra (art. 93 de la Ley del IRPF). Del bruto no se resta nada: ni mínimo por familia, edad o discapacidad ni las cotizaciones.`,
+      "Seguridad Social: las mismas cotizaciones que en el régimen general, como cualquier trabajador de alta en la Seguridad Social española. Si mantienes la de tu país de origen, el cálculo no es para tu caso.",
+      "La columna general es la retención de la nómina: el IRPF final se calcula en la Renta con la escala de tu comunidad. La especial ya es el impuesto final sobre el sueldo (modelo 151), igual en toda España.",
+      "No incluye otras rentas (ahorro, alquileres, ingresos del extranjero) ni la deducción por impuestos pagados fuera.",
+    ],
+    specialAbove: (f) => `Por encima de ${f.threshold}, el ${f.top} solo se aplica cuando la empresa ya te ha pagado ${f.threshold} en el año: el neto de cada nómina es la media del año.`,
+    specialMore: "Quién puede acogerse y cómo",
     share: "El enlace de la página guarda tus datos: puedes copiarlo y compartirlo.",
     disclaimer: "Es una estimación de la retención y de las cotizaciones, no el impuesto final: lo que pagas de IRPF se decide en la declaración de la Renta, con la escala de tu comunidad y tus deducciones. Tu empresa puede aplicar un convenio, pluses o conceptos que cambian la nómina.",
   },
@@ -298,6 +349,24 @@ export const CALC_COPY: Record<NetLocale, CalculatorCopy> = {
         : `La retenció pot ser més alta que l'IRPF final. La deducció de la disposició addicional 61a de la Llei de l'IRPF (Reial decret llei 5/2026, art. 28) no s'aplica a la nòmina, sinó a la renda ${f.year}: amb ${f.gross} és de ${f.ded} (${f.max} fins a ${f.upTo}, menys el 20 % del que passi d'aquesta xifra, i res des de ${f.end}), sense superar la teva quota de l'impost. El que et retornin dels ${f.ret} retinguts depèn de l'escala de la teva comunitat: aquesta calculadora no ho estima. Requisit: no tenir altres rendes no exemptes de més de ${f.other}.`,
     foral: "Navarra i el País Basc tenen el seu propi IRPF i les seves taules de retenció, que aquesta calculadora no inclou. Consulta la Hisenda Foral:",
     foralLinks: "Taules i simuladors oficials",
+    regime: "Règim de l'IRPF",
+    regimeOptions: { standard: "General (retenció d'IRPF)", special: "Règim especial de treballadors desplaçats (llei Beckham)" },
+    compareTitle: "Règim general i règim especial, l'un al costat de l'altre",
+    compareCols: ["", "Règim general", "Règim especial"],
+    taxRow: "IRPF",
+    differenceMore: (x) => `Amb el règim especial et queden ${x} més l'any.`,
+    differenceLess: (x) => `Amb el règim especial et quedarien ${x} menys l'any: amb aquest sou i aquesta situació, el règim general reté menys.`,
+    differenceEqual: "Amb aquest sou els dos règims deixen el mateix net.",
+    specialAssumptionsTitle: "Què suposa el càlcul del règim especial",
+    specialAssumptions: (f) => [
+      `Has optat pel règim amb el model 149 i has donat a la teva empresa el document de l'Agència Tributària: no és automàtic. El termini és de ${f.months} mesos des de la data d'alta a la Seguretat Social.`,
+      `Tot el que cobres és sou d'una sola empresa. Impost: el ${f.rate} del brut fins a ${f.threshold} i el ${f.top} del que passi d'aquesta xifra (art. 93 de la Llei de l'IRPF). Del brut no es resta res: ni mínim per família, edat o discapacitat ni les cotitzacions.`,
+      "Seguretat Social: les mateixes cotitzacions que al règim general, com qualsevol treballador d'alta a la Seguretat Social espanyola. Si mantens la del teu país d'origen, el càlcul no és per al teu cas.",
+      "La columna general és la retenció de la nòmina: l'IRPF final es calcula a la renda amb l'escala de la teva comunitat. L'especial ja és l'impost final sobre el sou (model 151), igual a tot Espanya.",
+      "No inclou altres rendes (estalvi, lloguers, ingressos de l'estranger) ni la deducció per impostos pagats fora.",
+    ],
+    specialAbove: (f) => `Per sobre de ${f.threshold}, el ${f.top} només s'aplica quan l'empresa ja t'ha pagat ${f.threshold} a l'any: el net de cada nòmina és la mitjana de l'any.`,
+    specialMore: "Qui s'hi pot acollir i com",
     share: "L'enllaç de la pàgina guarda les teves dades: el pots copiar i compartir.",
     disclaimer: "És una estimació de la retenció i de les cotitzacions, no l'impost final: el que pagues d'IRPF es decideix a la declaració de la renda, amb l'escala de la teva comunitat i les teves deduccions. La teva empresa pot aplicar un conveni, plusos o conceptes que canvien la nòmina.",
   },
@@ -357,6 +426,24 @@ export const CALC_COPY: Record<NetLocale, CalculatorCopy> = {
         : `Withholding may be more than your final income tax. The deduction in additional provision 61 of the IRPF Law (Royal Decree-law 5/2026, art. 28) is not applied on the payslip but in the ${f.year} annual return (Renta): on ${f.gross} it is ${f.ded} (${f.max} up to ${f.upTo}, minus 20% of the pay above that, nothing from ${f.end}), never more than your tax due. How much of the ${f.ret} withheld comes back depends on your region's scale: this calculator does not estimate it. Condition: no other non-exempt income above ${f.other}.`,
     foral: "Navarre and the Basque Country have their own income tax and withholding tables, which this calculator does not cover. See the regional tax office:",
     foralLinks: "Official tables and simulators",
+    regime: "Income tax regime",
+    regimeOptions: { standard: "Standard (IRPF withholding)", special: "Special regime for posted workers (Beckham law)" },
+    compareTitle: "Standard and special regime side by side",
+    compareCols: ["", "Standard regime", "Special regime"],
+    taxRow: "Income tax",
+    differenceMore: (x) => `With the special regime you keep ${x} more a year.`,
+    differenceLess: (x) => `With the special regime you would keep ${x} less a year: on this salary and situation, standard withholding is lower.`,
+    differenceEqual: "On this salary both regimes leave the same net pay.",
+    specialAssumptionsTitle: "What the special-regime figure assumes",
+    specialAssumptions: (f) => [
+      `You have opted in with modelo 149 and given your employer the Tax Agency's certificate: it is not automatic. The deadline is ${f.months} months from your Social Security registration date.`,
+      `All your income is pay from one employer. Tax: ${f.rate} of gross pay up to ${f.threshold} and ${f.top} above it (article 93 of the IRPF Law). Nothing comes off the gross: no family, age or disability allowance and no deduction for Social Security.`,
+      "Social Security: the same contributions as under the standard regime, as for any worker registered with Spanish Social Security. If you keep your home country's Social Security, this figure is not for you.",
+      "The standard column is payslip withholding: the final IRPF is settled in the annual return with your region's scale. The special column is already the final tax on the pay (modelo 151), the same everywhere in Spain.",
+      "Other income (savings, rent, foreign income) and the credit for tax paid abroad are not included.",
+    ],
+    specialAbove: (f) => `Above ${f.threshold}, the ${f.top} rate only applies once your employer has paid you ${f.threshold} in the year: per-payslip figures are the year's average.`,
+    specialMore: "Who can opt in and how",
     share: "The page link keeps your figures: you can copy and share it.",
     disclaimer: "This estimates withholding and contributions, not your final tax: what you owe in IRPF is settled in the annual return (Renta), with your region's scale and your deductions. Your employer may apply a collective agreement, bonuses or items that change the payslip.",
   },

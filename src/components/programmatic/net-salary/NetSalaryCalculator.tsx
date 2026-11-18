@@ -2,10 +2,11 @@
 
 import { useEffect, useId, useState } from "react";
 
-import { CALC_COPY, fillFigures, money, parseAmount, percent, readHash, smiDeductionNote, writeHash, type NetLocale } from "@/lib/programmatic/net-salary/copy";
-import { calculateNetSalary, type AgeBand, type Contract, type Disability, type FamilySituation, type SalaryInput } from "@/lib/programmatic/net-salary/engine";
+import { CALC_COPY, fillFigures, money, parseAmount, percent, readHash, smiDeductionNote, specialFigures, writeHash, type NetLocale } from "@/lib/programmatic/net-salary/copy";
+import { calculateNetSalary, calculateSpecialRegime, round2, type AgeBand, type Contract, type Disability, type FamilySituation, type SalaryInput } from "@/lib/programmatic/net-salary/engine";
 import { REGIONS, regionById } from "@/lib/programmatic/net-salary/regions";
 import { FORAL_LINKS } from "@/lib/programmatic/net-salary/rules-2026";
+import { SPECIAL_REGIME } from "@/lib/programmatic/net-salary/special-regime";
 import { useCalculatorUse } from "@/lib/analytics/use-calculator-use";
 
 /**
@@ -51,6 +52,11 @@ export function NetSalaryCalculator({ locale, initial }: { locale: NetLocale; in
   const p = r.input.payments;
   const f = (s: string) => fillFigures(s, locale);
   const smiNote = smiDeductionNote(r, locale);
+  // The special regime for posted workers (art. 93 LIRPF), side by side with the standard result.
+  const special = r.input.specialRegime ? calculateSpecialRegime(input) : null;
+  const sf = specialFigures(locale);
+  const difference = special ? round2(special.net.annual - r.net.annual) : 0;
+  const m = (v: number) => money(v, locale);
 
   // First result change by the visitor, once per session (lib/analytics/calculator-use.ts).
   const calcUse = useCalculatorUse("net-salary", locale, r);
@@ -95,6 +101,17 @@ export function NetSalaryCalculator({ locale, initial }: { locale: NetLocale; in
             {([14, 12] as const).map((n) => (
               <option key={n} value={n}>
                 {t.paymentsOption(n)}
+              </option>
+            ))}
+          </select>
+        </p>
+
+        <p className="ci-calc-row ci-calc-wide">
+          <label htmlFor={`${id}-regime`}>{t.regime}</label>
+          <select id={`${id}-regime`} className="ci-field" value={input.specialRegime ? "special" : "standard"} onChange={(e) => update({ specialRegime: e.target.value === "special" })}>
+            {(["standard", "special"] as const).map((k) => (
+              <option key={k} value={k}>
+                {t.regimeOptions[k]}
               </option>
             ))}
           </select>
@@ -168,7 +185,7 @@ export function NetSalaryCalculator({ locale, initial }: { locale: NetLocale; in
         <p className="ci-calc-row">
           <label htmlFor={`${id}-disability`}>{t.disability}</label>
           <select id={`${id}-disability`} className="ci-field" value={input.disability} onChange={(e) => update({ disability: e.target.value as Disability })}>
-            {(Object.keys(t.disabilityOptions) as Disability[]).map((d) => (
+            {(["none", "33", "33mobility", "65"] as const satisfies readonly Disability[]).map((d) => (
               <option key={d} value={d}>
                 {t.disabilityOptions[d]}
               </option>
@@ -214,6 +231,53 @@ export function NetSalaryCalculator({ locale, initial }: { locale: NetLocale; in
               ))}
             </ul>
           </div>
+        ) : special ? (
+          <>
+            <h3 className="ci-calc-title mt-4">{t.compareTitle}</h3>
+            <div className="ci-table-scroll">
+              <table className="ci-local-table">
+                <thead>
+                  <tr>
+                    {t.compareCols.map((c, k) => (
+                      <th key={k} scope="col" className={k > 0 ? "text-right" : undefined}>
+                        {c}
+                      </th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {[
+                    [t.netPayment(p), m(r.net.perPayment), m(special.net.perPayment)],
+                    ...(r.net.extraPayment !== null && special.net.extraPayment !== null ? [[t.extraPayment, m(r.net.extraPayment), m(special.net.extraPayment)]] : []),
+                    [t.netAnnual, m(r.net.annual), m(special.net.annual)],
+                    [t.grossAnnual, m(r.input.gross), m(special.input.gross)],
+                    [t.ss, `− ${m(r.ss.annual)}`, `− ${m(special.ss.annual)}`],
+                    [t.taxRow, `− ${m(r.irpf.annual)} (${percent(r.irpf.rate, locale)})`, `− ${m(special.tax.annual)} (${percent(special.tax.rate, locale)})`],
+                    [t.effective, percent(r.effectiveRate, locale), percent(special.effectiveRate, locale)],
+                  ].map(([label, a, b], k) => (
+                    <tr key={label}>
+                      <th scope="row" className={k === 0 ? "font-semibold" : "font-normal"}>
+                        {label}
+                      </th>
+                      <td className="whitespace-nowrap text-right tabular-nums">{a}</td>
+                      <td className="whitespace-nowrap text-right tabular-nums">{b}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            <p className="ci-calc-note font-semibold">{difference > 0 ? t.differenceMore(m(difference)) : difference < 0 ? t.differenceLess(m(-difference)) : t.differenceEqual}</p>
+            {r.input.gross > SPECIAL_REGIME.threshold ? <p className="ci-calc-note">{t.specialAbove(sf)}</p> : null}
+            <p className="ci-calc-note">{t.specialAssumptionsTitle}:</p>
+            <ul className="ci-calc-note">
+              {t.specialAssumptions(sf).map((a) => (
+                <li key={a}>{a}</li>
+              ))}
+            </ul>
+            <p className="ci-calc-note">
+              <a href="#beckham">{t.specialMore}</a>
+            </p>
+          </>
         ) : (
           <>
             <h3 className="ci-calc-title mt-4">{t.results}</h3>

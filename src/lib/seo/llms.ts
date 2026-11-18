@@ -187,7 +187,7 @@ export function liveTools(): LiveTool[] {
     {
       name: "Spain net salary calculator 2026",
       hubs: netSalaryEditions(),
-      description: "gross annual salary to net pay for 2026 anywhere in Spain's common tax regime (plus Ceuta, Melilla and La Palma): IRPF withholding with the Tax Agency's official 2026 algorithm and the worker's Social Security contributions (Orden PJC/297/2026), in 12 or 14 payments, by family situation, children, age, disability and contract type; checked against the Tax Agency's own withholding service.",
+      description: "gross annual salary to net pay for 2026 anywhere in Spain's common tax regime (plus Ceuta, Melilla and La Palma): IRPF withholding with the Tax Agency's official 2026 algorithm and the worker's Social Security contributions (Orden PJC/297/2026), in 12 or 14 payments, by family situation, children, age, disability and contract type; checked against the Tax Agency's own withholding service. A second mode puts the special regime for workers posted to Spain (\"Beckham law\", IRPF Law art. 93: 24% of gross pay up to 600,000 euros, 47% above, same Social Security) side by side with the standard result, with who qualifies, the modelo 149 deadline (six months from the Social Security registration, IRPF Regulation art. 116), the 183-day residence rule and the NIE and Social Security number steps.",
     },
     {
       name: "Spain Christmas extra pay calculator 2026 (paga extra de Navidad)",

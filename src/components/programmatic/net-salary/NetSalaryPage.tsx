@@ -14,6 +14,7 @@ import { dayMonthYear } from "@/lib/programmatic/holidays/format";
 import { TABLE_SALARIES, money, netSalaryEditions, netSalaryPath, percent, type NetLocale } from "@/lib/programmatic/net-salary/copy";
 import { DEFAULT_INPUT, calculateNetSalary, scale, type SalaryResult } from "@/lib/programmatic/net-salary/engine";
 import { REGIONS, regionById } from "@/lib/programmatic/net-salary/regions";
+import { specialRegimeFaq, specialRegimeLimit } from "@/lib/programmatic/net-salary/special-copy";
 import { AEAT_VALIDATION, FORAL_LINKS, IRPF, SALARY_RULES_AS_OF, SALARY_RULES_YEAR, SMI_DEDUCTION, SOCIAL_SECURITY, SOURCES } from "@/lib/programmatic/net-salary/rules-2026";
 import { wagePath } from "@/lib/programmatic/average-salary/copy";
 import { extraPayPath } from "@/lib/programmatic/extra-pay/copy";
@@ -24,6 +25,7 @@ import { ORGANIZATION_ID, breadcrumbSchema, graph } from "@/lib/seo/jsonld";
 import { buildMetadata } from "@/lib/seo/metadata";
 
 import { NetSalaryCalculator } from "./NetSalaryCalculator";
+import { RegistrationSection, ResidencySection, SpecialRegimeSection, SpecialRegimeSources, TaxInSpainSection } from "./SpecialRegimeSections";
 
 /**
  * "Calculadora de sueldo neto 2026" / "Calculadora de sou net 2026" / "Spain
@@ -32,6 +34,10 @@ import { NetSalaryCalculator } from "./NetSalaryCalculator";
  * pay by gross salary, the worked example step by step, why the community
  * does not change the payslip, the 2026 rates, questions, sources and limits.
  * Every figure is computed at build time by the engine from rules-2026.ts.
+ * For people moving to Spain (SpecialRegimeSections.tsx, 18 Nov 2026): how
+ * much tax, standard withholding vs the special regime for posted workers
+ * ("Beckham law", special-regime.ts), the 183-day rule, NIE and Social
+ * Security number; first in English, after the regions section in es/ca.
  */
 
 const L = <T,>(locale: NetLocale, v: Record<NetLocale, T>): T => v[locale];
@@ -273,6 +279,20 @@ export function NetSalaryRoute({ locale }: { locale: NetLocale }) {
     ],
   });
 
+  // The special regime for posted workers ("Beckham law"), residence and paperwork (SpecialRegimeSections.tsx).
+  const expatFaq = specialRegimeFaq(locale);
+  const allFaq = locale === "en" ? [...expatFaq, ...faq] : [...faq, ...expatFaq];
+  // English readers come for "Spain income tax", "salary after tax", "Beckham law": those sections go first for them.
+  const expatFirst = locale === "en";
+  const expatSections = (
+    <>
+      <TaxInSpainSection locale={locale} />
+      <SpecialRegimeSection locale={locale} />
+      <ResidencySection locale={locale} />
+      <RegistrationSection locale={locale} />
+    </>
+  );
+
   const sourcesLead = L(locale, {
     es: `Fuentes oficiales, leídas el ${asOf}. Comprobación: el ${validated} enviamos ${AEAT_VALIDATION.cases} casos distintos (sueldos de 12.000 a 350.000 €, las tres situaciones familiares, hijos, edad, discapacidad, contratos temporales, Ceuta, Melilla y La Palma, movilidad, hipoteca) al servicio de cálculo de retenciones de la Agencia Tributaria: el tipo y el importe de la retención coinciden en todos.`,
     ca: `Fonts oficials, llegides el ${asOf}. Comprovació: el ${validated} vam enviar ${AEAT_VALIDATION.cases} casos diferents (sous de 12.000 a 350.000 €, les tres situacions familiars, fills, edat, discapacitat, contractes temporals, Ceuta, Melilla i La Palma, mobilitat, hipoteca) al servei de càlcul de retencions de l'Agència Tributària: el tipus i l'import de la retenció coincideixen en tots.`,
@@ -322,7 +342,7 @@ export function NetSalaryRoute({ locale }: { locale: NetLocale }) {
   };
   const faqSchema = {
     "@type": "FAQPage",
-    mainEntity: faq.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })),
+    mainEntity: allFaq.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })),
   };
 
   return (
@@ -342,6 +362,7 @@ export function NetSalaryRoute({ locale }: { locale: NetLocale }) {
             <div className="ci-prose">
               <NetSalaryCalculator locale={locale} initial={DEFAULT_INPUT} />
               <CalculatorNextStep current="net-salary" locale={locale} />
+              {expatFirst ? expatSections : null}
 
               <h2 id="tabla">{h.table}</h2>
               <p>{tableLead}</p>
@@ -430,6 +451,8 @@ export function NetSalaryRoute({ locale }: { locale: NetLocale }) {
                 ))}
               </ul>
 
+              {expatFirst ? null : expatSections}
+
               <h2 id="tipos">{h.rates}</h2>
               <p>{ratesLead}</p>
               <div className="ci-table-scroll mt-4">
@@ -485,7 +508,7 @@ export function NetSalaryRoute({ locale }: { locale: NetLocale }) {
               </div>
 
               <h2 id="preguntas">{h.faq}</h2>
-              {faq.map((f) => (
+              {allFaq.map((f) => (
                 <section key={f.q}>
                   <h3>{f.q}</h3>
                   <p>{f.a}</p>
@@ -505,10 +528,11 @@ export function NetSalaryRoute({ locale }: { locale: NetLocale }) {
                 ))}
               </ul>
               <p>{sourceNote}</p>
+              <SpecialRegimeSources locale={locale} />
 
               <h2 id="limites">{h.limits}</h2>
               <ul>
-                {limits.map((l) => (
+                {[...limits, specialRegimeLimit(locale)].map((l) => (
                   <li key={l}>{l}</li>
                 ))}
               </ul>
