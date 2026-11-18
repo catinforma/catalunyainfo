@@ -1,5 +1,6 @@
 import { regionById, type Regime } from "./regions";
 import { IRPF, SMI_DEDUCTION, SOCIAL_SECURITY } from "./rules-2026";
+import { SPECIAL_REGIME } from "./special-regime";
 
 /**
  * Net salary 2026 for an employee in Spain: the worker's Social Security
@@ -8,6 +9,10 @@ import { IRPF, SMI_DEDUCTION, SOCIAL_SECURITY } from "./rules-2026";
  * (variable names in the comments are the algorithm's). Pure and
  * deterministic: the page renders it on the server, the calculator in the
  * browser, the tests against the AEAT's own service.
+ *
+ * The special regime for posted workers (art. 93 LIRPF, special-regime.ts)
+ * is computed next to it: same contributions, 24 % / 47 % on the gross pay
+ * (calculateSpecialRegime, compareRegimes).
  *
  * Out of scope, and said so on the page: ascendants, disabled descendants,
  * irregular income (art. 18 LIRPF), maintenance and compensatory payments,
@@ -41,6 +46,8 @@ export interface SalaryInput {
   mobility?: boolean;
   /** Paying a home loan from before 2013 that gives the deduction (2 % less withholding under 33,007.20 €). */
   housingLoan?: boolean;
+  /** Show the special regime for posted workers (art. 93 LIRPF, "Beckham law") next to the standard result. */
+  specialRegime?: boolean;
 }
 
 export interface SocialSecurityLine {
@@ -175,10 +182,12 @@ export function normalise(input: SalaryInput): SalaryInput {
     family,
     mobility: Boolean(input.mobility),
     housingLoan: Boolean(input.housingLoan),
+    specialRegime: Boolean(input.specialRegime),
   };
 }
 
-function socialSecurity(gross: number, contract: Contract): SalaryResult["ss"] {
+/** The worker's contributions (Orden PJC/297/2026): the same under the standard and the special tax regime. */
+export function socialSecurity(gross: number, contract: Contract): SalaryResult["ss"] {
   const S = SOCIAL_SECURITY;
   const monthlyPay = gross / 12;
   const baseMonthly = round2(Math.min(monthlyPay, S.maxBaseMonthly));
@@ -316,6 +325,102 @@ export function calculateNetSalary(raw: SalaryInput): SalaryResult {
   };
 }
 
+/* -------------------------------------------------------------------------- */
+/* Special regime for posted workers (art. 93 LIRPF, "Beckham law")           */
+/* -------------------------------------------------------------------------- */
+
+export interface SpecialRegimeResult {
+  input: SalaryInput;
+  /** False for Navarra and the Basque Country (foral income tax): nothing below applies there. */
+  supported: boolean;
+  /** The same contributions as the standard result. */
+  ss: SalaryResult["ss"];
+  tax: {
+    /** 24 % of the pay up to 600,000 € (art. 93.2.e.1º). */
+    upToThreshold: number;
+    /** 47 % of the pay above 600,000 €. */
+    above: number;
+    annual: number;
+    /** annual / gross, %: 24.00 up to 600,000 €. */
+    rate: number;
+  };
+  net: SalaryResult["net"];
+  /** (contributions + tax) / gross, %. */
+  effectiveRate: number;
+}
+
+/**
+ * The art. 93.2.e.1º scale on employment income: 24 % up to 600,000 €, 47 %
+ * above. The base is the gross pay (TRLIRNR art. 24.1, "importe íntegro"):
+ * nothing comes off it. For pay from a single employer it is also the
+ * withholding (art. 93.2.f, RIRPF art. 114.3: 24 %, 47 % on the excess over
+ * 600,000 € from the same payer), so the payslip and the final tax agree.
+ */
+export function specialRegimeTax(gross: number): SpecialRegimeResult["tax"] {
+  const S = SPECIAL_REGIME;
+  const g = Math.max(0, gross);
+  const upToThreshold = round2((Math.min(g, S.threshold) * S.rate) / 100);
+  const above = round2((Math.max(0, g - S.threshold) * S.topRate) / 100);
+  const annual = round2(upToThreshold + above);
+  return { upToThreshold, above, annual, rate: g > 0 ? round2((annual / g) * 100) : 0 };
+}
+
+/** Net pay if the worker has opted for the special regime: same contributions, the art. 93 tax instead of the IRPF withholding. */
+export function calculateSpecialRegime(raw: SalaryInput): SpecialRegimeResult {
+  const input = normalise(raw);
+  const regime: Regime = regionById(input.region)?.regime ?? "common";
+  const ss = socialSecurity(input.gross, input.contract);
+  const tax = specialRegimeTax(input.gross);
+  const annual = round2(input.gross - ss.annual - tax.annual);
+  const p = input.payments;
+  const grossPayment = input.gross / p;
+  // 24 % on every payment up to 600,000 € a year; above it, the year's average (the 47 % only bites once 600,000 € have been paid).
+  const share = input.gross > 0 ? tax.annual / input.gross : 0;
+  const perPayment = round2(grossPayment * (1 - share) - ss.annual / 12);
+  const extraPayment = p === 14 ? round2(grossPayment * (1 - share)) : null;
+  return {
+    input,
+    supported: regime !== "foral",
+    ss,
+    tax,
+    net: { annual, perPayment, extraPayment, monthlyAverage: round2(annual / 12) },
+    effectiveRate: input.gross > 0 ? round2(((ss.annual + tax.annual) / input.gross) * 100) : 0,
+  };
+}
+
+export interface RegimeComparison {
+  standard: SalaryResult;
+  special: SpecialRegimeResult;
+  /** special.net.annual − standard.net.annual: positive when the special regime leaves more on the payslip. */
+  difference: number;
+}
+
+/** Both regimes for the same person. The standard side is the withholding (the Renta settles the final tax); the special side is the tax itself. */
+export function compareRegimes(input: SalaryInput): RegimeComparison {
+  const standard = calculateNetSalary(input);
+  const special = calculateSpecialRegime(input);
+  return { standard, special, difference: round2(special.net.annual - standard.net.annual) };
+}
+
+/**
+ * The lowest whole-euro gross salary at which the special regime leaves more
+ * net pay than the standard withholding, for everything else in `base`
+ * (bisection: below it the standard withholding is under 24 %, above it over;
+ * the tests check there is one crossing). Null if there is none in range.
+ */
+export function breakEvenGross(base: SalaryInput, from = 15000, to = 600000): number | null {
+  const better = (gross: number) => compareRegimes({ ...base, gross }).difference > 0;
+  if (better(from) || !better(to)) return null;
+  let lo = from;
+  let hi = to;
+  while (hi - lo > 1) {
+    const mid = Math.floor((lo + hi) / 2);
+    if (better(mid)) hi = mid;
+    else lo = mid;
+  }
+  return hi;
+}
+
 /** The page's default example: 30,000 € in Catalonia, single, no children, open-ended contract, 14 payments. */
 export const DEFAULT_INPUT: SalaryInput = {
   gross: 30000,
@@ -330,4 +435,5 @@ export const DEFAULT_INPUT: SalaryInput = {
   contract: "open-ended",
   mobility: false,
   housingLoan: false,
+  specialRegime: false,
 };

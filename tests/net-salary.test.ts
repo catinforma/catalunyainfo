@@ -245,7 +245,7 @@ test("parseAmount reads what people type", () => {
 });
 
 test("the URL hash round-trips every input and ignores junk", () => {
-  const s: SalaryInput = { gross: 41500, payments: 12, region: "madrid", age: "65to74", family: 2, children: 3, childrenUnder3: 1, childrenWhole: true, disability: "33mobility", contract: "short", mobility: true, housingLoan: true };
+  const s: SalaryInput = { gross: 41500, payments: 12, region: "madrid", age: "65to74", family: 2, children: 3, childrenUnder3: 1, childrenWhole: true, disability: "33mobility", contract: "short", mobility: true, housingLoan: true, specialRegime: true };
   assert.deepEqual(readHash(writeHash(s), DEFAULT_INPUT, (id) => Boolean(regionById(id))), s);
   assert.deepEqual(readHash(writeHash(DEFAULT_INPUT), DEFAULT_INPUT, (id) => Boolean(regionById(id))), DEFAULT_INPUT);
   const junk = readHash("#b=-4&n=13&r=atlantis&f=9&h=99&c=x", DEFAULT_INPUT, (id) => Boolean(regionById(id)));
@@ -319,6 +319,9 @@ test("date guard: from 1 January 2027 the calculator needs the 2027 AEAT algorit
   // "Algoritmo de cálculo del tipo de retención 2027" (sede.agenciatributaria.gob.es/Sede/Retenciones.shtml),
   // the 2027 Orden de cotización (BOE) — or, until it is out, the decree-law that sets the 2027 bases —
   // into a rules-2027.ts, re-run the AEAT service check (PER for 2027), and move the page to 2027.
+  // Already published (BOE 18 Nov 2026): Real Decreto-ley 38/2026 (BOE-A-2026-24120) rewrites DA 61.ª LIRPF for 2027
+  // (1,033.58 € up to 18,004 €, nothing from 23,171.89 €) and adds RIRPF art. 85.3, which applies it IN WITHHOLDING from
+  // 1 January 2027: the 2027 engine must subtract it from the cuota (it no longer waits for the Renta).
   assert.ok(Date.now() < Date.parse(`${SALARY_RULES_UNTIL}T00:00:00Z`), "Net salary calculator: load the 2027 AEAT algorithm and contribution rules");
 });
 

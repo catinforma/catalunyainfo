@@ -7881,3 +7881,62 @@ are position (8–10 → 5–7) and the event calendar, not snippets.
 
 **Review:** none (nothing changed). The queue's own dates are above. Each item is logged as a new entry, with its
 baseline, when it is applied.
+
+## 2026-11-18 — Net salary calculator: special regime for posted workers ("Beckham law") mode and sections for people moving to Spain, ca/es/en (body only, inside the 13 Nov window; ships with the deploy, no publish group)
+
+**Window.** The three net-salary pages launched on 13 Nov (entry above, review 15 Dec). Title, description, H1 and
+lead are **untouched**; only the body and the calculator change.
+
+**What.**
+- Calculator: a new select "Income tax regime" / "Régimen del IRPF" / "Règim de l'IRPF": standard (the AEAT algorithm,
+  unchanged) or "Special regime for posted workers (Beckham law)". The special one shows both side by side (net per
+  payslip, extra payment, net a year, Social Security, income tax with rate, total rate), the difference, and five
+  stated assumptions; hash `e=1`. Engine: `calculateSpecialRegime`, `compareRegimes`, `breakEvenGross`
+  (`lib/programmatic/net-salary/engine.ts`, rules in `special-regime.ts`).
+- Rules (BOE consolidated texts and AEAT pages read 18 Nov 2026; fact pack `research_notes/beckham-special-regime-nov2026.md`):
+  LIRPF art. 93 (Ley 28/2022 DF 3.5 wording, from 1 Jan 2023): option for the residence year + the next 5; not resident
+  in the 5 previous tax years; employment contract / posting / remote work, director, entrepreneur, highly qualified
+  (>40 %); no PE income; family members (93.3); 24 % up to 600,000 €, 47 % above (93.2.e.1º); withholding 24 %, 47 %
+  on the excess from the same payer (93.2.f, RIRPF 114.3). Base = gross pay (TRLIRNR art. 24.1 "importe íntegro"); only
+  donations, foreign tax credit (≤30 %) and withholding reduce it (RIRPF 114.2.b). One scale for all Spain: modelo 151
+  applies the art. 93 scale and splits 50 % State / 50 % region (instructions, boxes 19–23). Modelo 149 within
+  6 months of the activity start date in the Social Security registration (RIRPF 116.1.a, **verified**); certificate
+  within 10 working days (119.4); waiver in Nov–Dec before the year (117), exclusion reported within one month (118),
+  no re-entry. Residence: LIRPF art. 9.1 (>183 days), art. 2; non-residents TRLIRNR art. 25.1.a (24 %, 19 % EU/EEA).
+  Social Security: unchanged (same contributions; keeping home Social Security not modelled).
+- Worked examples (tests/net-salary-special-regime.test.ts): 30,000 €, 14 payments: tax 7,200 €, net 20,850 €
+  (1,466.07 € × 12 + 1,628.57 € × 2), 2,274 € less than standard withholding (4,926 €); 100,000 €, 12 payments: SS
+  4,061.64 €, tax 24,000 €, net 71,938.36 €, +8,110 € vs standard (32,110 €); 700,000 €: 191,000 € (27.29 %). AEAT
+  cross-check: the modelo 151 instructions' examples (750,000 € → 214,500 €; 200,000 € → 48,000 €). Break-even, single:
+  57,564 €; two children: 61,973 € (one crossing, tested).
+- Page sections, same content in the three languages (`components/programmatic/net-salary/SpecialRegimeSections.tsx`):
+  `#tax-spain` (answer-first table, 9 salaries 30k–700k, both regimes), `#beckham` (who, what you pay, how to opt in and
+  how long, BOE quotes in Spanish, AEAT links), `#residency` (183 days, IRNR rates), `#nie` (NIE: cita previa
+  extranjería on mptmd.sede.gob.es + our NIE/TIE guide; NUSS on Import@ss; padrón and TSI guides). Order: right after the
+  calculator in English; after the regions section in es/ca. 7 FAQ entries added to the FAQPage (first in English, last
+  in es/ca); sources and limits extended; llms.txt description extended.
+- Also: the disability select listed "33 %" before "None" (Object.keys order); fixed to the natural order.
+
+**Baseline.** GSC 22 Oct–18 Nov: the net-salary URLs have 0 impressions (EN page "URL is unknown to Google" on 17 Nov).
+English site queries are elections, weather, city tax; no tax/salary query yet. Demand estimate (opportunities note,
+row 25, geo ES only): "income tax spain" 3.9k, "beckham law" 1.2k a month; worldwide larger, not anchored.
+
+**Prediction.** Once indexed, the EN page gets impressions for "spain income tax calculator", "salary after tax spain",
+"beckham law calculator", "how much tax will i pay in spain" (positions 20–50 at first: expat blogs and law firms rank);
+by 15 Jan 2027: ≥300 impressions on EN Beckham/tax queries. Wrong if under 100 by 15 Jan with the page indexed.
+
+**Measure.** 27 Nov indexing (already in the 13 Nov entry); 16 Dec and 15 Jan 2027: `snapshot.py page net-salary-spain 28`
+(queries containing tax, beckham, after tax), `page sueldo-neto 28` ("ley beckham", "régimen especial desplazados"),
+`page sou-net 28`; GA4 `calculator_use` (net-salary) on the EN path. **Review: 2026-12-16.**
+
+**Confounders.** Same window as the 13 Nov launch and the 18 Nov average-salary link; January pay season; the 2027 rules
+update on 1 Jan (titles move to 2027 then).
+
+**Upkeep / date guards.** `SPECIAL_REGIME_RECHECK_BY` = 1 Jan 2027 (tests fail until art. 93 LIRPF, RIRPF 113–120,
+TRLIRNR 24–25 and the AEAT 149/151 pages are re-read), next to `SALARY_RULES_UNTIL`. Noted for the 2027 engine: RDL
+38/2026 (BOE 18 Nov 2026) moves the DA 61.ª deduction into withholding from 1 Jan 2027 (new RIRPF art. 85.3).
+
+**Deploy.** Static (nothing in the database): deploy only, no publish group. IndexNow prefixes:
+`/en/calculators/net-salary-spain/`, `/es/calculadoras/sueldo-neto/`, `/ca/calculadores/sou-net/`.
+
+**Outcome:** _pending_
