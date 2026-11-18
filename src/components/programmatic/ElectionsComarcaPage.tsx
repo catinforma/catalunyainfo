@@ -5,9 +5,11 @@ import { ShareBar, crumbPath } from "@/components/share/ShareBar";
 import { JsonLd } from "@/components/JsonLd";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
+import { ElectionDayCallout } from "@/components/programmatic/ElectionDayCallout";
 import { renderInline } from "@/lib/content/inline";
 import { getMessages } from "@/lib/i18n";
 import { buildComarcaPage } from "@/lib/programmatic/elections/comarca";
+import { electionDayBlock, electionPhase } from "@/lib/programmatic/elections/election-day";
 import { comarcaPath, comarcaTranslations, hubMeta, hubPath, type ComarcaGroup, type ComarcaLocale } from "@/lib/programmatic/elections/pages";
 import { electionComarcaDataset } from "@/lib/programmatic/elections/structured";
 import { breadcrumbSchema, graph } from "@/lib/seo/jsonld";
@@ -23,10 +25,14 @@ export function electionComarcaCrumbs(locale: ComarcaLocale, g: ComarcaGroup): C
 /**
  * One comarca: every municipality's 2023 local result in a table (the list
  * with most councillors, how many, turnout), each row linking to the town's
- * page. Everything comes from the committed snapshot: no fetch, no clock.
+ * page. Everything comes from the committed snapshot: no fetch. From 28 Nov
+ * to 7 Dec 2026 it leads with the election-day block, decided on the server
+ * at render time (the route regenerates every 5 minutes). The town links do
+ * not prefetch (each would pull an uncached RSC payload from the origin).
  */
 export function ElectionsComarcaPage({ locale, group }: { locale: ComarcaLocale; group: ComarcaGroup }) {
   const model = buildComarcaPage(group, locale);
+  const day = electionDayBlock(locale, electionPhase(new Date()));
   const crumbs = electionComarcaCrumbs(locale, group);
   const headers = model.table.headers;
 
@@ -52,6 +58,8 @@ export function ElectionsComarcaPage({ locale, group }: { locale: ComarcaLocale;
 
           <div className="ci-shell py-10">
             <div className="ci-prose">
+              <ElectionDayCallout block={day} />
+
               <dl className="ci-facts">
                 {model.facts.map((fact) => (
                   <div key={fact.label} className="contents">
@@ -78,7 +86,9 @@ export function ElectionsComarcaPage({ locale, group }: { locale: ComarcaLocale;
                     {model.table.rows.map((row) => (
                       <tr key={row.href} role="row">
                         <th scope="row" role="rowheader" className="min-w-[9rem] font-normal" data-label={headers[0]}>
-                          <Link href={row.href}>{row.town}</Link>
+                          <Link href={row.href} prefetch={false}>
+                            {row.town}
+                          </Link>
                         </th>
                         <td role="cell" data-label={headers[1]} className="ci-numeric whitespace-nowrap">
                           {row.population}

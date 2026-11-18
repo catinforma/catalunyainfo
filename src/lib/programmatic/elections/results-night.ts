@@ -32,6 +32,17 @@ import type { Locale } from "@/lib/i18n/config";
  * that day). Interior's 21 Oct note on the "dispositivo de recepción de
  * resultados" describes a repository for accredited media only, not a public
  * site.
+ *
+ * Checked again 18 Nov 2026 (curl + grep "resultado"): 29neleccionesgenerales.es
+ * home page, its "Enlaces de interés" page (links to infoelectoral, INE,
+ * JEC, BOE, Correos, Congreso, Senado, mivotocuenta.es; no results site) and
+ * its sitemap.xml (6 URLs, all lastmod 2026-11-03): no results page, link or
+ * announcement. lamoncloa.gob.es timed out from this server and
+ * interior.gob.es / infoelectoral.interior.gob.es answered 403 (bot
+ * challenge), so Interior's press notes were not read that day: re-read them
+ * from a browser on or after 26 Nov (the test below fails until then).
+ * The election-day layer (election-day.ts) prints this switch as a button
+ * from 20:00 on 29 Nov.
  */
 export const ELECTION_NIGHT_RESULTS_URL: string | null = null;
 
@@ -39,15 +50,15 @@ export const ELECTION_NIGHT_RESULTS_URL: string | null = null;
 export const ELECTION_NIGHT_RESULTS_SOURCE: string | null = null;
 
 /** When the official sites were last read for it. */
-export const RESULTS_SITE_CHECKED = "2026-11-13";
+export const RESULTS_SITE_CHECKED = "2026-11-18";
 
 /** Hosts an announcement may come from (the results site itself may be on another domain). */
 export const RESULTS_ANNOUNCEMENT_HOSTS = ["lamoncloa.gob.es", "interior.gob.es", "29neleccionesgenerales.es"] as const;
 
 const CHECKED_LABEL: Record<Locale, string> = {
-  ca: "13 de novembre de 2026",
-  es: "13 de noviembre de 2026",
-  en: "13 November 2026",
+  ca: "18 de novembre de 2026",
+  es: "18 de noviembre de 2026",
+  en: "18 November 2026",
 };
 
 /**

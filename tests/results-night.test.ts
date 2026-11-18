@@ -32,9 +32,9 @@ import { datePath } from "../src/lib/programmatic/holidays/paths.ts";
 // The civil date in Catalonia (the server clock is UTC: just after midnight in Madrid it is still the day before).
 const today = madridDate(new Date());
 const CHECKED: Record<Locale, RegExp> = {
-  ca: /comprovat el 13 de novembre de 2026/,
-  es: /comprobado el 13 de noviembre de 2026/,
-  en: /checked on 13 November 2026/,
+  ca: /comprovat el 18 de novembre de 2026/,
+  es: /comprobado el 18 de noviembre de 2026/,
+  en: /checked on 18 November 2026/,
 };
 const salou = () => {
   const m = SNAPSHOT.municipalities.find((x) => x.slug === "salou");
