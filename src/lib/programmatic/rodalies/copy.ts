@@ -200,6 +200,8 @@ export interface LinePageCopy {
   kicker: string;
   lead: string;
   readLine: string;
+  /** "¿R2, R2 Nord o R2 Sud?" on the three R2 pages (null elsewhere). */
+  familyNote: string | null;
   facts: { label: string; value: string }[];
   liveTitle: string;
   stationsTitle: string;
@@ -286,6 +288,7 @@ export function lineCopy(line: SnapshotLine, locale: LineLocale): LinePageCopy {
       kicker: groupLabel(official.group, locale),
       lead: `${Name} circula ${between(line, locale)}, amb ${n} estacions. A continuació tens els avisos que Rodalies de Catalunya hi té publicats ara mateix i, després, les estacions, l'horari oficial, què fer si el servei falla i com reclamar un retard.`,
       readLine: `Recorregut i estacions llegits a Rodalies de Catalunya ${read}`,
+      familyNote: r2FamilyNote(line.id, locale),
       facts: [
         { label: "Recorregut", value: `${line.origin} – ${line.destination}` },
         ...(line.via.ca ? [{ label: "Passa", value: line.via.ca }] : []),
@@ -357,6 +360,7 @@ export function lineCopy(line: SnapshotLine, locale: LineLocale): LinePageCopy {
     kicker: groupLabel(official.group, locale),
     lead: `${Name} circula ${between(line, locale)}, con ${n} estaciones. A continuación tienes los avisos que Rodalies de Catalunya tiene publicados ahora mismo y, después, las estaciones, el horario oficial, qué hacer si el servicio falla y cómo reclamar un retraso.`,
     readLine: `Recorrido y estaciones leídos en Rodalies de Catalunya ${read}`,
+    familyNote: r2FamilyNote(line.id, locale),
     facts: [
       { label: "Recorrido", value: `${line.origin} – ${line.destination}` },
       ...(line.via.es ? [{ label: "Pasa", value: line.via.es }] : []),
@@ -461,6 +465,99 @@ export const KEY_STATIONS = [
 
 export function linesAt(station: string): SnapshotLine[] {
   return LINES.filter((l) => l.stations.some((s) => s.name === station));
+}
+
+/* -------------------------------------------------------------------------- */
+/* R2, R2 Nord or R2 Sud?                                                     */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * 18 Nov 2026 (position-loss diagnosis, docs/SEO_EXPERIMENTS.md): "r2" and
+ * "r2 rodalies" were split across six of our URLs (R2, R2 Nord and R2 Sud in
+ * es and ca), and all of them fell from 8.7-12.5 to 17-29 between 22 Oct-4 Nov
+ * and 5-18 Nov. Each R2 page now says which R2 it is and links the other two
+ * right under the live notices. The routes come from the committed snapshot.
+ *
+ * The works notice: Rodalies de Catalunya, "R2: Modificación temporal del
+ * servicio entre Gavà y Castelldefels por obras de Adif" (updated 09.11.2026,
+ * read 18 Nov 2026): "Desde el jueves 12 de noviembre y hasta el 14 de
+ * diciembre [...] los trenes de la relación Granollers Centre – Castelldefels
+ * iniciarán y finalizarán su recorrido en Gavà [...] podrán continuar su
+ * trayecto con los trenes de la R2 Sud [...] que mantienen el servicio en este
+ * tramo." tests/rodalies-r2-family.test.ts fails from the day after `until`.
+ */
+export const R2_WORKS = {
+  from: "2026-11-12",
+  until: "2026-12-14",
+  updated: "2026-11-09",
+  read: "2026-11-18",
+  url: {
+    ca: "https://rodalies.gencat.cat/ca/detalls/article/11_09_Gava_Castelldefels",
+    es: "https://rodalies.gencat.cat/es/detalls/article/11_09_Gava_Castelldefels",
+  },
+} as const;
+
+export const R2_FAMILY: readonly LineId[] = ["R2", "R2N", "R2S"];
+
+function r2Lines(): SnapshotLine[] {
+  return R2_FAMILY.map((id) => {
+    const line = LINES.find((l) => l.id === id);
+    if (!line) throw new Error(`No ${id} in the Rodalies snapshot`);
+    return line;
+  });
+}
+
+/** Stations every R2 line stops at, in the R2's own order. */
+export function r2SharedStations(): string[] {
+  const [first, ...rest] = r2Lines();
+  if (!first) return [];
+  return first.stations.map((s) => s.name).filter((name) => rest.every((l) => l.stations.some((s) => s.name === name)));
+}
+
+function joinNames(names: string[], locale: Locale): string {
+  const and = locale === "ca" ? " i " : locale === "es" ? " y " : " and ";
+  return names.length < 2 ? names.join("") : `${names.slice(0, -1).join(", ")}${and}${names[names.length - 1]}`;
+}
+
+function r2WorksLine(locale: Locale): string {
+  const until = dayMonthYear(R2_WORKS.until, locale);
+  const updated = dayMonthYear(R2_WORKS.updated, locale);
+  if (locale === "ca") {
+    return `Fins al ${until}, per obres d'Adif a l'entorn de Castelldefels, els trens Granollers Centre – Castelldefels de l'R2 comencen i acaben a Gavà; fins a Castelldefels hi continuen arribant els de l'R2 Sud (${link("avís de Rodalies", R2_WORKS.url.ca)} del ${updated}).`;
+  }
+  if (locale === "es") {
+    return `Hasta el ${until}, por obras de Adif en el entorno de Castelldefels, los trenes Granollers Centre – Castelldefels de la R2 empiezan y acaban en Gavà; hasta Castelldefels siguen llegando los de la R2 Sud (${link("aviso de Rodalies", R2_WORKS.url.es)} del ${updated}).`;
+  }
+  return `Until ${until}, because of Adif works near Castelldefels, R2 trains between Granollers Centre and Castelldefels start and end at Gavà; R2 Sud trains still serve Castelldefels (${link("Rodalies notice", R2_WORKS.url.es)} of ${updated}, in Spanish).`;
+}
+
+/**
+ * "¿R2, R2 Nord o R2 Sud?": which R2 this page is, the other two with their
+ * routes (linked on the ca and es line pages; the English edition has only
+ * the hub, `id` null), the stations all three share and the works notice.
+ * Null for every other line.
+ */
+export function r2FamilyNote(id: LineId | null, locale: Locale): string | null {
+  if (id !== null && !R2_FAMILY.includes(id)) return null;
+  const ca = locale === "ca";
+  const es = locale === "es";
+  const route = (l: SnapshotLine) => {
+    const via = l.via[locale];
+    const base = ca ? `entre ${l.origin} i ${l.destination}` : es ? `entre ${l.origin} y ${l.destination}` : `between ${l.origin} and ${l.destination}`;
+    return via ? `${base}, ${via}` : base;
+  };
+  const name = (l: SnapshotLine) => (locale === "en" ? l.name : link(l.name, linePath(locale, l.id)));
+  const lines = r2Lines();
+  const self = lines.find((l) => l.id === id) ?? null;
+  const others = lines
+    .filter((l) => l.id !== id)
+    .map((l) => (ca ? `l'${name(l)} va ${route(l)}` : es ? `la ${name(l)} va ${route(l)}` : `the ${name(l)} runs ${route(l)}`))
+    .join("; ");
+  const head = ca ? "**R2, R2 Nord o R2 Sud?**" : es ? "**¿R2, R2 Nord o R2 Sud?**" : "**R2, R2 Nord or R2 Sud?**";
+  const thisOne = self ? (ca ? ` Aquesta pàgina és l'${self.name}, ${route(self)}.` : ` Esta página es la ${self.name}, ${route(self)}.`) : "";
+  const shared = joinNames(r2SharedStations(), locale);
+  const sharedSentence = ca ? `Totes tres paren a ${shared}.` : es ? `Las tres paran en ${shared}.` : `All three stop at ${shared}.`;
+  return `${head}${thisOne} ${others.charAt(0).toUpperCase()}${others.slice(1)}. ${sharedSentence} ${r2WorksLine(locale)}`;
 }
 
 export interface HubCopy {
@@ -601,6 +698,8 @@ export function hubCopy(locale: Locale): HubCopy {
     visitorTitle: "Before you travel",
     visitor: [
       `**From the airport**, the train is the R2 Nord from Terminal 2: times, fares and the other options are in ${link("our airport to city centre guide", airport)}.`,
+      // 18 Nov 2026: the English edition has no line pages, so the R2 note lives here.
+      r2FamilyNote(null, "en")!,
       `**Tickets:** which pass covers Rodalies in Barcelona, and for how many zones, is in ${link("Barcelona transport passes", transport)}.`,
       `**Strike days:** Rodalies runs minimum services; see ${link("what runs on strike days", strikes)}.`,
       `**Help:** Rodalies answers on ${PHONE}, free, 7:00 to 23:00 every day. Notices are also posted on the line accounts on X and on the ${link("Rodalies WhatsApp channel", officialUrl.whatsapp)}.`,

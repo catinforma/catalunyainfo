@@ -92,6 +92,8 @@ export function LinePage({ line, locale, initial = null }: { line: SnapshotLine;
                   initial={initial}
                 />
 
+                {t.familyNote ? <p className="mt-4">{renderInline(t.familyNote)}</p> : null}
+
                 <section className="ci-margin-block" aria-label={line.name}>
                   <dl className="ci-facts">
                     {t.facts.map((fact) => (

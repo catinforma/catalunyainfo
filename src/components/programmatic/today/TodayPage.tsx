@@ -58,7 +58,7 @@ type LinkItem = { label: string; href: string; external?: boolean };
 const LINK_WORDS: Record<Locale, Record<string, string>> = {
   ca: {
     holidayHub: "Festius per municipi",
-    holidayToday: "És festiu avui? (tots els municipis)",
+    holidayToday: "És festiu avui a Catalunya? Avui, demà i a cada municipi",
     holidayLocal: "Festius locals de cada municipi",
     holidayCalendar: "Calendari laboral",
     strikesHub: "Vaga avui: què funciona",
@@ -79,7 +79,7 @@ const LINK_WORDS: Record<Locale, Record<string, string>> = {
   },
   es: {
     holidayHub: "Festivos por municipio",
-    holidayToday: "¿Es festivo hoy? (todos los municipios)",
+    holidayToday: "¿Es festivo hoy en Cataluña? Hoy, mañana y en cada municipio",
     holidayLocal: "Festivos locales de cada municipio",
     holidayCalendar: "Calendario laboral",
     strikesHub: "Huelga hoy: qué funciona",
@@ -100,7 +100,7 @@ const LINK_WORDS: Record<Locale, Record<string, string>> = {
   },
   en: {
     holidayHub: "",
-    holidayToday: "Is today a holiday? (every town)",
+    holidayToday: "Is today a holiday in Catalonia? Today, tomorrow and in every town",
     holidayLocal: "Local holidays by town",
     holidayCalendar: "Catalonia's public holidays",
     strikesHub: "Strike today: what runs",
@@ -126,9 +126,13 @@ function itemLinks(locale: Locale): Record<ItemKey, LinkItem[]> {
   const w = LINK_WORDS[locale];
   const some = (items: (LinkItem | null)[]) => items.filter((item): item is LinkItem => item !== null);
   return {
+    // 18 Nov 2026 (position-loss diagnosis, docs/SEO_EXPERIMENTS.md): from
+    // 9 Nov this page and the "¿Es festivo hoy en Cataluña?" guide split the
+    // query in Search Console (guide 7.5 -> 12.1, this page 9.4). The guide
+    // is the primary page for it: its link comes first, in the query's words.
     holidays: some([
-      l.holidays.hub ? { label: w.holidayHub!, href: l.holidays.hub } : null,
       { label: w.holidayToday!, href: l.holidays.today },
+      l.holidays.hub ? { label: w.holidayHub!, href: l.holidays.hub } : null,
       locale === "en" ? { label: w.holidayLocal!, href: l.holidays.local } : null,
       { label: w.holidayCalendar!, href: l.holidays.calendar },
     ]),
