@@ -7770,3 +7770,114 @@ re-crawl of `/es/calculadoras/sueldo-neto/`, `/ca/calculadores/sou-net/`, `/en/c
 and the calculators hubs `/es/calculadoras/`, `/ca/calculadores/`, `/en/calculators/`.
 
 **Outcome:** _pending_
+
+## 2026-11-18 — CTR sweep outside the windows: no page qualifies, so nothing is retitled; a dated queue for 28 Nov–4 Dec (no deploy, no publish group)
+
+**Brief.** Site CTR fell from 5–6 % (2–9 Nov) to 2–3 %, and 66 % of impressions sit at positions 6–10. The brief: raise CTR on
+pages that are **not** inside a measurement window. Out of scope (other work or dated reviews): strikes 19N/20N/23N/26N,
+elections (26 Nov), December bridge + shops (25 Nov), Semana Santa 2027, La Marató and the school calendar (25–26 Nov), the
+weather patch (19 Nov), calculators launched in the last 7 days.
+
+**Data.** `snapshot.py ctr 14 300` and `pages 14 80`, 5–18 Nov 2026 (18 Nov partial). The `ctr` command prints only 40 rows and
+includes `#fragment` URLs, so the full list was rebuilt with the same curve and the same rule (CTR < 60 % of the site curve at
+the page's rounded position, ≥ 300 impressions, position ≤ 20) without fragments: 101 pages. Each was matched to this log by
+slug, and by family for templates. The site curve in this window: pos 5 5.3 %, 6 4.8 %, 7 4.1 %, 8 2.1 %, 9 0.6 %, 10 0.8 %.
+
+**Why the site CTR fell: the event pages, not the snippets.** Page-level GSC, event pages = strikes and elections
+(URL contains huelga|vaga|strike|eleccion|election|vot|mesa|candidat|poll…):
+
+| Week | Site | Event pages (share of impr.) | Other pages | Other pages at 6–10 |
+| --- | --- | --- | --- | --- |
+| 26 Oct–1 Nov | 2.94 % | 5.55 % (29 %) | 1.86 % | 1.44 % (76.8k impr.) |
+| 2–8 Nov | 5.04 % | 6.30 % (70 %) | 2.04 % | 1.49 % (97.6k) |
+| 11–17 Nov | 2.66 % | 3.61 % (55 %) | 1.48 % | 1.13 % (99.3k) |
+
+The 5–6 % days were the event pages (11N and 17N strikes, 29N) at 6.3 % CTR with 70 % of impressions. Without them the site
+ran at 1.9–2.0 % before and during the peak. The non-event drop since (2.04 → 1.48 %) is about 40 % mix: impressions at 11+
+went from 10.6k to 22.7k a week (new pages: calculators, Spain 2027 cities), and those at 1–5 fell. At the 2–8 Nov bucket
+CTRs, the 11–17 Nov mix gives 1.81 %. The rest is lower CTR inside the buckets: at 6–10, 1.49 → 1.13 %. No snippet
+change can recover the event share.
+
+**Candidates (≥ 300 impr., CTR < 60 % of the curve), outside the excluded families, and their windows.** None is free.
+
+| Page (14 d clicks / impr. / CTR / pos; clicks lost vs curve) | Window (entry) | Earliest change |
+| --- | --- | --- |
+| Parking ES `aparcar-barcelona-zona-azul-verde` (29 / 8,647 / 0.3 % / 7.8; 154) | title 3 Nov, to 1 Dec; body measure 30 Nov | 1 Dec |
+| Gran Recapte ES (40 / 2,610 / 1.5 % / 6.3; 86) and CA (38 / 1,963 / 1.9 % / 6.4; 56) | new 4 Nov, to 2 Dec; body 16 Nov | 2 Dec (proposal in the 16 Nov entry) |
+| Parking CA `aparcar-barcelona-zona-blava-verda` (19 / 2,114 / 0.9 % / 5.6; 83) | title 6 Nov, to 4 Dec | 4 Dec |
+| Christmas lights ES (33 / 2,491 / 1.3 % / 7.1; 69), CA (36 / 1,662 / 2.2 % / 6.5; 44), EN (9 / 518 / 1.7 % / 7.1) | 12 Nov; review 19 Nov (lights owner) | after the 19 Nov review |
+| Metro hours EN (6 / 3,120 / 0.2 % / 7.6; 60) | title 6 Nov, to 4 Dec | 4 Dec |
+| Transport passes EN (21 / 3,348 / 0.6 % / 7.6; 50); T-casual ES (5 / 4,076 / 0.1 % / 8.6; 19) | 30 Oct; measure 30 Nov (ES proposal 28 Nov, 16 Nov entry) | 28 Nov (ES), 30 Nov (EN) |
+| Christmas markets guide ES (51 / 2,381 / 2.1 % / 7.4; 47) | 3 Nov, to 1 Dec; 13 Nov body | 1 Dec |
+| Town holiday template: Vilassar (44), Sant Celoni (32), Mataró (26), Badalona (24), Terrassa (24), Barcelona ES (18) and CA (25), Lleida (19), Lloret, Manresa, Vilanova, El Prat, Balaguer, Vic, Granollers… | 3 Nov family change; measure 1 Dec | 1 Dec |
+| 2027 date pages: 7 Dec 2027 (11 / 912 / 1.2 % / 4.8; 36), 17 May 2027 (4 / 573 / 0.7 % / 5.3; 26), 29 Mar 2027 ES/CA | new 2 Nov (to 30 Nov); measure 1 Feb 2027 | 30 Nov |
+| Clock change CA (3 / 634 / 0.5 % / 5.7; 27), EN (1 / 957 / 0.1 % / 8.3; 19) | 31 Oct; measure 28 Nov | 29 Nov (proposal in the 13 Nov queue) |
+| Tourist tax ES (14 / 1,923 / 0.7 % / 8.1; 27) | 30 Oct; measure 30 Nov | no retitle: ranking (13 Nov queue) |
+| Carnival 2027 CA (10 / 751 / 1.3 % / 5.1; 29) | new 13 Nov; CA lead 17 Nov | 15 Dec |
+| La Grossa CA (9 / 1,441 / 0.6 % / 8.2; 21) | title 17 Nov; review 1 Dec, revert rule 8 Dec | 15 Dec (8 Dec only to revert) |
+| Reis ES (8 / 490 / 1.6 % / 6.6), CA (9 / 396 / 2.3 % / 6.6) | new 31 Oct (to 28 Nov); 5 Nov body, measure 28 Dec | 28 Nov, title switch is pre-registered |
+| Fair towns (Canyelles, Cardedeu, Vic, Arbúcies…), traditions CA, living nativities ES, Christmas transport ES | 13 Nov titles/leads, 16 Nov fair leads, new 5 Nov; reviews 20 Nov–1 Dec | 3–14 Dec (28 days) |
+| Castanyada ES (4 / 676 / 0.6 % / 6.0) | season over (13 Nov queue) | Sept 2027 |
+| Ski CA (10 / 540 / 1.9 % / 5.2), ZBE ES (4 / 338 / 1.2 % / 8.5), LEZ EN (3 / 372 / 0.8 % / 7.8) | 28 Oct titles and group bodies, measure 28 Nov (ski body 5 Nov, measure 10 Dec) | 28 Nov; ZBE and ski queries rank 10–60 (ranking) |
+
+**The only pages with no entry: the L2 closure, ES/EN/CA** (`l2-metro-cortada-la-pau-gorg`: 12 / 1,020 / 1.2 % / 6.1;
+`barcelona-metro-l2-closure`: 1 / 544 / 0.2 % / 5.1; CA 9 / 301 / 3.0 % / 5.3). **Not changed.** The title already answers
+the query in its words ("L2 metro cortada La Pau–Gorg hasta el 3 de diciembre"). The named queries are at 6.6–8.0 ("l2 cortada"
+34 at 8.0, "l2 tallada" 19 at 6.6). Demand is ending: 227 impressions on 9 Nov, 20 on 17 Nov. The closure ends on 3 Dec
+(TMB notice in `l2-closure.ts`).
+
+**Not done, on purpose.** No window was broken to hit a count of pages. The task rule (no title, description or lead
+change inside an open window) and this log's 28-day rule leave nothing to change on 18 Nov. Barcelona's press room
+was read on 18 Nov (search "cavalcada", tag "reis"): the newest Cavalcada de Reis notes are from 2 and 5 Jan 2026, with no 2027
+programme, so the Reis page's pre-registered switch (`ANNOUNCED_2027.barcelona`) stays null.
+
+**Dated queue (query evidence 5–18 Nov; each proposal uses only facts already printed on the page).**
+- **28 Nov, Reis ES/CA/EN.** "cabalgata de reyes 2027" 33 at 4.6 (1 click), "cavalcada de reis 2027" 21 at 8.7 on ES and
+  29 at 8.1 on CA, "cuando es la cabalgata de reyes 2027" 7 at 5.7. The description already gives "la tarde del martes
+  5 de enero". No retitle. Re-read Barcelona's press room; fill `ANNOUNCED_2027.barcelona` when it publishes (the title and
+  description switch by themselves).
+- **29 Nov, clock change CA/EN** (13 Nov proposal, unchanged). New evidence: the CA queries are now all 2027 and all
+  0 clicks at 2.7–6.2 ("canvi d'hora 2027" 27 at 6.2, "canvi hora 2027" 23 at 3.9, "canvi horari estiu 2027" 15 at
+  2.7). The title gives the whole answer, the zero-click pattern of the 6 Nov entry. EN: "when do (the) clocks change in
+  spain" 40 at 8.6–9.3, ranking.
+- **30 Nov, EN transport passes.** "t casual barcelona" 113 at 8.9, "t-casual barcelona" 36 at 9.0, "t casual card
+  barcelona" 20 at 7.7, all 0 clicks. The live title opens "Barcelona transport pass 2026". Proposal: "T-casual Barcelona
+  2026: zone prices and which pass to buy" (58). The zone table and the "which to buy" comparison are on the page; the
+  €13 and Hola prices stay in the description. Pair it with the ES T-casual proposal of 28 Nov, so that both editions stop
+  putting the full price in the title.
+- **30 Nov, 2027 date pages (ES; CA/EN alike), one description each.**
+  - **17 May 2027:** "17 de mayo 2027 es festivo" gets 75 impressions at 4.8 and 0 clicks; its variants add ~60 more at
+    3.6–5.8, also 0 clicks. The searchers are mostly outside Catalonia. The page already says "Fuera de Cataluña, en
+    cambio, es festivo en Galicia, Ceuta y Melilla" (BOE) and "fiesta local al menos en 84 municipios". Proposal: "No en
+    toda Cataluña: el lunes 17 de mayo de 2027 es fiesta local en al menos 84 municipios, como Barcelona. Fuera, festivo
+    en Galicia, Ceuta y Melilla." (151; the count is the page's own variable). This is the 17 Nov entry's idea, brought
+    forward from 1 Feb because the 28-day window ends 30 Nov.
+  - **7 Dec 2027:** Google gives it the undated 2026-intent queries ("el 7 de diciembre es festivo en cataluña" 105 at 4.6,
+    1 click). Proposal: name the 2026 answer in the description: "…¿Este año? El lunes 7 de diciembre de 2026 también,
+    salvo en <the 2026 page's count> municipios". 30 Nov is the start of that day's peak.
+- **1 Dec, town holiday template (ES/CA), with the 3 Nov measurement.** Towns with 2027 days now get mostly "festivos
+  <town> 2027" / "calendario laboral <town> 2027" queries, at 8–10, 0–2 clicks: Lleida 50 at 8.1 and 22 at 10.3;
+  Badalona 54 at 9.5 and 52 at 8.5. The title leads with "¿Hoy o mañana es festivo en <town>?". Barcelona is the
+  exception: "hoy es festivo en barcelona" 128 at 8.3. Proposal for towns with council or DOGC 2027 days: "Festivos
+  Lleida 2027: calendario laboral y fiestas locales" (58), CA "Festius Lleida 2027: calendari laboral i festes locals"
+  (54). This is the same pattern as the Spain cities' 2 Dec titles (18 Nov entry). Keep the today/tomorrow wording on
+  Barcelona and in the description. Remove the 4 Nov title hold in the same change.
+- **1 Dec, parking ES.** The named queries are at 9–10 ("horario zona azul barcelona" 69 at 10.4, "zona verde trinitat
+  vella" 44 at 9.4), and the title is already in their words: this is ranking. The one CTR-shaped query, "la zona azul se
+  paga los domingos" (11 at 5.6), is answered by the description ("Domingo gratis fuera de la playa"). No retitle.
+- **1 Dec, Christmas markets ES.** ~290 "fira (de) santa llúcia barcelona 2026" impressions at 9.4–10.4 land on the guide.
+  The Barcelona fair page is held to 2 Dec (`SNIPPET_HOLDS`); its release, not the guide's title, is the lever.
+- **2 Dec, Gran Recapte:** demand is gone (1,053 impressions on 13 Nov, 9–82 a day since 16 Nov). Keep the 16 Nov
+  proposal (results or 2027 title, once the organisers publish).
+- **4 Dec, parking CA and metro hours EN.** Parking CA: "preu zona blava barcelona" 24 at 4.0 with 0 clicks, because the
+  description gives the prices; the weekend queries click (5–20 %). Keep the weekend in the title (13 Nov note). Metro EN:
+  "barcelona metro hours" 49 at 10.3, "is barcelona metro 24 hours" 19 at 6.2, 0 clicks; the description answers it.
+  Ranking, plus the strike-day generic queries of 10–11 Nov. No retitle.
+
+**Expected gain if the queue is applied:** small. The 30 Nov–1 Dec items (town template, 2027 dates, passes) lose
+~300–400 clicks a fortnight against the curve. Most of their named queries rank 8–10, so a snippet recovers only part
+of that. Two of the town figures (Vilassar, Sant Celoni) are spikes from local holidays that have passed. The big levers
+are position (8–10 → 5–7) and the event calendar, not snippets.
+
+**Review:** none (nothing changed). The queue's own dates are above. Each item is logged as a new entry, with its
+baseline, when it is applied.
