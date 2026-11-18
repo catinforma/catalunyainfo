@@ -10,7 +10,7 @@ import type { Locale } from "@/lib/i18n/config";
  *   /ca/calculadores/…
  *   /en/calculators/…
  *
- * Every tool's module (net-salary/copy.ts, self-employed/copy.ts, sick-leave/copy.ts, paid-leave/copy.ts, employment/*, rent-update/copy.ts, lottery-tax/copy.ts)
+ * Every tool's module (net-salary/copy.ts, self-employed/copy.ts, sick-leave/copy.ts, paid-leave/copy.ts, employment/*, rent-update/copy.ts, lottery-tax/copy.ts, bono-social/copy.ts)
  * reads its slugs from `CALCULATORS` below, and the hub lists the same
  * registry, so a tool added here shows up on the hub (tests/calculators-hub.test.ts
  * fails until it has a card). Slugs are live URLs: never change one.
@@ -54,6 +54,8 @@ export const CALCULATORS = [
   { id: "lottery-tax", slugs: { es: "premios-loteria", ca: "premis-loteria", en: "spain-lottery-prize-tax" } },
   // Vehicles (hub group "vehicle"): when the ITV is due (RD 920/2017 art. 6) and the official fee per region.
   { id: "itv", slugs: { es: "itv", ca: "itv", en: "itv-spain" } },
+  // Energy at home (hub group "energy"): who qualifies for the bono social eléctrico (RD 897/2017 arts. 3-4) and its 2026 discount (RDL 7/2026 art. 1).
+  { id: "bono-social", slugs: { es: "bono-social-electrico", ca: "bo-social-electric", en: "bono-social-electricity-spain" } },
 ] as const satisfies readonly { id: string; slugs: Record<CalcLocale, string> }[];
 
 export type CalculatorId = (typeof CALCULATORS)[number]["id"];

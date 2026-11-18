@@ -6,6 +6,7 @@ import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
 import { ShareBar, crumbPath } from "@/components/share/ShareBar";
 import { renderInline } from "@/lib/content/inline";
+import { bonoSocialPath } from "@/lib/programmatic/bono-social/copy";
 import { butanePath } from "@/lib/programmatic/butane/paths";
 import { getMessages } from "@/lib/i18n";
 import type { Locale } from "@/lib/i18n/config";
@@ -204,7 +205,8 @@ function relatedLinks(locale: Locale, which: PvpcDayView) {
   const other = which === "today" ? { label: w.tomorrowLink, href: pvpcPath(locale, "tomorrow") } : { label: w.todayLink, href: pvpcPath(locale, "today") };
   const today = { ca: "Avui a Catalunya", es: "Hoy en Cataluña", en: "Today in Catalonia" }[locale];
   const butane = { ca: "Preu de la bombona de butà avui", es: "Precio de la bombona de butano hoy", en: "Butane bottle price today" }[locale];
-  return [other, { label: butane, href: butanePath(locale) }, { label: today, href: todayPath(locale) }];
+  const bono = { ca: "Bo social elèctric: tens dret?", es: "Bono social eléctrico: ¿tienes derecho?", en: "Bono social for electricity: do you qualify?" }[locale];
+  return [other, { label: butane, href: butanePath(locale) }, { label: bono, href: bonoSocialPath(locale) }, { label: today, href: todayPath(locale) }];
 }
 
 export function PvpcPage({ locale, which, view }: { locale: Locale; which: PvpcDayView; view: PvpcView }) {

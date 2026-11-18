@@ -31,6 +31,7 @@ import { itvEditions } from "@/lib/programmatic/itv/copy";
 import { htEditions } from "@/lib/programmatic/home-purchase-tax/copy";
 import { lotteryTaxEditions, money as lotteryMoney } from "@/lib/programmatic/lottery-tax/copy";
 import { headline as lotteryHeadline } from "@/lib/programmatic/lottery-tax/page";
+import { bonoSocialEditions } from "@/lib/programmatic/bono-social/copy";
 import { LOCALES, type Locale } from "@/lib/i18n/config";
 import { legalPath, sectionPath } from "@/lib/i18n/routes";
 import { siteAuthorPath } from "@/lib/content/author";
@@ -257,6 +258,11 @@ export function liveTools(): LiveTool[] {
       name: "Spanish lottery prize tax calculator (El Gordo, El Niño, La Grossa)",
       hubs: lotteryTaxEditions(),
       description: `what you keep from a Spanish lottery prize after the special levy of Law 35/2006 on income tax, additional provision 33, quoted from the BOE: each winning décimo (ticket or bet) has its own 40,000 euros tax-free and 20% of the rest is withheld when it is paid; shared décimos and participaciones split the tax-free part by each holder's share; not declared on the income tax return. Presets for the Christmas Lottery 2026 prizes per 20-euro décimo (El Gordo ${lotteryMoney(lotteryHeadline().gordo.total.gross, "en")}: ${lotteryMoney(lotteryHeadline().gordo.total.withholding, "en")} withheld, ${lotteryMoney(lotteryHeadline().gordo.total.net, "en")} kept), El Niño 2027's first prize and La Grossa de Cap d'Any 2026 (Catalan government lottery, DOGC 9640), any other amount, non-residents (treaty refund on form 210) and the Agencia Tributaria's forms 136 and 230.`,
+    },
+    {
+      name: "Bono social eléctrico checker (Spain's electricity discount for vulnerable consumers)",
+      hubs: bonoSocialEditions(),
+      description: "who qualifies for Spain's bono social for electricity and what it gives, quoted from the BOE: holder of the contract at the main home, 10 kW or less, on the regulated PVPC tariff, which only a reference supplier (comercializadora de referencia) sells; vulnerable with household income up to 1.5 times the 14-payment IPREM (8,400 euros: 12,600 euros alone, +2,520 per further adult, +4,200 per minor, +8,400 with disability of 33% or more, gender or terrorism victim, dependency II/III, single parent or electrodependency), or a large-family title, minimum pensioners or IMV recipients; severely vulnerable at half the limit (1 x IPREM for minimum pensioners, 2 x IPREM for large families); at risk of social exclusion when social services pay at least half the bill (Royal Decree 897/2017 arts. 3-4; income = general + savings taxable base, Orden ETU/943/2017 art. 4). Discount 42.5% / 57.5% from 1 January to 31 December 2026 (Royal Decree-law 7/2026 art. 1, after Royal Decree-laws 16/2025 and 2/2026 were repealed), back to 35% / 50% from 1 January 2027 unless extended (RD 897/2017 art. 6.3); yearly kWh caps 1,587 / 2,222 / 2,698 / 4,761 (Annex I); no cut-offs until 31 December 2026 (RDL 7/2026 art. 4); how to apply, documents, the reference suppliers' phones (MITECO) and the thermal bono.",
     },
     {
       name: "When is my ITV due? Spain vehicle inspection calculator",

@@ -89,6 +89,7 @@ export const CALCULATOR_USE_IDS = [
   "treasury-bills",
   "lottery-tax",
   "itv",
+  "bono-social",
   "leave-planner-2027",
   "tourist-tax",
   "transport-pass",
