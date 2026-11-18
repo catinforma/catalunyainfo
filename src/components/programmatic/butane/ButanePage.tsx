@@ -27,6 +27,7 @@ import {
   sources,
   words,
 } from "@/lib/programmatic/butane/copy";
+import { bonoSocialPath } from "@/lib/programmatic/bono-social/copy";
 import { BUTANE_CHECKED } from "@/lib/programmatic/butane/data";
 import { butaneMetadata } from "@/lib/programmatic/butane/page";
 import { butanePath, butaneTranslations } from "@/lib/programmatic/butane/paths";
@@ -58,6 +59,7 @@ export function relatedLinks(locale: Locale): { label: string; href: string }[] 
   return [
     { label: { es: "Precio de la luz hoy (PVPC)", ca: "Preu de la llum avui (PVPC)", en: "Electricity price today (PVPC)" }[locale], href: pvpcPath(locale, "today") },
     { label: { es: "Gasolineras más baratas hoy", ca: "Benzineres més barates avui", en: "Cheapest petrol stations today (in Spanish)" }[locale], href: fuelHubPath(locale === "ca" ? "ca" : "es") },
+    { label: { es: "Bono social eléctrico: ¿tienes derecho?", ca: "Bo social elèctric: tens dret?", en: "Bono social for electricity: do you qualify?" }[locale], href: bonoSocialPath(locale) },
     { label: { es: "Calculadoras", ca: "Calculadores", en: "Calculators" }[locale], href: calculatorsHubPath(locale) },
   ];
 }

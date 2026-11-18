@@ -44,6 +44,7 @@ const { mortgageEditions } = await import("../src/lib/programmatic/mortgage/copy
 const { itvEditions } = await import("../src/lib/programmatic/itv/copy.ts");
 const { htEditions } = await import("../src/lib/programmatic/home-purchase-tax/copy.ts");
 const { lotteryTaxEditions } = await import("../src/lib/programmatic/lottery-tax/copy.ts");
+const { bonoSocialEditions } = await import("../src/lib/programmatic/bono-social/copy.ts");
 const { PATHS: TOOL_PATHS } = await import("../src/lib/content/home-tools.ts");
 
 // Titles and descriptions of every programmatic page.
@@ -129,6 +130,7 @@ test("every URL llms.txt names is a page a family or guide publishes", () => {
     ...Object.values(itvEditions()),
     ...Object.values(htEditions()),
     ...Object.values(lotteryTaxEditions()),
+    ...Object.values(bonoSocialEditions()),
   ]);
   for (const href of [spainHubPath(), ...editionPaths()]) known.add(href);
   for (const l of LOCALES) known.add(b2href("strikesSpain", l));

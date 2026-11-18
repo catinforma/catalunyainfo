@@ -7219,3 +7219,59 @@ were last read (they never read the clock).
 **Deploy.** Deploy only: the box is drawn by the templates, nothing is stored in a body, so no publish group is needed.
 
 **Outcome:** _pending_
+
+## 2026-11-18 — "Bono social eléctrico: ¿tienes derecho?", eligibility checker, es + ca + en (new page; deploy only, no publish group)
+
+**Why.** Research row 19 (research_notes/spain-utilities-opportunities-nov2026.md): "bono social" ≈ 39k/month in
+Spain, March index 135, October 113. The SERP (consumoresponde, comunidad.madrid, papernest, MITECO #4) **contradicts
+itself on the discount** (42.5/57.5 vs 35/50) and has **no household-income checker**. Both figures are "right": 35/50 is
+the permanent rule (RD 897/2017 art. 6.3, which is all the BOE consolidated text shows), 42.5/57.5 is 2026 only (RDL
+7/2026 art. 1, after RDL 16/2025 and RDL 2/2026, which set the same rates, were repealed by Congress on 27 Jan and 26 Feb
+2026). The page says so. Fact pack: research_notes/bono-social-electrico-nov2026.md (gitignored, worktree copy).
+
+- URLs: `/es/calculadoras/bono-social-electrico/` (primary), `/ca/calculadores/bo-social-electric/`,
+  `/en/calculators/bono-social-electricity-spain/` (sitemap + hreflang, x-default en; llms.txt entry; site-search
+  shortcut "bono social"; `calculator_use` id `bono-social`). Registry `CALCULATORS` id `bono-social`; new hub group
+  `energy` ("Luz y energía en casa") right before the live group (PVPC, butane). Next step under the tool: PVPC, butane.
+- Facts (all read 18 Nov 2026, curl + grep; every quote checked verbatim against the downloaded texts): RD 897/2017 arts.
+  2, 3, 4, 5.1, 6.3, 6.4, 8.2, 9, 12 and Annex I (BOE-A-2017-11505, última actualización 28/01/2026); RDL 7/2026 arts. 1
+  and 4 (BOE-A-2026-6544; validated 26 Mar 2026, BOE-A-2026-7125); RDL 8/2021 art. 4.1; Orden ETU/943/2017 art. 4.1
+  (income = general + savings taxable base); IPREM 600 €/month, 8,400 € in 14 payments (Ley 31/2022 DA 90ª, still
+  applied: SEPE "Cuantías anuales" 2026; MITECO). MITECO's FAQ euro examples (12,600 / 19,320 / 23,520; +8,400 special;
+  half for severe; 16,800 large family; 8,400 minimum pensioners) are test fixtures. kWh caps 1,587 / 2,222 / 2,698 /
+  4,761 (MITECO monthly 132 / 185 / 224 / 396), most favourable row. Reference suppliers: name + phone from MITECO only
+  (their sites: two 403, one 404, not linked).
+- Server-rendered: the checker on 2 adults + 2 minors + 20,000 €, the discount table, the income table (8 households,
+  with and without a special circumstance), the kWh table, 8 worked examples, 7-question FAQ + FAQPage JSON-LD, YMYL
+  disclaimer with MITECO's requirements link, sources, limits.
+- Links: the PVPC pages (bono social paragraph + related links) and the butane page (bono social térmico paragraph +
+  related links) now link the checker, and it links both back. The PVPC pages' MITECO link
+  (`/es/energia/energia-electrica/bono-social.html`) answered **404**: replaced by MITECO's requirements page. Body only:
+  no title or description touched on the PVPC or butane pages.
+
+**Date guard (tests/bono-social.test.ts).** From **31 Dec 2026** the test fails: that day the 42.5/57.5 discount and the
+no-cut-off guarantee (RDL 7/2026 arts. 1 and 4) end. Re-read the BOE for an extension decree-law (late December is when
+the previous ones came) and the 2027 IPREM; until one is published, the page already says 35/50 from 1 Jan 2027 "if not
+extended", so the text is right on either side of the date but must be updated the day the BOE speaks.
+
+**Baseline:** 0 (no page; the PVPC pages carry one bono social paragraph).
+
+**Prediction.** Indexed within 7 days (IndexNow the three URLs). The head "bono social" is navigational/government-bound:
+positions 8–20 by mid-December; long tail page 1 possible ("bono social 2026 descuento", "bono social requisitos ingresos",
+"bono social familia monoparental", "límite ingresos bono social 2026", "bono social 42,5"). January brings a "bono social
+2027" wave if the rates change. By 13 Jan 2027: 3,000–10,000 impressions/28 days, CTR 2–5 %. Wrong if under 800
+impressions/28 days by 13 Jan.
+
+**Measure:** 25 Nov `batch_url_inspection` (rendered checker + tables); 16 Dec and 13 Jan 2027 `snapshot.py page
+bono-social-electrico 28` (+ bo-social-electric, bono-social-electricity-spain); PVPC pages' related-link clicks to it in
+the 2 Dec next-step review. **Review: 2026-12-16.**
+
+**Confounders.** The PVPC pages' 27 Nov review reads the same body plus one more paragraph and link (no title change). Any
+late-December decree-law on the bono social will move searches and force a page update inside the window.
+
+**Deploy.** Deploy only (static, nothing in the database): no publish group. IndexNow prefixes:
+`/es/calculadoras/bono-social-electrico/`, `/ca/calculadores/bo-social-electric/`,
+`/en/calculators/bono-social-electricity-spain/`, plus the re-crawl of `/es/precio-luz/`, `/ca/preu-llum/`,
+`/en/electricity-price-spain/`, `/es/precio-butano/`, `/ca/preu-buta/`, `/en/butane-price-spain/` and the calculators hubs.
+
+**Outcome:** _pending_

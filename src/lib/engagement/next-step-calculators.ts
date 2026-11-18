@@ -45,6 +45,8 @@ export const CALCULATOR_NEXT: Partial<Record<NextToolKey, readonly NextToolKey[]
   ipc: ["rent-update", "pensions-2027"],
   "treasury-bills": ["euribor", "ipc"],
   itv: ["fuel"],
+  // Energy at home: the regulated tariff the bono social needs, then butane (the thermal bono).
+  "bono-social": ["pvpc", "butane"],
   "leave-2027": ["working-days"],
 };
 

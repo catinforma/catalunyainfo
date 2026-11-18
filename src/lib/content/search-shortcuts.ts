@@ -159,6 +159,7 @@ const CALC_KEYS: readonly { keys: readonly string[]; id: CalculatorId; label: Pe
   { keys: ["paga extra", "pagas extra", "pagues extra", "paga de navidad", "paga de nadal", "extra pay", "christmas bonus"], id: "extra-pay", label: { ca: "Calculadora de la paga extra", es: "Calculadora de la paga extra", en: "Christmas extra pay calculator" } },
   { keys: ["hipoteca", "mortgage"], id: "mortgage", label: { ca: "Calculadora d'hipoteca", es: "Calculadora de hipoteca", en: "Mortgage calculator" } },
   { keys: ["euribor"], id: "euribor", label: { ca: "Euríbor avui", es: "Euríbor hoy", en: "Euribor today" } },
+  { keys: ["bono social", "bo social", "social bonus"], id: "bono-social", label: { ca: "Bo social elèctric: tens dret?", es: "Bono social eléctrico: ¿tienes derecho?", en: "Bono social (electricity): do you qualify?" } },
   { keys: ["itv"], id: "itv", label: { ca: "Quan toca passar l'ITV", es: "Cuándo toca pasar la ITV", en: "When the ITV is due" } },
   { keys: ["ipc", "inflacio", "inflacion", "cpi"], id: "ipc", label: { ca: "IPC avui", es: "IPC hoy", en: "Spain CPI" } },
   { keys: ["smi", "salari minim", "salario minimo", "minimum wage"], id: "smi-2027", label: { ca: "Salari mínim 2027", es: "Salario mínimo 2027", en: "Minimum wage 2027" } },

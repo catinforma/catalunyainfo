@@ -45,6 +45,7 @@ import { mortgageSitemapEntries } from "@/lib/programmatic/mortgage/page";
 import { itvSitemapEntries } from "@/lib/programmatic/itv/page";
 import { htSitemapEntries } from "@/lib/programmatic/home-purchase-tax/page";
 import { lotteryTaxSitemapEntries } from "@/lib/programmatic/lottery-tax/page";
+import { bonoSocialSitemapEntries } from "@/lib/programmatic/bono-social/page";
 
 /**
  * Cached for an hour (ISR) and refreshed at once by every publish, and by the
@@ -225,6 +226,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...htSitemapEntries(),
     // Lottery prize tax (Ley 35/2006 DA 33ª; calculators family, group "lottery"), in es, ca and en.
     ...lotteryTaxSitemapEntries(),
+    ...bonoSocialSitemapEntries(),
     ...fuelSitemapEntries(),
     ...rodaliesSitemap(),
     ...reservoirSitemapEntries(),

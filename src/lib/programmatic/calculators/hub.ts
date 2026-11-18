@@ -24,6 +24,7 @@ import { reservoirHubPath } from "@/lib/programmatic/reservoirs/paths";
 import { RULES_AS_OF as WORKING_DAYS_AS_OF } from "@/lib/programmatic/working-days/rules";
 import { ITV_RULES_AS_OF } from "@/lib/programmatic/itv/rules";
 import { RULES_AS_OF as LOTTERY_TAX_AS_OF } from "@/lib/programmatic/lottery-tax/rules";
+import { RULES_AS_OF as BONO_SOCIAL_AS_OF } from "@/lib/programmatic/bono-social/rules";
 import { COMMUNITIES_AS_OF as HOME_TAX_AS_OF } from "@/lib/programmatic/home-purchase-tax/as-of";
 import { hubPath as rodaliesHubPath } from "@/lib/programmatic/rodalies/paths";
 
@@ -41,7 +42,7 @@ import { calcPath, calculatorsHubPath, type CalcLocale, type CalculatorId } from
  * figures come from, as the tool's own page cites them.
  */
 
-export type HubGroupId = "work" | "housing" | "official" | "lottery" | "vehicle" | "holidays" | "live";
+export type HubGroupId = "work" | "housing" | "official" | "lottery" | "vehicle" | "holidays" | "energy" | "live";
 export type Scope = "spain" | "catalonia";
 
 export interface HubCard {
@@ -544,6 +545,31 @@ export const HUB_GROUPS: HubGroup[] = [
           en: "The tax on stays in tourist establishments (Catalan Tax Agency, Law 2/2026) and Barcelona's surcharge.",
         },
         scope: "catalonia",
+      },
+    ],
+  },
+  {
+    // Energy at home: the bono social checker, right before the live group that opens with the PVPC and butane prices.
+    id: "energy",
+    title: { ca: "Llum i energia a casa", es: "Luz y energía en casa", en: "Electricity and energy at home" },
+    cards: [
+      {
+        key: "bono-social",
+        calculator: true,
+        href: calc("bono-social"),
+        title: { ca: "Bo social elèctric 2026", es: "Bono social eléctrico 2026", en: "Bono social for electricity 2026" },
+        answers: {
+          ca: "Tens dret al bo social, ets vulnerable o vulnerable sever, quin descompte et toca (42,5 % o 57,5 % fins al 31 de desembre de 2026) i fins a quants kWh?",
+          es: "¿Tienes derecho al bono social, eres vulnerable o vulnerable severo, qué descuento te toca (42,5 % o 57,5 % hasta el 31 de diciembre de 2026) y hasta cuántos kWh?",
+          en: "Whether you qualify for the bono social, as vulnerable or severely vulnerable, your discount (42.5% or 57.5% until 31 December 2026) and for how many kWh.",
+        },
+        basis: {
+          ca: "Reial decret 897/2017, arts. 3, 4 i 6 i annex I; Reial decret llei 7/2026, art. 1; Ordre ETU/943/2017; IPREM de la Llei 31/2022 (BOE); Ministeri per a la Transició Ecològica.",
+          es: "Real Decreto 897/2017, arts. 3, 4 y 6 y anexo I; Real Decreto-ley 7/2026, art. 1; Orden ETU/943/2017; IPREM de la Ley 31/2022 (BOE); Ministerio para la Transición Ecológica.",
+          en: "Royal Decree 897/2017, arts. 3, 4 and 6 and Annex I; Royal Decree-law 7/2026, art. 1; Orden ETU/943/2017; IPREM from Law 31/2022 (BOE); Ministry for the Ecological Transition.",
+        },
+        scope: "spain",
+        checked: BONO_SOCIAL_AS_OF,
       },
     ],
   },

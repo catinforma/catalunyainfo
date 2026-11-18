@@ -5,6 +5,7 @@
  */
 
 import type { Locale } from "@/lib/i18n/config";
+import { bonoSocialPath } from "@/lib/programmatic/bono-social/copy";
 
 import { BOTTLE_KG, BUTANE_CHECKED, BUTANE_ONLY_FROM, CEILING, ADJUSTMENTS, INE_LPG_CPI, OPERATORS, OPERATORS_BOE, REVISIONS, URLS, type Revision } from "./data";
 import { atCeiling, bottleBeforeTax, bottleWithTax, changePercent, dayBefore, hitFivePercent, nextBounds, scheduledRevisions, type BottleWithTax, type ButaneState } from "./rules";
@@ -505,9 +506,9 @@ export function bonoParagraphs(locale: Locale): string[] {
       en: `The **bono social térmico** helps pay for energy used for **heating, hot water or cooking**, butane included. It goes to households that had the **electricity bono social on 31 December of the previous year**; the amount depends on the degree of vulnerability and the climate zone, and the regions pay it ([Royal Decree-law 15/2018, arts. 5 to 10](${URLS.rdl15_2018})).`,
     }[locale],
     {
-      es: `Requisitos y solicitud del bono social eléctrico: [bonosocial.gob.es](${URLS.bonoSocial}) (Ministerio para la Transición Ecológica).`,
-      ca: `Requisits i sol·licitud del bo social elèctric: [bonosocial.gob.es](${URLS.bonoSocial}) (Ministeri per a la Transició Ecològica).`,
-      en: `Requirements and how to apply for the electricity bono social: [bonosocial.gob.es](${URLS.bonoSocial}) (Ministry for the Ecological Transition).`,
+      es: `¿Tienes derecho al bono social eléctrico? Compruébalo con la [calculadora del bono social](${bonoSocialPath(locale)}). Requisitos y solicitud: [bonosocial.gob.es](${URLS.bonoSocial}) (Ministerio para la Transición Ecológica).`,
+      ca: `Tens dret al bo social elèctric? Comprova-ho amb la [calculadora del bo social](${bonoSocialPath(locale)}). Requisits i sol·licitud: [bonosocial.gob.es](${URLS.bonoSocial}) (Ministeri per a la Transició Ecològica).`,
+      en: `Do you qualify for the electricity bono social? Check with the [bono social checker](${bonoSocialPath(locale)}). Requirements and how to apply: [bonosocial.gob.es](${URLS.bonoSocial}) (Ministry for the Ecological Transition).`,
     }[locale],
   ];
 }

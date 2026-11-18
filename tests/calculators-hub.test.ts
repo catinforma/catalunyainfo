@@ -58,6 +58,7 @@ test("registry: the live URLs did not move (13 Nov 2026)", () => {
   assert.deepEqual(calcEditions("home-purchase-tax"), { ca: "/ca/calculadores/impostos-compra-habitatge/", es: "/es/calculadoras/impuestos-compra-vivienda/", en: "/en/calculators/spain-home-purchase-taxes/" });
   assert.deepEqual(calcEditions("euribor"), { ca: "/ca/calculadores/euribor-avui/", es: "/es/calculadoras/euribor-hoy/", en: "/en/calculators/euribor-today/" });
   assert.deepEqual(calcEditions("mortgage"), { ca: "/ca/calculadores/hipoteca/", es: "/es/calculadoras/hipoteca/", en: "/en/calculators/mortgage-calculator-spain/" });
+  assert.deepEqual(calcEditions("bono-social"), { ca: "/ca/calculadores/bo-social-electric/", es: "/es/calculadoras/bono-social-electrico/", en: "/en/calculators/bono-social-electricity-spain/" });
 });
 
 test("hub: the housing group holds the rent, mortgage, Euribor and home-purchase tax tools", () => {
@@ -72,8 +73,10 @@ test("hub: lists every calculator of the registry exactly once, linking its own 
   assert.equal(new Set(keys).size, keys.length, "a card appears twice");
 });
 
-test("hub: the seven groups, each card complete in ca, es and en, linking indexable pages", () => {
-  assert.deepEqual(HUB_GROUPS.map((g) => g.id), ["work", "housing", "official", "lottery", "vehicle", "holidays", "live"]);
+test("hub: the eight groups, each card complete in ca, es and en, linking indexable pages", () => {
+  assert.deepEqual(HUB_GROUPS.map((g) => g.id), ["work", "housing", "official", "lottery", "vehicle", "holidays", "energy", "live"]);
+  // Energy at home: the bono social checker (lib/programmatic/bono-social), right before the live group (PVPC, butane).
+  assert.deepEqual(HUB_GROUPS.find((g) => g.id === "energy")?.cards.map((c) => c.key), ["bono-social"]);
   // The lottery group: the prize tax calculator (lib/programmatic/lottery-tax).
   assert.deepEqual(HUB_GROUPS.find((g) => g.id === "lottery")?.cards.map((c) => c.key), ["lottery-tax"]);
   // The vehicles group: the ITV calculator (lib/programmatic/itv).

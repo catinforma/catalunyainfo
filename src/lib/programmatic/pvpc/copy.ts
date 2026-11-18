@@ -21,10 +21,16 @@
  *    add up to it; contracted power, the electricity tax, VAT and meter rental
  *    are billed apart.
  *  - Bono social: needs the PVPC with a reference supplier and contracted
- *    power of 10 kW or less (CNMC, "Bono social eléctrico").
+ *    power of 10 kW or less (CNMC, "Bono social eléctrico"). Who qualifies
+ *    and the 2026 discount: the bono social checker (lib/programmatic/
+ *    bono-social, RDL 7/2026 art. 1), linked from here. MITECO's old
+ *    bono-social.html answered 404 on 18 Nov 2026: replaced by its
+ *    requirements page (bonosocial.gob.es redirects to the same section).
  */
 
 import type { Locale } from "@/lib/i18n/config";
+import { bonoSocialPath, rate } from "@/lib/programmatic/bono-social/copy";
+import { DISCOUNT_2026 } from "@/lib/programmatic/bono-social/rules";
 import { caEl, liveStamp } from "@/lib/programmatic/live-stamp";
 
 import type { DaySummary, HourView, Period } from "./periods";
@@ -45,7 +51,7 @@ export const URLS = {
   rd216: "https://www.boe.es/buscar/act.php?id=BOE-A-2014-3376",
   omie15: "https://www.omie.es/sites/default/files/2025-10/2501001_go_live_mtu15_md_es_vf.pdf",
   bonoCnmc: "https://www.cnmc.es/facil-para-ti/que-hace-la-cnmc-para-consumidores/bono-social-electrico",
-  bonoMiteco: "https://www.miteco.gob.es/es/energia/energia-electrica/bono-social.html",
+  bonoMiteco: "https://www.miteco.gob.es/es/energia/pobreza-energetica/pe-001/requisitos.html",
 } as const;
 
 /* -------------------------------------------------------------------------- */
@@ -551,13 +557,25 @@ export function includesParagraphs(locale: Locale): string[] {
 }
 
 export function bonoParagraphs(locale: Locale): string[] {
+  const v = rate(DISCOUNT_2026.rate.vulnerable, locale);
+  const s = rate(DISCOUNT_2026.rate.severe, locale);
+  const calc = bonoSocialPath(locale);
   if (locale === "ca") {
-    return [`El bo social elèctric només s'aplica amb el **PVPC contractat amb una comercialitzadora de referència** i una potència de **10 kW o menys**. Requisits, descomptes i com demanar-lo: [CNMC](${URLS.bonoCnmc}) i [Ministeri per a la Transició Ecològica](${URLS.bonoMiteco}).`];
+    return [
+      `El bo social elèctric només s'aplica amb el **PVPC contractat amb una comercialitzadora de referència** i una potència de **10 kW o menys**. Requisits, descomptes i com demanar-lo: [CNMC](${URLS.bonoCnmc}) i [Ministeri per a la Transició Ecològica](${URLS.bonoMiteco}).`,
+      `Tens dret al bo social? Comprova-ho amb la [calculadora del bo social elèctric](${calc}): el 2026 descompta el ${v} (el ${s} si ets vulnerable sever) fins al 31 de desembre.`,
+    ];
   }
   if (locale === "en") {
-    return [`The bono social (the discount for vulnerable consumers) only applies with the **PVPC contracted with a reference supplier** and contracted power of **10 kW or less**. Requirements, discounts and how to apply: [CNMC](${URLS.bonoCnmc}) and [Ministry for the Ecological Transition](${URLS.bonoMiteco}).`];
+    return [
+      `The bono social (the discount for vulnerable consumers) only applies with the **PVPC contracted with a reference supplier** and contracted power of **10 kW or less**. Requirements, discounts and how to apply: [CNMC](${URLS.bonoCnmc}) and [Ministry for the Ecological Transition](${URLS.bonoMiteco}).`,
+      `Do you qualify? Check with the [bono social checker](${calc}): in 2026 it takes ${v} off the bill (${s} if severely vulnerable) until 31 December.`,
+    ];
   }
-  return [`El bono social eléctrico solo se aplica con el **PVPC contratado con una comercializadora de referencia** y una potencia de **10 kW o menos**. Requisitos, descuentos y cómo pedirlo: [CNMC](${URLS.bonoCnmc}) y [Ministerio para la Transición Ecológica](${URLS.bonoMiteco}).`];
+  return [
+    `El bono social eléctrico solo se aplica con el **PVPC contratado con una comercializadora de referencia** y una potencia de **10 kW o menos**. Requisitos, descuentos y cómo pedirlo: [CNMC](${URLS.bonoCnmc}) y [Ministerio para la Transición Ecológica](${URLS.bonoMiteco}).`,
+    `¿Tienes derecho al bono social? Compruébalo con la [calculadora del bono social eléctrico](${calc}): en 2026 descuenta el ${v} (el ${s} si eres vulnerable severo) hasta el 31 de diciembre.`,
+  ];
 }
 
 export function quarterParagraphs(locale: Locale): string[] {
