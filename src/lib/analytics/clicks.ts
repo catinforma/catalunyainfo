@@ -10,7 +10,8 @@ import { RELATED_LINK_CONTEXTS, safePath, type AnalyticsEvent, type ChannelLinkC
  *  - a town or city .ics feed         -> ics_subscribe_click
  *  - an official or primary source    -> outbound_official_source_click
  *  - one of our pages, from the "next useful step" box
- *    (`data-ci-placement="next_step"`) -> related_content_click
+ *    (`data-ci-placement="next_step"`) or a town's list of its other pages
+ *    (`"town_hub"`)                    -> related_content_click
  *
  * Every other click is left to GA4's enhanced measurement (`click` for any
  * outbound link), so nothing is counted twice under our names; other

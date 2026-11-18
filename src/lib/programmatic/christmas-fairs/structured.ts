@@ -8,7 +8,7 @@
  * event's URL.
  */
 
-import { townEventSchema } from "@/lib/seo/jsonld";
+import { townEventSchema, townPlaceId } from "@/lib/seo/jsonld";
 import { municipality } from "@/lib/programmatic/weekend/data";
 
 import { townName } from "./copy";
@@ -33,6 +33,8 @@ export function christmasFairEvents(fairs: readonly Fair[], path: string, locale
           town: townName(m.name, locale),
           region: PROVINCE[m.province] ?? "Catalunya",
           url: f.webReplaced ? null : f.web,
+          // The same Place as the town's holiday and election pages (INE code).
+          placeId: townPlaceId(f.ine),
         }),
       ];
     });

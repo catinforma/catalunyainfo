@@ -7619,3 +7619,91 @@ and needs no ping.
 **Outcome:** _pending_
 
 **Correction 18 Nov 2026 (main session):** the embed widgets (2026/2027 calendars, calculator embeds) carry NO `rel=canonical` after all. They stay `noindex, indexifembedded`; the attribution link alone points to the source page. Reason: Google has said noindex combined with rel=canonical can pass the noindex to the canonical target, which would risk the town and calculator pages. The 11 Nov build had avoided it for that reason.
+
+## 2026-11-18 — Town hubs: each municipality's holiday, Christmas fair and election pages link each other, the holiday page leads (deploy only; no publish group; no title, description or lead touched)
+
+**Observation (GSC 22 Oct–18 Nov, `snapshot.py towns 2026-10-22 2026-11-18`; GA4 to 17 Nov, consenting visitors only).**
+A town has up to three pages that did not know each other: holidays (`/ca/festius/<town>/`, `/es/festivos/<town>/`, 29
+in `/en/holidays/`), Christmas fairs (44 towns) and elections (947 in ca/es, 30 in en). Before this change the holiday
+page linked the fair only through the next-step box (in season) and never the election page; the election page linked
+neither; the fair page linked the holiday page inside one sentence only when a fair day was a local holiday.
+
+Strongest page per town, measured: of the 943 towns with impressions, the **election** page leads in 609 by impressions
+(634 by clicks), the holiday page in 317 (288), the fair page in 17 (21). That is the 29N run-up: across the families the
+holiday pages already carry more impressions (105,983 vs 101,499) and lead in more towns in the latest 14 days (365 of
+943, 4–17 Nov) than over 28 (317). Example, `snapshot.py page /mataro/ 28`: holidays 90 clicks / 2,468 impressions, the
+election page 13 / 613. **Hub = the holiday page**: the only family with demand all year (2027 calendar queries peak in
+December–January), the one that holds the 2027 days, the today/tomorrow box and the .ics feed, and a hub that does not
+flip once election demand ends in the first week of December.
+
+**Baseline per family** (pages = URLs with impressions; position = impression-weighted average; v/sess = GA4 views per
+session of sessions that landed on that family's town pages):
+
+| Family | Pages | Clicks | Impr. | CTR | Pos. | GA4 sess. | v/sess | | 4–17 Nov: clicks | Impr. | Pos. | GA4 sess. | v/sess |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Holidays ca | 829 | 1,154 | 34,322 | 3.36 % | 6.0 | 517 | 1.354 | | 819 | 24,677 | 6.0 | 432 | 1.405 |
+| Holidays es | 781 | 1,480 | 70,998 | 2.08 % | 6.7 | 653 | 1.355 | | 880 | 35,451 | 6.6 | 523 | 1.403 |
+| Holidays en | 26 | 9 | 663 | 1.36 % | 8.2 | 5 | 1.400 | | 6 | 399 | 6.9 | 4 | 1.000 |
+| Fairs ca | 37 | 185 | 6,740 | 2.74 % | 6.6 | 90 | 1.233 | | 157 | 5,877 | 6.7 | 82 | 1.195 |
+| Fairs es | 37 | 263 | 10,621 | 2.48 % | 7.2 | 163 | 1.209 | | 232 | 9,600 | 7.3 | 152 | 1.178 |
+| Fairs en | 3 | 11 | 220 | 5.00 % | 8.6 | 16 | 1.000 | | 10 | 198 | 9.1 | 16 | 1.000 |
+| Elections ca | 890 | 1,616 | 50,682 | 3.19 % | 5.6 | 651 | 1.204 | | 978 | 27,483 | 5.7 | 486 | 1.212 |
+| Elections es | 848 | 2,643 | 50,188 | 5.27 % | 4.8 | 1,059 | 1.183 | | 1,219 | 25,012 | 5.2 | 648 | 1.207 |
+| Elections en | 25 | 23 | 629 | 3.66 % | 5.2 | 13 | 1.385 | | 18 | 412 | 5.4 | 13 | 1.385 |
+
+**Change.** A compact, server-rendered list "<Town>: tot el que hi ha a CatalunyaInfo" / "…: todo lo que hay en
+CatalunyaInfo" / "…: everything on CatalunyaInfo" (`components/TownHub.tsx`, rules in `lib/engagement/town-hub.ts`), low on
+the page: after the FAQ, i.e. after the answer and the next-step box, before the sibling-town lists. Items, in this order,
+each only if the page exists for the town in that language and is indexable (`isLowDemandPath`), and never the current
+page's own family: the holiday page (its H1) with jump links "calendari 2027" (`#festius-2027`) and "és festiu avui o
+demà?" (`#avui`); the fair page (its H1) while one of its fairs is still to end; the election page ("On votar el 29N a X:
+locals electorals i meses" to 29 Nov, then the page's H1 "Resultats de les eleccions a X"); the working-days calculator
+with the town picked (`#p=<town>`; towns with days in the order); the .ics feed through the holiday page's subscribe box
+(`#afegeix-calendari`; the feed itself is noindex, so it is never linked from the block). Shown only when another family's
+page is in it. `prefetch={false}` on every link (no RSC prefetch burst at the origin on 29N).
+
+| Page family | Pages with the block (indexable) | Links to |
+| --- | --- | --- |
+| Holidays ca / es / en | 478 (282) / 394 (252) / 29 (15) | election page (891 pages), fair page (84), working days (886) |
+| Fairs ca / es / en | 42 / 39 / 2 (all indexable) | holiday page + 2027/today anchors + .ics box (67), election page (80), working days (77) |
+| Elections ca / es / en | 359 (288) / 326 (258) / 16 (16) | holiday page + 2027/today anchors (678) + .ics box (662), fair page (90), working days (679) |
+
+1,685 pages carry it (1,194 of them indexable), for 599 municipalities; the other towns have no second indexable page
+(both their holiday and election pages are noindex low-demand pages, `low-demand.ts`, review 10 Dec). The sets follow
+the low-demand list automatically: when the 10 Dec review moves a page in or out of the index, the blocks change with
+the next deploy. Weight: 414–949 bytes of HTML per block (rendered), about as much again in the RSC payload: ≤ 2 KB raw,
+≤ 0.5 % of a 390 KB election page (test guard: markup ≤ 1.2 KB on every page).
+
+**Structured data.** The three families already described the town as a Place (Dataset `spatialCoverage` on the holiday
+and election pages, Event `location` on the fair pages); each now carries the same `@id`,
+`https://www.catalunyainfo.com/#municipality-<INE>` (`townPlaceId` in `lib/seo/jsonld.ts`). Nothing added beyond what each
+node said (no coordinates, no population). BreadcrumbList: already consistent (same slug and same town name in every
+family and language, now held by `tests/town-hub.test.ts`); not changed.
+
+**Measurement.** Clicks in the block are `related_content_click` with `link_context: "town_hub"` (added to the closed list
+`RELATED_LINK_CONTEXTS`; `docs/ANALYTICS.md`). `snapshot.py towns [start end]` (new) prints the table above plus the
+`town_hub` clicks per family; `snapshot.py landing` gained a "hub" column.
+
+**Hypothesis.** (1) Readers who land on one town page take the next town page: views per session on landings in the
+holiday and election town pages rise by ≥ 0.05 over the 4–17 Nov column, and the block gets ≥ 1 click per 100 page views
+on each family with ≥ 300 landed sessions. (2) Internal links between a town's indexable pages help the weaker one: more
+fair and election town pages with impressions, holiday town position not worse by more than 0.3.
+
+**Review: 9 Dec 2026** (`snapshot.py towns 2026-11-25 2026-12-08` against the 4–17 Nov column; GA4 Explore,
+`related_content_click` with link_context `town_hub`, Page path × Link URL, for which items are used). Rules per family:
+< 0.5 clicks per 100 page views and v/sess not above baseline → drop that family's items (one condition in
+`town-hub.ts`); the holiday→election item is due to change anyway after 29N (its anchor becomes the results H1 on 30 Nov).
+If the today/2027 jump links get < 10 % of the block's clicks, drop them (bytes). Re-read with the low-demand review of
+10 Dec, which changes which pages the block may link.
+
+**Confounders.** 29N moves election traffic up to 29 Nov and down after; December moves holidays and fairs up; the
+next-step box (live since 18 Nov, review 2 Dec) also adds onward links on the same pages, so read the `town_hub` clicks,
+not only v/sess. Static pages (holidays, fairs) choose their dated items at deploy; the fair and English town pages by the
+day the fairs were last read. GA4 counts consenting visitors only.
+
+**Deploy.** Deploy only: the templates draw the block, nothing is stored in a body, no publish group. IndexNow afterwards
+for the changed families (the script takes sitemap URLs only, so noindex pages are left out): `/ca/festius/`,
+`/es/festivos/`, `/en/holidays/`, `/ca/fires-de-nadal/`, `/es/mercados-navidad/`, `/en/christmas-markets/`,
+`/ca/eleccions/`, `/es/elecciones/`, `/en/elections/`.
+
+**Outcome:** _pending_

@@ -3,6 +3,7 @@ import { renderInline } from "@/lib/content/inline";
 
 import { Breadcrumbs, type Crumb } from "@/components/Breadcrumbs";
 import { NextStep } from "@/components/NextStep";
+import { TownHub } from "@/components/TownHub";
 import { ShareBar, crumbPath } from "@/components/share/ShareBar";
 import { WidgetPlaceLink } from "@/components/programmatic/embed-2027/WidgetLink";
 import { LeavePlaceLink } from "@/components/programmatic/leave-2027/LeaveLink";
@@ -11,6 +12,7 @@ import { CalendarSubscribe } from "@/components/programmatic/ics/CalendarSubscri
 import { getMessages } from "@/lib/i18n";
 import { todayInCatalonia } from "@/lib/content/holidays/calendar";
 import { townNextStep } from "@/lib/engagement/next-step-towns";
+import { townHub } from "@/lib/engagement/town-hub";
 import { SCHOOL_YEARS } from "@/lib/content/school/calendar";
 import { SchoolFreeDays } from "@/components/programmatic/holidays/SchoolFreeDays";
 import { comarcaLinkLabel, municipalityCopy, displayName, municipalityFaq, municipalityH1, municipalityNextLine, sharedDayLead, workCalendarLine } from "@/lib/programmatic/holidays/copy";
@@ -281,6 +283,9 @@ export function MunicipalityPage({ m, locale }: { m: SnapshotMunicipality; local
               </p>
             </div>
           ))}
+
+          {/* The hub of the town's pages (lib/engagement/town-hub.ts): its Christmas fair, its 29N page, working days. */}
+          <TownHub hub={townHub(m.slug, locale, "holidays", todayInCatalonia())} />
         </div>
 
         <section className="mt-12" aria-labelledby="ci-hol-siblings">

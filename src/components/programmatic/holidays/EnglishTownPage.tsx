@@ -3,6 +3,7 @@ import { renderInline } from "@/lib/content/inline";
 
 import { Breadcrumbs, type Crumb } from "@/components/Breadcrumbs";
 import { NextStep } from "@/components/NextStep";
+import { TownHub } from "@/components/TownHub";
 import { ShareBar, crumbPath } from "@/components/share/ShareBar";
 import { WidgetPlaceLink } from "@/components/programmatic/embed-2027/WidgetLink";
 import { LeavePlaceLink } from "@/components/programmatic/leave-2027/LeaveLink";
@@ -10,6 +11,8 @@ import { WorkingDaysPlaceLink } from "@/components/programmatic/working-days/Wor
 import { CalendarSubscribe } from "@/components/programmatic/ics/CalendarSubscribe";
 import { getMessages } from "@/lib/i18n";
 import { townNextStep } from "@/lib/engagement/next-step-towns";
+import { townHub } from "@/lib/engagement/town-hub";
+import { familyLastChecked } from "@/lib/programmatic/christmas-fairs/data";
 import { NEXT, YEAR, councilApproved2027, localThrough, nextYearFor, regionalThrough, statusDays, yearRows } from "@/lib/programmatic/holidays/data";
 import { englishTowns, isLargestTown } from "@/lib/programmatic/holidays/english";
 import { enName, englishHubCopy, englishTownCopy, englishTownFaq, englishTownH1, townDateAnswers } from "@/lib/programmatic/holidays/english-copy";
@@ -243,6 +246,10 @@ export function EnglishTownPage({ m }: { m: SnapshotMunicipality }) {
               <p>{item.answer}</p>
             </div>
           ))}
+
+          {/* The town's other English pages (lib/engagement/town-hub.ts). Clock-free like the rest of the page:
+              dated by the day the fairs were last read, as the next-step box is. */}
+          <TownHub hub={townHub(m.slug, "en", "holidays", familyLastChecked())} />
         </div>
 
         <section className="mt-12" aria-labelledby="ci-hol-siblings">

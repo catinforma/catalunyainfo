@@ -14,7 +14,8 @@ few dozen short lines. Works on the VPS (Linux) and on the owner's Windows PC.
     $PY scripts/snapshot.py audience [days]      # GA4: device, country, city, language, age, gender, channel
     $PY scripts/snapshot.py families [days]      # impressions by URL family (/es/festivos/dia/, ...)
     $PY scripts/snapshot.py channel [days]       # GA4: WhatsApp channel visits (utm whatsapp / channel), per day + pages
-    $PY scripts/snapshot.py landing [start end]  # GA4: pages/session by landing-page family + "next useful step" clicks
+    $PY scripts/snapshot.py landing [start end]  # GA4: pages/session by landing-page family + "next useful step" and town-hub clicks
+    $PY scripts/snapshot.py towns [start end]    # per-town pages (holidays, fairs, elections): GSC, GA4 views/session, town-hub clicks
 
 GSC data lags ~2 days; the last day is partial. Dates are Europe/Madrid.
 """
@@ -303,7 +304,7 @@ def _ga_rows(svc, body):
 
 
 def cmd_landing(a):
-    """GA4: pages per session by landing-page family, and clicks on the "next useful step" box.
+    """GA4: pages per session by landing-page family, and clicks on the "next useful step" box and the town hub list.
 
     snapshot.py landing [start end]   ISO dates; default the 14 days to yesterday.
     """
@@ -325,13 +326,15 @@ def cmd_landing(a):
     for x in _ga_rows(svc, {"dateRanges": rng, "dimensions": [{"name": "pagePath"}], "metrics": [{"name": "screenPageViews"}]}):
         views[landing_family(x["dimensionValues"][0]["value"])] += int(x["metricValues"][0]["value"])
     clicks = defaultdict(int)
+    hub = defaultdict(int)  # the town hub list (components/TownHub.tsx), since 18 Nov 2026
     try:
         for x in _ga_rows(svc, {
                 "dateRanges": rng, "dimensions": [{"name": "pagePath"}, {"name": "customEvent:link_context"}],
                 "metrics": [{"name": "eventCount"}],
                 "dimensionFilter": {"filter": {"fieldName": "eventName", "stringFilter": {"value": "related_content_click"}}}}):
-            if x["dimensionValues"][1]["value"] == "next_step":
-                clicks[landing_family(x["dimensionValues"][0]["value"])] += int(x["metricValues"][0]["value"])
+            ctx = x["dimensionValues"][1]["value"]
+            if ctx in ("next_step", "town_hub"):
+                (clicks if ctx == "next_step" else hub)[landing_family(x["dimensionValues"][0]["value"])] += int(x["metricValues"][0]["value"])
     except Exception as e:  # the event may have no rows yet
         print("(next_step clicks unavailable: %s)" % str(e)[:80])
     tot = svc.properties().runReport(property=GA_PROPERTY, body={
@@ -341,11 +344,90 @@ def cmd_landing(a):
     tv = sum(v[1] for k, v in fam.items())
     print("%s..%s  GA4 property: %d sessions, %d views, %.3f views/session" % (start, end, ps, pv_all, pv_all / ps if ps else 0))
     print("  by landing page (a session can count under two): %d sessions, %d views, %.3f" % (ts, tv, tv / ts if ts else 0))
-    print("%-18s %8s %8s %7s %6s %10s %7s %8s" % ("family", "sess", "views", "v/sess", "pages", "pageviews", "clicks", "clk/100v"))
+    print("%-18s %8s %8s %7s %6s %10s %7s %8s %7s" % ("family", "sess", "views", "v/sess", "pages", "pageviews", "clicks", "clk/100v", "hub"))
     for k in sorted(fam, key=lambda k: -fam[k][0]):
         s, v, n = fam[k]
         pv, c = views.get(k, 0), clicks.get(k, 0)
-        print("%-18s %8d %8d %7.3f %6d %10d %7d %8.2f" % (k, s, v, v / s if s else 0, n, pv, c, 100 * c / pv if pv else 0))
+        print("%-18s %8d %8d %7.3f %6d %10d %7d %8.2f %7d" % (k, s, v, v / s if s else 0, n, pv, c, 100 * c / pv if pv else 0, hub.get(k, 0)))
+
+
+# Per-town pages of the three town families (town hubs, 18 Nov 2026: lib/engagement/town-hub.ts).
+TOWN_FAMILIES = [
+    ("holidays-ca", r"^/ca/festius/(?!dia/|comarca/|2027/)([a-z0-9-]+)/$"),
+    ("holidays-es", r"^/es/festivos/(?!dia/|comarca/|2027/)([a-z0-9-]+)/$"),
+    ("holidays-en", r"^/en/holidays/(?!day/|2027/)([a-z0-9-]+)/$"),
+    ("fairs-ca", r"^/ca/fires-de-nadal/([a-z0-9-]+)/$"),
+    ("fairs-es", r"^/es/mercados-navidad/([a-z0-9-]+)/$"),
+    ("fairs-en", r"^/en/christmas-markets/([a-z0-9-]+)/$"),
+    ("elections-ca", r"^/ca/eleccions/(?!comarca/)([a-z0-9-]+)/$"),
+    ("elections-es", r"^/es/elecciones/(?!comarca/)([a-z0-9-]+)/$"),
+    ("elections-en", r"^/en/elections/([a-z0-9-]+)/$"),
+]
+
+
+def town_family(path):
+    path = path.split("?")[0].split("#")[0]
+    if not path.endswith("/"):  # GA4 paths carry no trailing slash; GSC URLs do
+        path += "/"
+    for name, rx in TOWN_FAMILIES:
+        m = re.match(rx, path)
+        if m:
+            return name, m.group(1)
+    return None, None
+
+
+def cmd_towns(a):
+    """GSC + GA4 for the per-town pages: clicks, impressions, average position, pages; views per session
+    by landing page; town_hub clicks; and which family is each town's strongest.
+
+    snapshot.py towns [start end]   ISO dates; default the 28 days to today (GSC) / yesterday (GA4).
+    """
+    if len(a) >= 2:
+        start, end = a[0], a[1]
+    else:
+        s0, e0 = window(28)
+        start, end = str(s0), str(e0)
+    fam = defaultdict(lambda: [0, 0, 0.0, 0])
+    town = defaultdict(lambda: defaultdict(lambda: [0, 0]))
+    for r in q(gsc(), start, end, ["page"]):
+        name, slug = town_family(short(r["keys"][0]))
+        if not name:
+            continue
+        f = fam[name]
+        f[0] += r["clicks"]; f[1] += r["impressions"]; f[2] += r["position"] * r["impressions"]; f[3] += 1
+        t = town[slug][name.split("-")[0]]
+        t[0] += r["clicks"]; t[1] += r["impressions"]
+    ga_end = min(end, str(date.today() - timedelta(days=1)))
+    sess = defaultdict(lambda: [0, 0])
+    hub = defaultdict(int)
+    try:
+        svc = ga()
+        rng = [{"startDate": start, "endDate": ga_end}]
+        for x in _ga_rows(svc, {"dateRanges": rng, "dimensions": [{"name": "landingPage"}],
+                                "metrics": [{"name": "sessions"}, {"name": "screenPageViews"}]}):
+            name, _ = town_family(x["dimensionValues"][0]["value"])
+            if name:
+                sess[name][0] += int(x["metricValues"][0]["value"])
+                sess[name][1] += int(x["metricValues"][1]["value"])
+        for x in _ga_rows(svc, {
+                "dateRanges": rng, "dimensions": [{"name": "pagePath"}, {"name": "customEvent:link_context"}],
+                "metrics": [{"name": "eventCount"}],
+                "dimensionFilter": {"filter": {"fieldName": "eventName", "stringFilter": {"value": "related_content_click"}}}}):
+            name, _ = town_family(x["dimensionValues"][0]["value"])
+            if name and x["dimensionValues"][1]["value"] == "town_hub":
+                hub[name] += int(x["metricValues"][0]["value"])
+    except Exception as e:  # GA4 optional
+        print("(GA4 unavailable: %s)" % str(e)[:80])
+    print("GSC %s..%s, GA4 to %s" % (start, end, ga_end))
+    print("%-13s %5s %6s %7s %6s %5s %7s %6s %6s" % ("family", "pages", "clicks", "impr", "ctr", "pos", "ga-sess", "v/sess", "hubclk"))
+    for name, _ in TOWN_FAMILIES:
+        c, i, w, n = fam[name]
+        s, v = sess[name]
+        print("%-13s %5d %6d %7d %5.2f%% %5.1f %7d %6.3f %6d" % (name, n, c, i, 100 * c / max(1, i), w / max(1, i), s, v / s if s else 0, hub[name]))
+    win = defaultdict(int)
+    for fs in town.values():
+        win[max(fs.items(), key=lambda kv: (kv[1][1], kv[1][0]))[0]] += 1
+    print("towns with impressions: %d; strongest family by impressions: %s" % (len(town), dict(win)))
 
 
 CMDS = {k[4:]: v for k, v in globals().items() if k.startswith("cmd_")}

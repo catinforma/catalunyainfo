@@ -2,6 +2,9 @@ import Link from "next/link";
 
 import { Breadcrumbs, type Crumb } from "@/components/Breadcrumbs";
 import { ShareBar, crumbPath } from "@/components/share/ShareBar";
+import { TownHub } from "@/components/TownHub";
+import { todayInCatalonia } from "@/lib/content/holidays/calendar";
+import { townHub } from "@/lib/engagement/town-hub";
 import { getMessages } from "@/lib/i18n";
 import { renderInline } from "@/lib/content/inline";
 import { workCalendarLine } from "@/lib/programmatic/holidays/copy";
@@ -78,6 +81,9 @@ export function UnlistedTownPage({ u, locale }: { u: UnlistedTown; locale: MuniL
               <p>{item.answer}</p>
             </div>
           ))}
+
+          {/* The town's other pages (lib/engagement/town-hub.ts). */}
+          <TownHub hub={townHub(u.slug, locale, "holidays", todayInCatalonia())} />
         </div>
 
         <p className="mt-8 text-sm">

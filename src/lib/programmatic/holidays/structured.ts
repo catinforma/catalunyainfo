@@ -8,7 +8,7 @@
  * so the markup says nothing the page does not.
  */
 
-import { GENCAT_OPEN_DATA_LICENCE, datasetSchema, faqSchema } from "@/lib/seo/jsonld";
+import { GENCAT_OPEN_DATA_LICENCE, datasetSchema, faqSchema, townPlaceId } from "@/lib/seo/jsonld";
 
 import { BOE_2027 } from "./boe-2027";
 import { comarcaDescription, comarcaH1, displayName, hubCopy, municipalityDescription, municipalityH1 } from "./copy";
@@ -46,6 +46,7 @@ export function municipalityDataset(m: SnapshotMunicipality, locale: MuniLocale)
     license: GENCAT_OPEN_DATA_LICENCE,
     isBasedOn: basedOn(m.slug),
     spatialCoverage: `${displayName(m, locale)}, ${CATALONIA[locale]}`,
+    spatialId: townPlaceId(m.ine),
     temporalCoverage: coverage(m.slug),
     dateModified: SNAPSHOT.readOn,
   });
@@ -79,6 +80,7 @@ export function englishTownDataset(m: SnapshotMunicipality) {
     license: GENCAT_OPEN_DATA_LICENCE,
     isBasedOn: basedOn(m.slug),
     spatialCoverage: `${enName(m)}, Catalonia`,
+    spatialId: townPlaceId(m.ine),
     temporalCoverage: coverage(m.slug),
     dateModified: SNAPSHOT.readOn,
   });

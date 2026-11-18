@@ -12,7 +12,7 @@
  */
 
 import type { Locale } from "@/lib/i18n/config";
-import { GENCAT_OPEN_DATA_LICENCE, datasetSchema } from "@/lib/seo/jsonld";
+import { GENCAT_OPEN_DATA_LICENCE, datasetSchema, townPlaceId } from "@/lib/seo/jsonld";
 
 import { INTERIOR_DOWNLOADS } from "./model";
 import { comarcaDescription, comarcaH1, electionDescription, hubMeta, latestDataDate, placeName, type ComarcaGroup } from "./pages";
@@ -44,6 +44,8 @@ export function electionDataset(m: Municipality, locale: Locale, name: string) {
     locale,
     ...common(),
     spatialCoverage: `${placeName(m, locale)}, ${CATALONIA[locale]}`,
+    // The same Place as the town's holiday and fair pages (INE code).
+    spatialId: townPlaceId(m.code),
   });
 }
 

@@ -2,11 +2,13 @@ import Link from "next/link";
 
 import { Breadcrumbs, type Crumb } from "@/components/Breadcrumbs";
 import { NextStep } from "@/components/NextStep";
+import { TownHub } from "@/components/TownHub";
 import { ShareBar, crumbPath } from "@/components/share/ShareBar";
 import { LinkList } from "@/components/programmatic/weekend/parts";
 import { B2_TITLES, b2href } from "@/lib/content/batch02/shared";
 import { renderInline } from "@/lib/content/inline";
 import { christmasNextStep } from "@/lib/engagement/next-step";
+import { townHub } from "@/lib/engagement/town-hub";
 import { getMessages } from "@/lib/i18n";
 import { confirmationNote, hubMeta, labels, statusLabels, townH1, townLead, townName } from "@/lib/programmatic/christmas-fairs/copy";
 import {
@@ -138,6 +140,9 @@ export function TownPage({ town, locale }: { town: Town; locale: FairsLocale }) 
           ) : null}
 
           <GuidanceShort locale={locale} />
+
+          {/* The town's other pages (lib/engagement/town-hub.ts), led by its holiday page; dated by the last read, like the page. */}
+          <TownHub hub={townHub(town.slug, locale, "fair", checked)} />
         </div>
 
         <LinkList title={t.nearby} id="ci-xmas-nearby" links={nearby} />
