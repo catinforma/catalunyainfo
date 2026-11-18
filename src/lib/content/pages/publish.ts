@@ -4,6 +4,7 @@ import { and, eq } from "drizzle-orm";
 
 import { requireDb, schema } from "@/lib/db/client";
 import { bodyToPlainText } from "@/lib/content/blocks";
+import { editionFingerprint, editionUpdatedAt } from "@/lib/seo/article-dates";
 import { LOCALES, type Locale } from "@/lib/i18n/config";
 import {
   ACCESSIBILITY,
@@ -100,11 +101,18 @@ export async function publishInstitutionalPages(keys?: readonly string[]): Promi
         // Legal pages state their own verification date on the page furniture,
         // so this is the date the current wording was last checked.
         lastVerifiedAt: spec.verifiedAt ? new Date(`${spec.verifiedAt}T12:00:00+01:00`) : publishedAt,
-        updatedAt: now,
       };
 
       const existing = await db
-        .select({ id: schema.entryTranslations.id })
+        .select({
+          id: schema.entryTranslations.id,
+          updatedAt: schema.entryTranslations.updatedAt,
+          title: schema.entryTranslations.title,
+          excerpt: schema.entryTranslations.excerpt,
+          seoTitle: schema.entryTranslations.seoTitle,
+          seoDescription: schema.entryTranslations.seoDescription,
+          body: schema.entryTranslations.body,
+        })
         .from(schema.entryTranslations)
         .where(
           and(
@@ -114,14 +122,27 @@ export async function publishInstitutionalPages(keys?: readonly string[]): Promi
         )
         .limit(1);
 
+      // Moves only when the wording changes (lib/seo/article-dates.ts); a
+      // re-send no longer stamps the page "updated today".
+      const previous = existing[0];
+      const updatedAt = editionUpdatedAt({
+        now,
+        publishedAt,
+        // A policy page has no facts to re-verify: a change in its wording is
+        // the update, dated by this publish; an identical re-send keeps the old date.
+        verifiedAt: now,
+        fingerprint: editionFingerprint({ ...copy, body: copy.blocks }),
+        previous: previous ? { updatedAt: previous.updatedAt, fingerprint: editionFingerprint(previous) } : null,
+      });
+
       if (existing[0]) {
         await db
           .update(schema.entryTranslations)
-          .set(values)
+          .set({ ...values, updatedAt })
           .where(eq(schema.entryTranslations.id, existing[0].id));
         result.pages.push({ key: spec.key, locale, path, action: "updated" });
       } else {
-        await db.insert(schema.entryTranslations).values(values);
+        await db.insert(schema.entryTranslations).values({ ...values, updatedAt });
         result.pages.push({ key: spec.key, locale, path, action: "created" });
       }
     }

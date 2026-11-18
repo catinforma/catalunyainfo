@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 
 import type { Locale } from "@/lib/i18n/config";
+import { cardImage } from "@/lib/seo/cards";
 import { buildMetadata } from "@/lib/seo/metadata";
 
 import {
@@ -52,5 +53,7 @@ export function electionsHubMetadata(locale: Locale): Metadata {
     description: meta.description,
     translations: hubTranslations(),
     type: "website",
+    // Its own share card (H1, 29N date, brand) instead of the site-wide one: lib/seo/cards.ts.
+    image: cardImage("elections", locale),
   });
 }

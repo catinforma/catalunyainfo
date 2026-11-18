@@ -131,8 +131,13 @@ export interface PageMetadataInput {
   translations?: Partial<Record<Locale, string>>;
   image?: { url: string; width?: number | null; height?: number | null; alt?: string } | null;
   type?: "website" | "article";
-  publishedTime?: Date | null;
-  modifiedTime?: Date | null;
+  /**
+   * `article:published_time` / `article:modified_time`. A string is passed
+   * through as it is (lib/seo/article-dates.ts: the same value as the JSON-LD,
+   * a bare day when the time is not known).
+   */
+  publishedTime?: Date | string | null;
+  modifiedTime?: Date | string | null;
   authors?: string[];
   /**
    * The byline, as `<meta name="author">` and `<link rel="author">` to the
@@ -274,8 +279,8 @@ export function buildMetadata(input: PageMetadataInput): Metadata {
       images: ogImages,
       ...(type === "article"
         ? {
-            publishedTime: publishedTime?.toISOString(),
-            modifiedTime: modifiedTime?.toISOString(),
+            publishedTime: typeof publishedTime === "string" ? publishedTime : publishedTime?.toISOString(),
+            modifiedTime: typeof modifiedTime === "string" ? modifiedTime : modifiedTime?.toISOString(),
             authors,
           }
         : {}),

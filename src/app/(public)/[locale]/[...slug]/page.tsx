@@ -54,6 +54,7 @@ import {
   placeSchema,
   siteAuthorProfileSchema,
 } from "@/lib/seo/jsonld";
+import { articleDates } from "@/lib/seo/article-dates";
 import { cropsForUrl } from "@/lib/seo/discover-images";
 import { buildMetadata } from "@/lib/seo/metadata";
 import { isProduction } from "@/lib/site";
@@ -250,8 +251,9 @@ export async function generateMetadata({
         // Guides and features are articles too; only places and plain pages
         // are "website" (og:type was "website" on 126 article pages).
         type: entry.type === "page" || entry.type === "destination" || entry.type === "place" ? "website" : "article",
-        publishedTime: entry.publishedAt,
-        modifiedTime: entry.updatedAt,
+        // The same values as the Article markup and the dates on the page.
+        publishedTime: articleDates(entry).publishedIso,
+        modifiedTime: articleDates(entry).modifiedIso,
         authors: entry.author ? [entry.author.name] : undefined,
         authorLink: entry.author
           ? { name: entry.author.name, path: `${sectionPath("authors", locale)}${entry.author.slug}/` }

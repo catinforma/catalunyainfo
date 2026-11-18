@@ -23,6 +23,21 @@ export function formatDateTime(date: Date, locale: Locale) {
   }).format(date);
 }
 
+/**
+ * "17 de noviembre de 2026, 13:00 CET": a news page's publication or update
+ * instant, with the zone so a reader outside Spain is not left guessing
+ * (Google News asks for "a clear, visible date and time").
+ */
+export function formatDateAndTime(date: Date, locale: Locale): string {
+  const time = new Intl.DateTimeFormat(INTL_LOCALE[locale], {
+    hour: "2-digit",
+    minute: "2-digit",
+    timeZone: SITE_TIMEZONE,
+    timeZoneName: "short",
+  }).format(date);
+  return `${formatDate(date, locale)}, ${time}`;
+}
+
 /** `2026-09-13` — the value for a <time datetime> attribute. */
 export function isoDate(date: Date): string {
   return date.toISOString().slice(0, 10);
