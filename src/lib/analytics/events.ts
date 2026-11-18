@@ -92,6 +92,7 @@ export const CALCULATOR_USE_IDS = [
   "lottery-check",
   "itv",
   "bono-social",
+  "zona-tensionada",
   "leave-planner-2027",
   "tourist-tax",
   "transport-pass",

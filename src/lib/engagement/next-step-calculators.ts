@@ -35,7 +35,9 @@ export const CALCULATOR_NEXT: Partial<Record<NextToolKey, readonly NextToolKey[]
   "unemployment-subsidy": ["unemployment", "pay-dates"],
   "sick-leave": ["paid-leave", "net-salary"],
   "paid-leave": ["working-days", "leave-2027"],
-  "rent-update": ["ipc"],
+  "rent-update": ["zona-tensionada", "ipc"],
+  // A tight-market area: the yearly update of the same lease, then the CPI behind it.
+  "zona-tensionada": ["rent-update", "ipc"],
   // Not each other: the Euribor and mortgage pages link each other in the line just above the box.
   euribor: ["home-purchase-tax", "treasury-bills"],
   mortgage: ["home-purchase-tax"],

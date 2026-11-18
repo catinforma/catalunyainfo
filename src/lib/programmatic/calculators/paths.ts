@@ -44,6 +44,8 @@ export const CALCULATORS = [
   { id: "mortgage", slugs: { es: "hipoteca", ca: "hipoteca", en: "mortgage-calculator-spain" } },
   // Housing (hub group "housing"): ITP or IVA + AJD on buying a home, by community (lib/programmatic/home-purchase-tax).
   { id: "home-purchase-tax", slugs: { es: "impuestos-compra-vivienda", ca: "impostos-compra-habitatge", en: "spain-home-purchase-taxes" } },
+  // Housing: is a town a declared zona de mercado residencial tensionado (Ley 12/2023 art. 18; BOE lists), and what changes (LAU arts. 10.3, 17.6-17.7).
+  { id: "zona-tensionada", slugs: { es: "zona-tensionada", ca: "zona-tensionada", en: "spain-rent-control-areas" } },
   { id: "pensions-2027", slugs: { es: "subida-pensiones-2027", ca: "pujada-pensions-2027", en: "spain-pension-increase-2027" } },
   { id: "working-days", slugs: { es: "dias-habiles", ca: "dies-habils", en: "working-days-spain" } },
   // Reference pages with official figures (hub group "official"): the SMI with its small calculator, the INE's CPI, and the Tesoro's Letras auctions with a yield calculator.

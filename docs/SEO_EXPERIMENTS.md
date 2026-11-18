@@ -7707,3 +7707,66 @@ for the changed families (the script takes sitemap URLs only, so noindex pages a
 `/ca/eleccions/`, `/es/elecciones/`, `/en/elections/`.
 
 **Outcome:** _pending_
+
+## 2026-11-18 — "¿Está mi municipio en zona tensionada?", checker + full list by region, es + ca + en (new page; deploy only, no publish group)
+
+**Why.** Research row 23 (research_notes/spain-utilities-opportunities-nov2026.md): "ley de vivienda" ≈ 15k/month +
+"zona tensionada" ≈ 6.3k/month (YoY +58 %), April–May index 147–155, December 54. The SERP (spotahome, cronista,
+diaridetarragona, rtvc, bbvamijubilacion) is 2024-era, **contradicts itself on the large-landlord threshold (5 vs 10
+homes)**, has no MIVAU/SERPAVI in the top 5 and **no list by municipality with dates**. Both thresholds are right: more
+than 10 homes or 1,500 m² is the general rule (Ley 12/2023 art. 3 k), and each declaration may lower it to 5 or more; the
+page shows what each declaration chose, from the BOE. Fact pack: research_notes/zona-tensionada-nov2026.md (gitignored,
+worktree copy).
+
+- URLs: `/es/calculadoras/zona-tensionada/` (primary), `/ca/calculadores/zona-tensionada/`,
+  `/en/calculators/spain-rent-control-areas/` (sitemap + hreflang, x-default en; llms.txt entry; site-search shortcut
+  "zona tensionada", "ley de vivienda"…; `calculator_use` id `zona-tensionada`). Registry id `zona-tensionada`; hub
+  group `housing`, right after the rent-update card. Next step under the tool: rent update, CPI; the rent-update page's
+  next step now opens with this tool and its Catalonia section links it (body only, no title touched).
+- Data: `src/lib/programmatic/zona-tensionada/declarations.json`, built by `scripts/zonas-tensionadas-snapshot.ts`
+  (`build` / `check`) from the Ministry of Housing's 10 quarterly lists in the BOE (BOE-A-2024-5214, 2024-20576,
+  2025-1721, 2025-8636, 2025-15728 + errata 2025-20246, 2025-21901, 2026-2448, 2026-9175, 2026-16532, 2026-23088), read as
+  XML, every date checked against the Ministry's page "Consultar zonas de mercado residencial tensionado", plus DOGC
+  TER/3739/2026 and TER/3740/2026 (19 Oct 2026) and INE codes (register 1 Jan 2026). 374 rows: Catalonia 271 listed
+  (140 from 16 Mar 2024 to 16 Mar 2027: 118 extended by the Generalitat, 22 not; 131 from 10 Oct 2024 to 10 Oct 2027)
+  + 53 declared by the Generalitat and awaiting a BOE list; Basque Country 21; Navarre 21; Galicia 2; Asturias 6 areas
+  in 5 councils. All 70 declaration/memoria/BOE URLs answered 200 except Navarre's memoria (404, not linked).
+- Rules (read 18 Nov 2026, 24 quotes checked verbatim): Ley 12/2023 arts. 3 k (as amended by RDL 29/2026), 18, 31.3
+  (consolidated 07/10/2026); LAU arts. 10.3, 17.6, 17.7, 17.9, DT 7ª (consolidated 13/11/2026); RDL 29/2026 (validated
+  12 Nov 2026, BOE-A-2026-23755) DF 6ª; BOE-A-2024-5213 (index system, upper value); Generalitat FAQ (the limit applies
+  from the day after the BOE list; the index is the Ministry's).
+- Server-rendered: the checker on Barcelona, what changes for a tenant (quotes), the 5-or-10 table per declaration, how
+  long a zone lasts and the Catalan 2027 case, the full list by region and declaration (one page, no page per town), how a
+  zone is declared, the index (link to SERPAVI's lookup, not scraped), 8-question FAQ + FAQPage JSON-LD, YMYL disclaimer,
+  sources, limits.
+
+**Date guards (tests/zona-tensionada.test.ts).** From **16 Dec 2026** (RECHECK_BY): re-run the script's `check` — the
+Ministry's 4th-quarter list will make the 53 Catalan towns effective from its next day and date the extension of the 118.
+For each zone, from its last day minus 14 days (first: **2 Mar 2027**, for the 140 Catalan towns ending 16 Mar 2027).
+RULES_UNTIL 2027-12-31 (RDL 29/2026 DF 6ª).
+
+**Baseline:** 0 (no page; the rent-update page carried one Catalonia paragraph with Generalitat links).
+
+**Prediction.** Indexed within 7 days (IndexNow the three URLs). Heads "ley de vivienda" and "zona tensionada" are
+news/government-bound: positions 8–20 by mid-December; long tail page 1 possible ("zona tensionada [town]", "municipios
+zona tensionada cataluña", "zonas tensionadas 2027", "gran tenedor 5 viviendas", "lleida zona tensionada", "zona
+tensionada prorroga"). The March 2027 Catalan expiry and the BOE list of the 53 should bring a wave. By 13 Jan 2027:
+2,000–8,000 impressions/28 days, CTR 2–5 %. Wrong if under 600 impressions/28 days by 13 Jan.
+
+**Measure:** 25 Nov `batch_url_inspection` (rendered checker + list); 16 Dec and 13 Jan 2027 `snapshot.py page
+zona-tensionada 28` (+ spain-rent-control-areas); rent-update page's next-step clicks to it in the 2 Dec next-step review.
+**Review: 2026-12-16.**
+
+**Confounders.** The rent-update page's body gained one link and its next step changed (no title change). The Ministry's
+4th-quarter list and the Catalan expiry will move searches and force data updates inside the window.
+
+**Found, not fixed (owner).** RDL 29/2026 DF 6ª caps yearly rent updates from 8 Oct 2026 to 31 Dec 2027 at 2 % without a
+new agreement (none if the rent is above the index); the rent-update calculator (rent-update/rules.ts, engine) applies the
+IRAV from 8 Oct 2026 and does not model DF 6ª. This page quotes DF 6ª.
+
+**Deploy.** Deploy only (static, nothing in the database): no publish group. IndexNow prefixes:
+`/es/calculadoras/zona-tensionada/`, `/ca/calculadores/zona-tensionada/`, `/en/calculators/spain-rent-control-areas/`,
+plus the re-crawl of `/es/calculadoras/actualizar-alquiler/`, `/ca/calculadores/actualitzar-lloguer/`,
+`/en/calculators/rent-increase-spain/` and the calculators hubs.
+
+**Outcome:** _pending_

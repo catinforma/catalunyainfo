@@ -27,6 +27,7 @@ import { ITV_RULES_AS_OF } from "@/lib/programmatic/itv/rules";
 import { RULES_AS_OF as LOTTERY_TAX_AS_OF } from "@/lib/programmatic/lottery-tax/rules";
 import { RULES_AS_OF as BONO_SOCIAL_AS_OF } from "@/lib/programmatic/bono-social/rules";
 import { COMMUNITIES_AS_OF as HOME_TAX_AS_OF } from "@/lib/programmatic/home-purchase-tax/as-of";
+import { RULES_AS_OF as ZONA_TENSIONADA_AS_OF } from "@/lib/programmatic/zona-tensionada/rules";
 import { hubPath as rodaliesHubPath } from "@/lib/programmatic/rodalies/paths";
 
 import { calcPath, calculatorsHubPath, type CalcLocale, type CalculatorId } from "./paths";
@@ -306,6 +307,24 @@ export const HUB_GROUPS: HubGroup[] = [
         },
         scope: "spain",
         checked: RENT_RULES_AS_OF,
+      },
+      {
+        key: "zona-tensionada",
+        calculator: true,
+        href: calc("zona-tensionada"),
+        title: { ca: "Zona tensionada: hi és el teu municipi?", es: "Zona tensionada: ¿está tu municipio?", en: "Zona tensionada: is your town in one?" },
+        answers: {
+          ca: "El teu municipi és zona de mercat residencial tensionat, des de quan i fins quan, qui és gran tenidor allà i què canvia en un contracte nou?",
+          es: "¿Tu municipio es zona de mercado residencial tensionado, desde cuándo y hasta cuándo, quién es gran tenedor allí y qué cambia en un contrato nuevo?",
+          en: "Whether your town is a declared tight housing market area, since and until when, who counts as a large landlord there and what changes on a new lease.",
+        },
+        basis: {
+          ca: "Llistes trimestrals del Ministeri d'Habitatge al BOE (Llei 12/2023, art. 18), resolucions TER/3739/2026 i TER/3740/2026 (DOGC) i Llei d'arrendaments urbans, arts. 10.3 i 17.6-17.7.",
+          es: "Listas trimestrales del Ministerio de Vivienda en el BOE (Ley 12/2023, art. 18), resoluciones TER/3739/2026 y TER/3740/2026 (DOGC) y Ley de Arrendamientos Urbanos, arts. 10.3 y 17.6-17.7.",
+          en: "The Ministry of Housing's quarterly lists in the BOE (Ley 12/2023 art. 18), resolutions TER/3739/2026 and TER/3740/2026 (DOGC) and the Urban Leases Act, arts. 10.3 and 17.6-17.7.",
+        },
+        scope: "spain",
+        checked: ZONA_TENSIONADA_AS_OF,
       },
       {
         key: "mortgage",

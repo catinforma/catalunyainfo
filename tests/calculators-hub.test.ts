@@ -58,11 +58,12 @@ test("registry: the live URLs did not move (13 Nov 2026)", () => {
   assert.deepEqual(calcEditions("home-purchase-tax"), { ca: "/ca/calculadores/impostos-compra-habitatge/", es: "/es/calculadoras/impuestos-compra-vivienda/", en: "/en/calculators/spain-home-purchase-taxes/" });
   assert.deepEqual(calcEditions("euribor"), { ca: "/ca/calculadores/euribor-avui/", es: "/es/calculadoras/euribor-hoy/", en: "/en/calculators/euribor-today/" });
   assert.deepEqual(calcEditions("mortgage"), { ca: "/ca/calculadores/hipoteca/", es: "/es/calculadoras/hipoteca/", en: "/en/calculators/mortgage-calculator-spain/" });
+  assert.deepEqual(calcEditions("zona-tensionada"), { ca: "/ca/calculadores/zona-tensionada/", es: "/es/calculadoras/zona-tensionada/", en: "/en/calculators/spain-rent-control-areas/" });
   assert.deepEqual(calcEditions("bono-social"), { ca: "/ca/calculadores/bo-social-electric/", es: "/es/calculadoras/bono-social-electrico/", en: "/en/calculators/bono-social-electricity-spain/" });
 });
 
-test("hub: the housing group holds the rent, mortgage, Euribor and home-purchase tax tools", () => {
-  assert.deepEqual(HUB_GROUPS.find((g) => g.id === "housing")?.cards.map((c) => c.key), ["rent-update", "mortgage", "euribor", "home-purchase-tax"]);
+test("hub: the housing group holds the rent, zona tensionada, mortgage, Euribor and home-purchase tax tools", () => {
+  assert.deepEqual(HUB_GROUPS.find((g) => g.id === "housing")?.cards.map((c) => c.key), ["rent-update", "zona-tensionada", "mortgage", "euribor", "home-purchase-tax"]);
 });
 
 test("hub: lists every calculator of the registry exactly once, linking its own editions", () => {

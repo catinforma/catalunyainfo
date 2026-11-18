@@ -50,6 +50,7 @@ import { itvSitemapEntries } from "@/lib/programmatic/itv/page";
 import { htSitemapEntries } from "@/lib/programmatic/home-purchase-tax/page";
 import { lotteryTaxSitemapEntries } from "@/lib/programmatic/lottery-tax/page";
 import { bonoSocialSitemapEntries } from "@/lib/programmatic/bono-social/page";
+import { ztSitemapEntries } from "@/lib/programmatic/zona-tensionada/page";
 
 /**
  * Cached for an hour (ISR) and refreshed at once by every publish, and by the
@@ -235,6 +236,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // Lottery prize tax (Ley 35/2006 DA 33ª; calculators family, group "lottery"), in es, ca and en.
     ...lotteryTaxSitemapEntries(),
     ...bonoSocialSitemapEntries(),
+    // Zonas tensionadas (Ley 12/2023 art. 18; calculators family, group "housing"), in es, ca and en.
+    ...ztSitemapEntries(),
     ...fuelSitemapEntries(),
     ...rodaliesSitemap(),
     ...reservoirSitemapEntries(),
