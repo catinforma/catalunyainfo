@@ -4,6 +4,7 @@ import Link from "next/link";
 import { BlockRenderer, type BlockContext } from "@/components/blocks/BlockRenderer";
 import { Breadcrumbs, type Crumb } from "@/components/Breadcrumbs";
 import { EntryCard } from "@/components/EntryCard";
+import { IntentLink } from "@/components/nav/IntentLink";
 import { NextStep } from "@/components/NextStep";
 import { VerifiedStamp } from "@/components/VerifiedStamp";
 import { PageFeedback } from "@/components/PageFeedback";
@@ -138,9 +139,9 @@ export function EntryArticle({
 
           {entry.category ? (
             <p className="ci-label mb-3 max-md:hidden">
-              <Link href={sectionPath(sectionFor(entry), locale)}>
+              <IntentLink href={sectionPath(sectionFor(entry), locale)}>
                 {entry.category.name}
-              </Link>
+              </IntentLink>
             </p>
           ) : null}
 
@@ -155,10 +156,13 @@ export function EntryArticle({
           ) : null}
 
           <div className={`flex flex-wrap items-center gap-x-5 gap-y-2 text-xs text-[var(--color-muted)] ${answerFirst ? "mt-3 md:mt-5" : "mt-5"}`}>
+            {/* The byline does not prefetch: on every article it pulled the
+                author page's RSC payload from the origin on each view
+                (Cloudflare never caches those). components/nav/IntentLink.tsx. */}
             {entry.author ? (
               <span>
                 {t.meta.by}{" "}
-                <Link href={`${sectionPath("authors", locale)}${entry.author.slug}/`}>
+                <Link prefetch={false} href={`${sectionPath("authors", locale)}${entry.author.slug}/`}>
                   {entry.author.name}
                 </Link>
               </span>
@@ -308,7 +312,7 @@ export function EntryArticle({
                   ) : null}
                   <div>
                     <p className="font-semibold">
-                      <Link href={`${sectionPath("authors", locale)}${entry.author.slug}/`}>
+                      <Link prefetch={false} href={`${sectionPath("authors", locale)}${entry.author.slug}/`}>
                   {entry.author.name}
                 </Link>
                     </p>

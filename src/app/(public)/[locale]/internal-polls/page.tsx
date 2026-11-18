@@ -18,7 +18,9 @@ import { NOT_FOUND_METADATA, pollsMetadata } from "@/lib/programmatic/polls/page
  * Rendered on every request, never prerendered or cached: whether the poll
  * figures may be shown depends on the clock (LOREG art. 69.7 blackout, 24 Nov
  * 2026 00:00 to 29 Nov 21:00, Madrid), so a stored copy could carry them into
- * the window. Do not add revalidate, static params or force-static here:
+ * the window. Inside the window the proxy serves the static, figure-free
+ * `blackout/` route at the public URLs instead (src/proxy.ts); this route is
+ * what serves them outside it. Do not add revalidate, static params or force-static here:
  * tests/polls-blackout.test.ts fails if you do. Cache headers: next.config.ts
  * (POLLS_CACHE_HEADERS).
  */

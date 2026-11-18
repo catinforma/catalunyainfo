@@ -137,7 +137,13 @@ test("headers: X-Frame-Options DENY and frame-ancestors 'none' everywhere but /e
 
 test("headers: the proxy never sees /embed/, and keeps DENY on what it answers", () => {
   const proxy = read("src/proxy.ts");
-  assert.match(proxy, /matcher: \["\/", "\/admin\/:path\*", "\/article\/:path\*"\]/);
+  // The matcher: "/", the admin gate, the 410s and the three 29N polls URLs
+  // (tests/polls-blackout.test.ts), nothing that could reach /embed/.
+  const matcher = proxy.match(/matcher: \[([\s\S]*?)\]/)?.[1] ?? "";
+  const sources = [...matcher.matchAll(/"([^"]+)"/g)].map((m) => m[1]);
+  assert.deepEqual(sources.slice(0, 3), ["/", "/admin/:path*", "/article/:path*"]);
+  for (const source of sources.slice(3)) assert.match(source!, /^\/(ca\/guies|es\/guias|en\/guides)\/[a-z-]+\/:path\*$/, source);
+  assert.ok(!sources.some((source) => source!.includes("embed") || source === "/:path*"), "the proxy must not see /embed/");
   const security = read("src/lib/security-headers.ts");
   assert.match(security, /"X-Frame-Options": "DENY"/);
   assert.match(security, /`frame-ancestors 'none'`/);

@@ -1,5 +1,5 @@
 import Image from "next/image";
-import Link from "next/link";
+import { IntentLink } from "@/components/nav/IntentLink";
 
 /**
  * The brand lock-up: the Catalonia mark beside the wordmark.
@@ -11,11 +11,11 @@ import Link from "next/link";
  */
 export function Wordmark({ href, className = "" }: { href: string; className?: string }) {
   return (
-    <Link href={href} className={`ci-wordmark ${className}`.trim()}>
+    <IntentLink href={href} className={`ci-wordmark ${className}`.trim()}>
       <Image src="/icon-192.png" alt="" width={36} height={36} className="ci-wordmark-mark" loading="eager" />
       <span className="ci-wordmark-name">
         Catalunya<span>Info</span>
       </span>
-    </Link>
+    </IntentLink>
   );
 }

@@ -25,10 +25,28 @@ export const POLLS_PATHS: Record<Locale, string> = {
 /** The internal route segment the rewrites point at. */
 export const POLLS_INTERNAL_SEGMENT = "internal-polls";
 
+/**
+ * The static, figure-free route under it (`internal-polls/blackout/`), which
+ * the proxy serves at the public URLs inside the LOREG 69.7 window
+ * (lib/programmatic/polls/routing.ts).
+ */
+export const POLLS_BLACKOUT_SEGMENT = "blackout";
+
 const LOCALE_KEYS = Object.keys(POLLS_PATHS) as Locale[];
 
 export function pollsPath(locale: Locale): string {
   return `/${locale}/${POLLS_PATHS[locale]}/`;
+}
+
+/** `/<locale>/internal-polls/blackout/`: the internal path of the static blackout view. */
+export function pollsBlackoutInternalPath(locale: Locale): string {
+  return `/${locale}/${POLLS_INTERNAL_SEGMENT}/${POLLS_BLACKOUT_SEGMENT}/`;
+}
+
+/** The locale whose public polls URL this pathname is (with or without the trailing slash), else null. */
+export function pollsLocaleForPath(pathname: string): Locale | null {
+  const path = pathname.endsWith("/") ? pathname : `${pathname}/`;
+  return LOCALE_KEYS.find((locale) => pollsPath(locale) === path) ?? null;
 }
 
 export function pollsTranslations(): Record<Locale, string> {
