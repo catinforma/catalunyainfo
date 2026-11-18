@@ -8,6 +8,7 @@ import { CITIES_AS_OF, INE_POPULATION, type LocalDay, type LocalList } from "./c
 import {
   cityLayers,
   cityReadOn,
+  councilAct,
   expectedMonth,
   holidayCount,
   commonLocalDays,
@@ -133,14 +134,44 @@ function bulletinAbbr(list: LocalList): string {
   return list.source.ref.split(/\s/)[0] ?? list.source.ref;
 }
 
+/* ------------------------------------------------ Council-approved days --- */
+
+/** "el Pleno del Ayuntamiento", "la Junta de Gobierno Local", "la Alcaldía": who adopted the act (status "council"). */
+function councilBy(kind: "pleno" | "junta" | "decreto"): string {
+  return kind === "pleno" ? "el Pleno del Ayuntamiento" : kind === "junta" ? "la Junta de Gobierno Local" : "la Alcaldía, por decreto,";
+}
+
+/**
+ * Status "council", where a bulletin would be named: "Las aprobó el Pleno del
+ * Ayuntamiento el 24 de septiembre de 2026; falta que las publique el BOCM
+ * (consultado hasta el BOCM núm. 277, de 18.11.2026)." Null for any other city.
+ */
+export function councilSentence(c: City): string | null {
+  const k = councilAct(c);
+  if (!k) return null;
+  const searched = k.check ? ` (consultado hasta el ${k.check.through})` : "";
+  return `Las aprobó ${councilBy(k.act.kind)} el ${dayMonthYear(k.act.date, "es")}; falta que las publique ${k.bulletin}${searched}.`;
+}
+
+/** Status "council", short, for captions and the layers block: "acuerdo del Pleno del Ayuntamiento de 24.9.2026, pendiente del BOCM". */
+export function councilShort(c: City): string | null {
+  const k = councilAct(c);
+  if (!k) return null;
+  const [y, m, day] = k.act.date.split("-");
+  const date = `${Number(day)}.${Number(m)}.${y}`;
+  const what = k.act.kind === "pleno" ? "acuerdo del Pleno del Ayuntamiento" : k.act.kind === "junta" ? "acuerdo de la Junta de Gobierno Local" : "decreto de Alcaldía";
+  return `${what} de ${date}, pendiente de publicación en ${k.bulletin}`;
+}
+
 export function cityDescription(c: City): string {
   const list = local2027(c);
   const total = holidayCount(c);
   if (list) {
     const days = localDays(c);
+    const by = councilAct(c) ? "aprobadas por el Ayuntamiento" : bulletinAbbr(list);
     const head = isZoned(c)
       ? `Fiestas locales de ${c.name} en ${YEAR} por zonas, según el ${bulletinAbbr(list)}: ${compactDates(days.map((d) => d.date))} y más.`
-      : `Fiestas locales de ${c.name} en ${YEAR}: ${joinList(days.map((d) => weekdayDate(d.date)), "es")} (${bulletinAbbr(list)}).`;
+      : `Fiestas locales de ${c.name} en ${YEAR}: ${joinList(days.map((d) => weekdayDate(d.date)), "es")} (${by}).`;
     const full = `${head} Con ellas, ${total} festivos en ${YEAR}; puentes y calendario laboral.`;
     if (full.length <= DESCRIPTION_LIMIT) return full;
     const mid = `${head} Con ellas, ${total} festivos en ${YEAR}.`;
@@ -192,7 +223,7 @@ export function cityLead(c: City): string {
     const effects = days.map((d) => `el ${weekdayDate(d.date)} ${planWords(c, d)}`);
     return (
       `${who} tiene en ${YEAR} estas 2 fiestas locales: ${joinList(days.map(withName), "es")}. ` +
-      `Las publica el ${list.source.ref}. Sumadas a ${base}, son ${holidayCount(c)} días festivos en ${YEAR}. ` +
+      `${councilSentence(c) ?? `Las publica el ${list.source.ref}.`} Sumadas a ${base}, son ${holidayCount(c)} días festivos en ${YEAR}. ` +
       `${capitalise(joinList(effects, "es"))}.${sharedLine(c)}`
     );
   }
@@ -222,7 +253,7 @@ export function cityAnswer(c: City): { strong: string; rest: string } {
     const island = islandDay(c) ? " y la fiesta insular" : "";
     return {
       strong: `Fiestas locales de ${c.name} en ${YEAR}: ${joinList(days.map(withName), "es")}.`,
-      rest: ` Las publica el ${list.source.ref}. Con los ${dayCount(c.region)} festivos ${c.community.de}${island}, son ${holidayCount(c)} festivos en ${YEAR}.`,
+      rest: ` ${councilSentence(c) ?? `Las publica el ${list.source.ref}.`} Con los ${dayCount(c.region)} festivos ${c.community.de}${island}, son ${holidayCount(c)} festivos en ${YEAR}.`,
     };
   }
   if (list) {
@@ -305,7 +336,7 @@ export function cityLayerLines(c: City): LayerLine[] {
       id: "local",
       label: isZoned(c) ? `Locales de ${c.name}, por zonas (${(list.mainArea ?? c.name).replace(/^Todo /, "todo ")})` : `Locales de ${c.name} (${l.local.length})`,
       days: joinList(l.local.map(named), "es"),
-      source: list.source.ref,
+      source: councilShort(c) ? `${councilShort(c)}${l.pending ? `; consultado hasta el ${l.pending.through}` : ""}` : list.source.ref,
     });
     return lines;
   }
@@ -387,13 +418,13 @@ export function cityFaq(c: City): Faq[] {
     const faq: Faq[] = [
       {
         question: `¿Cuáles son los festivos locales de ${c.name} en ${YEAR}?`,
-        answer: `${answer} Fuente: ${list.source.ref}.`,
+        answer: councilSentence(c) ? `${answer} ${councilSentence(c)} Fuente: ${list.source.title}.` : `${answer} Fuente: ${list.source.ref}.`,
       },
       ...days.map((d) => ({
         question: `¿Es festivo el ${weekdayDate(d.date)} de ${YEAR} en ${c.name}?`,
         answer:
-          `Sí. Es fiesta local en ${c.name}${d.name ? ` (${d.name})` : ""}${d.note ? `, ${d.note}` : ""}, no un festivo de toda la comunidad. ` +
-          `${capitalise(planWords(c, d))}.`,
+          `${councilAct(c) ? "Sí, según el acuerdo del Ayuntamiento" : "Sí"}. Es fiesta local en ${c.name}${d.name ? ` (${d.name})` : ""}${d.note ? `, ${d.note}` : ""}, no un festivo de toda la comunidad. ` +
+          `${capitalise(planWords(c, d))}.${councilAct(c) ? ` Falta que la publique ${councilAct(c)!.bulletin}.` : ""}`,
       })),
       {
         question: `¿Cuántos festivos tiene ${c.name} en ${YEAR}?`,
@@ -434,7 +465,7 @@ export function cityFaq(c: City): Faq[] {
 
 /** For the community page and the hub: "14 abr y 27 may", or the 2026 days, labelled. */
 export function cityListLine(c: City): string {
-  if (local2027(c)) return `${compactDates(localDays(c).map((d) => d.date))}${isZoned(c) ? "; por zonas" : ""}`;
+  if (local2027(c)) return `${compactDates(localDays(c).map((d) => d.date))}${isZoned(c) ? "; por zonas" : ""}${councilAct(c) ? " (aprobadas por el Ayuntamiento)" : ""}`;
   return c.local2026 ? `Pendiente (2026: ${compactDates(c.local2026.days.map((d) => d.date))})` : "Pendiente";
 }
 

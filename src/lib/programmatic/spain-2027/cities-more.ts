@@ -36,12 +36,17 @@ import { SOURCES, type OfficialText } from "./sources";
  *     13 Nov 2026, still so on 18 Nov), or the published list leaves it out
  *     (reason "missing").
  *     Unlike the core rows, a waiting town never gets a page with its 2026
- *     days: no page until its 2027 days are official.
+ *     days: no page until its 2027 days are official. The one exception
+ *     before the bulletin is the council's own act (the published minutes
+ *     of the Pleno that adopted both days): those towns are rows of
+ *     `cities-council.ts` (status "council", 18 Nov 2026), labelled
+ *     "pendientes de <boletín>" on their pages.
  *
  * Adding a community the day it publishes: put its 2027 text in sources.ts
  * (`local.y2027`, status "published"), move its towns from `WAITING_TOWNS`
- * to rows here with the days, the bulletin line and `MORE_READ_ON` of that
- * day; tests/spain-cities-2027-more.test.ts fails until both are done.
+ * and from `cities-council.ts` to rows here with the days, the bulletin line
+ * and `MORE_READ_ON` of that day; tests/spain-cities-2027-more.test.ts and
+ * tests/spain-2027-council-towns.test.ts fail until both are done.
  */
 
 /** The day every row below was read on its bulletin. */
@@ -462,7 +467,6 @@ export const WAITING_TOWNS: readonly WaitingTown[] = [
   wait("CB", "Cantabria", { ine: "39020", slug: "castro-urdiales", name: "Castro-Urdiales", ineName: "Castro-Urdiales", population: 33450, ineTable: 2893 }),
   wait("CB", "Cantabria", { ine: "39016", slug: "camargo", name: "Camargo", ineName: "Camargo", population: 30577, ineTable: 2893 }),
   wait("CB", "Cantabria", { ine: "39052", slug: "pielagos", name: "Piélagos", ineName: "Piélagos", population: 26901, ineTable: 2893 }),
-  wait("CM", "Ciudad Real", { ine: "13071", slug: "puertollano", name: "Puertollano", ineName: "Puertollano", population: 45565, ineTable: 2866 }),
   wait("CM", "Ciudad Real", { ine: "13082", slug: "tomelloso", name: "Tomelloso", ineName: "Tomelloso", population: 37060, ineTable: 2866 }),
   wait("CM", "Guadalajara", { ine: "19046", slug: "azuqueca-de-henares", name: "Azuqueca de Henares", ineName: "Azuqueca de Henares", population: 35924, ineTable: 2872 }),
   wait("CM", "Toledo", { ine: "45081", slug: "illescas", name: "Illescas", ineName: "Illescas", population: 33301, ineTable: 2902 }),
@@ -491,23 +495,16 @@ export const WAITING_TOWNS: readonly WaitingTown[] = [
   wait("VC", "Valencia", { ine: "46017", slug: "alzira", name: "Alzira", ineName: "Alzira", population: 48236, ineTable: 2903 }),
   wait("VC", "Alicante", { ine: "03063", slug: "denia", name: "Dénia", ineName: "Dénia", population: 47261, ineTable: 2856 }),
   wait("VC", "Valencia", { ine: "46169", slug: "mislata", name: "Mislata", ineName: "Mislata", population: 47079, ineTable: 2903 }),
-  wait("VC", "Valencia", { ine: "46078", slug: "burjassot", name: "Burjassot", ineName: "Burjassot", population: 41299, ineTable: 2903 }),
-  wait("VC", "Alicante", { ine: "03121", slug: "santa-pola", name: "Santa Pola", ineName: "Santa Pola", population: 39709, ineTable: 2856 }),
   wait("VC", "Castellón", { ine: "12032", slug: "burriana", name: "Burriana", ineName: "Borriana/Burriana", population: 37915, ineTable: 2865 }),
   wait("VC", "Alicante", { ine: "03139", slug: "villajoyosa", name: "Villajoyosa", ineName: "Vila Joiosa, la/Villajoyosa", population: 37449, ineTable: 2856 }),
-  wait("VC", "Valencia", { ine: "46184", slug: "ontinyent", name: "Ontinyent", ineName: "Ontinyent", population: 37012, ineTable: 2903 }),
-  wait("VC", "Alicante", { ine: "03140", slug: "villena", name: "Villena", ineName: "Villena", population: 34712, ineTable: 2856 }),
   wait("VC", "Valencia", { ine: "46021", slug: "aldaia", name: "Aldaia", ineName: "Aldaia", population: 34630, ineTable: 2903 }),
   wait("VC", "Alicante", { ine: "03104", slug: "petrer", name: "Petrer", ineName: "Petrer", population: 34022, ineTable: 2856 }),
-  wait("VC", "Valencia", { ine: "46159", slug: "manises", name: "Manises", ineName: "Manises", population: 32609, ineTable: 2903 }),
   wait("VC", "Castellón", { ine: "12126", slug: "la-vall-d-uixo", name: "La Vall d'Uixó", ineName: "Vall d'Uixó, la", population: 32242, ineTable: 2865 }),
   wait("VC", "Valencia", { ine: "46110", slug: "xirivella", name: "Xirivella", ineName: "Xirivella", population: 32093, ineTable: 2903 }),
   wait("VC", "Alicante", { ine: "03050", slug: "el-campello", name: "El Campello", ineName: "Campello, el", population: 31419, ineTable: 2856 }),
   wait("VC", "Valencia", { ine: "46145", slug: "xativa", name: "Xàtiva", ineName: "Xàtiva", population: 31008, ineTable: 2903 }),
-  wait("VC", "Alicante", { ine: "03059", slug: "crevillent", name: "Crevillent", ineName: "Crevillent", population: 30921, ineTable: 2856 }),
   wait("VC", "Alicante", { ine: "03082", slug: "javea", name: "Jávea", ineName: "Xàbia/Jávea", population: 30642, ineTable: 2856 }),
   wait("VC", "Valencia", { ine: "46094", slug: "catarroja", name: "Catarroja", ineName: "Catarroja", population: 30604, ineTable: 2903 }),
-  wait("VC", "Castellón", { ine: "12138", slug: "vinaros", name: "Vinaròs", ineName: "Vinaròs", population: 30529, ineTable: 2865 }),
   wait("VC", "Castellón", { ine: "12027", slug: "benicarlo", name: "Benicarló", ineName: "Benicarló", population: 30296, ineTable: 2865 }),
   wait("VC", "Valencia", { ine: "46005", slug: "alaquas", name: "Alaquàs", ineName: "Alaquàs", population: 30166, ineTable: 2903 }),
   wait("VC", "Valencia", { ine: "46235", slug: "sueca", name: "Sueca", ineName: "Sueca", population: 29194, ineTable: 2903 }),
@@ -521,10 +518,7 @@ export const WAITING_TOWNS: readonly WaitingTown[] = [
   wait("VC", "Valencia", { ine: "46102", slug: "quart-de-poblet", name: "Quart de Poblet", ineName: "Quart de Poblet", population: 26967, ineTable: 2903 }),
   wait("VC", "Alicante", { ine: "03119", slug: "sant-joan-d-alacant", name: "Sant Joan d'Alacant", ineName: "Sant Joan d'Alacant", population: 26834, ineTable: 2856 }),
   wait("VC", "Valencia", { ine: "46181", slug: "oliva", name: "Oliva", ineName: "Oliva", population: 26813, ineTable: 2903 }),
-  wait("VC", "Alicante", { ine: "03093", slug: "novelda", name: "Novelda", ineName: "Novelda", population: 26606, ineTable: 2856 }),
-  wait("VC", "Valencia", { ine: "46013", slug: "alboraya", name: "Alboraya", ineName: "Alboraia/Alboraya", population: 26273, ineTable: 2903 }),
   wait("VC", "Castellón", { ine: "12084", slug: "onda", name: "Onda", ineName: "Onda", population: 26190, ineTable: 2865 }),
-  wait("VC", "Valencia", { ine: "46147", slug: "lliria", name: "Llíria", ineName: "Llíria", population: 25333, ineTable: 2903 }),
   wait("VC", "Valencia", { ine: "46105", slug: "cullera", name: "Cullera", ineName: "Cullera", population: 24702, ineTable: 2903 }),
   wait("VC", "Valencia", { ine: "46214", slug: "riba-roja-de-turia", name: "Riba-roja de Túria", ineName: "Riba-roja de Túria", population: 24616, ineTable: 2903 }),
   wait("VC", "Alicante", { ine: "03018", slug: "altea", name: "Altea", ineName: "Altea", population: 24592, ineTable: 2856 }),

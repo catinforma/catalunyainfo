@@ -7391,4 +7391,76 @@ late-December decree-law on the bono social will move searches and force a page 
 `/en/calculators/bono-social-electricity-spain/`, plus the re-crawl of `/es/precio-luz/`, `/ca/preu-llum/`,
 `/en/electricity-price-spain/`, `/es/precio-butano/`, `/ca/preu-buta/`, `/en/butane-price-spain/` and the calculators hubs.
 
+## 2026-11-18 — Calendario laboral 2027: 11 more towns of 20,000+ from their council's own minutes, before their community's list (deploy; group `calendario-2027-espana`)
+
+**Why.** Row 1 of `research_notes/spain-utilities-opportunities-nov2026.md` ("calendario laboral <ciudad> 2027", tier A,
+peaks Dec–Jan). The "~400 more towns" of that note (13 Nov) is out of date: INE padrón 1 Jan 2025 (RD 1117/2025, the 56
+province CSVs re-read today) has 432 municipalities of 20,000+; 70 are Catalan (own engine), 2 are Ceuta and Melilla, 276
+already had a page, so the whole gap was the 85 towns of `WAITING_TOWNS` (83 in the six communities whose list is not
+out, 2 left out of a published list). Nothing else is missing at 20,000+.
+
+**Facts read 18 Nov.** The six pending bulletins, today's issue each, by their own summary ("fiestas locales /
+laborales / calendario de fiestas"; the same search finds the 2026 list on its day): DOGV 10496, BOA 223, BOCM 277, DOCM
+221, BON 230, BOC 222 — none has the 2027 list (as the morning reading, `PENDING_CHECKS`). Arcos de la Frontera: no BOJA
+211–223 adds it. Cangas: no DOG 205–221 corrects its 19 March. So no regional bulletin to transcribe. Second route the
+brief allows: the council's own act. For the 83 towns, the plenary minutes on each council's site (four read-only
+research agents found candidates; every one re-read here with curl + pdftotext, quote, item, vote and signature checked):
+
+| Town (community) | Act | Days |
+|---|---|---|
+| Puertollano (CM) | Acta Pleno 25.6.2026, p. 5 | 13 May, 8 Sep |
+| Burjassot (VC) | Acta Pleno 31.3.2026, p. 3 | 16 Aug, 30 Sep |
+| Santa Pola (VC) | Acta Pleno 28.5.2026, p. 3 | 16 Jul, 8 Sep |
+| Ontinyent (VC) | Acta Ple 28.5.2026, p. 3 | 23 Aug, 22 Nov |
+| Villena (VC) | Borrador acta Pleno 25.6.2026 (signed 22.7), pp. 10–11 | 5 Apr, 10 Sep |
+| Manises (VC) | Acta Pleno 30.7.2026 (video-acta platform linked from manises.es), p. 9 | 5 Apr, 19 Jul |
+| Crevillent (VC) | Acta Pleno 28.7.2026, p. 12 | 25 Mar, 4 Oct |
+| Vinaròs (VC) | Esborrany acta Ple 18.6.2026 (signed 29.7), p. 14 | 20 Jan, 24 Jun |
+| Novelda (VC) | Acta Pleno 7.5.2026, p. 17 | 5 Apr, 22 Jul |
+| Alboraya (VC) | Acta 6/2026 Pleno 25.6.2026 (video-acta linked from alboraya.es), pp. 2–3 | 5 Apr, 10 Jul (Sat) |
+| Llíria (VC) | Acta Pleno 26.3.2026 (approved 30.4), p. 2 | 5 Apr, 29 Sep |
+
+URLs, items, expedientes and votes in the header of `src/lib/programmatic/spain-2027/cities-council.ts`. No day is a
+BOE holiday of its community (test). **Not used:** agendas only (Mislata, Algemesí, Catarroja, Riba-roja, Onda,
+L'Alfàs, San Fernando de Henares, Torrelodones), an extract without dates (Galapagar, adopted 3.11.2026), council news
+posts (Alcázar de San Juan, Valdepeñas, Almansa, Calatayud, Burriana, Villajoyosa), a stale council page (San Fernando
+de Henares' "28 y 31 de mayo de 2027" links the 2025 BOCM list). **Still unpublished (no page):** Comunitat Valenciana 43
+towns (DOGV, 2026 precedent 14 Nov), Madrid 13 (BOCM ~12 Dec), Castilla-La Mancha 9 (DOCM ~12 Dec), Cantabria 3 (BOC
+~11 Dec), Navarra 3 (BON ~2 Dec), Aragón 1 (BOA ~20 Nov).
+
+**What changed.**
+1. New status `"council"` (`cities-data.ts`), rows in `cities-council.ts` (11 towns × es/ca/en = 33 URLs), out of
+   `WAITING_TOWNS` (85 → 72). Same template as the other city pages: layers block (BOE common days, community days with
+   decree, local days), weekday on every date, bridges, FAQ, leave planner and working-days links, .ics, widget. Every
+   place a bulletin would be named says instead "Las aprobó el Pleno del Ayuntamiento el <fecha>; falta que las publique
+   el DOGV (consultado hasta el DOGV núm. 10496, de 18.11.2026)"; captions and list lines "(aprobadas por el
+   Ayuntamiento)"; the source is the minutes, linked. ca/en the same.
+2. Counting tools follow the Catalan council precedent (`council-2027.ts`): the .ics feed, the widget and the
+   working-days calculator leave the council's days out until the bulletin (`officialCalendar`, `bulletinLocal2027`);
+   the leave planner carries them apart with a new status `"k"` and counts them only when the box is ticked (copy
+   ca/es/en: "pendientes del boletín de la comunidad").
+3. No 2026 page exists for these towns (outside Catalonia only the 11N strike cities had one), so no 2026 → 2027 link.
+4. Indexing: ES indexable (no rule matches); ca/en noindex by the existing `spain-2027-ca` / `spain-2027-en` patterns,
+   no keep-list change. Titles follow `cityTitle` (the 2 Dec switch applies to them too).
+5. Tests: `tests/spain-2027-council-towns.test.ts` (each town cites the minutes on the council's own host with the
+   session date; community still pending, so the day it publishes the test fails until the town is transcribed from the
+   bulletin into `cities-more.ts`; 20,000+, unique, out of the waiting list; days off the BOE ones, printed weekdays;
+   copy says "pendiente"; tools exclude the days; sitemap and indexing). Existing city, ICS and planner tests taught the
+   new status.
+
+**Baseline.** The 11 URLs: 0 impressions (no page until today). Family as in the entry above (ES city pages 5–18 Nov:
+15,270 impr., 137 clicks, position 9.4).
+
+**Prediction.** By 15 Dec: ≥ 6 of the 11 ES pages with impressions; their "festivos / calendario laboral <town> 2027"
+queries at ≤ 10 median position. When the DOGV / DOCM list comes out, ≥ 10 of 11 match the council's days (a mismatch is
+logged and the bulletin wins).
+
+**Review 2026-12-02** (`snapshot.py page /festivos/2027/ 14`, the 11 paths; re-read the six bulletins: any published list
+moves its council towns to `cities-more.ts` the same day), then 15 Dec and 15 Jan with the 13 Nov rule (fewer than 3 of
+the 11 with impressions by 15 Jan → noindex them in `low-demand.ts`). Date guards already running: `WAITING_RECHECK_BY`
+25 Nov, `STATUS_RECHECK_BY` / `CITIES_RECHECK_BY` 27 Nov.
+
+**Go-live.** Deploy (new static params for the 11 slugs in es/ca/en, the planner's status "k"), then publish
+`calendario-2027-espana`; IndexNow prefixes `/es/festivos/2027/`, `/ca/festius/2027/`, `/en/holidays/2027/`.
+
 **Outcome:** _pending_

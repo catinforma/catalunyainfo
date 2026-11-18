@@ -20,7 +20,7 @@ import {
   type FeedModel,
 } from "../src/lib/programmatic/ics/feeds.ts";
 import { escapeText, foldLine, icsStamp, nextDay, serializeCalendar } from "../src/lib/programmatic/ics/serialize.ts";
-import { CITIES, cityCalendar, local2027 } from "../src/lib/programmatic/spain-2027/cities.ts";
+import { CITIES, bulletinLocal2027, officialCalendar } from "../src/lib/programmatic/spain-2027/cities.ts";
 import { ALWAYS_NOINDEX_SOURCES } from "../src/lib/security-headers.ts";
 
 /**
@@ -230,21 +230,22 @@ test("towns: the 2026 local days are the DOGC ones, labelled local; Barcelona's 
 /* Spanish cities                                                             */
 /* -------------------------------------------------------------------------- */
 
-test("cities: every event is a row of the 2027 page (cityCalendar), local days only where published", () => {
+test("cities: every event is a row of the 2027 page as the bulletins give it (officialCalendar), local days only where published", () => {
   for (const c of CITIES) {
     for (const locale of FEED_LOCALES) {
       const model: FeedModel = cityFeed(locale, c);
       assert.deepEqual(
         model.calendar.events.map((e) => eventKey(e)),
-        cityCalendar(c).map((d) => `${d.date}:${d.kind === "national-kept" ? "kept" : d.kind}`),
+        officialCalendar(c).map((d) => `${d.date}:${d.kind === "national-kept" ? "kept" : d.kind}`),
         `${c.slug} ${locale}`,
       );
       assert.ok(model.calendar.events.every((e) => e.date.startsWith("2027-")));
-      if (!local2027(c)) {
+      if (!bulletinLocal2027(c)) {
         // Only a day an official text fixed for the whole community (Navarra's 3 December) can be local here.
         for (const e of model.calendar.events.filter((x) => x.scope === "local")) assert.equal(c.region, "NC", `${c.slug} ${e.date}`);
       }
-      assert.equal(model.localPending, c.status2027 === "pending");
+      // A council's days still pending their bulletin (status "council") stay out, and the feed says the local days are pending.
+      assert.equal(model.localPending, c.status2027 === "pending" || c.status2027 === "council");
       if (locale === "es") {
         const parsed = assertWellFormed(renderFeed(model), `${c.slug} ${locale}`);
         assert.deepEqual(parsed.events.map((e) => iso(e.start)), model.calendar.events.map((e) => e.date));

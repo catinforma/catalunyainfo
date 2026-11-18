@@ -99,7 +99,8 @@ test("Spain 2027 city pages: the first line gives the two local days, or the sta
         const day = String(Number(d.date.slice(8, 10)));
         for (const a of [es, ca, en]) assert.ok(a.strong.includes(` ${day} `), `${c.slug}: ${d.date}`);
       }
-      if (!isZoned(c)) assert.match(es.rest, /Las publica el /, c.slug);
+      // A council's days before the bulletin (status "council") name the act, not a bulletin.
+      if (!isZoned(c)) assert.match(es.rest, c.status2027 === "council" ? /Las aprobó el Pleno del Ayuntamiento el / : /Las publica el /, c.slug);
     } else {
       assert.match(es.strong, /aún sin publicar/, c.slug);
       assert.match(ca.strong, /encara sense publicar/, c.slug);

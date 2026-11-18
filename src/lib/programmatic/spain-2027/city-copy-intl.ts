@@ -6,6 +6,7 @@ import { CITIES_AS_OF, INE_POPULATION, type LocalDay, type LocalList } from "./c
 import {
   cityLayers,
   cityReadOn,
+  councilAct,
   pendingCheck,
   commonLocalDays,
   expectedMonth,
@@ -211,6 +212,45 @@ function bulletinAbbr(list: LocalList): string {
   return list.source.ref.split(/\s/)[0] ?? list.source.ref;
 }
 
+/* ------------------------------------------------ Council-approved days --- */
+
+/** "24.9.2026". */
+function dotted(iso: string): string {
+  const [y, m, d] = iso.split("-");
+  return `${Number(d)}.${Number(m)}.${y}`;
+}
+
+/**
+ * Status "council", where a bulletin would be named (city-copy.ts
+ * `councilSentence`): "Les va aprovar el Ple de l'Ajuntament el 24 de
+ * setembre de 2026; falta que les publiqui el BOCM (consultat fins al …)."
+ */
+export function councilSentenceIntl(c: City, locale: Edition): string | null {
+  const k = councilAct(c);
+  if (!k) return null;
+  const bulletin = k.bulletin.replace(/^(el|la|los|las) /, "");
+  const date = dayMonthYear(k.act.date, locale);
+  if (locale === "ca") {
+    const by = k.act.kind === "pleno" ? "el Ple de l'Ajuntament" : k.act.kind === "junta" ? "la Junta de Govern Local" : "l'Alcaldia, per decret,";
+    return `Les va aprovar ${by} ${caDayArticle(k.act.date) === "l'" ? "l'" : "el "}${date}; falta que les publiqui el ${bulletin}${k.check ? ` (consultat fins al ${k.check.through})` : ""}.`;
+  }
+  const by = k.act.kind === "pleno" ? "the full town council" : k.act.kind === "junta" ? "the council's local government board" : "a mayoral decree";
+  return `Approved by ${by} on ${date}; still to be published in the ${bulletin}${k.check ? ` (read up to ${k.check.through})` : ""}.`;
+}
+
+/** Status "council", short, for captions and the layers block. */
+export function councilShortIntl(c: City, locale: Edition): string | null {
+  const k = councilAct(c);
+  if (!k) return null;
+  const bulletin = k.bulletin.replace(/^(el|la|los|las) /, "");
+  if (locale === "ca") {
+    const what = k.act.kind === "pleno" ? "acord del Ple de l'Ajuntament" : k.act.kind === "junta" ? "acord de la Junta de Govern Local" : "decret d'Alcaldia";
+    return `${what} del ${dotted(k.act.date)}, pendent de publicació al ${bulletin}`;
+  }
+  const what = k.act.kind === "pleno" ? "full council agreement" : k.act.kind === "junta" ? "local government board agreement" : "mayoral decree";
+  return `${what} of ${dotted(k.act.date)}, pending publication in the ${bulletin}`;
+}
+
 export function cityDescriptionIntl(c: City, locale: Edition): string {
   const list = local2027(c);
   const total = holidayCount(c);
@@ -220,7 +260,7 @@ export function cityDescriptionIntl(c: City, locale: Edition): string {
   const fit = (candidates: string[]) => candidates.find((t) => t.length <= EDITION_DESCRIPTION_LIMIT) ?? candidates.at(-1)!;
   if (list) {
     const days = localDays(c);
-    const abbr = bulletinAbbr(list);
+    const abbr = councilAct(c) ? tr(locale, "aprovades per l'Ajuntament", "approved by the council") : bulletinAbbr(list);
     if (locale === "ca") {
       const head = isZoned(c)
         ? `Festes locals ${caOf(name)} el ${YEAR}, per zones, segons el ${abbr}: ${compactDatesIntl(days.map((d) => d.date), "ca")} i més.`
@@ -339,8 +379,8 @@ export function cityAnswerIntl(c: City, locale: Edition): { strong: string; rest
       strong: tr(locale, `Festes locals ${caOf(name)} el ${YEAR}: ${joinList(days.map((d) => withName(d, "ca")), "ca")}.`, `${Name} local holidays ${YEAR}: ${joinList(days.map((d) => withName(d, "en")), "en")}.`),
       rest: tr(
         locale,
-        ` Les publica el ${list.source.ref}. Amb els ${dayCount(c.region)} festius ${r.of}${island}, són ${holidayCount(c)} festius el ${YEAR}.`,
-        ` Published in the ${list.source.ref}. With the ${dayCount(c.region)} holidays ${r.of}${island}, that makes ${holidayCount(c)} public holidays in ${YEAR}.`,
+        ` ${councilSentenceIntl(c, "ca") ?? `Les publica el ${list.source.ref}.`} Amb els ${dayCount(c.region)} festius ${r.of}${island}, són ${holidayCount(c)} festius el ${YEAR}.`,
+        ` ${councilSentenceIntl(c, "en") ?? `Published in the ${list.source.ref}.`} With the ${dayCount(c.region)} holidays ${r.of}${island}, that makes ${holidayCount(c)} public holidays in ${YEAR}.`,
       ),
     };
   }
@@ -440,7 +480,9 @@ export function cityLayerLinesIntl(c: City, locale: Edition): LayerLine[] {
         l.local.map((d) => named(d.date, d.name)),
         locale,
       ),
-      source: list.source.ref,
+      source: councilShortIntl(c, locale)
+        ? `${councilShortIntl(c, locale)}${l.pending ? tr(locale, `; consultat fins al ${l.pending.through}`, `; read up to ${l.pending.through}`) : ""}`
+        : list.source.ref,
     });
     return lines;
   }
@@ -501,7 +543,7 @@ export function cityLeadIntl(c: City, locale: Edition): string {
       const effects = days.map((d) => `el ${weekdayDateIntl(d.date, "ca")} ${planWordsIntl(c, d, "ca")}`);
       return (
         `${who} té aquestes 2 festes locals el ${YEAR}: ${joinList(days.map((d) => withName(d, "ca")), "ca")}. ` +
-        `Les publica el ${list.source.ref}. Amb ${base}, fan ${total} dies festius el ${YEAR}. ` +
+        `${councilSentenceIntl(c, "ca") ?? `Les publica el ${list.source.ref}.`} Amb ${base}, fan ${total} dies festius el ${YEAR}. ` +
         `${cap(joinList(effects, "ca"))}.${sharedLineIntl(c, "ca")}`
       );
     }
@@ -526,7 +568,7 @@ export function cityLeadIntl(c: City, locale: Edition): string {
     const effects = days.map((d) => `${weekdayDateIntl(d.date, "en")} ${planWordsIntl(c, d, "en")}`);
     return (
       `${who} has these 2 local holidays in ${YEAR}: ${joinList(days.map((d) => withName(d, "en")), "en")}. ` +
-      `They are published in the ${list.source.ref}. Together with ${base}, that makes ${total} public holidays in ${YEAR}. ` +
+      `${councilSentenceIntl(c, "en") ?? `They are published in the ${list.source.ref}.`} Together with ${base}, that makes ${total} public holidays in ${YEAR}. ` +
       `${cap(joinList(effects, "en"))}.${sharedLineIntl(c, "en")}`
     );
   }
@@ -563,12 +605,18 @@ export function cityFaqIntl(c: City, locale: Edition): FaqIntl[] {
         : `${cap(joinList(days.map(wn), "ca"))}.`;
       const weekend = weekendLocalDays(c).length;
       return [
-        { question: `Quins són els festius locals ${caOf(name)} el ${YEAR}?`, answer: `${answer} Font: ${list.source.ref}.` },
+        {
+          question: `Quins són els festius locals ${caOf(name)} el ${YEAR}?`,
+          answer: councilSentenceIntl(c, "ca") ? `${answer} ${councilSentenceIntl(c, "ca")} Font: ${list.source.title}.` : `${answer} Font: ${list.source.ref}.`,
+        },
         ...days.map((d) => {
           const note = localNoteIntl(d.note, "ca");
+          const council = councilAct(c);
           return {
             question: `És festiu el ${weekdayDateIntl(d.date, "ca")} del ${YEAR} ${caIn(name)}?`,
-            answer: `Sí. És festa local ${caIn(name)}${d.name ? ` (${d.name})` : ""}${note ? `, ${note}` : ""}, no un festiu de tota la comunitat. ${cap(planWordsIntl(c, d, "ca"))}.`,
+            answer:
+              `${council ? "Sí, segons l'acord de l'Ajuntament" : "Sí"}. És festa local ${caIn(name)}${d.name ? ` (${d.name})` : ""}${note ? `, ${note}` : ""}, no un festiu de tota la comunitat. ${cap(planWordsIntl(c, d, "ca"))}.` +
+              (council ? ` Falta que la publiqui el ${council.bulletin.replace(/^(el|la) /, "")}.` : ""),
           };
         }),
         {
@@ -612,12 +660,18 @@ export function cityFaqIntl(c: City, locale: Edition): FaqIntl[] {
       : `${cap(joinList(days.map(wn), "en"))}.`;
     const weekend = weekendLocalDays(c).length;
     return [
-      { question: `What are ${Name}'s local holidays in ${YEAR}?`, answer: `${answer} Source: ${list.source.ref}.` },
+      {
+        question: `What are ${Name}'s local holidays in ${YEAR}?`,
+        answer: councilSentenceIntl(c, "en") ? `${answer} ${councilSentenceIntl(c, "en")} Source: ${list.source.title}.` : `${answer} Source: ${list.source.ref}.`,
+      },
       ...days.map((d) => {
         const note = localNoteIntl(d.note, "en");
+        const council = councilAct(c);
         return {
           question: `Is ${weekdayDateIntl(d.date, "en")} ${YEAR} a holiday in ${Name}?`,
-          answer: `Yes. It is a local holiday in ${Name}${d.name ? ` (${d.name})` : ""}${note ? `, ${note}` : ""}, not a holiday across the community. It ${planWordsIntl(c, d, "en")}.`,
+          answer:
+            `${council ? "Yes, according to the council's agreement" : "Yes"}. It is a local holiday in ${Name}${d.name ? ` (${d.name})` : ""}${note ? `, ${note}` : ""}, not a holiday across the community. It ${planWordsIntl(c, d, "en")}.` +
+            (council ? ` It is still to be published in the ${council.bulletin.replace(/^(el|la) /, "")}.` : ""),
         };
       }),
       {
@@ -658,7 +712,8 @@ export function cityFaqIntl(c: City, locale: Edition): FaqIntl[] {
 
 /** For the community page and the hub: "14 abr. i 27 maig", or the 2026 days, labelled. */
 export function cityListLineIntl(c: City, locale: Edition): string {
-  if (local2027(c)) return `${compactDatesIntl(localDays(c).map((d) => d.date), locale)}${isZoned(c) ? tr(locale, "; per zones", "; by area") : ""}`;
+  if (local2027(c))
+    return `${compactDatesIntl(localDays(c).map((d) => d.date), locale)}${isZoned(c) ? tr(locale, "; per zones", "; by area") : ""}${councilAct(c) ? tr(locale, " (aprovades per l'Ajuntament)", " (approved by the council)") : ""}`;
   const pending = tr(locale, "Pendent", "Pending");
   return c.local2026 ? `${pending} (2026: ${compactDatesIntl(c.local2026.days.map((d) => d.date), locale)})` : pending;
 }

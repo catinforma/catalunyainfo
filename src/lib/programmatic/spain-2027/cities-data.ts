@@ -1,5 +1,6 @@
 import type { Region } from "@/lib/programmatic/holidays/boe-2027";
 
+import { COUNCIL_CITY_ROWS } from "./cities-council";
 import { MORE_CITY_ROWS } from "./cities-more";
 import { SOURCES, type OfficialText } from "./sources";
 
@@ -23,6 +24,12 @@ import { SOURCES, type OfficialText } from "./sources";
  *
  * `status2027`:
  *  - "published": the community's (or province's) 2027 list is out and names the city;
+ *  - "council": the community has not published its 2027 list yet, but the
+ *    council's own official act (plenary agreement, Junta de Gobierno,
+ *    mayoral decree) fixes the two days (`cities-council.ts`). The pages
+ *    print them "aprobadas por el Ayuntamiento, pendientes de <boletín>";
+ *    the tools that count days for you (working days, .ics, the planner by
+ *    default) leave them out until the bulletin publishes them;
  *  - "missing": the list is out but leaves the city out or marks it "no comunicada";
  *  - "pending": the community has not published its 2027 list yet.
  * A city that is not "published" shows its 2026 days, labelled as 2026, when
@@ -61,6 +68,13 @@ export interface LocalDay {
   printedWeekday?: string;
 }
 
+/** How a council fixed its 2027 days (status "council"): the act and the day it was adopted. */
+export interface CouncilAct {
+  kind: "pleno" | "junta" | "decreto";
+  /** The session or decree date, ISO. */
+  date: string;
+}
+
 export interface LocalList {
   year: 2027 | 2026;
   /** The days of the municipality, or of `mainArea` when the bulletin splits it. */
@@ -70,6 +84,8 @@ export interface LocalList {
   /** Other parts of the municipality with days of their own, as the bulletin lists them. */
   zones?: { place: string; days: LocalDay[] }[];
   source: OfficialText;
+  /** Status "council" only: the council's act (`source` is the document that records it). */
+  act?: CouncilAct;
 }
 
 export interface CityRow {
@@ -93,7 +109,7 @@ export interface CityRow {
   ineTable: number;
   /** Canarias: the island whose `fiesta insular` (sources.ts) the city also has. */
   island?: string;
-  status2027: "published" | "missing" | "pending";
+  status2027: "published" | "council" | "missing" | "pending";
   local2027: LocalList | null;
   local2026: LocalList | null;
   /** One sentence on the city's status, when the list says something about it. */
@@ -422,8 +438,12 @@ export const CORE_CITY_ROWS: readonly CityRow[] = [
   ...VALENCIANA,
 ];
 
-/** Every city with a page: the core rows, then the 20,000+ wave (`cities-more.ts`). */
-export const CITY_ROWS: readonly CityRow[] = [...CORE_CITY_ROWS, ...MORE_CITY_ROWS];
+/**
+ * Every city with a page: the core rows, the 20,000+ wave (`cities-more.ts`),
+ * then the 20,000+ towns whose council act is out before their community's
+ * list (`cities-council.ts`).
+ */
+export const CITY_ROWS: readonly CityRow[] = [...CORE_CITY_ROWS, ...MORE_CITY_ROWS, ...COUNCIL_CITY_ROWS];
 
 /**
  * Ceuta and Melilla: in scope, one municipality each. Their two local days

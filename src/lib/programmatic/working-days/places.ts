@@ -6,7 +6,7 @@ import { councilApproved2027, isAran, municipalityBySlug, nextYearFor, nextYearP
 import { CATALONIA_ID } from "@/lib/programmatic/leave-2027/copy";
 import { plannerData } from "@/lib/programmatic/leave-2027/places";
 import { communityDays } from "@/lib/programmatic/spain-2027/calendar";
-import { CITIES, cityCalendar, type City } from "@/lib/programmatic/spain-2027/cities";
+import { CITIES, officialCalendar, type City } from "@/lib/programmatic/spain-2027/cities";
 import { COMMUNITIES } from "@/lib/programmatic/spain-2027/communities";
 import { editionHubPath } from "@/lib/programmatic/spain-2027/editions";
 import { spainHubPath } from "@/lib/programmatic/spain-2027/paths";
@@ -32,9 +32,10 @@ import { CANARIAS_ISLAND_DAYS_2026 } from "./rules";
  *    and its 2027 ones once the DOGC order is parsed (`nextYearFor`). The
  *    days a council has approved but the DOGC has not published are NOT
  *    counted (flag "c": the page says so);
- *  - a Spanish city with a page: its 2027 calendar as the city page gives it
- *    (`cityCalendar`: island day, Navarra's common day, local days once the
- *    bulletin lists them) and, for 2026, its local days where the data holds
+ *  - a Spanish city with a page: its 2027 calendar as the bulletins give it
+ *    (`officialCalendar`: island day, Navarra's common day, local days once
+ *    the bulletin lists them; a council's days still pending their bulletin,
+ *    status "council", are NOT counted) and, for 2026, its local days where the data holds
  *    them (`local2026`), the island day of Canarias (BOE-A-2025-23702, note 1)
  *    and Navarra's 3 December.
  *
@@ -71,7 +72,7 @@ export function regionLocal(region: Region): { y2026: string[]; y2027: string[] 
 /** A Spanish city: the days it adds to its community's column, each year, and what they include. */
 export function cityExtra(c: City): { dates: string[]; local2026: boolean; local2027: boolean; island: boolean } {
   const base27 = new Set(region2027(c.region));
-  const y2027 = cityCalendar(c)
+  const y2027 = officialCalendar(c)
     .map((d) => d.date)
     .filter((d) => !base27.has(d));
   const island26 = c.island ? (CANARIAS_ISLAND_DAYS_2026[c.island] ?? null) : null;

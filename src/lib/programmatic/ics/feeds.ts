@@ -4,7 +4,7 @@ import { caDe, joinList } from "@/lib/programmatic/holidays/names";
 import { fullPagePath, placeName, type EmbedLocale, type EmbedPlace } from "@/lib/programmatic/embed-2027/places";
 import type { SnapshotMunicipality } from "@/lib/programmatic/holidays/types";
 import { YEAR as SPAIN_YEAR } from "@/lib/programmatic/spain-2027/calendar";
-import { cityCalendar, cityReadOn, commonLocalDays, islandDay, local2027, type City, type CityDayKind } from "@/lib/programmatic/spain-2027/cities";
+import { bulletinLocal2027, cityReadOn, commonLocalDays, islandDay, officialCalendar, type City, type CityDayKind } from "@/lib/programmatic/spain-2027/cities";
 import { caOf, localNameIntl, localNoteIntl } from "@/lib/programmatic/spain-2027/city-copy-intl";
 import { localName } from "@/lib/programmatic/spain-2027/city-copy";
 import { dayName } from "@/lib/programmatic/spain-2027/copy";
@@ -222,9 +222,10 @@ export function cityFeed(locale: FeedLocale, c: City): FeedModel {
   const name = placeName(locale, place);
   const community = locale === "es" ? c.community.short : editionNames(c.region, locale).short;
   const pageUrl = absoluteUrl(fullPagePath(locale, place));
-  const list = local2027(c);
+  // Only the bulletin's days: a council's days still pending their bulletin stay out (status "council").
+  const list = bulletinLocal2027(c);
   const island = islandDay(c);
-  const events: FeedEvent[] = cityCalendar(c).map((d) => {
+  const events: FeedEvent[] = officialCalendar(c).map((d) => {
     const label =
       d.kind === "local"
         ? locale === "es"
@@ -253,7 +254,7 @@ export function cityFeed(locale: FeedLocale, c: City): FeedModel {
     };
   });
   // "pending": the community has not published its 2027 list yet ("missing": it has, without the city).
-  const localPending = c.status2027 === "pending";
+  const localPending = c.status2027 === "pending" || c.status2027 === "council";
   const title = { ca: `Festius ${caOf(name)} ${SPAIN_YEAR}`, es: `Festivos de ${name} ${SPAIN_YEAR}`, en: `${name} public holidays ${SPAIN_YEAR}` }[locale];
   const covered = commonLocalDays(c).length > 0;
   return {
