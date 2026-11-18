@@ -118,10 +118,10 @@ test("the paths collide with no other published path", () => {
 test("titles fit in 60 characters with the searched words first; descriptions fit in 155 and answer first", () => {
   const seo: Record<StrikeGuideKey, Record<Locale, string>> = {
     strikeRenfe: {
-      // 11 Nov 2026: 10 Nov is past (SEMAF withdrew the 12th), so the guide covers 17 and 19 Nov.
-      ca: "Vaga Renfe i Adif 17 i 19 novembre: Rodalies i mínims",
-      es: "Huelga Renfe y Adif 17 y 19 noviembre: Rodalies y mínimos",
-      en: "Renfe and Adif strike 17 and 19 November 2026: what runs",
+      // 18 Nov 2026: the 17th is past and SCF called off the 19th (SCFCOM 38), so the guide covers SEMAF's 23 Nov strike.
+      ca: "Vaga Renfe 23 novembre 2026: Rodalies i serveis mínims",
+      es: "Huelga Renfe 23 de noviembre: Rodalies y servicios mínimos",
+      en: "Renfe strike 23 November 2026: Rodalies and what runs",
     },
     strikeEducation: {
       ca: "Vaga educació 26 novembre 2026: escoles i serveis mínims",
@@ -220,7 +220,10 @@ test("the Renfe guide follows the next rail strike: its days, titles and the hub
   assert.equal(cover("2026-11-05"), "vaga-renfe-2026-11-10");
   assert.equal(cover("2026-11-10"), "vaga-renfe-2026-11-10");
   assert.equal(cover("2026-11-11"), "vaga-ferroviaria-2026-11-17");
-  assert.equal(cover("2026-11-19"), "vaga-ferroviaria-2026-11-17");
+  assert.equal(cover("2026-11-17"), "vaga-ferroviaria-2026-11-17");
+  // 18 Nov 2026: SCF called off the 19th (SCFCOM 38), so the 17 Nov strike ends on the 17th and the 23rd's takes over.
+  assert.equal(cover("2026-11-18"), "vaga-renfe-2026-11-23");
+  assert.equal(cover("2026-11-19"), "vaga-renfe-2026-11-23");
   assert.equal(cover("2026-11-20"), "vaga-renfe-2026-11-23");
   // After the last one, the guide stays on it (past wording).
   assert.equal(cover("2026-12-31"), "vaga-renfe-2026-11-23");
@@ -228,9 +231,9 @@ test("the Renfe guide follows the next rail strike: its days, titles and the hub
 
   const titles = (asOf: string) => LOCALES.map((locale) => strikeGuideMeta("strikeRenfe", locale, STRIKES, asOf).seoTitle);
   assert.deepEqual(titles("2026-11-12"), [
-    "Vaga Renfe i Adif 17 i 19 novembre: Rodalies i mínims",
-    "Huelga Renfe y Adif 17 y 19 noviembre: Rodalies y mínimos",
-    "Renfe and Adif strike 17 and 19 November 2026: what runs",
+    "Vaga Renfe i Adif 17 novembre: Rodalies i mínims",
+    "Huelga Renfe y Adif 17 noviembre: Rodalies y mínimos",
+    "Renfe and Adif strike 17 November 2026: what runs",
   ]);
   assert.deepEqual(titles("2026-11-20"), [
     "Vaga Renfe 23 novembre 2026: Rodalies i serveis mínims",
@@ -245,7 +248,7 @@ test("the Renfe guide follows the next rail strike: its days, titles and the hub
       assert.ok(description.length > 60 && description.length <= 155, `${locale} ${asOf}: ${description}`);
       assert.match(description, /^(\p{Lu}\p{Ll}+ )?\d{1,2}\b/u, `${locale} ${asOf}: ${description}`);
     }
-    // Covering 17 and 19 Nov: the earlier strike is named as over, with the hub link; the entry's facts are on the page.
+    // Covering 17 Nov: the earlier strike is named as over, with the hub link; the entry's facts are on the page.
     const blocks = buildStrikeGuideBody("strikeRenfe", locale, "2026-11-12");
     assert.ok(bodySchema.safeParse(blocks).success, locale);
     assert.match(text(blocks), /Ja ha passat la vaga anterior|Ya ha pasado la huelga anterior|The previous strike is over/, locale);

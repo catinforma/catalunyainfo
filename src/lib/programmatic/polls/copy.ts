@@ -17,7 +17,7 @@ import { hubPath } from "@/lib/programmatic/elections/paths";
 import type { PollOrg } from "./types";
 
 /** ISO date of the page's last editorial change (metadata, sitemap, JSON-LD). */
-export const POLLS_PAGE_UPDATED = "2026-11-05";
+export const POLLS_PAGE_UPDATED = "2026-11-18";
 
 export const LOREG_URL = "https://www.boe.es/buscar/act.php?id=BOE-A-1985-11672";
 export const LOREG_ART69_URL = "https://www.boe.es/buscar/act.php?id=BOE-A-1985-11672#a69";

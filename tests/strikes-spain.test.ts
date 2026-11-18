@@ -113,6 +113,21 @@ function detailItems(blocks: Block[], id: string): string[] {
 
 const tables = (blocks: Block[]) => blocks.filter((block) => block.type === "table") as unknown as { caption?: string; headers: string[]; rows: string[][] }[];
 
+/**
+ * Pending minimum services for the made-up strikes (18 Nov 2026: the rail
+ * entry they copy is past and published, so its texts no longer say "to be
+ * confirmed").
+ */
+const PENDING_MS: SpainStrike["minimumServices"] = {
+  status: "pending",
+  short: { ca: "Per confirmar", es: "Por confirmar", en: "To be confirmed" },
+  text: {
+    ca: "Per confirmar. El {checked} encara no hi havia cap resolució.",
+    es: "Por confirmar. El {checked} aún no había ninguna resolución.",
+    en: "To be confirmed. On {checked} there was still no resolution.",
+  },
+};
+
 /** A made-up strike, to test the wording without depending on today's list. */
 const sample = (over: Partial<SpainStrike>): SpainStrike => ({
   ...strike("huelga-ferroviaria-2026-11-17"),
@@ -348,7 +363,7 @@ test("a called strike is never printed as confirmed: status cell, status line, a
     }
   }
   // A made-up called strike with pending minimum services, in every language.
-  const made = sample({ dates: [STRIKES_SPAIN_AS_OF], status: "called" });
+  const made = sample({ dates: [STRIKES_SPAIN_AS_OF], status: "called", minimumServices: PENDING_MS });
   for (const locale of LOCALES) {
     const rows = weekRows(locale, STRIKES_SPAIN_AS_OF, [made]);
     const row = rows.find((r) => r[2] !== "—");
@@ -447,8 +462,9 @@ test("date wording: the month said once, ranges of three or more days, two month
 });
 
 test("'as of' lines carry the as-of date, and Catalan elides before 1 and 11 (\"L'11 de novembre\")", () => {
-  const pending = sample({ dates: ["2026-11-17"] });
-  const onDay = (locale: Locale, asOf: string) => text(buildStrikesSpainBody(locale, asOf, { strikes: [pending] }));
+  const pending = sample({ dates: ["2026-11-17"], minimumServices: PENDING_MS });
+  // Sources re-read on the as-of day itself.
+  const onDay = (locale: Locale, asOf: string) => text(buildStrikesSpainBody(locale, asOf, { strikes: [pending], verified: asOf }));
   assert.ok(onDay("es", "2026-11-10").includes("El 10 de noviembre de 2026"));
   assert.ok(onDay("es", "2026-11-11").includes("El 11 de noviembre de 2026"));
   assert.ok(onDay("en", "2026-11-11").includes("On 11 November 2026"));
@@ -456,6 +472,11 @@ test("'as of' lines carry the as-of date, and Catalan elides before 1 and 11 (\"
   assert.ok(onDay("ca", "2026-11-11").includes("L'11 de novembre de 2026"));
   assert.ok(!/\bEl 11 de novembre/i.test(onDay("ca", "2026-11-11")));
   assert.ok(onDay("ca", "2026-12-01").includes("L'1 de desembre de 2026"));
+  // 18 Nov 2026: a later as-of day without a re-read never claims one: "checked" lines print the verification date.
+  const unread = text(buildStrikesSpainBody("es", "2026-11-21", { strikes: [pending], verified: "2026-11-18" }));
+  assert.ok(unread.includes("Fuentes revisadas por última vez: 18 de noviembre de 2026"), unread.slice(0, 300));
+  assert.ok(unread.includes("El 18 de noviembre de 2026 aún no había"), "{checked} is the verification date");
+  assert.ok(!unread.includes("21 de noviembre de 2026 aún no"), "never the as-of day");
 });
 
 /* -------------------------------------------------------------------------- */

@@ -80,11 +80,31 @@ import type { SpainNotHappening, SpainOpenStrike, SpainStrike } from "./strikes-
  * Bizkaia). SCF newest SCFCOM 37 (19th kept). Sindicato de Estudiantes:
  * 20N kept, mobilisations at 12:00 (city list on its page). SMU: no
  * call-off. BOE sumarios of 13, 14, 16 and 17 Nov: no strike order.
+ *
+ * 18 Nov 2026 (afternoon): re-read (research_notes/x10/strikes-18nov-factpack.md).
+ * NEW: SCF called off the 19 Nov strike at Adif: "SCF ha acordado la
+ * desconvocatoria para el día 19" (SCFCOM 38, 17 Nov, 22:25, with the signed
+ * call-off agreement), after Adif accepted its demands and the Council of
+ * Ministers approved on the 17th the urgent processing of the change to RD
+ * 929/2020 (the Ministry's press note of that day). The rail entry keeps the
+ * 17th only; the 19th is in SPAIN_NOT_HAPPENING. SEMAF nº 2026-35 (17 Nov)
+ * keeps the 23rd: "afrontamos el 23 de noviembre como la próxima jornada de
+ * movilización". Unchanged: the Ministry's rail list (newest still the 12 Nov
+ * Grupo Renfe resolution: none for Adif or for the 23rd) and air list (newest
+ * the 17N ones and ELA Bizkaia; SAERCO, Groundforce, Outsmart in force to 30
+ * Nov); Treball's list (newest 17 Nov, the 23rd's order) and the newest 100
+ * e-Tauler edicts (16-18 Nov: no other strike order); SMU (no call-off,
+ * marches on the 19th at 18:00); Sindicato de Estudiantes (20N kept); BOE of
+ * 18 Nov (no strike order).
  */
-export const STRIKES_SPAIN_AS_OF = "2026-11-18";
+export const STRIKES_SPAIN_AS_OF: string = "2026-11-18";
 
-/** Printed as the page's "last verified" date. */
-export const STRIKES_SPAIN_VERIFIED = "2026-11-17";
+/**
+ * Printed as the page's "last verified" date and in every "checked on" line.
+ * Typed as string (not the literal) so a test comparing it with the as-of
+ * day never narrows it to `never` when the two differ.
+ */
+export const STRIKES_SPAIN_VERIFIED: string = "2026-11-18";
 
 const CDN = "https://cdn.transportes.gob.es/portal-web-transportes";
 const FICA = "https://ugt-fica.org/component/content/article";
@@ -137,6 +157,10 @@ export const SPAIN_URLS = {
   elaResolution: `${CDN}/aereo/huelga-servicios-minimos/2026/54_26-11-17_-_dgac_resolucion_huelga_aspel_sectorial_limpieza_vizcaya_-_ela_vi.pdf`,
   // Adif, 17 and 19 Nov: SCFCOM 37 (16 Nov 2026).
   scf37: "https://www.scf.es/com37/",
+  // SCF nº 38, 17 Nov 2026 (22:25, read 18 Nov): "SCF ha acordado la desconvocatoria para el día 19".
+  scf38: STRIKE_URLS.scf38,
+  // SEMAF nº 2026-35, 17 Nov 2026 (read 18 Nov): "afrontamos el 23 de noviembre como la próxima jornada de movilización".
+  semaf35: STRIKE_URLS.semaf35,
   // Rail, 23 Nov (read 17 Nov 2026): SEMAF nº 2026-34 (16 Nov). The Generalitat's order of 16 Nov is cited through treballMs.
   semaf34: STRIKE_URLS.semaf34,
   // Airports.
@@ -160,6 +184,8 @@ const MINISTRY = "Ministerio de Transportes y Movilidad Sostenible";
 const SRC = {
   ministryRail: { name: "Resoluciones de servicios mínimos ferroviarios", url: U.ministryRail, publisher: MINISTRY },
   ministryAir: { name: "Resoluciones de servicios mínimos del transporte aéreo", url: U.ministryAir, publisher: MINISTRY },
+  scf38: { name: "SCFCOM 38: Adif se compromete con todos los puntos de la convocatoria de huelga de SCF (17 de noviembre de 2026)", url: U.scf38, publisher: "Sindicato de Circulación Ferroviario (SCF)" },
+  semaf35: { name: "SEMAF continúa con la conflictividad: próxima movilización el 23 de noviembre (nº 2026-35, 17 de noviembre de 2026)", url: U.semaf35, publisher: "SEMAF" },
 } satisfies Record<string, B2Source>;
 
 /* -------------------------------------------------------------------------- */
@@ -391,7 +417,8 @@ export const SPAIN_STRIKES: SpainStrike[] = [
   },
   {
     id: "huelga-ferroviaria-2026-11-17",
-    dates: ["2026-11-17", "2026-11-19"],
+    // 18 Nov 2026: the 19th (SCF at Adif) was called off on the 17th (SCFCOM 38); it is in SPAIN_NOT_HAPPENING.
+    dates: ["2026-11-17"],
     sector: "rail",
     status: "official",
     catalanEntry: "vaga-ferroviaria-2026-11-17",
@@ -404,36 +431,36 @@ export const SPAIN_STRIKES: SpainStrike[] = [
     },
     label: { ca: "vaga ferroviària", es: "huelga ferroviaria", en: "rail strike" },
     scope: {
-      ca: "El dia 17: tot el personal del Grup Renfe (Rodalies i Cercanías, Mitja Distància, AVE i Llarga Distància, mercaderies) i Adif, i els maquinistes d'Iryo, Ouigo, Transfesa, Continental Rail, Tracción Rail, Captrain i Medway. El dia 19: el personal de circulació d'Adif.",
-      es: "El día 17: toda la plantilla del Grupo Renfe (Cercanías y Rodalies, Media Distancia, AVE y Larga Distancia, mercancías) y Adif, y los maquinistas de Iryo, Ouigo, Transfesa, Continental Rail, Tracción Rail, Captrain y Medway. El día 19: el personal de circulación de Adif.",
-      en: "On the 17th: all Renfe Group staff (Cercanías and Rodalies commuter trains, Media Distancia, AVE and long distance, freight) and Adif (the track operator), plus train drivers at Iryo, Ouigo, Transfesa, Continental Rail, Tracción Rail, Captrain and Medway. On the 19th: Adif's traffic-control staff.",
+      ca: "El dia 17: tot el personal del Grup Renfe (Rodalies i Cercanías, Mitja Distància, AVE i Llarga Distància, mercaderies) i Adif, i els maquinistes d'Iryo, Ouigo, Transfesa, Continental Rail, Tracción Rail, Captrain i Medway. L'aturada del personal de circulació d'Adif del dia 19 es va desconvocar.",
+      es: "El día 17: toda la plantilla del Grupo Renfe (Cercanías y Rodalies, Media Distancia, AVE y Larga Distancia, mercancías) y Adif, y los maquinistas de Iryo, Ouigo, Transfesa, Continental Rail, Tracción Rail, Captrain y Medway. El paro del personal de circulación de Adif del día 19 se desconvocó.",
+      en: "On the 17th: all Renfe Group staff (Cercanías and Rodalies commuter trains, Media Distancia, AVE and long distance, freight) and Adif (the track operator), plus train drivers at Iryo, Ouigo, Transfesa, Continental Rail, Tracción Rail, Captrain and Medway. The stoppage by Adif's traffic-control staff on the 19th was called off.",
     },
     hours: {
-      ca: "El 17, de 0.00 a 23.59 h al Grup Renfe, segons l'ordre de serveis mínims de la Generalitat; a Adif, aturades de 24 hores el 17 i el 19, segons l'SCF.",
-      es: "El 17, de 0.00 a 23.59 h en el Grupo Renfe, según la orden de servicios mínimos de la Generalitat; en Adif, paros de 24 horas el 17 y el 19, según el SCF.",
-      en: "On the 17th, 00:00 to 23:59 at the Renfe Group, according to the Generalitat's minimum-services order; at Adif, 24-hour stoppages on the 17th and the 19th, according to SCF.",
+      ca: "El 17, de 0.00 a 23.59 h al Grup Renfe, segons l'ordre de serveis mínims de la Generalitat; a Adif, aturada de 24 hores el 17, segons l'SCF.",
+      es: "El 17, de 0.00 a 23.59 h en el Grupo Renfe, según la orden de servicios mínimos de la Generalitat; en Adif, paro de 24 horas el 17, según el SCF.",
+      en: "On the 17th, 00:00 to 23:59 at the Renfe Group, according to the Generalitat's minimum-services order; at Adif, a 24-hour stoppage on the 17th, according to SCF.",
     },
     calledBy: {
-      ca: `El dia 17, els sindicats del Comitè General d'Empresa d'Adif (${link(U.ccooRail17, "CCOO, 3 de novembre")}), als quals es va sumar el Comitè General d'Empresa de Renfe (${link(U.alferro80, "ALFERRO, comunicat 80/2026")}): al Grup Renfe hi han registrat vaga FeSMC-UGT, CCOO, SF-Intersindical, SEMAF, ALFERRO i SFF-CGT, segons l'ordre de la Generalitat del 12 de novembre (${link(U.treballMs, "llista del Departament d'Empresa i Treball")}). SEMAF també crida els maquinistes de les altres operadores (${link(U.semafCuerpo, "SEMAF, 5 de novembre")}). El 17 i el 19, el sindicat SCF a Adif (${link(U.scfAdif, "SCF, 6 de novembre")}), que els mantenia el 12 de novembre (${link(U.scf35, "comunicat 35")}). CCOO, el 12 de novembre: «la huelga del 17 de noviembre sigue siendo necesaria» (${link(U.ccooRail17Still, "el seu comunicat")}); SEMAF, el 14: «Se mantienen los paros convocados para el día 17» (${link(U.semaf33, "comunicat 2026-33")}).`,
-      es: `El día 17, los sindicatos del Comité General de Empresa de Adif (${link(U.ccooRail17, "CCOO, 3 de noviembre")}), a los que se sumó el Comité General de Empresa de Renfe (${link(U.alferro80, "ALFERRO, comunicado 80/2026")}): en el Grupo Renfe han registrado huelga FeSMC-UGT, CCOO, SF-Intersindical, SEMAF, ALFERRO y SFF-CGT, según la orden de la Generalitat del 12 de noviembre (${link(U.treballMs, "lista del Departament d'Empresa i Treball")}). SEMAF llama también a los maquinistas de las demás operadoras (${link(U.semafCuerpo, "SEMAF, 5 de noviembre")}). El 17 y el 19, el sindicato SCF en Adif (${link(U.scfAdif, "SCF, 6 de noviembre")}), que los mantenía el 12 de noviembre (${link(U.scf35, "comunicado 35")}). CCOO, el 12 de noviembre: «la huelga del 17 de noviembre sigue siendo necesaria» (${link(U.ccooRail17Still, "su comunicado")}); SEMAF, el 14: «Se mantienen los paros convocados para el día 17» (${link(U.semaf33, "comunicado 2026-33")}).`,
-      en: `On the 17th, the unions on Adif's company-wide works council (${link(U.ccooRail17, "CCOO, 3 November")}), joined by Renfe's works council (${link(U.alferro80, "ALFERRO, notice 80/2026")}): at the Renfe Group, FeSMC-UGT, CCOO, SF-Intersindical, SEMAF, ALFERRO and SFF-CGT have registered strike calls, according to the Generalitat's order of 12 November (${link(U.treballMs, "the Catalan labour department's list")}). SEMAF also calls out drivers at the other operators (${link(U.semafCuerpo, "SEMAF, 5 November")}). On the 17th and the 19th, the SCF union at Adif (${link(U.scfAdif, "SCF, 6 November")}), which kept both days on 12 November (${link(U.scf35, "notice 35")}). CCOO on 12 November: "la huelga del 17 de noviembre sigue siendo necesaria" (the 17 November strike is still necessary; ${link(U.ccooRail17Still, "its notice")}); SEMAF on the 14th: "Se mantienen los paros convocados para el día 17" (the stoppages called for the 17th stand; ${link(U.semaf33, "notice 2026-33")}).`,
+      ca: `El dia 17, els sindicats del Comitè General d'Empresa d'Adif (${link(U.ccooRail17, "CCOO, 3 de novembre")}), als quals es va sumar el Comitè General d'Empresa de Renfe (${link(U.alferro80, "ALFERRO, comunicat 80/2026")}): al Grup Renfe hi han registrat vaga FeSMC-UGT, CCOO, SF-Intersindical, SEMAF, ALFERRO i SFF-CGT, segons l'ordre de la Generalitat del 12 de novembre (${link(U.treballMs, "llista del Departament d'Empresa i Treball")}). SEMAF també crida els maquinistes de les altres operadores (${link(U.semafCuerpo, "SEMAF, 5 de novembre")}). El 17 i el 19, el sindicat SCF a Adif (${link(U.scfAdif, "SCF, 6 de novembre")}), que els mantenia el 12 de novembre (${link(U.scf35, "comunicat 35")}). CCOO, el 12 de novembre: «la huelga del 17 de noviembre sigue siendo necesaria» (${link(U.ccooRail17Still, "el seu comunicat")}); SEMAF, el 14: «Se mantienen los paros convocados para el día 17» (${link(U.semaf33, "comunicat 2026-33")}). El 17 de novembre al vespre, l'SCF va desconvocar el dia 19: «SCF ha acordado la desconvocatoria para el día 19» (${link(U.scf38, "comunicat 38")}).`,
+      es: `El día 17, los sindicatos del Comité General de Empresa de Adif (${link(U.ccooRail17, "CCOO, 3 de noviembre")}), a los que se sumó el Comité General de Empresa de Renfe (${link(U.alferro80, "ALFERRO, comunicado 80/2026")}): en el Grupo Renfe han registrado huelga FeSMC-UGT, CCOO, SF-Intersindical, SEMAF, ALFERRO y SFF-CGT, según la orden de la Generalitat del 12 de noviembre (${link(U.treballMs, "lista del Departament d'Empresa i Treball")}). SEMAF llama también a los maquinistas de las demás operadoras (${link(U.semafCuerpo, "SEMAF, 5 de noviembre")}). El 17 y el 19, el sindicato SCF en Adif (${link(U.scfAdif, "SCF, 6 de noviembre")}), que los mantenía el 12 de noviembre (${link(U.scf35, "comunicado 35")}). CCOO, el 12 de noviembre: «la huelga del 17 de noviembre sigue siendo necesaria» (${link(U.ccooRail17Still, "su comunicado")}); SEMAF, el 14: «Se mantienen los paros convocados para el día 17» (${link(U.semaf33, "comunicado 2026-33")}). La noche del 17 de noviembre, el SCF desconvocó el día 19: «SCF ha acordado la desconvocatoria para el día 19» (${link(U.scf38, "comunicado 38")}).`,
+      en: `On the 17th, the unions on Adif's company-wide works council (${link(U.ccooRail17, "CCOO, 3 November")}), joined by Renfe's works council (${link(U.alferro80, "ALFERRO, notice 80/2026")}): at the Renfe Group, FeSMC-UGT, CCOO, SF-Intersindical, SEMAF, ALFERRO and SFF-CGT have registered strike calls, according to the Generalitat's order of 12 November (${link(U.treballMs, "the Catalan labour department's list")}). SEMAF also calls out drivers at the other operators (${link(U.semafCuerpo, "SEMAF, 5 November")}). On the 17th and the 19th, the SCF union at Adif (${link(U.scfAdif, "SCF, 6 November")}), which kept both days on 12 November (${link(U.scf35, "notice 35")}). CCOO on 12 November: "la huelga del 17 de noviembre sigue siendo necesaria" (the 17 November strike is still necessary; ${link(U.ccooRail17Still, "its notice")}); SEMAF on the 14th: "Se mantienen los paros convocados para el día 17" (the stoppages called for the 17th stand; ${link(U.semaf33, "notice 2026-33")}). On the evening of 17 November SCF called off the 19th: "SCF ha acordado la desconvocatoria para el día 19" (SCF has agreed to call off the 19th; ${link(U.scf38, "notice 38")}).`,
     },
     basis: {
-      ca: `El 17, ${link(U.ministryRenfe17, "la resolució de serveis mínims del Ministeri de Transports del 12 de novembre")}, que cita les convocatòries del Comitè General del Grup Renfe, SEMAF, CCOO, UGT, SFF-CGT, SF-Intersindical i ALFERRO, de 0.00 a 23.59 h. El 19 (Adif) consta al comunicat de l'SCF, que el 16 de novembre cridava «Todos a la huelga» (${link(U.scf37, "comunicat 37")}). El {checked} no hi havia cap resolució per a aquest dia a ${link(U.ministryRail, "la llista del Ministeri")}.`,
-      es: `El 17, ${link(U.ministryRenfe17, "la resolución de servicios mínimos del Ministerio de Transportes del 12 de noviembre")}, que cita las convocatorias del Comité General del Grupo Renfe, SEMAF, CCOO, UGT, SFF-CGT, SF-Intersindical y ALFERRO, de 0.00 a 23.59 h. El 19 (Adif) consta en el comunicado del SCF, que el 16 de noviembre llamaba «Todos a la huelga» (${link(U.scf37, "comunicado 37")}). El {checked} no había ninguna resolución para ese día en ${link(U.ministryRail, "la lista del Ministerio")}.`,
-      en: `For the 17th, ${link(U.ministryRenfe17, "the Ministry of Transport's minimum-services resolution of 12 November")}, which cites the calls by the Renfe Group's works council, SEMAF, CCOO, UGT, SFF-CGT, SF-Intersindical and ALFERRO, 00:00 to 23:59. The 19th (Adif) rests on SCF's notice, which on 16 November said "Todos a la huelga" (everyone on strike; ${link(U.scf37, "notice 37")}). On {checked} there was no resolution for that day on ${link(U.ministryRail, "the Ministry's list")}.`,
+      ca: `El 17, ${link(U.ministryRenfe17, "la resolució de serveis mínims del Ministeri de Transports del 12 de novembre")}, que cita les convocatòries del Comitè General del Grup Renfe, SEMAF, CCOO, UGT, SFF-CGT, SF-Intersindical i ALFERRO, de 0.00 a 23.59 h. El 19 (Adif) constava al comunicat de l'SCF, que el va desconvocar el 17 de novembre (${link(U.scf38, "comunicat 38")}).`,
+      es: `El 17, ${link(U.ministryRenfe17, "la resolución de servicios mínimos del Ministerio de Transportes del 12 de noviembre")}, que cita las convocatorias del Comité General del Grupo Renfe, SEMAF, CCOO, UGT, SFF-CGT, SF-Intersindical y ALFERRO, de 0.00 a 23.59 h. El 19 (Adif) constaba en el comunicado del SCF, que lo desconvocó el 17 de noviembre (${link(U.scf38, "comunicado 38")}).`,
+      en: `For the 17th, ${link(U.ministryRenfe17, "the Ministry of Transport's minimum-services resolution of 12 November")}, which cites the calls by the Renfe Group's works council, SEMAF, CCOO, UGT, SFF-CGT, SF-Intersindical and ALFERRO, 00:00 to 23:59. The 19th (Adif) rested on SCF's notice; SCF called it off on 17 November (${link(U.scf38, "notice 38")}).`,
     },
     minimumServices: {
       status: "published",
       short: {
-        ca: "Publicats: Cercanías 75% en hora punta, AVE 72%, Mitja Distància 65%; Adif, per confirmar",
-        es: "Publicados: Cercanías 75% en hora punta, AVE 72%, Media Distancia 65%; Adif, por confirmar",
-        en: "Published: Cercanías 75% at peak, AVE 72%, Media Distancia 65%; Adif to be confirmed",
+        ca: "Publicats: Cercanías 75% en hora punta, AVE 72%, Mitja Distància 65%",
+        es: "Publicados: Cercanías 75% en hora punta, AVE 72%, Media Distancia 65%",
+        en: "Published: Cercanías 75% at peak, AVE 72%, Media Distancia 65%",
       },
       text: {
-        ca: `Per al 17, ${link(U.ministryRenfe17, "la resolució del Ministeri de Transports del 12 de novembre")} fixa al Grup Renfe: **Cercanías, el 75% del servei habitual en hora punta** (de 6.00 a 9.00, de 13.30 a 15.30 i de 18.30 a 20.30 h; fora de Madrid, la franja del migdia és de 13.30/14.00 a 15.30/16.00 h) **i el 50% la resta del dia**; **Mitja Distància, una mitjana del 65%** (444 de 682 trens); **AVE i Llarga Distància, el 72%** (177 de 246 trens), i mercaderies, el 26%. Renfe ho confirma en ${link(U.renfe17, "el seu avís del 14 de novembre")}. A **Iryo**, el 70% (28 de 40 trens), i a **Ouigo**, el 65,38% (17 de 26), segons les resolucions del 13 de novembre (${link(U.iryo17, "Iryo")}, ${link(U.ouigo17, "Ouigo")}). A **Cercanías de Bilbao i Sant Sebastià** els fixa el Govern Basc: el 50% en hora punta i el 25% la resta del dia (${link(U.euskadi17, "ordre del 13 de novembre")}); a **Rodalies de Catalunya** i els regionals, la Generalitat: el 66% i el 33% (${link(U.treballMs, "llista del Departament d'Empresa i Treball")}). **Adif, el 17 i el 19:** per confirmar. El {checked} encara no hi havia cap resolució a ${link(U.ministryRail, "la llista del Ministeri")}; l'SCF diu que el personal d'Adif es regeix pels serveis mínims «determinados por la Secretaría de estado de transportes y movilidad sostenible y la Circular de Dirección General nº 5 del 13-11-2026» i que, durant les aturades, la circulació garanteix la seguretat del trànsit i les obres d'emergència (${link(U.scf37, "comunicat 37, 16 de novembre")}).`,
-        es: `Para el 17, ${link(U.ministryRenfe17, "la resolución del Ministerio de Transportes del 12 de noviembre")} fija en el Grupo Renfe: **Cercanías, el 75% del servicio habitual en hora punta** (de 6.00 a 9.00, de 13.30 a 15.30 y de 18.30 a 20.30 h; fuera de Madrid, la franja de mediodía es de 13.30/14.00 a 15.30/16.00 h) **y el 50% el resto del día**; **Media Distancia, una media del 65%** (444 de 682 trenes); **AVE y Larga Distancia, el 72%** (177 de 246 trenes), y mercancías, el 26%. Renfe lo confirma en ${link(U.renfe17, "su aviso del 14 de noviembre")}. En **Iryo**, el 70% (28 de 40 trenes), y en **Ouigo**, el 65,38% (17 de 26), según las resoluciones del 13 de noviembre (${link(U.iryo17, "Iryo")}, ${link(U.ouigo17, "Ouigo")}). En **Cercanías de Bilbao y San Sebastián** los fija el Gobierno Vasco: el 50% en hora punta y el 25% el resto del día (${link(U.euskadi17, "orden del 13 de noviembre")}); en **Rodalies de Catalunya** y los regionales, la Generalitat: el 66% y el 33% (${link(U.treballMs, "lista del Departament d'Empresa i Treball")}). **Adif, el 17 y el 19:** por confirmar. El {checked} aún no había ninguna resolución en ${link(U.ministryRail, "la lista del Ministerio")}; el SCF dice que la plantilla de Adif se rige por los servicios mínimos «determinados por la Secretaría de estado de transportes y movilidad sostenible y la Circular de Dirección General nº 5 del 13-11-2026» y que, durante los paros, la circulación garantiza la seguridad del tráfico y las obras de emergencia (${link(U.scf37, "comunicado 37, 16 de noviembre")}).`,
-        en: `For the 17th, ${link(U.ministryRenfe17, "the Ministry of Transport's resolution of 12 November")} sets at the Renfe Group: **Cercanías, 75% of the usual service at peak times** (06:00 to 09:00, 13:30 to 15:30 and 18:30 to 20:30; outside Madrid the midday band is 13:30/14:00 to 15:30/16:00) **and 50% the rest of the day**; **Media Distancia, 65% on average** (444 of 682 trains); **AVE and long distance, 72%** (177 of 246 trains); freight, 26%. Renfe confirms it in ${link(U.renfe17, "its notice of 14 November")}. **Iryo**, 70% (28 of 40 trains), and **Ouigo**, 65.38% (17 of 26), under the resolutions of 13 November (${link(U.iryo17, "Iryo")}, ${link(U.ouigo17, "Ouigo")}). On **Cercanías Bilbao and San Sebastián** the Basque Government sets them: 50% at peak times and 25% the rest of the day (${link(U.euskadi17, "order of 13 November")}); on **Rodalies de Catalunya** and regional trains, the Generalitat: 66% and 33% (${link(U.treballMs, "the Catalan labour department's list")}). **Adif, 17th and 19th:** to be confirmed. On {checked} there was still no resolution on ${link(U.ministryRail, "the Ministry's list")}; SCF says Adif staff follow the minimum services "determinados por la Secretaría de estado de transportes y movilidad sostenible y la Circular de Dirección General nº 5 del 13-11-2026" (set by the Secretary of State for Transport and Adif's Circular no. 5 of 13 November) and that during the stoppages traffic control keeps rail traffic safe and emergency works going (${link(U.scf37, "notice 37, 16 November")}).`,
+        ca: `Per al 17, ${link(U.ministryRenfe17, "la resolució del Ministeri de Transports del 12 de novembre")} fixa al Grup Renfe: **Cercanías, el 75% del servei habitual en hora punta** (de 6.00 a 9.00, de 13.30 a 15.30 i de 18.30 a 20.30 h; fora de Madrid, la franja del migdia és de 13.30/14.00 a 15.30/16.00 h) **i el 50% la resta del dia**; **Mitja Distància, una mitjana del 65%** (444 de 682 trens); **AVE i Llarga Distància, el 72%** (177 de 246 trens), i mercaderies, el 26%. Renfe ho confirma en ${link(U.renfe17, "el seu avís del 14 de novembre")}. A **Iryo**, el 70% (28 de 40 trens), i a **Ouigo**, el 65,38% (17 de 26), segons les resolucions del 13 de novembre (${link(U.iryo17, "Iryo")}, ${link(U.ouigo17, "Ouigo")}). A **Cercanías de Bilbao i Sant Sebastià** els fixa el Govern Basc: el 50% en hora punta i el 25% la resta del dia (${link(U.euskadi17, "ordre del 13 de novembre")}); a **Rodalies de Catalunya** i els regionals, la Generalitat: el 66% i el 33% (${link(U.treballMs, "llista del Departament d'Empresa i Treball")}). **Adif, el 17:** sense resolució publicada. El {checked} no n'hi havia cap a ${link(U.ministryRail, "la llista del Ministeri")}; l'SCF deia que el personal d'Adif es regeix pels serveis mínims «determinados por la Secretaría de estado de transportes y movilidad sostenible y la Circular de Dirección General nº 5 del 13-11-2026» i que, durant les aturades, la circulació garanteix la seguretat del trànsit i les obres d'emergència (${link(U.scf37, "comunicat 37, 16 de novembre")}). **El 19:** desconvocat per l'SCF (${link(U.scf38, "comunicat 38")}).`,
+        es: `Para el 17, ${link(U.ministryRenfe17, "la resolución del Ministerio de Transportes del 12 de noviembre")} fija en el Grupo Renfe: **Cercanías, el 75% del servicio habitual en hora punta** (de 6.00 a 9.00, de 13.30 a 15.30 y de 18.30 a 20.30 h; fuera de Madrid, la franja de mediodía es de 13.30/14.00 a 15.30/16.00 h) **y el 50% el resto del día**; **Media Distancia, una media del 65%** (444 de 682 trenes); **AVE y Larga Distancia, el 72%** (177 de 246 trenes), y mercancías, el 26%. Renfe lo confirma en ${link(U.renfe17, "su aviso del 14 de noviembre")}. En **Iryo**, el 70% (28 de 40 trenes), y en **Ouigo**, el 65,38% (17 de 26), según las resoluciones del 13 de noviembre (${link(U.iryo17, "Iryo")}, ${link(U.ouigo17, "Ouigo")}). En **Cercanías de Bilbao y San Sebastián** los fija el Gobierno Vasco: el 50% en hora punta y el 25% el resto del día (${link(U.euskadi17, "orden del 13 de noviembre")}); en **Rodalies de Catalunya** y los regionales, la Generalitat: el 66% y el 33% (${link(U.treballMs, "lista del Departament d'Empresa i Treball")}). **Adif, el 17:** sin resolución publicada. El {checked} no había ninguna en ${link(U.ministryRail, "la lista del Ministerio")}; el SCF decía que la plantilla de Adif se rige por los servicios mínimos «determinados por la Secretaría de estado de transportes y movilidad sostenible y la Circular de Dirección General nº 5 del 13-11-2026» y que, durante los paros, la circulación garantiza la seguridad del tráfico y las obras de emergencia (${link(U.scf37, "comunicado 37, 16 de noviembre")}). **El 19:** desconvocado por el SCF (${link(U.scf38, "comunicado 38")}).`,
+        en: `For the 17th, ${link(U.ministryRenfe17, "the Ministry of Transport's resolution of 12 November")} sets at the Renfe Group: **Cercanías, 75% of the usual service at peak times** (06:00 to 09:00, 13:30 to 15:30 and 18:30 to 20:30; outside Madrid the midday band is 13:30/14:00 to 15:30/16:00) **and 50% the rest of the day**; **Media Distancia, 65% on average** (444 of 682 trains); **AVE and long distance, 72%** (177 of 246 trains); freight, 26%. Renfe confirms it in ${link(U.renfe17, "its notice of 14 November")}. **Iryo**, 70% (28 of 40 trains), and **Ouigo**, 65.38% (17 of 26), under the resolutions of 13 November (${link(U.iryo17, "Iryo")}, ${link(U.ouigo17, "Ouigo")}). On **Cercanías Bilbao and San Sebastián** the Basque Government sets them: 50% at peak times and 25% the rest of the day (${link(U.euskadi17, "order of 13 November")}); on **Rodalies de Catalunya** and regional trains, the Generalitat: 66% and 33% (${link(U.treballMs, "the Catalan labour department's list")}). **Adif, 17th:** no resolution published. On {checked} there was none on ${link(U.ministryRail, "the Ministry's list")}; SCF said Adif staff follow the minimum services "determinados por la Secretaría de estado de transportes y movilidad sostenible y la Circular de Dirección General nº 5 del 13-11-2026" (set by the Secretary of State for Transport and Adif's Circular no. 5 of 13 November) and that during the stoppages traffic control keeps rail traffic safe and emergency works going (${link(U.scf37, "notice 37, 16 November")}). **The 19th:** called off by SCF (${link(U.scf38, "notice 38")}).`,
       },
     },
     sources: [
@@ -452,6 +479,7 @@ export const SPAIN_STRIKES: SpainStrike[] = [
       { name: "Orden de 13 de noviembre de 2026: servicios mínimos del Grupo Renfe en Euskadi (Cercanías), 17 de noviembre", url: U.euskadi17, publisher: "Gobierno Vasco, Departamento de Economía, Trabajo y Empleo" },
       { name: "Reunión de trabajo con el Ministerio de Transportes; las movilizaciones por la Seguridad continúan (nº 2026-33, 14 de noviembre de 2026)", url: U.semaf33, publisher: "SEMAF" },
       { name: "SCFCOM 37: Todos a la huelga (16 de noviembre de 2026)", url: U.scf37, publisher: "Sindicato de Circulación Ferroviario (SCF)" },
+      SRC.scf38,
     ],
   },
   {
@@ -480,9 +508,9 @@ export const SPAIN_STRIKES: SpainStrike[] = [
       en: "00:01 to 23:59, according to the Generalitat's minimum-services order.",
     },
     calledBy: {
-      ca: `El sindicat de maquinistes SEMAF, que el 10 de novembre va decidir «sustituir el paro previsto para el día 12 de noviembre por una nueva convocatoria de huelga el día 23 de noviembre», segons ${link(U.semaf23, "el seu comunicat")}, i el 16 de novembre la mantenia: «así como la jornada trasladada al día 23» (${link(U.semaf34, "comunicat 2026-34")}).`,
-      es: `El sindicato de maquinistas SEMAF, que el 10 de noviembre decidió «sustituir el paro previsto para el día 12 de noviembre por una nueva convocatoria de huelga el día 23 de noviembre», según ${link(U.semaf23, "su comunicado")}, y el 16 de noviembre la mantenía: «así como la jornada trasladada al día 23» (${link(U.semaf34, "comunicado 2026-34")}).`,
-      en: `The train drivers' union SEMAF, which on 10 November decided to "sustituir el paro previsto para el día 12 de noviembre por una nueva convocatoria de huelga el día 23 de noviembre" (replace the 12 November stoppage with a new strike call on 23 November), according to ${link(U.semaf23, "its notice")}, and kept it on 16 November: "así como la jornada trasladada al día 23" (as well as the day moved to the 23rd; ${link(U.semaf34, "notice 2026-34")}).`,
+      ca: `El sindicat de maquinistes SEMAF, que el 10 de novembre va decidir «sustituir el paro previsto para el día 12 de noviembre por una nueva convocatoria de huelga el día 23 de noviembre», segons ${link(U.semaf23, "el seu comunicat")}, i el 16 de novembre la mantenia: «así como la jornada trasladada al día 23» (${link(U.semaf34, "comunicat 2026-34")}). El 17, després de la vaga: «afrontamos el 23 de noviembre como la próxima jornada de movilización» (${link(U.semaf35, "comunicat 2026-35")}).`,
+      es: `El sindicato de maquinistas SEMAF, que el 10 de noviembre decidió «sustituir el paro previsto para el día 12 de noviembre por una nueva convocatoria de huelga el día 23 de noviembre», según ${link(U.semaf23, "su comunicado")}, y el 16 de noviembre la mantenía: «así como la jornada trasladada al día 23» (${link(U.semaf34, "comunicado 2026-34")}). El 17, tras la huelga: «afrontamos el 23 de noviembre como la próxima jornada de movilización» (${link(U.semaf35, "comunicado 2026-35")}).`,
+      en: `The train drivers' union SEMAF, which on 10 November decided to "sustituir el paro previsto para el día 12 de noviembre por una nueva convocatoria de huelga el día 23 de noviembre" (replace the 12 November stoppage with a new strike call on 23 November), according to ${link(U.semaf23, "its notice")}, and kept it on 16 November: "así como la jornada trasladada al día 23" (as well as the day moved to the 23rd; ${link(U.semaf34, "notice 2026-34")}). On the 17th, after that day's strike: "afrontamos el 23 de noviembre como la próxima jornada de movilización" (we face 23 November as the next day of action; ${link(U.semaf35, "notice 2026-35")}).`,
     },
     // The order is cited through Treball's official list, never by its e-Tauler notice (withdrawn on 15 Dec; the DOGC number is not out yet).
     basis: {
@@ -511,6 +539,7 @@ export const SPAIN_STRIKES: SpainStrike[] = [
       },
       { name: "Primer Real Decreto-ley aprobado: SEMAF mueve el paro del 12 al 23 de noviembre (10/11/2026)", url: U.semaf23, publisher: "SEMAF" },
       { name: "La fuerza del colectivo da resultados (nº 2026-34, 16/11/2026)", url: U.semaf34, publisher: "SEMAF" },
+      SRC.semaf35,
       SRC.ministryRail,
     ],
   },
@@ -739,6 +768,21 @@ export const SPAIN_OPEN_STRIKES: SpainOpenStrike[] = [
 /* -------------------------------------------------------------------------- */
 
 export const SPAIN_NOT_HAPPENING: SpainNotHappening[] = [
+  {
+    // 18 Nov 2026: SCFCOM 38 (17 Nov, 22:25), with the signed call-off agreement linked from it.
+    id: "adif-19-noviembre-desconvocada",
+    title: {
+      ca: "Personal de circulació d'Adif (SCF), 19 de novembre: desconvocada",
+      es: "Personal de circulación de Adif (SCF), 19 de noviembre: desconvocada",
+      en: "Adif traffic-control staff (SCF), 19 November: called off",
+    },
+    text: {
+      ca: `El sindicat SCF va desconvocar el 17 de novembre la vaga de 24 hores del dijous 19 a Adif, després que l'empresa acceptés les seves reivindicacions: «SCF ha acordado la desconvocatoria para el día 19», segons ${link(U.scf38, "el seu comunicat 38")}. Aquell dia no queda cap vaga ferroviària convocada: Renfe, Iryo i Ouigo no hi estaven convocats.`,
+      es: `El sindicato SCF desconvocó el 17 de noviembre la huelga de 24 horas del jueves 19 en Adif, después de que la empresa aceptara sus reivindicaciones: «SCF ha acordado la desconvocatoria para el día 19», según ${link(U.scf38, "su comunicado 38")}. Ese día no queda ninguna huelga ferroviaria convocada: Renfe, Iryo y Ouigo no estaban convocados.`,
+      en: `On 17 November the SCF union called off its 24-hour strike at Adif on Thursday 19, after Adif accepted its demands: "SCF ha acordado la desconvocatoria para el día 19" (SCF has agreed to call off the 19th), according to ${link(U.scf38, "its notice 38")}. No rail strike is left on that day: Renfe, Iryo and Ouigo were not called out.`,
+    },
+    sources: [SRC.scf38],
+  },
   {
     id: "medicos-estatal-aplazada",
     title: {

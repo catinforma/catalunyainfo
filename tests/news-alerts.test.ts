@@ -80,9 +80,10 @@ test("the alerts and their windows, as of 11 Nov 2026: from the 12th, what comes
       ["strike-11n", "strike11n", "2026-11-04T00:00:00+01:00", "2026-11-12T00:00:00+01:00"],
       // SEMAF called off the 12th (notice of 10 Nov): the Renfe line ends with the 10th.
       ["strike-renfe", "strikeRenfe", "2026-11-04T00:00:00+01:00", "2026-11-11T00:00:00+01:00"],
-      ["strike-rail-17n", "strikeRenfe", "2026-11-12T00:00:00+01:00", "2026-11-20T00:00:00+01:00"],
-      // Same guide as the 17/19 line: it starts when that one ends.
-      ["strike-renfe-23n", "strikeRenfe", "2026-11-20T00:00:00+01:00", "2026-11-24T00:00:00+01:00"],
+      // 18 Nov 2026: SCF called off the 19th (SCFCOM 38), so the rail line ends with the 17th.
+      ["strike-rail-17n", "strikeRenfe", "2026-11-12T00:00:00+01:00", "2026-11-18T00:00:00+01:00"],
+      // Same guide as the 17 Nov line: it starts when that one ends.
+      ["strike-renfe-23n", "strikeRenfe", "2026-11-18T00:00:00+01:00", "2026-11-24T00:00:00+01:00"],
       ["strike-education-26n", "strikeEducation", "2026-11-12T00:00:00+01:00", "2026-11-27T00:00:00+01:00"],
       // 13 Nov 2026: the postal vote's two deadlines, one after the other (same guide).
       ["postal-vote-request", "postalVote", "2026-11-13T00:00:00+01:00", "2026-11-20T00:00:00+01:00"],
@@ -168,7 +169,10 @@ test("each line is shown only inside its window, in Madrid time; each disappears
   assert.deepEqual(ids("2026-11-12T00:00:00+01:00"), next);
   assert.deepEqual(ids("2026-11-12T23:59:59+01:00"), next);
   assert.deepEqual(ids("2026-11-13T00:00:00+01:00"), nextPostal);
-  assert.deepEqual(ids("2026-11-19T23:59:59+01:00"), nextPostal);
+  assert.deepEqual(ids("2026-11-17T23:59:59+01:00"), nextPostal);
+  // 18 Nov 2026: the 19th was called off, so the 23 Nov line takes over on the 18th.
+  assert.deepEqual(ids("2026-11-18T00:00:00+01:00"), ["strike-renfe-23n", "strike-education-26n", "postal-vote-request", "election-29n"]);
+  assert.deepEqual(ids("2026-11-19T23:59:59+01:00"), ["strike-renfe-23n", "strike-education-26n", "postal-vote-request", "election-29n"]);
   assert.deepEqual(ids("2026-11-20T00:00:00+01:00"), ["strike-renfe-23n", "strike-education-26n", "postal-vote-deliver", "election-29n"]);
   assert.deepEqual(ids("2026-11-23T23:59:59+01:00"), ["strike-renfe-23n", "strike-education-26n", "postal-vote-deliver", "election-29n"]);
   assert.deepEqual(ids("2026-11-24T00:00:00+01:00"), ["strike-education-26n", "postal-vote-deliver", "election-29n"]);
@@ -195,7 +199,7 @@ test("each line is shown only inside its window, in Madrid time; each disappears
 test("the 11N pages' upcoming block: the strip's next lines, as of the page's date, one per guide", () => {
   const ca = nextDateLinks("ca", "2026-11-11");
   assert.deepEqual(ca, [
-    "[Vaga de trens el dimarts 17 i el dijous 19 de novembre: Renfe, Adif i serveis mínims](/ca/guies/vaga-renfe-rodalies-novembre/)",
+    "[Vaga de trens el dimarts 17 de novembre: Renfe, Adif i serveis mínims](/ca/guies/vaga-renfe-rodalies-novembre/)",
     "[Vaga a l'educació a Catalunya el dijous 26 de novembre: hi ha escola?](/ca/guies/vaga-educacio-novembre/)",
     "[Eleccions generals el diumenge 29 de novembre: on i com votar](/ca/guies/com-votar-eleccions-catalunya/)",
   ]);
@@ -278,9 +282,10 @@ test("the copy names the day, never 'today', and stays short and calm", () => {
   assert.equal(byId("strike-renfe").text.ca, "Vaga de Renfe el dimarts 10 de novembre: Rodalies i serveis mínims");
   assert.equal(byId("strike-renfe").text.es, "Huelga de Renfe el martes 10 de noviembre: Rodalies y servicios mínimos");
   assert.equal(byId("strike-renfe").text.en, "Renfe strike on Tuesday 10 November: Rodalies and minimum services");
-  assert.equal(byId("strike-rail-17n").text.ca, "Vaga de trens el dimarts 17 i el dijous 19 de novembre: Renfe, Adif i serveis mínims");
-  assert.equal(byId("strike-rail-17n").text.es, "Huelga de trenes el martes 17 y el jueves 19 de noviembre: Renfe, Adif y servicios mínimos");
-  assert.equal(byId("strike-rail-17n").text.en, "Rail strike on Tuesday 17 and Thursday 19 November: Renfe, Adif and minimum services");
+  // 18 Nov 2026: the 19th was called off (SCFCOM 38): the line names the 17th only.
+  assert.equal(byId("strike-rail-17n").text.ca, "Vaga de trens el dimarts 17 de novembre: Renfe, Adif i serveis mínims");
+  assert.equal(byId("strike-rail-17n").text.es, "Huelga de trenes el martes 17 de noviembre: Renfe, Adif y servicios mínimos");
+  assert.equal(byId("strike-rail-17n").text.en, "Rail strike on Tuesday 17 November: Renfe, Adif and minimum services");
   assert.equal(byId("strike-renfe-23n").text.ca, "Vaga de maquinistes el dilluns 23 de novembre: Renfe, Rodalies i serveis mínims");
   assert.equal(byId("strike-education-26n").text.ca, "Vaga a l'educació a Catalunya el dijous 26 de novembre: hi ha escola?");
   assert.equal(byId("strike-education-26n").text.es, "Huelga educativa en Cataluña el jueves 26 de noviembre: ¿hay colegio?");

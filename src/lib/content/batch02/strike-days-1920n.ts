@@ -6,7 +6,7 @@ import { dateYear, dayDate } from "./festive";
 import { B2_PATHS, B2_TITLES, b2Related, b2link, faq, keyFacts, lead, list, paras, table, verifiedLine, type B2Article, type B2Key, type B2Source } from "./shared";
 import { CITY_HERO } from "./strike-11n-cities";
 import { STRIKES, STRIKES_AS_OF, STRIKES_VERIFIED, isOnDay, type Strike } from "./strikes";
-import { SPAIN_OPEN_STRIKES, SPAIN_STRIKES, SPAIN_URLS, STRIKES_SPAIN_AS_OF, STRIKES_SPAIN_VERIFIED } from "./strikes-spain-data";
+import { SPAIN_NOT_HAPPENING, SPAIN_OPEN_STRIKES, SPAIN_STRIKES, SPAIN_URLS, STRIKES_SPAIN_AS_OF, STRIKES_SPAIN_VERIFIED } from "./strikes-spain-data";
 import type { L, SpainStrike } from "./strikes-spain-model";
 import { fillChecked, spainDays, strikesOn } from "./strikes-spain";
 
@@ -40,6 +40,13 @@ import { fillChecked, spainDays, strikesOn } from "./strikes-spain";
  * 17 Nov 2026 (afternoon): titles open with the searched words ("Huelga 20
  * de noviembre de 2026: …"); the eve says "Mañana, jueves 19…" with the check
  * date; the 20th lists the Sindicato de Estudiantes' mobilisations at 12:00.
+ *
+ * 18 Nov 2026: SCF called off the 19th at Adif (SCFCOM 38, 17 Nov). The rail
+ * entry no longer lists the 19th, so the page has no rail section; the
+ * call-off is printed from SPAIN_NOT_HAPPENING ("adif-19-noviembre-
+ * desconvocada") under "what is not on that day", and the lead, titles and
+ * FAQ say there is no rail strike. Every "Fuentes revisadas" line prints the
+ * verification date (STRIKE_DAYS_VERIFIED), never a later as-of day.
  */
 
 export const STRIKE_DAY = { strike19n: "2026-11-19", strike20n: "2026-11-20" } as const;
@@ -55,10 +62,21 @@ export type StrikeDayPhase = "before" | "eve" | "today" | "after";
 const SMU_ID = "huelga-medicos-smu-2026-11-16";
 const RAIL_ID = "huelga-ferroviaria-2026-11-17";
 const STUDENTS_ID = "huelga-estudiantil-2026-11-20";
-const CATALAN_RAIL_ID = "vaga-ferroviaria-2026-11-17";
+/** 18 Nov 2026: the 19th's Adif strike, called off (SPAIN_NOT_HAPPENING). */
+const CALLED_OFF_19N_ID = "adif-19-noviembre-desconvocada";
 
 /** The earlier of the two hubs' verification dates: the page never claims a re-check it did not get. */
 export const STRIKE_DAYS_VERIFIED = STRIKES_VERIFIED < STRIKES_SPAIN_VERIFIED ? STRIKES_VERIFIED : STRIKES_SPAIN_VERIFIED;
+
+/** The date the "Fuentes revisadas" lines print for a page built as of `asOf`: the last re-read, never later than the as-of day. */
+export function strikeDaysCheckedOn(asOf: string = STRIKES_SPAIN_AS_OF): string {
+  return STRIKE_DAYS_VERIFIED < asOf ? STRIKE_DAYS_VERIFIED : asOf;
+}
+
+/** The Spain-wide strikes searched for on the day that are not happening (the 19th: Adif, called off). */
+export function calledOffOnDay(key: StrikeDayKey) {
+  return key === "strike19n" ? SPAIN_NOT_HAPPENING.filter((item) => item.id === CALLED_OFF_19N_ID) : [];
+}
 
 export function strikeDayPhase(key: StrikeDayKey, asOf: string = STRIKES_SPAIN_AS_OF): StrikeDayPhase {
   const day = STRIKE_DAY[key];
@@ -194,8 +212,6 @@ interface Copy {
   catalanId: string;
   catalanIntro: (day: string) => string;
   catalanHub: (link: string) => string;
-  /** The rail entry on the 19th: Adif only, the Rodalies figures are the 17th's. */
-  catalanRail19: string;
   notHeading: string;
   notId: string;
   nextLinks: (locale: Locale) => string[];
@@ -237,7 +253,6 @@ const COPY: Record<Locale, Copy> = {
     catalanId: "cataluna",
     catalanIntro: (day) => `Las huelgas que afectan a Cataluña el ${day}, con sus servicios mínimos:`,
     catalanHub: (href) => `Todas las huelgas en Cataluña, con lo que funciona cada día: ${href}.`,
-    catalanRail19: "**Huelga ferroviaria.** El 19 para solo el personal de circulación de Adif (SCF); Renfe, que opera Rodalies, no está convocada ese día, y los servicios mínimos de Rodalies (66 % y 33 %) eran los del martes 17.",
     notHeading: "Lo que no hay ese día",
     notId: "no-convocado",
     nextLinks: (locale) => [
@@ -249,23 +264,24 @@ const COPY: Record<Locale, Copy> = {
       strike19n: {
         lead: (phase, checked) => {
           const what =
-            "paran los responsables de circulación de Adif (sindicato SCF, 24 horas; Renfe no está convocada y los servicios mínimos de Adif no se han publicado), sigue la huelga de médicos del Sindicato Médicos Unidos en la sanidad pública de toda España, con urgencias garantizadas y manifestaciones a las 18.00 h en una veintena de ciudades, y sigue la de la limpieza en Bizkaia (ELA). En Madrid continúa la huelga indefinida de la enseñanza pública. No es una huelga general.";
-          if (phase === "after") return "**El jueves 19 de noviembre de 2026 hubo huelga en Adif (circulación), en la sanidad pública (médicos del SMU, con manifestaciones a las 18.00 h) y en la limpieza de Bizkaia;** no fue una huelga general ni de Renfe. Más abajo, quién convocó cada una y sus servicios mínimos.";
+            "sigue la huelga de médicos del Sindicato Médicos Unidos en la sanidad pública de toda España, con urgencias garantizadas y manifestaciones a las 18.00 h en una veintena de ciudades, y sigue la de la limpieza en Bizkaia (ELA). En Madrid continúa la huelga indefinida de la enseñanza pública. No hay huelga de trenes: el sindicato SCF desconvocó la de Adif, y Renfe no estaba convocada. No es una huelga general.";
+          if (phase === "after") return "**El jueves 19 de noviembre de 2026 hubo huelga en la sanidad pública (médicos del SMU, con manifestaciones a las 18.00 h) y en la limpieza de Bizkaia;** no fue una huelga general ni de trenes: el SCF desconvocó la de Adif. Más abajo, quién convocó cada una y sus servicios mínimos.";
           if (phase === "today") return `**Hoy, jueves 19 de noviembre, hay huelga, pero no general:** ${what}`;
           if (phase === "eve") return `**Mañana, jueves 19 de noviembre, hay huelga, pero no general:** ${what} Fuentes revisadas el ${checked}.`;
           return `**Sí: el jueves 19 de noviembre de 2026 hay huelga, pero no general:** ${what}`;
         },
         firstQuestion: { eve: "¿Hay huelga mañana, jueves 19 de noviembre de 2026?", today: "¿Hay huelga hoy, jueves 19 de noviembre de 2026?" },
         // 17 Nov 2026 (new page, docs/SEO_EXPERIMENTS.md): the H1 and the title open with the searched words, "huelga 19 noviembre (2026)".
-        title: "Huelga 19 de noviembre de 2026: Adif (no Renfe), médicos, limpieza en Bizkaia y Madrid",
-        seoTitle: "Huelga 19 de noviembre de 2026: Adif (no Renfe) y médicos",
+        // 18 Nov 2026: Adif's strike called off (SCFCOM 38): a correctness fix, logged in docs/SEO_EXPERIMENTS.md.
+        title: "Huelga 19 de noviembre de 2026: médicos, limpieza en Bizkaia y Madrid; Adif, desconvocada",
+        seoTitle: "Huelga 19 de noviembre de 2026: médicos; Adif, desconvocada",
         description: {
-          before: "Jueves 19: huelga en Adif (circulación, no Renfe), de médicos (SMU) con manifestaciones a las 18 h y de limpieza en Bizkaia. Servicios mínimos.",
-          eve: "Mañana jueves 19: huelga en Adif (circulación, no Renfe), de médicos (SMU) con manifestaciones a las 18 h y de limpieza en Bizkaia.",
-          today: "Hoy jueves 19: huelga en Adif (circulación, no Renfe), de médicos (SMU) con manifestaciones a las 18 h y de limpieza en Bizkaia. Servicios mínimos.",
-          after: "El 19 de noviembre de 2026 hubo huelga en Adif, de médicos (SMU) y de limpieza en Bizkaia: quién la convocó y los servicios mínimos.",
+          before: "Jueves 19: huelga de médicos (SMU) con manifestaciones a las 18 h y de limpieza en Bizkaia. La de Adif, desconvocada: no hay huelga de trenes.",
+          eve: "Mañana jueves 19: huelga de médicos (SMU) con manifestaciones a las 18 h y de limpieza en Bizkaia. Adif, desconvocada: no hay huelga de trenes.",
+          today: "Hoy jueves 19: huelga de médicos (SMU) con manifestaciones a las 18 h y de limpieza en Bizkaia. Adif, desconvocada: no hay huelga de trenes.",
+          after: "El 19 de noviembre de 2026 hubo huelga de médicos (SMU) y de limpieza en Bizkaia; la de Adif se desconvocó. Quién convocó cada una.",
         },
-        excerpt: "Las huelgas del jueves 19 de noviembre de 2026 en España: Adif, médicos (SMU) y sus manifestaciones, limpieza en Bizkaia, Madrid y aeropuertos.",
+        excerpt: "Las huelgas del jueves 19 de noviembre de 2026 en España: médicos (SMU) y sus manifestaciones, limpieza en Bizkaia, Madrid y aeropuertos; Adif, desconvocada.",
         extraHeading: "Manifestaciones de médicos el jueves 19 a las 18.00 h",
         extraId: "manifestaciones",
         extra: () => [
@@ -273,10 +289,10 @@ const COPY: Record<Locale, Copy> = {
           table("Manifestaciones del SMU el jueves 19 de noviembre de 2026, 18.00 h", ["Ciudad", "Salida", "Llegada"], marchRows("es"), "Tal como las publica el sindicato; donde no hay recorrido, es una concentración."),
         ],
         notCalled:
-          "No hay huelga general. Renfe, Iryo y Ouigo no están convocados el jueves 19: el paro ferroviario es solo del personal de circulación de Adif. El metro, los autobuses y los tranvías no forman parte de ninguna convocatoria estatal ese día.",
+          "No hay huelga general ni de trenes: el SCF desconvocó el paro del personal de circulación de Adif, y Renfe, Iryo y Ouigo no están convocados el jueves 19. El metro, los autobuses y los tranvías no forman parte de ninguna convocatoria estatal ese día.",
         faq: [
-          { question: "¿Hay huelga el jueves 19 de noviembre de 2026?", answer: "Sí, pero no general: paran los responsables de circulación de Adif (SCF), sigue la huelga de médicos del Sindicato Médicos Unidos en la sanidad pública, con manifestaciones a las 18.00 h, y la de la limpieza en Bizkaia. En Madrid sigue la huelga indefinida de la enseñanza pública." },
-          { question: "¿Hay huelga de Renfe el 19 de noviembre?", answer: "No: el 19 no hay ninguna convocatoria en Renfe, Iryo ni Ouigo. Paran solo los responsables de circulación de Adif, por el sindicato SCF, con paros de 24 horas. Sus servicios mínimos los fija el Ministerio de Transportes y aún no están en su lista de resoluciones." },
+          { question: "¿Hay huelga el jueves 19 de noviembre de 2026?", answer: "Sí, pero no general: sigue la huelga de médicos del Sindicato Médicos Unidos en la sanidad pública, con manifestaciones a las 18.00 h, y la de la limpieza en Bizkaia. En Madrid sigue la huelga indefinida de la enseñanza pública. La huelga de Adif (SCF) se desconvocó." },
+          { question: "¿Hay huelga de Renfe el 19 de noviembre?", answer: "No: el 19 no hay ninguna convocatoria en Renfe, Iryo ni Ouigo, y el sindicato SCF desconvocó el 17 de noviembre el paro de 24 horas del personal de circulación de Adif, después de que la empresa aceptara sus reivindicaciones. Ese día no queda ninguna huelga ferroviaria convocada." },
           { question: "¿Hay huelga de médicos el 19 de noviembre?", answer: "Sí: el Sindicato Médicos Unidos mantiene su huelga en la sanidad pública de todas las comunidades desde las 8.00 h del 16 hasta las 8.00 h del 28 de noviembre, con manifestaciones el 19 a las 18.00 h. Las urgencias funcionan: cada comunidad fija sus servicios mínimos." },
           { question: "¿Dónde es la manifestación de médicos del 19 de noviembre?", answer: "En una veintena de ciudades a las 18.00 h. En Madrid, de la plaza de Carlos V al Ministerio de Sanidad; en Barcelona, de las Drassanes a la plaza de España; en Sevilla, del Hospital Virgen del Rocío al Servicio Andaluz de Salud." },
         ],
@@ -352,7 +368,6 @@ const COPY: Record<Locale, Copy> = {
     catalanId: "catalunya",
     catalanIntro: (day) => `Les vagues que afecten Catalunya el ${day}, amb els seus serveis mínims:`,
     catalanHub: (href) => `Totes les vagues a Catalunya, amb el que funciona cada dia: ${href}.`,
-    catalanRail19: "**Vaga ferroviària.** El 19 s'atura només el personal de circulació d'Adif (SCF); Renfe, que opera Rodalies, no hi està convocada aquell dia, i els serveis mínims de Rodalies (66 % i 33 %) eren els del dimarts 17.",
     notHeading: "El que no hi ha aquell dia",
     notId: "no-convocat",
     nextLinks: (locale) => [
@@ -364,22 +379,22 @@ const COPY: Record<Locale, Copy> = {
       strike19n: {
         lead: (phase, checked) => {
           const what =
-            "s'aturen els responsables de circulació d'Adif (sindicat SCF, 24 hores; Renfe no hi està convocada i els serveis mínims d'Adif no s'han publicat), continua la vaga de metges del Sindicato Médicos Unidos a la sanitat pública de tot Espanya, amb les urgències garantides i manifestacions a les 18.00 h en una vintena de ciutats, també Barcelona, i continua la de la neteja a Biscaia (ELA). A Madrid continua la vaga indefinida de l'ensenyament públic. No és una vaga general.";
-          if (phase === "after") return "**El dijous 19 de novembre de 2026 hi va haver vaga a Adif (circulació), a la sanitat pública (metges de l'SMU, amb manifestacions a les 18.00 h) i a la neteja de Biscaia;** no va ser una vaga general ni de Renfe. Més avall, qui va convocar cadascuna i els seus serveis mínims.";
+            "continua la vaga de metges del Sindicato Médicos Unidos a la sanitat pública de tot Espanya, amb les urgències garantides i manifestacions a les 18.00 h en una vintena de ciutats, també Barcelona, i continua la de la neteja a Biscaia (ELA). A Madrid continua la vaga indefinida de l'ensenyament públic. No hi ha vaga de trens: el sindicat SCF va desconvocar la d'Adif, i Renfe no hi estava convocada. No és una vaga general.";
+          if (phase === "after") return "**El dijous 19 de novembre de 2026 hi va haver vaga a la sanitat pública (metges de l'SMU, amb manifestacions a les 18.00 h) i a la neteja de Biscaia;** no va ser una vaga general ni de trens: l'SCF va desconvocar la d'Adif. Més avall, qui va convocar cadascuna i els seus serveis mínims.";
           if (phase === "today") return `**Avui, dijous 19 de novembre, hi ha vaga, però no general:** ${what}`;
           if (phase === "eve") return `**Demà, dijous 19 de novembre, hi ha vaga, però no general:** ${what} Fonts revisades el ${checked}.`;
           return `**Sí: el dijous 19 de novembre de 2026 hi ha vaga, però no general:** ${what}`;
         },
         firstQuestion: { eve: "Hi ha vaga demà, dijous 19 de novembre de 2026?", today: "Hi ha vaga avui, dijous 19 de novembre de 2026?" },
-        title: "Vaga 19 de novembre de 2026: Adif (no Renfe), metges, neteja a Biscaia i Madrid",
-        seoTitle: "Vaga 19 de novembre de 2026: Adif (no Renfe) i metges",
+        title: "Vaga 19 de novembre de 2026: metges, neteja a Biscaia i Madrid; Adif, desconvocada",
+        seoTitle: "Vaga 19 de novembre de 2026: metges; Adif, desconvocada",
         description: {
-          before: "Dijous 19: vaga a Adif (circulació, no Renfe), de metges (SMU) amb manifestacions a les 18 h, també a Barcelona, i de neteja a Biscaia. Serveis mínims.",
-          eve: "Demà dijous 19: vaga a Adif (circulació, no Renfe), de metges (SMU) amb manifestacions a les 18 h, també a Barcelona, i de neteja a Biscaia.",
-          today: "Avui dijous 19: vaga a Adif (circulació, no Renfe), de metges (SMU) amb manifestacions a les 18 h, també a Barcelona, i de neteja a Biscaia.",
-          after: "El 19 de novembre de 2026 hi va haver vaga a Adif, de metges (SMU) i de neteja a Biscaia: qui la va convocar i els serveis mínims.",
+          before: "Dijous 19: vaga de metges (SMU) amb manifestacions a les 18 h, també a Barcelona, i de neteja a Biscaia. Adif, desconvocada: no hi ha vaga de trens.",
+          eve: "Demà dijous 19: vaga de metges (SMU) amb manifestacions a les 18 h, també a Barcelona, i de neteja a Biscaia. Adif, desconvocada: no hi ha vaga de trens.",
+          today: "Avui dijous 19: vaga de metges (SMU) amb manifestacions a les 18 h, també a Barcelona, i de neteja a Biscaia. Adif, desconvocada: no hi ha vaga de trens.",
+          after: "El 19 de novembre de 2026 hi va haver vaga de metges (SMU) i de neteja a Biscaia; la d'Adif es va desconvocar. Qui va convocar cadascuna.",
         },
-        excerpt: "Les vagues del dijous 19 de novembre de 2026 a Espanya: Adif, metges (SMU) i les seves manifestacions, neteja a Biscaia, Madrid i aeroports.",
+        excerpt: "Les vagues del dijous 19 de novembre de 2026 a Espanya: metges (SMU) i les seves manifestacions, neteja a Biscaia, Madrid i aeroports; Adif, desconvocada.",
         extraHeading: "Manifestacions de metges el dijous 19 a les 18.00 h",
         extraId: "manifestacions",
         extra: () => [
@@ -387,10 +402,10 @@ const COPY: Record<Locale, Copy> = {
           table("Manifestacions de l'SMU el dijous 19 de novembre de 2026, 18.00 h", ["Ciutat", "Sortida", "Arribada"], marchRows("ca"), "Tal com les publica el sindicat; on no hi ha recorregut, és una concentració."),
         ],
         notCalled:
-          "No hi ha vaga general. Renfe, Iryo i Ouigo no hi estan convocats el dijous 19: l'aturada ferroviària és només del personal de circulació d'Adif. El metro, els autobusos i els tramvies no formen part de cap convocatòria estatal aquell dia.",
+          "No hi ha vaga general ni de trens: l'SCF va desconvocar l'aturada del personal de circulació d'Adif, i Renfe, Iryo i Ouigo no hi estan convocats el dijous 19. El metro, els autobusos i els tramvies no formen part de cap convocatòria estatal aquell dia.",
         faq: [
-          { question: "Hi ha vaga el dijous 19 de novembre de 2026?", answer: "Sí, però no general: s'aturen els responsables de circulació d'Adif (SCF), continua la vaga de metges del Sindicato Médicos Unidos a la sanitat pública, amb manifestacions a les 18.00 h, i la de la neteja a Biscaia. A Madrid continua la vaga indefinida de l'ensenyament públic." },
-          { question: "Hi ha vaga de Renfe el 19 de novembre?", answer: "No: el 19 no hi ha cap convocatòria a Renfe, Iryo ni Ouigo. S'aturen només els responsables de circulació d'Adif, pel sindicat SCF, amb aturades de 24 hores. Els serveis mínims els fixa el Ministeri de Transports i encara no són a la seva llista de resolucions." },
+          { question: "Hi ha vaga el dijous 19 de novembre de 2026?", answer: "Sí, però no general: continua la vaga de metges del Sindicato Médicos Unidos a la sanitat pública, amb manifestacions a les 18.00 h, i la de la neteja a Biscaia. A Madrid continua la vaga indefinida de l'ensenyament públic. La vaga d'Adif (SCF) es va desconvocar." },
+          { question: "Hi ha vaga de Renfe el 19 de novembre?", answer: "No: el 19 no hi ha cap convocatòria a Renfe, Iryo ni Ouigo, i el sindicat SCF va desconvocar el 17 de novembre l'aturada de 24 hores del personal de circulació d'Adif, després que l'empresa acceptés les seves reivindicacions. Aquell dia no queda cap vaga ferroviària convocada." },
           { question: "Hi ha vaga de metges el 19 de novembre?", answer: "Sí: el Sindicato Médicos Unidos manté la vaga a la sanitat pública de totes les comunitats des de les 8.00 h del 16 fins a les 8.00 h del 28 de novembre, amb manifestacions el 19 a les 18.00 h. A Catalunya continua també la vaga indefinida de Metges de Catalunya. Les urgències funcionen." },
           { question: "On és la manifestació de metges del 19 de novembre?", answer: "En una vintena de ciutats a les 18.00 h. A Barcelona, de la plaça de les Drassanes a la plaça d'Espanya; a Madrid, de la plaça de Carlos V al Ministeri de Sanitat; a Palma, de la plaça d'Espanya a la Delegació del Govern." },
         ],
@@ -465,7 +480,6 @@ const COPY: Record<Locale, Copy> = {
     catalanId: "catalonia",
     catalanIntro: (day) => `The strikes that touch Catalonia on ${day}, with their minimum services:`,
     catalanHub: (href) => `Every strike in Catalonia, with what runs each day: ${href}.`,
-    catalanRail19: "**Rail strike.** On the 19th only Adif's traffic-control staff stop work (SCF); Renfe, which runs Rodalies, is not called out that day, and the Rodalies minimum services (66% and 33%) were Tuesday 17's.",
     notHeading: "What is not on that day",
     notId: "not-called",
     nextLinks: (locale) => [
@@ -477,22 +491,22 @@ const COPY: Record<Locale, Copy> = {
       strike19n: {
         lead: (phase, checked) => {
           const what =
-            "Adif's traffic controllers stop work (SCF union, 24 hours; Renfe is not called out and Adif's minimum services have not been published), the Sindicato Médicos Unidos doctors' strike in public healthcare across Spain continues, with A&E guaranteed and marches at 18:00 in some twenty cities, and so does Bizkaia's cleaning strike (ELA). In Madrid the open-ended strike in state schools goes on. It is not a general strike.";
-          if (phase === "after") return "**On Thursday 19 November 2026 there were strikes at Adif (traffic control), in public healthcare (SMU doctors, with marches at 18:00) and in Bizkaia's cleaning sector;** it was not a general strike and Renfe was not called out. Who called each one and its minimum services are below.";
+            "the Sindicato Médicos Unidos doctors' strike in public healthcare across Spain continues, with A&E guaranteed and marches at 18:00 in some twenty cities, and so does Bizkaia's cleaning strike (ELA). In Madrid the open-ended strike in state schools goes on. There is no rail strike: the SCF union called off Adif's, and Renfe was not called out. It is not a general strike.";
+          if (phase === "after") return "**On Thursday 19 November 2026 there were strikes in public healthcare (SMU doctors, with marches at 18:00) and in Bizkaia's cleaning sector;** it was not a general strike and there was no rail strike: SCF called off Adif's. Who called each one and its minimum services are below.";
           if (phase === "today") return `**Today, Thursday 19 November, there are strikes, but not a general strike:** ${what}`;
           if (phase === "eve") return `**Tomorrow, Thursday 19 November, there are strikes in Spain, but not a general strike:** ${what} Sources checked on ${checked}.`;
           return `**Yes: on Thursday 19 November 2026 there are strikes in Spain, but not a general strike:** ${what}`;
         },
         firstQuestion: { eve: "Is there a strike in Spain tomorrow, Thursday 19 November 2026?", today: "Is there a strike in Spain today, Thursday 19 November 2026?" },
-        title: "Strike in Spain on 19 November 2026: Adif (not Renfe), doctors, Bizkaia cleaning and Madrid schools",
-        seoTitle: "Spain strike 19 November 2026: Adif (not Renfe), doctors",
+        title: "Strike in Spain on 19 November 2026: doctors, Bizkaia cleaning, Madrid schools; Adif called off",
+        seoTitle: "Spain strike 19 November 2026: doctors; Adif called off",
         description: {
-          before: "Thursday 19: Adif traffic-control strike (not Renfe), SMU doctors' strike with marches at 18:00, Bizkaia cleaning strike. Minimum services.",
-          eve: "Tomorrow, Thursday 19: Adif traffic-control strike (not Renfe), SMU doctors' strike with marches at 18:00, Bizkaia cleaning strike.",
-          today: "Today, Thursday 19: Adif traffic-control strike (not Renfe), SMU doctors' strike with marches at 18:00, Bizkaia cleaning strike.",
-          after: "On 19 November 2026 Adif, SMU doctors and Bizkaia's cleaners were on strike: who called each one and the minimum services.",
+          before: "Thursday 19: SMU doctors' strike with marches at 18:00 and Bizkaia cleaning strike. Adif's strike was called off: there is no rail strike.",
+          eve: "Tomorrow, Thursday 19: SMU doctors' strike with marches at 18:00 and Bizkaia cleaning strike. Adif's was called off: no rail strike.",
+          today: "Today, Thursday 19: SMU doctors' strike with marches at 18:00 and Bizkaia cleaning strike. Adif's was called off: no rail strike.",
+          after: "On 19 November 2026 SMU doctors and Bizkaia's cleaners were on strike; Adif's strike was called off. Who called each one.",
         },
-        excerpt: "Strikes in Spain on Thursday 19 November 2026: Adif, SMU doctors and their marches, Bizkaia cleaning, Madrid schools and airports.",
+        excerpt: "Strikes in Spain on Thursday 19 November 2026: SMU doctors and their marches, Bizkaia cleaning, Madrid schools and airports; Adif's was called off.",
         extraHeading: "Doctors' marches on Thursday 19 at 18:00",
         extraId: "marches",
         extra: () => [
@@ -500,10 +514,10 @@ const COPY: Record<Locale, Copy> = {
           table("SMU marches on Thursday 19 November 2026, 18:00", ["City", "Starts at", "Ends at"], marchRows("en"), "As the union lists them; where there is no route, it is a rally in one place."),
         ],
         notCalled:
-          "There is no general strike. Renfe, Iryo and Ouigo are not called out on Thursday 19: the rail stoppage is Adif's traffic-control staff only. Metros, buses and trams are not part of any nationwide call that day.",
+          "There is no general strike and no rail strike: SCF called off the stoppage by Adif's traffic-control staff, and Renfe, Iryo and Ouigo are not called out on Thursday 19. Metros, buses and trams are not part of any nationwide call that day.",
         faq: [
-          { question: "Is there a strike in Spain on Thursday 19 November 2026?", answer: "Yes, but not a general strike: Adif's traffic controllers stop work (SCF), the Sindicato Médicos Unidos doctors' strike in public healthcare continues, with marches at 18:00, and so does Bizkaia's cleaning strike. In Madrid the open-ended strike in state schools goes on." },
-          { question: "Is there a Renfe strike on 19 November?", answer: "No: there is no call at Renfe, Iryo or Ouigo on the 19th. Only Adif's traffic controllers stop work, called by the SCF union, with 24-hour stoppages. The Ministry of Transport sets their minimum services, which were not yet on its list of resolutions." },
+          { question: "Is there a strike in Spain on Thursday 19 November 2026?", answer: "Yes, but not a general strike: the Sindicato Médicos Unidos doctors' strike in public healthcare continues, with marches at 18:00, and so does Bizkaia's cleaning strike. In Madrid the open-ended strike in state schools goes on. Adif's strike (SCF) was called off." },
+          { question: "Is there a Renfe strike on 19 November?", answer: "No: there is no call at Renfe, Iryo or Ouigo on the 19th, and on 17 November the SCF union called off the 24-hour stoppage by Adif's traffic controllers, after Adif accepted its demands. No rail strike is left on that day." },
           { question: "Is there a doctors' strike on 19 November?", answer: "Yes: Sindicato Médicos Unidos keeps its strike in every region's public healthcare from 08:00 on the 16th to 08:00 on 28 November, with marches on the 19th at 18:00. A&E keeps running: each region sets its minimum services." },
           { question: "Where are the doctors' marches on 19 November?", answer: "In some twenty cities at 18:00. In Madrid, from Plaza de Carlos V to the Ministry of Health; in Barcelona, from Plaça de les Drassanes to Plaça d'Espanya; in Seville, from Virgen del Rocío hospital to the Andalusian Health Service." },
         ],
@@ -568,7 +582,7 @@ export function catalanStrikesOnDay(key: StrikeDayKey, strikes: Strike[] = STRIK
 
 function strikeSection(strike: SpainStrike, locale: Locale, page: StrikeDayKey): Block[] {
   const t = COPY[locale];
-  const fill = (value: L) => fillChecked(value, locale, STRIKES_SPAIN_AS_OF);
+  const fill = (value: L) => fillChecked(value, locale, strikeDaysCheckedOn());
   // The Catalan hub is linked from its own section; the page never links itself.
   const guides = (strike.guides ?? []).filter((key) => key !== "strikes" && key !== page).map((key: B2Key) => b2link(key, locale, B2_TITLES[key][locale]));
   return [
@@ -592,7 +606,9 @@ export function buildStrikeDayBody(key: StrikeDayKey, locale: Locale, asOf: stri
   const phase = strikeDayPhase(key, asOf);
   const spain = spainStrikesOnDay(key);
   const catalan = catalanStrikesOnDay(key);
-  const checked = dateYear(STRIKES_SPAIN_AS_OF, locale);
+  // 18 Nov 2026: "Fuentes revisadas" prints the day the sources were re-read, never a later as-of day.
+  const checked = dateYear(strikeDaysCheckedOn(asOf), locale);
+  const calledOff = calledOffOnDay(key);
 
   const facts = [
     ...spain.map((strike) => ({ label: cap(strike.title[locale]), value: `${strike.minimumServices.short[locale]}.` })),
@@ -603,7 +619,7 @@ export function buildStrikeDayBody(key: StrikeDayKey, locale: Locale, asOf: stri
   const faqItems = d.faq.map((item, index) => ({ question: index === 0 && first ? first : item.question, answer: strip(item.answer) }));
 
   return [
-    lead(d.lead(phase, dayDate(asOf, locale))),
+    lead(d.lead(phase, dayDate(strikeDaysCheckedOn(asOf), locale))),
     keyFacts(t.factsTitle(dayName), facts),
     heading(2, d.extraHeading, d.extraId),
     ...d.extra(),
@@ -613,17 +629,14 @@ export function buildStrikeDayBody(key: StrikeDayKey, locale: Locale, asOf: stri
     list(...t.madrid(twentieth)),
     heading(2, t.airportsHeading, t.airportsId),
     ...paras(t.airportsIntro),
-    list(...SPAIN_OPEN_STRIKES.map((strike) => `**${strike.title[locale]}.** ${fillChecked(strike.text, locale, STRIKES_SPAIN_AS_OF)}`)),
+    list(...SPAIN_OPEN_STRIKES.map((strike) => `**${strike.title[locale]}.** ${fillChecked(strike.text, locale, strikeDaysCheckedOn())}`)),
     heading(2, t.catalanHeading, t.catalanId),
     ...paras(t.catalanIntro(dayName)),
-    list(
-      ...catalan.map((strike) =>
-        strike.id === CATALAN_RAIL_ID && key === "strike19n" ? t.catalanRail19 : `**${cap(strike.title[locale])}.** ${strike.minimumServices.msShort[locale]}.`,
-      ),
-    ),
+    list(...catalan.map((strike) => `**${cap(strike.title[locale])}.** ${strike.minimumServices.msShort[locale]}.`)),
     ...paras(t.catalanHub(b2link("strikes", locale, B2_TITLES.strikes[locale]))),
     heading(2, t.notHeading, t.notId),
     ...paras(`${d.notCalled} ${t.checked(checked)}`),
+    ...(calledOff.length > 0 ? [list(...calledOff.map((item) => `**${item.title[locale]}.** ${fillChecked(item.text, locale, strikeDaysCheckedOn())}`))] : []),
     list(...t.nextLinks(locale), b2link(key === "strike19n" ? "strike20n" : "strike19n", locale, B2_TITLES[key === "strike19n" ? "strike20n" : "strike19n"][locale])),
     ...(phase === "after" ? [] : [faq(faqItems)]),
     ...paras(verifiedLine(locale, STRIKE_DAYS_VERIFIED)),
@@ -643,6 +656,7 @@ export function strikeDaySources(key: StrikeDayKey): B2Source[] {
   };
   for (const strike of spainStrikesOnDay(key)) strike.sources.forEach(add);
   for (const strike of SPAIN_OPEN_STRIKES) strike.sources.forEach(add);
+  for (const item of calledOffOnDay(key)) item.sources.forEach(add);
   MADRID_SOURCES.forEach(add);
   return all;
 }
