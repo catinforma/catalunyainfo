@@ -125,7 +125,7 @@ test("embed boxes: every town and city page carries the code inline, the calcula
 /* The 2026 holiday calendar                                                  */
 /* -------------------------------------------------------------------------- */
 
-test("2026 widget: every Catalan town, the DOGC order's days, canonical and attribution to its page", () => {
+test("2026 widget: every Catalan town, the DOGC order's days, no canonical, attribution to its page", () => {
   for (const locale of EMBED_LOCALES) {
     for (const m of municipalities()) {
       const place: EmbedPlace = { kind: "town", m };
@@ -144,7 +144,7 @@ test("2026 widget: every Catalan town, the DOGC order's days, canonical and attr
   assert.match(html, /<title>Calendari laboral 2026 de Castelldefels<\/title>/);
   assert.ok(html.includes(SNAPSHOT.sources.localOrder.url), "the 2026 order");
   assert.ok(html.includes(SNAPSHOT.sources.localAmendments[0]!.url), "Castelldefels: corrected by Ordre EMT/3/2026");
-  assert.ok(html.includes(`<link rel="canonical" href="${esc(absoluteUrl("/ca/festius/castelldefels/"))}">`));
+  assert.ok(!html.includes(`rel="canonical"`));
   assert.doesNotMatch(html, /<script|<form|cookie|analytics/i);
   assert.equal(embedTownPath("es", "girona", 2026), "/embed/es/2026/girona/");
   // The picker offers 2026 for the Catalan towns' group only.
@@ -176,7 +176,7 @@ test("net salary widget: the page's engine, the full calculator's field names, e
     const r = calculateNetSalary(DEFAULT_INPUT);
     assert.match(html, new RegExp(`<form method="get" action="${netSalaryEmbedPath(locale)}">`));
     for (const name of ["b", "n", "r", "c", "f", "h", "u", "a"]) assert.match(html, new RegExp(`name="${name}"`), `${locale}: field ${name}`);
-    assert.ok(html.includes(`<link rel="canonical" href="${esc(absoluteUrl(netSalaryPath(locale)))}">`), locale);
+    assert.ok(!html.includes(`rel="canonical"`), locale);
     assert.ok(html.includes(`<footer>${{ ca: "Font:", es: "Fuente:", en: "Source:" }[locale]} <a href="${esc(absoluteUrl(netSalaryPath(locale)))}" target="_blank" rel="noopener">CatalunyaInfo</a></footer>`), locale);
     assert.ok(html.includes(`<strong>${esc(money(r.net.annual, locale))}</strong>`), `${locale}: net annual`);
     assert.ok(html.includes(`<strong>${esc(money(r.net.perPayment, locale))}</strong>`), `${locale}: net per payment`);
@@ -215,7 +215,7 @@ test("working-days widget: every place of the calculator, the same engine and th
     assert.ok(expected.ok);
     assert.equal(expected.last, f.example.last, `${locale}: same as the page`);
     assert.ok(html.includes(`<strong>${esc(dateText(expected.last, locale))}</strong>`), `${locale}: the last day`);
-    assert.ok(html.includes(`<link rel="canonical" href="${esc(absoluteUrl(workingDaysPath(locale)))}">`), locale);
+    assert.ok(!html.includes(`rel="canonical"`), locale);
     assert.match(html, new RegExp(`action="${workingDaysEmbedPath(locale, f.place)}"`));
     assert.doesNotMatch(html, /<script|<iframe|<img|cookie|gtag|analytics/i);
   }

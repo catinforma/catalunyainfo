@@ -8,10 +8,11 @@ import { SITE, absoluteUrl } from "@/lib/site";
  * cookie, no request to anyone. Framing and robots headers come from
  * next.config.ts (`EMBED_SOURCE`, `EMBED_CALC_SOURCE`).
  *
- * Each document says where its content lives on the site twice: a
- * `rel="canonical"` to that page (the widget is noindex, `indexifembedded`:
- * never a result of its own) and, at the foot, the attribution link, a plain
- * followed link to the same page.
+ * Each document says where its content lives on the site with the attribution
+ * link at the foot, a plain followed link to that page. The widget is noindex,
+ * `indexifembedded` (never a result of its own) and carries NO rel=canonical:
+ * Google warns that noindex + canonical can pass the noindex to the target,
+ * which would drop the town or calculator page (decision 18 Nov 2026).
  */
 
 export function esc(text: string): string {
@@ -48,7 +49,7 @@ export function attributionFooter(lang: ShellLocale, page: string): string {
 export interface ShellInput {
   lang: ShellLocale;
   title: string;
-  /** Site path of the page the widget's content belongs to: the canonical and the attribution link. */
+  /** Site path of the page the widget's content belongs to: the attribution link. */
   page: string;
   /** The body's HTML, already escaped. */
   body: string[];
@@ -65,7 +66,6 @@ export function embedDocument(input: ShellInput): string {
     '<meta name="viewport" content="width=device-width,initial-scale=1">',
     `<meta name="robots" content="${EMBED_ROBOTS_VALUE}">`,
     `<title>${esc(input.title)}</title>`,
-    `<link rel="canonical" href="${esc(absoluteUrl(input.page))}">`,
     `<style>${BASE_STYLE}${input.style ?? ""}</style>`,
     "</head>",
     "<body>",

@@ -7617,3 +7617,5 @@ prefixes: `/ca/festius/dades-festius-locals/`, `/es/festivos/datos-festivos-loca
 and needs no ping.
 
 **Outcome:** _pending_
+
+**Correction 18 Nov 2026 (main session):** the embed widgets (2026/2027 calendars, calculator embeds) carry NO `rel=canonical` after all. They stay `noindex, indexifembedded`; the attribution link alone points to the source page. Reason: Google has said noindex combined with rel=canonical can pass the noindex to the canonical target, which would risk the town and calculator pages. The 11 Nov build had avoided it for that reason.

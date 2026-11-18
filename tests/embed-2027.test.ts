@@ -161,9 +161,8 @@ test("widget: noindex, no script, no tracking, no request to anyone", () => {
       assert.match(html, new RegExp(`<html lang="${locale}">`));
       assert.match(html, /<meta name="robots" content="noindex[^"]*">/);
       assert.doesNotMatch(html, /<script|<iframe|<img|@import|url\(|cookie|gtag|googletagmanager|analytics/i);
-      // One <link>, the canonical: the page the content belongs to, the same as the attribution link (18 Nov 2026).
-      assert.equal(html.match(/<link /g)?.length, 1);
-      assert.ok(html.includes(`<link rel="canonical" href="${esc(absoluteUrl(attributionPath(locale, place)))}">`), `${locale}: canonical`);
+      // No <link> at all, and no canonical: noindex + canonical can pass the noindex to the target (18 Nov 2026).
+      assert.equal(html.match(/<link /g), null);
     }
   }
 });
