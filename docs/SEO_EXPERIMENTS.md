@@ -6839,3 +6839,58 @@ last day of that window: read 12–17 Nov for it); the 19 Nov answer-first revie
 the as-of switches 18–23 Nov; any Ministry resolution for Adif or 23N published meanwhile.
 
 **Outcome:** _pending_
+
+## 2026-11-18 — Top Stories / Discover readiness: dates with real times that move only with the content, free-access flag, share cards for the Gordo and elections hubs (deploy only; no publish group; no title, description or lead touched)
+
+**Why.** Media take the news-like strike queries through Top Stories and Discover; we had 0 Discover and 0 Google News
+impressions in 28 days (GSC `type=discover|googleNews`, 21 Oct–17 Nov) and 3 News-tab impressions. Live audit, 18 Nov
+(strike day pages 19N/20N ca/es/en, both strike hubs, 17N rail page, education 26N, election-night and postal-vote guides,
+lottery guide, Gordo hub, elections hub, PVPC, butane, Rodalies): `max-image-preview:large` in robots and googlebot on all;
+NewsArticle with headline ≤ 95 chars, Person author with `url` to the author page, publisher with logo, 16:9/4:3/1:1 crops
+≥ 1,280 px on every news guide; canonical and hreflang clusters correct; news sitemap valid (19N/20N listed with their real
+publication date); TTFB 0.1–0.4 s, hero preloaded with `fetchpriority=high`. Gaps, against Google's own texts:
+- Google News, "Best practices for your article pages": "articles need to show both a clear, visible date and time …
+  between the headline and the article text". The header showed dates only, and on phones a page never updated showed only
+  the "Verificado" stamp (the publication date was hidden below `md`).
+- Search Central, "Add a byline date": "Ensure that the date (and optional time and timezone) match between the equivalent
+  user-visible and structured values". `dateModified` carried a time the publishers invented (verification days stored as
+  noon, e.g. `2026-11-17T10:00:00Z`), and `<time datetime>` used the UTC day.
+- Google News best practices: "it's against our guidelines to artificially freshen a story when the publisher didn't add
+  significant information". `updated_at` was recomputed on every re-send; institutional pages were stamped "now" on each
+  publish.
+- Discover: "Avoid using generic images (for example, your site logo) in the schema.org markup or og:image meta tag" and
+  images "at least 1200 px wide", "16x9". The Gordo hub (22 Dec night) and the elections hub (29N night) shared the
+  site-wide brand card.
+
+**Changes.**
+- `src/lib/seo/article-dates.ts` (new): one source for `datePublished`/`dateModified`, `article:*_time` and the header's
+  `<time datetime>`; a time is stated only when real (an update equal to the stored verification stamp is a bare day,
+  `2026-11-17`). `editionUpdatedAt`: identical re-send → unchanged; content changed and verified today → the instant of
+  this publish; changed with an older verification (the 00:05 "mañana"→"hoy" switch, a layout box) → unchanged; never
+  before publication or after now. Used by `publish-article.ts` (every code-published guide) and `pages/publish.ts`.
+- `EntryArticle` header: news-cycle pages (NewsArticle) show "Publicado el 17 de noviembre de 2026, 13:00 CET" /
+  "Actualizado el …, 09:41 CET" (time only when real); phones always get one date (update, else publication). Same in
+  ca/es/en (`formatDateAndTime`).
+- Article/NewsArticle: `isAccessibleForFree: true` (listed in the same Google News best practices).
+- `src/lib/seo/cards.ts` + `/card/<family>/<locale>-<hash>.png` (ImageResponse, as `/social-card.png`): 1200 × 675 card with
+  the hub's own H1, the event date (draw 22 Dec / election 29 Nov) and the brand, for `/ca/on-ha-tocat-la-loteria-de-nadal/`,
+  `/es/donde-ha-tocado-el-gordo/`, `/en/spanish-christmas-lottery-results/`, `/ca/eleccions/`, `/es/elecciones/`,
+  `/en/elections/`. Text from the registry only; the hash changes with the H1 (draw night), unknown hashes 404.
+
+**Not changed (windows / owner).** Titles, descriptions and leads of every strike, election and lottery page (open windows
+from 16–17 Nov). Finding left for the strike owner after the 23 Nov window: the leads say "Fuentes revisadas el <as-of>",
+which the 00:05 timer moves without a re-check; the page's verified constant (`*_VERIFIED`) is the honest value.
+
+**Baseline (GSC, 7 days to 17 Nov, web):** "huelga 19 noviembre 2026" 71 clicks / 1,750 impr / pos 8.1; "huelga renfe 19
+noviembre" 35 / 884 / 9.0; "huelga 20 noviembre 2026" 7 / 1,051 / 9.6; "mañana hay huelga" 1 / 190 / 8.5. Discover 0 / 0,
+Google News 0 / 0 (28 days).
+
+**Prediction.** Eligibility, not ranking: first Discover or News impressions within 3 weeks of the deploy on a news night
+(23N/26N strikes, 29N); no change in web position from this alone.
+
+**Review 2026-12-02** (`news-surfaces`: GSC `type=discover` and `type=googleNews` by page, 18 Nov–1 Dec; Rich Results Test on
+the 19N page and the Spain hub; spot-check that a strike re-send at 00:05 left `dateModified` unchanged). Second look
+2026-12-29 for the Gordo card (draw night). **Revert rule:** if Search Console reports date errors on Article items, put the
+full ISO instant back for unknown times (`modifiedIso`), keep the rest.
+
+**Outcome:** _pending_

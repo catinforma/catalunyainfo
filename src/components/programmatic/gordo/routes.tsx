@@ -32,6 +32,7 @@ import {
 } from "@/lib/programmatic/gordo/paths";
 import type { GordoSnapshot } from "@/lib/programmatic/gordo/types";
 import { breadcrumbSchema, faqSchema, graph } from "@/lib/seo/jsonld";
+import { cardImage } from "@/lib/seo/cards";
 import { buildMetadata } from "@/lib/seo/metadata";
 
 /**
@@ -44,8 +45,14 @@ import { buildMetadata } from "@/lib/seo/metadata";
 
 export const NOT_FOUND_METADATA: Metadata = { robots: { index: false, follow: false } };
 
-function meta(locale: Locale, path: string, m: PageMeta, translations: Record<Locale, string>): Metadata {
-  return buildMetadata({ locale, path, title: clampText(m.title, TITLE_LIMIT), description: clampText(m.description, DESCRIPTION_LIMIT), translations });
+function meta(
+  locale: Locale,
+  path: string,
+  m: PageMeta,
+  translations: Record<Locale, string>,
+  image?: ReturnType<typeof cardImage>,
+): Metadata {
+  return buildMetadata({ locale, path, title: clampText(m.title, TITLE_LIMIT), description: clampText(m.description, DESCRIPTION_LIMIT), translations, image });
 }
 
 function Shell({ locale, m, crumbs, blocks, translations }: { locale: Locale; m: PageMeta; crumbs: Crumb[]; blocks: Block[]; translations: Record<Locale, string> }) {
@@ -83,7 +90,9 @@ function hubCrumbs(locale: Locale, s: GordoSnapshot | null): Crumb[] {
 /* ------------------------------------------------------------------ Hub --- */
 
 export function gordoHubMetadata(locale: Locale): Metadata {
-  return meta(locale, gordoHubPath(locale), hubMeta(locale, SNAPSHOT), gordoHubTranslations());
+  // Its own share card (headline, draw date, brand) instead of the site-wide
+  // one: lib/seo/cards.ts. The draw-night H1 changes the card's URL too.
+  return meta(locale, gordoHubPath(locale), hubMeta(locale, SNAPSHOT), gordoHubTranslations(), cardImage("gordo", locale));
 }
 
 export function GordoHubRoute({ locale }: { locale: Locale }) {

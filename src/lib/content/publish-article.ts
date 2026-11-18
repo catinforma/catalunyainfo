@@ -5,6 +5,7 @@ import { and, eq } from "drizzle-orm";
 import { requireDb, schema } from "@/lib/db/client";
 import { bodyToPlainText, type Block } from "@/lib/content/blocks";
 import { fitColumn } from "@/lib/content/fit-column";
+import { editionFingerprint, editionUpdatedAt } from "@/lib/seo/article-dates";
 import type { Locale } from "@/lib/i18n/config";
 import type { EntryType } from "@/lib/db/schema";
 
@@ -264,19 +265,18 @@ export async function publishArticle(spec: ArticleSpec): Promise<PublishResult> 
       noindex: false,
       publishedAt,
       lastVerifiedAt: spec.lastVerifiedAt,
-      // The date the content last changed, not the date it was re-sent:
-      // republishing ~110 pages to add a layout box once stamped them all
-      // "updated today" (and dateModified) with nothing new in them, which is
-      // the inflated-freshness signal Google discounts. The verification date
-      // is when the facts were last checked or changed; never before the
-      // publication date, never in the future.
-      updatedAt: new Date(
-        Math.min(now.getTime(), Math.max(spec.lastVerifiedAt.getTime(), publishedAt.getTime())),
-      ),
     };
 
     const existing = await db
-      .select({ id: schema.entryTranslations.id })
+      .select({
+        id: schema.entryTranslations.id,
+        updatedAt: schema.entryTranslations.updatedAt,
+        title: schema.entryTranslations.title,
+        excerpt: schema.entryTranslations.excerpt,
+        seoTitle: schema.entryTranslations.seoTitle,
+        seoDescription: schema.entryTranslations.seoDescription,
+        body: schema.entryTranslations.body,
+      })
       .from(schema.entryTranslations)
       .where(
         and(
@@ -286,10 +286,25 @@ export async function publishArticle(spec: ArticleSpec): Promise<PublishResult> 
       )
       .limit(1);
 
+    // dateModified: the moment the page's verified content last changed, not
+    // the moment it was re-sent. Republishing ~110 pages to add a layout box
+    // once stamped them all "updated today" with nothing new in them, the
+    // artificial freshening Google's news guidelines forbid; and the strike
+    // pages are re-sent every day at 00:05 only to turn "mañana" into "hoy".
+    // Rule and reasons: lib/seo/article-dates.ts (editionUpdatedAt).
+    const previous = existing[0];
+    const updatedAt = editionUpdatedAt({
+      now,
+      publishedAt,
+      verifiedAt: spec.lastVerifiedAt,
+      fingerprint: editionFingerprint(edition),
+      previous: previous ? { updatedAt: previous.updatedAt, fingerprint: editionFingerprint(previous) } : null,
+    });
+
     if (existing[0]) {
       await db
         .update(schema.entryTranslations)
-        .set(values)
+        .set({ ...values, updatedAt })
         .where(eq(schema.entryTranslations.id, existing[0].id));
       editions.push({
         locale: edition.locale,
@@ -298,7 +313,7 @@ export async function publishArticle(spec: ArticleSpec): Promise<PublishResult> 
         action: "updated",
       });
     } else {
-      await db.insert(schema.entryTranslations).values(values);
+      await db.insert(schema.entryTranslations).values({ ...values, updatedAt });
       editions.push({
         locale: edition.locale,
         path: edition.path,

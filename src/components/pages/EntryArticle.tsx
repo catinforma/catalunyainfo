@@ -16,10 +16,12 @@ import { renderInline } from "@/lib/content/inline";
 import { MOST_READ, MOST_READ_COPY, mostReadFor } from "@/lib/content/most-read";
 import type { EntryDetail } from "@/lib/content/types";
 import { MORE_FACTS_LABEL, answerFirstEnabled, answerFirstLayout, type AnswerSummary } from "@/lib/layout/answer-first";
-import { formatDate, formatDistance, formatDuration, isoDate } from "@/lib/format";
+import { formatDate, formatDateAndTime, formatDistance, formatDuration, isoDate } from "@/lib/format";
 import { getMessages, interpolate } from "@/lib/i18n";
 import type { Locale } from "@/lib/i18n/config";
 import { SECTION_KEYS, sectionPath, type SectionKey } from "@/lib/i18n/routes";
+import { articleDates } from "@/lib/seo/article-dates";
+import { isNewsArticle } from "@/lib/seo/news-cycle";
 
 /**
  * The content page.
@@ -45,6 +47,8 @@ export function EntryArticle({
   const locale = entry.locale;
   const t = getMessages(locale);
   const published = entry.publishedAt;
+  const dates = articleDates(entry);
+  const news = isNewsArticle(entry);
   // Answer-first pages (lib/layout/answer-first.ts): summary under the byline,
   // then the photo and the body; supporting boxes after the body.
   const answerFirst = answerFirstEnabled(entry.key);
@@ -151,18 +155,25 @@ export function EntryArticle({
                 </Link>
               </span>
             ) : null}
-            {/* Phones get one meta line: updated date and the stamp. */}
+            {/* The same instants as datePublished/dateModified in the
+                markup (lib/seo/article-dates.ts). News pages state the time
+                too; a time is shown only when it is real. Phones get one
+                date: the update when there is one, else the publication. */}
             {published ? (
-              <span className="max-md:hidden">
+              <span className={dates.showModified ? "max-md:hidden" : undefined}>
                 {t.meta.publishedOn}{" "}
-                <time dateTime={isoDate(published)}>{formatDate(published, locale)}</time>
+                <time dateTime={dates.publishedIso ?? undefined}>
+                  {news ? formatDateAndTime(published, locale) : formatDate(published, locale)}
+                </time>
               </span>
             ) : null}
-            {entry.updatedAt && (!published || entry.updatedAt > published) ? (
+            {dates.showModified || !published ? (
               <span>
                 {t.meta.updatedOn}{" "}
-                <time dateTime={isoDate(entry.updatedAt)}>
-                  {formatDate(entry.updatedAt, locale)}
+                <time dateTime={dates.modifiedIso}>
+                  {news && dates.modifiedTimeKnown
+                    ? formatDateAndTime(dates.modified, locale)
+                    : formatDate(dates.modified, locale)}
                 </time>
               </span>
             ) : null}

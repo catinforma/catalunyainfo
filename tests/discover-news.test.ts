@@ -134,18 +134,23 @@ test("every news-cycle key is a published spec's entryKey", () => {
   }
 });
 
-test("dateModified is the verification date, never before datePublished", () => {
+test("dateModified is the verification date, never before datePublished, with a time only when it is real", () => {
+  // updated_at equal to the verification stamp: only the day is known (the
+  // publishers store a verification day as noon), so the markup says the day.
   const node = jsonld.articleSchema(entry());
   assert.equal(node.datePublished, "2026-10-29T19:00:00.000Z");
-  assert.equal(node.dateModified, "2026-11-05T11:00:00.000Z");
+  assert.equal(node.dateModified, "2026-11-05");
   assert.ok(String(node.dateModified) >= String(node.datePublished));
+  // A real instant (the publish that carried the change) is stated in full.
+  const timed = jsonld.articleSchema(entry({ updatedAt: new Date("2026-11-05T08:41:12.345Z") }));
+  assert.equal(timed.dateModified, "2026-11-05T08:41:12.345Z");
   // A row whose updated_at predates its publication is clamped to it, not moved forward to now.
   const early = jsonld.articleSchema(entry({ updatedAt: new Date("2026-10-01T00:00:00Z") }));
   assert.equal(early.dateModified, early.datePublished);
-  // No publication date: dateModified alone, as stored.
+  // No publication date: dateModified alone, as stored (a day here).
   const undated = jsonld.articleSchema(entry({ publishedAt: null }));
   assert.equal(undated.datePublished, undefined);
-  assert.equal(undated.dateModified, "2026-11-05T11:00:00.000Z");
+  assert.equal(undated.dateModified, "2026-11-05");
 });
 
 test("a licensed photograph is declared as 16:9, 4:3 and 1:1 crops, each at least 1,200 px wide", () => {

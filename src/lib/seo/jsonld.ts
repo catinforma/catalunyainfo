@@ -14,6 +14,7 @@ import {
   siteAuthorPath,
 } from "@/lib/content/author";
 import { cropsForUrl, licenceUrl, manifestImage } from "@/lib/seo/discover-images";
+import { articleDates } from "@/lib/seo/article-dates";
 import { isNewsArticle } from "@/lib/seo/news-cycle";
 
 /**
@@ -196,16 +197,16 @@ function publisherNode(): Json {
  * NewsArticle for `news` entries and the guides that report a dated event
  * (news-cycle.ts), Article for every other guide and long-form piece.
  *
- * Dates are the ones the page shows: datePublished is the publication date,
- * dateModified the date its facts were last verified or changed (the
- * publisher stamps `updated_at` from each spec's as-of date, never the time of
- * a re-send), and never earlier than the publication date.
+ * Dates are the ones the page shows (lib/seo/article-dates.ts): datePublished
+ * is the publication, dateModified the last change of the page's verified
+ * content (the publishers move `updated_at` only then, never on a re-send),
+ * never earlier than the publication, and with a time only when the time is
+ * real.
  */
 export function articleSchema(entry: EntryDetail): Json {
   const author = bylineAuthor(entry);
   const image = articleImage(entry);
-  const modified =
-    entry.publishedAt && entry.updatedAt.getTime() < entry.publishedAt.getTime() ? entry.publishedAt : entry.updatedAt;
+  const dates = articleDates(entry);
   return {
     "@type": isNewsArticle(entry) ? "NewsArticle" : "Article",
     "@id": `${absoluteUrl(entry.href)}#article`,
@@ -213,8 +214,13 @@ export function articleSchema(entry: EntryDetail): Json {
     ...(entry.excerpt ? { description: entry.excerpt } : {}),
     inLanguage: HTML_LANG[entry.locale],
     mainEntityOfPage: { "@type": "WebPage", "@id": absoluteUrl(entry.href) },
-    ...(entry.publishedAt ? { datePublished: entry.publishedAt.toISOString() } : {}),
-    dateModified: modified.toISOString(),
+    // The instants the page shows (article-dates.ts): a full time only when
+    // it is real, else the day the facts were verified.
+    ...(dates.publishedIso ? { datePublished: dates.publishedIso } : {}),
+    dateModified: dates.modifiedIso,
+    // No paywall anywhere on the site. Google News, "Best practices for your
+    // article pages": "Boolean flag to indicate no charge versus paywalled content."
+    isAccessibleForFree: true,
     // Inline rather than a bare @id: the Organization lives in another
     // script block, and a reference that does not resolve leaves Article
     // without a publisher for parsers that read one graph at a time.
