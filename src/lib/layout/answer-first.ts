@@ -20,8 +20,14 @@ import type { Locale } from "@/lib/i18n/config";
  * The reorder happens at render time from the stored body, so turning a page
  * on or off needs a deploy only, never a republish.
  *
- * THE SWITCH: add entry keys (or key prefixes for a family) below. Measure the
- * first group for 7 days (review 19 Nov 2026) before extending it.
+ * THE SWITCH: add entry keys (or key prefixes for a family) below.
+ *
+ * 19 Nov 2026 review (run 18 Nov; docs/SEO_EXPERIMENTS.md): strikes kept
+ * (live hubs + Renfe: mobile engagement 52.3 -> 53.3 %, CTR at position up,
+ * no position loss); the holiday guides taken out (mobile engagement -4.4
+ * points, engagement time -21 %, mix-free position +3.5 worse than the other
+ * Spanish pages). Not extended to every DB article: the rule needed the whole
+ * first group to pass. Next reviews 26 Nov and 3 Dec 2026.
  */
 export const ANSWER_FIRST_ENTRY_KEYS: readonly string[] = [
   // Strikes
@@ -30,7 +36,15 @@ export const ANSWER_FIRST_ENTRY_KEYS: readonly string[] = [
   "guide-strikes-catalonia-today", // strikes hub (Catalonia)
   "guide-strikes-spain", // strikes hub (Spain)
   "guide-strike-renfe-november-2026", // Renfe / rail strike guide
-  // Holidays
+];
+
+/**
+ * Out of the switch since the 19 Nov 2026 review: they render in the order
+ * they had before 12 Nov (photo, then the body as stored: the work calendar's
+ * 2027 lead and table, the today guide's live box). Kept here so a later
+ * review can see what was reverted; nothing reads it but the tests.
+ */
+export const ANSWER_FIRST_REVERTED_KEYS: readonly string[] = [
   "guide-public-holidays-catalonia", // calendari laboral (2027 work calendar)
   "guide-is-today-a-holiday-catalonia", // és festiu avui
   "guide-bridges-2027-catalonia", // ponts 2027

@@ -280,7 +280,8 @@ test("templates render the box server-side, after the answer, with the placement
   assert.match(article, /<SummaryBox[^>]*\/>\s*\{nextStepInSummary \? <NextStep/);
   assert.match(article, /<BlockRenderer body=\{body\} context=\{context\} insert=\{bodyInsert\} \/>/);
   for (const [file, re] of [
-    ["src/components/programmatic/holidays/MunicipalityPage.tsx", /<\/p>\s*\{\/\*[^*]*\*\/\}\s*<NextStep step=\{townNextStep\([^]*?<h2 id="avui">/],
+    // Right after the first screen (answer, table, lead: holidays/first-screen.ts, 19 Nov 2026), before #avui.
+    ["src/components/programmatic/holidays/MunicipalityPage.tsx", /\{firstScreenOrder\(locale\)\.map\([^]*?\{t\.lead\} \{t\.source\}\s*<\/p>\s*\),\s*\)\}\s*\{\/\*[^*]*\*\/\}\s*<NextStep step=\{townNextStep\([^]*?<h2 id="avui">/],
     ["src/components/programmatic/holidays/EnglishTownPage.tsx", /<NextStep step=\{townNextStep\(/],
     ["src/components/programmatic/holidays/DatePage.tsx", /<NextStep step=\{holidayDateNextStep\([^]*?<h2 id="local">/],
     ["src/components/programmatic/ElectionResultsPage.tsx", /<NextStep step=\{electionTownNextStep\(/],

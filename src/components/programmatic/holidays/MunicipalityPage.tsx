@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Fragment } from "react";
 import { renderInline } from "@/lib/content/inline";
 
 import { Breadcrumbs, type Crumb } from "@/components/Breadcrumbs";
@@ -32,6 +33,7 @@ import {
   yearRows,
 } from "@/lib/programmatic/holidays/data";
 import { municipalityDatePages } from "@/lib/programmatic/holidays/dates";
+import { TODAY_FIRST, firstScreenOrder, pastRowsLabel, splitRowsByDate, townTodayAnswer } from "@/lib/programmatic/holidays/first-screen";
 import { dayMonth, weekdayDayMonth } from "@/lib/programmatic/holidays/format";
 import { OFFICIAL } from "@/lib/programmatic/holidays/links";
 import { caComarca, joinList } from "@/lib/programmatic/holidays/names";
@@ -112,6 +114,11 @@ export function MunicipalityPage({ m, locale }: { m: SnapshotMunicipality; local
   const faq = municipalityFaq(m, locale, next, todayInCatalonia());
   // Static too: the cron rebuilds the page the day after each of its holidays (holidayRefreshPaths).
   const upcoming = municipalityNextLine(m, locale, todayInCatalonia());
+  // es: the dated "hoy o mañana" answer first, and this year's past days collapsed (first-screen.ts).
+  const todayFirst = TODAY_FIRST[locale];
+  const answer = todayFirst ? townTodayAnswer(m, locale, todayInCatalonia()) : null;
+  const halves = todayFirst ? splitRowsByDate(rows, todayInCatalonia()) : null;
+  const split = halves && halves.upcoming.length > 0 && halves.past.length > 0 ? halves : null;
 
   return (
     <article>
@@ -126,23 +133,50 @@ export function MunicipalityPage({ m, locale }: { m: SnapshotMunicipality; local
 
       <div className="ci-shell py-10">
         <div className="ci-prose">
-          {/* Dates first (12 Nov 2026, answer-first layout; docs/SEO_EXPERIMENTS.md): the list is the answer. */}
-          <h2 id="festius-2026" className="mt-0">{t.tableTitle}</h2>
-          <HolidayTable rows={rows} locale={locale} caption={t.tableCaption} />
-
-          {/* First screen (CTR sweep, 3 Nov 2026): the next holiday, the year's local days,
-              then the live today/tomorrow box, before the notes that qualify them. */}
-          <p className="ci-lead">
-            {upcoming ? (
-              <>
-                <strong>
-                  {upcoming.lead} {upcoming.date}
-                </strong>{" "}
-                {upcoming.rest}{" "}
-              </>
-            ) : null}
-            {t.lead} {t.source}
-          </p>
+          {/* First screen, per edition (lib/programmatic/holidays/first-screen.ts, 19 Nov 2026 review):
+              es answers "¿es festivo hoy o mañana?" and names the next holiday, then the table with
+              the past days collapsed, then the lead; ca keeps the table first (12 Nov 2026). */}
+          {firstScreenOrder(locale).map((part) =>
+            part === "answer" ? (
+              answer ? (
+                <p key={part} className="ci-lead ci-town-answer">
+                  <strong>{answer.question}</strong> {answer.before}
+                  <strong>{answer.strong}</strong>
+                  {answer.after}
+                </p>
+              ) : null
+            ) : part === "table" ? (
+              <Fragment key={part}>
+                <h2 id="festius-2026" className={todayFirst ? undefined : "mt-0"}>
+                  {t.tableTitle}
+                </h2>
+                {split ? (
+                  <>
+                    <HolidayTable rows={split.upcoming} locale={locale} caption={t.tableCaption} />
+                    <details className="ci-past-holidays">
+                      <summary>{pastRowsLabel(locale, split.past.length)}</summary>
+                      <HolidayTable rows={split.past} locale={locale} caption={pastRowsLabel(locale, split.past.length)} />
+                    </details>
+                  </>
+                ) : (
+                  <HolidayTable rows={rows} locale={locale} caption={t.tableCaption} />
+                )}
+              </Fragment>
+            ) : (
+              // The next holiday leads this paragraph where the answer above does not already give it.
+              <p key={part} className={todayFirst ? undefined : "ci-lead"}>
+                {upcoming && !todayFirst ? (
+                  <>
+                    <strong>
+                      {upcoming.lead} {upcoming.date}
+                    </strong>{" "}
+                    {upcoming.rest}{" "}
+                  </>
+                ) : null}
+                {t.lead} {t.source}
+              </p>
+            ),
+          )}
 
           {/* The next useful step (lib/engagement/next-step-towns.ts): the 2027 planner for this town, then its Christmas fair. */}
           <NextStep step={townNextStep(m.slug, name, locale, crumbPath(crumbs), todayInCatalonia())} locale={locale} />
