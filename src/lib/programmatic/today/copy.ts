@@ -20,8 +20,8 @@ import { TODAY_NAME } from "./paths";
 export const TITLE_LIMIT = 60;
 export const DESCRIPTION_LIMIT = 155;
 
-export type ItemKey = "holidays" | "strikes" | "rodalies" | "reservoirs" | "fuel" | "electricity" | "weekend" | "snow";
-export const ITEM_ORDER: readonly ItemKey[] = ["holidays", "strikes", "rodalies", "reservoirs", "fuel", "electricity", "weekend", "snow"];
+export type ItemKey = "holidays" | "strikes" | "warnings" | "rodalies" | "reservoirs" | "fuel" | "electricity" | "weekend" | "snow";
+export const ITEM_ORDER: readonly ItemKey[] = ["holidays", "strikes", "warnings", "rodalies", "reservoirs", "fuel", "electricity", "weekend", "snow"];
 
 interface PageCopy {
   title: string;
@@ -51,6 +51,7 @@ const COPY: Record<Locale, PageCopy> = {
     headings: {
       holidays: "És festiu avui?",
       strikes: "Hi ha vaga avui?",
+      warnings: "Hi ha avisos oficials?",
       rodalies: "Rodalies: hi ha avisos?",
       reservoirs: "Com estan els embassaments?",
       fuel: "Quant costa la benzina avui?",
@@ -74,6 +75,7 @@ const COPY: Record<Locale, PageCopy> = {
     headings: {
       holidays: "¿Es festivo hoy?",
       strikes: "¿Hay huelga hoy?",
+      warnings: "¿Hay avisos oficiales?",
       rodalies: "Rodalies: ¿hay avisos?",
       reservoirs: "¿Cómo están los embalses?",
       fuel: "¿Cuánto cuesta la gasolina hoy?",
@@ -97,6 +99,7 @@ const COPY: Record<Locale, PageCopy> = {
     headings: {
       holidays: "Is today a public holiday?",
       strikes: "Is there a strike today?",
+      warnings: "Any official warnings?",
       rodalies: "Rodalies trains: any notices?",
       reservoirs: "How full are the reservoirs?",
       fuel: "Fuel prices today",
@@ -164,6 +167,12 @@ export function strikesFallback(locale: Locale): string {
   if (locale === "ca") return `Vagues convocades segons la nostra llista, revisada ${asOf}: ${list}.`;
   if (locale === "es") return `Huelgas convocadas según nuestra lista, revisada ${asOf}: ${list}.`;
   return `Strikes called, on our list checked ${asOf}: ${list}.`;
+}
+
+export function warningsFallback(locale: Locale): string {
+  if (locale === "ca") return "Els avisos meteorològics de l'AEMET, els plans de Protecció Civil i les incidències del Servei Català de Trànsit es carreguen aquí en directe quan s'obre la pàgina.";
+  if (locale === "es") return "Los avisos meteorológicos de la AEMET, los planes de Protección Civil y las incidencias del Servei Català de Trànsit se cargan aquí en directo al abrir la página.";
+  return "AEMET's weather warnings, Civil Protection plans and Servei Català de Trànsit road incidents load here, live, when the page opens.";
 }
 
 export function rodaliesFallback(locale: Locale): string {
@@ -237,6 +246,7 @@ export function sourceLine(item: ItemKey, locale: Locale): string {
     ca: {
       holidays: `Font: calendari oficial de festes laborals de la Generalitat i calendari de festes locals ${year} (${HOLIDAY_SNAPSHOT.sources.localOrder.ref}), llegits ${holidaysRead}.`,
       strikes: `Font: convocatòries i avisos dels sindicats i dels operadors, revisats ${strikesRead}.`,
+      warnings: "Font: AEMET (pla Meteoalerta), dades obertes de Protecció Civil i del Servei Català de Trànsit.",
       rodalies: "Font: Rodalies de Catalunya, estat del servei (Renfe, dades obertes, si no respon).",
       reservoirs: "Font: Agència Catalana de l'Aigua, dades obertes diàries (els nou embassaments de les conques internes; els de l'Ebre no hi són).",
       fuel: "Font: Ministeri per a la Transició Ecològica, preus de les benzineres (CC BY 4.0).",
@@ -247,6 +257,7 @@ export function sourceLine(item: ItemKey, locale: Locale): string {
     es: {
       holidays: `Fuente: calendario oficial de fiestas laborales de la Generalitat y calendario de fiestas locales ${year} (${HOLIDAY_SNAPSHOT.sources.localOrder.ref}), leídos ${holidaysRead}.`,
       strikes: `Fuente: convocatorias y avisos de los sindicatos y de los operadores, revisados ${strikesRead}.`,
+      warnings: "Fuente: AEMET (plan Meteoalerta), datos abiertos de Protecció Civil y del Servei Català de Trànsit.",
       rodalies: "Fuente: Rodalies de Catalunya, estado del servicio (Renfe, datos abiertos, si no responde).",
       reservoirs: "Fuente: Agència Catalana de l'Aigua, datos abiertos diarios (los nueve embalses de las cuencas internas; los del Ebro no están).",
       fuel: "Fuente: Ministerio para la Transición Ecológica, precios de las gasolineras (CC BY 4.0).",
@@ -257,6 +268,7 @@ export function sourceLine(item: ItemKey, locale: Locale): string {
     en: {
       holidays: `Source: the Generalitat's official calendar of public holidays and the ${year} local holiday order (${HOLIDAY_SNAPSHOT.sources.localOrder.ref}), read ${holidaysRead}.`,
       strikes: `Source: the unions' calls and the operators' notices, checked ${strikesRead}.`,
+      warnings: "Source: AEMET (Meteoalerta plan), Protecció Civil and Servei Català de Trànsit open data.",
       rodalies: "Source: Rodalies de Catalunya service status (Renfe open data when it does not answer).",
       reservoirs: "Source: Catalan Water Agency (ACA) daily open data (the nine reservoirs of Catalonia's internal basins; the Ebro basin's are not included).",
       fuel: "Source: Spain's Ministry for the Ecological Transition, station prices (CC BY 4.0).",
@@ -280,20 +292,20 @@ export function aboutParagraphs(locale: Locale): string[] {
     return [
       "La data d'avui es calcula al teu navegador amb l'hora de Catalunya, de manera que les respostes canvien a mitjanit encara que la pàgina no s'hagi tornat a publicar.",
       `Els festius surten del calendari oficial de la Generalitat i de l'ordre de festes locals de ${year}, per als ${towns} municipis que en tenen; la pàgina de cada municipi té el calendari sencer. Les vagues surten de la nostra llista de convocatòries, revisada ${asOf} a les webs dels convocants i dels operadors.`,
-      "Els avisos de Rodalies, l'aigua dels embassaments i els preus del carburant es llegeixen a la font oficial quan obres la pàgina, amb una memòria cau de minuts. Quan una font no respon, la pàgina ho diu i l'enllaça: mai no mostra dades antigues com si fossin d'avui.",
+      "Els avisos oficials (AEMET, Protecció Civil i Trànsit), els de Rodalies, l'aigua dels embassaments i els preus del carburant es llegeixen a la font oficial quan obres la pàgina, amb una memòria cau de minuts. Quan una font no respon, la pàgina ho diu i l'enllaça: mai no mostra dades antigues com si fossin d'avui.",
     ];
   }
   if (locale === "es") {
     return [
       "La fecha de hoy se calcula en tu navegador con la hora de Cataluña, así que las respuestas cambian a medianoche aunque la página no se haya vuelto a publicar.",
       `Los festivos salen del calendario oficial de la Generalitat y de la orden de fiestas locales de ${year}, para los ${towns} municipios que las tienen; la página de cada municipio tiene el calendario completo. Las huelgas salen de nuestra lista de convocatorias, revisada ${asOf} en las webs de los convocantes y de los operadores.`,
-      "Los avisos de Rodalies, el agua de los embalses y los precios del carburante se leen en la fuente oficial al abrir la página, con una caché de minutos. Cuando una fuente no responde, la página lo dice y la enlaza: nunca muestra datos antiguos como si fueran de hoy.",
+      "Los avisos oficiales (AEMET, Protección Civil y Trànsit), los de Rodalies, el agua de los embalses y los precios del carburante se leen en la fuente oficial al abrir la página, con una caché de minutos. Cuando una fuente no responde, la página lo dice y la enlaza: nunca muestra datos antiguos como si fueran de hoy.",
     ];
   }
   return [
     "Today's date is worked out in your browser on Catalan time, so the answers change at midnight even if the page has not been republished.",
     `Holidays come from the Generalitat's official calendar and the ${year} local holiday order, for the ${towns} municipalities that have local holidays; each town's page in Catalan and Spanish has its whole calendar. Strikes come from our list of calls, checked ${asOf} on the organisers' and operators' websites.`,
-    "Rodalies notices, reservoir water and fuel prices are read from the official source when you open the page, cached for minutes. When a source does not answer, the page says so and links it: it never shows old data as today's.",
+    "Official warnings (AEMET, Civil Protection and traffic), Rodalies notices, reservoir water and fuel prices are read from the official source when you open the page, cached for minutes. When a source does not answer, the page says so and links it: it never shows old data as today's.",
   ];
 }
 
@@ -317,6 +329,9 @@ export function sources(locale: Locale): SourceItem[] {
       url: rodaliesOfficial.status(locale),
       note: live,
     },
+    { name: "Avisos Meteoalerta — Cataluña (RSS y CAP)", publisher: "AEMET", url: "https://www.aemet.es/es/rss_info/avisos/cat", note: live },
+    { name: "Plans de protecció civil en fase de prealerta, alerta o emergència", publisher: "Direcció General de Protecció Civil", url: "https://analisi.transparenciacatalunya.cat/d/wj9c-j6vf", note: live },
+    { name: "Incidències viàries en temps real a Catalunya", publisher: "Servei Català de Trànsit", url: "https://analisi.transparenciacatalunya.cat/d/uyam-bs37", note: live },
     { name: RESERVOIR_SNAPSHOT.sources.daily.name, publisher: RESERVOIR_SNAPSHOT.sources.daily.publisher, url: RESERVOIR_SNAPSHOT.sources.daily.url, note: live },
     { name: FUEL.sources.prices.name, publisher: FUEL.sources.prices.publisher, url: FUEL.sources.prices.url, note: `${FUEL.sources.prices.licence}, ${live}` },
     { name: "REData — PVPC 2.0TD", publisher: "Red Eléctrica", url: "https://www.ree.es/es/datos/apidatos", note: live },

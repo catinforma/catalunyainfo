@@ -1,6 +1,8 @@
 import type { Block } from "@/lib/content/blocks";
 import type { Locale } from "@/lib/i18n/config";
 
+import { warningsPath } from "@/lib/programmatic/warnings/paths";
+
 import { SNOW } from "./pyrenees";
 import {
   b2Related,
@@ -46,6 +48,9 @@ import {
  *   "meteorologia i ports". 112 Catalunya, "Cobertura del 112": most areas with
  *   no mobile coverage are high mountain or remote rural; CAT112 marks points
  *   with coverage on hiking routes there.
+ *
+ * 18 Nov 2026: "before you set off" links the warnings page (/ca/avisos/,
+ * /es/avisos/, /en/warnings/; body only, group `snow-now`).
  *
  * Left out, unverified: resort opening dates for 2026-27, any snowfall
  * forecast, and avalanche advice beyond pointing at the bulletin.
@@ -134,6 +139,7 @@ function body(locale: Locale): Block[] {
       ),
       ...h3("Abans de sortir"),
       list(
+        `els avisos en vigor (els de l'AEMET, els plans de Protecció Civil com el NEUCAT i les carreteres tallades), en una sola pàgina: [Avisos ara a Catalunya](${warningsPath("ca")});`,
         `les carreteres: el Servei Català de Trànsit publica les incidències, incloses les de meteorologia i ports de muntanya, a la seva pàgina [Estat del trànsit](${TRANSIT});`,
         "en cas d'emergència, el 112. Segons el [112 de Catalunya](https://112.gencat.cat/ca/us-del-112/cobertura-del-112/index.html), la major part de les zones sense cap cobertura mòbil són d'alta muntanya o rurals remotes, i a les rutes de senderisme que hi passen senyalitza punts on sí que n'hi ha.",
       ),
@@ -197,6 +203,7 @@ function body(locale: Locale): Block[] {
       ),
       ...h3("Antes de salir"),
       list(
+        `los avisos en vigor (los de la AEMET, los planes de Protección Civil como el NEUCAT y las carreteras cortadas), en una sola página: [Avisos hoy en Cataluña](${warningsPath("es")});`,
         `las carreteras: el Servei Català de Trànsit publica las incidencias, también las de meteorología y puertos de montaña, en su página [Estat del trànsit](${TRANSIT});`,
         "en caso de emergencia, el 112. Según el [112 de Cataluña](https://112.gencat.cat/es/us-del-112/cobertura-del-112/index.html), la mayoría de las zonas sin ninguna cobertura móvil son de alta montaña o rurales remotas, y en las rutas de senderismo que las atraviesan señaliza puntos donde sí la hay.",
       ),
@@ -259,6 +266,7 @@ function body(locale: Locale): Block[] {
     ),
     ...h3("Before you set off"),
     list(
+      `warnings in force (AEMET's, Civil Protection plans such as NEUCAT for snow, and closed roads) on one page: [Warnings in Catalonia now](${warningsPath("en")});`,
       `roads: the Servei Català de Trànsit lists incidents, including weather and mountain passes, on its [traffic status page](${TRANSIT});`,
       "emergencies: call 112. Catalonia's [112 service](https://112.gencat.cat/ca/us-del-112/cobertura-del-112/index.html) says most areas with no mobile coverage at all are high mountain or remote rural areas, and it marks points that do have coverage on the hiking routes through them.",
     ),

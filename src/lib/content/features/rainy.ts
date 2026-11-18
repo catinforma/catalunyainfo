@@ -1,4 +1,5 @@
 import { b2link } from "@/lib/content/batch02/shared";
+import { warningsPath } from "@/lib/programmatic/warnings/paths";
 import type { Block } from "@/lib/content/blocks";
 import {
   ARTICLE_PATHS,
@@ -198,7 +199,7 @@ function ca(): Block[] {
     ...h2(
       "Com decidir el mateix matí",
       "Mira l'avís de Meteocat abans de triar. Si hi ha alerta per pluges intenses, descarta coves i desplaçaments llargs i queda't amb museus urbans.",
-      `Avisos i previsió: [meteo.cat](${METEOCAT}). Horaris de tren: [rodalies.gencat.cat](${RODALIES}).`,
+      `Avisos i previsió: [meteo.cat](${METEOCAT}). Els avisos de l'AEMET, de Protecció Civil i de carreteres en vigor, en una pàgina: [Avisos ara a Catalunya](${warningsPath("ca")}). Horaris de tren: [rodalies.gencat.cat](${RODALIES}).`,
       `I si la pluja marxa, ${link("autumn", "ca", "els colors de tardor")} i ${link("mushrooms", "ca", "les condicions per als bolets")} milloren justament després.`,
     ),
     ...paras(`Fitxes oficials de bona part d'aquests espais: [patrimoni.gencat.cat](${PATRIMONI}).`),
@@ -253,7 +254,7 @@ function es(): Block[] {
     ...h2(
       "Cómo decidir esa misma mañana",
       "Mira el aviso de Meteocat antes de elegir. Si hay alerta por lluvias intensas, descarta cuevas y desplazamientos largos y quédate con museos urbanos.",
-      `Avisos y previsión: [meteo.cat](${METEOCAT}). Horarios de tren: [rodalies.gencat.cat](${RODALIES}).`,
+      `Avisos y previsión: [meteo.cat](${METEOCAT}). Los avisos de la AEMET, de Protección Civil y de carreteras en vigor, en una página: [Avisos hoy en Cataluña](${warningsPath("es")}). Horarios de tren: [rodalies.gencat.cat](${RODALIES}).`,
       `Y si la lluvia se va, ${link("autumn", "es", "los colores de otoño")} y ${link("mushrooms", "es", "las condiciones para las setas")} mejoran justo después.`,
     ),
     ...relatedBlocks(["gaudi", "surprising", "montserrat", "trains", "medieval"], "es"),
@@ -310,7 +311,7 @@ function en(): Block[] {
     ...h2(
       "Deciding on the morning",
       "Check the Meteocat warning before choosing. If heavy-rain alerts are in force, rule out caves and long journeys and stay with urban museums.",
-      `Warnings and forecast: [meteo.cat](${METEOCAT}). Train times: [rodalies.gencat.cat](${RODALIES}).`,
+      `Warnings and forecast: [meteo.cat](${METEOCAT}). AEMET, Civil Protection and road warnings in force, on one page: [Warnings in Catalonia now](${warningsPath("en")}). Train times: [rodalies.gencat.cat](${RODALIES}).`,
       `And when the rain clears, ${link("autumn", "en", "autumn colour")} and ${link("mushrooms", "en", "mushroom conditions")} both improve straight afterwards.`,
     ),
     ...paras(`Official records for many of these sites: [patrimoni.gencat.cat](${PATRIMONI}).`),

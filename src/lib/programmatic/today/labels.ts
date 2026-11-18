@@ -42,6 +42,26 @@ export interface TodayLabels {
     asOf: string;
     stale: string;
   };
+  warnings: {
+    loading: string;
+    /** "{n}" is "1 avís" / "3 avisos"; "{level}" the highest level; "{list}" the phenomena. */
+    inForce: string;
+    inForceNone: string;
+    /** "{n}", "{from}" (weekday, date and time of the first), "{level}". */
+    upcoming: string;
+    one: string;
+    many: string;
+    civilNone: string;
+    civilSome: string;
+    roads: string;
+    /** One source did not answer: "{source}". */
+    missing: string;
+    failed: string;
+    stale: string;
+    note: string;
+    and: string;
+    sources: { weather: string; civil: string; roads: string };
+  };
   rodalies: {
     loading: string;
     one: string;
@@ -128,6 +148,23 @@ const CA: TodayLabels = {
     asOf: "Llista revisada {date}.",
     stale: "La llista té més d'una setmana: comprova les convocatòries noves a la pàgina de vagues.",
   },
+  warnings: {
+    loading: "Carregant els avisos oficials…",
+    inForce: "{n} de l'AEMET en vigor ara (nivell màxim: {level}): {list}.",
+    inForceNone: "Cap avís de l'AEMET en vigor ara.",
+    upcoming: "Previstos: {n}; el primer comença {from} (nivell màxim: {level}).",
+    one: "1 avís",
+    many: "{n} avisos",
+    civilNone: "Protecció Civil: cap pla en prealerta, alerta o emergència.",
+    civilSome: "Protecció Civil: {list}.",
+    roads: "Carreteres: {traffic} incidències de circulació i {closures} obres amb la calçada tallada.",
+    missing: "{source}: no s'ha pogut llegir ara.",
+    failed: "No s'han pogut llegir els avisos oficials ara: mira la pàgina d'avisos.",
+    stale: "Les dades d'avisos no són recents: mira la pàgina d'avisos.",
+    note: "Llegit a les {time}.",
+    and: " i ",
+    sources: { weather: "AEMET", civil: "Protecció Civil", roads: "Servei Català de Trànsit" },
+  },
   rodalies: {
     loading: "Carregant els avisos de Rodalies de Catalunya…",
     one: "1 avís oficial actiu ara mateix.",
@@ -212,6 +249,23 @@ const ES: TodayLabels = {
     nextNone: "ninguna otra huelga convocada en la lista",
     asOf: "Lista revisada {date}.",
     stale: "La lista tiene más de una semana: comprueba las convocatorias nuevas en la página de huelgas.",
+  },
+  warnings: {
+    loading: "Cargando los avisos oficiales…",
+    inForce: "{n} de la AEMET en vigor ahora (nivel máximo: {level}): {list}.",
+    inForceNone: "Ningún aviso de la AEMET en vigor ahora.",
+    upcoming: "Previstos: {n}; el primero empieza el {from} (nivel máximo: {level}).",
+    one: "1 aviso",
+    many: "{n} avisos",
+    civilNone: "Protección Civil: ningún plan en prealerta, alerta o emergencia.",
+    civilSome: "Protección Civil: {list}.",
+    roads: "Carreteras: {traffic} incidencias de circulación y {closures} obras con la calzada cortada.",
+    missing: "{source}: no se ha podido leer ahora.",
+    failed: "No se han podido leer los avisos oficiales ahora: mira la página de avisos.",
+    stale: "Los datos de avisos no son recientes: mira la página de avisos.",
+    note: "Leído a las {time}.",
+    and: " y ",
+    sources: { weather: "AEMET", civil: "Protección Civil", roads: "Servei Català de Trànsit" },
   },
   rodalies: {
     loading: "Cargando los avisos de Rodalies de Catalunya…",
@@ -298,6 +352,23 @@ const EN: TodayLabels = {
     nextNone: "no other strike called on the list",
     asOf: "List checked {date}.",
     stale: "The list is over a week old: check for new calls on the strikes page.",
+  },
+  warnings: {
+    loading: "Loading the official warnings…",
+    inForce: "{n} from AEMET in force now (highest level: {level}): {list}.",
+    inForceNone: "No AEMET warning in force now.",
+    upcoming: "Coming up: {n}; the first starts {from} (highest level: {level}).",
+    one: "1 warning",
+    many: "{n} warnings",
+    civilNone: "Civil Protection: no plan in pre-alert, alert or emergency.",
+    civilSome: "Civil Protection: {list}.",
+    roads: "Roads: {traffic} traffic incidents and {closures} roadworks closures.",
+    missing: "{source}: could not be read just now.",
+    failed: "The official warnings could not be read just now: see the warnings page.",
+    stale: "The warnings data is not recent: see the warnings page.",
+    note: "Read at {time}.",
+    and: " and ",
+    sources: { weather: "AEMET", civil: "Civil Protection", roads: "Servei Català de Trànsit" },
   },
   rodalies: {
     loading: "Loading Rodalies de Catalunya's notices…",

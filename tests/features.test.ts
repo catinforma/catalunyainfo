@@ -16,6 +16,7 @@ import { TRAPS } from "../src/lib/content/features/traps.ts";
 import { SURPRISING } from "../src/lib/content/features/surprising.ts";
 import { RAINY } from "../src/lib/content/features/rainy.ts";
 import { LOCALES } from "../src/lib/i18n/config.ts";
+import { warningsPath } from "../src/lib/programmatic/warnings/paths.ts";
 
 /**
  * Ten feature guides in three languages.
@@ -45,11 +46,13 @@ const FEATURES = [
  * guides that carry the timetables; both registries are what links are
  * built from, so a link to either still cannot point at a dead URL).
  */
-const PUBLISHED_HREFS = new Set(
-  [...Object.values(ARTICLE_PATHS), ...Object.values(B2_PATHS)].flatMap((paths) =>
+const PUBLISHED_HREFS = new Set([
+  ...[...Object.values(ARTICLE_PATHS), ...Object.values(B2_PATHS)].flatMap((paths) =>
     LOCALES.map((locale) => `/${locale}/${paths[locale]}/`),
   ),
-);
+  // Live pages with their own routes that the guides link (warnings in force).
+  ...LOCALES.map((locale) => warningsPath(locale)),
+]);
 
 test("there are ten features, thirty editions, thirty distinct paths", () => {
   assert.equal(FEATURES.length, 10);

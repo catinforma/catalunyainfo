@@ -7338,3 +7338,65 @@ IndexNow prefixes `/es/guias/huelga-`, `/ca/guies/vaga-`, `/en/guides/spain-stri
 `/es/guias/huelgas-espana`, `/ca/guies/vagues-espanya`, `/en/guides/strikes-spain`.
 
 **Outcome:** _pending_
+
+
+## 2026-11-18 — New live page: "Avisos ara a Catalunya" / "Avisos hoy en Cataluña" / "Warnings in Catalonia now" (ca/es/en; ships with the deploy) + a compact item on the today page (review 2026-12-16)
+
+**URLs.** `/ca/avisos/`, `/es/avisos/` (one folder, `app/(public)/[locale]/avisos`), `/en/warnings/`. ISR every
+300 s (`revalidate = 300`, literal = `SERVER_REVALIDATE_SECONDS` in `lib/programmatic/warnings/server.ts`, test-guarded);
+`/api/warnings/now/` (force-dynamic, `s-maxage=300`) feeds the new "Hi ha avisos oficials?" item on `/ca/avui/`,
+`/es/hoy/`, `/en/today/` (browser island, like PVPC/Rodalies). Sitemap (hourly lastmod), llms.txt, hub "Live data" card.
+
+**Sources and licences (checked 18 Nov 2026 from the VPS, all keyless).**
+
+| Source | Endpoint | Format / rate | Licence (quoted) | Used |
+| --- | --- | --- | --- | --- |
+| AEMET Meteoalerta, Catalonia (area 69) | `https://www.aemet.es/documentos_d/eltiempo/prediccion/avisos/rss/CAP_AFAC69_RSS.xml` → tar.gz bundle → CAP 1.2 files (offered at aemet.es/es/rss_info/avisos/cat) | RSS + CAP XML; CloudFront max-age 60; AEMET issues 07:30–09:00, 10:30–11:30, reviews 17:00–19:00, 23:50 D+3 | Nota legal: "permiten la reutilización … para fines comerciales y no comerciales"; cite "© AEMET" or "Información elaborada por la Agencia Estatal de Meteorología"; "Debe mencionarse la fecha de la última actualización"; "No se puede indicar … que AEMET … participa, patrocina, o apoya" | yes |
+| Servei Català de Trànsit incidents | `https://www.gencat.cat/transit/opendata/incidenciesRSS.xml` (open-data entry `uyam-bs37`, update "Contínua"; GML twin `incidenciesGML.xml`) | RSS, Catalan; Last-Modified every ~15 min | Llicència oberta d'ús d'informació – Catalunya: cite "Generalitat de Catalunya. Departament de [nom departament]. [organisme autònom…]"; "S'ha d'informar de la darrera data d'actualització"; "No es pot alterar el contingut" | yes |
+| Protecció Civil plans in pre-alert/alert/emergency | `https://analisi.transparenciacatalunya.cat/resource/wj9c-j6vf.json` | Socrata JSON, update "Variable"; empty = no plan ("Quan no hi ha cap pla d'emergència activat, el conjunt de dades és buit") | same Generalitat licence (attribution "Direcció General de Protecció Civil") | yes |
+| Meteocat SMP warnings | `api.meteo.cat` | JSON API, **key required** (403 without; registration at apidocs.meteocat.gencat.cat "Plans i registre") | — | **no: owner action** |
+| AEMET OpenData API | `opendata-api.aemet.es` | **key required** (registration with email) | — | not needed (RSS/CAP are keyless) |
+| DGT DATEX II | nap.dgt.es | keyless | — | no: Catalonia's roads are SCT's competence |
+
+**What the page prints.** Answer first (AEMET in force / coming up with the highest level, Protecció Civil plans, SCT
+incident and closure counts), then tables: AEMET warnings in force and coming up (level chip + word, phenomenon, AEMET zone
+verbatim, province from the zone code, from–to in Madrid time, AEMET's Spanish text verbatim with probability); Protecció
+Civil plans (empty state with the dataset's last update); SCT traffic incidents, works with the road closed, other works in
+a `<details>`. Each section ends with the attribution the licence asks for and the source's own update time. Empty states:
+"No hi ha avisos en vigor segons l'AEMET a les HH:MM" (es/en equivalents). Failure: "No hem pogut llegir … a les HH:MM" +
+link, never "no warnings". Held reads (source down) only while recent (AEMET/Protecció Civil 3 h, SCT 45 min) and printed
+with their time; AEMET files older than 18 h and SCT feeds older than 60 min are not current. Kept file
+`/srv/catalunyainfo/shared/cache/warnings-last-good.json` (`WARNINGS_SNAPSHOT_FILE`). No committed snapshot of warnings on
+purpose (it would be stale by definition); committed: the guidance, AEMET's level definitions (quoted from its guide, our
+translation in ca/en) and the plan glossary from Protecció Civil's `wfei-fjk5` (INUNCAT inundacions, NEUCAT nevades,
+VENTCAT vent…).
+
+**Titles (new pages, no baseline; static, no figures — a cached snippet with a count would go stale).** ca "Avisos ara
+a Catalunya: AEMET, trànsit i Protecció Civil"; es "Avisos hoy en Cataluña: AEMET, tráfico y Protección Civil"; en
+"Warnings in Catalonia now: weather, roads, civil protection".
+
+**Links in (body only, no title/description change).** Today page item (static, ships with the deploy). Snow guide
+"Abans de sortir / Antes de salir / Before you set off" list (group `snow-now`, which also republishes `ski` and the snow
+trips guide unchanged). Rainy-day guide, the "Avisos i previsió" line (group `rainy`). **Not** the Barcelona weather-by-month
+guide (`climate`): its EN title window runs to 9 Dec and the 19 Nov H3 patch (`docs/patches/weather-month-h3-19nov.patch`)
+must apply cleanly and be measured alone — add the link after 9 Dec. The new page links to it.
+
+**Hypothesis.** Winter queries ("avisos meteocat", "alerta neu", "avís groc vent", "estat carreteres", "incidències
+trànsit", "avisos aemet cataluña", "carreteras cortadas cataluña") on storm and snow days reach a page that answers in its
+first line from the official feeds; returning users from the today page.
+
+**Review.** 2026-12-16 (`snapshot.py page avisos 14`, `page warnings 14`; queries with avis|alert|aemet|meteocat|neu|
+nieve|trànsit|tráfico|carreter); 1 Dec: indexed? (URL inspection). Ops check after deploy: the HTML of `/ca/avisos/` shows
+the three source lines with times < 10 min old; `/api/warnings/now/` 200.
+
+**Owner actions.** (1) Meteocat SMP warnings: request an API key at https://apidocs.meteocat.gencat.cat/ ("Plans i
+registre"; needs the owner's email) — then they can be added next to AEMET's. (2) None needed for AEMET (RSS/CAP keyless),
+SCT or Protecció Civil.
+
+**Go-live.** Deploy (new routes, API, today page, hub card, sitemap, llms.txt ship with it), then publish `snow-now`,
+`rainy`; IndexNow prefixes `/ca/avisos/`, `/es/avisos/`, `/en/warnings/`, `/ca/avui/`, `/es/hoy/`, `/en/today/`,
+`/ca/guies/neu-pirineu-avui`, `/es/guias/nieve-pirineo-hoy`, `/en/guides/snow-pyrenees-today`,
+`/ca/plans/que-fer-catalunya-quan-plou`, `/es/planes/que-hacer-cataluna-cuando-llueve`, `/en/things-to-do/catalonia-rainy-day`,
+`/es/calculadoras/`, `/ca/calculadores/`, `/en/calculators/`.
+
+**Outcome:** _pending_

@@ -32,6 +32,7 @@ import { subsidySitemapEntries } from "@/lib/programmatic/unemployment-subsidy/s
 import { rentSitemapEntries } from "@/lib/programmatic/rent-update/page";
 import { pvpcSitemapEntries } from "@/lib/programmatic/pvpc/pages";
 import { butaneSitemapEntries } from "@/lib/programmatic/butane/page";
+import { warningsSitemapEntries } from "@/lib/programmatic/warnings/page";
 import { madridDate } from "@/lib/programmatic/pvpc/time";
 import { pensionSitemapEntries } from "@/lib/programmatic/pensions-2027/page";
 import { workingDaysSitemapEntries } from "@/lib/programmatic/working-days/places";
@@ -207,6 +208,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...pvpcSitemapEntries(madridDate(Date.now())),
     // "Precio de la bombona de butano hoy" (BOE regulated price), in es, ca and en.
     ...butaneSitemapEntries(madridDate(Date.now())),
+    // "Avisos ara a Catalunya": AEMET warnings, Protecció Civil plans and SCT incidents in force, in ca, es and en.
+    ...warningsSitemapEntries(Date.now()),
     // "Subida de las pensiones 2027": the pension revaluation calculator (INE CPI), in es, ca and en.
     ...pensionSitemapEntries(),
     // "Calculadora de días hábiles": working days and deadlines (Ley 39/2015 art. 30, LOPJ, LEC), in es, ca and en.

@@ -28,6 +28,7 @@ import { GUIDES } from "@/lib/programmatic/holidays/links";
 import { DATE_PAGES, datePath, hubPath as holidayHubPath, municipalityPath } from "@/lib/programmatic/holidays/paths";
 import type { NucleusDays, SnapshotMunicipality } from "@/lib/programmatic/holidays/types";
 import { fuelHubPath } from "@/lib/programmatic/fuel/paths";
+import { warningsPath } from "@/lib/programmatic/warnings/paths";
 import { SNAPSHOT as RESERVOIRS, snapshotReadings } from "@/lib/programmatic/reservoirs/data";
 import { reservoirHubPath } from "@/lib/programmatic/reservoirs/paths";
 import { LINES } from "@/lib/programmatic/rodalies/data";
@@ -194,8 +195,16 @@ export function todayLinks(locale: Locale) {
       bridge: GUIDES.decemberBridge[locale],
     },
     snow: { page: `/${locale}/${B2_PATHS.snowNow[locale]}/` },
+    warnings: { page: warningsPath(locale), aemet: AEMET_WARNINGS_PAGE[locale] },
   };
 }
+
+/** AEMET's own warnings page for Catalonia, in the reader's language. */
+const AEMET_WARNINGS_PAGE: Record<Locale, string> = {
+  ca: "https://www.aemet.es/ca/eltiempo/prediccion/avisos?k=cat",
+  es: "https://www.aemet.es/es/eltiempo/prediccion/avisos?k=cat",
+  en: "https://www.aemet.es/en/eltiempo/prediccion/avisos?k=cat",
+};
 
 export type TodayLinks = ReturnType<typeof todayLinks>;
 

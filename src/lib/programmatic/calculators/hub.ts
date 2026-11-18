@@ -20,6 +20,7 @@ import { PENSION_RULES_AS_OF } from "@/lib/programmatic/pensions-2027/rules";
 import { SMI_RULES_AS_OF } from "@/lib/programmatic/smi/rules";
 import { RULES_AS_OF as TREASURY_RULES_AS_OF } from "@/lib/programmatic/treasury-bills/rules";
 import { pvpcTranslations } from "@/lib/programmatic/pvpc/paths";
+import { warningsTranslations } from "@/lib/programmatic/warnings/paths";
 import { reservoirHubPath } from "@/lib/programmatic/reservoirs/paths";
 import { RULES_AS_OF as WORKING_DAYS_AS_OF } from "@/lib/programmatic/working-days/rules";
 import { ITV_RULES_AS_OF } from "@/lib/programmatic/itv/rules";
@@ -46,7 +47,7 @@ export type Scope = "spain" | "catalonia";
 
 export interface HubCard {
   /** The calculator's registry id, or a key of its own for the other tools. */
-  key: CalculatorId | "pay-dates" | "leave-2027" | "ics" | "tourist-tax" | "fuel" | "reservoirs" | "rodalies" | "pvpc" | "butane";
+  key: CalculatorId | "pay-dates" | "leave-2027" | "ics" | "tourist-tax" | "fuel" | "reservoirs" | "rodalies" | "pvpc" | "butane" | "warnings";
   calculator: boolean;
   href: Record<CalcLocale, string>;
   /** Set when an edition links a page in another language (fuel has no English edition). */
@@ -635,6 +636,23 @@ export const HUB_GROUPS: HubGroup[] = [
           ca: "Avisos de Rodalies de Catalunya i dades obertes de Renfe.",
           es: "Avisos de Rodalies de Catalunya y datos abiertos de Renfe.",
           en: "Rodalies de Catalunya notices and Renfe's open data.",
+        },
+        scope: "catalonia",
+      },
+      {
+        key: "warnings",
+        calculator: false,
+        href: warningsTranslations(),
+        title: { ca: "Avisos ara a Catalunya", es: "Avisos hoy en Cataluña", en: "Warnings in Catalonia now" },
+        answers: {
+          ca: "Hi ha avisos de l'AEMET, plans de Protecció Civil activats o carreteres tallades ara mateix?",
+          es: "¿Hay avisos de la AEMET, planes de Protección Civil activados o carreteras cortadas ahora mismo?",
+          en: "Any AEMET weather warnings, Civil Protection plans or closed roads right now?",
+        },
+        basis: {
+          ca: "AEMET (Meteoalerta), dades obertes de Protecció Civil i del Servei Català de Trànsit.",
+          es: "AEMET (Meteoalerta), datos abiertos de Protecció Civil y del Servei Català de Trànsit.",
+          en: "AEMET (Meteoalerta), Protecció Civil and Servei Català de Trànsit open data.",
         },
         scope: "catalonia",
       },
