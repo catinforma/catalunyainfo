@@ -15,6 +15,7 @@ import { TABLE_SALARIES, money, netSalaryEditions, netSalaryPath, percent, type 
 import { DEFAULT_INPUT, calculateNetSalary, scale, type SalaryResult } from "@/lib/programmatic/net-salary/engine";
 import { REGIONS, regionById } from "@/lib/programmatic/net-salary/regions";
 import { AEAT_VALIDATION, FORAL_LINKS, IRPF, SALARY_RULES_AS_OF, SALARY_RULES_YEAR, SMI_DEDUCTION, SOCIAL_SECURITY, SOURCES } from "@/lib/programmatic/net-salary/rules-2026";
+import { wagePath } from "@/lib/programmatic/average-salary/copy";
 import { extraPayPath } from "@/lib/programmatic/extra-pay/copy";
 import { smiPath } from "@/lib/programmatic/smi/copy";
 import { QUOTE as SMI_QUOTE } from "@/lib/programmatic/smi/rules";
@@ -380,6 +381,14 @@ export function NetSalaryRoute({ locale }: { locale: NetLocale }) {
                   en: "How much your Christmas extra payment comes to, or the part you are owed if you started this year?",
                 })}{" "}
                 <Link href={extraPayPath(locale)}>{L(locale, { es: "Calculadora de la paga extra", ca: "Calculadora de la paga extra", en: "Christmas extra pay calculator" })}</Link>.
+              </p>
+              <p>
+                {L(locale, {
+                  es: "¿Tu sueldo bruto está por encima o por debajo de lo habitual? El INE publica el salario medio y el mediano por comunidad, edad, sexo y sector, y los deciles de salarios de la EPA:",
+                  ca: "El teu sou brut és per sobre o per sota del més habitual? L'INE publica el salari mitjà i el medià per comunitat, edat, sexe i sector, i els decils de salaris de l'EPA:",
+                  en: "Is your gross salary above or below what most people earn? The INE publishes the mean and median salary by region, age, sex and sector, and the EPA wage deciles:",
+                })}{" "}
+                <Link href={wagePath(locale)}>{L(locale, { es: "Salario medio en España (INE)", ca: "Salari mitjà a Espanya (INE)", en: "Average salary in Spain (INE)" })}</Link>.
               </p>
 
               <h2 id="smi">{smiH}</h2>

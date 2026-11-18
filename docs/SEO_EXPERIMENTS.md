@@ -7707,3 +7707,66 @@ for the changed families (the script takes sitemap URLs only, so noindex pages a
 `/ca/eleccions/`, `/es/elecciones/`, `/en/elections/`.
 
 **Outcome:** _pending_
+
+## 2026-11-18 — "Salario medio en España 2026" (INE EAES + EPA deciles), finder, chart, tables and CSV, es + ca + en (new page; deploy only, no publish group; review 2026-12-16)
+
+**Why.** Research row 15 (research_notes/spain-utilities-opportunities-nov2026.md): "salario medio" ≈ 15.5k + "tabla
+salarial" ≈ 12.8k searches/month in Spain, flat all year (January index 143 for "tabla salarial"). The SERP mixes a 2017
+article, Eurostat-vs-INE figures that disagree and a CCOO PDF; ine.es is barely visible and nobody has a per-community
+tool. Media pillars C (money tools) and E (linkable original-data asset: tables + CSV with "Fuente: INE").
+
+- URLs: `/es/calculadoras/salario-medio/` (primary), `/ca/calculadores/salari-mitja/`, `/en/calculators/average-salary-spain/`
+  (sitemap + hreflang, x-default en; llms.txt entry built from the snapshot; site-search shortcut "salario medio",
+  "sueldo medio", "tabla salarial"…; `calculator_use` id `average-salary`). Registry `CALCULATORS` id `average-salary`;
+  hub group `official`, card after the SMI. Next step under the finder: net salary, SMI. CSV: `/datos/salario-medio-ine.csv`.
+- Data (INE Tempus3 JSON API, reachable from the VPS; read 18 Nov 2026; `npm run salary:snapshot -- build|check`,
+  scripts/average-salary-snapshot.ts → src/lib/programmatic/average-salary/snapshot.json + public/datos/salario-medio-ine.csv):
+  - EAES (Encuesta Anual de Estructura Salarial), year **2024**, released **28 May 2026** (calendar 163, "Definitivos 2024"):
+    tables 28191 (mean, P10, P25, median, P75, P90 by community × sex), 28201 (community × sex × age band), 28192
+    (community × sex × sector), 28193 (community × sex × occupation level: INE note "Alta 1,2 y 3; Media 4,5,6,7 y 0; Baja 8 y
+    9"), 28189 (Spain, 5-year age bands), 28185 (CNAE-09 sections), 28186 (CNO-11 groups), 28187 (full/part-time). English
+    labels from INE's own EN API. Modal wage (16,520.18 €, 3.8 %) parsed from the press release (Prensa/es/EAES2024.htm), not in
+    the API. Headline checked against the press release: mean 29,540.26 €, median 24,497.17 €, women 26,904.90 €, men
+    32,057.55 €, +5.3 %, País Vasco 35,170.28 € … Extremadura 24,979.44 €. The INE calendar lists **no date for EAES 2025** yet.
+  - EPA, Decil de salarios del empleo principal, year **2024**, released **14 Nov 2025** (calendar 348): tables 66252 (decile
+    lower limits and means) and 66237 (means by working time). Monthly gross = yearly ÷ 12, extras prorated (INE methodology
+    nota_epa_decil.pdf and the press release dsEPA2024). **2025 deciles scheduled for 25 Nov 2026.**
+  - INE's "-" sign (100–500 observations) kept as a flag (*), missing cells (<100 observations) shown as "—"; nothing filled in
+    or rounded beyond INE's decimals. Licence CC BY 4.0 (INE aviso legal, "Reutilización…"); every CSV row says "Fuente: INE".
+- Server-rendered: key figures, the finder (default Spain, both sexes, 30,000 €: percentile band and EPA decile 7), ranked
+  HTML bar chart by community (one hue, national-mean line), 17 tables (community, age, sector, occupation, working time,
+  deciles; women/men versions in `<details>`), mean vs median vs mode, gross vs net (net-salary engine estimate, linked with
+  `#b=` prefill), why the lag (INE quote), why other figures differ, the "tabla salarial de tu convenio" answer (REGCON public
+  search, verified 200), CSV + citation, 7-question FAQ (FAQPage JSON-LD), Dataset JSON-LD with the CSV as DataDownload,
+  sources, limits, YMYL disclaimer.
+- Links: the net salary pages (after the extra-pay line) and the SMI pages (under the history table) link it; body only, no
+  title or description touched on either (their windows are unaffected).
+
+**Date guards (tests/average-salary.test.ts).** Fails from **26 Nov 2026** (the day after INE's scheduled EPA 2025 deciles):
+run `npm run salary:snapshot -- build`, check the deciles table/finder/FAQ, commit snapshot + CSV, redeploy. EAES: fails
+from **15 Jan 2027** (`EAES_CALENDAR_RECHECK_BY`) unless a rebuild has recorded INE's date for EAES 2025; once recorded, fails
+the day after that date.
+
+**Baseline:** 0 (no page; GSC 22 Oct–18 Nov: no "salario medio / mediano / tabla salarial" query on any calculator page).
+
+**Prediction.** Indexed within 7 days (IndexNow). The head "salario medio" is contested (news, INE, Eurostat explainers):
+positions 8–20 by mid-December; long tail on page 1 possible ("salario medio por comunidad autónoma", "salario medio
+cataluña 2024", "salario mediano españa", "salario medio por edad", "decil salarial", "salario medio hostelería").
+"tabla salarial" is mostly convenio intent: impressions, low CTR. By 13 Jan 2027: 3,000–12,000 impressions/28 days, CTR
+1.5–4 %. Wrong if under 800 impressions/28 days by 13 Jan.
+
+**Measure:** 25 Nov `batch_url_inspection` (rendered tables); 16 Dec and 13 Jan 2027 `snapshot.py page salario-medio 28`
+(+ salari-mitja, average-salary-spain); CSV hits in the access log; referring domains in GSC Links by March 2027.
+**Review: 2026-12-16.**
+
+**Confounders.** The EPA 2025 deciles (25 Nov) change the deciles table inside the window; the net salary page's 15 Dec
+review reads one more body paragraph and link (no title change); the SMI 2027 decree may move "salario" searches in
+December–January.
+
+**Deploy.** Deploy only (static, nothing in the database): no publish group. IndexNow prefixes:
+`/es/calculadoras/salario-medio/`, `/ca/calculadores/salari-mitja/`, `/en/calculators/average-salary-spain/`, plus the
+re-crawl of `/es/calculadoras/sueldo-neto/`, `/ca/calculadores/sou-net/`, `/en/calculators/net-salary-spain/`,
+`/es/calculadoras/salario-minimo-2027/`, `/ca/calculadores/salari-minim-2027/`, `/en/calculators/spain-minimum-wage-2027/`
+and the calculators hubs `/es/calculadoras/`, `/ca/calculadores/`, `/en/calculators/`.
+
+**Outcome:** _pending_

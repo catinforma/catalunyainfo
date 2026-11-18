@@ -24,6 +24,9 @@ import { pensionEditions } from "@/lib/programmatic/pensions-2027/copy";
 import { workingDaysEditions } from "@/lib/programmatic/working-days/copy";
 import { smiEditions } from "@/lib/programmatic/smi/copy";
 import { ipcEditions } from "@/lib/programmatic/ipc/copy";
+import { euros as wageMoney, wageEditions } from "@/lib/programmatic/average-salary/copy";
+import { SALARY_SNAPSHOT } from "@/lib/programmatic/average-salary/data";
+import { headline as wageHeadline } from "@/lib/programmatic/average-salary/page";
 import { letrasEditions } from "@/lib/programmatic/treasury-bills/copy";
 import { euriborEditions } from "@/lib/programmatic/euribor/copy";
 import { mortgageEditions } from "@/lib/programmatic/mortgage/copy";
@@ -253,6 +256,11 @@ export function liveTools(): LiveTool[] {
       name: "Spain minimum wage (SMI) 2027",
       hubs: smiEditions(),
       description: "Spain's minimum wage from the BOE: 2026 (RD 126/2026: 1,221 euros a month in 14 payments, 17,094 a year, 40.70 a day, 9.55 an hour for domestic workers), every decree since 2018 with its BOE link, where 2027 stands from official documents only (advisory committee report, the Ministry of Labour's draft, Council of Ministers, BOE checked hourly) and a part-time / 12-or-14-payments calculator linked to the net salary calculator.",
+    },
+    {
+      name: "Average salary in Spain (INE): by region, age, sex, sector and occupation, with EPA wage deciles",
+      hubs: wageEditions(),
+      description: `the INE's latest annual gross salary per worker from the Annual Wage Structure Survey (EAES, year ${wageHeadline().year}, released ${wageHeadline().released}: mean ${wageMoney(wageHeadline().mean, "en")}, median ${wageMoney(wageHeadline().median, "en")}${wageHeadline().modal ? `, most common ${wageMoney(wageHeadline().modal!.value, "en")}` : ""}; women ${wageMoney(wageHeadline().women, "en")}, men ${wageMoney(wageHeadline().men, "en")}): mean, 10th/25th/50th/75th/90th percentiles by autonomous community and sex (table 28191), by community and age (28201), sector (28192) and occupation level (28193), Spain by 5-year age band (28189), CNAE-09 section (28185), CNO-11 occupation group (28186) and full/part-time (28187); the EPA's monthly gross wage deciles of the main job (${SALARY_SNAPSHOT.epa.year}, released ${SALARY_SNAPSHOT.epa.released}: tables 66252, 66237${SALARY_SNAPSHOT.epa.next ? `; the ${SALARY_SNAPSHOT.epa.next.year} deciles are scheduled for ${SALARY_SNAPSHOT.epa.next.day}` : ""}); a finder that places a yearly gross salary among its region's percentiles and the national deciles; mean vs median vs mode, gross vs net (linked to the net salary calculator), why the data lag about a year and a half, and a CSV of every figure with 'Fuente: INE' (CC BY 4.0). Figures flagged by the INE as resting on 100-500 observations are marked; none are estimated.`,
     },
     {
       name: "Spain CPI (IPC) today and INE release calendar",

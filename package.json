@@ -37,6 +37,7 @@
     "reservoirs:snapshot": "node --experimental-strip-types --import ./tests/register-alias.mjs scripts/reservoirs-snapshot.ts",
     "rent:snapshot": "node --experimental-strip-types --import ./tests/register-alias.mjs scripts/rent-index-snapshot.ts",
     "ipc:snapshot": "node --experimental-strip-types --import ./tests/register-alias.mjs scripts/ipc-snapshot.ts",
+    "salary:snapshot": "node --experimental-strip-types --import ./tests/register-alias.mjs scripts/average-salary-snapshot.ts",
     "letras:snapshot": "node --experimental-strip-types --import ./tests/register-alias.mjs scripts/letras-snapshot.ts",
     "euribor:snapshot": "node --experimental-strip-types --import ./tests/register-alias.mjs scripts/euribor-snapshot.ts",
     "weekend:snapshot": "node --experimental-strip-types --import ./tests/register-alias.mjs scripts/weekend-snapshot.ts",

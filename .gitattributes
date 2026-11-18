@@ -4,3 +4,6 @@ tests/fixtures/interior/** -text
 # Server files are copied from a Windows checkout to Linux (ops/vps/README.md):
 # bash scripts and systemd units break on CRLF, so keep them LF everywhere.
 ops/vps/** text eol=lf
+
+# Downloadable CSV built byte-exact by scripts/average-salary-snapshot.ts (RFC 4180, CRLF, BOM); a test compares it: never convert.
+public/datos/*.csv -text

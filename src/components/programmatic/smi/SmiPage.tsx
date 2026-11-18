@@ -15,6 +15,7 @@ import { currentYear, increaseOn, officialYears, prorated12 } from "@/lib/progra
 import { freshnessText, leadText, smiMeta, statusOf } from "@/lib/programmatic/smi/page";
 import { DRAFT_2027, NORMS, QUOTE, SMI_2026, SMI_HISTORY, SMI_RULES_AS_OF, boeUrl, type SmiYear } from "@/lib/programmatic/smi/rules";
 import type { LiveBoe } from "@/lib/programmatic/smi/engine";
+import { wagePath } from "@/lib/programmatic/average-salary/copy";
 import { percent } from "@/lib/programmatic/net-salary/copy";
 import { DEFAULT_INPUT as NET_DEFAULT, calculateNetSalary } from "@/lib/programmatic/net-salary/engine";
 import { SMI_DEDUCTION } from "@/lib/programmatic/net-salary/rules-2026";
@@ -435,6 +436,14 @@ export function SmiRoute({ locale, data }: { locale: SmiLocale; data: SmiPageDat
                 </table>
               </div>
               <p className="text-sm">{histNote}</p>
+              <p>
+                {L(locale, {
+                  es: "El SMI es el mínimo legal. Lo que se cobra de verdad, de media y de mediana, por comunidad, edad, sexo y sector, lo mide el INE:",
+                  ca: "L'SMI és el mínim legal. El que es cobra de debò, de mitjana i de mediana, per comunitat, edat, sexe i sector, ho mesura l'INE:",
+                  en: "The SMI is the legal floor. What people actually earn, mean and median, by region, age, sex and sector, is measured by the INE:",
+                })}{" "}
+                <Link href={wagePath(locale)}>{L(locale, { es: "Salario medio en España (INE)", ca: "Salari mitjà a Espanya (INE)", en: "Average salary in Spain (INE)" })}</Link>.
+              </p>
 
               <h2 id="irpf">{h.irpf}</h2>
               <p>{irpf[0]}</p>
