@@ -9,6 +9,7 @@ import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
 import { getMessages } from "@/lib/i18n";
 import { IPREM_MONTHLY } from "@/lib/programmatic/employment/rules";
+import { calcPath } from "@/lib/programmatic/calculators/paths";
 import { PAY_DATES_PATH } from "@/lib/programmatic/employment/paths";
 import { MINIMUM_COLS, MINIMUM_LABEL, bareDay, elDay, euros, monthText, pct, pensionEditions, pensionPath, percentText, type PensionLocale } from "@/lib/programmatic/pensions-2027/copy";
 import { DEFAULT_INPUT, novemberScenarios, perMonth, type RateStatus } from "@/lib/programmatic/pensions-2027/engine";
@@ -507,6 +508,10 @@ export function PensionRoute({ locale, data }: { locale: PensionLocale; data: Se
               <h2 id="cobro">{h.pay}</h2>
               <p>
                 {payText[0]} <Link href={PAY_DATES_PATH[locale]}>{payText[1]}</Link>.
+              </p>
+              <p>
+                {L(locale, { es: "¿Aún no te has jubilado?", ca: "Encara no t'has jubilat?", en: "Not retired yet?" })}{" "}
+                <Link href={calcPath("retirement-age", locale)}>{L(locale, { es: "Calcula a qué edad te puedes jubilar", ca: "Calcula a quina edat et pots jubilar", en: "Work out when you can retire in Spain" })}</Link>.
               </p>
 
               <h2 id="fuentes">{h.sources}</h2>

@@ -84,6 +84,7 @@ export const CALCULATOR_USE_IDS = [
   "mortgage-revision",
   "home-purchase-tax",
   "pensions-2027",
+  "retirement-age",
   "working-days",
   "smi-2027",
   "average-salary",

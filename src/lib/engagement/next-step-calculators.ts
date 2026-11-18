@@ -43,6 +43,8 @@ export const CALCULATOR_NEXT: Partial<Record<NextToolKey, readonly NextToolKey[]
   mortgage: ["home-purchase-tax"],
   "home-purchase-tax": ["mortgage", "euribor"],
   "pensions-2027": ["ipc", "pay-dates"],
+  // The retirement date: how much the pension rises next January, then the day each payment arrives.
+  "retirement-age": ["pensions-2027", "pay-dates"],
   "working-days": ["leave-2027", "paid-leave"],
   "smi-2027": ["net-salary", "extra-pay"],
   // The average salary is gross: its readers want the net of a figure, then the floor (SMI).

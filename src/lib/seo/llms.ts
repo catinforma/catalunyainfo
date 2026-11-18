@@ -21,6 +21,7 @@ import { subsidyEditions } from "@/lib/programmatic/unemployment-subsidy/copy";
 import { calcEditions, calculatorsHubEditions } from "@/lib/programmatic/calculators/paths";
 import { rentEditions } from "@/lib/programmatic/rent-update/copy";
 import { pensionEditions } from "@/lib/programmatic/pensions-2027/copy";
+import { retirementEditions } from "@/lib/programmatic/retirement-age/copy";
 import { workingDaysEditions } from "@/lib/programmatic/working-days/copy";
 import { smiEditions } from "@/lib/programmatic/smi/copy";
 import { ipcEditions } from "@/lib/programmatic/ipc/copy";
@@ -248,6 +249,11 @@ export function liveTools(): LiveTool[] {
       name: "Spain pension increase 2027 calculator",
       hubs: pensionEditions(),
       description: "the January 2027 revaluation of Spanish contributory pensions: the average of the INE's annual CPI rates from December 2025 to November 2026 (LGSS art. 58), read daily and marked provisional until November's figure is out, a monthly and yearly calculator, no catch-up payment, and the 2026 minimum and non-contributory pensions and IPREM from the BOE (RDL 3/2026, RD 241/2026).",
+    },
+    {
+      name: "Spain retirement age calculator (edad de jubilación): when can I retire?",
+      hubs: retirementEditions(),
+      description: "the day you reach Spain's ordinary retirement age from your date of birth and years contributed, quoted from the BOE (General Social Security Act, consolidated text of 11/11/2026): 67, or 65 with 38 years and 6 months of contributions from 2027 (art. 205.1.a), and the seventh transitional provision's phase-in table 2013-2027 cell by cell (2026: 66 years 10 months, or 65 with 38 years 3 months), applied by the year in which the age is reached and counted date to date as the Seguridad Social does; at least 15 years for a contributory pension, 2 of them in the last 15 (art. 205.1.b); involuntary early retirement up to 4 years before with 33 years, 6 months as a job seeker and a listed cause, not for the self-employed (arts. 207, 318.d); voluntary up to 2 years before with 35 years and a pension above the minimum (art. 208); both monthly reduction tables of Law 21/2021 (per month or fraction since 2022, not per quarter: up to 30% at 48 months involuntary, 21% at 24 months voluntary, lower with longer careers), the reference age as if contributions continued, the 0.50% per quarter cap on the maximum pension (art. 210.4); delay bonus 4% per full year plus 2% for more than 6 months from the second full year (art. 210.2, Royal Decree-law 11/2024), lump-sum and mixed options explained, active retirement 45-100% (art. 214) and partial retirement (art. 215). No pension amount estimate and no personal data: links the Seguridad Social's own simulator and legal retirement age report.",
     },
     {
       name: "Spain working days and deadline calculator (días hábiles)",

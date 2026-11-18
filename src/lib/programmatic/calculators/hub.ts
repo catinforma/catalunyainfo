@@ -17,6 +17,7 @@ import { RULES_AS_OF as SICK_LEAVE_AS_OF } from "@/lib/programmatic/sick-leave/r
 import { RULES_AS_OF as PAID_LEAVE_AS_OF } from "@/lib/programmatic/paid-leave/rules";
 import { SUBSIDY_RULES_AS_OF } from "@/lib/programmatic/unemployment-subsidy/rules";
 import { PENSION_RULES_AS_OF } from "@/lib/programmatic/pensions-2027/rules";
+import { RULES_AS_OF as RETIREMENT_AGE_AS_OF } from "@/lib/programmatic/retirement-age/rules";
 import { SMI_RULES_AS_OF } from "@/lib/programmatic/smi/rules";
 import { RULES_AS_OF as TREASURY_RULES_AS_OF } from "@/lib/programmatic/treasury-bills/rules";
 import { pvpcTranslations } from "@/lib/programmatic/pvpc/paths";
@@ -245,6 +246,24 @@ export const HUB_GROUPS: HubGroup[] = [
         },
         scope: "spain",
         checked: PAID_LEAVE_AS_OF,
+      },
+      {
+        key: "retirement-age",
+        calculator: true,
+        href: calc("retirement-age"),
+        title: { ca: "Edat de jubilació", es: "Edad de jubilación", en: "Retirement age" },
+        answers: {
+          ca: "A quina edat et pots jubilar (65 o 67), quan com a molt aviat i amb quina retallada, i quant guanyes si l'endarrereixes?",
+          es: "¿A qué edad te puedes jubilar (65 o 67), cuándo como pronto y con qué recorte, y cuánto ganas si la retrasas?",
+          en: "When you can retire (65 or 67), the earliest date and its cut, and what you gain by delaying.",
+        },
+        basis: {
+          ca: "Llei general de la Seguretat Social, arts. 205, 207, 208 i 210 i disposició transitòria setena.",
+          es: "Ley General de la Seguridad Social, arts. 205, 207, 208 y 210 y disposición transitoria séptima.",
+          en: "General Social Security Act, arts. 205, 207, 208 and 210 and seventh transitional provision.",
+        },
+        scope: "spain",
+        checked: RETIREMENT_AGE_AS_OF,
       },
       {
         key: "pensions-2027",

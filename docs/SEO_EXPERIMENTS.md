@@ -8500,3 +8500,62 @@ cap-de-setmana 14`, `page fin-de-semana 14`, `page en/weekend 14`, `daily 14` (S
 Revert path: `revalidate = false` + the `WeekendLive` island (git history) if positions fall or weekend renders error.
 
 **Outcome:** _pending_
+
+## 2026-11-18 — "¿A qué edad me puedo jubilar?", retirement age calculator, es + ca + en (new page; deploy, then republish group `pagos`) (review 2026-12-16)
+
+**Why.** Research row 3 (research_notes/spain-utilities-opportunities-nov2026.md): "jubilación" ≈ 129k/month (head),
+"edad de jubilación" ≈ 5.6k, "calcular pensión" ≈ 3.5k (×0.5–1.5). The pensions-2027 page answers the January increase,
+not *when*; 1 Jan 2027 is the day DT 7ª reaches its last row (67, or 65 with 38 years 6 months), so "edad de jubilación
+2027" peaks now. Fact pack: research_notes/edad-jubilacion-nov2026.md (gitignored, worktree copy).
+
+- URLs: `/es/calculadoras/edad-jubilacion/` (primary), `/ca/calculadores/edat-jubilacio/`, `/en/calculators/spain-retirement-age/`
+  (sitemap + hreflang, x-default en; llms.txt entry; site-search shortcut "jubilación", "edad de jubilación", "retirement";
+  `calculator_use` id `retirement-age`). Registry `CALCULATORS` id `retirement-age`; hub card in the `work` group right
+  before the 2027 pension increase. Next step: pensions 2027, pay dates.
+- Inputs: date of birth, years + months contributed so far, keep contributing yes/no, type (ordinary / early involuntary /
+  early voluntary / delayed + months of delay). Outputs: the day the ordinary age is reached and why (65 rule or the row's
+  full age), the 65-rule check at the 65th birthday, the 15-year minimum, the earliest involuntary and voluntary early date
+  with months ahead, column and coefficient, the delay bonus and the jubilación activa share. No pension amount (needs the
+  person's bases): links the Seguridad Social simulator, pensions 2027 and pay dates. Never asks for ID or NSS.
+- Rules (read 18 Nov 2026, curl + grep; 25 quotes verbatim, the 75 DT 7ª cells and both coefficient tables (48 + 24 rows ×
+  4 columns) compared cell by cell with the BOE download; 15 URLs 200): LGSS consolidated (BOE-A-2015-11724, última
+  actualización 11/11/2026) arts. 205.1, 206, 206 bis, 207, 208, 210.2–210.4, 214, 215, 318.d and DT 7ª; Ley 21/2021
+  (monthly coefficients since 2022 — the brief's "per quarter" is the old rule; the quarter survives only as the art. 210.4
+  cap); RDL 11/2024 (4 % + 2 % half-year, from 1 Apr 2025); RD 416/2026 (flexible/mixed, 28 Aug 2026); Seguridad Social
+  requisitos (date-to-date count), cuantía, early-retirement, partial and active pages; Revista SS 30/09/2026 (legal age
+  report, same "situation continues" premise) and 27/05/2025.
+- Readings flagged on the page: the table row is the year the age is reached (15/02/1960 → 66 y 10 m on 15 Dec 2026;
+  15/04/1960 → 67 on 15 Apr 2027); early retirement measured against the age "de haber seguido cotizando"; the 2 % for >6
+  months only after two full years (stricter; SS example 2 y 7 m = 10 % fits); 38 y 6 m reached between 65 and 67 → that day.
+- Server-rendered: calculator on a person born 20/06/1965 with 35 years (65 on 20 Jun 2030 via 38 y 7 m), DT 7ª table
+  (es verbatim, ca/en translated from the same numbers), how it is counted, involuntary/voluntary requirements, both
+  coefficient tables, delay table, active/partial, lower ages, 7 worked examples, 8-question FAQ + FAQPage JSON-LD, YMYL
+  disclaimer with the official simulator, sources, limits.
+- Links (body only, no title or description touched): pay-dates guide pensions section, ca/es/en (DB article → republish
+  `pagos`); pensions-2027 page "cobro" section, ca/es/en.
+
+**Date guard (tests/retirement-age.test.ts).** From **1 Jan 2027** the test fails: re-read the consolidated LGSS ("última
+actualización"), DT 7ª, arts. 205/207/208/210/214/215/318, the Seguridad Social pages; re-run the scratchpad verify script;
+move RULES_AS_OF / RULES_UNTIL.
+
+**Baseline:** 0 (no page). The pensions-2027 page's "jubilación" impressions (if any) are its own.
+
+**Prediction.** Indexed within 7 days (IndexNow). Head "jubilación" is navigational (seg-social.es): no target. Long tail on
+page 1–2 by mid-December: "edad de jubilación 2027", "a qué edad me puedo jubilar", "jubilación a los 65 con 38 años y 6
+meses", "coeficientes reductores jubilación anticipada", "jubilación anticipada voluntaria 63". By 13 Jan 2027:
+3,000–10,000 impressions/28 days, CTR 2–5 %. Wrong if under 1,000 impressions/28 days by 13 Jan.
+
+**Measure:** 25 Nov `batch_url_inspection` (rendered tables); 16 Dec and 13 Jan 2027 `snapshot.py page edad-jubilacion 28`
+(+ edat-jubilacio, spain-retirement-age); `calculator_use` `retirement-age`; next-step clicks from it.
+**Review: 2026-12-16.**
+
+**Confounders.** The pay-dates guide and the pensions-2027 page each gain one body line (their next-step boxes unchanged);
+the 1 Jan 2027 change and the pension revaluation news move "jubilación" searches in December–January.
+
+**Deploy.** Deploy, then publish group `pagos` (pay-dates guide body). IndexNow prefixes: `/es/calculadoras/edad-jubilacion/`,
+`/ca/calculadores/edat-jubilacio/`, `/en/calculators/spain-retirement-age/`, plus the re-crawl of
+`/es/calculadoras/subida-pensiones-2027/`, `/ca/calculadores/pujada-pensions-2027/`, `/en/calculators/spain-pension-increase-2027/`,
+`/es/guias/cuando-se-cobra-paro-pension/`, `/ca/guies/quan-es-cobra-atur-pensio/`,
+`/en/guides/unemployment-benefit-pension-payment-dates-spain/` and the three calculators hubs.
+
+**Outcome:** _pending_
