@@ -8218,3 +8218,58 @@ page against the 14 Nov step pages left unchanged (metro hours, zoo, R4) as a co
 **Review:** 25 Nov 2026 (7 days) and 2 Dec 2026 (14 days), counted from 18 Nov; from the publish day if it goes
 live later. Same scripts, query × page per day for the three query baselines above. Revert any item whose page loses
 > 1.5 positions with no gain on its target query.
+
+## 2026-11-18 — Rent-update calculator: correctness fix, the 2 % cap of RDL 29/2026 DF 6ª (8 Oct 2026 – 31 Dec 2027), ca/es/en (body + engine; lead figures corrected; title and description untouched; deploy only, no publish group)
+
+**Window.** The three rent-update pages launched on 13 Nov (entry above, review 15 Dec 2026 and 20 Jan 2027). Title,
+description and H1 are **untouched**. The lead is computed by the engine and printed a wrong figure ("la subida máxima es
+el IRAV de octubre de 2026: 2,57 % … 1.000 € pasa a 1.025,70 €"), so it gets the minimal correctness fix allowed inside
+any window (precedent: the 19N correction, 18 Nov): it now says the 2 % and 1.020,00 €. Not an SEO experiment; the 15 Dec
+review reads it as a confounder.
+
+**The bug (YMYL).** The engine applied the IRAV cap from 8 Oct 2026 but ignored RDL 29/2026, disposición final sexta,
+flagged in the zona-tensionada entry above ("Found, not fixed").
+
+**What the BOE says (read 18 Nov 2026, curl + grep).** RDL 29/2026 (BOE-A-2026-20823, BOE núm. 249 of 7 Oct 2026, in
+force 8 Oct per DF 11ª.1; consolidated text "Última actualización publicada el 13/11/2026", DF 6ª only in its original
+wording). DF 6ª: «La persona arrendataria de un contrato de alquiler de vivienda sujeto a la Ley 29/1994 […] cuya renta
+deba ser actualizada porque se cumpla la correspondiente anualidad de vigencia dentro del periodo comprendido entre la
+entrada en vigor de este real decreto-ley y el 31 de diciembre de 2027, podrá negociar con el arrendador la actualización
+anual de la renta con sujeción a las siguientes condiciones: a) En el caso de que la renta sea superior al límite máximo
+del precio aplicable conforme al sistema de índices de precios de referencia, no procederá la aplicación de incremento
+alguno de la renta. b) En los demás casos, el incremento de la renta será el que resulte del nuevo pacto entre las partes.
+En ausencia de este nuevo pacto entre las partes, el incremento de la renta a aplicar no podrá ser superior al dos por
+ciento.» (the full text is in `rules.ts` DF6_QUOTE). Validation: Resolución de 12 de noviembre de 2026 (BOE-A-2026-23755,
+BOE núm. 283 of 13 Nov): «la Diputación Permanente del Congreso de los Diputados … acordó convalidar el Real Decreto-ley
+29/2026». Scope: every housing lease under the LAU (art. 2: vivienda habitual, rooms included), any signing date, by the
+day the yearly update falls due; no large/small-landlord distinction; shops and other uses outside. The consolidated
+LAU art. 18 (13/11/2026) does not carry DF 6ª (standalone provision); art. 18.1 still says «En todo caso» the update cannot
+exceed the IRAV, so the two caps stack and the lower binds. RDL 26/2026 (BOE-A-2026-20266, in force 1 Oct 2026 only,
+repealed BOE-A-2026-20526) had the identical DF 6ª, so 1 Oct 2026 gets it too. RDL 28/2026, repealed the same 12 Nov
+(BOE-A-2026-23754), has no rent-update rule. The "límite máximo" is the upper value of the state index (BOE-A-2024-5213,
+SERPAVI).
+
+**What changed (ca, es, en).**
+- Engine: caps `two` (2 %, negotiable by a new agreement of any landlord and tenant; note `newAgreement`) and `noIncrease`
+  (0 %, when the new input `aboveIndex` is set; not negotiable), by update day (`df6Decree`: rdl26 on 1 Oct 2026, rdl29
+  8 Oct 2026 – 31 Dec 2027). IRAV/IPC/IGC/3 %/RDL 8 paths unchanged outside the window; commercial leases unchanged.
+- Calculator: checkbox "la renta supera el límite del índice de referencia" (with the SERPAVI lookup link) shown only for
+  housing updates in the window; result line "Tope del 2 % por el RDL 29/2026 hasta el 31/12/2027 …" with its BOE link.
+- Body: new H2 "El tope del 2 % hasta el 31 de diciembre de 2027" with the DF 6ª quote, BOE, validation and SERPAVI links;
+  the "qué límite" cases; a 5-question FAQ (+ FAQPage JSON-LD); sources (DF 6ª anchor, validation, BOE-A-2024-5213, RDL
+  26/2026, SERPAVI); disclaimer; llms.txt entry.
+- Worked examples (tests/rent-update.test.ts): 1,000 € on the IRAV — 7 Oct 2026 2.47 % → 1,024.70 €; 8 Oct 2026 2 % →
+  1,020 €; 30 Sep 2.47 %, 1 Oct 2 %, 2 Oct 2.47 %; 20 Nov 2026 (IRAV Oct 2.57 %) 2 % → 1,020 €; above the index → 0 %;
+  fixed 1.5 % → 1.5 %; 31 Dec 2027 2 % (hypothetical fixture), 1 Jan 2028 out of range.
+
+**Baseline (GSC, 12–18 Nov).** `/es/calculadoras/actualizar-alquiler/`: 3 clicks / 101 impressions, daily position
+6–33 (top query "ipc alquiler", 5 impr at 60). CA and EN: 0 impressions.
+
+**Date guards.** DF6_RECHECK_BY **2026-12-16** (re-read the consolidated RDL 29/2026, LAU, Ley 12/2023 and compare their
+"Última actualización" in `BOE_CONSOLIDATED`); DF6_END_RECHECK **2027-12-17** (before the cap ends: extension, a law
+replacing it, the 2028 regime); RENT_RULES_REVIEW_BY 2027-01-01 unchanged.
+
+**Deploy.** Deploy only (static routes, nothing in the database): no publish group. IndexNow prefixes:
+`/es/calculadoras/actualizar-alquiler/ /ca/calculadores/actualitzar-lloguer/ /en/calculators/rent-increase-spain/`.
+
+**Review:** with the launch entry, 15 Dec 2026 and 20 Jan 2027.

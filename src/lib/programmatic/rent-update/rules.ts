@@ -34,12 +34,24 @@
  *     redacción dada al artículo 18.1": the IRAV cap applies to every
  *     housing contract, whatever its signing date. LAU art. 18.1 itself now
  *     names the IRAV as the cap and as the default index.
+ *  7. 8 Oct 2026 – 31 Dec 2027: RDL 29/2026 disposición final sexta (read
+ *     18 Nov 2026 in the BOE's original text and in its consolidated text,
+ *     "Última actualización publicada el 13/11/2026", DF 6ª unchanged), for
+ *     every housing lease under the LAU whatever its signing date, by the
+ *     day the yearly update falls due: (a) a rent above the upper limit of
+ *     the state reference index system gets no increase at all; (b)
+ *     otherwise the increase is what a new agreement between the parties
+ *     says and, without one, at most 2 %. It does not tell large landlords
+ *     from small ones. It is a standalone provision: the consolidated LAU
+ *     art. 18 does not carry it. RDL 26/2026 had the same DF 6ª, so it
+ *     also held on 1 Oct 2026. The 2 % stacks with the IRAV cap of rule 6:
+ *     the lower one binds.
  *
  * Commercial and other non-housing leases ("uso distinto del de vivienda",
  * LAU art. 4.3): what the contract says; none of these caps applies.
  */
 
-export const RENT_RULES_AS_OF = "2026-11-13";
+export const RENT_RULES_AS_OF = "2026-11-18";
 /** Re-read every rule here on this day (a test fails from then on). */
 export const RENT_RULES_REVIEW_BY = "2027-01-01";
 
@@ -72,6 +84,41 @@ export const RDL_8_2026_PCT = 2;
 export const RDL_26_2026_DAY = "2026-10-01";
 export const RDL_29_2026_FROM = "2026-10-08";
 
+/**
+ * RDL 29/2026 DF 6ª: yearly updates falling due from its entry into force
+ * (DF 11ª.1, "el día siguiente al de su publicación"; BOE núm. 249 of
+ * 7 Oct 2026) to 31 Dec 2027: none above the reference index, otherwise at
+ * most 2 % without a new agreement. RDL 26/2026 DF 6ª said the same on its
+ * one day in force, 1 Oct 2026.
+ */
+export const DF6_FROM = RDL_29_2026_FROM;
+export const DF6_TO = "2027-12-31";
+export const DF6_PCT = 2;
+/** A test fails from this day: re-read the BOE before DF6_TO (an extension, a law that replaces it, the 2028 regime). */
+export const DF6_END_RECHECK = "2027-12-17";
+/** Re-read the BOE consolidated texts below by this day (a test fails from then on) and compare their "Última actualización". */
+export const DF6_RECHECK_BY = "2026-12-16";
+/** "Última actualización publicada el …" of each BOE consolidated text, as read on RENT_RULES_AS_OF. */
+export const BOE_CONSOLIDATED = {
+  rdl29: { ref: "BOE-A-2026-20823", lastUpdate: "2026-11-13" },
+  lau: { ref: "BOE-A-1994-26003", lastUpdate: "2026-11-13" },
+  ley12: { ref: "BOE-A-2023-12203", lastUpdate: "2026-10-07" },
+} as const;
+
+/** RDL 29/2026 DF 6ª, verbatim (BOE-A-2026-20823; the same words in RDL 26/2026, BOE-A-2026-20266). Spanish only: a quotation. */
+export const DF6_QUOTE = {
+  scope:
+    "La persona arrendataria de un contrato de alquiler de vivienda sujeto a la Ley 29/1994, de 24 de noviembre, de Arrendamientos Urbanos, cuya renta deba ser actualizada porque se cumpla la correspondiente anualidad de vigencia dentro del periodo comprendido entre la entrada en vigor de este real decreto-ley y el 31 de diciembre de 2027, podrá negociar con el arrendador la actualización anual de la renta con sujeción a las siguientes condiciones:",
+  a: "a) En el caso de que la renta sea superior al límite máximo del precio aplicable conforme al sistema de índices de precios de referencia, no procederá la aplicación de incremento alguno de la renta.",
+  b: "b) En los demás casos, el incremento de la renta será el que resulte del nuevo pacto entre las partes. En ausencia de este nuevo pacto entre las partes, el incremento de la renta a aplicar no podrá ser superior al dos por ciento.",
+} as const;
+
+/** Which decree's DF 6ª covers a yearly update due on `update` (ISO day), if any. */
+export function df6Decree(update: string): "rdl26" | "rdl29" | null {
+  if (update === RDL_26_2026_DAY) return "rdl26";
+  return update >= DF6_FROM && update <= DF6_TO ? "rdl29" : null;
+}
+
 export type NormId =
   | "lau18"
   | "lau4"
@@ -84,7 +131,9 @@ export type NormId =
   | "rdl8Repeal"
   | "rdl26"
   | "rdl29"
-  | "rdl29Valid";
+  | "rdl29Df6"
+  | "rdl29Valid"
+  | "indexSystem";
 
 export interface Norm {
   /** The norm's short name, as the BOE titles it. */
@@ -107,7 +156,9 @@ export const NORMS: Record<NormId, Norm> = {
   rdl8Repeal: { name: "Resolución de 28 de abril de 2026, del Congreso (derogación del RDL 8/2026)", ref: "BOE-A-2026-9359", url: "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2026-9359" },
   rdl26: { name: "Real Decreto-ley 26/2026 (derogado el 2 de octubre de 2026)", ref: "BOE-A-2026-20266", url: "https://www.boe.es/buscar/act.php?id=BOE-A-2026-20266" },
   rdl29: { name: "Real Decreto-ley 29/2026, de 6 de octubre", ref: "BOE-A-2026-20823", url: "https://www.boe.es/eli/es/rdl/2026/10/06/29" },
+  rdl29Df6: { name: "Real Decreto-ley 29/2026, disposición final sexta (tope del 2 % hasta el 31/12/2027)", ref: "BOE-A-2026-20823", url: "https://www.boe.es/buscar/act.php?id=BOE-A-2026-20823#df-6" },
   rdl29Valid: { name: "Resolución de 12 de noviembre de 2026, del Congreso (convalidación del RDL 29/2026)", ref: "BOE-A-2026-23755", url: "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2026-23755" },
+  indexSystem: { name: "Resolución de 14 de marzo de 2024, sistema de índices de precios de referencia (valor superior del rango)", ref: "BOE-A-2024-5213", url: "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2024-5213" },
 };
 
 /** Official pages the page links (read 13 Nov 2026). */
@@ -121,6 +172,9 @@ export const OFFICIAL_LINKS = {
   gencatLimit: "https://habitatge.gencat.cat/ca/ambits/preus-ingressos-i-zones/limit-preu-lloguer/",
   gencatTowns: "https://habitatge.gencat.cat/ca/ambits/preus-ingressos-i-zones/limit-preu-lloguer/llistat-municipis-zmrt/",
   gencatRules: "https://habitatge.gencat.cat/ca/ambits/preus-ingressos-i-zones/limit-preu-lloguer/normativa/",
+  /** The Ministry's reference index lookup (SERPAVI), whose upper value is the limit of RDL 29/2026 DF 6ª a) (read 18 Nov 2026). */
+  serpaviLookup: "https://serpavi.mivau.gob.es/",
+  serpaviPage: "https://www.mivau.gob.es/vivienda/alquila-bien-es-tu-derecho/serpavi",
 } as const;
 
 /**

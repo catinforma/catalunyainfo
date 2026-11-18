@@ -6,12 +6,13 @@ import { CALC_COPY, DECIMALS, decimalsOf, elDay, euros, indexOfMonth, pct, type 
 import { anniversaryIn, computeRentUpdate, parseAmount, validIso, type AgreedIndex, type LeaseUse, type RentInput, type RentResult, type RentSeries } from "@/lib/programmatic/rent-update/engine";
 import { MONTHS } from "@/lib/programmatic/holidays/format";
 import { SERIES, apiSeriesUrl, latestPoint, tableUrl, type SeriesId } from "@/lib/programmatic/rent-update/ine";
-import { FIRST_UPDATE, LAST_UPDATE, NORMS } from "@/lib/programmatic/rent-update/rules";
+import { FIRST_UPDATE, LAST_UPDATE, NORMS, OFFICIAL_LINKS, df6Decree } from "@/lib/programmatic/rent-update/rules";
 import { useCalculatorUse } from "@/lib/analytics/use-calculator-use";
 
 /**
  * The rent-update calculator: rent, lease type, signing date, the month of
- * the update, the agreed index. Server-rendered with the page's worked
+ * the update, the agreed index and, for updates under RDL 29/2026 DF 6ª,
+ * whether the rent is above the reference index. Server-rendered with the page's worked
  * example (so it answers without JavaScript); in the browser every change
  * recomputes in place with `engine.ts` and the INE series the server read.
  */
@@ -26,6 +27,7 @@ interface State {
   year: number;
   index: AgreedIndex;
   fixed: string;
+  aboveIndex: boolean;
 }
 
 function latestText(series: RentSeries, id: SeriesId, locale: RentLocale): string | null {
@@ -97,7 +99,17 @@ function Result({ result, series, locale }: { result: RentResult; series: RentSe
         {caps
           .filter((c) => !(c.kind === "irav" && agreed.source?.series === "irav"))
           .map((c) => (
-            <li key={c.kind}>{t.capLine(c, locale)}</li>
+            <li key={c.kind}>
+              {t.capLine(c, locale)}
+              {c.kind === "two" || c.kind === "noIncrease" ? (
+                <>
+                  {" "}
+                  <a href={NORMS[c.norms[0]!].url} rel="noopener" target="_blank">
+                    BOE
+                  </a>
+                </>
+              ) : null}
+            </li>
           ))}
         <li>{caps.length === 0 ? t.noCap : binding ? t.capBinds : agreed.source?.series === "irav" && caps.some((c) => c.kind === "irav") ? t.iravIsCap : t.capDoesNotBind}</li>
       </ul>
@@ -133,6 +145,7 @@ export function RentCalculator({ locale, series, initial }: { locale: RentLocale
     year: Number(initial.update.slice(0, 4)),
     index: initial.index,
     fixed: initial.fixedPercent === undefined ? "3" : String(initial.fixedPercent),
+    aboveIndex: initial.aboveIndex ?? false,
   });
   const set = (next: Partial<State>) => setState((s) => ({ ...s, ...next }));
 
@@ -145,7 +158,10 @@ export function RentCalculator({ locale, series, initial }: { locale: RentLocale
     index: state.index,
     fixedPercent: state.index === "fixed" ? parseAmount(state.fixed) : undefined,
     use: state.use,
+    aboveIndex: state.aboveIndex,
   };
+  // RDL 29/2026 DF 6ª a) only counts for a home whose update falls due in its window.
+  const askIndex = state.use === "housing" && update !== "" && df6Decree(update) !== null;
   const result = computeRentUpdate(input, series);
 
   // First result change by the visitor, once per session (lib/analytics/calculator-use.ts).
@@ -238,6 +254,21 @@ export function RentCalculator({ locale, series, initial }: { locale: RentLocale
                 onChange={(e) => set({ fixed: e.target.value })}
               />
               <span className="ci-calc-suffix">%</span>
+            </span>
+          </p>
+        ) : null}
+        {askIndex ? (
+          <p className="ci-calc-row ci-calc-wide">
+            <label htmlFor={`${id}-above`} className="flex items-start gap-2">
+              <input id={`${id}-above`} type="checkbox" className="mt-1" checked={state.aboveIndex} onChange={(e) => set({ aboveIndex: e.target.checked })} />
+              <span>{t.aboveIndex}</span>
+            </label>
+            <span className="ci-calc-note">
+              {t.aboveIndexHint}{" "}
+              <a href={OFFICIAL_LINKS.serpaviLookup} rel="noopener" target="_blank">
+                {t.serpavi}
+              </a>
+              .
             </span>
           </p>
         ) : null}

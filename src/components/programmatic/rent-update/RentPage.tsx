@@ -14,8 +14,8 @@ import { calcPath } from "@/lib/programmatic/calculators/paths";
 import { DECIMALS, SERIES_LABEL, elDay, monthText, pct, rentEditions, rentPath, type RentLocale } from "@/lib/programmatic/rent-update/copy";
 import { defaultExample } from "@/lib/programmatic/rent-update/engine";
 import { SERIES, tableUrl } from "@/lib/programmatic/rent-update/ine";
-import { lastMonths, leadText, nextRelease, rentMeta } from "@/lib/programmatic/rent-update/page";
-import { GENCAT_LATEST_RESOLUTIONS, IRAV_DEFINITION_ES, NORMS, OFFICIAL_LINKS, RENT_RULES_AS_OF } from "@/lib/programmatic/rent-update/rules";
+import { lastMonths, leadText, nextRelease, rentFaq, rentMeta } from "@/lib/programmatic/rent-update/page";
+import { DF6_QUOTE, GENCAT_LATEST_RESOLUTIONS, IRAV_DEFINITION_ES, NORMS, OFFICIAL_LINKS, RENT_RULES_AS_OF } from "@/lib/programmatic/rent-update/rules";
 import type { ServerRentData } from "@/lib/programmatic/rent-update/server";
 import { breadcrumbSchema, graph } from "@/lib/seo/jsonld";
 import { buildMetadata } from "@/lib/seo/metadata";
@@ -75,6 +75,8 @@ export function RentRoute({ locale, data }: { locale: RentLocale; data: ServerRe
 
   const h = L(locale, {
     es: {
+      two: "El tope del 2 % hasta el 31 de diciembre de 2027",
+      faq: "Preguntas frecuentes",
       table: "El IPC y el IRAV de los últimos 12 meses",
       which: "Qué límite tiene tu contrato",
       month: "Qué mes del índice cuenta",
@@ -84,6 +86,8 @@ export function RentRoute({ locale, data }: { locale: RentLocale; data: ServerRe
       sources: "Fuentes",
     },
     ca: {
+      two: "El topall del 2 % fins al 31 de desembre de 2027",
+      faq: "Preguntes freqüents",
       table: "L'IPC i l'IRAV dels últims 12 mesos",
       which: "Quin límit té el teu contracte",
       month: "Quin mes de l'índex compta",
@@ -93,6 +97,8 @@ export function RentRoute({ locale, data }: { locale: RentLocale; data: ServerRe
       sources: "Fonts",
     },
     en: {
+      two: "The 2% cap until 31 December 2027",
+      faq: "Questions",
       table: "The CPI and the IRAV over the last 12 months",
       which: "Which cap applies to your contract",
       month: "Which month of the index counts",
@@ -116,10 +122,14 @@ export function RentRoute({ locale, data }: { locale: RentLocale; data: ServerRe
 
   const cases = L<[string, string][]>(locale, {
     es: [
-      ["Vivienda, contrato firmado desde el 26 de mayo de 2023", "Desde 2025, la subida no puede pasar del IRAV (disposición adicional undécima de la LAU, añadida por la Ley 12/2023). Si el contrato dice IPC o un porcentaje fijo más alto, se aplica el IRAV."],
+      [
+        "Vivienda, actualizaciones del 8 de octubre de 2026 al 31 de diciembre de 2027",
+        "Sea cual sea la fecha de firma: sin un nuevo pacto entre casero e inquilino, como mucho el 2 % (o el IRAV, si es más bajo), y nada si la renta supera el límite del índice de referencia del Ministerio (Real Decreto-ley 29/2026, disposición final sexta). El mismo tope rigió el 1 de octubre de 2026, el único día en vigor del Real Decreto-ley 26/2026.",
+      ],
+      ["Vivienda, contrato firmado desde el 26 de mayo de 2023", "Desde 2025, la subida no puede pasar del IRAV (disposición adicional undécima de la LAU, añadida por la Ley 12/2023). Si el contrato dice IPC o un porcentaje fijo más alto, se aplica el IRAV. Hasta el 31 de diciembre de 2027, además, el tope del 2 %."],
       [
         "Vivienda, contrato firmado antes del 26 de mayo de 2023",
-        "Hasta el 7 de octubre de 2026 se aplicaba lo que dijera el contrato (con el IPC como tope si se firmó desde el 6 de marzo de 2019). Desde el 8 de octubre de 2026 también tiene el tope del IRAV: el Real Decreto-ley 29/2026 reescribió la disposición transitoria cuarta de la Ley 12/2023 y el Congreso lo convalidó el 12 de noviembre de 2026.",
+        "Hasta el 7 de octubre de 2026 se aplicaba lo que dijera el contrato (con el IPC como tope si se firmó desde el 6 de marzo de 2019). Desde el 8 de octubre de 2026 también tiene el tope del IRAV: el Real Decreto-ley 29/2026 reescribió la disposición transitoria cuarta de la Ley 12/2023 y el Congreso lo convalidó el 12 de noviembre de 2026. Hasta el 31 de diciembre de 2027, además, el tope del 2 %.",
       ],
       ["Actualizaciones de 2023 y 2024", "En 2023 el tope era la variación del Índice de Garantía de Competitividad (IGC), que la Ley 2/2015 deja entre el 0 y el 2 %; en 2024, el 3 % (Real Decreto-ley 6/2022, art. 46). Valían para todos los contratos de vivienda; un arrendador que no era gran tenedor podía pactar otra subida con el inquilino."],
       ["Del 22 de marzo al 29 de abril de 2026", "El Real Decreto-ley 8/2026 limitó la subida al 2 % hasta que el Congreso lo derogó (BOE del 30 de abril de 2026)."],
@@ -127,10 +137,14 @@ export function RentRoute({ locale, data }: { locale: RentLocale; data: ServerRe
       ["Contrato sin cláusula de actualización", "La renta no se actualiza (art. 18.1 LAU: «En defecto de pacto expreso, no se aplicará actualización de rentas»). Si la cláusula prevé actualizar sin decir con qué índice, la redacción vigente del art. 18.1 manda usar el IRAV."],
     ],
     ca: [
-      ["Habitatge, contracte signat des del 26 de maig de 2023", "Des del 2025, la pujada no pot passar de l'IRAV (disposició addicional onzena de la LAU, afegida per la Llei 12/2023). Si el contracte diu IPC o un percentatge fix més alt, s'aplica l'IRAV."],
+      [
+        "Habitatge, actualitzacions del 8 d'octubre de 2026 al 31 de desembre de 2027",
+        "Sigui quina sigui la data de signatura: sense un nou pacte entre propietari i inquilí, com a molt el 2 % (o l'IRAV, si és més baix), i res si la renda supera el límit de l'índex de referència del Ministeri (Reial decret llei 29/2026, disposició final sisena). El mateix topall va regir l'1 d'octubre de 2026, l'únic dia de vigència del Reial decret llei 26/2026.",
+      ],
+      ["Habitatge, contracte signat des del 26 de maig de 2023", "Des del 2025, la pujada no pot passar de l'IRAV (disposició addicional onzena de la LAU, afegida per la Llei 12/2023). Si el contracte diu IPC o un percentatge fix més alt, s'aplica l'IRAV. Fins al 31 de desembre de 2027, a més, el topall del 2 %."],
       [
         "Habitatge, contracte signat abans del 26 de maig de 2023",
-        "Fins al 7 d'octubre de 2026 s'aplicava el que digués el contracte (amb l'IPC com a sostre si es va signar des del 6 de març de 2019). Des del 8 d'octubre de 2026 també té el sostre de l'IRAV: el Reial decret llei 29/2026 va reescriure la disposició transitòria quarta de la Llei 12/2023 i el Congrés el va convalidar el 12 de novembre de 2026.",
+        "Fins al 7 d'octubre de 2026 s'aplicava el que digués el contracte (amb l'IPC com a sostre si es va signar des del 6 de març de 2019). Des del 8 d'octubre de 2026 també té el sostre de l'IRAV: el Reial decret llei 29/2026 va reescriure la disposició transitòria quarta de la Llei 12/2023 i el Congrés el va convalidar el 12 de novembre de 2026. Fins al 31 de desembre de 2027, a més, el topall del 2 %.",
       ],
       ["Actualitzacions del 2023 i el 2024", "El 2023 el sostre era la variació de l'Índex de Garantia de Competitivitat (IGC), que la Llei 2/2015 deixa entre el 0 i el 2 %; el 2024, el 3 % (Reial decret llei 6/2022, art. 46). Valien per a tots els contractes d'habitatge; un arrendador que no era gran tenidor podia pactar una altra pujada amb l'inquilí."],
       ["Del 22 de març al 29 d'abril de 2026", "El Reial decret llei 8/2026 va limitar la pujada al 2 % fins que el Congrés el va derogar (BOE del 30 d'abril de 2026)."],
@@ -138,10 +152,14 @@ export function RentRoute({ locale, data }: { locale: RentLocale; data: ServerRe
       ["Contracte sense clàusula d'actualització", "La renda no s'actualitza (art. 18.1 LAU: «En defecto de pacto expreso, no se aplicará actualización de rentas»). Si la clàusula preveu actualitzar sense dir amb quin índex, la redacció vigent de l'art. 18.1 mana fer servir l'IRAV."],
     ],
     en: [
-      ["Housing lease signed on or after 26 May 2023", "Since 2025 the increase cannot exceed the IRAV (additional provision 11 of the LAU, added by Law 12/2023). If the contract says CPI or a higher fixed percentage, the IRAV applies instead."],
+      [
+        "Housing, updates from 8 October 2026 to 31 December 2027",
+        "Whatever the signing date: without a new agreement between landlord and tenant, at most 2% (or the IRAV, if lower), and nothing if the rent is above the limit of the Ministry's reference index (Royal Decree-law 29/2026, sixth final provision). The same cap held on 1 October 2026, the one day Royal Decree-law 26/2026 was in force.",
+      ],
+      ["Housing lease signed on or after 26 May 2023", "Since 2025 the increase cannot exceed the IRAV (additional provision 11 of the LAU, added by Law 12/2023). If the contract says CPI or a higher fixed percentage, the IRAV applies instead. Until 31 December 2027, the 2% cap as well."],
       [
         "Housing lease signed before 26 May 2023",
-        "Until 7 October 2026 the contract decided (with the CPI as a ceiling if it was signed on or after 6 March 2019). Since 8 October 2026 the IRAV cap applies too: Royal Decree-law 29/2026 rewrote transitional provision 4 of Law 12/2023, and the Congress validated it on 12 November 2026.",
+        "Until 7 October 2026 the contract decided (with the CPI as a ceiling if it was signed on or after 6 March 2019). Since 8 October 2026 the IRAV cap applies too: Royal Decree-law 29/2026 rewrote transitional provision 4 of Law 12/2023, and the Congress validated it on 12 November 2026. Until 31 December 2027, the 2% cap as well.",
       ],
       ["Updates in 2023 and 2024", "In 2023 the cap was the change in the Competitiveness Guarantee Index (IGC), which Law 2/2015 keeps between 0 and 2%; in 2024, 3% (Royal Decree-law 6/2022, art. 46). They applied to every housing lease; a landlord who was not a large landlord could agree a different increase with the tenant."],
       ["22 March to 29 April 2026", "Royal Decree-law 8/2026 capped the increase at 2% until the Congress repealed it (BOE, 30 April 2026)."],
@@ -221,10 +239,26 @@ export function RentRoute({ locale, data }: { locale: RentLocale; data: ServerRe
     ],
   });
 
+  const twoParas = L(locale, {
+    es: [
+      "Para las actualizaciones anuales que toquen entre el 8 de octubre de 2026 y el 31 de diciembre de 2027, en cualquier contrato de alquiler de vivienda sujeto a la LAU, sea cual sea su fecha de firma y sea el casero grande o pequeño, rige la disposición final sexta del Real Decreto-ley 29/2026 (BOE del 7 de octubre de 2026, en vigor desde el 8; convalidado por la Diputación Permanente del Congreso el 12 de noviembre de 2026, BOE del 13). Su texto:",
+      "Se suma al tope del IRAV del art. 18.1 de la LAU: cuenta el más bajo de los dos. El límite del índice de referencia es el valor superior que da para cada vivienda el sistema estatal del Ministerio (SERPAVI). Los locales de negocio quedan fuera.",
+    ],
+    ca: [
+      "Per a les actualitzacions anuals que toquin entre el 8 d'octubre de 2026 i el 31 de desembre de 2027, en qualsevol contracte de lloguer d'habitatge subjecte a la LAU, sigui quina sigui la data de signatura i sigui el propietari gran o petit, regeix la disposició final sisena del Reial decret llei 29/2026 (BOE del 7 d'octubre de 2026, vigent des del 8; convalidat per la Diputació Permanent del Congrés el 12 de novembre de 2026, BOE del 13). El seu text:",
+      "S'afegeix al sostre de l'IRAV de l'art. 18.1 de la LAU: compta el més baix dels dos. El límit de l'índex de referència és el valor superior que dona per a cada habitatge el sistema estatal del Ministeri (SERPAVI). Els locals de negoci en queden fora.",
+    ],
+    en: [
+      "For yearly updates falling due between 8 October 2026 and 31 December 2027, on any housing lease under the LAU, whatever its signing date and whether the landlord is large or small, the sixth final provision of Royal Decree-law 29/2026 applies (BOE of 7 October 2026, in force from the 8th; validated by the Standing Committee of the Congress on 12 November 2026, BOE of the 13th). Its text (Spanish):",
+      "It stacks with the IRAV cap of LAU art. 18.1: the lower of the two counts. The reference index limit is the upper value the Ministry's state system (SERPAVI) gives for each home. Shop and office leases are outside it.",
+    ],
+  });
+  const faq = rentFaq(locale);
+
   const disclaimer = L(locale, {
-    es: `Es un cálculo orientativo con los datos oficiales del INE y las normas publicadas en el BOE (revisadas ${elDay(RENT_RULES_AS_OF, "es")}), no asesoramiento jurídico. Lo que diga tu contrato, si el arrendador es gran tenedor o un cambio de ley posterior pueden cambiar el resultado. Ante una discrepancia, consulta un profesional o la oficina de vivienda de tu ayuntamiento.`,
-    ca: `És un càlcul orientatiu amb les dades oficials de l'INE i les normes publicades al BOE (revisades ${elDay(RENT_RULES_AS_OF, "ca")}), no assessorament jurídic. El que digui el teu contracte, si l'arrendador és gran tenidor o un canvi de llei posterior poden canviar el resultat. Davant d'una discrepància, consulta un professional o l'oficina d'habitatge del teu ajuntament.`,
-    en: `This is an estimate from the INE's official figures and the rules published in the BOE (checked ${elDay(RENT_RULES_AS_OF, "en")}), not legal advice. Your contract's wording, whether the landlord is a large landlord, or a later change in the law can change the result. If in doubt, ask a professional or your town council's housing office.`,
+    es: `Es un cálculo orientativo con los datos oficiales del INE y las normas publicadas en el BOE (revisadas ${elDay(RENT_RULES_AS_OF, "es")}), no asesoramiento jurídico. Lo que diga tu contrato, un nuevo pacto con el casero, si la renta supera el índice de referencia, si el arrendador es gran tenedor o un cambio de ley posterior pueden cambiar el resultado. Ante una discrepancia, consulta un profesional o la oficina de vivienda de tu ayuntamiento.`,
+    ca: `És un càlcul orientatiu amb les dades oficials de l'INE i les normes publicades al BOE (revisades ${elDay(RENT_RULES_AS_OF, "ca")}), no assessorament jurídic. El que digui el teu contracte, un nou pacte amb el propietari, si la renda supera l'índex de referència, si l'arrendador és gran tenidor o un canvi de llei posterior poden canviar el resultat. Davant d'una discrepància, consulta un professional o l'oficina d'habitatge del teu ajuntament.`,
+    en: `This is an estimate from the INE's official figures and the rules published in the BOE (checked ${elDay(RENT_RULES_AS_OF, "en")}), not legal advice. Your contract's wording, a new agreement with the landlord, whether the rent is above the reference index, whether the landlord is a large landlord, or a later change in the law can change the result. If in doubt, ask a professional or your town council's housing office.`,
   });
 
   const ministry = L(locale, {
@@ -233,7 +267,11 @@ export function RentRoute({ locale, data }: { locale: RentLocale; data: ServerRe
     en: "For IRAV contracts, the INE points to the Ministry of Housing's own calculator:",
   });
 
-  const sourceNorms = (["lau18", "lauDa11", "lau4", "ley12Dt4", "rdl29", "rdl29Valid", "rdl6art46", "ley2Annex", "rdl8", "rdl8Repeal"] as const).map((id) => NORMS[id]);
+  const sourceNorms = (["lau18", "lauDa11", "lau4", "ley12Dt4", "rdl29", "rdl29Df6", "rdl29Valid", "indexSystem", "rdl26", "rdl6art46", "ley2Annex", "rdl8", "rdl8Repeal"] as const).map((id) => NORMS[id]);
+  const faqSchema = {
+    "@type": "FAQPage",
+    mainEntity: faq.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })),
+  };
 
   return (
     <>
@@ -287,6 +325,19 @@ export function RentRoute({ locale, data }: { locale: RentLocale; data: ServerRe
                 <A href={tableUrl(SERIES.irav)}>{`IRAV, ${SERIES.irav.code}`}</A>
               </p>
 
+              <h2 id="tope-2">{h.two}</h2>
+              <p>{twoParas[0]}</p>
+              <blockquote lang="es">
+                <p>{DF6_QUOTE.scope}</p>
+                <p>{DF6_QUOTE.a}</p>
+                <p>{DF6_QUOTE.b}</p>
+              </blockquote>
+              <p>{twoParas[1]}</p>
+              <p className="text-sm">
+                <A href={NORMS.rdl29Df6.url}>{`BOE · ${NORMS.rdl29Df6.ref}`}</A> · <A href={NORMS.rdl29Valid.url}>{L(locale, { es: "Convalidación", ca: "Convalidació", en: "Validation" })} ({NORMS.rdl29Valid.ref})</A> ·{" "}
+                <A href={OFFICIAL_LINKS.serpaviLookup}>SERPAVI</A>
+              </p>
+
               <h2 id="limite">{h.which}</h2>
               <dl>
                 {cases.map(([term, text]) => (
@@ -337,6 +388,14 @@ export function RentRoute({ locale, data }: { locale: RentLocale; data: ServerRe
                 ))}
               </ul>
 
+              <h2 id="preguntas">{h.faq}</h2>
+              {faq.map((f) => (
+                <section key={f.q}>
+                  <h3>{f.q}</h3>
+                  <p>{f.a}</p>
+                </section>
+              ))}
+
               <h2 id="fuentes">{h.sources}</h2>
               <ul className="text-sm">
                 {sourceNorms.map((n) => (
@@ -344,6 +403,12 @@ export function RentRoute({ locale, data }: { locale: RentLocale; data: ServerRe
                     <A href={n.url}>{n.name}</A> ({n.ref})
                   </li>
                 ))}
+                <li>
+                  <A href={OFFICIAL_LINKS.serpaviPage}>
+                    {L(locale, { es: "Sistema Estatal de Referencia del Precio del Alquiler de Vivienda (SERPAVI)", ca: "Sistema Estatal de Referència del Preu del Lloguer d'Habitatge (SERPAVI)", en: "State rent reference price system (SERPAVI)" })}
+                  </A>{" "}
+                  (Ministerio de Vivienda y Agenda Urbana) · <A href={OFFICIAL_LINKS.serpaviLookup}>serpavi.mivau.gob.es</A>
+                </li>
                 <li>
                   INE ({L(locale, { es: "series", ca: "sèries", en: "series" })}): <A href={tableUrl(SERIES.ipc)}>IPC {SERIES.ipc.code}</A> ·{" "}
                   <A href={tableUrl(SERIES.irav)}>IRAV {SERIES.irav.code}</A> · <A href={tableUrl(SERIES.igc)}>IGC {SERIES.igc.code}</A>
@@ -356,7 +421,7 @@ export function RentRoute({ locale, data }: { locale: RentLocale; data: ServerRe
           </div>
         </article>
       </main>
-      <JsonLd json={graph([breadcrumbSchema(crumbs)])} />
+      <JsonLd json={graph([breadcrumbSchema(crumbs), faqSchema])} />
       <SiteFooter locale={locale} />
     </>
   );

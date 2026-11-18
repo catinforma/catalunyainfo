@@ -232,7 +232,7 @@ export function liveTools(): LiveTool[] {
     {
       name: "Rent increase calculator (Spain)",
       hubs: rentEditions(),
-      description: "the annual rent update for any Spanish housing or commercial lease: the INE's IRAV and CPI read daily, the month that applies on the anniversary from the INE's release calendar, and the legal cap by signing date (Ley 12/2023, RDL 29/2026, the 2023 IGC and 2024 3% caps), with the BOE texts.",
+      description: "the annual rent update for any Spanish housing or commercial lease: the INE's IRAV and CPI read daily, the month that applies on the anniversary from the INE's release calendar, and the legal cap by signing date and update date (Ley 12/2023, RDL 29/2026, the 2023 IGC and 2024 3% caps), including the 2% cap of RDL 29/2026's sixth final provision for housing updates due from 8 October 2026 to 31 December 2027 without a new agreement (none if the rent is above the reference index), with the BOE texts.",
     },
     {
       name: "Euribor today: the official monthly figure (Banco de España, BOE)",

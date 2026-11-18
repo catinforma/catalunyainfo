@@ -1,5 +1,7 @@
 import { monthInForce, type SeriesData, type SeriesId } from "./ine";
 import {
+  DF6_PCT,
+  DF6_TO,
   FIRST_UPDATE,
   IGC_CAP_TO,
   IGC_CEILING,
@@ -15,6 +17,7 @@ import {
   THREE_PCT,
   THREE_PCT_FROM,
   THREE_PCT_TO,
+  df6Decree,
   type NormId,
 } from "./rules";
 
@@ -40,6 +43,12 @@ export interface RentInput {
   /** The agreed fixed increase in %, when `index` is "fixed". */
   fixedPercent?: number;
   use: LeaseUse;
+  /**
+   * The current rent is above the upper limit of the state reference index
+   * (SERPAVI) for the home. Only read for updates under RDL 29/2026 DF 6ª
+   * (and RDL 26/2026 DF 6ª on 1 Oct 2026): then no increase applies.
+   */
+  aboveIndex?: boolean;
 }
 
 export interface RentSeries {
@@ -57,7 +66,8 @@ export interface IndexUse {
   published: string;
 }
 
-export type CapKind = "igc" | "three" | "rdl8" | "irav" | "ipc";
+/** "two": DF 6ª b) of RDL 29/2026 (or RDL 26/2026 on 1 Oct 2026); "noIncrease": its letter a), rent above the index. */
+export type CapKind = "igc" | "three" | "rdl8" | "irav" | "ipc" | "two" | "noIncrease";
 
 export interface Cap {
   kind: CapKind;
@@ -67,7 +77,11 @@ export interface Cap {
   index: IndexUse | null;
   /** IGC only: the INE's rate before Ley 2/2015's 0–2 % band. */
   raw?: number;
-  /** A landlord who is not a gran tenedor may agree a different increase (RDL 6/2022 art. 46, RDL 8/2026 art. 2). */
+  /**
+   * A new agreement may set a different increase: by a landlord who is not a
+   * gran tenedor (RDL 6/2022 art. 46, RDL 8/2026 art. 2), or by any landlord
+   * and tenant ("two", DF 6ª b).
+   */
   negotiable: boolean;
   norms: NormId[];
 }
@@ -78,6 +92,8 @@ export type NoteId =
   | "noLegalCap" // housing contract signed before 6 Mar 2019, outside the extraordinary caps
   | "commercial" // no legal cap
   | "negotiable" // a non-gran-tenedor landlord may agree otherwise
+  | "newAgreement" // DF 6ª b): the 2 % binds unless both parties agree otherwise, any landlord
+  | "indexCheck" // DF 6ª a): no increase at all if the rent is above the reference index
   | "decreeEdge" // within 3 days of a decree's start or end: check with a professional
   | "firstIrav" // 1 Jan 2025: DA 11 applied but no IRAV was out yet
   | "negative"; // the index fell: the clause may lower the rent
@@ -174,7 +190,7 @@ function addMonths(month: string, n: number): string {
 const within = (d: string, from: string, to: string) => d >= from && d <= to;
 
 /** Days a decree started or stopped applying: a few days either side deserve a professional's check. */
-const DECREE_EDGES = [RDL_8_2026_FROM, RDL_8_2026_TO, RDL_26_2026_DAY, RDL_29_2026_FROM];
+const DECREE_EDGES = [RDL_8_2026_FROM, RDL_8_2026_TO, RDL_26_2026_DAY, RDL_29_2026_FROM, DF6_TO];
 
 export function computeRentUpdate(input: RentInput, data: RentSeries): RentResult {
   const { rent, signed, update, index, use } = input;
@@ -238,6 +254,18 @@ export function computeRentUpdate(input: RentInput, data: RentSeries): RentResul
       notes.add("noLegalCap");
       norms.add("ley12Dt4");
     }
+
+    // RDL 29/2026 DF 6ª (RDL 26/2026 DF 6ª on 1 Oct 2026), by the day the update falls due, any signing date:
+    // a) rent above the reference index → no increase; b) otherwise the new agreement, and without one at most 2 %.
+    const decree = df6Decree(update);
+    if (decree) {
+      const df6Norms: NormId[] = decree === "rdl26" ? ["rdl26"] : ["rdl29Df6", "rdl29Valid"];
+      if (input.aboveIndex) caps.push({ kind: "noIncrease", percent: 0, index: null, negotiable: false, norms: [...df6Norms, "indexSystem"] });
+      else {
+        caps.push({ kind: "two", percent: DF6_PCT, index: null, negotiable: true, norms: df6Norms });
+        if (agreed.percent > 0) notes.add("indexCheck");
+      }
+    }
   } else {
     notes.add("commercial");
   }
@@ -247,7 +275,8 @@ export function computeRentUpdate(input: RentInput, data: RentSeries): RentResul
   for (const c of caps) if (c.percent < agreed.percent && (!binding || c.percent < binding.percent)) binding = c;
   const percent = binding ? binding.percent : agreed.percent;
   for (const c of caps) for (const n of c.norms) norms.add(n);
-  if (binding?.negotiable) notes.add("negotiable");
+  if (binding?.kind === "two") notes.add("newAgreement");
+  else if (binding?.negotiable) notes.add("negotiable");
   if (percent < 0) notes.add("negative");
   for (const src of [agreed.source, binding?.index ?? null]) if (src && src.published === update) notes.add("releaseDay");
   if (use === "housing" && DECREE_EDGES.some((d) => Math.abs(daysBetween(d, update)) <= 3)) notes.add("decreeEdge");

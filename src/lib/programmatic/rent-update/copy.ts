@@ -135,6 +135,10 @@ export interface CalcCopy {
   index: string;
   indexOptions: Record<AgreedIndex, string>;
   fixed: string;
+  /** RDL 29/2026 DF 6ª a): the checkbox, its hint and the link text. */
+  aboveIndex: string;
+  aboveIndexHint: string;
+  serpavi: string;
   newRent: string;
   change: string;
   monthly: string;
@@ -167,6 +171,14 @@ const CAP_ES = (c: Cap, l: RentLocale): string => {
       return `Límite legal en 2024: ${v} (Real Decreto-ley 6/2022, art. 46).`;
     case "rdl8":
       return `Límite extraordinario del 22 de marzo al 29 de abril de 2026: ${v} (Real Decreto-ley 8/2026, derogado).`;
+    case "two":
+      return c.norms.includes("rdl26")
+        ? `Tope del 2 % del Real Decreto-ley 26/2026, en vigor solo el 1 de octubre de 2026 (disposición final sexta), si no había un nuevo pacto entre las partes.`
+        : `Tope del 2 % por el RDL 29/2026 hasta el 31/12/2027 (disposición final sexta, convalidada por el Congreso el 12/11/2026), si no hay un nuevo pacto entre las partes.`;
+    case "noIncrease":
+      return c.norms.includes("rdl26")
+        ? `Sin subida: la renta supera el límite del índice de referencia del Ministerio (Real Decreto-ley 26/2026, 1 de octubre de 2026, disposición final sexta, letra a).`
+        : `Sin subida: la renta supera el límite del índice de referencia del Ministerio (RDL 29/2026, disposición final sexta, letra a, hasta el 31/12/2027).`;
   }
 };
 
@@ -183,6 +195,14 @@ const CAP_CA = (c: Cap, l: RentLocale): string => {
       return `Límit legal el 2024: ${v} (Reial decret llei 6/2022, art. 46).`;
     case "rdl8":
       return `Límit extraordinari del 22 de març al 29 d'abril de 2026: ${v} (Reial decret llei 8/2026, derogat).`;
+    case "two":
+      return c.norms.includes("rdl26")
+        ? `Topall del 2 % del Reial decret llei 26/2026, vigent només l'1 d'octubre de 2026 (disposició final sisena), si no hi havia un nou pacte entre les parts.`
+        : `Topall del 2 % pel RDL 29/2026 fins al 31/12/2027 (disposició final sisena, convalidada pel Congrés el 12/11/2026), si no hi ha un nou pacte entre les parts.`;
+    case "noIncrease":
+      return c.norms.includes("rdl26")
+        ? `Sense pujada: la renda supera el límit de l'índex de referència del Ministeri (Reial decret llei 26/2026, 1 d'octubre de 2026, disposició final sisena, lletra a).`
+        : `Sense pujada: la renda supera el límit de l'índex de referència del Ministeri (RDL 29/2026, disposició final sisena, lletra a, fins al 31/12/2027).`;
   }
 };
 
@@ -199,6 +219,14 @@ const CAP_EN = (c: Cap, l: RentLocale): string => {
       return `Legal cap in 2024: ${v} (Royal Decree-law 6/2022, art. 46).`;
     case "rdl8":
       return `Emergency cap from 22 March to 29 April 2026: ${v} (Royal Decree-law 8/2026, since repealed).`;
+    case "two":
+      return c.norms.includes("rdl26")
+        ? `2% cap of Royal Decree-law 26/2026, in force on 1 October 2026 only (sixth final provision), unless the parties had made a new agreement.`
+        : `2% cap under RDL 29/2026 until 31/12/2027 (sixth final provision, validated by the Congress on 12/11/2026), unless the parties make a new agreement.`;
+    case "noIncrease":
+      return c.norms.includes("rdl26")
+        ? `No increase: the rent is above the limit of the Ministry's reference index (Royal Decree-law 26/2026, 1 October 2026, sixth final provision, letter a).`
+        : `No increase: the rent is above the limit of the Ministry's reference index (RDL 29/2026, sixth final provision, letter a, until 31/12/2027).`;
   }
 };
 
@@ -217,6 +245,9 @@ export const CALC_COPY: Record<RentLocale, CalcCopy> = {
     index: "Índice pactado en el contrato",
     indexOptions: { irav: "IRAV (índice de referencia del INE)", ipc: "IPC", fixed: "Porcentaje fijo pactado" },
     fixed: "Porcentaje pactado",
+    aboveIndex: "La renta actual supera el límite del índice de referencia del Ministerio (el valor superior que da SERPAVI para tu vivienda)",
+    aboveIndexHint: "Cuenta en las actualizaciones del 8 de octubre de 2026 al 31 de diciembre de 2027: entonces no procede ninguna subida (Real Decreto-ley 29/2026, disposición final sexta, letra a). Consulta tu vivienda en",
+    serpavi: "el buscador SERPAVI del Ministerio",
     newRent: "Nueva renta al mes",
     change: "Subida aplicada",
     monthly: "Diferencia al mes",
@@ -251,7 +282,11 @@ export const CALC_COPY: Record<RentLocale, CalcCopy> = {
       commercial: "En un local de negocio o un alquiler de uso distinto de vivienda manda lo pactado (art. 4.3 LAU): los límites del IRAV, del 2 % y del 3 % no se aplican.",
       negotiable:
         "Si el arrendador no es gran tenedor, la norma le permite pactar con el inquilino otra subida; sin ese nuevo pacto, el máximo es el límite. Si es gran tenedor, el límite se aplica siempre.",
-      decreeEdge: "La fecha está a pocos días de la entrada en vigor o la derogación de un real decreto-ley: conviene confirmarlo con un profesional.",
+      newAgreement:
+        "El 2 % es el máximo si no hay un nuevo pacto: casero e inquilino pueden pactar otra subida (disposición final sexta, letra b), y el art. 18.1 LAU sigue diciendo que «en todo caso» la subida no puede pasar del IRAV. La norma no distingue entre grandes tenedores y pequeños propietarios.",
+      indexCheck:
+        "Si la renta ya supera el límite del índice de referencia del Ministerio (el valor superior que da SERPAVI para tu vivienda), no procede ninguna subida (disposición final sexta, letra a): marca la casilla de arriba.",
+      decreeEdge: "La fecha está a pocos días de la entrada en vigor, la derogación o el final de un tope de un real decreto-ley: conviene confirmarlo con un profesional.",
       firstIrav: "El 1 de enero de 2025 el INE aún no había publicado el primer IRAV (salió el 2 de enero): ese día el límite era el IPC.",
       negative: "El índice bajó: si la cláusula del contrato lo prevé, la renta baja en la misma proporción.",
     },
@@ -271,6 +306,9 @@ export const CALC_COPY: Record<RentLocale, CalcCopy> = {
     index: "Índex pactat al contracte",
     indexOptions: { irav: "IRAV (índex de referència de l'INE)", ipc: "IPC", fixed: "Percentatge fix pactat" },
     fixed: "Percentatge pactat",
+    aboveIndex: "La renda actual supera el límit de l'índex de referència del Ministeri (el valor superior que dona SERPAVI per al teu habitatge)",
+    aboveIndexHint: "Compta en les actualitzacions del 8 d'octubre de 2026 al 31 de desembre de 2027: aleshores no hi ha cap pujada (Reial decret llei 29/2026, disposició final sisena, lletra a). Consulta el teu habitatge a",
+    serpavi: "el cercador SERPAVI del Ministeri",
     newRent: "Nova renda al mes",
     change: "Pujada aplicada",
     monthly: "Diferència al mes",
@@ -305,7 +343,11 @@ export const CALC_COPY: Record<RentLocale, CalcCopy> = {
       commercial: "En un local de negoci o un lloguer d'ús diferent d'habitatge mana el que s'ha pactat (art. 4.3 LAU): els límits de l'IRAV, del 2 % i del 3 % no s'hi apliquen.",
       negotiable:
         "Si l'arrendador no és gran tenidor, la norma li permet pactar amb l'inquilí una altra pujada; sense aquest nou pacte, el màxim és el límit. Si és gran tenidor, el límit s'aplica sempre.",
-      decreeEdge: "La data és a pocs dies de l'entrada en vigor o la derogació d'un reial decret llei: val la pena confirmar-ho amb un professional.",
+      newAgreement:
+        "El 2 % és el màxim si no hi ha un nou pacte: propietari i inquilí poden pactar una altra pujada (disposició final sisena, lletra b), i l'art. 18.1 LAU continua dient que «en todo caso» la pujada no pot passar de l'IRAV. La norma no distingeix entre grans tenidors i petits propietaris.",
+      indexCheck:
+        "Si la renda ja supera el límit de l'índex de referència del Ministeri (el valor superior que dona SERPAVI per al teu habitatge), no hi ha cap pujada (disposició final sisena, lletra a): marca la casella de dalt.",
+      decreeEdge: "La data és a pocs dies de l'entrada en vigor, la derogació o el final d'un topall d'un reial decret llei: val la pena confirmar-ho amb un professional.",
       firstIrav: "L'1 de gener de 2025 l'INE encara no havia publicat el primer IRAV (va sortir el 2 de gener): aquell dia el límit era l'IPC.",
       negative: "L'índex va baixar: si la clàusula del contracte ho preveu, la renda baixa en la mateixa proporció.",
     },
@@ -325,6 +367,9 @@ export const CALC_COPY: Record<RentLocale, CalcCopy> = {
     index: "Index agreed in the contract",
     indexOptions: { irav: "IRAV (the INE's reference index)", ipc: "CPI (IPC)", fixed: "Agreed fixed percentage" },
     fixed: "Agreed percentage",
+    aboveIndex: "The current rent is above the limit of the Ministry's reference index (the upper value SERPAVI gives for your home)",
+    aboveIndexHint: "It counts for updates from 8 October 2026 to 31 December 2027: then no increase applies (Royal Decree-law 29/2026, sixth final provision, letter a). Look up your home in",
+    serpavi: "the Ministry's SERPAVI lookup",
     newRent: "New monthly rent",
     change: "Increase applied",
     monthly: "Difference per month",
@@ -358,7 +403,11 @@ export const CALC_COPY: Record<RentLocale, CalcCopy> = {
       commercial: "For a shop, office or any non-housing lease the contract decides (LAU art. 4.3): the IRAV, 2% and 3% caps do not apply.",
       negotiable:
         "If the landlord is not a large landlord (gran tenedor), the rule lets them agree a different increase with the tenant; without that new agreement the cap is the maximum. For a large landlord the cap always applies.",
-      decreeEdge: "The date is within a few days of a royal decree-law coming into force or being repealed: check it with a professional.",
+      newAgreement:
+        "2% is the maximum without a new agreement: landlord and tenant may agree a different increase (sixth final provision, letter b), and LAU art. 18.1 still says that “en todo caso” (in any case) the increase cannot exceed the IRAV. The rule does not distinguish large landlords from small ones.",
+      indexCheck:
+        "If the rent is already above the limit of the Ministry's reference index (the upper value SERPAVI gives for your home), no increase applies (sixth final provision, letter a): tick the box above.",
+      decreeEdge: "The date is within a few days of a royal decree-law coming into force, being repealed or a cap of one ending: check it with a professional.",
       firstIrav: "On 1 January 2025 the INE had not released the first IRAV yet (it came out on 2 January): that day the cap was the CPI.",
       negative: "The index fell: if the contract's clause allows it, the rent goes down by the same proportion.",
     },

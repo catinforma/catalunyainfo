@@ -7,9 +7,23 @@ import { CALC_COPY, DECIMALS, RENT_LOCALES, elDay, euros, indexOfMonth, monthTex
 import { RENT_SNAPSHOT } from "../src/lib/programmatic/rent-update/data.ts";
 import { anniversaryIn, computeRentUpdate, defaultExample, parseAmount, type OkResult, type RentInput, type RentResult, type RentSeries } from "../src/lib/programmatic/rent-update/engine.ts";
 import { SERIES, buildSeries, latestPoint, mergeSeries, monthInForce, parseCalendar, parseSeries, publishedPoints } from "../src/lib/programmatic/rent-update/ine.ts";
-import { lastMonths, latestShared, leadText, rentMeta, rentSitemapEntries } from "../src/lib/programmatic/rent-update/page.ts";
-import { NORMS, RENT_RULES_AS_OF, RENT_RULES_REVIEW_BY } from "../src/lib/programmatic/rent-update/rules.ts";
+import { lastMonths, latestShared, leadText, rentFaq, rentMeta, rentSitemapEntries } from "../src/lib/programmatic/rent-update/page.ts";
+import {
+  BOE_CONSOLIDATED,
+  DF6_END_RECHECK,
+  DF6_FROM,
+  DF6_PCT,
+  DF6_QUOTE,
+  DF6_RECHECK_BY,
+  DF6_TO,
+  LAST_UPDATE,
+  NORMS,
+  RENT_RULES_AS_OF,
+  RENT_RULES_REVIEW_BY,
+  df6Decree,
+} from "../src/lib/programmatic/rent-update/rules.ts";
 import { loadRentData, type Fetcher } from "../src/lib/programmatic/rent-update/server.ts";
+import { QUOTE as ZT_QUOTE, UPDATE_RULE as ZT_UPDATE_RULE } from "../src/lib/programmatic/zona-tensionada/rules.ts";
 
 /**
  * The rent-update calculator ("Actualizar el alquiler",
@@ -37,6 +51,27 @@ test("date guard: the rent rules were read in the BOE less than the review windo
   assert.ok(
     today < RENT_RULES_REVIEW_BY,
     `Re-read the rent-update rules (src/lib/programmatic/rent-update/rules.ts, read ${RENT_RULES_AS_OF}): LAU art. 18 and DA 11, Ley 12/2023 DT 4, any new real decreto-ley on rents (BOE), the INE's IRAV page; then move RENT_RULES_AS_OF and RENT_RULES_REVIEW_BY.`,
+  );
+});
+
+test("date guard: RDL 29/2026 DF 6ª (2 % cap) re-read in the BOE consolidated texts by DF6_RECHECK_BY", () => {
+  const today = new Date().toISOString().slice(0, 10);
+  const stamps = Object.entries(BOE_CONSOLIDATED)
+    .map(([k, v]) => `${k} ${v.ref} "Última actualización publicada el" ${v.lastUpdate}`)
+    .join("; ");
+  assert.ok(
+    today < DF6_RECHECK_BY,
+    `Re-read https://www.boe.es/buscar/act.php?id=BOE-A-2026-20823#df-6 and the consolidated LAU and Ley 12/2023 (recorded: ${stamps}). If any "Última actualización" is newer, read what changed (DF 6ª, LAU art. 18, a law replacing the RDL); then update rules.ts (DF6_*, BOE_CONSOLIDATED, RENT_RULES_AS_OF) and move DF6_RECHECK_BY.`,
+  );
+});
+
+test("date guard: the 2 % cap ends on 31 Dec 2027; re-check the BOE before it does", () => {
+  const today = new Date().toISOString().slice(0, 10);
+  assert.equal(DF6_END_RECHECK, "2027-12-17");
+  assert.ok(DF6_END_RECHECK < DF6_TO);
+  assert.ok(
+    today < DF6_END_RECHECK,
+    `RDL 29/2026 DF 6ª covers updates due until ${DF6_TO}. Check the BOE for an extension or a law that replaces it, set the 2028 regime in rules.ts/engine.ts (LAST_UPDATE ${LAST_UPDATE}), then move DF6_END_RECHECK.`,
   );
 });
 
@@ -120,21 +155,27 @@ test("ine: a value is never shown before its release day, and the month in force
 /* Engine: worked cases                                                       */
 /* -------------------------------------------------------------------------- */
 
-test("engine: flat signed after 26 May 2023 on the IRAV, updated 20 Nov 2026: IRAV of October 2026, 2.57 %", () => {
+test("engine: flat signed after 26 May 2023 on the IRAV, updated 20 Nov 2026: IRAV of October 2026 (2.57 %) capped at 2 % by RDL 29/2026 DF 6ª", () => {
   const r = ok(run({}));
   assert.equal(r.agreed.source?.month, "2026-10");
-  assert.equal(r.percent, 2.57);
-  assert.equal(r.newRent, 1025.7);
-  assert.equal(r.monthly, 25.7);
-  assert.equal(r.yearly, 308.4);
-  assert.ok(r.norms.includes("lauDa11") && r.norms.includes("rdl29"));
+  assert.equal(r.agreed.percent, 2.57);
+  assert.equal(r.binding?.kind, "two");
+  assert.equal(r.percent, 2);
+  assert.equal(r.newRent, 1020);
+  assert.equal(r.monthly, 20);
+  assert.equal(r.yearly, 240);
+  assert.ok(r.norms.includes("lauDa11") && r.norms.includes("rdl29") && r.norms.includes("rdl29Df6") && r.norms.includes("rdl29Valid"));
+  assert.ok(r.notes.includes("newAgreement") && r.notes.includes("indexCheck"));
+  assert.ok(!r.notes.includes("negotiable"));
 });
 
 test("engine: the month is the last released on the anniversary, not the anniversary's month (10 Nov 2026 → September)", () => {
   const r = ok(run({ update: "2026-11-10" }));
   assert.equal(r.agreed.source?.month, "2026-09");
-  assert.equal(r.percent, 2.54);
-  assert.equal(r.newRent, 1025.4);
+  assert.equal(r.agreed.percent, 2.54);
+  // RDL 29/2026 DF 6ª: 2 % without a new agreement.
+  assert.equal(r.percent, 2);
+  assert.equal(r.newRent, 1020);
   // On the release day itself the new month counts, and the note says so.
   const same = ok(run({ update: "2026-11-13" }));
   assert.equal(same.agreed.source?.month, "2026-10");
@@ -162,17 +203,21 @@ test("engine: a pre-2023 flat on the IPC, through the 2026 decrees", () => {
   assert.equal(oct5.percent, 4.3);
   assert.ok(!oct5.caps.some((c) => c.kind === "irav"));
   assert.ok(oct5.notes.includes("decreeEdge"));
-  // 1 Oct 2026, the one day of RDL 26/2026: IRAV cap.
+  // 1 Oct 2026, the one day of RDL 26/2026: IRAV cap (August, 2.47 %) and its DF 6ª 2 %, which binds.
   const oct1 = ok(run({ ...base, update: "2026-10-01" }));
-  assert.equal(oct1.binding?.kind, "irav");
-  assert.ok(oct1.norms.includes("rdl26"));
-  // 15 Oct 2026, RDL 29/2026: IPC of September 4.9 % capped by the IRAV of September, 2.54 %.
+  assert.equal(oct1.agreed.percent, 4.3);
+  assert.deepEqual(oct1.caps.map((c) => [c.kind, c.percent]), [["irav", 2.47], ["two", 2]]);
+  assert.equal(oct1.binding?.kind, "two");
+  assert.equal(oct1.percent, 2);
+  assert.ok(oct1.norms.includes("rdl26") && !oct1.norms.includes("rdl29Df6"));
+  // 15 Oct 2026, RDL 29/2026: IPC of September 4.9 %, IRAV of September 2.54 %, DF 6ª 2 % binds.
   const oct15 = ok(run({ ...base, update: "2026-10-15" }));
   assert.equal(oct15.agreed.percent, 4.9);
-  assert.equal(oct15.binding?.kind, "irav");
-  assert.equal(oct15.percent, 2.54);
-  assert.ok(oct15.norms.includes("rdl29") && oct15.norms.includes("ley12Dt4") && oct15.norms.includes("rdl29Valid"));
-  assert.ok(!oct15.notes.includes("negotiable"));
+  assert.deepEqual(oct15.caps.map((c) => [c.kind, c.percent]), [["irav", 2.54], ["two", 2]]);
+  assert.equal(oct15.binding?.kind, "two");
+  assert.equal(oct15.percent, 2);
+  assert.ok(oct15.norms.includes("rdl29") && oct15.norms.includes("ley12Dt4") && oct15.norms.includes("rdl29Valid") && oct15.norms.includes("rdl29Df6"));
+  assert.ok(!oct15.notes.includes("negotiable") && oct15.notes.includes("newAgreement"));
 });
 
 test("engine: 2023 IGC cap (Ley 2/2015 band 0–2 %) and 2024 3 % cap", () => {
@@ -207,9 +252,10 @@ test("engine: fixed percentages, contracts before 6 Mar 2019, 1 Jan 2025", () =>
   const old = ok(run({ signed: "2018-06-01", update: "2025-06-01", index: "fixed", fixedPercent: 5 }));
   assert.equal(old.percent, 5);
   assert.ok(old.notes.includes("noLegalCap"));
-  // The same contract from 8 Oct 2026: IRAV cap.
+  // The same contract from 8 Oct 2026: IRAV cap (2.57 %) and RDL 29/2026 DF 6ª (2 %).
   const now = ok(run({ signed: "2018-11-20", index: "fixed", fixedPercent: 5 }));
-  assert.equal(now.percent, 2.57);
+  assert.equal(now.binding?.kind, "two");
+  assert.equal(now.percent, 2);
   // A fixed rate below the cap applies as it is.
   assert.equal(ok(run({ index: "fixed", fixedPercent: 1.5 })).percent, 1.5);
   // 1 Jan 2025: DA 11 applied but no IRAV was out (first release 2 Jan): the IPC cap held.
@@ -250,6 +296,136 @@ test("engine: inputs it refuses", () => {
   assert.ok(Number.isNaN(parseAmount("")));
   assert.ok(Number.isNaN(parseAmount("mil")));
   assert.deepEqual(defaultExample("2028-02-29"), { rent: 1000, signed: "2026-02-28", update: "2028-02-29", index: "irav", use: "housing" });
+});
+
+/* -------------------------------------------------------------------------- */
+/* RDL 29/2026 DF 6ª: the 2 % cap, 8 Oct 2026 – 31 Dec 2027                    */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * A HYPOTHETICAL fixture (not INE data) for anniversaries beyond the
+ * snapshot: the real series plus months to Dec 2027 at a flat rate, each
+ * released on the 14th of the next month. Only the engine's date logic is
+ * tested with it; nothing here is printed on a page.
+ */
+function extended(iravRate: number, ipcRate: number): RentSeries {
+  // November 2026 to December 2027.
+  const months = Array.from({ length: 14 }, (_, i) => {
+    const t = 2026 * 12 + 10 + i;
+    return `${Math.floor(t / 12)}-${String((t % 12) + 1).padStart(2, "0")}`;
+  });
+  const pts = (rate: number) =>
+    months.map((month) => {
+      const [y, m] = month.split("-").map(Number) as [number, number];
+      const rel = m === 12 ? `${y + 1}-01-14` : `${y}-${String(m + 1).padStart(2, "0")}-14`;
+      return { month, value: rate, published: rel };
+    });
+  const keep = (id: "irav" | "ipc") => DATA[id].points.filter((p) => p.value !== null);
+  return { ...DATA, irav: { id: "irav", points: [...keep("irav"), ...pts(iravRate)] }, ipc: { id: "ipc", points: [...keep("ipc"), ...pts(ipcRate)] } };
+}
+
+test("DF 6ª: the window by update day, quoted from the BOE, matches the zona-tensionada module", () => {
+  assert.equal(DF6_FROM, "2026-10-08");
+  assert.equal(DF6_TO, "2027-12-31");
+  assert.equal(DF6_PCT, 2);
+  assert.deepEqual(ZT_UPDATE_RULE, { from: DF6_FROM, until: DF6_TO });
+  assert.ok(DF6_QUOTE.a.includes(ZT_QUOTE.updateAboveIndex));
+  assert.ok(DF6_QUOTE.b.includes(ZT_QUOTE.updateTwoPercent));
+  assert.match(DF6_QUOTE.scope, /entre la entrada en vigor de este real decreto-ley y el 31 de diciembre de 2027/);
+  assert.match(DF6_QUOTE.b, /no podrá ser superior al dos por ciento\.$/);
+  // Both sides of each edge: RDL 26/2026's one day, RDL 29/2026's entry into force, the end.
+  const cases: [string, ReturnType<typeof df6Decree>][] = [
+    ["2026-09-30", null],
+    ["2026-10-01", "rdl26"],
+    ["2026-10-02", null],
+    ["2026-10-07", null],
+    ["2026-10-08", "rdl29"],
+    ["2027-12-31", "rdl29"],
+    ["2028-01-01", null],
+  ];
+  for (const [day, want] of cases) assert.equal(df6Decree(day), want, day);
+  assert.equal(NORMS.rdl29Df6.url, "https://www.boe.es/buscar/act.php?id=BOE-A-2026-20823#df-6");
+  assert.equal(NORMS.rdl29Valid.ref, "BOE-A-2026-23755");
+  assert.equal(NORMS.indexSystem.ref, "BOE-A-2024-5213");
+});
+
+test("DF 6ª worked examples: 1,000 € on the IRAV either side of 8 Oct 2026", () => {
+  // 7 Oct 2026: IRAV of August 2026 (2.47 %, released 15 Sep; September's came out on 14 Oct). No 2 % cap yet.
+  const oct7 = ok(run({ signed: "2024-10-07", update: "2026-10-07" }));
+  assert.equal(oct7.agreed.source?.month, "2026-08");
+  assert.equal(oct7.percent, 2.47);
+  assert.equal(oct7.newRent, 1024.7);
+  assert.ok(!oct7.caps.some((c) => c.kind === "two"));
+  // 8 Oct 2026: same IRAV, DF 6ª in force: 2 %, 1,020 €.
+  const oct8 = ok(run({ signed: "2024-10-08", update: "2026-10-08" }));
+  assert.equal(oct8.agreed.source?.month, "2026-08");
+  assert.equal(oct8.binding?.kind, "two");
+  assert.equal(oct8.percent, 2);
+  assert.equal(oct8.newRent, 1020);
+  assert.equal(oct8.yearly, 240);
+  assert.ok(oct7.notes.includes("decreeEdge") && oct8.notes.includes("decreeEdge"));
+});
+
+test("DF 6ª worked examples: RDL 26/2026's one day (1 Oct 2026) had the same 2 %; 30 Sep and 2 Oct did not", () => {
+  const sep30 = ok(run({ signed: "2024-09-30", update: "2026-09-30" }));
+  assert.equal(sep30.percent, 2.47);
+  const oct1 = ok(run({ signed: "2024-10-01", update: "2026-10-01" }));
+  assert.equal(oct1.binding?.kind, "two");
+  assert.equal(oct1.percent, 2);
+  assert.ok(oct1.binding?.norms.includes("rdl26"));
+  const oct2 = ok(run({ signed: "2024-10-02", update: "2026-10-02" }));
+  assert.equal(oct2.percent, 2.47);
+  assert.ok(!oct2.caps.some((c) => c.kind === "two"));
+});
+
+test("DF 6ª worked examples: rent above the reference index → no increase, only inside the window", () => {
+  const above = ok(run({ aboveIndex: true }));
+  assert.equal(above.binding?.kind, "noIncrease");
+  assert.equal(above.percent, 0);
+  assert.equal(above.newRent, 1000);
+  assert.equal(above.monthly, 0);
+  assert.ok(above.norms.includes("rdl29Df6") && above.norms.includes("indexSystem"));
+  assert.ok(!above.notes.includes("indexCheck") && !above.notes.includes("newAgreement"));
+  // Not negotiable: letter a) has no "nuevo pacto".
+  assert.equal(above.binding?.negotiable, false);
+  // 7 Oct 2026, before the window: the box does not count.
+  assert.equal(ok(run({ signed: "2024-10-07", update: "2026-10-07", aboveIndex: true })).percent, 2.47);
+  // 1 Oct 2026 (RDL 26/2026 DF 6ª a): no increase.
+  const oct1 = ok(run({ signed: "2024-10-01", update: "2026-10-01", aboveIndex: true }));
+  assert.equal(oct1.percent, 0);
+  assert.ok(oct1.norms.includes("rdl26"));
+  // A shop is outside DF 6ª: the contract's IPC applies whole.
+  const shop = ok(run({ use: "commercial", index: "ipc", aboveIndex: true }));
+  assert.equal(shop.percent, 4.9);
+  assert.equal(shop.caps.length, 0);
+});
+
+test("DF 6ª worked examples: an agreed rate below 2 % applies as it is; the IRAV binds when it is the lower cap", () => {
+  const low = ok(run({ index: "fixed", fixedPercent: 1.5 }));
+  assert.equal(low.binding, null);
+  assert.equal(low.percent, 1.5);
+  assert.equal(low.newRent, 1015);
+  assert.ok(low.notes.includes("indexCheck") && !low.notes.includes("newAgreement"));
+  // Hypothetical IRAV of 1.8 % in 2027 (fixture): the IRAV binds, not the 2 %.
+  const lowIrav = extended(1.8, 3);
+  const jun = computeRentUpdate({ rent: 1000, signed: "2025-06-20", update: "2027-06-20", index: "ipc", use: "housing" }, lowIrav);
+  assert.equal(ok(jun).binding?.kind, "irav");
+  assert.equal(ok(jun).percent, 1.8);
+});
+
+test("DF 6ª worked examples: either side of 31 Dec 2027 (the calculator stops where the cap stops)", () => {
+  const high = extended(2.3, 3);
+  // 31 Dec 2027: IRAV of November 2027 (hypothetical 2.3 %), DF 6ª still applies: 2 %.
+  const dec31 = ok(computeRentUpdate({ rent: 1000, signed: "2025-12-31", update: "2027-12-31", index: "irav", use: "housing" }, high));
+  assert.equal(dec31.agreed.source?.month, "2027-11");
+  assert.equal(dec31.binding?.kind, "two");
+  assert.equal(dec31.percent, 2);
+  assert.equal(dec31.newRent, 1020);
+  assert.ok(dec31.notes.includes("decreeEdge"));
+  // 1 Jan 2028: outside DF 6ª and outside the calculator's range (re-check the BOE first: DF6_END_RECHECK).
+  assert.equal(df6Decree("2028-01-01"), null);
+  assert.deepEqual(computeRentUpdate({ rent: 1000, signed: "2026-01-01", update: "2028-01-01", index: "irav", use: "housing" }, high), { status: "out-of-range", first: "2023-01-01", last: LAST_UPDATE });
+  assert.equal(LAST_UPDATE, DF6_TO);
 });
 
 test("engine: every norm it cites has a BOE link", () => {
@@ -317,16 +493,45 @@ test("copy: numbers without locale data, months and articles", () => {
 });
 
 test("page: the lead answers today's question with the INE's figure, in all three languages", () => {
-  const es = leadText("es", DATA, "2026-11-13")!;
-  assert.match(es, /hoy, el 13 de noviembre de 2026, la subida máxima es el IRAV de octubre de 2026: 2,57 %/);
-  assert.match(es, /1\.000,00 € pasa a 1\.025,70 €/);
-  assert.match(es, /8 de octubre de 2026/);
+  // 18 Nov 2026: the IRAV of October (2.57 %) is above the 2 % of RDL 29/2026 DF 6ª, which binds.
+  const es = leadText("es", DATA, "2026-11-18")!;
+  assert.match(es, /hoy, el 18 de noviembre de 2026, la subida máxima sin un nuevo pacto con el casero es del 2 %: el tope del Real Decreto-ley 29\/2026 hasta el 31 de diciembre de 2027/);
+  assert.match(es, /más bajo que el IRAV de octubre de 2026 \(2,57 %\)/);
+  assert.match(es, /1\.000,00 € pasa a 1\.020,00 €/);
+  assert.match(es, /no sube nada si ya supera el índice de referencia/);
+  assert.match(es, /8 de octubre de 2026 estos límites valen para todos los contratos/);
   assert.match(es, /IPC, se aplica entero \(4,9 %\)/);
-  assert.match(leadText("ca", DATA, "2026-11-13")!, /l'IRAV d'octubre de 2026: 2,57 %/);
-  assert.match(leadText("en", DATA, "2026-11-13")!, /the IRAV for October 2026: 2\.57%/);
-  // Before 8 Oct 2026 it would not claim the cap covers every contract.
-  assert.doesNotMatch(leadText("es", DATA, "2026-09-20")!, /todos los contratos/);
+  assert.doesNotMatch(es, /1\.025,70/);
+  const ca = leadText("ca", DATA, "2026-11-18")!;
+  assert.match(ca, /és del 2 %: el topall del Reial decret llei 29\/2026 fins al 31 de desembre de 2027, més baix que l'IRAV d'octubre de 2026 \(2,57 %\)/);
+  assert.match(ca, /1\.000,00 € passa a 1\.020,00 €/);
+  const en = leadText("en", DATA, "2026-11-18")!;
+  assert.match(en, /without a new agreement with the landlord is 2%: the cap of Royal Decree-law 29\/2026 until 31 December 2027, lower than the IRAV for October 2026 \(2\.57%\)/);
+  assert.match(en, /€1,000\.00 becomes €1,020\.00/);
+  // Before 8 Oct 2026: the IRAV, no 2 % and no claim that the cap covers every contract.
+  const sep = leadText("es", DATA, "2026-09-20")!;
+  assert.match(sep, /la subida máxima es el IRAV de agosto de 2026: 2,47 %/);
+  assert.doesNotMatch(sep, /todos los contratos|2 %/);
+  // A hypothetical IRAV below 2 % (fixture): the IRAV leads and the 2 % is named as the other cap.
+  const low = leadText("es", extended(1.8, 3), "2027-06-20")!;
+  assert.match(low, /la subida máxima es el IRAV de mayo de 2027: 1,80 %/);
+  assert.match(low, /Hasta el 31 de diciembre de 2027 tampoco puede pasar del 2 %/);
+  assert.equal(leadText("es", DATA, "2026-10-01"), null);
   assert.equal(leadText("es", DATA, "2028-01-10"), null);
+});
+
+test("page: the FAQ answers the 2 % cap in all three languages, from the BOE's words", () => {
+  for (const l of RENT_LOCALES) {
+    const faq = rentFaq(l);
+    assert.equal(faq.length, 5, l);
+    const all = faq.map((f) => f.q + " " + f.a).join(" ");
+    assert.match(all, l === "en" ? /2%/ : /2 %/, l);
+    assert.match(all, l === "en" ? /31 December 2027/ : l === "ca" ? /31 de desembre de 2027/ : /31 de diciembre de 2027/, l);
+    assert.match(all, /29\/2026/, l);
+    assert.match(all, /4\.3/, l);
+    // Quoted words are the BOE's own.
+    assert.ok(all.includes("nuevo pacto entre las partes"), l);
+  }
 });
 
 test("page: title and description carry the latest month's figures, within Google's length", () => {
